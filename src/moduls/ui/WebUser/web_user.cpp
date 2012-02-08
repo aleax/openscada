@@ -440,7 +440,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* UserPrt                                       *
 //*************************************************
 UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntReq(0), mId(cfg("ID").getSd()), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
+    TConfig(el), cntReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
 {
     mId = iid;
 }
@@ -458,9 +458,7 @@ TCntrNode &UserPg::operator=( TCntrNode &node )
     if( enableStat( ) )	setEnable(false);
 
     //> Copy parameters
-    string prevId = mId;
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = prevId;
+    exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
 
     return *this;

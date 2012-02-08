@@ -34,7 +34,7 @@ using namespace VCA;
 //* Project					 *
 //************************************************
 Project::Project( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elProject()), mId(cfg("ID").getSd()), workPrjDB(lib_db), mPermit(cfg("PERMIT").getId()),
+    TConfig(&mod->elProject()), mId(cfg("ID")), workPrjDB(lib_db), mPermit(cfg("PERMIT").getId()),
     mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()), mEnable(false)
 {
     mId = id;
@@ -54,10 +54,8 @@ TCntrNode &Project::operator=( TCntrNode &node )
     if(!src_n) return *this;
 
     //> Copy generic configuration
-    string tid = mId;
-    *(TConfig *)this = *(TConfig*)src_n;
-    mId  = tid;
-    cfg("DB_TBL").setS(string("prj_")+tid);
+    exclCopy(*src_n, "ID;");
+    cfg("DB_TBL").setS("prj_"+id());
     workPrjDB = src_n->workPrjDB;
 
     if(!src_n->enable()) return *this;

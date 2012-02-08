@@ -42,7 +42,7 @@ namespace OSCADA
 class TConfig;
 
 //#pragma pack(push,1)
-class TCfg
+class TCfg : public TVariant
 {
     public:
 	//Data
@@ -62,7 +62,7 @@ class TCfg
 	TCfg( TFld &fld, TConfig &owner );
 	~TCfg( );
 
-	const	string &name( );
+	const string &name( );
 
 	bool	operator==( TCfg &cfg );
 	TCfg	&operator=( TCfg &cfg );
@@ -77,39 +77,36 @@ class TCfg
 	TFld	&fld( )			{ return *mFld; }
 
 	//> Universal access
-	string	getSEL( char RqFlg = 0 );
-	TVariant get( char RqFlg = 0 );
-	string	getS( char RqFlg = 0 );
-	double	getR( char RqFlg = 0 );
-	int	getI( char RqFlg = 0 );
-	bool	getB( char RqFlg = 0 );
+	string	getSEL( );
+	string	getS( );
+	operator bool( )		{ return getB(); }
+
 	//> Direct access. Use only for readonly config-fields by no resourced!
-	string	&getSd( );
+	const char *getSd( );
 	double	&getRd( );
 	int	&getId( );
-	bool	&getBd( );
+	char	&getBd( );
 
 	void	setSEL( const string &val, char RqFlg = 0 );
-	void	set( const TVariant &val, char RqFlg = 0 );
-	void	setS( const string &val, char RqFlg = 0 );
-	void	setR( double val, char RqFlg = 0 );
-	void	setI( int val, char RqFlg = 0 );
-	void	setB( bool val, char RqFlg = 0 );
+	void	setS( const string &val );
+	void	setS( const string &val, char RqFlg );
+	void	setR( double val );
+	void	setR( double val, char RqFlg );
+	void	setI( int val );
+	void	setI( int val, char RqFlg );
+	void	setB( char val );
+	void	setB( char val, char RqFlg );
+
+	TCfg	&operator=( const string &vl )	{ setS(vl); return *this; }
+	TCfg	&operator=( double vl )	{ setR(vl); return *this; }
+	TCfg	&operator=( int vl )	{ setI(vl); return *this; }
+	TCfg	&operator=( bool vl )	{ setB(vl); return *this; }
 
     private:
-	//Data
-	union
-	{
-	    string	*s_val;
-	    double	r_val;
-	    int		i_val;
-	    bool	b_val;
-	}m_val;
-
 	//Attributes
-	char mView	: 1;
-	char mKeyUse	: 1;
-	char mNoTransl	: 1;
+	uint8_t	mView		: 1;
+	uint8_t	mKeyUse		: 1;
+	uint8_t	mNoTransl	: 1;
 
 	TFld	*mFld;
 	TConfig	&mOwner;
@@ -131,6 +128,7 @@ class TConfig: public TValElem
 	virtual ~TConfig( );
 
 	TConfig &operator=( TConfig &cfg );
+	TConfig &exclCopy( TConfig &cfg, const string &passCpLs = "" );
 
 	void cfgList( vector<string> &list );
 	bool cfgPresent( const string &n_val );

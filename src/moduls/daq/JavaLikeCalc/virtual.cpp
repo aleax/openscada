@@ -458,7 +458,7 @@ void Contr::loadFunc( bool onlyVl )
 
 	//> Load values
 	TConfig cfg(&mod->elVal());
-	string bd_tbl = TController::id()+"_val";
+	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
 
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
@@ -487,7 +487,7 @@ void Contr::save_( )
 
 	//> Save values
 	TConfig cfg(&mod->elVal());
-	string bd_tbl = TController::id()+"_val";
+	string bd_tbl = id()+"_val";
 	string val_bd = DB()+"."+bd_tbl;
 	for( int iio = 0; iio < ioSize(); iio++ )
 	{

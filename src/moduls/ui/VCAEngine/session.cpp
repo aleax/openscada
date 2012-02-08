@@ -33,10 +33,9 @@ using namespace VCA;
 //* Session: Project's session			 *
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
-    mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser("root"), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
+    mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser("root"), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
     endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), tm_calc(0.0), mAlrmSndPlay(-1), mStyleIdW(-1)
 {
-    mId = iid;
     mPage = grpAdd("pg_");
     sec = SYS->security();
     mReqTm = time(NULL);

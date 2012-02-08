@@ -47,7 +47,7 @@ class TUser : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )	{ return m_name; }
+	string	name( )		{ return mName; }
 	string	lName( )	{ return cfg("DESCR").getS(); }
 	string	descr( )	{ return cfg("LONGDESCR").getS(); }
 	string	picture( )	{ return cfg("PICTURE").getS(); }
@@ -79,12 +79,12 @@ class TUser : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_name; }
+	const char *nodeName( )	{ return mName.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	string 	&m_name;
+	TCfg	&mName;
 	string	m_db;
 	bool	m_sysIt;
 };
@@ -101,11 +101,11 @@ class TGroup : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )	{ return m_name; }
-	string lName( )		{ return cfg("DESCR").getS(); }
-	string descr( )		{ return cfg("LONGDESCR").getS(); }
-	string users( )		{ return cfg("USERS").getS(); }
-	bool sysItem( )		{ return m_sysIt; }
+	string	name( )		{ return mName; }
+	string	lName( )	{ return cfg("DESCR").getS(); }
+	string	descr( )	{ return cfg("LONGDESCR").getS(); }
+	string	users( )	{ return cfg("USERS").getS(); }
+	bool	sysItem( )	{ return m_sysIt; }
 
 	string DB( )		{ return m_db; }
 	string tbl( );
@@ -133,12 +133,12 @@ class TGroup : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_name; }
+	const char *nodeName( )	{ return mName.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	string 	&m_name;
+	TCfg	&mName;
 	string	m_db;
 	bool	m_sysIt;
 };

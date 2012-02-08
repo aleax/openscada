@@ -30,7 +30,7 @@ using namespace OSCADA;
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    TConfig(cfgelem), en_st(false), run_st(false), mId(cfg("ID").getSd()), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
+    TConfig(cfgelem), en_st(false), run_st(false), mId(cfg("ID")), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
     mDB(daq_db), mRedntUse(false)
 {
     mId = id_c;
@@ -53,9 +53,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
 	dbNms.push_back(cfg(owner().tpPrmAt(i_tp).db).getS());
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = tid;
+    exclCopy(*src_n, "ID;");
     setDB(src_n->mDB);
 
     //> Individual DB names restore

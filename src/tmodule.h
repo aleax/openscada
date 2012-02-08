@@ -82,8 +82,8 @@ class TModule : public TCntrNode
 	TModule( const string &id );
 	virtual ~TModule(  );
 
-	const string &modId( )		{ return mId; }
-	string modName( );
+	string	modId( )		{ return mId.c_str(); }
+	string	modName( );
 
 	virtual void modStart( )	{ }
 	virtual void modStop( )		{ }
@@ -123,10 +123,10 @@ class TModule : public TCntrNode
 
     private:
 	//Methods
-	const string &nodeName( )	{ return modId(); }
+	const char *nodeName( )	{ return mId.c_str(); }
 
 	//Attributes
-	string		mId;		// Identificator
+	const string	mId;		// Identificator
 	string		lc_id;		// Locale id. For gettext.
 	vector<ExpFunc *> m_efunc;	// Export function list
 

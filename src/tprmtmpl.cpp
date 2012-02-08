@@ -28,7 +28,7 @@ using namespace OSCADA;
 //* TPrmTempl                                     *
 //*************************************************
 TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
-    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), mId(cfg("ID").getSd())
+    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), mId(cfg("ID"))
 {
     mId = iid;
     setName(iname);
@@ -44,10 +44,8 @@ TCntrNode &TPrmTempl::operator=( TCntrNode &node )
     TPrmTempl *src_n = dynamic_cast<TPrmTempl*>(&node);
     if( !src_n ) return *this;
 
-    string tid = id();
-    *(TConfig *)this = *(TConfig*)src_n;
+    exclCopy(*src_n, "ID;");
     *(TFunction *)this = *(TFunction*)src_n;
-    mId = tid;
 
     if( src_n->startStat( ) && !startStat( ) )  setStart( true );
 
@@ -419,7 +417,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 //* TPrmTmplLib                                   *
 //*************************************************
 TPrmTmplLib::TPrmTmplLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&SYS->daq().at().elLib()), run_st(false), mId(cfg("ID").getSd()), work_lib_db(lib_db)
+    TConfig(&SYS->daq().at().elLib()), run_st(false), mId(cfg("ID")), work_lib_db(lib_db)
 {
     mId = id;
     setName( name );
@@ -438,9 +436,7 @@ TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = tid;
+    exclCopy(*src_n, "ID;");
     work_lib_db = src_n->work_lib_db;
 
     //> Templates copy

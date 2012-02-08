@@ -43,7 +43,7 @@ class TPrmTempl: public TFunction, public TConfig
 {
     public:
 	//Data
-	//- Addition flags for IO -
+	//> Addition flags for IO
 	enum IOTmplFlgs
 	{
 	    AttrRead	= 0x010,	//Attribute only for read
@@ -59,12 +59,12 @@ class TPrmTempl: public TFunction, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
-	string name( );
-	string descr( );
+	string	id( )		{ return mId; }
+	string	name( );
+	string	descr( );
 	int maxCalcTm( );
-	string progLang( );
-	string prog( );
+	string	progLang( );
+	string	prog( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
@@ -92,10 +92,11 @@ class TPrmTempl: public TFunction, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Attributes
-	string	&mId, work_prog;
+	TCfg	&mId;
+	string	work_prog;
 };
 
 //*************************************************
@@ -111,13 +112,13 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
-	string name( );
-	string descr( );
+	string	id( )		{ return mId; }
+	string	name( );
+	string	descr( );
 
-	string DB( )		{ return work_lib_db; }
-	string tbl( )		{ return cfg("DB").getS(); }
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( )		{ return work_lib_db; }
+	string	tbl( )		{ return cfg("DB").getS(); }
+	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
 	bool startStat( )	{ return run_st; }
 	void start( bool val );
@@ -149,12 +150,12 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Attributes
 	bool	run_st;
 	int	m_ptmpl;
-	string 	&mId;
+	TCfg	&mId;
 	ResString work_lib_db;
 };
 

@@ -48,13 +48,13 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
-	string workId( );
-	string name( );
-	string dscr( )		{ return cfg("DESCRIPT").getS(); }
-	string addr( )		{ return cfg("ADDR").getS(); }
-	string protocolFull( )	{ return cfg("PROT").getS(); }
-	string protocol( );
+	string	id( )		{ return mId; }
+	string	workId( );
+	string	name( );
+	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
+	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	protocolFull( )	{ return cfg("PROT").getS(); }
+	string	protocol( );
 	virtual string getStatus( );
 
 	bool toStart( ) 	{ return mStart; }
@@ -95,11 +95,11 @@ class TTransportIn : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Attributes
-	string 	&mId;
-	bool	&mStart;
+	TCfg	&mId;
+	char	&mStart;
 	string	mDB;
 };
 
@@ -115,7 +115,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	string	id( )		{ return mId; }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
@@ -169,11 +169,11 @@ class TTransportOut : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Attributes
-	string 	&mId;
-	bool	&mStart;
+	TCfg	&mId;
+	char	&mStart;
 	string	mDB;
 
 	//> Reserve parameters

@@ -47,9 +47,9 @@ class TParamContr : public TConfig, public TValue
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return cfg("SHIFR").getSd(); }
-	string name( );
-	string descr( );
+	string	id( )		{ return mId.c_str(); }
+	string	name( );
+	string	descr( );
 	bool toEnable( )	{ return cfg("EN").getB(); }
 	bool enableStat( )	{ return m_en; }
 
@@ -89,11 +89,11 @@ class TParamContr : public TConfig, public TValue
 
     private:
 	//Methods
-	void setId( const string &vl );
-	const string &nodeName( )	{ return id(); }
+	const char *nodeName( )	{ return mId.c_str(); }
 
 	//Attributes
 	bool	m_en;
+	string	mId;
 	TElem	el_err;		//Error atributes
 
 	TTipParam	*tipparm;

@@ -73,7 +73,7 @@ class VCAObj : public TCntrNode
 	//Methods
 	VCAObj( const string &iid );
 
-	const string &id( )		{ return m_id; }
+	string id( )	{ return m_id.c_str(); }
 
 	virtual void getReq( SSess &ses ) = 0;
 	virtual void postReq( SSess &ses ) = 0;
@@ -86,7 +86,7 @@ class VCAObj : public TCntrNode
 
     private:
 	//Methods
-	const string &nodeName( )	{ return m_id; }
+	const char *nodeName( )	{ return m_id.c_str(); }
 
 	//Attributes
 	const string	m_id;
@@ -387,7 +387,7 @@ class VCASess : public TCntrNode
 	//Methods
 	VCASess( const string &iid, bool isCreate );
 
-	const string &id( )		{ return m_id; }
+	string id( )			{ return m_id; }
 	const string &sender( )		{ return mSender; }
 	time_t lstReq( )		{ return lst_ses_req; }
 
@@ -424,7 +424,7 @@ class VCASess : public TCntrNode
 	};
 
 	//Methods
-	const string &nodeName( )	{ return m_id; }
+	const char *nodeName( )	{ return m_id.c_str(); }
 	void postDisable( int flag );
 
 	//Attributes

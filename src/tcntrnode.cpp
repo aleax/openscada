@@ -385,7 +385,7 @@ bool TCntrNode::chldPresent( int8_t igr, const string &name )
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
-    TMap::iterator p = (*chGrp)[igr].elem.find(name);
+    TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
     if(p != (*chGrp)[igr].elem.end() && p->second->nodeMode() == Enable) return true;
 
     return false;
@@ -407,7 +407,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
     {
 	delete node;
 	if(p->second->nodeMode() == Disable)	p->second->nodeEn(TCntrNode::NodeRestore);
-	if(!noExp) throw TError(nodePath().c_str(),_("Node '%s' is already present."),p->first.c_str());
+	if(!noExp) throw TError(nodePath().c_str(),_("Node '%s' is already present."),p->first);
 	return;
     }
 
@@ -421,7 +421,7 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 	for(p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); p++)
 	    if(p->second->mOi >= pos) p->second->mOi++;
     }
-    (*chGrp)[igr].elem.insert(std::pair<string,TCntrNode*>(node->nodeName(),node));
+    (*chGrp)[igr].elem.insert(std::pair<const char *,TCntrNode*>(node->nodeName(),node));
     res.release();
 
     if(node->nodeMode() == Disable)	node->nodeEn(TCntrNode::NodeConnect);
@@ -435,7 +435,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     if(!(nodeMode() == Enable || nodeMode() == Disable))
         throw TError(nodePath().c_str(),_("Node is begin processed now!"));
 
-    TMap::iterator p = (*chGrp)[igr].elem.find(name);
+    TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
     if(p == (*chGrp)[igr].elem.end())
 	throw TError(nodePath().c_str(),_("Child '%s' is not present!"), name.c_str());
 
@@ -445,7 +445,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     if( !shDel )
     {
 	res.request( true );
-	p = (*chGrp)[igr].elem.find(name);
+	p = (*chGrp)[igr].elem.find(name.c_str());
 	if( p == (*chGrp)[igr].elem.end() ) return;
 	if( (*chGrp)[igr].ordered )
 	{
@@ -492,7 +492,7 @@ string TCntrNode::nodePath( char sep, bool from_root )
 	if( prev.node )
 	    return prev.node->nodePath(sep,from_root)+
 		    ((prev.grp<0)?"":(*(prev.node->chGrp))[prev.grp].id)+nodeName()+"/";
-	else return from_root?"/":("/"+nodeName()+"/");
+	else return from_root ? string("/"):(string("/")+nodeName()+"/");
     }
 }
 
@@ -509,7 +509,7 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
     if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
     if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
-    TMap::iterator p = (*chGrp)[igr].elem.find(name);
+    TMap::iterator p = (*chGrp)[igr].elem.find(name.c_str());
     if(p == (*chGrp)[igr].elem.end() || p->second->nodeMode() == Disable)
 	throw TError(nodePath().c_str(),_("Element '%s' is not present or disabled!"), name.c_str());
 
@@ -773,7 +773,7 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
     if( opt->name() == "info" )
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Node: ")+nodeName(),R_R_R_,"root","root");
+	ctrMkNode("oscada_cntr",opt,-1,"/",TSYS::strMess(_("Node: %s"),nodeName()),R_R_R_,"root","root");
 
     //> Process command to page
     string a_path = opt->attr("path");

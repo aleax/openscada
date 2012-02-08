@@ -601,7 +601,7 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
 //* TTransportIn				 *
 //************************************************
 TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mStart(cfg("START").getBd()), mDB(idb)
+    TConfig(el), run_st(false), mId(cfg("ID")), mStart(cfg("START").getBd()), mDB(idb)
 {
     mId = iid;
 }
@@ -614,12 +614,10 @@ TTransportIn::~TTransportIn()
 TCntrNode &TTransportIn::operator=( TCntrNode &node )
 {
     TTransportIn *src_n = dynamic_cast<TTransportIn*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
+    exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
-    mId = tid;
     setDB(src_n->mDB);
 
     return *this;
@@ -773,7 +771,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 //* TTransportOut                                *
 //************************************************
 TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), run_st(false), mId(cfg("ID").getSd()), mStart(cfg("START").getBd()),
+    TConfig(el), run_st(false), mId(cfg("ID")), mStart(cfg("START").getBd()),
     mDB(idb), mPrm1(0), mPrm2(0)
 {
     mId = iid;
@@ -789,10 +787,8 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
     TTransportOut *src_n = dynamic_cast<TTransportOut*>(&node);
     if( !src_n ) return *this;
 
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
+    exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
-    mId = tid;
     setDB(src_n->mDB);
 
     return *this;

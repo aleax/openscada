@@ -57,8 +57,8 @@ class TTable : public TCntrNode
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &name( )	{ return mName; }
-	time_t lstUse( )	{ return mLstUse; }
+	string	name( )		{ return mName.c_str(); }
+	time_t	lstUse( )	{ return mLstUse; }
 
 	virtual void fieldStruct( TConfig &cfg )
 	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"fieldStruct"); }
@@ -83,7 +83,7 @@ class TTable : public TCntrNode
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return mName; }
+	const char *nodeName( )	{ return mName.c_str(); }
 
 	//Private attributes
 	const string	mName;
@@ -105,11 +105,11 @@ class TBD : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string	&id( )		{ return mId; }
-	string		name( );
-	string		dscr( )		{ return cfg("DESCR").getS(); }
-	string		addr( )		{ return cfg("ADDR").getS(); }
-	string		codePage( )	{ return cfg("CODEPAGE").getS(); }
+	string	id( )		{ return mId; }
+	string	name( );
+	string	dscr( )		{ return cfg("DESCR").getS(); }
+	string	addr( )		{ return cfg("ADDR").getS(); }
+	string	codePage( )	{ return cfg("CODEPAGE").getS(); }
 
 	bool enableStat( )		{ return mEn; }
 	bool toEnable( )		{ return mToEn; }
@@ -160,12 +160,12 @@ class TBD : public TCntrNode, public TConfig
     private:
 	//Private methods
 	void postEnable( int flag );
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
 	//> Base options
-	string 	&mId;		//ID
-	bool	&mToEn;
+	TCfg	&mId;	//ID
+	char	&mToEn;
 
 	bool	mEn;
 

@@ -100,11 +100,11 @@ class TSYS : public TCntrNode
 	int stopSignal( )	{ return mStopSignal; }
 
 	//> Programs options
-	const string &id( )	{ return mId; }
-	string name( )		{ return mName; }
+	string	id( )		{ return mId.c_str(); }
+	string	name( )		{ return mName; }
 	void setName( const string &vl )	{ mName = vl; modif(); }
-	string user( )		{ return mUser; }	//Run user name
-	string host( );
+	string	user( )		{ return mUser; }	//Run user name
+	string	host( );
 
 	void list( vector<string> &list )	{ chldList(mSubst,list); }
 	bool present( const string &name )	{ return chldPresent(mSubst,name); }
@@ -303,7 +303,7 @@ class TSYS : public TCntrNode
 	};
 
 	//Private methods
-	const string &nodeName( )	{ return id(); }
+	const char *nodeName( )	{ return mId.c_str(); }
 	bool cfgFileLoad( );
 	void cfgFileSave( );
 	void cfgPrmLoad( );

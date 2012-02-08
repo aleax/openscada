@@ -80,8 +80,9 @@ TVariant::~TVariant( )
     setType(Null);
 }
 
-void TVariant::setType( Type tp )
+void TVariant::setType( Type tp, bool fix )
 {
+    mFixedTp = fix;
     if(tp == type()) return;
 
     //> Free

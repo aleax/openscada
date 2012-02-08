@@ -64,7 +64,7 @@ class TMdPrm : public TParamContr
 	TElem	p_el;		//Work atribute elements
 
 	int	&mod_addr;	//Module address
-	bool	&crc_ctrl;	//DCON CRC control mode
+	char	&crc_ctrl;	//DCON CRC control mode
 	int	&host_signal;
 
 	int	&ai_method;

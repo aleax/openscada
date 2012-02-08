@@ -46,7 +46,7 @@ class Session : public TCntrNode
 	~Session( );
 
 	string	ico( );
-	const string &id( )	{ return mId; }			//Identifier
+	string  id( )		{ return mId.c_str(); }		//Identifier
 	string	projNm( )	{ return mPrjnm; }		//Project's name
 	string	user( )		{ return mUser; }		//Open session user
 	string	owner( )	{ return mOwner; }		//Source project owner
@@ -104,7 +104,7 @@ class Session : public TCntrNode
 
     protected:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )		{ return mId.c_str(); }
 	void cntrCmdProc( XMLNode *opt );				//Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -140,7 +140,8 @@ class Session : public TCntrNode
 
 	//Attributes
 	int	mPage;
-	string	mId, mPrjnm, mOwner, mGrp;
+	const string mId;
+	string	mPrjnm, mOwner, mGrp;
 	ResString mUser;
 	int	mPer, mPermit;
 	bool	mEnable, mStart, endrun_req;	//Enabled, Started and endrun stats

@@ -103,7 +103,7 @@ class TFunction : public TCntrNode
 
 	TFunction &operator=( TFunction &func );
 
-	const string &id( )		{ return mId; };
+	string	id( )			{ return mId.c_str(); };
 	virtual string name( )		{ return ""; }
 	virtual string descr( )		{ return ""; }
 	bool startStat( )		{ return run_st; }
@@ -135,21 +135,19 @@ class TFunction : public TCntrNode
 
     protected:
 	//Methods
+	const char *nodeName( )	{ return mId.c_str(); }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void preDisable( int flag );
 
 	//Attributes
-	string			mId;
-	bool			run_st;
-	TValFunc		*mTVal;
+	string		mId;
+	bool		run_st;
+	TValFunc	*mTVal;
 	vector<TValFunc*>	used;
-	const char		*grp;
+	const char	*grp;
 
     private:
-	//Methods
-	const string &nodeName( )	{ return id(); }
-
 	//Attributes
 	Res		f_res;
 	vector<IO*>	mIO;

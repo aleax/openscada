@@ -36,8 +36,8 @@ TElem::TElem( const string &name ) : m_name(name)
 
 TElem::~TElem( )
 {
-    while( cont.size() )	cont[0]->detElem(this);
-    while( elem.size() )	fldDel(0);
+    while(cont.size())	cont[0]->detElem(this);
+    while(elem.size())	fldDel(0);
 }
 
 int TElem::fldAdd( TFld *fld, int id )
@@ -189,7 +189,7 @@ void TFld::setFlg( unsigned iflg )
 
 string TFld::values()
 {
-    if( m_val.v_s == NULL )	return "";
+    if(m_val.v_s == NULL) return "";
 
     string rez;
     switch(type())
@@ -219,7 +219,7 @@ string TFld::values()
 
 string TFld::selNames()
 {
-    if( m_sel == NULL )	return "";
+    if(m_sel == NULL) return "";
 
     string rez;
     for(unsigned i_el = 0; i_el < m_sel->size(); i_el++)
@@ -307,28 +307,28 @@ void TFld::setSelNames( const string &slnms )
 
 const vector<string> &TFld::selValS()
 {
-    if( flg()&TFld::Selected && type() == TFld::String )
+    if(flg()&TFld::Selected && type() == TFld::String)
 	return *m_val.v_s;
     throw TError("Field",_("Field is not String."));
 }
 
 const vector<int> &TFld::selValI()
 {
-    if( type() == TFld::Integer )
+    if(type() == TFld::Integer)
 	return *m_val.v_i;
     throw TError("Field",_("Field is not Integer."));
 }
 
 const vector<double> &TFld::selValR()
 {
-    if( type() == TFld::Real )
+    if(type() == TFld::Real)
 	return *m_val.v_r;
     throw TError("Field",_("Field is not Real."));
 }
 
 const vector<bool> &TFld::selValB()
 {
-    if( flg()&TFld::Selected && type() == TFld::Boolean )
+    if(flg()&TFld::Selected && type() == TFld::Boolean)
 	return *m_val.v_b;
     throw TError("Field",_("Field is not Boolean."));
 }
@@ -420,7 +420,7 @@ string TFld::selVl2Nm( const string &val )
 
 string TFld::selVl2Nm( int val )
 {
-    if( flg()&TFld::Selected && type()==TFld::Integer )
+    if( flg()&TFld::Selected && type() == TFld::Integer )
     {
 	int sz = vmin(m_sel->size(), m_val.v_i->size());
 	if( !sz ) return _("Empty");
@@ -435,7 +435,7 @@ string TFld::selVl2Nm( int val )
 
 string TFld::selVl2Nm( double val )
 {
-    if( flg()&TFld::Selected && type()==TFld::Real )
+    if( flg()&TFld::Selected && type() == TFld::Real )
     {
 	int sz = vmin(m_sel->size(), m_val.v_r->size());
 	if( !sz ) return _("Empty");
@@ -450,7 +450,7 @@ string TFld::selVl2Nm( double val )
 
 string TFld::selVl2Nm( bool val )
 {
-    if( flg()&TFld::Selected && type()==TFld::Boolean )
+    if( flg()&TFld::Selected && type() == TFld::Boolean )
     {
 	int sz = vmin(m_sel->size(), m_val.v_b->size());
 	if( !sz ) return _("Empty");
@@ -465,7 +465,7 @@ string TFld::selVl2Nm( bool val )
 
 string TFld::selNm2VlS( const string &name )
 {
-    if(flg()&TFld::Selected && type()==TFld::String)
+    if(flg()&TFld::Selected && type() == TFld::String)
 	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_s->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_s)[i_val];
@@ -475,7 +475,7 @@ string TFld::selNm2VlS( const string &name )
 
 int TFld::selNm2VlI( const string &name )
 {
-    if(flg()&TFld::Selected && type()==TFld::Integer)
+    if(flg()&TFld::Selected && type() == TFld::Integer)
 	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_i->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_i)[i_val];
@@ -485,7 +485,7 @@ int TFld::selNm2VlI( const string &name )
 
 double TFld::selNm2VlR( const string &name )
 {
-    if(flg()&TFld::Selected && type()==TFld::Real)
+    if(flg()&TFld::Selected && type() == TFld::Real)
 	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_r->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_r)[i_val];
@@ -495,7 +495,7 @@ double TFld::selNm2VlR( const string &name )
 
 bool TFld::selNm2VlB( const string &name )
 {
-    if(flg()&TFld::Selected && type()==TFld::Boolean)
+    if(flg()&TFld::Selected && type() == TFld::Boolean)
 	for(unsigned i_val = 0; i_val < vmin(m_sel->size(), m_val.v_b->size()); i_val++)
 	    if(name == (*m_sel)[i_val])
 		return (*m_val.v_b)[i_val];

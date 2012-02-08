@@ -250,7 +250,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Parameter: ")+nodeName(),RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",TSYS::strMess(_("Parameter: %s"),nodeName()),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("area",opt,-1,"/val",_("Attributes")))
 	{
 	    //>>> Add attributes list
@@ -368,8 +368,9 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    if(v_get && vlAt(attr).at().arch().freeStat())
 	    {
 		//>>>> Make archive name
-		string a_nm = nodeName()+"_"+attr;
-		if(a_nm.size() > 20) a_nm = (nodeName().substr(0,nodeName().size()-nodeName().size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
+		string n_nm = nodeName(),
+		       a_nm = n_nm+"_"+attr;
+		if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
 		string rez_nm = a_nm;
 		for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
 		{
@@ -479,11 +480,9 @@ void TVal::setCfg( TCfg &cfg )
     mCfg = true;
 }
 
-const string &TVal::name()
-{
-    if( mCfg )	return( src.cfg->name() );
-    else	return( src.fld->name() );
-}
+string TVal::name()		{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
+
+const char *TVal::nodeName( )	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
 TFld &TVal::fld()
 {

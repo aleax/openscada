@@ -51,7 +51,7 @@ class Project : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }			//Identifier
+	string  id( )		{ return mId; }			//Identifier
 	string	name( );					//Name
 	string	descr( )	{ return cfg("DESCR").getS(); }	//Description
 	string	ico( )		{ return cfg("ICO").getS(); }	//Icon
@@ -108,7 +108,7 @@ class Project : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -124,8 +124,8 @@ class Project : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	string	&mId,		//Identifier
-		workPrjDB,	//Work DB
+	TCfg	&mId;		//Identifier
+	string	workPrjDB,	//Work DB
 		mOldDB;
 	int	&mPermit,	//Access permission
 		&mPer,		//Calculate period

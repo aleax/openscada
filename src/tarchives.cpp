@@ -1032,8 +1032,7 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 //* TMArchivator                                 *
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
-    TConfig( cf_el ), run_st(false),
-    mId(cfg("ID").getSd()), m_start(cfg("START").getBd()), m_level(cfg("LEVEL").getId()), m_db(idb)
+    TConfig( cf_el ), run_st(false), mId(cfg("ID")), m_start(cfg("START").getBd()), m_level(cfg("LEVEL").getId()), m_db(idb)
 {
     mId = iid;
 }
@@ -1044,10 +1043,8 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
+    exclCopy(*src_n, "ID;");
     cfg("MODUL").setS(owner().modId());
-    mId = tid;
     m_db = src_n->m_db;
 
     if( src_n->startStat() && toStart() && !startStat() )
@@ -1078,7 +1075,7 @@ void TMArchivator::postDisable(int flag)
 
 TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
 
-string TMArchivator::workId( )		{ return owner().modId()+"."+id(); }
+string TMArchivator::workId( )		{ return string(owner().modId())+"."+id(); }
 
 string TMArchivator::name()
 {
@@ -1086,7 +1083,7 @@ string TMArchivator::name()
     return rez.size() ? rez : mId;
 }
 
-string TMArchivator::tbl( )		{ return owner().owner().subId()+"_mess_proc"; }
+string TMArchivator::tbl( )		{ return string(owner().owner().subId())+"_mess_proc"; }
 
 void TMArchivator::load_( )
 {

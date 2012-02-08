@@ -2421,7 +2421,7 @@ string TProtIn::mkError( uint32_t errId, const string &err )
 //* OPCEndPoint                                   *
 //*************************************************
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mId(cfg("ID").getSd()), mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
+    TConfig(el), mId(cfg("ID")), mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
     mEn(false), mDB(idb), cntReq(0), objTree("root")
 {
     mId = iid;
@@ -2441,9 +2441,7 @@ TCntrNode &OPCEndPoint::operator=( TCntrNode &node )
     if( enableStat( ) )	setEnable(false);
 
     //> Copy parameters
-    string prevId = mId;
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = prevId;
+    exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
 
     return *this;

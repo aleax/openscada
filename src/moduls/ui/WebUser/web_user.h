@@ -67,7 +67,7 @@ class UserPg : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	string id( )		{ return mId; }
 	string name( );
 	string descr( )		{ return cfg("DESCR").getS(); }
 	bool toEnable( )	{ return mAEn; }
@@ -105,15 +105,15 @@ class UserPg : public TCntrNode, public TConfig
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	//Attributes
-	string	&mId;
-	bool	&mAEn, mEn;
+	TCfg	&mId;
+	char	&mAEn, mEn;
 	string	mDB, mWorkProg;
 };
 

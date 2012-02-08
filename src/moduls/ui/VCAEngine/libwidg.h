@@ -44,7 +44,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }			//Identifier
+	string id( )		{ return mId; }			//Identifier
 	string name( );						//Name
 	string descr( ) 	{ return cfg("DESCR").getS(); }	//Description
 	string ico( )		{ return cfg("ICO").getS(); }	//Icon
@@ -80,7 +80,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     protected:
 	//Methods
-	const string &nodeName( )		{ return mId; }
+	const char *nodeName( )		{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
@@ -96,7 +96,7 @@ class WidgetLib : public TCntrNode, public TConfig
 
     private:
 	//Attributes
-	string &mId;
+	TCfg	&mId;
 	string work_lib_db, mOldDB;
 	bool	mEnable;
 };

@@ -152,8 +152,8 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t period( )	{ return mPer; }
-	string	cron( )		{ return cfg("SCHEDULE").getS(); }
-	string  addr( )		{ return cfg("ADDR").getS(); }
+	string	cron( )		{ return mSched; }
+	string  addr( )		{ return mAddr; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -203,7 +203,10 @@ class TMdContr: public TController
 	int	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
-	bool	&mMerge,			//Fragments of register merge
+	TCfg	&mSched,			//Calc schedule
+                &mPrt,                          //Protocol
+                &mAddr;                         //Transport device address
+	char	&mMerge,			//Fragments of register merge
 		&mMltWr;			//Use multi-write functions(15,16)
 	int	&reqTm,				//Request timeout in ms
 		&restTm,			//Restore timeout in s

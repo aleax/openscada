@@ -46,8 +46,8 @@ class TSubSYS : public TCntrNode
 	TSubSYS( const char *id, const char *name, bool mod = false );
 	virtual ~TSubSYS( );
 
-	const string &subId( )	{ return m_id; }
-	string subName( );
+	string	subId( )	{ return m_id.c_str(); }
+	string	subName( );
 	bool subStartStat( )	{ return mStart; }
 
 	bool subModule( )	{ return m_mod_sys; }	//Module subsystem
@@ -78,14 +78,14 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return subId(); }
+	const char *nodeName( )	{ return m_id.c_str(); }
 
 	//Private attributes
 	bool	m_mod_sys;
 	int	m_mod;
 
-	const string	m_id;		//Id
-	string		m_name;		//Name
+	string	m_id;		//Id
+	string	m_name;		//Name
 };
 
 }

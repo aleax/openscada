@@ -35,7 +35,7 @@ using namespace OSCADA;
 //*************************************************
 TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm), m_en(false), tipparm(tpprm)
 {
-    setId(name);
+    cfg("SHIFR") = mId = name;	//!! For prevent ID location change on parameter type change
     setName(name);
 }
 
@@ -57,12 +57,10 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     }
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
-    setId(tid);
+    exclCopy(*src_n, "ID;");
 
     //> Enable new parameter
-    if(src_n->enableStat() && toEnable( ) && !enableStat())	enable();
+    if(src_n->enableStat() && toEnable() && !enableStat()) enable();
 
     return *this;
 }
@@ -165,11 +163,6 @@ void TParamContr::vlGet( TVal &val )
 	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
     }
-}
-
-void TParamContr::setId( const string &vl )
-{
-    cfg("SHIFR").setS(vl);
 }
 
 void TParamContr::setType( const string &tpId )

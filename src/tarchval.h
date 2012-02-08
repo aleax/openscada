@@ -174,11 +174,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	//> Base functions
-	const string &id( )	{ return mId; }
-	string name( );
-	string dscr( )		{ return cfg("DESCR").getS(); }
-	SrcMode srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
-	string  srcData( )	{ return cfg("Source").getS(); }
+	string	id( )		{ return mId; }
+	string	name( );
+	string	dscr( )		{ return cfg("DESCR").getS(); }
+	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
+	string	srcData( )	{ return cfg("Source").getS(); }
 	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return runSt; }
 
@@ -247,21 +247,21 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     private:
 	//Private methods
 	void setUpBuf( );
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
 	Res	aRes;
 	bool	runSt;
 	string	mDB;
 	//> Base params
-	string 	&mId;		//ID
-	bool	&mStart;	//Starting flag
+	TCfg	&mId;		//ID
+	char	&mStart;	//Starting flag
 	int	&mSrcMode;	//Source mode
 	//> Buffer params
 	int	&mVType;	//Value type (int, real, bool, string)
 	double	&mBPer;		//Buffer period
 	int	&mBSize;	//Buffer size
-	bool	&mBHGrd,	//Buffer use hard time griding
+	char	&mBHGrd,	//Buffer use hard time griding
 		&mBHRes;	//Buffer use high time resolution
 	//> Mode params
 	AutoHD<TVal>	pattr_src;
@@ -287,13 +287,13 @@ class TVArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
-	string workId( );
-	string name( );
-	string dscr( )		{ return cfg("DESCR").getS(); }
-	string addr( )		{ return cfg("ADDR").getS(); }
-	double valPeriod( )	{ return mVPer; }
-	int    archPeriod( )	{ return mAPer; }
+	string	id( )		{ return mId; }
+	string	workId( );
+	string	name( );
+	string	dscr( )		{ return cfg("DESCR").getS(); }
+	string	addr( )		{ return cfg("ADDR").getS(); }
+	double	valPeriod( )	{ return mVPer; }
+	int	archPeriod( )	{ return mAPer; }
 
 	bool toStart( )		{ return mStart; }
 	bool startStat( )	{ return runSt; }
@@ -334,7 +334,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
 
 	void load_( );
 	void save_( );
@@ -347,12 +347,12 @@ class TVArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )		{ return mId.getSd(); }
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
-	string 	&mId;		//Var arch id
-	bool	&mStart;	//Var arch starting flag
+	TCfg	&mId;		//Var arch id
+	char	&mStart;	//Var arch starting flag
 	double	&mVPer;		//Value period (sec)
 	int	&mAPer;		//Archivation period
 	string	mDB;

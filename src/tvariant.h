@@ -83,15 +83,15 @@ class TVariant
 	bool isNull( ) const	{ return (type()==Null); }
 	bool isEVal( ) const;
 	Type type( ) const	{ return (Type)mType; }
-	void setType( Type tp );
+	void setType( Type tp, bool fix = false );
 	bool isModify( )	{ return mModify; }
 	void setModify( bool vl = true )	{ mModify = vl; }
 
-	char	getB( ) const;
-	int	getI( ) const;
-	double	getR( ) const;
-	string	getS( ) const;
-	TVarObj	*getO( bool noex = false ) const;
+	virtual char	getB( ) const;
+	virtual int 	getI( ) const;
+	virtual double	getR( ) const;
+	virtual string	getS( ) const;
+	virtual TVarObj	*getO( bool noex = false ) const;
 
 	operator char( )	{ return getB(); }
 	operator int( )		{ return getI(); }
@@ -99,11 +99,11 @@ class TVariant
 	operator string( )	{ return getS(); }
 	operator TVarObj*( )	{ return getO(); }
 
-	void setB( char val );
-	void setI( int val );
-	void setR( double val );
-	void setS( const string &val );
-	void setO( TVarObj *val );
+	virtual void setB( char val );
+	virtual void setI( int val );
+	virtual void setR( double val );
+	virtual void setS( const string &val );
+	virtual void setO( TVarObj *val );
 
     protected:
 	//Data

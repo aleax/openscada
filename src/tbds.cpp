@@ -707,7 +707,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
 //* TBD                                          *
 //************************************************
 TBD::TBD( const string &iid, TElem *cf_el ) : TConfig( cf_el ),
-    mId(cfg("ID").getSd()), mToEn(cfg("EN").getBd()), mEn(false), userSQLTrans(EVAL_BOOL)
+    mId(cfg("ID")), mToEn(cfg("EN").getBd()), mEn(false), userSQLTrans(EVAL_BOOL)
 {
     mId = iid;
     mTbl = grpAdd("tbl_");
@@ -720,10 +720,8 @@ TCntrNode &TBD::operator=( TCntrNode &node )
 
     if(!enableStat())
     {
-	string tid = id();
-	*(TConfig*)this = *(TConfig*)src_n;
+	exclCopy(*src_n, "ID;");
 	cfg("TYPE").setS(owner().modId());
-	mId = tid;
 	modif();
     }
 

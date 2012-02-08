@@ -306,13 +306,12 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TUser                                         *
 //*************************************************
-TUser::TUser( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_name(cfg("NAME").getSd()), m_db(idb), m_sysIt(false)
+TUser::TUser( const string &nm, const string &idb, TElem *el ) : TConfig(el), mName(cfg("NAME")), m_db(idb), m_sysIt(false)
 {
-    m_name = nm;
+    mName = nm;
 }
 
-TUser::~TUser(  )
+TUser::~TUser( )
 {
 
 }
@@ -322,9 +321,7 @@ TCntrNode &TUser::operator=( TCntrNode &node )
     TUser *src_n = dynamic_cast<TUser*>(&node);
     if( !src_n ) return *this;
 
-    string nm = name();
-    *(TConfig*)this = *(TConfig*)src_n;
-    m_name = nm;
+    exclCopy(*src_n, "NAME;");
     setDB(src_n->m_db);
 
     return *this;
@@ -357,7 +354,7 @@ void TUser::postDisable(int flag)
 
 TSecurity &TUser::owner( )	{ return *(TSecurity*)nodePrev(); }
 
-string TUser::tbl( )		{ return owner().subId()+"_user"; }
+string TUser::tbl( )		{ return string(owner().subId())+"_user"; }
 
 void TUser::load_( )
 {
@@ -467,10 +464,9 @@ void TUser::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TGroup					  *
 //*************************************************
-TGroup::TGroup( const string &nm, const string &idb, TElem *el ) :
-    TConfig(el), m_name(cfg("NAME").getSd()), m_db(idb), m_sysIt(false)
+TGroup::TGroup( const string &nm, const string &idb, TElem *el ) : TConfig(el), mName(cfg("NAME")), m_db(idb), m_sysIt(false)
 {
-    m_name = nm;
+    mName = nm;
 }
 
 TGroup::~TGroup(  )
@@ -481,11 +477,9 @@ TGroup::~TGroup(  )
 TCntrNode &TGroup::operator=( TCntrNode &node )
 {
     TGroup *src_n = dynamic_cast<TGroup*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
-    string nm = name();
-    *(TConfig*)this = *(TConfig*)src_n;
-    m_name = nm;
+    exclCopy(*src_n, "NAME;");
     setDB(src_n->m_db);
 
     return *this;
@@ -559,7 +553,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),RWRWR_,"root",SSEC_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group %s")+name(),RWRWR_,"root",SSEC_ID);
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","len","50");

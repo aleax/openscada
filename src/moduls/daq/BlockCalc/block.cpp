@@ -34,8 +34,7 @@ using namespace Virtual;
 //*************************************************
 Block::Block( const string &iid, Contr *iown ) :
     TCntrNode(iown), TValFunc(iid+"_block",NULL), TConfig(&((TipContr &)iown->owner()).blockE()),
-    m_enable(false), m_process(false),
-    m_id(cfg("ID").getSd()), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()),
+    m_enable(false), m_process(false), m_id(cfg("ID")), m_to_en(cfg("EN").getBd()), m_to_prc(cfg("PROC").getBd()),
     id_freq(-1), id_start(-1), id_stop(-1)
 {
     m_id = iid;
@@ -52,9 +51,7 @@ TCntrNode &Block::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //> Copy parameters
-    string prev_id = m_id;
-    *(TConfig *)this = *(TConfig*)src_n;
-    m_id = prev_id;
+    exclCopy(*src_n, "ID;");
 
     //> Copy IO and links
     if( src_n->enable() )

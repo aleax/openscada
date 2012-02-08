@@ -890,7 +890,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 //*************************************************
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), mDB(idb),
-    mId(cfg("ID").getSd()), mStart(cfg("START").getBd()), mSrcMode(cfg("SrcMode").getId()),
+    mId(cfg("ID")), mStart(cfg("START").getBd()), mSrcMode(cfg("SrcMode").getId()),
     mVType(cfg("VTYPE").getId()), mBPer(cfg("BPER").getRd()), mBSize(cfg("BSIZE").getId()),
     mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd())
 {
@@ -911,9 +911,7 @@ TCntrNode &TVArchive::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = tid;
+    exclCopy(*src_n, "ID;");
     mDB = src_n->mDB;
 
     if( src_n->startStat() && toStart() && !startStat() )
@@ -2113,7 +2111,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 //* TVArchivator                                  *
 //*************************************************
 TVArchivator::TVArchivator( const string &iid, const string &idb, TElem *cf_el ) : TConfig(cf_el), runSt(false), endrunReq(false),
-    mId(cfg("ID").getSd()), mStart(cfg("START").getBd()), mVPer(cfg("V_PER").getRd()), mAPer(cfg("A_PER").getId()), mDB(idb), tm_calc(0)
+    mId(cfg("ID")), mStart(cfg("START").getBd()), mVPer(cfg("V_PER").getRd()), mAPer(cfg("A_PER").getId()), mDB(idb), tm_calc(0)
 {
     mId = iid;
 }
@@ -2129,9 +2127,7 @@ TCntrNode &TVArchivator::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = tid;
+    exclCopy(*src_n, "ID;");
     mDB = src_n->mDB;
 
     if( src_n->startStat() && toStart() && !startStat() )

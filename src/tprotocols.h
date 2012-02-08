@@ -46,8 +46,8 @@ class TProtocolIn : public TCntrNode
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn( );
 
-	const string &name( )		{ return mName; }
-	const string &srcTr( )		{ return mSrcTr; }
+	string	name( )		{ return mName.c_str(); }
+	const string &srcTr( )	{ return mSrcTr; }
 
 	void setSrcTr( const string &vl )	{ mSrcTr = vl; }
 
@@ -59,11 +59,11 @@ class TProtocolIn : public TCntrNode
 
     private:
 	//Methods
-	const string &nodeName( )	{ return mName; }
+	const char *nodeName( )	{ return mName.c_str(); }
 
 	//Attributes
-	const string	mName;
-	string		mSrcTr;
+	string	mName;
+	string	mSrcTr;
 };
 
 //************************************************

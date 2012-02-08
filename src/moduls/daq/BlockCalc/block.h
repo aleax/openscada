@@ -63,7 +63,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	//> Block's parameters
-	const string &id( )	{ return m_id; }
+	string id( )		{ return m_id; }
 	string name( );
 	string descr( ) 	{ return cfg("DESCR").getS(); }
 	int    errCnt( )	{ return err_cnt; }
@@ -101,7 +101,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void loadIO( const string &blk_db = "", const string &blk_id = "" );
 	void saveIO( );
 
-	const string &nodeName( )	{ return m_id; }
+	const char *nodeName( )	{ return m_id.getSd(); }
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preDisable( int flag );
@@ -137,8 +137,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool		m_enable,
 			m_process;	//Processing block
 
-	string		&m_id;		//Block id
-	bool		&m_to_en, &m_to_prc;
+	TCfg		&m_id;		//Block id
+	char		&m_to_en, &m_to_prc;
 
 	Res		lnk_res;	//Link resource
 	int		err_cnt;

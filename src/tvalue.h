@@ -60,7 +60,7 @@ class TVal : public TCntrNode
 	void setFld( TFld &fld );
 	void setCfg( TCfg &cfg );
 
-	const string &name( );
+	string	name( );
 	int64_t time( )	{ return mTime; }
 
 	//> Read current value (direct)
@@ -101,7 +101,7 @@ class TVal : public TCntrNode
 
     private:
 	//Methods
-	const string &nodeName( )	{ return name(); }
+	const char *nodeName( );
 
 	//Attributes
 	union

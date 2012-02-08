@@ -56,19 +56,19 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
-	string workId( );
-	string name( );
-	string dscr( )		{ return cfg("DESCR").getS(); }
+	string	id( )	{ return mId; }
+	string	workId( );
+	string	name( );
+	string	dscr( )		{ return cfg("DESCR").getS(); }
 	bool toStart( )		{ return m_start; }
 	bool startStat( )	{ return run_st; }
-	string addr( )		{ return cfg("ADDR").getS(); }
-	int    level( )		{ return m_level; }
-	void   categ( vector<string> &list );
+	string	addr( )		{ return cfg("ADDR").getS(); }
+	int	level( )	{ return m_level; }
+	void	categ( vector<string> &list );
 
-	string DB( )		{ return m_db; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( )		{ return m_db; }
+	string	tbl( );
+	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &vl )	{ cfg("NAME").setS(vl); }
 	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }
@@ -109,11 +109,11 @@ class TMArchivator : public TCntrNode, public TConfig
 
     private:
 	//Private methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
-	string 	&mId;		//Mess arch id
-	bool	&m_start;	//Mess arch starting flag
+	TCfg	&mId;		//Mess arch id
+	char	&m_start;	//Mess arch starting flag
 	int	&m_level;	//Mess arch level
 	string	m_db;
 };

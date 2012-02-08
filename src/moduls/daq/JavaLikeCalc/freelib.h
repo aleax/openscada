@@ -48,7 +48,7 @@ class Lib : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	string id( )		{ return mId; }
 	string name( );
 	string descr( )		{ return cfg("DESCR").getS(); }
 	bool startStat( )	{ return run_st; }
@@ -75,7 +75,7 @@ class Lib : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     protected:
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	void load_( );
@@ -87,9 +87,9 @@ class Lib : public TCntrNode, public TConfig
     private:
 	bool	run_st;
 	int	mFnc;
-	string	&mId;
 	string	work_lib_db;
-	bool	&mProgTr;
+	TCfg	&mId;
+	char	&mProgTr;
 };
 
 } //End namespace FreeLib

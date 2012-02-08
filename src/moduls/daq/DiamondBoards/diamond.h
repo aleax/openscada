@@ -117,7 +117,7 @@ class TMdContr: public TController
 
 	//Attributes
 	int	&m_addr;
-	bool	&ad_int_mode, &data_emul;
+	char	&ad_int_mode, &data_emul;
 
 	double	dataEmulTm;
 

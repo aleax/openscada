@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-05 10:49+0200\n"
+"POT-Creation-Date: 2012-02-08 11:20+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -672,8 +672,9 @@ msgstr "Fehler beim Zugriff auf das Element '%s'!"
 msgid "Element '%s' warning! %s"
 msgstr "Element '%s' Warnung! %s"
 
-msgid "Node: "
-msgstr "Knoten: "
+#, c-format
+msgid "Node: %s"
+msgstr "Knoten: %s"
 
 msgid "*.*.[TableName]"
 msgstr "*.*.[Tabellenname]"
@@ -1431,8 +1432,9 @@ msgstr "Datenbank des Benutzers"
 msgid "Include"
 msgstr "Eingeschlossen"
 
-msgid "Group "
-msgstr "Gruppe "
+#, c-format
+msgid "Group %s"
+msgstr "Gruppe %s"
 
 msgid "User group DB"
 msgstr "Datenbank der Benutzergruppe"
@@ -1531,6 +1533,7 @@ msgstr ""
 msgid "B"
 msgstr ""
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1579,7 +1582,8 @@ msgstr ""
 "    --Config=<path>    Pfad der Konfigurationsdatei.\n"
 "    --Station=<id>     Name der Station.\n"
 "    --demon            Start im Hintergrund-Modus.\n"
-"    --CoreDumpAllow\tFestlegen von Limits für Core-Dump-Erstellung auf Crash erlauben.\n"
+"    --CoreDumpAllow\tFestlegen von Limits für Core-Dump-Erstellung auf Crash "
+"erlauben.\n"
 "    --MessLev=<Stufe>  Nachrichtenstufe <Stufe> von Nachrichten (0-7).\n"
 "    --log=<direct>     Umleitung der Nachrichten in:\n"
 "                         <direct> & 1 - Systemlog (syslogd);\n"
@@ -1843,6 +1847,7 @@ msgstr "Zähler"
 msgid "Finished. "
 msgstr "Finished. "
 
+#, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s)"
 msgstr "Letzter: %s. Laden: %3.1f%% (%s von %s)"
 
@@ -2018,6 +2023,10 @@ msgstr ""
 msgid "User interface"
 msgstr "Benutzerschnittstelle"
 
+#, c-format
+msgid "Parameter: %s"
+msgstr "Parameter: %s"
+
 msgid "Attributes"
 msgstr "Attribute"
 
@@ -2074,6 +2083,13 @@ msgstr "Variable ist kein Objekt"
 
 msgid "Zero object using try!"
 msgstr "Versuch der Benutzung des leeren Objekts"
+
+msgid "Too big string length (> 130 MB)!"
+msgstr ""
+
+#, c-format
+msgid "Memory alloc for big string length (%d) error!"
+msgstr ""
 
 msgid "Negative id is not allow for array."
 msgstr "Negativer Index ist verboten für das Massiv-"

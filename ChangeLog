@@ -1,3 +1,9 @@
+2012-02-08 Roman
+- !!!!:TConfig: It is set based on TVariant for items. Access to object TCfg is made clear and it allow using by link without main types.
+- !!!!:SYS: Childs storing into map for base object TCntrNode is set to "const char*" key and all nodes have been
+    adapted to identifiers constant.
+
+
 2012-02-07 Roman
 - ResString: For read-write to stored string used "string(vl.data(), vl.size())" construction for COW algorithm disable.
 - SYS: TSYS::cntrIter() function is added for faster and simple counters iteration.

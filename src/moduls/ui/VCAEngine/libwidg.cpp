@@ -34,7 +34,7 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), mId(cfg("ID").getSd()), work_lib_db(lib_db), mEnable(false)
+    TConfig(&mod->elWdgLib()), mId(cfg("ID")), work_lib_db(lib_db), mEnable(false)
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -53,10 +53,8 @@ TCntrNode &WidgetLib::operator=( TCntrNode &node )
     if(!src_n) return *this;
 
     //> Copy generic configuration
-    string tid = mId;
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId  = tid;
-    cfg("DB_TBL").setS(string("wlb_")+tid);
+    exclCopy(*src_n, "ID;");
+    cfg("DB_TBL").setS("wlb_"+id());
     work_lib_db = src_n->work_lib_db;
 
     if(!src_n->enable()) return *this;

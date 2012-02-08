@@ -91,9 +91,9 @@ class Node : public TFunction, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	const string &id( )	{ return mId; }
+	string id( )		{ return mId; }
 	string name( );
-	string descr( )		{ return cfg("DESCR").getS(); }
+	string descr( )		{ return mDscr; }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
 	int addr( );
@@ -111,8 +111,8 @@ class Node : public TFunction, public TConfig
 	string tbl( );
 	string fullDB( )	{ return DB()+'.'+tbl(); }
 
-	void setName( const string &name )	{ cfg("NAME").setS(name); }
-	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
+	void setName( const string &name )	{ mName = name; }
+	void setDescr( const string &idsc )	{ mDscr = idsc; }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
 	void setProgLang( const string &ilng );
@@ -143,7 +143,7 @@ class Node : public TFunction, public TConfig
 	};
 
 	//Methods
-	const string &nodeName( )	{ return mId; }
+	const char *nodeName( )	{ return mId.getSd(); }
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
@@ -156,9 +156,9 @@ class Node : public TFunction, public TConfig
 	//Attributes
 	Res	nRes;
 	SData	*data;
-	string	&mId;
+	TCfg	&mId, &mName, &mDscr;
 	double	&mPer;
-	bool	&mAEn, mEn;
+	char	&mAEn, mEn;
 	string	mDB;
 
 	bool	prcSt, endrunRun;

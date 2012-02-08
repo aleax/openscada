@@ -22,6 +22,7 @@
 #ifndef TCNTRNODE_H
 #define TCNTRNODE_H
 
+#include <string.h>
 #include <pthread.h>
 
 #include <string>
@@ -31,15 +32,15 @@
 #include "autohd.h"
 #include "resalloc.h"
 
-#ifndef OSC_HASHMAP
+//#ifndef OSC_HASHMAP
 #include <map>
 using std::map;
-#else
+/*#else
 #include <ext/hash_map>
 using __gnu_cxx::hash_map;
 //#include <unordered_map>
 //using std::unordered_map;
-#endif
+#endif*/
 
 //> Security standard permissions
 #define R_R_R_  0444
@@ -60,33 +61,28 @@ namespace OSCADA
 
 class TCntrNode;
 
-#ifndef OSC_HASHMAP
-/*struct StrPntLess
+//#ifndef OSC_HASHMAP
+struct StrPntLess
 {
-    bool operator()(const string *s1, const string *s2) const
-    {
-	return s1->compare(*s2) < 0;
-    }
-};*/
+    bool operator()(const char *s1, const char *s2) const	{ return strcmp(s1,s2) < 0; }
+};
 
-typedef map<string, TCntrNode*> TMap;
-#else
+typedef map<const char*, TCntrNode*, StrPntLess> TMap;
+/*#else
 namespace __gnu_cxx
 {
-template <> class hash<string>
-{
-    public:
-	size_t operator()(const string& h) const
-	{
-	    return hash<const char*>()(h.c_str());
-	}
-};
+    template <> class hash<const char*>
+    {
+	public:
+	    size_t operator()(const char *h) const	{ return hash<const char*>()(h); }
+    };
+
 }
-typedef hash_map<string, TCntrNode*, __gnu_cxx::hash<string> > TMap;
+typedef hash_map<const char*, TCntrNode*, __gnu_cxx::hash<string> > TMap;
 
 //typedef unordered_map<string, TCntrNode* > TMap;
 
-#endif
+#endif*/
 
 #define DEF_TIMEOUT 2
 
@@ -144,7 +140,7 @@ class TCntrNode
 
 	//Methods
 	virtual Res &nodeRes( )		{ return hd_res; }
-	virtual const string &nodeName( ) = 0;
+	virtual const char *nodeName( ) = 0;
 	string nodePath( char sep = 0, bool from_root = false );
 
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list

@@ -50,16 +50,18 @@ TConfig::~TConfig()
     pthread_mutex_destroy(&mRes);
 }
 
-TConfig &TConfig::operator=(TConfig &config)
+TConfig &TConfig::operator=(TConfig &config)	{ return exclCopy(config); }
+
+TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
 {
     vector<string> list_el;
 
-    cfgList( list_el );
+    cfgList(list_el);
     for(unsigned i_el = 0; i_el < list_el.size(); i_el++)
     {
-	if(!config.cfgPresent(list_el[i_el]))	continue;
-	TCfg &s_cfg = config.cfg( list_el[i_el] );
-	TCfg &d_cfg = cfg( list_el[i_el] );
+	if(!config.cfgPresent(list_el[i_el]) || passCpLs.find(list_el[i_el]+";") != string::npos) continue;
+	TCfg &s_cfg = config.cfg(list_el[i_el]);
+	TCfg &d_cfg = cfg(list_el[i_el]);
 	switch(d_cfg.fld().type())
 	{
 	    case TFld::String:	d_cfg.setS(s_cfg.getS());break;
@@ -209,7 +211,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
     {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf) return EVAL_REAL;
-	return cf->get();
+	return *cf;
     }
     // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
@@ -218,7 +220,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
     {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf || (cf->fld().flg()&TFld::NoWrite)) return false;
-	cf->set(prms[1]);
+	*(TVariant*)cf = prms[1];
 	return true;
     }
 
@@ -240,10 +242,10 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
 
     switch(mFld->type())
     {
-	case TFld::String:	m_val.s_val = new string(mFld->def());		break;
-	case TFld::Integer:	m_val.i_val = atoi(mFld->def().c_str());	break;
-	case TFld::Real:	m_val.r_val = atof(mFld->def().c_str());	break;
-	case TFld::Boolean:	m_val.b_val = atoi(mFld->def().c_str());	break;
+	case TFld::String:	setType(TVariant::String, true);  TVariant::setS(mFld->def());	break;
+	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(atoi(mFld->def().c_str()));	break;
+	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(atof(mFld->def().c_str()));	break;
+	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)atoi(mFld->def().c_str()));break;
 	default: break;
     }
     if(fld.flg()&TCfg::Hide)	mView = false;
@@ -251,262 +253,199 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
 
 TCfg::~TCfg(  )
 {
-    if(mFld->type() == TFld::String)	delete m_val.s_val;
     if(mFld->flg()&TFld::SelfFld)	delete mFld;
 }
 
-const string &TCfg::name()	{ return mFld->name(); }
+const string &TCfg::name( )	{ return mFld->name(); }
 
-string &TCfg::getSd( )
+const char *TCfg::getSd( )
 {
-    if(mFld->type() != TFld::String)	throw TError("Cfg",_("Element type is not string!"));
-    return *m_val.s_val;
+    if(type() != TVariant::String)	throw TError("Cfg",_("Element type is not string!"));
+    return (mSize < sizeof(val.sMini)) ? val.sMini : val.sPtr;
 }
 
 double &TCfg::getRd( )
 {
-    if(mFld->type() != TFld::Real)	throw TError("Cfg",_("Element type is not real!"));
-    return m_val.r_val;
+    if(type() != TVariant::Real)	throw TError("Cfg",_("Element type is not real!"));
+    return val.r;
 }
 
 int &TCfg::getId( )
 {
-    if(mFld->type() != TFld::Integer)	throw TError("Cfg",_("Element type is not int!"));
-    return m_val.i_val;
+    if(type() != TVariant::Integer)	throw TError("Cfg",_("Element type is not int!"));
+    return val.i;
 }
 
-bool &TCfg::getBd( )
+char &TCfg::getBd( )
 {
-    if(mFld->type() != TFld::Boolean)	throw TError("Cfg",_("Element type is not Boolean!"));
-    return m_val.b_val;
+    if(type() != TVariant::Boolean)	throw TError("Cfg",_("Element type is not Boolean!"));
+    return val.b;
 }
 
-string TCfg::getSEL( char RqFlg )
+string TCfg::getSEL( )
 {
     if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg",_("Element type is not selected!"));
-    switch(mFld->type())
+    switch(type())
     {
-	case TFld::String:	return mFld->selVl2Nm(getS(RqFlg));
-	case TFld::Integer:	return mFld->selVl2Nm(getI(RqFlg));
-	case TFld::Real:	return mFld->selVl2Nm(getR(RqFlg));
-	case TFld::Boolean:	return mFld->selVl2Nm(getB(RqFlg));
+	case TVariant::String:	return mFld->selVl2Nm(getS());
+	case TVariant::Integer:	return mFld->selVl2Nm(getI());
+	case TVariant::Real:	return mFld->selVl2Nm(getR());
+	case TVariant::Boolean:	return mFld->selVl2Nm(getB());
 	default: break;
     }
     return "";
 }
 
-TVariant TCfg::get( char RqFlg )
+string TCfg::getS( )
 {
-    switch(mFld->type())
-    {
-	case TFld::String:	return getS(RqFlg);
-	case TFld::Integer:	return getI(RqFlg);
-	case TFld::Real:	return getR(RqFlg);
-	case TFld::Boolean:	return getB(RqFlg);
-	default: break;
-    }
-    return TVariant();
+    pthread_mutex_lock(&mOwner.mRes);
+    string rez = TVariant::getS();
+    pthread_mutex_unlock(&mOwner.mRes);
+    return rez;
 }
 
-string TCfg::getS( char RqFlg )
+void TCfg::setS( const string &val )
 {
-    switch(mFld->type())
+    switch(type())
     {
-	case TFld::Integer:	return TSYS::int2str(getI(RqFlg));
-	case TFld::Real:	return TSYS::real2str(getR(RqFlg));
-	case TFld::Boolean:	return TSYS::int2str(getB(RqFlg));
-	case TFld::String:
+	case TVariant::Integer:	setI(atoi(val.c_str()));	break;
+	case TVariant::Real:	setR(atof(val.c_str()));	break;
+	case TVariant::Boolean:	setB((bool)atoi(val.c_str()));	break;
+	case TVariant::String:
 	{
 	    pthread_mutex_lock(&mOwner.mRes);
-	    string rez = *m_val.s_val;
+	    string t_str = TVariant::getS();
+	    TVariant::setS(val);
 	    pthread_mutex_unlock(&mOwner.mRes);
-	    return rez;
+	    if(!mOwner.cfgChange(*this))
+	    {
+		pthread_mutex_lock(&mOwner.mRes);
+		TVariant::setS(t_str);
+		pthread_mutex_unlock(&mOwner.mRes);
+	    }
+	    break;
 	}
 	default: break;
     }
-    return "";
 }
 
-double TCfg::getR( char RqFlg )
+void TCfg::setR( double val )
 {
-    switch(mFld->type())
+    switch(type())
     {
-	case TFld::String:	return atof(getS(RqFlg).c_str());
-	case TFld::Integer:	return getI(RqFlg);
-	case TFld::Boolean:	return getB(RqFlg);
-	case TFld::Real:	return m_val.r_val;
+	case TVariant::String:	setS(TSYS::real2str(val));	break;
+	case TVariant::Integer:	setI((int)val);	break;
+	case TVariant::Boolean:	setB((bool)val);break;
+	case TVariant::Real:
+	{
+	    if(!(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1])
+		val = vmin(mFld->selValR()[1],vmax(mFld->selValR()[0],val));
+	    double t_val = TVariant::getR();
+	    TVariant::setR(val);
+	    if(!mOwner.cfgChange(*this))	TVariant::setR(t_val);
+	    break;
+	}
 	default: break;
     }
-    return 0;
 }
 
-int TCfg::getI( char RqFlg )
+void TCfg::setI( int val )
 {
-    switch(mFld->type())
+    switch(type())
     {
-	case TFld::String:	return atoi(getS(RqFlg).c_str());
-	case TFld::Real:	return (int)getR(RqFlg);
-	case TFld::Boolean:	return getB(RqFlg);
-	case TFld::Integer:	return m_val.i_val;
+	case TVariant::String:	setS(TSYS::int2str(val));	break;
+	case TVariant::Real:	setR(val);	break;
+	case TVariant::Boolean:	setB((bool)val);break;
+	case TVariant::Integer:
+	{
+	    if(!(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1])
+		val = vmin(mFld->selValI()[1],vmax(mFld->selValI()[0],val));
+	    int t_val = TVariant::getI();
+	    TVariant::setI(val);
+	    if(!mOwner.cfgChange(*this))	TVariant::setI(t_val);
+	    break;
+	}
 	default: break;
     }
-    return 0;
 }
 
-bool TCfg::getB( char RqFlg )
+void TCfg::setB( char val )
 {
-    switch(mFld->type())
+    switch(type())
     {
-	case TFld::String:	return atoi(getS(RqFlg).c_str());
-	case TFld::Integer:	return getI(RqFlg);
-	case TFld::Real:	return (int)getR(RqFlg);
-	case TFld::Boolean:	return m_val.b_val;
+	case TVariant::String:	setS(TSYS::int2str(val));	break;
+	case TVariant::Integer:	setI(val);	break;
+	case TVariant::Real:	setR(val);	break;
+	case TVariant::Boolean:
+	{
+	    bool t_val = TVariant::getB();
+	    TVariant::setB(val);
+	    if(!mOwner.cfgChange(*this))	TVariant::setB(t_val);
+	    break;
+	}
 	default: break;
     }
-    return false;
 }
 
 void TCfg::setSEL( const string &val, char RqFlg )
 {
-    if( !(mFld->flg()&TFld::Selected) ) throw TError("Cfg",_("Element type is not selected!"));
-    switch( mFld->type() )
+    if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selected!"));
+    switch(type())
     {
-	case TFld::String:	setS( mFld->selNm2VlS(val), RqFlg );	break;
-	case TFld::Integer:	setI( mFld->selNm2VlI(val), RqFlg );	break;
-	case TFld::Real:	setR( mFld->selNm2VlR(val), RqFlg );	break;
-	case TFld::Boolean:	setB( mFld->selNm2VlB(val), RqFlg );	break;
-	default: break;
-    }
-}
-
-void TCfg::set( const TVariant &val, char RqFlg )
-{
-    switch(mFld->type())
-    {
-	case TFld::String:	return setS(val.getS(), RqFlg);
-	case TFld::Integer:	return setI(val.getI(), RqFlg);
-	case TFld::Real:	return setR(val.getR(), RqFlg);
-	case TFld::Boolean:	return setB(val.getB(), RqFlg);
+	case TVariant::String:	setS(mFld->selNm2VlS(val), RqFlg);	break;
+	case TVariant::Integer:	setI(mFld->selNm2VlI(val), RqFlg);	break;
+	case TVariant::Real:	setR(mFld->selNm2VlR(val), RqFlg);	break;
+	case TVariant::Boolean:	setB(mFld->selNm2VlB(val), RqFlg);	break;
 	default: break;
     }
 }
 
 void TCfg::setS( const string &val, char RqFlg )
 {
-    switch( mFld->type() )
-    {
-	case TFld::Integer:	setI( atoi(val.c_str()), RqFlg );	break;
-	case TFld::Real:	setR( atof(val.c_str()), RqFlg );	break;
-	case TFld::Boolean:	setB( atoi(val.c_str()), RqFlg );	break;
-	case TFld::String:
-	{
-	    pthread_mutex_lock(&mOwner.mRes);
-	    string t_str = *m_val.s_val;
-	    *m_val.s_val = val;
-	    pthread_mutex_unlock(&mOwner.mRes);
-	    if(!mOwner.cfgChange(*this))
-	    {
-		pthread_mutex_lock(&mOwner.mRes);
-		*m_val.s_val = t_str;
-		pthread_mutex_unlock(&mOwner.mRes);
-	    }
-	    if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
-	    break;
-	}
-	default: break;
-    }
+    setS(val);
+    if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
 void TCfg::setR( double val, char RqFlg )
 {
-    switch( mFld->type() )
-    {
-	case TFld::String:	setS( TSYS::real2str(val), RqFlg );	break;
-	case TFld::Integer:	setI( (int)val, RqFlg );	break;
-	case TFld::Boolean:	setB( val, RqFlg );	break;
-	case TFld::Real:
-	{
-	    if( !(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1] )
-		val = vmin(mFld->selValR()[1],vmax(mFld->selValR()[0],val));
-	    double t_val = m_val.r_val;
-	    m_val.r_val = val;
-	    if( !mOwner.cfgChange(*this) )	m_val.r_val = t_val;
-	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
-	    break;
-	}
-	default: break;
-    }
+    setR(val);
+    if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
 void TCfg::setI( int val, char RqFlg )
 {
-    switch( mFld->type() )
-    {
-	case TFld::String:	setS( TSYS::int2str(val), RqFlg );	break;
-	case TFld::Real:	setR( val, RqFlg );	break;
-	case TFld::Boolean:	setB( val, RqFlg );	break;
-	case TFld::Integer:
-	{
-	    if( !(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1] )
-		val = vmin(mFld->selValI()[1],vmax(mFld->selValI()[0],val));
-	    int t_val = m_val.i_val;
-	    m_val.i_val = val;
-	    if( !mOwner.cfgChange(*this) )	m_val.i_val = t_val;
-	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
-	    break;
-	}
-	default: break;
-    }
+    setI(val);
+    if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
-void TCfg::setB( bool val, char RqFlg )
+void TCfg::setB( char val, char RqFlg )
 {
-    switch( mFld->type() )
-    {
-	case TFld::String:	setS( TSYS::int2str(val), RqFlg );	break;
-	case TFld::Integer:	setI( val, RqFlg );	break;
-	case TFld::Real:	setR( val, RqFlg );	break;
-	case TFld::Boolean:
-	{
-	    bool t_val = m_val.b_val;
-	    m_val.b_val = val;
-	    if( !mOwner.cfgChange(*this) )	m_val.b_val = t_val;
-	    if( RqFlg&TCfg::ForceUse )	{ setView(true); setKeyUse(true); }
-	    break;
-	}
-	default: break;
-    }
+    setB(val);
+    if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
 bool TCfg::operator==( TCfg &cfg )
 {
-    switch(fld().type())
-    {
-	case TFld::String:
-	    if( cfg.fld().type()==TFld::String && getS() == cfg.getS() )	return true;
-	    break;
-	case TFld::Integer:
-	    if( cfg.fld().type()==TFld::Integer && getI() == cfg.getI() )	return true;
-	    break;
-	case TFld::Real:
-	    if( cfg.fld().type()==TFld::Real && getR() == cfg.getR() )	return true;
-	    break;
-	case TFld::Boolean:
-	    if( cfg.fld().type()==TFld::Boolean && getB() == cfg.getB())return true;
-	    break;
-	default: break;
-    }
-    return(false);
+    if(fld().type() == cfg.fld().type())
+	switch(fld().type())
+	{
+	    case TFld::String:	return (getS() == cfg.getS());
+	    case TFld::Integer:	return (getI() == cfg.getI());
+	    case TFld::Real:	return (getR() == cfg.getR());
+	    case TFld::Boolean:	return (getB() == cfg.getB());
+	    default: break;
+	}
+    return false;
 }
 
 TCfg &TCfg::operator=(TCfg & cfg)
 {
-    switch(fld().type())
+    switch(type())
     {
-	case TFld::String:	setS( cfg.getS() );	break;
-	case TFld::Integer:	setI( cfg.getI() );	break;
-	case TFld::Real:	setR( cfg.getR() );	break;
-	case TFld::Boolean:	setB( cfg.getB() );	break;
+	case TVariant::String:	setS(cfg.getS());	break;
+	case TVariant::Integer:	setI(cfg.getI());	break;
+	case TVariant::Real:	setR(cfg.getR());	break;
+	case TVariant::Boolean:	setB(cfg.getB());	break;
 	default: break;
     }
     return *this;

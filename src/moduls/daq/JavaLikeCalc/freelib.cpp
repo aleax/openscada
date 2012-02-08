@@ -33,7 +33,7 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elLib()), mId(cfg("ID").getSd()), work_lib_db(lib_db), mProgTr(cfg("PROG_TR").getBd())
+    TConfig(&mod->elLib()), work_lib_db(lib_db), mId(cfg("ID")), mProgTr(cfg("PROG_TR").getBd())
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -53,9 +53,7 @@ TCntrNode &Lib::operator=( TCntrNode &node )
     if(!src_n) return *this;
 
     //> Configuration copy
-    string tid = id();
-    *(TConfig*)this = *(TConfig*)src_n;
-    mId = tid;
+    exclCopy(*src_n, "ID;");
     work_lib_db = src_n->work_lib_db;
 
     //> Functions copy

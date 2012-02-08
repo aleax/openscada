@@ -235,7 +235,7 @@ class TMdContr: public TController
 		&mType,			// Connection type
 		&mSlot,
 		&mDev;			// CIF device number
-	bool	&mAssincWR;		// Asynchronous write mode
+	char	&mAssincWR;		// Asynchronous write mode
 
 	bool	prc_st,			// Process task active
 		call_st,        	// Calc now stat

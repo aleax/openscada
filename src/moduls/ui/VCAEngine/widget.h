@@ -155,7 +155,7 @@ class Widget : public TCntrNode
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string id( )			{ return mId; }		//Identifier
+	string id( )			{ return mId.c_str(); }	//Identifier
 	virtual string path( );					//Curent widget path
 	virtual string name( );					//Name
 	virtual string descr( );				//Description
@@ -227,7 +227,7 @@ class Widget : public TCntrNode
 
     protected:
 	//Methods
-	const string &nodeName()	{ return mId; }
+	const char *nodeName()	{ return mId.c_str(); }
 
 	void postEnable( int flag );
 	void preDisable( int flag );
@@ -248,7 +248,7 @@ class Widget : public TCntrNode
 
 	//Attributes
 	//> Generic data
-	string		mId;			//Widget identifier
+	const string	mId;			//Widget identifier
 
 	unsigned char	attrAtLockCnt	:8;	//attr at lock cnt
 	unsigned char	inclWdg		:3;
