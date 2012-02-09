@@ -1428,9 +1428,8 @@ void *TMdContr::Task( void *icntr )
 		{
 		    if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
 		    if(atoi(cntr.writeBlks[i_b].err.getVal().c_str()) == -1) continue;
-		    //	cntr.writeBlks[i_b].db, cntr.writeBlks[i_b].off, cntr.writeBlks[i_b].val.size());
 		    cntr.putDB(cntr.writeBlks[i_b].db,cntr.writeBlks[i_b].off,cntr.writeBlks[i_b].val);
-		    cntr.writeBlks[i_b].err="";
+		    cntr.writeBlks[i_b].err = _("-1:No data");
 		}
 		catch(TError err) { cntr.writeBlks[i_b].err = err.mess; }
 	//> Process acquisition data blocks
@@ -1438,7 +1437,6 @@ void *TMdContr::Task( void *icntr )
 	    try
 	    {
 		if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
-		//    cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val.size() );
 		cntr.getDB(cntr.acqBlks[i_b].db, cntr.acqBlks[i_b].off, cntr.acqBlks[i_b].val);
 		cntr.acqBlks[i_b].err="";
 	    }
