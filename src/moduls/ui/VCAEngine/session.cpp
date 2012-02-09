@@ -1584,6 +1584,7 @@ void SessWdg::calc( bool first, bool last )
 	    if(!wevent.empty())
 	    {
 		int t_off;
+		bool isPg = dynamic_cast<SessPage*>(this);
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
 		for(int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
 		{
@@ -1593,24 +1594,46 @@ void SessWdg::calc( bool first, bool last )
 		    sev_path = TSYS::strSepParse(sev,0,':',&t_off);
 		    sprc_lst = attrAt("evProc").at().getS();
 		    bool evProc = false;
-		    for( int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
+		    for(int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
 		    {
 			t_off = 0;
 			sprc_ev   = TSYS::strSepParse(sprc,0,':',&t_off);
 			sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
-			if( sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path) )
+			if(sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path))
 			{
 			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
-			    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off),
-				sev_path.empty() ? this : &((AutoHD<SessWdg>)nodeAt(sev_path)).at());
+    			    SessWdg *sev = this;
+    			    if(!sev_path.empty()) sev = (TSYS::pathLev(sev_path,0).compare(0,4,"ses_") == 0) ?
+    					    &((AutoHD<SessWdg>)mod->nodeAt(sev_path)).at() :  &((AutoHD<SessWdg>)nodeAt(sev_path)).at();
+			    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off), sev);
 			    evProc = true;
 			}
 		    }
-		    if( !evProc ) sevup+=sev_ev+":/"+id()+sev_path+"\n";
+		    if(!evProc)
+		    {
+			if(!isPg) sevup += sev_ev+":/"+id()+sev_path+"\n";
+			else sevup += sev_ev+":"+(TSYS::pathLev(sev_path,0).compare(0,4,"ses_")?path():"")+sev_path+"\n";
+		    }
 		}
 		//>> Put left events to parent widget
 		SessWdg *owner = ownerSessWdg(true);
-		if( owner && !sevup.empty() ) owner->eventAdd(sevup);
+		if(owner && !sevup.empty())
+		{
+		    if(!isPg) owner->eventAdd(sevup);
+		    //>> Up event to upper page
+		    else
+		    {
+			vector<string> &lst = ownerSess()->openList();
+			string prev;
+    			for(unsigned i_f = 0; i_f < lst.size(); i_f++)
+    			    if(lst[i_f] == path())
+    			    {
+    				if(prev.size()) ((AutoHD<SessPage>)mod->nodeAt(prev)).at().eventAdd(sevup);
+    				break;
+    			    }
+    			    else prev = lst[i_f];
+		    }
+		}
 	    }
 	    //> Generic calc
 	    Widget::calc(this);

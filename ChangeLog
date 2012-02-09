@@ -1,3 +1,7 @@
+2012-02-09 Roman
+- UI.VCAEngine: Uncatched events up to upper page send support is added. That allow central process global key combination and other.
+
+
 2012-02-08 Roman
 - !!!!:TConfig: It is set based on TVariant for items. Access to object TCfg is made clear and it allow using by link without main types.
 - !!!!:SYS: Childs storing into map for base object TCntrNode is set to "const char*" key and all nodes have been
