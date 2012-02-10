@@ -172,6 +172,11 @@ class TCntrNode
 	virtual void objPropSet( const string &id, TVariant val );
 	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
+	//> Childs
+	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
+	void chldList( int8_t igr, vector<string> &list );
+	bool chldPresent( int8_t igr, const string &name );
+
     protected:
 	//Data
 	struct GrpEl
@@ -192,9 +197,6 @@ class TCntrNode
 	void setNodeMode( char mode );
 
 	//> Childs
-	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list );
-	bool chldPresent( int8_t igr, const string &name );
 	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
 	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 

@@ -45,6 +45,8 @@ class TTipDAQ : public TModule, public TElem
 	TTipDAQ( const string &id );
 	virtual ~TTipDAQ( );
 
+	string DAQPath( );
+
 	void modStart( );
 	void modStop( );
 

@@ -179,6 +179,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string	dscr( )		{ return cfg("DESCR").getS(); }
 	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
 	string	srcData( )	{ return cfg("Source").getS(); }
+	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
 	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return runSt; }
 

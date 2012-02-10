@@ -1,3 +1,9 @@
+2012-02-10 Roman
+- DAQ: DAQPath() functions is added to DAQ subsystem objects for get internal DAQ path like "DAQMod.Cntr.Prm.attr".
+- !!:Archive: Link address to atribute of parameter of data source is make simpler by use DAQPath like "DAQMod.Cntr.Prm.attr".
+    Old address left usable for backward compatibility.
+
+
 2012-02-09 Roman
 - UI.VCAEngine: Uncatched events up to upper page send support is added. That allow central process global key combination and other.
 

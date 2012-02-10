@@ -44,6 +44,8 @@ TParamContr::~TParamContr( )
     nodeDelAll();
 }
 
+string TParamContr::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
+
 TCntrNode &TParamContr::operator=( TCntrNode &node )
 {
     TParamContr *src_n = dynamic_cast<TParamContr*>(&node);

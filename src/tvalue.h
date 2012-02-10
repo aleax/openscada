@@ -57,6 +57,8 @@ class TVal : public TCntrNode
 	TVal( TCfg &cfg );
 	~TVal( );
 
+	string DAQPath( );
+
 	void setFld( TFld &fld );
 	void setCfg( TCfg &cfg );
 
@@ -135,6 +137,8 @@ class TValue: public TCntrNode, public TValElem
     public:
 	TValue( );
 	virtual ~TValue();
+
+	virtual string DAQPath( );
 
 	//> Atributes
 	void vlList( vector<string> &list )	{ chldList(m_vl,list); }

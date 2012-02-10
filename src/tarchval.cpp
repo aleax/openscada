@@ -941,6 +941,21 @@ string TVArchive::name( )
     return rez.size() ? rez : (srcData().size() ? srcData() : mId);
 }
 
+AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
+{
+    if(!force && ipath.empty() && !pattr_src.freeStat()) return pattr_src;
+    string srcPath = ipath.empty() ? srcData() : ipath;
+    AutoHD<TVal> attr;
+    try
+    {
+	if(srcPath.compare(0,7,"sub_DAQ") == 0 || srcPath.compare(0,3,"DAQ") == 0)
+	    attr = SYS->nodeAt(srcPath,0,'.');
+	else attr = SYS->daq().at().nodeAt(srcPath,0,'.');
+    }
+    catch(TError err) { }
+    return attr;
+}
+
 TArchiveS &TVArchive::owner( )	{ return *(TArchiveS *)nodePrev(); }
 
 string TVArchive::tbl( )	{ return owner().subId()+"_val"; }
@@ -1096,27 +1111,26 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
     if((!runSt || vl != ActiveAttr || isrc != srcData()) && !pattr_src.freeStat())
     {
 	owner().setActValArch(id(), false);
+	srcPAttr().at().setArch(AutoHD<TVArchive>());
 	pattr_src.free();
-	dynamic_cast<TVal&>(SYS->nodeAt(srcData(),0,'.').at()).setArch(AutoHD<TVArchive>());
     }
 
     try
     {
-	if((!runSt || vl != PassiveAttr || isrc != srcData()) &&
-		dynamic_cast<TVal*>(&SYS->nodeAt(srcData(),0,'.').at()))
-	    dynamic_cast<TVal&>(SYS->nodeAt(srcData(),0,'.').at()).setArch(AutoHD<TVArchive>());
+	if((!runSt || vl != PassiveAttr || isrc != srcData()) && !srcPAttr().freeStat())
+	    srcPAttr().at().setArch(AutoHD<TVArchive>());
     }catch(...){  }
 
     //> Set all links
-    if(runSt && vl == ActiveAttr && dynamic_cast<TVal*>(&SYS->nodeAt(isrc,0,'.').at()))
+    if(runSt && vl == ActiveAttr && !srcPAttr(true,isrc).freeStat())
     {
-	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch( AutoHD<TVArchive>(this) );
-	pattr_src = SYS->nodeAt( isrc, 0, '.' );
-	owner().setActValArch( id(), true );
+	pattr_src = srcPAttr(true,isrc);
+	pattr_src.at().setArch(AutoHD<TVArchive>(this));
+	owner().setActValArch(id(), true);
     }
 
-    if(runSt && vl == PassiveAttr && dynamic_cast<TVal*>(&SYS->nodeAt(isrc,0,'.').at()))
-	dynamic_cast<TVal&>(SYS->nodeAt(isrc,0,'.').at()).setArch( AutoHD<TVArchive>(this) );
+    if(runSt && vl == PassiveAttr && !srcPAttr(true,isrc).freeStat())
+	srcPAttr(true,isrc).at().setArch(AutoHD<TVArchive>(this));
 
     if(mSrcMode != vl) { mSrcMode = vl; modif(); }
     cfg("Source").setS(isrc);
@@ -1191,15 +1205,16 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
 void TVArchive::getActiveData()
 {
-    if( pattr_src.freeStat() )	return;
+    if(pattr_src.freeStat())	return;
 
     int64_t tm = TSYS::curTime();
-    switch( valType() )
+    TVariant vl = pattr_src.at().get(&tm);
+    switch(valType())
     {
-	case TFld::Boolean:	{ char vl = pattr_src.at().getB(&tm); setB(vl,tm); break; }
-	case TFld::Integer:	{ int vl = pattr_src.at().getI(&tm); setI(vl,tm); break; }
-	case TFld::Real:	{ double vl = pattr_src.at().getR(&tm); setR(vl,tm); break; }
-	case TFld::String:	{ string vl = pattr_src.at().getS(&tm); setS(vl,tm); break; }
+	case TFld::Boolean:	setB(vl,tm); break;
+	case TFld::Integer:	setI(vl,tm); break;
+	case TFld::Real:	setR(vl,tm); break;
+	case TFld::String:	setS(vl,tm); break;
 	default: break;
     }
 }
@@ -1893,8 +1908,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/src")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)mSrcMode,opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData()+(srcPAttr(true).freeStat()?"":" (+)"));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)mSrcMode,TSYS::strParse(opt->text(), 0, " "));
     }
     else if(a_path == "/prm/cfg/b_per")
     {
@@ -1934,17 +1949,20 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	vector<string> list;
 	int c_lv = 0;
 	string c_path = "", c_el;
-	for( int c_off = 0; (c_el=TSYS::strSepParse(srcData(),0,'.',&c_off)).size(); c_lv++ )
+	for(int c_off = 0; (c_el=TSYS::strSepParse(srcData(),0,'.',&c_off)).size(); c_lv++)
 	{
 	    opt->childAdd("el")->setText(c_path);
-	    if( c_lv ) c_path+=".";
-	    c_path+=c_el;
+	    if(c_lv) c_path+=".";
+	    c_path += c_el;
 	}
 	opt->childAdd("el")->setText(c_path);
-	if( c_lv != 0 ) c_path += ".";
-	SYS->nodeAt(c_path,0,'.').at().nodeList(list);
-	for( unsigned i_a=0; i_a < list.size(); i_a++ )
-	    opt->childAdd("el")->setText(c_path+list[i_a]);
+	if(c_lv != 0) c_path += ".";
+	try
+	{
+	    SYS->daq().at().nodeAt(c_path,0,'.').at().chldList(0,list);
+	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
+		opt->childAdd("el")->setText(c_path+list[i_a]);
+	}catch(TError err) { }
     }
     else if(a_path == "/arch/arch")
     {
@@ -2448,7 +2466,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
     {
 	int64_t remTm = 0;
 	string lstStat;
-	AutoHD<TVal> paVl = SYS->nodeAt(archive().srcData(),0,'.');
+	AutoHD<TVal> paVl = archive().srcPAttr();
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));
 	if( sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode( ) != TController::Off )
 	{
@@ -2493,7 +2511,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
     if( !onlyLocal && archive().startStat() && buf.evalCnt( ) > ecnt && SYS->daq().at().rdActive() &&
 	(archive().srcMode( ) == TVArchive::ActiveAttr || archive().srcMode( ) == TVArchive::PassiveAttr) )
     {
-	AutoHD<TVal> paVl = SYS->nodeAt(archive().srcData(),0,'.');
+	AutoHD<TVal> paVl = archive().srcPAttr();
 	AutoHD<TParamContr> sPrm(dynamic_cast<TParamContr*>(&paVl.at().owner()));
 	if( sPrm.at().owner().owner().redntAllow() && sPrm.at().owner().redntMode( ) != TController::Off )
 	{

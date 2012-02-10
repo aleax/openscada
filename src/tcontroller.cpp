@@ -42,6 +42,8 @@ TController::~TController(  )
     nodeDelAll();
 }
 
+string TController::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
+
 TCntrNode &TController::operator=( TCntrNode &node )
 {
     TController *src_n = dynamic_cast<TController*>(&node);

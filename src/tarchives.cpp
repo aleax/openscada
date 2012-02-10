@@ -543,7 +543,7 @@ time_t TArchiveS::messBeg( const string &arch )
 	if( !arch.empty() ) return rez;
     }
 
-    //- Get records from archives -
+    //> Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
     AutoHD<TMArchivator> archtor;
@@ -688,7 +688,7 @@ void *TArchiveS::ArhValTask( void *param )
     arh.endrunReqVal = false;
     arh.prcStVal = true;
 
-    while( !arh.endrunReqVal )
+    while(!arh.endrunReqVal)
     {
 	int64_t work_tm = SYS->curTime();
 
@@ -696,7 +696,7 @@ void *TArchiveS::ArhValTask( void *param )
 	for(unsigned i_arh = 0; i_arh < arh.actUpSrc.size(); i_arh++)
 	    try
 	    {
-		if( work_tm/arh.actUpSrc[i_arh].at().period() > arh.actUpSrc[i_arh].at().end()/arh.actUpSrc[i_arh].at().period() )
+		if(work_tm/arh.actUpSrc[i_arh].at().period() > arh.actUpSrc[i_arh].at().end()/arh.actUpSrc[i_arh].at().period())
 		    arh.actUpSrc[i_arh].at().getActiveData();
 	    }
 	    catch(TError err)
