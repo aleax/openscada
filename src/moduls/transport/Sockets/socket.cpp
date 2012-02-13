@@ -56,7 +56,7 @@ Sockets::TTransSock *Sockets::mod;
 
 extern "C"
 {
-#ifdef MOD_Tr_Sockets_INCL
+#ifdef MOD_INCL
     TModule::SAt tr_Sockets_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -66,7 +66,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_Tr_Sockets_INCL
+#ifdef MOD_INCL
     TModule *tr_Sockets_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

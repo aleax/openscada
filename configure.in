@@ -83,8 +83,6 @@ AC_SUBST(LIB_CORE)
 
 QT4use=false;
 FFTWuse=false;
-GDuse=false;
-SensorsUse=false;
 
 ix86=no;
 if test $target_cpu = "i386" -o $target_cpu = "i486" -o $target_cpu = "i586" -o $target_cpu = "i686" -o \
@@ -124,13 +122,13 @@ AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--disable-LibGD], [disable using library Lib
 
 #====== Check build modules ======
 #> DB modules
-AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable build module DB.DBF]),[ ],[ enable_DBF=yes; ])
-AC_ARG_ENABLE(MySQL,AC_HELP_STRING([--disable-MySQL], [disable build module DB.MySQL]),[ ],[ enable_MySQL=yes; ])
+AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [enable/disable/enable=incl build module DB.DBF]),[ ],[ enable_DBF=yes; ])
+AC_ARG_ENABLE(MySQL,AC_HELP_STRING([--disable-MySQL], [enable/disable/enable=incl build module DB.MySQL]),[ ],[ enable_MySQL=yes; ])
 AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [enable/disable/enable=incl build module DB.SQLite]),[ ],[ enable_SQLite=yes; ])
-AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable build module DB.FireBird]),[ ],[ enable_FireBird=yes; ])
-AC_ARG_ENABLE(PostgreSQL,AC_HELP_STRING([--disable-PostgreSQL], [disable build module DB.PostgreSQL]),[ ],[ enable_PostgreSQL=yes; ])
+AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [enable/disable/enable=incl build module DB.FireBird]),[ ],[ enable_FireBird=yes; ])
+AC_ARG_ENABLE(PostgreSQL,AC_HELP_STRING([--disable-PostgreSQL], [enable/disable/enable=incl build module DB.PostgreSQL]),[ ],[ enable_PostgreSQL=yes; ])
 #> DAQ modules
-AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [disable build module DAQ.System]),[ ],[ enable_System=yes; ])
+AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [enable/disable/enable=incl build module DAQ.System]),[ ],[ enable_System=yes; ])
 AC_ARG_ENABLE(BlockCalc,AC_HELP_STRING([--disable-BlockCalc], [enable/disable/enable=incl build module DAQ.BlockCalc]),[ ],[ enable_BlockCalc=yes; ])
 AC_ARG_ENABLE(JavaLikeCalc,AC_HELP_STRING([--disable-JavaLikeCalc], [enable/disable/enable=incl build module DAQ.JavaLikeCalc]),[ ],[ enable_JavaLikeCalc=yes; ])
 AC_ARG_ENABLE(DiamondBoards,AC_HELP_STRING([--disable-DiamondBoards], [disable build module DAQ.DiamondBoards]),[ ],[ enable_DiamondBoards=yes; ])
@@ -209,18 +207,28 @@ AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library usi
 AC_MSG_RESULT(========== Build modules list =============)
 #> DB modules
 AC_SUBST(DBSub_mod)
-if test $enable_ForDist = yes -o $enable_DBF = yes; then
+if test $enable_ForDist = yes -o $enable_DBF = yes -o $enable_DBF = incl; then
     AC_MSG_RESULT(Build module: DB.DBF)
     AC_CONFIG_FILES(src/moduls/bd/DBF/Makefile)
     DBSub_mod="${DBSub_mod}DBF "
+    AM_CONDITIONAL([DBFIncl],[test $enable_DBF = incl])
+    if test $enable_DBF = incl; then
+	LIB_CORE="${LIB_CORE} moduls/bd/DBF/.libs/*.o "
+	ModsIncl="${ModsIncl}bd_DBF "
+    fi
 fi
-if test $enable_ForDist = yes -o $enable_MySQL = yes; then
+if test $enable_ForDist = yes -o $enable_MySQL = yes -o $enable_MySQL = incl; then
     AC_MSG_RESULT(Build module: DB.MySQL)
     AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
     #>> Modules checkings
     AX_LIB_MYSQL
     if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
+    AM_CONDITIONAL([MySQLIncl],[test $enable_MySQL = incl])
+    if test $enable_MySQL = incl; then
+	LIB_CORE="${LIB_CORE} moduls/bd/MySQL/.libs/*.o ${MYSQL_LDFLAGS} "
+	ModsIncl="${ModsIncl}bd_MySQL "
+    fi
 fi
 if test $enable_ForDist = yes -o $enable_SQLite = yes -o $enable_SQLite = incl; then
     AC_MSG_RESULT(Build module: DB.SQLite)
@@ -230,46 +238,60 @@ if test $enable_ForDist = yes -o $enable_SQLite = yes -o $enable_SQLite = incl; 
     PKG_CHECK_MODULES([sqlite3],[sqlite3 > 3],
 	[AC_CHECK_LIB([sqlite3],[sqlite3_open],[],[AC_MSG_ERROR(SQLite3 library is not usable!)])],
 	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!)])
+    AM_CONDITIONAL([SQLiteIncl],[test $enable_SQLite = incl])
     if test $enable_SQLite = incl; then
-	AC_MSG_RESULT(Include to core module: DB.SQLite);
 	LIB_CORE="${LIB_CORE} moduls/bd/SQLite/.libs/*.o ${sqlite3_LIBS} "
-	AC_DEFINE(MOD_DB_SQLite_INCL,[],[Module DB.SQLite include to core.])
 	ModsIncl="${ModsIncl}bd_SQLite "
     fi
 fi
-if test $enable_ForDist = yes -o $enable_FireBird = yes; then
+if test $enable_ForDist = yes -o $enable_FireBird = yes -o $enable_FireBird = incl; then
     AC_MSG_RESULT(Build module: DB.FireBird)
     AC_CONFIG_FILES(src/moduls/bd/FireBird/Makefile)
     DBSub_mod="${DBSub_mod}FireBird "
     #>> Modules checkings
     AX_LIB_FIREBIRD([2.0.0])
     if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
+    AM_CONDITIONAL([FireBirdIncl],[test $enable_FireBird = incl])
+    if test $enable_FireBird = incl; then
+	LIB_CORE="${LIB_CORE} moduls/bd/FireBird/.libs/*.o ${FIREBIRD_LDFLAGS} "
+	ModsIncl="${ModsIncl}bd_FireBird "
+    fi
 fi
-if test $enable_ForDist = yes -o $enable_PostgreSQL = yes; then
+if test $enable_ForDist = yes -o $enable_PostgreSQL = yes -o $enable_PostgreSQL = incl; then
     AC_MSG_RESULT(Build module: DB.PostgreSQL)
     AC_CONFIG_FILES(src/moduls/bd/PostgreSQL/Makefile)
     DBSub_mod="${DBSub_mod}PostgreSQL "
     #>> Modules checkings
     AX_LIB_POSTGRESQL([8.3.0])
     if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
+    AM_CONDITIONAL([PostgreSQLIncl],[test $enable_PostgreSQL = incl])
+    if test $enable_PostgreSQL = incl; then
+	LIB_CORE="${LIB_CORE} moduls/bd/PostgreSQL/.libs/*.o ${POSTGRESQL_LDFLAGS} "
+	ModsIncl="${ModsIncl}bd_PostgreSQL "
+    fi
 fi
 #> DAQ modules
 AC_SUBST(DAQSub_mod)
-if test $enable_ForDist = yes -o $enable_System = yes; then
+if test $enable_ForDist = yes -o $enable_System = yes -o $enable_System = incl; then
     AC_MSG_RESULT(Build module: DAQ.System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
     #>> Modules checkings
-    SensorsUse=true;
+    AX_LIB_SENSORS()
+    AM_CONDITIONAL([SystemIncl],[test $enable_System = incl])
+    if test $enable_System = incl; then
+	LIB_CORE="${LIB_CORE} moduls/daq/System/.libs/*.o ${LIB_SENSORS} "
+	ModsIncl="${ModsIncl}daq_System "
+    fi
+
 fi
 if test $enable_ForDist = yes -o $enable_BlockCalc = yes -o $enable_BlockCalc = incl; then
     AC_MSG_RESULT(Build module: DAQ.BlockCalc)
     AC_CONFIG_FILES(src/moduls/daq/BlockCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}BlockCalc "
+    AM_CONDITIONAL([BlockCalcIncl],[test $enable_BlockCalc = incl])
     if test $enable_BlockCalc = incl; then
-	AC_MSG_RESULT(Include to core module: DAQ.BlockCalc);
 	LIB_CORE="${LIB_CORE} moduls/daq/BlockCalc/.libs/*.o "
-	AC_DEFINE(MOD_DAQ_BlockCalc_INCL,[],[Module DAQ.BlockCalc include to core.])
 	ModsIncl="${ModsIncl}daq_BlockCalc "
     fi
 fi
@@ -277,17 +299,16 @@ if test $enable_ForDist = yes -o $enable_JavaLikeCalc = yes -o $enable_JavaLikeC
     AC_MSG_RESULT(Build module: DAQ.JavaLikeCalc)
     AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
-    if test $enable_JavaLikeCalc = incl; then
-	AC_MSG_RESULT(Include to core module: DAQ.JavaLikeCalc);
-	LIB_CORE="${LIB_CORE} moduls/daq/JavaLikeCalc/.libs/*.o "
-	AC_DEFINE(MOD_DAQ_JavaLikeCalc_INCL,[],[Module DAQ.JavaLikeCalc include to core.])
-	ModsIncl="${ModsIncl}daq_JavaLikeCalc "
-    fi
     #>> Modules checkings
     AC_PROG_YACC
     AC_CHECK_PROG(YACC_OK, bison, true, false)
     if test $YACC_OK = false; then
 	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
+    fi
+    AM_CONDITIONAL([JavaLikeCalcIncl],[test $enable_JavaLikeCalc = incl])
+    if test $enable_JavaLikeCalc = incl; then
+	LIB_CORE="${LIB_CORE} moduls/daq/JavaLikeCalc/.libs/*.o "
+	ModsIncl="${ModsIncl}daq_JavaLikeCalc "
     fi
 fi
 if test $enable_ForDist = yes || test $enable_DiamondBoards = yes -a $ix86 = yes; then
@@ -299,10 +320,9 @@ if test $enable_ForDist = yes -o $enable_LogicLev = yes -o $enable_LogicLev = in
     AC_MSG_RESULT(Build module: DAQ.LogicLev)
     AC_CONFIG_FILES(src/moduls/daq/LogicLev/Makefile)
     DAQSub_mod="${DAQSub_mod}LogicLev "
+    AM_CONDITIONAL([LogicLevIncl],[test $enable_LogicLev = incl])
     if test $enable_LogicLev = incl; then
-	AC_MSG_RESULT(Include to core module: DAQ.LogicLev);
 	LIB_CORE="${LIB_CORE} moduls/daq/LogicLev/.libs/*.o "
-	AC_DEFINE(MOD_DAQ_LogicLev_INCL,[],[Module DAQ.LogicLev include to core.])
 	ModsIncl="${ModsIncl}daq_LogicLev "
     fi
 fi
@@ -333,10 +353,9 @@ if test $enable_ForDist = yes -o $enable_ModBus = yes -o $enable_ModBus = incl; 
     AC_MSG_RESULT(Build module: DAQ.ModBus)
     AC_CONFIG_FILES(src/moduls/daq/ModBus/Makefile)
     DAQSub_mod="${DAQSub_mod}ModBus "
+    AM_CONDITIONAL([ModBusIncl],[test $enable_ModBus = incl])
     if test $enable_ModBus = incl; then
-	AC_MSG_RESULT(Include to core module: DAQ.ModBus);
 	LIB_CORE="${LIB_CORE} moduls/daq/ModBus/.libs/*.o "
-	AC_DEFINE(MOD_DAQ_ModBus_INCL,[],[Module DAQ.ModBus include to core.])
 	ModsIncl="${ModsIncl}daq_ModBus "
     fi
 fi
@@ -344,10 +363,9 @@ if test $enable_ForDist = yes -o $enable_DCON = yes -o $enable_DCON = incl; then
     AC_MSG_RESULT(Build module: DAQ.DCON)
     AC_CONFIG_FILES(src/moduls/daq/DCON/Makefile)
     DAQSub_mod="${DAQSub_mod}DCON "
+    AM_CONDITIONAL([DCONIncl],[test $enable_DCON = incl])
     if test $enable_DCON = incl; then
-	AC_MSG_RESULT(Include to core module: DAQ.DCON);
 	LIB_CORE="${LIB_CORE} moduls/daq/DCON/.libs/*.o "
-	AC_DEFINE(MOD_DAQ_DCON_INCL,[],[Module DAQ.DCON include to core.])
 	ModsIncl="${ModsIncl}daq_DCON "
     fi
 fi
@@ -415,15 +433,14 @@ if test $enable_ForDist = yes -o $enable_Sockets = yes -o $enable_Sockets = incl
     AC_MSG_RESULT(Build module: Transport.Sockets)
     AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
-    if test $enable_Sockets = incl; then
-	AC_MSG_RESULT(Include to core module: Transport.Sockets);
-	LIB_CORE="${LIB_CORE} moduls/transport/Sockets/.libs/*.o "
-	AC_DEFINE(MOD_Tr_Sockets_INCL,[],[Module Transport.Sockets include to core.])
-	ModsIncl="${ModsIncl}tr_Sockets "
-    fi
     #>> Modules checkings
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
+    AM_CONDITIONAL([SocketsIncl],[test $enable_Sockets = incl])
+    if test $enable_Sockets = incl; then
+	LIB_CORE="${LIB_CORE} moduls/transport/Sockets/.libs/*.o "
+	ModsIncl="${ModsIncl}tr_Sockets "
+    fi
 fi
 if test $enable_ForDist = yes -o $enable_SSL = yes; then
     AC_MSG_RESULT(Build module: Transport.SSL)
@@ -439,10 +456,9 @@ if test $enable_ForDist = yes -o $enable_Serial = yes -o $enable_Serial = incl; 
     AC_MSG_RESULT(Build module: Transport.Serial)
     AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
     TranspSub_mod="${TranspSub_mod}Serial "
+    AM_CONDITIONAL([SerialIncl],[test $enable_Serial = incl])
     if test $enable_Serial = incl; then
-	AC_MSG_RESULT(Include to core module: Transport.Serial);
 	LIB_CORE="${LIB_CORE} moduls/transport/Serial/.libs/*.o "
-	AC_DEFINE(MOD_Tr_Serial_INCL,[],[Module Transport.Serial include to core.])
 	ModsIncl="${ModsIncl}tr_Serial "
     fi
 fi
@@ -452,10 +468,9 @@ if test $enable_ForDist = yes -o $enable_HTTP = yes -o $enable_HTTP = incl; then
     AC_MSG_RESULT(Build module: Protocol.HTTP)
     AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile)
     ProtSub_mod="${ProtSub_mod}HTTP "
+    AM_CONDITIONAL([HTTPIncl],[test $enable_HTTP = incl])
     if test $enable_HTTP = incl; then
-	AC_MSG_RESULT(Include to core module: Protocol.HTTP);
 	LIB_CORE="${LIB_CORE} moduls/protocol/HTTP/.libs/*.o "
-	AC_DEFINE(MOD_PRT_HTTP_INCL,[],[Module Protocol.HTTP include to core.])
 	ModsIncl="${ModsIncl}prt_HTTP "
     fi
 fi
@@ -463,10 +478,9 @@ if test $enable_ForDist = yes -o $enable_SelfSystem = yes -o $enable_SelfSystem 
     AC_MSG_RESULT(Build module: Protocol.SelfSystem)
     AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
     ProtSub_mod="${ProtSub_mod}SelfSystem "
+    AM_CONDITIONAL([SelfSystemIncl],[test $enable_SelfSystem = incl])
     if test $enable_SelfSystem = incl; then
-	AC_MSG_RESULT(Include to core module: Protocol.SelfSystem);
 	LIB_CORE="${LIB_CORE} moduls/protocol/SelfSystem/.libs/*.o "
-	AC_DEFINE(MOD_PRT_SelfSystem_INCL,[],[Module Protocol.SelfSystem include to core.])
 	ModsIncl="${ModsIncl}prt_SelfSystem "
     fi
 fi
@@ -511,21 +525,20 @@ if test $enable_ForDist = yes -o $enable_WebCfgD = yes -o $enable_WebCfgD = incl
     AC_MSG_RESULT(Build module: UI.WebCfgD)
     AC_CONFIG_FILES(src/moduls/ui/WebCfgD/Makefile)
     UISub_mod="${UISub_mod}WebCfgD "
+    AX_LIB_GD()
+    AM_CONDITIONAL([WebCfgDIncl],[test $enable_WebCfgD = incl])
     if test $enable_WebCfgD = incl; then
-	AC_MSG_RESULT(Include to core module: UI.WebCfgD);
 	LIB_CORE="${LIB_CORE} moduls/ui/WebCfgD/.libs/*.o "
-	AC_DEFINE(MOD_UI_WebCfgD_INCL,[],[Module UI.WebCfgD include to core.])
 	ModsIncl="${ModsIncl}ui_WebCfgD "
     fi
-    GDuse=true;
 fi
 if test $enable_ForDist = yes -o $enable_WebVision = yes; then
     AC_MSG_RESULT(Build module: UI.WebVision)
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
     #>> Modules checkings
+    AX_LIB_GD()
     FFTWuse=true;
-    GDuse=true;
 fi
 if test $enable_ForDist = yes -o $enable_WebUser = yes; then
     AC_MSG_RESULT(Build module: UI.WebUser)
@@ -543,10 +556,9 @@ if test $enable_ForDist = yes -o $enable_FLibComplex1 = yes -o $enable_FLibCompl
     AC_MSG_RESULT(Build module: Special.FLibComplex1)
     AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibComplex1 "
+    AM_CONDITIONAL([FLibComplex1Incl],[test $enable_FLibComplex1 = incl])
     if test $enable_FLibComplex1 = incl; then
-	AC_MSG_RESULT(Include to core module: Special.FLibComplex1);
 	LIB_CORE="${LIB_CORE} moduls/special/FLibComplex1/.libs/*.o "
-	AC_DEFINE(MOD_SPEC_FLibComplex1_INCL,[],[Module Special.FLibComplex1 include to core.])
 	ModsIncl="${ModsIncl}spec_FLibComplex1 "
     fi
 fi
@@ -554,10 +566,9 @@ if test $enable_ForDist = yes -o $enable_FLibMath = yes -o $enable_FLibMath = in
     AC_MSG_RESULT(Build module: Special.FLibMath)
     AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibMath "
+    AM_CONDITIONAL([FLibMathIncl],[test $enable_FLibMath = incl])
     if test $enable_FLibMath = incl; then
-	AC_MSG_RESULT(Include to core module: Special.FLibMath);
 	LIB_CORE="${LIB_CORE} moduls/special/FLibMath/.libs/*.o "
-	AC_DEFINE(MOD_SPEC_FLibMath_INCL,[],[Module Special.FLibMath include to core.])
 	ModsIncl="${ModsIncl}spec_FLibMath "
     fi
 fi
@@ -565,10 +576,9 @@ if test $enable_ForDist = yes -o $enable_FLibSYS = yes -o $enable_FLibSYS = incl
     AC_MSG_RESULT(Build module: Special.FLibSYS)
     AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibSYS "
+    AM_CONDITIONAL([FLibSYSIncl],[test $enable_FLibSYS = incl])
     if test $enable_FLibSYS = incl; then
-	AC_MSG_RESULT(Include to core module: Special.FLibSYS);
 	LIB_CORE="${LIB_CORE} moduls/special/FLibSYS/.libs/*.o "
-	AC_DEFINE(MOD_SPEC_FLibSYS_INCL,[],[Module Special.FLibSYS include to core.])
 	ModsIncl="${ModsIncl}spec_FLibSYS "
     fi
     #>> Modules checkings
@@ -602,23 +612,6 @@ if test $FFTWuse = true; then
 		LIB_FFTW="-lfftw3"],[AC_MSG_NOTICE(FFTW3 library not found. Using is disabled!)])
 	],[AC_MSG_NOTICE(Some FFTW3 headers not found. Using is disabled!)])
     AC_SUBST(LIB_FFTW)
-fi
-
-if test $GDuse = true; then
-    AC_CHECK_HEADERS([gd.h],[],
-	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
-    AC_CHECK_LIB([gd],[gdImageCreate],[AC_MSG_NOTICE([LibGD: Pass global library using])],
-	[AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
-fi
-
-if test $SensorsUse = true; then
-    AC_CHECK_HEADERS([sensors/sensors.h],
-	[
-	    AC_CHECK_LIB([sensors],[sensors_init],
-		[AC_MSG_NOTICE([LibSensors: Pass global library using])
-		LIB_SENSORS="-lsensors"],[AC_MSG_NOTICE(Libsensors library not found. Using is disabled!)])
-	],[AC_MSG_NOTICE(DAQ.System: Libsensors headers not found. Using is disabled!)])
-    AC_SUBST(LIB_SENSORS)
 fi
 
 AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])

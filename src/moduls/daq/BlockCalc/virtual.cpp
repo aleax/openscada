@@ -54,7 +54,7 @@ Virtual::TipContr *Virtual::mod;
 
 extern "C"
 {
-#ifdef MOD_DAQ_BlockCalc_INCL
+#ifdef MOD_INCL
     TModule::SAt daq_BlockCalc_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -64,7 +64,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_DAQ_BlockCalc_INCL
+#ifdef MOD_INCL
     TModule *daq_BlockCalc_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

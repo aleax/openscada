@@ -50,7 +50,7 @@ LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to module
 
 extern "C"
 {
-#ifdef MOD_DAQ_LogicLev_INCL
+#ifdef MOD_INCL
     TModule::SAt daq_LogicLev_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -60,7 +60,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_DAQ_LogicLev_INCL
+#ifdef MOD_INCL
     TModule *daq_LogicLev_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

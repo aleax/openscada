@@ -1155,3 +1155,87 @@ AC_DEFUN([AX_LIB_POSTGRESQL],
     AC_SUBST([POSTGRESQL_CFLAGS])
     AC_SUBST([POSTGRESQL_LDFLAGS])
 ])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_LIB_SENSORS()
+#
+# DESCRIPTION
+#
+#   This macro provides tests of availability Sensors library from LmSensors.
+#
+#   This macro calls:
+#
+#     AC_CHECK_HEADERS(sensors/sensors.h)
+#     AC_SUBST(LIB_SENSORS)
+#
+#   And sets:
+#
+#     SensorsUse=true
+#
+# LICENSE
+#
+#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+AC_DEFUN([AX_LIB_SENSORS],
+[
+    AC_CHECK_HEADERS([sensors/sensors.h],
+	[
+	    AC_CHECK_LIB([sensors],[sensors_init],
+		[AC_MSG_NOTICE([LibSensors: Pass global library using])
+		LIB_SENSORS="-lsensors"],[AC_MSG_NOTICE(Libsensors library not found. Using is disabled!)])
+	],[AC_MSG_NOTICE(DAQ.System: Libsensors headers not found. Using is disabled!)])
+    AC_SUBST(LIB_SENSORS)
+    SensorsUse=true
+])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_LIB_GD()
+#
+# DESCRIPTION
+#
+#   This macro provides tests of availability Graphical GD library.
+#
+#   This macro calls:
+#
+#     AC_CHECK_HEADERS(gd.h)
+#     AC_CHECK_LIB(gd)
+#     AC_SUBST(LIB_GD)
+#
+#   And sets:
+#
+#     GDuse=true
+#
+# LICENSE
+#
+#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+AC_DEFUN([AX_LIB_GD],
+[
+    if test "x${GDuse}" = "x"; then
+	AC_CHECK_HEADERS([gd.h],[],
+	    [AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
+	AC_CHECK_LIB([gd],[gdImageCreate],[AC_MSG_NOTICE([LibGD: Pass global library using])],
+	    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
+	LIB_GD="-lgd"
+	AC_SUBST(LIB_GD)
+	GDuse=true
+    fi
+])

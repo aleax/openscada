@@ -42,7 +42,7 @@ FLibComplex1::Lib *FLibComplex1::mod;
 
 extern "C"
 {
-#ifdef MOD_SPEC_FLibComplex1_INCL
+#ifdef MOD_INCL
     TModule::SAt spec_FLibComplex1_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -52,7 +52,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_SPEC_FLibComplex1_INCL
+#ifdef MOD_INCL
     TModule *spec_FLibComplex1_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

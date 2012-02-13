@@ -53,7 +53,7 @@ Serial::TTr *Serial::mod;
 
 extern "C"
 {
-#ifdef MOD_Tr_Serial_INCL
+#ifdef MOD_INCL
     TModule::SAt tr_Serial_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -63,7 +63,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_Tr_Serial_INCL
+#ifdef MOD_INCL
     TModule *tr_Serial_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

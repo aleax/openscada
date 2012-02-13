@@ -48,7 +48,7 @@ WebCfgD::TWEB *WebCfgD::mod;
 
 extern "C"
 {
-#ifdef MOD_UI_WebCfgD_INCL
+#ifdef MOD_INCL
     TModule::SAt ui_WebCfgD_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -58,7 +58,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_UI_WebCfgD_INCL
+#ifdef MOD_INCL
     TModule *ui_WebCfgD_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

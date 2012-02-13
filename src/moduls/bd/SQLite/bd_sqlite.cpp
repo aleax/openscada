@@ -45,7 +45,7 @@ BDSQLite::BDMod *BDSQLite::mod;
 
 extern "C"
 {
-#ifdef MOD_DB_SQLite_INCL
+#ifdef MOD_INCL
     TModule::SAt bd_SQLite_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
@@ -55,7 +55,7 @@ extern "C"
 	return TModule::SAt("");
     }
 
-#ifdef MOD_DB_SQLite_INCL
+#ifdef MOD_INCL
     TModule *bd_SQLite_attach( const TModule::SAt &AtMod, const string &source )
 #else
     TModule *attach( const TModule::SAt &AtMod, const string &source )

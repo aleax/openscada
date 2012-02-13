@@ -1,3 +1,8 @@
+2012-02-13 Roman
+- !:SYS: Modules include (built in) to core mechanism is some updated for installation exclude.
+    All DB modules is adapted for include allow.
+
+
 2012-02-10 Roman
 - DAQ: DAQPath() functions is added to DAQ subsystem objects for get internal DAQ path like "DAQMod.Cntr.Prm.attr".
 - !!:Archive: Link address to atribute of parameter of data source is make simpler by use DAQPath like "DAQMod.Cntr.Prm.attr".

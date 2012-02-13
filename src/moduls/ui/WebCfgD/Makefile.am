@@ -4,7 +4,12 @@ EXTRA_DIST = WebCfgDVCA.js WebCfgDVCA.html *.h po/*
 
 INCLUDES = -I$(top_srcdir)/src
 
+if WebCfgDIncl
+noinst_LTLIBRARIES = ui_WebCfgD.la
+INCLUDES += -DMOD_INCL
+else
 oscd_modul_LTLIBRARIES = ui_WebCfgD.la
+endif
 ui_WebCfgD_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebCfgD_la_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
 ui_WebCfgD_la_LIBADD = -lgd
