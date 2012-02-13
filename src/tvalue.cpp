@@ -552,7 +552,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
 	    nodeRes().resRequestR();
-	    string rez = *val.val_s;
+	    string rez(val.val_s->data(), val.val_s->size());
 	    nodeRes().resRelease();
 	    return rez;
 	}
@@ -695,7 +695,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //> Set current value and time
 	    nodeRes().resRequestW();
 	    string pvl = *val.val_s;
-	    *val.val_s = value;
+	    val.val_s->assign(value.data(), value.size());
             nodeRes().resRelease();
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();

@@ -4,7 +4,12 @@ EXTRA_DIST = *.h qtstarter.qrc images/* po/*
 
 INCLUDES = -I$(top_srcdir)/src $(QT4_INCL)
 
+if QTStarterIncl
+noinst_LTLIBRARIES = ui_QTStarter.la
+INCLUDES += -DMOD_INCL
+else
 oscd_modul_LTLIBRARIES = ui_QTStarter.la
+endif
 ui_QTStarter_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_la_DIST = tuimod.cpp qtstarter.qrc

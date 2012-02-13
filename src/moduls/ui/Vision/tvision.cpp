@@ -57,30 +57,25 @@ VISION::TVision *VISION::mod;
 
 extern "C"
 {
+#ifdef MOD_INCL
+    TModule::SAt ui_Vision_module( int n_mod )
+#else
     TModule::SAt module( int n_mod )
+#endif
     {
-	TModule::SAt AtMod;
-
-	if(n_mod==0)
-	{
-	    AtMod.id	= MOD_ID;
-	    AtMod.type	= MOD_TYPE;
-	    AtMod.t_ver	= VER_TYPE;
-	}
-	else
-	    AtMod.id	= "";
-
-	return AtMod;
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+        return TModule::SAt("");
     }
 
+#ifdef MOD_INCL
+    TModule *ui_Vision_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
-	VISION::TVision *self_addr = NULL;
-
-	if( AtMod.id == MOD_ID && AtMod.type == MOD_TYPE && AtMod.t_ver == VER_TYPE )
-	    self_addr = new VISION::TVision( source );
-
-	return self_addr;
+        if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+            return new VISION::TVision( source );
+        return NULL;
     }
 }
 

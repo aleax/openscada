@@ -4,7 +4,12 @@ EXTRA_DIST = *.h qtcfg.qrc images/* po/*
 
 INCLUDES = -I$(top_srcdir)/src $(QT4_INCL)
 
+if QTCfgIncl
+noinst_LTLIBRARIES = ui_QTCfg.la
+INCLUDES += -DMOD_INCL
+else
 oscd_modul_LTLIBRARIES = ui_QTCfg.la
+endif
 ui_QTCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
 ui_QTCfg_la_DIST = tuimod.cpp qtcfg.cpp selfwidg.cpp qtcfg.qrc

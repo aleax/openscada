@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir)/src
 oscd_modul_LTLIBRARIES = daq_OPC_UA.la
 daq_OPC_UA_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_OPC_UA_la_SOURCES = moduls.cpp mod_daq.cpp mod_prt.cpp
-daq_OPC_UA_la_LIBADD  = -lcrypto
+daq_OPC_UA_la_LIBADD  = $(LIB_OpenSSL)
 daq_OPC_UA_la_LIBTOOLFLAGS = --tag=disable-static
 
 if LibIntl

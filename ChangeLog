@@ -1,6 +1,7 @@
 2012-02-13 Roman
 - !:SYS: Modules include (built in) to core mechanism is some updated for installation exclude.
-    All DB modules is adapted for include allow.
+    All DB modules is adapted for include allow. All other modules, have word sense, is adapted.
+- UI.Vision: RoundCap is set for draw line of Trends and Spectrums into primitive "Diagram".
 
 
 2012-02-10 Roman

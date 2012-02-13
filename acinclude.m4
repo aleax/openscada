@@ -1239,3 +1239,143 @@ AC_DEFUN([AX_LIB_GD],
 	GDuse=true
     fi
 ])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_LIB_OpenSSL()
+#
+# DESCRIPTION
+#
+#   This macro provides tests of availability Open SSL library.
+#
+#   This macro calls:
+#
+#     AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h])
+#     AC_CHECK_LIB([ssl])
+#     AC_SUBST(LIB_OpenSSL)
+#
+#   And sets:
+#
+#     OpenSSLuse=true
+#
+# LICENSE
+#
+#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+AC_DEFUN([AX_LIB_OpenSSL],
+[
+    if test "x${OpenSSLuse}" = "x"; then
+	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
+    	    [AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
+	AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
+    	    [AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
+	LIB_OpenSSL="-lssl -lcrypto"
+	AC_SUBST(LIB_OpenSSL)
+	OpenSSLuse=true
+    fi
+])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_LIB_FFTW3()
+#
+# DESCRIPTION
+#
+#   This macro provides tests of availability FFTW3 library.
+#
+#   This macro calls:
+#
+#     AC_CHECK_HEADERS([fftw3.h])
+#     AC_CHECK_LIB([fftw3])
+#     AC_SUBST(LIB_FFTW3)
+#
+#   And sets:
+#
+#     FFTW3use=true
+#
+# LICENSE
+#
+#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+AC_DEFUN([AX_LIB_FFTW3],
+[
+    if test "x${FFTW3use}" = "x"; then
+	AC_CHECK_HEADERS([fftw3.h],
+        [
+            AC_CHECK_LIB([fftw3],[fftw_execute],
+                [AC_MSG_NOTICE([LibFFTW3: Pass global library using])
+                LIB_FFTW3="-lfftw3"],[AC_MSG_NOTICE(FFTW3 library not found. Using is disabled!)])
+        ],[AC_MSG_NOTICE(Some FFTW3 headers not found. Using is disabled!)])
+	AC_SUBST(LIB_FFTW3)
+	FFTW3use=true
+    fi
+])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_LIB_QT4()
+#
+# DESCRIPTION
+#
+#   This macro provides tests of availability QT4 library.
+#
+#   This macro calls:
+#
+#     AC_ARG_WITH(qt4-dir)
+#     AC_CHECK_PROGS(QT4_MOC)
+#     AC_CHECK_PROGS(QT4_RCC)
+#     AC_SUBST(QT4_INCL)
+#     AC_SUBST(QT4_LIB)
+#
+#   And sets:
+#
+#     QT4use=true
+#
+# LICENSE
+#
+#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+AC_DEFUN([AX_LIB_QT4],
+[
+    if test "x${QT4use}" = "x"; then
+	AC_ARG_WITH(qt4-dir,[  --with-qt4-dir=DIR      Path to directory where QT4 instaled (/usr/lib/qt4 - default) ], [QT4_DIR="$withval"], [QT4_DIR="/usr/lib/qt4"])
+	AC_CHECK_PROGS(QT4_MOC, moc-qt4 moc, false)
+	AC_CHECK_PROGS(QT4_RCC, rcc-qt4 rcc, false)
+	if test $QT4_MOC = false -o $QT4_RCC = false; then
+	    if test -d $QT4_DIR; then
+        	QT4_MOC="${QT4_DIR}/bin/moc";
+        	QT4_RCC="${QT4_DIR}/bin/rcc";
+            else AC_MSG_ERROR([QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package.]);
+            fi;
+	fi
+	QT4_INCL="$(pkg-config --cflags QtGui)"
+	QT4_LIB="$(pkg-config --libs QtGui)"
+	AC_SUBST(QT4_INCL)
+	AC_SUBST(QT4_LIB)
+	QT4use=true
+    fi
+])

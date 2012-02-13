@@ -1676,6 +1676,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(sTr->width()*vmin(w->xScale(true),w->yScale(true))))));
+	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 	pnt.setPen(trpen);
 
 	double vlOff = sTr->fftOut[0][0]/sTr->fftN;
@@ -1773,6 +1774,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
 	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
+
 	//>> Set markers font and color
 	if( sclHor&0x2 || sclVer&0x2 )
 	{
@@ -2029,6 +2031,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	QPen trpen(sTr->color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(sTr->width()*vmin(w->xScale(true),w->yScale(true))))));
+	if(sTr->valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 	pnt.setPen(trpen);
 
 	//>>> Prepare generic parameters
@@ -2100,13 +2103,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
 		if( prevVl == EVAL_REAL )
 		{
-		    if( sTr->valTp() != 0 ) pnt.drawPoint(averPos,c_vpos);
+		    if(sTr->valTp() != 0) pnt.drawPoint(averPos,c_vpos);
 		    else pnt.drawLine(averPos,z_vpos,averPos,c_vpos);
 		}
 		else
 		{
 		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
-		    if( sTr->valTp() != 0 ) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
+		    if(sTr->valTp() != 0) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
 		    else
 			for( int sps = prevPos+1; sps <= averPos; sps++ )
 			    pnt.drawLine(sps,z_vpos,sps,c_vpos);

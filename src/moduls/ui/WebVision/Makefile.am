@@ -4,10 +4,15 @@ EXTRA_DIST = WebVisionVCA.js *.h po/*
 
 INCLUDES = -I$(top_srcdir)/src
 
+if WebVisionIncl
+noinst_LTLIBRARIES = ui_WebVision.la
+INCLUDES += -DMOD_INCL
+else
 oscd_modul_LTLIBRARIES = ui_WebVision.la
+endif
 ui_WebVision_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebVision_la_SOURCES = web_vision.cpp vca_sess.cpp VCAjs.cpp
-ui_WebVision_la_LIBADD = -lgd $(LIB_FFTW)
+ui_WebVision_la_LIBADD = $(LIB_GD) $(LIB_FFTW3)
 ui_WebVision_la_LIBTOOLFLAGS = --tag=disable-static
 
 VCAjs.cpp: WebVisionVCA.js

@@ -12,7 +12,7 @@ oscd_modul_LTLIBRARIES = spec_FLibSYS.la
 endif
 spec_FLibSYS_la_LDFLAGS = -module -avoid-version -no-undefined
 spec_FLibSYS_la_SOURCES = statfunc.cpp xmlfnc.cpp varchfnc.cpp
-spec_FLibSYS_la_LIBADD = $(LIB_FFTW)
+spec_FLibSYS_la_LIBADD = $(LIB_FFTW3)
 spec_FLibSYS_la_LIBTOOLFLAGS = --tag=disable-static
 
 if LibIntl

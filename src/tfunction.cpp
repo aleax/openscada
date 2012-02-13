@@ -602,7 +602,7 @@ string TValFunc::getS( unsigned id )
 	    break;
 	case IO::String:
 	    pthread_mutex_lock(&mRes);
-	    rez = *mVal[id].val.s;
+	    rez.assign(mVal[id].val.s->data(), mVal[id].val.s->size());
 	    pthread_mutex_unlock(&mRes);
 	    break;
 	case IO::Object:
@@ -722,7 +722,7 @@ void TValFunc::setS( unsigned id, const string &val )
 	case IO::Boolean:	mVal[id].val.b = (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL;	break;
 	case IO::String:
 	    pthread_mutex_lock(&mRes);
-	    *mVal[id].val.s = val;
+	    mVal[id].val.s->assign(val.data(), val.size());;
 	    pthread_mutex_unlock(&mRes);
 	    break;
     }
