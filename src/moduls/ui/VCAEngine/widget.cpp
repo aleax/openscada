@@ -661,7 +661,7 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg )
 
 string Widget::helpImg( )
 {
-    return _("Image name in form \"[src:name]\", where:\n"
+    return _("Image name in form \"[src:]name\", where:\n"
 	    "  \"src\" - image source:\n"
 	    "    file - direct from local file by path;\n"
 	    "    res - from DB mime resources table.\n"
@@ -670,6 +670,17 @@ string Widget::helpImg( )
 	    "  \"res:backLogo\" - from DB mime resources table for Id \"backLogo\";\n"
 	    "  \"backLogo\" - like previous;\n"
 	    "  \"file:/var/tmp/backLogo.png\" - from local file by path \"/var/tmp/backLogo.png\".");
+}
+
+string Widget::helpColor( )
+{
+    return _("Color name form \"color[-alpha]\", where:\n"
+	    "  \"color\" - standard color name or digital view of three hexadeciaml digit's number form \"#RRGGBB\";\n"
+	    "  \"alpha\" - alpha channel level (0-255).\n"
+	    "Examples:\n"
+	    "  \"red\" - solid red color;\n"
+	    "  \"#FF0000\" - solid red color by digital code;\n"
+	    "  \"red-127\" - half transparent red color.");
 }
 
 TVariant Widget::vlGet( Attr &a )

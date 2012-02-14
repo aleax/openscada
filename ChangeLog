@@ -1,3 +1,8 @@
+2012-02-14 Roman
+- UI.VCAEngine: Color help is added to color attributes of primitives: "ElFigure" and "Box".
+    Background image help is added to primitive "Box".
+
+
 2012-02-13 Roman
 - !:SYS: Modules include (built in) to core mechanism is some updated for installation exclude.
     All DB modules is adapted for include allow. All other modules, have word sense, is adapted.

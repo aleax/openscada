@@ -162,6 +162,9 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
+	    if((el=ctrId(root,"/lineClr",true))) el->setAttr("help",Widget::helpColor());
+	    if((el=ctrId(root,"/bordClr",true))) el->setAttr("help",Widget::helpColor());
+	    if((el=ctrId(root,"/fillColor",true))) el->setAttr("help",Widget::helpColor());
 	    if((el=ctrId(root,"/fillImg",true))) el->setAttr("help",Widget::helpImg());
 	    if((el=ctrId(root,"/elLst",true))) el->setAttr("SnthHgl","1")->setAttr("help",
 		_("The list of elements can contain:\n"
@@ -1693,4 +1696,25 @@ void OrigBox::postEnable( int flag )
 	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
 						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
     }
+}
+
+bool OrigBox::cntrCmdAttributes( XMLNode *opt, Widget *src )
+{
+    if(!src) src = this;
+    //> Get page info
+    if(opt->name() == "info")
+    {
+	Widget::cntrCmdAttributes(opt,src);
+	XMLNode *root, *el;
+	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
+	{
+	    if((el=ctrId(root,"/backColor",true))) el->setAttr("help",Widget::helpColor());
+	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
+	    if((el=ctrId(root,"/bordColor",true))) el->setAttr("help",Widget::helpColor());
+	}
+	return true;
+    }
+
+    //> Process command to page
+    return Widget::cntrCmdAttributes(opt,src);
 }

@@ -236,6 +236,7 @@ class OrigBox : public PrWidget
     protected:
 	//Methods
 	void postEnable( int flag );
+	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
 };
 
 //************************************************
