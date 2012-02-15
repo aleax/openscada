@@ -683,6 +683,19 @@ string Widget::helpColor( )
 	    "  \"red-127\" - half transparent red color.");
 }
 
+string Widget::helpFont( )
+{
+    return _("Font name form \"{family} {size} {bold} {italic} {underline} {strike}\", where:\n"
+	    "  \"family\" - font family, for spaces use symbol '_', like: \"Arial\", \"Courier\", \"Times_New_Roman\";\n"
+	    "  \"size\" - font size in pixels;\n"
+	    "  \"bold\" - font bold (0 or 1);\n"
+	    "  \"italic\" - font italic (0 or 1);\n"
+	    "  \"underline\" - font underlined (0 or 1);\n"
+	    "  \"strike\" - font striked (0 or 1).\n"
+	    "Examples:\n"
+	    "  \"Arial 10 1 0 0 0\" - Arial font size 10 pixels and bolded.");
+}
+
 TVariant Widget::vlGet( Attr &a )
 {
     if(a.owner() == this)
@@ -1000,7 +1013,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if(el)
 		{
 		    el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attr.at().flgGlob()))->
-			setAttr("modif",TSYS::uint2str(attr.at().modif()));
+			setAttr("modif",TSYS::uint2str(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
 		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"[owner]:[group]\"."));

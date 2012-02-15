@@ -225,6 +225,7 @@ class Widget : public TCntrNode
 	//> Context helps
 	static string helpImg( );
 	static string helpColor( );
+	static string helpFont( );
 
     protected:
 	//Methods

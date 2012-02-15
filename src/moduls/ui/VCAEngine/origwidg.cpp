@@ -161,39 +161,49 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	{
-	    if((el=ctrId(root,"/lineClr",true))) el->setAttr("help",Widget::helpColor());
-	    if((el=ctrId(root,"/bordClr",true))) el->setAttr("help",Widget::helpColor());
-	    if((el=ctrId(root,"/fillColor",true))) el->setAttr("help",Widget::helpColor());
-	    if((el=ctrId(root,"/fillImg",true))) el->setAttr("help",Widget::helpImg());
-	    if((el=ctrId(root,"/elLst",true))) el->setAttr("SnthHgl","1")->setAttr("help",
-		_("The list of elements can contain:\n"
-	         "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-	         "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-	         "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
-	         "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
-	         "Where:\n"
-	         "  (x|y)           - direct point (x,y) coordinate in float point pixels;\n"
-	         "  {1}...{n}       - dynamic point 1...n;\n"
-	         "  width, bord_w   - direct line and border width in float point pixels;\n"
-	         "  w{n}            - dynamic width 'n';\n"
-	         "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}-AAA, #RRGGBB-AAA;\n"
-	         "  c{n}            - dynamic color 'n';\n"
-	         "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
-	         "  s{n}            - dynamic style 'n';\n"
-	         "  fill_img        - direct fill image in form \"[src%3Aname]\", where:\n"
-	         "      \"src\" - image source:\n"
-	         "         file - direct from local file by path;\n"
-	         "         res  - from DB mime resources table.\n"
-                 "      \"name\" - file path or resource mime Id.\n"
-	         "  i{n}            - dynamic fill image 'n'.\n"
-	         "For example:\n"
-	         "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
-	         "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
-	         "  fill:(25|50):(25|50):c2:i2\n"
-	         "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
-	}
-
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+	    {
+		el = root->childGet(i_ch);
+		int p = atoi(el->attr("p").c_str());
+		switch(p)
+		{
+		    case 21: case 24: case 25:	el->setAttr("help",Widget::helpColor());	break;
+		    case 26:	el->setAttr("help",Widget::helpImg());	break;
+		    case 27:	el->setAttr("SnthHgl","1")->setAttr("help",
+		    _("The list of elements can contain:\n"
+	              "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	              "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	              "  bezier:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
+	              "  fill:(x|y)|{1},(x|y){2},...,(x|y)|{n}:[fill_clr|c{n}]:[fill_img|i{n}]\n"
+	              "Where:\n"
+	              "  (x|y)           - direct point (x,y) coordinate in float point pixels;\n"
+	              "  {1}...{n}       - dynamic point 1...n;\n"
+	              "  width, bord_w   - direct line and border width in float point pixels;\n"
+	              "  w{n}            - dynamic width 'n';\n"
+	              "  color, bord_clr, fill_clr - direct line, border and fill color name or 32bit code whith alpha: {name}-AAA, #RRGGBB-AAA;\n"
+	              "  c{n}            - dynamic color 'n';\n"
+	              "  line_stl        - direct line style: 0-Solid, 1-Dashed, 2-Dotted;\n"
+	    	      "  s{n}            - dynamic style 'n';\n"
+	    	      "  fill_img        - direct fill image in form \"[src%3Aname]\", where:\n"
+	              "      \"src\" - image source:\n"
+	              "         file - direct from local file by path;\n"
+	              "         res  - from DB mime resources table.\n"
+                      "      \"name\" - file path or resource mime Id.\n"
+	              "  i{n}            - dynamic fill image 'n'.\n"
+	              "For example:\n"
+	              "  line:(50|25):(90.5|25):2:yellow:3:green:2\n"
+	              "  arc:(25|50):(25|50):1:4:(25|50)::#000000-0\n"
+	    	      "  fill:(25|50):(25|50):c2:i2\n"
+	              "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
+		    default:
+			switch((p-30)%6)
+			{
+			    case 3:	el->setAttr("help",Widget::helpColor());	break;
+			    case 4:	el->setAttr("help",Widget::helpImg());		break;
+			}
+			break;
+		}
+	    }
 	return true;
     }
 
@@ -464,8 +474,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    switch(src->attrAt("elType").at().getI())
 	    {
 		case 0:	//Line edit
-		    el = ctrId(root,"/cfg",true);
-		    if(!el) break;
+		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
+		    if(!(el=ctrId(root,"/cfg",true)))	break;
 		    switch(src->attrAt("view").at().getI())
 		    {
 			case 0:	//Text
@@ -521,11 +531,18 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    break;
 		    }
 		    break;
+		case 1: case 2: //Text edit and checkbox
+		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
+		    break;
 		case 3:	//Button
-		    if((el=ctrId(root,"/img",true))) el->setAttr("help",Widget::helpImg());
+		    if((el=ctrId(root,"/img",true)))	el->setAttr("help",Widget::helpImg());
+		    if((el=ctrId(root,"/color",true)))	el->setAttr("help",Widget::helpColor());
+		    if((el=ctrId(root,"/colorText",true))) el->setAttr("help",Widget::helpColor());
+		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 		case 4: case 5:	//Combo box and list
 		    if((el=ctrId(root,"/items",true))) el->setAttr("help",_("List of items-values by lines."));
+		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 		case 6: case 7:	//Slider and scroll bar
 		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
@@ -536,7 +553,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		          "  \"Max\" - maximum value;\n"
 		          "  \"SinglStep\" - the size of a single step;\n"
 		          "  \"PageStep\" - the size of the page step."));
-		break;
+		    break;
 	    }
 	return true;
     }
@@ -649,8 +666,18 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
-	    if((el=ctrId(root,"/text",true))) el->setAttr("help",_("Text value. Use '%{n}' for argument {n} (from 1) value insert."));
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+            {
+                el = root->childGet(i_ch);
+                int p = atoi(el->attr("p").c_str());
+                switch(p)
+                {
+		    case 20: case 23: case 26: el->setAttr("help",Widget::helpColor());	break;
+		    case 25: el->setAttr("help",Widget::helpFont());	break;
+		    case 21: el->setAttr("help",Widget::helpImg());	break;
+		    case 30: el->setAttr("help",_("Text value. Use '%{n}' for argument {n} (from 1) value insert.")); break;
+		}
+	    }
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
 	    {
 		el = ctrId(root,"/arg"+TSYS::int2str(i_arg)+"cfg",true);
@@ -764,26 +791,36 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
-	    if((el=ctrId(root,"/src",true))) el->setAttr("help",
-		_("Media source name in form \"[src:name]\", where:\n"
-        	  "  \"src\" - source:\n"
-        	  "    file - direct from local file by path;\n"
-        	  "    res - from DB mime resources table.\n"
-        	  "  \"name\" - file path or resource mime Id.\n"
-        	  "Examples:\n"
-        	  "  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
-        	  "  \"workMedia\" - like previous;\n"
-        	  "  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\"."));
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+            {
+                el = root->childGet(i_ch);
+                int p = atoi(el->attr("p").c_str());
+                switch(p)
+                {
+		    case 20: case 23: el->setAttr("help",Widget::helpColor());	break;
+		    case 21:	el->setAttr("help",Widget::helpImg());		break;
+		    case 25:	el->setAttr("help",
+			_("Media source name in form \"[src:]name\", where:\n"
+        		"  \"src\" - source:\n"
+        		"    file - direct from local file by path;\n"
+        		"    res - from DB mime resources table.\n"
+        		"  \"name\" - file path or resource mime Id.\n"
+        		"Examples:\n"
+        		"  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
+        		"  \"workMedia\" - like previous;\n"
+        		"  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\"."));
+        		break;
+        	}
+    	    }
 	    for(int i_a = 0; i_a < src->attrAt("areas").at().getI(); i_a++)
 	    {
 		el = ctrId(root,TSYS::strMess("/area%dcoord",i_a),true);
 		if(!el) continue;
 		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
 		{
-		    case 0: el->setAttr("help",_("Rectangle area in form \"[x1],[y1],[x2],[y2]\"."));		break;
-		    case 1: el->setAttr("help",_("Polygon area in form \"[x1],[y1],[x2],[y2],[xN],[yN]\"."));	break;
-		    case 2: el->setAttr("help",_("Circle area in form \"[x],[y],[r]\"."));			break;
+		    case 0: el->setAttr("help",_("Rectangle area in form \"x1,y1,x2,y2\"."));		break;
+		    case 1: el->setAttr("help",_("Polygon area in form \"x1,y1,x2,y2,xN,yN\"."));	break;
+		    case 2: el->setAttr("help",_("Circle area in form \"x,y,r\"."));			break;
 		}
 	    }
 	}
@@ -955,18 +992,28 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
-	    if(src->attrAt("type").at().getI() == 0 || src->attrAt("type").at().getI() == 1)
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+            {
+                el = root->childGet(i_ch);
+                int p = atoi(el->attr("p").c_str());
+                switch(p)
+                {
+		    case 20: case 23: case 33: case 36:	el->setAttr("help",Widget::helpColor());	break;
+		    case 37: el->setAttr("help",Widget::helpFont());	break;
+		    case 21: el->setAttr("help",Widget::helpImg());	break;
+		    case 38: el->setAttr("help",_("Value archivator in form \"ArchMod.ArchivatorId\"."));
+		    case 42: el->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
+		}
+	    }
+	    for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++)
 	    {
-		if((el=ctrId(root,"/valArch",true))) el->setAttr("help",_("Value archivator in form \"[ArchMod].[ArchivatorId]\"."));
-		if((el=ctrId(root,"/valsForPix",true))) el->setAttr("help",_("The number of values per pixel. Increase to enhance the accuracy of export at large time intervals."));
-		for(int i_p = 0; i_p < src->attrAt("parNum").at().getI(); i_p++)
-		    if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
-			_("Full address to DAQ attribute of a parameter or to an archive.\n"
-			"Example:\n"
-			"  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
-			"	    of controller 'AutoDA' of DAQ module 'System';\n"
-			"  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
+		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
+		if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
+		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
+		      "Example:\n"
+		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
+		      "	    of controller 'AutoDA' of DAQ module 'System';\n"
+		      "  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
 	    }
 	}
 	return true;
@@ -1067,29 +1114,45 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
-	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
-	    if((el=ctrId(root,"/arch",true))) el->setAttr("help",_("Messages archivator in form \"[ArchMod].[ArchivatorId]\"."));
-	    if((el=ctrId(root,"/lev",true))) el->setAttr("help",_("Set value to < 0 for get current alarms."));
-	    if((el=ctrId(root,"/tSize",true))) el->setAttr("help",_("Set value to '0' for get all alarms, for 'lev' < 0."));
-	    if((el=ctrId(root,"/tmpl",true))) el->setAttr("help",
-		_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
-		"  '*' - any multiply symbols group;\n"
-		"  '?' - any one symbol;\n"
-		"  '\\' - use for shield special simbols."));
-	    if((el=ctrId(root,"/col",true))) el->setAttr("help",
-		_("Visible and order columns list separated by symbol ';'. Supported columns:\n"
-		"  \"pos\" - row number;\n"
-		"  \"tm\" - date and time of the message;\n"
-		"  \"utm\" - microseconds part of time of the message;\n"
-		"  \"lev\" - level of the message;\n"
-		"  \"cat\" - category of the message;\n"
-		"  \"mess\" - the message text."));
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+            {
+                el = root->childGet(i_ch);
+                int p = atoi(el->attr("p").c_str());
+                switch(p)
+                {
+		    case 20: el->setAttr("help",Widget::helpColor());	break;
+		    case 21: el->setAttr("help",Widget::helpImg());	break;
+		    case 22: el->setAttr("help",Widget::helpFont());	break;
+		    case 27: el->setAttr("help",_("Messages archivator in form \"ArchMod.ArchivatorId\"."));	break;
+		    case 29: el->setAttr("help",_("Set value to < 0 for get current alarms."));	break;
+		    case 25: el->setAttr("help",_("Set value to '0' for get all alarms, for 'lev' < 0."));	break;
+		    case 28: el->setAttr("help",
+			_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
+			"  '*' - any multiply symbols group;\n"
+			"  '?' - any one symbol;\n"
+			"  '\\' - use for shield special simbols."));
+			break;
+		    case 31: el->setAttr("help",
+			_("Visible and order columns list separated by symbol ';'. Supported columns:\n"
+			"  \"pos\" - row number;\n"
+			"  \"tm\" - date and time of the message;\n"
+			"  \"utm\" - microseconds part of time of the message;\n"
+			"  \"lev\" - level of the message;\n"
+			"  \"cat\" - category of the message;\n"
+			"  \"mess\" - the message text."));
+			break;
+		}
+	    }
 	    for(int i_p = 0; i_p < src->attrAt("itProp").at().getI(); i_p++)
+	    {
+		if((el=ctrId(root,TSYS::strMess("/it%dcolor",i_p),true))) el->setAttr("help",Widget::helpImg());
+		if((el=ctrId(root,TSYS::strMess("/it%dfnt",i_p),true))) el->setAttr("help",Widget::helpFont());
 		if((el=ctrId(root,TSYS::strMess("/it%dtmpl",i_p),true))) el->setAttr("help",
 		    _("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 		    "  '*' - any multiply symbols group;\n"
 		    "  '?' - any one symbol;\n"
 		    "  '\\' - use for shield special simbols."));
+	    }
 	}
 	return true;
     }
@@ -1328,16 +1391,29 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	{
-	    if((el=ctrId(root,"/style",true))) el->setAttr("SnthHgl","1")->setAttr("help",
-		_("CSS rules in rows like \"body { background-color:#818181; }\""));
-	    if((el=ctrId(root,"/tmpl",true))) el->setAttr("SnthHgl","1")->setAttr("help",
-		_("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
-		"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
-	    if((el=ctrId(root,"/doc",true))) el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
-	    if((el=ctrId(root,"/aDoc",true))) el->setAttr("SnthHgl","1")->setAttr("help",_("Current archive document in XHTML. Start from tag \"body\"."));
-	    if((el=ctrId(root,"/time",true))) el->setAttr("help",_("Write time for document generation from that point."));
-	}
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+            {
+                el = root->childGet(i_ch);
+                int p = atoi(el->attr("p").c_str());
+                switch(p)
+                {
+		    case 20: el->setAttr("SnthHgl","1")->setAttr("help",
+			_("CSS rules in rows like \"body { background-color:#818181; }\""));
+			break;
+		    case 21: el->setAttr("SnthHgl","1")->setAttr("help",
+			_("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
+			"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
+			break;
+		    case 22:
+			el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
+			break;
+		    case 23: el->setAttr("help",_("Write time for document generation from that point."));	break;
+		    case 26: el->setAttr("help",Widget::helpFont());	break;
+		    default:
+			if(el->attr("id") == "aDoc")
+			    el->setAttr("SnthHgl","1")->setAttr("help",_("Current archive document in XHTML. Start from tag \"body\"."));
+		}
+	    }
 	return true;
     }
 
@@ -1707,11 +1783,16 @@ bool OrigBox::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	Widget::cntrCmdAttributes(opt,src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	{
-	    if((el=ctrId(root,"/backColor",true))) el->setAttr("help",Widget::helpColor());
-	    if((el=ctrId(root,"/backImg",true))) el->setAttr("help",Widget::helpImg());
-	    if((el=ctrId(root,"/bordColor",true))) el->setAttr("help",Widget::helpColor());
-	}
+	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
+            {
+                el = root->childGet(i_ch);
+                int p = atoi(el->attr("p").c_str());
+                switch(p)
+                {
+		    case 20: case 23: el->setAttr("help",Widget::helpColor());	break;
+		    case 21: el->setAttr("help",Widget::helpImg());		break;
+		}
+	    }
 	return true;
     }
 
