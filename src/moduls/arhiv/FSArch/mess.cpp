@@ -324,15 +324,36 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	    "tp","str","help",_("Path to directory for archivator's of messages files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/add/xml",_("XML archive files"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Maximum archive file size (kB)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/fl",_("Maximum files number"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/len",_("File's time size (days)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-	    ctrMkNode("fld",opt,-1,"/prm/add/prev_dbl",_("Prevent duplicates"),RWRWR_,"root",SARH_ID,1,"tp","bool");
-	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("fld",opt,-1,"/prm/add/xml",_("XML archive files"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Enables archiving of messages in XML-format files, rather than plain text.\n"
+		  "The use of XML-format archiving requires more RAM because is needed full download file,\n"
+		  "XML-parsing and storing in memory at the time of use."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/sz",_("Maximum archive file size (kB)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets a limit on the size of one archive file.\n"
+		  "Disable the restriction can be by setting the parameter to zero."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/fl",_("Maximum files number"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Limits the maximum number of archive files and share with the size of single file\n"
+		  "determines the size of archive on disk. Completely remove this restriction can be set to zero."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/len",_("File's time size (days)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets a limit on the size of a single archive file on time."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
+		 "Set to zero for disable packing by gzip."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets the frequency of checking the archives for the emergence or delete new files\n"
+		  "in a directory of archives, as well as exceeding the limits and removing old archive files."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
+		  "When copying files of archive on another station, these info files can speed up the target station\n"
+		  "process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/prev_dbl",_("Prevent duplicates"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Enables checks for duplicate messages at the time put a message in the archive.\n"
+		  "If there is a duplicate the message does not fit into the archive.\n"
+		  "This feature some increases the recording time to archive, but in cases of\n"
+		  "placing messages in the archive by past time from external sources it allows to eliminate duplication."));
+	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID,1,"help",
+		_("The command, which allows you to immediately start checking the archives,\n"
+		  "for example, after manual changes to the directory archiver."));
 	}
 	return;
     }

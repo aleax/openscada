@@ -431,15 +431,36 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	    "tp","str","help",_("Path to directory for archivator's of values files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum files number for one archive"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",_("Use zero for limit disable"));
-	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum capacity by all archives (MB)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",_("Use zero for limit disable"));
-	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Numeric values rounding (%)"),RWRWR_,"root",SARH_ID,1,"tp","real");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool",
-		"help",_("Allow fast archives append to other station by prevent long unpack for info get."));
-	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID);
+	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
+		_("The parameter is set automatically when you change the frequency values by archiver\n"
+		  "and generally proportional to the frequency values of the archiver.\n"
+		  "Attention! Large archive files will be processed long by long unpacking gzip-files\n"
+		  "and the primary indexing, when accessing to parts of deep in the archives of history."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/fn",_("Maximum files number for one archive"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Limits the maximum number of archive files and share with the size of single file\n"
+                  "determines the size of archive on disk. Completely remove this restriction can be set to zero."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/maxCpct",_("Maximum capacity by all archives (MB)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
+		_("Sets a limit on the maximum amount of disk space occupied by all archive files by archiver.\n"
+		  "Testing is done by periodicity checking the archives, which resulted in, on exceeding the limit,\n"
+		  "removes the oldest files of all archives. Completely remove this restriction can be set to zero."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/round",_("Numeric values rounding (%)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
+		_("Sets the percentage of boundary difference values of parameters integer and real types\n"
+		  "where they are considered identical and will be archived as a single value\n"
+		  "through sequential packaging. Allows well-packaged slightly changing parameters\n"
+		  "which outside certainty. Disable this property can be set to zero."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/pcktm",_("Pack files timeout (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets the time after which, in the absence of appeals, archive files will be packaged in gzip archiver.\n"
+		 "Set to zero for disable packing by gzip."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/tmout",_("Check archives period (min)"),RWRWR_,"root",SARH_ID,2,"tp","dec","help",
+		_("Sets the frequency of checking the archives for the emergence or delete new files\n"
+                  "in a directory of archives, as well as exceeding the limits and removing old archive files."));
+	    ctrMkNode("fld",opt,-1,"/prm/add/pack_info_fl",_("Use info files for packed archives"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
+		_("Specifies whether to create files with information about the packed archive files by gzip-archiver.\n"
+                  "When copying files of archive on another station, these info files can speed up the target station\n"
+                  "process of first run by eliminating the need to decompress by gzip-archives in order to obtain information."));
+	    ctrMkNode("comm",opt,-1,"/prm/add/chk_nw",_("Check archivator directory now"),RWRW__,"root",SARH_ID,1,"help",
+		_("The command, which allows you to immediately start checking the archives,\n"
+                  "for example, after manual changes to the directory archiver."));
 	}
 	ctrMkNode("list",opt,-1,"/arch/arch/3",_("Files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	if(ctrMkNode("comm",opt,-1,"/arch/exp",_("Export"),RWRW__,"root",SARH_ID))
