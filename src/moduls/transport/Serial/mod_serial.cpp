@@ -205,7 +205,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
-    mMdmMode(false), mMdmDataMode(false)
+    mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("6:320");
@@ -367,13 +367,11 @@ void TTrIn::connect( )
 
 	//>> Set flow control
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
+	mRTSfc = false;
 	tio.c_cflag &= ~CRTSCTS;
-	if(!fc.empty())
-	    switch(tolower(fc[0]))
-	    {
-		case 'h': tio.c_cflag |= CRTSCTS;	break;
-		case 's': tio.c_iflag |= (IXON|IXOFF|IXANY);	break;
-	    }
+	if(strcasecmp(fc.c_str(),"h") == 0)         tio.c_cflag |= CRTSCTS;
+        else if(strcasecmp(fc.c_str(),"s") == 0)    tio.c_iflag |= (IXON|IXOFF|IXANY);
+        else if(strcasecmp(fc.c_str(),"rts") == 0)  mRTSfc = true;
 
 	//>> Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -466,12 +464,21 @@ void *TTrIn::Task( void *tr_in )
     string req, answ;
     char buf[1000];
     fd_set fdset;
+    int sec;
 
     double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
     int wFrTm = 1000*atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
     int64_t stFrTm = 0, tmW = 0, tmTmp1;
 
     fcntl(tr->fd, F_SETFL, 0);
+
+    if(tr->mRTSfc)
+    {
+	ioctl(tr->fd, TIOCMGET, &sec);
+	//> Disable transfer for read allow
+	sec |= TIOCM_RTS;
+        ioctl(tr->fd, TIOCMSET, &sec);
+    }
 
     while(!tr->endrun)
     {
@@ -560,11 +567,35 @@ void *TTrIn::Task( void *tr_in )
 #if OSC_DEBUG >= 5
 	    mess_debug(nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
 #endif
+	    //>> Pure RS-485 flow control: Clear RTS for transfer allow
+    	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
+
 	    ssize_t wL = 1;
 	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(tr->fd, answ.data()+wOff, answ.size()-wOff);
 		tr->trOut += vmax(0,wL);
+	    }
+
+	    //>> Hard read for wait request echo and transfer disable
+	    if(tr->mRTSfc)
+	    {
+		char echoBuf[255];
+		int64_t mLstReqTm = TSYS::curTime();
+		for(int r_off = 0; r_off < answ.size(); )
+		{
+		    int kz = read(tr->fd,echoBuf,vmin(answ.size()-r_off,sizeof(echoBuf)));
+		    if(kz == 0 || (kz == -1 && errno == EAGAIN))
+		    {
+			if((TSYS::curTime()-mLstReqTm) > wCharTm*answ.size()*1e3) break;
+			sched_yield();
+			continue;
+		    }
+		    if(kz < 0 || memcmp(echoBuf,answ.data()+r_off,kz) != 0) break;
+		    r_off += kz;
+		}
+        	sec |= TIOCM_RTS;
+        	ioctl(tr->fd, TIOCMSET, &sec);
 	    }
 	    answ = "";
 	}
@@ -596,7 +627,10 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
 	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
-	    "    fc - flow control: 'h' - hardware (CRTSCTS), 's' - software (IXON|IXOFF);\n"
+	    "    fc - flow control:\n"
+	    "      'h' - hardware (CRTSCTS);\n"
+	    "      's' - software (IXON|IXOFF);\n"
+	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"[symbol]:[frm]\". Where:\n"
@@ -868,12 +902,9 @@ void TTrOut::start( )
 	string fc = TSYS::strNoSpace(TSYS::strSepParse(addr(),3,':'));
 	mRTSfc = false;
 	tio.c_cflag &= ~CRTSCTS;
-	if(!fc.empty())
-	{
-	    if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
-	    else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
-	    else if(strcasecmp(fc.c_str(),"rts") == 0)	mRTSfc = true;
-	}
+	if(strcasecmp(fc.c_str(),"h") == 0)		tio.c_cflag |= CRTSCTS;
+	else if(strcasecmp(fc.c_str(),"s") == 0)	tio.c_iflag |= (IXON|IXOFF|IXANY);
+	else if(strcasecmp(fc.c_str(),"rts") == 0)	mRTSfc = true;
 
 	//>> Set port's data
 	tcflush(fd, TCIOFLUSH);
@@ -1003,11 +1034,32 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	//>> Pure RS-485 flow control: Clear RTS for transfer allow
 	if(mRTSfc) { sec &= ~TIOCM_RTS; ioctl(fd, TIOCMSET, &sec); }
 
-	for(int wOff = 0, kz = 0; wOff != len_ob; wOff += kz)
+	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
 	    kz = write(fd,obuf+wOff,len_ob-wOff);
 	    if(kz <= 0) { mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Writing request error.")); }
 	    else trOut += kz;
+	}
+
+	//>> Hard read for wait request echo and transfer disable
+	if(mRTSfc)
+	{
+	    char echoBuf[255];
+	    mLstReqTm = TSYS::curTime();
+	    for(int r_off = 0; r_off < len_ob; )
+	    {
+		kz = read(fd,echoBuf,vmin(len_ob-r_off,sizeof(echoBuf)));
+		if(kz == 0 || (kz == -1 && errno == EAGAIN))
+		{
+		    if((TSYS::curTime()-mLstReqTm) > wCharTm*len_ob*1e3) throw TError(nodePath().c_str(),_("Timeouted!"));
+		    sched_yield();
+		    continue;
+		}
+		if(kz < 0 || memcmp(echoBuf,obuf+r_off,kz) != 0) throw TError(nodePath().c_str(),_("Echo request reading error."));
+		r_off += kz;
+	    }
+            sec |= TIOCM_RTS;
+            ioctl(fd, TIOCMSET, &sec);
 	}
     }
 
@@ -1017,7 +1069,6 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	fd_set rd_fd;
 	struct timeval tv;
 
-wait_more:
 	do
 	{
 	    if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
@@ -1032,22 +1083,6 @@ wait_more:
 	{
 	    blen = read(fd, ibuf, len_ib);
 	    trIn += vmax(0, blen);
-
-	    //>> Pure RS-485 flow control: Set RTS for transfer disable, check for echo and wait real respond
-	    if(mRTSfc && obuf && len_ob > 0 && !(sec&TIOCM_RTS) && blen > 0)
-	    {
-        	if(blen < len_ob) goto wait_more;
-                if(string(obuf,len_ob) == string(ibuf,len_ob))
-                {
-                    sec |= TIOCM_RTS;
-                    ioctl(fd, TIOCMSET, &sec);
-
-                    trIn -= len_ob;
-                    memcpy(ibuf, ibuf+len_ob, blen-len_ob);
-                    blen -= len_ob;
-                }
-                if(!blen) goto wait_more;
-	    }
 	}
     }
     mLstReqTm = TSYS::curTime();
@@ -1073,7 +1108,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"[conn]:[symbol]\". Where:\n"
+	    _("Connection timings in format: \"conn:symbol\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))

@@ -1,3 +1,7 @@
+2012-02-16 Roman
+- !:Transport.Serial: Flow control by RTS signal for pure RS-485 is some unified and added to input transport.
+
+
 2012-02-15 Roman
 - Archive.FSArch: More context helps is added for specific parameters of archivators.
 - UI.VCAEngine: Color and font help is added to color and font attributes of all primitives.

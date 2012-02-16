@@ -100,7 +100,9 @@ class TTrIn: public TTransportIn
 	float	mMdmPreInit, mMdmPostInit;
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
 	string	mMdmRingReq, mMdmRingAnswer, mMdmRingAnswerResp;
-	bool	mMdmMode, mMdmDataMode;
+	unsigned mMdmMode	:1;
+	unsigned mMdmDataMode	:1;
+	unsigned mRTSfc         :1;
 };
 
 //************************************************
