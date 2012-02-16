@@ -633,7 +633,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"[symbol]:[frm]\". Where:\n"
+	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    frm - maximum frame length, in ms."));
 	if(atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
