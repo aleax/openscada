@@ -7276,8 +7276,9 @@ void ShapeElFigure::paintImage( WdgView *view )
             img_pnt.drawPath(in_path_rot);
             int im_x, im_y;
             QColor color;
-            double alpha, color_r, color_g, color_b;
+            double alpha, alpha_rez, color_r, color_g, color_b;
             double alpha_col = (double)(*colors)[inundationItems[i].brush].alpha()/255;
+            printf("alpha_col = %f\n", alpha_col);
             QRgb rgb;
             QPointF drw_pnt,drw_pnt1;
             QPen im_pen;
@@ -7299,7 +7300,8 @@ void ShapeElFigure::paintImage( WdgView *view )
                             color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
                             color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
                             color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();
-                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (*colors)[inundationItems[i].brush].alpha()) );
+                            alpha_rez = (1 - alpha_col) * (1 - alpha);
+                            im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (int)TSYS::realRound( 255*(1-alpha_rez), POS_PREC_DIG, true )) );
                             pnt.setPen( im_pen );
                             drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
                             pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), POS_PREC_DIG, true),

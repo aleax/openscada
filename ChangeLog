@@ -1,3 +1,7 @@
+2012-02-17 Maxim
+- FIX:UI.Vision, UI.WebVision: transparency calculation during the combination of fill color and image for the primitive ElFigure is fixed.
+
+
 2012-02-17 Roman
 - SYS: Realtime clock real hold accuracy control is added into tasks statistic table.
     Usefull for host system estimate to realtime.

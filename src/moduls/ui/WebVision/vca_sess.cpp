@@ -3847,7 +3847,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                             gdImagePtr im_fill_out = gdImageCreateTrueColor((int)TSYS::realRound( xMax - xMin ) + 1, (int)TSYS::realRound( yMax - yMin ) + 1 );
                             gdImageAlphaBlending(im_fill_out, 0);
                             int alpha;
-                            double alpha_pr;
+                            double alpha_pr, alpha_rez;
                             if( im_fill_in )
                             {
                                 gdImageAlphaBlending(im_fill_in, 0);
@@ -3888,17 +3888,18 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                         drw_pnt1.x = scaleRotate( drw_pnt, xSc, ySc, false, true ).x;
                                         drw_pnt1.y = scaleRotate( drw_pnt, xSc, ySc, false, true ).y;
 
-                                        if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
+                                        //if( fabs(alpha_pr - 0) < 0.001 ) alpha_pr = 1;
                                         color_r = alpha_pr*((rgb>>16)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>16 ) );
                                         color_g = alpha_pr*((rgb>>8)&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)( inundationItems[i].P_color>>8 ) );
                                         color_b = alpha_pr*(rgb&0xff) + (1-alpha_pr)*alpha_col*( (uint8_t)inundationItems[i].P_color );
+                                        alpha_rez = (1 - alpha_col) * (1 - alpha_pr);
                                         /*int color = gdImageColorResolve( im1, (int)TSYS::realRound( color_r, POS_PREC_DIG, true ),
                                                                             (int)TSYS::realRound( color_g, POS_PREC_DIG, true ),
                                                                             (int)TSYS::realRound( color_b, POS_PREC_DIG, true ) );*/
                                         int color = gdImageColorResolveAlpha( im1, (int)TSYS::realRound( color_r, POS_PREC_DIG, true ),
-                                                                                    (int)TSYS::realRound( color_g, POS_PREC_DIG, true ),
-                                                                                    (int)TSYS::realRound( color_b, POS_PREC_DIG, true ),
-                                                                                    127 - (uint8_t)(inundationItems[i].P_color>>24) );
+                                                                                   (int)TSYS::realRound( color_g, POS_PREC_DIG, true ),
+                                                                                   (int)TSYS::realRound( color_b, POS_PREC_DIG, true ),
+                                                                                   127 - (int)TSYS::realRound( 127*(1 - alpha_rez), POS_PREC_DIG, true ) );
                                         gdImageSetPixel( im1, (int)TSYS::realRound( drw_pnt1.x, POS_PREC_DIG, true ) , (int)TSYS::realRound( drw_pnt1.y, POS_PREC_DIG, true ), color );
                                     }
                                     im_x += 1;
