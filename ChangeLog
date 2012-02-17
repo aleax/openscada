@@ -1,3 +1,8 @@
+2012-02-17 Roman
+- FIX:UI.QTCfg: Page replace is some changed from previous removing from QScrolArea place,
+    for fix possible crash into QT4 plugin libqspiaccessiblebridge.so.
+
+
 2012-02-16 Roman
 - !:Transport.Serial: Flow control by RTS signal for pure RS-485 is some unified and added to input transport.
 
