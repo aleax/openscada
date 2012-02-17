@@ -7278,7 +7278,6 @@ void ShapeElFigure::paintImage( WdgView *view )
             QColor color;
             double alpha, alpha_rez, color_r, color_g, color_b;
             double alpha_col = (double)(*colors)[inundationItems[i].brush].alpha()/255;
-            printf("alpha_col = %f\n", alpha_col);
             QRgb rgb;
             QPointF drw_pnt,drw_pnt1;
             QPen im_pen;
