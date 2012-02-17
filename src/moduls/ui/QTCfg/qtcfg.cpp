@@ -1002,7 +1002,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    QScrollArea *scrl = (QScrollArea*)tabs->widget(i_area);
 		    int v_scrl = (scrl->verticalScrollBar()) ? scrl->verticalScrollBar()->value() : 0;
 
-		    QWidget *wdg = new QFrame(scrl);
+		    QWidget *wdg = new QFrame;
 		    QVBoxLayout *wdg_lay = new QVBoxLayout(wdg);
 		    wdg_lay->setSpacing(3);
 		    wdg_lay->setAlignment( Qt::AlignTop );

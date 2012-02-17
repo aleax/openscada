@@ -845,13 +845,9 @@ repeate:
 	fd_set rd_fd;
 	struct timeval tv;
 
-	do
-	{
-	    tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
-	    FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
-	    kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
-	}
-	while(kz == -1 && errno == EINTR);
+	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
+	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
+	kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	if(kz == 0)	{ res.release(); if(writeReq) stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if(kz < 0)	{ res.release(); stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Socket error!")); }
 	else if(FD_ISSET(sock_fd, &rd_fd))

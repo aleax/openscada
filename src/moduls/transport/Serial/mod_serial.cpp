@@ -177,13 +177,9 @@ string TTr::expect( int fd, const string& expLst, int tm )
 	fd_set rd_fd;
 	struct timeval tv;
 
-	do
-	{
-	    tv.tv_sec = tm-(time(NULL)-st_exp); tv.tv_usec = 0;
-	    FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
-	    kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
-	}
-	while( kz == -1 && errno == EINTR );
+	tv.tv_sec = tm-(time(NULL)-st_exp); tv.tv_usec = 0;
+	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
+	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	if( kz == 0 )	continue;
 	else if( kz < 0 ) throw TError(mod->nodePath().c_str(),_("Read from serial error."));
 	else if( FD_ISSET(fd,&rd_fd) )
@@ -1069,14 +1065,10 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	fd_set rd_fd;
 	struct timeval tv;
 
-	do
-	{
-	    if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
-	    else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
-	    FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
-	    kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
-	}
-	while(kz == -1 && errno == EINTR);
+	if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
+	else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
+	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
+	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Serial error!")); }
 	else if(FD_ISSET(fd, &rd_fd))

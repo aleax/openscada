@@ -1497,17 +1497,19 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;
 	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
+	    stsk->tm_pnt = pnt_tm;
 	}
     }
     else
     {
 	time_t end_tm = time(NULL);
-	while(time(NULL) < cron && sysSleep(1) == 0) ;
+	while(time(NULL) < cron && sysSleep(10) == 0) ;
 	if(stsk)
 	{
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = 1000000000ll*end_tm;
 	    stsk->tm_per = 1000000000ll*time(NULL);
+	    stsk->tm_pnt = 1000000000ll*cron;
 	}
     }
 }
@@ -1934,7 +1936,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     {
 	struct timespec tmval;
 	clock_getres(CLOCK_REALTIME,&tmval);
-	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));//  TSYS::real2str((float)tmval.tv_nsec/1000000.,4));
+	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config" && ctrChkNode(opt))		opt->setText(mConfFile);
@@ -2037,15 +2039,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_tid)	n_tid->childAdd("el")->setText(TSYS::int2str(it->second.tid));
 		if(n_stat)
 		{
-		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0;
+		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0;
 		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
-		    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; }
+		    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt; }
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f%% (%s from %s)"),
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"),
 			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
-			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str()));
+			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_pnt)).c_str()));
 		}
 		if(n_plc)
 		{

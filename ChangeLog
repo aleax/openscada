@@ -1,6 +1,10 @@
 2012-02-17 Roman
-- FIX:UI.QTCfg: Page replace is some changed from previous removing from QScrolArea place,
-    for fix possible crash into QT4 plugin libqspiaccessiblebridge.so.
+- SYS: Realtime clock real hold accuracy control is added into tasks statistic table.
+    Usefull for host system estimate to realtime.
+- FIX:Transport.SSL, Transport.Sockets, Transport.Serial: Enable termination allow from wait for timeout expiration
+    by pass EINTR result of select() processing. Usable for transports and it users disable ot exit.
+- UI.QTCfg: Page replace is some changed from previous removing from QScrolArea place,
+    for fix possible crash into QT4 plugin libqspiaccessiblebridge.so - no an effect.
 
 
 2012-02-16 Roman
