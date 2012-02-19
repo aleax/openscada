@@ -1,5 +1,3 @@
-## process this file with automake to generate Makefile.in
-
 EXTRA_DIST = *.h vision.qrc images/* po/*
 
 INCLUDES = -I$(top_srcdir)/src $(QT4_INCL)
@@ -38,40 +36,10 @@ moc_vis_shapes.cpp: vis_shapes.h
 moc_vis_shape_elfig.cpp: vis_shape_elfig.h
 	$(QT4_MOC) vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
-if LibIntl
-
-#PO files process
-m_name = $(oscd_modulpref)Vision
-
-messages:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h ; \
-	for cat in $$catalogs; do \
-	msgmerge -U $$cat $$name ; \
-	done
-
-install-data-local:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=$(m_name).mo ; \
-	for cat in $$catalogs; do \
-	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
-	msgfmt -vo $$name $$cat ; \
-	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	rm $$name ; \
-	done
-
-uninstall-local:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=$(m_name).mo ; \
-	for cat in $$catalogs; do \
-	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	done
+I18N_mod = $(oscd_modulpref)Vision
 
 clean-local:
 	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \
-    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp po/$(m_name).pot po/*~
-
-endif
+    moc_vis_run.cpp moc_vis_run_widgs.cpp moc_vis_shapes.cpp moc_vis_shape_elfig.cpp
 
 DISTFILES = $(DIST_COMMON) $(ui_Vision_la_DIST) $(EXTRA_DIST)

@@ -1,6 +1,6 @@
 SUBDIRS = src src_call
 
-EXTRA_DIST = *.spec README* TODO* debian/*
+EXTRA_DIST = I18N.am *.spec README* TODO* debian/*
 AUTOMAKE_OPTIONS = foreign 1.6
 
 dist-res:

@@ -1379,3 +1379,59 @@ AC_DEFUN([AX_LIB_QT4],
 	QT4use=true
     fi
 ])
+
+# ===========================================================================
+#     http://oscada.org
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_MOD_EN([ModName],[Help],[En],[InclAllow],[ActionIfEnable][ActionElse])
+#
+# DESCRIPTION
+#
+#   This macro provides OpenSCADA modules enable/disable/include and tests wrapper.
+#
+#   Parameters:
+#     ModName - module name
+#     Help - enable/disable/include option help
+#     En - "enable" or "disable" default option oposite for default module state.
+#     InclAllow - "incl" or empty for set module including to OpenSCADA core allow.
+#     ActionIfEnable - call action on enable/include module.
+#     ActionElse - call action on disable module.
+#
+#   This macro calls:
+#
+#     AC_ARG_ENABLE()
+#     AC_HELP_STRING()
+#     AM_CONDITIONAL()
+#     AS_IF()
+#
+#   And sets:
+#
+#     enable_{ModName}=yes|incl|no
+#
+# LICENSE
+#
+#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
+
+AC_DEFUN([AX_MOD_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],
+    [
+	if test "x$3" = "xdisable"; then
+	    if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+	    else enable_$1=yes; fi
+	else
+	    if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+	    else enable_$1=no; fi
+	fi
+    ])
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test "x$4" = "xincl" -a $enable_$1 = incl], [$5], [$6])
+])

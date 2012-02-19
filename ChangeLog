@@ -1,4 +1,7 @@
 2012-02-19 Roman
+- !!!!:SYS: Build system have been significant updated for:
+    - move I18N processing code to generic place and place it to modules Makefiles on configure;
+    - generic macros AX_MOD_EN() is added for unified modules control into configure.in.
 - FIX:Parameter: Parameters SHIFR copy prevent is fixed.
 
 

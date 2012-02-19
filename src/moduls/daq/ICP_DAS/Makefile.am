@@ -1,5 +1,3 @@
-## process this file with automake to generate Makefile.in
-
 EXTRA_DIST = *.h po/* libi8k.a libi8k_arm.a include/*.h include_arm/*.h
 
 INCLUDES = -I$(top_srcdir)/src $(ICP_DAS_CFLAGS)
@@ -10,38 +8,4 @@ daq_ICP_DAS_la_SOURCES = ICP_module.cpp
 daq_ICP_DAS_la_LIBADD  = $(ICP_DAS_LIBS)
 daq_ICP_DAS_la_LIBTOOLFLAGS = --tag=disable-static
 
-if LibIntl
-
-#PO files process
-m_name = $(oscd_modulpref)ICP_DAS
-
-messages:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=po/$(m_name).pot ; \
-	xgettext -o $$name -C --no-location --no-wrap -k_ *.cpp *.h ; \
-	for cat in $$catalogs; do \
-	msgmerge -U $$cat $$name ; \
-	done
-
-install-data-local:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=$(m_name).mo ; \
-	for cat in $$catalogs; do \
-	mkdir -p $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES ; \
-	msgfmt -vo $$name $$cat ; \
-	cp $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	rm $$name ; \
-	done
-
-uninstall-local:
-	@catalogs=`find ./po -name \*.po` ; \
-	name=$(m_name).mo ; \
-	for cat in $$catalogs; do \
-	rm -f $$name $(oscd_localedir)/`basename $$cat .po`/LC_MESSAGES/$$name ; \
-	done
-
-clean-local:
-	rm -f po/$(m_name).pot ; \
-	rm -f po/*~ ;
-
-endif
+I18N_mod = $(oscd_modulpref)ICP_DAS

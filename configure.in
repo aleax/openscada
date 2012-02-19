@@ -47,7 +47,6 @@ AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     [AC_MSG_ERROR([Some standard template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
 AC_CHECK_HEADERS([iconv.h],[ ],[AC_MSG_NOTICE(iconv.h header not found. Using is disabled!)])
 AC_CHECK_HEADERS([libintl.h],[ ],[AC_MSG_NOTICE(libintl.h header not found. Using is disabled!)])
-AM_CONDITIONAL([LibIntl], [test $ac_cv_header_libintl_h = yes])
 
 #Gettext utilites check
 if test $ac_cv_header_libintl_h = yes; then
@@ -96,10 +95,8 @@ AC_FUNC_STAT
 AC_ISC_POSIX
 
 oscd_moduldir="\${libdir}/${PACKAGE}"
-oscd_localedir="\${DESTDIR}\${datadir}/locale"
 AC_SUBST(oscd_LIBREVISION)
 AC_SUBST(oscd_moduldir)
-AC_SUBST(oscd_localedir)
 AC_SUBST(oscd_modulpref)
 AC_SUBST(oscd_docmodul)
 AC_SUBST(subdir_mod)
@@ -110,92 +107,12 @@ AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/ui/Makefile)
 
 #====== Generic functions enable/disable ======
-AC_ARG_ENABLE(ForDist,AC_HELP_STRING([--enable-ForDist], [prepare for distributive build by "make dist", by all modules enable.]),[ ],[ enable_ForDist=no; ])
 AC_ARG_ENABLE(CrossCompile,AC_HELP_STRING([--enable-CrossCompile], [enable crosscompile build]),[ ],
 [ if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
 AC_ARG_ENABLE(CoreLibStatic,AC_HELP_STRING([--enable-CoreLibStatic], [enable OpenSCADA core lib no shared, only static.]),
 [ liboscada_la_LIBTOOLFLAGS="--tag=disable-shared"; AC_SUBST(liboscada_la_LIBTOOLFLAGS) ],[ enable_CoreLibStatic=no; ])
 AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--disable-LibGD], [disable using library LibGD in core]),[ ],[ enable_LibGD=yes; ])
-
-#====== Check build modules ======
-#> DB modules
-AC_ARG_ENABLE(DBF,AC_HELP_STRING([--disable-DBF], [disable or enable[=incl] build module DB.DBF]),[ ],[ enable_DBF=yes; ])
-AM_CONDITIONAL([DBFIncl],[test $enable_DBF = incl])
-AC_ARG_ENABLE(MySQL,AC_HELP_STRING([--disable-MySQL], [disable or enable[=incl] or disable build module DB.MySQL]),[ ],[ enable_MySQL=yes; ])
-AM_CONDITIONAL([MySQLIncl],[test $enable_MySQL = incl])
-AC_ARG_ENABLE(SQLite,AC_HELP_STRING([--disable-SQLite], [disable or enable[=incl] build module DB.SQLite]),[ ],[ enable_SQLite=yes; ])
-AM_CONDITIONAL([SQLiteIncl],[test $enable_SQLite = incl])
-AC_ARG_ENABLE(FireBird,AC_HELP_STRING([--disable-FireBird], [disable or enable[=incl] build module DB.FireBird]),[ ],[ enable_FireBird=yes; ])
-AM_CONDITIONAL([FireBirdIncl],[test $enable_FireBird = incl])
-AC_ARG_ENABLE(PostgreSQL,AC_HELP_STRING([--disable-PostgreSQL], [disable or enable[=incl] build module DB.PostgreSQL]),[ ],[ enable_PostgreSQL=yes; ])
-AM_CONDITIONAL([PostgreSQLIncl],[test $enable_PostgreSQL = incl])
-#> DAQ modules
-AC_ARG_ENABLE(System,AC_HELP_STRING([--disable-System], [disable or enable[=incl] build module DAQ.System]),[ ],[ enable_System=yes; ])
-AM_CONDITIONAL([SystemIncl],[test $enable_System = incl])
-AC_ARG_ENABLE(BlockCalc,AC_HELP_STRING([--disable-BlockCalc], [disable or enable[=incl] build module DAQ.BlockCalc]),[ ],[ enable_BlockCalc=yes; ])
-AM_CONDITIONAL([BlockCalcIncl],[test $enable_BlockCalc = incl])
-AC_ARG_ENABLE(JavaLikeCalc,AC_HELP_STRING([--disable-JavaLikeCalc], [disable or enable[=incl] build module DAQ.JavaLikeCalc]),[ ],[ enable_JavaLikeCalc=yes; ])
-AM_CONDITIONAL([JavaLikeCalcIncl],[test $enable_JavaLikeCalc = incl])
-AC_ARG_ENABLE(DiamondBoards,AC_HELP_STRING([--disable-DiamondBoards], [disable build module DAQ.DiamondBoards]),[ ],[ enable_DiamondBoards=yes; ])
-AC_ARG_ENABLE(LogicLev,AC_HELP_STRING([--disable-LogicLev], [disable or enable[=incl] disable build module DAQ.LogicLev]),[ ],[ enable_LogicLev=yes; ])
-AM_CONDITIONAL([LogicLevIncl],[test $enable_LogicLev = incl])
-AC_ARG_ENABLE(SNMP,AC_HELP_STRING([--disable-SNMP], [disable build module DAQ.SNMP]),[ ],[ enable_SNMP=yes; ])
-AC_ARG_ENABLE(Siemens,AC_HELP_STRING([--disable-Siemens], [disable build module DAQ.Siemens]),[ ],[ enable_Siemens=yes; ])
-AC_ARG_ENABLE(ModBus,AC_HELP_STRING([--disable-ModBus], [disable or enable[=incl] build module DAQ.ModBus]),[ ],[ enable_ModBus=yes; ])
-AM_CONDITIONAL([ModBusIncl],[test $enable_ModBus = incl])
-AC_ARG_ENABLE(DCON,AC_HELP_STRING([--disable-DCON], [disable or enable[=incl] build module DAQ.DCON]),[ ],[ enable_DCON=yes; ])
-AM_CONDITIONAL([DCONIncl],[test $enable_DCON = incl])
-AC_ARG_ENABLE(DAQGate,AC_HELP_STRING([--disable-DAQGate], [disable or enable[=incl] build module DAQ.DAQGate]),[ ],[ enable_DAQGate=yes; ])
-AM_CONDITIONAL([DAQGateIncl],[test $enable_DAQGate = incl])
-AC_ARG_ENABLE(SoundCard,AC_HELP_STRING([--disable-SoundCard], [disable build module DAQ.SoundCard]),[ ],[ enable_SoundCard=yes; ])
-AC_ARG_ENABLE(ICP_DAS,AC_HELP_STRING([--enable-ICP_DAS], [enable build module DAQ.ICP_DAS]),[ ],[ enable_ICP_DAS=no; ])
-AC_ARG_ENABLE(OPC_UA,AC_HELP_STRING([--disable-OPC_UA], [disable build module DAQ.OPC_UA]),[ ],[ enable_OPC_UA=yes; ])
-AC_ARG_ENABLE(AMRDevs,AC_HELP_STRING([--enable-AMRDevs], [enable build module DAQ.AMRDevs]),[ ],[ enable_AMRDevs=no; ])
-AC_ARG_ENABLE(BFN,AC_HELP_STRING([--disable-BFN], [disable build module DAQ.BFN]),[ ],[ enable_BFN=yes; ])
-#> Archive modules
-AC_ARG_ENABLE(FSArch,AC_HELP_STRING([--disable-FSArch], [disable or enable[=incl] build module Archive.FSArch]),[ ],[ enable_FSArch=yes; ])
-AM_CONDITIONAL([FSArchIncl],[test $enable_FSArch = incl])
-AC_ARG_ENABLE(DBArch,AC_HELP_STRING([--disable-DBArch], [disable or enable[=incl] build module Archive.DBArch]),[ ],[ enable_DBArch=yes; ])
-AM_CONDITIONAL([DBArchIncl],[test $enable_DBArch = incl])
-#> Transport modules
-AC_ARG_ENABLE(Sockets,AC_HELP_STRING([--disable-Sockets], [disable or enable[=incl] build module Transport.Sockets]),[ ],[ enable_Sockets=yes; ])
-AM_CONDITIONAL([SocketsIncl],[test $enable_Sockets = incl])
-AC_ARG_ENABLE(SSL,AC_HELP_STRING([--disable-SSL], [disable or enable[=incl] build module Transport.SSL]),[ ],[ enable_SSL=yes; ])
-AM_CONDITIONAL([SSLIncl],[test $enable_SSL = incl])
-AC_ARG_ENABLE(Serial,AC_HELP_STRING([--disable-Serial], [disable or enable[=incl] build module Transport.Serial]),[ ],[ enable_Serial=yes; ])
-AM_CONDITIONAL([SerialIncl],[test $enable_Serial = incl])
-#> Transport protocol modules
-AC_ARG_ENABLE(HTTP,AC_HELP_STRING([--disable-HTTP], [disable or enable[=incl] build module Protocol.HTTP]),[ ],[ enable_HTTP=yes; ])
-AM_CONDITIONAL([HTTPIncl],[test $enable_HTTP = incl])
-AC_ARG_ENABLE(SelfSystem,AC_HELP_STRING([--disable-SelfSystem], [disable or enable[=incl] build module Protocol.SelfSystem]),[ ],[ enable_SelfSystem=yes; ])
-AM_CONDITIONAL([SelfSystemIncl],[test $enable_SelfSystem = incl])
-AC_ARG_ENABLE(UserProtocol,AC_HELP_STRING([--disable-UserProtocol], [disable or enable[=incl] build module Protocol.UserProtocol]),[ ],[ enable_UserProtocol=yes; ])
-AM_CONDITIONAL([UserProtocolIncl],[test $enable_UserProtocol = incl])
-#> UI modules
-AC_ARG_ENABLE(VCAEngine,AC_HELP_STRING([--disable-VCAEngine], [disable or enable[=incl] build module UI.VCAEngine]),[ ],[ enable_VCAEngine=yes; ])
-AM_CONDITIONAL([VCAEngineIncl],[test $enable_VCAEngine = incl])
-AC_ARG_ENABLE(Vision,AC_HELP_STRING([--disable-Vision], [disable or enable[=incl] build module UI.Vision]),[ ],[ enable_Vision=yes; ])
-AM_CONDITIONAL([VisionIncl],[test $enable_Vision = incl])
-AC_ARG_ENABLE(QTStarter,AC_HELP_STRING([--disable-QTStarter], [disable or enable[=incl] build module UI.QTStarter]),[ ],[ enable_QTStarter=yes; ])
-AM_CONDITIONAL([QTStarterIncl],[test $enable_QTStarter = incl])
-AC_ARG_ENABLE(QTCfg,AC_HELP_STRING([--disable-QTCfg], [disable or enable[=incl] build module UI.QTCfg]),[ ],[ enable_QTCfg=yes; ])
-AM_CONDITIONAL([QTCfgIncl],[test $enable_QTCfg = incl])
-AC_ARG_ENABLE(WebCfg,AC_HELP_STRING([--disable-WebCfg], [disable or enable[=incl] build module UI.WebCfg]),[ ],[ enable_WebCfg=yes; ])
-AM_CONDITIONAL([WebCfgIncl],[test $enable_WebCfg = incl])
-AC_ARG_ENABLE(WebCfgD,AC_HELP_STRING([--disable-WebCfgD], [disable or enable[=incl] build module UI.WebCfgD]),[ ],[ enable_WebCfgD=yes; ])
-AM_CONDITIONAL([WebCfgDIncl],[test $enable_WebCfgD = incl])
-AC_ARG_ENABLE(WebVision,AC_HELP_STRING([--disable-WebVision], [disable or enable[=incl] build module UI.WebVision]),[ ],[ enable_WebVision=yes; ])
-AM_CONDITIONAL([WebVisionIncl],[test $enable_WebVision = incl])
-AC_ARG_ENABLE(WebUser,AC_HELP_STRING([--disable-WebUser], [disable or enable[=incl] build module UI.WebUser]),[ ],[ enable_WebUser=yes; ])
-AM_CONDITIONAL([WebUserIncl],[test $enable_WebUser = incl])
-#> Special modules
-AC_ARG_ENABLE(SystemTests,AC_HELP_STRING([--disable-SystemTests], [disable build module Special.SystemTests]),[ ],[ enable_SystemTests=yes; ])
-AC_ARG_ENABLE(FLibComplex1,AC_HELP_STRING([--disable-FLibComplex1], [disable or enable[=incl] build module Special.FLibComplex1]),[ ],[ enable_FLibComplex1=yes; ])
-AM_CONDITIONAL([FLibComplex1Incl],[test $enable_FLibComplex1 = incl])
-AC_ARG_ENABLE(FLibMath,AC_HELP_STRING([--disable-FLibMath], [disable or enable[=incl] build module Special.FLibMath]),[ ],[ enable_FLibMath=yes; ])
-AM_CONDITIONAL([FLibMathIncl],[test $enable_FLibMath = incl])
-AC_ARG_ENABLE(FLibSYS,AC_HELP_STRING([--disable-FLibSYS], [disable or enable[=incl] build module Special.FLibSYS]),[ ],[ enable_FLibSYS=yes; ])
-AM_CONDITIONAL([FLibSYSIncl],[test $enable_FLibSYS = incl])
+AC_ARG_ENABLE(AllModuls,AC_HELP_STRING([--enable-AllModuls], [all modules enable/disable for separated modules select]),[ ],[ enable_AllModuls=individual; ])
 
 AC_MSG_RESULT(========== Core libraries check =============)
 # Check for libraries
@@ -232,10 +149,11 @@ AC_CHECK_HEADERS([pcre.h],[],
 AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
     [AC_MSG_ERROR(PCRE library not found. Install or check PCRE package!)])
 
-AC_MSG_RESULT(========== Build modules list =============)
+AC_MSG_RESULT(========== Build modules check =============)
 #> DB modules
 AC_SUBST(DBSub_mod)
-if test $enable_ForDist = yes -o $enable_DBF = yes -o $enable_DBF = incl; then
+AX_MOD_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl,
+[
     AC_MSG_RESULT(Build module: DB.DBF)
     AC_CONFIG_FILES(src/moduls/bd/DBF/Makefile)
     DBSub_mod="${DBSub_mod}DBF "
@@ -243,8 +161,9 @@ if test $enable_ForDist = yes -o $enable_DBF = yes -o $enable_DBF = incl; then
 	LIB_CORE="${LIB_CORE} moduls/bd/DBF/.libs/*.o "
 	ModsIncl="${ModsIncl}bd_DBF "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_MySQL = yes -o $enable_MySQL = incl; then
+])
+AX_MOD_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,
+[
     AC_MSG_RESULT(Build module: DB.MySQL)
     AC_CONFIG_FILES(src/moduls/bd/MySQL/Makefile)
     DBSub_mod="${DBSub_mod}MySQL "
@@ -255,8 +174,9 @@ if test $enable_ForDist = yes -o $enable_MySQL = yes -o $enable_MySQL = incl; th
 	LIB_CORE="${LIB_CORE} moduls/bd/MySQL/.libs/*.o ${MYSQL_LDFLAGS} "
 	ModsIncl="${ModsIncl}bd_MySQL "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_SQLite = yes -o $enable_SQLite = incl; then
+])
+AX_MOD_EN(SQLite,[disable or enable[=incl] build module DB.SQLite],disable,incl,
+[
     AC_MSG_RESULT(Build module: DB.SQLite)
     AC_CONFIG_FILES(src/moduls/bd/SQLite/Makefile)
     DBSub_mod="${DBSub_mod}SQLite "
@@ -268,8 +188,9 @@ if test $enable_ForDist = yes -o $enable_SQLite = yes -o $enable_SQLite = incl; 
 	LIB_CORE="${LIB_CORE} moduls/bd/SQLite/.libs/*.o ${sqlite3_LIBS} "
 	ModsIncl="${ModsIncl}bd_SQLite "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_FireBird = yes -o $enable_FireBird = incl; then
+])
+AX_MOD_EN(FireBird,[disable or enable[=incl] build module DB.FireBird],disable,incl,
+[
     AC_MSG_RESULT(Build module: DB.FireBird)
     AC_CONFIG_FILES(src/moduls/bd/FireBird/Makefile)
     DBSub_mod="${DBSub_mod}FireBird "
@@ -280,8 +201,9 @@ if test $enable_ForDist = yes -o $enable_FireBird = yes -o $enable_FireBird = in
 	LIB_CORE="${LIB_CORE} moduls/bd/FireBird/.libs/*.o ${FIREBIRD_LDFLAGS} "
 	ModsIncl="${ModsIncl}bd_FireBird "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_PostgreSQL = yes -o $enable_PostgreSQL = incl; then
+])
+AX_MOD_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],disable,incl,
+[
     AC_MSG_RESULT(Build module: DB.PostgreSQL)
     AC_CONFIG_FILES(src/moduls/bd/PostgreSQL/Makefile)
     DBSub_mod="${DBSub_mod}PostgreSQL "
@@ -292,10 +214,11 @@ if test $enable_ForDist = yes -o $enable_PostgreSQL = yes -o $enable_PostgreSQL 
 	LIB_CORE="${LIB_CORE} moduls/bd/PostgreSQL/.libs/*.o ${POSTGRESQL_LDFLAGS} "
 	ModsIncl="${ModsIncl}bd_PostgreSQL "
     fi
-fi
+])
 #> DAQ modules
 AC_SUBST(DAQSub_mod)
-if test $enable_ForDist = yes -o $enable_System = yes -o $enable_System = incl; then
+AX_MOD_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.System)
     AC_CONFIG_FILES(src/moduls/daq/System/Makefile)
     DAQSub_mod="${DAQSub_mod}System "
@@ -306,8 +229,9 @@ if test $enable_ForDist = yes -o $enable_System = yes -o $enable_System = incl; 
 	ModsIncl="${ModsIncl}daq_System "
     fi
 
-fi
-if test $enable_ForDist = yes -o $enable_BlockCalc = yes -o $enable_BlockCalc = incl; then
+])
+AX_MOD_EN(BlockCalc,[disable or enable[=incl] build module DAQ.BlockCalc],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.BlockCalc)
     AC_CONFIG_FILES(src/moduls/daq/BlockCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}BlockCalc "
@@ -315,8 +239,9 @@ if test $enable_ForDist = yes -o $enable_BlockCalc = yes -o $enable_BlockCalc = 
 	LIB_CORE="${LIB_CORE} moduls/daq/BlockCalc/.libs/*.o "
 	ModsIncl="${ModsIncl}daq_BlockCalc "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_JavaLikeCalc = yes -o $enable_JavaLikeCalc = incl; then
+])
+AX_MOD_EN(JavaLikeCalc,[disable or enable[=incl] build module DAQ.BlockCalc],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.JavaLikeCalc)
     AC_CONFIG_FILES(src/moduls/daq/JavaLikeCalc/Makefile)
     DAQSub_mod="${DAQSub_mod}JavaLikeCalc "
@@ -330,13 +255,17 @@ if test $enable_ForDist = yes -o $enable_JavaLikeCalc = yes -o $enable_JavaLikeC
 	LIB_CORE="${LIB_CORE} moduls/daq/JavaLikeCalc/.libs/*.o "
 	ModsIncl="${ModsIncl}daq_JavaLikeCalc "
     fi
-fi
-if test $enable_ForDist = yes || test $enable_DiamondBoards = yes -a $ix86 = yes; then
-    AC_MSG_RESULT(Build module: DAQ.DiamondBoards)
-    AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
-    DAQSub_mod="${DAQSub_mod}DiamondBoards "
-fi
-if test $enable_ForDist = yes -o $enable_LogicLev = yes -o $enable_LogicLev = incl; then
+])
+AX_MOD_EN(DiamondBoards,[enable build module DAQ.DiamondBoards],enable,[],
+[
+    if test $ix86 = yes; then
+	AC_MSG_RESULT(Build module: DAQ.DiamondBoards)
+	AC_CONFIG_FILES(src/moduls/daq/DiamondBoards/Makefile)
+	DAQSub_mod="${DAQSub_mod}DiamondBoards "
+    fi
+])
+AX_MOD_EN(LogicLev,[disable or enable[=incl] build module DAQ.LogicLev],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.LogicLev)
     AC_CONFIG_FILES(src/moduls/daq/LogicLev/Makefile)
     DAQSub_mod="${DAQSub_mod}LogicLev "
@@ -344,8 +273,9 @@ if test $enable_ForDist = yes -o $enable_LogicLev = yes -o $enable_LogicLev = in
 	LIB_CORE="${LIB_CORE} moduls/daq/LogicLev/.libs/*.o "
 	ModsIncl="${ModsIncl}daq_LogicLev "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_SNMP = yes; then
+])
+AX_MOD_EN(SNMP,[disable build module DAQ.SNMP],disable,[],
+[
     AC_MSG_RESULT(Build module: DAQ.SNMP)
     AC_CONFIG_FILES(src/moduls/daq/SNMP/Makefile)
     DAQSub_mod="${DAQSub_mod}SNMP "
@@ -355,8 +285,9 @@ if test $enable_ForDist = yes -o $enable_SNMP = yes; then
 #    AC_CHECK_LIB([netsnmp],[snmp_sess_init],[AC_MSG_NOTICE(Pass global library using)],
 #	[AC_MSG_ERROR(DAQ.SNMP: Net SNMP API library not found. Install or check Net SNMP library package!)],
 #	[crypto])
-fi
-if test $enable_ForDist = yes -o $enable_Siemens = yes; then
+])
+AX_MOD_EN(Siemens,[disable build module DAQ.Siemens],disable,[],
+[
     AC_MSG_RESULT(Build module: DAQ.Siemens)
     AC_CONFIG_FILES(src/moduls/daq/Siemens/Makefile)
     DAQSub_mod="${DAQSub_mod}Siemens "
@@ -365,8 +296,9 @@ if test $enable_ForDist = yes -o $enable_Siemens = yes; then
 	[AC_MSG_ERROR(DAQ.Siemens: Some GLibC network headers not found. Install or check GLibC developing package!)])
     AC_CHECK_HEADERS([linux/kd.h],[],
 	[AC_MSG_ERROR(DAQ.Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])
-fi
-if test $enable_ForDist = yes -o $enable_ModBus = yes -o $enable_ModBus = incl; then
+])
+AX_MOD_EN(ModBus,[disable or enable[=incl] build module DAQ.ModBus],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.ModBus)
     AC_CONFIG_FILES(src/moduls/daq/ModBus/Makefile)
     DAQSub_mod="${DAQSub_mod}ModBus "
@@ -374,8 +306,9 @@ if test $enable_ForDist = yes -o $enable_ModBus = yes -o $enable_ModBus = incl; 
 	LIB_CORE="${LIB_CORE} moduls/daq/ModBus/.libs/*.o "
 	ModsIncl="${ModsIncl}daq_ModBus "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_DCON = yes -o $enable_DCON = incl; then
+])
+AX_MOD_EN(DCON,[disable or enable[=incl] build module DAQ.DCON],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.DCON)
     AC_CONFIG_FILES(src/moduls/daq/DCON/Makefile)
     DAQSub_mod="${DAQSub_mod}DCON "
@@ -383,8 +316,9 @@ if test $enable_ForDist = yes -o $enable_DCON = yes -o $enable_DCON = incl; then
 	LIB_CORE="${LIB_CORE} moduls/daq/DCON/.libs/*.o "
 	ModsIncl="${ModsIncl}daq_DCON "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_DAQGate = yes -o $enable_DAQGate = incl; then
+])
+AX_MOD_EN(DAQGate,[disable or enable[=incl] build module DAQ.DAQGate],disable,incl,
+[
     AC_MSG_RESULT(Build module: DAQ.DAQGate)
     AC_CONFIG_FILES(src/moduls/daq/DAQGate/Makefile)
     DAQSub_mod="${DAQSub_mod}DAQGate "
@@ -392,8 +326,9 @@ if test $enable_ForDist = yes -o $enable_DAQGate = yes -o $enable_DAQGate = incl
 	LIB_CORE="${LIB_CORE} moduls/daq/DAQGate/.libs/*.o "
 	ModsIncl="${ModsIncl}daq_DAQGate "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_SoundCard = yes; then
+])
+AX_MOD_EN(SoundCard,[disable build module DAQ.SoundCard],disable,[],
+[
     AC_MSG_RESULT(Build module: DAQ.SoundCard)
     AC_CONFIG_FILES(src/moduls/daq/SoundCard/Makefile)
     DAQSub_mod="${DAQSub_mod}SoundCard "
@@ -402,38 +337,45 @@ if test $enable_ForDist = yes -o $enable_SoundCard = yes; then
 	[AC_MSG_ERROR(DAQ.SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
     AC_CHECK_LIB([portaudio],[Pa_Initialize],[AC_MSG_NOTICE([LibPortaudio: Pass global library using])],
 	[AC_MSG_ERROR(Portaudio library not found. Install or check Portaudio library package!)])
-fi
-if test $enable_ForDist = yes || test $enable_ICP_DAS = yes -a $ix86 = yes || test $enable_ICP_DAS = yes -a $target_cpu = "arm"; then
-    AC_MSG_RESULT(Build module: DAQ.ICP_DAS)
-    AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
-    DAQSub_mod="${DAQSub_mod}ICP_DAS "
-    #>> Modules checkings
-    ICP_DAS_CFLAGS="-I./include"
-    ICP_DAS_LIBS="-L./ -li8k"
-    if test $target_cpu = "arm"; then ICP_DAS_LIBS="-L./ -li8k_arm"; ICP_DAS_CFLAGS="-I./include_arm"; fi
-    AC_SUBST(ICP_DAS_CFLAGS)
-    AC_SUBST(ICP_DAS_LIBS)
-fi
-if test $enable_ForDist = yes -o $enable_OPC_UA = yes; then
+])
+AX_MOD_EN(ICP_DAS,[enable build module DAQ.ICP_DAS],enable,[],
+[
+    if test $ix86 = yes -o $target_cpu = "arm"; then
+	AC_MSG_RESULT(Build module: DAQ.ICP_DAS)
+	AC_CONFIG_FILES(src/moduls/daq/ICP_DAS/Makefile)
+	DAQSub_mod="${DAQSub_mod}ICP_DAS "
+	#>> Modules checkings
+	ICP_DAS_CFLAGS="-I./include"
+	ICP_DAS_LIBS="-L./ -li8k"
+	if test $target_cpu = "arm"; then ICP_DAS_LIBS="-L./ -li8k_arm"; ICP_DAS_CFLAGS="-I./include_arm"; fi
+	AC_SUBST(ICP_DAS_CFLAGS)
+	AC_SUBST(ICP_DAS_LIBS)
+    fi
+])
+AX_MOD_EN(OPC_UA,[disable build module DAQ.OPC_UA],disable,[],
+[
     AC_MSG_RESULT(Build module: DAQ.OPC_UA)
     AC_CONFIG_FILES(src/moduls/daq/OPC_UA/Makefile)
     DAQSub_mod="${DAQSub_mod}OPC_UA "
     #>> Modules checkings
     AX_LIB_OpenSSL()
-fi
-if test $enable_ForDist = yes -o $enable_AMRDevs = yes; then
+])
+AX_MOD_EN(AMRDevs,[enable build module DAQ.AMRDevs],enable,[],
+[
     AC_MSG_RESULT(Build module: DAQ.AMRDevs)
     AC_CONFIG_FILES(src/moduls/daq/AMRDevs/Makefile)
     DAQSub_mod="${DAQSub_mod}AMRDevs "
-fi
-if test $enable_ForDist = yes -o $enable_BFN = yes; then
+])
+AX_MOD_EN(BFN,[enable build module DAQ.BFN],enable,[],
+[
     AC_MSG_RESULT(Build module: DAQ.BFN)
     AC_CONFIG_FILES(src/moduls/daq/BFN/Makefile)
     DAQSub_mod="${DAQSub_mod}BFN "
-fi
+])
 #> Archive modules
 AC_SUBST(ArchSub_mod)
-if test $enable_ForDist = yes -o $enable_FSArch = yes -o $enable_FSArch = incl; then
+AX_MOD_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl,
+[
     AC_MSG_RESULT(Build module: Archive.FSArch)
     AC_CONFIG_FILES(src/moduls/arhiv/FSArch/Makefile)
     ArchSub_mod="${ArchSub_mod}FSArch "
@@ -441,8 +383,9 @@ if test $enable_ForDist = yes -o $enable_FSArch = yes -o $enable_FSArch = incl; 
 	LIB_CORE="${LIB_CORE} moduls/arhiv/FSArch/.libs/*.o "
 	ModsIncl="${ModsIncl}arh_FSArch "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_DBArch = yes -o $enable_DBArch = incl; then
+])
+AX_MOD_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,incl,
+[
     AC_MSG_RESULT(Build module: Archive.DBArch)
     AC_CONFIG_FILES(src/moduls/arhiv/DBArch/Makefile)
     ArchSub_mod="${ArchSub_mod}DBArch "
@@ -450,10 +393,11 @@ if test $enable_ForDist = yes -o $enable_DBArch = yes -o $enable_DBArch = incl; 
 	LIB_CORE="${LIB_CORE} moduls/arhiv/DBArch/.libs/*.o "
 	ModsIncl="${ModsIncl}arh_DBArch "
     fi
-fi
+])
 #> Transport modules
 AC_SUBST(TranspSub_mod)
-if test $enable_ForDist = yes -o $enable_Sockets = yes -o $enable_Sockets = incl; then
+AX_MOD_EN(Sockets,[disable or enable[=incl] build module Transport.Sockets],disable,incl,
+[
     AC_MSG_RESULT(Build module: Transport.Sockets)
     AC_CONFIG_FILES(src/moduls/transport/Sockets/Makefile)
     TranspSub_mod="${TranspSub_mod}Sockets "
@@ -464,8 +408,9 @@ if test $enable_ForDist = yes -o $enable_Sockets = yes -o $enable_Sockets = incl
 	LIB_CORE="${LIB_CORE} moduls/transport/Sockets/.libs/*.o "
 	ModsIncl="${ModsIncl}tr_Sockets "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_SSL = yes -o $enable_SSL = incl; then
+])
+AX_MOD_EN(SSL,[disable or enable[=incl] build module Transport.SSL],disable,incl,
+[
     AC_MSG_RESULT(Build module: Transport.SSL)
     AC_CONFIG_FILES(src/moduls/transport/SSL/Makefile)
     TranspSub_mod="${TranspSub_mod}SSL "
@@ -475,8 +420,9 @@ if test $enable_ForDist = yes -o $enable_SSL = yes -o $enable_SSL = incl; then
 	LIB_CORE="${LIB_CORE} moduls/transport/SSL/.libs/*.o ${LIB_OpenSSL} "
 	ModsIncl="${ModsIncl}tr_SSL "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_Serial = yes -o $enable_Serial = incl; then
+])
+AX_MOD_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl,
+[
     AC_MSG_RESULT(Build module: Transport.Serial)
     AC_CONFIG_FILES(src/moduls/transport/Serial/Makefile)
     TranspSub_mod="${TranspSub_mod}Serial "
@@ -484,10 +430,11 @@ if test $enable_ForDist = yes -o $enable_Serial = yes -o $enable_Serial = incl; 
 	LIB_CORE="${LIB_CORE} moduls/transport/Serial/.libs/*.o "
 	ModsIncl="${ModsIncl}tr_Serial "
     fi
-fi
+])
 #> Transport protocol modules
 AC_SUBST(ProtSub_mod)
-if test $enable_ForDist = yes -o $enable_HTTP = yes -o $enable_HTTP = incl; then
+AX_MOD_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl,
+[
     AC_MSG_RESULT(Build module: Protocol.HTTP)
     AC_CONFIG_FILES(src/moduls/protocol/HTTP/Makefile)
     ProtSub_mod="${ProtSub_mod}HTTP "
@@ -495,8 +442,9 @@ if test $enable_ForDist = yes -o $enable_HTTP = yes -o $enable_HTTP = incl; then
 	LIB_CORE="${LIB_CORE} moduls/protocol/HTTP/.libs/*.o "
 	ModsIncl="${ModsIncl}prt_HTTP "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_SelfSystem = yes -o $enable_SelfSystem = incl; then
+])
+AX_MOD_EN(SelfSystem,[disable or enable[=incl] build module Protocol.SelfSystem],disable,incl,
+[
     AC_MSG_RESULT(Build module: Protocol.SelfSystem)
     AC_CONFIG_FILES(src/moduls/protocol/SelfSystem/Makefile)
     ProtSub_mod="${ProtSub_mod}SelfSystem "
@@ -504,8 +452,9 @@ if test $enable_ForDist = yes -o $enable_SelfSystem = yes -o $enable_SelfSystem 
 	LIB_CORE="${LIB_CORE} moduls/protocol/SelfSystem/.libs/*.o "
 	ModsIncl="${ModsIncl}prt_SelfSystem "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_UserProtocol = yes -o $enable_UserProtocol = incl; then
+])
+AX_MOD_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProtocol],disable,incl,
+[
     AC_MSG_RESULT(Build module: Protocol.UserProtocol)
     AC_CONFIG_FILES(src/moduls/protocol/UserProtocol/Makefile)
     ProtSub_mod="${ProtSub_mod}UserProtocol "
@@ -513,10 +462,11 @@ if test $enable_ForDist = yes -o $enable_UserProtocol = yes -o $enable_UserProto
 	LIB_CORE="${LIB_CORE} moduls/protocol/UserProtocol/.libs/*.o "
 	ModsIncl="${ModsIncl}prt_UserProtocol "
     fi
-fi
+])
 #> UI modules
 AC_SUBST(UISub_mod)
-if test $enable_ForDist = yes -o $enable_VCAEngine = yes -o $enable_VCAEngine = incl; then
+AX_MOD_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.VCAEngine)
     AC_CONFIG_FILES(src/moduls/ui/VCAEngine/Makefile)
     UISub_mod="${UISub_mod}VCAEngine "
@@ -524,8 +474,9 @@ if test $enable_ForDist = yes -o $enable_VCAEngine = yes -o $enable_VCAEngine = 
 	LIB_CORE="${LIB_CORE} moduls/ui/VCAEngine/.libs/*.o "
 	ModsIncl="${ModsIncl}ui_VCAEngine "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_Vision = yes -o $enable_Vision = incl; then
+])
+AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.Vision)
     AC_CONFIG_FILES(src/moduls/ui/Vision/Makefile)
     UISub_mod="${UISub_mod}Vision "
@@ -536,8 +487,9 @@ if test $enable_ForDist = yes -o $enable_Vision = yes -o $enable_Vision = incl; 
 	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} "
 	ModsIncl="${ModsIncl}ui_Vision "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_QTStarter = yes -o $enable_QTStarter = incl; then
+])
+AX_MOD_EN(QTStarter,[disable or enable[=incl] build module UI.QTStarter],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.QTStarter)
     AC_CONFIG_FILES(src/moduls/ui/QTStarter/Makefile)
     UISub_mod="${UISub_mod}QTStarter "
@@ -546,8 +498,9 @@ if test $enable_ForDist = yes -o $enable_QTStarter = yes -o $enable_QTStarter = 
 	LIB_CORE="${LIB_CORE} moduls/ui/QTStarter/.libs/*.o ${QT4_LIB} "
 	ModsIncl="${ModsIncl}ui_QTStarter "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_QTCfg = yes -o $enable_QTCfg = incl; then
+])
+AX_MOD_EN(QTCfg,[disable or enable[=incl] build module UI.QTCfg],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.QTCfg)
     AC_CONFIG_FILES(src/moduls/ui/QTCfg/Makefile)
     UISub_mod="${UISub_mod}QTCfg "
@@ -556,8 +509,9 @@ if test $enable_ForDist = yes -o $enable_QTCfg = yes -o $enable_QTCfg = incl; th
 	LIB_CORE="${LIB_CORE} moduls/ui/QTCfg/.libs/*.o ${QT4_LIB} "
 	ModsIncl="${ModsIncl}ui_QTCfg "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_WebCfg = yes -o $enable_WebCfg = incl; then
+])
+AX_MOD_EN(WebCfg,[disable or enable[=incl] build module UI.WebCfg],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.WebCfg)
     AC_CONFIG_FILES(src/moduls/ui/WebCfg/Makefile)
     UISub_mod="${UISub_mod}WebCfg "
@@ -565,8 +519,9 @@ if test $enable_ForDist = yes -o $enable_WebCfg = yes -o $enable_WebCfg = incl; 
 	LIB_CORE="${LIB_CORE} moduls/ui/WebCfg/.libs/*.o "
 	ModsIncl="${ModsIncl}ui_WebCfg "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_WebCfgD = yes -o $enable_WebCfgD = incl; then
+])
+AX_MOD_EN(WebCfgD,[disable or enable[=incl] build module UI.WebCfgD],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.WebCfgD)
     AC_CONFIG_FILES(src/moduls/ui/WebCfgD/Makefile)
     UISub_mod="${UISub_mod}WebCfgD "
@@ -575,8 +530,9 @@ if test $enable_ForDist = yes -o $enable_WebCfgD = yes -o $enable_WebCfgD = incl
 	LIB_CORE="${LIB_CORE} moduls/ui/WebCfgD/.libs/*.o ${LIB_GD} "
 	ModsIncl="${ModsIncl}ui_WebCfgD "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_WebVision = yes -o $enable_WebVision = incl; then
+])
+AX_MOD_EN(WebVision,[disable or enable[=incl] build module UI.WebVision],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.WebVision)
     AC_CONFIG_FILES(src/moduls/ui/WebVision/Makefile)
     UISub_mod="${UISub_mod}WebVision "
@@ -587,8 +543,9 @@ if test $enable_ForDist = yes -o $enable_WebVision = yes -o $enable_WebVision = 
 	LIB_CORE="${LIB_CORE} moduls/ui/WebVision/.libs/*.o ${LIB_GD} ${LIB_FFTW3} "
 	ModsIncl="${ModsIncl}ui_WebVision "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_WebUser = yes -o $enable_WebUser = incl; then
+])
+AX_MOD_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,incl,
+[
     AC_MSG_RESULT(Build module: UI.WebUser)
     AC_CONFIG_FILES(src/moduls/ui/WebUser/Makefile)
     UISub_mod="${UISub_mod}WebUser "
@@ -596,15 +553,17 @@ if test $enable_ForDist = yes -o $enable_WebUser = yes -o $enable_WebUser = incl
 	LIB_CORE="${LIB_CORE} moduls/ui/WebUser/.libs/*.o "
 	ModsIncl="${ModsIncl}ui_WebUser "
     fi
-fi
+])
 #> Special modules
 AC_SUBST(SpecSub_mod)
-if test $enable_ForDist = yes -o $enable_SystemTests = yes; then
+AX_MOD_EN(SystemTests,[disable build module Special.SystemTests],disable,[],
+[
     AC_MSG_RESULT(Build module: Special.SystemTests)
     AC_CONFIG_FILES(src/moduls/special/SystemTests/Makefile)
     SpecSub_mod="${SpecSub_mod}SystemTests "
-fi
-if test $enable_ForDist = yes -o $enable_FLibComplex1 = yes -o $enable_FLibComplex1 = incl; then
+])
+AX_MOD_EN(FLibComplex1,[disable or enable[=incl] build module Special.FLibComplex1],disable,incl,
+[
     AC_MSG_RESULT(Build module: Special.FLibComplex1)
     AC_CONFIG_FILES(src/moduls/special/FLibComplex1/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibComplex1 "
@@ -612,8 +571,9 @@ if test $enable_ForDist = yes -o $enable_FLibComplex1 = yes -o $enable_FLibCompl
 	LIB_CORE="${LIB_CORE} moduls/special/FLibComplex1/.libs/*.o "
 	ModsIncl="${ModsIncl}spec_FLibComplex1 "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_FLibMath = yes -o $enable_FLibMath = incl; then
+])
+AX_MOD_EN(FLibMath,[disable or enable[=incl] build module Special.FLibMath],disable,incl,
+[
     AC_MSG_RESULT(Build module: Special.FLibMath)
     AC_CONFIG_FILES(src/moduls/special/FLibMath/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibMath "
@@ -621,8 +581,9 @@ if test $enable_ForDist = yes -o $enable_FLibMath = yes -o $enable_FLibMath = in
 	LIB_CORE="${LIB_CORE} moduls/special/FLibMath/.libs/*.o "
 	ModsIncl="${ModsIncl}spec_FLibMath "
     fi
-fi
-if test $enable_ForDist = yes -o $enable_FLibSYS = yes -o $enable_FLibSYS = incl; then
+])
+AX_MOD_EN(FLibSYS,[disable or enable[=incl] build module Special.FLibSYS],disable,incl,
+[
     AC_MSG_RESULT(Build module: Special.FLibSYS)
     AC_CONFIG_FILES(src/moduls/special/FLibSYS/Makefile)
     SpecSub_mod="${SpecSub_mod}FLibSYS "
@@ -632,7 +593,7 @@ if test $enable_ForDist = yes -o $enable_FLibSYS = yes -o $enable_FLibSYS = incl
     fi
     #>> Modules checkings
     AX_LIB_FFTW3()
-fi
+])
 AC_MSG_RESULT(===========================================)
 
 AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])
@@ -640,16 +601,25 @@ AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])
 # Clear libs list after PKG_CHECK_MODULES
 LIBS=""
 
-# I18N process place to *.am
-# for ac_config_file in $ac_config_files do
-#     AC_MSG_RESULT($ac_config_file)
-# done
-
 AC_OUTPUT
+
+# I18N process place to *.am
+if test $ac_cv_header_libintl_h = yes; then
+    for ac_config_file in $ac_config_files; do
+	sedRez=`cat $ac_config_file | sed -n '/^I18N_mod *= *\([[^ ]]*\)\$/s//\1/p'`
+	if test "x$sedRez" != "x"; then
+	    sed "s/\(^install:.*\)\$/\1 install-I18N/" $ac_config_file |
+	    sed "s/\(^uninstall:.*\)\$/\1 uninstall-I18N/" |
+	    sed "s/\(^clean:.*\)\$/\1 clean-I18N/" > $ac_config_file.prc
+	    cat $ac_config_file.prc I18N.am > $ac_config_file
+	    rm $ac_config_file.prc
+	fi
+    done
+fi
 
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Status:])
-AC_MSG_RESULT([  - Enable all modules for "make dist"                          = $enable_ForDist])
+AC_MSG_RESULT([  - Enable(yes)/disable(no) all modules                         = $enable_AllModuls])
 AC_MSG_RESULT([  - Crosscompile build                                          = $enable_CrossCompile])
 AC_MSG_RESULT([  - Core lib build only static                                  = $enable_CoreLibStatic])
 AC_MSG_RESULT([* Generic features:])
