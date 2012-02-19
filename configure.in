@@ -640,6 +640,11 @@ AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])
 # Clear libs list after PKG_CHECK_MODULES
 LIBS=""
 
+# I18N process place to *.am
+# for ac_config_file in $ac_config_files do
+#     AC_MSG_RESULT($ac_config_file)
+# done
+
 AC_OUTPUT
 
 AC_MSG_RESULT([============ Final configuration results ==============])

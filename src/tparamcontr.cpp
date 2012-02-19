@@ -59,7 +59,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     }
 
     //> Configuration copy
-    exclCopy(*src_n, "ID;");
+    exclCopy(*src_n, "SHIFR;");
 
     //> Enable new parameter
     if(src_n->enableStat() && toEnable() && !enableStat()) enable();
