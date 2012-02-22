@@ -1168,9 +1168,22 @@ void Page::wdgAdd( const string &wid, const string &name, const string &ipath, b
 	    m_herit[i_h].at().inheritIncl(wid);
 }
 
-AutoHD<PageWdg> Page::wdgAt( const string &wdg )
+AutoHD<Widget> Page::wdgAt( const string &wdg, int lev, int off )
 {
-    return Widget::wdgAt(wdg);
+    //> Check for global
+    if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
+        try { return (AutoHD<Widget>)ownerProj()->nodeAt(wdg,1); }
+        catch(TError err) { return AutoHD<Widget>(); }
+
+    int offt = off;
+    string iw = TSYS::pathLev(wdg,lev,true,&offt);
+    if(iw.compare(0,3,"pg_") == 0)
+    {
+	if(pagePresent(iw.substr(3))) return pageAt(iw.substr(3)).at().wdgAt(wdg, 0, offt);
+	else return AutoHD<Widget>();
+    }
+
+    return Widget::wdgAt(wdg, lev, off);
 }
 
 void Page::pageAdd( const string &id, const string &name, const string &orig )
@@ -1322,6 +1335,119 @@ void Page::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 }
 
+bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
+{
+    //> Get page info
+    if(opt->name() == "info")	return Widget::cntrCmdLinks(opt, lnk_ro);
+
+    //> Process command to page
+    string a_path = opt->attr("path");
+    if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt))
+    {
+        AutoHD<Widget> srcwdg(this);
+        string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
+        string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
+        if(nattr.size()) srcwdg = wdgAt(nwdg);
+        else nattr = nwdg;
+
+        bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
+        if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut)))
+        {
+            if(!is_pl) throw TError(nodePath().c_str(),_("Variable is not link"));
+            vector<string> a_ls;
+            string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
+            srcwdg.at().attrList(a_ls);
+            unsigned i_a;
+            for(i_a = 0; i_a < a_ls.size(); i_a++)
+                if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
+                    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
+                { nattr = a_ls[i_a]; break; }
+            if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("Variable is not link"));
+        }
+
+        string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
+
+        //>> Link interface process
+        int c_lv = 0;
+        string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
+        if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:"))
+        {
+            if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
+            opt->childAdd("el")->setText("prm:");
+            opt->childAdd("el")->setText("wdg:");
+        }
+        //>> Link elements process
+        else
+        {
+            int c_off = obj_tp.size();
+            vector<string> ls;
+            string c_path = obj_tp, c_el;
+            opt->childAdd("el")->setText("");
+            opt->childAdd("el")->setText(c_path);
+
+            try
+            {
+                if(obj_tp == "prm:")
+                {
+                    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
+                    {
+                        c_path += "/"+c_el;
+                        opt->childAdd("el")->setText(c_path);
+                    }
+                    AutoHD<TCntrNode> DAQnd = SYS->daq().at().nodeAt(c_path.substr(4));
+                    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !is_pl) DAQnd.at().chldList(0,ls);
+                    for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
+                }
+                else if(obj_tp == "wdg:")
+                {
+		    bool isAbs = (m_prm.compare(obj_tp.size(),1,"/") == 0);
+                    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
+                    {
+                        c_path += ((c_lv||isAbs)?"/":"")+c_el;
+                        opt->childAdd("el")->setText(c_path);
+                    }
+                    if(!c_lv)  opt->childAdd("el")->setText(c_path+"/prj_"+ownerProj()->id());
+		    else if(c_lv == 1 && isAbs)
+		    {
+			ownerProj()->list(ls);
+                    	if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
+                    	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                    	    opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[i_l]);
+			return true;
+		    }
+
+                    AutoHD<Widget> wnd = srcwdg.at().wdgAt(c_path.substr(4),0);
+                    if(!wnd.freeStat())
+                    {
+                        if(!isAbs && dynamic_cast<Widget*>(wnd.at().nodePrev())) opt->childAdd("el")->setText(c_path+(c_lv?"/..":".."));
+                        if(dynamic_cast<Page*>(&wnd.at()))
+                        {
+			    ((AutoHD<Page>)wnd).at().pageList(ls);
+                    	    if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
+                    	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                        	opt->childAdd("el")->setText(c_path+(c_lv?"/pg_":"pg_")+ls[i_l]);
+                    	}
+                        wnd.at().wdgList(ls, true);
+                        if(ls.size()) opt->childAdd("el")->setText(_("=== Widgets ==="));
+                        for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                            opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[i_l]);
+                        if(!is_pl)
+                        {
+                            wnd.at().attrList(ls);
+                            if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
+                            for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                            opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
+                        }
+                    }
+                }
+            }catch(TError err) { }
+        }
+    }
+    else return Widget::cntrCmdLinks(opt, lnk_ro);
+
+    return true;
+}
+
 //************************************************
 //* PageWdg: Container stored widget             *
 //************************************************
@@ -1395,6 +1521,16 @@ void PageWdg::postDisable( int flag )
 	c_el.cfg("IDW").setS(ownerPage().path(), true ); c_el.cfg("IDC").setS( id(), true);
 	SYS->db().at().dataDel(db+"."+tbl+"_uio", mod->nodePath()+tbl+"_uio", c_el);
     }
+}
+
+AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off )
+{
+    //> Check for global
+    if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
+        try { return (AutoHD<Widget>)ownerPage().ownerProj()->nodeAt(wdg,1); }
+        catch(TError err) { return AutoHD<Widget>(); }
+
+    return Widget::wdgAt(wdg, lev, off);
 }
 
 string PageWdg::path( )

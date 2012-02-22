@@ -197,7 +197,7 @@ class SessWdg : public Widget, public TValFunc
 
 	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on inherit
-	AutoHD<SessWdg> wdgAt( const string &wdg );
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 	void pgClose( );
 
 	//> Events process
@@ -278,12 +278,14 @@ class SessPage : public SessWdg
 	void pageAdd( const string &id, const string &parent = "" );
 	void pageDel( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
+
 	//> Alarms process
 	void alarmSet( bool isSet = false );
 	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 
 	bool attrPresent(const string &attr);
-	AutoHD<Attr> attrAt(const string &attr);
+	AutoHD<Attr> attrAt(const string &attr, int lev = -1);
 
     protected:
 	//Methods

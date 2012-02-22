@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 11:31+0200\n"
+"POT-Creation-Date: 2012-02-22 11:51+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -982,6 +982,21 @@ msgstr "Logischer Container"
 msgid "Container and template"
 msgstr "Container und Vorlage"
 
+msgid "Variable is not link"
+msgstr "Die Variable ist kein Lnk"
+
+msgid "val:Constant value"
+msgstr "val:Konstante"
+
+msgid "=== Pages ==="
+msgstr "=== Seite ==="
+
+msgid "=== Widgets ==="
+msgstr "=== Widgets ==="
+
+msgid "=== Attributes ==="
+msgstr "=== Attribute ==="
+
 msgid "Widget link: "
 msgstr "Widget Link: "
 
@@ -1406,10 +1421,10 @@ msgid ""
 "Examples:\n"
 "  \"Arial 10 1 0 0 0\" - Arial font size 10 pixels and bolded."
 msgstr ""
-"Der Name der Schrift in Form von \"{family} {size} {bold} {italic} {underline} {strike}\", "
-"wo:\n"
-"  \"family\" - Die Schriftfamilie, die Lücken nutzen '_' Symbol, z. B.: \"Arial\", "
-"\"Courier\", \"Times_New_Roman\";\n"
+"Der Name der Schrift in Form von \"{family} {size} {bold} {italic} "
+"{underline} {strike}\", wo:\n"
+"  \"family\" - Die Schriftfamilie, die Lücken nutzen '_' Symbol, z. B.: "
+"\"Arial\", \"Courier\", \"Times_New_Roman\";\n"
 "  \"size\" - Schriftgröße in Pixel;\n"
 "  \"bold\" - Erhöhung der Schriftgröße (0 oder 1);\n"
 "  \"italic\" - Kursivschrift (0 oder 1);\n"
@@ -1507,19 +1522,6 @@ msgstr "Attribute anzeigen"
 
 msgid "Custom"
 msgstr "Benutzerdefiniert"
-
-msgid "Destination has no any necessary attribute!"
-msgstr "Das Ziel hat kein erforderliches Attribut!"
-
-#, c-format
-msgid "Destination has no attributes: %s !"
-msgstr "Das Ziel hat keine Attribute: %s !"
-
-msgid "Variable is not link"
-msgstr "Die Variable ist kein Lnk"
-
-msgid "val:Constant value"
-msgstr "val:Konstante"
 
 msgid "Work area"
 msgstr "Arbeitsbereich"
@@ -1663,3 +1665,9 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Destination has no any necessary attribute!"
+#~ msgstr "Das Ziel hat kein erforderliches Attribut!"
+
+#~ msgid "Destination has no attributes: %s !"
+#~ msgstr "Das Ziel hat keine Attribute: %s !"

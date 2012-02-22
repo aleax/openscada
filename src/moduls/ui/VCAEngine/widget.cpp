@@ -583,20 +583,32 @@ bool Widget::attrPresent(const string &attr)
     return rez;
 }
 
-AutoHD<Attr> Widget::attrAt(const string &attr)
+AutoHD<Attr> Widget::attrAt(const string &attr, int lev)
 {
-    int rLock = pthread_mutex_lock(&mtxAttr);
-    if(rLock && (rLock != EDEADLK || !attrAtLockCnt))
-	throw TError(nodePath().c_str(),_("Attribute attach access error: %d."),rLock);
-
-    map<string, Attr* >::iterator p = mAttrs.find(attr);
-    if(p == mAttrs.end())
+    //> Local atribute request
+    if(lev < 0 )
     {
-	if(!rLock) pthread_mutex_unlock(&mtxAttr);
-	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
-    }
+	int rLock = pthread_mutex_lock(&mtxAttr);
+	if(rLock && (rLock != EDEADLK || !attrAtLockCnt))
+	    throw TError(nodePath().c_str(),_("Attribute attach access error: %d."),rLock);
 
-    return AutoHD<Attr>(p->second);
+	map<string, Attr* >::iterator p = mAttrs.find(attr);
+	if(p == mAttrs.end())
+	{
+	    if(!rLock) pthread_mutex_unlock(&mtxAttr);
+	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
+        }
+	return AutoHD<Attr>(p->second);
+    }
+    //> Process by full path
+    AutoHD<Attr> an;
+    size_t waSep = attr.rfind("/");
+    if(waSep == string::npos) return attrPresent(attr) ? attrAt(attr) : an;
+    string anm = attr.substr(waSep+1);
+    if(anm.compare(0,2,"a_") == 0) anm = anm.substr(2);
+    AutoHD<Widget> wn = wdgAt(attr.substr(0,waSep),lev);
+    if(wn.freeStat() || !wn.at().attrPresent(anm)) return an;
+    return wn.at().attrAt(anm);
 }
 
 int  Widget::attrPos(const string &inm)
@@ -630,9 +642,10 @@ bool Widget::attrChange( Attr &cfg, TVariant prev )
     return true;
 }
 
-void Widget::wdgList( vector<string> &list )
+void Widget::wdgList( vector<string> &list, bool fromLnk )
 {
-    chldList(inclWdg, list);
+    if(fromLnk && isLink()) parent().at().wdgList(list);
+    else chldList(inclWdg, list);
 }
 
 bool Widget::wdgPresent( const string &wdg )
@@ -654,9 +667,24 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path, 
 	    m_herit[i_h].at().inheritIncl(wid);
 }
 
-AutoHD<Widget> Widget::wdgAt( const string &wdg )
+AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off )
 {
-    return chldAt( inclWdg, wdg );
+    if(lev < 0) return chldAt(inclWdg, wdg);
+
+    AutoHD<Widget> rez;
+    string iw = TSYS::pathLev(wdg,lev,true,&off);
+    if(iw.compare(0,4,"wdg_") == 0) iw = iw.substr(4);
+    if(iw.empty())	rez = AutoHD<Widget>(this);
+    else if(iw == "..")
+    {
+	if(dynamic_cast<Widget*>(nodePrev())) rez = ((Widget*)nodePrev())->wdgAt(wdg, 0, off);
+    }
+    else if(isLink())
+    {
+	if(parent().at().wdgPresent(iw)) rez = parent().at().wdgAt(iw).at().wdgAt(wdg, 0, off);
+    }
+    else if(wdgPresent(iw)) rez = wdgAt(iw).at().wdgAt(wdg, 0, off);
+    return rez;
 }
 
 string Widget::helpImg( )
@@ -1158,7 +1186,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			    {
 				nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
 				if(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-					nel->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(nel->text().substr(4),0,true).freeStat())
+				    ((nel->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(nel->text().substr(4),0,true).freeStat()) ||
+				     (nel->text().compare(0,4,"wdg:") == 0 && !wdg.at().attrAt(nel->text().substr(4),0).freeStat())))
 				    nel->setText(nel->text() + " (+)");
 			    }
 			}
@@ -1178,7 +1207,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"showAttr",opt->text(),opt->attr("user"));
     }
-    else if(a_path.substr(0,14) == "/links/lnk/pr_")
+    else if(a_path.compare(0,14,"/links/lnk/pr_") == 0)
     {
 	vector<string> a_ls;
 	AutoHD<Widget> srcwdg(this);
@@ -1203,12 +1232,12 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
 	    string rez     = _("Custom");
 
-	    int c_lvl = 0;
-	    bool custom = false;
+	    bool custom = false, lnkOK = false;
 	    if(obj_tp == "prm:" || obj_tp == "wdg:")
 	    {
-		for(int c_off = obj_tp.size(); TSYS::pathLev(cfg_val,0,true,&c_off).size(); c_lvl++);
-		if((obj_tp == "prm:" && c_lvl==4) || (obj_tp == "wdg:" && c_lvl==2)) cfg_val.resize(cfg_val.rfind("/"));
+		if((obj_tp == "prm:" && !SYS->daq().at().attrAt(cfg_val.substr(4),0,true).freeStat()) ||
+		    (obj_tp == "wdg:" && !srcwdg.at().attrAt(cfg_val.substr(4),0).freeStat()))
+		    { cfg_val.resize(cfg_val.rfind("/")); lnkOK = true; }
 	    }else custom = true;
 
 	    string sel;
@@ -1226,7 +1255,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    else if(!custom)
 	    {
 		rez = cfg_val;
-		if(obj_tp == "prm:" && !SYS->daq().at().prmAt(rez.substr(4),0,true).freeStat()) rez += " (+)";
+		if(lnkOK) rez += " (+)";
 	    }
 
 	    opt->setText(rez);
@@ -1239,18 +1268,10 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
 	    string cfg_addr = (obj_tp.size()<cfg_val.size()) ? cfg_val.substr(obj_tp.size()) : "";
 
-	    int c_lvl = 0;
-	    for(int c_off = 0; TSYS::pathLev(cfg_addr,0,true,&c_off).size(); c_lvl++) ;
-
 	    AutoHD<TValue> prm;
-	    if(obj_tp == "prm:" && c_lvl==3)	prm = SYS->daq().at().nodeAt(cfg_addr);
+	    if(obj_tp == "prm:")	prm = SYS->daq().at().prmAt(cfg_addr,0,true);
 	    AutoHD<Widget> dstwdg;
-	    if(obj_tp == "wdg:" && c_lvl==1)
-	    {
-		string nwdg = TSYS::pathLev(cfg_addr,0);
-		if(nwdg=="self") dstwdg = this;
-		else	dstwdg = wdgAt(nwdg);
-	    }
+	    if(obj_tp == "wdg:" && cfg_addr.size())	dstwdg = srcwdg.at().wdgAt(cfg_addr,0);
 
 	    srcwdg.at().attrList(a_ls);
 	    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
@@ -1264,20 +1285,20 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			if((!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
 			    (!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
 			{
-			    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val+"/"+p_attr);
+			    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val+((obj_tp == "wdg:")?"/a_":"/")+p_attr);
 			    noonly_no_set = false;
 			}
-			else no_set+=p_attr+",";
+			else no_set += p_attr+",";
 		    }
 		}
-	    if(!prm.freeStat() || !dstwdg.freeStat())
+	    /*if(!prm.freeStat() || !dstwdg.freeStat())
 	    {
 		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Destination has no any necessary attribute!"));
 		else if(no_set.size())	throw TError(nodePath().c_str(),_("Destination has no attributes: %s !"),no_set.c_str());
-	    }
+	    }*/
 	}
     }
-    else if((a_path.substr(0,14) == "/links/lnk/pl_" || a_path.substr(0,14) == "/links/lnk/ls_") && ctrChkNode(opt))
+    else if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt))
     {
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
@@ -1305,69 +1326,63 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	//>> Link interface process
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:"/* || obj_tp == "wdg:"*/))
+	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:"))
 	{
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
-	    //opt->childAdd("el")->setText("wdg:");
+	    opt->childAdd("el")->setText("wdg:");
 	}
 	//>> Link elements process
 	else
 	{
 	    int c_off = obj_tp.size();
+	    vector<string> ls;
 	    string c_path = obj_tp, c_el;
 	    opt->childAdd("el")->setText("");
 	    opt->childAdd("el")->setText(c_path);
-	    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
-	    {
-		if(is_pl && ((obj_tp=="prm:" && c_lv>=3) || (obj_tp=="wdg:" && c_lv>=1))) break;
-		c_path += "/"+c_el;
-		opt->childAdd("el")->setText(c_path);
-	    }
-	    vector<string> ls;
-	    c_off = obj_tp.size();
 
-	    string prm1 = TSYS::pathLev(m_prm,0,true,&c_off);
-	    string prm2 = TSYS::pathLev(m_prm,0,true,&c_off);
-	    string prm3 = TSYS::pathLev(m_prm,0,true,&c_off);
-	    switch(c_lv)
-	    {
-		case 0:
-		    if(obj_tp == "prm:") SYS->daq().at().modList(ls);
-		    if(obj_tp == "wdg:")
+	    try
+    	    {
+		if(obj_tp == "prm:")
+		{
+		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
 		    {
-			wdgList(ls);
-			ls.push_back("self");
+			c_path += "/"+c_el;
+			opt->childAdd("el")->setText(c_path);
 		    }
-		    break;
-		case 1:
-		    if(obj_tp == "prm:" && SYS->daq().at().modPresent(prm1))
-			SYS->daq().at().at(prm1).at().list(ls);
-		    if(!is_pl && obj_tp == "wdg:")
+		    AutoHD<TCntrNode> DAQnd = SYS->daq().at().nodeAt(c_path.substr(4));
+		    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !is_pl) DAQnd.at().chldList(0,ls);
+		    for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
+        	}
+		else if(obj_tp == "wdg:")
+		{
+		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
 		    {
-			AutoHD<Widget> wdg;
-			if(prm1 == "self")	wdg = this;
-			else wdg = wdgAt(prm1);
-			if(!wdg.freeStat()) wdg.at().attrList(ls);
+			c_path += (c_lv?"/":"")+c_el;
+			opt->childAdd("el")->setText(c_path);
 		    }
-		    break;
-		case 2:
-		    if(obj_tp == "prm:" && SYS->daq().at().modPresent(prm1)
-			      && SYS->daq().at().at(prm1).at().present(prm2))
-			SYS->daq().at().at(prm1).at().at(prm2).at().list(ls);
-		    break;
-		case 3:
-		    if(!is_pl && obj_tp=="prm:" && SYS->daq().at().modPresent(prm1)
-			      && SYS->daq().at().at(prm1).at().present(prm2)
-			      && SYS->daq().at().at(prm1).at().at(prm2).at().present(prm3))
-			SYS->daq().at().at(prm1).at().at(prm2).at().at(prm3).at().vlList(ls);
-		    break;
-	    }
-	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
+
+		    AutoHD<Widget> wnd = srcwdg.at().wdgAt(c_path.substr(4),0);
+		    if(!wnd.freeStat())
+		    {
+			if(dynamic_cast<Widget*>(wnd.at().nodePrev())) opt->childAdd("el")->setText(c_path+(c_lv?"/..":".."));
+			wnd.at().wdgList(ls, true);
+			if(ls.size()) opt->childAdd("el")->setText(_("=== Widgets ==="));
+			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                    	    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[i_l]);
+			if(!is_pl)
+			{
+			    wnd.at().attrList(ls);
+			    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
+			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                    	    opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
+                    	}
+		    }
+		}
+    	    }catch(TError err) { }
 	}
     }
-    else if(a_path.substr(0,14) == "/links/lnk/el_")
+    else if(a_path.compare(0,14,"/links/lnk/el_") == 0)
     {
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
@@ -1379,10 +1394,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	{
 	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
 	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-		    opt->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(opt->text().substr(4),0,true).freeStat())
+		    ((opt->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(opt->text().substr(4),0,true).freeStat()) ||
+		     (opt->text().compare(0,4,"wdg:") == 0 && !srcwdg.at().attrAt(opt->text().substr(4),0).freeStat())))
 		opt->setText(opt->text() + " (+)");
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))
+	else if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))
 	{
 	    srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
 	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)	srcwdg.at().attrAt(nattr).at().setS(opt->text());

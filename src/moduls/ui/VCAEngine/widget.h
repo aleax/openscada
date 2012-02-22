@@ -210,14 +210,14 @@ class Widget : public TCntrNode
 	void attrDel(const string &attr, bool allInher = false);
 	virtual bool attrPresent(const string &attr);
 	int  attrPos(const string &iattr);
-	virtual AutoHD<Attr> attrAt(const string &attr);
+	virtual AutoHD<Attr> attrAt(const string &attr, int lev = -1);
 
 	//> Include widgets
-	void wdgList( vector<string> &list );
+	void wdgList( vector<string> &list, bool fromLnk = false );
 	bool wdgPresent( const string &wdg );
 	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full); }
-	AutoHD<Widget> wdgAt( const string &wdg );
+	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
 	//> Data access
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }

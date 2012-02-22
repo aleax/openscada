@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 11:31+0200\n"
+"POT-Creation-Date: 2012-02-22 11:51+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -984,6 +984,21 @@ msgstr "Логический контейнер"
 msgid "Container and template"
 msgstr "Контейнер и шаблон"
 
+msgid "Variable is not link"
+msgstr "Переменная не является связью"
+
+msgid "val:Constant value"
+msgstr "val:Постоянная"
+
+msgid "=== Pages ==="
+msgstr "=== Страницы ==="
+
+msgid "=== Widgets ==="
+msgstr "=== Виджеты ==="
+
+msgid "=== Attributes ==="
+msgstr "=== Атрибуты ==="
+
 msgid "Widget link: "
 msgstr "Виджет ссылка: "
 
@@ -1409,8 +1424,8 @@ msgid ""
 msgstr ""
 "Имя шрифта в виде \"{family} {size} {bold} {italic} {underline} {strike}\", "
 "где:\n"
-"  \"family\" - семейство шрифта, для пробелов используйте символ '_', вроде: \"Arial\", "
-"\"Courier\", \"Times_New_Roman\";\n"
+"  \"family\" - семейство шрифта, для пробелов используйте символ '_', вроде: "
+"\"Arial\", \"Courier\", \"Times_New_Roman\";\n"
 "  \"size\" - размер шрифта в пикселах;\n"
 "  \"bold\" - усиление шрифта (0 или 1);\n"
 "  \"italic\" - наклонность шрифта (0 или 1);\n"
@@ -1508,19 +1523,6 @@ msgstr "Показывать атрибуты"
 
 msgid "Custom"
 msgstr "Раздельно"
-
-msgid "Destination has no any necessary attribute!"
-msgstr "Цель не имеет ни одного нужного атрибута!"
-
-#, c-format
-msgid "Destination has no attributes: %s !"
-msgstr "Цель не имеет атрибутов: %s !"
-
-msgid "Variable is not link"
-msgstr "Переменная не является связью"
-
-msgid "val:Constant value"
-msgstr "val:Постоянная"
 
 msgid "Work area"
 msgstr "Рабочая область"
@@ -1664,3 +1666,9 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "Destination has no any necessary attribute!"
+#~ msgstr "Цель не имеет ни одного нужного атрибута!"
+
+#~ msgid "Destination has no attributes: %s !"
+#~ msgstr "Цель не имеет атрибутов: %s !"

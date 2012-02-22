@@ -868,6 +868,24 @@ AutoHD<SessPage> SessPage::pageAt( const string &iid )
     return chldAt(mPage,iid);
 }
 
+AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off )
+{
+    //> Check for global
+    if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
+	try { return (AutoHD<Widget>)ownerSess()->nodeAt(wdg,1); }
+	catch(TError err) { return AutoHD<Widget>(); }
+
+    int offt = off;
+    string iw = TSYS::pathLev(wdg,lev,true,&offt);
+    if(iw.compare(0,3,"pg_") == 0)
+    {
+        if(pagePresent(iw.substr(3))) return pageAt(iw.substr(3)).at().wdgAt(wdg, 0, offt);
+        else return AutoHD<Widget>();
+    }
+
+    return Widget::wdgAt(wdg, lev, off);
+}
+
 void SessPage::calc( bool first, bool last )
 {
     //> Process self data
@@ -1029,7 +1047,7 @@ void SessPage::alarmQuittance( uint8_t quit_tmpl, bool isSet )
     //> Include widgets quittance
     wdgList( lst );
     for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	wdgAt(lst[i_w]).at().alarmQuittance(quit_tmpl);
+	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl);
 
     if(isSet && ownerSessWdg(true))	ownerSessWdg(true)->alarmSet();
 }
@@ -1040,10 +1058,10 @@ bool SessPage::attrPresent(const string &attr)
     return Widget::attrPresent(attr);
 }
 
-AutoHD<Attr> SessPage::attrAt(const string &attr)
+AutoHD<Attr> SessPage::attrAt(const string &attr, int lev)
 {
-    if(!enable() && !mToEn) setEnable(true, true);
-    return Widget::attrAt(attr);
+    if(lev < 0 && !enable() && !mToEn) setEnable(true, true);
+    return Widget::attrAt(attr,lev);
 }
 
 TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
@@ -1284,7 +1302,7 @@ void SessWdg::setProcess( bool val )
     vector<string> ls;
     wdgList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	wdgAt(ls[i_l]).at().setProcess(val);
+	((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().setProcess(val);
 
     mProc = val;
 
@@ -1347,9 +1365,14 @@ void SessWdg::inheritAttr( const string &aid )
     }
 }
 
-AutoHD<SessWdg> SessWdg::wdgAt( const string &wdg )
+AutoHD<Widget> SessWdg::wdgAt( const string &wdg, int lev, int off )
 {
-    return Widget::wdgAt(wdg);
+    //> Check for global
+    if(lev == 0 && off == 0 && wdg.compare(0,1,"/") == 0)
+	try { return (AutoHD<Widget>)ownerSess()->nodeAt(wdg,1); }
+	catch(TError err) { return AutoHD<Widget>(); }
+
+    return Widget::wdgAt(wdg, lev, off);
 }
 
 void SessWdg::pgClose( )
@@ -1363,7 +1386,7 @@ void SessWdg::pgClose( )
     vector<string> list;
     wdgList(list);
     for(unsigned i_w = 0; i_w < list.size(); i_w++)
-	wdgAt(list[i_w]).at().pgClose();
+	((AutoHD<SessWdg>)wdgAt(list[i_w])).at().pgClose();
 }
 
 void SessWdg::eventAdd( const string &ev )
@@ -1425,7 +1448,7 @@ void SessWdg::alarmQuittance( uint8_t quit_tmpl, bool isSet )
     //> Include widgets quittance
     wdgList( lst );
     for(unsigned i_w = 0; i_w < lst.size(); i_w++)
-	wdgAt(lst[i_w]).at().alarmQuittance(quit_tmpl);
+	((AutoHD<SessWdg>)wdgAt(lst[i_w])).at().alarmQuittance(quit_tmpl);
 
     if(isSet && ownerSessWdg(true)) ownerSessWdg(true)->alarmSet();
 }
@@ -1437,7 +1460,7 @@ void SessWdg::prcElListUpdate( )
     wdgList(ls);
     mWdgChldAct.clear();
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	if(wdgAt(ls[i_l]).at().process())
+	if(((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().process())
 	    mWdgChldAct.push_back(ls[i_l]);
 
     attrList(ls);
@@ -1456,7 +1479,7 @@ void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &e
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
     for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
 	if(wdgPresent(mWdgChldAct[i_ch]))
-	    wdgAt(mWdgChldAct[i_ch]).at().getUpdtWdg(wpath,tm,els);
+	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_ch])).at().getUpdtWdg(wpath,tm,els);
 }
 
 unsigned int SessWdg::modifVal( Attr &cfg )
@@ -1483,7 +1506,7 @@ void SessWdg::calc( bool first, bool last )
     //> Calculate include widgets
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
 	if(wdgPresent(mWdgChldAct[i_l]))
-	    wdgAt(mWdgChldAct[i_l]).at().calc(first,last);
+	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_l])).at().calc(first,last);
 
     try
     {
@@ -1522,16 +1545,8 @@ void SessWdg::calc( bool first, bool last )
 			}
 		    }
 		    else if(obj_tp == "wdg:")
-		    {
-			try
-			{
-			    size_t a_pos = attr.at().cfgVal().rfind("/");
-			    if(a_pos == string::npos) throw TError("","");
-			    attr1 = ((AutoHD<Widget>)mod->nodeAt(attr.at().cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(attr.at().cfgVal().substr(a_pos+3));
-			    attr.at().set(attr1.at().get());
-			}
+			try { attr.at().set(attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).at().get()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
-		    }
 		}
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
 	    }
@@ -1690,20 +1705,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 		        break;
 		    default: break;
 		}
-	    else if( obj_tp == "wdg:" )
-	    {
-		size_t a_pos = cfg.cfgVal().rfind("/");
-		if(a_pos == string::npos) throw TError("","");
-		AutoHD<Attr> wattr = ((AutoHD<Widget>)mod->nodeAt(cfg.cfgVal().substr(0,a_pos),0,0,obj_tp.size())).at().attrAt(cfg.cfgVal().substr(a_pos+3));
-		switch( cfg.type() )
-		{
-		    case TFld::Boolean:	wattr.at().setB(cfg.getB());	break;
-		    case TFld::Integer:	wattr.at().setI(cfg.getI());	break;
-		    case TFld::Real:	wattr.at().setR(cfg.getR());	break;
-		    case TFld::String:	wattr.at().setS(cfg.getS());	break;
-		    default: break;
-		}
-	    }
+	    else if(obj_tp == "wdg:")	attrAt(cfg.cfgVal().substr(obj_tp.size()),0).at().set(cfg.get());
 	}catch(...)	{ }
     }
 

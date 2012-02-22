@@ -1,3 +1,8 @@
+2012-02-22 Roman
+- !!!:UI.VCAEngine: Link type "wdg:" between widgets direct set allow and two types absolute and relative is added.
+    To functions Widget::wdgAt() and Widget::attrAt() work with widget path is added.
+
+
 2012-02-19 Roman
 - !!!!:SYS: Build system have been significant updated for:
     - move I18N processing code to generic place and place it to modules Makefiles on configure;

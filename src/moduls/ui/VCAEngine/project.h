@@ -187,7 +187,7 @@ class Page : public Widget, public TConfig
 
 	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
-	AutoHD<PageWdg> wdgAt( const string &wdg );
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
 	//> Pages
 	void pageList( vector<string> &ls )	{ chldList(mPage,ls); }
@@ -220,6 +220,7 @@ class Page : public Widget, public TConfig
 
 	bool cntrCmdGeneric( XMLNode *opt );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cntrCmdLinks( XMLNode *opt, bool lnk_ro = false );
 
     private:
 	//Attributes
@@ -259,6 +260,8 @@ class PageWdg : public Widget, public TConfig
 
 	//> Data access
 	string resourceGet( const string &id, string *mime = NULL );
+
+	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
 	void inheritAttr( const string &attr = "" );
 
