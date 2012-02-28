@@ -39,6 +39,7 @@
 #include <QFont>
 #include <QCheckBox>
 #include <QPushButton>
+//#include <QPolygonF>
 
 #include <tsys.h>
 
@@ -5398,7 +5399,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     //- moving the start point of the figure -
     if( rect_num==0 )
     {
-        view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
+        view->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
                 arg(TSYS::realRound((*pnts)[itemInMotion->n1].x(),POS_PREC_DIG)).arg(TSYS::realRound((*pnts)[itemInMotion->n1].y(),POS_PREC_DIG)), 10000 );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
 
@@ -5475,7 +5476,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     //- moving the end point of the figure -
     if( rect_num == 1 )
     {
-        view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
+        view->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
                 arg(TSYS::realRound((*pnts)[itemInMotion->n2].x(),POS_PREC_DIG)).arg(TSYS::realRound((*pnts)[itemInMotion->n2].y(),POS_PREC_DIG)), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         if( shapeType == 2 )
@@ -5592,7 +5593,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     //- moving the first control point of the figure -
     if( rect_num == 2 )
     {
-        view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
+        view->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
                 arg(TSYS::realRound((*pnts)[itemInMotion->n3].x(),POS_PREC_DIG)).arg(TSYS::realRound((*pnts)[itemInMotion->n3].y(),POS_PREC_DIG)), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
@@ -5622,7 +5623,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     //- moving the second control point of the figure -
     if(rect_num == 3)
     {
-        view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
+        view->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
                 arg(TSYS::realRound((*pnts)[itemInMotion->n4].x(),POS_PREC_DIG)).arg(TSYS::realRound((*pnts)[itemInMotion->n4].y()),POS_PREC_DIG), 10000 );
         StartMotionPos = scaleRotate( (*pnts)[itemInMotion->n1], view, flag_scale, flag_rotate );
         EndMotionPos = scaleRotate( (*pnts)[itemInMotion->n2], view, flag_scale, flag_rotate );
@@ -5664,7 +5665,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     //- moving the third control point of the figure -
     if( rect_num == 4 )
     {
-        view->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
+        view->mainWin()->statusBar()->showMessage(QString(_("Point coordinates(x,y): (%1, %2)")).
                 arg(TSYS::realRound((*pnts)[itemInMotion->n5].x(),POS_PREC_DIG)).arg(TSYS::realRound((*pnts)[itemInMotion->n5].y(),POS_PREC_DIG)), 10000 );
         CtrlMotionPos_1 = scaleRotate( (*pnts)[itemInMotion->n3], view, flag_scale, flag_rotate );
         CtrlMotionPos_2 = scaleRotate( (*pnts)[itemInMotion->n4], view, flag_scale, flag_rotate );
@@ -6406,6 +6407,9 @@ void ShapeElFigure::checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, 
 //-- detecting the figure or one of its control points under mouse cursor --
 int ShapeElFigure::itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems ,WdgView *w )
 {
+    w->mainWin()->statusBar()->showMessage(QString(_("Coordinates(x,y): (%1, %2)")).
+            arg(TSYS::realRound(pos.x()/w->xScale(true),POS_PREC_DIG)).arg(TSYS::realRound(pos.y()/w->yScale(true),POS_PREC_DIG)), 10000 );
+
     QPointF point;
     rect_num = -1;
     bool flag_break = false;
@@ -6452,21 +6456,10 @@ int ShapeElFigure::itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeIt
         {
             point.setY(j);
             point.setX(j);
-            if( item.path.contains(pos + point) ) 
+            if( item.path.contains(pos + point) || item.path.contains(pos - point) ) 
             {
                index = i;
                flag_break = true;
-            }
-        }
-        if( flag_break ) break;
-        for(int j = 2; j > 0; j-- )
-        {
-            point.setY(j);
-            point.setX(j);
-            if( item.path.contains(pos - point) ) 
-            {
-                index = i;
-                flag_break = true;
             }
         }
         if( flag_break ) break;
@@ -7029,8 +7022,8 @@ void ShapeElFigure::paintImage( WdgView *view )
     ImageMap *images = &elFD->shapeImages;
     StyleMap *styles = &elFD->shapeStyles;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
-    //elFD->pictObj = QPixmap(view/*elFD->pictObj*/);
     elFD->pictObj = QPixmap(view->width(), view->height());
+    //elF-D>pictObj = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied);
     elFD->pictObj.fill(Qt::transparent);
     QPainter pnt( &elFD->pictObj );
     //- Prepare draw area -
@@ -7282,6 +7275,10 @@ void ShapeElFigure::paintImage( WdgView *view )
             QPointF drw_pnt,drw_pnt1;
             QPen im_pen;
             im_y = (int)yMin_rot;
+            //QImage draw_img( (int)TSYS::realRound( xMax_rot - xMin_rot )+1, (int)TSYS::realRound( yMax_rot - yMin_rot )+1, QImage::Format_ARGB32_Premultiplied  );
+            QImage draw_img( view->width(), view->height(), QImage::Format_ARGB32_Premultiplied  );
+            draw_img.fill(0);
+            QPainter draw_pnt( &draw_img );
             //>> Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path
             do
             {
@@ -7301,10 +7298,13 @@ void ShapeElFigure::paintImage( WdgView *view )
                             color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();
                             alpha_rez = (1 - alpha_col) * (1 - alpha);
                             im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (int)TSYS::realRound( 255*(1-alpha_rez), POS_PREC_DIG, true )) );
-                            pnt.setPen( im_pen );
+                            //pnt.setPen( im_pen );
+                            draw_pnt.setPen( im_pen );
                             drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
-                            pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), POS_PREC_DIG, true),
-                                                    (int)TSYS::realRound( drw_pnt1.y(), POS_PREC_DIG, true) ) );
+                            //draw_pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt.x() - xMin, POS_PREC_DIG, true),
+                            //                        (int)TSYS::realRound( drw_pnt.y() - yMin, POS_PREC_DIG, true) ) );
+                            draw_pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), POS_PREC_DIG, true),
+                                                         (int)TSYS::realRound( drw_pnt1.y(), POS_PREC_DIG, true) ) );
                         }
                     }
                     im_x += 1;
@@ -7313,6 +7313,9 @@ void ShapeElFigure::paintImage( WdgView *view )
                 im_y += 1;
             }
             while( im_y > yMin_rot && im_y < yMax_rot );
+            //pnt.drawImage(QPoint( (int)TSYS::realRound( xMin_rot, POS_PREC_DIG, true ),
+            //                      (int)TSYS::realRound( yMin_rot, POS_PREC_DIG, true ) ), draw_img);
+            pnt.drawImage(QPoint(0, 0), draw_img);
         }
         else
         {

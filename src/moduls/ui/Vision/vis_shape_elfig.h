@@ -130,6 +130,7 @@ class ElFigDt : public QObject
         StyleMap shapeStyles, shapeStyles_temp;
         WdgView *w;
         QPixmap pictObj;
+        //QImage pictObj;
     private slots:
         void dynamic();
         void properties();

@@ -21,7 +21,7 @@
  ***************************************************************************/
 
 #include <QApplication>
-#include <QWorkspace>
+#include <QMdiArea>
 #include <QMenu>
 #include <QMenuBar>
 #include <QSignalMapper>
@@ -34,6 +34,7 @@
 #include <QTimer>
 #include <QScrollArea>
 #include <QCheckBox>
+#include <QMdiSubWindow>
 
 #include <config.h>
 #include <tsys.h>
@@ -60,13 +61,20 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setWindowIcon(mod->icon());
 
     //> Init workspace
-    work_space = new QWorkspace(this);
-    work_space->setScrollBarsEnabled(true);
+    work_space = new QMdiArea(this);
+    //work_space->setScrollBarsEnabled(true);
     work_space->setBackground(QBrush(QColor(156,179,196)/*,Qt::Dense2Pattern*/));
     setCentralWidget(work_space);
 
     //> Create actions
     //>> Generic actions
+    //>>> Fullscreen
+    actFullScr = new QAction(_("Full screen"),this);
+    actFullScr->setCheckable(true);
+    actFullScr->setToolTip(_("Full screen toggle"));
+    actFullScr->setWhatsThis(_("The button for full screen toggle"));
+    actFullScr->setStatusTip(_("Press for toggle full screen."));
+    connect(actFullScr, SIGNAL(toggled(bool)), this, SLOT(fullScreen(bool)));
     //>>> Close
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
@@ -379,37 +387,37 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actWinClose->setToolTip(_("Close active window"));
     actWinClose->setWhatsThis(_("The button for the active window closing"));
     actWinClose->setStatusTip(_("Press to close active window."));
-    connect(actWinClose, SIGNAL(triggered()), work_space, SLOT(closeActiveWindow()));
+    connect(actWinClose, SIGNAL(triggered()), work_space, SLOT(closeActiveSubWindow()));
     //>>> Close all windows
     actWinCloseAll = new QAction(_("Close &All"), this);
     actWinCloseAll->setToolTip(_("Close all windows"));
     actWinCloseAll->setWhatsThis(_("The button for all windows closing"));
     actWinCloseAll->setStatusTip(_("Press to close all windows."));
-    connect(actWinCloseAll, SIGNAL(triggered()), work_space, SLOT(closeAllWindows()));
+    connect(actWinCloseAll, SIGNAL(triggered()), work_space, SLOT(closeAllSubWindows()));
     //>>> Tile windows
     actWinTile = new QAction(_("&Tile"), this);
     actWinTile->setToolTip(_("Tile all windows"));
     actWinTile->setWhatsThis(_("The button for all windows tiling"));
     actWinTile->setStatusTip(_("Press to tile all windows."));
-    connect(actWinTile, SIGNAL(triggered()), work_space, SLOT(tile()));
+    connect(actWinTile, SIGNAL(triggered()), work_space, SLOT(tileSubWindows()));
     //>>> Cascade windows
     actWinCascade = new QAction(_("&Cascade"), this);
     actWinCascade->setToolTip(_("Cascade all windows"));
     actWinCascade->setWhatsThis(_("The button for all windows cascading"));
     actWinCascade->setStatusTip(_("Press to cascade all windows."));
-    connect(actWinCascade, SIGNAL(triggered()), work_space, SLOT(cascade()));
+    connect(actWinCascade, SIGNAL(triggered()), work_space, SLOT(cascadeSubWindows()));
     //>>> Activate next window
     actWinNext = new QAction(_("Ne&xt"), this);
     actWinNext->setToolTip(_("Activate next window"));
     actWinNext->setWhatsThis(_("The button for next window activation"));
     actWinNext->setStatusTip(_("Press to activate next window."));
-    connect(actWinNext, SIGNAL(triggered()), work_space, SLOT(activateNextWindow()));
+    connect(actWinNext, SIGNAL(triggered()), work_space, SLOT(activateNextSubWindow()));
     //>>> Activate previous window
     actWinPrevious = new QAction(_("Pre&vious"), this);
     actWinPrevious->setToolTip(_("Activate previous window"));
     actWinPrevious->setWhatsThis(_("The button for previous window activation"));
     actWinPrevious->setStatusTip(_("Press to activate previous window."));
-    connect(actWinPrevious, SIGNAL(triggered()), work_space, SLOT(activatePreviousWindow()));
+    connect(actWinPrevious, SIGNAL(triggered()), work_space, SLOT(activatePreviousSubWindow()));
 
     //> Action groups
     //>> Create widgets action groups
@@ -466,8 +474,10 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_window = menuBar()->addMenu(_("&Window"));
     connect(mn_window, SIGNAL(aboutToShow()), this, SLOT(updateMenuWindow()));
     wMapper = new QSignalMapper(this);
-    connect(wMapper, SIGNAL(mapped(QWidget *)), work_space, SLOT(setActiveWindow(QWidget *)));
+    connect(wMapper, SIGNAL(mapped(QWidget *)), this, SLOT(setActiveSubWindow(QWidget *)));
     mn_view = menuBar()->addMenu(_("&View"));
+    mn_view->addAction(actFullScr);
+    mn_view->addSeparator();
     mn_help = menuBar()->addMenu(_("&Help"));
     mn_help->addAction(actAbout);
     mn_help->addAction(actQtAbout);
@@ -692,7 +702,7 @@ void VisDevelop::closeEvent( QCloseEvent* ce )
 	return;
     }
 
-    work_space->closeAllWindows();
+    work_space->closeAllSubWindows();
     ce->accept();
 }
 
@@ -749,6 +759,17 @@ void VisDevelop::setToolIconSize( )
 	tb->setIconSize(QSize(icSz,icSz));
 	mod->uiPropSet((tb->objectName()+"_icSz").toAscii().data(),TSYS::int2str(icSz),user());
     }
+}
+
+void VisDevelop::setActiveSubWindow(QWidget *w)
+{
+    work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w));
+}
+
+void VisDevelop::fullScreen( bool vl )
+{
+    if(vl) setWindowState(Qt::WindowFullScreen);
+    else setWindowState(Qt::WindowNoState);
 }
 
 bool VisDevelop::exitModifChk( )
@@ -906,9 +927,9 @@ void VisDevelop::updateMenuWindow( )
     mn_window->addAction(actWinNext);
     mn_window->addAction(actWinPrevious);
 
-    QList<QWidget *> windows = work_space->windowList();
+    QList<QMdiSubWindow *> windows = work_space->subWindowList();
     //> Enable action state
-    QWidget *act_win = work_space->activeWindow();
+    QMdiSubWindow  *act_win = work_space->activeSubWindow();
     actWinClose->setEnabled(act_win);
     actWinCloseAll->setEnabled(!windows.isEmpty());
     actWinTile->setEnabled(!windows.isEmpty());
@@ -920,7 +941,7 @@ void VisDevelop::updateMenuWindow( )
     if(!windows.isEmpty()) mn_window->addSeparator();
     for(int i_w = 0; i_w < windows.size(); ++i_w)
     {
-	QWidget *child = windows.at(i_w);
+	QMdiSubWindow *child = windows.at(i_w);
 	QAction *act = mn_window->addAction(QString((i_w<9)?"&%1 %2":"%1 %2").arg(i_w+1).arg(child->windowTitle()));
 	act->setCheckable(true);
 	act->setChecked(child == act_win);
@@ -1052,8 +1073,8 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     string own_wdg = iOwn.empty() ? TSYS::strSepParse(work_wdg,0,';') : iOwn;
     string par_nm = cact->objectName().toAscii().data();
 
-    if(work_space->activeWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
-	    !((DevelWdgView*)((QScrollArea*)work_space->activeWindow())->widget())->edit())
+    if(work_space->activeSubWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
+	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow())->widget())->edit())
 	return;
 
     //> Count level
@@ -1264,7 +1285,7 @@ void VisDevelop::visualItEdit( )
     {
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
 	//Check to already opened widget window
-	QWidgetList ws_wdg = work_space->windowList();
+	QList<QMdiSubWindow *> ws_wdg = work_space->subWindowList();
 	int i_w;
 	for( i_w = 0; i_w < ws_wdg.size(); i_w++ )
 	    if( ws_wdg.at(i_w)->windowTitle() == w_title )
@@ -1272,7 +1293,7 @@ void VisDevelop::visualItEdit( )
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("Widget's '%1' editing window is already opened.")).
 			    arg(ed_wdg.c_str()), TVision::Info, this );
-		work_space->setActiveWindow(ws_wdg.at(i_w));
+		work_space->setActiveSubWindow(ws_wdg.at(i_w));
 		break;
 	    }
 	if( i_w < ws_wdg.size() ) continue;
@@ -1308,7 +1329,7 @@ void VisDevelop::visualItEdit( )
 
 	scrl->setWidget(vw);
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
-	work_space->addWindow(scrl);
+	work_space->addSubWindow(scrl);
 	scrl->show();
     }
 }

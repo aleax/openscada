@@ -34,7 +34,7 @@
 using std::string;
 using std::vector;
 
-class QWorkspace;
+class QMdiArea;
 class QSignalMapper;
 class QActionGroup;
 
@@ -129,6 +129,7 @@ class VisDevelop : public QMainWindow
 		*actVisItUnDo,		//UnDo visual item changes
 		*actVisItReDo,		//ReDo visual item changes
 	//>> Widget's ordering actions
+		*actFullScr,		//Full screen action
 		*actLevUp,		//Up widget level
 		*actLevDown,		//Down widget level
 		*actLevRise,		//Rise widget level
@@ -167,7 +168,7 @@ class VisDevelop : public QMainWindow
 	InspLnkDock	*lnkInsp;	//Docked links inspector
 
 	//> Work space
-	QWorkspace	*work_space;	//MDI widgets workspace
+	QMdiArea	*work_space;	//MDI widgets workspace
 
 	//> Menu root items
 	QMenu	*mn_file,		//Menu "File"
@@ -190,6 +191,9 @@ class VisDevelop : public QMainWindow
 	void applyWorkWdg( );	//Timeouted apply work widget
 	void endRunChk( );	//End run flag check
 	void setToolIconSize( );
+	void setActiveSubWindow(QWidget *);
+
+	void fullScreen( bool vl );	//Full screen toggle
 
     private:
 	//Private attributes

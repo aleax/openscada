@@ -31,7 +31,7 @@
 #include <QKeyEvent>
 #include <QTextEdit>
 #include <QComboBox>
-#include <QWorkspace>
+#include <QMdiArea>
 #include <QToolBar>
 #include <QPainter>
 #include <QStatusBar>
@@ -1353,7 +1353,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 	        w_lev++;
 	    }
 	    //Prepare for drag and drop operation
-	    if( owner()->work_space->activeWindow() && w_lev == 2 )
+	    if( owner()->work_space->activeSubWindow() && w_lev == 2 )
 	    {
 	        //- Prepare put data stream -
 	        QByteArray itemData;
