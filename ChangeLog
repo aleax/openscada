@@ -2,10 +2,11 @@
 - UI.Vision: The QImage is used for the pixels' drawing during the combination of fill color and image for the primitive ElFigure.
 - UI.Vision: The coordinate's showing under the mouse cursor is added to the status bar for the developing mode of the primitive ElFigure.
 - UI.Vision: The QMdiArea is used instead if the obsolete QWorkspace for the building the mdi interface.
-- UI.Vision: The "Full screen" is added to the "View" section of the main menu.
+- UI.Vision: The "Full screen" is added to the "View" section of the main menu of development window.
 
 
 2012-02-28 Roman
+- FIX:SYS: Double RPATH set is fixed into "src_call".
 - !:UI.QTStarter: QT command line parameters, like -qws and -style, is forwarded from OpenSCADA module's parameters like --qws and --style.
     Print --help for see all list.
 - FIX:UI.Vision: Child widgets selection and edit frame, dots is disabled for no "Box" zero level widgets.
