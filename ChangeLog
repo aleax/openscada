@@ -1,3 +1,9 @@
+2012-02-28 Roman
+- !:UI.QTStarter: QT command line parameters, like -qws and -style, is forwarded from OpenSCADA module's parameters like --qws and --style.
+    Print --help for see all list.
+- FIX:UI.Vision: Child widgets selection and edit frame, dots is disabled for no "Box" zero level widgets.
+
+
 2012-02-22 Roman
 - !!!:UI.VCAEngine: Link type "wdg:" between widgets direct set allow and two types absolute and relative is added.
     To functions Widget::wdgAt() and Widget::attrAt() work with widget path is added.

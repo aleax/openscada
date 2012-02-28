@@ -3096,18 +3096,17 @@ bool DevelWdgView::event( QEvent *event )
 	}
 
 	//> Update select widget data
-	if( wLevel() == 0 && !fHoldSelRect )
+	if(wLevel() == 0 && !fHoldSelRect && root() == "Box")
 	{
 	    QRectF rsel;
-	    //if( !(flags()&DevelWdgView::moveHoldMove) )
-		for( int i_c = 0; i_c < children().size(); i_c++ )
-		    if( qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-			    ((DevelWdgView*)children().at(i_c))->select( ) )
-			rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-	    pntView->setSelArea( rsel, fMoveHoldMove ? SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots) );
+	    for(int i_c = 0; i_c < children().size(); i_c++)
+		if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
+			((DevelWdgView*)children().at(i_c))->select())
+		    rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
+	    pntView->setSelArea(rsel, fMoveHoldMove ? SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots));
 	}
 	pnt.end();
-	if( WdgView::event(event) )	return true;
+	if(WdgView::event(event))	return true;
 	return QWidget::event(event);
     }
 
@@ -3205,7 +3204,7 @@ bool DevelWdgView::event( QEvent *event )
 							arg(selectChilds().c_str()), 10000 );
 
 			//>> Hold select rect paint
-			if( !chld_sel )
+			if(!chld_sel && root() == "Box")
 			{
 			    fHoldSelRect = true;
 			    holdPnt = curp;

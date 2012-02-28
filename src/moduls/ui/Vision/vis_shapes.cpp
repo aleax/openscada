@@ -1490,7 +1490,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
     //> Prepare picture
     shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
-    shD->pictObj.fill(qRgba(0,0,0,0));
+    shD->pictObj.fill(0);
 
     QPainter pnt( &shD->pictObj );
 
@@ -1751,7 +1751,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     //> Prepare picture
     shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
-    shD->pictObj.fill(qRgba(0,0,0,0));
+    shD->pictObj.fill(0);
 
     QPainter pnt( &shD->pictObj );
 

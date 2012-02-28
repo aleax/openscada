@@ -83,7 +83,8 @@ using namespace QTStarter;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), demon_mode(false), end_run(false), start_com(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID),
+    demon_mode(false), end_run(false), start_com(false), qtArgC(0), qtArgEnd(0)
 {
     mod		= this;
 
@@ -128,28 +129,42 @@ void TUIMod::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
 	//> Set QT environments
+	qtArgC = qtArgEnd = 0;
+	if(SYS->argc) toQtArg(SYS->argv[0]);
 	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
 
 	//> Check command line for options no help and no daemon
 	bool isHelp = false;
-	int next_opt;
-	const char *short_opt="h";
+	int next_opt, option_index = 0;
 	struct option long_opt[] =
 	{
-	    {"help"    ,0,NULL,'h'},
-	    {"demon"   ,0,NULL,'d'},
-	    {NULL      ,0,NULL,0  }
+	    {"help",	0, NULL, 'h'},
+	    {"demon",	0, NULL, 'd'},
+	    //>QT bind options (debug)
+	    {"sync",	0, NULL, 0},
+	    {"widgetcount", 0, NULL, 0},
+	    //>QT bind options
+	    {"qws",	0, NULL, 0},
+	    {"style",	1, NULL, 0},
+	    {"stylesheet", 1, NULL, 0},
+	    {"session",	1, NULL, 0},
+	    {"reverse",	0, NULL, 0},
+	    {"graphicssystem", 1, NULL, 0},
+	    {"display",	1, NULL, 0},
+	    {"geometry",1, NULL, 0},
+	    {NULL,	0, NULL, 0}
 	};
 
 	optind=opterr=0;
 	do
 	{
-	    next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	    switch( next_opt )
+	    next_opt = getopt_long(SYS->argc, (char * const *)SYS->argv, "h", long_opt, &option_index);
+	    switch(next_opt)
 	    {
+		case 0	: toQtArg(long_opt[option_index].name, optarg);	break;
 		case 'h': isHelp = true; break;
 		case 'd': demon_mode = true; break;
 		case -1 : break;
@@ -157,7 +172,7 @@ void TUIMod::postEnable( int flag )
 	} while(next_opt != -1);
 
 	//> Start main QT thread if no help and no daemon
-	if( !(run_st || demon_mode || isHelp) )
+	if(!(run_st || demon_mode || isHelp))
 	{
 	    end_run = false;
 
@@ -181,22 +196,19 @@ void TUIMod::load_( )
 
     //> Load parameters from command line
     int next_opt;
-    const char *short_opt="h";
     struct option long_opt[] =
     {
 	{"help"    ,0,NULL,'h'},
-	{"demon"   ,0,NULL,'d'},
 	{NULL      ,0,NULL,0  }
     };
 
     optind=opterr=0;
     do
     {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,"h",long_opt,NULL);
 	switch(next_opt)
 	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case 'd': demon_mode = true; break;
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str());	break;
 	    case -1 : break;
 	}
     } while(next_opt != -1);
@@ -238,11 +250,46 @@ string TUIMod::optDescr( )
 
     snprintf(buf,sizeof(buf),_(
 	"======================= The module <%s:%s> options =======================\n"
+	"----------- QT debug commandline options ----------\n"
+	"    --sync                 Switches to synchronous mode X11 for debugging.\n"
+	"    --widgetcount          Prints debug message at the end about number of widgets\n"
+	"                           left undestroyed and maximum number of widgets existed at\n"
+	"                           the same time.\n"
+	"----------- QT commandline options ----------------\n"
+	"    --qws                  With Qt for Embedded Linux makes this application the server.\n"
+	"    --style=<nm>           Sets GUI style to <nm> (windows, platinum, plastique, ...).\n"
+	"    --stylesheet=<path>    Sets styleSheet by <path> to file that contains.\n"
+	"    --session=<nm>         Restores from an earlier session <nm>.\n"
+	"    --reverse              Sets layout direction to Qt::RightToLeft.\n"
+	"    --graphicssystem=<nm>  Sets the backend to be used for on-screen widgets and QPixmaps (raster, opengl).\n"
+	"    --display=<nm>         Sets the X display (default is $DISPLAY).\n"
+	"    --geometry=<geom>      Sets the client geometry of the first window that is shown.\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartMod  <moduls>    Start modules list (sep - ';').\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
+}
+
+void TUIMod::toQtArg( const char *nm, const char *arg )
+{
+    string plStr = nm;
+    if(qtArgC) plStr.insert(0,"-");
+    //> Name process
+    if(qtArgC >= (sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
+    strcpy(qtArgBuf+qtArgEnd, plStr.c_str());
+    qtArgV[qtArgC++] = qtArgBuf+qtArgEnd;
+    qtArgEnd += plStr.size()+1;
+
+    //> Argument process
+    if(arg)
+    {
+	plStr = arg;
+	if(qtArgC >= (sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
+	strcpy(qtArgBuf+qtArgEnd, plStr.c_str());
+	qtArgV[qtArgC++] = qtArgBuf+qtArgEnd;
+	qtArgEnd += plStr.size()+1;
+    }
 }
 
 void *TUIMod::Task( void * )
@@ -257,7 +304,7 @@ void *TUIMod::Task( void * )
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
     //> QT application object init
-    QApplication *QtApp = new QApplication( (int&)SYS->argc,(char **)SYS->argv );
+    QApplication *QtApp = new QApplication(mod->qtArgC, (char**)&mod->qtArgV);
     QtApp->setQuitOnLastWindowClosed(false);
     mod->run_st = true;
 

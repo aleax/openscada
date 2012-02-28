@@ -1261,11 +1261,11 @@ void WdgView::orderUpdate( )
 
 bool WdgView::event( QEvent *event )
 {
-    //- Paint event process -
-    if( event->type() == QEvent::Paint )
+    //> Paint event process
+    if(event->type() == QEvent::Paint)
     {
-	//- Self widget view -
-	if( shape )	return shape->event(this,event);
+	//> Self widget view
+	if(shape) return shape->event(this,event);
 	return true;
     }
 

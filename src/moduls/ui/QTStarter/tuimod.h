@@ -121,11 +121,17 @@ class TUIMod: public TUI
     private:
 	//Methods
 	static void *Task( void * );
-	string optDescr( );
+	string	optDescr( );
+	void	toQtArg( const char *nm, const char *arg = NULL );
 
 	//Attributes
 	bool	demon_mode, end_run, start_com;
 	string	start_mod;
+
+	//> Command line options binding to QT
+	int	qtArgC, qtArgEnd;		//Arguments counter and end position
+	char   	*qtArgV[10];			//Argument's values
+	char	qtArgBuf[1000];			//Arguments' strings buffer
 };
 
 extern TUIMod *mod;
