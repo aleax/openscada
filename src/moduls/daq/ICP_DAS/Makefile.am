@@ -1,8 +1,7 @@
 EXTRA_DIST = *.h po/* libi8k.a libi8k_arm.a include/*.h include_arm/*.h
 
-INCLUDES = -I$(top_srcdir)/src $(ICP_DAS_CFLAGS)
-
 oscd_modul_LTLIBRARIES = daq_ICP_DAS.la
+daq_ICP_DAS_la_CXXFLAGS = $(ICP_DAS_CFLAGS)
 daq_ICP_DAS_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_ICP_DAS_la_SOURCES = ICP_module.cpp
 daq_ICP_DAS_la_LIBADD  = $(ICP_DAS_LIBS)

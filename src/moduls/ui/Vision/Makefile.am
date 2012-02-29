@@ -1,13 +1,7 @@
 EXTRA_DIST = *.h vision.qrc images/* po/*
 
-INCLUDES = -I$(top_srcdir)/src $(QT4_INCL)
-
-if VisionIncl
-noinst_LTLIBRARIES = ui_Vision.la
-INCLUDES += -DMOD_INCL
-else
 oscd_modul_LTLIBRARIES = ui_Vision.la
-endif
+ui_Vision_la_CXXFLAGS = $(QT4_INCL)
 ui_Vision_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_Vision_la_SOURCES = tvision.cpp qrc_vision.cpp vis_widgs.cpp moc_vis_widgs.cpp vis_shapes.cpp moc_vis_shapes.cpp \
     vis_devel.cpp moc_vis_devel.cpp vis_devel_dlgs.cpp moc_vis_devel_dlgs.cpp vis_devel_widgs.cpp moc_vis_devel_widgs.cpp \
@@ -16,6 +10,11 @@ ui_Vision_la_DIST = tvision.cpp vis_widgs.cpp vis_shapes.cpp vis_devel.cpp vis_d
     vis_run.cpp vis_run_widgs.cpp vis_shape_elfig.cpp vision.qrc
 ui_Vision_la_LIBADD = $(QT4_LIB) $(LIB_FFTW3)
 ui_Vision_la_LIBTOOLFLAGS = --tag=disable-static
+
+if VisionIncl
+ui_Vision_la_CXXFLAGS += -DMOD_INCL
+install:
+endif
 
 qrc_vision.cpp: vision.qrc
 	$(QT4_RCC) -name Vision vision.qrc -o qrc_vision.cpp

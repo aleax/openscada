@@ -1,7 +1,5 @@
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -I$(top_srcdir)/src
-
 oscd_modul_LTLIBRARIES = daq_BFN.la
 daq_BFN_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_BFN_la_SOURCES = mod_BFN.cpp

@@ -1,3 +1,9 @@
+2012-02-29 Roman
+- SYS: Translation processing script is fixed for restore $(DESTDIR) to localedirectory.
+- SYS: Spare includings is removed from *.am.
+- FIX:SYS: Install disable for included modules is fixed for old automake (detected problem on version 1.8.3).
+
+
 2012-02-28 Maxim,Roman
 - UI.Vision: The QImage is used for the pixels' drawing during the combination of fill color and image for the primitive ElFigure.
 - UI.Vision: The coordinate's showing under the mouse cursor is added to the status bar for the developing mode of the primitive ElFigure.

@@ -2,11 +2,8 @@ SUBDIRS = moduls
 
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -DLOCALEDIR=\"$(localedir)\"
-
-AM_CXXFLAGS =
-
-lib_LTLIBRARIES =  liboscada.la
+lib_LTLIBRARIES = liboscada.la
+liboscada_la_CXXFLAGS = -DLOCALEDIR=\"$(localedir)\"
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp tvariant.cpp tconfig.cpp \
     tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tprotocols.cpp ttransports.cpp \
     tspecials.cpp ttipdaq.cpp tprmtmpl.cpp tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp \

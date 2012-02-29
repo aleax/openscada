@@ -1,6 +1,6 @@
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -I$(top_srcdir)/src -DLINUX -DDAVE_LITTLE_ENDIAN
+INCLUDES = -DLINUX -DDAVE_LITTLE_ENDIAN
 
 oscd_modul_LTLIBRARIES = daq_Siemens.la
 daq_Siemens_la_LDFLAGS = -module -avoid-version -no-undefined

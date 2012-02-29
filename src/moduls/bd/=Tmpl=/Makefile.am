@@ -1,10 +1,21 @@
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -I$(top_srcdir)/src
-
+#!!! The module result library name
 oscd_modul_LTLIBRARIES = db_Tmpl.la
-db_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined
+#!!! The module compiler flags
+db_Tmpl_la_CXXFLAGS = $(tmpl_CFLAGS)
+#!!! The module link flags
+db_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined $(tmpl_LDLAGS)
+#!!! The module source files list
 db_Tmpl_la_SOURCES = mod_tmpl.cpp
+#!!! Libtool util's flags. It is typical
 db_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 
+#!!! Include module to OpenSCADA core process. It is typical!
+if TmplIncl
+db_Tmpl_la_CXXFLAGS += -DMOD_INCL
+install:
+endif
+
+#!!! The module name for translation files
 I18N_mod = $(oscd_modulpref)Tmpl

@@ -1,7 +1,5 @@
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -I$(top_srcdir)/src
-
 oscd_modul_LTLIBRARIES = daq_SoundCard.la
 daq_SoundCard_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_SoundCard_la_SOURCES = sound.cpp

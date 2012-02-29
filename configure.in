@@ -637,9 +637,9 @@ if test "x${ModsIncl}" != "x"; then
     AC_MSG_RESULT([  - Modules list included to OpenSCADA core: $ModsIncl])
 fi
 AC_MSG_RESULT([* Modules' features:])
-if test $FFTW3use = true; then
+if test "x$FFTW3use" = "xtrue"; then
     AC_MSG_RESULT([  - FFTW3 library use for signal spectrum purchase: $LIB_FFTW3])
 fi
-if test $SensorsUse = true; then
+if test "x$SensorsUse" = "xtrue"; then
     AC_MSG_RESULT([  - Linux sensors library use: $LIB_SENSORS])
 fi

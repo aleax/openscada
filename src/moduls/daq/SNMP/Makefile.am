@@ -1,8 +1,4 @@
-## process this file with automake to generate Makefile.in
-
 EXTRA_DIST = *.h po/*
-
-INCLUDES = -I$(top_srcdir)/src
 
 oscd_modul_LTLIBRARIES = daq_SNMP.la
 daq_SNMP_la_LDFLAGS = -module -avoid-version -no-undefined

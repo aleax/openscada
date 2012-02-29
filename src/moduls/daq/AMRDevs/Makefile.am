@@ -1,11 +1,8 @@
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -I$(top_srcdir)/src
-
 oscd_modul_LTLIBRARIES = daq_AMRDevs.la
 daq_AMRDevs_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_AMRDevs_la_SOURCES = mod_amr.cpp da_FlowTEC.cpp da_Ergomera.cpp
-#daq_AMRdevs_la_LIBADD  = -lnetsnmp -lcrypto
 daq_AMRDevs_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)AMRDevs

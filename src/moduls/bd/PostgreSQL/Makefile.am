@@ -1,15 +1,14 @@
 EXTRA_DIST = *.h po/*
 
-INCLUDES = -I$(top_srcdir)/src $(POSTGRESQL_CFLAGS)
-
-if PostgreSQLIncl
-noinst_LTLIBRARIES = bd_PostgreSQL.la
-INCLUDES += -DMOD_INCL
-else
 oscd_modul_LTLIBRARIES = bd_PostgreSQL.la
-endif
+bd_PostgreSQL_la_CXXFLAGS = $(POSTGRESQL_CFLAGS)
 bd_PostgreSQL_la_LDFLAGS = -module -avoid-version -no-undefined $(POSTGRESQL_LDFLAGS)
 bd_PostgreSQL_la_SOURCES = postgre.cpp
 bd_PostgreSQL_la_LIBTOOLFLAGS = --tag=disable-static
+
+if PostgreSQLIncl
+bd_PostgreSQL_la_CXXFLAGS += -DMOD_INCL
+install:
+endif
 
 I18N_mod = $(oscd_modulpref)PostgreSQL
