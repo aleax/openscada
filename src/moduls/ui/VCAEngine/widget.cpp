@@ -1690,7 +1690,7 @@ void Attr::setFld( TFld *fld, bool inher )
 		if(m_val.s_val) delete m_val.s_val;
 		break;
 	    case TFld::Object:
-                if(m_val.o_val && !m_val.o_val->disconnect()) delete m_val.o_val;
+		if(m_val.o_val) delete m_val.o_val;
                 break;
             default: break;
 	}
@@ -1716,8 +1716,7 @@ void Attr::setFld( TFld *fld, bool inher )
 	    {
 		m_val.o_val = NULL;
 		if(fld->flg()&Attr::DirRead) break;
-		m_val.o_val = new TVarObj();
-		m_val.o_val->connect();
+		m_val.o_val = new AutoHD<TVarObj>(new TVarObj);
 		break;
 	    }
 	}
@@ -1780,7 +1779,7 @@ string Attr::getS( bool sys )
 	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
 	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
 	case TFld::String:	return *m_val.s_val;
-	case TFld::Object:	return m_val.o_val->getStrXML();
+	case TFld::Object:	return m_val.o_val->at().getStrXML();
     }
     return EVAL_STR;
 }
@@ -1830,12 +1829,12 @@ char Attr::getB( bool sys )
     return EVAL_BOOL;
 }
 
-TVarObj *Attr::getO( bool sys )
+AutoHD<TVarObj> Attr::getO( bool sys )
 {
     if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getO();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
     if(fld().type() != TFld::Object) throw TError(owner()->nodePath().c_str(),_("Get object from not object's attribute '%s' error!"),id().c_str());
-    return m_val.o_val;
+    return *m_val.o_val;
 }
 
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
@@ -1974,32 +1973,28 @@ void Attr::setB( char val, bool strongPrev, bool sys )
     }
 }
 
-void Attr::setO( TVarObj *val, bool strongPrev, bool sys )
+void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 {
-    val->connect();
-    if(!(flgGlob()&Attr::DirRead))
-        switch(fld().type())
-        {
-            case TFld::String:	setS(val->getStrXML(), strongPrev, sys);break;
-            case TFld::Integer: case TFld::Real: case TFld::Boolean:
-    				setB(true, strongPrev, sys);		break;
-            case TFld::Object:
-		if((!strongPrev && m_val.o_val == val) ||
-		    (flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
-		TVarObj *t_obj = m_val.o_val;
-		m_val.o_val = val;
-		if(!sys && !owner()->attrChange(*this,TVariant(t_obj))) m_val.o_val = t_obj;
-		else
-		{
-		    unsigned imdf = owner()->modifVal(*this);
-            	    m_modif = imdf ? imdf : m_modif+1;
-
-            	    if(t_obj && !t_obj->disconnect()) delete t_obj;
-		    return;
-                }
-                break;
+    if(flgGlob()&Attr::DirRead)	return;
+    switch(fld().type())
+    {
+	case TFld::String:	setS(val.at().getStrXML(), strongPrev, sys);break;
+	case TFld::Integer: case TFld::Real: case TFld::Boolean:
+				setB(true, strongPrev, sys);		break;
+	case TFld::Object:
+	    if((!strongPrev && *m_val.o_val == val) ||
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
+	    AutoHD<TVarObj> t_obj = *m_val.o_val;
+	    *m_val.o_val = val;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_obj))) *m_val.o_val = t_obj;
+	    else
+	    {
+		unsigned imdf = owner()->modifVal(*this);
+		m_modif = imdf ? imdf : m_modif+1;
+		return;
+	    }
+	    break;
         }
-    if(!val->disconnect()) delete val;
 }
 
 string Attr::cfgTempl( )
@@ -2057,8 +2052,9 @@ void Attr::AHDConnect( )
     owner()->attrAtLockCnt++;
 }
 
-void Attr::AHDDisConnect( )
+bool Attr::AHDDisConnect( )
 {
     owner()->attrAtLockCnt--;
     if(!owner()->attrAtLockCnt) pthread_mutex_unlock(&owner()->mtxAttr);
+    return false;
 }

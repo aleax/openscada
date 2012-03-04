@@ -1716,8 +1716,9 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "cntrReq" && prms.size() >= 1)
     {
 	XMLNode req;
-	if(!dynamic_cast<XMLNodeObj*>(prms[0].getO())) return string(_("1:Request is not object!"));
-	((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
+	AutoHD<XMLNodeObj> xnd = prms[0].getO();
+	if(xnd.freeStat()) return string(_("1:Request is not object!"));
+	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
 	if(prms.size() < 2 || prms[1].getS().empty())
 	{
@@ -1730,7 +1731,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    transport().at().cntrIfCmd(req,"cntrReq");
 	    req.setAttr("path",path);
 	}
-	((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
+	xnd.at().fromXMLNode(req);
 	return string("0");
     }
     // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.

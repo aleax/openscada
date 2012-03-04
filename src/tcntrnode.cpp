@@ -620,11 +620,12 @@ void TCntrNode::AHDConnect()
     pthread_mutex_unlock(&connM);
 }
 
-void TCntrNode::AHDDisConnect()
+bool TCntrNode::AHDDisConnect()
 {
     pthread_mutex_lock(&connM);
     mUse--;
     pthread_mutex_unlock(&connM);
+    return false;
 }
 
 TVariant TCntrNode::objPropGet( const string &id )			{ return TVariant(); }

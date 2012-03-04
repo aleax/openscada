@@ -46,16 +46,12 @@ template <class ORes> class AutoHD
 	    if(m_node)	m_node->AHDConnect();
 	}
 	AutoHD(const AutoHD &hd) : m_node(NULL)	{ operator=(hd); }
-	template <class ORes1> AutoHD(const AutoHD<ORes1> &hd_s, bool nosafe = false) : m_node(NULL)
+	template <class ORes1> AutoHD(const AutoHD<ORes1> &hd_s) : m_node(NULL)
 	{
 	    if(hd_s.freeStat()) return;
-	    if(nosafe)	m_node = (ORes *)&hd_s.at();
-	    else
-	    {
-		m_node = dynamic_cast<ORes*>(&hd_s.at());
-		if(!m_node)	throw TError("AutoHD","Type casting error!");
-	    }
-	    m_node->AHDConnect();
+	    m_node = dynamic_cast<ORes*>(&hd_s.at());
+	    if(m_node) m_node->AHDConnect();
+	    //else if(!noex) throw TError("AutoHD","Type casting error!");
 	}
 	~AutoHD( )	{ free(); }
 
@@ -65,21 +61,23 @@ template <class ORes> class AutoHD
 	    throw TError("AutoHD","No init!");
 	}
 
-	void operator=(const AutoHD &hd)
+	AutoHD &operator=(const AutoHD &hd)
 	{
 	    free();
 	    m_node = hd.m_node;
 	    if(m_node)	m_node->AHDConnect();
+	    return *this;
 	}
+
+	bool operator==(const AutoHD &hd)	{ return (m_node == hd.m_node); }
 
 	void free( )
 	{
-	    if(m_node)	m_node->AHDDisConnect();
+	    if(m_node && m_node->AHDDisConnect()) delete m_node;
 	    m_node = NULL;
 	}
 
-	bool freeStat( ) const
-	{ return (m_node==NULL)?true:false; }
+	bool freeStat( ) const	{ return (m_node==NULL); }
 
     private:
 	ORes *m_node;

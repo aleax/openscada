@@ -205,7 +205,7 @@ class TValFunc
 	int	getI( unsigned id );
 	double	getR( unsigned id );
 	char	getB( unsigned id );
-	TVarObj	*getO( unsigned id );
+	AutoHD<TVarObj>	getO( unsigned id );
 
 	//> set IO value
 	void set( unsigned id, const TVariant &val );
@@ -213,7 +213,7 @@ class TValFunc
 	void setI( unsigned id, int val );
 	void setR( unsigned id, double val );
 	void setB( unsigned id, char val );
-	void setO( unsigned id, TVarObj *val );
+	void setO( unsigned id, AutoHD<TVarObj> val );
 
 	//> Calc function
 	virtual void calc( const string &user = "" );
@@ -245,7 +245,7 @@ class TValFunc
 		double r;
 		int    i;
 		char   b;
-		TVarObj	*o;
+		AutoHD<TVarObj>	*o;
 	    }val;
 	};
 

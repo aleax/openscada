@@ -96,7 +96,7 @@ class dbReqSQL : public TFunction
 		    TArrayObj *row = new TArrayObj();
 		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++)
 			row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
-		    rez->propSet(TSYS::int2str(i_r),row);
+		    rez->propSet(TSYS::int2str(i_r),AutoHD<TVarObj>(row));
 		}
 	    }catch(...){ }
 	    val->setO(0,rez);
@@ -138,7 +138,7 @@ class messGet : public TFunction
 		am->propSet("categ",recs[i_m].categ);
 		am->propSet("level",recs[i_m].level);
 		am->propSet("mess",recs[i_m].mess);
-		rez->propSet(TSYS::int2str(i_m),am);
+		rez->propSet(TSYS::int2str(i_m),AutoHD<TVarObj>(am));
 	    }
 	    val->setO(0,rez);
 	}

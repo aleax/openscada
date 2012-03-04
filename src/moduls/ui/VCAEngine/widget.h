@@ -99,7 +99,7 @@ class Attr
 	double getR( bool sys = false );
 	int    getI( bool sys = false );
 	char   getB( bool sys = false );
-	TVarObj *getO( bool sys = false );
+	AutoHD<TVarObj> getO( bool sys = false );
 
 	//> Set value
 	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
@@ -108,13 +108,13 @@ class Attr
 	void setR( double val, bool strongPrev = false, bool sys = false );
 	void setI( int val, bool strongPrev = false, bool sys = false );
 	void setB( char val, bool strongPrev = false, bool sys = false );
-	void setO( TVarObj *val, bool strongPrev = false, bool sys = false );
+	void setO( AutoHD<TVarObj> val, bool strongPrev = false, bool sys = false );
 
 	TFld &fld( )			{ return *mFld; }
 	void setFld(TFld *fld, bool inher);
 
 	void AHDConnect( );
-	void AHDDisConnect( );
+	bool AHDDisConnect( );
 
 	Widget *owner( )		{ return mOwner; }
 
@@ -127,7 +127,7 @@ class Attr
 	    double	r_val;		//Real
 	    int		i_val;		//Integer
 	    char	b_val;		//Boolean
-	    TVarObj	*o_val;		//Object
+	    AutoHD<TVarObj>	*o_val;	//Object
 	}m_val;
 	//> Attributes
 	TFld		*mFld;		//Base field

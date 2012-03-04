@@ -1157,7 +1157,7 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 {
     switch(vl.type())
     {
-	case TVariant::Object:	return vl.getO()->propGet(prop);
+	case TVariant::Object:	return vl.getO().at().propGet(prop);
 	case TVariant::Boolean:	return TVariant();
 	case TVariant::Integer:
 	    if(prop == "MAX_VALUE")	return INT_MAX;
@@ -1190,7 +1190,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	    case TVariant::Null:
 		if(prop == "isEVal")	return true;
 		return false;
-	    case TVariant::Object:	return vl.getO()->funcCall( prop, prms );
+	    case TVariant::Object:	return vl.getO().at().funcCall(prop, prms);
 	    case TVariant::Boolean:
 		// bool isEVal( ) - check value to "EVAL"
 		if( prop == "isEVal" )	return (vl.getB() == EVAL_BOOL);
@@ -1313,14 +1313,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  flg - regular expression flags.
 		if(prop == "search" && prms.size())
 		{
-		    TRegExp *re = NULL;
+		    AutoHD<TRegExp> re;
 		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(),(prms.size()>=2)?prms[1].getS():string());
-		    else if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
-			re = (TRegExp*)prms[0].getO();
-		    else return -1;
-		    int n = re->search(vl.getS());
-		    if(prms[0].type() == TVariant::String) delete re;
-		    return n;
+		    else if(prms[0].type() != TVariant::Object || (re=prms[0].getO()).freeStat()) return -1;
+		    return re.at().search(vl.getS());
 		}
 		// Array match( string pat, string flg = "" ); - call match for the string by pattern 'pat' and flags 'flg'.
 		//       Return matched substring (0) and subexpressions (>0) array.
@@ -1332,14 +1328,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  flg - regular expression flags.
 		if(prop == "match" && prms.size())
 		{
-		    TRegExp *re = NULL;
+		    AutoHD<TRegExp> re;
 		    if(prms[0].type() == TVariant::String) re = new TRegExp(prms[0].getS(),(prms.size()>=2)?prms[1].getS():string());
-		    else if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
-			re = (TRegExp*)prms[0].getO();
-		    else return -1;
-		    TArrayObj *arr = re->match(vl.getS(),true);
-		    if(prms[0].type() == TVariant::String) delete re;
-		    return arr;
+		    else if(prms[0].type() != TVariant::Object || (re=prms[0].getO()).freeStat()) return -1;
+		    return re.at().match(vl.getS(),true);
 		}
 		// string slice(int beg, int end) - return the string extracted from the original one starting from the <beg> position
 		//       and ending be the <end>
@@ -1365,8 +1357,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if( prop == "split" && prms.size() )
 		{
 		    //> Use RegExp for split
-		    if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
-			return ((TRegExp*)prms[0].getO())->split(vl.getS(),(prms.size()>=2)?prms[1].getI():0);
+		    if(prms[0].type() == TVariant::Object && !AutoHD<TRegExp>(prms[0].getO()).freeStat())
+			return AutoHD<TRegExp>(prms[0].getO()).at().split(vl.getS(),(prms.size()>=2)?prms[1].getI():0);
 
 		    //> Use simple string separator
 		    TArrayObj *rez = new TArrayObj();
@@ -1402,8 +1394,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 			for(size_t cpos = 0; (cpos=cstr.find(prms[0].getS(),cpos)) != string::npos; cpos += prms[1].getS().size())
 			    cstr.replace(cpos,prms[0].getS().size(),prms[1].getS());
 		    //> Replace substrings by RegExp patern by other string
-		    else if(prms[0].type() == TVariant::Object && dynamic_cast<TRegExp*>(prms[0].getO()))
-			cstr = ((TRegExp*)prms[0].getO())->replace(cstr,prms[1].getS());
+		    else if(prms[0].type() == TVariant::Object && !AutoHD<TRegExp>(prms[0].getO()).freeStat())
+			cstr = AutoHD<TRegExp>(prms[0].getO()).at().replace(cstr,prms[1].getS());
 		    //> Simple - direct replace
 		    if(prms.size() >= 3 && prms[2].type() == TVariant::String)
 		    {
@@ -1493,7 +1485,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 		default: break;
 	    }
 	    break;
-	case Reg::Obj:	vl = rg.val().o_el;	break;
+	case Reg::Obj:	vl = *rg.val().o_el;	break;
 	default: break;
     }
 
@@ -1518,7 +1510,7 @@ string Func::getValS( TValFunc *io, RegW &rg )
 	    case Reg::String:	return *rg.val().s_el;
 	    case Reg::Var:	return io->getS(rg.val().io);
 	    case Reg::PrmAttr:	return rg.val().p_attr->at().getS();
-	    case Reg::Obj:	return rg.val().o_el->getStrXML();
+	    case Reg::Obj:	return rg.val().o_el->at().getStrXML();
 	    default:	break;
 	}
     else return getVal(io,rg).getS();
@@ -1583,13 +1575,13 @@ char Func::getValB( TValFunc *io, RegW &rg )
     return EVAL_BOOL;
 }
 
-TVarObj *Func::getValO( TValFunc *io, RegW &rg )
+AutoHD<TVarObj> Func::getValO( TValFunc *io, RegW &rg )
 {
     if(rg.propEmpty())
     {
 	switch(rg.type())
 	{
-	    case Reg::Obj:	return rg.val().o_el;
+	    case Reg::Obj:	return *rg.val().o_el;
 	    case Reg::Var:
 		if(io->ioType(rg.val().io) == IO::Object) return io->getO(rg.val().io);
 	    default:	break;
@@ -1639,10 +1631,10 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 	}
     else if(rg.type() == Reg::Obj)
     {
-	TVariant vl(rg.val().o_el);
+	TVariant vl(*rg.val().o_el);
 	for(int i_p = 0; i_p < rg.propSize( ); i_p++)
-	    if(i_p < (rg.propSize( )-1)) vl = vl.getO()->propGet(rg.propGet(i_p));
-	    else vl.getO()->propSet(rg.propGet(i_p),val);
+	    if(i_p < (rg.propSize( )-1)) vl = vl.getO().at().propGet(rg.propGet(i_p));
+	    else vl.getO().at().propSet(rg.propGet(i_p),val);
     }
 }
 
@@ -1694,10 +1686,10 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
     else setVal(io,rg,val);
 }
 
-void Func::setValO( TValFunc *io, RegW &rg, TVarObj *val )
+void Func::setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
 	    case Reg::Var:	io->setO(rg.val().io,val);	break;
 	    case Reg::PrmAttr:	break;
@@ -1801,7 +1793,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Load object to reg %d.\n",ptr->reg);
 #endif
-		reg[ptr->reg] = new TVarObj();
+		reg[ptr->reg] = AutoHD<TVarObj>(new TVarObj());
 		cprg += sizeof(SCode); break;
 	    }
 	    case Reg::MviArray:
@@ -1825,10 +1817,10 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));		break;
 			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
 			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Obj: ar->propSet( TSYS::int2str(i_p), reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].val().o_el );	break;
+			    case Reg::Obj: ar->propSet(TSYS::int2str(i_p), *reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].val().o_el);	break;
 			    default:	break;
 			}
-		reg[ptr->reg] = ar;
+		reg[ptr->reg] = AutoHD<TVarObj>(ar);
 		cprg += sizeof(SCode) + ptr->numb*sizeof(uint16_t); break;
 	    }
 	    case Reg::MviRegExp:
@@ -1838,7 +1830,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Load RegExpr to reg %d = (%d,%d).\n",ptr->rez,ptr->expr,ptr->arg);
 #endif
-		reg[ptr->rez] = new TRegExp(getValS(val,reg[ptr->expr]), getValS(val,reg[ptr->arg]));
+		reg[ptr->rez] = AutoHD<TVarObj>(new TRegExp(getValS(val,reg[ptr->expr]), getValS(val,reg[ptr->arg])));
 		cprg += sizeof(SCode); break;
 	    }
 	    case Reg::MviSysObject:
@@ -1848,7 +1840,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Load system object %s(%d) to reg %d.\n",string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(),ptr->len,ptr->reg);
 #endif
-		reg[ptr->reg] = new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user());
+		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user()));
 		cprg += sizeof(SCode)+ptr->len; break;
 	    }
 	    case Reg::MviFuncArg:
@@ -1858,7 +1850,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Load the function arguments object to reg %d.\n",ptr->reg);
 #endif
-		reg[ptr->reg] = new TFuncArgsObj(*val);
+		reg[ptr->reg] = AutoHD<TVarObj>(new TFuncArgsObj(*val));
 		cprg += sizeof(SCode); break;
 	    }
 	    //>> Assign codes
@@ -2291,7 +2283,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		if(obj.type() == TVariant::Object)
 		{
 		    vector<string> pLs;
-		    obj.getO()->propList(pLs);
+		    obj.getO().at().propList(pLs);
 		    for(unsigned i_l = 0; i_l < pLs.size() && !(dt.flg&0x01); i_l++)
 		    {
 			setValS(val,reg[ptr->val],pLs[i_l]);
@@ -2534,7 +2526,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    case TVariant::Integer:	rez = "int";    break;
 		    case TVariant::Real:	rez = "real";   break;
 		    case TVariant::String:	rez = "string"; break;
-		    case TVariant::Object:	rez = vl.getO()->objName(); break;
+		    case TVariant::Object:	rez = vl.getO().at().objName(); break;
 		}
 		reg[ptr->rez] = rez;
 		cprg += sizeof(SCode); break;
@@ -2761,10 +2753,7 @@ Reg &Reg::operator=( Reg &irg )
 	case Int:	el.i_el = irg.el.i_el;	break;
 	case Real:	el.r_el = irg.el.r_el;	break;
 	case String:	*el.s_el = *irg.el.s_el;break;
-	case Obj:
-	    el.o_el = irg.el.o_el;
-	    if( el.o_el ) el.o_el->connect();
-	    break;
+	case Obj:	*el.o_el = *irg.el.o_el;break;
 	case Var:	el.io = irg.el.io;	break;
 	case PrmAttr:	*el.p_attr = *irg.el.p_attr;	break;
 	default:	break;
@@ -2774,13 +2763,6 @@ Reg &Reg::operator=( Reg &irg )
     return *this;
 }
 
-void Reg::operator=( TVarObj *ivar )
-{
-    setType(Obj);
-    el.o_el = ivar;
-    el.o_el->connect();
-}
-
 void Reg::setType( Type tp )
 {
     if(mTp == tp && mTp != Reg::Obj)	return;
@@ -2788,9 +2770,7 @@ void Reg::setType( Type tp )
     switch(mTp)
     {
 	case Reg::String:	delete el.s_el;		break;
-	case Reg::Obj:
-	    if(el.o_el && !el.o_el->disconnect()) delete el.o_el;
-	    break;
+	case Reg::Obj:		delete el.o_el;		break;
 	case Reg::PrmAttr:	delete el.p_attr;	break;
 	default:	break;
     }
@@ -2798,7 +2778,7 @@ void Reg::setType( Type tp )
     switch(tp)
     {
 	case Reg::String:	el.s_el = new string;	break;
-	case Reg::Obj:		el.o_el = NULL;	break;
+	case Reg::Obj:		el.o_el = new AutoHD<TVarObj>;	break;
 	case Reg::PrmAttr:	el.p_attr = new AutoHD<TVal>;	break;
 	default:	break;
     }
@@ -2845,14 +2825,6 @@ void Reg::free()
 //*************************************************
 //* RegW : Work register                          *
 //*************************************************
-void RegW::operator=( TVarObj *ivar )
-{
-    setType(Reg::Free);
-    mTp = Reg::Obj;
-    el.o_el = ivar;
-    el.o_el->connect();
-}
-
 void RegW::operator=( const TVariant &ivar )
 {
     switch(ivar.type())
@@ -2874,9 +2846,7 @@ void RegW::setType( Reg::Type tp )
     switch(mTp)
     {
 	case Reg::String:	delete el.s_el;		break;
-	case Reg::Obj:
-	    if(el.o_el && !el.o_el->disconnect()) { delete el.o_el; el.o_el = NULL; }
-	    break;
+	case Reg::Obj:		delete el.o_el;		break;
 	case Reg::PrmAttr:	delete el.p_attr;	break;
 	default:	break;
     }
@@ -2884,7 +2854,7 @@ void RegW::setType( Reg::Type tp )
     switch(tp)
     {
 	case Reg::String:	el.s_el = new string;	break;
-	case Reg::Obj:		el.o_el = new TVarObj(); el.o_el->connect(); break;
+	case Reg::Obj:		el.o_el = new AutoHD<TVarObj>(new TVarObj()); break;
 	case Reg::PrmAttr:	el.p_attr = new AutoHD<TVal>;	break;
 	default:	break;
     }

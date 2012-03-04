@@ -275,16 +275,16 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	funcV.setS(5, user);
 	funcV.setO(6, new TVarObj());
 	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
-	    funcV.getO(6)->propSet(prmEl->first, prmEl->second);
+	    funcV.getO(6).at().propSet(prmEl->first, prmEl->second);
 	funcV.setO(7, new TVarObj());
 	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
-	    funcV.getO(7)->propSet(prmEl->first, prmEl->second);
+	    funcV.getO(7).at().propSet(prmEl->first, prmEl->second);
 	funcV.setO(8, new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++)
 	{
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);
-	    ((TArrayObj*)funcV.getO(8))->propSet(TSYS::int2str(ic),xo);
+	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(TSYS::int2str(ic),xo);
 	}
 
 	//> Call processing
@@ -294,11 +294,11 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	page = funcV.getS(3);
 
 	//> HTTP properties prepare
-	funcV.getO(6)->propList(sls);
+	funcV.getO(6).at().propList(sls);
 	bool cTp = false;
 	for(unsigned i_l = 0; i_l < sls.size(); i_l++)
 	{
-	    tstr = funcV.getO(6)->propGet(sls[i_l]).getS();
+	    tstr = funcV.getO(6).at().propGet(sls[i_l]).getS();
 	    if(sls[i_l] == "Date" || sls[i_l] == "Server" || sls[i_l] == "Accept-Ranges" || sls[i_l] == "Content-Length" ||
 		((prmEl=ses.vars.find(sls[i_l])) != ses.vars.end() && prmEl->second == tstr)) continue;
 	    if(sls[i_l] == "Content-Type") cTp = true;
@@ -356,16 +356,16 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	funcV.setS(5,user);
 	funcV.setO(6,new TVarObj());
 	for(prmEl = ses.vars.begin(); prmEl != ses.vars.end(); prmEl++)
-	    funcV.getO(6)->propSet(prmEl->first, prmEl->second);
+	    funcV.getO(6).at().propSet(prmEl->first, prmEl->second);
 	funcV.setO(7,new TVarObj());
 	for(prmEl = ses.prm.begin(); prmEl != ses.prm.end(); prmEl++)
-	    funcV.getO(7)->propSet(prmEl->first,prmEl->second);
+	    funcV.getO(7).at().propSet(prmEl->first,prmEl->second);
 	funcV.setO(8,new TArrayObj());
 	for(unsigned ic = 0; ic < ses.cnt.size(); ic++)
 	{
 	    XMLNodeObj *xo = new XMLNodeObj();
 	    xo->fromXMLNode(ses.cnt[ic]);
-	    ((TArrayObj*)funcV.getO(8))->propSet(TSYS::int2str(ic),xo);
+	    AutoHD<TArrayObj>(funcV.getO(8)).at().propSet(TSYS::int2str(ic),xo);
 	}
 
 	//> Call processing
@@ -375,11 +375,11 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	page = funcV.getS(3);
 
 	//> HTTP properties prepare
-	funcV.getO(6)->propList(sls);
+	funcV.getO(6).at().propList(sls);
 	bool cTp = false;
 	for(unsigned i_l = 0; i_l < sls.size(); i_l++)
 	{
-	    tstr = funcV.getO(6)->propGet(sls[i_l]).getS();
+	    tstr = funcV.getO(6).at().propGet(sls[i_l]).getS();
 	    if(sls[i_l] == "Date" || sls[i_l] == "Server" || sls[i_l] == "Accept-Ranges" || sls[i_l] == "Content-Length" ||
 		((prmEl=ses.vars.find(sls[i_l])) != ses.vars.end() && prmEl->second == tstr)) continue;
 	    if(sls[i_l] == "Content-Type") cTp = true;

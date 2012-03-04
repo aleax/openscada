@@ -1530,8 +1530,8 @@ void SessWdg::calc( bool first, bool last )
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if(obj_tp == "prm:")
 		    {
-			try{ vl = SYS->daq().at().nodeAt(attr.at().cfgVal(),0,0,obj_tp.size()); }
-			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
+			vl = SYS->daq().at().attrAt(attr.at().cfgVal().substr(obj_tp.size()),0,true);
+			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
 
 			if(attr.at().flgGlob()&Attr::Address)
 			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
@@ -1617,9 +1617,9 @@ void SessWdg::calc( bool first, bool last )
 			if(sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path))
 			{
 			    sprc_path = TSYS::strSepParse(sprc,0,':',&t_off);
-    			    SessWdg *sev = this;
-    			    if(!sev_path.empty()) sev = (TSYS::pathLev(sev_path,0).compare(0,4,"ses_") == 0) ?
-    					    &((AutoHD<SessWdg>)mod->nodeAt(sev_path)).at() :  &((AutoHD<SessWdg>)nodeAt(sev_path)).at();
+			    SessWdg *sev = this;
+			    if(!sev_path.empty()) sev = (TSYS::pathLev(sev_path,0).compare(0,4,"ses_") == 0) ?
+					    &((AutoHD<SessWdg>)mod->nodeAt(sev_path)).at() :  &((AutoHD<SessWdg>)nodeAt(sev_path)).at();
 			    ownerSess()->uiComm(sprc_path,TSYS::strSepParse(sprc,0,':',&t_off), sev);
 			    evProc = true;
 			}
@@ -1640,16 +1640,17 @@ void SessWdg::calc( bool first, bool last )
 		    {
 			vector<string> &lst = ownerSess()->openList();
 			string prev;
-    			for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-    			    if(lst[i_f] == path())
-    			    {
-    				if(prev.size()) ((AutoHD<SessPage>)mod->nodeAt(prev)).at().eventAdd(sevup);
-    				break;
-    			    }
-    			    else prev = lst[i_f];
+			for(unsigned i_f = 0; i_f < lst.size(); i_f++)
+			    if(lst[i_f] == path())
+			    {
+				if(prev.size()) ((AutoHD<SessPage>)mod->nodeAt(prev)).at().eventAdd(sevup);
+				break;
+			    }
+			    else prev = lst[i_f];
 		    }
 		}
 	    }
+
 	    //> Generic calc
 	    Widget::calc(this);
 	}
@@ -1672,36 +1673,36 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     if(cfg.id() == "active" && cfg.getB() && !cfg.owner()->attrPresent("focus"))
 	cfg.owner()->attrAdd(new TFld("focus","Focus",TFld::Boolean,TFld::NoFlag,"1","false","","","-2"));
     //> Alarm event for widget process
-    else if( cfg.id() == "alarm" && enable() && !prev.isNull() ) alarmSet( true );
+    else if(cfg.id() == "alarm" && enable() && !prev.isNull()) alarmSet(true);
     //> Alarm status process
-    else if( cfg.id() == "alarmSt" && cfg.getI()&0x1000000 )
+    else if(cfg.id() == "alarmSt" && cfg.getI()&0x1000000)
     {
 	int tmpl = ~(cfg.getI()&0xFF);
 	cfg.setI(prev.getI(),false,true);
-	ownerSess( )->alarmQuittance(path(),tmpl);
+	ownerSess()->alarmQuittance(path(),tmpl);
     }
 
     //> External link process
-    if( !inLnkGet && !prev.isNull() && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty() )
+    if(!inLnkGet && !prev.isNull() && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty())
     {
-	if( cfg.flgSelf()&Attr::SessAttrInh ) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
+	if(cfg.flgSelf()&Attr::SessAttrInh) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
 	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
 	{
-	    if( obj_tp == "prm:" )
-		switch( cfg.type() )
+	    if(obj_tp == "prm:")
+		switch(cfg.type())
 		{
 		    case TFld::Boolean:
-		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setB(cfg.getB());
+		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setB(cfg.getB());
 		        break;
 		    case TFld::Integer:
-		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setI(cfg.getI());
+		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setI(cfg.getI());
 		        break;
 		    case TFld::Real:
-		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setR(cfg.getR());
+		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setR(cfg.getR());
 		        break;
 		    case TFld::String:
-		        ((AutoHD<TVal>)SYS->daq().at().nodeAt(cfg.cfgVal(),0,0,obj_tp.size())).at().setS(cfg.getS());
+		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setS(cfg.getS());
 		        break;
 		    default: break;
 		}

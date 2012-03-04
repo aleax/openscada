@@ -143,10 +143,10 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     {
 	TVariant vl;
 	int64_t vtm = (int64_t)prms[0].getI()*1000000 + prms[1].getI();
-	if( isArch() ) vl = arch().at().getVal( &vtm, (prms.size()>=3)?prms[2].getB():false, (prms.size()>=4)?prms[3].getS():"" );
+	if(isArch()) vl = arch().at().getVal(&vtm, (prms.size()>=3)?prms[2].getB():false, (prms.size()>=4)?prms[3].getS():"");
 	else
 	{
-	    if( !buf() ) return EVAL_REAL;
+	    if(!buf()) return EVAL_REAL;
 	    switch(buf()->valType())
 	    {
 		case TFld::Boolean:	vl = buf()->getB( &vtm, (prms.size()>=3)?prms[2].getB():false );	break;
@@ -187,39 +187,39 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     if( id == "copy" && prms.size() >= 5 ) 
     {
-	VArchObj *src = dynamic_cast<VArchObj*>(prms[0].getO());
-	if( !src ) return false;
+	AutoHD<VArchObj> src = prms[0].getO();
+	if(src.freeStat()) return false;
 
 	AutoHD<TVArchive> tarch;
-	if( src->isArch() )
+	if(src.at().isArch())
 	{
 	    TValBuf* vb = NULL;
-	    if( isArch() )
+	    if(isArch())
 	    {
 		tarch = arch();
 		vb = &tarch.at();
 	    }
 	    else vb = buf();
-	    if( !vb )     return false;
-	    src->arch().at().getVals( *vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-					   (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
+	    if(!vb)     return false;
+	    src.at().arch().at().getVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
+				   	      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
-	else if( isArch() )
+	else if(isArch())
 	{
 	    TValBuf* vb = NULL;
-	    if( src->isArch() )
+	    if(src.at().isArch())
 	    {
-		tarch = src->arch();
+		tarch = src.at().arch();
 		vb = &tarch.at();
 	    }
-	    else vb = src->buf();
+	    else vb = src.at().buf();
 	    if(!vb)     return false;
 	    arch().at().setVals( *vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
 				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
 	}
 	else
 	{
-	    TValBuf* svb = src->buf();
+	    TValBuf* svb = src.at().buf();
 	    TValBuf* dvb = buf();
 	    if( !svb || !dvb ) return false;
 	    svb->getVals( *dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI() );

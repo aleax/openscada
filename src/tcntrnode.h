@@ -165,7 +165,7 @@ class TCntrNode
 
 	//> Connections counter
 	virtual void AHDConnect( );
-	virtual void AHDDisConnect( );
+	virtual bool AHDDisConnect( );
 
 	//> User object access
 	virtual TVariant objPropGet( const string &id );

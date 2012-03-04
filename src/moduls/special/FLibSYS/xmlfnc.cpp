@@ -31,10 +31,11 @@ void xmlCntrReq::calc( TValFunc *val )
     try
     {
 	XMLNode req;
-	if( !dynamic_cast<XMLNodeObj*>(val->getO(1)) ) { val->setS(0,_("1:Request is not object!")); return; }
-	((XMLNodeObj*)val->getO(1))->toXMLNode(req);
+	AutoHD<XMLNodeObj> xnd = val->getO(1);
+	if(xnd.freeStat()) { val->setS(0,_("1:Request is not object!")); return; }
+	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
-	if( val->getS(2).empty() )
+	if(val->getS(2).empty())
 	{
 	    req.setAttr("user",val->user());
 	    SYS->cntrCmd(&req);
@@ -45,7 +46,7 @@ void xmlCntrReq::calc( TValFunc *val )
 	    SYS->transport().at().cntrIfCmd(req,"xmlCntrReq");
 	    req.setAttr("path",path);
 	}
-	((XMLNodeObj*)val->getO(1))->fromXMLNode(req);
+	xnd.at().fromXMLNode(req);
 	val->setS(0,"0");
     }catch(TError err){ val->setS(0,TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
 }

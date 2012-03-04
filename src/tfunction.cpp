@@ -520,7 +520,7 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 		case IO::Integer:	val.val.i = atoi(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Real:		val.val.r = atof(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Boolean:	val.val.b = atoi(mFunc->io(i_vl)->def().c_str());	break;
-		case IO::Object:	val.val.o = new TVarObj(); val.val.o->connect();	break;
+		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
 	    }
 	    mVal.push_back(val);
 	}
@@ -536,10 +536,8 @@ void TValFunc::funcDisConnect( bool det )
 	for(unsigned i_vl = 0; i_vl < mVal.size(); i_vl++)
 	    switch( mVal[i_vl].tp )
 	    {
-		case IO::String:	delete mVal[i_vl].val.s;	break;
-		case IO::Object:
-		    if( mVal[i_vl].val.o && !mVal[i_vl].val.o->disconnect() ) delete mVal[i_vl].val.o;
-		    break;
+		case IO::String: delete mVal[i_vl].val.s;	break;
+		case IO::Object: delete mVal[i_vl].val.o;	break;
 	    }
 
 	mVal.clear();
@@ -606,7 +604,7 @@ string TValFunc::getS( unsigned id )
 	    pthread_mutex_unlock(&mRes);
 	    break;
 	case IO::Object:
-	    rez = mVal[id].val.o->getStrXML();
+	    rez = mVal[id].val.o->at().getStrXML();
 	    break;
     }
 
@@ -691,11 +689,11 @@ char TValFunc::getB( unsigned id )
     return rez;
 }
 
-TVarObj *TValFunc::getO( unsigned id )
+AutoHD<TVarObj> TValFunc::getO( unsigned id )
 {
     if(id >= mVal.size())	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getO()",id);
     if(mVal[id].tp != IO::Object) throw TError("ValFnc",_("Get object from not object's IO %d error!"),id);
-    return mVal[id].val.o;
+    return *mVal[id].val.o;
 }
 
 void TValFunc::set( unsigned id, const TVariant &val )
@@ -780,23 +778,19 @@ void TValFunc::setB( unsigned id, char val )
     }
 }
 
-void TValFunc::setO( unsigned id, TVarObj *val )
+void TValFunc::setO( unsigned id, AutoHD<TVarObj> val )
 {
-    val->connect();
-    if(id < mVal.size())
-	switch(mVal[id].tp)
-	{
-	    case IO::String:	setS(id, val->getStrXML());	break;
-	    case IO::Integer: case IO::Real: case IO::Boolean:
-				setB(id, true);			break;
-	    case IO::Object:
-		if(mdfChk() && val != mVal[id].val.o) mVal[id].mdf = true;
-		if(mVal[id].val.o && !mVal[id].val.o->disconnect()) delete mVal[id].val.o;
-		mVal[id].val.o = val;
-		return;
-	}
-    if(!val->disconnect()) delete val;
     if(id >= mVal.size()) throw TError("ValFnc",_("%s: Id or IO %d error!"),"setO()",id);
+    switch(mVal[id].tp)
+    {
+	case IO::String:	setS(id, val.at().getStrXML());	break;
+	case IO::Integer: case IO::Real: case IO::Boolean:
+				setB(id, true);			break;
+	case IO::Object:
+	    if(mdfChk() && !(val == *mVal[id].val.o)) mVal[id].mdf = true;
+	    *mVal[id].val.o = val;
+	    return;
+    }
 }
 
 void TValFunc::setMdfChk( bool set )
@@ -909,7 +903,7 @@ string TFuncArgsObj::getStrXML( const string &oid )
             case IO::Integer:	nd += "<int id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</int>\n"; break;
             case IO::Real:	nd += "<real id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</real>\n"; break;
             case IO::Boolean:	nd += "<bool id='"+vf.func()->io(i_io)->id()+"'>"+vf.getS(i_io)+"</bool>\n"; break;
-            case IO::Object:	nd += vf.getO(i_io)->getStrXML(vf.func()->io(i_io)->id()); break;
+            case IO::Object:	nd += vf.getO(i_io).at().getStrXML(vf.func()->io(i_io)->id()); break;
 	}
     nd += "</TFuncArgsObj>\n";
 

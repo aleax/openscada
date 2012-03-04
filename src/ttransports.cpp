@@ -866,15 +866,15 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name
-    else if(iid == "messIO" && prms.size() >= 2 && dynamic_cast<XMLNodeObj*>(prms[0].getO()))
+    else if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat())
     {
 	try
 	{
 	    XMLNode req;
 	    if(!startStat()) start();
-	    ((XMLNodeObj*)prms[0].getO())->toXMLNode(req);
+	    AutoHD<XMLNodeObj>(prms[0].getO()).at().toXMLNode(req);
 	    messProtIO(req,prms[1].getS());
-	    ((XMLNodeObj*)prms[0].getO())->fromXMLNode(req);
+	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
 	}catch(TError err) { return err.mess; }
 	return 0;
     }

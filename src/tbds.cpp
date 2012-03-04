@@ -1067,27 +1067,27 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
     // string fieldDel(XMLNodeObj fld) - Remove field for set keys
     //  row - seeked row number;
     //  fld - source and result field's record.
-    if((iid == "fieldSeek" && prms.size() >= 2 && dynamic_cast<XMLNodeObj*>(prms[1].getO())) ||
+    if((iid == "fieldSeek" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[1].getO()).freeStat()) ||
 	((iid == "fieldGet" || iid == "fieldSet" || iid == "fieldDel") &&
-	    prms.size() >= 1 && dynamic_cast<XMLNodeObj*>(prms[0].getO())))
+	    prms.size() >= 1 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()))
     {
 	string rez = "1";
 	bool isRet = false;
 
 	try
 	{
-	    XMLNodeObj *fld = (XMLNodeObj*)prms[(iid=="fieldSeek")?1:0].getO();
+	    AutoHD<XMLNodeObj> fld = prms[(iid=="fieldSeek")?1:0].getO();
 	    TConfig cfg;
-	    for(unsigned i_r = 0; i_r < fld->childSize(); i_r++)
+	    for(unsigned i_r = 0; i_r < fld.at().childSize(); i_r++)
 	    {
-		XMLNodeObj *xel = fld->childGet(i_r);
+		AutoHD<XMLNodeObj> xel = fld.at().childGet(i_r);
 		TFld::Type eltp = TFld::String;
-		if(xel->propGet("type").getS() == "int")	eltp = TFld::Integer;
-		else if(xel->propGet("type").getS() == "real")	eltp = TFld::Real;
-		else if(xel->propGet("type").getS() == "bool")	eltp = TFld::Boolean;
-		cfg.elem().fldAdd(new TFld(xel->name().c_str(),"",eltp,(xel->propGet("key").getI()==1?(int)TCfg::Key:(int)TFld::NoFlag),
-		    xel->propGet("len").getS().c_str(),xel->propGet("def").getS().c_str()));
-		cfg.cfg(xel->name()).setS(xel->text());
+		if(xel.at().propGet("type").getS() == "int")	eltp = TFld::Integer;
+		else if(xel.at().propGet("type").getS() == "real")	eltp = TFld::Real;
+		else if(xel.at().propGet("type").getS() == "bool")	eltp = TFld::Boolean;
+		cfg.elem().fldAdd(new TFld(xel.at().name().c_str(),"",eltp,(xel.at().propGet("key").getI()==1?(int)TCfg::Key:(int)TFld::NoFlag),
+		    xel.at().propGet("len").getS().c_str(),xel.at().propGet("def").getS().c_str()));
+		cfg.cfg(xel.at().name()).setS(xel.at().text());
 	    }
 
 	    if(iid == "fieldSeek")	{ rez = TSYS::int2str(fieldSeek(prms[0].getI(), cfg)); isRet = true; }
@@ -1100,7 +1100,7 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		vector<string> el;
 		cfg.cfgList(el);
 		for(unsigned i_el = 0; i_el < el.size(); i_el++)
-		    fld->childGet(i_el)->setText(cfg.cfg(el[i_el]).getS());
+		    fld.at().childGet(i_el).at().setText(cfg.cfg(el[i_el]).getS());
 	    }
 	}catch(TError err) { rez = "0:"+err.mess; }
 

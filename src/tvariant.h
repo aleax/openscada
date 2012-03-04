@@ -70,6 +70,7 @@ class TVariant
 	TVariant( int ivl );
 	TVariant( double ivl );
 	TVariant( const string &ivl );
+	TVariant( AutoHD<TVarObj> ivl );
 	TVariant( TVarObj *ivl );
 	TVariant( const TVariant &var );
 	TVariant( const char *var );
@@ -91,18 +92,19 @@ class TVariant
 	virtual int 	getI( ) const;
 	virtual double	getR( ) const;
 	virtual string	getS( ) const;
-	virtual TVarObj	*getO( bool noex = false ) const;
+	virtual AutoHD<TVarObj> getO( bool noex = false ) const;
 
 	operator char( )	{ return getB(); }
 	operator int( )		{ return getI(); }
 	operator double( )	{ return getR(); }
 	operator string( )	{ return getS(); }
-	operator TVarObj*( )	{ return getO(); }
+	operator AutoHD<TVarObj>( )	{ return getO(); }
 
 	virtual void setB( char val );
 	virtual void setI( int val );
 	virtual void setR( double val );
 	virtual void setS( const string &val );
+	virtual void setO( AutoHD<TVarObj> val );
 	virtual void setO( TVarObj *val );
 
     protected:
@@ -114,7 +116,7 @@ class TVariant
 	    double	r;
 	    char	*sPtr;
 	    char	sMini[8];
-	    TVarObj	*o;
+	    AutoHD<TVarObj>	*o;
 	}val;
 
 	//Attributes
@@ -137,8 +139,8 @@ class TVarObj
 
 	virtual string objName( )	{ return "object"; }
 
-	int connect( );
-	int disconnect( );
+	void AHDConnect( );
+	bool AHDDisConnect( );
 
 	virtual void propList( vector<string> &ls );
 	virtual TVariant propGet( const string &id );
@@ -152,6 +154,8 @@ class TVarObj
 	//Attributes
 	map<string,TVariant> mProps;
 	unsigned int mUseCnt;
+	static pthread_mutex_t	connM;	//Connection mutex
+	Res oRes;
 };
 
 //***********************************************************
@@ -225,8 +229,8 @@ class TRegExp : public TVarObj
 	unsigned multiline	: 1;
 	unsigned isSimplePat	: 1;
 
-	pcre 	*regex;
-	int 	vSz, *capv;
+	pcre	*regex;
+	int	vSz, *capv;
 };
 
 //*************************************************
@@ -241,16 +245,16 @@ class XMLNodeObj : public TVarObj
 
 	string objName( )       { return "XMLNode"; }
 
-	string name( )		{ return mName; }
-	string text( )		{ return mText; }
+	string name( );
+	string text( );
 
-	void setName( const string &vl )	{ mName = vl; }
-	void setText( const string &vl )	{ mText = vl; }
+	void setName( const string &vl );
+	void setText( const string &vl );
 
 	unsigned childSize( )	{ return mChilds.size(); }
-	XMLNodeObj *childGet( unsigned id );
-	void childAdd( XMLNodeObj *nd );
-	void childIns( unsigned id, XMLNodeObj *nd );
+	AutoHD<XMLNodeObj> childGet( unsigned id );
+	void childAdd( AutoHD<XMLNodeObj> nd );
+	void childIns( unsigned id, AutoHD<XMLNodeObj> nd );
 	void childDel( unsigned id );
 
 	string getStrXML( const string &oid = "" );
@@ -260,13 +264,13 @@ class XMLNodeObj : public TVarObj
 	void toXMLNode( XMLNode &nd );
 	void fromXMLNode( XMLNode &nd );
 
-	XMLNodeObj *getElementBy( const string &attr, const string &val );
+	AutoHD<XMLNodeObj> getElementBy( const string &attr, const string &val );
 
     private:
 	//Attributes
 	string			mName, mText;
-	vector<XMLNodeObj*>	mChilds;
-	XMLNodeObj		*parent;
+	vector<AutoHD<XMLNodeObj> >	mChilds;
+	AutoHD<XMLNodeObj>	parent;
 };
 
 //***********************************************************

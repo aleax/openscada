@@ -242,17 +242,17 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	string langMod = TSYS::strParse(prms[0].getS(),0,".");
 	if(!modPresent(langMod)) return false;
 	TVariant aVal;
-	TVarObj *args = prms[1].getO();
+	AutoHD<TVarObj> args = prms[1].getO();
 
 	try
 	{
 	    //> Prepare arguments structure
 	    TFunction argStr("<auto>");
 	    vector<string> als;
-	    args->propList(als);
+	    args.at().propList(als);
 	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
 	    {
-		aVal = args->propGet(als[i_a]);
+		aVal = args.at().propGet(als[i_a]);
 		IO::Type tp = IO::String;
 		switch(aVal.type())
 		{
@@ -273,7 +273,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 
 	    //> Load values
 	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
-		switch((aVal=args->propGet(als[i_a])).type())
+		switch((aVal=args.at().propGet(als[i_a])).type())
 		{
         	    case TVariant::Boolean:	wCtx.setB(i_a, aVal.getB());	break;
         	    case TVariant::Integer:	wCtx.setI(i_a, aVal.getI());	break;
@@ -290,11 +290,11 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 	    for(int i_a = 0; i_a < wCtx.ioSize(); i_a++)
 		switch(wCtx.ioType(i_a))
 		{
-        	    case IO::Boolean:	args->propSet(als[i_a], wCtx.getB(i_a));	break;
-        	    case IO::Integer:	args->propSet(als[i_a], wCtx.getI(i_a));	break;
-		    case IO::Real:	args->propSet(als[i_a], wCtx.getR(i_a));	break;
-        	    case IO::String:	args->propSet(als[i_a], wCtx.getS(i_a));	break;
-        	    case IO::Object:	args->propSet(als[i_a], wCtx.getO(i_a));	break;
+        	    case IO::Boolean:	args.at().propSet(als[i_a], wCtx.getB(i_a));	break;
+        	    case IO::Integer:	args.at().propSet(als[i_a], wCtx.getI(i_a));	break;
+		    case IO::Real:	args.at().propSet(als[i_a], wCtx.getR(i_a));	break;
+        	    case IO::String:	args.at().propSet(als[i_a], wCtx.getS(i_a));	break;
+        	    case IO::Object:	args.at().propSet(als[i_a], wCtx.getO(i_a));	break;
 		    default:	break;
 		}
 
@@ -431,19 +431,15 @@ void TDAQS::subStop( )
 
 AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TValue> rez;
-    try { rez = nodeAt(path, 0, sep); }
-    catch(TError err) { if(!noex) throw; }
-
+    AutoHD<TValue> rez = nodeAt(path, 0, sep);
+    if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No parameter present '%s'."),path.c_str());
     return rez;
 }
 
 AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TVal> rez;
-    try { rez = nodeAt(path, 0, sep); }
-    catch(TError err) { if(!noex) throw; }
-
+    AutoHD<TVal> rez = nodeAt(path, 0, sep);
+    if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No attribute present '%s'."),path.c_str());
     return rez;
 }
 

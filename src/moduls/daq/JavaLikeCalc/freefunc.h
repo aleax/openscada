@@ -162,7 +162,7 @@ class Reg
 	    int		i_el;	//Integer for constant and local variable
 	    double	r_el;	//Real for constant and local variable
 	    string	*s_el;	//String for constant and local variable
-	    TVarObj	*o_el;	//Object for constant and local variable
+	    AutoHD<TVarObj>	*o_el;	//Object for constant and local variable
 	    int		io;	//IO id for IO variable
 	    AutoHD<TVal>*p_attr;//Parameter attribute
 	};
@@ -178,7 +178,7 @@ class Reg
 	void operator=( int ivar )		{ setType(Int);		el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Real);	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
-	void operator=( TVarObj *ivar );
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);		*el.o_el = ivar;}
 
 	string name( ) const			{ return mNm; }
 	Type type( ) const			{ return mTp; }
@@ -221,7 +221,7 @@ class RegW
 	void operator=( int ivar )		{ setType(Reg::Int);	el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Reg::Real);	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
-	void operator=( TVarObj *ivar );
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o_el = ivar;}
 	void operator=( const TVariant &ivar );
 
 	Reg::Type type( ) const			{ return mTp; }
@@ -335,14 +335,14 @@ class Func : public TConfig, public TFunction
 	int	getValI( TValFunc *io, RegW &rg );
 	char	getValB( TValFunc *io, RegW &rg );
 	double	getValR( TValFunc *io, RegW &rg );
-	TVarObj	*getValO( TValFunc *io, RegW &rg );
+	AutoHD<TVarObj>	getValO( TValFunc *io, RegW &rg );
 
 	void setVal( TValFunc *io, RegW &rg, const TVariant &val );
 	void setValS( TValFunc *io, RegW &rg, const string &val );
 	void setValI( TValFunc *io, RegW &rg, int val );
 	void setValR( TValFunc *io, RegW &rg, double val );
 	void setValB( TValFunc *io, RegW &rg, char val );
-	void setValO( TValFunc *io, RegW &rg, TVarObj *val );
+	void setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val );
 
 	//> IO operations
 	void ioAdd( IO *io );

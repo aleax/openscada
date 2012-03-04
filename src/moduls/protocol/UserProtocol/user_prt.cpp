@@ -180,20 +180,21 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     //> Get user protocol for using
     string pIt = io.attr("ProtIt");
-    if( !uPrtPresent(pIt) ) return;
+    if(!uPrtPresent(pIt)) return;
     AutoHD<UserPrt> up = uPrtAt(pIt);
     funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workOutProg())).at());
 
     ResAlloc res( tro.nodeRes(), true );
 
     //> Load inputs
-    funcV.setO(0,new XMLNodeObj());
-    ((XMLNodeObj*)funcV.getO(0))->fromXMLNode(io);
+    AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
+    funcV.setO(0,xnd);
+    xnd.at().fromXMLNode(io);
     funcV.setO(1,new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
     //> Call processing
     funcV.calc( );
     //> Get outputs
-    ((XMLNodeObj*)funcV.getO(0))->toXMLNode(io);
+    xnd.at().toXMLNode(io);
 
     up.at().cntOutReq++;
 }

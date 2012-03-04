@@ -1,3 +1,8 @@
+2012-03-04 Roman
+- !!!!:SYS: Threadsafe in generic is made for user API objects and individual for: TVarObj, TArrayObj and XMLNodeObj.
+    Automatic resource free is added to AutoHD on true return from AHDDisConnect().
+
+
 2012-02-29 Roman
 - SYS: Translation processing script is fixed for restore $(DESTDIR) to localedirectory.
 - SYS: Spare includings is removed from *.am.
