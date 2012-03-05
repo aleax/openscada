@@ -128,20 +128,20 @@ class ShapeFormEl : public WdgShape
 	void textAccept( );
 	//>> Check box events
 	void checkChange(int);
-	//-- Combo box and list events --
+	//>> Combo box and list events
 	void comboChange(const QString&);
-	//-- List events --
+	//>> List events
 	void listChange(int);
-	//-- Button's events --
+	//>> Button's events
 	void buttonPressed( );
 	void buttonReleased( );
 	void buttonToggled( bool val );
-	//-- Sliders' events --
+	//>> Sliders' events
 	void sliderMoved( int val );
 
     private:
 	//Data
-	//- Shape node date -
+	//> Shape node date
 	class ShpDt
 	{
 	    public:
@@ -243,9 +243,11 @@ class ShapeMedia : public WdgShape
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 
+	void clear( WdgView *view );
+
     private:
 	//Data
-	//- Map areas structure -
+	//> Map areas structure
 	class MapArea
 	{
 	    public:
@@ -259,12 +261,12 @@ class ShapeMedia : public WdgShape
 		string	title;		//Area title
 		QVector<QPoint>	pnts;	//Area points
 	};
-	//- Shape node date -
+	//> Shape node date
 	class ShpDt
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), mediaType(-1)	{ }
+		ShpDt( ) : en(true), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	geomMargin	:8;
@@ -272,8 +274,12 @@ class ShapeMedia : public WdgShape
 		short	mediaType	:3;
 		short	mediaFit	:1;
 		short	mediaSpeed	:8;
+		short	videoPlay	:1;
+		short	videoRoll	:1;
+		short	videoPause	:1;
+		double	videoSeek, audioVolume;
 		QBrush	backGrnd;
-		QLabel	*labWdg;
+		QWidget *addrWdg;
 		QPen	border;
 		string	mediaSrc;
 		vector<MapArea>	maps;

@@ -305,6 +305,7 @@ void *TUIMod::Task( void * )
 
     //> QT application object init
     QApplication *QtApp = new QApplication(mod->qtArgC, (char**)&mod->qtArgV);
+    QtApp->setApplicationName(PACKAGE_STRING);
     QtApp->setQuitOnLastWindowClosed(false);
     mod->run_st = true;
 

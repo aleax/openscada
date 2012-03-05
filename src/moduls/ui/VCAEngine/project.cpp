@@ -310,7 +310,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
     bool is_file = (iid.compare(0,5,"file:")==0);
     bool is_res  = (iid.compare(0,4,"res:")==0);
 
-    if( !is_file )
+    if(!is_file)
     {
 	//> Get resource file from DB
 	string dbid = is_res ? iid.substr(4) : iid;
@@ -326,7 +326,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 	    return true;
 	}
     }
-    if( !is_res )
+    if(!is_res)
     {
 	//> Get resource file from file system
 	string filepath = is_file ? iid.substr(5) : iid;
@@ -334,7 +334,9 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 	char buf[STR_BUF_LEN];
 	string rez;
 	int hd = open(filepath.c_str(),O_RDONLY);
-	if( hd == -1 )  return false;
+	if(hd == -1)  return false;
+	if(lseek(hd,0,SEEK_END) > 100*1024*1024) { close(hd); return false; }
+	lseek(hd,0,SEEK_SET);
 
 	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-22 11:51+0200\n"
+"POT-Creation-Date: 2012-03-05 22:03+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -488,20 +488,38 @@ msgstr "Медиа виджет конечной визуализации."
 msgid "Source"
 msgstr "Источник"
 
-msgid "Fit to widget size"
-msgstr "Заполнять виджет"
-
 msgid "Type"
 msgstr "Тип"
 
-msgid "Image;Movie"
-msgstr "Изображение;Видео ролик"
+msgid "Image;Movie;Full video"
+msgstr "Изображение;Видео ролик;Полное видео"
 
 msgid "Map areas"
 msgstr "Области карты"
 
+msgid "Fit to widget size"
+msgstr "Заполнять виджет"
+
 msgid "Play speed"
 msgstr "Скорость проигрывания"
+
+msgid "Play"
+msgstr "Играть"
+
+msgid "Roll play"
+msgstr "Завор. проигр."
+
+msgid "Pause"
+msgstr "Пауза"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "Seek"
+msgstr "Положение"
+
+msgid "Volume"
+msgstr "Громкость"
 
 msgid "Area "
 msgstr "Область "

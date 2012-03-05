@@ -6253,10 +6253,11 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 
 void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 {
-    int64_t tSize     = (int64_t)(1e6*owner().tSize);
-    int64_t tTime     = owner().tTime;
-    int64_t tTimeGrnd = tTime - tSize;
-    int64_t wantPer   = tSize/(int)(owner().width+0.5);
+    int64_t tSize	= (int64_t)(1e6*owner().tSize);
+    int64_t tTime	= owner().tTime;
+    int64_t tTimeGrnd	= tTime - tSize;
+    int64_t wantPer	= tSize/(int)(owner().width+0.5);
+    int bufLim		= 2*owner().width;
     string arch = owner().valArch;
 
     //> Clear trend for empty address and the full reload data
@@ -6306,7 +6307,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 		int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
 		vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
 	    }
-	    while( vals.size() > 2000 ) vals.pop_front();
+	    while(vals.size() > bufLim) vals.pop_front();
 	}
 	return;
     }
@@ -6372,13 +6373,13 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     if( toEnd )
     {
 	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
-	while( vals.size() > 2000 )     vals.pop_front();
+	while(vals.size() > bufLim) vals.pop_front();
 	endBlks+=buf.size();
     }
     else
     {
 	vals.insert(vals.begin(),buf.begin(),buf.end());
-	while( vals.size() > 2000 )     vals.pop_back();
+	while(vals.size() > bufLim) vals.pop_back();
     }
     //> Check for archive jump
     if( arch.empty() && (bbeg-tTimeGrnd)/bper ) { tTime = bbeg-bper; goto m1; }

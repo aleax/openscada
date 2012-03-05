@@ -431,14 +431,14 @@ void TDAQS::subStop( )
 
 AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TValue> rez = nodeAt(path, 0, sep);
+    AutoHD<TValue> rez = nodeAt(path, 0, sep, 0, true);
     if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No parameter present '%s'."),path.c_str());
     return rez;
 }
 
 AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TVal> rez = nodeAt(path, 0, sep);
+    AutoHD<TVal> rez = nodeAt(path, 0, sep, 0, true);
     if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No attribute present '%s'."),path.c_str());
     return rez;
 }

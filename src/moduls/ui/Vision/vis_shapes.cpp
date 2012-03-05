@@ -19,9 +19,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  ***************************************************************************/
 
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <math.h>
 #include <algorithm>
 
+#include <QApplication>
 #include <QEvent>
 #include <QPainter>
 #include <QVBoxLayout>
@@ -46,8 +49,6 @@
 #include <QHeaderView>
 #include <QPlastiqueStyle>
 
-#include <QApplication>
-
 #include <tsys.h>
 #include "tvision.h"
 #include "vis_devel.h"
@@ -55,6 +56,11 @@
 #include "vis_run_widgs.h"
 #include "vis_devel_widgs.h"
 #include "vis_shapes.h"
+
+#ifdef HAVE_PHONON
+#include <phonon/VideoPlayer>
+#endif
+
 
 using namespace VISION;
 
@@ -207,8 +213,8 @@ ShapeFormEl::ShapeFormEl( ) : WdgShape("FormEl")
 
 void ShapeFormEl::init( WdgView *w )
 {
-    new QVBoxLayout(w);
     w->shpData = new ShpDt();
+    new QVBoxLayout(w);
 }
 
 void ShapeFormEl::destroy( WdgView *w )
@@ -946,6 +952,10 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 //************************************************
 //* Media view shape widget                      *
 //************************************************
+#ifdef HAVE_PHONON
+using namespace Phonon;
+#endif
+
 ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 {
 
@@ -954,51 +964,67 @@ ShapeMedia::ShapeMedia( ) : WdgShape("Media")
 void ShapeMedia::init( WdgView *w )
 {
     w->shpData = new ShpDt();
-
-    //- Create label widget -
-    QLabel *lab = new QLabel(w);
-    if( qobject_cast<DevelWdgView*>(w) ) lab->setMouseTracking(true);
-    w->setMouseTracking(true);
-    lab->setAlignment(Qt::AlignCenter);
-    lab->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    ((ShpDt*)w->shpData)->labWdg = lab;
-    QVBoxLayout *lay = new QVBoxLayout(w);
-    lay->addWidget(lab);
+    new QVBoxLayout(w);
 }
 
 void ShapeMedia::destroy( WdgView *w )
 {
-    //- Clear label widget's elements -
-    QLabel *lab = ((ShpDt*)w->shpData)->labWdg;
-    if( lab && lab->movie() )
+    clear(w);
+    delete (ShpDt*)w->shpData;
+}
+
+void ShapeMedia::clear( WdgView *w )
+{
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    //> Clear label widget's elements
+    QLabel *lab = dynamic_cast<QLabel*>(shD->addrWdg);
+    if(lab)
     {
-	if(lab->movie()->device()) delete lab->movie()->device();
-	delete lab->movie();
-	lab->clear();
+	if(lab->movie())
+	{
+	    if(lab->movie()->device()) delete lab->movie()->device();
+	    delete lab->movie();
+	    lab->clear();
+	}
+#ifdef HAVE_PHONON
+	if(shD->mediaType == 2) { lab->deleteLater(); shD->addrWdg = NULL; }
+#endif
     }
 
-    delete (ShpDt*)w->shpData;
+#ifdef HAVE_PHONON
+    VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
+    if(player)
+    {
+	if(shD->mediaType == 0 || shD->mediaType == 1)	{ player->deleteLater(); shD->addrWdg = NULL; }
+    }
+#endif
 }
 
 bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
-    bool up = true, reld_src = false;
+    QLabel *lab;
+#ifdef HAVE_PHONON
+    VideoPlayer *player;
+#endif
+
+    bool up = true, reld_cfg = false;
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    switch( uiPrmPos )
+    switch(uiPrmPos)
     {
 	case -1:	//load
-	    reld_src = true;
+	    reld_cfg = true;
 	    break;
 	case 5:		//en
-	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
+	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible( shD->en && ((RunWdgView*)w)->permView() );
+	    w->setVisible(shD->en && ((RunWdgView*)w)->permView());
 	    break;
 	case 6:		//active
-	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    shD->labWdg->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
-	    w->setMouseTracking( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() );
+	    if(!qobject_cast<RunWdgView*>(w))	break;
+	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr());
+	    w->setMouseTracking(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr());
 	    break;
 	case 12:	//geomMargin
 	    shD->geomMargin = atoi(val.c_str());
@@ -1011,7 +1037,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setColor(shD->backGrnd.color());
-	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
 	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
 	    plt.setBrush(QPalette::Background,brsh);
 	    w->setPalette(plt);
@@ -1022,13 +1048,13 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
-	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Background,brsh);
 	    w->setPalette(plt);
 	    break;
@@ -1040,18 +1066,19 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	case 24:	//bordStyle
 	    shD->bordStyle = atoi(val.c_str());		break;
 	case 25:	//src
-	    if( shD->mediaSrc == val )	break;
+	    if(shD->mediaSrc == val)	break;
 	    shD->mediaSrc = val;
-	    reld_src = true;
+	    reld_cfg = true;
 	    break;
 	case 26:	//fit
 	    shD->mediaFit = (bool)atoi(val.c_str());
-	    shD->labWdg->setScaledContents( shD->mediaFit );
+	    lab = dynamic_cast<QLabel*>(shD->addrWdg);
+	    if(lab) lab->setScaledContents(shD->mediaFit);
 	    break;
 	case 27:	//type
-	    if( shD->mediaType == atoi(val.c_str()) )	break;
+	    if(shD->mediaType == atoi(val.c_str()))	break;
 	    shD->mediaType = atoi(val.c_str());
-	    reld_src = true;
+	    reld_cfg = true;
 	    break;
 	case 28:	//areas
 	{
@@ -1060,23 +1087,67 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    while((int)shD->maps.size() > numbMAr) shD->maps.pop_back();
 	    break;
 	}
-	case 29: 	//speed
-	    shD->mediaSpeed = atoi(val.c_str());
-	    if( !shD->labWdg->movie() ) break;
-	    if( shD->mediaSpeed <= 1 ) shD->labWdg->movie()->stop();
-	    else
+	case 29: 	//speed, play
+	    switch(shD->mediaType)
 	    {
-		shD->labWdg->movie()->setSpeed(shD->mediaSpeed);
-		shD->labWdg->movie()->start();
+		case 0: case 1: shD->mediaSpeed = atoi(val.c_str());	break;
+		case 2: shD->videoPlay = (bool)atoi(val.c_str());	break;
+	    }
+	    if((lab=dynamic_cast<QLabel*>(shD->addrWdg)))
+	    {
+
+		if(!lab->movie()) break;
+		if(shD->mediaSpeed <= 1) lab->movie()->stop();
+		else
+		{
+		    lab->movie()->setSpeed(shD->mediaSpeed);
+		    lab->movie()->start();
+		}
+	    }
+	    else if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
+	    {
+		if(shD->videoPlay)
+		{
+		    player->play();
+		    w->attrSet("size",TSYS::real2str(player->totalTime()));
+		}
+		else player->stop();
 	    }
 	    break;
+	case 30:	//roll
+	    if(shD->videoRoll == (bool)atoi(val.c_str())) break;
+	    shD->videoRoll = (bool)atoi(val.c_str());
+	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
+	    {
+		if(shD->videoRoll) connect(player, SIGNAL(finished()), player, SLOT(play()));
+		else disconnect(player, SIGNAL(finished()), 0, 0);
+	    }
+	    break;
+	case 31:	//pause
+	    shD->videoPause = (bool)atoi(val.c_str());
+	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
+	    {
+		if(shD->videoPause && !player->isPaused()) player->pause();
+		if(!shD->videoPause && player->isPaused()) player->play();
+	    }
+	    break;
+	case 33:	//seek
+	    if(shD->videoSeek == atof(val.c_str())) break;
+	    shD->videoSeek = atof(val.c_str());
+	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->seek(shD->videoSeek);
+	    break;
+	case 34:	//volume
+	    if(shD->audioVolume == atof(val.c_str())) break;
+	    shD->audioVolume = atof(val.c_str());
+	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume);
+	    break;
 	default:
-	    //- Individual arguments process -
-	    if( uiPrmPos >= 40 )
+	    //> Individual arguments process
+	    if(uiPrmPos >= 40)
 	    {
 		int areaN = (uiPrmPos-40)/3;
 		if(areaN >= (int)shD->maps.size()) break;
-		switch( (uiPrmPos-40)%3 )
+		switch((uiPrmPos-40)%3)
 		{
 		    case 0:	//shape
 			shD->maps[areaN].shp = atoi(val.c_str());	break;
@@ -1084,9 +1155,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    {
 			string stmp;
 			shD->maps[areaN].pnts.clear();
-			for( int ncrd = 0, pos = 0; (stmp=TSYS::strSepParse(val,0,',',&ncrd)).size(); pos++ )
-			    if( !(pos%2) ) shD->maps[areaN].pnts.push_back(QPoint(atoi(stmp.c_str()),0));
-			    else           shD->maps[areaN].pnts[shD->maps[areaN].pnts.size()-1].setY(atoi(stmp.c_str()));
+			for(int ncrd = 0, pos = 0; (stmp=TSYS::strSepParse(val,0,',',&ncrd)).size(); pos++)
+			    if(!(pos%2)) shD->maps[areaN].pnts.push_back(QPoint(atoi(stmp.c_str()),0));
+			    else         shD->maps[areaN].pnts[shD->maps[areaN].pnts.size()-1].setY(atoi(stmp.c_str()));
 		    }
 		    case 2:	//title
 			shD->maps[areaN].title = val;	break;
@@ -1094,72 +1165,135 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
     }
 
-    if( reld_src && !w->allAttrLoad() )
+    if(reld_cfg && !w->allAttrLoad())
     {
-	string sdata = w->resGet(shD->mediaSrc);
-	switch( shD->mediaType )
+	bool mk_new = false;
+	switch(shD->mediaType)
 	{
-	    case 0:
+	    case 0:	//Image
 	    {
 		QImage img;
 		//> Free movie data, if set
-		if( shD->labWdg->movie() )
-		{
-		    if(shD->labWdg->movie()->device()) delete shD->labWdg->movie()->device();
-		    delete shD->labWdg->movie();
-		    shD->labWdg->clear();
-		}
+		clear(w);
+		//> Create label widget
+		if(!shD->addrWdg) { shD->addrWdg = new QLabel(w); mk_new = true; }
 		//> Set new image
-		if( !sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()) )
+		lab = dynamic_cast<QLabel*>(shD->addrWdg);
+		if(!lab) break;
+		lab->setAlignment(Qt::AlignCenter);
+		string sdata = w->resGet(shD->mediaSrc);
+		if(!sdata.empty() && img.loadFromData((const uchar*)sdata.data(),sdata.size()))
 		{
-		    shD->labWdg->setPixmap(QPixmap::fromImage(img.scaled(
+		    lab->setPixmap(QPixmap::fromImage(img.scaled(
 			(int)((float)img.width()*w->xScale(true)),
 			(int)((float)img.height()*w->yScale(true)),
 			Qt::KeepAspectRatio,Qt::SmoothTransformation)));
-		    shD->labWdg->setScaledContents( shD->mediaFit );
+		    lab->setScaledContents(shD->mediaFit);
 		}
-		else shD->labWdg->setText("");
+		else lab->setText("");
 		break;
 	    }
-	    case 1:
+	    case 1:	//Movie
 	    {
 		//> Clear previous movie data
-		if( shD->labWdg->movie() )
-		{
-		    if(shD->labWdg->movie()->device()) delete shD->labWdg->movie()->device();
-		    delete shD->labWdg->movie();
-		    shD->labWdg->clear();
-		}
+		clear(w);
+		//> Create label widget
+		if(!shD->addrWdg) { shD->addrWdg = new QLabel(w); mk_new = true; }
 		//> Set new data
-		if( sdata.size() )
+		lab = dynamic_cast<QLabel*>(shD->addrWdg);
+		if(!lab) break;
+		lab->setAlignment(Qt::AlignCenter);
+		string sdata = w->resGet(shD->mediaSrc);
+		if(sdata.size())
 		{
 		    QBuffer *buf = new QBuffer(w);
-		    buf->setData( sdata.data(), sdata.size() );
-		    buf->open( QIODevice::ReadOnly );
-		    shD->labWdg->setMovie( new QMovie(buf) );
+		    buf->setData(sdata.data(), sdata.size());
+		    buf->open(QIODevice::ReadOnly);
+		    lab->setMovie(new QMovie(buf));
 
 		    //> Play speed set
-		    if( shD->mediaSpeed <= 1 ) shD->labWdg->movie()->stop();
+		    if(shD->mediaSpeed <= 1) lab->movie()->stop();
 		    else
 		    {
-			shD->labWdg->movie()->setSpeed(shD->mediaSpeed);
-			shD->labWdg->movie()->start();
+			lab->movie()->setSpeed(shD->mediaSpeed);
+			lab->movie()->start();
 		    }
 		    //> Fit set
-		    shD->labWdg->setScaledContents( shD->mediaFit );
-		    if( !shD->mediaFit && shD->labWdg->movie()->jumpToNextFrame() )
+		    lab->setScaledContents( shD->mediaFit );
+		    if(!shD->mediaFit && lab->movie()->jumpToNextFrame())
 		    {
-			QImage img = shD->labWdg->movie()->currentImage();
-			shD->labWdg->movie()->setScaledSize(QSize((int)((float)img.width()*w->xScale(true)),(int)((float)img.height()*w->yScale(true))));
+			QImage img = lab->movie()->currentImage();
+			lab->movie()->setScaledSize(QSize((int)((float)img.width()*w->xScale(true)),(int)((float)img.height()*w->yScale(true))));
 		    }
-		}else shD->labWdg->setText("");
-
+		}else lab->setText("");
 		break;
 	    }
+#ifdef HAVE_PHONON
+	    case 2:	//Full video
+	    {
+		//> Clear previous movie data
+		clear(w);
+		//> Create player widget
+		if(!shD->addrWdg)
+		{
+		    shD->addrWdg = new VideoPlayer(Phonon::VideoCategory, w);
+		    if(shD->videoRoll) connect(shD->addrWdg, SIGNAL(finished()), shD->addrWdg, SLOT(play()));
+		    mk_new = true;
+		}
+		//> Set new data
+		player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
+		if(!player) break;
+		MediaSource mSrc;
+		if(player->isPlaying()) { player->stop(); player->seek(0); }
+		//> Try play local file
+		if(shD->mediaSrc.compare(0,5,"file:") == 0)
+		    mSrc = MediaSource(QString(shD->mediaSrc.substr(5).c_str()));
+		//> Try play Stream by URL
+		else if(shD->mediaSrc.compare(0,5,"http:") == 0 || shD->mediaSrc.compare(0,4,"ftp:") == 0)
+		    mSrc = MediaSource(QUrl(shD->mediaSrc.c_str()));
+		//> Try remote VCAEngine resource at last
+		if(shD->mediaSrc.size() && (mSrc.type() == MediaSource::Invalid || mSrc.type() == MediaSource::Empty))
+		{
+		    string sdata = w->resGet(shD->mediaSrc);
+		    if(sdata.size())
+		    {
+			string tfile = TSYS::path2sepstr(w->id(),'_');
+			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
+			if(tfid >= 0)
+			{
+			    write(tfid, sdata.data(), sdata.size());
+			    close(tfid);
+			    mSrc = MediaSource(QString(tfile.c_str()));
+			}
+		    }
+		}
+		if(mSrc.type() != MediaSource::Invalid && mSrc.type() != MediaSource::Empty) player->load(mSrc);
+		if(mSrc.type() != MediaSource::Invalid && mSrc.type() != MediaSource::Empty)
+		{
+		    if(shD->videoPlay)
+		    {
+			player->play();
+			w->attrSet("size",TSYS::real2str(player->totalTime()));
+		    }
+		    else player->stop();
+		    if(shD->videoPause) player->pause();
+		    player->seek(shD->videoSeek);
+		    player->setVolume(shD->audioVolume);
+		}
+		break;
+	    }
+#endif
+	}
+	if(mk_new)
+	{
+	    if(qobject_cast<DevelWdgView*>(w)) shD->addrWdg->setMouseTracking(true);
+	    w->setMouseTracking(true);
+	    shD->addrWdg->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
     }
 
-    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 ) w->update();
+    if(up && !w->allAttrLoad( ) && uiPrmPos != -1) w->update();
 
     return up;
 }
@@ -1167,7 +1301,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 bool ShapeMedia::event( WdgView *w, QEvent *event )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
-    if( !shD->en ) return false;
+    if(!shD->en) return false;
 
     switch( event->type() )
     {
@@ -1181,18 +1315,18 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
 	    //> Draw decoration
-	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
-	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
+	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dA,shD->backGrnd.color());
+	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
 	    //> Draw border
-	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
+	    borderDraw(pnt, dA, shD->border, shD->bordStyle);
 
 	    return true;
 	}
 	case QEvent::MouseMove:
 	{
 	    Qt::CursorShape new_shp = Qt::ArrowCursor;
-	    if( !shD->maps.empty() )
+	    if(!shD->maps.empty())
 	    {
 		for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
 		    if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
@@ -1204,7 +1338,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    }
 	    else new_shp = Qt::PointingHandCursor;
 
-	    if( new_shp != w->cursor().shape() ) w->setCursor(new_shp);
+	    if(new_shp != w->cursor().shape()) w->setCursor(new_shp);
 
 	    return true;
 	}
@@ -2380,6 +2514,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     int64_t tTime	= shD->tTime;
     int64_t tTimeGrnd	= tTime - tSize;
     int64_t wantPer	= tSize/(view->size().width()*shD->valsForPix);
+    int bufLim		= 2*view->size().width()*shD->valsForPix;
 
     //> Clear trend for empty address and for full reload data
     if(full || addr().empty())
@@ -2428,7 +2563,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
 		vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
 	    }
-	    while( vals.size() > 2000 )	vals.pop_front();
+	    while(vals.size() > bufLim)	vals.pop_front();
 	}
 	return;
     }
@@ -2496,19 +2631,19 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     }
 
     //> Append buffer to values deque
-    if( toEnd )
+    if(toEnd)
     {
 	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
-	while( vals.size() > 2000 )	vals.pop_front();
-	endBlks+=buf.size();
+	while(vals.size() > bufLim) vals.pop_front();
+	endBlks += buf.size();
     }
     else
     {
 	vals.insert(vals.begin(),buf.begin(),buf.end());
-	while( vals.size() > 2000 )	vals.pop_back();
+	while(vals.size() > bufLim)	vals.pop_back();
     }
     //> Check for archive jump
-    if( shD->valArch.empty() && (bbeg-tTimeGrnd)/bper )	{ tTime = bbeg-bper; goto m1; }
+    if(shD->valArch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
 }
 
 void ShapeDiagram::TrendObj::loadSpectrumData( bool full )

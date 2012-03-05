@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-22 11:51+0200\n"
+"POT-Creation-Date: 2012-03-05 22:03+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -486,20 +486,38 @@ msgstr "Widget für die Media der Visualisierung."
 msgid "Source"
 msgstr "Quelle"
 
-msgid "Fit to widget size"
-msgstr "Anpassen an Widgetgrössse"
-
 msgid "Type"
 msgstr "Typ"
 
-msgid "Image;Movie"
-msgstr "Bild;Video"
+msgid "Image;Movie;Full video"
+msgstr "Bild;Video;Full Video"
 
 msgid "Map areas"
 msgstr "Kartenbereiche"
 
+msgid "Fit to widget size"
+msgstr "Anpassen an Widgetgrössse"
+
 msgid "Play speed"
 msgstr "Geschwindigkeit der Wiedergabe"
+
+msgid "Play"
+msgstr "Abspielen"
+
+msgid "Roll play"
+msgstr "Roll spielen"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "Seek"
+msgstr "Suchen"
+
+msgid "Volume"
+msgstr "Volumen"
 
 msgid "Area "
 msgstr "Bereich "

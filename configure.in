@@ -483,8 +483,9 @@ AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
     #>> Modules checkings
     AX_LIB_FFTW3()
     AX_LIB_QT4()
+    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])])
     if test $enable_Vision = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} "
+	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${phonon_LIBS} "
 	ModsIncl="${ModsIncl}ui_Vision "
     fi
 ])
@@ -626,20 +627,16 @@ AC_MSG_RESULT([* Generic features:])
 AC_MSG_RESULT([  - Strings charset encode support (by iconv)                   = $ac_cv_header_iconv_h])
 AC_MSG_RESULT([  - Interfaces internationalisation (I18N) support (by LibIntl) = $ac_cv_header_libintl_h])
 AC_MSG_RESULT([  - Graphical library (LibGD2) use by core                      = $enable_LibGD])
-AC_MSG_RESULT([  - Subsystem "DB" modules build:                   $DBSub_mod])
-AC_MSG_RESULT([  - Subsystem "DAQ" modules build:                  $DAQSub_mod])
-AC_MSG_RESULT([  - Subsystem "Archive" modules build:              $ArchSub_mod])
-AC_MSG_RESULT([  - Subsystem "Transport" modules build:            $TranspSub_mod])
-AC_MSG_RESULT([  - Subsystem "Transport's protocol" modules build: $ProtSub_mod])
-AC_MSG_RESULT([  - Subsystem "UI" modules build:                   $UISub_mod])
-AC_MSG_RESULT([  - Subsystem "Special" modules build:              $SpecSub_mod])
-if test "x${ModsIncl}" != "x"; then
-    AC_MSG_RESULT([  - Modules list included to OpenSCADA core: $ModsIncl])
-fi
+AC_MSG_RESULT([  - Subsystem modules build:])
+AC_MSG_RESULT([    "DB":                   $DBSub_mod])
+AC_MSG_RESULT([    "DAQ":                  $DAQSub_mod])
+AC_MSG_RESULT([    "Archive":              $ArchSub_mod])
+AC_MSG_RESULT([    "Transport":            $TranspSub_mod])
+AC_MSG_RESULT([    "Transport's protocol": $ProtSub_mod])
+AC_MSG_RESULT([    "UI":                   $UISub_mod])
+AC_MSG_RESULT([    "Special":              $SpecSub_mod])
+AC_MSG_RESULT([  - Modules included to OpenSCADA core: $ModsIncl])
 AC_MSG_RESULT([* Modules' features:])
-if test "x$FFTW3use" = "xtrue"; then
-    AC_MSG_RESULT([  - FFTW3 library use for signal spectrum purchase: $LIB_FFTW3])
-fi
-if test "x$SensorsUse" = "xtrue"; then
-    AC_MSG_RESULT([  - Linux sensors library use: $LIB_SENSORS])
-fi
+AC_MSG_RESULT([  - FFTW3 for signal spectrum purchase: $LIB_FFTW3])
+AC_MSG_RESULT([  - Linux sensors library use:          $LIB_SENSORS])
+AC_MSG_RESULT([  - Media play engine:                  $phonon_LIBS])

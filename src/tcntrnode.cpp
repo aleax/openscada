@@ -240,7 +240,7 @@ void TCntrNode::nodeList( vector<string> &list, const string &gid )
 	}
 }
 
-AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int off )
+AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int off, bool noex )
 {
     string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
 			TSYS::pathLev(path,lev,true,&off);
@@ -252,10 +252,11 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
     ResAlloc res(hd_res,false);
     for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	if(s_br.substr(0,(*chGrp)[i_g].id.size()) == (*chGrp)[i_g].id)
-	    return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off);
+	    return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off,noex);
     //> Go to default group
-    if(chGrp)	return chldAt(0,s_br).at().nodeAt(path,0,sep,off);
-    throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
+    if(chGrp)	return chldAt(0,s_br).at().nodeAt(path,0,sep,off,noex);
+    if(!noex)	throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
+    return NULL;
 }
 
 void TCntrNode::nodeDel( const string &path, char sep, int flag, bool shDel )

@@ -1,3 +1,12 @@
+2012-03-06 Roman
+- UI.VCAEngine, UI.Vision: New type "Full video" is added to primitive "Media".
+    Type "Full video" is realised by help Phonon engine into UI.Vision.
+- SYS: No execution mode is added to TCntrNode::nodeAt().
+- UI.QTStarter: Application name for QT is set to PACKAGE_STRING.
+- FIX:UI.VCAEngine: Limit to loaded file resources through VCAEngine is set to 100MB.
+- FIX:UI.Vision, UI.WebVision: Limit to trends buffer into primitive "Diagram" is fixed for valsForPix use.
+
+
 2012-03-04 Roman
 - !!!!:SYS: Threadsafe in generic is made for user API objects and individual for: TVarObj, TArrayObj and XMLNodeObj.
     Automatic resource free is added to AutoHD on true return from AHDDisConnect().

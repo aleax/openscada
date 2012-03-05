@@ -720,18 +720,17 @@ void OrigMedia::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF","","","20") );
-	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
-	attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22") );
-	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
-	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
-	attrAdd( new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","","25") );
-	attrAdd( new TFld("fit",_("Fit to widget size"),TFld::Boolean,TFld::NoFlag,"","","","","26") );
-	attrAdd( new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1",_("Image;Movie"),"27") );
-	attrAdd( new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","","28") );
+	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF","","","20"));
+	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21"));
+	attrAdd(new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22"));
+	attrAdd(new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23"));
+	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
+						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24"));
+	attrAdd(new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","","25"));
+	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1;2",_("Image;Movie;Full video"),"27"));
+	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","","28"));
     }
 }
 
@@ -742,21 +741,54 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	if( cfg.id() == "type" )
 	{
 	    //> Delete specific attributes
-	    if( prev.getI() == 1 ) cfg.owner()->attrDel("speed");
+	    switch(prev.getI())
+	    {
+		case 0:	//Image
+		    cfg.owner()->attrDel("fit");
+		    break;
+		case 1:	//Movie
+		    cfg.owner()->attrDel("fit");
+		    cfg.owner()->attrDel("speed");
+		    break;
+		case 2:	//Full vudeo
+		    cfg.owner()->attrDel("play");
+		    cfg.owner()->attrDel("roll");
+		    cfg.owner()->attrDel("pause");
+		    cfg.owner()->attrDel("size");
+		    cfg.owner()->attrDel("seek");
+		    cfg.owner()->attrDel("volume");
+		    break;
+	    }
 
 	    //> Create specific attributes
-	    if(cfg.getI() == 1 )
-		cfg.owner()->attrAdd( new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"3","100","1;900","","29") );
+	    switch(cfg.getI())
+	    {
+		case 0:	//Image
+		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","","26"));
+		    break;
+		case 1:	//Movie
+		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","","26"));
+		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","","29"));
+		    break;
+		case 2:	//Video
+		    cfg.owner()->attrAdd(new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable,"","0","","","29"));
+		    cfg.owner()->attrAdd(new TFld("roll",_("Roll play"),TFld::Boolean,Attr::Mutable,"","0","","","30"));
+		    cfg.owner()->attrAdd(new TFld("pause",_("Pause"),TFld::Boolean,Attr::Mutable,"","0","","","31"));
+		    cfg.owner()->attrAdd(new TFld("size",_("Size"),TFld::Real,Attr::Mutable,"","0","0;1e300","","32"));
+		    cfg.owner()->attrAdd(new TFld("seek",_("Seek"),TFld::Real,Attr::Mutable,"","0","0;1e300","","33"));
+		    cfg.owner()->attrAdd(new TFld("volume",_("Volume"),TFld::Real,Attr::Mutable,"","50","0;100","","34"));
+		    break;
+	    }
 	}
-	else if( cfg.id() == "areas" )
+	else if(cfg.id() == "areas")
 	{
 	    string fid("area"), fnm(_("Area ")), fidp, fnmp;
 	    //> Delete specific unnecessary attributes of map areas
-	    for( int i_p = 0; true; i_p++ )
+	    for(int i_p = 0; true; i_p++)
 	    {
 		fidp = fid+TSYS::int2str(i_p);
-		if( !cfg.owner()->attrPresent( fidp+"shp" ) )	break;
-		else if( i_p >= cfg.getI() )
+		if(!cfg.owner()->attrPresent(fidp+"shp"))	break;
+		else if(i_p >= cfg.getI())
 		{
 		    cfg.owner()->attrDel(fidp+"shp");
 		    cfg.owner()->attrDel(fidp+"coord");
@@ -764,17 +796,17 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		}
 	    }
 	    //> Create ullage attributes of map areas
-	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    for(int i_p = 0; i_p < cfg.getI(); i_p++)
 	    {
 		fidp = fid+TSYS::int2str(i_p);
 		fnmp = fnm+TSYS::int2str(i_p);
-		if( cfg.owner()->attrPresent( fidp+"shp" ) ) continue;
-		cfg.owner()->attrAdd( new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),
-					       TFld::Integer,TFld::Selected|Attr::Mutable,"1","0","0;1;2",_("Rect;Poly;Circle"),TSYS::int2str(40+3*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(41+3*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(42+3*i_p).c_str()) );
+		if(cfg.owner()->attrPresent(fidp+"shp")) continue;
+		cfg.owner()->attrAdd(new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),
+					       TFld::Integer,TFld::Selected|Attr::Mutable,"1","0","0;1;2",_("Rect;Poly;Circle"),TSYS::int2str(40+3*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),
+					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(41+3*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),
+					       TFld::String,Attr::Mutable,"","","","",TSYS::int2str(42+3*i_p).c_str()));
 	    }
 	}
     }
