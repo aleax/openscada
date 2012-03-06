@@ -2069,11 +2069,11 @@ void WMdfStBar::mousePressEvent( QMouseEvent * event )
 //****************************************
 //* Shape widget view development mode   *
 //****************************************
-DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent ) :
+DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent, QScrollArea *MdiWin ) :
     WdgView(iwid,ilevel,mainWind,parent), fMakeScale(false), fWdgEdit(false), fWdgSelect(false), fMoveHold(false),
     fHoldChild(false), fLeftTop(false), fHoldSelRect(false), fMoveHoldMove(false), fHideChilds(false),
     fSelChange(false), fPrevEdExitFoc(false), fFocus(false), fMakeIco(false),
-    mVisScale(1), pntView(NULL), editWdg(NULL), chTree(NULL), chGeomCtx("geom")
+    mVisScale(1), pntView(NULL), editWdg(NULL), chTree(NULL), chGeomCtx("geom"), mMdiWin(MdiWin)
 {
     setObjectName(iwid.c_str());
     setMouseTracking(true);
@@ -2094,6 +2094,8 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
     //> Select only created widgets by user
     else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload)
     { setSelect(true,PrcChilds); z_coord = 100000; }
+
+    if(mMdiWin) mMdiWin->installEventFilter(this);
 }
 
 DevelWdgView::~DevelWdgView( )
@@ -3445,9 +3447,8 @@ bool DevelWdgView::event( QEvent *event )
 
 bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
 {
-    QScrollArea *bEv = dynamic_cast<QScrollArea*>(object);
-
-    if(bEv)
+    if(object == mMdiWin)
+    {
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
@@ -3456,14 +3457,17 @@ bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
 		break;
 	    case QEvent::FocusOut:
 		if(!this->hasFocus()) setFocus(false);
-        	if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !bEv->widget()->hasFocus()) setSelect(false);
+		if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !mMdiWin->widget()->hasFocus()) setSelect(false);
 		break;
 	    case QEvent::MouseButtonRelease:
 		setSelect(false,PrcChilds);
 		setSelect(true);
 		break;
-            default:    break;
+	    default:	break;
 	}
+	return false;
+    }
+
     return WdgView::eventFilter(object, event);
 }
 

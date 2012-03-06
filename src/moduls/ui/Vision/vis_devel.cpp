@@ -1319,13 +1319,11 @@ void VisDevelop::visualItEdit( )
 		scrl->setWindowIcon(QPixmap::fromImage(ico_t));
 	}
 	//> Make and place view widget
-	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this);
+	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this,0,scrl);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
 	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
 	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
-
-	scrl->installEventFilter(vw);
 
 	scrl->setWidget(vw);
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));

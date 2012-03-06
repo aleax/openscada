@@ -1274,6 +1274,6 @@ bool WdgView::event( QEvent *event )
 
 bool WdgView::eventFilter( QObject *object, QEvent *event )
 {
-    if( shape )	return shape->eventFilter(this,object,event);
+    if(shape)	return shape->eventFilter(this,object,event);
     return false;
 }

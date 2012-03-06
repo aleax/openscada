@@ -558,9 +558,9 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    if( qobject_cast<DevelWdgView*>(w) )
+    if(qobject_cast<DevelWdgView*>(w))
     {
-	switch( event->type() )
+	switch(event->type())
 	{
 	    case QEvent::Enter:
 	    case QEvent::Leave:		return true;
@@ -575,7 +575,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	}
     }
     else
-	switch( event->type() )
+	switch(event->type())
 	{
 	    case QEvent::FocusIn:
 		if( !w->hasFocus() ) break;

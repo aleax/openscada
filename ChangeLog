@@ -1,4 +1,6 @@
 2012-03-06 Roman
+- FIX:UI.Vision: Crash on recursion MouseRelease event process into development mode for primitive "ElFigure",
+    on ScrollArea events filter after change QWorkspace to QMdiArea, is fixed.
 - UI.VCAEngine, UI.Vision: New type "Full video" is added to primitive "Media".
     Type "Full video" is realised by help Phonon engine into UI.Vision.
 - SYS: No execution mode is added to TCntrNode::nodeAt().

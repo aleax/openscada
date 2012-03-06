@@ -32,6 +32,7 @@
 #include <QTreeView>
 #include <QTreeWidget>
 #include <QItemDelegate>
+#include <QScrollArea>
 
 #include "vis_widgs.h"
 
@@ -493,7 +494,7 @@ class DevelWdgView: public WdgView
 	enum SelFlgs { PrcChilds = 0x01, OnlyFlag = 0x02, NoUpdate = 0x04 };
 
 	//Public methods
-	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget* parent = 0 );
+	DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind, QWidget *parent = 0, QScrollArea *MdiWin = 0 );
 	~DevelWdgView( );
 
 	float xScale( bool full = false );
@@ -561,18 +562,18 @@ class DevelWdgView: public WdgView
 
 	//Private attributes
 	uint8_t	fMakeScale	:1;	//Make visual item scaling
-        uint8_t	fWdgEdit	:1;	//Widget under edition
-        uint8_t	fWdgSelect	:1;	//Widget is selected
-        uint8_t	fMoveHold	:1;	//Mouse move hold state
-        uint8_t	fHoldChild	:1;	//Hold child widget in time of moving and resizing
-        uint8_t	fLeftTop	:1;	//Left top anchors
-        uint8_t	fHoldSelRect	:1;	//Hold for select rect
-        uint8_t	fMoveHoldMove	:1;	//Mouse move on hold
-        uint8_t	fHideChilds	:1;	//Hide childs on move
-        uint8_t	fSelChange	:1;	//Changed select map
-        uint8_t	fPrevEdExitFoc  :1;	//Prevention exit from widget edition by focus loosing
-        uint8_t	fFocus		:1;	//Edition window of the widget in focus
-        uint8_t	fMakeIco	:1;	//Make icon flag for background disable
+	uint8_t	fWdgEdit	:1;	//Widget under edition
+	uint8_t	fWdgSelect	:1;	//Widget is selected
+	uint8_t	fMoveHold	:1;	//Mouse move hold state
+	uint8_t	fHoldChild	:1;	//Hold child widget in time of moving and resizing
+	uint8_t	fLeftTop	:1;	//Left top anchors
+	uint8_t	fHoldSelRect	:1;	//Hold for select rect
+	uint8_t	fMoveHoldMove	:1;	//Mouse move on hold
+	uint8_t	fHideChilds	:1;	//Hide childs on move
+	uint8_t	fSelChange	:1;	//Changed select map
+	uint8_t	fPrevEdExitFoc  :1;	//Prevention exit from widget edition by focus loosing
+	uint8_t	fFocus		:1;	//Edition window of the widget in focus
+	uint8_t	fMakeIco	:1;	//Make icon flag for background disable
 
 	float		mVisScale;		//Visual scale value of root widget.
 
@@ -583,6 +584,7 @@ class DevelWdgView: public WdgView
 	XMLNode 	chGeomCtx;		//Change geometry context
 	QPoint		dragStartPos;
 	map<string,string>	mCacheRes;	//Resources cache
+	QScrollArea	*mMdiWin;
 };
 
 }
