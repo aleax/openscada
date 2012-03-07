@@ -149,7 +149,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Data
-	enum Type { CIF_PB, ISO_TCP, ADS };
+	enum Type { CIF_PB, ISO_TCP, ADS, ISO_TCP243 };
 
 	//Methods
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );

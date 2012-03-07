@@ -103,7 +103,8 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
-	TSYS::strMess("%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ADS).c_str(),"CIF_PB;ISO_TCP;ADS"));
+	TSYS::strMess("%d;%d;%d;%d",TMdContr::CIF_PB,TMdContr::ISO_TCP,TMdContr::ISO_TCP243,TMdContr::ADS).c_str(),
+	"CIF_PB;ISO_TCP;ISO_TCP243;ADS"));
     fldAdd(new TFld("ADDR",_("Remote controller address"),TFld::String,TFld::NoFlag,"100","10"));
     fldAdd(new TFld("ADDR_TR",_("Output transport"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SLOT",_("Slot CPU"),TFld::Integer,TFld::NoFlag,"2","2","0;30"));
@@ -612,7 +613,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
     if(icfg.fld().name() == "TYPE")
     {
 	cfg("CIF_DEV").setView(icfg.getI() == CIF_PB);
-	cfg("SLOT").setView(icfg.getI() == CIF_PB || icfg.getI() == ISO_TCP);
+	cfg("SLOT").setView(icfg.getI() == CIF_PB || icfg.getI() == ISO_TCP || icfg.getI() == TMdContr::ISO_TCP243);
 	cfg("ADDR_TR").setView(icfg.getI() == ADS);
 	if(startStat())	stop();
     }
@@ -718,6 +719,7 @@ void TMdContr::connectRemotePLC( )
 		throw TError(nodePath().c_str(),_("No one driver or board are present."));
 	    break;
 	case ISO_TCP:
+	case ISO_TCP243:
 	{
 	    //> Dsconnect previous connection
 	    if(dc && di) disconnectRemotePLC();
@@ -727,7 +729,8 @@ void TMdContr::connectRemotePLC( )
 	    _daveOSserialType fds;
 	    fds.wfd = fds.rfd = openSocket(102, addr().c_str());
 	    if(fds.rfd <= 0) throw TError(nodePath().c_str(),_("Open socket of remote PLC error."));
-	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,daveProtoISOTCP,daveSpeed187k);
+	    di = daveNewInterface(fds,(char*)(string("IF")+id()).c_str(),0,
+		((mType==ISO_TCP243)?daveProtoISOTCP243:daveProtoISOTCP),daveSpeed187k);
 	    dc = daveNewConnection(di,2,0,mSlot);
 	    daveSetTimeout(di,1500000);
 	    if(daveConnectPLC(dc))
@@ -811,6 +814,7 @@ void TMdContr::disconnectRemotePLC( )
     switch(mType)
     {
         case ISO_TCP:
+        case ISO_TCP243:
 	    ResAlloc res(reqRes, true);
 	    if(!dc || !di) break;
 	    daveDisconnectPLC(dc);
@@ -897,6 +901,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    break;
 	}
 	case ISO_TCP:
+	case ISO_TCP243:
 	{
 	    //> Reconnect for lost connection
 	    if(!dc || atoi(errCon.getVal().c_str())) { connectRemotePLC(); errCon = ""; }
@@ -1084,6 +1089,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    break;
 	}
 	case ISO_TCP:
+	case ISO_TCP243:
 	{
 	    //> Reconnect for lost connection
 	    if(!dc || atoi(errCon.getVal().c_str())) { connectRemotePLC(); errCon = ""; }
@@ -1509,12 +1515,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",cfg("TYPE").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
             "help",_("Connection type:\n"
         	     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
-		     "  ISO_TCP - connection to controllers series S7, by firm Siemens, by Ethernet network;\n"
+		     "  ISO_TCP, ISO_TCP243 - connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);\n"
 		     "  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."));
         ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
             "help",_("Remote controller address. For connections:\n"
         	     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
-		     "  ISO_TCP - IP-address into Ethernet network;\n"
+		     "  ISO_TCP, ISO_TCP243 - IP-address into Ethernet network;\n"
 		     "  ADS - Network identifier and port for target and source stations, in view\n"
 		     "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
 		     "      (for example: \"192.168.0.1.1.1:801|82.207.88.73.1.1:801\"), where:\n"

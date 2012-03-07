@@ -1,4 +1,5 @@
 2012-03-07 Roman
+- DAQ.Siemens: ISO_TCP243 variant for CP243 (on S7-200) support is added.
 - UI.VCAEngine: Separated attributes list request is added to service request "get /serv/attr".
 - UI.Vision: Single attribute (no active) set is made on attribute change from attributes inspector.
 
