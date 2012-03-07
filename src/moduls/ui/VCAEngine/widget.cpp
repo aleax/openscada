@@ -748,23 +748,36 @@ TVariant Widget::stlReq( Attr &a, const TVariant &vl, bool wr )
 
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
+    string tNm;
     string a_path = opt->attr("path");
     //> Service commands process
     if(a_path == "/serv/attr")	//Attribute's access
     {
 	if(ctrChkNode(opt,"get",RWRWRW,"root",SUI_ID,SEC_RD))		//Get values
 	{
-	    vector<string> ls;
-	    attrList(ls);
 	    AutoHD<Attr> attr;
-	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	    if(!opt->childSize())
 	    {
-		attr = attrAt(ls[i_l]);
-		if(attr.at().flgGlob()&Attr::IsUser)	continue;
-		opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-				     setAttr("p",attr.at().fld().reserve())->
-				     setText(attr.at().getS());
+		vector<string> ls;
+		attrList(ls);
+		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+		{
+		    attr = attrAt(ls[i_l]);
+		    if(attr.at().flgGlob()&Attr::IsUser)	continue;
+		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
+				         setAttr("p",attr.at().fld().reserve())->
+				         setText(attr.at().getS());
+		}
 	    }
+	    else
+		for(unsigned i_l = 0; i_l < opt->childSize(); i_l++)
+		    if(attrPresent(tNm=opt->childGet(i_l)->attr("id")))
+		    {
+			attr = attrAt(tNm);
+			opt->childGet(i_l)->setAttr("p",attr.at().fld().reserve())->
+					    setAttr("act",(attr.at().flgGlob()&Attr::Active)?"1":"0")->
+					    setText(attr.at().getS());
+		    }
 	}
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)

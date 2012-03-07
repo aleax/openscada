@@ -540,7 +540,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		//> Local update
 		it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
 		it->setModify(true);
-		emit modified(swdg);
+		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index,index);
 		if(it->flag()&Item::Active) setWdg(cur_wdg);
 	    }
@@ -2143,7 +2143,28 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
 
 void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr )
 {
-    WdgView::load(item, load, init, aBr);
+    //> Check for single attribute update
+    size_t epos = item.rfind("/");
+    if(epos != string::npos && item.compare(epos,3,"/a_") == 0)
+    {
+	string tWdgNm = item.substr(0,epos);
+	string tAttrNm = item.substr(epos+3);
+	XMLNode req("get");
+        req.setAttr("path",tWdgNm+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",tAttrNm);
+        int rez = cntrIfCmd(req);
+	if(!atoi(req.childGet(0)->attr("act").c_str()))
+	{
+    	    WdgView *tWdg = (id()==tWdgNm) ? this : findChild<WdgView*>(tWdgNm.c_str());
+    	    int pAttr = atoi(req.childGet(0)->attr("p").c_str());
+    	    if(pAttr > 0 && tWdg) tWdg->attrSet("",req.childGet(0)->text(),pAttr);
+	    return;
+	}
+	//> Full load for active attributes
+	else WdgView::load(tWdgNm, load, init, aBr);
+    }
+    //> Full load process
+    else WdgView::load(item, load, init, aBr);
+
     if(editWdg)	editWdg->raise();
     if(pntView)	pntView->raise();
 }
