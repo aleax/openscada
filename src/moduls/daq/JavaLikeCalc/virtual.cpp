@@ -795,15 +795,7 @@ void Prm::enable()
 
 	unsigned	flg = TVal::DirWrite|TVal::DirRead;
 	if( !(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)) ) flg |= TFld::NoWrite;
-	TFld::Type	tp  = TFld::String;
-	switch( ((Contr &)owner()).ioType(io_id) )
-	{
-	    case IO::String:	tp = TFld::String;	break;
-	    case IO::Integer:	tp = TFld::Integer;	break;
-	    case IO::Real:	tp = TFld::Real;	break;
-	    case IO::Boolean:	tp = TFld::Boolean;	break;
-	    case IO::Object:	tp = TFld::String;	break;
-	}
+	TFld::Type	tp  = TFld::type(((Contr &)owner()).ioType(io_id));
 	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
 	{
 	    if( v_el.fldPresent(aid) ) v_el.fldDel(v_el.fldId(aid));
@@ -851,7 +843,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
     //> Send to active reserve station
     if( owner().redntUse( ) )
     {
-	if( val.getS(0,true) == pvl.getS() ) return;
+	if(val.getS(0,true) == pvl.getS()) return;
 	XMLNode req("set");
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
 	SYS->daq().at().rdStRequest(owner().workId(),req);
@@ -862,26 +854,8 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
     try
     {
 	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
-	if( io_id < 0 ) disable();
-	else
-	{
-	    switch(val.fld().type())
-	    {
-		case TFld::String:
-		    ((Contr &)owner()).setS(io_id,val.getS(0,true));
-		    break;
-		case TFld::Integer:
-		    ((Contr &)owner()).setI(io_id,val.getI(0,true));
-		    break;
-		case TFld::Real:
-		    ((Contr &)owner()).setR(io_id,val.getR(0,true));
-		    break;
-		case TFld::Boolean:
-		    ((Contr &)owner()).setB(io_id,val.getB(0,true));
-		    break;
-		default: break;
-	    }
-	}
+	if(io_id < 0) disable();
+	else ((Contr &)owner()).set(io_id,val.get(0,true));
     }catch(TError err) { disable(); }
 }
 
@@ -898,22 +872,8 @@ void Prm::vlGet( TVal &val )
     try
     {
 	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
-	if( io_id < 0 ) disable();
-	else
-	{
-	    switch(val.fld().type())
-	    {
-		case TFld::String:
-		    val.setS(enableStat()?owner().getS(io_id):EVAL_STR,0,true);	break;
-		case TFld::Integer:
-		    val.setI(enableStat()?owner().getI(io_id):EVAL_INT,0,true);	break;
-		case TFld::Real:
-		    val.setR(enableStat()?owner().getR(io_id):EVAL_REAL,0,true);break;
-		case TFld::Boolean:
-		    val.setB(enableStat()?owner().getB(io_id):EVAL_BOOL,0,true);break;
-		default: break;
-	    }
-        }
+	if(io_id < 0) disable();
+	else val.set(enableStat()?owner().get(io_id):EVAL_STR,0,true);
     }catch(TError err) { disable(); }
 }
 

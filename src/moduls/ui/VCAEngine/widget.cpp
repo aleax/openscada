@@ -1885,6 +1885,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::Integer:	setI((val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys);	break;
 	case TFld::Real:	setR((val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev, sys);	break;
 	case TFld::Boolean:	setB((val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys);	break;
+	case TFld::Object:	setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val, NULL, getO()) : AutoHD<TVarObj>());	break;
 	case TFld::String:
 	{
 	    if((!strongPrev && *m_val.s_val == val) ||

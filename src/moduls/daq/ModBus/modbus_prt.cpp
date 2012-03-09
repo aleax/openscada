@@ -1118,7 +1118,7 @@ void *Node::Task( void *ind )
 		    {
 			case IO::String:	nd.data->val.setS(li->first,li->second.at().getS());	break;
 			case IO::Integer:	nd.data->val.setI(li->first,li->second.at().getI());	break;
-			case IO::Real:	nd.data->val.setR(li->first,li->second.at().getR());	break;
+			case IO::Real:		nd.data->val.setR(li->first,li->second.at().getR());	break;
 			case IO::Boolean:	nd.data->val.setB(li->first,li->second.at().getB());	break;
 			default: break;
 		    }

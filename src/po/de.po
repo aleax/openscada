@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-17 11:08+0200\n"
+"POT-Creation-Date: 2012-03-09 09:17+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -829,6 +829,12 @@ msgstr "Fehler beim Anhalten des Controllers '%s'."
 #, c-format
 msgid "Disable controller '%s' error."
 msgstr "Fehler beim Abschalten des Controllers '%s'."
+
+msgid "No parameter present '%s'."
+msgstr "Es gibt keine Option '%s'."
+
+msgid "No attribute present '%s'."
+msgstr "Es ist kein Attribut '%s'."
 
 #, c-format
 msgid ""
@@ -1847,6 +1853,7 @@ msgstr "Zähler"
 msgid "Finished. "
 msgstr "Finished. "
 
+#, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"
 msgstr "Letzter: %s. Laden: %3.1f%% (%s von %s). Lag: %s"
 
@@ -2067,6 +2074,9 @@ msgstr "Archivierung"
 msgid "Not select type!"
 msgstr "Typ ist nicht ausgewählt!"
 
+msgid "Value not object!"
+msgstr "Der Wert ist kein Objekt!"
+
 msgid "Write access is denied!"
 msgstr "Schreibzugriff verboten!"
 
@@ -2084,11 +2094,15 @@ msgid "Zero object using try!"
 msgstr "Versuch der Benutzung des leeren Objekts"
 
 msgid "Too big string length (> 130 MB)!"
-msgstr ""
+msgstr "Sehr große Größe der Zeichenfolge (> 130 MB)!"
 
 #, c-format
 msgid "Memory alloc for big string length (%d) error!"
-msgstr ""
+msgstr "Fehler Zuweisung von Speicher für eine Reihe von Großformat (%d)!"
+
+#, c-format
+msgid "Double disconnection try: %d."
+msgstr "Ein Versuch, verdoppeln sich aus: %d."
 
 msgid "Negative id is not allow for array."
 msgstr "Negativer Index ist verboten für das Massiv-"

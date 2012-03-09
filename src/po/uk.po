@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-17 11:08+0200\n"
+"POT-Creation-Date: 2012-03-09 09:17+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -816,6 +816,12 @@ msgstr "Помилка зупинки контролера '%s'."
 #, c-format
 msgid "Disable controller '%s' error."
 msgstr "Помилка вимкнення контролеру '%s'."
+
+msgid "No parameter present '%s'."
+msgstr "Відсутній параметр '%s'."
+
+msgid "No attribute present '%s'."
+msgstr "Відсутній атрибут '%s'."
 
 #, c-format
 msgid ""
@@ -1828,6 +1834,7 @@ msgstr "Лічильники"
 msgid "Finished. "
 msgstr "Закінчено. "
 
+#, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"
 msgstr "Останній: %s. Навант.: %3.1f%% (%s із %s). Відстав.: %s"
 
@@ -2047,6 +2054,9 @@ msgstr "Архівація"
 msgid "Not select type!"
 msgstr "Не вибірковий тип!"
 
+msgid "Value not object!"
+msgstr "Значення не є об'єкт!"
+
 msgid "Write access is denied!"
 msgstr "Немає доступу на запис!"
 
@@ -2064,11 +2074,15 @@ msgid "Zero object using try!"
 msgstr "Спроба використання порожнього об'єкту!"
 
 msgid "Too big string length (> 130 MB)!"
-msgstr ""
+msgstr "Дуже великий розмір рядка (> 130 MB)!"
 
 #, c-format
 msgid "Memory alloc for big string length (%d) error!"
-msgstr ""
+msgstr "Помилка виділення пам'яті для рядка великого розміру (%d)!"
+
+#, c-format
+msgid "Double disconnection try: %d."
+msgstr "Спроба подвійного від'єднання: %d."
 
 msgid "Negative id is not allow for array."
 msgstr "Негативний індекс не дозволений для масиву."

@@ -179,7 +179,7 @@ class TValFunc
 	int  ioSize( );
 	IO::Type ioType( unsigned id )
 	{
-	    if( id >= mVal.size() )    throw TError("ValFunc",_("%s: Id or IO %d error!"),"ioType()",id);
+	    if(id >= mVal.size()) throw TError("ValFunc",_("%s: Id or IO %d error!"),"ioType()",id);
 	    return mFunc->io(id)->type();
 	}
 	unsigned ioFlg( unsigned id )

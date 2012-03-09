@@ -1607,17 +1607,7 @@ void TMdPrm::enable( )
 	    {
 		unsigned flg = TVal::DirWrite|TVal::DirRead;
 		if(func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
-
-		TFld::Type tp = TFld::String;
-		switch(ioType(i_io))
-		{
-		    case IO::String:	tp = TFld::String;	break;
-		    case IO::Integer:	tp = TFld::Integer;	break;
-		    case IO::Real:	tp = TFld::Real;	break;
-		    case IO::Boolean:	tp = TFld::Boolean;	break;
-		    case IO::Object:	tp = TFld::String;	break;
-		}
-
+		TFld::Type tp = TFld::type(ioType(i_io));
 		if((fId=p_el.fldId(func()->io(i_io)->id(),true)) < p_el.fldSize())
 		{
 		    if(p_el.fldAt(fId).type() != tp)
@@ -1761,26 +1751,16 @@ void TMdPrm::vlGet( TVal &val )
 	{
 	    int id_lnk = lnkId(val.name());
 	    if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
-	    switch(val.fld().type())
-	    {
-		case TFld::String:
-		    if(id_lnk < 0) val.setS(getS(ioId(val.name())),0,true);
-		    else val.setS(owner().getValS(lnk(id_lnk).val,acq_err),0,true);
-		    break;
-		case TFld::Integer:
-		    if(id_lnk < 0) val.setI(getI(ioId(val.name())),0,true);
-		    else val.setI(owner().getValI(lnk(id_lnk).val,acq_err),0,true);
-		    break;
-		case TFld::Real:
-		    if(id_lnk < 0) val.setR(getR(ioId(val.name())),0,true);
-		    else val.setR(owner().getValR(lnk(id_lnk).val,acq_err),0,true);
-		    break;
-		case TFld::Boolean:
-		    if(id_lnk < 0) val.setB(getB(ioId(val.name())),0,true);
-		    else val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);
-		    break;
-		default: break;
-	    }
+	    if(id_lnk < 0) val.set(get(ioId(val.name())),0,true);
+	    else
+		switch(val.fld().type())
+		{
+		    case TFld::String:	val.setS(owner().getValS(lnk(id_lnk).val,acq_err),0,true);	break;
+		    case TFld::Integer:	val.setI(owner().getValI(lnk(id_lnk).val,acq_err),0,true);	break;
+		    case TFld::Real:	val.setR(owner().getValR(lnk(id_lnk).val,acq_err),0,true);	break;
+		    case TFld::Boolean:	val.setB(owner().getValB(lnk(id_lnk).val,acq_err),0,true);	break;
+		    default: break;
+		}
 	}catch(TError err) { }
     else
     {
@@ -1808,42 +1788,19 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     try
     {
 	int id_lnk = lnkId(val.name());
-	if( id_lnk >= 0 && lnk(id_lnk).val.db < 0 ) id_lnk = -1;
-	switch( val.fld().type() )
+	if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
+	TVariant vl = val.get(0,true);
+	if(!(vl.isEVal() || vl == pvl))
 	{
-	    case TFld::String:
-	    {
-		string vl = val.getS(0,true);
-		if( vl == EVAL_STR || vl == pvl.getS() ) break;
-		if( id_lnk < 0 ) setS( ioId(val.name()), vl );
-		else owner().setValS( vl, lnk(id_lnk).val, acq_err );
-		break;
-	    }
-	    case TFld::Integer:
-	    {
-		int vl = val.getI(0,true);
-		if( vl == EVAL_INT || vl == pvl.getI() ) break;
-		if( id_lnk < 0 ) setI( ioId(val.name()), vl );
-		else owner().setValI( vl, lnk(id_lnk).val, acq_err );
-		break;
-	    }
-	    case TFld::Real:
-	    {
-		double vl = val.getR(0,true);
-		if( vl == EVAL_REAL || vl == pvl.getR() ) break;
-		if( id_lnk < 0 ) setR( ioId(val.name()), vl );
-		else owner().setValR( vl, lnk(id_lnk).val, acq_err );
-		break;
-	    }
-	    case TFld::Boolean:
-	    {
-		char vl = val.getB(0,true);
-		if( vl == EVAL_BOOL || vl == pvl.getB() ) break;
-		if( id_lnk < 0 ) setB( ioId(val.name()), vl );
-		else owner().setValB( vl, lnk(id_lnk).val, acq_err );
-		break;
-	    }
-	    default: break;
+	    if(id_lnk < 0) set(ioId(val.name()), vl);
+	    else
+		switch( val.fld().type() )
+		{
+		    case TFld::String:	owner().setValS(vl.getS(), lnk(id_lnk).val, acq_err);	break;
+		    case TFld::Integer:	owner().setValI(vl.getI(), lnk(id_lnk).val, acq_err);	break;
+		    case TFld::Real:	owner().setValR(vl.getR(), lnk(id_lnk).val, acq_err);	break;
+		    case TFld::Boolean:	owner().setValB(vl.getB(), lnk(id_lnk).val, acq_err);	break;
+		}
 	}
     }catch(TError err) {  }
 }

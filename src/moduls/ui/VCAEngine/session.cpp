@@ -1219,18 +1219,7 @@ void SessWdg::setProcess( bool val )
 	{
 	    AutoHD<Attr> cattr = attrAt(als[i_a]);
 	    if((fulw.at().attrPresent(als[i_a])&&fulw.at().attrAt(als[i_a]).at().flgSelf()&Attr::ProcAttr) || als[i_a] == "focus")
-	    {
-		IO::Type tp = IO::String;
-		switch(cattr.at().type())
-		{
-		    case TFld::Boolean: tp = IO::Boolean;	break;
-		    case TFld::Integer: tp = IO::Integer;	break;
-		    case TFld::Real:    tp = IO::Real;		break;
-		    case TFld::String:  tp = IO::String;	break;
-		    case TFld::Object:	tp = IO::Object;	break;
-		}
-		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output,"",false,("./"+als[i_a]).c_str()));
-	    }
+		fio.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output,"",false,("./"+als[i_a]).c_str()));
 	}
 
 	//>>> Include attributes check
@@ -1243,19 +1232,8 @@ void SessWdg::setProcess( bool val )
 	    {
 		AutoHD<Attr> cattr = curw.at().attrAt(als[i_a]);
 		if(cattr.at().flgSelf()&Attr::ProcAttr || als[i_a] == "focus")
-		{
-		    IO::Type tp = IO::String;
-		    switch(cattr.at().type())
-		    {
-			case TFld::Boolean: tp = IO::Boolean;	break;
-			case TFld::Integer: tp = IO::Integer;	break;
-			case TFld::Real:    tp = IO::Real;	break;
-			case TFld::String:  tp = IO::String;	break;
-			case TFld::Object:  tp = IO::Object;	break;
-		    }
-		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),tp,IO::Output,"",false,
-					(iwls[i_w]+"/"+als[i_a]).c_str()));
-		}
+		    fio.ioAdd(new IO((iwls[i_w]+"_"+als[i_a]).c_str(),(curw.at().name()+"."+cattr.at().name()).c_str(),
+			cattr.at().fld().typeIO(),IO::Output,"",false,(iwls[i_w]+"/"+als[i_a]).c_str()));
 	    }
 	}
 	fio.ioAdd(new IO("event","Event",IO::String,IO::Output));
@@ -1535,14 +1513,7 @@ void SessWdg::calc( bool first, bool last )
 
 			if(attr.at().flgGlob()&Attr::Address)
 			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
-			else switch(attr.at().type())
-			{
-			    case TFld::Boolean:	attr.at().setB(vl.at().getB());	break;
-			    case TFld::Integer:	attr.at().setI(vl.at().getI());	break;
-			    case TFld::Real:	attr.at().setR(vl.at().getR());	break;
-			    case TFld::String:	attr.at().setS(vl.at().getS());	break;
-			    default: break;
-			}
+			else attr.at().set(vl.at().get());
 		    }
 		    else if(obj_tp == "wdg:")
 			try { attr.at().set(attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).at().get()); }
@@ -1689,23 +1660,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':')+":";
 	try
 	{
-	    if(obj_tp == "prm:")
-		switch(cfg.type())
-		{
-		    case TFld::Boolean:
-		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setB(cfg.getB());
-		        break;
-		    case TFld::Integer:
-		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setI(cfg.getI());
-		        break;
-		    case TFld::Real:
-		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setR(cfg.getR());
-		        break;
-		    case TFld::String:
-		        SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().setS(cfg.getS());
-		        break;
-		    default: break;
-		}
+	    if(obj_tp == "prm:")	SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().set(cfg.get());
 	    else if(obj_tp == "wdg:")	attrAt(cfg.cfgVal().substr(obj_tp.size()),0).at().set(cfg.get());
 	}catch(...)	{ }
     }

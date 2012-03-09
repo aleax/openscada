@@ -202,14 +202,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
             if(p_p >= vfnc.func()->ioSize()) break;
             //>>>> Set default value
             if(i_p >= (int)prms.size()) { vfnc.setS(p_p,vfnc.func()->io(p_p)->def()); continue; }
-            switch(vfnc.ioType(p_p))
-            {
-                case IO::String:        vfnc.setS(p_p,prms[i_p].getS());        break;
-                case IO::Integer:       vfnc.setI(p_p,prms[i_p].getI());        break;
-                case IO::Real:          vfnc.setR(p_p,prms[i_p].getR());        break;
-                case IO::Boolean:       vfnc.setB(p_p,prms[i_p].getB());        break;
-                case IO::Object:        vfnc.setO(p_p,prms[i_p].getO());        break;
-            }
+            vfnc.set(p_p,prms[i_p]);
         }
         //>>> Make calc
         vfnc.calc(user);
@@ -219,26 +212,11 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
             p_p = (i_p>=r_pos) ? i_p+1 : i_p;
             if(p_p >= vfnc.func()->ioSize()) break;
             if(!(vfnc.ioFlg(p_p)&IO::Output))   continue;
-            switch(vfnc.ioType(p_p))
-            {
-                case IO::String:    prms[i_p].setS(vfnc.getS(p_p));     break;
-                case IO::Integer:   prms[i_p].setI(vfnc.getI(p_p));     break;
-                case IO::Real:      prms[i_p].setR(vfnc.getR(p_p));     break;
-                case IO::Boolean:   prms[i_p].setB(vfnc.getB(p_p));     break;
-                case IO::Object:    prms[i_p].setO(vfnc.getO(p_p));     break;
-            }
+            prms[i_p] = vfnc.get(p_p);
             prms[i_p].setModify();
         }
         //>>> Set return
-        if(r_pos < vfnc.func()->ioSize())
-            switch(vfnc.ioType(r_pos))
-            {
-                case IO::String:        return vfnc.getS(r_pos);
-                case IO::Integer:       return vfnc.getI(r_pos);
-                case IO::Real:          return vfnc.getR(r_pos);
-                case IO::Boolean:       return vfnc.getB(r_pos);
-                case IO::Object:        return vfnc.getO(r_pos);
-            }
+        if(r_pos < vfnc.func()->ioSize()) return vfnc.get(r_pos);
         return TVariant();
     }
 
@@ -604,7 +582,9 @@ string TValFunc::getS( unsigned id )
 	    pthread_mutex_unlock(&mRes);
 	    break;
 	case IO::Object:
+	    pthread_mutex_lock(&mRes);
 	    rez = mVal[id].val.o->at().getStrXML();
+	    pthread_mutex_unlock(&mRes);
 	    break;
     }
 
@@ -693,7 +673,10 @@ AutoHD<TVarObj> TValFunc::getO( unsigned id )
 {
     if(id >= mVal.size())	throw TError("ValFnc",_("%s: Id or IO %d error!"),"getO()",id);
     if(mVal[id].tp != IO::Object) throw TError("ValFnc",_("Get object from not object's IO %d error!"),id);
-    return *mVal[id].val.o;
+    pthread_mutex_lock(&mRes);
+    AutoHD<TVarObj> rez = *mVal[id].val.o;
+    pthread_mutex_unlock(&mRes);
+    return rez;
 }
 
 void TValFunc::set( unsigned id, const TVariant &val )
@@ -718,6 +701,11 @@ void TValFunc::setS( unsigned id, const string &val )
 	case IO::Integer:	mVal[id].val.i = (val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT;	break;
 	case IO::Real:		mVal[id].val.r = (val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL;	break;
 	case IO::Boolean:	mVal[id].val.b = (val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL;	break;
+	case IO::Object:
+	    pthread_mutex_lock(&mRes);
+	    *mVal[id].val.o = TVarObj::parseStrXML(val, NULL, *mVal[id].val.o);
+	    pthread_mutex_unlock(&mRes);
+	    break;
 	case IO::String:
 	    pthread_mutex_lock(&mRes);
 	    mVal[id].val.s->assign(val.data(), val.size());;
@@ -787,8 +775,10 @@ void TValFunc::setO( unsigned id, AutoHD<TVarObj> val )
 	case IO::Integer: case IO::Real: case IO::Boolean:
 				setB(id, true);			break;
 	case IO::Object:
-	    if(mdfChk() && !(val == *mVal[id].val.o)) mVal[id].mdf = true;
+	    if(mdfChk() && !(val == getO(id))) mVal[id].mdf = true;
+	    pthread_mutex_lock(&mRes);
 	    *mVal[id].val.o = val;
+	    pthread_mutex_unlock(&mRes);
 	    return;
     }
 }
@@ -861,15 +851,7 @@ TVariant TFuncArgsObj::propGet( const string &id )
     if(id == "length")	return vf.ioSize();
     if(id.size() && isdigit(id[0])) apos = atoi(id.c_str());
     if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
-    if(apos != -1)
-        switch(vf.ioType(apos))
-	{
-	    case IO::String:	return vf.getS(apos);
-	    case IO::Integer:	return vf.getI(apos);
-	    case IO::Real:	return vf.getR(apos);
-	    case IO::Boolean:	return vf.getB(apos);
-	    case IO::Object:	return vf.getO(apos);
-	}
+    if(apos != -1) return vf.get(apos);
     return EVAL_REAL;
 }
 
@@ -880,15 +862,7 @@ void TFuncArgsObj::propSet( const string &id, TVariant val )
     if(!vf.func()) return;
     if(id.size() && isdigit(id[0])) apos = atoi(id.c_str());
     if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
-    if(apos != -1/* && (vf.ioFlg(apos)&(IO::Output|IO::Return))*/)
-        switch(vf.ioType(apos))
-	{
-	    case IO::String:	return vf.setS(apos,val.getS());
-	    case IO::Integer:	return vf.setI(apos,val.getI());
-	    case IO::Real:	return vf.setR(apos,val.getR());
-	    case IO::Boolean:	return vf.setB(apos,val.getB());
-	    case IO::Object:	return vf.setO(apos,val.getO());
-	}
+    if(apos != -1) vf.set(apos,val);
 }
 
 string TFuncArgsObj::getStrXML( const string &oid )

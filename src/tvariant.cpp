@@ -296,7 +296,8 @@ void TVariant::setS( const string &ivl )
 	    break;
 	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : atoi(ivl.c_str()));	break;
 	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : atof(ivl.c_str()));	break;
-	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(ivl.c_str()));
+	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(ivl.c_str()));	break;
+	case Object:	setO((ivl==EVAL_STR) ? AutoHD<TVarObj>() : TVarObj::parseStrXML(ivl, NULL, getO(true))); break;
 	default: break;
     }
 }
@@ -339,6 +340,7 @@ bool TVarObj::AHDDisConnect( )
 {
     pthread_mutex_lock(&connM);
     if(mUseCnt) mUseCnt--;
+    else mess_err("TVarObj",_("Double disconnection try: %d."),mUseCnt);
     pthread_mutex_unlock(&connM);
 
     return (mUseCnt==0);
@@ -392,6 +394,39 @@ string TVarObj::getStrXML( const string &oid )
     nd += "</TVarObj>\n";
 
     return nd;
+}
+
+AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVarObj> prev )
+{
+    XMLNode oTree;
+    if(!nd)
+    {
+	try { oTree.load(str); }
+	catch(TError err) { return prev; }
+	nd = &oTree;
+    }
+    //> Different objects process
+    if(nd->name() == "TVarObj")
+    {
+	TVarObj *rez = new TVarObj;
+	for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
+	{
+	    XMLNode *cNd = nd->childGet(i_ch);
+	    if(cNd->name() == "str")		rez->mProps[cNd->attr("p")] = cNd->text();
+	    else if(cNd->name() == "int")	rez->mProps[cNd->attr("p")] = atoi(cNd->text().c_str());
+	    else if(cNd->name() == "real")	rez->mProps[cNd->attr("p")] = atof(cNd->text().c_str());
+	    else if(cNd->name() == "bool")	rez->mProps[cNd->attr("p")] = (char)atoi(cNd->text().c_str());
+	    else if(cNd->name() == "TVarObj")	rez->mProps[cNd->attr("p")] = TVarObj::parseStrXML("", cNd);
+	    else if(cNd->name() == "TArrayObj")	rez->mProps[cNd->attr("p")] = TArrayObj::parseStrXML(cNd);
+	    else if(TSYS::strParse(cNd->name(),0,":") == "XMLNodeObj")
+		rez->mProps[cNd->attr("p")] = XMLNodeObj::parseStrXML(cNd);
+	}
+	return rez;
+    }
+    else if(nd->name() == "TArrayObj")	return TArrayObj::parseStrXML(nd);
+    else if(TSYS::strParse(nd->name(),0,":") == "XMLNodeObj")	return XMLNodeObj::parseStrXML(nd);
+
+    return prev;
 }
 
 TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
@@ -469,6 +504,28 @@ string TArrayObj::getStrXML( const string &oid )
     nd += "</TArrayObj>\n";
 
     return nd;
+}
+
+AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
+{
+    TArrayObj *rez = new TArrayObj;
+    for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
+    {
+	XMLNode *cNd = nd->childGet(i_ch);
+	string p = cNd->attr("p");
+	TVariant vl;
+	if(cNd->name() == "str")		vl = cNd->text();
+	else if(cNd->name() == "int")		vl = atoi(cNd->text().c_str());
+	else if(cNd->name() == "real")		vl = atof(cNd->text().c_str());
+	else if(cNd->name() == "bool")		vl = (char)atoi(cNd->text().c_str());
+	else vl = TVarObj::parseStrXML("", cNd);
+	if(!vl.isNull())
+	{
+	    if(p.size()) rez->mProps[p] = vl;
+    	    else rez->mEls.push_back(vl);
+	}
+    }
+    return rez;
 }
 
 TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
@@ -871,6 +928,7 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet(unsigned id)
 string XMLNodeObj::getStrXML(const string &oid)
 {
     string nd("<XMLNodeObj:"+name());
+    if(!oid.empty()) nd += " p='"+oid+"'";
     oRes.resRequestR();
     for(map<string,TVariant>::iterator ip = mProps.begin(); ip != mProps.end(); ip++)
 	nd += " "+ip->first+"=\""+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"\"";
@@ -881,6 +939,24 @@ string XMLNodeObj::getStrXML(const string &oid)
     nd += "</XMLNodeObj:"+name()+">\n";
 
     return nd;
+}
+
+AutoHD<TVarObj> XMLNodeObj::parseStrXML( XMLNode *nd )
+{
+    XMLNodeObj *rez = new XMLNodeObj(TSYS::strParse(nd->name(),1,":"));
+    rez->mText = nd->text();
+
+    //> Attributes process
+    vector<string> lst;
+    nd->attrList(lst);
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+	rez->mProps[lst[i_l]] = nd->attr(lst[i_l]);
+
+    //> Child nodes process
+    for(unsigned i_ch = 0; i_ch < nd->childSize(); i_ch++)
+	rez->mChilds.push_back(XMLNodeObj::parseStrXML(nd->childGet(i_ch)));
+
+    return rez;
 }
 
 TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-17 11:08+0200\n"
+"POT-Creation-Date: 2012-03-09 09:17+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -817,6 +817,12 @@ msgstr "Ошибка останова контроллера '%s'."
 #, c-format
 msgid "Disable controller '%s' error."
 msgstr "Ошибка отключения контроллера '%s'."
+
+msgid "No parameter present '%s'."
+msgstr "Отсутствует параметр '%s'."
+
+msgid "No attribute present '%s'."
+msgstr "Отсутствует атрибут '%s'."
 
 #, c-format
 msgid ""
@@ -1832,6 +1838,7 @@ msgstr "Счётчики"
 msgid "Finished. "
 msgstr "Закончен. "
 
+#, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"
 msgstr "Последний: %s. Нагрузка %3.1f%% (%s из %s). Отстав.: %s"
 
@@ -2051,6 +2058,9 @@ msgstr "Архивация"
 msgid "Not select type!"
 msgstr "Не выборочный тип!"
 
+msgid "Value not object!"
+msgstr "Значение не объект!"
+
 msgid "Write access is denied!"
 msgstr "Нет доступа на запись!"
 
@@ -2068,11 +2078,15 @@ msgid "Zero object using try!"
 msgstr "Попытка использования пустого объекта!"
 
 msgid "Too big string length (> 130 MB)!"
-msgstr ""
+msgstr "Очень большой размер строки (> 130 MB)!"
 
 #, c-format
 msgid "Memory alloc for big string length (%d) error!"
-msgstr ""
+msgstr "Ошибка выделения памяти для строки большого размера (%d)!"
+
+#, c-format
+msgid "Double disconnection try: %d."
+msgstr "Попытка двойного отключения: %d."
 
 msgid "Negative id is not allow for array."
 msgstr "Отрицательные индексы не допустимы для массива."

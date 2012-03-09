@@ -815,10 +815,18 @@ void ConfApp::pageRefresh( bool tm )
 
 	autoUpdTimer->setSingleShot(true);
 	autoUpdTimer->start(CH_REFR_TM);
+
 	return;
     }
 
-    try { pageDisplay(sel_path); }
+    try
+    {
+	//> Tree part update
+	if(CtrTree->currentItem()) viewChildRecArea(CtrTree->currentItem(), true);
+
+	//> Same page update
+	pageDisplay(sel_path);
+    }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
@@ -2055,7 +2063,7 @@ void ConfApp::ctrTreePopup( )
 
     try
     {
-	if( lview && lview->currentItem() && lview->currentItem()->text(2)[0] != '*' )
+	if(lview && lview->currentItem() && lview->currentItem()->text(2)[0] != '*')
 	{
 	    //> Load and Save actions
 	    popup.addAction(actDBLoad);
@@ -2072,16 +2080,16 @@ void ConfApp::ctrTreePopup( )
 	}
 	//> Main action add
 	QImage ico_t;
-	if( !ico_t.load(TUIS::icoPath("reload").c_str()) ) ico_t.load(":/images/reload.png");
-	QAction *actRemHostUp = new QAction( QPixmap::fromImage(ico_t), _("Refresh items tree"), this );
+	if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+	QAction *actRemHostUp = new QAction(QPixmap::fromImage(ico_t), _("Refresh items tree"), this);
 	popup.addAction(actRemHostUp);
 	QAction *rez = popup.exec(QCursor::pos());
-	if( rez == actRemHostUp )
+	if(rez == actRemHostUp)
 	{
-	    initHosts( );
-	    treeUpdate( );
+	    initHosts();
+	    treeUpdate();
 	}
-	popup.clear( );
+	popup.clear();
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 

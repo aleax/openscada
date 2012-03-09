@@ -1,3 +1,14 @@
+2012-03-09 Roman
+- !!!!:TVal, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens, UI.VCAEngine:
+    Object type support for values is added. Using for all is enabled.
+- !!!!:SYS: Objects backward serialization is added to objects TVarObj, TArrayObj and XMLNodeObj.
+    Object backward serialization enabled for TVariant, TVal, TValFunc, UI.VCAEngine.Widget
+    and allow save and load it to DB.
+- TFunction: Resource enable for access to object values into TValFunc.
+- TElem: Types conversion function is added to TFld object.
+- UI.QTCfg: Partial tree update for select item is added on page update command (F5).
+
+
 2012-03-07 Roman
 - DAQ.Siemens: ISO_TCP243 variant for CP243 (on S7-200) support is added.
 - UI.VCAEngine: Separated attributes list request is added to service request "get /serv/attr".

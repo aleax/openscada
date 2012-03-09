@@ -147,6 +147,7 @@ class TVarObj
 	virtual void propSet( const string &id, TVariant val );
 
 	virtual string getStrXML( const string &oid = "" );
+	static AutoHD<TVarObj> parseStrXML( const string &str, XMLNode *nd = NULL, AutoHD<TVarObj> prev = NULL );
 
 	virtual TVariant funcCall( const string &id, vector<TVariant> &prms );
 
@@ -176,6 +177,7 @@ class TArrayObj : public TVarObj
 	void propSet( const string &id, TVariant val );
 
 	string getStrXML( const string &oid = "" );
+	static AutoHD<TVarObj> parseStrXML( XMLNode *nd = NULL );
 
 	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
@@ -258,6 +260,7 @@ class XMLNodeObj : public TVarObj
 	void childDel( unsigned id );
 
 	string getStrXML( const string &oid = "" );
+	static AutoHD<TVarObj> parseStrXML( XMLNode *nd = NULL );
 
 	TVariant funcCall( const string &id, vector<TVariant> &prms );
 

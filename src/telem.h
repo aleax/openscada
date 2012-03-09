@@ -26,6 +26,7 @@
 #include <vector>
 
 #include "resalloc.h"
+#include "tfunction.h"
 
 using std::string;
 using std::vector;
@@ -79,7 +80,9 @@ class TFld
 	const string &descr( )	{ return m_descr; }	//Description
 	int len( )		{ return m_len; }	//Length
 	int dec( )		{ return m_dec; }	//Float dec
-	Type type( )		{ return (Type)m_type; }	//Value type
+	Type type( )		{ return (Type)m_type; }//Value type
+	static Type type(IO::Type tp);			//Field type from IO
+	IO::Type typeIO( );				//Type to IO
 	unsigned flg( )		{ return m_flg; }	//Flags
 	const string &def( )	{ return m_def; }	//Default value
 	string values( );				//Values range or values list

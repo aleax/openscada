@@ -433,16 +433,7 @@ void TMdPrm::enable()
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
 		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
 
-		    TFld::Type tp = TFld::String;
-		    switch(tmpl->val.ioType(i_io))
-		    {
-			case IO::String:	tp = TFld::String;	break;
-			case IO::Integer:	tp = TFld::Integer;	break;
-			case IO::Real:		tp = TFld::Real;	break;
-			case IO::Boolean:	tp = TFld::Boolean;	break;
-			case IO::Object:	tp = TFld::String;	break;
-		    }
-
+		    TFld::Type tp = TFld::type(tmpl->val.ioType(i_io));
 		    if((fId=p_el.fldId(tmpl->val.func()->io(i_io)->id(),true)) < p_el.fldSize())
             	    {
                 	if(p_el.fldAt(fId).type() != tp)

@@ -446,11 +446,16 @@ TValue &TVal::owner( )	{ return *(TValue*)nodePrev(); }
 void TVal::setFld( TFld &fld )
 {
     //> Delete previous
-    if(!mCfg && src.fld && src.fld->type() == TFld::String)	delete val.val_s;
+    if(!mCfg && src.fld)
+	switch(src.fld->type())
+	{
+	    case TFld::String:	delete val.val_s;	break;
+	    case TFld::Object:	delete val.val_o;	break;
+	}
     if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 
     //> Chek for self field for dynamic elements
-    if( fld.flg()&TFld::SelfFld )
+    if(fld.flg()&TFld::SelfFld)
     {
 	src.fld = new TFld();
 	*(src.fld) = fld;
@@ -468,6 +473,8 @@ void TVal::setFld( TFld &fld )
 	    val.val_r = src.fld->def().empty() ? EVAL_REAL : atof(src.fld->def().c_str());	break;
 	case TFld::Boolean:
 	    val.val_b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
+	case TFld::Object:
+	    val.val_o = new AutoHD<TVarObj>(new TVarObj); break;
 	default: break;
     }
 
@@ -521,6 +528,7 @@ TVariant TVal::get( int64_t *tm, bool sys )
 	case TFld::Real:	return getR(tm,sys);
 	case TFld::Boolean:	return getB(tm,sys);
 	case TFld::String:	return getS(tm,sys);
+	case TFld::Object:	return getO(tm,sys);
 	default: break;
     }
     return EVAL_STR;
@@ -536,6 +544,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? TSYS::real2str(vl) : EVAL_STR; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
+	case TFld::Object:		return !getO().freeStat() ? getO().at().getStrXML() : EVAL_STR;
 	case TFld::String:
 	{
 	    setReqFlg(true);
@@ -571,6 +580,7 @@ int TVal::getI( int64_t *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (int)vl : EVAL_INT; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
+	case TFld::Object:		return getO().freeStat() ? 1 : EVAL_INT;
 	case TFld::Integer:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -601,6 +611,7 @@ double TVal::getR( int64_t *tm, bool sys )
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT) ? vl : EVAL_REAL; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
+	case TFld::Object:		return getO().freeStat() ? 1 : EVAL_REAL;
 	case TFld::Real:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -631,6 +642,7 @@ char TVal::getB( int64_t *tm, bool sys )
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Real:
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
+	case TFld::Object:		return getO().freeStat() ? true : EVAL_BOOL;
 	case TFld::Boolean:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -649,6 +661,23 @@ char TVal::getB( int64_t *tm, bool sys )
 	default: break;
     }
     return EVAL_BOOL;
+}
+
+AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
+{
+    if(fld().type() != TFld::Object) throw TError("Val",_("Value not object!"));
+
+    setReqFlg(true);
+    //> Get from archive. Get objects from archive did not support
+    //> Get value from config. Get object form config did not support
+    if(mCfg) return AutoHD<TVarObj>();
+    //> Get current value
+    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
+    if(tm) *tm = time();
+    nodeRes().resRequestR();
+    AutoHD<TVarObj> rez = *val.val_o;
+    nodeRes().resRelease();
+    return rez;
 }
 
 void TVal::setSEL( const string &value, int64_t tm, bool sys )
@@ -672,6 +701,7 @@ void TVal::set( const TVariant &value, int64_t tm, bool sys )
 	case TFld::Real:	setR(value.getR(), tm, sys);	break;
 	case TFld::Boolean:	setB(value.getB(), tm, sys);	break;
 	case TFld::String:	setS(value.getS(), tm, sys);	break;
+	case TFld::Object:	setO(value.getO(), tm, sys);	break;
 	default: break;
     }
 }
@@ -681,11 +711,13 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
     switch( fld().type() )
     {
 	case TFld::Integer:
-	    setI( (value!=EVAL_STR) ? atoi(value.c_str()) : EVAL_INT, tm, sys );	break;
+	    setI((value!=EVAL_STR) ? atoi(value.c_str()) : EVAL_INT, tm, sys);	break;
 	case TFld::Real:
-	    setR( (value!=EVAL_STR) ? atof(value.c_str()) : EVAL_REAL, tm, sys );	break;
+	    setR((value!=EVAL_STR) ? atof(value.c_str()) : EVAL_REAL, tm, sys);	break;
 	case TFld::Boolean:
-	    setB( (value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys );	break;
+	    setB((value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys);	break;
+	case TFld::Object:
+	    setO(TVarObj::parseStrXML(value, NULL, getO()));	break;
 	case TFld::String:
 	{
 	    //> Set value to config
@@ -807,6 +839,23 @@ void TVal::setB( char value, int64_t tm, bool sys )
     }
 }
 
+void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
+{
+    if(mCfg || fld().type() != TFld::Object) return;
+    //> Set value to config. Set object to config did not support
+    //> Check to write
+    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
+    //> Set current value and time
+    nodeRes().resRequestW();
+    AutoHD<TVarObj> pvl = *val.val_o;
+    *val.val_o = value;
+    nodeRes().resRelease();
+    mTime = tm;
+    if(!mTime) mTime = TSYS::curTime();
+    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
+    //> Set to archive. Set object to archive did not support
+}
+
 TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // ElTp get(int tm = 0, int utm = 0, bool sys = false) - get attribute value at time <tm:utm> and system access flag <sys>.
@@ -822,14 +871,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 2) tm += prms[1].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 3) isSys = prms[2].getB();
-	    switch(fld().type())
-	    {
-		case TFld::Boolean:	rez = getB(&tm,isSys);	break;
-		case TFld::Integer:	rez = getI(&tm,isSys);	break;
-		case TFld::Real:	rez = getR(&tm,isSys);	break;
-		case TFld::String:	rez = getS(&tm,isSys);	break;
-		default: break;
-	    }
+	    rez = get(&tm,isSys);
 	    if(prms.size() >= 1)	{ prms[0].setI(tm/1000000); prms[0].setModify(); }
 	    if(prms.size() >= 2)	{ prms[1].setI(tm%1000000); prms[1].setModify(); }
 
@@ -850,14 +892,7 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	    if(prms.size() >= 3) tm += prms[2].getI();
 	    bool isSys = false;
 	    if(prms.size() >= 4) isSys = prms[3].getB();
-	    switch(fld().type())
-	    {
-		case TFld::Boolean:	setB(prms[0].getB(),tm,isSys);	break;
-		case TFld::Integer:	setI(prms[0].getI(),tm,isSys);	break;
-		case TFld::Real:	setR(prms[0].getR(),tm,isSys);	break;
-		case TFld::String:	setS(prms[0].getS(),tm,isSys);	break;
-		default: break;
-	    }
+	    set(prms[0],tm,isSys);
 	    return false;
 	}catch(...){ }
 	return true;

@@ -629,15 +629,7 @@ void Prm::enable()
 	    blk = ((Contr&)owner()).blkAt(ioblk);
 	    if((io=blk.at().ioId(ioid)) < 0)	continue;
 	    if(anm.empty()) anm = blk.at().func()->io(io)->name();
-
-	    switch(blk.at().ioType(io))
-	    {
-		case IO::String:	tp = TFld::String;	break;
-		case IO::Integer:	tp = TFld::Integer;	break;
-		case IO::Real:		tp = TFld::Real;	break;
-		case IO::Boolean:	tp = TFld::Boolean;	break;
-		case IO::Object:	tp = TFld::String;	break;
-	    }
+	    tp = TFld::type(blk.at().ioType(io));
 	    flg = TVal::DirWrite|TVal::DirRead;
 	    reserve = ioaddr;
 	}
@@ -700,14 +692,7 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
 	else
 	{
 	    ResAlloc sres(owner().calcRes,true);
-	    switch(val.fld().type())
-	    {
-		case TFld::String:	blk.at().setS(io_id,val.getS(0,true));	break;
-		case TFld::Integer:	blk.at().setI(io_id,val.getI(0,true));	break;
-		case TFld::Real:	blk.at().setR(io_id,val.getR(0,true));	break;
-		case TFld::Boolean:	blk.at().setB(io_id,val.getB(0,true));	break;
-		default: break;
-	    }
+	    blk.at().set(io_id,val.get(0,true));
 	}
     }catch(TError err) { disable(); }
 }
@@ -730,19 +715,7 @@ void Prm::vlGet( TVal &val )
 	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
 	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
 	if( io_id < 0 )	disable();
-	else
-	    switch(val.fld().type())
-	    {
-		case TFld::String:
-		    val.setS( (enableStat()&&owner().startStat()) ? blk.at().getS(io_id) : EVAL_STR, 0, true );	break;
-		case TFld::Integer:
-		    val.setI( (enableStat()&&owner().startStat()) ? blk.at().getI(io_id) : EVAL_INT, 0, true );	break;
-		case TFld::Real:
-		    val.setR( (enableStat()&&owner().startStat()) ? blk.at().getR(io_id) : EVAL_REAL, 0, true );break;
-		case TFld::Boolean:
-		    val.setB( (enableStat()&&owner().startStat()) ? blk.at().getB(io_id) : EVAL_BOOL, 0, true );break;
-		default: break;
-	    }
+	else val.set((enableStat()&&owner().startStat()) ? blk.at().get(io_id) : EVAL_STR, 0, true);
     }catch(TError err) { disable(); }
 }
 

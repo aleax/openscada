@@ -179,6 +179,32 @@ TFld::~TFld( )
 	}
 }
 
+TFld::Type TFld::type(IO::Type tp)
+{
+    switch(tp)
+    {
+        case IO::String:	return String;
+        case IO::Integer:       return Integer;
+        case IO::Real:          return Real;
+        case IO::Boolean:       return Boolean;
+        case IO::Object:        return Object;
+    }
+    return String;
+}
+
+IO::Type TFld::typeIO( )
+{
+    switch(type())
+    {
+        case Boolean:	return IO::Boolean;
+        case Integer:	return IO::Integer;
+        case Real:	return IO::Real;
+        case String:	return IO::String;
+        case Object:	return IO::Object;
+    }
+    return IO::String;
+}
+
 void TFld::setFlg( unsigned iflg )
 {
     unsigned ch_flg = iflg^flg();

@@ -29,8 +29,6 @@
 #include <vector>
 #include <exception>
 
-#include "tconfig.h"
-
 #define _(mess) Mess->I18N(mess)
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 #define message(cat,lev,fmt,args...) Mess->put(cat,lev,fmt,##args)

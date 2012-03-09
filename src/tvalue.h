@@ -72,6 +72,7 @@ class TVal : public TCntrNode
 	double	getR( int64_t *tm = NULL, bool sys = false );
 	int	getI( int64_t *tm = NULL, bool sys = false );
 	char	getB( int64_t *tm = NULL, bool sys = false );
+	AutoHD<TVarObj> getO( int64_t *tm = NULL, bool sys = false );
 
 	//> Set current value
 	void setSEL( const string &value, int64_t tm = 0, bool sys = false );
@@ -80,6 +81,7 @@ class TVal : public TCntrNode
 	void setR( double value, int64_t tm = 0, bool sys = false );
 	void setI( int value, int64_t tm = 0, bool sys = false );
 	void setB( char value, int64_t tm = 0, bool sys = false );
+	void setO( AutoHD<TVarObj> value, int64_t tm = 0, bool sys = false );
 
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
@@ -112,6 +114,7 @@ class TVal : public TCntrNode
 	    double	val_r;		//Real value
 	    int		val_i;		//Integer value
 	    char	val_b;		//Boolean value
+	    AutoHD<TVarObj> *val_o;	//Object value
 	} val;
 
 	unsigned char	mCfg	: 1;		//Configuration id
