@@ -1,3 +1,7 @@
+2012-03-11 Roman
+- UI.VCAEngine: Context help for type "Full video" of primitive "Media" is updated.
+
+
 2012-03-09 Roman
 - !!!!:TVal, DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens, UI.VCAEngine:
     Object type support for values is added. Using for all is enabled.
