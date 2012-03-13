@@ -662,29 +662,42 @@ bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
 TRegExp::TRegExp( const string &rule, const string &flg ) :
     lastIndex(0), pattern(rule), global(false), ignoreCase(false), multiline(false), isSimplePat(false), regex(NULL), vSz(90), capv(NULL)
 {
-    global = (flg.find('g')!=string::npos);
-    ignoreCase = (flg.find('i')!=string::npos);
-    multiline = (flg.find('m')!=string::npos);
-    if(flg.find('p') != string::npos)
-    {
-	isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
-	if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
-    }
-
-    if(!isSimplePat && pattern.size())
-    {
-	const char *terr;
-	int erroff;
-	regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
-	if(!regex) err = terr;
-	else capv = new int[90];
-    }
+    setPattern(rule, flg);
 }
 
 TRegExp::~TRegExp( )
 {
     if(capv)	delete [] capv;
     if(regex)	pcre_free(regex);
+}
+
+void TRegExp::setPattern( const string &rule, const string &flg )
+{
+    //> Global properties init
+    global = (flg.find('g')!=string::npos);
+    ignoreCase = (flg.find('i')!=string::npos);
+    multiline = (flg.find('m')!=string::npos);
+    isSimplePat = false;
+    pattern = rule;
+    if(flg.find('p') != string::npos)
+    {
+	isSimplePat = !(rule.size() > 2 && rule[0] == '/' && rule[rule.size()-1] == '/');
+	if(!isSimplePat) pattern = rule.substr(1,rule.size()-2);
+    }
+
+    //> Check for free
+    if(isSimplePat && capv)	{ delete [] capv; capv = NULL; }
+    if(regex)			{ pcre_free(regex); regex = NULL; }
+
+    //> Alloc for regexp
+    if(!isSimplePat && pattern.size())
+    {
+	const char *terr;
+	int erroff;
+	regex = pcre_compile(pattern.c_str(),PCRE_DOTALL|(ignoreCase?PCRE_CASELESS:0)|(multiline?PCRE_MULTILINE:0),&terr,&erroff,NULL);
+	if(!regex) err = terr;
+	else if(!capv) capv = new int[90];
+    }
 }
 
 TArrayObj *TRegExp::match( const string &vl, bool all )
@@ -773,10 +786,10 @@ bool TRegExp::test( const string &vl )
     return (n>0);
 }
 
-int TRegExp::search( const string &vl )
+int TRegExp::search( const string &vl, int off )
 {
     if(!regex) return -1;
-    int n = pcre_exec(regex, NULL, vl.data(), vl.size(), 0, 0, capv, vSz);
+    int n = pcre_exec(regex, NULL, vl.data(), vl.size(), off, 0, capv, vSz);
     return (n>0) ? capv[0] : -1;
 }
 

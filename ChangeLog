@@ -1,4 +1,9 @@
 2012-03-13 Roman
+- SYS: Object TRegExp API is some updated for allow pattern/rule change and search by offset.
+- UI.QTCfg, UI.Vision: Minimal mode (no greed) enabling support is added to syntax highlight rules by attribute "min".
+- DAQ.JavaLikeCalc: Syntax highlight rule for strings is some updated for correct process parts like "\"..." and "...\\".
+- UI.VCAEngine: User API function wdgAt() is added for allow simple connect to session widgets by different
+    address form (absolute or relative).
 - UI.VCAEngine, UI.Vision: Stream prefix before URL for type "Full video" of primitive "Media" is changed
     to "stream:" for made generic.
 

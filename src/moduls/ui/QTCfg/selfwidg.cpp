@@ -384,6 +384,7 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 	    if(rl->name() == "rule")	expr.setPattern(rl->attr("expr").c_str());
 	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
 	    else continue;
+	    expr.setMinimal(atoi(rl->attr("min").c_str()));
 	    rul_pos[i_ch] = expr.indexIn(text,i_t);
 	    if(expr.matchedLength() <= 0) continue;
 	    if(rul_pos[i_ch] < 0) rul_pos[i_ch] = text.length();
@@ -416,6 +417,7 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 		startBlk = rul_pos[minRule]+expr.matchedLength();
 	    }
 	    QRegExp eExpr(rl->attr("end").c_str());
+	    eExpr.setMinimal(atoi(rl->attr("min").c_str()));
 	    endIndex = eExpr.indexIn(text, startBlk);
             if(endIndex == -1 || eExpr.matchedLength() <= 0)
             {

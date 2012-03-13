@@ -1717,6 +1717,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     }
     // TCntrNodeObj wdgAt(string wid, bool byPath = false) - attach to child widget or global by <path>
     //  wid - widget identifier
+    //  byPath - attach by absolute or relative path. First item of absolute path (session or project id) is passed.
     if(iid == "wdgAt" && prms.size())
     {
 	try { return new TCntrNodeObj(wdgAt(prms[0].getS(),(prms.size()>1&&prms[1].getB())?0:-1),user); }

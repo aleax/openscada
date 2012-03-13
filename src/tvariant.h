@@ -203,9 +203,11 @@ class TRegExp : public TVarObj
 	string objName( )	{ return "RegExp"; }
 	bool isNull( )		{ return !regex; }
 
+	void setPattern( const string &rule, const string &flg = "" );
+
 	TArrayObj *match( const string &vl, bool all = false );
 	bool test( const string &vl );
-	int search( const string &vl );
+	int search( const string &vl, int off = 0 );
 	string replace( const string &vl, const string &str );
 	TArrayObj *split( const string &vl, int limit = 0 );
 
