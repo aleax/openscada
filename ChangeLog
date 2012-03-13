@@ -1,3 +1,8 @@
+2012-03-13 Roman
+- UI.VCAEngine, UI.Vision: Stream prefix before URL for type "Full video" of primitive "Media" is changed
+    to "stream:" for made generic.
+
+
 2012-03-11 Roman
 - UI.VCAEngine: Context help for type "Full video" of primitive "Media" is updated.
 

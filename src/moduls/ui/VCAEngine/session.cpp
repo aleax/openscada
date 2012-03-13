@@ -1715,6 +1715,14 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	catch(TError err){ return false; }
 	return true;
     }
+    // TCntrNodeObj wdgAt(string wid, bool byPath = false) - attach to child widget or global by <path>
+    //  wid - widget identifier
+    if(iid == "wdgAt" && prms.size())
+    {
+	try { return new TCntrNodeObj(wdgAt(prms[0].getS(),(prms.size()>1&&prms[1].getB())?0:-1),user); }
+	catch(TError err){ }
+	return false;
+    }
     // bool attrPresent(string attr) - check for attribute <attr> present.
     //  attr - checked attribute
     if(iid == "attrPresent" && prms.size())	return attrPresent(prms[0].getS());

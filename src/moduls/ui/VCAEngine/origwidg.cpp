@@ -836,13 +836,13 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
         		"  \"src\" - source:\n"
         		"    file - direct from local (visualizator or engine) file by path;\n"
         		"    res - from DB mime resources table;\n"
-        		"    http, ftp - Stream URL for video and audio play.\n"
+        		"    stream - Stream URL for video and audio play.\n"
         		"  \"name\" - file path or resource mime Id.\n"
         		"Examples:\n"
         		"  \"res:workMedia\" - from DB mime resources table for Id \"workMedia\";\n"
         		"  \"workMedia\" - like previous;\n"
         		"  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\";\n"
-        		"  \"http://localhost.localhost:5050\" - video and audio stream play from URL."));
+        		"  \"stream:http://localhost.localhost:5050\" - video and audio stream play from URL."));
         		break;
         	}
     	    }

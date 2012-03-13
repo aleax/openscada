@@ -1249,8 +1249,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		if(shD->mediaSrc.compare(0,5,"file:") == 0)
 		    mSrc = MediaSource(QString(shD->mediaSrc.substr(5).c_str()));
 		//> Try play Stream by URL
-		else if(shD->mediaSrc.compare(0,5,"http:") == 0 || shD->mediaSrc.compare(0,4,"ftp:") == 0)
-		    mSrc = MediaSource(QUrl(shD->mediaSrc.c_str()));
+		else if(shD->mediaSrc.compare(0,7,"stream:") == 0)
+		    mSrc = MediaSource(QUrl(shD->mediaSrc.substr(7).c_str()));
 		//> Try remote VCAEngine resource at last
 		if(shD->mediaSrc.size() && (mSrc.type() == MediaSource::Invalid || mSrc.type() == MediaSource::Empty))
 		{
@@ -1267,9 +1267,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			}
 		    }
 		}
-		if(mSrc.type() != MediaSource::Invalid && mSrc.type() != MediaSource::Empty) player->load(mSrc);
 		if(mSrc.type() != MediaSource::Invalid && mSrc.type() != MediaSource::Empty)
 		{
+		    player->load(mSrc);
 		    if(shD->videoPlay)
 		    {
 			player->play();
