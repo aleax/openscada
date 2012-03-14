@@ -746,6 +746,7 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
         if(rl->name() == "rule")
         {
             expr.setPattern(rl->attr("expr").c_str());
+	    expr.setMinimal(atoi(rl->attr("min").c_str()));
             if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
             setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
             //> Call include rules
@@ -758,6 +759,7 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
             else
             {
                 expr.setPattern(rl->attr("beg").c_str());
+		expr.setMinimal(atoi(rl->attr("min").c_str()));
                 if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
                 startBlk = rul_pos[minRule]+expr.matchedLength();
             }
