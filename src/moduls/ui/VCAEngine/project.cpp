@@ -1372,11 +1372,13 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
         //>> Link interface process
         int c_lv = 0;
         string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-        if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:"))
+        if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:"))
         {
             if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
             opt->childAdd("el")->setText("prm:");
             opt->childAdd("el")->setText("wdg:");
+            if(!is_pl && srcwdg.at().attrAt(nattr).at().flgGlob()&Attr::Address)
+                opt->childAdd("el")->setText("arh:");
         }
         //>> Link elements process
         else
@@ -1441,6 +1443,12 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
                             opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
                         }
                     }
+                }
+                else if(m_prm == "arh:")
+                {
+                    SYS->archive().at().valList(ls);
+                    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                        opt->childAdd("el")->setText(c_path+ls[i_l]);
                 }
             }catch(TError err) { }
         }

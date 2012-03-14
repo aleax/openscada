@@ -1518,6 +1518,8 @@ void SessWdg::calc( bool first, bool last )
 		    else if(obj_tp == "wdg:")
 			try { attr.at().set(attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).at().get()); }
 			catch(TError err) { attr.at().setS(EVAL_STR); continue; }
+		    else if(obj_tp == "arh:" && attr.at().flgGlob()&Attr::Address)
+			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
 		}
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
 	    }

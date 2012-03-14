@@ -1200,7 +1200,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 				nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
 				if(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 				    ((nel->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(nel->text().substr(4),0,true).freeStat()) ||
-				     (nel->text().compare(0,4,"wdg:") == 0 && !wdg.at().attrAt(nel->text().substr(4),0).freeStat())))
+				     (nel->text().compare(0,4,"wdg:") == 0 && !wdg.at().attrAt(nel->text().substr(4),0).freeStat()) ||
+				     (nel->text().compare(0,4,"arh:") == 0 && SYS->archive().at().valPresent(nel->text().substr(4)))))
 				    nel->setText(nel->text() + " (+)");
 			    }
 			}
@@ -1339,11 +1340,13 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	//>> Link interface process
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
-	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:"))
+	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:"))
 	{
 	    if(!is_pl) opt->childAdd("el")->setText(_("val:Constant value"));
 	    opt->childAdd("el")->setText("prm:");
 	    opt->childAdd("el")->setText("wdg:");
+	    if(!is_pl && srcwdg.at().attrAt(nattr).at().flgGlob()&Attr::Address)
+		opt->childAdd("el")->setText("arh:");
 	}
 	//>> Link elements process
 	else
@@ -1388,9 +1391,15 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			    wnd.at().attrList(ls);
 			    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
 			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-                    	    opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
+                    		opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
                     	}
 		    }
+		}
+		else if(m_prm == "arh:")
+		{
+		    SYS->archive().at().valList(ls);
+		    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+                	opt->childAdd("el")->setText(c_path+ls[i_l]);
 		}
     	    }catch(TError err) { }
 	}
@@ -1408,7 +1417,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
 	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 		    ((opt->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(opt->text().substr(4),0,true).freeStat()) ||
-		     (opt->text().compare(0,4,"wdg:") == 0 && !srcwdg.at().attrAt(opt->text().substr(4),0).freeStat())))
+		     (opt->text().compare(0,4,"wdg:") == 0 && !srcwdg.at().attrAt(opt->text().substr(4),0).freeStat()) ||
+		     (opt->text().compare(0,4,"arh:") == 0 && SYS->archive().at().valPresent(opt->text().substr(4)))))
 		opt->setText(opt->text() + " (+)");
 	}
 	else if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))

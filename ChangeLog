@@ -1,4 +1,5 @@
 2012-03-13 Roman
+- UI.VCAEngine: Link prefix "arh:" is added for Address fields allow link direct to Archive data source.
 - SYS: Object TRegExp API is some updated for allow pattern/rule change and search by offset.
 - UI.QTCfg, UI.Vision: Minimal mode (no greed) enabling support is added to syntax highlight rules by attribute "min".
 - DAQ.JavaLikeCalc: Syntax highlight rule for strings is some updated for correct process parts like "\"..." and "...\\".
