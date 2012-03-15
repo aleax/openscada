@@ -729,7 +729,7 @@ void OrigMedia::postEnable( int flag )
 	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
 						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24"));
 	attrAdd(new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","","25"));
-	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1;2",_("Image;Movie;Full video"),"27"));
+	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1;2",_("Image;Animation;Full video"),"27"));
 	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","","28"));
     }
 }
@@ -746,7 +746,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		case 0:	//Image
 		    cfg.owner()->attrDel("fit");
 		    break;
-		case 1:	//Movie
+		case 1:	//Animation
 		    cfg.owner()->attrDel("fit");
 		    cfg.owner()->attrDel("speed");
 		    break;
@@ -766,7 +766,7 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		case 0:	//Image
 		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","","26"));
 		    break;
-		case 1:	//Movie
+		case 1:	//Animation
 		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","","26"));
 		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","","29"));
 		    break;
@@ -843,6 +843,12 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
         		"  \"workMedia\" - like previous;\n"
         		"  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\";\n"
         		"  \"stream:http://localhost.localhost:5050\" - video and audio stream play from URL."));
+        		break;
+        	    case 27:	el->setAttr("help",
+        		_("Media type variant:\n"
+        		"  \"Image\" - raster or vector(can not support) image, like: PNG, JPEG, GIF;\n"
+        		"  \"Animation\" - simple animation image, like: GIF, MNG;\n"
+        		"  \"Full video\" - full video, audio or stream, like: OGG, OGM, AVI, MKV, MPG, MP3, MP4."));
         		break;
         	}
     	    }

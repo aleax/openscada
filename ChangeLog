@@ -1,5 +1,13 @@
-2012-03-13 Roman
+2012-03-15 Roman
+- UI.VCAEngine: "Movie" type variant of primitive "Media" has been renamed to "Animation".
+    Context help to type fiels of primitive "Media" is added.
+
+
+2012-03-14 Roman
 - UI.VCAEngine: Link prefix "arh:" is added for Address fields allow link direct to Archive data source.
+
+
+2012-03-13 Roman
 - SYS: Object TRegExp API is some updated for allow pattern/rule change and search by offset.
 - UI.QTCfg, UI.Vision: Minimal mode (no greed) enabling support is added to syntax highlight rules by attribute "min".
 - DAQ.JavaLikeCalc: Syntax highlight rule for strings is some updated for correct process parts like "\"..." and "...\\".
