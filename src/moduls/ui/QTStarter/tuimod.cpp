@@ -330,7 +330,7 @@ void *TUIMod::Task( void * )
 	recs.clear();
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
-	TSYS::sysSleep(1);
+	TSYS::sysSleep(0.5);
     }
     delete splash;
 
@@ -376,7 +376,7 @@ void *TUIMod::Task( void * )
 	recs.clear();
 	splash->showMessage(mess,Qt::AlignBottom|Qt::AlignLeft);
 	QtApp->processEvents();
-	TSYS::sysSleep(1);
+	TSYS::sysSleep(0.5);
     }
     delete splash;
 

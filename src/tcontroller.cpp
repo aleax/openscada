@@ -42,6 +42,8 @@ TController::~TController(  )
     nodeDelAll();
 }
 
+string TController::objName( )	{ return TCntrNode::objName()+":TController"; }
+
 string TController::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
 
 TCntrNode &TController::operator=( TCntrNode &node )

@@ -288,7 +288,7 @@ class TCntrNodeObj: public TVarObj
 	//Methods
 	TCntrNodeObj( AutoHD<TCntrNode> nd, const string &user );
 
-	string objName( )       { return "TCntrNode"; }
+	string objName( );
 
 	string user( )		{ return mUser; }
 

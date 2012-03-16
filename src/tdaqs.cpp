@@ -72,6 +72,8 @@ TDAQS::~TDAQS( )
     nodeDelAll();
 }
 
+string TDAQS::objName( )		{ return TSubSYS::objName()+":TDAQS"; }
+
 void TDAQS::setRdStLevel( int vl )	{ mRdStLevel = vmin(255,vmax(0,vl)); modif(); }
 
 void TDAQS::setRdTaskPer( float vl )	{ mRdTaskPer = vmin(255,vmax(0.1,vl)); modif(); }

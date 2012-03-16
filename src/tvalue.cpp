@@ -41,6 +41,8 @@ TValue::~TValue()
     while( elem.size() ) vlElemDet(elem[0]);
 }
 
+string TValue::objName( )	{ return TCntrNode::objName()+":TValue"; }
+
 string TValue::DAQPath( )	{ return nodeName(); }
 
 TVal* TValue::vlNew( )
@@ -438,6 +440,8 @@ TVal::~TVal( )
     if(!mCfg && src.fld->type() == TFld::String)delete val.val_s;
     if(!mCfg && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 }
+
+string TVal::objName( )	{ return TCntrNode::objName()+":TVal"; }
 
 string TVal::DAQPath( )	{ return owner().DAQPath()+"."+name(); }
 

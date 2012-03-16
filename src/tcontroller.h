@@ -53,6 +53,8 @@ class TController : public TCntrNode, public TConfig
 	TController( const string &name_c, const string &daq_db, TElem *cfgelem );
 	virtual ~TController(  );
 
+	string objName( );
+
 	string DAQPath( );
 
 	TCntrNode &operator=( TCntrNode &node );

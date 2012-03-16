@@ -41,6 +41,8 @@ TSubSYS::~TSubSYS(  )
     nodeDelAll();
 }
 
+string TSubSYS::objName( )	{ return TCntrNode::objName()+":TSubSYS"; }
+
 TSYS &TSubSYS::owner( )		{ return *(TSYS*)nodePrev(); }
 
 string TSubSYS::subName( )	{ return m_name.size()?_(m_name.c_str()):m_id; }

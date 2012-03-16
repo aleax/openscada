@@ -298,6 +298,7 @@ class ShapeDiagram : public WdgShape
 	//> Trend object's class
 	class TrendObj
 	{
+	    friend class ShapeDiagram;
 	    public:
 		//Data
 		class SHg

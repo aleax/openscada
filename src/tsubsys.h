@@ -46,6 +46,8 @@ class TSubSYS : public TCntrNode
 	TSubSYS( const char *id, const char *name, bool mod = false );
 	virtual ~TSubSYS( );
 
+	string objName( );
+
 	string	subId( )	{ return m_id.c_str(); }
 	string	subName( );
 	bool subStartStat( )	{ return mStart; }

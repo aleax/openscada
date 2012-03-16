@@ -305,6 +305,7 @@ class VCADiagram : public VCAObj
 	//> Trend object's class
 	class TrendObj
 	{
+	    friend class VCADiagram;
 	    public:
 		//Data
 		class SHg

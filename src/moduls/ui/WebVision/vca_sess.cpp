@@ -6131,7 +6131,18 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 
     if(reld_tr_dt)
 	for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
+	{
 	    trnds[i_p].loadData(user, reld_tr_dt==2);
+	    if(trnds[i_p].arh_beg && trnds[i_p].arh_end)
+	    {
+		XMLNode req("set");
+		req.setAttr("path",id()+"/%2fserv%2fattr");
+		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dprop",i_p))->
+		    setText(TSYS::strMess("%.15g:%.15g:%.15g",
+			(double)trnds[i_p].arh_beg*1e-6,(double)trnds[i_p].arh_end*1e-6,(double)trnds[i_p].arh_per*1e-6));
+		mod->cntrIfCmd(req,user);
+	    }
+	}
 }
 
 void VCADiagram::setCursor( int64_t itm, const string& user )
@@ -6244,7 +6255,7 @@ void VCADiagram::TrendObj::setAddr( const string &vl )
 
 void VCADiagram::TrendObj::loadData( const string &user, bool full )
 {
-    switch( owner().type )
+    switch(owner().type)
     {
 	case 0:	loadTrendsData(user,full);	break;
 	case 1:	loadSpectrumData(user,full);	break;
@@ -6278,7 +6289,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	else
 	{
 	    val_tp  = atoi(req.attr("vtp").c_str());
-	    //arh_beg = atoll(req.attr("beg").c_str());
+	    arh_beg = atoll(req.attr("beg").c_str());
 	    arh_end = atoll(req.attr("end").c_str());
 	    arh_per = atoi(req.attr("per").c_str());
 	}
@@ -6316,7 +6327,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     //> Correct request to archive border
     wantPer	= (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime	= vmin(tTime,arh_end);
-    tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
+    //tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
     //> Clear data at time error
     if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )
 	vals.clear();

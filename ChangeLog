@@ -1,3 +1,16 @@
+2012-03-16 Roman
+- !:FIX:Archive: Value archive begin() calculate for empty buffer is fixed.
+- !!:FIX:Function: IO set for different types is fixed for modify checking fails (Real to Integer).
+- FIX:UI.Vision: Slider and Scroll bars realization of primitive "FormEl" is fixed for event generaton prevent
+    on value set from model and generic init. Tracking is disabled for prevent more events generation.
+- SYS, TSubSYS, TDAQS, TModule, TTipDAQ, TController, TValue, TParamContr, TVal:
+    Virtual function TCntrNode::objName() is added for allow object type purchase from user API by function
+    typeof() to User's object TCntrNodeObj.
+- UI.QTStarter: Splash update is set from 1 second to 0.5 second period.
+- UI.VCAEngine, UI.Vision, UI.WebVision: Archive property field "prmXprop" is added to primitive "Diagram" and fill
+    for allow used archive depth purchase.
+
+
 2012-03-15 Roman
 - UI.VCAEngine: "Movie" type variant of primitive "Media" has been renamed to "Animation".
     Context help to type fiels of primitive "Media" is added.

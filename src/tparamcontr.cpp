@@ -44,6 +44,8 @@ TParamContr::~TParamContr( )
     nodeDelAll();
 }
 
+string TParamContr::objName( )	{ return TValue::objName()+":TParamContr"; }
+
 string TParamContr::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
 
 TCntrNode &TParamContr::operator=( TCntrNode &node )

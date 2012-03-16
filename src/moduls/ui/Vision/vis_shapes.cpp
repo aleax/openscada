@@ -280,7 +280,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    ((QListWidget*)shD->addrWdg)->setCurrentItem(its.size()?its[0]:NULL);
 		    break;
 		}
-		case 6: case 7:	((QAbstractSlider*)shD->addrWdg)->setValue(atoi(val.c_str()));	break;
+		case 6: case 7:
+		    shD->addrWdg->blockSignals(true);
+		    ((QAbstractSlider*)shD->addrWdg)->setValue(atoi(val.c_str()));
+		    shD->addrWdg->blockSignals(false);
+		    break;
 	    }
 	    break;
 	case 22:	//view, wordWrap, img, items, cfg
@@ -490,6 +494,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		{
 		    if(shD->addrWdg) shD->addrWdg->deleteLater();
 		    shD->addrWdg = (shD->elType==6 ? (QWidget *)new QSlider(w) : (QWidget *)new QScrollBar(w));
+		    ((QAbstractSlider*)shD->addrWdg)->setTracking(false);
 		    if(runW) connect(shD->addrWdg, SIGNAL(valueChanged(int)), this, SLOT(sliderMoved(int)));
 		    mk_new = true;
 		}
@@ -505,17 +510,19 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    ((QAbstractSlider*)shD->addrWdg)->setOrientation( Qt::Horizontal );
 		    wAlign = Qt::AlignVCenter;
 		}
+		shD->addrWdg->blockSignals(true);
 		((QAbstractSlider*)shD->addrWdg)->setMinimum( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)shD->addrWdg)->setMaximum( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)shD->addrWdg)->setSingleStep( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)shD->addrWdg)->setPageStep( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
 		((QAbstractSlider*)shD->addrWdg)->setValue(atoi(shD->value.c_str()));
+		shD->addrWdg->blockSignals(false);
 		break;
 	    }
 	}
 	if( mk_new )
 	{
-	    //-- Install event's filter and disable focus --
+	    //>> Install event's filter and disable focus
 	    eventFilterSet(w,shD->addrWdg,true);
 	    w->setFocusProxy(shD->addrWdg);
 	    if( devW )	setFocus(w,shD->addrWdg,false,devW);
@@ -525,7 +532,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		shD->addrWdg->setEnabled( shD->active && runW->permCntr() );
 	    }
 	    shD->addrWdg->setVisible(shD->en);
-	    //-- Fix widget --
+	    //>> Fix widget
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
 	if( wAlign ) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg,wAlign);
@@ -1417,7 +1424,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
     bool up = false,		//Repaint diagram picture
 	 make_pct = false;	//Remake diagram picture
-    int  reld_tr_dt = 0;	//Reload trend's data ( 1-reload addons, 2-full reload)
+    int  reld_tr_dt = 0;	//Reload trend's data (1-reload addons, 2-full reload)
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
@@ -1601,7 +1608,12 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
+    {
 	shD->prms[i_p].loadData(full);
+	if(shD->prms[i_p].arh_beg && shD->prms[i_p].arh_end)
+	    w->attrSet(TSYS::strMess("prm%dprop",i_p),TSYS::strMess("%.15g:%.15g:%.15g",
+		    (double)shD->prms[i_p].arh_beg*1e-6,(double)shD->prms[i_p].arh_end*1e-6,(double)shD->prms[i_p].arh_per*1e-6));
+    }
 }
 
 void ShapeDiagram::makePicture( WdgView *w )
@@ -2522,10 +2534,11 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	arh_per = arh_beg = arh_end = 0;
 	val_tp = 0;
 	vals.clear();
-	if( addr().empty() )	return;
+	if(addr().empty())	return;
     }
+
     //> Get archive parameters
-    if( !arh_per || tTime > arh_end )
+    if(!arh_per || tTime > arh_end)
     {
 	XMLNode req("info");
 	req.setAttr("arch",shD->valArch)->setAttr("path",addr()+"/%2fserv%2fval");
@@ -2534,9 +2547,10 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	else
 	{
 	    val_tp  = atoi(req.attr("vtp").c_str());
-	    //arh_beg = atoll(req.attr("beg").c_str());
+	    arh_beg = atoll(req.attr("beg").c_str());
 	    arh_end = atoll(req.attr("end").c_str());
 	    arh_per = atoi(req.attr("per").c_str());
+
 	}
     }
 
@@ -2572,7 +2586,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     //> Correct request to archive border
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime     = vmin(tTime,arh_end);
-    tTimeGrnd = vmax(tTimeGrnd,arh_beg);
+    //tTimeGrnd = vmax(tTimeGrnd,arh_beg);
 
     //> Clear data at time error
     if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )

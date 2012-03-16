@@ -1156,6 +1156,12 @@ TCntrNodeObj::TCntrNodeObj( AutoHD<TCntrNode> ind, const string &iuser ) : mUser
     cnd = ind;
 }
 
+string TCntrNodeObj::objName( )
+{
+    if(cnd.freeStat())	return "TCntrNodeObj:Free";
+    return cnd.at().objName();
+}
+
 TVariant TCntrNodeObj::propGet( const string &id )
 {
     if(cnd.freeStat()) return TVariant();

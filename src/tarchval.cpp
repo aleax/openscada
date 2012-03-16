@@ -963,10 +963,10 @@ string TVArchive::tbl( )	{ return owner().subId()+"_val"; }
 int64_t TVArchive::end( const string &arch )
 {
     int64_t rez = 0;
-    if( arch.empty() || arch == BUF_ARCH_NM )
+    if(arch.empty() || arch == BUF_ARCH_NM)
     {
 	rez = TValBuf::end();
-	if( !arch.empty() ) return rez;
+	if(!arch.empty()) return rez;
     }
 
     ResAlloc res(aRes,false);
@@ -981,12 +981,14 @@ int64_t TVArchive::end( const string &arch )
 
 int64_t TVArchive::begin( const string &arch )
 {
-    int64_t rez = TSYS::curTime();
-    if( arch.empty() || arch == BUF_ARCH_NM )
+    int64_t cTm = TSYS::curTime();
+    int64_t rez = cTm;
+    if(arch.empty() || arch == BUF_ARCH_NM)
     {
 	rez = TValBuf::begin();
-	if( !arch.empty() ) return rez;
+	if(!arch.empty()) return rez;
     }
+    if(!rez) rez = cTm;	//> Empty buffer
 
     ResAlloc res(aRes,false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
@@ -995,7 +997,7 @@ int64_t TVArchive::begin( const string &arch )
 	    rez = arch_el[i_a]->begin();
 	    if(!arch.empty())	break;
 	}
-    return rez;
+    return (rez==cTm)?0:rez;
 }
 
 int64_t TVArchive::period( const string &arch )

@@ -100,6 +100,8 @@ class TCntrNode
 	TCntrNode( TCntrNode *prev = NULL );
 	virtual ~TCntrNode( );
 
+	virtual string objName( )	{ return "TCntrNode"; }
+
 	virtual TCntrNode &operator=( TCntrNode &node );
 
 	void cntrCmd( XMLNode *opt, int lev = 0, const string &path = "", int off = 0 );

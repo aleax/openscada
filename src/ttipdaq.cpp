@@ -57,6 +57,8 @@ TTipDAQ::~TTipDAQ( )
     }
 }
 
+string TTipDAQ::objName( )	{ return TModule::objName()+":TTipDAQ"; }
+
 string TTipDAQ::DAQPath( )	{ return modId(); }
 
 TDAQS &TTipDAQ::owner( )	{ return *(TDAQS*)nodePrev(); }

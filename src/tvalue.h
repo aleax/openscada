@@ -57,6 +57,8 @@ class TVal : public TCntrNode
 	TVal( TCfg &cfg );
 	~TVal( );
 
+	string objName( );
+
 	string DAQPath( );
 
 	void setFld( TFld &fld );
@@ -140,6 +142,8 @@ class TValue: public TCntrNode, public TValElem
     public:
 	TValue( );
 	virtual ~TValue();
+
+	string objName( );
 
 	virtual string DAQPath( );
 

@@ -49,6 +49,8 @@ class TDAQS : public TSubSYS
 	TDAQS( );
 	~TDAQS( );
 
+	string objName( );
+
 	int subVer( )	{ return SDAQ_VER; }
 	void subStart(  );
 	void subStop( );

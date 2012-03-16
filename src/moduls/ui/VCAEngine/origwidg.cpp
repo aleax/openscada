@@ -994,6 +994,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrDel(fidp+"color");
 		cfg.owner()->attrDel(fidp+"width");
 		cfg.owner()->attrDel(fidp+"val");
+		cfg.owner()->attrDel(fidp+"prop");
 	    }
 	}
 	//> Create ullage attributes of parameters
@@ -1016,6 +1017,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 					    TFld::Integer,Attr::Mutable,"","1","1;10","",TSYS::int2str(56+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
 					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(54+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"prop").c_str(),(fnmp+_(":properties")).c_str(),
+					    TFld::String,Attr::Mutable,"","","","",TSYS::int2str(57+10*i_p).c_str()));
 	}
     }
 
@@ -1054,6 +1057,10 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
 		      "	    of controller 'AutoDA' of DAQ module 'System';\n"
 		      "  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
+		if((el=ctrId(root,TSYS::strMess("/prm%dprop",i_p),true))) el->setAttr("help",
+		    _("Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
+		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"
+		      "                  real up to microseconds (1e-6)."));
 	    }
 	}
 	return true;

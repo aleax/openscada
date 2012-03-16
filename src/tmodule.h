@@ -82,6 +82,8 @@ class TModule : public TCntrNode
 	TModule( const string &id );
 	virtual ~TModule(  );
 
+	string	objName( );
+
 	string	modId( )		{ return mId.c_str(); }
 	string	modName( );
 

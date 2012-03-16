@@ -45,6 +45,8 @@ class TParamContr : public TConfig, public TValue
 	TParamContr( const string &name, TTipParam *tpprm );
 	virtual ~TParamContr( );
 
+	string objName( );
+
 	string DAQPath( );
 
 	TCntrNode &operator=( TCntrNode &node );

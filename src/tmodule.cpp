@@ -65,6 +65,8 @@ TModule::~TModule(  )
         delete m_efunc[i];
 }
 
+string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }
+
 string TModule::modName()
 {
     return mName;
