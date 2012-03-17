@@ -166,11 +166,11 @@ char TVariant::getB( ) const
 {
     switch(type())
     {
-	case String:	return (getS()==EVAL_STR) ? EVAL_BOOL : (bool)atoi(getS().c_str());
-	case Integer:	return (getI()==EVAL_INT) ? EVAL_BOOL : (bool)getI();
-	case Real:	return (getR()==EVAL_REAL) ? EVAL_BOOL : (bool)getR();
-	case Boolean:	return val.b;
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(tvl.c_str()); }
+	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_BOOL : (bool)tvl; }
+	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_BOOL : (bool)tvl; }
 	case Object:	return true;
+	case Boolean:	return val.b;
 	default: break;
     }
     return EVAL_BOOL;
@@ -180,11 +180,11 @@ int TVariant::getI( ) const
 {
     switch(type())
     {
-	case String:	return (getS()==EVAL_STR) ? EVAL_INT : atoi(getS().c_str());
-	case Integer:	return val.i;
-	case Real:	return (getR()==EVAL_REAL) ? EVAL_INT : (int)getR();
-	case Boolean:	return (getB()==EVAL_BOOL) ? EVAL_INT : getB();
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_INT : atoi(tvl.c_str()); }
+	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_INT : (int)tvl; }
+	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_INT : tvl; }
 	case Object:	return 1;
+	case Integer:	return val.i;
 	default: break;
     }
     return EVAL_INT;
@@ -194,11 +194,11 @@ double TVariant::getR( ) const
 {
     switch(type())
     {
-	case String:	return (getS()==EVAL_STR) ? EVAL_REAL : atof(getS().c_str());
-	case Integer:	return (getI()==EVAL_INT) ? EVAL_REAL : getI();
-	case Real:	return val.r;
-	case Boolean:	return (getB()==EVAL_BOOL) ? EVAL_REAL : getB();
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_REAL : atof(tvl.c_str()); }
+	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_REAL : tvl; }
+	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_REAL : tvl; }
 	case Object:	return 1;
+	case Real:	return val.r;
 	default: break;
     }
     return EVAL_REAL;
@@ -208,13 +208,13 @@ string TVariant::getS( ) const
 {
     switch(type())
     {
+	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_STR : TSYS::int2str(tvl); }
+	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_STR : TSYS::real2str(tvl); }
+	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(tvl); }
+	case Object:	{ AutoHD<TVarObj> tvl = getO(true); return tvl.freeStat() ? EVAL_STR : tvl.at().getStrXML(); }
 	case String:
 	    if(mSize < sizeof(val.sMini)) return string(val.sMini,mSize);
 	    return string(val.sPtr,mSize);
-	case Integer:	return (getI()==EVAL_INT) ? EVAL_STR : TSYS::int2str(getI());
-	case Real:	return (getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(getR());
-	case Boolean:	return (getB()==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(getB());
-	case Object:	return getO(true).freeStat() ? EVAL_STR : getO().at().getStrXML();
 	default: break;
     }
     return EVAL_STR;

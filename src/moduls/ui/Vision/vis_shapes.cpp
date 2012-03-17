@@ -1585,6 +1585,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			make_pct = false;
 			break;
 		    case 6: shD->prms[trndN].setWidth(atoi(val.c_str()));	break;		//width
+		    case 7: make_pct = false;					break;		//prop
 		}
 	    }
     }
@@ -1607,13 +1608,16 @@ void ShapeDiagram::loadData( WdgView *w, bool full )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
+    XMLNode req("set");
+    req.setAttr("path",w->id()+"/%2fserv%2fattr");
     for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
     {
 	shD->prms[i_p].loadData(full);
 	if(shD->prms[i_p].arh_beg && shD->prms[i_p].arh_end)
-	    w->attrSet(TSYS::strMess("prm%dprop",i_p),TSYS::strMess("%.15g:%.15g:%.15g",
-		    (double)shD->prms[i_p].arh_beg*1e-6,(double)shD->prms[i_p].arh_end*1e-6,(double)shD->prms[i_p].arh_per*1e-6));
+    	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dprop",i_p))->setText(TSYS::strMess("%.15g:%.15g:%.15g",
+		(double)shD->prms[i_p].arh_beg*1e-6,(double)shD->prms[i_p].arh_end*1e-6,(double)shD->prms[i_p].arh_per*1e-6));
     }
+    if(req.childSize()) w->cntrIfCmd(req);
 }
 
 void ShapeDiagram::makePicture( WdgView *w )
@@ -2413,11 +2417,13 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	int64_t tTimeGrnd = shD->tTime - (int64_t)(1e6*shD->tSize);
 	int64_t curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
 
+	shD->curTime = curTime;
 	shD->holdCur = (curTime==shD->tTime);
 
-	w->setAllAttrLoad(true);
-	w->attrSet("curSek",TSYS::int2str(curTime/1000000),30);
-	w->attrSet("curUSek",TSYS::int2str(curTime%1000000),31);
+	XMLNode req("set");
+	req.setAttr("path",w->id()+"/%2fserv%2fattr");
+	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
+	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
 
 	//> Update trend's current values
 	for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
@@ -2432,17 +2438,22 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 		val = shD->prms[i_p].val()[vpos].val;
 	    }
 	    if(val != shD->prms[i_p].curVal())
-		w->attrSet(TSYS::strMess("prm%dval",i_p),TSYS::real2str(val,6),54+10*i_p);
+	    {
+		req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(TSYS::real2str(val,6));
+		shD->prms[i_p].setCurVal(val);
+	    }
 	}
-	w->setAllAttrLoad(false);
+	w->cntrIfCmd(req);
     }
     else if( shD->type == 1 )
     {
 	float curFrq = vmax(vmin(1e6/(float)itm,shD->fftEnd),shD->fftBeg);
+	shD->curTime = 1e6/curFrq;
 
-	w->setAllAttrLoad(true);
-	w->attrSet("curSek",TSYS::int2str(((int64_t)(1e6/curFrq))/1000000),30);
-	w->attrSet("curUSek",TSYS::int2str(((int64_t)(1e6/curFrq))%1000000),31);
+	XMLNode req("set");
+        req.setAttr("path",w->id()+"/%2fserv%2fattr");
+        req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(shD->curTime/1000000));
+        req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(shD->curTime%1000000));
 
 #if HAVE_FFTW3_H
 	//> Update trend's current values
@@ -2452,13 +2463,14 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	    float fftDt = (1/shD->tSize)*(float)w->size().width()/shD->prms[i_p].fftN;
 	    int vpos = (int)(curFrq/fftDt);
 	    double val = EVAL_REAL;
-	    if( vpos >= 1 && vpos < (shD->prms[i_p].fftN/2+1) )
+	    if(vpos >= 1 && vpos < (shD->prms[i_p].fftN/2+1))
 		val = shD->prms[i_p].fftOut[0][0]/shD->prms[i_p].fftN +
 		    pow(pow(shD->prms[i_p].fftOut[vpos][0],2)+pow(shD->prms[i_p].fftOut[vpos][1],2),0.5)/(shD->prms[i_p].fftN/2+1);
-	    w->attrSet(TSYS::strMess("prm%dval",i_p),TSYS::real2str(val,6),54+10*i_p);
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(TSYS::real2str(val,6));
+	    shD->prms[i_p].setCurVal(val);
 	}
 #endif
-	w->setAllAttrLoad(false);
+	w->cntrIfCmd(req);
     }
 }
 
@@ -2550,7 +2562,6 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    arh_beg = atoll(req.attr("beg").c_str());
 	    arh_end = atoll(req.attr("end").c_str());
 	    arh_per = atoi(req.attr("per").c_str());
-
 	}
     }
 

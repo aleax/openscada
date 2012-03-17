@@ -1124,19 +1124,20 @@ void *Node::Task( void *ind )
 		    }
 		}
 
+		nd.data->val.setMdfChk(true);
 		nd.data->val.calc();
 
 		//> Put output links
 		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
-		    if(!li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite))
-		    switch(nd.data->val.ioType(li->first))
-		    {
-			case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
-			case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
-			case IO::Real:		li->second.at().setR(nd.data->val.getR(li->first));	break;
-			case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
-			default: break;
-		    }
+		    if(!li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) && nd.data->val.ioMdf(li->first))
+			switch(nd.data->val.ioType(li->first))
+			{
+			    case IO::String:	li->second.at().setS(nd.data->val.getS(li->first));	break;
+			    case IO::Integer:	li->second.at().setI(nd.data->val.getI(li->first));	break;
+			    case IO::Real:	li->second.at().setR(nd.data->val.getR(li->first));	break;
+			    case IO::Boolean:	li->second.at().setB(nd.data->val.getB(li->first));	break;
+			    default: break;
+			}
 	    }
 	    catch(TError err)
 	    {

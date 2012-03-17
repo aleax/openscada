@@ -1,3 +1,9 @@
+2012-03-17 Roman
+- FIX:DAQ.ModBus: Writing by links into "Data" mode of protocol module is set only for modified IO.
+- FIX:UI.Vision, UI.WebVision: Trends update performance into trace mode of primitive "Diagram" is fixed and made optimal.
+- TVariant, TValFunc: Get values by convert is made some optimal by prevent double read for check to EVAL.
+
+
 2012-03-16 Roman
 - !:FIX:Archive: Value archive begin() calculate for empty buffer is fixed.
 - !!:FIX:Function: IO set for different types is fixed for modify checking fails (Real to Integer).

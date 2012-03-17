@@ -380,17 +380,17 @@ class ShapeDiagram : public WdgShape
 		unsigned valsForPix	:3;
 		QColor	curColor, sclColor, sclMarkColor;
 		QBrush	backGrnd;
-		QPen		border;
-		QImage		pictObj;
-		QRect		pictRect;
-		QFont		sclMarkFont;
-		QTimer 		*trcTimer;
+		QPen	border;
+		QImage	pictObj;
+		QRect	pictRect;
+		QFont	sclMarkFont;
+		QTimer 	*trcTimer;
 		vector<TrendObj>	prms;
-		int64_t		tTime, tPict, curTime;
-		float		tSize;
-		float		fftBeg, fftEnd;
-		float		sclVerScl, sclVerSclOff;
-		string		valArch;
+		int64_t	tTime, tPict, curTime;
+		float	tSize;
+		float	fftBeg, fftEnd;
+		float	sclVerScl, sclVerSclOff;
+		string	valArch;
 	};
 
 	//Methods
