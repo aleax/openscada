@@ -710,8 +710,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
             "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
 		"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
 		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code addressing for object \"System\";\n"
-		"  \"system.sysDescr\" - simple, not full path, addressing from root alias (object \"System\");\n"
-		"  \"SNMPv2-MIB::sysDescr\" - addressing from MIB base by module name for \"system.sysDescr\"."));
+		"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias (object \"System\");\n"
+		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for \"system.sysDescr.0\"."));
 	return;
     }
 
