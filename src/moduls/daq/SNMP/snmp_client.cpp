@@ -526,13 +526,14 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
     for(unsigned ioid = 0; ioid < lsOID().size(); ioid++)
     {
 	oid_root_len = oid_next_len = lsOID()[ioid].size()/sizeof(oid);
-	memmove(oid_root,lsOID()[ioid].c_str(),oid_root_len*sizeof(oid));
+	memmove(oid_root,lsOID()[ioid].data(),oid_root_len*sizeof(oid));
 	memmove(oid_next,oid_root,oid_root_len*sizeof(oid));
 
+	bool isScalar = oid_root_len && (oid_root[oid_root_len-1] == 0);
 	bool running = true;
 	while(running && (el_cnt++) < owner().pAttrLimit())
 	{
-	    struct snmp_pdu *pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
+	    struct snmp_pdu *pdu = snmp_pdu_create(isScalar ? SNMP_MSG_GET : SNMP_MSG_GETNEXT);
 	    snmp_add_null_var(pdu, oid_next, oid_next_len);
 	    int status = snmp_sess_synch_response(ss, pdu, &response);
 	    if(status == STAT_SUCCESS && response && response->errstat == SNMP_ERR_NOERROR)
@@ -645,6 +646,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				break;
 			}
 		    }
+		    if(isScalar) { running = false; break; }
 		    if(running)
 		    {
 			memmove((char*)oid_next, (char*)var->name, var->name_length*sizeof(oid));
