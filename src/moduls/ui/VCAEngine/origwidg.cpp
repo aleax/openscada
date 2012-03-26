@@ -546,7 +546,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    break;
 		case 6: case 7:	//Slider and scroll bar
 		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
-			_("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep].\n"
+			_("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep]\".\n"
 		          "Where:\n"
 		          "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
 		          "  \"Min\" - minimum value;\n"
@@ -675,7 +675,7 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case 20: case 23: case 26: el->setAttr("help",Widget::helpColor());	break;
 		    case 25: el->setAttr("help",Widget::helpFont());	break;
 		    case 21: el->setAttr("help",Widget::helpImg());	break;
-		    case 30: el->setAttr("help",_("Text value. Use '%{n}' for argument {n} (from 1) value insert.")); break;
+		    case 30: el->setAttr("help",_("Text value. Use \"%{n}\" for argument {n} (from 1) value insert.")); break;
 		}
 	    }
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
@@ -1054,9 +1054,9 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
 		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
 		      "Example:\n"
-		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute 'use' of parameter 'MemInfo'\n"
-		      "	    of controller 'AutoDA' of DAQ module 'System';\n"
-		      "  \"/Archive/va_CPULoad_load\" - address to archive 'CPULoad_load'."));
+		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute \"use\" of parameter \"MemInfo\"\n"
+		      "	    of controller \"AutoDA\" of DAQ module \"System\";\n"
+		      "  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\"."));
 		if((el=ctrId(root,TSYS::strMess("/prm%dprop",i_p),true))) el->setAttr("help",
 		    _("Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
 		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"
@@ -1172,7 +1172,7 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case 22: el->setAttr("help",Widget::helpFont());	break;
 		    case 27: el->setAttr("help",_("Messages archivator in form \"ArchMod.ArchivatorId\"."));	break;
 		    case 29: el->setAttr("help",_("Set value to < 0 for get current alarms."));	break;
-		    case 25: el->setAttr("help",_("Set value to '0' for get all alarms, for 'lev' < 0."));	break;
+		    case 25: el->setAttr("help",_("Set value to '0' for get all alarms, for \"lev\" < 0."));	break;
 		    case 28: el->setAttr("help",
 			_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 			"  '*' - any multiply symbols group;\n"
@@ -1192,7 +1192,7 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    }
 	    for(int i_p = 0; i_p < src->attrAt("itProp").at().getI(); i_p++)
 	    {
-		if((el=ctrId(root,TSYS::strMess("/it%dcolor",i_p),true))) el->setAttr("help",Widget::helpImg());
+		if((el=ctrId(root,TSYS::strMess("/it%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
 		if((el=ctrId(root,TSYS::strMess("/it%dfnt",i_p),true))) el->setAttr("help",Widget::helpFont());
 		if((el=ctrId(root,TSYS::strMess("/it%dtmpl",i_p),true))) el->setAttr("help",
 		    _("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"

@@ -26,8 +26,6 @@
 #include <vector>
 #include <map>
 
-#include <pcre.h>
-
 #include "autohd.h"
 #include "xml.h"
 #include "tcntrnode.h"
@@ -233,7 +231,7 @@ class TRegExp : public TVarObj
 	unsigned multiline	: 1;
 	unsigned isSimplePat	: 1;
 
-	pcre	*regex;
+	void	*regex;
 	int	vSz, *capv;
 };
 

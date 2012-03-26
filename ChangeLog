@@ -1,3 +1,21 @@
+2012-03-26 Roman
+- !!!!:SYS: Include files install is added to development system.
+    File openscada.pc is added for OpenSCADA configuration check allow from external modules building.
+    Checking to pkg-config allow is added to build system.
+    I18N scripts file I18N.am is renamed to I18N.mk.
+    Global PCRE requires is removed from "tvariant.h" for external modules build make simple.
+    Template modules "=Tmpl=" of all subsystems is added to source distributive packages.
+    Core template modules' "=Tmpl=" files is renamed from mod_tmpl.{h,cpp} to module.{h,cpp}.
+    RPM- and Deb-packages build resources is updated for version 0.8.0.
+    Global source tree version is changed to 0.8.0 and OpenSCADA core library version changed to 2.0.0.
+- !!!!:DB: Model "AGLKS" and main libraries DB files is updated.
+- UI.VCAEngine: Some messages original and translations is some updated.
+
+
+2012-03-20 Roman
+- DAQ.SNMP: Direct scalar request (OID ends by zero) by SNMP_MSG_GET is added.
+
+
 2012-03-17 Roman
 - FIX:DAQ.ModBus: Writing by links into "Data" mode of protocol module is set only for modified IO.
 - FIX:UI.Vision, UI.WebVision: Trends update performance into trace mode of primitive "Diagram" is fixed and made optimal.

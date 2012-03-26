@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Archive.ModTmpl file: mess.h
+//OpenSCADA system module Archive.Tmpl file: mess.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 //!!! Multi-including this header file prevent. Change for your include file name
-#ifndef DB_MESS_H
-#define DB_MESS_H
+#ifndef MESS_H
+#define MESS_H
 
 //!!! System's includings. Add need for your module includings.
 #include <string>
@@ -77,4 +77,4 @@ class ModMArch: public TMArchivator
 
 } //End namespace ModTmpl
 
-#endif //DB_MESS_H
+#endif //MESS_H

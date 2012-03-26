@@ -1,8 +1,8 @@
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module BD.PostgreSQL file: postgre.cpp
+//OpenSCADA system module BD.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko                                   *
- *   mlisenko@oscada.org                                                   *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -22,54 +22,60 @@
 //!!! System's includings. Add need for your module includings.
 #include <getopt.h>
 #include <string>
-#include <libpq-fe.h>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
 #include <tsys.h>
 #include <tmess.h>
 
 //!!! Self your module's includings. Add need for your module includings.
-#include "postgre.h"
+#include "module.h"
 
 //!!! Module's meta-information. Change for your module.
 //************************************************
 //* Modul info!                                  *
-#define MOD_ID		"PostgreSQL"
-#define MOD_NAME	_("DB PostgreSQL")
+#define MOD_ID		"Tmpl"
+#define MOD_NAME	_("DB Tmpl")
 #define MOD_TYPE	SDB_ID
 #define VER_TYPE	SDB_VER
-#define MOD_VER		"0.5.0"
-#define AUTHORS		_("Maxim Lysenko")
-#define DESCRIPTION	_("BD module. Provides support of the BD PostgreSQL.")
-#define MOD_LICENSE	"GPL2"
+#define MOD_VER		"0.0.1"
+#define AUTHORS		_("MyName MyFamily")
+#define DESCRIPTION	_("BD Tmpl description.")
+#define MOD_LICENSE	"MyLicense"
 //************************************************
 
-BDPostgreSQL::BDMod *BDPostgreSQL::mod; //Pointer for direct access to module
+BDTmpl::BDMod *BDTmpl::mod; //Pointer for direct access to module
 
 //!!! Required section for binding OpenSCADA core to this module. It gives information and creates module root object.
 //!!! Do not remove this section!
 extern "C"
 {
+#ifdef MOD_INCL
+    TModule::SAt bd_Tmpl_module( int n_mod )
+#else
     TModule::SAt module( int n_mod )
+#endif
     {
 	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
-
+#ifdef MOD_INCL
+    TModule *bd_Tmpl_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new BDPostgreSQL::BDMod( source );
+	    return new BDTmpl::BDMod( source );
 	return NULL;
     }
 }
 
 //!!! Include for default enter to your module namespace.
-using namespace BDPostgreSQL;
+using namespace BDTmpl;
 
 //!!! Constructor for Root module object.
 //************************************************
-//* BDPostgreSQL::BDMod				 *
+//* BDTmpl::BDMod				 *
 //************************************************
 BDMod::BDMod(string name) : TTipBD(MOD_ID)
 {
@@ -101,7 +107,7 @@ TBD *BDMod::openBD( const string &name )
 
 //!!! Constructor for DB-subsystem database object.
 //************************************************
-//* BDPostgreSQL::MBD				 *
+//* BDTmpl::MBD				         *
 //************************************************
 MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
 {
@@ -199,9 +205,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,
-	    "tp","str","help",
-	    _(//!!! Type here the help information about the db address of your module
-             ));
+	    "tp","str","help",_("!!! Type here the help information about the db address of your module"));
 	return;
     }
     TBD::cntrCmdProc(opt);
@@ -209,7 +213,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 
 //!!! Constructor for DB-subsystem table object.
 //************************************************
-//* BDPostgreSQL::Table                          *
+//* BDTmpl::Table                                *
 //************************************************
 MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 {

@@ -7,7 +7,7 @@ daq_Tmpl_la_CXXFLAGS = $(tmpl_CFLAGS)
 #!!! The module link flags
 daq_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined $(tmpl_LDLAGS)
 #!!! The module source files list
-daq_Tmpl_la_SOURCES = mod_tmpl.cpp
+daq_Tmpl_la_SOURCES = module.cpp
 #!!! Libtool util's flags. It is typical!
 daq_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 

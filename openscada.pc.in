@@ -1,0 +1,11 @@
+prefix=@prefix@
+exec_prefix=${prefix}
+libdir=@libdir@
+includedir=${prefix}/include/openscada
+
+Name: openscada
+Description: Open SCADA system
+Requires:
+Version: @PACKAGE_VERSION@
+Libs: -L${libdir} -loscada
+Cflags: -I${includedir}

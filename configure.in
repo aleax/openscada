@@ -1,11 +1,10 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.7.2],[rom_as@oscada.org, rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.8.0],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="1:0:0"
+oscd_LIBREVISION="2:0:0"
 oscd_modulpref="oscd_"
-oscd_docmodul="../../../../doc/Modules/"
 
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE(AC_PACKAGE_TARNAME, AC_PACKAGE_VERSION)
@@ -34,6 +33,12 @@ AC_PROG_LIBTOOL
 if test "$ac_cv_prog_cc_g" = "no" -o "$ac_cv_prog_cxx_g" = "no"; then
     AC_MSG_ERROR([No C or C++ compiler present. Install GCC and G++.]);
 fi
+
+AC_CHECK_PROG(have_pkg_config, pkg-config, yes, no)
+if test x"$have_pkg_config" = "xno"; then
+    AC_MSG_ERROR(pkg-config is required to install this program)
+fi
+PKG_PROG_PKG_CONFIG
 
 AM_SANITY_CHECK
 
@@ -98,8 +103,6 @@ oscd_moduldir="\${libdir}/${PACKAGE}"
 AC_SUBST(oscd_LIBREVISION)
 AC_SUBST(oscd_moduldir)
 AC_SUBST(oscd_modulpref)
-AC_SUBST(oscd_docmodul)
-AC_SUBST(subdir_mod)
 
 AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile
@@ -612,7 +615,7 @@ if test $ac_cv_header_libintl_h = yes; then
 	    sed "s/\(^install:.*\)\$/\1 install-I18N/" $ac_config_file |
 	    sed "s/\(^uninstall:.*\)\$/\1 uninstall-I18N/" |
 	    sed "s/\(^clean:.*\)\$/\1 clean-I18N/" > $ac_config_file.prc
-	    cat $ac_config_file.prc I18N.am > $ac_config_file
+	    cat $ac_config_file.prc I18N.mk > $ac_config_file
 	    rm $ac_config_file.prc
 	fi
     done

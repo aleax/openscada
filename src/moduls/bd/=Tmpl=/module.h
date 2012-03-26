@@ -1,8 +1,8 @@
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module BD.PostgreSQL file: postgre.h
+//OpenSCADA system module BD.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko                                   *
- *   mlisenko@oscada.org                                                   *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -20,8 +20,8 @@
  ***************************************************************************/
 
 //!!! Multi-including of this header file prevent. Change it for your include file name
-#ifndef POSTGRE_SQL_H
-#define POSTGRE_SQL_H
+#ifndef MODULE_H
+#define MODULE_H
 
 //!!! System's includings. Add need for your module includings.
 #include <string>
@@ -38,12 +38,12 @@ using std::string;
 using namespace OSCADA;
 
 //!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
-namespace BDPostgreSQL
+namespace BDTmpl
 {
 
 //!!! BD-subsystem table object realisation define. Add methods and attributes for your need.
 //************************************************
-//* BDPostgreSQL::Table				 *
+//* BDTmpl::Table				 *
 //************************************************
 class MBD;
 class MTable : public TTable
@@ -91,7 +91,7 @@ class MTable : public TTable
 
 //!!! BD-subsystem database object realisation define. Add methods and attributes for your need.
 //************************************************
-//* BDPostgreSQL::MBD				 *
+//* BDTmpl::MBD				 	 *
 //************************************************
 class BDMod;
 class MBD : public TBD
@@ -143,8 +143,8 @@ class MBD : public TBD
 
 //!!! Root module module object realisation define.
 //************************************************
-//* BDPostgreSQL::BDMod                          *
-//************************************************ 
+//* BDTmpl::BDMod                                *
+//************************************************
 class BDMod: public TTipBD
 {
     public:
@@ -163,6 +163,6 @@ class BDMod: public TTipBD
 //!!! The module root link
 extern BDMod *mod;
 
-}//End namespace BDPostgreSQL
+}//End namespace BDTmpl
 
-#endif // POSTGRE_SQL_H
+#endif // MODULE_H

@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Archive.Tmpl file: mod_tmpl.h
+//OpenSCADA system module Archive.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

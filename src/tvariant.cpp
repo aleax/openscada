@@ -26,6 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <algorithm>
+#include <pcre.h>
 
 #include <tsys.h>
 #include "tvariant.h"
@@ -668,7 +669,7 @@ TRegExp::TRegExp( const string &rule, const string &flg ) :
 TRegExp::~TRegExp( )
 {
     if(capv)	delete [] capv;
-    if(regex)	pcre_free(regex);
+    if(regex)	pcre_free((pcre*)regex);
 }
 
 void TRegExp::setPattern( const string &rule, const string &flg )
@@ -687,7 +688,7 @@ void TRegExp::setPattern( const string &rule, const string &flg )
 
     //> Check for free
     if(isSimplePat && capv)	{ delete [] capv; capv = NULL; }
-    if(regex)			{ pcre_free(regex); regex = NULL; }
+    if(regex)			{ pcre_free((pcre*)regex); regex = NULL; }
 
     //> Alloc for regexp
     if(!isSimplePat && pattern.size())
@@ -706,11 +707,11 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
     if(!regex) return rez;
 
     if(all && global)
-	for(int curPos = 0, i_n = 0; pcre_exec(regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
+	for(int curPos = 0, i_n = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
 	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[0],capv[1]-capv[0]));
     else
     {
-	int n = pcre_exec(regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
+	int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
 	for(int i_n = 0; i_n < n; i_n++)
 	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
 	if(global) lastIndex = (n>0) ? capv[1] : 0;
@@ -723,7 +724,7 @@ string TRegExp::replace( const string &vl, const string &str )
 {
     string rez = vl, repl;
     if(!regex) return rez;
-    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec(regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0; curPos = capv[0]+repl.size())
+    for(int curPos = 0, n; (!curPos || global) && (n=pcre_exec((pcre*)regex,NULL,rez.data(),rez.size(),curPos,0,capv,vSz)) > 0; curPos = capv[0]+repl.size())
     {
 	repl = substExprRepl(str,rez,capv,n);
 	rez.replace(capv[0],capv[1]-capv[0],repl);
@@ -736,7 +737,7 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
     TArrayObj *rez = new TArrayObj();
     if(!regex) return rez;
     int curPos = 0, i_n = 0;
-    for(int se = 0; (se=pcre_exec(regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && (!limit || i_n < limit); curPos = capv[1])
+    for(int se = 0; (se=pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && (!limit || i_n < limit); curPos = capv[1])
     {
 	rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,capv[0]-curPos));
 	for(int i_se = 1; i_se < se && (!limit || i_n < limit); i_se++)
@@ -781,7 +782,7 @@ bool TRegExp::test( const string &vl )
     }
     //> Check by regular expression
     if(!regex) return false;
-    int n = pcre_exec(regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
+    int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
     if(global) lastIndex = (n>0) ? capv[1] : 0;
     return (n>0);
 }
@@ -789,7 +790,7 @@ bool TRegExp::test( const string &vl )
 int TRegExp::search( const string &vl, int off )
 {
     if(!regex) return -1;
-    int n = pcre_exec(regex, NULL, vl.data(), vl.size(), off, 0, capv, vSz);
+    int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), off, 0, capv, vSz);
     return (n>0) ? capv[0] : -1;
 }
 

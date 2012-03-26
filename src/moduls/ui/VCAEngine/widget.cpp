@@ -703,7 +703,7 @@ string Widget::helpImg( )
 string Widget::helpColor( )
 {
     return _("Color name form \"color[-alpha]\", where:\n"
-	    "  \"color\" - standard color name or digital view of three hexadeciaml digit's number form \"#RRGGBB\";\n"
+	    "  \"color\" - standard color name or digital view of three hexadecimal digit's number form \"#RRGGBB\";\n"
 	    "  \"alpha\" - alpha channel level (0-255).\n"
 	    "Examples:\n"
 	    "  \"red\" - solid red color;\n"

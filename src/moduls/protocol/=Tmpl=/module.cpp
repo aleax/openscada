@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Protocol.Tmpl file: mod_tmpl.cpp
+//OpenSCADA system module Protocol.Tmpl file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -31,7 +31,7 @@
 #include <tuis.h>
 
 //!!! Self your module's includings. Add need for your module includings.
-#include "mod_tmpl.h"
+#include "module.h"
 
 //!!! Module's meta-information. Change for your module.
 //*************************************************
@@ -41,9 +41,9 @@
 #define MOD_TYPE	SPRT_ID
 #define VER_TYPE	SPRT_VER
 #define MOD_VER		"0.0.1"
-#define AUTHORS		_("Roman Savochenko")
+#define AUTHORS		_("MyName MyFamily")
 #define DESCRIPTION	_("Protocol's subsystem template module.")
-#define LICENSE		"GPL2"
+#define LICENSE		"MyLicense"
 //*************************************************
 
 ModTmpl::TProt *ModTmpl::mod;
@@ -52,13 +52,21 @@ ModTmpl::TProt *ModTmpl::mod;
 //!!! Not remove this section!
 extern "C"
 {
+#ifdef MOD_INCL
+    TModule::SAt prt_Tmpl_module( int n_mod )
+#else
     TModule::SAt module( int n_mod )
+#endif
     {
 	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
+#ifdef MOD_INCL
+    TModule *prt_Tmpl_attach( const TModule::SAt &AtMod, const string &source )
+#else
     TModule *attach( const TModule::SAt &AtMod, const string &source )
+#endif
     {
 	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
 	    return new ModTmpl::TProt( source );

@@ -7,7 +7,7 @@ tr_Tmpl_la_CXXFLAGS = $(tmpl_CFLAGS)
 #!!! The module link flags
 tr_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined $(tmpl_LDLAGS)
 #!!! The module source files list
-tr_Tmpl_la_SOURCES = mod_tmpl.cpp
+tr_Tmpl_la_SOURCES = module.cpp
 #!!! Libtool util's flags. It is typical!
 tr_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 

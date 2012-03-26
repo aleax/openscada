@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Special.ModTmpl file: mod_tmpl.h
+//OpenSCADA system module Protocol.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,58 +21,79 @@
  ***************************************************************************/
 
 //!!! Multi-including this header file prevent. Change for your include file name
-#ifndef MOD_TMPL_H
-#define MOD_TMPL_H
+#ifndef MODULE_H
+#define MODULE_H
 
 //!!! System's includings. Add need for your module includings.
 #include <string>
-#include <vector>
+#include <map>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
-#include <tspecials.h>
+#include <tprotocols.h>
 
-//!!! Individual module's translation function define. Not change it!
+//!!! Individual module's translation function define. Don't change it!
 #undef _
 #define _(mess) mod->I18N(mess)
 
 using std::string;
-using std::vector;
+using std::map;
 using namespace OSCADA;
 
-//!!! All module's object's include into self (individual) namespace. Change namespace for your module.
+//!!! All module's objects you must include into self (individual) namespace. Change namespace for your module.
 namespace ModTmpl
 {
 
-//!!! Root module's object define. Add methods and attributes for your need.
+//!!! Input protocol realisation object define. Add methods and attributes for your need.
 //*************************************************
-//* ModTmpl::Lib				  *
+//* ModTmpl::TProtIn                              *
 //*************************************************
-class Lib : public TSpecial
+class TProtIn: public TProtocolIn
 {
     public:
 	//Methods
-	//!!! Constructor for input transport object.
-	Lib( string src );
-	//!!! Destructor for input transport object.
-	~Lib( );
+	//!!! Constructor for input protocol object.
+	TProtIn( string name );
+	//!!! Destructor for input protocol object.
+	~TProtIn( );
 
-	//!!! Module's start and stop call. Place code for internal objects start and stop.
-	void modStart( );
-	void modStop( );
+	//!!! The inherited (virtual) function of process input and preparint output data for called input transport
+	bool mess( const string &request, string &answer, const string &sender );
+};
+
+//!!! Root module object define. Add methods and attributes for your need.
+//*************************************************
+//* ModTmpl::TProt                                *
+//*************************************************
+class TProt: public TProtocol
+{
+    public:
+	//Methods
+	//!!! Constructor for root module object.
+	TProt( string name );
+	//!!! Destructor for root module object.
+	~TProt( );
+
+    protected:
+	//Methods
+	//!!! Inherited (virtual) load and save object's node methods. Call from OpenSCADA kernel.
+	void load_( );
+	void save_( );
 
     private:
 	//Methods
 	//!!! Module's comandline options for print help function.
 	string optDescr( );
+	//!!! Main subsystem API function for self modules input protocol object creation.
+	TProtocolIn *in_open( const string &name );
 
-	//!!! Module's post enable call. Add your module objects initialize code.
-	void postEnable( int flag );
 	//!!! OpenSCADA control interface comands process virtual function.
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+
 };
 
-extern Lib *mod;
+//!!! The module root link
+extern TProt *mod;
 
 } //End namespace ModTmpl
 
-#endif //MOD_TMPL_H
+#endif //MODULE_H

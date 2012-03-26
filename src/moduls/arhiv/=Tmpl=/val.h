@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Archive.ModTmpl file: val.h
+//OpenSCADA system module Archive.Tmpl file: val.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 //!!! Multi-including this header file prevent. Change for your include file name
-#ifndef DB_VAL_H
-#define DB_VAL_H
+#ifndef VAL_H
+#define VAL_H
 
 //!!! System's includings. Add need for your module includings.
 #include <string>
@@ -103,4 +103,4 @@ class ModVArch: public TVArchivator
 
 } //End namespace ModTmpl
 
-#endif //DB_VAL_H
+#endif //VAL_H

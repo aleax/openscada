@@ -2,6 +2,9 @@ SUBDIRS = moduls
 
 EXTRA_DIST = *.h po/*
 
+oscadaincludedir=$(includedir)/openscada
+oscadainclude_HEADERS = *.h
+
 lib_LTLIBRARIES = liboscada.la
 liboscada_la_CXXFLAGS = -DLOCALEDIR=\"$(localedir)\"
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp tvariant.cpp tconfig.cpp \

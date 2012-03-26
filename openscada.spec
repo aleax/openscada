@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.7.2
+Version: 0.8.0
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -225,10 +225,8 @@ autoreconf -ivf
 %install
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
-install -m 755 -d %buildroot/%_includedir/openscada/
 install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
 install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/{MESS,VAL}
-install -m 644 src/*.h %buildroot/%_includedir/openscada
 install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
 install -m 644 -pD data/oscada_start.xml %buildroot/%_sysconfdir/oscada_start.xml
 install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
@@ -301,6 +299,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_libdir/*.so
 %_libdir/*.*a
 %_includedir/openscada/*
+%_pkgconfigdir/openscada.pc
 
 %files LibDB.Main
 %defattr(-,root,root)
@@ -330,6 +329,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/Boiler/*.db
 
 %changelog
+* Mon Apr 02 2012 Roman Savochenko <rom_as@oscada.org>
+- Build 0.8.0 release.
+
 * Mon Dec 05 2011 Roman Savochenko <rom_as@oscada.org>
 - Build 0.7.2 release.
 

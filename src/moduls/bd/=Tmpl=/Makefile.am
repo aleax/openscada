@@ -7,7 +7,7 @@ db_Tmpl_la_CXXFLAGS = $(tmpl_CFLAGS)
 #!!! The module link flags
 db_Tmpl_la_LDFLAGS = -module -avoid-version -no-undefined $(tmpl_LDLAGS)
 #!!! The module source files list
-db_Tmpl_la_SOURCES = mod_tmpl.cpp
+db_Tmpl_la_SOURCES = module.cpp
 #!!! Libtool util's flags. It is typical
 db_Tmpl_la_LIBTOOLFLAGS = --tag=disable-static
 

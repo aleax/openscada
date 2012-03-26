@@ -1,3 +1,4 @@
-# Remember to also add subdirs in configure.in
+EXTRA_DIST = =Tmpl=/*
+
 SUBDIRS = ${SpecSub_mod}
 

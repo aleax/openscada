@@ -1,3 +1,4 @@
 debian/tmp/usr/lib/*.so
 debian/tmp/usr/lib/*.*a
-src/*.h /usr/include/openscada/
+/usr/include/openscada/*
+/lib/pkgconfig/openscada.pc

@@ -1,9 +1,9 @@
 
 //!!! Module name, file name and module's license. Change for your need.
-//OpenSCADA system module Transport.Tmpl file: mod_tmpl.h
+//OpenSCADA system module Transport.Tmpl file: module.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2012 by MyName MyFamily                                 *
+ *   my@email.org                                                          *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,8 +21,8 @@
  ***************************************************************************/
 
 //!!! Multi-including this header file prevent. Change for your include file name
-#ifndef MOD_TMPL_H
-#define MOD_TMPL_H
+#ifndef MODULE_H
+#define MODULE_H
 
 //!!! System's includings. Add need for your module includings.
 #include <pthread.h>
@@ -140,4 +140,4 @@ class TTr: public TTipTransport
 extern TTr *mod;
 }
 
-#endif //MOD_TMPL_H
+#endif //MODULE_H
