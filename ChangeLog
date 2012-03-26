@@ -1,3 +1,9 @@
+2012-03-27 Roman
+- FIX:SYS,UI.Vision: Automatic Phonon disable is fixed.
+- FIX:SYS: File openscada.pc place for Deb-package is fixed.
+- Transport.Sockets: Some messages original and translations is updated.
+
+
 2012-03-26 Roman
 - !!!!:SYS: Include files install is added to development system.
     File openscada.pc is added for OpenSCADA configuration check allow from external modules building.
@@ -9,7 +15,11 @@
     RPM- and Deb-packages build resources is updated for version 0.8.0.
     Global source tree version is changed to 0.8.0 and OpenSCADA core library version changed to 2.0.0.
 - !!!!:DB: Model "AGLKS" and main libraries DB files is updated.
-- UI.VCAEngine: Some messages original and translations is some updated.
+    To "Main elements library of the user interface" added:
+	- Parameters selection and configuration dialog for "Graphics Group" frame;
+	- Some improvement is added to "Graphics Group" frame for parameters selection by user and other allow;
+	- Horizontal scroll bar for browsing on archive is added to "Graphics Group" frame.
+- UI.VCAEngine: Some messages original and translations is updated.
 
 
 2012-03-20 Roman
@@ -31,7 +41,7 @@
     Virtual function TCntrNode::objName() is added for allow object type purchase from user API by function
     typeof() to User's object TCntrNodeObj.
 - UI.QTStarter: Splash update is set from 1 second to 0.5 second period.
-- UI.VCAEngine, UI.Vision, UI.WebVision: Archive property field "prmXprop" is added to primitive "Diagram" and fill
+- !!:UI.VCAEngine, UI.Vision, UI.WebVision: Archive property field "prm{X}prop" is added to primitive "Diagram" and fill
     for allow used archive depth purchase.
 
 
@@ -48,7 +58,7 @@
 - SYS: Object TRegExp API is some updated for allow pattern/rule change and search by offset.
 - UI.QTCfg, UI.Vision: Minimal mode (no greed) enabling support is added to syntax highlight rules by attribute "min".
 - DAQ.JavaLikeCalc: Syntax highlight rule for strings is some updated for correct process parts like "\"..." and "...\\".
-- UI.VCAEngine: User API function wdgAt() is added for allow simple connect to session widgets by different
+- !:UI.VCAEngine: User API function wdgAt() is added for allow simple connect to session widgets by different
     address form (absolute or relative).
 - UI.VCAEngine, UI.Vision: Stream prefix before URL for type "Full video" of primitive "Media" is changed
     to "stream:" for made generic.
@@ -78,7 +88,7 @@
 2012-03-06 Roman
 - FIX:UI.Vision: Crash on recursion MouseRelease event process into development mode for primitive "ElFigure",
     on ScrollArea events filter after change QWorkspace to QMdiArea, is fixed.
-- UI.VCAEngine, UI.Vision: New type "Full video" is added to primitive "Media".
+- !!:UI.VCAEngine, UI.Vision: New type "Full video" is added to primitive "Media".
     Type "Full video" is realised by help Phonon engine into UI.Vision.
 - SYS: No execution mode is added to TCntrNode::nodeAt().
 - UI.QTStarter: Application name for QT is set to PACKAGE_STRING.
@@ -88,7 +98,7 @@
 
 2012-03-04 Roman
 - !!!!:SYS: Threadsafe in generic is made for user API objects and individual for: TVarObj, TArrayObj and XMLNodeObj.
-    Automatic resource free is added to AutoHD on true return from AHDDisConnect().
+    Automatic object delete is added to AutoHD on true return from AHDDisConnect().
 
 
 2012-02-29 Roman
@@ -98,7 +108,7 @@
 
 
 2012-02-28 Maxim,Roman
-- UI.Vision: The QImage is used for the pixels' drawing during the combination of fill color and image for the primitive ElFigure.
+- !!:UI.Vision: The QImage is used for the pixels' drawing during the combination of fill color and image for the primitive ElFigure.
 - UI.Vision: The coordinate's showing under the mouse cursor is added to the status bar for the developing mode of the primitive ElFigure.
 - UI.Vision: The QMdiArea is used instead if the obsolete QWorkspace for the building the mdi interface.
 - UI.Vision: The "Full screen" is added to the "View" section of the main menu of development window.
@@ -130,8 +140,8 @@
 2012-02-17 Roman
 - SYS: Realtime clock real hold accuracy control is added into tasks statistic table.
     Usefull for host system estimate to realtime.
-- FIX:Transport.SSL, Transport.Sockets, Transport.Serial: Enable termination allow from wait for timeout expiration
-    by pass EINTR result of select() processing. Usable for transports and it users disable ot exit.
+- !:FIX:Transport.SSL, Transport.Sockets, Transport.Serial: Enable termination allow from wait for timeout expiration
+    by pass EINTR result of select() processing. Usable for transports and it usings disable ot exit.
 - UI.QTCfg: Page replace is some changed from previous removing from QScrolArea place,
     for fix possible crash into QT4 plugin libqspiaccessiblebridge.so - no an effect.
 
@@ -163,17 +173,17 @@
 
 
 2012-02-09 Roman
-- UI.VCAEngine: Uncatched events up to upper page send support is added. That allow central process global key combination and other.
+- !:UI.VCAEngine: Uncatched events up to upper page send support is added. That allow central process global key combination and other.
 
 
 2012-02-08 Roman
-- !!!!:TConfig: It is set based on TVariant for items. Access to object TCfg is made clear and it allow using by link without main types.
+- !!!!:TConfig: TCfg is set based on TVariant for items. Access to object TCfg is made clear and it allow using by link without main types.
 - !!!!:SYS: Childs storing into map for base object TCntrNode is set to "const char*" key and all nodes have been
     adapted to identifiers constant.
 
 
 2012-02-07 Roman
-- ResString: For read-write to stored string used "string(vl.data(), vl.size())" construction for COW algorithm disable.
+- !:ResString: For read-write to stored string used "string(vl.data(), vl.size())" construction for COW algorithm prevent.
 - SYS: TSYS::cntrIter() function is added for faster and simple counters iteration.
 - !!!!:TVariant: Rewrited to storage mechanism change from "string" using to "union" and adaptive memory alloc using for strings
     (simple, up to 7 symbols store static and more allocated to dynamic memory).
@@ -181,7 +191,7 @@
 
 2012-02-06 Roman
 - FIX:SYS: Modification flag set is fixed for all nodes changed after last TConfig API modification.
-- Archive.FSArch: Archives files limit size for value archivator is added.
+- !:Archive.FSArch: Archives files limit size for value archivator is added.
 
 
 2012-01-31 Roman
@@ -193,18 +203,13 @@
     Direct values access by link by functions like getSd() is dangerous for parallel access.
 - !!!!:TValFunc: Store string is changed from type "ResString" to "string" object and resource removed direct to the object.
 - !!!!:TVal: Store string is changed from type "ResString" to "string" object and resource used nodeRes() by the object.
-- !!!!:Archives: Subsystem's modules version ABI is changed to 6.
-- !!!!:DB: Subsystem's modules version ABI is changed to 6.
-- !!!!:Protocol: Subsystem's modules version ABI is changed to 6.
-- !!!!:Special: Subsystem's modules version ABI is changed to 6.
-- !!!!:Transport: Subsystem's modules version ABI is changed to 6.
-- !!!!:UI: Subsystem's modules version ABI is changed to 6.
+- !!!!:UI,Transport,Special,Protocol,DB,Archives: Subsystem's modules version ABI is changed to 6.
 - !:Transport.Serial: Flow control by RTS signal for pure RS-485 is added to output transport.
 - FIX:DAQ.Siemens: String write is fixed by write reserved block size.
 
 
 2012-01-25 Roman
-- SYS: DAQ subsystem modules interface version is risen to 6.
+- !!:SYS: DAQ subsystem modules interface version is risen to 6.
 
 
 2012-01-24 Roman
@@ -220,7 +225,7 @@
 - DAQ.BlockCalc, DAQ.JavaLikeCalc, DAQ.LogicLev, DAQ.DCON, Transport.Sockets, Transport.Serial,
 	Protocol.HTTP, Protocol.SelfSystem, UI.WebCfgD, Special.FLibComplex1, Special.FLibMath, Special.FLibSYS:
     Builtin to OpenSCADA core support is added.
-- Transport.Sockets: Last repeat timeout is added for next requests repeat.
+- !:Transport.Sockets: Last repeat timeout is added for next requests repeat.
 
 
 2012-01-22 Roman
@@ -235,7 +240,7 @@
 
 
 2012-01-19 Roman
-- DAQ.ModBus: Maximum request block size is made optional for a controller object.
+- !:DAQ.ModBus: Maximum request block size is made optional for a controller object.
     Comments support is added into attributes configuration list, for standard parameter type.
 
 
@@ -276,13 +281,13 @@
 
 
 2012-01-05 Roman
-- SYS: Modules builtin to OpenSCADA core support is added. Experimental build modules DB.SQLite and DAQ.ModBus is added
-    for builtin to core library.
-- SYS:confugure.in: Use buildin variables for macros AC_CHECK_HEADERS and AC_ARG_ENABLE.
-- SYS: Option --CoreDumpAllow is added for core dump creation on crash enable. Function TSYS::sysSleep() is some fixed.
-- SYS: To all start scripts added procedure for automatic core dump files process by backtrace call and put it result to
-    text files. The procedure wait core file "core" into work directory then
-    set Linux kernel core pattern variable (kernel.core_pattern) to "core" value.
+- !!!!:SYS: Modules builtin to OpenSCADA core support is added. Experimental build modules DB.SQLite and DAQ.ModBus is added
+	for builtin to core library.
+    confugure.in: Uses buildin variables from macros AC_CHECK_HEADERS and AC_ARG_ENABLE.
+    Option --CoreDumpAllow is added for core dump creation on crash enable. Function TSYS::sysSleep() is some fixed.
+    To all start scripts added procedure for automatic core dump files process by backtrace call and put it result to
+	text files. The procedure wait core file "core" into work directory then
+	set Linux kernel core pattern variable (kernel.core_pattern) to "core" value.
 
 
 2012-01-04 Roman
@@ -293,7 +298,7 @@
 	- Automatic detect and enable configure option --enable-CrossCompile is added for cross-compile environments.
 	- Configure option --enable-CoreLibStatic is added for shared OpenSCADA library build separate disable and 
 	    call-start programm static linking.
-	- Module DAQ.ICP_DAS is configured by default to disabled, for prevent build try for onapt ARM environment.
+	- Module DAQ.ICP_DAS is configured by default to disabled, for prevent build try for unapt ARM environment.
 	- Results table is added at configuration end.
 	- Function usleep() is replaced everywhere to self function-wraper TSYS::sysSleep() by reason function usleep()
 	    miss into uCLibc and allow only by special uClibc configure on build. Into TSYS::sysSleep() used nanosleep().
@@ -306,7 +311,7 @@
 
 2011-12-29 Roman
 - FIX:SYS:User's API function TArrayObj::slice() is fixed from more bugs.
-- FIX:DAQ.JavaLikeCalc: User's API function string.slice() is fixed for begin position outrage check.
+- FIX:DAQ.JavaLikeCalc: User's API function string.slice() is fixed for begin position outrange check.
 
 
 2011-12-27 Roman

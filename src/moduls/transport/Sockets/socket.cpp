@@ -565,14 +565,14 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's input transport has address format:\n"
-	    "  TCP:[addr]:[port]:[mode] - TCP socket:\n"
+	    "  TCP:{addr}:{port}:{mode} - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive).\n"
-	    "  UDP:[addr]:[port] - UDP socket:\n"
+	    "  UDP:{addr}:{port} - UDP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
 	    "    port - network port (/etc/services).\n"
-	    "  UNIX:[name]:[mode] - UNIX socket:\n"
+	    "  UNIX:{name}:{mode} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
@@ -880,16 +880,16 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	TTransportOut::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's output transport has address format:\n"
-	    "  TCP:[addr]:[port] - TCP socket:\n"
+	    "  TCP:{addr}:{port} - TCP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"
 	    "    port - network port (/etc/services);\n"
-	    "  UDP:[addr]:[port] - UDP socket:\n"
+	    "  UDP:{addr}:{port} - UDP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"
 	    "    port - network port (/etc/services).\n"
-	    "  UNIX:[name] - UNIX socket:\n"
+	    "  UNIX:{name} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"conn:next:[rep]\". Where:\n"
+	    _("Connection timings in format: \"conn:next[:rep]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in seconds;\n"
 	    "    next - maximum time for continue respond wait, in seconds;\n"
 	    "    rep  - minimum repeate timeout, in seconds."));

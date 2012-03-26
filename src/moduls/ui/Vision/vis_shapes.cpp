@@ -1111,6 +1111,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		    lab->movie()->start();
 		}
 	    }
+#ifdef HAVE_PHONON
 	    else if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
 	    {
 		if(shD->videoPlay)
@@ -1120,7 +1121,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		}
 		else player->stop();
 	    }
+#endif
 	    break;
+#ifdef HAVE_PHONON
 	case 30:	//roll
 	    if(shD->videoRoll == (bool)atoi(val.c_str())) break;
 	    shD->videoRoll = (bool)atoi(val.c_str());
@@ -1148,6 +1151,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->audioVolume = atof(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume);
 	    break;
+#endif
 	default:
 	    //> Individual arguments process
 	    if(uiPrmPos >= 40)

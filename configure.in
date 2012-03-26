@@ -486,7 +486,9 @@ AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
     #>> Modules checkings
     AX_LIB_FFTW3()
     AX_LIB_QT4()
-    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])])
+    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
+	[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
+	[AC_MSG_NOTICE(Phonon not found. Using is disabled!)])
     if test $enable_Vision = incl; then
 	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${phonon_LIBS} "
 	ModsIncl="${ModsIncl}ui_Vision "
