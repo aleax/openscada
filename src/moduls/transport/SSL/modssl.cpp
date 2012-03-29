@@ -42,7 +42,7 @@
 #define MOD_NAME	_("SSL")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"1.0.0"
+#define MOD_VER		"1.0.1"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow security socket layer based transport. Used OpenSSL and supported SSLv2, SSLv3 and TLSv1.")
 #define LICENSE		"GPL2"

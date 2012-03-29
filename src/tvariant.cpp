@@ -139,12 +139,15 @@ TVariant &TVariant::operator=( const TVariant &vr )
 {
     switch(vr.type())
     {
+	case Null:
+	    if(!mFixedTp) setType(Null);
+	    else setS("");
+	    break;
 	case Boolean:	setB(vr.getB());	break;
 	case Integer:	setI(vr.getI());	break;
 	case Real:	setR(vr.getR());	break;
 	case String:	setS(vr.getS());	break;
 	case Object:	setO(vr.getO(true));	break;
-	default: break;
     }
     return *this;
 }

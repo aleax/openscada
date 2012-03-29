@@ -1,3 +1,26 @@
+2012-03-29 Roman
+- SYS: Append files support is added to I18N process code into I18N.mk.
+- FIX:SYS.TVariant, DAQ.JavaLikeCalc: Null type process is added. Objects support is added to left places.
+- !!:Archive.FSArch: Documents is updated and released version 1.5.1.
+- !!:DAQ.BlockCalc: Documents is updated and released version 1.6.0.
+- !!:DAQ.JavaLikeCalc: Documents and full translations is updated and released version 2.0.0.
+- !!:DAQ.LogicLev: Documents is updated and released version 1.3.0.
+- !!:DAQ.ModBus: Documents is updated and released version 1.3.0.
+- !!:DAQ.SNMP: Documents is updated and released version 0.7.0.
+- !!:DAQ.Siemens: Documents and full translations is updated and released version 1.4.0.
+- !!:Protocol.ModBus: Documents is updated and released version 0.6.4.
+- !!:Transport.SSL: Documents is updated and released version 1.0.1.
+- !!:Transport.Serial: Documents is updated and released version 0.8.0.
+- !!:Transport.Sockets: Documents is updated and released version 1.5.1.
+- !!:UI.QTCfg: Documents is updated and released version 2.1.0.
+- !!:UI.QTStarter: Documents is updated and released version 1.7.0.
+- !!:UI.VCAEngine: Documents is updated and released version 1.3.0.
+- !!:UI.Vision: Documents and full translations is updated and released version 1.3.0.
+- !!:UI.WebVision: Documents and full translations is updated and released version 1.0.0.
+- DOC: Generic documents, include "openscada.pdf", and library "WLib Main" is updated.
+- DOC: Electro elements library document is added.
+
+
 2012-03-27 Roman
 - FIX:SYS,UI.Vision: Automatic Phonon disable is fixed.
 - FIX:SYS: File openscada.pc place for Deb-package is fixed.

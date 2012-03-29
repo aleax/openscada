@@ -43,7 +43,7 @@
 #define MOD_NAME	_("Serial interfaces")
 #define MOD_TYPE	STR_ID
 #define VER_TYPE	STR_VER
-#define MOD_VER		"0.7.3"
+#define MOD_VER		"0.8.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow serial based interfaces. Used for data exchanging through serial interfaces like RS232, RS485, GSM and other.")
 #define LICENSE		"GPL2"

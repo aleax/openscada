@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-24 10:37+0200\n"
+"POT-Creation-Date: 2012-03-27 18:04+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
 msgid "Operation user interface (QT)"
 msgstr "Робочий інтерфейс користувача (QT)"
@@ -134,6 +134,18 @@ msgstr "Допомога по опціям"
 
 msgid "OpenSCADA: Vision developing"
 msgstr "OpenSCADA: Vision-розробка"
+
+msgid "Full screen"
+msgstr "Весь екран"
+
+msgid "Full screen toggle"
+msgstr "Перемикач режиму \"На весь екран\""
+
+msgid "The button for full screen toggle"
+msgstr "Кнопка для перемикання режиму \"На весь екран\""
+
+msgid "Press for toggle full screen."
+msgstr "Натиснути для перемикання режиму \"На весь екран\"."
 
 msgid "&Close"
 msgstr "&Закрити"
@@ -1313,18 +1325,6 @@ msgstr "Кнопка для закриття вікна виконання Visio
 
 msgid "Press to close of the current Vision runtime window."
 msgstr "Натиснути для закриття поточного вікна виконання Vision."
-
-msgid "Full screen"
-msgstr "Весь екран"
-
-msgid "Full screen toggle"
-msgstr "Перемикач режиму \"На весь екран\""
-
-msgid "The button for full screen toggle"
-msgstr "Кнопка для перемикання режиму \"На весь екран\""
-
-msgid "Press for toggle full screen."
-msgstr "Натиснути для перемикання режиму \"На весь екран\"."
 
 msgid "Press for display the program and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."

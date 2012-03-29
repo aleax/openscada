@@ -1473,6 +1473,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 		case IO::Real:		vl = io->getR(rg.val().io);	break;
 		case IO::String:	vl = io->getS(rg.val().io);	break;
 		case IO::Object:	vl = io->getO(rg.val().io);	break;
+		default: vl = EVAL_BOOL;
 	    }
 	    break;
 	case Reg::PrmAttr:
@@ -1482,16 +1483,17 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 		case TFld::Integer:	vl = rg.val().p_attr->at().getI();	break;
 		case TFld::Real:	vl = rg.val().p_attr->at().getR();	break;
 		case TFld::String:	vl = rg.val().p_attr->at().getS();	break;
-		default: break;
+		case TFld::Object:	vl = rg.val().p_attr->at().getO();	break;
+		default: vl = EVAL_BOOL;
 	    }
 	    break;
 	case Reg::Obj:	vl = *rg.val().o_el;	break;
 	default: break;
     }
 
-    for(int i_p = 0; i_p < rg.propSize( ); i_p++)
+    for(int i_p = 0; i_p < rg.propSize(); i_p++)
     {
-	if(fObj && i_p == (rg.propSize( )-1)) break;
+	if(fObj && i_p == (rg.propSize()-1)) break;
 	if(vl.isNull()) return false;	//throw TError(nodePath().c_str(),_("Value error. Get property from null value try."));
 	vl = oPropGet(vl,rg.propGet(i_p));
     }
@@ -1604,7 +1606,7 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 		    case TVariant::Real:	io->setR(rg.val().io,val.getR());	break;
 		    case TVariant::String:	io->setS(rg.val().io,val.getS());	break;
 		    case TVariant::Object:	io->setO(rg.val().io,val.getO());	break;
-		    default:	break;
+		    default:			io->setB(rg.val().io,EVAL_BOOL);
 		}
 		break;
 	    case Reg::PrmAttr:
@@ -1614,7 +1616,8 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 		    case TVariant::Integer:	rg.val().p_attr->at().setI(val.getI());	break;
 		    case TVariant::Real:	rg.val().p_attr->at().setR(val.getR());	break;
 		    case TVariant::String:	rg.val().p_attr->at().setS(val.getS());	break;
-		    default:	break;
+		    case TVariant::Object:	rg.val().p_attr->at().setO(val.getO());	break;
+		    default:			rg.val().p_attr->at().setB(EVAL_BOOL);
 		}
 		break;
 	    default:
@@ -1868,8 +1871,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case Reg::Int:		setValI(val,reg[ptr->toR],getValI(val,reg[ptr->fromR]));	break;
 			case Reg::Real:		setValR(val,reg[ptr->toR],getValR(val,reg[ptr->fromR]));	break;
 			case Reg::String:	setValS(val,reg[ptr->toR],getValS(val,reg[ptr->fromR]));	break;
-			case Reg::Obj:		setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));		break;
-			default:	break;
+			default:		setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));		break;
 		    }
 		else setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));
 		cprg += sizeof(SCode); break;

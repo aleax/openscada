@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-07 11:08+0300\n"
+"POT-Creation-Date: 2012-03-27 15:45+0300\n"
 "PO-Revision-Date: 2009-08-26 08:08+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -54,6 +54,9 @@ msgid "Root page"
 msgstr "Rootseite"
 
 msgid "Current page"
+msgstr "Aktuelle Seite"
+
+msgid "Curent page"
 msgstr "Aktuelle Seite"
 
 msgid "Previous page"
