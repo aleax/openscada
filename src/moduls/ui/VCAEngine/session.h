@@ -87,6 +87,7 @@ class Session : public TCntrNode
 	void openUnreg( const string &id );
 
 	Res &eventRes( )			{ return mEvRes; }
+	pthread_mutex_t &resAttr( )		{ return mtxAttr; }
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
@@ -155,6 +156,7 @@ class Session : public TCntrNode
 	AutoHD<Project>	mParent;
 	Res		mCalcRes;		//Calc resource
 	Res		mEvRes;			//Event access resource
+	pthread_mutex_t mtxAttr;
 
 	vector<string>	mOpen;
 
@@ -232,6 +234,8 @@ class SessWdg : public Widget, public TValFunc
 
 	unsigned int modifVal( Attr &cfg );
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
+
+	pthread_mutex_t	&mtxAttr( )	{ return mSess->resAttr(); }
 
 	//Attributes
 	unsigned	mProc		: 1;

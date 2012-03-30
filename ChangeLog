@@ -1,3 +1,8 @@
+2012-03-30 Roman
+- !!!!:FIX:UI.VCAngine: Resources to widget's attributes is made more clear (by use Recursive mutex)
+    and use one generic resource, for session and other, for each other dead locking prevent.
+
+
 2012-03-29 Roman
 - SYS: Append files support is added to I18N process code into I18N.mk.
 - FIX:SYS.TVariant, DAQ.JavaLikeCalc: Null type process is added. Objects support is added to left places.

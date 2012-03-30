@@ -33,33 +33,35 @@ using namespace VCA;
 //************************************************
 //* Widget                                       *
 //************************************************
+pthread_mutex_t Widget::mtxAttrGlob = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+
 Widget::Widget( const string &id, const string &isrcwdg ) :
-    mId(id), attrAtLockCnt(0), mEnable(false), m_lnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
+    mId(id), mEnable(false), m_lnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
 {
     inclWdg = grpAdd("wdg_");
 
     //> Attributes mutex create
-    pthread_mutexattr_t attrM;
+    /*pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_ERRORCHECK);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&mtxAttr, &attrM);
-    pthread_mutexattr_destroy(&attrM);
+    pthread_mutexattr_destroy(&attrM);*/
 }
 
 Widget::~Widget()
 {
     //> Remove attributes
-    if(pthread_mutex_lock(&mtxAttr)) throw TError(nodePath().c_str(),_("Attributes deadlock."));
+    pthread_mutex_lock(&mtxAttr());
     map<string,Attr*>::iterator p;
     while((p = mAttrs.begin()) != mAttrs.end())
     {
 	delete p->second;
 	mAttrs.erase(p);
     }
-    pthread_mutex_unlock(&mtxAttr);
+    pthread_mutex_unlock(&mtxAttr());
 
     //> Attributes mutex destroy
-    pthread_mutex_destroy(&mtxAttr);
+    //pthread_mutex_destroy(&mtxAttr);
 }
 
 TCntrNode &Widget::operator=( TCntrNode &node )
@@ -510,7 +512,7 @@ void Widget::wClear( )
 
 void Widget::attrList( vector<string> &list )
 {
-    int rLock = pthread_mutex_lock(&mtxAttr);
+    pthread_mutex_lock(&mtxAttr());
     list.clear();
     list.reserve(mAttrs.size());
     for(map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p)
@@ -518,12 +520,11 @@ void Widget::attrList( vector<string> &list )
 	while(p->second->mOi >= list.size())	list.push_back("");
 	list[p->second->mOi] = p->first;
     }
-    if(!rLock) pthread_mutex_unlock(&mtxAttr);
+    pthread_mutex_unlock(&mtxAttr());
 }
 
 void Widget::attrAdd(TFld *attr, int pos, bool inher)
 {
-    int rLock = -1;
     string anm = attr->name();
 
     if(attrPresent(anm) || TSYS::strNoSpace(anm).empty())
@@ -533,7 +534,7 @@ void Widget::attrAdd(TFld *attr, int pos, bool inher)
     }
     try
     {
-	rLock = pthread_mutex_lock(&mtxAttr);
+	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p;
 	Attr *a = new Attr(attr,inher);
 	a->mOwner = this;
@@ -544,12 +545,11 @@ void Widget::attrAdd(TFld *attr, int pos, bool inher)
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
     }
     catch(...){ }
-    if(!rLock) pthread_mutex_unlock(&mtxAttr);
+    pthread_mutex_unlock(&mtxAttr());
 }
 
 void Widget::attrDel( const string &attr, bool allInher  )
 {
-    int rLock = -1;
     if(!attrPresent(attr)) return;
 
     //> Delete from inheritant wigets
@@ -561,8 +561,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
     //> Self delete
     try
     {
-	rLock = pthread_mutex_lock(&mtxAttr);
-
+	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
 	int pos = p->second->mOi;
@@ -572,14 +571,14 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	mAttrs.erase(p);
     }
     catch(...){ }
-    if(!rLock) pthread_mutex_unlock(&mtxAttr);
+    pthread_mutex_unlock(&mtxAttr());
 }
 
 bool Widget::attrPresent(const string &attr)
 {
-    int rLock = pthread_mutex_lock(&mtxAttr);
+    pthread_mutex_lock(&mtxAttr());
     bool rez = (mAttrs.find(attr) != mAttrs.end());
-    if(!rLock) pthread_mutex_unlock(&mtxAttr);
+    pthread_mutex_unlock(&mtxAttr());
     return rez;
 }
 
@@ -588,17 +587,16 @@ AutoHD<Attr> Widget::attrAt(const string &attr, int lev)
     //> Local atribute request
     if(lev < 0 )
     {
-	int rLock = pthread_mutex_lock(&mtxAttr);
-	if(rLock && (rLock != EDEADLK || !attrAtLockCnt))
-	    throw TError(nodePath().c_str(),_("Attribute attach access error: %d."),rLock);
-
+	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())
 	{
-	    if(!rLock) pthread_mutex_unlock(&mtxAttr);
+	    pthread_mutex_unlock(&mtxAttr());
 	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
         }
-	return AutoHD<Attr>(p->second);
+        AutoHD<Attr> rez(p->second);
+        pthread_mutex_unlock(&mtxAttr());
+        return rez;
     }
     //> Process by full path
     AutoHD<Attr> an;
@@ -2073,12 +2071,11 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
 
 void Attr::AHDConnect( )
 {
-    owner()->attrAtLockCnt++;
+    pthread_mutex_lock(&owner()->mtxAttr());
 }
 
 bool Attr::AHDDisConnect( )
 {
-    owner()->attrAtLockCnt--;
-    if(!owner()->attrAtLockCnt) pthread_mutex_unlock(&owner()->mtxAttr);
+    pthread_mutex_unlock(&owner()->mtxAttr());
     return false;
 }

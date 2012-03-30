@@ -144,6 +144,8 @@ class Attr
 //************************************************
 //* Widget                                       *
 //************************************************
+//static pthread_mutex_t	mtxAttrGlob;
+
 class Widget : public TCntrNode
 {
     friend class Attr;
@@ -248,11 +250,12 @@ class Widget : public TCntrNode
 	virtual void calc( Widget *base );
 	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 
+	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrGlob; }
+
 	//Attributes
 	//> Generic data
 	const string	mId;			//Widget identifier
 
-	unsigned char	attrAtLockCnt	:8;	//attr at lock cnt
 	unsigned char	inclWdg		:3;
 	unsigned char	mEnable		:1;	//Enable status
 	unsigned char	m_lnk		:1;	//Widget as link
@@ -264,7 +267,7 @@ class Widget : public TCntrNode
 	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 	map<string, Attr* >	mAttrs;
-	pthread_mutex_t	mtxAttr;
+	static pthread_mutex_t	mtxAttrGlob;
 };
 
 }

@@ -39,11 +39,19 @@ Session::Session( const string &iid, const string &iproj ) :
     mPage = grpAdd("pg_");
     sec = SYS->security();
     mReqTm = time(NULL);
+
+    //> Attributes mutex create
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxAttr, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 Session::~Session( )
 {
-
+    //> Attributes mutex destroy
+    pthread_mutex_destroy(&mtxAttr);
 }
 
 void Session::postEnable( int flag )
@@ -1495,7 +1503,7 @@ void SessWdg::calc( bool first, bool last )
 	{
 	    string wevent = eventGet(true);
 	    //> Process input links and constants
-	    AutoHD<Attr> attr, attr1;
+	    AutoHD<Attr> attr;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
 	    for(unsigned i_a = 0; i_a < mAttrLnkLs.size(); i_a++)
@@ -1522,10 +1530,11 @@ void SessWdg::calc( bool first, bool last )
 			attr.at().setS("/Archive/va_"+attr.at().cfgVal().substr(obj_tp.size()));
 		}
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn) attr.at().setS(EVAL_STR);
+		attr.free();
 	    }
 	    inLnkGet = false;
 
-	    if( TValFunc::func() )
+	    if(TValFunc::func())
 	    {
 		//> Load events to calc procedure
 		int evId = ioId("event");
