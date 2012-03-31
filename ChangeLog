@@ -1,3 +1,8 @@
+2012-03-31 Roman
+- SYS:Debian rules build updated for: dh_autoreconf add, openscada.pc and includes place,
+    typical dependents for Debian and Ubuntu is added to "Build-Depends:" and compatible down to 5.
+
+
 2012-03-30 Roman
 - !!!!:FIX:UI.VCAngine: Resources to widget's attributes is made more clear (by use Recursive mutex)
     and use one generic resource, for session and other, for each other dead locking prevent.
