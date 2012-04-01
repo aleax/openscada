@@ -26,7 +26,7 @@ else
 CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
-config.status: configure
+config.status:
 	dh_testdir
 	dh_autoreconf
 	./configure $(CROSS) --prefix=/usr
