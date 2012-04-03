@@ -59,6 +59,7 @@ class TTest: public TSpecial
 	//Methods
 	void load_( );
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
     private:
 	//Methods

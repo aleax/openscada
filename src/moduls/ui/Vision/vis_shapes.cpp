@@ -59,6 +59,7 @@
 
 #ifdef HAVE_PHONON
 #include <phonon/VideoPlayer>
+#include <phonon/VideoWidget>
 #endif
 
 
@@ -1249,6 +1250,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		{
 		    shD->addrWdg = new VideoPlayer(Phonon::VideoCategory, w);
 		    if(shD->videoRoll) connect(shD->addrWdg, SIGNAL(finished()), shD->addrWdg, SLOT(play()));
+		    ((VideoPlayer*)shD->addrWdg)->videoWidget()->installEventFilter(w);
 		    mk_new = true;
 		}
 		//> Set new data
@@ -1375,6 +1377,21 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	}
 	default: break;
     }
+
+    return false;
+}
+
+bool ShapeMedia::eventFilter( WdgView *w, QObject *object, QEvent *event )
+{
+#ifdef HAVE_PHONON
+    VideoPlayer *player = dynamic_cast<VideoPlayer*>(((ShpDt*)w->shpData)->addrWdg);
+    if(player && player->videoWidget() == object)
+	if(event->type() == QEvent::MouseButtonDblClick && ((QMouseEvent*)event)->button() == Qt::LeftButton)
+	{
+	    player->videoWidget()->setFullScreen(!player->videoWidget()->isFullScreen());
+	    return true;
+	}
+#endif
 
     return false;
 }

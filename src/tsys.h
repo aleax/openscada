@@ -307,7 +307,7 @@ class TSYS : public TCntrNode
 	bool cfgFileLoad( );
 	void cfgFileSave( );
 	void cfgPrmLoad( );
-	void cfgFileScan( bool first = false );
+	void cfgFileScan( bool first = false, bool up = false );
 	void cntrCmdProc( XMLNode *opt );	// Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

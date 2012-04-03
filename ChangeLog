@@ -1,4 +1,9 @@
 2012-04-05 Roman
+- SYS: Service command "<scan path="%2fgen%2fconfig"/>" is added for config file against rescan.
+- FIX:DAQ.JavaLikeCalc: Start repeate is prevented.
+- DAQ.SystemTests: Direct tests' function call by dynamic is added.
+- UI.Vision: Double click process is added for full screen Full Video play by Phonon of primitive "Media".
+- DataDB: Library VCABase is updated for Prescription engine some fix.
 - FIX:Archive.DBArch: Messages archive's time limit size last apply is fixed.
 
 

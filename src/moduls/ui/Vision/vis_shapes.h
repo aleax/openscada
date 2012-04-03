@@ -242,6 +242,7 @@ class ShapeMedia : public WdgShape
 	void destroy( WdgView *view );
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
+	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
 	void clear( WdgView *view );
 

@@ -273,6 +273,15 @@ void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )
     mess(testNm,"%s}%d \"%s\"", string(level,' ').c_str(), level, node->name().c_str());
 }
 
+TVariant TTest::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // ElTp {funcID}(ElTp prm1, ...) - the test {funcID} call
+    //  prm{N} - {N} parameter to the test.
+    if(testPresent(iid)) return testAt(iid).at().objFuncCall("call", prms, user);
+
+    return TCntrNode::objFuncCall(iid, prms, user);
+}
+
 void TTest::cntrCmdProc( XMLNode *opt )
 {
     //Get page info

@@ -98,8 +98,8 @@ void TSubSYS::subStart( )
     if( !subModule() )	return;
     vector<string> list;
     modList(list);
-    for( unsigned i_m=0; i_m < list.size(); i_m++ )
-	try{ modAt(list[i_m]).at().modStart( ); }
+    for(unsigned i_m = 0; i_m < list.size(); i_m++)
+	try { modAt(list[i_m]).at().modStart();	}
 	catch(TError err)
 	{
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());

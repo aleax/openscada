@@ -638,13 +638,12 @@ void TSYS::clkCalc( )
     }
 }
 
-void TSYS::cfgFileScan( bool first )
+void TSYS::cfgFileScan( bool first, bool up )
 {
     struct stat f_stat;
 
     if(stat(cfgFile().c_str(),&f_stat) != 0) return;
-    bool up = false;
-    if(rootCfgFl != cfgFile() || rootFlTm != f_stat.st_mtime) up = true;
+    if(!up && (rootCfgFl != cfgFile() || rootFlTm != f_stat.st_mtime)) up = true;
     rootCfgFl = cfgFile();
     rootFlTm = f_stat.st_mtime;
 
@@ -1940,7 +1939,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
-    else if(a_path == "/gen/config" && ctrChkNode(opt))		opt->setText(mConfFile);
+    else if(a_path == "/gen/config")
+    {
+	if(ctrChkNode(opt))	opt->setText(mConfFile);
+	if(ctrChkNode(opt,"scan",RWRWR_,"root","root",SEC_WR))	cfgFileScan(false, true);
+    }
     else if(a_path == "/gen/wrk_db" )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(mWorkDB);

@@ -263,6 +263,7 @@ void Func::postIOCfgChange()
 
 void Func::setStart( bool val )
 {
+    if(val == run_st) return;
     //> Start calc
     if( val )
     {

@@ -303,7 +303,7 @@ void TipContr::modStart( )
 
     //> Start functions
     lbList(lst);
-    for(unsigned i_lb=0; i_lb < lst.size(); i_lb++)
+    for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
 	lbAt(lst[i_lb]).at().setStart(true);
 
     TTipDAQ::modStart( );
