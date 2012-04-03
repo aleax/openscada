@@ -69,23 +69,7 @@ void ModMArch::load_( )
     TMArchivator::load_();
 
     //> Init address to DB
-    if( addr().empty() ) setAddr("*.*");
-
-    //> Load message archive parameters
-    TConfig wcfg(&mod->archEl());
-    wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg))
-    {
-	mBeg = atoi(wcfg.cfg("BEGIN").getS().c_str());
-	mEnd = atoi(wcfg.cfg("END").getS().c_str());
-	//>> Check for delete archivator table
-	if( mEnd <= (time(NULL)-(time_t)(maxSize()*3600.)) )
-	{
-	    SYS->db().at().open(addr()+"."+archTbl());
-	    SYS->db().at().close(addr()+"."+archTbl(),true);
-	    mBeg = mEnd = 0;
-	}
-    }
+    if(addr().empty()) setAddr("*.*");
 
     try
     {
@@ -95,6 +79,22 @@ void ModMArch::load_( )
 	vl = prmNd.attr("Size");
 	if(!vl.empty()) setMaxSize(atof(vl.c_str()));
     } catch(...){ }
+
+    //> Load message archive parameters
+    TConfig wcfg(&mod->archEl());
+    wcfg.cfg("TBL").setS(archTbl());
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg))
+    {
+	mBeg = atoi(wcfg.cfg("BEGIN").getS().c_str());
+	mEnd = atoi(wcfg.cfg("END").getS().c_str());
+	//>> Check for delete archivator table
+	if(mEnd <= (time(NULL)-(time_t)(maxSize()*3600)))
+	{
+	    SYS->db().at().open(addr()+"."+archTbl());
+	    SYS->db().at().close(addr()+"."+archTbl(),true);
+	    mBeg = mEnd = 0;
+	}
+    }
 }
 
 void ModMArch::save_( )

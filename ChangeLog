@@ -1,3 +1,7 @@
+2012-04-05 Roman
+- FIX:Archive.DBArch: Messages archive's time limit size last apply is fixed.
+
+
 2012-03-31 Roman
 - SYS:Debian rules build updated for: dh_autoreconf add, openscada.pc and includes place,
     typical dependents for Debian and Ubuntu is added to "Build-Depends:" and compatible down to 5.
