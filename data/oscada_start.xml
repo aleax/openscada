@@ -73,6 +73,9 @@
 	    <node id="mod_QTCfg">
 		<prm id="StartUser">root</prm>
 	    </node>
+	    <node id="mod_Vision">
+		<prm id="StartUser">root</prm>
+	    </node>
 	    <node id="mod_WebCfg">
 		<prm id="SessTimeLife">20</prm>
 	    </node>
