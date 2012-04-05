@@ -2692,7 +2692,7 @@ string OPCEndPoint::getStatus( )
     if( enableStat( ) )
     {
 	rez = _("Enabled. ");
-	rez += TSYS::strMess( _("Requests %.4g."), cntReq );
+	rez += TSYS::strMess( _("Requests %.4g."), (double)cntReq );
     }
 
     return rez;

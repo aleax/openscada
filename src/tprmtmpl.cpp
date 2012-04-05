@@ -142,7 +142,14 @@ AutoHD<TFunction> TPrmTempl::func()
 {
     if(!startStat())	throw TError(nodePath().c_str(),_("Template is disabled."));
     if(!prog().size())	return AutoHD<TFunction>(this);
-    return SYS->nodeAt(work_prog);
+    try { return SYS->nodeAt(work_prog); }
+    catch(TError err)
+    {
+	//> Template restart try
+	setStart(false);
+	setStart(true);
+	return SYS->nodeAt(work_prog);
+    }
 }
 
 void TPrmTempl::load_( )

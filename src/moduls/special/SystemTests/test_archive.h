@@ -151,7 +151,7 @@ class TestArchive : public TFunction
 		}
 		mod->mess(id(),_("Test6: Passed."));
 		//--------------------------- Test 7 ----------------------------------
-		mod->mess(id(),_("Test7: Internal insert value instaead double value."));
+		mod->mess(id(),_("Test7: Internal insert value instead double value."));
 		buf.clear();
 		buf.setI((int)pow(10,3),wtm+3*per);
 		o_arch.at().setVals(buf,wtm+3*per,wtm+3*per,"");

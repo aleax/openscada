@@ -143,7 +143,7 @@ msgstr "Test6: Fehler."
 msgid "Test6: Passed."
 msgstr "Test6: Gemacht."
 
-msgid "Test7: Internal insert value instaead double value."
+msgid "Test7: Internal insert value instead double value."
 msgstr "Test7: Innerer Einsatz des Wertes statt des reellen."
 
 msgid "Test7: Failed"

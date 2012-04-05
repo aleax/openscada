@@ -1,3 +1,9 @@
+2012-04-05 Roman
+- FIX:DAQ.Template: Restore template build after module DAQ.JavaLikeCalc or builded function close.
+- FIX:Special.SystemTests: Original message fixed.
+- FIX:DAQ.OPC_UA: Protocol requests counter show is fixed.
+
+
 2012-04-04 Roman
 - SYS: Config files some fixed and clear.
 - SYS: Service command "<scan path="%2fgen%2fconfig"/>" is added for config file against rescan.

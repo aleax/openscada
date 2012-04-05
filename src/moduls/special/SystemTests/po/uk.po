@@ -138,7 +138,7 @@ msgstr "Тест6: Помилка."
 msgid "Test6: Passed."
 msgstr "Тест6: Виконано."
 
-msgid "Test7: Internal insert value instaead double value."
+msgid "Test7: Internal insert value instead double value."
 msgstr "Тест7: Внутрішня вставка значення замість реального значення."
 
 msgid "Test7: Failed"
