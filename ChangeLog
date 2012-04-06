@@ -1,4 +1,9 @@
-2012-04-06 Roman
+2012-04-06 Roman 0.8.0
+- UI.QTStarter: Splash is updated for 0.8.0 release.
+- DOC: Release notes for version 0.8.0 is added. Index files is updated.
+- FIX:DAQ.OPC_UA: Build for old version of OpenSSL is fixed.
+
+
 - UI.Vision: The signal QAction::activated(), from QT3, is replaced by QAction::triggered() full at last.
 
 

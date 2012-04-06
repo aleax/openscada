@@ -1457,7 +1457,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
-* Mon Apr 02 2012 Roman Savochenko <rom_as@oscada.org>
+* Fri Apr 06 2012 Roman Savochenko <rom_as@oscada.org>
 - Build 0.8.0 release.
 
 * Mon Dec 05 2011 Roman Savochenko <rom_as@oscada.org>
