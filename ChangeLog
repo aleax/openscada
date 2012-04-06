@@ -1,3 +1,7 @@
+2012-04-06 Roman
+- UI.Vision: The signal QAction::activated(), from QT3, is replaced by QAction::triggered() full at last.
+
+
 2012-04-05 Roman
 - FIX:UI.QTStarter: Count only "QMainWindow" set for correct exit on last modules list window close.
 - FIX:DAQ.Template: Restore template build after module DAQ.JavaLikeCalc or builded function close.

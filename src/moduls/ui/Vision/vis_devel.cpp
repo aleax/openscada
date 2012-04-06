@@ -171,7 +171,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItDel->setStatusTip(_("Press to delete visual item from library, container widget, project or page."));
     actVisItDel->setShortcut(QKeySequence("Ctrl+D"));
     actVisItDel->setEnabled(false);
-    connect(actVisItDel, SIGNAL(activated()), this, SLOT(visualItDel()));
+    connect(actVisItDel, SIGNAL(triggered()), this, SLOT(visualItDel()));
     //>>> Visual item properties
     if(!ico_t.load(TUIS::icoPath("vision_it_prop").c_str())) ico_t.load(":/images/it_prop.png");
     actVisItProp = new QAction(QPixmap::fromImage(ico_t),_("Visual item properties"),this);
