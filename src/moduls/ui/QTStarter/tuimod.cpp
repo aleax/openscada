@@ -571,7 +571,12 @@ StartDialog::StartDialog( WinControl *wcntr )
 
 void StartDialog::closeEvent( QCloseEvent* ce )
 {
-    if(QApplication::topLevelWidgets().size() <= 1) SYS->stop();
+    unsigned winCnt = 0;
+    for(unsigned i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
+	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]))
+	    winCnt++;
+
+    if(winCnt <= 1) SYS->stop();
     ce->accept();
 }
 
