@@ -237,10 +237,10 @@ void DlgUser::finish( int result )
 {
     if( result )
     {
-	//> Check user auth
+	//- Check user auth -
 	XMLNode req("get");
 	req.setAttr("path",string("/Security/")+user().toAscii().data()+"/%2fauth")->setAttr("password",password().toAscii().data());
-	if(!mod->cntrIfCmd(req,user().toAscii().data(),password().toAscii().data(),VCAstat.toAscii().data(),true) && atoi(req.text().c_str()))
+	if( !mod->cntrIfCmd(req,user().toAscii().data(),password().toAscii().data(),VCAstat.toAscii().data(),true) && atoi(req.text().c_str()) )
 	    setResult(SelOK);
 	else setResult(SelErr);
     }
@@ -433,19 +433,19 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis, bool resApply ) :
 
 void LineEdit::viewApplyBt( bool view )
 {
-    if(view == (bool)bt_fld) return;
+    if( view == (bool)bt_fld ) return;
 
-    if(view && !bt_fld)
+    if( view && !bt_fld )
     {
 	bt_fld = new QPushButton(this);
-	bt_fld->setIcon(QIcon(":/images/ok.png"));
-	bt_fld->setIconSize(QSize(12,12));
-	bt_fld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-	bt_fld->setMaximumWidth(15);
+	bt_fld->setIcon( QIcon(":/images/ok.png") );
+	bt_fld->setIconSize( QSize(12,12) );
+	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+	bt_fld->setMaximumWidth( 15 );
 	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
-	layout()->addWidget(bt_fld);
+	layout()->addWidget( bt_fld );
     }
-    if(!view && bt_fld)
+    if( !view && bt_fld )
     {
 	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
@@ -455,76 +455,66 @@ void LineEdit::viewApplyBt( bool view )
 
 bool LineEdit::isEdited( )	{ return mIsEdited; }
 
-void LineEdit::setReadOnly( bool val )
-{
-    if(!ed_fld)	return;
-    switch(type())
-    {
-	case Text:	((QLineEdit*)ed_fld)->setReadOnly(val);		break;
-	case Integer: case Real: case Time: case Date: case DateTime:
-	    ((QAbstractSpinBox*)ed_fld)->setReadOnly(val);		break;
-	case Combo:	((QComboBox*)ed_fld)->setEnabled(!val);		break;
-    }
-}
-
 void LineEdit::setType( LType tp )
 {
     needReserver = false;
-    if(tp == m_tp) return;
+    if( tp == m_tp ) return;
 
     //> Delete previous
-    if(tp >= 0 && ed_fld) delete ed_fld;
+    if( tp >= 0 && ed_fld ) delete ed_fld;
 
     //> Create new widget
-    switch(tp)
+    switch( tp )
     {
 	case Text:
 	    ed_fld = new QLineEdit(this);
-	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
+	    connect( (QLineEdit*)ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed() ) );
 	    break;
 	case Integer:
 	    ed_fld = new QSpinBox(this);
-	    connect((QSpinBox*)ed_fld, SIGNAL(valueChanged(int)), SLOT(changed()));
-	    if(mPrev) needReserver = true;
+	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
+	    if( mPrev ) needReserver = true;
 	    break;
 	case Real:
 	    ed_fld = new QDoubleSpinBox(this);
-	    connect((QDoubleSpinBox*)ed_fld, SIGNAL(valueChanged(double)), SLOT(changed()));
-	    if(mPrev) needReserver = true;
+	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
+	    if( mPrev ) needReserver = true;
 	    break;
 	case Time:
 	    ed_fld = new QTimeEdit(this);
-	    connect((QTimeEdit*)ed_fld, SIGNAL(timeChanged(const QTime&)), SLOT(changed()));
-	    if(mPrev) needReserver = true;
+	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
+	    if( mPrev ) needReserver = true;
 	    break;
 	case Date:
 	    ed_fld = new QDateEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-	    connect((QDateEdit*)ed_fld, SIGNAL(dateChanged(const QDate&)), SLOT(changed()));
+	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
 	    break;
 	case DateTime:
+	{
 	    ed_fld = new QDateTimeEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-	    connect((QDateTimeEdit*)ed_fld, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(changed()));
+	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
 	    break;
+	}
 	case Combo:
 	    ed_fld = new QComboBox(this);
 	    ((QComboBox*)ed_fld)->setEditable(true);
-	    connect((QComboBox*)ed_fld, SIGNAL(editTextChanged(const QString&)), SLOT(changed()));
-	    connect((QComboBox*)ed_fld, SIGNAL(activated(int)), this, SLOT(applySlot()));
+	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
+	    connect( (QComboBox*)ed_fld, SIGNAL( activated(int) ), this, SLOT( applySlot() ) );
 	    break;
     }
-    ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
-    if(applyReserve && needReserver)
+    ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
+    if( applyReserve && needReserver )
     {
 	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
-	((QBoxLayout*)layout())->setAlignment(ed_fld, Qt::AlignLeft);
+	((QBoxLayout*)layout())->setAlignment(ed_fld,Qt::AlignLeft);
     }
-    setFocusProxy(ed_fld);
+    setFocusProxy( ed_fld );
 
     m_tp = tp;
 }
@@ -828,12 +818,10 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     if( !ico_t.load(TUIS::icoPath("find").c_str()) ) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
-    actFind->setShortcutContext(Qt::WidgetShortcut);
     connect(actFind, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFind);
     actFindNext = new QAction(_("Find next"), ed_fld);
     actFindNext->setShortcut(Qt::Key_F3);
-    actFindNext->setShortcutContext(Qt::WidgetShortcut);
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 
@@ -1005,26 +993,6 @@ void TextEdit::find( )
     }
 }
 
-//*********************************************
-//* TreeView item delegate for ComboBox.      *
-//*********************************************
-/*TreeComboDelegate::TreeComboDelegate( QObject *parent ) : QItemDelegate(parent)
-{
-
-}
-
-void TreeComboDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
-{
-    if(index.isValid() && index.column() == 0)
-    {
-	QStyleOptionViewItem opt = option;
-	opt.font = index.data(Qt::FontRole).value<QFont>();
-        drawDisplay(painter, opt, opt.rect, index.data(Qt::UserRole).toString());
-        return;
-    }
-    QItemDelegate::paint(painter, option, index);
-}*/
-
 //****************************************
 //* Shape widget view                    *
 //****************************************
@@ -1082,7 +1050,7 @@ void WdgView::resizeF( const QSizeF &isz )
     mWSize = isz;
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
-    resize(QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())));
+    resize( QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())) );
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )
@@ -1100,7 +1068,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	req.childAdd("el")->setAttr("id",attr)->setText(val);
 	cntrIfCmd(req);
     }
-    bool up = false, upChlds = false;
+    bool up = false;
 
     switch(uiPrmPos)
     {
@@ -1138,12 +1106,12 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 13:	//geomXsc
 	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
 	    x_scale = atof(val.c_str());
-	    up = upChlds = true;
+	    up = true;
 	    break;
 	case 14:	//geomYsc
 	    mWSize = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
 	    y_scale = atof(val.c_str());
-	    up = upChlds = true;
+	    up = true;
 	    break;
 	case 15:	//tipTool
 	    setToolTip(val.c_str());
@@ -1152,34 +1120,15 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    setStatusTip(val.c_str());
 	    break;
     }
-    if(up && !allAttrLoad())
+    if( up && !allAttrLoad( ) )
     {
 	if(wLevel() > 0) moveF(posF());
 	resizeF(sizeF());
-	for(int i_c = 0; upChlds && i_c < children().size(); i_c++)
-	    if(qobject_cast<WdgView*>(children().at(i_c)))
-	        ((WdgView*)children().at(i_c))->load("");
     }
 
     if(shape)	return shape->attrSet(this,uiPrmPos,val);
 
     return true;
-}
-
-void WdgView::attrsSet( map<string,string> &attrs )
-{
-    XMLNode req("set");
-    req.setAttr("path", id()+"/%2fserv%2fattr");
-    string attrId, attrPos;
-    for(map<string,string>::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++)
-    {
-	int off = 0;
-	attrId = TSYS::strParse(i_a->first, 0, ":", &off);
-	attrPos = TSYS::strParse(i_a->first, 0, ":", &off);
-	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(i_a->second);
-	if(!attrPos.empty())	attrSet("", i_a->second, atoi(attrPos.c_str()));
-    }
-    if(req.childSize())	cntrIfCmd(req);
 }
 
 string WdgView::resGet( const string &res )

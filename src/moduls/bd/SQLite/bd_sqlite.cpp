@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <errno.h>
 #include <string.h>
 
@@ -91,16 +92,6 @@ BDMod::~BDMod()
 TBD *BDMod::openBD( const string &iid )
 {
     return new MBD(iid,&owner().openDB_E());
-}
-
-void BDMod::modStop( )
-{
-    vector<string> dbs;
-
-    //Close transactions for all DB
-    list(dbs);
-    for(unsigned i_db = 0; i_db < dbs.size(); i_db++)
-	at(dbs[i_db]).at().transCommit();
 }
 
 void BDMod::load_( )
@@ -263,7 +254,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 60 || (time(NULL)-trOpenTm) > 10*60))
+    if(enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60))
 	transCommit();
 }
 
@@ -273,8 +264,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,4,
-	    "tp","str","dest","sel_ed","select","/prm/cfg/dbFsList","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,"tp","str","help",
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
@@ -286,12 +276,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/dbFsList" && ctrChkNode(opt))
-    {
-	opt->childAdd("el")->setText(":memory:");
-	TSYS::ctrListFS(opt, addr(), "db;");
-    }
-    else if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt) transCommit();
+    if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt)
+	transCommit();
     else TBD::cntrCmdProc(opt);
 }
 
@@ -389,7 +375,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //> Request
     if( first_sel ) return false;
     req = req + " FROM '" + mod->sqlReqCode(name()) + "' " + ((next)?req_where:"") + " LIMIT " +  TSYS::int2str(row) + ",1;";
-    owner().sqlReq(req, &tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
+    owner().sqlReq(req, &tbl, false);
     if( tbl.size() < 2 ) return false;
     //> Processing of query
     for( unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
@@ -665,7 +651,7 @@ void MTable::fieldFix( TConfig &cfg )
     }
 
     //> Create new table
-    req = "CREATE TABLE IF NOT EXISTS '"+mod->sqlReqCode(name())+"' (";
+    req ="CREATE TABLE '"+mod->sqlReqCode(name())+"' (";
     bool next = false;
     bool next_key = false;
     string pr_keys, tpCfg;

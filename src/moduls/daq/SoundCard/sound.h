@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.h
 /***************************************************************************
- *   Copyright (C) 2008-2012 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
+ 
 #ifndef SOUND_H
 #define SOUND_H
 
@@ -87,11 +87,9 @@ class TMdContr: public TController
 	~TMdContr( );
 
 	string	card( )		{ return cfg("CARD").getS(); }
-	int	prior( )	{ return mPrior; }
 
 	string getStatus( );
 	int channelAllow( );
-	string sampleRates( );
 
 	TParamContr *ParamAttach( const string &name, int type );
 
@@ -114,23 +112,19 @@ class TMdContr: public TController
 	static int recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
 		const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void *userData );
 
-	bool cfgChange( TCfg &cfg );
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:
 	//Attributes
 	TElem	pEl;					//Work atribute elements
-	int	&mSmplRate, &mSmplType, &mPrior;
-	bool	prcSt, endrunReq, firstCall;
+	int	&mSmplRate, &mSmplType;
+	bool	prcSt, endrunReq;
 	int	numChan, smplSize;
 	vector< AutoHD<TMdPrm> > pHd;			// Parameter's process list
 
 	PaStream *stream;
-	time_t	cTm;
-	int64_t	wTm, tmAdj;
-	int	sRt;
+	int64_t	wTm, sdTm;
 	float	acqSize;
-	double	inAdcTimePrev, inAdcTimeAdj, lostFrmsCntr;
 
 	Res	nRes;
 };

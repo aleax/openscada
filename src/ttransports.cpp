@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <string.h>
 
 #include "tsys.h"
@@ -39,7 +40,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
     el_in.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
     el_in.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_in.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
-    el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
+    el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
     el_in.fldAdd( new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,"50") );
     el_in.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
@@ -48,7 +49,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
     el_out.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
     el_out.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_out.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
-    el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
+    el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
     el_out.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
     //> External hosts' connection DB struct
@@ -102,9 +103,24 @@ string TTransportS::extHostsDB()
 void TTransportS::load_( )
 {
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters from config-file
 
@@ -895,9 +911,9 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","bool");
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID))
+	if(startStat() && ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time"),R_R___,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time (ms)"),R_R___,"root",STR_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2;3","sel_list",_("Binary;Text(LF);Text(CR);Text(CR/LF)"));
 	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root",STR_ID,2,"tp","bool","help",
@@ -979,7 +995,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
+    else if(a_path == "/req/send" && startStat() && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
     {
 	string answ;
 	int mode = atoi(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")).c_str());
@@ -1005,21 +1021,23 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		break;
 	}
 
-	int64_t stm = TSYS::curTime();
-	char buf[STR_BUF_LEN];
-	if(!startStat()) start();
-	ResAlloc resN(nodeRes(), true);
-	int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
-	answ.assign(buf,resp_len);
-
-	bool ToTmOut = (bool)atoi(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")).c_str());
-	while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM)
+	if(!req.empty())
 	{
-	    try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError err) { break; }
-	    answ.append(buf,resp_len);
-	}
+	    int64_t stm = TSYS::curTime( );
+	    char buf[STR_BUF_LEN];
+	    ResAlloc resN( nodeRes(), true );
+	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
+	    answ.assign(buf,resp_len);
 
-	TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::time2str(TSYS::curTime()-stm),opt->attr("user"));
+	    bool ToTmOut = (bool)atoi(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")).c_str());
+	    while(ToTmOut && resp_len > 0)
+	    {
+		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError err) { break; }
+		answ.append(buf,resp_len);
+	    }
+
+	    TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::real2str(1e-3*(TSYS::curTime()-stm)),opt->attr("user"));
+	}
 	TBDS::genDBSet(owner().nodePath()+"ReqAnsw",(mode==0)?TSYS::strDecode(answ,TSYS::Bin):answ,opt->attr("user"));
     }
     else TCntrNode::cntrCmdProc(opt);

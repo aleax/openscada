@@ -38,7 +38,6 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QPlastiqueStyle>
-#include <QScrollBar>
 
 #include <tsys.h>
 
@@ -474,12 +473,10 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     if( !ico_t.load(TUIS::icoPath("find").c_str()) ) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
-    actFind->setShortcutContext(Qt::WidgetShortcut);
     connect(actFind, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFind);
     actFindNext = new QAction(_("Find next"), ed_fld);
     actFindNext->setShortcut(Qt::Key_F3);
-    actFindNext->setShortcutContext(Qt::WidgetShortcut);
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 
@@ -503,7 +500,7 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
 
 bool TextEdit::isChanged( )
 {
-    if(but_box && but_box->isVisible()) return true;
+    if( but_box && but_box->isVisible() ) return true;
     return false;
 }
 
@@ -528,10 +525,8 @@ void TextEdit::setText(const QString &text)
 
 void TextEdit::setSnthHgl(XMLNode nd)
 {
-    int scrollPos = ed_fld->verticalScrollBar()->value();
     if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
     snt_hgl->setSnthHgl(nd);
-    ed_fld->verticalScrollBar()->setValue(scrollPos);
 }
 
 void TextEdit::changed()
@@ -817,7 +812,6 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
     if(tgs.size()) itTp->setCurrentIndex(defPos);
     bool tpView = !(itTp->count()==1 && itTp->itemText(0).isEmpty());
     itTpLab->setVisible(tpView); itTp->setVisible(tpView);
-    itTp->setEnabled(itTp->count()>1);
 }
 
 void ReqIdNameDlg::selectItTp( int it )
@@ -1027,7 +1021,6 @@ void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) c
 	if(value.type() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
 	else if(val_user.isValid())
 	{
-	    comb->clear();
 	    comb->addItems(val_user.toStringList());
 	    comb->setCurrentIndex(comb->findText(value.toString()));
 	}

@@ -1,15 +1,16 @@
 # OpenSCADA.UI.VCAEngine translate to German.
+# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 16:17+0300\n"
+"POT-Creation-Date: 2012-03-21 10:53+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -242,10 +243,9 @@ msgstr "Widget für die Formenelemente der Visualisierung."
 msgid "Element type"
 msgstr "Typ des Elements"
 
-msgid ""
-"Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"
+msgid "Line edit;Text edit;Check box;Button;Combo box;List;Slider;Scroll Bar"
 msgstr ""
-"Zeilenbearbeitung;Textbearbeitung;Check Box;Schaltfläche;Combo Box;Liste;Baum;"
+"Zeilenbearbeitung;Textbearbeitung;Check Box;Schaltfläche;Combo Box;Liste;"
 "Schieber;Schieberegler"
 
 msgid "Value"
@@ -381,49 +381,6 @@ msgstr ""
 "  \"s\" - Sekunden (0-59);\n"
 "  \"ss\" - Sekunden (00-59);\n"
 "  \"AP,ap\" - auf AM/PM-Anzeige oder am/pm."
-
-msgid ""
-"The button operation mode:\n"
-"  \"Standard\" - normal button which allow events repeat on it hold (the "
-"parameters into \"value\");\n"
-"  \"Checkable\" - fixed button (values into \"value\");\n"
-"  \"Menu\" - open menu on press (items list into \"value\");\n"
-"  \"Load\" - provides user-space small files loading through the visual "
-"interface;\n"
-"             on the mode the button press will open selection file dialog "
-"for loading and\n"
-"             the file content next saving to attribute \"value\";\n"
-"  \"Save\" - provides user-space small files saving through the visual "
-"interface;\n"
-"             on the file content writing to \"value\" attribute for user "
-"will open selection/set file dialog\n"
-"             and next saving the attribute \"value\" content to the file and "
-"next the attribute \"value\" will set clean."
-msgstr ""
-
-msgid ""
-"Repeating parameters of events on holding \"{delay}-{interval}\", time in "
-"milliseconds."
-msgstr ""
-
-#, fuzzy
-msgid "Toggle value."
-msgstr "Wert der Nachricht"
-
-msgid "Addresses of menu elements list like \"/grp1/grp2/item1\"."
-msgstr ""
-
-msgid ""
-"Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and loaded "
-"file content.\n"
-"Files template like \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."
-msgstr ""
-
-msgid ""
-"Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and saved file "
-"content.\n"
-"Files template like \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."
-msgstr ""
 
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
@@ -652,9 +609,6 @@ msgstr "Cursor:Mikrosek"
 msgid "Cursor:color"
 msgstr "Cursor:Farbe"
 
-msgid "Scale:horizontal grid size, sek"
-msgstr "Skala:Horiz. Gitterlinien Größe, sec"
-
 msgid "Time:sek"
 msgstr "Zeit:Sek"
 
@@ -671,17 +625,17 @@ msgid "Scale:horizontal"
 msgstr "Skala:waagerecht"
 
 msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"
+msgstr "Ohne;Gitter;Markierung;Gitter und Markierung"
 
 msgid "Scale:vertical"
 msgstr "Skala:senkrecht"
 
 msgid ""
-"No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
+"No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and "
 "markers (log)"
 msgstr ""
-"Zeichnen nicht;Gitter;Markierung;Gitter und Markierung;Gitter (log);"
-"Markierung (log);Gitter und Markierung (log)"
+"Ohne;Gitter;Markierung;Gitter und Markierung;Gitter (log);Markierung (log);"
+"Gitter und Markierung (log)"
 
 msgid "Scale:vertical scale (%)"
 msgstr "Skala:senkrechter Maßstab (%)"
@@ -722,14 +676,6 @@ msgstr ":Farbe"
 msgid ":width"
 msgstr ":Stärke"
 
-msgid ":scale"
-msgstr ":Skale"
-
-msgid "Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"
-msgstr ""
-"Globally;Markierung;Gitter und Markierung;Markierung (log);Gitter und "
-"Markierung (log)"
-
 msgid ":properties"
 msgstr ":Eigenschaften"
 
@@ -745,38 +691,18 @@ msgstr ""
 
 msgid ""
 "Full address to DAQ attribute of a parameter or to an archive.\n"
-"Also support direct data set by prefixes:\n"
-"  \"data:{XMLNodeData}\" - draw from direct set data;\n"
-"  \"line:{value}\" - draw horizontal line by value.\n"
 "Example:\n"
 "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute \"use\" of "
 "parameter \"MemInfo\"\n"
 "\t    of controller \"AutoDA\" of DAQ module \"System\";\n"
-"  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\";\n"
-"  \"data:<d tm=\"1369465209000000\" tm_grnd=\"1369465200000000\" per="
-"\"1000000\">\n"
-"    0 3.14\n"
-"    1 3.141\n"
-"    5 3.1415</d> - data for 10 seconds and period 1 second from \"25.05.2013 "
-"10:00:00\";\n"
-"  \"line:3.14159265\" - horizontal line into value \"3.14159265\"."
+"  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\"."
 msgstr ""
 "Vollständige Adresse zu DAQ Attribut eines Parameters oder in ein Archiv.\n"
-"Außerdem unterstützt direkten Montage Daten auf dem Präfix:\n"
-"  \"data:{XMLNodeData}\" - zeichnung direkt aus dem Datensatz;\n"
-"  \"line:{Wert}\" - zeichnung eine horizontale Linie sinnvoll.\n"
 "Beispiel:\n"
 "  \"/DAQ/System/AutoDA/MemInfo/use\" - Adresse Attribut \"use\" des "
 "Parameters \"MemInfo\"\n"
 "\t    des Controllers \"AutoDA\" des DAQ-Modul \"System\";\n"
-"  \"/Archive/va_CPULoad_load\" - Adresse zu archivieren \"CPULoad_load\";\n"
-"  \"data:<d tm=\"1369465209000000\" tm_grnd=\"1369465200000000\" per="
-"\"1000000\">\n"
-"    0 3.14\n"
-"    1 3.141\n"
-"    5 3.1415</d> - 10 Sekunden Daten bei 1 Sekunde von \"25.05.2013 "
-"10:00:00\";\n"
-"  \"line:3.14159265\" - eine horizontale Linie auf dem Wert \"3.14159265\"."
+"  \"/Archive/va_CPULoad_load\" - Adresse zu archivieren \"CPULoad_load\"."
 
 msgid ""
 "Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
@@ -929,12 +855,8 @@ msgstr ""
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Final-Dokument in XHTML. Start von Tag \"body\"."
 
-msgid ""
-"Write the time for document generation from that point or zero for "
-"regeneration."
-msgstr ""
-"Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus oder Null "
-"für die Regeneration."
+msgid "Write time for document generation from that point."
+msgstr "Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus."
 
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Aktuelle Dokumentenarchiv in XHTML. Es beginnt mit dem Tag \"Körper\"."
@@ -1423,9 +1345,8 @@ msgstr "Kodierung des Textes"
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
-#, c-format
-msgid "Attribute '%s' was not free. Force delete!"
-msgstr "Das Attribut '%s' wird nicht freigegeben. Zwangsräumung!"
+msgid "Attributes deadlock."
+msgstr "Attribute Sackgasse."
 
 msgid "Path"
 msgstr "Pfad"
@@ -1480,9 +1401,6 @@ msgstr "Bearbeitung der Ereignisse"
 msgid "Empty parent or parent identical self!"
 msgstr "Eltern leer oder Eltern gleich sich selber!"
 
-msgid "Parent identical to owner for link!"
-msgstr "Der Elternteil ist identisch mit dem Besitzer für den Anschluss!"
-
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Fehler der Einschaltung des Widgets: %s"
@@ -1496,16 +1414,12 @@ msgid "Child widget '%s' enable/disable error."
 msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 
 #, c-format
-msgid "Adding a new attribute '%s' number more to %d!"
-msgstr "Hinzufügen eines neuen Attribut '%s' überschreitet die Anzahl der %d!"
-
-#, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' fehlt!"
 
 #, c-format
-msgid "Deleted attribute '%s' was not free!"
-msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht!"
+msgid "Attribute attach access error: %d."
+msgstr "Fehler des Zuganges des Anschlusses %d ans Attribut."
 
 msgid ""
 "Image name in form \"[src:]name\", where:\n"
@@ -1744,12 +1658,8 @@ msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
 #, c-format
-msgid "Connections to attribute '%s' more to %d!"
-msgstr "Verbindungen an das Attribut '%s' mehr als %d!"
-
-#, c-format
-msgid "Disconnection from attribute '%s' more to connections!"
-msgstr "Entfernen vom Attribut '%s' mehr Verbindungen!"
+msgid "Get object from not object's attribute '%s' error!"
+msgstr "Failed, um ein Objekt aus einem Nicht-Objekt-Attribut '%s' abrufen!"
 
 msgid "Root primitive"
 msgstr "Ursprungsprimitiv"
@@ -1810,3 +1720,9 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Destination has no any necessary attribute!"
+#~ msgstr "Das Ziel hat kein erforderliches Attribut!"
+
+#~ msgid "Destination has no attributes: %s !"
+#~ msgstr "Das Ziel hat keine Attribute: %s !"

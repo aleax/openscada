@@ -45,6 +45,7 @@
 #include <QPushButton>
 #include <QFontDialog>
 #include <QColorDialog>
+#include <QFileDialog>
 #include <QClipboard>
 #include <QBitmap>
 
@@ -196,10 +197,10 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	Item *curit = it;
 
 	//>> Get next item
-	while(idst[it_lev] < curit->childCount())
+	while( idst[it_lev] < curit->childCount() )
 	{
 	    //>> Process next attribute
-	    if(curit->child(idst[it_lev])->type( ) == Item::Attr)
+	    if( curit->child(idst[it_lev])->type( ) == Item::Attr )
 	    {
 		string it_id = curit->child(idst[it_lev])->id();
 		//>>> Find into present attributes list
@@ -255,17 +256,17 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
 	{
 	    XMLNode *gnd = root->childGet(i_a);
-	    if(grpW && !(atoi(gnd->attr("acs").c_str())&SEC_WR)) continue;
+	    if( grpW && !(atoi(gnd->attr("acs").c_str())&SEC_WR) ) continue;
 
 	    string a_id = gnd->attr("id");
 	    string a_nm = gnd->attr("dscr");
 	    Item *cur_it = it;
 	    //>> Parse attributes group
-	    if(TSYS::strSepParse(a_nm,1,':').size())
-		for(int i_l = 0; true; i_l++)
+	    if( TSYS::strSepParse(a_nm,1,':').size() )
+		for( int i_l = 0; true; i_l++ )
 		{
 		    string c_sel = TSYS::strSepParse(a_nm,i_l,':');
-		    if(TSYS::strSepParse(a_nm,i_l+1,':').size())
+		    if( TSYS::strSepParse(a_nm,i_l+1,':').size() )
 		    {
 			int ga_id = cur_it->childGet(c_sel);
 			if( ga_id < 0 ) ga_id = cur_it->childInsert(c_sel,-1,Item::AttrGrp);
@@ -309,22 +310,8 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		if(req.childSize() > 1)	cur_it->child(ga_id)->setSnthHgl(req.childGet(1)->save());
 	    }
 	    //>>> Get selected list
-	    if(gnd->attr("dest") == "select" || gnd->attr("dest") == "sel_ed")
-	    {
-		cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::Select);
-		QStringList selLs;
-		if(gnd->attr("select").empty()) selLs = QString(gnd->attr("sel_list").c_str()).split(";");
-		else
-		{
-		    cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::SelEd);
-		    XMLNode req1("get");
-		    req1.setAttr("path", itId+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
-		    if(!mainWin()->cntrIfCmd(req1))
-			for(unsigned i_ch = 0; i_ch < req1.childSize(); i_ch++)
-			    selLs << req1.childGet(i_ch)->text().c_str();
-		}
-		cur_it->child(ga_id)->setDataEdit(selLs);
-	    }
+	    if(gnd->attr("dest") == "select")
+		cur_it->child(ga_id)->setDataEdit(QString(gnd->attr("sel_list").c_str()).split(";"));
 	}
 
 	if(grp_it.isValid() && !grpW)
@@ -404,45 +391,45 @@ int ModInspAttr::columnCount( const QModelIndex &parent ) const
 QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 {
     QVariant val;
-    if(index.isValid())
+    if( index.isValid() )
     {
 	Item *it = static_cast<Item*>(index.internalPointer());
 
-	if(index.column() == 0)
+	if( index.column() == 0 )
 	    switch(role)
 	    {
 		case Qt::DisplayRole:	val = it->name().c_str();	break;
 		case Qt::ForegroundRole:
-		    if(it->modify())	val = QBrush(Qt::blue);
+		    if( it->modify() )	val = QBrush(Qt::blue);
 		    break;
 	    }
-	if(index.column() == 1)
+	if( index.column() == 1 )
 	    switch(role)
 	    {
 		case Qt::DisplayRole:
 		    val = it->data();
-		    if(val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
+		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime )
 			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
 		case Qt::EditRole:	val = it->dataEdit();	break;
 		case Qt::UserRole:	val = it->flag();	break;
 		case (Qt::UserRole+1):	val = it->snthHgl().c_str();	break;
 		case Qt::DecorationRole:
-		    if(it->flag()&ModInspAttr::Item::Color)
+		    if( it->flag()&ModInspAttr::Item::Color )
 		    {
 			QPixmap pct(16,16);
 			pct.fill("white");
 			QPainter painter(&pct);
 			QColor clr;
 			size_t found = it->data().toString().toStdString().find("-");
-			if(found != string::npos)
+			if (found != string::npos)
 			{
-			    clr = QColor(it->data().toString().toStdString().substr(0,found).c_str());
-			    clr.setAlpha(atoi(it->data().toString().toStdString().substr(found+1).c_str()));
+			    clr = QColor( it->data().toString().toStdString().substr(0,found).c_str() );
+			    clr.setAlpha( atoi(it->data().toString().toStdString().substr(found+1).c_str()) );
 			}
 			else clr = QColor(it->data().toString());
 
-			if(clr.isValid())
+			if( clr.isValid() )
 			{
 			    painter.fillRect(pct.rect(),QBrush(clr));
 			    painter.drawRect(pct.rect().adjusted(0,0,-1,-1));
@@ -450,7 +437,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			    val = pct;
 			}
 		    }
-		    else if(it->flag()&ModInspAttr::Item::Font)
+		    else if( it->flag()&ModInspAttr::Item::Font )
 		    {
 			QPixmap pct(24,24);
 			QPainter painter(&pct);
@@ -471,7 +458,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			painter.end();
 			val = pct;
 		    }
-		    else if(it->flag()&ModInspAttr::Item::Image)
+		    else if( it->flag()&ModInspAttr::Item::Image )
 		    {
 			Item *tit = it;
 			while( tit && tit->type() != ModInspAttr::Item::Wdg )	tit = tit->parent();
@@ -504,6 +491,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     //> Attribute
     Item *it = static_cast<Item*>(index.internalPointer());
+    if(it->data() == value) return true;
     string nattr = it->id();
 
     //> Attribute widget(s)
@@ -523,7 +511,6 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
     try
     {
 	bool isGrp = TSYS::strSepParse(nwdg,1,';').size();
-	if(it->data() == value && !isGrp) return true;
 	XMLNode chCtx("attr");
 
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();
@@ -555,7 +542,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index,index);
-		if(it->flag()&(Item::Active|Item::SelEd)) setWdg(cur_wdg);
+		if(it->flag()&Item::Active) setWdg(cur_wdg);
 	    }
 	}
     }catch(...){ return false; }
@@ -805,12 +792,8 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if(flag&ModInspAttr::Item::Select)
-    {
-	w_del = new QComboBox(parent);
-	if(flag&ModInspAttr::Item::SelEd) ((QComboBox*)w_del)->setEditable(true);
-    }
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::FullText)
+    if( flag&ModInspAttr::Item::Select )	w_del = new QComboBox(parent);
+    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::FullText )
     {
 	w_del = new QTextEdit(parent);
 	((QTextEdit*)w_del)->setTabStopWidth(40);
@@ -827,23 +810,23 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	    snt_hgl->setSnthHgl(rules);
 	}
     }
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Font)
+    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Font )
 	w_del = new LineEditProp(parent,LineEditProp::Font);
-    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Color)
+    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Color )
 	w_del = new LineEditProp(parent,LineEditProp::Color);
-    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime)
+    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime )
     {
 	w_del = new QDateTimeEdit(parent);
 	((QDateTimeEdit*)w_del)->setCalendarPopup(true);
 	((QDateTimeEdit*)w_del)->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     }
-    else if(value.type() == QVariant::Int)
+    else if( value.type() == QVariant::Int )
     {
 	w_del = new QSpinBox(parent);
 	((QSpinBox*)w_del)->setMinimum(-2147483647);
 	((QSpinBox*)w_del)->setMaximum(2147483647);
     }
-    else if(value.type() == QVariant::Double)
+    else if( value.type() == QVariant::Double )
     {
 	w_del = new QDoubleSpinBox(parent);
 	((QDoubleSpinBox*)w_del)->setMinimum(-1e100);
@@ -866,12 +849,11 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if((flag&ModInspAttr::Item::Select) && dynamic_cast<QComboBox*>(editor))
+    if(flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor))
     {
 	QComboBox *comb = (QComboBox*)editor;
 	comb->addItems(value.toStringList());
-	if(flag&ModInspAttr::Item::SelEd) comb->setEditText(index.data(Qt::DisplayRole).toString());
-	else comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
+	comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
     else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	((QTextEdit*)editor)->setPlainText(value.toString());
@@ -1373,16 +1355,16 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 	    //Prepare for drag and drop operation
 	    if( owner()->work_space->activeSubWindow() && w_lev == 2 )
 	    {
-	        //> Prepare put data stream
+	        //- Prepare put data stream -
 	        QByteArray itemData;
 	        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
 	        dataStream << QString(work_wdg.c_str());
 
-	        //> Prepare mime data
+	        //- Prepare mime data -
 	        QMimeData *mimeData = new QMimeData;
 	        mimeData->setData("application/OpenSCADA-libwdg",itemData);
 
-	        //> Create drag object
+	        //- Create drag object -
 	        QDrag *drag = new QDrag(this);
 	        drag->setMimeData(mimeData);
 	        //drag->setDragCursor(item->icon(0).pixmap(64,64),Qt::MoveAction);
@@ -2169,7 +2151,7 @@ void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr 
 	string tAttrNm = item.substr(epos+3);
 	XMLNode req("get");
         req.setAttr("path",tWdgNm+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",tAttrNm);
-        cntrIfCmd(req);
+        int rez = cntrIfCmd(req);
 	if(!atoi(req.childGet(0)->attr("act").c_str()))
 	{
     	    WdgView *tWdg = (id()==tWdgNm) ? this : findChild<WdgView*>(tWdgNm.c_str());
@@ -2204,18 +2186,13 @@ void DevelWdgView::saveGeom( const string& item )
 	chGeomCtx.setAttr("ySc", TSYS::real2str(TSYS::realRound(y_scale,POS_PREC_DIG)));
 	chGeomCtx.setAttr("z", TSYS::int2str(parent()->children().indexOf(this)));
 	chRecord(chGeomCtx);
-	setAllAttrLoad(true);
-	map<string,string> attrs;
-	attrs["geomX:7"] = chGeomCtx.attr("x");
-	attrs["geomY:8"] = chGeomCtx.attr("y");
-	attrs["geomW:9"] = chGeomCtx.attr("w");
-	attrs["geomH:10"] = chGeomCtx.attr("h");
-	attrs["geomXsc:13"] = chGeomCtx.attr("xSc");
-	attrs["geomYsc:14"] = chGeomCtx.attr("ySc");
-	attrs["geomZ:11"] = chGeomCtx.attr("z");
-	attrsSet(attrs);
-	setAllAttrLoad(false);
-	attrSet("","load",-1);	//> For reload
+	attrSet("geomX", chGeomCtx.attr("x"), 7);
+	attrSet("geomY", chGeomCtx.attr("y"), 8);
+	attrSet("geomW", chGeomCtx.attr("w"), 9);
+	attrSet("geomH", chGeomCtx.attr("h"), 10);
+	attrSet("geomXsc", chGeomCtx.attr("xSc"), 13);
+	attrSet("geomYsc", chGeomCtx.attr("ySc"), 14);
+	attrSet("geomZ", chGeomCtx.attr("z"), 11);
     }
 
     if(item != id() && wLevel() == 0)
@@ -2277,7 +2254,6 @@ void DevelWdgView::setEdit( bool vl )
 
     if(vl)
     {
-	if(editWdg) mess_err(id().c_str(),_("Warning! Edit widget already set."));
 	editWdg = this;
 	if(shape->isEditable()) shape->editEnter(this);
 	//> Raise top included editable widget
@@ -2295,9 +2271,9 @@ void DevelWdgView::setEdit( bool vl )
 	for(int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++)
 	    mainWin()->wdgToolView->actions().at(i_a)->setEnabled(false);
     }
-    else if(editWdg)
+    else
     {
-	if(shape && shape->isEditable()) shape->editExit(this);
+	if(shape->isEditable()) shape->editExit(this);
 	editWdg = NULL;
 	//> Update widgets order
 	if(wLevel() == 0) orderUpdate();
@@ -2584,16 +2560,13 @@ void DevelWdgView::wdgPopup( )
 
 void DevelWdgView::makeIcon( )
 {
-    QPalette plt = palette();
-    plt.setBrush(QPalette::Window,QColor(0,0,0,0));
-    setPalette(plt);
-
     fMakeIco = true;
     QPixmap ico_new = QPixmap::grabWidget(this);
     fMakeIco = false;
     ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-    if(mMdiWin)	mMdiWin->parentWidget()->setWindowIcon(ico_new);	//parentWidget is QMdiSubWindow
-
+    QBitmap bMask = ico_new.createMaskFromColor ( (0xFFFDFBFC), Qt::MaskInColor );
+    ico_new.setMask(bMask);
+    parentWidget()->setWindowIcon(ico_new);
     //> Send to VCA engine
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -2614,8 +2587,8 @@ void DevelWdgView::makeImage( )
     QPixmap img = QPixmap::grabWidget(this);
 
     //> Call save file dialog
-    QString fileName = mainWin()->getFileName(_("Save widget's image"), (TSYS::path2sepstr(id())+".png").c_str(),
-	_("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
+    QString fileName = QFileDialog::getSaveFileName(this,_("Save widget's image"),
+	(TSYS::path2sepstr(id())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
     if(!fileName.isEmpty() && !img.save(fileName))
 	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }
@@ -2860,7 +2833,6 @@ void DevelWdgView::chRecord( XMLNode ch )
 
 void DevelWdgView::chUnDo( )
 {
-    map<string,string>	attrs;
     int cur = 0;
     if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= chTree->childSize()) return;
 
@@ -2869,20 +2841,18 @@ void DevelWdgView::chUnDo( )
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
     if(rlW && rule->name() == "geom")
     {
-	attrs["geomX"] = rule->attr("_x");
-	attrs["geomY"] = rule->attr("_y");
-	attrs["geomW"] = rule->attr("_w");
-	attrs["geomH"] = rule->attr("_h");
-	attrs["geomXsc"] = rule->attr("_xSc");
-	attrs["geomYsc"] = rule->attr("_ySc");
-	attrs["geomZ"] = rule->attr("_z");
-	rlW->attrsSet(attrs);
+	rlW->attrSet("geomX", rule->attr("_x"));
+	rlW->attrSet("geomY", rule->attr("_y"));
+	rlW->attrSet("geomW", rule->attr("_w"));
+	rlW->attrSet("geomH", rule->attr("_h"));
+	rlW->attrSet("geomXsc", rule->attr("_xSc"));
+	rlW->attrSet("geomYsc", rule->attr("_ySc"));
+	rlW->attrSet("geomZ", rule->attr("_z"));
     }
     else if(rlW && rule->name() == "attr")
     {
         for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-            attrs[rule->childGet(i_ch)->attr("id")] = rule->childGet(i_ch)->attr("prev");
-        if(attrs.size()) rlW->attrsSet(attrs);
+            rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->attr("prev"));
         if(rule->attr("id").size())
         {
             rlW->attrSet(rule->attr("id"), rule->attr("prev"));
@@ -2910,7 +2880,6 @@ void DevelWdgView::chUnDo( )
 
 void DevelWdgView::chReDo( )
 {
-    map<string,string>  attrs;
     int cur = 0;
     if(!chTree || !chTree->childSize() || !(cur=atoi(chTree->attr("cur").c_str()))) return;
 
@@ -2921,21 +2890,19 @@ void DevelWdgView::chReDo( )
     {
 	if(rule->name() == "geom")
 	{
-	    attrs["geomX"] = rule->attr("x");
-	    attrs["geomY"] = rule->attr("y");
-	    attrs["geomW"] = rule->attr("w");
-	    attrs["geomH"] = rule->attr("h");
-	    attrs["geomXsc"] = rule->attr("xSc");
-	    attrs["geomYsc"] = rule->attr("ySc");
-	    attrs["geomZ"] = rule->attr("z");
-	    rlW->attrsSet(attrs);
+	    rlW->attrSet("geomX", rule->attr("x"));
+	    rlW->attrSet("geomY", rule->attr("y"));
+	    rlW->attrSet("geomW", rule->attr("w"));
+	    rlW->attrSet("geomH", rule->attr("h"));
+	    rlW->attrSet("geomXsc", rule->attr("xSc"));
+	    rlW->attrSet("geomYsc", rule->attr("ySc"));
+	    rlW->attrSet("geomZ", rule->attr("z"));
 	}
 	else if(rule->name() == "attr")
         {
             if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
             for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-                attrs[rule->childGet(i_ch)->attr("id")] = rule->childGet(i_ch)->text();
-            if(attrs.size()) rlW->attrsSet(attrs);
+                rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->text());
         }
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
 	else if(rule->name() == "chldAdd")
@@ -3098,13 +3065,13 @@ void DevelWdgView::incDecVisScale( )
 bool DevelWdgView::event( QEvent *event )
 {
     //> Paint event process
-    if(event->type() == QEvent::Paint)
+    if( event->type() == QEvent::Paint )
     {
-	QPainter pnt(this);
-	pnt.setWindow(rect());
+	QPainter pnt( this );
+	pnt.setWindow( rect() );
 
 	//> Draw background for root widget
-	if(wLevel() == 0)
+	if( wLevel() == 0 )
 	{
 	    if(!fMakeIco)
 	    {
@@ -3112,15 +3079,21 @@ bool DevelWdgView::event( QEvent *event )
 		pnt.setBrush(QBrush(QColor("white")));
 		pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    }
+            else
+            {
+                pnt.setPen(QColor(253,251,252));
+                pnt.setBrush(QBrush(QColor(253,251,252)));
+                pnt.drawRect(rect().adjusted(0,0,-1,-1));
+            }
 	}
 	//> Draw widget border geometry
-	else if(levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove)
+	else if( levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove )
 	{
-	    if(!fHideChilds)
+	    if( !fHideChilds )
 	    {
 		fHideChilds = true;
-		for(int i_c = 0; i_c < children().size(); i_c++)
-		    if(qobject_cast<QWidget*>(children().at(i_c)))
+		for( int i_c = 0; i_c < children().size(); i_c++ )
+		    if( qobject_cast<QWidget*>(children().at(i_c)) )
 			((QWidget*)children().at(i_c))->setEnabled(false);//hide();
 	    }
 	    pnt.setPen("white");
@@ -3131,11 +3104,11 @@ bool DevelWdgView::event( QEvent *event )
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    return true;
 	}
-	else if(fHideChilds)
+	else if( fHideChilds )
 	{
 	    fHideChilds = false;
-	    for(int i_c = 0; i_c < children().size(); i_c++)
-		if(qobject_cast<QWidget*>(children().at(i_c)))
+	    for( int i_c = 0; i_c < children().size(); i_c++ )
+		if( qobject_cast<QWidget*>(children().at(i_c)) )
 		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
 	}
 	//> Check widget
@@ -3500,17 +3473,14 @@ bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		editExit();
 		setFocus(true);
 		setSelect(true);
 		break;
 	    case QEvent::FocusOut:
 		if(!this->hasFocus()) setFocus(false);
-		if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !mMdiWin->widget()->hasFocus())
-		{ setSelect(false); editExit(); }
+		if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !mMdiWin->widget()->hasFocus()) setSelect(false);
 		break;
 	    case QEvent::MouseButtonRelease:
-		editExit();
 		setSelect(false,PrcChilds);
 		setSelect(true);
 		break;
@@ -3575,9 +3545,9 @@ void SizePntWdg::apply( )
 		irect = QRect(0,0,wrect.width(),wrect.height());
 		//> Make widget's mask
 		for(int i_p = 0; i_p < 9; i_p++)
-		    if(i_p != 4)
-			reg += QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-6)/2),
-				   irect.y()+(i_p/3)*((irect.height()-6)/2),6,6));
+		    if( i_p != 4 )
+			reg += QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-7)/2),
+				   irect.y()+(i_p/3)*((irect.height()-7)/2),7,7));
 		break;
 	    case EditBorder:
 		wrect = parentWidget()->rect();
@@ -3614,14 +3584,13 @@ bool SizePntWdg::event( QEvent *ev )
 			pnt.setBrush(QBrush(QColor("lightgreen")));
 			for(int i_p = 0; i_p < 9; i_p++)
 			{
-			    if(i_p == 4) continue;
-			    QRect anch(rect().x()+(i_p%3)*((rect().width()-6)/2),
-				rect().y()+(i_p/3)*((rect().height()-6)/2),5,5);
+			    if( i_p == 4 ) continue;
+			    QRect anch(rect().x()+(i_p%3)*((rect().width()-7)/2),
+				rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
 			    pnt.drawRect(anch);
 			}
 			break;
 		    case EditBorder:
-			if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
 			pnt.fillRect(rect(),QColor(127,127,127,190));
 			pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
 			pnt.setPen(QColor("black"));

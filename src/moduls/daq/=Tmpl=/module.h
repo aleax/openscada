@@ -108,9 +108,8 @@ class TMdContr: public TController
 	string getStatus( );
 
 	//!!! The controller's background task properties
-	int64_t	period( )	{ return mPer; }
-	string  cron( )         { return mSched; }
-	int	prior( )	{ return mPrior; }
+	double	period( )	{ return vmax(m_per,0.1); }
+	int	prior( )	{ return m_prior; }
 
 	//!!! Request for connection to parameter-object of this controller
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -128,28 +127,24 @@ class TMdContr: public TController
 	//Methods
 	//!!! Processing virtual functions for self object-parameter creation.
 	TParamContr *ParamAttach( const string &name, int type );
-	//!!! Processing virtual function for OpenSCADA control interface comands
-	void cntrCmdProc( XMLNode *opt );
 	//!!! Background task's function for periodic data acquisition.
 	static void *Task( void *icntr );
 
 	//Attributes
 	//!!! The resource for Enable parameters.
-	Res	en_res;		// Resource for enable params
+	Res	en_res;		//Resource for enable params
 	//!!! The links to the controller's background task properties into config.
-	TCfg	&mSched,	// Schedule
-		&mPrior;	// Process task priority
-	int64_t	mPer;
+	int	&m_per,		// s
+		&m_prior;	// Process task priority
 
 	//!!! Background task's sync properties
-	bool	prcSt,		// Process task active
- 		callSt,		// Calc now stat
-		endrunReq;	// Request to stop of the Process task
+	bool	prc_st,		// Process task active
+		endrun_req;	// Request to stop of the Process task
 
 	//!!! Enabled and processing parameter's links list container.
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tmGath;		// Gathering time
+	double	tm_gath;	// Gathering time
 };
 
 //!!! Root module object define. Add methods and attributes for your need.

@@ -106,10 +106,9 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return mPer; }
-	string	cron( )		{ return cfg("SCHEDULE").getS(); }
-	int	prior( )	{ return mPrior; }
-	string	addr( )		{ return mAddr; }
+	double period( )	{ return mPer; }
+	string cron( )		{ return cfg("SCHEDULE").getS(); }
+	int    prior( )		{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -133,7 +132,6 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res, req_res;		//Resource for enable params and request values
-	TCfg	&mAddr;				//Transport device address
 	int	&mPerOld,			//Acquisition task (seconds)
 		&mPrior,			//Process task priority
 		&connTry;			//Connections try

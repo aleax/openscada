@@ -79,6 +79,7 @@ class TPrmTempl: public TFunction, public TConfig
 
     protected:
 	//Methods
+	void preIOCfgChange( );
 	void load_( );
 	void save_( );
 

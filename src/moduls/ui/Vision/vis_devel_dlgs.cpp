@@ -29,6 +29,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QFileDialog>
 #include <QBuffer>
 #include <QTableWidget>
 #include <QPainter>
@@ -43,6 +44,7 @@
 #include "vis_devel_dlgs.h"
 
 using namespace VISION;
+
 
 //****************************************
 //* Library properties dialog            *
@@ -119,7 +121,7 @@ LibProjProp::LibProjProp( VisDevelop *parent ) :
     glay->setSpacing(6);
 
     glay->addWidget(new QLabel(_("Id:"),tab_w),0,0);
-    obj_id = new QLabel(tab_w);
+    obj_id = new QLabel(this);
     obj_id->setTextInteractionFlags(Qt::TextSelectableByMouse);
     obj_id->setObjectName("/obj/cfg/id");
     obj_id->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -311,16 +313,16 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     XMLNode *root = info_req.childGet(0),
 	    *gnd;
 
-    setWindowTitle(root->attr("dscr").c_str());
+    setWindowTitle( root->attr("dscr").c_str() );
 
     //> Generic dialog's page
-    gnd = TCntrNode::ctrId(root,"/obj",true);
+    gnd=TCntrNode::ctrId(root,"/obj",true);
     wdg_tabs->setTabEnabled(0,gnd);
     if( gnd )
     {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
 	//>> Enable stat
-	gnd = TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
+	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
 	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
@@ -328,13 +330,13 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) ) obj_enable->setChecked(atoi(req.text().c_str()));
 	}
 	//>> DB value
-	gnd = TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
+	gnd=TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
 	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
-	if(gnd)
+	if( gnd )
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_db->setValue(req.text().c_str());
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) )
 	    {
 		string els;
@@ -596,13 +598,15 @@ void LibProjProp::selectIco( )
 {
     QImage ico_t;
 
-    if(!ico_modif)	return;
+    if( !ico_modif )	return;
 
-    QString fileName = owner()->getFileName(_("Load icon picture"),"",_("Images (*.png *.jpg)"));
-    if(fileName.isEmpty())	return;
-    if(!ico_t.load(fileName))
+    QString fileName = QFileDialog::getOpenFileName(this,_("Load icon picture"),"",_("Images (*.png *.jpg)"));
+
+    if( fileName.isEmpty() )	return;
+    if( !ico_t.load(fileName) )
     {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Load icon image '%1' error.")).arg(fileName), TVision::Warning, this);
+	mod->postMess( mod->nodePath().c_str(),
+		QString(_("Load icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;
     }
 
@@ -611,12 +615,13 @@ void LibProjProp::selectIco( )
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
-    ico_t.save(&buffer, "PNG");
+    ico_t.save(&buffer,"PNG");
 
     XMLNode req("set");
-    req.setAttr("path", ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl))->
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl))->
 	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64));
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+    if( owner()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     is_modif = true;
 }
@@ -687,8 +692,9 @@ void LibProjProp::showEvent( QShowEvent * event )
 void LibProjProp::addMimeData( )
 {
     XMLNode req("add");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));    
+    if( owner()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     tabChanged(1);
 }
@@ -696,7 +702,7 @@ void LibProjProp::addMimeData( )
 void LibProjProp::delMimeData( )
 {
     int row = mimeDataTable->currentRow( );
-    if(row < 0) { mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this ); return; }
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this ); return; }
 
     XMLNode req("del");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
@@ -709,27 +715,23 @@ void LibProjProp::delMimeData( )
 
 void LibProjProp::loadMimeData( )
 {
-    QString fileName = owner()->getFileName(_("Load data"),"",_("All files (*.*)"));
-    if(fileName.isEmpty())	return;
+    int row = mimeDataTable->currentRow( );
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
+
+    QString fileName = QFileDialog::getOpenFileName(this,_("Load data"),"",_("All files (*.*)"));
+    if( fileName.isEmpty() )	return;
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly))
-    {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
-	return;
-    }
-    if(file.size() >= USER_FILE_LIMIT)
-    {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fileName), TVision::Error, this);
-	return;
-    }
+	mod->postMess( mod->nodePath().c_str(),
+		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
     QByteArray data = file.readAll();
 
     XMLNode req("set");
-    req.setAttr("path", ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
-	setAttr("col", "dt")->
-	setAttr("key_id", mimeDataTable->selectedItems().empty() ? QFileInfo(fileName).fileName().toStdString() : mimeDataTable->selectedItems()[0]->text().toStdString())->
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
+	setAttr("col","dt")->
+	setAttr("key_id",mimeDataTable->item(row,0)->text().toAscii().data())->
 	setText(TSYS::strEncode(string(data.data(),data.size()),TSYS::base64));
-    if(owner()->cntrIfCmd(req))
+    if( owner()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     tabChanged(1);
@@ -737,33 +739,30 @@ void LibProjProp::loadMimeData( )
 
 void LibProjProp::unloadMimeData( )
 {
-    int row = mimeDataTable->currentRow();
-    if(row < 0) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
+    int row = mimeDataTable->currentRow( );
+    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
 
-    string fext = TSYS::pathLev(mimeDataTable->item(row,1)->text().toStdString(),1);
-    QString fileName = owner()->getFileName(_("Save data"), mimeDataTable->item(row,0)->text()+(fext.size()?("."+fext).c_str():""),
-	_("All files (*.*)"), QFileDialog::AcceptSave);
-    if(fileName.isEmpty())	return;
+    QString fileName = QFileDialog::getSaveFileName(this,_("Save data"),
+			    mimeDataTable->item(row,0)->text(),_("All files (*.*)"));
+    if( fileName.isEmpty() )	return;
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
-    {
-	mod->postMess(mod->nodePath().c_str(),
-		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
-	return;
-    }
+	mod->postMess( mod->nodePath().c_str(),
+		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
 
     XMLNode req("get");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
 	setAttr("data","1")->
 	setAttr("col","dt")->
 	setAttr("key_id",mimeDataTable->item(row,0)->text().toAscii().data());
-    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+    if( owner()->cntrIfCmd(req) )
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
     else
     {
 	string mimeData = TSYS::strDecode(req.text(),TSYS::base64);
-	if(file.write(mimeData.data(),mimeData.size()) < 0)
-	    mod->postMess(mod->nodePath().c_str(),
-		QString(_("Write data to file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
+	if( file.write(mimeData.data(),mimeData.size()) < 0 )
+	    mod->postMess( mod->nodePath().c_str(),
+		QString(_("Write data to file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
     }
 }
 
@@ -1078,9 +1077,10 @@ void VisItProp::showDlg( const string &iit, bool reload )
 
     XMLNode info_req("info");
     info_req.setAttr("path",ed_it);
-    if(owner()->cntrIfCmd(info_req))
+    if( owner()->cntrIfCmd(info_req) )
     {
-	mod->postMess(mod->nodePath().c_str(), QString(_("Getting node '%1' information error.")).arg(ed_it.c_str()), TVision::Error, this);
+	mod->postMess( mod->nodePath().c_str(),
+		QString(_("Getting node '%1' information error.")).arg(ed_it.c_str()),TVision::Error, this );
 	return;
     }
 
@@ -1447,15 +1447,15 @@ void VisItProp::selectIco( )
 {
     QImage ico_t;
 
-    if(!ico_modif)	return;
+    if( !ico_modif )	return;
 
-    QString fileName = owner()->getFileName(_("Load icon picture"),"",_("Images (*.png *.jpg)"));
+    QString fileName = QFileDialog::getOpenFileName(this,_("Load icon picture"),"",_("Images (*.png *.jpg)"));
 
-    if(fileName.isEmpty())	return;
+    if( fileName.isEmpty() )	return;
     if(!ico_t.load(fileName))
     {
-	mod->postMess(mod->nodePath().c_str(),
-		QString(_("Load icon image '%1' error.")).arg(fileName), TVision::Warning, this);
+	mod->postMess( mod->nodePath().c_str(), 
+		QString(_("Load icon image '%1' error.")).arg(fileName),TVision::Warning, this );
 	return;
     }
 
@@ -1469,7 +1469,7 @@ void VisItProp::selectIco( )
     XMLNode req("set");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode(obj_ico->objectName().toAscii().data(),TSYS::PathEl))->
 	setText(TSYS::strEncode(string(ba.data(),ba.size()),TSYS::base64));
-    if(owner()->cntrIfCmd(req))
+    if( owner()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     is_modif = true;
@@ -1671,7 +1671,7 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	    for( int i_l = 0; i_l < types.size(); i_l++ )
 		if( atoi(TSYS::strSepParse(types[i_l].toAscii().data(),1,'|').c_str()) == index.data(Qt::DisplayRole).toInt() )
 		    val = TSYS::strSepParse(types[i_l].toAscii().data(),0,'|').c_str();
-	    drawDisplay(painter, option, option.rect, val);
+	    drawDisplay(painter, option, option.rect,val);
 	    return;
 	}
 	if( index.column() == 4 )
@@ -1687,7 +1687,7 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	    return;
 	}
     }
-    QItemDelegate::paint(painter, option, index);
+    QItemDelegate::paint(painter,option,index);
 }
 
 QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const

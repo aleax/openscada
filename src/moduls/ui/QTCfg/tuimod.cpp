@@ -18,6 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#include <getopt.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -126,9 +127,24 @@ void TUIMod::load_( )
 #endif
 
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt = "h";
+    struct option long_opt[] =
+    {
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters from config-file and DB
     setStartPath( TBDS::genDBGet(nodePath()+"StartPath",startPath()) );

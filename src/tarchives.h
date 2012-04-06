@@ -25,6 +25,8 @@
 #define SARH_VER	6		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
+#include <time.h>
+
 #include <string>
 #include <vector>
 
@@ -58,10 +60,10 @@ class TMArchivator : public TCntrNode, public TConfig
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	bool	toStart( )	{ return m_start; }
-	bool	startStat( )	{ return run_st; }
+	bool toStart( )		{ return m_start; }
+	bool startStat( )	{ return run_st; }
 	string	addr( )		{ return cfg("ADDR").getS(); }
-	int	level( )	{ return mLevel; }
+	int	level( )	{ return m_level; }
 	void	categ( vector<string> &list );
 
 	string	DB( )		{ return m_db; }
@@ -72,7 +74,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setToStart( bool vl )		{ m_start = vl; modif(); }
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
-	void setLevel( int lev )		{ mLevel = lev; }
+	void setLevel( int lev )		{ m_level = lev; modif(); }
 
 	void setDB( const string &idb )		{ m_db = idb; modifG(); }
 
@@ -110,9 +112,9 @@ class TMArchivator : public TCntrNode, public TConfig
 	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
-	TCfg	&mId,		//Mess arch id
-		&mLevel;	//Mess arch level
+	TCfg	&mId;		//Mess arch id
 	char	&m_start;	//Mess arch starting flag
+	int	&m_level;	//Mess arch level
 	string	m_db;
 };
 
@@ -181,7 +183,7 @@ class TArchiveS : public TSubSYS
 	int valPeriod( );
 	int valPrior( )		{ return mValPrior; }
 
-	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
+	void setMessPeriod( int ivl );
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl );
 	void setToUpdate( )		{ toUpdate = true; }
@@ -227,7 +229,7 @@ class TArchiveS : public TSubSYS
 	//Private methods
 	string optDescr( );
 
-	static void *ArhMessTask( void *param );
+	static void ArhMessTask( union sigval obj );
 	static void *ArhValTask( void *param );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -244,6 +246,7 @@ class TArchiveS : public TSubSYS
 	//> Messages archiving
 	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message archiving period
+	timer_t	tmIdMess;		//Messages timer
 	bool	prcStMess;		//Process messages flag
 	//> Messages buffer
 	Res	mRes;			//Mess access resource

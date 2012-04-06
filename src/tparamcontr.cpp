@@ -37,20 +37,11 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm
 {
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on parameter type change
     setName(name);
-
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("DAQParamCntr",1);
-#endif
 }
 
 TParamContr::~TParamContr( )
 {
     nodeDelAll();
-
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("DAQParamCntr",-1);
-#endif
-
 }
 
 string TParamContr::objName( )	{ return TValue::objName()+":TParamContr"; }
@@ -73,21 +64,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     exclCopy(*src_n, "SHIFR;");
 
     //> Enable new parameter
-    if(src_n->enableStat() && toEnable() && !enableStat())
-    {
-	enable();
-
-	//> Archives creation and copy
-        vector<string> a_ls;
-	vlList(a_ls);
-        for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-        {
-            if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
-
-	    vlAt(a_ls[i_a]).at().setArch();
-	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
-        }
-    }
+    if(src_n->enableStat() && toEnable() && !enableStat()) enable();
 
     return *this;
 }
@@ -99,8 +76,6 @@ string TParamContr::name( )	{ string nm = cfg("NAME").getS(); return nm.size() ?
 void TParamContr::setName( const string &inm )	{ cfg("NAME").setS(inm); }
 
 string TParamContr::descr( )	{ return cfg("DESCR").getS(); }
-
-bool TParamContr::dataActive( )	{ return owner().startStat(); }
 
 void TParamContr::setDescr( const string &idsc ){ cfg("DESCR").setS(idsc); }
 
@@ -192,11 +167,6 @@ void TParamContr::vlGet( TVal &val )
 	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
     }
-}
-
-void TParamContr::vlArchMake( TVal &val )
-{
-    if(!val.arch().freeStat())	val.arch().at().setDB(owner().DB());
 }
 
 void TParamContr::setType( const string &tpId )

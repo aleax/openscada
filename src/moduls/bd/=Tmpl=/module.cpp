@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 //!!! System's includings. Add need for your module includings.
+#include <getopt.h>
 #include <string>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.
@@ -54,7 +55,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
+	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 #ifdef MOD_INCL
@@ -63,7 +64,8 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new BDTmpl::BDMod(source);
+	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	    return new BDTmpl::BDMod( source );
 	return NULL;
     }
 }
@@ -202,7 +204,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,
 	    "tp","str","help",_("!!! Type here the help information about the db address of your module"));
 	return;
     }

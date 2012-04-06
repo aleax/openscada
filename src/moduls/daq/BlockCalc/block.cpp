@@ -57,7 +57,7 @@ TCntrNode &Block::operator=( TCntrNode &node )
     if( src_n->enable() )
     {
 	setEnable(true);
-	loadIO(src_n->owner().DB()+"."+src_n->owner().cfg("BLOCK_SH").getS(), src_n->id(), true);
+	loadIO(src_n->owner().DB()+"."+src_n->owner().cfg("BLOCK_SH").getS(),src_n->id());
     }
 
     return *this;
@@ -98,7 +98,7 @@ string Block::name( )
 
 void Block::load_( )
 {
-    if(!SYS->chkSelDB(owner().DB())) return;
+    if( !SYS->chkSelDB(owner().DB()) ) return;
 
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
@@ -116,15 +116,14 @@ void Block::save_( )
     saveIO();
 }
 
-void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
+void Block::loadIO( const string &blk_db, const string &blk_id )
 {
     string bd_tbl, bd;
-    if(!func()) return;
-    if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    if( !func() ) return;
 
     TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());
-    if(blk_db.empty())
+    if( blk_db.empty() )
     {
 	bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
 	bd     = owner().DB()+"."+bd_tbl;
@@ -135,20 +134,20 @@ void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
 	bd_tbl = TSYS::strSepParse(bd,2,'.');
     }
 
-    for(int i_ln = 0; i_ln < ioSize(); i_ln++)
+    for( int i_ln = 0; i_ln < ioSize(); i_ln++ )
     {
-	if(i_ln >= (int)m_lnk.size())
+	if( i_ln >= (int)m_lnk.size() )
 	{
 	    m_lnk.push_back( SLnk() );
 	    m_lnk[i_ln].tp = FREE;
 	}
 
 	cfg.cfg("ID").setS(func()->io(i_ln)->id());
-	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg)) continue;
+	if( !SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg) ) continue;
 	//> Value
 	setS(i_ln,cfg.cfg("VAL").getS());
 	//> Configuration of link
-	setLink(i_ln, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS());
+	setLink( i_ln, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS() );
     }
 }
 
@@ -194,7 +193,7 @@ void Block::setEnable( bool val )
 	    id_stop  = func()->ioId("f_stop");
 	}
 	//>> Init links
-	loadIO("", "", true);
+	loadIO( );
     }
     //> Disable
     else if( !val && m_enable )
@@ -643,81 +642,97 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    int id   = ioId(TSYS::pathLev(a_path,2).substr(2));
 	    string lnk = m_lnk[id].lnk;
 
-	    switch(lev)
+	    if(lev == '1')	opt->setText(TSYS::int2str(m_lnk[id].tp));
+	    else if(lev == '2')
 	    {
-		case '1':	opt->setText(TSYS::int2str(m_lnk[id].tp));	break;
-		case '2':
-		    opt->setText(lnk);
-		    try
+		opt->setText(lnk);
+		try
+		{
+		    switch(m_lnk[id].tp)
 		    {
-			switch(m_lnk[id].tp)
-			{
-			    case I_LOC: case O_LOC:
-				if(owner().blkAt(TSYS::strParse(lnk,0,".")).at().ioId(TSYS::strParse(lnk,1,".")) >= 0)
-				    opt->setText(opt->text()+" (+)");
-				break;
-			    case I_GLB: case O_GLB:
-				if(((Contr&)owner().owner().at(TSYS::strParse(lnk,0,".")).at()).blkAt(TSYS::strParse(lnk,1,".")).at().ioId(TSYS::strParse(lnk,2,".")) >= 0)
-				    opt->setText(opt->text()+" (+)");
-				break;
-			    case I_PRM: case O_PRM:
-				if(!SYS->daq().at().attrAt(lnk,'.',true).freeStat()) opt->setText(opt->text()+" (+)");
-				break;
-			    default: break;
-			}
+			case I_LOC: case O_LOC:
+			    if(owner().blkAt(TSYS::strParse(lnk,0,".")).at().ioId(TSYS::strParse(lnk,1,".")) >= 0)
+				opt->setText(opt->text()+" (+)");
+			    break;
+			case I_GLB: case O_GLB:
+			    if(((Contr&)owner().owner().at(TSYS::strParse(lnk,0,".")).at()).blkAt(TSYS::strParse(lnk,1,".")).at().ioId(TSYS::strParse(lnk,2,".")) >= 0)
+				opt->setText(opt->text()+" (+)");
+			    break;
+			case I_PRM: case O_PRM:
+			    if(!SYS->daq().at().attrAt(lnk,'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+			    break;
+			default: break;
 		    }
-		    catch(TError) { }
-		    break;
-		case '3':
-		    if(m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM) SYS->daq().at().ctrListPrmAttr(opt, lnk);
-		    else
-		    {
-			int c_lv = 0;
-			string c_path = "", c_el;
+		}
+		catch(TError) { }
+	    }
+	    else if(lev == '3')
+	    {
+		int c_lv = 0;
+		string c_path = "", c_el;
 
-			opt->childAdd("el")->setText(c_path);
-			for(int c_off = 0; (c_el=TSYS::strSepParse(lnk,0,'.',&c_off)).size(); ++c_lv)
+		opt->childAdd("el")->setText(c_path);
+		for(int c_off = 0; (c_el=TSYS::strSepParse(lnk,0,'.',&c_off)).size(); c_lv++)
+		{
+		    c_path += c_lv ? "."+c_el : c_el;
+		    opt->childAdd("el")->setText(c_path);
+		}
+		if(c_lv) c_path+=".";
+
+		string prm0 = TSYS::strSepParse(lnk, 0, '.');
+		string prm1 = TSYS::strSepParse(lnk, 1, '.');
+		string prm2 = TSYS::strSepParse(lnk, 2, '.');
+
+		switch(m_lnk[id].tp)
+		{
+		    case I_LOC: case O_LOC:
+			switch(c_lv)
 			{
-			    c_path += c_lv ? "."+c_el : c_el;
-			    opt->childAdd("el")->setText(c_path);
+			    case 0: owner().blkList(list); break;
+			    case 1:
+				if(owner().blkPresent(prm0) && owner().blkAt(prm0).at().func())
+				    owner().blkAt(prm0).at().ioList(list);
+				break;
 			}
-			if(c_lv) c_path += ".";
-
-			string prm0 = TSYS::strSepParse(lnk, 0, '.');
-			string prm1 = TSYS::strSepParse(lnk, 1, '.');
-			string prm2 = TSYS::strSepParse(lnk, 2, '.');
-
-			switch(m_lnk[id].tp)
+			break;
+		    case I_GLB: case O_GLB:
+			switch(c_lv)
 			{
-			    case I_LOC: case O_LOC:
-				switch(c_lv)
-				{
-				    case 0: owner().blkList(list); break;
-				    case 1:
-					if(owner().blkPresent(prm0) && owner().blkAt(prm0).at().func())
-					    owner().blkAt(prm0).at().ioList(list);
-					break;
-				}
+			    case 0: owner().owner().list(list); break;
+			    case 1:
+				if(owner().owner().present(prm0))
+				    ((Contr &)owner().owner().at(prm0).at()).blkList(list);
 				break;
-			    case I_GLB: case O_GLB:
-				switch(c_lv)
-				{
-				    case 0: owner().owner().list(list); break;
-				    case 1:
-					if(owner().owner().present(prm0))
-					    ((Contr &)owner().owner().at(prm0).at()).blkList(list);
-					break;
-				    case 2:
-					if(owner().owner().present(prm0) && ((Contr &)owner().owner().at(prm0).at()).blkPresent(prm1))
-					    ((Contr&)owner().owner().at(prm0).at()).blkAt(prm1).at().ioList(list);
-					break;
-				}
+			    case 2:
+				if(owner().owner().present(prm0) && ((Contr &)owner().owner().at(prm0).at()).blkPresent(prm1))
+				    ((Contr&)owner().owner().at(prm0).at()).blkAt(prm1).at().ioList(list);
 				break;
-			    default:	break;
 			}
-			for(unsigned i_a=0; i_a < list.size(); i_a++)
-			    opt->childAdd("el")->setText(c_path+list[i_a]);
-		    }
+			break;
+		    case I_PRM: case O_PRM:
+			//SYS->nodeAt(lnk,0,'.').at().nodeList(list);
+			switch(c_lv)
+			{
+			    case 0:	SYS->daq().at().modList(list);	break;
+			    case 1:
+				if(SYS->daq().at().modPresent(prm0))
+				    SYS->daq().at().at(prm0).at().list(list);
+				break;
+			    case 2:
+				 if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
+				    SYS->daq().at().at(prm0).at().at(prm1).at().list(list);
+				break;
+			    case 3:
+				if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1) &&
+					SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2))
+				    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(list);
+				break;
+			}
+			break;
+		    default:	break;
+		}
+		for(unsigned i_a=0; i_a < list.size(); i_a++)
+		    opt->childAdd("el")->setText(c_path+list[i_a]);
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))

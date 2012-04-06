@@ -60,7 +60,6 @@ namespace VISION
 {
 
 class WdgView;
-class DevelWdgView;
 
 //*************************************************
 //* Widget shape abstract object                  *
@@ -80,8 +79,8 @@ class WdgShape : public QObject
 	virtual void init( WdgView *view )						{ }
 	virtual void destroy( WdgView *view )						{ }
 
-	virtual void editEnter( DevelWdgView *view )					{ }
-	virtual void editExit( DevelWdgView *view )					{ }
+	virtual void editEnter( WdgView *view )						{ }
+	virtual void editExit( WdgView *view )						{ }
 	virtual void wdgPopup( WdgView *view, QMenu &menu )				{ }
 
 	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val );
@@ -117,11 +116,9 @@ class ShapeFormEl : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val );
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
-	void setActive( WdgView *view, bool val );
-	void setValue( WdgView *view, const string &val, bool force = false );
 
     public slots:
 	//Public slots
@@ -135,8 +132,6 @@ class ShapeFormEl : public WdgShape
 	void comboChange(const QString&);
 	//>> List events
 	void listChange(int);
-	//>> Tree events
-	void treeChange( );
 	//>> Button's events
 	void buttonPressed( );
 	void buttonReleased( );
@@ -151,13 +146,13 @@ class ShapeFormEl : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), setType(false), wordWrap(false), addrWdg(NULL) { }
+		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), welType(-1), addrWdg(NULL) { }
 		//Attributes
 		short	en	:1;
 		short	active	:1;
 		short	evLock	:1;
-		short	elType	:5;
-		short	setType	:1;
+		short	elType	:4;
+		short	welType	:4;
 		short	view	:4;
 		short	wordWrap:1;
 		short	checkable:1;
@@ -239,8 +234,6 @@ class ShapeText : public WdgShape
 //************************************************
 class ShapeMedia : public WdgShape
 {
-    Q_OBJECT
-
     public:
 	//Methods
 	ShapeMedia( );
@@ -252,11 +245,6 @@ class ShapeMedia : public WdgShape
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
 	void clear( WdgView *view );
-
-    public slots:
-        //Public slots
-        //>> Media play events
-        void mediaFinished( );
 
     private:
 	//Data
@@ -279,10 +267,9 @@ class ShapeMedia : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
+		ShpDt( ) : en(true), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
 		//Attributes
 		short	en		:1;
-		short	active		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		short	mediaType	:3;
@@ -309,7 +296,6 @@ class ShapeDiagram : public WdgShape
 
     public:
 	//Data
-	enum Scale { SC_GRID = 0x01, SC_MARKERS = 0x02, SC_LOG = 0x04 };
 	//> Trend object's class
 	class TrendObj
 	{
@@ -332,7 +318,6 @@ class ShapeDiagram : public WdgShape
 		double	bordU( )	{ return mBordUp; }
 		QColor	color( )	{ return mColor; }
 		int	width( )	{ return mWidth; }
-		int	scale( )	{ return mScale; }
 		double	curVal( )	{ return mCurvl; }
 		int	valTp( )	{ return val_tp; }
 		int64_t	valBeg( );
@@ -345,7 +330,6 @@ class ShapeDiagram : public WdgShape
 		void setBordU( double vl )	{ mBordUp  = vl; }
 		void setColor( const QColor &vl ){ mColor = vl; }
 		void setWidth( char vl )	{ mWidth = vl; }
-		void setScale( char vl )	{ mScale = vl; }
 		void setCurVal( double vl )	{ mCurvl = vl; }
 
 		void loadData( bool full = false );
@@ -353,9 +337,6 @@ class ShapeDiagram : public WdgShape
 		void loadSpectrumData( bool full = false );
 
 		//Attributes
-		double	adjL, adjU;		//Adjusted lower and upper borders
-		bool	isIndiv;		//Individual scale
-		char	wScale;
 #if HAVE_FFTW3_H
 		//> FFT
 		int		fftN;		//Spectrum samples number
@@ -369,9 +350,8 @@ class ShapeDiagram : public WdgShape
 		double		mCurvl;		//Curent value
 		QColor		mColor;		//Values line color
 		char		mWidth;		//Line width in pixels
-		char		mScale;		//Separted scale
 		//> Archive
-		int64_t		arh_per;	//Archive period
+		int		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time
 		int64_t		arh_end;	//Archive end time
 		//> Values
@@ -386,7 +366,7 @@ class ShapeDiagram : public WdgShape
 	    public:
 		//Methods
 		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1),
-		    tTime(0), tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0)	{ }
+		    tTime(0), tPict(0), curTime(0), tSize(1), sclVerScl(100), sclVerSclOff(0)	{ }
 		//Attributes
 		unsigned en		:1;
 		unsigned active		:1;
@@ -398,7 +378,7 @@ class ShapeDiagram : public WdgShape
 		unsigned trcPer		:10;
 		unsigned sclHor		:4;
 		unsigned sclVer		:4;
-		unsigned valsForPix	:4;
+		unsigned valsForPix	:3;
 		QColor	curColor, sclColor, sclMarkColor;
 		QBrush	backGrnd;
 		QPen	border;
@@ -407,7 +387,7 @@ class ShapeDiagram : public WdgShape
 		QFont	sclMarkFont;
 		QTimer 	*trcTimer;
 		vector<TrendObj>	prms;
-		int64_t	tTime, tPict, curTime, sclHorPer;
+		int64_t	tTime, tPict, curTime;
 		float	tSize;
 		float	fftBeg, fftEnd;
 		float	sclVerScl, sclVerSclOff;
@@ -512,17 +492,12 @@ class ShapeDocument : public WdgShape
 	    public:
 		//Methods
 		ShpDt( ) : en(true), active(true), tmpl(false), web(NULL) { }
-
-		string	toHtml( );
-		void	nodeProcess( XMLNode *xcur );
-
 		//Attributes
 		short	en	:1;
 		short	active	:1;
 		short	view	:4;
 		short	tmpl	:1;
 		QTextBrowser	*web;
-		string	font;
 		string	style;
 		string	doc;
 	};
@@ -541,6 +516,8 @@ class ShapeDocument : public WdgShape
 	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
+
+	void nodeProcess( XMLNode *xcur, ShpDt *shD );
 
 	//Attributes
 	static const char *XHTML_entity;

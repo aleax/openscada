@@ -84,7 +84,6 @@ class Lib : public TCntrNode, public TConfig
 	void preDisable( int flag );
 	void postDisable( int flag );
 	bool cfgChange( TCfg &cfg )     { modif(); return true; }
-
     private:
 	bool	run_st;
 	int	mFnc;

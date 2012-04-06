@@ -21,6 +21,7 @@
 
 #include <sys/times.h>
 #include <sys/time.h>
+#include <getopt.h>
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -105,10 +106,10 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable( flag );
 
     //> Controler's bd structure
-    fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"40",""));
-    fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"50",""));
-    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
-    fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100", "1"));
+    fldAdd(new TFld("PRM_BD",_("Parameters table by template"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PRM_BD_REFL",_("Parameters table for reflection"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","0;10000"));	//!!!! Remove at further
+    fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
@@ -187,7 +188,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
 }
 
 void TMdContr::start_( )
@@ -306,9 +307,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
         TController::cntrCmdProc(opt);
         ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
         return;
     }
     TController::cntrCmdProc(opt);
@@ -341,9 +341,6 @@ TCntrNode &TMdPrm::operator=( TCntrNode &node )
 	if(src_n->tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    lnk(lnkId(i_io)).prm_attr = src_n->lnk(src_n->lnkId(i_io)).prm_attr;
 	else tmpl->val.setS(i_io,src_n->tmpl->val.getS(i_io));
-
-    //>> Init links
-    initTmplLnks();
 
     return *this;
 }
@@ -434,8 +431,7 @@ void TMdPrm::enable()
 		if((tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 		{
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
-		    if(tmpl->val.func()->io(i_io)->flg()&IO::FullText)		flg |= TFld::FullText;
-		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
+		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
 
 		    TFld::Type tp = TFld::type(tmpl->val.ioType(i_io));
 		    if((fId=p_el.fldId(tmpl->val.func()->io(i_io)->id(),true)) < p_el.fldSize())
@@ -461,7 +457,7 @@ void TMdPrm::enable()
 	    initTmplLnks();
 
 	    //> Load IO
-	    loadIO(true);
+	    loadIO();
 
 	    //> Init system attributes identifiers
 	    id_freq	= tmpl->val.ioId("f_frq");
@@ -496,7 +492,7 @@ void TMdPrm::enable()
     }
 }
 
-void TMdPrm::disable( )
+void TMdPrm::disable()
 {
     if(!enableStat())  return;
 
@@ -525,13 +521,11 @@ void TMdPrm::load_( )
     if(enableStat()) loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO()
 {
     //> Load IO and init links
     if(isStd())
     {
-	if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
-
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id());
 	string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
@@ -643,8 +637,6 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ val.setS(EVAL_STR, 0, true); return; }
-
     //> Send to active reserve station
     if(owner().redntUse())
     {
@@ -672,11 +664,9 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    TParamContr::vlArchMake(val);
-
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
+    val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }
@@ -818,22 +808,16 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    else
 		    {
 			const char *tip = "str";
-			bool fullTxt = false;
 			if(!is_lnk)
 			    switch(tmpl->val.ioType(i_io))
 			    {
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
-				case IO::String:
-				    if(tmpl->val.func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
-				    break;
-				case IO::Object:	fullTxt = true;	break;
+				default:		tip = "str";	break;
 			    }
-			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),
-				tmpl->val.func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
-			if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select","/cfg/prm/ls_"+TSYS::int2str(i_io));
-			if(wn && fullTxt)wn->setAttr("cols","100")->setAttr("rows","4");
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),tmpl->val.func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,
+			    3,"tp",tip,"dest",is_lnk?"sel_ed":"","select",is_lnk?(string("/cfg/prm/ls_")+TSYS::int2str(i_io)).c_str():"");
 		    }
 		}
 	}
@@ -930,7 +914,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    int c_lvl = 0;
 	    for(int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++);
 	    AutoHD<TValue> prm;
-	    if(c_lvl == 3)
+	    if(c_lvl==3)
 	    {
 		if(TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(p_vl,1,'.') == owner().id() &&
@@ -964,8 +948,44 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    initTmplLnks();
 	}
     }
-    else if(isStd() && (a_path.compare(0,12,"/cfg/prm/pl_") == 0 || a_path.compare(0,12,"/cfg/prm/ls_") == 0) && ctrChkNode(opt))
-	SYS->daq().at().ctrListPrmAttr(opt, lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr, a_path.compare(0,12,"/cfg/prm/pl_")==0);
+    else if(isStd() && (a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") && ctrChkNode(opt))
+    {
+	int c_lv = 0;
+	string l_prm = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
+	bool is_pl = (a_path.substr(0,12) == "/cfg/prm/pl_");
+	string c_path = "", c_el;
+	opt->childAdd("el")->setText(c_path);
+	for(int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++)
+	{
+	    if(is_pl && c_lv>2) break;
+	    c_path += c_lv ? "."+c_el : c_el;
+	    opt->childAdd("el")->setText(c_path);
+	}
+	if(c_lv) c_path+=".";
+	string prm0 = TSYS::strSepParse(l_prm,0,'.');
+	string prm1 = TSYS::strSepParse(l_prm,1,'.');
+	string prm2 = TSYS::strSepParse(l_prm,2,'.');
+	vector<string>  ls;
+	switch(c_lv)
+	{
+	    case 0:	SYS->daq().at().modList(ls);	break;
+	    case 1:
+		if(SYS->daq().at().modPresent(prm0))
+		    SYS->daq().at().at(prm0).at().list(ls);
+		break;
+	    case 2:
+		 if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
+		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
+		break;
+	    case 3:
+		if(!is_pl && SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
+			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2))
+		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
+		break;
+	}
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(c_path+ls[i_l]);
+    }
     else if(isStd() && a_path.substr(0,12) == "/cfg/prm/el_")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
@@ -982,9 +1002,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
+	    string a_vl = TSYS::strParse(opt->text(), 0, " ");
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    {
-		string a_vl = TSYS::strParse(opt->text(), 0, " ");
 		if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 			TSYS::strSepParse(a_vl,2,'.') == id())
@@ -992,7 +1012,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		lnk(lnkId(i_io)).prm_attr = a_vl;
 		initTmplLnks();
 	    }
-	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) tmpl->val.setS(i_io,opt->text());
+	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) tmpl->val.setS(i_io,a_vl);
 	    modif();
 	}
     }

@@ -26,9 +26,6 @@
 #include <tvariant.h>
 #include <tconfig.h>
 
-#define ATTR_OI_DEPTH	8	//Order index field depth = real limit to attributes
-#define ATTR_CON_DEPTH	8	//Connection counter depth = simultaneously connections to single attribute
-
 using namespace OSCADA;
 
 namespace VCA
@@ -135,9 +132,8 @@ class Attr
 	//> Attributes
 	TFld		*mFld;		//Base field
 	unsigned	m_modif;	//Modify counter
-	unsigned short	self_flg;	//Self attributes flags
-	unsigned short	mOi	 :ATTR_OI_DEPTH;	//Order index, up to 256 attributes
-	unsigned short	mConn    :ATTR_CON_DEPTH;	//Connections counter
+	short		self_flg;	//Self attributes flags
+	unsigned char	mOi;		//Order index
 
 	string	cfg;			//Configuration template and value
 
@@ -148,6 +144,8 @@ class Attr
 //************************************************
 //* Widget                                       *
 //************************************************
+//static pthread_mutex_t	mtxAttrGlob;
+
 class Widget : public TCntrNode
 {
     friend class Attr;
@@ -209,12 +207,12 @@ class Widget : public TCntrNode
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
 	//> Widget's attributes
-	void attrList( vector<string> &list );
-	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
-	void attrDel( const string &attr, bool allInher = false );
-	virtual bool attrPresent( const string &attr );
-	int  attrPos( const string &iattr );
-	virtual AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
+	void attrList(vector<string> &list);
+	void attrAdd(TFld *attr, int pos = -1, bool inher = false);
+	void attrDel(const string &attr, bool allInher = false);
+	virtual bool attrPresent(const string &attr);
+	int  attrPos(const string &iattr);
+	virtual AutoHD<Attr> attrAt(const string &attr, int lev = -1);
 
 	//> Include widgets
 	void wdgList( vector<string> &list, bool fromLnk = false );
@@ -224,7 +222,6 @@ class Widget : public TCntrNode
 	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
 	//> Data access
-	virtual void resourceList( vector<string> &ls )				{ }
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
 	//> Context helps
@@ -253,7 +250,7 @@ class Widget : public TCntrNode
 	virtual void calc( Widget *base );
 	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 
-	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrM; }
+	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrGlob; }
 
 	//Attributes
 	//> Generic data
@@ -270,8 +267,7 @@ class Widget : public TCntrNode
 	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 	map<string, Attr* >	mAttrs;
-	pthread_mutex_t	mtxAttrM;
-	static pthread_mutex_t	mtxAttrCon;
+	static pthread_mutex_t	mtxAttrGlob;
 };
 
 }

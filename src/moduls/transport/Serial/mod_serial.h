@@ -52,7 +52,6 @@ class TTrIn: public TTransportIn
 
 	//> Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
-	int	taskPrior( )			{ return mTaskPrior; }
 	float	mdmPreInit( )			{ return mMdmPreInit; }
 	float	mdmPostInit( )			{ return mMdmPostInit; }
 	string	mdmInitStr1( )			{ return mMdmInitStr1; }
@@ -62,7 +61,6 @@ class TTrIn: public TTransportIn
 	string	mdmRingAnswer( )		{ return mMdmRingAnswer; }
 	string	mdmRingAnswerResp( )		{ return mMdmRingAnswerResp; }
 
-	void	setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 	void	setMdmTm( int vl )		{ mMdmTm = vmax(1,vmin(120,vl)); modif(); }
 	void	setMdmPreInit( float vl )	{ mMdmPreInit = vmax(0,vmin(3,vl)); modif(); }
 	void	setMdmPostInit( float vl )	{ mMdmPostInit = vmax(0.01,vmin(3,vl)); modif(); }
@@ -98,7 +96,6 @@ class TTrIn: public TTransportIn
 	float	tmMax;
 
 	//> Modem properties
-	int	mTaskPrior;			// Requests processing task prioritet
 	int	mMdmTm;
 	float	mMdmPreInit, mMdmPostInit;
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
@@ -137,7 +134,6 @@ class TTrOut: public TTransportOut
 	string	mdmBusyResp( )			{ return mMdmBusyResp; }
 	string	mdmNoCarResp( )			{ return mMdmNoCarResp; }
 	string	mdmNoDialToneResp( )		{ return mMdmNoDialToneResp; }
-	string  mdmExit( )			{ return mMdmExit; }
 	string	mdmHangUp( )			{ return mMdmHangUp; }
 	string	mdmHangUpResp( )		{ return mMdmHangUpResp; }
 
@@ -154,7 +150,6 @@ class TTrOut: public TTransportOut
 	void	setMdmNoCarResp( const string &vl )	{ mMdmNoCarResp = vl; modif(); }
 	void	setMdmNoDialToneResp( const string &vl ){ mMdmNoDialToneResp = vl; modif(); }
 	void	setMdmHangUp( const string &vl )	{ mMdmHangUp = vl; modif(); }
-	void	setMdmExit( const string &vl )		{ mMdmExit = vl; modif(); }
 	void	setMdmHangUpResp( const string &vl )	{ mMdmHangUpResp = vl; modif(); }
 
 	void start( );
@@ -176,7 +171,7 @@ class TTrOut: public TTransportOut
 	//Attributes
 	string	mDevPort, mTimings;
 	int	fd;
-	int64_t	mLstReqTm, mKeepAliveLstTm;
+	int64_t	mLstReqTm;
 
 	uint64_t trIn, trOut;			// Traffic in and out counter and maximum respond timeout
 
@@ -185,7 +180,7 @@ class TTrOut: public TTransportOut
 	float	mMdmPreInit, mMdmPostInit;
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
 	string	mMdmDialStr, mMdmCnctResp, mMdmBusyResp, mMdmNoCarResp, mMdmNoDialToneResp;
-	string	mMdmExit, mMdmHangUp, mMdmHangUpResp;
+	string	mMdmHangUp, mMdmHangUpResp;
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
 	unsigned mRTSfc		:1;	//Flow control by RTS signal for pure RS-485

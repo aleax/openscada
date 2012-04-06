@@ -1,16 +1,17 @@
 # OpenSCADA.UI.Vision translate to German.
+# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-22 12:28+0300\n"
+"POT-Creation-Date: 2012-03-27 18:04+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -38,28 +39,22 @@ msgid ""
 "======================= The module <%s:%s> options =======================\n"
 "---------- Parameters of the module section '%s' in config-file ----------\n"
 "StartUser   <user>    No password requested start user.\n"
-"UserPass    <pass>    User password for no local start.\n"
 "RunPrjs     <list>    Run projects list on the module start.\n"
-"RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
-"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
-"CachePgLife <hours>   Cached pages lifetime.\n"
+"RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive "
+"update,\n"
+"\t\t       1 - update only changed widgets).\n"
 "VCAstation  <id>      VCA station id ('.' - local).\n"
-"PlayCom     <cmd>     Audio alarms' files play command.\n"
 "\n"
 msgstr ""
 "======================== Optionen des Moduls <%s:%s> "
 "============================\n"
 "------- Parameter des Abschnitts '%s' in der Konfigurationsdatei ---------\n"
-"StartUser     <user>  Startbenutzer, ohne Kennwort.\n"
-"UserPass  <passwort>  Passwort auf eine nicht-lokale Start.\n"
-"RunPrjs       <list>  Liste von aktivierten Projekte beim Starten .\n"
-"RunPrjsSt      {0;1}  Zeigt den Status der laufenden Projekte (standardmäßig "
-"= 1).\n"
-"ExitLstRunPrjCls {0;1}Beenden, wenn der letzte der Ablauf des Projekts "
-"(standardmäßig = 1).\n"
-"CachePgLife    <uhr>  Die Lebensdauer der Seiten im Cache.\n"
-"VCAstation      <id>  Station mit der VCA Maschine ('.' - local).\n"
-"PlayCom     <befehl>  Audio-Alarme Dateien abspielen Befehl.\n"
+"StartUser   <user>   Startbenutzer, ohne Kennwort.\n"
+"RunPrjs     <list>  Liste von aktivierten Projekte beim Starten .\n"
+"RunTimeUpdt <mode>    Aktualiserungsmodus in RunTime (0 - adaptive "
+"periodische Aktualiserung aller Widgets,\n"
+"\t\t       1 - Aktualiserung nur der geänderten Widgets).\n"
+"VCAstation  <id>      Station mit der VCA Maschine ('.' - local).\n"
 "\n"
 
 msgid "Load module."
@@ -71,7 +66,7 @@ msgstr "Speicherung des Moduls."
 msgid "Error connection to remote station!"
 msgstr "Fehler beim Verbinden an die enfernte Station!"
 
-msgid "Auth wrong!!!"
+msgid "Auth is wrong!!!"
 msgstr "Authentifizierungsfehler!!!"
 
 msgid "Start module."
@@ -117,12 +112,6 @@ msgstr ""
 "Für das Laden eines Projektfensters (1) verwenden Sie den Namen des Projekts "
 "im Format: 'PrjName-1'."
 
-msgid "Run projects status display"
-msgstr "Zeigt den Status von aktivierten Projekten"
-
-msgid "Exit on last run project close"
-msgstr "Beenden, wenn der letzte der Ablauf des Projekts"
-
 msgid "Go to remote stations list configuration"
 msgstr "Konfiguration der entfernten Stationen"
 
@@ -145,9 +134,8 @@ msgstr ""
 msgid "Options help"
 msgstr "Optionen Hilfe"
 
-#, c-format
-msgid "OpenSCADA Vision developing: %s"
-msgstr "OpenSCADA Vision-Entwicklung: %s"
+msgid "OpenSCADA: Vision developing"
+msgstr "OpenSCADA: Vision-Entwicklung"
 
 msgid "Full screen"
 msgstr "Vollbild"
@@ -983,9 +971,6 @@ msgstr "Schliessen"
 msgid "Get node '%1' information error."
 msgstr "Fehler bei der Knoteninformation '%1'."
 
-msgid "No set"
-msgstr "Kein Satz"
-
 msgid "Load icon picture"
 msgstr "Iconbild laden"
 
@@ -1162,9 +1147,6 @@ msgstr "Maßstab"
 
 msgid "Resize"
 msgstr "Größe ändern"
-
-msgid "Warning! Edit widget already set."
-msgstr "Achtung! Edit Widget bereits eingestellt."
 
 msgid "Exit from widget editing"
 msgstr "Beenden der Widgetbearbeitung"
@@ -1565,21 +1547,24 @@ msgstr "XHTML (*.html);;CSV File (*.csv)"
 msgid "No data for export."
 msgstr "Keine Daten für Export."
 
+msgid "Select session for connection"
+msgstr "Sitzung für die Verbindung auswählen"
+
 msgid ""
-"Several sessions are already opened on the project \"%1\".\n"
-"You can create new or connect to present session. Please, select needed or "
-"press \"Cancel\"."
+"Several sessions are already opened on the page %1. You can create new "
+"session or connect to present session. Please, select needed session and "
+"press 'Connect' or press 'Create' for creation of a new, individual, session."
 msgstr ""
-"Bereits mehrere offene Sessions für das Projekt \"%1\".\n"
-"Sie können eine neue Sitzung erstellen oder sich an eine existierende "
-"Sitzung verbinden. Bitte wählen Sie die richtige oder klicken Sie \"Abbrechen"
-"\"."
+"Es sind schon mehrere Sitzungen für die Seite %1 geöffnet. Sie können eine "
+"neue Sitzung erstellen oder sich an eine existierende Sitzung verbinden. "
+"Bitte wählen Sie die gewünschte Sitzung und betätigen Sie 'Verbinden' oder "
+"'Erstellen' für neue individuelle Sitzung."
 
-msgid "Select session for connection or new creation"
-msgstr "Sitzung für die Verbindung auswählen oder eine neue"
+msgid "Connect"
+msgstr "Verbinden"
 
-msgid "<Create new session>"
-msgstr "<Erstellen Sie eine neue Sitzung>"
+msgid "Create"
+msgstr "Erstellen"
 
 msgid "Running project: %1"
 msgstr "Ausführen Projekt: %1"
@@ -1921,18 +1906,6 @@ msgstr "Koordinaten(x,y): (%1, %2)"
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Widgetsgestalt '%1' ist nicht verfügbar!"
 
-msgid "Load file"
-msgstr "Datei laden"
-
-msgid "Save file"
-msgstr "Datei speichern"
-
-msgid "Write file '%1' is fail."
-msgstr "Fehler beim Schreiben in die Datei '%1'."
-
-msgid "Loadable file '%1' is too large."
-msgstr "Ladbarer Datei '%1' ist zu groß."
-
 msgid "kHz"
 msgstr "kHz"
 
@@ -1975,8 +1948,8 @@ msgid "Message"
 msgstr "Nachricht"
 
 #, c-format
-msgid "Document parsing error: %s"
-msgstr "Fehler der Dokumentanalyse: %s"
+msgid "Document '%s' parsing is error: %s"
+msgstr "Fehler der Dokumentanalyse '%s': %s"
 
 msgid "Loading page: '%1'."
 msgstr "Lade Seite: '%1'."
@@ -2025,6 +1998,9 @@ msgstr "Muster:"
 
 msgid "AaBbCcDdEeFf"
 msgstr "AaBbCcDdEeFf"
+
+msgid "Auth wrong!!!"
+msgstr "Authentifizierungsfehler!!!"
 
 msgid "Find"
 msgstr "Suche"

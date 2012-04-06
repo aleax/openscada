@@ -30,6 +30,7 @@
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <getopt.h>
 #include <string>
 #include <errno.h>
 
@@ -234,7 +235,7 @@ void TSocketIn::start()
 	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;
-	if(type == SOCK_TCP)
+	if( type == SOCK_TCP )
 	{
 	    mode	= atoi( TSYS::strSepParse(addr(),3,':').c_str() );
 	    //Get system port for "oscada" /etc/services
@@ -251,7 +252,7 @@ void TSocketIn::start()
 	    }
 	    listen(sock_fd,maxQueue());
 	}
-	else if(type == SOCK_UDP)
+	else if(type == SOCK_UDP )
 	{
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"udp");
@@ -439,7 +440,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     //> Client socket process
     struct  timeval tv;
-    fd_set  rw_fd;
+    fd_set  rd_fd;
     string  req, answ;
     char    buf[s.s->bufLen()*1000 + 1];
     AutoHD<TProtocolIn> prot_in;
@@ -448,9 +449,10 @@ void *TSocketIn::ClTask( void *s_inf )
     do
     {
 	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rw_fd); FD_SET(s.cSock,&rw_fd);
-	int kz = select(s.cSock+1,&rw_fd,NULL,NULL,&tv);
-	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rw_fd)) continue;
+	FD_ZERO(&rd_fd); FD_SET(s.cSock,&rd_fd);
+
+	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
+	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd)) continue;
 	ssize_t r_len = read(s.cSock,buf,s.s->bufLen()*1000);
 	if(r_len <= 0) break;
 	s.s->sock_res.resRequestW();
@@ -471,20 +473,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    ssize_t wL = 1;
 	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
-		wL = write(s.cSock, answ.data()+wOff, answ.size()-wOff);
-		if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
-		else if(wL < 0)
-		{
-		    if(errno == EAGAIN)
-            	    {
-                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
-                	FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
-                	kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
-                	if(kz > 0 && FD_ISSET(s.cSock,&rw_fd)) { wL = 0; continue; }
-            	    }
-            	    mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
-		    break;
-		}
+		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
 		s.s->sock_res.resRequestW();
 		s.s->trOut += vmax(0,wL);
 		s.s->sock_res.resRelease();
@@ -586,13 +575,12 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:{name}:{mode} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveTm",_("Keep alive timeout (s)"),RWRWR_,"root",STR_ID,1,"tp","dec");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
-            "tp","dec","min","-1","max","99","help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	return;
     }
     //> Process command to page
@@ -642,7 +630,7 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
 
 TSocketOut::~TSocketOut()
 {
-    if(startStat()) stop();
+    if( startStat() )	stop();
 }
 
 void TSocketOut::setTimings( const string &vl )
@@ -653,12 +641,6 @@ void TSocketOut::setTimings( const string &vl )
     mTimings = mTmRep ? TSYS::strMess("%g:%g:%g",(1e-3*mTmCon),(1e-3*mTmNext),(1e-3*mTmRep)) :
 			TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
-}
-
-void TSocketOut::setAddr( const string &addr )
-{
-    TTransportOut::setAddr(addr);
-    if(startStat()) stop();
 }
 
 string TSocketOut::getStatus( )
@@ -812,8 +794,6 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 {
     string err(_("Unknown error"));
     ssize_t kz = 0;
-    struct timeval tv;
-    fd_set rw_fd;
     int reqTry = 0;
     bool writeReq = false;
 
@@ -831,8 +811,6 @@ repeate:
     writeReq = false;
     if(obuf != NULL && len_ob > 0)
     {
-	if(!time) time = mTmCon;
-
 	//>> Input buffer clear
 	char tbuf[100];
 	while(read(sock_fd,tbuf,sizeof(tbuf)) > 0) ;
@@ -841,16 +819,9 @@ repeate:
 	    TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
-	    kz = write(sock_fd, obuf+wOff, len_ob-wOff);
+	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);
 	    if(kz <= 0)
 	    {
-		if(errno == EAGAIN)
-		{
-		    tv.tv_sec  = (time/2)/1000; tv.tv_usec = 1000*((time/2)%1000);
-		    FD_ZERO(&rw_fd); FD_SET(sock_fd, &rw_fd);
-		    kz = select(sock_fd+1, NULL, &rw_fd, NULL, &tv);
-		    if(kz > 0 && FD_ISSET(sock_fd,&rw_fd)) { kz = 0; continue; }
-		}
 		err = strerror(errno);
 		res.release();
 		stop(); start();
@@ -859,6 +830,7 @@ repeate:
 	    }
 	}
 
+	if(!time) time = mTmCon;
 	writeReq = true;
     }
     else time = mTmNext;
@@ -870,12 +842,15 @@ repeate:
     int i_b = 0;
     if(ibuf != NULL && len_ib > 0)
     {
+	fd_set rd_fd;
+	struct timeval tv;
+
 	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
-	FD_ZERO(&rw_fd); FD_SET(sock_fd, &rw_fd);
-	kz = select(sock_fd+1, &rw_fd, NULL, NULL, &tv);
+	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
+	kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
 	if(kz == 0)	{ res.release(); if(writeReq) stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if(kz < 0)	{ res.release(); stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Socket error!")); }
-	else if(FD_ISSET(sock_fd, &rw_fd))
+	else if(FD_ISSET(sock_fd, &rd_fd))
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
 	    if(i_b <= 0 && obuf)

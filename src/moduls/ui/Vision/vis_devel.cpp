@@ -48,7 +48,7 @@
 using namespace VISION;
 
 VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const string &VCAstat ) :
-    fileDlg(NULL), winClose(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
+    winClose(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
 
@@ -57,7 +57,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin( this );
 
-    setWindowTitle(TSYS::strMess(_("OpenSCADA Vision developing: %s"),SYS->name().c_str()).c_str());
+    setWindowTitle(_("OpenSCADA: Vision developing"));
     setWindowIcon(mod->icon());
 
     //> Init workspace
@@ -647,7 +647,6 @@ VisDevelop::~VisDevelop()
     //> Other data clean
     if(prjLibPropDlg)	delete prjLibPropDlg;
     if(visItPropDlg)	delete visItPropDlg;
-    if(fileDlg)		delete fileDlg;
 
     mod->unregWin(this);
 }
@@ -655,19 +654,6 @@ VisDevelop::~VisDevelop()
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
     return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
-}
-
-QString VisDevelop::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
-{
-    if(!fileDlg) fileDlg = new QFileDialog(this);
-    fileDlg->setFileMode(QFileDialog::AnyFile);
-    fileDlg->setAcceptMode(mode);
-    fileDlg->setWindowTitle(caption);
-    fileDlg->setNameFilter(filter);
-    if(dir.size()) fileDlg->selectFile(dir);
-    if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
-
-    return "";
 }
 
 string VisDevelop::user( )
@@ -883,8 +869,8 @@ void VisDevelop::applyWorkWdg( )
     string sel2 = TSYS::pathLev(cur_wdg,1);
     string sel3 = TSYS::pathLev(cur_wdg,2);
 
-    bool isProj = (sel1.substr(0,4)=="prj_");
-    bool isLib  = (sel1.substr(0,4)=="wlb_");
+    bool isProj = sel1.substr(0,4)=="prj_";
+    bool isLib  = sel1.substr(0,4)=="wlb_";
 
     //> Process main actions
     actPrjRun->setEnabled(isProj);
@@ -943,7 +929,7 @@ void VisDevelop::updateMenuWindow( )
 
     QList<QMdiSubWindow *> windows = work_space->subWindowList();
     //> Enable action state
-    QMdiSubWindow *act_win = work_space->activeSubWindow();
+    QMdiSubWindow  *act_win = work_space->activeSubWindow();
     actWinClose->setEnabled(act_win);
     actWinCloseAll->setEnabled(!windows.isEmpty());
     actWinTile->setEnabled(!windows.isEmpty());
@@ -1088,7 +1074,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     string par_nm = cact->objectName().toAscii().data();
 
     if(work_space->activeSubWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
-	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow()->widget())->widget())->edit())
+	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow())->widget())->edit())
 	return;
 
     //> Count level
@@ -1322,6 +1308,16 @@ void VisDevelop::visualItEdit( )
 	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
+	//> Set window icon
+	XMLNode req("get");
+	req.setAttr("path",ed_wdg+"/%2fico");
+	if( !cntrIfCmd(req) )
+	{
+	    QImage ico_t;
+	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
+	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
+		scrl->setWindowIcon(QPixmap::fromImage(ico_t));
+	}
 	//> Make and place view widget
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this,0,scrl);
 	vw->load("");
@@ -1333,17 +1329,6 @@ void VisDevelop::visualItEdit( )
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addSubWindow(scrl);
 	scrl->show();
-
-	//> Set window icon
-	XMLNode req("get");
-	req.setAttr("path",ed_wdg+"/%2fico");
-	if(!cntrIfCmd(req))
-	{
-	    QImage ico_t;
-	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
-	    if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
-		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
-	}
     }
 }
 

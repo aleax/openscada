@@ -68,10 +68,6 @@ class TMdPrm : public TParamContr
 
 	TMdContr &owner( );
 
-	//Attributes
-	ResString daErr;		//DA error
-	void	*daData;       		//DA personal data
-
     protected:
 	//Methods
 	void load_( );
@@ -109,13 +105,11 @@ class TMdContr: public TController
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void devUpdate( );
-
     protected:
 	//Methods
 	void load_( );
-	void start_( );
 	void enable_( );
+	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	void prmEn( const string &id, bool val );
@@ -151,11 +145,6 @@ class TTpContr: public TTipDAQ
 	void	daList( vector<string> &da );
 	void	daReg( DA *da );
 	DA	*daGet( const string &da );
-
-	AutoHD<TMdContr> at( const string &name, const string &who = "" )
-	{ return TTipDAQ::at(name,who); }
-
-	void perSYSCall( unsigned int cnt );
 
     protected:
 	//Methods

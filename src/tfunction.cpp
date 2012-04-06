@@ -30,7 +30,7 @@ using namespace OSCADA;
 //*************************************************
 //* Function abstract object                      *
 //*************************************************
-TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), run_st(false), be_start(false), mTVal(NULL), grp(igrp)
+TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), run_st(false), mTVal(NULL), grp(igrp)
 {
 
 }
@@ -149,30 +149,18 @@ void TFunction::ioMove( int pos, int to )
 
 void TFunction::preIOCfgChange()
 {
-    //> Previous stop
-    be_start = startStat();
-    if(be_start)
-    {
-        setStart(false);
-        if(mTVal) { delete mTVal; mTVal = NULL; }
-    }
-
-    //> Main process
     string blk_lst;
-    for(unsigned i = 0; i < used.size(); i++)
-	if(used[i]->blk()) blk_lst += used[i]->vfName()+",";
-    if(blk_lst.size())
+    for(unsigned i=0; i < used.size(); i++)
+	if( used[i]->blk() )	blk_lst+=used[i]->vfName()+",";
+    if( blk_lst.size() )
 	throw TError(nodePath().c_str(),_("Change is not permitted while function is used: %s"),blk_lst.c_str());
 
-    for(unsigned i = 0; i < used.size(); i++)
+    for( unsigned i=0; i < used.size(); i++ )
 	used[i]->preIOCfgChange();
 }
 
 void TFunction::postIOCfgChange()
 {
-    //> Start for restore
-    if(be_start) setStart(true);
-
     for(unsigned i=0; i < used.size(); i++)
         used[i]->postIOCfgChange();
 }
@@ -355,7 +343,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
 	{
 	    bool to_en_exec = atoi(opt->text().c_str());
-	    if(to_en_exec && !mTVal)	mTVal = new TValFunc(id()+"_exec",this);
+	    if(to_en_exec && !mTVal)	{ mTVal = new TValFunc(id()+"_exec",this); mTVal->setDimens(true); }
 	    if(!to_en_exec && mTVal)	{ delete mTVal; mTVal = NULL; }
 	}
     }
@@ -380,13 +368,14 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
     {
+	double c_rez = 0;
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());
-	string wuser = opt->attr("user");
-	int64_t t_cnt = TSYS::curTime();
-	time_t tm_lim = time(NULL)+STD_WAIT_TM;
-	for(int i_c = 0; i_c < n_tcalc && time(NULL) < tm_lim; i_c++)
-	    mTVal->calc(wuser);
-	mTVal->setCalcTm(TSYS::curTime()-t_cnt);
+	for(int i_c = 0; i_c < n_tcalc; i_c++ )
+	{
+	    mTVal->calc(opt->attr("user"));
+	    c_rez += mTVal->calcTm();
+	}
+	mTVal->setCalcTm(c_rez);
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -474,7 +463,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), mMdfChk(false), tm_calc(0), mFunc(NULL)
+    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), tm_calc(0), mFunc(NULL)
 {
     pthread_mutex_init(&mRes, NULL);
     setFunc(ifunc);

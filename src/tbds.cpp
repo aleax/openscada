@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <getopt.h>
 
 #include "tsys.h"
 #include "tmess.h"
@@ -468,7 +469,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     bool bd_ok = false;
 
     //> Set to DB
-    if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg))
+    if(SYS->present(SDB_ID))
     {
 	AutoHD<TBDS> dbs = SYS->db();
 	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(),true);
@@ -496,7 +497,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     }
 
     //> Set to config
-    if(!bd_ok && (SYS->workDB() == "<cfg>" || rFlg&TBDS::OnlyCfg))
+    if(!bd_ok && SYS->workDB() == "<cfg>")
     {
 	ResAlloc res(SYS->nodeRes(),true);
 	XMLNode *tgtN = NULL;
@@ -568,9 +569,24 @@ string TBDS::optDescr(  )
 void TBDS::load_( )
 {
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"	,0,NULL,'h'},
+	{NULL	,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters from config-file
     mSYSStPref = (bool)atoi(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg).c_str());
@@ -867,10 +883,9 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SDB_ID,3,"tp","str","cols","100","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,4,
-		    "tp","str","dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
-		    "help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));
+		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),RWRWR_,"root",SDB_ID,2,
+		    "tp","str","help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),RWRWR_,"root",SDB_ID,1,"tp","bool");
 	    }
 	}

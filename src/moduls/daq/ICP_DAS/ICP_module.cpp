@@ -42,7 +42,7 @@ extern "C"
 #define LICENSE		"GPL2"
 //*************************************************
 
-ICP_DAS_DAQ::TTpContr *ICP_DAS_DAQ::mod;  //Pointer for direct access to the module
+ICP_DAS_DAQ::TTpContr *ICP_DAS_DAQ::mod;  //Pointer for direct access to module
 
 extern "C"
 {
@@ -101,7 +101,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_TP",_("Module type"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","552985") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255") );
     tpPrmAt(t_prm).fldAdd( new TFld("MOD_SLOT",_("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11") );
-    tpPrmAt(t_prm).fldAdd( new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000") );
+    tpPrmAt(t_prm).fldAdd( new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000") );
 }
 
 void TTpContr::load_( )
@@ -711,7 +711,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ valo.setI(EVAL_INT, 0, true); return; }
+    if( !enableStat() || !owner().startStat() )	valo.setI( EVAL_INT, 0, true );
     string rez;
 
     //> Send to active reserve station
@@ -829,13 +829,11 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    TParamContr::vlArchMake(val);
-
-    if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
-    val.arch().at().setPeriod((int64_t)(owner().period()*1000000));
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode( TVArchive::ActiveAttr, val.arch().at().srcData() );
+    val.arch().at().setPeriod( (int64_t)(owner().period()*1000000) );
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
 }
 
 void *TMdPrm::fastTask( void *iprm )

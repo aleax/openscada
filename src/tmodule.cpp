@@ -56,10 +56,6 @@ TModule::TModule( const string &id ) : mId(id)
 #if 0
     char mess[][100] = { _("Author"), _("License") };
 #endif
-
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("ModulsCntr",1);
-#endif
 }
 
 TModule::~TModule(  )
@@ -67,10 +63,6 @@ TModule::~TModule(  )
     //> Clean export function list
     for(unsigned i = 0; i < m_efunc.size(); i++)
         delete m_efunc[i];
-
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("ModulsCntr",-1);
-#endif
 }
 
 string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }
@@ -84,7 +76,7 @@ void TModule::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore)	return;
 
-    mess_info(nodePath().c_str(),_("Connect module."));
+    mess_info(nodePath().c_str(),_("Connect module!"));
 }
 
 TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }
@@ -166,7 +158,8 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if(a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
+    else if(a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt))
+	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }
 

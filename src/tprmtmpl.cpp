@@ -233,6 +233,11 @@ void TPrmTempl::save_( )
     }
 }
 
+void TPrmTempl::preIOCfgChange()
+{
+    if(startStat()) setStart(false);
+}
+
 TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Configuration functions call
@@ -271,15 +276,15 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Text;Object"));
+		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)+";"+TSYS::int2str(IO::Object)).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;Object"));
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d",IO::Default,IO::Output).c_str(),"sel_list",_("Input;Output"));
+		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)).c_str(),"sel_list",_("Input;Output"));
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Attribute"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::AttrRead,TPrmTempl::AttrFull).c_str(),
+		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(TPrmTempl::AttrRead)+";"+TSYS::int2str(TPrmTempl::AttrFull)).c_str(),
 		    "sel_list",_("No attribute;Read only;Full access"));
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Configure"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,TPrmTempl::CfgPublConst,TPrmTempl::CfgLink).c_str(),
+		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(TPrmTempl::CfgPublConst)+";"+TSYS::int2str(TPrmTempl::CfgLink)).c_str(),
 		    "sel_list",_("Constant;Public constant;Link"));
 		ctrMkNode("list",opt,-1,"/io/io/6",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
@@ -330,28 +335,15 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
+		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
 		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_attr)	n_attr->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
 		if(n_accs)	n_accs->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));
 		if(n_val)	n_val->childAdd("el")->setText(io(id)->def());
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
-	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
-	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)));
-	    else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
-	    modif();
-	}
-	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
-	    int row = atoi(opt->attr("row").c_str());
-            IO *ioPrev = row ? io(row-1) : NULL;
-            if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)), row);
-	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
-	    modif();
-	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default)); modif(); }
+	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), atoi(opt->attr("row").c_str())); modif(); }
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int row = atoi(opt->attr("row").c_str());
@@ -371,10 +363,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    {
 		case 0:	io(row)->setId(opt->text());	break;
 		case 1:	io(row)->setName(opt->text());	break;
-		case 2:
-		    io(row)->setType((IO::Type)(atoi(opt->text().c_str())&0xFF));
-		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(atoi(opt->text().c_str())>>8))&IO::FullText));
-		    break;
+		case 2:	io(row)->setType((IO::Type)atoi(opt->text().c_str()));	break;
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));		break;
 		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
 		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
@@ -451,10 +440,10 @@ TPrmTmplLib::~TPrmTmplLib()
 TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
 {
     TPrmTmplLib *src_n = dynamic_cast<TPrmTmplLib*>(&node);
-    if(!src_n) return *this;
+    if( !src_n ) return *this;
 
     //> Configuration copy
-    exclCopy(*src_n, "ID;DB;");
+    exclCopy(*src_n, "ID;");
     work_lib_db = src_n->work_lib_db;
 
     //> Templates copy
@@ -506,7 +495,6 @@ void TPrmTmplLib::setFullDB( const string &vl )
     size_t dpos = vl.rfind(".");
     work_lib_db = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
     cfg("DB").setS((dpos!=string::npos) ? vl.substr(dpos+1) : "");
-    modifG();
 }
 
 void TPrmTmplLib::load_( )
@@ -588,8 +576,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library BD"),RWRWR_,"root",SDAQ_ID,4,
-		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
+		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library BD"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed","select","/db/tblList",
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))

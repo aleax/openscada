@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <getopt.h>
 #include <string.h>
 
 #include <tsys.h>
@@ -106,9 +107,24 @@ string TProt::optDescr( )
 void TProt::load_( )
 {
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL, 0 }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters from config-file
     setAuthTime(atoi(TBDS::genDBGet(nodePath()+"AuthTime",TSYS::int2str(authTime())).c_str()));
@@ -348,7 +364,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/prm",_("Protocol")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/tmplList");
+	    ctrMkNode("fld",opt,-1,"/prm/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		"help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 	    {
@@ -402,7 +418,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(tmpl());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmpl(opt->text());
     }
-    else if(a_path == "/prm/tmplList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmpl(), "html;xhtml;xml;");
     else if(a_path == "/prm/usr_ls" && ctrChkNode(opt))
     {
 	vector<string> ls;
@@ -446,12 +461,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     vector<string> vars;
 
     //> Continue for full reqst
-    if(m_nofull)
+    if( m_nofull )
     {
-	m_buf.append(reqst);
+	m_buf = m_buf+reqst;
 	m_nofull = false;
     }
-    else m_buf = reqst;  //Save request to buffer
+    else m_buf=reqst;  //Save request to buffer
 
     string request = m_buf;
 
@@ -465,14 +480,13 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 	//> Parse first record
 	req = TSYS::strLine(request,0,&pos);
-	if(req == request) { m_nofull = true; return m_nofull; }	//HTTP header is not full
 	string method   = TSYS::strSepParse(req,0,' ');
 	string urls     = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
 	string user, url;
 
 	//> Parse parameters
-	int c_lng = -1;
+	int c_lng=-1;
 	while( true )
 	{
 	    req = TSYS::strLine(request,0,&pos);
@@ -561,12 +575,6 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    answer = pgTmpl("<h2 class='title'>"+TSYS::strMess(_("Going to page: <b>%s</b>"),"/")+"</h2>\n",
 		"<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/'/>");
 	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
-	    return m_nofull||KeepAlive;
-	}
-	else if(name_mod == "robots.txt" && method == "GET")
-	{
-	    answer = "User-Agent: *\nDisallow: /";
-	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false)+answer;
 	    return m_nofull||KeepAlive;
 	}
 

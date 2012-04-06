@@ -91,8 +91,6 @@ class WidgetLib : public TCntrNode, public TConfig
 	void postDisable( int flag );
 	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
-	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-
 	//Attributes
 	int     m_wdg;
 
@@ -101,7 +99,6 @@ class WidgetLib : public TCntrNode, public TConfig
 	TCfg	&mId;
 	string work_lib_db, mOldDB;
 	bool	mEnable;
-	bool    passAutoEn;
 };
 
 //************************************************
@@ -126,13 +123,11 @@ class LWidget : public Widget, public TConfig
 	string parentNm( )	{ return cfg("PARENT").getS(); }
 	string proc( )		{ return cfg("PROC").getS(); }
 
-	void setEnable( bool val );
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
 	void setParentNm( const string &isw );
-	void setEnableByNeed( );
 
 	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
@@ -143,14 +138,11 @@ class LWidget : public Widget, public TConfig
 	void saveIO( );
 
 	//> Data access
-	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
 
 	WidgetLib &ownerLib( );
-
-	bool	enableByNeed;   //Load and enable by need
 
     protected:
 	//Methods
@@ -168,7 +160,6 @@ class LWidget : public Widget, public TConfig
     private:
 	//Attributes
 	int	&m_proc_per;	//Widget period
-	string	mParentNmPrev;  //Previous parent name after successful enable
 };
 
 //************************************************
@@ -199,7 +190,6 @@ class CWidget : public Widget, public TConfig
 	void saveIO( );
 
 	//> Data access
-	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );

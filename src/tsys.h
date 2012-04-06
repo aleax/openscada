@@ -29,9 +29,8 @@
 #define PACKAGE_SITE	"http://oscada.org"
 
 //> Other system's constants
-#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace
-#define STR_BUF_LEN	10000	// Length of string buffers (no string class)
-#define NSTR_BUF_LEN	100	// Length of string buffers for number
+#define TO_FREE		NULL	// Object free
+#define STR_BUF_LEN	3000	// Len of string buffers (no string class)
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
 #define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	5	// Interface wait for long (s)
@@ -95,10 +94,10 @@ class TSYS : public TCntrNode
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS( );
 
-	int	start( );
-	void	stop( );
+	int  start( );
+	void stop( );
 
-	int	stopSignal( )	{ return mStopSignal; }
+	int stopSignal( )	{ return mStopSignal; }
 
 	//> Programs options
 	string	id( )		{ return mId.c_str(); }
@@ -107,10 +106,10 @@ class TSYS : public TCntrNode
 	string	user( )		{ return mUser; }	//Run user name
 	string	host( );
 
-	void	list( vector<string> &list )	{ chldList(mSubst,list); }
-	bool	present( const string &name )	{ return chldPresent(mSubst,name); }
-	void	add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
-	void	del( const string &name )	{ chldDel(mSubst,name); }
+	void list( vector<string> &list )	{ chldList(mSubst,list); }
+	bool present( const string &name )	{ return chldPresent(mSubst,name); }
+	void add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
+	void del( const string &name )		{ chldDel(mSubst,name); }
 	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst,name); }
 
 	AutoHD<TUIS>		ui( )		{ return at("UI"); }
@@ -123,37 +122,37 @@ class TSYS : public TCntrNode
 	AutoHD<TModSchedul>	modSchedul( )	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security( )	{ return at("Security"); }
 
-	string	workDir( );
-	string	icoDir( )	{ return mIcoDir; }
-	string	modDir( )	{ return mModDir; }
-	void	setWorkDir( const string &wdir );
-	void	setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
-	void	setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
+	string workDir( );
+	string icoDir( )	{ return mIcoDir; }
+	string modDir( )	{ return mModDir; }
+	void setWorkDir( const string &wdir );
+	void setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
+	void setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
 
 	//> Config-file functions
 	string cfgFile( )	{ return mConfFile; }
 	XMLNode &cfgRoot( )	{ return rootN; }
 	XMLNode *cfgNode( const string &path, bool create = false );
-	void	modifCfg( )	{ rootModifCnt++; }
+	void modifCfg( )	{ rootModifCnt++; }
 
-	string	workDB( )	{ return mWorkDB; }
-	string	selDB( )	{ return mSelDB; }
-	bool	chkSelDB( const string& wDB, bool isStrong = false );
-	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
-	void	setSelDB( const string &vl )	{ mSelDB = vl; }
-	bool	saveAtExit( )	{ return mSaveAtExit; }
-	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
-	int 	savePeriod( )	{ return mSavePeriod; }
-	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
+	string workDB( )	{ return mWorkDB; }
+	string selDB( )		{ return mSelDB; }
+	bool chkSelDB( const string& wDB, bool isStrong = false );
+	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
+	void setSelDB( const string &vl )	{ mSelDB = vl; }
+	bool saveAtExit( )	{ return mSaveAtExit; }
+	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }
+	int  savePeriod( )	{ return mSavePeriod; }
+	void setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 
-	string	optDescr( );	//print comand line options
+	string optDescr( );	//print comand line options
 
 	static void sighandler( int signal );
 
 	//> Short time dimensions
-	bool	multCPU( )	{ return mMultCPU; }
+	bool multCPU( )		{ return mMultCPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
-	void	clkCalc( );
+	void clkCalc( );
 	uint64_t shrtCnt( )
 	{
 #if defined (__i386__) || defined (__x86_64__)
@@ -166,12 +165,18 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	static int64_t curTime( );	//> Current system time (usec)
+	bool   cntrEmpty( );
+	double cntrGet( const string &id );
+	void   cntrSet( const string &id, double vl );
+	void   cntrIter( const string &id, double vl );
+
+	//Public system static methods
+	//> Current system time (usec)
+	static int64_t curTime( );
 
 	//> Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
 	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );
-	static bool taskEndRun( );      // Check for the task endrun by signal SIGUSR1
 
 	//> Sleep task for period grid <per> on ns or to cron time.
 	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
@@ -180,12 +185,6 @@ class TSYS : public TCntrNode
 
 	//> Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
-
-	//> System counters
-	bool	cntrEmpty( );
-	double	cntrGet( const string &id );
-	void	cntrSet( const string &id, double vl );
-	void	cntrIter( const string &id, double vl );
 
 	//> Convert value to string
 	static string int2str( int val, IntView view = Dec );
@@ -211,49 +210,48 @@ class TSYS : public TCntrNode
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 	static string strLine( const string &str, int level, int *off = NULL );
-	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
+	static string pathLev( const string &path, int level, bool encode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
 	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
 	static string strDecode( const string &in, Code tp = Custom );
 	static string strMess( const char *fmt, ... );
-	static string strLabEnum( const string &base );
 
 	static string strCompr( const string &in, int lev = -1 );
 	static string strUncompr( const string &in );
 
 	//> Unaligned read from memory for some ARM and other
-	static inline uint16_t getUnalign16( const void *p )
+	static inline uint16_t getUnalign16(const void *p)
 	{
 	    struct su16 { uint16_t x; } __attribute__((packed));
 	    const struct su16 *ptr = (const struct su16 *)p;
 	    return ptr->x;
 	}
-	static inline uint32_t getUnalign32( const void *p )
+	static inline uint32_t getUnalign32(const void *p)
 	{
 	    struct su32 { uint32_t x; } __attribute__((packed));
 	    const struct su32 *ptr = (const struct su32 *)p;
 	    return ptr->x;
 	}
-	static inline uint64_t getUnalign64( const void *p )
+	static inline uint64_t getUnalign64(const void *p)
 	{
 	    struct su64 { uint64_t x; } __attribute__((packed));
 	    const struct su64 *ptr = (const struct su64 *)p;
 	    return ptr->x;
 	}
-	static inline int getUnalignInt( const void *p )
+	static inline int getUnalignInt(const void *p)
 	{
 	    struct suInt { int x; } __attribute__((packed));
 	    const struct suInt *ptr = (const struct suInt *)p;
 	    return ptr->x;
 	}
-	static inline float getUnalignFloat( const void *p )
+	static inline float getUnalignFloat(const void *p)
 	{
 	    struct sFloat64 { float x; } __attribute__((packed));
 	    const struct sFloat64 *ptr = (const struct sFloat64 *)p;
 	    return ptr->x;
 	}
-	static inline double getUnalignDbl( const void *p )
+	static inline double getUnalignDbl(const void *p)
 	{
 	    struct sDbl { double x; } __attribute__((packed));
 	    const struct sDbl *ptr = (const struct sDbl *)p;
@@ -261,16 +259,10 @@ class TSYS : public TCntrNode
 	}
 
 	//> Endian convert
-	static float floatLE( float in );
-	static float floatLErev( float in );
-	static double doubleLE( double in );
-	static double doubleLErev( double in );
-
-	//> Reentrant commandline processing
-	string getCmdOpt( int &curPos, string *argVal = NULL );
-
-	//>> System control interface functions
-	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
+	static float floatLE(float in);
+	static float floatLErev(float in);
+	static double doubleLE(double in);
+	static double doubleLErev(double in);
 
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources
@@ -294,9 +286,9 @@ class TSYS : public TCntrNode
 		enum Flgs	{ Detached = 0x01, FinishTask = 0x02 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0)		{ }
+		STask( ) : thr(0), policy(0), prior(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0)		{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) :
-		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0)	{ }
+		    thr(ithr), policy(ipolicy), prior(iprior), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0)	{ }
 
 		//Attributes
 		string		path;
@@ -354,13 +346,6 @@ class TSYS : public TCntrNode
 
 	map<string,double>	mCntrs;
 };
-
-//*************************************************
-//* Global functions for OSCADA namespace         *
-inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2str(val, view); }
-inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
-inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
-inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 
 extern TSYS *SYS;
 }

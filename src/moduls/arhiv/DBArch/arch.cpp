@@ -21,6 +21,7 @@
 
 #include <sys/stat.h>
 #include <signal.h>
+#include <getopt.h>
 #include <string>
 
 #include <tsys.h>

@@ -117,15 +117,12 @@ class BDMod: public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod( );
+	~BDMod();
 
 	static string sqlReqCode( const string &req, char symb = '\'' );
 
-	AutoHD<MBD> at( const string &name )	{ return TTipBD::at(name); }
-
     protected:
 	//Methods
-	void modStop( );
 	void load_( );
 
     private:

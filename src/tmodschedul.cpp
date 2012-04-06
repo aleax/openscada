@@ -26,6 +26,7 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <getopt.h>
 #include <string.h>
 
 #include <string>
@@ -47,10 +48,10 @@ void TModSchedul::preDisable(int flag)
 {
     //> Detach all share libs
     ResAlloc res(nodeRes(),true);
-    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
-	if(SchHD[i_sh].hd)
+    for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
+	if( SchHD[i_sh].hd )
 	{
-	    while(SchHD[i_sh].use.size())
+	    while( SchHD[i_sh].use.size() )
 	    {
 		owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
 			modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
@@ -88,23 +89,37 @@ int TModSchedul::loadLibS( )
 void TModSchedul::load_( )
 {
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
-        else if(argCom == "ModPath")	SYS->setModDir(optarg);
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"     ,0,NULL,'h'},
+	{"ModPath"  ,1,NULL,'m'},
+	{NULL       ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,( char *const * ) SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case 'm': SYS->setModDir(optarg); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters from command line
     setChkPer(atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(chkPer())).c_str()));
     SYS->setModDir(TBDS::genDBGet(nodePath()+"ModPath",SYS->modDir()));
-    setAllowList(TBDS::genDBGet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg));
-    setDenyList(TBDS::genDBGet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg));
+    setAllowList(TBDS::genDBGet(nodePath()+"ModAllow",allowList(),"root",true));
+    setDenyList(TBDS::genDBGet(nodePath()+"ModDeny",denyList(),"root",true));
 }
 
 void TModSchedul::save_( )
 {
     TBDS::genDBSet(nodePath()+"ChkPer",TSYS::int2str(chkPer()));
-    TBDS::genDBSet(nodePath()+"ModAllow",allowList(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"ModDeny",denyList(),"root",TBDS::OnlyCfg);
 }
 
 void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
@@ -116,14 +131,14 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
     //> Check and append present files
     for(int off = 0; (Path=TSYS::strParse(Paths,0,",",&off)).size(); )
     {
-	dirent scan_dirent, *scan_rez = NULL;
+	dirent *scan_dirent;
 	DIR *IdDir = opendir(Path.c_str());
 	if(IdDir == NULL) continue;
 
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
+	while((scan_dirent=readdir(IdDir)) != NULL)
 	{
-	    if(strcmp("..",scan_rez->d_name) == 0 || strcmp(".",scan_rez->d_name) == 0) continue;
-	    NameMod = Path+"/"+scan_rez->d_name;
+	    if(strcmp("..",scan_dirent->d_name) == 0 || strcmp(".",scan_dirent->d_name) == 0) continue;
+	    NameMod = Path+"/"+scan_dirent->d_name;
 	    if(CheckFile(NameMod)) files.push_back(NameMod);
 	}
 	closedir(IdDir);
@@ -418,13 +433,10 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/ms",_("Subsystem"),R_R_R_,"root",SMSH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/ms/mod_path",_("Path to shared libs(modules)"),R_R_R_,"root",SMSH_ID,1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),RWRWR_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) deny for auto connection.\n"
-		         "Elements separated by symbol ';'."));
-	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),RWRWR_,"root",SMSH_ID,2,"tp","str",
-		"help",_("List of shared libs(modules) allowed for auto connection.\n"
-		         "Elements separated by symbol ';'.\n"
-		         "Value '*' used for allow all modules."));
+	    ctrMkNode("fld",opt,-1,"/ms/mod_allow",_("Allowed modules"),R_R_R_,"root",SMSH_ID,2,"tp","str",
+		"help",_("List of shared libs(modules) allow for auto connection.\nElements separated by symbol ';'.\nValue '*' is used for allow all modules."));
+	    ctrMkNode("fld",opt,-1,"/ms/mod_deny",_("Denied modules"),R_R_R_,"root",SMSH_ID,2,"tp","str",
+		"help",_("List of shared libs(modules) deny for auto connection.\nElements separated by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/ms/chk_per",_("Check modules period (sec)"),RWRWR_,"root",SMSH_ID,1,"tp","dec");
 	    ctrMkNode("comm",opt,-1,"/ms/chk_now",_("Check modules now."),RWRW__,"root",SMSH_ID);
 	    if(ctrMkNode("table",opt,-1,"/ms/libs",_("Shared libs(modules)"),RWRWR_,"root",SMSH_ID,1,"key","path"))
@@ -442,16 +454,8 @@ void TModSchedul::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/ms/mod_path" && ctrChkNode(opt,"get"))	opt->setText(SYS->modDir());
-    else if(a_path == "/ms/mod_deny")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SMSH_ID,SEC_RD))	opt->setText(denyList());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SMSH_ID,SEC_WR))	setDenyList(opt->text());
-    }
-    else if(a_path == "/ms/mod_allow")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SMSH_ID,SEC_RD))	opt->setText(allowList());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SMSH_ID,SEC_WR))	setAllowList(opt->text());
-    }
+    else if(a_path == "/ms/mod_allow" && ctrChkNode(opt,"get"))	opt->setText(allowList());
+    else if(a_path == "/ms/mod_deny" && ctrChkNode(opt,"get"))	opt->setText(denyList());
     else if(a_path == "/ms/chk_per")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SMSH_ID,SEC_RD))	opt->setText(TSYS::int2str(chkPer()));

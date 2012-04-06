@@ -98,7 +98,6 @@ class TCfg : public TVariant
 	void	setB( char val, char RqFlg );
 
 	TCfg	&operator=( const string &vl )	{ setS(vl); return *this; }
-	TCfg	&operator=( const char *vl )	{ setS(vl); return *this; }
 	TCfg	&operator=( double vl )	{ setR(vl); return *this; }
 	TCfg	&operator=( int vl )	{ setI(vl); return *this; }
 	TCfg	&operator=( bool vl )	{ setB(vl); return *this; }

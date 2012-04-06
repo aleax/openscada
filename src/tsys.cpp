@@ -27,20 +27,17 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/utsname.h>
-#include <sys/resource.h>
-#include <dirent.h>
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <getopt.h>
 #include <stdio.h>
 #include <signal.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <langinfo.h>
 #include <zlib.h>
-
-#include <algorithm>
 
 #include "terror.h"
 #include "tmess.h"
@@ -88,7 +85,6 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //signal(SIGFPE,sighandler);
     //signal(SIGSEGV,sighandler);
     signal(SIGABRT,sighandler);
-    signal(SIGUSR1,sighandler);
 }
 
 TSYS::~TSYS( )
@@ -108,15 +104,7 @@ TSYS::~TSYS( )
 
     delete Mess;
     pthread_key_delete(sTaskKey);
-
-#if OSC_DEBUG >= 1
-    ResAlloc res(nodeRes(), false);
-    string cntrsStr;
-    for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
-	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
-    printf(_("System counters on exit: %s"),cntrsStr.c_str());
-#endif
-} 
+}
 
 string TSYS::host( )
 {
@@ -132,7 +120,7 @@ string TSYS::workDir( )
 
 void TSYS::setWorkDir( const string &wdir )
 {
-    if(wdir.empty() || workDir() == wdir) return;
+    if(workDir() == wdir) return;
     if(chdir(wdir.c_str()) != 0)
 	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
 	    wdir.c_str(),strerror(errno),workDir().c_str());
@@ -180,50 +168,41 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 
 string TSYS::int2str( int val, TSYS::IntView view )
 {
-    char buf[NSTR_BUF_LEN];
-    switch(view)
-    {
-	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", (unsigned)val);	break;
-	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", (unsigned)val);	break;
-	default: snprintf(buf, sizeof(buf), "%d", val);				break;
-    }
+    char buf[STR_BUF_LEN];
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%d",val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
+
     return buf;
 }
 
 string TSYS::uint2str( unsigned val, IntView view )
 {
-    char buf[NSTR_BUF_LEN];
-    switch(view)
-    {
-	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", val);	break;
-	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", val);	break;
-	default: snprintf(buf, sizeof(buf), "%u", val);		break;
-    }
+    char buf[STR_BUF_LEN];
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%u",val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
+
     return buf;
 }
 
 string TSYS::ll2str( int64_t val, IntView view )
 {
-    char buf[NSTR_BUF_LEN];
-    switch(view)
-    {
-	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%llo", (long long unsigned int)val);	break;
-	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%llx", (long long unsigned int)val);	break;
-	default: snprintf(buf, sizeof(buf), "%lld", (long long int)val);			break;
-    }
+    char buf[STR_BUF_LEN];
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",val);
+
     return buf;
 }
 
 string TSYS::real2str( double val, int prec, char tp )
 {
-    char buf[NSTR_BUF_LEN];
-    prec = vmax(0, prec);
-    switch(tp)
-    {
-	case 'g': snprintf(buf, sizeof(buf), "%.*g", prec, val);	break;
-	case 'e': snprintf(buf, sizeof(buf), "%.*e", prec, val);	break;
-	default: snprintf(buf, sizeof(buf), "%.*f", prec, val);		break;
-    }
+    char buf[STR_BUF_LEN];
+    if(tp == 'g') snprintf(buf,sizeof(buf),"%.*g",prec,val);
+    else if(tp == 'e') snprintf(buf,sizeof(buf),"%.*e",prec,val);
+    else snprintf(buf,sizeof(buf),"%.*f",prec,val);
+
     return buf;
 }
 
@@ -308,26 +287,6 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
-string TSYS::strLabEnum( const string &base )
-{
-    //> Get number from end
-    unsigned numbDig = base.size(), numbXDig = base.size();
-    bool noDig = false;
-    for(int i_c = base.size()-1; i_c >= 0; i_c--)
-    {
-	if(!noDig && isdigit(base[i_c])) numbDig = i_c; else noDig = true;
-	if(!(isxdigit(base[i_c]) || (i_c && strncasecmp(base.c_str()+i_c-1,"0x",2) == 0))) break;
-	else if(!isxdigit(base[i_c])) { numbXDig = i_c-1; break; }
-    }
-
-    //> Process number and increment
-    if(numbXDig < numbDig && (base.size()-numbXDig) > 2 && strncasecmp(base.c_str()+numbXDig,"0x",2) == 0)
-	return base.substr(0, numbXDig) + "0x" + int2str(strtol(base.c_str()+numbXDig,NULL,16)+1, TSYS::Hex);
-    if((base.size()-numbDig) > 1 && base[numbDig] == '0')
-	return base.substr(0, numbDig) + "0" + int2str(strtol(base.c_str()+numbDig,NULL,8)+1, TSYS::Oct);
-    return base.substr(0, numbDig) + int2str(strtol(base.c_str()+numbDig,NULL,0)+1);
-}
-
 string TSYS::optDescr( )
 {
     utsname buf;
@@ -341,8 +300,7 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"-h, --help             Info message about system options.\n"
 	"    --Config=<path>    Config-file path.\n"
-	"    --Station=<id>     The station identifier.\n"
-	"    --StatName=<name>  The station name.\n"
+	"    --Station=<id>     Station identifier.\n"
 	"    --demon            Start into demon mode.\n"
 	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
 	"    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -363,47 +321,10 @@ string TSYS::optDescr( )
 	"                           <direct> & 2 - stdout;\n"
 	"                           <direct> & 4 - stderr;\n"
 	"                           <direct> & 8 - archive.\n"
-	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"SaveAtExit <true>      Save system at exit.\n"
 	"SavePeriod <sec>	Save system period.\n\n"),
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
-}
-
-string TSYS::getCmdOpt( int &curPos, string *argVal )
-{
-    size_t fPos;
-    int argI = curPos&0xFF;
-    int argIsh = (curPos>>8)&0xFF;
-    if(argI >= argc) return "";
-    for(int argLen = 0; argI < argc; argI++, argIsh=0)
-    {
-	argLen = strlen(argv[argI]);
-	if(argLen < 2 || argv[argI][0] != '-') continue;
-	//> Check for long: "--var", "--var=val" or "--var val"
-	if(argv[argI][1] == '-')
-	{
-	    curPos = argI+1;
-	    string rez = string(argv[argI]+2);
-	    if((fPos=rez.find("=")) != string::npos)
-	    {
-		if(argVal) *argVal = rez.substr(fPos+1);
-		return rez.substr(0,fPos);
-	    }
-	    if(argVal) *argVal = ((argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
-	    return rez;
-	}
-	//> Check for short: "-v", "-v val", "-abcv" or "-abcv val"
-	else
-	{
-	    if((argIsh+1) >= argLen) continue;
-	    curPos = argI+((argIsh+1)<<8);
-	    if(argVal) *argVal = ((argIsh+2) == argLen && (argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
-	    return string(argv[argI]+argIsh+1,1);
-	}
-    }
-
-    return "";
 }
 
 bool TSYS::cfgFileLoad( )
@@ -411,17 +332,32 @@ bool TSYS::cfgFileLoad( )
     bool cmd_help = false;
 
     //================ Load parameters from commandline =========================
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"     ,0,NULL,'h'},
+	{"Config"   ,1,NULL,'f'},
+	{"Station"  ,1,NULL,'s'},
+	{NULL       ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
+	switch(next_opt)
 	{
-	    fprintf(stdout,"%s",optDescr().c_str());
-	    Mess->setMessLevel(7);
-	    cmd_help = true;
+	    case 'h':
+		fprintf(stdout,"%s",optDescr().c_str());
+		Mess->setMessLevel(7);
+		cmd_help = true;
+		break;
+	    case 'f': mConfFile = optarg; break;
+	    case 's': mId = optarg; break;
+	    case -1 : break;
 	}
-	else if(argCom == "Config") 	mConfFile = argVl;
-	else if(argCom == "Station")	mId = argVl;
-	else if(argCom == "StatName")	mName = argVl;
+    } while(next_opt != -1);
 
     //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
@@ -456,9 +392,8 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId)
 		{
-		    if(mId != "EmptySt")
-			mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
-			    mId.c_str(), stat_n->attr("id").c_str());
+		    mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
+			mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
@@ -491,9 +426,9 @@ void TSYS::cfgPrmLoad( )
     //System parameters
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str());
-    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg));
-    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg));
+    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir").c_str());
+    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir()));
+    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir()));
     setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
     setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
 }
@@ -561,10 +496,9 @@ void TSYS::save_( )
     //> System parameters
     getcwd(buf,sizeof(buf));
     TBDS::genDBSet(nodePath()+"StName",mName,"root",TBDS::UseTranslate);
-    TBDS::genDBSet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"Workdir",buf,"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"Workdir",buf);
+    TBDS::genDBSet(nodePath()+"IcoDir",icoDir());
+    TBDS::genDBSet(nodePath()+"ModDir",modDir());
     TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod",TSYS::int2str(savePeriod()));
 
@@ -677,9 +611,7 @@ void TSYS::sighandler( int signal )
 	case SIGABRT:
 	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA is aborted!"));
 	    break;
-	case SIGALRM:
-	case SIGUSR1:
-            break;
+	case SIGALRM:	break;
 	default:
 	    mess_warning(SYS->nodePath().c_str(),_("Unknown signal %d!"),signal);
     }
@@ -838,7 +770,7 @@ string TSYS::strLine( const string &str, int level, int *off )
     return "";
 }
 
-string TSYS::pathLev( const string &path, int level, bool decode, int *off )
+string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
@@ -854,12 +786,12 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 	if( t_dir == string::npos )
 	{
 	    if( off ) *off = path.size();
-	    return (t_lev == level) ? ( decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
+	    return (t_lev == level) ? ( encode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
 	}
 	else if( t_lev == level )
 	{
 	    if( off ) *off = t_dir;
-	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
+	    return encode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
 	}
 	an_dir = t_dir;
 	t_lev++;
@@ -871,8 +803,9 @@ string TSYS::path2sepstr( const string &path, char sep )
 {
     string rez, curv;
     int off = 0;
-    while(!(curv=TSYS::pathLev(path,0,false,&off)).empty()) rez += curv+sep;
-    if(!rez.empty()) rez.resize(rez.size()-1);
+    while( !(curv=TSYS::pathLev(path,0,false,&off)).empty() )
+	rez+=curv+sep;
+    if(!rez.empty())	rez.resize(rez.size()-1);
 
     return rez;
 }
@@ -881,7 +814,8 @@ string TSYS::sepstr2path( const string &str, char sep )
 {
     string rez, curv;
     int off = 0;
-    while(!(curv=TSYS::strSepParse(str,0,sep,&off)).empty()) rez += "/"+curv;
+    while( !(curv=TSYS::strSepParse(str,0,sep,&off)).empty() )
+	rez+="/"+curv;
 
     return rez;
 }
@@ -1203,7 +1137,7 @@ string TSYS::strUncompr( const string &in )
 float TSYS::floatLE(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_float ieee754_be;
+    ieee754_double ieee754_be;
     union ieee754_le
     {
 	float f;
@@ -1229,7 +1163,7 @@ float TSYS::floatLE(float in)
 float TSYS::floatLErev(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_float ieee754_be;
+    ieee754_double ieee754_be;
     union ieee754_le
     {
 	float f;
@@ -1323,7 +1257,7 @@ double TSYS::cntrGet( const string &id )
 {
     ResAlloc res( nodeRes(), false );
     map<string,double>::iterator icnt = mCntrs.find(id);
-    if(icnt == mCntrs.end())	return 0;
+    if( icnt == mCntrs.end() )	return 0;
     return icnt->second;
 }
 
@@ -1347,18 +1281,10 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     map<string,STask>::iterator ti;
 
     ResAlloc res(taskRes, true);
-    for(time_t c_tm = time(NULL); (ti=mTasks.find(path)) != mTasks.end(); )
+    for(time_t c_tm = time(NULL); mTasks.find(path) != mTasks.end(); )
     {
-        //> Remove created and finished but not destroyed task
-        if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached))
-        {
-            pthread_join(ti->second.thr, NULL);
-            mTasks.erase(ti);
-            continue;
-        }
-        res.release();
-        //> Error by this active task present
 	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
+	res.release();
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1367,8 +1293,6 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.task = start_routine;
     htsk.taskArg = arg;
     htsk.flgs = 0;
-    htsk.thr = 0;
-    htsk.prior = priority;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1385,7 +1309,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 #if __GLIBC_PREREQ(2,4)
     if(priority < 0)	policy = SCHED_BATCH;
 #endif
-    if(priority > 0)	policy = SCHED_RR;
+    if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
     pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
@@ -1397,7 +1321,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM)
 	{
-	    mess_warning(nodePath().c_str(), _("No permission for create real-time policy for '%s'. Default thread is created!"), path.c_str());
+	    mess_warning(nodePath().c_str(),_("No permission for create real-time policy. Default thread is created!"));
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
@@ -1409,7 +1333,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
 
 	//> Wait for thread structure initialization finish for not detachable tasks
-	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
+	while(!(htsk.flgs&STask::Detached) && !htsk.thr) sched_yield();
 	//> Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); )
 	{
@@ -1428,52 +1352,42 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSignal )
 {
-    map<string,STask>::iterator it;
     ResAlloc res(taskRes, false);
-    if(mTasks.find(path) == mTasks.end()) return;
+    map<string,STask>::iterator it = mTasks.find(path);
+    if(it == mTasks.end()) return;
+    pthread_t thr = it->second.thr;
     res.release();
 
     if(endrunCntr) *endrunCntr = true;
+    if(!noSignal) pthread_kill(thr, SIGALRM);
 
     //> Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
     t_tm = s_tm = time(NULL);
-    bool first = true;
-    res.request(true);
-    while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask))
+    while(!(it->second.flgs&STask::FinishTask))
     {
-	if(first) pthread_kill(it->second.thr, SIGUSR1);        //> User's termination signal, check for it by function taskEndRun()
-	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
-	res.release();
-
+        if(!noSignal) pthread_kill(thr, SIGALRM);
 	time_t c_tm = time(NULL);
-	//Check timeout
+        //Check timeout
         if(wtm && (c_tm > (s_tm+wtm)))
         {
             mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
 	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
         }
 	//Make messages
-	if(c_tm > t_tm+1)  //1sec
+        if(c_tm > t_tm+1)  //1sec
         {
             t_tm = c_tm;
             mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
+
         }
         sysSleep(STD_WAIT_DELAY*1e-3);
-        first = false;
-        res.request(true);
     }
-    if(it != mTasks.end())
-    {
-        if(!(it->second.flgs&STask::Detached)) pthread_join(it->second.thr, NULL);
-        mTasks.erase(it);
-    }
-}
 
-bool TSYS::taskEndRun( )
-{
-    sigset_t sigset;
-    return sigpending(&sigset) == 0 && sigismember(&sigset,SIGUSR1);
+    if(!(it->second.flgs&STask::Detached)) pthread_join(thr, NULL);
+
+    res.request(true);
+    mTasks.erase(it);
 }
 
 void *TSYS::taskWrap( void *stas )
@@ -1491,7 +1405,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    //tsk->prior = param.sched_priority;
+    tsk->prior = param.sched_priority;
 
 #if __GLIBC_PREREQ(2,4)
     //> Load and init CPU set
@@ -1511,15 +1425,7 @@ void *TSYS::taskWrap( void *stas )
 
     //> Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
-    //>> Set nice level without realtime if it no permitted
-    if(tsk->policy != SCHED_RR && tsk->prior > 0 && setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0) tsk->prior = 0;
-    tsk->thr = pthread_self();		//Task creation finish
-
-    //> Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
-    sigset_t mask;
-    sigemptyset(&mask);
-    sigaddset(&mask, SIGUSR1);
-    pthread_sigmask(SIG_BLOCK, &mask, NULL);
+    tsk->thr = pthread_self();
 
     //> Call work task
     void *rez = NULL;
@@ -1827,7 +1733,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().fromXMLNode(req);
 	return string("0");
     }
-    // int sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
+    // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1)
@@ -1835,7 +1741,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
 	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
-	return nanosleep(&sp_tm,NULL);
+	int rez = nanosleep(&sp_tm,NULL);
+	return rez;
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
@@ -1874,42 +1781,6 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(prms.size() >= 9) 	{ prms[8].setI(tm_tm.tm_yday); prms[8].setModify(); }
 	if(prms.size() >= 10) 	{ prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
 	return 0;
-    }
-    // int mktime(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
-    //      - return time since the Epoch 1.1.1970 converted from broken-down time
-    //  sec - seconds
-    //  min - minutes
-    //  hour - hours
-    //  mday - days of the month
-    //  month - months
-    //  year - years
-    //  wday - days in the week
-    //  yday - days in the year
-    //  isdst - sign of summer time
-    if(iid == "mktime")
-    {
-	struct tm tm_tm;
-	tm_tm.tm_sec	= (prms.size()>=1) ? prms[0].getI() : 0;
-	tm_tm.tm_min	= (prms.size()>=2) ? prms[1].getI() : 0;
-	tm_tm.tm_hour	= (prms.size()>=3) ? prms[2].getI() : 0;
-	tm_tm.tm_mday	= (prms.size()>=4) ? prms[3].getI() : 0;
-	tm_tm.tm_mon	= (prms.size()>=5) ? prms[4].getI() : 0;
-	tm_tm.tm_year	= (prms.size()>=6) ? prms[5].getI()-1900 : 0;
-	tm_tm.tm_wday	= (prms.size()>=7) ? prms[6].getI() : -1;
-	tm_tm.tm_yday	= (prms.size()>=8) ? prms[7].getI() : -1;
-	tm_tm.tm_isdst	= (prms.size()>=9) ? prms[8].getI() : -1;
-	time_t rez = mktime(&tm_tm);
-	if(prms.size() >= 1)	{ prms[0].setI(tm_tm.tm_sec);	prms[0].setModify(); }
-	if(prms.size() >= 2)	{ prms[1].setI(tm_tm.tm_min);	prms[1].setModify(); }
-	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_hour);	prms[2].setModify(); }
-	if(prms.size() >= 4)	{ prms[3].setI(tm_tm.tm_mday);	prms[3].setModify(); }
-	if(prms.size() >= 5)	{ prms[4].setI(tm_tm.tm_mon);	prms[4].setModify(); }
-	if(prms.size() >= 6)	{ prms[5].setI(1900+tm_tm.tm_year); prms[5].setModify(); }
-	if(prms.size() >= 7)	{ prms[6].setI(tm_tm.tm_wday);	prms[6].setModify(); }
-	if(prms.size() >= 8)	{ prms[7].setI(tm_tm.tm_yday);	prms[7].setModify(); }
-	if(prms.size() >= 9)	{ prms[8].setI(tm_tm.tm_isdst);	prms[8].setModify(); }
-
-	return (int)rez;
     }
     // string strftime(int sec, string form = "%Y-%m-%d %H:%M:%S") - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
@@ -1960,60 +1831,6 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 
-void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
-{
-    int pathLev = 0;
-    //> Source path check and normalize
-    bool fromRoot = (fsBaseIn.size() && fsBaseIn[0] == '/');
-    nd->childAdd("el")->setText("/");
-    if(TSYS::pathLev(fsBaseIn,0) != ".") nd->childAdd("el")->setText(".");
-    string fsBase, tEl;
-    for(int off = 0; (tEl=TSYS::pathLev(fsBaseIn,0,false,&off)).size(); pathLev++)
-    {
-        fsBase += ((pathLev || fromRoot)?"/":"")+tEl;
-        nd->childAdd("el")->setText(fsBase);
-    }
-    if(fromRoot && pathLev == 0) fsBase = "/";
-    //> Previous items set
-    if(!fromRoot)
-    {
-        if(pathLev == 0) nd->childAdd("el")->setText("..");
-        else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
-    }
-    //> From work directory check
-    string fsBaseCor = fsBase;
-    if(!fsBaseCor.size() || (fsBaseCor[0] != '/' && fsBaseCor[0] != '.')) fsBaseCor = "./"+fsBaseCor;
-    //> Child items process
-    vector<string> its, fits;
-    DIR *IdDir = opendir(fsBaseCor.c_str());
-    if(IdDir != NULL)
-    {
-        dirent sDir, *sDirRez = NULL;
-        while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
-        {
-            if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
-            if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
-                    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
-                    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
-                fits.push_back(sDirRez->d_name);
-            else if(sDirRez->d_type == DT_REG && fileExt.size())
-            {
-                tEl = sDirRez->d_name;
-                size_t extPos = tEl.rfind(".");
-                tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
-                if(fileExt == "*" || (tEl.size() && fileExt.find(tEl+";") != string::npos)) fits.push_back(sDirRez->d_name);
-            }
-        }
-        closedir(IdDir);
-    }
-    sort(its.begin(),its.end());
-    for(unsigned i_it = 0; i_it < its.size(); i_it++)
-        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
-    sort(fits.begin(),fits.end());
-    for(unsigned i_it = 0; i_it < fits.size(); i_it++)
-        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
-}
-
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[STR_BUF_LEN];
@@ -2030,7 +1847,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_))
 	{
 	    ctrMkNode("fld",opt,-1,"/gen/id",_("ID"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station name"),RWRWR_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Program"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/ver",_("Version"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
@@ -2040,9 +1857,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
-	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/icoDirList");
-	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root","root",2,"tp","bool",
@@ -2050,15 +1867,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
-		"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
+	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
 		"help",_("Multilingual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_))
 	    {
-		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
-		    "sel_id","0;1;2;3;4;5;6;7",
-		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
-		    "help",_("Least messages level which process by the system."));
+		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",3,
+		    "tp","dec","len","1","help",_("Least messages level which process by the system."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),RWRWR_,"root","root",1,"tp","bool");
@@ -2147,22 +1961,19 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/workdir")
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
+	if(ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD))	opt->setText(workDir());
+	if(ctrChkNode(opt,"set",R_R___,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
     }
-    else if(a_path == "/gen/workDirList" && ctrChkNode(opt))	ctrListFS(opt, workDir());
     else if(a_path == "/gen/icodir")
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
+	if(ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD))	opt->setText(icoDir());
+	if(ctrChkNode(opt,"set",R_R___,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
     }
-    else if(a_path == "/gen/icoDirList" && ctrChkNode(opt))	ctrListFS(opt, icoDir());
     else if(a_path == "/gen/moddir")
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(modDir());
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setModDir(opt->text().c_str());
+	if(ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD))	opt->setText(modDir());
+	if(ctrChkNode(opt,"set",R_R___,"root","root",SEC_WR))	setModDir(opt->text().c_str());
     }
-    else if(a_path == "/gen/modDirList" && ctrChkNode(opt))     ctrListFS(opt, modDir());
     else if(a_path == "/gen/lang")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());

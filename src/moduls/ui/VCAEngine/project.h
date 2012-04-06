@@ -80,7 +80,6 @@ class Project : public TCntrNode, public TConfig
 	//> Enable stat
 	bool enable( )			{ return mEnable; }
 	void setEnable( bool val );
-	void setEnableByNeed( );
 
 	//> Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
@@ -106,9 +105,6 @@ class Project : public TCntrNode, public TConfig
 	void stlPropList( vector<string> &ls );
 	string stlPropGet( const string &pid, const string &def = "", int sid = -1 );
 	bool stlPropSet( const string &pid, const string &vl, int sid = -1 );
-
-	//Attributes
-	bool	enableByNeed;	//Load and enable by need
 
     protected:
 	//Methods
@@ -202,7 +198,6 @@ class Page : public Widget, public TConfig
 	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
 	//> Data access
-	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -232,7 +227,6 @@ class Page : public Widget, public TConfig
 	int	mPage;		//Page container identifier
 	int	&mFlgs,		//Project's flags
 		&mProcPer;	//Process period
-	string	mParentNmPrev;	//Previous parent name after successful enable
 };
 
 //************************************************
@@ -265,7 +259,6 @@ class PageWdg : public Widget, public TConfig
 	void saveIO( );
 
 	//> Data access
-	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );

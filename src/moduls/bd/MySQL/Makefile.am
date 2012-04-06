@@ -12,4 +12,3 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)MySQL
-include ../../../../I18N.mk

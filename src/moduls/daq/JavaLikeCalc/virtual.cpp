@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <signal.h>
+#include <getopt.h>
 #include <sys/time.h>
 #include <sys/times.h>
 
@@ -125,7 +126,7 @@ void TipContr::postEnable( int flag )
     fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
     fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
-    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"1000000") );
+    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"10000") );
 
     //> Function's IO structure
     fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"20") );
@@ -199,7 +200,7 @@ void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 	shgl.childAdd("rule")->setAttr("expr","\\b(if|else|for|while|in|using|new|var|break|continue|return|Array|Object|RegExp)\\b")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\?|\\:)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*\\.?[0-9]+|[0-9]*\\.?[0-9]+[eE][-+]?[0-9]*|true|false)\\b")->setAttr("color","darkorange");
-	shgl.childAdd("rule")->setAttr("expr","(\\=|\\!|\\+|\\-|\\>|\\<|\\*|\\/|\\%|\\||\\&|\\^)")->setAttr("color","darkblue")->setAttr("font_weight","1");
+	shgl.childAdd("rule")->setAttr("expr","(\\=|\\!|\\+|\\-|\\>|\\<|\\*|\\/|\\%|\\||\\&)")->setAttr("color","darkblue")->setAttr("font_weight","1");
 	shgl.childAdd("rule")->setAttr("expr","(\\;|\\,|\\{|\\}|\\[|\\]|\\(|\\))")->setAttr("color","blue");
     }
 }
@@ -249,7 +250,7 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
-	throw TError(nodePath().c_str(),_("Compile error: %s"),err.mess.c_str());
+	throw TError(nodePath().c_str(),_("Compile error: %s\n"),err.mess.c_str());
     }
 
     return func.at().nodePath(0,true);
@@ -509,7 +510,6 @@ void Contr::save_( )
 
 void Contr::start_( )
 {
-    call_st = false;
     ((Func *)func())->setStart(true);
 
     //> Link to special atributes
@@ -523,13 +523,13 @@ void Contr::start_( )
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Start the request data task
-    SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
+    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
 }
 
 void Contr::stop_( )
 {
     //> Stop the request and calc data task
-    SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
 void *Contr::Task( void *icntr )
@@ -627,10 +627,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/FUNC",cfg("FUNC").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/cntr/flst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	if(enableStat() && ctrMkNode("area",opt,-1,"/fnc",_("Calculation")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/fnc/io",_("Data"),RWRWR_,"root",SDAQ_ID,2,"s_com","add,del,ins,move","rows","15"))
@@ -638,8 +637,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Text;Object"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::String,IO::Integer,IO::Real,IO::Boolean,IO::Object).c_str(),
+		    "sel_list",_("String;Integer;Real;Boolean;Object"));
 		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
@@ -688,7 +687,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(func()->io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(func()->io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(func()->io(id)->type()|((func()->io(id)->flg()&IO::FullText)<<8)));
+		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(func()->io(id)->type()));
 		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(func()->io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }
@@ -719,11 +718,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    {
 		case 0:	func()->io(row)->setId(opt->text());	break;
 		case 1:	func()->io(row)->setName(opt->text());	break;
-		case 2:
-		    func()->io(row)->setType((IO::Type)(atoi(opt->text().c_str())&0xFF));
-                    func()->io(row)->setFlg(func()->io(row)->flg()^((func()->io(row)->flg()^(atoi(opt->text().c_str())>>8))&IO::FullText));
-		    break;
-		case 3:	func()->io(row)->setFlg(func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)));	break;
+		case 2:	func()->io(row)->setType((IO::Type)atoi(opt->text().c_str()));	break;
+		case 3:	func()->io(row)->setFlg( func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)) );	break;
 		case 4:	setS(row,opt->text());	break;
 	    }
 	    modif();
@@ -794,16 +790,15 @@ void Prm::enable()
 	anm    = TSYS::strSepParse(mio,2,':');
 	if( aid.empty() ) aid = ionm;
 
-	int io_id = ((Contr &)owner()).ioId(ionm);
-	if(io_id < 0)	continue;
+	int	io_id = ((Contr &)owner()).ioId(ionm);
+	if( io_id < 0 )	continue;
 
 	unsigned	flg = TVal::DirWrite|TVal::DirRead;
-	if(((Contr &)owner()).ioFlg(io_id)&IO::FullText)		flg |= TFld::FullText;
-	if(!(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)))flg |= TFld::NoWrite;
+	if( !(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)) ) flg |= TFld::NoWrite;
 	TFld::Type	tp  = TFld::type(((Contr &)owner()).ioType(io_id));
-	if(!v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg)
+	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
 	{
-	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
+	    if( v_el.fldPresent(aid) ) v_el.fldDel(v_el.fldId(aid));
 	    v_el.fldAdd(new TFld(aid.c_str(),"",tp,flg));
 	}
 
@@ -843,7 +838,7 @@ Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
 
 void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
-    if(!enableStat())	return;
+    if( !enableStat() ) return;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
@@ -884,13 +879,11 @@ void Prm::vlGet( TVal &val )
 
 void Prm::vlArchMake( TVal &val )
 {
-    TParamContr::vlArchMake(val);
-
-    if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
 }
 
 void Prm::cntrCmdProc( XMLNode *opt )

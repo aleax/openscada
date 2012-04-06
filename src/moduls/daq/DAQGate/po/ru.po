@@ -1,13 +1,14 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
+# Copyright (C) 2007-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2007-2013.
+# Roman Savochenko <rom_as@fromru.com>, 2007-2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-29 16:39+0300\n"
+"POT-Creation-Date: 2011-11-22 13:22+0200\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -43,16 +44,10 @@ msgstr "Уровень приоритета задачи сбора данных
 msgid "Restore timeout (s)"
 msgstr "Интервал восстановления (с)"
 
-msgid "Restore data depth time (hour)"
-msgstr "Глубина времени восстановления данных (часов)"
-
-msgid "Gather messages level"
-msgstr "Уровень запрашиваемых сообщений"
-
-msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
+msgid "Restore data depth time (hour). Zero for disable archive access."
 msgstr ""
+"Глубина времени восстановления данных (часов). Ноль для отключения доступа к "
+"архивам."
 
 msgid "Sync inter remote station period (s)"
 msgstr "Периодичность синхронизации с удалённой станцией (с)"
@@ -100,28 +95,8 @@ msgstr ""
 "Ошибка удаления параметра '%s', однако он отсутствует в конфигурации или на "
 "удалённой станции."
 
-#, c-format
-msgid "DAQ.%s: connect to data source: %s."
-msgstr "DAQ.%s: подключение к источнику данных: %s."
-
-msgid "STOP"
-msgstr "ОСТАНОВЛЕН"
-
 msgid "10:Data not allow."
 msgstr "10:Данные не доступны."
-
-msgid "OK"
-msgstr "НОРМА"
-
-#, c-format
-msgid "DAQ.%s: connect to data source '%s': %s."
-msgstr "DAQ.%s: подключение к источнику данных '%s': %s."
-
-msgid "Zero for disable archive access."
-msgstr "Ноль для отключения доступа к архивам."
-
-msgid "Zero for disable periodic sync."
-msgstr "Ноль для отключения периодической синхронизации."
 
 msgid "Remote OpenSCADA stations' identifiers list used into it controller."
 msgstr ""

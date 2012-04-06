@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <string.h>
 #include <string>
 
@@ -92,7 +93,7 @@ TProt::~TProt( )
 
 int TProt::sesOpen( const char *user,const char *pass )
 {
-    if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass))
+    if( !SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass) )
 	return -1;
 
     //> Check sesion and close old sesion
@@ -303,7 +304,7 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     if( req.substr(0,8) == "SES_OPEN" )
     {
 	sscanf(req.c_str(),"SES_OPEN %255s %255s",user,pass);
-	ses_id = mod->sesOpen(user, pass);
+	ses_id = mod->sesOpen( user, pass );
 	if(ses_id < 0)	answer = "REZ 1 Auth error. User or password error.\n";
 	else answer = "REZ 0 "+TSYS::int2str(ses_id)+"\n";
     }

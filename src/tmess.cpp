@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <langinfo.h>
+#include <getopt.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
@@ -46,7 +47,7 @@ using namespace OSCADA;
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE), mConvCode(true), mIsUTF8(true)
+TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2), mConvCode(true), mIsUTF8(true)
 {
     setenv("LC_NUMERIC","C",1);
     openlog(PACKAGE,0,LOG_USER);
@@ -74,7 +75,7 @@ TMess::~TMess(  )
 
 void TMess::setMessLevel( int level )
 {
-    mMessLevel = vmax(Debug, vmin(Crit,level));
+    mMessLevel = vmax(0,vmin(5,level));
     SYS->modif();
 }
 
@@ -93,16 +94,16 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     vsnprintf(mess,sizeof(mess),fmt,argptr);
     va_end(argptr);
 
-    level = vmin(Emerg, vmax(-Emerg,level));
-    if(abs(level) < messLevel()) return;
+    level = vmin(Emerg,vmax(-Emerg,level));
+    if( abs(level) < messLevel() ) return;
 
     int64_t ctm = TSYS::curTime();
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
 
-    if(mLogDir & DIR_SYSLOG)
+    if( mLogDir&1 )
     {
 	int level_sys;
-	switch(abs(level))
+	switch( abs(level) )
 	{
 	    case Debug:		level_sys = LOG_DEBUG;	break;
 	    case Info:		level_sys = LOG_INFO;	break;
@@ -114,17 +115,17 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	    case Emerg:		level_sys = LOG_EMERG;	break;
 	    default: 		level_sys = LOG_DEBUG;
 	}
-	syslog(level_sys, "%s", s_mess.c_str());
+	syslog(level_sys,"%s",s_mess.c_str());
     }
-    if(mLogDir & DIR_STDOUT)	fprintf(stdout, "%s \n", s_mess.c_str());
-    if(mLogDir & DIR_STDERR)	fprintf(stderr, "%s \n", s_mess.c_str());
-    if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
-	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
+    if( mLogDir&2 ) fprintf(stdout,"%s \n",s_mess.c_str());
+    if( mLogDir&4 ) fprintf(stderr,"%s \n",s_mess.c_str());
+    if( (mLogDir&8) && SYS->present("Archive") )
+	SYS->archive().at().messPut( ctm/1000000, ctm%1000000, categ, level, mess );
 }
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, int8_t level )
 {
-    if(mLogDir & DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
+    if( mLogDir&8 ) SYS->archive().at().messGet(b_tm,e_tm,recs,category,level);
 }
 
 string TMess::lang( )
@@ -150,8 +151,6 @@ void TMess::setLang( const string &lng )
     if( mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C" ) mLang2Code = "en";
     else mLang2Code = mLang2Code.substr(0,2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
-
-    SYS->modif();
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess )
@@ -163,11 +162,11 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     string buf;
     buf.reserve(mess.size());
     char   *ibuf, outbuf[1000], *obuf;
-    size_t ilen, olen, chwrcnt = 0;
+    size_t ilen, olen;
     iconv_t hd;
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
-    if(hd == (iconv_t)(-1))
+    if( hd == (iconv_t)(-1) )
     {
 	mess_crit("IConv",_("Error 'iconv' open: %s"),strerror(errno));
 	return mess;
@@ -180,21 +179,19 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     {
 	obuf = outbuf;
 	olen = sizeof(outbuf)-1;
-	size_t rez = iconv(hd, &ibuf, &ilen, &obuf, &olen);
-	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF))
+	size_t rez = iconv(hd,&ibuf,&ilen,&obuf,&olen);
+	if( rez == (size_t)(-1) && errno != E2BIG )
 	{
-	    mess_crit("IConv", _("Error input sequence convert: %s"), strerror(errno));
+	    mess_crit("IConv",_("Error input sequence convert: %s"),strerror(errno));
+	    mess_debug("IConv",_("Error converting from %s to %s for message part: '%s'"),
+		fromCH.c_str(),toCH.c_str(),mess.substr(vmax((int)mess.size()-(int)ilen-10,0),20).c_str());
 	    buf = mess;
 	    break;
 	}
-	if(obuf > outbuf) buf.append(outbuf, obuf-outbuf);
-	if(rez == (size_t)(-1) && errno == EILSEQ) { buf += '?'; ilen--; ibuf++; chwrcnt++; }
+	if( obuf > outbuf )
+	    buf.append(outbuf,obuf-outbuf);
     }
     iconv_close(hd);
-
-    //> Deadlock possible on the error message print
-    //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for message part: '%s'(%d)"),
-    //		    chwrcnt, fromCH.c_str(), toCH.c_str(), mess.substr(0,20).c_str(), mess.size());
 
     return buf;
 #else
@@ -221,32 +218,43 @@ void TMess::setLang2CodeBase( const string &vl )
     SYS->modif();
 }
 
-void TMess::load( )
+void TMess::load()
 {
-    //> Load params from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	return;
-	else if(argCom == "MessLev")
+    //- Load params from command line -
+    int i,next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"     ,0,NULL,'h'},
+	{"MessLev"  ,1,NULL,'d'},
+	{"log"      ,1,NULL,'l'},
+	{NULL       ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
 	{
-	    int i = atoi(optarg);
-	    if(i >= Debug && i <= Emerg) setMessLevel(i);
+	    case 'h': return;
+	    case 'd': i = atoi(optarg); if(i>=0&&i<=7) setMessLevel(i); break;
+	    case 'l': setLogDirect(atoi(optarg)); break;
+	    case -1 : break;
 	}
-	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
+    } while(next_opt != -1);
 
     //> Load params config-file
-    setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));
-    setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg).c_str()));
-    setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
-    mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
+    setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel())).c_str()));
+    setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect())).c_str()));
+    mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase);
 }
 
 void TMess::save()
 {
-    TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()));
+    TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()));
+    TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase);
 }
 
 const char *TMess::labDB( )
@@ -282,12 +290,4 @@ const char *TMess::labSecCRON( )
 const char *TMess::labSecCRONsel( )
 {
     return "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *";
-}
-
-const char *TMess::labTaskPrior( )
-{
-    return _("Task priority level (-1...99), where:\n"
-             "  -1     - lowest priority batch policy;\n"
-             "  0      - standard userspace priority;\n"
-             "  1...99 - realtime priority level (round-robin), often allowed only for \"root\".");
 }

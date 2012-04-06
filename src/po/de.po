@@ -1,15 +1,16 @@
 # OpenSCADA core translate to German.
+# Copyright (C) 2008-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA package.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.8.1\n"
+"Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-11 15:46+0300\n"
+"POT-Creation-Date: 2012-03-09 09:17+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -134,6 +135,9 @@ msgstr "Fehler beim Starten des Wertearchivs '%s'."
 msgid "Stop subsystem."
 msgstr "Subsystem anhalten."
 
+msgid "Archive messages thread is not stopped!"
+msgstr "Nachrichtarchiv-Thread ist nicht angehalten!"
+
 #, c-format
 msgid "Value archivator '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivars '%s'."
@@ -195,19 +199,8 @@ msgstr ""
 msgid "Level"
 msgstr "Stufe"
 
-msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
-"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
-"Emergency (7), ALARMS"
-msgstr ""
-"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
-"(5);Wach (6);Notfall (7);Information (1), ALARM;Bemerkung (2), ALARM;Warnung "
-"(3), ALARM;Fehler (4), ALARM;Kritisch (5), ALARM;Wach (6), ALARM;Notfall "
-"(7), ALARM"
-
 msgid "Get messages for level more and equal it."
-msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
+msgstr "Empfang von Nachrichten für gleiche und höhere Stufe"
 
 msgid "Archivator"
 msgstr "Archivar"
@@ -293,13 +286,6 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
-msgstr ""
-"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
-"(5);Wach (6);Notfall (7)"
-
-msgid ""
 "Messages category template or regular expression to processing by "
 "archivator, separated by symbol ';'.\n"
 "Use template symbols for group selection:\n"
@@ -330,14 +316,6 @@ msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
 
 msgid "Set too old value to buffer."
 msgstr "Einfügen von sehr alten Werten in den Speicher."
-
-#, c-format
-msgid "Connect to source '%s' error."
-msgstr "Fehler beim Verbinden mit der Quelle '%s'."
-
-#, c-format
-msgid "The archive '%s' was already connected to target parameter '%s'."
-msgstr "Archiv '%s' ist bereits auf die Zielparameter '%s' verbunden."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
@@ -698,6 +676,12 @@ msgstr "Element '%s' Warnung! %s"
 msgid "Node: %s"
 msgstr "Knoten: %s"
 
+msgid "*.*.[TableName]"
+msgstr "*.*.[Tabellenname]"
+
+msgid "<cfg>.[TableName]"
+msgstr "<cfg>.[Tabellenname]"
+
 msgid "[TableName]"
 msgstr "[Tabellenname]"
 
@@ -846,11 +830,9 @@ msgstr "Fehler beim Anhalten des Controllers '%s'."
 msgid "Disable controller '%s' error."
 msgstr "Fehler beim Abschalten des Controllers '%s'."
 
-#, c-format
 msgid "No parameter present '%s'."
 msgstr "Es gibt keine Option '%s'."
 
-#, c-format
 msgid "No attribute present '%s'."
 msgstr "Es ist kein Attribut '%s'."
 
@@ -1091,6 +1073,10 @@ msgstr "Fehler beim Öffnen 'iconv': %s"
 msgid "Error input sequence convert: %s"
 msgstr "Fehler beim Konvertieren der Eingangssequenz: %s"
 
+#, c-format
+msgid "Error converting from %s to %s for message part: '%s'"
+msgstr "Fehler beim Konvertieren aus %s in %s für Nachricht: %s"
+
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
@@ -1141,19 +1127,6 @@ msgstr ""
 "  \"10 23 * * *\" - nur 23 Stunden und 10 Minuten für jeden Tag und Monat;\n"
 "  \"*/2 * * * *\" - für Minuten: 0,2,4,..., 56,58;\n"
 "  \"* 2-4 * * *\" - für alle Minuten in Stunden von 2 bis 4 (einschließlich)."
-
-msgid ""
-"Task priority level (-1...99), where:\n"
-"  -1     - lowest priority batch policy;\n"
-"  0      - standard userspace priority;\n"
-"  1...99 - realtime priority level (round-robin), often allowed only for "
-"\"root\"."
-msgstr ""
-"Task-Priorität (-1 ... 99), wobei:\n"
-"  -1     - Niedrigste Priorität, Hintergrund Politik;\n"
-"  0      - Standard-Benutzer Priorität;\n"
-"  1...99 - Die Prioritätsstufe der Echtzeit-(Round-Robin), oft nur für \"root"
-"\"."
 
 msgid "Modules scheduler"
 msgstr "Modulsteuerung"
@@ -1223,6 +1196,19 @@ msgstr "Subsystem"
 msgid "Path to shared libs(modules)"
 msgstr "Pfad zu den gemeinsamen Bibliotheken (Modulen)"
 
+msgid "Allowed modules"
+msgstr "Erlaubte Module"
+
+msgid ""
+"List of shared libs(modules) allow for auto connection.\n"
+"Elements separated by symbol ';'.\n"
+"Value '*' is used for allow all modules."
+msgstr ""
+"Liste von gemeinsamen Bibliotheken (Modulen) die für die automatische "
+"Verbindung erlaubt sind.\n"
+"Elemente sind mit dem Symbol ';' getrennt.\n"
+"Wert '*' wird für die Auflistung aller Module verwendet."
+
 msgid "Denied modules"
 msgstr "Nicht erlaubte Module"
 
@@ -1232,19 +1218,6 @@ msgid ""
 msgstr ""
 "Liste von gemeinsamen Bibkiotheken (Modulen) die für die automatische "
 "Verbindung nicht erlaubt sind.\n"
-"Elemente sind mit dem Symbol ';' getrennt.\n"
-"Wert '*' wird für die Auflistung aller Module verwendet."
-
-msgid "Allowed modules"
-msgstr "Erlaubte Module"
-
-msgid ""
-"List of shared libs(modules) allowed for auto connection.\n"
-"Elements separated by symbol ';'.\n"
-"Value '*' used for allow all modules."
-msgstr ""
-"Liste von gemeinsamen Bibliotheken (Modulen) die für die automatische "
-"Verbindung erlaubt sind.\n"
 "Elemente sind mit dem Symbol ';' getrennt.\n"
 "Wert '*' wird für die Auflistung aller Module verwendet."
 
@@ -1269,8 +1242,8 @@ msgstr "Autor"
 msgid "License"
 msgstr "Lizenz"
 
-msgid "Connect module."
-msgstr "Modul verbinden."
+msgid "Connect module!"
+msgstr "Modul verbinden!"
 
 #, c-format
 msgid "Function '%s' is not present in the module!"
@@ -1321,8 +1294,8 @@ msgstr "Parametervorlage: "
 msgid "Template"
 msgstr "Vorlage"
 
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr "Reelle Zahl;Ganzzahl;Logisch;Linie;Text;Objekt"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Reelle Zahl;Ganzzahl;Logisch;Text;Objekt"
 
 msgid "Input;Output"
 msgstr "Eingang;Ausgang"
@@ -1465,8 +1438,9 @@ msgstr "Datenbank des Benutzers"
 msgid "Include"
 msgstr "Eingeschlossen"
 
-msgid "Group "
-msgstr "Gruppe "
+#, c-format
+msgid "Group %s"
+msgstr "Gruppe %s"
 
 msgid "User group DB"
 msgstr "Datenbank der Benutzergruppe"
@@ -1508,10 +1482,6 @@ msgstr "Modul"
 
 msgid "Empty Station"
 msgstr "Leere Station "
-
-#, c-format
-msgid "System counters on exit: %s"
-msgstr "System Zählern an der Ausfahrt: %s"
 
 #, c-format
 msgid ""
@@ -1580,8 +1550,7 @@ msgid ""
 "===========================================================================\n"
 "-h, --help             Info message about system options.\n"
 "    --Config=<path>    Config-file path.\n"
-"    --Station=<id>     The station identifier.\n"
-"    --StatName=<name>  The station name.\n"
+"    --Station=<id>     Station identifier.\n"
 "    --demon            Start into demon mode.\n"
 "    --CoreDumpAllow\tSet limits for core dump creation allow on crash.\n"
 "    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -1602,7 +1571,6 @@ msgid ""
 "                           <direct> & 2 - stdout;\n"
 "                           <direct> & 4 - stderr;\n"
 "                           <direct> & 8 - archive.\n"
-"Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two "
 "symbols code.\n"
 "SaveAtExit <true>      Save system at exit.\n"
@@ -1618,8 +1586,7 @@ msgstr ""
 "===========================================================================\n"
 "-h, --help             Info Nachricht über System-Optionen.\n"
 "    --Config=<path>    Pfad der Konfigurationsdatei.\n"
-"    --Station=<id>     Station-ID.\n"
-"    --StatName=<name>  Name der Station.\n"
+"    --Station=<id>     Name der Station.\n"
 "    --demon            Start im Hintergrund-Modus.\n"
 "    --CoreDumpAllow\tFestlegen von Limits für Core-Dump-Erstellung auf Crash "
 "erlauben.\n"
@@ -1641,7 +1608,6 @@ msgstr ""
 "                         <direction> & 2 - Standardausgang (stdout);\n"
 "                         <direction> & 4 - Standardfehlerausgang (stderr);\n"
 "                         <direction> & 8 -Archiv.\n"
-"Lang       <Sprache>\tWorker-interne Sprache, wie \"de_DE.UTF-8\".\n"
 "Lang2CodeBase <Sprache> Grundsprache für die Übersetzung von Textvariablen, "
 "zwei Symbole.\n"
 "SaveAtExit <true>      System beim Beenden Speichern.\n"
@@ -1731,11 +1697,9 @@ msgstr "Warte auf Ereignis..."
 msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
-msgid ""
-"No permission for create real-time policy for '%s'. Default thread is "
-"created!"
+msgid "No permission for create real-time policy. Default thread is created!"
 msgstr ""
-"Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist geschaffen "
+"Kein Zugang für das Schaffen der Realzeitpolitik. Der Strom ist geschaffen "
 "default!"
 
 #, c-format
@@ -1763,9 +1727,6 @@ msgstr "%s Station: \"%s\""
 
 msgid "Station"
 msgstr "Station"
-
-msgid "Station name"
-msgstr "Stationsnamen"
 
 msgid "Version"
 msgstr "Version"
@@ -1928,9 +1889,8 @@ msgstr "Fehler beim Starten des Controllers '%s'."
 msgid "Id of parameter type error!"
 msgstr "Fehler Typ des Parameterbezeichners!"
 
-#, c-format
-msgid "Parameter type '%s' is not present."
-msgstr "Parametertyp '%s' ist nicht vorhanden."
+msgid "Parameter type is not present."
+msgstr "Parametertyp ist nicht vorhanden."
 
 #, c-format
 msgid "Error attach new controller %s."
@@ -2028,6 +1988,9 @@ msgstr "Übertragungsprotokoll ist '%s' nicht vorhanden"
 msgid "Output transport: "
 msgstr "Ausgangsübertragung:"
 
+msgid "Time (ms)"
+msgstr "Zeit (msek.)"
+
 msgid "Binary;Text(LF);Text(CR);Text(CR/LF)"
 msgstr "Binär;Text(LF);Text(CR);Text(CR/LF)"
 
@@ -2111,6 +2074,9 @@ msgstr "Archivierung"
 msgid "Not select type!"
 msgstr "Typ ist nicht ausgewählt!"
 
+msgid "Value not object!"
+msgstr "Der Wert ist kein Objekt!"
+
 msgid "Write access is denied!"
 msgstr "Schreibzugriff verboten!"
 
@@ -2120,6 +2086,12 @@ msgstr "Fehler beim Schreiben des Wertes ins Archiv: %s"
 
 msgid "Attribute doesn't have archive"
 msgstr "Attribut hat kein Archiv"
+
+msgid "Variable not object!"
+msgstr "Variable ist kein Objekt"
+
+msgid "Zero object using try!"
+msgstr "Versuch der Benutzung des leeren Objekts"
 
 msgid "Too big string length (> 130 MB)!"
 msgstr "Sehr große Größe der Zeichenfolge (> 130 MB)!"
@@ -2202,8 +2174,8 @@ msgid "Entity error. Pos: %d"
 msgstr "Entity Fehler. Pos: %d"
 
 #, c-format
-msgid "Unknown entity '%s'. Pos: %d"
-msgstr "Unbekannte Entität '%s'. Pos: %d"
+msgid "Unknown entity. Pos: %d"
+msgstr "Unbekannte Entität. Pos: %d"
 
 msgid "Message archive no support!"
 msgstr "Nachrichtarchiv wird nicht unterstützt!"

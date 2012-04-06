@@ -131,7 +131,6 @@ class TCntrNode
 	    Enable	= 0x03,		//Node enabled
 	    //> Flags
 	    SelfModify	= 0x04,		//Self modify
-	    SelfModifyS = 0x08,		//Self modify store
 	};
 	enum EnFlag
 	{
@@ -158,13 +157,13 @@ class TCntrNode
 	unsigned nodePos( )		{ return mOi; }
 
 	//> Modify process methods
-	int  isModify( int mflg = TCntrNode::All );	//Check for modify want
-	void modif( bool save = false );		//Set local modify
-	void modifG( );					//Set group modify
-	void modifClr( bool save = false );		//Clear modify
-	void modifGClr( );				//Modify group clear
-	void load( bool force = false );		//Load node, if modified
-	void save( );					//Save node, if modified
+	int  isModify( int mflg = TCntrNode::All );		//Check for modify want
+	void modif( )	{ m_flg |= SelfModify; }		//Set local modify
+	void modifG( );						//Set group modify
+	void modifClr( ){ m_flg &= ~(SelfModify); }		//Clear modify
+	void modifGClr( );					//Modify group clear
+	void load( bool force = false );			//Load node, if modified
+	void save( );						//Save node, if modified
 
 	//> Connections counter
 	virtual void AHDConnect( );
@@ -177,7 +176,7 @@ class TCntrNode
 
 	//> Childs
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list, bool noex = false );
+	void chldList( int8_t igr, vector<string> &list );
 	bool chldPresent( int8_t igr, const string &name );
 
     protected:

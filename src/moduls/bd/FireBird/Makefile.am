@@ -12,4 +12,3 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)FireBird
-include ../../../../I18N.mk

@@ -27,7 +27,3 @@ uninstall-I18N:
 
 clean-I18N:
 	rm -f po/$(I18N_mod).pot po/*~ ;
-
-install-data-local: install-I18N
-uninstall-local: uninstall-I18N
-clean-local: clean-I18N

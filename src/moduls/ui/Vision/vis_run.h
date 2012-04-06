@@ -29,7 +29,6 @@
 
 #include <QMainWindow>
 #include <QLabel>
-#include <QFileDialog>
 
 #include "tvision.h"
 
@@ -86,13 +85,11 @@ class VisRun : public QMainWindow
 	string wAttrGet( const string &path, const string &attr );
 	bool wAttrSet( const string &path, const string &attr, const string &val );
 
-	RunPageView *masterPg( )				{ return master_pg; }
+	RunPageView *masterPg()					{ return master_pg; }
 	RunPageView *findOpenPage( const string &pg );
 	RunWdgView *findOpenWidget( const string &wdg );
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
-
-	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
 
 	//> Resource cache commands
 	string cacheResGet( const string &res );
@@ -164,8 +161,6 @@ class VisRun : public QMainWindow
 
 	//> Main components
 	QTimer		*endRunTimer, *updateTimer;
-	QPrinter	*prPg, *prDiag, *prDoc;
-	QFileDialog	*fileDlg;
 	bool		winClose;		//Close window flag
 	UserStBar	*mWUser;		//User status widget
 	StylesStBar	*mStlBar;		//Style status widget

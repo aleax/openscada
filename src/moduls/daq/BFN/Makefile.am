@@ -6,4 +6,3 @@ daq_BFN_la_SOURCES = mod_BFN.cpp
 daq_BFN_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)BFN
-include ../../../../I18N.mk

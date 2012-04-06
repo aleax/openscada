@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2012 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2010 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -82,13 +82,12 @@ class TMdPrm : public TParamContr
 	//Attributes
 	unsigned char isPrcOK	: 1;
 	unsigned char isEVAL	: 1;
-	unsigned char isSynced	: 1;
+	unsigned char isUpdated	: 1;
 
     protected:
 	//Methods
-	void load_( );				//Load parameter
-	void save_( );				//Save parameter
-	void sync( );				//Synchronize parameter
+	void load_( );				//Synchronize parameter
+	void save_( );				//Save blocking
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
@@ -117,7 +116,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	double	period( )	{ return mPer; }
-	string	cron( )		{ return mSched; }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
@@ -125,7 +124,7 @@ class TMdContr: public TController
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	//> Request to OpenSCADA control interface
-	int cntrIfCmd( XMLNode &node );
+	int cntrIfCmd( XMLNode &node, bool lockErr = false );
 
     protected:
 	//Methods
@@ -135,7 +134,6 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	bool cfgChange( TCfg &cfg );
 
     private:
 	//Methods
@@ -144,7 +142,6 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	enRes;				//Resource for enable params and request to remote OpenSCADA station
-	TCfg	&mSched;			//Calc schedule
 	double	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestDtTm;			//Restore data maximum length time (hour)

@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <signal.h>
 #include <string.h>
 
@@ -72,7 +73,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(1)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5)
 {
     mod		= this;
 
@@ -275,9 +276,9 @@ TWEB::~TWEB()
 
 string TWEB::modInfo( const string &name )
 {
-    if(name == "SubType")		return SUB_TYPE;
-    else if(name == "Auth")		return "1";
-    else if(name == _("Developers"))	return DEVELOPERS;
+    if( name == "SubType" )		return SUB_TYPE;
+    else if( name == "Auth" )		return "1";
+    else if( name == _("Developers") )	return DEVELOPERS;
     else return TModule::modInfo(name);
 }
 
@@ -311,26 +312,35 @@ string TWEB::optDescr( )
 void TWEB::load_( )
 {
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"      ,0,NULL,'h'},
+	{NULL        ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters from config-file
     setSessTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime())).c_str()));
     setSessLimit(atoi(TBDS::genDBGet(nodePath()+"SessLimit",TSYS::int2str(sessLimit())).c_str()));
-    setPNGCompLev(atoi(TBDS::genDBGet(nodePath()+"PNGCompLev",TSYS::int2str(PNGCompLev())).c_str()));
 }
 
 void TWEB::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime()));
     TBDS::genDBSet(nodePath()+"SessLimit",TSYS::int2str(sessLimit()));
-    TBDS::genDBSet(nodePath()+"PNGCompLev",TSYS::int2str(PNGCompLev()));
 }
-
-void TWEB::modStart( )	{ run_st = true; }
-
-void TWEB::modStop( )	{ run_st = false; }
 
 void TWEB::perSYSCall( unsigned int cnt )
 {
@@ -348,17 +358,17 @@ void TWEB::perSYSCall( unsigned int cnt )
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
+string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
     return "HTTP/1.0 "+rcode+"\x0D\x0A"
 	"Server: "+PACKAGE_STRING+"\x0D\x0A"
 	"Accept-Ranges: bytes\x0D\x0A"
 	"Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
 	"Connection: close\x0D\x0A"
-	"Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"+addattr+"\x0D\x0A";
+	"Content-Type: "+cnt_tp+"; charset="+Mess->charset()+"\x0D\x0A"+addattr+"\x0D\x0A";
 }
 
-string TWEB::pgHead( const string &head_els, const string &title, const string &charset )
+string TWEB::pgHead( const string &head_els, const string &title )
 {
     string shead =
 	"<?xml version='1.0' ?>\n"
@@ -366,7 +376,7 @@ string TWEB::pgHead( const string &head_els, const string &title, const string &
 	"'DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset="+charset+"'/>\n"
+	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
@@ -507,7 +517,6 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    //> Main session page data prepare
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
 	    {
-		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//> Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
 		//>> Check for session present
 		if( !ses.prm.size() )
@@ -575,14 +584,13 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
     try
     {
-	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//> Internal data into UTF-8
 	//> To control interface request
 	if( (cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com" )
 	{
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
 	    ses.page = req.save();
-	    page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 	    return;
 	}
 
@@ -629,13 +637,8 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_))
 	{
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Life time of session (min)"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/sesLimit", _("Sessions limit"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
-	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("PNG compression level"), RWRWR_, "root", SUI_ID, 4,
-		"tp","dec", "min","-1", "max","9", "help",_("PNG (ZLib) compression level:\n"
-			    "  -1  - optimal speed-size;\n"
-			    "  0   - disable;\n"
-			    "  1-9 - direct level."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,2,"tp","str","rows","5");
 	return;
@@ -652,11 +655,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(sessLimit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(atoi(opt->text().c_str()));
-    }
-    else if(a_path == "/prm/cfg/PNGCompLev")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(PNGCompLev()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPNGCompLev(atoi(opt->text().c_str()));
     }
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)) opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
@@ -713,9 +711,9 @@ void TWEB::imgConvert(SSess &ses)
         int img_sz;
         char *img_ptr = NULL;
         gdImageSaveAlpha(sim, 1);
-        if(itp == "png")        img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, PNGCompLev());
-        else if(itp == "jpg")   img_ptr = (char *)gdImageJpegPtr(sim, &img_sz,-1);
-        else if(itp == "gif")   img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
+        if(itp == "png")        img_ptr = (char *)gdImagePngPtr(sim,&img_sz);
+        else if(itp == "jpg")   img_ptr = (char *)gdImageJpegPtr(sim,&img_sz,-1);
+        else if(itp == "gif")   img_ptr = (char *)gdImageGifPtr(sim,&img_sz);
         if(img_ptr)
         {
             ses.page.assign(img_ptr,img_sz);
@@ -752,11 +750,6 @@ int TWEB::colorParse( const string &tclr )
 	    return ((int)vmin(127,(alpha/2+0.5))<<24)+ iclr->second;
     }
     return -1;
-}
-
-int TWEB::colorResolve( gdImagePtr im, int clr )
-{
-    return gdImageColorResolveAlpha(im, (uint8_t)(clr>>16), (uint8_t)(clr>>8), (uint8_t)clr, 127-(uint8_t)(clr>>24));
 }
 
 string TWEB::trMessReplace( const string &tsrc )

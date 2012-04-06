@@ -66,7 +66,6 @@ class TVal : public TCntrNode
 
 	string	name( );
 	int64_t time( )	{ return mTime; }
-	bool	dataActive( );
 
 	//> Read current value (direct)
 	string	getSEL( int64_t *tm = NULL, bool sys = false );
@@ -88,7 +87,6 @@ class TVal : public TCntrNode
 
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
-	string setArch( const string &nm = "" );
 
 	bool reqFlg( )	{ return mReqFlg; }
 	bool resB1( )	{ return mResB1; }
@@ -103,7 +101,6 @@ class TVal : public TCntrNode
 
     protected:
 	//Methods
-	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -145,8 +142,6 @@ class TValue: public TCntrNode, public TValElem
     public:
 	TValue( );
 	virtual ~TValue();
-
-	virtual bool dataActive( )	{ return false; }
 
 	string objName( );
 

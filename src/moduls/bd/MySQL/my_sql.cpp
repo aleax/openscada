@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <string>
 #include <mysql/mysql.h>
 #include <mysql/errmsg.h>
@@ -267,7 +268,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,"tp","str","help",
 	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>;<tms>].\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
@@ -339,25 +340,24 @@ void MTable::fieldStruct( TConfig &cfg )
 	if( cfg.cfgPresent(sid) ) continue;
 
 	int flg = (tblStrct[i_fld][3]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
-	/*if(tblStrct[i_fld][1] == "tinyint(1)")
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Boolean,flg,"1") );
-	else */
-	if(sscanf(tblStrct[i_fld][1].c_str(),"char(%d)",&pr1) || sscanf(tblStrct[i_fld][1].c_str(),"varchar(%d)",&pr1))
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,TSYS::int2str(pr1).c_str()));
-	else if(tblStrct[i_fld][1] == "text")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"65535"));
-	else if(tblStrct[i_fld][1] == "mediumtext")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
-	else if(tblStrct[i_fld][1] == "int")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
-	else if(sscanf(tblStrct[i_fld][1].c_str(),"int(%d)",&pr1) || sscanf(tblStrct[i_fld][1].c_str(),"tinyint(%d)",&pr1) ||
-		sscanf(tblStrct[i_fld][1].c_str(),"bigint(%d)",&pr1))
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg,TSYS::int2str(pr1).c_str()));
-	else if(tblStrct[i_fld][1] == "double")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
-	else if(sscanf(tblStrct[i_fld][1].c_str(),"double(%d,%d)",&pr1,&pr2))
+	if( sscanf(tblStrct[i_fld][1].c_str(),"char(%d)",&pr1) ||
+		sscanf(tblStrct[i_fld][1].c_str(),"varchar(%d)",&pr1) )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,TSYS::int2str(pr1).c_str()) );
+	else if( tblStrct[i_fld][1] == "text" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"65535") );
+	else if( tblStrct[i_fld][1] == "mediumtext" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215") );
+	else if( tblStrct[i_fld][1] == "int" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg) );
+	else if( sscanf(tblStrct[i_fld][1].c_str(),"int(%d)",&pr1) )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg,TSYS::int2str(pr1).c_str()) );
+	else if( tblStrct[i_fld][1] == "double" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg) );
+	else if( sscanf(tblStrct[i_fld][1].c_str(),"double(%d,%d)",&pr1,&pr2) )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg,(TSYS::int2str(pr1)+"."+TSYS::int2str(pr2)).c_str()) );
-	else if(tblStrct[i_fld][1] == "datetime")
+	else if( tblStrct[i_fld][1] == "tinyint(1)" )
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Boolean,flg,"1") );
+	else if( tblStrct[i_fld][1] == "datetime" )
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg|TFld::DateTimeDec,"10") );
     }
 }
@@ -752,16 +752,16 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 
 string MTable::getVal( TCfg &cfg )
 {
-    switch(cfg.fld().type())
+    switch( cfg.fld().type() )
     {
 	case TFld::String:	return cfg.getS();
 	case TFld::Integer:
-	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
+	    if( cfg.fld().flg()&TFld::DateTimeDec )	return UTCtoSQL(cfg.getI());
 	    else		return SYS->int2str(cfg.getI());
 	case TFld::Real:
 	{
 	    double vl = cfg.getR();
-	    if(vl == EVAL_REAL)	return SYS->real2str(EVAL_REAL_MYSQL);
+	    if( vl == EVAL_REAL ) return SYS->real2str(EVAL_REAL_MYSQL);
 	    return SYS->real2str(vl);
 	}
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
@@ -792,11 +792,10 @@ void MTable::setVal( TCfg &cfg, const string &val )
 
 string MTable::UTCtoSQL( time_t val )
 {
-    char buf[255];
     struct tm tm_tm;
-
     //localtime_r(&val,&tm_tm);
     gmtime_r(&val,&tm_tm);
+    char buf[255];
     int rez = strftime( buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_tm );
 
     return (rez>0) ? string(buf,rez) : "";
@@ -805,8 +804,8 @@ string MTable::UTCtoSQL( time_t val )
 time_t MTable::SQLtoUTC( const string &val )
 {
     struct tm stm;
-    strptime(val.c_str(),"%Y-%m-%d %H:%M:%S",&stm);
+    //strptime(val.c_str(),"%Y-%m-%d %H:%M:%S",&stm);
+    strptime((val+" UTC").c_str(),"%F %T %Z",&stm);
 
-    //return mktime(&stm);
-    return timegm(&stm);
+    return mktime(&stm);
 }

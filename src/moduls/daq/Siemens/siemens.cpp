@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <signal.h>
 #include <string.h>
 
@@ -97,8 +98,8 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's DB structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000"));	//!!!! Remove at further
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
     fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("ASINC_WR",_("Asynchronous write mode"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TYPE",_("Connection type"),TFld::Integer,TFld::Selected,"1","0",
@@ -544,7 +545,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
 }
 
 void TMdContr::save_( )
@@ -997,7 +998,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
             try { resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
             catch(TError err) { errCon = _("10:Connection error."); throw; }
             int full_len = resp_len;
-            if(full_len < (int)sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
+            if(full_len < sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
             unsigned resp_sz = AmsHD->len;
 
@@ -1177,7 +1178,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
             try{ resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
             catch(TError err) { errCon = _("10:Connection error."); throw; }
             int full_len = resp_len;
-            if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(nodePath().c_str(),_("13:Error server respond"));
+            if(full_len < sizeof(AMS_TCP_HEAD))	throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
             unsigned resp_sz = AmsHD->len;
 	    //> Wait tail
@@ -1428,7 +1429,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.nodeRes().resRequestR( );
 	//> Process write data blocks
 	if(cntr.assincWrite())
-	    for(unsigned i_b = 0; !cntr.endrun_req && i_b < cntr.writeBlks.size(); i_b++)
+	    for(unsigned i_b = 0; i_b < cntr.writeBlks.size(); i_b++)
 		try
 		{
 		    if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
@@ -1438,7 +1439,7 @@ void *TMdContr::Task( void *icntr )
 		}
 		catch(TError err) { cntr.writeBlks[i_b].err = err.mess; }
 	//> Process acquisition data blocks
-	for(unsigned i_b = 0; !cntr.endrun_req && i_b < cntr.acqBlks.size(); i_b++)
+	for(unsigned i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
 	    try
 	    {
 		if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }
@@ -1507,19 +1508,18 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info")
     {
-	TController::cntrCmdProc(opt);
-	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",cfg("TYPE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
-	    "help",_("Connection type:\n"
-		     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
+        TController::cntrCmdProc(opt);
+        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",cfg("TYPE").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+            "help",_("Connection type:\n"
+        	     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
 		     "  ISO_TCP, ISO_TCP243 - connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);\n"
 		     "  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."));
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
-	    "help",_("Remote controller address. For connections:\n"
-		     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+            "help",_("Remote controller address. For connections:\n"
+        	     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
 		     "  ISO_TCP, ISO_TCP243 - IP-address into Ethernet network;\n"
 		     "  ADS - Network identifier and port for target and source stations, in view\n"
 		     "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
@@ -1527,8 +1527,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		     "    AMSNetId - network identifier, write into view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
 		     "    AMSPort - port, write into view digit 0-65535."));
 	XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/ADDR_TR",true);
-	if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/cfg/trLst");
-	return;
+        if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/cfg/trLst");
+        return;
     }
 
     //> Process command to page
@@ -1606,7 +1606,6 @@ void TMdPrm::enable( )
 	    if((func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 	    {
 		unsigned flg = TVal::DirWrite|TVal::DirRead;
-		if(func()->io(i_io)->flg()&IO::FullText)	flg |= TFld::FullText;
 		if(func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
 		TFld::Type tp = TFld::type(ioType(i_io));
 		if((fId=p_el.fldId(func()->io(i_io)->id(),true)) < p_el.fldSize())
@@ -1644,7 +1643,7 @@ void TMdPrm::enable( )
         if(id_this >= 0) setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	//>> Load IO at enabling
-	if(to_make)	loadIO(true);
+	if(to_make)	loadIO();
 
 	//> Check for delete DAQ parameter's attributes
 	for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
@@ -1688,11 +1687,10 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO( bool force )
+void TMdPrm::loadIO()
 {
     //> Load IO and init links
     if(!enableStat())	return;
-    if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
@@ -1774,7 +1772,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ val.setS(EVAL_STR, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	val.setS(EVAL_STR, 0, true);
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
@@ -1796,13 +1794,12 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	{
 	    if(id_lnk < 0) set(ioId(val.name()), vl);
 	    else
-		switch(val.fld().type())
+		switch( val.fld().type() )
 		{
 		    case TFld::String:	owner().setValS(vl.getS(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Integer:	owner().setValI(vl.getI(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Real:	owner().setValR(vl.getR(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Boolean:	owner().setValB(vl.getB(), lnk(id_lnk).val, acq_err);	break;
-		    default: break;
 		}
 	}
     }catch(TError err) {  }
@@ -1810,13 +1807,11 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    TParamContr::vlArchMake(val);
-
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+    val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
 }
 
 int TMdPrm::lnkSize()
@@ -2005,20 +2000,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    else
 		    {
 			const char *tip = "str";
-			bool fullTxt = false;
 			if(!is_lnk)
 			    switch(ioType(i_io))
 			    {
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
-				case IO::String:
-                                    if(func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
-                                    break;
-                                case IO::Object:	fullTxt = true; break;
+				default:		tip = "str";	break;
 			    }
-			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
-			if(wn && fullTxt) wn->setAttr("cols","100")->setAttr("rows","4");
+			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
 		    }
 		}
 	}

@@ -21,6 +21,7 @@
 
 #include <sys/times.h>
 #include <sys/time.h>
+#include <getopt.h>
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -128,8 +129,8 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1") );
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //> Parameter type bd structure
@@ -150,7 +151,7 @@ void TTpContr::postEnable( int flag )
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return new TMdContr(name,daq_db,this);
+    return( new TMdContr(name,daq_db,this));
 }
 
 void TTpContr::daList( vector<string> &da )
@@ -171,15 +172,6 @@ DA *TTpContr::daGet( const string &da )
 	if(m_da[i_da]->id() == da) return m_da[i_da];
 
     return NULL;
-}
-
-void TTpContr::perSYSCall( unsigned int cnt )
-{
-    //> Recheck auto-controllers to create parameters for new devices
-    vector<string> clist;
-    list(clist);
-    for(unsigned i_c = 0; i_c < clist.size(); i_c++)
-	at(clist[i_c]).at().devUpdate();
 }
 
 //*************************************************
@@ -210,17 +202,6 @@ string TMdContr::getStatus( )
     return rez;
 }
 
-void TMdContr::devUpdate( )
-{
-    if(cfg("AUTO_FILL").getB())
-    {
-	vector<string> list;
-	mod->daList(list);
-	for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	    mod->daGet(list[i_l])->makeActiveDA(this);
-    }
-}
-
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -233,12 +214,18 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
 }
 
 void TMdContr::enable_(  )
 {
-    devUpdate();
+    if(cfg("AUTO_FILL").getB())
+    {
+	vector<string> list;
+	mod->daList(list);
+	for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	    mod->daGet(list[i_l])->makeActiveDA(this);
+    }
 }
 
 void TMdContr::start_( )
@@ -313,12 +300,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info")
     {
-	TController::cntrCmdProc(opt);
-	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	return;
+        TController::cntrCmdProc(opt);
+        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        return;
     }
     TController::cntrCmdProc(opt);
 }
@@ -327,7 +313,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), m_auto(false), m_da(NULL), daData(NULL)
+    TParamContr(name,tp_prm), m_auto(false), m_da(NULL)
 {
 
 }
@@ -344,14 +330,13 @@ void TMdPrm::postEnable( int flag )
 TMdPrm::~TMdPrm( )
 {
     nodeDelAll();
-    setType("");
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat())	return;
+    if( enableStat() )	return;
     cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
     ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
@@ -359,9 +344,10 @@ void TMdPrm::enable( )
 
 void TMdPrm::disable( )
 {
-    if(!enableStat())	return;
+    if( !enableStat() )  return;
     ((TMdContr&)owner()).prmEn( id(), false );	//Remove from process
     setEval( );
+    //setType("");
     TParamContr::disable();
 }
 
@@ -372,7 +358,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::save_( )
 {
-    if(!m_auto) TParamContr::save_();
+    if( !m_auto ) TParamContr::save_();
 
     //> Save archives
     vector<string> a_ls;
@@ -384,18 +370,17 @@ void TMdPrm::save_( )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if(val.name() == "err")
+    if( val.name() == "err" )
     {
-	if(!owner().startStat())val.setS(_("2:Controller stopped"), 0, true);
-	else if(!enableStat())	val.setS(_("1:Parameter disabled"), 0, true);
-	else if(daErr.size())	val.setS(daErr, 0, true);
-	else val.setS("0", 0, true);
+	if( !owner().startStat() ) val.setS(_("2:Controller stopped"),0,true);
+	else if( !enableStat() )   val.setS(_("1:Parameter disabled"),0,true);
+	else val.setS("0",0,true);
     }
 }
 
 void TMdPrm::getVal( )
 {
-    if(m_da) m_da->getVal(this);
+    if( m_da )	m_da->getVal(this);
 }
 
 void TMdPrm::setEval( )
@@ -411,21 +396,19 @@ void TMdPrm::setEval( )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    TParamContr::vlArchMake(val);
-
-    if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+    if( val.arch().freeStat() ) return;
+    val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
     val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( true );
 }
 
 void TMdPrm::setType( const string &da_id )
 {
-    if(m_da && da_id == m_da->id())	return;
+    if( m_da && da_id == m_da->id() )	return;
 
     //> Free previous type
-    if(m_da)
+    if( m_da )
     {
 	m_da->deInit(this);
 	vlElemDet(m_da);
@@ -435,11 +418,14 @@ void TMdPrm::setType( const string &da_id )
     //> Create new type
     try
     {
-	if(da_id.size() && (m_da=mod->daGet(da_id)))
+	if(da_id.size())
 	{
-	    daErr = "";
-	    vlElemAtt(m_da);
-	    m_da->init(this);
+	    m_da = mod->daGet(da_id);
+	    if(m_da)
+	    {
+		vlElemAtt(m_da);
+		m_da->init(this);
+	    }
 	}
     }
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }

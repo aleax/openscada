@@ -20,7 +20,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
-#include <crypt.h>
+#include <getopt.h>
 
 #include "tsys.h"
 #include "tmess.h"
@@ -139,9 +139,24 @@ char TSecurity::access( const string &user, char mode, const string &owner, cons
 void TSecurity::load_( )
 {
     //> Load commandline data
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"     ,0,NULL,'h'},
+	{NULL       ,0,NULL,0  }
+    };
+
+    optind=opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,( char *const * ) SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters
 
@@ -314,16 +329,12 @@ TCntrNode &TUser::operator=( TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
-    crypt_data data;
-    data.initialized = 0;
-    cfg("PASS").setS(crypt_r(n_pass.c_str(),name().c_str(),&data));
+    cfg("PASS").setS(crypt(n_pass.c_str(),name().c_str()));
 }
 
 bool TUser::auth( const string &ipass )
 {
-    crypt_data data;
-    data.initialized = 0;
-    return (cfg("PASS").getS() == crypt_r(ipass.c_str(),name().c_str(),&data));
+    return (cfg("PASS").getS() == crypt(ipass.c_str(),name().c_str()));
 }
 
 void TUser::postDisable(int flag)
@@ -542,7 +553,7 @@ void TGroup::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group ")+name(),RWRWR_,"root",SSEC_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Group %s")+name(),RWRWR_,"root",SSEC_ID);
 	ctrMkNode("area",opt,-1,"/prm",_("Group"));
 	ctrMkNode("fld",opt,-1,"/prm/name",cfg("NAME").fld().descr(),R_R_R_,"root",SSEC_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SSEC_ID,2,"tp","str","len","50");

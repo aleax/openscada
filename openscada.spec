@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.8.0.8
+Version: 0.8.0
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -17,15 +17,13 @@ URL: http://oscada.org
 
 #= Individual distributives seting =
 %if %_vendor == "alt"
-AutoReq: noshell
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc-c++ libgd2-devel libMySQL-devel libsqlite3-devel libsensors3-devel
+BuildRequires: glibc-devel gcc-c++-common libgd2-devel libMySQL-devel libsqlite3-devel libsensors3-devel
 BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel libportaudio2-devel libfftw3-devel libpcre-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
 %define _iconsdir /usr/share/icons
-%define _pkgconfigdir %_libdir/pkgconfig
 BuildRoot: %_tmppath/%name-%version-root
 %endif
 
@@ -209,7 +207,7 @@ Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %prep
 %setup -q -n %srcname
-%setup -T -D -a 1 -n %srcname
+%setup -T -D -a 1
 
 %build
 %if %_vendor == "Mandriva"
@@ -331,30 +329,6 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 /var/spool/openscada/Boiler/*.db
 
 %changelog
-* Mon Sep 16 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.8 update to production release.
-
-* Thu Jul 11 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.7 update to production release.
-
-* Sat May 11 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.6 update to production release.
-
-* Sat Feb 02 2013 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.5 update to production release.
-
-* Tue Nov 13 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.4 update to production release.
-
-* Sat Sep 08 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.3 update to production release.
-
-* Mon Jul 09 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.2 update to production release.
-
-* Sat Jun 09 2012 Roman Savochenko <rom_as@oscada.org>
-- Build 0.8.0.1 update to production release.
-
 * Fri Apr 06 2012 Roman Savochenko <rom_as@oscada.org>
 - Build 0.8.0 release.
 

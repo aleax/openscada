@@ -46,6 +46,7 @@
 #include <QPrinter>
 #include <QPrintDialog>
 #include <QDateTime>
+#include <QFileDialog>
 #include <QTextStream>
 
 #include <config.h>
@@ -58,9 +59,8 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, QWidget *parent ) :
-    QMainWindow(parent), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
-    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF),
-    isConErr(false)
+    QMainWindow(parent), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false), prj_it(iprj_it), master_pg(NULL), mPeriod(1000),
+    wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF), isConErr(false)
 {
     QImage ico_t;
 
@@ -262,10 +262,9 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     mStlBar->setWhatsThis(_("This label displays used interface style."));
     mStlBar->setToolTip(_("Field for display the used interface style."));
     mStlBar->setStatusTip(_("Double click for style change."));
-    connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
+    connect( mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()) );
     statusBar()->insertPermanentWidget(0,mStlBar);
     statusBar()->insertPermanentWidget(0,toolBarStatus);
-    statusBar()->setVisible(mod->runPrjsSt());
 
     //> Init scroller
     QScrollArea *scrl = new QScrollArea;
@@ -319,12 +318,6 @@ VisRun::~VisRun()
 
     //> Clear cache
     pgCacheClear();
-
-    //> Print objects free
-    if(prPg)	delete prPg;
-    if(prDiag)	delete prDiag;
-    if(prDoc)	delete prDoc;
-    if(fileDlg)	delete fileDlg;
 }
 
 string VisRun::user( )		{ return mWUser->user().toAscii().data(); }
@@ -375,34 +368,8 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
     return rez;
 }
 
-QString VisRun::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
-{
-    if(!fileDlg) fileDlg = new QFileDialog(this);
-    fileDlg->setFileMode(QFileDialog::AnyFile);
-    fileDlg->setAcceptMode(mode);
-    fileDlg->setWindowTitle(caption);
-    fileDlg->setNameFilter(filter);
-    if(dir.size()) fileDlg->selectFile(dir);
-#if QT_VERSION >= 0x040500
-    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
-#endif
-    if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
-
-    return "";
-}
-
 void VisRun::closeEvent( QCloseEvent* ce )
 {
-    if(mod->exitLstRunPrjCls() && master_pg)	//Exit on close last run project
-    {
-	unsigned winCnt = 0;
-	for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
-	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
-		winCnt++;
-
-	if(winCnt <= 1) SYS->stop();
-    }
-
     winClose = true;
     ce->accept();
 }
@@ -460,29 +427,29 @@ void VisRun::printPg( const string &ipg )
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
-	if(sdlg.exec() != QDialog::Accepted)	return;
+	if( sdlg.exec() != QDialog::Accepted )	return;
 	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
     }
 
     //> Find need page
     rpg = master_pg;
-    if(rpg->id() != pg)	rpg = findOpenPage(pg);
-    if(!rpg) return;
+    if( rpg->id() != pg )	rpg = findOpenPage(pg);
+    if( !rpg ) return;
 
     string pnm = rpg->name();
-    if(!prPg)	prPg = new QPrinter(QPrinter::HighResolution);
-    QPrintDialog dlg(prPg, this);
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintDialog dlg(&printer,this);
     dlg.setWindowTitle(QString(_("Print page: \"%1\" (%2)")).arg(pnm.c_str()).arg(pg.c_str()));
-    if(dlg.exec() == QDialog::Accepted)
+    if( dlg.exec() == QDialog::Accepted )
     {
 	int fntSize = 35;
-	QSize papl(2048,2048*prPg->paperRect().height()/prPg->paperRect().width());
-	QSize pagl(papl.width()*prPg->pageRect().width()/prPg->paperRect().width(), papl.height()*prPg->pageRect().height()/prPg->paperRect().height());
+	QSize papl(2048,2048*printer.paperRect().height()/printer.paperRect().width());
+	QSize pagl(papl.width()*printer.pageRect().width()/printer.paperRect().width(), papl.height()*printer.pageRect().height()/printer.paperRect().height());
 
 	QPainter painter;
-	painter.begin(prPg);
+	painter.begin(&printer);
 	painter.setWindow(QRect(QPoint(0,0),papl));
-	painter.setViewport(prPg->paperRect());
+	painter.setViewport(printer.paperRect());
 
 	//> Draw image
 	QImage im = QPixmap::grabWidget(rpg).toImage();
@@ -510,17 +477,17 @@ void VisRun::printDiag( const string &idg )
     RunWdgView *rwdg;
     string dg = idg;
 
-    if(pgList.empty())	{ QMessageBox::warning(this,_("Print diagram"),_("No one page is present!")); return; }
+    if( pgList.empty() )	{ QMessageBox::warning(this,_("Print diagram"),_("No one page is present!")); return; }
 
-    if(dg.empty())
+    if( dg.empty() )
     {
 	RunPageView *rpg;
 	vector<string> lst;
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Diagram",lst);
-	if(lst.empty())	{ QMessageBox::warning(this,_("Print diagram"),_("No one diagram is present!")); return; }
-	if(lst.size() == 1)	dg = lst[0];
+	if( lst.empty() )	{ QMessageBox::warning(this,_("Print diagram"),_("No one diagram is present!")); return; }
+	if( lst.size() == 1 )	dg = lst[0];
 	else
 	{
 	    //> Make select diagrams dialog
@@ -538,25 +505,25 @@ void VisRun::printDiag( const string &idg )
 	}
     }
 
-    if(!(rwdg=findOpenWidget(dg)))	return;
+    if( !(rwdg=findOpenWidget(dg)) )	return;
 
     string dgnm = rwdg->name();
-    if(!prDiag)	prDiag = new QPrinter(QPrinter::HighResolution);
-    QPrintDialog dlg(prDiag, this);
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintDialog dlg(&printer,this);
     dlg.setWindowTitle(QString(_("Print diagram: \"%1\" (%2)")).arg(dgnm.c_str()).arg(dg.c_str()));
     if( dlg.exec() == QDialog::Accepted )
     {
 	int fntSize = 35;
-	QSize papl(2048,2048*prDiag->paperRect().height()/prDiag->paperRect().width());
-	QSize pagl(papl.width()*prDiag->pageRect().width()/prDiag->paperRect().width(), papl.height()*prDiag->pageRect().height()/prDiag->paperRect().height());
+	QSize papl(2048,2048*printer.paperRect().height()/printer.paperRect().width());
+	QSize pagl(papl.width()*printer.pageRect().width()/printer.paperRect().width(), papl.height()*printer.pageRect().height()/printer.paperRect().height());
 
 	ShapeDiagram::ShpDt *sD = (ShapeDiagram::ShpDt*)rwdg->shpData;
 	int elLine = sD->prms.size()/2+((sD->prms.size()%2)?1:0);
 
 	QPainter painter;
-	painter.begin(prDiag);
+	painter.begin(&printer);
 	painter.setWindow(QRect(QPoint(0,0),papl));
-	painter.setViewport(prDiag->paperRect());
+	painter.setViewport(printer.paperRect());
 
 	//> Draw image
 	QImage im = QPixmap::grabWidget(rwdg).toImage();
@@ -574,19 +541,14 @@ void VisRun::printDiag( const string &idg )
 	painter.drawText(QRect(0,0,pagl.width(),fntSize*2),Qt::AlignRight,QString(_("User: \"%1\"\n%2")).arg(user().c_str()).arg(dt.toString("d.MM.yyyy h:mm:ss")));
 
 	//>> Draw trend's elements
-	XMLNode reqName("name");
 	for(unsigned i_e = 0; i_e < sD->prms.size(); i_e++)
 	{
 	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
 	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
-	    //>>> Trend name request
-	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
-    	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
-
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
 	    painter.drawText(QRect(pnt.x()+fntSize,pnt.y(),pagl.width()/2,fntSize),Qt::AlignLeft,
-		QString("%1 [%2...%3]").arg(reqName.text().c_str()).arg(sD->prms[i_e].bordL()).arg(sD->prms[i_e].bordU()));
+		QString("%1 [%2...%3]").arg(sD->prms[i_e].addr().c_str()).arg(sD->prms[i_e].bordL()).arg(sD->prms[i_e].bordU()));
 	}
 
 	painter.end();
@@ -629,11 +591,11 @@ void VisRun::printDoc( const string &idoc )
     if( !(rwdg=findOpenWidget(doc)) )	return;
 
     string docnm = rwdg->name();
-    if(!prDoc) prDoc = new QPrinter(QPrinter::HighResolution);
-    QPrintDialog dlg(prDoc, this);
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintDialog dlg(&printer,this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
-    if(dlg.exec() == QDialog::Accepted)
-	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(prDoc);
+    if( dlg.exec() == QDialog::Accepted )
+	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(&printer);
 }
 
 void VisRun::exportDef( )
@@ -671,8 +633,11 @@ void VisRun::exportPg( const string &ipg )
     if(!rpg) return;
 
     QPixmap img = QPixmap::grabWidget(rpg);
-    QString fn = getFileName(_("Save page's image"), (rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
-    if(fn.size() && !img.save(fn)) mod->postMess(mod->nodePath().c_str(), QString(_("Save to file '%1' is error.")).arg(fn), TVision::Error, this);
+
+    //> Call save file dialog -
+    QString fileName = QFileDialog::getSaveFileName(this,_("Save page's image"),(rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
+    if(!fileName.isEmpty() && !img.save(fileName))
+	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }
 
 void VisRun::exportDiag( const string &idg )
@@ -711,8 +676,10 @@ void VisRun::exportDiag( const string &idg )
     if(!(rwdg=findOpenWidget(dg))) return;
 
     QPixmap img = QPixmap::grabWidget(rwdg);
-    QString fileName = getFileName(_("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
-	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"), QFileDialog::AcceptSave);
+
+    //> Call save file dialog
+    QString fileName = QFileDialog::getSaveFileName(this, _("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
+	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"));
     if(!fileName.isEmpty())
     {
 	//>> Export to CSV
@@ -744,11 +711,8 @@ void VisRun::exportDiag( const string &idg )
 		if(firstPrm < 0) return;
 		//>>> Place data
 		deque<ShapeDiagram::TrendObj::SHg> &baseVls = dgDt->prms[firstPrm].val();
-		int64_t eTmVl = dgDt->tTime;
-		int64_t bTmVl = eTmVl - 1e6*dgDt->tSize;
-		for(unsigned i_v = 0; i_v < baseVls.size() && baseVls[i_v].tm <= eTmVl; i_v++)
+		for(unsigned i_v = 0; i_v < baseVls.size(); i_v++)
 		{
-		    if(baseVls[i_v].tm < bTmVl) continue;
 		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+TSYS::int2str(baseVls[i_v].tm%1000000);
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
 		    {
@@ -839,8 +803,10 @@ void VisRun::exportDoc( const string &idoc )
     }
 
     if(!(rwdg=findOpenWidget(doc))) return;
-    QString fileName = getFileName(_("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
-	_("XHTML (*.html);;CSV file (*.csv)"), QFileDialog::AcceptSave);
+
+    //> Call save file dialog -
+    QString fileName = QFileDialog::getSaveFileName(this, _("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
+	_("XHTML (*.html);;CSV file (*.csv)"));
     if(!fileName.isEmpty())
     {
 	int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
@@ -914,7 +880,14 @@ void VisRun::exportDoc( const string &idoc )
 	    }
 	}
 	//>> Export to XHTML
-	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
+	else rez = "<?xml version='1.0' ?>\n"
+		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+		"'DTD/xhtml1-transitional.dtd'>\n"
+		"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+		"<head>\n"
+		"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+		"  <style type='text/css'>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->style+"</style>\n"
+		"</head>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->doc+"</html>";
 
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
 	else ::write(fd,rez.data(),rez.size());
@@ -1016,40 +989,83 @@ void VisRun::alarmAct( QAction *alrm )
     cntrIfCmd(req);
 
     //> Send event to master page
-    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
+    if( master_pg ) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
 }
 
 void VisRun::initSess( const string &prj_it, bool crSessForce )
 {
     //> Connect/create session
     src_prj = TSYS::pathLev(prj_it,0);
-    if(src_prj.empty()) return;
+    if( src_prj.empty() ) return;
     src_prj = src_prj.substr(4);
     work_sess = "";
 
     //> Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
-    if(!crSessForce && !cntrIfCmd(req) && req.childSize())
+    if( !crSessForce && !cntrIfCmd(req) && req.childSize() )
     {
-	//>> Prepare and execute a session selection dialog
+	//>> Prepare dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
-	InputDlg conreq(this,QPixmap::fromImage(ico_t),
-	    QString(_("Several sessions are already opened on the project \"%1\".\n"
-		"You can create new or connect to present session. Please, select needed or press \"Cancel\".")).arg(src_prj.c_str()),
-	    _("Select session for connection or new creation"),false,false);
+	QDialog conreq(this);
+	conreq.setWindowTitle(_("Select session for connection"));
+	conreq.setMinimumSize( QSize( 150, 100 ) );
+	conreq.setWindowIcon(QPixmap::fromImage(ico_t));
+	conreq.setSizeGripEnabled(true);
+
+	QVBoxLayout *dlg_lay = new QVBoxLayout(&conreq);
+	dlg_lay->setMargin(10);
+	dlg_lay->setSpacing(6);
+
+	QHBoxLayout *intr_lay = new QHBoxLayout;
+	intr_lay->setSpacing(6);
+
+	QLabel *icon_lab = new QLabel(&conreq);
+	icon_lab->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum) );
+	icon_lab->setPixmap(QPixmap::fromImage(ico_t));
+	intr_lay->addWidget(icon_lab);
+
+        QLabel *inp_lab = new QLabel(QString(_("Several sessions are already opened on the page %1. You can create new "
+				       "session or connect to present session. Please, select needed session "
+				       "and press 'Connect' or press 'Create' for creation of a new, individual, "
+				       "session.")).arg(src_prj.c_str()),&conreq);
+	inp_lab->setWordWrap(true);
+	intr_lay->addWidget(inp_lab);
+	dlg_lay->addItem(intr_lay);
+
+	intr_lay = new QHBoxLayout;
+	intr_lay->setSpacing(6);
+	intr_lay->addStretch();
 	QListWidget *ls_wdg = new QListWidget(&conreq);
-	conreq.edLay()->addWidget(ls_wdg, 0, 0);
-	ls_wdg->addItem(_("<Create new session>"));
+	intr_lay->addWidget(ls_wdg);
+	intr_lay->addStretch();
+	dlg_lay->addItem(intr_lay);
+
+	dlg_lay->addStretch();
+
+	QFrame *sep = new QFrame(&conreq);
+	sep->setFrameShape( QFrame::HLine );
+	sep->setFrameShadow( QFrame::Raised );
+	dlg_lay->addWidget( sep );
+
+	QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,Qt::Horizontal,&conreq);
+	but_box->button(QDialogButtonBox::Ok)->setText(_("Connect"));
+	but_box->button(QDialogButtonBox::Cancel)->setText(_("Create"));
+	connect(but_box, SIGNAL(accepted()), &conreq, SLOT(accept()));
+	connect(but_box, SIGNAL(rejected()), &conreq, SLOT(reject()));
+	dlg_lay->addWidget( but_box );
+	conreq.resize(400,300);
+
+	//>> Load session list
 	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 	    ls_wdg->addItem(req.childGet(i_ch)->text().c_str());
 	ls_wdg->setCurrentRow(0);
 
-	if(conreq.exec() == QDialog::Accepted && ls_wdg->currentItem())
-	    work_sess = (ls_wdg->currentRow() > 0) ? ls_wdg->currentItem()->text().toAscii().data() : "";
-	else { close(); return; }
-
+	//>> Execute dialog
+	int rez = 0;
+	if( (rez=conreq.exec()) == QDialog::Accepted && ls_wdg->currentItem() )
+	    work_sess = ls_wdg->currentItem()->text().toAscii().data();
     }
 
     req.clear()->setName("connect")->setAttr("path","/%2fserv%2fsess");
@@ -1057,7 +1073,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     else req.setAttr("sess",work_sess);
     if(cntrIfCmd(req))
     {
-	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
+	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	close();
 	return;
     }
@@ -1067,34 +1083,34 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //> Set window title
     //>> Get project's name
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fname");
-    if(!cntrIfCmd(req))	setWindowTitle(req.text().c_str());
+    if( !cntrIfCmd(req) )	setWindowTitle(req.text().c_str());
     else setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));
 
     //> Set project's icon to window
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fico");
-    if(!cntrIfCmd(req))
+    if( !cntrIfCmd(req) )
     {
 	QImage img;
 	string simg = TSYS::strDecode(req.text(),TSYS::base64);
-	if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
+	if( img.loadFromData((const uchar*)simg.c_str(),simg.size()) )
 	    setWindowIcon(QPixmap::fromImage(img));
     }
     else setWindowIcon(mod->icon());
 
     //> Get update period
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
-    if(!cntrIfCmd(req)) mPeriod = atoi(req.text().c_str());
+    if( !cntrIfCmd(req) ) mPeriod = atoi(req.text().c_str());
 
     //> Get current style
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
-    if(!cntrIfCmd(req))
+    if( !cntrIfCmd(req) )
     {
-	setStyle(atoi(req.text().c_str()));
+	setStyle( atoi(req.text().c_str()) );
 	//> Check for styles present
-	if(style() < 0)
+	if( style() < 0 )
 	{
 	    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
-	    if(!cntrIfCmd(req) && req.childSize() <= 1) mStlBar->setVisible(false);
+	    if( !cntrIfCmd(req) && req.childSize() <= 1 ) mStlBar->setVisible(false);
 	}
     }
 
@@ -1118,15 +1134,15 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //> Open direct-selected page
-    if(!TSYS::pathLev(prj_it,1).empty())
+    if( !TSYS::pathLev(prj_it,1).empty() )
     {
 	//>> Convert project path to session path
 	string prj_el;
 	string ses_it = "/ses_"+work_sess;
 	int i_el = 1;
-	while((prj_el=TSYS::pathLev(prj_it,i_el++)).size())
-	    if(prj_el.substr(0,3) != "pg_") break;
-	    else ses_it += "/"+prj_el;
+	while( (prj_el=TSYS::pathLev(prj_it,i_el++)).size() )
+	    if( prj_el.substr(0,3) != "pg_" ) break;
+	    else ses_it = ses_it+"/"+prj_el;
 
 	//>> Send open command
 	req.clear()->setName("open")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",ses_it);

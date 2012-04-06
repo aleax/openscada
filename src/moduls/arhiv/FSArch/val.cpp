@@ -226,7 +226,7 @@ void ModVArch::checkArchivator( bool now )
     {
 	//> Find archive files for no present archives and create it.
 	struct stat file_stat;
-	dirent scan_dirent, *scan_rez = NULL;
+	dirent *scan_dirent;
 
 	//>> Open/create new directory
 	DIR *IdDir = opendir(addr().c_str());
@@ -237,13 +237,13 @@ void ModVArch::checkArchivator( bool now )
 	}
 
 	//>> Scan opened directory
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
+	while((scan_dirent=readdir(IdDir)) != NULL)
 	{
-	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name) continue;
 
 	    string	ArhNm;
 	    TFld::Type	ArhTp;
-	    string NameArhFile = addr()+"/"+scan_rez->d_name;
+	    string NameArhFile = addr()+"/"+scan_dirent->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
 	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
@@ -427,8 +427,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	TVArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Full archives size"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
-	    "tp","str","dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to directory for archivator's of values files."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,2,
+	    "tp","str","help",_("Path to directory for archivator's of values files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
@@ -475,8 +475,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/dirList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, addr());
-    else if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
+    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
     else if(a_path == "/prm/add/tm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(fileTimeSize(),6));
@@ -601,19 +600,19 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
     {
 	//> Scan directory for find new files and deleted files
 	struct stat file_stat;
-	dirent scan_dirent, *scan_rez = NULL;
+	dirent *scan_dirent;
 
 	//>> Open archive derictory
 	DIR *IdDir = opendir(archivator().addr().c_str());
 	if(IdDir == NULL) return;
 
 	//>> Check to allow files
-	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
+	while((scan_dirent=readdir(IdDir)) != NULL)
 	{
-	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0)	continue;
+	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name)	continue;
 
 	    string ArhNm;
-	    string NameArhFile = archivator().addr()+"/"+scan_rez->d_name;
+	    string NameArhFile = archivator().addr()+"/"+scan_dirent->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
 	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0)	continue;
@@ -674,38 +673,27 @@ void ModVArchEl::fileAdd( const string &file )
 		break;
 	    }
 	if(i_arh < 0) arh_f.push_front(f_arh);
-	realEnd = 0;	//Reset real end position
     }
 }
 
-int64_t ModVArchEl::end( )
+int64_t ModVArchEl::end()
 {
-    if(realEnd) return realEnd;
-
-    //Real end first calculation
-    ResAlloc res(mRes, false);
-    int64_t curTm = TSYS::curTime();
-    VFileArch *lstFile = NULL;
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-    {
-	if(arh_f[i_a]->err()) continue;
-	lstFile = arh_f[i_a];
-	if(curTm <= lstFile->end())
+    ResAlloc res(mRes,false);
+    for(int i_a = (int)arh_f.size()-1; i_a >= 0; i_a--)
+	if(!arh_f[i_a]->err())
 	{
-	    if(!realEnd) realEnd = lstFile->endData();
-	    break;
+	    if(!realEnd) realEnd = arh_f[i_a]->endData();
+	    return vmin(arh_f[i_a]->end(),realEnd);
 	}
-    }
-    if(lstFile && !realEnd) realEnd = lstFile->endData();
 
-    return realEnd;
+    return 0;
 }
 
 int64_t ModVArchEl::begin()
 {
     ResAlloc res(mRes,false);
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-	if(!arh_f[i_a]->err())
+    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
+	if( !arh_f[i_a]->err() )
 	    return arh_f[i_a]->begin();
 
     return 0;
@@ -713,29 +701,18 @@ int64_t ModVArchEl::begin()
 
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
-    //> Request by single values for most big buffer period
-    if(buf.period()/100 > (int64_t)(archivator().valPeriod()*1e6))
-    {
-	ibeg = (ibeg/buf.period())*buf.period();
-	for(int64_t ctm; ibeg <= iend; ibeg += buf.period())
-	{
-	    ctm = ibeg;
-	    TVariant vl = getValProc(&ctm, false);
-	    buf.set(vl, ibeg);
-	}
-	return;
-    }
-
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes,false);
     for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
 	if(ibeg > iend) break;
 	else if(!arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin())
 	{
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += arh_f[i_a]->period()) buf.setI(EVAL_INT,ibeg);
-	    arh_f[i_a]->getVals(buf, ibeg, vmin(iend,arh_f[i_a]->end()));
-	    ibeg = arh_f[i_a]->end()+arh_f[i_a]->period();
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (int64_t)(archivator().valPeriod()*1e6))
+		buf.setI(EVAL_INT,ibeg);
+	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
+	    ibeg = arh_f[i_a]->end()+1;
 	}
-    for( ; ibeg <= iend; ibeg += (int64_t)(archivator().valPeriod()*1e6)) buf.setI(EVAL_INT, ibeg);
+    for( ; ibeg <= iend; ibeg+=(int64_t)(archivator().valPeriod()*1e6) )
+	buf.setI(EVAL_INT,ibeg);
 }
 
 TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
@@ -743,10 +720,10 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     int64_t itm = tm ? *tm : SYS->curTime();
     int64_t per;
     ResAlloc res(mRes,false);
-    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-	if(!arh_f[i_a]->err() && (
+    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
+	if( !arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
-		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin())))
+		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
 	{
 	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getVal(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
@@ -1138,15 +1115,15 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
     //> Get values block character
-    vpos_beg = vmax(0, (beg-begin())/period());
-    if(vpos_beg > mpos)	return;
+    vpos_beg = vmax(0,(beg-begin())/period());
+    if( vpos_beg > mpos )	return;
     vpos_end = vmin(mpos,(end-begin())/period());
-    if(vpos_end < 0)	return;
+    if( vpos_end < 0 )		return;
     //if( (vpos_end-vpos_beg) > (TArchiveS::max_req_vals-buf.realSize()) )
     //	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
-    if(vpos_beg > vpos_end)	return;
+    if( vpos_beg > vpos_end )	return;
 
-    if(mPack)
+    if( mPack )
     {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
@@ -1316,14 +1293,14 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     int vpos_beg, vpos_end;
     string val_b, value, value_first, value_end;       //Set value
 
-    ResAlloc res(mRes, false);
+    ResAlloc res(mRes,false);
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
-    ibeg = vmax(ibeg, begin());
-    iend = vmin(iend, end());
-    if(ibeg > iend)	return;
+    ibeg = vmax(ibeg,begin());
+    iend = vmin(iend,end());
+    if( ibeg > iend )	return;
 
-    if(mPack)
+    if( mPack )
     {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
@@ -1343,47 +1320,47 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //> Get values, make value buffer and init the pack index table
     vpos_beg = 0;
     vpos_end = -1;
-    while(ibeg <= iend)
+    while( ibeg <= iend )
     {
 	//>> Get value and put it to file
 	switch(type())
 	{
 	    case TFld::Boolean:
 	    {
-		char tval = buf.getB(&ibeg, true);
-		value.assign(&tval, vSize);
+		char tval = buf.getB(&ibeg,true);
+		value.assign(&tval,vSize);
 		break;
 	    }
 	    case TFld::Integer:
 	    {
-		int tval = buf.getI(&ibeg, true);
-		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0)
+		int tval = buf.getI(&ibeg,true);
+		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
 		{
 		    int vprev = *(int*)value_end.c_str();
-		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
+		    if( ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
 			tval = vprev;
 		}
-		value.assign((char*)&tval, vSize);
+		value.assign((char*)&tval,vSize);
 		break;
 	    }
 	    case TFld::Real:
 	    {
-		double tval = buf.getR(&ibeg, true);
-		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0)
+		double tval = buf.getR(&ibeg,true);
+		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
 		{
 		    double vprev = *(double*)value_end.c_str();
-		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
+		    if( ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
 			tval = vprev;
 		}
 		tval = TSYS::doubleLE(tval);
-		value.assign((char*)&tval, vSize);
+		value.assign((char*)&tval,vSize);
 		break;
 	    }
 	    case TFld::String:
 	    {
-		value = buf.getS(&ibeg, true);
+		value = buf.getS(&ibeg,true);
 		if(!value.size()) value = " ";
 		if((int)value.size() >= (1<<(vSize*8)))
 		    value.erase((1<<(vSize*8))-1);
@@ -1392,14 +1369,14 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	    default: break;
 	}
 
-	int pos_cur = (vmin(ibeg,iend)-begin())/period();		//> Border add to end for prevent index buffer overlap
-	if(vpos_end < 0) { vpos_beg = pos_cur; vpos_end = vpos_beg-1; }	//> First call
+	int pos_cur = (ibeg-begin())/period();
+	if( vpos_end < 0 ) { vpos_beg = pos_cur; vpos_end = vpos_beg-1; }
 	int pos_i = vpos_end;
 	while(pos_i < pos_cur)
 	{
 	    pos_i++;
 	    string wr_val = (pos_i==pos_cur)?value:eVal;
-	    if(vpos_end < vpos_beg || wr_val != value_end)
+	    if( vpos_end < vpos_beg || wr_val != value_end )
 	    {
 		if(fixVl)
 		{
@@ -1410,11 +1387,11 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 		else
 		{
 		    int v_sz = wr_val.size();
-		    for(int v_psz = 0; v_psz < vSize; v_psz++)
+		    for(int v_psz = 0; v_psz < vSize; v_psz++ )
 			pid_b[vSize*(pos_i-vpos_beg)+v_psz] = *(((char *)&v_sz)+v_psz);
 		    val_b.append(wr_val);
 		}
-		if(vpos_end < vpos_beg) value_first = wr_val;
+		if(vpos_end < vpos_beg ) value_first = wr_val;
 		value_end = wr_val;
 	    }
 	    vpos_end = pos_i;
@@ -1424,15 +1401,15 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     res.request(true);
     //> Open archive file
-    int hd = open(name().c_str(), O_RDWR);
+    int hd = open(name().c_str(),O_RDWR);
     if(hd <= 0) { mErr = true; return; }
 
     //> Get block geometry from file
     int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev = 0, foff_end_len, foff_end, foff_endnext_len, foff_endnext = 0;
-    if(vpos_beg) foff_begprev = calcVlOff(hd, vpos_beg-1, &foff_begprev_len, true);
-    foff_beg = calcVlOff(hd, vpos_beg, &foff_beg_len, true);
-    foff_end = calcVlOff(hd, vpos_end, &foff_end_len, true);
-    if(vpos_beg < mpos) foff_endnext = calcVlOff(hd, vpos_end+1, &foff_endnext_len, true);
+    if(vpos_beg) foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
+    foff_beg = calcVlOff(hd,vpos_beg,&foff_beg_len,true);
+    foff_end = calcVlOff(hd,vpos_end,&foff_end_len,true);
+    if(vpos_beg < mpos) foff_endnext = calcVlOff(hd,vpos_end+1,&foff_endnext_len,true);
 
     //> Checking and adaptation border
     if(fixVl)
@@ -1509,32 +1486,31 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     int pid_b_sz;
     if(fixVl)
     {
-	lseek(hd, sizeof(FHead)+vpos_beg/8, SEEK_SET);
+	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
 	pid_b_sz = vpos_end/8 - vpos_beg/8 + 1;
     }
     else
     {
-	lseek(hd, sizeof(FHead)+vSize*vpos_beg, SEEK_SET);
+	lseek(hd,sizeof(FHead)+vSize*vpos_beg,SEEK_SET);
 	pid_b_sz = vSize*(vpos_end-vpos_beg+1);
     }
-    if(pid_b.size() < pid_b_sz) mess_err(mod->nodePath().c_str(),_("Warning! Allocated buffer size %d for indexes lesser for used %d."),pid_b.size(),pid_b_sz);
-    write(hd, pid_b.data(), pid_b_sz);
-    moveTail(hd, foff_end, foff_end+(val_b.size()-(foff_end-foff_beg)));
-    lseek(hd, foff_beg, SEEK_SET);
-    write(hd, val_b.data(), val_b.size());
+    write(hd,pid_b.data(),pid_b_sz);
+    moveTail(hd,foff_end,foff_end+(val_b.size()-(foff_end-foff_beg)));
+    lseek(hd,foff_beg,SEEK_SET);
+    write(hd,val_b.data(),val_b.size());
 
     //> Check for write to end correct
-    if(mod->copyErrValFiles && fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
-		((mSize-foff_end) == 0 && (int)val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
+    if(fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
+				((mSize-foff_end) == 0 && (int)val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
 	mess_err(mod->nodePath().c_str(), _("Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);
 
     //> Drop cache
     cacheDrop(vpos_beg);
-    cacheSet(vpos_end, foff_beg+val_b.size()-value_end.size(), value_end.size(), true, true);
+    cacheSet(vpos_end,foff_beg+val_b.size()-value_end.size(),value_end.size(),true,true);
 
     mAcces = time(NULL);
 
-    mSize = lseek(hd, 0, SEEK_END);
+    mSize = lseek(hd,0,SEEK_END);
 
     close(hd);
 }

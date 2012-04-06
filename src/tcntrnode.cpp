@@ -24,6 +24,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <unistd.h>
+#include <dirent.h>
 #include <stdarg.h>
 #include <limits.h>
 
@@ -76,9 +77,9 @@ void TCntrNode::nodeDelAll( )
 
 void TCntrNode::setNodeMode( char mode )
 {
-    pthread_mutex_lock(&connM);
+    hd_res.resRequestW();
     m_flg = (m_flg&(~0x03))|(mode&0x03);
-    pthread_mutex_unlock(&connM);
+    hd_res.resRelease();
 }
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
@@ -241,23 +242,20 @@ void TCntrNode::nodeList( vector<string> &list, const string &gid )
 
 AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int off, bool noex )
 {
-    try
+    string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
+			TSYS::pathLev(path,lev,true,&off);
+    if(s_br.empty())
     {
-	string s_br = sep ? TSYS::strDecode(TSYS::strSepParse(path,lev,sep,&off),TSYS::PathEl) :
-			    TSYS::pathLev(path,lev,true,&off);
-	if(s_br.empty())
-	{
-	    if(nodeMode() == Disable) throw TError(nodePath().c_str(),_("Node is disabled!"));
-	    return this;
-	}
-	ResAlloc res(hd_res,false);
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0)
-		return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off,noex);
-	//> Go to default group
-	if(chGrp) return chldAt(0,s_br).at().nodeAt(path,0,sep,off,noex);
-	throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
-    } catch(TError err) { if(!noex) throw; }
+	if(nodeMode() == Disable) throw TError(nodePath().c_str(),_("Node is disabled!"));
+	return this;
+    }
+    ResAlloc res(hd_res,false);
+    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	if(s_br.substr(0,(*chGrp)[i_g].id.size()) == (*chGrp)[i_g].id)
+	    return chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().nodeAt(path,0,sep,off,noex);
+    //> Go to default group
+    if(chGrp)	return chldAt(0,s_br).at().nodeAt(path,0,sep,off,noex);
+    if(!noex)	throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
     return NULL;
 }
 
@@ -351,11 +349,11 @@ TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
     return (*chGrp)[iid];
 }
 
-void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
+void TCntrNode::chldList(int8_t igr, vector<string> &list)
 {
-    ResAlloc res(hd_res, false);
-    if(!chGrp || igr >= (int)chGrp->size()) { if(noex) return; else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr); }
-    if(nodeMode() == Disable) { if(noex) return; else throw TError(nodePath().c_str(),"Node is disabled!"); }
+    ResAlloc res(hd_res,false);
+    if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
+    if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
 
     list.clear();
     list.reserve((*chGrp)[igr].elem.size());
@@ -537,20 +535,6 @@ int TCntrNode::isModify( int f )
     return rflg;
 }
 
-void TCntrNode::modif( bool save )
-{
-    pthread_mutex_lock(&connM);
-    m_flg |= (save?(SelfModifyS|SelfModify):SelfModify);
-    pthread_mutex_unlock(&connM);
-}
-
-void TCntrNode::modifClr( bool save )
-{
-    pthread_mutex_lock(&connM);
-    m_flg &= ~(save?SelfModifyS:SelfModify);
-    pthread_mutex_unlock(&connM);
-}
-
 void TCntrNode::modifG( )
 {
     ResAlloc res( hd_res, false );
@@ -575,10 +559,8 @@ void TCntrNode::load( bool force )
     if((isModify(Self)&Self) || force)
 	try
 	{
-	    if(nodeMode( ) == TCntrNode::Disable) nodeEn(NodeRestore|NodeShiftDel);
-	    modifClr(true);	//Save flag clear
-	    load_();
-	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
+	    if( nodeMode( ) == TCntrNode::Disable )	nodeEn( NodeRestore|NodeShiftDel );
+	    load_( );
 	}
 	catch(TError err)
 	{
@@ -591,9 +573,9 @@ void TCntrNode::load( bool force )
 	ResAlloc res( hd_res, false );
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-		if(p->second->isModify(Self|Child)) p->second->load(force);
+		if(p->second->isModify(Self|Child))	p->second->load(force);
     }
-
+    modifClr( );
 }
 
 void TCntrNode::save( )
@@ -609,10 +591,24 @@ void TCntrNode::save( )
     //> Childs load process
     if( isModify(Child)&Child )
     {
-	ResAlloc res(hd_res, false);
+	ResAlloc res( hd_res, false );
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-                if(p->second->isModify(Self|Child)) p->second->save();
+	    for(unsigned i_p = 0; i_p < (*chGrp)[i_g].elem.size(); )
+	    {
+		TMap::iterator p = (*chGrp)[i_g].elem.begin();
+		for(unsigned i = 0; i < i_p; i++) p++;
+
+		if(p->second->isModify(Self|Child)) p->second->save();
+		if(p->second->nodeMode() == TCntrNode::Disable)
+		{
+		    string chld_nm = p->second->nodeName();
+		    res.release();
+		    chldDel(i_g, chld_nm);
+		    res.request(false);
+		    continue;
+		}
+		i_p++;
+	    }
     }
     modifClr( );
 }
@@ -748,23 +744,16 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 
 bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
 {
-    int woff = 0;
-    string req = nd->attr("path");
-    string reqt, reqt1;
-
-    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off)
-	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)))
-	    return false;
-
     XMLNode *obj = nd;
-    if(obj->name() == "info") obj = nd->childGet(0,true);
-    if(!obj)	return false;
+    if( obj->name() == "info" )	obj = nd->childGet(0,true);
+    if( !obj )	return false;
 
     //> Find element
-    while((reqt=TSYS::pathLev(path,0,true,&woff)).size())
+    string reqt;
+    for( int woff = 0; (reqt=TSYS::pathLev(path,0,true,&woff)).size(); )
     {
 	XMLNode *obj1 = obj->childGet("id",reqt,true);
-	if(!obj1) return false;
+	if( !obj1 ) return false;
 	obj = obj1;
     }
     obj->parent()->childDel(obj);
@@ -785,24 +774,24 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
-    if(opt->name() == "info")
+    if( opt->name() == "info" )
 	ctrMkNode("oscada_cntr",opt,-1,"/",TSYS::strMess(_("Node: %s"),nodeName()),R_R_R_,"root","root");
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/obj")
+    if( a_path == "/obj" )
     {
 	//>> Get node modify flag
-	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
+	if( ctrChkNode(opt,"modify",R_R_R_) )	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	//>> Do load node
-	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR))	load( );
+	else if( ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR) )	load( );
 	//>> Do save node
-	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR))	save( );
+	else if( ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR) )	save( );
 	//>> Do copy node
-	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))
+	else if( ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR) )
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
 	//>> Request node childs parameters
-	else if(ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEC_RD))
+	else if( ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEC_RD) )
 	{
 	    string chGrp = opt->attr("grp");
 	    bool icoCheck = atoi(opt->attr("icoCheck").c_str());
@@ -810,7 +799,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    XMLNode req("get"); req.setAttr("path","/br/"+chGrp)->setAttr("user",opt->attr("user"));
 	    cntrCmdProc(&req);
 	    int chGrpId = grpId(chGrp);
-	    if(chGrpId >= 0)
+	    if( chGrpId >= 0 )
 		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 		{
 		    XMLNode *chN = opt->childAdd();
@@ -820,7 +809,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		    //>>>> Check icon
 		    XMLNode reqIco("get"); reqIco.setAttr("path","/ico")->setAttr("user",opt->attr("user"));
 		    ch.at().cntrCmdProc(&reqIco);
-		    if(icoCheck) chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
+		    if( icoCheck ) chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
 		    else chN->childAdd("ico")->setText(reqIco.text());
 		    //>>>> Process groups
 		    XMLNode brReq("info"); brReq.setAttr("path","/br")->setAttr("user",opt->attr("user"));
@@ -836,17 +825,14 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		}
 	}
     }
-    else if((a_path == "/db/list" || a_path.compare(0,11,"/db/tblList") == 0) && ctrChkNode(opt))
+    else if( (a_path == "/db/list" || a_path == "/db/tblList") && ctrChkNode(opt) )
     {
-	string tblList = "";
-	if(a_path.compare(0,11,"/db/tblList") == 0)
-	    if(!(tblList=TSYS::strParse(a_path,1,":")).size())	tblList = _("[TableName]");
+	bool tblList = a_path == "/db/tblList";
 	vector<string> c_list;
 	SYS->db().at().dbList(c_list);
-	opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
-	opt->childAdd("el")->setText(tblList.size() ? ("<cfg>."+tblList) : "<cfg>");
+	opt->childAdd("el")->setText(tblList ? _("*.*.[TableName]") : "*.*");
+	opt->childAdd("el")->setText(tblList ? _("<cfg>.[TableName]") : "<cfg>");
 	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
-	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
+	    opt->childAdd("el")->setText( tblList ? c_list[i_db]+"."+_("[TableName]") : c_list[i_db] );
     }
-
 }

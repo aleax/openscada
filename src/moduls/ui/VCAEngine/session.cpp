@@ -39,11 +39,19 @@ Session::Session( const string &iid, const string &iproj ) :
     mPage = grpAdd("pg_");
     sec = SYS->security();
     mReqTm = time(NULL);
+
+    //> Attributes mutex create
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mtxAttr, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 Session::~Session( )
 {
-
+    //> Attributes mutex destroy
+    pthread_mutex_destroy(&mtxAttr);
 }
 
 void Session::postEnable( int flag )
@@ -422,6 +430,8 @@ void *Session::Task( void *icontr )
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
 
+	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
+
 	ses.tm_calc = TSYS::curTime()-t_cnt;
 	/*ses.rez_calc+=ses.tm_calc;
 	if( !(ses.calcClk()%10) )
@@ -431,7 +441,6 @@ void *Session::Task( void *icontr )
 	}*/
 
 	TSYS::taskSleep((int64_t)ses.period()*1000000);
-	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
     }
 
     ses.mStart = false;
@@ -819,20 +828,31 @@ void SessPage::setEnable( bool val, bool force )
     }
 }
 
-void SessPage::setProcess( bool val, bool lastFirstCalc )
+void SessPage::setProcess( bool val )
 {
     //> Change process state for included pages
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-        pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
+        pageAt(ls[i_l]).at().setProcess(val);
 
     if(!enable()) return;
 
     //> Change self process state
+    bool diff = (val!=process());
     if(val && !parent().at().parent().freeStat() && (attrAt("pgOpen").at().getB() || attrAt("pgNoOpenProc").at().getB()))
-	SessWdg::setProcess(true, lastFirstCalc);
-    else if(!val) SessWdg::setProcess(false, lastFirstCalc);
+    {
+	SessWdg::setProcess(true);
+	//>> First calc
+	if(diff) calc(true,false);
+    }
+    else if(!val)
+    {
+	//>> Last calc
+	if(diff) calc(false,true);
+
+	SessWdg::setProcess(false);
+    }
 }
 
 AutoHD<Page> SessPage::parent( )
@@ -877,7 +897,7 @@ AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off )
 void SessPage::calc( bool first, bool last )
 {
     //> Process self data
-    if(process()) SessWdg::calc(first, last);
+    if(process()) SessWdg::calc(first,last);
 
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
@@ -885,7 +905,7 @@ void SessPage::calc( bool first, bool last )
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	pageAt(ls[i_l]).at().calc(first, last);
+	pageAt(ls[i_l]).at().calc(first,last);
 }
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
@@ -1172,7 +1192,7 @@ string SessWdg::ownerFullId( bool contr )
 
 void SessWdg::setEnable( bool val )
 {
-    try { Widget::setEnable(val); } catch(...) { return; }
+    Widget::setEnable(val);
 
     if(!val)
     {
@@ -1182,20 +1202,13 @@ void SessWdg::setEnable( bool val )
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    wdgDel(ls[i_l]);
     }
-    SessWdg *sw;
-    if(val && (sw=ownerSessWdg(true)) && sw->process())
-    {
-	setProcess(true);
-	sw->prcElListUpdate();
-    }
 }
 
-void SessWdg::setProcess( bool val, bool lastFirstCalc )
+void SessWdg::setProcess( bool val )
 {
     if(val && !enable()) setEnable(true);
 
     //> Prepare process function value level
-    bool diff = (val!=process());
     if(val && !TSYS::strNoSpace(calcProg()).empty())
     {
 	//>> Prepare function io structure
@@ -1265,9 +1278,6 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     }
     if(!val)
     {
-	//>> Last calc, before any free
-	if(diff && lastFirstCalc) calc(false, true);
-
 	//>> Free function link
 	mProc = false;
 	ResAlloc res(mCalcRes, true);
@@ -1278,15 +1288,12 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     vector<string> ls;
     wdgList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().setProcess(val, false);
+	((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().setProcess(val);
 
     mProc = val;
 
     //>> Make process element's lists
     if(val) prcElListUpdate();
-
-    //>> First calc, after all set
-    if(diff && val && lastFirstCalc) calc(true, false);
 }
 
 string SessWdg::ico( )
@@ -1317,8 +1324,8 @@ string SessWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    mimeData = parent().at().resourceGet(id, &mimeType);
-    if(mime) *mime = mimeType;
+    mimeData = parent().at().resourceGet( id, &mimeType );
+    if(mime)	*mime = mimeType;
 
     return mimeData;
 }
@@ -1452,11 +1459,10 @@ void SessWdg::prcElListUpdate( )
     }
 }
 
-void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &els )
+void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
 {
-    string wpath = ipath+"/"+id();
+    string wpath = path+"/"+id();
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
-
     for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
 	if(wdgPresent(mWdgChldAct[i_ch]))
 	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_ch])).at().getUpdtWdg(wpath,tm,els);
@@ -1486,7 +1492,7 @@ void SessWdg::calc( bool first, bool last )
     //> Calculate include widgets
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
 	if(wdgPresent(mWdgChldAct[i_l]))
-	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_l])).at().calc(first, last);
+	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_l])).at().calc(first,last);
 
     try
     {
@@ -1705,6 +1711,8 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    //> Enable widget
 	    AutoHD<SessWdg> nw = wdgAt(prms[0].getS());
 	    nw.at().setEnable(true);
+	    nw.at().setProcess(true);
+	    prcElListUpdate();
 
 	    return new TCntrNodeObj(&nw.at(),user);
 	}

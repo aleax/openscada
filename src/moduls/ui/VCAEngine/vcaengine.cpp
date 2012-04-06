@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -74,7 +75,7 @@ using namespace VCA;
 //* Engine                                       *
 //************************************************
 Engine::Engine( string name ) : TUI(MOD_ID),
-    passAutoEn(false), mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R")
+    mSynthCom("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10k -c 1 -v 0.8 - -t ogg -"), mSynthCode("KOI8-R")
 {
     mod		= this;
 
@@ -131,7 +132,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     wdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000") );
+    wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
     wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
 
@@ -179,7 +180,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     page_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
     page_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    page_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000") );
+    page_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"10000") );
     page_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
@@ -232,7 +233,6 @@ void Engine::preDisable( int flag )
     if(startStat()) modStop();
 
     vector<string> ls;
-    passAutoEn = true;
     //> Sessions disable
     sesList(ls);
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
@@ -247,7 +247,6 @@ void Engine::preDisable( int flag )
     wlbList(ls);
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
 	wlbAt(ls[l_id]).at().setEnable(false);
-    passAutoEn = false;
 
     TModule::preDisable(flag);
 }
@@ -265,8 +264,6 @@ void Engine::load_( )
 #endif
 
     map<string, bool>	itReg;
-
-    passAutoEn = true;
 
     //>> Load widgets libraries
     try
@@ -332,11 +329,7 @@ void Engine::load_( )
 	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+prjTable(),nodePath()+"PRJ",lib_cnt++,c_el); )
 	    {
 		string prj_id = c_el.cfg("ID").getS();
-		if(!prjPresent(prj_id))
-		{
-		    prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		    prjAt(prj_id).at().setEnableByNeed();
-		}
+		if(!prjPresent(prj_id))	prjAdd(prj_id,"",(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 		itReg[prj_id] = true;
 	    }
 
@@ -385,15 +378,12 @@ void Engine::load_( )
     prjList(ls);
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
     {
-	if(prjAt(ls[l_id]).at().enableByNeed)	continue;
 	prjAt(ls[l_id]).at().setEnable(true);
 #if OSC_DEBUG >= 3
 	mess_debug(nodePath().c_str(),_("Enable project '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
 	w_tm = TSYS::curTime();
 #endif
     }
-
-    passAutoEn = false;
 
     //> Auto-sessions load and enable
     ResAlloc res(nodeRes(),true);
@@ -581,10 +571,10 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	c_el.cfg("ID").setS(tstr);
         c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
-	c_el.cfg("CFG_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))/* &&
-		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))*/));	//!!!! Commented by no the flags present on first start
-										//on global attributes creation from the primitive.
+	c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
+
 	if( !SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el) ) continue;
 
 	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
@@ -981,26 +971,4 @@ void Engine::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/tts/comm_ls" && ctrChkNode(opt))
 	opt->childAdd("el")->setText("echo \"%t\" | ru_tts | sox -t raw -s -b 8 -r 10000 -c 1 -v 0.8 - -t ogg -");
     else TUI::cntrCmdProc(opt);
-}
-
-AutoHD<TCntrNode> Engine::chldAt( int8_t igr, const string &name, const string &user )
-{
-    AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
-    if(igr == idPrj && !nd.freeStat())
-    {
-	AutoHD<Project> prj = nd;
-	if(!prj.freeStat() && !prj.at().enable() && !passAutoEn && prj.at().enableByNeed)
-	{
-	    prj.at().enableByNeed = false;
-	    try
-	    {
-		prj.at().load(true);
-		prj.at().setEnable(true);
-		prj.at().modifGClr();
-	    }
-	    catch(TError err) { }
-	}
-    }
-
-    return nd;
 }

@@ -67,8 +67,6 @@ namespace VISION
 
 	    string resGet( const string &res );
 
-	    bool isVisible( QPoint pos );
-
 	protected:
 	    //Protected methods
 	    bool event( QEvent * event );

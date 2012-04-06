@@ -58,8 +58,8 @@ void TValue::detElem( TElem *el )
 void TValue::addFld( TElem *el, unsigned id_val )
 {
     int i_off = l_cfg;
-    for(unsigned i_e = 0; i_e < elem.size(); i_e++)
-	if(elem[i_e]->elName() == el->elName()) break;
+    for( unsigned i_e = 0; i_e < elem.size(); i_e++ )
+	if( elem[i_e]->elName() == el->elName() ) break;
 	else i_off += elem[i_e]->fldSize();
 
     TVal *vl = vlNew();
@@ -69,8 +69,8 @@ void TValue::addFld( TElem *el, unsigned id_val )
 
 void TValue::delFld( TElem *el, unsigned id_val )
 {
-    if(nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()))
-	chldDel(m_vl, el->fldAt(id_val).name());
+    if( nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()) )
+	chldDel(m_vl,el->fldAt(id_val).name());
 }
 
 void TValue::setVlCfg( TConfig *cfg )
@@ -325,7 +325,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	{
 	    if( vl.at().fld().flg()&TFld::Selected )	opt->setText(vl.at().getSEL());
 	    else opt->setText( (vl.at().fld().type()==TFld::Real) ?
-		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(vl.at().getR(),6)) :
+		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(vl.at().getR(),6)) : 
 		    vl.at().getS() );
 	}
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR))
@@ -369,7 +369,29 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    string col  = opt->attr("col");
 
 	    //>>> Check for create new
-	    if(v_get && vlAt(attr).at().arch().freeStat()) vlAt(attr).at().setArch();
+	    if(v_get && vlAt(attr).at().arch().freeStat())
+	    {
+		//>>>> Make archive name
+		string n_nm = nodeName(),
+		       a_nm = n_nm+"_"+attr;
+		if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
+		string rez_nm = a_nm;
+		for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
+		{
+		    AutoHD<TVal> dattr = SYS->archive().at().valAt(rez_nm).at().srcPAttr();
+		    if(!dattr.freeStat() && dattr.at().DAQPath() == vlAt(attr).at().DAQPath()) break;
+		    rez_nm = a_nm+TSYS::int2str(p_cnt);
+		    if(rez_nm.size() > 20) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
+		}
+		//>>>> Create new archive
+		if(!SYS->archive().at().valPresent(rez_nm)) SYS->archive().at().valAdd(rez_nm);
+		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
+		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,vlAt(attr).at().DAQPath());
+		SYS->archive().at().valAt(rez_nm).at().setToStart(true);
+		SYS->archive().at().valAt(rez_nm).at().start();
+		vlArchMake(vlAt(attr).at());
+		modif();
+	    }
 	    //>>> Check for delete archive
 	    if(col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat())
 	    {
@@ -416,7 +438,6 @@ TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
 TVal::~TVal( )
 {
     if(!mCfg && src.fld->type() == TFld::String)delete val.val_s;
-    if(!mCfg && src.fld->type() == TFld::Object)delete val.val_o;
     if(!mCfg && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 }
 
@@ -434,7 +455,6 @@ void TVal::setFld( TFld &fld )
 	{
 	    case TFld::String:	delete val.val_s;	break;
 	    case TFld::Object:	delete val.val_o;	break;
-	    default: break;
 	}
     if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 
@@ -458,7 +478,7 @@ void TVal::setFld( TFld &fld )
 	case TFld::Boolean:
 	    val.val_b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
 	case TFld::Object:
-	    val.val_o = new AutoHD<TVarObj>(new TEValObj); break;
+	    val.val_o = new AutoHD<TVarObj>(new TVarObj); break;
 	default: break;
     }
 
@@ -478,8 +498,6 @@ void TVal::setCfg( TCfg &cfg )
 
 string TVal::name()		{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
-bool TVal::dataActive( )		{ return owner().dataActive(); }
-
 const char *TVal::nodeName( )	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
 TFld &TVal::fld()
@@ -491,37 +509,6 @@ TFld &TVal::fld()
 AutoHD<TVArchive> TVal::arch()	{ return mArch; }
 
 void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
-
-string TVal::setArch( const string &nm )
-{
-    string rez_nm = nm, n_nm, a_nm;
-    //>>>> Make archive name
-    if(rez_nm.empty())
-    {
-	n_nm = owner().nodeName();
-	a_nm = n_nm+"_"+name();
-	if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+name()).substr(0,20);
-	rez_nm = a_nm;
-    }
-    a_nm = rez_nm;
-    for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
-    {
-	AutoHD<TVal> dattr = SYS->archive().at().valAt(rez_nm).at().srcPAttr();
-	if(!dattr.freeStat() && dattr.at().DAQPath() == DAQPath()) break;
-	rez_nm = a_nm + TSYS::int2str(p_cnt);
-	if(rez_nm.size() > 20) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
-    }
-    //>>>> Create new archive
-    if(!SYS->archive().at().valPresent(rez_nm)) SYS->archive().at().valAdd(rez_nm);
-    SYS->archive().at().valAt(rez_nm).at().setValType(fld().type());
-    SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,DAQPath());
-    SYS->archive().at().valAt(rez_nm).at().setToStart(true);
-    SYS->archive().at().valAt(rez_nm).at().start();
-    owner().vlArchMake(*this);
-    owner().modif();
-
-    return rez_nm;
-}
 
 string TVal::getSEL( int64_t *tm, bool sys )
 {
@@ -561,7 +548,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? TSYS::real2str(vl) : EVAL_STR; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
-	case TFld::Object:		return (getO().at().objName()!="EVAL") ? getO().at().getStrXML() : EVAL_STR;
+	case TFld::Object:		return !getO().freeStat() ? getO().at().getStrXML() : EVAL_STR;
 	case TFld::String:
 	{
 	    setReqFlg(true);
@@ -597,7 +584,7 @@ int TVal::getI( int64_t *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (int)vl : EVAL_INT; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
-	case TFld::Object:		return (getO().at().objName()!="EVAL") ? 1 : EVAL_INT;
+	case TFld::Object:		return getO().freeStat() ? 1 : EVAL_INT;
 	case TFld::Integer:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -628,7 +615,7 @@ double TVal::getR( int64_t *tm, bool sys )
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT) ? vl : EVAL_REAL; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
-	case TFld::Object:		return (getO().at().objName()!="EVAL") ? 1 : EVAL_REAL;
+	case TFld::Object:		return getO().freeStat() ? 1 : EVAL_REAL;
 	case TFld::Real:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -659,7 +646,7 @@ char TVal::getB( int64_t *tm, bool sys )
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Real:
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
-	case TFld::Object:		return (getO().at().objName()!="EVAL") ? true : EVAL_BOOL;
+	case TFld::Object:		return getO().freeStat() ? true : EVAL_BOOL;
 	case TFld::Boolean:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -682,12 +669,12 @@ char TVal::getB( int64_t *tm, bool sys )
 
 AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
 {
-    if(fld().type() != TFld::Object) return new TEValObj;
+    if(fld().type() != TFld::Object) throw TError("Val",_("Value not object!"));
 
     setReqFlg(true);
     //> Get from archive. Get objects from archive did not support
     //> Get value from config. Get object form config did not support
-    if(mCfg) return new TEValObj;
+    if(mCfg) return AutoHD<TVarObj>();
     //> Get current value
     if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
     if(tm) *tm = time();
@@ -725,7 +712,7 @@ void TVal::set( const TVariant &value, int64_t tm, bool sys )
 
 void TVal::setS( const string &value, int64_t tm, bool sys )
 {
-    switch(fld().type())
+    switch( fld().type() )
     {
 	case TFld::Integer:
 	    setI((value!=EVAL_STR) ? atoi(value.c_str()) : EVAL_INT, tm, sys);	break;
@@ -734,7 +721,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	case TFld::Boolean:
 	    setB((value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys);	break;
 	case TFld::Object:
-	    setO((value!=EVAL_STR) ? TVarObj::parseStrXML(value,NULL,getO(NULL,true)) : new TEValObj, tm, sys);	break;
+	    setO(TVarObj::parseStrXML(value, NULL, getO()));	break;
 	case TFld::String:
 	{
 	    //> Set value to config
@@ -761,29 +748,29 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 
 void TVal::setI( int value, int64_t tm, bool sys )
 {
-    switch(fld().type())
+    switch( fld().type() )
     {
 	case TFld::String:
-	    setS((value!=EVAL_INT) ? TSYS::int2str(value) : EVAL_STR, tm, sys);	break;
+	    setS( (value!=EVAL_INT) ? TSYS::int2str(value) : EVAL_STR, tm, sys );	break;
 	case TFld::Real:
-	    setR((value!=EVAL_INT) ? value : EVAL_REAL, tm, sys);		break;
+	    setR( (value!=EVAL_INT) ? value : EVAL_REAL, tm, sys );		break;
 	case TFld::Boolean:
-	    setB((value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys);		break;
+	    setB( (value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys );	break;
 	case TFld::Integer:
 	{
 	    //> Set value to config
-	    if(mCfg)	{ src.cfg->setI( value ); return; }
+	    if( mCfg )	{ src.cfg->setI( value ); return; }
 	    //> Check to write
-            if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
+            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val",_("Write access is denied!"));
 	    //> Set current value and time
-	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
+	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT )
 		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
 	    int pvl = val.val_i; val.val_i = value;
 	    mTime = tm;
-	    if(!mTime) mTime = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
+	    if( !mTime ) mTime = TSYS::curTime();
+	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
 	    //> Set to archive
-	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
+	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
 		try{ mArch.at().setI(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;
@@ -947,18 +934,13 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 
-void TVal::preDisable( int flag )
-{
-    if(!arch().freeStat()) arch().at().stop();
-}
-
 void TVal::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //> Service commands process
     if(a_path == "/serv/val")		//Values access
     {
-	if(ctrChkNode(opt,"info",RWRWRW,"root",SDAQ_ID,SEC_RD))		//Value's data information
+	if(ctrChkNode(opt,"info",RWRWRW,"root",SDAQ_ID,SEC_RD) )	//Value's data information
 	{
 	    if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
 	    else
@@ -977,16 +959,6 @@ void TVal::cntrCmdProc( XMLNode *opt )
 	    }
 	    else if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
 	    else throw TError(nodePath().c_str(),_("Attribute doesn't have archive"));
-	}
-	else if(ctrChkNode(opt,"name",RWRWRW,"root",SDAQ_ID,SEC_RD))     //Archive name request
-	{
-	    if(owner().vlPresent("NAME") && owner().vlAt("NAME").at().getS().size())
-		opt->setText(owner().vlAt("NAME").at().getS()+"."+fld().descr());
-	    /*else if(owner().vlPresent("SHIFR") && owner().vlAt("SHIFR").at().getS().size())
-		opt->setText(owner().vlAt("SHIFR").at().getS()+"."+fld().descr());
-	    else if(owner().vlPresent("ID") && owner().vlAt("ID").at().getS().size())
-		opt->setText(owner().vlAt("ID").at().getS()+"."+fld().descr());*/
-	    else fld().descr();
 	}
 	return;
     }

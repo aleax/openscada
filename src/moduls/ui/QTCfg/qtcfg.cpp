@@ -103,7 +103,9 @@ ConfApp::ConfApp( string open_user ) :
     CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     CtrTree->setAutoScroll(false);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
-    CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
+    QStringList headerLabels;
+    headerLabels << _("Name") << _("Type") << _("Path");
+    CtrTree->setHeaderLabels(headerLabels);
     CtrTree->header()->setStretchLastSection(false);
     CtrTree->header()->resizeSection(0,200);
     //CtrTree->header()->setSectionHidden(1,true);
@@ -820,8 +822,7 @@ void ConfApp::pageRefresh( bool tm )
     try
     {
 	//> Tree part update
-	if(CtrTree->currentItem())
-	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent(): CtrTree->currentItem(), true);
+	if(CtrTree->currentItem()) viewChildRecArea(CtrTree->currentItem(), true);
 
 	//> Same page update
 	pageDisplay(sel_path);
@@ -1414,9 +1415,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_r = new QLabel( widget );
 		val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		val_r->setStatusTip((sel_path+"/"+br_path).c_str());
-		QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		sp.setHorizontalStretch(1);
-		val_r->setSizePolicy(sp);
 	    }
 	    else
 	    {
@@ -1434,12 +1432,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	        *l_hbox = new QHBoxLayout; l_pos = 0;
 	        (*l_hbox)->setSpacing(6);
 		lab = new QLabel(widget);
-		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		(*l_hbox)->insertWidget(l_pos++, lab);
-		if(val_w) (*l_hbox)->insertWidget(l_pos++, val_w);
-		if(val_r) (*l_hbox)->insertWidget(l_pos++, val_r);
-		(*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding, QSizePolicy::Minimum));
-		widget->layout()->addItem(*l_hbox);
+		(*l_hbox)->insertWidget( l_pos++, lab );
+		if(val_w)	(*l_hbox)->insertWidget( l_pos++, val_w );
+		if(val_r)	(*l_hbox)->insertWidget( l_pos++, val_r );
+		(*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
+		widget->layout()->addItem( *l_hbox );
 	    }
 	    else
 	    {
@@ -1530,9 +1527,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r = new QLabel( widget );
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
-		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		    sp.setHorizontalStretch(1);
-		    val_r->setSizePolicy(sp);
 		}
 		//>> View edit
 		else
@@ -1549,11 +1543,10 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
 		    lab = new QLabel(widget);
-		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    (*l_hbox)->insertWidget( l_pos++, lab );
 		    if(val_w)	(*l_hbox)->insertWidget( l_pos++, val_w );
 		    if(val_r)	(*l_hbox)->insertWidget( l_pos++, val_r );
-		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
+		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem( *l_hbox );
 		}
 		else
@@ -1599,7 +1592,6 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(widget)
 	    {
 		lab = new QLabel(t_s.attr("dscr").c_str(),widget);
-		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		widget->layout()->addWidget(lab);
 
 		edit = new TextEdit(widget,br_path.c_str());
@@ -1692,17 +1684,17 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(t_s.attr("dscr").size())
 		{
 		    lab = new QLabel(widget);
-		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
+
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
-		    (*l_hbox)->insertWidget(l_pos++, lab);
-		    if(val_w)	(*l_hbox)->insertWidget(l_pos++, val_w);
-		    if(val_r)
+		    (*l_hbox)->insertWidget( l_pos++, lab);
+		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
+		    if( val_r )
 		    {
 			(*l_hbox)->insertWidget( l_pos++, val_r );
 			lab->setAlignment( Qt::AlignTop );
 		    }
-		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
+		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
@@ -1752,7 +1744,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r = new QLabel( widget );
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
-		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Preferred);
 		    sp.setHorizontalStretch(1);
 		    val_r->setSizePolicy( sp );
 		    val_r->setAlignment( Qt::AlignVCenter );
@@ -1774,14 +1766,14 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    //>>> addon parameters
 		    string tp = t_s.attr("tp");
-		    if(t_s.attr("dest") == "sel_ed")
+		    if( t_s.attr("dest") == "sel_ed" )
 		    {
-			val_w->setMinimumSize(100, 0);
-			val_w->setType(LineEdit::Combo);
+			val_w->setMinimumSize(100,0);
+			val_w->setType( LineEdit::Combo );
 		    }
-		    else if(tp == "dec")
+		    else if( tp == "dec" )
 		    {
-			val_w->setFixedWidth(5*15+30);
+			val_w->setFixedWidth( 5*15+30 );
 			val_w->setType( LineEdit::Integer );
 			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
 			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
@@ -1813,29 +1805,28 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
 		    lab = new QLabel(widget);
-		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
-		    (*l_hbox)->insertWidget(l_pos++, lab);
-		    if(val_w)	(*l_hbox)->insertWidget(l_pos++, val_w);
-		    if(val_r)
+		    (*l_hbox)->insertWidget( l_pos++, lab );
+		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
+		    if( val_r )
 		    {
-			(*l_hbox)->insertWidget(l_pos++, val_r);
-			lab->setAlignment(Qt::AlignTop);
+			(*l_hbox)->insertWidget( l_pos++, val_r );
+			lab->setAlignment( Qt::AlignTop );
 		    }
 
-		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
+		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
 		{
-		    if(*l_hbox)
+		    if( *l_hbox )
 		    {
-			if(val_w) (*l_hbox)->insertWidget(l_pos++, val_w);
-			if(val_r) (*l_hbox)->insertWidget(l_pos++, val_r);
+			if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
+			if( val_r )	(*l_hbox)->insertWidget( l_pos++, val_r );
 		    }
 		    else
 		    {
-			if(val_w) { val_w->deleteLater(); val_w = NULL; }
-			if(val_r) { val_r->deleteLater(); val_r = NULL; }
+			if( val_w ) { val_w->deleteLater(); /*delete val_w;*/ val_w = NULL; }
+			if( val_r ) { val_r->deleteLater(); /*delete val_r;*/ val_r = NULL; }
 		    }
 		}
 
@@ -1881,7 +1872,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else
 		    {
 			XMLNode x_lst("get");
-			x_lst.setAttr("path", TSYS::strEncode(t_s.attr("select"),TSYS::PathEl));
+			x_lst.setAttr("path",TSYS::strEncode( t_s.attr("select"),TSYS::PathEl));
 			if(!cntrIfCmd(x_lst))
 			    for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
 				if(x_lst.childGet(i_el)->name() == "el")
@@ -2833,16 +2824,16 @@ void ConfApp::imgPopup( const QPoint &pos )
 	    {
 		//> Get path to image file
 		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
-		if(fileName.isNull()) return;
+		if( fileName.isNull( ) ) return;
 		int len;
 		char buf[STR_BUF_LEN];
 		string rez;
 
 		//> Load image file
-		int hd = open(fileName.toAscii().data(), O_RDONLY);
-		if(hd < 0) throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
+		int hd = open(fileName.toAscii().data(),O_RDONLY);
+		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
 		{
-		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
+		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 		    ::close(hd);
 		}
 

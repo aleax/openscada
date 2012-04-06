@@ -19,6 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <string>
 #include <libpq-fe.h>
 
@@ -173,32 +174,35 @@ void MBD::enable( )
     cd_pg  = codePage().size()?codePage():Mess->charset();
     try
     {
-	bool dbCreateTry = false;
-nextTry:
-	if((connection=PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
+	if((connection = PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 	    throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	if(PQstatus(connection) != CONNECTION_OK)
+	if(PQstatus( connection ) != CONNECTION_OK)
+	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
+	TBD::enable();
+
+	vector< vector<string> > tbl;
+	string req = "SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '" + db + "'";
+	sqlReq(req,&tbl);
+	if(tbl.size() == 2 && tbl[1][0] == "0")
 	{
-	    if(dbCreateTry) throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
-	    //> Try for connect to system DB, check for need DB present and create otherwise
+	    sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
 	    PQfinish(connection);
-	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
+	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
-	    TBD::enable();
-
-	    vector< vector<string> > tbl;
-	    sqlReq("SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '"+db+"'", &tbl);
-	    if(tbl.size() == 2 && tbl[1][0] == "0")
-		sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '"+cd_pg+"'");
-	    PQfinish(connection);
-
-	    dbCreateTry = true;
-	    goto nextTry;
+	    else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
 	}
-	PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
-	if(!dbCreateTry) TBD::enable();
+	else
+	{
+	    PQfinish(connection);
+	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
+		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+	    if(PQstatus(connection) != CONNECTION_OK)
+		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
+	    else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
+	}
+
     }
     catch(...)
     {
@@ -210,8 +214,8 @@ nextTry:
 
 void MBD::disable( )
 {
-    if(!enableStat())  return;
-    TBD::disable();
+    if( !enableStat() )  return;
+    TBD::disable( );
 
     //> Last commit
     if(reqCnt) transCommit();
@@ -368,7 +372,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRW__,"root",SDB_ID,2,"tp","str","help",
 	    _("PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;<db>;<port>;<connect_timeout>].\n"
 	      "Where:\n"
 	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
@@ -854,11 +858,11 @@ void MTable::fieldFix( TConfig &cfg )
 
 string MTable::getVal( TCfg &cfg )
 {
-    switch(cfg.fld().type())
+    switch( cfg.fld().type() )
     {
-	case TFld::String:	return (cfg.fld().len() > 0) ? cfg.getS().substr(0,cfg.fld().len()) : cfg.getS();
+	case TFld::String:	return cfg.getS();
 	case TFld::Integer:
-	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
+	    if( cfg.fld().flg()&TFld::DateTimeDec )	return UTCtoSQL(cfg.getI());
 	    else		return SYS->int2str(cfg.getI());
 	case TFld::Real:	return SYS->real2str(cfg.getR());
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
@@ -884,11 +888,9 @@ void MTable::setVal( TCfg &cfg, const string &val )
 
 string MTable::UTCtoSQL( time_t val )
 {
-    char buf[255];
     struct tm tm_tm;
-
-    //localtime_r(&val,&tm_tm);
-    gmtime_r(&val,&tm_tm);
+    localtime_r(&val,&tm_tm);
+    char buf[255];
     int rez = strftime( buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", &tm_tm );
 
     return (rez>0) ? string(buf,rez) : "";
@@ -899,6 +901,5 @@ time_t MTable::SQLtoUTC( const string &val )
     struct tm stm;
     strptime(val.c_str(),"%Y-%m-%d %H:%M:%S",&stm);
 
-    //return mktime(&stm);
-    return timegm(&stm);
+    return mktime(&stm);
 }

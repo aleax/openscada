@@ -28,7 +28,6 @@
 
 #include <QMainWindow>
 #include <QLabel>
-#include <QFileDialog>
 
 #include "tvision.h"
 
@@ -74,8 +73,6 @@ class VisDevelop : public QMainWindow
 	void setWdgVisScale(double val );
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
-
-	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
 
     signals:
 	//Public signals
@@ -183,8 +180,6 @@ class VisDevelop : public QMainWindow
 		*mn_view,		//Menu "View"
 		*mn_help;		//Menu "Help"
 	vector<QMenu*>	lb_menu;	//Library menus
-
-	QFileDialog	*fileDlg;
 
     protected:
 	//Protected methods

@@ -79,7 +79,6 @@ class TValBuf
 
 	//> Get value
 	virtual void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
-	TVariant get( int64_t *tm = NULL, bool up_ord = false );
 	virtual string getS( int64_t *tm = NULL, bool up_ord = false );
 	virtual double getR( int64_t *tm = NULL, bool up_ord = false );
 	virtual int    getI( int64_t *tm = NULL, bool up_ord = false );
@@ -87,7 +86,6 @@ class TValBuf
 
 	//> Set value
 	virtual void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
-	void set( const TVariant &value, int64_t tm = 0 );
 	virtual void setS( const string &value, int64_t tm = 0 );
 	virtual void setR( double value, int64_t tm = 0 );
 	virtual void setI( int value, int64_t tm = 0 );
@@ -167,7 +165,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 {
     public:
 	//Public data
-	enum SrcMode { SaveCur = -1, Passive = 0, PassiveAttr, ActiveAttr };
+	enum SrcMode { Passive, PassiveAttr, ActiveAttr };
 
 	//Public methods
 	TVArchive( const string &id, const string &db, TElem *cf_el );
@@ -179,8 +177,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string	id( )		{ return mId; }
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode.getI(); }
-	string	srcData( )	{ return mSource; }
+	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
+	string	srcData( )	{ return cfg("Source").getS(); }
 	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
 	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return runSt; }
@@ -199,7 +197,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
-	void setSrcMode( SrcMode vl = SaveCur, const string &isrc = "<*>", bool noex = false );
+	void setSrcMode( SrcMode vl, const string &isrc = "" );
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
@@ -227,7 +225,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void archivatorList( vector<string> &ls );
 	bool archivatorPresent( const string &arch );
 	void archivatorAttach( const string &arch );
-	void archivatorDetach( const string &arch, bool full = false, bool toModify = true );
+	void archivatorDetach( const string &arch, bool full = false );
 	void archivatorSort( );
 
 	string makeTrendImg( int64_t beg, int64_t end, const string &arch, int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0 );
@@ -240,7 +238,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Protected methods
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
 	void load_( );
 	void save_( );
@@ -257,15 +255,13 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool	runSt;
 	string	mDB;
 	//> Base params
-	TCfg	&mId,		//ID
-		&mSrcMode,	//Source mode
-		&mSource,	//Source
-		&mBPer,		//Buffer period
-		&mBSize;	//Buffer size
-
+	TCfg	&mId;		//ID
 	char	&mStart;	//Starting flag
+	int	&mSrcMode;	//Source mode
 	//> Buffer params
 	int	&mVType;	//Value type (int, real, bool, string)
+	double	&mBPer;		//Buffer period
+	int	&mBSize;	//Buffer size
 	char	&mBHGrd,	//Buffer use hard time griding
 		&mBHRes;	//Buffer use high time resolution
 	//> Mode params
@@ -283,7 +279,7 @@ class TTipArchivator;
 class TVArchivator : public TCntrNode, public TConfig
 {
     friend void TVArchive::archivatorAttach( const string &arch );
-    friend void TVArchive::archivatorDetach( const string &arch, bool full = false, bool toModify = true );
+    friend void TVArchive::archivatorDetach( const string &arch, bool full = false );
 
     public:
 	//Public methods
@@ -311,7 +307,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
 	virtual void setValPeriod( double per );
-	virtual void setArchPeriod( int per )	{ mAPer = (per?per:1); }
+	virtual void setArchPeriod( int per )	{ mAPer = (per?per:1); modif(); }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
 	void setDB( const string &idb )		{ mDB = idb; modif(); }
@@ -356,10 +352,10 @@ class TVArchivator : public TCntrNode, public TConfig
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
-	TCfg	&mId,		//Var arch id
-		&mVPer,		//Value period (sec)
-		&mAPer;		//Archivation period
+	TCfg	&mId;		//Var arch id
 	char	&mStart;	//Var arch starting flag
+	double	&mVPer;		//Value period (sec)
+	int	&mAPer;		//Archivation period
 	string	mDB;
 	//> Archivate process
 	double	tm_calc;	//Archiving time

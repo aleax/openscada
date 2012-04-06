@@ -1,13 +1,14 @@
 # OpenSCADA core translate to Russian.
+# Copyright (C) 2003 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2013.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.8.1\n"
+"Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-11 15:46+0300\n"
+"POT-Creation-Date: 2012-03-09 09:17+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -127,6 +128,9 @@ msgstr "Ошибка запуска архива значений '%s'."
 msgid "Stop subsystem."
 msgstr "Останов подсистемы."
 
+msgid "Archive messages thread is not stopped!"
+msgstr "Поток архива сообщений не остановлен!"
+
 #, c-format
 msgid "Value archivator '%s' stop error."
 msgstr "Ошибка останова архиватора значений '%s'."
@@ -188,17 +192,6 @@ msgstr ""
 
 msgid "Level"
 msgstr "Уровень"
-
-msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
-"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
-"Emergency (7), ALARMS"
-msgstr ""
-"Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
-"Критически (5);Тревога (6);Авария (7);Информация (1), НАРУШЕНИЯ;Замечание "
-"(2), НАРУШЕНИЯ;Предупреждение (3), НАРУШЕНИЯ;Ошибка (4), НАРУШЕНИЯ;"
-"Критически (5), НАРУШЕНИЯ;Тревога (6), НАРУШЕНИЯ;Авария (7), НАРУШЕНИЯ"
 
 msgid "Get messages for level more and equal it."
 msgstr "Получать сообщения уровнем больше или равно указанному."
@@ -286,13 +279,6 @@ msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
-msgstr ""
-"Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
-"Критически (5);Тревога (6);Авария (7)"
-
-msgid ""
 "Messages category template or regular expression to processing by "
 "archivator, separated by symbol ';'.\n"
 "Use template symbols for group selection:\n"
@@ -325,14 +311,6 @@ msgstr "Режим привязки к сетке не поддерживает 
 
 msgid "Set too old value to buffer."
 msgstr "Вставка очень старых значений в буфер."
-
-#, c-format
-msgid "Connect to source '%s' error."
-msgstr "Ошибка подключения к источнику '%s'."
-
-#, c-format
-msgid "The archive '%s' was already connected to target parameter '%s'."
-msgstr "Архив '%s' уже подключен к целевому параметру '%s'."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
@@ -686,6 +664,12 @@ msgstr "Предупреждение по элементу '%s'! %s"
 msgid "Node: %s"
 msgstr "Узел: %s"
 
+msgid "*.*.[TableName]"
+msgstr "*.*.[ИмяТаблицы]"
+
+msgid "<cfg>.[TableName]"
+msgstr "<cfg>.[ИмяТаблицы]"
+
 msgid "[TableName]"
 msgstr "[ИмяТаблицы]"
 
@@ -834,11 +818,9 @@ msgstr "Ошибка останова контроллера '%s'."
 msgid "Disable controller '%s' error."
 msgstr "Ошибка отключения контроллера '%s'."
 
-#, c-format
 msgid "No parameter present '%s'."
 msgstr "Отсутствует параметр '%s'."
 
-#, c-format
 msgid "No attribute present '%s'."
 msgstr "Отсутствует атрибут '%s'."
 
@@ -1077,6 +1059,10 @@ msgstr "Ошибка открытия 'iconv': %s"
 msgid "Error input sequence convert: %s"
 msgstr "Ошибка преобразования входной последовательности: %s"
 
+#, c-format
+msgid "Error converting from %s to %s for message part: '%s'"
+msgstr "Ошибка преобразования из %s в %s для части сообщения: %s"
+
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
@@ -1127,19 +1113,6 @@ msgstr ""
 "  \"10 23 * * *\" - только 23ий час и 10ая минута любого дня и месяца;\n"
 "  \"*/2 * * * *\" - для минут: 0,2,4,...,56,58;\n"
 "  \"* 2-4 * * *\" - для любой минуты в часе от 2 до 4(включительно)."
-
-msgid ""
-"Task priority level (-1...99), where:\n"
-"  -1     - lowest priority batch policy;\n"
-"  0      - standard userspace priority;\n"
-"  1...99 - realtime priority level (round-robin), often allowed only for "
-"\"root\"."
-msgstr ""
-"Уровень приоритета задачи (-1...99), где:\n"
-"  -1     - минимальный приоритет, фоновая политика;\n"
-"  0      - стандартный пользовательский приоритет;\n"
-"  1...99 - уровень приоритета реального времени (round-robin), часто "
-"доступно только для \"root\"."
 
 msgid "Modules scheduler"
 msgstr "Управление модулями"
@@ -1208,6 +1181,19 @@ msgstr "Подсистема"
 msgid "Path to shared libs(modules)"
 msgstr "Путь к разделяемым библиотекам(модулям)"
 
+msgid "Allowed modules"
+msgstr "Разрешённые модули"
+
+msgid ""
+"List of shared libs(modules) allow for auto connection.\n"
+"Elements separated by symbol ';'.\n"
+"Value '*' is used for allow all modules."
+msgstr ""
+"Список разделяемых библиотек(модулей) разрешённых для автоматического "
+"подключения.\n"
+"Элементы разделены символом ';'.\n"
+"Значение '*' используется для разрешения всех модулей."
+
 msgid "Denied modules"
 msgstr "Запрещённые модули"
 
@@ -1218,19 +1204,6 @@ msgstr ""
 "Список разделяемых библиотек(модулей) запрещённых для автоматического "
 "подключения.\n"
 "Элементы разделены символом ';'."
-
-msgid "Allowed modules"
-msgstr "Разрешённые модули"
-
-msgid ""
-"List of shared libs(modules) allowed for auto connection.\n"
-"Elements separated by symbol ';'.\n"
-"Value '*' used for allow all modules."
-msgstr ""
-"Список разделяемых библиотек(модулей) разрешённых для автоматического "
-"подключения.\n"
-"Элементы разделены символом ';'.\n"
-"Значение '*' используется для разрешения всех модулей."
 
 msgid "Check modules period (sec)"
 msgstr "Период проверки модулей (сек)"
@@ -1253,8 +1226,8 @@ msgstr "Автор"
 msgid "License"
 msgstr "Лицензия"
 
-msgid "Connect module."
-msgstr "Подключение модуля."
+msgid "Connect module!"
+msgstr "Подключение модуля!"
 
 #, c-format
 msgid "Function '%s' is not present in the module!"
@@ -1305,8 +1278,8 @@ msgstr "Шаблон параметра: "
 msgid "Template"
 msgstr "Шаблон"
 
-msgid "Real;Integer;Boolean;String;Text;Object"
-msgstr "Вещественный;Целый;Логический;Строка;Текст;Объект"
+msgid "Real;Integer;Boolean;String;Object"
+msgstr "Вещественный;Целый;Логический;Строка;Объект"
 
 msgid "Input;Output"
 msgstr "Вход;Выход"
@@ -1448,8 +1421,9 @@ msgstr "БД пользователя"
 msgid "Include"
 msgstr "Включен"
 
-msgid "Group "
-msgstr "Группа "
+#, c-format
+msgid "Group %s"
+msgstr "Группа %s"
 
 msgid "User group DB"
 msgstr "БД группы пользователей"
@@ -1490,10 +1464,6 @@ msgstr "Модуль"
 
 msgid "Empty Station"
 msgstr "Пустая станция"
-
-#, c-format
-msgid "System counters on exit: %s"
-msgstr "Системные счётчики при выходе: %s"
 
 #, c-format
 msgid ""
@@ -1562,8 +1532,7 @@ msgid ""
 "===========================================================================\n"
 "-h, --help             Info message about system options.\n"
 "    --Config=<path>    Config-file path.\n"
-"    --Station=<id>     The station identifier.\n"
-"    --StatName=<name>  The station name.\n"
+"    --Station=<id>     Station identifier.\n"
 "    --demon            Start into demon mode.\n"
 "    --CoreDumpAllow\tSet limits for core dump creation allow on crash.\n"
 "    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -1584,7 +1553,6 @@ msgid ""
 "                           <direct> & 2 - stdout;\n"
 "                           <direct> & 4 - stderr;\n"
 "                           <direct> & 8 - archive.\n"
-"Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two "
 "symbols code.\n"
 "SaveAtExit <true>      Save system at exit.\n"
@@ -1600,8 +1568,7 @@ msgstr ""
 "===========================================================================\n"
 "-h, --help             Информация по опциям системы.\n"
 "    --Config=<путь>    Конфигурационный файл.\n"
-"    --Station=<ид>     Идентификатор станции.\n"
-"    --StatName=<имя>   Имя станции.\n"
+"    --Station=<имя>    Имя станции.\n"
 "    --demon            Запуск в режиме демона.\n"
 "    --CoreDumpAllow\tУстановить ограничения для разрешения генерации дампа "
 "памяти при крушении.\n"
@@ -1625,7 +1592,6 @@ msgstr ""
 "                         <направл.> & 4 - стандартный выход ошибок "
 "(stderr);\n"
 "                         <направл.> & 8 - архив сообщений.\n"
-"Lang       <язык>\tРабочий-внутренний язык, вроде \"ru_RU.UTF-8\".\n"
 "Lang2CodeBase <язык>   Базовый язык для перевода текстовых переменных, два "
 "символа.\n"
 "SaveAtExit <true>      Сохранять систему при выходе.\n"
@@ -1716,11 +1682,9 @@ msgstr "Ожидание события..."
 msgid "Task '%s' is already present!"
 msgstr "Задача '%s' уже присутствует!"
 
-msgid ""
-"No permission for create real-time policy for '%s'. Default thread is "
-"created!"
+msgid "No permission for create real-time policy. Default thread is created!"
 msgstr ""
-"Нет доступа для создания политики реального времени для '%s'. Создан поток по "
+"Нет доступа для создания политики реального времени. Создан поток по "
 "умолчанию!"
 
 #, c-format
@@ -1748,9 +1712,6 @@ msgstr "%s станция: \"%s\""
 
 msgid "Station"
 msgstr "Станция"
-
-msgid "Station name"
-msgstr "Имя станции"
 
 msgid "Version"
 msgstr "Версия"
@@ -1913,9 +1874,8 @@ msgstr "Ошибка запуска контроллера '%s'."
 msgid "Id of parameter type error!"
 msgstr "Ошибка идентификатора типа параметра!"
 
-#, c-format
-msgid "Parameter type '%s' is not present."
-msgstr "Тип параметра '%s' отсутствует."
+msgid "Parameter type is not present."
+msgstr "Тип параметра отсутствует."
 
 #, c-format
 msgid "Error attach new controller %s."
@@ -2013,6 +1973,9 @@ msgstr "Транспортный протокол '%s' отсутствует"
 msgid "Output transport: "
 msgstr "Выходной транспорт:"
 
+msgid "Time (ms)"
+msgstr "Время (мс)"
+
 msgid "Binary;Text(LF);Text(CR);Text(CR/LF)"
 msgstr "Бинарный;Текст(LF);Текст(CR);Текст(CR/LF)"
 
@@ -2095,6 +2058,9 @@ msgstr "Архивация"
 msgid "Not select type!"
 msgstr "Не выборочный тип!"
 
+msgid "Value not object!"
+msgstr "Значение не объект!"
+
 msgid "Write access is denied!"
 msgstr "Нет доступа на запись!"
 
@@ -2104,6 +2070,12 @@ msgstr "Ошибка записи значения в архив: %s"
 
 msgid "Attribute doesn't have archive"
 msgstr "Атрибут не имеет архива"
+
+msgid "Variable not object!"
+msgstr "Переменная не объект!"
+
+msgid "Zero object using try!"
+msgstr "Попытка использования пустого объекта!"
 
 msgid "Too big string length (> 130 MB)!"
 msgstr "Очень большой размер строки (> 130 MB)!"
@@ -2186,8 +2158,8 @@ msgid "Entity error. Pos: %d"
 msgstr "Ошибка сущности. Поз: %d"
 
 #, c-format
-msgid "Unknown entity '%s'. Pos: %d"
-msgstr "Неизвестная сущность '%s'. Поз: %d"
+msgid "Unknown entity. Pos: %d"
+msgstr "Неизвестная сущность. Поз: %d"
 
 msgid "Message archive no support!"
 msgstr "Архив сообщений не поддерживается!"

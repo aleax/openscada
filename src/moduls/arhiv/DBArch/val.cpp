@@ -105,7 +105,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TVArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,4,
 	    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
@@ -170,31 +170,18 @@ void ModVArchEl::fullErase()
 
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 {
-    //> Request by single values for most big buffer period
-    if(buf.period()/2 > period())
-    {
-        ibegIn = (ibegIn/buf.period())*buf.period();
-        for(int64_t ctm; ibegIn <= iendIn; ibegIn += buf.period())
-        {
-            ctm = ibegIn;
-            TVariant vl = getValProc(&ctm, false);
-            buf.set(vl, ibegIn);
-        }
-        return;
-    }
-
     //> Going border to period time
     ibegIn = (ibegIn/period())*period();
     iendIn = (iendIn/period())*period();
 
     //> Prepare border
-    int64_t ibeg = vmax(ibegIn, begin());
-    int64_t iend = vmin(iendIn, end());
+    int64_t ibeg = vmax( ibegIn, begin() );
+    int64_t iend = vmin( iendIn, end() );
 
-    if(iend < ibeg)	return;
+    if( iend < ibeg )	return;
 
     //> Get values
-    for(int64_t c_tm = ibegIn; c_tm < ibeg; c_tm += period()) buf.setR(EVAL_REAL,c_tm);
+    for( int64_t c_tm = ibegIn; c_tm < ibeg; c_tm += period() ) buf.setR(EVAL_REAL,c_tm);
     switch(archive().valType())
     {
 	case TFld::Boolean: case TFld::Integer:

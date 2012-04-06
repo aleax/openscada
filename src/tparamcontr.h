@@ -56,7 +56,6 @@ class TParamContr : public TConfig, public TValue
 	string	descr( );
 	bool toEnable( )	{ return cfg("EN").getB(); }
 	bool enableStat( )	{ return m_en; }
-	bool dataActive( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
@@ -87,7 +86,6 @@ class TParamContr : public TConfig, public TValue
 	bool cfgChange( TCfg &cfg );
 
 	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
 
 	virtual void setType( const string &tpId );
 

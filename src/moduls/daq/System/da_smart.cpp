@@ -30,11 +30,9 @@
 #include "os_contr.h"
 #include "da_smart.h"
 
-#define SCSI_MAJOR 8
-
 using namespace SystemCntr;
 
-const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 %s 2> /dev/null";
+const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
 
 //*************************************************
 //* HddSmart                                      *
@@ -60,11 +58,15 @@ void HddSmart::init( TMdPrm *prm )
     dList(list);
     string dls;
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	dls += list[i_l]+";";
+	dls = dls+list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
 
-    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
+    try{ c_subt.getSEL(); }
+    catch(...)
+    {
+	if( list.size() ) c_subt.setS(list[0]);
+    }
 }
 
 void HddSmart::dList( vector<string> &list, bool part )
@@ -74,28 +76,28 @@ void HddSmart::dList( vector<string> &list, bool part )
     char buf[256];
 
     FILE *f = fopen("/proc/partitions","r");
-    if(f == NULL) return;
+    if( f == NULL ) return;
 
-    while(fgets(buf,sizeof(buf),f) != NULL)
+    while( fgets(buf,sizeof(buf),f) != NULL )
     {
-	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
-	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
-	    continue;
+	if( sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3 ) continue;
+	//if( strncmp(name,"hd",2) )	continue;
+	if( !part && minor != 0 )	continue;
 
-	string cmd = TSYS::strMess(smartval_cmd,(string("/dev/")+name+((major==SCSI_MAJOR)?" -d ata":"")).c_str());
+	string cmd = string(smartval_cmd)+name+((name[0]=='s')?" -d ata":"");
 	FILE *fp = popen(cmd.c_str(),"r");
-	if(fp)
+	if( fp )
 	{
 	    int val;
 	    bool access_true = false;
-	    while(fgets(buf,sizeof(buf),fp) != NULL)
+	    while( fgets(buf,sizeof(buf),fp) != NULL )
 	    {
-		if(sscanf(buf,"%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n",&val) != 1) continue;
+		if( sscanf(buf,"%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n",&val) != 1 ) continue;
 		access_true = true;
 		break;
 	    }
 	    pclose(fp);
-	    if(access_true) list.push_back(name);
+	    if( access_true )	list.push_back(name);
 	}
     }
     fclose(f);
@@ -107,28 +109,22 @@ void HddSmart::getVal( TMdPrm *prm )
     unsigned long val;
     char buf[256];
     char name[31];
-    bool devOK = false;
 
     string dev = prm->cfg("SUBT").getS();
 
     //> SMART attributes
-    string cmd = TSYS::strMess(smartval_cmd,("/dev/"+dev+((dev.size()&&dev[0]=='s')?" -d ata":"")).c_str());
+    string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");
     FILE *fp = popen(cmd.c_str(),"r");
-    while(fp && fgets(buf,sizeof(buf),fp) != NULL)
+    if( fp )
     {
-	if(sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3) continue;
-	string s_id = TSYS::int2str(id);
-	if(!prm->vlPresent(s_id)) fldAdd(new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite));
-	prm->vlAt(s_id).at().setI(val,0,true);
-	devOK = true;
-    }
-    if(fp) fclose(fp);
-
-    if(devOK) prm->daErr = "";
-    else if(!prm->daErr.getVal().size())
-    {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+	while( fgets(buf,sizeof(buf),fp) != NULL )
+	{
+	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
+	    string s_id = TSYS::int2str(id);
+	    if( !prm->vlPresent(s_id) )	fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite) );
+	    prm->vlAt(s_id).at().setI(val,0,true);
+	}
+	fclose(fp);
     }
 }
 
@@ -141,14 +137,14 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
 	string hddprm = ap_nm+list[i_hd];
-	if(a_cntr->present(hddprm))	continue;
-	a_cntr->add(hddprm,0);
-	AutoHD<TMdPrm> dprm = a_cntr->at(hddprm);
-	dprm.at().setName(_("HD smart: ")+list[i_hd]);
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("SUBT").setS(list[i_hd]);
-	dprm.at().cfg("EN").setB(true);
-	if(a_cntr->enableStat()) dprm.at().enable();
+	if(!a_cntr->present(hddprm))
+	{
+	    a_cntr->add(hddprm,0);
+	    a_cntr->at(hddprm).at().setName(_("HD smart: ")+list[i_hd]);
+	    a_cntr->at(hddprm).at().autoC(true);
+	    a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
+	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
+	    a_cntr->at(hddprm).at().cfg("EN").setB(true);
+	}
     }
 }

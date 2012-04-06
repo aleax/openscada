@@ -1474,7 +1474,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
       if( val_r )
       {
 	val_r.title = t_s.getAttribute('help');
-	setNodeText(val_r,nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On ':'Off '));
+	setNodeText(val_r,nodeText(dataReq)=='<EVAL>'?'<EVAL>':(parseInt(nodeText(dataReq))?'On':'Off'));
       }
     }
     //> View edit fields
@@ -1670,7 +1670,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  var tp = t_s.getAttribute('tp');
 	  if( t_s.getAttribute('dest') == 'sel_ed' )
 	  {
-	    val_w.childNodes[0].size = 50;
+	    val_w.childNodes[0].size = 20;
 	    var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
 	    cmbImg.onclick = function( )
 	    {
@@ -1972,7 +1972,7 @@ function getPopup( )
 function getCombo( )
 {
   var comboMenu = document.getElementById('combomenu');
-  if(!comboMenu)
+  if( !comboMenu )
   {
     comboMenu = document.createElement('div'); comboMenu.id = 'combomenu';
     comboMenu.appendChild(document.createElement('select'));

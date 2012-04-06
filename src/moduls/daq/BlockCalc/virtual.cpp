@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <getopt.h>
 #include <unistd.h>
 #include <sys/time.h>
 #include <sys/times.h>
@@ -112,8 +113,8 @@ void TipContr::postEnable( int flag )
     //Controllers BD structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
-    fldAdd( new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100","1") );
+    fldAdd( new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
     fldAdd( new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
@@ -243,7 +244,7 @@ void Contr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    if(cron().empty())	cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
 
     //> Load block's configuration
     TConfig c_el(&mod->blockE());
@@ -475,9 +476,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	TController::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
         ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -572,7 +572,7 @@ void Prm::enable()
     string ioLs = cfg("IO").getS();
 
     //> Check and delete no used fields
-    /*for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
+    for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
     {
 	if(v_el.fldAt(i_fld).reserve().empty()) continue;
 	string fel;
@@ -584,7 +584,7 @@ void Prm::enable()
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
-    }*/
+    }
 
     //> Init elements
     vector<string> pls;
@@ -671,7 +671,7 @@ void Prm::disable()
 
 void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	return;
+    if( !enableStat() )	return;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
@@ -721,13 +721,11 @@ void Prm::vlGet( TVal &val )
 
 void Prm::vlArchMake( TVal &val )
 {
-    TParamContr::vlArchMake(val);
-
-    if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(false);
+    if( val.arch().freeStat() ) return;
+	val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
+    val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
+    val.arch().at().setHardGrid( true );
+    val.arch().at().setHighResTm( false );
 }
 
 void Prm::cntrCmdProc( XMLNode *opt )

@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <getopt.h>
 #include <signal.h>
 #include <sys/time.h>
 #include <string.h>
@@ -53,7 +54,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elMess.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1") );
     elMess.fldAdd( new TFld("CATEG",_("Messages categories"),TFld::String,0,"100") );
-    elMess.fldAdd( new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","0","0;7") );
+    elMess.fldAdd( new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","","0;7") );
     elMess.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"100") );
 
     //> Value archivator DB structure
@@ -75,18 +76,30 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd( new TFld("Source",_("Source"),TFld::String,0,"100") );
     elAval.fldAdd( new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1") );
     elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000") );
-    elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"8","100","10;10000000") );
+    elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"6","100","0;1000000") );
     elAval.fldAdd( new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1") );
     elAval.fldAdd( new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0") );
     elAval.fldAdd( new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500") );
 
     setMessBufLen( BUF_SIZE_DEF );
+
+    //> Create message archive timer
+    struct sigevent sigev;
+    memset(&sigev,0,sizeof(sigev));
+    sigev.sigev_notify = SIGEV_THREAD;
+    sigev.sigev_value.sival_ptr = this;
+    sigev.sigev_notify_function = ArhMessTask;
+    sigev.sigev_notify_attributes = NULL;
+    timer_create(CLOCK_REALTIME,&sigev,&tmIdMess);
 }
 
 TArchiveS::~TArchiveS(  )
 {
-    //> Stop subsystem
-    if(prcStMess || prcStVal) subStop();
+    //> Stop messages timer
+    timer_delete(tmIdMess);
+
+    //> Stop values archiving task
+    if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
 
     //> Free other resources
     nodeDelAll();
@@ -99,9 +112,24 @@ void TArchiveS::setValPrior( int ivl )	{ mValPrior = vmax(-1,vmin(99,ivl)); modi
 void TArchiveS::load_( )
 {
     //> Load parameters from command line
-    string argCom, argVl;
-    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+    int next_opt;
+    const char *short_opt="h";
+    struct option long_opt[] =
+    {
+	{"help"    ,0,NULL,'h'},
+	{NULL      ,0,NULL,0  }
+    };
+
+    optind=0,opterr=0;
+    do
+    {
+	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
+	switch(next_opt)
+	{
+	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
+	    case -1 : break;
+	}
+    } while(next_opt != -1);
 
     //> Load parameters
     setMessBufLen( atoi(TBDS::genDBGet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen())).c_str()) );
@@ -207,8 +235,6 @@ void TArchiveS::load_( )
 	    {
 	        id = c_el.cfg("ID").getS();
 	        if(!valPresent(id)) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-	        //> For force loading after creation from archivator storage
-	        else if(valAt(id).at().DB() == "*.*" && db_ls[i_db] != SYS->workDB()) valAt(id).at().setDB(db_ls[i_db]);
 	        itReg[id] = true;
 	    }
 
@@ -316,8 +342,13 @@ void TArchiveS::subStart( )
 	    }
     }
 
-    //> Start messages values acquisition task
-    if(!prcStMess) SYS->taskCreate(nodePath('.',true)+".mess", 0, TArchiveS::ArhMessTask, this);
+    //> Start messages interval timer
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_value.tv_sec = messPeriod();
+    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmIdMess, 0, &itval, NULL);
+
+    //> Start values acquisition task
     if(!prcStVal) SYS->taskCreate(nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this);
 
     TSubSYS::subStart( );
@@ -333,9 +364,20 @@ void TArchiveS::subStop( )
 
     vector<string> t_lst, o_lst;
 
-    //> Messages and Values acquisition task stop
-    if(prcStMess) SYS->taskDestroy(nodePath('.',true)+".mess");
+    //> Stop interval timer for periodic thread creating for messages archivation
+    struct itimerspec itval;
+    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
+	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
+    timer_settime(tmIdMess, 0, &itval, NULL);
+    if(TSYS::eventWait( prcStMess, false, nodePath()+"mess_stop",10))
+	throw TError(nodePath().c_str(),_("Archive messages thread is not stopped!"));
+
+    //> Values acquisition task stop
     if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
+
+    //> Last messages archivation call
+    sigval obj; obj.sival_ptr = this;
+    ArhMessTask(obj);
 
     //> Archivators stop
     modList(t_lst);
@@ -581,62 +623,63 @@ void TArchiveS::setActValArch( const string &id, bool val )
 	actUpSrc.erase(actUpSrc.begin()+i_arch);
 }
 
-void *TArchiveS::ArhMessTask( void *param )
+void TArchiveS::setMessPeriod( int ivl )
 {
-    TArchiveS &arh = *(TArchiveS *)param;
-    arh.prcStMess = true;
-    bool isLast = false;
+    mMessPer = ivl;
+    modif();
 
-    //> First wait
-    TSYS::taskSleep(1000000000ll*arh.messPeriod());
-    //> Turns cycle
-    while(true)
+    if( subStartStat( ) )
     {
-	if(TSYS::taskEndRun()) isLast = true;
-	//> Message buffer read
-	if(arh.headLstread != arh.headBuf)
-	    try
-	    {
-		ResAlloc res(arh.mRes,false);
-
-		//>> Get new messages
-		unsigned new_headLstread = arh.headBuf;
-		unsigned i_m = arh.headLstread;
-		vector<TMess::SRec> o_mess;
-		while(i_m != new_headLstread)
-		{
-		    o_mess.push_back(arh.mBuf[i_m]);
-		    if(++i_m >= arh.mBuf.size()) i_m = 0;
-		}
-		arh.headLstread = new_headLstread;
-
-		res.release();
-
-		//>> Put to archivators
-		vector<string> t_lst, o_lst;
-		arh.modList(t_lst);
-		for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
-		{
-		    arh.at(t_lst[i_t]).at().messList(o_lst);
-		    for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
-			if(arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().startStat())
-			    arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().put(o_mess);
-		}
-	    }
-	    catch(TError err)
-	    {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(arh.nodePath().c_str(),_("Message buffer read error."));
-	    }
-
-	if(isLast) break;
-
-	TSYS::taskSleep(1000000000ll*arh.messPeriod());
+	struct itimerspec itval;
+	itval.it_interval.tv_sec = itval.it_value.tv_sec = mMessPer;
+	itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
+	timer_settime(tmIdMess, 0, &itval, NULL);
     }
+}
+
+void TArchiveS::ArhMessTask( union sigval obj )
+{
+    TArchiveS &arh = *(TArchiveS *)obj.sival_ptr;
+    if( arh.prcStMess )  return;
+    arh.prcStMess = true;
+
+    //> Message buffer read
+    if( arh.headLstread != arh.headBuf )
+	try
+	{
+	    ResAlloc res(arh.mRes,false);
+
+	    //>> Get new messages
+	    unsigned new_headLstread = arh.headBuf;
+	    unsigned i_m = arh.headLstread;
+	    vector<TMess::SRec> o_mess;
+	    while( i_m != new_headLstread )
+	    {
+		o_mess.push_back(arh.mBuf[i_m]);
+		if( ++i_m >= arh.mBuf.size() ) i_m = 0;
+	    }
+	    arh.headLstread = new_headLstread;
+
+	    res.release();
+
+	    //>> Put to archivators
+	    vector<string> t_lst, o_lst;
+	    arh.modList(t_lst);
+	    for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
+	    {
+		arh.at(t_lst[i_t]).at().messList(o_lst);
+		for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+		    if(arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().startStat())
+			arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().put(o_mess);
+	    }
+	}
+	catch(TError err)
+	{
+	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	    mess_err(arh.nodePath().c_str(),_("Message buffer read error."));
+	}
 
     arh.prcStMess = false;
-
-    return NULL;
 }
 
 void *TArchiveS::ArhValTask( void *param )
@@ -716,13 +759,13 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     //> Service commands process
     if(a_path == "/serv/mess")		//Messages access
     {
-	if(ctrChkNode(opt,"info",RWRWR_,"root",SARH_ID,SEC_RD))		//Messages information
+	if(ctrChkNode(opt,"info",RWRWRW,"root",SARH_ID,SEC_RD))		//Messages information
 	{
 	    string arch = opt->attr("arch");
 	    opt->setAttr("end",TSYS::uint2str(messEnd(arch)));
 	    opt->setAttr("beg",TSYS::uint2str(messBeg(arch)));
 	}
-	else if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	//Value's data request
+	else if(ctrChkNode(opt,"get",RWRWRW,"root",SARH_ID,SEC_RD))	//Value's data request
 	{
 	    time_t tm      = strtoul(opt->attr("tm").c_str(),0,10);
 	    time_t tm_grnd = strtoul(opt->attr("tm_grnd").c_str(),0,10);
@@ -739,14 +782,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    setAttr("lev",TSYS::int2str(rez[i_r].level))->
 		    setText(rez[i_r].mess);
 	}
-	else if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	//Value's data set
-	    for(unsigned i_r = 0; i_r < opt->childSize(); i_r++)
-	    {
-		XMLNode *mNd = opt->childGet(i_r);
-		messPut(strtol(mNd->attr("time").c_str(),NULL,10),
-			atoi(mNd->attr("utime").c_str()),
-			mNd->attr("cat"), atoi(mNd->attr("lev").c_str()), mNd->text());
-	    }
 	return;
     }
 
@@ -767,10 +802,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    _("Messages category template or regular expression.\n"
             	      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
                       "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
-		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,5,"tp","dec","dest","select",
-            	    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
-            	    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);"
-            		         "Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"),
+		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","-7","max","7",
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/m_arch/lstAMess",
 		    "help",_("Messages archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
@@ -1000,7 +1032,7 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 //* TMArchivator                                 *
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
-    TConfig(cf_el), run_st(false), mId(cfg("ID")), mLevel(cfg("LEVEL")), m_start(cfg("START").getBd()), m_db(idb)
+    TConfig( cf_el ), run_st(false), mId(cfg("ID")), m_start(cfg("START").getBd()), m_level(cfg("LEVEL").getId()), m_db(idb)
 {
     mId = iid;
 }
@@ -1124,9 +1156,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,5,"tp","dec","dest","select",
-            	    "sel_id","0;1;2;3;4;5;6;7",
-            	    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","dec",
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str",
 		    "help",_("Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
@@ -1143,9 +1173,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		_("Messages category template or regular expression.\n"
             	  "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
                   "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
-	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SARH_ID,5,"tp","dec","dest","select",
-            	"sel_id","0;1;2;3;4;5;6;7",
-            	"sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","0","max","7",
 		"help",_("Get messages for level more and equal it."));
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID))
 	    {

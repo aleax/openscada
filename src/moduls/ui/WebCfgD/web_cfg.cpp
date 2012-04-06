@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <time.h>
+#include <getopt.h>
 #include <string.h>
 #include <string>
 #include <gd.h>
@@ -160,13 +161,13 @@ void TWEB::modStop()
     run_st = false;
 }
 
-string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
+string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
 {
     return  "HTTP/1.0 "+rcode+"\x0D\x0A"
 	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
 	    "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
-	    "Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"
+	    "Content-Type: "+cnt_tp+"; charset="+Mess->charset()+"\x0D\x0A"
 	    "Cache-Control: no-cache\x0D\x0A"+addattr+"\x0D\x0A";
 }
 
@@ -253,9 +254,9 @@ void TWEB::imgConvert(SSess &ses)
 	int img_sz;
 	char *img_ptr = NULL;
 	gdImageSaveAlpha(sim, 1);
-	if(itp == "png")	img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, 1);
-	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim, &img_sz, -1);
-	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
+	if(itp == "png")	img_ptr = (char *)gdImagePngPtr(sim,&img_sz);
+	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim,&img_sz,-1);
+	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim,&img_sz);
 	if(img_ptr)
 	{
 	    ses.page.assign(img_ptr,img_sz);
@@ -302,11 +303,9 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 	    {
 		ses.page = trMessReplace(WebCfgDVCA_html);
 		//>> User replace
-		size_t varPos = ses.page.find("##USER##");
-		if(varPos != string::npos)
-		    ses.page.replace(varPos,8,TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
-		//>> Charset replace
-		if((varPos=ses.page.find("##CHARSET##")) != string::npos) ses.page.replace(varPos,11,Mess->charset());
+		size_t userPos = ses.page.find("##USER##");
+		if(userPos != string::npos)
+		ses.page.replace(userPos,8,TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
 
 		page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 		return;
@@ -366,7 +365,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		    mod->cntrIfCmd(req,ses.user);
 		}
 		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
 	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify")
@@ -374,7 +373,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		XMLNode req(wp_com); req.setAttr("path",ses.url);
 		mod->cntrIfCmd(req,ses.user);
 		ses.page = req.save();
-		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+		page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
 		return;
 	    }
 	    else if( wp_com == "img" )
@@ -443,8 +442,8 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     {
 	XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	mod->cntrIfCmd(req,ses.user);
-	ses.page = req.save(XMLNode::XMLHeader);
-	page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	ses.page = req.save();
+	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     //> Full request to control interface
     else if( wp_com == "req" )
@@ -452,7 +451,7 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	XMLNode req(""); req.load(ses.content);
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save(XMLNode::XMLHeader);
-	page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
+	page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
     }
     else if( wp_com == "img" )
     {

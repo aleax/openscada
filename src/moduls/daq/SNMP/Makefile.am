@@ -7,4 +7,3 @@ daq_SNMP_la_LIBADD  = -lnetsnmp -lcrypto
 daq_SNMP_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)SNMP
-include ../../../../I18N.mk

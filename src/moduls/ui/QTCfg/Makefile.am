@@ -1,11 +1,11 @@
 EXTRA_DIST = *.h qtcfg.qrc images/* po/*
 
 oscd_modul_LTLIBRARIES = ui_QTCfg.la
-ui_QTCfg_la_CXXFLAGS = $(QtGui_CFLAGS)
+ui_QTCfg_la_CXXFLAGS = $(QT4_INCL)
 ui_QTCfg_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTCfg_la_SOURCES = tuimod.cpp qrc_qtcfg.cpp qtcfg.cpp selfwidg.cpp moc_qtcfg.cpp moc_selfwidg.cpp
 ui_QTCfg_la_DIST = tuimod.cpp qtcfg.cpp selfwidg.cpp qtcfg.qrc
-ui_QTCfg_la_LIBADD = $(QtGui_LIBS)
+ui_QTCfg_la_LIBADD = $(QT4_LIB)
 ui_QTCfg_la_LIBTOOLFLAGS = --tag=disable-static
 
 if QTCfgIncl
@@ -21,7 +21,6 @@ moc_selfwidg.cpp: selfwidg.h
 	$(QT4_MOC) selfwidg.h > moc_selfwidg.cpp
 
 I18N_mod = $(oscd_modulpref)QTCfg
-include ../../../../I18N.mk
 
 clean-local:
 	rm -f qrc_qtcfg.cpp moc_qtcfg.cpp moc_selfwidg.cpp

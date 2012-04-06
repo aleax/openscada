@@ -68,10 +68,10 @@ class TVariant
 	TVariant( int ivl );
 	TVariant( double ivl );
 	TVariant( const string &ivl );
-	TVariant( const char *var );
 	TVariant( AutoHD<TVarObj> ivl );
 	TVariant( TVarObj *ivl );
 	TVariant( const TVariant &var );
+	TVariant( const char *var );
 
 	~TVariant( );
 
@@ -90,7 +90,7 @@ class TVariant
 	virtual int 	getI( ) const;
 	virtual double	getR( ) const;
 	virtual string	getS( ) const;
-	virtual AutoHD<TVarObj> getO( ) const;
+	virtual AutoHD<TVarObj> getO( bool noex = false ) const;
 
 	operator char( )	{ return getB(); }
 	operator int( )		{ return getI(); }
@@ -155,25 +155,6 @@ class TVarObj
 	unsigned int mUseCnt;
 	static pthread_mutex_t	connM;	//Connection mutex
 	Res oRes;
-};
-
-//*****************************************************************
-//* TEValObj                                                      *
-//*   Special EVal object — Scalar bool, int, real, string analog *
-//*****************************************************************
-class TEValObj : public TVarObj
-{
-    public:
-	//Methods
-	TEValObj( );
-	~TEValObj( );
-
-	string objName( )	{ return "EVAL"; }
-
-	string getStrXML( const string &oid = "" );
-	static AutoHD<TVarObj> parseStrXML( XMLNode *nd = NULL );
-
-	TVariant funcCall( const string &id, vector<TVariant> &prms );
 };
 
 //***********************************************************
@@ -290,9 +271,9 @@ class XMLNodeObj : public TVarObj
 
     private:
 	//Attributes
-	string		mName, mText;
+	string			mName, mText;
 	vector<AutoHD<XMLNodeObj> >	mChilds;
-	XMLNodeObj	*parent;
+	AutoHD<XMLNodeObj>	parent;
 };
 
 //***********************************************************

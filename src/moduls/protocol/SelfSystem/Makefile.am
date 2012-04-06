@@ -11,4 +11,3 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)SelfSystem
-include ../../../../I18N.mk

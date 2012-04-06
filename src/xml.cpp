@@ -143,17 +143,6 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
     throw TError("XMLNode",_("Child with attribut %s=%s is not present."),attr.c_str(),val.c_str());
 }
 
-XMLNode* XMLNode::getElementBy( const string &iattr, const string &val )
-{
-    if(attr(iattr) == val)      return this;
-
-    XMLNode* rez = NULL;
-    for(unsigned i_ch = 0; !rez && i_ch < childSize(); i_ch++)
-        rez = childGet(i_ch)->getElementBy(iattr,val);
-
-    return rez;
-}
-
 string	XMLNode::text( bool childs, bool recursive ) const
 {
     if(!childs || mName == "<*>") return mText;
@@ -259,10 +248,10 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
     //> Text block
     if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true); return; }
     //> Commentary block
-    if(name() == "<!>")	{ if(!(flg&Clean)) xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
+    if(name() == "<!>") { xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
     //> Process special block <? ... ?>
     if(name().compare(0,2,"<?") == 0)
-    { if(!(flg&Clean)) xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
+    { xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
 
     xml.append((flg&XMLNode::BrOpenPrev && xml.size() && xml[xml.size()-1] != '\n') ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
@@ -474,7 +463,7 @@ bool XMLNode::parseAttr( LoadCtx &ctx, unsigned &pos, char sep )
     //> Get attribute name
     //>> Pass spaces
     while(isspace(ctx.vl[pos])) pos++;
-    if(!isalpha(ctx.vl[pos]) && !isxdigit(ctx.vl[pos])) return false;
+    if(!isalpha(ctx.vl[pos])) return false;
 
     unsigned bpos = pos;
     for( ; !isspace(ctx.vl[pos]) && ctx.vl[pos] != '='; pos++)
@@ -545,20 +534,17 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	    }
     }
     //> Check for loaded entities
-    else
+    else if(ctx.ent.size())
     {
 	rpos += 1;
 	unsigned nBeg = rpos;
 	for( ; ctx.vl[rpos] != ';'; rpos++)
 	    if(rpos >= ctx.vl.size()) throw TError("XMLNode",_("Entity error. Pos: %d"),nBeg-1);
-	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg)) : ctx.ent.end();
-	if(ient != ctx.ent.end()) rez += ient->second;
-	else
-	{
-	    rez += '?';
-	    mess_warning("XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,rpos-nBeg).c_str(), rpos);
-	}
+	map<string,string>::iterator ient = ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg));
+	if(ient == ctx.ent.end()) throw TError("XMLNode",_("Unknown entity. Pos: %d"),rpos);
+	rez += ient->second;
     }
+    else throw TError("XMLNode",_("Unknown entity. Pos: %d"),rpos);
 }
 
 
