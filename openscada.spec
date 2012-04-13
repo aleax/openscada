@@ -24,6 +24,7 @@ BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
 %define _iconsdir /usr/share/icons
+%define _pkgconfigdir %_libdir/pkgconfig
 BuildRoot: %_tmppath/%name-%version-root
 %endif
 
