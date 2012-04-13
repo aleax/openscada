@@ -1,3 +1,9 @@
+2012-04-13 Roman
+- SYS: For build to OpenSuSE and Mandriva defined "pkgconfigdir" variable.
+- FIX:SYS: Permition for write on "/gen/workdir", "/gen/icodir" and "/gen/moddir" is fixed.
+- DAQ.JavaLikeCalc: Operation '^' syntax highlight is added.
+
+
 2012-04-06 Roman 0.8.0
 - UI.QTStarter: Splash is updated for 0.8.0 release.
 - DOC: Release notes for version 0.8.0 is added. Index files is updated.

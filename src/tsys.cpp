@@ -1961,18 +1961,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/workdir")
     {
-	if(ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD))	opt->setText(workDir());
-	if(ctrChkNode(opt,"set",R_R___,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
     }
     else if(a_path == "/gen/icodir")
     {
-	if(ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD))	opt->setText(icoDir());
-	if(ctrChkNode(opt,"set",R_R___,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
     }
     else if(a_path == "/gen/moddir")
     {
-	if(ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD))	opt->setText(modDir());
-	if(ctrChkNode(opt,"set",R_R___,"root","root",SEC_WR))	setModDir(opt->text().c_str());
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(modDir());
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setModDir(opt->text().c_str());
     }
     else if(a_path == "/gen/lang")
     {
