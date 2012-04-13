@@ -1,3 +1,7 @@
+2012-04-13 Maxim
+- FIX:UI.WebVision: Several declarations of unused variables are removed.
+
+
 2012-04-13 Roman
 - SYS: For build to OpenSuSE and Mandriva defined "pkgconfigdir" variable.
 - FIX:SYS: Permition for write on "/gen/workdir", "/gen/icodir" and "/gen/moddir" is fixed.

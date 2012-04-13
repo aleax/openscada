@@ -3127,8 +3127,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                         if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
                         else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
                         //--- Arc ---
-                        Point el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true );
-                        Point el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc, true, true );
                         Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
                         Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
                         Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc, true, true );
@@ -3743,12 +3741,9 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
                                 Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc, true, true );
                                 Point el_p5_rot = scaleRotate( (pnts)[item.n5], xSc, ySc, true, true );
 
-                                Point el_p1 = unscaleUnrotate( el_p1_rot, xSc, ySc, false, true );
-                                Point el_p2 = unscaleUnrotate( el_p2_rot, xSc, ySc, false, true );
                                 Point el_p3 = unscaleUnrotate( el_p3_rot, xSc, ySc, false, true );
                                 Point el_p4 = unscaleUnrotate( el_p4_rot, xSc, ySc, false, true );
                                 Point el_p5 = unscaleUnrotate( el_p5_rot, xSc, ySc, false, true );
-                                Point el_p6 = item.ctrlPos4;
 
                                 if( el_p5.y <= el_p3.y ) ang = angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
                                 else ang = 360 - angle( el_p3, el_p5, el_p3, Point( el_p3.x+10, el_p3.y ) );
