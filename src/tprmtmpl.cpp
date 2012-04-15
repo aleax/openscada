@@ -495,6 +495,7 @@ void TPrmTmplLib::setFullDB( const string &vl )
     size_t dpos = vl.rfind(".");
     work_lib_db = (dpos!=string::npos) ? vl.substr(0,dpos) : "";
     cfg("DB").setS((dpos!=string::npos) ? vl.substr(dpos+1) : "");
+    modifG();
 }
 
 void TPrmTmplLib::load_( )

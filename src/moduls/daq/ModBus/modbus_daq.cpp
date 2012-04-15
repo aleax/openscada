@@ -1186,7 +1186,7 @@ void TMdPrm::initLnks( )
 	ai  = TSYS::strParse(lCtx->lnk(i_l).addr, 0, ":", &off);
 	reg = strtol(ai.c_str(),NULL,0);
 	mode  = TSYS::strParse(lCtx->lnk(i_l).addr, 0, ":", &off);
-	owner().regVal(reg,atp_m);
+	if(mode != "w")	owner().regVal(reg,atp_m);
 	if(atp[0] == 'R' && (atp_sub == "i4" || atp_sub == "f"))
 	{
 	    reg2 = TSYS::strParse(ai,1,",").empty() ? (reg+1) : strtol(TSYS::strParse(ai,1,",").c_str(),NULL,0);
@@ -1225,7 +1225,8 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 
 	    //> Get input links
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
-		lCtx->set(lCtx->lnk(i_l).io_id, owner().getVal(lCtx->lnk(i_l).real,w_err));
+		if(TSYS::strParse(lCtx->lnk(i_l).real,2,":") != "w")	//No read try for only writible
+		    lCtx->set(lCtx->lnk(i_l).io_id, owner().getVal(lCtx->lnk(i_l).real,w_err));
 
             //> Calc template
             lCtx->setMdfChk(true);
