@@ -1,3 +1,9 @@
+2012-04-15 Roman
+- FIX:DAQ: All included nodes (templates) are set to modify on templates' library DB change.
+- FIX:DAQ.ModBus: No read only writible register by "C:3:w" for logical type is set.
+- FIX:Protocol.ModBus: Read Coils by function 1 for no one set is fixed.
+
+
 2012-04-13 Maxim
 - FIX:UI.WebVision: Several declarations of unused variables are removed.
 
