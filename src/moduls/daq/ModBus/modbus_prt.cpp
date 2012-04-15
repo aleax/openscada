@@ -910,8 +910,8 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    case 0x01:	//Read multiple coils
 	    {
 		int c_sz = 0;
-		if( pdu.size() == 5 ) c_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if( c_sz < 1 || c_sz > 2000 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
+		if(pdu.size() == 5) c_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		if(c_sz < 1 || c_sz > 2000) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
 		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
 		pdu.assign(1,pdu[0]);
 		pdu += (char)(c_sz/8+((c_sz%8)?1:0));
@@ -919,10 +919,15 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 
 		bool isData = false;
 		map<int,int>::iterator itc;
-		for( int i_c = c_addr; i_c < (c_addr+c_sz); i_c++ )
-		    if( (itc=data->coil.find(i_c)) != data->coil.end() && data->val.getB(itc->second) )
-		    { pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8)); isData = true; }
-		if( !isData )	{ pdu.assign(1,pdu[0]|0x80); pdu += 0x2; return true; }
+		for(int i_c = c_addr; i_c < (c_addr+c_sz); i_c++)
+		{
+		    if((itc=data->coil.find(i_c)) != data->coil.end())
+		    {
+			if(data->val.getB(itc->second))	pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8));
+			isData = true;
+		    }
+		}
+		if(!isData)	{ pdu.assign(1,pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rCoil += c_sz;
 
