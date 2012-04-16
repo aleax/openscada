@@ -267,7 +267,7 @@ class ShapeMedia : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
+		ShpDt( ) : en(true), active(false), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
 		//Attributes
 		short	en		:1;
 		short	active		:1;
