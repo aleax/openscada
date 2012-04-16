@@ -270,6 +270,7 @@ class ShapeMedia : public WdgShape
 		ShpDt( ) : en(true), geomMargin(0), mediaType(-1), addrWdg(NULL)	{ }
 		//Attributes
 		short	en		:1;
+		short	active		:1;
 		short	geomMargin	:8;
 		short	bordStyle	:5;
 		short	mediaType	:3;
