@@ -1,3 +1,9 @@
+2012-04-16 Roman
+- FIX:SYS: TCntrNode::nodeAt() is fixed for no exceptions mode.
+- FIX:UI.Vision: Cursor change on mouse move to map area of primitive "Media" is fixed.
+- FIX:UI.WebVision: Map number for event generation "ws_MapAct{x}Left" of primitive "Media" is fixed.
+
+
 2012-04-15 Roman
 - FIX:DAQ: All included nodes (templates) are set to modify on templates' library DB change.
 - FIX:DAQ.ModBus: No read only writible register by "C:3:w" for logical type is set.

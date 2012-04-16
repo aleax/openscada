@@ -806,7 +806,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
       {
 	var mapObj = this.place.ownerDocument.createElement('map');
 	mapObj.name = this.addr;
-	for( var i = 0; i <  parseInt(this.attrs['areas']); i++ )
+	for( var i = 0; i < parseInt(this.attrs['areas']); i++ )
 	{
 	  var arObj = this.place.ownerDocument.createElement('area');
 	  switch(parseInt(this.attrs['area'+i+'shp']))
@@ -818,7 +818,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	  arObj.coords = this.attrs['area'+i+'coord'];
 	  arObj.title = this.attrs['area'+i+'title'];
 	  arObj.href = '';
-	  arObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_MapAct'+i+'Left'); return false; }
+	  arObj.areaId = i;
+	  arObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_MapAct'+this.areaId+'Left'); return false; }
 	  arObj.wdgLnk = this;
 	  mapObj.appendChild(arObj);
 	}
