@@ -1031,8 +1031,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	case 6:		//active
 	    if(!qobject_cast<RunWdgView*>(w))	break;
-	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr());
-	    w->setMouseTracking(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr());
+	    shD->active = atoi(val.c_str());
+	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
+	    w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
 	    break;
 	case 12:	//geomMargin
 	    shD->geomMargin = atoi(val.c_str());
@@ -1299,8 +1300,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	if(mk_new)
 	{
-	    if(qobject_cast<DevelWdgView*>(w)) shD->addrWdg->setMouseTracking(true);
-	    w->setMouseTracking(true);
+	    w->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
+	    shD->addrWdg->setMouseTracking(qobject_cast<DevelWdgView*>(w) || (shD->active && ((RunWdgView*)w)->permCntr()));
 	    shD->addrWdg->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
