@@ -1,4 +1,6 @@
 2012-04-17 Roman
+- UI.WebVision: Adaptive update interface period is made by 3x to last interface update time.
+    Images update hang is prevented on previous image load lost (typical for Konqueror).
 - FIX:SYS: QT4 (QTGui) check for error on miss is fixed. Checking to QTGui full replaced for use "pkg-config QTGui".
 
 
