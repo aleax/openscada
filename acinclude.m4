@@ -1341,11 +1341,9 @@ AC_DEFUN([AX_LIB_FFTW3],
 #
 #   This macro calls:
 #
-#     AC_ARG_WITH(qt4-dir)
-#     AC_CHECK_PROGS(QT4_MOC)
-#     AC_CHECK_PROGS(QT4_RCC)
-#     AC_SUBST(QT4_INCL)
-#     AC_SUBST(QT4_LIB)
+#     PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0])
+#     AC_SUBST(QT4_MOC)
+#     AC_SUBST(QT4_RCC)
 #
 #   And sets:
 #
@@ -1362,20 +1360,11 @@ AC_DEFUN([AX_LIB_FFTW3],
 AC_DEFUN([AX_LIB_QT4],
 [
     if test "x${QT4use}" = "x"; then
-	AC_ARG_WITH(qt4-dir,[  --with-qt4-dir=DIR      Path to directory where QT4 instaled (/usr/lib/qt4 - default) ], [QT4_DIR="$withval"], [QT4_DIR="/usr/lib/qt4"])
-	AC_CHECK_PROGS(QT4_MOC, moc-qt4 moc, false)
-	AC_CHECK_PROGS(QT4_RCC, rcc-qt4 rcc, false)
-	if test $QT4_MOC = false -o $QT4_RCC = false; then
-	    if test -d $QT4_DIR; then
-        	QT4_MOC="${QT4_DIR}/bin/moc";
-        	QT4_RCC="${QT4_DIR}/bin/rcc";
-            else AC_MSG_ERROR([QT4 development utilites no present (into directory ${QT4_DIR})! Install QT4 library development package.]);
-            fi;
-	fi
-	QT4_INCL="$(pkg-config --cflags QtGui)"
-	QT4_LIB="$(pkg-config --libs QtGui)"
-	AC_SUBST(QT4_INCL)
-	AC_SUBST(QT4_LIB)
+	PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0],[],[AC_MSG_ERROR(QT4 library QtGui not found! Install QT4 library development package.)])
+	AC_SUBST(QT4_MOC)
+	AC_SUBST(QT4_RCC)
+	QT4_MOC="$(pkg-config --variable=moc_location QtGui)"
+	QT4_RCC="$(pkg-config --variable=rcc_location QtGui)";
 	QT4use=true
     fi
 ])
