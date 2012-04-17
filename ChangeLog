@@ -1,3 +1,7 @@
+2012-04-17 Roman
+- FIX:SYS: QT4 (QTGui) check for error on miss is fixed. Checking to QTGui full replaced for use "pkg-config QTGui".
+
+
 2012-04-16 Roman
 - FIX:SYS: TCntrNode::nodeAt() is fixed for no exceptions mode.
 - FIX:UI.Vision: Cursor change on mouse move to map area of primitive "Media" is fixed.
