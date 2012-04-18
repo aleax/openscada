@@ -1,3 +1,9 @@
+2012-04-18 Roman
+- FIX:SYS: QT4 (QTGui) check for get miss variables "moc_location" and "rcc_location" is added by
+    append to "prefix" variable.
+- UI.Vision: All dialogs call into runtime mode, for unprivileged users and full screen call is set to ReadOnly mode.
+
+
 2012-04-17 Roman
 - UI.WebVision: Adaptive update interface period is made by 3x to last interface update time.
     Images update hang is prevented on previous image load lost (typical for Konqueror).

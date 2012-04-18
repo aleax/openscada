@@ -6,7 +6,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = openscada.pc
 
 %.pc: %.pc.in
-	$(AM_V_GEN)sed -e 's,@prefix\@,$(prefix),g' \
+	@$(AM_V_GEN)sed -e 's,@prefix\@,$(prefix),g' \
 	    -e 's,@libdir\@,$(libdir),g' \
 	    -e 's,@HOWL_COMPAT_VERSION\@,$(HOWL_COMPAT_VERSION),g' \
 	    -e 's,@PACKAGE_VERSION\@,$(PACKAGE_VERSION),g' $< > $@

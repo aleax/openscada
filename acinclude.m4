@@ -1365,6 +1365,8 @@ AC_DEFUN([AX_LIB_QT4],
 	AC_SUBST(QT4_RCC)
 	QT4_MOC="$(pkg-config --variable=moc_location QtGui)"
 	QT4_RCC="$(pkg-config --variable=rcc_location QtGui)";
+	if test "x${QT4_MOC}" = "x"; then QT4_MOC="$(pkg-config --variable=prefix QtGui)/bin/moc"; fi
+	if test "x${QT4_RCC}" = "x"; then QT4_RCC="$(pkg-config --variable=prefix QtGui)/bin/rcc"; fi
 	QT4use=true
     fi
 ])
