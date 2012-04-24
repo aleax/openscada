@@ -39,19 +39,11 @@ Session::Session( const string &iid, const string &iproj ) :
     mPage = grpAdd("pg_");
     sec = SYS->security();
     mReqTm = time(NULL);
-
-    //> Attributes mutex create
-    pthread_mutexattr_t attrM;
-    pthread_mutexattr_init(&attrM);
-    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mtxAttr, &attrM);
-    pthread_mutexattr_destroy(&attrM);
 }
 
 Session::~Session( )
 {
-    //> Attributes mutex destroy
-    pthread_mutex_destroy(&mtxAttr);
+
 }
 
 void Session::postEnable( int flag )
@@ -430,8 +422,6 @@ void *Session::Task( void *icontr )
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
 
-	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
-
 	ses.tm_calc = TSYS::curTime()-t_cnt;
 	/*ses.rez_calc+=ses.tm_calc;
 	if( !(ses.calcClk()%10) )
@@ -441,6 +431,7 @@ void *Session::Task( void *icontr )
 	}*/
 
 	TSYS::taskSleep((int64_t)ses.period()*1000000);
+	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;
     }
 
     ses.mStart = false;
@@ -1202,6 +1193,12 @@ void SessWdg::setEnable( bool val )
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    wdgDel(ls[i_l]);
     }
+    SessWdg *sw;
+    if(val && (sw=ownerSessWdg(true)) && sw->process())
+    {
+	setProcess(true);
+	sw->prcElListUpdate();
+    }
 }
 
 void SessWdg::setProcess( bool val )
@@ -1459,10 +1456,11 @@ void SessWdg::prcElListUpdate( )
     }
 }
 
-void SessWdg::getUpdtWdg( const string &path, unsigned int tm, vector<string> &els )
+void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &els )
 {
-    string wpath = path+"/"+id();
+    string wpath = ipath+"/"+id();
     if(modifChk(tm,mMdfClc)) els.push_back(wpath);
+
     for(unsigned i_ch = 0; i_ch < mWdgChldAct.size(); i_ch++)
 	if(wdgPresent(mWdgChldAct[i_ch]))
 	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_ch])).at().getUpdtWdg(wpath,tm,els);
@@ -1711,8 +1709,6 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	    //> Enable widget
 	    AutoHD<SessWdg> nw = wdgAt(prms[0].getS());
 	    nw.at().setEnable(true);
-	    nw.at().setProcess(true);
-	    prcElListUpdate();
 
 	    return new TCntrNodeObj(&nw.at(),user);
 	}

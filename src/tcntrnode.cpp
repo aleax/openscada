@@ -538,6 +538,10 @@ int TCntrNode::isModify( int f )
     return rflg;
 }
 
+void TCntrNode::modif( bool save )	{ m_flg |= (save?(SelfModifyS|SelfModify):SelfModify); }
+
+void TCntrNode::modifClr( bool save )	{ m_flg &= ~(save?SelfModifyS:SelfModify); }
+
 void TCntrNode::modifG( )
 {
     ResAlloc res( hd_res, false );
@@ -562,8 +566,10 @@ void TCntrNode::load( bool force )
     if((isModify(Self)&Self) || force)
 	try
 	{
-	    if( nodeMode( ) == TCntrNode::Disable )	nodeEn( NodeRestore|NodeShiftDel );
-	    load_( );
+	    if(nodeMode( ) == TCntrNode::Disable) nodeEn(NodeRestore|NodeShiftDel);
+	    modifClr(true);	//Save flag clear
+	    load_();
+	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
 	}
 	catch(TError err)
 	{
@@ -576,9 +582,9 @@ void TCntrNode::load( bool force )
 	ResAlloc res( hd_res, false );
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
-		if(p->second->isModify(Self|Child))	p->second->load(force);
+		if(p->second->isModify(Self|Child)) p->second->load(force);
     }
-    modifClr( );
+
 }
 
 void TCntrNode::save( )
