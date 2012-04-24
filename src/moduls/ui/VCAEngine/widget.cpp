@@ -33,7 +33,7 @@ using namespace VCA;
 //************************************************
 //* Widget                                       *
 //************************************************
-pthread_mutex_t Widget::mtxAttrGlob = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
+pthread_mutex_t Widget::mtxAttrCon = PTHREAD_MUTEX_INITIALIZER;
 
 Widget::Widget( const string &id, const string &isrcwdg ) :
     mId(id), mEnable(false), m_lnk(false), mStlLock(false), BACrtHoldOvr(false), mParentNm(isrcwdg)
@@ -41,11 +41,11 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
     inclWdg = grpAdd("wdg_");
 
     //> Attributes mutex create
-    /*pthread_mutexattr_t attrM;
+    pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
     pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&mtxAttr, &attrM);
-    pthread_mutexattr_destroy(&attrM);*/
+    pthread_mutex_init(&mtxAttrM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
 Widget::~Widget()
@@ -55,13 +55,15 @@ Widget::~Widget()
     map<string,Attr*>::iterator p;
     while((p = mAttrs.begin()) != mAttrs.end())
     {
+	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
+	if(p->second->mConn) mess_err(nodePath().c_str(),_("Attribute '%s' was not free. Force delete!"),p->first.c_str());
 	delete p->second;
 	mAttrs.erase(p);
     }
     pthread_mutex_unlock(&mtxAttr());
 
     //> Attributes mutex destroy
-    //pthread_mutex_destroy(&mtxAttr);
+    pthread_mutex_destroy(&mtxAttrM);
 }
 
 TCntrNode &Widget::operator=( TCntrNode &node )
@@ -564,6 +566,9 @@ void Widget::attrDel( const string &attr, bool allInher  )
 	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
 	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
+	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
+        if(p->second->mConn) throw TError(nodePath().c_str(),_("Deleted attribute '%s' was not free!"),attr.c_str());
+
 	int pos = p->second->mOi;
 	for(map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1)
 	    if(p1->second->mOi > pos) p1->second->mOi--;
@@ -1691,7 +1696,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget attribute                       *
 //************************************************
-Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mOwner(NULL)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mOwner(NULL), mConn(0)
 {
     setFld(ifld, inher);
 }
@@ -1703,6 +1708,7 @@ Attr::~Attr(  )
 
 void Attr::setFld( TFld *fld, bool inher )
 {
+    if(owner()) pthread_mutex_lock(&owner()->mtxAttr());
     //> Free for previous type
     if(mFld && (!fld || fld->type() != mFld->type()))
 	switch(mFld->type())
@@ -1752,6 +1758,7 @@ void Attr::setFld( TFld *fld, bool inher )
     if(mFld && !inher)	mFld->setLen(1);
     else if(mFld && inher)	mFld->setLen(mFld->len()+1);
     self_flg = inher ? self_flg|Attr::IsInher : self_flg & ~Attr::IsInher;
+    if(owner()) pthread_mutex_unlock(&owner()->mtxAttr());
 }
 
 const string &Attr::id( )	{ return fld().name(); }
@@ -1764,7 +1771,7 @@ int Attr::flgGlob( )		{ return fld().flg(); }
 
 string Attr::getSEL( bool sys )
 {
-    if( !(fld().flg()&TFld::Selected) ) throw TError("Cfg",_("Element type is not selected!"));
+    if(!(fld().flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selected!"));
     switch( fld().type() )
     {
 	case TFld::String:	return fld().selVl2Nm(getS(sys));
@@ -1793,14 +1800,19 @@ string Attr::getS( bool sys )
 {
     if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getS();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getS(true),false).getS();
-
     switch(fld().type())
     {
-	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? TSYS::int2str(m_val.i_val) : EVAL_STR;
-	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? TSYS::real2str(m_val.r_val) : EVAL_STR;
-	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? TSYS::int2str((bool)m_val.b_val) : EVAL_STR;
-	case TFld::String:	return *m_val.s_val;
-	case TFld::Object:	return m_val.o_val->at().getStrXML();
+	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? TSYS::int2str(tvl) : EVAL_STR; }
+	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? TSYS::real2str(tvl) : EVAL_STR; }
+	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? TSYS::int2str((bool)tvl) : EVAL_STR; }
+	case TFld::Object:	return getO(sys).at().getStrXML();
+	case TFld::String:
+	{
+	    pthread_mutex_lock(&owner()->mtxAttr());
+	    string tvl = *m_val.s_val;
+	    pthread_mutex_unlock(&owner()->mtxAttr());
+	    return tvl;
+	}
     }
     return EVAL_STR;
 }
@@ -1811,9 +1823,9 @@ int Attr::getI( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getI(true),false).getI();
     switch(fld().type())
     {
-	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? atoi(m_val.s_val->c_str()) : EVAL_INT;
-	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (int)m_val.r_val : EVAL_INT;
-	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_INT;
+	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? atoi(tvl.c_str()) : EVAL_INT; }
+	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? (int)tvl : EVAL_INT; }
+	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? (bool)tvl : EVAL_INT; }
 	case TFld::Integer:	return m_val.i_val;
 	default: break;
     }
@@ -1826,9 +1838,9 @@ double Attr::getR( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getR(true),false).getR();
     switch(fld().type())
     {
-	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? atof(m_val.s_val->c_str()) : EVAL_REAL;
-	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? m_val.i_val : EVAL_REAL;
-	case TFld::Boolean:	return (m_val.b_val != EVAL_BOOL) ? (bool)m_val.b_val : EVAL_REAL;
+	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? atof(tvl.c_str()) : EVAL_REAL; }
+	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? tvl : EVAL_REAL; }
+	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? (bool)tvl : EVAL_REAL; }
 	case TFld::Real:	return m_val.r_val;
 	default: break;
     }
@@ -1841,9 +1853,9 @@ char Attr::getB( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getB(true),false).getB();
     switch(fld().type())
     {
-	case TFld::String:	return (*m_val.s_val != EVAL_STR) ? (bool)atoi(m_val.s_val->c_str()) : EVAL_BOOL;
-	case TFld::Integer:	return (m_val.i_val != EVAL_INT) ? (bool)m_val.i_val : EVAL_BOOL;
-	case TFld::Real:	return (m_val.r_val != EVAL_REAL) ? (bool)m_val.r_val : EVAL_BOOL;
+	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? (bool)atoi(tvl.c_str()) : EVAL_BOOL; }
+	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? (bool)tvl : EVAL_BOOL; }
+	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? (bool)tvl : EVAL_BOOL; }
 	case TFld::Boolean:	return m_val.b_val;
 	default: break;
     }
@@ -1855,7 +1867,10 @@ AutoHD<TVarObj> Attr::getO( bool sys )
     if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getO();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
     if(fld().type() != TFld::Object) throw TError(owner()->nodePath().c_str(),_("Get object from not object's attribute '%s' error!"),id().c_str());
-    return *m_val.o_val;
+    pthread_mutex_lock(&owner()->mtxAttr());
+    AutoHD<TVarObj> tvl = *m_val.o_val;
+    pthread_mutex_unlock(&owner()->mtxAttr());
+    return tvl;
 }
 
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
@@ -1898,9 +1913,16 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	{
 	    if((!strongPrev && *m_val.s_val == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
+	    pthread_mutex_lock(&owner()->mtxAttr());
 	    string t_str = *m_val.s_val;
 	    *m_val.s_val = val;
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_str))) *m_val.s_val = t_str;
+	    pthread_mutex_unlock(&owner()->mtxAttr());
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_str)))
+	    {
+		pthread_mutex_lock(&owner()->mtxAttr());
+		*m_val.s_val = t_str;
+		pthread_mutex_unlock(&owner()->mtxAttr());
+	    }
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -2006,9 +2028,16 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 	case TFld::Object:
 	    if((!strongPrev && *m_val.o_val == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
+	    pthread_mutex_lock(&owner()->mtxAttr());
 	    AutoHD<TVarObj> t_obj = *m_val.o_val;
 	    *m_val.o_val = val;
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_obj))) *m_val.o_val = t_obj;
+	    pthread_mutex_unlock(&owner()->mtxAttr());
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_obj)))
+	    {
+		pthread_mutex_lock(&owner()->mtxAttr());
+		*m_val.o_val = t_obj;
+		pthread_mutex_unlock(&owner()->mtxAttr());
+	    }
 	    else
 	    {
 		unsigned imdf = owner()->modifVal(*this);
@@ -2021,21 +2050,34 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 
 string Attr::cfgTempl( )
 {
-    return cfg.substr(0,cfg.find("\n"));
+    pthread_mutex_lock(&owner()->mtxAttr());
+    string tvl = cfg.substr(0,cfg.find("\n"));
+    pthread_mutex_unlock(&owner()->mtxAttr());
+    return tvl;
 }
 
 string Attr::cfgVal( )
 {
+    pthread_mutex_lock(&owner()->mtxAttr());
     size_t sepp = cfg.find("\n");
-    return (sepp!=string::npos) ? cfg.substr(sepp+1) : "";
+    string tvl = (sepp!=string::npos) ? cfg.substr(sepp+1) : "";
+    pthread_mutex_unlock(&owner()->mtxAttr());
+    return tvl;
 }
 
 void Attr::setCfgTempl( const string &vl )
 {
     string t_tmpl = cfgTempl();
-    if( t_tmpl == vl ) return;
+    if(t_tmpl == vl) return;
+    pthread_mutex_lock(&owner()->mtxAttr());
     cfg = vl+"\n"+cfgVal();
-    if( !owner()->attrChange(*this,TVariant()) ) cfg = t_tmpl+"\n"+cfgVal();
+    pthread_mutex_unlock(&owner()->mtxAttr());
+    if(!owner()->attrChange(*this,TVariant()))
+    {
+	pthread_mutex_lock(&owner()->mtxAttr());
+	cfg = t_tmpl+"\n"+cfgVal();
+	pthread_mutex_unlock(&owner()->mtxAttr());
+    }
     else
     {
 	unsigned imdf = owner()->modifVal(*this);
@@ -2046,9 +2088,16 @@ void Attr::setCfgTempl( const string &vl )
 void Attr::setCfgVal( const string &vl )
 {
     string t_val = cfgVal();
-    if( t_val == vl ) return;
+    if(t_val == vl) return;
+    pthread_mutex_lock(&owner()->mtxAttr());
     cfg = cfgTempl()+"\n"+vl;
-    if( !owner()->attrChange(*this,TVariant()) ) cfg = cfgTempl()+"\n"+t_val;
+    pthread_mutex_unlock(&owner()->mtxAttr());
+    if(!owner()->attrChange(*this,TVariant()))
+    {
+	pthread_mutex_lock(&owner()->mtxAttr());
+	cfg = cfgTempl()+"\n"+t_val;
+	pthread_mutex_unlock(&owner()->mtxAttr());
+    }
     else
     {
 	unsigned imdf = owner()->modifVal(*this);
@@ -2058,10 +2107,10 @@ void Attr::setCfgVal( const string &vl )
 
 void Attr::setFlgSelf( SelfAttrFlgs flg )
 {
-    if( self_flg == flg )	return;
+    if(self_flg == flg)	return;
     SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
     self_flg = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
-    if( !owner()->attrChange(*this,TVariant()) )	self_flg = t_flg;
+    if(!owner()->attrChange(*this,TVariant()))	self_flg = t_flg;
     else
     {
 	unsigned imdf = owner()->modifVal(*this);
@@ -2071,11 +2120,17 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
 
 void Attr::AHDConnect( )
 {
-    pthread_mutex_lock(&owner()->mtxAttr());
+    pthread_mutex_lock(&owner()->mtxAttrCon);
+    if(mConn < 255) mConn++;
+    else mess_err(owner()->nodePath().c_str(),_("Connections to attribute '%s' more to 255!"),id().c_str());
+    pthread_mutex_unlock(&owner()->mtxAttrCon);
 }
 
 bool Attr::AHDDisConnect( )
 {
-    pthread_mutex_unlock(&owner()->mtxAttr());
+    pthread_mutex_lock(&owner()->mtxAttrCon);
+    if(mConn > 0) mConn--;
+    else mess_err(owner()->nodePath().c_str(),_("Disconnection from attribute '%s' more to connections!"),id().c_str());
+    pthread_mutex_unlock(&owner()->mtxAttrCon);
     return false;
 }

@@ -1355,16 +1355,16 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 	    //Prepare for drag and drop operation
 	    if( owner()->work_space->activeSubWindow() && w_lev == 2 )
 	    {
-	        //- Prepare put data stream -
+	        //> Prepare put data stream
 	        QByteArray itemData;
 	        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
 	        dataStream << QString(work_wdg.c_str());
 
-	        //- Prepare mime data -
+	        //> Prepare mime data
 	        QMimeData *mimeData = new QMimeData;
 	        mimeData->setData("application/OpenSCADA-libwdg",itemData);
 
-	        //- Create drag object -
+	        //> Create drag object
 	        QDrag *drag = new QDrag(this);
 	        drag->setMimeData(mimeData);
 	        //drag->setDragCursor(item->icon(0).pixmap(64,64),Qt::MoveAction);

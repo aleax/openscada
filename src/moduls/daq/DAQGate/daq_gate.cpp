@@ -179,7 +179,6 @@ void TMdContr::load_( )
 void TMdContr::enable_( )
 {
     string statv, cp_el, daqtp, cntrnm, prmnm, cntrpath, gPrmLs;
-    bool gAddPrm = false;
     vector<string> prm_ls;
     XMLNode req("list");
 
@@ -204,7 +203,6 @@ void TMdContr::enable_( )
 		prm_ls.clear();
 		if(prmnm.empty() || prmnm == "*")
 		{
-		    //>> Get attributes list
 		    req.clear()->setName("get")->setAttr("path",cntrpath+"%2fprm%2fprm");
 		    if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
 		    else for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
@@ -222,16 +220,9 @@ void TMdContr::enable_( )
 			if(cntrIfCmd(req)) throw TError(req.attr("mcat").c_str(),"%s",req.text().c_str());
 			add(prm_ls[i_p],owner().tpPrmToId("std"));
 			at(prm_ls[i_p]).at().setName(req.text());
-			gAddPrm = true;
 		    }
 		    if(!at(prm_ls[i_p]).at().enableStat()) at(prm_ls[i_p]).at().enable();
 		    at(prm_ls[i_p]).at().setCntrAdr(cntrpath);
-		    at(prm_ls[i_p]).at().load();
-		    if(at(prm_ls[i_p]).at().isUpdated)
-		    {
-			at(prm_ls[i_p]).at().modif();
-			at(prm_ls[i_p]).at().isUpdated = false;
-		    }
 		    gPrmLs += prm_ls[i_p]+";";
 		}
 	    }catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -249,18 +240,6 @@ void TMdContr::enable_( )
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Deletion parameter '%s' is error but it no present on configuration or remote station."),prm_ls[i_p].c_str());
 		}
-    }
-
-    //> Update try for archives start
-    if(gAddPrm && SYS->archive().at().subStartStat())
-    {
-	SYS->archive().at().valList(prm_ls);
-	for(unsigned i_a = 0; i_a < prm_ls.size(); i_a++)
-	{
-	    AutoHD<TVArchive> archt = SYS->archive().at().valAt(prm_ls[i_a]);
-	    if(archt.at().toStart() && !archt.at().startStat())
-		try{ archt.at().start(); } catch(...) { }
-	}
     }
 }
 
@@ -350,7 +329,7 @@ void *TMdContr::Task( void *icntr )
 		    if(cntr.mStatWork[i_st].second > 0) continue;
 		    XMLNode req("CntrReqs"); req.setAttr("path","/"+cntr.mStatWork[i_st].first+"/DAQ/");
 
-		    //> Put attributes reuests
+		    //> Put attributes requests
 		    for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
 		    {
 			prm = cntr.at(pLS[i_p]);
@@ -527,7 +506,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(vlCfg())  setVlCfg(NULL);
+    if(vlCfg())	setVlCfg(NULL);
     if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
@@ -585,30 +564,41 @@ void TMdPrm::load_( )
     //> Request and update attributes list
     string scntr;
     XMLNode req("CntrReqs");
-    for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
+    for(int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	try
 	{
+	    vector<string> als;
 	    req.clear()->setAttr("path",scntr+id());
 	    req.childAdd("get")->setAttr("path","/%2fprm%2fcfg%2fNAME");
 	    req.childAdd("get")->setAttr("path","/%2fprm%2fcfg%2fDESCR");
 	    req.childAdd("list")->setAttr("path","/%2fserv%2fattr");
-	    if( owner().cntrIfCmd(req) ) throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 
 	    setName(req.childGet(0)->text());
 	    setDescr(req.childGet(1)->text());
 	    //>> Check and create new attributes
-	    for( int i_a = 0; req.childGet(2)->childSize(); i_a++ )
+	    for(int i_a = 0; i_a < req.childGet(2)->childSize(); i_a++)
 	    {
 		XMLNode *ael = req.childGet(2)->childGet(i_a);
-		if( vlPresent(ael->attr("id")) )	continue;
+		als.push_back(ael->attr("id"));
+		if(vlPresent(ael->attr("id")))	continue;
 		TFld::Type tp = (TFld::Type)atoi(ael->attr("tp").c_str());
 		p_el.fldAdd( new TFld( ael->attr("id").c_str(),ael->attr("nm").c_str(),tp,
 		    (atoi(ael->attr("flg").c_str())&(TFld::Selected|TFld::NoWrite|TFld::HexDec|TFld::OctDec|TFld::FullText))|TVal::DirWrite|TVal::DirRead,
 		    "","",ael->attr("vals").c_str(),ael->attr("names").c_str()) );
-		isUpdated = true;
+		modif(true);
 	    }
-	    //>> Remove attributes
-	    //????
+	    //>> Check for remove attributes
+	    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
+	    {
+    		unsigned i_l;
+    		for(i_l = 0; i_l < als.size(); i_l++)
+        	    if(p_el.fldAt(i_p).name() == als[i_l])
+            		break;
+    		if(i_l >= als.size())
+        	    try{ p_el.fldDel(i_p); i_p--; modif(true); }
+        	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    }
 	    return;
 	}catch(TError err) { continue; }
 }

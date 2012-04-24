@@ -929,7 +929,7 @@ void VisDevelop::updateMenuWindow( )
 
     QList<QMdiSubWindow *> windows = work_space->subWindowList();
     //> Enable action state
-    QMdiSubWindow  *act_win = work_space->activeSubWindow();
+    QMdiSubWindow *act_win = work_space->activeSubWindow();
     actWinClose->setEnabled(act_win);
     actWinCloseAll->setEnabled(!windows.isEmpty());
     actWinTile->setEnabled(!windows.isEmpty());
@@ -1074,7 +1074,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     string par_nm = cact->objectName().toAscii().data();
 
     if(work_space->activeSubWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
-	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow())->widget())->edit())
+	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow()->widget())->widget())->edit())
 	return;
 
     //> Count level

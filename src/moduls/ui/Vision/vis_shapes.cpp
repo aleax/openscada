@@ -689,7 +689,7 @@ void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
-    //- Set up current widget -
+    //> Set up current widget
     if( en )
     {
 	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
