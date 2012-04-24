@@ -948,7 +948,7 @@ AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
     AutoHD<TVal> attr;
     try
     {
-	if(srcPath.compare(0,7,"sub_DAQ") == 0 || srcPath.compare(0,3,"DAQ") == 0)
+	if(TSYS::strParse(srcPath,0,".") == "sub_DAQ" || TSYS::strParse(srcPath,0,".") == "DAQ")
 	    attr = SYS->nodeAt(srcPath,0,'.');
 	else attr = SYS->daq().at().nodeAt(srcPath,0,'.');
     }
@@ -1786,10 +1786,10 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		default: break;
 	    }
 	    //>>> Set result and information attributes
-	    opt->setAttr("tm",TSYS::ll2str( (buf.end()/period)*period ));
-	    opt->setAttr("tm_grnd",TSYS::ll2str( (buf.begin()/period)*period + ((buf.begin()%period)?period:0) ));
+	    opt->setAttr("tm",TSYS::ll2str((buf.end()/period)*period));
+	    opt->setAttr("tm_grnd",TSYS::ll2str((buf.begin()/period)*period + ((buf.begin()%period)?period:0)));
 	    opt->setAttr("per",TSYS::ll2str(period));
-	    opt->setText( (mode==2) ? TSYS::strEncode(text,TSYS::base64) : text);
+	    opt->setText((mode==2) ? TSYS::strEncode(text,TSYS::base64) : text);
 	    opt->setAttr("vtp",TSYS::int2str(TValBuf::valType()));
 	}
 	return;

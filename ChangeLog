@@ -1,3 +1,14 @@
+2012-04-24 Roman
+- FIX:Archive: Value archive's link address to DAQ parameter's attribute is fixed for old address format process.
+    The problem detected on DAQ.DAQGate.
+- SYS: Nodes modify control is expanded to modify state save into load_() functions, need for DAQ.DAQGate.
+- FIX:DAQ.DAQGate: Parameters cache load/save is fixed. Attributes init fixed for XMLNodes childs process.
+- DAQ.DAQGate: Removed self code for archives connection restore. Remove attributes is added.
+- !!!:FIX:UI.VCAEngine: Set widgets to process into sessions on add to development is added.
+    Resources to attributes is set to individual access to operation for prevent possible hide deadlocks.
+- FIX:UI.Vision: Direct cast access to QMdiSubWindow content is fixed on check to add new widgets.
+
+
 2012-04-18 Roman
 - FIX:SYS: QT4 (QTGui) check for get miss variables "moc_location" and "rcc_location" is added by
     append to "prefix" variable.

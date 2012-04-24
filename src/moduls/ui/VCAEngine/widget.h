@@ -132,8 +132,9 @@ class Attr
 	//> Attributes
 	TFld		*mFld;		//Base field
 	unsigned	m_modif;	//Modify counter
-	short		self_flg;	//Self attributes flags
-	unsigned char	mOi;		//Order index
+	unsigned short	self_flg;	//Self attributes flags
+	unsigned char	mOi	 :8;	//Order index
+	unsigned char	mConn    :8;	//Connections counter
 
 	string	cfg;			//Configuration template and value
 
@@ -144,8 +145,6 @@ class Attr
 //************************************************
 //* Widget                                       *
 //************************************************
-//static pthread_mutex_t	mtxAttrGlob;
-
 class Widget : public TCntrNode
 {
     friend class Attr;
@@ -250,7 +249,7 @@ class Widget : public TCntrNode
 	virtual void calc( Widget *base );
 	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 
-	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrGlob; }
+	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrM; }
 
 	//Attributes
 	//> Generic data
@@ -267,7 +266,8 @@ class Widget : public TCntrNode
 	AutoHD<Widget>	mParent;		//Parent widget
 	vector< AutoHD<Widget> > m_herit;	//Heritators
 	map<string, Attr* >	mAttrs;
-	static pthread_mutex_t	mtxAttrGlob;
+	pthread_mutex_t	mtxAttrM;
+	static pthread_mutex_t	mtxAttrCon;
 };
 
 }
