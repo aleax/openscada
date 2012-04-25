@@ -1,3 +1,8 @@
+2012-04-25 Roman
+- UI.WebVision: Adaptive update interface period is made by 3x to last interface update time.
+    Images update hang is prevented on previous image load lost (typical for Konqueror).
+
+
 2012-04-24 Roman
 - FIX:Archive: Value archive's link address to DAQ parameter's attribute is fixed for old address format process.
     The problem detected on DAQ.DAQGate.

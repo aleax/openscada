@@ -1698,19 +1698,25 @@ function perUpdtEn( en )
 }
 function perUpdt( )
 {
-  if( this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].clearTm && (--this.place.childNodes[0].clearTm) <= 0 )
+  if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].clearTm && (this.place.childNodes[0].clearTm-=prcTm) <= 0)
     this.place.childNodes[0].chEscape();
-  else if( this.attrs['root'] == 'Diagram' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 )
+  else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0)
   {
+    this.updCntr = parseInt(this.attrs['trcPer']);
     var dgrObj = this.place.childNodes[0].childNodes[0];
-    if( dgrObj && dgrObj.isLoad )
+    if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000))
     {
       dgrObj.isLoad = false;
       dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
+      dgrObj.stLoadTm = (new Date()).getTime();
     }
   }
-  else if( this.attrs['root'] == 'Protocol' && (this.updCntr % parseInt(this.attrs['trcPer'])) == 0 ) this.loadData();
-  else if( this.attrs['root'] == 'Document' )
+  else if(this.attrs['root'] == 'Protocol' && (this.updCntr-=prcTm) <= 0)
+  {
+    this.updCntr = parseInt(this.attrs['trcPer']);
+    this.loadData();
+  }
+  else if(this.attrs['root'] == 'Document')
   {
     var frDoc = this.place.childNodes[0].contentDocument || this.place.childNodes[0].contentWindow || this.place.childNodes[0].document;
     frDoc.open();
@@ -1739,7 +1745,6 @@ function perUpdt( )
     }
     this.perUpdtEn( false );
   }
-  this.updCntr++;
 }
 function xScale( full )
 {
@@ -1794,6 +1799,8 @@ function pwDescr( pgAddr, pg, parent )
 function makeUI()
 {
   prcCnt++;
+
+  var stTm = new Date();
   //> Get open pages list
   var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
   if(pgNode)
@@ -1839,7 +1846,11 @@ function makeUI()
   }
   //> Update some widgets
   for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
-  setTimeout(makeUI,1000);
+
+  prcTm = 3e-3*((new Date()).getTime() - stTm.getTime());
+  //setStatus("Process wait: "+prcTm+"s.",1000);
+
+  setTimeout(makeUI,prcTm*1e3);
 }
 
 /***************************************************
@@ -1890,6 +1901,7 @@ document.body.onmouseup = function(e)
 }
 
 prcCnt = 0;				//Process counter
+prcTm = 0;				//Process time
 tmCnt = 0;				//Call counter
 pgList = new Array();			//Opened pages list
 pgCache = new Object();			//Cached pages' data
