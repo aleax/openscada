@@ -577,7 +577,7 @@ void TMdPrm::load_( )
 	    setName(req.childGet(0)->text());
 	    setDescr(req.childGet(1)->text());
 	    //>> Check and create new attributes
-	    for(int i_a = 0; i_a < req.childGet(2)->childSize(); i_a++)
+	    for(unsigned i_a = 0; i_a < req.childGet(2)->childSize(); i_a++)
 	    {
 		XMLNode *ael = req.childGet(2)->childGet(i_a);
 		als.push_back(ael->attr("id"));
