@@ -6263,7 +6263,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     int64_t tTime	= owner().tTime;
     int64_t tTimeGrnd	= tTime - tSize;
     int64_t wantPer	= tSize/(int)(owner().width+0.5);
-    int bufLim		= 2*owner().width;
+    unsigned bufLim	= 2*owner().width;
     string arch = owner().valArch;
 
     //> Clear trend for empty address and the full reload data

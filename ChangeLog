@@ -1,3 +1,11 @@
+2012-04-27 Roman
+- SYS: Some code clean from warning by key "-Wall".
+- UI.Vision: For mode "Full video" of primitive "Media" added:
+    - Event "ws_MediaFinished" generation.
+    - "Play" flag clean on play finish.
+    - Play roll processing moved to generic play finish event handler.
+
+
 2012-04-24 Roman
 - FIX:Archive: Value archive's link address to DAQ parameter's attribute is fixed for old address format process.
     The problem detected on DAQ.DAQGate.

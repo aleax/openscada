@@ -234,6 +234,8 @@ class ShapeText : public WdgShape
 //************************************************
 class ShapeMedia : public WdgShape
 {
+    Q_OBJECT
+
     public:
 	//Methods
 	ShapeMedia( );
@@ -245,6 +247,11 @@ class ShapeMedia : public WdgShape
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 
 	void clear( WdgView *view );
+
+    public slots:
+        //Public slots
+        //>> Media play events
+        void mediaFinished( );
 
     private:
 	//Data
