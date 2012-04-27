@@ -112,10 +112,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
-	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()),
-	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
-	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
+	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
+	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
+	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
 	prc_st(false), call_st(false), endrun_req(false), isReload(false),
 	tmGath(0), tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {

@@ -1009,6 +1009,19 @@ void ShapeMedia::clear( WdgView *w )
 #endif
 }
 
+void ShapeMedia::mediaFinished( )
+{
+    WdgView *w = (WdgView*)((QWidget*)sender())->parentWidget();
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+#ifdef HAVE_PHONON
+    VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
+    if(shD->videoRoll && player) player->play();
+    else w->attrSet("play","0");
+    w->attrSet("event","ws_MediaFinished");
+#endif
+}
+
 bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
     QLabel *lab;
@@ -1127,13 +1140,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 #ifdef HAVE_PHONON
 	case 30:	//roll
-	    if(shD->videoRoll == (bool)atoi(val.c_str())) break;
 	    shD->videoRoll = (bool)atoi(val.c_str());
-	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
-	    {
-		if(shD->videoRoll) connect(player, SIGNAL(finished()), player, SLOT(play()));
-		else disconnect(player, SIGNAL(finished()), 0, 0);
-	    }
 	    break;
 	case 31:	//pause
 	    shD->videoPause = (bool)atoi(val.c_str());
@@ -1206,7 +1213,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		else lab->setText("");
 		break;
 	    }
-	    case 1:	//Movie
+	    case 1:	//Animation
 	    {
 		//> Clear previous movie data
 		clear(w);
@@ -1250,7 +1257,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		if(!shD->addrWdg)
 		{
 		    shD->addrWdg = new VideoPlayer(Phonon::VideoCategory, w);
-		    if(shD->videoRoll) connect(shD->addrWdg, SIGNAL(finished()), shD->addrWdg, SLOT(play()));
+		    connect(shD->addrWdg, SIGNAL(finished()), this, SLOT(mediaFinished()));
 		    ((VideoPlayer*)shD->addrWdg)->videoWidget()->installEventFilter(w);
 		    mk_new = true;
 		}
@@ -2560,7 +2567,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     int64_t tTime	= shD->tTime;
     int64_t tTimeGrnd	= tTime - tSize;
     int64_t wantPer	= tSize/(view->size().width()*shD->valsForPix);
-    int bufLim		= 2*view->size().width()*shD->valsForPix;
+    unsigned bufLim	= 2*view->size().width()*shD->valsForPix;
 
     //> Clear trend for empty address and for full reload data
     if(full || addr().empty())

@@ -276,7 +276,7 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
     string plStr = nm;
     if(qtArgC) plStr.insert(0,"-");
     //> Name process
-    if(qtArgC >= (sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
+    if(qtArgC >= (int)(sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
     strcpy(qtArgBuf+qtArgEnd, plStr.c_str());
     qtArgV[qtArgC++] = qtArgBuf+qtArgEnd;
     qtArgEnd += plStr.size()+1;
@@ -285,7 +285,7 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
     if(arg)
     {
 	plStr = arg;
-	if(qtArgC >= (sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
+	if(qtArgC >= (int)(sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
 	strcpy(qtArgBuf+qtArgEnd, plStr.c_str());
 	qtArgV[qtArgC++] = qtArgBuf+qtArgEnd;
 	qtArgEnd += plStr.size()+1;
@@ -572,7 +572,7 @@ StartDialog::StartDialog( WinControl *wcntr )
 void StartDialog::closeEvent( QCloseEvent* ce )
 {
     unsigned winCnt = 0;
-    for(unsigned i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
+    for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
 	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]))
 	    winCnt++;
 

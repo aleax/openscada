@@ -1696,7 +1696,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget attribute                       *
 //************************************************
-Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mOwner(NULL), mConn(0)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
 {
     setFld(ifld, inher);
 }

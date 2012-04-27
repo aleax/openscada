@@ -2151,7 +2151,7 @@ void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr 
 	string tAttrNm = item.substr(epos+3);
 	XMLNode req("get");
         req.setAttr("path",tWdgNm+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",tAttrNm);
-        int rez = cntrIfCmd(req);
+        cntrIfCmd(req);
 	if(!atoi(req.childGet(0)->attr("act").c_str()))
 	{
     	    WdgView *tWdg = (id()==tWdgNm) ? this : findChild<WdgView*>(tWdgNm.c_str());

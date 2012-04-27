@@ -998,7 +998,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
             try { resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
             catch(TError err) { errCon = _("10:Connection error."); throw; }
             int full_len = resp_len;
-            if(full_len < sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
+            if(full_len < (int)sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
             unsigned resp_sz = AmsHD->len;
 
@@ -1178,7 +1178,7 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
             try{ resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
             catch(TError err) { errCon = _("10:Connection error."); throw; }
             int full_len = resp_len;
-            if(full_len < sizeof(AMS_TCP_HEAD))	throw TError(nodePath().c_str(),_("13:Error server respond"));
+            if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
             unsigned resp_sz = AmsHD->len;
 	    //> Wait tail
@@ -1794,12 +1794,13 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	{
 	    if(id_lnk < 0) set(ioId(val.name()), vl);
 	    else
-		switch( val.fld().type() )
+		switch(val.fld().type())
 		{
 		    case TFld::String:	owner().setValS(vl.getS(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Integer:	owner().setValI(vl.getI(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Real:	owner().setValR(vl.getR(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Boolean:	owner().setValB(vl.getB(), lnk(id_lnk).val, acq_err);	break;
+		    default: break;
 		}
 	}
     }catch(TError err) {  }
