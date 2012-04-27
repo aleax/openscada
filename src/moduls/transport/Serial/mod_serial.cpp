@@ -578,7 +578,7 @@ void *TTrIn::Task( void *tr_in )
 	    {
 		char echoBuf[255];
 		int64_t mLstReqTm = TSYS::curTime();
-		for(int r_off = 0; r_off < answ.size(); )
+		for(unsigned r_off = 0; r_off < answ.size(); )
 		{
 		    int kz = read(tr->fd,echoBuf,vmin(answ.size()-r_off,sizeof(echoBuf)));
 		    if(kz == 0 || (kz == -1 && errno == EAGAIN))
@@ -912,7 +912,8 @@ void TTrOut::start( )
 	{
 	    //>> Resource to transfer function alloc
 	    ResAlloc res(nodeRes(), true);
-	    run_st = mMdmMode = true;
+	    run_st = true;
+	    mMdmMode = true;
 
 	    //>> Send init 1 string
 	    if(!mdmInitStr1().empty())
@@ -964,7 +965,8 @@ void TTrOut::start( )
 
 	if(fd >= 0) { close(fd); fd = -1; }
 	if(isLock) mod->devUnLock(mDevPort);
-	run_st = mMdmMode = false;
+	run_st = false;
+	mMdmMode = false;
 	throw;
     }
 
@@ -993,7 +995,8 @@ void TTrOut::stop()
     //> Unlock device
     mod->devUnLock(mDevPort);
 
-    run_st = mMdmMode = false;
+    run_st = false;
+    mMdmMode = false;
 }
 
 void TTrOut::check( )

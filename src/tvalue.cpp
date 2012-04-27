@@ -455,6 +455,7 @@ void TVal::setFld( TFld &fld )
 	{
 	    case TFld::String:	delete val.val_s;	break;
 	    case TFld::Object:	delete val.val_o;	break;
+	    default: break;
 	}
     if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 
