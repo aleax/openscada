@@ -96,12 +96,24 @@ void VCASess::getReq( SSess &ses )
     else if( wp_com == "pgOpenList" && first_lev.empty() )
     {
 	prmEl = ses.prm.find("tm");
-	XMLNode req("openlist");
+
+	XMLNode req("CntrReqs");
+	req.setAttr("path",ses.url);
+	req.childAdd("openlist")->setAttr("path","/%2fserv%2fpg")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
+	req.childAdd("get")->setAttr("path","/%2fobj%2fcfg%2fper");
+	mod->cntrIfCmd(req,ses.user);
+	req.childGet(0)->setAttr("per",req.childGet(1)->text());
+
+	ses.page = req.childGet(0)->save();
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+
+	/*XMLNode req("openlist");
 	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
 	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
 	mod->cntrIfCmd(req,ses.user);
+
 	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;*/
     }
     //> Attribute get
     else if( wp_com == "attr" )
@@ -5315,6 +5327,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
     gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
+    gdImageAlphaBlending(im,1);
     int brect[8];
 
     if( !trnds.size() || tSz <= 0 )	{ makeImgPng(ses,im); return; }
@@ -5646,18 +5659,20 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //Write point and line
 	    if( averVl != EVAL_REAL )
 	    {
-		if( trnds[i_t].valTp() == 0 )
-		    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,( (vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin )/(vsMax-vsMin))));
+		if(trnds[i_t].valTp() == 0)
+		    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin)/(vsMax-vsMin))));
 		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
-		if( trnds[i_t].valTp() != 0 ) gdImageSetPixel(im,averPos,c_vpos,clr_t);
-		else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
-		if( prevVl != EVAL_REAL )
+		if(prevVl == EVAL_REAL)
+		{
+		    if(trnds[i_t].valTp() != 0) gdImageSetPixel(im,averPos,c_vpos,clr_t);
+		    else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
+		}
+		else
 		{
 		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
-		    if( trnds[i_t].valTp() != 0 ) gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
-		    else
-			for( int sps = prevPos+1; sps <= averPos; sps++ )
-			    gdImageLine(im,sps,z_vpos,sps,c_vpos,clr_t);
+		    if(trnds[i_t].valTp() != 0) gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
+		    else for(int sps = prevPos+1; sps <= averPos; sps++)
+			gdImageLine(im,sps,z_vpos,sps,c_vpos,clr_t);
 		}
 	    }
 	    prevVl  = averVl;
@@ -5665,7 +5680,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    averVl  = curVl;
 	    averPos = curPos;
 	    averTm  = averLstTm = curTm;
-	    if( !curPos ) break;
+	    if(!curPos) break;
 	}
     }
 
@@ -5715,6 +5730,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
     gdImageAlphaBlending(im,0);
     gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
+    gdImageAlphaBlending(im,1);
     int brect[8];
 
     if( !trnds.size() || tSz <= 0 )	{ makeImgPng(ses,im); return; }

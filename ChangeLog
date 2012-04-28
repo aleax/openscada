@@ -1,3 +1,8 @@
+2012-04-28 Roman
+- UI.WebVision: Web-interface update period is limited to ({ModelPeriod}...60s).
+- FIX:UI.WebVision: Trends paint is fixed to logical trand transparent.
+
+
 2012-04-27 Roman
 - SYS: Some code clean from warning by key "-Wall".
 - UI.Vision: For mode "Full video" of primitive "Media" added:
