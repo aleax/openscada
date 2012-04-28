@@ -1805,6 +1805,7 @@ function makeUI()
   var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
   if(pgNode)
   {
+    modelPer = parseInt(pgNode.getAttribute("per"));
     //>> Check for delete pages
     for(var i_p = 0; i_p < pgList.length; i_p++)
     {
@@ -1847,7 +1848,7 @@ function makeUI()
   //> Update some widgets
   for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
 
-  prcTm = 3e-3*((new Date()).getTime() - stTm.getTime());
+  prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTm.getTime())));
   //setStatus("Process wait: "+prcTm+"s.",1000);
 
   setTimeout(makeUI,prcTm*1e3);
@@ -1900,6 +1901,7 @@ document.body.onmouseup = function(e)
   if( popUpMenu ) popUpMenu.style.visibility = 'hidden';
 }
 
+modelPer = 0;				//Model proc period
 prcCnt = 0;				//Process counter
 prcTm = 0;				//Process time
 tmCnt = 0;				//Call counter
