@@ -1,3 +1,8 @@
+2012-05-04 Roman
+- FIX:DAQ.DAQGate: Stations list update on start is added and generic fixed.
+    Load parameters after enable on processing is restored.
+
+
 2012-04-28 Roman
 - UI.WebVision: Web-interface update period is limited to ({ModelPeriod}...60s).
 - FIX:UI.WebVision: Trends paint is fixed to logical trand transparent.
