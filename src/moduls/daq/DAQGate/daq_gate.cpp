@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2012 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -186,10 +186,13 @@ void TMdContr::enable_( )
     list(prm_ls);
     for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++) at(prm_ls[i_p]).at().setCntrAdr("");
 
+    //> Station list update
+    if(!mStatWork.size())
+	for(int st_off = 0; (statv=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&st_off)).size(); )
+	    mStatWork.push_back(pair<string,float>(statv,0));
+
     //> Remote station scaning. Controllers and parameters scaning
-    for(int st_off = 0; (statv=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&st_off)).size(); )
-    {
-	if(!enableStat()) mStatWork.push_back(pair<string,float>(statv,0));
+    for(int i_st = 0; i_st < mStatWork.size(); i_st++)
 	for(int cp_off = 0; (cp_el=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cp_off)).size(); )
 	    try
 	    {
@@ -198,7 +201,7 @@ void TMdContr::enable_( )
 		cntrnm = TSYS::strSepParse(cp_el,1,'.');
 		prmnm  = TSYS::strSepParse(cp_el,2,'.');
 		if(daqtp.empty() || cntrnm.empty()) continue;
-		cntrpath = "/"+statv+"/DAQ/"+daqtp+"/"+cntrnm+"/";
+		cntrpath = "/"+mStatWork[i_st].first+"/DAQ/"+daqtp+"/"+cntrnm+"/";
 		//>> Get parameters list
 		prm_ls.clear();
 		if(prmnm.empty() || prmnm == "*")
@@ -221,12 +224,15 @@ void TMdContr::enable_( )
 			add(prm_ls[i_p],owner().tpPrmToId("std"));
 			at(prm_ls[i_p]).at().setName(req.text());
 		    }
-		    if(!at(prm_ls[i_p]).at().enableStat()) at(prm_ls[i_p]).at().enable();
+		    if(!at(prm_ls[i_p]).at().enableStat())
+		    {
+			at(prm_ls[i_p]).at().enable();
+			if(enableStat()) at(prm_ls[i_p]).at().load();
+		    }
 		    at(prm_ls[i_p]).at().setCntrAdr(cntrpath);
 		    gPrmLs += prm_ls[i_p]+";";
 		}
 	    }catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-    }
 
     //> Removing parameter's try
     if(!enableStat())
@@ -251,6 +257,9 @@ void TMdContr::disable_( )
 void TMdContr::start_( )
 {
     if(prcSt) return;
+
+    mStatWork.clear();
+    enable_( );
 
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
@@ -746,7 +755,7 @@ TMdPrm &TMdVl::owner( )	{ return *(dynamic_cast<TMdPrm*>(nodePrev())); }
 
 void TMdVl::cntrCmdProc( XMLNode *opt )
 {
-    if(!arch( ).freeStat()) { TVal::cntrCmdProc(opt); return; }
+    if(!arch().freeStat()) { TVal::cntrCmdProc(opt); return; }
 
     string a_path = opt->attr("path");
     //> Service commands process
