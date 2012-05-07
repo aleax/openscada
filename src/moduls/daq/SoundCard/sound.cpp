@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2012 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -90,7 +90,7 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd( new TFld("PRM_BD",_("Parameters' table"),TFld::String,0,"30") );
-    fldAdd( new TFld("CARD",_("Card device"),TFld::String,0,"20","<default>") );
+    fldAdd( new TFld("CARD",_("Card device"),TFld::String,0,"100","<default>") );
     fldAdd( new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;100000") );
     fldAdd( new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",TSYS::int2str(paFloat32).c_str(),
 	(TSYS::int2str(paFloat32)+";"+TSYS::int2str(paInt32)+";"+TSYS::int2str(paInt16)).c_str(),_("Float 32;Int 32;Int 16")) );
@@ -129,8 +129,9 @@ TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }
 string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
-    if( !startStat( ) ) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
-    else if( !redntUse( ) ) val+= TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB."),numChan,acqSize);
+    if(!startStat()) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
+    else if(!redntUse())
+	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB. Aspect by us depth limit %g."),numChan,acqSize,aspSample());
 
     return val;
 }
@@ -255,9 +256,9 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 
     if(cntr.redntUse()) return cntr.endrunReq;
 
-    //> Check for current time correction
+    //> Check for current time correction, only for samplerate aspect 1
     int64_t cTm = TSYS::curTime();
-    if(fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6)
+    if(cntr.aspSample() == 1 && fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6)
     {
 	cntr.wTm = cTm - framesPerBuffer*cntr.sdTm;
 	mess_warning(cntr.nodePath().c_str(),_("Sound card's counter run from system time is corrected."));
@@ -302,6 +303,15 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     cntr.prcSt = false;
 
     return cntr.endrunReq;
+}
+
+bool TMdContr::cfgChange( TCfg &icfg )
+{
+    TController::cfgChange(icfg);
+
+    if(startStat() && (icfg.name() == "CARD" || icfg.name() == "SMPL_RATE" || icfg.name() == "SMPL_TYPE")) stop();
+
+    return true;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
