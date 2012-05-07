@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 12:57+0200\n"
+"POT-Creation-Date: 2012-05-06 18:41+0300\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -54,8 +54,11 @@ msgid "Allowed %d input channels"
 msgstr "Доступно %d входных каналов"
 
 #, c-format
-msgid "Gathering from %d channels. Recieved %.2f MB."
-msgstr "Сбор с %d каналов. Получено %.2f МБ."
+msgid ""
+"Gathering from %d channels. Recieved %.2f MB. Aspect by us depth limit %g."
+msgstr ""
+"Сбор с %d каналов. Получено %.2f МБ. Коэффициент к лимиту микросек. глубины "
+"%g."
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."

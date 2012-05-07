@@ -86,8 +86,9 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	void load_( );				//Synchronize parameter
-	void save_( );				//Save blocking
+	void load_( );				//Load parameter
+	void save_( );				//Save parameter
+	void sync( );				//Synchronize parameter
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
