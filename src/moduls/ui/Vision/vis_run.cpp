@@ -635,8 +635,11 @@ void VisRun::exportPg( const string &ipg )
     QPixmap img = QPixmap::grabWidget(rpg);
 
     //> Call save file dialog
-    QString fileName = QFileDialog::getSaveFileName(this,_("Save page's image"),(rpg->name()+".png").c_str(),
-	_("Images (*.png *.xpm *.jpg)"),0,menuBar()->isVisible()?(QFileDialog::Options)0:QFileDialog::ReadOnly);
+    QFileDialog::Option fopt = (QFileDialog::Option)0;
+#if QT_VERSION >= 0x040500
+    if(menuBar()->isVisible())	fopt = QFileDialog::ReadOnly;
+#endif
+    QString fileName = QFileDialog::getSaveFileName(this,_("Save page's image"),(rpg->name()+".png").c_str(),_("Images (*.png *.xpm *.jpg)"),0,fopt);
     if(!fileName.isEmpty() && !img.save(fileName))
 	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }
@@ -679,8 +682,11 @@ void VisRun::exportDiag( const string &idg )
     QPixmap img = QPixmap::grabWidget(rwdg);
 
     //> Call save file dialog
-    QString fileName = QFileDialog::getSaveFileName(this, _("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
-	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"),0,menuBar()->isVisible()?(QFileDialog::Options)0:QFileDialog::ReadOnly);
+    QFileDialog::Option fopt = (QFileDialog::Option)0;
+#if QT_VERSION >= 0x040500
+    if(menuBar()->isVisible())  fopt = QFileDialog::ReadOnly;
+#endif
+    QString fileName = QFileDialog::getSaveFileName(this, _("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"),0,fopt);
     if(!fileName.isEmpty())
     {
 	//>> Export to CSV
@@ -806,8 +812,11 @@ void VisRun::exportDoc( const string &idoc )
     if(!(rwdg=findOpenWidget(doc))) return;
 
     //> Call save file dialog
-    QString fileName = QFileDialog::getSaveFileName(this, _("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
-	_("XHTML (*.html);;CSV file (*.csv)"),0,menuBar()->isVisible()?(QFileDialog::Options)0:QFileDialog::ReadOnly);
+    QFileDialog::Option fopt = (QFileDialog::Option)0;
+#if QT_VERSION >= 0x040500
+    if(menuBar()->isVisible())  fopt = QFileDialog::ReadOnly;
+#endif
+    QString fileName = QFileDialog::getSaveFileName(this, _("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),_("XHTML (*.html);;CSV file (*.csv)"),0,fopt);
     if(!fileName.isEmpty())
     {
 	int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);

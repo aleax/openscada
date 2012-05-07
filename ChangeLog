@@ -1,4 +1,5 @@
 2012-05-07 Roman
+- UI.Vision: QFileDialog option QFileDialog::ReadOnly is set conditional to QT4 version >= 4.5.
 - DAQ.DAQGate: Parameter's attributes sync function separated to different function sync() for prevent cache reload.
 - DAQ.SoundCard: Aspect rate from real acquisition period to selected sample rate for microseconds period limit is added.
     Card name limit is expanded to 100 symbols.
