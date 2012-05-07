@@ -822,7 +822,8 @@ void ConfApp::pageRefresh( bool tm )
     try
     {
 	//> Tree part update
-	if(CtrTree->currentItem()) viewChildRecArea(CtrTree->currentItem(), true);
+	if(CtrTree->currentItem())
+	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent(): CtrTree->currentItem(), true);
 
 	//> Same page update
 	pageDisplay(sel_path);

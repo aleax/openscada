@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SoundCard file: sound.h
 /***************************************************************************
- *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2012 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,7 +18,7 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
- 
+
 #ifndef SOUND_H
 #define SOUND_H
 
@@ -87,6 +87,7 @@ class TMdContr: public TController
 	~TMdContr( );
 
 	string	card( )		{ return cfg("CARD").getS(); }
+	float	aspSample( )	{ return (1e6/mSmplRate)/floor(1e6/mSmplRate); }
 
 	string getStatus( );
 	int channelAllow( );
@@ -112,6 +113,7 @@ class TMdContr: public TController
 	static int recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
 		const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void *userData );
 
+	bool cfgChange( TCfg &cfg );
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:

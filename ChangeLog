@@ -1,3 +1,15 @@
+2012-05-07 Roman
+- DAQ.DAQGate: Parameter's attributes sync function separated to different function sync() for prevent cache reload.
+- DAQ.SoundCard: Aspect rate from real acquisition period to selected sample rate for microseconds period limit is added.
+    Card name limit is expanded to 100 symbols.
+    Sound card's counter run from system time correction make only at aspect rate to sample rate 1.
+- UI.QTCfg: Tree update on page update made for parent page.
+- DB: Font "Liberation" replaced to "Arial" into library "VCABase" for unification.
+- SYS: Icons added for modules: DAQ.BFN, DAQ.BlockCalc, DAQ.DAQGate, DAQ.DCON, DAQ.DiamondBoards, DAQ.ICP_DAS, DAQ.JavaLikeCalc,
+    DAQ.LogicLev, DAQ.ModBus, DAQ.OPC_UA, DAQ.SNMP, DAQ.Siemens, DAQ.SoundCard, Protocol.HTTP, Protocol.ModBus, Protocol.OPC_UA,
+    Protocol.SelfSystem, Protocol.UserProtocol, Transport.Serial.
+
+
 2012-05-04 Roman
 - FIX:DAQ.DAQGate: Stations list update on start is added and generic fixed.
     Load parameters after enable on processing is restored.

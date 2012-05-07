@@ -328,7 +328,7 @@ void *TMdContr::Task( void *icntr )
 		for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
 		{
 		    if((!div && syncCnt <= 0) || (div && it_cnt > div && (((it_cnt+i_p)%div) == 0)))
-			cntr.at(pLS[i_p]).at().load_();
+			cntr.at(pLS[i_p]).at().sync();
 		    cntr.at(pLS[i_p]).at().isPrcOK = false;
 		}
 
@@ -570,6 +570,35 @@ void TMdPrm::load_( )
 	}
     } catch(TError err) { }
 
+    //> Sync attributes list
+    sync();
+}
+
+void TMdPrm::save_( )
+{
+    //> Prepare attributes cache configuration
+    XMLNode attrsNd("Attrs");
+    vector<string> ls;
+    elem().fldList(ls);
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
+    {
+	AutoHD<TVal> vl = vlAt(ls[i_el]);
+	attrsNd.childAdd("a")->setAttr("id",ls[i_el])->
+			       setAttr("nm",vl.at().fld().descr())->
+			       setAttr("tp",TSYS::int2str(vl.at().fld().type()))->
+			       setAttr("flg",TSYS::int2str(vl.at().fld().flg()))->
+			       setAttr("vals",vl.at().fld().values())->
+			       setAttr("names",vl.at().fld().selNames());
+			       //setText(vl.at().getS());
+    }
+    cfg("ATTRS").setS(attrsNd.save(XMLNode::BrAllPast));
+
+    //> Save to cache
+    TParamContr::save_();
+}
+
+void TMdPrm::sync( )
+{
     //> Request and update attributes list
     string scntr;
     XMLNode req("CntrReqs");
@@ -610,29 +639,6 @@ void TMdPrm::load_( )
 	    }
 	    return;
 	}catch(TError err) { continue; }
-}
-
-void TMdPrm::save_( )
-{
-    //> Prepare attributes cache configuration
-    XMLNode attrsNd("Attrs");
-    vector<string> ls;
-    elem().fldList(ls);
-    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
-    {
-	AutoHD<TVal> vl = vlAt(ls[i_el]);
-	attrsNd.childAdd("a")->setAttr("id",ls[i_el])->
-			       setAttr("nm",vl.at().fld().descr())->
-			       setAttr("tp",TSYS::int2str(vl.at().fld().type()))->
-			       setAttr("flg",TSYS::int2str(vl.at().fld().flg()))->
-			       setAttr("vals",vl.at().fld().values())->
-			       setAttr("names",vl.at().fld().selNames());
-			       //setText(vl.at().getS());
-    }
-    cfg("ATTRS").setS(attrsNd.save(XMLNode::BrAllPast));
-
-    //> Save to cache
-    TParamContr::save_();
 }
 
 void TMdPrm::vlGet( TVal &val )
