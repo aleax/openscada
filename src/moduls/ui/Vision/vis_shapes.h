@@ -386,7 +386,7 @@ class ShapeDiagram : public WdgShape
 		unsigned trcPer		:10;
 		unsigned sclHor		:4;
 		unsigned sclVer		:4;
-		unsigned valsForPix	:3;
+		unsigned valsForPix	:4;
 		QColor	curColor, sclColor, sclMarkColor;
 		QBrush	backGrnd;
 		QPen	border;

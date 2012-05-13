@@ -1,3 +1,9 @@
+2012-05-13 Roman
+- DB.Boiler: Some translation to English and Ukrainian is updated.
+- FIX:UI.Vision: Export primitive "Diagram" to CVS is limited to real trend borders.
+    Limit for variable "valsForPix" of primitive "Diagram" is expanded from 3 bit (<8) to 4 bit (<16).
+
+
 2012-05-07 Roman
 - UI.Vision: QFileDialog option QFileDialog::ReadOnly is set conditional to QT4 version >= 4.5.
 - DAQ.DAQGate: Parameter's attributes sync function separated to different function sync() for prevent cache reload.
