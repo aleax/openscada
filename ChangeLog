@@ -1,3 +1,7 @@
+2012-05-15 Roman
+- FIX:UI.VCAEngine: Name changing for no user attributes is fixed.
+
+
 2012-05-13 Roman
 - DB.Boiler: Some translation to English and Ukrainian is updated.
 - FIX:UI.Vision: Export primitive "Diagram" to CVS is limited to real trend borders.
