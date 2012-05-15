@@ -1588,7 +1588,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    }
 	    else
 	    {
-		if(idcol == "name")	wdg.at().attrAt(idattr).at().fld().setDescr(opt->text());
+		if(idcol == "name")
+		{
+		    if(!(!(wdg.at().attrAt(idattr).at().flgSelf()&Attr::IsInher) && wdg.at().attrAt(idattr).at().fld().flg()&Attr::IsUser))
+			throw TError(nodePath().c_str(),_("Changing of not user attribute is no permitted"));
+		    wdg.at().attrAt(idattr).at().fld().setDescr(opt->text());
+		}
 		else if(idcol == "wa")
 		{
 		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
