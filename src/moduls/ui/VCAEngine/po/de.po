@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-21 10:53+0200\n"
+"POT-Creation-Date: 2012-05-18 18:22+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1345,8 +1345,8 @@ msgstr "Kodierung des Textes"
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
-msgid "Attributes deadlock."
-msgstr "Attribute Sackgasse."
+msgid "Attribute '%s' was not free. Force delete!"
+msgstr "Das Attribut '%s' wird nicht freigegeben. Zwangsräumung!"
 
 msgid "Path"
 msgstr "Pfad"
@@ -1401,6 +1401,9 @@ msgstr "Bearbeitung der Ereignisse"
 msgid "Empty parent or parent identical self!"
 msgstr "Eltern leer oder Eltern gleich sich selber!"
 
+msgid "Parent identical to owner for link!"
+msgstr "Der Elternteil ist identisch mit dem Besitzer für den Anschluss!"
+
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Fehler der Einschaltung des Widgets: %s"
@@ -1417,9 +1420,8 @@ msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' fehlt!"
 
-#, c-format
-msgid "Attribute attach access error: %d."
-msgstr "Fehler des Zuganges des Anschlusses %d ans Attribut."
+msgid "Deleted attribute '%s' was not free!"
+msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht!"
 
 msgid ""
 "Image name in form \"[src:]name\", where:\n"
@@ -1661,6 +1663,14 @@ msgstr "Elemententyp ist nicht ausgewählt!"
 msgid "Get object from not object's attribute '%s' error!"
 msgstr "Failed, um ein Objekt aus einem Nicht-Objekt-Attribut '%s' abrufen!"
 
+#, c-format
+msgid "Connections to attribute '%s' more to 255!"
+msgstr "Mehr als 255 Verbindungen an das Attribut '%s'!"
+
+#, c-format
+msgid "Disconnection from attribute '%s' more to connections!"
+msgstr "Entfernen vom Attribut '%s' mehr Verbindungen!"
+
 msgid "Root primitive"
 msgstr "Ursprungsprimitiv"
 
@@ -1720,9 +1730,3 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
-
-#~ msgid "Destination has no any necessary attribute!"
-#~ msgstr "Das Ziel hat kein erforderliches Attribut!"
-
-#~ msgid "Destination has no attributes: %s !"
-#~ msgstr "Das Ziel hat keine Attribute: %s !"
