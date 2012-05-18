@@ -279,9 +279,15 @@ void Widget::setEnable( bool val )
 	    try
 	    {
 		if(TSYS::strNoSpace(parentNm()).empty() || parentNm() == path())
-		    throw TError(nodePath().c_str(),"%s",_("Empty parent or parent identical self!"));
+		    throw TError(nodePath().c_str(),_("Empty parent or parent identical self!"));
 		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
 		else mParent = mod->nodeAt(parentNm());
+
+		if(isLink() && dynamic_cast<Widget*>(nodePrev()) && mParent.at().path() == ((Widget*)nodePrev())->path())
+		{
+		    mParent.free();
+		    throw TError(nodePath().c_str(),_("Parent identical to owner for link!"));
+		}
 
 		//> Check for enable parent widget and enable if not
 		if(!parent().at().enable()) parent().at().setEnable(true);

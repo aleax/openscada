@@ -1,3 +1,10 @@
+2012-05-18 Roman
+- FIX:SYS.TConfig: Function TCfg&TCfg::operator=( const char *vl ) is added for correct assign string constants.
+- FIX:UI.VCAEngine: Recursive pages copy is prevented on copy upward branch to internal.
+    Widget container copy as link to self is prevented, at enabling.
+- UI.VCAEngine: Translation is some updated.
+
+
 2012-05-15 Roman
 - FIX:UI.VCAEngine: Name changing for no user attributes is fixed.
 
