@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-21 10:53+0200\n"
+"POT-Creation-Date: 2012-05-18 18:22+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -773,7 +773,8 @@ msgid "Set value to < 0 for get current alarms."
 msgstr "Встановіть значення у < 0 для отримання поточних порушень."
 
 msgid "Set value to '0' for get all alarms, for \"lev\" < 0."
-msgstr "Встановіть значення у '0' для отримання всіх порушень, для \"lev\" < 0."
+msgstr ""
+"Встановіть значення у '0' для отримання всіх порушень, для \"lev\" < 0."
 
 msgid ""
 "Category template or regular expression \"/{re}/\". For template reserved "
@@ -1343,8 +1344,8 @@ msgstr "Кодування тексту"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодування тексту рушія для перекодування у неї."
 
-msgid "Attributes deadlock."
-msgstr "Мертве блокування атрибуту."
+msgid "Attribute '%s' was not free. Force delete!"
+msgstr "Атрибут '%s' не звільнено. Примусове видалення!"
 
 msgid "Path"
 msgstr "Шлях"
@@ -1399,6 +1400,9 @@ msgstr "Обробка явищ"
 msgid "Empty parent or parent identical self!"
 msgstr "Батьківський елемент порожній або дорівнює собі!"
 
+msgid "Parent identical to owner for link!"
+msgstr "Батько ідентичний до власника для посилання!"
+
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Помилка включення віджета: %s"
@@ -1415,9 +1419,8 @@ msgstr "Помилка включення/вимкнення дочірньог�
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' відсутній!"
 
-#, c-format
-msgid "Attribute attach access error: %d."
-msgstr "Помилка доступу підключення %d до атрибуту."
+msgid "Deleted attribute '%s' was not free!"
+msgstr "Видаляємий атрибут '%s' не було звільнено!"
 
 msgid ""
 "Image name in form \"[src:]name\", where:\n"
@@ -1660,6 +1663,14 @@ msgstr "Елемент не вибіркового типу!"
 msgid "Get object from not object's attribute '%s' error!"
 msgstr "Помилка запиту об'єкту з не об'єктного атрибуту '%s'!"
 
+#, c-format
+msgid "Connections to attribute '%s' more to 255!"
+msgstr "Підключень до атрибуту '%s' більш 255!"
+
+#, c-format
+msgid "Disconnection from attribute '%s' more to connections!"
+msgstr "Відключень від атрибуту '%s' більш за підключень!"
+
 msgid "Root primitive"
 msgstr "Кореневий примітив"
 
@@ -1718,9 +1729,3 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
-
-#~ msgid "Destination has no any necessary attribute!"
-#~ msgstr "Мета не має жодного потрібного атрибуту!"
-
-#~ msgid "Destination has no attributes: %s !"
-#~ msgstr "Мета не має атрибутів: %s !"
