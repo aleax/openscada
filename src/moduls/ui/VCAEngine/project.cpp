@@ -799,11 +799,13 @@ TCntrNode &Page::operator=( TCntrNode &node )
     //> Include widgets copy
     vector<string> els;
     src_n->pageList(els);
-    for(unsigned i_p = 0; i_p < els.size(); i_p++)
-    {
-	if(!pagePresent(els[i_p])) pageAdd(els[i_p],"");
-	(TCntrNode&)pageAt(els[i_p]).at() = (TCntrNode&)src_n->pageAt(els[i_p]).at();
-    }
+    //>> Call recursive only for separated branches copy and for prevent to included copy
+    if(path().find(src_n->path()+"/") != 0)
+	for(unsigned i_p = 0; i_p < els.size(); i_p++)
+	{
+	    if(!pagePresent(els[i_p])) pageAdd(els[i_p],"");
+	    (TCntrNode&)pageAt(els[i_p]).at() = (TCntrNode&)src_n->pageAt(els[i_p]).at();
+	}
 
     return *this;
 }

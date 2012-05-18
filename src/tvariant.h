@@ -68,10 +68,10 @@ class TVariant
 	TVariant( int ivl );
 	TVariant( double ivl );
 	TVariant( const string &ivl );
+	TVariant( const char *var );
 	TVariant( AutoHD<TVarObj> ivl );
 	TVariant( TVarObj *ivl );
 	TVariant( const TVariant &var );
-	TVariant( const char *var );
 
 	~TVariant( );
 
