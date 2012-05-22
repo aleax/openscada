@@ -1,3 +1,7 @@
+2012-05-22 Roman
+- FIX:DAQ.ModBus: "EVAL" blink on logical attribute set is fixed.
+
+
 2012-05-18 Roman
 - FIX:SYS.TConfig: Function TCfg&TCfg::operator=( const char *vl ) is added for correct assign string constants.
 - FIX:UI.VCAEngine: Recursive pages copy is prevented on copy upward branch to internal.
