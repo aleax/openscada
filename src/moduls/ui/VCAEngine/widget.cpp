@@ -1025,7 +1025,17 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
-	    wdgAdd(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text(),"");
+	{
+	    string sid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
+	    wdgAdd(sid.c_str(),opt->text(),"");
+	    //> GeomZ set to include widgets number
+	    if(wdgPresent(sid))
+	    {
+		vector<string> c_list;
+		wdgList(c_list);
+		wdgAt(sid).at().attrAt("geomZ").at().setI(c_list.size()-1);
+	    }
+	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wdgDel(opt->attr("id").c_str(),true);
     }
     else if(a_path == "/inclwdg/nmb" && ctrChkNode(opt))
