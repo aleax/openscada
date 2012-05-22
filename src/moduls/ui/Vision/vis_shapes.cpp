@@ -3341,7 +3341,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	    "  <style type='text/css'>\n"+shD->style+"</style>\n"
 	    "</head>\n"+
-	    xproc.save()+
+	    xproc.save(XMLNode::Clean)+
 	    "</html>").c_str());
 
 	shD->web->verticalScrollBar()->setValue(scrollPos);

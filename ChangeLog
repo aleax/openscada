@@ -1,4 +1,8 @@
 2012-05-22 Roman
+- SYS.XMLNode: Tree clean from comments and procedure insertions at save is added by option XMLNode::Clean.
+- UI.VCAEngine: GeomZ attribute for new created include widgets set to full include widgets number, for place it to upward.
+- FIX:UI.Vision: Bad processing for procedure's insertions into QT4 document view HTML parser fix by clean primitive
+    "Document" XHTML code from comments and procedure insertions at place for view.
 - FIX:DAQ.ModBus: "EVAL" blink on logical attribute set is fixed.
 
 
