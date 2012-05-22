@@ -54,6 +54,7 @@ class XMLNode
 	    BrAllPast		= 0x1E,		//Break after all
 	    XMLHeader		= 0x20,		//Include standard XML header
 	    XHTMLHeader		= 0x40,		//Incluse standard XHTML header
+	    Clean		= 0x80,		//Clean service tags: <??>, <!-- -->
 	    MissTagEnc		= 0x100,	//Miss tag name encode
 	    MissAttrEnc		= 0x200		//Miss attribute name encode
 	};

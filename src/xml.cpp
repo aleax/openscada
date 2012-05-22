@@ -248,10 +248,10 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
     //> Text block
     if(name() == "<*>")	{ encode(Mess->codeConvOut(cp,mText), xml, true); return; }
     //> Commentary block
-    if(name() == "<!>") { xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
+    if(name() == "<!>")	{ if(!(flg&Clean)) xml += "<!--"+Mess->codeConvOut(cp,mText)+"-->"; return; }
     //> Process special block <? ... ?>
     if(name().compare(0,2,"<?") == 0)
-    { xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
+    { if(!(flg&Clean)) xml += name()+" "+Mess->codeConvOut(cp,mText)+(flg&XMLNode::BrSpecBlkPast?"?>\n":"?>"); return; }
 
     xml.append((flg&XMLNode::BrOpenPrev && xml.size() && xml[xml.size()-1] != '\n') ? "\n<" : "<");
     if(flg&XMLNode::MissTagEnc) xml.append(name());
