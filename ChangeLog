@@ -1,3 +1,10 @@
+2012-05-23 Roman
+- DB: Main libraries and model AGLKS is updated for QuickStart expanding.
+- DAQ.BlockCalc, DAQ.DAQGate, DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System:
+    Set default scheduling to "1" second at new controller object creation is fixed.
+- UI.QTCfg: "Target" combobox field is disabled for one item to select.
+
+
 2012-05-22 Roman
 - SYS.XMLNode: Tree clean from comments and procedure insertions at save is added by option XMLNode::Clean.
 - UI.VCAEngine: GeomZ attribute for new created include widgets set to full include widgets number, for place it to upward.
