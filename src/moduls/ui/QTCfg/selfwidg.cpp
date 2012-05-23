@@ -812,6 +812,7 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
     if(tgs.size()) itTp->setCurrentIndex(defPos);
     bool tpView = !(itTp->count()==1 && itTp->itemText(0).isEmpty());
     itTpLab->setVisible(tpView); itTp->setVisible(tpView);
+    itTp->setEnabled(itTp->count()>1);
 }
 
 void ReqIdNameDlg::selectItTp( int it )
