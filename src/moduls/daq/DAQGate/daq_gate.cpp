@@ -99,8 +99,8 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's DB structure
     fldAdd(new TFld("PRM_BD",_("Parameters cache table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6.2","1","0.1;100"));	//!!!! Remove at further
-    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */));
+    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6","0","0;100"));	//!!!! Remove at further
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","0;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
@@ -173,7 +173,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld));
+    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::int2str(mPerOld)); mPerOld = 0; }
 }
 
 void TMdContr::enable_( )
