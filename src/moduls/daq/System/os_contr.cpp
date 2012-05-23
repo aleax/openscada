@@ -129,8 +129,8 @@ void TTpContr::postEnable( int flag )
     //> Controler's bd structure
     fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
     fldAdd( new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
+    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
 
     //> Parameter type bd structure
@@ -214,7 +214,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(cron().empty()) cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
+    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
 }
 
 void TMdContr::enable_(  )

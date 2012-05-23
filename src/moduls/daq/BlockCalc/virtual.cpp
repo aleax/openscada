@@ -113,8 +113,8 @@ void TipContr::postEnable( int flag )
     //Controllers BD structure
     fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
     fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
-    fldAdd( new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","1000","1;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100",""/* "1" */) );
+    fldAdd( new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );	//!!!! Remove at further
+    fldAdd( new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100","1") );
     fldAdd( new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
     fldAdd( new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
 
@@ -244,7 +244,7 @@ void Contr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(cron().empty())	cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3));
+    if(mPerOld)	{ cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
 
     //> Load block's configuration
     TConfig c_el(&mod->blockE());
