@@ -1,3 +1,8 @@
+2012-05-27 Roman
+- FIX:DB: Boiler DB is fixed for set correct Kotel controllers' schedule to 5ms and 1s.
+- Archives: Service request <set path="/serv/mess"/> is added.
+
+
 2012-05-23 Roman
 - DB: Main libraries and model AGLKS is updated for QuickStart expanding.
 - DAQ.BlockCalc, DAQ.DAQGate, DAQ.DCON, DAQ.LogicLev, DAQ.Siemens, DAQ.System:
