@@ -1,3 +1,7 @@
+2012-05-28 Roman
+- !:FIX:Archives, UI.Vision, UI.WebVision: Hang at trend build for constant big value like 1e-37 is fixed.
+
+
 2012-05-27 Roman
 - FIX:DB: Boiler DB is fixed for set correct Kotel controllers' schedule to 5ms and 1s.
 - Archives: Service request <set path="/serv/mess"/> is added.

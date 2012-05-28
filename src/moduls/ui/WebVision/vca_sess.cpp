@@ -5523,7 +5523,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		ipos++;
 	    }
 	    if(vsMaxAdj == -3e300)		{ vsMaxAdj = 1.0; vsMinAdj = 0.0; }
-	    else if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
+	    else if((vsMaxAdj-vsMinAdj) < 1e-30 && fabs(vsMaxAdj) < 1e-30)
+	    { vsMaxAdj += 0.5; vsMinAdj -= 0.5; }
 	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
 	    {
 		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
