@@ -759,13 +759,13 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     //> Service commands process
     if(a_path == "/serv/mess")		//Messages access
     {
-	if(ctrChkNode(opt,"info",RWRWRW,"root",SARH_ID,SEC_RD))		//Messages information
+	if(ctrChkNode(opt,"info",RWRWR_,"root",SARH_ID,SEC_RD))		//Messages information
 	{
 	    string arch = opt->attr("arch");
 	    opt->setAttr("end",TSYS::uint2str(messEnd(arch)));
 	    opt->setAttr("beg",TSYS::uint2str(messBeg(arch)));
 	}
-	else if(ctrChkNode(opt,"get",RWRWRW,"root",SARH_ID,SEC_RD))	//Value's data request
+	else if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	//Value's data request
 	{
 	    time_t tm      = strtoul(opt->attr("tm").c_str(),0,10);
 	    time_t tm_grnd = strtoul(opt->attr("tm_grnd").c_str(),0,10);
@@ -782,6 +782,14 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    setAttr("lev",TSYS::int2str(rez[i_r].level))->
 		    setText(rez[i_r].mess);
 	}
+	else if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	//Value's data set
+	    for(unsigned i_r = 0; i_r < opt->childSize(); i_r++)
+	    {
+		XMLNode *mNd = opt->childGet(i_r);
+		messPut(strtol(mNd->attr("time").c_str(),NULL,10),
+			atoi(mNd->attr("utime").c_str()),
+			mNd->attr("cat"), atoi(mNd->attr("lev").c_str()), mNd->text());
+	    }
 	return;
     }
 
