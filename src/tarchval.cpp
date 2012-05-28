@@ -1482,6 +1482,14 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	v_max = vmax(v_max,c_val);
     }
     if(v_max == -3e300)	{ gdImageDestroy(im); return rez; }
+    else if((v_max-v_min) < 1e-30 && fabs(v_max) < 1e-30)
+    { v_max += 0.5; v_min -= 0.5; }
+    else if((v_max-v_min) / fabs(v_min+(v_max-v_min)/2) < 0.001)
+    {
+        double wnt_dp = 0.001*fabs(v_min+(v_max-v_min)/2)-(v_max-v_min);
+        v_min -= wnt_dp/2;
+        v_max += wnt_dp/2;
+    }
     if(valmax > valmin)
     {
 	v_max = vmax(v_max,valmax);
