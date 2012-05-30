@@ -1,3 +1,8 @@
+2012-05-30 Roman
+- !!:FIX:DB.MySQL, DB.PostgreSQL: DateTime UTC-string representation field's conversion from and to Unix-time is fixed for
+    local TimeZone and SummerTime conversion.
+
+
 2012-05-28 Roman
 - !:FIX:Archives, UI.Vision, UI.WebVision: Hang at trend build for constant big value like 1e-37 is fixed.
 
