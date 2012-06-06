@@ -169,6 +169,11 @@ void TParamContr::vlGet( TVal &val )
     }
 }
 
+void TParamContr::vlArchMake( TVal &val )
+{
+    if(!val.arch().freeStat())	val.arch().at().setDB(owner().DB());
+}
+
 void TParamContr::setType( const string &tpId )
 {
     if(enableStat() || tpId == type().name || !owner().owner().tpPrmPresent(tpId))	return;
