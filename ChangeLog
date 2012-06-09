@@ -1,3 +1,9 @@
+2012-06-09 Roman
+- DOC: More documents update for English, Russian and Ukrainian:
+	AboutOpenSCADA, QuickStart, APIOpenSCADA, openscada, build, report, WLib.Main, Archive.FSArch, Transport.Serial, UI.VCAEngine.
+    New documents add: moduleCreation, DAQ.BlockCalc.
+
+
 2012-06-06 Roman
 - DAQ.*, Archive: Archive's DB on creation from the DAQ parameter is set to DAQ controller DB of the parameter.
 - !!:FIX:Archive: Enable archive at miss source parameter is prevented.
