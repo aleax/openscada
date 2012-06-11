@@ -793,6 +793,8 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
+    TParamContr::vlArchMake(val);
+
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);

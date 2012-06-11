@@ -396,11 +396,13 @@ void TMdPrm::setEval( )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    if( val.arch().freeStat() ) return;
+    TParamContr::vlArchMake(val);
+
+    if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
     val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
-    val.arch().at().setHardGrid( true );
-    val.arch().at().setHighResTm( true );
+    val.arch().at().setHardGrid(true);
+    val.arch().at().setHighResTm(true);
 }
 
 void TMdPrm::setType( const string &da_id )
