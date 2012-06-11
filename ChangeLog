@@ -1,3 +1,17 @@
+2012-06-09 Roman 0.8.0.1
+- DOC: More documents update for English, Russian and Ukrainian:
+	AboutOpenSCADA, QuickStart, APIOpenSCADA, openscada, build, report, WLib.Main, Archive.FSArch, Transport.Serial, UI.VCAEngine.
+    New documents add: moduleCreation, DAQ.BlockCalc.
+
+
+2012-06-06 Roman
+- DAQ.*, Archive: Archive's DB on creation from the DAQ parameter is set to DAQ controller DB of the parameter.
+- !!:FIX:Archive: Enable archive at miss source parameter is prevented.
+    Stop archive on source type and address change is added.
+    Reload archives from DB (no base), which been made by archive's storage, is added.
+- Archive.FSarch: Debug maessage about "Write data block to archive file error" has made display only for flag "copyErrValFiles".
+
+
 2012-05-30 Roman
 - !!:FIX:DB.MySQL, DB.PostgreSQL: DateTime UTC-string representation field's conversion from and to Unix-time is fixed for
     local TimeZone and SummerTime conversion.

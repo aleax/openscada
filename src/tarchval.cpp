@@ -890,7 +890,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 //*************************************************
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), mDB(idb),
-    mId(cfg("ID")), mStart(cfg("START").getBd()), mSrcMode(cfg("SrcMode").getId()),
+    mId(cfg("ID")), mSrcMode(cfg("SrcMode")), mSource(cfg("Source")), mStart(cfg("START").getBd()),
     mVType(cfg("VTYPE").getId()), mBPer(cfg("BPER").getRd()), mBSize(cfg("BSIZE").getId()),
     mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd())
 {
@@ -933,6 +933,15 @@ void TVArchive::postDisable(int flag)
 	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+bool TVArchive::cfgChange( TCfg &cfg )
+{
+    //> Stop the archive for some config change
+    if(startStat() && (cfg.name() == "SrcMode" || cfg.name() == "Source")) stop();
+
+    modif();
+    return true;
 }
 
 string TVArchive::name( )
@@ -1080,7 +1089,7 @@ void TVArchive::start( )
 	try
 	{
 	    runSt = true;
-	    setSrcMode((TVArchive::SrcMode)mSrcMode,srcData());
+	    setSrcMode();
 	}
 	catch(...){ runSt = false; throw; }
 
@@ -1104,13 +1113,16 @@ void TVArchive::stop( bool full_del )
     for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++)
 	archivatorDetach(arch_ls[i_l],full_del);
 
-    setSrcMode((TVArchive::SrcMode)mSrcMode,srcData());
+    setSrcMode();
 }
 
-void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
+void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 {
+    SrcMode vl = (ivl == TVArchive::SaveCur) ? srcMode() : ivl;
+    string  src = (isrc == "<*>") ? mSource : isrc;
+
     //> Disable all links
-    if((!runSt || vl != ActiveAttr || isrc != srcData()) && !pattr_src.freeStat())
+    if((!runSt || vl != ActiveAttr || src != srcData()) && !pattr_src.freeStat())
     {
 	owner().setActValArch(id(), false);
 	srcPAttr().at().setArch(AutoHD<TVArchive>());
@@ -1119,23 +1131,31 @@ void TVArchive::setSrcMode( SrcMode vl, const string &isrc )
 
     try
     {
-	if((!runSt || vl != PassiveAttr || isrc != srcData()) && !srcPAttr().freeStat())
+	if((!runSt || vl != PassiveAttr || src != srcData()) && !srcPAttr().freeStat())
 	    srcPAttr().at().setArch(AutoHD<TVArchive>());
     }catch(...){  }
 
     //> Set all links
-    if(runSt && vl == ActiveAttr && !srcPAttr(true,isrc).freeStat())
+    if(runSt && vl == ActiveAttr)
     {
-	pattr_src = srcPAttr(true,isrc);
-	pattr_src.at().setArch(AutoHD<TVArchive>(this));
-	owner().setActValArch(id(), true);
+	pattr_src = srcPAttr(true,src);
+	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
+	else
+	{
+	    pattr_src.at().setArch(AutoHD<TVArchive>(this));
+	    owner().setActValArch(id(), true);
+	}
     }
 
-    if(runSt && vl == PassiveAttr && !srcPAttr(true,isrc).freeStat())
-	srcPAttr(true,isrc).at().setArch(AutoHD<TVArchive>(this));
+    if(runSt && vl == PassiveAttr)
+    {
+	pattr_src = srcPAttr(true,src);
+	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
+	else pattr_src.at().setArch(AutoHD<TVArchive>(this));
+    }
 
-    if(mSrcMode != vl) { mSrcMode = vl; modif(); }
-    cfg("Source").setS(isrc);
+    if(mSrcMode.getI() != vl)	mSrcMode = (int)vl;
+    if(mSource != src)	mSource = src;
 }
 
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
@@ -1821,12 +1841,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/id",mId.fld().descr(),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","dec","dest","select","select","/cfg/vtp_ls");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/srcm",cfg("Source").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","dec","dest","select","select","/cfg/srcm_ls");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/srcm",mSource.fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","dec","dest","select","select","/cfg/srcm_ls");
 		if( srcMode() == PassiveAttr || srcMode() == ActiveAttr )
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/src","",RWRWR_,"root",SARH_ID,3,"tp","str","dest","sel_ed","select","/cfg/prm_atr_ls");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_per",cfg("BPER").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","real");
@@ -1914,12 +1934,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/srcm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(mSrcMode));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),srcData());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)atoi(opt->text().c_str()),"<*>",true);
     }
     else if(a_path == "/prm/cfg/src")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData()+(srcPAttr(true).freeStat()?"":" (+)"));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode((TVArchive::SrcMode)mSrcMode,TSYS::strParse(opt->text(), 0, " "));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode(SaveCur,TSYS::strParse(opt->text(),0," "),true);
     }
     else if(a_path == "/prm/cfg/b_per")
     {

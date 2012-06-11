@@ -86,6 +86,7 @@ class TParamContr : public TConfig, public TValue
 	bool cfgChange( TCfg &cfg );
 
 	void vlGet( TVal &val );
+	void vlArchMake( TVal &val );
 
 	virtual void setType( const string &tpId );
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-09 09:17+0200\n"
+"POT-Creation-Date: 2012-06-06 20:51+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -310,6 +310,9 @@ msgstr ""
 
 msgid "Set too old value to buffer."
 msgstr "Вставка дуже старого значення до буфера."
+
+msgid "Connect to source '%s' error."
+msgstr "Помилка підключення до джерела '%s'."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
@@ -817,9 +820,11 @@ msgstr "Помилка зупинки контролера '%s'."
 msgid "Disable controller '%s' error."
 msgstr "Помилка вимкнення контролеру '%s'."
 
+#, c-format
 msgid "No parameter present '%s'."
 msgstr "Відсутній параметр '%s'."
 
+#, c-format
 msgid "No attribute present '%s'."
 msgstr "Відсутній атрибут '%s'."
 
