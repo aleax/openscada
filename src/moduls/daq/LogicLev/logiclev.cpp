@@ -664,6 +664,8 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 
 void TMdPrm::vlArchMake( TVal &val )
 {
+    TParamContr::vlArchMake(val);
+
     if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::ActiveAttr,val.arch().at().srcData());
     val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);

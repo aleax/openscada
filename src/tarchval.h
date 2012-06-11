@@ -165,7 +165,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 {
     public:
 	//Public data
-	enum SrcMode { Passive, PassiveAttr, ActiveAttr };
+	enum SrcMode { SaveCur = -1, Passive = 0, PassiveAttr, ActiveAttr };
 
 	//Public methods
 	TVArchive( const string &id, const string &db, TElem *cf_el );
@@ -177,8 +177,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string	id( )		{ return mId; }
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode; }
-	string	srcData( )	{ return cfg("Source").getS(); }
+	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode.getI(); }
+	string	srcData( )	{ return mSource; }
 	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
 	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return runSt; }
@@ -197,7 +197,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
-	void setSrcMode( SrcMode vl, const string &isrc = "" );
+	void setSrcMode( SrcMode vl = SaveCur, const string &isrc = "<*>", bool noex = false );
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
@@ -238,7 +238,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Protected methods
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &cfg );
 
 	void load_( );
 	void save_( );
@@ -255,9 +255,11 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	bool	runSt;
 	string	mDB;
 	//> Base params
-	TCfg	&mId;		//ID
+	TCfg	&mId,		//ID
+		&mSrcMode,	//Source mode
+		&mSource;	//Source
+
 	char	&mStart;	//Starting flag
-	int	&mSrcMode;	//Source mode
 	//> Buffer params
 	int	&mVType;	//Value type (int, real, bool, string)
 	double	&mBPer;		//Buffer period

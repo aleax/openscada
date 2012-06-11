@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-09 09:17+0200\n"
+"POT-Creation-Date: 2012-06-06 20:51+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -316,6 +316,9 @@ msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
 
 msgid "Set too old value to buffer."
 msgstr "Einfügen von sehr alten Werten in den Speicher."
+
+msgid "Connect to source '%s' error."
+msgstr "Fehler beim Verbinden mit der Quelle '%s'."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
@@ -830,9 +833,11 @@ msgstr "Fehler beim Anhalten des Controllers '%s'."
 msgid "Disable controller '%s' error."
 msgstr "Fehler beim Abschalten des Controllers '%s'."
 
+#, c-format
 msgid "No parameter present '%s'."
 msgstr "Es gibt keine Option '%s'."
 
+#, c-format
 msgid "No attribute present '%s'."
 msgstr "Es ist kein Attribut '%s'."
 
@@ -2206,3 +2211,7 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+#, fuzzy
+#~ msgid "Connect to '%s' error."
+#~ msgstr "Fehler beim Schliessen der Datenbank '%s'!"

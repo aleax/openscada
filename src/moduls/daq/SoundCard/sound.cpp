@@ -388,11 +388,13 @@ void TMdPrm::disable()
 
 void TMdPrm::vlArchMake( TVal &val )
 {
-    if( val.arch().freeStat() ) return;
+    TParamContr::vlArchMake(val);
+
+    if(val.arch().freeStat()) return;
     val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
     val.arch().at().setPeriod(1000000/owner().mSmplRate);
-    val.arch().at().setHardGrid( true );
-    val.arch().at().setHighResTm( true );
+    val.arch().at().setHardGrid(true);
+    val.arch().at().setHighResTm(true);
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )

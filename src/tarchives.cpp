@@ -235,6 +235,8 @@ void TArchiveS::load_( )
 	    {
 	        id = c_el.cfg("ID").getS();
 	        if(!valPresent(id)) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+	        //> For force loading after creation from archivator storage
+	        else if(valAt(id).at().DB() == "*.*" && db_ls[i_db] != SYS->workDB()) valAt(id).at().setDB(db_ls[i_db]);
 	        itReg[id] = true;
 	    }
 
