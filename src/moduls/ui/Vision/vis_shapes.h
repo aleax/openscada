@@ -44,6 +44,10 @@
 #include <QScrollArea>
 #include <QTextBrowser>
 
+#ifdef HAVE_WEBKIT
+#include <QWebView>
+#endif
+
 #include <tmess.h>
 #include <xml.h>
 
@@ -505,7 +509,11 @@ class ShapeDocument : public WdgShape
 		short	active	:1;
 		short	view	:4;
 		short	tmpl	:1;
+#ifdef HAVE_WEBKIT
+		QWebView	*web;
+#else
 		QTextBrowser	*web;
+#endif
 		string	style;
 		string	doc;
 	};

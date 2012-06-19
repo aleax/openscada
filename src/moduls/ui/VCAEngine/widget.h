@@ -246,6 +246,7 @@ class Widget : public TCntrNode
 	virtual TVariant vlGet( Attr &a );
 	virtual TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
+	virtual void disable( Widget *base );
 	virtual void calc( Widget *base );
 	virtual TVariant objFuncCall_w( const string &id, vector<TVariant> &prms, const string &user, Widget *src = NULL );
 

@@ -143,6 +143,13 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
     throw TError("XMLNode",_("Child with attribut %s=%s is not present."),attr.c_str(),val.c_str());
 }
 
+XMLNode* XMLNode::root( )
+{
+    XMLNode *cur = this;
+    while(cur->parent()) cur = cur->parent();
+    return cur;
+}
+
 string	XMLNode::text( bool childs, bool recursive ) const
 {
     if(!childs || mName == "<*>") return mText;

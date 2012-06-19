@@ -1,3 +1,13 @@
+2012-06-19 Roman
+- SYS, UI.QTStarter: OpenSCADA source tree version (work) changed to 0.8.1, no release yet. Splash is updated.
+- !!:SYS: New system task's endrun mechanism is realized, based on signal SIGUSR1 and it checking by function TSYS::taskEndRun().
+- XMLNode: The function root() is added for XML tree root obtaining from any it's child.
+- !!:UI.VCAEngine: Documents generation into primitive "Document" is moved to separated task for main task lock prevent at processing time.
+    On the document processing the result is updating for every 5 seconds. Attribute "process" is added for end processing control.
+- !!:UI.Vision: QTWebKit using for primitive "Document" is added.
+    WebKit is significant faster for QTextBrowser and open new features way.
+
+
 2012-06-09 Roman
 - DOC: More documents update for English, Russian and Ukrainian:
 	AboutOpenSCADA, QuickStart, APIOpenSCADA, openscada, build, report, WLib.Main, Archive.FSArch, Transport.Serial, UI.VCAEngine.

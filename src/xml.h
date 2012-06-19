@@ -96,6 +96,7 @@ class XMLNode
 	XMLNode* childGet( const string &attr, const string &name, bool noex = false ) const;
 
 	XMLNode* parent( )			{ return mParent; }
+	XMLNode* root( );
 
     private:
 	//Methods

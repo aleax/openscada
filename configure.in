@@ -1,7 +1,7 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.0],[rom_as@oscada.org, rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.8.1],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="2:0:0"
 oscd_modulpref="oscd_"
@@ -486,11 +486,14 @@ AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
     #>> Modules checkings
     AX_LIB_FFTW3()
     AX_LIB_QT4()
+    PKG_CHECK_MODULES([QtWebKit],[QtWebKit > 4.4.0],
+	[AC_DEFINE(HAVE_WEBKIT,1,[WebKit web browser engine allow.])],
+	[AC_MSG_NOTICE(WebKit not found. Using is disabled!)])
     PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
 	[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
 	[AC_MSG_NOTICE(Phonon not found. Using is disabled!)])
     if test $enable_Vision = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${phonon_LIBS} "
+	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${QtWebKit_LIBS} ${phonon_LIBS} "
 	ModsIncl="${ModsIncl}ui_Vision "
     fi
 ])
@@ -644,4 +647,5 @@ AC_MSG_RESULT([  - Modules included to OpenSCADA core: $ModsIncl])
 AC_MSG_RESULT([* Modules' features:])
 AC_MSG_RESULT([  - FFTW3 for signal spectrum purchase: $LIB_FFTW3])
 AC_MSG_RESULT([  - Linux sensors library use:          $LIB_SENSORS])
+AC_MSG_RESULT([  - WebKit web-browser engine:          $QtWebKit_LIBS])
 AC_MSG_RESULT([  - Media play engine:                  $phonon_LIBS])

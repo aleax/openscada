@@ -1243,36 +1243,14 @@ void OrigDocument::postEnable( int flag )
 	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","26"));
 	attrAdd(new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","","24"));
 	attrAdd(new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","","23"));
+	attrAdd(new TFld("process",_("Process"),TFld::Boolean,TFld::NoWrite,"","0","","","27"));
 	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;1000000","","25"));
     }
 }
 
-void OrigDocument::calc( Widget *base )
+void OrigDocument::disable( Widget *base )
 {
-    //> Make document after time set
-    if(base->attrAt("time").at().flgSelf()&0x100 && TSYS::strNoSpace(base->attrAt("tmpl").at().getS()).size())
-    {
-	base->attrAt("time").at().setFlgSelf((Attr::SelfAttrFlgs)(base->attrAt("time").at().flgSelf()&(~0x100)));
-	string mkDk;
-	int n = base->attrAt("n").at().getI();
-	if(!n)
-	{
-	    mkDk = base->attrAt("doc").at().getS();
-	    if(mkDk.empty()) mkDk = base->attrAt("tmpl").at().getS();
-	    mkDk = makeDoc(mkDk,base);
-	    base->attrAt("doc").at().setS(mkDk);
-	}
-	else
-	{
-	    int aCur = base->attrAt("aCur").at().getI();
-	    mkDk = base->attrAt("aDoc").at().getS();
-	    if(mkDk.empty()) mkDk = base->attrAt("tmpl").at().getS();
-
-	    mkDk = makeDoc(mkDk,base);
-	    base->attrAt("aDoc").at().setS(mkDk);
-	    if(aCur == base->attrAt("vCur").at().getI()) base->attrAt("doc").at().setS(mkDk);
-	}
-    }
+    SYS->taskDestroy(base->nodePath('.',true)+".doc");
 }
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
@@ -1321,7 +1299,16 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
     //> Make document after time set
-    if(cfg.id() == "time" && cfg.getI() != prev.getI()) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
+    if(cfg.id() == "time" && cfg.getI() != prev.getI())
+    {
+	try
+	{
+	    string taskNm = sw->nodePath('.',true)+".doc";
+	    SYS->taskDestroy(taskNm);
+	    SYS->taskCreate(taskNm, -1, OrigDocument::DocTask, sw, 2);
+	    sw->attrAt("process").at().setB(true);
+	}catch(TError err) { }
+    }
     //> Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI())
     {
@@ -1631,7 +1618,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     }
 
     //> Node proocess
-    nodeProcess( wdg, &xdoc, funcV, funcIO, iLang );
+    OrigDocument::nodeProcess( wdg, &xdoc, funcV, funcIO, iLang );
 
     xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
@@ -1691,26 +1678,34 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 
 	    bool docRevers = atoi(reptN->attr("docRevers").c_str());
 	    funcV.setR(6,dRpt);
-	    int64_t time = (int64_t)funcV.getI(1)*1000000;
+	    int64_t wTime = (int64_t)funcV.getI(1)*1000000;
 	    int64_t bTime = (int64_t)funcV.getI(2)*1000000;
 	    int64_t lstTime = (int64_t)funcV.getI(3)*1000000;
 	    int64_t perRpt = (int64_t)(1000000*dRpt);
 	    int64_t rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
-	    if(lstTime && lstTime<bTime) rTime-=perRpt;
+	    if(lstTime && lstTime < bTime) rTime -= perRpt;
 	    //if(((time-rTime)/perRpt) > 1000) continue;
-	    while(rTime < time && ::time(NULL) < upTo)
+	    while(rTime < wTime && !TSYS::taskEndRun())
 	    {
+		//> Drop current changes and continue
+		if(time(NULL) >= upTo)
+		{
+		    upTo = time(NULL)+STD_INTERF_TM;
+		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI())
+			wdg->attrAt("doc").at().setS(xcur->root()->save());
+		}
+		//> Process
 		if(atoi(reptN->attr("docRptEnd").c_str()))
 		{
 		    int i_n = docRevers?(i_c+1):i_c;
 		    *(xcur->childIns(i_n)) = *reptN;
-		    nodeClear(xcur->childGet(i_n));
+		    OrigDocument::nodeClear(xcur->childGet(i_n));
 		    if(!docRevers) i_c++;
 		    rCnt++;
 		}
-		int64_t rTimeT = vmin(rTime+perRpt,time);
+		int64_t rTimeT = vmin(rTime+perRpt,wTime);
 		funcV.setI(4,rTimeT/1000000); funcV.setI(5,rTimeT%1000000); funcV.setR(6,(rTimeT-rTime)/1000000.0);
-		nodeProcess(wdg,reptN,funcV,funcIO,iLang);
+		OrigDocument::nodeProcess(wdg,reptN,funcV,funcIO,iLang,false,upTo);
 		reptN->setAttr("docRptEnd",((rTimeT-rTime)==perRpt)?"1":"0");
 		rTime = rTimeT;
 	    }
@@ -1746,13 +1741,13 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		funcV.setI(9,mess[i_r].level);
 		funcV.setS(10,mess[i_r].categ);
 		funcV.setS(11,mess[i_r].mess);
-		nodeProcess(wdg,reptN,funcV,funcIO,iLang);
+		nodeProcess(wdg,reptN,funcV,funcIO,iLang,false,upTo);
 		reptN->setAttr("docRptEnd","1");
 	    }
 	    funcV.setI(7,0); funcV.setI(8,0); funcV.setI(9,0); funcV.setS(10,""); funcV.setS(11,"");
 	    if(docRevers) i_c += rCnt;
 	}
-	else nodeProcess(wdg,xcur->childGet(i_c),funcV,funcIO,iLang,instrDel);
+	else nodeProcess(wdg,xcur->childGet(i_c),funcV,funcIO,iLang,instrDel,upTo);
     }
 }
 
@@ -1766,6 +1761,34 @@ void OrigDocument::nodeClear( XMLNode *xcur )
     for(unsigned i_c = 0; i_c < xcur->childSize(); )
 	if(xcur->childGet(i_c)->name().compare(0,4,"<?dp") == 0) xcur->childDel(i_c);
 	else nodeClear(xcur->childGet(i_c++));
+}
+
+void *OrigDocument::DocTask( void *param )
+{
+    Widget *sw = (Widget *)param;
+
+    // The document generation
+    string mkDk;
+    if(!sw->attrAt("n").at().getI())
+    {
+	mkDk = sw->attrAt("doc").at().getS();
+	if(mkDk.empty()) mkDk = sw->attrAt("tmpl").at().getS();
+	mkDk = OrigDocument::makeDoc(mkDk,sw);
+	sw->attrAt("doc").at().setS(mkDk);
+    }
+    else
+    {
+	int aCur = sw->attrAt("aCur").at().getI();
+	mkDk = sw->attrAt("aDoc").at().getS();
+	if(mkDk.empty()) mkDk = sw->attrAt("tmpl").at().getS();
+
+	mkDk = makeDoc(mkDk,sw);
+	sw->attrAt("aDoc").at().setS(mkDk);
+	if(aCur == sw->attrAt("vCur").at().getI()) sw->attrAt("doc").at().setS(mkDk);
+    }
+    sw->attrAt("process").at().setB(false);
+
+    return NULL;
 }
 
 //************************************************

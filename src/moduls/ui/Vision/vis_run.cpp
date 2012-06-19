@@ -594,8 +594,12 @@ void VisRun::printDoc( const string &idoc )
     QPrinter printer(QPrinter::HighResolution);
     QPrintDialog dlg(&printer,this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
-    if( dlg.exec() == QDialog::Accepted )
+    if(dlg.exec() == QDialog::Accepted)
+#ifdef HAVE_WEBKIT
+	((ShapeDocument::ShpDt*)rwdg->shpData)->web->print(&printer);
+#else
 	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(&printer);
+#endif
 }
 
 void VisRun::exportDef( )

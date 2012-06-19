@@ -3261,7 +3261,11 @@ void ShapeDocument::init( WdgView *w )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     QVBoxLayout *lay = new QVBoxLayout(w);
+#ifdef HAVE_WEBKIT
+    shD->web = new QWebView(w);
+#else
     shD->web = new QTextBrowser(w);
+#endif
 
     eventFilterSet( w, shD->web, true );
     w->setFocusProxy( shD->web );
@@ -3318,7 +3322,9 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->tmpl = false;
 	    break;
 	case 26:	//font
-	    shD->web->setFont(getFont(val,vmin(w->xScale(true),w->yScale(true)),false));	break;
+	    shD->web->setFont(getFont(val,vmin(w->xScale(true),w->yScale(true)),false));
+	    relDoc = true;
+	    break;
     }
     if( relDoc && !w->allAttrLoad() )
     {
@@ -3331,21 +3337,39 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 	nodeProcess( &xproc, shD );
 
+#ifndef HAVE_WEBKIT
 	int scrollPos = shD->web->verticalScrollBar()->value();
+#endif
 
-	shD->web->setHtml(
-	    ("<?xml version='1.0' ?>\n"
+	shD->web->setHtml(("<?xml version='1.0' ?>\n"
 	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 	    "'DTD/xhtml1-transitional.dtd'>\n"
 	    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	    "<head>\n"
 	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	    "  <style type='text/css'>\n"+shD->style+"</style>\n"
+	    "  <style type='text/css'>\n"+
+	    " * { font-family: "+shD->web->font().family().toStdString()+"; "
+	         "font-size: "+TSYS::int2str(shD->web->font().pointSize())+"pt; "
+	         "font-weight: "+(shD->web->font().bold()?"bold":"normal")+"; "
+	         "font-style: "+(shD->web->font().italic()?"italic":"normal")+"; }\n"
+            " big { font-size: 120%; }\n"+
+            " small { font-size: 90%; }\n"+
+            " h1 { font-size: 200%; }\n"+
+            " h2 { font-size: 150%; }\n"+
+            " h3 { font-size: 120%; }\n"+
+            " h4 { font-size: 105%; }\n"+
+            " h5 { font-size: 95%; }\n"+
+            " h6 { font-size: 70%; }\n"+
+            " u,b,i { font-size : inherit; }\n"+
+            " sup,sub { font-size: 80%; }\n"+
+	    shD->style+"</style>\n"
 	    "</head>\n"+
 	    xproc.save(XMLNode::Clean)+
 	    "</html>").c_str());
 
+#ifndef HAVE_WEBKIT
 	shD->web->verticalScrollBar()->setValue(scrollPos);
+#endif
     }
 
     return true;

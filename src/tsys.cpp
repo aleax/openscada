@@ -85,6 +85,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //signal(SIGFPE,sighandler);
     //signal(SIGSEGV,sighandler);
     signal(SIGABRT,sighandler);
+    signal(SIGUSR1,sighandler);
 }
 
 TSYS::~TSYS( )
@@ -611,7 +612,9 @@ void TSYS::sighandler( int signal )
 	case SIGABRT:
 	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA is aborted!"));
 	    break;
-	case SIGALRM:	break;
+	case SIGALRM:
+	case SIGUSR1:
+	    break;
 	default:
 	    mess_warning(SYS->nodePath().c_str(),_("Unknown signal %d!"),signal);
     }
@@ -1359,7 +1362,11 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     res.release();
 
     if(endrunCntr) *endrunCntr = true;
-    if(!noSignal) pthread_kill(thr, SIGALRM);
+    if(!noSignal)
+    {
+	pthread_kill(thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
+	pthread_kill(thr, SIGALRM);	//> Sleep, select and other system calls termination
+    }
 
     //> Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
@@ -1388,6 +1395,12 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 
     res.request(true);
     mTasks.erase(it);
+}
+
+bool TSYS::taskEndRun( )
+{
+    sigset_t sigset;
+    return sigpending(&sigset) == 0 && sigismember(&sigset,SIGUSR1);
 }
 
 void *TSYS::taskWrap( void *stas )
@@ -1426,6 +1439,12 @@ void *TSYS::taskWrap( void *stas )
     //> Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
     tsk->thr = pthread_self();
+
+    //> Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
+    sigset_t mask;
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGUSR1);
+    pthread_sigmask(SIG_BLOCK, &mask, NULL);
 
     //> Call work task
     void *rez = NULL;

@@ -314,6 +314,8 @@ void Widget::setEnable( bool val )
     }
     if(!val)
     {
+	disable(this);
+
 	//> Free no base attributes and restore base
 	vector<string> ls;
 	attrList(ls);
@@ -623,6 +625,11 @@ AutoHD<Attr> Widget::attrAt(const string &attr, int lev)
 int  Widget::attrPos(const string &inm)
 {
     return attrAt(inm).at().mOi;
+}
+
+void Widget::disable( Widget *base )
+{
+    if(!parent().freeStat()) parent().at().disable(base);
 }
 
 void Widget::calc( Widget *base )

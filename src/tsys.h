@@ -177,6 +177,7 @@ class TSYS : public TCntrNode
 	//> Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
 	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );
+	static bool taskEndRun( );	// Check for the task endrun by signal SIGUSR1
 
 	//> Sleep task for period grid <per> on ns or to cron time.
 	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
