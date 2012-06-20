@@ -544,15 +544,22 @@ function makeEl( pgBr, inclPg, full, FullTree )
 {
   var margBrdUpd = false; var newAttr = false;
   this.place.wdgLnk = this;
-  if( !inclPg && pgBr )
-    for( var j = 0; j < pgBr.childNodes.length; j++ )
+  if(!inclPg && pgBr)
+  {
+    //> Clear modify flag for all
+    for(var j in this.attrsMdf) this.attrsMdf[j] = false;
+    //> Updated attributes
+    for(var j = 0; j < pgBr.childNodes.length; j++)
     {
       if(pgBr.childNodes[j].nodeName != 'el') continue;
       var i = pgBr.childNodes[j].getAttribute('id');
       if((i == 'bordWidth' || i == 'geomMargin') && this.attrs[i] != nodeText(pgBr.childNodes[j])) margBrdUpd = true;
-      this.attrs[i] = nodeText(pgBr.childNodes[j]);
+      var curAttr = nodeText(pgBr.childNodes[j]);
+      this.attrsMdf[i] = !this.attrs[i] || this.attrs[i] != curAttr;
+      this.attrs[i] = curAttr;
       newAttr = true;
     }
+  }
   if( newAttr || inclPg || !pgBr )
   {
   var elMargin = parseInt(this.attrs['geomMargin']);
@@ -1566,18 +1573,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
   {
     elStyle += 'background-color: white; ';
 
-    this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),true);
+    if(this.attrsMdf["style"] || this.attrsMdf["font"] ||
+	(this.attrsMdf["doc"] && this.attrs["doc"].length) || (this.attrsMdf["tmpl"] && !this.attrs["doc"].length))
+    {
+	this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),true);
 
-    //???? check for need clear on gone to link
-    while(this.place.childNodes.length) this.place.removeChild(this.place.lastChild);
-    //var ifrmObj = this.place.childNodes[0];
-    //if( !ifrmObj )
-    //{
-      ifrmObj = this.place.ownerDocument.createElement('iframe');
-      this.place.appendChild(ifrmObj);
-    //}
-    ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
-    this.perUpdtEn(true);
+	var ifrmObj = this.place.childNodes[0];
+	try
+	{
+	    if(ifrmObj && (!ifrmObj.contentDocument || document.URL != ifrmObj.contentDocument.URL))
+	    { this.place.removeChild(ifrmObj); ifrmObj = null; }
+	}catch(e) { this.place.removeChild(ifrmObj); ifrmObj = null; }
+	if(!ifrmObj)
+	{
+    	    ifrmObj = this.place.ownerDocument.createElement('iframe');
+    	    this.place.appendChild(ifrmObj);
+	}
+
+	ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
+	this.perUpdtEn(true);
+    }
   }
   elStyle+='width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
   this.place.style.cssText = elStyle;
@@ -1735,6 +1750,7 @@ function perUpdt( )
 		" h6 { font-size: 70%; }\n"+
 		" u,b,i { font-size : inherit; }\n"+
 		" sup,sub { font-size: 80%; }\n"+
+		" th { font-weight: bold; }\n"+
 		this.attrs['style']+"</style>"+
 		"</head>"+(this.attrs['doc']?this.attrs['doc']:this.attrs['tmpl'])+"</html>");
     frDoc.close();
@@ -1780,6 +1796,7 @@ function pwDescr( pgAddr, pg, parent )
   this.pages = new Object();
   this.wdgs = new Object();
   this.attrs = new Object();
+  this.attrsMdf = new Object();
   this.pg = pg;
   this.parent = parent;
   this.window = null;

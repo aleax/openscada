@@ -3337,7 +3337,10 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 	nodeProcess( &xproc, shD );
 
-#ifndef HAVE_WEBKIT
+#ifdef HAVE_WEBKIT
+	QPoint scrollPos;
+	if(shD->web->page() && shD->web->page()->mainFrame()) scrollPos = shD->web->page()->mainFrame()->scrollPosition();
+#else
 	int scrollPos = shD->web->verticalScrollBar()->value();
 #endif
 
@@ -3362,12 +3365,16 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
             " h6 { font-size: 70%; }\n"+
             " u,b,i { font-size : inherit; }\n"+
             " sup,sub { font-size: 80%; }\n"+
+            " th { font-weight: bold; }\n"+
 	    shD->style+"</style>\n"
 	    "</head>\n"+
 	    xproc.save(XMLNode::Clean)+
 	    "</html>").c_str());
 
-#ifndef HAVE_WEBKIT
+#ifdef HAVE_WEBKIT
+	if(!scrollPos.isNull() && shD->web->page() && shD->web->page()->mainFrame())
+	    shD->web->page()->mainFrame()->setScrollPosition(scrollPos);
+#else
 	shD->web->verticalScrollBar()->setValue(scrollPos);
 #endif
     }

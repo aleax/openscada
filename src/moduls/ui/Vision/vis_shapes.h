@@ -46,6 +46,7 @@
 
 #ifdef HAVE_WEBKIT
 #include <QWebView>
+#include <QWebFrame>
 #endif
 
 #include <tmess.h>

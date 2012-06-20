@@ -1,4 +1,7 @@
 2012-06-20 Roman
+- UI.Vision: Scroll position restore for WebKit is added.
+- UI.WebVision: Modify attributes flags is added and used for primitive 'Document' updating need check.
+    Restore after open external links into primitive 'Document' frame is added.
 - UI.WebVision: Internal links processing for primitive "Document" is allowed but question about the iframe need clear is open now.
 
 
