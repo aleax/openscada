@@ -1568,12 +1568,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
     this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),true);
 
-    var ifrmObj = this.place.childNodes[0];
-    if( !ifrmObj )
-    {
+    //???? check for need clear on gone to link
+    while(this.place.childNodes.length) this.place.removeChild(this.place.lastChild);
+    //var ifrmObj = this.place.childNodes[0];
+    //if( !ifrmObj )
+    //{
       ifrmObj = this.place.ownerDocument.createElement('iframe');
       this.place.appendChild(ifrmObj);
-    }
+    //}
     ifrmObj.style.cssText = 'width: '+(geomW-14)+'px; height: '+(geomH-14)+'px; border-style: ridge; border-width: 2px; padding: 5px;';
     this.perUpdtEn(true);
   }
@@ -1741,7 +1743,7 @@ function perUpdt( )
     frDoc.body.onclick = function(e)
     {
       if( this.isActive ) setFocus(this.wdgLnk.addr);
-      return false;
+      return true;
     }
     this.perUpdtEn( false );
   }

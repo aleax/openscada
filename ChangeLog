@@ -1,3 +1,7 @@
+2012-06-20 Roman
+- UI.WebVision: Internal links processing for primitive "Document" is allowed but question about the iframe need clear is open now.
+
+
 2012-06-19 Roman
 - SYS, UI.QTStarter: OpenSCADA source tree version (work) changed to 0.8.1, no release yet. Splash is updated.
 - !!:SYS: New system task's endrun mechanism is realized, based on signal SIGUSR1 and it checking by function TSYS::taskEndRun().
