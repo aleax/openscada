@@ -1,3 +1,13 @@
+2012-06-23 Roman
+- TConfig: Exceptions processing is added to cfgChange() for revert changes.
+- Transport.Serial: Exit from data mode command is added (typical "+++") which used first, next PreInit timeout and next HangUp.
+- !!!:DAQ.System: Periodic checking for new devices add to Automatic mode is added.
+    Temporary data storage is added to parameter context, individual for DA type. Used for CPU info.
+    Parameter's error processing is added for all DA types.
+    Attributes "Read speed (B/s)" and "Write speed (B/s)" is added to DA_HDDSTAT.
+    Attributes "Receive speed (B/s)" and "Transmit speed (B/s)" is added to DA_NETSTAT.
+
+
 2012-06-20 Roman
 - UI.Vision: Scroll position restore for WebKit is added.
 - UI.WebVision: Modify attributes flags is added and used for primitive 'Document' updating need check.

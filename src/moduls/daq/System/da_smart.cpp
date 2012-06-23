@@ -58,15 +58,11 @@ void HddSmart::init( TMdPrm *prm )
     dList(list);
     string dls;
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	dls = dls+list[i_l]+";";
+	dls += list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
 
-    try{ c_subt.getSEL(); }
-    catch(...)
-    {
-	if( list.size() ) c_subt.setS(list[0]);
-    }
+    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
 }
 
 void HddSmart::dList( vector<string> &list, bool part )
@@ -109,22 +105,28 @@ void HddSmart::getVal( TMdPrm *prm )
     unsigned long val;
     char buf[256];
     char name[31];
+    bool devOK = false;
 
     string dev = prm->cfg("SUBT").getS();
 
     //> SMART attributes
     string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");
     FILE *fp = popen(cmd.c_str(),"r");
-    if( fp )
+    while(fp && fgets(buf,sizeof(buf),fp) != NULL)
     {
-	while( fgets(buf,sizeof(buf),fp) != NULL )
-	{
-	    if( sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3 ) continue;
-	    string s_id = TSYS::int2str(id);
-	    if( !prm->vlPresent(s_id) )	fldAdd( new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite) );
-	    prm->vlAt(s_id).at().setI(val,0,true);
-	}
-	fclose(fp);
+	if(sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3) continue;
+	string s_id = TSYS::int2str(id);
+	if(!prm->vlPresent(s_id)) fldAdd(new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite));
+	prm->vlAt(s_id).at().setI(val,0,true);
+	devOK = true;
+    }
+    if(fp) fclose(fp);
+
+    if(devOK) prm->daErr = "";
+    else if(!prm->daErr.getVal().size())
+    {
+        prm->setEval();
+        prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -137,14 +139,14 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
 	string hddprm = ap_nm+list[i_hd];
-	if(!a_cntr->present(hddprm))
-	{
-	    a_cntr->add(hddprm,0);
-	    a_cntr->at(hddprm).at().setName(_("HD smart: ")+list[i_hd]);
-	    a_cntr->at(hddprm).at().autoC(true);
-	    a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
-	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
-	    a_cntr->at(hddprm).at().cfg("EN").setB(true);
-	}
+	if(a_cntr->present(hddprm))	continue;
+	a_cntr->add(hddprm,0);
+	AutoHD<TMdPrm> dprm = a_cntr->at(hddprm);
+	dprm.at().setName(_("HD smart: ")+list[i_hd]);
+	dprm.at().autoC(true);
+	dprm.at().cfg("TYPE").setS(id());
+	dprm.at().cfg("SUBT").setS(list[i_hd]);
+	dprm.at().cfg("EN").setB(true);
+	if(a_cntr->enableStat()) dprm.at().enable();
     }
 }

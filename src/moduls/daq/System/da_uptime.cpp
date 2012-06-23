@@ -36,11 +36,11 @@ UpTime::UpTime( )
     st_tm = time(NULL);
 
     //> Uptime value structure
-    fldAdd( new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("hour",_("Hours"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite) );
+    fldAdd(new TFld("full",_("Full seconds"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sec",_("Seconds"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("min",_("Minutes"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("hour",_("Hours"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("day",_("Days"),TFld::Integer,TFld::NoWrite));
 }
 
 UpTime::~UpTime( )
@@ -50,35 +50,47 @@ UpTime::~UpTime( )
 
 void UpTime::init( TMdPrm *prm )
 {
-    //- Create config -
+    //> Create config
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().setDescr("");
 
     c_subt.fld().setValues("sys;stat");
     c_subt.fld().setSelNames(string(_("System"))+";"+_("Station"));
-    try{ c_subt.getSEL(); }
-    catch(...) { c_subt.setS("sys"); }
+
+    if(!TRegExp("(^|;)"+c_subt.getS()+";").test(c_subt.fld().values())) c_subt.setS("sys");
 }
 
 void UpTime::getVal( TMdPrm *prm )
 {
     long val;
+    bool devOK = false;
 
     string trg = prm->cfg("SUBT").getS();
 
-    if( trg == "sys" )
+    if(trg == "sys")
     {
 	FILE *f = fopen("/proc/uptime","r");
-	if( f == NULL ) return;
+	if(f == NULL) return;
 	fscanf(f,"%lu",&val);
 	fclose(f);
+	devOK = true;
     }
-    else val = time(NULL) - st_tm;
-    prm->vlAt("full").at().setI(val,0,true);
-    prm->vlAt("day").at().setI(val/86400,0,true);
-    prm->vlAt("hour").at().setI((val%86400)/3600,0,true);
-    prm->vlAt("min").at().setI(((val%86400)%3600)/60,0,true);
-    prm->vlAt("sec").at().setI(((val%86400)%3600)%60,0,true);
+    else { val = time(NULL) - st_tm; devOK = true; }
+
+    if(devOK)
+    {
+	prm->daErr = "";
+	prm->vlAt("full").at().setI(val, 0, true);
+	prm->vlAt("day").at().setI(val/86400, 0, true);
+	prm->vlAt("hour").at().setI((val%86400)/3600, 0, true);
+	prm->vlAt("min").at().setI(((val%86400)%3600)/60, 0, true);
+	prm->vlAt("sec").at().setI(((val%86400)%3600)%60, 0, true);
+    }
+    else if(!prm->daErr.getVal().size())
+    {
+        prm->setEval();
+        prm->daErr = _("10:Device is not available.");
+    }
 }
 
 void UpTime::makeActiveDA( TMdContr *a_cntr )
@@ -90,11 +102,13 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
 	if( f != NULL )
 	{
 	    a_cntr->add(ap_nm,0);
-	    a_cntr->at(ap_nm).at().setName(_("System up time"));
-	    a_cntr->at(ap_nm).at().autoC(true);
-	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-	    a_cntr->at(ap_nm).at().cfg("SUBT").setS("sys");
-	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	    AutoHD<TMdPrm> dprm = a_cntr->at(ap_nm);
+	    dprm.at().setName(_("System up time"));
+	    dprm.at().autoC(true);
+	    dprm.at().cfg("TYPE").setS(id());
+	    dprm.at().cfg("SUBT").setS("sys");
+	    dprm.at().cfg("EN").setB(true);
+	    if(a_cntr->enableStat()) dprm.at().enable();
 	    fclose(f);
 	}
     }
@@ -102,10 +116,12 @@ void UpTime::makeActiveDA( TMdContr *a_cntr )
     if(!a_cntr->present(ap_nm))
     {
 	a_cntr->add(ap_nm,0);
-	a_cntr->at(ap_nm).at().setName(_("Station up time"));
-	a_cntr->at(ap_nm).at().autoC(true);
-	a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-	a_cntr->at(ap_nm).at().cfg("SUBT").setS("stat");
-	a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	AutoHD<TMdPrm> dprm = a_cntr->at(ap_nm);
+	dprm.at().setName(_("Station up time"));
+	dprm.at().autoC(true);
+	dprm.at().cfg("TYPE").setS(id());
+	dprm.at().cfg("SUBT").setS("stat");
+	dprm.at().cfg("EN").setB(true);
+	if(a_cntr->enableStat()) dprm.at().enable();
     }
 }

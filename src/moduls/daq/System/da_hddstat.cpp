@@ -38,8 +38,10 @@ using namespace SystemCntr;
 //*************************************************
 HddStat::HddStat( )
 {
-    fldAdd( new TFld("rd",_("Read (Kb)"),TFld::Real,TFld::NoWrite) );
-    fldAdd( new TFld("wr",_("Write (Kb)"),TFld::Real,TFld::NoWrite) );
+    fldAdd(new TFld("rd",_("Read (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("rdSp",_("Read speed (B/s)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("wr",_("Write (B)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("wrSp",_("Write speed (B/s)"),TFld::Real,TFld::NoWrite));
 }
 
 HddStat::~HddStat( )
@@ -58,15 +60,11 @@ void HddStat::init( TMdPrm *prm )
     dList(list,true);
     string dls;
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	dls = dls+list[i_l]+";";
+	dls += list[i_l]+";";
     c_subt.fld().setValues(dls);
     c_subt.fld().setSelNames(dls);
 
-    try{ c_subt.getSEL(); }
-    catch(...)
-    {
-	if(list.size()) c_subt.setS(list[0]);
-    }
+    if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
 }
 
 void HddStat::dList( vector<string> &list, bool part )
@@ -76,58 +74,74 @@ void HddStat::dList( vector<string> &list, bool part )
     char buf[256];
 
     FILE *f = fopen("/proc/partitions","r");
-    if( f == NULL ) return;
-
-    while( fgets(buf,sizeof(buf),f) != NULL )
+    while(f && fgets(buf,sizeof(buf),f) != NULL)
     {
-	if( sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3 ) continue;
-	if( !part && minor != 0 ) continue;
-	if( !strncmp(name,"md",2) )	continue;
+	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
+	if(!part && minor != 0)	continue;
+	if(!strncmp(name,"md",2))	continue;
 	list.push_back(name);
     }
-    fclose(f);
+    if(f) fclose(f);
 }
 
 void HddStat::getVal( TMdPrm *prm )
 {
-    unsigned int rd,rd1,wr,wr1;
+    unsigned int rd, rd1, wr, wr1;
+    double rdVl, wrVl;
     char sc_pat[50], buf[256];
+    FILE *f = NULL;
+    bool devOK = false;
 
     string dev = prm->cfg("SUBT").getS();
-    FILE *f = fopen("/proc/diskstats","r");
-    if(f)
+    if(f=fopen("/proc/diskstats","r"))
     {
 	//major minor name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
         //--or for a partition--
 	//major minor name rio rsect wio wsect
-	snprintf(sc_pat,sizeof(sc_pat),"%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu",dev.c_str());
-	while( fgets(buf,sizeof(buf),f) != NULL )
+	snprintf(sc_pat, sizeof(sc_pat), "%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu", dev.c_str());
+	for(int n; fgets(buf,sizeof(buf),f) != NULL; )
 	{
-	    int n = sscanf(buf,sc_pat,&rd,&rd1,&wr,&wr1);
-            if( !n ) continue;
-	    if(n == 4)
-    	    {
-                rd = rd1;
-            	wr = wr1;
-            }
-	    prm->vlAt("rd").at().setR((double)rd/2.0,0,true);
-	    prm->vlAt("wr").at().setR((double)wr/2.0,0,true);
+	    if(!(n=sscanf(buf,sc_pat,&rd,&rd1,&wr,&wr1))) continue;
+	    if(n == 4)	{ rd = rd1; wr = wr1; }
+	    rdVl = (double)rd*512;
+	    wrVl = (double)wr*512;
+	    devOK = true;
 	    break;
 	}
 	fclose(f);
-	return;
     }
-    f = fopen("/proc/partitions","r");
-    if(f)
+    if(!devOK && (f=fopen("/proc/partitions","r")))
     {
 	//major minor #blocks name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
 	snprintf(sc_pat,sizeof(sc_pat),"%%*d %%*d %%*d %s %%*d %%*d %%lu %%*d %%*d %%*d %%lu",dev.c_str());
-	while( fgets(buf,sizeof(buf),f) != NULL )
-	    if( sscanf(buf,sc_pat,&rd,&wr) == 2 ) break;
-	prm->vlAt("rd").at().setR((double)rd/2.0,0,true);
-        prm->vlAt("wr").at().setR((double)wr/2.0,0,true);
+	while(fgets(buf,sizeof(buf),f) != NULL)
+	    if(sscanf(buf,sc_pat,&rd,&wr) == 2)
+	    {
+		rdVl = (double)rd*512;
+		wrVl = (double)wr*512;
+		devOK = true;
+    		break;
+    	    }
 	fclose(f);
-	return;
+    }
+
+    if(devOK)
+    {
+	prm->daErr = "";
+	double lstVl = prm->vlAt("rd").at().getR(0, true);
+	if(lstVl != EVAL_REAL)
+	    prm->vlAt("rdSp").at().setR(1e6*(rdVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rd").at().time()), 0, true);
+	lstVl = prm->vlAt("wr").at().getR(0, true);
+	if(lstVl != EVAL_REAL)
+	    prm->vlAt("wrSp").at().setR(1e6*(wrVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("wr").at().time()), 0, true);
+
+	prm->vlAt("rd").at().setR(rdVl, 0, true);
+	prm->vlAt("wr").at().setR(wrVl, 0, true);
+    }
+    else if(!prm->daErr.getVal().size())
+    {
+	prm->setEval();
+        prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -136,18 +150,20 @@ void HddStat::makeActiveDA( TMdContr *a_cntr )
     string ap_nm = "Statistic_";
 
     vector<string> list;
-    dList(list);
+    dList(list,true);
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
         string hddprm = ap_nm+list[i_hd];
         if(!a_cntr->present(hddprm))
         {
             a_cntr->add(hddprm,0);
-	    a_cntr->at(hddprm).at().setName(_("HD statistic: ")+list[i_hd]);
-	    a_cntr->at(hddprm).at().autoC(true);
-            a_cntr->at(hddprm).at().cfg("TYPE").setS(id());
-    	    a_cntr->at(hddprm).at().cfg("SUBT").setS(list[i_hd]);
-            a_cntr->at(hddprm).at().cfg("EN").setB(true);
+	    AutoHD<TMdPrm> dprm = a_cntr->at(hddprm);
+	    dprm.at().setName(_("HD statistic: ")+list[i_hd]);
+	    dprm.at().autoC(true);
+            dprm.at().cfg("TYPE").setS(id());
+    	    dprm.at().cfg("SUBT").setS(list[i_hd]);
+            dprm.at().cfg("EN").setB(true);
+            if(a_cntr->enableStat()) dprm.at().enable();
         }
     }
 }
