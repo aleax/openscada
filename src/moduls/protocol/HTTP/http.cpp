@@ -461,12 +461,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     vector<string> vars;
 
     //> Continue for full reqst
-    if( m_nofull )
+    if(m_nofull)
     {
-	m_buf = m_buf+reqst;
+	m_buf.append(reqst);
 	m_nofull = false;
     }
-    else m_buf=reqst;  //Save request to buffer
+    else m_buf = reqst;  //Save request to buffer
 
     string request = m_buf;
 
@@ -480,13 +480,14 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 	//> Parse first record
 	req = TSYS::strLine(request,0,&pos);
+	if(req == request) { m_nofull = true; return m_nofull; }	//HTTP header is not full
 	string method   = TSYS::strSepParse(req,0,' ');
 	string urls     = TSYS::strSepParse(req,1,' ');
 	string protocol = TSYS::strSepParse(req,2,' ');
 	string user, url;
 
 	//> Parse parameters
-	int c_lng=-1;
+	int c_lng = -1;
 	while( true )
 	{
 	    req = TSYS::strLine(request,0,&pos);

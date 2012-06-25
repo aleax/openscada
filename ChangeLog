@@ -1,3 +1,7 @@
+2012-06-25 Roman
+- FIX:Protocol.HTTP: Incomplete HTTP header processing is added, observed on packages from SSL transport.
+
+
 2012-06-23 Roman
 - TConfig: Exceptions processing is added to cfgChange() for revert changes.
 - Transport.Serial: Exit from data mode command is added (typical "+++") which used first, next PreInit timeout and next HangUp.
