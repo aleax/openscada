@@ -832,7 +832,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::ActiveAttr, val.arch().at().srcData());
+    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
     val.arch().at().setPeriod((int64_t)(owner().period()*1000000));
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);

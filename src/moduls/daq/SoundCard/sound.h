@@ -91,6 +91,7 @@ class TMdContr: public TController
 
 	string getStatus( );
 	int channelAllow( );
+	string sampleRates( );
 
 	TParamContr *ParamAttach( const string &name, int type );
 

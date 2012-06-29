@@ -86,18 +86,18 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable( flag );
 
     PaError err = Pa_Initialize();
-    if( err != paNoError ) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
+    if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
 
     //> Controler's bd structure
-    fldAdd( new TFld("PRM_BD",_("Parameters' table"),TFld::String,0,"30") );
-    fldAdd( new TFld("CARD",_("Card device"),TFld::String,0,"100","<default>") );
-    fldAdd( new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;100000") );
-    fldAdd( new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",TSYS::int2str(paFloat32).c_str(),
-	(TSYS::int2str(paFloat32)+";"+TSYS::int2str(paInt32)+";"+TSYS::int2str(paInt16)).c_str(),_("Float 32;Int 32;Int 16")) );
+    fldAdd(new TFld("PRM_BD",_("Parameters' table"),TFld::String,0,"30"));
+    fldAdd(new TFld("CARD",_("Card device"),TFld::String,0,"100","<default>"));
+    fldAdd(new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
+    fldAdd(new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",TSYS::int2str(paFloat32).c_str(),
+	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16).c_str(),_("Float 32;Int 32;Int 16")));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("CHANNEL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0","0;100") );
+    tpPrmAt(t_prm).fldAdd(new TFld("CHANNEL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0","0;100"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -149,7 +149,34 @@ int TMdContr::channelAllow( )
 		break;
 	    }
 
+
+
     return chann;
+}
+
+string TMdContr::sampleRates( )
+{
+    string rez;
+    static unsigned standardSampleRates[] = { 8000, 9600, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000, 88200, 96000, 192000, 0 };
+    PaStreamParameters iParam;
+    iParam.device = -1;
+
+    if(card() == "<default>")	iParam.device = Pa_GetDefaultInputDevice();
+    else
+	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
+	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels && card() == Pa_GetDeviceInfo(i_d)->name)
+	    { iParam.device = i_d; break; }
+    if(iParam.device < 0) return rez;
+    iParam.channelCount = Pa_GetDeviceInfo(iParam.device)->maxInputChannels;
+    iParam.sampleFormat = mSmplType;
+    iParam.suggestedLatency = 0;
+    iParam.hostApiSpecificStreamInfo = NULL;
+
+    for(int i_s = 0; standardSampleRates[i_s]; i_s++)
+	if(Pa_IsFormatSupported(&iParam, NULL, standardSampleRates[i_s]) == paFormatIsSupported)
+	    rez += TSYS::int2str(standardSampleRates[i_s])+";";
+
+    return rez;
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -322,7 +349,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/CARD",cfg("CARD").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/lst_SMPL_RATE");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_RATE",cfg("SMPL_RATE").fld().descr(),RWRWR_,"root",SDAQ_ID,
-	    3,"tp","str","dest","sel_ed","sel_list","8000;16000;22050;44100;48000;96000");
+	    3,"tp","str","dest","sel_ed","sel_list",sampleRates().c_str() /* "8000;16000;22050;44100;48000;96000" */);
 	return;
     }
 
@@ -391,7 +418,7 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr,val.arch().at().srcData());
+    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
     val.arch().at().setPeriod(1000000/owner().mSmplRate);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
