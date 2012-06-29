@@ -1,3 +1,8 @@
+2012-06-29 Roman
+- DAQ.SoundCard: Check for allowed samplerates and placing it to combo is added.
+- !:FIX:Archive: Restore value archive's starting on set by function setSrcMode(). Fix archives enabling for active data sources.
+
+
 2012-06-25 Roman
 - FIX:Protocol.HTTP: Incomplete HTTP header processing is added, observed on packages from SSL transport.
 

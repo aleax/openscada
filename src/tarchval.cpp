@@ -1121,6 +1121,8 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     SrcMode vl = (ivl == TVArchive::SaveCur) ? srcMode() : ivl;
     string  src = (isrc == "<*>") ? mSource : isrc;
 
+    bool stOnCh = runSt;
+
     //> Disable all links
     if((!runSt || vl != ActiveAttr || src != srcData()) && !pattr_src.freeStat())
     {
@@ -1156,6 +1158,8 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 
     if(mSrcMode.getI() != vl)	mSrcMode = (int)vl;
     if(mSource != src)	mSource = src;
+    //> Restore start status
+    if(stOnCh && !runSt) start();
 }
 
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )
