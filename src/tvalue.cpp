@@ -499,6 +499,8 @@ void TVal::setCfg( TCfg &cfg )
 
 string TVal::name()		{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
+bool TVal::dataActive( )		{ return owner().dataActive(); }
+
 const char *TVal::nodeName( )	{ return mCfg ? src.cfg->name().c_str() : src.fld->name().c_str(); }
 
 TFld &TVal::fld()
