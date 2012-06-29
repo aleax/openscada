@@ -1,6 +1,10 @@
 2012-06-29 Roman
+- DAQ:Data active flag is added to a parameter and an attribute of DAQ by function dataActive().
+- !:FIX:Archive: Restore value archive's starting on set by function setSrcMode().
+    Fix archives enabling for active data sources.
+    Archiving data on active mode is made only for active data source, for restoring archives at start from reserve allow.
+    New path type to archiving source processing error is fixed for holes data fill from reserve at request.
 - DAQ.SoundCard: Check for allowed samplerates and placing it to combo is added.
-- !:FIX:Archive: Restore value archive's starting on set by function setSrcMode(). Fix archives enabling for active data sources.
 
 
 2012-06-25 Roman
