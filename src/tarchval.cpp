@@ -1231,7 +1231,7 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
 
 void TVArchive::getActiveData()
 {
-    if(pattr_src.freeStat())	return;
+    if(pattr_src.freeStat() || !pattr_src.at().dataActive()) return;
 
     int64_t tm = TSYS::curTime();
     TVariant vl = pattr_src.at().get(&tm);
@@ -2506,7 +2506,7 @@ TVariant TVArchEl::getVal( int64_t *tm, bool up_ord, bool onlyLocal )
 	{
 	    XMLNode req("get");
 	    req.clear()->setAttr("local","1")->
-		setAttr("path",TSYS::sepstr2path(archive().srcData())+"/%2fserv%2fval")->
+		setAttr("path",paVl.at().nodePath(0,true)+"/%2fserv%2fval")->
 		setAttr("tm",TSYS::ll2str(*tm))->
 		setAttr("arch",archivator().workId());
 	    reqCall:
@@ -2569,7 +2569,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 		{
 		    reqCall:
 		    req.clear()->setAttr("local","1")->
-			setAttr("path",TSYS::sepstr2path(archive().srcData())+"/%2fserv%2fval")->
+			setAttr("path",paVl.at().nodePath(0,true)+"/%2fserv%2fval")->
 			setAttr("tm_grnd",TSYS::ll2str(firstEval))->
 			setAttr("tm",TSYS::ll2str(curEval))->
 			setAttr("arch",archivator().workId())->

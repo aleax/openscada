@@ -56,6 +56,7 @@ class TParamContr : public TConfig, public TValue
 	string	descr( );
 	bool toEnable( )	{ return cfg("EN").getB(); }
 	bool enableStat( )	{ return m_en; }
+	bool dataActive( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );

@@ -77,6 +77,8 @@ void TParamContr::setName( const string &inm )	{ cfg("NAME").setS(inm); }
 
 string TParamContr::descr( )	{ return cfg("DESCR").getS(); }
 
+bool TParamContr::dataActive( )	{ return owner().startStat(); }
+
 void TParamContr::setDescr( const string &idsc ){ cfg("DESCR").setS(idsc); }
 
 void TParamContr::postEnable(int flag)

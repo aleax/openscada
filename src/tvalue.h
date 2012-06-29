@@ -66,6 +66,7 @@ class TVal : public TCntrNode
 
 	string	name( );
 	int64_t time( )	{ return mTime; }
+	bool	dataActive( );
 
 	//> Read current value (direct)
 	string	getSEL( int64_t *tm = NULL, bool sys = false );
@@ -142,6 +143,8 @@ class TValue: public TCntrNode, public TValElem
     public:
 	TValue( );
 	virtual ~TValue();
+
+	virtual bool dataActive( )	{ return false; }
 
 	string objName( );
 
