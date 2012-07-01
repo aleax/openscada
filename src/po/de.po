@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-06 20:51+0300\n"
+"POT-Creation-Date: 2012-07-01 15:25+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -63,8 +63,17 @@ msgstr "Zeitintervall für die Archivierung (Sek)"
 msgid "Source mode"
 msgstr "Quellenmodus"
 
+msgid "Passive;Passive param. attribute;Active param. attribute"
+msgstr "Passiv;Passives Parameterattribut;Aktives Parameterattribut"
+
 msgid "Source"
 msgstr "Quelle"
+
+msgid "Data combining mode"
+msgstr "Modus der Assoziation Daten"
+
+msgid "Moving average;Single;Minimum;Maximum"
+msgstr "Gleitender Durchschnitt;Einer;Minimum;Maximum"
 
 msgid "Value type"
 msgstr "Datentyp der Werte"
@@ -317,6 +326,7 @@ msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
 msgid "Set too old value to buffer."
 msgstr "Einfügen von sehr alten Werten in den Speicher."
 
+#, c-format
 msgid "Connect to source '%s' error."
 msgstr "Fehler beim Verbinden mit der Quelle '%s'."
 
@@ -431,15 +441,6 @@ msgstr "Reele Zahl"
 
 msgid "String"
 msgstr "Text"
-
-msgid "Passive"
-msgstr "Passiv"
-
-msgid "Passive param. attribute"
-msgstr "Passives Parameterattribut"
-
-msgid "Active param. attribute"
-msgstr "Aktives Attribut des Parameters"
 
 msgid "Value archivator: "
 msgstr "Wertearchivar: "
@@ -2211,6 +2212,12 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+#~ msgid "Passive"
+#~ msgstr "Passiv"
+
+#~ msgid "Active param. attribute"
+#~ msgstr "Aktives Attribut des Parameters"
 
 #, fuzzy
 #~ msgid "Connect to '%s' error."

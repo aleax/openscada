@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-06 20:51+0300\n"
+"POT-Creation-Date: 2012-07-01 15:25+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -58,8 +58,17 @@ msgstr "Период архивирования (сек)"
 msgid "Source mode"
 msgstr "Режим источника"
 
+msgid "Passive;Passive param. attribute;Active param. attribute"
+msgstr "Пассивный;Пассивный атрибут параметра;Активный атрибут параметра"
+
 msgid "Source"
 msgstr "Источник"
+
+msgid "Data combining mode"
+msgstr "Режим объединения данных"
+
+msgid "Moving average;Single;Minimum;Maximum"
+msgstr "Скользящее среднее;Один;Минимум;Максимум"
 
 msgid "Value type"
 msgstr "Тип значений"
@@ -426,15 +435,6 @@ msgstr "Веществен."
 
 msgid "String"
 msgstr "Строка"
-
-msgid "Passive"
-msgstr "Пассивный"
-
-msgid "Passive param. attribute"
-msgstr "Пассивный атрибут параметра"
-
-msgid "Active param. attribute"
-msgstr "Активный атрибут параметра"
 
 msgid "Value archivator: "
 msgstr "Архиватор значений: "

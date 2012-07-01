@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-06 20:51+0300\n"
+"POT-Creation-Date: 2012-07-01 15:25+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -58,8 +58,17 @@ msgstr "Період архівування (сек)"
 msgid "Source mode"
 msgstr "Режим джерела"
 
+msgid "Passive;Passive param. attribute;Active param. attribute"
+msgstr "Пасивний;Пасивний атрибут параметру;Активний атрибут параметру"
+
 msgid "Source"
 msgstr "Джерело"
+
+msgid "Data combining mode"
+msgstr "Режим поєднання даних"
+
+msgid "Moving average;Single;Minimum;Maximum"
+msgstr "Ковзне середне;Один;Мінімум;Максимум"
 
 msgid "Value type"
 msgstr "Тип значення"
@@ -311,6 +320,7 @@ msgstr ""
 msgid "Set too old value to buffer."
 msgstr "Вставка дуже старого значення до буфера."
 
+#, c-format
 msgid "Connect to source '%s' error."
 msgstr "Помилка підключення до джерела '%s'."
 
@@ -424,15 +434,6 @@ msgstr "Реальний"
 
 msgid "String"
 msgstr "Рядок"
-
-msgid "Passive"
-msgstr "Пасивний"
-
-msgid "Passive param. attribute"
-msgstr "Пасивний атрибут параметру"
-
-msgid "Active param. attribute"
-msgstr "Активний атрибут параметру"
 
 msgid "Value archivator: "
 msgstr "Архіватор значень: "

@@ -166,6 +166,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
     public:
 	//Public data
 	enum SrcMode { SaveCur = -1, Passive = 0, PassiveAttr, ActiveAttr };
+	enum CombMode { MovAver = 0, LastVal, MinVal, MaxVal };
 
 	//Public methods
 	TVArchive( const string &id, const string &db, TElem *cf_el );
@@ -179,6 +180,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	string	dscr( )		{ return cfg("DESCR").getS(); }
 	SrcMode	srcMode( )	{ return (TVArchive::SrcMode)mSrcMode.getI(); }
 	string	srcData( )	{ return mSource; }
+	CombMode combMode( )	{ return (TVArchive::CombMode)mCombMode.getI(); }
 	AutoHD<TVal> srcPAttr( bool force = false, const string &ipath = "" );
 	bool toStart( )  	{ return mStart; }
 	bool startStat( )	{ return runSt; }
@@ -198,6 +200,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setSrcMode( SrcMode vl = SaveCur, const string &isrc = "<*>", bool noex = false );
+	void setCombMode( CombMode vl )		{ mCombMode = (int)vl; }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
 	void setDB( const string &idb )		{ mDB = idb; modifG(); }
@@ -257,7 +260,8 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//> Base params
 	TCfg	&mId,		//ID
 		&mSrcMode,	//Source mode
-		&mSource;	//Source
+		&mSource,	//Source
+		&mCombMode;	//Data combining mode (Moving average, Single, Minimum, Maximum)
 
 	char	&mStart;	//Starting flag
 	//> Buffer params

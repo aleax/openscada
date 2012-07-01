@@ -72,8 +72,13 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     elAval.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elAval.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
-    elAval.fldAdd( new TFld("SrcMode",_("Source mode"),TFld::Integer,0,"1") );
+    elAval.fldAdd( new TFld("SrcMode",_("Source mode"),TFld::Integer,TFld::Selected,"1","0",
+	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::PassiveAttr,TVArchive::ActiveAttr).c_str(),
+	_("Passive;Passive param. attribute;Active param. attribute")) );
     elAval.fldAdd( new TFld("Source",_("Source"),TFld::String,0,"100") );
+    elAval.fldAdd( new TFld("CombMode",_("Data combining mode"),TFld::Integer,TFld::Selected,"1","0",
+	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal).c_str(),
+	_("Moving average;Single;Minimum;Maximum")) );
     elAval.fldAdd( new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1") );
     elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000") );
     elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"6","100","0;1000000") );

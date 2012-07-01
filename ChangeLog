@@ -1,3 +1,9 @@
+2012-07-01 Roman
+- Archive: Data combining mode selection is added for combining data from the high resolution buffer to
+    the low resolution archivator. Implemented combining modes: "Moving average", "Single", "Minimum", "Maximum".
+    Combining mode "Moving average" has implemented for Boolean type by weight 0.5.
+
+
 2012-06-29 Roman
 - DAQ:Data active flag is added to a parameter and an attribute of DAQ by function dataActive().
 - !:FIX:Archive: Restore value archive's starting on set by function setSrcMode().

@@ -890,7 +890,7 @@ template <class TpVal> void TValBuf::TBuf<TpVal>::set( TpVal value, int64_t tm )
 //*************************************************
 TVArchive::TVArchive( const string &iid, const string &idb, TElem *cf_el ) :
     TConfig(cf_el), runSt(false), mDB(idb),
-    mId(cfg("ID")), mSrcMode(cfg("SrcMode")), mSource(cfg("Source")), mStart(cfg("START").getBd()),
+    mId(cfg("ID")), mSrcMode(cfg("SrcMode")), mSource(cfg("Source")), mCombMode(cfg("CombMode")), mStart(cfg("START").getBd()),
     mVType(cfg("VTYPE").getId()), mBPer(cfg("BPER").getRd()), mBSize(cfg("BSIZE").getId()),
     mBHGrd(cfg("BHGRD").getBd()), mBHRes(cfg("BHRES").getBd())
 {
@@ -1850,9 +1850,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","dec","dest","select","select","/cfg/vtp_ls");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/srcm",mSource.fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","dec","dest","select","select","/cfg/srcm_ls");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/srcm",mSource.fld().descr(),RWRWR_,"root",SARH_ID,4,"tp","dec","dest","select",
+		    "sel_id",mSrcMode.fld().values().c_str(),"sel_list",mSrcMode.fld().selNames().c_str());
 		if( srcMode() == PassiveAttr || srcMode() == ActiveAttr )
 		    ctrMkNode("fld",opt,-1,"/prm/cfg/src","",RWRWR_,"root",SARH_ID,3,"tp","str","dest","sel_ed","select","/cfg/prm_atr_ls");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/combm",mCombMode.fld().descr(),RWRWR_,"root",SARH_ID,4,"tp","dec","dest","select",
+		    "sel_id",mCombMode.fld().values().c_str(),"sel_list",mCombMode.fld().selNames().c_str());
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_per",cfg("BPER").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_size",cfg("BSIZE").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/b_hgrd",cfg("BHGRD").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","bool");
@@ -1945,6 +1948,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(srcData()+(srcPAttr(true).freeStat()?"":" (+)"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setSrcMode(SaveCur,TSYS::strParse(opt->text(),0," "),true);
     }
+    else if(a_path == "/prm/cfg/combm")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::int2str(combMode()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setCombMode((TVArchive::CombMode)atoi(opt->text().c_str()));
+    }
     else if(a_path == "/prm/cfg/b_per")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(mBPer,6));
@@ -1971,12 +1979,6 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer))->setText(_("Integer"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real))->setText(_("Real"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String))->setText(_("String"));
-    }
-    else if(a_path == "/cfg/srcm_ls" && ctrChkNode(opt))
-    {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::Passive))->setText(_("Passive"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::PassiveAttr))->setText(_("Passive param. attribute"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::ActiveAttr))->setText(_("Active param. attribute"));
     }
     else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt))
     {
@@ -2648,33 +2650,64 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 {
     int64_t a_per = (int64_t)(1e6*archivator().valPeriod());
 
-    if( !beg || !end ) { beg = ibuf.begin(); end = ibuf.end(); }
+    if(!beg || !end) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax(beg,ibuf.begin()); end = vmin(end,ibuf.end());
 
-    if( !beg || !end || beg > end ) return;
+    if(!beg || !end || beg > end) return;
 
     //>> Check for put to buffer
-    if( &archive() != &ibuf && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size() )
+    if(&archive() != &ibuf && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size())
     { archive().TValBuf::setVals(ibuf,vmax(archive().end(),beg),end); return; }
     //>> Put direct to archive
-    int64_t wPrevTm = 0;
+    int64_t wPrevTm = 0, s_k, n_k;
     string wPrevVal;
 
-    if( &archive() == &ibuf || end > archive().end() ) { wPrevTm = prev_tm; wPrevVal = prev_val; }
+    if(&archive() == &ibuf || end > archive().end()) { wPrevTm = prev_tm; wPrevVal = prev_val; }
 
-    //>> Averaging
-    if( a_per > ibuf.period() )
+    //>> Combining
+    TVArchive::CombMode combM = archive().combMode();
+    if(a_per > ibuf.period())
     {
 	TValBuf obuf(ibuf.valType(),0,a_per,true,true);
-	for( int64_t c_tm = beg; c_tm <= end;)
+	for(int64_t c_tm = beg; c_tm <= end; )
 	{
 	    switch(ibuf.valType())
 	    {
 		case TFld::Boolean:
 		{
-		    char c_val = ibuf.getB(&c_tm,true);
-		    obuf.setB(c_val,c_tm);
-		    c_tm += a_per;
+		    float c_val = ibuf.getB(&c_tm,true);
+		    if(combM == TVArchive::LastVal) { obuf.setB((char)c_val,c_tm); c_tm += a_per; break; }
+
+		    int vdif = c_tm/a_per - wPrevTm/a_per;
+		    if(!vdif)
+		    {
+			float v_o = *(float*)wPrevVal.c_str();
+			if(c_val == EVAL_BOOL) c_val = v_o;
+			if(c_val != EVAL_BOOL && v_o != EVAL_BOOL)
+			    switch(combM)
+			    {
+				case TVArchive::MovAver:
+				    s_k = c_tm-a_per*(c_tm/a_per);
+				    n_k = ibuf.period();
+				    c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
+				    break;
+				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
+				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+			    }
+			wPrevVal.assign((char*)&c_val,sizeof(float));
+			wPrevTm = c_tm;
+		    }
+		    if(vdif == 1 || (c_tm+1) > end)
+		    {
+			float t_vl = *(float*)wPrevVal.c_str();
+			obuf.setB((t_vl!=EVAL_BOOL) ? t_vl > 0.5 : t_vl, wPrevTm);
+		    }
+		    if(vdif)
+		    {
+			wPrevVal.assign((char*)&c_val,sizeof(float));
+			wPrevTm = c_tm;
+		    }
+		    c_tm++;
 		    break;
 		}
 		case TFld::String:
@@ -2687,22 +2720,29 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		case TFld::Integer:
 		{
 		    int c_val = ibuf.getI(&c_tm,true);
+		    if(combM == TVArchive::LastVal) { obuf.setI(c_val,c_tm); c_tm += a_per; break; }
+
 		    int vdif = c_tm/a_per - wPrevTm/a_per;
-		    if( !vdif )
+		    if(!vdif)
 		    {
 			int v_o = *(int*)wPrevVal.c_str();
-			if( c_val == EVAL_INT ) c_val = v_o;
-			if( c_val != EVAL_INT && v_o != EVAL_INT )
-			{
-			    int64_t s_k = c_tm-a_per*(c_tm/a_per);
-			    int64_t n_k = ibuf.period();
-			    c_val = ((int64_t)v_o*s_k+(int64_t)c_val*n_k)/(s_k+n_k);
-			}
+			if(c_val == EVAL_INT) c_val = v_o;
+			if(c_val != EVAL_INT && v_o != EVAL_INT)
+			    switch(combM)
+			    {
+				case TVArchive::MovAver:
+				    s_k = c_tm-a_per*(c_tm/a_per);
+				    n_k = ibuf.period();
+				    c_val = ((int64_t)v_o*s_k+(int64_t)c_val*n_k)/(s_k+n_k);
+				    break;
+				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
+				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+			    }
 			wPrevVal.assign((char*)&c_val,sizeof(int));
 			wPrevTm = c_tm;
 		    }
-		    if( vdif == 1 || c_tm+1 > end ) obuf.setI(*(int*)wPrevVal.c_str(),wPrevTm);
-		    if( vdif )
+		    if(vdif == 1 || (c_tm+1) > end) obuf.setI(*(int*)wPrevVal.c_str(),wPrevTm);
+		    if(vdif)
 		    {
 			wPrevVal.assign((char*)&c_val,sizeof(int));
 			wPrevTm = c_tm;
@@ -2713,22 +2753,29 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		case TFld::Real:
 		{
 		    double c_val = ibuf.getR(&c_tm,true);
+		    if(combM == TVArchive::LastVal) { obuf.setR(c_val,c_tm); c_tm += a_per; break; }
+
 		    int vdif = c_tm/a_per - wPrevTm/a_per;
-		    if( !vdif )
+		    if(!vdif)
 		    {
 			double v_o = *(double*)wPrevVal.c_str();
-			if( c_val == EVAL_REAL ) c_val = v_o;
-			if( c_val != EVAL_REAL && v_o != EVAL_REAL )
-			{
-			    int64_t s_k = c_tm-a_per*(c_tm/a_per);
-			    int64_t n_k = ibuf.period();
-			    c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
-			}
+			if(c_val == EVAL_REAL) c_val = v_o;
+			if(c_val != EVAL_REAL && v_o != EVAL_REAL)
+			    switch(combM)
+			    {
+				case TVArchive::MovAver:
+				    s_k = c_tm-a_per*(c_tm/a_per);
+				    n_k = ibuf.period();
+				    c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
+				    break;
+				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
+				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+			    }
 			wPrevVal.assign((char*)&c_val,sizeof(double));
 			wPrevTm = c_tm;
 		    }
-		    if( vdif == 1 || c_tm+1 > end ) obuf.setR(*(double*)wPrevVal.c_str(),wPrevTm);
-		    if( vdif )
+		    if(vdif == 1 || (c_tm+1) > end) obuf.setR(*(double*)wPrevVal.c_str(),wPrevTm);
+		    if(vdif)
 		    {
 			wPrevVal.assign((char*)&c_val,sizeof(double));
 			wPrevTm = c_tm;
@@ -2739,10 +2786,10 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		default: break;
 	    }
 	}
-	setValsProc( obuf, obuf.begin(), end );
+	setValsProc(obuf, obuf.begin(), end);
     }
-    else setValsProc( ibuf, beg, end );
+    else setValsProc(ibuf, beg, end);
 
-    if( end > mLastGet ) mLastGet = end+1;
-    if( &archive() == &ibuf || end > archive().end() ) { prev_tm = wPrevTm; prev_val = wPrevVal; }
+    if(end > mLastGet) mLastGet = end+1;
+    if(&archive() == &ibuf || end > archive().end()) { prev_tm = wPrevTm; prev_val = wPrevVal; }
 }
