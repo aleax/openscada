@@ -1,4 +1,5 @@
 2012-07-03 Roman
+- FIX:LibsDB.vcaBase: DAQ parameters check is fixed for "Parameters selection dialog for graphics".
 - TConfig: Exceptions processing is added to cfgChange() for revert changes.
 - Transport.Serial: Exit from data mode command is added (typical "+++") which used first, next PreInit timeout and next HangUp.
 - !!!:DAQ.System: Periodic checking for new devices add to Automatic mode is added.
