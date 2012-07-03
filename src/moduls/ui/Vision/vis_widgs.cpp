@@ -696,6 +696,10 @@ SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
 void SyntxHighl::setSnthHgl(XMLNode nd)
 {
     rules = nd;
+
+    //> Set current font settings
+    document()->setDefaultFont(WdgShape::getFont(rules.attr("font"), 1, false));
+
     rehighlight();
 }
 

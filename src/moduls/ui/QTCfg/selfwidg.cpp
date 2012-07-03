@@ -351,6 +351,21 @@ SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
 void SyntxHighl::setSnthHgl(XMLNode nd)
 {
     rules = nd;
+
+    //> Set current font settings
+    QFont rez;
+
+    char family[101]; strcpy(family,"Arial");
+    int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
+    sscanf(nd.attr("font").c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+    rez.setFamily(QString(family).replace(QRegExp("_")," "));
+    rez.setPointSize(size);
+    rez.setBold(bold);
+    rez.setItalic(italic);
+    rez.setUnderline(underline);
+    rez.setStrikeOut(strike);
+    document()->setDefaultFont(rez);
+
     rehighlight();
 }
 

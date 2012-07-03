@@ -250,7 +250,7 @@ namespace VISION
 	    QString text( );
 
 	    void setText( const QString & );
-	    void setSnthHgl(XMLNode nd);
+	    void setSnthHgl( XMLNode nd );
 
 	    QTextEdit *workWdg( )	{ return ed_fld; }
 
