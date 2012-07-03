@@ -34,10 +34,10 @@ using namespace SystemCntr;
 CPU::CPU( )
 {
     //> CPU value structure
-    fldAdd( new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite) );
-    fldAdd( new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite) );
-    fldAdd( new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite) );
-    fldAdd( new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite) );
+    fldAdd(new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite));
+    fldAdd(new TFld("idle",_("Idle (%)"),TFld::Real,TFld::NoWrite));
 }
 
 CPU::~CPU( )
@@ -48,48 +48,48 @@ CPU::~CPU( )
 void CPU::init( TMdPrm *prm )
 {
     char buf[256];
-    //- Create config -
-    TCfg &t_cf = prm->cfg("SUBT");
-    t_cf.fld().setDescr("");
+    prm->daData = new tval;
 
-    //t_fl.selValI().push_back(-1); t_fl.selNm().push_back("OpenSCADA");
+    //> Create config
+    TCfg &c_subt = prm->cfg("SUBT");
+    c_subt.fld().setDescr("");
 
-    //- Init start value -
+    //> Init start value
     FILE *f = fopen("/proc/stat","r");
-    if( f == NULL ) return;
-
     string cpuLs, cpuLsNm;
-    while( fgets(buf,sizeof(buf),f) != NULL )
-    {
-	int n_cpu;
-	if( sscanf(buf,"cpu%d",&n_cpu) )
+    for(int n_cpu; f && fgets(buf,sizeof(buf),f) != NULL; )
+	if(sscanf(buf,"cpu%d",&n_cpu))
 	{
-	    if( !isdigit(buf[3]) )
+	    if(!isdigit(buf[3]))
 	    {
-		cpuLs=cpuLs+"gen;";
-		cpuLsNm=cpuLsNm+_("General")+";";
-		c_vls.push_back(tval());
+		cpuLs += "gen;";
+		cpuLsNm += string(_("General"))+";";
 	    }
 	    else
 	    {
-		cpuLs=cpuLs+TSYS::int2str(n_cpu)+";";
-		cpuLsNm=cpuLsNm+TSYS::int2str(n_cpu)+";";
-		c_vls.push_back(tval());
+		cpuLs += TSYS::int2str(n_cpu)+";";
+		cpuLsNm += TSYS::int2str(n_cpu)+";";
 	    }
 	}
-    }
-    t_cf.fld().setValues(cpuLs);
-    t_cf.fld().setSelNames(cpuLsNm);
+    c_subt.fld().setValues(cpuLs);
+    c_subt.fld().setSelNames(cpuLsNm);
 
-    fclose(f);
-    try{ t_cf.getSEL(); }
-    catch(...){ t_cf.setS("gen"); }
+    if(f) fclose(f);
+
+    if(!TRegExp("(^|;)"+c_subt.getS()+";").test(cpuLs)) c_subt.setS("gen");
+}
+
+void CPU::deInit( TMdPrm *prm )
+{
+    delete (tval*)prm->daData;
 }
 
 void CPU::getVal( TMdPrm *prm )
 {
     long unsigned user,nice,sys,idle,iowait;
     float sum;
+    tval &c_vls = *(tval*)prm->daData;
+    bool devOK = false;
 
     string trg = prm->cfg("SUBT").getS();
 
@@ -114,39 +114,39 @@ void CPU::getVal( TMdPrm *prm )
     }*/
 
     //> File /proc/stat scan
-    int n_el = 0;	//CPU number
-    int n = 0;
     char buf[256];
     FILE *f = fopen("/proc/stat","r");
-    if( f == NULL ) return;
-    while( fgets(buf,sizeof(buf),f) != NULL )
+    for(int n = 0; f && fgets(buf,sizeof(buf),f) != NULL; )
     {
-	if( trg == "gen" )
-	{
+	if(trg == "gen")
 	    n = sscanf(buf,"cpu %lu %lu %lu %lu %lu\n",&user,&nice,&sys,&idle,&iowait);
-	    n_el=0;
-	}
-	else if( isdigit(trg[0]) )
-	{
+	else if(isdigit(trg[0]))
 	    n = sscanf(buf,(string("cpu")+trg+" %lu %lu %lu %lu %lu\n").c_str(),&user,&nice,&sys,&idle,&iowait);
-	    n_el=atoi(trg.c_str())+1;
-	}
-	if( n )
+	if(n)
 	{
-	    if( n == 5 ) idle += iowait;
-	    sum = (float)(user+nice+sys+idle-c_vls[n_el].user-c_vls[n_el].nice-c_vls[n_el].sys-c_vls[n_el].idle);
-	    prm->vlAt("load").at().setR( 100.0*(float(user+sys-c_vls[n_el].user-c_vls[n_el].sys))/sum,0,true);
-	    prm->vlAt("sys").at().setR( 100.0*(float(sys-c_vls[n_el].sys))/sum,0,true);
-	    prm->vlAt("user").at().setR( 100.0*(float(user-c_vls[n_el].user))/sum,0,true);
-	    prm->vlAt("idle").at().setR( 100.0*(float(idle-c_vls[n_el].idle))/sum,0,true);
-	    c_vls[n_el].user = user; 
-	    c_vls[n_el].nice = nice; 
-	    c_vls[n_el].sys  = sys; 
-	    c_vls[n_el].idle = idle;
+	    if(n == 5) idle += iowait;
+	    sum = (float)(user+nice+sys+idle-c_vls.user-c_vls.nice-c_vls.sys-c_vls.idle);
+	    prm->vlAt("load").at().setR(100*(float(user+sys-c_vls.user-c_vls.sys))/sum, 0, true);
+	    prm->vlAt("sys").at().setR(100*(float(sys-c_vls.sys))/sum, 0, true);
+	    prm->vlAt("user").at().setR(100*(float(user-c_vls.user))/sum, 0, true);
+	    prm->vlAt("idle").at().setR(100*(float(idle-c_vls.idle))/sum, 0, true);
+	    c_vls.user = user;
+	    c_vls.nice = nice;
+	    c_vls.sys  = sys;
+	    c_vls.idle = idle;
+	    devOK = true;
 	    break;
 	}
     }
-    fclose(f);
+    if(f) fclose(f);
+
+    //> Device error
+    if(devOK) prm->daErr = "";
+    else if(!prm->daErr.getVal().size())
+    {
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
+    }
 }
 
 void CPU::makeActiveDA( TMdContr *a_cntr )
@@ -154,40 +154,31 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
     char buf[256];
 
     FILE *f = fopen("/proc/stat","r");
-    if( f == NULL ) return;
+    if(f == NULL) return;
 
     //> Check for allow CPU
-    while( fgets(buf,sizeof(buf),f) != NULL )
-    {
-	int n_cpu;
-	if( sscanf(buf,"cpu%d",&n_cpu) )
+    for(int n_cpu; fgets(buf,sizeof(buf),f) != NULL; )
+	if(sscanf(buf,"cpu%d",&n_cpu))
 	{
-	    if( !isdigit(buf[3]) )
+	    string pId = "CPULoad";
+	    string pNm = _("Full CPU Load");
+	    string pSTp = "gen";
+	    if(isdigit(buf[3]))
 	    {
-		if(!a_cntr->present("CPULoad"))
-		{
-		    a_cntr->add("CPULoad",0);
-		    a_cntr->at("CPULoad").at().setName(_("Full CPU Load"));
-		    a_cntr->at("CPULoad").at().autoC(true);
-		    a_cntr->at("CPULoad").at().cfg("TYPE").setS(id());
-		    a_cntr->at("CPULoad").at().cfg("SUBT").setS("gen");
-		    a_cntr->at("CPULoad").at().cfg("EN").setB(true);
-		}
+		pId = "CPU"+TSYS::int2str(n_cpu)+"Load";
+		pNm = _("CPU Load :")+TSYS::int2str(n_cpu);
+		pSTp = TSYS::int2str(n_cpu);
 	    }
-	    else
-	    {
-		string ncpu = "CPU"+TSYS::int2str(n_cpu)+"Load";
-		if(!a_cntr->present(ncpu))
-		{
-		    a_cntr->add(ncpu,0);
-		    a_cntr->at(ncpu).at().setName(_("CPU Load :")+TSYS::int2str(n_cpu));
-		    a_cntr->at(ncpu).at().autoC(true);
-		    a_cntr->at(ncpu).at().cfg("TYPE").setS(id());
-		    a_cntr->at(ncpu).at().cfg("SUBT").setS(TSYS::int2str(n_cpu));
-		    a_cntr->at(ncpu).at().cfg("EN").setB(true);
-		}
-	    }
+
+	    if(a_cntr->present(pId))	continue;
+	    a_cntr->add(pId,0);
+	    AutoHD<TMdPrm> dprm = a_cntr->at(pId);
+	    dprm.at().setName(pNm);
+	    dprm.at().autoC(true);
+	    dprm.at().cfg("TYPE").setS(id());
+	    dprm.at().cfg("SUBT").setS(pSTp);
+	    dprm.at().cfg("EN").setB(true);
+	    if(a_cntr->enableStat()) dprm.at().enable();
 	}
-    }
     fclose(f);
 }

@@ -151,7 +151,7 @@ void TTpContr::postEnable( int flag )
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return( new TMdContr(name,daq_db,this));
+    return new TMdContr(name,daq_db,this);
 }
 
 void TTpContr::daList( vector<string> &da )
@@ -172,6 +172,15 @@ DA *TTpContr::daGet( const string &da )
 	if(m_da[i_da]->id() == da) return m_da[i_da];
 
     return NULL;
+}
+
+void TTpContr::perSYSCall( unsigned int cnt )
+{
+    //> Recheck auto-controllers to create parameters for new devices
+    vector<string> clist;
+    list(clist);
+    for(unsigned i_c = 0; i_c < clist.size(); i_c++)
+	at(clist[i_c]).at().devUpdate();
 }
 
 //*************************************************
@@ -202,6 +211,17 @@ string TMdContr::getStatus( )
     return rez;
 }
 
+void TMdContr::devUpdate( )
+{
+    if(cfg("AUTO_FILL").getB())
+    {
+	vector<string> list;
+	mod->daList(list);
+	for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	    mod->daGet(list[i_l])->makeActiveDA(this);
+    }
+}
+
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
@@ -219,13 +239,7 @@ void TMdContr::load_( )
 
 void TMdContr::enable_(  )
 {
-    if(cfg("AUTO_FILL").getB())
-    {
-	vector<string> list;
-	mod->daList(list);
-	for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	    mod->daGet(list[i_l])->makeActiveDA(this);
-    }
+    devUpdate();
 }
 
 void TMdContr::start_( )
@@ -313,7 +327,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), m_auto(false), m_da(NULL)
+    TParamContr(name,tp_prm), m_auto(false), m_da(NULL), daData(NULL)
 {
 
 }
@@ -330,13 +344,14 @@ void TMdPrm::postEnable( int flag )
 TMdPrm::~TMdPrm( )
 {
     nodeDelAll();
+    setType("");
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
     cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
     ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
@@ -344,10 +359,9 @@ void TMdPrm::enable( )
 
 void TMdPrm::disable( )
 {
-    if( !enableStat() )  return;
+    if(!enableStat())	return;
     ((TMdContr&)owner()).prmEn( id(), false );	//Remove from process
     setEval( );
-    //setType("");
     TParamContr::disable();
 }
 
@@ -358,7 +372,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::save_( )
 {
-    if( !m_auto ) TParamContr::save_();
+    if(!m_auto) TParamContr::save_();
 
     //> Save archives
     vector<string> a_ls;
@@ -370,17 +384,18 @@ void TMdPrm::save_( )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if( val.name() == "err" )
+    if(val.name() == "err")
     {
-	if( !owner().startStat() ) val.setS(_("2:Controller stopped"),0,true);
-	else if( !enableStat() )   val.setS(_("1:Parameter disabled"),0,true);
-	else val.setS("0",0,true);
+	if(!owner().startStat())val.setS(_("2:Controller stopped"), 0, true);
+	else if(!enableStat())	val.setS(_("1:Parameter disabled"), 0, true);
+	else if(daErr.size())	val.setS(daErr, 0, true);
+	else val.setS("0", 0, true);
     }
 }
 
 void TMdPrm::getVal( )
 {
-    if( m_da )	m_da->getVal(this);
+    if(m_da) m_da->getVal(this);
 }
 
 void TMdPrm::setEval( )
@@ -407,10 +422,10 @@ void TMdPrm::vlArchMake( TVal &val )
 
 void TMdPrm::setType( const string &da_id )
 {
-    if( m_da && da_id == m_da->id() )	return;
+    if(m_da && da_id == m_da->id())	return;
 
     //> Free previous type
-    if( m_da )
+    if(m_da)
     {
 	m_da->deInit(this);
 	vlElemDet(m_da);
@@ -420,14 +435,11 @@ void TMdPrm::setType( const string &da_id )
     //> Create new type
     try
     {
-	if(da_id.size())
+	if(da_id.size() && (m_da=mod->daGet(da_id)))
 	{
-	    m_da = mod->daGet(da_id);
-	    if(m_da)
-	    {
-		vlElemAtt(m_da);
-		m_da->init(this);
-	    }
+	    daErr = "";
+	    vlElemAtt(m_da);
+	    m_da->init(this);
 	}
     }
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }

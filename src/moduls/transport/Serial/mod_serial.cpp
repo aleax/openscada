@@ -709,7 +709,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
-    mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
+    mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
 {
     setAddr("/dev/ttyS0:19200:8E2");
     setTimings("640:6");
@@ -742,6 +742,7 @@ void TTrOut::load_( )
 	vl = prmNd.attr("MdmBusyResp");	if(!vl.empty()) setMdmBusyResp(vl);
 	vl = prmNd.attr("MdmNoCarResp");if(!vl.empty()) setMdmNoCarResp(vl);
 	vl = prmNd.attr("MdmNoDialToneResp");	if(!vl.empty()) setMdmNoDialToneResp(vl);
+	vl = prmNd.attr("MdmExit");	if(!vl.empty()) setMdmExit(vl);
 	vl = prmNd.attr("MdmHangUp");	if(!vl.empty()) setMdmHangUp(vl);
 	vl = prmNd.attr("MdmHangUpResp");if(!vl.empty()) setMdmHangUpResp(vl);
     } catch(...){ }
@@ -763,6 +764,7 @@ void TTrOut::save_( )
     prmNd.setAttr("MdmBusyResp",mdmBusyResp());
     prmNd.setAttr("MdmNoCarResp",mdmNoCarResp());
     prmNd.setAttr("MdmNoDialToneResp",mdmNoDialToneResp());
+    prmNd.setAttr("MdmExit",mdmExit());
     prmNd.setAttr("MdmHangUp",mdmHangUp());
     prmNd.setAttr("MdmHangUpResp",mdmHangUpResp());
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
@@ -981,6 +983,8 @@ void TTrOut::stop()
 
     if( mMdmDataMode )
     {
+	TTr::writeLine(fd,mdmExit());
+	if(mdmPreInit() > 0) TSYS::sysSleep(mdmPreInit());
 	//> HangUp
 	TTr::writeLine(fd,mdmHangUp());
 	mMdmDataMode = false;
@@ -1120,6 +1124,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/mod/busyResp",_("Busy response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/noCarResp",_("No carrier response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/noDialToneResp",_("No dial tone response"),RWRWR_,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/mod/exit",_("Exit"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/hangUp",_("Hangup string"),RWRWR_,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/mod/hangUpResp",_("Hangup response"),RWRWR_,"root",STR_ID,1,"tp","str");
 	}
@@ -1192,6 +1197,11 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmNoDialToneResp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmNoDialToneResp(opt->text());
+    }
+    else if(a_path == "/mod/exit")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(mdmExit());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMdmExit(opt->text());
     }
     else if(a_path == "/mod/hangUp")
     {

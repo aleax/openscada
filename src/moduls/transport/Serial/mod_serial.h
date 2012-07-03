@@ -134,6 +134,7 @@ class TTrOut: public TTransportOut
 	string	mdmBusyResp( )			{ return mMdmBusyResp; }
 	string	mdmNoCarResp( )			{ return mMdmNoCarResp; }
 	string	mdmNoDialToneResp( )		{ return mMdmNoDialToneResp; }
+	string  mdmExit( )			{ return mMdmExit; }
 	string	mdmHangUp( )			{ return mMdmHangUp; }
 	string	mdmHangUpResp( )		{ return mMdmHangUpResp; }
 
@@ -150,6 +151,7 @@ class TTrOut: public TTransportOut
 	void	setMdmNoCarResp( const string &vl )	{ mMdmNoCarResp = vl; modif(); }
 	void	setMdmNoDialToneResp( const string &vl ){ mMdmNoDialToneResp = vl; modif(); }
 	void	setMdmHangUp( const string &vl )	{ mMdmHangUp = vl; modif(); }
+	void	setMdmExit( const string &vl )		{ mMdmExit = vl; modif(); }
 	void	setMdmHangUpResp( const string &vl )	{ mMdmHangUpResp = vl; modif(); }
 
 	void start( );
@@ -180,7 +182,7 @@ class TTrOut: public TTransportOut
 	float	mMdmPreInit, mMdmPostInit;
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
 	string	mMdmDialStr, mMdmCnctResp, mMdmBusyResp, mMdmNoCarResp, mMdmNoDialToneResp;
-	string	mMdmHangUp, mMdmHangUpResp;
+	string	mMdmExit, mMdmHangUp, mMdmHangUpResp;
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
 	unsigned mRTSfc		:1;	//Flow control by RTS signal for pure RS-485
