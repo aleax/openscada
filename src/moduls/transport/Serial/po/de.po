@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-16 17:45+0200\n"
+"POT-Creation-Date: 2012-06-23 18:29+0300\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -256,6 +256,9 @@ msgstr "Keine Tragende, Ergebnis"
 
 msgid "No dial tone response"
 msgstr "Kein Signal, Ergebnis"
+
+msgid "Exit"
+msgstr "Ausgang"
 
 msgid "Hangup string"
 msgstr "den Hörer legen"

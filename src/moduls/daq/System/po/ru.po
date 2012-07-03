@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 10:20+0300\n"
+"POT-Creation-Date: 2012-06-23 20:12+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -31,17 +31,26 @@ msgstr "Простой (%)"
 msgid "General"
 msgstr "В общем"
 
+msgid "10:Device is not available."
+msgstr "10:Устройство недоступно."
+
 msgid "Full CPU Load"
 msgstr "Общая нагрузка процессора"
 
 msgid "CPU Load :"
 msgstr "Нагрузка процессора: "
 
-msgid "Read (Kb)"
-msgstr "Прочитано (Кб)"
+msgid "Read (B)"
+msgstr "Прочитано (Б)"
 
-msgid "Write (Kb)"
-msgstr "Записано (Кб)"
+msgid "Read speed (B/s)"
+msgstr "Скорость чтения (Б/c)"
+
+msgid "Write (B)"
+msgstr "Записано (Б)"
+
+msgid "Write speed (B/s)"
+msgstr "Скорость записи (Б/c)"
 
 msgid "Disk(part)"
 msgstr "Диск(раздел)"
@@ -94,11 +103,17 @@ msgstr "Своп использовано (кБ)"
 msgid "Memory info"
 msgstr "Информация про память"
 
-msgid "Receive (Kb)"
-msgstr "Принято (Кб)"
+msgid "Receive (B)"
+msgstr "Принято (Б)"
 
-msgid "Transmit (Kb)"
-msgstr "Передано (Кб)"
+msgid "Receive speed (B/s)"
+msgstr "Скорость приёма (Б/с)"
+
+msgid "Transmit (B)"
+msgstr "Передано (Б)"
+
+msgid "Transmit speed (B/s)"
+msgstr "Скорость передачи (Б/с)"
 
 msgid "Interface"
 msgstr "Интерфейс"

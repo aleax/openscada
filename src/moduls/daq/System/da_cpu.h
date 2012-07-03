@@ -41,6 +41,7 @@ class CPU: public DA
 	string name( )	{ return _("CPU"); }
 
 	void init( TMdPrm *prm );
+	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
 
 	void makeActiveDA( TMdContr *a_cntr );
@@ -54,7 +55,6 @@ class CPU: public DA
 	    long sys;
 	    long idle;
 	};
-	vector<tval>	c_vls;
 };
 
 } //End namespace

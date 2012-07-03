@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 10:20+0300\n"
+"POT-Creation-Date: 2012-06-23 20:12+0300\n"
 "PO-Revision-Date: 2009-08-18 09:59+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -36,17 +36,26 @@ msgstr "Idletime (%)"
 msgid "General"
 msgstr "Im allgemein"
 
+msgid "10:Device is not available."
+msgstr "10:Das Gerät ist."
+
 msgid "Full CPU Load"
 msgstr "Auslastung des Prozessors"
 
 msgid "CPU Load :"
 msgstr "Auslastung des Prozessors: "
 
-msgid "Read (Kb)"
-msgstr "Gelesen (Kb)"
+msgid "Read (B)"
+msgstr "Gelesen (B)"
 
-msgid "Write (Kb)"
-msgstr "Geschrieben (Kb)"
+msgid "Read speed (B/s)"
+msgstr "Speed Reading (B/s)"
+
+msgid "Write (B)"
+msgstr "Geschrieben (B)"
+
+msgid "Write speed (B/s)"
+msgstr "Speed Geschrieben (B/s)"
 
 msgid "Disk(part)"
 msgstr "Disk(Teil)"
@@ -99,11 +108,17 @@ msgstr "Swap benutzt (kB)"
 msgid "Memory info"
 msgstr "Speicherinformation"
 
-msgid "Receive (Kb)"
-msgstr "Empfangen (Kb)"
+msgid "Receive (B)"
+msgstr "Empfangen (B)"
 
-msgid "Transmit (Kb)"
-msgstr "Uebermitteln (Кб)"
+msgid "Receive speed (B/s)"
+msgstr "Speed Empfangen (B/s)"
+
+msgid "Transmit (B)"
+msgstr "Uebermitteln (B)"
+
+msgid "Transmit speed (B/s)"
+msgstr "Speed Uebermitteln (B/s)"
 
 msgid "Interface"
 msgstr "Schnittstelle"

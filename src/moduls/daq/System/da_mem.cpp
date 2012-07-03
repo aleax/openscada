@@ -34,14 +34,14 @@ using namespace SystemCntr;
 Mem::Mem( )
 {
     //> Memory value structure
-    fldAdd( new TFld("free",_("Free (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("total",_("Total (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("use",_("Use (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("buff",_("Buffers (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("cache",_("Cached (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("sw_free",_("Swap free (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("sw_total",_("Swap total (kB)"),TFld::Integer,TFld::NoWrite) );
-    fldAdd( new TFld("sw_use",_("Swap use (kB)"),TFld::Integer,TFld::NoWrite) );
+    fldAdd(new TFld("free",_("Free (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("total",_("Total (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("use",_("Use (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("buff",_("Buffers (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("cache",_("Cached (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_free",_("Swap free (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_total",_("Swap total (kB)"),TFld::Integer,TFld::NoWrite));
+    fldAdd(new TFld("sw_use",_("Swap use (kB)"),TFld::Integer,TFld::NoWrite));
 }
 
 Mem::~Mem( )
@@ -65,9 +65,8 @@ void Mem::getVal( TMdPrm *prm )
     char buf[256];
 
     FILE *f = fopen("/proc/meminfo","r");
-    if( f == NULL ) return;
-
-    while( fgets(buf,sizeof(buf),f) != NULL )
+    m_total = m_free = m_buff = m_cach = sw_total = sw_free = 0;
+    while(f && fgets(buf,sizeof(buf),f) != NULL)
     {
 	sscanf(buf,"MemTotal: %d kB\n",&m_total);
 	sscanf(buf,"MemFree: %d kB\n",&m_free);
@@ -78,31 +77,37 @@ void Mem::getVal( TMdPrm *prm )
     }
     fclose(f);
 
-    prm->vlAt("free").at().setI(m_free+m_buff+m_cach,0,true);
-    prm->vlAt("total").at().setI(m_total,0,true);
-    prm->vlAt("use").at().setI(m_total-m_free-m_buff-m_cach,0,true);
-    prm->vlAt("buff").at().setI(m_buff,0,true);
-    prm->vlAt("cache").at().setI(m_cach,0,true);
-    prm->vlAt("sw_free").at().setI(sw_free,0,true);
-    prm->vlAt("sw_total").at().setI(sw_total,0,true);
-    prm->vlAt("sw_use").at().setI(sw_total-sw_free,0,true);
+    if(m_total || m_free || m_buff || m_cach || sw_total || sw_free)
+    {
+	prm->daErr = "";
+	prm->vlAt("free").at().setI(m_free+m_buff+m_cach,0,true);
+	prm->vlAt("total").at().setI(m_total,0,true);
+	prm->vlAt("use").at().setI(m_total-m_free-m_buff-m_cach,0,true);
+	prm->vlAt("buff").at().setI(m_buff,0,true);
+	prm->vlAt("cache").at().setI(m_cach,0,true);
+	prm->vlAt("sw_free").at().setI(sw_free,0,true);
+	prm->vlAt("sw_total").at().setI(sw_total,0,true);
+	prm->vlAt("sw_use").at().setI(sw_total-sw_free,0,true);
+    }
+    else if(!prm->daErr.getVal().size())
+    {
+        prm->setEval();
+        prm->daErr = _("10:Device is not available.");
+    }
 }
 
 void Mem::makeActiveDA( TMdContr *a_cntr )
 {
-    string ap_nm = "MemInfo";
-
-    if(!a_cntr->present(ap_nm))
+    FILE *f = fopen("/proc/meminfo","r");
+    if(f && !a_cntr->present("MemInfo"))
     {
-	FILE *f = fopen("/proc/meminfo","r");
-	if( f != NULL )
-	{
-	    a_cntr->add(ap_nm,0);
-	    a_cntr->at(ap_nm).at().setName(_("Memory info"));
-	    a_cntr->at(ap_nm).at().autoC(true);
-	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
-	    fclose(f);
-	}
+	a_cntr->add("MemInfo",0);
+	AutoHD<TMdPrm> dprm = a_cntr->at("MemInfo");
+	dprm.at().setName(_("Memory info"));
+	dprm.at().autoC(true);
+	dprm.at().cfg("TYPE").setS(id());
+	dprm.at().cfg("EN").setB(true);
+	if(a_cntr->enableStat()) dprm.at().enable();
     }
+    if(f) fclose(f);
 }
