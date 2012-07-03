@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-16 17:45+0200\n"
+"POT-Creation-Date: 2012-06-23 18:29+0300\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -253,6 +253,9 @@ msgstr "Нет несущей, результат"
 
 msgid "No dial tone response"
 msgstr "Нет гудка, результат"
+
+msgid "Exit"
+msgstr "Выход"
 
 msgid "Hangup string"
 msgstr "Повесить трубку"

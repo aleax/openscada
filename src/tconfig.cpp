@@ -317,11 +317,21 @@ void TCfg::setS( const string &val )
 	    string t_str = TVariant::getS();
 	    TVariant::setS(val);
 	    pthread_mutex_unlock(&mOwner.mRes);
-	    if(!mOwner.cfgChange(*this))
+	    try
+	    {
+		if(!mOwner.cfgChange(*this))
+		{
+		    pthread_mutex_lock(&mOwner.mRes);
+		    TVariant::setS(t_str);
+		    pthread_mutex_unlock(&mOwner.mRes);
+		}
+	    }
+	    catch(TError err)
 	    {
 		pthread_mutex_lock(&mOwner.mRes);
 		TVariant::setS(t_str);
 		pthread_mutex_unlock(&mOwner.mRes);
+		throw;
 	    }
 	    break;
 	}
@@ -342,7 +352,8 @@ void TCfg::setR( double val )
 		val = vmin(mFld->selValR()[1],vmax(mFld->selValR()[0],val));
 	    double t_val = TVariant::getR();
 	    TVariant::setR(val);
-	    if(!mOwner.cfgChange(*this))	TVariant::setR(t_val);
+	    try{ if(!mOwner.cfgChange(*this)) TVariant::setR(t_val); }
+	    catch(TError err) { TVariant::setR(t_val); throw; }
 	    break;
 	}
 	default: break;
@@ -362,7 +373,8 @@ void TCfg::setI( int val )
 		val = vmin(mFld->selValI()[1],vmax(mFld->selValI()[0],val));
 	    int t_val = TVariant::getI();
 	    TVariant::setI(val);
-	    if(!mOwner.cfgChange(*this))	TVariant::setI(t_val);
+	    try{ if(!mOwner.cfgChange(*this)) TVariant::setI(t_val); }
+	    catch(TError err) { TVariant::setI(t_val); throw; }
 	    break;
 	}
 	default: break;
@@ -380,7 +392,8 @@ void TCfg::setB( char val )
 	{
 	    bool t_val = TVariant::getB();
 	    TVariant::setB(val);
-	    if(!mOwner.cfgChange(*this))	TVariant::setB(t_val);
+	    try{ if(!mOwner.cfgChange(*this)) TVariant::setB(t_val); }
+	    catch(TError err) { TVariant::setB(t_val); throw; }
 	    break;
 	}
 	default: break;

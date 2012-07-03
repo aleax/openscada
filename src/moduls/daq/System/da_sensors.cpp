@@ -59,7 +59,7 @@ Sensors::~Sensors( )
 {
 #if HAVE_SENSORS_SENSORS_H
     //> Libsensor API cleanup
-    if( libsensor_ok ) sensors_cleanup();
+    if(libsensor_ok) sensors_cleanup();
 #endif
 }
 
@@ -81,8 +81,9 @@ void Sensors::getVal( TMdPrm *prm )
 
 void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 {
+    bool devOK = false;
     //> Use libsensor
-    if( libsensor_ok )
+    if(libsensor_ok)
     {
 #if HAVE_SENSORS_SENSORS_H
 	int nr = 0;
@@ -116,6 +117,7 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 		    fldAdd( new TFld(s_id.c_str(),(string(name->prefix)+" "+main_feature->name).c_str(),TFld::Real,TFld::NoWrite) );
 		if(!onlyCreate && sensors_get_value(name, feature->number, &val) == 0)
 		    prm->vlAt(s_id).at().setR(val,0,true);
+		devOK = true;
 	    }
 	}
 #else
@@ -134,6 +136,7 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 			sensors_get_feature( *name, feature->number, &val);
 			prm->vlAt(s_id).at().setR(val,0,true);
 		    }
+		    devOK = true;
 		}
 	}
 #endif
@@ -152,8 +155,16 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
 	    if( sscanf(buf, "%31s : %f", name, &val) != 2 ) continue;
 	    if( !prm->vlPresent(name) )	fldAdd( new TFld(name,name,TFld::Real,TFld::NoWrite) );
 	    if( !onlyCreate ) prm->vlAt(name).at().setR(val,0,true);
+	    devOK = true;
 	}
 	pclose(fp);
+    }
+
+    if(devOK) prm->daErr = "";
+    else if(!onlyCreate && !prm->daErr.getVal().size())
+    {
+        prm->setEval();
+        prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -224,10 +235,12 @@ void Sensors::makeActiveDA( TMdContr *a_cntr )
 	if( sens_allow )
 	{
 	    a_cntr->add(ap_nm,0);
-	    a_cntr->at(ap_nm).at().setName(_("Data sensors"));
-	    a_cntr->at(ap_nm).at().autoC(true);
-	    a_cntr->at(ap_nm).at().cfg("TYPE").setS(id());
-	    a_cntr->at(ap_nm).at().cfg("EN").setB(true);
+	    AutoHD<TMdPrm> dprm = a_cntr->at(ap_nm);
+	    dprm.at().setName(_("Data sensors"));
+	    dprm.at().autoC(true);
+	    dprm.at().cfg("TYPE").setS(id());
+	    dprm.at().cfg("EN").setB(true);
+	    if(a_cntr->enableStat()) dprm.at().enable();
 	}
     }
 }
