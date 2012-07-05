@@ -1512,6 +1512,8 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 
 	if(stsk)
 	{
+	    if(stsk->tm_pnt && (pnt_tm/per - stsk->tm_pnt/per) > 1)
+		stsk->cycleLost += (pnt_tm/per-stsk->tm_pnt/per-1);
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;
 	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
@@ -2068,9 +2070,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"),
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."),
 			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
-			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_pnt)).c_str()));
+			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_pnt)).c_str(),
+			    (double)it->second.cycleLost));
 		}
 		if(n_plc)
 		{

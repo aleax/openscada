@@ -1,3 +1,7 @@
+2012-07-05 Roman
+- SYS: Cycles lost counter is added to task statistic.
+
+
 2012-07-03 Roman
 - DAQ, DAQ.JavaLikeCalc, UI.QTCfg, UI.Vision: Attribute "font" is added to syntax highlight rules root node for set default font config.
     Default font for JavaLikeCalc programms is set to "Courier".
