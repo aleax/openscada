@@ -85,7 +85,7 @@ void NetStat::dList( vector<string> &list, bool part )
 
 void NetStat::getVal( TMdPrm *prm )
 {
-    unsigned int rcv, trns;
+    unsigned long rcv, trns;
     double rcvVl, trnsVl;
     char sc_pat[50] = "",
 	 buf[256] = "";
@@ -113,11 +113,11 @@ void NetStat::getVal( TMdPrm *prm )
     {
         prm->daErr = "";
         double lstVl = prm->vlAt("rcv").at().getR(0, true);
-        if(lstVl != EVAL_REAL)
-            prm->vlAt("rcvSp").at().setR(1e6*(rcvVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rcv").at().time()), 0, true);
+        prm->vlAt("rcvSp").at().setR((lstVl != EVAL_REAL && rcvVl > lstVl) ?
+        	1e6*(rcvVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rcv").at().time()) : 0, 0, true);
         lstVl = prm->vlAt("trns").at().getR(0, true);
-        if(lstVl != EVAL_REAL)
-            prm->vlAt("trnsSp").at().setR(1e6*(trnsVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("trns").at().time()), 0, true);
+        prm->vlAt("trnsSp").at().setR((lstVl != EVAL_REAL && trnsVl > lstVl) ?
+    		1e6*(trnsVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("trns").at().time()) : 0, 0, true);
 
 	prm->vlAt("rcv").at().setR(rcvVl,0,true);
 	prm->vlAt("trns").at().setR(trnsVl,0,true);
