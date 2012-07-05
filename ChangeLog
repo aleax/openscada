@@ -1,4 +1,6 @@
 2012-07-05 Roman
+- FIX:DAQ.System: Possible crash at inconsistency types size "unsigned int"(32) and scanf "%lu" (unsigned long, 64) on x86_64 is fixed.
+    Speed value forming is fixed for counters wrap consider.
 - SYS: Cycles lost counter is added to task statistic.
 
 

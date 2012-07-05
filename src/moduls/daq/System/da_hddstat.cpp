@@ -86,7 +86,7 @@ void HddStat::dList( vector<string> &list, bool part )
 
 void HddStat::getVal( TMdPrm *prm )
 {
-    unsigned int rd, rd1, wr, wr1;
+    unsigned long rd, rd1, wr, wr1;
     double rdVl, wrVl;
     char sc_pat[50], buf[256];
     FILE *f = NULL;
@@ -129,11 +129,11 @@ void HddStat::getVal( TMdPrm *prm )
     {
 	prm->daErr = "";
 	double lstVl = prm->vlAt("rd").at().getR(0, true);
-	if(lstVl != EVAL_REAL)
-	    prm->vlAt("rdSp").at().setR(1e6*(rdVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rd").at().time()), 0, true);
+	prm->vlAt("rdSp").at().setR((lstVl != EVAL_REAL && rdVl > lstVl) ?
+		1e6*(rdVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rd").at().time()) : 0, 0, true);
 	lstVl = prm->vlAt("wr").at().getR(0, true);
-	if(lstVl != EVAL_REAL)
-	    prm->vlAt("wrSp").at().setR(1e6*(wrVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("wr").at().time()), 0, true);
+	prm->vlAt("wrSp").at().setR((lstVl != EVAL_REAL && wrVl > lstVl) ?
+		1e6*(wrVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("wr").at().time()) : 0, 0, true);
 
 	prm->vlAt("rd").at().setR(rdVl, 0, true);
 	prm->vlAt("wr").at().setR(wrVl, 0, true);
