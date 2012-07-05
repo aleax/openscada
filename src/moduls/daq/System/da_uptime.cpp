@@ -62,7 +62,7 @@ void UpTime::init( TMdPrm *prm )
 
 void UpTime::getVal( TMdPrm *prm )
 {
-    long val;
+    unsigned long val;
     bool devOK = false;
 
     string trg = prm->cfg("SUBT").getS();
