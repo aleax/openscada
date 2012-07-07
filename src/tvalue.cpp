@@ -369,29 +369,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	    string col  = opt->attr("col");
 
 	    //>>> Check for create new
-	    if(v_get && vlAt(attr).at().arch().freeStat())
-	    {
-		//>>>> Make archive name
-		string n_nm = nodeName(),
-		       a_nm = n_nm+"_"+attr;
-		if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+attr).substr(0,20);
-		string rez_nm = a_nm;
-		for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
-		{
-		    AutoHD<TVal> dattr = SYS->archive().at().valAt(rez_nm).at().srcPAttr();
-		    if(!dattr.freeStat() && dattr.at().DAQPath() == vlAt(attr).at().DAQPath()) break;
-		    rez_nm = a_nm+TSYS::int2str(p_cnt);
-		    if(rez_nm.size() > 20) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
-		}
-		//>>>> Create new archive
-		if(!SYS->archive().at().valPresent(rez_nm)) SYS->archive().at().valAdd(rez_nm);
-		SYS->archive().at().valAt(rez_nm).at().setValType(vlAt(attr).at().fld().type());
-		SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,vlAt(attr).at().DAQPath());
-		SYS->archive().at().valAt(rez_nm).at().setToStart(true);
-		SYS->archive().at().valAt(rez_nm).at().start();
-		vlArchMake(vlAt(attr).at());
-		modif();
-	    }
+	    if(v_get && vlAt(attr).at().arch().freeStat()) vlAt(attr).at().setArch();
 	    //>>> Check for delete archive
 	    if(col == "prc" && !v_get && !vlAt(attr).at().arch().freeStat())
 	    {
@@ -512,6 +490,37 @@ TFld &TVal::fld()
 AutoHD<TVArchive> TVal::arch()	{ return mArch; }
 
 void TVal::setArch( const AutoHD<TVArchive> &vl )	{ mArch = vl; }
+
+string TVal::setArch( const string &nm )
+{
+    string rez_nm = nm, n_nm, a_nm;
+    //>>>> Make archive name
+    if(rez_nm.empty())
+    {
+	n_nm = owner().nodeName();
+	a_nm = n_nm+"_"+name();
+	if(a_nm.size() > 20) a_nm = (n_nm.substr(0,n_nm.size()-n_nm.size()*(a_nm.size()-19)/21)+"_"+name()).substr(0,20);
+	rez_nm = a_nm;
+    }
+    a_nm = rez_nm;
+    for(int p_cnt = 0; SYS->archive().at().valPresent(rez_nm); p_cnt++)
+    {
+	AutoHD<TVal> dattr = SYS->archive().at().valAt(rez_nm).at().srcPAttr();
+	if(!dattr.freeStat() && dattr.at().DAQPath() == DAQPath()) break;
+	rez_nm = a_nm + TSYS::int2str(p_cnt);
+	if(rez_nm.size() > 20) rez_nm = a_nm.substr(0,a_nm.size()-(rez_nm.size()-20))+TSYS::int2str(p_cnt);
+    }
+    //>>>> Create new archive
+    if(!SYS->archive().at().valPresent(rez_nm)) SYS->archive().at().valAdd(rez_nm);
+    SYS->archive().at().valAt(rez_nm).at().setValType(fld().type());
+    SYS->archive().at().valAt(rez_nm).at().setSrcMode(TVArchive::PassiveAttr,DAQPath());
+    SYS->archive().at().valAt(rez_nm).at().setToStart(true);
+    SYS->archive().at().valAt(rez_nm).at().start();
+    owner().vlArchMake(*this);
+    owner().modif();
+
+    return rez_nm;
+}
 
 string TVal::getSEL( int64_t *tm, bool sys )
 {

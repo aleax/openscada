@@ -64,7 +64,21 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
     exclCopy(*src_n, "SHIFR;");
 
     //> Enable new parameter
-    if(src_n->enableStat() && toEnable() && !enableStat()) enable();
+    if(src_n->enableStat() && toEnable() && !enableStat())
+    {
+	enable();
+
+	//> Archives creation and copy
+        vector<string> a_ls;
+	vlList(a_ls);
+        for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+        {
+            if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
+
+	    vlAt(a_ls[i_a]).at().setArch();
+	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
+        }
+    }
 
     return *this;
 }

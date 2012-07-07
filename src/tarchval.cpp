@@ -911,7 +911,7 @@ TCntrNode &TVArchive::operator=( TCntrNode &node )
     if( !src_n ) return *this;
 
     //> Configuration copy
-    exclCopy(*src_n, "ID;");
+    exclCopy(*src_n, "ID;SrcMode;Source;");
     mDB = src_n->mDB;
 
     if( src_n->startStat() && toStart() && !startStat() )
@@ -941,6 +941,7 @@ bool TVArchive::cfgChange( TCfg &cfg )
     if(startStat() && (cfg.name() == "SrcMode" || cfg.name() == "Source")) stop();
 
     modif();
+
     return true;
 }
 
@@ -1063,23 +1064,13 @@ void TVArchive::setUpBuf( )
 
 void TVArchive::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) return;
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
     setUpBuf();
 }
 
 void TVArchive::save_( )
 {
-    //> Update Archivators list
-    if( startStat() )
-    {
-	vector<string> arch_ls;
-	archivatorList(arch_ls);
-	string als;
-	for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++) als += arch_ls[i_l]+";";
-	cfg("ArchS").setS(als);
-    }
-
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
@@ -1288,6 +1279,14 @@ void TVArchive::archivatorAttach( const string &arch )
 	    return;
 	}
     arch_el.push_back(archivat.at().archivePlace(*this));
+
+    if(!TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
+    {
+	string als;
+	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
+	    als += arch_el[i_l]->archivator().workId()+";";
+	cfg("ArchS").setS(als);
+    }
 }
 
 void TVArchive::archivatorDetach( const string &arch, bool full )
@@ -1303,6 +1302,14 @@ void TVArchive::archivatorDetach( const string &arch, bool full )
 	    archivat.at().archiveRemove(id(),full);
 	    arch_el.erase(arch_el.begin()+i_l);
 	} else i_l++;
+
+    if(TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
+    {
+	string als;
+	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
+	    als += arch_el[i_l]->archivator().workId()+";";
+	cfg("ArchS").setS(als);
+    }
 }
 
 void TVArchive::archivatorSort()

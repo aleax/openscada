@@ -88,6 +88,7 @@ class TVal : public TCntrNode
 
 	AutoHD<TVArchive> arch( );
 	void setArch( const AutoHD<TVArchive> &vl );
+	string setArch( const string &nm = "" );
 
 	bool reqFlg( )	{ return mReqFlg; }
 	bool resB1( )	{ return mResB1; }
