@@ -31,6 +31,8 @@
 #include "os_contr.h"
 #include "da_hddstat.h"
 
+#define SCSI_MAJOR 8
+
 using namespace SystemCntr;
 
 //*************************************************
@@ -77,8 +79,8 @@ void HddStat::dList( vector<string> &list, bool part )
     while(f && fgets(buf,sizeof(buf),f) != NULL)
     {
 	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
-	if(!part && minor != 0)	continue;
-	if(!strncmp(name,"md",2))	continue;
+	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
+	    continue;
 	list.push_back(name);
     }
     if(f) fclose(f);

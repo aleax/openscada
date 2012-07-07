@@ -30,6 +30,8 @@
 #include "os_contr.h"
 #include "da_smart.h"
 
+#define SCSI_MAJOR 8
+
 using namespace SystemCntr;
 
 const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
@@ -72,28 +74,28 @@ void HddSmart::dList( vector<string> &list, bool part )
     char buf[256];
 
     FILE *f = fopen("/proc/partitions","r");
-    if( f == NULL ) return;
+    if(f == NULL) return;
 
-    while( fgets(buf,sizeof(buf),f) != NULL )
+    while(fgets(buf,sizeof(buf),f) != NULL)
     {
-	if( sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3 ) continue;
-	//if( strncmp(name,"hd",2) )	continue;
-	if( !part && minor != 0 )	continue;
+	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
+	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
+	    continue;
 
-	string cmd = string(smartval_cmd)+name+((name[0]=='s')?" -d ata":"");
+	string cmd = string(smartval_cmd)+name+((major==SCSI_MAJOR)?" -d ata":"");
 	FILE *fp = popen(cmd.c_str(),"r");
-	if( fp )
+	if(fp)
 	{
 	    int val;
 	    bool access_true = false;
-	    while( fgets(buf,sizeof(buf),fp) != NULL )
+	    while(fgets(buf,sizeof(buf),fp) != NULL)
 	    {
-		if( sscanf(buf,"%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n",&val) != 1 ) continue;
+		if(sscanf(buf,"%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n",&val) != 1) continue;
 		access_true = true;
 		break;
 	    }
 	    pclose(fp);
-	    if( access_true )	list.push_back(name);
+	    if(access_true) list.push_back(name);
 	}
     }
     fclose(f);
