@@ -49,7 +49,7 @@ string TController::DAQPath( )	{ return owner().DAQPath()+"."+id(); }
 TCntrNode &TController::operator=( TCntrNode &node )
 {
     TController *src_n = dynamic_cast<TController*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     //> Individual DB names store
     vector<string> dbNms;
@@ -65,17 +65,17 @@ TCntrNode &TController::operator=( TCntrNode &node )
 	cfg(owner().tpPrmAt(i_tp).db).setS(dbNms[i_tp]);
 
     //> Parameters copy
-    if( src_n->enableStat( ) )
+    if(src_n->enableStat())
     {
-	if( !enableStat( ) )	enable();
+	if(!enableStat()) enable();
 	vector<string> prm_ls;
 	src_n->list(prm_ls);
 	for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
 	{
-	    if( !owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name) ) continue;
-	    if( !present(prm_ls[i_p]) )	add( prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name) );
+	    if(!owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name)) continue;
+	    if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
 	    (TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
-	    if( toEnable( ) && !enableStat( ) )	enable();
+	    if(toEnable() && !enableStat()) enable();
 	}
     }
 
