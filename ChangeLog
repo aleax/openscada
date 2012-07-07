@@ -1,3 +1,9 @@
+2012-07-07 Roman
+- DAQ: Archives creation and copying on parameter copy is added.
+- Archive: Config properties "SrcMode" and "Source" copying pass is added, for prevent double connection to a single DAQ attribute.
+    Config property "ArchS" update is moved direct to functions TVArchive::archivatorAttach() and TVArchive::archivatorDetach().
+
+
 2012-07-06 Roman
 - FIX:DAQ.System: SCSI disks ("sdXN") and MD (mirror device) processing is fixed for HDDStat and HDDSmart.
 
