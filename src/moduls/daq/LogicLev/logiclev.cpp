@@ -919,7 +919,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    int c_lvl = 0;
 	    for(int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++);
 	    AutoHD<TValue> prm;
-	    if(c_lvl==3)
+	    if(c_lvl == 3)
 	    {
 		if(TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(p_vl,1,'.') == owner().id() &&
@@ -1007,9 +1007,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    int i_io = atoi(a_path.substr(12).c_str());
-	    string a_vl = TSYS::strParse(opt->text(), 0, " ");
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    {
+		string a_vl = TSYS::strParse(opt->text(), 0, " ");
 		if(TSYS::strSepParse(a_vl,0,'.') == owner().owner().modId() &&
 			TSYS::strSepParse(a_vl,1,'.') == owner().id() &&
 			TSYS::strSepParse(a_vl,2,'.') == id())
@@ -1017,7 +1017,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		lnk(lnkId(i_io)).prm_attr = a_vl;
 		initTmplLnks();
 	    }
-	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) tmpl->val.setS(i_io,a_vl);
+	    else if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgPublConst) tmpl->val.setS(i_io,opt->text());
 	    modif();
 	}
     }
