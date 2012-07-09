@@ -23,6 +23,7 @@
 extern "C"
 {
 #include "msw.h"
+#include "ixisa.h"
 }
 
 #include <tsys.h>

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-04 21:07+0300\n"
+"POT-Creation-Date: 2012-07-09 09:40+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -329,6 +329,10 @@ msgstr "Einfügen von sehr alten Werten in den Speicher."
 #, c-format
 msgid "Connect to source '%s' error."
 msgstr "Fehler beim Verbinden mit der Quelle '%s'."
+
+#, c-format
+msgid "The archive '%s' was already connected to target parameter '%s'."
+msgstr "Archiv '%s' ist bereits auf die Zielparameter '%s' verbunden."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
@@ -1859,6 +1863,7 @@ msgstr "Zähler"
 msgid "Finished. "
 msgstr "Finished. "
 
+#, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."
 msgstr "Letzter: %s. Laden: %3.1f%% (%s von %s). Lag: %s. Verlust Zyklen: %g."
 

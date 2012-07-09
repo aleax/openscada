@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-04 21:07+0300\n"
+"POT-Creation-Date: 2012-07-09 09:40+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -323,6 +323,10 @@ msgstr "Вставка дуже старого значення до буфер�
 #, c-format
 msgid "Connect to source '%s' error."
 msgstr "Помилка підключення до джерела '%s'."
+
+#, c-format
+msgid "The archive '%s' was already connected to target parameter '%s'."
+msgstr "Архів '%s' вже підключено до цільового параметру '%s'."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
@@ -1840,8 +1844,10 @@ msgstr "Лічильники"
 msgid "Finished. "
 msgstr "Закінчено. "
 
+#, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."
-msgstr "Останній: %s. Навант.: %3.1f%% (%s із %s). Відстав.: %s. Втрата циклів: %g."
+msgstr ""
+"Останній: %s. Навант.: %3.1f%% (%s із %s). Відстав.: %s. Втрата циклів: %g."
 
 msgid "Standard"
 msgstr "Стандарт"

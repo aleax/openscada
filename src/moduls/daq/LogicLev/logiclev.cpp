@@ -342,6 +342,9 @@ TCntrNode &TMdPrm::operator=( TCntrNode &node )
 	    lnk(lnkId(i_io)).prm_attr = src_n->lnk(src_n->lnkId(i_io)).prm_attr;
 	else tmpl->val.setS(i_io,src_n->tmpl->val.getS(i_io));
 
+    //>> Init links
+    initTmplLnks();
+
     return *this;
 }
 

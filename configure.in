@@ -375,6 +375,14 @@ AX_MOD_EN(BFN,[enable build module DAQ.BFN],enable,[],
     AC_CONFIG_FILES(src/moduls/daq/BFN/Makefile)
     DAQSub_mod="${DAQSub_mod}BFN "
 ])
+AX_MOD_EN(Comedi,[enable build module DAQ.Comedi],enable,[],
+[
+    AC_MSG_RESULT(Build module: DAQ.Comedi)
+    AC_CONFIG_FILES(src/moduls/daq/Comedi/Makefile)
+    DAQSub_mod="${DAQSub_mod}Comedi "
+    PKG_CHECK_MODULES([comedilib],[comedilib > 0.7.0],[],
+	[AC_MSG_ERROR(Comedilib not found. Install or check Comedilib library package!)])
+])
 #> Archive modules
 AC_SUBST(ArchSub_mod)
 AX_MOD_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl,

@@ -1,3 +1,10 @@
+2012-07-09 Roman
+- Archive: Double linking to an attribute of DAQ parameter is prevented. Restart archive for empty source is prevented.
+- DAQ.LogicLev: Links init on object parameter copy is set.
+- !:DAQ.Comedi: New module template is added for further implementation DAQ boards collection by library Comedy (http://www.comedi.org).
+- DAQ.ICP_DAQ: Headers files ixisa.h and other added for further implementation ISA boards like DIO-144 from ICP_DAS.
+
+
 2012-07-07 Roman
 - DAQ: Archives creation and copying on parameter copy is added.
 - Archive: Config properties "SrcMode" and "Source" copying pass is added, for prevent double connection to a single DAQ attribute.
