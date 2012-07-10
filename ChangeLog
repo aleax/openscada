@@ -1,3 +1,9 @@
+2012-07-09 Roman 0.8.0.2
+- Archive: Double linking to an attribute of DAQ parameter is prevented. Restart archive for empty source is prevented.
+- FIX:DAQ.LogicLev: String with spaces set for PublicConstant template's config fields fix.
+- DAQ.LogicLev: Links init on object parameter copy is set.
+
+
 2012-07-07 Roman
 - DAQ: Archives creation and copying on parameter copy is added.
 - Archive: Config properties "SrcMode" and "Source" copying pass is added, for prevent double connection to a single DAQ attribute.

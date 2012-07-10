@@ -1115,18 +1115,12 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     bool stOnCh = runSt;
 
     //> Disable all links
-    if((!runSt || vl != ActiveAttr || src != srcData()) && !pattr_src.freeStat())
+    if(!pattr_src.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData()))
     {
 	owner().setActValArch(id(), false);
 	srcPAttr().at().setArch(AutoHD<TVArchive>());
 	pattr_src.free();
     }
-
-    try
-    {
-	if((!runSt || vl != PassiveAttr || src != srcData()) && !srcPAttr().freeStat())
-	    srcPAttr().at().setArch(AutoHD<TVArchive>());
-    }catch(...){  }
 
     //> Set all links
     if(runSt && vl == ActiveAttr)
@@ -1135,8 +1129,21 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
 	else
 	{
-	    pattr_src.at().setArch(AutoHD<TVArchive>(this));
-	    owner().setActValArch(id(), true);
+	    //> Double link prevent
+	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this)
+	    {
+		if(!noex)
+		{
+		    pattr_src.free();
+		    throw TError(nodePath().c_str(), _("The archive '%s' was already connected to target parameter '%s'."),
+			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
+		}
+	    }
+	    else
+	    {
+		pattr_src.at().setArch(AutoHD<TVArchive>(this));
+		owner().setActValArch(id(), true);
+	    }
 	}
     }
 
@@ -1144,13 +1151,26 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     {
 	pattr_src = srcPAttr(true,src);
 	if(pattr_src.freeStat()) { if(!noex) throw TError(nodePath().c_str(),_("Connect to source '%s' error."),src.c_str()); }
-	else pattr_src.at().setArch(AutoHD<TVArchive>(this));
+	else
+	{
+	    //> Double link prevent
+	    if(!pattr_src.at().arch().freeStat() && &pattr_src.at().arch().at() != this)
+	    {
+		if(!noex)
+		{
+		    pattr_src.free();
+		    throw TError(nodePath().c_str(), _("The archive '%s' was already connected to target parameter '%s'."),
+			srcPAttr(true,src).at().arch().at().id().c_str(), src.c_str());
+		}
+	    }
+	    else pattr_src.at().setArch(AutoHD<TVArchive>(this));
+	}
     }
 
     if(mSrcMode.getI() != vl)	mSrcMode = (int)vl;
     if(mSource != src)	mSource = src;
     //> Restore start status
-    if(stOnCh && !runSt) start();
+    if(stOnCh && !runSt && (srcMode() == Passive || !srcData().empty())) start();
 }
 
 TVariant TVArchive::getVal( int64_t *tm, bool up_ord, const string &arch, bool onlyLocal )

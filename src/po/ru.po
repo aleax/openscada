@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-06 20:51+0300\n"
+"POT-Creation-Date: 2012-07-09 09:40+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -315,6 +315,10 @@ msgstr "Вставка очень старых значений в буфер."
 #, c-format
 msgid "Connect to source '%s' error."
 msgstr "Ошибка подключения к источнику '%s'."
+
+#, c-format
+msgid "The archive '%s' was already connected to target parameter '%s'."
+msgstr "Архив '%s' уже подключен к целевому параметру '%s'."
 
 #, c-format
 msgid "Archivator '%s' error or it is not started."
