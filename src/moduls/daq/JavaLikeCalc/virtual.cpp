@@ -640,9 +640,9 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::String,IO::Integer,IO::Real,IO::Boolean,IO::Object).c_str(),
 		    "sel_list",_("String;Integer;Real;Boolean;Object"));
-		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
+		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Attribute mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
-		    "sel_list",_("Input;Output;Return"));
+		    "sel_list",_("Read only;Read and Write;Read and Write"));
 		ctrMkNode("list",opt,-1,"/fnc/io/4",_("Value"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/fnc/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");

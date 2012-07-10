@@ -1,3 +1,8 @@
+2012-07-10 Roman
+- DAQ.JavaLikeCalc: the mode property for controller procedure is renamed to "Attribute mode" and variants to "Read only;Read and Write;Read and Write".
+- UI.QTCfg: Date and time display format is made unified to "01-01-1977 02:00:00".
+
+
 2012-07-09 Roman
 - Archive: Double linking to an attribute of DAQ parameter is prevented. Restart archive for empty source is prevented.
 - FIX:DAQ.LogicLev: String with spaces set for PublicConstant template's config fields fix.

@@ -1240,13 +1240,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			    thd_it->setData(Qt::UserRole,elms);
 			}
 			else if(t_linf->attr("tp") == "time")
-			{
-			    time_t tm_t = atoi(t_linf->childGet(i_el)->text().c_str());
-			    char *c_tm = ctime( &tm_t );
-			    for(unsigned i_ch = 0; i_ch < strlen(c_tm); i_ch++)
-				if(c_tm[i_ch] == '\n') c_tm[i_ch] = '\0';
-			    thd_it->setData(Qt::DisplayRole,c_tm);
-			}
+			    thd_it->setData(Qt::DisplayRole, TSYS::time2str(atoi(t_linf->childGet(i_el)->text().c_str()),"%d-%m-%Y %H:%M:%S").c_str());
 			else thd_it->setData(Qt::DisplayRole,t_linf->childGet(i_el)->text().c_str());
 
 			//>>>> Set access
@@ -1675,7 +1669,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_w = new LineEdit( widget, LineEdit::DateTime, comm );
 		    val_w->setObjectName(br_path.c_str());
 		    val_w->setStatusTip((sel_path+"/"+br_path).c_str());
-		    val_w->setCfg("dd.MM.yyyy hh:mm:ss");
+		    val_w->setCfg("dd-MM-yyyy hh:mm:ss");
 		    connect( val_w, SIGNAL( valChanged(const QString&) ), this, SLOT( editChange(const QString&) ) );
 		    connect( val_w, SIGNAL( apply() ), this, SLOT( applyButton() ) );
 		    connect( val_w, SIGNAL( cancel() ), this, SLOT( cancelButton() ) );

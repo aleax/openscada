@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-27 11:22+0300\n"
+"POT-Creation-Date: 2012-07-10 11:42+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -267,6 +267,12 @@ msgstr "Данные"
 
 msgid "String;Integer;Real;Boolean;Object"
 msgstr "Строка;Целый;Веществ.;Логич.;Объект"
+
+msgid "Attribute mode"
+msgstr "Режим атрибута"
+
+msgid "Read only;Read and Write;Read and Write"
+msgstr "Только чтение;Чтение и запись;Чтение и запись"
 
 msgid "Value"
 msgstr "Значение"
