@@ -1,3 +1,9 @@
+openscada (0.8.0.2-1) experimental; urgency=low
+
+  * Build 0.8.0.2 update to production release.
+
+ -- Roman Savochenko <rom_as@oscada.org>  Jul, 09 Mon 2012 10:00:00 +0200
+
 openscada (0.8.0.1-1) experimental; urgency=low
 
   * Build 0.8.0.1 update to production release.
