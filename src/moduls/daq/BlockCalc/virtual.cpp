@@ -671,7 +671,7 @@ void Prm::disable()
 
 void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
-    if( !enableStat() )	return;
+    if(!enableStat() || !owner().startStat())	return;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )
