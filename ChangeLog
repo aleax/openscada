@@ -1,3 +1,7 @@
+2012-07-18 Roman
+- FIX:DAQ.{BlockCalc,DCON,ICP_DAS,LogicLev,ModBus,SNMP,Siemens}: DAQ attributes writing is prevented for disabled parameters and stopped controllers.
+
+
 2012-07-09 Roman 0.8.0.2
 - Archive: Double linking to an attribute of DAQ parameter is prevented. Restart archive for empty source is prevented.
 - FIX:DAQ.LogicLev: String with spaces set for PublicConstant template's config fields fix.

@@ -721,7 +721,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat()) valo.setS(EVAL_STR, 0, true);
+    if(!enableStat() || !owner().startStat()) { valo.setS(EVAL_STR, 0, true); return; }
 
     //> Send to active reserve station
     if(owner().redntUse())
