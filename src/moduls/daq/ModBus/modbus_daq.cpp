@@ -1288,7 +1288,7 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if(!enableStat())	valo.setS(EVAL_STR, 0, true);
+    if(!enableStat() || !owner().startStat())	valo.setS(EVAL_STR, 0, true);
 
     TVariant vl = valo.get(0,true);
     if(vl.isEVal() || vl == pvl) return;
