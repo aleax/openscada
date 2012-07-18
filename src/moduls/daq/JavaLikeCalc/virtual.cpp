@@ -839,7 +839,7 @@ Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
 
 void Prm::vlSet( TVal &val, const TVariant &pvl )
 {
-    if( !enableStat() ) return;
+    if(!enableStat())	return;
 
     //> Send to active reserve station
     if( owner().redntUse( ) )

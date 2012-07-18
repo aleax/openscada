@@ -1,3 +1,7 @@
+2012-07-18 Roman
+- FIX:DAQ.{BlockCalc,DCON,ICP_DAS,LogicLev,ModBus,SNMP,Siemens}: DAQ attributes writing is prevented for disabled parameters and stopped controllers.
+
+
 2012-07-10 Roman
 - DAQ.JavaLikeCalc: the mode property for controller procedure is renamed to "Attribute mode" and variants to "Read only;Read and Write;Read and Write".
 - UI.QTCfg: Date and time display format is made unified to "01-01-1977 02:00:00".
