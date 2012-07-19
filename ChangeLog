@@ -1,3 +1,8 @@
+2012-07-19 Roman
+- DB.MySQL: Some fields type processing is added and changed for getting table structure function.
+- !:FIX:DAQ: Value into Object's type set to string is fixed by recursion prevent.
+
+
 2012-07-18 Roman
 - FIX:DAQ.{BlockCalc,DCON,ICP_DAS,LogicLev,ModBus,SNMP,Siemens}: DAQ attributes writing is prevented for disabled parameters and stopped controllers.
 

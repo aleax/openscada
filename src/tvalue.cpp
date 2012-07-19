@@ -724,7 +724,7 @@ void TVal::set( const TVariant &value, int64_t tm, bool sys )
 
 void TVal::setS( const string &value, int64_t tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::Integer:
 	    setI((value!=EVAL_STR) ? atoi(value.c_str()) : EVAL_INT, tm, sys);	break;
@@ -733,7 +733,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	case TFld::Boolean:
 	    setB((value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys);	break;
 	case TFld::Object:
-	    setO(TVarObj::parseStrXML(value, NULL, getO()));	break;
+	    setO(TVarObj::parseStrXML(value,NULL,getO(NULL,true)), tm, sys);	break;
 	case TFld::String:
 	{
 	    //> Set value to config
@@ -760,29 +760,29 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 
 void TVal::setI( int value, int64_t tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::String:
-	    setS( (value!=EVAL_INT) ? TSYS::int2str(value) : EVAL_STR, tm, sys );	break;
+	    setS((value!=EVAL_INT) ? TSYS::int2str(value) : EVAL_STR, tm, sys);	break;
 	case TFld::Real:
-	    setR( (value!=EVAL_INT) ? value : EVAL_REAL, tm, sys );		break;
+	    setR((value!=EVAL_INT) ? value : EVAL_REAL, tm, sys);		break;
 	case TFld::Boolean:
-	    setB( (value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys );	break;
+	    setB((value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys);		break;
 	case TFld::Integer:
 	{
 	    //> Set value to config
-	    if( mCfg )	{ src.cfg->setI( value ); return; }
+	    if(mCfg)	{ src.cfg->setI( value ); return; }
 	    //> Check to write
-            if( !sys && fld().flg()&TFld::NoWrite )	throw TError("Val",_("Write access is denied!"));
+            if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
 	    //> Set current value and time
-	    if( !(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT )
+	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
 		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
 	    int pvl = val.val_i; val.val_i = value;
 	    mTime = tm;
-	    if( !mTime ) mTime = TSYS::curTime();
-	    if( fld().flg()&TVal::DirWrite && !sys )	owner().vlSet( *this, pvl );
+	    if(!mTime) mTime = TSYS::curTime();
+	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
 	    //> Set to archive
-	    if( !mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr )
+	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setI(value,time()); }
 		catch(TError err){ mess_err(nodePath().c_str(),_("Write value to archive error: %s"),err.mess.c_str()); }
 	    break;
