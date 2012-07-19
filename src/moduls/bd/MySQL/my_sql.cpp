@@ -340,24 +340,25 @@ void MTable::fieldStruct( TConfig &cfg )
 	if( cfg.cfgPresent(sid) ) continue;
 
 	int flg = (tblStrct[i_fld][3]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
-	if( sscanf(tblStrct[i_fld][1].c_str(),"char(%d)",&pr1) ||
-		sscanf(tblStrct[i_fld][1].c_str(),"varchar(%d)",&pr1) )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,TSYS::int2str(pr1).c_str()) );
-	else if( tblStrct[i_fld][1] == "text" )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"65535") );
-	else if( tblStrct[i_fld][1] == "mediumtext" )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215") );
-	else if( tblStrct[i_fld][1] == "int" )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg) );
-	else if( sscanf(tblStrct[i_fld][1].c_str(),"int(%d)",&pr1) )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg,TSYS::int2str(pr1).c_str()) );
-	else if( tblStrct[i_fld][1] == "double" )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg) );
-	else if( sscanf(tblStrct[i_fld][1].c_str(),"double(%d,%d)",&pr1,&pr2) )
-	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg,(TSYS::int2str(pr1)+"."+TSYS::int2str(pr2)).c_str()) );
-	else if( tblStrct[i_fld][1] == "tinyint(1)" )
+	/*if(tblStrct[i_fld][1] == "tinyint(1)")
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Boolean,flg,"1") );
-	else if( tblStrct[i_fld][1] == "datetime" )
+	else */
+	if(sscanf(tblStrct[i_fld][1].c_str(),"char(%d)",&pr1) || sscanf(tblStrct[i_fld][1].c_str(),"varchar(%d)",&pr1))
+	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,TSYS::int2str(pr1).c_str()));
+	else if(tblStrct[i_fld][1] == "text")
+	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"65535"));
+	else if(tblStrct[i_fld][1] == "mediumtext")
+	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
+	else if(tblStrct[i_fld][1] == "int")
+	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
+	else if(sscanf(tblStrct[i_fld][1].c_str(),"int(%d)",&pr1) || sscanf(tblStrct[i_fld][1].c_str(),"tinyint(%d)",&pr1) ||
+		sscanf(tblStrct[i_fld][1].c_str(),"bigint(%d)",&pr1))
+	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg,TSYS::int2str(pr1).c_str()));
+	else if(tblStrct[i_fld][1] == "double")
+	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
+	else if(sscanf(tblStrct[i_fld][1].c_str(),"double(%d,%d)",&pr1,&pr2))
+	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg,(TSYS::int2str(pr1)+"."+TSYS::int2str(pr2)).c_str()) );
+	else if(tblStrct[i_fld][1] == "datetime")
 	    cfg.elem().fldAdd( new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg|TFld::DateTimeDec,"10") );
     }
 }
