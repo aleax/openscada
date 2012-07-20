@@ -1,5 +1,11 @@
 2012-07-20 Roman
-- FIX:Archive: No clear used archivators list on archive's object stop is fixed.
+- !!:FIX:Archive: No clear used archivators list on archive's object stop is fixed.
+    Force archive detach from archivators at it remove for left and next crash prevent.
+    Prevent attach archivators to stopped archive.
+- DAQ.{AMRDevs,DAQGate,ModBus}: Lower border for "TM_REST" is set to "1".
+- DAQ.{BlockCalc,DiamondBoards,JavaLikeCalc,LogicLev,Siemens}: Set buffer period for created archive to Active archiving task period,
+    for Active mode archiving sources.
+- DAQ.{DCON,ICP_DAS}: Default archivation mode is changed to "Passive" mode.
 
 
 2012-07-19 Roman

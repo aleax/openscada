@@ -1094,8 +1094,6 @@ void TVArchive::start( )
 
 void TVArchive::stop( bool full_del )
 {
-    if(!runSt)	return;
-
     runSt = false;
 
     //> Detach all archivators
@@ -1287,18 +1285,21 @@ void TVArchive::archivatorAttach( const string &arch )
     if(!archivat.at().startStat())
 	throw TError(nodePath().c_str(),_("Archivator '%s' error or it is not started."),arch.c_str());
 
-    //> Find already present archivator
-    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-        if(&arch_el[i_l]->archivator() == &archivat.at())
-	    return;
-    //> Find position
-    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-        if(archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod())
-	{
-	    arch_el.insert(arch_el.begin()+i_l,archivat.at().archivePlace(*this));
-	    return;
-	}
-    arch_el.push_back(archivat.at().archivePlace(*this));
+    if(startStat())	//Attach allow only to started archive
+    {
+	//> Find already present archivator
+	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
+    	    if(&arch_el[i_l]->archivator() == &archivat.at())
+		return;
+	//> Find position
+	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
+    	    if(archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod())
+	    {
+		arch_el.insert(arch_el.begin()+i_l,archivat.at().archivePlace(*this));
+		return;
+	    }
+	arch_el.push_back(archivat.at().archivePlace(*this));
+    }
 
     if(!TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
     {
