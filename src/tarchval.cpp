@@ -1102,7 +1102,7 @@ void TVArchive::stop( bool full_del )
     vector<string> arch_ls;
     archivatorList(arch_ls);
     for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++)
-	archivatorDetach(arch_ls[i_l],full_del);
+	archivatorDetach(arch_ls[i_l],full_del,false);
 
     setSrcMode();
 }
@@ -1309,7 +1309,7 @@ void TVArchive::archivatorAttach( const string &arch )
     }
 }
 
-void TVArchive::archivatorDetach( const string &arch, bool full )
+void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
 {
     ResAlloc res(aRes,true);
 
@@ -1323,7 +1323,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full )
 	    arch_el.erase(arch_el.begin()+i_l);
 	} else i_l++;
 
-    if(TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
+    if(toModify && TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
     {
 	string als;
 	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)

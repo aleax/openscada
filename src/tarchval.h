@@ -228,7 +228,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	void archivatorList( vector<string> &ls );
 	bool archivatorPresent( const string &arch );
 	void archivatorAttach( const string &arch );
-	void archivatorDetach( const string &arch, bool full = false );
+	void archivatorDetach( const string &arch, bool full = false, bool toModify = true );
 	void archivatorSort( );
 
 	string makeTrendImg( int64_t beg, int64_t end, const string &arch, int hsz = 650, int vsz = 230, double valmax = 0, double valmin = 0 );
@@ -285,7 +285,7 @@ class TTipArchivator;
 class TVArchivator : public TCntrNode, public TConfig
 {
     friend void TVArchive::archivatorAttach( const string &arch );
-    friend void TVArchive::archivatorDetach( const string &arch, bool full = false );
+    friend void TVArchive::archivatorDetach( const string &arch, bool full = false, bool toModify = true );
 
     public:
 	//Public methods

@@ -1,3 +1,7 @@
+2012-07-20 Roman
+- FIX:Archive: No clear used archivators list on archive's object stop is fixed.
+
+
 2012-07-19 Roman
 - DB.MySQL: Some fields type processing is added and changed for getting table structure function.
 - !:FIX:DAQ: Value into Object's type set to string is fixed by recursion prevent.
