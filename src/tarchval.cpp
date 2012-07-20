@@ -1094,15 +1094,13 @@ void TVArchive::start( )
 
 void TVArchive::stop( bool full_del )
 {
-    if(!runSt)	return;
-
     runSt = false;
 
     //> Detach all archivators
     vector<string> arch_ls;
     archivatorList(arch_ls);
     for(unsigned i_l = 0; i_l < arch_ls.size(); i_l++)
-	archivatorDetach(arch_ls[i_l],full_del);
+	archivatorDetach(arch_ls[i_l],full_del,false);
 
     setSrcMode();
 }
@@ -1287,18 +1285,21 @@ void TVArchive::archivatorAttach( const string &arch )
     if(!archivat.at().startStat())
 	throw TError(nodePath().c_str(),_("Archivator '%s' error or it is not started."),arch.c_str());
 
-    //> Find already present archivator
-    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-        if(&arch_el[i_l]->archivator() == &archivat.at())
-	    return;
-    //> Find position
-    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-        if(archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod())
-	{
-	    arch_el.insert(arch_el.begin()+i_l,archivat.at().archivePlace(*this));
-	    return;
-	}
-    arch_el.push_back(archivat.at().archivePlace(*this));
+    if(startStat())	//Attach allow only to started archive
+    {
+	//> Find already present archivator
+	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
+    	    if(&arch_el[i_l]->archivator() == &archivat.at())
+		return;
+	//> Find position
+	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
+    	    if(archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod())
+	    {
+		arch_el.insert(arch_el.begin()+i_l,archivat.at().archivePlace(*this));
+		return;
+	    }
+	arch_el.push_back(archivat.at().archivePlace(*this));
+    }
 
     if(!TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
     {
@@ -1309,7 +1310,7 @@ void TVArchive::archivatorAttach( const string &arch )
     }
 }
 
-void TVArchive::archivatorDetach( const string &arch, bool full )
+void TVArchive::archivatorDetach( const string &arch, bool full, bool toModify )
 {
     ResAlloc res(aRes,true);
 
@@ -1323,7 +1324,7 @@ void TVArchive::archivatorDetach( const string &arch, bool full )
 	    arch_el.erase(arch_el.begin()+i_l);
 	} else i_l++;
 
-    if(TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
+    if(toModify && TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
     {
 	string als;
 	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
