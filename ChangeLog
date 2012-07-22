@@ -1,3 +1,9 @@
+2012-07-22 Roman
+- FIX:XMLNode: Digits using for attributes name set.
+- DAQ.System: DA.SmartHDD is updated for miss utility "smartctl" warnings prevent.
+- FIX:UI.WebCfgD: Editable combobox fixed for drop-down list and size is expanded to 50 symbols.
+
+
 2012-07-20 Roman
 - !!:FIX:Archive: No clear used archivators list on archive's object stop is fixed.
     Force archive detach from archivators at it remove for left and next crash prevent.

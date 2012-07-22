@@ -34,7 +34,7 @@
 
 using namespace SystemCntr;
 
-const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 /dev/";
+const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 %s 2> /dev/null";
 
 //*************************************************
 //* HddSmart                                      *
@@ -82,7 +82,7 @@ void HddSmart::dList( vector<string> &list, bool part )
 	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
 	    continue;
 
-	string cmd = string(smartval_cmd)+name+((major==SCSI_MAJOR)?" -d ata":"");
+	string cmd = TSYS::strMess(smartval_cmd,(string("/dev/")+name+((major==SCSI_MAJOR)?" -d ata":"")).c_str());
 	FILE *fp = popen(cmd.c_str(),"r");
 	if(fp)
 	{
@@ -112,7 +112,7 @@ void HddSmart::getVal( TMdPrm *prm )
     string dev = prm->cfg("SUBT").getS();
 
     //> SMART attributes
-    string cmd = string(smartval_cmd)+dev+((dev.size()&&dev[0]=='s')?" -d ata":"");
+    string cmd = TSYS::strMess(smartval_cmd,("/dev/"+dev+((dev.size()&&dev[0]=='s')?" -d ata":"")).c_str());
     FILE *fp = popen(cmd.c_str(),"r");
     while(fp && fgets(buf,sizeof(buf),fp) != NULL)
     {
