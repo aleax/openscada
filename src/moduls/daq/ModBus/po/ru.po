@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 16:15+0200\n"
+"POT-Creation-Date: 2012-07-22 19:31+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -45,6 +45,9 @@ msgstr "Объединять фрагменты данных"
 
 msgid "Use multi-items write functions (15,16)"
 msgstr "Использовать функции записи нескольких элементов (15,16)"
+
+msgid "Asynchronous write"
+msgstr "Асинхронная запись"
 
 msgid "Connection timeout (ms)"
 msgstr "Время ожидания соединения (мс)"
