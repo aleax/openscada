@@ -1,7 +1,7 @@
 
-//OpenSCADA system file: ttiparam.h
+//OpenSCADA system module DAQ.ICP_DAS file: da_87x.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2012 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,41 +19,38 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef DA_87X_H
+#define DA_87X_H
 
-#ifndef TTIPARAM_H
-#define TTIPARAM_H
+#include "da.h"
 
-#include <string>
-#include <vector>
-
-#include "tconfig.h"
-
-using std::string;
-using std::vector;
-
-namespace OSCADA
+namespace ICP_DAS_DAQ
 {
 
 //*************************************************
-//* TTipParam                                     *
+//* da_87x                                         *
 //*************************************************
-class TParamContr;
-
-class TTipParam : public TElem
+class da_87x: public DA
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb ) :
-	    name(iid), descr(iname), db(idb)	{ };
+	da_87x( );
+	~da_87x( );
 
-	virtual void cntrCmdProc( TParamContr *prm, XMLNode *opt )	{ }
+	string id( )	{ return "87x"; }
+	string name( )	{ return _("I-8700, I-7000 serial bus"); }
 
-	//Attributes
-	string name;
-	string descr;
-	string db;
+	void tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl = NULL );
+
+	void enable( TMdPrm *prm, vector<string> &als );
+	void disable( TMdPrm *prm );
+
+	void getVal( TMdPrm *prm );
+	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
+
+	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
 };
 
-}
+} //End namespace
 
-#endif // TTIPARAM_H
+#endif //DA_87X_H

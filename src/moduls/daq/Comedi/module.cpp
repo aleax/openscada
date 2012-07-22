@@ -21,6 +21,7 @@
 
 #include <getopt.h>
 #include <unistd.h>
+#include <dirent.h>
 
 #include <terror.h>
 #include <tsys.h>
@@ -129,8 +130,8 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
-    fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100"));
-    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    //fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100"));
+    //fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -146,8 +147,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem), prc_st(false), endrun_req(false), tm_gath(0),
-	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
+	::TController(name_c,daq_db,cfgelem)//, prc_st(false), endrun_req(false), tm_gath(0),
+//	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
 {
     cfg("PRM_BD").setS("ComediPrm_"+name_c);
 }
@@ -160,7 +161,7 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
-    if(startStat() && !redntUse()) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
+    //if(startStat() && !redntUse()) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
     return rez;
 }
 
@@ -172,16 +173,16 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 void TMdContr::start_( )
 {
     //> Start the gathering data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
+    //if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    //if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
-void TMdContr::prmEn( const string &id, bool val )
+/*void TMdContr::prmEn( const string &id, bool val )
 {
     int i_prm;
 
@@ -222,7 +223,7 @@ void *TMdContr::Task( void *icntr )
     cntr.prc_st = false;
 
     return NULL;
-}
+}*/
 
 //*************************************************
 //* TMdPrm                                        *
@@ -244,6 +245,72 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
+void TMdPrm::vlGet( TVal &val )
+{
+    if(!enableStat() || !owner().startStat())
+    {
+        if(val.name() == "err")
+        {
+            if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
+            else if(!owner().startStat()) val.setS(_("2:Acquisition is stopped."),0,true);
+        }
+        else val.setS(EVAL_STR,0,true);
+        return;
+    }
+
+    if(owner().redntUse()) return;
+
+    if(val.name() == "err")
+    {
+        /*if(acq_err.getVal().size()) val.setS(acq_err.getVal(),0,true);
+        else if(lCtx && lCtx->id_err >= 0) val.setS(lCtx->getS(lCtx->id_err),0,true);
+        else*/ val.setS("0",0,true);
+    }
+    else if(val.name() == "info")
+	val.setS(TSYS::strMess("%s (%s) 0x%06x",comedi_get_driver_name(devH),comedi_get_board_name(devH),comedi_get_version_code(devH)),0,true);
+    else if(val.name().compare(0,2,"ai") == 0)
+    {
+	lsampl_t data;
+	int rez = comedi_data_read(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), 0, 0, &data);
+	val.setR((rez == -1) ? EVAL_REAL : data, 0, true);
+    }
+    else if(val.name().compare(0,2,"di") == 0)
+    {
+	unsigned int bit = EVAL_BOOL;
+	comedi_dio_read(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), &bit);
+	val.setB(bit, 0, true);
+    }
+}
+
+void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+{
+    if(!enableStat()) val.setS(EVAL_STR, 0, true);
+
+    TVariant vl = val.get(0,true);
+    if(vl.isEVal() || vl == pvl) return;
+
+    //> Send to active reserve station
+    if(owner().redntUse())
+    {
+        XMLNode req("set");
+        req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(vl.getS());
+        SYS->daq().at().rdStRequest(owner().workId(),req);
+        return;
+    }
+
+    //> Direct write
+    if(val.name().compare(0,2,"ao") == 0)
+    {
+	int rez = comedi_data_write(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), 0, 0, vmax(0,vl.getI()));
+	if(rez == -1) val.setR(EVAL_REAL, 0, true);
+    }
+    else if(val.name().compare(0,2,"do") == 0)
+    {
+	int rez = comedi_dio_write(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), vl.getB());
+	if(rez == -1) val.setB(EVAL_BOOL, 0, true);
+    }
+}
+
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable()
@@ -255,14 +322,71 @@ void TMdPrm::enable()
     devH = comedi_open(cfg("ADDR").getS().c_str());
     if(!devH)	throw TError(nodePath().c_str(), "%s", comedi_strerror(comedi_errno()));
 
-    owner().prmEn(id(), true);
+    vector<string> als;
+    p_el.fldAdd(new TFld("info",_("Information"),TFld::String,TFld::NoWrite|TVal::DirRead));
+    als.push_back("info");
+    int nSubDev = comedi_get_n_subdevices(devH);
+    for(int i_sd = 0; i_sd < nSubDev; i_sd++)
+	switch(comedi_get_subdevice_type(devH, i_sd))
+	{
+	    case COMEDI_SUBD_AI:
+		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
+		{
+		    p_el.fldAdd(new TFld(TSYS::strMess("ai%d",i_n).c_str(),TSYS::strMess(_("Analog input %d"),i_n).c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead,"","","","",TSYS::int2str(i_sd).c_str()));
+		    als.push_back(TSYS::strMess("ai%d",i_n));
+		}
+		break;
+	    case COMEDI_SUBD_AO:
+		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
+		{
+		    p_el.fldAdd(new TFld(TSYS::strMess("ao%d",i_n).c_str(),TSYS::strMess(_("Analog output %d"),i_n).c_str(),TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(i_sd).c_str()));
+		    als.push_back(TSYS::strMess("ao%d",i_n));
+		}
+		break;
+	    case COMEDI_SUBD_DI:
+		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
+		{
+		    p_el.fldAdd(new TFld(TSYS::strMess("di%d",i_n).c_str(),TSYS::strMess(_("Digital input %d"),i_n).c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",TSYS::int2str(i_sd).c_str()));
+		    als.push_back(TSYS::strMess("di%d",i_n));
+		}
+		break;
+	    case COMEDI_SUBD_DO:
+		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
+		{
+		    p_el.fldAdd(new TFld(TSYS::strMess("do%d",i_n).c_str(),TSYS::strMess(_("Digital output %d"),i_n).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(i_sd).c_str()));
+		    als.push_back(TSYS::strMess("do%d",i_n));
+		}
+		break;
+	    case COMEDI_SUBD_DIO:
+		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
+		{
+		    p_el.fldAdd(new TFld(TSYS::strMess("dio%d",i_n).c_str(),TSYS::strMess(_("Digital input-output %d"),i_n).c_str(),TFld::Boolean,TVal::DirRead|TVal::DirWrite,"","","","",TSYS::int2str(i_sd).c_str()));
+		    als.push_back(TSYS::strMess("dio%d",i_n));
+		}
+		break;
+	    default: continue;
+	}
+
+    //> Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
+    {
+        unsigned i_l;
+        for(i_l = 0; i_l < als.size(); i_l++)
+            if(p_el.fldAt(i_p).name() == als[i_l])
+                break;
+        if(i_l >= als.size())
+            try{ p_el.fldDel(i_p); i_p--; }
+            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+    }
+
+    //owner().prmEn(id(), true);
 }
 
 void TMdPrm::disable()
 {
     if(!enableStat()) return;
 
-    owner().prmEn(id(), false);
+    //owner().prmEn(id(), false);
 
     TParamContr::disable();
 
@@ -295,15 +419,29 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	    2,"dest","sel_ed","select","/prm/cfg/devLst");
 	return;
     }
 
     //> Process command to page
-    if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+    if(a_path == "/prm/cfg/ADDR" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && enableStat())
+	throw TError(nodePath().c_str(),"Parameter is enabled.");
+    else if(a_path == "/prm/cfg/devLst" && ctrChkNode(opt))
     {
-	if(enableStat())	throw TError(nodePath().c_str(),"Parameter is enabled.");
-//	parseOIDList(opt->text());
+	DIR *IdDir = opendir("/dev");
+	if(IdDir)
+	{
+	    dirent *scan_dirent;
+	    while((scan_dirent=readdir(IdDir)) != NULL)
+	    {
+		string nFile = string("/dev/")+scan_dirent->d_name;
+		if(!strcmp("..",scan_dirent->d_name) || !strcmp(".",scan_dirent->d_name) ||
+		    strncmp("comedi",scan_dirent->d_name,6) || access(nFile.c_str(),F_OK|R_OK) != 0) continue;
+		opt->childAdd("el")->setText(nFile);
+	    }
+	    closedir(IdDir);
+	}
     }
     else TParamContr::cntrCmdProc(opt);
 }
@@ -313,8 +451,8 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(TVArchive::PassiveAttr);
-    val.arch().at().setPeriod((int64_t)(owner().period()*1000000));
+    val.arch().at().setSrcMode(TVArchive::ActiveAttr);
+    val.arch().at().setPeriod(1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
 }

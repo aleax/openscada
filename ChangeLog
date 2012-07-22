@@ -1,3 +1,14 @@
+2012-07-22 Roman
+- FIX:XMLNode: Digits using for attributes name set.
+- DAQ: Type parameters using as specific container is added at first, by inherit allow by new function TTipDAQ::tpParmAdd().
+- !:DAQ.Comedi: First realization for simple pool AI, AO, DI, DO and DIO, without configuring yet is added.
+- !!:DAQ.ICP_DAS: The module is separated to three parts "LP_8x" (LP-8000, I-8000 parallel bus), "87x" (I-8700, I-7000 serial bus) and
+    "ISA" (ISA DAQ boards) for further unification and expanding different parts.
+    Simple ISA DIO is expanded for support boards: "DIO-48", "DIO-96" and "DIO-144" (tested).
+- DAQ.System: DA.SmartHDD is updated for miss utility "smartctl" warnings prevent.
+- FIX:UI.WebCfgD: Editable combobox fixed for drop-down list and size is expanded to 50 symbols.
+
+
 2012-07-20 Roman
 - !!:FIX:Archive: No clear used archivators list on archive's object stop is fixed.
     Force archive detach from archivators at it remove for left and next crash prevent.

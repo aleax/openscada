@@ -1,7 +1,7 @@
 
-//OpenSCADA system file: ttiparam.h
+//OpenSCADA system module DAQ.ICP_DAS file: da.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2012 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,41 +19,40 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef DA_H
+#define DA_H
 
-#ifndef TTIPARAM_H
-#define TTIPARAM_H
+using namespace OSCADA;
 
-#include <string>
-#include <vector>
-
-#include "tconfig.h"
-
-using std::string;
-using std::vector;
-
-namespace OSCADA
+namespace ICP_DAS_DAQ
 {
 
 //*************************************************
-//* TTipParam                                     *
+//* DA                                            *
 //*************************************************
-class TParamContr;
+class TMdPrm;
 
-class TTipParam : public TElem
+class DA
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb ) :
-	    name(iid), descr(iname), db(idb)	{ };
+	DA( )			{ }
+	virtual ~DA( )		{ }
 
-	virtual void cntrCmdProc( TParamContr *prm, XMLNode *opt )	{ }
+	virtual string id( ) = 0;
+	virtual string name( ) = 0;
 
-	//Attributes
-	string name;
-	string descr;
-	string db;
+	virtual void tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl = NULL ) = 0;
+
+	virtual void enable( TMdPrm *prm, vector<string> &als ) { }
+	virtual void disable( TMdPrm *prm )			{ }
+
+	virtual void getVal( TMdPrm *prm )			{ }
+	virtual void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl )	{ }
+
+	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ }
 };
 
-}
+} //End namespace
 
-#endif // TTIPARAM_H
+#endif //DA_H

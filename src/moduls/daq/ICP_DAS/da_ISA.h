@@ -1,7 +1,7 @@
 
-//OpenSCADA system file: ttiparam.h
+//OpenSCADA system module DAQ.ICP_DAS file: da_ISA.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2012 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,41 +19,66 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#ifndef DA_ISA_H
+#define DA_ISA_H
 
-#ifndef TTIPARAM_H
-#define TTIPARAM_H
+#include <map>
 
-#include <string>
-#include <vector>
+#include "da.h"
 
-#include "tconfig.h"
+using std::map;
 
-using std::string;
-using std::vector;
-
-namespace OSCADA
+namespace ICP_DAS_DAQ
 {
 
 //*************************************************
-//* TTipParam                                     *
+//* da_ISA                                         *
 //*************************************************
-class TParamContr;
-
-class TTipParam : public TElem
+class da_ISA: public DA
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb ) :
-	    name(iid), descr(iname), db(idb)	{ };
+	da_ISA( );
+	~da_ISA( );
 
-	virtual void cntrCmdProc( TParamContr *prm, XMLNode *opt )	{ }
+	string id( )	{ return "ISA"; }
+	string name( )	{ return _("ISA DAQ boards"); }
+	string modType( const string &modTp );      //Module type, include dynamic ISA and other processing
+
+	void tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl = NULL );
+
+	void enable( TMdPrm *prm, vector<string> &als );
+	void disable( TMdPrm *prm );
+
+	void getVal( TMdPrm *prm );
+	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
+
+	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
+
+    private:
+        //Data
+        class DevFeature
+        {
+	    public:
+		DevFeature( unsigned iDIO ) : dio(iDIO)	{ }
+		DevFeature( ) : dio(0)	{ }
+
+		unsigned dio;	//[cnls][prts]	0x0603
+        };
+
+        class tval
+        {
+            public:
+                tval( ) : devFd(-1)	{ }
+
+		int	devFd;
+		DevFeature dev;
+        };
 
 	//Attributes
-	string name;
-	string descr;
-	string db;
+	map<string, DevFeature>	devs;
 };
 
-}
+} //End namespace
 
-#endif // TTIPARAM_H
+#endif //DA_ISA_H

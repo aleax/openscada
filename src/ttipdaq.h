@@ -64,6 +64,7 @@ class TTipDAQ : public TModule, public TElem
 	bool tpPrmPresent( const string &name_t );
 	int tpPrmToId( const string &name_t );
 	int tpParmAdd( const char *id, const char *n_db, const char *name );
+	int tpParmAdd( TTipParam *tp );
 	unsigned tpPrmSize( )			{ return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id );
 

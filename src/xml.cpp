@@ -470,7 +470,7 @@ bool XMLNode::parseAttr( LoadCtx &ctx, unsigned &pos, char sep )
     //> Get attribute name
     //>> Pass spaces
     while(isspace(ctx.vl[pos])) pos++;
-    if(!isalpha(ctx.vl[pos])) return false;
+    if(!isalpha(ctx.vl[pos]) && !isxdigit(ctx.vl[pos])) return false;
 
     unsigned bpos = pos;
     for( ; !isspace(ctx.vl[pos]) && ctx.vl[pos] != '='; pos++)

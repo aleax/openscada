@@ -121,16 +121,20 @@ bool TTipDAQ::tpPrmPresent( const string &name_t )
 
 int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 {
-    if( tpPrmPresent(id) )	return tpPrmToId(id);
+    return tpParmAdd(new TTipParam(id,name,n_db));
+}
 
-    //> Add type
+int TTipDAQ::tpParmAdd( TTipParam *tp )
+{
+    if(tpPrmPresent(tp->name)) { delete tp; return tpPrmToId(tp->name); }
+
     int i_t = paramt.size();
-    paramt.push_back( new TTipParam(id,name,n_db) );
+    paramt.push_back(tp);
     //> Add structure fields
-    paramt[i_t]->fldAdd( new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    paramt[i_t]->fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    paramt[i_t]->fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200") );
-    paramt[i_t]->fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0") );
+    paramt[i_t]->fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    paramt[i_t]->fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    paramt[i_t]->fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
+    paramt[i_t]->fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 
     return i_t;
 }

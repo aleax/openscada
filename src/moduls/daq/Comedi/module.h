@@ -69,6 +69,8 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
+	void vlGet( TVal &val );
+        void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	//Attributes
@@ -90,14 +92,14 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double	period( )	{ return vmax(m_per,0.1); }
-	int	prior( )	{ return m_prior; }
+	//double	period( )	{ return vmax(m_per,0.1); }
+	//int	prior( )	{ return m_prior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
 	//Methods
-	void prmEn( const string &id, bool val );
+	//void prmEn( const string &id, bool val );
 
 	void start_( );
 	void stop_( );
@@ -105,19 +107,19 @@ class TMdContr: public TController
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
-	static void *Task( void *icntr );
+	//static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
-	int	&m_per,		// s
-		&m_prior;	// Process task priority
+	//Res	en_res;		//Resource for enable params
+	//int	&m_per,		// s
+	//	&m_prior;	// Process task priority
 
-	bool	prc_st,		// Process task active
-		endrun_req;	// Request to stop of the Process task
+	//bool	prc_st,		// Process task active
+	//	endrun_req;	// Request to stop of the Process task
 
-	vector< AutoHD<TMdPrm> >  p_hd;
+	//vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tm_gath;	// Gathering time
+	//double	tm_gath;	// Gathering time
 };
 
 //*************************************************
