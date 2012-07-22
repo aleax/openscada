@@ -1,4 +1,5 @@
 2012-07-22 Roman
+- DAQ.ModBus: Asynchronous write mode is realized.
 - FIX:XMLNode: Digits using for attributes name set.
 - DAQ: Type parameters using as specific container is added at first, by inherit allow by new function TTipDAQ::tpParmAdd().
 - !:DAQ.Comedi: First realization for simple pool AI, AO, DI, DO and DIO, without configuring yet is added.

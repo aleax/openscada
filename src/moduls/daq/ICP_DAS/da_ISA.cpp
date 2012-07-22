@@ -269,9 +269,9 @@ bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     //> Process command to page
     string a_path = opt->attr("path");
     //> Typical DIO, like "DIO-144" process
-    if((dev=devs[modType(p->modTp.getS())]).dio && a_path.compare(0,12,"/cfg/portOut") == 0)
+    if((dev=devs[modType(p->modTp.getS())]).dio && a_path.compare(0,11,"/cfg/chnOut") == 0)
     {
-        int rout = atoi(a_path.c_str()+12);
+        int rout = atoi(a_path.c_str()+11);
         if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(atoi(p->modPrm("DirectDIO").c_str())&(1<<rout)?"1":"0");
         if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
             p->setModPrm("DirectDIO",TSYS::int2str(atoi(opt->text().c_str()) ? atoi(p->modPrm("DirectDIO").c_str()) | (1<<rout) :

@@ -162,7 +162,7 @@ class TMdContr: public TController
 	TVariant getVal( const string &addr, ResString &err );		//Unified value request from string address
 	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
 	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
-	bool setVal( const TVariant &val, const string &addr, ResString &err );	//Unified value set by string address
+	bool setVal( const TVariant &val, const string &addr, ResString &err, bool chkAssync = false );	//Unified value set by string address
 	bool setValR( int val, int addr, ResString &err );		//Set register value
 	bool setValRs( const map<int,int> &regs, ResString &err );	//Set multiply registers
 	bool setValC( char val, int addr, ResString &err );		//Set coins value
@@ -199,7 +199,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	Res     req_res, en_res;
+	Res     req_res, en_res, asWr_res;
 	int	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
@@ -207,7 +207,8 @@ class TMdContr: public TController
                 &mPrt,                          //Protocol
                 &mAddr;                         //Transport device address
 	char	&mMerge,			//Fragments of register merge
-		&mMltWr;			//Use multi-write functions(15,16)
+		&mMltWr,			//Use multi-write functions(15,16)
+		&mAsynchWr;			//Asynchronous write
 	int	&reqTm,				//Request timeout in ms
 		&restTm,			//Restore timeout in s
 		&connTry;			//Connections try
@@ -221,6 +222,7 @@ class TMdContr: public TController
 	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers
 	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils
 	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
+	map<string,string>	asynchWrs;	//Asynchronous writers list
 
 	double	tmGath;				//Gathering time
 	float	tmDelay;			//Delay time for next try connect

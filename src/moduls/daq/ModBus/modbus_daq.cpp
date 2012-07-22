@@ -73,6 +73,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("NODE",_("Destination node"),TFld::Integer,TFld::NoFlag,"20","1","0;255"));
     fldAdd(new TFld("FRAG_MERGE",_("Data fragments merge"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("WR_MULTI",_("Use multi-items write functions (15,16)"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("WR_ASYNCH",_("Asynchronous write"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("TM_REQ",_("Connection timeout (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;3600"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
@@ -114,8 +115,8 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mNode(cfg("NODE").getId()), blkMaxSz(cfg("MAX_BLKSZ").getId()),
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
-	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), reqTm(cfg("TM_REQ").getId()),
-	restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
+	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
+	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
 	prc_st(false), call_st(false), endrun_req(false), isReload(false),
 	tmGath(0), tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
@@ -414,13 +415,15 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
     return rez;
 }
 
-bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err )
+bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err, bool chkAssync )
 {
     if(tmDelay > 0)
     {
 	if(w_err.getVal().empty()) w_err.setVal(_("10:Connection error or no response."));
 	return false;
     }
+
+    if(chkAssync && mAsynchWr) { ResAlloc resAsWr(asWr_res, true); asynchWrs[addr] = val.getS(); return true; }
 
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
@@ -668,6 +671,19 @@ void *TMdContr::Task( void *icntr )
 
 	    cntr.call_st = true;
 	    t_cnt = TSYS::curTime();
+
+	    //> Write asynchronous writings queue
+	    ResAlloc resAsWr(cntr.asWr_res,false);
+	    map<string,string> aWrs = cntr.asynchWrs;
+	    cntr.asynchWrs.clear();
+	    resAsWr.release();
+	    ResString asWrErr;
+	    for(map<string,string>::iterator iw = aWrs.begin(); iw != aWrs.end(); ++iw)
+	    {
+		if(asWrErr.size() && cntr.asynchWrs.find(iw->first) == cntr.asynchWrs.end()) cntr.asynchWrs[iw->first] = iw->second;
+		if(!asWrErr.size() && !cntr.setVal(iw->second, iw->first, asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.request(true); }
+	    }
+	    resAsWr.release();
 
 #if OSC_DEBUG >= 3
 	    mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
@@ -1305,14 +1321,14 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     //> Direct write
     bool wrRez = false;
     //>> Standard type request
-    if(isStd())	wrRez = owner().setVal(vl,valo.fld().reserve(),acq_err);
+    if(isStd())	wrRez = owner().setVal(vl, valo.fld().reserve(), acq_err, true);
     //>> Logical type request
     else if(isLogic())
     {
 	int id_lnk = lCtx->lnkId(valo.name());
         if(id_lnk >= 0 && lCtx->lnk(id_lnk).real.empty()) id_lnk = -1;
     	if(id_lnk < 0) { lCtx->set(lCtx->ioId(valo.name()), vl); wrRez = true; }
-        else wrRez = owner().setVal(vl, lCtx->lnk(id_lnk).real, acq_err);
+        else wrRez = owner().setVal(vl, lCtx->lnk(id_lnk).real, acq_err, true);
     }
     if(!wrRez) valo.setS(EVAL_STR, 0, true);
 }
