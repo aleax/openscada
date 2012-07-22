@@ -1,4 +1,5 @@
 2012-07-22 Roman
+- DAQ.ModBus: Asynchronous write mode is realized.
 - FIX:XMLNode: Digits using for attributes name set.
 - DAQ.System: DA.SmartHDD is updated for miss utility "smartctl" warnings prevent.
 - FIX:UI.WebCfgD: Editable combobox fixed for drop-down list and size is expanded to 50 symbols.
