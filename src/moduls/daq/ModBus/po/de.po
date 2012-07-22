@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-19 16:15+0200\n"
+"POT-Creation-Date: 2012-07-22 19:31+0300\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -50,6 +50,9 @@ msgstr "Datenfragmente zusammenfügen"
 
 msgid "Use multi-items write functions (15,16)"
 msgstr "Verwenden Sie Multi-Artikel schreiben Funktionen (15,16)"
+
+msgid "Asynchronous write"
+msgstr "Asynchronous Rekord"
 
 msgid "Connection timeout (ms)"
 msgstr "Zeitüberschreitung beim Verbinden (msek)"
