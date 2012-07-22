@@ -1670,7 +1670,7 @@ function basicFields( t_s, aPath, cBlk, wr, comm )
 	  var tp = t_s.getAttribute('tp');
 	  if( t_s.getAttribute('dest') == 'sel_ed' )
 	  {
-	    val_w.childNodes[0].size = 20;
+	    val_w.childNodes[0].size = 50;
 	    var cmbImg = document.createElement('img'); cmbImg.src = '/'+MOD_ID+'/img_combar';
 	    cmbImg.onclick = function( )
 	    {
@@ -1972,7 +1972,7 @@ function getPopup( )
 function getCombo( )
 {
   var comboMenu = document.getElementById('combomenu');
-  if( !comboMenu )
+  if(!comboMenu)
   {
     comboMenu = document.createElement('div'); comboMenu.id = 'combomenu';
     comboMenu.appendChild(document.createElement('select'));
