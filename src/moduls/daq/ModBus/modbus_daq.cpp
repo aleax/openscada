@@ -201,6 +201,11 @@ void TMdContr::start_( )
     tmDelay = -1;
 
     //> Reenable parameters for data blocks structure update
+    //>> Asynchronous writings queue clear
+    ResAlloc resAsWr(asWr_res,true);
+    asynchWrs.clear();
+    resAsWr.release();
+
     //>> Clear data blocks
     acqBlks.clear();
     acqBlksIn.clear();
@@ -673,7 +678,7 @@ void *TMdContr::Task( void *icntr )
 	    t_cnt = TSYS::curTime();
 
 	    //> Write asynchronous writings queue
-	    ResAlloc resAsWr(cntr.asWr_res,false);
+	    ResAlloc resAsWr(cntr.asWr_res,true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
 	    resAsWr.release();
