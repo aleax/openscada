@@ -1,3 +1,7 @@
+2012-07-23 Roman
+- DAQ.ModBus: Asynchronous writings queue clear at start is added. Resource alloc at clear is fixed.
+
+
 2012-07-22 Roman
 - DAQ.ModBus: Asynchronous write mode is realized.
 - FIX:XMLNode: Digits using for attributes name set.
