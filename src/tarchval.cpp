@@ -1403,7 +1403,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     int64_t h_div = 1;
     int64_t h_min = ibeg;
     int64_t h_max = iend;
-    int hmax_ln = vsz/(mrkHeight?mrkHeight:10);
+    int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15.0);
     if( hmax_ln >= 2 )
     {
 	int hvLev = 0;
@@ -1481,7 +1481,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		if( hvLev == 5 || chLev >= 4 )
 		    lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
 		//Hours and minuts
-		if( (hvLev == 4 || hvLev == 3 || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		//Seconds
 		else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
 		    lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);

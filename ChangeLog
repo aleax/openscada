@@ -1,3 +1,7 @@
+2012-07-24 Roman
+- FIX:Archive: Trend's build function is some fixed for horizontal scale calculation.
+
+
 2012-07-23 Roman
 - DAQ.ModBus: Asynchronous writings queue clear at start is added. Resource alloc at clear is fixed.
 
