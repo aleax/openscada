@@ -928,7 +928,7 @@ void XMLNodeObj::childDel( unsigned id )
 {
     if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Deletion child '%d' error."),id);
     oRes.resRequestW();
-    if(&mChilds[id].at().parent.at() == this) mChilds[id].at().parent = NULL;
+    if(mChilds[id].at().parent == this) mChilds[id].at().parent = NULL;
     mChilds.erase(mChilds.begin()+id);
     oRes.resRelease();
 }
@@ -1034,7 +1034,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //  id - child node position
     if(id == "childGet" && prms.size())	return AutoHD<TVarObj>(childGet(prms[0].getI()));
     // XMLNodeObj parent() - get parent node
-    if(id == "parent")	return parent.freeStat() ? TVariant(false) : TVariant(parent);
+    if(id == "parent")	return !parent ? TVariant(false) : TVariant(parent);
     // string load(string str, bool file = false, bool full = false, string cp = "UTF-8") - load XML tree from XML-stream from string or file
     //  str - source stream string or file name, for <file> = true;
     //  file - load XML-tree from file (true) or stram (false);
