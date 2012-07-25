@@ -271,9 +271,9 @@ class XMLNodeObj : public TVarObj
 
     private:
 	//Attributes
-	string			mName, mText;
+	string		mName, mText;
 	vector<AutoHD<XMLNodeObj> >	mChilds;
-	AutoHD<XMLNodeObj>	parent;
+	XMLNodeObj	*parent;
 };
 
 //***********************************************************
