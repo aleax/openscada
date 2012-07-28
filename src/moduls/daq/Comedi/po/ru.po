@@ -1,0 +1,75 @@
+# OpenSCADA.DAQ.Comedi translate to Russian.
+# Copyright (C) 2012 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.Comedi package module.
+#
+# Roman Savochenko <rom_as@fromru.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-27 22:43+0300\n"
+"PO-Revision-Date: 2012-07-27 22:21+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <ru@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "DAQ boards by Comedi"
+msgstr "DAQ платы от Comedi"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org)."
+msgstr ""
+"Коллекция ISA, PCI, PCMCIA, USB DAQ плат от Comedi(http://www.comedi.org)."
+
+msgid "Parameteres table"
+msgstr "Таблица параметров"
+
+msgid "Standard"
+msgstr "Стандарт"
+
+msgid "Board's device address"
+msgstr "Адрес устройства платы"
+
+msgid "Addition parameters"
+msgstr "Дополнительные параметры"
+
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр отключен."
+
+msgid "2:Acquisition is stopped."
+msgstr "2:Опрос остановлен."
+
+msgid "Information"
+msgstr "Информация"
+
+msgid "Analog input %d"
+msgstr "Аналоговый вход %d"
+
+#, c-format
+msgid "Analog output %d"
+msgstr "Аналоговый выход %d"
+
+#, c-format
+msgid "Digital input %d"
+msgstr "Дискретный вход %d"
+
+#, c-format
+msgid "Digital output %d"
+msgstr "Дискретный выход %d"
+
+#, c-format
+msgid "Digital input-output %d"
+msgstr "Дискретный вход-выход %d"
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#, c-format
+msgid "Channel %d.%d range"
+msgstr "Диапазон канала %d.%d"

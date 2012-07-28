@@ -913,7 +913,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	}
 	if(startStat() && ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID))
 	{
-	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time (ms)"),R_R___,"root",STR_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time"),R_R___,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","dec","dest","select",
 		"sel_id","0;1;2;3","sel_list",_("Binary;Text(LF);Text(CR);Text(CR/LF)"));
 	    ctrMkNode("fld",opt,-1,"/req/toTmOut",_("Wait timeout"),RWRWR_,"root",STR_ID,2,"tp","bool","help",
@@ -1021,23 +1021,20 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		break;
 	}
 
-	if(!req.empty())
+	int64_t stm = TSYS::curTime();
+	char buf[STR_BUF_LEN];
+	ResAlloc resN(nodeRes(), true);
+	int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
+	answ.assign(buf,resp_len);
+
+	bool ToTmOut = (bool)atoi(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")).c_str());
+	while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM)
 	{
-	    int64_t stm = TSYS::curTime( );
-	    char buf[STR_BUF_LEN];
-	    ResAlloc resN( nodeRes(), true );
-	    int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
-	    answ.assign(buf,resp_len);
-
-	    bool ToTmOut = (bool)atoi(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")).c_str());
-	    while(ToTmOut && resp_len > 0)
-	    {
-		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError err) { break; }
-		answ.append(buf,resp_len);
-	    }
-
-	    TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::real2str(1e-3*(TSYS::curTime()-stm)),opt->attr("user"));
+	    try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError err) { break; }
+	    answ.append(buf,resp_len);
 	}
+
+	TBDS::genDBSet(owner().nodePath()+"ReqTm",TSYS::time2str(TSYS::curTime()-stm),opt->attr("user"));
 	TBDS::genDBSet(owner().nodePath()+"ReqAnsw",(mode==0)?TSYS::strDecode(answ,TSYS::Bin):answ,opt->attr("user"));
     }
     else TCntrNode::cntrCmdProc(opt);

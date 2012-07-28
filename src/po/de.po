@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-09 09:40+0300\n"
+"POT-Creation-Date: 2012-07-24 09:39+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1998,9 +1998,6 @@ msgstr "Übertragungsprotokoll ist '%s' nicht vorhanden"
 msgid "Output transport: "
 msgstr "Ausgangsübertragung:"
 
-msgid "Time (ms)"
-msgstr "Zeit (msek.)"
-
 msgid "Binary;Text(LF);Text(CR);Text(CR/LF)"
 msgstr "Binär;Text(LF);Text(CR);Text(CR/LF)"
 
@@ -2216,13 +2213,3 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
-
-#~ msgid "Passive"
-#~ msgstr "Passiv"
-
-#~ msgid "Active param. attribute"
-#~ msgstr "Aktives Attribut des Parameters"
-
-#, fuzzy
-#~ msgid "Connect to '%s' error."
-#~ msgstr "Fehler beim Schliessen der Datenbank '%s'!"

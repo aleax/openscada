@@ -1336,7 +1336,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
 
 	//> Wait for thread structure initialization finish for not detachable tasks
-	while(!(htsk.flgs&STask::Detached) && !htsk.thr) sched_yield();
+	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
 	//> Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); )
 	{

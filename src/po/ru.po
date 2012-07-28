@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-09 09:40+0300\n"
+"POT-Creation-Date: 2012-07-24 09:39+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1983,9 +1983,6 @@ msgstr "Транспортный протокол '%s' отсутствует"
 
 msgid "Output transport: "
 msgstr "Выходной транспорт:"
-
-msgid "Time (ms)"
-msgstr "Время (мс)"
 
 msgid "Binary;Text(LF);Text(CR);Text(CR/LF)"
 msgstr "Бинарный;Текст(LF);Текст(CR);Текст(CR/LF)"

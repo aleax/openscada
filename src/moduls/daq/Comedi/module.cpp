@@ -37,7 +37,7 @@
 #define MOD_NAME	_("DAQ boards by Comedi")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.0"
+#define MOD_VER		"0.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).")
 #define LICENSE		"GPL2"
@@ -84,39 +84,9 @@ TTpContr::~TTpContr()
 
 }
 
-string TTpContr::optDescr( )
-{
-    char buf[STR_BUF_LEN];
-
-    snprintf(buf,sizeof(buf),_(
-	"======================= The module <%s:%s> options =======================\n"
-	"---------- Parameters of the module section '%s' in config-file ----------\n\n"),
-	MOD_TYPE,MOD_ID,nodePath().c_str());
-
-    return buf;
-}
-
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
 
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
 }
 
 void TTpContr::save_( )
@@ -130,12 +100,11 @@ void TTpContr::postEnable( int flag )
 
     //> Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
-    //fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"3","1","0;100"));
-    //fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("ADDR",_("Board's device address)"),TFld::String,TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ADDR",_("Board's device address"),TFld::String,TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("PRMS",_("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -147,8 +116,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem)//, prc_st(false), endrun_req(false), tm_gath(0),
-//	m_per(cfg("PERIOD").getId()), m_prior(cfg("PRIOR").getId())
+	::TController(name_c,daq_db,cfgelem)
 {
     cfg("PRM_BD").setS("ComediPrm_"+name_c);
 }
@@ -160,9 +128,7 @@ TMdContr::~TMdContr( )
 
 string TMdContr::getStatus( )
 {
-    string rez = TController::getStatus( );
-    //if(startStat() && !redntUse()) rez += TSYS::strMess(_("Gather data time %.6g ms. "),tm_gath);
-    return rez;
+    return TController::getStatus( );
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -172,58 +138,13 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::start_( )
 {
-    //> Start the gathering data task
-    //if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
+
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
-    //if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+
 }
-
-/*void TMdContr::prmEn( const string &id, bool val )
-{
-    int i_prm;
-
-    ResAlloc res(en_res,true);
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(p_hd[i_prm].at().id() == id) break;
-
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
-}
-
-void *TMdContr::Task( void *icntr )
-{
-    TMdContr &cntr = *(TMdContr *)icntr;
-
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
-
-    while( !cntr.endrun_req )
-    {
-	int64_t t_cnt = TSYS::curTime();
-
-	//> Update controller's data
-	cntr.en_res.resRequestR( );
-	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
-	    try
-	    {
-		//!!! Process parameter code
-	    }
-	    catch(TError err)
-	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	cntr.en_res.resRelease( );
-	cntr.tm_gath = 1e-3*(TSYS::curTime()-t_cnt);
-
-	TSYS::taskSleep((int64_t)(1e9*cntr.period()));
-    }
-
-    cntr.prc_st = false;
-
-    return NULL;
-}*/
 
 //*************************************************
 //* TMdPrm                                        *
@@ -260,25 +181,26 @@ void TMdPrm::vlGet( TVal &val )
 
     if(owner().redntUse()) return;
 
-    if(val.name() == "err")
+    ResAlloc res(dev_res,true);
+    if(val.name() == "err") val.setS("0",0,true);
+    else
     {
-        /*if(acq_err.getVal().size()) val.setS(acq_err.getVal(),0,true);
-        else if(lCtx && lCtx->id_err >= 0) val.setS(lCtx->getS(lCtx->id_err),0,true);
-        else*/ val.setS("0",0,true);
-    }
-    else if(val.name() == "info")
-	val.setS(TSYS::strMess("%s (%s) 0x%06x",comedi_get_driver_name(devH),comedi_get_board_name(devH),comedi_get_version_code(devH)),0,true);
-    else if(val.name().compare(0,2,"ai") == 0)
-    {
-	lsampl_t data;
-	int rez = comedi_data_read(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), 0, 0, &data);
-	val.setR((rez == -1) ? EVAL_REAL : data, 0, true);
-    }
-    else if(val.name().compare(0,2,"di") == 0)
-    {
-	unsigned int bit = EVAL_BOOL;
-	comedi_dio_read(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), &bit);
-	val.setB(bit, 0, true);
+	int i_sd = atoi(TSYS::strParse(val.fld().reserve(),0,".").c_str()),
+	    i_rng= atoi(TSYS::strParse(val.fld().reserve(),1,".").c_str());
+	if(val.name() == "info")
+	    val.setS(TSYS::strMess("%s (%s) 0x%06x",comedi_get_driver_name(devH),comedi_get_board_name(devH),comedi_get_version_code(devH)),0,true);
+	else if(val.name().compare(0,2,"ai") == 0)
+	{
+	    lsampl_t data;
+	    int rez = comedi_data_read(devH, i_sd, atoi(val.name().c_str()+2), i_rng, 0, &data);
+	    val.setR((rez == -1) ? EVAL_REAL : data, 0, true);
+	}
+	else if(val.name().compare(0,2,"di") == 0)
+	{
+	    unsigned int bit = EVAL_BOOL;
+	    comedi_dio_read(devH, i_sd, atoi(val.name().c_str()+2), &bit);
+	    val.setB(bit, 0, true);
+	}
     }
 }
 
@@ -299,14 +221,17 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     }
 
     //> Direct write
+    ResAlloc res(dev_res,true);
+    int i_sd = atoi(TSYS::strParse(val.fld().reserve(),0,".").c_str()),
+	i_rng= atoi(TSYS::strParse(val.fld().reserve(),1,".").c_str());
     if(val.name().compare(0,2,"ao") == 0)
     {
-	int rez = comedi_data_write(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), 0, 0, vmax(0,vl.getI()));
+	int rez = comedi_data_write(devH, i_sd, atoi(val.name().c_str()+2), i_rng, 0, vmax(0,vl.getI()));
 	if(rez == -1) val.setR(EVAL_REAL, 0, true);
     }
     else if(val.name().compare(0,2,"do") == 0)
     {
-	int rez = comedi_dio_write(devH, atoi(val.fld().reserve().c_str()), atoi(val.name().c_str()+2), vl.getB());
+	int rez = comedi_dio_write(devH, i_sd, atoi(val.name().c_str()+2), vl.getB());
 	if(rez == -1) val.setB(EVAL_BOOL, 0, true);
     }
 }
@@ -319,49 +244,63 @@ void TMdPrm::enable()
 
     TParamContr::enable();
 
+    ResAlloc res(dev_res,true);
     devH = comedi_open(cfg("ADDR").getS().c_str());
     if(!devH)	throw TError(nodePath().c_str(), "%s", comedi_strerror(comedi_errno()));
 
+    string chnId, chnNm;
     vector<string> als;
     p_el.fldAdd(new TFld("info",_("Information"),TFld::String,TFld::NoWrite|TVal::DirRead));
     als.push_back("info");
     int nSubDev = comedi_get_n_subdevices(devH);
+
+    //> Attributes create
     for(int i_sd = 0; i_sd < nSubDev; i_sd++)
 	switch(comedi_get_subdevice_type(devH, i_sd))
 	{
 	    case COMEDI_SUBD_AI:
 		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
 		{
-		    p_el.fldAdd(new TFld(TSYS::strMess("ai%d",i_n).c_str(),TSYS::strMess(_("Analog input %d"),i_n).c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead,"","","","",TSYS::int2str(i_sd).c_str()));
-		    als.push_back(TSYS::strMess("ai%d",i_n));
+		    chnId = TSYS::strMess("ai%d",i_n); chnNm = TSYS::strMess(_("Analog input %d"),i_n);
+		    als.push_back(chnId);
+		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead))).
+			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_AO:
 		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
 		{
-		    p_el.fldAdd(new TFld(TSYS::strMess("ao%d",i_n).c_str(),TSYS::strMess(_("Analog output %d"),i_n).c_str(),TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(i_sd).c_str()));
-		    als.push_back(TSYS::strMess("ao%d",i_n));
+		    chnId = TSYS::strMess("ao%d",i_n); chnNm = TSYS::strMess(_("Analog output %d"),i_n);
+		    als.push_back(chnId);
+		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite))).
+			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_DI:
 		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
 		{
-		    p_el.fldAdd(new TFld(TSYS::strMess("di%d",i_n).c_str(),TSYS::strMess(_("Digital input %d"),i_n).c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"","","","",TSYS::int2str(i_sd).c_str()));
-		    als.push_back(TSYS::strMess("di%d",i_n));
+		    chnId = TSYS::strMess("di%d",i_n); chnNm = TSYS::strMess(_("Digital input %d"),i_n);
+		    als.push_back(chnId);
+		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead))).
+			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_DO:
 		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
 		{
-		    p_el.fldAdd(new TFld(TSYS::strMess("do%d",i_n).c_str(),TSYS::strMess(_("Digital output %d"),i_n).c_str(),TFld::Boolean,TVal::DirWrite,"","","","",TSYS::int2str(i_sd).c_str()));
-		    als.push_back(TSYS::strMess("do%d",i_n));
+		    chnId = TSYS::strMess("do%d",i_n); chnNm = TSYS::strMess(_("Digital output %d"),i_n);
+		    als.push_back(chnId);
+		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite))).
+			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_DIO:
 		for(int i_n = 0; i_n < comedi_get_n_channels(devH,i_sd); i_n++)
 		{
-		    p_el.fldAdd(new TFld(TSYS::strMess("dio%d",i_n).c_str(),TSYS::strMess(_("Digital input-output %d"),i_n).c_str(),TFld::Boolean,TVal::DirRead|TVal::DirWrite,"","","","",TSYS::int2str(i_sd).c_str()));
-		    als.push_back(TSYS::strMess("dio%d",i_n));
+		    chnId = TSYS::strMess("dio%d",i_n); chnNm = TSYS::strMess(_("Digital input-output %d"),i_n);
+		    als.push_back(chnId);
+		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirRead|TVal::DirWrite))).
+			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    default: continue;
@@ -378,15 +317,11 @@ void TMdPrm::enable()
             try{ p_el.fldDel(i_p); i_p--; }
             catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
-
-    //owner().prmEn(id(), true);
 }
 
 void TMdPrm::disable()
 {
     if(!enableStat()) return;
-
-    //owner().prmEn(id(), false);
 
     TParamContr::disable();
 
@@ -396,7 +331,47 @@ void TMdPrm::disable()
     for(int i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 
+    ResAlloc res(dev_res,true);
     if(devH) comedi_close(devH);
+}
+
+string TMdPrm::modPrm( const string &prm )
+{
+    XMLNode prmNd;
+    try
+    {
+        prmNd.load(cfg("PRMS").getS());
+        string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
+        if(!sa.size())  return prmNd.attr(prm);
+        //> Internal node
+        for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
+            if(prmNd.childGet(i_n)->name() == sobj)
+                return prmNd.childGet(i_n)->attr(sa);
+    } catch(...){ }
+
+    return "";
+}
+
+void TMdPrm::setModPrm( const string &prm, const string &val )
+{
+    XMLNode prmNd("ModCfg");
+    try { prmNd.load(cfg("PRMS").getS()); } catch(...){ }
+
+    if(modPrm(prm) != val) modif();
+    string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
+    if(!sa.size()) prmNd.setAttr(prm,val);
+    //> Internal node
+    else
+    {
+        unsigned i_n;
+        for(i_n = 0; i_n < prmNd.childSize(); i_n++)
+            if(prmNd.childGet(i_n)->name() == sobj)
+            { prmNd.childGet(i_n)->setAttr(sa,val); break; }
+        if(i_n >= prmNd.childSize())
+            prmNd.childAdd(sobj)->setAttr(sa,val);
+    }
+
+    cfg("PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 }
 
 void TMdPrm::load_( )
@@ -421,6 +396,34 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    2,"dest","sel_ed","select","/prm/cfg/devLst");
+	ctrRemoveNode(opt,"/prm/cfg/PRMS");
+	//>> Configuration page: ranges
+	ResAlloc res(dev_res,true);
+	if(devH && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+	{
+	    int cfgIts = 0;
+	    for(int iSDev = 0; iSDev < comedi_get_n_subdevices(devH); iSDev++)
+	    {
+		bool rChnSpec = (comedi_range_is_chan_specific(devH,iSDev)==1);
+		int nRanges = rChnSpec ? 0 : comedi_get_n_ranges(devH,iSDev,0);
+		for(int i_cn = 0; i_cn < comedi_get_n_channels(devH,iSDev); i_cn++)
+		{
+		    if(rChnSpec) nRanges = comedi_get_n_ranges(devH,iSDev,i_cn);
+		    if(nRanges <= 1) continue;
+		    string rngIdLs, rngNmLs;
+		    for(int iRng = 0; iRng < nRanges; iRng++)
+		    {
+			rngIdLs += TSYS::int2str(iRng)+";";
+			comedi_range *rng = comedi_get_range(devH, iSDev, (rChnSpec?i_cn:0), iRng);
+			rngNmLs += TSYS::strMess("[%g, %g]",rng->min, rng->max)+";";
+		    }
+		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/chn%d_%d",iSDev,i_cn).c_str(),TSYS::strMess(_("Channel %d.%d range"),iSDev,i_cn).c_str(),
+                	enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","int","sel_id",rngIdLs.c_str(),"sel_list",rngNmLs.c_str());
+		    cfgIts++;
+		}
+	    }
+	    if(!cfgIts) ctrRemoveNode(opt,"/cfg");
+	}
 	return;
     }
 
@@ -442,6 +445,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    }
 	    closedir(IdDir);
 	}
+    }
+    else if(a_path.compare(0,8,"/cfg/chn") == 0)
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm("rng."+a_path.substr(8)));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm("rng."+a_path.substr(8),opt->text());
     }
     else TParamContr::cntrCmdProc(opt);
 }

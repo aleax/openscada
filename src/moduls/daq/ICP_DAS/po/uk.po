@@ -1,20 +1,203 @@
 # OpenSCADA.DAQ.ICP_DAS translate to Ukrainian.
-# Copyright (C) 2009-2010 Roman Savochenko
+# Copyright (C) 2009-2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2009-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2009-2012.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 10:08+0300\n"
+"POT-Creation-Date: 2012-07-27 23:09+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "I-87xxx (generic)"
+msgstr "I-87xxx (загальний)"
+
+msgid "I-7xxx (generic)"
+msgstr "I-7xxx (загальний)"
+
+msgid "Cold-Junction Compensation(CJC) temperature"
+msgstr "Температура компенсації холодних спаїв"
+
+#, c-format
+msgid "Input %d"
+msgstr "Вхід %d"
+
+#, c-format
+msgid "H/A %d"
+msgstr ""
+
+#, c-format
+msgid "L/A %d"
+msgstr ""
+
+#, c-format
+msgid "Out %d"
+msgstr "Вихід %d"
+
+msgid "10:Request to module error."
+msgstr "10:Помилка запиту до модуля."
+
+msgid "11:Respond from module error."
+msgstr "11:Помилка у відповіді модуля."
+
+msgid "Configuration"
+msgstr "Конфігурація"
+
+#, c-format
+msgid "Input %d type"
+msgstr "Тип входу %d"
+
+msgid "Host watchdog timeout (s)"
+msgstr "Час хостового сторожового таймеру (с)"
+
+msgid "Module"
+msgstr "Модуль"
+
+msgid "Host watchdog status"
+msgstr "Стан хостового сторожового таймеру"
+
+msgid "Power on values"
+msgstr "Значення при включені"
+
+msgid "Set power on values from current"
+msgstr "Встановити значення при включені у поточні"
+
+msgid "Safe values"
+msgstr "Безпечні значення"
+
+msgid "Set safe values from current"
+msgstr "Встановити безпечні значення у поточні"
+
+msgid "Out reverse"
+msgstr "Реверс виходу"
+
+msgid "Error"
+msgstr "Помилка"
+
+msgid "-15mV to +15mV"
+msgstr "-15мВ до +15мВ"
+
+msgid "-50mV to +50mV"
+msgstr "-50мВ до +50мВ"
+
+msgid "-100mV to +100mV"
+msgstr "-100мВ до +100мВ"
+
+msgid "-500mV to +500mV"
+msgstr "-500мВ до +500мВ"
+
+msgid "-1V to +1V"
+msgstr "-1В до +1В"
+
+msgid "-2.5V to +2.5V"
+msgstr "-2.5В до +2.5В"
+
+msgid "-20mA to +20mA (with 125 ohms resistor)"
+msgstr "-20мА до +20мА (з резістором 125 Омів)"
+
+msgid "-10V to +10V"
+msgstr "-10В до +10В"
+
+msgid "-5V to +5V"
+msgstr "-5В до +5В"
+
+msgid "-150mV to +150mV"
+msgstr "-150мВ до +150мВ"
+
+msgid "J Type"
+msgstr "J Тип"
+
+msgid "K Type"
+msgstr "K Тип"
+
+msgid "T Type"
+msgstr "T Тип"
+
+msgid "E Type"
+msgstr "E Тип"
+
+msgid "R Type"
+msgstr "R Тип"
+
+msgid "S Type"
+msgstr "S Тип"
+
+msgid "B Type"
+msgstr "B Тип"
+
+msgid "N Type"
+msgstr "N Тип"
+
+msgid "C Type"
+msgstr "C Тип"
+
+msgid "L Type"
+msgstr "L Тип"
+
+msgid "M Type"
+msgstr "M Тип"
+
+msgid "L Type (DIN43710C Type)"
+msgstr "L Тип (DIN43710C Тип)"
+
+msgid "Set. "
+msgstr "Встановлений. "
+
+msgid "Clear. "
+msgstr "Чистий. "
+
+msgid "Enabled, "
+msgstr "Включений, "
+
+msgid "Disabled, "
+msgstr "Виключений, "
+
+msgid " s."
+msgstr " с."
+
+msgid "Out %d.%d"
+msgstr "Вихід %d.%d"
+
+msgid "Input %d.%d"
+msgstr "Вхід %d.%d"
+
+#, c-format
+msgid "Channel %d out"
+msgstr "Канал %d вихід"
+
+msgid "Serial number"
+msgstr "Серійний номер"
+
+msgid "SDK version"
+msgstr "Версія SDK"
+
+msgid "DIP switch"
+msgstr "DIP перемикач"
+
+msgid "Process parameters"
+msgstr "Обробка параметрів"
+
+msgid "Fast data get period (s)"
+msgstr "Період швидкого збору даних (с)"
+
+msgid "Mode"
+msgstr "Режим"
+
+msgid "Inputs reverse"
+msgstr "Реверс входів"
+
+msgid "Outputs reverse"
+msgstr "Реверс виходів"
+
+msgid "-1.25V to +1.25V"
+msgstr "-1.25В до +1.25В"
 
 msgid "ICP DAS hardware"
 msgstr "Обладнання ICP DAS"
@@ -85,42 +268,14 @@ msgstr "Помилка відкриття COM%d порту."
 msgid "Watchdog timeout (s)"
 msgstr "Час сторожового таймеру (с)"
 
+msgid "ISA"
+msgstr ""
+
 msgid " (Master LP-8x81)"
 msgstr " (Головний LP-8x81)"
 
-msgid "Serial number"
-msgstr "Серійний номер"
-
-msgid "SDK version"
-msgstr "Версія SDK"
-
-msgid "DIP switch"
-msgstr "DIP перемикач"
-
-#, c-format
-msgid "Input %d"
-msgstr "Вхід %d"
-
-#, c-format
-msgid "H/A %d"
-msgstr ""
-
-#, c-format
-msgid "L/A %d"
-msgstr ""
-
-#, c-format
-msgid "Out %d"
-msgstr "Вихід %d"
-
-msgid "Cold-Junction Compensation(CJC) temperature"
-msgstr "Температура компенсації холодних спаїв"
-
-msgid "10:Request to module error."
-msgstr "10:Помилка запиту до модуля."
-
-msgid "11:Respond from module error."
-msgstr "11:Помилка у відповіді модуля."
+msgid "No a device selected."
+msgstr "Жодного пристрою не обрано."
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
@@ -132,135 +287,14 @@ msgstr "2:Збір зупинено."
 msgid "Write value to attribute '%s' error: %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
-msgid "Configuration"
-msgstr "Конфігурація"
+msgid "<No select>"
+msgstr "<Не обрано>"
 
-msgid "Process parameters"
-msgstr "Обробка параметрів"
+msgid "I-8700, I-7000 serial bus"
+msgstr "I-8700, I-7000 послідовна шина"
 
-msgid "Fast data get period (s)"
-msgstr "Період швидкого збору даних (с)"
+msgid "ISA DAQ boards"
+msgstr "ISA DAQ плати"
 
-msgid "Mode"
-msgstr "Режим"
-
-msgid "Inputs reverse"
-msgstr "Реверс входів"
-
-msgid "Outputs reverse"
-msgstr "Реверс виходів"
-
-#, c-format
-msgid "Input %d type"
-msgstr "Тип входу %d"
-
-msgid "Host watchdog timeout (s)"
-msgstr "Час хостового сторожового таймеру (с)"
-
-msgid "Module"
-msgstr "Модуль"
-
-msgid "Host watchdog status"
-msgstr "Стан хостового сторожового таймеру"
-
-msgid "Power on values"
-msgstr "Значення при включені"
-
-msgid "Set power on values from current"
-msgstr "Встановити значення при включені у поточні"
-
-msgid "Safe values"
-msgstr "Безпечні значення"
-
-msgid "Set safe values from current"
-msgstr "Встановити безпечні значення у поточні"
-
-msgid "Out reverse"
-msgstr "Реверс виходу"
-
-msgid "-10V to +10V"
-msgstr "-10В до +10В"
-
-msgid "-5V to +5V"
-msgstr "-5В до +5В"
-
-msgid "-2.5V to +2.5V"
-msgstr "-2.5В до +2.5В"
-
-msgid "-1.25V to +1.25V"
-msgstr "-1.25В до +1.25В"
-
-msgid "-20mA to +20mA (with 125 ohms resistor)"
-msgstr "-20мА до +20мА (з резістором 125 Омів)"
-
-msgid "Error"
-msgstr "Помилка"
-
-msgid "-15mV to +15mV"
-msgstr "-15мВ до +15мВ"
-
-msgid "-50mV to +50mV"
-msgstr "-50мВ до +50мВ"
-
-msgid "-100mV to +100mV"
-msgstr "-100мВ до +100мВ"
-
-msgid "-500mV to +500mV"
-msgstr "-500мВ до +500мВ"
-
-msgid "-1V to +1V"
-msgstr "-1В до +1В"
-
-msgid "-150mV to +150mV"
-msgstr "-150мВ до +150мВ"
-
-msgid "J Type"
-msgstr "J Тип"
-
-msgid "K Type"
-msgstr "K Тип"
-
-msgid "T Type"
-msgstr "T Тип"
-
-msgid "E Type"
-msgstr "E Тип"
-
-msgid "R Type"
-msgstr "R Тип"
-
-msgid "S Type"
-msgstr "S Тип"
-
-msgid "B Type"
-msgstr "B Тип"
-
-msgid "N Type"
-msgstr "N Тип"
-
-msgid "C Type"
-msgstr "C Тип"
-
-msgid "L Type"
-msgstr "L Тип"
-
-msgid "M Type"
-msgstr "M Тип"
-
-msgid "L Type (DIN43710C Type)"
-msgstr "L Тип (DIN43710C Тип)"
-
-msgid "Set. "
-msgstr "Встановлений. "
-
-msgid "Clear. "
-msgstr "Чистий. "
-
-msgid "Enabled, "
-msgstr "Включений, "
-
-msgid "Disabled, "
-msgstr "Виключений, "
-
-msgid " s."
-msgstr " с."
+msgid "LP-8000, I-8000 parallel bus"
+msgstr "LP-8000, I-8000 паралельна шина"

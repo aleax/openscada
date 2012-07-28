@@ -1,0 +1,74 @@
+# OpenSCADA.DAQ.Comedi translate to Ukrainian.
+# Copyright (C) 2012 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.Comedi package module.
+#
+# Roman Savochenko <rom_as@fromru.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-27 22:43+0300\n"
+"PO-Revision-Date: 2012-07-27 22:43+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Language-Team: <uk@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "DAQ boards by Comedi"
+msgstr "DAQ плати від Comedi"
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org)."
+msgstr "Колекція ISA, PCI, PCMCIA, USB DAQ плат від Comedi(http://www.comedi.org)."
+
+msgid "Parameteres table"
+msgstr "Таблиця параметрів"
+
+msgid "Standard"
+msgstr "Стандарт"
+
+msgid "Board's device address"
+msgstr "Адреса пристрою плати"
+
+msgid "Addition parameters"
+msgstr "Додаткові параметри"
+
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр вимкнено."
+
+msgid "2:Acquisition is stopped."
+msgstr "2:Збір зупинено."
+
+msgid "Information"
+msgstr "Інформація"
+
+msgid "Analog input %d"
+msgstr "Аналоговий вхід %d"
+
+#, c-format
+msgid "Analog output %d"
+msgstr "Аналоговий вихід %d"
+
+#, c-format
+msgid "Digital input %d"
+msgstr "Дискретний вхід %d"
+
+#, c-format
+msgid "Digital output %d"
+msgstr "Дискретний вихід %d"
+
+#, c-format
+msgid "Digital input-output %d"
+msgstr "Дискретний вхід-вихід %d"
+
+msgid "Configuration"
+msgstr "Конфігурація"
+
+#, c-format
+msgid "Channel %d.%d range"
+msgstr "Діапазон каналу %d.%d"

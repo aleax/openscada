@@ -58,6 +58,10 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
+	string modPrm( const string &prm );
+
+        void setModPrm( const string &prm, const string &val );
+
 	TMdContr &owner( );
 
     protected:
@@ -76,6 +80,7 @@ class TMdPrm : public TParamContr
 	//Attributes
 	TElem	p_el;			//Work atribute elements
 
+	Res	dev_res;	//Resource for access to device
 	comedi_t *devH;
 };
 
@@ -92,34 +97,16 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	//double	period( )	{ return vmax(m_per,0.1); }
-	//int	prior( )	{ return m_prior; }
-
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
     protected:
 	//Methods
-	//void prmEn( const string &id, bool val );
-
 	void start_( );
 	void stop_( );
 
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
-	//static void *Task( void *icntr );
-
-	//Attributes
-	//Res	en_res;		//Resource for enable params
-	//int	&m_per,		// s
-	//	&m_prior;	// Process task priority
-
-	//bool	prc_st,		// Process task active
-	//	endrun_req;	// Request to stop of the Process task
-
-	//vector< AutoHD<TMdPrm> >  p_hd;
-
-	//double	tm_gath;	// Gathering time
 };
 
 //*************************************************
@@ -144,8 +131,6 @@ class TTpContr: public TTipDAQ
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
-
-	string optDescr( );
 };
 
 extern TTpContr *mod;

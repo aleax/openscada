@@ -105,7 +105,6 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
             	    case 5: reg.id = IXISA_CN5CR;   break;
         	}
         	int rez = ioctl(((tval*)p->extPrms)->devFd,IXISA_WRITE_REG,&reg);
-        	printf("TEST 00: %d\n",rez);
 
         	//> Attributes create
         	if(directDIO&(1<<i_ch))
@@ -183,7 +182,6 @@ void da_ISA::getVal( TMdPrm *p )
                         break;
                 }
                 bool rez = ioctl(((tval*)p->extPrms)->devFd,IXISA_READ_REG,&data);
-                //printf("TEST 10: %d.%d(%d): %d = %xh\n",i_ch,i_p,data.id,rez,data.value);
                 if((directDIO>>i_ch)&1)
                     for(int i_o = 0; i_o < 8; i_o++)
                         p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_p*8+i_o)).at().setB(rez?EVAL_BOOL:(data.value>>i_o)&1, 0, true);
@@ -201,7 +199,6 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     //> Typical DIO, like "DIO-144" process
     if(((tval*)p->extPrms)->dev.dio)
     {
-        printf("TEST 10: '%s'\n",valo.name().c_str());
         int i_ch = 0, i_p = 0;
         if(sscanf(valo.name().c_str(),"o%d_%d",&i_ch,&i_p) != 2) return;
         i_p = i_p/8;
@@ -249,7 +246,6 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
             if(p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_p*8+i_o)).at().getB(0, true)) data.value |= 1;
         }
         int rez = ioctl(((tval*)p->extPrms)->devFd,IXISA_WRITE_REG,&data);
-        printf("TEST 20: %d.%d(%d): %d = %xh\n",i_ch,i_p,data.id,rez,data.value);
     }
 }
 

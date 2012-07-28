@@ -1,3 +1,13 @@
+2012-07-28 Roman
+- !!:FIX:SYS: Real task creation from high priority thread at some Linux kernels, for example 2.6.29, is fixed by replace wait call
+    sched_yield() to TSYS::sysSleep(1e-3).
+- FIX:CntrNode: Removing into subtree for function TCntrNode::ctrRemoveNode() is fixed.
+- Transport: Manual requests by output transports is made allow without a request set, only for buffer read.
+    Timeout limit to standard interface time set.
+- DAQ.Comedi: Ranges selection is added. Translations is added.
+- DAQ.ICP_DAS: "<No select>" device item is added. Debug messages is removed. Translation is updated.
+
+
 2012-07-25 Roman
 - !!!!:FIX:XMLNodeObj: Parent link storing is changed to direct pointer for prevent self lock, allow remove and exclude memory leak.
 

@@ -109,7 +109,7 @@ void TTpContr::postEnable( int flag )
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD_TP",_("Module type"),TFld::String,TFld::HexDec|TCfg::NoVal,"20","552985"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD_TP",_("Module type"),TFld::String,TFld::HexDec|TCfg::NoVal,"20","-"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_SLOT",_("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
@@ -584,6 +584,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	vector<string> tid, tnm;
 	mod->daTpList(this, tid, &tnm);
+	opt->childAdd("el")->setAttr("id","-")->setText(_("<No select>"));
 	for(int i_t = 0; i_t < vmin(tid.size(),tnm.size()); i_t++)
 	    opt->childAdd("el")->setAttr("id",tid[i_t])->setText(tnm[i_t]);
     }
