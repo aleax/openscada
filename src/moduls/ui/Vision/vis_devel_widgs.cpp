@@ -3473,14 +3473,17 @@ bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
+		editExit();
 		setFocus(true);
 		setSelect(true);
 		break;
 	    case QEvent::FocusOut:
 		if(!this->hasFocus()) setFocus(false);
-		if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !mMdiWin->widget()->hasFocus()) setSelect(false);
+		if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !mMdiWin->widget()->hasFocus())
+		{ setSelect(false); editExit(); }
 		break;
 	    case QEvent::MouseButtonRelease:
+		editExit();
 		setSelect(false,PrcChilds);
 		setSelect(true);
 		break;
