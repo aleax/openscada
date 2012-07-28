@@ -753,16 +753,23 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 
 bool TCntrNode::ctrRemoveNode( XMLNode *nd, const char *path )
 {
+    int woff = 0;
+    string req = nd->attr("path");
+    string reqt, reqt1;
+
+    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off)
+	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)))
+	    return false;
+
     XMLNode *obj = nd;
-    if( obj->name() == "info" )	obj = nd->childGet(0,true);
-    if( !obj )	return false;
+    if(obj->name() == "info") obj = nd->childGet(0,true);
+    if(!obj)	return false;
 
     //> Find element
-    string reqt;
-    for( int woff = 0; (reqt=TSYS::pathLev(path,0,true,&woff)).size(); )
+    while((reqt=TSYS::pathLev(path,0,true,&woff)).size())
     {
 	XMLNode *obj1 = obj->childGet("id",reqt,true);
-	if( !obj1 ) return false;
+	if(!obj1) return false;
 	obj = obj1;
     }
     obj->parent()->childDel(obj);
