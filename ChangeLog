@@ -2,6 +2,7 @@
 - !!:FIX:SYS: Real task creation from high priority thread at some Linux kernels, for example 2.6.29, is fixed by replace wait call
     sched_yield() to TSYS::sysSleep(1e-3).
 - FIX:CntrNode: Removing into subtree for function TCntrNode::ctrRemoveNode() is fixed.
+- FIX:UI.Vision: Not full exit from edit mode for "ElFigure" is fixed at press about widget-container or scale by mouse wheel.
 - Transport: Manual requests by output transports is made allow without a request set, only for buffer read.
     Timeout limit to standard interface time set.
 - DAQ.Comedi: Ranges selection is added. Translations is added.
