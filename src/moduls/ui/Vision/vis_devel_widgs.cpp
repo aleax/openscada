@@ -2186,6 +2186,7 @@ void DevelWdgView::saveGeom( const string& item )
 	chGeomCtx.setAttr("ySc", TSYS::real2str(TSYS::realRound(y_scale,POS_PREC_DIG)));
 	chGeomCtx.setAttr("z", TSYS::int2str(parent()->children().indexOf(this)));
 	chRecord(chGeomCtx);
+	setAllAttrLoad(true);
 	attrSet("geomX", chGeomCtx.attr("x"), 7);
 	attrSet("geomY", chGeomCtx.attr("y"), 8);
 	attrSet("geomW", chGeomCtx.attr("w"), 9);
@@ -2193,6 +2194,7 @@ void DevelWdgView::saveGeom( const string& item )
 	attrSet("geomXsc", chGeomCtx.attr("xSc"), 13);
 	attrSet("geomYsc", chGeomCtx.attr("ySc"), 14);
 	attrSet("geomZ", chGeomCtx.attr("z"), 11);
+	setAllAttrLoad(false);
     }
 
     if(item != id() && wLevel() == 0)
