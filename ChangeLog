@@ -1,3 +1,8 @@
+2012-07-29 Roman
+- UI.Vision: Widget's childs update at single "geomXsc" and "geomYsc" changing is added, for full scale update to the subtree.
+    setAllAttrLoad(x) use for set geometry attributes group into DevelWdgView::saveGeom() function.
+
+
 2012-07-28 Roman
 - !!:FIX:SYS: Real task creation from high priority thread at some Linux kernels, for example 2.6.29, is fixed by replace wait call
     sched_yield() to TSYS::sysSleep(1e-3).

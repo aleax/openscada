@@ -1054,7 +1054,7 @@ void WdgView::resizeF( const QSizeF &isz )
     mWSize = isz;
     mWSize.setWidth(vmax(mWSize.width(),3));
     mWSize.setHeight(vmax(mWSize.height(),3));
-    resize( QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())) );
+    resize(QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())));
 }
 
 WdgView *WdgView::newWdgItem( const string &iwid )
@@ -1072,7 +1072,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	req.childAdd("el")->setAttr("id",attr)->setText(val);
 	cntrIfCmd(req);
     }
-    bool up = false;
+    bool up = false, upChlds = false;
 
     switch(uiPrmPos)
     {
@@ -1110,12 +1110,12 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case 13:	//geomXsc
 	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
 	    x_scale = atof(val.c_str());
-	    up = true;
+	    up = upChlds = true;
 	    break;
 	case 14:	//geomYsc
 	    mWSize = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
 	    y_scale = atof(val.c_str());
-	    up = true;
+	    up = upChlds = true;
 	    break;
 	case 15:	//tipTool
 	    setToolTip(val.c_str());
@@ -1124,10 +1124,13 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    setStatusTip(val.c_str());
 	    break;
     }
-    if( up && !allAttrLoad( ) )
+    if(up && !allAttrLoad())
     {
 	if(wLevel() > 0) moveF(posF());
 	resizeF(sizeF());
+	for(int i_c = 0; upChlds && i_c < children().size(); i_c++)
+	    if(qobject_cast<WdgView*>(children().at(i_c)))
+	        ((WdgView*)children().at(i_c))->load("");
     }
 
     if(shape)	return shape->attrSet(this,uiPrmPos,val);
