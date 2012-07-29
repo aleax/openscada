@@ -1,4 +1,8 @@
 2012-07-29 Roman
+- SYS: DAQ.Comedi is added to RPM build spec-file openscada_mod.spec.
+- SYS: Libraries "Phonon" and "QTWebKit" using force disable is added for without build to pure environments with litle memory set.
+- FIX:DAQ.ICP_DAS: return into virtual function "bool DA::cntrCmdProc( TMdPrm *prm, XMLNode *opt )" is fixed.
+- FIX:DB: Into vcaBase.db the archives parameters select dialog, pasport dialog is some fixed and root page is expanded for SO buttons placement tune.
 - UI.Vision: Widget's childs update at single "geomXsc" and "geomYsc" changing is added, for full scale update to the subtree.
     setAllAttrLoad(x) use for set geometry attributes group into DevelWdgView::saveGeom() function.
 

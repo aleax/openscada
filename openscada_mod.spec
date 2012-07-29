@@ -72,6 +72,7 @@ Das offene SCADA System. Typische Installation.
 %def_enable ICP_DAS
 %def_enable DiamondBoards
 %endif
+%def_enable Comedi
 
 #=====  Archive modules =====
 %def_enable FSArch
@@ -704,6 +705,25 @@ The %{name}-DAQ.BFN package - allow realisation of BFN.
 Das Paket %{name}-DAQ.BFN - erlauben Realisierung von BFN.
 %endif
 
+%if_enabled Comedi
+%package DAQ.Comedi
+Summary: DAQ boards by Comedi.
+Summary(ru_RU.UTF8): DAQ платы от Comedi.
+Summary(uk_UA.UTF8): DAQ плати від Comedi.
+Summary(de_DE.UTF8): DAQ-Karte aus Comedi.
+Group: Graphics
+Requires: %name-core = %version-%release
+%description DAQ.Comedi
+The %{name}-DAQ.Comedi package - allow ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org).
+%description DAQ.Comedi -l ru_RU.UTF8
+Пакет %{name}-DAQ.Comedi - предоставляет коллекцию ISA, PCI, PCMCIA, USB DAQ плат от Comedi(http://www.comedi.org).
+%description DAQ.Comedi -l uk_UA.UTF8
+Пакет %{name}-DAQ.Comedi - надає колекцію ISA, PCI, PCMCIA, USB DAQ плат від Comedi(http://www.comedi.org).
+%description DAQ.Comedi -l de_DE.UTF8
+Das Paket %{name}-DAQ.Comedi - erlauben die Sammlung von ISA, PCI, PCMCIA, USB DAQ-Karten von Comedi (http://www.comedi.org).
+%endif
+
+
 #=====  Archive modules =====
 %if_enabled FSArch
 %package Archive.FSArch
@@ -1077,7 +1097,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 %configure %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} %{subst_enable PostgreSQL} \
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
-    %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} %{subst_enable BFN} \
+    %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} %{subst_enable BFN} %{subst_enable Comedi} \
     %{subst_enable FSArch} %{subst_enable DBArch} \
     %{subst_enable Sockets} %{subst_enable SSL} %{subst_enable Serial} \
     %{subst_enable HTTP} %{subst_enable SelfSystem} %{subst_enable UserProtocol} \
@@ -1326,6 +1346,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %files DAQ.BFN
 %_libdir/openscada/daq_BFN.so
 %_datadir/locale/*/LC_MESSAGES/oscd_BFN.mo
+%endif
+
+%if_enabled Comedi
+%files DAQ.Comedi
+%_libdir/openscada/daq_Comedi.so
+%_datadir/locale/*/LC_MESSAGES/oscd_Comedi.mo
 %endif
 
 #=====  Archive modules =====

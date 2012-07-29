@@ -50,7 +50,7 @@ class DA
 	virtual void getVal( TMdPrm *prm )			{ }
 	virtual void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl )	{ }
 
-	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ }
+	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
 };
 
 } //End namespace
