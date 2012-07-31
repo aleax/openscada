@@ -80,6 +80,7 @@ class Project : public TCntrNode, public TConfig
 	//> Enable stat
 	bool enable( )			{ return mEnable; }
 	void setEnable( bool val );
+	void setEnableByNeed( );
 
 	//> Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
@@ -105,6 +106,9 @@ class Project : public TCntrNode, public TConfig
 	void stlPropList( vector<string> &ls );
 	string stlPropGet( const string &pid, const string &def = "", int sid = -1 );
 	bool stlPropSet( const string &pid, const string &vl, int sid = -1 );
+
+	//Attributes
+	bool	enableByNeed;	//Load and enable by need
 
     protected:
 	//Methods

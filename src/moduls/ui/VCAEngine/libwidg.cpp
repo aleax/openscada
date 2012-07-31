@@ -34,7 +34,7 @@ using namespace VCA;
 //* WidgetLib: Widgets library                   *
 //************************************************
 WidgetLib::WidgetLib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elWdgLib()), mId(cfg("ID")), work_lib_db(lib_db), mEnable(false)
+    TConfig(&mod->elWdgLib()), mId(cfg("ID")), work_lib_db(lib_db), mEnable(false), passAutoEn(false)
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -117,6 +117,27 @@ void WidgetLib::postDisable( int flag )
     }
 }
 
+AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const string &user )
+{
+    AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
+    if(igr == m_wdg && !nd.freeStat())
+    {
+        AutoHD<LWidget> lwdg = nd;
+        if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed)
+        {
+            lwdg.at().enableByNeed = false;
+            try
+            {
+                lwdg.at().load(true);
+                lwdg.at().setEnable(true);
+            }
+            catch(TError err) { }
+        }
+    }
+
+    return nd;
+}
+
 string WidgetLib::name( )
 {
     string tNm = cfg("NAME").getS();
@@ -139,6 +160,8 @@ void WidgetLib::load_( )
 
     SYS->db().at().dataGet(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this);
 
+    passAutoEn = true;
+
     //> Create new widgets
     map<string, bool>   itReg;
     TConfig c_el(&mod->elWdg());
@@ -146,7 +169,7 @@ void WidgetLib::load_( )
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); )
     {
 	string f_id = c_el.cfg("ID").getS();
-	if(!present(f_id)) add(f_id,"","");
+	if(!present(f_id)) { add(f_id,"",""); at(f_id).at().setEnableByNeed(); }
 	itReg[f_id] = true;
     }
 
@@ -159,6 +182,8 @@ void WidgetLib::load_( )
     	    if(itReg.find(it_ls[i_it]) == itReg.end())
                 del(it_ls[i_it]);
     }
+
+    passAutoEn = false;
 
     mOldDB = TBDS::realDBName(DB());
 }
@@ -191,12 +216,19 @@ void WidgetLib::setEnable( bool val )
 
     mess_info(nodePath().c_str(),val ? _("Enable widgets library.") : _("Disable widgets library."));
 
+    passAutoEn = true;
+
     vector<string> f_lst;
     list(f_lst);
     for(unsigned i_ls = 0; i_ls < f_lst.size(); i_ls++)
+    {
+	if(at(f_lst[i_ls]).at().enableByNeed)	continue;
 	try { at(f_lst[i_ls]).at().setEnable(val); }
 	catch(TError err)
 	{ mess_err(nodePath().c_str(),_("Enable/disable widget '%s' error %s."),f_lst[i_ls].c_str(),err.mess.c_str()); }
+    }
+
+    passAutoEn = false;
 
     mEnable = val;
 }
@@ -448,7 +480,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 //* LWidget: Library stored widget               *
 //************************************************
 LWidget::LWidget( const string &iid, const string &isrcwdg ) :
-	Widget(iid), TConfig(&mod->elWdg()), m_proc_per(cfg("PROC_PER").getId())
+	Widget(iid), TConfig(&mod->elWdg()), enableByNeed(false), m_proc_per(cfg("PROC_PER").getId())
 {
     cfg("ID").setS(id());
 
@@ -569,6 +601,12 @@ void LWidget::setParentNm( const string &isw )
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
     modif();
+}
+
+void LWidget::setEnableByNeed( )
+{
+    enableByNeed = true;
+    modifClr();
 }
 
 void LWidget::load_( )

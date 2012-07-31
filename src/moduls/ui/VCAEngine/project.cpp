@@ -34,8 +34,9 @@ using namespace VCA;
 //* Project					 *
 //************************************************
 Project::Project( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elProject()), mId(cfg("ID")), workPrjDB(lib_db), mPermit(cfg("PERMIT").getId()),
-    mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()), mEnable(false)
+    TConfig(&mod->elProject()), enableByNeed(false), mId(cfg("ID")), workPrjDB(lib_db), mPermit(cfg("PERMIT").getId()),
+    mPer(cfg("PER").getId()), mFlgs(cfg("FLGS").getId()), mStyleIdW(cfg("STYLE").getId()),
+    mEnable(false)
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -273,6 +274,12 @@ void Project::setEnable( bool val )
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     mEnable = val;
+}
+
+void Project::setEnableByNeed( )
+{
+    enableByNeed = true;
+    modifClr();
 }
 
 void Project::add( const string &id, const string &name, const string &orig )

@@ -118,8 +118,11 @@ class Engine : public TUI
 	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
+	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
+
     private:
 	//Attributes
+	bool	passAutoEn;
 	int	idWlb, idPrj, idSes, idFnc;
 	TElem	lbwdg_el,	//The generic table structure of libraries
 		wdgdata_el,	//Media and other data what use by widgets and stored into DB

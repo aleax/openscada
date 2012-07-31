@@ -1,3 +1,10 @@
+2012-07-31 Roman
+- FIX:DB: Into vcaBase.db the button "Play demo" hide for empty demo scenario.
+    Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
+- !!:UI.VCAEngine: Widgets of library and project on demand loading/enable is added.
+    Allow more faster into Runtime mode start and lesser memory consumption for load only used projects and widgets.
+
+
 2012-07-29 Roman
 - SYS: DAQ.Comedi is added to RPM build spec-file openscada_mod.spec.
 - SYS: Libraries "Phonon" and "QTWebKit" using force disable is added for without build to pure environments with litle memory set.
