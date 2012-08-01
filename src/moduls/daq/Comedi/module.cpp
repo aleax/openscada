@@ -192,8 +192,10 @@ void TMdPrm::vlGet( TVal &val )
 	else if(val.name().compare(0,2,"ai") == 0)
 	{
 	    lsampl_t data;
-	    int rez = comedi_data_read(devH, i_sd, atoi(val.name().c_str()+2), i_rng, 0, &data);
-	    val.setR((rez == -1) ? EVAL_REAL : data, 0, true);
+	    int i_chnl = atoi(val.name().c_str()+2);
+	    int rez = comedi_data_read(devH, i_sd, i_chnl, i_rng, 0, &data);
+	    val.setR((rez == -1) ? EVAL_REAL :
+		data/*comedi_to_phys(data,comedi_get_range(devH,i_sd,i_chnl,i_rng),comedi_get_maxdata(devH,i_sd,i_chnl))*/, 0, true);
 	}
 	else if(val.name().compare(0,2,"di") == 0)
 	{
@@ -399,31 +401,33 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/prm/cfg/PRMS");
 	//>> Configuration page: ranges
 	ResAlloc res(dev_res,true);
-	if(devH && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+	comedi_t *tmpDevH = comedi_open(cfg("ADDR").getS().c_str());
+	if(tmpDevH && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
 	{
 	    int cfgIts = 0;
-	    for(int iSDev = 0; iSDev < comedi_get_n_subdevices(devH); iSDev++)
+	    for(int iSDev = 0; iSDev < comedi_get_n_subdevices(tmpDevH); iSDev++)
 	    {
-		bool rChnSpec = (comedi_range_is_chan_specific(devH,iSDev)==1);
-		int nRanges = rChnSpec ? 0 : comedi_get_n_ranges(devH,iSDev,0);
-		for(int i_cn = 0; i_cn < comedi_get_n_channels(devH,iSDev); i_cn++)
+		bool rChnSpec = (comedi_range_is_chan_specific(tmpDevH,iSDev)==1);
+		int nRanges = rChnSpec ? 0 : comedi_get_n_ranges(tmpDevH,iSDev,0);
+		for(int i_cn = 0; i_cn < comedi_get_n_channels(tmpDevH,iSDev); i_cn++)
 		{
-		    if(rChnSpec) nRanges = comedi_get_n_ranges(devH,iSDev,i_cn);
+		    if(rChnSpec) nRanges = comedi_get_n_ranges(tmpDevH,iSDev,i_cn);
 		    if(nRanges <= 1) continue;
 		    string rngIdLs, rngNmLs;
 		    for(int iRng = 0; iRng < nRanges; iRng++)
 		    {
 			rngIdLs += TSYS::int2str(iRng)+";";
-			comedi_range *rng = comedi_get_range(devH, iSDev, (rChnSpec?i_cn:0), iRng);
+			comedi_range *rng = comedi_get_range(tmpDevH, iSDev, (rChnSpec?i_cn:0), iRng);
 			rngNmLs += TSYS::strMess("[%g, %g]",rng->min, rng->max)+";";
 		    }
 		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/chn%d_%d",iSDev,i_cn).c_str(),TSYS::strMess(_("Channel %d.%d range"),iSDev,i_cn).c_str(),
-                	enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","int","sel_id",rngIdLs.c_str(),"sel_list",rngNmLs.c_str());
+                	enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"dest","select","tp","int","sel_id",rngIdLs.c_str(),"sel_list",rngNmLs.c_str());
 		    cfgIts++;
 		}
 	    }
 	    if(!cfgIts) ctrRemoveNode(opt,"/cfg");
 	}
+	if(tmpDevH) comedi_close(tmpDevH);
 	return;
     }
 
@@ -448,7 +452,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path.compare(0,8,"/cfg/chn") == 0)
     {
-        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm("rng."+a_path.substr(8)));
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(atoi(modPrm("rng."+a_path.substr(8)).c_str())));
         if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm("rng."+a_path.substr(8),opt->text());
     }
     else TParamContr::cntrCmdProc(opt);

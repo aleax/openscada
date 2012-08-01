@@ -1,3 +1,7 @@
+2012-08-01 Roman
+- FIX:DAQ.Comedi: Ranges selection into Disable parameter's mode is fixed and tested on PCL-813.
+
+
 2012-07-31 Roman
 - FIX:DB: Into vcaBase.db the button "Play demo" hide for empty demo scenario.
     Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
