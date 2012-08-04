@@ -92,6 +92,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
 
     	    for(int i_ch = 0; i_ch < (((tval*)p->extPrms)->dev.dio>>8); i_ch++)
     	    {
+		p->dInOutRev[i_ch] = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
     		//> Set board configuration
         	ixisa_reg_t reg;
         	reg.value = (directDIO&(1<<i_ch)) ? 0x80 : 0x9b;
@@ -184,10 +185,10 @@ void da_ISA::getVal( TMdPrm *p )
                 bool rez = ioctl(((tval*)p->extPrms)->devFd,IXISA_READ_REG,&data);
                 if((directDIO>>i_ch)&1)
                     for(int i_o = 0; i_o < 8; i_o++)
-                        p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_p*8+i_o)).at().setB(rez?EVAL_BOOL:(data.value>>i_o)&1, 0, true);
+                        p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_p*8+i_o)).at().setB(rez?EVAL_BOOL:(((p->dInOutRev[i_ch]>>(i_p*8))^data.value)>>i_o)&1, 0, true);
                 else
                     for(int i_i = 0; i_i < 8; i_i++)
-                        p->vlAt(TSYS::strMess("i%d_%d",i_ch,i_p*8+i_i)).at().setB(rez?EVAL_BOOL:(data.value>>i_i)&1, 0, true);
+                        p->vlAt(TSYS::strMess("i%d_%d",i_ch,i_p*8+i_i)).at().setB(rez?EVAL_BOOL:(((p->dInOutRev[i_ch]>>(i_p*8))^data.value)>>i_i)&1, 0, true);
             }
     }
 }
@@ -245,6 +246,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
             data.value = data.value << 1;
             if(p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_p*8+i_o)).at().getB(0, true)) data.value |= 1;
         }
+        data.value ^= (p->dInOutRev[i_ch]>>(i_p*8))&0xFF;
         int rez = ioctl(((tval*)p->extPrms)->devFd,IXISA_WRITE_REG,&data);
     }
 }
@@ -258,8 +260,13 @@ bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	//> Typical DIO, like "DIO-144" process
 	if((dev=devs[modType(p->modTp.getS())]).dio && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
             for(unsigned i_ch = 0; i_ch < (dev.dio>>8); i_ch++)
+            {
                 p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/chnOut%d",i_ch).c_str(),TSYS::strMess(_("Channel %d out"),i_ch).c_str(),
             	    p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		for(unsigned i_n = 0; i_n < (dev.dio&0xFF)*8; i_n++)
+		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(),TSYS::strMess(_("IO %d.%d reverse"),i_ch,i_n).c_str(),
+			p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	    }
 	return true;
     }
     //> Process command to page
@@ -268,10 +275,19 @@ bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     if((dev=devs[modType(p->modTp.getS())]).dio && a_path.compare(0,11,"/cfg/chnOut") == 0)
     {
         int rout = atoi(a_path.c_str()+11);
-        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(atoi(p->modPrm("DirectDIO").c_str())&(1<<rout)?"1":"0");
+        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(atoi(p->modPrm("DirectDIO").c_str())&(1<<rout)?"1":"0");
         if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
             p->setModPrm("DirectDIO",TSYS::int2str(atoi(opt->text().c_str()) ? atoi(p->modPrm("DirectDIO").c_str()) | (1<<rout) :
                                                                                atoi(p->modPrm("DirectDIO").c_str()) & ~(1<<rout)));
+    }
+    else if((dev=devs[modType(p->modTp.getS())]).dio && a_path.compare(0,10,"/cfg/nRevs") == 0)
+    {
+	int i_ch = 0, i_n = 0;
+	sscanf(a_path.c_str(),"/cfg/nRevs%d_%d",&i_ch,&i_n);
+	int chVl = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
+        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    p->setModPrm("dIORev"+TSYS::int2str(i_ch), TSYS::int2str(atoi(opt->text().c_str()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
     }
     else return false;
 

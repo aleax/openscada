@@ -78,6 +78,8 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
     }
     else if(p->modTp.getS() == "I-8042")
     {
+	p->dInOutRev[0] = atoi(p->modPrm("dInRev").c_str());
+	p->dInOutRev[1] = atoi(p->modPrm("dOutRevvl").c_str());
         for(int i_i = 0; i_i < 16; i_i++)
         {
             p->p_el.fldAdd(new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite));
@@ -147,11 +149,11 @@ void da_LP_8x::getVal( TMdPrm *p )
         p->owner().pBusRes.resRequestW();
         int c_vl = DI_16(p->modSlot);
         p->owner().pBusRes.resRelease();
-        for(int i_v = 0; i_v < 16; i_v++) p->vlAt(TSYS::strMess("i%d",i_v)).at().setB(((p->dInRev^c_vl)>>i_v)&0x01, 0, true);
+        for(int i_v = 0; i_v < 16; i_v++) p->vlAt(TSYS::strMess("i%d",i_v)).at().setB(((p->dInOutRev[0]^c_vl)>>i_v)&0x01, 0, true);
         p->owner().pBusRes.resRequestW();
         c_vl = DO_16_RB(p->modSlot);
         p->owner().pBusRes.resRelease();
-        for(int o_v = 0; o_v < 16; o_v++) p->vlAt(TSYS::strMess("o%d",o_v)).at().setB(((p->dOutRev^c_vl)>>o_v)&0x01, 0, true);
+        for(int o_v = 0; o_v < 16; o_v++) p->vlAt(TSYS::strMess("o%d",o_v)).at().setB(((p->dInOutRev[1]^c_vl)>>o_v)&0x01, 0, true);
     }
 }
 
@@ -183,7 +185,7 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
         int chnl = atoi(valo.name().c_str()+1);
 
         p->owner().pBusRes.resRequestW(1000);
-        DO_16(p->modSlot, ((vl^(p->dOutRev>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));
+        DO_16(p->modSlot, ((vl^(p->dInOutRev[1]>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));
         p->owner().pBusRes.resRelease();
     }
 }
@@ -247,16 +249,18 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	if(a_path.substr(0,10) == "/cfg/revIn")
 	{
     	    int rin = atoi(a_path.substr(10).c_str());
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText((p->dInRev&(1<<rin))?"1":"0");
+    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText((p->dInOutRev[0]&(1<<rin))?"1":"0");
     	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("dInRev",TSYS::int2str(p->dInRev = atoi(opt->text().c_str()) ? (p->dInRev|(1<<rin)) : (p->dInRev & ~(1<<rin))));
+        	p->setModPrm("dInRev",TSYS::int2str(p->dInOutRev[0] = atoi(opt->text().c_str()) ?
+        	    (p->dInOutRev[0] | (1<<rin)) : (p->dInOutRev[0] & ~(1<<rin))));
 	}
 	else if(a_path.substr(0,11) == "/cfg/revOut")
 	{
     	    int rout = atoi(a_path.substr(11).c_str());
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText((p->dOutRev&(1<<rout))?"1":"0");
+    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText((p->dInOutRev[1]&(1<<rout))?"1":"0");
     	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("dOutRev",TSYS::int2str(p->dOutRev = atoi(opt->text().c_str()) ? (p->dOutRev|(1<<rout)) : (p->dOutRev & ~(1<<rout))));
+        	p->setModPrm("dOutRev",TSYS::int2str(p->dInOutRev[1] = atoi(opt->text().c_str()) ?
+        	    (p->dInOutRev[1]|(1<<rout)) : (p->dInOutRev[1] & ~(1<<rout))));
 	}
 	else return false;
     }

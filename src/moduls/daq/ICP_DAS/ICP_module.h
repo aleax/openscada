@@ -74,7 +74,7 @@ class TMdPrm : public TParamContr
 	ResString	acq_err;
 
 	bool	endRunReq, prcSt;
-	int	dOutRev, dInRev;
+	uint32_t dInOutRev[6];	//Up to 6 channels with 32 io each
 	float	wTm;
 
     protected:
@@ -83,19 +83,6 @@ class TMdPrm : public TParamContr
 	bool cfgChange( TCfg &cfg );
 
     private:
-	//Data
-	class PrmsI8017
-	{
-	    public:
-		PrmsI8017( ) : init(false), prmNum(8), fastPer(0)
-		{ for( int ip = 0; ip < 8; ip++ ) cnlMode[ip] = 0; }
-
-		bool	init;
-		char	prmNum;
-		float	fastPer;
-		char	cnlMode[8];
-	};
-
 	//Methods
 	void postEnable( int flag );
 	void vlGet( TVal &val );
@@ -103,7 +90,7 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	//Attributes
-	int		clcCnt;
+	int	clcCnt;
 
 	DA	*da;
 };
@@ -121,7 +108,8 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	double period( )	{ return mPer; }
+	int64_t period( )       { return mPer; }
+        string  cron( )         { return mSched; }
 	int    prior( )		{ return mPrior; }
 	int    bus( ) 		{ return mBus; }
 	string prmLP( const string &prm );
@@ -150,11 +138,12 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;				//Resource for enable params
-	double	&mPer;				//Acquisition task (seconds)
 	int	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
 		&mBaud,				//Baudrate
 		&connTry;			//Connections try
+	TCfg    &mSched;                        //Calc schedule
+	int64_t mPer;
 
 	bool	prcSt,				//Process task active
 		call_st,        		//Calc now stat

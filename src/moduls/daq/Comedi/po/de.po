@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-27 22:43+0300\n"
+"POT-Creation-Date: 2012-08-04 22:40+0300\n"
 "PO-Revision-Date: 2012-07-27 22:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -25,11 +25,20 @@ msgstr "DAQ-Karte aus Comedi"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-msgid "ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org)."
-msgstr "Die Sammlung von ISA, PCI, PCMCIA, USB DAQ-Karten von Comedi (http://www.comedi.org)."
+msgid ""
+"ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org)."
+msgstr ""
+"Die Sammlung von ISA, PCI, PCMCIA, USB DAQ-Karten von Comedi (http://www."
+"comedi.org)."
 
 msgid "Parameteres table"
 msgstr "Tabelle der Parameter"
+
+msgid "Acquisition schedule"
+msgstr "Planung der Befragung"
+
+msgid "Gather task priority"
+msgstr "Priorität der Datenerfassung"
 
 msgid "Standard"
 msgstr "Standard"
@@ -37,8 +46,26 @@ msgstr "Standard"
 msgid "Board's device address"
 msgstr "Die Geräteadresse Bord"
 
+msgid "Asynchronous read"
+msgstr "Asynchrone Lese"
+
 msgid "Addition parameters"
 msgstr "Zusätzliche Parameter"
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr "Verbrauchte Zeit: %s. "
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
@@ -46,9 +73,14 @@ msgstr "1:Parameter ist abgeschaltet."
 msgid "2:Acquisition is stopped."
 msgstr "2:Erfassung ist angehalten."
 
+#, c-format
+msgid "Comedi device file open: %s"
+msgstr "Das Öffnen einer Datei Comedi Gerät: %s"
+
 msgid "Information"
 msgstr "Information"
 
+#, c-format
 msgid "Analog input %d"
 msgstr "Analog-Eingang %d"
 
@@ -70,6 +102,9 @@ msgstr "Digital-Input-Output %d"
 
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "Analog input settle timeout (us)"
+msgstr "Setup-Zeit der analogen Eingang (mcs)"
 
 #, c-format
 msgid "Channel %d.%d range"

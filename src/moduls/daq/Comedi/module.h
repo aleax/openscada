@@ -58,6 +58,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
+	void getVals( const string &atr = "" );
 	string modPrm( const string &prm );
 
         void setModPrm( const string &prm, const string &val );
@@ -78,10 +79,12 @@ class TMdPrm : public TParamContr
 	void vlArchMake( TVal &val );
 
 	//Attributes
-	TElem	p_el;			//Work atribute elements
+	TElem	p_el;		//Work atribute elements
+	char	&asynchRd;	//Asynchronous reading
 
 	Res	dev_res;	//Resource for access to device
 	comedi_t *devH;
+	int	aiTm;
 };
 
 //*************************************************
@@ -97,16 +100,36 @@ class TMdContr: public TController
 
 	string getStatus( );
 
+	int64_t period( )       { return mPer; }
+        string  cron( )         { return mSched; }
+	int	prior( )	{ return mPrior; }
+
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+
+	void prmEn( const string &id, bool val );
 
     protected:
 	//Methods
 	void start_( );
 	void stop_( );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
+	static void *Task( void *icntr );
+
+	//Attributes
+	Res     en_res;                         //Resource for enable params
+	int	&mPrior;			//Process task priority
+	TCfg    &mSched;                        //Calc schedule
+	int64_t mPer;
+
+	bool	prcSt,				//Process task active
+		call_st,			//Calc now stat
+		endRunReq;			//Request to stop of the Process task
+	vector< AutoHD<TMdPrm> >  p_hd;
+	double	tm_gath;			//Gathering time
 };
 
 //*************************************************

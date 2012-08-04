@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-27 22:43+0300\n"
+"POT-Creation-Date: 2012-08-04 22:40+0300\n"
 "PO-Revision-Date: 2012-07-27 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -30,14 +30,38 @@ msgstr ""
 msgid "Parameteres table"
 msgstr "Таблица параметров"
 
+msgid "Acquisition schedule"
+msgstr "Планирование опроса"
+
+msgid "Gather task priority"
+msgstr "Приоритет задачи сбора"
+
 msgid "Standard"
 msgstr "Стандарт"
 
 msgid "Board's device address"
 msgstr "Адрес устройства платы"
 
+msgid "Asynchronous read"
+msgstr "Асинхронное чтение"
+
 msgid "Addition parameters"
 msgstr "Дополнительные параметры"
+
+msgid "Call now. "
+msgstr "Вызов сейчас. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr "Затрачено времени: %s. "
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
@@ -45,9 +69,14 @@ msgstr "1:Параметр отключен."
 msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
+#, c-format
+msgid "Comedi device file open: %s"
+msgstr "Открытие файла устройства Comedi: %s"
+
 msgid "Information"
 msgstr "Информация"
 
+#, c-format
 msgid "Analog input %d"
 msgstr "Аналоговый вход %d"
 
@@ -69,6 +98,9 @@ msgstr "Дискретный вход-выход %d"
 
 msgid "Configuration"
 msgstr "Конфигурация"
+
+msgid "Analog input settle timeout (us)"
+msgstr "Время установки аналогового входа (мкс)"
 
 #, c-format
 msgid "Channel %d.%d range"

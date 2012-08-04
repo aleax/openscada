@@ -28,6 +28,7 @@
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
+#include <netdb.h>
 #include <openssl/rand.h>
 
 #include <tsys.h>
@@ -671,7 +672,7 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOu
 
 TSocketOut::~TSocketOut()
 {
-    if( startStat() )	stop();
+    if(startStat()) stop();
 }
 
 void TSocketOut::setTimings( const string &vl )
@@ -721,6 +722,10 @@ void TSocketOut::save_( )
 
 void TSocketOut::start()
 {
+    int sock_fd = -1;
+    conn = NULL;
+    ctx = NULL;
+
     string	cfile;
     char	err[255];
     ResAlloc res( wres, true );
@@ -751,36 +756,73 @@ void TSocketOut::start()
 
     try
     {
-	conn = NULL;
-	ctx = NULL;
+	//> Connect to remote host try
+	struct sockaddr_in	name_in;
+	memset(&name_in,0,sizeof(name_in));
+        name_in.sin_family = AF_INET;
 
-	ctx = SSL_CTX_new(meth);
-	if( ctx == NULL )
+        if(ssl_host.size())
+        {
+            struct hostent *loc_host_nm = gethostbyname(ssl_host.c_str());
+            if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
+                throw TError(nodePath().c_str(),_("Socket name '%s' error!"),ssl_host.c_str());
+            name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+        }
+        else name_in.sin_addr.s_addr = INADDR_ANY;
+        //>> Get system port for "oscada" /etc/services
+        struct servent *sptr = getservbyname(ssl_port.c_str(),"tcp");
+        if(sptr != NULL)			   name_in.sin_port = sptr->s_port;
+        else if(htons(atol(ssl_port.c_str())) > 0) name_in.sin_port = htons(atol(ssl_port.c_str()));
+        else name_in.sin_port = 10041;
+
+	if((sock_fd = socket(PF_INET,SOCK_STREAM,0))== -1)
+            throw TError(nodePath().c_str(),_("Error creation TCP socket: %s!"),strerror(errno));
+        int vl = 1;
+        setsockopt(sock_fd,SOL_SOCKET,SO_REUSEADDR,&vl,sizeof(int));
+
+	//> Connect to socket
+        int flags = fcntl(sock_fd, F_GETFL, 0);
+        fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
+        int res = ::connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
+        if(res == -1 && errno == EINPROGRESS)
+        {
+            struct timeval tv;
+            socklen_t slen = sizeof(res);
+            fd_set fdset;
+            tv.tv_sec = mTmCon/1000; tv.tv_usec = 1000*(mTmCon%1000);
+            FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
+            if((res=select(sock_fd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
+            else res = -1;
+        }
+        if(res)	throw TError(nodePath().c_str(),_("Connect to Internet socket error: %s!"),strerror(errno));
+
+	//> SSL processing
+	if((ctx=SSL_CTX_new(meth)) == NULL)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 	    throw TError(nodePath().c_str(),"SSL_CTX_new: %s",err);
 	}
 
 	//> Certificates, private key and it password loading
-	if( !TSYS::strNoSpace(certKey()).empty() )
+	if(!TSYS::strNoSpace(certKey()).empty())
 	{
 	    //>> Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	    if( icfile < 0 ) throw TError(nodePath().c_str(),_("Open temporary file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
+	    if(icfile < 0) throw TError(nodePath().c_str(),_("Open temporary file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
 	    write(icfile,certKey().data(),certKey().size());
 	    close(icfile);
 
 	    //>> Set private key password
 	    SSL_CTX_set_default_passwd_cb_userdata(ctx,(char*)pKeyPass().c_str());
 	    //>> Load certificate
-	    if( SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1 )
+	    if(SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1)
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 		throw TError(nodePath().c_str(),_("SSL_CTX_use_certificate_chain_file: %s"),err);
 	    }
 	    //>> Load private key
-	    if( SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1 )
+	    if(SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1)
 	    {
 		ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
 		throw TError(nodePath().c_str(),_("SSL_CTX_use_PrivateKey_file: %s"),err);
@@ -790,29 +832,38 @@ void TSocketOut::start()
 	    remove(cfile.c_str()); cfile = "";
 	}
 
-	conn = BIO_new_ssl_connect(ctx);
-	if( !conn )
+	if((ssl=SSL_new(ctx)) == NULL)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"BIO_new_ssl_connect: %s",err);
+	    throw TError(nodePath().c_str(),"SSL_new: %s",err);
 	}
-	BIO_get_ssl(conn,&ssl);
-	SSL_set_mode(ssl,SSL_MODE_AUTO_RETRY);
 
-	BIO_set_conn_hostname(conn,(char*)(ssl_host+":"+ssl_port).c_str());
+	SSL_set_connect_state(ssl);
+	SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
+	SSL_set_read_ahead(ssl, 1);
 
-	if( BIO_do_connect(conn) <= 0 )
+	if(SSL_set_fd(ssl, sock_fd) != 1)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
-	    throw TError(nodePath().c_str(),"BIO_do_connect: %s",err);
+	    throw TError(nodePath().c_str(),"SSL_set_fd: %s",err);
 	}
 
-	int sock_fd = BIO_get_fd(conn,NULL);
-	int flags = fcntl(sock_fd,F_GETFL,0);
+	fcntl(sock_fd,F_SETFL,flags);	//Clear nonblock
+	if(SSL_connect(ssl) != 1)
+	{
+	    ERR_error_string_n(ERR_peek_last_error(),err,sizeof(err));
+	    throw TError(nodePath().c_str(),"SSL_connect: %s",err);
+	}
+
+	conn = BIO_new(BIO_f_ssl());
+	BIO_set_ssl(conn, ssl, BIO_NOCLOSE);
+	BIO_set_nbio(conn, 1);
+
 	fcntl(sock_fd,F_SETFL,flags|O_NONBLOCK);
     }
     catch(TError err)
     {
+    	if(sock_fd >= 0)close(sock_fd);
 	if(conn)	{ BIO_reset(conn); BIO_free(conn); }
 	if(ctx)		SSL_CTX_free(ctx);
 	if(!cfile.empty())	remove(cfile.c_str());
@@ -834,6 +885,7 @@ void TSocketOut::stop()
     //SSL deinit
     BIO_flush(conn);
     BIO_reset(conn);
+    close(BIO_get_fd(conn,NULL));
     BIO_free(conn);
     SSL_CTX_free(ctx);
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-27 23:09+0300\n"
+"POT-Creation-Date: 2012-08-04 23:01+0300\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -168,15 +168,19 @@ msgstr "Ausgeschaltet, "
 msgid " s."
 msgstr " s."
 
+#, c-format
 msgid "Out %d.%d"
 msgstr "Ausgang %d.%d"
 
+#, c-format
 msgid "Input %d.%d"
 msgstr "Eingang %d.%d"
 
-#, c-format
 msgid "Channel %d out"
 msgstr "Kanal %d Ausgang"
+
+msgid "IO %d.%d reverse"
+msgstr "IO %d.%d Wechselschaltung"
 
 msgid "Serial number"
 msgstr "Seriennummer"
@@ -221,8 +225,8 @@ msgstr ""
 msgid "Parameteres table"
 msgstr "Tabelle der Parameter"
 
-msgid "Gather data period (s)"
-msgstr "Datenerfassungsperiode (sek)"
+msgid "Acquisition schedule"
+msgstr "Planung der Befragung"
 
 msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
@@ -256,6 +260,14 @@ msgstr "Zusätzliche Parameter des Moduls"
 
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Serial requests %g, errors %g. "

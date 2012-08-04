@@ -73,11 +73,14 @@ void da_87x::enable( TMdPrm *p, vector<string> &als )
             als.push_back(TSYS::strMess("o%d",i_o));
         }
     else if(p->modTp.getS() == "I-87057")
+    {
+	p->dInOutRev[0] = atoi(p->modPrm("dOutRevvl").c_str());
         for(int i_o = 0; i_o < 16; i_o++)
         {
             p->p_el.fldAdd(new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite));
             als.push_back(TSYS::strMess("o%d",i_o));
         }
+    }
 }
 
 void da_87x::disable( TMdPrm *prm )
@@ -187,7 +190,7 @@ void da_87x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
         if(!p->acq_err.getVal().empty() || vl == EVAL_BOOL || vl == pvl.getB()) return;
 
         int daddr = atoi(valo.name().c_str()+1);
-        string cmd = TSYS::strMess("#%02X%s%d%02X",(p->owner().bus()==0)?0:p->modAddr,(daddr/8)?"B":"A",daddr%8,(vl^(p->dOutRev>>daddr))&1);
+        string cmd = TSYS::strMess("#%02X%s%d%02X",(p->owner().bus()==0)?0:p->modAddr,(daddr/8)?"B":"A",daddr%8,(vl^(p->dInOutRev[0]>>daddr))&1);
 
         rep57:
         rez = p->owner().serReq(cmd, p->modSlot);

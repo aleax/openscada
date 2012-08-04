@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-27 23:09+0300\n"
+"POT-Creation-Date: 2012-08-04 23:01+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -162,15 +162,20 @@ msgstr "Выключен, "
 msgid " s."
 msgstr " с."
 
+#, c-format
 msgid "Out %d.%d"
 msgstr "Выход %d.%d"
 
+#, c-format
 msgid "Input %d.%d"
 msgstr "Вход %d.%d"
 
 #, c-format
 msgid "Channel %d out"
 msgstr "Канал %d выход"
+
+msgid "IO %d.%d reverse"
+msgstr "IO %d.%d, инверсия"
 
 msgid "Serial number"
 msgstr "Серийный номер"
@@ -215,11 +220,11 @@ msgstr ""
 msgid "Parameteres table"
 msgstr "Таблица параметров"
 
-msgid "Gather data period (s)"
-msgstr "Период сбора данных (с)"
+msgid "Acquisition schedule"
+msgstr "Планирование опроса"
 
 msgid "Gather task priority"
-msgstr "Уровень приоритета задачи сбора данных"
+msgstr "Приоритет задачи сбора"
 
 msgid "Bus"
 msgstr "Шина"
@@ -250,6 +255,14 @@ msgstr "Дополнительные параметры модуля"
 
 msgid "Call now. "
 msgstr "Вызов сейчас. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
 
 #, c-format
 msgid "Spent time: %s. Serial requests %g, errors %g. "

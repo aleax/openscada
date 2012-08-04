@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.Comedi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-27 22:43+0300\n"
+"POT-Creation-Date: 2012-08-04 22:40+0300\n"
 "PO-Revision-Date: 2012-07-27 22:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -24,10 +24,17 @@ msgstr "Роман Савоченко"
 
 msgid ""
 "ISA, PCI, PCMCIA, USB DAQ boards collection by Comedi(http://www.comedi.org)."
-msgstr "Колекція ISA, PCI, PCMCIA, USB DAQ плат від Comedi(http://www.comedi.org)."
+msgstr ""
+"Колекція ISA, PCI, PCMCIA, USB DAQ плат від Comedi(http://www.comedi.org)."
 
 msgid "Parameteres table"
 msgstr "Таблиця параметрів"
+
+msgid "Acquisition schedule"
+msgstr "Планування опитування"
+
+msgid "Gather task priority"
+msgstr "Пріоритет задачі збору"
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -35,8 +42,26 @@ msgstr "Стандарт"
 msgid "Board's device address"
 msgstr "Адреса пристрою плати"
 
+msgid "Asynchronous read"
+msgstr "Асинхроне читання"
+
 msgid "Addition parameters"
 msgstr "Додаткові параметри"
+
+msgid "Call now. "
+msgstr "Виклик зараз. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s. "
+msgstr "Витрачено часу: %s. "
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
@@ -44,9 +69,14 @@ msgstr "1:Параметр вимкнено."
 msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."
 
+#, c-format
+msgid "Comedi device file open: %s"
+msgstr "Відкриття файлу пристрою Comedi: %s"
+
 msgid "Information"
 msgstr "Інформація"
 
+#, c-format
 msgid "Analog input %d"
 msgstr "Аналоговий вхід %d"
 
@@ -68,6 +98,9 @@ msgstr "Дискретний вхід-вихід %d"
 
 msgid "Configuration"
 msgstr "Конфігурація"
+
+msgid "Analog input settle timeout (us)"
+msgstr "Час встановлення аналогового входу (мкс)"
 
 #, c-format
 msgid "Channel %d.%d range"
