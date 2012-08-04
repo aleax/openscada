@@ -1,3 +1,7 @@
+2012-08-04 Roman
+- UI.VCAEngine: Modify flag clear after on demand loading/enable.
+
+
 2012-08-01 Roman
 - FIX:DAQ.Comedi: Ranges selection into Disable parameter's mode is fixed and tested on PCL-813.
 

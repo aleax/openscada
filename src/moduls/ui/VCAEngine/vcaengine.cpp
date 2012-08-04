@@ -997,6 +997,7 @@ AutoHD<TCntrNode> Engine::chldAt( int8_t igr, const string &name, const string &
 	    {
 		prj.at().load(true);
 		prj.at().setEnable(true);
+		prj.at().modifGClr();
 	    }
 	    catch(TError err) { }
 	}

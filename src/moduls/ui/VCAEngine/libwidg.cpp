@@ -130,6 +130,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
             {
                 lwdg.at().load(true);
                 lwdg.at().setEnable(true);
+		lwdg.at().modifGClr();
             }
             catch(TError err) { }
         }
