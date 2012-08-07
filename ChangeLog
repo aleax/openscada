@@ -1,3 +1,7 @@
+2012-08-07 Roman
+- SYS.TVariant: Simple TVarObj object create at request to empty object. At further going to replaced for TEvalObj.
+
+
 2012-08-04 Roman
 - DAQ.Comedi: Asynchronous acquisition is added. Analog inputs A/D conversion settle timeout is added.
 - DAQ.ICP_DAS: Acquisition schedule by cron is added. DIO reverse allow is added for DIO144.
