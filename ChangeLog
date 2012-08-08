@@ -1,3 +1,7 @@
+2012-08-08 Roman
+- FIX:UI.Vision: Cursor shape drop to hand is fixed for primitive "Media".
+
+
 2012-08-07 Roman
 - SYS.TVariant: Simple TVarObj object create at request to empty object. At further going to replaced for TEvalObj.
 

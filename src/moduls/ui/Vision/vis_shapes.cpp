@@ -1347,17 +1347,13 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	case QEvent::MouseMove:
 	{
 	    Qt::CursorShape new_shp = Qt::ArrowCursor;
-	    if(!shD->maps.empty())
-	    {
-		for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
-		    if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
-		    {
-			new_shp = Qt::PointingHandCursor;
-			if(!shD->maps[i_a].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
-			break;
-		    }
-	    }
-	    else new_shp = Qt::PointingHandCursor;
+	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
+		if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
+		{
+		    new_shp = Qt::PointingHandCursor;
+		    if(!shD->maps[i_a].title.empty()) QToolTip::showText(w->cursor().pos(),shD->maps[i_a].title.c_str());
+		    break;
+		}
 
 	    if(new_shp != w->cursor().shape()) w->setCursor(new_shp);
 
