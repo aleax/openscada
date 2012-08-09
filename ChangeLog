@@ -1,3 +1,14 @@
+2012-08-09 Roman
+- FIX:Archive: TVArchive::archivatorAttach() rewrited for new archivators correct attach and set it into "ArchS" config-field.
+- FIX:UI.Vision: Cursor shape drop to hand is fixed for primitive "Media".
+- SYS.TVariant: Simple TVarObj object create at request to empty object. At further going to replaced for TEvalObj.
+- !!:Transport.SSL: Connection procedure into TSocketOut::start() has rewited for use configured timeout for connection.
+- !!:UI.VCAEngine: Widgets of library and project on demand loading/enable is added.
+Allow more faster into Runtime mode start and lesser memory consumption for load only used projects and widgets.
+- FIX:DB: Into vcaBase.db the button "Play demo" hide for empty demo scenario.
+Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
+
+
 2012-07-29 Roman
 - FIX:DB: Into vcaBase.db the archives parameters select dialog, pasport dialog is some fixed and root page is expanded for SO buttons placement tune.
 - SYS: Library "Phonon" using force disable is added for without build to pure environments with litle memory set.
