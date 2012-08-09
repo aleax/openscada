@@ -1,3 +1,7 @@
+2012-08-09 Roman
+- FIX:Archive: TVArchive::archivatorAttach() rewrited for new archivators correct attach and set it into "ArchS" config-field.
+
+
 2012-08-08 Roman
 - FIX:UI.Vision: Cursor shape drop to hand is fixed for primitive "Media".
 

@@ -1287,18 +1287,17 @@ void TVArchive::archivatorAttach( const string &arch )
 
     if(startStat())	//Attach allow only to started archive
     {
-	//> Find already present archivator
-	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-    	    if(&arch_el[i_l]->archivator() == &archivat.at())
-		return;
-	//> Find position
-	for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
-    	    if(archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod())
-	    {
-		arch_el.insert(arch_el.begin()+i_l,archivat.at().archivePlace(*this));
-		return;
-	    }
-	arch_el.push_back(archivat.at().archivePlace(*this));
+	int i_l, i_ins = -1;
+	for(i_l = 0; i_l < (int)arch_el.size(); i_l++)
+	{
+	    if(&arch_el[i_l]->archivator() == &archivat.at()) break;
+	    if(i_ins < 0 && archivat.at().valPeriod() <= arch_el[i_l]->archivator().valPeriod()) i_ins = i_l;
+	}
+	if(i_l >= (int)arch_el.size())
+	{
+	    if(i_ins < 0) arch_el.push_back(archivat.at().archivePlace(*this));
+	    else arch_el.insert(arch_el.begin()+i_ins,archivat.at().archivePlace(*this));
+	}
     }
 
     if(!TRegExp("(^|;)"+arch+"(;|$)").test(cfg("ArchS").getS()))
