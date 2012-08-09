@@ -227,7 +227,7 @@ string TVariant::getS( ) const
 AutoHD<TVarObj>	TVariant::getO( bool noex ) const
 {
     if(type() != Object) { if(noex) return NULL; throw TError("TVariant",_("Variable not object!")); }
-    if(val.o->freeStat() && !noex) throw TError("TVariant",_("Zero object using try!"));
+    if(val.o->freeStat()) *val.o = AutoHD<TVarObj>(new TVarObj());
     return *val.o;
 }
 

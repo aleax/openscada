@@ -91,6 +91,8 @@ class WidgetLib : public TCntrNode, public TConfig
 	void postDisable( int flag );
 	bool cfgChange( TCfg &cfg )     { modif(); return true; }
 
+	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
+
 	//Attributes
 	int     m_wdg;
 
@@ -99,6 +101,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	TCfg	&mId;
 	string work_lib_db, mOldDB;
 	bool	mEnable;
+	bool    passAutoEn;
 };
 
 //************************************************
@@ -128,6 +131,7 @@ class LWidget : public Widget, public TConfig
 	void setCalcProg( const string &iprg );
 	void setCalcPer( int vl );
 	void setParentNm( const string &isw );
+	void setEnableByNeed( );
 
 	//> Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
@@ -143,6 +147,8 @@ class LWidget : public Widget, public TConfig
 	void inheritAttr( const string &attr = "" );
 
 	WidgetLib &ownerLib( );
+
+	bool	enableByNeed;   //Load and enable by need
 
     protected:
 	//Methods
