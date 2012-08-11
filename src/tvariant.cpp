@@ -126,7 +126,7 @@ bool TVariant::operator==( const TVariant &vr )
 	    case Integer:	return (vr.getI()==getI());
 	    case Real:		return (vr.getR()==getR());
 	    case String:	return (vr.getS()==getS());
-	    case Object:	return (vr.getO(true)==getO(true));
+	    case Object:	return (vr.getO()==getO());
 	    default: break;
 	}
 
@@ -147,7 +147,7 @@ TVariant &TVariant::operator=( const TVariant &vr )
 	case Integer:	setI(vr.getI());	break;
 	case Real:	setR(vr.getR());	break;
 	case String:	setS(vr.getS());	break;
-	case Object:	setO(vr.getO(true));	break;
+	case Object:	setO(vr.getO());	break;
     }
     return *this;
 }
@@ -160,7 +160,7 @@ bool TVariant::isEVal( ) const
 	case Integer:	return (getI()==EVAL_INT);
 	case Real:	return (getR()==EVAL_REAL);
 	case Boolean:	return (getB()==EVAL_BOOL);;
-	case Object:	return getO(true).freeStat();
+	case Object:	return (getO().at().objName() == "EVAL");
 	default: break;
     }
     return true;
@@ -173,7 +173,7 @@ char TVariant::getB( ) const
 	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(tvl.c_str()); }
 	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_BOOL : (bool)tvl; }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_BOOL : (bool)tvl; }
-	case Object:	return true;
+	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_BOOL : true; }
 	case Boolean:	return val.b;
 	default: break;
     }
@@ -187,7 +187,7 @@ int TVariant::getI( ) const
 	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_INT : atoi(tvl.c_str()); }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_INT : (int)tvl; }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_INT : tvl; }
-	case Object:	return 1;
+	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_INT : 1; }
 	case Integer:	return val.i;
 	default: break;
     }
@@ -201,7 +201,7 @@ double TVariant::getR( ) const
 	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_REAL : atof(tvl.c_str()); }
 	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_REAL : tvl; }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_REAL : tvl; }
-	case Object:	return 1;
+	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_REAL : 1; }
 	case Real:	return val.r;
 	default: break;
     }
@@ -215,7 +215,7 @@ string TVariant::getS( ) const
 	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_STR : TSYS::int2str(tvl); }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_STR : TSYS::real2str(tvl); }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(tvl); }
-	case Object:	{ AutoHD<TVarObj> tvl = getO(true); return tvl.freeStat() ? EVAL_STR : tvl.at().getStrXML(); }
+	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_STR : tvl.at().getStrXML(); }
 	case String:
 	    if(mSize < sizeof(val.sMini)) return string(val.sMini,mSize);
 	    return string(val.sPtr,mSize);
@@ -224,10 +224,10 @@ string TVariant::getS( ) const
     return EVAL_STR;
 }
 
-AutoHD<TVarObj>	TVariant::getO( bool noex ) const
+AutoHD<TVarObj>	TVariant::getO( ) const
 {
-    if(type() != Object) { if(noex) return NULL; throw TError("TVariant",_("Variable not object!")); }
-    if(val.o->freeStat()) *val.o = AutoHD<TVarObj>(new TVarObj());
+    if(type() != Object)	return new TEValObj();
+    if(val.o->freeStat())	*val.o = AutoHD<TVarObj>(new TEValObj());
     return *val.o;
 }
 
@@ -301,7 +301,7 @@ void TVariant::setS( const string &ivl )
 	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : atoi(ivl.c_str()));	break;
 	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : atof(ivl.c_str()));	break;
 	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(ivl.c_str()));	break;
-	case Object:	setO((ivl==EVAL_STR) ? AutoHD<TVarObj>() : TVarObj::parseStrXML(ivl, NULL, getO(true))); break;
+	case Object:	setO((ivl==EVAL_STR) ? AutoHD<TVarObj>(new TEValObj()) : TVarObj::parseStrXML(ivl,NULL,getO())); break;
 	default: break;
     }
 }
@@ -421,12 +421,14 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
 	    else if(cNd->name() == "real")	rez->mProps[cNd->attr("p")] = atof(cNd->text().c_str());
 	    else if(cNd->name() == "bool")	rez->mProps[cNd->attr("p")] = (char)atoi(cNd->text().c_str());
 	    else if(cNd->name() == "TVarObj")	rez->mProps[cNd->attr("p")] = TVarObj::parseStrXML("", cNd);
+	    else if(cNd->name() == "TEValObj")	rez->mProps[cNd->attr("p")] = TEValObj::parseStrXML(cNd);
 	    else if(cNd->name() == "TArrayObj")	rez->mProps[cNd->attr("p")] = TArrayObj::parseStrXML(cNd);
 	    else if(TSYS::strParse(cNd->name(),0,":") == "XMLNodeObj")
 		rez->mProps[cNd->attr("p")] = XMLNodeObj::parseStrXML(cNd);
 	}
 	return rez;
     }
+    else if(nd->name() == "TEValObj")	return TEValObj::parseStrXML(nd);
     else if(nd->name() == "TArrayObj")	return TArrayObj::parseStrXML(nd);
     else if(TSYS::strParse(nd->name(),0,":") == "XMLNodeObj")	return XMLNodeObj::parseStrXML(nd);
 
@@ -435,7 +437,35 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
 
 TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 {
-    throw TError("VarObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    // bool isEVal() - return "false" for EVAL detect
+    if(id == "isEVal")	return false;
+
+    throw TError(TSYS::strMess("Obj%s",objName().c_str()).c_str(),_("Function '%s' error or not enough parameters."),id.c_str());
+}
+
+//*****************************************************************
+//* TEValObj                                                      *
+//*   Special EVal object — Scalar bool, int, real, string analog *
+//*****************************************************************
+TVariant TEValObj::funcCall( const string &id, vector<TVariant> &prms )
+{
+    // bool isEVal() - return "true" for EVAL detect
+    if(id == "isEVal")	return true;
+
+    return TVarObj::funcCall(id, prms);
+}
+
+string TEValObj::getStrXML( const string &oid )
+{
+    string nd("<TEValObj");
+    if(!oid.empty()) nd += " p='" + oid + "'";
+    nd += " />\n";
+    return nd;
+}
+
+AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )
+{
+    return new TEValObj;
 }
 
 //***********************************************************
@@ -651,7 +681,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	return this;
     }
 
-    throw TError("ArrayObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    return TVarObj::funcCall(id, prms);
 }
 
 bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
@@ -846,7 +876,8 @@ TVariant TRegExp::funcCall( const string &id, vector<TVariant> &prms )
     // bool test(string val) - call match for string 'val'. Return "true" for match OK.
     //  val - matched string
     if(id == "test" && prms.size() && prms[0].type() == TVariant::String) return test(prms[0].getS());
-    throw TError("RegExp",_("Function '%s' error or not enough parameters."),id.c_str());
+
+    return TVarObj::funcCall(id, prms);
 }
 
 string TRegExp::getStrXML( const string &oid )
@@ -1105,7 +1136,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	return AutoHD<TVarObj>(rez);
     }
 
-    throw TError("XMLNodeObj",_("Function '%s' error or not enough parameters."),id.c_str());
+    return TVarObj::funcCall(id, prms);
 }
 
 void XMLNodeObj::toXMLNode(XMLNode &nd)
@@ -1195,5 +1226,6 @@ string TCntrNodeObj::getStrXML(const string &oid)
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if(cnd.freeStat()) throw TError("TCntrNodeObj",_("The object don't attached to node of OpenSCADA tree."));
-    return cnd.at().objFuncCall(id, prms, user());
+    try{ return cnd.at().objFuncCall(id, prms, user()); } catch(TError){ }
+    return TVarObj::funcCall(id, prms);
 }
