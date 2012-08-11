@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-27 18:04+0300\n"
+"POT-Creation-Date: 2012-08-11 08:23+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -66,7 +66,7 @@ msgstr "Speicherung des Moduls."
 msgid "Error connection to remote station!"
 msgstr "Fehler beim Verbinden an die enfernte Station!"
 
-msgid "Auth is wrong!!!"
+msgid "Auth wrong!!!"
 msgstr "Authentifizierungsfehler!!!"
 
 msgid "Start module."
@@ -1998,9 +1998,6 @@ msgstr "Muster:"
 
 msgid "AaBbCcDdEeFf"
 msgstr "AaBbCcDdEeFf"
-
-msgid "Auth wrong!!!"
-msgstr "Authentifizierungsfehler!!!"
 
 msgid "Find"
 msgstr "Suche"

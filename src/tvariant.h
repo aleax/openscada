@@ -90,7 +90,7 @@ class TVariant
 	virtual int 	getI( ) const;
 	virtual double	getR( ) const;
 	virtual string	getS( ) const;
-	virtual AutoHD<TVarObj> getO( bool noex = false ) const;
+	virtual AutoHD<TVarObj> getO( ) const;
 
 	operator char( )	{ return getB(); }
 	operator int( )		{ return getI(); }
@@ -155,6 +155,24 @@ class TVarObj
 	unsigned int mUseCnt;
 	static pthread_mutex_t	connM;	//Connection mutex
 	Res oRes;
+};
+
+//*****************************************************************
+//* TEValObj                                                      *
+//*   Special EVal object — Scalar bool, int, real, string analog *
+//*****************************************************************
+class TEValObj : public TVarObj
+{
+    public:
+	//Methods
+	TEValObj( )	{ };
+
+	string objName( )	{ return "EVAL"; }
+
+	string getStrXML( const string &oid = "" );
+	static AutoHD<TVarObj> parseStrXML( XMLNode *nd = NULL );
+
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
 };
 
 //***********************************************************
