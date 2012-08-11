@@ -254,7 +254,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60))
+    if(enableStat() && reqCnt && ((time(NULL)-reqCntTm) > 60 || (time(NULL)-trOpenTm) > 10*60))
 	transCommit();
 }
 
@@ -375,7 +375,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //> Request
     if( first_sel ) return false;
     req = req + " FROM '" + mod->sqlReqCode(name()) + "' " + ((next)?req_where:"") + " LIMIT " +  TSYS::int2str(row) + ",1;";
-    owner().sqlReq(req, &tbl, false);
+    owner().sqlReq(req, &tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
     if( tbl.size() < 2 ) return false;
     //> Processing of query
     for( unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++ )

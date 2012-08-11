@@ -302,11 +302,12 @@ void *TMdContr::Task( void *icntr )
 	    ResAlloc res(cntr.enRes,false);
 
 	    //> Allow stations presenting
-	    bool isAccess = false;
+	    bool isAccess = false, needEnable = false;
 	    for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++)
 	    {
-		if(cntr.mStatWork[i_st].second > 0) cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-1e-6*(t_cnt-t_prev));
-		if(cntr.mStatWork[i_st].second <= 0) isAccess = true;
+		if(cntr.mStatWork[i_st].second > 0)	cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-1e-6*(t_cnt-t_prev));
+		if(cntr.mStatWork[i_st].second <= 0)	isAccess = true;
+		if(cntr.mStatWork[i_st].second == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
 	    }
 	    if(!isAccess) { t_prev = t_cnt; TSYS::sysSleep(1); continue; }
 	    else
@@ -320,7 +321,7 @@ void *TMdContr::Task( void *icntr )
 		string scntr;
 
 		//> Parameters list update
-		if(isFirst || (!div && syncCnt <= 0) || (div && it_cnt > div && (it_cnt%div) == 0))
+		if(isFirst || needEnable || (!div && syncCnt <= 0) || (div && it_cnt > div && (it_cnt%div) == 0))
 		    try { res.release(); cntr.enable_(); res.request(false); }
 		    catch(TError err) { }
 
@@ -375,7 +376,7 @@ void *TMdContr::Task( void *icntr )
 		    if(!req.childSize()) continue;
 
 		    //> Same request
-		    if(cntr.cntrIfCmd(req,true)) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
+		    if(cntr.cntrIfCmd(req)) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
 
 		    //> Result process
 		    for(unsigned i_r = 0; i_r < req.childSize(); i_r++)
@@ -447,7 +448,7 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-int TMdContr::cntrIfCmd( XMLNode &node, bool lockErr )
+int TMdContr::cntrIfCmd( XMLNode &node )
 {
     string reqStat = TSYS::pathLev(node.attr("path"),0);
 
@@ -463,7 +464,7 @@ int TMdContr::cntrIfCmd( XMLNode &node, bool lockErr )
 		    mStatWork[i_st].second -= 1;
 		    return rez;
 		}
-		catch(...){ if(lockErr) mStatWork[i_st].second = mRestTm; throw; }
+		catch(...){ if(call_st) mStatWork[i_st].second = mRestTm; throw; }
 	    }
     }catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("err","10")->setText(err.mess); }
 

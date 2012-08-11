@@ -457,7 +457,7 @@ void TVal::setFld( TFld &fld )
 	case TFld::Boolean:
 	    val.val_b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
 	case TFld::Object:
-	    val.val_o = new AutoHD<TVarObj>(new TVarObj); break;
+	    val.val_o = new AutoHD<TVarObj>(new TEValObj); break;
 	default: break;
     }
 
@@ -560,7 +560,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? TSYS::real2str(vl) : EVAL_STR; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? TSYS::int2str((bool)vl) : EVAL_STR; }
-	case TFld::Object:		return !getO().freeStat() ? getO().at().getStrXML() : EVAL_STR;
+	case TFld::Object:		return (getO().at().objName()!="EVAL") ? getO().at().getStrXML() : EVAL_STR;
 	case TFld::String:
 	{
 	    setReqFlg(true);
@@ -596,7 +596,7 @@ int TVal::getI( int64_t *tm, bool sys )
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (int)vl : EVAL_INT; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
-	case TFld::Object:		return getO().freeStat() ? 1 : EVAL_INT;
+	case TFld::Object:		return (getO().at().objName()!="EVAL") ? 1 : EVAL_INT;
 	case TFld::Integer:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -627,7 +627,7 @@ double TVal::getR( int64_t *tm, bool sys )
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT) ? vl : EVAL_REAL; }
 	case TFld::Boolean:
 	{ char vl = getB(tm,sys);	return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
-	case TFld::Object:		return getO().freeStat() ? 1 : EVAL_REAL;
+	case TFld::Object:		return (getO().at().objName()!="EVAL") ? 1 : EVAL_REAL;
 	case TFld::Real:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -658,7 +658,7 @@ char TVal::getB( int64_t *tm, bool sys )
 	{ int vl = getI(tm,sys);	return (vl!=EVAL_INT) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Real:
 	{ double vl = getR(tm,sys);	return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
-	case TFld::Object:		return getO().freeStat() ? true : EVAL_BOOL;
+	case TFld::Object:		return (getO().at().objName()!="EVAL") ? true : EVAL_BOOL;
 	case TFld::Boolean:
 	    setReqFlg(true);
 	    //> Get from archive
@@ -681,12 +681,12 @@ char TVal::getB( int64_t *tm, bool sys )
 
 AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
 {
-    if(fld().type() != TFld::Object) throw TError("Val",_("Value not object!"));
+    if(fld().type() != TFld::Object) return new TEValObj;
 
     setReqFlg(true);
     //> Get from archive. Get objects from archive did not support
     //> Get value from config. Get object form config did not support
-    if(mCfg) return AutoHD<TVarObj>();
+    if(mCfg) return new TEValObj;
     //> Get current value
     if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
     if(tm) *tm = time();
@@ -733,7 +733,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	case TFld::Boolean:
 	    setB((value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys);	break;
 	case TFld::Object:
-	    setO(TVarObj::parseStrXML(value,NULL,getO(NULL,true)), tm, sys);	break;
+	    setO((value!=EVAL_STR) ? TVarObj::parseStrXML(value,NULL,getO(NULL,true)) : new TEValObj, tm, sys);	break;
 	case TFld::String:
 	{
 	    //> Set value to config

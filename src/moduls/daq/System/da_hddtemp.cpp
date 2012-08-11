@@ -83,12 +83,13 @@ void Hddtemp::getVal( TMdPrm *prm )
     {
 	string	dev = prm->cfg("SUBT").getS(),
 		val = getHDDTemp(),
-		c_el;
+		c_el, t_vl;
 	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt += 5)
 	    if(c_el == dev)
 	    {
 		prm->vlAt("disk").at().setS(parseName(TSYS::strSepParse(val,p_cnt+2,'|')), 0, true);
-		prm->vlAt("t").at().setI(atoi(TSYS::strSepParse(val,p_cnt+3,'|').c_str()), 0, true);
+		t_vl = TSYS::strSepParse(val,p_cnt+3, '|');
+		prm->vlAt("t").at().setI(((t_vl=="NA")?EVAL_INT:atoi(t_vl.c_str())), 0, true);
 		prm->vlAt("ed").at().setS(TSYS::strSepParse(val,p_cnt+4,'|'), 0, true);
 		devOK = true;
 		break;
@@ -112,26 +113,20 @@ string Hddtemp::getHDDTemp( )
     ResAlloc res(m_res,true);
     //> Check connect and start
     if(!SYS->transport().at().at(t_tr).at().outPresent(n_tr))
-    {
 	SYS->transport().at().at(t_tr).at().outAdd(n_tr);
-	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setName(_("Parameter Hddtemp"));
-	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setAddr("TCP:127.0.0.1:7634");
-    }
+    SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setName(_("Parameter Hddtemp"));
+    SYS->transport().at().at(t_tr).at().outAt(n_tr).at().setAddr("TCP:127.0.0.1:7634");
+
     if(SYS->transport().at().at(t_tr).at().outAt(n_tr).at().startStat())
 	SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
-    try{ SYS->transport().at().at(t_tr).at().outAt(n_tr).at().start(); }
-    catch(TError err)
-    {
-	SYS->transport().at().at(t_tr).at().outDel(n_tr,true);
-	throw;
-    }
+    SYS->transport().at().at(t_tr).at().outAt(n_tr).at().start();
 
     //> Request
     int len;
     do{
         len = SYS->transport().at().at(t_tr).at().outAt(n_tr).at().messIO(NULL,0,buf,sizeof(buf),1);
         val.append(buf,len);
-    }while( len == sizeof(buf) );
+    }while(len);
 
     SYS->transport().at().at(t_tr).at().outAt(n_tr).at().stop();
 

@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <crypt.h>
 #include <getopt.h>
 
 #include "tsys.h"
@@ -334,7 +335,9 @@ void TUser::setPass( const string &n_pass )
 
 bool TUser::auth( const string &ipass )
 {
-    return (cfg("PASS").getS() == crypt(ipass.c_str(),name().c_str()));
+    crypt_data data;
+    data.initialized = 0;
+    return (cfg("PASS").getS() == crypt_r(ipass.c_str(),name().c_str(),&data));
 }
 
 void TUser::postDisable(int flag)
