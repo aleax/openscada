@@ -1,3 +1,6 @@
+2012-08-11 Maxim
+- FIX:UI.Vision: drawing the rect for the centre point of the arc is fixed for the primitive ElFigure.
+
 2012-08-11 Roman
 - !:DB.SQLite: For seek to deletion into save context do not set into a transaction, for drop transaction prevent at UI.VCAEngine saving.
     Transaction close after last request is decreased to 60 seconds.

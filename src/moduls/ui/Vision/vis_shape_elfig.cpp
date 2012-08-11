@@ -5750,7 +5750,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
             rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
             rectPath = newPath;
-            rectPath.addRect( QRectF( CtrlMotionPos_1.toPoint(), QSize(8,8) ) );
+            rectPath.addRect( QRectF( QPointF(CtrlMotionPos_1.toPoint().x() - 4, CtrlMotionPos_1.toPoint().y() - 4), QSize(8,8) ) );
             rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
             rectPath = newPath;
