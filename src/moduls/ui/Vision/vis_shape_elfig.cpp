@@ -4323,8 +4323,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                 inundation( ev->pos(), shapeItems, pnts, vect, buildMatrix(shapeItems), view );
                                 if( inundationPath != newPath )
                                 {
-                                    for( int i=0; i < inundationItems.size(); i++ )
-                                        if( inundationItems[i].path == inundationPath )
+                                    //for( int i=0; i < inundationItems.size(); i++ )
+                                    for( int i = inundationItems.size()-1; i >= 0; i-- )
+                                    {
+                                        if( inundationItems[i].path.contains(ev->pos()) )
                                         {
                                             inundationItems.remove(i);
                                             fl_brk = true;
@@ -4334,6 +4336,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
                                             view->repaint();
                                             break;
                                         }
+                                    }
                                     if( !fl_brk && status_hold )
                                     {
                                         inundationItems.push_back(inundationItem(inundationPath,-7,-5, inundation_vector, inundation_vector));
@@ -6700,7 +6703,8 @@ int ShapeElFigure::buildMatrix( const QVector<ShapeItem> &shapeItems )
         vect.push_back(0);
     int j = 1;
     bool flag_vect_n1, flag_vect_n2;
-    for(int i = 0; i < shapeItems.size(); i++ )
+    //for(int i = 0; i < shapeItems.size(); i++ )
+    for( int i = shapeItems.size()-1; i >= 0; i-- )
     {
         flag_vect_n1 = false;
         flag_vect_n2 = false;
@@ -6730,23 +6734,24 @@ int ShapeElFigure::buildMatrix( const QVector<ShapeItem> &shapeItems )
     }
     N = j - 1;
     for( int v = 1; v < j; v++ )
-        for( int i = 0; i < shapeItems.size(); i++ )
-    {
-        if( shapeItems[i].n1 == vect[v] )
-            for( int p = 1; p < j; p++ )
-                if( vect[p] == shapeItems[i].n2 )
-                {
-                    map_matrix[v][p] = 1;
-                    map_matrix[p][v] = 1;
-                }
-        if( shapeItems[i].n2 == vect[v] )
-            for( int p = 1; p < j; p++ )
-                if( vect[p] == shapeItems[i].n1 )
-                {
-                    map_matrix[v][p] = 1;
-                    map_matrix[p][v] = 1;
-                }
-    }
+        //for( int i = 0; i < shapeItems.size(); i++ )
+        for( int i = shapeItems.size()-1; i >= 0; i-- )
+        {
+            if( shapeItems[i].n1 == vect[v] )
+                for( int p = 1; p < j; p++ )
+                    if( vect[p] == shapeItems[i].n2 )
+                    {
+                        map_matrix[v][p] = 1;
+                        map_matrix[p][v] = 1;
+                    }
+            if( shapeItems[i].n2 == vect[v] )
+                for( int p = 1; p < j; p++ )
+                    if( vect[p] == shapeItems[i].n1 )
+                    {
+                        map_matrix[v][p] = 1;
+                        map_matrix[p][v] = 1;
+                    }
+        }
     return N;
 }
 
@@ -6888,7 +6893,8 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
     QVector<int> in_fig_num;
     bool flag_break;
     flag_break = false;
-    for( int i = 0; i < shapeItems.size(); i++ )
+    //for( int i = 0; i < shapeItems.size(); i++ )
+    for( int i = shapeItems.size()-1; i >= 0; i-- )
     {
         if( shapeItems[i].type == 2 )
             if( scaleRotate((*pnts)[shapeItems[i].n1], view, flag_scale, flag_rotate).toPoint()==scaleRotate((*pnts)[shapeItems[i].n2], view, flag_scale, flag_rotate).toPoint() )
@@ -6928,7 +6934,8 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
             }
         if( shapeItems[i].type == 2 || shapeItems[i].type == 3 )
         {
-            for( int j = 0; j < shapeItems.size(); j++ )
+            //for( int j = 0; j < shapeItems.size(); j++ )
+            for( int j = shapeItems.size()-1; j >= 0; j-- )
             {
                 inundationPath_1_2 = newPath;
                 if( in_fig_num.size() ) in_fig_num.clear();
