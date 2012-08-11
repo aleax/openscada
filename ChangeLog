@@ -1,3 +1,13 @@
+2012-08-11 Roman
+- !:DB.SQLite: For seek to deletion into save context do not set into a transaction, for drop transaction prevent at UI.VCAEngine saving.
+    Transaction close after last request is decreased to 60 seconds.
+- !!:FIX:Security.User: No reentrant password hash calculation by function crypt() is replaced by reentrant function crypt_r().
+- !!:SYS, TValue, UI.VCAEngine: The object TEValObj is added for like to scalar processing for EVAL.
+- !:FIX:DAQ.DAQGate: Init reconnect counter set global for flag "call_st".
+    Call enable_() for reconnect by reconnect counter zero for prevent empty request at first start and no planed for update parameters present.
+- FIX:DAQ.System: HDDTemp source is fixed for no stable and no full requests. Multiple creation and deletion transport is prevented.
+
+
 2012-08-09 Roman
 - FIX:Archive: TVArchive::archivatorAttach() rewrited for new archivators correct attach and set it into "ArchS" config-field.
 

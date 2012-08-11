@@ -237,10 +237,10 @@ void DlgUser::finish( int result )
 {
     if( result )
     {
-	//- Check user auth -
+	//> Check user auth
 	XMLNode req("get");
 	req.setAttr("path",string("/Security/")+user().toAscii().data()+"/%2fauth")->setAttr("password",password().toAscii().data());
-	if( !mod->cntrIfCmd(req,user().toAscii().data(),password().toAscii().data(),VCAstat.toAscii().data(),true) && atoi(req.text().c_str()) )
+	if(!mod->cntrIfCmd(req,user().toAscii().data(),password().toAscii().data(),VCAstat.toAscii().data(),true) && atoi(req.text().c_str()))
 	    setResult(SelOK);
 	else setResult(SelErr);
     }

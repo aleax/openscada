@@ -1833,7 +1833,7 @@ string Attr::getS( bool sys )
 	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? TSYS::int2str(tvl) : EVAL_STR; }
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? TSYS::real2str(tvl) : EVAL_STR; }
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? TSYS::int2str((bool)tvl) : EVAL_STR; }
-	case TFld::Object:	return getO(sys).at().getStrXML();
+	case TFld::Object:	{ AutoHD<TVarObj> tvl = getO(sys); return (tvl.at().objName() != "EVAL") ? tvl.at().getStrXML() : EVAL_STR; }
 	case TFld::String:
 	{
 	    pthread_mutex_lock(&owner()->mtxAttr());
@@ -1894,7 +1894,7 @@ AutoHD<TVarObj> Attr::getO( bool sys )
 {
     if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getO();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
-    if(fld().type() != TFld::Object) throw TError(owner()->nodePath().c_str(),_("Get object from not object's attribute '%s' error!"),id().c_str());
+    if(fld().type() != TFld::Object) return new TEValObj;
     pthread_mutex_lock(&owner()->mtxAttr());
     AutoHD<TVarObj> tvl = *m_val.o_val;
     pthread_mutex_unlock(&owner()->mtxAttr());
@@ -1936,7 +1936,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 	case TFld::Integer:	setI((val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys);	break;
 	case TFld::Real:	setR((val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev, sys);	break;
 	case TFld::Boolean:	setB((val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys);	break;
-	case TFld::Object:	setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val, NULL, getO()) : AutoHD<TVarObj>());	break;
+	case TFld::Object:	setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val, NULL, getO()) : AutoHD<TVarObj>(new TEValObj)); break;
 	case TFld::String:
 	{
 	    if((!strongPrev && *m_val.s_val == val) ||
