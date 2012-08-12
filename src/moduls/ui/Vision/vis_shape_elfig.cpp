@@ -5308,7 +5308,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     int MotionWidth = itemInMotion->width;
     int MotionBorderWidth = itemInMotion->border_width;
     QLineF line1, line2;
-    QPointF Temp, EndMotionPos_temp, CtrlMotionPos_1_temp, CtrlMotionPos_2_temp;
+    QPointF EndMotionPos_temp, CtrlMotionPos_1_temp, CtrlMotionPos_2_temp;
     bool flag_MotionNum_1 = false,
 	 flag_MotionNum_2 = false,
 	 flag_MotionNum_3 = false,
@@ -5745,24 +5745,23 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
                                        MotionNum_1, MotionNum_2, MotionNum_3, MotionNum_4, MotionNum_5, CtrlMotionPos_4, MotionLineColor, MotionBorderColor, MotionStyle, MotionWidth, MotionBorderWidth, 2, angle_temp, ang_t ) );
         if( devW && devW->edit() )
         {
-            rectPath.addRect( QRectF( QPointF( StartMotionPos.x() - 4, StartMotionPos.y() - 4 ),QSize(8,8) ) );
+            rectPath.addRect(QRectF(StartMotionPos,QSize(8,8)).translated(-4,-4));
             rectItems.append( RectItem( rectPath, MotionNum_1, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
             rectPath = newPath;
-            rectPath.addRect( QRectF( QPointF( EndMotionPos.x() - 4, EndMotionPos.y() - 4 ), QSize(8,8) ) );
+            rectPath.addRect(QRectF(EndMotionPos,QSize(8,8)).translated(-4,-4));
             rectItems.append( RectItem( rectPath, MotionNum_2, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ),
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
             rectPath = newPath;
-            rectPath.addRect( QRectF( QPointF(CtrlMotionPos_1.toPoint().x() - 4, CtrlMotionPos_1.toPoint().y() - 4), QSize(8,8) ) );
+            rectPath.addRect(QRectF(CtrlMotionPos_1,QSize(8,8)).translated(-4,-4));
             rectItems.append( RectItem( rectPath, MotionNum_3, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin ) ) );
             rectPath = newPath;
-            rectPath.addRect( QRectF( QPointF( CtrlMotionPos_2.x() - 4, CtrlMotionPos_2.y() - 4), QSize(8,8) ) );
+            rectPath.addRect(QRectF(CtrlMotionPos_2,QSize(8,8)).translated(-4,-4));
             rectItems.append( RectItem( rectPath, MotionNum_4, QBrush( QColor( 127,127,127,128 ), Qt::SolidPattern ), 
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) ) );
             rectPath = newPath;
-            Temp = QPointF( CtrlMotionPos_3.x() - 20, CtrlMotionPos_3.y() - 4);
-            rectPath.addRect( QRectF( Temp, QSize(8,8) ) );
+            rectPath.addRect(QRectF(CtrlMotionPos_3,QSize(8,8)).translated(-20,-4));
             rectItems.append( RectItem( rectPath, MotionNum_5, QBrush( QColor( 0, 0, 0, 255) ,Qt::SolidPattern ), 
                               QPen( QColor( 0, 0, 0 ), 1, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin ) ) );
             rectPath = newPath;
