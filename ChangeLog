@@ -1,3 +1,8 @@
+2012-08-15 Roman
+- !!:FIX:Security.User: No reentrant password hash calculation by function crypt() is replaced by reentrant function crypt_r() for set password.
+- DAQ.DAQGate: Config field's name "TM_REST_DT" made short.
+
+
 2012-08-12 Roman
 - UI.Vision: Drawing the rects for the points is rewirited optimal.
 
