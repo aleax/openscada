@@ -103,7 +103,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;1000"));
-    fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour). Zero for disable archive access."),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
+    fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour)"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","1;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
@@ -482,6 +482,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/STATIONS",cfg("STATIONS").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REST_DT",cfg("TM_REST_DT").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Zero for disable archive access."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/CNTRPRM",cfg("CNTRPRM").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Remote OpenSCADA full controller's or separated controller's parameters list. Address example:\n"
 		     "  System.AutoDA - for controller;\n"

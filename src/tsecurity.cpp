@@ -330,7 +330,9 @@ TCntrNode &TUser::operator=( TCntrNode &node )
 
 void TUser::setPass( const string &n_pass )
 {
-    cfg("PASS").setS(crypt(n_pass.c_str(),name().c_str()));
+    crypt_data data;
+    data.initialized = 0;
+    cfg("PASS").setS(crypt_r(n_pass.c_str(),name().c_str(),&data));
 }
 
 bool TUser::auth( const string &ipass )
