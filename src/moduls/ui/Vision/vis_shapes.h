@@ -515,6 +515,7 @@ class ShapeDocument : public WdgShape
 #else
 		QTextBrowser	*web;
 #endif
+		string	font;
 		string	style;
 		string	doc;
 	};

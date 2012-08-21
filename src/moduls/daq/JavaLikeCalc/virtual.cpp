@@ -511,6 +511,7 @@ void Contr::save_( )
 
 void Contr::start_( )
 {
+    call_st = false;
     ((Func *)func())->setStart(true);
 
     //> Link to special atributes

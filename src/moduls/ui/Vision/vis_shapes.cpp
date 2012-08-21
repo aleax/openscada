@@ -3302,28 +3302,31 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case 12:	//geomMargin
 	    w->layout()->setMargin(atoi(val.c_str()));	break;
 	case 20:	//style
+	    if(shD->style == val) break;
 	    shD->style = val;
 	    relDoc = true;
 	    break;
 	case 21:	//tmpl
-	    if( !shD->doc.empty() && !shD->tmpl )	break;
+	    if((!shD->doc.empty() && !shD->tmpl) || shD->doc == val) break;
 	    shD->doc = val;
 	    relDoc = true;
 	    shD->tmpl = true;
 	    break;
 	case 22:	//doc
-	    if( TSYS::strNoSpace(val).empty() )		break;
+	    if(TSYS::strNoSpace(val).empty() || shD->doc == val) break;
 	    shD->doc = val;
 	    relDoc = true;
 	    shD->tmpl = false;
 	    break;
 	case 26:	//font
-	    shD->web->setFont(getFont(val,vmin(w->xScale(true),w->yScale(true)),false));
+	    if(shD->font == val) break;
+	    shD->font = val;
 	    relDoc = true;
 	    break;
     }
     if( relDoc && !w->allAttrLoad() )
     {
+	shD->web->setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true)),false));
 	//> Process source document
 	//>> Parse document
 	XMLNode xproc;
@@ -3339,7 +3342,6 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 #else
 	int scrollPos = shD->web->verticalScrollBar()->value();
 #endif
-
 	shD->web->setHtml(("<?xml version='1.0' ?>\n"
 	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
 	    "'DTD/xhtml1-transitional.dtd'>\n"
