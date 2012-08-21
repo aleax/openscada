@@ -1,3 +1,9 @@
+2012-08-21 Roman
+- FIX:DB: Some fixes into vcaBase.db and OscadaLibs.db.
+- FIX:DAQ.JavaLikeCalc: Flag "call_st" clear at start.
+- FIX:UI.Vision: Document rebuild at equal properties obtain is prevented.
+
+
 2012-08-15 Roman
 - !!:FIX:Security.User: No reentrant password hash calculation by function crypt() is replaced by reentrant function crypt_r() for set password.
 - DAQ.DAQGate: Config field's name "TM_REST_DT" made short.
