@@ -506,6 +506,7 @@ class ShapeDocument : public WdgShape
 		short	view	:4;
 		short	tmpl	:1;
 		QTextBrowser	*web;
+		string	font;
 		string	style;
 		string	doc;
 	};
