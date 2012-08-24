@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-18 18:22+0300\n"
+"POT-Creation-Date: 2012-08-24 14:33+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -821,6 +821,9 @@ msgstr "Zeit:Beginn"
 msgid "Time:current"
 msgstr "Zeit:laufend"
 
+msgid "Process"
+msgstr "Bearbeitung"
+
 msgid "Archive size"
 msgstr "Archivgrösse"
 
@@ -906,12 +909,43 @@ msgid "Compile function for document is error: %s"
 msgstr "Fehler in der Funktionskompilation für das Dokument: %s"
 
 #, c-format
+msgid ""
+"<BODY>\n"
+"  <H1>The document is forming now ...</H1>\n"
+"  <P>The document is too big to generate into standard user interface "
+"timeout (%ds). And for now the document is into building. You can wait for "
+"forming finish or terminate the process by select lesser time interval for "
+"the document.</P>\n"
+"  <P>Building progress:\n"
+"    <ul id='progress' />\n"
+"  </P>\n"
+"</BODY>"
+msgstr ""
+"<BODY>\n"
+"  <H1>Das Dokument wird gebildet ...</H1>\n"
+"  <P>Dieses Dokument ist sehr groß für eine Generation in der Standard-Timeout-Benutzeroberfläche (%ds). "
+"Nun ist die Dokument gebildet ist. Sie könnten für die Beendigung der Ausbildung warten oder den Vorgang "
+"abbrechen, indem Sie einen kleineren Bereich für das Dokument.</P>\n"
+"  <P>Fortschritt Bildung:\n"
+"    <ul id='progress' />\n"
+"  </P>\n"
+"</BODY>"
+
+#, c-format
 msgid "Instruction procedure '%s' error: %s"
 msgstr "Fehler in der Befehlsausführung '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
 msgstr "Fehlercode : %s"
+
+#, c-format
+msgid "Data block %d: %0.2f%% loaded."
+msgstr "Datenbaustein %d: %0.2f%% beladen."
+
+#, c-format
+msgid "Messages block %d: %0.2f%% loaded."
+msgstr "Meldeblock %d: %0.2f%% beladen."
 
 msgid "Built-in function"
 msgstr "Installierte Funktion"
@@ -1160,9 +1194,6 @@ msgstr ""
 msgid "Widget calculation error. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
-msgid "Process"
-msgstr "Bearbeitung"
-
 msgid "Visual control area engine"
 msgstr "Visualisierungssteuerung"
 
@@ -1345,6 +1376,7 @@ msgstr "Kodierung des Textes"
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Das Attribut '%s' wird nicht freigegeben. Zwangsräumung!"
 
@@ -1420,6 +1452,7 @@ msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' fehlt!"
 
+#, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht!"
 
@@ -1660,10 +1693,6 @@ msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
 #, c-format
-msgid "Get object from not object's attribute '%s' error!"
-msgstr "Failed, um ein Objekt aus einem Nicht-Objekt-Attribut '%s' abrufen!"
-
-#, c-format
 msgid "Connections to attribute '%s' more to 255!"
 msgstr "Mehr als 255 Verbindungen an das Attribut '%s'!"
 
@@ -1730,3 +1759,6 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
+
+#~ msgid "Get object from not object's attribute '%s' error!"
+#~ msgstr "Failed, um ein Objekt aus einem Nicht-Objekt-Attribut '%s' abrufen!"

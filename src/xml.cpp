@@ -143,6 +143,17 @@ XMLNode* XMLNode::childGet( const string &attr, const string &val, bool noex ) c
     throw TError("XMLNode",_("Child with attribut %s=%s is not present."),attr.c_str(),val.c_str());
 }
 
+XMLNode* XMLNode::getElementBy( const string &iattr, const string &val )
+{
+    if(attr(iattr) == val)	return this;
+
+    XMLNode* rez = NULL;
+    for(unsigned i_ch = 0; !rez && i_ch < childSize(); i_ch++)
+        rez = childGet(i_ch)->getElementBy(iattr,val);
+
+    return rez;
+}
+
 XMLNode* XMLNode::root( )
 {
     XMLNode *cur = this;

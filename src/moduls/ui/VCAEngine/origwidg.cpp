@@ -1617,8 +1617,23 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	return "";
     }
 
+    //> Warning timeout message subtree add to generic tree
+    xdoc.childAdd()->load(TSYS::strMess(
+	_("<BODY>\n"
+	"  <H1>The document is forming now ...</H1>\n"
+	"  <P>The document is too big to generate into standard user interface timeout (%ds). "
+	"And for now the document is into building. "
+	"You can wait for forming finish or terminate the process by select lesser time interval for the document.</P>\n"
+	"  <P>Building progress:\n"
+	"    <ul id='progress' />\n"
+	"  </P>\n"
+	"</BODY>"),STD_INTERF_TM));
+
     //> Node proocess
     OrigDocument::nodeProcess( wdg, &xdoc, funcV, funcIO, iLang );
+
+    //> Remove warning timeout message subtree
+    xdoc.childDel(xdoc.childSize()-1);
 
     xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
@@ -1627,6 +1642,9 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 
 void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel, time_t upTo )
 {
+    //> Progress warning node
+    XMLNode *progrNode = NULL;
+
     if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
     //> Process instructions
     if(xcur->childGet("<?dp",0,true))
@@ -1685,6 +1703,15 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    int64_t rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
 	    if(lstTime && lstTime < bTime) rTime -= perRpt;
 	    //if(((time-rTime)/perRpt) > 1000) continue;
+
+	    //>> Progress prepare
+	    if(!progrNode)
+	    {
+		progrNode = xcur->root();
+		progrNode = progrNode->childGet(progrNode->childSize()-1)->getElementBy("id","progress");
+	    }
+	    progrNode->childAdd("li")->setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),0));
+
 	    while(rTime < wTime && !TSYS::taskEndRun())
 	    {
 		//> Drop current changes and continue
@@ -1692,7 +1719,12 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		{
 		    upTo = time(NULL)+STD_INTERF_TM;
 		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI())
-			wdg->attrAt("doc").at().setS(xcur->root()->save());
+		    {
+			progrNode->childGet(progrNode->childSize()-1)->
+			    setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)(rTime-bTime)/(float)(wTime-bTime)));
+			XMLNode *rootN = xcur->root();
+			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save());
+		    }
 		}
 		//> Process
 		if(atoi(reptN->attr("docRptEnd").c_str()))
@@ -1711,6 +1743,8 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    }
 	    funcV.setI(4,0); funcV.setI(5,0); funcV.setR(6,0);
 	    if(docRevers) i_c += rCnt;
+
+	    progrNode->childGet(progrNode->childSize()-1)->setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100));
 	}
 	//>> Repeat messages
 	else if(!(dAMess=xcur->childGet(i_c)->attr("docAMess")).empty())
@@ -1726,8 +1760,29 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    vector<TMess::SRec> mess;
 	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess, dATmpl, (TMess::Type)dACat );
 
-	    for(unsigned i_r = 0; i_r < mess.size(); i_r++)
+	    //>> Progress bar prepare
+	    if(!progrNode)
 	    {
+		progrNode = xcur->root();
+		progrNode = progrNode->childGet(progrNode->childSize()-1)->getElementBy("id","progress");
+	    }
+	    progrNode->childAdd("li")->setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),0));
+
+	    for(unsigned i_r = 0; i_r < mess.size() && !TSYS::taskEndRun(); i_r++)
+	    {
+		//> Drop current changes and continue
+		if(time(NULL) >= upTo)
+		{
+		    upTo = time(NULL)+STD_INTERF_TM;
+		    if(!wdg->attrAt("n").at().getI() || wdg->attrAt("aCur").at().getI() == wdg->attrAt("vCur").at().getI())
+		    {
+			progrNode->childGet(progrNode->childSize()-1)->
+			    setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)i_r/(float)mess.size()));
+			XMLNode *rootN = xcur->root();
+			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save());
+		    }
+		}
+
 		if(atoi(reptN->attr("docRptEnd").c_str()))
 		{
 		    unsigned i_n = (docRevers ? (i_c+1) : i_c);
@@ -1744,6 +1799,9 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		nodeProcess(wdg,reptN,funcV,funcIO,iLang,false,upTo);
 		reptN->setAttr("docRptEnd","1");
 	    }
+
+	    progrNode->childGet(progrNode->childSize()-1)->setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100));
+
 	    funcV.setI(7,0); funcV.setI(8,0); funcV.setI(9,0); funcV.setS(10,""); funcV.setS(11,"");
 	    if(docRevers) i_c += rCnt;
 	}

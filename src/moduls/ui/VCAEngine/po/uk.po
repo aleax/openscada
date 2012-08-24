@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-18 18:22+0300\n"
+"POT-Creation-Date: 2012-08-24 14:33+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -822,6 +822,9 @@ msgstr "Час:початок"
 msgid "Time:current"
 msgstr "Час:поточний"
 
+msgid "Process"
+msgstr "Обробка"
+
 msgid "Archive size"
 msgstr "Розмір архіву"
 
@@ -907,12 +910,43 @@ msgid "Compile function for document is error: %s"
 msgstr "Помилка компіляції функції для документа: %s"
 
 #, c-format
+msgid ""
+"<BODY>\n"
+"  <H1>The document is forming now ...</H1>\n"
+"  <P>The document is too big to generate into standard user interface "
+"timeout (%ds). And for now the document is into building. You can wait for "
+"forming finish or terminate the process by select lesser time interval for "
+"the document.</P>\n"
+"  <P>Building progress:\n"
+"    <ul id='progress' />\n"
+"  </P>\n"
+"</BODY>"
+msgstr ""
+"<BODY>\n"
+"  <H1>Документ формується ...</H1>\n"
+"  <P>Цей документ дуже великий для генерації у стандартному таймауті користувацького інтерфейсу (%dс). "
+"Зараз цей документ формується. Ви можете зачекати завершення формування або перервати процес, обравши "
+"менший інтервал для документа.</P>\n"
+"  <P>Прогрес формування\n"
+"    <ul id='progress' />\n"
+"  </P>\n"
+"</BODY>"
+
+#, c-format
 msgid "Instruction procedure '%s' error: %s"
 msgstr "Помилка виконання інструкції '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
 msgstr "Код з помилкою: %s"
+
+#, c-format
+msgid "Data block %d: %0.2f%% loaded."
+msgstr "Блок даних %d: %0.2f%% завантажено."
+
+#, c-format
+msgid "Messages block %d: %0.2f%% loaded."
+msgstr "Блок повідомлень %d: %0.2f%% завантажено."
 
 msgid "Built-in function"
 msgstr "Вбудована функція"
@@ -1160,9 +1194,6 @@ msgstr "Помилка компіляції функції '%s' мови '%s' д
 msgid "Widget calculation error. Process is disabled."
 msgstr "Помилка обчислення віджета. Обробку вимкнено."
 
-msgid "Process"
-msgstr "Обробка"
-
 msgid "Visual control area engine"
 msgstr "Рушій середовища візуалізації та керування"
 
@@ -1344,6 +1375,7 @@ msgstr "Кодування тексту"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодування тексту рушія для перекодування у неї."
 
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не звільнено. Примусове видалення!"
 
@@ -1419,6 +1451,7 @@ msgstr "Помилка включення/вимкнення дочірньог�
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' відсутній!"
 
+#, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Видаляємий атрибут '%s' не було звільнено!"
 
@@ -1660,10 +1693,6 @@ msgid "Element type is not selected!"
 msgstr "Елемент не вибіркового типу!"
 
 #, c-format
-msgid "Get object from not object's attribute '%s' error!"
-msgstr "Помилка запиту об'єкту з не об'єктного атрибуту '%s'!"
-
-#, c-format
 msgid "Connections to attribute '%s' more to 255!"
 msgstr "Підключень до атрибуту '%s' більш 255!"
 
@@ -1729,3 +1758,6 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
+
+#~ msgid "Get object from not object's attribute '%s' error!"
+#~ msgstr "Помилка запиту об'єкту з не об'єктного атрибуту '%s'!"

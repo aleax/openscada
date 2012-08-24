@@ -1,3 +1,8 @@
+2012-08-24 Roman
+- XMLNode: Function XMLNode::getElementBy() is added for find node into XML tree by attribute value.
+- !!:UI.VCAEngine: The continuous big documents forming warning message is added with period 5 seconds for data and messages blocks.
+
+
 2012-08-21 Roman
 - FIX:DB: Some fixes into vcaBase.db and OscadaLibs.db.
 - FIX:DAQ.JavaLikeCalc: Flag "call_st" clear at start.

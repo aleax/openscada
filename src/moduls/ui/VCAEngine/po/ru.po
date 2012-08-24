@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-18 18:22+0300\n"
+"POT-Creation-Date: 2012-08-24 14:33+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -822,6 +822,9 @@ msgstr "Время:начало"
 msgid "Time:current"
 msgstr "Время:текущее"
 
+msgid "Process"
+msgstr "Обработка"
+
 msgid "Archive size"
 msgstr "Размер архива"
 
@@ -907,12 +910,41 @@ msgid "Compile function for document is error: %s"
 msgstr "Ошибка компиляции функции для документа: %s"
 
 #, c-format
+msgid ""
+"<BODY>\n"
+"  <H1>The document is forming now ...</H1>\n"
+"  <P>The document is too big to generate into standard user interface "
+"timeout (%ds). And for now the document is into building. You can wait for "
+"forming finish or terminate the process by select lesser time interval for "
+"the document.</P>\n"
+"  <P>Building progress:\n"
+"    <ul id='progress' />\n"
+"  </P>\n"
+"</BODY>"
+msgstr ""
+"<BODY>\n"
+"  <H1>Документ формируется ...</H1>\n"
+"  <P>Этот документ очень большой для генерации в стандартном таймауте пользовательского интерфейса (%dс). "
+"Сейчас этот документ формируется. Вы можете подождать завершения формирования или прервать процесс, выбрав "
+"меньший интервал для документа.</P>\n"
+"  <P>Прогресс формирования:\n"
+"    <ul id='progress' />\n"
+"  </P>\n"
+"</BODY>"
+
+#, c-format
 msgid "Instruction procedure '%s' error: %s"
 msgstr "Ошибка исполнения инструкции '%s': %s"
 
 #, c-format
 msgid "Error code: %s"
 msgstr "Код с ошибкой: %s"
+
+msgid "Data block %d: %0.2f%% loaded."
+msgstr "Блок данных %d: %0.2f%% загружено."
+
+msgid "Messages block %d: %0.2f%% loaded."
+msgstr "Блок сообщений %d: %0.2f%% загружено."
 
 msgid "Built-in function"
 msgstr "Встроенная функция"
@@ -1160,9 +1192,6 @@ msgstr "Ошибка компиляции функции '%s' на языке '%
 msgid "Widget calculation error. Process is disabled."
 msgstr "Ошибка вычисления виджета. Обработка отключена."
 
-msgid "Process"
-msgstr "Обработка"
-
 msgid "Visual control area engine"
 msgstr "Движок среды визуализации и управления"
 
@@ -1344,6 +1373,7 @@ msgstr "Кодировка текста"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодировка текста движка для перекодирования в неё."
 
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не освобождён. Принудительное удаление!"
 
@@ -1419,6 +1449,7 @@ msgstr "Ошибка включения/отключения дочернего 
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' отсутствует!"
 
+#, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Удаляемый атрибут '%s' не освобождён!"
 
@@ -1660,10 +1691,6 @@ msgid "Element type is not selected!"
 msgstr "Элемент не выборного типа!"
 
 #, c-format
-msgid "Get object from not object's attribute '%s' error!"
-msgstr "Ошибка получения объекта из необъектного атрибута '%s'!"
-
-#, c-format
 msgid "Connections to attribute '%s' more to 255!"
 msgstr "Более 255 подключений к атрибуту '%s'!"
 
@@ -1730,3 +1757,6 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
+
+#~ msgid "Get object from not object's attribute '%s' error!"
+#~ msgstr "Ошибка получения объекта из необъектного атрибута '%s'!"
