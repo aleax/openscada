@@ -525,13 +525,13 @@ void Contr::start_( )
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Start the request data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
+    SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
 }
 
 void Contr::stop_( )
 {
     //> Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
 void *Contr::Task( void *icntr )
