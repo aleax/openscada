@@ -1,3 +1,8 @@
+2012-08-30 Roman
+- FIX:DAQ.JavaLikeCalc: Controller's task stop by exception possible and clear flag "prc_st" miss.
+    In that case no more controller start possible allow is fixed.
+
+
 2012-08-21 Roman
 - FIX:DB: Some fixes into vcaBase.db and OscadaLibs.db.
 - FIX:DAQ.JavaLikeCalc: Flag "call_st" clear at start.
