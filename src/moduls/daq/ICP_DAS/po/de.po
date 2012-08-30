@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-04 23:01+0300\n"
+"POT-Creation-Date: 2012-08-30 10:10+0300\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -168,19 +168,39 @@ msgstr "Ausgeschaltet, "
 msgid " s."
 msgstr " s."
 
-#, c-format
-msgid "Out %d.%d"
-msgstr "Ausgang %d.%d"
+msgid "Analog input %d"
+msgstr "Analogeingang %d"
 
 #, c-format
-msgid "Input %d.%d"
-msgstr "Eingang %d.%d"
+msgid "Analog output %d"
+msgstr "Analogausgang %d"
 
+msgid "Digital out %d.%d"
+msgstr "Digital-Ausgang %d.%d"
+
+msgid "Digital input %d.%d"
+msgstr "Digital-Eingang %d.%d"
+
+msgid "Analog input settle timeout (us)"
+msgstr "Setup-Zeit der analogen Eingang (mcs)"
+
+#, c-format
+msgid "AI %d gain"
+msgstr "AI %d Steigerung"
+
+#, c-format
 msgid "Channel %d out"
 msgstr "Kanal %d Ausgang"
 
+#, c-format
 msgid "IO %d.%d reverse"
 msgstr "IO %d.%d Wechselschaltung"
+
+msgid "DI %d.%d reverse"
+msgstr "DI %d.%d Wechselschaltung"
+
+msgid "DO %d.%d reverse"
+msgstr "DO %d.%d Wechselschaltung"
 
 msgid "Serial number"
 msgstr "Seriennummer"

@@ -57,7 +57,7 @@ class TMdPrm : public TParamContr
 	void disable( );
 
 	void getVals( );
-	string modPrm( const string &prm );
+	string modPrm( const string &prm, const string &def = "" );
 
 	void setModPrm( const string &prm, const string &val );
 
@@ -74,7 +74,7 @@ class TMdPrm : public TParamContr
 	ResString	acq_err;
 
 	bool	endRunReq, prcSt;
-	uint32_t dInOutRev[6];	//Up to 6 channels with 32 io each
+	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
 	float	wTm;
 
     protected:

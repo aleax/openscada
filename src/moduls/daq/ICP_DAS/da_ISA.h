@@ -60,10 +60,17 @@ class da_ISA: public DA
         class DevFeature
         {
 	    public:
-		DevFeature( unsigned iDIO ) : dio(iDIO)	{ }
-		DevFeature( ) : dio(0)	{ }
+		DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0 ) :
+		    AI(iAI), AO(iAO), DIO(iDIO), DI(iDI), DO(iDO), aiTm(200)	{ }
+		DevFeature( ) : AI(0), AO(0), DIO(0), DI(0), DO(0), aiTm(200)	{ }
 
-		unsigned dio;	//[cnls][prts]	0x0603
+		unsigned AI;	//[MCR][cnls]	0x1108
+		unsigned AO;	//[cnls]	2
+		unsigned DIO;	//[cnls]	6	cnls*24
+		unsigned DI;	//[mode][cnls]	0x0002	cnls*8	mode:0-IXISA_DI_A(N);1-IXISA_DIL(H);2-IXISA_DIO_A(N)
+		unsigned DO;	//[mode][cnls]	0x0002	cnls*8	mode:0-IXISA_DO_A(N);1-IXISA_DOL(H);2-IXISA_DIO_A(N)
+
+		int aiTm;	//Analog input settle timeout (us)
         };
 
         class tval

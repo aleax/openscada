@@ -392,7 +392,7 @@ TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
     p_el("w_attr"), modTp(cfg("MOD_TP")), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
     endRunReq(false), prcSt(false), clcCnt(0), da(NULL), extPrms(NULL), wTm(0)
 {
-    for(int i_c = 0; i_c < 6; i_c++) dInOutRev[i_c] = 0;
+    for(int i_c = 0; i_c < 10; i_c++) dInOutRev[i_c] = 0;
 }
 
 TMdPrm::~TMdPrm( )
@@ -462,7 +462,7 @@ void TMdPrm::getVals( )
     if(da) da->getVal(this);
 }
 
-string TMdPrm::modPrm( const string &prm )
+string TMdPrm::modPrm( const string &prm, const string &def )
 {
     XMLNode prmNd;
     try
@@ -476,7 +476,7 @@ string TMdPrm::modPrm( const string &prm )
 		return prmNd.childGet(i_n)->attr(sa);
     } catch(...){ }
 
-    return "";
+    return def;
 }
 
 void TMdPrm::setModPrm( const string &prm, const string &val )

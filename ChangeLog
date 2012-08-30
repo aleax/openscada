@@ -1,3 +1,9 @@
+2012-08-30 Roman
+- !!:DB.LibsDB.{OscadaLibs.db,vcaBase.db,vcaTest.db}, DB.AGLKS.*:
+    Significant update for document's time generation optimal and new prescriptions concept implementation.
+- !!!:DAQ.ICP_DAS: Support for all main ISA-boards is implemented for bus "ISA" and for generic data: AI, AO, DIO, DI and DO.
+
+
 2012-08-28 Roman
 - FIX:DAQ.JavaLikeCalc: Controller's task stop by exception possible and clear flag "prc_st" miss.
     In that case no more controller start possible allow is fixed.
