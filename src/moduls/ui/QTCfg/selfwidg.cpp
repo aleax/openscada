@@ -1037,6 +1037,7 @@ void TableDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) c
 	if(value.type() == QVariant::Bool) comb->setCurrentIndex(value.toBool());
 	else if(val_user.isValid())
 	{
+	    comb->clear();
 	    comb->addItems(val_user.toStringList());
 	    comb->setCurrentIndex(comb->findText(value.toString()));
 	}

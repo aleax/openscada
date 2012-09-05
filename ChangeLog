@@ -1,3 +1,7 @@
+2012-09-05 Roman
+- FIX:UI.QTCfg: ComboBox items accumulation at update is fixed for no exited table's item delegate.
+
+
 2012-08-30 Roman
 - !!:DB.LibsDB.{OscadaLibs.db,vcaBase.db,vcaTest.db}, DB.AGLKS.*:
     Significant update for document's time generation optimal and new prescriptions concept implementation.
