@@ -1077,7 +1077,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
 	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
 	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
-	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Serial error!")); }
+	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Serial error!")); }
 	else if(FD_ISSET(fd, &rd_fd))
 	{
 	    blen = read(fd, ibuf, len_ib);

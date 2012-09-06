@@ -1,3 +1,10 @@
+2012-09-06 Roman
+- FIX:Transport.Serial: Stop output transport at read() error, possible by serial device lost.
+- FIX:UI.QTCfg: Size policy for read-values is changed to QSizePolicy::Ignored. Values' labels text selection by mouse is added.
+- FIX:UI.WebCfgD: Read-values space for Boolean is added.
+- FIX:UI.QTCfg: ComboBox items accumulation at update is fixed for no exited table's item delegate.
+
+
 2012-08-30 Roman
 - FIX:DAQ.JavaLikeCalc: Controller's task stop by exception possible and clear flag "prc_st" miss.
     In that case no more controller start possible allow is fixed.
