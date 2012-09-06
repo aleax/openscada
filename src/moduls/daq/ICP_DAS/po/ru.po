@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-30 10:10+0300\n"
+"POT-Creation-Date: 2012-09-06 19:44+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,11 +16,18 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "I-87xxx (generic)"
-msgstr "I-87xxx (общий)"
-
-msgid "I-7xxx (generic)"
-msgstr "I-7xxx (общий)"
+msgid ""
+"-15mV to +15mV;-50mV to +50mV;-100mV to +100mV;-500mV to +500mV;-1V to "
+"+1V;-2.5V to +2.5V;-20mA to +20mA (with 125 ohms resistor);-10V to +10V;-5V "
+"to +5V;-1V to +1V;-500mV to +500mV;-150mV to +150mV;-20mA to +20mA (with 125 "
+"ohms resistor);J Type;K Type;T Type;E Type;R Type;S Type;B Type;N Type;C "
+"Type;L Type;M Type;L Type (DIN43710C Type)"
+msgstr ""
+"-15мВ до +15мВ;-50мВ до +50мВ;-100мВ до +100мВ;-500мВ до +500мВ;-1В до "
+"+1В;-2.5В до +2.5В;-20мА до +20мА (с резистором 125 Ом);-10В до +10В;-5В до "
+"+5В;-1В до +1В;-500мВ до +500мВ;-150мВ до +150мВ;-20мА до +20мА (с "
+"резистором 125 Ом);J Тип;K Тип;T Тип;E Тип;R Тип;S Тип;B Тип;N Тип;C Тип;L "
+"Тип;M Тип;L Тип (DIN43710C Тип)"
 
 msgid "Cold-Junction Compensation(CJC) temperature"
 msgstr "Температура компенсации холодных спаев"
@@ -30,16 +37,20 @@ msgid "Input %d"
 msgstr "Вход %d"
 
 #, c-format
-msgid "H/A %d"
-msgstr ""
-
-#, c-format
-msgid "L/A %d"
-msgstr ""
-
-#, c-format
 msgid "Out %d"
 msgstr "Выход %d"
+
+#, c-format
+msgid "Digital input %d.%d"
+msgstr "Дискретный вход %d.%d"
+
+#, c-format
+msgid "Digital out %d.%d"
+msgstr "Дискретный выход %d.%d"
+
+#, c-format
+msgid "Counter %d"
+msgstr "Счётчик %d"
 
 msgid "10:Request to module error."
 msgstr "10:Ошибка запроса к модулю."
@@ -47,12 +58,30 @@ msgstr "10:Ошибка запроса к модулю."
 msgid "11:Respond from module error."
 msgstr "11:Ошибка в ответе модуля."
 
+msgid "AI number"
+msgstr "Количество AI"
+
+msgid "AO number, #AAN(Data)"
+msgstr "Количество AO, #AAN(Data)"
+
+msgid "DI number (ports x8)"
+msgstr "Количество DI (порты x8)"
+
+msgid "DO number (ports x8)"
+msgstr "Количество DO (порты x8)"
+
+msgid "Counters number"
+msgstr "Количество счётчиков"
+
 msgid "Configuration"
 msgstr "Конфигурация"
 
 #, c-format
 msgid "Input %d type"
 msgstr "Тип входа %d"
+
+msgid "Error;"
+msgstr "Ошибка;"
 
 msgid "Host watchdog timeout (s)"
 msgstr "Время хостового сторожевого таймера (с)"
@@ -75,77 +104,13 @@ msgstr "Безопасные значения"
 msgid "Set safe values from current"
 msgstr "Установка безопасных значений из текущих"
 
-msgid "Out reverse"
-msgstr "Инверсия выхода"
+#, c-format
+msgid "DI %d reverse"
+msgstr "DI %d, инверсия"
 
-msgid "Error"
-msgstr "Ошибка"
-
-msgid "-15mV to +15mV"
-msgstr "-15мВ до +15мВ"
-
-msgid "-50mV to +50mV"
-msgstr "-50мВ до +50мВ"
-
-msgid "-100mV to +100mV"
-msgstr "-100мВ до +100мВ"
-
-msgid "-500mV to +500mV"
-msgstr "-500мВ до +500мВ"
-
-msgid "-1V to +1V"
-msgstr "-1В до +1В"
-
-msgid "-2.5V to +2.5V"
-msgstr "-2.5В до +2.5В"
-
-msgid "-20mA to +20mA (with 125 ohms resistor)"
-msgstr "-20мА до +20мА (с резистором 125 Ом)"
-
-msgid "-10V to +10V"
-msgstr "-10В до +10В"
-
-msgid "-5V to +5V"
-msgstr "-5В до +5В"
-
-msgid "-150mV to +150mV"
-msgstr "-150мВ до +150мВ"
-
-msgid "J Type"
-msgstr "J Тип"
-
-msgid "K Type"
-msgstr "K Тип"
-
-msgid "T Type"
-msgstr "T Тип"
-
-msgid "E Type"
-msgstr "E Тип"
-
-msgid "R Type"
-msgstr "R Тип"
-
-msgid "S Type"
-msgstr "S Тип"
-
-msgid "B Type"
-msgstr "B Тип"
-
-msgid "N Type"
-msgstr "N Тип"
-
-msgid "C Type"
-msgstr "C Тип"
-
-msgid "L Type"
-msgstr "L Тип"
-
-msgid "M Type"
-msgstr "H Тип"
-
-msgid "L Type (DIN43710C Type)"
-msgstr "L Тип (DIN43710C Тип)"
+#, c-format
+msgid "DO %d reverse"
+msgstr "DO %d, инверсия"
 
 msgid "Set. "
 msgstr "Установлен. "
@@ -162,18 +127,16 @@ msgstr "Выключен, "
 msgid " s."
 msgstr " с."
 
+msgid "Error"
+msgstr "Ошибка"
+
+#, c-format
 msgid "Analog input %d"
 msgstr "Аналоговый вход %d"
 
 #, c-format
 msgid "Analog output %d"
 msgstr "Аналоговый выход %d"
-
-msgid "Digital out %d.%d"
-msgstr "Дискретный выход %d.%d"
-
-msgid "Digital input %d.%d"
-msgstr "Дискретный вход %d.%d"
 
 msgid "Analog input settle timeout (us)"
 msgstr "Время установки аналогового входа (мкс)"
@@ -187,14 +150,8 @@ msgid "Channel %d out"
 msgstr "Канал %d выход"
 
 #, c-format
-msgid "IO %d.%d reverse"
-msgstr "IO %d.%d, инверсия"
-
-msgid "DI %d.%d reverse"
-msgstr "DI %d.%d, инверсия"
-
-msgid "DO %d.%d reverse"
-msgstr "DO %d.%d, инверсия"
+msgid "IO %d reverse"
+msgstr "IO %d, инверсия"
 
 msgid "Serial number"
 msgstr "Серийный номер"
@@ -205,23 +162,36 @@ msgstr "Версия SDK"
 msgid "DIP switch"
 msgstr "DIP переключатель"
 
+#, c-format
+msgid "H/A %d"
+msgstr ""
+
+#, c-format
+msgid "L/A %d"
+msgstr ""
+
+#, c-format
+msgid "Output %d"
+msgstr "Выход %d"
+
 msgid "Process parameters"
 msgstr "Обработка параметров"
 
 msgid "Fast data get period (s)"
 msgstr "Период быстрого сбора данных (с)"
 
+msgid "Use 0 for disable"
+msgstr "Используйте 0 для отключения"
+
 msgid "Mode"
 msgstr "Режим"
 
-msgid "Inputs reverse"
-msgstr "Реверс входов"
-
-msgid "Outputs reverse"
-msgstr "Реверс выходов"
-
-msgid "-1.25V to +1.25V"
-msgstr "-1.25В до +1.25В"
+msgid ""
+"-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with "
+"125 ohms resistor)"
+msgstr ""
+"-10В до +10В;-5В до +5В;-2.5В до +2.5В;-1.25В до +1.25В;-20мА до +20мА (с "
+"резистором 125ом)"
 
 msgid "ICP DAS hardware"
 msgstr "Оборудование ICP DAS"
@@ -297,14 +267,15 @@ msgstr "Ошибка открытия LP-слота 9."
 msgid "Open COM%d port error."
 msgstr "Ошибка открытия COM%d порта."
 
+msgid ""
+"ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;"
+"COM 9;COM 10"
+msgstr ""
+"ISA;COM 1 (Мастер LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;"
+"COM 9;COM 10"
+
 msgid "Watchdog timeout (s)"
 msgstr "Время сторожевого таймера (с)"
-
-msgid "ISA"
-msgstr ""
-
-msgid " (Master LP-8x81)"
-msgstr " (Главный LP-8x81)"
 
 msgid "No a device selected."
 msgstr "Ни одного устройства не выбрано."

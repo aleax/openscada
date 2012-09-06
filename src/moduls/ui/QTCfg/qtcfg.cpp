@@ -1410,6 +1410,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		val_r = new QLabel( widget );
 		val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		val_r->setStatusTip((sel_path+"/"+br_path).c_str());
+		QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		sp.setHorizontalStretch(1);
+		val_r->setSizePolicy(sp);
 	    }
 	    else
 	    {
@@ -1427,11 +1430,12 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	        *l_hbox = new QHBoxLayout; l_pos = 0;
 	        (*l_hbox)->setSpacing(6);
 		lab = new QLabel(widget);
-		(*l_hbox)->insertWidget( l_pos++, lab );
-		if(val_w)	(*l_hbox)->insertWidget( l_pos++, val_w );
-		if(val_r)	(*l_hbox)->insertWidget( l_pos++, val_r );
-		(*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
-		widget->layout()->addItem( *l_hbox );
+		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
+		(*l_hbox)->insertWidget(l_pos++, lab);
+		if(val_w) (*l_hbox)->insertWidget(l_pos++, val_w);
+		if(val_r) (*l_hbox)->insertWidget(l_pos++, val_r);
+		(*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding, QSizePolicy::Minimum));
+		widget->layout()->addItem(*l_hbox);
 	    }
 	    else
 	    {
@@ -1522,6 +1526,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r = new QLabel( widget );
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
+		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		    sp.setHorizontalStretch(1);
+		    val_r->setSizePolicy(sp);
 		}
 		//>> View edit
 		else
@@ -1538,10 +1545,11 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
 		    lab = new QLabel(widget);
+		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    (*l_hbox)->insertWidget( l_pos++, lab );
 		    if(val_w)	(*l_hbox)->insertWidget( l_pos++, val_w );
 		    if(val_r)	(*l_hbox)->insertWidget( l_pos++, val_r );
-		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
+		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
 		    widget->layout()->addItem( *l_hbox );
 		}
 		else
@@ -1587,6 +1595,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 	    if(widget)
 	    {
 		lab = new QLabel(t_s.attr("dscr").c_str(),widget);
+		lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		widget->layout()->addWidget(lab);
 
 		edit = new TextEdit(widget,br_path.c_str());
@@ -1679,17 +1688,17 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		if(t_s.attr("dscr").size())
 		{
 		    lab = new QLabel(widget);
-
+		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
-		    (*l_hbox)->insertWidget( l_pos++, lab);
-		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
-		    if( val_r )
+		    (*l_hbox)->insertWidget(l_pos++, lab);
+		    if(val_w)	(*l_hbox)->insertWidget(l_pos++, val_w);
+		    if(val_r)
 		    {
 			(*l_hbox)->insertWidget( l_pos++, val_r );
 			lab->setAlignment( Qt::AlignTop );
 		    }
-		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
+		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
@@ -1739,7 +1748,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r = new QLabel( widget );
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
-		    QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Preferred);
+		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
 		    sp.setHorizontalStretch(1);
 		    val_r->setSizePolicy( sp );
 		    val_r->setAlignment( Qt::AlignVCenter );
@@ -1800,28 +1809,29 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    *l_hbox = new QHBoxLayout; l_pos = 0;
 		    (*l_hbox)->setSpacing(6);
 		    lab = new QLabel(widget);
-		    (*l_hbox)->insertWidget( l_pos++, lab );
-		    if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
-		    if( val_r )
+		    lab->setTextInteractionFlags(Qt::TextSelectableByMouse);
+		    (*l_hbox)->insertWidget(l_pos++, lab);
+		    if(val_w)	(*l_hbox)->insertWidget(l_pos++, val_w);
+		    if(val_r)
 		    {
-			(*l_hbox)->insertWidget( l_pos++, val_r );
-			lab->setAlignment( Qt::AlignTop );
+			(*l_hbox)->insertWidget(l_pos++, val_r);
+			lab->setAlignment(Qt::AlignTop);
 		    }
 
-		    (*l_hbox)->addItem( new QSpacerItem( 0, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ) );
+		    (*l_hbox)->addItem(new QSpacerItem(0,10,QSizePolicy::Expanding,QSizePolicy::Minimum));
 		    widget->layout()->addItem(*l_hbox);
 		}
 		else
 		{
-		    if( *l_hbox )
+		    if(*l_hbox)
 		    {
-			if( val_w )	(*l_hbox)->insertWidget( l_pos++, val_w );
-			if( val_r )	(*l_hbox)->insertWidget( l_pos++, val_r );
+			if(val_w) (*l_hbox)->insertWidget(l_pos++, val_w);
+			if(val_r) (*l_hbox)->insertWidget(l_pos++, val_r);
 		    }
 		    else
 		    {
-			if( val_w ) { val_w->deleteLater(); /*delete val_w;*/ val_w = NULL; }
-			if( val_r ) { val_r->deleteLater(); /*delete val_r;*/ val_r = NULL; }
+			if(val_w) { val_w->deleteLater(); val_w = NULL; }
+			if(val_r) { val_r->deleteLater(); val_r = NULL; }
 		    }
 		}
 

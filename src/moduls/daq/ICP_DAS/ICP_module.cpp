@@ -24,7 +24,10 @@
 #include <tsys.h>
 #include <ttiparam.h>
 
+extern "C"
+{
 #include "msw.h"
+}
 
 #include "da_LP_8x.h"
 #include "da_87x.h"
@@ -105,7 +108,7 @@ void TTpContr::postEnable( int flag )
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
     fldAdd(new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));
-    fldAdd(new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
+    fldAdd(new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -363,20 +366,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrRemoveNode(opt,"/cntr/cfg/LP_PRMS");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",cfg("BUS").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/cntr/cfg/busLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",cfg("BUS").fld().descr(),RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
+	    "sel_id","-1;0;1;2;3;4;5;6;7;8;9;10",
+            "sel_list",_("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10"));
 	if(mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC"))
 	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/busLst" && ctrChkNode(opt))
-    {
-	opt->childAdd("el")->setAttr("id","-1")->setText(_("ISA"));
-	for(int i_s = 0; i_s < 11; i_s++)
-	    opt->childAdd("el")->setAttr("id",TSYS::int2str(i_s))->setText("COM "+TSYS::int2str(i_s?i_s:1)+(i_s==0?_(" (Master LP-8x81)"):""));
-    }
-    else if(mBus == 0 && a_path == "/LPcfg/wTm")
+    if(mBus == 0 && a_path == "/LPcfg/wTm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prmLP("wTm"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setPrmLP("wTm",opt->text());
@@ -464,16 +463,17 @@ void TMdPrm::getVals( )
 
 string TMdPrm::modPrm( const string &prm, const string &def )
 {
+    string rez;
     XMLNode prmNd;
     try
     {
 	prmNd.load(cfg("MOD_PRMS").getS());
 	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
-	if(!sa.size())	return prmNd.attr(prm);
+	if(!sa.size())	return (rez=prmNd.attr(prm)).empty()?def:rez;
 	//> Internal node
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
-		return prmNd.childGet(i_n)->attr(sa);
+		return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
     } catch(...){ }
 
     return def;
@@ -574,11 +574,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-	cfg("MOD_SLOT").setView(owner().mBus >= 0 && atoi(modTp.getS().c_str()) != 0x8781);
-	cfg("MOD_ADDR").setView((atoi(modTp.getS().c_str())>>12) != 8 && owner().mBus > 0);
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/MOD_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/modLst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",cfg("MOD_SLOT").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_ADDR",cfg("MOD_ADDR").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
+	if(owner().mBus != 0) ctrRemoveNode(opt, "/prm/cfg/MOD_SLOT");
+	if(owner().mBus <= 0) ctrRemoveNode(opt, "/prm/cfg/MOD_ADDR");
 	if(da) da->cntrCmdProc(this,opt);
 	return;
     }

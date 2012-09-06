@@ -33,6 +33,32 @@ namespace ICP_DAS_DAQ
 class da_87x: public DA
 {
     public:
+        //Data
+        class DevFeature
+        {
+            public:
+                DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0, unsigned iCNTR = 0 ) :
+                    AI(iAI), AO(iAO), DI(iDI), DO(iDO), CNTR(iCNTR)	{ }
+                DevFeature( ) : AI(0), AO(0), DI(0), DO(0), CNTR(0)	{ }
+
+                unsigned AI;    //[mode][cnls]	0x0108	mode:0-#AA;1-$AA3,#AA
+                unsigned AO;    //[cnls]        2	#AAN(Data),~AA0-5
+                unsigned DI;    //[mode][cnls]  0x0002  mode:0-@AA(cnls*8);1-@AADI(cnls*8)
+                unsigned DO;    //[mode][cnls]  0x0002  mode:0-@AA(Data)(cnls*8);1-@AADODD(cnls*8)
+                unsigned CNTR;	//[cntrs]	8	#AAN
+
+		string	aiTypes;
+        };
+
+        class tval
+        {
+            public:
+                tval( ) : doVal(0)	{ }
+
+                DevFeature dev;
+		uint32_t doVal;	//current values for DO channels
+        };
+
 	//Methods
 	da_87x( );
 	~da_87x( );
@@ -48,7 +74,13 @@ class da_87x: public DA
 	void getVal( TMdPrm *prm );
 	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
 
+	DevFeature getDev( TMdPrm *prm, const string &nm );
+
 	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
+
+
+        //Attributes
+        map<string, DevFeature> devs;
 };
 
 } //End namespace

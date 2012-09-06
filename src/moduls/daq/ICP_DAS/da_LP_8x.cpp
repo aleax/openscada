@@ -20,7 +20,10 @@
  ***************************************************************************/
 
 #include <unistd.h>
+extern "C"
+{
 #include "lincon.h"
+}
 
 #include <tsys.h>
 
@@ -34,7 +37,31 @@ using namespace ICP_DAS_DAQ;
 //*************************************************
 da_LP_8x::da_LP_8x( )
 {
-
+    devs["LP-8xxx"]	= DevFeature(0);	//Individual processing
+    devs["I-8017"]	= DevFeature(0);	//Individual processing
+    devs["I-8024"]	= DevFeature(0);	//Individual processing
+    devs["I-8037"]	= DevFeature(0, 0x0002);
+    devs["I-8040"]	= DevFeature(0x0004);
+    devs["I-8042"]	= DevFeature(0x0002, 0x0002);
+    devs["I-8046"]	= DevFeature(0x0002);
+    devs["I-8048"]	= DevFeature(0x0001);
+    devs["I-8050"]	= DevFeature(0x0102, 0x0102);
+    devs["I-8051"]	= DevFeature(0x0002);
+    devs["I-8052"]	= DevFeature(0x0001);
+    devs["I-8053"]	= DevFeature(0x0002);
+    devs["I-8054"]	= DevFeature(0x0001, 0x0001);
+    devs["I-8055"]	= DevFeature(0x0001, 0x0001);
+    devs["I-8056"]	= DevFeature(0, 0x0002);
+    devs["I-8057"]	= DevFeature(0, 0x0002);
+    devs["I-8058"]	= DevFeature(0x0001);
+    devs["I-8060"]	= DevFeature(0, 0x0001);
+    devs["I-8063"]	= DevFeature(0x0001, 0x0001);
+    devs["I-8064"]	= DevFeature(0, 0x0001);
+    devs["I-8065"]	= DevFeature(0, 0x0001);
+    devs["I-8066"]	= DevFeature(0, 0x0001);
+    devs["I-8068"]	= DevFeature(0, 0x0001);
+    devs["I-8069"]	= DevFeature(0, 0x0001);
+    devs["I-8077"]	= DevFeature(0x0102, 0x0102);
 }
 
 da_LP_8x::~da_LP_8x( )
@@ -46,66 +73,93 @@ void da_LP_8x::tpList( TMdPrm *p, vector<string> &tpl, vector<string> *ntpl )
 {
     //Only for LP, I-8000 parallel bus
     if(p->owner().bus() != 0)	return;
-    tpl.push_back("LP-8x8x");	if(ntpl) ntpl->push_back("LP-8x8x (PAC)");
-    tpl.push_back("I-8017");	if(ntpl) ntpl->push_back("I-8017");
-    tpl.push_back("I-8042");	if(ntpl) ntpl->push_back("I-8042");
+    for(map<string, DevFeature>::iterator i_d = devs.begin(); i_d != devs.end(); i_d++)
+    {
+        tpl.push_back(i_d->first);
+        if(ntpl) ntpl->push_back(i_d->first);
+    }
 }
 
 void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
 {
-    //> Make DAQ parameter's attributes
-    if(p->modTp.getS() == "LP-8x8x")
+    string chnId, chnNm;
+
+    if(!p->extPrms) p->extPrms = new tval();
+    tval *ePrm = (tval*)p->extPrms;
+    ePrm->dev = devs[p->modTp.getS()];
+
+    if(p->modTp.getS() == "LP-8xxx")		//> Individual LP-8xxx processing
     {
         p->p_el.fldAdd(new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite)); als.push_back("serial");
         p->p_el.fldAdd(new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite)); als.push_back("SDK");
         p->p_el.fldAdd(new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite)); als.push_back("DIP");
     }
-    else if(p->modTp.getS() == "I-8017")
+    else if(p->modTp.getS() == "I-8017")	//> Individual I-8017 processing
     {
-	if(!p->extPrms) p->extPrms = new PrmsI8017();
-        ((PrmsI8017*)p->extPrms)->prmNum = vmin(8,vmax(0,atoi(p->modPrm("cnls").c_str())));
-        ((PrmsI8017*)p->extPrms)->fastPer = atof(p->modPrm("fastPer").c_str());
-        for(int i_i = 0; i_i < 8; i_i++)
-        {
-            ((PrmsI8017*)p->extPrms)->cnlMode[i_i] = atoi(p->modPrm(TSYS::strMess("cnl:%d",i_i)).c_str());
-            p->p_el.fldAdd(new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Real,TFld::NoWrite));
-            als.push_back(TSYS::strMess("i%d",i_i));
-            p->p_el.fldAdd(new TFld(TSYS::strMess("ha%d",i_i).c_str(),TSYS::strMess(_("H/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite));
-            als.push_back(TSYS::strMess("ha%d",i_i));
-            p->p_el.fldAdd(new TFld(TSYS::strMess("la%d",i_i).c_str(),TSYS::strMess(_("L/A %d"),i_i).c_str(),TFld::Boolean,TVal::DirWrite));
-            als.push_back(TSYS::strMess("la%d",i_i));
-        }
-    }
-    else if(p->modTp.getS() == "I-8042")
-    {
-	p->dInOutRev[0] = atoi(p->modPrm("dInRev").c_str());
-	p->dInOutRev[1] = atoi(p->modPrm("dOutRevvl").c_str());
+        ePrm->prmNum = vmin(8,vmax(0,atoi(p->modPrm("cnls","8").c_str())));
+        ePrm->fastPer = atof(p->modPrm("fastPer").c_str());
         for(int i_i = 0; i_i < 16; i_i++)
         {
-            p->p_el.fldAdd(new TFld(TSYS::strMess("i%d",i_i).c_str(),TSYS::strMess(_("Input %d"),i_i).c_str(),TFld::Boolean,TFld::NoWrite));
-            als.push_back(TSYS::strMess("i%d",i_i));
-        }
-        for( int i_o = 0; i_o < 16; i_o++ )
-        {
-            p->p_el.fldAdd(new TFld(TSYS::strMess("o%d",i_o).c_str(),TSYS::strMess(_("Out %d"),i_o).c_str(),TFld::Boolean,TVal::DirWrite));
-            als.push_back(TSYS::strMess("o%d",i_o));
+            ePrm->cnlMode[i_i] = atoi(p->modPrm(TSYS::strMess("cnl:%d",i_i)).c_str());
+            chnId = TSYS::strMess("ai%d",i_i); chnNm = TSYS::strMess(_("Input %d"),i_i);
+            p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+            if(i_i < 8)
+            {
+		chnId = TSYS::strMess("ha%d",i_i); chnNm = TSYS::strMess(_("H/A %d"),i_i);
+        	p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
+		chnId = TSYS::strMess("la%d",i_i); chnNm = TSYS::strMess(_("L/A %d"),i_i);
+        	p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
+	    }
         }
     }
+    else if(p->modTp.getS() == "I-8024")	//> Individual I-8024 processing
+        for(int i_o = 0; i_o < 8; i_o++)
+        {
+            chnId = TSYS::strMess("ao%d",i_o); chnNm = TSYS::strMess(_("Output %d"),i_o);
+            p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+	}
+    //> Other typical modules processing
+    else
+	//> DI and DO processing
+	for(unsigned i_ch = 0; i_ch < ((ePrm->dev.DI&0xFF)+(ePrm->dev.DO&0xFF)); i_ch++)
+	{
+    	    //> Reverse configuration load
+    	    p->dInOutRev[i_ch] = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+
+    	    //> Attributes create
+    	    if(i_ch < (ePrm->dev.DI&0xFF))
+        	for(int i_i = 0; i_i < 8; i_i++)
+        	{
+            	    chnId = TSYS::strMess("di%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
+            	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
+            	    als.push_back(chnId);
+        	}
+    	    else
+        	for(int i_o = 0; i_o < 8; i_o++)
+        	{
+            	    chnId = TSYS::strMess("do%d_%d",i_ch-(ePrm->dev.DI&0xFF),i_o);
+            	    chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch-(ePrm->dev.DI&0xFF),i_o);
+            	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
+            	    als.push_back(chnId);
+        	}
+	}
 }
 
 void da_LP_8x::disable( TMdPrm *p )
 {
     //> Free module object
-    if(p->modTp.getS() == "I-8017")
+    if(p->extPrms)
     {
-	delete ((PrmsI8017*)p->extPrms);
+	delete (tval*)p->extPrms;
 	p->extPrms = NULL;
     }
 }
 
 void da_LP_8x::getVal( TMdPrm *p )
 {
-    if(p->modTp.getS() == "LP-8x8x")
+    tval *ePrm = (tval*)p->extPrms;
+
+    if(p->modTp.getS() == "LP-8xxx")	//> Individual LP-8xxx processing
     {
         //> Read serial number
         AutoHD<TVal> vl = p->vlAt("serial");
@@ -127,43 +181,103 @@ void da_LP_8x::getVal( TMdPrm *p )
         p->owner().pBusRes.resRelease();
         p->vlAt("DIP").at().setI(dpSw,0,true);
     }
-    else if(p->modTp.getS() == "I-8017")
+    else if(p->modTp.getS() == "I-8017")//> Individual I-8017 processing
     {
         //> Check for I8017 init
-        if(!((PrmsI8017*)p->extPrms)->init)
-        { p->owner().pBusRes.resRequestW(); I8017_Init(p->modSlot); ((PrmsI8017*)p->extPrms)->init = true; p->owner().pBusRes.resRelease(); }
+        if(!ePrm->init)	{ p->owner().pBusRes.resRequestW(); I8017_Init(p->modSlot); ePrm->init = true; p->owner().pBusRes.resRelease(); }
         //> Check for I8017 fast task start
-        if(((PrmsI8017*)p->extPrms)->fastPer && !p->prcSt) SYS->taskCreate(p->nodePath('.',true), 32, fastTask, p);
+        if(ePrm->fastPer && !p->prcSt) SYS->taskCreate(p->nodePath('.',true), 32, fastTask, p);
         //> Get values direct
-        for(int i_v = 0; i_v < 8; i_v++)
-            if(i_v >= ((PrmsI8017*)p->extPrms)->prmNum) p->vlAt(TSYS::strMess("i%d",i_v)).at().setR(EVAL_REAL,0,true);
-            else if(!((PrmsI8017*)p->extPrms)->fastPer)
+        for(int i_v = 0; i_v < 16; i_v++)
+            if(i_v >= ePrm->prmNum) p->vlAt(TSYS::strMess("ai%d",i_v)).at().setR(EVAL_REAL,0,true);
+            else if(!ePrm->fastPer)
             {
                 ResAlloc res(p->owner().pBusRes, true);
-                I8017_SetChannelGainMode(p->modSlot,i_v,((PrmsI8017*)p->extPrms)->cnlMode[i_v],0);
+                I8017_SetChannelGainMode(p->modSlot, i_v, ePrm->cnlMode[i_v], 0);
                 p->vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(p->modSlot), 0, true );
             }
     }
-    else if(p->modTp.getS() == "I-8042")
+    //> Other typical modules processing
+    //>> DI
+    else if(ePrm->dev.DI)
     {
-        p->owner().pBusRes.resRequestW();
-        int c_vl = DI_16(p->modSlot);
-        p->owner().pBusRes.resRelease();
-        for(int i_v = 0; i_v < 16; i_v++) p->vlAt(TSYS::strMess("i%d",i_v)).at().setB(((p->dInOutRev[0]^c_vl)>>i_v)&0x01, 0, true);
-        p->owner().pBusRes.resRequestW();
-        c_vl = DO_16_RB(p->modSlot);
-        p->owner().pBusRes.resRelease();
-        for(int o_v = 0; o_v < 16; o_v++) p->vlAt(TSYS::strMess("o%d",o_v)).at().setB(((p->dInOutRev[1]^c_vl)>>o_v)&0x01, 0, true);
+	bool isErr = false;
+	uint32_t val = 0;
+
+	p->owner().pBusRes.resRequestW(1000);
+	switch(ePrm->dev.DI>>8)
+	{
+	    case 0:     //DI_8(32)
+		switch(ePrm->dev.DI&0xFF)
+		{
+		    case 1:	val = DI_8(p->modSlot);	break;
+		    case 2:	val = DI_16(p->modSlot);break;
+		    case 4:	val = DI_32(p->modSlot);break;
+		    default:	isErr = true;
+		}
+		break;
+	    case 1:     //DIO_DI_8(16)
+		switch(ePrm->dev.DI&0xFF)
+		{
+		    case 1:	val = DIO_DI_8(p->modSlot);	break;
+		    case 2:	val = DIO_DI_16(p->modSlot);break;
+		    default:	isErr = true;
+		}
+		break;
+	    default:    isErr = true;
+	}
+	p->owner().pBusRes.resRelease();
+
+	for(unsigned i_ch = 0; i_ch < (ePrm->dev.DI&0xFF); i_ch++)
+	    for(int i_i = 0; i_i < 8; i_i++)
+		p->vlAt(TSYS::strMess("di%d_%d",i_ch,i_i)).at().setB(isErr ? EVAL_BOOL : 
+		    (((val>>(i_ch*8))^p->dInOutRev[i_ch])>>i_i)&1, 0, true);
+    }
+    //>> DO back read
+    else if(ePrm->dev.DO)
+    {
+	bool isErr = false;
+
+	p->owner().pBusRes.resRequestW(1000);
+	switch(ePrm->dev.DO>>8)
+	{
+	    case 0:	//DO_8_RB(32)
+		switch(ePrm->dev.DO&0xFF)
+		{
+		    case 1:	ePrm->doVal = DO_8_RB(p->modSlot);	break;
+		    case 2:	ePrm->doVal = DO_16_RB(p->modSlot);	break;
+		    case 4:	ePrm->doVal = DO_32_RB(p->modSlot);	break;
+		    default:	isErr = true;
+		}
+		break;
+	    case 1:	//DIO_DO_8_RB(16)
+		switch(ePrm->dev.DO&0xFF)
+		{
+		    case 1:	ePrm->doVal = DIO_DO_8_RB(p->modSlot);	break;
+		    case 2:	ePrm->doVal = DIO_DO_16_RB(p->modSlot);	break;
+		    default:	isErr = true;
+		}
+		break;
+	    default:    isErr = true;
+	}
+	p->owner().pBusRes.resRelease();
+
+	for(unsigned i_ch = 0; i_ch < (ePrm->dev.DO&0xFF); i_ch++)
+	    for(int i_o = 0; i_o < 8; i_o++)
+		p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_o)).at().setB(isErr ? EVAL_BOOL :
+		    (((ePrm->doVal>>(i_ch*8))^p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch])>>i_o)&1, 0, true);
     }
 }
 
 void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 {
-    if(p->modTp.getS() == "I-8017")
+    tval *ePrm = (tval*)p->extPrms;
+
+    if(p->modTp.getS() == "I-8017")	//> Individual I-8017 processing
     {
         bool ha = (valo.name().substr(0,2) == "ha");
         bool la = (valo.name().substr(0,2) == "la");
-        if(!(ha||la) || !((PrmsI8017*)p->extPrms)->init) return;
+        if(!(ha||la) || !ePrm->init) return;
 
         //> Create previous value
         int hvl = 0, lvl = 0;
@@ -171,14 +285,62 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
         {
             hvl = hvl << 1;
             lvl = lvl << 1;
-            if(p->vlAt(TSYS::strMess("ha%d",i_v)).at().getB() == true) hvl |= 1;
-            if(p->vlAt(TSYS::strMess("la%d",i_v)).at().getB() == true) lvl |= 1;
+            if(p->vlAt(TSYS::strMess("ha%d",i_v)).at().getB(0, true) == true) hvl |= 1;
+            if(p->vlAt(TSYS::strMess("la%d",i_v)).at().getB(0, true) == true) lvl |= 1;
         }
         p->owner().pBusRes.resRequestW(1000);
         I8017_SetLed(p->modSlot,(lvl<<8)|hvl);
         p->owner().pBusRes.resRelease();
     }
-    else if(p->modTp.getS() == "I-8042")
+    else if(p->modTp.getS() == "I-8024")	//> Individual I-8024 processing
+    {
+	p->owner().pBusRes.resRequestW(1000);
+	I8024_VoltageOut(p->modSlot, atoi(valo.name().c_str()+2), valo.getR(0, true));
+	p->owner().pBusRes.resRelease();
+    }
+    //> Other typical modules processing
+    //>> DO
+    else if(valo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
+    {
+	uint32_t val = ePrm->doVal;
+        int i_ch = 0, i_p = 0;
+        if(sscanf(valo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
+        if((int)valo.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))  val |= 1<<((i_ch*8)+i_p);
+        else val &= ~(1<<((i_ch*8)+i_p));
+        ePrm->doVal = val;
+        /*for(int i_ch = (ePrm->dev.DO&0xFF)-1; i_ch >= 0; i_ch--)
+        {
+            for(int i_o = 7; i_o >= 0; i_o--)
+            {
+                val = val << 1;
+                if(p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_o)).at().getB(0, true)) val |= 1;
+            }
+            val ^= p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch];
+        }*/
+
+        p->owner().pBusRes.resRequestW(1000);
+	switch(ePrm->dev.DO>>8)
+	{
+	    case 0:	//DO_8(32)
+		switch(ePrm->dev.DO&0xFF)
+		{
+		    case 1:	DO_8(p->modSlot, val);	break;
+		    case 2:	DO_16(p->modSlot, val);	break;
+		    case 4:	DO_32(p->modSlot, val);	break;
+		}
+		break;
+	    case 1:	//DIO_DO_8(16)
+		switch(ePrm->dev.DO&0xFF)
+		{
+		    case 1:	DIO_DO_8(p->modSlot, val);	break;
+		    case 2:	DIO_DO_16(p->modSlot, val);	break;
+		}
+		break;
+	}
+	p->owner().pBusRes.resRelease();
+    }
+
+    /*else if(p->modTp.getS() == "I-8042")
     {
         bool vl = valo.getB(0,true);
         if(vl == EVAL_BOOL || vl == pvl.getB()) return;
@@ -187,82 +349,78 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
         p->owner().pBusRes.resRequestW(1000);
         DO_16(p->modSlot, ((vl^(p->dInOutRev[1]>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));
         p->owner().pBusRes.resRelease();
-    }
+    }*/
 }
 
 bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 {
+    DevFeature dev = devs[p->modTp.getS()];
+    tval *ePrm = (tval*)p->extPrms;
+
     if(opt->name() == "info")
     {
-	if(p->modTp.getS() == "I-8017" && p->enableStat() && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+	if(p->modTp.getS() == "LP-8xxx") p->ctrRemoveNode(opt, "/prm/cfg/MOD_SLOT");
+	//> Individual I-8017 processing
+	if(p->modTp.getS() == "I-8017" && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
         {
             p->ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-            p->ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+            p->ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,2,"tp","real","help",_("Use 0 for disable"));
             if(p->ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")))
-                for(int i_v = 0; i_v < 8; i_v++)
-                    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","dest","select","select","/cfg/tpLst");
+                for(int i_v = 0; i_v < 16; i_v++)
+                    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),
+                	RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
+                	"sel_id","0;1;2;3;4",
+                	"sel_list",_("-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with 125 ohms resistor)"));
         }
-	else if(p->modTp.getS() == "I-8042" && p->enableStat() && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
-	{
-            for(int i_o = 0; i_o < 16; i_o++)
-                p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revIn%d",i_o).c_str(),i_o?"":_("Inputs reverse"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-            for(int i_o = 0; i_o < 16; i_o++)
-                p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/revOut%d",i_o).c_str(),i_o?"":_("Outputs reverse"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	}
+	//>> DI and DO processing
+        else if((dev.DI || dev.DO) && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+        {
+            for(unsigned i_ch = 0; i_ch < ((dev.DI&0xFF)+(dev.DO&0xFF)); i_ch++)
+                for(unsigned i_n = 0; i_n < 8; i_n++)
+                    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(), (i_n==0) ?
+                        ((i_ch < (dev.DI&0xFF)) ? TSYS::strMess(_("DI %d reverse"),i_ch).c_str() :
+                                                 TSYS::strMess(_("DO %d reverse"),i_ch-(dev.DI&0xFF)).c_str()) : "",
+                        p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+        }
+
 	return true;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(p->modTp.getS() == "I-8017" && p->enableStat())
+    if(p->modTp.getS() == "I-8017")
     {
 	if(a_path == "/cfg/prms" )
 	{
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(TSYS::int2str(((PrmsI8017*)p->extPrms)->prmNum));
+    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(ePrm?TSYS::int2str(ePrm->prmNum):p->modPrm("cnls","8"));
     	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("cnls",TSYS::int2str(((PrmsI8017*)p->extPrms)->prmNum = atoi(opt->text().c_str())));
+    		ePrm ? p->setModPrm("cnls",TSYS::int2str(ePrm->prmNum = atoi(opt->text().c_str()))) : p->setModPrm("cnls",opt->text());
 	}
 	else if(a_path == "/cfg/fastPer")
 	{
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(TSYS::real2str(((PrmsI8017*)p->extPrms)->fastPer,5));
+    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(ePrm?TSYS::real2str(ePrm->fastPer,5):p->modPrm("fastPer","0"));
     	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("fastPer",TSYS::real2str(((PrmsI8017*)p->extPrms)->fastPer = atof(opt->text().c_str()),5));
+        	ePrm ? p->setModPrm("fastPer",TSYS::real2str(ePrm->fastPer = atof(opt->text().c_str()),5)) : p->setModPrm("fastPer",opt->text());
 	}
 	else if(a_path.substr(0,12) == "/cfg/mode/in")
 	{
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(TSYS::int2str(((PrmsI8017*)p->extPrms)->cnlMode[atoi(a_path.substr(12).c_str())]));
+    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    		opt->setText(ePrm?TSYS::int2str(ePrm->cnlMode[atoi(a_path.substr(12).c_str())]):p->modPrm("cnl:"+a_path.substr(12),"0"));
     	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("cnl:"+a_path.substr(12),TSYS::int2str(((PrmsI8017*)p->extPrms)->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str())));
-	}
-	else if(a_path == "/cfg/tpLst" && p->ctrChkNode(opt))
-	{
-    	    opt->childAdd("el")->setAttr("id","0")->setText(_("-10V to +10V"));
-    	    opt->childAdd("el")->setAttr("id","1")->setText(_("-5V to +5V"));
-    	    opt->childAdd("el")->setAttr("id","2")->setText(_("-2.5V to +2.5V"));
-    	    opt->childAdd("el")->setAttr("id","3")->setText(_("-1.25V to +1.25V"));
-    	    opt->childAdd("el")->setAttr("id","4")->setText(_("-20mA to +20mA (with 125 ohms resistor)"));
+        	ePrm ? p->setModPrm("cnl:"+a_path.substr(12),TSYS::int2str(ePrm->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()))) :
+        	       p->setModPrm("cnl:"+a_path.substr(12),opt->text());
 	}
 	else return false;
     }
-    else if(p->modTp.getS() == "I-8042" && p->enableStat())
+    //> DI and DO processing
+    if((dev.DI || dev.DO) && a_path.compare(0,10,"/cfg/nRevs") == 0)
     {
-	if(a_path.substr(0,10) == "/cfg/revIn")
-	{
-    	    int rin = atoi(a_path.substr(10).c_str());
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText((p->dInOutRev[0]&(1<<rin))?"1":"0");
-    	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("dInRev",TSYS::int2str(p->dInOutRev[0] = atoi(opt->text().c_str()) ?
-        	    (p->dInOutRev[0] | (1<<rin)) : (p->dInOutRev[0] & ~(1<<rin))));
-	}
-	else if(a_path.substr(0,11) == "/cfg/revOut")
-	{
-    	    int rout = atoi(a_path.substr(11).c_str());
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText((p->dInOutRev[1]&(1<<rout))?"1":"0");
-    	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	p->setModPrm("dOutRev",TSYS::int2str(p->dInOutRev[1] = atoi(opt->text().c_str()) ?
-        	    (p->dInOutRev[1]|(1<<rout)) : (p->dInOutRev[1] & ~(1<<rout))));
-	}
-	else return false;
+        int i_ch = 0, i_n = 0;
+        sscanf(a_path.c_str(),"/cfg/nRevs%d_%d",&i_ch,&i_n);
+        int chVl = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
+        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+            p->setModPrm("dIORev"+TSYS::int2str(i_ch), TSYS::int2str(atoi(opt->text().c_str()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
     }
     else return false;
 
@@ -272,6 +430,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 void *da_LP_8x::fastTask( void *iprm )
 {
     TMdPrm &prm = *(TMdPrm*)iprm;
+    tval *ePrm = (tval*)prm.extPrms;
 
     prm.endRunReq = false;
     prm.prcSt = true;
@@ -281,8 +440,8 @@ void *da_LP_8x::fastTask( void *iprm )
     int c_mode;
 
     vector< AutoHD<TVal> > cnls;
-    for(int i_c = 0; i_c < ((PrmsI8017*)prm.extPrms)->prmNum; i_c++)
-        cnls.push_back(prm.vlAt(TSYS::strMess("i%d",i_c)));
+    for(int i_c = 0; i_c < ePrm->prmNum; i_c++)
+        cnls.push_back(prm.vlAt(TSYS::strMess("ai%d",i_c)));
     float vbuf[cnls.size()];
 
     while(!prm.endRunReq)
@@ -290,7 +449,7 @@ void *da_LP_8x::fastTask( void *iprm )
         prm.owner().pBusRes.resRequestW( );
         for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
         {
-            c_mode = ((PrmsI8017*)prm.extPrms)->cnlMode[i_c];
+            c_mode = ePrm->cnlMode[i_c];
             I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
             vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017_GetCurAdChannel_Hex(prm.modSlot)/8000;
         }
@@ -300,7 +459,7 @@ void *da_LP_8x::fastTask( void *iprm )
             cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
         //> Calc next work time and sleep
-        wTm += (int64_t)(1e6*((PrmsI8017*)prm.extPrms)->fastPer);
+        wTm += (int64_t)(1e6*ePrm->fastPer);
         sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
         clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
     }

@@ -526,7 +526,8 @@ bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
                 p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/chnOut%d",i_ch).c_str(),TSYS::strMess(_("Channel %d out"),i_ch).c_str(),
             	    p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		for(unsigned i_n = 0; i_n < 24; i_n++)
-		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(),TSYS::strMess(_("IO %d.%d reverse"),i_ch,i_n).c_str(),
+		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(),
+			(i_n==0)?TSYS::strMess(_("IO %d reverse"),i_ch).c_str():"",
 			p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 
@@ -535,9 +536,9 @@ bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    {
         	for(unsigned i_ch = 0; i_ch < ((dev.DI&0xFF)+(dev.DO&0xFF)); i_ch++)
 		    for(unsigned i_n = 0; i_n < 8; i_n++)
-			p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(),
-			    (i_ch < (dev.DI&0xFF)) ? TSYS::strMess(_("DI %d.%d reverse"),i_ch,i_n).c_str() :
-						     TSYS::strMess(_("DO %d.%d reverse"),i_ch-(dev.DI&0xFF),i_n).c_str(),
+			p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(), (i_n==0) ?
+			    ((i_ch < (dev.DI&0xFF)) ? TSYS::strMess(_("DI %d reverse"),i_ch).c_str() :
+						      TSYS::strMess(_("DO %d reverse"),i_ch-(dev.DI&0xFF)).c_str()) : "",
 			    p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}

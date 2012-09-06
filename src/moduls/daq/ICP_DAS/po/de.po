@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-30 10:10+0300\n"
+"POT-Creation-Date: 2012-09-06 19:44+0300\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -21,11 +21,18 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "I-87xxx (generic)"
-msgstr "I-87xxx (allgemein)"
-
-msgid "I-7xxx (generic)"
-msgstr "I-7xxx (allgemein)"
+msgid ""
+"-15mV to +15mV;-50mV to +50mV;-100mV to +100mV;-500mV to +500mV;-1V to "
+"+1V;-2.5V to +2.5V;-20mA to +20mA (with 125 ohms resistor);-10V to +10V;-5V "
+"to +5V;-1V to +1V;-500mV to +500mV;-150mV to +150mV;-20mA to +20mA (with 125 "
+"ohms resistor);J Type;K Type;T Type;E Type;R Type;S Type;B Type;N Type;C "
+"Type;L Type;M Type;L Type (DIN43710C Type)"
+msgstr ""
+"-15mV bis +15mV;-50mV bis +50mV;-100mV bis +100mV;-500mV bis +500mV;-1V bis "
+"+1V;-2.5V bis +2.5V;-20mA bis +20mA (mit dem Resistor 125 Om);-10V bis "
+"+10V;-5V bis +5V;-1V bis +1V;-500mV bis +500mV;-150mV bis +150mV;-20mA bis "
+"+20mA (mit dem Resistor 125 Om);J Typ;K Typ;T Typ;E Typ;R Typ;S Typ;B Typ;N "
+"Typ;C Typ;L Typ;M Typ;L Typ (DIN43710C Typ)"
 
 msgid "Cold-Junction Compensation(CJC) temperature"
 msgstr "Temperatur der Kompensation der kalten Fugen"
@@ -35,16 +42,20 @@ msgid "Input %d"
 msgstr "Eingang %d"
 
 #, c-format
-msgid "H/A %d"
-msgstr ""
-
-#, c-format
-msgid "L/A %d"
-msgstr ""
-
-#, c-format
 msgid "Out %d"
 msgstr "Ausgang %d"
+
+#, c-format
+msgid "Digital input %d.%d"
+msgstr "Digital-Eingang %d.%d"
+
+#, c-format
+msgid "Digital out %d.%d"
+msgstr "Digital-Ausgang %d.%d"
+
+#, c-format
+msgid "Counter %d"
+msgstr "Messuhr %d"
 
 msgid "10:Request to module error."
 msgstr "10:Fehler der Anfrage ans Modul."
@@ -52,12 +63,30 @@ msgstr "10:Fehler der Anfrage ans Modul."
 msgid "11:Respond from module error."
 msgstr "11:Fehler in der Antwort des Moduls."
 
+msgid "AI number"
+msgstr "Anzahl AI"
+
+msgid "AO number, #AAN(Data)"
+msgstr "Anzahl AO, #AAN(Data)"
+
+msgid "DI number (ports x8)"
+msgstr "Anzahl DI (Ports x8)"
+
+msgid "DO number (ports x8)"
+msgstr "Anzahl DO (Ports x8)"
+
+msgid "Counters number"
+msgstr "Anzahl Messuhr"
+
 msgid "Configuration"
 msgstr "Konfiguration"
 
 #, c-format
 msgid "Input %d type"
 msgstr "Eingangstyp %d"
+
+msgid "Error;"
+msgstr "Fehler;"
 
 msgid "Host watchdog timeout (s)"
 msgstr "Zeit des Hostwatchdogs (s)"
@@ -81,77 +110,13 @@ msgstr "Sichere Werte"
 msgid "Set safe values from current"
 msgstr "Wiederherstellung der sicheren Werte aus den laufenden"
 
-msgid "Out reverse"
-msgstr "Umgekehrt des Eingangs"
+#, c-format
+msgid "DI %d reverse"
+msgstr "DI %d Wechselschaltung"
 
-msgid "Error"
-msgstr "Fehler"
-
-msgid "-15mV to +15mV"
-msgstr "-15мВ bis +15мВ"
-
-msgid "-50mV to +50mV"
-msgstr "-50мВ bis +50мВ"
-
-msgid "-100mV to +100mV"
-msgstr "-100мВ bis +100мВ"
-
-msgid "-500mV to +500mV"
-msgstr "-500мВ bis +500мВ"
-
-msgid "-1V to +1V"
-msgstr "-1В bis +1В"
-
-msgid "-2.5V to +2.5V"
-msgstr "-2.5В bis +2.5В"
-
-msgid "-20mA to +20mA (with 125 ohms resistor)"
-msgstr "-20мА bis +20мА (mit dem Resistor 125 Ом)"
-
-msgid "-10V to +10V"
-msgstr "-10В bis +10В"
-
-msgid "-5V to +5V"
-msgstr "-5В bis +5В"
-
-msgid "-150mV to +150mV"
-msgstr "-150мВ bis +150мВ"
-
-msgid "J Type"
-msgstr "J Typ"
-
-msgid "K Type"
-msgstr "K Typ"
-
-msgid "T Type"
-msgstr "T Typ"
-
-msgid "E Type"
-msgstr "E Typ"
-
-msgid "R Type"
-msgstr "R Typ"
-
-msgid "S Type"
-msgstr "S Typ"
-
-msgid "B Type"
-msgstr "B Typ"
-
-msgid "N Type"
-msgstr "N Typ"
-
-msgid "C Type"
-msgstr "C Typ"
-
-msgid "L Type"
-msgstr "L Typ"
-
-msgid "M Type"
-msgstr "H Typ"
-
-msgid "L Type (DIN43710C Type)"
-msgstr "L Typ (DIN43710C Typ)"
+#, c-format
+msgid "DO %d reverse"
+msgstr "DO %d Wechselschaltung"
 
 msgid "Set. "
 msgstr "Installiert. "
@@ -168,18 +133,16 @@ msgstr "Ausgeschaltet, "
 msgid " s."
 msgstr " s."
 
+msgid "Error"
+msgstr "Fehler"
+
+#, c-format
 msgid "Analog input %d"
 msgstr "Analogeingang %d"
 
 #, c-format
 msgid "Analog output %d"
 msgstr "Analogausgang %d"
-
-msgid "Digital out %d.%d"
-msgstr "Digital-Ausgang %d.%d"
-
-msgid "Digital input %d.%d"
-msgstr "Digital-Eingang %d.%d"
 
 msgid "Analog input settle timeout (us)"
 msgstr "Setup-Zeit der analogen Eingang (mcs)"
@@ -193,14 +156,8 @@ msgid "Channel %d out"
 msgstr "Kanal %d Ausgang"
 
 #, c-format
-msgid "IO %d.%d reverse"
-msgstr "IO %d.%d Wechselschaltung"
-
-msgid "DI %d.%d reverse"
-msgstr "DI %d.%d Wechselschaltung"
-
-msgid "DO %d.%d reverse"
-msgstr "DO %d.%d Wechselschaltung"
+msgid "IO %d reverse"
+msgstr "IO %d Wechselschaltung"
 
 msgid "Serial number"
 msgstr "Seriennummer"
@@ -211,23 +168,36 @@ msgstr "SDK-Version"
 msgid "DIP switch"
 msgstr "DIP-Umschalter"
 
+#, c-format
+msgid "H/A %d"
+msgstr ""
+
+#, c-format
+msgid "L/A %d"
+msgstr ""
+
+#, c-format
+msgid "Output %d"
+msgstr "Ausgang %d"
+
 msgid "Process parameters"
 msgstr "Parameterbearbeitung"
 
 msgid "Fast data get period (s)"
 msgstr "Periode der schnellen Datenerfassun (s)"
 
+msgid "Use 0 for disable"
+msgstr "Mit 0 deaktivieren"
+
 msgid "Mode"
 msgstr "Modus"
 
-msgid "Inputs reverse"
-msgstr "Eingängerevers"
-
-msgid "Outputs reverse"
-msgstr "Ausgängerevers"
-
-msgid "-1.25V to +1.25V"
-msgstr "-1.25В bis +1.25B"
+msgid ""
+"-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with "
+"125 ohms resistor)"
+msgstr ""
+"-10V bis +10V;-5V bis +5V;-2.5V bis +2.5V;-1.25V bis +1.25V;-20mA bis +20mA "
+"(mit dem Resistor 125 Om)"
 
 msgid "ICP DAS hardware"
 msgstr "Ausstattung ICP DAS"
@@ -303,14 +273,15 @@ msgstr "Fehler der Öffnung des LP-Slots 9."
 msgid "Open COM%d port error."
 msgstr "Fehler der Öffnung des COM%d Ports."
 
+msgid ""
+"ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;"
+"COM 9;COM 10"
+msgstr ""
+"ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;"
+"COM 9;COM 10"
+
 msgid "Watchdog timeout (s)"
 msgstr "Zeit des Watchdogs (s)"
-
-msgid "ISA"
-msgstr ""
-
-msgid " (Master LP-8x81)"
-msgstr " (Haupt- LP-8x81)"
 
 msgid "No a device selected."
 msgstr "Nr. ein Gerät ausgewählt."

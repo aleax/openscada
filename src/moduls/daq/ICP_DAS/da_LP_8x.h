@@ -52,20 +52,38 @@ class da_LP_8x: public DA
 
     private:
 	//Data
-        class PrmsI8017
+        class DevFeature
         {
             public:
-                PrmsI8017( ) : init(false), prmNum(8), fastPer(0)
-                { for( int ip = 0; ip < 8; ip++ ) cnlMode[ip] = 0; }
+                DevFeature( unsigned iDI, unsigned iDO = 0 ) : DI(iDI), DO(iDO)	{ }
+                DevFeature( ) : DI(0), DO(0)	{ }
 
+                unsigned DI;    //[mode][cnls]	0x0002  cnls*8	mode:0-DI_8(32);1-DIO_DI_8(16)
+                unsigned DO;    //[mode][cnls]  0x0002  cnls*8  mode:0-DO_8(32);1-DIO_DO_8(16)
+        };
+
+        class tval
+        {
+            public:
+                tval( ) : init(false), prmNum(8), fastPer(0), doVal(0)
+                { for( int ip = 0; ip < 16; ip++ ) cnlMode[ip] = 0; }
+
+		DevFeature dev;
+
+		//> I-8017
                 bool    init;
                 char    prmNum;
                 float   fastPer;
-                char    cnlMode[8];
+                char    cnlMode[16];
+
+		uint32_t doVal; //current values for DO channels
         };
 
 	//Methods
 	static void *fastTask( void *iprm );
+
+	//Attributes
+        map<string, DevFeature> devs;
 };
 
 } //End namespace

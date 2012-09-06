@@ -1,3 +1,10 @@
+2012-09-06 Roman
+- !!!!:DAQ.ICP_DAS: Support for all main I-87xxx and I-8xxx modules is added. Link with -li8k is fixed. Digital IO reversing set writed by ports.
+- FIX:Transport.Serial: Stop output transport at read() error, possible by serial device lost.
+- FIX:UI.QTCfg: Size policy for read-values is changed to QSizePolicy::Ignored. Values' labels text selection by mouse is added.
+- FIX:UI.WebCfgD: Read-values space for Boolean is added.
+
+
 2012-09-05 Roman
 - FIX:UI.QTCfg: ComboBox items accumulation at update is fixed for no exited table's item delegate.
 
