@@ -1,3 +1,8 @@
+2012-09-10 Roman
+- !!:DAQ.ICP_DAS: Version 1.0.0 is released.
+- FIX:DAQ.ICP_DAS: AO writing alow is fixed for I-8xxx modules series.
+
+
 2012-09-06 Roman
 - !!!!:DAQ.ICP_DAS: Support for all main I-87xxx and I-8xxx modules is added. Link with -li8k is fixed. Digital IO reversing set writed by ports.
 - FIX:Transport.Serial: Stop output transport at read() error, possible by serial device lost.

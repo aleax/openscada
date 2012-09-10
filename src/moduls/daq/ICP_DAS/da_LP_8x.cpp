@@ -116,7 +116,7 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
         for(int i_o = 0; i_o < 8; i_o++)
         {
             chnId = TSYS::strMess("ao%d",i_o); chnNm = TSYS::strMess(_("Output %d"),i_o);
-            p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+            p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite)); als.push_back(chnId);
 	}
     //> Other typical modules processing
     else
