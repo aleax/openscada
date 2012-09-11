@@ -388,7 +388,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 		"tp","dec","dest","select","sel_id","0;1","sel_list","@AA(Data);@AADODD");
 	}
 	if(p->modTp.getS() == "I-87xxx" || devOrig.CNTR)
-	    p->ctrMkNode("fld",opt,-1,"/prm/cfg/modCNTR",_("Counters number"),p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    p->ctrMkNode("fld",opt,-1,"/prm/cfg/modCNTR",_("Counters number, #AAN"),p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 		"tp","dec","min","-1","max",devOrig.CNTR?TSYS::int2str(devOrig.CNTR).c_str():"32");
 
 	//> AI processing
