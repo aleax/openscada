@@ -38,6 +38,7 @@
 #include <QStatusBar>
 #include <QMenu>
 #include <QPlastiqueStyle>
+#include <QScrollBar>
 
 #include <tsys.h>
 
@@ -540,8 +541,10 @@ void TextEdit::setText(const QString &text)
 
 void TextEdit::setSnthHgl(XMLNode nd)
 {
+    int scrollPos = ed_fld->verticalScrollBar()->value();
     if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
     snt_hgl->setSnthHgl(nd);
+    ed_fld->verticalScrollBar()->setValue(scrollPos);
 }
 
 void TextEdit::changed()
