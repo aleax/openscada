@@ -173,7 +173,7 @@ class TTrOut: public TTransportOut
 	//Attributes
 	string	mDevPort, mTimings;
 	int	fd;
-	int64_t	mLstReqTm;
+	int64_t	mLstReqTm, mKeepAliveLstTm;
 
 	uint64_t trIn, trOut;			// Traffic in and out counter and maximum respond timeout
 

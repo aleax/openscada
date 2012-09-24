@@ -108,7 +108,8 @@ class TMdContr: public TController
 	string getStatus( );
 
 	//!!! The controller's background task properties
-	double	period( )	{ return vmax(m_per,0.1); }
+	int64_t	period( )	{ return mPer; }
+	string  cron( )         { return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return m_prior; }
 
 	//!!! Request for connection to parameter-object of this controller
@@ -134,17 +135,18 @@ class TMdContr: public TController
 	//!!! The resource for Enable parameters.
 	Res	en_res;		//Resource for enable params
 	//!!! The links to the controller's background task properties into config.
-	int	&m_per,		// s
-		&m_prior;	// Process task priority
+	int	&m_prior;	// Process task priority
+	int64_t	mPer;
 
 	//!!! Background task's sync properties
-	bool	prc_st,		// Process task active
-		endrun_req;	// Request to stop of the Process task
+	bool	prcSt,		// Process task active
+ 		callSt,		// Calc now stat
+		endrunReq;	// Request to stop of the Process task
 
 	//!!! Enabled and processing parameter's links list container.
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	tm_gath;	// Gathering time
+	double	tmGath;		// Gathering time
 };
 
 //!!! Root module object define. Add methods and attributes for your need.
