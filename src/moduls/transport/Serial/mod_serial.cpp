@@ -806,6 +806,7 @@ void TTrOut::setTimings( const string &vl )
 
 void TTrOut::start( )
 {
+    ResAlloc res(nodeRes(), true);
     if(run_st) return;
 
     //> Status clear
@@ -914,7 +915,6 @@ void TTrOut::start( )
 	if(!telNumb.empty())
 	{
 	    //>> Resource to transfer function alloc
-	    ResAlloc res(nodeRes(), true);
 	    run_st = true;
 	    mMdmMode = true;
 
@@ -979,11 +979,10 @@ void TTrOut::start( )
 
 void TTrOut::stop()
 {
-    if( !run_st ) return;
+    ResAlloc res(nodeRes(), true);
+    if(!run_st) return;
 
-    ResAlloc res( nodeRes(), true );
-
-    if( mMdmDataMode )
+    if(mMdmDataMode)
     {
 	TTr::writeLine(fd,mdmExit());
 	if(mdmPreInit() > 0) TSYS::sysSleep(mdmPreInit());

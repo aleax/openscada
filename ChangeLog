@@ -1,4 +1,6 @@
 2012-09-24 Roman
+- FIX:Transport.Serial: Resource embracing expand to full TTrOut::start() function for prevent posible crash on
+    multiply requests from different threads.
 - !!!:DAQ.SMH2Gi: New module version 0.5.0 for deep integration to Segnetics SMH2Gi hardware.
     Shared memory for communication to SMLogics and devices on MR/MC bus protocol is realized.
 - !:DAQ: Parameters loading is moved straight to function load_(), from enable().
