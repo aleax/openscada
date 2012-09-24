@@ -1,3 +1,8 @@
+2012-09-24 Roman
+- FIX:Transport.Serial: Resource embracing expand to full TTrOut::start() function for prevent posible crash on
+    multiply requests from different threads.
+
+
 2012-09-09 Roman 0.8.0.3
 - !!:DB.LibsDB.{OscadaLibs.db,vcaBase.db,vcaTest.db}, DB.AGLKS.*:
     Significant update for document's time generation optimal and new prescriptions concept implementation.
