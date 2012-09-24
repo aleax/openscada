@@ -49,7 +49,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to module
+SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to the module
 
 extern "C"
 {

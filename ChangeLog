@@ -1,4 +1,8 @@
 2012-09-24 Roman
+- DAQ.=Tmpl=: Significant updated.
+- FIX:DAQ.SNMP: Configure field "OID_LS" size is expanded to "100000".
+- FIX:ICP_DAS: Configure field "MOD_PRMS" size is expanded to "100000".
+- !:Transport.Serial: KeepAlive timeout is added to output transport, for connection reset allow.
 - FIX:Transport.Serial: Resource embracing expand to full TTrOut::start() function for prevent posible crash on
     multiply requests from different threads.
 
