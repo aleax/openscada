@@ -1,0 +1,14 @@
+EXTRA_DIST = *.h po/*
+
+oscd_modul_LTLIBRARIES = daq_SMH2Gi.la
+daq_SMH2Gi_la_CXXFLAGS = $(SMH2Gi_CFLAGS)
+daq_SMH2Gi_la_LDFLAGS = -module -avoid-version -no-undefined $(SMH2Gi_LDLAGS)
+daq_SMH2Gi_la_SOURCES = module.cpp shm.cpp rlinifile.cpp rlsharedmemory.cpp rlwthread.cpp rlcutil.cpp rlsocket.cpp
+daq_SMH2Gi_la_LIBTOOLFLAGS = --tag=disable-static
+
+if SMH2GiIncl
+daq_SMH2Gi_la_CXXFLAGS += -DMOD_INCL
+install:
+endif
+
+I18N_mod = $(oscd_modulpref)SMH2Gi

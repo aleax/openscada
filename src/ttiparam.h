@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "tconfig.h"
+#include "tvalue.h"
 
 using std::string;
 using std::vector;
@@ -43,10 +43,17 @@ class TTipParam : public TElem
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb ) :
-	    name(iid), descr(iname), db(idb)	{ };
+	TTipParam( const char *iid, const char *iname, const char *idb );
 
-	virtual void cntrCmdProc( TParamContr *prm, XMLNode *opt )	{ }
+	virtual void enable( TParamContr *prm )			{ }
+	virtual void disable( TParamContr *prm )		{ }
+
+	virtual void vlGet( TParamContr *prm, TVal &val )	{ }
+	virtual void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl )	{ }
+        virtual void vlArchMake( TParamContr *prm, TVal &val )	{ }
+	virtual void getVals( TParamContr *prm )		{ }
+
+	virtual bool cntrCmdProc( TParamContr *prm, XMLNode *opt )	{ return false; }
 
 	//Attributes
 	string name;

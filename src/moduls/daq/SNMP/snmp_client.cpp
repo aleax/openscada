@@ -49,7 +49,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to module
+SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to the module
 
 extern "C"
 {
@@ -116,7 +116,7 @@ void TTpContr::postEnable(int flag)
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
 TController *TTpContr::ContrAttach(const string &name, const string &daq_db)

@@ -43,7 +43,7 @@
 #define MOD_LICENSE	"MyLicense"
 //************************************************
 
-BDTmpl::BDMod *BDTmpl::mod; //Pointer for direct access to module
+BDTmpl::BDMod *BDTmpl::mod; //Pointer for direct access to the module
 
 //!!! Required section for binding OpenSCADA core to this module. It gives information and creates module root object.
 //!!! Do not remove this section!

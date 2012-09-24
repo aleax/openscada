@@ -167,27 +167,37 @@ TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
 
 void TParamContr::enable()
 {
+    type().enable(this);
     m_en = true;
 }
 
 void TParamContr::disable()
 {
+    type().disable(this);
     m_en = false;
 }
 
 void TParamContr::vlGet( TVal &val )
 {
-    if( val.name() == "err" )
+    if(val.name() == "err")
     {
-	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
-	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
+	if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
+	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
     }
+
+    type().vlGet(this, val);
+}
+
+void TParamContr::vlSet( TVal &val, const TVariant &pvl )
+{
+    type().vlSet(this, val, pvl);
 }
 
 void TParamContr::vlArchMake( TVal &val )
 {
     if(!val.arch().freeStat())	val.arch().at().setDB(owner().DB());
+    type().vlArchMake(this, val);
 }
 
 void TParamContr::setType( const string &tpId )
@@ -257,6 +267,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDAQ_ID,RWRWR_);
 	}
+	type().cntrCmdProc(this, opt);
         return;
     }
     //> Process command to page
@@ -274,6 +285,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }
+    else if(type().cntrCmdProc(this, opt)) /* Process OK */;
     else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
     else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
     {

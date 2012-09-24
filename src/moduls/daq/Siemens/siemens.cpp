@@ -49,7 +49,7 @@
 #define LICENSE		"GPL2"
 //************************************************
 
-Siemens::TTpContr *Siemens::mod;	//Pointer for direct access to module
+Siemens::TTpContr *Siemens::mod;	//Pointer for direct access to the module
 
 extern "C"
 {

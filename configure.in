@@ -383,6 +383,12 @@ AX_MOD_EN(Comedi,[enable build module DAQ.Comedi],enable,[],
     PKG_CHECK_MODULES([comedilib],[comedilib > 0.7.0],[],
 	[AC_MSG_ERROR(Comedilib not found. Install or check Comedilib library package!)])
 ])
+AX_MOD_EN(SMH2Gi,[enable build module DAQ.BFN],enable,[],
+[
+    AC_MSG_RESULT(Build module: DAQ.SMH2Gi)
+    AC_CONFIG_FILES(src/moduls/daq/SMH2Gi/Makefile)
+    DAQSub_mod="${DAQSub_mod}SMH2Gi "
+])
 #> Archive modules
 AC_SUBST(ArchSub_mod)
 AX_MOD_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl,

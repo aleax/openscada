@@ -43,7 +43,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-ModComedi::TTpContr *ModComedi::mod;  //Pointer for direct access to module
+ModComedi::TTpContr *ModComedi::mod;  //Pointer for direct access to the module
 
 extern "C"
 {
@@ -520,7 +520,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	comedi_t *tmpDevH = comedi_open(cfg("ADDR").getS().c_str());
 	if(tmpDevH && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
 	{
-	    ctrMkNode("fld",opt,-1,"/cfg/aiTm",_("Analog input settle timeout (us)"),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","int","min","0","max","1000000");
+	    ctrMkNode("fld",opt,-1,"/cfg/aiTm",_("Analog input settle timeout (us)"),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","1000000");
 
 	    int cfgIts = 0;
 	    for(int iSDev = 0; iSDev < comedi_get_n_subdevices(tmpDevH); iSDev++)
@@ -539,7 +539,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			rngNmLs += TSYS::strMess("[%g, %g]",rng->min, rng->max)+";";
 		    }
 		    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/chn%d_%d",iSDev,i_cn).c_str(),TSYS::strMess(_("Channel %d.%d range"),iSDev,i_cn).c_str(),
-                	enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"dest","select","tp","int","sel_id",rngIdLs.c_str(),"sel_list",rngNmLs.c_str());
+                	enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"dest","select","tp","dec","sel_id",rngIdLs.c_str(),"sel_list",rngNmLs.c_str());
 		    cfgIts++;
 		}
 	    }

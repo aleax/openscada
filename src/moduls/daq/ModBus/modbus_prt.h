@@ -189,7 +189,7 @@ class TProt: public TProtocol
 	void outMess( XMLNode &io, TTransportOut &tro );
 
 	//> Special modbus protocol's functions
-	uint16_t	CRC16( const string &mbap );
+	uint16_t CRC16( const string &mbap );
 	uint8_t	LRC( const string &mbap );
 	string	DataToASCII( const string &in );
 	string	ASCIIToData( const string &in );

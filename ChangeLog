@@ -1,3 +1,20 @@
+2012-09-24 Roman
+- !!!:DAQ.SMH2Gi: New module version 0.5.0 for deep integration to Segnetics SMH2Gi hardware.
+    Shared memory for communication to SMLogics and devices on MR/MC bus protocol is realized.
+- !:DAQ: Parameters loading is moved straight to function load_(), from enable().
+    To parameter type object TTipParam() bind functions from object TParamContr() is added:
+    enable(), disable(), vlGet(), vlSet(), vlArchMake() and cntrCmdProc().
+- DAQ.=Tmpl=: Significant updated.
+- FIX:DAQ.Comedy: Control interface's type "int" is fixed to "dec".
+- FIX:ICP_DAS: Control interface's type "int" is fixed to "dec". Configure field "MOD_PRMS" size is expanded to "100000".
+- FIX:DAQ.SNMP: Configure field "OID_LS" size is expanded to "100000".
+- !:Transport.Serial: KeepAlive timeout is added to output transport, for connection reset allow.
+
+
+2012-09-12 Roman
+- FIX:UI.QTCfg: Vertical scroll position restore after syntax highlight rules set, for text edit areas.
+
+
 2012-09-10 Roman
 - !!:DAQ.ICP_DAS: Version 1.0.0 is released.
 - FIX:DAQ.ICP_DAS: AO writing alow is fixed for I-8xxx modules series.

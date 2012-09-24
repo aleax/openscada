@@ -706,7 +706,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 //* TTrOut                                   *
 //************************************************
 TTrOut::TTrOut(string name, const string &idb, TElem *el) :
-    TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), trIn(0), trOut(0),
+    TTransportOut(name,idb,el), fd(-1), mLstReqTm(0), mKeepAliveLstTm(0), trIn(0), trOut(0),
     mMdmTm(30), mMdmLifeTime(30), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmDialStr("ATDT"), mMdmCnctResp("CONNECT"), mMdmBusyResp("BUSY"), mMdmNoCarResp("NO CARRIER"), mMdmNoDialToneResp("NO DIALTONE"),
     mMdmExit("+++"), mMdmHangUp("+++ATH"), mMdmHangUpResp("OK"), mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
@@ -798,7 +798,8 @@ void TTrOut::setTimings( const string &vl )
 {
     int wReqTm = vmax(1,vmin(10000,atoi(TSYS::strSepParse(vl,0,':').c_str())));
     double wCharTm = vmax(0.01,vmin(1e3,atof(TSYS::strSepParse(vl,1,':').c_str())));
-    mTimings = TSYS::strMess("%d:%g",wReqTm,wCharTm);
+    double wKeepAliveTm = vmax(0,vmin(1e3,atof(TSYS::strSepParse(vl,2,':').c_str())));
+    mTimings = TSYS::strMess(wKeepAliveTm?"%d:%g:%g":"%d:%g",wReqTm,wCharTm,wKeepAliveTm);
 
     modif();
 }
@@ -972,6 +973,7 @@ void TTrOut::start( )
 	throw;
     }
 
+    mKeepAliveLstTm = TSYS::curTime();
     run_st = true;
 }
 
@@ -1023,6 +1025,13 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     int wReqTm = atoi(TSYS::strSepParse(timings(),0,':',&off).c_str());
     wReqTm = time ? time : wReqTm;
     double wCharTm = atof(TSYS::strSepParse(timings(),0,':',&off).c_str());
+    double wKeepAliveTm = atof(TSYS::strSepParse(timings(),0,':',&off).c_str());
+    if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000)
+    {
+	stop();
+	start();
+	mKeepAliveLstTm = TSYS::curTime();
+    }
 
     int64_t tmW = TSYS::curTime();
 
@@ -1107,9 +1116,10 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Connection timings in format: \"conn:symbol\". Where:\n"
+	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm]\". Where:\n"
 	    "    conn - maximum time for connection respond wait, in ms;\n"
-	    "    symbol - one symbol maximum time, used for frame end detection, in ms."));
+	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
+	    "    KeepAliveTm - keep alive timeout in seconds for restart transport."));
 	if(TSYS::strParse(addr(),4,":").size() && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");

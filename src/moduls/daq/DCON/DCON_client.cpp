@@ -45,7 +45,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-DCONDAQ::TTpContr *DCONDAQ::mod;  //Pointer for direct access to module
+DCONDAQ::TTpContr *DCONDAQ::mod;  //Pointer for direct access to the module
 
 extern "C"
 {

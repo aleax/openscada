@@ -47,7 +47,7 @@ extern "C"
 #define LICENSE		"GPL2"
 //*************************************************
 
-ICP_DAS_DAQ::TTpContr *ICP_DAS_DAQ::mod;  //Pointer for direct access to module
+ICP_DAS_DAQ::TTpContr *ICP_DAS_DAQ::mod;  //Pointer for direct access to the module
 
 extern "C"
 {
@@ -116,7 +116,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_TP",_("Module type"),TFld::String,TFld::HexDec|TCfg::NoVal,"20","-"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_SLOT",_("Module slot"),TFld::Integer,TCfg::NoVal,"2","1","1;11"));
-    tpPrmAt(t_prm).fldAdd(new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
+    tpPrmAt(t_prm).fldAdd(new TFld("MOD_PRMS",_("Module addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
 void TTpContr::load_( )

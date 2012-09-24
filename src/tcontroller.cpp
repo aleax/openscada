@@ -163,8 +163,7 @@ void TController::load_( )
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
-    //> Load parameters if enabled
-    if(en_st)	LoadParmCfg( );
+    LoadParmCfg( );
 
     if(!en_st && en_st_prev) enable();
     if(!run_st && run_st_prev) start();
@@ -215,9 +214,6 @@ void TController::enable( )
 
 	//> Enable for children
 	enable_();
-
-	//> Load parameters
-	LoadParmCfg( );
 
 	mRedntUse = (bool)redntMode();
     }

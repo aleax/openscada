@@ -127,16 +127,9 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
 int TTipDAQ::tpParmAdd( TTipParam *tp )
 {
     if(tpPrmPresent(tp->name)) { delete tp; return tpPrmToId(tp->name); }
-
-    int i_t = paramt.size();
     paramt.push_back(tp);
-    //> Add structure fields
-    paramt[i_t]->fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
-    paramt[i_t]->fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
-    paramt[i_t]->fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
-    paramt[i_t]->fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 
-    return i_t;
+    return paramt.size()-1;
 }
 
 int TTipDAQ::tpPrmToId( const string &name_t)
@@ -186,4 +179,16 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(m_cntr,opt->attr("id"),-1,1);
     }
     else TModule::cntrCmdProc(opt);
+}
+
+//*************************************************
+//* TTipParam                                     *
+//*************************************************
+TTipParam::TTipParam( const char *iid, const char *iname, const char *idb ) : name(iid), descr(iname), db(idb)
+{
+    //> Add typical structure fields
+    fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
+    fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 }

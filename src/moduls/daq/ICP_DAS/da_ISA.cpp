@@ -514,10 +514,10 @@ bool da_ISA::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    if(dev.AI)
 	    {
 		p->ctrMkNode("fld",opt,-1,"/cfg/aiTm",_("Analog input settle timeout (us)"),p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-		    "tp","int","min","0","max","1000000");
+		    "tp","dec","min","0","max","1000000");
         	for(unsigned i_ch = 0; i_ch < (dev.AI&0xFF); i_ch++)
 		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/aiG%d",i_ch).c_str(),TSYS::strMess(_("AI %d gain"),i_ch).c_str(),
-                	p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","int","min","0","max","100");
+                	p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","100");
 	    }
 
 	    //>> DIO processing

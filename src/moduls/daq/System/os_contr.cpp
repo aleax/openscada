@@ -55,7 +55,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-SystemCntr::TTpContr *SystemCntr::mod;  //Pointer for direct access to module
+SystemCntr::TTpContr *SystemCntr::mod;  //Pointer for direct access to the module
 
 extern "C"
 {

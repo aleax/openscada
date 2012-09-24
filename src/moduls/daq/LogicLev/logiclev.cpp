@@ -46,7 +46,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to module
+LogicLev::TTpContr *LogicLev::mod;  //Pointer for direct access to the module
 
 extern "C"
 {

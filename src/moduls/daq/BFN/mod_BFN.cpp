@@ -43,7 +43,7 @@
 #define LICENSE		"GPL2"
 //*************************************************
 
-ModBFN::TTpContr *ModBFN::mod;  //Pointer for direct access to module
+ModBFN::TTpContr *ModBFN::mod;  //Pointer for direct access to the module
 
 extern "C"
 {
