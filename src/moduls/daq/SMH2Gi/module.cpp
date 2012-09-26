@@ -852,100 +852,140 @@ void MRCParam::getVals( TParamContr *ip )
 
     if(modSlot < 0)	//> MC process
     {
-	//> Send outputs
-	data.clear();
-	//>> MR_broadcast_t.Offsets
-	for(int i_n = 0; i_n < 8; i_n++)
-	    data += (char)((i_n == vmax(0,modSlot))?8:(8+10));
+	//> Read inputs
+	pdu = (char)ePrm->SN;		//SN[0]
+	pdu += (char)0x03;		//Function, read multiple registers
+	pdu += (char)(ePrm->SN>>16);	//SN[2]
+	pdu += (char)(ePrm->SN>>8);	//SN[1]
+	pdu += (char)0x00;		//Registers quantity MSB
+    	pdu += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
 
-	//>> MR_broadcast_t.Data
-	//>>> Digital outputs prepare and place
-	vl = 0;
-	for(int i_d = 11; i_d >= 0; i_d--)
-        {
-            vl = vl << 1;
-            if(i_d == 11)	{ if(p->vlAt("crst_din8_").at().getB(0, true) == true) vl |= 1; }
-            else if(i_d == 10)	{ if(p->vlAt("crst_din7_").at().getB(0, true) == true) vl |= 1; }
-            else if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
-        }
-        data += (char)vl; data += (char)(vl>>8);
-
-	//>>> Analog outputs place
-	for(int i_a; i_a < 4; i_a++)
+	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	rezReq = p->owner().modBusReq(pdu, (modSlot<0));
+	if(rezReq.size() || pdu.size() < 35)
 	{
-	    vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
-	    if(vl == EVAL_INT) vl = 0;
-    	    data += (char)vl; data += (char)(vl>>8);
+	    pdu.resize(35);
+	    if(rezReq.empty()) rezReq = _("20:PDU short.");
 	}
 
-	//>> Prepare broadcast header
-	pdu = (char)0xFE;		//BroadCast
-	pdu += (char)0x10;		//Function, preset multiple registers
-	pdu += (char)0;
-	pdu += (char)0;
-	pdu += (char)((data.size()/2)>>8);//Registers quantity MSB
-        pdu += (char)(data.size()/2);	//Registers quantity LSB
-        pdu += (char)data.size();	//Byte Count
-        pdu += data;
-	//printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
+	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	pdu.erase(0,3);
+	//> Swap registers
+	for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
+	{ char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
 
-	//> Read inputs
+	const char *off = pdu.data() + sizeof(Inquired_t);
+	//>> AI process
+	off += sizeof(float);
+	for(int i_a = 0; i_a < 8; i_a++)
+	{
+	    p->vlAt(TSYS::strMess("ain%d",i_a)).at().setR(rezReq.size()?EVAL_REAL:TSYS::getUnalignFloat(off), 0, true);
+	    off += sizeof(float);
+	}
+	off += sizeof(float);
+	//>> Counters process
+	for(int i_c = 7; i_c <= 8; i_c++)
+	{
+	    p->vlAt(TSYS::strMess("cntr_din%d_",i_c)).at().setI(rezReq.size()?EVAL_INT:TSYS::getUnalign32(off), 0, true);
+	    off += sizeof(uint32_t);
+	}
+	//>> Frequency process
+	for(int i_c = 7; i_c <= 8; i_c++)
+	{
+	    p->vlAt(TSYS::strMess("freq_din%d_",i_c)).at().setI(rezReq.size()?EVAL_INT:TSYS::getUnalign32(off), 0, true);
+	    off += sizeof(uint32_t);
+	}
+	//>> Digit inputs process
+	int vl = TSYS::getUnalign16(off);
+	for(int i_d = 0; i_d <= 10; i_d++)
+    	{
+    	    if(i_d == 10)	p->vlAt("cr_ack_din8_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+    	    else if(i_d == 9)	p->vlAt("cr_ack_din7_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+    	    else p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+	}
+
+	//> Send outputs
 	if(!rezReq.size())
 	{
-	    pdu = (char)ePrm->SN;	//SN[0]
-	    pdu += (char)0x03;		//Function, read multiple registers
-	    pdu += (char)(ePrm->SN>>16);//SN[2]
-	    pdu += (char)(ePrm->SN>>8);	//SN[1]
-	    pdu += (char)0x00;		//Registers quantity MSB
-    	    pdu += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
+	    data.clear();
+	    //>> MR_broadcast_t.Offsets
+	    for(int i_n = 0; i_n < 8; i_n++)
+		data += (char)((i_n == vmax(0,modSlot))?8:(8+10));
 
-	    //printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	    if(!rezReq.size() && pdu.size() >= 35)
+	    //>> MR_broadcast_t.Data
+	    //>>> Digital outputs prepare and place
+	    vl = 0;
+	    for(int i_d = 11; i_d >= 0; i_d--)
+    	    {
+    		vl = vl << 1;
+        	if(i_d == 11)		{ if(p->vlAt("crst_din8_").at().getB(0, true) == true) vl |= 1; }
+        	else if(i_d == 10)	{ if(p->vlAt("crst_din7_").at().getB(0, true) == true) vl |= 1; }
+        	else if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
+    	    }
+    	    data += (char)vl; data += (char)(vl>>8);
+
+	    //>>> Analog outputs place
+	    for(int i_a; i_a < 4; i_a++)
 	    {
-		//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-		pdu.erase(0,3);
-		//> Swap registers
-		for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
-		{ char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
-
-		const char *off = pdu.data() + sizeof(Inquired_t);
-		//>> AI process
-		off += sizeof(float);
-		for(int i_a = 0; i_a < 8; i_a++)
-		{
-		    p->vlAt(TSYS::strMess("ain%d",i_a)).at().setR(TSYS::getUnalignFloat(off), 0, true);
-		    off += sizeof(float);
-		}
-		off += sizeof(float);
-		//>> Counters process
-		for(int i_c = 7; i_c <= 8; i_c++)
-		{
-		    p->vlAt(TSYS::strMess("cntr_din%d_",i_c)).at().setI(TSYS::getUnalign32(off), 0, true);
-		    off += sizeof(uint32_t);
-		}
-		//>> Frequency process
-		for(int i_c = 7; i_c <= 8; i_c++)
-		{
-		    p->vlAt(TSYS::strMess("freq_din%d_",i_c)).at().setI(TSYS::getUnalign32(off), 0, true);
-		    off += sizeof(uint32_t);
-		}
-		//>> Digit inputs process
-		int vl = TSYS::getUnalign16(off);
-		for(int i_d = 0; i_d <= 10; i_d++)
-    		{
-        	    if(i_d == 10)	p->vlAt("cr_ack_din8_").at().setB((vl>>i_d)&1, 0, true);
-        	    else if(i_d == 9)	p->vlAt("cr_ack_din7_").at().setB((vl>>i_d)&1, 0, true);
-        	    else p->vlAt(TSYS::strMess("din%d",i_d)).at().setB((vl>>i_d)&1, 0, true);
-    		}
+		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
+		if(vl == EVAL_INT) vl = 0;
+    		data += (char)vl; data += (char)(vl>>8);
 	    }
+
+	    //>> Prepare broadcast header
+	    pdu = (char)0xFE;		//BroadCast
+	    pdu += (char)0x10;		//Function, preset multiple registers
+	    pdu += (char)0;
+	    pdu += (char)0;
+	    pdu += (char)((data.size()/2)>>8);	//Registers quantity MSB
+    	    pdu += (char)(data.size()/2);	//Registers quantity LSB
+    	    pdu += (char)data.size();	//Byte Count
+    	    pdu += data;
+	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
 	}
     }
     else		//> MR process
     {
+	//> Read inputs
+	if(ePrm->DI || ePrm->CNTR)
+	{
+	    int reStrSize = sizeof(Inquired_t) + (ePrm->DI?2:0) + ePrm->CNTR*4;
+	    pdu = (char)ePrm->SN;		//SN[0]
+	    pdu += (char)0x03;			//Function, read multiple registers
+	    pdu += (char)(ePrm->SN>>16);	//SN[2]
+	    pdu += (char)(ePrm->SN>>8);		//SN[1]
+	    pdu += (char)((reStrSize/2)>>8);	//Registers quantity MSB
+    	    pdu += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
+	    //printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    rezReq = p->owner().modBusReq(pdu, (modSlot<0));
+	    //printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    if(rezReq.size() || pdu.size() < (3+reStrSize))
+	    {
+		pdu.resize(3+reStrSize);
+		if(rezReq.empty()) rezReq = _("20:PDU short.");
+	    }
+
+	    pdu.erase(0,3);
+	    //> Swap registers
+	    for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
+	    { char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
+
+	    const char *off = pdu.data() + sizeof(Inquired_t);
+	    //>> Counters process
+	    for(int i_c = 1; i_c <= ePrm->CNTR; i_c++)
+	    {
+		p->vlAt(TSYS::strMess("cntr%d",i_c)).at().setI(rezReq.size()?EVAL_INT:TSYS::getUnalign32(off), 0, true);
+		off += sizeof(uint32_t);
+	    }
+	    //>> Digit inputs process
+	    int vl = TSYS::getUnalign16(off);
+	    for(int i_d = 0; i_d < ePrm->DI; i_d++)
+        	p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+	}
+
 	//> Send outputs
-	if(ePrm->DO || ePrm->AO)
+	if(!rezReq.size() && (ePrm->DO || ePrm->AO))
 	{
 	    //> Send outputs
 	    data.clear();
@@ -985,40 +1025,6 @@ void MRCParam::getVals( TParamContr *ip )
 
 	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
 	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
-	}
-
-	//> Read inputs
-	if(!rezReq.size() && (ePrm->DI || ePrm->CNTR))
-	{
-	    int reStrSize = sizeof(Inquired_t) + (ePrm->DI?2:0) + ePrm->CNTR*4;
-	    pdu = (char)ePrm->SN;	//SN[0]
-	    pdu += (char)0x03;		//Function, read multiple registers
-	    pdu += (char)(ePrm->SN>>16);//SN[2]
-	    pdu += (char)(ePrm->SN>>8);	//SN[1]
-	    pdu += (char)((reStrSize/2)>>8);//Registers quantity MSB
-    	    pdu += (char)(reStrSize/2);	//Registers quantity LSB, MC structure size 32 registers
-	    //printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	    //printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    if(!rezReq.size() && pdu.size() >= (3+reStrSize))
-	    {
-		pdu.erase(0,3);
-		//> Swap registers
-		for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
-		{ char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
-
-		const char *off = pdu.data() + sizeof(Inquired_t);
-		//>> Counters process
-		for(int i_c = 1; i_c <= ePrm->CNTR; i_c++)
-		{
-		    p->vlAt(TSYS::strMess("cntr%d",i_c)).at().setI(TSYS::getUnalign32(off), 0, true);
-		    off += sizeof(uint32_t);
-		}
-		//>> Digit inputs process
-		int vl = TSYS::getUnalign16(off);
-		for(int i_d = 0; i_d < ePrm->DI; i_d++)
-        	    p->vlAt(TSYS::strMess("din%d",i_d)).at().setB((vl>>i_d)&1, 0, true);
-	    }
 	}
     }
 

@@ -1,4 +1,5 @@
-EXTRA_DIST = *.h po/*
+EXTRA_DIST = *.h 
+# po/*
 
 oscd_modul_LTLIBRARIES = daq_SMH2Gi.la
 daq_SMH2Gi_la_CXXFLAGS = $(SMH2Gi_CFLAGS)

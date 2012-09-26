@@ -1,3 +1,8 @@
+2012-09-26 Roman
+- SYS: Build "openscada-dbg" Debian package is added to rules by Alexey Bondarchuk(aleax) initiative.
+- DAQ.SMH2Gi: Set inputs to EVAL is added on error requests. Inputs read before outputs send is made.
+
+
 2012-09-24 Roman
 - FIX:Transport.Serial: Resource embracing expand to full TTrOut::start() function for prevent posible crash on
     multiply requests from different threads.
