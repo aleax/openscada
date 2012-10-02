@@ -1,3 +1,8 @@
+2012-10-02 Roman
+- FIX:Archive: Single value, typical for 1h, request is fixed.
+- FIX:UI.Vision, UI.WebVision: Periods values processing for hours more is fixed.
+
+
 2012-09-24 Roman
 - DAQ.=Tmpl=: Significant updated.
 - FIX:DAQ.SNMP: Configure field "OID_LS" size is expanded to "100000".
