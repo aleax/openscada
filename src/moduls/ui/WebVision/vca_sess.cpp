@@ -6303,7 +6303,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    val_tp  = atoi(req.attr("vtp").c_str());
 	    arh_beg = atoll(req.attr("beg").c_str());
 	    arh_end = atoll(req.attr("end").c_str());
-	    arh_per = atoi(req.attr("per").c_str());
+	    arh_per = atoll(req.attr("per").c_str());
 	}
     }
 

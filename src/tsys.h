@@ -165,14 +165,8 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	bool   cntrEmpty( );
-	double cntrGet( const string &id );
-	void   cntrSet( const string &id, double vl );
-	void   cntrIter( const string &id, double vl );
-
-	//Public system static methods
-	//> Current system time (usec)
-	static int64_t curTime( );
+	time_t sysTm( )		{ return mSysTm; }	//> System time fast access, from updated cell
+	static int64_t curTime( );	//> Current system time (usec)
 
 	//> Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
@@ -186,6 +180,12 @@ class TSYS : public TCntrNode
 
 	//> Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
+
+	//> System counters
+	bool   cntrEmpty( );
+	double cntrGet( const string &id );
+	void   cntrSet( const string &id, double vl );
+	void   cntrIter( const string &id, double vl );
 
 	//> Convert value to string
 	static string int2str( int val, IntView view = Dec );
@@ -327,7 +327,7 @@ class TSYS : public TCntrNode
 		mIcoDir,	// Icons directory
 		mModDir;	// Modules directory
 
-	string	mWorkDB,mSelDB;	// Work and selected DB
+	string	mWorkDB, mSelDB;// Work and selected DB
 	bool	mSaveAtExit;	// Save at exit
 	int	mSavePeriod;	// Save period (s) for periodic system saving to DB
 
@@ -346,6 +346,7 @@ class TSYS : public TCntrNode
 
 	bool	mMultCPU;
 	uint64_t mSysclc;
+	time_t	mSysTm;
 
 	map<string,double>	mCntrs;
 };

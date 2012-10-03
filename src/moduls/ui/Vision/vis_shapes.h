@@ -364,7 +364,7 @@ class ShapeDiagram : public WdgShape
 		QColor		mColor;		//Values line color
 		char		mWidth;		//Line width in pixels
 		//> Archive
-		int		arh_per;	//Archive period
+		int64_t		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time
 		int64_t		arh_end;	//Archive end time
 		//> Values

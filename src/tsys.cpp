@@ -53,7 +53,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), mStopSignal(-1), mMultCPU(false)
+    mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), mStopSignal(-1), mMultCPU(false), mSysTm(time(NULL))
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -528,10 +528,13 @@ int TSYS::start( )
     mStopSignal = 0;
     while(!mStopSignal)
     {
-	//> CPU frequency calc
+	//> Static system time update (one second)
+	if(!(i_cnt%(1000/STD_WAIT_DELAY)))	mSysTm = time(NULL);
+
+	//> CPU frequency calc (ten seconds)
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
 
-	//> Config-file change periodic check
+	//> Config-file change periodic check (ten seconds)
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
 
 	//> Periodic shared libraries checking

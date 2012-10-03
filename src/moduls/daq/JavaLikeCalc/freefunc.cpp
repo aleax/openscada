@@ -1724,10 +1724,9 @@ void Func::calc( TValFunc *val )
 	}
 
     //> Exec calc
-    ExecData dt = { 1, time(NULL), 0 };
-    try{ exec(val,reg,(const uint8_t*)prg.c_str(),dt); }
-    catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-    res.release();
+    ExecData dt = { SYS->sysTm(), 0 };
+    exec(val,reg,(const uint8_t*)prg.c_str(),dt);
+    if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));
 }
 
 void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
@@ -1735,14 +1734,11 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
     while(!(dt.flg&0x01))
     {
 	//> Calc time control mechanism
-	if(!((dt.com_cnt++)%10))
+	if(SYS->sysTm() > (dt.start_tm+max_calc_tm))
 	{
-	    if(time(NULL) > (dt.start_tm+max_calc_tm))
-	    {
-		mess_err(nodePath().c_str(),_("Timeouted function calculation"));
-		dt.flg |= 0x01;
-		return;
-	    }
+	    mess_err(nodePath().c_str(),_("Timeouted function calculation"));
+	    dt.flg |= 0x09;
+	    return;
 	}
 	//> Calc operation
 	switch(*cprg)

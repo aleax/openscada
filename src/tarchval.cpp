@@ -1685,12 +1685,14 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		//>>> Find more usable archivator
 		int i_asel = -1;
 		for(int i_a = ((int)arch_el.size()-1); i_a >= 0; i_a--)
-		    if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && tm_grnd <= arch_el[i_a]->end() && tm > arch_el[i_a]->begin())
+		{
+		    if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && tm_grnd <= arch_el[i_a]->end() && tm >= arch_el[i_a]->begin())
 		    {
 			i_asel = i_a;
 			if(!arch.empty()) break;
 			if(arch_el[i_a]->archivator().valPeriod() <= (period/1e6)) break;
 		    }
+		}
 		if(i_asel >= 0)
 		{
 		    buf.setPeriod((int64_t)(1000000.*arch_el[i_asel]->archivator().valPeriod()));

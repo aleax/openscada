@@ -22,6 +22,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include <linux/serial.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
@@ -373,6 +374,12 @@ void TTrIn::connect( )
 	tcflush(fd, TCIOFLUSH);
 	tcsetattr(fd, TCSANOW, &tio);
 
+	//>> Standard RS-485 mode
+	serial_rs485 rs485conf;
+	memset(&rs485conf, 0, sizeof(serial_rs485));
+	if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
+	ioctl(fd, TIOCSRS485, &rs485conf);
+
 	//> Modem init
 	mMdmMode = atoi(TSYS::strSepParse(addr(),4,':').c_str());
 	if(mMdmMode)
@@ -618,7 +625,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	TTransportIn::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Serial transport has address format: \"dev:speed:format:[fc]:[mdm]\". Where:\n"
+	    _("Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
@@ -626,7 +633,8 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    fc - flow control:\n"
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
-	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
+	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
+	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
@@ -910,6 +918,12 @@ void TTrOut::start( )
 	tcflush(fd, TCIOFLUSH);
 	tcsetattr(fd, TCSANOW, &tio);
 
+	//>> Standard RS-485 mode
+	serial_rs485 rs485conf;
+	memset(&rs485conf, 0, sizeof(serial_rs485));
+	if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
+	ioctl(fd, TIOCSRS485, &rs485conf);
+
 	//> Modem connection establish
 	string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));
 	if(!telNumb.empty())
@@ -1104,7 +1118,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	TTransportOut::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
-	    _("Serial transport has address format: \"dev:speed:format:[fc]:[modTel]\". Where:\n"
+	    _("Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
@@ -1112,7 +1126,8 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    fc - flow control:\n"
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
-	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485.\n"
+	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
+	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    modTel - modem telephone, the field presence do switch transport to work with modem mode."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"conn:symbol[:KeepAliveTm]\". Where:\n"

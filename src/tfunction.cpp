@@ -737,9 +737,9 @@ void TValFunc::setMdfChk( bool set )
 
 void TValFunc::calc( const string &user )
 {
-    if( !mFunc || !mFunc->startStat() ) return;
-    if( !user.empty() ) mUser = user;
-    if( !mDimens ) mFunc->calc(this);
+    if(!mFunc) return;
+    if(!user.empty()) mUser = user;
+    if(!mDimens) mFunc->calc(this);
     else
     {
 	int64_t t_cnt = TSYS::curTime();

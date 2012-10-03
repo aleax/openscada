@@ -1,3 +1,12 @@
+2012-10-03 Roman
+- SYS: Function TSYS::sysTm() is added for allow fast access to time from periodic updated global memory cell.
+    Used for DAQ.JavaLikeCalc execution time limit control.
+- !!:DAQ.JavaLikeCalc: Time limit processing is made more optimal for time, from 5% to 12% JavaLike code execution faster.
+    Exception generation enabled on execution time limit exceed.
+- FIX:Archive: Single value, typical for 1h, request is fixed.
+- FIX:UI.Vision, UI.WebVision: Periods values processing for hours more is fixed.
+
+
 2012-09-26 Roman
 - SYS: Build "openscada-dbg" Debian package is added to rules by Alexey Bondarchuk(aleax) initiative.
 - DAQ.SMH2Gi: Set inputs to EVAL is added on error requests. Inputs read before outputs send is made.

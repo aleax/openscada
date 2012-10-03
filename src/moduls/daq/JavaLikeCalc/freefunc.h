@@ -356,11 +356,11 @@ class Func : public TConfig, public TFunction
 	//Data
 	struct ExecData
 	{
-	    unsigned	com_cnt;	//Command counter;
 	    time_t	start_tm;	//Start time
 	    unsigned char flg;		//0x01 - recursive exit stat;
 					//0x02 - break operator flag;
 					//0x04 - continue operator flag;
+					//0x08 - error flag
 	};
 
 	//Methods
