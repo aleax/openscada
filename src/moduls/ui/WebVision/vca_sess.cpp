@@ -142,9 +142,9 @@ void VCASess::getReq( SSess &ses )
 	XMLNode *cn = &req;
 	while(true)
 	{
-	    if( cpos < cn->childSize() )
+	    if(cpos < cn->childSize())
 	    {
-		if( cn->childGet(cpos)->name() == "w" )
+		if(cn->childGet(cpos)->name() == "w")
 		{
 		    cn = cn->childGet(cpos);
 		    pos.push_back(cpos+1);
@@ -155,8 +155,12 @@ void VCASess::getReq( SSess &ses )
 		else cpos++;
 		continue;
 	    }
-	    if( objPresent(caddr) )	objAt(caddr).at().setAttrs(*cn,ses.user);
-	    if( !cn->parent() )	break;
+	    if(objPresent(caddr)) objAt(caddr).at().setAttrs(*cn,ses.user);
+	    //???? Possible filtring here
+	    //XMLNode xproc;
+            //xproc.load(string(XHTML_entity)+req_el->text(),true);
+            //req_el->setText(xproc.save(XMLNode::Clean));
+	    if(!cn->parent())	break;
 	    cn = cn->parent();
 	    cpos = pos.back();	pos.pop_back();
 	    caddr = addr.back(); addr.pop_back();
@@ -179,19 +183,19 @@ void VCASess::getReq( SSess &ses )
 	} else ses.page = mod->httpHead("404 Not Found");
     }
     //> Request to primitive object. Used for data caching
-    else if( wp_com == "obj" )
+    else if(wp_com == "obj")
     {
-	if( !objPresent(ses.url) )
+	if(!objPresent(ses.url))
 	{
 	    //>> Request to widget type
 	    bool new_obj = false;
 	    XMLNode req("get");
 	    req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2froot");
 	    mod->cntrIfCmd(req,ses.user);
-	    if( req.text() == "ElFigure" )	{ objAdd( new VCAElFigure(ses.url) ); new_obj = true; }
-            else if( req.text() == "Text" )     { objAdd( new VCAText(ses.url) ); new_obj = true; }
-	    else if( req.text() == "Diagram" )	{ objAdd( new VCADiagram(ses.url) ); new_obj = true; }
-	    if( new_obj )
+	    if(req.text() == "ElFigure")	{ objAdd(new VCAElFigure(ses.url)); new_obj = true; }
+            else if(req.text() == "Text")	{ objAdd(new VCAText(ses.url)); new_obj = true; }
+	    else if(req.text() == "Diagram")	{ objAdd(new VCADiagram(ses.url)); new_obj = true; }
+	    if(new_obj)
 	    {
 		//>> Request new object's attributes
 		req.clear()->setAttr("path",ses.url+"/%2fserv%2fattr");
@@ -199,7 +203,7 @@ void VCASess::getReq( SSess &ses )
 		objAt(ses.url).at().setAttrs(req,ses.user);
 	    }
 	}
-	if( objPresent(ses.url) ) objAt(ses.url).at().getReq(ses);
+	if(objPresent(ses.url)) objAt(ses.url).at().getReq(ses);
     }
     else
     {

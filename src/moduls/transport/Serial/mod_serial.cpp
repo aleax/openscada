@@ -374,11 +374,16 @@ void TTrIn::connect( )
 	tcflush(fd, TCIOFLUSH);
 	tcsetattr(fd, TCSANOW, &tio);
 
+#ifdef SER_RS485_ENABLED
+#ifndef TIOCSRS485
+#define TIOCSRS485      0x542f
+#endif
 	//>> Standard RS-485 mode
 	serial_rs485 rs485conf;
 	memset(&rs485conf, 0, sizeof(serial_rs485));
 	if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
 	ioctl(fd, TIOCSRS485, &rs485conf);
+#endif
 
 	//> Modem init
 	mMdmMode = atoi(TSYS::strSepParse(addr(),4,':').c_str());
@@ -918,11 +923,16 @@ void TTrOut::start( )
 	tcflush(fd, TCIOFLUSH);
 	tcsetattr(fd, TCSANOW, &tio);
 
+#ifdef SER_RS485_ENABLED
+#ifndef TIOCSRS485
+#define TIOCSRS485      0x542f
+#endif
 	//>> Standard RS-485 mode
 	serial_rs485 rs485conf;
 	memset(&rs485conf, 0, sizeof(serial_rs485));
 	if(strcasecmp(fc.c_str(),"rs485") == 0)	rs485conf.flags |= SER_RS485_ENABLED;
 	ioctl(fd, TIOCSRS485, &rs485conf);
+#endif
 
 	//> Modem connection establish
 	string telNumb = TSYS::strNoSpace(TSYS::strSepParse(addr(),4,':'));

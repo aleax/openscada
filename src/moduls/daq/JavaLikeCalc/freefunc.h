@@ -284,6 +284,9 @@ class Func : public TConfig, public TFunction
 
 	void calc( TValFunc *val );
 
+	void valAtt( TValFunc *vfnc );
+        void valDet( TValFunc *vfnc );
+
 	void preIOCfgChange( );
 	void postIOCfgChange( );
 
@@ -377,7 +380,9 @@ class Func : public TConfig, public TFunction
 	void saveIO( );
 	void delIO( );
 
-	void exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt );
+	void exec( TValFunc *val, const uint8_t *cprg, ExecData &dt );
+
+	void workRegControl( TValFunc *vfnc, bool toFree = false );
 
     private:
 	//Attributes

@@ -1,3 +1,11 @@
+2012-10-07 Roman
+- TFunction: valAtt() and valDet() is made virtual. Public attribute "exCtx" for execution context store here.
+- !!:DAQ.JavaLikeCalc: Registers RegW execution context moved out each execution turn, and next execution
+    performance rised from 5% to 10%.
+- Protocol.HTTP: File /robots.txt processing is added for prevent scan by seach engines.
+- FIX:Transport.Serial: New flow control mode "rs485" some fixed for SER_RS485_ENABLED miss processing.
+
+
 2012-10-03 Roman
 - SYS: Function TSYS::sysTm() is added for allow fast access to time from periodic updated global memory cell.
     Used for DAQ.JavaLikeCalc execution time limit control.

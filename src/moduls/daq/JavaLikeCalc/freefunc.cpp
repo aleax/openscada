@@ -244,7 +244,47 @@ void Func::delIO( )
     SYS->db().at().dataDel(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",cfg);
 }
 
-void Func::preIOCfgChange()
+void Func::valAtt( TValFunc *vfnc )
+{
+    TFunction::valAtt(vfnc);
+    workRegControl(vfnc);
+}
+
+void Func::valDet( TValFunc *vfnc )
+{
+    TFunction::valDet(vfnc);
+    workRegControl(vfnc, true);
+}
+
+void Func::workRegControl( TValFunc *vfnc, bool toFree )
+{
+    if(vfnc->exCtx)
+    {
+	delete [] (RegW*)vfnc->exCtx;
+	vfnc->exCtx = NULL;
+    }
+    if(!toFree && mRegs.size())
+    {
+	vfnc->exCtx = new RegW[mRegs.size()];
+	RegW *reg = (RegW*)vfnc->exCtx;
+	//> Init list of registers
+	for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
+	    switch(mRegs[i_rg]->type())
+	    {
+		case Reg::Var:
+		    reg[i_rg].setType(Reg::Var);
+		    reg[i_rg].val().io = mRegs[i_rg]->val().io;
+		    break;
+		case Reg::PrmAttr:
+		    reg[i_rg].setType(Reg::PrmAttr);
+		    *reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
+		    break;
+		default:	break;
+	    }
+    }
+}
+
+void Func::preIOCfgChange( )
 {
     be_start = startStat();
     if(be_start)
@@ -265,9 +305,11 @@ void Func::setStart( bool val )
 {
     if(val == run_st) return;
     //> Start calc
-    if( val )
+    if(val)
     {
 	progCompile( );
+	for(unsigned i = 0; i < used.size(); i++)
+	    workRegControl(used[i]);
 	run_st = true;
     }
     //> Stop calc
@@ -1707,30 +1749,16 @@ void Func::calc( TValFunc *val )
     ResAlloc res(fRes(), false);
     if(!startStat()) return;
 
-    //> Init list of registers
-    RegW reg[mRegs.size()];
-    for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
-	switch(mRegs[i_rg]->type())
-	{
-	    case Reg::Var:
-		reg[i_rg].setType(Reg::Var);
-		reg[i_rg].val().io = mRegs[i_rg]->val().io;
-		break;
-	    case Reg::PrmAttr:
-		reg[i_rg].setType(Reg::PrmAttr);
-		*reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
-		break;
-	    default:	break;
-	}
-
     //> Exec calc
     ExecData dt = { SYS->sysTm(), 0 };
-    exec(val,reg,(const uint8_t*)prg.c_str(),dt);
+    exec(val, (const uint8_t*)prg.c_str(), dt);
     if(dt.flg&0x08) throw TError(nodePath().c_str(),_("Function execution terminated by error"));
 }
 
-void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
+void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 {
+    RegW *reg = (RegW*)val->exCtx;
+
     while(!(dt.flg&0x01))
     {
 	//> Calc time control mechanism
@@ -2057,7 +2085,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		if(getValB(val,reg[ptr->a1]) != true)
 		{
-		    exec(val,reg,cprg+sizeof(SCode),dt);
+		    exec(val, cprg+sizeof(SCode), dt);
 		    reg[ptr->rez] = (getValB(val,reg[ptr->a2])==true);
 		}
 		else reg[ptr->rez] = true;
@@ -2082,7 +2110,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		if(getValB(val,reg[ptr->a1]) == true)
 		{
-		    exec(val,reg,cprg+sizeof(SCode),dt);
+		    exec(val, cprg+sizeof(SCode), dt);
 		    reg[ptr->rez] = (getValB(val,reg[ptr->a2])==true);
 		}
 		else reg[ptr->rez] = false;
@@ -2244,8 +2272,8 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #if OSC_DEBUG >= 5
 		printf("CODE: Condition %d: %d|%d|%d.\n",ptr->cond,sizeof(SCode),ptr->toFalse,ptr->end);
 #endif
-		if(getValB(val,reg[ptr->cond]))	exec(val,reg,cprg+sizeof(SCode),dt);
-		else if(ptr->toFalse != ptr->end) exec(val,reg,cprg+ptr->toFalse,dt);
+		if(getValB(val,reg[ptr->cond]))	exec(val, cprg+sizeof(SCode), dt);
+		else if(ptr->toFalse != ptr->end) exec(val, cprg+ptr->toFalse, dt);
 		cprg += ptr->end;
 		continue;
 	    }
@@ -2258,15 +2286,15 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 #endif
 		while(!(dt.flg&0x01))
 		{
-		    exec(val,reg,cprg+sizeof(SCode),dt);
+		    exec(val, cprg+sizeof(SCode), dt);
 		    if(!getValB(val,reg[ptr->cond])) break;
 		    dt.flg &= ~0x06;
-		    exec(val, reg, cprg+ptr->body, dt);
+		    exec(val, cprg+ptr->body, dt);
 		    //Check break and continue operators
 		    if(dt.flg&0x02)	{ dt.flg=0; break; }
 		    else if(dt.flg&0x04)dt.flg=0;
 
-		    if(ptr->after) exec(val, reg, cprg+ptr->after, dt);
+		    if(ptr->after) exec(val, cprg+ptr->after, dt);
 		}
 		cprg += ptr->end;
 		continue;
@@ -2287,7 +2315,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    {
 			setValS(val,reg[ptr->val],pLs[i_l]);
 			dt.flg &= ~0x06;
-			exec(val, reg, cprg + ptr->body, dt);
+			exec(val, cprg + ptr->body, dt);
 			//Check break and continue operators
 			if(dt.flg&0x02)		{ dt.flg=0; break; }
 			else if(dt.flg&0x04)	dt.flg=0;

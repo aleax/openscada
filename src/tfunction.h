@@ -125,8 +125,8 @@ class TFunction : public TCntrNode
 
 	virtual void calc( TValFunc *val )	{ }
 
-	void valAtt( TValFunc *vfnc );
-	void valDet( TValFunc *vfnc );
+	virtual void valAtt( TValFunc *vfnc );
+	virtual void valDet( TValFunc *vfnc );
 
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
@@ -232,6 +232,9 @@ class TValFunc
 	TValFunc *ctxGet( int key );
 	void ctxSet( int key, TValFunc *val );
 	void ctxClear( );
+
+	//Attributes
+	void	*exCtx;
 
     protected:
 	//Data
