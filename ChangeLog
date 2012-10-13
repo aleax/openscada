@@ -1,3 +1,9 @@
+2012-10-13 Roman
+- FIX:DAQ.DAQGate: Attributes sync at start is fixed. Detected on MillLevel system, without saved attributes profile present.
+    No already present remotely parameters removing, only for correct connection, is fixed.
+- FIX:UI.{Vision,WebVision}: Zero value draw for Boolean type of primitive "Diagram" is fixed by set height limit to the line width.
+
+
 2012-10-07 Roman
 - TFunction: valAtt() and valDet() is made virtual. Public attribute "exCtx" for execution context store here.
 - !!:DAQ.JavaLikeCalc: Registers RegW execution context moved out each execution turn, and next execution

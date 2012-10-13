@@ -5599,7 +5599,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     for(unsigned i_t = 0; i_t < trnds.size(); i_t++)
     {
 	//>> Set trend's pen
-	gdImageSetThickness(im,vmax(1,vmin(10,(int)TSYS::realRound(trnds[i_t].width()*vmin(xSc,ySc)))));
+	int lnWdth = vmax(1,vmin(10,(int)TSYS::realRound(trnds[i_t].width()*vmin(xSc,ySc))));
+	gdImageSetThickness(im,lnWdth);
 	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
 	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
 
@@ -5670,14 +5671,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if(prevVl == EVAL_REAL)
 		{
 		    if(trnds[i_t].valTp() != 0) gdImageSetPixel(im,averPos,c_vpos,clr_t);
-		    else gdImageLine(im,averPos,z_vpos,averPos,c_vpos,clr_t);
+		    else gdImageLine(im,averPos,z_vpos,averPos,vmin(z_vpos-lnWdth,c_vpos),clr_t);
 		}
 		else
 		{
 		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
 		    if(trnds[i_t].valTp() != 0) gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
 		    else for(int sps = prevPos+1; sps <= averPos; sps++)
-			gdImageLine(im,sps,z_vpos,sps,c_vpos,clr_t);
+			gdImageLine(im,sps,z_vpos,sps,vmin(z_vpos-lnWdth,c_vpos),clr_t);
 		}
 	    }
 	    prevVl  = averVl;

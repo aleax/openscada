@@ -82,7 +82,7 @@ class TMdPrm : public TParamContr
 	//Attributes
 	unsigned char isPrcOK	: 1;
 	unsigned char isEVAL	: 1;
-	unsigned char isUpdated	: 1;
+	unsigned char isSynced	: 1;
 
     protected:
 	//Methods

@@ -265,7 +265,7 @@ void TController::disable( )
     en_st = false;
 }
 
-void TController::LoadParmCfg(  )
+void TController::LoadParmCfg( )
 {
     map<string, bool>   itReg;
 

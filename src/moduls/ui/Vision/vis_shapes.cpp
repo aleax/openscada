@@ -2272,23 +2272,23 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 
 	    //Write point and line
-	    if( averVl != EVAL_REAL )
+	    if(averVl != EVAL_REAL)
 	    {
-		if( sTr->valTp() == 0 )
+		if(sTr->valTp() == 0)
 		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin)/(vsMax-vsMin))));
 		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
-		if( prevVl == EVAL_REAL )
+		if(prevVl == EVAL_REAL)
 		{
 		    if(sTr->valTp() != 0) pnt.drawPoint(averPos,c_vpos);
-		    else pnt.drawLine(averPos,z_vpos,averPos,c_vpos);
+		    else pnt.drawLine(averPos,z_vpos,averPos,vmin(z_vpos-trpen.width(),c_vpos));
 		}
 		else
 		{
 		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
 		    if(sTr->valTp() != 0) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
 		    else
-			for( int sps = prevPos+1; sps <= averPos; sps++ )
-			    pnt.drawLine(sps,z_vpos,sps,c_vpos);
+			for(int sps = prevPos+1; sps <= averPos; sps++)
+			    pnt.drawLine(sps,z_vpos,sps,vmin(z_vpos-trpen.width(),c_vpos));
 		}
 	    }
 	    prevVl  = averVl;
