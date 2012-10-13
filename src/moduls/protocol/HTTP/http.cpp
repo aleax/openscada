@@ -578,6 +578,12 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    answer = httpHead("200 OK",answer.size(),"Set-Cookie: oscd_u_id=0; path=/;\x0D\x0A")+answer;
 	    return m_nofull||KeepAlive;
 	}
+	else if(name_mod == "robots.txt" && method == "GET")
+	{
+	    answer = "User-Agent: *\nDisallow: /";
+	    answer = httpHead("200 OK",answer.size(),"Content-Type: text/plain;charset=us-ascii\x0D\x0A",false)+answer;
+	    return m_nofull||KeepAlive;
+	}
 
 	//> Send request to module
 	try
