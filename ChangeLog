@@ -1,3 +1,11 @@
+2012-10-13 Roman
+- FIX:DAQ.DAQGate: Attributes sync at start is fixed. Detected on MillLevel system, without saved attributes profile present.
+    No already present remotely parameters removing, only for correct connection, is fixed.
+- FIX:UI.{Vision,WebVision}: Zero value draw for Boolean type of primitive "Diagram" is fixed by set height limit to the line width.
+- Protocol.HTTP: File /robots.txt processing is added for prevent scan by seach engines.
+- Transport.Serial: New flow control mode "rs485" by TIOCSRS485 is added.
+
+
 2012-10-02 Roman
 - FIX:Archive: Single value, typical for 1h, request is fixed.
 - FIX:UI.Vision, UI.WebVision: Periods values processing for hours more is fixed.

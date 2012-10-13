@@ -234,8 +234,11 @@ void TMdContr::enable_( )
 		}
 	    }catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    //> Removing parameter's try
-    if(!enableStat())
+    //> Removing remotely missed parameters in case all remote stations active status by actual list
+    bool prmChkToDel = true;
+    for(int i_st = 0; prmChkToDel && i_st < mStatWork.size(); i_st++)
+	if(mStatWork[i_st].second >= 0) prmChkToDel = false;
+    if(prmChkToDel && enableStat())
     {
 	list(prm_ls);
 	for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
@@ -328,9 +331,10 @@ void *TMdContr::Task( void *icntr )
 		//> Mark no process
 		for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
 		{
-		    if((!div && syncCnt <= 0) || (div && it_cnt > div && (((it_cnt+i_p)%div) == 0)))
-			cntr.at(pLS[i_p]).at().sync();
-		    cntr.at(pLS[i_p]).at().isPrcOK = false;
+		    AutoHD<TMdPrm> pO = cntr.at(pLS[i_p]);
+		    if(!pO.at().isSynced || (!div && syncCnt <= 0) || (div && it_cnt > div && (((it_cnt+i_p)%div) == 0)))
+			pO.at().sync();
+		    pO.at().isPrcOK = false;
 		}
 
 		//> Station's cycle
@@ -505,7 +509,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), p_el("w_attr")
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), isPrcOK(false), isEVAL(true), isSynced(false), p_el("w_attr")
 {
     setToEnable(true);
 }
@@ -640,6 +644,7 @@ void TMdPrm::sync( )
         	    try{ p_el.fldDel(i_p); i_p--; modif(true); }
         	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	    }
+	    isSynced = true;
 	    return;
 	}catch(TError err) { continue; }
 }
