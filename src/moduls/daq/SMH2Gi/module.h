@@ -117,6 +117,10 @@ class MRCParam : public TTipParam
 	void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl );
 
 	bool cntrCmdProc( TParamContr *prm, XMLNode *opt );
+
+    private:
+	//Methods
+	void sendTune( TParamContr *prm );
 };
 
 //*************************************************
@@ -188,6 +192,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Shm     *smv;
+	string	MRWrFrm;
 
     protected:
 	//Methods

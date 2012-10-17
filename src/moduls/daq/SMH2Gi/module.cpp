@@ -346,9 +346,42 @@ void *TMdContr::Task( void *icntr )
 	//> Update controller's data
 	cntr.en_res.resRequestR( );
 	cntr.callSt = true;
+
+	//>> MR frame prepare
+	if(cntr.MRWrFrm.size() != 8)
+	{
+	    cntr.MRWrFrm.clear();
+	    for(int i_n = 0; i_n < 8; i_n++)
+		cntr.MRWrFrm += (char)8;
+	}
+
+	//>> Call for get vals
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
 	    try { cntr.p_hd[i_p].at().getVals(); }
 	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+
+	//>> Send generic MR write frame
+	if(cntr.MRWrFrm.size() != 8)
+	{
+	    string pdu;
+	    //> Swap registers
+	    for(int i_p = 0; i_p < cntr.MRWrFrm.size()-1; i_p += 2)
+	    { char t_sw = cntr.MRWrFrm[i_p]; cntr.MRWrFrm[i_p] = cntr.MRWrFrm[i_p+1]; cntr.MRWrFrm[i_p+1] = t_sw; }
+
+	    //>> Prepare header
+	    pdu = (char)0xFE;				//BroadCast
+	    pdu += (char)0x10;				//Function, preset multiple registers
+	    pdu += (char)0;
+	    pdu += (char)0;
+	    pdu += (char)((cntr.MRWrFrm.size()/2)>>8);	//Registers quantity MSB
+    	    pdu += (char)(cntr.MRWrFrm.size()/2);	//Registers quantity LSB
+    	    pdu += (char)cntr.MRWrFrm.size();		//Byte Count
+    	    pdu += cntr.MRWrFrm;
+
+	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    cntr.modBusReq(pdu, false, true);
+	}
+
 	cntr.callSt = false;
 	cntr.en_res.resRelease( );
 	cntr.tmGath = TSYS::curTime()-t_cnt;
@@ -709,15 +742,15 @@ struct Inquired_t
 	    unsigned short	soft:6;
 	} ID;					//used on parameters request
 	struct {				// MC alarm codes
-	    unsigned short     Reserved1:3;
-	    unsigned short     NoTunes:1;	// No tunes get
-	    unsigned short     AOutOverload:1;	// Analog output overvoltage
-	    unsigned short     Reserved2:11;
+	    unsigned short	Reserved1:3;
+	    unsigned short	NoTunes:1;	// No tunes get
+	    unsigned short	AOutOverload:1;	// Analog output overvoltage
+	    unsigned short	Reserved2:11;
 	} AlarmsMC;
 	struct {      				// MR alarm codes
     	    unsigned short	Reserved1:3;
     	    unsigned short	HighVoltage:1;	// High voltage
-	    unsigned short	LowVoltage:1;	// Log voltage
+	    unsigned short	LowVoltage:1;	// Low voltage
     	    unsigned short	AOutOverload:1;	// Analog output overvoltage
     	    unsigned short	PSOverload:1;	// Internal power supply overvoltage
 	    unsigned short	NoTunes:1;	// No tunes get
@@ -751,33 +784,12 @@ void MRCParam::enable( TParamContr *ip )
     {
 	if(!ePrm->dev.HardID)
 	    throw TError(p->nodePath().c_str(),TSYS::strMess(_("No selected any module type or type '%d' error."),p->cfg("MOD_TP").getI()).c_str());
-	//> Prepare and send tune request
+
 	int modSlot = p->cfg("MOD_SLOT").getI();
-	string pdu, tune, rezReq;
-	//>> Prepare tune
-	for(int i_t = 0; true; i_t++)
-	{
-	    string tits = TSYS::strMess("tune%d",i_t);
-	    map<string, string>::iterator tit = ePrm->dev.sects["common"].find(tits);
-	    if(tit == ePrm->dev.sects["common"].end()) break;
-	    int regVal = atoi(p->modPrm(tits,TSYS::strParse(tit->second,5,"#")).c_str());
-	    tune += (char)(regVal>>8);	//MSB
-    	    tune += (char)regVal;	//LSB
-	}
-	pdu = (char)max(0,modSlot);	//Slave address
-	pdu += (char)0x10;		//Function, preset multiple registers
-	pdu += (char)0x00;		//Start address, MSB
-	pdu += (char)0x00;		//Start address, LSB
-	pdu += (char)((tune.size()/2)>>8);//Registers quantity MSB
-        pdu += (char)(tune.size()/2);	//Registers quantity LSB
-        pdu += (char)tune.size();	//Byte Count
-        pdu += tune;
+	string pdu, rezReq;
 
-	//printf("TEST 10: Send tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-
-	rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	if(rezReq.size()) throw TError(p->nodePath().c_str(),_("Send tune request error: %s."),rezReq.c_str());
-	//printf("TEST 10: Respond for tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	//> Prepare and send tune request
+	sendTune(ip);
 
 	//> Value's attributes prepare
 	ePrm->DI = ePrm->DO = ePrm->AO = ePrm->CNTR = 0;
@@ -825,12 +837,43 @@ void MRCParam::enable( TParamContr *ip )
 	ePrm->SoftID = resp->proc.ID.soft;
 	ePrm->SN = resp->SerialNum;
 
-
     }catch(TError err)
     {
 	if(p->extPrms)	{ delete (tval*)p->extPrms; p->extPrms = NULL; }
 	throw;
     }
+}
+
+void MRCParam::sendTune( TParamContr *ip )
+{
+    TMdPrm *p = (TMdPrm *)ip;
+    tval *ePrm = (tval*)p->extPrms;
+    int modSlot = p->cfg("MOD_SLOT").getI();
+    string pdu, tune, rezReq;
+
+    for(int i_t = 0; true; i_t++)
+    {
+	string tits = TSYS::strMess("tune%d",i_t);
+	map<string, string>::iterator tit = ePrm->dev.sects["common"].find(tits);
+	if(tit == ePrm->dev.sects["common"].end()) break;
+	int regVal = atoi(p->modPrm(tits,TSYS::strParse(tit->second,5,"#")).c_str());
+	tune += (char)(regVal>>8);	//MSB
+    	tune += (char)regVal;	//LSB
+    }
+    pdu = (char)max(0,modSlot);	//Slave address
+    pdu += (char)0x10;		//Function, preset multiple registers
+    pdu += (char)0x00;		//Start address, MSB
+    pdu += (char)0x00;		//Start address, LSB
+    pdu += (char)((tune.size()/2)>>8);//Registers quantity MSB
+    pdu += (char)(tune.size()/2);	//Registers quantity LSB
+    pdu += (char)tune.size();	//Byte Count
+    pdu += tune;
+
+    //printf("TEST 10: Send tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+
+    rezReq = p->owner().modBusReq(pdu, (modSlot<0));
+    if(rezReq.size()) throw TError(p->nodePath().c_str(),_("Send tune request error: %s."),rezReq.c_str());
+    //printf("TEST 10: Respond for tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
 }
 
 void MRCParam::disable( TParamContr *ip )
@@ -841,7 +884,7 @@ void MRCParam::disable( TParamContr *ip )
 
 void MRCParam::getVals( TParamContr *ip )
 {
-    string pdu, data, rezReq;
+    string pdu, pduReq, data, rezReq;
     TMdPrm *p = (TMdPrm *)ip;
     tval *ePrm = (tval*)p->extPrms;
     int modSlot = p->cfg("MOD_SLOT").getI(), vl;
@@ -853,33 +896,35 @@ void MRCParam::getVals( TParamContr *ip )
     if(modSlot < 0)	//> MC process
     {
 	//> Read inputs
-	pdu = (char)ePrm->SN;		//SN[0]
-	pdu += (char)0x03;		//Function, read multiple registers
-	pdu += (char)(ePrm->SN>>16);	//SN[2]
-	pdu += (char)(ePrm->SN>>8);	//SN[1]
-	pdu += (char)0x00;		//Registers quantity MSB
-    	pdu += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
+	pduReq = (char)ePrm->SN;		//SN[0]
+	pduReq += (char)0x03;		//Function, read multiple registers
+	pduReq += (char)(ePrm->SN>>16);	//SN[2]
+	pduReq += (char)(ePrm->SN>>8);	//SN[1]
+	pduReq += (char)0x00;		//Registers quantity MSB
+    	pduReq += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
 
-	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	if(rezReq.size() || pdu.size() < 35)
+	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
+	if(rezReq.size() || pduReq.size() < 35)
 	{
-	    pdu.resize(35);
+	    pduReq.resize(35);
 	    if(rezReq.empty()) rezReq = _("20:PDU short.");
 	}
 
-	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	pdu.erase(0,3);
+	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	pduReq.erase(0,3);
 	//> Swap registers
-	for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
-	{ char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
+	for(int i_p = 0; i_p < pduReq.size()-1; i_p += 2)
+	{ char t_sw = pduReq[i_p]; pduReq[i_p] = pduReq[i_p+1]; pduReq[i_p+1] = t_sw; }
 
-	const char *off = pdu.data() + sizeof(Inquired_t);
+	Inquired_t *respHd = (Inquired_t*)pduReq.data();
+	const char *off = pduReq.data() + sizeof(Inquired_t);
+
 	//>> AI process
 	off += sizeof(float);
 	for(int i_a = 0; i_a < 8; i_a++)
 	{
-	    p->vlAt(TSYS::strMess("ain%d",i_a)).at().setR(rezReq.size()?EVAL_REAL:TSYS::getUnalignFloat(off), 0, true);
+	    p->vlAt(TSYS::strMess("ain%d",i_a)).at().setR((rezReq.size() || !respHd->MCAinsValid)?EVAL_REAL:TSYS::getUnalignFloat(off), 0, true);
 	    off += sizeof(float);
 	}
 	off += sizeof(float);
@@ -911,6 +956,9 @@ void MRCParam::getVals( TParamContr *ip )
 	    //>> MR_broadcast_t.Offsets
 	    for(int i_n = 0; i_n < 8; i_n++)
 		data += (char)((i_n == vmax(0,modSlot))?8:(8+10));
+	    //> Swap registers
+	    for(int i_p = 0; i_p < data.size()-1; i_p += 2)
+	    { char t_sw = data[i_p]; data[i_p] = data[i_p+1]; data[i_p+1] = t_sw; }
 
 	    //>> MR_broadcast_t.Data
 	    //>>> Digital outputs prepare and place
@@ -922,14 +970,14 @@ void MRCParam::getVals( TParamContr *ip )
         	else if(i_d == 10)	{ if(p->vlAt("crst_din7_").at().getB(0, true) == true) vl |= 1; }
         	else if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
     	    }
-    	    data += (char)vl; data += (char)(vl>>8);
+    	    data += (char)(vl>>8); data += (char)vl;
 
 	    //>>> Analog outputs place
 	    for(int i_a; i_a < 4; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
-    		data += (char)vl; data += (char)(vl>>8);
+    		data += (char)(vl>>8); data += (char)vl;
 	    }
 
 	    //>> Prepare broadcast header
@@ -944,54 +992,90 @@ void MRCParam::getVals( TParamContr *ip )
 	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
 	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
 	}
+
+	//> Alarms process
+	if(rezReq.empty() && respHd->AlarmsInID)
+	{
+	    if(respHd->proc.AlarmsMC.AOutOverload) rezReq += _("Analog output overload; ");
+	    if(respHd->proc.AlarmsMC.NoTunes) rezReq += _("No tunes get; ");
+	    if(rezReq.size()) rezReq = "21:"+rezReq;
+	}
     }
     else		//> MR process
     {
 	//> Read inputs
-	if(ePrm->DI || ePrm->CNTR)
+	int reStrSize = sizeof(Inquired_t) + (ePrm->DI?2:0) + ePrm->CNTR*4;
+	pduReq = (char)ePrm->SN;		//SN[0]
+	pduReq += (char)0x03;			//Function, read multiple registers
+	pduReq += (char)(ePrm->SN>>16);		//SN[2]
+	pduReq += (char)(ePrm->SN>>8);		//SN[1]
+	pduReq += (char)((reStrSize/2)>>8);	//Registers quantity MSB
+    	pduReq += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
+	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
+	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	if(rezReq.size() || pduReq.size() < (3+reStrSize))
 	{
-	    int reStrSize = sizeof(Inquired_t) + (ePrm->DI?2:0) + ePrm->CNTR*4;
-	    pdu = (char)ePrm->SN;		//SN[0]
-	    pdu += (char)0x03;			//Function, read multiple registers
-	    pdu += (char)(ePrm->SN>>16);	//SN[2]
-	    pdu += (char)(ePrm->SN>>8);		//SN[1]
-	    pdu += (char)((reStrSize/2)>>8);	//Registers quantity MSB
-    	    pdu += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
-	    //printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	    //printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    if(rezReq.size() || pdu.size() < (3+reStrSize))
-	    {
-		pdu.resize(3+reStrSize);
-		if(rezReq.empty()) rezReq = _("20:PDU short.");
-	    }
-
-	    pdu.erase(0,3);
-	    //> Swap registers
-	    for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
-	    { char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
-
-	    const char *off = pdu.data() + sizeof(Inquired_t);
-	    //>> Counters process
-	    for(int i_c = 1; i_c <= ePrm->CNTR; i_c++)
-	    {
-		p->vlAt(TSYS::strMess("cntr%d",i_c)).at().setI(rezReq.size()?EVAL_INT:TSYS::getUnalign32(off), 0, true);
-		off += sizeof(uint32_t);
-	    }
-	    //>> Digit inputs process
-	    int vl = TSYS::getUnalign16(off);
-	    for(int i_d = 0; i_d < ePrm->DI; i_d++)
-        	p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+	    pduReq.resize(3+reStrSize);
+	    if(rezReq.empty()) rezReq = _("20:PDU short.");
 	}
+
+	pduReq.erase(0,3);
+	//> Swap registers
+	for(int i_p = 0; i_p < pduReq.size()-1; i_p += 2)
+	{ char t_sw = pduReq[i_p]; pduReq[i_p] = pduReq[i_p+1]; pduReq[i_p+1] = t_sw; }
+
+	Inquired_t *respHd = (Inquired_t*)pduReq.data();
+	const char *off = pduReq.data() + sizeof(Inquired_t);
+	//>> Counters process
+	for(int i_c = 1; i_c <= ePrm->CNTR; i_c++)
+	{
+	    p->vlAt(TSYS::strMess("cntr%d",i_c)).at().setI(rezReq.size()?EVAL_INT:TSYS::getUnalign32(off), 0, true);
+	    off += sizeof(uint32_t);
+	}
+	//>> Digit inputs process
+	int vl = ePrm->DI ? TSYS::getUnalign16(off) : 0;
+	for(int i_d = 0; i_d < ePrm->DI; i_d++)
+    	    p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
 
 	//> Send outputs
 	if(!rezReq.size() && (ePrm->DO || ePrm->AO))
 	{
+	    //>> Append to generic MR write frame
+	    for(int i_n = 0; i_n < 8; i_n++)
+		if(i_n != modSlot && p->owner().MRWrFrm[i_n] == p->owner().MRWrFrm.size())
+		    p->owner().MRWrFrm[i_n] += (ePrm->DO?2:0)+ePrm->AO*2;
+	    //>> Digital outputs prepare and place
+	    if(ePrm->DO)
+	    {
+		int vl = 0;
+		for(int i_d = (ePrm->DO-1); i_d >= 0; i_d--)
+    		{
+        	    vl = vl << 1;
+        	    if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
+		}
+    		p->owner().MRWrFrm += (char)vl;
+    		p->owner().MRWrFrm += (char)(vl>>8);
+    	    }
+	    //>>> Analog outputs place
+	    for(int i_a; i_a < ePrm->AO; i_a++)
+	    {
+		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
+		if(vl == EVAL_INT) vl = 0;
+    		p->owner().MRWrFrm += (char)vl;
+    		p->owner().MRWrFrm += (char)(vl>>8);
+	    }
+
+	    //>> MR_broadcast_t.Offsets
+	    /*
 	    //> Send outputs
 	    data.clear();
-	    //>> MR_broadcast_t.Offsets
+
 	    for(int i_n = 0; i_n < 8; i_n++)
 		data += (char)((i_n == vmax(0,modSlot))?8:(8+(ePrm->DO?2:0)+ePrm->AO*2));
+	    //> Swap registers
+	    //for(int i_p = 0; i_p < data.size()-1; i_p += 2)
+	    //{ char t_sw = data[i_p]; data[i_p] = data[i_p+1]; data[i_p+1] = t_sw; }
 
 	    //>> MR_broadcast_t.Data
 	    //>>> Digital outputs prepare and place
@@ -1003,14 +1087,14 @@ void MRCParam::getVals( TParamContr *ip )
         	    vl = vl << 1;
         	    if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
 		}
-    		data += (char)vl; data += (char)(vl>>8);
+    		data += (char)(vl>>8); data += (char)vl;
     	    }
 	    //>>> Analog outputs place
 	    for(int i_a; i_a < ePrm->AO; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
-    		data += (char)vl; data += (char)(vl>>8);
+    		data += (char)(vl>>8); data += (char)vl;
 	    }
 
 	    //>> Prepare header
@@ -1023,9 +1107,23 @@ void MRCParam::getVals( TParamContr *ip )
     	    pdu += (char)data.size();		//Byte Count
     	    pdu += data;
 
-	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
+	    printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);*/
 	}
+
+	//> Alarms process
+	if(rezReq.empty() && respHd->AlarmsInID)
+	{
+	    if(respHd->proc.AlarmsMR.HighVoltage)	rezReq += _("High voltage; ");
+	    if(respHd->proc.AlarmsMR.LowVoltage)	rezReq += _("Low voltage; ");
+	    if(respHd->proc.AlarmsMR.AOutOverload)	rezReq += _("Analog output overload; ");
+	    if(respHd->proc.AlarmsMR.PSOverload)	rezReq += _("Internal power supply overvoltage; ");
+	    if(respHd->proc.AlarmsMR.UnknownType)	rezReq += _("Unknown MR module type; ");
+	    if(rezReq.size()) rezReq = "21:"+rezReq;
+	}
+
+	//> Reinit process
+	//if(respHd->Reinit) sendTune(ip);
     }
 
     p->acq_err.setVal(rezReq);
@@ -1139,7 +1237,7 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 		string cfgStream = TSYS::strEncode(mod->MRCdevs[-1].sects[buf][TSYS::strMess("%dWIRE%d",nWr,i_tb)], TSYS::Bin);
 		if(cfgStream.size() >= 8)
 		    for(int i_air = 0; i_air < 4; i_air++)
-			p->setModPrm("tune"+TSYS::int2str(i_t+i_air),TSYS::int2str(TSYS::getUnalign16(cfgStream.data()+i_air*2)));
+			p->setModPrm("tune"+TSYS::int2str(i_t+i_air),TSYS::int2str((cfgStream[i_air*2]<<8)|cfgStream[i_air*2+1]));
 		//printf("TEST 00: '%s', %d = %d\n",buf,nWr,cfgStream.size());
 	    }
 	    else if(i_tb < 0) p->setModPrm(tits, opt->text());
