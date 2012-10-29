@@ -1,3 +1,8 @@
+2012-10-29 Roman
+- !:FIX:DAQ.OPC_UA: Writing through DAQ parameters is fixed.
+- UI.WebVision: Childs update is added on "geomXsc" or "geomYsc" attributes modify.
+
+
 2012-10-13 Roman
 - FIX:DAQ.DAQGate: Attributes sync at start is fixed. Detected on MillLevel system, without saved attributes profile present.
     No already present remotely parameters removing, only for correct connection, is fixed.

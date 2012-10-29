@@ -366,7 +366,7 @@ void *TMdContr::Task( void *icntr )
 		    cntr.p_hd[i_p].at().vlList(als);
 		    for(unsigned i_a = 0; i_a < als.size(); i_a++)
 		    {
-			nId = cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve();
+			nId = TSYS::strLine(cntr.p_hd[i_p].at().vlAt(als[i_a]).at().fld().reserve(),0);
 			if(nId.empty()) continue;
 			req.childAdd("node")->setAttr("prmId",cntr.p_hd[i_p].at().id())->setAttr("prmAttr",als[i_a])->setAttr("nodeId",nId)->setAttr("attributeId","13");
 		    }
@@ -689,7 +689,7 @@ string TMdPrm::attrPrc( )
 	    srchOK = false;
 	    //>> Find for already presented attribute
 	    for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
-		if(p_el.fldAt(i_a).reserve() == snd) srchOK = true;
+		if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == snd) srchOK = true;
 
 	    //>> Create new attribute
 	    if(!srchOK)
@@ -722,7 +722,8 @@ string TMdPrm::attrPrc( )
 		unsigned vflg = TVal::DirWrite;
 		if(!(atoi(req.childGet(4)->text().c_str())&TProt::ACS_Write))	vflg |= TFld::NoWrite;
 
-		p_el.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,req.childGet(3)->attr("EncodingMask").c_str(),"","","",snd.c_str()));
+		p_el.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,"",
+		    "","","",(snd+"\n"+req.childGet(3)->attr("EncodingMask")).c_str()));
 	    }
 	}
 
@@ -737,7 +738,7 @@ string TMdPrm::attrPrc( )
     for(unsigned i_a = 0, i_p; i_a < p_el.fldSize(); )
     {
 	for(i_p = 0; i_p < als.size(); i_p++)
-	    if(p_el.fldAt(i_a).reserve() == als[i_p])	break;
+	    if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == als[i_p])	break;
 	if(i_p >= als.size())
 	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
 	i_a++;
@@ -801,10 +802,10 @@ void TMdPrm::vlGet( TVal &val )
     if(!owner().acq_err.getVal().empty()) val.setS(owner().acq_err.getVal(),0,true);
     else
     {
-	//> Check remote attribuutes for error status
+	//> Check remote attributes for error status
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
-	ResAlloc res( nodeRes(), true );
+	ResAlloc res(nodeRes(), true);
 	for(unsigned i_a = 0; i_a < p_el.fldSize(); i_a++)
 	{
 	    astls.push_back(p_el.fldAt(i_a).len());
@@ -819,10 +820,10 @@ void TMdPrm::vlGet( TVal &val )
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if( !enableStat() )	valo.setS( EVAL_STR, 0, true );
+    if(!enableStat())	valo.setS(EVAL_STR, 0, true);
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
 	if( valo.getS(NULL,true) == pvl.getS() ) return;
 	XMLNode req("set");
@@ -831,16 +832,16 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	return;
     }
 
-    string vl = valo.getS(NULL,true);
-    if( vl == EVAL_STR || vl == pvl.getS() ) return;
+    TVariant vl = valo.get(NULL, true);
+    if(vl.isEVal() || vl == pvl) return;
 
     //> Direct write
     XMLNode req("opc.tcp");
     req.setAttr("id","Write")->
-	childAdd("node")->setAttr("nodeId",valo.fld().reserve())->
+	childAdd("node")->setAttr("nodeId",TSYS::strLine(valo.fld().reserve(),0))->
 			  setAttr("attributeId",TSYS::int2str(TProt::AId_Value))->
-			  setAttr("EncodingMask",TSYS::int2str(valo.fld().len()))->
-			  setText(vl);
+			  setAttr("EncodingMask",TSYS::strLine(valo.fld().reserve(),1))->
+			  setText(vl.getS());
     owner().reqOPC(req);
 }
 
