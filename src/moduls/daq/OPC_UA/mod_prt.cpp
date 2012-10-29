@@ -522,7 +522,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			oSqlf(mReq,"");					//dataEncoding
 		    }
 		}
-		else if( io.attr("id") == "Write" )
+		else if(io.attr("id") == "Write")
 		{
 		    iTpId = OpcUa_WriteRequest;
 									//> nodesToWrite []
@@ -1157,23 +1157,23 @@ void TProt::oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const Nod
 void TProt::oDataValue( string &buf, uint8_t eMsk, const TVariant &vl, uint8_t vEMsk, int64_t srcTmStmp )
 {
     eMsk = eMsk & (~0x30);	//Exclude picoseconds parts
-    if( eMsk & 0x02 )	eMsk = eMsk & (~0x01);
+    if(eMsk&0x02) eMsk = eMsk&(~0x01);
 
-    oNu(buf,eMsk,1);		//Encoding Mask
-    if( eMsk & 0x01 )		//> Variant
+    oNu(buf, eMsk, 1);		//Encoding Mask
+    if(eMsk&0x01)		//> Variant
     {
-	oNu(buf,vEMsk,1);	//Encoding Mask
+	oNu(buf, vEMsk, 1);	//Encoding Mask
 	int32_t arrL = 1;
-	if( vEMsk&0x80 )	//Array process
+	if(vEMsk&0x80)		//Array process
 	{
 	    arrL = 0;
-	    for( int off = 0; TSYS::strParse(vl.getS(),0,"\n",&off).size(); ) arrL++;
+	    for(int off = 0; TSYS::strParse(vl.getS(),0,"\n",&off).size(); ) arrL++;
 	    oNu(buf,arrL,4);	//ArrayLength
 	}
-	for( int i_v = 0, off = 0; i_v < arrL; i_v++ )
+	for(int i_v = 0, off = 0; i_v < arrL; i_v++)
 	{
 	    TVariant setVl = (arrL==1) ? vl : TSYS::strParse(vl.getS(),0,"\n",&off);
-	    switch( vEMsk&0x3F )
+	    switch(vEMsk&0x3F)
 	    {
 		case OpcUa_Boolean:
 		case OpcUa_SByte:	oN(buf,setVl.getI(),1);		break;
