@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 18:41+0300\n"
+"POT-Creation-Date: 2012-10-31 10:48+0200\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -53,12 +53,11 @@ msgstr "Значение"
 msgid "Allowed %d input channels"
 msgstr "Доступно %d входных каналов"
 
-#, c-format
 msgid ""
-"Gathering from %d channels. Recieved %.2f MB. Aspect by us depth limit %g."
+"Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost "
+"frames %g"
 msgstr ""
-"Сбор с %d каналов. Получено %.2f МБ. Коэффициент к лимиту микросек. глубины "
-"%g."
+"Сбор с %d каналов. Получено %.2f МБ. Подстроенная частота выборки %d. Потеряно кадров %g"
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
@@ -72,7 +71,3 @@ msgstr "Ошибка установки типа значения."
 
 msgid "Sound input stream is not stopped!"
 msgstr "Звуковой входной поток не остановлено!"
-
-msgid "Sound card's counter run from system time is corrected."
-msgstr ""
-"Выполнена коррекция отклонения счётчика звуковой карты от системного времени."
