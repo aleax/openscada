@@ -444,7 +444,7 @@ void WinControl::checkForEnd( )
 void WinControl::callQTModule( )
 {
     QObject *obj = (QObject *)sender();
-    if( string("*exit*") == obj->objectName().toAscii().data() ) SYS->stop();
+    if(string("*exit*") == obj->objectName().toAscii().data())	SYS->stop();
     else
     {
 	try{ callQTModule(obj->objectName().toAscii().data()); }
@@ -454,8 +454,7 @@ void WinControl::callQTModule( )
 
 void WinControl::lastWinClose( )
 {
-    if( !mod->startCom() || mod->endRun() || SYS->stopSignal() )
-	qApp->quit();
+    if(!mod->startCom() || mod->endRun() || SYS->stopSignal())	qApp->quit();
     else startDialog( );
 }
 
@@ -573,7 +572,7 @@ void StartDialog::closeEvent( QCloseEvent* ce )
 {
     unsigned winCnt = 0;
     for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
-	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]))
+	if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
 	    winCnt++;
 
     if(winCnt <= 1) SYS->stop();

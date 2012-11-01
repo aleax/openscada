@@ -2275,7 +2275,7 @@ void DevelWdgView::setEdit( bool vl )
     }
     else
     {
-	if(shape->isEditable()) shape->editExit(this);
+	if(shape && shape->isEditable()) shape->editExit(this);
 	editWdg = NULL;
 	//> Update widgets order
 	if(wLevel() == 0) orderUpdate();

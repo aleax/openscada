@@ -1,3 +1,12 @@
+2012-11-01 Roman
+- !:FIX:UI.Vision: Crash on open virtual pages as visual item is fixed.
+- !:FIX:UI.QTStarter: Hang on close OpenSCADA with DE is fixed. Detected on exit TDE.
+- DB: TBDS::genDBSet() is adapted for write only to config file, for modifiable system properties.
+- SYS, Mess: System properties allow for change and save to config file: MessLev, LogTarget, Lang, Lang2CodeBase, WorkDB,
+    Workdir, IcoDir, ModDir.
+- !!!!:FIX:DAQ.SoundCard: Rewrited acquisition for realtime provide and control for samplerate and lost frames.
+
+
 2012-10-29 Roman
 - !:FIX:DAQ.OPC_UA: Writing through DAQ parameters is fixed.
 - UI.WebVision: Childs update is added on "geomXsc" or "geomYsc" attributes modify.
