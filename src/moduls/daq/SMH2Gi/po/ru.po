@@ -1,0 +1,152 @@
+# OpenSCADA.DAQ.SMH2Gi translate to Russian.
+# Copyright (C) 2012 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-31 10:58+0200\n"
+"PO-Revision-Date: 2012-10-31 10:21+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <ru@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Segnetics SMH2Gi"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/"
+"smh_2gi) hardware interfaces and modules."
+msgstr ""
+"Сбор данных и управление аппаратными интерфейсами и модулями "
+"Segnetics SMH2Gi (http://segnetics.com/smh_2gi)"
+
+msgid "Shared memory parameters"
+msgstr "Параметры разделяемой памяти"
+
+msgid "MR and MC bus parameters"
+msgstr "Параметры шин MR и MC"
+
+msgid "Acquisition schedule"
+msgstr "Планирование опроса"
+
+msgid "Gather task priority"
+msgstr "Уровень приоритета задачи сбора данных"
+
+msgid "Shared memory variables file"
+msgstr "Файл переменных в разделяемой памяти"
+
+msgid "MR bus device"
+msgstr "Устройство шины MR"
+
+msgid "MC bus device"
+msgstr "Устройство шины MC"
+
+msgid "Request tries"
+msgstr "Попыток запроса"
+
+msgid "MR/MC devices *.ini files directry"
+msgstr "Директория с *.ini файлами устройств MR/MC"
+
+msgid "Call now. "
+msgstr "Вызов сейчас. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s."
+msgstr "Затрачено времени: %s."
+
+msgid "Error GPIO PC30 open for MC reset."
+msgstr "Ошибка открытия GPIO PC30 для сброса MC."
+
+#, c-format
+msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
+msgstr "Автоматически созданный транспорт Segnetics SMH2Gi для шины '%s'"
+
+msgid "13:Error respond: Too short."
+msgstr "13:Ошибка ответа: Очень короткий."
+
+msgid "13:Error respond: CRC check error."
+msgstr "13:Ошибка ответа: Ошибка проверки CRC."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр отключен."
+
+msgid "2:Acquisition is stopped."
+msgstr "2:Опрос остановлен."
+
+msgid "Variables list"
+msgstr "Перечень переменных"
+
+msgid "Module type"
+msgstr "Тип модуля"
+
+msgid "Module slot/address"
+msgstr "Адрес/слот модуля"
+
+msgid "Module addition parameters"
+msgstr "Дополнительные параметры модуля"
+
+#, c-format
+msgid "No selected any module type or type '%d' error."
+msgstr "Ошибка '%d' или не выбран тип модуля."
+
+msgid "Parameters request error: %s."
+msgstr "Ошибка запроса параметров: %s."
+
+#, c-format
+msgid "Configure device %d but set %d."
+msgstr "Сконфигурировано устройство %d, однако установлено %d."
+
+#, c-format
+msgid "Send tune request error: %s."
+msgstr "Ошибка отправки тюн-запроса: %s."
+
+msgid "20:PDU short."
+msgstr "20:PDU короткий."
+
+msgid "Analog output overload; "
+msgstr "Аналоговый выход перегружен; "
+
+msgid "No tunes get; "
+msgstr "Не получено настроек; "
+
+msgid "High voltage; "
+msgstr "Высокое напряжение; "
+
+msgid "Low voltage; "
+msgstr "Низкое напряжение; "
+
+msgid "Internal power supply overvoltage; "
+msgstr "Перегружен внутренний источник питания; "
+
+msgid "Unknown MR module type; "
+msgstr "Неизвестный тип модуля MR; "
+
+msgid ""
+"-1  - for MC;\n"
+"0-7 - for MR."
+msgstr ""
+"-1  - для MC;\n"
+"0-7 - для MR."
+
+msgid "Configuration"
+msgstr "Конфигурация"
+
+msgid "<No select>"
+msgstr "<Не выбрано>"

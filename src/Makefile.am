@@ -6,7 +6,7 @@ oscadaincludedir=$(includedir)/openscada
 oscadainclude_HEADERS = *.h
 
 lib_LTLIBRARIES = liboscada.la
-liboscada_la_CXXFLAGS = -DLOCALEDIR=\"$(localedir)\"
+liboscada_la_CXXFLAGS = -DLOCALEDIR=\"$(localedir)\" -DSYSCONFDIR=\"$(sysconfdir)\"
 liboscada_la_SOURCES = tsys.cpp resalloc.cpp tarchives.cpp tarchval.cpp tbds.cpp tvariant.cpp tconfig.cpp \
     tcontroller.cpp tsecurity.cpp tmess.cpp tsubsys.cpp tprotocols.cpp ttransports.cpp \
     tspecials.cpp ttipdaq.cpp tprmtmpl.cpp tvalue.cpp terror.cpp tuis.cpp tmodschedul.cpp \

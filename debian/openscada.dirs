@@ -1,6 +1,6 @@
 /etc
 /usr/bin
-/var/spool/openscada/DATA
-/var/spool/openscada/ARCHIVES/MESS
-/var/spool/openscada/ARCHIVES/VAL
+/usr/share/openscada/DATA
+/usr/share/openscada/ARCHIVES/MESS
+/usr/share/openscada/ARCHIVES/VAL
 

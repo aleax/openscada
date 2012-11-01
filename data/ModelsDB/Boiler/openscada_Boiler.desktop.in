@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Categories=Graphics;Development;
 Type=Application
-Exec=openscada_Boiler
+Exec=@bindir_full@/openscada_Boiler
 Icon=openscada_Boiler
 Terminal=false
 Name=OpenSCADA: Model "Boiler"

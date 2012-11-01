@@ -1,3 +1,24 @@
+2012-10-31 Roman
+- !:FIX:UI.Vision: Crash on open virtual pages as visual item is fixed.
+- !:FIX:UI.QTStarter: Hang on close OpenSCADA with DE is fixed. Detected on exit TDE.
+- DB: TBDS::genDBSet() is adapted for write only to config file, for modifiable system properties.
+- SYS, Mess: System properties allow for change and save to config file: MessLev, LogTarget, Lang, Lang2CodeBase, WorkDB,
+    Workdir, IcoDir, ModDir.
+- !!!!:FIX:DAQ.SoundCard: Rewrited acquisition for realtime provide and control for samplerate and lost frames.
+- !!!!:SYS:Mostly data and configs install moved to "make install" stage for apply correct configuration for place:
+    - Data install path changed to /usr/share/openscada.
+    - AutoConf macro AX_DEFINE_DIR is added for some paths full resolve to config-files.
+    - *.spec files and debian/* configs adapted to new resources install into "make install" stage.
+    - openscada.pc forming is moved to "configure" stage.
+    - Files data/oscada.xml data/oscada_start.xml data/openscada.desktop data/openscada_start data/ModelsDB/AGLKS/oscada_AGLKS.xml
+	data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/AGLKS/openscada_AGLKS data/ModelsDB/AGLKS/openscada_demo
+	data/ModelsDB/Boiler/oscada_Boiler.xml data/ModelsDB/Boiler/openscada_Boiler.desktop data/ModelsDB/Boiler/openscada_Boiler
+	is added to configure stage, by rename to *.in, and its install to "make install" stage.
+    - Default sysconfig directory path pass to OpenSCADA core.
+- !!:DAQ.SMH2Gi: Broadcast write request is fixed for MR. Translation to Russian, Ukrainian and German is added.
+- !:FIX:DAQ.OPC_UA: Writing through DAQ parameters is fixed.
+
+
 2012-10-17 Roman
 - FIX:DAQ.SMH2Gi: Significant updated for fix some bug after testing on real hardware.
     Broadcast write request for MR modules moved to controller level.

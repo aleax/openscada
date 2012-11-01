@@ -3,18 +3,18 @@
     <!--
     This is the OpenSCADA configuration file.
     -->
-    <station id="AGLKS">
+    <station id="Boiler">
 	<!--
 	Discribe internal parameter for station.
 	Station this only OpenSCADA programm.
 	-->
-	<prm id="StName">AGLKS</prm>
-	<prm id="StName_ru">АГЛКС</prm>
-	<prm id="StName_uk">АГЛКС</prm>
+	<prm id="StName">Boiler</prm>
+	<prm id="StName_ru">Котёл</prm>
+	<prm id="StName_uk">Котел</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="Workdir">~/.openscada</prm>
 	<prm id="IcoDir">./icons</prm>
-	<prm id="ModDir">/usr/lib/openscada</prm>
+	<prm id="ModDir">@libdir_full@/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="Lang2CodeBase">en</prm>
@@ -24,7 +24,7 @@
 	<node id="sub_BD">
 	    <prm id="SYSStPref">0</prm>
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_ru="Основная БД" NAME_uk="Основна БД" ADDR="./AGLKS/St.db" CODEPAGE="UTF-8"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Generic DB" NAME_ru="Основная БД" NAME_uk="Основна БД" ADDR="./Boiler/St.db" CODEPAGE="UTF-8"/>
 	    </tbl>
 	</node>
 

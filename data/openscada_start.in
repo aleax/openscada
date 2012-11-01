@@ -6,14 +6,14 @@ if [ ! -d ~/.openscada/ARCHIVES ]; then
     mkdir -pm 700 ~/.openscada/ARCHIVES/MESS;
     mkdir -pm 700 ~/.openscada/ARCHIVES/VAL;
 fi
-if [ ! -L ~/.openscada/icons ]; then ln -s /var/spool/openscada/icons ~/.openscada/icons; fi
-if [ ! -d ~/.openscada/LibsDB ]; then cp -R /var/spool/openscada/LibsDB ~/.openscada/; fi
+if [ ! -L ~/.openscada/icons ]; then ln -s @datadir_full@/openscada/icons ~/.openscada/icons; fi
+if [ ! -d ~/.openscada/LibsDB ]; then cp -R @datadir_full@/openscada/LibsDB ~/.openscada/; fi
 if [ ! -d ~/.openscada/DATA ]; then mkdir -m 700 ~/.openscada/DATA; fi
-if [ ! -e ~/.openscada/oscada.xml ]; then cp /etc/oscada_start.xml ~/.openscada/oscada.xml; fi
+if [ ! -e ~/.openscada/oscada.xml ]; then cp @sysconfdir_full@/oscada_start.xml ~/.openscada/oscada.xml; fi
 cd ~/.openscada
 
 # Program command and lock file
-pCmd="openscada --CoreDumpAllow --Config=./oscada.xml"
+pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=./oscada.xml"
 pLock=".start.lock"
 
 # Check for already started programm present

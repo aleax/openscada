@@ -1,6 +1,7 @@
-data/ModelsDB/AGLKS/oscada_AGLKS.xml /etc/
-data/ModelsDB/AGLKS/openscada_AGLKS /usr/bin/
-data/ModelsDB/AGLKS/openscada_demo /usr/bin/
-data/ModelsDB/AGLKS/*.db /var/spool/openscada/AGLKS
-data/ModelsDB/AGLKS/openscada_AGLKS.png /usr/share/pixmaps/
-data/ModelsDB/AGLKS/openscada_AGLKS.desktop /usr/share/applications/
+debian/tmp/etc/oscada_AGLKS.xml
+debian/tmp/usr/bin/openscada_AGLKS
+debian/tmp/usr/bin/openscada_demo
+debian/tmp/usr/share/openscada/AGLKS/*.db
+debian/tmp/usr/share/icons/openscada_AGLKS.png
+debian/tmp/usr/share/openscada/icons/AGLKS.png
+debian/tmp/usr/share/applications/openscada_AGLKS.desktop

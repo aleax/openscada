@@ -1109,37 +1109,12 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 %install
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
-install -m 755 -d %buildroot/var/spool/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
-install -m 755 -d %buildroot/var/spool/openscada/ARCHIVES/{MESS,VAL}
-install -m 644 -pD data/oscada.xml %buildroot/%_sysconfdir/oscada.xml
-install -m 644 -pD data/oscada_start.xml %buildroot/%_sysconfdir/oscada_start.xml
-install -m 755 -pD data/openscada_start %buildroot/%_bindir/openscada_start
-install -m 644 -pD data/openscada.desktop %buildroot/%_desktopdir/openscada.desktop
-install -m 644 -pD data/openscada.png %buildroot/%_iconsdir/openscada.png
+install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
+install -m 755 -d %buildroot/%_datadir/openscada/ARCHIVES/{MESS,VAL}
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
-echo "OpenSCADA data dir" > %buildroot/var/spool/openscada/DATA/.info
-install -m 644 data/icons/* %buildroot/var/spool/openscada/icons
-echo "OpenSCADA messages archive dir" > %buildroot/var/spool/openscada/ARCHIVES/MESS/.info
-echo "OpenSCADA values archive dir" > %buildroot/var/spool/openscada/ARCHIVES/VAL/.info
-
-install -m 644 data/LibsDB/*.db %buildroot/var/spool/openscada/LibsDB
-
-install -m 644 data/ModelsDB/AGLKS/*.db %buildroot/var/spool/openscada/AGLKS
-install -m 644 -pD data/ModelsDB/AGLKS/oscada_AGLKS.xml %buildroot/%_sysconfdir/oscada_AGLKS.xml
-install -m 755 -pD data/ModelsDB/AGLKS/openscada_AGLKS %buildroot/%_bindir/openscada_AGLKS
-install -m 755 -pD data/ModelsDB/AGLKS/openscada_demo %buildroot/%_bindir/openscada_demo
-install -m 644 -pD data/ModelsDB/AGLKS/openscada_AGLKS.desktop %buildroot/%_desktopdir/openscada_AGLKS.desktop
-install -m 644 -pD data/ModelsDB/AGLKS/openscada_AGLKS.png %buildroot/%_iconsdir/openscada_AGLKS.png
-install -m 644 -pD data/ModelsDB/AGLKS/openscada_AGLKS.png %buildroot/var/spool/openscada/icons/AGLKS.png
-
-install -m 644 data/ModelsDB/Boiler/*.db %buildroot/var/spool/openscada/Boiler
-install -m 644 -pD data/ModelsDB/Boiler/oscada_Boiler.xml %buildroot/%_sysconfdir/oscada_Boiler.xml
-install -m 755 -pD data/ModelsDB/Boiler/openscada_Boiler %buildroot/%_bindir/openscada_Boiler
-install -m 644 -pD data/ModelsDB/Boiler/openscada_Boiler.desktop %buildroot/%_desktopdir/openscada_Boiler.desktop
-install -m 644 -pD data/ModelsDB/Boiler/openscada_Boiler.png %buildroot/%_iconsdir/openscada_Boiler.png
-install -m 644 -pD data/ModelsDB/Boiler/openscada_Boiler.png %buildroot/var/spool/openscada/icons/Boiler.png 
-
-sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
+echo "OpenSCADA data dir" > %buildroot/%_datadir/openscada/DATA/.info
+echo "OpenSCADA messages archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/MESS/.info
+echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VAL/.info
 
 %files
 
@@ -1173,12 +1148,12 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 #exclude %_libdir/openscada/*.a
 #exclude %_libdir/openscada/*.la
 %_datadir/locale/*/LC_MESSAGES/openscada.mo
-/var/spool/openscada/DATA/.info
-/var/spool/openscada/icons/*
-%exclude /var/spool/openscada/icons/AGLKS.png
-%exclude /var/spool/openscada/icons/Boiler.png
-/var/spool/openscada/ARCHIVES/MESS/.info
-/var/spool/openscada/ARCHIVES/VAL/.info
+%_datadir/openscada/DATA/.info
+%_datadir/openscada/icons/*
+%exclude %_datadir/openscada/icons/AGLKS.png
+%exclude %_datadir/openscada/icons/Boiler.png
+%_datadir/openscada/ARCHIVES/MESS/.info
+%_datadir/openscada/ARCHIVES/VAL/.info
 
 %files docEN
 %defattr(-,root,root)
@@ -1201,11 +1176,11 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 %files LibDB.Main
 %defattr(-,root,root)
-/var/spool/openscada/LibsDB/OscadaLibs.db
+%_datadir/openscada/LibsDB/OscadaLibs.db
 
 %files LibDB.VCA
 %defattr(-,root,root)
-/var/spool/openscada/LibsDB/vca*.db
+%_datadir/openscada/LibsDB/vca*.db
 
 %files Model.AGLKS
 %defattr(-,root,root)
@@ -1214,8 +1189,8 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_bindir/openscada_demo
 %_desktopdir/openscada_AGLKS.desktop
 %_iconsdir/openscada_AGLKS.png
-/var/spool/openscada/icons/AGLKS.png
-/var/spool/openscada/AGLKS/*.db
+%_datadir/openscada/icons/AGLKS.png
+%_datadir/openscada/AGLKS/*.db
 
 %files Model.Boiler
 %defattr(-,root,root)
@@ -1223,8 +1198,8 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 %_bindir/openscada_Boiler
 %_desktopdir/openscada_Boiler.desktop
 %_iconsdir/openscada_Boiler.png
-/var/spool/openscada/icons/Boiler.png
-/var/spool/openscada/Boiler/*.db 
+%_datadir/openscada/icons/Boiler.png
+%_datadir/openscada/Boiler/*.db 
 
 %files plc
 

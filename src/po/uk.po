@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-24 09:39+0300\n"
+"POT-Creation-Date: 2012-10-31 22:58+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1528,7 +1528,6 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
-#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1560,6 +1559,7 @@ msgid ""
 "                           <direct> & 2 - stdout;\n"
 "                           <direct> & 4 - stderr;\n"
 "                           <direct> & 8 - archive.\n"
+"Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two "
 "symbols code.\n"
 "SaveAtExit <true>      Save system at exit.\n"
@@ -1599,6 +1599,7 @@ msgstr ""
 "                         <напрямок> & 4 - стандартний вихід помилок "
 "(stderr);\n"
 "                         <напрямок> & 8 - архів повідомлень.\n"
+"Lang       <мова>\tРобоча-внутрішня мова, як \"uk_UA.UTF-8\".\n"
 "Lang2CodeBase <мова>   Базова мова для перекладу текстових змінних, два "
 "символи.\n"
 "SaveAtExit <true>      Зберігати систему при виході.\n"
@@ -2062,9 +2063,6 @@ msgstr "Архівація"
 msgid "Not select type!"
 msgstr "Не вибірковий тип!"
 
-msgid "Value not object!"
-msgstr "Значення не є об'єкт!"
-
 msgid "Write access is denied!"
 msgstr "Немає доступу на запис!"
 
@@ -2074,12 +2072,6 @@ msgstr "Помилка запису значення до архіву: %s"
 
 msgid "Attribute doesn't have archive"
 msgstr "Атрибут не має архіву"
-
-msgid "Variable not object!"
-msgstr "Змінна не є об'єкт!"
-
-msgid "Zero object using try!"
-msgstr "Спроба використання порожнього об'єкту!"
 
 msgid "Too big string length (> 130 MB)!"
 msgstr "Дуже великий розмір рядка (> 130 MB)!"
@@ -2194,3 +2186,12 @@ msgstr "Вхідні транспорти не підтримуються!"
 
 msgid "Output transport no support!"
 msgstr "Вихідні транспорти не підтримуються!"
+
+#~ msgid "Value not object!"
+#~ msgstr "Значення не є об'єкт!"
+
+#~ msgid "Variable not object!"
+#~ msgstr "Змінна не є об'єкт!"
+
+#~ msgid "Zero object using try!"
+#~ msgstr "Спроба використання порожнього об'єкту!"

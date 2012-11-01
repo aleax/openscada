@@ -1,6 +1,6 @@
 prefix=@prefix@
 exec_prefix=${prefix}
-libdir=@libdir@
+libdir=@libdir_full@
 includedir=${prefix}/include/openscada
 
 Name: openscada

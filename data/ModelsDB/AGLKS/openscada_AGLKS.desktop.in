@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Categories=Graphics;Development;
 Type=Application
-Exec=openscada_AGLKS
+Exec=@bindir_full@/openscada_AGLKS
 Icon=openscada_AGLKS
 Terminal=false
 Name=OpenSCADA: Model "AGLKS"

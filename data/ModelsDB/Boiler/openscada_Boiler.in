@@ -9,14 +9,14 @@ if [ ! -d ~/.openscada/ARCHIVES ]; then
     mkdir -pm 700 ~/.openscada/ARCHIVES/MESS;
     mkdir -pm 700 ~/.openscada/ARCHIVES/VAL;
 fi
-if [ ! -L ~/.openscada/icons ]; then ln -s /var/spool/openscada/icons ~/.openscada/icons; fi
-if [ ! -d ~/.openscada/LibsDB ]; then cp -R /var/spool/openscada/LibsDB ~/.openscada/; fi
-if [ ! -d ~/.openscada/Boiler ]; then cp -R /var/spool/openscada/Boiler ~/.openscada/; fi
-if [ ! -e ~/.openscada/oscada_Boiler.xml ]; then cp /etc/oscada_Boiler.xml ~/.openscada/; fi
+if [ ! -L ~/.openscada/icons ]; then ln -s @datadir_full@/openscada/icons ~/.openscada/icons; fi
+if [ ! -d ~/.openscada/LibsDB ]; then cp -R @datadir_full@/openscada/LibsDB ~/.openscada/; fi
+if [ ! -d ~/.openscada/Boiler ]; then cp -R @datadir_full@/openscada/Boiler ~/.openscada/; fi
+if [ ! -e ~/.openscada/oscada_Boiler.xml ]; then cp @sysconfdir_full@/oscada_Boiler.xml ~/.openscada/; fi
 cd ~/.openscada
 
 # Programm command and lock file
-pCmd="openscada --CoreDumpAllow --Config=./oscada_Boiler.xml"
+pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=./oscada_Boiler.xml"
 pLock=".Boiler.lock"
 
 # Check for already started programm present

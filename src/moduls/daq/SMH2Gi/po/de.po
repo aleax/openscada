@@ -1,0 +1,152 @@
+# OpenSCADA.DAQ.SMH2Gi translate to German.
+# Copyright (C) 2012 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-31 10:58+0200\n"
+"PO-Revision-Date: 2012-10-31 10:58+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: German <de@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Segnetics SMH2Gi"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+msgid ""
+"Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/"
+"smh_2gi) hardware interfaces and modules."
+msgstr ""
+"Datenerfassung und Steuerung Hardware-Schnittstellen und Module "
+"Segnetics SMH2Gi (http://segnetics.com/smh_2gi)."
+
+msgid "Shared memory parameters"
+msgstr "Die Parameter gemeinsamen Speicher"
+
+msgid "MR and MC bus parameters"
+msgstr "Reifenparameter MR und MC"
+
+msgid "Acquisition schedule"
+msgstr "Planung der Befragung"
+
+msgid "Gather task priority"
+msgstr "Priorität der Datenerfassung"
+
+msgid "Shared memory variables file"
+msgstr "Variable Datei in dem gemeinsamen Speicher"
+
+msgid "MR bus device"
+msgstr "Busgerat-MR"
+
+msgid "MC bus device"
+msgstr "Busgerat-MC"
+
+msgid "Request tries"
+msgstr "Anfrageversuche"
+
+msgid "MR/MC devices *.ini files directry"
+msgstr "Das Verzeichnis der *.INI-Dateien Geräten MR/MC"
+
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s."
+msgstr "Abgelaufene Zeit: %s."
+
+msgid "Error GPIO PC30 open for MC reset."
+msgstr "Fehler beim Öffnen GPIO PC30 zurückzusetzen MC."
+
+#, c-format
+msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
+msgstr "Automatische Erstellung Verkehr Segnetics SMH2Gi für Bus '%s'"
+
+msgid "13:Error respond: Too short."
+msgstr "13:Fehler in der Antwort: Zu kurz."
+
+msgid "13:Error respond: CRC check error."
+msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter ist abgeschaltet."
+
+msgid "2:Acquisition is stopped."
+msgstr "2:Anfrage ist angehalten."
+
+msgid "Variables list"
+msgstr "Liste der Variablen"
+
+msgid "Module type"
+msgstr "Modultyp"
+
+msgid "Module slot/address"
+msgstr "Adresse/platz module"
+
+msgid "Module addition parameters"
+msgstr "Zusätzliche Parameter des Moduls"
+
+#, c-format
+msgid "No selected any module type or type '%d' error."
+msgstr "Fehler '%d' oder ausgewählten Modultyp."
+
+msgid "Parameters request error: %s."
+msgstr "Fehler Parameter-Abfrage: %s."
+
+#, c-format
+msgid "Configure device %d but set %d."
+msgstr "Konfiguriertes Gerät %d, aber %d gefunden."
+
+#, c-format
+msgid "Send tune request error: %s."
+msgstr "Thun Anfrage Fehler beim Senden: %s."
+
+msgid "20:PDU short."
+msgstr "20: PDU kurz."
+
+msgid "Analog output overload; "
+msgstr "Analoge Ausgang ist überlastet; "
+
+msgid "No tunes get; "
+msgstr "Nicht erhalten die Einstellungen; "
+
+msgid "High voltage; "
+msgstr "Hochspannung; "
+
+msgid "Low voltage; "
+msgstr "Niederspannung; "
+
+msgid "Internal power supply overvoltage; "
+msgstr "Überlastete internes Netzteil; "
+
+msgid "Unknown MR module type; "
+msgstr "Unbekannt Modultyp MR; "
+
+msgid ""
+"-1  - for MC;\n"
+"0-7 - for MR."
+msgstr ""
+"-1  - für MC;\n"
+"0-7 - für MR."
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+msgid "<No select>"
+msgstr "<Nicht ausgewählt>"

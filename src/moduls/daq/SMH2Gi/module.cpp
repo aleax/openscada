@@ -308,7 +308,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	//> Send request
 	for(int i_tr = 0; i_tr < connTry; i_tr++)
 	{
-	    //printf("TEST 00: Send req: '%s'\n",TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	    //printf("TEST 00: Send to '%s' req: '%s'\n",tro.at().id().c_str(),TSYS::strDecode(mbap,TSYS::Bin).c_str());
     	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
 	    if(broadCast) { err = ""; break; }
     	    rez.assign(buf, resp_len);
@@ -322,6 +322,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
     	    if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
     	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
     	    { err = _("13:Error respond: CRC check error."); continue; }
+	    //printf("TEST 01: Get resp: '%s'\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
     	    pdu = rez.substr(0, rez.size()-2);
     	    err = "";
 	    break;
@@ -1041,10 +1042,7 @@ void MRCParam::getVals( TParamContr *ip )
 	//> Send outputs
 	if(!rezReq.size() && (ePrm->DO || ePrm->AO))
 	{
-	    //>> Append to generic MR write frame
-	    for(int i_n = 0; i_n < 8; i_n++)
-		if(i_n != modSlot && p->owner().MRWrFrm[i_n] == p->owner().MRWrFrm.size())
-		    p->owner().MRWrFrm[i_n] += (ePrm->DO?2:0)+ePrm->AO*2;
+	    data.clear();
 	    //>> Digital outputs prepare and place
 	    if(ePrm->DO)
 	    {
@@ -1054,61 +1052,24 @@ void MRCParam::getVals( TParamContr *ip )
         	    vl = vl << 1;
         	    if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
 		}
-    		p->owner().MRWrFrm += (char)vl;
-    		p->owner().MRWrFrm += (char)(vl>>8);
+    		data += (char)vl; data += (char)(vl>>8);
     	    }
-	    //>>> Analog outputs place
+	    //>> Analog outputs place
 	    for(int i_a; i_a < ePrm->AO; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
-    		p->owner().MRWrFrm += (char)vl;
-    		p->owner().MRWrFrm += (char)(vl>>8);
+    		data += (char)vl; data += (char)(vl>>8);
 	    }
-
-	    //>> MR_broadcast_t.Offsets
-	    /*
-	    //> Send outputs
-	    data.clear();
-
-	    for(int i_n = 0; i_n < 8; i_n++)
-		data += (char)((i_n == vmax(0,modSlot))?8:(8+(ePrm->DO?2:0)+ePrm->AO*2));
-	    //> Swap registers
-	    //for(int i_p = 0; i_p < data.size()-1; i_p += 2)
-	    //{ char t_sw = data[i_p]; data[i_p] = data[i_p+1]; data[i_p+1] = t_sw; }
-
-	    //>> MR_broadcast_t.Data
-	    //>>> Digital outputs prepare and place
-	    if(ePrm->DO)
+	    //>> Append to generic MR write frame
+	    if(data.size() && p->owner().MRWrFrm[modSlot] == ((modSlot<7)?p->owner().MRWrFrm[modSlot+1]:p->owner().MRWrFrm.size()))
 	    {
-		int vl = 0;
-		for(int i_d = (ePrm->DO-1); i_d >= 0; i_d--)
-    		{
-        	    vl = vl << 1;
-        	    if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
-		}
-    		data += (char)(vl>>8); data += (char)vl;
-    	    }
-	    //>>> Analog outputs place
-	    for(int i_a; i_a < ePrm->AO; i_a++)
-	    {
-		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
-		if(vl == EVAL_INT) vl = 0;
-    		data += (char)(vl>>8); data += (char)vl;
+		if(p->owner().MRWrFrm[modSlot] >= p->owner().MRWrFrm.size()) p->owner().MRWrFrm.append(data);
+		else p->owner().MRWrFrm.insert(p->owner().MRWrFrm[modSlot], data);
+
+		for(int i_n = modSlot+1; i_n < 8; i_n++)
+		    p->owner().MRWrFrm[i_n] += data.size();
 	    }
-
-	    //>> Prepare header
-	    pdu = (char)0xFE;			//BroadCast
-	    pdu += (char)0x10;			//Function, preset multiple registers
-	    pdu += (char)0;
-	    pdu += (char)0;
-	    pdu += (char)((data.size()/2)>>8);	//Registers quantity MSB
-    	    pdu += (char)(data.size()/2);	//Registers quantity LSB
-    	    pdu += (char)data.size();		//Byte Count
-    	    pdu += data;
-
-	    printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
-	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);*/
 	}
 
 	//> Alarms process

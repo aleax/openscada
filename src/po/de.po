@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-24 09:39+0300\n"
+"POT-Creation-Date: 2012-10-31 22:58+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1549,7 +1549,6 @@ msgstr ""
 msgid "B"
 msgstr ""
 
-#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1581,6 +1580,7 @@ msgid ""
 "                           <direct> & 2 - stdout;\n"
 "                           <direct> & 4 - stderr;\n"
 "                           <direct> & 8 - archive.\n"
+"Lang       <lang>\tWork-internal language, like \"en_US.UTF-8\".\n"
 "Lang2CodeBase <lang>\tBase language for variable texts translation, two "
 "symbols code.\n"
 "SaveAtExit <true>      Save system at exit.\n"
@@ -1618,6 +1618,7 @@ msgstr ""
 "                         <direction> & 2 - Standardausgang (stdout);\n"
 "                         <direction> & 4 - Standardfehlerausgang (stderr);\n"
 "                         <direction> & 8 -Archiv.\n"
+"Lang       <Sprache>\tWorker-interne Sprache, wie \"de_DE.UTF-8\".\n"
 "Lang2CodeBase <Sprache> Grundsprache für die Übersetzung von Textvariablen, "
 "zwei Symbole.\n"
 "SaveAtExit <true>      System beim Beenden Speichern.\n"
@@ -2081,9 +2082,6 @@ msgstr "Archivierung"
 msgid "Not select type!"
 msgstr "Typ ist nicht ausgewählt!"
 
-msgid "Value not object!"
-msgstr "Der Wert ist kein Objekt!"
-
 msgid "Write access is denied!"
 msgstr "Schreibzugriff verboten!"
 
@@ -2093,12 +2091,6 @@ msgstr "Fehler beim Schreiben des Wertes ins Archiv: %s"
 
 msgid "Attribute doesn't have archive"
 msgstr "Attribut hat kein Archiv"
-
-msgid "Variable not object!"
-msgstr "Variable ist kein Objekt"
-
-msgid "Zero object using try!"
-msgstr "Versuch der Benutzung des leeren Objekts"
 
 msgid "Too big string length (> 130 MB)!"
 msgstr "Sehr große Größe der Zeichenfolge (> 130 MB)!"
@@ -2213,3 +2205,12 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+#~ msgid "Value not object!"
+#~ msgstr "Der Wert ist kein Objekt!"
+
+#~ msgid "Variable not object!"
+#~ msgstr "Variable ist kein Objekt"
+
+#~ msgid "Zero object using try!"
+#~ msgstr "Versuch der Benutzung des leeren Objekts"

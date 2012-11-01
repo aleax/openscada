@@ -78,17 +78,14 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_STRUCT_TM
 
-# Set up system library
-AC_SUBST(sys_lib)
-sys_lib="/usr/lib"
-if test $target_cpu = "x86_64"; then sys_lib="/usr/lib64"; fi
-
 AC_SUBST(LIB_CORE)
 
 ix86=no;
 if test $target_cpu = "i386" -o $target_cpu = "i486" -o $target_cpu = "i586" -o $target_cpu = "i686" -o \
     $target_cpu = "k6" -o $target_cpu = "athlon" -o $target_cpu = "pentium2" -o $target_cpu = "pentium3" -o \
     $target_cpu = "pentium4"; then ix86=yes; fi
+
+AM_CONDITIONAL([ResourcesAllow],[test -d data])
 
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
@@ -100,11 +97,21 @@ AC_FUNC_STAT
 AC_ISC_POSIX
 
 oscd_moduldir="\${libdir}/${PACKAGE}"
+oscd_datadir="\${datadir}/${PACKAGE}"
 AC_SUBST(oscd_LIBREVISION)
 AC_SUBST(oscd_moduldir)
 AC_SUBST(oscd_modulpref)
+AC_SUBST(oscd_datadir)
+AX_DEFINE_DIR([bindir_full],[bindir],[Binaries location for configurations])
+AX_DEFINE_DIR([sysconfdir_full],[sysconfdir],[Configure location for configurations])
+AX_DEFINE_DIR([libdir_full],[libdir],[Libraries location for configurations])
+AX_DEFINE_DIR([datadir_full],[datadir],[Data location for configurations])
 
-AC_CONFIG_FILES(Makefile src/Makefile src_call/Makefile src/moduls/Makefile
+AC_CONFIG_FILES(Makefile openscada.pc
+	data/oscada.xml data/oscada_start.xml data/openscada.desktop data/openscada_start
+	data/ModelsDB/AGLKS/oscada_AGLKS.xml data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/AGLKS/openscada_AGLKS data/ModelsDB/AGLKS/openscada_demo
+	data/ModelsDB/Boiler/oscada_Boiler.xml data/ModelsDB/Boiler/openscada_Boiler.desktop data/ModelsDB/Boiler/openscada_Boiler
+	src/Makefile src_call/Makefile src/moduls/Makefile
 	src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile
 	src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile
 	src/moduls/ui/Makefile)

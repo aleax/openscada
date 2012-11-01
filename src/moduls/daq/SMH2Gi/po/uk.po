@@ -1,0 +1,152 @@
+# OpenSCADA.DAQ.SMH2Gi translate to Ukrainian.
+# Copyright (C) 2012 Roman Savochenko
+# This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-31 10:58+0200\n"
+"PO-Revision-Date: 2012-10-31 10:58+0200\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <uk@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+msgid "Segnetics SMH2Gi"
+msgstr ""
+
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+msgid ""
+"Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/"
+"smh_2gi) hardware interfaces and modules."
+msgstr ""
+"Збір даних і управління апаратними інтерфейсами та модулями "
+"Segnetics SMH2Gi (http://segnetics.com/smh_2gi)"
+
+msgid "Shared memory parameters"
+msgstr "Параметри поділяємої пам'яті"
+
+msgid "MR and MC bus parameters"
+msgstr "Параметри шин MR та MC"
+
+msgid "Acquisition schedule"
+msgstr "Планування опитування"
+
+msgid "Gather task priority"
+msgstr "Пріоритет задачі збору"
+
+msgid "Shared memory variables file"
+msgstr "Файл змінних у поділюваній пам'яті"
+
+msgid "MR bus device"
+msgstr "Пристрої шини MR"
+
+msgid "MC bus device"
+msgstr "Пристрої шины MC"
+
+msgid "Request tries"
+msgstr "Спроб запиту"
+
+msgid "MR/MC devices *.ini files directry"
+msgstr "Тека з *.ini файлами пристроїв MR/MC"
+
+msgid "Call now. "
+msgstr "Виклик зараз. "
+
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
+
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
+
+#, c-format
+msgid "Spent time: %s."
+msgstr "Витрачено часу: %s."
+
+msgid "Error GPIO PC30 open for MC reset."
+msgstr "Помилка відкриття GPIO PC30 для скиду MC."
+
+#, c-format
+msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
+msgstr "Автоматично створений транспорт Segnetics SMH2Gi для шини '%s'"
+
+msgid "13:Error respond: Too short."
+msgstr "13:Помилка відповіді: Дуже коротка."
+
+msgid "13:Error respond: CRC check error."
+msgstr "13:Помилка відповіді: Помилка перевірки CRC."
+
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр вимкнено."
+
+msgid "2:Acquisition is stopped."
+msgstr "2:Збір зупинено."
+
+msgid "Variables list"
+msgstr "Перелік змінних"
+
+msgid "Module type"
+msgstr "Тип модуля"
+
+msgid "Module slot/address"
+msgstr "Адреса/слот модуля"
+
+msgid "Module addition parameters"
+msgstr "Додаткові параметри модуля"
+
+#, c-format
+msgid "No selected any module type or type '%d' error."
+msgstr "Помилка '%d' або не обрано тип модуля."
+
+msgid "Parameters request error: %s."
+msgstr "Помилка запиту параметрів: %s."
+
+#, c-format
+msgid "Configure device %d but set %d."
+msgstr "Сконфігуровано пристрій %d, однак встановлено %d."
+
+#, c-format
+msgid "Send tune request error: %s."
+msgstr "Помилка відправлення тюн-запиту: %s."
+
+msgid "20:PDU short."
+msgstr "20:PDU короткий"
+
+msgid "Analog output overload; "
+msgstr "Аналоговий вихід перевантажено; "
+
+msgid "No tunes get; "
+msgstr "Не отримано налаштувань; "
+
+msgid "High voltage; "
+msgstr "Висока напруга; "
+
+msgid "Low voltage; "
+msgstr "Низька напруга; "
+
+msgid "Internal power supply overvoltage; "
+msgstr "Перевантажено внутрішнє джерело живлення; "
+
+msgid "Unknown MR module type; "
+msgstr "Невідомий тип модуля MR; "
+
+msgid ""
+"-1  - for MC;\n"
+"0-7 - for MR."
+msgstr ""
+"-1  - для MC;\n"
+"0-7 - для MR."
+
+msgid "Configuration"
+msgstr "Конфігурація"
+
+msgid "<No select>"
+msgstr "<Не обрано>"

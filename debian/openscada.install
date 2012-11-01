@@ -2,9 +2,9 @@ debian/tmp/usr/bin/*
 debian/tmp/usr/lib/*.so.*
 debian/tmp/usr/lib/openscada/*.so
 debian/tmp/usr/share/locale/*
-data/oscada.xml /etc
-data/oscada_start.xml /etc
-data/openscada_start /usr/bin
-data/icons/* /var/spool/openscada/icons/
-data/openscada.png /usr/share/pixmaps/
-data/openscada.desktop /usr/share/applications/
+debian/tmp/etc/oscada.xml
+debian/tmp/etc/oscada_start.xml
+debian/tmp/usr/bin/openscada_start
+debian/tmp/usr/share/openscada/icons/*
+debian/tmp/usr/share/icons/openscada.png
+debian/tmp/usr/share/applications/openscada.desktop

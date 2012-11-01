@@ -6,14 +6,14 @@ if [ ! -d ~/.openscada/ARCHIVES ]; then
     mkdir -pm 700 ~/.openscada/ARCHIVES/MESS;
     mkdir -pm 700 ~/.openscada/ARCHIVES/VAL;
 fi
-if [ ! -L ~/.openscada/icons ]; then ln -s /var/spool/openscada/icons ~/.openscada/icons; fi
-if [ ! -d ~/.openscada/LibsDB ]; then cp -R /var/spool/openscada/LibsDB ~/.openscada/; fi
-if [ ! -d ~/.openscada/AGLKS ]; then cp -R /var/spool/openscada/AGLKS ~/.openscada/; fi
-if [ ! -e ~/.openscada/oscada_AGLKS.xml ]; then cp /etc/oscada_AGLKS.xml ~/.openscada/; fi
+if [ ! -L ~/.openscada/icons ]; then ln -s @datadir_full@/openscada/icons ~/.openscada/icons; fi
+if [ ! -d ~/.openscada/LibsDB ]; then cp -R @datadir_full@/openscada/LibsDB ~/.openscada/; fi
+if [ ! -d ~/.openscada/AGLKS ]; then cp -R @datadir_full@/openscada/AGLKS ~/.openscada/; fi
+if [ ! -e ~/.openscada/oscada_AGLKS.xml ]; then cp @sysconfdir_full@/oscada_AGLKS.xml ~/.openscada/; fi
 cd ~/.openscada
 
 # Programm command and lock file
-pCmd="openscada --CoreDumpAllow --Config=./oscada_AGLKS.xml"
+pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=./oscada_AGLKS.xml"
 pLock=".AGLKS.lock"
 
 # Check for already started programm present

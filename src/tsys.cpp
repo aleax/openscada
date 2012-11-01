@@ -52,7 +52,7 @@ bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
-    mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
+    mUser("root"), mConfFile(SYSCONFDIR"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
     mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), mStopSignal(-1), mMultCPU(false), mSysTm(time(NULL))
 {
     finalKill = false;
@@ -322,6 +322,7 @@ string TSYS::optDescr( )
 	"                           <direct> & 2 - stdout;\n"
 	"                           <direct> & 4 - stderr;\n"
 	"                           <direct> & 8 - archive.\n"
+	"Lang       <lang>	Work-internal language, like \"en_US.UTF-8\".\n"
 	"Lang2CodeBase <lang>	Base language for variable texts translation, two symbols code.\n"
 	"SaveAtExit <true>      Save system at exit.\n"
 	"SavePeriod <sec>	Save system period.\n\n"),
@@ -427,9 +428,9 @@ void TSYS::cfgPrmLoad( )
     //System parameters
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir").c_str());
-    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir()));
-    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir()));
+    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str());
+    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg));
+    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg));
     setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
     setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
 }
@@ -497,9 +498,10 @@ void TSYS::save_( )
     //> System parameters
     getcwd(buf,sizeof(buf));
     TBDS::genDBSet(nodePath()+"StName",mName,"root",TBDS::UseTranslate);
-    TBDS::genDBSet(nodePath()+"Workdir",buf);
-    TBDS::genDBSet(nodePath()+"IcoDir",icoDir());
-    TBDS::genDBSet(nodePath()+"ModDir",modDir());
+    TBDS::genDBSet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"Workdir",buf,"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod",TSYS::int2str(savePeriod()));
 

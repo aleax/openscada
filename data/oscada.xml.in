@@ -10,9 +10,9 @@
 	-->
 	<prm id="StName">Work station</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
-	<prm id="Workdir">/var/spool/openscada</prm>
+	<prm id="Workdir">@datadir_full@/openscada</prm>
 	<prm id="IcoDir">./icons</prm>
-	<prm id="ModDir">/usr/lib/openscada</prm>
+	<prm id="ModDir">@libdir_full@/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="Lang2CodeBase"></prm>
