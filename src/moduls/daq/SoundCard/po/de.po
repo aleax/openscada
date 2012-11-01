@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-06 18:41+0300\n"
+"POT-Creation-Date: 2012-10-31 10:48+0200\n"
 "PO-Revision-Date: 2011-07-19 20:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -58,8 +58,10 @@ msgid "Allowed %d input channels"
 msgstr "Verfügbar %d Eingangskanäle"
 
 msgid ""
-"Gathering from %d channels. Recieved %.2f MB. Aspect by us depth limit %g."
-msgstr "Erfassung von %d Kanälen. Empfangen %.2f MB. Verhältnis von Tiefe zu der Grenze von Mikrosekunden %g."
+"Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost "
+"frames %g"
+msgstr ""
+"Erfassung von %d Kanälen. Empfangen %.2f MB. Customized Probenahme %d. Verlorenen Frames %g"
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
@@ -75,6 +77,3 @@ msgstr "Fehler Bein Einstellen der Abtastung."
 
 msgid "Sound input stream is not stopped!"
 msgstr "Datenerfassung Toneingang ist nicht angehalten!"
-
-msgid "Sound card's counter run from system time is corrected."
-msgstr "Soundkarten Zähler ist mit der Systemzeit korrigiert"

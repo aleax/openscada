@@ -469,7 +469,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     bool bd_ok = false;
 
     //> Set to DB
-    if(SYS->present(SDB_ID))
+    if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg))
     {
 	AutoHD<TBDS> dbs = SYS->db();
 	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(),true);
@@ -497,7 +497,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     }
 
     //> Set to config
-    if(!bd_ok && SYS->workDB() == "<cfg>")
+    if(!bd_ok && (SYS->workDB() == "<cfg>" || rFlg&TBDS::OnlyCfg))
     {
 	ResAlloc res(SYS->nodeRes(),true);
 	XMLNode *tgtN = NULL;

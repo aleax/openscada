@@ -87,7 +87,6 @@ class TMdContr: public TController
 	~TMdContr( );
 
 	string	card( )		{ return cfg("CARD").getS(); }
-	float	aspSample( )	{ return (1e6/mSmplRate)/floor(1e6/mSmplRate); }
 
 	string getStatus( );
 	int channelAllow( );
@@ -126,8 +125,10 @@ class TMdContr: public TController
 	vector< AutoHD<TMdPrm> > pHd;			// Parameter's process list
 
 	PaStream *stream;
-	int64_t	wTm, sdTm;
+	int64_t	wTm, tmAdj;
+	int	sRt;
 	float	acqSize;
+	double	inAdcTimePrev, inAdcTimeAdj, lostFrmsCntr;
 
 	Res	nRes;
 };

@@ -45,14 +45,14 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new SoundCard::TTpContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+	    return new SoundCard::TTpContr(source);
 	return NULL;
     }
 }
@@ -78,12 +78,12 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 TTpContr::~TTpContr()
 {
     PaError err = Pa_Terminate();
-    if( err != paNoError ) mess_err(nodePath().c_str(),"Pa_Terminate: %s",Pa_GetErrorText(err));
+    if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Terminate: %s",Pa_GetErrorText(err));
 }
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTipDAQ::postEnable(flag);
 
     PaError err = Pa_Initialize();
     if(err != paNoError) mess_err(nodePath().c_str(),"Pa_Initialize: %s",Pa_GetErrorText(err));
@@ -115,8 +115,8 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 {
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 
-    pEl.fldAdd( new TFld("val",_("Value"),((mSmplType==paFloat32)?TFld::Real:TFld::Integer),TFld::NoWrite,"",
-					  ((mSmplType==paFloat32)?TSYS::real2str(EVAL_REAL).c_str():TSYS::int2str(EVAL_INT).c_str())) );
+    pEl.fldAdd(new TFld("val",_("Value"),((mSmplType==paFloat32)?TFld::Real:TFld::Integer),TFld::NoWrite,"",
+					  ((mSmplType==paFloat32)?TSYS::real2str(EVAL_REAL).c_str():TSYS::int2str(EVAL_INT).c_str())));
 }
 
 TMdContr::~TMdContr()
@@ -131,7 +131,8 @@ string TMdContr::getStatus( )
     string val = TController::getStatus( );
     if(!startStat()) val += TSYS::strMess(_("Allowed %d input channels"),channelAllow());
     else if(!redntUse())
-	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB. Aspect by us depth limit %g."),numChan,acqSize,aspSample());
+	val += TSYS::strMess(_("Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost frames %g"),
+	    numChan, acqSize, sRt, lostFrmsCntr);
 
     return val;
 }
@@ -142,14 +143,12 @@ int TMdContr::channelAllow( )
     if(card() == "<default>" && Pa_GetDefaultInputDevice() >= 0)
 	chann = Pa_GetDeviceInfo(Pa_GetDefaultInputDevice())->maxInputChannels;
     else
-	for( int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++ )
+	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
 	    if(card() == Pa_GetDeviceInfo(i_d)->name)
 	    {
 		chann = Pa_GetDeviceInfo(i_d)->maxInputChannels;
 		break;
 	    }
-
-
 
     return chann;
 }
@@ -173,7 +172,7 @@ string TMdContr::sampleRates( )
     iParam.hostApiSpecificStreamInfo = NULL;
 
     for(int i_s = 0; standardSampleRates[i_s]; i_s++)
-	if(Pa_IsFormatSupported(&iParam, NULL, standardSampleRates[i_s]) == paFormatIsSupported)
+	if(startStat() || Pa_IsFormatSupported(&iParam, NULL, standardSampleRates[i_s]) == paFormatIsSupported)
 	    rez += TSYS::int2str(standardSampleRates[i_s])+";";
 
     return rez;
@@ -201,6 +200,7 @@ void TMdContr::start_( )
     endrunReq = false;
     numChan = 0;
     acqSize = 0;
+    lostFrmsCntr = 0;
 
     //> Former proccess parameters list
     vector<string> list_p;
@@ -213,7 +213,8 @@ void TMdContr::start_( )
 	}
 
     wTm = TSYS::curTime( );
-    sdTm = 1000000/mSmplRate;
+    sRt = mSmplRate;
+    inAdcTimePrev = inAdcTimeAdj = -1;
     switch(mSmplType)
     {
 	case paFloat32:	smplSize = sizeof(float);	break;
@@ -231,32 +232,32 @@ void TMdContr::start_( )
 	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
 	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels && card() == Pa_GetDeviceInfo(i_d)->name)
 	    { iParam.device = i_d; break; }
-    if( iParam.device < 0 ) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),card().c_str());
-    if( !numChan ) throw TError(nodePath().c_str(),_("No one channel is configured for acquisition."));
-    if( !smplSize ) throw TError(nodePath().c_str(),_("Sample type set is error."));
+    if(iParam.device < 0) throw TError(nodePath().c_str(),_("Selected device '%s' is error or default device no allow."),card().c_str());
+    if(!numChan) throw TError(nodePath().c_str(),_("No one channel is configured for acquisition."));
+    if(!smplSize) throw TError(nodePath().c_str(),_("Sample type set is error."));
 
     iParam.channelCount = numChan;
     iParam.sampleFormat = mSmplType;
-    iParam.suggestedLatency = Pa_GetDeviceInfo(iParam.device)->defaultLowInputLatency;
+    iParam.suggestedLatency = 0.2;//Pa_GetDeviceInfo(iParam.device)->defaultLowInputLatency;
     iParam.hostApiSpecificStreamInfo = NULL;
 
-    PaError err = Pa_OpenStream( &stream, &iParam, NULL, mSmplRate, mSmplRate/2, paClipOff, recordCallback, this );
-    if( err != paNoError ) throw TError(nodePath().c_str(),"Pa_OpenStream: %s",Pa_GetErrorText(err));
+    PaError err = Pa_OpenStream(&stream, &iParam, NULL, mSmplRate, 0/*mSmplRate/2*/, paClipOff, recordCallback, this);
+    if(err != paNoError) throw TError(nodePath().c_str(),"Pa_OpenStream: %s",Pa_GetErrorText(err));
 
-    err = Pa_StartStream( stream );
-    if( err != paNoError ) throw TError(nodePath().c_str(),"Pa_StartStream: %s",Pa_GetErrorText(err));
+    err = Pa_StartStream(stream);
+    if(err != paNoError) throw TError(nodePath().c_str(),"Pa_StartStream: %s",Pa_GetErrorText(err));
 }
 
 void TMdContr::stop_( )
 {
-    if( !startStat( ) )	return;
+    if(!startStat())	return;
 
     //> Close and stop stream
     endrunReq = true;
-    if( TSYS::eventWait(prcSt,false,nodePath()+"stream_stop",5) )
+    if(TSYS::eventWait(prcSt,false,nodePath()+"stream_stop",5))
 	throw TError(nodePath().c_str(),_("Sound input stream is not stopped!"));
-    PaError err = Pa_CloseStream( stream );
-    if( err != paNoError ) throw TError(nodePath().c_str(),"Pa_CloseStream: %s",Pa_GetErrorText(err));
+    PaError err = Pa_CloseStream(stream);
+    if(err != paNoError) throw TError(nodePath().c_str(),"Pa_CloseStream: %s",Pa_GetErrorText(err));
 
     //> Clear proccess parameters list
     pHd.clear();
@@ -264,7 +265,7 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(nodeRes( ),true);
+    ResAlloc res(nodeRes(),true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < pHd.size(); i_prm++)
@@ -283,13 +284,27 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 
     if(cntr.redntUse()) return cntr.endrunReq;
 
-    //> Check for current time correction, only for samplerate aspect 1
-    int64_t cTm = TSYS::curTime();
-    if(cntr.aspSample() == 1 && fabs((cntr.wTm+framesPerBuffer*cntr.sdTm)-cTm) > 1e6)
+    //> Check for current time correction
+    int64_t t_sz = (1000000ll*framesPerBuffer)/cntr.sRt;
+    double err = ((timeInfo->inputBufferAdcTime-cntr.inAdcTimePrev)-1e-6*t_sz)/(1e-6*t_sz);
+    //>> Lost frames process
+    if(cntr.inAdcTimePrev > 0 && err > 0.001)
     {
-	cntr.wTm = cTm - framesPerBuffer*cntr.sdTm;
-	mess_warning(cntr.nodePath().c_str(),_("Sound card's counter run from system time is corrected."));
+	int64_t cTm = TSYS::curTime();
+	cntr.wTm += (int64_t)((double)t_sz*err);
+	//printf("TEST 00: %lu (%d); t_sz=%lld; dT=%g; diff=%lld\n",framesPerBuffer,cntr.sRt,t_sz,err,cTm-cntr.wTm);
+	cntr.lostFrmsCntr++;
     }
+    //>> Sound counter difference from time clock correction
+    else if(cntr.inAdcTimeAdj < 0 || (timeInfo->inputBufferAdcTime-cntr.inAdcTimeAdj) >= 60)
+    {
+	int64_t dTm = TSYS::curTime()-cntr.wTm;
+	if(cntr.inAdcTimeAdj > 0) cntr.sRt -= (dTm-cntr.tmAdj)*cntr.sRt/60000000;
+	//printf("TEST 01: cntr.sRt=%d; dTm=%lld\n",cntr.sRt,dTm);
+	cntr.tmAdj = dTm;
+	cntr.inAdcTimeAdj = timeInfo->inputBufferAdcTime;
+    }
+    cntr.inAdcTimePrev = timeInfo->inputBufferAdcTime;
 
     //> Input buffer process
     ResAlloc res(cntr.nodeRes(),false);
@@ -298,34 +313,34 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 	const char *rptr = (const char*)iBuf;
 	int  chn = cntr.pHd[i_p].at().iCnl();
 	AutoHD<TVal> val = cntr.pHd[i_p].at().vlAt("val");
-	bool archAllow = (!val.at().arch().freeStat() && val.at().arch().at().srcMode() == TVArchive::PassiveAttr);
+	AutoHD<TVArchive> arch = val.at().arch();
+	bool archAllow = (!arch.freeStat() && arch.at().srcMode() == TVArchive::PassiveAttr);
 	switch(cntr.mSmplType)
 	{
 	    case paFloat32:
 		if(archAllow)
-		    for(unsigned i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize)
-			val.at().arch().at().setR(*(float*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
-		val.at().setR(*(float*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
+		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
+			arch.at().setR(*(float*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
+		val.at().setR(*(float*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
 		break;
 	    case paInt32:
 		if(archAllow)
-		    for(unsigned i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize)
-			val.at().arch().at().setR(*(int32_t*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
-		val.at().setI(*(int32_t*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
+		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
+			arch.at().setI(*(int32_t*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
+		val.at().setI(*(int32_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
 		break;
 	    case paInt16:
 		if(archAllow)
-		    for(unsigned i_s = 0; i_s < framesPerBuffer; i_s++, rptr += cntr.numChan*cntr.smplSize)
-			val.at().arch().at().setR(*(int16_t*)(rptr+(chn*cntr.smplSize)),cntr.wTm+(cntr.sdTm*i_s));
-		val.at().setI(*(int16_t*)(bptr+(framesPerBuffer-1)*cntr.numChan*cntr.smplSize+(chn*cntr.smplSize)),cntr.wTm+(framesPerBuffer-1)*cntr.sdTm,true);
+		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
+			arch.at().setI(*(int16_t*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
+		val.at().setI(*(int16_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
 		break;
 	}
     }
 
-    cntr.wTm += framesPerBuffer*cntr.sdTm;
+    cntr.wTm += t_sz;
 
     cntr.acqSize += (float)(framesPerBuffer*cntr.smplSize*cntr.numChan)/1048576;
-//    if( timeInfo ) printf("Samle time %f (%f).\n",timeInfo->currentTime,timeInfo->inputBufferAdcTime);
 
     cntr.prcSt = false;
 
@@ -347,15 +362,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/CARD",cfg("CARD").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/lst_SMPL_RATE");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_RATE",cfg("SMPL_RATE").fld().descr(),RWRWR_,"root",SDAQ_ID,
-	    3,"tp","str","dest","sel_ed","sel_list",sampleRates().c_str() /* "8000;16000;22050;44100;48000;96000" */);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/CARD",cfg("CARD").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/lsDEVS");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_RATE",cfg("SMPL_RATE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+	    3,"tp","str","dest","sel_ed","sel_list",sampleRates().c_str());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_TYPE",cfg("SMPL_TYPE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/lst_SMPL_RATE" && ctrChkNode(opt))
+    if(a_path == "/cntr/cfg/lsDEVS" && ctrChkNode(opt))
     {
 	for(int i_d = 0; i_d < Pa_GetDeviceCount(); i_d++)
 	    if(Pa_GetDeviceInfo(i_d)->maxInputChannels)
@@ -368,8 +384,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), mCnl(cfg("CHANNEL").getId())
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), mCnl(cfg("CHANNEL").getId())
 {
 
 }
@@ -381,9 +396,9 @@ TMdPrm::~TMdPrm( )
 
 void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( flag );
+    TParamContr::postEnable(flag);
 
-    if( !vlElemPresent(&owner().prmEL()) ) vlElemAtt(&owner().prmEL());
+    if(!vlElemPresent(&owner().prmEL())) vlElemAtt(&owner().prmEL());
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -395,22 +410,22 @@ void TMdPrm::load_( )
 
 void TMdPrm::enable()
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     TParamContr::enable();
 
     //> Set to process
-    if(owner().startStat())	owner().prmEn( id(), true );
+    if(owner().startStat())	owner().prmEn(id(), true);
 }
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )	return;
+    if(!enableStat())	return;
 
     TParamContr::disable();
 
     //> Set to process
-    if(owner().startStat())	owner().prmEn( id(), false );
+    if(owner().startStat())	owner().prmEn(id(), false);
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -438,7 +453,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/lst_CHANNEL" && ctrChkNode(opt))
     {
-	for(int i_c = 0; i_c < owner().channelAllow( ); i_c++)
+	for(int i_c = 0; i_c < owner().channelAllow(); i_c++)
 	    opt->childAdd("el")->setText(TSYS::int2str(i_c));
     }
     else TParamContr::cntrCmdProc(opt);
