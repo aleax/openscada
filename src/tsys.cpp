@@ -121,7 +121,7 @@ string TSYS::workDir( )
 
 void TSYS::setWorkDir( const string &wdir )
 {
-    if(workDir() == wdir) return;
+    if(wdir.empty() || workDir() == wdir) return;
     if(chdir(wdir.c_str()) != 0)
 	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
 	    wdir.c_str(),strerror(errno),workDir().c_str());

@@ -1,3 +1,11 @@
+2012-11-03 Roman
+- !!!:SYS: Configure script adapted for build without "data". AX_MOD_EN macros replaced to AX_MOD_{SubSys}_EN,
+    specific to the subsystem macro. To argument enable-AllModuls value "dest" is added to configure for "make distSrc"
+    by all modules enable without dependents check. For source distribution created new make targets "distSrc", "distRes",
+    "distSrc-lzma" and "distRes-lzma". Start scripts adapted for global and local build-install.
+- FIX:DB.SQLite: Error messages about table exist is prevented, for multithread access, by use command "CREATE TABLE IF NOT EXISTS".
+
+
 2012-10-31 Roman
 - !:FIX:UI.Vision: Crash on open virtual pages as visual item is fixed.
 - !:FIX:UI.QTStarter: Hang on close OpenSCADA with DE is fixed. Detected on exit TDE.

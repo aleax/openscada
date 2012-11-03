@@ -12,7 +12,6 @@
 	<prm id="StName_ru">Котёл</prm>
 	<prm id="StName_uk">Котел</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
-	<prm id="Workdir">~/.openscada</prm>
 	<prm id="IcoDir">./icons</prm>
 	<prm id="ModDir">@libdir_full@/openscada</prm>
 	<prm id="LogTarget">10</prm>

@@ -15,3 +15,5 @@ I18N_addfiles = *.ypp
 
 clean-local:
 	rm -f *func_analise.cpp
+
+DISTFILES = Makefile.am Makefile.in $(DIST_SOURCES) $(EXTRA_DIST)

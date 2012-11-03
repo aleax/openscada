@@ -651,7 +651,7 @@ void MTable::fieldFix( TConfig &cfg )
     }
 
     //> Create new table
-    req ="CREATE TABLE '"+mod->sqlReqCode(name())+"' (";
+    req = "CREATE TABLE IF NOT EXISTS '"+mod->sqlReqCode(name())+"' (";
     bool next = false;
     bool next_key = false;
     string pr_keys, tpCfg;

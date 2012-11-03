@@ -28,8 +28,18 @@ Boilerdbdir = $(oscd_datadir)/Boiler
 Boilerdb_DATA = data/ModelsDB/Boiler/*.db
 endif
 
-dist-res:
+distSrc: distdir
+	rm -rf $(distdir)/data $(distdir)/doc
+	tar --exclude=".svn" -cvzf $(PACKAGE)-$(PACKAGE_VERSION).tar.gz $(distdir)
+	$(am__remove_distdir)
+
+distSrc-lzma: distdir
+	rm -rf $(distdir)/data $(distdir)/doc
+	tar --exclude=".svn" --lzma -cvf $(PACKAGE)-$(PACKAGE_VERSION).tar.lzma $(distdir)
+	$(am__remove_distdir)
+
+distRes:
 	tar --exclude=".svn" -cvzf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.gz doc data
 
-dist-reslzma:
+distRes-lzma:
 	tar --exclude=".svn" --lzma -cvf $(PACKAGE)-res-$(PACKAGE_VERSION).tar.lzma doc data

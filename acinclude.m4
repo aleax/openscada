@@ -1427,8 +1427,184 @@ AC_DEFUN([AX_MOD_EN],
     AS_IF([test $enable_$1 = yes || test "x$4" = "xincl" -a $enable_$1 = incl], [$5], [$6])
 ])
 
+AC_DEFUN([AX_MOD_DB_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+		if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: DB.$1)
+	    AC_CONFIG_FILES(src/moduls/bd/$1/Makefile)
+	    DBSub_mod="${DBSub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
 
+AC_DEFUN([AX_MOD_DAQ_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+		if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: DAQ.$1)
+	    AC_CONFIG_FILES(src/moduls/daq/$1/Makefile)
+	    DAQSub_mod="${DAQSub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
 
+AC_DEFUN([AX_MOD_Archive_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+	        if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: Archive.$1)
+	    AC_CONFIG_FILES(src/moduls/arhiv/$1/Makefile)
+	    ArchSub_mod="${ArchSub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
+
+AC_DEFUN([AX_MOD_Transport_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+		if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: Transport.$1)
+	    AC_CONFIG_FILES(src/moduls/transport/$1/Makefile)
+	    TranspSub_mod="${TranspSub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
+
+AC_DEFUN([AX_MOD_TrProt_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+		if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: Protocol.$1)
+	    AC_CONFIG_FILES(src/moduls/protocol/$1/Makefile)
+	    ProtSub_mod="${ProtSub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
+
+AC_DEFUN([AX_MOD_UI_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+		if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: UI.$1)
+	    AC_CONFIG_FILES(src/moduls/ui/$1/Makefile)
+	    UISub_mod="${UISub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
+
+AC_DEFUN([AX_MOD_Special_EN],
+[
+    AC_ARG_ENABLE([$1],AC_HELP_STRING([--$3-$1],[$2]),[ ],[
+	    if test "x$3" = "xdisable"; then
+		if test $enable_AllModuls = no || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=yes; fi
+	    else
+		if test $enable_AllModuls = yes || test "x$4" = "xincl" -a $enable_AllModuls = incl; then enable_$1=$enable_AllModuls;
+		else enable_$1=no; fi
+	    fi
+	])
+    if test $enable_AllModuls = dist; then enable_$1=$enable_AllModuls; fi
+    AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
+    AS_IF([test $enable_$1 = yes || test $enable_$1 = dist || test "x$4" = "xincl" -a $enable_$1 = incl],[
+	    AC_MSG_RESULT(Build module: Special.$1)
+	    AC_CONFIG_FILES(src/moduls/special/$1/Makefile)
+	    SpecSub_mod="${SpecSub_mod}$1 "
+	    AS_IF([test $enable_$1 = dist],[$6],[$5])
+	],[$6])
+])
+
+# ===========================================================================
+#       http://www.gnu.org/software/autoconf-archive/ax_define_dir.html
+# ===========================================================================
+#
+# SYNOPSIS
+#
+#   AX_DEFINE_DIR(VARNAME, DIR [, DESCRIPTION])
+#
+# DESCRIPTION
+#
+#   This macro sets VARNAME to the expansion of the DIR variable, taking
+#   care of fixing up ${prefix} and such.
+#
+#   VARNAME is then offered as both an output variable and a C preprocessor
+#   symbol.
+#
+#   Example:
+#
+#     AX_DEFINE_DIR([DATADIR], [datadir], [Where data are placed to.])
+#
+# LICENSE
+#
+#   Copyright (c) 2008 Stepan Kasal <kasal@ucw.cz>
+#   Copyright (c) 2008 Andreas Schwab <schwab@suse.de>
+#   Copyright (c) 2008 Guido U. Draheim <guidod@gmx.de>
+#   Copyright (c) 2008 Alexandre Oliva
+#
+#   Copying and distribution of this file, with or without modification, are
+#   permitted in any medium without royalty provided the copyright notice
+#   and this notice are preserved. This file is offered as-is, without any
+#   warranty.
 AC_DEFUN([AX_DEFINE_DIR], [
   prefix_NONE=
   exec_prefix_NONE=

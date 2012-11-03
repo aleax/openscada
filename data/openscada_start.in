@@ -1,19 +1,30 @@
 #!/bin/sh
 
-# User directory prepare
-if [ ! -d ~/.openscada ]; then mkdir -m 700 ~/.openscada; fi
-if [ ! -d ~/.openscada/ARCHIVES ]; then
-    mkdir -pm 700 ~/.openscada/ARCHIVES/MESS;
-    mkdir -pm 700 ~/.openscada/ARCHIVES/VAL;
-fi
-if [ ! -L ~/.openscada/icons ]; then ln -s @datadir_full@/openscada/icons ~/.openscada/icons; fi
-if [ ! -d ~/.openscada/LibsDB ]; then cp -R @datadir_full@/openscada/LibsDB ~/.openscada/; fi
-if [ ! -d ~/.openscada/DATA ]; then mkdir -m 700 ~/.openscada/DATA; fi
-if [ ! -e ~/.openscada/oscada.xml ]; then cp @sysconfdir_full@/oscada_start.xml ~/.openscada/oscada.xml; fi
-cd ~/.openscada
+# Work directory check and prepare
+StartCfgDir=@sysconfdir_full@
+StartWorkDir=@datadir_full@/openscada
+CfgDir=$StartCfgDir
+WorkDir=$StartWorkDir
 
-# Program command and lock file
-pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=./oscada.xml"
+if test ! -w $WorkDir/LibsDB ||
+	test -d $WorkDir/ARCHIVES/VAL -a ! -w $WorkDir/ARCHIVES/VAL ||
+	test ! -d $WorkDir/ARCHIVES/VAL -a ! -w $WorkDir; then
+    WorkDir=~/.openscada
+    CfgDir=$WorkDir
+    if test ! -d $WorkDir; then mkdir -m 700 $WorkDir; fi
+    if test ! -L $WorkDir/icons; then ln -s $StartWorkDir/icons $WorkDir/icons; fi
+    if test ! -d $WorkDir/LibsDB; then cp -R $StartWorkDir/LibsDB $WorkDir; fi
+    if test ! -d $WorkDir/DATA; then mkdir -m 700 $WorkDir/DATA; fi
+    if test ! -e $WorkDir/oscada_start.xml; then cp $StartCfgDir/oscada_start.xml $CfgDir; fi
+fi
+if test ! -d $WorkDir/ARCHIVES; then
+    mkdir -pm 700 $WorkDir/ARCHIVES/MESS;
+    mkdir -pm 700 $WorkDir/ARCHIVES/VAL;
+fi
+cd $WorkDir
+
+# Programm command and lock file
+pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgDir/oscada_start.xml"
 pLock=".start.lock"
 
 # Check for already started programm present
@@ -31,13 +42,13 @@ echo $pPid > $pLock
 
 # Wait for programm stop
 wait $pPid
-echo "Program result: $?"
+echo "Program rezult: $?"
 
 # Core dump file "core" into work directory process
-if [ -f ~/.openscada/core -a -n "$(which gdb)" ]; then
-    cd ~/.openscada/
+if [ -f $WorkDir/core -a -n "$(which gdb)" ]; then
+    cd $WorkDir
     echo "Core dump process for back trace purchase to file crash_$(date +%F_%H:%M).txt"
-    gdb openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" > crash_$(date +%F_%H:%M).txt
+    gdb @bindir_full@/openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" > crash_$(date +%F_%H:%M).txt
     rm -f core
 fi
 
