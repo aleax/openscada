@@ -1,3 +1,9 @@
+2012-11-05 Roman
+- !!:SYS: Project name for start scripts moved to single variable 'ProjName'.
+    Archives moved to 'ProjName' directory for make archives only self.
+- DAQ.BFN: Symbols into SQLite DB-file is added.
+
+
 2012-11-03 Roman
 - !!!:SYS: Configure script adapted for build without "data". AX_MOD_EN macros replaced to AX_MOD_{SubSys}_EN,
     specific to the subsystem macro. To argument enable-AllModuls value "dest" is added to configure for "make distSrc"

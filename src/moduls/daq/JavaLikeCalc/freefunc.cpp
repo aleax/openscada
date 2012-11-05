@@ -1764,7 +1764,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 	//> Calc time control mechanism
 	if(SYS->sysTm() > (dt.start_tm+max_calc_tm))
 	{
-	    mess_err(nodePath().c_str(),_("Timeouted function calculation"));
+	    mess_err(nodePath().c_str(),_("Timeouted function calculation %d > %d+%d"),SYS->sysTm(),dt.start_tm,max_calc_tm);
 	    dt.flg |= 0x09;
 	    return;
 	}
