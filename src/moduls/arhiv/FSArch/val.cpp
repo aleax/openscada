@@ -701,18 +701,31 @@ int64_t ModVArchEl::begin()
 
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 {
-    ResAlloc res(mRes,false);
+    //> Request by single values for most big buffer period
+    if(buf.period()/100 > (int64_t)(archivator().valPeriod()*1e6))
+    {
+	ibeg = (ibeg/buf.period())*buf.period();
+	for(int64_t ctm; ibeg <= iend; ibeg += buf.period())
+	{
+	    ctm = ibeg;
+	    TVariant vl = getValProc(&ctm, false);
+	    buf.set(vl, ibeg);
+	}
+	return;
+    }
+
+    ResAlloc res(mRes, false);
     for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
 	if(ibeg > iend) break;
 	else if(!arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin())
 	{
 	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (int64_t)(archivator().valPeriod()*1e6))
 		buf.setI(EVAL_INT,ibeg);
-	    arh_f[i_a]->getVals(buf,ibeg,vmin(iend,arh_f[i_a]->end()));
+	    arh_f[i_a]->getVals(buf, ibeg, vmin(iend,arh_f[i_a]->end()));
 	    ibeg = arh_f[i_a]->end()+1;
 	}
-    for( ; ibeg <= iend; ibeg+=(int64_t)(archivator().valPeriod()*1e6) )
-	buf.setI(EVAL_INT,ibeg);
+    for( ; ibeg <= iend; ibeg += (int64_t)(archivator().valPeriod()*1e6))
+	buf.setI(EVAL_INT, ibeg);
 }
 
 TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
@@ -720,10 +733,10 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     int64_t itm = tm ? *tm : SYS->curTime();
     int64_t per;
     ResAlloc res(mRes,false);
-    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( !arh_f[i_a]->err() && (
+    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
+	if(!arh_f[i_a]->err() && (
 		(up_ord && itm <= arh_f[i_a]->end() && itm > arh_f[i_a]->begin()-arh_f[i_a]->period()) ||
-		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin()) ) )
+		(!up_ord && itm < arh_f[i_a]->end()+arh_f[i_a]->period() && itm >= arh_f[i_a]->begin())))
 	{
 	    if(tm) { per = arh_f[i_a]->period(); *tm = (itm/per)*per+((up_ord&&itm%per)?per:0); }
 	    return arh_f[i_a]->getVal(up_ord?arh_f[i_a]->maxPos()-(arh_f[i_a]->end()-itm)/arh_f[i_a]->period():(itm-arh_f[i_a]->begin())/arh_f[i_a]->period());
@@ -1115,15 +1128,15 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
     //> Get values block character
-    vpos_beg = vmax(0,(beg-begin())/period());
-    if( vpos_beg > mpos )	return;
+    vpos_beg = vmax(0, (beg-begin())/period());
+    if(vpos_beg > mpos)	return;
     vpos_end = vmin(mpos,(end-begin())/period());
-    if( vpos_end < 0 )		return;
+    if(vpos_end < 0)	return;
     //if( (vpos_end-vpos_beg) > (TArchiveS::max_req_vals-buf.realSize()) )
     //	vpos_end = vpos_beg+TArchiveS::max_req_vals-buf.realSize();
-    if( vpos_beg > vpos_end )	return;
+    if(vpos_beg > vpos_end)	return;
 
-    if( mPack )
+    if(mPack)
     {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }

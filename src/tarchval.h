@@ -79,6 +79,7 @@ class TValBuf
 
 	//> Get value
 	virtual void getVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
+	TVariant get( int64_t *tm = NULL, bool up_ord = false );
 	virtual string getS( int64_t *tm = NULL, bool up_ord = false );
 	virtual double getR( int64_t *tm = NULL, bool up_ord = false );
 	virtual int    getI( int64_t *tm = NULL, bool up_ord = false );
@@ -86,6 +87,7 @@ class TValBuf
 
 	//> Set value
 	virtual void setVals( TValBuf &buf, int64_t beg = 0, int64_t end = 0 );
+	void set( const TVariant &value, int64_t tm = 0 );
 	virtual void setS( const string &value, int64_t tm = 0 );
 	virtual void setR( double value, int64_t tm = 0 );
 	virtual void setI( int value, int64_t tm = 0 );
@@ -261,13 +263,13 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	TCfg	&mId,		//ID
 		&mSrcMode,	//Source mode
 		&mSource,	//Source
-		&mCombMode;	//Data combining mode (Moving average, Single, Minimum, Maximum)
+		&mCombMode,	//Data combining mode (Moving average, Single, Minimum, Maximum)
+		&mBPer,		//Buffer period
+		&mBSize;	//Buffer size
 
 	char	&mStart;	//Starting flag
 	//> Buffer params
 	int	&mVType;	//Value type (int, real, bool, string)
-	double	&mBPer;		//Buffer period
-	int	&mBSize;	//Buffer size
 	char	&mBHGrd,	//Buffer use hard time griding
 		&mBHRes;	//Buffer use high time resolution
 	//> Mode params
@@ -313,7 +315,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
 	virtual void setValPeriod( double per );
-	virtual void setArchPeriod( int per )	{ mAPer = (per?per:1); modif(); }
+	virtual void setArchPeriod( int per )	{ mAPer = (per?per:1); }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
 	void setDB( const string &idb )		{ mDB = idb; modif(); }
@@ -358,10 +360,10 @@ class TVArchivator : public TCntrNode, public TConfig
 	static void *Task( void *param );	//Process task
 
 	//Private attributes
-	TCfg	&mId;		//Var arch id
+	TCfg	&mId,		//Var arch id
+		&mVPer,		//Value period (sec)
+		&mAPer;		//Archivation period
 	char	&mStart;	//Var arch starting flag
-	double	&mVPer;		//Value period (sec)
-	int	&mAPer;		//Archivation period
 	string	mDB;
 	//> Archivate process
 	double	tm_calc;	//Archiving time

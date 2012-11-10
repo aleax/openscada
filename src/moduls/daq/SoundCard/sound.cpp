@@ -437,6 +437,7 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setPeriod(1000000/owner().mSmplRate);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
+    val.arch().at().setCombMode(TVArchive::LastVal);
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )

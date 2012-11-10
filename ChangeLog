@@ -1,3 +1,17 @@
+2012-11-10 Roman
+- !!!!:Archive: TValBuf::get() and TValBuf::set() generic functions is added.
+    Value archive's properties "Buffer period" and "Buffer size" and archivator's "Value period (sec)" and "Archivation period"
+    access has changed for border everywhere work.
+    Request only need period is added for allow fast access to high precision value archives but by need frame size and period:
+    - TValBuf::getVals() adapted for read data only by longer buffer's period.
+    - To service request <get path="%2fserv%2fval"/> made processing for longer period.
+    - Archive.FSArch, Archive.DBArch: To ModVArchEl::getValsProc() added request by single values for longer requested periods.
+- DAQ.SoundCard: Combining for archives set to "Last values" by high resolution reason.
+- DAQ.WebVision: Backend objects processing some changed for create primitive "Document" object allow.
+    Primitive "Document" object created for filtering attributes "tmpl" and "doc" from comments and internal procedure's tags <?dp ?>,
+    which can contain symbols '<' '>' and this wrong processed by parsers Mozilla::Geko and WebKit.
+
+
 2012-11-05 Roman
 - !!:SYS: Project name for start scripts moved to single variable 'ProjName'.
     Archives moved to 'ProjName' directory for make archives only self.

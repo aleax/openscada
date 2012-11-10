@@ -54,7 +54,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elMess.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1") );
     elMess.fldAdd( new TFld("CATEG",_("Messages categories"),TFld::String,0,"100") );
-    elMess.fldAdd( new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","","0;7") );
+    elMess.fldAdd( new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","0","0;7") );
     elMess.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"100") );
 
     //> Value archivator DB structure
@@ -81,7 +81,7 @@ TArchiveS::TArchiveS( ) :
 	_("Moving average;Single;Minimum;Maximum")) );
     elAval.fldAdd( new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1") );
     elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000") );
-    elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"6","100","0;1000000") );
+    elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"8","100","10;10000000") );
     elAval.fldAdd( new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1") );
     elAval.fldAdd( new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0") );
     elAval.fldAdd( new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500") );
@@ -1047,7 +1047,7 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 //* TMArchivator                                 *
 //************************************************
 TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
-    TConfig( cf_el ), run_st(false), mId(cfg("ID")), m_start(cfg("START").getBd()), m_level(cfg("LEVEL").getId()), m_db(idb)
+    TConfig(cf_el), run_st(false), mId(cfg("ID")), mLevel(cfg("LEVEL")), m_start(cfg("START").getBd()), m_db(idb)
 {
     mId = iid;
 }
