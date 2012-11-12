@@ -59,8 +59,9 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, QWidget *parent ) :
-    QMainWindow(parent), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false), prj_it(iprj_it), master_pg(NULL), mPeriod(1000),
-    wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF), isConErr(false)
+    QMainWindow(parent), prPg(NULL), prDiag(NULL), prDoc(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
+    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF),
+    isConErr(false)
 {
     QImage ico_t;
 
@@ -318,6 +319,11 @@ VisRun::~VisRun()
 
     //> Clear cache
     pgCacheClear();
+
+    //> Print objects free
+    if(prPg)	delete prPg;
+    if(prDiag)	delete prDiag;
+    if(prDoc)	delete prDoc;
 }
 
 string VisRun::user( )		{ return mWUser->user().toAscii().data(); }
@@ -427,29 +433,29 @@ void VisRun::printPg( const string &ipg )
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
-	if( sdlg.exec() != QDialog::Accepted )	return;
+	if(sdlg.exec() != QDialog::Accepted)	return;
 	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
     }
 
     //> Find need page
     rpg = master_pg;
-    if( rpg->id() != pg )	rpg = findOpenPage(pg);
-    if( !rpg ) return;
+    if(rpg->id() != pg)	rpg = findOpenPage(pg);
+    if(!rpg) return;
 
     string pnm = rpg->name();
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintDialog dlg(&printer,this);
+    if(!prPg)	prPg = new QPrinter(QPrinter::HighResolution);
+    QPrintDialog dlg(prPg, this);
     dlg.setWindowTitle(QString(_("Print page: \"%1\" (%2)")).arg(pnm.c_str()).arg(pg.c_str()));
-    if( dlg.exec() == QDialog::Accepted )
+    if(dlg.exec() == QDialog::Accepted)
     {
 	int fntSize = 35;
-	QSize papl(2048,2048*printer.paperRect().height()/printer.paperRect().width());
-	QSize pagl(papl.width()*printer.pageRect().width()/printer.paperRect().width(), papl.height()*printer.pageRect().height()/printer.paperRect().height());
+	QSize papl(2048,2048*prPg->paperRect().height()/prPg->paperRect().width());
+	QSize pagl(papl.width()*prPg->pageRect().width()/prPg->paperRect().width(), papl.height()*prPg->pageRect().height()/prPg->paperRect().height());
 
 	QPainter painter;
-	painter.begin(&printer);
+	painter.begin(prPg);
 	painter.setWindow(QRect(QPoint(0,0),papl));
-	painter.setViewport(printer.paperRect());
+	painter.setViewport(prPg->paperRect());
 
 	//> Draw image
 	QImage im = QPixmap::grabWidget(rpg).toImage();
@@ -477,17 +483,17 @@ void VisRun::printDiag( const string &idg )
     RunWdgView *rwdg;
     string dg = idg;
 
-    if( pgList.empty() )	{ QMessageBox::warning(this,_("Print diagram"),_("No one page is present!")); return; }
+    if(pgList.empty())	{ QMessageBox::warning(this,_("Print diagram"),_("No one page is present!")); return; }
 
-    if( dg.empty() )
+    if(dg.empty())
     {
 	RunPageView *rpg;
 	vector<string> lst;
 	for(unsigned i_p = 0; i_p < pgList.size(); i_p++)
 	    if((rpg=findOpenPage(pgList[i_p])))
 		rpg->shapeList("Diagram",lst);
-	if( lst.empty() )	{ QMessageBox::warning(this,_("Print diagram"),_("No one diagram is present!")); return; }
-	if( lst.size() == 1 )	dg = lst[0];
+	if(lst.empty())	{ QMessageBox::warning(this,_("Print diagram"),_("No one diagram is present!")); return; }
+	if(lst.size() == 1)	dg = lst[0];
 	else
 	{
 	    //> Make select diagrams dialog
@@ -505,25 +511,25 @@ void VisRun::printDiag( const string &idg )
 	}
     }
 
-    if( !(rwdg=findOpenWidget(dg)) )	return;
+    if(!(rwdg=findOpenWidget(dg)))	return;
 
     string dgnm = rwdg->name();
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintDialog dlg(&printer,this);
+    if(!prDiag)	prDiag = new QPrinter(QPrinter::HighResolution);
+    QPrintDialog dlg(prDiag, this);
     dlg.setWindowTitle(QString(_("Print diagram: \"%1\" (%2)")).arg(dgnm.c_str()).arg(dg.c_str()));
     if( dlg.exec() == QDialog::Accepted )
     {
 	int fntSize = 35;
-	QSize papl(2048,2048*printer.paperRect().height()/printer.paperRect().width());
-	QSize pagl(papl.width()*printer.pageRect().width()/printer.paperRect().width(), papl.height()*printer.pageRect().height()/printer.paperRect().height());
+	QSize papl(2048,2048*prDiag->paperRect().height()/prDiag->paperRect().width());
+	QSize pagl(papl.width()*prDiag->pageRect().width()/prDiag->paperRect().width(), papl.height()*prDiag->pageRect().height()/prDiag->paperRect().height());
 
 	ShapeDiagram::ShpDt *sD = (ShapeDiagram::ShpDt*)rwdg->shpData;
 	int elLine = sD->prms.size()/2+((sD->prms.size()%2)?1:0);
 
 	QPainter painter;
-	painter.begin(&printer);
+	painter.begin(prDiag);
 	painter.setWindow(QRect(QPoint(0,0),papl));
-	painter.setViewport(printer.paperRect());
+	painter.setViewport(prDiag->paperRect());
 
 	//> Draw image
 	QImage im = QPixmap::grabWidget(rwdg).toImage();
@@ -541,14 +547,19 @@ void VisRun::printDiag( const string &idg )
 	painter.drawText(QRect(0,0,pagl.width(),fntSize*2),Qt::AlignRight,QString(_("User: \"%1\"\n%2")).arg(user().c_str()).arg(dt.toString("d.MM.yyyy h:mm:ss")));
 
 	//>> Draw trend's elements
+	XMLNode reqName("name");
 	for(unsigned i_e = 0; i_e < sD->prms.size(); i_e++)
 	{
 	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
 	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
+	    //>>> Trend name request
+	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
+    	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
+
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
 	    painter.drawText(QRect(pnt.x()+fntSize,pnt.y(),pagl.width()/2,fntSize),Qt::AlignLeft,
-		QString("%1 [%2...%3]").arg(sD->prms[i_e].addr().c_str()).arg(sD->prms[i_e].bordL()).arg(sD->prms[i_e].bordU()));
+		QString("%1 [%2...%3]").arg(reqName.text().c_str()).arg(sD->prms[i_e].bordL()).arg(sD->prms[i_e].bordU()));
 	}
 
 	painter.end();
@@ -591,14 +602,14 @@ void VisRun::printDoc( const string &idoc )
     if( !(rwdg=findOpenWidget(doc)) )	return;
 
     string docnm = rwdg->name();
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintDialog dlg(&printer,this);
+    if(!prDoc) prDoc = new QPrinter(QPrinter::HighResolution);
+    QPrintDialog dlg(prDoc, this);
     dlg.setWindowTitle(QString(_("Print document: \"%1\" (%2)")).arg(docnm.c_str()).arg(doc.c_str()));
     if(dlg.exec() == QDialog::Accepted)
 #ifdef HAVE_WEBKIT
-	((ShapeDocument::ShpDt*)rwdg->shpData)->web->print(&printer);
+	((ShapeDocument::ShpDt*)rwdg->shpData)->web->print(prDoc);
 #else
-	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(&printer);
+	((ShapeDocument::ShpDt*)rwdg->shpData)->web->document()->print(prDoc);
 #endif
 }
 

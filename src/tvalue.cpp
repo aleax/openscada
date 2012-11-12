@@ -972,6 +972,8 @@ void TVal::cntrCmdProc( XMLNode *opt )
 	    else if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
 	    else throw TError(nodePath().c_str(),_("Attribute doesn't have archive"));
 	}
+	else if(ctrChkNode(opt,"name",RWRWRW,"root",SDAQ_ID,SEC_RD))     //Archive name request
+            opt->setText(owner().vlPresent("NAME") ? owner().vlAt("NAME").at().getS()+"."+name():string(""));
 	return;
     }
 

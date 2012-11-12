@@ -673,27 +673,38 @@ void ModVArchEl::fileAdd( const string &file )
 		break;
 	    }
 	if(i_arh < 0) arh_f.push_front(f_arh);
+	realEnd = 0;	//Reset real end position
     }
 }
 
 int64_t ModVArchEl::end()
 {
-    ResAlloc res(mRes,false);
-    for(int i_a = (int)arh_f.size()-1; i_a >= 0; i_a--)
-	if(!arh_f[i_a]->err())
-	{
-	    if(!realEnd) realEnd = arh_f[i_a]->endData();
-	    return vmin(arh_f[i_a]->end(),realEnd);
-	}
+    if(realEnd) return realEnd;
 
-    return 0;
+    //Real end first calculation
+    ResAlloc res(mRes, false);
+    int64_t curTm = TSYS::curTime();
+    VFileArch *lstFile = NULL;
+    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
+    {
+	if(arh_f[i_a]->err()) continue;
+	lstFile = arh_f[i_a];
+	if(curTm <= lstFile->end())
+	{
+	    if(!realEnd) realEnd = lstFile->endData();
+	    break;
+	}
+    }
+    if(lstFile && !realEnd) realEnd = lstFile->endData();
+
+    return realEnd;
 }
 
 int64_t ModVArchEl::begin()
 {
     ResAlloc res(mRes,false);
-    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( !arh_f[i_a]->err() )
+    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
+	if(!arh_f[i_a]->err())
 	    return arh_f[i_a]->begin();
 
     return 0;

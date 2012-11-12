@@ -1876,6 +1876,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    opt->setText((mode==2) ? TSYS::strEncode(text,TSYS::base64) : text);
 	    opt->setAttr("vtp",TSYS::int2str(TValBuf::valType()));
 	}
+	else if(ctrChkNode(opt,"name",RWRWRW,"root","root",SEC_RD))	//Archive name request
+	{
+	    AutoHD<TVal> vObj = srcPAttr(true);
+	    opt->setText((!vObj.freeStat() && vObj.at().owner().vlPresent("NAME")) ?
+		vObj.at().owner().vlAt("NAME").at().getS()+"."+vObj.at().name():name());
+	}
 	return;
     }
 
