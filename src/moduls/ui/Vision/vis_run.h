@@ -161,6 +161,7 @@ class VisRun : public QMainWindow
 
 	//> Main components
 	QTimer		*endRunTimer, *updateTimer;
+	QPrinter	*prPg, *prDiag, *prDoc;
 	bool		winClose;		//Close window flag
 	UserStBar	*mWUser;		//User status widget
 	StylesStBar	*mStlBar;		//Style status widget

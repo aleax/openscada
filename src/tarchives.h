@@ -63,7 +63,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	bool toStart( )		{ return m_start; }
 	bool startStat( )	{ return run_st; }
 	string	addr( )		{ return cfg("ADDR").getS(); }
-	int	level( )	{ return m_level; }
+	int	level( )	{ return mLevel; }
 	void	categ( vector<string> &list );
 
 	string	DB( )		{ return m_db; }
@@ -74,7 +74,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	void setDscr( const string &vl )	{ cfg("DESCR").setS(vl); }
 	void setToStart( bool vl )		{ m_start = vl; modif(); }
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
-	void setLevel( int lev )		{ m_level = lev; modif(); }
+	void setLevel( int lev )		{ mLevel = lev; }
 
 	void setDB( const string &idb )		{ m_db = idb; modifG(); }
 
@@ -112,9 +112,9 @@ class TMArchivator : public TCntrNode, public TConfig
 	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
-	TCfg	&mId;		//Mess arch id
+	TCfg	&mId,		//Mess arch id
+		&mLevel;	//Mess arch level
 	char	&m_start;	//Mess arch starting flag
-	int	&m_level;	//Mess arch level
 	string	m_db;
 };
 

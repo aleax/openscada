@@ -106,14 +106,6 @@ void VCASess::getReq( SSess &ses )
 
 	ses.page = req.childGet(0)->save();
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
-
-	/*XMLNode req("openlist");
-	req.setAttr("path",ses.url+"/%2fserv%2fpg")->
-	    setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0");
-	mod->cntrIfCmd(req,ses.user);
-
-	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;*/
     }
     //> Attribute get
     else if( wp_com == "attr" )
@@ -155,8 +147,11 @@ void VCASess::getReq( SSess &ses )
 		else cpos++;
 		continue;
 	    }
-	    if( objPresent(caddr) )	objAt(caddr).at().setAttrs(*cn,ses.user);
-	    if( !cn->parent() )	break;
+	    //> Check for objects represent some widgets type creation if attribute "root" present, typical for init requests
+	    XMLNode *rootId = cn->getElementBy("id","root");
+	    if(rootId) objCheck(rootId->text(), caddr);
+	    if(objPresent(caddr)) objAt(caddr).at().setAttrs(*cn,ses.user);
+	    if(!cn->parent())	break;
 	    cn = cn->parent();
 	    cpos = pos.back();	pos.pop_back();
 	    caddr = addr.back(); addr.pop_back();
@@ -181,24 +176,6 @@ void VCASess::getReq( SSess &ses )
     //> Request to primitive object. Used for data caching
     else if( wp_com == "obj" )
     {
-	if( !objPresent(ses.url) )
-	{
-	    //>> Request to widget type
-	    bool new_obj = false;
-	    XMLNode req("get");
-	    req.setAttr("path",ses.url+"/%2fwdg%2fcfg%2froot");
-	    mod->cntrIfCmd(req,ses.user);
-	    if( req.text() == "ElFigure" )	{ objAdd( new VCAElFigure(ses.url) ); new_obj = true; }
-            else if( req.text() == "Text" )     { objAdd( new VCAText(ses.url) ); new_obj = true; }
-	    else if( req.text() == "Diagram" )	{ objAdd( new VCADiagram(ses.url) ); new_obj = true; }
-	    if( new_obj )
-	    {
-		//>> Request new object's attributes
-		req.clear()->setAttr("path",ses.url+"/%2fserv%2fattr");
-		mod->cntrIfCmd(req,ses.user);
-		objAt(ses.url).at().setAttrs(req,ses.user);
-	    }
-	}
 	if( objPresent(ses.url) ) objAt(ses.url).at().getReq(ses);
     }
     else
@@ -232,6 +209,15 @@ void VCASess::postReq( SSess &ses )
     else if( wp_com == "obj" && objPresent(ses.url) )
         objAt(ses.url).at().postReq(ses);
     ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
+}
+
+void VCASess::objCheck( const string &rootId, const string &wPath )
+{
+    if(objPresent(wPath)) return;
+    if(rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
+    else if(rootId == "Text")	objAdd(new VCAText(wPath));
+    else if(rootId == "Diagram")objAdd(new VCADiagram(wPath));
+    else if(rootId == "Document")objAdd(new VCADocument(wPath));
 }
 
 void VCASess::objAdd( VCAObj *obj )
@@ -6459,3 +6445,42 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
     fftw_destroy_plan(p);
 #endif
 }
+
+//*************************************************
+//* VCADocument                                   *
+//*************************************************
+VCADocument::VCADocument( const string &iid ) : VCAObj(iid)
+{
+
+}
+
+void VCADocument::setAttrs( XMLNode &node, const string &user )
+{
+    for(unsigned i_a = 0; i_a < node.childSize(); i_a++)
+    {
+        XMLNode *req_el = node.childGet(i_a);
+        if(req_el->name() != "el")	continue;
+        switch(atoi(req_el->attr("p").c_str()))
+        {
+            case 21: 	//tmpl
+            case 22:	//doc
+	    {
+		if(TSYS::strNoSpace(req_el->text()).empty())	break;
+		const char *XHTML_entity =
+		    "<!DOCTYPE xhtml [\n"
+		    "  <!ENTITY nbsp \"&#160;\" >\n"
+		    "]>\n";
+		XMLNode xproc;
+		try
+		{
+        	    xproc.load(string(XHTML_entity)+req_el->text(),true);
+        	    req_el->setText(xproc.save(XMLNode::Clean));
+        	}
+		catch(TError err)
+    		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),id().c_str(),err.mess.c_str()); }
+		break;
+	    }
+        }
+    }
+}
+
