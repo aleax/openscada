@@ -380,6 +380,21 @@ class VCADiagram : public VCAObj
 };
 
 //*************************************************
+//* VCADocument                                   *
+//*************************************************
+class VCADocument : public VCAObj
+{
+    public:
+	//Methods
+        VCADocument( const string &iid );
+        ~VCADocument( )			{ }
+
+        void getReq( SSess &ses )	{ }
+        void postReq( SSess &ses )	{ }
+        void setAttrs( XMLNode &node, const string &user );
+};
+
+//*************************************************
 //* VCASess                                       *
 //*************************************************
 class VCASess : public TCntrNode
@@ -398,6 +413,7 @@ class VCASess : public TCntrNode
 	void postReq( SSess &ses );
 
 	//> Objects
+	void objCheck( const string &rootId, const string &wPath );
 	void objList( vector<string> &list )		{ chldList(id_objs,list); }
 	bool objPresent( const string &name )		{ return chldPresent(id_objs,name); }
 	void objAdd( VCAObj *obj );
