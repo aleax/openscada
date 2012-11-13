@@ -150,14 +150,14 @@ class ModVArchEl: public TVArchEl
 	//Methods
 	ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
 	~ModVArchEl( );
-	void fullErase();
+	void fullErase( );
 
 	int size( );
 
 	int64_t	begin( );
 	int64_t	end( );
 
-	ModVArch &archivator()	{ return (ModVArch&)TVArchEl::archivator(); }
+	ModVArch &archivator( )	{ return (ModVArch&)TVArchEl::archivator(); }
 
 	void checkArchivator( bool now = false, bool cpctLim = false );
 	void fileAdd( const string &file );

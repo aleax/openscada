@@ -1,3 +1,21 @@
+2012-11-13 Roman 0.8.0.4
+- Archive: To value archive service request <name path="/%2fserv%2fval"/> is added for name get.
+- FIX:Archive.FSArch: Real end position obtain is some fixed for posible double archive's files creation.
+- UI.Vision: Print configuration store separated for page, diagram and document.
+    Trends names request and display its instead address for diagram print.
+- !!!!:Archive: TValBuf::get() and TValBuf::set() generic functions is added.
+    Value archive's properties "Buffer period" and "Buffer size" and archivator's "Value period (sec)" and "Archivation period"
+    access has changed for border everywhere work.
+    Request only need period is added for allow fast access to high precision value archives but by need frame size and period:
+    - TValBuf::getVals() adapted for read data only by longer buffer's period.
+    - To service request <get path="%2fserv%2fval"/> made processing for longer period.
+    - Archive.FSArch, Archive.DBArch: To ModVArchEl::getValsProc() added request by single values for longer requested periods.
+- DAQ.WebVision: Backend objects processing some changed for create primitive "Document" object allow.
+    Primitive "Document" object created for filtering attributes "tmpl" and "doc" from comments and internal procedure's tags <?dp ?>,
+    which can contain symbols '<' '>' and this wrong processed by parsers Mozilla::Geko and WebKit.
+- FIX:DB.SQLite: Error messages about table exist is prevented, for multithread access, by use command "CREATE TABLE IF NOT EXISTS".
+
+
 2012-11-01 Roman
 - !:FIX:UI.Vision: Crash on open virtual pages as visual item is fixed.
 - !:FIX:UI.QTStarter: Hang on close OpenSCADA with DE is fixed. Detected on exit TDE.
