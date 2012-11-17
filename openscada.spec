@@ -208,7 +208,7 @@ Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %prep
 %setup -q -n %srcname
-%setup -T -D -a 1
+%setup -T -D -a 1 -n %srcname
 
 %build
 %if %_vendor == "Mandriva"
@@ -226,12 +226,12 @@ autoreconf -ivf
 %install
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
-install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
-install -m 755 -d %buildroot/%_datadir/openscada/ARCHIVES/{MESS,VAL}
+#install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
+#install -m 755 -d %buildroot/%_datadir/openscada/ARCHIVES/{MESS,VAL}
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
-echo "OpenSCADA data dir" > %buildroot/%_datadir/openscada/DATA/.info
-echo "OpenSCADA messages archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/MESS/.info
-echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VAL/.info
+#echo "OpenSCADA data dir" > %buildroot/%_datadir/openscada/DATA/.info
+#echo "OpenSCADA messages archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/MESS/.info
+#echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VAL/.info
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version
@@ -251,12 +251,12 @@ echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VA
 #exclude %_libdir/openscada/*.a
 #exclude %_libdir/openscada/*.la
 %_datadir/locale/*/LC_MESSAGES/*
-%_datadir/openscada/DATA/.info
+##%_datadir/openscada/DATA/.info
 %_datadir/openscada/icons/*
 %exclude %_datadir/openscada/icons/AGLKS.png
 %exclude %_datadir/openscada/icons/Boiler.png
-%_datadir/openscada/ARCHIVES/MESS/.info
-%_datadir/openscada/ARCHIVES/VAL/.info
+##%_datadir/openscada/ARCHIVES/MESS/.info
+##%_datadir/openscada/ARCHIVES/VAL/.info
 
 %files docEN
 %defattr(-,root,root)

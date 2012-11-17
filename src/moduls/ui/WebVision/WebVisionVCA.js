@@ -1867,10 +1867,17 @@ function makeUI()
   //> Update some widgets
   for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
 
-  prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTm.getTime())));
-  //setStatus("Process wait: "+prcTm+"s.",1000);
+  //> Elapsed time get and adjust for plane update period depends from network speed
+  var elTm = 1e-3*((new Date()).getTime()-stTm.getTime());
+  if(!planePer) planePer = 1e-3*modelPer;
+  planePer += (Math.max(1e-3*modelPer,elTm*3)-planePer)/100;
+  var sleepTm = Math.max(0, planePer-elTm);
+  prcTm = elTm+sleepTm;
+  //setStatus("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.",1000);
+  setTimeout(makeUI,sleepTm*1e3);
 
-  setTimeout(makeUI,prcTm*1e3);
+  //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTm.getTime())));
+  //setTimeout(makeUI,prcTm*1e3);
 }
 
 /***************************************************
@@ -1923,6 +1930,7 @@ document.body.onmouseup = function(e)
 modelPer = 0;				//Model proc period
 prcCnt = 0;				//Process counter
 prcTm = 0;				//Process time
+planePer = 0;				//Planed update period
 tmCnt = 0;				//Call counter
 pgList = new Array();			//Opened pages list
 pgCache = new Object();			//Cached pages' data

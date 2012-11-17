@@ -522,7 +522,10 @@ int TSYS::start( )
 	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
 	}
 
-    cfgFileScan( true );
+    cfgFileScan(true);
+
+    //> High priority service task creation
+    taskCreate(nodePath('.',true), 20, TSYS::HPrTask, this);
 
     mess_info(nodePath().c_str(),_("Final starting!"));
 
@@ -530,9 +533,6 @@ int TSYS::start( )
     mStopSignal = 0;
     while(!mStopSignal)
     {
-	//> Static system time update (one second)
-	if(!(i_cnt%(1000/STD_WAIT_DELAY)))	mSysTm = time(NULL);
-
 	//> CPU frequency calc (ten seconds)
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
 
@@ -540,8 +540,8 @@ int TSYS::start( )
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
 
 	//> Periodic shared libraries checking
-	if(modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)))
-	    modSchedul( ).at().libLoad(modDir(),true);
+	if(modSchedul().at().chkPer() && !(i_cnt%(modSchedul().at().chkPer()*1000/STD_WAIT_DELAY)))
+	    modSchedul().at().libLoad(modDir(),true);
 
 	//> Periodic changes saving to DB
 	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
@@ -569,6 +569,9 @@ int TSYS::start( )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
 	}
+
+    //> High priority service task stop
+    taskDestroy(nodePath('.',true));
 
     return mStopSignal;
 }
@@ -1289,10 +1292,18 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     map<string,STask>::iterator ti;
 
     ResAlloc res(taskRes, true);
-    for(time_t c_tm = time(NULL); mTasks.find(path) != mTasks.end(); )
+    for(time_t c_tm = time(NULL); (ti=mTasks.find(path)) != mTasks.end(); )
     {
-	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
+	//> Remove created and finished but not destroyed task
+	if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached))
+	{
+	    pthread_join(ti->second.thr, NULL);
+	    mTasks.erase(ti);
+	    continue;
+	}
 	res.release();
+	//> Error by this active task present
+	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1301,6 +1312,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.task = start_routine;
     htsk.taskArg = arg;
     htsk.flgs = 0;
+    htsk.thr = 0;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1360,46 +1372,49 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSignal )
 {
+    map<string,STask>::iterator it;
     ResAlloc res(taskRes, false);
-    map<string,STask>::iterator it = mTasks.find(path);
-    if(it == mTasks.end()) return;
-    pthread_t thr = it->second.thr;
+    if(mTasks.find(path) == mTasks.end()) return;
     res.release();
 
     if(endrunCntr) *endrunCntr = true;
-    if(!noSignal)
-    {
-	pthread_kill(thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
-	pthread_kill(thr, SIGALRM);	//> Sleep, select and other system calls termination
-    }
 
     //> Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
     t_tm = s_tm = time(NULL);
-    while(!(it->second.flgs&STask::FinishTask))
-    {
-        if(!noSignal) pthread_kill(thr, SIGALRM);
-	time_t c_tm = time(NULL);
-        //Check timeout
-        if(wtm && (c_tm > (s_tm+wtm)))
-        {
-            mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
-	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
-        }
-	//Make messages
-        if(c_tm > t_tm+1)  //1sec
-        {
-            t_tm = c_tm;
-            mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
-
-        }
-        sysSleep(STD_WAIT_DELAY*1e-3);
-    }
-
-    if(!(it->second.flgs&STask::Detached)) pthread_join(thr, NULL);
-
+    bool first = true;
     res.request(true);
-    mTasks.erase(it);
+    while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask))
+    {
+	if(!noSignal)
+	{
+	    if(first) pthread_kill(it->second.thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
+	    pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
+	}
+	res.release();
+
+	time_t c_tm = time(NULL);
+	//Check timeout
+	if(wtm && (c_tm > (s_tm+wtm)))
+	{
+	    mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
+	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
+	}
+	//Make messages
+	if(c_tm > t_tm+1)  //1sec
+	{
+	    t_tm = c_tm;
+	    mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
+	}
+	sysSleep(STD_WAIT_DELAY*1e-3);
+	first = false;
+	res.request(true);
+    }
+    if(it != mTasks.end())
+    {
+	if(!(it->second.flgs&STask::Detached)) pthread_join(it->second.thr, NULL);
+	mTasks.erase(it);
+    }
 }
 
 bool TSYS::taskEndRun( )
@@ -1469,6 +1484,16 @@ void *TSYS::taskWrap( void *stas )
     if(tsk->flgs & STask::Detached)	SYS->taskDestroy(tsk->path, NULL);
 
     return rez;
+}
+
+void *TSYS::HPrTask( void *icntr )
+{
+    while(!TSYS::taskEndRun())
+    {
+	SYS->mSysTm = time(NULL);
+
+	TSYS::taskSleep(1000000000);
+    }
 }
 
 int TSYS::sysSleep( float tm )

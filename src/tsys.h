@@ -319,6 +319,8 @@ class TSYS : public TCntrNode
 
 	static void *taskWrap( void *stas );
 
+	static void *HPrTask( void *isys );
+
 	//Private attributes
 	string	mUser,		// A owner user name!
 	 	mConfFile,	// Config-file name

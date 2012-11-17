@@ -1,3 +1,14 @@
+2012-11-17 Roman
+- SYS: For RPM and Debian packages build scripts is disabled directories ./DATA and ./ARCHIVES/{MESS,VAL} packing, by
+    install it from start scripts.
+- !!:SYS: System high priority task "HPrTask" is created for system time update and fix some errors like to
+    "Timeouted function calculation ..." by the time update lag.
+- !!:SYS: To task create function added control and freeing for finished but the object present and not detached tasks.
+    For prevent some errors like to "Task '...' is already present!".
+- !!!:UI.WebVision: Update period time calculation is rewrited for provide more responsibility and adaption to real network
+    channel properties.
+
+
 2012-11-12 Roman
 - Archive: To value archive service request <name path="/%2fserv%2fval"/> is added for name get.
 - FIX:Archive.FSArch: Real end position obtain is some fixed for posible double archive's files creation.

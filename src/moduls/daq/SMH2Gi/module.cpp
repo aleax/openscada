@@ -45,7 +45,7 @@
 #define MOD_VER		"0.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/smh_2gi) hardware interfaces and modules.")
-#define LICENSE		"MyLicense"
+#define LICENSE		"GPL2"
 //*************************************************
 
 SMH2Gi::TTpContr *SMH2Gi::mod;  //Pointer for direct access to the module
