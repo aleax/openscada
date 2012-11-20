@@ -1121,6 +1121,76 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     return vmax(0,blen);
 }
 
+TVariant TTrOut::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
+{
+    // bool TS(bool rts = EVAL) - To Send control by set request <rts> and return Clear CTS state
+    //  rts - Request value RTS
+    if(iid == "TS")
+    {
+	ResAlloc res(nodeRes(), true);
+	if(!run_st) return EVAL_BOOL;
+	int tiocm;
+	//> Get TIOCM current status
+	ioctl(fd, TIOCMGET, &tiocm);
+	if(prms.size())
+	{
+	    //> Set RTS
+	    if(!prms[0].isEVal() && !prms[0].isNull())
+	    {
+		if(prms[0].getB()) tiocm |= TIOCM_RTS; else tiocm &= ~TIOCM_RTS;
+		ioctl(fd, TIOCMSET, &tiocm);
+	    }
+	    //> Get current RTS
+	    else { prms[0].setB((bool)(tiocm&TIOCM_RTS)); prms[0].setModify(); }
+	}
+	return (bool)(tiocm&TIOCM_CTS);
+    }
+    // bool DR(bool dtr = EVAL) - Device ready to communicate control by set Terminal Ready <dtr> and return Set Ready DSR state
+    //  dtr - Terminal ready value DTR
+    if(iid == "DR")
+    {
+	ResAlloc res(nodeRes(), true);
+	if(!run_st) return EVAL_BOOL;
+	int tiocm;
+	//> Get TIOCM current status
+	ioctl(fd, TIOCMGET, &tiocm);
+	if(prms.size())
+	{
+	    //> Set DTR
+	    if(!prms[0].isEVal() && !prms[0].isNull())
+	    {
+		if(prms[0].getB()) tiocm |= TIOCM_DTR; else tiocm &= ~TIOCM_DTR;
+		ioctl(fd, TIOCMSET, &tiocm);
+	    }
+	    //> Get current DTR
+	    else { prms[0].setB((bool)(tiocm&TIOCM_DTR)); prms[0].setModify(); }
+	}
+	return (bool)(tiocm&TIOCM_DSR);
+    }
+    // bool DCD() - Data Carrier Detect control
+    if(iid == "DCD")
+    {
+	ResAlloc res(nodeRes(), true);
+	if(!run_st) return EVAL_BOOL;
+	int tiocm;
+	//> Get TIOCM current status
+	ioctl(fd, TIOCMGET, &tiocm);
+	return (bool)(tiocm&TIOCM_CD);
+    }
+    // bool RI() - Ring Indicator control
+    if(iid == "RI")
+    {
+	ResAlloc res(nodeRes(), true);
+	if(!run_st) return EVAL_BOOL;
+	int tiocm;
+	//> Get TIOCM current status
+	ioctl(fd, TIOCMGET, &tiocm);
+	return (bool)(tiocm&TIOCM_RI);
+    }
+
+    return TTransportOut::objFuncCall(iid, prms, user);
+}
+
 void TTrOut::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info

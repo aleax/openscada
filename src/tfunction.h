@@ -142,7 +142,7 @@ class TFunction : public TCntrNode
 
 	//Attributes
 	string		mId;
-	bool		run_st;
+	bool		run_st, be_start;
 	TValFunc	*mTVal;
 	vector<TValFunc*>	used;
 	const char	*grp;

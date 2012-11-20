@@ -166,6 +166,8 @@ class TTrOut: public TTransportOut
 	void load_( );
 	void save_( );
 
+	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+
     private:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process

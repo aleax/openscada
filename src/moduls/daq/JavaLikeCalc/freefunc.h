@@ -287,9 +287,6 @@ class Func : public TConfig, public TFunction
 	void valAtt( TValFunc *vfnc );
         void valDet( TValFunc *vfnc );
 
-	void preIOCfgChange( );
-	void postIOCfgChange( );
-
 	//> Functins` list functions
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return mFncs.at(id); }
@@ -368,7 +365,6 @@ class Func : public TConfig, public TFunction
 
 	//Methods
 	void postEnable( int flag );
-	void preDisable( int flag );
 	void postDisable( int flag );
 	bool cfgChange( TCfg & )        { modif(); return true; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -387,8 +383,6 @@ class Func : public TConfig, public TFunction
     private:
 	//Attributes
 	int	&max_calc_tm;
-
-	bool	be_start;		//Change structure check
 
 	//> Parser's data
 	string		sprg, prg;	//Build prog

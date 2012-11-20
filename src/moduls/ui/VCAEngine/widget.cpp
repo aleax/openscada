@@ -74,10 +74,10 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     if(!src_n->enable()) return *this;
 
     //> Parent link copy
-    if(src_n->parentNm() != path())
+    if(src_n->parentNm() != path() && parentNm().empty())
     {
 	if(parentNm() != src_n->parentNm() && enable()) setEnable(false);
-	setParentNm( src_n->parentNm() );
+	setParentNm(src_n->parentNm());
     }
     if(!enable()) setEnable(true);
 
@@ -116,8 +116,8 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 		case TFld::String:	attr.at().setS(pattr.at().getS());	break;
 		default: break;
 	    }
-	attr.at().setCfgTempl( pattr.at().cfgTempl() );
-	attr.at().setCfgVal( pattr.at().cfgVal() );
+	attr.at().setCfgTempl(pattr.at().cfgTempl());
+	attr.at().setCfgVal(pattr.at().cfgVal());
     }
 
     //> Include widgets copy

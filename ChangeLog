@@ -1,3 +1,9 @@
+2012-11-20 Roman
+- SYS.TFunction, DAQ.JavaLikeCalc, SYS.Tmpl: TValFunc execution context full moved from DAQ.JavaLikeCalc.
+- !!:Transport.Serial: Users API functions to output transport added: bool TS(bool), bool DR(bool), bool DCD(), bool RI().
+- FIX:UI.VCAEngine: Project's subtree copy from one project to other fixed for inherited attributes copying.
+
+
 2012-11-17 Roman
 - SYS: For RPM and Debian packages build scripts is disabled directories ./DATA and ./ARCHIVES/{MESS,VAL} packing, by
     install it from start scripts.
