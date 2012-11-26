@@ -1,3 +1,24 @@
+2012-11-26 Roman
+- !!!!:SYS, DAQ: Module DAQ.OneWire is added for implement the devices on 1Wire BUS support by different drivers and library
+    OWFS (http://owfs.org). For now implemented and tested only temperature sensors DS18B20 by DS9097 serial converter.
+- !!!:FIX:SYS.*: System function "getopt" for command line parsing full replaced to self implementing function TSYS::getCmdOpt()
+    on reason the system getopt() is not reentrant nature and wrong processing for independent calls from different OpenSCADA parts.
+    Start program rewrited for use SYS::getCmdOpt().
+- !:FIX:Archive: Messages buffer processing task moved from creation by timer to standard OpenSCADA task for some system memory
+    leak prevent.
+- !:TElem: Resources review for some problems prevent.
+- FIX:TValFunc: Assign default value for variable "mMdfChk".
+- TSYS, TModule, TParamContr, TVarObj, TEValObj: Debug objects counters for "-DOSC_DEBUG=1" and print its finish number
+    on exit is added.
+- TSYS: TSYS::taskEndRun() set independent from "noSignal" argument of taskDestroy() function.
+- FIX:SYS: The crash filenames generation into start scripts fixed.
+- !!:FIX:TVal: Memory leak for objects into destructor TVal::~TVal() is fixed, detected by "ValGrind".
+- !!:FIX:Archive.FSArch: Value archive data corruption into some cases by index buffer memory overlap is prevented,
+    detected by "ValGrind".
+- FIX:DAQ.=Tmpl=: Some updated and fixed.
+- FIX:DAQ.SoundCard: TMdContr objects free early for used its data parameters objects TMdPrm is prevented, detected by "ValGrind".
+
+
 2012-11-20 Roman
 - SYS.TFunction, DAQ.JavaLikeCalc, SYS.Tmpl: TValFunc execution context full moved from DAQ.JavaLikeCalc.
 - !!:Transport.Serial: Users API functions to output transport added: bool TS(bool), bool DR(bool), bool DCD(), bool RI().

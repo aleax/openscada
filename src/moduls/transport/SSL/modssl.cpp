@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include <string.h>
-#include <getopt.h>
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/types.h>

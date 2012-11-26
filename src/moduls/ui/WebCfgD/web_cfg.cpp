@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include <time.h>
-#include <getopt.h>
 #include <string.h>
 #include <string>
 #include <gd.h>

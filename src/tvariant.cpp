@@ -325,12 +325,16 @@ pthread_mutex_t TVarObj::connM = PTHREAD_MUTEX_INITIALIZER;
 
 TVarObj::TVarObj( ) : mUseCnt(0)
 {
-
+#if OSC_DEBUG >= 1
+    SYS->cntrIter("VarObjCntr",1);
+#endif
 }
 
 TVarObj::~TVarObj( )
 {
-
+#if OSC_DEBUG >= 1
+    SYS->cntrIter("VarObjCntr",-1);
+#endif
 }
 
 void TVarObj::AHDConnect( )
@@ -447,6 +451,20 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 //* TEValObj                                                      *
 //*   Special EVal object — Scalar bool, int, real, string analog *
 //*****************************************************************
+TEValObj::TEValObj( )
+{
+#if OSC_DEBUG >= 1
+    SYS->cntrIter("EValObjCntr",1);
+#endif
+}
+
+TEValObj::~TEValObj( )
+{
+#if OSC_DEBUG >= 1
+    SYS->cntrIter("EValObjCntr",-1);
+#endif
+}
+
 TVariant TEValObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     // bool isEVal() - return "true" for EVAL detect

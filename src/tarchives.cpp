@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include <unistd.h>
-#include <getopt.h>
 #include <signal.h>
 #include <sys/time.h>
 #include <string.h>
@@ -87,24 +86,12 @@ TArchiveS::TArchiveS( ) :
     elAval.fldAdd( new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500") );
 
     setMessBufLen( BUF_SIZE_DEF );
-
-    //> Create message archive timer
-    struct sigevent sigev;
-    memset(&sigev,0,sizeof(sigev));
-    sigev.sigev_notify = SIGEV_THREAD;
-    sigev.sigev_value.sival_ptr = this;
-    sigev.sigev_notify_function = ArhMessTask;
-    sigev.sigev_notify_attributes = NULL;
-    timer_create(CLOCK_REALTIME,&sigev,&tmIdMess);
 }
 
 TArchiveS::~TArchiveS(  )
 {
-    //> Stop messages timer
-    timer_delete(tmIdMess);
-
-    //> Stop values archiving task
-    if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
+    //> Stop subsystem
+    if(prcStMess || prcStVal) subStop();
 
     //> Free other resources
     nodeDelAll();
@@ -117,24 +104,9 @@ void TArchiveS::setValPrior( int ivl )	{ mValPrior = vmax(-1,vmin(99,ivl)); modi
 void TArchiveS::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=0,opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //> Load parameters
     setMessBufLen( atoi(TBDS::genDBGet(nodePath()+"MessBufSize",TSYS::int2str(messBufLen())).c_str()) );
@@ -349,13 +321,8 @@ void TArchiveS::subStart( )
 	    }
     }
 
-    //> Start messages interval timer
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_value.tv_sec = messPeriod();
-    itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmIdMess, 0, &itval, NULL);
-
-    //> Start values acquisition task
+    //> Start messages values acquisition task
+    if(!prcStMess) SYS->taskCreate(nodePath('.',true)+".mess", 0, TArchiveS::ArhMessTask, this);
     if(!prcStVal) SYS->taskCreate(nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this);
 
     TSubSYS::subStart( );
@@ -371,20 +338,9 @@ void TArchiveS::subStop( )
 
     vector<string> t_lst, o_lst;
 
-    //> Stop interval timer for periodic thread creating for messages archivation
-    struct itimerspec itval;
-    itval.it_interval.tv_sec = itval.it_interval.tv_nsec =
-	itval.it_value.tv_sec = itval.it_value.tv_nsec = 0;
-    timer_settime(tmIdMess, 0, &itval, NULL);
-    if(TSYS::eventWait( prcStMess, false, nodePath()+"mess_stop",10))
-	throw TError(nodePath().c_str(),_("Archive messages thread is not stopped!"));
-
-    //> Values acquisition task stop
+    //> Messages and Values acquisition task stop
+    if(prcStMess) SYS->taskDestroy(nodePath('.',true)+".mess");
     if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
-
-    //> Last messages archivation call
-    sigval obj; obj.sival_ptr = this;
-    ArhMessTask(obj);
 
     //> Archivators stop
     modList(t_lst);
@@ -630,63 +586,62 @@ void TArchiveS::setActValArch( const string &id, bool val )
 	actUpSrc.erase(actUpSrc.begin()+i_arch);
 }
 
-void TArchiveS::setMessPeriod( int ivl )
+void *TArchiveS::ArhMessTask( void *param )
 {
-    mMessPer = ivl;
-    modif();
-
-    if( subStartStat( ) )
-    {
-	struct itimerspec itval;
-	itval.it_interval.tv_sec = itval.it_value.tv_sec = mMessPer;
-	itval.it_interval.tv_nsec = itval.it_value.tv_nsec = 0;
-	timer_settime(tmIdMess, 0, &itval, NULL);
-    }
-}
-
-void TArchiveS::ArhMessTask( union sigval obj )
-{
-    TArchiveS &arh = *(TArchiveS *)obj.sival_ptr;
-    if( arh.prcStMess )  return;
+    TArchiveS &arh = *(TArchiveS *)param;
     arh.prcStMess = true;
+    bool isLast = false;
 
-    //> Message buffer read
-    if( arh.headLstread != arh.headBuf )
-	try
-	{
-	    ResAlloc res(arh.mRes,false);
-
-	    //>> Get new messages
-	    unsigned new_headLstread = arh.headBuf;
-	    unsigned i_m = arh.headLstread;
-	    vector<TMess::SRec> o_mess;
-	    while( i_m != new_headLstread )
+    //> First wait
+    TSYS::taskSleep(1000000000ll*arh.messPeriod());
+    //> Turns cycle
+    while(true)
+    {
+	if(TSYS::taskEndRun()) isLast = true;
+	//> Message buffer read
+	if(arh.headLstread != arh.headBuf)
+	    try
 	    {
-		o_mess.push_back(arh.mBuf[i_m]);
-		if( ++i_m >= arh.mBuf.size() ) i_m = 0;
+		ResAlloc res(arh.mRes,false);
+
+		//>> Get new messages
+		unsigned new_headLstread = arh.headBuf;
+		unsigned i_m = arh.headLstread;
+		vector<TMess::SRec> o_mess;
+		while(i_m != new_headLstread)
+		{
+		    o_mess.push_back(arh.mBuf[i_m]);
+		    if(++i_m >= arh.mBuf.size()) i_m = 0;
+		}
+		arh.headLstread = new_headLstread;
+
+		res.release();
+
+		//>> Put to archivators
+		vector<string> t_lst, o_lst;
+		arh.modList(t_lst);
+		for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
+		{
+		    arh.at(t_lst[i_t]).at().messList(o_lst);
+		    for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
+			if(arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().startStat())
+			    arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().put(o_mess);
+		}
 	    }
-	    arh.headLstread = new_headLstread;
-
-	    res.release();
-
-	    //>> Put to archivators
-	    vector<string> t_lst, o_lst;
-	    arh.modList(t_lst);
-	    for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
+	    catch(TError err)
 	    {
-		arh.at(t_lst[i_t]).at().messList(o_lst);
-		for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
-		    if(arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().startStat())
-			arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().put(o_mess);
+		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_err(arh.nodePath().c_str(),_("Message buffer read error."));
 	    }
-	}
-	catch(TError err)
-	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(arh.nodePath().c_str(),_("Message buffer read error."));
-	}
+
+	if(isLast) break;
+
+	TSYS::taskSleep(1000000000ll*arh.messPeriod());
+    }
 
     arh.prcStMess = false;
+
+    return NULL;
 }
 
 void *TArchiveS::ArhValTask( void *param )

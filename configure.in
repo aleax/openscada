@@ -46,7 +46,7 @@ AM_SANITY_CHECK
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
-AC_CHECK_HEADERS([time.h signal.h semaphore.h fcntl.h math.h errno.h syslog.h unistd.h dirent.h stdio.h stdarg.h stdlib.h getopt.h dlfcn.h locale.h langinfo.h sys/types.h sys/stat.h sys/time.h sys/utsname.h pthread.h],[],
+AC_CHECK_HEADERS([time.h signal.h semaphore.h fcntl.h math.h errno.h syslog.h unistd.h dirent.h stdio.h stdarg.h stdlib.h dlfcn.h locale.h langinfo.h sys/types.h sys/stat.h sys/time.h sys/utsname.h pthread.h],[],
     [AC_MSG_ERROR(Some GLibC headers not found. Install or check GLibC developing package!)])
 AC_CHECK_HEADERS([string vector map exception typeinfo deque],[],
     [AC_MSG_ERROR([Some standard template libs' STL headers not found. Install or check STL-StdC++ developing package!])])
@@ -296,6 +296,17 @@ AX_MOD_DAQ_EN(Comedi,[enable build module DAQ.Comedi],enable,[],[
 	[AC_MSG_ERROR(Comedilib not found. Install or check Comedilib library package!)])
 ])
 AX_MOD_DAQ_EN(SMH2Gi,[enable build module DAQ.BFN],enable)
+AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,[],[
+    OneWire_CFLAGS="-I${oldincludedir}/owfs"
+    OneWire_LDLAGS="-lowcapi"
+    AC_SUBST(OneWire_CFLAGS)
+    AC_SUBST(OneWire_LDLAGS)
+    AC_CHECK_LIB([owcapi],[OW_init],[],[AC_MSG_ERROR(OWCAPI library is not usable!)])
+    if test $enable_OneWire = incl; then
+	LIB_CORE="${LIB_CORE} ${OneWire_LDLAGS} moduls/daq/OneWire/.libs/*.o "
+	ModsIncl="${ModsIncl}daq_OneWire "
+    fi
+])
 #> Archive modules
 AC_SUBST(ArchSub_mod)
 AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl,[

@@ -21,7 +21,6 @@
  ***************************************************************************/
 
 //!!! System's includings. Add need for your module includings.
-#include <getopt.h>
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -51,7 +50,7 @@
 
 ModTmpl::TTpContr *ModTmpl::mod;  //Pointer for direct access to the module
 
-//!!! Required section for binding OpenSCADA core to this module. It give information and create module root object.
+//!!! Required section for binding OpenSCADA core to this module. It provides information and create module root object.
 //!!! Do not remove this section!
 extern "C"
 {
@@ -61,7 +60,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -122,24 +121,9 @@ string TTpContr::optDescr( )
 void TTpContr::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt = "h";
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind = opterr = 0;
-    do
-    {
-	next_opt = getopt_long(SYS->argc, (char * const *)SYS->argv, short_opt, long_opt, NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout, "%s", optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	fprintf(stdout, "%s", optDescr().c_str());
 }
 
 //!!! Processing virtual function for save Root module to DB
@@ -175,7 +159,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //!!! Constructor for DAQ-subsystem controller object.
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
     ::TController(name_c,daq_db,cfgelem), prcSt(false), callSt(false), endrunReq(false), tmGath(0),
-    m_prior(cfg("PRIOR").getId())
+    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR"))
 {
     cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
@@ -210,10 +194,10 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 void TMdContr::start_( )
 {
     //> Schedule process
-    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Start the gathering data task
-    SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
+    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 //!!! Processing virtual functions for stop DAQ-controller
@@ -261,7 +245,7 @@ void *TMdContr::Task( void *icntr )
 	    { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	cntr.callSt = false;
 	cntr.en_res.resRelease();
-	cntr.tmGath = 1e-3*(TSYS::curTime()-t_cnt);
+	cntr.tmGath = TSYS::curTime()-t_cnt;
 
 	//!!! Wait for next iteration
 	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
@@ -270,6 +254,21 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = false;
 
     return NULL;
+}
+
+//!!! Processing virtual function for OpenSCADA control interface comands
+void TMdContr::cntrCmdProc( XMLNode *opt )
+{
+    //> Get page info
+    if(opt->name() == "info")
+    {
+        TController::cntrCmdProc(opt);
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,3,
+            "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        return;
+    }
+    //> Process command to page
+    TController::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -348,8 +347,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-		  "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }

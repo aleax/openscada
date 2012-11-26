@@ -49,8 +49,8 @@ echo "Program rezult: $?"
 # Core dump file "core" into work directory process
 if [ -f $WorkDir/core -a -n "$(which gdb)" ]; then
     cd $WorkDir
-    echo "Core dump process for back trace purchase to file crash_$ProjName_$(date +%F_%H:%M).txt"
-    gdb @bindir_full@/openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" > crash_$ProjName_$(date +%F_%H:%M).txt
+    echo "Core dump process for back trace purchase to file crash_${ProjName}_$(date +%F_%H:%M).txt"
+    gdb @bindir_full@/openscada --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" > crash_${ProjName}_$(date +%F_%H:%M).txt
     rm -f core
 fi
 

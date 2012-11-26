@@ -21,7 +21,6 @@
 
 #include <sys/times.h>
 #include <sys/time.h>
-#include <getopt.h>
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>

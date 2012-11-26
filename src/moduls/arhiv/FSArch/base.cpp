@@ -23,7 +23,6 @@
 #include <signal.h>
 #include <string.h>
 #include <string>
-#include <getopt.h>
 
 #include <tsys.h>
 #include <resalloc.h>
@@ -170,27 +169,11 @@ string ModArch::optDescr( )
 void ModArch::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt = "h";
-    struct option long_opt[] =
-    {
-        {"help",	0,	NULL,	'h'},
-        {"noArchLimit",	0,	NULL,	'l'},
-        {"copyErrValFiles",0,	NULL,	'c'},
-        {NULL,		0,	NULL,	0  }
-    };
-
-    optind = opterr = 0;
-    do
-    {
-        next_opt = getopt_long(SYS->argc, (char * const *)SYS->argv, short_opt, long_opt, NULL);
-        switch(next_opt)
-        {
-            case 'h': fprintf(stdout, "%s", optDescr().c_str()); break;
-            case 'l': noArchLimit = true;	break;
-            case 'c': copyErrValFiles = true;	break;
-        }
-    } while(next_opt != -1);
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	fprintf(stdout, "%s", optDescr().c_str());
+	else if(argCom == "noArchLimit")	noArchLimit = true;
+	else if(argCom == "copyErrValFiles")	copyErrValFiles = true;
 }
 
 void ModArch::perSYSCall( unsigned int cnt )

@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 //!!! System's includings. Add need for your module includings.
-#include <getopt.h>
 #include <string>
 
 //!!! OpenSCADA module's API includings. Add need for your module includings.

@@ -31,7 +31,6 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <getopt.h>
 #include <stdio.h>
 #include <signal.h>
 #include <stdarg.h>
@@ -105,7 +104,15 @@ TSYS::~TSYS( )
 
     delete Mess;
     pthread_key_delete(sTaskKey);
-}
+
+#if OSC_DEBUG >= 1
+    ResAlloc res(nodeRes(), false);
+    string cntrsStr;
+    for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
+	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
+    printf(_("System counters on exit: %s"),cntrsStr.c_str());
+#endif
+} 
 
 string TSYS::host( )
 {
@@ -329,37 +336,57 @@ string TSYS::optDescr( )
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
+string TSYS::getCmdOpt( int &curPos, string *argVal )
+{
+    size_t fPos;
+    int argI = curPos&0xFF;
+    int argIsh = (curPos>>8)&0xFF;
+    if(argI >= argc) return "";
+    for(int argLen = 0; argI < argc; argI++, argIsh=0)
+    {
+	argLen = strlen(argv[argI]);
+	if(argLen < 2 || argv[argI][0] != '-') continue;
+	//> Check for long: "--var", "--var=val" or "--var val"
+	if(argv[argI][1] == '-')
+	{
+	    curPos = argI+1;
+	    string rez = string(argv[argI]+2);
+	    if((fPos=rez.find("=")) != string::npos)
+	    {
+		if(argVal) *argVal = rez.substr(fPos+1);
+		return rez.substr(0,fPos);
+	    }
+	    if(argVal) *argVal = ((argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
+	    return rez;
+	}
+	//> Check for short: "-v", "-v val", "-abcv" or "-abcv val"
+	else
+	{
+	    if((argIsh+1) >= argLen) continue;
+	    curPos = argI+((argIsh+1)<<8);
+	    if(argVal) *argVal = ((argIsh+2) == argLen && (argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
+	    return string(argv[argI]+argIsh+1,1);
+	}
+    }
+
+    return "";
+}
+
 bool TSYS::cfgFileLoad( )
 {
     bool cmd_help = false;
 
     //================ Load parameters from commandline =========================
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"     ,0,NULL,'h'},
-	{"Config"   ,1,NULL,'f'},
-	{"Station"  ,1,NULL,'s'},
-	{NULL       ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
-	switch(next_opt)
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
+	if(argCom == "h" || argCom == "help")
 	{
-	    case 'h':
-		fprintf(stdout,"%s",optDescr().c_str());
-		Mess->setMessLevel(7);
-		cmd_help = true;
-		break;
-	    case 'f': mConfFile = optarg; break;
-	    case 's': mId = optarg; break;
-	    case -1 : break;
+	    fprintf(stdout,"%s",optDescr().c_str());
+	    Mess->setMessLevel(7);
+	    cmd_help = true;
 	}
-    } while(next_opt != -1);
+	else if(argCom == "Config") 	mConfFile = argVl;
+	else if(argCom == "Station")	mId = argVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
@@ -1268,7 +1295,7 @@ double TSYS::cntrGet( const string &id )
 {
     ResAlloc res( nodeRes(), false );
     map<string,double>::iterator icnt = mCntrs.find(id);
-    if( icnt == mCntrs.end() )	return 0;
+    if(icnt == mCntrs.end())	return 0;
     return icnt->second;
 }
 
@@ -1386,11 +1413,8 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     res.request(true);
     while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask))
     {
-	if(!noSignal)
-	{
-	    if(first) pthread_kill(it->second.thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
-	    pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
-	}
+	if(first) pthread_kill(it->second.thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
+	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
 	res.release();
 
 	time_t c_tm = time(NULL);

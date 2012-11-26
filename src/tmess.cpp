@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <langinfo.h>
-#include <getopt.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
@@ -222,29 +221,16 @@ void TMess::setLang2CodeBase( const string &vl )
 
 void TMess::load()
 {
-    //- Load params from command line -
-    int i,next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"     ,0,NULL,'h'},
-	{"MessLev"  ,1,NULL,'d'},
-	{"log"      ,1,NULL,'l'},
-	{NULL       ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
+    //> Load params from command line
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	return;
+	else if(argCom == "MessLev")
 	{
-	    case 'h': return;
-	    case 'd': i = atoi(optarg); if(i>=0&&i<=7) setMessLevel(i); break;
-	    case 'l': setLogDirect(atoi(optarg)); break;
-	    case -1 : break;
+	    int i = atoi(optarg);
+	    if(i >= 0 && i <= 7) setMessLevel(i);
 	}
-    } while(next_opt != -1);
+	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
 
     //> Load params config-file
     setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));

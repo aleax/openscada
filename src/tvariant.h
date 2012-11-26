@@ -165,7 +165,8 @@ class TEValObj : public TVarObj
 {
     public:
 	//Methods
-	TEValObj( )	{ };
+	TEValObj( );
+	~TEValObj( );
 
 	string objName( )	{ return "EVAL"; }
 
