@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 22:58+0200\n"
+"POT-Creation-Date: 2012-12-01 15:41+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -143,9 +143,6 @@ msgstr "Fehler beim Starten des Wertearchivs '%s'."
 
 msgid "Stop subsystem."
 msgstr "Subsystem anhalten."
-
-msgid "Archive messages thread is not stopped!"
-msgstr "Nachrichtarchiv-Thread ist nicht angehalten!"
 
 #, c-format
 msgid "Value archivator '%s' stop error."
@@ -1083,10 +1080,6 @@ msgstr "Fehler beim Öffnen 'iconv': %s"
 msgid "Error input sequence convert: %s"
 msgstr "Fehler beim Konvertieren der Eingangssequenz: %s"
 
-#, c-format
-msgid "Error converting from %s to %s for message part: '%s'"
-msgstr "Fehler beim Konvertieren aus %s in %s für Nachricht: %s"
-
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
@@ -1494,6 +1487,10 @@ msgid "Empty Station"
 msgstr "Leere Station "
 
 #, c-format
+msgid "System counters on exit: %s"
+msgstr ""
+
+#, c-format
 msgid ""
 "Change work directory to '%s' error: %s. Perhaps current directory already "
 "set correct to '%s'."
@@ -1549,6 +1546,7 @@ msgstr ""
 msgid "B"
 msgstr ""
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2172,9 +2170,8 @@ msgstr "Unfertig Attribut. Pos: %d"
 msgid "Entity error. Pos: %d"
 msgstr "Entity Fehler. Pos: %d"
 
-#, c-format
-msgid "Unknown entity. Pos: %d"
-msgstr "Unbekannte Entität. Pos: %d"
+msgid "Unknown entity '%s'. Pos: %d"
+msgstr "Unbekannte Entität '%s'. Pos: %d"
 
 msgid "Message archive no support!"
 msgstr "Nachrichtarchiv wird nicht unterstützt!"
@@ -2206,11 +2203,5 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
 
-#~ msgid "Value not object!"
-#~ msgstr "Der Wert ist kein Objekt!"
-
-#~ msgid "Variable not object!"
-#~ msgstr "Variable ist kein Objekt"
-
-#~ msgid "Zero object using try!"
-#~ msgstr "Versuch der Benutzung des leeren Objekts"
+#~ msgid "Error converting from %s to %s for message part: '%s'"
+#~ msgstr "Fehler beim Konvertieren aus %s in %s für Nachricht: %s"

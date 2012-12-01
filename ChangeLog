@@ -1,3 +1,21 @@
+2012-12-01 Roman
+- SYS: Generic system high priority task renamed to "SYS_HighPr".
+- FIX:UI.Vision.ElFigure: Multiple edit exit function call is fixed and it is fixed some problems into the primitive.
+    Variable "itemInMotion" set to NULL into edit enter for some cases crash into the primitive prevent.
+    Circle contour gap is fixed for begin and end points seperating.
+    The arc building adaptive step some tested and commented code left.
+    Arc approximation by too short lines will replaced next by curves, which typical, more quality and faster for QT4 vector PainterPath.
+    QPainter::Antialiasing is enabled for lines with width and border more and equal to 2 pixels for some fix low quiality big arc.
+- FIX:UI.Vision: Inner widgets edit border building fixed for inner-widget contains widget-container.
+- !!:FIX:SYS: Adapting to one symbol system charsets support, tested on KOI8-R:
+    - TMess::codeConv() change quiet and for replace wrong symbols to '?'.
+    - TVariant: Userspace object loading (parsing from string) from XML and default charset set from system's charset.
+    - XMLNode: Wrong or no present entity for XLNode parsing cause no converting termination and set symbol '?'.
+    - UI.VCAEngine, UI.Vision: Primitive "Document" converting charset is changed to system charset.
+    - UI.WebCfgD, UI.WebVision: Charset for AJAX requests forced set to UTF-8 and generic codepage set to system charset.
+	Charset for GD's text forced set to UTF-8.
+
+
 2012-11-26 Roman
 - !!!!:SYS, DAQ: Module DAQ.OneWire is added for implement the devices on 1Wire BUS support by different drivers and library
     OWFS (http://owfs.org). For now implemented and tested only temperature sensors DS18B20 by DS9097 serial converter.

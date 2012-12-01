@@ -342,17 +342,17 @@ void TWEB::perSYSCall( unsigned int cnt )
     catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
-string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr )
+string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
 {
     return "HTTP/1.0 "+rcode+"\x0D\x0A"
 	"Server: "+PACKAGE_STRING+"\x0D\x0A"
 	"Accept-Ranges: bytes\x0D\x0A"
 	"Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
 	"Connection: close\x0D\x0A"
-	"Content-Type: "+cnt_tp+"; charset="+Mess->charset()+"\x0D\x0A"+addattr+"\x0D\x0A";
+	"Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"+addattr+"\x0D\x0A";
 }
 
-string TWEB::pgHead( const string &head_els, const string &title )
+string TWEB::pgHead( const string &head_els, const string &title, const string &charset )
 {
     string shead =
 	"<?xml version='1.0' ?>\n"
@@ -360,7 +360,7 @@ string TWEB::pgHead( const string &head_els, const string &title )
 	"'DTD/xhtml1-transitional.dtd'>\n"
 	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
 	"<head>\n"
-	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+	"  <meta http-equiv='Content-Type' content='text/html; charset="+charset+"'/>\n"
 	"  <meta http-equiv='Cache-Control' content='no-store, no-cache, must-revalidate'/>\n"
 	"  <meta http-equiv='Cache-Control' content='post-check=0, pre-check=0'/>\n"
 	"  <meta http-equiv='Content-Script-Type' content='text/javascript'/>\n"
@@ -501,6 +501,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 	    //> Main session page data prepare
 	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
 	    {
+		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//> Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
 		//>> Check for session present
 		if( !ses.prm.size() )
@@ -568,13 +569,14 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
     try
     {
+	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//> Internal data into UTF-8
 	//> To control interface request
 	if( (cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com" )
 	{
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
 	    ses.page = req.save();
-	    page = httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	    page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
 	    return;
 	}
 

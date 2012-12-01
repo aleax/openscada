@@ -552,17 +552,20 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	    }
     }
     //> Check for loaded entities
-    else if(ctx.ent.size())
+    else
     {
 	rpos += 1;
 	unsigned nBeg = rpos;
 	for( ; ctx.vl[rpos] != ';'; rpos++)
 	    if(rpos >= ctx.vl.size()) throw TError("XMLNode",_("Entity error. Pos: %d"),nBeg-1);
-	map<string,string>::iterator ient = ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg));
-	if(ient == ctx.ent.end()) throw TError("XMLNode",_("Unknown entity. Pos: %d"),rpos);
-	rez += ient->second;
+	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg)) : ctx.ent.end();
+	if(ient != ctx.ent.end()) rez += ient->second;
+	else
+	{
+	    rez += '?';
+	    mess_warning("XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,rpos-nBeg).c_str(), rpos);
+	}
     }
-    else throw TError("XMLNode",_("Unknown entity. Pos: %d"),rpos);
 }
 
 

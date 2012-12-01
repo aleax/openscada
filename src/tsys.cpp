@@ -552,7 +552,7 @@ int TSYS::start( )
     cfgFileScan(true);
 
     //> High priority service task creation
-    taskCreate(nodePath('.',true), 20, TSYS::HPrTask, this);
+    taskCreate("SYS_HighPr", 20, TSYS::HPrTask, this);
 
     mess_info(nodePath().c_str(),_("Final starting!"));
 
@@ -598,7 +598,7 @@ int TSYS::start( )
 	}
 
     //> High priority service task stop
-    taskDestroy(nodePath('.',true));
+    taskDestroy("SYS_HighPr");
 
     return mStopSignal;
 }

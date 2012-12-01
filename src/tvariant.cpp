@@ -409,7 +409,7 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
     XMLNode oTree;
     if(!nd)
     {
-	try { oTree.load(str); }
+	try { oTree.load(str, false, Mess->charset()); }
 	catch(TError err) { return prev; }
 	nd = &oTree;
     }
@@ -1110,12 +1110,12 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	    }
 	    close(hd);
 
-	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false), ((prms.size()>=4)?prms[3].getS():string("UTF-8"))); }
+	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
 	    catch(TError err) { return "1:"+err.mess; }
 	}
 	//> Load from string
 	else
-	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getB():false)); }
+	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getB():false), Mess->charset()); }
 	    catch(TError err) { return "1:"+err.mess; }
 	fromXMLNode(nd);
 	return string("0");
@@ -1134,7 +1134,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     {
 	XMLNode nd;
 	toXMLNode(nd);
-	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():string("UTF-8"));
+	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():Mess->charset());
 	//> Save to file
 	if( prms.size() >= 2 )
 	{

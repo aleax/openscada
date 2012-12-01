@@ -1737,8 +1737,8 @@ function perUpdt( )
   {
     var frDoc = this.place.childNodes[0].contentDocument || this.place.childNodes[0].contentWindow || this.place.childNodes[0].document;
     frDoc.open();
-    frDoc.write("<html><head>"+
-		"<style type='text/css'>"+
+    frDoc.write("<html><head>\n"+
+		"<style type='text/css'>\n"+
 		" * { "+this.wFont+" }\n"+
 		" big { font-size: 120%; }\n"+
 		" small { font-size: 90%; }\n"+

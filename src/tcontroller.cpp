@@ -180,8 +180,8 @@ void TController::save_( )
 void TController::start( )
 {
     //> Enable if no enabled
-    if( run_st ) return;
-    if( !en_st ) enable();
+    if(run_st)	return;
+    if(!en_st)	enable();
 
     mess_info(nodePath().c_str(),_("Start controller!"));
 

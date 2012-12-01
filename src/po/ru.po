@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 22:58+0200\n"
+"POT-Creation-Date: 2012-12-01 15:41+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -136,9 +136,6 @@ msgstr "Ошибка запуска архива значений '%s'."
 
 msgid "Stop subsystem."
 msgstr "Останов подсистемы."
-
-msgid "Archive messages thread is not stopped!"
-msgstr "Поток архива сообщений не остановлен!"
 
 #, c-format
 msgid "Value archivator '%s' stop error."
@@ -1069,10 +1066,6 @@ msgstr "Ошибка открытия 'iconv': %s"
 msgid "Error input sequence convert: %s"
 msgstr "Ошибка преобразования входной последовательности: %s"
 
-#, c-format
-msgid "Error converting from %s to %s for message part: '%s'"
-msgstr "Ошибка преобразования из %s в %s для части сообщения: %s"
-
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
@@ -1476,6 +1469,10 @@ msgid "Empty Station"
 msgstr "Пустая станция"
 
 #, c-format
+msgid "System counters on exit: %s"
+msgstr ""
+
+#, c-format
 msgid ""
 "Change work directory to '%s' error: %s. Perhaps current directory already "
 "set correct to '%s'."
@@ -1531,6 +1528,7 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2157,9 +2155,8 @@ msgstr "Незавершённый атрибут. Поз: %d"
 msgid "Entity error. Pos: %d"
 msgstr "Ошибка сущности. Поз: %d"
 
-#, c-format
-msgid "Unknown entity. Pos: %d"
-msgstr "Неизвестная сущность. Поз: %d"
+msgid "Unknown entity '%s'. Pos: %d"
+msgstr "Неизвестная сущность '%s'. Поз: %d"
 
 msgid "Message archive no support!"
 msgstr "Архив сообщений не поддерживается!"
@@ -2190,3 +2187,6 @@ msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport no support!"
 msgstr "Выходных транспорт не поддерживается!"
+
+#~ msgid "Error converting from %s to %s for message part: '%s'"
+#~ msgstr "Ошибка преобразования из %s в %s для части сообщения: %s"

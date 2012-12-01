@@ -79,7 +79,7 @@ void VCASess::getReq( SSess &ses )
 	}
 
 	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->trMessReplace(WebVisionVCA_js)+"\n</SCRIPT>\n"+mod->pgTail();
-	ses.page = mod->httpHead("200 OK",ses.page.size())+ses.page;
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 
 	//>> Cache clear
 	ResAlloc res(nodeRes(),true);
@@ -107,7 +107,7 @@ void VCASess::getReq( SSess &ses )
 	req.childGet(0)->setAttr("per",req.childGet(1)->text());
 
 	ses.page = req.childGet(0)->save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
     }
     //> Attribute get
     else if( wp_com == "attr" )
@@ -118,7 +118,7 @@ void VCASess::getReq( SSess &ses )
 	XMLNode req("get"); req.setAttr("path",ses.url+"/%2fattr%2f"+attr);
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
     }
     //> Widget's (page) full attributes branch request
     else if( wp_com == "attrsBr" )
@@ -128,7 +128,7 @@ void VCASess::getReq( SSess &ses )
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/%2fserv%2fattrBr")->setAttr("tm",(prmEl!=ses.prm.end())?prmEl->second:"0")->
 	    setAttr("FullTree",(prmEl1!=ses.prm.end())?prmEl1->second:"0");
-	mod->cntrIfCmd(req,ses.user);
+	mod->cntrIfCmd(req, ses.user);
 
 	//>> Backend objects' attributes set
 	vector<int> pos;	unsigned cpos = 0;
@@ -161,7 +161,7 @@ void VCASess::getReq( SSess &ses )
 
 	//>> Send request to browser
 	ses.page = req.save();
-	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml")+ses.page;
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
     }
     //> Resources request (images and other files)
     else if( wp_com == "res" )
@@ -5179,8 +5179,9 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
             }
             case 30:	//text
             {
-                if( text_tmpl == req_el->text().c_str() )	break;
-                text_tmpl = req_el->text().c_str();
+		string newText = Mess->codeConvOut("UTF-8", req_el->text());
+                if(text_tmpl == newText)	break;
+                text_tmpl = newText;
                 reform = true;
                 break;
             }
@@ -5438,12 +5439,13 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
 		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
-			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
+			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : 
+							   Mess->codeConvOut("UTF-8",TSYS::strMess(_("%ds"),ttm.tm_sec));
 		    //Milliseconds
 		    else if( hvLev <= 1 || i_h%1000000 )
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-				 (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
-					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
+				 (chLev>=1) ? Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6)) :
+					      Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.));
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    if( lab_tm.size() )
 		    {
@@ -5792,7 +5794,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    int endMarkBrd = tArX+tArW;
 	    if( sclHor&0x2 && mrkHeight )
 	    {
-		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
+		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
                 gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str(), &strex);
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd,markBrd);
@@ -6473,8 +6475,8 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 		XMLNode xproc;
 		try
 		{
-        	    xproc.load(string(XHTML_entity)+req_el->text(),true);
-        	    req_el->setText(xproc.save(XMLNode::Clean));
+        	    xproc.load(string(XHTML_entity)+req_el->text(), true, Mess->charset());
+        	    req_el->setText(xproc.save(XMLNode::Clean, Mess->charset()));
         	}
 		catch(TError err)
     		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),id().c_str(),err.mess.c_str()); }

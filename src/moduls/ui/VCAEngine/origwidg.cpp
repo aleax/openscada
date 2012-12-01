@@ -1331,7 +1331,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	if(!cdoc.empty())
 	{
 	    XMLNode xdoc;
-	    try{ xdoc.load(XHTML_entity+cdoc); } catch(TError err) { }
+	    try{ xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError err) { }
 	    cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
 	}
 	sizeUpdate(sw);
@@ -1552,7 +1552,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     vector<string> als;
 
     //> Parse template
-    try{ xdoc.load(XHTML_entity+tmpl,true); }
+    try{ xdoc.load(XHTML_entity+tmpl, true, Mess->charset()); }
     catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());
@@ -1627,7 +1627,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	"  <P>Building progress:\n"
 	"    <ul id='progress' />\n"
 	"  </P>\n"
-	"</BODY>"),STD_INTERF_TM));
+	"</BODY>"),STD_INTERF_TM), false, Mess->charset());
 
     //> Node proocess
     OrigDocument::nodeProcess( wdg, &xdoc, funcV, funcIO, iLang );
@@ -1637,7 +1637,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 
     xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
-    return xdoc.save();
+    return xdoc.save(0, Mess->charset());
 }
 
 void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel, time_t upTo )
@@ -1668,7 +1668,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		funcV.calc( );
 		//>>> Load result to XML tree
 		XMLNode xproc;
-		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true);
+		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true, Mess->charset());
 		//>>> Set result
 		for(unsigned i_tr = 0; i_tr < xproc.childSize(); i_tr++)
 		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
@@ -1723,7 +1723,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 			progrNode->childGet(progrNode->childSize()-1)->
 			    setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)(rTime-bTime)/(float)(wTime-bTime)));
 			XMLNode *rootN = xcur->root();
-			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save());
+			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0, Mess->charset()));
 		    }
 		}
 		//> Process
@@ -1779,7 +1779,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 			progrNode->childGet(progrNode->childSize()-1)->
 			    setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100*(float)i_r/(float)mess.size()));
 			XMLNode *rootN = xcur->root();
-			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save());
+			wdg->attrAt("doc").at().setS(rootN->childGet(rootN->childSize()-1)->save(0, Mess->charset()));
 		    }
 		}
 

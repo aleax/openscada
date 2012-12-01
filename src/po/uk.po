@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.7.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 22:58+0200\n"
+"POT-Creation-Date: 2012-12-01 15:41+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -136,9 +136,6 @@ msgstr "Помилка запуску архіву значень '%s'."
 
 msgid "Stop subsystem."
 msgstr "Зупинка підсистеми."
-
-msgid "Archive messages thread is not stopped!"
-msgstr "Нитку архівування повідомлень не зупинено!"
 
 #, c-format
 msgid "Value archivator '%s' stop error."
@@ -1066,10 +1063,6 @@ msgstr "Помилка відкриття 'iconv': %s"
 msgid "Error input sequence convert: %s"
 msgstr "Помилка перетворення вхідної послідовності: %s"
 
-#, c-format
-msgid "Error converting from %s to %s for message part: '%s'"
-msgstr "Помилка перетворення з %s до %s для частини повідомлення: %s"
-
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
@@ -1473,6 +1466,10 @@ msgid "Empty Station"
 msgstr "Порожня станція"
 
 #, c-format
+msgid "System counters on exit: %s"
+msgstr ""
+
+#, c-format
 msgid ""
 "Change work directory to '%s' error: %s. Perhaps current directory already "
 "set correct to '%s'."
@@ -1528,6 +1525,7 @@ msgstr "КіБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2153,9 +2151,8 @@ msgstr "Незавершений атрибут. Поз: %d"
 msgid "Entity error. Pos: %d"
 msgstr "Помилка сутності. Поз: %d"
 
-#, c-format
-msgid "Unknown entity. Pos: %d"
-msgstr "Невідома сутність. Поз: %d"
+msgid "Unknown entity '%s'. Pos: %d"
+msgstr "Невідома сутність '%s'. Поз: %d"
 
 msgid "Message archive no support!"
 msgstr "Архів повідомлень не підтримується!"
@@ -2187,11 +2184,5 @@ msgstr "Вхідні транспорти не підтримуються!"
 msgid "Output transport no support!"
 msgstr "Вихідні транспорти не підтримуються!"
 
-#~ msgid "Value not object!"
-#~ msgstr "Значення не є об'єкт!"
-
-#~ msgid "Variable not object!"
-#~ msgstr "Змінна не є об'єкт!"
-
-#~ msgid "Zero object using try!"
-#~ msgstr "Спроба використання порожнього об'єкту!"
+#~ msgid "Error converting from %s to %s for message part: '%s'"
+#~ msgstr "Помилка перетворення з %s до %s для частини повідомлення: %s"
