@@ -1,3 +1,8 @@
+2012-12-07 Roman
+- !:FIX:UI.Vision: Primitive "ElFigure" arc drawing quality is fixed.
+    Arc and other figures drawing code is mostly cleared and make time optimal.
+
+
 2012-12-01 Roman
 - SYS: Generic system high priority task renamed to "SYS_HighPr".
 - FIX:UI.Vision.ElFigure: Multiple edit exit function call is fixed and it is fixed some problems into the primitive.

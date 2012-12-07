@@ -1,8 +1,9 @@
 
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@oscada.org.ua)
- *   			     by Yashina Kseniya (ksu@oscada.org.ua)
+ *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)
+ *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)
+ *                      2012 by Roman Savochenko (rom_as@oscada.org, rom_as@fromru.com)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -1533,7 +1534,7 @@ QPointF ShapeElFigure::getArcStartEnd( QPointF StartMotionPos, QPointF EndMotion
     if( EndMotionPos.y() > 0 )	t_end = 1-t_end;
     if( t_start > t_end ) 		t_end+=1;
     if( (t_end-1) > t_start ) 	t_end-=1;
-    if( fabs(t_start - t_end) < 0.0027777777777 ) t_end+=1;
+    if( fabs(t_start - t_end) < ARC_STEP ) t_end+=1;
     if( t_end > t_start && t_start >= 1 && t_end > 1 )	{ t_start-=1; t_end-=1; }
     return QPointF( t_start, t_end );
 }
@@ -6459,8 +6460,8 @@ int ShapeElFigure::itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeIt
 //- Building the path for the current figure -
 QPainterPath ShapeElFigure::painterPath( float el_width, float el_border_width, int el_type, double el_ang, QPointF el_p1, QPointF el_p2, QPointF el_p3, QPointF el_p4, QPointF el_p5, QPointF el_p6 )
 {
-    double arc_a, arc_b, arc_step, arc_a_small, arc_b_small, t, t_start, t_end;
-    QPointF  CtrlMotionPos_1_temp, CtrlMotionPos_2_temp, EndMotionPos_temp;
+    double arc_a, arc_b, arc_a_small, arc_b_small, t, t_start, t_end;
+    QPointF CtrlMotionPos_1_temp, CtrlMotionPos_2_temp, EndMotionPos_temp, rotArc;
     QPainterPath circlePath;
     circlePath = newPath;
     if( el_width < 1 ) el_width = 1;
@@ -6485,28 +6486,34 @@ QPainterPath ShapeElFigure::painterPath( float el_width, float el_border_width, 
     //-- if arc --
     if( el_type == 2 )
     {
-        arc_a = length( el_p5, el_p3 ) + el_width/2 + el_border_width/2;
-        arc_b = length( el_p3, el_p4 ) + el_width/2 + el_border_width/2;
+	//!!!! RealRound function using removed by painting low quality arcs.
+	// Possible need RealRound apply only to all source points or only to begin and end points.
+        arc_a = length(el_p5, el_p3) + el_width/2 + el_border_width/2;
+        arc_b = length(el_p3, el_p4) + el_width/2 + el_border_width/2;
         arc_a_small = arc_a - el_width - el_border_width;
         arc_b_small = arc_b - el_width - el_border_width;
-        //arc_step = vmax(0.001,atan(0.3/vmax(arc_a,arc_b)));
-        arc_step = 0.00277777777778;
         t_start = el_p6.x();
         t_end = el_p6.y();
-        circlePath.moveTo( TSYS::realRound( el_p3.x() + rotate( arc( t_start, arc_a_small, arc_b_small ), el_ang ).x(), POS_PREC_DIG, true ),
-                           TSYS::realRound( el_p3.y() - rotate( arc( t_start, arc_a_small, arc_b_small ), el_ang ).y(), POS_PREC_DIG, true ) );
-        circlePath.lineTo( TSYS::realRound( el_p3.x() + rotate( arc( t_start, arc_a, arc_b ), el_ang ).x(), POS_PREC_DIG, true ),
-                           TSYS::realRound( el_p3.y() - rotate( arc( t_start, arc_a, arc_b ), el_ang ).y(), POS_PREC_DIG, true ) );
-        for( t = t_start; t < t_end + arc_step; t += arc_step )
-            circlePath.lineTo( QPointF( TSYS::realRound( el_p3.x() + rotate( arc( t, arc_a, arc_b ), el_ang ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( el_p3.y() - rotate( arc( t, arc_a, arc_b ), el_ang ).y(), POS_PREC_DIG, true ) ) );
-        circlePath.lineTo( TSYS::realRound( el_p3.x() + rotate( arc( t_end, arc_a_small, arc_b_small ), el_ang ).x(), POS_PREC_DIG, true ),
-                           TSYS::realRound( el_p3.y() - rotate( arc( t_end, arc_a_small, arc_b_small ), el_ang ).y(), POS_PREC_DIG, true ) );
-        for( t = t_end; t > t_start; t -= arc_step )
-            circlePath.lineTo( QPointF( TSYS::realRound( el_p3.x() + rotate( arc( t, arc_a_small, arc_b_small ), el_ang ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( el_p3.y() - rotate( arc( t, arc_a_small, arc_b_small ), el_ang ).y(), POS_PREC_DIG, true ) ) );
+        rotArc = rotate(arc(t_start,arc_a_small,arc_b_small), el_ang);
+        circlePath.moveTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+        rotArc = rotate(arc(t_start,arc_a,arc_b), el_ang);
+        circlePath.lineTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+        for(t = t_start; true; t += ARC_STEP)
+        {
+	    rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), el_ang);
+            circlePath.lineTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+            if(t >= t_end) break;
+        }
+	rotArc = rotate(arc(t_end,arc_a_small,arc_b_small), el_ang);
+        circlePath.lineTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+        for(t = t_end; true; t -= ARC_STEP)
+        {
+	    rotArc = rotate(arc(vmax(t,t_start),arc_a_small,arc_b_small), el_ang);
+            circlePath.lineTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+            if(t <= t_start) break;
+        }
         circlePath.closeSubpath();
-        circlePath.setFillRule ( Qt::WindingFill );
+        circlePath.setFillRule(Qt::WindingFill);
     }
     //-- if bezier --
     if( el_type == 3 )
@@ -6543,33 +6550,38 @@ QPainterPath ShapeElFigure::painterPathSimple( int el_type, double el_ang, QPoin
     QPainterPath circlePath;
     double t;
     circlePath = newPath;
-    double arc_a, arc_b, arc_step;
-    if( el_type == 1 )
+    double arc_a, arc_b;
+    QPointF rotArc;
+    switch(el_type)
     {
-        circlePath.moveTo( TSYS::realRound( el_p1.x(), POS_PREC_DIG, true ), TSYS::realRound( el_p1.y(), POS_PREC_DIG, true ) );
-        circlePath.lineTo( TSYS::realRound( el_p2.x(), POS_PREC_DIG, true ), TSYS::realRound( el_p2.y(), POS_PREC_DIG, true ) );
+	case 1:
+    	    circlePath.moveTo(TSYS::realRound(el_p1.x(),POS_PREC_DIG,true), TSYS::realRound(el_p1.y(),POS_PREC_DIG,true));
+    	    circlePath.lineTo(TSYS::realRound(el_p2.x(),POS_PREC_DIG,true), TSYS::realRound(el_p2.y(),POS_PREC_DIG,true));
+	    break;
+	case 2:
+	    //!!!! RealRound function using removed by painting low quality arcs.
+    	    // Possible need RealRound apply only to all source points or only to begin and end points.
+    	    arc_a = length(el_p5, el_p3);
+    	    arc_b = length(el_p3, el_p4);
+    	    t_start = el_p6.x();
+    	    t_end = el_p6.y();
+	    rotArc = rotate(arc(t_start,arc_a,arc_b), el_ang);
+    	    circlePath.moveTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+    	    for(t = t_start; true; t += ARC_STEP)
+	    {
+		rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), el_ang);
+        	circlePath.lineTo(el_p3.x()+rotArc.x(), el_p3.y()-rotArc.y());
+		if(t >= t_end) break;
+	    }
+	    break;
+	case 3:
+    	    circlePath.moveTo(TSYS::realRound(el_p1.x(),POS_PREC_DIG,true), TSYS::realRound(el_p1.y(),POS_PREC_DIG,true));
+    	    circlePath.cubicTo(TSYS::realRound(el_p3.x(),POS_PREC_DIG,true), TSYS::realRound(el_p3.y(),POS_PREC_DIG,true),
+                    	       TSYS::realRound(el_p4.x(),POS_PREC_DIG,true), TSYS::realRound(el_p4.y(),POS_PREC_DIG,true),
+                    	       TSYS::realRound(el_p2.x(),POS_PREC_DIG,true), TSYS::realRound(el_p2.y(),POS_PREC_DIG,true));
+	    break;
     }
-    if( el_type == 2 )
-    {
-        arc_a = length( el_p5, el_p3 );
-        arc_b = length( el_p3, el_p4 );
-        //arc_step = vmax(0.001,atan(0.3/vmax(arc_a,arc_b)));
-        arc_step = 0.00277777777778;
-        t_start = el_p6.x();
-        t_end = el_p6.y();
-        circlePath.moveTo( TSYS::realRound( el_p3.x() + rotate( arc( t_start, arc_a, arc_b ), el_ang ).x(), POS_PREC_DIG, true ),
-                           TSYS::realRound( el_p3.y() - rotate( arc( t_start, arc_a, arc_b ), el_ang ).y(), POS_PREC_DIG, true ) );
-        for( t = t_start; t < t_end + arc_step; t += arc_step ) 
-            circlePath.lineTo( TSYS::realRound( el_p3.x() + rotate( arc( t, arc_a, arc_b ), el_ang ).x(), POS_PREC_DIG, true ),
-                               TSYS::realRound( el_p3.y() - rotate( arc( t, arc_a, arc_b ), el_ang ).y(), POS_PREC_DIG, true ) );
-    }
-    if( el_type == 3 )
-    {
-        circlePath.moveTo( TSYS::realRound( el_p1.x(), POS_PREC_DIG, true ), TSYS::realRound( el_p1.y(), POS_PREC_DIG, true ) );
-        circlePath.cubicTo( TSYS::realRound( el_p3.x(), POS_PREC_DIG, true ), TSYS::realRound( el_p3.y(), POS_PREC_DIG, true ), 
-                            TSYS::realRound( el_p4.x(), POS_PREC_DIG, true ), TSYS::realRound( el_p4.y(), POS_PREC_DIG, true ), 
-                            TSYS::realRound( el_p2.x(), POS_PREC_DIG, true ), TSYS::realRound( el_p2.y(), POS_PREC_DIG, true ) );
-    }
+
     return circlePath;
 }
 
@@ -7413,327 +7425,304 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 {
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     QPainterPath path;
+    QPointF rotArc, scRtTmp;
     int flag = -1, in_index = -1;
     bool flag_n1, flag_n2, flag_break;
-    double arc_a, arc_b, arc_step, t_start, t_end, t, ang;
+    double arc_a, arc_b, t_start, t_end, t, ang;
     QLineF line1,line2;
     path = newPath;
-    if( in_fig_num.size() >= 2 || ( in_fig_num.size() == 1 && shapeItems[in_fig_num[0]].type == 2 ) )
+    if(in_fig_num.size() >= 2 || (in_fig_num.size() == 1 && shapeItems[in_fig_num[0]].type == 2))
     {
-        if( shapeItems[in_fig_num[0]].n1 < shapeItems[in_fig_num[0]].n2 )
+	const ShapeItem &curShIt = shapeItems[in_fig_num[0]];
+        if(curShIt.n1 < curShIt.n2)
         {
-            path.moveTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
-            switch( shapeItems[in_fig_num[0]].type )
+	    scRtTmp = scaleRotate(pnts[curShIt.n1],view,flag_scale,flag_rotate);
+            path.moveTo(TSYS::realRound(scRtTmp.x(),POS_PREC_DIG,true), TSYS::realRound(scRtTmp.y(),POS_PREC_DIG,true));
+            switch(curShIt.type)
             {
                 case 1:
-                    path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+		    scRtTmp = scaleRotate(pnts[curShIt.n2], view, flag_scale, flag_rotate);
+                    path.lineTo(TSYS::realRound(scRtTmp.x(),POS_PREC_DIG,true), TSYS::realRound(scRtTmp.y(),POS_PREC_DIG,true));
                     break;
                 case 2:
                 {
-                    if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
-                        || ( !flag_scale && !flag_rotate) )
+                    if((flag_angle_temp && fabs(view->xScale(true)-1) < 0.001 && fabs(view->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
+                        || (!flag_scale && !flag_rotate))
                     {
-                        line2 = QLineF( pnts[shapeItems[in_fig_num[0]].n3].x(),
-                                        pnts[shapeItems[in_fig_num[0]].n3].y(),
-                                        pnts[shapeItems[in_fig_num[0]].n3].x()+10,
-                                        pnts[shapeItems[in_fig_num[0]].n3].y() );
-                        line1 = QLineF( pnts[shapeItems[in_fig_num[0]].n3].x(),
-                                        pnts[shapeItems[in_fig_num[0]].n3].y(),
-                                        pnts[shapeItems[in_fig_num[0]].n5].x(),
-                                        pnts[shapeItems[in_fig_num[0]].n5].y() );
-                        if( pnts[shapeItems[in_fig_num[0]].n5].y() <= pnts[shapeItems[in_fig_num[0]].n3].y() ) 
-                            ang = angle( line1, line2 );
-                        else ang = 360 - angle( line1, line2 );
+                        line2 = QLineF(pnts[curShIt.n3], QPointF(pnts[curShIt.n3].x()+10,pnts[curShIt.n3].y()));
+                        line1 = QLineF(pnts[curShIt.n3], pnts[curShIt.n5]);
+                        ang = angle(line1, line2);
+                        if(pnts[curShIt.n5].y() > pnts[curShIt.n3].y()) ang = 360-ang;
                     }
-                    else ang = shapeItems[in_fig_num[0]].angle_temp;
-                    ang += shapeItems[in_fig_num[0]].ang_t;
+                    else ang = curShIt.angle_temp;
+                    ang += curShIt.ang_t;
 
-                    if( !flag_scale && !flag_rotate )
+		    //!!!! RealRound function using removed by painting low quality arcs.
+    		    // Possible need RealRound apply only to all source points or only to begin and end points.
+                    if(!flag_scale && !flag_rotate)
                     {
-                        arc_a = length( pnts[shapeItems[in_fig_num[0]].n3], pnts[shapeItems[in_fig_num[0]].n5] );
-                        arc_b = length( pnts[shapeItems[in_fig_num[0]].n3], QPointF( TSYS::realRound( pnts[shapeItems[in_fig_num[0]].n4].x(), POS_PREC_DIG ),
-                                    TSYS::realRound( pnts[shapeItems[in_fig_num[0]].n4].y(), POS_PREC_DIG ) ) );
+                        arc_a = length(pnts[curShIt.n3], pnts[curShIt.n5]);
+                        arc_b = length(pnts[curShIt.n3], pnts[curShIt.n4]);
                     }
                     else
                     {
-                        arc_a = length( QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() ),
-                                        QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate ).y() ) );
-                        arc_b = length( QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() ),
-                                        QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).y() ) );
+                        arc_a = length(scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate), scaleRotate(pnts[curShIt.n5],view,flag_scale,flag_rotate));
+                        arc_b = length(scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate), scaleRotate(pnts[curShIt.n4],view,flag_scale,flag_rotate));
                     }
-                    //arc_step = vmax(0.001,atan(0.3/vmax(arc_a,arc_b)));
-                    arc_step = 0.00277777777778;
-                    t_start = shapeItems[in_fig_num[0]].ctrlPos4.x();
-                    t_end = shapeItems[in_fig_num[0]].ctrlPos4.y();
-                    for( t = t_start; t <= t_end+arc_step; t += arc_step)
-                        path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
-                                    TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) );
+                    t_start = curShIt.ctrlPos4.x();
+                    t_end = curShIt.ctrlPos4.y();
+                    for(t = t_start; true; t += ARC_STEP)
+                    {
+                	scRtTmp = scaleRotate(pnts[curShIt.n3], view, flag_scale, flag_rotate);
+                	rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+                        path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+                        if(t >= t_end) break;
+		    }
                     break;
                 }
                 case 3:
-                    path.cubicTo( TSYS::realRound( scaleRotate(pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+                {
+		    QPointF scRtN2 = scaleRotate(pnts[curShIt.n2], view, flag_scale, flag_rotate),
+			    scRtN3 = scaleRotate(pnts[curShIt.n3], view, flag_scale, flag_rotate),
+			    scRtN4 = scaleRotate(pnts[curShIt.n4], view, flag_scale, flag_rotate);
+                    path.cubicTo(TSYS::realRound(scRtN3.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN3.y(),POS_PREC_DIG,true),
+                                 TSYS::realRound(scRtN4.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN4.y(),POS_PREC_DIG,true),
+                                 TSYS::realRound(scRtN2.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN2.y(),POS_PREC_DIG,true));
                     break;
+                }
             }
             flag_n2 = true;
             flag_n1 = false;
         }
         else
         {
-            path.moveTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
-            switch( shapeItems[in_fig_num[0]].type )
+	    scRtTmp = scaleRotate(pnts[curShIt.n2], view, flag_scale, flag_rotate);
+            path.moveTo(TSYS::realRound(scRtTmp.x(),POS_PREC_DIG,true), TSYS::realRound(scRtTmp.y(),POS_PREC_DIG,true));
+            switch(curShIt.type)
             {
                 case 1:
-                    path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+		    scRtTmp = scaleRotate(pnts[curShIt.n1], view, flag_scale, flag_rotate);
+                    path.lineTo(TSYS::realRound(scRtTmp.x(),POS_PREC_DIG,true), TSYS::realRound(scRtTmp.y(),POS_PREC_DIG,true));
                     break;
                 case 2:
                 {
-                    if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
-                        || ( !flag_scale && !flag_rotate) )
+                    if((flag_angle_temp && fabs(view->xScale(true)-1) < 0.001 && fabs(view->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
+                        || (!flag_scale && !flag_rotate))
                     {
-                        line2 = QLineF( scaleRotate(QPointF(pnts[shapeItems[in_fig_num[0]].n3].x(),
-                                        pnts[shapeItems[in_fig_num[0]].n3].y()), view, flag_scale, flag_rotate ),
-                                        scaleRotate(QPointF(pnts[shapeItems[in_fig_num[0]].n3].x()+10,
-                                                pnts[shapeItems[in_fig_num[0]].n3].y()), view, flag_scale, flag_rotate ) );
-                        line1 = QLineF( scaleRotate(QPointF(pnts[shapeItems[in_fig_num[0]].n3].x(),
-                                        pnts[shapeItems[in_fig_num[0]].n3].y()), view, flag_scale, flag_rotate ),
-                                        scaleRotate(QPointF(pnts[shapeItems[in_fig_num[0]].n5].x(),
-                                                pnts[shapeItems[in_fig_num[0]].n5].y()), view, flag_scale, flag_rotate) );
-                        if( scaleRotate(pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate).y() <= scaleRotate(pnts[shapeItems[in_fig_num[0]].n3],view, flag_scale, flag_rotate).y() ) 
-                            ang = angle( line1, line2 );
-                        else ang = 360 - angle( line1, line2 );
+                        line2 = QLineF(scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate),
+                                       scaleRotate(QPointF(pnts[curShIt.n3].x()+10,pnts[curShIt.n3].y()),view,flag_scale,flag_rotate));
+                        line1 = QLineF(scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate),
+                                       scaleRotate(pnts[curShIt.n5],view,flag_scale,flag_rotate));
+                        ang = angle(line1, line2);
+                        if(scaleRotate(pnts[curShIt.n5],view,flag_scale,flag_rotate).y() > scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate).y())
+                    	    ang = 360 - ang;
                     }
-                    else ang = shapeItems[in_fig_num[0]].angle_temp;
-                    ang += shapeItems[in_fig_num[0]].ang_t;
+                    else ang = curShIt.angle_temp;
+                    ang += curShIt.ang_t;
 
-                    if( !flag_scale && !flag_rotate )
+		    //!!!! RealRound function using removed by painting low quality arcs.
+    		    // Possible need RealRound apply only to all source points or only to begin and end points.
+                    if(!flag_scale && !flag_rotate)
                     {
-                        arc_a = length( pnts[shapeItems[in_fig_num[0]].n3], pnts[shapeItems[in_fig_num[0]].n5] );
-                        arc_b = length( pnts[shapeItems[in_fig_num[0]].n3], QPointF( TSYS::realRound( pnts[shapeItems[in_fig_num[0]].n4].x(), POS_PREC_DIG ),
-                                    TSYS::realRound( pnts[shapeItems[in_fig_num[0]].n4].y(), POS_PREC_DIG ) ) );
+                        arc_a = length(pnts[curShIt.n3], pnts[curShIt.n5]);
+                        arc_b = length(pnts[curShIt.n3], pnts[curShIt.n4]);
                     }
                     else
                     {
-                        arc_a = length( QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() ),
-                                        QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n5], view, flag_scale, flag_rotate ).y() ) );
-                        arc_b = length( QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() ),
-                                        QPointF( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).x(),
-                                                scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).y() ) );
+                        arc_a = length(scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate), scaleRotate(pnts[curShIt.n5],view,flag_scale,flag_rotate));
+                        arc_b = length(scaleRotate(pnts[curShIt.n3],view,flag_scale,flag_rotate), scaleRotate(pnts[curShIt.n4],view,flag_scale,flag_rotate));
                     }
-                    //arc_step = vmax(0.001,atan(0.3/vmax(arc_a,arc_b)));
-                    arc_step = 0.00277777777778;
-                    t_start = shapeItems[in_fig_num[0]].ctrlPos4.x();
-                    t_end = shapeItems[in_fig_num[0]].ctrlPos4.y();
-                    for( t = t_end; t >= t_start-arc_step; t -= arc_step)
-                        path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
-                                    TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) );
+                    t_start = curShIt.ctrlPos4.x();
+                    t_end = curShIt.ctrlPos4.y();
+                    for(t = t_end; true; t -= ARC_STEP)
+                    {
+                	scRtTmp = scaleRotate(pnts[curShIt.n3], view, flag_scale, flag_rotate);
+                	rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
+                        path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+                        if(t <= t_start) break;
+                    }
                     break;
                 }
                 case 3:
-                    path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n4], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                TSYS::realRound( scaleRotate( pnts[shapeItems[in_fig_num[0]].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+                {
+		    QPointF scRtN1 = scaleRotate(pnts[curShIt.n1], view, flag_scale, flag_rotate),
+			    scRtN3 = scaleRotate(pnts[curShIt.n3], view, flag_scale, flag_rotate),
+			    scRtN4 = scaleRotate(pnts[curShIt.n4], view, flag_scale, flag_rotate);
+                    path.cubicTo(TSYS::realRound(scRtN4.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN4.y(),POS_PREC_DIG,true),
+                                 TSYS::realRound(scRtN3.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN3.y(),POS_PREC_DIG,true),
+                                 TSYS::realRound(scRtN1.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN1.y(),POS_PREC_DIG,true));
                     break;
+                }
             }
             flag_n2 = false;
             flag_n1 = true;
         }
-        int k = 0;
-        for( int i = 0; i < in_fig_num.size()-1; i++ )
+        for(int i = 0, k = 0; i < (in_fig_num.size()-1); i++)
         {
-            if( flag_n2 )
+            if(flag_n2)
             {
                 flag_break = false;
-                for( int j = 0; j < in_fig_num.size(); j++ )
+                for(int j = 0; j < in_fig_num.size(); j++)
                 {
-                    if( (k != j) && ( shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n1 ) )
+                    if((k != j) && (shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n1))
                     {
                         flag = 1;
                         in_index = in_fig_num[j];
                         k = j;
                         flag_break = true;
                     }
-                    if( flag_break ) break;
-                    if( (k != j) && ( shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n2 ) )
+                    if(flag_break) break;
+                    if((k != j) && ( shapeItems[in_fig_num[k]].n2 == shapeItems[in_fig_num[j]].n2))
                     {
                         flag = 2;
                         in_index = in_fig_num[j];
                         k = j;
                         flag_break = true;
                     }
-                    if( flag_break ) break;
+                    if(flag_break) break;
                 }
             }
-            if( flag_n1 )
+            if(flag_n1)
             {
                 flag_break = false;
-                for( int j = 0; j < in_fig_num.size(); j++ )
+                for(int j = 0; j < in_fig_num.size(); j++)
                 {
-                    if( (k != j) && ( shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n1 ) )
+                    if((k != j) && (shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n1))
                     {
                         flag = 1;
                         in_index = in_fig_num[j];
                         k = j;
                         flag_break = true;
                     }
-                    if( flag_break ) break;
-                    if( (k != j) && ( shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n2 ) )
+                    if(flag_break) break;
+                    if((k != j) && (shapeItems[in_fig_num[k]].n1 == shapeItems[in_fig_num[j]].n2))
                     {
                         flag = 2;
                         in_index = in_fig_num[j];
                         k = j;
                         flag_break = true;
                     }
-                    if( flag_break ) break;
+                    if(flag_break) break;
                 }
             }
-            switch( flag )
+	    const ShapeItem &inShIt = shapeItems[in_index];
+            switch(flag)
             {
                 case 1:
-                    switch( shapeItems[in_index].type )
+                    switch(inShIt.type)
                     {
                         case 1:
-                            path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n2], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+			    scRtTmp = scaleRotate(pnts[inShIt.n2], view, flag_scale, flag_rotate);
+                            path.lineTo(TSYS::realRound(scRtTmp.x(),POS_PREC_DIG,true), TSYS::realRound(scRtTmp.y(),POS_PREC_DIG,true));
                             break;
                         case 2:
                         {
-                            if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
-                                || ( !flag_scale && !flag_rotate) )
+                            if((flag_angle_temp && fabs(view->xScale(true)-1) < 0.001 && fabs(view->yScale(true)-1) < 0.001 && fabs(elFD->orient) < 0.001)
+                                || (!flag_scale && !flag_rotate))
                             {
-                                line2 = QLineF( pnts[shapeItems[in_index].n3].x(),
-                                                pnts[shapeItems[in_index].n3].y(),
-                                                pnts[shapeItems[in_index].n3].x()+10,  
-                                                pnts[shapeItems[in_index].n3].y() );
-                                line1 = QLineF( pnts[shapeItems[in_index].n3].x(),
-                                                pnts[shapeItems[in_index].n3].y(),
-                                                pnts[shapeItems[in_index].n5].x(),
-                                                pnts[shapeItems[in_index].n5].y() );
-                                if( pnts[shapeItems[in_index].n5].y() <= pnts[shapeItems[in_index].n3].y() ) 
-                                    ang = angle( line1, line2 );
-                                else ang = 360 - angle( line1, line2 );
+                                line2 = QLineF(pnts[inShIt.n3], QPointF(pnts[inShIt.n3].x()+10,pnts[inShIt.n3].y()));
+                                line1 = QLineF(pnts[inShIt.n3], pnts[inShIt.n5]);
+                                ang = angle(line1, line2);
+                                if(pnts[inShIt.n5].y() > pnts[inShIt.n3].y()) ang = 360 - ang;
                             }
-                            else ang = shapeItems[in_index].angle_temp;
-                            ang += shapeItems[in_index].ang_t;
+                            else ang = inShIt.angle_temp;
+                            ang += inShIt.ang_t;
 
-                            if( !flag_scale && !flag_rotate )
+			    //!!!! RealRound function using removed by painting low quality arcs.
+    			    // Possible need RealRound apply only to all source points or only to begin and end points.
+                            if(!flag_scale && !flag_rotate )
                             {
-                                arc_a = length( pnts[shapeItems[in_index].n3], pnts[shapeItems[in_index].n5] );
-                                arc_b = length( pnts[shapeItems[in_index].n3], QPointF(TSYS::realRound( pnts[shapeItems[in_index].n4].x(), POS_PREC_DIG ),
-                                            TSYS::realRound( pnts[shapeItems[in_index].n4].y(), POS_PREC_DIG ) ) );
+                                arc_a = length(pnts[inShIt.n3], pnts[inShIt.n5]);
+                                arc_b = length(pnts[inShIt.n3], pnts[inShIt.n4]);
                             }
                             else
                             {
-                                arc_a = length( QPointF( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() ),
-                                                QPointF( scaleRotate( pnts[shapeItems[in_index].n5], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n5], view, flag_scale, flag_rotate ).y() ) );
-                                arc_b = length( QPointF( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() ),
-                                                QPointF( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y() ) );
+                                arc_a = length(scaleRotate(pnts[inShIt.n3],view,flag_scale,flag_rotate),
+                            		       scaleRotate(pnts[inShIt.n5],view,flag_scale,flag_rotate));
+                                arc_b = length(scaleRotate(pnts[inShIt.n3],view,flag_scale,flag_rotate),
+                            		       scaleRotate(pnts[inShIt.n4],view,flag_scale,flag_rotate));
                             }
-			    //arc_step = vmax(0.001,atan(0.3/vmax(arc_a,arc_b)));
-			    arc_step = 0.00277777777778;
-                            t_start = shapeItems[in_index].ctrlPos4.x();
-                            t_end = shapeItems[in_index].ctrlPos4.y();
-                            for( t = t_start; t <= t_end+arc_step; t += arc_step ) 
-                                path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
-                                            TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) ); 
+                            t_start = inShIt.ctrlPos4.x();
+                            t_end = inShIt.ctrlPos4.y();
+                            for(t = t_start; true; t += ARC_STEP)
+                            {
+                		scRtTmp = scaleRotate(pnts[inShIt.n3], view, flag_scale, flag_rotate);
+                		rotArc = rotate(arc(vmin(t,t_end),arc_a,arc_b), ang);
+                                path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+                                if(t >= t_end) break;
+                            }
                             break;
                         }
                         case 3:
-                            path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n2], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n2], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+                        {
+			    QPointF scRtN2 = scaleRotate(pnts[inShIt.n2], view, flag_scale, flag_rotate),
+				    scRtN3 = scaleRotate(pnts[inShIt.n3], view, flag_scale, flag_rotate),
+				    scRtN4 = scaleRotate(pnts[inShIt.n4], view, flag_scale, flag_rotate);
+                            path.cubicTo(TSYS::realRound(scRtN3.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN3.y(),POS_PREC_DIG,true),
+                                         TSYS::realRound(scRtN4.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN4.y(),POS_PREC_DIG,true),
+                                         TSYS::realRound(scRtN2.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN2.y(),POS_PREC_DIG,true));
                             break;
+                        }
                     }
                     flag_n2 = true;
                     flag_n1 = false;
                     break;
                 case 2:
-                    switch( shapeItems[in_index].type )
+                    switch(inShIt.type)
                     {
                         case 1:
-                            path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+			    scRtTmp = scaleRotate(pnts[inShIt.n1], view, flag_scale, flag_rotate);
+                            path.lineTo(TSYS::realRound(scRtTmp.x(),POS_PREC_DIG,true), TSYS::realRound(scRtTmp.y(),POS_PREC_DIG,true));
                             break;
                         case 2:
                         {
                             if( (flag_angle_temp &&  fabs(view->xScale(true) - 1) < 0.001 && fabs(view->yScale(true) - 1) < 0.001 && fabs(elFD->orient - 0) < 0.001)
                                 || ( !flag_scale && !flag_rotate) )
                             {
-                                line2 = QLineF( pnts[shapeItems[in_index].n3].x(),
-                                                pnts[shapeItems[in_index].n3].y(),
-                                                pnts[shapeItems[in_index].n3].x()+10,
-                                                pnts[shapeItems[in_index].n3].y() );
-                                line1 = QLineF( pnts[shapeItems[in_index].n3].x(),
-                                                pnts[shapeItems[in_index].n3].y(),
-                                                pnts[shapeItems[in_index].n5].x(),
-                                                pnts[shapeItems[in_index].n5].y() );
-                                if( pnts[shapeItems[in_index].n5].y() <= pnts[shapeItems[in_index].n3].y() ) 
-                                    ang = angle( line1, line2 );
-                                else ang = 360 - angle( line1, line2 );
+                                line2 = QLineF(pnts[inShIt.n3], QPointF(pnts[inShIt.n3].x()+10,pnts[inShIt.n3].y()));
+                                line1 = QLineF(pnts[inShIt.n3], pnts[inShIt.n5]);
+                                ang = angle(line1, line2);
+                                if(pnts[inShIt.n5].y() > pnts[inShIt.n3].y()) ang = 360 - ang;
                             }
-                            else ang = shapeItems[in_index].angle_temp;
-                            ang += shapeItems[in_index].ang_t;
+                            else ang = inShIt.angle_temp;
+                            ang += inShIt.ang_t;
 
-                            if( !flag_scale && !flag_rotate )
+			    //!!!! RealRound function using removed by painting low quality arcs.
+    			    // Possible need RealRound apply only to all source points or only to begin and end points.
+                            if(!flag_scale && !flag_rotate)
                             {
-                                arc_a = length( pnts[shapeItems[in_index].n3], pnts[shapeItems[in_index].n5] );
-                                arc_b = length( pnts[shapeItems[in_index].n3], QPointF( TSYS::realRound( pnts[shapeItems[in_index].n4].x(),POS_PREC_DIG),
-                                            TSYS::realRound(pnts[shapeItems[in_index].n4].y(), POS_PREC_DIG ) ) );
+                                arc_a = length(pnts[inShIt.n3], pnts[inShIt.n5]);
+                                arc_b = length(pnts[inShIt.n3], pnts[inShIt.n4]);
                             }
                             else
                             {
-                                arc_a = length( QPointF( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() ),
-                                                QPointF( scaleRotate( pnts[shapeItems[in_index].n5], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n5], view, flag_scale, flag_rotate).y() ) );
-                                arc_b = length( QPointF( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() ),
-                                                QPointF( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(),
-                                                        scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y() ) );
+                                arc_a = length(scaleRotate(pnts[inShIt.n3],view,flag_scale,flag_rotate),
+                                               scaleRotate(pnts[inShIt.n5],view,flag_scale,flag_rotate));
+                                arc_b = length(scaleRotate(pnts[inShIt.n3],view,flag_scale,flag_rotate),
+                                               scaleRotate(pnts[inShIt.n4],view,flag_scale,flag_rotate));
                             }
 
-                            t_start = shapeItems[in_index].ctrlPos4.x();
-                            t_end = shapeItems[in_index].ctrlPos4.y();
-                            //arc_step = vmax(0.001,atan(0.3/vmax(arc_a,arc_b)));
-                            arc_step = 0.00277777777778;
-                            for( t = t_end; t >= t_start-arc_step; t -= arc_step ) 
-                                path.lineTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x() + rotate( arc( t, arc_a, arc_b ), ang ).x(), POS_PREC_DIG, true ),
-                                            TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y() - rotate( arc( t, arc_a, arc_b ), ang ).y(), POS_PREC_DIG, true ) ); 
+                            t_start = inShIt.ctrlPos4.x();
+                            t_end = inShIt.ctrlPos4.y();
+                            for(t = t_end; true; t -= ARC_STEP)
+                            {
+                		scRtTmp = scaleRotate(pnts[inShIt.n3], view, flag_scale, flag_rotate);
+                		rotArc = rotate(arc(vmax(t,t_start),arc_a,arc_b), ang);
+                                path.lineTo(scRtTmp.x()+rotArc.x(), scRtTmp.y()-rotArc.y());
+                                if(t <= t_start) break;
+                            }
                             break;
                         }
                         case 3:
-                            path.cubicTo( TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n4], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n3], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).x(), POS_PREC_DIG, true ),
-                                        TSYS::realRound( scaleRotate( pnts[shapeItems[in_index].n1], view, flag_scale, flag_rotate ).y(), POS_PREC_DIG, true ) );
+			{
+			    QPointF scRtN1 = scaleRotate(pnts[inShIt.n1], view, flag_scale, flag_rotate),
+				    scRtN3 = scaleRotate(pnts[inShIt.n3], view, flag_scale, flag_rotate),
+				    scRtN4 = scaleRotate(pnts[inShIt.n4], view, flag_scale, flag_rotate);
+                            path.cubicTo(TSYS::realRound(scRtN4.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN4.y(),POS_PREC_DIG,true),
+                                         TSYS::realRound(scRtN3.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN3.y(),POS_PREC_DIG,true),
+                                         TSYS::realRound(scRtN1.x(),POS_PREC_DIG,true), TSYS::realRound(scRtN1.y(),POS_PREC_DIG,true));
                             break;
+                        }
                     }
                     flag_n2 = false;
                     flag_n1 = true;
