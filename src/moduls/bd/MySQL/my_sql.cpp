@@ -752,16 +752,16 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 
 string MTable::getVal( TCfg &cfg )
 {
-    switch( cfg.fld().type() )
+    switch(cfg.fld().type())
     {
 	case TFld::String:	return cfg.getS();
 	case TFld::Integer:
-	    if( cfg.fld().flg()&TFld::DateTimeDec )	return UTCtoSQL(cfg.getI());
+	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
 	    else		return SYS->int2str(cfg.getI());
 	case TFld::Real:
 	{
 	    double vl = cfg.getR();
-	    if( vl == EVAL_REAL ) return SYS->real2str(EVAL_REAL_MYSQL);
+	    if(vl == EVAL_REAL)	return SYS->real2str(EVAL_REAL_MYSQL);
 	    return SYS->real2str(vl);
 	}
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());

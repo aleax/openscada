@@ -857,11 +857,11 @@ void MTable::fieldFix( TConfig &cfg )
 
 string MTable::getVal( TCfg &cfg )
 {
-    switch( cfg.fld().type() )
+    switch(cfg.fld().type())
     {
-	case TFld::String:	return cfg.getS();
+	case TFld::String:	return (cfg.fld().len() > 0) ? cfg.getS().substr(0,cfg.fld().len()) : cfg.getS();
 	case TFld::Integer:
-	    if( cfg.fld().flg()&TFld::DateTimeDec )	return UTCtoSQL(cfg.getI());
+	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
 	    else		return SYS->int2str(cfg.getI());
 	case TFld::Real:	return SYS->real2str(cfg.getR());
 	case TFld::Boolean:	return SYS->int2str(cfg.getB());
