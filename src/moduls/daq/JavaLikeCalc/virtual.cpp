@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include <signal.h>
-#include <getopt.h>
 #include <sys/time.h>
 #include <sys/times.h>
 

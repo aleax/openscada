@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <langinfo.h>
-#include <getopt.h>
 #include <stdlib.h>
 #include <locale.h>
 #include <string.h>
@@ -164,11 +163,11 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     string buf;
     buf.reserve(mess.size());
     char   *ibuf, outbuf[1000], *obuf;
-    size_t ilen, olen;
+    size_t ilen, olen, chwrcnt = 0;
     iconv_t hd;
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
-    if( hd == (iconv_t)(-1) )
+    if(hd == (iconv_t)(-1))
     {
 	mess_crit("IConv",_("Error 'iconv' open: %s"),strerror(errno));
 	return mess;
@@ -181,19 +180,21 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     {
 	obuf = outbuf;
 	olen = sizeof(outbuf)-1;
-	size_t rez = iconv(hd,&ibuf,&ilen,&obuf,&olen);
-	if( rez == (size_t)(-1) && errno != E2BIG )
+	size_t rez = iconv(hd, &ibuf, &ilen, &obuf, &olen);
+	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF))
 	{
-	    mess_crit("IConv",_("Error input sequence convert: %s"),strerror(errno));
-	    mess_debug("IConv",_("Error converting from %s to %s for message part: '%s'"),
-		fromCH.c_str(),toCH.c_str(),mess.substr(vmax((int)mess.size()-(int)ilen-10,0),20).c_str());
+	    mess_crit("IConv", _("Error input sequence convert: %s"), strerror(errno));
 	    buf = mess;
 	    break;
 	}
-	if( obuf > outbuf )
-	    buf.append(outbuf,obuf-outbuf);
+	if(obuf > outbuf) buf.append(outbuf, obuf-outbuf);
+	if(rez == (size_t)(-1) && errno == EILSEQ) { buf += '?'; ilen--; ibuf++; chwrcnt++; }
     }
     iconv_close(hd);
+
+    //> Deadlock possible on the error message print
+    //if(chwrcnt)	mess_err("IConv", _("Error converting %d symbols from '%s' to '%s' for message part: '%s'(%d)"),
+    //		    chwrcnt, fromCH.c_str(), toCH.c_str(), mess.substr(0,20).c_str(), mess.size());
 
     return buf;
 #else
@@ -222,29 +223,16 @@ void TMess::setLang2CodeBase( const string &vl )
 
 void TMess::load()
 {
-    //- Load params from command line -
-    int i,next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"     ,0,NULL,'h'},
-	{"MessLev"  ,1,NULL,'d'},
-	{"log"      ,1,NULL,'l'},
-	{NULL       ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
+    //> Load params from command line
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	return;
+	else if(argCom == "MessLev")
 	{
-	    case 'h': return;
-	    case 'd': i = atoi(optarg); if(i>=0&&i<=7) setMessLevel(i); break;
-	    case 'l': setLogDirect(atoi(optarg)); break;
-	    case -1 : break;
+	    int i = atoi(optarg);
+	    if(i >= 0 && i <= 7) setMessLevel(i);
 	}
-    } while(next_opt != -1);
+	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
 
     //> Load params config-file
     setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));

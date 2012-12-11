@@ -3326,7 +3326,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	//> Process source document
 	//>> Parse document
 	XMLNode xproc;
-	try{ if(!shD->doc.empty()) xproc.load(string(XHTML_entity)+shD->doc,true); }
+	try{ if(!shD->doc.empty()) xproc.load(string(XHTML_entity)+shD->doc, true, Mess->charset()); }
 	catch( TError err )
 	{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),w->id().c_str(),err.mess.c_str()); }
 
@@ -3342,7 +3342,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
 	    "  <style type='text/css'>\n"+shD->style+"</style>\n"
 	    "</head>\n"+
-	    xproc.save(XMLNode::Clean)+
+	    xproc.save(XMLNode::Clean, Mess->charset())+
 	    "</html>").c_str());
 
 	shD->web->verticalScrollBar()->setValue(scrollPos);

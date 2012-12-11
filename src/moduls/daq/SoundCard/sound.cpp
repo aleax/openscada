@@ -121,7 +121,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 
 TMdContr::~TMdContr()
 {
-
+    nodeDelAll();
 }
 
 TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }

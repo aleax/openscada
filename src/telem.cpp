@@ -42,13 +42,13 @@ TElem::~TElem( )
 
 int TElem::fldAdd( TFld *fld, int id )
 {
-    ResAlloc res( mResEl, false );
+    ResAlloc res(mResEl, false);
     //> Find dublicates
     for(unsigned i_f = 0; i_f < elem.size(); i_f++)
 	if(elem[i_f]->name() == fld->name())
 	{ delete fld; return i_f; }
-    if(id > (int)elem.size() || id < 0) id = elem.size();
     res.request(true);
+    if(id > (int)elem.size() || id < 0) id = elem.size();
     elem.insert(elem.begin()+id,fld);
     //> Add value and set them default
     res.request(false);
@@ -60,8 +60,9 @@ int TElem::fldAdd( TFld *fld, int id )
 
 void TElem::fldDel( unsigned int id )
 {
-    ResAlloc res(mResEl, false);
+    ResAlloc res(mResEl, true);
     if(id >= elem.size()) throw TError("Elem",_("Id error!"));
+    res.request(false);
     for(unsigned cfg_i = 0; cfg_i < cont.size(); cfg_i++)
 	cont[cfg_i]->delFld(this, id);
     res.request(true);

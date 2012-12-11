@@ -251,7 +251,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     if(fld.flg()&TCfg::Hide)	mView = false;
 }
 
-TCfg::~TCfg(  )
+TCfg::~TCfg( )
 {
     if(mFld->flg()&TFld::SelfFld)	delete mFld;
 }

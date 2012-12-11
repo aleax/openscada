@@ -2256,6 +2256,7 @@ void DevelWdgView::setEdit( bool vl )
 
     if(vl)
     {
+	if(editWdg) mess_err(id().c_str(),_("Warning! Edit widget already set."));
 	editWdg = this;
 	if(shape->isEditable()) shape->editEnter(this);
 	//> Raise top included editable widget
@@ -2273,7 +2274,7 @@ void DevelWdgView::setEdit( bool vl )
 	for(int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++)
 	    mainWin()->wdgToolView->actions().at(i_a)->setEnabled(false);
     }
-    else
+    else if(editWdg)
     {
 	if(shape && shape->isEditable()) shape->editExit(this);
 	editWdg = NULL;
@@ -3596,6 +3597,7 @@ bool SizePntWdg::event( QEvent *ev )
 			}
 			break;
 		    case EditBorder:
+			if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
 			pnt.fillRect(rect(),QColor(127,127,127,190));
 			pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
 			pnt.setPen(QColor("black"));

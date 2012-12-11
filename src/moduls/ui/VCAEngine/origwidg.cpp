@@ -1344,7 +1344,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	if(!cdoc.empty())
 	{
 	    XMLNode xdoc;
-	    try{ xdoc.load(XHTML_entity+cdoc); } catch(TError err) { }
+	    try{ xdoc.load(XHTML_entity+cdoc, false, Mess->charset()); } catch(TError err) { }
 	    cfg.owner()->attrAt("time").at().setS(xdoc.attr("docTime"),false,true);
 	}
 	sizeUpdate(sw);
@@ -1565,7 +1565,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     vector<string> als;
 
     //> Parse template
-    try{ xdoc.load(XHTML_entity+tmpl,true); }
+    try{ xdoc.load(XHTML_entity+tmpl, true, Mess->charset()); }
     catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());
@@ -1635,7 +1635,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 
     xdoc.setAttr("docTime",TSYS::int2str(funcV.getI(1)));
 
-    return xdoc.save();
+    return xdoc.save(0, Mess->charset());
 }
 
 void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFunction &funcIO, const string &iLang, bool instrDel, time_t upTo )
@@ -1663,7 +1663,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		funcV.calc( );
 		//>>> Load result to XML tree
 		XMLNode xproc;
-		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true);
+		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true, Mess->charset());
 		//>>> Set result
 		for(unsigned i_tr = 0; i_tr < xproc.childSize(); i_tr++)
 		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
