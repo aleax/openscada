@@ -233,11 +233,6 @@ void TPrmTempl::save_( )
     }
 }
 
-void TPrmTempl::preIOCfgChange()
-{
-    if(startStat()) setStart(false);
-}
-
 TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     //> Configuration functions call

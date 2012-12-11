@@ -1317,14 +1317,14 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     int vpos_beg, vpos_end;
     string val_b, value, value_first, value_end;       //Set value
 
-    ResAlloc res(mRes,false);
+    ResAlloc res(mRes, false);
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
-    ibeg = vmax(ibeg,begin());
-    iend = vmin(iend,end());
-    if( ibeg > iend )	return;
+    ibeg = vmax(ibeg, begin());
+    iend = vmin(iend, end());
+    if(ibeg > iend)	return;
 
-    if( mPack )
+    if(mPack)
     {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
@@ -1344,47 +1344,47 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //> Get values, make value buffer and init the pack index table
     vpos_beg = 0;
     vpos_end = -1;
-    while( ibeg <= iend )
+    while(ibeg <= iend)
     {
 	//>> Get value and put it to file
 	switch(type())
 	{
 	    case TFld::Boolean:
 	    {
-		char tval = buf.getB(&ibeg,true);
-		value.assign(&tval,vSize);
+		char tval = buf.getB(&ibeg, true);
+		value.assign(&tval, vSize);
 		break;
 	    }
 	    case TFld::Integer:
 	    {
-		int tval = buf.getI(&ibeg,true);
-		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
+		int tval = buf.getI(&ibeg, true);
+		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0)
 		{
 		    int vprev = *(int*)value_end.c_str();
-		    if( ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
+		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100.*(double)abs(vprev-tval)/(double)vmax(abs(vprev),abs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
 			tval = vprev;
 		}
-		value.assign((char*)&tval,vSize);
+		value.assign((char*)&tval, vSize);
 		break;
 	    }
 	    case TFld::Real:
 	    {
-		double tval = buf.getR(&ibeg,true);
-		if( ((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0 )
+		double tval = buf.getR(&ibeg, true);
+		if(((ModVArch&)owner().archivator()).roundProc() && vpos_end >= 0)
 		{
 		    double vprev = *(double*)value_end.c_str();
-		    if( ((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
-			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc() )
+		    if(((vprev > 0 && tval > 0) || (vprev < 0 && tval < 0)) &&
+			    100.*fabs(vprev-tval)/vmax(fabs(vprev),fabs(tval)) <= ((ModVArch&)owner().archivator()).roundProc())
 			tval = vprev;
 		}
 		tval = TSYS::doubleLE(tval);
-		value.assign((char*)&tval,vSize);
+		value.assign((char*)&tval, vSize);
 		break;
 	    }
 	    case TFld::String:
 	    {
-		value = buf.getS(&ibeg,true);
+		value = buf.getS(&ibeg, true);
 		if(!value.size()) value = " ";
 		if((int)value.size() >= (1<<(vSize*8)))
 		    value.erase((1<<(vSize*8))-1);
@@ -1393,14 +1393,14 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	    default: break;
 	}
 
-	int pos_cur = (ibeg-begin())/period();
-	if( vpos_end < 0 ) { vpos_beg = pos_cur; vpos_end = vpos_beg-1; }
+	int pos_cur = (vmin(ibeg,iend)-begin())/period();		//> Border add to end for prevent index buffer overlap
+	if(vpos_end < 0) { vpos_beg = pos_cur; vpos_end = vpos_beg-1; }	//> First call
 	int pos_i = vpos_end;
 	while(pos_i < pos_cur)
 	{
 	    pos_i++;
 	    string wr_val = (pos_i==pos_cur)?value:eVal;
-	    if( vpos_end < vpos_beg || wr_val != value_end )
+	    if(vpos_end < vpos_beg || wr_val != value_end)
 	    {
 		if(fixVl)
 		{
@@ -1411,11 +1411,11 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 		else
 		{
 		    int v_sz = wr_val.size();
-		    for(int v_psz = 0; v_psz < vSize; v_psz++ )
+		    for(int v_psz = 0; v_psz < vSize; v_psz++)
 			pid_b[vSize*(pos_i-vpos_beg)+v_psz] = *(((char *)&v_sz)+v_psz);
 		    val_b.append(wr_val);
 		}
-		if(vpos_end < vpos_beg ) value_first = wr_val;
+		if(vpos_end < vpos_beg) value_first = wr_val;
 		value_end = wr_val;
 	    }
 	    vpos_end = pos_i;
@@ -1425,15 +1425,15 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     res.request(true);
     //> Open archive file
-    int hd = open(name().c_str(),O_RDWR);
+    int hd = open(name().c_str(), O_RDWR);
     if(hd <= 0) { mErr = true; return; }
 
     //> Get block geometry from file
     int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev = 0, foff_end_len, foff_end, foff_endnext_len, foff_endnext = 0;
-    if(vpos_beg) foff_begprev = calcVlOff(hd,vpos_beg-1,&foff_begprev_len,true);
-    foff_beg = calcVlOff(hd,vpos_beg,&foff_beg_len,true);
-    foff_end = calcVlOff(hd,vpos_end,&foff_end_len,true);
-    if(vpos_beg < mpos) foff_endnext = calcVlOff(hd,vpos_end+1,&foff_endnext_len,true);
+    if(vpos_beg) foff_begprev = calcVlOff(hd, vpos_beg-1, &foff_begprev_len, true);
+    foff_beg = calcVlOff(hd, vpos_beg, &foff_beg_len, true);
+    foff_end = calcVlOff(hd, vpos_end, &foff_end_len, true);
+    if(vpos_beg < mpos) foff_endnext = calcVlOff(hd, vpos_end+1, &foff_endnext_len, true);
 
     //> Checking and adaptation border
     if(fixVl)
@@ -1510,18 +1510,19 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     int pid_b_sz;
     if(fixVl)
     {
-	lseek(hd,sizeof(FHead)+vpos_beg/8,SEEK_SET);
+	lseek(hd, sizeof(FHead)+vpos_beg/8, SEEK_SET);
 	pid_b_sz = vpos_end/8 - vpos_beg/8 + 1;
     }
     else
     {
-	lseek(hd,sizeof(FHead)+vSize*vpos_beg,SEEK_SET);
+	lseek(hd, sizeof(FHead)+vSize*vpos_beg, SEEK_SET);
 	pid_b_sz = vSize*(vpos_end-vpos_beg+1);
     }
-    write(hd,pid_b.data(),pid_b_sz);
-    moveTail(hd,foff_end,foff_end+(val_b.size()-(foff_end-foff_beg)));
-    lseek(hd,foff_beg,SEEK_SET);
-    write(hd,val_b.data(),val_b.size());
+    if(pid_b.size() < pid_b_sz) mess_err(mod->nodePath().c_str(),_("Warning! Allocated buffer size %d for indexes lesser for used %d."),pid_b.size(),pid_b_sz);
+    write(hd, pid_b.data(), pid_b_sz);
+    moveTail(hd, foff_end, foff_end+(val_b.size()-(foff_end-foff_beg)));
+    lseek(hd, foff_beg, SEEK_SET);
+    write(hd, val_b.data(), val_b.size());
 
     //> Check for write to end correct
     if(mod->copyErrValFiles && fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
@@ -1530,11 +1531,11 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
     //> Drop cache
     cacheDrop(vpos_beg);
-    cacheSet(vpos_end,foff_beg+val_b.size()-value_end.size(),value_end.size(),true,true);
+    cacheSet(vpos_end, foff_beg+val_b.size()-value_end.size(), value_end.size(), true, true);
 
     mAcces = time(NULL);
 
-    mSize = lseek(hd,0,SEEK_END);
+    mSize = lseek(hd, 0, SEEK_END);
 
     close(hd);
 }

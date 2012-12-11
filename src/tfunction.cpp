@@ -30,7 +30,7 @@ using namespace OSCADA;
 //*************************************************
 //* Function abstract object                      *
 //*************************************************
-TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), run_st(false), mTVal(NULL), grp(igrp)
+TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), run_st(false), be_start(false), mTVal(NULL), grp(igrp)
 {
 
 }
@@ -149,18 +149,30 @@ void TFunction::ioMove( int pos, int to )
 
 void TFunction::preIOCfgChange()
 {
+    //> Previous stop
+    be_start = startStat();
+    if(be_start)
+    {
+        setStart(false);
+        if(mTVal) { delete mTVal; mTVal = NULL; }
+    }
+
+    //> Main process
     string blk_lst;
-    for(unsigned i=0; i < used.size(); i++)
-	if( used[i]->blk() )	blk_lst+=used[i]->vfName()+",";
-    if( blk_lst.size() )
+    for(unsigned i = 0; i < used.size(); i++)
+	if(used[i]->blk()) blk_lst += used[i]->vfName()+",";
+    if(blk_lst.size())
 	throw TError(nodePath().c_str(),_("Change is not permitted while function is used: %s"),blk_lst.c_str());
 
-    for( unsigned i=0; i < used.size(); i++ )
+    for(unsigned i = 0; i < used.size(); i++)
 	used[i]->preIOCfgChange();
 }
 
 void TFunction::postIOCfgChange()
 {
+    //> Start for restore
+    if(be_start) setStart(true);
+
     for(unsigned i=0; i < used.size(); i++)
         used[i]->postIOCfgChange();
 }
@@ -463,7 +475,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), tm_calc(0), mFunc(NULL)
+    mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), mMdfChk(false), tm_calc(0), mFunc(NULL)
 {
     pthread_mutex_init(&mRes, NULL);
     setFunc(ifunc);

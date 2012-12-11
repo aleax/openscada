@@ -1,3 +1,42 @@
+2012-12-11 Roman
+- FIX:DB.PostgreSQL: Text fields cut to declared length on write to DB for long string errors from PostgreSQL prevent.
+- FIX:DAQ.LogicLev: "PRM_BD" and "PRM_BD_REFL" DB fields length expanded to 40 and 50 symbols.
+- !:FIX:UI.Vision: Primitive "ElFigure" arc drawing quality is fixed.
+    Arc and other figures drawing code is mostly cleared and make time optimal.
+- FIX:UI.Vision.ElFigure: Multiple edit exit function call is fixed and it is fixed some problems into the primitive.
+    Variable "itemInMotion" set to NULL into edit enter for some cases crash into the primitive prevent.
+    Circle contour gap is fixed for begin and end points seperating.
+    QPainter::Antialiasing is enabled for lines with width and border more and equal to 2 pixels for some fix low quiality big arc.
+- FIX:UI.Vision: Inner widgets edit border building fixed for inner-widget contains widget-container.
+- !!:FIX:SYS: Adapting to one symbol system charsets support, tested on KOI8-R:
+    - TMess::codeConv() change quiet and for replace wrong symbols to '?'.
+    - TVariant: Userspace object loading (parsing from string) from XML and default charset set from system's charset.
+    - XMLNode: Wrong or no present entity for XLNode parsing cause no converting termination and set symbol '?'.
+    - UI.VCAEngine, UI.Vision: Primitive "Document" converting charset is changed to system charset.
+    - UI.WebCfgD, UI.WebVision: Charset for AJAX requests forced set to UTF-8 and generic codepage set to system charset.
+	Charset for GD's text forced set to UTF-8.
+- !!!:FIX:SYS.*: System function "getopt" for command line parsing full replaced to self implementing function TSYS::getCmdOpt()
+    on reason the system getopt() is not reentrant nature and wrong processing for independent calls from different OpenSCADA parts.
+    Start program rewrited for use SYS::getCmdOpt().
+- !:FIX:Archive: Messages buffer processing task moved from creation by timer to standard OpenSCADA task for some system memory
+    leak prevent.
+- !:TElem: Resources review for some problems prevent.
+- FIX:TValFunc: Assign default value for variable "mMdfChk".
+- TSYS, TModule, TParamContr, TVarObj, TEValObj: Debug objects counters for "-DOSC_DEBUG=1" and print its finish number
+    on exit is added.
+- !!:FIX:TVal: Memory leak for objects into destructor TVal::~TVal() is fixed, detected by "ValGrind".
+- !!:FIX:Archive.FSArch: Value archive data corruption into some cases by index buffer memory overlap is prevented,
+    detected by "ValGrind".
+- FIX:DAQ.=Tmpl=: Some updated and fixed.
+- FIX:DAQ.SoundCard: TMdContr objects free early for used its data parameters objects TMdPrm is prevented, detected by "ValGrind".
+- SYS.TFunction, DAQ.JavaLikeCalc, SYS.Tmpl: TValFunc execution context full moved from DAQ.JavaLikeCalc.
+- FIX:UI.VCAEngine: Project's subtree copy from one project to other fixed for inherited attributes copying.
+- !!:SYS: To task create function added control and freeing for finished but the object present and not detached tasks.
+    For prevent some errors like to "Task '...' is already present!".
+- !!!:UI.WebVision: Update period time calculation is rewrited for provide more responsibility and adaption to real network
+    channel properties.
+
+
 2012-11-13 Roman 0.8.0.4
 - Archive: To value archive service request <name path="/%2fserv%2fval"/> is added for name get.
 - FIX:Archive.FSArch: Real end position obtain is some fixed for posible double archive's files creation.

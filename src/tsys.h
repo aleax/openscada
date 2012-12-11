@@ -177,6 +177,7 @@ class TSYS : public TCntrNode
 	//> Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
 	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );
+	static bool taskEndRun( );      // Check for the task endrun by signal SIGUSR1
 
 	//> Sleep task for period grid <per> on ns or to cron time.
 	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
@@ -221,37 +222,37 @@ class TSYS : public TCntrNode
 	static string strUncompr( const string &in );
 
 	//> Unaligned read from memory for some ARM and other
-	static inline uint16_t getUnalign16(const void *p)
+	static inline uint16_t getUnalign16( const void *p )
 	{
 	    struct su16 { uint16_t x; } __attribute__((packed));
 	    const struct su16 *ptr = (const struct su16 *)p;
 	    return ptr->x;
 	}
-	static inline uint32_t getUnalign32(const void *p)
+	static inline uint32_t getUnalign32( const void *p )
 	{
 	    struct su32 { uint32_t x; } __attribute__((packed));
 	    const struct su32 *ptr = (const struct su32 *)p;
 	    return ptr->x;
 	}
-	static inline uint64_t getUnalign64(const void *p)
+	static inline uint64_t getUnalign64( const void *p )
 	{
 	    struct su64 { uint64_t x; } __attribute__((packed));
 	    const struct su64 *ptr = (const struct su64 *)p;
 	    return ptr->x;
 	}
-	static inline int getUnalignInt(const void *p)
+	static inline int getUnalignInt( const void *p )
 	{
 	    struct suInt { int x; } __attribute__((packed));
 	    const struct suInt *ptr = (const struct suInt *)p;
 	    return ptr->x;
 	}
-	static inline float getUnalignFloat(const void *p)
+	static inline float getUnalignFloat( const void *p )
 	{
 	    struct sFloat64 { float x; } __attribute__((packed));
 	    const struct sFloat64 *ptr = (const struct sFloat64 *)p;
 	    return ptr->x;
 	}
-	static inline double getUnalignDbl(const void *p)
+	static inline double getUnalignDbl( const void *p )
 	{
 	    struct sDbl { double x; } __attribute__((packed));
 	    const struct sDbl *ptr = (const struct sDbl *)p;
@@ -259,10 +260,13 @@ class TSYS : public TCntrNode
 	}
 
 	//> Endian convert
-	static float floatLE(float in);
-	static float floatLErev(float in);
-	static double doubleLE(double in);
-	static double doubleLErev(double in);
+	static float floatLE( float in );
+	static float floatLErev( float in );
+	static double doubleLE( double in );
+	static double doubleLErev( double in );
+
+	//> Reentrant commandline processing
+	string getCmdOpt( int &curPos, string *argVal = NULL );
 
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources

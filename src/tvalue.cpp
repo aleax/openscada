@@ -416,6 +416,7 @@ TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
 TVal::~TVal( )
 {
     if(!mCfg && src.fld->type() == TFld::String)delete val.val_s;
+    if(!mCfg && src.fld->type() == TFld::Object)delete val.val_o;
     if(!mCfg && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 }
 

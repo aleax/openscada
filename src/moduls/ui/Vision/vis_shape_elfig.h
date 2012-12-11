@@ -1,8 +1,9 @@
 
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Lysenko Maxim (mlisenko@oscada.org.ua)
- *   			     by Yashina Kseniya (ksu@oscada.org.ua)
+ *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)
+ *                 2007-2012 by Lysenko Maxim (mlisenko@oscada.org)
+ *                      2012 by Roman Savochenko (rom_as@oscada.org, rom_as@fromru.com)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -38,6 +39,8 @@ typedef map<int,float> WidthMap;
 typedef map<int,QColor> ColorMap;
 typedef map<int,string> ImageMap;
 typedef map<int,Qt::PenStyle> StyleMap;
+
+#define ARC_STEP	0.00277777777778	// Arc build sted 1/360 = 1 degree
 
 namespace VISION
 {

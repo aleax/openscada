@@ -54,11 +54,6 @@ void Func::postEnable( int flag )
     if( owner().DB().empty() )	modifClr();
 }
 
-void Func::preDisable( int flag )
-{
-    if( mTVal ) { delete mTVal; mTVal = NULL; }
-}
-
 void Func::postDisable( int flag )
 {
     setStart(false);
@@ -242,23 +237,6 @@ void Func::delIO( )
     TConfig cfg(&mod->elFncIO());
     cfg.cfg("F_ID").setS(id(),true);
     SYS->db().at().dataDel(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",cfg);
-}
-
-void Func::preIOCfgChange()
-{
-    be_start = startStat();
-    if(be_start)
-    {
-	setStart(false);
-	if(mTVal) { delete mTVal; mTVal = NULL; }
-    }
-    TFunction::preIOCfgChange();
-}
-
-void Func::postIOCfgChange()
-{
-    if(be_start) setStart(true);
-    TFunction::postIOCfgChange();
 }
 
 void Func::setStart( bool val )

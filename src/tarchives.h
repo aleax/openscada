@@ -25,8 +25,6 @@
 #define SARH_VER	6		//ArchiveS type modules version
 #define SARH_ID		"Archive"
 
-#include <time.h>
-
 #include <string>
 #include <vector>
 
@@ -183,7 +181,7 @@ class TArchiveS : public TSubSYS
 	int valPeriod( );
 	int valPrior( )		{ return mValPrior; }
 
-	void setMessPeriod( int ivl );
+	void setMessPeriod( int ivl )	{ mMessPer = ivl; modif(); }
 	void setValPeriod( int ivl )	{ mValPer = ivl; modif(); }
 	void setValPrior( int ivl );
 	void setToUpdate( )		{ toUpdate = true; }
@@ -229,7 +227,7 @@ class TArchiveS : public TSubSYS
 	//Private methods
 	string optDescr( );
 
-	static void ArhMessTask( union sigval obj );
+	static void *ArhMessTask( void *param );
 	static void *ArhValTask( void *param );
 
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
@@ -246,7 +244,6 @@ class TArchiveS : public TSubSYS
 	//> Messages archiving
 	char	bufErr;			//Buffer error
 	int	mMessPer;		//Message archiving period
-	timer_t	tmIdMess;		//Messages timer
 	bool	prcStMess;		//Process messages flag
 	//> Messages buffer
 	Res	mRes;			//Mess access resource

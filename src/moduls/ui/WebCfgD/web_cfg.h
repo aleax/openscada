@@ -77,7 +77,8 @@ class TWEB: public TUI
 
     private:
 	//Methods
-	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html", const string &addattr = "" );
+	string httpHead( const string &rcode, int cln, const string &cnt_tp = "text/html",
+	    const string &addattr = "", const string &charset = Mess->charset() );
 	string pgHead( string head_els = "" );
 	string pgTail( );
 

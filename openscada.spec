@@ -208,7 +208,7 @@ Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %prep
 %setup -q -n %srcname
-%setup -T -D -a 1
+%setup -T -D -a 1 -n %srcname
 
 %build
 %if %_vendor == "Mandriva"
