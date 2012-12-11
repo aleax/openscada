@@ -1071,7 +1071,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
 
 %prep
 %setup -q -n %srcname
-%setup -T -D -a 1
+%setup -T -D -a 1 -n %srcname
 
 %build
 %configure %{subst_enable DBF} %{subst_enable SQLite} %{subst_enable MySQL} %{subst_enable FireBird} %{subst_enable PostgreSQL} \

@@ -26,7 +26,6 @@
 #include <dirent.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <getopt.h>
 #include <string.h>
 
 #include <string>
@@ -48,10 +47,10 @@ void TModSchedul::preDisable(int flag)
 {
     //> Detach all share libs
     ResAlloc res(nodeRes(),true);
-    for( unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++ )
-	if( SchHD[i_sh].hd )
+    for(unsigned i_sh = 0; i_sh < SchHD.size(); i_sh++)
+	if(SchHD[i_sh].hd)
 	{
-	    while( SchHD[i_sh].use.size() )
+	    while(SchHD[i_sh].use.size())
 	    {
 		owner().at(TSYS::strSepParse(SchHD[i_sh].use[0],0,'.')).at().
 			modDel(TSYS::strSepParse(SchHD[i_sh].use[0],1,'.'));
@@ -89,26 +88,10 @@ int TModSchedul::loadLibS( )
 void TModSchedul::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"     ,0,NULL,'h'},
-	{"ModPath"  ,1,NULL,'m'},
-	{NULL       ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,( char *const * ) SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case 'm': SYS->setModDir(optarg); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+        else if(argCom == "ModPath")	SYS->setModDir(optarg);
 
     //> Load parameters from command line
     setChkPer(atoi(TBDS::genDBGet(nodePath()+"ChkPer",TSYS::int2str(chkPer())).c_str()));

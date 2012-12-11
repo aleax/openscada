@@ -18,7 +18,6 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <getopt.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -134,42 +133,20 @@ void TUIMod::postEnable( int flag )
 	//> Set QT environments
 	qtArgC = qtArgEnd = 0;
 	if(SYS->argc) toQtArg(SYS->argv[0]);
-	QTextCodec::setCodecForCStrings( QTextCodec::codecForLocale () ); //codepage for QT across QString recode!
+	QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale()); //codepage for QT across QString recode!
 
 	//> Check command line for options no help and no daemon
 	bool isHelp = false;
-	int next_opt, option_index = 0;
-	struct option long_opt[] =
-	{
-	    {"help",	0, NULL, 'h'},
-	    {"demon",	0, NULL, 'd'},
-	    //>QT bind options (debug)
-	    {"sync",	0, NULL, 0},
-	    {"widgetcount", 0, NULL, 0},
-	    //>QT bind options
-	    {"qws",	0, NULL, 0},
-	    {"style",	1, NULL, 0},
-	    {"stylesheet", 1, NULL, 0},
-	    {"session",	1, NULL, 0},
-	    {"reverse",	0, NULL, 0},
-	    {"graphicssystem", 1, NULL, 0},
-	    {"display",	1, NULL, 0},
-	    {"geometry",1, NULL, 0},
-	    {NULL,	0, NULL, 0}
-	};
-
-	optind=opterr=0;
-	do
-	{
-	    next_opt = getopt_long(SYS->argc, (char * const *)SYS->argv, "h", long_opt, &option_index);
-	    switch(next_opt)
-	    {
-		case 0	: toQtArg(long_opt[option_index].name, optarg);	break;
-		case 'h': isHelp = true; break;
-		case 'd': demon_mode = true; break;
-		case -1 : break;
-	    }
-	} while(next_opt != -1);
+	string argCom, argVl;
+	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+    	    if(argCom == "h" || argCom == "help") isHelp = true;
+	    else if(argCom == "demon") demon_mode = true;
+		    //>QT bind options (debug)
+	    else if(argCom == "sync" || argCom == "widgetcount" ||
+		    //>QT bind options
+		    argCom == "qws" || argCom == "style" || argCom == "stylesheet" || argCom == "session" ||
+		    argCom == "reverse" || argCom == "graphicssystem" || argCom == "display" || argCom == "geometry")
+		toQtArg(argCom.c_str(), argVl.c_str());
 
 	//> Start main QT thread if no help and no daemon
 	if(!(run_st || demon_mode || isHelp))
@@ -195,23 +172,9 @@ void TUIMod::load_( )
 #endif
 
     //> Load parameters from command line
-    int next_opt;
-    struct option long_opt[] =
-    {
-	{"help"    ,0,NULL,'h'},
-	{NULL      ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,"h",long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str());	break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //> Load parameters from config-file
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);

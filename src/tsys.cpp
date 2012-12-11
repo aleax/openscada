@@ -31,7 +31,6 @@
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <getopt.h>
 #include <stdio.h>
 #include <signal.h>
 #include <stdarg.h>
@@ -85,6 +84,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
     //signal(SIGFPE,sighandler);
     //signal(SIGSEGV,sighandler);
     signal(SIGABRT,sighandler);
+    signal(SIGUSR1,sighandler);
 }
 
 TSYS::~TSYS( )
@@ -104,7 +104,15 @@ TSYS::~TSYS( )
 
     delete Mess;
     pthread_key_delete(sTaskKey);
-}
+
+#if OSC_DEBUG >= 1
+    ResAlloc res(nodeRes(), false);
+    string cntrsStr;
+    for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
+	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
+    printf(_("System counters on exit: %s"),cntrsStr.c_str());
+#endif
+} 
 
 string TSYS::host( )
 {
@@ -328,37 +336,57 @@ string TSYS::optDescr( )
 	PACKAGE_NAME,VERSION,buf.sysname,buf.release,nodePath().c_str());
 }
 
+string TSYS::getCmdOpt( int &curPos, string *argVal )
+{
+    size_t fPos;
+    int argI = curPos&0xFF;
+    int argIsh = (curPos>>8)&0xFF;
+    if(argI >= argc) return "";
+    for(int argLen = 0; argI < argc; argI++, argIsh=0)
+    {
+	argLen = strlen(argv[argI]);
+	if(argLen < 2 || argv[argI][0] != '-') continue;
+	//> Check for long: "--var", "--var=val" or "--var val"
+	if(argv[argI][1] == '-')
+	{
+	    curPos = argI+1;
+	    string rez = string(argv[argI]+2);
+	    if((fPos=rez.find("=")) != string::npos)
+	    {
+		if(argVal) *argVal = rez.substr(fPos+1);
+		return rez.substr(0,fPos);
+	    }
+	    if(argVal) *argVal = ((argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
+	    return rez;
+	}
+	//> Check for short: "-v", "-v val", "-abcv" or "-abcv val"
+	else
+	{
+	    if((argIsh+1) >= argLen) continue;
+	    curPos = argI+((argIsh+1)<<8);
+	    if(argVal) *argVal = ((argIsh+2) == argLen && (argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
+	    return string(argv[argI]+argIsh+1,1);
+	}
+    }
+
+    return "";
+}
+
 bool TSYS::cfgFileLoad( )
 {
     bool cmd_help = false;
 
     //================ Load parameters from commandline =========================
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"     ,0,NULL,'h'},
-	{"Config"   ,1,NULL,'f'},
-	{"Station"  ,1,NULL,'s'},
-	{NULL       ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(argc,(char * const *)argv,short_opt,long_opt,NULL);
-	switch(next_opt)
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
+	if(argCom == "h" || argCom == "help")
 	{
-	    case 'h':
-		fprintf(stdout,"%s",optDescr().c_str());
-		Mess->setMessLevel(7);
-		cmd_help = true;
-		break;
-	    case 'f': mConfFile = optarg; break;
-	    case 's': mId = optarg; break;
-	    case -1 : break;
+	    fprintf(stdout,"%s",optDescr().c_str());
+	    Mess->setMessLevel(7);
+	    cmd_help = true;
 	}
-    } while(next_opt != -1);
+	else if(argCom == "Config") 	mConfFile = argVl;
+	else if(argCom == "Station")	mId = argVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
@@ -613,7 +641,9 @@ void TSYS::sighandler( int signal )
 	case SIGABRT:
 	    mess_emerg(SYS->nodePath().c_str(),_("OpenSCADA is aborted!"));
 	    break;
-	case SIGALRM:	break;
+	case SIGALRM:
+	case SIGUSR1:
+            break;
 	default:
 	    mess_warning(SYS->nodePath().c_str(),_("Unknown signal %d!"),signal);
     }
@@ -1259,7 +1289,7 @@ double TSYS::cntrGet( const string &id )
 {
     ResAlloc res( nodeRes(), false );
     map<string,double>::iterator icnt = mCntrs.find(id);
-    if( icnt == mCntrs.end() )	return 0;
+    if(icnt == mCntrs.end())	return 0;
     return icnt->second;
 }
 
@@ -1283,10 +1313,18 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     map<string,STask>::iterator ti;
 
     ResAlloc res(taskRes, true);
-    for(time_t c_tm = time(NULL); mTasks.find(path) != mTasks.end(); )
+    for(time_t c_tm = time(NULL); (ti=mTasks.find(path)) != mTasks.end(); )
     {
+        //> Remove created and finished but not destroyed task
+        if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached))
+        {
+            pthread_join(ti->second.thr, NULL);
+            mTasks.erase(ti);
+            continue;
+        }
+        res.release();
+        //> Error by this active task present
 	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
-	res.release();
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1295,6 +1333,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.task = start_routine;
     htsk.taskArg = arg;
     htsk.flgs = 0;
+    htsk.thr = 0;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1354,42 +1393,52 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSignal )
 {
+    map<string,STask>::iterator it;
     ResAlloc res(taskRes, false);
-    map<string,STask>::iterator it = mTasks.find(path);
-    if(it == mTasks.end()) return;
-    pthread_t thr = it->second.thr;
+    if(mTasks.find(path) == mTasks.end()) return;
     res.release();
 
     if(endrunCntr) *endrunCntr = true;
-    if(!noSignal) pthread_kill(thr, SIGALRM);
 
     //> Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
     t_tm = s_tm = time(NULL);
-    while(!(it->second.flgs&STask::FinishTask))
+    bool first = true;
+    res.request(true);
+    while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask))
     {
-        if(!noSignal) pthread_kill(thr, SIGALRM);
+	if(first) pthread_kill(it->second.thr, SIGUSR1);        //> User's termination signal, check for it by function taskEndRun()
+	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
+	res.release();
+
 	time_t c_tm = time(NULL);
-        //Check timeout
+	//Check timeout
         if(wtm && (c_tm > (s_tm+wtm)))
         {
             mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
 	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
         }
 	//Make messages
-        if(c_tm > t_tm+1)  //1sec
+	if(c_tm > t_tm+1)  //1sec
         {
             t_tm = c_tm;
             mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
-
         }
         sysSleep(STD_WAIT_DELAY*1e-3);
+        first = false;
+        res.request(true);
     }
+    if(it != mTasks.end())
+    {
+        if(!(it->second.flgs&STask::Detached)) pthread_join(it->second.thr, NULL);
+        mTasks.erase(it);
+    }
+}
 
-    if(!(it->second.flgs&STask::Detached)) pthread_join(thr, NULL);
-
-    res.request(true);
-    mTasks.erase(it);
+bool TSYS::taskEndRun( )
+{
+    sigset_t sigset;
+    return sigpending(&sigset) == 0 && sigismember(&sigset,SIGUSR1);
 }
 
 void *TSYS::taskWrap( void *stas )
@@ -1428,6 +1477,12 @@ void *TSYS::taskWrap( void *stas )
     //> Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
     tsk->thr = pthread_self();
+
+    //> Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
+    sigset_t mask;
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGUSR1);
+    pthread_sigmask(SIG_BLOCK, &mask, NULL);
 
     //> Call work task
     void *rez = NULL;

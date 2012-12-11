@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include <signal.h>
-#include <getopt.h>
 
 #include "tsys.h"
 #include "tmess.h"
@@ -112,24 +111,9 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 void TDAQS::load_( )
 {
     //> Load parameters from command line
-    int next_opt;
-    const char *short_opt="h";
-    struct option long_opt[] =
-    {
-	{"help"       ,0,NULL,'h'},
-	{NULL         ,0,NULL,0  }
-    };
-
-    optind=opterr=0;
-    do
-    {
-	next_opt=getopt_long(SYS->argc,(char * const *)SYS->argv,short_opt,long_opt,NULL);
-	switch(next_opt)
-	{
-	    case 'h': fprintf(stdout,"%s",optDescr().c_str()); break;
-	    case -1 : break;
-	}
-    } while(next_opt != -1);
+    string argCom, argVl;
+    for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
+        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     map<string, bool>   itReg;
     //> Load templates libraries of parameter

@@ -56,6 +56,10 @@ TModule::TModule( const string &id ) : mId(id)
 #if 0
     char mess[][100] = { _("Author"), _("License") };
 #endif
+
+#if OSC_DEBUG >= 1
+    SYS->cntrIter("ModulsCntr",1);
+#endif
 }
 
 TModule::~TModule(  )
@@ -63,6 +67,10 @@ TModule::~TModule(  )
     //> Clean export function list
     for(unsigned i = 0; i < m_efunc.size(); i++)
         delete m_efunc[i];
+
+#if OSC_DEBUG >= 1
+    SYS->cntrIter("ModulsCntr",-1);
+#endif
 }
 
 string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }

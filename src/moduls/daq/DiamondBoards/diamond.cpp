@@ -20,7 +20,6 @@
  ***************************************************************************/
 
 #include <sys/time.h>
-#include <getopt.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <fcntl.h>

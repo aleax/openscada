@@ -109,8 +109,8 @@ class TMdContr: public TController
 
 	//!!! The controller's background task properties
 	int64_t	period( )	{ return mPer; }
-	string  cron( )         { return cfg("SCHEDULE").getS(); }
-	int	prior( )	{ return m_prior; }
+	string  cron( )         { return mSched; }
+	int	prior( )	{ return mPrior; }
 
 	//!!! Request for connection to parameter-object of this controller
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -128,14 +128,17 @@ class TMdContr: public TController
 	//Methods
 	//!!! Processing virtual functions for self object-parameter creation.
 	TParamContr *ParamAttach( const string &name, int type );
+	//!!! Processing virtual function for OpenSCADA control interface comands
+	void cntrCmdProc( XMLNode *opt );
 	//!!! Background task's function for periodic data acquisition.
 	static void *Task( void *icntr );
 
 	//Attributes
 	//!!! The resource for Enable parameters.
-	Res	en_res;		//Resource for enable params
+	Res	en_res;		// Resource for enable params
 	//!!! The links to the controller's background task properties into config.
-	int	&m_prior;	// Process task priority
+	TCfg	&mSched,	// Schedule
+		&mPrior;	// Process task priority
 	int64_t	mPer;
 
 	//!!! Background task's sync properties
