@@ -1,3 +1,10 @@
+2012-12-17 Roman
+- FIX:SYS: The dependency to libcomedi-devel is added for ALTLinux RPM packages build.
+    Binary-scripts and icons dublication is prevented for Debian-based packages build.
+- !:FIX:DAQ.JavaLikeCalc: Crash on call without a work registers context regeneration,
+    after only the program recompile is fixed.
+
+
 2012-12-11 Roman
 - FIX:DB.PostgreSQL: Text fields cut to declared length on write to DB for long string errors from PostgreSQL prevent.
 - FIX:DAQ.LogicLev: "PRM_BD" and "PRM_BD_REFL" DB fields length expanded to 40 and 50 symbols.

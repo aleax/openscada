@@ -286,8 +286,6 @@ void Func::setStart( bool val )
     if(val)
     {
 	progCompile( );
-	for(unsigned i = 0; i < used.size(); i++)
-	    workRegControl(used[i]);
 	run_st = true;
     }
     //> Stop calc
@@ -355,6 +353,10 @@ void Func::progCompile( )
     }
     sprg.clear();
     regTmpClean( );
+
+    //> Work registers update for calc contexts
+    for(unsigned i = 0; i < used.size(); i++)
+	workRegControl(used[i]);
 }
 
 int Func::funcGet( const string &path )
