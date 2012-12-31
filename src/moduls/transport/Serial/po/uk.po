@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 11:36+0300\n"
+"POT-Creation-Date: 2012-12-20 18:25+0200\n"
 "PO-Revision-Date: 2009-03-31 18:44+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -35,8 +35,24 @@ msgstr "Додаткові параметри"
 msgid "Write line error."
 msgstr "Помилка запису рядка."
 
+#, c-format
+msgid "Send to modem %d: '%s'."
+msgstr "Надіслано до модему %d: '%s'."
+
 msgid "Read from serial error."
 msgstr "Помилка читання з послідовного інтерфейсу."
+
+#, c-format
+msgid "Receive from modem %d: '%s'."
+msgstr "Отримано з модему %d: '%s'."
+
+#, c-format
+msgid "No any respond from modem %d."
+msgstr "Немає відповіді з модему %d."
+
+#, c-format
+msgid "No any expected respond but receive from modem %d: '%s'."
+msgstr "Немає очікуваної відповіді, але отримано з модему %d: '%s'."
 
 #, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
@@ -211,7 +227,8 @@ msgid ""
 "    modTel - modem telephone, the field presence do switch transport to work "
 "with modem mode."
 msgstr ""
-"Послідовний транспорт має адресу у форматі: \"dev:speed:format[:fc[:modTel]]\". Де:\n"
+"Послідовний транспорт має адресу у форматі: \"dev:speed:format[:fc[:"
+"modTel]]\". Де:\n"
 "    dev - адреса послідовного пристрою (/dev/ttyS0);\n"
 "    speed - швидкість пристрою (300, 600, 1200, 2400, 4800, 9600, 19200, "
 "38400, 57600, 115200\n"

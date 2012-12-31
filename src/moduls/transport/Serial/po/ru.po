@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 11:36+0300\n"
+"POT-Creation-Date: 2012-12-20 18:25+0200\n"
 "PO-Revision-Date: 2009-03-31 18:28+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -35,8 +35,24 @@ msgstr "Дополнительные параметры"
 msgid "Write line error."
 msgstr "Ошибка записи строки."
 
+#, c-format
+msgid "Send to modem %d: '%s'."
+msgstr "Отправлено на модем %d: '%s'."
+
 msgid "Read from serial error."
 msgstr "Ошибка чтения последовательного интерфейса."
+
+#, c-format
+msgid "Receive from modem %d: '%s'."
+msgstr "Получено из модема %d: '%s'."
+
+#, c-format
+msgid "No any respond from modem %d."
+msgstr "Нет ответа от модема %d."
+
+#, c-format
+msgid "No any expected respond but receive from modem %d: '%s'."
+msgstr "Нет ожидаемого ответа, но получено из модема %d: '%s'."
 
 #, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
@@ -99,7 +115,8 @@ msgid ""
 "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 "    mdm - modem mode, listen for 'RING'."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:mdm]]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:"
+"mdm]]\". Где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
 "    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
 "38400, 57600, 115200,\n"
@@ -211,7 +228,8 @@ msgid ""
 "    modTel - modem telephone, the field presence do switch transport to work "
 "with modem mode."
 msgstr ""
-"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:modTel]]\". Где:\n"
+"Последовательный транспорт имеет адрес в формате: \"dev:speed:format[:fc[:"
+"modTel]]\". Где:\n"
 "    dev - адрес последовательного устройства (/dev/ttyS0);\n"
 "    speed - скорость устройства (300, 600, 1200, 2400, 4800, 9600, 19200, "
 "38400, 57600, 115200,\n"

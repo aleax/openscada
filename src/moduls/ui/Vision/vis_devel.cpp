@@ -1308,16 +1308,6 @@ void VisDevelop::visualItEdit( )
 	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
-	//> Set window icon
-	XMLNode req("get");
-	req.setAttr("path",ed_wdg+"/%2fico");
-	if( !cntrIfCmd(req) )
-	{
-	    QImage ico_t;
-	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
-	    if( ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()) )
-		scrl->setWindowIcon(QPixmap::fromImage(ico_t));
-	}
 	//> Make and place view widget
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this,0,scrl);
 	vw->load("");
@@ -1329,6 +1319,17 @@ void VisDevelop::visualItEdit( )
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addSubWindow(scrl);
 	scrl->show();
+
+	//> Set window icon
+	XMLNode req("get");
+	req.setAttr("path",ed_wdg+"/%2fico");
+	if(!cntrIfCmd(req))
+	{
+	    QImage ico_t;
+	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
+	    if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
+		scrl->parentWidget()->setWindowIcon(QPixmap::fromImage(ico_t));	//parentWidget is QMdiSubWindow
+	}
     }
 }
 
