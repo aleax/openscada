@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Serial 0.7.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-03 11:36+0300\n"
+"POT-Creation-Date: 2012-12-20 18:25+0200\n"
 "PO-Revision-Date: 2011-07-19 20:53+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -37,8 +37,24 @@ msgstr "Zusätzliche Parameter"
 msgid "Write line error."
 msgstr "Fehler der Einschreibung der Zeile."
 
+#, c-format
+msgid "Send to modem %d: '%s'."
+msgstr "An das Modem gesendet %d: '%s'."
+
 msgid "Read from serial error."
 msgstr "Fehler des Lesens des seriellen Interfaces"
+
+#, c-format
+msgid "Receive from modem %d: '%s'."
+msgstr "Empfangen von dem Modem %d: '%s'."
+
+#, c-format
+msgid "No any respond from modem %d."
+msgstr "Keine Antwort vom Modem %d."
+
+#, c-format
+msgid "No any expected respond but receive from modem %d: '%s'."
+msgstr "Keine Antwort erwartet wurde, erhielt aber vom Modem %d: '%s'."
 
 #, c-format
 msgid "Traffic in %s, out %s. Maximum char timeout %.4g ms."
@@ -102,7 +118,8 @@ msgid ""
 "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 "    mdm - modem mode, listen for 'RING'."
 msgstr ""
-"Serielle Übertragung hat die Parameter im Format: \"dev:speed:format[:fc[:mdm]]\". Wo:\n"
+"Serielle Übertragung hat die Parameter im Format: \"dev:speed:format[:fc[:"
+"mdm]]\". Wo:\n"
 "    dev - Adresse der seriellen Gerät (/dev/ttyS0);\n"
 "    speed - Speed-Geräte (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"
@@ -214,7 +231,8 @@ msgid ""
 "    modTel - modem telephone, the field presence do switch transport to work "
 "with modem mode."
 msgstr ""
-"Serielle Übertragung hat die Parameter im Format: \"dev:speed:format[:fc[:modTel]]\". Wo:\n"
+"Serielle Übertragung hat die Parameter im Format: \"dev:speed:format[:fc[:"
+"modTel]]\". Wo:\n"
 "    dev - Adresse der seriellen Gerät (/dev/ttyS0);\n"
 "    speed - Speed-Geräte (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, "
 "57600, 115200,\n"

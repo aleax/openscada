@@ -1,3 +1,10 @@
+2012-12-31 Roman
+- DAQ.Serial: Working with modem process log is added.
+- FIX:UI.Vision: MDI window icon generation and set is fixed.
+- !!:UI.Vision: Real visible a widget part (by pixel) checking is added and used for events generate and context menu call,
+    mostly used for "Box" and "ElFigure" primitives.
+
+
 2012-12-11 Roman
 - FIX:DB.PostgreSQL: Text fields cut to declared length on write to DB for long string errors from PostgreSQL prevent.
 - FIX:DAQ.LogicLev: "PRM_BD" and "PRM_BD_REFL" DB fields length expanded to 40 and 50 symbols.

@@ -103,6 +103,7 @@ namespace OPC_UA
 #define OpcUa_BadSecurityPolicyRejected	0x80550000
 #define OpcUa_BadApplicationSignatureInvalid	0x80580000
 #define OpcUa_BadBrowseNameInvalid	0x80600000
+#define OpcUa_BadWriteNotSupported	0x80730000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000

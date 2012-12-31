@@ -162,6 +162,7 @@ void TTr::writeLine( int fd, const string &ln )
     for(unsigned wOff = 0, kz = 0; wOff != obuf.size(); wOff += kz)
 	if((kz=write(fd,obuf.data()+wOff,obuf.size()-wOff)) <= 0)
 	    throw TError(mod->nodePath().c_str(),_("Write line error."));
+    mess_debug(mod->nodePath().c_str(), _("Send to modem %d: '%s'."), fd, ln.c_str());
 }
 
 string TTr::expect( int fd, const string& expLst, int tm )
@@ -188,9 +189,16 @@ string TTr::expect( int fd, const string& expLst, int tm )
 	    rl = read(fd,buf,sizeof(buf));
 	    rez.append(buf,rl);
 	    for( int off = 0; (stmp=TSYS::strParse(expLst,0,"\n",&off)).size(); )
-		if( rez.find(stmp) != string::npos ) return stmp;
+		if( rez.find(stmp) != string::npos )
+		{
+		    mess_debug(mod->nodePath().c_str(), _("Receive from modem %d: '%s'."), fd, stmp.c_str());
+		    return stmp;
+		}
 	}
     }
+
+    if(rez.empty()) mess_debug(mod->nodePath().c_str(), _("No any respond from modem %d."), fd);
+    else mess_debug(mod->nodePath().c_str(), _("No any expected respond but receive from modem %d: '%s'."), fd, rez.c_str());
 
     return "";
 }

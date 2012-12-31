@@ -135,11 +135,11 @@ int TTipDAQ::tpParmAdd( const char *id, const char *n_db, const char *name )
     return i_t;
 }
 
-int TTipDAQ::tpPrmToId( const string &name_t)
+int TTipDAQ::tpPrmToId( const string &name_t )
 {
     for(unsigned i_t=0; i_t < paramt.size(); i_t++)
 	if(paramt[i_t]->name == name_t) return i_t;
-    throw TError(nodePath().c_str(),_("Parameter type is not present."));
+    throw TError(nodePath().c_str(),_("Parameter type '%s' is not present."),name_t.c_str());
 }
 
 TController *TTipDAQ::ContrAttach( const string &name, const string &daq_db )

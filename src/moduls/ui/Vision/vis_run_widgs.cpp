@@ -204,7 +204,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     {
 	case -2:	//focus
 	    if((bool)atoi(val.c_str()) == hasFocus())	break;
-	    if((bool)atoi(val.c_str())) setFocus(Qt::OtherFocusReason);
+	    if((bool)atoi(val.c_str()))	setFocus(Qt::OtherFocusReason);
 	    return true;
 	case -3:	//perm
 	    setPermCntr(atoi(val.c_str())&SEC_WR);
@@ -254,6 +254,16 @@ string RunWdgView::resGet( const string &res )
     return ret;
 }
 
+bool RunWdgView::isVisible( QPoint pos )
+{
+    //> Clear background and draw transparent
+    QPalette plt = palette();
+    plt.setBrush(QPalette::Window,QColor(0,0,0,0));
+    setPalette(plt);
+    //> Grab widget and check it for no zero
+    return QPixmap::grabWidget(this).toImage().pixel(pos);
+}
+
 bool RunWdgView::event( QEvent *event )
 {
     //> Force event's process
@@ -284,21 +294,22 @@ bool RunWdgView::event( QEvent *event )
 	    }
 	    return true;
 	case QEvent::MouseButtonRelease:
-	    if(((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() && property("active").toBool() && permCntr())
+	    if(((QMouseEvent*)event)->button() == Qt::RightButton && !property("contextMenu").toString().isEmpty() &&
+		property("active").toBool() && permCntr() && isVisible(mapFromGlobal(cursor().pos())))
 	    {
 		QAction *actTmp;
 		QMenu popup;
 		string sln;
-		for( int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toAscii().data(),0,'\n',&off)).size(); )
+		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toAscii().data(),0,'\n',&off)).size(); )
 		{
 		    actTmp = new QAction(TSYS::strSepParse(sln,0,':').c_str(),this);
 		    actTmp->setWhatsThis(TSYS::strSepParse(sln,1,':').c_str());
 		    popup.addAction(actTmp);
 		}
-		if( !popup.isEmpty() )
+		if(!popup.isEmpty())
 		{
 		    actTmp = popup.exec(QCursor::pos());
-		    if( actTmp && !actTmp->whatsThis().isEmpty() ) attrSet("event","usr_"+actTmp->whatsThis().toStdString());
+		    if(actTmp && !actTmp->whatsThis().isEmpty()) attrSet("event","usr_"+actTmp->whatsThis().toStdString());
 		    popup.clear();
 		    return true;
 		}
@@ -308,11 +319,11 @@ bool RunWdgView::event( QEvent *event )
     }
 
     //> Call to shape for event process
-    if( WdgView::event(event) || (shape&&shape->event(this,event)) )	return true;
+    if(WdgView::event(event) || (shape&&shape->event(this,event)))	return true;
 
     //> Key events process for send to model
     string mod_ev;
-    if( property("active").toBool() && permCntr() )
+    if(property("active").toBool() && permCntr())
     switch( event->type() )
     {
 	case QEvent::Paint:	return true;
@@ -440,7 +451,7 @@ bool RunWdgView::event( QEvent *event )
 	case QEvent::MouseButtonPress:
 	    mod_ev = "key_mousePres";
 	case QEvent::MouseButtonRelease:
-	    if( mod_ev.empty() ) mod_ev = "key_mouseRels";
+	    if(mod_ev.empty()) mod_ev = "key_mouseRels";
 	    switch(((QMouseEvent*)event)->button())
 	    {
 		case Qt::LeftButton:	mod_ev += "Left";	break;
@@ -448,9 +459,16 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::MidButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
-	    attrSet("event",mod_ev);
-	    return true;
-	case QEvent::MouseButtonDblClick:	attrSet("event","key_mouseDblClick");	return true;
+	    if(isVisible(mapFromGlobal(cursor().pos())))
+	    {
+		if(event->type() == QEvent::MouseButtonPress && !hasFocus()) setFocus(Qt::MouseFocusReason);
+		attrSet("event",mod_ev);
+		return true;
+	    }
+	    break;
+	case QEvent::MouseButtonDblClick:
+	    if(isVisible(mapFromGlobal(cursor().pos()))) { attrSet("event","key_mouseDblClick"); return true; }
+	    break;
 	case QEvent::FocusIn:	attrSet("focus","1");	attrSet("event","ws_FocusIn");	return true;
 	case QEvent::FocusOut:	attrSet("focus","0");	attrSet("event","ws_FocusOut");	return true;
 	default: break;
@@ -464,10 +482,25 @@ bool RunWdgView::event( QEvent *event )
 	QPoint curp = parentWidget()->mapFromGlobal(cursor().pos());
 	for(int i_c = parentWidget()->children().size()-1; i_c >= 0; i_c--)
 	{
-	    RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget()->children().at(i_c));
-	    if(!wdg) continue;
-	    if(wdg == this) isOk = true;
-	    else if(isOk && wdg->geometry().contains(curp)) return QApplication::sendEvent(wdg,event);
+	    RunWdgView *curwdg = qobject_cast<RunWdgView*>(parentWidget()->children().at(i_c));
+	    if(!curwdg) continue;
+	    if(curwdg == this) isOk = true;
+	    else if(isOk && curwdg->geometry().contains(curp))
+	    {
+		RunWdgView *wdg = curwdg;
+		curp = wdg->mapFromGlobal(cursor().pos());
+		for(int i_cr = wdg->children().size()-1; i_cr >= 0; i_cr--)
+		{
+		    curwdg = qobject_cast<RunWdgView*>(wdg->children().at(i_cr));
+		    if(curwdg && curwdg->geometry().contains(curp))
+		    {
+			wdg = curwdg;
+			i_cr = wdg->children().size();
+			curp = wdg->mapFromGlobal(cursor().pos());
+		    }
+		}
+		return QApplication::sendEvent(wdg, event);
+	    }
 	}
     }
 
