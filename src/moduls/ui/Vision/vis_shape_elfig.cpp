@@ -3981,20 +3981,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         case QEvent::MouseButtonPress:
         {
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
-            if( runW && elFD->active && runW->permCntr() )
+            if(runW && elFD->active && runW->permCntr())
             {
 		string sev;
-		for( int i=0; i < inundationItems.size(); i++ )
-		    if( inundationItems[i].path.contains(view->mapFromGlobal(view->cursor().pos())) )
-			sev="ws_Fig"+TSYS::int2str(i);
-		if( !sev.empty() )
+		for(int i = 0; i < inundationItems.size(); i++)
+		    if(inundationItems[i].path.contains(view->mapFromGlobal(view->cursor().pos())))
+			sev = "ws_Fig"+TSYS::int2str(i);
+		if(!sev.empty())
 		{
-		    if( !runW->hasFocus() )	runW->setFocus( Qt::MouseFocusReason );
-                    if( ev->buttons() & Qt::LeftButton )	{ sev += "Left"; view->attrSet( "event", "ws_FigLeft" ); };
-                    if( ev->buttons() & Qt::RightButton ) 	{ sev += "Right"; view->attrSet( "event", "ws_FigRight" ); }
-                    if( ev->buttons() & Qt::MidButton )      	{ sev += "Midle"; view->attrSet( "event", "ws_FigMiddle" ); }
-                    view->attrSet( "event", sev );
-		    return true;
+		    if(!runW->hasFocus())		runW->setFocus(Qt::MouseFocusReason);
+                    if(ev->buttons()&Qt::LeftButton)	{ sev += "Left"; view->attrSet( "event", "ws_FigLeft" ); };
+                    if(ev->buttons()&Qt::RightButton) 	{ sev += "Right"; view->attrSet( "event", "ws_FigRight" ); }
+                    if(ev->buttons()&Qt::MidButton)    	{ sev += "Midle"; view->attrSet( "event", "ws_FigMiddle" ); }
+                    view->attrSet("event", sev);
+		    return false;
 		}
             }
             else if( devW )
@@ -4292,18 +4292,18 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
             bool fl_brk;
             QMouseEvent *ev = static_cast<QMouseEvent*>(event);
 
-            if( runW && elFD->active && runW->permCntr() )
+            if(runW && elFD->active && runW->permCntr())
 	    {
 		string sev;
-		for( int i=0; i < inundationItems.size(); i++ )
-		    if( inundationItems[i].path.contains(ev->pos()) )
-			sev="ws_Fig"+TSYS::int2str(i);
-		if( !sev.empty() )
+		for(int i = 0; i < inundationItems.size(); i++)
+		    if(inundationItems[i].path.contains(ev->pos()))
+			sev = "ws_Fig"+TSYS::int2str(i);
+		if(!sev.empty())
 		{
-                    if( !runW->hasFocus() )	runW->setFocus( Qt::MouseFocusReason );
-                    view->attrSet( "event", "ws_FigDblClick" );
-		    view->attrSet( "event", sev+"DblClick" );
-		    return true;
+                    if(!runW->hasFocus()) runW->setFocus(Qt::MouseFocusReason);
+                    view->attrSet("event", "ws_FigDblClick");
+		    view->attrSet("event", sev+"DblClick");
+		    return false;
 		}
             }
             else if( devW )
@@ -5234,6 +5234,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
         }
 	default: break;
     }
+
     return false;
 }
 
