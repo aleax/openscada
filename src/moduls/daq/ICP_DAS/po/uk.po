@@ -213,7 +213,7 @@ msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
 msgid "Gather task priority"
-msgstr "Рівень пріоритету задачі збору даних"
+msgstr "Пріоритет задачі збору даних"
 
 msgid "Bus"
 msgstr "Шина"

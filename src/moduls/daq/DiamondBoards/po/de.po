@@ -4,14 +4,15 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@fromru.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.5\n"
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 17:24+0300\n"
+"POT-Creation-Date: 2012-12-30 19:44+0200\n"
 "PO-Revision-Date: 2009-08-17 14:02+0200\n"
-"Last-Translator: Joan Zimmermann <j.zimmermann@fetron.de>\n"
+"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: de <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -20,160 +21,174 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Diamond DA boards"
+msgid "Diamond DAQ boards"
 msgstr "Datenerfassungkarte Diamond"
 
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 msgid ""
-"Allow access to Diamond systems DA boards. Include support of Athena board."
+"Allow access to 'Diamond Systems' DAQ boards. Include main support for "
+"generic boards."
+msgstr "Bietet Zugriff auf die 'Diamond Systems Messkarten. Verfügt über ein Haupt Trägergrundplatte."
+
+msgid ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"
+"[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V"
 msgstr ""
-"Zugriff auf Datenerfassungskarten von Diamond Systems (und Systemplatform "
-"Athena)."
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"
+"[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V"
+
+msgid ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Custom;[0, 10]"
+"V;[0, 5]V;[0, 2]V;[0, 1]V;+Custom"
+msgstr ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Brauch;[0, 10]"
+"V;[0, 5]V;[0, 2]V;[0, 1]V;+Brauch"
+
+msgid ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[-10, +10]V;[-5, "
+"+5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"
+msgstr ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[-10, +10]V;[-5, "
+"+5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"
+
+msgid ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[0, 10]V;[0, 5]V;"
+"[0, 2.5]V;[0, 1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V"
+msgstr ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[0, 10]V;[0, 5]V;"
+"[0, 2.5]V;[0, 1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V"
+
+msgid ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;"
+"[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 8.3]V;[0, 5]V;[0, 2.5]V"
+msgstr ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;"
+"[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 8.3]V;[0, 5]V;[0, 2.5]V"
+
+msgid ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]"
+"V;[0, 1.25]V"
+msgstr ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]"
+"V;[0, 1.25]V"
+
+msgid "[0, 5]V;[0, 10]V;[-2.5, +2.5]V;[-5, +5]V;[-10, +10]V"
+msgstr "[0, 5]V;[0, 10]V;[-2.5, +2.5]V;[-5, +5]V;[-10, +10]V"
 
 msgid "dscInit error."
 msgstr "Fehler dscInit."
 
-msgid "Diamond system board"
-msgstr "Diamond Karte"
+msgid "Parameteres table"
+msgstr "Tabelle von Parametern"
 
-msgid "Analog parameters' table"
-msgstr "Tabelle der Analogparameter"
+msgid "Acquisition schedule"
+msgstr "Planung der Befragung"
 
-msgid "Digital parameters' table"
-msgstr "Tabelle der Digitalparameter"
+msgid "Gather task priority"
+msgstr "Priorität der Datenerfassung"
 
-msgid "Data emulation"
-msgstr "Datenemulation"
+msgid "Standard"
+msgstr "Standard"
 
-msgid "Base board address"
-msgstr "Basisadresse Karte"
+msgid "Board type"
+msgstr "Board-Typ"
 
-msgid "Interrupt vector"
-msgstr "Interrupt Nummer"
+msgid "Board address"
+msgstr "Board-Adresse"
 
-msgid "Digit IO configuration byte"
-msgstr "Konfigurationbyte Diskret IO"
+msgid "Board interrupt"
+msgstr "Board-Interrupt"
 
-msgid "A/D interrupt mode"
-msgstr "A/D Interrupt Betriebsart"
+msgid "Asynchronous read"
+msgstr "Asynchrones Lesen"
 
-msgid "A/D voltage range"
-msgstr "A/D Spannungsbereich"
+msgid "AI value mode"
+msgstr "Modus-Werte AI"
 
-msgid "5v;10v"
-msgstr "5V;10V"
+msgid "Code;%;Voltage"
+msgstr "Code;%;Volta"
 
-msgid "A/D polarity"
-msgstr "A/D Polarität"
+msgid "Addition parameters"
+msgstr "Zusätzliche Parameter"
 
-msgid "Bipolar;Unipolar"
-msgstr "Bipolar;Unipolar"
+msgid "Call now. "
+msgstr "Rufen Sie jetzt an. "
 
-msgid "A/D gain"
-msgstr "A/D Verstärkung"
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Aufruf mit einer Periode: %s. "
 
-msgid "A/D conversion rate (Hz)"
-msgstr "A/D Abtastrate (Hz)"
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Call nächsten durch cron '%s'. "
 
-msgid "Analog parameter"
-msgstr "Analogparameter"
+#, c-format
+msgid "Spent time: %s. "
+msgstr "Verbrauchte Zeit: %s. "
 
-msgid "Analog parameter type"
-msgstr "Typ des Analogparameters"
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter ist abgeschaltet."
 
-msgid "Input;Output"
-msgstr "Eingang;Ausgang"
-
-msgid "Channel"
-msgstr "Kanal"
-
-msgid "A/D converter gain"
-msgstr "Verstärkung A/D Konverter"
-
-msgid "Digital parameter"
-msgstr "Digitaler Parameter"
-
-msgid "Digital parameter type"
-msgstr "Typ des Digitalen Parameters"
-
-msgid "Port"
-msgstr "Port"
-
-msgid "Value %"
-msgstr "Wert %"
-
-msgid "Voltage V"
-msgstr "Spannung,V"
-
-msgid "A/D code"
-msgstr "A/D Code"
-
-msgid "Value"
-msgstr "Wert"
+msgid "2:Acquisition is stopped."
+msgstr "2:Erfassung ist angehalten."
 
 msgid "DSC driver is not initialized!"
 msgstr "DSC-Treiber ist nicht initialisiert!"
 
 #, c-format
-msgid "dscInitBoard %d(%xh) error: %s %s"
-msgstr "Fehler dscInitBoard %d(%xh): %s %s"
+msgid "Select device %d error!"
+msgstr "Geräteauswahl Fehler %d!"
+
+msgid "dscInitBoard '%s'(%xh) error: %s %s"
+msgstr "Fehler dscInitBoard '%s'(%xh): %s %s"
 
 #, c-format
-msgid "dscDIOSetConfig error: %s %s"
-msgstr "Fehler dscDIOSetConfig: %s %s"
+msgid "Analog input %d"
+msgstr "Analog-Eingang %d"
 
 #, c-format
-msgid "dscADSetSettings error: %s %s"
-msgstr "Fehler dscADSetSettings: %s %s"
+msgid "Analog output %d"
+msgstr "Analog-Ausgang %d"
+
+msgid "Board's '%s' DIO configuration unsupported."
+msgstr "Konfiguration ist nicht DIO Board '%s' unterstützt."
 
 #, c-format
-msgid "dscADScanInt error: %s %s"
-msgstr "Fehler dscADScanInt: %s %s"
-
-msgid "DSC card's counter run from system time is corrected."
-msgstr "DSC Zähler ist mit der Systemzeit korrigiert"
-
-msgid "AD DSC task error."
-msgstr "AD DSC Aufgabe Fehler."
-
-msgid "Board configuration"
-msgstr "Konfiguration der Karte"
-
-msgid "Digital IO ports. Select input!"
-msgstr "Diskrete IO-Ports. Eingang auswählen!"
-
-msgid "Port A"
-msgstr "Port A"
-
-msgid "Port B"
-msgstr "Port B"
-
-msgid "Port C1"
-msgstr "Port C1"
-
-msgid "Port C2"
-msgstr "Port C2"
+msgid "Digital out %d.%d"
+msgstr "Digital-Ausgang %d.%d"
 
 #, c-format
-msgid "dscDAConvert error: %s %s"
-msgstr "Fehler dscDAConvert: %s %s"
+msgid "Digital input %d.%d"
+msgstr "Digital-Eingang %d.%d"
+
+msgid "Configuration"
+msgstr "Konfiguration"
 
 #, c-format
-msgid "dscDIOOutputBit error: %s %s"
-msgstr "Fehler dscDIOOutputBit: %s %s"
-
-msgid "2:Controller is stopped"
-msgstr "2:Controller ist angehalten"
-
-msgid "1:Parameter is disabled"
-msgstr "1:Parameter ist abgeschaltet"
+msgid "Input %d type"
+msgstr "Eingang %d: type"
 
 #, c-format
-msgid "dscADSample error: %s %s"
-msgstr "Fehler dscADSample: %s %s"
+msgid "Output %d type"
+msgstr "Ausgang %d: type"
 
 #, c-format
-msgid "dscDIOInputBit error: %s %s"
-msgstr "Fehler dscDIOInputBit: %s %s"
+msgid "DIO %d: out"
+msgstr "DIO %d: Ausgang"
+
+#, c-format
+msgid "DIO %d: reverse"
+msgstr "DIO %d: Inversion"
+
+#, c-format
+msgid "DI %d reverse"
+msgstr "DI %d Inversion"
+
+#, c-format
+msgid "DO %d reverse"
+msgstr "DO %d Inversion"
+
+msgid "%s error: %s %s"
+msgstr "Fehler %s: %s %s"

@@ -1,3 +1,14 @@
+2012-12-31 Roman
+- DAQ.Comedi: Archive parameters set adaptive for TVArchive::PassiveAttr and TVArchive::ActiveAttr.
+- !!!!:DAQ.DiamondBoards: DSCU driver version update to 6.01.
+    Rewrited for move single board implementation full to the parameter.
+    Added support for generic boards for main functions, AI processing by FIFO will implemented further.
+- DAQ.Serial: Working with modem process log is added.
+- FIX:UI.Vision: MDI window icon generation and set is fixed.
+- !!:UI.Vision: Real visible a widget part (by pixel) checking is added and used for events generate and context menu call,
+    mostly used for "Box" and "ElFigure" primitives.
+
+
 2012-12-17 Roman
 - FIX:SYS: The dependency to libcomedi-devel is added for ALTLinux RPM packages build.
     Binary-scripts and icons dublication is prevented for Debian-based packages build.

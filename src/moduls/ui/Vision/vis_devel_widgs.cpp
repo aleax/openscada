@@ -2563,13 +2563,16 @@ void DevelWdgView::wdgPopup( )
 
 void DevelWdgView::makeIcon( )
 {
+    QPalette plt = palette();
+    plt.setBrush(QPalette::Window,QColor(0,0,0,0));
+    setPalette(plt);
+
     fMakeIco = true;
     QPixmap ico_new = QPixmap::grabWidget(this);
     fMakeIco = false;
     ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
-    QBitmap bMask = ico_new.createMaskFromColor ( (0xFFFDFBFC), Qt::MaskInColor );
-    ico_new.setMask(bMask);
-    parentWidget()->setWindowIcon(ico_new);
+    if(mMdiWin)	mMdiWin->parentWidget()->setWindowIcon(ico_new);	//parentWidget is QMdiSubWindow
+
     //> Send to VCA engine
     QByteArray ba;
     QBuffer buffer(&ba);
@@ -3068,13 +3071,13 @@ void DevelWdgView::incDecVisScale( )
 bool DevelWdgView::event( QEvent *event )
 {
     //> Paint event process
-    if( event->type() == QEvent::Paint )
+    if(event->type() == QEvent::Paint)
     {
-	QPainter pnt( this );
-	pnt.setWindow( rect() );
+	QPainter pnt(this);
+	pnt.setWindow(rect());
 
 	//> Draw background for root widget
-	if( wLevel() == 0 )
+	if(wLevel() == 0)
 	{
 	    if(!fMakeIco)
 	    {
@@ -3082,21 +3085,15 @@ bool DevelWdgView::event( QEvent *event )
 		pnt.setBrush(QBrush(QColor("white")));
 		pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    }
-            else
-            {
-                pnt.setPen(QColor(253,251,252));
-                pnt.setBrush(QBrush(QColor(253,251,252)));
-                pnt.drawRect(rect().adjusted(0,0,-1,-1));
-            }
 	}
 	//> Draw widget border geometry
-	else if( levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove )
+	else if(levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove)
 	{
-	    if( !fHideChilds )
+	    if(!fHideChilds)
 	    {
 		fHideChilds = true;
-		for( int i_c = 0; i_c < children().size(); i_c++ )
-		    if( qobject_cast<QWidget*>(children().at(i_c)) )
+		for(int i_c = 0; i_c < children().size(); i_c++)
+		    if(qobject_cast<QWidget*>(children().at(i_c)))
 			((QWidget*)children().at(i_c))->setEnabled(false);//hide();
 	    }
 	    pnt.setPen("white");

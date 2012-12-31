@@ -40,7 +40,7 @@ typedef map<int,QColor> ColorMap;
 typedef map<int,string> ImageMap;
 typedef map<int,Qt::PenStyle> StyleMap;
 
-#define ARC_STEP	0.00277777777778	// Arc build sted 1/360 = 1 degree
+#define ARC_STEP	1.0/360.0	// Arc build sted 1/360 = 1 degree
 
 namespace VISION
 {

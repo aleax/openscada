@@ -1,14 +1,14 @@
 # OpenSCADA.DAQ.DiamondBoards translate to Ukrainian.
-# Copyright (C) 2005-2010 Roman Savochenko
+# Copyright (C) 2005-2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.DiamondBoards module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 1.2.5\n"
+"Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 17:24+0300\n"
+"POT-Creation-Date: 2012-12-30 19:44+0200\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -16,160 +16,175 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "Diamond DA boards"
-msgstr "Diamond плати збору даних"
+msgid "Diamond DAQ boards"
+msgstr "Diamond DAQ плати"
 
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 msgid ""
-"Allow access to Diamond systems DA boards. Include support of Athena board."
+"Allow access to 'Diamond Systems' DAQ boards. Include main support for "
+"generic boards."
 msgstr ""
-"Надає доступ до плат збору даних фірми Diamond systems. Включає підтримку "
-"системної плати Athena."
+"Надає доступ до 'Diamond Systems' DAQ плат. Включає основну підтримку базових плат."
+
+msgid ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"
+"[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V"
+msgstr ""
+"[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;"
+"[-1.25, +1.25]В;[0, 10]В;[0, 5]В;[0, 2.5]В"
+
+msgid ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Custom;[0, 10]"
+"V;[0, 5]V;[0, 2]V;[0, 1]V;+Custom"
+msgstr ""
+"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1, +1]В;[-0.5, +0.5]В;+-Корист.;[0, 10]"
+"В;[0, 5]В;[0, 2]В;[0, 1]В;+Корист."
+
+msgid ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[-10, +10]V;[-5, "
+"+5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"
+msgstr ""
+"[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[-0.625, +0.625]В;[-10, +10]В;[-5, "
+"+5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[0, 10]В;[0, 5]В;[0, 2.5]В;[0, 1.25]В"
+
+msgid ""
+"[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[0, 10]V;[0, 5]V;"
+"[0, 2.5]V;[0, 1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V"
+msgstr ""
+"[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[-0.625, +0.625]В;[0, 10]В;[0, 5]В;"
+"[0, 2.5]В;[0, 1.25]В;[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В"
+
+msgid ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;"
+"[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 8.3]V;[0, 5]V;[0, 2.5]V"
+msgstr ""
+"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[-10, +10]В;[-5, +5]В;"
+"[-2.5, +2.5]В;[-1.25, +1.25]В;[0, 8.3]В;[0, 5]В;[0, 2.5]В"
+
+msgid ""
+"[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]"
+"V;[0, 1.25]V"
+msgstr ""
+"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1.25, +1.25]В;[0, 10]В;[0, 5]В;[0, 2.5]"
+"В;[0, 1.25]В"
+
+msgid "[0, 5]V;[0, 10]V;[-2.5, +2.5]V;[-5, +5]V;[-10, +10]V"
+msgstr "[0, 5]В;[0, 10]В;[-2.5, +2.5]В;[-5, +5]В;[-10, +10]В"
 
 msgid "dscInit error."
 msgstr "Помилка dscInit."
 
-msgid "Diamond system board"
-msgstr "Diamond плата"
+msgid "Parameteres table"
+msgstr "Таблиця параметров"
 
-msgid "Analog parameters' table"
-msgstr "Таблиця аналогових параметрів"
+msgid "Acquisition schedule"
+msgstr "Планування опитування"
 
-msgid "Digital parameters' table"
-msgstr "Таблиця дискретних параметрів"
+msgid "Gather task priority"
+msgstr "Пріоритет задачі збору даних"
 
-msgid "Data emulation"
-msgstr "Емуляція даних"
+msgid "Standard"
+msgstr "Стандарт"
 
-msgid "Base board address"
-msgstr "Базовий адрес плати"
+msgid "Board type"
+msgstr "Тип плати"
 
-msgid "Interrupt vector"
-msgstr "Вектор переривання"
+msgid "Board address"
+msgstr "Адреса плати"
 
-msgid "Digit IO configuration byte"
-msgstr "Конфігураційний байт цифрових IO"
+msgid "Board interrupt"
+msgstr "Переривання плати"
 
-msgid "A/D interrupt mode"
-msgstr "Збір AI по перериванню"
+msgid "Asynchronous read"
+msgstr "Асинхронне читання"
 
-msgid "A/D voltage range"
-msgstr "Діапазон напруг AI"
+msgid "AI value mode"
+msgstr "Режим значення AI"
 
-msgid "5v;10v"
-msgstr "5В;10В"
+msgid "Code;%;Voltage"
+msgstr "Код;%;Напруга"
 
-msgid "A/D polarity"
-msgstr "Полярність AI"
+msgid "Addition parameters"
+msgstr "Додаткові параметри"
 
-msgid "Bipolar;Unipolar"
-msgstr "Біполярний;Однополярний"
+msgid "Call now. "
+msgstr "Виклик зараз. "
 
-msgid "A/D gain"
-msgstr "Підсилення для AI"
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Виклик за періодом: %s. "
 
-msgid "A/D conversion rate (Hz)"
-msgstr "Частота збору за одним каналом AI (Гц)"
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Наступний виклик за cron '%s'. "
 
-msgid "Analog parameter"
-msgstr "Аналоговий параметр"
+#, c-format
+msgid "Spent time: %s. "
+msgstr "Витрачено часу: %s. "
 
-msgid "Analog parameter type"
-msgstr "Тип аналогового параметра"
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр вимкнено."
 
-msgid "Input;Output"
-msgstr "Вхід;Вихід"
-
-msgid "Channel"
-msgstr "Канал"
-
-msgid "A/D converter gain"
-msgstr "Підсилення A/D конвертора"
-
-msgid "Digital parameter"
-msgstr "Цифровий параметр"
-
-msgid "Digital parameter type"
-msgstr "Тип цифрового параметра"
-
-msgid "Port"
-msgstr "Порт"
-
-msgid "Value %"
-msgstr "Значення %"
-
-msgid "Voltage V"
-msgstr "Напруга, В"
-
-msgid "A/D code"
-msgstr "A/D код"
-
-msgid "Value"
-msgstr "Значення"
+msgid "2:Acquisition is stopped."
+msgstr "2:Опитування зупинено."
 
 msgid "DSC driver is not initialized!"
 msgstr "DSC драйвер не ініційовано!"
 
 #, c-format
-msgid "dscInitBoard %d(%xh) error: %s %s"
-msgstr "Помилка dscInitBoard %d(%xh): %s %s"
+msgid "Select device %d error!"
+msgstr "Помилка вибору пристрою %d!"
+
+msgid "dscInitBoard '%s'(%xh) error: %s %s"
+msgstr "Помилка dscInitBoard '%s'(%xh): %s %s"
 
 #, c-format
-msgid "dscDIOSetConfig error: %s %s"
-msgstr "Помилка dscDIOSetConfig: %s %s"
+msgid "Analog input %d"
+msgstr "Аналоговий вхід %d"
 
 #, c-format
-msgid "dscADSetSettings error: %s %s"
-msgstr "Помилка dscADSetSettings: %s %s"
+msgid "Analog output %d"
+msgstr "Аналоговий вихід %d"
+
+msgid "Board's '%s' DIO configuration unsupported."
+msgstr "Конфігурація DIO плати '%s' не підтримується."
 
 #, c-format
-msgid "dscADScanInt error: %s %s"
-msgstr "Помилка dscADScanInt: %s %s"
-
-msgid "DSC card's counter run from system time is corrected."
-msgstr "Виконано корекцію відхилення лічильника DSC карти від системного часу."
-
-msgid "AD DSC task error."
-msgstr "Помилка задачі DSC."
-
-msgid "Board configuration"
-msgstr "Конфігурація плати"
-
-msgid "Digital IO ports. Select input!"
-msgstr "Порти цифрових IO. Вибрані є входами!"
-
-msgid "Port A"
-msgstr "Порт A"
-
-msgid "Port B"
-msgstr "Порт B"
-
-msgid "Port C1"
-msgstr "Порт C1"
-
-msgid "Port C2"
-msgstr "Порт C2"
+msgid "Digital out %d.%d"
+msgstr "Цифровий вихід %d.%d"
 
 #, c-format
-msgid "dscDAConvert error: %s %s"
-msgstr "Помилка dscDAConvert: %s %s"
+msgid "Digital input %d.%d"
+msgstr "Цифровий вхід %d.%d"
+
+msgid "Configuration"
+msgstr "Конфігурація"
 
 #, c-format
-msgid "dscDIOOutputBit error: %s %s"
-msgstr "Помилка dscDIOOutputBit: %s %s"
-
-msgid "2:Controller is stopped"
-msgstr "2:Контролер зупинено"
-
-msgid "1:Parameter is disabled"
-msgstr "1:Параметр вимкнено"
+msgid "Input %d type"
+msgstr "Вхід %d: тип"
 
 #, c-format
-msgid "dscADSample error: %s %s"
-msgstr "Помилка dscADSample: %s %s"
+msgid "Output %d type"
+msgstr "Вихід %d: тип"
 
 #, c-format
-msgid "dscDIOInputBit error: %s %s"
-msgstr "Помилка dscDIOInputBit: %s %s"
+msgid "DIO %d: out"
+msgstr "DIO %d: вихід"
+
+#, c-format
+msgid "DIO %d: reverse"
+msgstr "DIO %d: інверсія"
+
+#, c-format
+msgid "DI %d reverse"
+msgstr "DI %d: інверсія"
+
+#, c-format
+msgid "DO %d reverse"
+msgstr "DO %d: інверсія"
+
+msgid "%s error: %s %s"
+msgstr "Помилка %s: %s %s"

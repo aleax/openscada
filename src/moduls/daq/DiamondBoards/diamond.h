@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2012 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,8 +19,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef ATHENA_H
-#define ATHENA_H
+#ifndef DIAMOND_H
+#define DIAMOND_H
 
 #include <tmodule.h>
 #include <tcontroller.h>
@@ -41,6 +41,34 @@ using namespace OSCADA;
 
 namespace Diamond
 {
+//*************************************************
+//* DevFeature                                    *
+//*************************************************
+class DevFeature
+{
+    public:
+	//Data
+	struct rng { float min, max; };
+	//Functions
+        DevFeature( const string &inm, unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0 ) :
+	    name(inm), AI(iAI), AO(iAO), DIO(iDIO), DI(iDI), DO(iDO) { }
+        DevFeature( ) : AI(0), AO(0), DIO(0), DI(0), DO(0)	{ }
+
+	void setAITypes( const string &vl );
+	void setAOTypes( const string &vl )	{ aoTypes = vl; }
+
+	string	 name;	//Device name
+
+	unsigned AI;	//[res][smpl][cnls]	0x6410	smpl:interrupted samplerate into ksml/s; res:A/D resolution (bits), default 16
+	unsigned AO;	//[res][cnls]		res:D/A resolution (bits), default 12
+	unsigned DIO;	//[ports]	0x0002  ports*8
+        unsigned DI;    //[ports]	0x0002  ports*8
+        unsigned DO;    //[ports]	0x0002  ports*8
+
+	string	aiTypes,	//Two string with modes indexes and names. Indexes code: [diff|range|polar][gain]
+		aoTypes;	//Two string with modes indexes and names. Indexes code: [daPol|range|polar][gain]
+	map<int, rng>	aiRngs;	//Parsed from aiTypes ranges for voltage values calculate
+};
 
 //*************************************************
 //* TMdPrm                                        *
@@ -50,38 +78,46 @@ class TMdContr;
 class TMdPrm : public TParamContr
 {
     public:
-	//Data
-	enum Type { NONE, AI, AO, DI, DO };
-
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	Type	type( )		{ return m_tp; }
-	int	cnl( )		{ return cfg("CNL").getI(); }
-	void	setType( Type val );
+	TElem &elem( )          { return p_el; }
+
+        void enable( );
+        void disable( );
+
+        void getVals( const string &atr = "" );
+        string modPrm( const string &prm, const string &def = "" );
+
+        void setModPrm( const string &prm, const string &val );
 
 	TMdContr &owner( );
 
-    protected:
+    private:
 	//Methods
-	bool cfgChange( TCfg &cfg );
-	void vlSet( TVal &val, const TVariant &pvl );
+	void postEnable( int flag );
+	void cntrCmdProc( XMLNode *opt );
 	void vlGet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
-	void postEnable( int flag );
+	string errDSC( const string &func );
 
-	void setType( const string &tpId );
-
-    private:
 	//Attributes
-	Type	m_tp;
-	union
-	{
-	    int	m_gain;		//AI gain
-	    int	m_dio_port;	//DIO port
-	};
+	TElem	p_el;		//Work atribute elements
+        int	&mTP,		//Board type
+		&mADDR,		//Board address
+		&mINT,		//Board interrupt
+		&mAImode;	//AI values mode
+	char	&asynchRd;	//Asynchronous reading
+
+        Res	dev_res;	//Resource for access to device
+	DevFeature dev;
+	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
+
+	DSCB	dscb;		//Board descriptor
+	ResString	acq_err;
 };
 
 //*************************************************
@@ -94,39 +130,40 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem);
+	TMdContr( string name_c, const string &daq_db, TElem *cfgelem );
 	~TMdContr( );
 
-	bool ADIIntMode( )	{ return ad_int_mode; }
-	bool dataEmul( )	{ return data_emul; }
+	string	getStatus( );
 
-	TParamContr *ParamAttach( const string &name, int type );
+        int64_t	period( )	{ return mPer; }
+        string	cron( )		{ return mSched; }
+        int	prior( )	{ return mPrior; }
 
-	TTpContr &owner( );
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+
+	void prmEn( const string &id, bool val );
 
     protected:
 	//Methods
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	bool cfgChange( TCfg &cfg );
 
     private:
 	//Methods
-	static void *AD_DSCTask( void *param );
+	TParamContr *ParamAttach( const string &name, int type );
+	static void *Task( void *icntr );
 
 	//Attributes
-	int	&m_addr;
-	char	&ad_int_mode, &data_emul;
+	Res	en_res;				//Resource for enable params
+	int	&mPrior;			//Process task priority
+	TCfg	&mSched;			//Calc schedule
+	int64_t	mPer;
 
-	double	dataEmulTm;
-
-	DSCB	dscb;
-	DSCADSETTINGS dscadsettings;
-
-	bool	ad_dsc_st, endrun_req_ad_dsc;
-
-	Res	ai_res, ao_res, dio_res;
+        bool	prcSt,				//Process task active
+		call_st;			//Calc now stat
+        vector< AutoHD<TMdPrm> > p_hd;
+        double	tm_gath;			//Gathering time
 };
 
 //*************************************************
@@ -139,34 +176,23 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	bool drvInitOk( )	{ return m_init; }
+	bool drvInitOk( )	{ return mInit; }
 	void postEnable( int flag );
 
-	TController *ContrAttach( const string &name, const string &daq_db );
-
-	TElem &elemAI( )	{ return elem_ai; }
-	TElem &elemAO( )	{ return elem_ao; }
-	TElem &elemDI( )	{ return elem_di; }
-	TElem &elemDO( )	{ return elem_do; }
-
-    protected:
-	//Attribute
-	bool redntAllow( )	{ return true; }
+	//Attributes
+	map<int, DevFeature> devs;
 
     private:
+	//Methods
+	TController *ContrAttach( const string &name, const string &daq_db );
+	bool redntAllow( )	{ return true; }
+
 	//Attributes
-	bool	m_init;
-
-	TElem	elem_ai;
-	TElem	elem_ao;
-	TElem	elem_di;
-	TElem	elem_do;
-
-	Res	drvRes;
+	bool	mInit;
 };
 
 extern TTpContr *mod;
 
 } //End namespace
 
-#endif //ATHENA_H
+#endif //DIAMOND_H

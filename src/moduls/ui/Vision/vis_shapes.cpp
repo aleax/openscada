@@ -3507,25 +3507,25 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
     {
 	case -1:	//load
 	    up = true;
-	    if( qobject_cast<RunWdgView*>(w) && shD->inclWidget )
+	    if(qobject_cast<RunWdgView*>(w) && shD->inclWidget)
 		shD->inclWidget->setMinimumSize(w->size());
 	    break;
 	case -2:	//focus
 	    //if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
 	    break;
         case 5:         //en
-	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
+	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
 	    w->setVisible(shD->en && (((RunWdgView*)w)->permView() || dynamic_cast<RunPageView*>(w)));
 	    break;
 	case 6:		//active
-	    if( !qobject_cast<RunWdgView*>(w) ) { up = false; break; }
-	    if( atoi(val.c_str()) && ((RunWdgView*)w)->permCntr() ) w->setFocusPolicy( Qt::StrongFocus );
-	    else w->setFocusPolicy( Qt::NoFocus );
+	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
+	    if(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
+	    else w->setFocusPolicy(Qt::NoFocus);
 	    break;
 	case 12:	//geomMargin
 	    shD->geomMargin = atoi(val.c_str());
-	    if( w->layout() ) w->layout()->setMargin( shD->geomMargin );
+	    if(w->layout()) w->layout()->setMargin(shD->geomMargin);
 	    break;
 	case 20: 	//backColor
 	{

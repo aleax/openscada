@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2012 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,12 +35,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"DiamondBoards"
-#define MOD_NAME	_("Diamond DA boards")
+#define MOD_NAME	_("Diamond DAQ boards")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"1.2.5"
+#define MOD_VER		"2.0.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow access to Diamond systems DA boards. Include support of Athena board.")
+#define DESCRIPTION	_("Allow access to 'Diamond Systems' DAQ boards. Include main support for generic boards.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -50,14 +50,14 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new Diamond::TTpContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+	    return new Diamond::TTpContr(source);
 	return NULL;
     }
 }
@@ -67,7 +67,7 @@ using namespace Diamond;
 //*************************************************
 //* TTpContr                                      *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), m_init(false), elem_ai("AI"), elem_ao("AO"), elem_di("DI"), elem_do("DO")
+TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), mInit(false)
 {
     mod		= this;
 
@@ -78,67 +78,106 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), m_init(false), elem_ai("AI"
     mDescr	= DESCRIPTION;
     mLicense	= LICENSE;
     mSource	= name;
+
+    //> Known devices typical configuration
+    devs[DSC_DMM16]	= DevFeature("DMM-16", 0x6410, 4, 0, 1, 1);
+    devs[DSC_DMM16].setAITypes(string("0x00;0x01;0x02;0x20;0x21;0x22;0x23;0x30;0x31;0x32\n")+
+        _("[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V"));
+    devs[DSC_RMM]	= DevFeature("Ruby-MM", 0, 8, 3);
+    //devs[DSC_TMM] ??
+    devs[DSC_OPMM]	= DevFeature("Opal-MM", 0, 0, 0, 1, 1);
+    devs[DSC_DMM]	= DevFeature("DMM", 0x0C6410, 2, 0, 1, 1);
+    devs[DSC_DMM].setAITypes(string("0x00;0x01;0x02;0x03;0x04;0x05;0x10;0x11;0x12;0x13;0x14\n")+
+	_("[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Custom;[0, 10]V;[0, 5]V;[0, 2]V;[0, 1]V;+Custom"));
+    //devs[DSC_SMM] ??
+    //devs[DSC_DMM] Replaced by DSC_GPIO11_DIO and DSC_GPIO21 for DIO
+    //devs[DSC_QMM] ??
+    //devs[DSC_ZMM] ??
+    devs[DSC_PMM]	= DevFeature("Pearl-MM", 0, 0, 0, 0, 2);
+    devs[DSC_OMM]	= DevFeature("Onyx-MM", 0, 0, 6);
+    devs[DSC_RMM416]	= DevFeature("Ruby-MM-416", 0, 0x1004, 3);
+    devs[DSC_DMM32]	= DevFeature("DMM-32(-AT)", 0xC820, 4, 3);
+    devs[DSC_DMM32].setAITypes(string("0x00;0x01;0x02;0x03;0x20;0x21;0x22;0x23;0x30;0x31;0x32;0x33\n")+
+        _("[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;"
+          "[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
+    //devs[DSC_EMMDIO] ??
+    devs[DSC_RMM1612]	= DevFeature("Ruby-MM-1612", 0, 16, 3);
+    devs[DSC_DMMAT]	= DevFeature("DMM-AT", 0x0C6410, 2, 0, 1, 1);
+    devs[DSC_DMMAT].setAITypes(string("0x00;0x01;0x02;0x03;0x10;0x11;0x12;0x13;0x20;0x21;0x22;0x23\n")+
+	_("[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;"
+	  "[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V"));
+    devs[DSC_DMM16AT]	= DevFeature("DMM-16-AT", 0x6410, 4, 0, 1, 1);
+    devs[DSC_DMM16AT].setAITypes(string("0x00;0x01;0x02;0x03;0x10;0x11;0x12;0x13;0x20;0x21;0x22;0x23\n")+
+	_("[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;"
+	  "[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V"));
+    devs[DSC_IR104]	= DevFeature("IR104", 0, 0, 0, 3, 3);	// Not full ports 20 DI, 20 DO. Specific processing
+    //devs[DSC_EMM8] ??
+    devs[DSC_PROM]	= DevFeature("Prometheus", 0x6410, 4, 3);
+    devs[DSC_PROM].setAITypes(string("0x00;0x01;0x02;0x03;0x20;0x21;0x22;0x23;0x30;0x31;0x32\n")+
+        _("[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 8.3]V;[0, 5]V;[0, 2.5]V"));
+    devs[DSC_HERCEBX]	= DevFeature("Hercules EBX", 0xFA20, 4, 5);
+    devs[DSC_HERCEBX].setAITypes(string("0x00;0x01;0x02;0x03;0x10;0x11;0x12;0x13\n")+
+        _("[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
+    //devs[DSC_CPT] ??
+    //devs[DSC_DMM48] ??
+    devs[DSC_OMMDIO]	= DevFeature("Onyx-MM-DIO", 0, 0, 6);
+    devs[DSC_MRC]	= DevFeature("Mercator", 0, 0, 3);				//DSC_GPIO no configure direction need
+    devs[DSC_ATHENA]	= DevFeature("Athena", 0x6410, 4, 3);
+    devs[DSC_ATHENA].setAITypes(devs[DSC_PROM].aiTypes);
+    //devs[DSC_METIS] ??
+    devs[DSC_DMM32X]	= DevFeature("DMM-32x(-AT)", 0xFA20, 4, 3);
+    devs[DSC_DMM32X].setAITypes(devs[DSC_DMM32].aiTypes);
+    //devs[DSC_ELEKTRA] ??
+    devs[DSC_GPIO11_DIO] = DevFeature("GPIO-MM-11[12](DIO)", 0, 0, 6, 0/*1*/, 0/*1*/);	//Unknown DIO, DI and DO ports order!
+    devs[DSC_GPIO21]	= DevFeature("GPIO-MM-21", 0, 0, 12);				//DSC_GPIO no configure direction need
+    devs[DSC_PSD]	= DevFeature("Poseidon", 0xFA20, 4, 3);
+    devs[DSC_PSD].setAITypes(string("0x00;0x01;0x02;0x03;0x20;0x21;0x22;0x23;0x30;0x31;0x32;0x33\n")+
+        _("[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;"
+          "[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
+    devs[DSC_ATHENAII]	= DevFeature("Athena-II", 0x6410, 4, 3);
+    devs[DSC_ATHENAII].setAITypes(string("0x00;0x01;0x02;0x03;0x11;0x12;0x13\n")+
+        _("[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
+    devs[DSC_DMM32DX]	= DevFeature("DMM-32dx(-AT)", 0xFA20, 4, 3);
+    devs[DSC_DMM32DX].setAITypes(devs[DSC_DMM32].aiTypes);
+    devs[DSC_HELIOS]	= DevFeature("Helios", 0x6410, 4, 5);
+    devs[DSC_HELIOS].setAITypes(string("0x00;0x01;0x02;0x03;0x11;0x12;0x13\n")+
+        _("[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
+    devs[DSC_HELIOS].setAOTypes(string("0x00;0x01;0x40;0x41;0x42\n")+
+        _("[0, 5]V;[0, 10]V;[-2.5, +2.5]V;[-5, +5]V;[-10, +10]V"));
+    devs[DSC_NEPTUNE]	= DevFeature("Neptune", 0xFA20, 4, 4);
+    devs[DSC_NEPTUNE].setAITypes(string("0x00;0x01;0x02;0x03;0x20;0x21;0x22;0x23;0x30;0x31;0x32;0x33\n")+
+        _("[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;"
+          "[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[0, 10]V;[0, 5]V;[0, 2.5]V;[0, 1.25]V"));
 }
 
 TTpContr::~TTpContr()
 {
-    //- Free DSCAD -
-    if( drvInitOk( ) )	dscFree();
+    //> Free DSCAD
+    if(drvInitOk())	dscFree();
 }
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTipDAQ::postEnable(flag);
 
-    //- Init DSCAD -
-    if( dscInit( DSC_VERSION ) != DE_NONE )
-	mess_err(mod->nodePath().c_str(),_("dscInit error."));
-    else m_init = true;
+    //> Init DSCAD
+    if(dscInit(DSC_VERSION) != DE_NONE)
+	mess_err(mod->nodePath().c_str(), _("dscInit error."));
+    else mInit = true;
 
-    //- Controler's bd structure -
-    fldAdd( new TFld("BOARD",_("Diamond system board"),TFld::Integer,TFld::Selected,"2","25",
-	(TSYS::int2str(DSC_DMM16)+";"+TSYS::int2str(DSC_ATHENA)+";"+TSYS::int2str(DSC_DMM32XAT)).c_str(),
-	"DMM16;ATHENA;DMM32XAT") );
-    fldAdd( new TFld("PRM_BD_A",_("Analog parameters' table"),TFld::String,0,"30","diamond_prm_a") );
-    fldAdd( new TFld("PRM_BD_D",_("Digital parameters' table"),TFld::String,0,"30","diamond_prm_d") );
-    fldAdd( new TFld("DATA_EMUL",_("Data emulation"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("ADDR",_("Base board address"),TFld::Integer,TFld::HexDec,"3","640") );
-    fldAdd( new TFld("INT",_("Interrupt vector"),TFld::Integer,0,"2","5") );
-    fldAdd( new TFld("DIO_CFG",_("Digit IO configuration byte"),TFld::Integer,TFld::HexDec,"2","0") );
-    fldAdd( new TFld("ADMODE",_("A/D interrupt mode"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("ADRANGE",_("A/D voltage range"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(RANGE_10).c_str(),
-	(TSYS::int2str(RANGE_5)+";"+TSYS::int2str(RANGE_10)).c_str(),_("5v;10v")) );
-    fldAdd( new TFld("ADPOLAR",_("A/D polarity"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(BIPOLAR).c_str(),
-	(TSYS::int2str(BIPOLAR)+";"+TSYS::int2str(UNIPOLAR)).c_str(),_("Bipolar;Unipolar")) );
-    fldAdd( new TFld("ADGAIN",_("A/D gain"),TFld::Integer,TFld::Selected,"1",TSYS::int2str(GAIN_1).c_str(),
-	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
-    fldAdd( new TFld("ADCONVRATE",_("A/D conversion rate (Hz)"),TFld::Integer,0,"6","200","100;100000") );
+    //> Controler's bd structure
+    fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
-    //- Parameter type bd structure -
-    //-- Analog --
-    int t_prm = tpParmAdd("a_prm","PRM_BD_A",_("Analog parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Analog parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1",_("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal,"2","0","0;99") );
-    tpPrmAt(t_prm).fldAdd( new TFld("GAIN",_("A/D converter gain"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1",TSYS::int2str(GAIN_1).c_str(),
-	(TSYS::int2str(GAIN_1)+";"+TSYS::int2str(GAIN_2)+";"+TSYS::int2str(GAIN_4)+";"+TSYS::int2str(GAIN_8)).c_str(),"x1;x2;x4;x8") );
-    //-- Digit --
-    t_prm = tpParmAdd("d_prm","PRM_BD_D",_("Digital parameter"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("Digital parameter type"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0","0;1",_("Input;Output")) );
-    tpPrmAt(t_prm).fldAdd( new TFld("PORT",_("Port"),TFld::Integer,TFld::Selected|TCfg::NoVal,"2","0","0;1;2","A;B;C") );
-    tpPrmAt(t_prm).fldAdd( new TFld("CNL",_("Channel"),TFld::Integer,TCfg::NoVal,"1","0","0;7") );
-
-    //- Init value elements -
-    //-- Analog input --
-    elem_ai.fldAdd( new TFld("value",_("Value %"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","","1") );
-    elem_ai.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TFld::NoWrite|TVal::DirRead,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","","2") );
-    elem_ai.fldAdd( new TFld("code",_("A/D code"),TFld::Integer,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_INT).c_str(),"","","3") );
-    //-- Analog output --
-    elem_ao.fldAdd( new TFld("value",_("Value %"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"0;100","","1") );
-    elem_ao.fldAdd( new TFld("voltage",_("Voltage V"),TFld::Real,TVal::DirWrite,"",TSYS::real2str(EVAL_REAL).c_str(),"-10;10","","2") );
-    //-- Digit input --
-    elem_di.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TFld::NoWrite|TVal::DirRead,"",TSYS::int2str(EVAL_BOOL).c_str(),"","","1") );
-    //-- Digit output --
-    elem_do.fldAdd( new TFld("value",_("Value"),TFld::Boolean,TVal::DirWrite,"",TSYS::int2str(EVAL_BOOL).c_str(),"","","1") );
+    //> Parameter type bd structure
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    tpPrmAt(t_prm).fldAdd(new TFld("TP",_("Board type"),TFld::Integer,TCfg::NoVal,"3","25"));
+    tpPrmAt(t_prm).fldAdd(new TFld("ADDR",_("Board address"),TFld::Integer,TCfg::NoVal|TFld::HexDec,"3","640"));
+    tpPrmAt(t_prm).fldAdd(new TFld("INT",_("Board interrupt"),TFld::Integer,TCfg::NoVal,"2","5"));
+    tpPrmAt(t_prm).fldAdd(new TFld("ASYNCH_RD",_("Asynchronous read"),TFld::Boolean,TCfg::NoVal,"1","0"));
+    tpPrmAt(t_prm).fldAdd(new TFld("AI_VAL",_("AI value mode"),TFld::Integer,TCfg::NoVal|TFld::Selected,"1","0","0;1;2",_("Code;%;Voltage")));
+    tpPrmAt(t_prm).fldAdd(new TFld("PRMS",_("Addition parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -149,110 +188,104 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c,daq_db,cfgelem), m_addr(cfg("ADDR").getId()), ad_int_mode(cfg("ADMODE").getBd()),
-    data_emul(cfg("DATA_EMUL").getBd()), ad_dsc_st(false)
+TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
+    TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE")),
+    mPer(1000000000), prcSt(false), call_st(false), tm_gath(0)
 {
-    cfg("PRM_BD_A").setS("DiamPrmA_"+name_c);
-    cfg("PRM_BD_D").setS("DiamPrmD_"+name_c);
-
-    //- Hide sevral config fields -
-    cfg("INT").setView(false);
-    cfg("DIO_CFG").setView(false);
-    cfg("ADCONVRATE").setView(false);
-    cfg("ADGAIN").setView(false);
-
-    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
+    cfg("PRM_BD").setS("DiamPrm_"+name_c);
 }
 
 TMdContr::~TMdContr()
 {
-
+    if(run_st) stop();
 }
 
-TTpContr &TMdContr::owner( )	{ return (TTpContr&)TController::owner(); }
+string TMdContr::getStatus( )
+{
+    string val = TController::getStatus( );
+
+    if(startStat() && !redntUse())
+    {
+        if(call_st)	val += TSYS::strMess(_("Call now. "));
+        if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+        else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+        val += TSYS::strMess(_("Spent time: %s. "), TSYS::time2str(tm_gath).c_str());
+    }
+
+    return val;
+}
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return new TMdPrm(name,&owner().tpPrmAt(type));
+    return new TMdPrm(name, &owner().tpPrmAt(type));
 }
 
 void TMdContr::start_( )
 {
-    //> Main DSC code
-    if( !dataEmul() )
-    {
-	//> Check inited of Diamond API
-	if( !mod->drvInitOk() )
-	    throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
+    if(prcSt)	return;
 
-	//> DSC strucures init
-	ERRPARAMS errorParams;
-	DSCADSETTINGS dscadsettings;
-	memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
+    //> Schedule process
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
-	//>> Init Board
-	DSCCB dsccb;
-	dsccb.base_address = m_addr;
-	dsccb.int_level = cfg("INT").getI();
-	if(dscInitBoard(cfg("BOARD").getI(), &dsccb, &dscb)!= DE_NONE)
-	{
-	    dscGetLastError(&errorParams);
-	    throw TError(nodePath().c_str(),_("dscInitBoard %d(%xh) error: %s %s"),
-	        cfg("BOARD").getI(),m_addr,dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}
-	//>> Set DIO config
-	BYTE cfg_byte = cfg("DIO_CFG").getI()|0x80;
-	if( dscDIOSetConfig(dscb, &cfg_byte) != DE_NONE )
- 	{
-	    dscGetLastError(&errorParams);
-	    throw TError(nodePath().c_str(),_("dscDIOSetConfig error: %s %s"),dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-	}
-	//>> Init AD acquisition
-	dscadsettings.range = cfg("ADRANGE").getI();
-	dscadsettings.polarity = cfg("ADPOLAR").getI();
-	dscadsettings.gain = cfg("ADGAIN").getI();
-	dscadsettings.load_cal = 0;
-    }
-
-    //> Create interrupt AD DSC task
-    if(ad_int_mode) SYS->taskCreate(nodePath('.',true)+".int", 0, AD_DSCTask, this);
+    //> Start the gathering data task
+    SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
 }
 
 void TMdContr::stop_( )
 {
-    //> Close AI DAQ task
-    if(ad_dsc_st) SYS->taskDestroy(nodePath('.',true)+".int", &endrun_req_ad_dsc);
-
-    if(!dataEmul()) dscFreeBoard(dscb);
+    //> Stop the request and calc data task
+    SYS->taskDestroy(nodePath('.',true));
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+void TMdContr::prmEn( const string &id, bool val )
 {
-    TController::cfgChange(icfg);
+    ResAlloc res(en_res, true);
 
-    if(icfg.fld().name() == "ADMODE")
-    {
-	if(icfg.getB())
-	{
-	    cfg("INT").setView(true);
-	    cfg("ADCONVRATE").setView(true);
-	    cfg("ADGAIN").setView(true);
-	}
-	else
-	{
-	    cfg("INT").setView(false);
-	    cfg("ADCONVRATE").setView(false);
-	    cfg("ADGAIN").setView(false);
-	}
-	if(startStat()) stop();
-    }
-    else if(icfg.fld().name() == "DATA_EMUL" && startStat() )	stop();
+    unsigned i_prm;
+    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
+        if(p_hd[i_prm].at().id() == id)	break;
 
-    return true;
+    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
+    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
 }
 
-void *TMdContr::AD_DSCTask( void *param )
+void *TMdContr::Task( void *icntr )
+{
+    TMdContr &cntr = *(TMdContr*)icntr;
+
+    try
+    {
+        while(!TSYS::taskEndRun())
+        {
+            if(!cntr.redntUse())
+            {
+                cntr.call_st = true;
+                int64_t t_cnt = TSYS::curTime();
+
+                //> Update controller's data
+                ResAlloc res(cntr.en_res, false);
+                for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().getVals();
+                res.release();
+
+                //> Calc acquisition process time
+                cntr.tm_gath = TSYS::curTime()-t_cnt;
+                cntr.call_st = false;
+            }
+
+            cntr.prcSt = true;
+
+            //> Calc next work time and sleep
+            TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
+        }
+    }
+    catch(TError err) { mess_err(err.cat.c_str(), err.mess.c_str()); }
+
+    cntr.prcSt = false;
+
+    return NULL;
+}
+
+/*void *TMdContr::AD_DSCTask( void *param )
 {
     int64_t vtm = 0;
     struct timespec get_tm;
@@ -435,58 +468,28 @@ void *TMdContr::AD_DSCTask( void *param )
     }
 
     return NULL;
-}
+}*/
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
     if(opt->name() == "info")
     {
-	TController::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,-1,"/board",_("Board configuration")))
-	    if(ctrMkNode("area",opt,-1,"/board/dio",_("Digital IO ports. Select input!")))
-	    {
-		ctrMkNode("fld",opt,-1,"/board/dio/a",_("Port A"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/b",_("Port B"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/c1",_("Port C1"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/board/dio/c2",_("Port C2"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-	    }
-	return;
+        TController::cntrCmdProc(opt);
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        return;
     }
-
     //> Process command to page
-    string a_path = opt->attr("path");
-    if(a_path.substr(0,11) == "/board/dio/")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	{
-	    string port_n = TSYS::pathLev(a_path,2);
-	    int cfg_b = cfg("DIO_CFG").getI();
-	    if(port_n == "a")		cfg_b&=0x10;
-	    else if(port_n == "b")	cfg_b&=0x02;
-	    else if(port_n == "c1")	cfg_b&=0x01;
-	    else if(port_n == "c2")	cfg_b&=0x08;
-	    opt->setText(cfg_b?"1":"0");
-	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
-	    string port_n = TSYS::pathLev(a_path,2);
-	    int cfg_b = cfg("DIO_CFG").getI();
-	    if(port_n == "a")		cfg_b = atoi(opt->text().c_str())?cfg_b|0x10:cfg_b&(~0x10);
-	    else if(port_n == "b")	cfg_b = atoi(opt->text().c_str())?cfg_b|0x02:cfg_b&(~0x02);
-	    else if(port_n == "c1")	cfg_b = atoi(opt->text().c_str())?cfg_b|0x01:cfg_b&(~0x01);
-	    else if(port_n == "c2")	cfg_b = atoi(opt->text().c_str())?cfg_b|0x08:cfg_b&(~0x08);
-	    cfg("DIO_CFG").setI(cfg_b);
-	}
-    }
-    else TController::cntrCmdProc(opt);
+    TController::cntrCmdProc(opt);
 }
 
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), m_tp(NONE)
+    TParamContr(name,tp_prm), p_el("w_attr"), mTP(cfg("TP").getId()), mADDR(cfg("ADDR").getId()), mINT(cfg("INT").getId()),
+    mAImode(cfg("AI_VAL").getId()), asynchRd(cfg("ASYNCH_RD").getBd())
 {
 
 }
@@ -499,224 +502,483 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-
-    if(TParamContr::type().name == "a_prm")		setType(AI);
-    else if(TParamContr::type().name == "d_prm")	setType(DI);
-}
-
-void TMdPrm::setType( const string &tpId )
-{
-    TParamContr::setType(tpId);
-
-    if(TParamContr::type().name == "a_prm")		setType(AI);
-    else if(TParamContr::type().name == "d_prm")	setType(DI);
-}
-
-TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
-
-void TMdPrm::setType( TMdPrm::Type vtp )
-{
-    //> Free previos type
-    switch(m_tp)
-    {
-	case AI: vlElemDet(&mod->elemAI()); break;
-	case AO: vlElemDet(&mod->elemAO()); break;
-	case DI: vlElemDet(&mod->elemDI()); break;
-	case DO: vlElemDet(&mod->elemDO()); break;
-	default: break;
-    }
-
-    //> Init new type
-    switch(vtp)
-    {
-	case AI:
-	    cfg("GAIN").setView(true);
-	    m_gain = cfg("GAIN").getI();
-	    cfg("GAIN").setView(!owner().ADIIntMode());
-	    vlElemAtt( &mod->elemAI() );
-	    break;
-	case AO:
-	    cfg("GAIN").setView(false);
-	    vlElemAtt( &mod->elemAO() );
-	    break;
-	case DI:
-	    m_dio_port = (cfg("PORT").getI()<<4)+cfg("CNL").getI();
-	    vlElemAtt( &mod->elemDI() );
-	    break;
-	case DO:
-	    vlElemAtt( &mod->elemDO() );
-	    break;
-	default: break;
-    }
-    m_tp = vtp;
-}
-
-bool TMdPrm::cfgChange( TCfg &i_cfg )
-{
-    TParamContr::cfgChange(i_cfg);
-
-    //- Change TYPE parameter -
-    if( i_cfg.name() == "TYPE" )
-    {
-	if( i_cfg.getI() == 0 && type() == AO )		setType(AI);
-	else if( i_cfg.getI() == 0 && type() == DO )	setType(DI);
-	else if( i_cfg.getI() == 1 && type() == AI )	setType(AO);
-	else if( i_cfg.getI() == 1 && type() == DI )	setType(DO);
-	else return false;
-	return true;
-    }
-    switch( type() )
-    {
-	case AI:
-	    if( i_cfg.name() == "GAIN" ) m_gain = i_cfg.getI();
-	    break;
-	case DI: case DO:
-	    if( i_cfg.name() == "PORT" )	m_dio_port = (i_cfg.getI()<<4)+cfg("CNL").getI();
-	    else if( i_cfg.name() == "CNL" )	m_dio_port = (cfg("PORT").getI()<<4)+i_cfg.getI();
-	    break;
-	default: break;
-    }
-
-    return true;
-}
-
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
-{
-    if( !owner().startStat() || !enableStat() )	return;
-
-    //> Send to active reserve station
-    if( owner().redntUse( ) )
-    {
-	if( val.getS(0,true) == pvl.getS() ) return;
-	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
-	SYS->daq().at().rdStRequest(owner().workId(),req);
-	return;
-    }
-
-    //> Direct write
-    switch(type())
-    {
-	case AO:
-	{
-	    int code = 0;
-	    switch( atoi(val.fld().reserve().c_str()) )
-	    {
-		case 1:	code = (int)(4095.*val.getR(0,true)/100.);	break;
-		case 2:	code = (int)(4095.*val.getR(0,true)/10.);	break;
-	    }
-
-	    //- Direct writing -
-	    if( owner().dataEmul() )	break;
-	    owner().ao_res.resRequestW( );
-	    if( dscDAConvert(owner().dscb,cnl(),code) != DE_NONE )
-	    {
-		ERRPARAMS errorParams;
-		dscGetLastError(&errorParams);
-		mess_err(nodePath().c_str(),_("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-	    }
-	    owner().ao_res.resRelease( );
-	    break;
-	}
-	case DO:
-	{
-	    //- Direct writing -
-	    if( owner().dataEmul() )	break;
-	    owner().dio_res.resRequestW( );
-	    if( dscDIOOutputBit(owner().dscb, m_dio_port>>4, m_dio_port&0x0f, val.getB(0,true)) != DE_NONE )
-	    {
-		ERRPARAMS errorParams;
-		dscGetLastError(&errorParams);
-		mess_err(nodePath().c_str(),_("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-	    }
-	    owner().dio_res.resRelease( );
-	}
-	default: break;
-    }
+    if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
 void TMdPrm::vlGet( TVal &val )
 {
-    int aid = atoi(val.fld().reserve().c_str());
-    if(aid == 0)
+    if(!enableStat() || !owner().startStat())
     {
-	if(!owner().startStat())
-	    val.setS(_("2:Controller is stopped"),0,true);
-	else if(!enableStat())
-	    val.setS(_("1:Parameter is disabled"),0,true);
-	else val.setS("0",0,true);
-	return;
+        if(val.name() == "err")
+        {
+            if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
+            else if(!owner().startStat()) val.setS(_("2:Acquisition is stopped."),0,true);
+        }
+        else val.setS(EVAL_STR,0,true);
+        return;
     }
-    if(!owner().startStat() || !enableStat())	{ val.setS(EVAL_STR,0,true); return; }
 
     if(owner().redntUse()) return;
 
-    switch(type())
+    ResAlloc res(dev_res,true);
+    if(val.name() == "err")
     {
-	case AI:
-	{
-	    if(owner().ADIIntMode()) return;
-	    short gval = 0;
-	    if(enableStat())
-	    {
-		//> Direct reading
-		if(owner().dataEmul())	gval = rand()*10000/RAND_MAX;
-		else
-		{
-		    owner().ai_res.resRequestW( );
-		    owner().dscadsettings.gain = m_gain;
-		    owner().dscadsettings.current_channel = cnl();
-		    if( dscADSetSettings(owner().dscb,&owner().dscadsettings) != DE_NONE )
-		    {
-			ERRPARAMS errorParams;
-			dscGetLastError(&errorParams);
-			mess_err(nodePath().c_str(),_("dscADSetSettings error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-		    }
-		    DSCSAMPLE smpl;
-		    if( dscADSample(owner().dscb,&smpl) != DE_NONE )
-		    {
-			ERRPARAMS errorParams;
-			dscGetLastError(&errorParams);
-			mess_err(nodePath().c_str(),_("dscADSample error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring );
-		    }
-		    gval = smpl;
-		    owner().ai_res.resRelease( );
-		}
-	    }
-	    switch( aid )
-	    {
-		case 1: val.setR(enableStat()?(100.*((double)gval/32768.)):EVAL_REAL,0,true); break;
-		case 2: val.setR(enableStat()?(10.*((double)gval/32768.)):EVAL_REAL,0,true);  break;
-		case 3: val.setI(enableStat()?gval:EVAL_INT,0,true);  break;
-	    }
-	    break;
-	}
-	case DI:
-	{
-	    char gval = EVAL_BOOL;
-	    if( enableStat() )
-	    {
-		//- Direct reading -
-		if( owner().dataEmul() )	gval = !((bool)rand()%3);
-		else
-		{
-		    owner().dio_res.resRequestW( );
-		    BYTE i_bt;
-		    if( dscDIOInputBit(owner().dscb,m_dio_port>>4,m_dio_port&0x0f,&i_bt) != DE_NONE )
-		    {
-			ERRPARAMS errorParams;
-			dscGetLastError(&errorParams);
-			mess_err(nodePath().c_str(),_("dscDIOInputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
-		    }
-		    gval = i_bt;
-		    owner().dio_res.resRelease( );
-		}
-	    }
-	    val.setB(gval,0,true);
-	    break;
-	}
-	default: break;
+        if(acq_err.getVal().empty())	val.setS("0", 0, true);
+        else				val.setS(acq_err.getVal(), 0, true);
     }
+    else if(!asynchRd) getVals(val.name());
+}
+
+void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+{
+    if(!enableStat()) val.setS(EVAL_STR, 0, true);
+
+    TVariant vl = val.get(0, true);
+    if(vl.isEVal() || vl == pvl) return;
+
+    //> Send to active reserve station
+    if(owner().redntUse())
+    {
+        XMLNode req("set");
+        req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(vl.getS());
+        SYS->daq().at().rdStRequest(owner().workId(),req);
+        return;
+    }
+
+    //> Direct write
+    ResAlloc res(dev_res, true);
+    BYTE rez = DE_NONE;
+    string errRez;
+    if(val.name().compare(0,2,"ao") == 0)
+    {
+	int acnl = atoi(val.name().c_str()+2);
+    	int ao_cfg = val.fld().reserve().size() ? strtol(val.fld().reserve().c_str(),NULL,0) : -1;
+	if(ao_cfg > 0)
+	{
+	    DSCDASETTINGS dasettings;
+	    memset(&dasettings, 0, sizeof(DSCDASETTINGS));
+	    dasettings.gain	=  ao_cfg&0x0F;
+	    dasettings.polarity	= (ao_cfg&0x10) ? TRUE : FALSE;
+	    dasettings.range	= (ao_cfg&0x20) ? TRUE : FALSE;
+	    dasettings.daPolEn	= (ao_cfg&0x40) ? TRUE : FALSE;
+	    dscDASetSettings(dscb, &dasettings);
+	}
+	int res = (dev.AO>>8)&0xFF;
+	if(!res) res = 12;
+	if((rez=dscDAConvert(dscb,acnl,(int)(vmax(0,vmin(100,vl.getR()))*((1<<res)-1)/100))) != DE_NONE)
+	{ errRez = errDSC("dscDAConvert"); val.setR(EVAL_REAL, 0, true); }
+    }
+    else if(val.name().compare(0,2,"do") == 0)
+    {
+	int i_ch = 0, i_p = 0;
+    	if(sscanf((val.name().c_str()+2),"%d_%d",&i_ch,&i_p) != 2) return;
+	bool setVl = vl.getB()^((dInOutRev[(dev.DI&0xFF)+i_ch]>>i_p)&1);
+	if(mTP == DSC_IR104)	rez = dscSetRelay(dscb, (i_ch*i_p)+1, setVl);
+	else rez = dscDIOOutputBit(dscb, i_ch, i_p, setVl);
+	if(rez != DE_NONE) { errRez = errDSC((mTP==DSC_IR104)?"dscSetRelay":"dscDIOOutputBit"); val.setB(EVAL_BOOL, 0, true); }
+    }
+
+    if(errRez.size())	{ acq_err.setVal(errRez); mess_err(nodePath().c_str(), "%s", errRez.c_str()); }
+}
+
+TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
+
+void TMdPrm::enable( )
+{
+    ERRPARAMS errorParams;
+    string chnId, chnNm;
+    vector<string> als;
+
+    if(enableStat()) return;
+
+    //> Check inited of Diamond API
+    if(!mod->drvInitOk()) throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
+    dev = mod->devs[mTP];
+    if(dev.name.empty())  throw TError(nodePath().c_str(),_("Select device %d error!"),mTP);
+
+    ResAlloc res(dev_res, true);
+
+    //> Init Board
+    DSCCB dsccb;
+    memset(&dsccb, 0 ,sizeof(DSCCB));
+    dsccb.base_address = mADDR;
+    dsccb.int_level = mINT;
+    //if(mTP == DSC_HELIOS) dsccb.DAC_Config = 1 ; // for 16 bit mode DAC.
+    if(dscInitBoard(mTP,&dsccb,&dscb)!= DE_NONE)
+    {
+	dscGetLastError(&errorParams);
+	throw TError(nodePath().c_str(), _("dscInitBoard '%s'(%xh) error: %s %s"),
+	    dev.name.c_str(), mADDR, dscGetErrorString(errorParams.ErrCode), errorParams.errstring);
+    }
+
+    TParamContr::enable();
+
+    //> AI processing
+    for(unsigned i_a = 0; i_a < (dev.AI&0xFF); i_a++)
+    {
+        chnId = TSYS::strMess("ai%d",i_a); chnNm = TSYS::strMess(_("Analog input %d"),i_a);
+        p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead))).
+                setReserve(modPrm(TSYS::strMess("AI_TP%d",i_a),"0x00"));
+        als.push_back(chnId);
+    }
+
+    //> AO processing
+    for(unsigned i_a = 0; i_a < (dev.AO&0xFF); i_a++)
+    {
+        chnId = TSYS::strMess("ao%d",i_a); chnNm = TSYS::strMess(_("Analog output %d"),i_a);
+        p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite))).
+                setReserve(dev.aoTypes.size() ? modPrm(TSYS::strMess("AO_TP%d",i_a),"0x00") : string(""));
+        als.push_back(chnId);
+    }
+
+    //>> Set DIO config
+    //> DIO processing
+    if(dev.DIO)
+    {
+        int directDIO = atoi(modPrm("DirectDIO").c_str());
+	BYTE cfgBytes[10];
+	memset(cfgBytes, 0, sizeof(cfgBytes));
+
+        for(unsigned i_ch = 0; i_ch < (dev.DIO&0xFF); i_ch++)
+        {
+            dInOutRev[i_ch] = atoi(modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+            bool curDIOOut = directDIO&(1<<i_ch);
+            //> Prepare specific board configuration
+	    switch(mTP)
+	    {
+		case DSC_RMM: case DSC_ATHENA: case DSC_NEPTUNE:
+		case DSC_DMM32: case DSC_DMM32X: 	//Use only mode 0
+		    cfgBytes[0] |= 0x80;
+		    if(!curDIOOut)
+			switch(i_ch)
+			{
+			    case 0:	cfgBytes[0] |= 0x10;	break;
+			    case 1:	cfgBytes[0] |= 0x02;	break;
+			    case 2:	cfgBytes[0] |= 0x09;	break;
+			}
+		    break;
+		case DSC_OMM: case DSC_OMMDIO:
+		    cfgBytes[0] |= 0x80;
+		    cfgBytes[1] |= 0x80;
+		    if(!curDIOOut)
+			switch(i_ch)
+			{
+			    case 0:	cfgBytes[0] |= 0x10;	break;
+			    case 1:	cfgBytes[0] |= 0x02;	break;
+			    case 2:	cfgBytes[0] |= 0x09;	break;
+			    case 3:	cfgBytes[1] |= 0x10;	break;
+			    case 4:	cfgBytes[1] |= 0x02;	break;
+			    case 5:	cfgBytes[1] |= 0x09;	break;
+			}
+		    break;
+		case DSC_GPIO11_DIO: case DSC_GPIO21:	break;	//No configure need
+		case DSC_HERCEBX:
+		    if(!curDIOOut)	cfgBytes[0] |= (1<<i_ch);
+		    break;
+		case DSC_HELIOS:
+		    cfgBytes[0] = 0;
+		    switch(i_ch)
+		    {
+			case 0:	if(!curDIOOut) cfgBytes[1] |= 0x10;	break;
+			case 1:	if(!curDIOOut) cfgBytes[1] |= 0x08;	break;
+			case 2:	if(!curDIOOut) cfgBytes[1] |= 0x03;	break;
+			case 3:
+			    cfgBytes[2] = 1;
+			    cfgBytes[3] = curDIOOut ? 0x00 : 0xFF;
+			    dscDIOSetConfig(dscb, cfgBytes+2);
+			    break;
+			case 4:
+			    cfgBytes[2] = 2;
+			    cfgBytes[3] = curDIOOut ? 0x00 : 0xFF;
+			    dscDIOSetConfig(dscb, cfgBytes+2);
+			    break;
+		    }
+		    break;
+		default: throw TError(nodePath().c_str(),_("Board's '%s' DIO configuration unsupported."),dev.name.c_str());
+	    }
+            //> Attributes create
+            if((directDIO>>i_ch)&1)
+                for(int i_o = 0; i_o < 8; i_o++)
+                {
+                    chnId = TSYS::strMess("do%d_%d",i_ch,i_o); chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch,i_o);
+                    p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite|TVal::DirRead));
+                    als.push_back(chnId);
+                }
+            else
+                for(int i_i = 0; i_i < 8; i_i++)
+                {
+                    chnId = TSYS::strMess("di%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
+                    p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead));
+                    als.push_back(chnId);
+                }
+	}
+	//> Set specific board configuration
+	dscDIOSetConfig(dscb, cfgBytes);
+    }
+
+    //> DI and DO processing
+    for(unsigned i_ch = 0; i_ch < ((dev.DI&0xFF)+(dev.DO&0xFF)); i_ch++)
+    {
+        //> Reverse configuration load
+        dInOutRev[i_ch] = atoi(modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+
+        //> Attributes create
+        if(i_ch < (dev.DI&0xFF))
+            for(int i_i = 0; i_i < 8; i_i++)
+            {
+                chnId = TSYS::strMess("di%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
+                p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead));
+                als.push_back(chnId);
+            }
+        else
+            for(int i_o = 0; i_o < 8; i_o++)
+            {
+                chnId = TSYS::strMess("do%d_%d",i_ch-(dev.DI&0xFF),i_o); chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch-(dev.DI&0xFF),i_o);
+                p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite|TVal::DirRead));
+                als.push_back(chnId);
+            }
+    }
+
+    //> Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
+    {
+        unsigned i_l;
+        for(i_l = 0; i_l < als.size(); i_l++)
+            if(p_el.fldAt(i_p).name() == als[i_l])
+                break;
+        if(i_l >= als.size())
+            try{ p_el.fldDel(i_p); i_p--; }
+            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+    }
+
+    owner().prmEn(id(), true);
+}
+
+void TMdPrm::disable()
+{
+    if(!enableStat()) return;
+
+    owner().prmEn(id(), false);
+
+    TParamContr::disable();
+
+    ResAlloc res(dev_res, true);
+    dscFreeBoard(dscb);
+}
+
+void TMdPrm::getVals( const string &atr )
+{
+    if(!enableStat())	return;
+
+    vector<string> als;
+    if(atr.empty())
+    {
+        if(!asynchRd)	return;
+        vlList(als);
+    }
+    else als.push_back(atr);
+
+    ResAlloc res(dev_res, true);
+
+    string errRez;
+    BYTE rez = DE_NONE;
+    DSCADSETTINGS dscadsettings;
+    memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
+
+    for(int i_a = 0; i_a < als.size(); i_a++)
+    {
+        AutoHD<TVal> val = vlAt(als[i_a]);
+
+        if(als[i_a].compare(0,2,"ai") == 0)
+        {
+	    dscadsettings.current_channel = atoi(als[i_a].c_str()+2);
+    	    int ai_cfg	= strtol(val.at().fld().reserve().c_str(), NULL, 0);
+	    dscadsettings.gain		= ai_cfg&0x0F;
+	    dscadsettings.polarity	= (ai_cfg&0x10) ? TRUE : FALSE;
+	    dscadsettings.range		= (ai_cfg&0x20) ? TRUE : FALSE;
+	    dscadsettings.addiff	= (ai_cfg&0x40) ? TRUE : FALSE;
+	    //dscadsettings.load_cal	= TRUE;
+	    if(dscADSetSettings(dscb,&dscadsettings) != DE_NONE){ errRez = errDSC("dscADSetSettings"); val.at().setR(EVAL_REAL, 0, true); }
+	    DSCSAMPLE smpl;
+	    if(dscADSample(dscb,&smpl) != DE_NONE)		{ errRez = errDSC("dscADSample"); val.at().setR(EVAL_REAL, 0, true); }
+	    else
+	    {
+		int ADres = (dev.AI>>16)&0xFF;
+		if(!ADres) ADres = 16;
+		int code = (ADres<16) ? smpl : (int)smpl+32768;
+		switch(mAImode)
+		{
+		    case 0: val.at().setR(code, 0, true);			break;	//Code
+		    case 1: val.at().setR(100*(double)code/(1<<ADres), 0, true);break;	//%
+		    case 2:	//Voltage
+		    {
+			map<int, DevFeature::rng>::iterator ai_rng = dev.aiRngs.find(ai_cfg);
+			if(ai_rng != dev.aiRngs.end())
+			    val.at().setR(ai_rng->second.min+(((double)code)/(1<<ADres))*(ai_rng->second.max-ai_rng->second.min), 0, true);
+			else val.at().setR(code, 0, true);
+			break;
+		    }
+		}
+	    }
+        }
+        else if(als[i_a].compare(0,2,"di") == 0 || als[i_a].compare(0,2,"do") == 0)
+        {
+	    int i_ch = 0, i_p = 0;
+    	    if(sscanf((als[i_a].c_str()+2),"%d_%d",&i_ch,&i_p) != 2) return;
+	    BYTE i_bt;
+	    if(mTP == DSC_IR104)
+	    {
+		if(als[i_a].compare(0,2,"di") == 0)
+		    rez = dscIR104OptoInput(dscb, (i_ch*i_p)+1, &i_bt);
+		else rez = dscIR104RelayInput(dscb, (i_ch*i_p)+1, &i_bt);
+	    }
+	    else rez = dscDIOInputBit(dscb, i_ch, i_p, &i_bt);
+            if(rez != DE_NONE)	{ errRez = errDSC((mTP==DSC_IR104)?"dscIR104OptoInput":"dscDIOInputBit"); val.at().setB(EVAL_BOOL, 0, true); }
+            else val.at().setB((i_bt^(dInOutRev[i_ch]>>i_p))&1 , 0, true);
+        }
+    }
+
+    acq_err.setVal(errRez);
+    if(errRez.size()) mess_err(nodePath().c_str(), "%s", errRez.c_str());
+}
+
+string TMdPrm::modPrm( const string &prm, const string &def )
+{
+    string rez;
+    XMLNode prmNd;
+    try
+    {
+        prmNd.load(cfg("PRMS").getS());
+        string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
+        if(!sa.size())  return (rez=prmNd.attr(prm)).empty()?def:rez;
+        //> Internal node
+        for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
+            if(prmNd.childGet(i_n)->name() == sobj)
+                return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
+    } catch(...){ }
+
+    return def;
+}
+
+void TMdPrm::setModPrm( const string &prm, const string &val )
+{
+    XMLNode prmNd("ModCfg");
+    try { prmNd.load(cfg("PRMS").getS()); } catch(...){ }
+
+    if(modPrm(prm) != val) modif();
+    string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
+    if(!sa.size()) prmNd.setAttr(prm,val);
+    //> Internal node
+    else
+    {
+        unsigned i_n;
+        for(i_n = 0; i_n < prmNd.childSize(); i_n++)
+            if(prmNd.childGet(i_n)->name() == sobj)
+            { prmNd.childGet(i_n)->setAttr(sa,val); break; }
+        if(i_n >= prmNd.childSize())
+            prmNd.childAdd(sobj)->setAttr(sa,val);
+    }
+
+    cfg("PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+}
+
+void TMdPrm::cntrCmdProc( XMLNode *opt )
+{
+    //> Service commands process
+    string a_path = opt->attr("path");
+    if(a_path.substr(0,6) == "/serv/")  { TParamContr::cntrCmdProc(opt); return; }
+
+    DevFeature tdev = mod->devs[mTP];
+
+    //> Get page info
+    if(opt->name() == "info")
+    {
+        TParamContr::cntrCmdProc(opt);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/TP",cfg("TP").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+    	    2,"dest","select","select","/prm/cfg/brdLst");
+        ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/INT",cfg("INT").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/AI_VAL",cfg("AI_VAL").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/ASYNCH_RD",cfg("ASYNCH_RD").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+
+        ctrRemoveNode(opt,"/prm/cfg/PRMS");
+        //>> Configuration page: AI type, DIO direction and DIO inversion
+        if(tdev.name.size() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+        {
+	    //> AI processing
+            for(int i_v = 0; i_v < (tdev.AI&0xFF); i_v++)
+            {
+		XMLNode *tnd = ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/inTp%d",i_v).c_str(),
+			TSYS::strMess(_("Input %d type"),i_v).c_str(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","hex");
+		if(tdev.aiTypes.size()) tnd->setAttr("dest","select")->
+		    setAttr("sel_id",TSYS::strParse(tdev.aiTypes,0,"\n"))->
+		    setAttr("sel_list",TSYS::strParse(tdev.aiTypes,1,"\n"));
+	    }
+	    //> AO processing
+            for(int i_v = 0; tdev.aoTypes.size() && i_v < (tdev.AO&0xFF); i_v++)
+		XMLNode *tnd = ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/outTp%d",i_v).c_str(),
+			TSYS::strMess(_("Output %d type"),i_v).c_str(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
+			4,"tp","hex","dest","select","sel_id",TSYS::strParse(tdev.aoTypes,0,"\n").c_str(),
+						     "sel_list",TSYS::strParse(tdev.aoTypes,1,"\n").c_str());
+            //>> DIO processing
+            for(unsigned i_ch = 0; i_ch < (tdev.DIO&0xFF); i_ch++)
+            {
+                ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/chnOut%d",i_ch).c_str(),TSYS::strMess(_("DIO %d: out"),i_ch).c_str(),
+                    enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+                for(unsigned i_n = 0; i_n < 8; i_n++)
+                    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(),
+                        (i_n==0)?TSYS::strMess(_("DIO %d: reverse"),i_ch).c_str():"",
+                        enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+            }
+            //>> DI and DO processing
+            for(unsigned i_ch = 0; i_ch < ((tdev.DI&0xFF)+(tdev.DO&0xFF)); i_ch++)
+                for(unsigned i_n = 0; i_n < 8; i_n++)
+                    ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(), (i_n==0) ?
+                        ((i_ch < (tdev.DI&0xFF)) ? TSYS::strMess(_("DI %d reverse"),i_ch).c_str() :
+                                            	   TSYS::strMess(_("DO %d reverse"),i_ch-(tdev.DI&0xFF)).c_str()) : "",
+                                            		enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+        }
+        return;
+    }
+    //> Process command to page
+    if(a_path == "/prm/cfg/brdLst" && ctrChkNode(opt))
+	for(map<int, DevFeature>::iterator id = mod->devs.begin(); id != mod->devs.end(); ++id)
+	    opt->childAdd("el")->setAttr("id",TSYS::int2str(id->first))->setText(id->second.name);
+    //>> AI processing
+    else if(tdev.AI && a_path.compare(0,9,"/cfg/inTp") == 0)
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(modPrm("AI_TP"+a_path.substr(9),"0x00"));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) setModPrm("AI_TP"+a_path.substr(9), opt->text());
+    }
+    //>> AO processing
+    else if(tdev.AO && a_path.compare(0,10,"/cfg/outTp") == 0)
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(modPrm("AO_TP"+a_path.substr(10),"0x00"));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR)) setModPrm("AO_TP"+a_path.substr(10), opt->text());
+    }
+    //> DIO, DI and DO processing
+    else if(tdev.DIO || tdev.DI || tdev.DO)
+    {
+        if(a_path.compare(0,11,"/cfg/chnOut") == 0)
+        {
+            int rout = atoi(a_path.c_str()+11);
+            if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText(atoi(modPrm("DirectDIO").c_str())&(1<<rout)?"1":"0");
+            if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+                setModPrm("DirectDIO",TSYS::int2str(atoi(opt->text().c_str()) ? atoi(modPrm("DirectDIO").c_str()) | (1<<rout) :
+                                                                                atoi(modPrm("DirectDIO").c_str()) & ~(1<<rout)));
+        }
+        else if(a_path.compare(0,10,"/cfg/nRevs") == 0)
+        {
+            int i_ch = 0, i_n = 0;
+            sscanf(a_path.c_str(),"/cfg/nRevs%d_%d",&i_ch,&i_n);
+            int chVl = atoi(modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+            if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
+            if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+                setModPrm("dIORev"+TSYS::int2str(i_ch), TSYS::int2str(atoi(opt->text().c_str()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
+        }
+        else TParamContr::cntrCmdProc(opt);
+    }
+    else TParamContr::cntrCmdProc(opt);
 }
 
 void TMdPrm::vlArchMake( TVal &val )
@@ -724,8 +986,40 @@ void TMdPrm::vlArchMake( TVal &val )
     TParamContr::vlArchMake(val);
 
     if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(owner().ADIIntMode() ? TVArchive::PassiveAttr : TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(owner().ADIIntMode() ? 1000000/owner().cfg("ADCONVRATE").getI() : SYS->archive().at().valPeriod()*1000);
+    if(asynchRd)
+    {
+	val.arch().at().setSrcMode(TVArchive::PassiveAttr);
+	val.arch().at().setPeriod(owner().period() ? (int64_t)owner().period()/1000 : 1000000);
+    }
+    else
+    {
+	val.arch().at().setSrcMode(TVArchive::ActiveAttr);
+	val.arch().at().setPeriod(SYS->archive().at().valPeriod()*1000);
+    }
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
+}
+
+string TMdPrm::errDSC( const string &func )
+{
+    ERRPARAMS errorParams;
+    dscGetLastError(&errorParams);
+    return TSYS::strMess(_("%s error: %s %s"), func.c_str(), dscGetErrorString(errorParams.ErrCode), errorParams.errstring);
+}
+
+//*************************************************
+//* DevFeature                                    *
+//*************************************************
+void DevFeature::setAITypes( const string &vl )
+{
+    aiTypes = vl;
+    string idxs = TSYS::strLine(vl, 0),
+	   vals = TSYS::strLine(vl, 1),
+	   curIdx, curVal;
+    for(int offIdx = 0, offVl = 0; (curIdx=TSYS::strParse(idxs,0,";",&offIdx)).size() && (curVal=TSYS::strParse(vals,0,";",&offVl)).size(); )
+    {
+	float rMin = 0, rMax = 0;
+    	if(sscanf(curVal.c_str(),"[%f,%f]",&rMin,&rMax) == 2 && rMax > rMin)
+    	    aiRngs[strtol(curIdx.c_str(),NULL,0)] = (rng){ rMin, rMax };
+    }
 }
