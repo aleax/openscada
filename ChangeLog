@@ -1,3 +1,7 @@
+2013-01-09 Roman
+- UI.VCAEngine: "f_start" and "f_stop" attributes set on user API SYS.UI functions use this.wdgAdd() and this.wdgDel().
+
+
 2012-12-31 Roman
 - DAQ.Comedi: Archive parameters set adaptive for TVArchive::PassiveAttr and TVArchive::ActiveAttr.
 - !!!!:DAQ.DiamondBoards: DSCU driver version update to 6.01.
