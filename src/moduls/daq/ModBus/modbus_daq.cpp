@@ -632,6 +632,7 @@ string TMdContr::modBusReq( string &pdu )
     {
 	if(atoi(req.attr("err").c_str()) == 14) numErrCon++;
 	else numErrResp++;
+	mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
 	return req.attr("err");
     }
     pdu = req.text();

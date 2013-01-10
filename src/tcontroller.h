@@ -77,6 +77,7 @@ class TController : public TCntrNode, public TConfig
 	bool toStart( )		{ return mAStart; }
 	bool enableStat( )	{ return en_st; }
 	bool startStat( )	{ return run_st; }
+	int  messLev( )		{ return mMessLev; }
 
 	void start( );
 	void stop( );
@@ -135,7 +136,7 @@ class TController : public TCntrNode, public TConfig
 	void LoadParmCfg(  );
 
 	//Private attributes
-	TCfg	&mId;
+	TCfg	&mId, &mMessLev;
 	char	&mAEn, &mAStart;
 
 	string	mDB;

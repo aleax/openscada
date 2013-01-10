@@ -301,6 +301,7 @@ void TMdContr::start_( )
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
+    servSt = 0;
     tmDelay = 0;
 
     //> Start the gathering data task
@@ -397,6 +398,7 @@ void *TMdContr::Task( void *icntr )
 	    if(isErr)
 	    {
 		cntr.acq_err.setVal(req.attr("err"));
+		mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
 		cntr.tmDelay = cntr.syncPer();
 		continue;
 	    }
@@ -484,7 +486,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	for(int i_a = 1; i_a <= 22; i_a++)
 	    req.childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("attributeId",TSYS::int2str(i_a));
 	reqOPC(req);
-	if(!req.attr("err").empty()) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
+	if(!req.attr("err").empty())
+	{
+	    mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+	    throw TError(nodePath().c_str(), "%s", req.attr("err").c_str());
+	}
 
 	//>> Get result
 	for(unsigned i_a = 0; i_a < req.childSize(); i_a++)
@@ -527,7 +533,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		    reqTp.setAttr("id","Read")->setAttr("timestampsToReturn",TSYS::int2str(TProt::TS_NEITHER))->
 			childAdd("node")->setAttr("nodeId",nAVl)->setAttr("attributeId","3");
 		    reqOPC(reqTp);
-		    if(reqTp.attr("err").empty() && reqTp.childSize()) nAVl = reqTp.childGet(0)->text();
+		    if(!reqTp.attr("err").empty()) mess_err(nodePath().c_str(), "%s", reqTp.attr("err").c_str());
+		    else if(reqTp.childSize()) nAVl = reqTp.childGet(0)->text();
 		    break;
 		}
 		case TProt::AId_ValueRank:	nANm = _("ValueRank");	break;
@@ -577,7 +584,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 			      setAttr("resultMask",TSYS::int2str(/*0x3f*/TProt::RdRm_IsForward|TProt::RdRm_BrowseName));
 	try{ reqOPC(req); } catch(TError) { opt->childAdd("el")->setText(_("Root folder (84)")); return; }
 	if(!req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize())
-	{ opt->childAdd("el")->setText(_("Root folder (84)")); return; }
+	{
+	    if(!req.attr("err").empty()) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+	    opt->childAdd("el")->setText(_("Root folder (84)"));
+	    return;
+	}
 	XMLNode *rn = req.childGet(0);
 
 	//>> Process inverse references
@@ -678,7 +689,11 @@ string TMdPrm::attrPrc( )
 	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_Value));
 	req.childAdd("node")->setAttr("nodeId",snd)->setAttr("attributeId",TSYS::int2str(TProt::AId_AccessLevel));
 	owner().reqOPC(req);
-	if(!req.attr("err").empty()) return req.attr("err");
+	if(!req.attr("err").empty())
+	{
+	    mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+	    return req.attr("err");
+	}
 	if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;
 
 	//>> Variable node's attribute creation
@@ -842,6 +857,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 			  setAttr("EncodingMask",TSYS::strLine(valo.fld().reserve(),1))->
 			  setText(vl.getS());
     owner().reqOPC(req);
+    if(!req.attr("err").empty()) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+    else if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))
+	mess_err(nodePath().c_str(), "Write error status: %s", req.childGet(0)->attr("Status").c_str());
 }
 
 void TMdPrm::vlArchMake( TVal &val )

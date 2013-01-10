@@ -1004,7 +1004,9 @@ string TMdPrm::errDSC( const string &func )
 {
     ERRPARAMS errorParams;
     dscGetLastError(&errorParams);
-    return TSYS::strMess(_("%s error: %s %s"), func.c_str(), dscGetErrorString(errorParams.ErrCode), errorParams.errstring);
+    string rez = TSYS::strMess(_("%s error: %s %s"), func.c_str(), dscGetErrorString(errorParams.ErrCode), errorParams.errstring);
+    mess_err(nodePath().c_str(), "%s", rez.c_str());
+    return rez;
 }
 
 //*************************************************

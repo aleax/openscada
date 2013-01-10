@@ -2,13 +2,13 @@
 # Copyright (C) 2003 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2011.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.7.2\n"
+"Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-01 15:41+0200\n"
+"POT-Creation-Date: 2013-01-10 16:22+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -197,6 +197,16 @@ msgstr ""
 
 msgid "Level"
 msgstr "Рівень"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
+"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
+"Emergency (7), ALARMS"
+msgstr ""
+"Отладка (0);Інформація (1);Зауваження (2);Попередження (3);Помилка (4);Критично (5);"
+"Тривога (6);Аварія (7);Інформація (1), ПОРУШЕННЯ;Зауваження (2), ПОРУШЕННЯ;Попередження "
+"(3), ПОРУШЕННЯ;Помилка (4), ПОРУШЕННЯ;Критично (5), ПОРУШЕННЯ;Тривога (6), ПОРУШЕННЯ;Аварія (7), ПОРУШЕННЯ"
 
 msgid "Get messages for level more and equal it."
 msgstr "Отримання повідомлень з рівнем більш або дорівнює вказаному."
@@ -774,6 +784,19 @@ msgstr "Параметри"
 
 msgid "To add parameters"
 msgstr "Додавати параметри"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7)"
+msgstr "Отладка (0);Інформація (1);Зауваження (2);Попередження (3);Помилка (4);Критично (5);"
+"Тривога (6);Аварія (7)"
+
+msgid ""
+"Get messages for level more and equal it.\n"
+"Also affect to specific-diagnostic messages generation by data source."
+msgstr ""
+"Отримання повідомлень з рівнем більш або дорівнює вказаному.\n"
+"Також впливає на генерацію джерелом даних специфічних-діагностичних повідомлень."
 
 msgid "Data acquisition"
 msgstr "Збір даних"
@@ -1467,7 +1490,7 @@ msgstr "Порожня станція"
 
 #, c-format
 msgid "System counters on exit: %s"
-msgstr ""
+msgstr "Системні лічильники при виході: %s"
 
 #, c-format
 msgid ""
@@ -1880,8 +1903,8 @@ msgstr "Помилка запуску контролера '%s'."
 msgid "Id of parameter type error!"
 msgstr "Id параметру помилкове!"
 
-msgid "Parameter type is not present."
-msgstr "Тип параметру відсутній."
+msgid "Parameter type '%s' is not present."
+msgstr "Тип параметру '%s' відсутній."
 
 #, c-format
 msgid "Error attach new controller %s."
@@ -2151,6 +2174,7 @@ msgstr "Незавершений атрибут. Поз: %d"
 msgid "Entity error. Pos: %d"
 msgstr "Помилка сутності. Поз: %d"
 
+#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Невідома сутність '%s'. Поз: %d"
 
@@ -2183,6 +2207,3 @@ msgstr "Вхідні транспорти не підтримуються!"
 
 msgid "Output transport no support!"
 msgstr "Вихідні транспорти не підтримуються!"
-
-#~ msgid "Error converting from %s to %s for message part: '%s'"
-#~ msgstr "Помилка перетворення з %s до %s для частини повідомлення: %s"

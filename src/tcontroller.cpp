@@ -30,7 +30,8 @@ using namespace OSCADA;
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    TConfig(cfgelem), en_st(false), run_st(false), mId(cfg("ID")), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
+    TConfig(cfgelem), en_st(false), run_st(false),
+    mId(cfg("ID")), mMessLev(cfg("MESS_LEV")), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
     mDB(daq_db), mRedntUse(false)
 {
     mId = id_c;
@@ -472,6 +473,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/cntr/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/cntr/cfg",0,"root",SDAQ_ID,RWRWR_);
+		ctrRemoveNode(opt,"/cntr/cfg/MESS_LEV");
 		ctrRemoveNode(opt,"/cntr/cfg/REDNT");
 		ctrRemoveNode(opt,"/cntr/cfg/REDNT_RUN");
 	    }
@@ -486,6 +488,24 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
 	    }
+	}
+	if(ctrMkNode("area",opt,-1,"/mess",_("Messages")))
+	{
+            ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SDAQ_ID,1,"tp","time");
+            ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SDAQ_ID,1,"tp","dec");
+            ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SDAQ_ID,5,"tp","dec","dest","select",
+        	"sel_id","0;1;2;3;4;5;6;7",
+        	"sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+                "help",_("Get messages for level more and equal it.\n"
+                	 "Also affect to specific-diagnostic messages generation by data source."));
+            if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SDAQ_ID))
+            {
+                ctrMkNode("list",opt,-1,"/mess/mess/0",_("Time"),R_R___,"root",SDAQ_ID,1,"tp","time");
+                ctrMkNode("list",opt,-1,"/mess/mess/0a",_("mcsec"),R_R___,"root",SDAQ_ID,1,"tp","dec");
+                ctrMkNode("list",opt,-1,"/mess/mess/1",_("Category"),R_R___,"root",SDAQ_ID,1,"tp","str");
+                ctrMkNode("list",opt,-1,"/mess/mess/2",_("Lev."),R_R___,"root",SDAQ_ID,1,"tp","dec");
+                ctrMkNode("list",opt,-1,"/mess/mess/3",_("Message"),R_R___,"root",SDAQ_ID,1,"tp","str");
+            }
 	}
 	return;
     }
@@ -552,6 +572,50 @@ void TController::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_t = 0; i_t < owner().tpPrmSize( ); i_t++)
 		if(owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2))
 		     modifG( );
+    }
+    else if(a_path == "/mess/tm")
+    {
+        if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
+        {
+            opt->setText(TBDS::genDBGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")));
+            if(!atoi(opt->text().c_str())) opt->setText(TSYS::int2str(time(NULL)));
+        }
+        if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+            TBDS::genDBSet(SYS->daq().at().nodePath()+"messTm",(atoi(opt->text().c_str())>=time(NULL))?"0":opt->text(),opt->attr("user"));
+    }
+    else if(a_path == "/mess/size")
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    	    opt->setText(TBDS::genDBGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+    	    TBDS::genDBSet(SYS->daq().at().nodePath()+"messSize",opt->text(),opt->attr("user"));
+    }
+    else if(a_path == "/mess/lvl")
+    {
+        if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))	opt->setText(mMessLev.getS());
+        if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))  mMessLev = opt->text();
+    }
+    else if(a_path == "/mess/mess" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID))
+    {
+        vector<TMess::SRec> rec;
+        time_t gtm = atoi(TBDS::genDBGet(SYS->daq().at().nodePath()+"messTm","0",opt->attr("user")).c_str());
+        if(!gtm) gtm = time(NULL);
+        int gsz = atoi(TBDS::genDBGet(SYS->daq().at().nodePath()+"messSize","60",opt->attr("user")).c_str());
+        SYS->archive().at().messGet(gtm-gsz, gtm, rec, "/^(al"+owner().modId()+":"+id()+"(\\.|$)|"+nodePath()+")/", messLev(), "");
+
+        XMLNode *n_tm   = ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SDAQ_ID);
+        XMLNode *n_tmu  = ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"root",SDAQ_ID);
+        XMLNode *n_cat  = ctrMkNode("list",opt,-1,"/mess/mess/1","",R_R___,"root",SDAQ_ID);
+        XMLNode *n_lvl  = ctrMkNode("list",opt,-1,"/mess/mess/2","",R_R___,"root",SDAQ_ID);
+        XMLNode *n_mess = ctrMkNode("list",opt,-1,"/mess/mess/3","",R_R___,"root",SDAQ_ID);
+        for(int i_rec = rec.size()-1; i_rec >= 0; i_rec--)
+        {
+            if(n_tm)	n_tm->childAdd("el")->setText(TSYS::int2str(rec[i_rec].time));
+            if(n_tmu)	n_tmu->childAdd("el")->setText(TSYS::int2str(rec[i_rec].utime));
+            if(n_cat)	n_cat->childAdd("el")->setText(rec[i_rec].categ);
+            if(n_lvl)	n_lvl->childAdd("el")->setText(TSYS::int2str(rec[i_rec].level));
+            if(n_mess)	n_mess->childAdd("el")->setText(rec[i_rec].mess);
+        }
     }
     else TCntrNode::cntrCmdProc(opt);
 }

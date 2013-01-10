@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.7.2\n"
+"Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-01 15:41+0200\n"
+"POT-Creation-Date: 2013-01-10 16:22+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -205,8 +205,18 @@ msgstr ""
 msgid "Level"
 msgstr "Stufe"
 
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
+"(3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;"
+"Emergency (7), ALARMS"
+msgstr ""
+"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch (5);"
+"Wach (6);Notfall (7);Information (1), ALARM;Bemerkung (2), ALARM;Warnung "
+"(3), ALARM;Fehler (4), ALARM;Kritisch (5), ALARM;Wach (6), ALARM;Notfall (7), ALARM"
+
 msgid "Get messages for level more and equal it."
-msgstr "Empfang von Nachrichten für gleiche und höhere Stufe"
+msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
 
 msgid "Archivator"
 msgstr "Archivar"
@@ -787,6 +797,19 @@ msgstr "Optionen"
 
 msgid "To add parameters"
 msgstr "Optionen hinzufügen"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7)"
+msgstr "Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch (5);"
+"Wach (6);Notfall (7)"
+
+msgid ""
+"Get messages for level more and equal it.\n"
+"Also affect to specific-diagnostic messages generation by data source."
+msgstr ""
+"Empfang von Nachrichten für gleiche und höhere Stufe.\n"
+"Wirkt sich auch auf das Erzeugen der Datenquelle Diagnosemeldungen."
 
 msgid "Data acquisition"
 msgstr "Datenerfassung"
@@ -1488,7 +1511,7 @@ msgstr "Leere Station "
 
 #, c-format
 msgid "System counters on exit: %s"
-msgstr ""
+msgstr "System Zählern an der Ausfahrt: %s"
 
 #, c-format
 msgid ""
@@ -1898,8 +1921,8 @@ msgstr "Fehler beim Starten des Controllers '%s'."
 msgid "Id of parameter type error!"
 msgstr "Fehler Typ des Parameterbezeichners!"
 
-msgid "Parameter type is not present."
-msgstr "Parametertyp ist nicht vorhanden."
+msgid "Parameter type '%s' is not present."
+msgstr "Parametertyp '%s' ist nicht vorhanden."
 
 #, c-format
 msgid "Error attach new controller %s."
@@ -2170,6 +2193,7 @@ msgstr "Unfertig Attribut. Pos: %d"
 msgid "Entity error. Pos: %d"
 msgstr "Entity Fehler. Pos: %d"
 
+#, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Unbekannte Entität '%s'. Pos: %d"
 
@@ -2202,6 +2226,3 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
-
-#~ msgid "Error converting from %s to %s for message part: '%s'"
-#~ msgstr "Fehler beim Konvertieren aus %s in %s für Nachricht: %s"

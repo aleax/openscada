@@ -1,3 +1,10 @@
+2013-01-10 Roman
+- Archive: Level field for messages list set selectable from readable levels "Debug (0);Information (1);...".
+- Controller: messLev() function is added for diagnostic messages level. Further will used for some debug information enable.
+    Tab "Messages" is added for full log diagnostic information about the data source.
+- DAQ.DiamondBoards, DAQ.ModBus, DAQ.OPC_UA: Diagnostic messages is added.
+
+
 2013-01-09 Roman
 - UI.VCAEngine: "f_start" and "f_stop" attributes set on user API SYS.UI functions use this.wdgAdd() and this.wdgDel().
 

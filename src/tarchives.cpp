@@ -772,7 +772,10 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		    _("Messages category template or regular expression.\n"
             	      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
                       "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
-		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","-7","max","7",
+		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,5,"tp","dec","dest","select",
+            	    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
+            	    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);"
+            		         "Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"),
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/m_arch/lstAMess",
 		    "help",_("Messages archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
