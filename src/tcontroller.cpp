@@ -489,7 +489,7 @@ void TController::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
 	    }
 	}
-	if(ctrMkNode("area",opt,-1,"/mess",_("Messages")))
+	if(ctrMkNode("area",opt,-1,"/mess",_("Diagnostics")))
 	{
             ctrMkNode("fld",opt,-1,"/mess/tm",_("Time"),RWRW__,"root",SDAQ_ID,1,"tp","time");
             ctrMkNode("fld",opt,-1,"/mess/size",_("Size (s)"),RWRW__,"root",SDAQ_ID,1,"tp","dec");

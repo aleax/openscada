@@ -26,6 +26,9 @@
 #include <tvariant.h>
 #include <tconfig.h>
 
+#define ATTR_OI_DEPTH	10	//Order index field depth = real limit to attributes
+#define ATTR_CON_DEPTH	6	//Connection counter depth = simultaneously connections to single attribute
+
 using namespace OSCADA;
 
 namespace VCA
@@ -133,8 +136,8 @@ class Attr
 	TFld		*mFld;		//Base field
 	unsigned	m_modif;	//Modify counter
 	unsigned short	self_flg;	//Self attributes flags
-	unsigned char	mOi	 :8;	//Order index
-	unsigned char	mConn    :8;	//Connections counter
+	unsigned short	mOi	 :ATTR_OI_DEPTH;	//Order index, up to 256 attributes
+	unsigned short	mConn    :ATTR_CON_DEPTH;	//Connections counter
 
 	string	cfg;			//Configuration template and value
 

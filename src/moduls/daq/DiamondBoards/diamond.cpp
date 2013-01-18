@@ -476,8 +476,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
         TController::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
         return;
     }
     //> Process command to page
@@ -899,7 +900,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
         ctrMkNode("fld",opt,-1,"/prm/cfg/INT",cfg("INT").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
         ctrMkNode("fld",opt,-1,"/prm/cfg/AI_VAL",cfg("AI_VAL").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-        ctrMkNode("fld",opt,-1,"/prm/cfg/ASYNCH_RD",cfg("ASYNCH_RD").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+        ctrMkNode("fld",opt,-1,"/prm/cfg/ASYNCH_RD",cfg("ASYNCH_RD").fld().descr(),RWRWR_,"root",SDAQ_ID);
 
         ctrRemoveNode(opt,"/prm/cfg/PRMS");
         //>> Configuration page: AI type, DIO direction and DIO inversion

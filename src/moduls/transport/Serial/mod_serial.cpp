@@ -207,7 +207,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 //* TTrIn                                        *
 //************************************************
 TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0),
+    TTransportIn(name,idb,el), fd(-1), endrun(false), trIn(0), trOut(0), tmMax(0), mTaskPrior(0),
     mMdmTm(20), mMdmPreInit(0.5), mMdmPostInit(1), mMdmInitStr1("ATZ"), mMdmInitStr2(""), mMdmInitResp("OK"),
     mMdmRingReq("RING"), mMdmRingAnswer("ATA"), mMdmRingAnswerResp("CONNECT"),
     mMdmMode(false), mMdmDataMode(false), mRTSfc(false)
@@ -231,6 +231,7 @@ void TTrIn::load_( )
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("TMS");		if(!vl.empty()) setTimings(vl);
+	vl = prmNd.attr("TaskPrior");   if(!vl.empty()) setTaskPrior(atoi(vl.c_str()));
 	vl = prmNd.attr("MdmTm");	if(!vl.empty()) setMdmTm(atoi(vl.c_str()));
 	vl = prmNd.attr("MdmPreInit");	if(!vl.empty()) setMdmPreInit(atof(vl.c_str()));
 	vl = prmNd.attr("MdmPostInit");	if(!vl.empty()) setMdmPostInit(atof(vl.c_str()));
@@ -247,6 +248,7 @@ void TTrIn::save_( )
 {
     XMLNode prmNd("prms");
     prmNd.setAttr("TMS",timings());
+    prmNd.setAttr("TaskPrior",TSYS::int2str(taskPrior()));
     prmNd.setAttr("MdmTm",TSYS::int2str(mdmTm()));
     prmNd.setAttr("MdmPreInit",TSYS::real2str(mdmPreInit()));
     prmNd.setAttr("MdmPostInit",TSYS::real2str(mdmPostInit()));
@@ -446,7 +448,7 @@ void TTrIn::start()
     connect( );
 
     //> Start listen task
-    SYS->taskCreate(nodePath('.',true), 0, Task, this);
+    SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 }
 
 void TTrIn::stop()
@@ -653,6 +655,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    frm - maximum frame length, in ms."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	if(atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");
@@ -674,6 +677,11 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(timings());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTimings(opt->text());
+    }
+    else if(a_path == "/prm/cfg/taskPrior")
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))   opt->setText(TSYS::int2str(taskPrior()));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))   setTaskPrior(atoi(opt->text().c_str()));
     }
     else if(a_path == "/mod/tm")
     {

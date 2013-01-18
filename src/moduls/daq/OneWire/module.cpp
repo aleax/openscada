@@ -319,7 +319,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         TController::cntrCmdProc(opt);
         ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
             "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
         ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",mBus.fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
             "dest","select","select","/cntr/cfg/BUSLst","help",_("1Wire bus number according OWFS order configuration."));
         return;

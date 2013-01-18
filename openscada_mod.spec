@@ -110,6 +110,9 @@ Summary: Open SCADA system core.
 Summary(ru_RU.UTF8): Ядро открытой SCADA системы.
 Summary(uk_UA.UTF8): Ядро відкритої SCADA системи.
 Summary(de_DE.UTF8): Open SCADA-System Kern.
+%if %_vendor == "alt"
+AutoReq: noshell
+%endif
 Group: Graphics
 %description core
 Open SCADA system core. For access use account "root" and password "openscada".
@@ -232,6 +235,9 @@ Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" 
 Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,RU,UK).
 Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,RU,UK).
 Group: Graphics
+%if %_vendor == "alt"
+AutoReq: noshell
+%endif
 Requires: %name-LibDB.Main %name-LibDB.VCA
 Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System
 Requires: %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem
@@ -264,6 +270,9 @@ Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" 
 Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,RU,UK).
 Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,RU,UK).
 Group: Graphics
+%if %_vendor == "alt"
+AutoReq: noshell
+%endif
 Requires: %name-LibDB.Main %name-LibDB.VCA
 Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.System
 Requires: %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS
@@ -1322,6 +1331,7 @@ install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 %files DAQ.BFN
 %_libdir/openscada/daq_BFN.so
 %_datadir/locale/*/LC_MESSAGES/oscd_BFN.mo
+%_datadir/openscada/BFN/*.db
 %endif
 
 %if_enabled Comedi

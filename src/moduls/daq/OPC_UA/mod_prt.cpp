@@ -204,6 +204,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     try
     {
+	string debugCat = io.attr("debugCat");
 	if( io.name() == "opc.tcp" )
 	{
 	    if( io.attr("id") == "HEL" )
@@ -219,17 +220,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oS(rez,io.attr("EndPoint"));		//EndpointURL
 		oNu(rez,rez.size(),4,4);		//Real message size
 
-#if OSC_DEBUG >= 5
-		printf("TEST 10: HELLO request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), "HELLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		//> Send request
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
 
-#if OSC_DEBUG >= 5
-		printf("TEST 10a: HELLO response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: response: %s"), "HELLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		int off = 4;
 		if( rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size() )
@@ -300,14 +297,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    //> Signature
 		    rez += asymmetricSign( rez, io.attr("PvKey") );
 		    //> Encoding
-#if OSC_DEBUG >= 5
-		    printf("TEST 11a: OPN request, decoded:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		    if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request, decoded: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		    rez.replace(begEncBlck,rez.size()-begEncBlck,asymmetricEncrypt(rez.substr(begEncBlck),io.attr("ServCert"),secPlc));
 		}
-#if OSC_DEBUG >= 5
-		printf("TEST 11: OPN request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		//> Send request and wait respond
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
@@ -327,9 +320,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
 		else
 		{
-#if OSC_DEBUG >= 5
-		    printf("TEST 11a: OPN response:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		    if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: response: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		    iNu(rez,off,4);					//Secure channel identifier
 		    iS(rez,off);					//Security policy URI
 		    string servCert = iS(rez,off);			//ServerCertificate
@@ -427,9 +418,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		io.setAttr("SecChnId",""); io.setAttr("SecTokenId","");
 		io.setAttr("SeqNumber",""); io.setAttr("SeqReqId","");
 
-#if OSC_DEBUG >= 5
-		printf("TEST 12: CLO request:\n%s\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), "CLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		//> Send request and don't wait response
 		tro.messIO( rez.data(), rez.size(), NULL, 0, 0, true );
 	    }
@@ -608,9 +597,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			rez.replace(begEncBlck,rez.size()-begEncBlck,symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
 		}
 
-#if OSC_DEBUG >= 5
-		printf("TEST 13: Request '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), io.attr("id").c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
 		//> Send request and wait respond
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
@@ -622,9 +609,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.append( buf, resp_len );
 		}
 
-#if OSC_DEBUG >= 5
-		printf("TEST 13a: Response '%s':\n%s\n",io.attr("id").c_str(),TSYS::strDecode(rez,TSYS::Bin).c_str());
-#endif
+		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: response: %s"), io.attr("id").c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		off = 4;
 		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )

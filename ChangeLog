@@ -1,3 +1,17 @@
+2013-01-18 Roman
+- FIX:SYS: RPM build spec-files some fixed for ALTLinux.
+- SYS: Tasks priority level context help message is added.
+- !:DAQ.*: To editable control for Controller object's configuration fields depends from "Enable" and "Start" stats is added.
+- !!:DAQ.ModBus: Context help for protocol's node into "Data" mode for data's field "Id" and link status by "(+)" is added.
+    ModBus protocol log generation is some updated and added this messages into tab "Diagnostics" of the Controller object,
+    for debug level (0).
+- !:DAQ.OPC_UA: OPC UA protocol's dump messages added into tab "Diagnostics" of the Controller object, for debug level (0).
+- !!:Transport.Serial: Configure field "Priority" for input transport's task is added.
+- !!:UI.VCAEngine: Primitive "Diagram" field "Parameters number" limit expand to 100.
+    Order index for widget's attributes is set to 10 bits depth, that up to 1024 attributes support.
+    Connections counter to widget's attribute is decreased to 6 bits, that up to 64 connections.
+
+
 2013-01-10 Roman
 - Archive: Level field for messages list set selectable from readable levels "Debug (0);Information (1);...".
 - Controller: messLev() function is added for diagnostic messages level. Further will used for some debug information enable.

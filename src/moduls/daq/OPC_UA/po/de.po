@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-24 10:13+0300\n"
+"POT-Creation-Date: 2013-01-18 12:43+0200\n"
 "PO-Revision-Date: 2010-10-21 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -274,11 +274,23 @@ msgstr "Privatschlüssel des Servers (PEM)"
 msgid "Search and create new server error."
 msgstr "Fehler der Suche und der Schaffung des neuen Servers."
 
+#, c-format
+msgid "%s: request: %s"
+msgstr "%s: Anforderung: %s"
+
+#, c-format
+msgid "%s: response: %s"
+msgstr "%s: Antwort: %s"
+
 msgid "Respond size is not coincidence."
 msgstr "Nicht übereinstimmender Umfang der Antwort."
 
 msgid "Respond don't acknowledge."
 msgstr "Nichtübereinstimmung der Antwort."
+
+#, c-format
+msgid "%s: request, decoded: %s"
+msgstr "%s: Anforderung, decodiert: %s"
 
 msgid "Not full respond."
 msgstr "Teilantwort"

@@ -152,6 +152,8 @@ void TMdContr::reqOPC( XMLNode &io )
 
     nextTry:
     XMLNode req("opc.tcp");
+    req.setAttr("debugCat", (messLev() == 0) ? nodePath() : "");
+    io.setAttr("debugCat", (messLev() == 0) ? nodePath() : "");
     if( !sess.secChnl || !sess.secToken ||
 	(1e-3*(TSYS::curTime()-sess.sesAccess) >= sess.secLifeTime) ||
 	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode() )
@@ -442,10 +444,16 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/EndPoint",cfg("EndPoint").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/Cert",cfg("Cert").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","cols","90","rows","7");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecPolicy",cfg("SecPolicy").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecMessMode",cfg("SecMessMode").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/Cert",cfg("Cert").fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID,3,"tp","str","cols","90","rows","7");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey",cfg("PvKey").fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AttrsLimit",cfg("AttrsLimit").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser")))
 	{
 	    ctrMkNode("fld",opt,-1,"/ndBrws/nd",_("Node"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/ndBrws/ndLst");

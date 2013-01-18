@@ -545,6 +545,13 @@ void Widget::attrAdd(TFld *attr, int pos, bool inher)
     try
     {
 	pthread_mutex_lock(&mtxAttr());
+	if(mAttrs.size() >= ((1<<ATTR_OI_DEPTH)-1))
+	{
+	    if(!inher) delete attr;
+	    pthread_mutex_unlock(&mtxAttr());
+	    mess_err(nodePath().c_str(),_("Add new attribute '%s' number more to %d!"),anm.c_str(),(1<<ATTR_OI_DEPTH)-1);
+	    return;
+	}
 	map<string, Attr* >::iterator p;
 	Attr *a = new Attr(attr,inher);
 	a->mOwner = this;
@@ -2149,8 +2156,8 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
 void Attr::AHDConnect( )
 {
     pthread_mutex_lock(&owner()->mtxAttrCon);
-    if(mConn < 255) mConn++;
-    else mess_err(owner()->nodePath().c_str(),_("Connections to attribute '%s' more to 255!"),id().c_str());
+    if(mConn < ((1<<ATTR_CON_DEPTH)-1)) mConn++;
+    else mess_err(owner()->nodePath().c_str(),_("Connections to attribute '%s' more to %d!"),id().c_str(),(1<<ATTR_CON_DEPTH)-1);
     pthread_mutex_unlock(&owner()->mtxAttrCon);
 }
 
