@@ -819,31 +819,20 @@ void SessPage::setEnable( bool val, bool force )
     }
 }
 
-void SessPage::setProcess( bool val )
+void SessPage::setProcess( bool val, bool lastFirstCalc )
 {
     //> Change process state for included pages
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-        pageAt(ls[i_l]).at().setProcess(val);
+        pageAt(ls[i_l]).at().setProcess(val, lastFirstCalc);
 
     if(!enable()) return;
 
     //> Change self process state
-    bool diff = (val!=process());
     if(val && !parent().at().parent().freeStat() && (attrAt("pgOpen").at().getB() || attrAt("pgNoOpenProc").at().getB()))
-    {
-	SessWdg::setProcess(true);
-	//>> First calc
-	if(diff) calc(true,false);
-    }
-    else if(!val)
-    {
-	//>> Last calc
-	if(diff) calc(false,true);
-
-	SessWdg::setProcess(false);
-    }
+	SessWdg::setProcess(true, lastFirstCalc);
+    else if(!val) SessWdg::setProcess(false, lastFirstCalc);
 }
 
 AutoHD<Page> SessPage::parent( )
@@ -888,7 +877,7 @@ AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off )
 void SessPage::calc( bool first, bool last )
 {
     //> Process self data
-    if(process()) SessWdg::calc(first,last);
+    if(process()) SessWdg::calc(first, last);
 
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
@@ -896,7 +885,7 @@ void SessPage::calc( bool first, bool last )
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	pageAt(ls[i_l]).at().calc(first,last);
+	pageAt(ls[i_l]).at().calc(first, last);
 }
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
@@ -1201,11 +1190,12 @@ void SessWdg::setEnable( bool val )
     }
 }
 
-void SessWdg::setProcess( bool val )
+void SessWdg::setProcess( bool val, bool lastFirstCalc )
 {
     if(val && !enable()) setEnable(true);
 
     //> Prepare process function value level
+    bool diff = (val!=process());
     if(val && !TSYS::strNoSpace(calcProg()).empty())
     {
 	//>> Prepare function io structure
@@ -1275,6 +1265,9 @@ void SessWdg::setProcess( bool val )
     }
     if(!val)
     {
+	//>> Last calc, before any free
+	if(diff && lastFirstCalc) calc(false, true);
+
 	//>> Free function link
 	mProc = false;
 	ResAlloc res(mCalcRes, true);
@@ -1285,12 +1278,15 @@ void SessWdg::setProcess( bool val )
     vector<string> ls;
     wdgList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().setProcess(val);
+	((AutoHD<SessWdg>)wdgAt(ls[i_l])).at().setProcess(val, false);
 
     mProc = val;
 
     //>> Make process element's lists
     if(val) prcElListUpdate();
+
+    //>> First calc, after all set
+    if(diff && val && lastFirstCalc) calc(true, false);
 }
 
 string SessWdg::ico( )
@@ -1490,7 +1486,7 @@ void SessWdg::calc( bool first, bool last )
     //> Calculate include widgets
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
 	if(wdgPresent(mWdgChldAct[i_l]))
-	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_l])).at().calc(first,last);
+	    ((AutoHD<SessWdg>)wdgAt(mWdgChldAct[i_l])).at().calc(first, last);
 
     try
     {

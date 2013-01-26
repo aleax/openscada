@@ -390,12 +390,18 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     //> Prepare log
     if(prtLen())
     {
-	time_t tm_t = time(NULL);
-	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n')+" "+prt+": '"+sid+"' --> "+TSYS::int2str(node)+"("+tro.workId()+")\n"+
-	    _("REQ -> ")+((prt!="ASCII")?TSYS::strDecode(mbap,TSYS::Bin):mbap.substr(0,mbap.size()-2))+"\n";
-	if(!err.empty()) mess += _("ERR -> ")+err;
-	else mess += _("RESP -> ")+((prt!="ASCII")?TSYS::strDecode(rez,TSYS::Bin):rez.substr(0,rez.size()-2));
-	pushPrtMess(mess+"\n");
+	string mess = _("REQ -> ");
+	if(prt != "ASCII") mess += TSYS::strDecode(mbap,TSYS::Bin);
+	else if(mbap.size() > 2) mess += mbap.substr(0,mbap.size()-2);
+	mess += "\n";
+
+	if(err.empty()) mess += _("RESP -> ");
+	else mess += _("ERR -> ") + err + " -> ";
+	if(prt != "ASCII") mess += TSYS::strDecode(rez,TSYS::Bin);
+	else if(rez.size() > 2) mess += rez.substr(0,rez.size()-2);
+
+	if(prtLen())
+	    pushPrtMess(TSYS::time2str(time(NULL),"")+" "+prt+": '"+sid+"' --> "+TSYS::int2str(node)+"("+tro.workId()+")\n"+mess+"\n");
     }
 }
 
@@ -575,10 +581,16 @@ retry:
 
     if(owner().prtLen( ) && prt.size() && answer.size())
     {
-	time_t tm_t = time(NULL);
-	string mess = TSYS::strSepParse(ctime(&tm_t),0,'\n')+" "+prt+": "+srcTr()+"("+sender+") --> "+TSYS::int2str(node)+"\n"+
-	    _("REQ -> ")+((prt!="ASCII")?TSYS::strDecode(reqst,TSYS::Bin):reqst.substr(0,reqst.size()-2))+"\n"+
-	    _("RESP -> ")+((prt!="ASCII")?TSYS::strDecode(answer,TSYS::Bin):answer.substr(0,answer.size()-2));
+	string mess = TSYS::time2str(time(NULL),"")+" "+prt+": "+srcTr()+"("+sender+") --> "+TSYS::int2str(node)+"\n";
+	mess += _("REQ -> ");
+	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin);
+	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);
+	mess += "\n";
+
+	mess +=_("RESP -> ");
+	if(prt != "ASCII")	mess += TSYS::strDecode(answer, TSYS::Bin);
+	else if(answer.size() > 2) mess += answer.substr(0, answer.size()-2);
+
 	owner().pushPrtMess(mess+"\n");
     }
 
@@ -1196,7 +1208,13 @@ void Node::cntrCmdProc( XMLNode *opt )
 	}
 	if(mode() == 0 && ctrMkNode("area",opt,-1,"/dt",_("Data")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins,move","rows","15"))
+	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,3,"s_com","add,del,ins,move","rows","15",
+		"help",_("For \"Id\" field provide specific ModBus data form:\n"
+		         "  \"R{N}[w]\" - register;\n"
+		         "  \"C{N}[w]\" - coil.\n"
+		         "Where:\n"
+		         "  {N} - number (0...65535);\n"
+		         "  w   - optional symbol for writing allow indicate.")))
 	    {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
@@ -1387,9 +1405,15 @@ void Node::cntrCmdProc( XMLNode *opt )
     else if(a_path.substr(0,8) == "/lnk/el_")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
+	{
 	    opt->setText(io(atoi(a_path.substr(8).c_str()))->rez());
+	    if(!SYS->daq().at().attrAt(opt->text(),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))
-	{ io(atoi(a_path.substr(8).c_str()))->setRez(opt->text()); modif(); }
+	{
+	    io(atoi(a_path.substr(8).c_str()))->setRez(TSYS::strParse(opt->text(),0," "));
+	    modif();
+	}
     }
     else TCntrNode::cntrCmdProc(opt);
 }

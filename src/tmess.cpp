@@ -221,7 +221,7 @@ void TMess::setLang2CodeBase( const string &vl )
     SYS->modif();
 }
 
-void TMess::load()
+void TMess::load( )
 {
     //> Load params from command line
     string argCom, argVl;
@@ -282,4 +282,12 @@ const char *TMess::labSecCRON( )
 const char *TMess::labSecCRONsel( )
 {
     return "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *";
+}
+
+const char *TMess::labTaskPrior( )
+{
+    return _("Task priority level (-1...99), where:\n"
+             "  -1     - lowest priority batch policy;\n"
+             "  0      - standard userspace priority;\n"
+             "  1...99 - realtime priority level (round-robin), often allowed only for \"root\".");
 }
