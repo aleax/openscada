@@ -1,7 +1,15 @@
+2013-01-26 Roman
+- DAQ.Templates, DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens:
+    IO type sets to "Text" and display its into DAQ attributes and template's constants.
+- DAQ.DiamondBoards: Processed AI numbers strict is added from asserted for the board. Read DIO by ports (bytes) is added.
+- Transport.Serial: Editable control object's configuration fields depends from "Start" state is added for input transport.
+- FIX:UI.Vision: Size points for selected widgets into development mode display is fixed.
+
+
 2013-01-18 Roman
 - FIX:SYS: RPM build spec-files some fixed for ALTLinux.
 - SYS: Tasks priority level context help message is added.
-- !:DAQ.*: To editable control for Controller object's configuration fields depends from "Enable" and "Start" stats is added.
+- !:DAQ.*: Editable control for Controller object's configuration fields depends from "Enable" and "Start" state is added.
 - !!:DAQ.ModBus: Context help for protocol's node into "Data" mode for data's field "Id" and link status by "(+)" is added.
     ModBus protocol log generation is some updated and added this messages into tab "Diagnostics" of the Controller object,
     for debug level (0).

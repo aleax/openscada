@@ -596,6 +596,7 @@ void TMdPrm::enable( )
     if(!mod->drvInitOk()) throw TError(nodePath().c_str(),_("DSC driver is not initialized!"));
     dev = mod->devs[mTP];
     if(dev.name.empty())  throw TError(nodePath().c_str(),_("Select device %d error!"),mTP);
+    dev.AI = (dev.AI&0xFFFF00) | vmin(dev.AI&0xFF, atoi(modPrm("modAI",TSYS::int2str(dev.AI&0xFF)).c_str()));
 
     ResAlloc res(dev_res, true);
 
@@ -786,6 +787,8 @@ void TMdPrm::getVals( const string &atr )
     DSCADSETTINGS dscadsettings;
     memset(&dscadsettings, 0, sizeof(DSCADSETTINGS));
 
+    BYTE w_bt, w_port = 255;
+
     for(int i_a = 0; i_a < als.size(); i_a++)
     {
         AutoHD<TVal> val = vlAt(als[i_a]);
@@ -827,15 +830,20 @@ void TMdPrm::getVals( const string &atr )
 	    int i_ch = 0, i_p = 0;
     	    if(sscanf((als[i_a].c_str()+2),"%d_%d",&i_ch,&i_p) != 2) return;
 	    BYTE i_bt;
+
 	    if(mTP == DSC_IR104)
 	    {
 		if(als[i_a].compare(0,2,"di") == 0)
 		    rez = dscIR104OptoInput(dscb, (i_ch*i_p)+1, &i_bt);
 		else rez = dscIR104RelayInput(dscb, (i_ch*i_p)+1, &i_bt);
 	    }
-	    else rez = dscDIOInputBit(dscb, i_ch, i_p, &i_bt);
+	    else
+	    {
+		if(w_port != i_ch) { rez = dscDIOInputByte(dscb, i_ch, &w_bt); w_port = i_ch; }
+		i_bt = (w_bt>>i_p)&1;
+	    }
             if(rez != DE_NONE)	{ errRez = errDSC((mTP==DSC_IR104)?"dscIR104OptoInput":"dscDIOInputBit"); val.at().setB(EVAL_BOOL, 0, true); }
-            else val.at().setB((i_bt^(dInOutRev[i_ch]>>i_p))&1 , 0, true);
+            else val.at().setB((i_bt^(dInOutRev[i_ch]>>i_p))&1, 0, true);
         }
     }
 
@@ -901,8 +909,11 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         ctrMkNode("fld",opt,-1,"/prm/cfg/INT",cfg("INT").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
         ctrMkNode("fld",opt,-1,"/prm/cfg/AI_VAL",cfg("AI_VAL").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
         ctrMkNode("fld",opt,-1,"/prm/cfg/ASYNCH_RD",cfg("ASYNCH_RD").fld().descr(),RWRWR_,"root",SDAQ_ID);
-
         ctrRemoveNode(opt,"/prm/cfg/PRMS");
+        if(tdev.AI)
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/modAI",_("AI number process"),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+		"tp","dec","min","0","max",TSYS::int2str(tdev.AI&0xFF).c_str());
+
         //>> Configuration page: AI type, DIO direction and DIO inversion
         if(tdev.name.size() && ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
         {
@@ -941,8 +952,15 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
         }
         return;
     }
+
     //> Process command to page
-    if(a_path == "/prm/cfg/brdLst" && ctrChkNode(opt))
+    //>> Generic "I-87xxx" and AI CNTR channels processing limit set configuration
+    if(a_path.compare(0,12,"/prm/cfg/mod") == 0)
+    {
+        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm(a_path.substr(9),TSYS::int2str(tdev.AI&0xFF)));
+        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setModPrm(a_path.substr(9),opt->text());
+    }
+    else if(a_path == "/prm/cfg/brdLst" && ctrChkNode(opt))
 	for(map<int, DevFeature>::iterator id = mod->devs.begin(); id != mod->devs.end(); ++id)
 	    opt->childAdd("el")->setAttr("id",TSYS::int2str(id->first))->setText(id->second.name);
     //>> AI processing

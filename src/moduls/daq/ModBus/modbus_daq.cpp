@@ -1062,7 +1062,8 @@ void TMdPrm::enable( )
         	if((lCtx->func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
         	{
     		    unsigned flg = TVal::DirWrite|TVal::DirRead;
-            	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
+		    if(lCtx->func()->io(i_io)->flg()&IO::FullText)		flg |= TFld::FullText;
+            	    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
             	    TFld::Type tp = TFld::type(lCtx->ioType(i_io));
 		    if((fId=p_el.fldId(lCtx->func()->io(i_io)->id(),true)) < p_el.fldSize())
             	    {
@@ -1405,14 +1406,19 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
                     else
                     {
                 	const char *tip = "str";
+			bool fullTxt = false;
                         switch(lCtx->ioType(i_io))
                         {
-                            case IO::Integer:       tip = "dec";    break;
-                            case IO::Real:          tip = "real";   break;
-                            case IO::Boolean:       tip = "bool";   break;
-                            default:                tip = "str";    break;
+                            case IO::Integer:	tip = "dec";	break;
+                            case IO::Real:	tip = "real";	break;
+                            case IO::Boolean:	tip = "bool";	break;
+                            case IO::String:
+                                if(lCtx->func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
+                                break;
+                            case IO::Object:	fullTxt = true;	break;
                         }
-                	ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+                	XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+			if(wn && fullTxt) wn->setAttr("cols","100")->setAttr("rows","4");
 		    }
                 }
             }

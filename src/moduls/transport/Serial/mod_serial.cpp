@@ -639,7 +639,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -651,11 +651,11 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
 	    "    frm - maximum frame length, in ms."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","dec");
 	if(atoi(TSYS::strParse(addr(),4,":").c_str()) && ctrMkNode("area",opt,-1,"/mod",_("Modem"),R_R_R_,"root",STR_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/mod/tm",_("Timeout (sec)"),RWRWR_,"root",STR_ID,1,"tp","dec");

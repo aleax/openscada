@@ -433,7 +433,8 @@ void TMdPrm::enable()
 		if((tmpl->val.func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 		{
 		    unsigned flg = TVal::DirWrite|TVal::DirRead;
-		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead) flg |= TFld::NoWrite;
+		    if(tmpl->val.func()->io(i_io)->flg()&IO::FullText)		flg |= TFld::FullText;
+		    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
 
 		    TFld::Type tp = TFld::type(tmpl->val.ioType(i_io));
 		    if((fId=p_el.fldId(tmpl->val.func()->io(i_io)->id(),true)) < p_el.fldSize())
@@ -814,16 +815,22 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    else
 		    {
 			const char *tip = "str";
+			bool fullTxt = false;
 			if(!is_lnk)
 			    switch(tmpl->val.ioType(i_io))
 			    {
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
-				default:		tip = "str";	break;
+				case IO::String:
+				    if(tmpl->val.func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
+				    break;
+				case IO::Object:	fullTxt = true;	break;
 			    }
-			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),tmpl->val.func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,
-			    3,"tp",tip,"dest",is_lnk?"sel_ed":"","select",is_lnk?(string("/cfg/prm/ls_")+TSYS::int2str(i_io)).c_str():"");
+			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),
+				tmpl->val.func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+			if(wn && is_lnk) wn->setAttr("dest","sel_ed")->setAttr("select","/cfg/prm/ls_"+TSYS::int2str(i_io));
+			if(wn && fullTxt)wn->setAttr("cols","100")->setAttr("rows","4");
 		    }
 		}
 	}
