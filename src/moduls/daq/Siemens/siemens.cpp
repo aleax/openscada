@@ -1507,18 +1507,19 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //Get page info
     if(opt->name() == "info")
     {
-        TController::cntrCmdProc(opt);
-        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
-            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",cfg("TYPE").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
-            "help",_("Connection type:\n"
-        	     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
+	TController::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/TYPE",cfg("TYPE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Connection type:\n"
+		     "  CIF_PB - connection to controllers series S7, by firm Siemens, by communication unit CIF-50PB or like;\n"
 		     "  ISO_TCP, ISO_TCP243 - connection to controllers series S7, by firm Siemens, by Ethernet network (TCP243 by CP243);\n"
 		     "  ADS - TwinCAT ADS/AMS protocol for connection to controllers firm Beckhoff."));
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
-            "help",_("Remote controller address. For connections:\n"
-        	     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
+	    "help",_("Remote controller address. For connections:\n"
+		     "  CIF_PB - controller address in \"Profibus\" network, digit 0-255;\n"
 		     "  ISO_TCP, ISO_TCP243 - IP-address into Ethernet network;\n"
 		     "  ADS - Network identifier and port for target and source stations, in view\n"
 		     "      \"{Target_AMSNetId}:{Target_AMSPort}|{Source_AMSNetId}:{Source_AMSPort}\"\n"
@@ -1526,8 +1527,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		     "    AMSNetId - network identifier, write into view of six digits 0-255, for example: \"192.168.0.1.1.1\";\n"
 		     "    AMSPort - port, write into view digit 0-65535."));
 	XMLNode *xt = ctrId(opt->childGet(0),"/cntr/cfg/ADDR_TR",true);
-        if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/cfg/trLst");
-        return;
+	if(xt) xt->setAttr("dest","select")->setAttr("select","/cntr/cfg/trLst");
+	return;
     }
 
     //> Process command to page
@@ -1605,6 +1606,7 @@ void TMdPrm::enable( )
 	    if((func()->io(i_io)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)))
 	    {
 		unsigned flg = TVal::DirWrite|TVal::DirRead;
+		if(func()->io(i_io)->flg()&IO::FullText)	flg |= TFld::FullText;
 		if(func()->io(i_io)->flg()&TPrmTempl::AttrRead)	flg |= TFld::NoWrite;
 		TFld::Type tp = TFld::type(ioType(i_io));
 		if((fId=p_el.fldId(func()->io(i_io)->id(),true)) < p_el.fldSize())
@@ -2002,15 +2004,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    else
 		    {
 			const char *tip = "str";
+			bool fullTxt = false;
 			if(!is_lnk)
 			    switch(ioType(i_io))
 			    {
 				case IO::Integer:	tip = "dec";	break;
 				case IO::Real:		tip = "real";	break;
 				case IO::Boolean:	tip = "bool";	break;
-				default:		tip = "str";	break;
+				case IO::String:
+                                    if(func()->io(i_io)->flg()&IO::FullText) fullTxt = true;
+                                    break;
+                                case IO::Object:	fullTxt = true; break;
 			    }
-			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+			XMLNode *wn = ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,1,"tp",tip);
+			if(wn && fullTxt) wn->setAttr("cols","100")->setAttr("rows","4");
 		    }
 		}
 	}

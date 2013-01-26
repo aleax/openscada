@@ -189,7 +189,7 @@ class SessWdg : public Widget, public TValFunc
 	bool   process( )	{ return mProc; }		//Process stat
 
 	void setEnable( bool val );
-	virtual void setProcess( bool val );
+	virtual void setProcess( bool val, bool lastFirstCalc = true );
 
 	virtual void prcElListUpdate( );
 	virtual void calc( bool first, bool last );
@@ -265,7 +265,7 @@ class SessPage : public SessWdg
 	string type( )          { return "SessPage"; }
 
 	void setEnable( bool val, bool force = false );
-	void setProcess( bool val );
+	void setProcess( bool val, bool lastFirstCalc = true );
 
 	void calc( bool first, bool last );
 

@@ -3548,9 +3548,9 @@ void SizePntWdg::apply( )
 		irect = QRect(0,0,wrect.width(),wrect.height());
 		//> Make widget's mask
 		for(int i_p = 0; i_p < 9; i_p++)
-		    if( i_p != 4 )
-			reg += QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-7)/2),
-				   irect.y()+(i_p/3)*((irect.height()-7)/2),7,7));
+		    if(i_p != 4)
+			reg += QRegion(QRect(irect.x()+(i_p%3)*((irect.width()-6)/2),
+				   irect.y()+(i_p/3)*((irect.height()-6)/2),6,6));
 		break;
 	    case EditBorder:
 		wrect = parentWidget()->rect();
@@ -3587,9 +3587,9 @@ bool SizePntWdg::event( QEvent *ev )
 			pnt.setBrush(QBrush(QColor("lightgreen")));
 			for(int i_p = 0; i_p < 9; i_p++)
 			{
-			    if( i_p == 4 ) continue;
-			    QRect anch(rect().x()+(i_p%3)*((rect().width()-7)/2),
-				rect().y()+(i_p/3)*((rect().height()-7)/2),6,6);
+			    if(i_p == 4) continue;
+			    QRect anch(rect().x()+(i_p%3)*((rect().width()-6)/2),
+				rect().y()+(i_p/3)*((rect().height()-6)/2),5,5);
 			    pnt.drawRect(anch);
 			}
 			break;

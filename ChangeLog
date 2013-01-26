@@ -1,3 +1,20 @@
+2013-01-26 Roman
+- DAQ.Templates, DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens:
+    IO type sets to "Text" and display its into DAQ attributes and template's constants.
+- Transport.Serial: Editable control object's configuration fields depends from "Start" state is added for input transport.
+- FIX:UI.Vision: Size points for selected widgets into development mode display is fixed.
+- FIX:SYS: RPM build spec-files some fixed for ALTLinux.
+- SYS: Tasks priority level context help message is added.
+- !:DAQ.*: Editable control for Controller object's configuration fields depends from "Enable" and "Start" stats is added.
+- !!:DAQ.ModBus: Context help for protocol's node into "Data" mode for data's field "Id" and link status by "(+)" is added.
+    ModBus protocol log generation is some updated and added this messages into tab "Diagnostics" of the Controller object,
+    for debug level (0).
+- !!:Transport.Serial: Configure field "Priority" for input transport's task is added.
+- !!:UI.VCAEngine: Primitive "Diagram" field "Parameters number" limit expand to 20.
+- Archive: Level field for messages list set selectable from readable levels "Debug (0);Information (1);...".
+- UI.VCAEngine: "f_start" and "f_stop" attributes set on user API SYS.UI functions use this.wdgAdd() and this.wdgDel().
+
+
 2012-12-31 Roman
 - DAQ.Serial: Working with modem process log is added.
 - FIX:UI.Vision: MDI window icon generation and set is fixed.

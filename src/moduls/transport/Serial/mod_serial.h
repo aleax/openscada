@@ -52,6 +52,7 @@ class TTrIn: public TTransportIn
 
 	//> Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
+	int	taskPrior( )			{ return mTaskPrior; }
 	float	mdmPreInit( )			{ return mMdmPreInit; }
 	float	mdmPostInit( )			{ return mMdmPostInit; }
 	string	mdmInitStr1( )			{ return mMdmInitStr1; }
@@ -61,6 +62,7 @@ class TTrIn: public TTransportIn
 	string	mdmRingAnswer( )		{ return mMdmRingAnswer; }
 	string	mdmRingAnswerResp( )		{ return mMdmRingAnswerResp; }
 
+	void	setTaskPrior( int vl )		{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 	void	setMdmTm( int vl )		{ mMdmTm = vmax(1,vmin(120,vl)); modif(); }
 	void	setMdmPreInit( float vl )	{ mMdmPreInit = vmax(0,vmin(3,vl)); modif(); }
 	void	setMdmPostInit( float vl )	{ mMdmPostInit = vmax(0.01,vmin(3,vl)); modif(); }
@@ -96,6 +98,7 @@ class TTrIn: public TTransportIn
 	float	tmMax;
 
 	//> Modem properties
+	int	mTaskPrior;			// Requests processing task prioritet
 	int	mMdmTm;
 	float	mMdmPreInit, mMdmPostInit;
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;

@@ -382,22 +382,26 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-        TController::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
+	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str",
 	    "help",_("SNMP agent host in IP address or domain host name.\nAlso you can set port like \"localhost:161\""));
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),RWRWR_,"root",SDAQ_ID,4,
-            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
-    	    "help",_("Community group or user."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM",cfg("TM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/VER",cfg("VER").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/COMM",cfg("COMM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str",
+	    "help",_("Community group or user."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PATTR_LIM",cfg("PATTR_LIM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrRemoveNode(opt,"/cntr/cfg/V3");
 	if(ver() == "3")
 	{
-    	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
-        	"sel_id","noAurhNoPriv;authNoPriv;authPriv","sel_list",_("No auth/No privacy;Auth/No privacy;Auth/Privacy"));
+	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
+		"sel_id","noAurhNoPriv;authNoPriv;authPriv","sel_list",_("No auth/No privacy;Auth/No privacy;Auth/Privacy"));
 	    if(secLev() != "noAurhNoPriv")
 	    {
-		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthProto",_("Auth"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list","MD5;SHA");
-		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass","",RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthProto",_("Auth"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list","MD5;SHA");
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass","",startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    if(secLev() == "authPriv")
 	    {
@@ -406,8 +410,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 #else
 		const char *prtLs = "DES";
 #endif
-		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivProto",_("Privacy"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list",prtLs);
-		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivPass","",RWRWR_,"root",SDAQ_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivProto",_("Privacy"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list",prtLs);
+		ctrMkNode("fld",opt,-1,"/cntr/cfg/PrivPass","",startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	}
         return;
