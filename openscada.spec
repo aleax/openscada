@@ -17,6 +17,7 @@ URL: http://oscada.org
 
 #= Individual distributives seting =
 %if %_vendor == "alt"
+AutoReq: noshell
 %set_verify_elf_method no
 BuildRequires: glibc-devel gcc-c++ libgd2-devel libMySQL-devel libsqlite3-devel libsensors3-devel
 BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.0-devel libportaudio2-devel libfftw3-devel libpcre-devel

@@ -108,6 +108,7 @@ class TMess
 	static const char *labDB( );
 	static const char *labSecCRON( );
 	static const char *labSecCRONsel( );
+	static const char *labTaskPrior( );
 
     private:
 	//Methods
