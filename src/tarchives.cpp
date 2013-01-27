@@ -1129,7 +1129,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","dec",
+		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,5,"tp","dec","dest","select",
+            	    "sel_id","0;1;2;3;4;5;6;7",
+            	    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/prm/cfg/cats",cfg("CATEG").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str",
 		    "help",_("Messages category template or regular expression to processing by archivator, separated by symbol ';'.\n"
@@ -1146,7 +1148,9 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 		_("Messages category template or regular expression.\n"
             	  "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
                   "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
-	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SARH_ID,4,"tp","dec","min","0","max","7",
+	    ctrMkNode("fld",opt,-1,"/mess/lvl",_("Level"),RWRW__,"root",SARH_ID,5,"tp","dec","dest","select",
+            	"sel_id","0;1;2;3;4;5;6;7",
+            	"sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
 		"help",_("Get messages for level more and equal it."));
 	    if(ctrMkNode("table",opt,-1,"/mess/mess",_("Messages"),R_R___,"root",SARH_ID))
 	    {
