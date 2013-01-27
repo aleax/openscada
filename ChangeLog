@@ -1,3 +1,12 @@
+2013-01-27 Roman
+- SYS: Work DB for "Start" project change to "start/St.db".
+- FIX:SYS: Document filename fix for "moduleCreation.pdf".
+- DB, DB.*: Editable control object's configuration fields depends from "Enable" state is added for DB object.
+    Some charsets list for field "CODEPAGE" is added.
+- DAQ.LogicLev: Editable control for Controller object's configuration fields depends from "Start" state is added.
+- DAQ.SMH2Gi: Directory ./data/*.ini append to repository.
+
+
 2013-01-26 Roman
 - DAQ.Templates, DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens:
     IO type sets to "Text" and display its into DAQ attributes and template's constants.

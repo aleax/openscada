@@ -954,7 +954,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
 
     //> Process command to page
-    //>> Generic "I-87xxx" and AI CNTR channels processing limit set configuration
+    //>> Generic AI CNTR channels processing limit set configuration
     if(a_path.compare(0,12,"/prm/cfg/mod") == 0)
     {
         if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(modPrm(a_path.substr(9),TSYS::int2str(tdev.AI&0xFF)));
