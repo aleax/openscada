@@ -1,6 +1,7 @@
 #!/bin/sh
 
-ProjName=start
+ProjName=$OSCADA_ProjName
+if test "x$ProjName" = "x"; then ProjName=start; fi
 
 # Work directory check and prepare
 StartCfgDir=@sysconfdir_full@

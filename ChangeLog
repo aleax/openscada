@@ -1,3 +1,12 @@
+2013-01-28 Roman
+- FIX:SYS: configure.in fixed for remove keyword "include". Detected on old aclocal.
+- SYS:ModSched: Fields "ModAllow" and "ModDeny" open for edit and save its to config-file.
+- SYS: Start script "openscada_start" adapted for start different projects by set variable "OSCADA_ProjName" to project name,
+    like "OSCADA_ProjName=MyProjName openscada_start".
+- UI.VCAEngine: Brackets '' processing into syntax highlight rules for XHTML tag's attribute is added.
+- UI.Vision, UI.WebVision: Default loadable tag for primitive "Document" set to "body".
+
+
 2013-01-27 Roman
 - SYS: Work DB for "Start" project change to "start/St.db".
 - FIX:SYS: Document filename fix for "moduleCreation.pdf".
