@@ -355,7 +355,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
 	{
 	    bool to_en_exec = atoi(opt->text().c_str());
-	    if(to_en_exec && !mTVal)	{ mTVal = new TValFunc(id()+"_exec",this); mTVal->setDimens(true); }
+	    if(to_en_exec && !mTVal)	mTVal = new TValFunc(id()+"_exec",this);
 	    if(!to_en_exec && mTVal)	{ delete mTVal; mTVal = NULL; }
 	}
     }
@@ -380,14 +380,13 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
     {
-	double c_rez = 0;
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());
-	for(int i_c = 0; i_c < n_tcalc; i_c++ )
-	{
-	    mTVal->calc(opt->attr("user"));
-	    c_rez += mTVal->calcTm();
-	}
-	mTVal->setCalcTm(c_rez);
+	string wuser = opt->attr("user");
+	int64_t t_cnt = TSYS::curTime();
+	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM;
+	for(int i_c = 0; i_c < n_tcalc && SYS->sysTm() < tm_lim; i_c++)
+	    mTVal->calc(wuser);
+	mTVal->setCalcTm(TSYS::curTime()-t_cnt);
     }
     else TCntrNode::cntrCmdProc(opt);
 }

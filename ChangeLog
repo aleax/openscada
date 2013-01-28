@@ -1,4 +1,8 @@
 2013-01-28 Roman
+- !:FIX:Function: Remove function gettimeofday() twice call on it execution time measurement, for each calls.
+    Add the function execution time limit to 10 seconds.
+- FIX:Security: Group tab's name is fixed.
+- SYS: Translation for core update.
 - FIX:SYS: configure.in fixed for remove keyword "include". Detected on old aclocal.
 - SYS:ModSched: Fields "ModAllow" and "ModDeny" open for edit and save its to config-file.
 - SYS: Start script "openscada_start" adapted for start different projects by set variable "OSCADA_ProjName" to project name,
