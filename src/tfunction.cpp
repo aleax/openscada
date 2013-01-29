@@ -364,7 +364,8 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))	opt->setText(TSYS::time2str(mTVal->calcTm()));
+    else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
+	opt->setText(TSYS::time2str(SYS->cntrGet(nodePath('.'))));
     else if(a_path.substr(0,8) == "/exec/io" && mTVal)
     {
 	string io_id = TSYS::pathLev(a_path,2);
@@ -386,7 +387,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM;
 	for(int i_c = 0; i_c < n_tcalc && SYS->sysTm() < tm_lim; i_c++)
 	    mTVal->calc(wuser);
-	mTVal->setCalcTm(TSYS::curTime()-t_cnt);
+	SYS->cntrSet(nodePath('.'),TSYS::curTime()-t_cnt);
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -474,7 +475,7 @@ void IO::setRez( const string &val )
 //* TValFunc                                      *
 //*************************************************
 TValFunc::TValFunc( const string &iname, TFunction *ifunc, bool iblk, const string &iuser ) :
-    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mDimens(false), mMdfChk(false), tm_calc(0), mFunc(NULL)
+    exCtx(NULL), mName(iname), mUser(iuser), mBlk(iblk), mMdfChk(false), mFunc(NULL)
 {
     pthread_mutex_init(&mRes, NULL);
     setFunc(ifunc);
@@ -750,29 +751,23 @@ void TValFunc::calc( const string &user )
 {
     if(!mFunc) return;
     if(!user.empty()) mUser = user;
-    if(!mDimens) mFunc->calc(this);
-    else
-    {
-	int64_t t_cnt = TSYS::curTime();
-	mFunc->calc(this);
-	tm_calc = TSYS::curTime()-t_cnt;
-    }
+    mFunc->calc(this);
 }
 
 void TValFunc::preIOCfgChange( )
 {
-    setFunc( NULL, false );
+    setFunc(NULL, false);
 }
 
 void TValFunc::postIOCfgChange( )
 {
-    setFunc( mFunc, false );
+    setFunc(mFunc, false);
 }
 
 TValFunc *TValFunc::ctxGet( int key )
 {
     map<int,TValFunc* >::iterator vc = vctx.find(key);
-    if( vc == vctx.end() ) return NULL;
+    if(vc == vctx.end()) return NULL;
     return vc->second;
 }
 

@@ -1,3 +1,9 @@
+2013-01-29 Roman
+- SYS.Function: Remove execution measurement from TValFunc.
+- SYS.Function, DAQ.{BlockCalc,DiamondBoards,LogicLev}:
+    Execution measurement is made planed by user request and moved to system counters container.
+
+
 2013-01-28 Roman
 - !:FIX:Function: Remove function gettimeofday() twice call on it execution time measurement, for each calls.
     Add the function execution time limit to 10 seconds.

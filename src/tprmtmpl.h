@@ -62,7 +62,7 @@ class TPrmTempl: public TFunction, public TConfig
 	string	id( )		{ return mId; }
 	string	name( );
 	string	descr( );
-	int maxCalcTm( );
+	int	maxCalcTm( );
 	string	progLang( );
 	string	prog( );
 

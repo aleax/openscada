@@ -159,9 +159,9 @@ TController *TipContr::ContrAttach( const string &name, const string &daq_db )
 //* Contr - Blocks and parameters container      *
 //************************************************
 Contr::Contr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c, daq_db, cfgelem), prc_st(false), call_st(false), endrun_req(false), sync_st(false),
+    ::TController(name_c, daq_db, cfgelem), prc_st(false), call_st(false), endrun_req(false), sync_st(false), exec_calc(false),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), mIter(cfg("ITER").getId()),
-    mPer(1e9), tm_calc(0)
+    mPer(1e9)
 {
     cfg("PRM_BD").setS("BlckCalcPrm_"+name_c);
     cfg("BLOCK_SH").setS("BlckCalcBlcks_"+name_c);
@@ -207,7 +207,8 @@ string Contr::getStatus( )
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(SYS->cntrGet(nodePath('.'))).c_str());
+	exec_calc = true;
     }
     return rez;
 }
@@ -376,12 +377,12 @@ void *Contr::Task( void *icontr )
     {
 	//Check calk time
 	cntr.call_st = true;
-	t_cnt = TSYS::curTime();
+	t_cnt = (cntr.exec_calc || !cntr.period()) ? TSYS::curTime() : 0; cntr.exec_calc = false;
 
 	cntr.hd_res.resRequestR( );
 	ResAlloc sres(cntr.calcRes,true);
 	for(unsigned i_it = 0; (int)i_it < cntr.mIter && !cntr.redntUse(); i_it++)
-	    for( unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++ )
+	    for(unsigned i_blk = 0; i_blk < cntr.clc_blks.size(); i_blk++)
 	    {
 		try{ cntr.clc_blks[i_blk].at().calc(is_start, is_stop, cntr.period()?((1e9*(double)cntr.iterate())/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err)
@@ -399,8 +400,7 @@ void *Contr::Task( void *icontr )
 	sres.release();
 	cntr.hd_res.resRelease( );
 
-	t_prev = t_cnt;
-	cntr.tm_calc = TSYS::curTime()-t_cnt;
+	if(t_cnt) { t_prev = t_cnt; SYS->cntrSet(cntr.nodePath('.'),TSYS::curTime()-t_cnt); }
 	cntr.call_st = false;
 
 	if(is_stop) break;

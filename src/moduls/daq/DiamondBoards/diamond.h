@@ -117,7 +117,7 @@ class TMdPrm : public TParamContr
 	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
 
 	DSCB	dscb;		//Board descriptor
-	ResString	acq_err;
+	ResString acq_err;
 };
 
 //*************************************************
@@ -161,9 +161,9 @@ class TMdContr: public TController
 	int64_t	mPer;
 
         bool	prcSt,				//Process task active
-		call_st;			//Calc now stat
+		call_st,			//Calc now stat
+		exec_calc;			//Request for execution time measurement
         vector< AutoHD<TMdPrm> > p_hd;
-        double	tm_gath;			//Gathering time
 };
 
 //*************************************************

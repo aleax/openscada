@@ -135,7 +135,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
-    prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_calc(0)
+    prc_st(false), call_st(false), endrun_req(false), exec_calc(false), mPer(1e9)
 {
     cfg("PRM_BD").setS("LogLevPrm_"+name_c);
     cfg("PRM_BD_REFL").setS("LogLevPrmRefl_"+name_c);
@@ -170,7 +170,8 @@ string TMdContr::getStatus( )
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(SYS->cntrGet(nodePath('.'))).c_str());
+	exec_calc = true;
     }
     return rez;
 }
@@ -244,15 +245,14 @@ void *TMdContr::Task( void *icntr )
 	if(!cntr.redntUse())
 	{
 	    cntr.call_st = true;
-	    t_cnt = TSYS::curTime();
+	    t_cnt = (cntr.exec_calc || !cntr.period()) ? TSYS::curTime() : 0; cntr.exec_calc = false;
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		try { cntr.p_hd[i_p].at().calc(is_start, is_stop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err)
 		{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    cntr.en_res.resRelease();
-	    t_prev = t_cnt;
-	    cntr.tm_calc = TSYS::curTime()-t_cnt;
+	    if(t_cnt) {	t_prev = t_cnt; SYS->cntrSet(cntr.nodePath('.'),TSYS::curTime()-t_cnt); }
 	    cntr.call_st = false;
 	}
 

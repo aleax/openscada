@@ -166,12 +166,10 @@ class TValFunc
 	string user( )				{ return mUser; }
 	const string &vfName( )			{ return mName; }
 	bool blk( )				{ return mBlk; }
-	bool dimens( )				{ return mDimens; }
 	bool mdfChk( )				{ return mMdfChk; }
 
 	void setUser( const string &iuser )	{ mUser = iuser; }
 	void setVfName( const string &inm )	{ mName = inm; }
-	void setDimens( bool set )		{ mDimens = set; }
 	void setMdfChk( bool set );
 
 	void ioList( vector<string> &list );
@@ -217,9 +215,6 @@ class TValFunc
 
 	//> Calc function
 	virtual void calc( const string &user = "" );
-	//> Calc time function
-	double  calcTm( )		{ return tm_calc; }
-	void setCalcTm( double ivl )	{ tm_calc = ivl; }
 
 	//> Attached function
 	TFunction *func( )		{ return mFunc; }
@@ -265,8 +260,6 @@ class TValFunc
 	unsigned short	mBlk	:1;	//Blocked values screen
 	unsigned short	mDimens	:1;	//Make dimension of the calc time
 	unsigned short	mMdfChk	:1;	//Modify attributes check
-
-	double tm_calc;		//Calc time in mikroseconds
 
 	TFunction	*mFunc;
 	map<int,TValFunc* >	vctx;

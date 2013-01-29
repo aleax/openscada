@@ -160,10 +160,11 @@ class TMdContr: public TController
 
 	bool	prc_st,				// Process task active
 		call_st,        		// Calc now stat
-		endrun_req;			// Request to stop of the Process task
+		endrun_req,			// Request to stop of the Process task
+		exec_calc;			// Request for execution time measurement
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	mPer, tm_calc;			// Template functions calc time
+	double	mPer;
 };
 
 //*************************************************
