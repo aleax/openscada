@@ -97,12 +97,13 @@ class MRCParam : public TTipParam
         class tval
         {
             public:
-                tval( ) : SoftID(-1), SN(-1), DI(0), DO(0), AO(0), CNTR(0)	{ }
+                tval( ) : SoftID(-1), SN(-1), DI(0), DO(0), AO(0), CNTR(0), diRev(0), doRev(0)	{ }
 
 		int SoftID;
 		int SN;
 
 		int DI, DO, AO, CNTR;
+		uint32_t diRev, doRev;
 
                 DevMRCFeature dev;
         };

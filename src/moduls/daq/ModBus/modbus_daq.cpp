@@ -117,7 +117,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
 	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
 	prc_st(false), call_st(false), endrun_req(false), isReload(false),
-	tmGath(0), tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
+	tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
     cfg("PRM_BD_L").setS("ModBusPrmL_"+name_c);
@@ -162,7 +162,7 @@ string TMdContr::getStatus( )
 	    if(period())val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	    else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    val += TSYS::strMess(_("Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g coils. Errors of connection %g, of respond %g."),
-				    TSYS::time2str(tmGath).c_str(),numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
+				    TSYS::time2str(SYS->taskUtilizTm(nodePath('.',true))).c_str(),numRReg,numRRegIn,numRCoil,numRCoilIn,numWReg,numWCoil,numErrCon,numErrResp);
 	}
     }
 
@@ -676,7 +676,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    cntr.call_st = true;
-	    t_cnt = TSYS::curTime();
+	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //> Write asynchronous writings queue
 	    ResAlloc resAsWr(cntr.asWr_res,true);
@@ -835,7 +835,6 @@ void *TMdContr::Task( void *icntr )
 
 	    //> Calc acquisition process time
 	    t_prev = t_cnt;
-	    cntr.tmGath = TSYS::curTime()-t_cnt;
 	    cntr.call_st = false;
 
 	    if(is_stop) break;

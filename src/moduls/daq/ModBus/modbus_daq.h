@@ -224,7 +224,6 @@ class TMdContr: public TController
 	vector<SDataRec>	acqBlksCoilIn;	//Acquisition data blocks for input coils
 	map<string,string>	asynchWrs;	//Asynchronous writers list
 
-	double	tmGath;				//Gathering time
 	float	tmDelay;			//Delay time for next try connect
 
 	vector< AutoHD<TMdPrm> >  p_hd;

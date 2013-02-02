@@ -161,8 +161,7 @@ class TMdContr: public TController
 	int64_t	mPer;
 
         bool	prcSt,				//Process task active
-		call_st,			//Calc now stat
-		exec_calc;			//Request for execution time measurement
+		call_st;			//Calc now stat
         vector< AutoHD<TMdPrm> > p_hd;
 };
 

@@ -190,7 +190,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c,daq_db,cfgelem), mPrior(cfg("PRIOR").getId()), mSched(cfg("SCHEDULE")),
-    mPer(1000000000), prcSt(false), call_st(false), exec_calc(false)
+    mPer(1000000000), prcSt(false), call_st(false)
 {
     cfg("PRM_BD").setS("DiamPrm_"+name_c);
 }
@@ -209,8 +209,7 @@ string TMdContr::getStatus( )
         if(call_st)	val += TSYS::strMess(_("Call now. "));
         if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
         else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-        val += TSYS::strMess(_("Spent time: %s. "), TSYS::time2str(SYS->cntrGet(nodePath('.'))).c_str());
-	exec_calc = true;
+        val += TSYS::strMess(_("Spent time: %s. "), TSYS::time2str(SYS->taskUtilizTm(nodePath('.',true))).c_str());
     }
 
     return val;
@@ -260,16 +259,12 @@ void *TMdContr::Task( void *icntr )
         {
             if(!cntr.redntUse())
             {
-                cntr.call_st = true;
-                int64_t t_cnt = (cntr.exec_calc || !cntr.period()) ? TSYS::curTime() : 0; cntr.exec_calc = false;
-
                 //> Update controller's data
                 ResAlloc res(cntr.en_res, false);
                 for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().getVals();
                 res.release();
 
                 //> Calc acquisition process time
-                if(t_cnt) SYS->cntrSet(cntr.nodePath('.'), TSYS::curTime()-t_cnt);
                 cntr.call_st = false;
             }
 

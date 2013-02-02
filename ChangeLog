@@ -1,3 +1,11 @@
+2013-02-02 Roman
+- SYS: Function TSYS::taskUtilizTm() added for get utilize time by pointed tasks.
+- DAQ.BlockCalc, DAQ.DiamondBoards, DAQ.LogicLev, DAQ.ModBus:
+    The function TSYS::taskUtilizTm() has replace for task execution time measurement.
+- DAQ.SMH2Gi: Digital signals inversion configuration is added for MC and MR modules.
+- FIX:UI.QTStarter: Splash early hide is fixed by the splash hide only after all "Qt" modules processing.
+
+
 2013-01-29 Roman
 - SYS.Function: Remove execution measurement from TValFunc.
 - SYS.Function, DAQ.{BlockCalc,DiamondBoards,LogicLev}:

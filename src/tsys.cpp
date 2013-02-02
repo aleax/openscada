@@ -1441,6 +1441,18 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     }
 }
 
+double TSYS::taskUtilizTm( const string &path )
+{
+    ResAlloc res(taskRes,false);
+    map<string,STask>::iterator it = mTasks.find(path);
+    if(it == mTasks.end()) return 0;
+    int64_t tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0;
+    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
+    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt; }
+    if(tm_beg && tm_beg < tm_per) return 1e-3*(tm_end-tm_beg);
+    return 0;
+}
+
 bool TSYS::taskEndRun( )
 {
     sigset_t sigset;

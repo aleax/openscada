@@ -807,6 +807,8 @@ void MRCParam::enable( TParamContr *ip )
 	    else if(itv->first.compare(0,3,"dou") == 0) ePrm->DO = vmax(ePrm->DO, atoi(itv->first.c_str()+3)+1);
 	    else if(itv->first.compare(0,4,"cntr") == 0) ePrm->CNTR = vmax(ePrm->CNTR, atoi(itv->first.c_str()+4));
 	}
+	ePrm->diRev = atoi(p->modPrm("DIRev").c_str());
+	ePrm->doRev = atoi(p->modPrm("DORev").c_str());
 
 	//> Request HardID, SoftID, SN
 	//>> Calculate request block size
@@ -947,7 +949,7 @@ void MRCParam::getVals( TParamContr *ip )
     	{
     	    if(i_d == 10)	p->vlAt("cr_ack_din8_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
     	    else if(i_d == 9)	p->vlAt("cr_ack_din7_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
-    	    else p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+    	    else p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:((vl^ePrm->diRev)>>i_d)&1, 0, true);
 	}
 
 	//> Send outputs
@@ -969,7 +971,7 @@ void MRCParam::getVals( TParamContr *ip )
     		vl = vl << 1;
         	if(i_d == 11)		{ if(p->vlAt("crst_din8_").at().getB(0, true) == true) vl |= 1; }
         	else if(i_d == 10)	{ if(p->vlAt("crst_din7_").at().getB(0, true) == true) vl |= 1; }
-        	else if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
+        	else if((p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0,true)^(ePrm->doRev>>i_d))&1) vl |= 1;
     	    }
     	    data += (char)(vl>>8); data += (char)vl;
 
@@ -1037,7 +1039,7 @@ void MRCParam::getVals( TParamContr *ip )
 	//>> Digit inputs process
 	int vl = ePrm->DI ? TSYS::getUnalign16(off) : 0;
 	for(int i_d = 0; i_d < ePrm->DI; i_d++)
-    	    p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+    	    p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:((vl^ePrm->diRev)>>i_d)&1, 0, true);
 
 	//> Send outputs
 	if(!rezReq.size() && (ePrm->DO || ePrm->AO))
@@ -1050,7 +1052,7 @@ void MRCParam::getVals( TParamContr *ip )
 		for(int i_d = (ePrm->DO-1); i_d >= 0; i_d--)
     		{
         	    vl = vl << 1;
-        	    if(p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0, true) == true) vl |= 1;
+        	    if((p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0,true)^(ePrm->doRev>>i_d))&1) vl |= 1;
 		}
     		data += (char)vl; data += (char)(vl>>8);
     	    }
@@ -1109,6 +1111,8 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	p->ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",p->cfg("MOD_SLOT").fld().descr(),(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,1,
 	    "help",_("-1  - for MC;\n0-7 - for MR."));
 	if(dMRC.HardID && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+	{
+	    //> Tune configuration
 	    for(int i_t = 0, i_ain = 0; true; i_t++)
 	    {
 		string tits = TSYS::strMess("tune%d",i_t);
@@ -1155,6 +1159,20 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 			    "root",SDAQ_ID,2,"tp","bool","help",bhelp.c_str());
 		    }
             }
+	    //> Digital signals revers configuration
+	    XMLNode *tReq = p->ctrMkNode("area",opt,-1,"/cfg/digRev",_("Digital signals reverse"));
+	    for(map<string, DevMRCFeature::SVal>::iterator itv = dMRC.vars.begin(); tReq && itv != dMRC.vars.end(); itv++)
+	    {
+		int dN = (itv->first.size()>3) ? atoi(itv->first.c_str()+3) : -1;
+		if(itv->first.compare(0,3,"din") == 0)
+		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/digRev/DI%d",dN).c_str(),TSYS::strMess(_("DI %d"),dN).c_str(),
+			p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		else if(itv->first.compare(0,3,"dou") == 0)
+		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/digRev/DO%d",dN).c_str(),TSYS::strMess(_("DO %d"),dN).c_str(),
+			p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	    }
+	    if(tReq && !tReq->childSize()) tReq->parent()->childDel(tReq);
+        }
         return true;
     }
     //> Process command to page
@@ -1209,6 +1227,22 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 		p->setModPrm(tits, TSYS::int2str(cur_val));
 	    }
 	}
+    }
+    else if(a_path.compare(0,14,"/cfg/digRev/DI") == 0)
+    {
+	int dN = atoi(a_path.c_str()+14);
+        int dVl = atoi(p->modPrm("DIRev").c_str());
+        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((dVl&(1<<dN))?"1":"0");
+        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+            p->setModPrm("DIRev", TSYS::int2str(atoi(opt->text().c_str()) ? (dVl|(1<<dN)) : (dVl & ~(1<<dN))));
+    }
+    else if(a_path.compare(0,14,"/cfg/digRev/DO") == 0)
+    {
+	int dN = atoi(a_path.c_str()+14);
+        int dVl = atoi(p->modPrm("DORev").c_str());
+        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((dVl&(1<<dN))?"1":"0");
+        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+            p->setModPrm("DORev", TSYS::int2str(atoi(opt->text().c_str()) ? (dVl|(1<<dN)) : (dVl & ~(1<<dN))));
     }
     else return false;
 

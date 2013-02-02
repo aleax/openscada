@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 10:58+0200\n"
+"POT-Creation-Date: 2013-02-01 11:23+0200\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -26,8 +26,8 @@ msgid ""
 "Data acquisition and control by Segnetics SMH2Gi (http://segnetics.com/"
 "smh_2gi) hardware interfaces and modules."
 msgstr ""
-"Datenerfassung und Steuerung Hardware-Schnittstellen und Module "
-"Segnetics SMH2Gi (http://segnetics.com/smh_2gi)."
+"Datenerfassung und Steuerung Hardware-Schnittstellen und Module Segnetics "
+"SMH2Gi (http://segnetics.com/smh_2gi)."
 
 msgid "Shared memory parameters"
 msgstr "Die Parameter gemeinsamen Speicher"
@@ -106,6 +106,7 @@ msgstr "Zusätzliche Parameter des Moduls"
 msgid "No selected any module type or type '%d' error."
 msgstr "Fehler '%d' oder ausgewählten Modultyp."
 
+#, c-format
 msgid "Parameters request error: %s."
 msgstr "Fehler Parameter-Abfrage: %s."
 
@@ -147,6 +148,17 @@ msgstr ""
 
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "Digital signals reverse"
+msgstr "Inversion von Digitalsignalen"
+
+#, c-format
+msgid "DI %d"
+msgstr ""
+
+#, c-format
+msgid "DO %d"
+msgstr ""
 
 msgid "<No select>"
 msgstr "<Nicht ausgewählt>"

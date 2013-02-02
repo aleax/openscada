@@ -131,8 +131,7 @@ class Contr: public TController
 	bool	prc_st,		// Calc status
 		call_st,        // Calc now stat
 		endrun_req,	// Endrun calc request
-		sync_st,	// Sync DB status
-		exec_calc;	// Request for execution time measurement
+		sync_st;	// Sync DB status
 	int	&mPerOld,	// Clock period (ms)
 		&mPrior,	// Process data task priority
 		&mIter;		// Iteration into clock
