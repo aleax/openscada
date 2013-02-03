@@ -1,3 +1,17 @@
+2013-02-02 Roman 0.8.0.5
+- FIX:UI.QTStarter: Splash early hide is fixed by the splash hide only after all "Qt" modules processing.
+- !:FIX:Function: Remove function gettimeofday() twice call on it execution time measurement, for each calls.
+    Add the function execution time limit to 10 seconds.
+- FIX:Security: Group tab's name is fixed.
+- SYS: Translation for core update.
+- SYS:ModSched: Fields "ModAllow" and "ModDeny" open for edit and save its to config-file.
+- UI.VCAEngine: Brackets '' processing into syntax highlight rules for XHTML tag's attribute is added.
+- UI.Vision, UI.WebVision: Default loadable tag for primitive "Document" set to "body".
+- DB, DB.*: Editable control object's configuration fields depends from "Enable" state is added for DB object.
+    Some charsets list for field "CODEPAGE" is added.
+- DAQ.LogicLev: Editable control for Controller object's configuration fields depends from "Start" state is added.
+
+
 2013-01-26 Roman
 - DAQ.Templates, DAQ.LogicLev, DAQ.ModBus, DAQ.Siemens:
     IO type sets to "Text" and display its into DAQ attributes and template's constants.
