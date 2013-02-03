@@ -6472,7 +6472,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 		    "<!DOCTYPE xhtml [\n"
 		    "  <!ENTITY nbsp \"&#160;\" >\n"
 		    "]>\n";
-		XMLNode xproc;
+		XMLNode xproc("body");
 		try
 		{
         	    xproc.load(string(XHTML_entity)+req_el->text(), true, Mess->charset());

@@ -295,7 +295,6 @@ void *TUIMod::Task( void * )
 	QtApp->processEvents();
 	TSYS::sysSleep(0.5);
     }
-    delete splash;
 
     //> Start external modules
     WinControl *winCntr = new WinControl( );
@@ -314,6 +313,8 @@ void *TUIMod::Task( void * )
 	    if(!s_el.empty() || !i_off)
 		if(winCntr->callQTModule(list[i_l])) op_wnd++;
 	}
+
+    delete splash;
 
     //> Start call dialog
     if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog( );
