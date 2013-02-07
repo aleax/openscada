@@ -1,3 +1,11 @@
+2013-02-07 Roman
+- !:SYS: User API function SYS.mktime() is added for get time since the Epoch 1.1.1970 converted from broken-down time.
+- FIX:DAQ.JavaLikeCalc: Increment, decrement and like operations fixed for object's items.
+- DAQ.JavaLikeCalc: IO type sets to "Text" and display its into DAQ attributes.
+- FIX:UI.VCAEngine: Using "Object" type into primitive "Document" calculation environment is fixed.
+- UI.VCAEngine: The primitive "Document" generation starting is added by set attribute "time" to zero and previous no zero restore.
+
+
 2013-02-02 Roman
 - SYS: Function TSYS::taskUtilizTm() added for get utilize time by pointed tasks.
 - DAQ.BlockCalc, DAQ.DiamondBoards, DAQ.LogicLev, DAQ.ModBus:

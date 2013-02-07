@@ -639,8 +639,8 @@ void Contr::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/fnc/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/fnc/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d",IO::String,IO::Integer,IO::Real,IO::Boolean,IO::Object).c_str(),
-		    "sel_list",_("String;Integer;Real;Boolean;Object"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;Text;Object"));
 		ctrMkNode("list",opt,-1,"/fnc/io/3",_("Attribute mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
 		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Read only;Read and Write;Read and Write"));
@@ -689,7 +689,7 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(func()->io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(func()->io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(func()->io(id)->type()));
+		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(func()->io(id)->type()|((func()->io(id)->flg()&IO::FullText)<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(func()->io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_val)	n_val->childAdd("el")->setText(getS(id));
 	    }
@@ -720,8 +720,11 @@ void Contr::cntrCmdProc( XMLNode *opt )
 	    {
 		case 0:	func()->io(row)->setId(opt->text());	break;
 		case 1:	func()->io(row)->setName(opt->text());	break;
-		case 2:	func()->io(row)->setType((IO::Type)atoi(opt->text().c_str()));	break;
-		case 3:	func()->io(row)->setFlg( func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)) );	break;
+		case 2:
+		    func()->io(row)->setType((IO::Type)(atoi(opt->text().c_str())&0xFF));
+                    func()->io(row)->setFlg(func()->io(row)->flg()^((func()->io(row)->flg()^(atoi(opt->text().c_str())>>8))&IO::FullText));
+		    break;
+		case 3:	func()->io(row)->setFlg(func()->io(row)->flg()^((atoi(opt->text().c_str())^func()->io(row)->flg())&(IO::Output|IO::Return)));	break;
 		case 4:	setS(row,opt->text());	break;
 	    }
 	    modif();
@@ -792,15 +795,16 @@ void Prm::enable()
 	anm    = TSYS::strSepParse(mio,2,':');
 	if( aid.empty() ) aid = ionm;
 
-	int	io_id = ((Contr &)owner()).ioId(ionm);
-	if( io_id < 0 )	continue;
+	int io_id = ((Contr &)owner()).ioId(ionm);
+	if(io_id < 0)	continue;
 
 	unsigned	flg = TVal::DirWrite|TVal::DirRead;
-	if( !(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)) ) flg |= TFld::NoWrite;
+	if(((Contr &)owner()).ioFlg(io_id)&IO::FullText)		flg |= TFld::FullText;
+	if(!(((Contr &)owner()).ioFlg(io_id) & (IO::Output|IO::Return)))flg |= TFld::NoWrite;
 	TFld::Type	tp  = TFld::type(((Contr &)owner()).ioType(io_id));
-	if( !v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg )
+	if(!v_el.fldPresent(aid) || v_el.fldAt(v_el.fldId(aid)).type() != tp || v_el.fldAt(v_el.fldId(aid)).flg() != flg)
 	{
-	    if( v_el.fldPresent(aid) ) v_el.fldDel(v_el.fldId(aid));
+	    if(v_el.fldPresent(aid)) v_el.fldDel(v_el.fldId(aid));
 	    v_el.fldAdd(new TFld(aid.c_str(),"",tp,flg));
 	}
 

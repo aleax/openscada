@@ -677,7 +677,7 @@ void ModVArchEl::fileAdd( const string &file )
     }
 }
 
-int64_t ModVArchEl::end()
+int64_t ModVArchEl::end( )
 {
     if(realEnd) return realEnd;
 

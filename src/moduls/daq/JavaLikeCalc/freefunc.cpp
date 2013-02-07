@@ -719,8 +719,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	    case Reg::Add: case Reg::Sub: case Reg::Mul:
 	    case Reg::Div: case Reg::LT: case Reg::GT:
 	    case Reg::LEQ: case Reg::GEQ: case Reg::EQU: case Reg::NEQ:
-		if( op1->vType(this) != Reg::String )
-		    op1 = cdTypeConv( op1, Reg::Real, true );
+		if(op1->vType(this) != Reg::String)
+		    op1 = cdTypeConv(op1, Reg::Real, true);
 		break;
 	    default: break;
 	}
@@ -800,11 +800,12 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     if( op1_tp != Reg::Dynamic ) op2 = cdTypeConv(op2,op1_tp);
     else if( op2->pos() < 0 ) op2 = cdMvi( op2 );
     int op2_pos = op2->pos();
-    op1->free();
-    op2->free();
     //>> Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(rez_tp);
+    //!!!! Free operands after alloc rezult for prevent operations from self by some problems with object
+    op1->free();
+    op2->free();
     //>> Add code
     switch(cod)
     {
@@ -2673,10 +2674,10 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)+";"+TSYS::int2str(IO::Object)).c_str(),
-		    "sel_list",_("Real;Integer;Boolean;String;Object"));
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String,IO::String|(IO::FullText<<8),IO::Object).c_str(),
+		    "sel_list",_("Real;Integer;Boolean;String;Text;Object"));
 		ctrMkNode("list",opt,-1,"/io/io/3",_("Mode"),RWRWR_,"root",SDAQ_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",(TSYS::int2str(IO::Default)+";"+TSYS::int2str(IO::Output)+";"+TSYS::int2str(IO::Return)).c_str(),
+		    "sel_id",TSYS::strMess("%d;%d;%d",IO::Default,IO::Output,IO::Return).c_str(),
 		    "sel_list",_("Input;Output;Return"));
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
@@ -2709,7 +2710,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
 		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
 		if(n_hide)	n_hide->childAdd("el")->setText(io(id)->hide()?"1":"0");
 		if(n_def)	n_def->childAdd("el")->setText(io(id)->def());
@@ -2725,12 +2726,18 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    int col = atoi(opt->attr("col").c_str());
 	    if((col == 0 || col == 1) && !opt->text().size())
 	        throw TError(nodePath().c_str(),_("Empty value is not valid."));
-	    if(col == 0)	io(row)->setId(opt->text());
-	    else if(col == 1)	io(row)->setName(opt->text());
-	    else if(col == 2)	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
-	    else if(col == 3)	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));
-	    else if(col == 4)	io(row)->setHide(atoi(opt->text().c_str()));
-	    else if(col == 5)	io(row)->setDef(opt->text());
+	    switch(col)
+	    {
+		case 0:	io(row)->setId(opt->text());	break;
+		case 1:	io(row)->setName(opt->text());	break;
+		case 2:
+		    io(row)->setType((IO::Type)(atoi(opt->text().c_str())&0xFF));
+                    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(atoi(opt->text().c_str())>>8))&IO::FullText));
+		    break;
+		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));	break;
+		case 4:	io(row)->setHide(atoi(opt->text().c_str()));	break;
+		case 5:	io(row)->setDef(opt->text());	break;
+	    }
 	    if(!owner().DB().empty()) modif();
 	}
     }

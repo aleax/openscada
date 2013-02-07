@@ -1299,8 +1299,9 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
     //> Make document after time set
-    if(cfg.id() == "time" && cfg.getI() != prev.getI())
+    if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI())))
     {
+	if(!cfg.getI() && prev.getI()) cfg.setI(prev.getI(),false,true);
 	try
 	{
 	    string taskNm = sw->nodePath('.',true)+".doc";
@@ -1588,16 +1589,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     {
 	AutoHD<Attr> cattr = wdg->attrAt(als[i_a]);
 	if(!(cattr.at().flgGlob()&Attr::IsUser)) continue;
-	IO::Type tp = IO::String;
-	switch(cattr.at().type())
-	{
-	    case TFld::Boolean:	tp = IO::Boolean;	break;
-	    case TFld::Integer:	tp = IO::Integer;	break;
-	    case TFld::Real:	tp = IO::Real;		break;
-	    case TFld::String:	tp = IO::String;	break;
-	    default: break;
-	}
-	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output));
+	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output));
     }
     try
     {
@@ -1610,9 +1602,9 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	funcV.setI(2,wdg->attrAt("bTime").at().getI());
 	funcV.setI(3,lstTime);
 	//>> Load values of user IO
-	for( int i_a = 12; i_a < funcV.ioSize( ); i_a++ )
-	    funcV.setS(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().getS());
-    }catch( TError err )
+	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
+	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
+    }catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
 	return "";
