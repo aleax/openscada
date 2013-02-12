@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-24 14:33+0300\n"
+"POT-Creation-Date: 2013-02-07 10:58+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -858,8 +858,12 @@ msgstr ""
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Final-Dokument in XHTML. Start von Tag \"body\"."
 
-msgid "Write time for document generation from that point."
-msgstr "Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus."
+msgid ""
+"Write the time for document generation from that point or zero for "
+"regeneration."
+msgstr ""
+"Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus oder Null "
+"für die Regeneration."
 
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Aktuelle Dokumentenarchiv in XHTML. Es beginnt mit dem Tag \"Körper\"."
@@ -923,9 +927,10 @@ msgid ""
 msgstr ""
 "<BODY>\n"
 "  <H1>Das Dokument wird gebildet ...</H1>\n"
-"  <P>Dieses Dokument ist sehr groß für eine Generation in der Standard-Timeout-Benutzeroberfläche (%ds). "
-"Nun ist die Dokument gebildet ist. Sie könnten für die Beendigung der Ausbildung warten oder den Vorgang "
-"abbrechen, indem Sie einen kleineren Bereich für das Dokument.</P>\n"
+"  <P>Dieses Dokument ist sehr groß für eine Generation in der Standard-"
+"Timeout-Benutzeroberfläche (%ds). Nun ist die Dokument gebildet ist. Sie "
+"könnten für die Beendigung der Ausbildung warten oder den Vorgang abbrechen, "
+"indem Sie einen kleineren Bereich für das Dokument.</P>\n"
 "  <P>Fortschritt Bildung:\n"
 "    <ul id='progress' />\n"
 "  </P>\n"
@@ -1449,6 +1454,10 @@ msgid "Child widget '%s' enable/disable error."
 msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 
 #, c-format
+msgid "Adding a new attribute '%s' number more to %d!"
+msgstr "Hinzufügen eines neuen Attribut '%s' überschreitet die Anzahl der %d!"
+
+#, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' fehlt!"
 
@@ -1692,9 +1701,8 @@ msgstr "Aus dem Stil"
 msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
-#, c-format
-msgid "Connections to attribute '%s' more to 255!"
-msgstr "Mehr als 255 Verbindungen an das Attribut '%s'!"
+msgid "Connections to attribute '%s' more to %d!"
+msgstr "Verbindungen an das Attribut '%s' mehr als %d!"
 
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"
@@ -1759,6 +1767,3 @@ msgstr "Attribut speichern"
 
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
-
-#~ msgid "Get object from not object's attribute '%s' error!"
-#~ msgstr "Failed, um ein Objekt aus einem Nicht-Objekt-Attribut '%s' abrufen!"

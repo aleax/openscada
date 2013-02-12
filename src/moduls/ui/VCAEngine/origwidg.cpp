@@ -1442,7 +1442,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case 22:
 			el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
 			break;
-		    case 23: el->setAttr("help",_("Write time for document generation from that point."));	break;
+		    case 23: el->setAttr("help",_("Write the time for document generation from that point or zero for regeneration."));	break;
 		    case 26: el->setAttr("help",Widget::helpFont());	break;
 		    default:
 			if(el->attr("id") == "aDoc")

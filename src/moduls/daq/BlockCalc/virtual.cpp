@@ -571,7 +571,7 @@ void Prm::enable()
     string ioLs = cfg("IO").getS();
 
     //> Check and delete no used fields
-    for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
+    /*for(int i_fld = 0; i_fld < (int)v_el.fldSize(); i_fld++)
     {
 	if(v_el.fldAt(i_fld).reserve().empty()) continue;
 	string fel;
@@ -583,7 +583,7 @@ void Prm::enable()
 	    catch(TError err)
 	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	}
-    }
+    }*/
 
     //> Init elements
     vector<string> pls;

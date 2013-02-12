@@ -822,10 +822,12 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     if( !ico_t.load(TUIS::icoPath("find").c_str()) ) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
+    actFind->setShortcutContext(Qt::WidgetShortcut);
     connect(actFind, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFind);
     actFindNext = new QAction(_("Find next"), ed_fld);
     actFindNext->setShortcut(Qt::Key_F3);
+    actFindNext->setShortcutContext(Qt::WidgetShortcut);
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 

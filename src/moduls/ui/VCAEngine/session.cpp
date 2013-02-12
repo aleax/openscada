@@ -34,7 +34,7 @@ using namespace VCA;
 //************************************************
 Session::Session( const string &iid, const string &iproj ) :
     mId(iid), mPrjnm(iproj), mOwner("root"), mGrp("UI"), mUser("root"), mPer(100), mPermit(RWRWR_), mEnable(false), mStart(false),
-    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), tm_calc(0.0), mAlrmSndPlay(-1), mStyleIdW(-1)
+    endrun_req(false), mBackgrnd(false), mConnects(0), mCalcClk(1), mAlrmSndPlay(-1), mStyleIdW(-1)
 {
     mPage = grpAdd("pg_");
     sec = SYS->security();
@@ -221,10 +221,9 @@ string Session::ico( )
     return "";
 }
 
-AutoHD<Project> Session::parent( )
-{
-    return mParent;
-}
+double Session::calcTm( )		{ return SYS->taskUtilizTm(nodePath('.',true)); }
+
+AutoHD<Project> Session::parent( )	{ return mParent; }
 
 void Session::add( const string &iid, const string &iparent )
 {
@@ -410,9 +409,6 @@ void *Session::Task( void *icontr )
     ses.list(pls);
     while(!ses.endrun_req)
     {
-	//> Check calk time
-	int64_t t_cnt = TSYS::curTime();
-
 	//> Calc session pages and all other items at recursion
 	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
 	    try { ses.at(pls[i_l]).at().calc(false,false); }
@@ -421,14 +417,6 @@ void *Session::Task( void *icontr )
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
-
-	ses.tm_calc = TSYS::curTime()-t_cnt;
-	/*ses.rez_calc+=ses.tm_calc;
-	if( !(ses.calcClk()%10) )
-	{
-	    printf("Session calc time: %d = %f\n",ses.calcClk(),ses.rez_calc);
-	    ses.rez_calc=0;
-	}*/
 
 	TSYS::taskSleep((int64_t)ses.period()*1000000);
 	if((ses.mCalcClk++) == 0) ses.mCalcClk = 1;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-24 14:33+0300\n"
+"POT-Creation-Date: 2013-02-07 10:58+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -859,8 +859,12 @@ msgstr ""
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Финальный документ в XHTML. Начинается с тега \"body\"."
 
-msgid "Write time for document generation from that point."
-msgstr "Записать время для генерации документа от этой точки."
+msgid ""
+"Write the time for document generation from that point or zero for "
+"regeneration."
+msgstr ""
+"Записать время для генерации документа от этой точки или нуль для "
+"регенерации."
 
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Текущий документ архива в XHTML. Начинается с тега \"body\"."
@@ -924,8 +928,9 @@ msgid ""
 msgstr ""
 "<BODY>\n"
 "  <H1>Документ формируется ...</H1>\n"
-"  <P>Этот документ очень большой для генерации в стандартном таймауте пользовательского интерфейса (%dс). "
-"Сейчас этот документ формируется. Вы можете подождать завершения формирования или прервать процесс, выбрав "
+"  <P>Этот документ очень большой для генерации в стандартном таймауте "
+"пользовательского интерфейса (%dс). Сейчас этот документ формируется. Вы "
+"можете подождать завершения формирования или прервать процесс, выбрав "
 "меньший интервал для документа.</P>\n"
 "  <P>Прогресс формирования:\n"
 "    <ul id='progress' />\n"
@@ -940,9 +945,11 @@ msgstr "Ошибка исполнения инструкции '%s': %s"
 msgid "Error code: %s"
 msgstr "Код с ошибкой: %s"
 
+#, c-format
 msgid "Data block %d: %0.2f%% loaded."
 msgstr "Блок данных %d: %0.2f%% загружено."
 
+#, c-format
 msgid "Messages block %d: %0.2f%% loaded."
 msgstr "Блок сообщений %d: %0.2f%% загружено."
 
@@ -1446,6 +1453,10 @@ msgid "Child widget '%s' enable/disable error."
 msgstr "Ошибка включения/отключения дочернего виджета '%s'."
 
 #, c-format
+msgid "Adding a new attribute '%s' number more to %d!"
+msgstr "Добавление нового атрибута '%s' превышает количество %d!"
+
+#, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' отсутствует!"
 
@@ -1690,9 +1701,8 @@ msgstr "Из стиля"
 msgid "Element type is not selected!"
 msgstr "Элемент не выборного типа!"
 
-#, c-format
-msgid "Connections to attribute '%s' more to 255!"
-msgstr "Более 255 подключений к атрибуту '%s'!"
+msgid "Connections to attribute '%s' more to %d!"
+msgstr "Подключений к атрибуту '%s' более %d!"
 
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"
@@ -1757,6 +1767,3 @@ msgstr "Установка атрибута"
 
 msgid "Setup widget's attribute to value."
 msgstr "Установка значения атрибута виджета."
-
-#~ msgid "Get object from not object's attribute '%s' error!"
-#~ msgstr "Ошибка получения объекта из необъектного атрибута '%s'!"

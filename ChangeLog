@@ -1,3 +1,13 @@
+2013-02-12 Roman
+- FIX:DAQ.BlockCalc: Parameter's attributes first checking for remove is removed for prevent to free linked but present attributes.
+- DAQ.DCON: Diagnostic protocol requests is added for messages level "Debug (0)".
+- FIX:DAQ.JavaLikeCalc: Unaligned access for double and integer constants is fixed for some ARM-processors.
+- FIX:UI.QTCfg, UI.Vision: Find shortcuts for TextEdit widgets is set context to the widget.
+- UI.VCAEngine: The function TSYS::taskUtilizTm() has replace for a session execution time measurement.
+- UI.Vision: The file dialog for export is set stored for save directory place and other.
+- !!:UI.WebCfg: Source code is made clean and some values encoding to HTML is fixed.
+
+
 2013-02-07 Roman
 - !:SYS: User API function SYS.mktime() is added for get time since the Epoch 1.1.1970 converted from broken-down time.
 - FIX:DAQ.JavaLikeCalc: Increment, decrement and like operations fixed for object's items.

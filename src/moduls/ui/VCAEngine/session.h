@@ -53,7 +53,7 @@ class Session : public TCntrNode
 	string	grp( )		{ return mGrp; }		//Source project group
 	short	permit( )	{ return mPermit; }		//Permission for access to source project
 	int	period( )	{ return vmax(1,mPer); }	//Process period (ms)
-	double	calcTm( )	{ return tm_calc; }		//Calculate session time
+	double	calcTm( );					//Calculate session time
 	bool	enable( )	{ return mEnable; }		//Enable stat
 	bool	start( )	{ return mStart; }		//Start stat
 	bool	backgrnd( )	{ return mBackgrnd; }		//Background session execution
@@ -149,8 +149,6 @@ class Session : public TCntrNode
 	int	mConnects;			//Connections counter
 
 	unsigned	mCalcClk;		//Calc clock
-	float		tm_calc;		//Scheme's calc time
-	float		rez_calc;
 	time_t		mReqTm;
 	AutoHD<Project>	mParent;
 	Res		mCalcRes;		//Calc resource

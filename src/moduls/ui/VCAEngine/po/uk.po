@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-24 14:33+0300\n"
+"POT-Creation-Date: 2013-02-07 10:58+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -859,8 +859,11 @@ msgstr ""
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Результуючий документ в XHTML. Починається з тегу \"body\"."
 
-msgid "Write time for document generation from that point."
-msgstr "Записати час для генерації документу з цієї точки."
+msgid ""
+"Write the time for document generation from that point or zero for "
+"regeneration."
+msgstr ""
+"Записати час для генерації документу з цієї точки або нуль для регенерації."
 
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Поточний документ архіву у XHTML. Починається з тегу \"body\"."
@@ -924,9 +927,10 @@ msgid ""
 msgstr ""
 "<BODY>\n"
 "  <H1>Документ формується ...</H1>\n"
-"  <P>Цей документ дуже великий для генерації у стандартному таймауті користувацького інтерфейсу (%dс). "
-"Зараз цей документ формується. Ви можете зачекати завершення формування або перервати процес, обравши "
-"менший інтервал для документа.</P>\n"
+"  <P>Цей документ дуже великий для генерації у стандартному таймауті "
+"користувацького інтерфейсу (%dс). Зараз цей документ формується. Ви можете "
+"зачекати завершення формування або перервати процес, обравши менший інтервал "
+"для документа.</P>\n"
 "  <P>Прогрес формування\n"
 "    <ul id='progress' />\n"
 "  </P>\n"
@@ -1448,6 +1452,10 @@ msgid "Child widget '%s' enable/disable error."
 msgstr "Помилка включення/вимкнення дочірнього віджета '%s'."
 
 #, c-format
+msgid "Adding a new attribute '%s' number more to %d!"
+msgstr "Додання нового атрибуту '%s' превищує кількість %d!"
+
+#, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' відсутній!"
 
@@ -1692,9 +1700,8 @@ msgstr "Зі стиля"
 msgid "Element type is not selected!"
 msgstr "Елемент не вибіркового типу!"
 
-#, c-format
-msgid "Connections to attribute '%s' more to 255!"
-msgstr "Підключень до атрибуту '%s' більш 255!"
+msgid "Connections to attribute '%s' more to %d!"
+msgstr "Підключень до атрибуту '%s' більш за %d!"
 
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"
@@ -1758,6 +1765,3 @@ msgstr "Встановлення атрибуту"
 
 msgid "Setup widget's attribute to value."
 msgstr "Встановлення значення атрибуту віджета."
-
-#~ msgid "Get object from not object's attribute '%s' error!"
-#~ msgstr "Помилка запиту об'єкту з не об'єктного атрибуту '%s'!"

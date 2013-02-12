@@ -258,6 +258,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(cfg("ADDR").getS());
 	if(!tr.at().startStat()) tr.at().start();
 	if(CRC) pdu += DCONCRC(pdu);
+	if(messLev() == 0) mess_debug(nodePath().c_str(), _("REQ -> '%s'"), pdu.c_str());
 	pdu += "\r";
 
 	ResAlloc resN( tr.at().nodeRes(), true );
@@ -284,13 +285,18 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 		else if(((!CRC && acqLen != pdu.size()) || (CRC && (acqLen+2) != pdu.size()))) { err = _("20:Respond length error."); break; }
 	    }
 
+	    if(messLev() == 0) mess_debug(nodePath().c_str(), _("RESP -> '%s'"), pdu.c_str());
 	    err = "0";
 	    break;
 	}
     }
     catch(TError er) { err = _("10:Transport error: ")+er.mess; }
 
-    if(err != "0") pdu = "";
+    if(err != "0")
+    {
+	if(messLev() == 0) mess_debug(nodePath().c_str(), _("ERR -> '%s': %s"), pdu.c_str(), err.c_str());
+	pdu = "";
+    }
 
     return err;
 }

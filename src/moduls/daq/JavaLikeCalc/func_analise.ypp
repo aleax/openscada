@@ -517,10 +517,10 @@ retry:
 	    yylval.reg = p_fnc->regTmpNew();
 	    switch(cnst_v->tp)
 	    {
-		case TFld::Real:	*yylval.reg = *(double*)(cnst_v->val.c_str());	break;
-		case TFld::Integer:	*yylval.reg = *(int*)(cnst_v->val.c_str());	break;
-		case TFld::Boolean:	*yylval.reg = *(char*)(cnst_v->val.c_str());	break;
-		case TFld::String:	*yylval.reg = cnst_v->val;			break;
+		case TFld::Real:	*yylval.reg = TSYS::getUnalignDbl(cnst_v->val.data());	break;
+		case TFld::Integer:	*yylval.reg = TSYS::getUnalignInt(cnst_v->val.data());	break;
+		case TFld::Boolean:	*yylval.reg = (char)cnst_v->val[0];	break;
+		case TFld::String:	*yylval.reg = cnst_v->val;		break;
 		default: break;
 	    }
 	    return CONST;
