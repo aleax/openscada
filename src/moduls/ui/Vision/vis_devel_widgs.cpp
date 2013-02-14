@@ -491,7 +491,6 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
     //> Attribute
     Item *it = static_cast<Item*>(index.internalPointer());
-    if(it->data() == value) return true;
     string nattr = it->id();
 
     //> Attribute widget(s)
@@ -511,6 +510,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
     try
     {
 	bool isGrp = TSYS::strSepParse(nwdg,1,';').size();
+	if(it->data() == value && !isGrp) return true;
 	XMLNode chCtx("attr");
 
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();

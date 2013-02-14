@@ -1,3 +1,8 @@
+2013-02-14 Roman
+- FIX:UI.VCAEngine: Global attributes translation read for field "CFG_VAL" is fixed.
+- FIX:UI.Vision: Attributes change for group widgets and for equal to first attribute value into the group is fixed.
+
+
 2013-02-12 Roman
 - FIX:DAQ.BlockCalc: Parameter's attributes first checking for remove is removed for prevent to free linked but present attributes.
 - DAQ.DCON: Diagnostic protocol requests is added for messages level "Debug (0)".
