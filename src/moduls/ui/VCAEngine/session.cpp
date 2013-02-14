@@ -1160,7 +1160,7 @@ string SessWdg::ownerFullId( bool contr )
 
 void SessWdg::setEnable( bool val )
 {
-    Widget::setEnable(val);
+    try { Widget::setEnable(val); } catch(...) { return; }
 
     if(!val)
     {

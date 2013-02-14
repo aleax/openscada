@@ -303,6 +303,7 @@ void Widget::setEnable( bool val )
 		mess_err(nodePath().c_str(),_("Widget enable error: %s"),err.mess.c_str());
 		mParent.free();
 		if(BACrtHoldOvr) { BACrtHoldOvr = false; postEnable(TCntrNode::NodeConnect); }
+		mEnable = false;
 		throw;
 	    }
 	}

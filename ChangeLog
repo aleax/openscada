@@ -1,4 +1,6 @@
 2013-02-14 Roman
+- FIX:UI.VCAEngine: Lock session on enabling try pages with broken child widgets, like no parrent set, is fixed
+    and the error ignored for full project start.
 - FIX:UI.VCAEngine: Global attributes translation read for field "CFG_VAL" is fixed.
 - FIX:UI.Vision: Attributes change for group widgets and for equal to first attribute value into the group is fixed.
 
