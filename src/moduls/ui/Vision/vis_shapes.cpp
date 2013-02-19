@@ -330,8 +330,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case 26:	//name
 	    shD->name = TSYS::strEncode(val,TSYS::ShieldSimb);
-	    if( shD->welType == 2)	((QCheckBox*)shD->addrWdg)->setText(val.c_str());
-	    else if( shD->welType == 3 )	((QPushButton*)shD->addrWdg)->setText(val.c_str());
+	    if(shD->welType == 2)	((QCheckBox*)shD->addrWdg)->setText(TSYS::strEncode(val,TSYS::ShieldSimb).c_str());
+	    else if(shD->welType == 3)	((QPushButton*)shD->addrWdg)->setText(TSYS::strEncode(val,TSYS::ShieldSimb).c_str());
 	    break;
 	case 27:	//colorText
 	    shD->colorText = val;
@@ -3263,10 +3263,10 @@ void ShapeDocument::init( WdgView *w )
     shD->web = new QTextBrowser(w);
 #endif
 
-    eventFilterSet( w, shD->web, true );
-    w->setFocusProxy( shD->web );
-    if( qobject_cast<DevelWdgView*>(w) )
-	setFocus( w, shD->web, false, true );
+    eventFilterSet(w, shD->web, true);
+    w->setFocusProxy(shD->web);
+    if(qobject_cast<DevelWdgView*>(w))
+	setFocus(w, shD->web, false, true);
 
     lay->addWidget(shD->web);
 }
@@ -3283,7 +3283,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
     bool relDoc = false;	//Reload configuration
 
-    switch( uiPrmPos )
+    switch(uiPrmPos)
     {
 	case -1:	//load
 	    relDoc = true;
@@ -3402,8 +3402,8 @@ bool ShapeDocument::event( WdgView *w, QEvent *event )
 
 bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    if( qobject_cast<DevelWdgView*>(w) )
-	switch( event->type() )
+    if(qobject_cast<DevelWdgView*>(w))
+	switch(event->type())
 	{
 	    case QEvent::Enter:
 	    case QEvent::Leave:		return true;
@@ -3417,7 +3417,7 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    default: break;
 	}
     else
-	switch( event->type() )
+	switch(event->type())
 	{
 	    case QEvent::FocusIn:
 		w->attrSet("focus","1");
@@ -3435,11 +3435,11 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 
 void ShapeDocument::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
-    if( en )	wdg->installEventFilter(view);
-    else	wdg->removeEventFilter(view);
+    if(en) wdg->installEventFilter(view);
+    else   wdg->removeEventFilter(view);
     //> Process childs
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
 }
 
@@ -3447,23 +3447,23 @@ void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
     //> Set up current widget
-    if( en )
+    if(en)
     {
-	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+	if(isFocus && !devel)	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
     {
-	if( wdg->focusPolicy() != Qt::NoFocus )
+	if(wdg->focusPolicy() != Qt::NoFocus)
 	{
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));
 	    wdg->setFocusPolicy(Qt::NoFocus);
 	}
-	if( devel ) wdg->setMouseTracking(true);
+	if(devel) wdg->setMouseTracking(true);
     }
 
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+    //> Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
 }
 

@@ -3104,11 +3104,11 @@ bool DevelWdgView::event( QEvent *event )
 	    pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    return true;
 	}
-	else if( fHideChilds )
+	else if(fHideChilds)
 	{
 	    fHideChilds = false;
-	    for( int i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<QWidget*>(children().at(i_c)) )
+	    for(int i_c = 0; i_c < children().size(); i_c++)
+		if(qobject_cast<QWidget*>(children().at(i_c)))
 		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
 	}
 	//> Check widget

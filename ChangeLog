@@ -1,3 +1,14 @@
+2013-02-19 Roman
+- !!:DB.LibsDB, DB.ModelsDB.AGLKS: Documents formating some updated. Some other bugs is fixed.
+    Now the DBs will often updated for fast improving and fixing direct into SQLite DB files.
+- DAQ.JavaLikeCalc: Assigns separating by symbol ',' is added to the language for like the constructions:
+    var1=1, var2=3, var4=var1+var2;
+    for(var1=0, var2=0, var3=-1; var1 < 10; var1++, var2++) var3++;
+- UI.WebVision: Attribute "width='100%'" is added to primitive's "Protocol" table for fill full the widget width.
+- UI.Vision: Symbols '\n' process is added into attribute "name" of "Button" type of primitive "FormEl" for multiple line text
+    into buttons show allow.
+
+
 2013-02-14 Roman
 - FIX:UI.VCAEngine: Lock session on enabling try pages with broken child widgets, like no parrent set, is fixed
     and the error ignored for full project start.

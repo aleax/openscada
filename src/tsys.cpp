@@ -1820,7 +1820,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().fromXMLNode(req);
 	return string("0");
     }
-    // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
+    // int sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1)
@@ -1828,8 +1828,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
 	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
-	int rez = nanosleep(&sp_tm,NULL);
-	return rez;
+	return nanosleep(&sp_tm,NULL);
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
