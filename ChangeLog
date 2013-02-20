@@ -1,3 +1,12 @@
+2013-02-20 Roman
+- !!:DAQ.DCON: Significant changes from Almaz Karimov:
+    - analog inputs reading of one methods is added;
+    - the method 1AO (#AA) (blocks NL-1AO, I-7021, ADAM-4021) working is fixed;
+    - the method 4AO (#AACN) is added for working with block ADAM-4024;
+    - the digital inputs reading methods @AA is replaced to $AA6 for compatibility with ADAM blocks;
+    - the digital outputs writing methods 4DO (#AA000F), 8DO (#AA00FF), 12DO (#AA000FFF) is added for working with ADAM blocks.
+
+
 2013-02-19 Roman
 - !!:DB.LibsDB, DB.ModelsDB.AGLKS: Documents formating some updated. Some other bugs is fixed.
     Now the DBs will often updated for fast improving and fixing direct into SQLite DB files.
