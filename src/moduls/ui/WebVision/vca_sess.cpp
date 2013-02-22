@@ -6116,11 +6116,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		break;
 	    default:
 		//> Individual trend's attributes process
-		if( uiPrmPos >= 50 && uiPrmPos < 150 )
+		if(uiPrmPos >= 50)
 		{
 		    unsigned trndN = (uiPrmPos/10)-5;
-		    if( trndN >= trnds.size() )	break;
-		    switch( uiPrmPos%10 )
+		    if(trndN >= trnds.size())	break;
+		    switch(uiPrmPos%10)
 		    {
 			case 0: trnds[trndN].setAddr(req_el->text());			break;	//addr
 			case 1: trnds[trndN].setBordL(atof(req_el->text().c_str()));	break;	//bordL

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-01 11:23+0200\n"
+"POT-Creation-Date: 2013-02-22 13:27+0200\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -78,11 +78,23 @@ msgstr "Ошибка открытия GPIO PC30 для сброса MC."
 msgid "Segnetics SMH2Gi automatic created transport for '%s' bus"
 msgstr "Автоматически созданный транспорт Segnetics SMH2Gi для шины '%s'"
 
+#, c-format
+msgid "ModBUS REQ -> '%s': %s"
+msgstr "ModBUS Запрос -> '%s': %s"
+
 msgid "13:Error respond: Too short."
 msgstr "13:Ошибка ответа: Очень короткий."
 
 msgid "13:Error respond: CRC check error."
 msgstr "13:Ошибка ответа: Ошибка проверки CRC."
+
+#, c-format
+msgid "ModBUS RESP -> '%s': %s"
+msgstr "ModBUS Ответ -> '%s': %s"
+
+#, c-format
+msgid "ModBUS ERR -> '%s': %s: %s"
+msgstr "ModBUS Ошибка -> '%s': %s: %s"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
@@ -92,6 +104,18 @@ msgstr "2:Опрос остановлен."
 
 msgid "Variables list"
 msgstr "Перечень переменных"
+
+#, c-format
+msgid "SHM Get vals: %s"
+msgstr "SHM Получение знач.: %s"
+
+#, c-format
+msgid "SHM Set value '%s' to '%s' error."
+msgstr "SHM Уст. значения '%s' в '%s' ошибка."
+
+#, c-format
+msgid "SHM Set val: %s='%s': %d"
+msgstr "SHM Уст. значения: %s='%s': %d"
 
 msgid "Module type"
 msgstr "Тип модуля"

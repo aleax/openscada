@@ -1,3 +1,9 @@
+2013-02-22 Roman
+- DAQ.SMH2Gi: Diagnostic for communication is added.
+- FIX:DAQ.SMH2Gi: Working load_files.srv file without SHM size field "Slave"->"ShmSize is fixed.
+- FIX:UI.{Vision,WebVision}: Remove upper limit for primitive's "Diagram" parameters number.
+
+
 2013-02-20 Roman
 - !!:DAQ.DCON: Significant changes from Almaz Karimov:
     - analog inputs reading of one methods is added;

@@ -1594,7 +1594,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	default:
 	    //> Individual trend's attributes process
-	    if(uiPrmPos >= 50 && uiPrmPos < 150)
+	    if(uiPrmPos >= 50)
 	    {
 		int trndN = (uiPrmPos/10)-5;
 		if(trndN >= (int)shD->prms.size()) break;

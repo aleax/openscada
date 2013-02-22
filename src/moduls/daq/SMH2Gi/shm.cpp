@@ -61,12 +61,17 @@ Shm::Shm(const char * name)
     
     rlIniFile ini;
     ini.read(name);
+    int size = 0;
     for(unsigned char i = 0; i < sizeof(items) / sizeof(const char *); i++) {
 	int ret, off, qty;
 	ret = parseHeader(ini, items[i], &off, &qty);
-	if(ret == 3) parseSect(ini, items[i], maps[i]);
+	if(ret == 3)
+	{
+	    parseSect(ini, items[i], maps[i]);
+	    size += qty;
+	}
     }
-    shm = new rlSharedMemory("/dev/shm/wsi", atoi(ini.text("Slave", "ShmSize")));
+    shm = new rlSharedMemory("/dev/shm/wsi", atoi(ini.text("Slave", "ShmSize")) ? atoi(ini.text("Slave", "ShmSize")) : size);
 //    last = map_coil.end();
 }
 

@@ -308,7 +308,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	//> Send request
 	for(int i_tr = 0; i_tr < connTry; i_tr++)
 	{
-	    //printf("TEST 00: Send to '%s' req: '%s'\n",tro.at().id().c_str(),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	    if(messLev() == 0) mess_debug(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
     	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
 	    if(broadCast) { err = ""; break; }
     	    rez.assign(buf, resp_len);
@@ -322,13 +322,16 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
     	    if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
     	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
     	    { err = _("13:Error respond: CRC check error."); continue; }
-	    //printf("TEST 01: Get resp: '%s'\n",TSYS::strDecode(rez,TSYS::Bin).c_str());
+	    if(messLev() == 0) mess_debug(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
     	    pdu = rez.substr(0, rez.size()-2);
     	    err = "";
 	    break;
 	}
     }
     catch(TError ierr) { err = "10:"+ierr.mess; }
+
+    if(messLev() == 0 && err.size())
+	mess_debug(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin).c_str(), err.c_str());
 
     return err;
 }
@@ -670,7 +673,7 @@ void SHMParam::getVals( TParamContr *ip )
 {
     TMdPrm *p = (TMdPrm *)ip;
 
-    string tnm;
+    string tnm, vals;
     for(int i_p = 0; i_p < (int)p->p_el.fldSize(); i_p++)
     {
 	tnm = p->p_el.fldAt(i_p).name();
@@ -693,7 +696,9 @@ void SHMParam::getVals( TParamContr *ip )
 		vl.at().setR(p->owner().smv->getFloat(tnm.c_str()), 0, true);
 		break;
 	}
+	if(ip->owner().messLev() == 0) vals += tnm+"='"+vl.at().getS(0,true)+"'; ";
     }
+    if(ip->owner().messLev() == 0) mess_debug(ip->nodePath().c_str(), _("SHM Get vals: %s"), vals.c_str());
 }
 
 void SHMParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
@@ -702,21 +707,25 @@ void SHMParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
 
     if(!p->enableStat() || !p->owner().startStat())	val.setS(EVAL_STR, 0, true);
     if(val.get().isEVal() || val.get() == pvl) return;
+    int rez = -2;
     switch(atoi(val.fld().reserve().c_str()))
     {
 	case BOOL:
-	    p->owner().smv->setBool(val.name().c_str(),val.getB(0,true));
+	    rez = p->owner().smv->setBool(val.name().c_str(),val.getB(0,true));
 	    break;
 	case SHORT:
-	    p->owner().smv->setShort(val.name().c_str(),val.getI(0,true));
+	    rez = p->owner().smv->setShort(val.name().c_str(),val.getI(0,true));
 	    break;
 	case LONG:
-	    p->owner().smv->setLong(val.name().c_str(),val.getI(0,true));
+	    rez = p->owner().smv->setLong(val.name().c_str(),val.getI(0,true));
 	    break;
 	case FLOAT:
-	    p->owner().smv->setFloat(val.name().c_str(),val.getR(0,true));
+	    rez = p->owner().smv->setFloat(val.name().c_str(),val.getR(0,true));
 	    break;
     }
+    if(rez < 0)	mess_err(ip->nodePath().c_str(), _("SHM Set value '%s' to '%s' error."), val.name().c_str(), val.getS(0,true).c_str());
+    if(ip->owner().messLev() == 0)
+	mess_debug(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), val.name().c_str(), val.getS(0,true).c_str(),rez);
 }
 
 bool SHMParam::cntrCmdProc( TParamContr *p, XMLNode *opt )
