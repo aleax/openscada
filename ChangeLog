@@ -1,3 +1,13 @@
+2013-02-27 Roman
+- FIX:DAQ.SMH2Gi: True ID encoding is added for SMH parameter's attributes, for prevent wrong symbols pass.
+- Transport.Serial: Editable control for Input transport object's configuration fields depends from "Start" state is added.
+- !:FIX.UI.Vision: Primitive "ElFigure" changes and fixes:
+    - Value range define is added and used.
+    - ShapeItem::Type enumeration for figures "Line", "Arc" and "Bezier" is added.
+    - Significant code clear.
+    - Widths, Styles and Colors indexes copy on the figures copy is added.
+
+
 2013-02-22 Roman
 - DAQ.SMH2Gi: Diagnostic for communication is added.
 - FIX:DAQ.SMH2Gi: Working load_files.srv file without SHM size field "Slave"->"ShmSize is fixed.

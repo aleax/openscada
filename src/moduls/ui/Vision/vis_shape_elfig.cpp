@@ -1910,39 +1910,28 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
 void ShapeElFigure::toolAct( QAction *act )
 {
-    WdgView *w = (WdgView*)TSYS::str2addr(act->property("wdgAddr").toString().toAscii().data());
-    if( !w ) return;
+    DevelWdgView *w = dynamic_cast<DevelWdgView*>((WdgView*)TSYS::str2addr(act->property("wdgAddr").toString().toAscii().data()));
+    if(!w) return;
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
-    PntMap *pnts = &elFD->shapePnts;
+    PntMap &pnts 	= elFD->shapePnts;
+    WidthMap &widths	= elFD->shapeWidths;
+    StyleMap &styles	= elFD->shapeStyles;
+    ColorMap &clrs	= elFD->shapeColors;
 
-    if( !w ) return;
-    if( act->objectName() == "cursor" || act->objectName() == "line" || 
-            act->objectName() == "arc" || act->objectName() == "besier" )
-        for( int i_a = 0; i_a < ((VisDevelop *)w->mainWin())->elFigTool->actions().size(); i_a++ )
-            if( ((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a)->objectName() != "hold" )
-                ((VisDevelop *)w->mainWin())->elFigTool->actions().at(i_a)->setChecked(false);
+    if(act->objectName() == "cursor" || act->objectName() == "line" || act->objectName() == "arc" || act->objectName() == "besier")
+        for(int i_a = 0; i_a < w->mainWin()->elFigTool->actions().size(); i_a++)
+            if(w->mainWin()->elFigTool->actions().at(i_a)->objectName() != "hold")
+                w->mainWin()->elFigTool->actions().at(i_a)->setChecked(false);
     bool fl_figure = false;
-    if( act->objectName() == "line" )
-    {
-        shapeType = 1;
-        fl_figure = true;
-    }
-    else if( act->objectName() == "arc" )
-    {
-        shapeType = 2;
-        fl_figure = true;
-    }
-    else if( act->objectName() == "besier" )
-    {
-        shapeType = 3;
-        fl_figure = true;
-    }
-    else if( act->objectName() == "hold" )
+    if(act->objectName() == "line")		{ shapeType = 1; fl_figure = true; }
+    else if(act->objectName() == "arc")		{ shapeType = 2; fl_figure = true; }
+    else if(act->objectName() == "besier")	{ shapeType = 3; fl_figure = true; }
+    else if(act->objectName() == "hold")
     {
         status_hold = act->isChecked();
-        if( flag_A )
+        if(flag_A)
         {
             flag_ctrl = flag_A = flag_copy = false;
             flag_check_pnt_inund = false;
@@ -1955,7 +1944,7 @@ void ShapeElFigure::toolAct( QAction *act )
         paintImage(w);
         w->repaint();
     }
-    else if( act->objectName() == "cursor" )
+    else if(act->objectName() == "cursor")
     {
         act->setChecked(true);
         w->unsetCursor();
@@ -1963,156 +1952,79 @@ void ShapeElFigure::toolAct( QAction *act )
         paintImage(w);
         w->update();
     }
-    else if( act->objectName() == "editcopy" )
+    else if(act->objectName() == "editcopy")
     {
-        if( copy_index.size() ) copy_index.clear();
-        if( flag_A ) 
-        {
-            if( index_array_copy_flag_A.size() ) copy_index = index_array_copy_flag_A;
-            else copy_index = index_array;
-        }
-        else if( index_array.size() && !status_hold && index_array[0] != -1 ) copy_index = index_array;
-        else if( status_hold && index_array_copy.size() ) copy_index = index_array_copy;
-        else if( index_temp != -1 ) copy_index.push_back( index_temp );
+        if(copy_index.size()) copy_index.clear();
+        if(flag_A) copy_index = index_array_copy_flag_A.size() ? index_array_copy_flag_A : index_array;
+        else if(index_array.size() && !status_hold && index_array[0] != -1) copy_index = index_array;
+        else if(status_hold && index_array_copy.size())	copy_index = index_array_copy;
+        else if(index_temp != -1) copy_index.push_back(index_temp);
         index_array_copy_flag_A.clear();
         ((VisDevelop *)w->mainWin())->actVisItPaste->setEnabled(true);
     }
-    else if( act->objectName() == "editpaste" )
+    else if(act->objectName() == "editpaste")
     {
         QPointF Temp;
         QVector<int> inund_figs;
-        map< int, QVector<int> > inund_map;
-        if( index_array.size() ) index_array.clear();
+        map<int, QVector<int> > inund_map;
+        if(index_array.size()) index_array.clear();
         bool f_present = true;
-        for( int i_p=0; i_p < copy_index.size(); i_p++ )
-        {
-            if( copy_index[i_p] != -1 )
+        for(int i_p = 0; f_present && i_p < copy_index.size(); i_p++)
+            if(copy_index[i_p] != -1)
             {
                 bool f_pr = false;
-                for (int i_s = 0; i_s < shapeItems.size(); i_s++ )
-                    if( copy_index[i_p] == i_s ) { f_pr = true; break; }
-                if( !f_pr ){ f_present = false; break; }
+                for(int i_s = 0; !f_pr && i_s < shapeItems.size(); i_s++)
+                    if(copy_index[i_p] == i_s)	f_pr = true;
+                if(!f_pr) f_present = false;
             }
-        }
-        if( f_present )
-        {
-            for( int i=0; i < copy_index.size(); i++ )
+        if(f_present)
+            for(int i = 0; i < copy_index.size(); i++)
             {
-                if( copy_index[i] != -1 )
-                {
-                    shapeItems.push_back( shapeItems[copy_index[i]] );
-                    index_array.push_back( shapeItems.size()-1 );
-                    switch( shapeItems[copy_index[i]].type )
-                    {
-                        case 1:
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                            if( shapeItems[shapeItems.size()-1].n1 > 0 )
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if(  shapeItems[shapeItems.size()-1].n1 <= -10 )
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                            if( shapeItems[shapeItems.size()-1].n2 > 0 )
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            break;
-                        case 2:
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                            if( shapeItems[shapeItems.size()-1].n1 > 0 )
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n1 <= -10 )
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                            if( shapeItems[shapeItems.size()-1].n2 > 0 )
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
-                            if( shapeItems[shapeItems.size()-1].n3 > 0 )
-                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n3 <= -10 )
-                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
-                            if( shapeItems[shapeItems.size()-1].n4 > 0 )
-                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n4 <= -10 )
-                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n5];
-                            if( shapeItems[shapeItems.size()-1].n5 > 0 )
-                                shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n5 <= -10 )
-                                shapeItems[shapeItems.size()-1].n5 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            break;
-                        case 3:
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n1];
-                            if( shapeItems[shapeItems.size()-1].n1 > 0 )
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n1 <= -10 )
-                                shapeItems[shapeItems.size()-1].n1 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n2];
-                            if( shapeItems[shapeItems.size()-1].n2 > 0 )
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n2 <= -10 )
-                                shapeItems[shapeItems.size()-1].n2 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n3];
-                            if( shapeItems[shapeItems.size()-1].n3 > 0 )
-                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n3 <= -10 )
-                                shapeItems[shapeItems.size()-1].n3 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            Temp = (*pnts)[shapeItems[shapeItems.size()-1].n4];
-                            if( shapeItems[shapeItems.size()-1].n4 > 0 )
-                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 0 );
-                            else if( shapeItems[shapeItems.size()-1].n4 <= -10 )
-                                shapeItems[shapeItems.size()-1].n4 = appendPoint( Temp, shapeItems, pnts, 1 );
-                            break;
-                    }
-                }
+		if(copy_index[i] == -1) continue;
+		shapeItems.push_back(shapeItems[copy_index[i]]);
+		index_array.push_back(shapeItems.size()-1);
+		ShapeItem &newIt = shapeItems[shapeItems.size()-1];
+		if(!vrng(newIt.n1,-9,0))	newIt.n1 = appendPoint(pnts[newIt.n1], shapeItems, &pnts, (newIt.n1 <= -10));
+		if(!vrng(newIt.n2,-9,0))	newIt.n2 = appendPoint(pnts[newIt.n2], shapeItems, &pnts, (newIt.n2 <= -10));
+		if(!vrng(newIt.n3,-9,0))	newIt.n3 = appendPoint(pnts[newIt.n3], shapeItems, &pnts, (newIt.n3 <= -10));
+		if(!vrng(newIt.n4,-9,0))	newIt.n4 = appendPoint(pnts[newIt.n4], shapeItems, &pnts, (newIt.n4 <= -10));
+		if(!vrng(newIt.n5,-9,0))	newIt.n5 = appendPoint(pnts[newIt.n5], shapeItems, &pnts, (newIt.n5 <= -10));
+		if(!vrng(newIt.width,-9,0))	newIt.width = appendWidth(widths[newIt.width], &widths, (newIt.width <= -10));
+		if(!vrng(newIt.border_width,-9,0)) newIt.border_width = appendWidth(widths[newIt.border_width], &widths, (newIt.border_width <= -10));
+		if(!vrng(newIt.style,-9,0))	newIt.style = appendStyle(styles[newIt.style], &styles, (newIt.style <= -10));
+		if(!vrng(newIt.lineColor,-9,0))	newIt.lineColor = appendColor(clrs[newIt.lineColor], &clrs, (newIt.lineColor <= -10));
+		if(!vrng(newIt.borderColor,-9,0)) newIt.borderColor = appendColor(clrs[newIt.borderColor], &clrs, (newIt.borderColor <= -10));
             }
-        }
         else ((VisDevelop *)w->mainWin())->actVisItCopy->setEnabled(false);
-        if( index_array.size() )
+        if(index_array.size())
         {
-            for( int i = 0; i < index_array.size(); i++ )
-                for( int h_p = 0; h_p < index_array.size(); h_p++ )
+            for(int i = 0; i < index_array.size(); i++)
+                for(int h_p = 0; h_p < index_array.size(); h_p++)
                 {
-                    if( (fabs((*pnts)[shapeItems[index_array[i]].n1].x() - (*pnts)[shapeItems[index_array[h_p]].n1].x()) < 0.01) && 
-                         (fabs((*pnts)[shapeItems[index_array[i]].n1].y() - (*pnts)[shapeItems[index_array[h_p]].n1].y()) < 0.01) &&
-                         (!(shapeItems[index_array[i]].type == 2 && shapeItems[index_array[h_p]].type == 2)) && (h_p != i) )
-                    {
-                        dropPoint( shapeItems[index_array[h_p]].n1, index_array[h_p], shapeItems, pnts );
-                        shapeItems[index_array[h_p]].n1 = shapeItems[index_array[i]].n1;
-                    }
-                    if( (fabs((*pnts)[shapeItems[index_array[i]].n1].x() - (*pnts)[shapeItems[index_array[h_p]].n2].x()) < 0.01) && 
-                         (fabs((*pnts)[shapeItems[index_array[i]].n1].y() - (*pnts)[shapeItems[index_array[h_p]].n2].y()) < 0.01) &&
-                         (!(shapeItems[index_array[i]].type == 2 && shapeItems[index_array[h_p]].type == 2)) && (h_p != i) )
-                    {
-                        dropPoint( shapeItems[index_array[h_p]].n2, index_array[h_p], shapeItems, pnts );
-                        shapeItems[index_array[h_p]].n2 = shapeItems[index_array[i]].n1;
-                    }
-                    if( (fabs((*pnts)[shapeItems[index_array[i]].n2].x() - (*pnts)[shapeItems[index_array[h_p]].n2].x()) < 0.01) && 
-                         (fabs((*pnts)[shapeItems[index_array[i]].n2].y() - (*pnts)[shapeItems[index_array[h_p]].n2].y()) < 0.01) &&
-                         (!(shapeItems[index_array[i]].type == 2 && shapeItems[index_array[h_p]].type == 2)) && (h_p != i) )
-                    {
-                        dropPoint( shapeItems[index_array[h_p]].n2, index_array[h_p], shapeItems, pnts );
-                        shapeItems[index_array[h_p]].n2 = shapeItems[index_array[i]].n2;
-                    }
+		    ShapeItem &iP = shapeItems[index_array[i]], &hP = shapeItems[index_array[h_p]];
+		    if(h_p == i || (iP.type == ShapeItem::Arc && hP.type == ShapeItem::Arc)) continue;
 
+		    if(fabs(pnts[iP.n1].x()-pnts[hP.n1].x()) < 0.01 && fabs(pnts[iP.n1].y()-pnts[hP.n1].y()) < 0.01)
+		    { dropPoint(hP.n1, index_array[h_p], shapeItems, &pnts); hP.n1 = iP.n1; }
+		    if(fabs(pnts[iP.n1].x()-pnts[hP.n2].x()) < 0.01 && fabs(pnts[iP.n1].y()-pnts[hP.n2].y()) < 0.01)
+		    { dropPoint(hP.n2, index_array[h_p], shapeItems, &pnts); hP.n2 = iP.n1; }
+		    if(fabs(pnts[iP.n2].x()-pnts[hP.n2].x()) < 0.01 && fabs(pnts[iP.n2].y()-pnts[hP.n2].y()) < 0.01)
+		    { dropPoint(hP.n2, index_array[h_p], shapeItems, &pnts); hP.n2 = iP.n2; }
                 }
-            for( int i = 0; i < inundationItems.size(); i++ )
+            for(int i = 0; i < inundationItems.size(); i++)
             {
-                for( int j = 0; j < inundationItems[i].number_shape.size(); j ++ )
-                    for( int k =0; k < copy_index.size(); k++ )
-                        if( inundationItems[i].number_shape[j] == copy_index[k] )
-                        inund_figs.push_back(index_array[k]);
-                if( inund_figs.size() == inundationItems[i].number_shape.size() )
-                    inund_map[i] = inund_figs;
+                for(int j = 0; j < inundationItems[i].number_shape.size(); j++)
+                    for(int k = 0; k < copy_index.size(); k++)
+                        if(inundationItems[i].number_shape[j] == copy_index[k])
+                    	    inund_figs.push_back(index_array[k]);
+                if(inund_figs.size() == inundationItems[i].number_shape.size())	inund_map[i] = inund_figs;
                 inund_figs.clear();
             }
-            for( map< int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++ )
-                inundationItems.push_back(inundationItem(createInundationPath( pi->second, shapeItems, *pnts,w ),
-                                          inundationItems[pi->first].brush,inundationItems[pi->first].brush_img, pi->second, pi->second));
+            for(map<int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++)
+                inundationItems.push_back(inundationItem(createInundationPath(pi->second,shapeItems,pnts,w),
+                                          inundationItems[pi->first].brush,inundationItems[pi->first].brush_img,pi->second,pi->second));
             flag_copy = flag_A = true;
-            if( rect_array.size() )
+            if(rect_array.size())
             {
                 flag_rect = false;
                 rect_array.clear();
@@ -2120,250 +2032,228 @@ void ShapeElFigure::toolAct( QAction *act )
             rect_num = -1;
             flag_ctrl_move = true;
             count_Shapes = index_array.size();
-            moveAll( QPointF(0,0), shapeItems, pnts, inundationItems, w );
-            shapeSave( w );
+            moveAll(QPointF(0,0), shapeItems, &pnts, inundationItems, w);
+            shapeSave(w);
             paintImage(w);
             w->repaint();
         }
         copy_index.clear();
-        ((VisDevelop *)w->mainWin())->actVisItPaste->setEnabled(false);
+        w->mainWin()->actVisItPaste->setEnabled(false);
     }
-    else if( act->objectName() == "level_rise" )
+    else if(act->objectName() == "level_rise")
     {
-        int index_array_inund; 
-        if( index_array.size() && !status_hold && index_array[0] != -1 )
+        int index_array_inund;
+        if(index_array.size() && !status_hold && index_array[0] != -1)
         {
-            //>sorting the fills
-            vector<int> rise_fill; //container of the fills to be rised
-            int fig_col; //quantity of the figures matched with the each fill's shapes
-            for( int j = 0; j < inundationItems.size(); j++  )
+            //> Sorting the fills
+            vector<int> rise_fill;	//container of the fills to be rised
+            int fig_col;		//quantity of the figures matched with the each fill's shapes
+            for(int j = 0; j < inundationItems.size(); j++)
             {
                 fig_col = 0;
-                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
                     for(int i = 0; i < index_array.size(); i++)
-                        if( inundationItems[j].number_shape[p] == index_array[i] ) fig_col++;
-                if( fig_col == inundationItems[j].number_shape.size() )// addition the fill to the container
-                    rise_fill.push_back( j );
+                        if(inundationItems[j].number_shape[p] == index_array[i]) fig_col++;
+                if(fig_col == inundationItems[j].number_shape.size())	// addition the fill to the container
+                    rise_fill.push_back(j);
             }
-            //>>replacing the fills
+            //>> Replacing the fills
             for(unsigned i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
-            int off = 0;
-            for(unsigned i = 0; i < rise_fill.size(); i++, off++) inundationItems.remove(rise_fill[i] - off);
+            for(unsigned i = 0, off = 0; i < rise_fill.size(); i++, off++) inundationItems.remove(rise_fill[i]-off);
 
-            //>sorting the figures
+            //> Sorting the figures
             ShapeItem item_temp;
-            for( int i = 0; i < index_array.size(); i++  )
-                if( index_array[i] != -1 )
+            for(int i = 0; i < index_array.size(); i++)
+                if(index_array[i] != -1)
                 {
                     index_array_inund = index_array[i];
                     item_temp = shapeItems[index_array[i]];
-                    for( int j = index_array[i]; j < shapeItems.size()-1; j++ )
+                    for(int j = index_array[i]; j < (shapeItems.size()-1); j++)
                     {
                         shapeItems[j] = shapeItems[j+1];
-                        for( int k = 0; k < index_array.size(); k++ )
-                            if( j == index_array[k] && index_array[k] != -1 ) 
+                        for(int k = 0; k < index_array.size(); k++)
+                            if(j == index_array[k] && index_array[k] != -1)
                                 index_array[k] = index_array[k] - 1;
                     }
                     shapeItems[shapeItems.size()-1] = item_temp;
-                    for( int j = 0; j < inundationItems.size(); j++  )
-                        for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                            if( inundationItems[j].number_shape[p] == index_array_inund )
-                                inundationItems[j].number_shape[p] = shapeItems.size()-1;
-                            else if( inundationItems[j].number_shape[p] > index_array_inund )
+                    for(int j = 0; j < inundationItems.size(); j++)
+                        for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
+                            if(inundationItems[j].number_shape[p] == index_array_inund)
+                        	inundationItems[j].number_shape[p] = shapeItems.size()-1;
+                            else if(inundationItems[j].number_shape[p] > index_array_inund)
                                 inundationItems[j].number_shape[p]--;
                 }
         }
-        else if( status_hold && ( index_array_copy.size() || 
-                 (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) ) )
+        else if(status_hold && (index_array_copy.size() || (index_array_copy.size() == 0 && (index_array.size() && index_array[0] != -1))))
         {
-            if( (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) )
-                index_array_copy = index_array;
+            if(index_array_copy.size() == 0 && index_array.size() && index_array[0] != -1) index_array_copy = index_array;
 
-            //>sorting the fills
+            //> Sorting the fills
             vector<int> rise_fill;
             int fig_col;
-            for( int j = 0; j < inundationItems.size(); j++  )
+            for(int j = 0; j < inundationItems.size(); j++)
             {
                 fig_col = 0;
-                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
                     for(int i = 0; i < index_array_copy.size(); i++)
-                        if( inundationItems[j].number_shape[p] == index_array_copy[i] ) fig_col++;
-                if( fig_col == inundationItems[j].number_shape.size() ) rise_fill.push_back( j );
+                        if(inundationItems[j].number_shape[p] == index_array_copy[i]) fig_col++;
+                if(fig_col == inundationItems[j].number_shape.size()) rise_fill.push_back(j);
             }
             for(unsigned i = 0; i < rise_fill.size(); i++) inundationItems.push_back(inundationItems[rise_fill[i]]);
-            int off = 0;
-            for(unsigned i = 0; i < rise_fill.size(); i++, off++) inundationItems.remove(rise_fill[i] - off);
+            for(unsigned i = 0, off = 0; i < rise_fill.size(); i++, off++) inundationItems.remove(rise_fill[i] - off);
 
-            //>sorting the figures
+            //> Sorting the figures
             ShapeItem item_temp;
-            for( int i = 0; i < index_array_copy.size(); i++  )
-                if( index_array_copy[i] != -1 )
+            for(int i = 0; i < index_array_copy.size(); i++)
+                if(index_array_copy[i] != -1)
                 {
                     index_array_inund = index_array_copy[i];
                     item_temp = shapeItems[index_array_copy[i]];
-                    for( int j = index_array_copy[i]; j < shapeItems.size()-1; j++ )
+                    for(int j = index_array_copy[i]; j < (shapeItems.size()-1); j++)
                     {
                         shapeItems[j] = shapeItems[j+1];
-                        for( int k = 0; k < index_array_copy.size(); k++ )
-                            if( j == index_array_copy[k] && index_array_copy[k] != -1 ) 
+                        for(int k = 0; k < index_array_copy.size(); k++)
+                            if(j == index_array_copy[k] && index_array_copy[k] != -1)
                                 index_array_copy[k] = index_array_copy[k] - 1;
                     }
                     shapeItems[shapeItems.size()-1] = item_temp;
-                    for( int j = 0; j < inundationItems.size(); j++  )
-                        for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                            if( inundationItems[j].number_shape[p] == index_array_inund )
+                    for(int j = 0; j < inundationItems.size(); j++)
+                        for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
+                            if(inundationItems[j].number_shape[p] == index_array_inund)
                                 inundationItems[j].number_shape[p] = shapeItems.size()-1;
-                            else if( inundationItems[j].number_shape[p] > index_array_inund )
+                            else if(inundationItems[j].number_shape[p] > index_array_inund)
                                 inundationItems[j].number_shape[p]--;
                 }
         }
-        else if( index_temp != -1 )
+        else if(index_temp != -1)
         {
             shapeItems.push_back(shapeItems[index_temp]);
-            shapeItems.remove( index_temp );
-            for( int j = 0; j < inundationItems.size(); j++  )
-                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                    if( inundationItems[j].number_shape[p] == index_temp )
-                        inundationItems[j].number_shape[p] = shapeItems.size()-1;
-                    else if( inundationItems[j].number_shape[p] > index_temp )
-                        inundationItems[j].number_shape[p]--;
+            shapeItems.remove(index_temp);
+            for(int j = 0; j < inundationItems.size(); j++)
+                for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
+                    if(inundationItems[j].number_shape[p] == index_temp)	inundationItems[j].number_shape[p] = shapeItems.size()-1;
+                    else if(inundationItems[j].number_shape[p] > index_temp)	inundationItems[j].number_shape[p]--;
         }
-        shapeSave( w );
+        shapeSave(w);
         itemInMotion = 0;
         rectItems.clear();
         index_array.clear();
         index_array_copy.clear();
         index = index_temp = -1;
         flag_ctrl = flag_A = flag_copy = false;
-        ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
-        ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        w->mainWin()->actLevRise->setEnabled(false);
+        w->mainWin()->actLevLower->setEnabled(false);
         paintImage(w);
         w->repaint();
     }
-    else if( act->objectName() == "level_lower" )
+    else if(act->objectName() == "level_lower")
     {
         int index_array_inund;
-        if( index_array.size() && !status_hold && index_array[0] != -1 )
+        if(index_array.size() && !status_hold && index_array[0] != -1)
         {
-            //>sorting the fills
+            //> Sorting the fills
             vector<int> low_fill;
             int fig_col;
-            for( int j = 0; j < inundationItems.size(); j++  )
+            for(int j = 0; j < inundationItems.size(); j++)
             {
                 fig_col = 0;
-                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
                     for(int i = 0; i < index_array.size(); i++)
-                        if( inundationItems[j].number_shape[p] == index_array[i] ) fig_col++;
-                if( fig_col == inundationItems[j].number_shape.size() ) low_fill.push_back( j );
+                        if(inundationItems[j].number_shape[p] == index_array[i]) fig_col++;
+                if(fig_col == inundationItems[j].number_shape.size()) low_fill.push_back(j);
             }
-            int off = 0;
-            for(int i = low_fill.size()-1; i > -1; i--)
-            {
-                inundationItems.prepend(inundationItems[low_fill[i] + off]);
-                off++;
-            }
-            off = 0;
-            for(unsigned i = 0; i < low_fill.size(); i++, off++) inundationItems.remove(low_fill[i] + low_fill.size() - off);
+            for(int i = low_fill.size()-1, off = 0; i > -1; i--, off++)   inundationItems.prepend(inundationItems[low_fill[i] + off]);
+            for(unsigned i = 0, off = 0; i < low_fill.size(); i++, off++) inundationItems.remove(low_fill[i] + low_fill.size() - off);
 
-            //>sorting the figures
+            //> Sorting the figures
             ShapeItem item_temp;
-            for( int i = 0; i < index_array.size(); i++  )
-                if( index_array[i] != -1 )
+            for(int i = 0; i < index_array.size(); i++)
+                if(index_array[i] != -1)
                 {
                     index_array_inund = index_array[i];
                     item_temp = shapeItems[index_array[i]];
-                    for( int j = index_array[i]; j > 0; j-- )
+                    for(int j = index_array[i]; j > 0; j--)
                     {
                         shapeItems[j] = shapeItems[j-1];
-                        for( int k = 0; k < index_array.size(); k++ )
-                            if( j == index_array[k] && index_array[k] != -1 ) 
+                        for(int k = 0; k < index_array.size(); k++)
+                            if(j == index_array[k] && index_array[k] != -1)
                                 index_array[k] = index_array[k] + 1;
                     }
                     shapeItems[0] = item_temp;
-                    for( int j = 0; j < inundationItems.size(); j++  )
-                        for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                            if( inundationItems[j].number_shape[p] == index_array_inund )
+                    for(int j = 0; j < inundationItems.size(); j++)
+                        for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
+                            if(inundationItems[j].number_shape[p] == index_array_inund)
                                 inundationItems[j].number_shape[p] = 0;
-                            else if( inundationItems[j].number_shape[p] < index_array_inund )
+                            else if(inundationItems[j].number_shape[p] < index_array_inund)
                                 inundationItems[j].number_shape[p]++;
                 }
         }
-        else if( status_hold && ( index_array_copy.size() || 
-                 (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) ) )
+        else if(status_hold && (index_array_copy.size() || (index_array_copy.size() == 0 && (index_array.size() && index_array[0] != -1))))
         {
-            if( (index_array_copy.size() == 0 && ( index_array.size() && index_array[0] != -1) ) )
-                index_array_copy = index_array;
+            if(index_array_copy.size() == 0 && index_array.size() && index_array[0] != -1) index_array_copy = index_array;
 
-            //>sorting the fills
+            //> Sorting the fills
             vector<int> low_fill;
             int fig_col;
-            for( int j = 0; j < inundationItems.size(); j++  )
+            for(int j = 0; j < inundationItems.size(); j++)
             {
                 fig_col = 0;
-                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
+                for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
                     for(int i = 0; i < index_array_copy.size(); i++)
-                        if( inundationItems[j].number_shape[p] == index_array_copy[i] ) fig_col++;
-                if( fig_col == inundationItems[j].number_shape.size() ) low_fill.push_back( j );
+                        if(inundationItems[j].number_shape[p] == index_array_copy[i]) fig_col++;
+                if(fig_col == inundationItems[j].number_shape.size()) low_fill.push_back(j);
             }
-            int off = 0;
-            for(int i = low_fill.size()-1; i > -1; i--)
-            {
-                inundationItems.prepend(inundationItems[low_fill[i] + off]);
-                off++;
-            }
-            off = 0;
-            for(unsigned i = 0; i < low_fill.size(); i++, off++) inundationItems.remove(low_fill[i] + low_fill.size() - off);
+            for(int i = low_fill.size()-1, off = 0; i > -1; i--, off++)   inundationItems.prepend(inundationItems[low_fill[i] + off]);
+            for(unsigned i = 0, off = 0; i < low_fill.size(); i++, off++) inundationItems.remove(low_fill[i] + low_fill.size() - off);
 
-            //>sorting the figures
+            //> Sorting the figures
             ShapeItem item_temp;
-            for( int i = 0; i < index_array_copy.size(); i++  )
-                if( index_array_copy[i] != -1 )
+            for(int i = 0; i < index_array_copy.size(); i++)
+                if(index_array_copy[i] != -1)
                 {
                     index_array_inund = index_array_copy[i];
                     item_temp = shapeItems[index_array_copy[i]];
-                    for( int j = index_array_copy[i]; j > 0; j-- )
+                    for(int j = index_array_copy[i]; j > 0; j--)
                     {
                         shapeItems[j] = shapeItems[j-1];
-                        for( int k = 0; k < index_array_copy.size(); k++ )
-                            if( j == index_array_copy[k] && index_array_copy[k] != -1 ) 
+                        for(int k = 0; k < index_array_copy.size(); k++)
+                            if(j == index_array_copy[k] && index_array_copy[k] != -1)
                                 index_array_copy[k] = index_array_copy[k] + 1;
                     }
                     shapeItems[0] = item_temp;
-                    for( int j = 0; j < inundationItems.size(); j++  )
-                        for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                            if( inundationItems[j].number_shape[p] == index_array_inund )
+                    for(int j = 0; j < inundationItems.size(); j++)
+                        for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
+                            if(inundationItems[j].number_shape[p] == index_array_inund)
                                 inundationItems[j].number_shape[p] = 0;
-                            else if( inundationItems[j].number_shape[p] < index_array_inund )
+                            else if(inundationItems[j].number_shape[p] < index_array_inund)
                                 inundationItems[j].number_shape[p]++;
                 }
         }
-        else if( index_temp != -1 )
+        else if(index_temp != -1)
         {
             shapeItems.push_front(shapeItems[index_temp]);
-            shapeItems.remove( index_temp + 1 );
-            for( int j = 0; j < inundationItems.size(); j++  )
-                for( int p = 0; p < inundationItems[j].number_shape.size(); p++ ) 
-                    if( inundationItems[j].number_shape[p] == index_temp )
-                        inundationItems[j].number_shape[p] = 0;
-                    else if( inundationItems[j].number_shape[p] < index_temp )
-                        inundationItems[j].number_shape[p]++;
+            shapeItems.remove(index_temp + 1);
+            for(int j = 0; j < inundationItems.size(); j++)
+                for(int p = 0; p < inundationItems[j].number_shape.size(); p++)
+                    if(inundationItems[j].number_shape[p] == index_temp)	inundationItems[j].number_shape[p] = 0;
+                    else if(inundationItems[j].number_shape[p] < index_temp)	inundationItems[j].number_shape[p]++;
         }
-        shapeSave( w );
+        shapeSave(w);
         itemInMotion = 0;
         rectItems.clear();
         index_array.clear();
         index_array_copy.clear();
         index = index_temp = -1;
         flag_ctrl = flag_A = flag_copy = false;
-        ((VisDevelop *)w->mainWin())->actLevRise->setEnabled(false);
-        ((VisDevelop *)w->mainWin())->actLevLower->setEnabled(false);
+        w->mainWin()->actLevRise->setEnabled(false);
+        w->mainWin()->actLevLower->setEnabled(false);
         paintImage(w);
         w->repaint();
     }
-    if( fl_figure )
+    if(fl_figure)
     {
         act->setChecked(true);
-        if( flag_A )
+        if(flag_A)
         {
             flag_ctrl = flag_A = flag_copy = false;
             flag_check_pnt_inund = false;
@@ -2382,7 +2272,8 @@ void ShapeElFigure::toolAct( QAction *act )
         w->repaint();
     }
 }
-//- Making a static value the dynamic one and vise versa -
+
+//> Making a static value the dynamic one and vise versa
 void ElFigDt::dynamic( )
 {
     ShapeElFigure *elF = (ShapeElFigure*) mod->getWdgShape("ElFigure");
@@ -3195,66 +3086,66 @@ void ElFigDt::properties()
         propDlg.edLay()->setColumnMinimumWidth ( 2, 100 );
         propDlg.edLay()->setColumnStretch ( 2, 1 );
     }
-    if( propDlg.exec() == QDialog::Accepted )
+    if(propDlg.exec() == QDialog::Accepted)
     {
         int k;
         elF->flag_dyn_save = false;
         //>> Applying the changes for the fills
-        if( sender()->objectName() == "Fill" )
+        if(sender()->objectName() == "Fill")
         {
             string res_fColor = f_color->value().toStdString();
-            QColor res_fClr = WdgShape::getColor(  res_fColor );
-            if( fc_en->isChecked() && f_color->isEnabled() )
+            QColor res_fClr = WdgShape::getColor(res_fColor);
+            if(fc_en->isChecked() && f_color->isEnabled())
             {
-                if( inundationItems[elF->fill_index].brush == -7 )
+                if(inundationItems[elF->fill_index].brush == -7)
                 {
                     k = -10;
-                    while( (*colors).find(k) != (*colors).end() ) k--;
-                    (*colors).insert( std::pair<int, QColor> ( k, res_fClr ) );
+                    while((*colors).find(k) != (*colors).end()) k--;
+                    (*colors).insert(std::pair<int, QColor>(k, res_fClr));
                     inundationItems[elF->fill_index].brush = k;
                 }
                 else (*colors)[inundationItems[elF->fill_index].brush] = res_fClr;
             }
-            else if( fc_en->isChecked() && fc_check->isChecked() && inundationItems[elF->fill_index].brush != -7 )
+            else if(fc_en->isChecked() && fc_check->isChecked() && inundationItems[elF->fill_index].brush != -7)
             {
-                (*colors).erase( inundationItems[elF->fill_index].brush );
+                (*colors).erase(inundationItems[elF->fill_index].brush);
                 inundationItems[elF->fill_index].brush = -7;
             }
-            if( fi_en->isChecked() && f_image->isEnabled() )
+            if(fi_en->isChecked() && f_image->isEnabled())
             {
-                if( !f_image->text().isEmpty() )
+                if(!f_image->text().isEmpty())
                 {
-                    if( inundationItems[elF->fill_index].brush_img == -5 )
+                    if(inundationItems[elF->fill_index].brush_img == -5)
                     {
                         k = -10;
-                        while( (*images).find(k) != (*images).end() ) k--;
-                        (*images).insert( std::pair<int, string> ( k, f_image->text().toStdString() ) );
+                        while((*images).find(k) != (*images).end()) k--;
+                        (*images).insert(std::pair<int, string>(k,f_image->text().toStdString()));
                         inundationItems[elF->fill_index].brush_img = k;
                     }
                     else (*images)[inundationItems[elF->fill_index].brush_img] = f_image->text().toStdString();
                 }
-                else if( f_image->text().isEmpty() && !(*images)[inundationItems[elF->fill_index].brush_img].empty() )
+                else if(f_image->text().isEmpty() && !(*images)[inundationItems[elF->fill_index].brush_img].empty())
                 {
-                    (*images).erase( inundationItems[elF->fill_index].brush_img );
+                    (*images).erase(inundationItems[elF->fill_index].brush_img);
                     inundationItems[elF->fill_index].brush_img = -5;
-                    inundationItems[elF->fill_index].path = elF->createInundationPath( inundationItems[elF->fill_index].number_shape, shapeItems, *pnts, w );
+                    inundationItems[elF->fill_index].path = elF->createInundationPath(inundationItems[elF->fill_index].number_shape, shapeItems, *pnts, w);
                 }
             }
-            else if( fi_en->isChecked() && fi_check->isChecked() && inundationItems[elF->fill_index].brush_img != -5 )
+            else if(fi_en->isChecked() && fi_check->isChecked() && inundationItems[elF->fill_index].brush_img != -5)
             {
-                (*images).erase( inundationItems[elF->fill_index].brush_img );
+                (*images).erase(inundationItems[elF->fill_index].brush_img);
                 inundationItems[elF->fill_index].brush_img = -5;
             }
-            if( fc_en->isChecked() &&  fc_c->isEnabled() && ( (fc_c->isChecked() && 
+            if(fc_en->isChecked() &&  fc_c->isEnabled() && ((fc_c->isChecked() &&
                 (inundationItems[elF->fill_index].brush <= -10 || inundationItems[elF->fill_index].brush == -7)) ||
-                (!fc_c->isChecked() && inundationItems[elF->fill_index].brush > 0) ) )
+                (!fc_c->isChecked() && inundationItems[elF->fill_index].brush > 0)))
             {
                 elF->rect_dyn = -1; elF->dyn_num = 7;
                 dynamic();
             }
-            if( fi_en->isChecked() && fi_c->isEnabled() && ( (fi_c->isChecked() && 
+            if(fi_en->isChecked() && fi_c->isEnabled() && ((fi_c->isChecked() &&
                 (inundationItems[elF->fill_index].brush_img <= -10 || inundationItems[elF->fill_index].brush_img == -5)) ||
-                (!fi_c->isChecked() && inundationItems[elF->fill_index].brush_img > 0) ) )
+                (!fi_c->isChecked() && inundationItems[elF->fill_index].brush_img > 0)))
             {
                 elF->rect_dyn = -1; elF->dyn_num = 8;
                 dynamic();
@@ -3270,19 +3161,19 @@ void ElFigDt::properties()
                     ++pi;
                 }
             else ++pi;*/
-            if( fl_appN1 )
+            if(fl_appN1)
             {
-                if( shapeItems[elF->index].n1 > 0 )
-                    shapeItems[elF->index].n1 = elF->appendPoint( (*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, false );
-                else if( shapeItems[elF->index].n1 <= -10 )
-                    shapeItems[elF->index].n1 = elF->appendPoint( (*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, true );
+                if(shapeItems[elF->index].n1 > 0)
+                    shapeItems[elF->index].n1 = elF->appendPoint((*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, false);
+                else if(shapeItems[elF->index].n1 <= -10)
+                    shapeItems[elF->index].n1 = elF->appendPoint((*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, true);
             }
-            if( fl_appN2 )
+            if(fl_appN2)
             {
-                if( shapeItems[elF->index].n2 > 0 )
-                    shapeItems[elF->index].n2 = elF->appendPoint( (*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, false );
-                else if( shapeItems[elF->index].n2 <= -10 )
-                    shapeItems[elF->index].n2 = elF->appendPoint( (*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, true );
+                if(shapeItems[elF->index].n2 > 0)
+                    shapeItems[elF->index].n2 = elF->appendPoint((*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, false);
+                else if(shapeItems[elF->index].n2 <= -10)
+                    shapeItems[elF->index].n2 = elF->appendPoint((*pnts)[shapeItems[elF->index].n1], shapeItems, pnts, true);
             }
             string res_lColor = l_color->value().toStdString();
             string res_lbColor = lb_color->value().toStdString();
@@ -3551,324 +3442,318 @@ void ElFigDt::properties()
                         shapeItems[elF->index].borderColor = elF->appendColor( (*colors)[shapeItems[elF->index].borderColor], colors, false );
                 }
             }
-            //>>>Applying the changes of the fugures properties for all figures in the items_array_holds array except th elF->index figure
-            for( int i = 0; i < items_array_holds.size(); i++ )
+            //>>> Applying the changes of the fugures properties for all figures in the items_array_holds array except th elF->index figure
+            for(int i = 0; i < items_array_holds.size(); i++)
             {
-                //>>>>Applying changes for the line width
-                if( lw_en->isChecked() )
+                //>>>> Applying changes for the line width
+                if(lw_en->isChecked())
                 {
-                    if( l_width->isEnabled() )
+                    if(l_width->isEnabled())
                     {
-                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        if(items_array_holds.size() > 1 && items_array_holds[i] != elF->index)
                         {
-                            if( shapeItems[elF->index].width > 0 )
+                            if(shapeItems[elF->index].width > 0)
                             {
-                                //>>>Detecting if there is the necessity to erase the width from the map andchanging the width's index to those of the elF->index figure
+                                //>>> Detecting if there is the necessity to erase the width from the map andchanging the width's index to those of the elF->index figure
                                 bool flag_save = false;
-                                for( int p = 0; p < tmp_shapes.size(); p++ )
-                                    if( (shapeItems[items_array_holds[i]].width > 0) && (shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[i]].width) )
-                                    { flag_save = true; break; }
-                                if( (shapeItems[items_array_holds[i]].width != -5) && (shapeItems[items_array_holds[i]].width != shapeItems[elF->index].width) && !flag_save )
-                                    (*widths).erase( shapeItems[items_array_holds[i]].width );
+                                for(int p = 0; !flag_save && p < tmp_shapes.size(); p++)
+                                    if(shapeItems[items_array_holds[i]].width > 0 && shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[i]].width)
+                                	flag_save = true;
+                                if(shapeItems[items_array_holds[i]].width != -5 && shapeItems[items_array_holds[i]].width != shapeItems[elF->index].width && !flag_save)
+                                    (*widths).erase(shapeItems[items_array_holds[i]].width);
                                 shapeItems[items_array_holds[i]].width = shapeItems[elF->index].width;
                             }
-                            else if( shapeItems[elF->index].width <= -10 )
+                            else if(shapeItems[elF->index].width <= -10)
                             {
-                                if( (shapeItems[items_array_holds[i]].width == -5) || (shapeItems[items_array_holds[i]].width > 0) )
+                                if(shapeItems[items_array_holds[i]].width == -5 || shapeItems[items_array_holds[i]].width > 0)
                                 {
-                                    //>>>Detecting if there is the necessity to erase the width from the map and appendint the new statc width to the map
-                                    if( shapeItems[items_array_holds[i]].width > 0 )
+                                    //>>> Detecting if there is the necessity to erase the width from the map and appendint the new static width to the map
+                                    if(shapeItems[items_array_holds[i]].width > 0)
                                     {
                                         bool fl_keep = false;
-                                        for( int p = 0; p < tmp_shapes.size(); p++ )
-                                            if( shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[i]].width )
-                                            { fl_keep = true; break; }
-                                        if( !fl_keep ) (*widths).erase( shapeItems[items_array_holds[i]].width );
+                                        for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                            if(shapeItems[tmp_shapes[p]].width == shapeItems[items_array_holds[i]].width)
+                                        	fl_keep = true;
+                                        if(!fl_keep) (*widths).erase(shapeItems[items_array_holds[i]].width);
                                     }
-                                    shapeItems[items_array_holds[i]].width = elF->appendWidth( (float)(l_width->value()*scale), widths, true );
+                                    shapeItems[items_array_holds[i]].width = elF->appendWidth((float)(l_width->value()*scale), widths, true);
                                 }
                                 //>>> If the figures width is already static just changing its value to the actual one.
-                                else if( shapeItems[items_array_holds[i]].width <= -10 )
+                                else if(shapeItems[items_array_holds[i]].width <= -10)
                                     (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
                             }
                         }
                         //>>> Appending the static point for the figure with the default width
-                        else if( shapeItems[items_array_holds[i]].width == -5 )
-                            shapeItems[items_array_holds[i]].width = elF->appendWidth( (float)(l_width->value()*scale), widths, true );
-                        else//Changing the width of the figure with the actual value without changing its index in the map
-                            (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
+                        else if(shapeItems[items_array_holds[i]].width == -5)
+                            shapeItems[items_array_holds[i]].width = elF->appendWidth((float)(l_width->value()*scale), widths, true);
+                        //Changing the width of the figure with the actual value without changing its index in the map
+                        else (*widths)[shapeItems[items_array_holds[i]].width] = l_width->value()*scale;
                     }
-                    //>>> Making the figures width the default one 
+                    //>>> Making the figures width the default one
                     //>>> and detecting if there is the necessity to save the previous figure's width index.
-                    else if( shapeItems[items_array_holds[i]].width != -5 )
+                    else if(shapeItems[items_array_holds[i]].width != -5)
                     {
                         bool fl_keep = false;
-                        if( shapeItems[items_array_holds[i]].width > 0 ) 
-                            for( int p = 0; p < tmp_shapes.size(); p++ )
-                                if( shapeItems[items_array_holds[i]].width == shapeItems[tmp_shapes[p]].width )
-                                { fl_keep = true; break; }
-                        if( !fl_keep )
-                            (*widths).erase( shapeItems[items_array_holds[i]].width );
+                        if(shapeItems[items_array_holds[i]].width > 0)
+                            for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                if(shapeItems[items_array_holds[i]].width == shapeItems[tmp_shapes[p]].width)
+                            	    fl_keep = true;
+                        if(!fl_keep) (*widths).erase(shapeItems[items_array_holds[i]].width);
                         shapeItems[items_array_holds[i]].width = -5;
                     }
                 }
                 //>>>>Applying changes for the line color
-                if( lc_en->isChecked() )
+                if(lc_en->isChecked())
                 {
-                    if( l_color->isEnabled() )
+                    if(l_color->isEnabled())
                     {
-                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        if(items_array_holds.size() > 1 && items_array_holds[i] != elF->index)
                         {
-                            if( shapeItems[elF->index].lineColor > 0 )
+                            if(shapeItems[elF->index].lineColor > 0)
                             {
                                 //>>>Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
                                 bool flag_save = false;
-                                for( int p = 0; p < tmp_shapes.size(); p++ )
-                                    if( (shapeItems[items_array_holds[i]].lineColor > 0) && (shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[i]].lineColor) )
-                                    { flag_save = true; break; }
-                                if( (shapeItems[items_array_holds[i]].lineColor != -5) && (shapeItems[items_array_holds[i]].lineColor != shapeItems[elF->index].lineColor) && !flag_save )
-                                    (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                                for(int p = 0; !flag_save && p < tmp_shapes.size(); p++)
+                                    if(shapeItems[items_array_holds[i]].lineColor > 0 && shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[i]].lineColor)
+                                	flag_save = true;
+                                if(shapeItems[items_array_holds[i]].lineColor != -5 && shapeItems[items_array_holds[i]].lineColor != shapeItems[elF->index].lineColor && !flag_save)
+                                    (*colors).erase(shapeItems[items_array_holds[i]].lineColor);
                                 shapeItems[items_array_holds[i]].lineColor = shapeItems[elF->index].lineColor;
                             }
-                            else if( shapeItems[elF->index].lineColor <= -10 )
+                            else if(shapeItems[elF->index].lineColor <= -10)
                             {
-                                if( (shapeItems[items_array_holds[i]].lineColor == -5) || (shapeItems[items_array_holds[i]].lineColor > 0) )
+                                if(shapeItems[items_array_holds[i]].lineColor == -5 || shapeItems[items_array_holds[i]].lineColor > 0)
                                 {
-                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new statc color to the map
-                                    if( shapeItems[items_array_holds[i]].lineColor > 0 )
+                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new static color to the map
+                                    if(shapeItems[items_array_holds[i]].lineColor > 0)
                                     {
                                         bool fl_keep = false;
-                                        for( int p = 0; p < tmp_shapes.size(); p++ )
-                                            if( shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[i]].lineColor )
-                                            { fl_keep = true; break; }
-                                        if( !fl_keep ) (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                                        for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                            if(shapeItems[tmp_shapes[p]].lineColor == shapeItems[items_array_holds[i]].lineColor)
+                                        	fl_keep = true;
+                                        if(!fl_keep) (*colors).erase(shapeItems[items_array_holds[i]].lineColor);
                                     }
-                                    shapeItems[items_array_holds[i]].lineColor = elF->appendColor( res_lClr, colors, true );
+                                    shapeItems[items_array_holds[i]].lineColor = elF->appendColor(res_lClr, colors, true);
                                 }
                                 //>>> If the figure's color is already static just changing its value to the actual one.
-                                else if( shapeItems[items_array_holds[i]].lineColor <= -10 )
+                                else if(shapeItems[items_array_holds[i]].lineColor <= -10)
                                     (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
                             }
                         }
                         //>>> Appending the static point for the figure with the default color
-                        else if( shapeItems[items_array_holds[i]].lineColor == -5 )
-                            shapeItems[items_array_holds[i]].lineColor = elF->appendColor( res_lClr, colors, true );
-                        else//Changing the color of the figure with the actual value without changing its index in the map
-                            (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
+                        else if(shapeItems[items_array_holds[i]].lineColor == -5)
+                            shapeItems[items_array_holds[i]].lineColor = elF->appendColor(res_lClr, colors, true);
+                        //Changing the color of the figure with the actual value without changing its index in the map
+                        else (*colors)[shapeItems[items_array_holds[i]].lineColor] = res_lClr;
                     }
                     //>>> Making the figures color the default one 
                     //>>> and detecting if there is the necessity to save the previous figure's color index.
-                    else if( shapeItems[items_array_holds[i]].lineColor != -5 )
+                    else if(shapeItems[items_array_holds[i]].lineColor != -5)
                     {
                         bool fl_keep = false;
-                        if( shapeItems[items_array_holds[i]].lineColor > 0 ) 
-                            for( int p = 0; p < tmp_shapes.size(); p++ )
-                                if( shapeItems[items_array_holds[i]].lineColor == shapeItems[tmp_shapes[p]].lineColor )
-                                { fl_keep = true; break; }
-                        if( !fl_keep )
-                            (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
+                        if(shapeItems[items_array_holds[i]].lineColor > 0)
+                            for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                if(shapeItems[items_array_holds[i]].lineColor == shapeItems[tmp_shapes[p]].lineColor)
+                            	    fl_keep = true;
+                        if(!fl_keep) (*colors).erase( shapeItems[items_array_holds[i]].lineColor );
                         shapeItems[items_array_holds[i]].lineColor = -5;
                     }
                 }
                 //>>>>Applying changes for the line style
-                if( ls_en->isChecked() )
+                if(ls_en->isChecked())
                 {
-                    if( l_style->isEnabled() )
+                    if(l_style->isEnabled())
                     {
-                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        if(items_array_holds.size() > 1 && items_array_holds[i] != elF->index)
                         {
-                            if( shapeItems[elF->index].style > 0 )
+                            if(shapeItems[elF->index].style > 0)
                             {
-                                //>>>Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
+                                //>>> Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
                                 bool flag_save = false;
-                                for( int p = 0; p < tmp_shapes.size(); p++ )
-                                    if( (shapeItems[items_array_holds[i]].style > 0) && (shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[i]].style) )
-                                    {
+                                for(int p = 0; !flag_save && p < tmp_shapes.size(); p++)
+                                    if(shapeItems[items_array_holds[i]].style > 0 && shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[i]].style)
                                         flag_save = true;
-                                        break;
-                                    }
-                                if( (shapeItems[items_array_holds[i]].style != -5) && (shapeItems[items_array_holds[i]].style != shapeItems[elF->index].style) && !flag_save )
-                                    (*styles).erase( shapeItems[items_array_holds[i]].style );
+                                if(shapeItems[items_array_holds[i]].style != -5 && shapeItems[items_array_holds[i]].style != shapeItems[elF->index].style && !flag_save)
+                                    (*styles).erase(shapeItems[items_array_holds[i]].style);
                                 shapeItems[items_array_holds[i]].style = shapeItems[elF->index].style;
                             }
-                            else if( shapeItems[elF->index].style <= -10 )
+                            else if(shapeItems[elF->index].style <= -10)
                             {
-                                if( (shapeItems[items_array_holds[i]].style == -5) || (shapeItems[items_array_holds[i]].style > 0) )
+                                if(shapeItems[items_array_holds[i]].style == -5 || shapeItems[items_array_holds[i]].style > 0)
                                 {
-                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new statc color to the map
-                                    if( shapeItems[items_array_holds[i]].style > 0 )
+                                    //>>> Detecting if there is the necessity to erase the color from the map and appendint the new static color to the map
+                                    if(shapeItems[items_array_holds[i]].style > 0)
                                     {
                                         bool fl_keep = false;
-                                        for( int p = 0; p < tmp_shapes.size(); p++ )
-                                            if( shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[i]].style )
-                                            { fl_keep = true; break; }
-                                        if( !fl_keep ) (*styles).erase( shapeItems[items_array_holds[i]].style );
+                                        for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                            if(shapeItems[tmp_shapes[p]].style == shapeItems[items_array_holds[i]].style)
+                                        	fl_keep = true;
+                                        if(!fl_keep) (*styles).erase(shapeItems[items_array_holds[i]].style);
                                     }
-                                    shapeItems[items_array_holds[i]].style = elF->appendStyle( ln_style, styles, true );
+                                    shapeItems[items_array_holds[i]].style = elF->appendStyle(ln_style, styles, true);
                                 }
                                 //>>> If the figure's color is already static just changing its value to the actual one.
-                                else if( shapeItems[items_array_holds[i]].style <= -10 )
+                                else if(shapeItems[items_array_holds[i]].style <= -10)
                                     (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
                             }
                         }
                         //>>> Appending the static point for the figure with the default color
-                        else if( shapeItems[items_array_holds[i]].style == -5 )
-                            shapeItems[items_array_holds[i]].style = elF->appendStyle( ln_style, styles, true );
-                        else//Changing the color of the figure with the actual value without changing its index in the map
-                            (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
+                        else if(shapeItems[items_array_holds[i]].style == -5)
+                            shapeItems[items_array_holds[i]].style = elF->appendStyle(ln_style, styles, true);
+                        //Changing the color of the figure with the actual value without changing its index in the map
+                        else (*styles)[shapeItems[items_array_holds[i]].style] = ln_style;
                     }
-                    //>>> Making the figures color the default one 
+                    //>>> Making the figures color the default one
                     //>>> and detecting if there is the necessity to save the previous figure's color index.
-                    else if( shapeItems[items_array_holds[i]].style != -5 )
+                    else if(shapeItems[items_array_holds[i]].style != -5)
                     {
                         bool fl_keep = false;
-                        if( shapeItems[items_array_holds[i]].style > 0 ) 
-                            for( int p = 0; p < tmp_shapes.size(); p++ )
-                                if( shapeItems[items_array_holds[i]].style == shapeItems[tmp_shapes[p]].style )
-                                { fl_keep = true; break; }
-                        if( !fl_keep ) (*styles).erase( shapeItems[items_array_holds[i]].style );
+                        if(shapeItems[items_array_holds[i]].style > 0)
+                            for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                if(shapeItems[items_array_holds[i]].style == shapeItems[tmp_shapes[p]].style)
+                            	    fl_keep = true;
+                        if(!fl_keep) (*styles).erase(shapeItems[items_array_holds[i]].style);
                         shapeItems[items_array_holds[i]].style = -5;
                     }
                 }
-                //>>>>Applying changes for the border width
-                if( lbw_en->isChecked() )
+                //>>>> Applying changes for the border width
+                if(lbw_en->isChecked())
                 {
-                    if( lb_width->isEnabled() )
+                    if(lb_width->isEnabled())
                     {
-                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        if(items_array_holds.size() > 1 && items_array_holds[i] != elF->index)
                         {
-                            if( shapeItems[elF->index].border_width > 0 )
+                            if(shapeItems[elF->index].border_width > 0)
                             {
-                                //>>>Detecting if there is the necessity to erase the border width from the map andchanging the border width's index to those of the elF->index figure
+                                //>>> Detecting if there is the necessity to erase the border width from the map and changing the border width's index to those of the elF->index figure
                                 bool flag_save = false;
-                                for( int p = 0; p < tmp_shapes.size(); p++ )
-                                    if( (shapeItems[items_array_holds[i]].border_width > 0) && (shapeItems[tmp_shapes[p]].border_width == shapeItems[items_array_holds[i]].border_width) )
-                                    { flag_save = true; break; }
-                                if( (shapeItems[items_array_holds[i]].border_width != -6) && (shapeItems[items_array_holds[i]].border_width != shapeItems[elF->index].border_width) && !flag_save )
-                                    (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                                for(int p = 0; !flag_save && p < tmp_shapes.size(); p++)
+                                    if(shapeItems[items_array_holds[i]].border_width > 0 && shapeItems[tmp_shapes[p]].border_width == shapeItems[items_array_holds[i]].border_width)
+                                	flag_save = true;
+                                if(shapeItems[items_array_holds[i]].border_width != -6 && shapeItems[items_array_holds[i]].border_width != shapeItems[elF->index].border_width && !flag_save)
+                                    (*widths).erase(shapeItems[items_array_holds[i]].border_width);
                                 shapeItems[items_array_holds[i]].border_width = shapeItems[elF->index].border_width;
                             }
-                            else if( shapeItems[elF->index].border_width <= -10 )
+                            else if(shapeItems[elF->index].border_width <= -10)
                             {
-                                if( (shapeItems[items_array_holds[i]].border_width == -6) || (shapeItems[items_array_holds[i]].border_width > 0) )
+                                if(shapeItems[items_array_holds[i]].border_width == -6 || shapeItems[items_array_holds[i]].border_width > 0)
                                 {
-                                    //>>>Detecting if there is the necessity to erase the border width from the map and appending the new statc border width to the map
-                                    if( shapeItems[items_array_holds[i]].border_width > 0 )
+                                    //>>> Detecting if there is the necessity to erase the border width from the map and appending the new static border width to the map
+                                    if(shapeItems[items_array_holds[i]].border_width > 0)
                                     {
                                         bool fl_keep = false;
-                                        for( int p = 0; p < tmp_shapes.size(); p++ )
+                                        for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
                                             if( shapeItems[tmp_shapes[p]].border_width == shapeItems[items_array_holds[i]].border_width )
-                                            { fl_keep = true; break; }
-                                        if( !fl_keep ) (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                                        	fl_keep = true;
+                                        if(!fl_keep) (*widths).erase(shapeItems[items_array_holds[i]].border_width);
                                     }
-                                    shapeItems[items_array_holds[i]].border_width = elF->appendWidth( (float)(lb_width->value()*scale), widths, true );
+                                    shapeItems[items_array_holds[i]].border_width = elF->appendWidth((float)(lb_width->value()*scale), widths, true);
                                 }
                                 //>>> If the figures border width is already static just changing its value to the actual one.
-                                else if( shapeItems[items_array_holds[i]].border_width <= -10 )
+                                else if(shapeItems[items_array_holds[i]].border_width <= -10)
                                     (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
                             }
                         }
                         //>>> Appending the static point for the figure with the default border_width
-                        else if( shapeItems[items_array_holds[i]].border_width == -6 )
-                            shapeItems[items_array_holds[i]].border_width = elF->appendWidth( (float)(lb_width->value()*scale), widths, true );
-                        else//Changing the border width of the figure with the actual value without changing its index in the map
-                            (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
+                        else if(shapeItems[items_array_holds[i]].border_width == -6)
+                            shapeItems[items_array_holds[i]].border_width = elF->appendWidth((float)(lb_width->value()*scale), widths, true);
+			//Changing the border width of the figure with the actual value without changing its index in the map
+                        else (*widths)[shapeItems[items_array_holds[i]].border_width] = lb_width->value()*scale;
                     }
-                    //>>> Making the figures border width the default one 
+                    //>>> Making the figures border width the default one
                     //>>> and detecting if there is the necessity to save the previous figure's border width index.
-                    else if( shapeItems[items_array_holds[i]].border_width != -6 )
+                    else if(shapeItems[items_array_holds[i]].border_width != -6)
                     {
                         bool fl_keep = false;
-                        if( shapeItems[items_array_holds[i]].border_width > 0 ) 
-                            for( int p = 0; p < tmp_shapes.size(); p++ )
-                                if( shapeItems[items_array_holds[i]].border_width == shapeItems[tmp_shapes[p]].border_width )
-                                { fl_keep = true; break; }
-                        if( !fl_keep ) (*widths).erase( shapeItems[items_array_holds[i]].border_width );
+                        if(shapeItems[items_array_holds[i]].border_width > 0)
+                            for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++ )
+                                if(shapeItems[items_array_holds[i]].border_width == shapeItems[tmp_shapes[p]].border_width)
+                            	    fl_keep = true;
+                        if(!fl_keep) (*widths).erase(shapeItems[items_array_holds[i]].border_width);
                         shapeItems[items_array_holds[i]].border_width = -6;
                     }
                 }
-                //>>>>Applying changes for the border color
-                if( lbc_en->isChecked() )
+                //>>>> Applying changes for the border color
+                if(lbc_en->isChecked())
                 {
-                    if( lb_color->isEnabled() )
+                    if(lb_color->isEnabled())
                     {
-                        if( items_array_holds.size() > 1 && items_array_holds[i] != elF->index )
+                        if(items_array_holds.size() > 1 && items_array_holds[i] != elF->index)
                         {
-                            if( shapeItems[elF->index].borderColor > 0 )
+                            if(shapeItems[elF->index].borderColor > 0)
                             {
                                 //>>>Detecting if there is the necessity to erase the color from the map and changing the color's index to those of the elF->index figure
                                 bool flag_save = false;
-                                for( int p = 0; p < tmp_shapes.size(); p++ )
-                                    if( (shapeItems[items_array_holds[i]].borderColor > 0) && (shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[i]].borderColor) )
-                                    { flag_save = true; break; }
-                                if( (shapeItems[items_array_holds[i]].borderColor != -6) && (shapeItems[items_array_holds[i]].borderColor != shapeItems[elF->index].borderColor) && !flag_save )
+                                for(int p = 0; !flag_save && p < tmp_shapes.size(); p++)
+                                    if(shapeItems[items_array_holds[i]].borderColor > 0 && shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[i]].borderColor)
+                                	flag_save = true;
+                                if(shapeItems[items_array_holds[i]].borderColor != -6 && shapeItems[items_array_holds[i]].borderColor != shapeItems[elF->index].borderColor && !flag_save)
                                     (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
                                 shapeItems[items_array_holds[i]].borderColor = shapeItems[elF->index].borderColor;
                             }
-                            else if( shapeItems[elF->index].borderColor <= -10 )
+                            else if(shapeItems[elF->index].borderColor <= -10)
                             {
-                                if( (shapeItems[items_array_holds[i]].borderColor == -6) || (shapeItems[items_array_holds[i]].borderColor > 0) )
+                                if(shapeItems[items_array_holds[i]].borderColor == -6 || shapeItems[items_array_holds[i]].borderColor > 0)
                                 {
-                                    //>>>Detecting if there is the necessity to erase the color from the map and appendint the new statc color to the map
-                                    if( shapeItems[items_array_holds[i]].borderColor > 0 )
+                                    //>>> Detecting if there is the necessity to erase the color from the map and appendint the new static color to the map
+                                    if(shapeItems[items_array_holds[i]].borderColor > 0)
                                     {
                                         bool fl_keep = false;
-                                        for( int p = 0; p < tmp_shapes.size(); p++ )
-                                            if( shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[i]].borderColor )
-                                            { fl_keep = true; break; }
-                                        if( !fl_keep ) (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
+                                        for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
+                                            if(shapeItems[tmp_shapes[p]].borderColor == shapeItems[items_array_holds[i]].borderColor)
+                                        	fl_keep = true;
+                                        if(!fl_keep) (*colors).erase(shapeItems[items_array_holds[i]].borderColor);
                                     }
-                                    shapeItems[items_array_holds[i]].borderColor = elF->appendColor( res_lbClr, colors, true );
+                                    shapeItems[items_array_holds[i]].borderColor = elF->appendColor(res_lbClr, colors, true);
                                 }
                                 //>>> If the figure's color is already static just changing its value to the actual one.
-                                else if( shapeItems[items_array_holds[i]].borderColor <= -10 )
+                                else if(shapeItems[items_array_holds[i]].borderColor <= -10)
                                     (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
                             }
                         }
                         //>>> Appending the static point for the figure with the default color
-                        else if( shapeItems[items_array_holds[i]].borderColor == -6 )
-                            shapeItems[items_array_holds[i]].borderColor = elF->appendColor( res_lbClr, colors, true );
-                        else//Changing the color of the figure with the actual value without changing its index in the map
-                            (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
+                        else if(shapeItems[items_array_holds[i]].borderColor == -6)
+                            shapeItems[items_array_holds[i]].borderColor = elF->appendColor(res_lbClr, colors, true);
+                        //Changing the color of the figure with the actual value without changing its index in the map
+                        else (*colors)[shapeItems[items_array_holds[i]].borderColor] = res_lbClr;
                     }
-                    //>>> Making the figures color the default one 
+                    //>>> Making the figures color the default one
                     //>>> and detecting if there is the necessity to save the previous figure's color index.
-                    else if( shapeItems[items_array_holds[i]].borderColor != -6 )
+                    else if(shapeItems[items_array_holds[i]].borderColor != -6)
                     {
                         bool fl_keep = false;
-                        if( shapeItems[items_array_holds[i]].borderColor > 0 ) 
-                            for( int p = 0; p < tmp_shapes.size(); p++ )
+                        if(shapeItems[items_array_holds[i]].borderColor > 0)
+                            for(int p = 0; !fl_keep && p < tmp_shapes.size(); p++)
                                 if( shapeItems[items_array_holds[i]].borderColor == shapeItems[tmp_shapes[p]].borderColor )
-                                { fl_keep = true; break; }
-                        if( !fl_keep )
-                            (*colors).erase( shapeItems[items_array_holds[i]].borderColor );
+                            	    fl_keep = true;
+                        if(!fl_keep) (*colors).erase(shapeItems[items_array_holds[i]].borderColor);
                         shapeItems[items_array_holds[i]].borderColor = -6;
                     }
                 }
             }
-            if( !flag_hld )
+            if(!flag_hld)
             {
-                if( sender()->objectName() == "Line" )
+                if(sender()->objectName() == "Line")
                 {
-                    if( !fl_n1Block )
+                    if(!fl_n1Block)
                     {
                         (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value());
                         (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
                     }
-                    if( !fl_n2Block )
+                    if(!fl_n2Block)
                     {
                         (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value());
                         (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
                     }
                 }
-                else if( sender()->objectName() == "Bezier curve" )
+                else if(sender()->objectName() == "Bezier curve")
                 {
-                    if( !fl_n1Block )
+                    if(!fl_n1Block)
                     {
                         (*pnts)[shapeItems[elF->index].n1].setX(p1_x->value());
                         (*pnts)[shapeItems[elF->index].n1].setY(p1_y->value());
                     }
-                    if( !fl_n2Block )
+                    if(!fl_n2Block)
                     {
                         (*pnts)[shapeItems[elF->index].n2].setX(p2_x->value());
                         (*pnts)[shapeItems[elF->index].n2].setY(p2_y->value());
@@ -3883,57 +3768,56 @@ void ElFigDt::properties()
                     (*pnts)[shapeItems[elF->index].n3].setX(p3_x->value()); (*pnts)[shapeItems[elF->index].n3].setY(p3_y->value());
                     (*pnts)[shapeItems[elF->index].n4].setX(p4_x->value()); (*pnts)[shapeItems[elF->index].n4].setY(p4_y->value());
                     (*pnts)[shapeItems[elF->index].n5].setX(p5_x->value()); (*pnts)[shapeItems[elF->index].n5].setY(p5_y->value());
-                    //-- Calcylating t_start and t_end for the arc, using the start and end points(n1,n2) --
-                    shapeItems[elF->index].ctrlPos4 = elF->getArcStartEnd( (*pnts)[shapeItems[elF->index].n1], (*pnts)[shapeItems[elF->index].n2], (*pnts)[shapeItems[elF->index].n3], (*pnts)[shapeItems[elF->index].n4], (*pnts)[shapeItems[elF->index].n5] );
+                    //>> Calcylating t_start and t_end for the arc, using the start and end points(n1,n2)
+                    shapeItems[elF->index].ctrlPos4 = elF->getArcStartEnd((*pnts)[shapeItems[elF->index].n1], (*pnts)[shapeItems[elF->index].n2], (*pnts)[shapeItems[elF->index].n3], (*pnts)[shapeItems[elF->index].n4], (*pnts)[shapeItems[elF->index].n5]);
                 }
-                if( p1_c->isEnabled() && ( (p1_c->isChecked() && shapeItems[elF->index].n1 <= -10) ||
-                                           (!p1_c->isChecked() && shapeItems[elF->index].n1 > 0) ) )
+                if(p1_c->isEnabled() &&
+            	    ((p1_c->isChecked() && shapeItems[elF->index].n1 <= -10) || (!p1_c->isChecked() && shapeItems[elF->index].n1 > 0)))
                 {
                     elF->rect_dyn = 0; elF->dyn_num = 0;
                     dynamic();
                 }
-                if( p2_c->isEnabled() &&( (p2_c->isChecked() && shapeItems[elF->index].n2 <= -10) ||
-                                          (!p2_c->isChecked() && shapeItems[elF->index].n2 > 0) ) )
+                if(p2_c->isEnabled() &&
+            	    ((p2_c->isChecked() && shapeItems[elF->index].n2 <= -10) || (!p2_c->isChecked() && shapeItems[elF->index].n2 > 0)))
                 {
                     elF->rect_dyn = 1; elF->dyn_num = 0;
                     dynamic();
                 }
-                if( p3_c->isEnabled() && ( (p3_c->isChecked() && shapeItems[elF->index].n3 <= -10) ||
-                                           (!p3_c->isChecked() && shapeItems[elF->index].n3 > 0) ) )
+                if(p3_c->isEnabled() &&
+            	    ((p3_c->isChecked() && shapeItems[elF->index].n3 <= -10) || (!p3_c->isChecked() && shapeItems[elF->index].n3 > 0)))
                 {
                     elF->rect_dyn = 2; elF->dyn_num = 0;
                     dynamic();
                 }
-                if( p4_c->isEnabled() && ( (p4_c->isChecked() && shapeItems[elF->index].n4 <= -10) ||
-                                           (!p4_c->isChecked() && shapeItems[elF->index].n4 > 0) ) )
+                if(p4_c->isEnabled() &&
+            	    ((p4_c->isChecked() && shapeItems[elF->index].n4 <= -10) || (!p4_c->isChecked() && shapeItems[elF->index].n4 > 0)))
                 {
                     elF->rect_dyn = 3; elF->dyn_num = 0;
                     dynamic();
                 }
-                if( p5_c->isEnabled() && ( (p5_c->isChecked() && shapeItems[elF->index].n5 <= -10) ||
-                                           (!p5_c->isChecked() && shapeItems[elF->index].n5 > -10) ) )
+                if(p5_c->isEnabled() &&
+            	    ((p5_c->isChecked() && shapeItems[elF->index].n5 <= -10) || (!p5_c->isChecked() && shapeItems[elF->index].n5 > -10)))
                 {
                     elF->rect_dyn = 4; elF->dyn_num = 0;
                     dynamic();
                 }
             }
-            //-- Adding the figures to be updated to the ones in the items_array_holds array --
-            if( items_array_up.size() > 1 )
-                for( int z = 1; z < items_array_up.size(); z++ )
+            //>> Adding the figures to be updated to the ones in the items_array_holds array
+            if(items_array_up.size() > 1)
+                for(int z = 1; z < items_array_up.size(); z++)
                     items_array_holds.push_back(items_array_up[z]);
-            //-- Rebuilding the figures, which are connected with the current one --
-            elF->initShapeItems( QPointF(0,0),w, items_array_holds );
+            //>> Rebuilding the figures, which are connected with the current one
+            elF->initShapeItems(QPointF(0,0), w, items_array_holds);
 
-            //-- Rebuilding the fills' paths if the current figure is included to it --
-            for( int i = 0; i < inund_Rebuild.size(); i++ )
-                if( elF->status_hold )
-                    inundationItems[inund_Rebuild[i]].path = elF->createInundationPath( inundationItems[inund_Rebuild[i]].number_shape, shapeItems, *pnts, w );
-                else//-- Removing the fills if the current figure is included to their paths --
+            //>> Rebuilding the fills' paths if the current figure is included to it
+            for(int i = 0; i < inund_Rebuild.size(); i++)
+                if(elF->status_hold)
+                    inundationItems[inund_Rebuild[i]].path = elF->createInundationPath(inundationItems[inund_Rebuild[i]].number_shape, shapeItems, *pnts, w);
+                else	//>> Removing the fills if the current figure is included to their paths
                 {
                     inundationItems.remove(inund_Rebuild[i]);
-                    for( int j = i+1; j < inund_Rebuild.size(); j++ )
-                        if( inund_Rebuild[j] > inund_Rebuild[i] )
-                            inund_Rebuild[j]--;
+                    for(int j = i+1; j < inund_Rebuild.size(); j++)
+                        if(inund_Rebuild[j] > inund_Rebuild[i]) inund_Rebuild[j]--;
                 }
         }
         elF->rectItems.clear();

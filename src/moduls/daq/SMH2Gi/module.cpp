@@ -651,9 +651,10 @@ void SHMParam::enable( TParamContr *ip )
     TMdPrm *p = (TMdPrm *)ip;
 
     //> Read, check and create attributes from variables list
-    string sel;
+    string sid, sel;
     for(int ioff = 0; (sel=TSYS::strParse(p->cfg("VAR_LS").getS(),0,"\n",&ioff)).size(); )
     {
+	sid = TSYS::strEncode(sel, TSYS::oscdID);
 	int vtp = p->owner().smv->getType(sel.c_str());
 	if(vtp < 0) continue;
 	TFld::Type tp = (TFld::Type)-1;
@@ -664,8 +665,8 @@ void SHMParam::enable( TParamContr *ip )
 	    case LONG:	tp = TFld::Integer;	break;
 	    case FLOAT:	tp = TFld::Real;	break;
 	}
-	p->p_el.fldAdd(new TFld(sel.c_str(),sel.c_str(),tp,TVal::DirWrite,"","","","",TSYS::int2str(vtp).c_str()));
-	p->als.push_back(sel);
+	p->p_el.fldAdd(new TFld(sid.c_str(),sel.c_str(),tp,TVal::DirWrite,"","","","",TSYS::int2str(vtp).c_str()));
+	p->als.push_back(sid);
     }
 }
 
@@ -673,30 +674,25 @@ void SHMParam::getVals( TParamContr *ip )
 {
     TMdPrm *p = (TMdPrm *)ip;
 
-    string tnm, vals;
+    string tnm, tvar, vals;
     for(int i_p = 0; i_p < (int)p->p_el.fldSize(); i_p++)
     {
 	tnm = p->p_el.fldAt(i_p).name();
 	AutoHD<TVal> vl = p->vlAt(tnm);
+	tvar = p->p_el.fldAt(i_p).descr();
 	switch(atoi(p->p_el.fldAt(i_p).reserve().c_str()))
 	{
 	    case BOOL:
 	    {
-		char rvl = p->owner().smv->getBool(tnm.c_str());
+		char rvl = p->owner().smv->getBool(tvar.c_str());
 		vl.at().setB((rvl==-1)?EVAL_BOOL:rvl, 0, true);
 		break;
 	    }
-	    case SHORT:
-		vl.at().setI(p->owner().smv->getShort(tnm.c_str()), 0, true);
-		break;
-	    case LONG:
-		vl.at().setI(p->owner().smv->getLong(tnm.c_str()), 0, true);
-		break;
-	    case FLOAT:
-		vl.at().setR(p->owner().smv->getFloat(tnm.c_str()), 0, true);
-		break;
+	    case SHORT:	vl.at().setI(p->owner().smv->getShort(tvar.c_str()), 0, true);	break;
+	    case LONG:	vl.at().setI(p->owner().smv->getLong(tvar.c_str()), 0, true);	break;
+	    case FLOAT:	vl.at().setR(p->owner().smv->getFloat(tvar.c_str()), 0, true);	break;
 	}
-	if(ip->owner().messLev() == 0) vals += tnm+"='"+vl.at().getS(0,true)+"'; ";
+	if(ip->owner().messLev() == 0) vals += tvar+"='"+vl.at().getS(0,true)+"'; ";
     }
     if(ip->owner().messLev() == 0) mess_debug(ip->nodePath().c_str(), _("SHM Get vals: %s"), vals.c_str());
 }
@@ -708,24 +704,17 @@ void SHMParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
     if(!p->enableStat() || !p->owner().startStat())	val.setS(EVAL_STR, 0, true);
     if(val.get().isEVal() || val.get() == pvl) return;
     int rez = -2;
+    string tvar = val.fld().descr();
     switch(atoi(val.fld().reserve().c_str()))
     {
-	case BOOL:
-	    rez = p->owner().smv->setBool(val.name().c_str(),val.getB(0,true));
-	    break;
-	case SHORT:
-	    rez = p->owner().smv->setShort(val.name().c_str(),val.getI(0,true));
-	    break;
-	case LONG:
-	    rez = p->owner().smv->setLong(val.name().c_str(),val.getI(0,true));
-	    break;
-	case FLOAT:
-	    rez = p->owner().smv->setFloat(val.name().c_str(),val.getR(0,true));
-	    break;
+	case BOOL:	rez = p->owner().smv->setBool(tvar.c_str(),val.getB(0,true));	break;
+	case SHORT:	rez = p->owner().smv->setShort(tvar.c_str(),val.getI(0,true));	break;
+	case LONG:	rez = p->owner().smv->setLong(tvar.c_str(),val.getI(0,true));	break;
+	case FLOAT:	rez = p->owner().smv->setFloat(tvar.c_str(),val.getR(0,true));	break;
     }
-    if(rez < 0)	mess_err(ip->nodePath().c_str(), _("SHM Set value '%s' to '%s' error."), val.name().c_str(), val.getS(0,true).c_str());
+    if(rez < 0)	mess_err(ip->nodePath().c_str(), _("SHM Set value '%s' to '%s' error."), tvar.c_str(), val.getS(0,true).c_str());
     if(ip->owner().messLev() == 0)
-	mess_debug(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), val.name().c_str(), val.getS(0,true).c_str(),rez);
+	mess_debug(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), tvar.c_str(), val.getS(0,true).c_str(), rez);
 }
 
 bool SHMParam::cntrCmdProc( TParamContr *p, XMLNode *opt )
