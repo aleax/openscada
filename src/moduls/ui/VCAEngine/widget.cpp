@@ -303,6 +303,7 @@ void Widget::setEnable( bool val )
 		mess_err(nodePath().c_str(),_("Widget enable error: %s"),err.mess.c_str());
 		mParent.free();
 		if(BACrtHoldOvr) { BACrtHoldOvr = false; postEnable(TCntrNode::NodeConnect); }
+		mEnable = false;
 		throw;
 	    }
 	}
@@ -547,7 +548,7 @@ void Widget::attrAdd(TFld *attr, int pos, bool inher)
 	{
 	    if(!inher) delete attr;
 	    pthread_mutex_unlock(&mtxAttr());
-	    mess_err(nodePath().c_str(),_("Add new attribute '%s' number more to %d!"),anm.c_str(),(1<<ATTR_OI_DEPTH)-1);
+	    mess_err(nodePath().c_str(),_("Adding a new attribute '%s' number more to %d!"),anm.c_str(),(1<<ATTR_OI_DEPTH)-1);
 	    return;
 	}
 	map<string, Attr* >::iterator p;

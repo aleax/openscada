@@ -32,6 +32,8 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
+#define vrng(val,min,max) ((val) >= (min) && (val) <= (max))
+
 #define POS_PREC_DIG	3
 
 using namespace OSCADA;

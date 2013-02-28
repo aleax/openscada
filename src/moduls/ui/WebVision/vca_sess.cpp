@@ -3996,9 +3996,9 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 
 void VCAElFigure::getReq( SSess &ses )
 {
-    ResAlloc res(mRes,true);
-    //- Prepare picture -
-    map< string, string >::iterator prmEl = ses.prm.find("xSc");
+    ResAlloc res(mRes, true);
+    //> Prepare picture
+    map<string, string>::iterator prmEl = ses.prm.find("xSc");
     double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
     prmEl = ses.prm.find("ySc");
     double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
@@ -4009,21 +4009,23 @@ void VCAElFigure::getReq( SSess &ses )
 
     scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
-    if( im ) gdImageDestroy(im);
-    im = gdImageCreateTrueColor( scaleWidth, scaleHeight );
-    if( !im ) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+    if(im) gdImageDestroy(im);
+    im = gdImageCreateTrueColor(scaleWidth, scaleHeight);
+    if(!im) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
     else
     {
-        gdImageAlphaBlending(im, 0);
-        gdImageFilledRectangle( im, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im,0,0,0,127) );
-        gdImageAlphaBlending(im, 1);
-        drawElF( ses, xSc, ySc, Point(-1,-1) );
-        //- Get image and transfer it -
-        int img_sz;
-        char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
-        ses.page.assign(img_ptr,img_sz);
-        ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
-        gdFree(img_ptr);
+	//> Draw image
+	gdImageAlphaBlending(im, 0);
+	gdImageFilledRectangle(im, 0, 0, scaleWidth-1, scaleHeight-1, gdImageColorResolveAlpha(im,0,0,0,127));
+	gdImageAlphaBlending(im, 1);
+	drawElF(ses, xSc, ySc, Point(-1,-1));
+
+	//> Get image and transfer it
+	int img_sz;
+	char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+	ses.page.assign(img_ptr,img_sz);
+	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
+	gdFree(img_ptr);
     }
 }
 
@@ -6116,11 +6118,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		break;
 	    default:
 		//> Individual trend's attributes process
-		if( uiPrmPos >= 50 && uiPrmPos < 150 )
+		if(uiPrmPos >= 50)
 		{
 		    unsigned trndN = (uiPrmPos/10)-5;
-		    if( trndN >= trnds.size() )	break;
-		    switch( uiPrmPos%10 )
+		    if(trndN >= trnds.size())	break;
+		    switch(uiPrmPos%10)
 		    {
 			case 0: trnds[trndN].setAddr(req_el->text());			break;	//addr
 			case 1: trnds[trndN].setBordL(atof(req_el->text().c_str()));	break;	//bordL

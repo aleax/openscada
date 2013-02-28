@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-18 18:22+0300\n"
+"POT-Creation-Date: 2013-02-28 20:06+0200\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -856,8 +856,12 @@ msgstr ""
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Финальный документ в XHTML. Начинается с тега \"body\"."
 
-msgid "Write time for document generation from that point."
-msgstr "Записать время для генерации документа от этой точки."
+msgid ""
+"Write the time for document generation from that point or zero for "
+"regeneration."
+msgstr ""
+"Записать время для генерации документа от этой точки или нуль для "
+"регенерации."
 
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Текущий документ архива в XHTML. Начинается с тега \"body\"."
@@ -1344,6 +1348,7 @@ msgstr "Кодировка текста"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодировка текста движка для перекодирования в неё."
 
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не освобождён. Принудительное удаление!"
 
@@ -1416,9 +1421,14 @@ msgid "Child widget '%s' enable/disable error."
 msgstr "Ошибка включения/отключения дочернего виджета '%s'."
 
 #, c-format
+msgid "Adding a new attribute '%s' number more to %d!"
+msgstr "Добавление нового атрибута '%s' превышает количество %d!"
+
+#, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' отсутствует!"
 
+#, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Удаляемый атрибут '%s' не освобождён!"
 
@@ -1660,12 +1670,8 @@ msgid "Element type is not selected!"
 msgstr "Элемент не выборного типа!"
 
 #, c-format
-msgid "Get object from not object's attribute '%s' error!"
-msgstr "Ошибка получения объекта из необъектного атрибута '%s'!"
-
-#, c-format
-msgid "Connections to attribute '%s' more to 255!"
-msgstr "Более 255 подключений к атрибуту '%s'!"
+msgid "Connections to attribute '%s' more to %d!"
+msgstr "Подключений к атрибуту '%s' более %d!"
 
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"
