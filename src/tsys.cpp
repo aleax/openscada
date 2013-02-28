@@ -1790,7 +1790,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	xnd.at().fromXMLNode(req);
 	return string("0");
     }
-    // string sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
+    // int sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds
     //  ntm - wait time part in nanoseconds
     if(iid == "sleep" && prms.size() >= 1)
@@ -1798,8 +1798,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
 	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
-	int rez = nanosleep(&sp_tm,NULL);
-	return rez;
+	return nanosleep(&sp_tm,NULL);
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
@@ -1838,6 +1837,42 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(prms.size() >= 9) 	{ prms[8].setI(tm_tm.tm_yday); prms[8].setModify(); }
 	if(prms.size() >= 10) 	{ prms[9].setI(tm_tm.tm_isdst); prms[9].setModify(); }
 	return 0;
+    }
+    // int mktime(int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
+    //      - return time since the Epoch 1.1.1970 converted from broken-down time
+    //  sec - seconds
+    //  min - minutes
+    //  hour - hours
+    //  mday - days of the month
+    //  month - months
+    //  year - years
+    //  wday - days in the week
+    //  yday - days in the year
+    //  isdst - sign of summer time
+    if(iid == "mktime")
+    {
+	struct tm tm_tm;
+	tm_tm.tm_sec	= (prms.size()>=1) ? prms[0].getI() : 0;
+	tm_tm.tm_min	= (prms.size()>=2) ? prms[1].getI() : 0;
+	tm_tm.tm_hour	= (prms.size()>=3) ? prms[2].getI() : 0;
+	tm_tm.tm_mday	= (prms.size()>=4) ? prms[3].getI() : 0;
+	tm_tm.tm_mon	= (prms.size()>=5) ? prms[4].getI() : 0;
+	tm_tm.tm_year	= (prms.size()>=6) ? prms[5].getI()-1900 : 0;
+	tm_tm.tm_wday	= (prms.size()>=7) ? prms[6].getI() : -1;
+	tm_tm.tm_yday	= (prms.size()>=8) ? prms[7].getI() : -1;
+	tm_tm.tm_isdst	= (prms.size()>=9) ? prms[8].getI() : -1;
+	time_t rez = mktime(&tm_tm);
+	if(prms.size() >= 1)	{ prms[0].setI(tm_tm.tm_sec);	prms[0].setModify(); }
+	if(prms.size() >= 2)	{ prms[1].setI(tm_tm.tm_min);	prms[1].setModify(); }
+	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_hour);	prms[2].setModify(); }
+	if(prms.size() >= 4)	{ prms[3].setI(tm_tm.tm_mday);	prms[3].setModify(); }
+	if(prms.size() >= 5)	{ prms[4].setI(tm_tm.tm_mon);	prms[4].setModify(); }
+	if(prms.size() >= 6)	{ prms[5].setI(1900+tm_tm.tm_year); prms[5].setModify(); }
+	if(prms.size() >= 7)	{ prms[6].setI(tm_tm.tm_wday);	prms[6].setModify(); }
+	if(prms.size() >= 8)	{ prms[7].setI(tm_tm.tm_yday);	prms[7].setModify(); }
+	if(prms.size() >= 9)	{ prms[8].setI(tm_tm.tm_isdst);	prms[8].setModify(); }
+
+	return (int)rez;
     }
     // string strftime(int sec, string form = "%Y-%m-%d %H:%M:%S") - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970

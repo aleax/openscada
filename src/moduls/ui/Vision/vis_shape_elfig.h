@@ -51,6 +51,8 @@ namespace VISION
 class ShapeItem
 {
     public:
+	enum Type { Line = 1, Arc = 2, Bezier = 3 };
+
         ShapeItem( )	{ }
         ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3,
                 short num_4, short num_5, const QPointF &ctrlpos_4, const short &ilineColor, const short &iborderColor,
@@ -68,7 +70,7 @@ class ShapeItem
         short           style;
         short           width;
         short           border_width;
-        short           type :3;
+        short           type;
         double          angle_temp, ang_t;
 };
 

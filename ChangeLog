@@ -1,4 +1,42 @@
+2013-02-28 Roman
+- FIX:Archive.FSArch: Wrong EVAL place on archive files seam is fixed.
+- Transport.Sockets: Editable control for Input transport object's configuration fields depends from "Start" state is added.
+- !:FIX.UI.Vision: Primitive "ElFigure" changes and fixes:
+    - Value range define is added and used.
+    - ShapeItem::Type enumeration for figures "Line", "Arc" and "Bezier" is added.
+    - Significant code clear.
+    - Widths, Styles and Colors indexes copy on the figures copy is added.
+- FIX:UI.{Vision,WebVision}: Remove upper limit for primitive's "Diagram" parameters number.
+- !!:DAQ.DCON: Significant changes from Almaz Karimov:
+    - analog inputs reading of one methods is added;
+    - the method 1AO (#AA) (blocks NL-1AO, I-7021, ADAM-4021) working is fixed;
+    - the method 4AO (#AACN) is added for working with block ADAM-4024;
+    - the digital inputs reading methods @AA is replaced to $AA6 for compatibility with ADAM blocks;
+    - the digital outputs writing methods 4DO (#AA000F), 8DO (#AA00FF), 12DO (#AA000FFF) is added for working with ADAM blocks.
+- DAQ.JavaLikeCalc: Assigns separating by symbol ',' is added to the language for like the constructions:
+    var1=1, var2=3, var4=var1+var2;
+    for(var1=0, var2=0, var3=-1; var1 < 10; var1++, var2++) var3++;
+- UI.WebVision: Attribute "width='100%'" is added to primitive's "Protocol" table for fill full the widget width.
+- UI.Vision: Symbols '\n' process is added into attribute "name" of "Button" type of primitive "FormEl" for multiple line text
+    into buttons show allow.
+- FIX:UI.VCAEngine: Lock session on enabling try pages with broken child widgets, like no parrent set, is fixed
+    and the error ignored for full project start.
+- FIX:UI.VCAEngine: Global attributes translation read for field "CFG_VAL" is fixed.
+- FIX:UI.Vision: Attributes change for group widgets and for equal to first attribute value into the group is fixed.
+- FIX:DAQ.BlockCalc: Parameter's attributes first checking for remove is removed for prevent to free linked but present attributes.
+- FIX:DAQ.JavaLikeCalc: Unaligned access for double and integer constants is fixed for some ARM-processors.
+- FIX:UI.QTCfg, UI.Vision: Find shortcuts for TextEdit widgets is set context to the widget.
+- UI.Vision: The file dialog for export is set stored for save directory place and other.
+- !!:UI.WebCfg: Source code is made clean and some values encoding to HTML is fixed.
+- !:SYS: User API function SYS.mktime() is added for get time since the Epoch 1.1.1970 converted from broken-down time.
+- FIX:DAQ.JavaLikeCalc: Increment, decrement and like operations fixed for object's items.
+- DAQ.JavaLikeCalc: IO type sets to "Text" and display its into DAQ attributes.
+- FIX:UI.VCAEngine: Using "Object" type into primitive "Document" calculation environment is fixed.
+- UI.VCAEngine: The primitive "Document" generation starting is added by set attribute "time" to zero and previous no zero restore.
+
+
 2013-02-02 Roman 0.8.0.5
+>>>>>>> .merge-right.r1963
 - FIX:UI.QTStarter: Splash early hide is fixed by the splash hide only after all "Qt" modules processing.
 - !:FIX:Function: Remove function gettimeofday() twice call on it execution time measurement, for each calls.
     Add the function execution time limit to 10 seconds.

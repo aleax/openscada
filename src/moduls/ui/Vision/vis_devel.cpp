@@ -869,8 +869,8 @@ void VisDevelop::applyWorkWdg( )
     string sel2 = TSYS::pathLev(cur_wdg,1);
     string sel3 = TSYS::pathLev(cur_wdg,2);
 
-    bool isProj = sel1.substr(0,4)=="prj_";
-    bool isLib  = sel1.substr(0,4)=="wlb_";
+    bool isProj = (sel1.substr(0,4)=="prj_");
+    bool isLib  = (sel1.substr(0,4)=="wlb_");
 
     //> Process main actions
     actPrjRun->setEnabled(isProj);
