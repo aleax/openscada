@@ -1352,6 +1352,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
     if( !this.place.firstChild )
     {
       this.place.appendChild(document.createElement('table'));
+      this.place.firstChild.setAttribute('width','100%');
       this.place.firstChild.wdgLnk = this;
       this.place.firstChild.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
       this.place.firstChild.onclick = function(e)

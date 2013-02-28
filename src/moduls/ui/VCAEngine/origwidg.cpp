@@ -1321,7 +1321,11 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
     //> Make document after time set
-    if(cfg.id() == "time" && cfg.getI() != prev.getI()) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
+    if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI())))
+    {
+	if(!cfg.getI() && prev.getI()) cfg.setI(prev.getI(),false,true);
+	cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()|0x100));
+    }
     //> Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI())
     {
@@ -1454,7 +1458,7 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		    case 22:
 			el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
 			break;
-		    case 23: el->setAttr("help",_("Write time for document generation from that point."));	break;
+		    case 23: el->setAttr("help",_("Write the time for document generation from that point or zero for regeneration."));	break;
 		    case 26: el->setAttr("help",Widget::helpFont());	break;
 		    default:
 			if(el->attr("id") == "aDoc")
@@ -1601,16 +1605,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     {
 	AutoHD<Attr> cattr = wdg->attrAt(als[i_a]);
 	if(!(cattr.at().flgGlob()&Attr::IsUser)) continue;
-	IO::Type tp = IO::String;
-	switch(cattr.at().type())
-	{
-	    case TFld::Boolean:	tp = IO::Boolean;	break;
-	    case TFld::Integer:	tp = IO::Integer;	break;
-	    case TFld::Real:	tp = IO::Real;		break;
-	    case TFld::String:	tp = IO::String;	break;
-	    default: break;
-	}
-	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),tp,IO::Output));
+	funcIO.ioAdd(new IO(als[i_a].c_str(),cattr.at().name().c_str(),cattr.at().fld().typeIO(),IO::Output));
     }
     try
     {
@@ -1623,9 +1618,9 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	funcV.setI(2,wdg->attrAt("bTime").at().getI());
 	funcV.setI(3,lstTime);
 	//>> Load values of user IO
-	for( int i_a = 12; i_a < funcV.ioSize( ); i_a++ )
-	    funcV.setS(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().getS());
-    }catch( TError err )
+	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
+	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
+    }catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
 	return "";

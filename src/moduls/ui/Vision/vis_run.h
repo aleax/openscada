@@ -29,6 +29,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QFileDialog>
 
 #include "tvision.h"
 
@@ -162,6 +163,7 @@ class VisRun : public QMainWindow
 	//> Main components
 	QTimer		*endRunTimer, *updateTimer;
 	QPrinter	*prPg, *prDiag, *prDoc;
+	QFileDialog	*fileDlg;
 	bool		winClose;		//Close window flag
 	UserStBar	*mWUser;		//User status widget
 	StylesStBar	*mStlBar;		//Style status widget

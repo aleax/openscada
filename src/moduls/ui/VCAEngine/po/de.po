@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-05-18 18:22+0300\n"
+"POT-Creation-Date: 2013-02-28 20:06+0200\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -855,8 +855,12 @@ msgstr ""
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Final-Dokument in XHTML. Start von Tag \"body\"."
 
-msgid "Write time for document generation from that point."
-msgstr "Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus."
+msgid ""
+"Write the time for document generation from that point or zero for "
+"regeneration."
+msgstr ""
+"Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus oder Null "
+"für die Regeneration."
 
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Aktuelle Dokumentenarchiv in XHTML. Es beginnt mit dem Tag \"Körper\"."
@@ -1345,6 +1349,7 @@ msgstr "Kodierung des Textes"
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
+#, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Das Attribut '%s' wird nicht freigegeben. Zwangsräumung!"
 
@@ -1417,9 +1422,14 @@ msgid "Child widget '%s' enable/disable error."
 msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 
 #, c-format
+msgid "Adding a new attribute '%s' number more to %d!"
+msgstr "Hinzufügen eines neuen Attribut '%s' überschreitet die Anzahl der %d!"
+
+#, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' fehlt!"
 
+#, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht!"
 
@@ -1660,12 +1670,8 @@ msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
 #, c-format
-msgid "Get object from not object's attribute '%s' error!"
-msgstr "Failed, um ein Objekt aus einem Nicht-Objekt-Attribut '%s' abrufen!"
-
-#, c-format
-msgid "Connections to attribute '%s' more to 255!"
-msgstr "Mehr als 255 Verbindungen an das Attribut '%s'!"
+msgid "Connections to attribute '%s' more to %d!"
+msgstr "Verbindungen an das Attribut '%s' mehr als %d!"
 
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"

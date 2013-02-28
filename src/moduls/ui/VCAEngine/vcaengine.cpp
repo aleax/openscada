@@ -581,10 +581,10 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	c_el.cfg("ID").setS(tstr);
         c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
-	c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
-
+	c_el.cfg("CFG_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))/* &&
+		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))*/));	//!!!! Commented by no the flags present on first start
+										//on global attributes creation from the primitive.
 	if( !SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el) ) continue;
 
 	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
