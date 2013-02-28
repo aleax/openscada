@@ -730,13 +730,11 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibeg, int64_t iend )
 	if(ibeg > iend) break;
 	else if(!arh_f[i_a]->err() && ibeg <= arh_f[i_a]->end() && iend >= arh_f[i_a]->begin())
 	{
-	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += (int64_t)(archivator().valPeriod()*1e6))
-		buf.setI(EVAL_INT,ibeg);
+	    for( ; ibeg < arh_f[i_a]->begin(); ibeg += arh_f[i_a]->period()) buf.setI(EVAL_INT,ibeg);
 	    arh_f[i_a]->getVals(buf, ibeg, vmin(iend,arh_f[i_a]->end()));
-	    ibeg = arh_f[i_a]->end()+1;
+	    ibeg = arh_f[i_a]->end()+arh_f[i_a]->period();
 	}
-    for( ; ibeg <= iend; ibeg += (int64_t)(archivator().valPeriod()*1e6))
-	buf.setI(EVAL_INT, ibeg);
+    for( ; ibeg <= iend; ibeg += (int64_t)(archivator().valPeriod()*1e6)) buf.setI(EVAL_INT, ibeg);
 }
 
 TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
