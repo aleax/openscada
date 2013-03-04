@@ -157,6 +157,7 @@ Summary(ru_RU.UTF8): БД и конфигурация модели "АГЛКС" 
 Summary(uk_UA.UTF8): БД та конфігурація моделі "АГЛКС" (Демо: EN,RU,UK).
 Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "AGLKS" (Demo: EN,RU,UK).
 Group: Graphics
+BuildArch: noarch
 Requires: %name %name-LibDB.Main %name-LibDB.VCA
 %description Model.AGLKS
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
@@ -185,6 +186,7 @@ Summary(ru_RU.UTF8): БД и конфигурация модели "Котёл" 
 Summary(uk_UA.UTF8): БД та конфігурація моделі "Котел" (EN,RU,UK).
 Summary(de_DE.UTF8): Datenbanken und Konfigurationsdateien Modell "Kessel" (EN,RU,UK).
 Group: Graphics
+BuildArch: noarch
 Requires: %name %name-LibDB.Main %name-LibDB.VCA
 %description Model.Boiler
 The %{name}-Model.Boiler package model "Boiler" data bases and config.

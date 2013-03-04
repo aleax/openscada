@@ -1,6 +1,22 @@
+2013-03-04 Roman
+- !!!:SYS: All path configuration variables is moved to config.h and some new is added for default one set.
+    Packages Model.AGLKS and Model.Boiler is set to "noarch".
+    Start scripts "openscada_start", "openscada_AGLKS", "openscada_demo", "openscada_Boiler" and
+	configs "oscada.xml", "oscada_AGLKS.xml" and "oscada_Boiler.xml" is mostly rewrote for move all
+	the project specific files to it directory.
+    Model's DB for AGLKS and Boiler is adapted for working into self current directory and some fixed.
+- !!:UI: UI's icons and resources obtaining functions icoPresent(), icoGet() and icoPath() is condensed to one icoGet() function
+    and adapted for multiple directories process. Default icons directories is set to "icons/;"oscd_datadir_full"/icons/".
+- UI.{Vision, WebVision}: Source files of primitive "ElFigure" is reformatted for replace 8 spaces to tabs and other fix.
+
+
+2013-02-28 Roman
+- FIX:Archive.FSArch: Wrong EVAL place on archive files seam is fixed.
+
+
 2013-02-27 Roman
 - FIX:DAQ.SMH2Gi: True ID encoding is added for SMH parameter's attributes, for prevent wrong symbols pass.
-- Transport.Serial: Editable control for Input transport object's configuration fields depends from "Start" state is added.
+- Transport.Sockets: Editable control for Input transport object's configuration fields depends from "Start" state is added.
 - !:FIX.UI.Vision: Primitive "ElFigure" changes and fixes:
     - Value range define is added and used.
     - ShapeItem::Type enumeration for figures "Line", "Arc" and "Bezier" is added.

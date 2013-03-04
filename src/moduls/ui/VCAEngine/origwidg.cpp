@@ -36,17 +36,15 @@ PrWidget::PrWidget( const string &iid ) : LWidget(iid)
 
 void PrWidget::preDisable(int flag)
 {
-    if( flag )
-	throw TError(mod->nodePath().c_str(),_("Deleting the base primitive-widget error."));
+    if(flag) throw TError(mod->nodePath().c_str(),_("Deleting the base primitive-widget error."));
 
     Widget::preDisable(flag);
 }
 
 string PrWidget::ico( )
 {
-    if( LWidget::ico().size() )
-	return LWidget::ico();
-    if( TUIS::icoPresent("VCA.wdg_"+id()) )
+    if(LWidget::ico().size()) return LWidget::ico();
+    if(TUIS::icoGet("VCA.wdg_"+id(),NULL,true).size())
 	return TSYS::strEncode(TUIS::icoGet("VCA.wdg_"+id()),TSYS::base64);
     return "";
 }

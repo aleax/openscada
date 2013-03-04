@@ -76,44 +76,29 @@ void TUIS::subStop( )
     TSubSYS::subStop( );
 }
 
-bool TUIS::icoPresent(const string &inm, string *tp)
+string TUIS::icoGet( const string &inm, string *tp, bool retPath )
 {
-    int hd = open(icoPath(inm).c_str(),O_RDONLY);
-    if( hd != -1 )
-    {
-	if( tp ) *tp = "png";
-	close(hd);
-	return true;
-    }
-    return false;
-}
-
-string TUIS::icoGet(const string &inm, string *tp )
-{
-    int len, hd = -1;
     unsigned i_t;
-    char buf[STR_BUF_LEN];
-    string rez;
+    int hd = -1;
+    string rez, pathi;
     char types[][5] = {"png","gif","jpg","jpeg"};
 
-    for(i_t = 0; i_t < sizeof(types)/5; i_t++)
-    {
-	hd = open(icoPath(inm,types[i_t]).c_str(),O_RDONLY);
-	if(hd != -1) break;
-    }
+    for(int off = 0; hd == -1 && (pathi=TSYS::strParse(SYS->icoDir(),0,";",&off)).size(); )
+	for(i_t = 0; i_t < sizeof(types)/5; i_t++)
+	    if((hd=open((pathi+"/"+inm+"."+types[i_t]).c_str(),O_RDONLY)) != -1) break;
     if(hd != -1)
     {
 	if(tp) *tp = types[i_t];
-	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
+	if(retPath) rez = pathi+"/"+inm+"."+types[i_t];
+	else
+	{
+	    char buf[STR_BUF_LEN];
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
+	}
 	close(hd);
     }
 
     return rez;
-}
-
-string TUIS::icoPath( const string &ico, const string &tp )
-{
-    return SYS->icoDir()+"/"+ico+"."+tp;
 }
 
 void TUIS::cntrCmdProc( XMLNode *opt )

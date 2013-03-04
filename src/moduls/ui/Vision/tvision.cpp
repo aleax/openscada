@@ -207,7 +207,7 @@ void TVision::uiPropSet( const string &prop, const string &vl, const string &use
 QIcon TVision::icon()
 {
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("UI.Vision").c_str())) ico_t.load(":/images/vision.png");
+    if(!ico_t.load(TUIS::icoGet("UI.Vision",NULL,true).c_str())) ico_t.load(":/images/vision.png");
     return QPixmap::fromImage(ico_t);
 }
 

@@ -238,6 +238,7 @@ Group: Graphics
 %if %_vendor == "alt"
 AutoReq: noshell
 %endif
+BuildArch: noarch
 Requires: %name-LibDB.Main %name-LibDB.VCA
 Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System
 Requires: %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem
@@ -273,6 +274,7 @@ Group: Graphics
 %if %_vendor == "alt"
 AutoReq: noshell
 %endif
+BuildArch: noarch
 Requires: %name-LibDB.Main %name-LibDB.VCA
 Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.System
 Requires: %name-DB.SQLite %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS

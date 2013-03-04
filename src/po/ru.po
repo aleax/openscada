@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-28 20:20+0200\n"
+"POT-Creation-Date: 2013-03-01 17:20+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1792,6 +1792,9 @@ msgstr "Рабочая директория"
 
 msgid "Icons directory"
 msgstr "Директория иконок"
+
+msgid "Separate directory paths with icons by symbol ';'."
+msgstr "Отделять пути директорий с иконками символом ';'."
 
 msgid "Modules directory"
 msgstr "Директория модулей"

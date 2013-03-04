@@ -277,7 +277,7 @@ void *TUIMod::Task( void * )
     QtApp->installTranslator(&translator);
 
     //> Start splash create
-    if(!ico_t.load(TUIS::icoPath(SYS->id()+"_splash").c_str()))	ico_t.load(":/images/splash.png");
+    if(!ico_t.load(TUIS::icoGet(SYS->id()+"_splash",NULL,true).c_str())) ico_t.load(":/images/splash.png");
     QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
     QFont wFnt = splash->font();
@@ -325,7 +325,7 @@ void *TUIMod::Task( void * )
     delete winCntr;
 
     //> Stop splash create
-    if(!ico_t.load(TUIS::icoPath(SYS->id()+"_splash_exit").c_str()))	ico_t.load(":/images/splash.png");
+    if(!ico_t.load(TUIS::icoGet(SYS->id()+"_splash_exit",NULL,true).c_str())) ico_t.load(":/images/splash.png");
     splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
     splash->setFont(wFnt);

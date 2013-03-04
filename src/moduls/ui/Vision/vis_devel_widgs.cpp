@@ -708,12 +708,12 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     {
 	//> Copy action
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+	if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
 	actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
 	popup.addAction(actCopy);
 	if(it->flag()&ModInspAttr::Item::FullText)
 	{
-	    if(!ico_t.load(TUIS::icoPath("edit").c_str())) ico_t.load(":/images/edit.png");
+	    if(!ico_t.load(TUIS::icoGet("edit",NULL,true).c_str())) ico_t.load(":/images/edit.png");
 	    actEdit = new QAction(QPixmap::fromImage(ico_t),_("Edit"),this);
 	    popup.addAction(actEdit);
 	}
@@ -721,7 +721,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	//> Changes clear action
 	if( it->modify() )
 	{
-	    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+	    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
 	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
 	    actClr->setStatusTip(_("Press to clear attribute's changes."));
 	    popup.addAction(actClr);
@@ -1016,7 +1016,7 @@ void InspLnk::contextMenuEvent( QContextMenuEvent *event )
 
     //Add actions
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+    if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
     actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
     popup.addAction(actCopy);
 
@@ -1706,7 +1706,7 @@ void WdgTree::ctrTreePopup( )
     popup.addSeparator();
     //> Reload action
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
     actRefresh->setStatusTip(_("Press to refresh present libraries."));
     connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));
@@ -1960,7 +1960,7 @@ void ProjTree::ctrTreePopup( )
 
     //- Reload action -
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh projects"),this);
     actRefresh->setStatusTip(_("Press to refresh present projects."));
     connect(actRefresh, SIGNAL(triggered()), this, SLOT(updateTree()));

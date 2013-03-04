@@ -111,11 +111,11 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
 						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
     but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
     but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
@@ -202,11 +202,11 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
     but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
     but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
@@ -317,11 +317,11 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
 						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
-    if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+    if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
     but_box->button(QDialogButtonBox::Ok)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(accepted()), this, SLOT(accept()));
     but_box->button(QDialogButtonBox::Cancel)->setText(_("Cancel"));
-    if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+    if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
     but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box, 5, 0, 1, 2 );
@@ -819,7 +819,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->addWidget(ed_fld);
 
     QImage ico_t;
-    if( !ico_t.load(TUIS::icoPath("find").c_str()) ) ico_t.load(":/images/find.png");
+    if( !ico_t.load(TUIS::icoGet("find",NULL,true).c_str()) ) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
     actFind->setShortcutContext(Qt::WidgetShortcut);
@@ -836,12 +836,12 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QImage ico_t;
 	but_box->button(QDialogButtonBox::Apply)->setText("");
-	if(!ico_t.load(TUIS::icoPath("button_ok").c_str())) ico_t.load(":/images/button_ok.png");
+	if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
 	but_box->button(QDialogButtonBox::Apply)->setIcon(QPixmap::fromImage(ico_t));
 	but_box->button(QDialogButtonBox::Apply)->setIconSize(QSize(12,12));
 	connect(but_box->button(QDialogButtonBox::Apply), SIGNAL(pressed()), this, SLOT(applySlot()));
 	but_box->button(QDialogButtonBox::Cancel)->setText("");
-	if(!ico_t.load(TUIS::icoPath("button_cancel").c_str())) ico_t.load(":/images/button_cancel.png");
+	if(!ico_t.load(TUIS::icoGet("button_cancel",NULL,true).c_str())) ico_t.load(":/images/button_cancel.png");
 	but_box->button(QDialogButtonBox::Cancel)->setIcon(QPixmap::fromImage(ico_t));
 	but_box->button(QDialogButtonBox::Cancel)->setIconSize(QSize(12,12));
 	connect(but_box->button(QDialogButtonBox::Cancel), SIGNAL(pressed()), this, SLOT(cancelSlot()));

@@ -143,7 +143,7 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Subsystem: ")+subName(),R_R_R_);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
-	if(TUIS::icoPresent(subId()))	ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
+	if(TUIS::icoGet(subId(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
 	if(subModule())
 	{
 	    ctrMkNode("grp",opt,-1,"/br/mod_",_("Module"),R_R_R_,"root","root",1,"idm","1");

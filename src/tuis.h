@@ -67,10 +67,8 @@ class TUIS : public TSubSYS
 
 	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
 
-	//- All system UI functions -
-	static bool icoPresent( const string &inm, string *tp = NULL );
-	static string icoGet( const string &inm, string *tp = NULL );
-	static string icoPath( const string &ico, const string &tp = "png" );
+	//> All system UI functions
+	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
 
     protected:
 	void load_( );

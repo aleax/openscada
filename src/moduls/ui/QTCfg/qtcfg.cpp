@@ -167,7 +167,7 @@ ConfApp::ConfApp( string open_user ) :
 
     //> Create actions
     //>> Close
-    if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
+    if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
     actClose->setToolTip(_("Close configurator window"));
@@ -175,7 +175,7 @@ ConfApp::ConfApp( string open_user ) :
     actClose->setStatusTip(_("Press to close OpenSCADA configurator window"));
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //>> Quit
-    if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
+    if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
     actQuit->setToolTip(_("Quit OpenSCADA"));
@@ -183,7 +183,7 @@ ConfApp::ConfApp( string open_user ) :
     actQuit->setStatusTip(_("Press for full quit from OpenSCADA"));
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
     //>> Up button
-    if(!ico_t.load(TUIS::icoPath("up").c_str())) ico_t.load(":/images/up.png");
+    if(!ico_t.load(TUIS::icoGet("up",NULL,true).c_str())) ico_t.load(":/images/up.png");
     actUp = new QAction(QPixmap::fromImage(ico_t),_("&Up"),this);
     actUp->setShortcut(Qt::ALT+Qt::Key_Up);
     actUp->setToolTip(_("Up page"));
@@ -192,7 +192,7 @@ ConfApp::ConfApp( string open_user ) :
     actUp->setEnabled(false);
     connect(actUp, SIGNAL(triggered()), this, SLOT(pageUp()));
     //>> Previous page
-    if(!ico_t.load(TUIS::icoPath("previous").c_str())) ico_t.load(":/images/previous.png");
+    if(!ico_t.load(TUIS::icoGet("previous",NULL,true).c_str())) ico_t.load(":/images/previous.png");
     actPrev = new QAction(QPixmap::fromImage(ico_t),_("&Previous"),this);
     actPrev->setShortcut(Qt::ALT+Qt::Key_Left);
     actPrev->setToolTip(_("Previous page"));
@@ -201,7 +201,7 @@ ConfApp::ConfApp( string open_user ) :
     actPrev->setEnabled(false);
     connect(actPrev, SIGNAL(triggered()), this, SLOT(pagePrev()));
     //>> Next page
-    if(!ico_t.load(TUIS::icoPath("next").c_str())) ico_t.load(":/images/next.png");
+    if(!ico_t.load(TUIS::icoGet("next",NULL,true).c_str())) ico_t.load(":/images/next.png");
     actNext = new QAction(QPixmap::fromImage(ico_t),_("&Next"),this);
     actNext->setShortcut(Qt::ALT+Qt::Key_Right);
     actNext->setToolTip(_("Next page"));
@@ -210,7 +210,7 @@ ConfApp::ConfApp( string open_user ) :
     actNext->setEnabled(false);
     connect(actNext, SIGNAL(triggered()), this, SLOT(pageNext()));
     //>>> Load item from db
-    if(!ico_t.load(TUIS::icoPath("load").c_str())) ico_t.load(":/images/load.png");
+    if(!ico_t.load(TUIS::icoGet("load",NULL,true).c_str())) ico_t.load(":/images/load.png");
     actDBLoad = new QAction(QPixmap::fromImage(ico_t),_("Load from DB"),this);
     actDBLoad->setToolTip(_("Load item data from DB"));
     actDBLoad->setWhatsThis(_("The button for loading item data from DB"));
@@ -218,7 +218,7 @@ ConfApp::ConfApp( string open_user ) :
     actDBLoad->setEnabled(false);
     connect(actDBLoad, SIGNAL(triggered()), this, SLOT(itDBLoad()));
     //>>> Save item to db
-    if(!ico_t.load(TUIS::icoPath("save").c_str())) ico_t.load(":/images/save.png");
+    if(!ico_t.load(TUIS::icoGet("save",NULL,true).c_str())) ico_t.load(":/images/save.png");
     actDBSave = new QAction(QPixmap::fromImage(ico_t),_("Save to DB"),this);
     actDBSave->setToolTip(_("Save item data to DB"));
     actDBSave->setWhatsThis(_("The button for saving item data to DB"));
@@ -227,7 +227,7 @@ ConfApp::ConfApp( string open_user ) :
     actDBSave->setEnabled(false);
     connect(actDBSave, SIGNAL(triggered()), this, SLOT(itDBSave()));
     //>> Item add
-    if(!ico_t.load(TUIS::icoPath("it_add").c_str())) ico_t.load(":/images/it_add.png");
+    if(!ico_t.load(TUIS::icoGet("it_add",NULL,true).c_str())) ico_t.load(":/images/it_add.png");
     actItAdd = new QAction(QPixmap::fromImage(ico_t),_("&Add"),this);
     actItAdd->setToolTip(_("Add item"));
     actItAdd->setWhatsThis(_("The button for adding new item"));
@@ -235,7 +235,7 @@ ConfApp::ConfApp( string open_user ) :
     actItAdd->setEnabled(false);
     connect(actItAdd, SIGNAL(triggered()), this, SLOT(itAdd()));
     //>> Item delete
-    if(!ico_t.load(TUIS::icoPath("it_del").c_str())) ico_t.load(":/images/it_del.png");
+    if(!ico_t.load(TUIS::icoGet("it_del",NULL,true).c_str())) ico_t.load(":/images/it_del.png");
     actItDel = new QAction(QPixmap::fromImage(ico_t),_("&Delete"),this);
     actItDel->setToolTip(_("Delete item"));
     actItDel->setWhatsThis(_("The button for deleting item"));
@@ -244,7 +244,7 @@ ConfApp::ConfApp( string open_user ) :
     actItDel->setEnabled(false);
     connect(actItDel, SIGNAL(triggered()), this, SLOT(itDel()));
     //>>> Cut item
-    if(!ico_t.load(TUIS::icoPath("editcut").c_str())) ico_t.load(":/images/editcut.png");
+    if(!ico_t.load(TUIS::icoGet("editcut",NULL,true).c_str())) ico_t.load(":/images/editcut.png");
     actItCut = new QAction(QPixmap::fromImage(ico_t),_("Item cut"),this);
     actItCut->setToolTip(_("Cutting of the item"));
     actItCut->setWhatsThis(_("The button for cutting of the item"));
@@ -253,7 +253,7 @@ ConfApp::ConfApp( string open_user ) :
     actItCut->setEnabled(false);
     connect(actItCut, SIGNAL(triggered()), this, SLOT(itCut()));
     //>>> Copy item
-    if(!ico_t.load(TUIS::icoPath("editcopy").c_str())) ico_t.load(":/images/editcopy.png");
+    if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
     actItCopy = new QAction(QPixmap::fromImage(ico_t),_("Item copy"),this);
     actItCopy->setToolTip(_("Copying of the item"));
     actItCopy->setWhatsThis(_("The button for copying of the item"));
@@ -262,7 +262,7 @@ ConfApp::ConfApp( string open_user ) :
     actItCopy->setEnabled(false);
     connect(actItCopy, SIGNAL(triggered()), this, SLOT(itCopy()));
     //>>> Paste item
-    if(!ico_t.load(TUIS::icoPath("editpaste").c_str())) ico_t.load(":/images/editpaste.png");
+    if(!ico_t.load(TUIS::icoGet("editpaste",NULL,true).c_str())) ico_t.load(":/images/editpaste.png");
     actItPaste = new QAction(QPixmap::fromImage(ico_t),_("Item paste"),this);
     actItPaste->setToolTip(_("Pasting of the item"));
     actItPaste->setWhatsThis(_("The button for pasting of the item"));
@@ -271,7 +271,7 @@ ConfApp::ConfApp( string open_user ) :
     actItPaste->setEnabled(false);
     connect(actItPaste, SIGNAL(triggered()), this, SLOT(itPaste()));
     //>> Update
-    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
     QAction *actUpdate = new QAction(QPixmap::fromImage(ico_t),_("&Refresh"),this);
     actUpdate->setShortcut(Qt::Key_F5);
     actUpdate->setToolTip(_("Refresh current page"));
@@ -279,7 +279,7 @@ ConfApp::ConfApp( string open_user ) :
     actUpdate->setStatusTip(_("Press for refreshing of the content of the current page."));
     connect(actUpdate, SIGNAL(triggered()), this, SLOT(pageRefresh()));
     //>> Start of "Auto update"
-    if(!ico_t.load(TUIS::icoPath("start").c_str())) ico_t.load(":/images/start.png");
+    if(!ico_t.load(TUIS::icoGet("start",NULL,true).c_str())) ico_t.load(":/images/start.png");
     actStartUpd = new QAction(QPixmap::fromImage(ico_t),_("&Start"),this);
     actStartUpd->setShortcut(Qt::CTRL+Qt::Key_B);
     actStartUpd->setToolTip(_("Start cycled refresh"));
@@ -287,7 +287,7 @@ ConfApp::ConfApp( string open_user ) :
     actStartUpd->setStatusTip(_("Press to start the cycled refresh of the content of the current page."));
     connect(actStartUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStart()));
     //>> Stop of "Auto update"
-    if(!ico_t.load(TUIS::icoPath("stop").c_str())) ico_t.load(":/images/stop.png");
+    if(!ico_t.load(TUIS::icoGet("stop",NULL,true).c_str())) ico_t.load(":/images/stop.png");
     actStopUpd = new QAction(QPixmap::fromImage(ico_t),_("&Stop"),this);
     actStopUpd->setShortcut(Qt::CTRL+Qt::Key_E);
     actStopUpd->setToolTip(_("Stop cycled refresh"));
@@ -296,7 +296,7 @@ ConfApp::ConfApp( string open_user ) :
     actStopUpd->setEnabled(false);
     connect(actStopUpd, SIGNAL(triggered()), this, SLOT(pageCyclRefrStop()));
     //>> About "System info"
-    if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
+    if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
     actAbout->setToolTip(_("Program and OpenSCADA information"));
@@ -310,7 +310,7 @@ ConfApp::ConfApp( string open_user ) :
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //>> What is
-    if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
+    if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     actWhatIs->setToolTip(_("Question about GUI elements"));
     actWhatIs->setWhatsThis(_("The button for requesting the information about user interface elements"));
@@ -387,7 +387,7 @@ ConfApp::ConfApp( string open_user ) :
     mStModify->setToolTip(_("Field for display of the local station modifying."));
     statusBar()->insertPermanentWidget(0,mStModify);
 
-    if(!ico_t.load(TUIS::icoPath("combar").c_str())) ico_t.load(":/images/combar.png");
+    if(!ico_t.load(TUIS::icoGet("combar",NULL,true).c_str())) ico_t.load(":/images/combar.png");
     QPushButton *stBt = new QPushButton(QPixmap::fromImage(ico_t),"",this);
     stBt->setWhatsThis(_("This button for call status bar history."));
     stBt->setToolTip(_("Button for call status bar history."));
@@ -2085,7 +2085,7 @@ void ConfApp::ctrTreePopup( )
 	}
 	//> Main action add
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
+	if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
 	QAction *actRemHostUp = new QAction(QPixmap::fromImage(ico_t), _("Refresh items tree"), this);
 	popup.addAction(actRemHostUp);
 	QAction *rez = popup.exec(QCursor::pos());

@@ -54,7 +54,7 @@ TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2), mConvCode(tr
     IOCharSet = nl_langinfo(CODESET);
 
 #ifdef HAVE_LIBINTL_H
-    bindtextdomain(PACKAGE,LOCALEDIR);
+    bindtextdomain(PACKAGE, localedir_full);
     textdomain(PACKAGE);
 #endif
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-28 20:20+0200\n"
+"POT-Creation-Date: 2013-03-01 17:20+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1806,6 +1806,9 @@ msgstr "Arbeitsverzeichnis"
 
 msgid "Icons directory"
 msgstr "Symbolverzeichnis"
+
+msgid "Separate directory paths with icons by symbol ';'."
+msgstr "Separate Verzeichnispfade mit Ikonen Symbol ';'."
 
 msgid "Modules directory"
 msgstr "Modulverzeichnis"

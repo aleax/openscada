@@ -5,13 +5,11 @@
     -->
     <station id="WorkStation">
 	<!--
-	Discribe internal parameter for station".
-	Station this OpenSCADA programm.
+	Describe internal parameters for station.
+	The station is OpenSCADA program.
 	-->
 	<prm id="StName">Work station</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
-	<prm id="IcoDir">./icons</prm>
-	<prm id="ModDir">@libdir_full@/openscada</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="MessLev">0</prm>
 	<prm id="Lang2CodeBase"></prm>
@@ -21,7 +19,7 @@
 	<node id="sub_BD">
 	    <prm id="SYSStPref">0</prm>
 	    <tbl id="DB">
-		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="start/St.db" CODEPAGE="UTF-8"/>
+		<fld ID="GenDB" TYPE="SQLite" NAME="Main DB" ADDR="St.db" CODEPAGE="UTF-8"/>
 	    </tbl>
 	</node>
 

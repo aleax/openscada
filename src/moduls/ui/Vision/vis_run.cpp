@@ -75,7 +75,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //> Create actions
     //>> Generic actions
     //>>> Print
-    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
+    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
     QMenu *menuPrint = new QMenu(_("&Print"), this);
     menuPrint->setIcon(QPixmap::fromImage(ico_t));
     menuPrint->menuAction()->setShortcut(QKeySequence::Print);
@@ -102,7 +102,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     connect(actPrintDoc, SIGNAL(triggered()), this, SLOT(printDoc()));
     menuPrint->addAction(actPrintDoc);
     //>>> Export
-    if(!ico_t.load(TUIS::icoPath("export").c_str())) ico_t.load(":/images/export.png");
+    if(!ico_t.load(TUIS::icoGet("export",NULL,true).c_str())) ico_t.load(":/images/export.png");
     QMenu *menuExport = new QMenu(_("&Export"), this);
     menuExport->setIcon(QPixmap::fromImage(ico_t));
     menuExport->menuAction()->setToolTip(_("Export the master page"));
@@ -128,7 +128,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     connect(actExpDoc, SIGNAL(triggered()), this, SLOT(exportDoc()));
     menuExport->addAction(actExpDoc);
     //>>> Close
-    if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
+    if(!ico_t.load(TUIS::icoGet("close",NULL,true).c_str())) ico_t.load(":/images/close.png");
     QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
     actClose->setToolTip(_("Close Vision window"));
@@ -136,7 +136,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actClose->setStatusTip(_("Press to close of the current Vision runtime window."));
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
     //>>> Quit
-    if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
+    if(!ico_t.load(TUIS::icoGet("exit",NULL,true).c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
     actQuit->setToolTip(_("Quit from OpenSCADA"));
@@ -154,7 +154,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
 
     //>> Help actions
     //>>> About "System info"
-    if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
+    if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
     actAbout->setToolTip(_("Program and OpenSCADA information"));
@@ -168,7 +168,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //>>> What is
-    //if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
+    //if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     //QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     //actWhatIs->setToolTip(_("The button for requestion about GUI elements"));
     //actWhatIs->setWhatsThis(_("Get request about user interface elements"));
@@ -177,14 +177,14 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
 
     //>> Alarms actions
     //>>> Alarm level display button and full alarms quittance
-    if(!ico_t.load(TUIS::icoPath("alarmLev").c_str())) ico_t.load(":/images/alarmLev.png");
+    if(!ico_t.load(TUIS::icoGet("alarmLev",NULL,true).c_str())) ico_t.load(":/images/alarmLev.png");
     actAlrmLev = new QAction( QPixmap::fromImage(ico_t), _("Alarm level"), this );
     actAlrmLev->setObjectName("alarmLev");
     actAlrmLev->setToolTip(_("Alarm level"));
     actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
     actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
     //>>> Alarm by Light
-    if(!ico_t.load(TUIS::icoPath("alarmLight").c_str())) ico_t.load(":/images/alarmLight.png");
+    if(!ico_t.load(TUIS::icoGet("alarmLight",NULL,true).c_str())) ico_t.load(":/images/alarmLight.png");
     actAlrmLight = new QAction( QPixmap::fromImage(ico_t), _("Blink alarm"), this );
     actAlrmLight->setObjectName("alarmLight");
     actAlrmLight->setToolTip(_("Blink alarm"));
@@ -192,7 +192,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actAlrmLight->setStatusTip(_("Press for all blink alarms quittance."));
     actAlrmLight->setVisible(false);
     //>>> Alarm by mono sound (PC speaker)
-    if(!ico_t.load(TUIS::icoPath("alarmAlarm").c_str())) ico_t.load(":/images/alarmAlarm.png");
+    if(!ico_t.load(TUIS::icoGet("alarmAlarm",NULL,true).c_str())) ico_t.load(":/images/alarmAlarm.png");
     actAlrmAlarm = new QAction( QPixmap::fromImage(ico_t), _("Speaker alarm"), this );
     actAlrmAlarm->setObjectName("alarmAlarm");
     actAlrmAlarm->setToolTip(_("PC speaker alarm"));
@@ -200,7 +200,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actAlrmAlarm->setStatusTip(_("Press for all PC speaker alarms quittance."));
     actAlrmAlarm->setVisible(false);
     //>>> Alarm by sound or synthesis of speech
-    if(!ico_t.load(TUIS::icoPath("alarmSound").c_str())) ico_t.load(":/images/alarmSound.png");
+    if(!ico_t.load(TUIS::icoGet("alarmSound",NULL,true).c_str())) ico_t.load(":/images/alarmSound.png");
     actAlrmSound = new QAction( QPixmap::fromImage(ico_t), _("Sound/speech alarm"), this );
     actAlrmSound->setObjectName("alarmSound");
     actAlrmSound->setToolTip(_("Sound or speech alarm"));
@@ -425,7 +425,7 @@ void VisRun::printPg( const string &ipg )
     {
 	//> Make select page dialog
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
+	if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
 	InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select page for print."), _("Page print."), false, false );
 	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
 	QComboBox *spg = new QComboBox(&sdlg);
@@ -498,7 +498,7 @@ void VisRun::printDiag( const string &idg )
 	{
 	    //> Make select diagrams dialog
 	    QImage ico_t;
-	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
+	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for print."), _("Diagram print."), false, false);
 	    sdlg.edLay()->addWidget( new QLabel(_("Diagrams:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
@@ -586,7 +586,7 @@ void VisRun::printDoc( const string &idoc )
 	{
 	    //> Make select diagrams dialog
 	    QImage ico_t;
-	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
+	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/print.png");
 	    InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select document for print."), _("Document print."), false, false );
 	    sdlg.edLay()->addWidget( new QLabel(_("Document:"),&sdlg), 2, 0 );
 	    QComboBox *spg = new QComboBox(&sdlg);
@@ -630,7 +630,7 @@ void VisRun::exportPg( const string &ipg )
     {
 	//> Make select page dialog
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoPath("export").c_str())) ico_t.load(":/images/export.png");
+	if(!ico_t.load(TUIS::icoGet("export",NULL,true).c_str())) ico_t.load(":/images/export.png");
 	InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select page for export."), _("Page export."), false, false );
 	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
 	QComboBox *spg = new QComboBox(&sdlg);
@@ -681,7 +681,7 @@ void VisRun::exportDiag( const string &idg )
 	{
 	    //> Make select diagrams dialog
 	    QImage ico_t;
-	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/export.png");
+	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/export.png");
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select diagram for export."), _("Diagram export."), false, false);
 	    sdlg.edLay()->addWidget(new QLabel(_("Diagrams:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
@@ -819,7 +819,7 @@ void VisRun::exportDoc( const string &idoc )
 	{
 	    //> Make select diagrams dialog
 	    QImage ico_t;
-	    if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/export.png");
+	    if(!ico_t.load(TUIS::icoGet("print",NULL,true).c_str())) ico_t.load(":/images/export.png");
 	    InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select document for export."), _("Document export."), false, false);
 	    sdlg.edLay()->addWidget(new QLabel(_("Document:"),&sdlg), 2, 0);
 	    QComboBox *spg = new QComboBox(&sdlg);
@@ -1043,7 +1043,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     {
 	//>> Prepare dialog
 	QImage ico_t;
-	if(!ico_t.load(TUIS::icoPath("vision_prj_run").c_str())) ico_t.load(":/images/prj_run.png");
+	if(!ico_t.load(TUIS::icoGet("vision_prj_run",NULL,true).c_str())) ico_t.load(":/images/prj_run.png");
 	QDialog conreq(this);
 	conreq.setWindowTitle(_("Select session for connection"));
 	conreq.setMinimumSize( QSize( 150, 100 ) );

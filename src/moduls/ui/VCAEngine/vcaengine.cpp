@@ -205,7 +205,7 @@ void Engine::postEnable( int flag )
     //> Init original widgets library
     wlbAdd("originals",_("Original widgets"));
     //>> Set default library icon
-    if( TUIS::icoPresent("VCA.lwdg_root") )
+    if(TUIS::icoGet("VCA.lwdg_root",NULL,true).size())
         wlbAt("originals").at().setIco(TSYS::strEncode(TUIS::icoGet("VCA.lwdg_root"),TSYS::base64));
     //>> Add main original widgets
     wlbAt("originals").at().add( new OrigElFigure() );

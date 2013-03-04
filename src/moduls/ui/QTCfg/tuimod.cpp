@@ -154,7 +154,7 @@ void TUIMod::postEnable( int flag )
 QIcon TUIMod::icon( )
 {
     QImage ico_t;
-    if(!ico_t.load(TUIS::icoPath("UI.QTCfg").c_str())) ico_t.load(":/images/oscada_cfg.png");
+    if(!ico_t.load(TUIS::icoGet("UI.QTCfg",NULL,true).c_str())) ico_t.load(":/images/oscada_cfg.png");
     return QPixmap::fromImage(ico_t);
 }
 
