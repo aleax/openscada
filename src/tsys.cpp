@@ -51,7 +51,7 @@ bool TSYS::finalKill = false;
 pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
-    mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("icons/;"oscd_datadir_full"/icons/"),
+    mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("icons;"oscd_datadir_full"/icons"),
     mModDir(oscd_moddir_full), mWorkDB("<cfg>"),
     mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), mStopSignal(-1), mMultCPU(false), mSysTm(time(NULL))
 {
@@ -113,7 +113,7 @@ TSYS::~TSYS( )
 	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
     printf(_("System counters on exit: %s"),cntrsStr.c_str());
 #endif
-} 
+}
 
 string TSYS::host( )
 {
@@ -809,7 +809,7 @@ string TSYS::strLine( const string &str, int level, int *off )
     return "";
 }
 
-string TSYS::pathLev( const string &path, int level, bool encode, int *off )
+string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
@@ -825,12 +825,12 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 	if( t_dir == string::npos )
 	{
 	    if( off ) *off = path.size();
-	    return (t_lev == level) ? ( encode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
+	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir)) : "";
 	}
 	else if( t_lev == level )
 	{
 	    if( off ) *off = t_dir;
-	    return encode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
+	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
 	}
 	an_dir = t_dir;
 	t_lev++;
@@ -842,9 +842,8 @@ string TSYS::path2sepstr( const string &path, char sep )
 {
     string rez, curv;
     int off = 0;
-    while( !(curv=TSYS::pathLev(path,0,false,&off)).empty() )
-	rez+=curv+sep;
-    if(!rez.empty())	rez.resize(rez.size()-1);
+    while(!(curv=TSYS::pathLev(path,0,false,&off)).empty()) rez += curv+sep;
+    if(!rez.empty()) rez.resize(rez.size()-1);
 
     return rez;
 }
@@ -853,8 +852,7 @@ string TSYS::sepstr2path( const string &str, char sep )
 {
     string rez, curv;
     int off = 0;
-    while( !(curv=TSYS::strSepParse(str,0,sep,&off)).empty() )
-	rez+="/"+curv;
+    while(!(curv=TSYS::strSepParse(str,0,sep,&off)).empty()) rez += "/"+curv;
 
     return rez;
 }
@@ -1176,7 +1174,7 @@ string TSYS::strUncompr( const string &in )
 float TSYS::floatLE(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_double ieee754_be;
+    ieee754_float ieee754_be;
     union ieee754_le
     {
 	float f;
@@ -1202,7 +1200,7 @@ float TSYS::floatLE(float in)
 float TSYS::floatLErev(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_double ieee754_be;
+    ieee754_float ieee754_be;
     union ieee754_le
     {
 	float f;
@@ -1980,10 +1978,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",2,"tp","str",
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",4,"tp","str","dest","sel_ed","select","/gen/icoDirList",
 		"help",_("Separate directory paths with icons by symbol ';'."));
-	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root","root",2,"tp","bool",
@@ -1991,7 +1989,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
+	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
+		"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
 		"help",_("Multilingual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_))
 	    {
@@ -2088,16 +2087,19 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
     }
+    else if(a_path == "/gen/workDirList" && ctrChkNode(opt))	ctrListFS(opt, workDir());
     else if(a_path == "/gen/icodir")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
     }
+    else if(a_path == "/gen/icoDirList" && ctrChkNode(opt))	ctrListFS(opt, TSYS::strParse(icoDir(),0,";"));
     else if(a_path == "/gen/moddir")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(modDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setModDir(opt->text().c_str());
     }
+    else if(a_path == "/gen/modDirList" && ctrChkNode(opt))	ctrListFS(opt, modDir());
     else if(a_path == "/gen/lang")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());

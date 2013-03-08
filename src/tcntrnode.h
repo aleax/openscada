@@ -115,6 +115,9 @@ class TCntrNode
 	static bool ctrChkNode( XMLNode *nd, const char *cmd="get", int perm=0444, const char *user="root",
 	    const char *grp="root", char mode=04, const char *warn = NULL );
 
+	//>> Specific
+	static void ctrListFS( XMLNode *nd, const string &fsBase );
+
     protected:
 	//Methods
 	virtual void cntrCmdProc( XMLNode *req );

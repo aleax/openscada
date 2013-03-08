@@ -325,7 +325,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	{
 	    if( vl.at().fld().flg()&TFld::Selected )	opt->setText(vl.at().getSEL());
 	    else opt->setText( (vl.at().fld().type()==TFld::Real) ?
-		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(vl.at().getR(),6)) : 
+		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : TSYS::real2str(vl.at().getR(),6)) :
 		    vl.at().getS() );
 	}
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR))

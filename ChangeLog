@@ -1,3 +1,17 @@
+2013-03-08 Roman
+- SYS.{TCntrNode,WorkDir,IcoDir,ModDir},Archive.FSArch:
+    Function ctrListFS() is added and used for directories and files (further) browsing into configure items allow.
+- SYS.{TCntrNode,TPrmTmpl},DAQ.JavaLikeCalc,UI.{VCAEngine,Vision}:
+    For tables list used preferable table name instead the table mask "[TableName]".
+- !:FIX:ModShedul,Archive.FSArch,DB.DBF,DAQ.{Comedi,SMH2Gi}:
+    The hidden problematic readdir() function is replaced to reentrant variant readdir_r().
+- !:SYS: Function sysTm() and it variable "mSysTm" are set to "volatile" and will test at further for atomic access.
+- FIX:SYS: ieee754_float using instead ieee754_double into floatLE() and floatLErev() is fixed.
+- Archive.{FSArch,DBArch}: Editable control for Values and Messages archives' configuration fields depends from "Start" state is added.
+- FIX:UI.Vision: Documents export is made equal to display and clean.
+- UI.WebVision: To JavaScript function getColor() opaque obtaine property is added.
+
+
 2013-03-04 Roman
 - !!!:SYS: All path configuration variables is moved to config.h and some new is added for default one set.
     Packages Model.AGLKS and Model.Boiler is set to "noarch".

@@ -134,16 +134,16 @@ void TTpContr::setMRCDirDevs( const string &vl )
     //> Scan directory for MR/MC devices *.ini files load
     DevMRCFeature devIni;
     string fn, f_data;
-    dirent *scan_dirent;
+    dirent scan_dirent, *scan_rez = NULL;
     DIR *IdDir = opendir(mod->MRCDirDevs().c_str());
-    while(IdDir && (scan_dirent=readdir(IdDir)) != NULL)
+    while(IdDir && readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
     {
-	fn = mod->MRCDirDevs()+"/"+scan_dirent->d_name;
-	if(scan_dirent->d_type != DT_REG || fn.compare(fn.size()-4,4,".ini") != 0) continue;
+	fn = mod->MRCDirDevs()+"/"+scan_rez->d_name;
+	if(scan_rez->d_type != DT_REG || fn.compare(fn.size()-4,4,".ini") != 0) continue;
 	if(devIni.load(fn))
 	{
 	    if(devIni.HardID) MRCdevs[devIni.HardID] = devIni;
-	    else if(strcmp(scan_dirent->d_name,"ain_tunes.ini") == 0) MRCdevs[-1] = devIni;
+	    else if(strcmp(scan_rez->d_name,"ain_tunes.ini") == 0) MRCdevs[-1] = devIni;
 	}
     }
     if(IdDir) closedir(IdDir);

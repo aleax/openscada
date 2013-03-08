@@ -3327,14 +3327,6 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
     if( relDoc && !w->allAttrLoad() )
     {
 	shD->web->setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true)),false));
-	//> Process source document
-	//>> Parse document
-	XMLNode xproc("body");
-	try{ if(!shD->doc.empty()) xproc.load(string(XHTML_entity)+shD->doc, true, Mess->charset()); }
-	catch( TError err )
-	{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),w->id().c_str(),err.mess.c_str()); }
-
-	nodeProcess( &xproc, shD );
 
 #ifdef HAVE_WEBKIT
 	QPoint scrollPos;
@@ -3342,32 +3334,8 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 #else
 	int scrollPos = shD->web->verticalScrollBar()->value();
 #endif
-	shD->web->setHtml(("<?xml version='1.0' ?>\n"
-	    "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-	    "'DTD/xhtml1-transitional.dtd'>\n"
-	    "<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-	    "<head>\n"
-	    "  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-	    "  <style type='text/css'>\n"+
-	    " * { font-family: "+shD->web->font().family().toStdString()+"; "
-	         "font-size: "+TSYS::int2str(shD->web->font().pointSize())+"pt; "
-	         "font-weight: "+(shD->web->font().bold()?"bold":"normal")+"; "
-	         "font-style: "+(shD->web->font().italic()?"italic":"normal")+"; }\n"
-            " big { font-size: 120%; }\n"+
-            " small { font-size: 90%; }\n"+
-            " h1 { font-size: 200%; }\n"+
-            " h2 { font-size: 150%; }\n"+
-            " h3 { font-size: 120%; }\n"+
-            " h4 { font-size: 105%; }\n"+
-            " h5 { font-size: 95%; }\n"+
-            " h6 { font-size: 70%; }\n"+
-            " u,b,i { font-size : inherit; }\n"+
-            " sup,sub { font-size: 80%; }\n"+
-            " th { font-weight: bold; }\n"+
-	    shD->style+"</style>\n"
-	    "</head>\n"+
-	    xproc.save(XMLNode::Clean, Mess->charset())+
-	    "</html>").c_str());
+
+	shD->web->setHtml(shD->toHtml().c_str());
 
 #ifdef HAVE_WEBKIT
 	if(!scrollPos.isNull() && shD->web->page() && shD->web->page()->mainFrame())
@@ -3378,21 +3346,6 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
 
     return true;
-}
-
-void ShapeDocument::nodeProcess( XMLNode *xcur, ShapeDocument::ShpDt *shD )
-{
-    //> Delete process instructions
-    //xcur->prcInstrClear();
-
-    //> Go to include nodes
-    for(unsigned i_c = 0; i_c < xcur->childSize(); )
-    {
-	//>> Check for special tags
-	if(xcur->childGet(i_c)->name().substr(0,3) == "doc") { xcur->childDel(i_c); continue; }
-	nodeProcess(xcur->childGet(i_c),shD);
-	i_c++;
-    }
 }
 
 bool ShapeDocument::event( WdgView *w, QEvent *event )
@@ -3465,6 +3418,62 @@ void ShapeDocument::setFocus( WdgView *view, QWidget *wdg, bool en, bool devel )
     for(int i_c = 0; i_c < wdg->children().size(); i_c++)
 	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
+}
+
+//> Shape node date
+string ShapeDocument::ShpDt::toHtml( )
+{
+    if(!web) return "";
+
+    //> Process source document
+    //>> Parse document
+    XMLNode xproc("body");
+    try{ if(!doc.empty()) xproc.load(string(XHTML_entity)+doc, true, Mess->charset()); }
+    catch(TError err)
+    { mess_err(mod->nodePath().c_str(),_("Document parsing error: %s"),err.mess.c_str()); }
+
+    nodeProcess(&xproc);
+
+    return "<?xml version='1.0' ?>\n"
+	"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
+	"'DTD/xhtml1-transitional.dtd'>\n"
+	"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
+	"<head>\n"
+	"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
+	"  <style type='text/css'>\n"+
+	" * { font-family: "+web->font().family().toStdString()+"; "
+	    "font-size: "+TSYS::int2str(web->font().pointSize())+"pt; "
+	    "font-weight: "+(web->font().bold()?"bold":"normal")+"; "
+	    "font-style: "+(web->font().italic()?"italic":"normal")+"; }\n"
+        " big { font-size: 120%; }\n"+
+        " small { font-size: 90%; }\n"+
+        " h1 { font-size: 200%; }\n"+
+        " h2 { font-size: 150%; }\n"+
+        " h3 { font-size: 120%; }\n"+
+        " h4 { font-size: 105%; }\n"+
+        " h5 { font-size: 95%; }\n"+
+        " h6 { font-size: 70%; }\n"+
+        " u,b,i { font-size : inherit; }\n"+
+        " sup,sub { font-size: 80%; }\n"+
+        " th { font-weight: bold; }\n"+style+"</style>\n"
+	"</head>\n"+
+	xproc.save(XMLNode::Clean, Mess->charset())+
+	"</html>";
+}
+
+void ShapeDocument::ShpDt::nodeProcess( XMLNode *xcur )
+{
+    //> Delete process instructions
+    //xcur->prcInstrClear();
+
+    //> Go to include nodes
+    for(unsigned i_c = 0; i_c < xcur->childSize(); )
+    {
+	//>> Check for special tags
+	if(xcur->childGet(i_c)->name().compare(0,3,"doc") == 0) { xcur->childDel(i_c); continue; }
+	nodeProcess(xcur->childGet(i_c));
+	i_c++;
+    }
 }
 
 //************************************************

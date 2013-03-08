@@ -505,6 +505,10 @@ class ShapeDocument : public WdgShape
 	    public:
 		//Methods
 		ShpDt( ) : en(true), active(true), tmpl(false), web(NULL) { }
+
+		string	toHtml( );
+		void	nodeProcess( XMLNode *xcur );
+
 		//Attributes
 		short	en	:1;
 		short	active	:1;
@@ -534,8 +538,6 @@ class ShapeDocument : public WdgShape
 	//Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
-
-	void nodeProcess( XMLNode *xcur, ShpDt *shD );
 
 	//Attributes
 	static const char *XHTML_entity;

@@ -226,7 +226,7 @@ void ModVArch::checkArchivator( bool now )
     {
 	//> Find archive files for no present archives and create it.
 	struct stat file_stat;
-	dirent *scan_dirent;
+	dirent scan_dirent, *scan_rez = NULL;
 
 	//>> Open/create new directory
 	DIR *IdDir = opendir(addr().c_str());
@@ -237,13 +237,13 @@ void ModVArch::checkArchivator( bool now )
 	}
 
 	//>> Scan opened directory
-	while((scan_dirent=readdir(IdDir)) != NULL)
+	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
 	{
-	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name) continue;
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
 
 	    string	ArhNm;
 	    TFld::Type	ArhTp;
-	    string NameArhFile = addr()+"/"+scan_dirent->d_name;
+	    string NameArhFile = addr()+"/"+scan_rez->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
 	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
@@ -427,8 +427,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	TVArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Full archives size"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,2,
-	    "tp","str","help",_("Path to directory for archivator's of values files."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
+	    "tp","str","dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to directory for archivator's of values files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
@@ -475,7 +475,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
+    if(a_path == "/prm/cfg/dirList" && ctrChkNode(opt))	ctrListFS(opt, addr());
+    else if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
     else if(a_path == "/prm/add/tm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(fileTimeSize(),6));
@@ -600,19 +601,19 @@ void ModVArchEl::checkArchivator( bool now, bool cpctLim )
     {
 	//> Scan directory for find new files and deleted files
 	struct stat file_stat;
-	dirent *scan_dirent;
+	dirent scan_dirent, *scan_rez = NULL;
 
 	//>> Open archive derictory
 	DIR *IdDir = opendir(archivator().addr().c_str());
 	if(IdDir == NULL) return;
 
 	//>> Check to allow files
-	while((scan_dirent=readdir(IdDir)) != NULL)
+	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
 	{
-	    if(string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name)	continue;
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0)	continue;
 
 	    string ArhNm;
-	    string NameArhFile = archivator().addr()+"/"+scan_dirent->d_name;
+	    string NameArhFile = archivator().addr()+"/"+scan_rez->d_name;
 
 	    stat(NameArhFile.c_str(),&file_stat);
 	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0)	continue;

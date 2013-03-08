@@ -556,12 +556,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	DIR *IdDir = opendir("/dev");
 	if(IdDir)
 	{
-	    dirent *scan_dirent;
-	    while((scan_dirent=readdir(IdDir)) != NULL)
+	    dirent scan_dirent, *scan_rez = NULL;
+	    while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
 	    {
-		string nFile = string("/dev/")+scan_dirent->d_name;
-		if(!strcmp("..",scan_dirent->d_name) || !strcmp(".",scan_dirent->d_name) ||
-		    strncmp("comedi",scan_dirent->d_name,6) || access(nFile.c_str(),F_OK|R_OK) != 0) continue;
+		string nFile = string("/dev/")+scan_rez->d_name;
+		if(!strcmp("..",scan_rez->d_name) || !strcmp(".",scan_rez->d_name) ||
+		    strncmp("comedi",scan_rez->d_name,6) || access(nFile.c_str(),F_OK|R_OK) != 0) continue;
 		opt->childAdd("el")->setText(nFile);
 	    }
 	    closedir(IdDir);

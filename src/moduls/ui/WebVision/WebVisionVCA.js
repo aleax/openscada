@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: VCA.js
 /***************************************************************************
- *   Copyright (C) 2007-2009 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2013 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,18 +30,18 @@ var isKonq = navigator.userAgent.indexOf('Konqueror') != -1;
  ***************************************************/
 function strEncode( vl, tp )
 {
-  var encRez = '';
-  if(!tp || tp == "html")
-    for(var i_enc = 0; i_enc < vl.length; i_enc++)
-      switch(vl.charAt(i_enc))
-      {
-        case '&': encRez += '&amp;'; break;
-        case '>': encRez += '&gt;'; break;
-        case '<': encRez += '&lt;'; break;
-        case '"': encRez += '&quot;'; break;
-        default:  encRez += vl.charAt(i_enc);
-      }
-  return encRez;
+    var encRez = '';
+    if(!tp || tp == "html")
+	for(var i_enc = 0; i_enc < vl.length; i_enc++)
+	    switch(vl.charAt(i_enc))
+	    {
+		case '&': encRez += '&amp;'; break;
+		case '>': encRez += '&gt;'; break;
+		case '<': encRez += '&lt;'; break;
+		case '"': encRez += '&quot;'; break;
+		default:  encRez += vl.charAt(i_enc);
+	    }
+    return encRez;
 }
 
 /***************************************************
@@ -50,20 +50,20 @@ function strEncode( vl, tp )
 pathLev.off = 0;
 function pathLev( path, level, scan )
 {
-  var an_dir = scan ? pathLev.off : 0;
-  var t_lev = 0;
-  var t_dir;
-  while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
-  if(an_dir >= path.length) return '';
-  while(true)
-  {
-    t_dir = path.indexOf('/',an_dir);
-    if( t_dir < 0 ) { pathLev.off=path.length; return (t_lev==level)?path.substr(an_dir):''; }
-    if( t_lev==level ) { pathLev.off=t_dir; return path.substr(an_dir,t_dir-an_dir); }
-    an_dir = t_dir;
-    t_lev++;
-    while( an_dir<path.length && path.charAt(an_dir)=='/' ) an_dir++;
-  }
+    var an_dir = scan ? pathLev.off : 0;
+    var t_lev = 0;
+    var t_dir;
+    while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
+    if(an_dir >= path.length) return '';
+    while(true)
+    {
+	t_dir = path.indexOf('/',an_dir);
+	if(t_dir < 0)		{ pathLev.off = path.length; return (t_lev==level)?path.substr(an_dir):''; }
+	if(t_lev == level)	{ pathLev.off = t_dir; return path.substr(an_dir,t_dir-an_dir); }
+	an_dir = t_dir;
+	t_lev++;
+	while(an_dir<path.length && path.charAt(an_dir)=='/') an_dir++;
+    }
 }
 /***************************************************
  * noSpace - Get no space string                   *
@@ -306,11 +306,11 @@ function getFont( fStr, fSc, inPt )
 /***************************************************
  * getColor - Parse color                          *
  ***************************************************/
-function getColor( cStr )
+function getColor( cStr, getOpacity )
 {
-  var fPos = cStr.indexOf('-');
-  if( fPos >= 0 ) return cStr.slice(0,fPos);
-  return cStr;
+    var fPos = cStr.indexOf('-');
+    if(getOpacity) return (fPos >= 0) ? parseFloat(cStr.slice(fPos+1))/255 : 1;
+    return (fPos >= 0) ? cStr.slice(0,fPos) : cStr;
 }
 /*****************************************************
  * chkPattern - Check for allow expression to pattern *
@@ -786,7 +786,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
   }
   else if( this.attrs['root'] == 'Media' )
   {
-    if(this.attrs['backColor']) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+    if(this.attrs['backColor'])	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
     if(this.attrs['backImg'])
       elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
@@ -1304,8 +1304,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
   }
   else if( this.attrs['root'] == 'Diagram' )
   {
-    if( this.attrs['backColor'] ) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
-    if( this.attrs['backImg'] )   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+    if(this.attrs['backColor']) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
+    if(this.attrs['backImg'])   elStyle+='background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle+='border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
     if( this.attrs['bordColor'] ) elStyle+='border-color: '+getColor(this.attrs['bordColor'])+'; ';
     var anchObj = this.place.childNodes[0];

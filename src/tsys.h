@@ -165,7 +165,7 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	time_t sysTm( )		{ return mSysTm; }	//> System time fast access, from updated cell
+	time_t sysTm( ) volatile	{ return mSysTm; }	//> System time fast access, from updated cell
 	static int64_t curTime( );	//> Current system time (usec)
 
 	//> Tasks control
@@ -212,7 +212,7 @@ class TSYS : public TCntrNode
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
 	static string strLine( const string &str, int level, int *off = NULL );
-	static string pathLev( const string &path, int level, bool encode = true, int *off = NULL );
+	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
 	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
@@ -352,7 +352,7 @@ class TSYS : public TCntrNode
 
 	bool	mMultCPU;
 	uint64_t mSysclc;
-	time_t	mSysTm;
+	volatile time_t	mSysTm;
 
 	map<string,double>	mCntrs;
 };

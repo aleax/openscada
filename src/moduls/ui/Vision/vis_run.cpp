@@ -916,14 +916,7 @@ void VisRun::exportDoc( const string &idoc )
 	    }
 	}
 	//>> Export to XHTML
-	else rez = "<?xml version='1.0' ?>\n"
-		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-		"'DTD/xhtml1-transitional.dtd'>\n"
-		"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-		"<head>\n"
-		"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-		"  <style type='text/css'>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->style+"</style>\n"
-		"</head>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->doc+"</html>";
+	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
 
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
 	else ::write(fd,rez.data(),rez.size());
