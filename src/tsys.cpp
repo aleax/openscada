@@ -538,6 +538,10 @@ void TSYS::save_( )
 
 int TSYS::start( )
 {
+    //> High priority service task creation
+    taskCreate("SYS_HighPr", 20, TSYS::HPrTask, this);
+
+    //> Subsystems starting
     vector<string> lst;
     list(lst);
 
@@ -551,9 +555,6 @@ int TSYS::start( )
 	}
 
     cfgFileScan(true);
-
-    //> High priority service task creation
-    taskCreate("SYS_HighPr", 20, TSYS::HPrTask, this);
 
     mess_info(nodePath().c_str(),_("Final starting!"));
 

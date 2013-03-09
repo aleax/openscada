@@ -1,3 +1,8 @@
+2013-03-09 Roman
+- SYS: "SYS_HighPr" task creation late, after subsystems start, is fixed.
+    The problem detected on high-loaded systems on start by messages "Timeouted function calculation ...".
+
+
 2013-03-08 Roman
 - SYS.{TCntrNode,WorkDir,IcoDir,ModDir},Archive.FSArch:
     Function ctrListFS() is added and used for directories and files (further) browsing into configure items allow.
