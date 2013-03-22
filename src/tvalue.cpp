@@ -953,7 +953,7 @@ void TVal::cntrCmdProc( XMLNode *opt )
     //> Service commands process
     if(a_path == "/serv/val")		//Values access
     {
-	if(ctrChkNode(opt,"info",RWRWRW,"root",SDAQ_ID,SEC_RD) )	//Value's data information
+	if(ctrChkNode(opt,"info",RWRWRW,"root",SDAQ_ID,SEC_RD))		//Value's data information
 	{
 	    if(!arch().freeStat()) arch().at().cntrCmdProc(opt);
 	    else
@@ -974,7 +974,15 @@ void TVal::cntrCmdProc( XMLNode *opt )
 	    else throw TError(nodePath().c_str(),_("Attribute doesn't have archive"));
 	}
 	else if(ctrChkNode(opt,"name",RWRWRW,"root",SDAQ_ID,SEC_RD))     //Archive name request
-            opt->setText(owner().vlPresent("NAME") ? owner().vlAt("NAME").at().getS()+"."+name():string(""));
+	{
+	    if(owner().vlPresent("NAME") && owner().vlAt("NAME").at().getS().size())
+		opt->setText(owner().vlAt("NAME").at().getS()+"."+fld().descr());
+	    /*else if(owner().vlPresent("SHIFR") && owner().vlAt("SHIFR").at().getS().size())
+		opt->setText(owner().vlAt("SHIFR").at().getS()+"."+fld().descr());
+	    else if(owner().vlPresent("ID") && owner().vlAt("ID").at().getS().size())
+		opt->setText(owner().vlAt("ID").at().getS()+"."+fld().descr());*/
+	    else fld().descr();
+	}
 	return;
     }
 

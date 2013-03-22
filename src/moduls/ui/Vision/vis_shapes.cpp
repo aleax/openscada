@@ -358,7 +358,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		}
 		//> View
 		LineEdit::LType tp = LineEdit::Text;
-		switch( shD->view )
+		switch(shD->view)
 		{
 		    case 0: tp = LineEdit::Text;	break;
 		    case 1: tp = LineEdit::Combo;	break;
@@ -862,30 +862,34 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
     }
 
     //> Text reformation
-    if( reform && !w->allAttrLoad() )
+    if(reform && !w->allAttrLoad())
     {
 	QString text = shD->text_tmpl.c_str();
 	for(unsigned i_a = 0; i_a < shD->args.size(); i_a++)
 	{
-	    switch( shD->args[i_a].val().type())
+	    switch(shD->args[i_a].val().type())
 	    {
-		case QVariant::String: text = text.arg(shD->args[i_a].val().toString(),atoi(shD->args[i_a].cfg().c_str())); break;
+		case QVariant::String:
+		    text = text.arg(shD->args[i_a].val().toString(), vmax(-1000,vmin(1000,atoi(shD->args[i_a].cfg().c_str()))));
+		    break;
 		case QVariant::Double:
 		{
 		    int off = 0;
 		    int wdth = atoi(TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off).c_str());
 		    string form = TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off);
 		    int prec = atoi(TSYS::strSepParse(shD->args[i_a].cfg(),0,';',&off).c_str());
-		    text = text.arg(shD->args[i_a].val().toDouble(),wdth,form.empty()?0:form[0],prec,' ');
+		    text = text.arg(shD->args[i_a].val().toDouble(),vmax(-1000,vmin(1000,wdth)),form.empty()?0:form[0],vmax(0,prec),' ');
 		    break;
 		}
-		default: text = text.arg(shD->args[i_a].val().toInt(),atoi(shD->args[i_a].cfg().c_str())); break;
+		default:
+		    text = text.arg(shD->args[i_a].val().toInt(), vmax(-1000,vmin(1000,atoi(shD->args[i_a].cfg().c_str()))));
+		    break;
 	    }
 	}
-	if( text != shD->text.c_str() )	{ shD->text = text.toAscii().data(); up = true; }
+	if(text != shD->text.c_str())	{ shD->text = text.toAscii().data(); up = true; }
     }
 
-    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 ) w->update();
+    if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
 
     return up;
 }

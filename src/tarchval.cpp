@@ -984,6 +984,7 @@ AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
     if(!force && ipath.empty() && !pattr_src.freeStat()) return pattr_src;
     string srcPath = ipath.empty() ? srcData() : ipath;
     AutoHD<TVal> attr;
+    if(srcMode() == TVArchive::Passive)	return attr;
     try
     {
 	if(TSYS::strParse(srcPath,0,".") == "sub_DAQ" || TSYS::strParse(srcPath,0,".") == "DAQ")

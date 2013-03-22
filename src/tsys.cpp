@@ -208,6 +208,7 @@ string TSYS::ll2str( int64_t val, IntView view )
 string TSYS::real2str( double val, int prec, char tp )
 {
     char buf[STR_BUF_LEN];
+    prec = vmax(0,prec);
     if(tp == 'g') snprintf(buf,sizeof(buf),"%.*g",prec,val);
     else if(tp == 'e') snprintf(buf,sizeof(buf),"%.*e",prec,val);
     else snprintf(buf,sizeof(buf),"%.*f",prec,val);
@@ -1368,7 +1369,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM)
 	{
-	    mess_warning(nodePath().c_str(),_("No permission for create real-time policy. Default thread is created!"));
+	    mess_warning(nodePath().c_str(), _("No permission for create real-time policy for '%s'. Default thread is created!"), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;

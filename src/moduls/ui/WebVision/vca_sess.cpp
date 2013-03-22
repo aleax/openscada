@@ -5212,14 +5212,12 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
     {
 	string txt = text_tmpl.c_str();
 	string argVal;
-	//- Placing the arguments to the text -
+	//> Placing the arguments to the text
 	for(unsigned i_a = 0; i_a < args.size(); i_a++)
 	{
-	    switch( args[i_a].type())
+	    switch(args[i_a].type())
 	    {
-		case 0: case 2:
-		    argVal = args[i_a].val();
-		    break;
+		case 0: case 2:	argVal = args[i_a].val();	break;
 		case 1:
 		{
 		    string atp = TSYS::strSepParse(args[i_a].cfg(),1,';');
@@ -5229,20 +5227,21 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 		}
 	    }
 	    int argSize = atoi(TSYS::strSepParse(args[i_a].cfg(),0,';').c_str());
+	    argSize = vmax(-1000,vmin(1000,argSize));
 	    string argPad = "";
-	    for( int j = argVal.length(); j < VCAElFigure::ABS(argSize); j++ ) argPad+=' ';
-	    if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;
+	    for(int j = argVal.length(); j < VCAElFigure::ABS(argSize); j++) argPad += ' ';
+	    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 	    string rep = "%"+TSYS::int2str(i_a+1);
 	    size_t fnd = txt.find(rep);
-	    if( fnd != string::npos )
-	    do
-	    {
-		txt.replace( fnd, rep.length(), argVal );
-		fnd = txt.find(rep);
-	    }
-	    while( fnd != string::npos );
+	    if(fnd != string::npos)
+		do
+		{
+		    txt.replace(fnd, rep.length(), argVal);
+		    fnd = txt.find(rep);
+		}
+		while(fnd != string::npos);
 	}
-	if( txt != text.c_str() ) text = txt;
+	if(txt != text.c_str()) text = txt;
     }
 }
 

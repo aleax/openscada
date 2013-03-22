@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 17:20+0200\n"
+"POT-Creation-Date: 2013-03-19 21:47+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -698,12 +698,6 @@ msgstr "Element '%s' Warnung! %s"
 #, c-format
 msgid "Node: %s"
 msgstr "Knoten: %s"
-
-msgid "*.*.[TableName]"
-msgstr "*.*.[Tabellenname]"
-
-msgid "<cfg>.[TableName]"
-msgstr "<cfg>.[Tabellenname]"
 
 msgid "[TableName]"
 msgstr "[Tabellenname]"
@@ -1746,9 +1740,11 @@ msgstr "Warte auf Ereignis..."
 msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
-msgid "No permission for create real-time policy. Default thread is created!"
+msgid ""
+"No permission for create real-time policy for '%s'. Default thread is "
+"created!"
 msgstr ""
-"Kein Zugang für das Schaffen der Realzeitpolitik. Der Strom ist geschaffen "
+"Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist geschaffen "
 "default!"
 
 #, c-format
@@ -2247,3 +2243,9 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
+
+#~ msgid "*.*.[TableName]"
+#~ msgstr "*.*.[Tabellenname]"
+
+#~ msgid "<cfg>.[TableName]"
+#~ msgstr "<cfg>.[Tabellenname]"

@@ -1428,7 +1428,7 @@ void *TMdContr::Task( void *icntr )
 	cntr.nodeRes().resRequestR( );
 	//> Process write data blocks
 	if(cntr.assincWrite())
-	    for(unsigned i_b = 0; i_b < cntr.writeBlks.size(); i_b++)
+	    for(unsigned i_b = 0; !cntr.endrun_req && i_b < cntr.writeBlks.size(); i_b++)
 		try
 		{
 		    if(cntr.redntUse()) { cntr.writeBlks[i_b].err = _("-1:No data"); continue; }
@@ -1438,7 +1438,7 @@ void *TMdContr::Task( void *icntr )
 		}
 		catch(TError err) { cntr.writeBlks[i_b].err = err.mess; }
 	//> Process acquisition data blocks
-	for(unsigned i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
+	for(unsigned i_b = 0; !cntr.endrun_req && i_b < cntr.acqBlks.size(); i_b++)
 	    try
 	    {
 		if(cntr.redntUse()) { cntr.acqBlks[i_b].err = _("-1:No data"); continue; }

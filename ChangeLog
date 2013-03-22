@@ -1,3 +1,11 @@
+2013-03-22 Roman
+- SYS.Value: Attribute print name is set to container name and the attribute description.
+    For empty name used only the attribute description.
+- FIX:SYS,UI.{Vision,WebVision}: Precision boundary for real to string converting is set to > 0. Padding boundary is set to (-1000;1000).
+- FIX:Archive: Access to source for "Passive" mode is disabled.
+- DAQ.Siemens: Try requests for different DB disabled on the task endrun.
+
+
 2013-03-09 Roman
 - SYS: "SYS_HighPr" task creation late, after subsystems start, is fixed.
     The problem detected on high-loaded systems on start by messages "Timeouted function calculation ...".

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 17:20+0200\n"
+"POT-Creation-Date: 2013-03-19 21:47+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -685,12 +685,6 @@ msgstr "Попередження елементу '%s'! %s"
 #, c-format
 msgid "Node: %s"
 msgstr "Вузол: %s"
-
-msgid "*.*.[TableName]"
-msgstr "*.*.[Ім'яТаблиці]"
-
-msgid "<cfg>.[TableName]"
-msgstr "<cfg>.[Ім'яТаблиці]"
 
 msgid "[TableName]"
 msgstr "[Ім'яТаблиці]"
@@ -1729,9 +1723,11 @@ msgstr "Очікування повідомлення..."
 msgid "Task '%s' is already present!"
 msgstr "Завдання '%s' вже присутнє!"
 
-msgid "No permission for create real-time policy. Default thread is created!"
+msgid ""
+"No permission for create real-time policy for '%s'. Default thread is "
+"created!"
 msgstr ""
-"Немає доступу для створення політики реального часу. Створено звичайну нитку!"
+"Немає доступу для створення політики реального часу для '%s'. Створено звичайну нитку!"
 
 #, c-format
 msgid "Task creation error %d."
@@ -2229,3 +2225,9 @@ msgstr "Вхідні транспорти не підтримуються!"
 
 msgid "Output transport no support!"
 msgstr "Вихідні транспорти не підтримуються!"
+
+#~ msgid "*.*.[TableName]"
+#~ msgstr "*.*.[Ім'яТаблиці]"
+
+#~ msgid "<cfg>.[TableName]"
+#~ msgstr "<cfg>.[Ім'яТаблиці]"

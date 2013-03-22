@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-01 17:20+0200\n"
+"POT-Creation-Date: 2013-03-19 21:47+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -686,12 +686,6 @@ msgstr "Предупреждение по элементу '%s'! %s"
 #, c-format
 msgid "Node: %s"
 msgstr "Узел: %s"
-
-msgid "*.*.[TableName]"
-msgstr "*.*.[ИмяТаблицы]"
-
-msgid "<cfg>.[TableName]"
-msgstr "<cfg>.[ИмяТаблицы]"
 
 msgid "[TableName]"
 msgstr "[ИмяТаблицы]"
@@ -1732,9 +1726,11 @@ msgstr "Ожидание события..."
 msgid "Task '%s' is already present!"
 msgstr "Задача '%s' уже присутствует!"
 
-msgid "No permission for create real-time policy. Default thread is created!"
+msgid ""
+"No permission for create real-time policy for '%s'. Default thread is "
+"created!"
 msgstr ""
-"Нет доступа для создания политики реального времени. Создан поток по "
+"Нет доступа для создания политики реального времени для '%s'. Создан поток по "
 "умолчанию!"
 
 #, c-format
@@ -2233,3 +2229,9 @@ msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport no support!"
 msgstr "Выходных транспорт не поддерживается!"
+
+#~ msgid "*.*.[TableName]"
+#~ msgstr "*.*.[ИмяТаблицы]"
+
+#~ msgid "<cfg>.[TableName]"
+#~ msgstr "<cfg>.[ИмяТаблицы]"

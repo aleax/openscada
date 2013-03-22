@@ -745,33 +745,33 @@ function makeEl( pgBr, inclPg, full, FullTree )
       spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
       spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
       var txtVal = this.attrs['text'];
-      for( var i = 0; i < parseInt(this.attrs['numbArg']); i++ )
+      for(var i = 0; i < parseInt(this.attrs['numbArg']); i++)
       {
 	var argVal;
 	var argCfg = new Array();
 	switch(parseInt(this.attrs['arg'+i+'tp']))
 	{
 	  case 0: case 2:
-	    argCfg[0]=this.attrs['arg'+i+'cfg'];
-	    argVal=this.attrs['arg'+i+'val'];
+	    argCfg[0] = this.attrs['arg'+i+'cfg'];
+	    argVal = this.attrs['arg'+i+'val'];
 	    break;
 	  case 1:
-	    argCfg=this.attrs['arg'+i+'cfg'].split(';');
-	    if( argCfg[1] == 'g' )      argVal=parseFloat(this.attrs['arg'+i+'val']).toPrecision(argCfg[2]);
-	    else if( argCfg[1] == 'e' ) argVal=parseFloat(this.attrs['arg'+i+'val']).toExponential(argCfg[2]);
-	    else if( argCfg[1] == 'f' ) argVal=parseFloat(this.attrs['arg'+i+'val']).toFixed(argCfg[2]);
-	    else argVal=this.attrs['arg'+i+'val'];
+	    argCfg = this.attrs['arg'+i+'cfg'].split(';');
+	    if(argCfg[1] == 'g')      argVal = parseFloat(this.attrs['arg'+i+'val']).toPrecision(Math.max(0,argCfg[2]));
+	    else if(argCfg[1] == 'e') argVal = parseFloat(this.attrs['arg'+i+'val']).toExponential(Math.max(0,argCfg[2]));
+	    else if(argCfg[1] == 'f') argVal = parseFloat(this.attrs['arg'+i+'val']).toFixed(Math.max(0,argCfg[2]));
+	    else argVal = this.attrs['arg'+i+'val'];
 	    break;
         }
-        var argSize = parseInt(argCfg[0]);
+        var argSize = Math.max(-1000,Math.min(1000,parseInt(argCfg[0])));
         var argPad = '';
-        for( var j = argVal.length; j < Math.abs(argSize); j++ ) argPad+='&nbsp;';
-        if( argSize > 0 ) argVal=argPad+argVal; else argVal+=argPad;
+        for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += '&nbsp;';
+        if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
         txtVal = txtVal.replace('%'+(i+1),argVal);
       }
       var txtVal1 = '';
-      for( var j = 0; j < txtVal.length; j++ )
-        if( txtVal[j] == '\n' ) txtVal1+='<br />'; else txtVal1+=txtVal[j];
+      for(var j = 0; j < txtVal.length; j++)
+        if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
 //    txtVal.replace(/\n/g,'<br />');
 //    while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
       this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
