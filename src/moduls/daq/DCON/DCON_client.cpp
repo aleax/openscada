@@ -102,7 +102,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6","0","0;100"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    fldAdd(new TFld("ADDR",_("Serial transport"),TFld::String,TFld::NoFlag,"30",""));
+    fldAdd(new TFld("ADDR",_("Serial transport"),TFld::String,TFld::NoFlag,"41",""));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
 
     //> Parameter type bd structure
@@ -156,7 +156,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     TController(name_c, daq_db, cfgelem),
-    mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
+    mAddr(cfg("ADDR")), mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
     prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_gath(0)
 {
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
@@ -210,7 +210,13 @@ void TMdContr::start_( )
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
 
-    SYS->transport().at().at("Serial").at().outAt(cfg("ADDR").getS()).at().start();
+    //> Fix old address format
+    if(addr().size() && TSYS::strParse(addr(),1,".").empty())	mAddr = "Serial."+addr();
+
+    //> Establish connection
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
+    try { tr.at().start(); }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -255,7 +261,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 
     try
     {
-	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(cfg("ADDR").getS());
+	AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
 	if(!tr.at().startStat()) tr.at().start();
 	if(CRC) pdu += DCONCRC(pdu);
 	if(messLev() == 0) mess_debug(nodePath().c_str(), _("REQ -> '%s'"), pdu.c_str());
@@ -699,8 +705,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-	    "tp","str","dest","select","select","/cntr/cfg/serDevLst");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",mAddr.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "tp","str","dest","select","select","/cntr/cfg/trLst");
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
         ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
@@ -709,13 +715,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/serDevLst" && ctrChkNode(opt))
+    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
     {
-	vector<string> sls;
-	if(SYS->transport().at().modPresent("Serial"))
-	    SYS->transport().at().at("Serial").at().outList(sls);
-	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
-	    opt->childAdd("el")->setText(sls[i_s]);
+        vector<string> sls;
+        SYS->transport().at().outTrList(sls);
+        for(unsigned i_s = 0; i_s < sls.size(); i_s++)
+            opt->childAdd("el")->setText(sls[i_s]);
     }
     else TController::cntrCmdProc(opt);
 }

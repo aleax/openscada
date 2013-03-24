@@ -790,7 +790,7 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
     return true;
 }
 
-void TCntrNode::ctrListFS( XMLNode *nd, const string &fsBaseIn )
+void TCntrNode::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
 {
     int pathLev = 0;
     //> Source path check and normalize
@@ -814,21 +814,31 @@ void TCntrNode::ctrListFS( XMLNode *nd, const string &fsBaseIn )
     string fsBaseCor = fsBase;
     if(!fsBaseCor.size() || (fsBaseCor[0] != '/' && fsBaseCor[0] != '.')) fsBaseCor = "./"+fsBaseCor;
     //> Child items process
-    vector<string> its;
+    vector<string> its, fits;
     DIR *IdDir = opendir(fsBaseCor.c_str());
     if(IdDir != NULL)
     {
 	dirent sDir, *sDirRez = NULL;
 	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
 	{
-	    if(sDirRez->d_type != DT_DIR || strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
-	    its.push_back(sDirRez->d_name);
+	    if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
+	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK) its.push_back(sDirRez->d_name);
+	    else if(sDirRez->d_type == DT_REG && fileExt.size())
+	    {
+		tEl = sDirRez->d_name;
+		size_t extPos = tEl.rfind(".");
+		tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
+		if(fileExt == "*" || (tEl.size() && fileExt.find(tEl+";") != string::npos)) fits.push_back(sDirRez->d_name);
+	    }
 	}
 	closedir(IdDir);
     }
     sort(its.begin(),its.end());
     for(unsigned i_it = 0; i_it < its.size(); i_it++)
 	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
+    sort(fits.begin(),fits.end());
+    for(unsigned i_it = 0; i_it < fits.size(); i_it++)
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
 }
 
 void TCntrNode::cntrCmdProc( XMLNode *opt )

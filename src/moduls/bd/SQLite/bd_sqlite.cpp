@@ -263,7 +263,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,4,
+	    "tp","str","dest","sel_ed","select","/prm/cfg/dbFsList","help",
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
@@ -275,8 +276,12 @@ void MBD::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt)
-	transCommit();
+    if(a_path == "/prm/cfg/dbFsList" && ctrChkNode(opt))
+    {
+	opt->childAdd("el")->setText(":memory:");
+	TSYS::ctrListFS(opt, addr(), "db;");
+    }
+    else if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt) transCommit();
     else TBD::cntrCmdProc(opt);
 }
 

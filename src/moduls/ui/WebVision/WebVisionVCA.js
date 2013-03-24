@@ -142,13 +142,15 @@ function posGetY(obj,noWScrl)
  ***************************************************/
 function getXmlHttp( )
 {
-  if( window.XMLHttpRequest ) return new XMLHttpRequest();
-  else if( window.ActiveXObject )
-  {
-    try { return new ActiveXObject('Msxml2.XMLHTTP'); }
-    catch(e) { return new ActiveXObject('Microsoft.XMLHTTP'); }
-  }
-  return null;
+    if(httpReqObj) { delete httpReqObj; httpReqObj = null; }
+
+    if(window.XMLHttpRequest) httpReqObj = new XMLHttpRequest();
+    else if(window.ActiveXObject)
+    {
+	try { httpReqObj = new ActiveXObject('Msxml2.XMLHTTP'); }
+	catch(e) { httpReqObj = new ActiveXObject('Microsoft.XMLHTTP'); }
+    }
+    return httpReqObj;
 }
 /***************************************************
  * realRound - Real numbers round                  *
@@ -317,38 +319,43 @@ function getColor( cStr, getOpacity )
  *****************************************************/
 function chkPattern( val, patt )
 {
-  //> Check by regular expression
-  if(patt.length > 2 && patt.charAt(0) == '/' && patt.charAt(patt.length-1) == '/')
-    return (new RegExp(patt.slice(1,patt.length-1),'')).test(val);
-
-  //> Check by simple pattern
-  var mult_s = false;
-  var v_cnt = 0, p_cnt = 0;
-  var v_bck = -1, p_bck = -1;
-
-  while(true)
-  {
-    if( p_cnt >= patt.length )	return true;
-    if( patt.charAt(p_cnt) == '?' )	{ v_cnt++; p_cnt++; mult_s = false; continue; }
-    if( patt.charAt(p_cnt) == '*' )	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
-    if( patt.charAt(p_cnt) == '\\' )	p_cnt++;
-    if( v_cnt >= val.length )	break;
-    if( patt.charAt(p_cnt) == val.charAt(v_cnt) )
+    //> Check by regular expression
+    if(patt.length > 2 && patt.charAt(0) == '/' && patt.charAt(patt.length-1) == '/')
     {
-      if( mult_s && v_bck < 0 )	{ v_bck = v_cnt+1; p_bck = p_cnt; }
-      v_cnt++; p_cnt++;
+	var re = new RegExp(patt.slice(1,patt.length-1),'');
+	var reRez = re.test(val);
+	delete re;
+	return reRez;
     }
-    else
+
+    //> Check by simple pattern
+    var mult_s = false;
+    var v_cnt = 0, p_cnt = 0;
+    var v_bck = -1, p_bck = -1;
+
+    while(true)
     {
-      if( mult_s )
-      {
-	if( v_bck >= 0 ) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
-	else v_cnt++;
-      }
-      else break;
+	if(p_cnt >= patt.length)	return true;
+	if(patt.charAt(p_cnt) == '?')	{ v_cnt++; p_cnt++; mult_s = false; continue; }
+	if(patt.charAt(p_cnt) == '*')	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
+	if(patt.charAt(p_cnt) == '\\')	p_cnt++;
+	if(v_cnt >= val.length)	break;
+	if(patt.charAt(p_cnt) == val.charAt(v_cnt))
+	{
+	    if(mult_s && v_bck < 0)	{ v_bck = v_cnt+1; p_bck = p_cnt; }
+	    v_cnt++; p_cnt++;
+	}
+	else
+	{
+	    if(mult_s)
+	    {
+		if(v_bck >= 0) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
+		else v_cnt++;
+	    }
+	    else break;
+	}
     }
-  }
-  return false;
+    return false;
 }
 
 /***************************************************
@@ -356,12 +363,13 @@ function chkPattern( val, patt )
  ***************************************************/
 function setFocus( wdg, onlyClr )
 {
-  if( masterPage.focusWdf && masterPage.focusWdf == wdg ) return;
-  var attrs = new Object();
-  if( masterPage.focusWdf ) { attrs.focus = '0'; attrs.event = 'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }
-  masterPage.focusWdf = wdg;
-  if( onlyClr ) return;
-  attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs);
+    if(masterPage.focusWdf && masterPage.focusWdf == wdg) return;
+    var attrs = new Object();
+    if(masterPage.focusWdf) { attrs.focus = '0'; attrs.event = 'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }
+    masterPage.focusWdf = wdg;
+    if(onlyClr) return;
+    attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs);
+    delete attrs;
 }
 
 /**********************************************************
@@ -389,7 +397,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
     if(this.addr.length)
     {
 	servSet(this.addr,'com=pgClose','');
-	document.body.removeChild(this.window);
+	delete document.body.removeChild(this.window);
     }
     this.addr  = pgId;
     this.place = document.createElement('div');
@@ -481,7 +489,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	closeWin.appendChild(document.createTextNode('X'));
 	closeWin.setAttribute('style','color: red; cursor: pointer;');
 	closeWin.onclick = function()
-	{ servSet(this.iPg.addr,'com=pgClose',''); document.getElementById('mainCntr').removeChild(this.iPg.window); delete this.iPg.parent.pages[this.iPg.addr]; }
+	{ servSet(this.iPg.addr,'com=pgClose',''); delete document.getElementById('mainCntr').removeChild(this.iPg.window); delete this.iPg.parent.pages[this.iPg.addr]; }
 	closeWin.iPg = iPg;
 	wRow = document.createElement('tr');
 	iPg.window.appendChild(wRow);
@@ -599,8 +607,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
   geomW -= 2*(elMargin+elBorder);
   geomH -= 2*(elMargin+elBorder);
 
-  this.mousedown = new Array();
-  this.mouseup = new Array();
+    for(var i_f = 0; i_f < this.mousedown.length; i_f++) delete this.mousedown[i_f];
+    this.mousedown.length = 0;
+    for(var i_f = 0; i_f < this.mouseup.length; i_f++) delete this.mouseup[i_f];
+    this.mouseup.length = 0;
 
   //> Set included window geometry to widget size
 //  if( this == masterPage ) resizeTo(geomW,geomH);
@@ -687,7 +697,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	servSet(this.inclOpen,'com=pgClose','');
 	pgCache[this.inclOpen] = this.pages[this.inclOpen];
 	pgCache[this.inclOpen].reqTm = tmCnt;
-	this.place.removeChild(this.pages[this.inclOpen].place);
+	delete this.place.removeChild(this.pages[this.inclOpen].place);
 	this.pages[this.inclOpen].perUpdtEn(false);
 	delete this.pages[this.inclOpen];
 	this.inclOpen = null;
@@ -768,12 +778,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
         for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += '&nbsp;';
         if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
         txtVal = txtVal.replace('%'+(i+1),argVal);
+        delete argCfg;
       }
       var txtVal1 = '';
       for(var j = 0; j < txtVal.length; j++)
         if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
 //    txtVal.replace(/\n/g,'<br />');
-//    while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+//    while(this.place.childNodes.length) delete this.place.removeChild(this.place.childNodes[0]);
       this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
     }
     else
@@ -791,7 +802,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
       elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
     elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
     if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-    while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+    while(this.place.childNodes.length) delete this.place.removeChild(this.place.childNodes[0]);
     var medObj = this.place.ownerDocument.createElement('img');
     medObj.wdgLnk = this;
     medObj.src = this.attrs['src'].length ? ('/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src']) : '';
@@ -837,12 +848,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
     }
     else this.place.appendChild(medObj);
   }
-  else if( this.attrs['root'] == 'FormEl' && !this.place.isModify )
+  else if(this.attrs['root'] == 'FormEl' && !this.place.isModify)
   {
     var elTp = parseInt(this.attrs['elType']);
-    while( this.place.childNodes.length ) this.place.removeChild(this.place.childNodes[0]);
+    while(this.place.childNodes.length) delete this.place.removeChild(this.place.childNodes[0]);
     var fontCfg = '';
-    if( this.attrs['font'] )
+    if(this.attrs['font'])
     {
       var allFnt = this.attrs['font'].split(' ');
       if( allFnt.length >= 3 && parseInt(allFnt[2]) ) fontCfg += 'bold ';
@@ -886,7 +897,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		combList.childNodes[0].onblur = function() { this.parentNode.style.visibility = 'hidden'; this.parentNode.style.top = "-100px"; }
 		this.ownerDocument.body.appendChild(combList);
 	      }
-	      while(combList.childNodes[0].childNodes.length) combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
+	      while(combList.childNodes[0].childNodes.length) delete combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
 	      var elLst = formObj.parentNode.cfg.split('\n');
 	      for( var i = 0; i < elLst.length; i++ )
 	      {
@@ -1087,7 +1098,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 		lenS++; i++;
 	      }
-	      return dt.getTime()/1000;
+	      rez = dt.getTime()/1000;
+	      delete dt;
+	      return rez;
 	    case 6:
 	      var cfg = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy hh:mm';
 	      var rez  = this.value;
@@ -1119,7 +1132,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		lenS++; i++;
 	      }
 	      if( this.value.indexOf('pm') >= 0 || this.value.indexOf('PM') >= 0 ) dt.setHours(dt.getHours()+12);
-	      return dt.getTime()/1000;
+	      rez = dt.getTime()/1000;
+	      delete dt;
+	      return rez;
 	  }
 	}
 	formObj.chApply = function( )
@@ -1130,6 +1145,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	  this.setModify(false);
 	  var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';
 	  setWAttrs(this.wdgLnk.addr,attrs);
+	  delete attrs;
 	}
 	formObj.chEscape = function( )
 	{
@@ -1163,7 +1179,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	var okImg = this.place.ownerDocument.createElement('img');
 	okImg.src = '/'+MOD_ID+'/img_button_ok';
 	okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-35)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
-	okImg.onclick = function() { var attrs = new Object(); attrs.value = this.parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept'; setWAttrs(this.parentNode.childNodes[0].wdgLnk.addr,attrs); this.parentNode.childNodes[0].setModify(false); return false; };
+	okImg.onclick = function()
+	{
+	    var attrs = new Object();
+	    attrs.value = this.parentNode.childNodes[0].value;
+	    attrs.event = 'ws_TxtAccept';
+	    setWAttrs(this.parentNode.childNodes[0].wdgLnk.addr,attrs);
+	    this.parentNode.childNodes[0].setModify(false);
+	    delete attrs;
+	    return false;
+	};
 	var cancelImg = this.place.ownerDocument.createElement('img');
 	cancelImg.src = '/'+MOD_ID+'/img_button_cancel';
 	cancelImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-16)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
@@ -1178,7 +1203,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	formObj.type='checkbox'; formObj.checked=parseInt(this.attrs['value']);
 	formObj.wdgLnk = this;
-	formObj.onclick = function( ) { var attrs = new Object(); attrs.value = (this.checked)?'1':'0'; attrs.event = 'ws_ChkChange'; setWAttrs(this.wdgLnk.addr,attrs); return true; }
+	formObj.onclick = function( )
+	{
+	    var attrs = new Object();
+	    attrs.value = this.checked ? '1' : '0';
+	    attrs.event = 'ws_ChkChange';
+	    setWAttrs(this.wdgLnk.addr,attrs);
+	    delete attrs;
+	    return true;
+	}
 	tblCell.appendChild(formObj); tblCell.appendChild(this.place.ownerDocument.createTextNode(this.attrs['name'])); this.place.appendChild(tblCell);
 	break;
       case 3:	//Button
@@ -1221,6 +1254,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	      else { attrs.value = '0'; this.style.borderStyle='outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
 	      setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
 	      setWAttrs(this.wdgLnk.addr,'value',attrs.value);
+	      delete attrs;
 	      return false;
 	    };
 	    this.place.wdgLnk = this;
@@ -1274,12 +1308,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-20)/2:0)+'px; height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: '+(geomW-4)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px; ';
 	formObj.wdgLnk = this;
 //	if( elTp == 5 ) formObj.setAttribute('size',100);
-	if( elTp == 4 )
-	  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange'; setWAttrs(this.wdgLnk.addr,attrs); }
+	if(elTp == 4)
+	    formObj.onchange = function( )
+	    {
+		var attrs = new Object();
+		attrs.value = this.options[this.selectedIndex].value;
+		attrs.event = 'ws_CombChange';
+		setWAttrs(this.wdgLnk.addr,attrs);
+		delete attrs;
+	    }
 	else
 	{
-	  formObj.size = 100;
-	  formObj.onchange = function( ) { var attrs = new Object(); attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange'; setWAttrs(this.wdgLnk.addr,attrs); }
+	    formObj.size = 100;
+	    formObj.onchange = function( )
+	    {
+		var attrs = new Object();
+		attrs.value = this.options[this.selectedIndex].value;
+		attrs.event = 'ws_ListChange';
+		setWAttrs(this.wdgLnk.addr,attrs);
+		delete attrs;
+	    }
 	}
 	var selVal = this.attrs['value'];
 	var elLst = this.attrs['items'].split('\n');
@@ -1370,7 +1418,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	//> Get archive parameters
 	var tTime = parseInt(this.attrs['time']);
-	if(!tTime) tTime = (new Date()).getTime()/1000;
+	if(!tTime) tTime = (new Date()).getTime()/1000;		//!!!!
 	var srcTime = tTime;
 	var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
@@ -1435,7 +1483,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	if( tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
 	{
 	  this.messList = new Array();
-	  while( tblB.childNodes.length > 1 ) tblB.removeChild(tblB.lastChild);
+	  while( tblB.childNodes.length > 1 ) delete tblB.removeChild(tblB.lastChild);
 	  valEnd = valBeg = 0;
 	  return;
 	}
@@ -1563,7 +1611,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	    if( i_m >= (tblB.childNodes.length-1) ) tblB.appendChild(rowEl);
 	}
-	while( (tblB.childNodes.length-1) > sortIts.length ) tblB.removeChild(tblB.lastChild);
+	while( (tblB.childNodes.length-1) > sortIts.length ) delete tblB.removeChild(tblB.lastChild);
       }
     }
 
@@ -1583,8 +1631,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	try
 	{
 	    if(ifrmObj && (!ifrmObj.contentDocument || document.URL != ifrmObj.contentDocument.URL))
-	    { this.place.removeChild(ifrmObj); ifrmObj = null; }
-	}catch(e) { this.place.removeChild(ifrmObj); ifrmObj = null; }
+	    { delete this.place.removeChild(ifrmObj); ifrmObj = null; }
+	}catch(e) { delete this.place.removeChild(ifrmObj); ifrmObj = null; }
 	if(!ifrmObj)
 	{
     	    ifrmObj = this.place.ownerDocument.createElement('iframe');
@@ -1649,7 +1697,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
       }
       return false;
     }
-    if( isKonq || isOpera ) this.mousedown[this.mousedown.length] = ctxEv;
+    if(isKonq || isOpera) this.mousedown[this.mousedown.length] = ctxEv;
     else this.place.oncontextmenu = ctxEv;
   }
   else this.place.oncontextmenu = null;
@@ -1680,7 +1728,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		break;
 	if(j >= pgBr.childNodes.length)
 	{
-	    this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
+	    delete this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
 	    delete this.wdgs[i];
 	}
     }
@@ -1783,9 +1831,9 @@ function yScale( full )
 }
 function isEnabled( )
 {
-  var rez = parseInt(this.attrs['en']);
-  if( !rez || this.pg ) return rez;
-  return this.parent.isEnabled();
+    var rez = parseInt(this.attrs['en']);
+    if(!rez || this.pg) return rez;
+    return this.parent.isEnabled();
 }
 
 /***************************************************
@@ -1812,6 +1860,8 @@ function pwDescr( pgAddr, pg, parent )
   this.yScale = yScale;
   this.isEnabled = isEnabled;
   this.updCntr = 0;
+  this.mousedown = new Array();
+  this.mouseup = new Array();
 }
 /***************************************************
  * makeUI                                          *
@@ -1837,10 +1887,10 @@ function makeUI()
       if(opPg.window)
       {
         if(opPg.windowExt) opPg.window.close();
-        else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
+        else if(opPg != masterPage) delete document.getElementById('mainCntr').removeChild(opPg.window);
 	else
 	{
-	    document.body.removeChild(opPg.window);
+	    delete document.body.removeChild(opPg.window);
 	    delete masterPage;
 	    masterPage = new pwDescr('',true)
 	}
@@ -1938,5 +1988,6 @@ pgCache = new Object();			//Cached pages' data
 perUpdtWdgs = new Object();		//Periodic updated widgets register
 masterPage = new pwDescr('',true);	//Master page create
 stTmID = null;				//Status line timer identifier
+httpReqObj = null;			//HTTP request temporary object
 
 setTimeout(makeUI,1000);		//First call init

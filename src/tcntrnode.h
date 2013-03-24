@@ -116,7 +116,7 @@ class TCntrNode
 	    const char *grp="root", char mode=04, const char *warn = NULL );
 
 	//>> Specific
-	static void ctrListFS( XMLNode *nd, const string &fsBase );
+	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );
 
     protected:
 	//Methods
