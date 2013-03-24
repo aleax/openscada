@@ -1,8 +1,7 @@
 2013-03-24 Roman
+- FIX:UI.WebVision: Mostly JS code clean, direct objects free is added, memory leak fix into this.mousedown and this.mouseup functions' arrays.
 - SYS.TCntrNode,DB.SQLite: To function TCntrNode::ctrListFS() is added files browsing and in some places used.
 - DAQ.DCON: Any other besides "Serial" transports selection is allowed.
-- FIX:UI.WebVision: Some JS code clean, direct objects free is added, memory leak fix try into this.mousedown and this.mouseup
-    functions' arrays.
 
 
 2013-03-22 Roman
