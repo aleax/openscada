@@ -19,7 +19,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-MOD_ID = 'WebVision';
+var MOD_ID = 'WebVision';
 var isNN = navigator.appName.indexOf('Netscape') != -1;
 var isIE = navigator.appName.indexOf('Microsoft') != -1;
 var isOpera = navigator.appName.indexOf('Opera') != -1;
@@ -142,24 +142,22 @@ function posGetY(obj,noWScrl)
  ***************************************************/
 function getXmlHttp( )
 {
-    if(httpReqObj) { delete httpReqObj; httpReqObj = null; }
-
-    if(window.XMLHttpRequest) httpReqObj = new XMLHttpRequest();
+    if(window.XMLHttpRequest) return new XMLHttpRequest();
     else if(window.ActiveXObject)
     {
-	try { httpReqObj = new ActiveXObject('Msxml2.XMLHTTP'); }
-	catch(e) { httpReqObj = new ActiveXObject('Microsoft.XMLHTTP'); }
+	try { return new ActiveXObject('Msxml2.XMLHTTP'); }
+	catch(e) { return new ActiveXObject('Microsoft.XMLHTTP'); }
     }
-    return httpReqObj;
+    return null;
 }
 /***************************************************
  * realRound - Real numbers round                  *
  ***************************************************/
 function realRound( val, dig, toInt )
 {
-    rez = Math.floor(val*Math.pow(10,dig?dig:0)+0.5)/Math.pow(10,dig?dig:0);
-    if(toInt) return Math.floor(rez+0.5);
-    return rez;
+    var rrRez = Math.floor(val*Math.pow(10,dig?dig:0)+0.5)/Math.pow(10,dig?dig:0);
+    if(toInt) return Math.floor(rrRez+0.5);
+    return rrRez;
 }
 /***************************************************
  * evMouseGet - Get mouse key code from event      *
@@ -169,6 +167,7 @@ function evMouseGet( e )
     if(e.which == 1)		return 'Left';
     else if(e.which == 2)	return 'Midle';
     else if(e.which == 3)	return 'Right';
+    return '';
 }
 /***************************************************
  * evKeyGet - Get key code from event              *
@@ -244,16 +243,31 @@ function evKeyGet( e )
 /***************************************************
  * servGet - XML get request to server             *
  ***************************************************/
-function servGet( adr, prm )
+function servGet( adr, prm, callBack )
 {
     var req = getXmlHttp();
-    req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm), false);
+    req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm), callBack ? true : false);
+    if(callBack)
+    {
+	req.callBack = callBack;
+	req.onreadystatechange = function( )
+	{
+	    if(this.readyState != 4) return;
+	    if(this.status == 200 && this.responseXML.childNodes.length)
+		this.callBack(this.responseXML.childNodes[0]);
+	    else this.callBack(-1);
+	};
+	req.send(null);
+	return null;
+    }
     try
     {
 	req.send(null);
 	if(req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
     } catch(e) { window.location = '/'+MOD_ID; }
+
+    return null;
 }
 /***************************************************
  * servSet - XML set request to server             *
@@ -316,7 +330,7 @@ function getFont( fStr, fSc, inPt )
 function getColor( cStr, getOpacity )
 {
     var fPos = cStr.indexOf('-');
-    if(getOpacity) return (fPos >= 0) ? parseFloat(cStr.slice(fPos+1))/255 : 1;
+    if(getOpacity) return (fPos >= 0) ? Math.max(0,Math.min(255,parseFloat(cStr.slice(fPos+1))/255)) : 1;
     return (fPos >= 0) ? cStr.slice(0,fPos) : cStr;
 }
 /*****************************************************
@@ -326,12 +340,7 @@ function chkPattern( val, patt )
 {
     //> Check by regular expression
     if(patt.length > 2 && patt.charAt(0) == '/' && patt.charAt(patt.length-1) == '/')
-    {
-	var re = new RegExp(patt.slice(1,patt.length-1),'');
-	var reRez = re.test(val);
-	delete re;
-	return reRez;
-    }
+	return (new RegExp(patt.slice(1,patt.length-1),'')).test(val);
 
     //> Check by simple pattern
     var mult_s = false;
@@ -372,9 +381,7 @@ function setFocus( wdg, onlyClr )
     var attrs = new Object();
     if(masterPage.focusWdf) { attrs.focus = '0'; attrs.event = 'ws_FocusOut'; setWAttrs(masterPage.focusWdf,attrs); }
     masterPage.focusWdf = wdg;
-    if(onlyClr) return;
-    attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs);
-    delete attrs;
+    if(!onlyClr) { attrs.focus = '1'; attrs.event = 'ws_FocusIn'; setWAttrs(masterPage.focusWdf,attrs); }
 }
 
 /**********************************************************
@@ -402,7 +409,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.addr.length)
 	{
 	    servSet(this.addr,'com=pgClose','');
-	    delete document.body.removeChild(this.window);
+	    document.body.removeChild(this.window);
 	}
 	this.addr  = pgId;
 	this.place = document.createElement('div');
@@ -496,7 +503,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    closeWin.onclick = function()
 	    {
 		servSet(this.iPg.addr,'com=pgClose','');
-		delete document.getElementById('mainCntr').removeChild(this.iPg.window);
+		document.getElementById('mainCntr').removeChild(this.iPg.window);
 		delete this.iPg.parent.pages[this.iPg.addr];
 	    }
 	    closeWin.iPg = iPg;
@@ -572,15 +579,17 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	{
 	    if(pgBr.childNodes[j].nodeName != 'el') continue;
 	    var i = pgBr.childNodes[j].getAttribute('id');
-	    if((i == 'bordWidth' || i == 'geomMargin') && this.attrs[i] != nodeText(pgBr.childNodes[j])) margBrdUpd = true;
+	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != nodeText(pgBr.childNodes[j]))) margBrdUpd = true;
 	    var curAttr = nodeText(pgBr.childNodes[j]);
 	    this.attrsMdf[i] = !this.attrs[i] || this.attrs[i] != curAttr;
 	    this.attrs[i] = curAttr;
 	    newAttr = true;
 	}
     }
+
     if(newAttr || inclPg || !pgBr)
     {
+	var elWr = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
 	var elMargin = parseInt(this.attrs['geomMargin']);
 	var elBorder = 0;
 	if(this.attrs['bordWidth']) elBorder = parseInt(this.attrs['bordWidth']);
@@ -631,7 +640,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    else this.window.resizeTo(geomW+20,geomH+40);
 	}
 
-	if(parseInt(this.attrs['focus'])) setFocus(this.addr,true);
+	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
 
 	if(!(parseInt(this.attrs['perm'])&SEC_RD))
 	{
@@ -643,23 +652,19 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'ElFigure')
 	{
-	    if(this.attrs['backColor']) elStyle+='background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])
-	    elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    var figObj = this.place.childNodes[0];
-	    if(!figObj)
-	    {
-		figObj = this.place.ownerDocument.createElement('img');
-		figObj.border = 0;
-		figObj.wdgLnk = this;
-		this.place.appendChild(figObj);
-	    }
-	    figObj.width = geomW; figObj.height = geomH;
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    var toInit = !this.place.childNodes.length;
+	    var figObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
+	    if(toInit || this.attrsMdf["geomW"]) figObj.width = geomW;
+	    if(toInit || this.attrsMdf["geomH"]) figObj.height = geomH;
+	    //>> Src update always therefore for any changes is shape update
 	    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
-	    if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
+	    if(elWr != this.place.elWr)
 	    {
-		figObj.onclick = function(e)
+		figObj.onclick = !elWr ? '' : function(e)
 		{
 		    if(!e) e = window.event;
 		    servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
@@ -669,7 +674,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						    '&key='+evMouseGet(e),'');
 		    return false;
     		}
-    		figObj.ondblclick = function(e)
+    		figObj.ondblclick = !elWr ? '' : function(e)
     		{
 		    if(!e) e = window.event;
 		    servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
@@ -679,25 +684,34 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						    '&key=DblClick','');
 		}
 	    }
-	    else { figObj.onclick = ''; figObj.ondblclick = ''; }
+
+	    if(toInit)
+	    {
+		figObj.border = 0;
+		figObj.wdgLnk = this;
+		this.place.appendChild(figObj);
+		//> Disable drag mostly for FireFox
+		figObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
+	    }
 	}
-	else if( this.attrs['root'] == 'Box' )
+	else if(this.attrs['root'] == 'Box')
 	{
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
-	    if(this.attrs['backColor']) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg'])   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    switch(parseInt(this.attrs['bordStyle']))
 	    {
-		case 1: elStyle+='border-style: dotted; '; break;
-		case 2: elStyle+='border-style: dashed; '; break;
-		case 3: elStyle+='border-style: solid; ';  break;
-		case 4: elStyle+='border-style: double; '; break;
-		case 5: elStyle+='border-style: groove; '; break;
-		case 6: elStyle+='border-style: ridge; ';  break;
-		case 7: elStyle+='border-style: inset; ';  break;
-		case 8: elStyle+='border-style: outset; '; break;
+		case 1: elStyle += 'border-style: dotted; '; break;
+		case 2: elStyle += 'border-style: dashed; '; break;
+		case 3: elStyle += 'border-style: solid; ';  break;
+		case 4: elStyle += 'border-style: double; '; break;
+		case 5: elStyle += 'border-style: groove; '; break;
+		case 6: elStyle += 'border-style: ridge; ';  break;
+		case 7: elStyle += 'border-style: inset; ';  break;
+		case 8: elStyle += 'border-style: outset; '; break;
 	    }
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
@@ -708,7 +722,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    servSet(this.inclOpen,'com=pgClose','');
 		    pgCache[this.inclOpen] = this.pages[this.inclOpen];
 		    pgCache[this.inclOpen].reqTm = tmCnt;
-		    delete this.place.removeChild(this.pages[this.inclOpen].place);
+		    this.place.removeChild(this.pages[this.inclOpen].place);
 		    this.pages[this.inclOpen].perUpdtEn(false);
 		    delete this.pages[this.inclOpen];
 		    this.inclOpen = null;
@@ -736,13 +750,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 	    }
 	    this.place.wdgLnk = this;
-	    if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
-		this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
-	    else this.place.onclick = '';
+	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };
 	}
-	else if( this.attrs['root'] == 'Text' )
+	else if(this.attrs['root'] == 'Text')
 	{
-	    if(this.attrs['backColor']) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
@@ -789,102 +802,129 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    for(var j = argVal.length; j < Math.abs(argSize); j++) argPad += '&nbsp;';
 		    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
 		    txtVal = txtVal.replace('%'+(i+1),argVal);
-		    delete argCfg;
 		}
 		var txtVal1 = '';
 		for(var j = 0; j < txtVal.length; j++)
 		    if(txtVal[j] == '\n') txtVal1 += '<br />'; else txtVal1 += txtVal[j];
 		//txtVal.replace(/\n/g,'<br />');
-		//while(this.place.childNodes.length) delete this.place.removeChild(this.place.childNodes[0]);
+		//while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 		this.place.innerHTML = "<span style='"+spanStyle+"'>"+txtVal1+"</span>";
 	    }
 	    else this.place.innerHTML = "<img width='"+geomW+"px' height='"+geomH+"px' border='0' src='/"+MOD_ID+this.addr+
 					"?com=obj&tm="+tmCnt+"&xSc="+xSc.toFixed(2)+"&ySc="+ySc.toFixed(2)+"'/>";
 
 	    this.place.wdgLnk = this;
-	    if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
-		this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
+	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
 	    else this.place.onclick = '';
 	}
-	else if( this.attrs['root'] == 'Media' )
+	else if(this.attrs['root'] == 'Media')
 	{
-	    if(this.attrs['backColor'])	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])
-		elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-	    while(this.place.childNodes.length) delete this.place.removeChild(this.place.childNodes[0]);
-	    var medObj = this.place.ownerDocument.createElement('img');
-	    medObj.wdgLnk = this;
-	    medObj.src = this.attrs['src'].length ? ('/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src']) : '';
-	    medObj.border = 0;
-	    if(this.attrs['fit'] == 1)
-	    {
-		medObj.width = geomW; medObj.height = geomH;
-		if(this.attrs['src'].length) medObj.src += "&size="+geomH;
+	    if(this.place.elWr != elWr || (parseInt(this.attrs['areas']) && this.place.childNodes.length <= 1) ||
+					  (!parseInt(this.attrs['areas']) && this.place.childNodes.length > 1))
+		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+
+	    var toInit = !this.place.childNodes.length;
+            var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
+            if(toInit || this.attrsMdf["src"])
+            {
+        	medObj.src = this.attrs['src'].length ? '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src'] : '';
+		medObj.hidden = !this.attrs['src'].length;
 	    }
-	    else medObj.onload = function()
+	    if(toInit || this.attrsMdf["fit"])
 	    {
-		var cWdth = this.width; var cHeight = this.height;
-		this.width = cWdth * this.wdgLnk.xScale(true);
-		this.height = cHeight * this.wdgLnk.yScale(true);
-	    }
-	    if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
-	    {
-		if(parseInt(this.attrs['areas']))
+		if(this.attrs['fit'] == 1)
 		{
-		    var mapObj = this.place.ownerDocument.createElement('map');
-		    mapObj.name = this.addr;
-		    for(var i = 0; i < parseInt(this.attrs['areas']); i++)
-		    {
-			var arObj = this.place.ownerDocument.createElement('area');
-			switch(parseInt(this.attrs['area'+i+'shp']))
-			{
-			    case 0: arObj.shape = 'rect';	break;
-			    case 1: arObj.shape = 'poly';	break;
-			    case 2: arObj.shape = 'circle';	break;
-			}
-			arObj.coords = this.attrs['area'+i+'coord'];
-			arObj.title = this.attrs['area'+i+'title'];
-			arObj.href = '';
-			arObj.areaId = i;
-			arObj.onclick = function() { setWAttrs(this.wdgLnk.addr,'event','ws_MapAct'+this.areaId+'Left'); return false; }
-			arObj.wdgLnk = this;
-			mapObj.appendChild(arObj);
-		    }
-		    this.place.appendChild(mapObj);
-		    medObj.setAttribute('usemap','#'+this.addr);
-		    this.place.appendChild(medObj);
+		    medObj.width = geomW; medObj.height = geomH;
+		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
+		    medObj.onload = null;
+		}
+		else medObj.onload = function()
+		{
+		    var cWdth = this.width; var cHeight = this.height;
+		    this.width = cWdth * this.wdgLnk.xScale(true);
+		    this.height = cHeight * this.wdgLnk.yScale(true);
 		}
 	    }
-	    else this.place.appendChild(medObj);
+	    if(elWr && (toInit || this.attrsMdf["areas"]))
+	    {
+		var mapObj = toInit ? this.place.ownerDocument.createElement('map') : this.place.childNodes[1];
+		while(mapObj.childNodes.length) mapObj.removeChild(mapObj.childNodes[0]);
+		for(var i = 0; i < parseInt(this.attrs['areas']); i++)
+		{
+		    var arObj = this.place.ownerDocument.createElement('area');
+		    switch(parseInt(this.attrs['area'+i+'shp']))
+		    {
+			case 0: arObj.shape = 'rect';	break;
+			case 1: arObj.shape = 'poly';	break;
+			case 2: arObj.shape = 'circle';	break;
+		    }
+		    arObj.coords = this.attrs['area'+i+'coord'];
+		    arObj.title = this.attrs['area'+i+'title'];
+		    arObj.href = '';
+		    arObj.areaId = i;
+		    arObj.onclick = function( )	{ setWAttrs(this.wdgLnk.addr,'event','ws_MapAct'+this.areaId+'Left'); return false; }
+		    arObj.wdgLnk = this;
+		    mapObj.appendChild(arObj);
+		}
+	    }
+	    if(toInit)
+	    {
+		medObj.wdgLnk = this;
+		//> Disable drag mostly for FireFox
+		medObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
+		medObj.border = 0;
+		this.place.appendChild(medObj);
+		if(elWr)
+		{
+		    this.place.appendChild(mapObj);
+		    mapObj.name = this.addr;
+		    medObj.setAttribute('usemap','#'+this.addr);
+		}
+	    }
 	}
 	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify)
 	{
 	    var elTp = parseInt(this.attrs['elType']);
-	    while(this.place.childNodes.length) delete this.place.removeChild(this.place.childNodes[0]);
-	    var fontCfg = '';
-	    if(this.attrs['font'])
+	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
+		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+
+	    if(this.attrsMdf['font'])
 	    {
-		var allFnt = this.attrs['font'].split(' ');
-		if(allFnt.length >= 3 && parseInt(allFnt[2])) fontCfg += 'bold ';
-		if(allFnt.length >= 4 && parseInt(allFnt[3])) fontCfg += 'italic ';
-		if(allFnt.length >= 2) fontCfg += (parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px ';
-		if(allFnt.length >= 1) fontCfg += allFnt[0].replace(/_/g,' ')+' ';
+		this.place.fontCfg = '';
+		if(this.attrs['font'])
+		{
+		    var allFnt = this.attrs['font'].split(' ');
+		    if(allFnt.length >= 3 && parseInt(allFnt[2])) this.place.fontCfg += 'bold ';
+		    if(allFnt.length >= 4 && parseInt(allFnt[3])) this.place.fontCfg += 'italic ';
+		    if(allFnt.length >= 2) this.place.fontCfg += (parseInt(allFnt[1])*Math.min(xSc,ySc)).toFixed(0)+'px ';
+		    if(allFnt.length >= 1) this.place.fontCfg += allFnt[0].replace(/_/g,' ')+' ';
+		}
 	    }
 	    switch(elTp)
 	    {
 		case 0:	//Line edit
-		    var formObj = this.place.ownerDocument.createElement('input');
-		    formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
-		    formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    this.place.appendChild(formObj);
-		    var geomWint = geomW-4;
-		    formObj.wdgLnk = this;
-		    formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-20)/2)+'px; width: '+geomWint+'px; height: '+Math.min(geomH,16)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px;';
+		    var toInit = !this.place.childNodes.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font'])
+		    {
+			var geomWint = geomW-4;
+			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-20)/2)+'px; width: '+geomWint+'px; '+
+						'height: '+Math.min(geomH,16)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+		    }
+		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
 		    this.place.cfg = this.attrs['cfg'];
-		    if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
+		    if(!toInit) break;
+		    formObj.wdgLnk = this;
+		    formObj.disabled = !elWr;
+		    this.place.appendChild(formObj);
+		    if(elWr)
 		    {
 			switch(this.place.view)
 			{
@@ -918,7 +958,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					this.ownerDocument.body.appendChild(combList);
 				    }
 				    while(combList.childNodes[0].childNodes.length)
-					delete combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
+					combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
 				    var elLst = formObj.parentNode.cfg.split('\n');
 				    for(var i = 0; i < elLst.length; i++)
 				    {
@@ -933,7 +973,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 							         'top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; width: '+formObj.offsetWidth+'px; '+
 							         'height: '+Math.min(elLst.length*15,70)+'px; border: 0; ';
 					combList.childNodes[0].style.cssText = 'width: '+formObj.offsetWidth+'px; height: '+Math.min(elLst.length*15,70)+'px; '+
-									       'border-width: 2px; font: '+fontCfg+'; padding: 1px;';
+									       'border-width: 2px; font: '+formObj.parentNode.fontCfg+'; padding: 1px;';
 					combList.childNodes[0].formObj = formObj;
 					combList.childNodes[0].focus();
 				    }
@@ -941,6 +981,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				break;
 			    case 2: case 3:	//Integer, Real
+				if(this.place.childNodes.length >= 2) break;
 				var spinImg = this.place.ownerDocument.createElement('img');
 				spinImg.src = '/'+MOD_ID+'/img_spinar';
 				spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-20)/2)+'px; width: 16px; height: 20px; cursor: pointer; ';
@@ -1023,7 +1064,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				var v = dt.getDate().toString(10); rez = rez.replace('dddd',(v.length==1)?'0'+v:v); rez = rez.replace('ddd',(v.length==1)?'0'+v:v); rez = rez.replace('dd',(v.length==1)?'0'+v:v); rez = rez.replace('d',v);
 				v = (dt.getMonth()+1).toString(10); rez = rez.replace('MMMM',(v.length==1)?'0'+v:v); rez = rez.replace('MMM',(v.length==1)?'0'+v:v); rez = rez.replace('MM',(v.length==1)?'0'+v:v); rez = rez.replace('M',v);
 				v = dt.getFullYear().toString(10); rez = rez.replace('yyyy',v); rez = rez.replace('yy',v.substr(2,2));
-				delete dt;
 				this.value = rez;
 				break;
 			    case 6:
@@ -1037,7 +1077,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				v = dt.getSeconds().toString(10); rez = rez.replace('ss',(v.length==1)?'0'+v:v); rez = rez.replace('s',v);
 				if(rez.indexOf('ap') >= 0)	{ rez = rez.replace('ap',(val>=43200)?'pm':'am'); var ap = true; }
 				if(rez.indexOf('AP') >= 0)	{ rez = rez.replace('AP',(val>=43200)?'PM':'AM'); var ap = true; }
-				delete dt;
 				this.value = rez;
 				break;
 			}
@@ -1143,7 +1182,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    lenS++; i++;
 				}
 				rez = dt.getTime()/1000;
-				delete dt;
 				return rez;
 			    case 6:
 				var cfg = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy hh:mm';
@@ -1190,9 +1228,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				if(this.value.indexOf('pm') >= 0 || this.value.indexOf('PM') >= 0) dt.setHours(dt.getHours()+12);
 				rez = dt.getTime()/1000;
-				delete dt;
 				return rez;
 			}
+			return '';
 		    }
 		    formObj.chApply = function( )
 		    {
@@ -1202,7 +1240,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.setModify(false);
 			var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';
 			setWAttrs(this.wdgLnk.addr,attrs);
-			delete attrs;
 		    }
 		    formObj.chEscape = function( )
 		    {
@@ -1218,16 +1255,19 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.valSet(this.attrs['value']);
 		    break;
 		case 1:	//Text edit
-		    var formObj = this.place.ownerDocument.createElement('textarea');
-		    formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
+		    var toInit = !this.place.childNodes.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('textarea') : this.place.childNodes[0];
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
+			formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+		    if(this.attrsMdf['value']) formObj.saveVal = formObj.value = this.attrs['value'];
+		    if(!toInit) break;
+		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
-		    formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    formObj.style.cssText = 'width: '+(geomW-5)+'px; height: '+(geomH-5)+'px; border: 1px solid black; font: '+fontCfg+'; padding: 1px;';
 		    formObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs['value']));
-		    formObj.saveVal = formObj.value = this.attrs['value'];
-		    formObj.onkeyup = function( ) { if( this.saveVal != this.value ) this.setModify(true); };
+		    formObj.onkeyup = function( ) { if(this.saveVal != this.value) this.setModify(true); };
 		    formObj.modify = function( ) { return (this.parentNode.childNodes[1].style.visibility == 'visible'); }
-		    formObj.setModify = function( on )
+		    formObj.setModify = function(on)
 		    {
 			if(this.modify() == on) return;
 			if(on)
@@ -1251,7 +1291,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			attrs.value = this.parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept';
 			setWAttrs(this.parentNode.childNodes[0].wdgLnk.addr,attrs);
 			this.parentNode.childNodes[0].setModify(false);
-			delete attrs;
 			return false;
 		    };
 		    var cancelImg = this.place.ownerDocument.createElement('img');
@@ -1263,23 +1302,29 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.parentNode.childNodes[0].setModify(false);
 			return false;
 		    };
-		    this.place.appendChild(formObj); this.place.appendChild(okImg); this.place.appendChild(cancelImg);
+		    this.place.appendChild(formObj);
+		    this.place.appendChild(okImg);
+		    this.place.appendChild(cancelImg);
 		    break;
 		case 2:	//Chek box
-		    var tblCell = this.place.ownerDocument.createElement('div');
-		    tblCell.style.cssText = 'position: absolute; top: '+((geomH-15)/2)+'px; width: '+geomW+'px; '+
-					    'height: '+Math.min(geomH,15)+'px; text-align: left; font: '+fontCfg+'; ';
-		    var formObj = this.place.ownerDocument.createElement('input');
-		    formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
-		    formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    formObj.type = 'checkbox'; formObj.checked = parseInt(this.attrs['value']);
+		    var toInit = !this.place.childNodes.length;
+		    var tblCell = toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
+		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font'])
+			tblCell.style.cssText = 'position: absolute; top: '+((geomH-15)/2)+'px; width: '+geomW+'px; '+
+					    'height: '+Math.min(geomH,15)+'px; text-align: left; font: '+this.place.fontCfg+'; ';
+		    var formObj = tblCell.childNodes.length ? tblCell.childNodes[0] : this.place.ownerDocument.createElement('input');
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['value']) formObj.checked = parseInt(this.attrs['value']);
+		    if(!toInit) break;
+		    formObj.type = 'checkbox';
+		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
 		    formObj.onclick = function( )
 		    {
+			//console.log(this.addr+": TEST 00: ChkChange="+this.checked);
 			var attrs = new Object();
 			attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
 			setWAttrs(this.wdgLnk.addr,attrs);
-			delete attrs;
 			return true;
 		    }
 		    tblCell.appendChild(formObj);
@@ -1290,110 +1335,153 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj;
 		    var iconImg = this.attrs['img'];
 		    this.place.checkable = parseInt(this.attrs['checkable']);
-		    if(iconImg || this.place.checkable)
+		    var custBut = (iconImg || this.place.checkable);
+		    if(custBut != this.place.custBut)
+			while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
+		    this.place.custBut = custBut;
+		    var toInit = !this.place.childNodes.length;
+		    if(custBut)
 		    {
-			formObj = this.place.ownerDocument.createElement('div');
-			formObj.className = 'vertalign';
-			formObj.style.font = fontCfg;
+			formObj =  toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
+			//>> Container widget style
 			elStyle += 'border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset; ':'outset; ')+
-						    (parseInt(this.attrs['active'])?'cursor: pointer; ':'')+'border-width: 2px; ';
+						    (elWr?'cursor: pointer; ':'')+'border-width: 2px; ';
 			if(this.attrs['colorText'])
-			    elStyle += 'color: '+(parseInt(this.attrs['active']) ? getColor(this.attrs['colorText']) : 'silver')+'; ';
-			if(parseInt(this.attrs['active']) && this.attrs['color'])
-			    elStyle += 'background-color: '+getColor(this.attrs['color'])+'; ';
+			    elStyle += 'color: '+(elWr ? getColor(this.attrs['colorText']) : 'silver')+'; ';
+			if(elWr && this.attrs['color']) elStyle += 'background-color: '+getColor(this.attrs['color'])+'; ';
 			else elStyle += 'background-color: snow; ';
-			if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
+
+			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
+			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
+			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
+			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name'])
+			{
+			    imgObj.hidden = !this.attrs['img'].length;
+			    if(!imgObj.hidden)
+			    {
+				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW-6,geomH-6)+(!elWr?"&filtr=unact":"");
+				imgObj.width = Math.min(geomW-6,geomH-6);
+				imgObj.height = Math.min(geomW-6,geomH-6);
+				imgObj.float = 'left';
+				imgObj.style.marginRight = this.attrs['name'].length ? "2px" : "0px";
+			    }
+			}
+			if(toInit || this.attrsMdf['name'])
+			{
+			    spanObj.disabled = !this.attrs['name'].length;
+			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
+			    txtVal1 = '';
+			    for(var j = 0; j < this.attrs['name'].length; j++)
+				txtVal1 += this.attrs['name'].substr(j,2) != '\\n' ? strEncode(this.attrs['name'][j]) : '<br />';
+			    spanObj.innerHTML = txtVal1;
+			}
+
+			geomW -= 4; geomH -= 4;
+
+			if(elWr)
 			{
 			    this.mouseup[this.mouseup.length] = function(e,el)
 			    {
 				if(el.checkable) return;
 				el.style.borderStyle = 'outset'; setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
 			    };
-			    //console.log(this.addr+": TEST 01: mDownCnt="+this.mDownCnt);
 			    this.mousedown[this.mousedown.length] = function(e,el)
 			    {
 				if(el.checkable) return;
 				el.style.borderStyle = "inset"; setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
 			    };
+			}
+
+			if(!toInit) break;
+			formObj.className = 'vertalign';
+			//> Disable drag mostly for FireFox
+			imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
+			if(elWr)
+			{
 			    this.place.onmouseout = function()
 			    {
 				if(this.checkable || this.style.borderStyle == 'outset') return false;
 				this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
+				return false;
 			    };
 			    this.place.onclick = function()
 			    {
 				if(!this.checkable) return false;
 				var attrs = new Object();
 				if(this.style.borderLeftStyle == 'outset')
-				{ attrs.value = '1'; this.style.borderStyle='inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
-				else { attrs.value = '0'; this.style.borderStyle='outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
+				{ attrs.value = '1'; this.style.borderStyle = 'inset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtPress'); }
+				else { attrs.value = '0'; this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease'); }
 				setWAttrs(this.wdgLnk.addr,'event','ws_BtToggleChange');
 				setWAttrs(this.wdgLnk.addr,'value',attrs.value);
-				delete attrs;
 				return false;
 			    };
 			    this.place.wdgLnk = this;
 			}
-			var txtVal1 = '';
-			if(iconImg)
-			    txtVal1 += "<IMG src='/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW-6,geomH-6)+
-						(!parseInt(this.attrs['active'])?"&filtr=unact":"")+"' "+
-						"width='"+Math.min(geomW-6,geomH-6)+"' height='"+Math.min(geomW-6,geomH-6)+"' float='left' "+
-						(this.attrs['name'].length?"style='margin-right: 2px'":"")+"/>";
-			if(this.attrs['name'].length)
-			{
-			    var begBlk = true;
-			    for(var j = 0; j < this.attrs['name'].length; j++)
-			    if(this.attrs['name'].substr(j,2) == '\\n')
-			    {
-				if(!begBlk) { txtVal1 += "</span>"; begBlk = true; }
-				txtVal1 += '<br />';
-			    }
-			    else
-			    {
-				if(begBlk) { txtVal1 += "<span>"; begBlk = false; }
-				txtVal1 += strEncode(this.attrs['name'][j]);
-			    }
-			}
-			if(!begBlk) txtVal1 += "</span>";
-			formObj.innerHTML = txtVal1;
-			geomW -= 4; geomH -= 4;
+			formObj.appendChild(imgObj);
+			formObj.appendChild(spanObj);
+			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+			this.place.appendChild(formObj);
 		    }
 		    else
 		    {
-			formObj = this.place.ownerDocument.createElement('input');
-			formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
-			formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-			formObj.style.font = fontCfg;
-			formObj.type = 'button';
-			formObj.value = this.attrs['name'].replace('\\n','\n');
+			formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
+			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
+			if(toInit || this.attrsMdf['name'])	formObj.value = this.attrs['name'].replace('\\n','\n');
+			if(toInit || this.attrsMdf['color'])	formObj.style.backgroundColor = getColor(this.attrs['color']);
+			if(toInit || this.attrsMdf['colorText'])formObj.style.color = getColor(this.attrs['colorText']);
 			this.mouseup[this.mouseup.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease'); };
-			this.mousedown[this.mousedown.length] = function(e,el){ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
-			//console.log(this.addr+": TEST 02: mDownCnt="+this.mDownCnt);
+			this.mousedown[this.mousedown.length] = function(e,el)	{ setWAttrs(el.wdgLnk.addr,'event','ws_BtPress'); };
+			if(!toInit) break;
+			formObj.style.cursor = elWr ? 'pointer' : '';
+			formObj.disabled = !elWr;
+			formObj.type = 'button';
 			formObj.wdgLnk = this;
-			if(this.attrs['color'])		formObj.style.backgroundColor=getColor(this.attrs['color']);
-			if(this.attrs['colorText'])	formObj.style.color=getColor(this.attrs['colorText']);
+			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
+			this.place.appendChild(formObj);
+			formObj.value = this.attrs['name'].replace('\\n','\n');	//Need for Opera after place to DOM
 		    }
-		    formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
-		    this.place.appendChild(formObj);
 		    break;
 		case 4: case 5:	//Combo box, List
-		    var formObj = this.place.ownerDocument.createElement('select');
-		    formObj.disabled = !( parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR );
-		    formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-20)/2:0)+'px; '+
+		    var toInit = !this.place.childNodes.length;
+		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
+		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
+		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
+			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-20)/2:0)+'px; '+
 					    'height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: '+(geomW-4)+'px; '+
-					    'border: 1px solid black; font: '+fontCfg+'; padding: 1px; ';
+					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px; ';
+		    if(this.attrsMdf['items'] || this.attrsMdf['value'])
+		    {
+			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
+			var selVal = this.attrs['value'];
+			var elLst = this.attrs['items'].split('\n');
+			var selOk = false;
+			for(var i = 0; i < elLst.length; i++)
+			{
+			    var optEl = this.place.ownerDocument.createElement('option');
+			    optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));
+			    if(selVal == elLst[i]) selOk = optEl.defaultSelected=optEl.selected = true;
+			    formObj.appendChild(optEl);
+			}
+			if(!selOk && elTp == 4)
+			{
+			    var optEl = this.place.ownerDocument.createElement('option');
+			    optEl.textContent = selVal;
+			    optEl.selected = optEl.defaultSelected = true;
+			    formObj.appendChild(optEl);
+			}
+		    }
+		    if(!toInit) break;
+		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
 		    //f(elTp == 5) formObj.setAttribute('size',100);
 		    if(elTp == 4)
-		    formObj.onchange = function( )
-		    {
-			var attrs = new Object();
-			attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange';
-			setWAttrs(this.wdgLnk.addr,attrs);
-			delete attrs;
-		    }
+			formObj.onchange = function( )
+			{
+			    var attrs = new Object();
+			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange';
+			    setWAttrs(this.wdgLnk.addr,attrs);
+			}
 		    else
 		    {
 			formObj.size = 100;
@@ -1402,25 +1490,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    var attrs = new Object();
 			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange';
 			    setWAttrs(this.wdgLnk.addr,attrs);
-			    delete attrs;
 			}
-		    }
-		    var selVal = this.attrs['value'];
-		    var elLst = this.attrs['items'].split('\n');
-		    var selOk = false;
-		    for(var i = 0; i < elLst.length; i++)
-		    {
-			var optEl = this.place.ownerDocument.createElement('option');
-			optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));
-			if(selVal == elLst[i]) selOk = optEl.defaultSelected=optEl.selected = true;
-			formObj.appendChild(optEl);
-		    }
-		    if(!selOk && elTp == 4)
-		    {
-			var optEl = this.place.ownerDocument.createElement('option');
-			optEl.textContent = selVal;
-			optEl.selected = optEl.defaultSelected = true;
-			formObj.appendChild(optEl);
 		    }
 		    this.place.appendChild(formObj);
 		    break;
@@ -1428,8 +1498,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else if(this.attrs['root'] == 'Diagram')
 	{
-	    if(this.attrs['backColor']) elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    var anchObj = this.place.childNodes[0];
@@ -1441,7 +1512,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		dgrObj.border = 0;
 		anchObj.appendChild(dgrObj); this.place.appendChild(anchObj);
 	    }
-	    anchObj.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
+	    anchObj.isActive = elWr;
 	    anchObj.href = '#';
 	    anchObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 	    anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
@@ -1461,11 +1532,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    dgrObj.isLoad = false;
 	    dgrObj.onload = function( )	{ this.isLoad = true; }
 	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
+	    //> Disable drag mostly for FireFox
+	    dgrObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
 	}
 	else if( this.attrs['root'] == 'Protocol')
 	{
-	    if(this.attrs['backColor'])	elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
+		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    else elStyle += 'background-color: white; ';
 	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border: 1px solid black; overflow: auto; padding: 2px; text-align: left; ';
@@ -1478,7 +1552,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		this.place.appendChild(document.createElement('table'));
 		this.place.firstChild.setAttribute('width','100%');
 		this.place.firstChild.wdgLnk = this;
-		this.place.firstChild.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
+		this.place.firstChild.isActive = elWr;
 		this.place.firstChild.onclick = function(e)
 		{
 		    if(this.isActive) setFocus(this.wdgLnk.addr);
@@ -1559,7 +1633,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg))
 		    {
 			this.messList = new Array();
-			while(tblB.childNodes.length > 1) delete tblB.removeChild(tblB.lastChild);
+			while(tblB.childNodes.length > 1) tblB.removeChild(tblB.lastChild);
 			valEnd = valBeg = 0;
 			return;
 		    }
@@ -1690,7 +1764,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			if(i_m >= (tblB.childNodes.length-1)) tblB.appendChild(rowEl);
 		    }
-		    while((tblB.childNodes.length-1) > sortIts.length) delete tblB.removeChild(tblB.lastChild);
+		    while((tblB.childNodes.length-1) > sortIts.length) tblB.removeChild(tblB.lastChild);
 		}
 	    }
 
@@ -1710,8 +1784,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		try
 		{
 		    if(ifrmObj && (!ifrmObj.contentDocument || document.URL != ifrmObj.contentDocument.URL))
-		    { delete this.place.removeChild(ifrmObj); ifrmObj = null; }
-		}catch(e) { delete this.place.removeChild(ifrmObj); ifrmObj = null; }
+		    { this.place.removeChild(ifrmObj); ifrmObj = null; }
+		}catch(e) { this.place.removeChild(ifrmObj); ifrmObj = null; }
 		if(!ifrmObj)
 		{
 		    ifrmObj = this.place.ownerDocument.createElement('iframe');
@@ -1723,10 +1797,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	elStyle += 'width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
-	this.place.style.cssText = elStyle;
+	if(elStyle != this.place.style.cssText)	this.place.style.cssText = elStyle;
 
 	//> Generic mouse events process
-	if(parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR)
+	if(elWr)
 	{
 	    //console.log(this.addr+": TEST 03: mDownCnt="+this.mDownCnt);
 	    this.mousedown[this.mousedown.length] = function(e,el)
@@ -1744,7 +1818,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	else this.place.ondblclick = '';
 
 	//> Context menu setup
-	if(parseInt(this.attrs['perm'])&SEC_WR && parseInt(this.attrs['active']) && this.attrs['contextMenu'].length)
+	if(elWr && this.attrs['contextMenu'].length)
 	{
 	    var ctxEv = function(e,el)
 	    {
@@ -1795,13 +1869,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		return true;
 	    }
 	else delete this.mouseup;
+
+	this.place.elWr = elWr;
     }
     if(margBrdUpd || this.attrsMdf["geomXsc"] || this.attrsMdf["geomYsc"]) for(var i in this.wdgs) this.wdgs[i].makeEl();
     this.place.setAttribute('title',this.attrs['tipTool']);
     this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
 
     //> Delete child widgets check
-    if(FullTree)
+    if(FullTree && pgBr)
 	for(var i in this.wdgs)
 	{
 	    var j;
@@ -1810,7 +1886,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 	    if(j >= pgBr.childNodes.length)
 	    {
-		delete this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
+		this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
 		delete this.wdgs[i];
 	    }
 	}
@@ -1856,6 +1932,7 @@ function perUpdt( )
     {
 	this.updCntr = parseInt(this.attrs['trcPer']);
 	var dgrObj = this.place.childNodes[0].childNodes[0];
+	if(!dgrObj.stLoadTm) dgrObj.stLoadTm = (new Date()).getTime();
 	if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000))
 	{
 	    dgrObj.isLoad = false;
@@ -1950,13 +2027,21 @@ function pwDescr( pgAddr, pg, parent )
 /***************************************************
  * makeUI                                          *
  ***************************************************/
-function makeUI()
+function makeUI( callBackRez )
 {
-    prcCnt++;
+    if(!callBackRez)
+    {
+	prcCnt++;
+	stTmMain = new Date();
+    }
 
-    var stTm = new Date();
     //> Get open pages list
-    var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
+    //>> Synchronous
+    //var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
+    //>> Asynchronous
+    var pgNode = null;
+    if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
+    else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode)
     {
 	modelPer = parseInt(pgNode.getAttribute("per"));
@@ -1971,11 +2056,10 @@ function makeUI()
 	    if(opPg.window)
 	    {
 		if(opPg.windowExt) opPg.window.close();
-		else if(opPg != masterPage) delete document.getElementById('mainCntr').removeChild(opPg.window);
+		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
 		else
 		{
-		    delete document.body.removeChild(opPg.window);
-		    delete masterPage;
+		    document.body.removeChild(opPg.window);
 		    masterPage = new pwDescr('',true)
 		}
 		if(opPg.parent)	delete opPg.parent.pages[pgList[i_p]];
@@ -2003,16 +2087,23 @@ function makeUI()
     for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
 
     //> Elapsed time get and adjust for plane update period depends from network speed
-    var elTm = 1e-3*((new Date()).getTime()-stTm.getTime());
+    var elTm = 1e-3*((new Date()).getTime()-stTmMain.getTime());
     if(!planePer) planePer = 1e-3*modelPer;
     planePer += (Math.max(1e-3*modelPer,elTm*3)-planePer)/100;
     var sleepTm = Math.max(0, planePer-elTm);
-    prcTm = elTm+sleepTm;
-    //setStatus("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.",1000);
+    prcTm = elTm + sleepTm;
+    //console.log("sleepTm: "+sleepTm+"s; prcTm: "+prcTm+"s; elTm: "+elTm+"s; planePer: "+planePer+"s.");
     setTimeout(makeUI,sleepTm*1e3);
 
-    //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTm.getTime())));
+    //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTmMain.getTime())));
     //setTimeout(makeUI,prcTm*1e3);
+
+    //> Execution performance test
+    /*var startChkTm = (new Date()).getTime();
+    for(var i_cnt = 0; i_cnt < 1000000; i_cnt++)
+	var trez = Math.sin(Math.PI);
+    var stopChkTm = (new Date()).getTime();
+    console.log("sin(PI): "+(stopChkTm-startChkTm)+"ms; trez: "+trez);*/
 }
 
 /***************************************************
@@ -2045,11 +2136,12 @@ function getPopup( )
 /***************************************************
  * Main start code                                 *
  ***************************************************/
-SEC_XT = 0x01;	//Extended
-SEC_WR = 0x02;	//Write access
-SEC_RD = 0x04;	//Read access
+var SEC_XT = 0x01;	//Extended
+var SEC_WR = 0x02;	//Write access
+var SEC_RD = 0x04;	//Read access
+
 //Call session identifier
-sessId = location.pathname.split('/');
+var sessId = location.pathname.split('/');
 for(var i_el = sessId.length-1; i_el >= 0; i_el--)
     if( sessId[i_el].length )
     { sessId = sessId[i_el]; break; }
@@ -2060,18 +2152,19 @@ document.body.onmouseup = function(e)
     if(evMouseGet(e) != 'Left') return true;
     var popUpMenu = document.getElementById('popupmenu');
     if(popUpMenu) popUpMenu.style.visibility = 'hidden';
+    return false;
 }
 
-modelPer = 0;				//Model proc period
-prcCnt = 0;				//Process counter
-prcTm = 0;				//Process time
-planePer = 0;				//Planed update period
-tmCnt = 0;				//Call counter
-pgList = new Array();			//Opened pages list
-pgCache = new Object();			//Cached pages' data
-perUpdtWdgs = new Object();		//Periodic updated widgets register
-masterPage = new pwDescr('',true);	//Master page create
-stTmID = null;				//Status line timer identifier
-httpReqObj = null;			//HTTP request temporary object
+var modelPer = 0;			//Model proc period
+var prcCnt = 0;				//Process counter
+var prcTm = 0;				//Process time
+var planePer = 0;			//Planed update period
+var tmCnt = 0;				//Call counter
+var pgList = new Array();		//Opened pages list
+var pgCache = new Object();		//Cached pages' data
+var perUpdtWdgs = new Object();		//Periodic updated widgets register
+var masterPage = new pwDescr('',true);	//Master page create
+var stTmID = null;			//Status line timer identifier
+var stTmMain = null;			//Main cycle start time
 
 setTimeout(makeUI,1000);		//First call init

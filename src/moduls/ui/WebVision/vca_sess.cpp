@@ -20,6 +20,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.	           *
  ***************************************************************************/
 
+#include <fcntl.h>
 #include <stdint.h>
 #include <string.h>
 #include <algorithm>
@@ -68,7 +69,7 @@ void VCASess::getReq( SSess &ses )
     string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
     if(wp_com.empty())
     {
-	string prjNm;
+	string prjNm, extJS;
 	//>> Get project's name
 	XMLNode req("get");
 	req.setAttr("path",ses.url+"/%2fobj%2fst%2fprj");
@@ -78,7 +79,15 @@ void VCASess::getReq( SSess &ses )
 	    if(!mod->cntrIfCmd(req,ses.user))	prjNm = req.text();
 	}
 
-	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->trMessReplace(WebVisionVCA_js)+"\n</SCRIPT>\n"+mod->pgTail();
+	//>> External JS file loading try
+	int hd = open("WebVisionVCA.js", O_RDONLY);
+	if(hd >= 0)
+	{
+	    char buf[STR_BUF_LEN];
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) extJS.append(buf, len);
+	    close(hd);
+	}
+	ses.page = mod->pgHead("",prjNm)+"<SCRIPT>\n"+mod->trMessReplace(extJS.size()?extJS.c_str():WebVisionVCA_js)+"\n</SCRIPT>\n"+mod->pgTail();
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 
 	//>> Cache clear

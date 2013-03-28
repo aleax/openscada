@@ -1,3 +1,14 @@
+2013-03-28 Roman
+- SYS.TCntrNode,DAQ.SMH2Gi,Protocol.HTTP,Transport.Serial:
+    Devices by "<dev>" and "<chrdev>" listing is added to function TCntrNode::ctrListFS() and some used.
+- !!:UI.WebVision: External JS file "WebVisionVCA.js" loading try from current directory is added. JS code changes:
+    - mostly clean and fix;
+    - zero opacity checking is added for background disable;
+    - asynchronous main cycle requests try;
+    - primitives 'ElFigure', 'Media', 'FormEl' mostly adapted for prevent non full context replacing on single dynamic properties change.
+    - drag for images is disabled for FireFox.
+
+
 2013-03-24 Roman
 - FIX:UI.WebVision: Mostly JS code clean, direct objects free is added, memory leak fix into this.mousedown and this.mouseup functions' arrays.
 - SYS.TCntrNode,DB.SQLite: To function TCntrNode::ctrListFS() is added files browsing and in some places used.

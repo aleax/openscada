@@ -822,7 +822,10 @@ void TCntrNode::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fi
 	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
 	{
 	    if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
-	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK) its.push_back(sDirRez->d_name);
+	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
+		    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
+		    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
+		fits.push_back(sDirRez->d_name);
 	    else if(sDirRez->d_type == DT_REG && fileExt.size())
 	    {
 		tEl = sDirRez->d_name;
@@ -906,5 +909,4 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
 	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
     }
-
 }

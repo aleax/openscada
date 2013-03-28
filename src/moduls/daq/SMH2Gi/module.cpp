@@ -79,7 +79,7 @@ using namespace SMH2Gi;
 //*************************************************
 //* SMH2Gi::TTpContr                              *
 //*************************************************
-TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), mMRCDirDevs("./SegneticsMRC")
+TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID), mMRCDirDevs(oscd_datadir_full"/SegneticsMRC")
 {
     mod		= this;
 
@@ -168,10 +168,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     {
         TTipDAQ::cntrCmdProc(opt);
         if(ctrMkNode("area",opt,0,"/prm","SMH2Gi"))
-        {
-            ctrMkNode("fld",opt,-1,"/prm/dirMRC",_("MR/MC devices *.ini files directry"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
-            //???? Make directory select and loaded devices list display
-        }
+            ctrMkNode("fld",opt,-1,"/prm/dirMRC",_("MR/MC devices *.ini files directry"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/dirMRCList");
         return;
     }
     //> Process command to page
@@ -181,6 +178,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
         if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(MRCDirDevs());
         if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMRCDirDevs(opt->text());
     }
+    else if(a_path == "/prm/dirMRCList" && ctrChkNode(opt))	ctrListFS(opt, MRCDirDevs());
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -407,15 +405,18 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 		  "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SHM_VARS",cfg("SHM_VARS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/MC_DEV",cfg("MC_DEV").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/MR_DEV",cfg("MR_DEV").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SHM_VARS",cfg("SHM_VARS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/fileShmL");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/MC_DEV",cfg("MC_DEV").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/devMCLs");
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/MR_DEV",cfg("MR_DEV").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/cntr/cfg/devMRLs");
 	return;
     }
 
     //> Process command to page
-    //string a_path = opt->attr("path");
-    TController::cntrCmdProc(opt);
+    string a_path = opt->attr("path");
+    if(a_path == "/cntr/cfg/fileShmL" && ctrChkNode(opt))	ctrListFS(opt, cfg("SHM_VARS").getS(), "srv;");
+    else if(a_path == "/cntr/cfg/devMCLs" && ctrChkNode(opt))	ctrListFS(opt, cfg("MC_DEV").getS(), "<chrdev>;");
+    else if(a_path == "/cntr/cfg/devMRLs" && ctrChkNode(opt))	ctrListFS(opt, cfg("MR_DEV").getS(), "<chrdev>;");
+    else TController::cntrCmdProc(opt);
 }
 
 uint8_t TMdContr::CRCHi[] =
