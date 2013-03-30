@@ -1,3 +1,9 @@
+2013-03-30 Roman
+- UI.Vision: Status line display control is added for run projects.
+- UI.WebVision: The property "Margin" for primitive "Text" behavior is changed and border calculation added.
+- UI.WebVision: Control information clear for closing pages is added. "overflow: hidden;" for primitive "Text" is added.
+
+
 2013-03-28 Roman
 - SYS.TCntrNode,DAQ.SMH2Gi,Protocol.HTTP,Transport.Serial:
     Devices by "<dev>" and "<chrdev>" listing is added to function TCntrNode::ctrListFS() and some used.

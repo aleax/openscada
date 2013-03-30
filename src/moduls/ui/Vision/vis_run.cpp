@@ -262,9 +262,10 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     mStlBar->setWhatsThis(_("This label displays used interface style."));
     mStlBar->setToolTip(_("Field for display the used interface style."));
     mStlBar->setStatusTip(_("Double click for style change."));
-    connect( mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()) );
+    connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
     statusBar()->insertPermanentWidget(0,mStlBar);
     statusBar()->insertPermanentWidget(0,toolBarStatus);
+    statusBar()->setVisible(mod->runPrjsSt());
 
     //> Init scroller
     QScrollArea *scrl = new QScrollArea;

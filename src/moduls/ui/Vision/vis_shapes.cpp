@@ -905,55 +905,37 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	{
 	    QPainter pnt(w);
 
-	    //> Prepare draw area
-	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
-	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
-
-	    //> Prepare draw area
-	    /*QRect dA(w->rect().x(),w->rect().y(),
-		(int)TSYS::realRound(w->sizeF().width()/w->xScale(true),POS_PREC_DIG,true)-2*shD->geomMargin,
-		(int)TSYS::realRound(w->sizeF().height()/w->yScale(true),POS_PREC_DIG,true)-2*shD->geomMargin);
-	    pnt.setWindow(dA);
-	    pnt.setViewport(w->rect().adjusted((int)TSYS::realRound(w->xScale(true)*shD->geomMargin,POS_PREC_DIG,true),(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,POS_PREC_DIG,true),
-		-(int)TSYS::realRound(w->xScale(true)*shD->geomMargin,POS_PREC_DIG,true),-(int)TSYS::realRound(w->yScale(true)*shD->geomMargin,POS_PREC_DIG,true)));*/
-
-	    int scale = 0;
-#if QT_VERSION < 0x040400
-	    if(pnt.window() != pnt.viewport())	scale = 1;
-#endif
-	    QRect dR = dA;
+	    QRect dA = w->rect();	// Decoration draw area
 
 	    //> Draw decoration
-	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dR,shD->backGrnd.color());
-	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dR,shD->backGrnd.textureImage());
+	    if(shD->backGrnd.color().isValid())		pnt.fillRect(dA, shD->backGrnd.color());
+	    if(!shD->backGrnd.textureImage().isNull())	pnt.fillRect(dA, shD->backGrnd.textureImage());
 
 	    //> Draw border
 	    if(shD->border.width())
 	    {
-		borderDraw(pnt, dR, shD->border, shD->bordStyle);
-		dR.adjust(shD->border.width()+1, shD->border.width()+1, shD->border.width()-1, shD->border.width()-1);
+		borderDraw(pnt, dA, shD->border, shD->bordStyle);
+		dA.adjust(shD->border.width(), shD->border.width(), -shD->border.width(), -shD->border.width());
 	    }
+	    dA.adjust(shD->geomMargin, shD->geomMargin, -shD->geomMargin, -shD->geomMargin);
 
 	    //> Text translation
-	    pnt.translate(dA.width()/2+scale,dA.height()/2+scale);
+	    pnt.translate(w->rect().width()/2, w->rect().height()/2);
 	    pnt.rotate(shD->orient);
 
 	    //> Calc whidth and hight draw rect at rotate
-	    double rad_angl  = fabs(3.14159*(double)shD->orient/180.);
-	    double rect_rate = 1./(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
+	    double rad_angl  = fabs(M_PI*(double)shD->orient/180);
+	    double rect_rate = 1/(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
 	    int wdth  = (int)(rect_rate*dA.size().width()+fabs(sin(rad_angl))*(dA.size().height()-dA.size().width()));
 	    int heigt = (int)(rect_rate*dA.size().height()+fabs(sin(rad_angl))*(dA.size().width()-dA.size().height()));
-
-	    dR = QRect(QPoint(-wdth/2,-heigt/2),QSize(wdth,heigt));
+	    dA = QRect(QPoint(-wdth/2,-heigt/2), QSize(wdth,heigt));
 
 	    //> Draw text
 	    pnt.setPen(shD->color);
 	    pnt.setFont(shD->font);
+	    pnt.drawText(dA, shD->text_flg, shD->text.c_str());
 
-	    pnt.drawText(dR,shD->text_flg,shD->text.c_str());
-
-	    event->accept();
+	    event->accept( );
 	    return true;
         }
 	default: break;

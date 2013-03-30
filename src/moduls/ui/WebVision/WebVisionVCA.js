@@ -390,6 +390,7 @@ function setFocus( wdg, onlyClr )
 function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 {
     if(!pgId) return true;
+
     //> Check and update present page
     if(this == masterPage)
     {
@@ -401,6 +402,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    return true;
 	}
     }
+
     //> Create or replace main page
     if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
     if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
@@ -409,6 +411,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	if(this.addr.length)
 	{
 	    servSet(this.addr,'com=pgClose','');
+	    this.pwClean();
 	    document.body.removeChild(this.window);
 	}
 	this.addr  = pgId;
@@ -423,6 +426,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	document.getElementsByTagName('link')[0].setAttribute('href',location.pathname+'?com=ico');
 	return true;
     }
+
     //> Find for include page creation
     for(var i in this.wdgs)
 	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible)
@@ -504,6 +508,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    {
 		servSet(this.iPg.addr,'com=pgClose','');
 		document.getElementById('mainCntr').removeChild(this.iPg.window);
+		this.iPg.pwClean();
 		delete this.iPg.parent.pages[this.iPg.addr];
 	    }
 	    closeWin.iPg = iPg;
@@ -757,8 +762,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
-	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
+	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
+	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
 	    if(parseInt(this.attrs['orient']) == 0)
 	    {
 		var txtAlign = parseInt(this.attrs['alignment']);
@@ -1022,7 +1028,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(posOkImg == 2)
 				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)-16)+'px';
 				okImg.style.visibility = 'visible';
-				this.wdgLnk.perUpdtEn( true ); this.clearTm = 5;
+				this.wdgLnk.perUpdtEn(true); this.clearTm = 5;
 			    }
 			    else
 			    {
@@ -1030,7 +1036,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(posOkImg == 2)
 				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)+16)+'px';
 				okImg.style.visibility = 'hidden';
-				this.wdgLnk.perUpdtEn( false ); this.clearTm = 0;
+				this.wdgLnk.perUpdtEn(false); this.clearTm = 0;
 			    }
 			    this.parentNode.isModify = on;
 			}
@@ -1536,7 +1542,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    dgrObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
 	}
-	else if( this.attrs['root'] == 'Protocol')
+	else if(this.attrs['root'] == 'Protocol')
 	{
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
@@ -1568,7 +1574,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		    //> Get archive parameters
 		    var tTime = parseInt(this.attrs['time']);
-		    if(!tTime) tTime = (new Date()).getTime()/1000;		//!!!!
+		    if(!tTime) tTime = (new Date()).getTime()/1000;
 		    var srcTime = tTime;
 		    var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
@@ -1909,11 +1915,24 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 }
+
+function pwClean( )
+{
+    //> Periodic update disable
+    this.perUpdtEn(false);
+    //> Pages recursively clean
+    for(var i in this.pages) this.pages[i].pwClean();
+    this.pages = new Object();
+    //> Widgets recursively clean
+    for(var i in this.wdgs) this.wdgs[i].pwClean();
+    this.wdgs = new Object();
+}
+
 function perUpdtEn( en )
 {
     if(this.attrs['root'] == 'Diagram' || this.attrs['root'] == 'Protocol')
     {
-	if(en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer'])) perUpdtWdgs[this.addr] = this;
+	if(en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']))	perUpdtWdgs[this.addr] = this;
 	if(!en && perUpdtWdgs[this.addr]) delete perUpdtWdgs[this.addr];
     }
     else if(this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl')
@@ -1923,6 +1942,7 @@ function perUpdtEn( en )
     }
     for(var i in this.wdgs) this.wdgs[i].perUpdtEn(en);
 }
+
 function perUpdt( )
 {
     if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].clearTm &&
@@ -1976,6 +1996,7 @@ function perUpdt( )
 	this.perUpdtEn( false );
     }
 }
+
 function xScale( full )
 {
     var rez = parseFloat(this.attrs['geomXsc'])
@@ -1984,6 +2005,7 @@ function xScale( full )
     // if(this != masterPage) return masterPage.xScale()*rez;
     return rez;
 }
+
 function yScale( full )
 {
     var rez = parseFloat(this.attrs['geomYsc'])
@@ -1992,6 +2014,7 @@ function yScale( full )
     // if(this != masterPage) return masterPage.yScale()*rez;
     return rez;
 }
+
 function isEnabled( )
 {
     var rez = parseInt(this.attrs['en']);
@@ -2017,6 +2040,7 @@ function pwDescr( pgAddr, pg, parent )
     this.callPage = callPage;
     this.findOpenPage = findOpenPage;
     this.makeEl = makeEl;
+    this.pwClean = pwClean;
     this.perUpdtEn = perUpdtEn;
     this.perUpdt = perUpdt;
     this.xScale = xScale;
@@ -2037,11 +2061,11 @@ function makeUI( callBackRez )
 
     //> Get open pages list
     //>> Synchronous
-    //var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
+    var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
     //>> Asynchronous
-    var pgNode = null;
-    if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
-    else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
+    //var pgNode = null;
+    //if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
+    //else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
     if(pgNode)
     {
 	modelPer = parseInt(pgNode.getAttribute("per"));
@@ -2070,17 +2094,22 @@ function makeUI( callBackRez )
 	//>> Process opened pages
 	pgList = new Array();
 	for(var i = 0; i < pgNode.childNodes.length; i++)
-	if(pgNode.childNodes[i].nodeName == 'pg')
-	{
-	    var prPath = nodeText(pgNode.childNodes[i]);
-	    //>>> Check for closed window
-	    var opPg = masterPage.findOpenPage(prPath);
-	    if(opPg && opPg.window && opPg.windowExt && opPg.window.closed)
-	    { servSet(prPath,'com=pgClose',''); delete opPg.parent.pages[prPath]; continue; }
-	    //>>> Call page
-	    pgList.push(prPath);
-	    masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
-	}
+	    if(pgNode.childNodes[i].nodeName == 'pg')
+	    {
+	        var prPath = nodeText(pgNode.childNodes[i]);
+		//>>> Check for closed window
+		var opPg = masterPage.findOpenPage(prPath);
+		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed)
+		{
+		    servSet(prPath,'com=pgClose','');
+		    opPg.pwClean();
+		    delete opPg.parent.pages[prPath];
+		    continue;
+		}
+		//>>> Call page
+		pgList.push(prPath);
+		masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
+	    }
 	tmCnt = parseInt(pgNode.getAttribute('tm'));
     }
     //> Update some widgets

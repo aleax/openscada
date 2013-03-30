@@ -83,7 +83,7 @@ using namespace VISION;
 //*************************************************
 //* QTCFG::TVision                                *
 //*************************************************
-TVision::TVision( string name ) : TUI(MOD_ID), end_run(false), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
+TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), end_run(false), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
 {
     mod		= this;
 
@@ -130,10 +130,12 @@ string TVision::optDescr( )
 	"======================= The module <%s:%s> options =======================\n"
 	"---------- Parameters of the module section '%s' in config-file ----------\n"
 	"StartUser   <user>    No password requested start user.\n"
+	"UserPass    <pass>    User password for no local start.\n"
 	"RunPrjs     <list>    Run projects list on the module start.\n"
-	"RunTimeUpdt <mode>    RunTime update mode (0 - all widgets periodic adaptive update,\n"
-	"		       1 - update only changed widgets).\n"
-	"VCAstation  <id>      VCA station id ('.' - local).\n\n"),
+	"RunPrjsSt    {0;1}    Display status for run projects.\n"
+	"CachePgLife <hours>   Cached pages lifetime.\n"
+	"VCAstation  <id>      VCA station id ('.' - local).\n"
+	"PlayCom     <cmd>     Audio alarms' files play command.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
     return buf;
@@ -154,9 +156,10 @@ void TVision::load_( )
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",""));
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
+    setRunPrjsSt(atoi(TBDS::genDBGet(nodePath()+"RunPrjsSt","1").c_str()));
+    setCachePgLife(atof(TBDS::genDBGet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife())).c_str()));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
-    setCachePgLife(atof(TBDS::genDBGet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife())).c_str()));
 }
 
 void TVision::save_( )
@@ -168,9 +171,10 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"StartUser",startUser());
     TBDS::genDBSet(nodePath()+"UserPass",userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
+    TBDS::genDBSet(nodePath()+"RunPrjsSt",TSYS::int2str(runPrjsSt()));
+    TBDS::genDBSet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife()));
     TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
     TBDS::genDBSet(nodePath()+"PlayCom",playCom());
-    TBDS::genDBSet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife()));
 }
 
 void TVision::postEnable( int flag )
@@ -356,13 +360,14 @@ void TVision::cntrCmdProc( XMLNode *opt )
 		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,2,"tp","str",
 		"help",_("Automatic started project's list separated by symbol ';'.\nFor opening a project's window to need display (1) use project's name format: 'PrjName-1'."));
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj_st",_("Run projects status display"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
 	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
 		    _("Command line for call sounds play.\n"
 		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
+	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
 
@@ -388,6 +393,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runPrjs());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjs(opt->text());
+    }
+    else if(a_path == "/prm/cfg/run_prj_st")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(runPrjsSt()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjsSt(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/stationVCA")
     {
