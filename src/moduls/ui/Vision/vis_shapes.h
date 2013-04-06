@@ -309,6 +309,7 @@ class ShapeDiagram : public WdgShape
 
     public:
 	//Data
+	enum Scale { SC_GRID = 0x01, SC_MARKERS = 0x02, SC_LOG = 0x04 };
 	//> Trend object's class
 	class TrendObj
 	{
@@ -331,6 +332,7 @@ class ShapeDiagram : public WdgShape
 		double	bordU( )	{ return mBordUp; }
 		QColor	color( )	{ return mColor; }
 		int	width( )	{ return mWidth; }
+		int	scale( )	{ return mScale; }
 		double	curVal( )	{ return mCurvl; }
 		int	valTp( )	{ return val_tp; }
 		int64_t	valBeg( );
@@ -343,6 +345,7 @@ class ShapeDiagram : public WdgShape
 		void setBordU( double vl )	{ mBordUp  = vl; }
 		void setColor( const QColor &vl ){ mColor = vl; }
 		void setWidth( char vl )	{ mWidth = vl; }
+		void setScale( char vl )	{ mScale = vl; }
 		void setCurVal( double vl )	{ mCurvl = vl; }
 
 		void loadData( bool full = false );
@@ -350,6 +353,9 @@ class ShapeDiagram : public WdgShape
 		void loadSpectrumData( bool full = false );
 
 		//Attributes
+		double	adjL, adjU;		//Adjusted lower and upper borders
+		bool	isIndiv;		//Individual scale
+		char	wScale;
 #if HAVE_FFTW3_H
 		//> FFT
 		int		fftN;		//Spectrum samples number
@@ -363,6 +369,7 @@ class ShapeDiagram : public WdgShape
 		double		mCurvl;		//Curent value
 		QColor		mColor;		//Values line color
 		char		mWidth;		//Line width in pixels
+		char		mScale;		//Separted scale
 		//> Archive
 		int64_t		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time

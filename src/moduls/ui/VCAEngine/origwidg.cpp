@@ -964,7 +964,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAdd( new TFld("sclHor",_("Scale:horizontal"),TFld::Integer,Attr::Mutable|TFld::Selected,
 		    "1","0","0;1;2;3",_("No draw;Grid;Markers;Grid and markers"),"34") );
 		cfg.owner()->attrAdd( new TFld("sclVer",_("Scale:vertical"),TFld::Integer,Attr::Mutable|TFld::Selected,
-		    "1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and markers (log)"),"35") );
+		    "1","0","0;1;2;3;5;6;7",_("No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and markers (log)"),"35") );
 		cfg.owner()->attrAdd( new TFld("sclVerScl",_("Scale:vertical scale (%)"),TFld::Real,Attr::Mutable,"","100","10;1000","","40") );
 		cfg.owner()->attrAdd( new TFld("sclVerSclOff",_("Scale:vertical scale offset (%)"),TFld::Real,Attr::Mutable,"","0","-100;100","","41") );
 		cfg.owner()->attrAdd( new TFld("sclMarkColor",_("Scale:Markers:color"),TFld::String,Attr::Color|Attr::Mutable,"","white","","","36") );
@@ -991,6 +991,7 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrDel(fidp+"aScale");
 		cfg.owner()->attrDel(fidp+"color");
 		cfg.owner()->attrDel(fidp+"width");
+		cfg.owner()->attrDel(fidp+"scl");
 		cfg.owner()->attrDel(fidp+"val");
 		cfg.owner()->attrDel(fidp+"prop");
 	    }
@@ -1013,6 +1014,8 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 					    TFld::String,Attr::Color|Attr::Mutable,"","","","",TSYS::int2str(53+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"width").c_str(),(fnmp+_(":width")).c_str(),
 					    TFld::Integer,Attr::Mutable,"","1","1;10","",TSYS::int2str(56+10*i_p).c_str()));
+	    cfg.owner()->attrAdd(new TFld((fidp+"scl").c_str(),(fnmp+_(":scale")).c_str(),TFld::Integer,Attr::Mutable|TFld::Selected,
+		    "","0","0;2;3;6;7",_("Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"),TSYS::int2str(55+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
 					    TFld::Real,Attr::Mutable,"","","","",TSYS::int2str(54+10*i_p).c_str()));
 	    cfg.owner()->attrAdd(new TFld((fidp+"prop").c_str(),(fnmp+_(":properties")).c_str(),

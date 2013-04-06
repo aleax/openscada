@@ -5285,13 +5285,12 @@ void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 
 void VCADiagram::makeTrendsPicture( SSess &ses )
 {
-    ResAlloc res(mRes,true);
+    ResAlloc res(mRes, true);
 
     //> Check for trend's data reload
     bool rld = true;
-    if( tTimeCurent )	tTime = (int64_t)time(NULL)*1000000;
-    else if( trcPer && lstTrc < time(NULL) )
-    { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
+    if(tTimeCurent)	tTime = (int64_t)time(NULL)*1000000;
+    else if(trcPer && lstTrc < time(NULL)) { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
     if(rld)
     {
@@ -5301,7 +5300,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	{
 	    int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
 	    if(holdCur || curTime >= (tTime-2*(int64_t)trcPer*1000000) || curTime <= tTimeGrnd)
-		setCursor(tTime,ses.user);
+		setCursor(tTime, ses.user);
 	}
     }
 
@@ -5326,17 +5325,17 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     //> Prepare picture
     gdImagePtr im = gdImageCreateTrueColor(imW,imH);
     if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
-    gdImageAlphaBlending(im,0);
-    gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
-    gdImageAlphaBlending(im,1);
+    gdImageAlphaBlending(im, 0);
+    gdImageFilledRectangle(im, 0, 0, imW-1, imH-1, gdImageColorResolveAlpha(im,0,0,0,127));
+    gdImageAlphaBlending(im, 1);
     int brect[8];
 
-    if( !trnds.size() || tSz <= 0 )	{ makeImgPng(ses,im); return; }
+    if(!trnds.size() || tSz <= 0)	{ makeImgPng(ses,im); return; }
 
     //> Make decoration and prepare trends area
     tArX = 1, tArY = 1,						//Curves of trends area rect
-    tArW = imW-2*(geomMargin+bordWidth+1),
-    tArH = imH-2*(geomMargin+bordWidth+1);
+    tArW = imW - 2*(geomMargin+bordWidth+1),
+    tArH = imH - 2*(geomMargin+bordWidth+1);
 
     //> Setting the resolution for the text's font
     gdFTStringExtra strex;
@@ -5344,67 +5343,253 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     strex.vdpi = 72;
     strex.hdpi = 72;
 
-    if(sclHor&0x3 || sclVer&0x3)
+    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
     {
-	gdImageSetThickness(im,vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
+	gdImageSetThickness(im, vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
 	//>> Set grid color
-	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
+	clr_grid = TWEB::colorResolve(im, sclColor);
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
-	if( sclHor&0x2 || sclVer&0x2 )
+	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
 	{
 	    //>> Set markers font and color
-	    mrkFontSize = (int)((float)sclMarkFontSize*vmin(xSc,ySc));
-	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
+	    mrkFontSize = (float)sclMarkFontSize * vmin(xSc,ySc);
+	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
-	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
-	    if( sclHor&0x2 )
+	    if(sclHor & SC_MARKERS)
 	    {
-		if( tArH < (int)(100*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
+		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
 		else tArH -= 2*(mrkHeight+2);
 	    }
-	    if( sclVer&0x2 && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
+	    if(sclVer&SC_MARKERS && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(SC_MARKERS);
 	}
     }
+
+    //> Calc vertical scale
+    int64_t aVend;					//Corrected for allow data the trend end point
+    int64_t aVbeg;					//Corrected for allow data the trend begin point
+    bool    vsPerc = true;				//Vertical scale percent mode
+    bool    isLog = sclVer&SC_LOG;			//Logarithmic scale
+    bool    isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
+    double  curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
+
+    //>> Get main scale for non individual parameters
+    int prmInGrp = 0, prmGrpLast = -1;
+    for(unsigned i_p = 0, mainPerc = false; i_p < trnds.size(); i_p++)
+    {
+	TrendObj &cP = trnds[i_p];
+	if(!cP.val().size() || ((cP.color()>>31)&0x01))	continue;
+
+	cP.adjU = -3e300, cP.adjL = 3e300;
+	if(cP.bordU() <= cP.bordL() && cP.valTp() != 0)
+	{
+	    //>> Check trend for valid data
+	    aVbeg = vmax(tBeg, cP.valBeg());
+	    aVend = vmin(tEnd, cP.valEnd());
+
+	    if(aVbeg >= aVend)	{ makeImgPng(ses,im); return; }
+	    //>> Calc value borders
+	    bool end_vl = false;
+	    int ipos = cP.val(aVbeg);
+	    if(ipos && cP.val()[ipos].tm > aVbeg) ipos--;
+	    while(true)
+	    {
+		if(ipos >= (int)cP.val().size() || end_vl)	break;
+		if(cP.val()[ipos].tm >= aVend)	end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL)
+		{
+		    curVl = cP.val()[ipos].val;
+		    cP.adjL = vmin(cP.adjL, curVl); cP.adjU = vmax(cP.adjU, curVl);
+		}
+		ipos++;
+	    }
+	    if(cP.adjU == -3e300)		{ cP.adjU = 1.0; cP.adjL = 0.0; }
+	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30) { cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
+	    {
+		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2;
+		cP.adjU += wnt_dp/2;
+	    }
+	}
+	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
+	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
+
+	cP.wScale = cP.mScale&(sclVer|SC_LOG);
+        if(cP.wScale&(SC_GRID|SC_MARKERS))      continue;
+
+	//>>> Check for value border allow
+	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+	{ vsMin = vmin(vsMin,cP.adjL); vsMax = vmax(vsMax,cP.adjU); }
+	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = i_p;
+    }
+
+    //>> Check for individual parameters and for possibility to merge it to group or create new for no group
+    int prmIndiv = 0;
+    int prmIndivSc = -1;
+    vector<int> prmsInd;
+    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
+    {
+        TrendObj &cP = trnds[i_p];
+        cP.isIndiv = false;
+        if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+        //>> Check for include to present or create new group and exclude from individual
+        if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
+            (cP.mScale&SC_LOG) == (sclVer&SC_LOG))
+        {
+            vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+            prmInGrp++; prmGrpLast = i_p;
+            continue;
+        }
+        cP.isIndiv = true;
+        prmIndiv++;
+        if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+        else prmsInd.push_back(i_p);
+        if(cP.mScale&SC_LOG)
+        {
+            cP.adjU = log10(vmax(1e-100,cP.adjU));
+            cP.adjL = log10(vmax(1e-100,cP.adjL));
+        }
+        if(isScale)     //Vertical scale and offset apply
+        {
+            float vsDif = cP.adjU - cP.adjL;
+            cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
+            cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
+        }
+    }
+    if(prmInGrp) prmsInd.push_back(-1);
+    if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
+
+    //>> Final main scale adapting
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMax = 100, vsMin = isLog ? pow(10,vmin(0,2-(tArH/150))) : 0; }
+    else vsPerc = false;
+    if(isLog)
+    {
+	vsMax = log10(vmax(1e-100,vsMax));
+	vsMin = log10(vmax(1e-100,vsMin));
+    }
+    if(isScale)	//Vertical scale and offset apply
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += sclVerSclOff*vsDif/100;	vsMin += sclVerSclOff*vsDif/100;
+	vsMax += (sclVerScl*vsDif/100-vsDif)/2;	vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    }
+
+    //> Draw main and individual vertical scales
+    float vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
+    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
+    {
+        bool	isLogT, vsPercT;
+        char	sclVerT;
+	int     clrGridT = TWEB::colorResolve(im, sclColor);
+        double	vsMinT, vsMaxT;
+        double	vDiv = 1;
+        if(prmsInd[i_p] < 0)    //Main scale process
+        {
+            //>> Draw environment
+            vsPercT = vsPerc;
+            isLogT = isLog;
+            sclVerT = sclVer;
+            clrGridT = TWEB::colorResolve(im, sclColor);
+	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+            if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
+		clrGridT = clr_mrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
+            //>> Rounding
+            double v_len = vsMax - vsMin;
+            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+            if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+            while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+            vsMinT = vsMin; vsMaxT = vsMax;
+        }
+        else    //Individual scale process
+        {
+            TrendObj &cP = trnds[prmsInd[i_p]];
+            //>> Draw environment
+            vsPercT = false;
+            isLogT = cP.mScale&SC_LOG;
+            sclVerT = cP.wScale;
+	    clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
+            //>> Rounding
+            double v_len = cP.adjU - cP.adjL;
+            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+            if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+            while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+            vsMinT = cP.adjL; vsMaxT = cP.adjU;
+        }
+        if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+
+	//>> Draw vertical grid and markers
+	int markWdth = 0;
+	if(sclVerT & (SC_GRID|SC_MARKERS))
+	{
+	    string labVal;
+	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
+	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
+	    {
+		//>>> Draw grid
+		int v_pos = tArY + tArH - (int)((double)tArH*(i_v-vsMinT)/(vsMaxT-vsMinT));
+		if(sclVerT & SC_GRID) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
+		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
+		//>>> Draw markers
+		if(sclVerT&SC_MARKERS && mrkHeight)
+		{
+		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-1-mrkHeight) < tArY;
+		    labVal = (isLogT ? TSYS::real2str(pow(10,i_v),4,'g') : TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"");
+		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);
+                    markWdth = vmax(markWdth, brect[2]-brect[6]);
+		}
+	    }
+	}
+	if(i_p < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+    }
+    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+
     //> Calc horizontal scale
     int64_t hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&0x2 && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
-    if( hmax_ln >= 2 )
+    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
+    if(hmax_ln >= 2)
     {
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
-	if( hLen/86400000000ll >= 2 )    { hvLev = 5; hDiv = 86400000000ll; }	//Days
-	else if( hLen/3600000000ll >= 2 ){ hvLev = 4; hDiv =  3600000000ll; }	//Hours
-	else if( hLen/60000000 >= 2 )    { hvLev = 3; hDiv =    60000000; }	//Minutes
-	else if( hLen/1000000 >= 2 )     { hvLev = 2; hDiv =     1000000; }	//Seconds
-	else if( hLen/1000 >= 2 )	{ hvLev = 1; hDiv =	1000; }	//Milliseconds
-	while( hLen/hDiv > hmax_ln )     hDiv *= 10;
-	while( hLen/hDiv < hmax_ln/2 )   hDiv /= 2;
-	if( hLen/hDiv >= 5 && trcPer )
+	if(hLen/86400000000ll >= 2)	{ hvLev = 5; hDiv = 86400000000ll; }	//Days
+	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
+	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =    60000000; }	//Minutes
+	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =     1000000; }	//Seconds
+	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =	1000; }		//Milliseconds
+	while(hLen/hDiv > hmax_ln)     hDiv *= 10;
+	while(hLen/hDiv < hmax_ln/2)   hDiv /= 2;
+	if(hLen/hDiv >= 5 && trcPer)
 	{
 	    tPict = hDiv*(tEnd/hDiv+1);
 	    tBeg = tPict-hLen;
 	}
 
 	//>> Draw horisontal grid and markers
-	if( sclHor&0x3 )
+	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
 	    time_t tm_t;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
 	    //>>> Draw generic grid line
-	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
+	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX+tArW;
-	    if( sclHor&0x2 && mrkHeight )
+	    if(sclHor&SC_MARKERS && mrkHeight)
 	    {
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
 		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
 		gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
 		int markBrd = tArX+tArW-(brect[2]-brect[6]);
@@ -5418,177 +5603,74 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
 	    //>>> Draw grid and/or markers
 	    bool first_m = true;
-	    for( int64_t i_h = tBeg; true; )
+	    for(int64_t i_h = tBeg; true; )
 	    {
 		//>>>> Draw grid
-		int h_pos = tArX+tArW*(i_h-tBeg)/(tPict-tBeg);
-		if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
-		else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
+		int h_pos = tArX + tArW*(i_h-tBeg)/(tPict-tBeg);
+		if(sclHor & SC_GRID) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
+		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
 		//>>>> Draw markers
-		if( sclHor&0x2 && mrkHeight && !(i_h%hDiv) && i_h != tPict )
+		if(sclHor&SC_MARKERS && mrkHeight && !(i_h%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
-		    localtime_r(&tm_t,&ttm);
+		    localtime_r(&tm_t, &ttm);
 		    int chLev = -1;
-		    if( !first_m )
+		    if(!first_m)
 		    {
-			if( ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year )  chLev = 5;
-			else if( ttm.tm_mday > ttm1.tm_mday )  chLev = 4;
-			else if( ttm.tm_hour > ttm1.tm_hour )  chLev = 3;
-			else if( ttm.tm_min > ttm1.tm_min )    chLev = 2;
-			else if( ttm.tm_sec > ttm1.tm_sec )    chLev = 1;
+			if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year) chLev = 5;
+			else if(ttm.tm_mday > ttm1.tm_mday) chLev = 4;
+			else if(ttm.tm_hour > ttm1.tm_hour) chLev = 3;
+			else if(ttm.tm_min > ttm1.tm_min)   chLev = 2;
+			else if(ttm.tm_sec > ttm1.tm_sec)   chLev = 1;
 			else chLev = 0;
 		    }
 		    //Check for data present
 		    lab_dt = lab_tm = "";
 		    //Date
-		    if( hvLev == 5 || chLev >= 4 )
+		    if(hvLev == 5 || chLev >= 4)
 			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
 		    //Hours and minuts
-		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
-		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
+		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
 							   Mess->codeConvOut("UTF-8",TSYS::strMess(_("%ds"),ttm.tm_sec));
 		    //Milliseconds
-		    else if( hvLev <= 1 || i_h%1000000 )
+		    else if(hvLev <= 1 || i_h%1000000)
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 				 (chLev>=1) ? Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6)) :
 					      Mess->codeConvOut("UTF-8",TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.));
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
-		    if( lab_tm.size() )
+		    if(lab_tm.size())
 		    {
-			gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str(), &strex);
+			gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_tm.c_str(), &strex);
 			wdth = brect[2]-brect[6];
-			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
+			tpos = vmax(h_pos-wdth/2, 0);
+			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
 			{
-			    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)lab_tm.c_str(), &strex);
+			    gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)lab_tm.c_str(), &strex);
 			    endPosTm = tpos+wdth;
 			}
 		    }
-		    if( lab_dt.size() )
+		    if(lab_dt.size())
 		    {
-			gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str(), &strex);
+			gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str(), &strex);
 			wdth = brect[2]-brect[6];
-			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
+			tpos = vmax(h_pos-wdth/2, 0);
+			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
 			{
-			    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+2*(brect[3]-brect[7]),(char*)lab_dt.c_str(), &strex);
+			    gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+2*(brect[3]-brect[7]), (char*)lab_dt.c_str(), &strex);
 			    endPosDt = tpos+wdth;
 			}
 		    }
-		    begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
-		    memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
+		    begMarkBrd = vmax(begMarkBrd, vmax(endPosTm,endPosDt));
+		    memcpy((char*)&ttm1, (char*)&ttm, sizeof(tm));
 		    first_m = false;
 		}
 		//>>>> Next
-		if( i_h >= tPict )	break;
+		if(i_h >= tPict) break;
 		i_h = (i_h/hDiv)*hDiv + hDiv;
-		if( i_h > tPict )	i_h = tPict;
-	    }
-	}
-    }
-
-    //> Calc vertical scale
-    int64_t aVend;			//Corrected for allow data the trend end point
-    int64_t aVbeg;			//Corrected for allow data the trend begin point
-    bool    vsPerc = true;	      //Vertical scale percent mode
-    bool    isLog = sclVer&0x4;		//Logarithmic scale
-    double  curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
-
-    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
-    {
-	if(!trnds[i_p].val().size() || ((trnds[i_p].color()>>31)&0x01))	continue;
-
-	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
-	if(trnds[i_p].bordU() <= trnds[i_p].bordL() && trnds[i_p].valTp() != 0)
-	{
-	    //>> Check trend for valid data
-	    aVbeg = vmax(tBeg,trnds[i_p].valBeg());
-	    aVend = vmin(tEnd,trnds[i_p].valEnd());
-
-	    if(aVbeg >= aVend)	{ makeImgPng(ses,im); return; }
-	    //>> Calc value borders
-	    bool end_vl = false;
-	    int ipos = trnds[i_p].val(aVbeg);
-	    if( ipos && trnds[i_p].val()[ipos].tm > aVbeg ) ipos--;
-	    while(true)
-	    {
-		if(ipos >= (int)trnds[i_p].val().size() || end_vl)	break;
-		if(trnds[i_p].val()[ipos].tm >= aVend)	end_vl = true;
-		if(trnds[i_p].val()[ipos].val != EVAL_REAL)
-		{
-		    curVl = trnds[i_p].val()[ipos].val;
-		    vsMinAdj = vmin(vsMinAdj,curVl); vsMaxAdj = vmax(vsMaxAdj,curVl);
-		}
-		ipos++;
-	    }
-	    if(vsMaxAdj == -3e300)		{ vsMaxAdj = 1.0; vsMinAdj = 0.0; }
-	    else if((vsMaxAdj-vsMinAdj) < 1e-30 && fabs(vsMaxAdj) < 1e-30)
-	    { vsMaxAdj += 0.5; vsMinAdj -= 0.5; }
-	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
-	    {
-		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
-		vsMinAdj -= wnt_dp/2;
-		vsMaxAdj += wnt_dp/2;
-	    }
-	}
-	else if(trnds[i_p].bordU() <= trnds[i_p].bordL() && trnds[i_p].valTp() == 0)
-	{ vsMaxAdj = 1.5; vsMinAdj = -0.5; }
-	else { vsMaxAdj = trnds[i_p].bordU(); vsMinAdj = trnds[i_p].bordL(); }
-
-	//>>> Check for value border allow
-	if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
-	{ vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
-	else { vsMax = -3e300; vsMin = 3e300; break; }
-    }
-    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMax = 100, vsMin = isLog?pow(10,vmin(0,2-(tArH/150))):0; }
-    else vsPerc = false;
-
-    if(isLog)
-    {
-	vsMax = log10(vmax(1e-100,vsMax));
-	vsMin = log10(vmax(1e-100,vsMin));
-    }
-
-    //>> Vertical scale and offset apply
-    bool isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
-    if( isScale )
-    {
-	float vsDif = vsMax - vsMin;
-	vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
-	vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
-    }
-
-    float vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)) );
-    if( vmax_ln >= 2 )
-    {
-	double vDiv = 1;
-	double v_len = vsMax - vsMin;
-	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
-	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-	while( !isLog && ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
-
-	//>> Draw vertical grid and markers
-	if( sclVer&0x3 )
-	{
-	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
-	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
-	    {
-		//>>> Draw grid
-		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
-		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
-		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
-		//>>> Draw markers
-		if( sclVer&0x2 && mrkHeight )
-		{
-		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
-		    bool isMax = (v_pos-mrkHeight) < tArY;
-		    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-			    (char*)((isLog?TSYS::real2str(pow(10,i_v),4,'g'):TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"")).c_str(), &strex);
-		}
+		if(i_h > tPict)	i_h = tPict;
 	    }
 	}
     }
@@ -5596,35 +5678,40 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     //> Draw trends
     for(unsigned i_t = 0; i_t < trnds.size(); i_t++)
     {
+	TrendObj &cP = trnds[i_t];
+
 	//>> Set trend's pen
-	int lnWdth = vmax(1,vmin(10,(int)TSYS::realRound(trnds[i_t].width()*vmin(xSc,ySc))));
-	gdImageSetThickness(im,lnWdth);
-	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
-	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
+	int lnWdth = vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(xSc,ySc))));
+	gdImageSetThickness(im, lnWdth);
+	int clr_t = TWEB::colorResolve(im, cP.color());
 
 	//>> Prepare generic parameters
-	aVbeg = vmax(tBeg,trnds[i_t].valBeg());
-	aVend = vmin(tEnd,trnds[i_t].valEnd());
-	if( aVbeg >= aVend || (trnds[i_t].color()>>31)&0x01 ) continue;
-	int aPosBeg = trnds[i_t].val(aVbeg);;
-	if( aPosBeg && trnds[i_t].val()[aPosBeg].tm > aVbeg ) aPosBeg--;
+	aVbeg = vmax(tBeg, cP.valBeg());
+	aVend = vmin(tEnd, cP.valEnd());
+	if(aVbeg >= aVend || (cP.color()>>31)&0x01) continue;
+	int aPosBeg = cP.val(aVbeg);;
+	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
+	bool vsPercT = cP.isIndiv ? false : vsPerc;
+        bool isLogT = cP.isIndiv ? (cP.wScale&SC_LOG) : isLog;
+        double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+        double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
 	//>> Prepare border for percent trend
-	float bordL = trnds[i_t].bordL();
-	float bordU = trnds[i_t].bordU();
-	if( vsPerc && bordL >= bordU )
+	float bordL = cP.bordL();
+	float bordU = cP.bordU();
+	if(vsPercT && bordL >= bordU)
 	{
 	    bordU = -3e300, bordL = 3e300;
 	    bool end_vl = false;
 	    int ipos = aPosBeg;
-	    while( true )
+	    while(true)
 	    {
-		if( ipos >= (int)trnds[i_t].val().size() || end_vl )	break;
-		if( trnds[i_t].val()[ipos].tm >= aVend )	end_vl = true;
-		if( trnds[i_t].val()[ipos].val != EVAL_REAL )
+		if(ipos >= (int)cP.val().size() || end_vl)	break;
+		if(cP.val()[ipos].tm >= aVend)	end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL)
 		{
-		    bordL = vmin(bordL,trnds[i_t].val()[ipos].val);
-		    bordU = vmax(bordU,trnds[i_t].val()[ipos].val);
+		    bordL = vmin(bordL, cP.val()[ipos].val);
+		    bordU = vmax(bordU, cP.val()[ipos].val);
 		}
 		ipos++;
 	    }
@@ -5638,45 +5725,44 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	double	curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int	curPos, averPos = 0, prevPos = 0, z_vpos = 0;
 	int64_t	curTm = 0, averTm = 0, averLstTm = 0;
-	for( int a_pos = aPosBeg; true; a_pos++ )
+	for(int a_pos = aPosBeg; true; a_pos++)
 	{
-	    if( a_pos < (int)trnds[i_t].val().size() && !end_vl )
+	    if(a_pos < (int)cP.val().size() && !end_vl)
 	    {
-		curTm = vmin(aVend,vmax(aVbeg,trnds[i_t].val()[a_pos].tm));
-		curVl = trnds[i_t].val()[a_pos].val;
-		if(vsPerc && curVl != EVAL_REAL) curVl = 100*(curVl-bordL)/(bordU-bordL);
+		curTm = vmin(aVend, vmax(aVbeg,cP.val()[a_pos].tm));
+		curVl = cP.val()[a_pos].val;
+		if(vsPercT && curVl != EVAL_REAL) curVl = 100*(curVl-bordL)/(bordU-bordL);
 		if(isnan(curVl)) curVl = EVAL_REAL;
-		curPos = tArX+tArW*(curTm-tBeg)/(tPict-tBeg);
+		curPos = tArX + tArW*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
-	    if(!curPos || trnds[i_t].val()[a_pos].tm >= aVend)	end_vl = true;
+	    if(!curPos || cP.val()[a_pos].tm >= aVend)	end_vl = true;
 	    //Square Average
-	    if( averPos == curPos )
+	    if(averPos == curPos)
 	    {
-		if( !(2*curTm-averTm-averLstTm) ) continue;
-		if( averVl == EVAL_REAL )  averVl = curVl;
-		else if( curVl != EVAL_REAL )
-		    averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/
-			     ((double)(2*curTm-averTm-averLstTm));
+		if(!(2*curTm-averTm-averLstTm)) continue;
+		if(averVl == EVAL_REAL)  averVl = curVl;
+		else if(curVl != EVAL_REAL)
+		    averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/((double)(2*curTm-averTm-averLstTm));
 		averLstTm = curTm;
 		continue;
 	    }
 	    //Write point and line
-	    if( averVl != EVAL_REAL )
+	    if(averVl != EVAL_REAL)
 	    {
-		if(trnds[i_t].valTp() == 0)
-		    z_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin)/(vsMax-vsMin))));
-		int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
+		if(cP.valTp() == 0)
+		    z_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((vsPercT?(100*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
+		int c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,averVl)):averVl)-vsMinT)/(vsMaxT-vsMinT))));
 		if(prevVl == EVAL_REAL)
 		{
-		    if(trnds[i_t].valTp() != 0) gdImageSetPixel(im,averPos,c_vpos,clr_t);
-		    else gdImageLine(im,averPos,z_vpos,averPos,vmin(z_vpos-lnWdth,c_vpos),clr_t);
+		    if(cP.valTp() != 0) gdImageSetPixel(im, averPos, c_vpos, clr_t);
+		    else gdImageLine(im, averPos, z_vpos, averPos, vmin(z_vpos-lnWdth,c_vpos), clr_t);
 		}
 		else
 		{
-		    int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
-		    if(trnds[i_t].valTp() != 0) gdImageLine(im,prevPos,c_vpos_prv,averPos,c_vpos,clr_t);
+		    int c_vpos_prv = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
+		    if(cP.valTp() != 0) gdImageLine(im, prevPos, c_vpos_prv, averPos, c_vpos, clr_t);
 		    else for(int sps = prevPos+1; sps <= averPos; sps++)
-			gdImageLine(im,sps,z_vpos,sps,vmin(z_vpos-lnWdth,c_vpos),clr_t);
+			gdImageLine(im, sps, z_vpos, sps, vmin(z_vpos-lnWdth,c_vpos), clr_t);
 		}
 	    }
 	    prevVl  = averVl;
@@ -5689,30 +5775,29 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //> Draw cursor
-    if( active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict) )
+    if(active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict))
     {
 	//>> Set trend's pen
-	int clr_cur = gdImageColorResolveAlpha(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor,127-(uint8_t)(curColor>>24));
+	int clr_cur = TWEB::colorResolve(im, curColor);
 	//gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
-	int curPos = tArX+tArW*(curTime-tBeg)/(tPict-tBeg);
-	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
+	int curPos = tArX + tArW*(curTime-tBeg)/(tPict-tBeg);
+	gdImageLine(im, curPos, tArY, curPos, tArY+tArH, clr_cur);
     }
 
     //> Get image and transfer it
-    makeImgPng(ses,im);
+    makeImgPng(ses, im);
 }
 
 void VCADiagram::makeSpectrumPicture( SSess &ses )
 {
-    ResAlloc res(mRes,true);
+    ResAlloc res(mRes, true);
 
     //> Check for trend's data reload
     bool rld = true;
-    if( tTimeCurent )	tTime = (int64_t)time(NULL)*1000000;
-    else if( trcPer && lstTrc < time(NULL) )
-    { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
+    if(tTimeCurent)	tTime = (int64_t)time(NULL)*1000000;
+    else if(trcPer && lstTrc < time(NULL)) { tTime += (time(NULL)-lstTrc)*1000000; lstTrc = time(NULL); }
     else rld = false;
-    if( rld ) for(unsigned i_p = 0; i_p < trnds.size(); i_p++) trnds[i_p].loadData(ses.user);
+    if(rld) for(unsigned i_p = 0; i_p < trnds.size(); i_p++) trnds[i_p].loadData(ses.user);
 
     int mrkFontSize = 0;
     int mrkHeight = 0;
@@ -5730,14 +5815,14 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     int imH = (int)TSYS::realRound((double)height*ySc,POS_PREC_DIG,true);
 
     //> Prepare picture
-    gdImagePtr im = gdImageCreateTrueColor(imW,imH);
+    gdImagePtr im = gdImageCreateTrueColor(imW, imH);
     if(!im) { ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page; return; }
     gdImageAlphaBlending(im,0);
-    gdImageFilledRectangle(im,0,0,imW-1,imH-1,gdImageColorResolveAlpha(im,0,0,0,127));
+    gdImageFilledRectangle(im, 0, 0, imW-1, imH-1, gdImageColorResolveAlpha(im,0,0,0,127));
     gdImageAlphaBlending(im,1);
     int brect[8];
 
-    if( !trnds.size() || tSz <= 0 )	{ makeImgPng(ses,im); return; }
+    if(!trnds.size() || tSz <= 0)	{ makeImgPng(ses,im); return; }
 
     //> Make decoration and prepare trends area
     tArX = 1, tArY = 1,						//Curves of trends area rect
@@ -5751,185 +5836,270 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     strex.hdpi = 72;
 
     //> Process scale
-    if( sclHor&0x3 || sclVer&0x3 )
+    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
     {
-	gdImageSetThickness(im,vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
+	gdImageSetThickness(im, vmax(1,TSYS::realRound(vmin(xSc,ySc))));
 	//>> Set grid color
-	clr_grid = gdImageColorResolveAlpha(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor,127-(uint8_t)(sclColor>>24));
+	clr_grid = TWEB::colorResolve(im, sclColor);
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
-	if( sclHor&0x2 || sclVer&0x2 )
+	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
 	{
 	    //>> Set markers font and color
-	    mrkFontSize = (int)((double)sclMarkFontSize*vmin(xSc,ySc));
-	    clr_mrk = gdImageColorResolveAlpha(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor,127-(uint8_t)(sclMarkColor>>24));
+	    mrkFontSize = (double)sclMarkFontSize*vmin(xSc, ySc);
+	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
-	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0, (char*)"000000", &strex);
-	    if( rez ) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
+	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
+	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
 	    else mrkHeight = brect[3]-brect[7];
-	    if( sclHor&0x2 )
+	    if(sclHor&SC_MARKERS)
 	    {
-		if( tArH < (int)(100*vmin(xSc,ySc)) ) sclHor &= ~(0x02);
+		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
 		else tArH -= mrkHeight+4;
 	    }
-	    if( sclVer&0x2 && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(0x02);
+	    if(sclVer&SC_MARKERS && tArW < (int)(100*vmin(xSc,ySc))) sclVer &= ~(SC_MARKERS);
 	}
     }
+
+#if HAVE_FFTW3_H
+    //>> Calc vertical scale for main and individual
+    double curVl, vsMax = -3e300, vsMin = 3e300;//Trend's vertical scale border
+    bool   vsPerc = true;			//Vertical scale percent mode
+    bool   isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
+
+    //>> Get main scale for non individual parameters
+    int prmInGrp = 0, prmGrpLast = -1;
+    for(unsigned i_p = 0, mainPerc = false; i_p < trnds.size(); i_p++)
+    {
+	TrendObj &cP = trnds[i_p];
+	if(!cP.fftN || ((cP.color()>>31)&0x01))	continue;
+
+	cP.adjU = -3e300; cP.adjL = 3e300;
+	if(cP.bordU() <= cP.bordL())
+	{
+	    //>>> Calc value borders
+	    double vlOff = cP.fftOut[0][0]/cP.fftN;
+	    for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++)
+	    {
+		curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+		cP.adjL = vmin(cP.adjL, curVl);
+		cP.adjU = vmax(cP.adjU, curVl);
+	    }
+	    if(cP.adjU == cP.adjL)	{ cP.adjU += 1.0; cP.adjL -= 1.0; }
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
+	    {
+		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2;
+		cP.adjU += wnt_dp/2;
+	    }
+	}
+	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
+
+	cP.wScale = cP.mScale&(sclVer|SC_LOG);
+        if(cP.wScale&(SC_GRID|SC_MARKERS)) continue;
+
+	//>>> Check for value border allow
+	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+	{ vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU); }
+	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = i_p;
+    }
+
+    //>> Check for individual parameters and for possibility to merge it to group or create new for no group
+    int prmIndiv = 0;
+    int prmIndivSc = -1;
+    vector<int> prmsInd;
+    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
+    {
+        TrendObj &cP = trnds[i_p];
+        cP.isIndiv = false;
+        if(!cP.fftN || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+        //>> Check for include to present or create new group and exclude from individual
+        if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
+        {
+            vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+            prmInGrp++; prmGrpLast = i_p;
+            continue;
+        }
+        cP.isIndiv = true;
+        prmIndiv++;
+        if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+        else prmsInd.push_back(i_p);
+        if(isScale)     //Vertical scale and offset apply
+        {
+            float vsDif = cP.adjU - cP.adjL;
+            cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
+            cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
+        }
+    }
+    if(prmInGrp) prmsInd.push_back(-1);
+    if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
+
+    //>> Final main scale adapting
+    if(vsMin > vsMax)	{ vsPerc = true; vsMax = 100; vsMin = 0; }
+    else vsPerc = false;
+    if(isScale)	//Vertical scale and offset apply
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += sclVerSclOff*vsDif/100;	vsMin += sclVerSclOff*vsDif/100;
+	vsMax += (sclVerScl*vsDif/100-vsDif)/2;	vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
+    }
+
+    //> Draw main and individual vertical scales
+    double vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
+    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
+    {
+	bool    vsPercT;
+        char    sclVerT;
+        int	clrGridT = TWEB::colorResolve(im, sclColor);
+        double  vsMinT, vsMaxT;
+        double  vDiv = 1;
+        if(prmsInd[i_p] < 0)    //Main scale process
+        {
+            //>> Draw environment
+            vsPercT = vsPerc;
+            sclVerT = sclVer;
+            clrGridT = TWEB::colorResolve(im, sclColor);
+	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+            if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
+		clrGridT = clr_mrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
+            //>> Rounding
+            double v_len = vsMax - vsMin;
+            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+            if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+            while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+            vsMinT = vsMin; vsMaxT = vsMax;
+        }
+        else    //Individual scale process
+	{
+	    TrendObj &cP = trnds[prmsInd[i_p]];
+            //>> Draw environment
+            vsPercT = false;
+            sclVerT = cP.wScale;
+            clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
+            //>> Rounding
+            double v_len = cP.adjU - cP.adjL;
+            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+            if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+            while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+            vsMinT = cP.adjL; vsMaxT = cP.adjU;
+        }
+        if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+
+	//>>> Draw vertical grid and markers
+	int markWdth = 0;
+	if(sclVerT & (SC_GRID|SC_MARKERS))
+	{
+	    string labVal;
+	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
+	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
+	    {
+		int v_pos = tArY + tArH - (int)((double)tArH*(i_v-vsMinT)/(vsMaxT-vsMinT));
+		if(sclVerT & SC_GRID) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
+		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
+		if(sclVerT & SC_MARKERS && mrkHeight)
+		{
+		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-1-mrkHeight) < tArY;
+		    labVal = TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"");
+		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Check for correct work combining mode
+		    markWdth = vmax(markWdth, brect[2]-brect[6]);
+		}
+	    }
+	}
+	if(i_p < (prmsInd.size()-1)) { tArX += markWdth?(markWdth+5):0; tArW -= markWdth?(markWdth+5):0; }
+    }
+    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
+#endif
 
     //> Calc horizontal scale
     int fftN = (int)(width+0.5);
     fftBeg = 1e6/(double)tSz;			//Minimum frequency or maximum period time (s)
     fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;				//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&0x2 && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
-    if( hmax_ln >= 2 )
+    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkHeight)?(brect[2]-brect[6]):(15*vmin(xSc,ySc)));
+    if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
-	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
-	while( hLen/hDiv < hmax_ln/10)	hDiv /= 10;
+	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
+	while(hLen/hDiv < hmax_ln/10)	hDiv /= 10;
 	fftBeg = floor(10*fftBeg/hDiv)*hDiv/10;
 	fftEnd = ceil(10*fftEnd/hDiv)*hDiv/10;
-	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv/=2;
+	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv /= 2;
 
 	//>> Draw horisontal grid and markers
-	if( sclHor&0x3 )
+	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
 	    string labH;
 	    double labDiv = 1;
-	    if( fftEnd>1000 ) labDiv = 1000;
+	    if(fftEnd > 1000) labDiv = 1000;
 	    //>>> Draw generic grid line
-	    gdImageLine(im,tArX,tArY+tArH,tArX+tArW,tArY+tArH,clr_grid);
+	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
-	    int endMarkBrd = tArX+tArW;
-	    if( sclHor&0x2 && mrkHeight )
+	    int endMarkBrd = tArX + tArW;
+	    if(sclHor&SC_MARKERS && mrkHeight)
 	    {
-		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
-		gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str(), &strex);
-		int markBrd = tArX+tArW-(brect[2]-brect[6]);
-		endMarkBrd = vmin(endMarkBrd,markBrd);
-		gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str(), &strex);
+		labH = TSYS::strMess("%0.4g",fftEnd/labDiv) + Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
+		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
+		int markBrd = tArX + tArW - (brect[2]-brect[6]);
+		endMarkBrd = vmin(endMarkBrd, markBrd);
+		gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, markBrd, tArY+tArH+3+(brect[3]-brect[7]), (char*)labH.c_str(), &strex);
 	    }
 	    //>>> Draw grid and/or markers
-	    for( double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h+=hDiv )
+	    for(double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h += hDiv)
 	    {
 		//>>>> Draw grid
-		int h_pos = tArX+(int)((double)tArW*(i_h-fftBeg)/(fftEnd-fftBeg));
-		if( sclHor&0x1 ) gdImageLine(im,h_pos,tArY,h_pos,tArY+tArH,clr_grid);
-		else gdImageLine(im,h_pos,tArY+tArH-3,h_pos,tArY+tArH+3,clr_grid);
+		int h_pos = tArX + (int)((double)tArW*(i_h-fftBeg)/(fftEnd-fftBeg));
+		if(sclHor & SC_GRID) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
+		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
 
-		if( sclHor&0x2 && mrkHeight )
+		if(sclHor&SC_MARKERS && mrkHeight)
 		{
-		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
-		    gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)labH.c_str(), &strex);
+		    labH = TSYS::strMess("%0.4g", i_h/labDiv);
+		    gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
-		    if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
-			gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,tArY+tArH+3+(brect[3]-brect[7]),(char*)labH.c_str(), &strex);
-		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
+		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
+			gdImageStringFTEx(im, NULL, clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, tArY+tArH+3+(brect[3]-brect[7]), (char*)labH.c_str(), &strex);
+		    begMarkBrd = vmax(begMarkBrd, tpos+wdth);
 		}
 	    }
 	}
     }
 
 #if HAVE_FFTW3_H
-    //>> Calc vertical scale
-    double curVl, vsMax = -3e300, vsMin = 3e300;//Trend's vertical scale border
-    bool   vsPerc = true;			//Vertical scale percent mode
-    for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
-    {
-	if(!trnds[i_p].fftN || ((trnds[i_p].color()>>31)&0x01))	continue;
-
-	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
-	if(trnds[i_p].bordU() <= trnds[i_p].bordL())
-	{
-	    //>>> Calc value borders
-	    double vlOff = trnds[i_p].fftOut[0][0]/trnds[i_p].fftN;
-	    for(int i_v = 1; i_v < (trnds[i_p].fftN/2+1); i_v++)
-	    {
-		curVl = vlOff+pow(pow(trnds[i_p].fftOut[i_v][0],2)+pow(trnds[i_p].fftOut[i_v][1],2),0.5)/(trnds[i_p].fftN/2+1);
-		vsMinAdj = vmin(vsMinAdj,curVl);
-		vsMaxAdj = vmax(vsMaxAdj,curVl);
-	    }
-	    if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
-	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
-	    {
-		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
-		vsMinAdj -= wnt_dp/2;
-		vsMaxAdj += wnt_dp/2;
-	    }
-	}
-	else { vsMaxAdj = trnds[i_p].bordU(); vsMinAdj = trnds[i_p].bordL(); }
-
-	//>>> Check for value border allow
-	if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
-	{ vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
-	else { vsMax = -3e300; vsMin = 3e300; break; }
-    }
-    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = 0; }
-    else vsPerc = false;
-
-    //>> Vertical scale and offset apply
-    bool isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
-    if( isScale )
-    {
-	float vsDif = vsMax - vsMin;
-	vsMax += sclVerSclOff*vsDif/100; vsMin += sclVerSclOff*vsDif/100;
-	vsMax += (sclVerScl*vsDif/100-vsDif)/2; vsMin -= (sclVerScl*vsDif/100-vsDif)/2;
-    }
-
-    double vmax_ln = tArH / ( (sclVer&0x2 && mrkHeight)?(2*mrkHeight):(int)(15.0*vmin(xSc,ySc)) );
-    if( vmax_ln >= 2 )
-    {
-	double vDiv = 1.;
-	double v_len = vsMax - vsMin;
-	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
-	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
-
-	//>>> Draw vertical grid and markers
-	if( sclVer&0x3 )
-	{
-	    gdImageLine(im,tArX,tArY,tArX,tArH,clr_grid);
-	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v += vDiv )
-	    {
-		int v_pos = tArY+tArH-(int)((double)tArH*(i_v-vsMin)/(vsMax-vsMin));
-		if( sclVer&0x1 ) gdImageLine(im,tArX,v_pos,tArX+tArW,v_pos,clr_grid);
-		else gdImageLine(im,tArX-3,v_pos,tArX+3,v_pos,clr_grid);
-		if( sclVer&0x2 && mrkHeight )
-		{
-		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
-		    bool isMax = (v_pos-mrkHeight) < tArY;
-		    gdImageStringFTEx(im,NULL,clr_mrk,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tArX+2,v_pos+(isMax?mrkHeight:0),
-				      (char*)(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str(), &strex);
-		}
-	    }
-	}
-    }
-
     //>> Draw trends trnds[i_t];
     for(unsigned i_t = 0; i_t < trnds.size(); i_t++)
     {
-	if( !trnds[i_t].fftN || (trnds[i_t].color()>>31)&0x01 ) continue;
+	TrendObj &cP = trnds[i_t];
+	if(!cP.fftN || (cP.color()>>31)&0x01) continue;
 
 	//>> Set trend's pen
-	gdImageSetThickness(im,vmax(1,vmin(10,(int)TSYS::realRound(trnds[i_t].width()*vmin(xSc,ySc)))));
-	int clr_t = gdImageColorResolveAlpha(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color(),127-(uint8_t)(trnds[i_t].color()>>24));
-	//gdImageColorAllocate(im,(uint8_t)(trnds[i_t].color()>>16),(uint8_t)(trnds[i_t].color()>>8),(uint8_t)trnds[i_t].color());
-	double vlOff = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN;
-	double fftDt = (1e6/(double)tSz)*(double)width/trnds[i_t].fftN;
+	gdImageSetThickness(im,vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(xSc,ySc)))));
+	int clr_t = TWEB::colorResolve(im, cP.color());
+	//gdImageColorAllocate(im,(uint8_t)(cP.color()>>16),(uint8_t)(cP.color()>>8),(uint8_t)cP.color());
+	double vlOff = cP.fftOut[0][0]/cP.fftN;
+	double fftDt = (1e6/(double)tSz)*(double)width/cP.fftN;
+
+	bool vsPercT = cP.isIndiv ? false : vsPerc;
+        double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+        double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
 	//>>> Prepare border for percent trend
-	double bordL = trnds[i_t].bordL();
-	double bordU = trnds[i_t].bordU();
-	if( vsPerc && bordL >= bordU )
+	double bordL = cP.bordL();
+	double bordU = cP.bordU();
+	if(vsPercT && bordL >= bordU)
 	{
 	    bordU = -3e300, bordL = 3e300;
-	    for( int i_v = 1; i_v < (trnds[i_t].fftN/2+1); i_v++ )
+	    for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++)
 	    {
-		curVl = vlOff+pow(pow(trnds[i_t].fftOut[i_v][0],2)+pow(trnds[i_t].fftOut[i_v][1],2),0.5)/(trnds[i_t].fftN/2+1);
-		bordL = vmin(bordL,curVl);
-		bordU = vmax(bordU,curVl);
+		curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+		bordL = vmin(bordL, curVl);
+		bordU = vmax(bordU, curVl);
 	    }
 	    double vMarg = (bordU-bordL)/10;
 	    bordL -= vMarg;
@@ -5939,31 +6109,31 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	//>>> Draw trend
 	double prevVl = EVAL_REAL;
 	int curPos = 0, prevPos = 0;
-	for( int i_v = 1; i_v < (trnds[i_t].fftN/2+1); i_v++ )
+	for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++)
 	{
-	    curVl = vlOff+pow(pow(trnds[i_t].fftOut[i_v][0],2)+pow(trnds[i_t].fftOut[i_v][1],2),0.5)/(trnds[i_t].fftN/2+1);
-	    if(vsPerc) curVl = 100*(curVl-bordL)/(bordU-bordL);
-	    curPos = tArX+(int)((double)tArW*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
+	    curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+	    if(vsPercT) curVl = 100*(curVl-bordL)/(bordU-bordL);
+	    curPos = tArX + (int)((double)tArW*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
 
-	    int c_vpos = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(curVl-vsMin)/(vsMax-vsMin))));
-	    if( prevVl == EVAL_REAL ) gdImageSetPixel(im,curPos,c_vpos,clr_t);
+	    int c_vpos = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,(curVl-vsMinT)/(vsMaxT-vsMinT))));
+	    if(prevVl == EVAL_REAL) gdImageSetPixel(im, curPos, c_vpos, clr_t);
 	    else
 	    {
-		int c_vpos_prv = tArY+tArH-(int)((double)tArH*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
-		gdImageLine(im,prevPos,c_vpos_prv,curPos,c_vpos,clr_t);
+		int c_vpos_prv = tArY + tArH - (int)((double)tArH*vmax(0,vmin(1,(prevVl-vsMinT)/(vsMaxT-vsMinT))));
+		gdImageLine(im, prevPos, c_vpos_prv, curPos, c_vpos, clr_t);
 	    }
 	    prevPos = curPos;
 	    prevVl = curVl;
 	}
 
 	//>>> Update value on cursor
-	if( active )
+	if(active)
 	{
 	    double curFrq = vmax(vmin(1e6/(double)curTime,fftEnd),fftBeg);
 	    curPos = (int)(curFrq/fftDt);
-	    if( curPos >= 1 && curPos < (trnds[i_t].fftN/2+1) )
+	    if(curPos >= 1 && curPos < (cP.fftN/2+1))
 	    {
-		double val = trnds[i_t].fftOut[0][0]/trnds[i_t].fftN + pow(pow(trnds[i_t].fftOut[curPos][0],2)+pow(trnds[i_t].fftOut[curPos][1],2),0.5)/(trnds[i_t].fftN/2+1);
+		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
 		XMLNode req("set");
 		req.setAttr("path",id()+"/%2fserv%2fattr")->
 		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(TSYS::real2str(val,6));
@@ -5974,44 +6144,44 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 #endif
 
     //> Draw cursor
-    if( active && tSz )
+    if(active && tSz)
     {
-	float curFrq = vmax(vmin(1e6/(float)curTime,fftEnd),fftBeg);
-	int curPos = tArX+(int)(tArW*(curFrq-fftBeg)/(fftEnd-fftBeg));
-	int clr_cur = gdImageColorResolveAlpha(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor,127-(uint8_t)(curColor>>24));
+	float curFrq = vmax(vmin(1e6/(float)curTime,fftEnd), fftBeg);
+	int curPos = tArX + (int)(tArW*(curFrq-fftBeg)/(fftEnd-fftBeg));
+	int clr_cur = TWEB::colorResolve(im, curColor);
 	//gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
-	gdImageLine(im,curPos,tArY,curPos,tArY+tArH,clr_cur);
+	gdImageLine(im, curPos, tArY, curPos, tArY+tArH, clr_cur);
     }
 
     //> Get image and transfer it
-    makeImgPng(ses,im);
+    makeImgPng(ses, im);
 }
 
 void VCADiagram::postReq( SSess &ses )
 {
-    ResAlloc res(mRes,true);
+    ResAlloc res(mRes, true);
 
-    map< string, string >::iterator prmEl = ses.prm.find("sub");
-    if( prmEl != ses.prm.end() && prmEl->second == "point" );
+    map<string, string>::iterator prmEl = ses.prm.find("sub");
+    if(prmEl != ses.prm.end() && prmEl->second == "point");
     {
 	prmEl = ses.prm.find("x");
 	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
-	if( x_coord >= tArX && x_coord <= tArX+tArW )
+	if(x_coord >= tArX && x_coord <= (tArX+tArW))
 	{
-	    if( type == 0 )
+	    if(type == 0)
 	    {
 		int64_t tTimeGrnd = tPict - (int64_t)(1e6*tSize);
-		setCursor( tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user );
+		setCursor(tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user);
 	    }
-	    else if( type == 1 )
-		setCursor( (int64_t)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user );
+	    else if(type == 1)
+		setCursor((int64_t)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user);
 	}
     }
 }
 
 void VCADiagram::setAttrs( XMLNode &node, const string &user )
 {
-    ResAlloc res(mRes,true);
+    ResAlloc res(mRes, true);
 
     int  reld_tr_dt = 0;	//Reload trend's data (1-reload addons, 2-full reload)
 
@@ -6094,8 +6264,8 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		sscanf(req_el->text().c_str(),"%100s %d %d %d",family,&sclMarkFontSize,&bold,&italic);
 		sclMarkFont = family;
 		for(unsigned p = 0; p < sclMarkFont.size(); p++) if(sclMarkFont[p] == '_') sclMarkFont[p] = ' ';
-		if( bold ) sclMarkFont += ":bold";
-		if( italic ) sclMarkFont += ":italic";
+		if(bold) sclMarkFont += ":bold";
+		if(italic) sclMarkFont += ":italic";
 		//> Font size correct
 		/*int brect[8];
 		gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),sclMarkFontSize,0.,0,0,"Test");
@@ -6138,6 +6308,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 			case 4:									//value
 			    trnds[trndN].setCurVal((req_el->text()==EVAL_STR) ? EVAL_REAL : atof(req_el->text().c_str()));
 			    break;
+			case 5: trnds[trndN].setScale(atoi(req_el->text().c_str()));	break;	//scale
 			case 6:	trnds[trndN].setWidth(atoi(req_el->text().c_str()));	break;	//width
 		    }
 		}

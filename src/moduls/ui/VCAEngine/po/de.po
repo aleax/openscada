@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-07 10:58+0200\n"
+"POT-Creation-Date: 2013-04-03 17:38+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -625,16 +625,16 @@ msgid "Scale:horizontal"
 msgstr "Skala:waagerecht"
 
 msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Ohne;Gitter;Markierung;Gitter und Markierung"
+msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"
 
 msgid "Scale:vertical"
 msgstr "Skala:senkrecht"
 
 msgid ""
-"No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and "
+"No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
-"Ohne;Gitter;Markierung;Gitter und Markierung;Gitter (log);Markierung (log);"
+"Zeichnen nicht;Gitter;Markierung;Gitter und Markierung;Gitter (log);Markierung (log);"
 "Gitter und Markierung (log)"
 
 msgid "Scale:vertical scale (%)"
@@ -675,6 +675,12 @@ msgstr ":Farbe"
 
 msgid ":width"
 msgstr ":Stärke"
+
+msgid ":scale"
+msgstr ":Skale"
+
+msgid "Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"
+msgstr "Globally;Markierung;Gitter und Markierung;Markierung (log);Gitter und Markierung (log)"
 
 msgid ":properties"
 msgstr ":Eigenschaften"
@@ -1701,6 +1707,7 @@ msgstr "Aus dem Stil"
 msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
+#, c-format
 msgid "Connections to attribute '%s' more to %d!"
 msgstr "Verbindungen an das Attribut '%s' mehr als %d!"
 

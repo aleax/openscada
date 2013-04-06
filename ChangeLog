@@ -1,3 +1,8 @@
+2013-04-06 Roman
+- SYS: Default messages level is set to "Info (1)".
+- !!!!:UI.{VCAEngine,Vision,WebVision}: Scales separation for different parameters of primitive "Diagram" is implemented.
+
+
 2013-03-30 Roman
 - UI.Vision: Status line display control is added for run projects.
 - UI.WebVision: The property "Margin" for primitive "Text" behavior is changed and border calculation added.

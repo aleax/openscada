@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-07 10:58+0200\n"
+"POT-Creation-Date: 2013-04-03 17:38+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -627,16 +627,16 @@ msgid "Scale:horizontal"
 msgstr "Шкала:горизонтальна"
 
 msgid "No draw;Grid;Markers;Grid and markers"
-msgstr "Без;Ґратка;Маркери;Ґратка та маркери"
+msgstr "Не малювати;Ґратка;Маркери;Ґратка та маркери"
 
 msgid "Scale:vertical"
 msgstr "Шкала:вертикальна"
 
 msgid ""
-"No draw;Grid;Markers;Grid and markers;Grid (log);Marker (log);Grid and "
+"No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
 msgstr ""
-"Без;Ґратка;Маркери;Ґратка та маркери;Ґратка (лог);Маркери (лог);Ґратка та "
+"Не малювати;Ґратка;Маркери;Ґратка та маркери;Ґратка (лог);Маркери (лог);Ґратка та "
 "маркери (лог)"
 
 msgid "Scale:vertical scale (%)"
@@ -677,6 +677,12 @@ msgstr ":колір"
 
 msgid ":width"
 msgstr ":ширина"
+
+msgid ":scale"
+msgstr ":шкала"
+
+msgid "Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"
+msgstr "Глобально;Маркери;Ґратка та маркери;Маркери (лог);Ґратка та маркери (лог)"
 
 msgid ":properties"
 msgstr ":властивості"
@@ -1700,6 +1706,7 @@ msgstr "Зі стиля"
 msgid "Element type is not selected!"
 msgstr "Елемент не вибіркового типу!"
 
+#, c-format
 msgid "Connections to attribute '%s' more to %d!"
 msgstr "Підключень до атрибуту '%s' більш за %d!"
 

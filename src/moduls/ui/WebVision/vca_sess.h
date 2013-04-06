@@ -265,6 +265,9 @@ class VCAText : public VCAObj
 class VCADiagram : public VCAObj
 {
     public:
+	//Data
+	enum Scale { SC_GRID = 0x01, SC_MARKERS = 0x02, SC_LOG = 0x04 };
+
 	//Methods
 	VCADiagram( const string &iid );
 
@@ -325,6 +328,7 @@ class VCADiagram : public VCAObj
 		double	bordU( )	{ return mBordUp; }
 		int	color( )	{ return mColor; }
 		char	width( )	{ return mWidth; }
+		int	scale( )	{ return mScale; }
 		double	curVal( )	{ return mCurvl; }
 		int	valTp( )	{ return val_tp; }
 		int64_t	valBeg( );
@@ -337,6 +341,7 @@ class VCADiagram : public VCAObj
 		void setBordU( double vl )	{ mBordUp  = vl; }
 		void setColor( int vl )		{ mColor = vl; }
 		void setWidth( char vl )	{ mWidth = vl; }
+		void setScale( char vl )	{ mScale = vl; }
 		void setCurVal( double vl )	{ mCurvl = vl; }
 
 		void loadData( const string &user, bool full = false );
@@ -346,12 +351,14 @@ class VCADiagram : public VCAObj
 		VCADiagram &owner( );
 
 		//Attributes
+		double	adjL, adjU;		//Adjusted lower and upper borders
+		bool	isIndiv;		//Individual scale
+		char	wScale;
 #if HAVE_FFTW3_H
 		//> FFT
 		int	fftN;			//Spectrum samples number
 		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
 #endif
-
 	    private:
 		//Attributes
 		string		mAddr;		//A parameter or an archive item address
@@ -359,6 +366,7 @@ class VCADiagram : public VCAObj
 		double		mCurvl;		//Curent value
 		int		mColor;		//Values line color
 		char		mWidth;		//Line width
+		char		mScale;		//Separted scale
 		//> Archive
 		int64_t		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time

@@ -1595,6 +1595,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			shD->prms[trndN].setCurVal((val==EVAL_STR) ? EVAL_REAL : atof(val.c_str()));
 			make_pct = false;
 			break;
+		    case 5: shD->prms[trndN].setScale(atoi(val.c_str()));	break;		//scale
 		    case 6: shD->prms[trndN].setWidth(atoi(val.c_str()));	break;		//width
 		    case 7: make_pct = false;					break;		//prop
 		}
@@ -1653,48 +1654,207 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
     shD->pictObj.fill(0);
 
-    QPainter pnt( &shD->pictObj );
+    QPainter pnt(&shD->pictObj);
 
     //> Get generic parameters
     int64_t tSize = (int64_t)(1e6*shD->tSize);			//Time size (us)
-    if( shD->prms.empty() || tSize <= 0 ) return;
-
-    //> Make decoration and prepare trends area
-    QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of spectrum area rect
+    if(shD->prms.empty() || tSize <= 0) return;
     int sclHor = shD->sclHor;						//Horisontal scale mode
     int sclVer = shD->sclVer;						//Vertical scale mode
 
-    //> Process scale
-    if( sclHor&0x3 || sclVer&0x3 )
+    //> Trends' area rect definition
+    QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of spectrum area rect
+
+    //> Main scales definition
+    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
     {
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
-	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
+	grdPen.setWidth(vmax(1,TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
 	//>> Set markers font and color
-	if( sclHor&0x2 || sclVer&0x2 )
+	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
 	{
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize( (int)((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))) );
+	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
-	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
-	    if( sclHor&0x2 )
+	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
+	    if(sclHor&SC_MARKERS)
 	    {
-		if( tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
+		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
 		else tAr.adjust(0,0,0,-mrkHeight);
 	    }
-	    if( sclVer&0x2 && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true))) )
-		sclVer &= ~(0x02);
+	    if(sclVer&SC_MARKERS && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclVer &= ~(SC_MARKERS);
 	}
     }
+
+#if HAVE_FFTW3_H
+    //> Calc vertical scale for main and individual
+    double curVl, vsMax = -3e300, vsMin = 3e300;//Trend's vertical scale border
+    bool   vsPerc = true;			//Vertical scale percent mode
+    bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
+
+    //>> Get main scale for non individual parameters
+    int prmInGrp = 0, prmGrpLast = -1;
+    for(unsigned i_p = 0, mainPerc = false; i_p < shD->prms.size(); i_p++)
+    {
+	TrendObj &cP = shD->prms[i_p];
+	if(!cP.fftN || !cP.color().isValid())	continue;
+
+	cP.adjU = -3e300; cP.adjL = 3e300;
+	if(cP.bordU() <= cP.bordL())
+	{
+	    //>>> Calc value borders
+	    double vlOff = cP.fftOut[0][0]/cP.fftN;
+	    for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++)
+	    {
+		curVl = vlOff+pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+		cP.adjL = vmin(cP.adjL, curVl); cP.adjU = vmax(cP.adjU, curVl);
+	    }
+	    if(cP.adjU == cP.adjL)	{ cP.adjU += 1.0; cP.adjL -= 1.0; }
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
+	    {
+		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2;
+		cP.adjU += wnt_dp/2;
+	    }
+	}
+	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
+
+	cP.wScale = cP.mScale&(sclVer|SC_LOG);
+        if(cP.wScale&(SC_GRID|SC_MARKERS)) continue;
+
+	//>> Check for value border allow
+        if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+        { vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU); }
+        else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = i_p;
+    }
+
+    //>> Check for individual parameters and for possibility to merge it to group or create new for no group
+    int prmIndiv = 0;
+    int prmIndivSc = -1;
+    vector<int> prmsInd;
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
+    {
+        TrendObj &cP = shD->prms[i_p];
+        cP.isIndiv = false;
+        if(!cP.fftN || !cP.color().isValid() || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+        //>> Check for include to present or create new group and exclude from individual
+        if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
+        {
+            vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+            prmInGrp++; prmGrpLast = i_p;
+            continue;
+        }
+        cP.isIndiv = true;
+        prmIndiv++;
+        if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+        else prmsInd.push_back(i_p);
+        if(isScale)     //Vertical scale and offset apply
+        {
+            float vsDif = cP.adjU - cP.adjL;
+            cP.adjU += shD->sclVerSclOff*vsDif/100;             cP.adjL += shD->sclVerSclOff*vsDif/100;
+            cP.adjU += (shD->sclVerScl*vsDif/100-vsDif)/2;      cP.adjL -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+        }
+    }
+    if(prmInGrp) prmsInd.push_back(-1);
+    if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
+
+    //>> Final main scale adapting
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = 0; }
+    else vsPerc = false;
+    if(isScale)	//Vertical scale and offset apply
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
+	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+    }
+
+    //> Draw main and individual vertical scales
+    double vmax_ln = tAr.height() / ((sclVer&SC_MARKERS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
+    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
+    {
+        bool    vsPercT;
+        char    sclVerT;
+        QPen    grdPenT = grdPen;
+        double  vsMinT, vsMaxT;
+        double	vDiv = 1;
+        if(prmsInd[i_p] < 0)    //Main scale process
+        {
+            //>> Draw environment
+            vsPercT = vsPerc;
+            sclVerT = sclVer;
+            grdPenT.setColor(shD->sclColor);
+            mrkPen.setColor(shD->sclMarkColor);
+            if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
+            {
+                grdPenT.setColor(shD->prms[prmGrpLast].color());
+                mrkPen.setColor(shD->prms[prmGrpLast].color());
+            }
+            //>> Rounding
+            double v_len = vsMax - vsMin;
+            while(v_len > vmax_ln)      { vDiv *= 10; v_len /= 10; }
+            while(v_len < vmax_ln/10)   { vDiv /= 10; v_len *= 10; }
+            if(!isScale)        { vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+            while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+            vsMinT = vsMin; vsMaxT = vsMax;
+        }
+	else    //Individual scale process
+        {
+            TrendObj &cP = shD->prms[prmsInd[i_p]];
+            //>> Draw environment
+            vsPercT = false;
+            sclVerT = cP.wScale;
+            grdPenT.setColor(cP.color());
+            mrkPen.setColor(cP.color());
+            //>> Rounding
+            double v_len = cP.adjU - cP.adjL;
+            while(v_len > vmax_ln)      { vDiv *= 10; v_len /= 10; }
+            while(v_len < vmax_ln/10)   { vDiv /= 10; v_len *= 10; }
+            if(!isScale)        { cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+            while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+            vsMinT = cP.adjL; vsMaxT = cP.adjU;
+        }
+        if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+
+	//>> Draw vertical grid and markers
+        int markWdth = 0;
+        if(sclVerT & (SC_GRID|SC_MARKERS))
+        {
+            string labVal;
+            pnt.setPen(grdPenT);
+            pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
+            for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
+            {
+                int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMinT)/(vsMaxT-vsMinT));
+                if(sclVerT & SC_GRID) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
+                else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
+
+                if(sclVerT & SC_MARKERS)
+                {
+                    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
+                    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
+                    pnt.setPen(mrkPen);
+                    labVal = TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"");
+                    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
+                    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
+                }
+            }
+        }
+        if(i_p < (prmsInd.size()-1)) tAr.adjust((markWdth?(markWdth+5):0), 0, 0, 0);
+    }
+    mrkPen.setColor(shD->sclMarkColor); //Restore mark color
+#endif
 
     //> Calc horizontal scale
     int fftN = w->size().width();
     double fftBeg = 1e6/(double)tSize;			//Minimum frequency or maximum period time (s)
     double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -1705,7 +1865,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv/=2;
 
 	//>> Draw horisontal grid and markers
-	if( sclHor&0x3 )
+	if(sclHor & (SC_GRID|SC_MARKERS))
 	{
 	    string labH;
 	    double labDiv = 1;
@@ -1716,7 +1876,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tAr.x()+tAr.width();
-	    if( sclHor&0x2 )
+	    if(sclHor&SC_MARKERS)
 	    {
 		pnt.setPen(mrkPen);
 		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
@@ -1726,22 +1886,22 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		pnt.drawText(markBrd,tAr.y()+tAr.height()+mrkHeight,labH.c_str());
 	    }
 	    //>>> Draw grid and/or markers
-	    for( double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h+=hDiv )
+	    for(double i_h = fftBeg; (fftEnd-i_h)/hDiv > -0.1; i_h += hDiv)
 	    {
 		//>>>> Draw grid
 		pnt.setPen(grdPen);
 		int h_pos = tAr.x()+(int)((double)tAr.width()*(i_h-fftBeg)/(fftEnd-fftBeg));
-		if( sclHor&0x1 ) pnt.drawLine(h_pos,tAr.y(),h_pos,tAr.y()+tAr.height());
-		else pnt.drawLine(h_pos,tAr.y()+tAr.height()-3,h_pos,tAr.y()+tAr.height()+3);
+		if(sclHor & SC_GRID) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
+		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if( sclHor&0x2 )
+		if(sclHor&SC_MARKERS)
 		{
 		    pnt.setPen(mrkPen);
-		    labH = TSYS::strMess("%0.4g",i_h/labDiv);
+		    labH = TSYS::strMess("%0.4g", i_h/labDiv);
 		    int wdth = pnt.fontMetrics().width(labH.c_str());
-		    int tpos = vmax(h_pos-wdth/2,0);
-		    if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
-			pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, labH.c_str() );
+		    int tpos = vmax(h_pos-wdth/2, 0);
+		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
+			pnt.drawText(tpos, tAr.y()+tAr.height()+mrkHeight, labH.c_str());
 		    begMarkBrd = vmax(begMarkBrd,tpos+wdth);
 		}
 	    }
@@ -1749,111 +1909,38 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     }
 
 #if HAVE_FFTW3_H
-    //>> Calc vertical scale
-    double curVl, vsMax = -3e300, vsMin = 3e300;//Trend's vertical scale border
-    bool   vsPerc = true;			//Vertical scale percent mode
-    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
-    {
-	if(!shD->prms[i_p].fftN || !shD->prms[i_p].color().isValid())	continue;
-
-	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
-	if(shD->prms[i_p].bordU() <= shD->prms[i_p].bordL())
-	{
-	    //>>> Calc value borders
-	    double vlOff = shD->prms[i_p].fftOut[0][0]/shD->prms[i_p].fftN;
-	    for(int i_v = 1; i_v < (shD->prms[i_p].fftN/2+1); i_v++)
-	    {
-		curVl = vlOff+pow(pow(shD->prms[i_p].fftOut[i_v][0],2)+pow(shD->prms[i_p].fftOut[i_v][1],2),0.5)/(shD->prms[i_p].fftN/2+1);
-		vsMinAdj = vmin(vsMinAdj,curVl);
-		vsMaxAdj = vmax(vsMaxAdj,curVl);
-	    }
-	    if(vsMaxAdj == vsMinAdj)	{ vsMaxAdj += 1.0; vsMinAdj -= 1.0; }
-	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
-	    {
-		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
-		vsMinAdj -= wnt_dp/2;
-		vsMaxAdj += wnt_dp/2;
-	    }
-	}
-	else { vsMaxAdj = shD->prms[i_p].bordU(); vsMinAdj = shD->prms[i_p].bordL(); }
-
-	//>>> Check for value border allow
-        if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
-        { vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
-        else { vsMax = -3e300; vsMin = 3e300; break; }
-    }
-    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = 0; }
-    else vsPerc = false;
-
-    //>> Vertical scale and offset apply
-    bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
-    if( isScale )
-    {
-	float vsDif = vsMax - vsMin;
-	vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
-	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
-    }
-
-    double vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))) );
-    if( vmax_ln >= 2 )
-    {
-	double vDiv = 1.;
-	double v_len = vsMax - vsMin;
-	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
-	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-	while( ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
-
-	//>>> Draw vertical grid and markers
-	if( sclVer&0x3 )
-	{
-	    pnt.setPen(grdPen);
-	    pnt.drawLine(tAr.x(),tAr.y(),tAr.x(),tAr.height());
-	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
-	    {
-		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMin)/(vsMax-vsMin));
-		pnt.setPen(grdPen);
-		if( sclVer&0x1 ) pnt.drawLine(tAr.x(),v_pos,tAr.x()+tAr.width(),v_pos);
-		else pnt.drawLine(tAr.x()-3,v_pos,tAr.x()+3,v_pos);
-
-		if( sclVer&0x2 )
-		{
-		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
-		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
-		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),(TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"")).c_str());
-		}
-	    }
-	}
-    }
-
     //>> Draw trends
     for(unsigned i_t = 0; i_t < shD->prms.size(); i_t++)
     {
-	TrendObj *sTr = &shD->prms[i_t];
-	if(!sTr->fftN || !sTr->color().isValid()) continue;
+	TrendObj &cP = shD->prms[i_t];
+	if(!cP.fftN || !cP.color().isValid()) continue;
 
 	//>>> Set trend's pen
-	QPen trpen(sTr->color());
+	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(sTr->width()*vmin(w->xScale(true),w->yScale(true))))));
+	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 	pnt.setPen(trpen);
 
-	double vlOff = sTr->fftOut[0][0]/sTr->fftN;
-	double fftDt = (1e6/(double)tSize)*(double)w->size().width()/sTr->fftN;
+	//>> Prepare generic parameters
+	double vlOff = cP.fftOut[0][0]/cP.fftN;
+	double fftDt = (1e6/(double)tSize)*(double)w->size().width()/cP.fftN;
+
+	bool vsPercT = cP.isIndiv ? false : vsPerc;
+        double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+        double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
 	//>>> Prepare border for percent trend
-	double bordL = sTr->bordL();
-	double bordU = sTr->bordU();
-	if( vsPerc && bordL >= bordU )
+	double bordL = cP.bordL();
+	double bordU = cP.bordU();
+	if(vsPercT && bordL >= bordU)
 	{
 	    bordU = -3e300, bordL = 3e300;
-	    for( int i_v = 1; i_v < (sTr->fftN/2+1); i_v++ )
+	    for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++)
 	    {
-		curVl = vlOff+pow(pow(sTr->fftOut[i_v][0],2)+pow(sTr->fftOut[i_v][1],2),0.5)/(sTr->fftN/2+1);
-		bordL = vmin(bordL,curVl);
-		bordU = vmax(bordU,curVl);
+		curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+		bordL = vmin(bordL, curVl);
+		bordU = vmax(bordU, curVl);
 	    }
 	    double vMarg = (bordU-bordL)/10;
 	    bordL -= vMarg;
@@ -1863,31 +1950,31 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	//>>> Draw trend
 	double prevVl = EVAL_REAL;
 	int curPos = 0, prevPos = 0;
-	for( int i_v = 1; i_v < (sTr->fftN/2+1); i_v++ )
+	for(int i_v = 1; i_v < (cP.fftN/2+1); i_v++)
 	{
-	    curVl = vlOff+pow(pow(sTr->fftOut[i_v][0],2)+pow(sTr->fftOut[i_v][1],2),0.5)/(sTr->fftN/2+1);
-	    if(vsPerc) curVl = 100*(curVl-bordL)/(bordU-bordL);
-	    curPos = tAr.x()+(int)((double)tAr.width()*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
+	    curVl = vlOff + pow(pow(cP.fftOut[i_v][0],2)+pow(cP.fftOut[i_v][1],2),0.5)/(cP.fftN/2+1);
+	    if(vsPercT) curVl = 100*(curVl-bordL)/(bordU-bordL);
+	    curPos = tAr.x() + (int)((double)tAr.width()*(fftDt*i_v-fftBeg)/(fftEnd-fftBeg));
 
-	    int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(curVl-vsMin)/(vsMax-vsMin))));
-	    if( prevVl == EVAL_REAL ) pnt.drawPoint(curPos,c_vpos);
+	    int c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(curVl-vsMinT)/(vsMaxT-vsMinT))));
+	    if(prevVl == EVAL_REAL) pnt.drawPoint(curPos, c_vpos);
 	    else
 	    {
-		int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,(prevVl-vsMin)/(vsMax-vsMin))));
-		pnt.drawLine(prevPos,c_vpos_prv,curPos,c_vpos);
+		int c_vpos_prv = tAr.y() + tAr.height() - (int)((double)tAr.height()*vmax(0,vmin(1,(prevVl-vsMinT)/(vsMaxT-vsMinT))));
+		pnt.drawLine(prevPos, c_vpos_prv, curPos, c_vpos);
 	    }
 	    prevPos = curPos;
 	    prevVl = curVl;
 	}
 
 	//>>> Update value on cursor
-	if( shD->active && shD->tTimeCurent && shD->trcPer )
+	if(shD->active && shD->tTimeCurent && shD->trcPer)
 	{
 	    double curFrq = vmax(vmin(1e6/(double)shD->curTime,fftEnd),fftBeg);
 	    curPos = (int)(curFrq/fftDt);
-	    if( curPos >= 1 && curPos < (sTr->fftN/2+1) )
+	    if(curPos >= 1 && curPos < (cP.fftN/2+1))
 	    {
-		double val = sTr->fftOut[0][0]/sTr->fftN + pow(pow(sTr->fftOut[curPos][0],2)+pow(sTr->fftOut[curPos][1],2),0.5)/(sTr->fftN/2+1);
+		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
 		w->attrSet(TSYS::strMess("prm%dval",i_t),TSYS::real2str(val,6),54+10*i_t);
 	    }
 	}
@@ -1914,22 +2001,22 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
     shD->pictObj.fill(0);
 
-    QPainter pnt( &shD->pictObj );
+    QPainter pnt(&shD->pictObj);
 
     //> Get generic parameters
     int64_t tSize = (int64_t)(1e6*shD->tSize);				//Trends size (us)
     int64_t tEnd  = shD->tTime;						//Trends end point (us)
     int64_t tPict = tEnd;
     int64_t tBeg  = tEnd - tSize;					//Trends begin point (us)
-    if( shD->prms.empty() || tSize <= 0 ) return;
-
-    //> Make decoration and prepare trends area
-    QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of trends area rect
+    if(shD->prms.empty() || tSize <= 0) return;
     int sclHor = shD->sclHor;						//Horisontal scale mode
     int sclVer = shD->sclVer;						//Vertical scale mode
 
-    //> Process scale
-    if( sclHor&0x3 || sclVer&0x3 )
+    //> Trends' area rect definition
+    QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));
+
+    //> Main scales definition
+    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
     {
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
@@ -1937,59 +2024,245 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
 
 	//>> Set markers font and color
-	if( sclHor&0x2 || sclVer&0x2 )
+	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
 	{
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
-	    mrkFnt.setPixelSize( (int)((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))) );
+	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
-
-	    if( sclHor&0x2 )
+	    if(sclHor&SC_MARKERS)
 	    {
-		if( tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true))) ) sclHor &= ~(0x02);
+		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
 		else tAr.adjust(0,0,0,-2*mrkHeight);
 	    }
-	    if( sclVer&0x2 && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true))) )
-		sclVer &= ~(0x02);
+	    if(sclVer&SC_MARKERS && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclVer &= ~(SC_MARKERS);
 	}
     }
 
+    //> Calc vertical scale for main and individual
+    int64_t	aVend;			//Corrected for allow data the trend end point
+    int64_t	aVbeg;			//Corrected for allow data the trend begin point
+    bool	vsPerc = true;		//Vertical scale percent mode
+    bool	isLog = sclVer&SC_LOG;	//Logarithmic scale
+    double	curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
+    bool	isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
+
+    //>> Get main scale for non individual parameters
+    int prmInGrp = 0, prmGrpLast = -1;
+    for(unsigned i_p = 0, mainPerc = false; i_p < shD->prms.size(); i_p++)
+    {
+	TrendObj &cP = shD->prms[i_p];
+	if(!cP.val().size() || !cP.color().isValid())	continue;
+
+	cP.adjU = -3e300; cP.adjL = 3e300;
+	if(cP.bordU() <= cP.bordL() && cP.valTp() != 0)
+	{
+	    //>> Check trend for valid data
+	    aVbeg = vmax(tBeg, cP.valBeg());
+	    aVend = vmin(tEnd, cP.valEnd());
+
+	    if(aVbeg >= aVend) return;
+	    //>> Calc value borders
+	    bool end_vl = false;
+	    int ipos = cP.val(aVbeg);
+	    if(ipos && cP.val()[ipos].tm > aVbeg) ipos--;
+	    while(true)
+	    {
+		if(ipos >= (int)cP.val().size() || end_vl)	break;
+		if(cP.val()[ipos].tm >= aVend) end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL)
+		{
+		    curVl = cP.val()[ipos].val;
+		    cP.adjL = vmin(cP.adjL,curVl); cP.adjU = vmax(cP.adjU,curVl);
+		}
+		ipos++;
+	    }
+	    if(cP.adjU == -3e300)	{ cP.adjU = 1.0; cP.adjL = 0.0; }
+	    else if((cP.adjU-cP.adjL) < 1e-30 && fabs(cP.adjU) < 1e-30)	{ cP.adjU += 0.5; cP.adjL -= 0.5; }
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
+	    {
+		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2;
+		cP.adjU += wnt_dp/2;
+	    }
+	}
+	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
+	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
+
+	cP.wScale = cP.mScale&(sclVer|SC_LOG);
+	if(cP.wScale&(SC_GRID|SC_MARKERS))	continue;
+
+	//>> Check for value border allow
+	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
+	{ vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU); }
+	else { vsMax = -3e300; vsMin = 3e300; mainPerc = true; }
+
+	prmInGrp++; prmGrpLast = i_p;
+    }
+
+    //>> Check for individual parameters and for possibility to merge it to group or create new for no group
+    int prmIndiv = 0;
+    int prmIndivSc = -1;
+    vector<int>	prmsInd;
+    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
+    {
+	TrendObj &cP = shD->prms[i_p];
+	cP.isIndiv = false;
+	if(!cP.val().size() || !cP.color().isValid() || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	//>> Check for include to present or create new group and exclude from individual
+	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
+	    (cP.mScale&SC_LOG) == (sclVer&SC_LOG))
+	{
+	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+	    prmInGrp++; prmGrpLast = i_p;
+	    continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	else prmsInd.push_back(i_p);
+	if(cP.mScale&SC_LOG)
+	{
+	    cP.adjU = log10(vmax(1e-100,cP.adjU));
+	    cP.adjL = log10(vmax(1e-100,cP.adjL));
+	}
+	if(isScale)	//Vertical scale and offset apply
+	{
+	    float vsDif = cP.adjU - cP.adjL;
+	    cP.adjU += shD->sclVerSclOff*vsDif/100;		cP.adjL += shD->sclVerSclOff*vsDif/100;
+	    cP.adjU += (shD->sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+	}
+    }
+    if(prmInGrp) prmsInd.push_back(-1);
+    if(prmIndivSc >= 0)	prmsInd.push_back(prmIndivSc);
+
+    //>> Final main scale adapting
+    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog ? pow(10,vmin(0,2-(tAr.height()/150))) : 0; }
+    else vsPerc = false;
+    if(isLog)
+    {
+	vsMax = log10(vmax(1e-100,vsMax));
+	vsMin = log10(vmax(1e-100,vsMin));
+    }
+    if(isScale)	//Vertical scale and offset apply
+    {
+	float vsDif = vsMax - vsMin;
+	vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
+	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
+    }
+
+    //> Draw main and individual vertical scales
+    float vmax_ln = tAr.height() / ((sclVer&SC_MARKERS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
+    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)	//prmsInd[i]=-1 - for main scale
+    {
+	bool	isLogT, vsPercT;
+	char	sclVerT;
+	QPen	grdPenT = grdPen;
+	double	vsMinT, vsMaxT;
+	double	vDiv = 1;
+	if(prmsInd[i_p] < 0)	//Main scale process
+	{
+	    //>> Draw environment
+	    vsPercT = vsPerc;
+	    isLogT = isLog;
+	    sclVerT = sclVer;
+	    grdPenT.setColor(shD->sclColor);
+	    mrkPen.setColor(shD->sclMarkColor);
+	    if(prmInGrp == 1 && prmGrpLast >= 0)	//Set color for single parameter in main group
+	    {
+		grdPenT.setColor(shD->prms[prmGrpLast].color());
+		mrkPen.setColor(shD->prms[prmGrpLast].color());
+	    }
+	    //>> Rounding
+	    double v_len = vsMax - vsMin;
+	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+	    while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+	    while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = vsMin; vsMaxT = vsMax;
+	}
+	else	//Individual scale process
+	{
+	    TrendObj &cP = shD->prms[prmsInd[i_p]];
+	    //>> Draw environment
+	    vsPercT = false;
+	    isLogT = cP.mScale&SC_LOG;
+	    sclVerT = cP.wScale;
+	    grdPenT.setColor(cP.color());
+	    mrkPen.setColor(cP.color());
+	    //>> Rounding
+	    double v_len = cP.adjU - cP.adjL;
+	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+	    while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
+	}
+	if(i_p < (prmsInd.size()-1))	sclVerT &= ~(SC_GRID);	//Hide grid for no last scale
+
+	//>> Draw vertical grid and markers
+	int markWdth = 0;
+	if(sclVerT & (SC_GRID|SC_MARKERS))
+	{
+	    string labVal;
+	    pnt.setPen(grdPenT);
+	    pnt.drawLine(tAr.x()-1, tAr.y(), tAr.x()-1, tAr.height());
+	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
+	    {
+		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMinT)/(vsMaxT-vsMinT));
+		if(sclVerT & SC_GRID) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
+		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
+
+		if(sclVerT & SC_MARKERS)
+		{
+		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
+		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
+		    pnt.setPen(mrkPen);
+		    labVal = (isLogT ? TSYS::real2str(pow(10,i_v),4,'g') : TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"");
+		    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
+		    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
+		}
+	    }
+	}
+	if(i_p < (prmsInd.size()-1)) tAr.adjust((markWdth?(markWdth+5):0), 0, 0, 0);
+    }
+    mrkPen.setColor(shD->sclMarkColor);	//Restore mark color
+
     //> Calc horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
-
-    int hmax_ln = tAr.width() / (int)((sclHor&0x2)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
-    if( hmax_ln >= 2 )
+    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
+    if(hmax_ln >= 2)
     {
 	int hvLev = 0;
 	int64_t hLen = tEnd - tBeg;
-	if( hLen/86400000000ll >= 2 )		{ hvLev = 5; hDiv = 86400000000ll; }	//Days
-	else if( hLen/3600000000ll >= 2 )	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
-	else if( hLen/60000000 >= 2 )		{ hvLev = 3; hDiv =    60000000; }	//Minutes
-	else if( hLen/1000000 >= 2 )		{ hvLev = 2; hDiv =     1000000; }	//Seconds
-	else if( hLen/1000 >= 2 )		{ hvLev = 1; hDiv =        1000; }	//Milliseconds
-	while( hLen/hDiv > hmax_ln )	hDiv *= 10;
-	while( hLen/hDiv < hmax_ln/2 )	hDiv /= 2;
+	if(hLen/86400000000ll >= 2)	{ hvLev = 5; hDiv = 86400000000ll; }	//Days
+	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; hDiv =  3600000000ll; }	//Hours
+	else if(hLen/60000000 >= 2)	{ hvLev = 3; hDiv =    60000000ll; }	//Minutes
+	else if(hLen/1000000 >= 2)	{ hvLev = 2; hDiv =     1000000ll; }	//Seconds
+	else if(hLen/1000 >= 2)		{ hvLev = 1; hDiv =        1000ll; }	//Milliseconds
+	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
+	while(hLen/hDiv < hmax_ln/2)	hDiv /= 2;
 
-	if( (hLen/hDiv) >= 5 && shD->trcPer )
+	if((hLen/hDiv) >= 5 && shD->trcPer)
 	{
 	    tPict = hDiv*(tEnd/hDiv+1);
 	    tBeg = tPict-hLen;
 	}
 
 	//>>> Draw horisontal grid and markers
-	if( sclHor&0x3 )
+	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
 	    time_t tm_t;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
 	    //>>>> Draw generic grid line
 	    pnt.setPen(grdPen);
-	    pnt.drawLine(tAr.x(),tAr.y()+tAr.height(),tAr.x()+tAr.width(),tAr.y()+tAr.height());
+	    pnt.drawLine(tAr.x(), tAr.y()+tAr.height(), tAr.x()+tAr.width(), tAr.y()+tAr.height());
 	    //>>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tAr.x()+tAr.width();
-	    if( sclHor&0x2 )
+	    if(sclHor&SC_MARKERS)
 	    {
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
@@ -2007,219 +2280,118 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	    //>>>> Draw grid and/or markers
 	    bool first_m = true;
-	    for( int64_t i_h = tBeg; true; )
+	    for(int64_t i_h = tBeg; true; )
 	    {
 		//>>>> Draw grid
 		pnt.setPen(grdPen);
 		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
-		if( sclHor&0x1 ) pnt.drawLine(h_pos,tAr.y(),h_pos,tAr.y()+tAr.height());
-		else pnt.drawLine(h_pos,tAr.y()+tAr.height()-3,h_pos,tAr.y()+tAr.height()+3);
+		if(sclHor & SC_GRID) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
+		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if( sclHor&0x2 && !(i_h%hDiv) && i_h != tPict )
+		if(sclHor&SC_MARKERS && !(i_h%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t,&ttm);
 		    int chLev = -1;
-		    if( !first_m )
+		    if(!first_m)
 		    {
-			if( ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year )	chLev = 5;
-			else if( ttm.tm_mday > ttm1.tm_mday )	chLev = 4;
-			else if( ttm.tm_hour > ttm1.tm_hour )	chLev = 3;
-			else if( ttm.tm_min > ttm1.tm_min )	chLev = 2;
-			else if( ttm.tm_sec > ttm1.tm_sec )	chLev = 1;
+			if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year) chLev = 5;
+			else if(ttm.tm_mday > ttm1.tm_mday)	chLev = 4;
+			else if(ttm.tm_hour > ttm1.tm_hour)	chLev = 3;
+			else if(ttm.tm_min > ttm1.tm_min)	chLev = 2;
+			else if(ttm.tm_sec > ttm1.tm_sec)	chLev = 1;
 			else chLev = 0;
 		    }
 
 		    //Check for data present
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
-		    if( hvLev == 5 || chLev >= 4 )
+		    if(hvLev == 5 || chLev >= 4)
 			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
 		    //Hours and minuts
-		    if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
-		    else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
+		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
 		    //Milliseconds
-		    else if( hvLev <= 1 || i_h%1000000 )
+		    else if(hvLev <= 1 || i_h%1000000)
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 				 (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					      TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
 		    int wdth, tpos, endPosTm = 0, endPosDt = 0;
 		    pnt.setPen(mrkPen);
-		    if( lab_tm.size() )
+		    if(lab_tm.size())
 		    {
 			wdth = pnt.fontMetrics().width(lab_tm.c_str());
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
+			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
 			{
-			    pnt.drawText( tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str() );
+			    pnt.drawText(tpos, tAr.y()+tAr.height()+mrkHeight, lab_tm.c_str());
 			    endPosTm = tpos+wdth;
 			}
 		    }
-		    if( lab_dt.size() )
+		    if(lab_dt.size())
 		    {
 			wdth = pnt.fontMetrics().width(lab_dt.c_str());
 			tpos = vmax(h_pos-wdth/2,0);
-			if( (tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3) )
+			if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
 			{
-			    pnt.drawText( tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str() );
+			    pnt.drawText(tpos, tAr.y()+tAr.height()+2*mrkHeight, lab_dt.c_str());
 			    endPosDt = tpos+wdth;
 			}
 		    }
-		    begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
-		    memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
+		    begMarkBrd = vmax(begMarkBrd, vmax(endPosTm,endPosDt));
+		    memcpy((char*)&ttm1, (char*)&ttm, sizeof(tm));
 		    first_m = false;
 		}
 		//>>>> Next
-		if( i_h >= tPict )	break;
+		if(i_h >= tPict) break;
 		i_h = (i_h/hDiv)*hDiv + hDiv;
-		if( i_h > tPict )	i_h = tPict;
+		if(i_h > tPict)	i_h = tPict;
 	    }
 	}
     }
 
-    //>> Calc vertical scale
-    int64_t aVend;			//Corrected for allow data the trend end point
-    int64_t aVbeg;			//Corrected for allow data the trend begin point
-    bool    vsPerc = true;		//Vertical scale percent mode
-    bool    isLog = sclVer&0x4;		//Logarithmic scale
-    double  curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
-
-    for(unsigned i_p = 0; i_p < shD->prms.size(); i_p++)
-    {
-	if(!shD->prms[i_p].val().size() || !shD->prms[i_p].color().isValid())	continue;
-
-	double vsMaxAdj = -3e300, vsMinAdj = 3e300;
-	if(shD->prms[i_p].bordU() <= shD->prms[i_p].bordL() && shD->prms[i_p].valTp() != 0)
-	{
-	    //>>> Check trend for valid data
-	    aVbeg = vmax(tBeg,shD->prms[i_p].valBeg());
-	    aVend = vmin(tEnd,shD->prms[i_p].valEnd());
-
-	    if(aVbeg >= aVend) return;
-	    //>>> Calc value borders
-	    bool end_vl = false;
-	    int ipos = shD->prms[i_p].val(aVbeg);
-	    if(ipos && shD->prms[i_p].val()[ipos].tm > aVbeg) ipos--;
-	    while( true )
-	    {
-		if(ipos >= (int)shD->prms[i_p].val().size() || end_vl)	break;
-		if(shD->prms[i_p].val()[ipos].tm >= aVend) end_vl = true;
-		if(shD->prms[i_p].val()[ipos].val != EVAL_REAL)
-		{
-		    curVl = shD->prms[i_p].val()[ipos].val;
-		    vsMinAdj = vmin(vsMinAdj,curVl); vsMaxAdj = vmax(vsMaxAdj,curVl);
-		}
-		ipos++;
-	    }
-	    if(vsMaxAdj == -3e300)		{ vsMaxAdj = 1.0; vsMinAdj = 0.0; }
-	    else if((vsMaxAdj-vsMinAdj) < 1e-30 && fabs(vsMaxAdj) < 1e-30)
-	    { vsMaxAdj += 0.5; vsMinAdj -= 0.5; }
-	    else if((vsMaxAdj-vsMinAdj) / fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2) < 0.001)
-	    {
-		double wnt_dp = 0.001*fabs(vsMinAdj+(vsMaxAdj-vsMinAdj)/2)-(vsMaxAdj-vsMinAdj);
-		vsMinAdj -= wnt_dp/2;
-		vsMaxAdj += wnt_dp/2;
-	    }
-	}
-	else if(shD->prms[i_p].bordU() <= shD->prms[i_p].bordL() && shD->prms[i_p].valTp() == 0)
-	{ vsMaxAdj = 1.5; vsMinAdj = -0.5; }
-	else { vsMaxAdj = shD->prms[i_p].bordU(); vsMinAdj = shD->prms[i_p].bordL(); }
-
-	//>>> Check for value border allow
-	if(vsMin > vsMax || (fabs((vsMax-vsMinAdj)/(vsMax-vsMin)-1) < 0.2 && fabs((vsMaxAdj-vsMin)/(vsMax-vsMin)-1) < 0.2))
-	{ vsMin = vmin(vsMin,vsMinAdj); vsMax = vmax(vsMax,vsMaxAdj); }
-	else { vsMax = -3e300; vsMin = 3e300; break; }
-    }
-    if(vsMin > vsMax) { vsPerc = true; vsMax = 100; vsMin = isLog?pow(10,vmin(0,2-(tAr.height()/150))):0; }
-    else vsPerc = false;
-
-    if(isLog)
-    {
-	vsMax = log10(vmax(1e-100,vsMax));
-	vsMin = log10(vmax(1e-100,vsMin));
-    }
-
-    //>> Vertical scale and offset apply
-    bool isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
-    if( isScale )
-    {
-	float vsDif = vsMax - vsMin;
-	vsMax += shD->sclVerSclOff*vsDif/100; vsMin += shD->sclVerSclOff*vsDif/100;
-	vsMax += (shD->sclVerScl*vsDif/100-vsDif)/2; vsMin -= (shD->sclVerScl*vsDif/100-vsDif)/2;
-    }
-
-    float vmax_ln = tAr.height() / ( (sclVer&0x2)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))) );
-    if( vmax_ln >= 2 )
-    {
-	double vDiv = 1;
-	double v_len = vsMax - vsMin;
-	while( v_len > vmax_ln )	{ vDiv *= 10; v_len /= 10; }
-	while( v_len < vmax_ln/10 )	{ vDiv /= 10; v_len *= 10; }
-	if( !isScale )			{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-	while( !isLog && ((vsMax-vsMin)/vDiv) < vmax_ln/2 ) vDiv/=2;
-
-	//>>> Draw vertical grid and markers
-	if( sclVer&0x3 )
-	{
-	    pnt.setPen(grdPen);
-	    pnt.drawLine(tAr.x(),tAr.y(),tAr.x(),tAr.height());
-	    for( double i_v = ceil(vsMin/vDiv)*vDiv; (vsMax-i_v)/vDiv > -0.1; i_v+=vDiv )
-	    {
-		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMin)/(vsMax-vsMin));
-		pnt.setPen(grdPen);
-		if( sclVer&0x1 ) pnt.drawLine(tAr.x(),v_pos,tAr.x()+tAr.width(),v_pos);
-		else pnt.drawLine(tAr.x()-3,v_pos,tAr.x()+3,v_pos);
-
-		if( sclVer&0x2 )
-		{
-		    bool isPerc = vsPerc && ((vsMax-i_v-vDiv)/vDiv <= -0.1);
-		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
-		    pnt.setPen(mrkPen);
-		    pnt.drawText(tAr.x()+2,v_pos-1+(isMax?mrkHeight:0),
-			((isLog?TSYS::real2str(pow(10,i_v),4,'g'):TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"")).c_str());
-		}
-	    }
-	}
-    }
-
-    //>> Draw trends
+    //> Draw trends
     for(unsigned i_t = 0; i_t < shD->prms.size(); i_t++)
     {
-	TrendObj *sTr = &shD->prms[i_t];
+	TrendObj &cP = shD->prms[i_t];
 
-	//>>> Set trend's pen
-	QPen trpen(sTr->color());
+	//>> Set trend's pen
+	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
-	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(sTr->width()*vmin(w->xScale(true),w->yScale(true))))));
-	if(sTr->valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
+	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
 	pnt.setPen(trpen);
 
-	//>>> Prepare generic parameters
-	aVbeg = vmax(tBeg,sTr->valBeg());
-	aVend = vmin(tEnd,sTr->valEnd());
+	//>> Prepare generic parameters
+	aVbeg = vmax(tBeg, cP.valBeg());
+	aVend = vmin(tEnd, cP.valEnd());
 
-	if( aVbeg >= aVend || !sTr->color().isValid() ) continue;
-	int aPosBeg = sTr->val(aVbeg);
-	if( aPosBeg && sTr->val()[aPosBeg].tm > aVbeg ) aPosBeg--;
+	if(aVbeg >= aVend || !cP.color().isValid()) continue;
+	int aPosBeg = cP.val(aVbeg);
+	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
+	bool vsPercT = cP.isIndiv ? false : vsPerc;
+	bool isLogT = cP.isIndiv ? (cP.wScale&SC_LOG) : isLog;
+	double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+	double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
-	//>>> Prepare border for percent trend
-	float bordL = sTr->bordL();
-	float bordU = sTr->bordU();
-	if( vsPerc && bordL >= bordU )
+	//>> Prepare border for percent trend, ONLY!
+	float bordL = cP.bordL();
+	float bordU = cP.bordU();
+	if(vsPercT && bordL >= bordU)
 	{
 	    bordU = -3e300, bordL = 3e300;
 	    bool end_vl = false;
 	    int ipos = aPosBeg;
-	    while( true )
+	    while(true)
 	    {
-		if(ipos >= (int)sTr->val().size() || end_vl)	break;
-		if(sTr->val()[ipos].tm >= aVend) end_vl = true;
-		if(sTr->val()[ipos].val != EVAL_REAL)
+		if(ipos >= (int)cP.val().size() || end_vl)	break;
+		if(cP.val()[ipos].tm >= aVend) end_vl = true;
+		if(cP.val()[ipos].val != EVAL_REAL)
 		{
-		    bordL = vmin(bordL,sTr->val()[ipos].val);
-		    bordU = vmax(bordU,sTr->val()[ipos].val);
+		    bordL = vmin(bordL, cP.val()[ipos].val);
+		    bordU = vmax(bordU, cP.val()[ipos].val);
 		}
 		ipos++;
 	    }
@@ -2228,31 +2400,30 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    bordU += vMarg;
 	}
 
-	//>>> Draw trend
+	//>> Draw trend
 	bool end_vl = false;
 	double curVl = EVAL_REAL, averVl = EVAL_REAL, prevVl = EVAL_REAL;
 	int    curPos, averPos = 0, prevPos = 0, c_vpos, z_vpos = 0;
 	int64_t curTm = 0, averTm = 0, averLstTm = 0;
-	for( int a_pos = aPosBeg; true; a_pos++ )
+	for(int a_pos = aPosBeg; true; a_pos++)
 	{
-	    if(a_pos < (int)sTr->val().size() && !end_vl)
+	    if(a_pos < (int)cP.val().size() && !end_vl)
 	    {
-		curTm = vmin(aVend,vmax(aVbeg,sTr->val()[a_pos].tm));
-		curVl = sTr->val()[a_pos].val;
-		if(vsPerc && curVl != EVAL_REAL) curVl = 100*(curVl-bordL)/(bordU-bordL);
+		curTm = vmin(aVend,vmax(aVbeg,cP.val()[a_pos].tm));
+		curVl = cP.val()[a_pos].val;
+		if(vsPercT && curVl != EVAL_REAL) curVl = 100*(curVl-bordL)/(bordU-bordL);
 		if(isnan(curVl)) curVl = EVAL_REAL;
 		curPos = tAr.x()+tAr.width()*(curTm-tBeg)/(tPict-tBeg);
 	    }else curPos = 0;
-	    if(!curPos || sTr->val()[a_pos].tm >= aVend) end_vl = true;
+	    if(!curPos || cP.val()[a_pos].tm >= aVend) end_vl = true;
 
 	    //Square Average
-	    if( averPos == curPos )
+	    if(averPos == curPos)
 	    {
-		if( !(2*curTm-averTm-averLstTm) ) continue;
-		if( averVl == EVAL_REAL ) averVl = curVl;
-		else if( curVl != EVAL_REAL )
-		    averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/
-			((double)(2*curTm-averTm-averLstTm));
+		if(!(2*curTm-averTm-averLstTm)) continue;
+		if(averVl == EVAL_REAL) averVl = curVl;
+		else if(curVl != EVAL_REAL)
+		    averVl = (averVl*(double)(curTm-averTm)+curVl*(double)(curTm-averLstTm))/((double)(2*curTm-averTm-averLstTm));
 		averLstTm = curTm;
 		continue;
 	    }
@@ -2260,18 +2431,18 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    //Write point and line
 	    if(averVl != EVAL_REAL)
 	    {
-		if(sTr->valTp() == 0)
-		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPerc ? (100.*(0-bordL)/(bordU-bordL)) : 0) - vsMin)/(vsMax-vsMin))));
-		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,averVl)):averVl)-vsMin)/(vsMax-vsMin))));
+		if(cP.valTp() == 0)
+		    z_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((vsPercT?(100.*(0-bordL)/(bordU-bordL)):0)-vsMinT)/(vsMaxT-vsMinT))));
+		c_vpos = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,averVl)):averVl)-vsMinT)/(vsMaxT-vsMinT))));
 		if(prevVl == EVAL_REAL)
 		{
-		    if(sTr->valTp() != 0) pnt.drawPoint(averPos,c_vpos);
+		    if(cP.valTp() != 0) pnt.drawPoint(averPos,c_vpos);
 		    else pnt.drawLine(averPos,z_vpos,averPos,vmin(z_vpos-trpen.width(),c_vpos));
 		}
 		else
 		{
-		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLog?log10(vmax(1e-100,prevVl)):prevVl)-vsMin)/(vsMax-vsMin))));
-		    if(sTr->valTp() != 0) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
+		    int c_vpos_prv = tAr.y()+tAr.height()-(int)((double)tAr.height()*vmax(0,vmin(1,((isLogT?log10(vmax(1e-100,prevVl)):prevVl)-vsMinT)/(vsMaxT-vsMinT))));
+		    if(cP.valTp() != 0) pnt.drawLine(prevPos,c_vpos_prv,averPos,c_vpos);
 		    else
 			for(int sps = prevPos+1; sps <= averPos; sps++)
 			    pnt.drawLine(sps,z_vpos,sps,vmin(z_vpos-trpen.width(),c_vpos));
@@ -2282,7 +2453,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    averVl  = curVl;
 	    averPos = curPos;
 	    averTm  = averLstTm = curTm;
-	    if( !curPos ) break;
+	    if(!curPos) break;
 	}
     }
 
@@ -2299,17 +2470,17 @@ void ShapeDiagram::tracing( )
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    if( !w->isEnabled() ) return;
+    if(!w->isEnabled()) return;
 
     int64_t trcPer = (int64_t)shD->trcPer*1000000;
-    if( shD->tTimeCurent )	shD->tTime = (int64_t)time(NULL)*1000000;
-    else if( shD->tTime )	shD->tTime += trcPer;
+    if(shD->tTimeCurent)shD->tTime = (int64_t)time(NULL)*1000000;
+    else if(shD->tTime)	shD->tTime += trcPer;
     loadData(w);
     makePicture(w);
 
     //> Trace cursors value
-    if( shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(int64_t)(1e6*shD->tSize))) )
-	setCursor( w, shD->tTime );
+    if(shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(int64_t)(1e6*shD->tSize))))
+	setCursor(w, shD->tTime);
     w->update();
 }
 
@@ -2317,17 +2488,17 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    if( !shD->en ) return false;
+    if(!shD->en) return false;
 
     //> Process event
-    switch( event->type() )
+    switch(event->type())
     {
 	case QEvent::Paint:
 	{
 #if OSC_DEBUG >= 3
 	    int64_t t_cnt = TSYS::curTime();
 #endif
-	    QPainter pnt( w );
+	    QPainter pnt(w);
 
 	    //> Decoration draw
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
@@ -2335,38 +2506,38 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
 	    //> Draw decoration
-	    if( shD->backGrnd.color().isValid() ) pnt.fillRect(dA,shD->backGrnd.color());
-	    if( !shD->backGrnd.textureImage().isNull() ) pnt.fillRect(dA,shD->backGrnd.textureImage());
+	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dA,shD->backGrnd.color());
+	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
 	    //> Draw border
-	    borderDraw( pnt, dA, shD->border, shD->bordStyle );
+	    borderDraw(pnt, dA, shD->border, shD->bordStyle);
 
 	    //> Trend's picture
-	    pnt.drawImage(shD->border.width(),shD->border.width(),shD->pictObj);
+	    pnt.drawImage(shD->border.width(), shD->border.width(), shD->pictObj);
 
 	    //> Draw focused border
-	    if( w->hasFocus() )	qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
+	    if(w->hasFocus()) qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
 	    //> Draw cursor
 	    int curPos = -1;
-	    if( shD->type == 0 && shD->active )
+	    if(shD->type == 0 && shD->active)
 	    {
 		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
-		int64_t curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
-		if( curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict) )
-		    curPos = shD->pictRect.x()+shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
+		int64_t curTime = vmax(vmin(shD->curTime,shD->tPict), tTimeGrnd);
+		if(curTime && tTimeGrnd && shD->tPict && (curTime >= tTimeGrnd || curTime <= shD->tPict))
+		    curPos = shD->pictRect.x() + shD->pictRect.width()*(curTime-tTimeGrnd)/(shD->tPict-tTimeGrnd);
 	    }
-	    else if( shD->type == 1 && shD->active )
+	    else if(shD->type == 1 && shD->active)
 	    {
 		float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
-		curPos = shD->pictRect.x()+(int)(shD->pictRect.width()*(curFrq-shD->fftBeg)/(shD->fftEnd-shD->fftBeg));
+		curPos = shD->pictRect.x() + (int)(shD->pictRect.width()*(curFrq-shD->fftBeg)/(shD->fftEnd-shD->fftBeg));
 	    }
-	    if( curPos >= 0 && curPos <= shD->pictRect.width() )
+	    if(curPos >= 0 && (curPos-shD->pictRect.x()) <= shD->pictRect.width())
 	    {
 		QPen curpen(shD->curColor);
 		curpen.setWidth(1);
 		pnt.setPen(curpen);
-		pnt.drawLine(curPos,shD->pictRect.y(),curPos,shD->pictRect.y()+shD->pictRect.height());
+		pnt.drawLine(curPos, shD->pictRect.y(), curPos,shD->pictRect.y()+shD->pictRect.height());
 	    }
 
 #if OSC_DEBUG >= 3
@@ -2379,20 +2550,20 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	{
 	    QKeyEvent *key = static_cast<QKeyEvent*>(event);
 
-	    switch( key->key() )
+	    switch(key->key())
 	    {
 		case Qt::Key_Left: case Qt::Key_Right:
-		    if( !shD->active ) break;
-		    if( shD->type == 0 )
+		    if(!shD->active) break;
+		    if(shD->type == 0)
 		    {
 			int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
 			int64_t curTime = vmax(vmin(shD->curTime,shD->tPict),tTimeGrnd);
-			setCursor( w, curTime+((key->key()==Qt::Key_Left)?-1:1)*(shD->tTime-tTimeGrnd)/shD->pictRect.width() );
+			setCursor(w, curTime+((key->key()==Qt::Key_Left)?-1:1)*(shD->tTime-tTimeGrnd)/shD->pictRect.width());
 		    }
-		    else if( shD->type == 1 )
+		    else if(shD->type == 1)
 		    {
 			float curFrq = vmax(vmin(1e6/(float)shD->curTime,shD->fftEnd),shD->fftBeg);
-			setCursor( w, (int64_t)(1e6/(curFrq+((key->key()==Qt::Key_Left)?-1:1)*(shD->fftEnd-shD->fftBeg)/shD->pictRect.width())) );
+			setCursor(w, (int64_t)(1e6/(curFrq+((key->key()==Qt::Key_Left)?-1:1)*(shD->fftEnd-shD->fftBeg)/shD->pictRect.width())));
 		    }
 		    w->update();
 		    return true;
@@ -2401,16 +2572,16 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	}
 	case QEvent::MouseButtonPress:
 	{
-	    if( !shD->active || !w->hasFocus() ) break;
+	    if(!shD->active || !w->hasFocus()) break;
 	    QPoint curp = w->mapFromGlobal(w->cursor().pos());
-	    if( curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width()) ) break;
-	    if( shD->type == 0 )
+	    if(curp.x() < shD->pictRect.x() || curp.x() > (shD->pictRect.x()+shD->pictRect.width())) break;
+	    if(shD->type == 0)
 	    {
 		int64_t tTimeGrnd = shD->tPict - (int64_t)(1e6*shD->tSize);
-		setCursor( w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width() );
+		setCursor(w, tTimeGrnd + (shD->tPict-tTimeGrnd)*(curp.x()-shD->pictRect.x())/shD->pictRect.width());
 	    }
-	    else if( shD->type == 1 )
-		setCursor( w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())) );
+	    else if(shD->type == 1)
+		setCursor(w, (int64_t)(1e6/(shD->fftBeg+(shD->fftEnd-shD->fftBeg)*(curp.x()-shD->pictRect.x())/shD->pictRect.width())));
 	    w->update();
 	    break;
 	}
@@ -2488,11 +2659,11 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 
 //* Trend object's class                         *
 //************************************************
-ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) :
+ShapeDiagram::TrendObj::TrendObj( WdgView *iview ) : adjL(3e300), adjU(-3e300), isIndiv(false), wScale(0),
 #if HAVE_FFTW3_H
     fftN(0), fftOut(NULL),
 #endif
-    mBordLow(0), mBordUp(0), mCurvl(EVAL_REAL), mWidth(1),
+    mBordLow(0), mBordUp(0), mCurvl(EVAL_REAL), mWidth(1), mScale(0),
     arh_per(0), arh_beg(0), arh_end(0), val_tp(0), view(iview)
 {
     loadData();
