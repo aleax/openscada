@@ -3826,7 +3826,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
     RunWdgView   *runW = qobject_cast<RunWdgView*>(view);
     PntMap *pnts = &elFD->shapePnts;
     WidthMap *widths = &elFD->shapeWidths;
-    switch( event->type() )
+
+    switch(event->type())
     {
 	case QEvent::Paint:
 	{
@@ -3856,12 +3857,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		    return false;
 		}
 	    }
-	    else if( devW )
+	    else if(devW)
 	    {
 		mousePress_pos = ev->pos();
-		if( !flag_down && !flag_up && !flag_left && !flag_right )
+		if(!flag_down && !flag_up && !flag_left && !flag_right)
 		{
-		    if( ev->button()==Qt::LeftButton && !status )
+		    if(ev->button() == Qt::LeftButton && !status)
 		    {
 			//> initialization for holds
 			current_ss = current_se = current_es = current_ee = -1;
