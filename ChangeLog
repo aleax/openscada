@@ -1,3 +1,7 @@
+2013-04-18 Roman
+- FIX:DAQ.DCON: "DO_METHOD" separated symbol ',' is fixed to ';'.
+
+
 2013-04-10 Roman
 - FIX:DB.PostgreSQL: Connection procedure is rewrote for allow connect to need DB and only for errors connect to "template1",
     check for present and create for need. The allow to set permition only to need and present DB, without "template1".

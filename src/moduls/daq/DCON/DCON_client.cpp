@@ -127,7 +127,7 @@ void TTpContr::postEnable( int flag )
 		"0;3;4;7;8;14;16;101;201",
 		_("No DI;3DI ($AA6);4DI ($AA6);7DI ($AA6);8DI ($AA6);14DI ($AA6);16DI ($AA6);1DI (@AADI);8DI ($AA6,FF00)")) );
     tpPrmAt(t_prm).fldAdd(new TFld("DO_METHOD",_("DO method"),TFld::Integer,TFld::Selected|TCfg::NoVal,"1","0",
-		"0;2;3;4;5;7;8;12;13;16;102;103;202;204;306;402;504;604;608,704,708,712)",
+		"0;2;3;4;5;7;8;12;13;16;102;103;202;204;306;402;504;604;608;704;708;712)",
 		_("No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO (@AA,FF);12DO (@AA,0FFF);"
 		  "13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO (^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);"
 		  "2DO (@AADO0D);4DO (@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO (#AA000FFF)")));
