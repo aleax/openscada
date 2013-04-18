@@ -877,8 +877,8 @@ void TMdPrm::enable()
 	case 604:itCnt = 4;	break;	//4DO (@AA,0F00)
 	case 608:itCnt = 8;	break;	//8DO (@AA,FF00)
 	case 704:itCnt = 4;	break;	//4DO (#AA000F)
-	case 708:itCnt = 4;	break;	//8DO (#AA00FF)
-	case 712:itCnt = 8;	break;	//12DO (#AA000FFF)
+	case 708:itCnt = 8;	break;	//8DO (#AA00FF)
+	case 712:itCnt = 12;	break;	//12DO (#AA000FFF)
 	default:itCnt = 0;	break;
     }
     if(itCnt)
