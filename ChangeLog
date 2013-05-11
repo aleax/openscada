@@ -1,3 +1,18 @@
+2013-05-11 Roman
+- !!!!:SYS,*: Least level field is set to selectable.
+    Global messages level "Debug (0)" specific processing is added by all messages enable.
+    Default global messages level is set to "Information (1)".
+    For messages flow limit tab "Debug" with categories specify for selectable debug.
+- !!!!:Messages: Functions mess_lev(), message_(), mess_*_() for new debuging conception implement:
+    Mostly debugs now enabled by set "Least level" to "Debug (0)" and specify need categories for debuging into tab "Debug".
+    For generation used function "mess_debug()", for the function conditional call used "if(mess_lev() == TMess::Debug)" and for
+    too performance dependent parts used conditional build by define "-DOSC_DEBUG".
+- !:DAQ.{DCON_client,ModBus,OPC_UA,SMH2Gi}: Diagnostic messages by "Debug (0)" level generation is adapted to new debuging concept.
+- Transport.{SSL,Serial,Sockets}: Address and some other input's and output's transport's fields set modifiable depend from start status.
+- !:UI.QTStarter: Wrong "QT" mostly renamed to "Qt". Messages translation from original Qt4 dialogs is fixed and appended.
+- UI.Vision: Exit on last run project close control is added for run projects.
+
+
 2013-04-20 Roman
 - !:FIX.UI.Vision: Primitive "ElFigure" next changes and fixes:
     - Several arcs' point 5 separating is fixed on keyboard and mouse move.

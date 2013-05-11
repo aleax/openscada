@@ -1153,26 +1153,23 @@ string WdgView::resGet( const string &res )
 
 void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 {
-#if OSC_DEBUG >= 3
-    int64_t t_cnt;
-    if( wLevel() == 0 ) t_cnt = TSYS::curTime();
-#endif
+    int64_t d_cnt;
+    if(mess_lev() == TMess::Debug && wLevel() == 0) d_cnt = TSYS::curTime();
 
     isReload = shape;
 
-    //> Load from data model -
-    if( isLoad )
+    //> Load from data model
+    if(isLoad)
     {
         bool reqBrCr = false;
-	if( !aBr )
+	if(!aBr)
 	{
 	    aBr = new XMLNode("get");
 	    aBr->setAttr("path",id()+"/%2fserv%2fattrBr");
 	    cntrIfCmd(*aBr);
 	    reqBrCr = true;
-#if OSC_DEBUG >= 3
-	    mess_debug("VCA DEBUG",_("Request to VCA engine '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(mod->nodePath().c_str(), _("Request to VCA engine '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 	}
 
 	setAllAttrLoad(true);
@@ -1180,11 +1177,11 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
 		if(aBr->childGet(i_el)->name() == "el")
 		    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
-	setAllAttrLoad( false );
+	setAllAttrLoad(false);
 
 	//>> Delete child widgets
 	string b_nm = aBr->attr("lnkPath");
-	if( b_nm.empty() ) b_nm = id();
+	if(b_nm.empty()) b_nm = id();
 	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++)
 	{
 	    if(!qobject_cast<WdgView*>(children().at(i_c))) continue;
@@ -1196,60 +1193,60 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	}
 
 	//>> Create new child widget
-	for( int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++ )
+	for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++)
 	{
-	    if( aBr->childGet(i_l)->name() != "w" ) continue;
-	    for( i_c = 0; i_c < children().size(); i_c++ )
-		if( qobject_cast<WdgView*>(children().at(i_c)) &&
-			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")) )
+	    if(aBr->childGet(i_l)->name() != "w") continue;
+	    for(i_c = 0; i_c < children().size(); i_c++)
+		if(qobject_cast<WdgView*>(children().at(i_c)) &&
+			qobject_cast<WdgView*>(children().at(i_c))->id() == (b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id")))
 		{
 		    ((WdgView*)children().at(i_c))->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
 		    break;
 		}
-	    if( i_c < children().size() ) continue;
+	    if(i_c < children().size()) continue;
 	    WdgView *nwdg = newWdgItem(b_nm+"/wdg_"+aBr->childGet(i_l)->attr("id"));
 	    nwdg->show();
 	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
 	}
 
 	//>> Children widgets order update
-	orderUpdate( );
+	orderUpdate();
 
-	if( reqBrCr ) delete aBr;
+	if(reqBrCr) delete aBr;
     }
     //> Going to children init
     else
-	for( int i_c = 0; i_c < children().size(); i_c++ )
+	for(int i_c = 0; i_c < children().size(); i_c++)
 	{
 	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
-	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
 		wdg->load((item==id())?"":item,false,(wLevel()>0)?isInit:false);
 	}
 
     //> Init loaded data
-    if( isInit && (item.empty() || item == id()) && wLevel()>0 )	attrSet("","load",-1);
+    if(isInit && (item.empty() || item == id()) && wLevel() > 0) attrSet("", "load", -1);
 
     //> Post load init for root widget
-    if( wLevel() == 0 )
+    if(wLevel() == 0)
     {
-#if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Load '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
-	t_cnt = TSYS::curTime();
-#endif
+	if(mess_lev() == TMess::Debug)
+	{
+	    mess_debug(mod->nodePath().c_str(), _("Load '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
+	    d_cnt = TSYS::curTime();
+	}
 
-	attrSet("","load",-1);
-	for( int i_c = 0; i_c < children().size(); i_c++ )
+	attrSet("", "load", -1);
+	for(int i_c = 0; i_c < children().size(); i_c++)
 	{
 	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
-	    if( wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())) )
+	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
 		wdg->load((item==id())?"":item,false,true);
 	}
 	update();
         //repaint();
 
-#if OSC_DEBUG >= 3
-	mess_debug("VCA DEBUG",_("Init '%s' time %f ms."),id().c_str(),1e-3*(TSYS::curTime()-t_cnt));
-#endif
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(mod->nodePath().c_str(), _("Init '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
     }
 }
 

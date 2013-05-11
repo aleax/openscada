@@ -84,18 +84,63 @@ void TMess::setLogDirect( int dir )
     SYS->modif();
 }
 
+
+
 void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 {
-    char mess[STR_BUF_LEN];
+    if(abs(vmin(Emerg, vmax(-Emerg,level))) < messLevel()) return;
+
+    //> messLevel() = TMess::Debug process for selected category and categories list combining
+    if(messLevel() == TMess::Debug && level == TMess::Debug)
+    {
+	ResAlloc res(mRes, false);
+	//>> Check for present into debugCats and put new
+	if(debugCats.find(categ) == debugCats.end())
+	{
+	    string curCatLev, tCat;
+	    bool resWR = false;
+	    for(int off = 0; (tCat=TSYS::pathLev(categ,0,true,&off)).size(); )
+	    {
+		curCatLev += "/"+tCat;
+		if(debugCats.find(curCatLev) == debugCats.end())
+		{
+		    if(!resWR) { res.request(true); resWR = true; }
+		    debugCats[curCatLev] = false;
+		}
+	    }
+	    if(resWR) res.request(false);
+	}
+
+	//>> Check for match to selectDebugCats
+	bool matchOK = false;
+	for(unsigned i_dc = 0; !matchOK && i_dc < selectDebugCats.size(); i_dc++)
+	    matchOK = (strncmp(categ,selectDebugCats[i_dc].c_str(),selectDebugCats[i_dc].size()) == 0);
+	if(!matchOK) return;
+    }
+
+    //> Put the message
     va_list argptr;
 
-    va_start(argptr,fmt);
-    vsnprintf(mess,sizeof(mess),fmt,argptr);
+    va_start(argptr, fmt);
+    put(categ, level, fmt, argptr);
     va_end(argptr);
+}
+
+void TMess::put_( const char *categ, int8_t level, const char *fmt,  ... )
+{
+    va_list argptr;
+
+    va_start(argptr, fmt);
+    put(categ, level, fmt, argptr);
+    va_end(argptr);
+}
+
+void TMess::put( const char *categ, int8_t level, const char *fmt, va_list ap )
+{
+    char mess[STR_BUF_LEN];
+    vsnprintf(mess, sizeof(mess), fmt, ap);
 
     level = vmin(Emerg, vmax(-Emerg,level));
-    if(abs(level) < messLevel()) return;
-
     int64_t ctm = TSYS::curTime();
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
 
@@ -130,19 +175,43 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const stri
 string TMess::lang( )
 {
     char *lng = NULL;
-    if( ((lng=getenv("LANGUAGE")) && strlen(lng)) ||
-	    ((lng=getenv("LC_MESSAGES")) && strlen(lng)) ||
-	    ((lng=getenv("LANG")) && strlen(lng)) )
+    if(((lng=getenv("LANGUAGE")) && strlen(lng)) || ((lng=getenv("LC_MESSAGES")) && strlen(lng)) || ((lng=getenv("LANG")) && strlen(lng)))
 	return lng;
     else return "C";
+}
+
+string TMess::selDebCats( )
+{
+    string rez;
+
+    ResAlloc res(Mess->mRes, false);
+    for(unsigned i_sdc = 0; i_sdc < selectDebugCats.size(); i_sdc++)
+	rez += selectDebugCats[i_sdc]+";";
+
+    return rez;
+}
+
+void TMess::setSelDebCats( const string &vl )
+{
+    ResAlloc res(Mess->mRes, true);
+    debugCats.clear();
+    selectDebugCats.clear();
+
+    string curCat;
+    for(int off = 0; (curCat=TSYS::strParse(vl,0,";",&off)).size(); )
+    {
+	debugCats[curCat] = true;
+	selectDebugCats.push_back(curCat);
+    }
+    SYS->modif();
 }
 
 void TMess::setLang( const string &lng )
 {
     char *prvLng = NULL;
-    if( (prvLng=getenv("LANGUAGE")) && strlen(prvLng) ) setenv( "LANGUAGE", lng.c_str(), 1 );
-    else setenv( "LC_MESSAGES", lng.c_str(), 1 );
-    setlocale(LC_ALL,"");
+    if((prvLng=getenv("LANGUAGE")) && strlen(prvLng) ) setenv( "LANGUAGE", lng.c_str(), 1);
+    else setenv("LC_MESSAGES", lng.c_str(), 1);
+    setlocale(LC_ALL, "");
 
     IOCharSet = nl_langinfo(CODESET);
 
@@ -236,6 +305,7 @@ void TMess::load( )
 
     //> Load params config-file
     setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));
+    setSelDebCats(TBDS::genDBGet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg));
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg).c_str()));
     setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
@@ -244,6 +314,7 @@ void TMess::load( )
 void TMess::save()
 {
     TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);

@@ -403,7 +403,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	if(prtLen())
 	    pushPrtMess(TSYS::time2str(time(NULL),"")+" "+prt+": '"+sid+"' --> "+TSYS::int2str(node)+"("+tro.workId()+")\n"+mess+"\n");
-	if(debugCat.size()) mess_debug(debugCat.c_str(), mess.c_str());
+	if(debugCat.size()) mess_debug_(debugCat.c_str(), mess.c_str());
     }
 }
 

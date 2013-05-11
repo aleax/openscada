@@ -121,9 +121,7 @@ string TUIMod::optDescr( )
 
 void TUIMod::load_( )
 {
-#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Load module."));
-#endif
 
     //> Load parameters from command line
     string argCom, argVl;
@@ -137,11 +135,9 @@ void TUIMod::load_( )
 
 void TUIMod::save_( )
 {
-#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Save module."));
-#endif
 
-    //- Save parameters to DB -
+    //> Save parameters to DB
     TBDS::genDBSet( nodePath()+"StartPath", startPath() );
     TBDS::genDBSet( nodePath()+"StartUser", startUser() );
 }
@@ -180,9 +176,7 @@ QMainWindow *TUIMod::openWindow( )
 
 void TUIMod::modStart( )
 {
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Start module."));
-#endif
+    mess_debug(nodePath().c_str(), _("Start module."));
 
     end_run = false;
     run_st  = true;
@@ -190,9 +184,7 @@ void TUIMod::modStart( )
 
 void TUIMod::modStop( )
 {
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Stop module."));
-#endif
+    mess_debug(nodePath().c_str(), _("Stop module."));
 
     end_run = true;
 

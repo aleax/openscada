@@ -254,15 +254,15 @@ void Engine::preDisable( int flag )
 
 void Engine::load_( )
 {
+    int64_t d_tm;
+
     mess_info(nodePath().c_str(),_("Load module."));
 
     //> Load parameters from config-file and DB
     setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
     setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
 
-#if OSC_DEBUG >= 3
-    int64_t w_tm = TSYS::curTime();
-#endif
+    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
     map<string, bool>	itReg;
 
@@ -296,19 +296,18 @@ void Engine::load_( )
                     wlbDel(db_ls[i_it]);
         }
 
-#if OSC_DEBUG >= 3
-	w_tm = TSYS::curTime();
-#endif
+	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
 	//>>>> Load present libraries
 	wlbList(db_ls);
 	for(unsigned l_id = 0; l_id < db_ls.size(); l_id++)
 	{
 	    wlbAt(db_ls[l_id]).at().load();
-#if OSC_DEBUG >= 3
-	    mess_debug(nodePath().c_str(),_("Load library '%s' time: %f ms."),db_ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
-	    w_tm = TSYS::curTime();
-#endif
+	    if(mess_lev() == TMess::Debug)
+	    {
+		mess_debug(nodePath().c_str(), _("Load library '%s' time: %f ms."), db_ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		d_tm = TSYS::curTime();
+	    }
 	}
     }catch( TError err )
     {
@@ -349,19 +348,18 @@ void Engine::load_( )
                     prjDel(db_ls[i_it]);
         }
 
-#if OSC_DEBUG >= 3
-	w_tm = TSYS::curTime();
-#endif
+	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
 	//>>>> Load present projects
 	prjList(db_ls);
 	for(unsigned el_id = 0; el_id < db_ls.size(); el_id++)
 	{
 	    prjAt(db_ls[el_id]).at().load();
-#if OSC_DEBUG >= 3
-	    mess_debug(nodePath().c_str(),_("Load project '%s' time: %f ms."),db_ls[el_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
-	    w_tm = TSYS::curTime();
-#endif
+	    if(mess_lev() == TMess::Debug)
+	    {
+		mess_debug(nodePath().c_str(), _("Load project '%s' time: %f ms."), db_ls[el_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		d_tm = TSYS::curTime();
+	    }
 	}
     }catch(TError err)
     {
@@ -375,10 +373,11 @@ void Engine::load_( )
     for(unsigned l_id = 0; l_id < ls.size(); l_id++)
     {
 	wlbAt(ls[l_id]).at().setEnable(true);
-#if OSC_DEBUG >= 3
-	mess_debug(nodePath().c_str(),_("Enable library '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
-	w_tm = TSYS::curTime();
-#endif
+	if(mess_lev() == TMess::Debug)
+	{
+	    mess_debug(nodePath().c_str(),_("Enable library '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-d_tm));
+	    d_tm = TSYS::curTime();
+	}
     }
 
     //> Projects enable
@@ -387,10 +386,11 @@ void Engine::load_( )
     {
 	if(prjAt(ls[l_id]).at().enableByNeed)	continue;
 	prjAt(ls[l_id]).at().setEnable(true);
-#if OSC_DEBUG >= 3
-	mess_debug(nodePath().c_str(),_("Enable project '%s' time: %f ms."),ls[l_id].c_str(),1e-3*(TSYS::curTime()-w_tm));
-	w_tm = TSYS::curTime();
-#endif
+	if(mess_lev() == TMess::Debug)
+	{
+	    mess_debug(nodePath().c_str(), _("Enable project '%s' time: %f ms."), ls[l_id].c_str(), 1e-3*(TSYS::curTime()-d_tm));
+	    d_tm = TSYS::curTime();
+	}
     }
 
     passAutoEn = false;

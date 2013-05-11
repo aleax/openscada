@@ -384,27 +384,25 @@ void *TSocketIn::Task(void *sock_in)
 		}
 	    }
 	}
-	else if( sock->type == SOCK_UDP )
+	else if(sock->type == SOCK_UDP)
 	{
 	    string req, answ;
 
 	    ssize_t r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
 	    if(r_len <= 0) continue;
 	    sock->trIn += r_len;
-	    req.assign(buf,r_len);
+	    req.assign(buf, r_len);
 
-#if OSC_DEBUG >= 5
-	    mess_debug( sock->nodePath().c_str(), _("Socket received datagram '%d' from '%s'!"), r_len, inet_ntoa(name_cl.sin_addr) );
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(sock->nodePath().c_str(), _("Socket received datagram '%d' from '%s'!"), r_len, inet_ntoa(name_cl.sin_addr));
 
 	    sock->messPut(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),prot_in);
-	    if( !prot_in.freeStat() ) continue;
+	    if(!prot_in.freeStat()) continue;
 
-#if OSC_DEBUG >= 5
-	    mess_debug( sock->nodePath().c_str(), _("Socket replied datagram '%d' to '%s'!"), answ.size(), inet_ntoa(name_cl.sin_addr) );
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(sock->nodePath().c_str(), _("Socket replied datagram '%d' to '%s'!"), answ.size(), inet_ntoa(name_cl.sin_addr));
 
-	    r_len = sendto(sock->sock_fd,answ.c_str(),answ.size(),0,(sockaddr *)&name_cl, name_cl_len);
+	    r_len = sendto(sock->sock_fd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
 	    sock->trOut += vmax(0,r_len);
 	}
     }
@@ -431,9 +429,8 @@ void *TSocketIn::ClTask( void *s_inf )
     int cnt = 0;		//> Requests counter
     int tm = time(NULL);	//> Last connection time
 
-#if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str());
-#endif
+    if(mess_lev() == TMess::Debug)
+	mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str());
 
     s.s->clientReg(pthread_self(), s.cSock);
 
@@ -458,17 +455,15 @@ void *TSocketIn::ClTask( void *s_inf )
 	s.s->trIn += r_len;
 	s.s->sock_res.resRelease();
 
-#if OSC_DEBUG >= 5
-	mess_debug(s.s->nodePath().c_str(),_("Socket received message '%d' from '%s'."), r_len, s.sender.c_str());
-#endif
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(s.s->nodePath().c_str(),_("Socket received message '%d' from '%s'."), r_len, s.sender.c_str());
 	req.assign(buf,r_len);
 
 	s.s->messPut(s.cSock,req,answ,s.sender,prot_in);
 	if(answ.size())
 	{
-#if OSC_DEBUG >= 5
-	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(s.s->nodePath().c_str(),_("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
 	    ssize_t wL = 1;
 	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
@@ -496,9 +491,8 @@ void *TSocketIn::ClTask( void *s_inf )
 
     s.s->clientUnreg(pthread_self());
 
-#if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected by '%s'!"),s.sender.c_str());
-#endif
+    if(mess_lev() == TMess::Debug)
+	mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected by '%s'!"),s.sender.c_str());
 
     delete (SSockIn*)s_inf;
 
@@ -562,7 +556,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's input transport has address format:\n"
 	    "  TCP:{addr}:{port}:{mode} - TCP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
@@ -878,7 +872,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's output transport has address format:\n"
 	    "  TCP:{addr}:{port} - TCP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"

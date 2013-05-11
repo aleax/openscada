@@ -459,9 +459,8 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     if( request.size() > 0 )
     {
 	int	pos = 0;
-#if OSC_DEBUG >= 3
-	mess_debug(nodePath().c_str(),_("Content: %d:\n%s"),request.size(),request.c_str());
-#endif
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(nodePath().c_str(), _("Content: %d:\n%s"), request.size(), request.c_str());
 
 	//> Parse first record
 	req = TSYS::strLine(request,0,&pos);
@@ -603,9 +602,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 		    (void (TModule::**)()) &HttpGet);
 
 		((&wwwmod.at())->*HttpGet)(url,answer,sender,vars,user);
-#if OSC_DEBUG >= 4
-		mess_debug(nodePath().c_str(),"Get Content:\n%s",request.c_str());
-#endif
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Get Content:\n%s", request.c_str());
 	    }
 	    else if( method == "POST" )
 	    {
@@ -615,9 +612,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 
 		answer = request.substr(pos);
 		((&wwwmod.at())->*HttpPost)(url,answer,sender,vars,user);
-#if OSC_DEBUG >= 4
-		mess_debug(nodePath().c_str(),"Post Content:\n%s",request.c_str());
-#endif
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Post Content:\n%s", request.c_str());
 	    }
 	    else
 	    {

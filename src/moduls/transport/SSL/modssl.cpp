@@ -436,9 +436,8 @@ void *TSocketIn::ClTask( void *s_inf )
 
     int cSock = s.s->clientReg(pthread_self());
 
-#if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str() );
-#endif
+    if(mess_lev() == TMess::Debug)
+	mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str());
 
     if(BIO_do_handshake(s.bio) <= 0)
     {
@@ -479,9 +478,8 @@ void *TSocketIn::ClTask( void *s_inf )
 
 	rez = BIO_read(s.bio,buf,sizeof(buf));
 	if(rez <= 0)	break;		//Connection closed by client
-#if OSC_DEBUG >= 4
-        mess_debug(s.s->nodePath().c_str(),_("The message is received with the size '%d'."),rez);
-#endif
+	if(mess_lev() == TMess::Debug)
+    	    mess_debug(s.s->nodePath().c_str(),_("The message is received with the size '%d'."),rez);
 	req.assign(buf,rez);
 	s.s->sock_res.resRequestW();
 	s.s->trIn += rez;
@@ -490,9 +488,8 @@ void *TSocketIn::ClTask( void *s_inf )
 	s.s->messPut(cSock,req,answ,s.sender,prot_in);
 	if(answ.size())
 	{
-#if OSC_DEBUG >= 4
-            mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size '%d'."),answ.size());
-#endif
+	    if(mess_lev() == TMess::Debug)
+        	mess_debug(s.s->nodePath().c_str(),_("The message is replied with the size '%d'."),answ.size());
 	    do { rez = BIO_write(s.bio,answ.data(),answ.size()); }
 	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
 	    s.s->sock_res.resRequestW();
@@ -523,9 +520,8 @@ void *TSocketIn::ClTask( void *s_inf )
 
     s.s->clientUnreg( pthread_self() );
 
-#if OSC_DEBUG >= 3
-    mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected (%d)."),s.s->cl_id.size() );
-#endif
+    if(mess_lev() == TMess::Debug)
+	mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected (%d)."),s.s->cl_id.size());
 
     delete (SSockIn*)s_inf;
 
@@ -604,15 +600,15 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("SSL input transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),RWRWR_,"root",STR_ID,4,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),RWRWR_,"root",STR_ID,1,"tp","str");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/cl_n",_("Clients maximum"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/bf_ln",_("Input buffer (kbyte)"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/keepAliveCon",_("Keep alive connections"),RWRWR_,"root",STR_ID,1,"tp","dec");
@@ -920,9 +916,7 @@ repeate:
     if(!time) time = 5000;
 
     trOut += ret;
-#if OSC_DEBUG >= 4
-    if( ret > 0 ) mess_debug(nodePath().c_str(),_("The message is sent with the size '%d'."),ret);
-#endif
+    if(mess_lev() == TMess::Debug && ret > 0) mess_debug(nodePath().c_str(), _("The message is sent with the size '%d'."), ret);
 
     //> Read reply
     if(ibuf != NULL && len_ib > 0)
@@ -959,9 +953,7 @@ repeate:
 	}
     }
 
-#if OSC_DEBUG >= 4
-    if(ret > 0) mess_debug(nodePath().c_str(),_("The message is received with the size '%d'."),ret);
-#endif
+    if(mess_lev() == TMess::Debug && ret > 0) mess_debug(nodePath().c_str(), _("The message is received with the size '%d'."), ret);
 
     return vmax(0,ret);
 }
@@ -972,7 +964,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("SSL output transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"

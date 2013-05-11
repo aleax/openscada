@@ -11,8 +11,6 @@
 	<prm id="StName">Work station</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="LogTarget">10</prm>
-	<prm id="MessLev">0</prm>
-	<prm id="Lang2CodeBase"></prm>
 	<prm id="SaveAtExit">0</prm>
 	<prm id="SavePeriod">0</prm>
 

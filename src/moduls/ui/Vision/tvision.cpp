@@ -132,7 +132,8 @@ string TVision::optDescr( )
 	"StartUser   <user>    No password requested start user.\n"
 	"UserPass    <pass>    User password for no local start.\n"
 	"RunPrjs     <list>    Run projects list on the module start.\n"
-	"RunPrjsSt    {0;1}    Display status for run projects.\n"
+	"RunPrjsSt    {0;1}    Display status for run projects (default = 1).\n"
+	"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 	"CachePgLife <hours>   Cached pages lifetime.\n"
 	"VCAstation  <id>      VCA station id ('.' - local).\n"
 	"PlayCom     <cmd>     Audio alarms' files play command.\n\n"),
@@ -143,9 +144,7 @@ string TVision::optDescr( )
 
 void TVision::load_( )
 {
-#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Load module."));
-#endif
 
     //> Load parameters from command line
     string argCom, argVl;
@@ -157,6 +156,7 @@ void TVision::load_( )
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setRunPrjsSt(atoi(TBDS::genDBGet(nodePath()+"RunPrjsSt","1").c_str()));
+    setExitLstRunPrjCls(atoi(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls","1").c_str()));
     setCachePgLife(atof(TBDS::genDBGet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife())).c_str()));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
@@ -164,14 +164,14 @@ void TVision::load_( )
 
 void TVision::save_( )
 {
-#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Save module."));
-#endif
+
     //> Save parameters to DB
     TBDS::genDBSet(nodePath()+"StartUser",startUser());
     TBDS::genDBSet(nodePath()+"UserPass",userPass());
     TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
     TBDS::genDBSet(nodePath()+"RunPrjsSt",TSYS::int2str(runPrjsSt()));
+    TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls",TSYS::int2str(exitLstRunPrjCls()));
     TBDS::genDBSet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife()));
     TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
     TBDS::genDBSet(nodePath()+"PlayCom",playCom());
@@ -293,9 +293,7 @@ QMainWindow *TVision::openWindow()
 
 void TVision::modStart()
 {
-#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Start module."));
-#endif
 
     end_run = false;
     run_st  = true;
@@ -303,9 +301,8 @@ void TVision::modStart()
 
 void TVision::modStop()
 {
-#if OSC_DEBUG >= 1
     mess_debug(nodePath().c_str(),_("Stop module."));
-#endif
+
     end_run = true;
 
     for(unsigned i_w = 0; i_w < mn_winds.size(); i_w++)
@@ -361,6 +358,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,2,"tp","str",
 		"help",_("Automatic started project's list separated by symbol ';'.\nFor opening a project's window to need display (1) use project's name format: 'PrjName-1'."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj_st",_("Run projects status display"),RWRWR_,"root",SUI_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
@@ -393,6 +391,11 @@ void TVision::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runPrjs());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjs(opt->text());
+    }
+    else if(a_path == "/prm/cfg/exit_on_lst_run_prj_cls")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(exitLstRunPrjCls()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setExitLstRunPrjCls(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/run_prj_st")
     {

@@ -90,6 +90,7 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
 TSYS::~TSYS( )
 {
+    int mLev = Mess->messLevel();
     finalKill = true;
 
     //Delete all nodes in order
@@ -106,13 +107,14 @@ TSYS::~TSYS( )
     delete Mess;
     pthread_key_delete(sTaskKey);
 
-#if OSC_DEBUG >= 1
-    ResAlloc res(nodeRes(), false);
-    string cntrsStr;
-    for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
-	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
-    printf(_("System counters on exit: %s"),cntrsStr.c_str());
-#endif
+    if(mLev == TMess::Debug)
+    {
+	ResAlloc res(nodeRes(), false);
+	string cntrsStr;
+	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
+	    cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
+	printf(_("System counters on exit: %s"),cntrsStr.c_str());
+    }
 }
 
 string TSYS::host( )
@@ -326,6 +328,7 @@ string TSYS::optDescr( )
 	"IcoDir     <path>	Icons directory.\n"
 	"ModDir     <path>	Modules directory.\n"
 	"MessLev    <level>     Messages <level> (0-7).\n"
+	"SelDebCats <list>	Debug categories list (separated by ';').\n"
 	"LogTarget  <direction> Direct messages to:\n"
 	"                           <direct> & 1 - syslogd;\n"
 	"                           <direct> & 2 - stdout;\n"
@@ -1288,13 +1291,13 @@ long TSYS::HZ()
 
 bool TSYS::cntrEmpty( )
 {
-    ResAlloc res( nodeRes(), false );
+    ResAlloc res(nodeRes(), false);
     return mCntrs.empty();
 }
 
 double TSYS::cntrGet( const string &id )
 {
-    ResAlloc res( nodeRes(), false );
+    ResAlloc res(nodeRes(), false);
     map<string,double>::iterator icnt = mCntrs.find(id);
     if(icnt == mCntrs.end())	return 0;
     return icnt->second;
@@ -1302,13 +1305,13 @@ double TSYS::cntrGet( const string &id )
 
 void TSYS::cntrSet( const string &id, double vl )
 {
-    ResAlloc res( nodeRes(), true );
+    ResAlloc res(nodeRes(), true);
     mCntrs[id] = vl;
 }
 
 void TSYS::cntrIter( const string &id, double vl )
 {
-    ResAlloc res( nodeRes(), true );
+    ResAlloc res(nodeRes(), true);
     mCntrs[id] += vl;
 }
 
@@ -1996,8 +1999,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		"help",_("Multilingual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_))
 	    {
-		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",3,
-		    "tp","dec","len","1","help",_("Least messages level which process by the system."));
+		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
+                    "sel_id","0;1;2;3;4;5;6;7",
+                    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		    "help",_("Least messages level which process by the system."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),RWRWR_,"root","root",1,"tp","bool");
@@ -2022,13 +2027,21 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
 #endif
 	    }
-	if( !cntrEmpty() && ctrMkNode("area",opt,-1,"/cntr",_("Counters")) )
-	    if( ctrMkNode("table",opt,-1,"/cntr/cntr",_("Counters"),R_R___,"root","root") )
+	if((mess_lev() == TMess::Debug || !cntrEmpty()) && ctrMkNode("area",opt,-1,"/debug",_("Debug")))
+	{
+	    if(ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root"))
 	    {
-		ctrMkNode("list",opt,-1,"/cntr/cntr/id","ID",R_R___,"root","root",1,"tp","str");
-		ctrMkNode("list",opt,-1,"/cntr/cntr/vl",_("Value"),R_R___,"root","root",1,"tp","real");
+		ctrMkNode("list",opt,-1,"/debug/cntr/id","ID",R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/debug/cntr/vl",_("Value"),R_R_R_,"root","root",1,"tp","real");
 	    }
-	if( ctrMkNode("area",opt,-1,"/hlp",_("Help"),R_R___) )
+	    if(ctrMkNode("table",opt,-1,"/debug/dbgCats",_("Debug categories"),RWRWR_,"root","root",1,"key","cat"))
+	    {
+		ctrMkNode("list",opt,-1,"/debug/dbgCats/cat",_("Category"),R_R_R_,"root","root",1,"tp","str");
+		ctrMkNode("list",opt,-1,"/debug/dbgCats/prc",_("Process"),RWRWR_,"root","root",1,"tp","bool");
+	    }
+	    ctrMkNode("comm",opt,-1,"/debug/mess",_("See to messages"),R_R_R_,"root","root",1,"tp","lnk");
+	}
+	if(ctrMkNode("area",opt,-1,"/hlp",_("Help"),R_R___))
 	    ctrMkNode("fld",opt,-1,"/hlp/g_help",_("Options help"),R_R___,"root","root",3,"tp","str","cols","90","rows","10");
 	return;
     }
@@ -2218,18 +2231,62 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 #endif
     }
-    if(!cntrEmpty() && a_path == "/cntr/cntr" && ctrChkNode(opt,"get",R_R___,"root","root"))
+    else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root"))
     {
-	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/cntr/cntr/id","",R_R___,"root","root");
-	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/cntr/cntr/vl","",R_R___,"root","root");
+	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/debug/cntr/id","",R_R_R_,"root","root");
+	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/debug/cntr/vl","",R_R_R_,"root","root");
 
-	ResAlloc res( nodeRes(), false );
+	ResAlloc res(nodeRes(), false);
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	{
 	    if(n_id)	n_id->childAdd("el")->setText(icnt->first);
 	    if(n_vl)	n_vl->childAdd("el")->setText(TSYS::real2str(icnt->second));
 	}
     }
+    else if(a_path == "/debug/dbgCats")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))
+	{
+	    XMLNode *n_cat = ctrMkNode("list",opt,-1,"/debug/dbgCats/cat","",RWRWR_,"root","root");
+	    XMLNode *n_prc = ctrMkNode("list",opt,-1,"/debug/dbgCats/prc","",RWRWR_,"root","root");
+
+	    ResAlloc res(Mess->mRes, false);
+	    for(map<string,bool>::iterator idc = Mess->debugCats.begin(); idc != Mess->debugCats.end(); idc++)
+	    {
+		if(n_cat)	n_cat->childAdd("el")->setText(idc->first);
+		if(n_prc)	n_prc->childAdd("el")->setText(TSYS::real2str(idc->second));
+	    }
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))
+	{
+	    ResAlloc res(Mess->mRes, true);
+	    Mess->debugCats[opt->attr("key_cat")] = atoi(opt->text().c_str());
+	    if(atoi(opt->text().c_str()))
+	    {
+		for(unsigned i_sdc = 0; i_sdc < Mess->selectDebugCats.size(); i_sdc++)
+		{
+		    if(Mess->selectDebugCats[i_sdc] == opt->attr("key_cat")) continue;
+		    if(Mess->selectDebugCats[i_sdc].compare(0,opt->attr("key_cat").size(),opt->attr("key_cat")) == 0)
+		    {
+			Mess->debugCats[Mess->selectDebugCats[i_sdc]] = false;
+			Mess->selectDebugCats.erase(Mess->selectDebugCats.begin()+i_sdc);
+			i_sdc--;
+		    }
+		    else if(opt->attr("key_cat").compare(0,Mess->selectDebugCats[i_sdc].size(),Mess->selectDebugCats[i_sdc]) == 0)
+		    { Mess->debugCats[opt->attr("key_cat")] = false; break; }
+		}
+		if(Mess->debugCats[opt->attr("key_cat")]) { Mess->selectDebugCats.push_back(opt->attr("key_cat")); modif(); }
+	    }
+	    else for(unsigned i_sdc = 0; i_sdc < Mess->selectDebugCats.size(); i_sdc)
+		if(Mess->selectDebugCats[i_sdc] == opt->attr("key_cat"))
+		{
+		    Mess->selectDebugCats.erase(Mess->selectDebugCats.begin()+i_sdc);
+		    modif();
+		    break;
+		}
+	}
+    }
+    else if(a_path == "/debug/mess" && ctrChkNode(opt,"get"))	opt->setText(archive().at().nodePath(0,true));
     else if(a_path == "/hlp/g_help" && ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD)) opt->setText(optDescr());
     else TCntrNode::cntrCmdProc(opt);
 }

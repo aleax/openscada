@@ -58,20 +58,16 @@ void TUIS::load_( )
     //> Load parameters from config-file
 }
 
-void TUIS::subStart(  )
+void TUIS::subStart( )
 {
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Start subsystem."));
-#endif
+    mess_info(nodePath().c_str(), _("Start subsystem."));
 
     TSubSYS::subStart( );
 }
 
 void TUIS::subStop( )
 {
-#if OSC_DEBUG >=1
-    mess_debug(nodePath().c_str(),_("Stop subsystem."));
-#endif
+    mess_info(nodePath().c_str(), _("Stop subsystem."));
 
     TSubSYS::subStop( );
 }

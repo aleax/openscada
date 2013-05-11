@@ -38,19 +38,14 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on parameter type change
     setName(name);
 
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("DAQParamCntr",1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQParamCntr",1);
 }
 
 TParamContr::~TParamContr( )
 {
     nodeDelAll();
 
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("DAQParamCntr",-1);
-#endif
-
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQParamCntr",-1);
 }
 
 string TParamContr::objName( )	{ return TValue::objName()+":TParamContr"; }

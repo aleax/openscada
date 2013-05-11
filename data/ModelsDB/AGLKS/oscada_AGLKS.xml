@@ -13,7 +13,6 @@
 	<prm id="StName_uk">АГЛКС</prm>
 	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="LogTarget">10</prm>
-	<prm id="MessLev">0</prm>
 	<prm id="Lang2CodeBase">en</prm>
 	<prm id="SaveAtExit">0</prm>
 	<prm id="SavePeriod">0</prm>

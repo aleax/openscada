@@ -201,9 +201,7 @@ void TCntrNode::nodeDis( long tm, int flag )
 	while(1)
 	{
 	    if(!mUse)	break;
-#if OSC_DEBUG >= 1
             mess_debug(nodePath().c_str(),_("Waiting for freeing by %d users!"),mUse);
-#endif
 	    //Check timeout
 	    if(tm && time(NULL) > t_cur+tm)
 	    {

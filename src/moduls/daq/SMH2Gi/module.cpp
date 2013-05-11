@@ -306,7 +306,8 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	//> Send request
 	for(int i_tr = 0; i_tr < connTry; i_tr++)
 	{
-	    if(messLev() == 0) mess_debug(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	    if(messLev() == TMess::Debug)
+		mess_debug_(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
     	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
 	    if(broadCast) { err = ""; break; }
     	    rez.assign(buf, resp_len);
@@ -320,7 +321,8 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
     	    if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
     	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
     	    { err = _("13:Error respond: CRC check error."); continue; }
-	    if(messLev() == 0) mess_debug(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
+	    if(messLev() == TMess::Debug)
+		mess_debug_(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
     	    pdu = rez.substr(0, rez.size()-2);
     	    err = "";
 	    break;
@@ -328,8 +330,8 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
     }
     catch(TError ierr) { err = "10:"+ierr.mess; }
 
-    if(messLev() == 0 && err.size())
-	mess_debug(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin).c_str(), err.c_str());
+    if(messLev() == TMess::Debug && err.size())
+	mess_debug_(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin).c_str(), err.c_str());
 
     return err;
 }
@@ -693,9 +695,9 @@ void SHMParam::getVals( TParamContr *ip )
 	    case LONG:	vl.at().setI(p->owner().smv->getLong(tvar.c_str()), 0, true);	break;
 	    case FLOAT:	vl.at().setR(p->owner().smv->getFloat(tvar.c_str()), 0, true);	break;
 	}
-	if(ip->owner().messLev() == 0) vals += tvar+"='"+vl.at().getS(0,true)+"'; ";
+	if(ip->owner().messLev() == TMess::Debug) vals += tvar+"='"+vl.at().getS(0,true)+"'; ";
     }
-    if(ip->owner().messLev() == 0) mess_debug(ip->nodePath().c_str(), _("SHM Get vals: %s"), vals.c_str());
+    if(ip->owner().messLev() == TMess::Debug) mess_debug_(ip->nodePath().c_str(), _("SHM Get vals: %s"), vals.c_str());
 }
 
 void SHMParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
@@ -714,8 +716,8 @@ void SHMParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
 	case FLOAT:	rez = p->owner().smv->setFloat(tvar.c_str(),val.getR(0,true));	break;
     }
     if(rez < 0)	mess_err(ip->nodePath().c_str(), _("SHM Set value '%s' to '%s' error."), tvar.c_str(), val.getS(0,true).c_str());
-    if(ip->owner().messLev() == 0)
-	mess_debug(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), tvar.c_str(), val.getS(0,true).c_str(), rez);
+    if(ip->owner().messLev() == TMess::Debug)
+	mess_debug_(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), tvar.c_str(), val.getS(0,true).c_str(), rez);
 }
 
 bool SHMParam::cntrCmdProc( TParamContr *p, XMLNode *opt )

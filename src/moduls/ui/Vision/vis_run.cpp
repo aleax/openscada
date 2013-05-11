@@ -377,6 +377,16 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 
 void VisRun::closeEvent( QCloseEvent* ce )
 {
+    if(mod->exitLstRunPrjCls())	//Exit on close last run project
+    {
+	unsigned winCnt = 0;
+	for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
+    	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
+        	winCnt++;
+
+	if(winCnt <= 1) SYS->stop();
+    }
+
     winClose = true;
     ce->accept();
 }
@@ -1413,13 +1423,12 @@ void VisRun::cacheResSet( const string &res, const string &val )
 
 void VisRun::updatePage( )
 {
+    int64_t d_cnt;
     if(winClose) return;
 
     int rez;
 
-#if OSC_DEBUG >= 3
-    int64_t t_cnt = TSYS::curTime();
-#endif
+    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     //> Pages update
     XMLNode req("openlist");
@@ -1509,14 +1518,15 @@ void VisRun::updatePage( )
 	}
 	else i_pg++;
 
-#if OSC_DEBUG >= 3
-    upd_tm += 1e-3*(TSYS::curTime()-t_cnt);
-    if(!(1000/vmin(1000,period()) && wPrcCnt%(1000/vmin(1000,period()))))
+    if(mess_lev() == TMess::Debug)
     {
-	mess_debug("VCA DEBUG",_("Session '%s' update time %f ms."),workSess().c_str(),upd_tm);
-	upd_tm = 0;
+	upd_tm += 1e-3*(TSYS::curTime()-d_cnt);
+	if(!(1000/vmin(1000,period()) && wPrcCnt%(1000/vmin(1000,period()))))
+	{
+	    mess_debug(mod->nodePath().c_str(), _("Session '%s' update time %f ms."), workSess().c_str(), upd_tm);
+	    upd_tm = 0;
+	}
     }
-#endif
 
     //> Time update
     if(mWTime->isVisible() && !(wPrcCnt%vmax(1000/vmin(1000,period()),1)))

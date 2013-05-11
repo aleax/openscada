@@ -220,16 +220,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		oS(rez,io.attr("EndPoint"));		//EndpointURL
 		oNu(rez,rez.size(),4,4);		//Real message size
 
-		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), "HELLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
+		if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: request: %s"), "HELLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		//> Send request
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
 
-		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: response: %s"), "HELLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
+		if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: response: %s"), "HELLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		int off = 4;
-		if( rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size() )
+		if(rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size())
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTooLarge,_("Respond size is not coincidence."));
 		else if( rez.compare(0,4,"ERRF") == 0 ) err = iErr(rez,off);
 		else if( rez.compare(0,4,"ACKF") != 0 )
@@ -297,10 +297,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    //> Signature
 		    rez += asymmetricSign( rez, io.attr("PvKey") );
 		    //> Encoding
-		    if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request, decoded: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
+		    if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: request, decoded: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		    rez.replace(begEncBlck,rez.size()-begEncBlck,asymmetricEncrypt(rez.substr(begEncBlck),io.attr("ServCert"),secPlc));
 		}
-		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
+		if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: request: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		//> Send request and wait respond
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
@@ -320,7 +320,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    err = TSYS::strMess("0x%x:%s",OpcUa_BadTcpMessageTypeInvalid,_("Respond don't acknowledge."));
 		else
 		{
-		    if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: response: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
+		    if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: response: %s"), "OPN", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		    iNu(rez,off,4);					//Secure channel identifier
 		    iS(rez,off);					//Security policy URI
 		    string servCert = iS(rez,off);			//ServerCertificate
@@ -418,7 +418,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		io.setAttr("SecChnId",""); io.setAttr("SecTokenId","");
 		io.setAttr("SeqNumber",""); io.setAttr("SeqReqId","");
 
-		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), "CLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
+		if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: request: %s"), "CLO", TSYS::strDecode(rez,TSYS::Bin).c_str());
 		//> Send request and don't wait response
 		tro.messIO( rez.data(), rez.size(), NULL, 0, 0, true );
 	    }
@@ -597,7 +597,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 			rez.replace(begEncBlck,rez.size()-begEncBlck,symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
 		}
 
-		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: request: %s"), io.attr("id").c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
+		if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: request: %s"), io.attr("id").c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
 		//> Send request and wait respond
 		int resp_len = tro.messIO( rez.data(), rez.size(), buf, sizeof(buf), 0, true );
 		rez.assign( buf, resp_len );
@@ -609,7 +609,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    rez.append( buf, resp_len );
 		}
 
-		if(debugCat.size()) mess_debug(debugCat.c_str(), _("%s: response: %s"), io.attr("id").c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
+		if(debugCat.size()) mess_debug_(debugCat.c_str(), _("%s: response: %s"), io.attr("id").c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
 
 		off = 4;
 		if( rez.size() < 8 || iNu(rez,off,4) != rez.size() )
@@ -1793,9 +1793,8 @@ nextReq:
 	{
 	    if(rb.size() > 4096) throw TError(OpcUa_BadTcpMessageTooLarge,"","");
 
-#if OSC_DEBUG >= 5
-	    printf("TEST 00: Hello request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(nodePath().c_str(), "Hello request:\n%s", TSYS::strDecode(rb,TSYS::Bin).c_str());
 
 	    off = 8;
 	    TProt::iNu(rb,off,4);					//Protocol version
@@ -1815,25 +1814,23 @@ nextReq:
 	    if(i_ep >= epLs.size()) throw TError(OpcUa_BadTcpEndpointUrlInvalid,"","");
 
 	    //> Prepare acknowledge message
-	    out.reserve( 28 );
-	    out.append( "ACKF" );					//Acknowledge message type
-	    TProt::oNu(out,28,4);					//Message size
-	    TProt::oNu(out,OpcUa_ProtocolVersion,4);			//Protocol version
-	    TProt::oNu(out,OpcUa_ReciveBufferSize,4);			//Recive buffer size
-	    TProt::oNu(out,OpcUa_SendBufferSize,4);			//Send buffer size
-	    TProt::oNu(out,OpcUa_MaxMessageSize,4);			//Max message size
-	    TProt::oNu(out,OpcUa_MaxChunkCount,4);			//Max chunk count
+	    out.reserve(28);
+	    out.append("ACKF");					//Acknowledge message type
+	    TProt::oNu(out, 28, 4);				//Message size
+	    TProt::oNu(out, OpcUa_ProtocolVersion, 4);		//Protocol version
+	    TProt::oNu(out, OpcUa_ReciveBufferSize, 4);		//Recive buffer size
+	    TProt::oNu(out, OpcUa_SendBufferSize, 4);		//Send buffer size
+	    TProt::oNu(out, OpcUa_MaxMessageSize, 4);		//Max message size
+	    TProt::oNu(out, OpcUa_MaxChunkCount, 4);		//Max chunk count
 
-#if OSC_DEBUG >= 5
-	    printf( "TEST 00a: Hello response:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+                mess_debug(nodePath().c_str(), "Hello response:\n%s", TSYS::strDecode(out,TSYS::Bin).c_str());
 	}
 	//> Check for Open SecureChannel message type
-	else if( rb.compare(0,4,"OPNF") == 0 )
+	else if(rb.compare(0,4,"OPNF") == 0)
 	{
-#if OSC_DEBUG >= 5
-	    printf( "TEST 01: Open SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+                mess_debug(nodePath().c_str(), "Open SecureChannel request:\n%s", TSYS::strDecode(rb,TSYS::Bin).c_str());
 
 	    off = 8;
 	    TProt::iNu(rb,off,4);					//Secure channel identifier
@@ -1870,9 +1867,8 @@ nextReq:
 		    throw TError(OpcUa_BadTcpMessageTypeInvalid, "OPC UA Bin", _("Server certificate thumbprint error."));
 		//>> Decode message block
 		rb.replace(off,rb.size()-off,TProt::asymmetricDecrypt(rb.substr(off),wep.at().pvKey(),secPlc));
-#if OSC_DEBUG >= 5
-		printf("TEST 01a: Open SecureChannel decrypted request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-#endif
+		if(mess_lev() == TMess::Debug)
+            	    mess_debug(nodePath().c_str(), "Open SecureChannel decrypted request:\n%s", TSYS::strDecode(rb,TSYS::Bin).c_str());
 	    }
 									//> Sequence header
 	    uint32_t secNumb = TProt::iNu(rb,off,4);			//Sequence number
@@ -1967,16 +1963,14 @@ nextReq:
 		TProt::oNu(out,out.size(),4,4);				//Real message size
 	    }
 
-#if OSC_DEBUG >= 5
-	    printf("TEST 01a: Open sec respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(nodePath().c_str(), "Open sec respond:\n%s", TSYS::strDecode(out,TSYS::Bin).c_str());
 	}
 	//> Check for Close SecureChannel message type
 	else if( rb.compare(0,4,"CLOF") == 0 )
 	{
-#if OSC_DEBUG >= 5
-	    printf( "TEST 01: Close SecureChannel request:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+                mess_debug(nodePath().c_str(), "Close SecureChannel request:\n%s", TSYS::strDecode(rb,TSYS::Bin).c_str());
 
 	    off = 8;
 	    uint32_t secId = TProt::iNu(rb,off,4);			//Secure channel identifier
@@ -2018,11 +2012,10 @@ nextReq:
 	    return false;
 	}
 	//> Check for SecureChannel message type
-	else if( rb.compare(0,4,"MSGF") == 0 )
+	else if(rb.compare(0,4,"MSGF") == 0)
 	{
-#if OSC_DEBUG >= 5
-	    printf( "TEST 02: SecureChannel message:\n%s\n",TSYS::strDecode(rb,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+                mess_debug(nodePath().c_str(), "SecureChannel message:\n%s", TSYS::strDecode(rb,TSYS::Bin).c_str());
 
 	    off = 8;
 	    uint32_t stCode = 0;
@@ -2373,9 +2366,8 @@ nextReq:
 		    out.replace(begEncBlck,out.size()-begEncBlck,TProt::symmetricEncrypt(out.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
 	    }
 
-#if OSC_DEBUG >= 5
-	    printf("TEST 02a: SecureChannel message respond:\n%s\n",TSYS::strDecode(out,TSYS::Bin).c_str());
-#endif
+	    if(mess_lev() == TMess::Debug)
+                mess_debug(nodePath().c_str(), "SecureChannel message respond:\n%s", TSYS::strDecode(out,TSYS::Bin).c_str());
 	}
 	else throw TError(OpcUa_BadNotSupported,"","");
     }
@@ -2725,9 +2717,7 @@ string OPCEndPoint::tcpReq( int reqTp, const string &rb )
 		if( ndX == ndMap.end() )
 		{
 		    stCode = OpcUa_BadBrowseNameInvalid;
-#if OSC_DEBUG >= 5
-		    printf("TEST 101: Browse request to unknown node: %s\n",nid.toAddr().c_str());
-#endif
+		    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Browse request to unknown node: %s",nid.toAddr().c_str());
 		}
 		else
 		{

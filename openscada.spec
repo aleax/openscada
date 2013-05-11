@@ -230,12 +230,7 @@ autoreconf -ivf
 %install
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
-#install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,LibsDB,AGLKS,Boiler}
-#install -m 755 -d %buildroot/%_datadir/openscada/ARCHIVES/{MESS,VAL}
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
-#echo "OpenSCADA data dir" > %buildroot/%_datadir/openscada/DATA/.info
-#echo "OpenSCADA messages archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/MESS/.info
-#echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VAL/.info
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version

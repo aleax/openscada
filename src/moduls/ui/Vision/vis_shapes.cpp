@@ -1988,14 +1988,13 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
 void ShapeDiagram::makeTrendsPicture( WdgView *w )
 {
+    int64_t d_cnt;
     QPen grdPen, mrkPen;
     int  mrkHeight = 0;
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
-#if OSC_DEBUG >= 3
-    int64_t t_cnt = TSYS::curTime();
-#endif
+    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     //> Prepare picture
     shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
@@ -2460,9 +2459,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     shD->pictRect = tAr;
     shD->tPict = tPict;
 
-#if OSC_DEBUG >= 3
-    mess_debug("VCA DEBUG",_("Trend build: %f ms."),1e-3*(TSYS::curTime()-t_cnt));
-#endif
+    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Trend build: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
 }
 
 void ShapeDiagram::tracing( )
@@ -2486,6 +2483,7 @@ void ShapeDiagram::tracing( )
 
 bool ShapeDiagram::event( WdgView *w, QEvent *event )
 {
+    int64_t d_cnt;
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!shD->en) return false;
@@ -2495,9 +2493,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
     {
 	case QEvent::Paint:
 	{
-#if OSC_DEBUG >= 3
-	    int64_t t_cnt = TSYS::curTime();
-#endif
+	    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 	    QPainter pnt(w);
 
 	    //> Decoration draw
@@ -2540,9 +2536,7 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 		pnt.drawLine(curPos, shD->pictRect.y(), curPos,shD->pictRect.y()+shD->pictRect.height());
 	    }
 
-#if OSC_DEBUG >= 3
-	    mess_debug("VCA DEBUG",_("Trend draw: %f ms."),1e-3*(TSYS::curTime()-t_cnt));
-#endif
+	    if(mess_lev() == TMess::Debug) mess_debug(mod->nodePath().c_str(), _("Trend draw: %f ms."), 1e-3*(TSYS::curTime()-d_cnt));
 
 	    return true;
 	}

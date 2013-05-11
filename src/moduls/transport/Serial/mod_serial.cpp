@@ -542,9 +542,8 @@ void *TTrIn::Task( void *tr_in )
 
 	tr->trIn += req.size();
 
-#if OSC_DEBUG >= 5
-	mess_debug(nodePath().c_str(), _("Serial received message '%d'."), req.size());
-#endif
+	if(mess_lev() == TMess::Debug)
+	    mess_debug(tr->nodePath().c_str(), _("Serial received message '%d'."), req.size());
 
 	//> Check for device lock and RING request from modem
 	if(tr->mMdmMode && !tr->mMdmDataMode)
@@ -582,9 +581,8 @@ void *TTrIn::Task( void *tr_in )
 	//> Send respond
 	if(answ.size())
 	{
-#if OSC_DEBUG >= 5
-	    mess_debug(nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(tr->nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
 	    //>> Pure RS-485 flow control: Clear RTS for transfer allow
     	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
 
@@ -1224,7 +1222,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,4,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","dest","sel_ed","select","/cntr/cfg/devLS","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"

@@ -2110,9 +2110,8 @@ void ConfApp::tabSelect( int idx )
 
 void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 {
-#if OSC_DEBUG >= 3
-    int64_t t_cnt = TSYS::curTime();
-#endif
+    int64_t d_cnt;
+    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     QStringList grps = i->data(2,Qt::UserRole).toStringList();
     if( grps.empty() ) return;
@@ -2232,9 +2231,8 @@ void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 	if(!i->parent() && i->data(0,Qt::UserRole).toInt() == 10) initHosts();
     }
 
-#if OSC_DEBUG >= 3
-    mess_debug("QTCfg DEBUG",_("Expand/update branch '%s' time %f ms."),i->text(2).toAscii().data(),1e-3*(TSYS::curTime()-t_cnt));
-#endif
+    if(mess_lev() == TMess::Debug)
+	mess_debug(mod->nodePath().c_str(), _("Expand/update branch '%s' time %f ms."), i->text(2).toAscii().data(), 1e-3*(TSYS::curTime()-d_cnt));
 }
 
 int ConfApp::cntrIfCmd( XMLNode &node )

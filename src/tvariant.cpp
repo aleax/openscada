@@ -325,16 +325,12 @@ pthread_mutex_t TVarObj::connM = PTHREAD_MUTEX_INITIALIZER;
 
 TVarObj::TVarObj( ) : mUseCnt(0)
 {
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("VarObjCntr",1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("VarObjCntr",1);
 }
 
 TVarObj::~TVarObj( )
 {
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("VarObjCntr",-1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("VarObjCntr",-1);
 }
 
 void TVarObj::AHDConnect( )
@@ -453,16 +449,12 @@ TVariant TVarObj::funcCall( const string &id, vector<TVariant> &prms )
 //*****************************************************************
 TEValObj::TEValObj( )
 {
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("EValObjCntr",1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("EValObjCntr",1);
 }
 
 TEValObj::~TEValObj( )
 {
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("EValObjCntr",-1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("EValObjCntr",-1);
 }
 
 TVariant TEValObj::funcCall( const string &id, vector<TVariant> &prms )

@@ -57,20 +57,16 @@ TModule::TModule( const string &id ) : mId(id)
     char mess[][100] = { _("Author"), _("License") };
 #endif
 
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("ModulsCntr",1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("ModulsCntr",1);
 }
 
-TModule::~TModule(  )
+TModule::~TModule( )
 {
     //> Clean export function list
     for(unsigned i = 0; i < m_efunc.size(); i++)
         delete m_efunc[i];
 
-#if OSC_DEBUG >= 1
-    SYS->cntrIter("ModulsCntr",-1);
-#endif
+    if(mess_lev() == TMess::Debug) SYS->cntrIter("ModulsCntr",-1);
 }
 
 string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }

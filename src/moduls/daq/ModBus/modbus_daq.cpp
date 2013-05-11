@@ -620,11 +620,11 @@ string TMdContr::modBusReq( string &pdu )
     AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
 
     XMLNode req(mPrt);
-    req.setAttr("id",id())->
-	setAttr("reqTm",TSYS::int2str(reqTm))->
-	setAttr("node",TSYS::int2str(mNode))->
-	setAttr("reqTry",TSYS::int2str(connTry))->
-	setAttr("debugCat",(messLev()==0) ? nodePath() : string(""))->
+    req.setAttr("id", id())->
+	setAttr("reqTm", TSYS::int2str(reqTm))->
+	setAttr("node", TSYS::int2str(mNode))->
+	setAttr("reqTry", TSYS::int2str(connTry))->
+	setAttr("debugCat", (messLev()==TMess::Debug) ? nodePath() : string(""))->
 	setText(pdu);
 
     tr.at().messProtIO(req,"ModBus");
@@ -691,9 +691,6 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    resAsWr.release();
 
-#if OSC_DEBUG >= 3
-	    mess_debug(cntr.nodePath().c_str(),_("Fetch coils' and registers' blocks."));
-#endif
 	    ResAlloc res(cntr.req_res, false);
 
 	    //> Get coils

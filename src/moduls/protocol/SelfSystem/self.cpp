@@ -286,6 +286,7 @@ TProtIn::~TProtIn()
 
 bool TProtIn::mess( const string &request, string &answer, const string &sender )
 {
+    int64_t d_tm;
     int ses_id = -1;
     int req_sz = 0;
     char user[256] = "", pass[256] = "";
@@ -315,10 +316,11 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     }
     else if( req.substr(0,3) == "REQ" )
     {
-#if OSC_DEBUG >= 3
-	int64_t w_tm = TSYS::curTime();
-	mess_debug(nodePath().c_str(),_("Get request: '%s': %d"),req.c_str(),req_buf.size());
-#endif
+	if(mess_lev() == TMess::Debug)
+	{
+	    d_tm = TSYS::curTime();
+	    mess_debug(nodePath().c_str(), _("Get request: '%s': %d"), req.c_str(), req_buf.size());
+	}
 
 	TProt::SAuth auth(0,"",0);
 	if( sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2 )	auth = mod->sesGet(ses_id);
@@ -345,17 +347,19 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    req_node.load(req_buf.substr(req.size()+strlen("\n")));
 	    req_node.setAttr("user",auth.name);
 
-#if OSC_DEBUG >= 3
-	    mess_debug(nodePath().c_str(),_("Unpack and load request: '%s': %d, time: %f ms."),req.c_str(),req_buf.size(),1e-3*(TSYS::curTime()-w_tm));
-	    w_tm = TSYS::curTime();
-#endif
+	    if(mess_lev() == TMess::Debug)
+	    {
+		mess_debug(nodePath().c_str(), _("Unpack and load request: '%s': %d, time: %f ms."), req.c_str(), req_buf.size(), 1e-3*(TSYS::curTime()-d_tm));
+		d_tm = TSYS::curTime();
+	    }
 
 	    SYS->cntrCmd(&req_node);
 
-#if OSC_DEBUG >= 3
-	    mess_debug(nodePath().c_str(),_("Process request: '%s', time: %f ms."),req.c_str(),1e-3*(TSYS::curTime()-w_tm));
-	    w_tm = TSYS::curTime();
-#endif
+	    if(mess_lev() == TMess::Debug)
+	    {
+		mess_debug(nodePath().c_str(), _("Process request: '%s', time: %f ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
+		d_tm = TSYS::curTime();
+	    }
 
 	    string resp = req_node.save(XMLNode::MissTagEnc|XMLNode::MissAttrEnc)+"\n";
 
@@ -363,15 +367,14 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 	    bool respCompr = (((TProt&)owner()).comprLev() && (int)resp.size() > ((TProt&)owner()).comprBrd());
 	    if( respCompr ) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
 
-#if OSC_DEBUG >= 3
-	    mess_debug(nodePath().c_str(),_("Save respond to stream and pack: '%s': %d, time: %f ms."),req.c_str(),resp.size(),1e-3*(TSYS::curTime()-w_tm));
-#endif
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(nodePath().c_str(), _("Save respond to stream and pack: '%s': %d, time: %f ms."), req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
-	    answer="REZ 0 "+TSYS::int2str(resp.size()*(respCompr?-1:1))+"\n"+resp;
+	    answer = "REZ 0 "+TSYS::int2str(resp.size()*(respCompr?-1:1))+"\n"+resp;
 	}
 	catch(TError err)
 	{
-	    answer="REZ 2 "+err.cat+":"+err.mess+"\n";
+	    answer = "REZ 2 "+err.cat+":"+err.mess+"\n";
 	}
     }
     else answer = "REZ 3 Command format error.\n";

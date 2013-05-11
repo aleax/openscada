@@ -264,7 +264,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
 	if(!tr.at().startStat()) tr.at().start();
 	if(CRC) pdu += DCONCRC(pdu);
-	if(messLev() == 0) mess_debug(nodePath().c_str(), _("REQ -> '%s'"), pdu.c_str());
+	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), pdu.c_str());
 	pdu += "\r";
 
 	ResAlloc resN( tr.at().nodeRes(), true );
@@ -291,7 +291,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 		else if(((!CRC && acqLen != pdu.size()) || (CRC && (acqLen+2) != pdu.size()))) { err = _("20:Respond length error."); break; }
 	    }
 
-	    if(messLev() == 0) mess_debug(nodePath().c_str(), _("RESP -> '%s'"), pdu.c_str());
+	    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("RESP -> '%s'"), pdu.c_str());
 	    err = "0";
 	    break;
 	}
@@ -300,7 +300,7 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 
     if(err != "0")
     {
-	if(messLev() == 0) mess_debug(nodePath().c_str(), _("ERR -> '%s': %s"), pdu.c_str(), err.c_str());
+	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("ERR -> '%s': %s"), pdu.c_str(), err.c_str());
 	pdu = "";
     }
 

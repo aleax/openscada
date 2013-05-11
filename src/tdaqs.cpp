@@ -300,9 +300,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 
 void TDAQS::subStart(  )
 {
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Start subsystem."));
-#endif
+    mess_info(nodePath().c_str(), _("Start subsystem."));
 
     vector<string> m_l, tmpl_lst;
 
@@ -363,9 +361,7 @@ void TDAQS::subStart(  )
 
 void TDAQS::subStop( )
 {
-#if OSC_DEBUG >= 1
-    mess_debug(nodePath().c_str(),_("Stop subsystem."));
-#endif
+    mess_info(nodePath().c_str(),_("Stop subsystem."));
 
     if(prcStRd) SYS->taskDestroy(nodePath('.',true)+".redundant", &endrunRd);
 

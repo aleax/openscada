@@ -152,8 +152,8 @@ void TMdContr::reqOPC( XMLNode &io )
 
     nextTry:
     XMLNode req("opc.tcp");
-    req.setAttr("debugCat", (messLev() == 0) ? nodePath() : "");
-    io.setAttr("debugCat", (messLev() == 0) ? nodePath() : "");
+    req.setAttr("debugCat", (messLev() == TMess::Debug) ? nodePath() : "");
+    io.setAttr("debugCat", (messLev() == TMess::Debug) ? nodePath() : "");
     if( !sess.secChnl || !sess.secToken ||
 	(1e-3*(TSYS::curTime()-sess.sesAccess) >= sess.secLifeTime) ||
 	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode() )
