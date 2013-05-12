@@ -116,14 +116,14 @@ void TModSchedul::ScanDir( const string &Paths, vector<string> &files )
     //> Check and append present files
     for(int off = 0; (Path=TSYS::strParse(Paths,0,",",&off)).size(); )
     {
-	dirent *scan_dirent;
+	dirent scan_dirent, *scan_rez = NULL;
 	DIR *IdDir = opendir(Path.c_str());
 	if(IdDir == NULL) continue;
 
-	while((scan_dirent=readdir(IdDir)) != NULL)
+	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
 	{
-	    if(strcmp("..",scan_dirent->d_name) == 0 || strcmp(".",scan_dirent->d_name) == 0) continue;
-	    NameMod = Path+"/"+scan_dirent->d_name;
+	    if(strcmp("..",scan_rez->d_name) == 0 || strcmp(".",scan_rez->d_name) == 0) continue;
+	    NameMod = Path+"/"+scan_rez->d_name;
 	    if(CheckFile(NameMod)) files.push_back(NameMod);
 	}
 	closedir(IdDir);

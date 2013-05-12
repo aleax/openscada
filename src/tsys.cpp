@@ -207,6 +207,7 @@ string TSYS::ll2str( int64_t val, IntView view )
 string TSYS::real2str( double val, int prec, char tp )
 {
     char buf[STR_BUF_LEN];
+    prec = vmax(0,prec);
     if(tp == 'g') snprintf(buf,sizeof(buf),"%.*g",prec,val);
     else if(tp == 'e') snprintf(buf,sizeof(buf),"%.*e",prec,val);
     else snprintf(buf,sizeof(buf),"%.*f",prec,val);
@@ -802,7 +803,7 @@ string TSYS::strLine( const string &str, int level, int *off )
     return "";
 }
 
-string TSYS::pathLev( const string &path, int level, bool encode, int *off )
+string TSYS::pathLev( const string &path, int level, bool decode, int *off )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
@@ -818,12 +819,12 @@ string TSYS::pathLev( const string &path, int level, bool encode, int *off )
 	if( t_dir == string::npos )
 	{
 	    if( off ) *off = path.size();
-	    return (t_lev == level) ? ( encode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
+	    return (t_lev == level) ? ( decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
 	}
 	else if( t_lev == level )
 	{
 	    if( off ) *off = t_dir;
-	    return encode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
+	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
 	}
 	an_dir = t_dir;
 	t_lev++;
@@ -835,9 +836,8 @@ string TSYS::path2sepstr( const string &path, char sep )
 {
     string rez, curv;
     int off = 0;
-    while( !(curv=TSYS::pathLev(path,0,false,&off)).empty() )
-	rez+=curv+sep;
-    if(!rez.empty())	rez.resize(rez.size()-1);
+    while(!(curv=TSYS::pathLev(path,0,false,&off)).empty()) rez += curv+sep;
+    if(!rez.empty()) rez.resize(rez.size()-1);
 
     return rez;
 }
@@ -846,8 +846,7 @@ string TSYS::sepstr2path( const string &str, char sep )
 {
     string rez, curv;
     int off = 0;
-    while( !(curv=TSYS::strSepParse(str,0,sep,&off)).empty() )
-	rez+="/"+curv;
+    while(!(curv=TSYS::strSepParse(str,0,sep,&off)).empty()) rez += "/"+curv;
 
     return rez;
 }
@@ -1169,7 +1168,7 @@ string TSYS::strUncompr( const string &in )
 float TSYS::floatLE(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_double ieee754_be;
+    ieee754_float ieee754_be;
     union ieee754_le
     {
 	float f;
@@ -1195,7 +1194,7 @@ float TSYS::floatLE(float in)
 float TSYS::floatLErev(float in)
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
-    ieee754_double ieee754_be;
+    ieee754_float ieee754_be;
     union ieee754_le
     {
 	float f;
@@ -1362,7 +1361,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
 	if(rez == EPERM)
 	{
-	    mess_warning(nodePath().c_str(),_("No permission for create real-time policy. Default thread is created!"));
+	    mess_warning(nodePath().c_str(), _("No permission for create real-time policy for '%s'. Default thread is created!"), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
 	    prior.sched_priority = 0;
@@ -1959,12 +1958,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
+	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
+		"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
 		"help",_("Multilingual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_))
 	    {
-		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",3,
-		    "tp","dec","len","1","help",_("Least messages level which process by the system."));
+		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
+		    "sel_id","0;1;2;3;4;5;6;7",
+		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
+		    "help",_("Least messages level which process by the system."));
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_sysl",_("To syslog"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stdo",_("To stdout"),RWRWR_,"root","root",1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/gen/mess/log_stde",_("To stderr"),RWRWR_,"root","root",1,"tp","bool");

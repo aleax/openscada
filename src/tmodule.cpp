@@ -166,8 +166,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if(a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt))
-	opt->setText(modInfo(TSYS::pathLev(a_path,2)));
+    else if(a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }
 

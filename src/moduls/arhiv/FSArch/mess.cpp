@@ -199,25 +199,24 @@ void ModMArch::checkArchivator( bool now )
     if( now || time(NULL) > mLstCheck + checkTm()*60 )
     {
 	struct stat file_stat;
-	dirent *scan_dirent;
+	dirent scan_dirent, *scan_rez = NULL;
 
 	DIR *IdDir = opendir(addr().c_str());
 	if(IdDir == NULL)
 	{
-	    if( mkdir(addr().c_str(),0777) )
+	    if(mkdir(addr().c_str(),0777))
 		throw TError(nodePath().c_str(),_("Can not create directory '%s'."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
 	}
 	//> Clean scan flag
 	ResAlloc res(mRes,false);
-	for( unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
-	    arh_s[i_arh]->scan = false;
+	for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++) arh_s[i_arh]->scan = false;
 	res.release();
 
-	while( (scan_dirent = readdir(IdDir)) != NULL )
+	while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
 	{
-	    if( string("..") == scan_dirent->d_name || string(".") == scan_dirent->d_name ) continue;
-	    string NameArhFile = addr()+"/"+scan_dirent->d_name;
+	    if(strcmp(scan_rez->d_name,"..") == 0 || strcmp(scan_rez->d_name,".") == 0) continue;
+	    string NameArhFile = addr()+"/"+scan_rez->d_name;
 	    stat( NameArhFile.c_str(), &file_stat );
 	    if( (file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
 	    //>> Check for info files
@@ -320,7 +319,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
 	    "tp","str","help",_("Path to directory for archivator's of messages files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{

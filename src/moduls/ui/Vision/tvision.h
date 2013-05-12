@@ -61,6 +61,8 @@ class TVision : public TUI
 	string startUser( )			{ return start_user; }
 	string userPass( )			{ return user_pass; }
 	string runPrjs( )			{ return run_prjs; }
+	bool runPrjsSt( )			{ return mStatusEn; }
+	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
 	string VCAStation( )			{ return vca_station; }
 	string playCom( )			{ return mPlayCom; }
 	float cachePgLife( )			{ return mCachePgLife; }
@@ -69,6 +71,8 @@ class TVision : public TUI
 	void setStartUser( const string &user )	{ start_user = user; modif(); }
 	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
+	void setRunPrjsSt( bool en )		{ mStatusEn = en; modif(); }
+	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
 	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
@@ -114,6 +118,8 @@ class TVision : public TUI
 				user_pass,	//No quest user password
 				run_prjs;	//Run projects list on the module start
 	vector<WdgShape*>	shapesWdg;
+	bool			mStatusEn;	//Status line display for projects run
+	bool			mExitLstRunPrjCls;	//Exit program on last run project close
 	bool			end_run;	//End run command. Close all windows
 	float			mCachePgLife;	//Cached pages lifetime
 

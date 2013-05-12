@@ -1,3 +1,43 @@
+2013-05-11 Roman 0.8.0.6
+- !:UI.QTStarter: Wrong "QT" mostly renamed to "Qt". Messages translation from original Qt4 dialogs is fixed and appended.
+- UI.Vision: Exit on last run project close control is added for run projects.
+- !:FIX.UI.Vision: Primitive "ElFigure" next changes and fixes:
+    - Several arcs' point 5 separating is fixed on keyboard and mouse move.
+    - Mouse cursor moving according to keyboard moving is added.
+    - Circle contour gap by moving from keyboard is added.
+    - Significant code clear.
+- FIX:DAQ.DCON: "DO_METHOD" separated symbol ',' is fixed to ';' and "8DO (#AA00FF)", 12DO (#AA000FFF) is fixed for channels number.
+- FIX:DB.PostgreSQL: Connection procedure is rewrote for allow connect to need DB and only for errors connect to "template1",
+    check for present and create for need. The allow to set permition only to need and present DB, without "template1".
+- SYS: Default messages level is set to "Info (1)".
+- !!!!:UI.{VCAEngine,Vision,WebVision}: Scales separation for different parameters of primitive "Diagram" is implemented.
+- UI.Vision: Status line display control is added for run projects.
+- UI.WebVision: The property "Margin" for primitive "Text" behavior is changed and border calculation added.
+- UI.WebVision: Control information clear for closing pages is added. "overflow: hidden;" for primitive "Text" is added.
+- !!:UI.WebVision: External JS file "WebVisionVCA.js" loading try from current directory is added. JS code changes:
+    - mostly clean and fix;
+    - zero opacity checking is added for background disable;
+    - asynchronous main cycle requests try;
+    - primitives 'ElFigure', 'Media', 'FormEl' mostly adapted for prevent non full context replacing on single dynamic properties change.
+    - drag for images is disabled for FireFox.
+- FIX:UI.WebVision: Mostly JS code clean, direct objects free is added, memory leak fix into this.mousedown and this.mouseup functions' arrays.
+- DAQ.DCON: Any other besides "Serial" transports selection is allowed.
+- SYS.Value: Attribute print name is set to container name and the attribute description.
+    For empty name used only the attribute description.
+- FIX:SYS,UI.{Vision,WebVision}: Precision boundary for real to string converting is set to > 0. Padding boundary is set to (-1000;1000).
+- FIX:Archive: Access to source for "Passive" mode is disabled.
+- DAQ.Siemens: Try requests for different DB disabled on the task endrun.
+- SYS.{TCntrNode,TPrmTmpl},DAQ.JavaLikeCalc,UI.{VCAEngine,Vision}:
+    For tables list used preferable table name instead the table mask "[TableName]".
+- !:FIX:ModShedul,Archive.FSArch,DB.DBF:
+    The hidden problematic readdir() function is replaced to reentrant variant readdir_r().
+- FIX:SYS: ieee754_float using instead ieee754_double into floatLE() and floatLErev() is fixed.
+- Archive.{FSArch,DBArch}: Editable control for Values and Messages archives' configuration fields depends from "Start" state is added.
+- FIX:UI.Vision: Documents export is made equal to display and clean.
+- UI.WebVision: To JavaScript function getColor() opaque obtaine property is added.
+- UI.{Vision, WebVision}: Source files of primitive "ElFigure" is reformatted for replace 8 spaces to tabs and other fix.
+
+
 2013-02-28 Roman
 - FIX:Archive.FSArch: Wrong EVAL place on archive files seam is fixed.
 - Transport.Sockets: Editable control for Input transport object's configuration fields depends from "Start" state is added.
@@ -36,7 +76,6 @@
 
 
 2013-02-02 Roman 0.8.0.5
->>>>>>> .merge-right.r1963
 - FIX:UI.QTStarter: Splash early hide is fixed by the splash hide only after all "Qt" modules processing.
 - !:FIX:Function: Remove function gettimeofday() twice call on it execution time measurement, for each calls.
     Add the function execution time limit to 10 seconds.

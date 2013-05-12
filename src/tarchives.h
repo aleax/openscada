@@ -58,8 +58,8 @@ class TMArchivator : public TCntrNode, public TConfig
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
-	bool toStart( )		{ return m_start; }
-	bool startStat( )	{ return run_st; }
+	bool	toStart( )	{ return m_start; }
+	bool	startStat( )	{ return run_st; }
 	string	addr( )		{ return cfg("ADDR").getS(); }
 	int	level( )	{ return mLevel; }
 	void	categ( vector<string> &list );
