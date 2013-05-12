@@ -113,6 +113,7 @@ class TWEB: public TUI
 
 	void imgConvert(SSess &ses);
 	int colorParse( const string &clr );
+	static int colorResolve( gdImagePtr im, int clr );
 	string trMessReplace( const string &tsrc );
 
 	void perSYSCall( unsigned int cnt );

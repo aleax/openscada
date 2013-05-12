@@ -262,9 +262,10 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     mStlBar->setWhatsThis(_("This label displays used interface style."));
     mStlBar->setToolTip(_("Field for display the used interface style."));
     mStlBar->setStatusTip(_("Double click for style change."));
-    connect( mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()) );
+    connect(mStlBar, SIGNAL(styleChanged()), this, SLOT(styleChanged()));
     statusBar()->insertPermanentWidget(0,mStlBar);
     statusBar()->insertPermanentWidget(0,toolBarStatus);
+    statusBar()->setVisible(mod->runPrjsSt());
 
     //> Init scroller
     QScrollArea *scrl = new QScrollArea;
@@ -376,6 +377,16 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 
 void VisRun::closeEvent( QCloseEvent* ce )
 {
+    if(mod->exitLstRunPrjCls()) //Exit on close last run project
+    {
+	unsigned winCnt = 0;
+	for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
+	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
+		winCnt++;
+
+	if(winCnt <= 1) SYS->stop();
+    }
+
     winClose = true;
     ce->accept();
 }
@@ -912,14 +923,7 @@ void VisRun::exportDoc( const string &idoc )
 	    }
 	}
 	//>> Export to XHTML
-	else rez = "<?xml version='1.0' ?>\n"
-		"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN'\n"
-		"'DTD/xhtml1-transitional.dtd'>\n"
-		"<html xmlns='http://www.w3.org/1999/xhtml'>\n"
-		"<head>\n"
-		"  <meta http-equiv='Content-Type' content='text/html; charset="+Mess->charset()+"'/>\n"
-		"  <style type='text/css'>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->style+"</style>\n"
-		"</head>\n"+((ShapeDocument::ShpDt*)rwdg->shpData)->doc+"</html>";
+	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
 
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
 	else ::write(fd,rez.data(),rez.size());

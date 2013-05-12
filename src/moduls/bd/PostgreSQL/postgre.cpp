@@ -173,35 +173,32 @@ void MBD::enable( )
     cd_pg  = codePage().size()?codePage():Mess->charset();
     try
     {
-	if((connection = PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
+	bool dbCreateTry = false;
+nextTry:
+	if((connection=PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
 	    throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	if(PQstatus( connection ) != CONNECTION_OK)
-	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
-	TBD::enable();
-
-	vector< vector<string> > tbl;
-	string req = "SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '" + db + "'";
-	sqlReq(req,&tbl);
-	if(tbl.size() == 2 && tbl[1][0] == "0")
+	if(PQstatus(connection) != CONNECTION_OK)
 	{
-	    sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '" + cd_pg + "'");
+	    if(dbCreateTry) throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
+	    //> Try for connect to system DB, check for need DB present and create otherwise
 	    PQfinish(connection);
-	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
+	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
-	    else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
-	}
-	else
-	{
-	    PQfinish(connection);
-	    if((connection = PQconnectdb((conninfo+"dbname="+db).c_str())) == NULL)
-		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
-	    if(PQstatus(connection) != CONNECTION_OK)
-		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
-	    else  PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
-	}
+	    TBD::enable();
 
+	    vector< vector<string> > tbl;
+	    sqlReq("SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '"+db+"'", &tbl);
+	    if(tbl.size() == 2 && tbl[1][0] == "0")
+		sqlReq("CREATE DATABASE \""+TSYS::strEncode(db,TSYS::SQL)+"\" ENCODING = '"+cd_pg+"'");
+	    PQfinish(connection);
+
+	    dbCreateTry = true;
+	    goto nextTry;
+	}
+	PQsetNoticeProcessor(connection, MyNoticeProcessor, NULL);
+	if(!dbCreateTry) TBD::enable();
     }
     catch(...)
     {
@@ -213,8 +210,8 @@ void MBD::enable( )
 
 void MBD::disable( )
 {
-    if( !enableStat() )  return;
-    TBD::disable( );
+    if(!enableStat())  return;
+    TBD::disable();
 
     //> Last commit
     if(reqCnt) transCommit();

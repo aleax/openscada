@@ -790,24 +790,24 @@ bool TCntrNode::ctrChkNode( XMLNode *nd, const char *cmd, int perm, const char *
 
 void TCntrNode::cntrCmdProc( XMLNode *opt )
 {
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
 	ctrMkNode("oscada_cntr",opt,-1,"/",TSYS::strMess(_("Node: %s"),nodeName()),R_R_R_,"root","root");
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if( a_path == "/obj" )
+    if(a_path == "/obj")
     {
 	//>> Get node modify flag
-	if( ctrChkNode(opt,"modify",R_R_R_) )	opt->setText(isModify(TCntrNode::All)?"1":"0");
+	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	//>> Do load node
-	else if( ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR) )	load( );
+	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR))	load( );
 	//>> Do save node
-	else if( ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR) )	save( );
+	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR))	save( );
 	//>> Do copy node
-	else if( ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR) )
+	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));
 	//>> Request node childs parameters
-	else if( ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEC_RD) )
+	else if(ctrChkNode(opt,"chlds",R_R_R_,"root","root",SEC_RD))
 	{
 	    string chGrp = opt->attr("grp");
 	    bool icoCheck = atoi(opt->attr("icoCheck").c_str());
@@ -815,7 +815,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	    XMLNode req("get"); req.setAttr("path","/br/"+chGrp)->setAttr("user",opt->attr("user"));
 	    cntrCmdProc(&req);
 	    int chGrpId = grpId(chGrp);
-	    if( chGrpId >= 0 )
+	    if(chGrpId >= 0)
 		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
 		{
 		    XMLNode *chN = opt->childAdd();
@@ -825,7 +825,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		    //>>>> Check icon
 		    XMLNode reqIco("get"); reqIco.setAttr("path","/ico")->setAttr("user",opt->attr("user"));
 		    ch.at().cntrCmdProc(&reqIco);
-		    if( icoCheck ) chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
+		    if(icoCheck) chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
 		    else chN->childAdd("ico")->setText(reqIco.text());
 		    //>>>> Process groups
 		    XMLNode brReq("info"); brReq.setAttr("path","/br")->setAttr("user",opt->attr("user"));
@@ -841,14 +841,17 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		}
 	}
     }
-    else if( (a_path == "/db/list" || a_path == "/db/tblList") && ctrChkNode(opt) )
+    else if((a_path == "/db/list" || a_path.compare(0,11,"/db/tblList") == 0) && ctrChkNode(opt))
     {
-	bool tblList = a_path == "/db/tblList";
+	string tblList = "";
+	if(a_path.compare(0,11,"/db/tblList") == 0)
+	    if(!(tblList=TSYS::strParse(a_path,1,":")).size())	tblList = _("[TableName]");
 	vector<string> c_list;
 	SYS->db().at().dbList(c_list);
-	opt->childAdd("el")->setText(tblList ? _("*.*.[TableName]") : "*.*");
-	opt->childAdd("el")->setText(tblList ? _("<cfg>.[TableName]") : "<cfg>");
+	opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
+	opt->childAdd("el")->setText(tblList.size() ? ("<cfg>."+tblList) : "<cfg>");
 	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
-	    opt->childAdd("el")->setText( tblList ? c_list[i_db]+"."+_("[TableName]") : c_list[i_db] );
+	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
     }
+
 }

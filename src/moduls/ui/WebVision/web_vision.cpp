@@ -738,6 +738,11 @@ int TWEB::colorParse( const string &tclr )
     return -1;
 }
 
+int TWEB::colorResolve( gdImagePtr im, int clr )
+{
+    return gdImageColorResolveAlpha(im, (uint8_t)(clr>>16), (uint8_t)(clr>>8), (uint8_t)clr, 127-(uint8_t)(clr>>24));
+}
+
 string TWEB::trMessReplace( const string &tsrc )
 {
     string trez; trez.reserve(tsrc.size());

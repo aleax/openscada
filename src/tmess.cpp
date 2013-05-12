@@ -46,7 +46,7 @@ using namespace OSCADA;
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess(  ) : IOCharSet("UTF-8"), mMessLevel(0), mLogDir(0x2), mConvCode(true), mIsUTF8(true)
+TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE), mConvCode(true), mIsUTF8(true)
 {
     setenv("LC_NUMERIC","C",1);
     openlog(PACKAGE,0,LOG_USER);
@@ -74,7 +74,7 @@ TMess::~TMess(  )
 
 void TMess::setMessLevel( int level )
 {
-    mMessLevel = vmax(0,vmin(5,level));
+    mMessLevel = vmax(Debug, vmin(Crit,level));
     SYS->modif();
 }
 
@@ -93,16 +93,16 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     vsnprintf(mess,sizeof(mess),fmt,argptr);
     va_end(argptr);
 
-    level = vmin(Emerg,vmax(-Emerg,level));
-    if( abs(level) < messLevel() ) return;
+    level = vmin(Emerg, vmax(-Emerg,level));
+    if(abs(level) < messLevel()) return;
 
     int64_t ctm = TSYS::curTime();
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
 
-    if( mLogDir&1 )
+    if(mLogDir & DIR_SYSLOG)
     {
 	int level_sys;
-	switch( abs(level) )
+	switch(abs(level))
 	{
 	    case Debug:		level_sys = LOG_DEBUG;	break;
 	    case Info:		level_sys = LOG_INFO;	break;
@@ -114,17 +114,17 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 	    case Emerg:		level_sys = LOG_EMERG;	break;
 	    default: 		level_sys = LOG_DEBUG;
 	}
-	syslog(level_sys,"%s",s_mess.c_str());
+	syslog(level_sys, "%s", s_mess.c_str());
     }
-    if( mLogDir&2 ) fprintf(stdout,"%s \n",s_mess.c_str());
-    if( mLogDir&4 ) fprintf(stderr,"%s \n",s_mess.c_str());
-    if( (mLogDir&8) && SYS->present("Archive") )
-	SYS->archive().at().messPut( ctm/1000000, ctm%1000000, categ, level, mess );
+    if(mLogDir & DIR_STDOUT)	fprintf(stdout, "%s \n", s_mess.c_str());
+    if(mLogDir & DIR_STDERR)	fprintf(stderr, "%s \n", s_mess.c_str());
+    if((mLogDir&DIR_ARCHIVE) && SYS->present("Archive"))
+	SYS->archive().at().messPut(ctm/1000000, ctm%1000000, categ, level, mess);
 }
 
 void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category, int8_t level )
 {
-    if( mLogDir&8 ) SYS->archive().at().messGet(b_tm,e_tm,recs,category,level);
+    if(mLogDir & DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
 }
 
 string TMess::lang( )
@@ -230,7 +230,7 @@ void TMess::load( )
 	else if(argCom == "MessLev")
 	{
 	    int i = atoi(optarg);
-	    if(i >= 0 && i <= 7) setMessLevel(i);
+	    if(i >= Debug && i <= Emerg) setMessLevel(i);
 	}
 	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
 
