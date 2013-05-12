@@ -228,7 +228,7 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
     {
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,4,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
 	    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;

@@ -313,16 +313,16 @@ void LibProjProp::showDlg( const string &iit, bool reload )
     XMLNode *root = info_req.childGet(0),
 	    *gnd;
 
-    setWindowTitle( root->attr("dscr").c_str() );
+    setWindowTitle(root->attr("dscr").c_str());
 
     //> Generic dialog's page
-    gnd=TCntrNode::ctrId(root,"/obj",true);
+    gnd = TCntrNode::ctrId(root,"/obj",true);
     wdg_tabs->setTabEnabled(0,gnd);
     if( gnd )
     {
 	wdg_tabs->setTabText(0,gnd->attr("dscr").c_str());
 	//>> Enable stat
-	gnd=TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
+	gnd = TCntrNode::ctrId(root,obj_enable->objectName().toAscii().data(),true);
 	obj_enable->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
 	if( gnd )
 	{
@@ -330,13 +330,13 @@ void LibProjProp::showDlg( const string &iit, bool reload )
 	    if( !owner()->cntrIfCmd(req) ) obj_enable->setChecked(atoi(req.text().c_str()));
 	}
 	//>> DB value
-	gnd=TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
+	gnd = TCntrNode::ctrId(root,obj_db->objectName().toAscii().data(),true);
 	obj_db->setEnabled( gnd && atoi(gnd->attr("acs").c_str())&SEC_WR );
-	if( gnd )
+	if(gnd)
 	{
 	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode(obj_db->objectName().toAscii().data(),TSYS::PathEl));
 	    if( !owner()->cntrIfCmd(req) ) obj_db->setValue(req.text().c_str());
-	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl));
+	    req.clear()->setAttr("path",ed_it+"/"+TSYS::strEncode("/db/tblList",TSYS::PathEl)+":"+TSYS::pathLev(ed_it,0));
 	    if( !owner()->cntrIfCmd(req) )
 	    {
 		string els;

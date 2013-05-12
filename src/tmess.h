@@ -56,6 +56,7 @@ class TMess
     public:
 	//Data
 	enum Type { Debug, Info, Notice, Warning, Error, Crit, Alert, Emerg };
+	enum Direct { DIR_SYSLOG = 0x1, DIR_STDOUT = 0x2, DIR_STDERR = 0x4, DIR_ARCHIVE = 0x8 };
 
 	class SRec
 	{

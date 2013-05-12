@@ -1,7 +1,7 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.0.5],[rom_as@oscada.org, rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.8.0.6],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="2:0:0"
 oscd_modulpref="oscd_"
@@ -36,7 +36,7 @@ fi
 
 AC_CHECK_PROG(have_pkg_config, pkg-config, yes, no)
 if test x"$have_pkg_config" = "xno"; then
-    AC_MSG_ERROR(pkg-config is required to install this program)
+    AC_MSG_ERROR(pkg-config is required to configure this program)
 fi
 PKG_PROG_PKG_CONFIG
 

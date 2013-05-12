@@ -146,16 +146,16 @@ void MBD::allowList( vector<string> &list )
     list.clear();
 
     struct stat file_stat;
-    dirent *scan_dirent;
+    dirent scan_dirent, *scan_rez = NULL;
     DIR *IdDir = opendir(addr().c_str());
     if(IdDir == NULL) return;
-    while((scan_dirent = readdir(IdDir)) != NULL)
+    while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
     {
-	nfile = scan_dirent->d_name;
-	if( nfile == ".." || nfile == "." ||
-	    nfile.rfind(".") == string::npos || nfile.substr(nfile.rfind(".")) != ".dbf" ) continue;
+	nfile = scan_rez->d_name;
+	if(nfile == ".." || nfile == "." ||
+	    nfile.rfind(".") == string::npos || nfile.substr(nfile.rfind(".")) != ".dbf") continue;
 	stat((addr()+"/"+nfile).c_str(),&file_stat);
-	if( (file_stat.st_mode&S_IFMT) != S_IFREG ) continue;
+	if((file_stat.st_mode&S_IFMT) != S_IFREG) continue;
 	list.push_back(nfile.substr(0,nfile.rfind(".")));
     }
     closedir(IdDir);

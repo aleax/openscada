@@ -183,7 +183,8 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size())
-		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,"tp","str","dest","sel_ed","select","/db/tblList",
+		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
+			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
 			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))
