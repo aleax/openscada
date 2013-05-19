@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmess.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -125,7 +125,6 @@ class TMess
 
 	void put( const char *categ, int8_t level, const char *fmt,  ... );
 	void put_( const char *categ, int8_t level, const char *fmt,  ... );
-	void put( const char *categ, int8_t level, const char *fmt, va_list ap );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	//> Often used, generic text messages
@@ -136,7 +135,7 @@ class TMess
 
     private:
 	//Methods
-	void varTextActivate( );
+	void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );
 
 	//Attributes
 	string	IOCharSet;		//Internal charset

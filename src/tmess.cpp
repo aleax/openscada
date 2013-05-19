@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tmess.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -122,7 +122,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     va_list argptr;
 
     va_start(argptr, fmt);
-    put(categ, level, fmt, argptr);
+    putArg(categ, level, fmt, argptr);
     va_end(argptr);
 }
 
@@ -131,11 +131,11 @@ void TMess::put_( const char *categ, int8_t level, const char *fmt,  ... )
     va_list argptr;
 
     va_start(argptr, fmt);
-    put(categ, level, fmt, argptr);
+    putArg(categ, level, fmt, argptr);
     va_end(argptr);
 }
 
-void TMess::put( const char *categ, int8_t level, const char *fmt, va_list ap )
+void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap )
 {
     char mess[STR_BUF_LEN];
     vsnprintf(mess, sizeof(mess), fmt, ap);

@@ -1,3 +1,15 @@
+2013-05-19 Roman
+- SYS: Core library version is set to 1.1.0, for OpenSCADA version 0.8.1 reflection.
+    Package libqtwebkit-dev to Debian packages build dependencies, into "control", is added.
+    New TMess::put() and TMess::put_() functions is some fixed.
+- !!:DB.SQLite: Opened transaction close on the module stop is added for prevent data lost after crash on some other module
+    detach, for example UI.QTStarter module is often crash, by QT4 components' problems.
+- !:FIX.UI.Vision: Primitive "ElFigure" next changes and fixes:
+    - Crash on click to common point for arc's points 0,1 and line point 0 is fixed.
+    - Not full anti-aliasing is fixed.
+    - Significant code clear.
+
+
 2013-05-11 Roman
 - !!!!:SYS,*: Least level field is set to selectable.
     Global messages level "Debug (0)" specific processing is added by all messages enable.

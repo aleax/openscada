@@ -4494,7 +4494,6 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 	    if(devW)
 	    {
 		Mouse_pos = ev->pos();
-
 		if((ev->buttons()&Qt::LeftButton) && itemInMotion && (!status || fl_status_move))
 		{
 		    flag_m = true;
@@ -5808,44 +5807,34 @@ void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_n
     flag_rect = true;
     count_rects = 0;
     QVector <int> index_array_temp;
-    for(int i = 0; i < count_holds+1; i++)
-    {
-	index_array_temp.push_back(-1);
-	rect_array.push_back(0);
-    }
-    //- detecting the common points for all connected figures -
-    for( int i = 0; i <= count_holds; i++ )
-    {
-	if( (*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n1] )
+    //> detecting the common points for all connected figures
+    for(int i = 0; i <= count_holds; i++)
+	if((*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n1] ||
+	    (*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n2])
 	{
-	    index_array_temp[count_rects] = index_array[i];
-	    rect_array[count_rects] = 0;
+	    index_array_temp.push_back(index_array[i]);
+	    rect_array.push_back(((*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n1]) ? 0 : 1);
 	    count_rects++;
 	    flag_rect = true;
 	}
-	if( (*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n2] )
+	else
 	{
-	    index_array_temp[count_rects] = index_array[i];
-	    rect_array[count_rects] = 1;
-	    count_rects++;
-	    flag_rect = true;
+	    index_array_temp.push_back(-1);
+	    rect_array.push_back(0);
 	}
 
-    }
     index_array.clear();
-    for( int i = 0; i < count_rects+1; i++ )
-	index_array.push_back(-1);
-    for( int i = 0; i < count_rects; i++ )
-	index_array[i] = index_array_temp[i];
+    for(int i = 0; i < (count_rects+1); i++)	index_array.push_back(-1);
+    for(int i = 0; i < count_rects; i++)	index_array[i] = index_array_temp[i];
     // if there is an arc in "index_array" we put it on the first place in it.
     int num_arc = -1;
-    for( int i = 0; i < count_rects; i++ )
-	if( shapeItems[index_array[i]].type == 2 )
+    for(int i = 0; i < count_rects; i++)
+	if(shapeItems[index_array[i]].type == ShapeItem::Arc)
 	{
 	    flag_hold_arc = true;
 	    num_arc = i;
 	}
-    if( num_arc != -1 )
+    if(num_arc != -1)
     {
 	int index_0 = index_array[0];
 	int rect_0 = rect_array[0];
@@ -5854,10 +5843,10 @@ void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_n
 	rect_array[0] = rect_array[num_arc];
 	rect_array[num_arc] = rect_0;
     }
-    if( count_rects == 1 )
+    if(count_rects == 1)
     {
 	flag_rect = false;
-	if( shapeItems[index_array[0]].type == 2 )
+	if(shapeItems[index_array[0]].type == ShapeItem::Arc)
 	{
 	    rect_num_arc = rect_num;
 	    flag_hold_arc = false;
@@ -6733,396 +6722,330 @@ void ShapeElFigure::paintImage( WdgView *view )
     ElFigDt *elFD = (ElFigDt*)view->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
     QVector<inundationItem> &inundationItems = elFD->inundationItems;
-    PntMap *pnts = &elFD->shapePnts;
-    WidthMap *widths = &elFD->shapeWidths;
-    ColorMap *colors = &elFD->shapeColors;
-    ImageMap *images = &elFD->shapeImages;
-    StyleMap *styles = &elFD->shapeStyles;
+    PntMap  	&pnts = elFD->shapePnts;
+    WidthMap	&widths = elFD->shapeWidths;
+    ColorMap	&colors = elFD->shapeColors;
+    ImageMap	&images = elFD->shapeImages;
+    StyleMap 	&styles = elFD->shapeStyles;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(view);
     elFD->pictObj = QPixmap(view->width(), view->height());
     //elF-D>pictObj = QImage(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied);
     elFD->pictObj.fill(Qt::transparent);
-    QPainter pnt( &elFD->pictObj );
-    //- Prepare draw area -
+    QPainter pnt(&elFD->pictObj);
+
+    //> Prepare draw area
     int margin = elFD->geomMargin;
-    QRect draw_area = view->rect().adjusted(0,0,-2*margin,-2*margin);
+    QRect draw_area = view->rect().adjusted(0, 0, -2*margin, -2*margin);
     pnt.setWindow(draw_area);
     pnt.setViewport(view->rect().adjusted(margin,margin,-margin,-margin));
     vector<int> shape_inund_all;
-    //- Drawing all fills(inundations) -
-    for( int i=0; i < inundationItems.size(); i++ )
+
+    //> Drawing all fills(inundations)
+    for(int i = 0; i < inundationItems.size(); i++)
     {
 	QImage img;
-	string backimg = view->resGet((*images)[inundationItems[i].brush_img]);
+	string backimg = view->resGet(images[inundationItems[i].brush_img]);
 	img.loadFromData((const uchar*)backimg.c_str(), backimg.size());
-	if( shapeItems.size() == 0 || ( (inundationItems[i].path == newPath) && img.isNull() ) ) continue;
-	//-- Sorting the figures in each fill(inundation) --
+	if(shapeItems.size() == 0 || ((inundationItems[i].path == newPath) && img.isNull())) continue;
+
+	//>> Sorting the figures in each fill(inundation)
 	QVector<int> number_shape;
 	number_shape = inundationItems[i].number_shape;
 	std::sort(number_shape.begin(), number_shape.end());
+
 	//>> Making the array of the figures to be drawn before the each fill
 	vector<int> draw_before;
 	bool fl_numb;
-	for( int k=0; k < shapeItems.size(); k++ )
+	for(int k = 0; k < shapeItems.size(); k++)
 	{
 	    fl_numb = false;
-	    for( int j = 0; j < number_shape.size(); j++ )
-		if( k >= number_shape[j] ){ fl_numb = true; break; }
-	    if( !fl_numb ){ draw_before.push_back( k ); }
-	    else continue;
+	    for(int j = 0; !fl_numb && j < number_shape.size(); j++) fl_numb = (k >= number_shape[j]);
+	    if(!fl_numb) draw_before.push_back(k);
 	}
-	//>>>Drawing the figures and push_bask them into the array of the already drawn figures
+	//>>> Drawing the figures and push_bask them into the array of the already drawn figures
 	bool flag_dr;
-	for(unsigned k=0; k < draw_before.size(); k++)
+	for(unsigned k = 0; k < draw_before.size(); k++)
 	{
 	    flag_dr = true;
-	    for(unsigned j = 0; j < shape_inund_all.size(); j ++)
-		if(draw_before[k] == shape_inund_all[j])
-		{
-	    	    flag_dr = false;
-	    	    break;
-		}
-	    if( flag_dr )//-- If the figure is out of this array, then draw it(it is the figures which are lower than the current fill ) --
+	    for(unsigned j = 0; flag_dr && j < shape_inund_all.size(); j++) flag_dr = (draw_before[k] != shape_inund_all[j]);
+	    //>> If the figure is out of this array, then draw it (it is the figures which are lower than the current fill)
+	    if(!flag_dr) continue;
+
+	    const ShapeItem &cShIt = shapeItems[draw_before[k]];
+	    shape_inund_all.push_back(k);
+	    if(widths[cShIt.border_width] > 0.01)
 	    {
-		shape_inund_all.push_back(k);
-		if( (*widths)[shapeItems[draw_before[k]].border_width] > 0.01 )
-		{
-		    pnt.setBrush( QBrush( (*colors)[shapeItems[draw_before[k]].lineColor], Qt::SolidPattern ) );
-		    pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].borderColor],
-				(int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].border_width]),
-				 (*styles)[shapeItems[draw_before[k]].style], Qt::FlatCap, Qt::MiterJoin ) );
-		    pnt.drawPath( shapeItems[draw_before[k]].path );
-		}
-		else if( ( (*widths)[shapeItems[draw_before[k]].border_width] >= 0) &&
-			     (fabs((*widths)[shapeItems[draw_before[k]].border_width] - 0) < 0.01) )
-		{
-		    pnt.setBrush(Qt::NoBrush);
-		    if( (*widths)[shapeItems[draw_before[k]].width] < 3 )
-			pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor],
-				    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]),
-				     (*styles)[shapeItems[draw_before[k]].style], Qt::SquareCap, Qt::RoundJoin ) );
-		    else
-			pnt.setPen( QPen( (*colors)[shapeItems[draw_before[k]].lineColor],
-				    (int)TSYS::realRound((*widths)[shapeItems[draw_before[k]].width]),
-				     (*styles)[shapeItems[draw_before[k]].style], Qt::FlatCap, Qt::RoundJoin ) );
-		    pnt.drawPath( shapeItems[draw_before[k]].pathSimple );
-		}
+		int curWdth = (int)TSYS::realRound(widths[cShIt.border_width]);
+		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
+		pnt.setBrush(QBrush(colors[cShIt.lineColor],Qt::SolidPattern));
+		pnt.setPen(QPen(colors[cShIt.borderColor],curWdth,styles[cShIt.style],Qt::FlatCap,Qt::MiterJoin));
+		pnt.drawPath(cShIt.path);
+	    }
+	    else if(widths[cShIt.border_width] >= 0 && fabs(widths[cShIt.border_width]-0) < 0.01)
+	    {
+		int curWdth = (int)TSYS::realRound(widths[cShIt.width]);
+		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
+		pnt.setBrush(Qt::NoBrush);
+		pnt.setPen(QPen(colors[cShIt.lineColor],curWdth,styles[cShIt.style],((curWdth<3)?Qt::SquareCap:Qt::FlatCap),Qt::RoundJoin));
+		pnt.drawPath(cShIt.pathSimple);
 	    }
 	}
-	if( !img.isNull() )
+	if(!img.isNull())
 	{
 	    QPainterPath in_path, in_path_rot;
 	    in_path = newPath;
-	    //-- Building the scaled and unrotated inundation path --
+
+	    //>> Building the scaled and unrotated inundation path
 	    QPointF p1;
 	    PntMap tmp_pnts;
 	    QVector<int> number_vector;
 	    bool fl_;
-	    for( int p = 0; p < inundationItems[i].number_shape.size(); p++ )
+	    for(int p = 0; p < inundationItems[i].number_shape.size(); p++)
 	    {
-		if( shapeItems[inundationItems[i].number_shape[p]].type == 1 )
+		const ShapeItem &cShIt = shapeItems[inundationItems[i].number_shape[p]];
+		switch(cShIt.type)
 		{
-		    fl_ = false;
-		    for( int k = 0; k < number_vector.size(); k ++ )
-			if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
+		    case ShapeItem::Line:
+			fl_ = false;
+			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
+			if(!fl_)
 			{
-			    fl_ = true;
-			    break;
+			    p1 = scaleRotate(pnts[cShIt.n1], view, true, true);
+			    tmp_pnts[cShIt.n1] = unScaleRotate(p1, view, false, true);
+			    number_vector.push_back(cShIt.n1);
 			}
-		    if( !fl_ )
-		    {
-			p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-			tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-			number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-		    }
-		    fl_ = false;
-		    for( int k = 0; k < number_vector.size(); k ++ )
-			if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
+			fl_ = false;
+			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n2 == number_vector[k]);
+			if(!fl_)
 			{
-			    fl_ = true;
-			    break;
+			    p1 = scaleRotate(pnts[cShIt.n2], view, true, true);
+			    tmp_pnts[cShIt.n2] = unScaleRotate(p1, view, false, true);
+			    number_vector.push_back(cShIt.n2);
 			}
-		    if( !fl_ )
-		    {
-			p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-			tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-			number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-		    }
-		}
-		else if( shapeItems[inundationItems[i].number_shape[p]].type == 2 )
-		{
-		    fl_ = false;
-		    for( int k = 0; k < number_vector.size(); k ++ )
-			if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-			{
-			    fl_ = true;
-			    break;
-			}
-		    if( !fl_ )
-		    {
-			p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-			tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-			number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-		    }
-		    fl_ = false;
-		    for( int k = 0; k < number_vector.size(); k ++ )
-			if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-			{
-			    fl_ = true;
-			    break;
-			}
-		    if( !fl_ )
-		    {
-			p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-			tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-			number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-		    }
-
-		    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
-		    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
-		    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
-		    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
-		    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n5], view, true, true);
-		    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n5] = unScaleRotate( p1, view, false, true);
-		}
-		else if( shapeItems[inundationItems[i].number_shape[p]].type == 3 )
-		{
-		    fl_ = false;
-		    for( int k = 0; k < number_vector.size(); k ++ )
-			if(shapeItems[inundationItems[i].number_shape[p]].n1 == number_vector[k])
-			{
-			    fl_ = true;
-			    break;
-		    }
-		    if( !fl_ )
-		    {
-			p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n1], view, true, true);
-			tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n1] = unScaleRotate( p1, view, false, true);
-			number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n1);
-		    }
-		    fl_ = false;
-		    for( int k = 0; k < number_vector.size(); k ++ )
-			if(shapeItems[inundationItems[i].number_shape[p]].n2 == number_vector[k])
-			{
-			    fl_ = true;
 			break;
+		    case ShapeItem::Arc:
+			fl_ = false;
+			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
+			if(!fl_)
+			{
+			    p1 = scaleRotate(pnts[cShIt.n1], view, true, true);
+			    tmp_pnts[cShIt.n1] = unScaleRotate(p1, view, false, true);
+			    number_vector.push_back(cShIt.n1);
 			}
-		    if( !fl_ )
-		    {
-			p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n2], view, true, true);
-			tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n2] = unScaleRotate( p1, view, false, true);
-			number_vector.push_back(shapeItems[inundationItems[i].number_shape[p]].n2);
-		    }
-		    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n3], view, true, true);
-		    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n3] = unScaleRotate( p1, view, false, true);
-		    p1 =  scaleRotate( (*pnts)[shapeItems[inundationItems[i].number_shape[p]].n4], view, true, true);
-		    tmp_pnts[shapeItems[inundationItems[i].number_shape[p]].n4] = unScaleRotate( p1, view, false, true);
+			fl_ = false;
+			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n2 == number_vector[k]);
+			if(!fl_)
+			{
+			    p1 = scaleRotate(pnts[cShIt.n2], view, true, true);
+			    tmp_pnts[cShIt.n2] = unScaleRotate(p1, view, false, true);
+			    number_vector.push_back(cShIt.n2);
+			}
+
+			tmp_pnts[cShIt.n3] = unScaleRotate(scaleRotate(pnts[cShIt.n3],view,true,true), view, false, true);
+			tmp_pnts[cShIt.n4] = unScaleRotate(scaleRotate(pnts[cShIt.n4],view,true,true), view, false, true);
+			tmp_pnts[cShIt.n5] = unScaleRotate(scaleRotate(pnts[cShIt.n5],view,true,true), view, false, true);
+			break;
+		    case ShapeItem::Bezier:
+			fl_ = false;
+			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
+			if(!fl_)
+			{
+			    p1 = scaleRotate(pnts[cShIt.n1], view, true, true);
+			    tmp_pnts[cShIt.n1] = unScaleRotate(p1, view, false, true);
+			    number_vector.push_back(cShIt.n1);
+			}
+			fl_ = false;
+			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n2 == number_vector[k]);
+			if(!fl_)
+			{
+			    p1 = scaleRotate(pnts[cShIt.n2], view, true, true);
+			    tmp_pnts[cShIt.n2] = unScaleRotate(p1, view, false, true);
+			    number_vector.push_back(cShIt.n2);
+			}
+			tmp_pnts[cShIt.n3] = unScaleRotate(scaleRotate(pnts[cShIt.n3],view,true,true), view, false, true);
+			tmp_pnts[cShIt.n4] = unScaleRotate(scaleRotate(pnts[cShIt.n4],view,true,true), view, false, true);
+			break;
 		}
 	    }
 	    number_vector.clear();
-	    flag_rotate = false;
-	    flag_scale = false;
-	    in_path = createInundationPath( inundationItems[i].number_shape, shapeItems, tmp_pnts, view );
-	    flag_rotate = true;
-	    flag_scale = true;
+	    flag_rotate = flag_scale = false;
+	    in_path = createInundationPath(inundationItems[i].number_shape, shapeItems, tmp_pnts, view);
+	    flag_rotate = flag_scale = true;
 	    tmp_pnts.clear();
 
-	    double xMax = in_path.pointAtPercent ( 0 ).x();
-	    double xMin = in_path.pointAtPercent ( 0 ).x();
-	    double yMax = in_path.pointAtPercent ( 0 ).y();
-	    double yMin = in_path.pointAtPercent ( 0 ).y();
+	    QPointF pnt_ = in_path.pointAtPercent(0);
+	    double xMax = pnt_.x(), xMin = pnt_.x(), yMax = pnt_.y(), yMin = pnt_.y();
 	    double t = 0.01;
 	    do
 	    {
-		QPointF pnt_ = in_path.pointAtPercent ( t );
-		if( pnt_.x() < xMin ) xMin = pnt_.x();
-		if( pnt_.x() > xMax ) xMax = pnt_.x();
-		if( pnt_.y() < yMin ) yMin = pnt_.y();
-		if( pnt_.y() > yMax ) yMax = pnt_.y();
+		pnt_ = in_path.pointAtPercent(t);
+		xMin = vmin(xMin, pnt_.x()); yMin = vmin(yMin, pnt_.y());
+		xMax = vmax(xMax, pnt_.x()); yMax = vmax(yMax, pnt_.y());
 		t += 0.01;
 	    }
-	    while( t < 1 );
+	    while(t < 1);
 
-	    xMin = (int)TSYS::realRound( xMin, POS_PREC_DIG, true );
-	    yMin = (int)TSYS::realRound( yMin, POS_PREC_DIG, true );
-	    xMax = (int)TSYS::realRound( xMax, POS_PREC_DIG, true );
-	    yMax = (int)TSYS::realRound( yMax, POS_PREC_DIG, true );
-	    in_path_rot = createInundationPath( inundationItems[i].number_shape, shapeItems, *pnts, view );
-	    double xMax_rot = in_path_rot.pointAtPercent ( 0 ).x();
-	    double xMin_rot = in_path_rot.pointAtPercent ( 0 ).x();
-	    double yMax_rot = in_path_rot.pointAtPercent ( 0 ).y();
-	    double yMin_rot = in_path_rot.pointAtPercent ( 0 ).y();
+	    xMin = TSYS::realRound(xMin, POS_PREC_DIG, true); yMin = TSYS::realRound(yMin, POS_PREC_DIG, true);
+	    xMax = TSYS::realRound(xMax, POS_PREC_DIG, true); yMax = TSYS::realRound(yMax, POS_PREC_DIG, true);
+	    in_path_rot = createInundationPath(inundationItems[i].number_shape, shapeItems, pnts, view);
+	    pnt_ = in_path_rot.pointAtPercent(0);
+	    double xMax_rot = pnt_.x(), xMin_rot = pnt_.x(), yMax_rot = pnt_.y(), yMin_rot = pnt_.y();
 	    t = 0.01;
 	    do
 	    {
-		QPointF pnt_ = in_path_rot.pointAtPercent ( t );
-		if( pnt_.x() < xMin_rot ) xMin_rot = pnt_.x();
-		if( pnt_.x() > xMax_rot ) xMax_rot = pnt_.x();
-		if( pnt_.y() < yMin_rot ) yMin_rot = pnt_.y();
-		if( pnt_.y() > yMax_rot ) yMax_rot = pnt_.y();
+		pnt_ = in_path_rot.pointAtPercent ( t );
+		xMin_rot = vmin(xMin_rot, pnt_.x()); yMin_rot = vmin(yMin_rot, pnt_.y());
+		xMax_rot = vmax(xMax_rot, pnt_.x()); yMax_rot = vmax(yMax_rot, pnt_.y());
 		t += 0.01;
 	    }
-	    while( t < 1 );
+	    while(t < 1);
 
-	    xMin_rot = (int)TSYS::realRound( xMin_rot, POS_PREC_DIG, true );
-	    yMin_rot = (int)TSYS::realRound( yMin_rot, POS_PREC_DIG, true );
-	    xMax_rot = (int)TSYS::realRound( xMax_rot, POS_PREC_DIG, true );
-	    yMax_rot = (int)TSYS::realRound( yMax_rot, POS_PREC_DIG, true );
+	    xMin_rot = TSYS::realRound(xMin_rot, POS_PREC_DIG, true); yMin_rot = TSYS::realRound(yMin_rot, POS_PREC_DIG, true);
+	    xMax_rot = TSYS::realRound(xMax_rot, POS_PREC_DIG, true); yMax_rot = TSYS::realRound(yMax_rot, POS_PREC_DIG, true);
 
+	    //>> Scaling image for filling
+	    img = img.scaled(QSize((int)TSYS::realRound(xMax-xMin)+1,(int)TSYS::realRound(yMax-yMin)+1), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-	    //-- Scaling image for filling --
-	    img = img.scaled ( QSize( (int)TSYS::realRound( xMax - xMin )+1, (int)TSYS::realRound( yMax - yMin )+1 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation  );
 	    //>>Creating the composition of the fill color and fill image
 	    /*QPainter img_pnt(&img);
 	    img_pnt.setCompositionMode(QPainter::CompositionMode_DestinationOver);
 	    QPixmap clr_img(img.size());
-	    clr_img.fill((*colors)[inundationItems[i].brush]);
+	    clr_img.fill(colors[inundationItems[i].brush]);
 	    img_pnt.drawPixmap(0, 0, clr_img);*/
 	    QImage clr_img(elFD->pictObj.size(), QImage::Format_Mono);
 	    clr_img.fill(0);
 	    QPainter img_pnt(&clr_img);
-	    img_pnt.setBrush( QBrush( Qt::white, Qt::SolidPattern ) );
-	    img_pnt.setPen( Qt::NoPen );
+	    img_pnt.setBrush(QBrush(Qt::white,Qt::SolidPattern));
+	    img_pnt.setPen(Qt::NoPen);
 	    img_pnt.drawPath(in_path_rot);
 	    int im_x, im_y;
 	    QColor color;
 	    double alpha, alpha_rez, color_r, color_g, color_b;
-	    double alpha_col = (double)(*colors)[inundationItems[i].brush].alpha()/255;
+	    double alpha_col = (double)colors[inundationItems[i].brush].alpha()/255;
 	    QRgb rgb;
 	    QPointF drw_pnt,drw_pnt1;
 	    QPen im_pen;
 	    im_y = (int)yMin_rot;
 	    //QImage draw_img( (int)TSYS::realRound( xMax_rot - xMin_rot )+1, (int)TSYS::realRound( yMax_rot - yMin_rot )+1, QImage::Format_ARGB32_Premultiplied  );
-	    QImage draw_img( view->width(), view->height(), QImage::Format_ARGB32_Premultiplied  );
+	    QImage draw_img(view->width(), view->height(), QImage::Format_ARGB32_Premultiplied);
 	    draw_img.fill(0);
-	    QPainter draw_pnt( &draw_img );
+	    QPainter draw_pnt(&draw_img);
+
 	    //>> Calculating the resulting color of the image and drawing the scaled and rotated points of it into the inundation path
 	    do
 	    {
 		im_x = (int)xMin_rot;
 		do
 		{
-		    if( im_x >= 0 && im_x < clr_img.width() && im_y >= 0 && im_y < clr_img.height() &&
-			clr_img.pixel(QPoint( im_x, im_y)) == qRgb( 255, 255, 255 ) )
+		    if(im_x >= 0 && im_x < clr_img.width() && im_y >= 0 && im_y < clr_img.height() &&
+			clr_img.pixel(QPoint(im_x,im_y)) == qRgb(255,255,255))
 		    {
-			drw_pnt = unScaleRotate( QPoint( im_x, im_y ), view, false, true );
-			if( img.valid ( (int)TSYS::realRound( drw_pnt.x() - xMin, POS_PREC_DIG, true ), (int)TSYS::realRound( drw_pnt.y() - yMin, POS_PREC_DIG, true ) ) )
+			drw_pnt = unScaleRotate(QPoint(im_x,im_y), view, false, true);
+			if(img.valid((int)TSYS::realRound(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)TSYS::realRound(drw_pnt.y()-yMin,POS_PREC_DIG,true)))
 			{
-			    rgb = img.pixel ((int)TSYS::realRound( drw_pnt.x() - xMin, POS_PREC_DIG, true ), (int)TSYS::realRound( drw_pnt.y() - yMin, POS_PREC_DIG, true ));
+			    rgb = img.pixel((int)TSYS::realRound(drw_pnt.x()-xMin,POS_PREC_DIG,true), (int)TSYS::realRound(drw_pnt.y()-yMin,POS_PREC_DIG,true));
 			    alpha = (double)((rgb>>24)&0xff)/255;
-			    color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].red();
-			    color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].green();
-			    color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*(*colors)[inundationItems[i].brush].blue();
-			    alpha_rez = (1 - alpha_col) * (1 - alpha);
-			    im_pen.setColor ( QColor((int)(color_r), (int)(color_g), (int)(color_b), (int)TSYS::realRound( 255*(1-alpha_rez), POS_PREC_DIG, true )) );
+			    color_r = alpha*((rgb>>16)&0xff) + (1-alpha)*alpha_col*colors[inundationItems[i].brush].red();
+			    color_g = alpha*((rgb>>8)&0xff) + (1-alpha)*alpha_col*colors[inundationItems[i].brush].green();
+			    color_b = alpha*(rgb&0xff) + (1-alpha)*alpha_col*colors[inundationItems[i].brush].blue();
+			    alpha_rez = (1-alpha_col) * (1-alpha);
+			    im_pen.setColor(QColor(color_r,color_g,color_b,TSYS::realRound(255*(1-alpha_rez),POS_PREC_DIG,true)));
 			    //pnt.setPen( im_pen );
-			    draw_pnt.setPen( im_pen );
-			    drw_pnt1 = scaleRotate( drw_pnt, view, false, true );
+			    draw_pnt.setPen(im_pen);
+			    drw_pnt1 = scaleRotate(drw_pnt, view, false, true);
 			    //draw_pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt.x() - xMin, POS_PREC_DIG, true),
 			    //			(int)TSYS::realRound( drw_pnt.y() - yMin, POS_PREC_DIG, true) ) );
-			    draw_pnt.drawPoint( QPointF( (int)TSYS::realRound( drw_pnt1.x(), POS_PREC_DIG, true),
-							 (int)TSYS::realRound( drw_pnt1.y(), POS_PREC_DIG, true) ) );
+			    draw_pnt.drawPoint(QPointF(TSYS::realRound(drw_pnt1.x(),POS_PREC_DIG,true),TSYS::realRound(drw_pnt1.y(),POS_PREC_DIG,true)));
 			}
 		    }
 		    im_x += 1;
 		}
-		while( im_x > xMin_rot && im_x < xMax_rot );
+		while(im_x > xMin_rot && im_x < xMax_rot);
 		im_y += 1;
 	    }
-	    while( im_y > yMin_rot && im_y < yMax_rot );
+	    while(im_y > yMin_rot && im_y < yMax_rot);
 	    //pnt.drawImage(QPoint( (int)TSYS::realRound( xMin_rot, POS_PREC_DIG, true ),
 	    //		      (int)TSYS::realRound( yMin_rot, POS_PREC_DIG, true ) ), draw_img);
-	    pnt.drawImage(QPoint(0, 0), draw_img);
+	    pnt.drawImage(QPoint(), draw_img);
 	}
 	else
 	{
-	    pnt.setBrush( (*colors)[inundationItems[i].brush] );
-	    pnt.setPen( Qt::NoPen );
-	    pnt.drawPath( inundationItems[i].path );
+	    pnt.setBrush(colors[inundationItems[i].brush]);
+	    pnt.setPen(Qt::NoPen);
+	    pnt.drawPath(inundationItems[i].path);
 	}
 
-	//-- Drawing the fills' figures --
-	for( int j = 0; j < number_shape.size(); j++ )
+	//>> Drawing the fills' figures
+	for(int j = 0; j < number_shape.size(); j++)
 	{
-	    //--- Making the resulting arrary of all figures which take part in all fills(inundations) ---
+	    //>>> Making the resulting arrary of all figures which take part in all fills(inundations)
+	    const ShapeItem &cShIt = shapeItems[number_shape[j]];
 	    shape_inund_all.push_back(number_shape[j]);
-	    if((*widths)[shapeItems[number_shape[j]].border_width] > 0.01)
+	    if(widths[cShIt.border_width] > 0.01)
 	    {
-		int curWdth = (int)TSYS::realRound((*widths)[shapeItems[number_shape[j]].border_width]);
+		int curWdth = (int)TSYS::realRound(widths[cShIt.border_width]);
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
-		pnt.setBrush(QBrush((*colors)[shapeItems[number_shape[j]].lineColor],Qt::SolidPattern));
-		pnt.setPen(QPen((*colors)[shapeItems[number_shape[j]].borderColor],curWdth,
-				(*styles)[shapeItems[number_shape[j]].style],Qt::FlatCap,Qt::MiterJoin));
-		pnt.drawPath(shapeItems[number_shape[j]].path);
+		pnt.setBrush(QBrush(colors[cShIt.lineColor],Qt::SolidPattern));
+		pnt.setPen(QPen(colors[cShIt.borderColor],curWdth,styles[cShIt.style],Qt::FlatCap,Qt::MiterJoin));
+		pnt.drawPath(cShIt.path);
 	    }
-	    else /*if( ( (*widths)[shapeItems[number_shape[j]].border_width] >= 0) &&
-		       (fabs((*widths)[shapeItems[number_shape[j]].border_width] - 0) < 0.01) )*/
+	    else if(widths[cShIt.border_width] >= 0 && fabs(widths[cShIt.border_width] - 0) < 0.01)
 	    {
-		int curWdth = (int)TSYS::realRound((*widths)[shapeItems[number_shape[j]].width]);
+		int curWdth = (int)TSYS::realRound(widths[cShIt.width]);
 		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
 		pnt.setBrush(Qt::NoBrush);
-		pnt.setPen(QPen((*colors)[shapeItems[number_shape[j]].lineColor],curWdth,
-				(*styles)[shapeItems[number_shape[j]].style],
-				((curWdth<3)?Qt::SquareCap:Qt::FlatCap),Qt::RoundJoin));
-		pnt.drawPath(shapeItems[number_shape[j]].pathSimple);
+		pnt.setPen(QPen(colors[cShIt.lineColor],curWdth,styles[cShIt.style],((curWdth<3)?Qt::SquareCap:Qt::FlatCap),Qt::RoundJoin));
+		pnt.drawPath(cShIt.pathSimple);
 	    }
 	}
     }
     bool flag_draw;
 
     //pnt.setRenderHint(QPainter::Antialiasing);
-    //- Drawing all el_figures -
-    //-- Checking if the figure is inside the array of figures which take part in all fills --
-    for( int k=0; k < shapeItems.size(); k++ )
+    //> Drawing all el_figures
+    //>> Checking if the figure is inside the array of figures which take part in all fills
+    for(int k = 0; k < shapeItems.size(); k++)
     {
 	flag_draw = true;
-	for(unsigned j = 0; j < shape_inund_all.size(); j ++)
-	    if(k == shape_inund_all[j])
-	    {
-		flag_draw = false;
-		break;
-	    }
-	if( flag_draw )//-- If the figure is out of this array, then draw it(it is the figures which take part in none fill ) --
+	for(unsigned j = 0; j < shape_inund_all.size(); j++) flag_draw = (k!=shape_inund_all[j]);
+	//>> If the figure is out of this array, then draw it (it is the figures which take part in none fill)
+	if(!flag_draw)	continue;
+	const ShapeItem &cShIt = shapeItems[k];
+	if(widths[cShIt.border_width] > 0.01)
 	{
-	    if((*widths)[shapeItems[k].border_width] > 0.01)
-	    {
-		int curWdth = (int)TSYS::realRound((*widths)[shapeItems[k].border_width]);
-		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
-		pnt.setBrush(QBrush((*colors)[shapeItems[k].lineColor],Qt::SolidPattern));
-		pnt.setPen(QPen((*colors)[shapeItems[k].borderColor],curWdth,
-				    (*styles)[shapeItems[k].style],Qt::FlatCap,Qt::MiterJoin));
-		pnt.drawPath(shapeItems[k].path);
-	    }
-	    else /*if( ( (*widths)[shapeItems[k].border_width] >= 0) &&
-		       (fabs((*widths)[shapeItems[k].border_width] - 0) < 0.01) )*/
-	    {
-		int curWdth = (int)TSYS::realRound((*widths)[shapeItems[k].width]);
-		pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
-		pnt.setBrush(Qt::NoBrush);
-		pnt.setPen(QPen((*colors)[shapeItems[k].lineColor],curWdth,
-				    (*styles)[shapeItems[k].style],((curWdth<3)?Qt::SquareCap:Qt::FlatCap),Qt::RoundJoin));
-		pnt.drawPath(shapeItems[k].pathSimple);
-	    }
+	    int curWdth = (int)TSYS::realRound(widths[cShIt.border_width]);
+	    pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
+	    pnt.setBrush(QBrush(colors[cShIt.lineColor],Qt::SolidPattern));
+	    pnt.setPen(QPen(colors[cShIt.borderColor],curWdth,styles[cShIt.style],Qt::FlatCap,Qt::MiterJoin));
+	    pnt.drawPath(cShIt.path);
+	}
+	else if(widths[cShIt.border_width] >= 0 && fabs(widths[cShIt.border_width] - 0) < 0.01)
+	{
+	    int curWdth = (int)TSYS::realRound(widths[cShIt.width]);
+	    pnt.setRenderHint(QPainter::Antialiasing, (curWdth>=2));
+	    pnt.setBrush(Qt::NoBrush);
+	    pnt.setPen(QPen(colors[cShIt.lineColor],curWdth,styles[cShIt.style],((curWdth<3)?Qt::SquareCap:Qt::FlatCap),Qt::RoundJoin));
+	    pnt.drawPath(cShIt.pathSimple);
 	}
     }
 
-    //- Drawing all rects for choosen el_figures -
-    pnt.setRenderHint( QPainter::Antialiasing, false );
-    if( devW && devW->edit() )
+    //> Drawing all rects for choosen el_figures
+    pnt.setRenderHint(QPainter::Antialiasing, false);
+    if(devW && devW->edit())
     {
-	for( int k = 0; k < rectItems.size(); k++ )
+	for(int k = 0; k < rectItems.size(); k++)
 	{
-	    pnt.setBrush( rectItems[k].brush );
-	    pnt.setPen( rectItems[k].pen );
-	    pnt.drawPath( rectItems[k].path );
+	    pnt.setBrush(rectItems[k].brush);
+	    pnt.setPen(rectItems[k].pen);
+	    pnt.drawPath(rectItems[k].path);
 	}
-	pnt.setBrush( Qt::NoBrush );
-	pnt.setPen( QPen( Qt::gray , 2, Qt::SolidLine, Qt::FlatCap, Qt::RoundJoin) );
-	pnt.setBrush( QBrush( QColor(127,127,127,127), Qt::SolidPattern ) );
-	ellipse_draw_startPath.setFillRule ( Qt::WindingFill );
-	pnt.drawPath( ellipse_draw_startPath );
-	ellipse_draw_endPath.setFillRule ( Qt::WindingFill );
-	pnt.drawPath( ellipse_draw_endPath );
+	pnt.setBrush(Qt::NoBrush);
+	pnt.setPen(QPen(Qt::gray,2,Qt::SolidLine,Qt::FlatCap,Qt::RoundJoin));
+	pnt.setBrush(QBrush(QColor(127,127,127,127),Qt::SolidPattern));
+	ellipse_draw_startPath.setFillRule(Qt::WindingFill);
+	pnt.drawPath(ellipse_draw_startPath);
+	ellipse_draw_endPath.setFillRule(Qt::WindingFill);
+	pnt.drawPath(ellipse_draw_endPath);
 	ellipse_draw_startPath = newPath;
 	ellipse_draw_endPath = newPath;
     }
