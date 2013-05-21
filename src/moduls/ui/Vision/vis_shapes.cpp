@@ -2732,11 +2732,70 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	if(addr().empty())	return;
     }
 
+//    mess_debug(__func__,"\n\n\nSource: %s",addr().c_str());
+    if(addr()=="<EVAL>")	return;
+
+//    mess_debug(__func__,"vals.size()= %d",vals.size());
+//    mess_debug(__func__,"arh_per= %lld",arh_per);
+//    mess_debug(__func__,"arh_beg= %lld",arh_beg);
+//    mess_debug(__func__,"arh_end= %lld",arh_end);
+
+    string type=TSYS::strSepParse(addr(),0,':');
+
+    //mess_debug(__func__,"Type: %s",type.c_str());
+
+    if(type=="val")
+    {
+//    	mess_debug(__func__,"tTime= %lld",tTime);
+//    	mess_debug(__func__,"tSize= %lld",tSize);
+//    	mess_debug(__func__,"tTimeGrnd= %lld",tTimeGrnd);
+//    	mess_debug(__func__,"bufLim= %d",bufLim);
+
+    	string value = addr().substr(type.size()+1,string::npos);
+
+    	double v=atof(value.c_str());
+
+    	//mess_debug(__func__,"value=%s, v=%f",value.c_str(),v);
+/*
+    	if(full || tTimeGrnd < arh_beg)
+    	{
+    		mess_debug(__func__,"full= %s",(full)?"true":"false");
+  			vals.clear();
+    		arh_per=1e6;
+    		for(int64_t i=tTimeGrnd; i<=tTime; i+=arh_per)
+    		{
+    			vals.push_back(SHg(i,v));
+    		}
+    	}
+    	else
+    	{
+    		vals.push_back(SHg(tTime,v));
+    	}
+
+    	//while(vals.size() > bufLim)	vals.pop_front();
+    	while ( vals.front().tm<tTimeGrnd )
+    		vals.pop_front();
+*/
+    	vals.clear();
+    	vals.push_back(SHg(tTimeGrnd,v));
+    	vals.push_back(SHg(tTime,v));
+    	arh_beg=vals[0].tm;
+    	arh_end=vals[vals.size()-1].tm;
+    	val_tp = 2;
+    }
+    else		//default is addr
+    {
+
+    if(type!=addr())
+    	mLoadaddr = addr().substr(type.size()+1,string::npos);
+    else
+    	mLoadaddr = addr();
+
     //> Get archive parameters
     if(!arh_per || tTime > arh_end)
     {
 	XMLNode req("info");
-	req.setAttr("arch",shD->valArch)->setAttr("path",addr()+"/%2fserv%2fval");
+	req.setAttr("arch",shD->valArch)->setAttr("path",loadaddr()+"/%2fserv%2fval");
 	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
 	{ arh_per = arh_beg = arh_end = 0; return; }
 	else
@@ -2752,8 +2811,9 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     int trcPer = shD->trcPer*1000000;
     if( shD->tTimeCurent && trcPer && shD->valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
     {
+
 	XMLNode req("get");
-	req.setAttr("path",addr()+"/%2fserv%2fval")->
+	req.setAttr("path",loadaddr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd","0");
 	if( view->cntrIfCmd(req,true) )	return;
@@ -2804,7 +2864,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 
     m1:	req.clear()->
 	    setAttr("arch",shD->valArch)->
-	    setAttr("path",addr()+"/%2fserv%2fval")->
+	    setAttr("path",loadaddr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
 	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
 	    setAttr("per",TSYS::ll2str(wantPer))->
@@ -2852,6 +2912,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     }
     //> Check for archive jump
     if(shD->valArch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
+    }
 }
 
 void ShapeDiagram::TrendObj::loadSpectrumData( bool full )

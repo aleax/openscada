@@ -323,6 +323,7 @@ class ShapeDiagram : public WdgShape
 		~TrendObj( );
 
 		string	addr( )		{ return mAddr; }
+		string	loadaddr( )		{ return mLoadaddr; }
 		double	bordL( )	{ return mBordLow; }
 		double	bordU( )	{ return mBordUp; }
 		QColor	color( )	{ return mColor; }
@@ -360,6 +361,7 @@ class ShapeDiagram : public WdgShape
 	    private:
 		//Attributes
 		string		mAddr;		//A parameter or an archive item address
+		string		mLoadaddr;
 		double mBordLow, mBordUp;	//Borders
 		double		mCurvl;		//Curent value
 		QColor		mColor;		//Values line color

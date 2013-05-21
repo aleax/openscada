@@ -564,8 +564,8 @@ void VisRun::printDiag( const string &idg )
 	    QPoint pnt((i_e/elLine)*(pagl.width()/2),im.height()+fntSize*(2+i_e%elLine));
 	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
 	    //>>> Trend name request
-	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
-    	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
+	    reqName.setAttr("path",sD->prms[i_e].loadaddr()+"/%2fserv%2fval");
+    	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].loadaddr());
 
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
@@ -738,7 +738,7 @@ void VisRun::exportDiag( const string &idg )
 		for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
     		    if(dgDt->prms[i_p].val().size() && dgDt->prms[i_p].color().isValid())
     		    {
-			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].addr())+"\"";
+			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].loadaddr())+"\"";
 			if(firstPrm < 0) firstPrm = i_p;
 		    }
 		CSVr += "\x0D\x0A";
@@ -771,7 +771,7 @@ void VisRun::exportDiag( const string &idg )
 		CSVr += _("\"Frequency (Hz)\"");
 		for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
     		    if(dgDt->prms[i_p].fftN && dgDt->prms[i_p].color().isValid())
-			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].addr())+"\"";
+			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].loadaddr())+"\"";
 		CSVr += "\x0D\x0A";
 		//>>> Place data
 		int fftN = rwdg->size().width();		//Samples number

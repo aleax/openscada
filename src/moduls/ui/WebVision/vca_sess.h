@@ -324,6 +324,7 @@ class VCADiagram : public VCAObj
 		~TrendObj( );
 
 		string	addr( )		{ return mAddr; }
+		string	loadaddr( )		{ return mLoadaddr; }
 		double	bordL( )	{ return mBordLow; }
 		double	bordU( )	{ return mBordUp; }
 		int	color( )	{ return mColor; }
@@ -362,6 +363,7 @@ class VCADiagram : public VCAObj
 	    private:
 		//Attributes
 		string		mAddr;		//A parameter or an archive item address
+		string		mLoadaddr;
 		double mBordLow, mBordUp;	//Borders
 		double		mCurvl;		//Curent value
 		int		mColor;		//Values line color
