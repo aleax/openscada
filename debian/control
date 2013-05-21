@@ -12,6 +12,12 @@ Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: OpenSCADA system project
  Open SCADA system. For access use account "root" and password "openscada".
 
+Package: openscada-dbg
+Architecture: any
+Depends: openscada (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: Debug symbols for OpenSCADA
+ Debug symbols to provide extra debug info in case of crash.
+
 Package: openscada-doc.en
 Architecture: all
 Description: OpenSCADA documents (EN).
