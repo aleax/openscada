@@ -99,7 +99,7 @@ binary-common:
 #	dh_installinfo
 #	dh_installman
 	dh_link
-	dh_strip
+	dh_strip --dbg-package=openscada-dbg
 #	dh_compress
 	dh_fixperms
 #	dh_perl
