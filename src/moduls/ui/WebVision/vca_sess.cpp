@@ -5255,7 +5255,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 }
 
 //*************************************************
-//* VCADiagram				    *
+//* VCADiagram					  *
 //*************************************************
 VCADiagram::VCADiagram( const string &iid ) :
     VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
@@ -6456,83 +6456,116 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     int64_t wantPer	= tSize/(int)(owner().width+0.5);
     unsigned bufLim	= 2*owner().width;
     string arch = owner().valArch;
+    XMLNode req("get");
 
     //> Clear trend for empty address and the full reload data
-    if( full || addr().empty() )
+    if(full || addr().empty())
     {
 	arh_per = arh_beg = arh_end = 0;
-	val_tp = 0;
+	val_tp = TFld::Boolean;
 	vals.clear();
-	if( addr().empty() )    return;
-    }
-    //> Get archive parameters
-    if( !arh_per || tTime > arh_end )
-    {
-	XMLNode req("info");
-	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
-	if( mod->cntrIfCmd(req,user,false) || atoi(req.attr("vtp").c_str()) == 5 )
-	{ arh_per = arh_beg = arh_end = 0; return; }
-	else
-	{
-	    val_tp  = atoi(req.attr("vtp").c_str());
-	    arh_beg = atoll(req.attr("beg").c_str());
-	    arh_end = atoll(req.attr("end").c_str());
-	    arh_per = atoll(req.attr("per").c_str());
-	}
+	if(addr().empty()) return;
     }
 
-    //> One request check and prepare
-    int trcPer = owner().trcPer*1000000;
-    if( owner().tTimeCurent && trcPer && owner().valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
-    {
-	XMLNode req("get");
-	req.setAttr("path",addr()+"/%2fserv%2fval")->
-	    setAttr("tm",TSYS::ll2str(tTime))->
-	    setAttr("tm_grnd","0");
-	if( mod->cntrIfCmd(req,user,false) ) return;
+    bool isDataDir = (addr().compare(0,5,"data:") == 0 || addr().compare(0,5,"line:") == 0);
 
-	int64_t lst_tm = atoll(req.attr("tm").c_str());
-	if( lst_tm > valEnd() )
+    if(!isDataDir)      // From archive by address
+    {
+	//> Get archive parameters
+	if(!arh_per || tTime > arh_end)
 	{
-	    double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
-	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	    if( valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-	    else if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
-	    else if( vals[vals.size()-1].val == EVAL_REAL ) vals[vals.size()-1].val = curVal;
-	    else if( curVal != EVAL_REAL )
+	    XMLNode req("info");
+	    req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
+	    if(mod->cntrIfCmd(req,user,false) || (val_tp=atoi(req.attr("vtp").c_str())) == TFld::String || val_tp == TFld::Object)
+	    { arh_per = arh_beg = arh_end = 0; return; }
+	    else
 	    {
-		int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
-		vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
+		val_tp  = atoi(req.attr("vtp").c_str());
+		arh_beg = atoll(req.attr("beg").c_str());
+		arh_end = atoll(req.attr("end").c_str());
+		arh_per = atoll(req.attr("per").c_str());
 	    }
-	    while(vals.size() > bufLim) vals.pop_front();
 	}
-	return;
-    }
 
-    if( !arh_per )      return;
+	//> One request check and prepare
+	int trcPer = owner().trcPer*1000000;
+	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
+	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)))
+	{
+	    XMLNode req("get");
+	    req.setAttr("path",addr()+"/%2fserv%2fval")->
+		setAttr("tm",TSYS::ll2str(tTime))->
+		setAttr("tm_grnd","0");
+	    if(mod->cntrIfCmd(req,user,false)) return;
+
+	    int64_t lst_tm = atoll(req.attr("tm").c_str());
+	    if(lst_tm > valEnd())
+	    {
+		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
+		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		    curVal = EVAL_REAL;
+		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
+		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
+		else if(vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		else if(curVal != EVAL_REAL)
+		{
+		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
+		}
+		while(vals.size() > bufLim) vals.pop_front();
+	    }
+	    return;
+	}
+    }
+    else	//Data direct into address field by searilised XML string or horizontal line
+	try
+	{
+	    if(addr().compare(0,5,"data:") == 0) req.load(addr().substr(5));
+	    else if(addr().compare(0,5,"line:") == 0)
+		req.setAttr("vtp", TSYS::int2str(TFld::Real))->
+		    setAttr("tm", TSYS::ll2str(tTime))->
+		    setAttr("tm_grnd", TSYS::ll2str(tTimeGrnd))->
+		    setAttr("per", TSYS::ll2str(wantPer))->
+		    setText("0 "+addr().substr(5));
+
+	    val_tp  = req.attr("vtp").size() ? atoi(req.attr("vtp").c_str()) : TFld::Real;
+	    arh_beg = atoll(req.attr("tm_grnd").c_str());
+	    arh_end = atoll(req.attr("tm").c_str());
+            arh_per = atoll(req.attr("per").c_str());
+        }
+        catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
+
+    if(!arh_per) return;
+
     //> Correct request to archive border
     wantPer	= (vmax(wantPer,arh_per)/arh_per)*arh_per;
-    tTime	= vmin(tTime,arh_end);
+    tTime	= vmin(tTime, arh_end);
     //tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
+
     //> Clear data at time error
-    if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )
-	vals.clear();
-    if( tTime <= tTimeGrnd ) return;
+    if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
+    if(tTime <= tTimeGrnd) return;
+
     //> Check for request to present in buffer data
-    if( tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer )    return;
-    //> Correct request to present data
-    if( valEnd() && tTime > valEnd() )	  tTimeGrnd = valEnd()+1;
-    else if( valBeg() && tTimeGrnd < valBeg() ) tTime = valBeg()-1;
+    if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
+
+    //> Correcting request to present data
+    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+1;
+    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-1;
+
     //> Get values data
     int64_t	bbeg, bend, bper;
-    int	 curPos, prevPos;
+    int		curPos, prevPos, maxPos;
     double      curVal, prevVal;
     string      svl;
     vector<SHg> buf;
-    bool toEnd = (tTimeGrnd >= valEnd());
-    int  endBlks = 0;
-    XMLNode req("get");
-    m1: req.clear()->
+    bool	toEnd = (tTimeGrnd >= valEnd());
+    int		endBlks = 0;
+
+    m1:
+    if(!isDataDir)
+    {
+	req.clear()->
 	    setAttr("arch",arch)->
 	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
@@ -6541,45 +6574,49 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100/(float)owner().height));
-    if( mod->cntrIfCmd(req,user,false) )     return;
+
+	if(mod->cntrIfCmd(req,user,false)) return;
+    }
+
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
 
-    if( !bbeg || !bend || req.text().empty() ) return;
+    if(bbeg <= 0 || bend <= 0 || bper <= 0 || bbeg > bend || req.text().empty()) return;
 
-    prevPos = 0;
-    prevVal = EVAL_REAL;
+    prevPos = 0, prevVal = EVAL_REAL, maxPos = (bend-bbeg)/bper;
     buf.clear();
-    for( int v_off = 0; true; )
+    for(int v_off = 0; true; )
     {
-	svl = TSYS::strLine(req.text(),0,&v_off);
-	if( svl.size() )
+	if((svl=TSYS::strLine(req.text(),0,&v_off)).size())
 	{
-	    sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
-	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
+	    sscanf(svl.c_str(), "%d %lf", &curPos, &curVal);
+	    if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		curVal = EVAL_REAL;
 	}
-	else curPos = ((bend-bbeg)/bper)+1;
-	for( ; prevPos < curPos; prevPos++ ) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	else curPos = maxPos+1;
+	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
+	for( ; prevPos < curPos; prevPos++) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	if(prevPos > maxPos) break;	//Normal exit
 	prevVal = curVal;
-	if( prevPos > (bend-bbeg)/bper ) break;
     }
 
     //> Append buffer to values deque
-    if( toEnd )
+    if(toEnd)
     {
-	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
+	vals.insert(vals.end()-endBlks, buf.begin(), buf.end());
 	while(vals.size() > bufLim) vals.pop_front();
-	endBlks+=buf.size();
+	endBlks += buf.size();
     }
     else
     {
-	vals.insert(vals.begin(),buf.begin(),buf.end());
+	vals.insert(vals.begin(), buf.begin(), buf.end());
 	while(vals.size() > bufLim) vals.pop_back();
     }
+
     //> Check for archive jump
-    if( arch.empty() && (bbeg-tTimeGrnd)/bper ) { tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && arch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
 }
 
 void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )

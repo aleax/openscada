@@ -48,6 +48,14 @@
 		    ADDR="TCP::10004:0"
 		    PROT="HTTP"
 		    START="1"/>
+		<fld
+		    ID="CNTR"
+		    MODULE="Sockets"
+		    NAME="OpenSCADA control interface"
+		    DESCRIPT=""
+		    ADDR="TCP::10005:1"
+		    PROT="SelfSystem"
+		    START="1"/>
 	    </tbl>
 	</node>
 

@@ -1013,6 +1013,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
     StyleMap *styles = &elFD->shapeStyles;
     string elList;
     double scale;
+    map<string,string> stAttrs;
 
     if( w->xScale(true) < w->yScale(true) ) scale = w->xScale(true);
     else scale = w->yScale(true);
@@ -1328,7 +1329,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	chCtx.setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList);
 	devW->chLoadCtx(chCtx, "", "elLst");
     }
-    w->attrSet( "elLst", elList );
+    stAttrs["elLst"] = elList;
     elFD->elLst = elList;
     //devW->chRecord(*XMLNode("attr").setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList));
 
@@ -1352,8 +1353,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"x")->setAttr("prev","0")->setText(TSYS::real2str(pnt_next.x(),POS_PREC_DIG));
 		chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"y")->setAttr("prev","0")->setText(TSYS::real2str(pnt_next.y(),POS_PREC_DIG));
 	    }
-	    w->attrSet( "p"+TSYS::int2str(pi->first)+"x", TSYS::real2str(pnt_next.x()) );
-	    w->attrSet( "p"+TSYS::int2str(pi->first)+"y", TSYS::real2str(pnt_next.y()) );
+	    stAttrs["p"+TSYS::int2str(pi->first)+"x"] = TSYS::real2str(pnt_next.x());
+	    stAttrs["p"+TSYS::int2str(pi->first)+"y"] = TSYS::real2str(pnt_next.y());
 	}
 	elFD->shapePnts_temp = elFD->shapePnts;
     //- Write shapes widths to data model -
@@ -1371,7 +1372,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    }
 	    else
 		chCtx.childAdd("attr")->setAttr("id","w"+TSYS::int2str(pi->first))->setAttr("prev","0")->setText(TSYS::real2str(wdt_next,POS_PREC_DIG));
-	    w->attrSet( "w"+TSYS::int2str(pi->first), TSYS::real2str(TSYS::realRound(pi->second/scale,POS_PREC_DIG)) );
+	    stAttrs["w"+TSYS::int2str(pi->first)] = TSYS::real2str(TSYS::realRound(pi->second/scale,POS_PREC_DIG));
 	}
     elFD->shapeWidths_temp = elFD->shapeWidths;
      //- Write shapes colors to data model -
@@ -1398,8 +1399,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		else chCtx.childAdd("attr")->setAttr("id","c"+TSYS::int2str(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString());
 	    }
 	    if( pi->second.alpha() < 255 )
-		w->attrSet( "c"+TSYS::int2str(pi->first), pi->second.name().toStdString() + "-" + TSYS::int2str( pi->second.alpha() ) );
-	    else w->attrSet( "c"+TSYS::int2str(pi->first), pi->second.name().toAscii().data() );
+		stAttrs["c"+TSYS::int2str(pi->first)] = pi->second.name().toStdString()+"-"+TSYS::int2str(pi->second.alpha());
+	    else stAttrs["c"+TSYS::int2str(pi->first)] = pi->second.name().toAscii().data();
 	}
     elFD->shapeColors_temp = elFD->shapeColors;
      //- Write fills images to data model -
@@ -1416,7 +1417,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		    chCtx.childAdd("attr")->setAttr("id","i"+TSYS::int2str(pi->first))->setAttr("prev",img_prev)->setText(img_next);
 	    }
 	    else chCtx.childAdd("attr")->setAttr("id","i"+TSYS::int2str(pi->first))->setAttr("prev","")->setText(img_next);
-	    w->attrSet( "i"+TSYS::int2str(pi->first), pi->second.c_str() );
+	    stAttrs["i"+TSYS::int2str(pi->first)] = pi->second.c_str();
 	}
     elFD->shapeImages_temp = elFD->shapeImages;
      //- Write shapes styles to data model -
@@ -1433,8 +1434,9 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		    chCtx.childAdd("attr")->setAttr("id","s"+TSYS::int2str(pi->first))->setAttr("prev",TSYS::int2str(stl_prev-1))->setText(TSYS::int2str(stl_next-1));
 	    }
 	    else chCtx.childAdd("attr")->setAttr("id","s"+TSYS::int2str(pi->first))->setAttr("prev","0")->setText(TSYS::int2str(stl_next-1));
-	    w->attrSet( "s"+TSYS::int2str(pi->first), TSYS::int2str( pi->second - 1) );
+	    stAttrs["s"+TSYS::int2str(pi->first)] = TSYS::int2str(pi->second-1);
 	}
+    if(stAttrs.size()) w->attrsSet(stAttrs);
     elFD->shapeStyles_temp = elFD->shapeStyles;
     if(devW && (chCtx.attr("id").size() || chCtx.childSize())) devW->chRecord(chCtx);
     devW->setSelect(true,false);
@@ -3828,11 +3830,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			sev = "ws_Fig"+TSYS::int2str(i);
 		if(!sev.empty())
 		{
+		    map<string,string> attrs;
 		    if(!runW->hasFocus())		runW->setFocus(Qt::MouseFocusReason);
-		    if(ev->buttons()&Qt::LeftButton)	{ sev += "Left"; view->attrSet( "event", "ws_FigLeft" ); };
-		    if(ev->buttons()&Qt::RightButton) 	{ sev += "Right"; view->attrSet( "event", "ws_FigRight" ); }
-		    if(ev->buttons()&Qt::MidButton)    	{ sev += "Midle"; view->attrSet( "event", "ws_FigMiddle" ); }
-		    view->attrSet("event", sev);
+		    if(ev->buttons()&Qt::LeftButton)	{ sev += "Left";  attrs["event"] ="ws_FigLeft"; };
+		    if(ev->buttons()&Qt::RightButton) 	{ sev += "Right"; attrs["event"] = "ws_FigRight"; }
+		    if(ev->buttons()&Qt::MidButton)    	{ sev += "Midle"; attrs["event"] = "ws_FigMiddle"; }
+		    attrs["event"] = sev;
+		    view->attrsSet(attrs);
 		    return false;
 		}
 	    }
@@ -4125,8 +4129,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		if(!sev.empty())
 		{
 		    if(!runW->hasFocus()) runW->setFocus(Qt::MouseFocusReason);
-		    view->attrSet("event", "ws_FigDblClick");
-		    view->attrSet("event", sev+"DblClick");
+		    map<string,string> attrs;
+		    attrs["event"] = "ws_FigDblClick";
+		    attrs["event"] = sev+"DblClick";
+		    view->attrsSet(attrs);
 		    return false;
 		}
 	    }

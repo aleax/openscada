@@ -4,6 +4,7 @@ ProjName=$OSCADA_ProjName
 if test "x$ProjName" = "x"; then ProjName=start; fi
 
 # Work directory check and prepare
+StartOrigCfgFile=@sysconfdir_full@/oscada_start.xml
 StartCfgFile=@sysconfdir_full@/oscada_$ProjName.xml
 StartWorkDir=@oscd_datadir_full@
 CfgFile=$StartCfgFile
@@ -18,7 +19,8 @@ if test ! -w $WorkDir/$ProjName; then
 	if test -d $StartWorkDir/$ProjName; then cp -R $StartWorkDir/$ProjName/* $WorkDir/$ProjName; fi
     fi
     CfgFile=$WorkDir/$ProjName/oscada.xml
-    if test ! -e $CfgFile; then cp $StartCfgFile $CfgFile; fi
+    if test ! -e $CfgFile -a -f $StartCfgFile; then cp $StartCfgFile $CfgFile; fi
+    if test ! -e $CfgFile -a -f $StartOrigCfgFile; then cp $StartOrigCfgFile $CfgFile; fi
 fi
 ## Check for local copy need for libraries DBs directory
 if test -d $StartWorkDir/LibsDB -a ! -d $WorkDir/LibsDB; then cp -R $StartWorkDir/LibsDB $WorkDir; fi

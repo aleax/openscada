@@ -1054,10 +1054,18 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if((el=ctrId(root,TSYS::strMess("/prm%dcolor",i_p),true))) el->setAttr("help",Widget::helpColor());
 		if((el=ctrId(root,TSYS::strMess("/prm%daddr",i_p),true))) el->setAttr("help",
 		    _("Full address to DAQ attribute of a parameter or to an archive.\n"
+		      "Also support direct data set by prefixes:\n"
+		      "  \"data:{XMLNodeData}\" - draw from direct set data;\n"
+		      "  \"line:{value}\" - draw horizontal line by value.\n"
 		      "Example:\n"
 		      "  \"/DAQ/System/AutoDA/MemInfo/use\" - address to attribute \"use\" of parameter \"MemInfo\"\n"
 		      "	    of controller \"AutoDA\" of DAQ module \"System\";\n"
-		      "  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\"."));
+		      "  \"/Archive/va_CPULoad_load\" - address to archive \"CPULoad_load\";\n"
+		      "  \"data:<d tm=\"1369465209000000\" tm_grnd=\"1369465200000000\" per=\"1000000\">\n"
+		      "    0 3.14\n"
+		      "    1 3.141\n"
+		      "    5 3.1415</d> - data for 10 seconds and period 1 second from \"25.05.2013 10:00:00\";\n"
+		      "  \"line:3.14159265\" - horizontal line into value \"3.14159265\"."));
 		if((el=ctrId(root,TSYS::strMess("/prm%dprop",i_p),true))) el->setAttr("help",
 		    _("Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
 		      "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's data in seconds,\n"

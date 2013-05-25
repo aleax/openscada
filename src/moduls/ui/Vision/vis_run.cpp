@@ -1029,7 +1029,7 @@ void VisRun::alarmAct( QAction *alrm )
     cntrIfCmd(req);
 
     //> Send event to master page
-    if( master_pg ) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
+    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
 }
 
 void VisRun::initSess( const string &prj_it, bool crSessForce )

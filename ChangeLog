@@ -1,3 +1,14 @@
+2013-05-25 Roman
+- !:DB: To OscadaLibs.db added counter VKT-7 from TeploCom (http://www.teplocom.spb.ru) support.
+- FIX:SYS: Fix copy default config from "oscada_start.xml" for user's projects by environment "OSCADA_ProjName".
+    To oscada_start.xml "OpenSCADA control interface" on port 10005 is added.
+- FIX:DAQ.Template: Omit for copy "DB" field on the template library node copy.
+- !!!:UI.{VCAEngine,Vision,WebVision}: To primitive "Diagram" trends build from direct data is added, by prefix "data:" and "line:".
+- !:FIX:UI.Vision: Function WdgView::attrsSet() is added and used for group attributes set into one request,
+    for prevent several linked events lost on processing and general performance rise on network.
+- UI.WebVision: Functions modStart() and modStop() is added for the events from OpenSCADA core process.
+
+
 2013-05-19 Roman
 - SYS: Core library version is set to 1.1.0, for OpenSCADA version 0.8.1 reflection.
     Package libqtwebkit-dev to Debian packages build dependencies, into "control", is added.
@@ -5,7 +16,7 @@
 - !!:DB.SQLite: Opened transaction close on the module stop is added for prevent data lost after crash on some other module
     detach, for example UI.QTStarter module is often crash, by QT4 components' problems.
 - !:FIX.UI.Vision: Primitive "ElFigure" next changes and fixes:
-    - Crash on click to common point for arc's points 0,1 and line point 0 is fixed.
+    - Crash on click to common point for arc's points 1,2 and line point 1 is fixed.
     - Not full anti-aliasing is fixed.
     - Significant code clear.
 

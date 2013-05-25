@@ -1140,6 +1140,22 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     return true;
 }
 
+void WdgView::attrsSet( map<string,string> &attrs )
+{
+    XMLNode req("set");
+    req.setAttr("path", id()+"/%2fserv%2fattr");
+    string attrId, attrPos;
+    for(map<string,string>::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++)
+    {
+	int off = 0;
+	attrId = TSYS::strParse(i_a->first, 0, ":", &off);
+	attrPos = TSYS::strParse(i_a->first, 0, ":", &off);
+	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(i_a->second);
+	if(!attrPos.empty())	attrSet("", i_a->second, atoi(attrPos.c_str()));
+    }
+    if(req.childSize())	cntrIfCmd(req);
+}
+
 string WdgView::resGet( const string &res )
 {
     if( res.empty() )	return "";

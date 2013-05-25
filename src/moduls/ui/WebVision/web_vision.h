@@ -122,6 +122,10 @@ class TWEB: public TUI
 	//Methods
 	void load_( );
 	void save_( );
+
+	void modStart( );
+        void modStop( );
+
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:

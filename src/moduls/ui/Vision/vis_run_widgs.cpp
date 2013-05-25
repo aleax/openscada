@@ -323,20 +323,21 @@ bool RunWdgView::event( QEvent *event )
 
     //> Key events process for send to model
     string mod_ev;
+    map<string,string> attrs;
     if(property("active").toBool() && permCntr())
-    switch( event->type() )
+    switch(event->type())
     {
 	case QEvent::Paint:	return true;
 	case QEvent::KeyPress:
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
-	    if( ((QKeyEvent*)event)->key() == Qt::Key_Tab ) { mod_ev = ""; break; }
-	    if( mod_ev.empty() ) mod_ev = "key_rels";
-	    if( QApplication::keyboardModifiers()&Qt::ControlModifier )	mod_ev+="Ctrl";
-	    if( QApplication::keyboardModifiers()&Qt::AltModifier )	mod_ev+="Alt";
-	    if( QApplication::keyboardModifiers()&Qt::ShiftModifier )	mod_ev+="Shift";
-	    if( ((QKeyEvent*)event)->nativeScanCode() )
-		attrSet("event",mod_ev+"SC#"+TSYS::int2str(((QKeyEvent*)event)->nativeScanCode(),TSYS::Hex));
+	    if(((QKeyEvent*)event)->key() == Qt::Key_Tab) { mod_ev = ""; break; }
+	    if(mod_ev.empty()) mod_ev = "key_rels";
+	    if(QApplication::keyboardModifiers()&Qt::ControlModifier)	mod_ev += "Ctrl";
+	    if(QApplication::keyboardModifiers()&Qt::AltModifier)	mod_ev += "Alt";
+	    if(QApplication::keyboardModifiers()&Qt::ShiftModifier)	mod_ev += "Shift";
+	    if(((QKeyEvent*)event)->nativeScanCode())
+		attrs["event"] = mod_ev+"SC#"+TSYS::int2str(((QKeyEvent*)event)->nativeScanCode(),TSYS::Hex);
 	    switch(((QKeyEvent*)event)->key())
 	    {
 		case Qt::Key_Escape:	mod_ev+="Esc";		break;
@@ -446,7 +447,8 @@ bool RunWdgView::event( QEvent *event )
 		    mod_ev+="#"+TSYS::int2str(((QKeyEvent*)event)->key(),TSYS::Hex);
 		    break;
 	    }
-	    attrSet("event",mod_ev);
+	    attrs["event"] = mod_ev;
+	    attrsSet(attrs);
 	    return true;
 	case QEvent::MouseButtonPress:
 	    mod_ev = "key_mousePres";
@@ -462,15 +464,16 @@ bool RunWdgView::event( QEvent *event )
 	    if(isVisible(mapFromGlobal(cursor().pos())))
 	    {
 		if(event->type() == QEvent::MouseButtonPress && !hasFocus()) setFocus(Qt::MouseFocusReason);
-		attrSet("event",mod_ev);
+		attrSet("event", mod_ev);
 		return true;
 	    }
 	    break;
 	case QEvent::MouseButtonDblClick:
-	    if(isVisible(mapFromGlobal(cursor().pos()))) { attrSet("event","key_mouseDblClick"); return true; }
-	    break;
-	case QEvent::FocusIn:	attrSet("focus","1");	attrSet("event","ws_FocusIn");	return true;
-	case QEvent::FocusOut:	attrSet("focus","0");	attrSet("event","ws_FocusOut");	return true;
+	    if(!isVisible(mapFromGlobal(cursor().pos()))) break;
+	    attrSet("event", "key_mouseDblClick");
+	    return true;
+	case QEvent::FocusIn:	attrs["focus"] = "1"; attrs["event"] = "ws_FocusIn"; attrsSet(attrs); return true;
+	case QEvent::FocusOut:	attrs["focus"] = "0"; attrs["event"] = "ws_FocusOut"; attrsSet(attrs); return true;
 	default: break;
     }
 

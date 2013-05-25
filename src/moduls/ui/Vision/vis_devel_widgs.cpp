@@ -2185,14 +2185,17 @@ void DevelWdgView::saveGeom( const string& item )
 	chGeomCtx.setAttr("z", TSYS::int2str(parent()->children().indexOf(this)));
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);
-	attrSet("geomX", chGeomCtx.attr("x"), 7);
-	attrSet("geomY", chGeomCtx.attr("y"), 8);
-	attrSet("geomW", chGeomCtx.attr("w"), 9);
-	attrSet("geomH", chGeomCtx.attr("h"), 10);
-	attrSet("geomXsc", chGeomCtx.attr("xSc"), 13);
-	attrSet("geomYsc", chGeomCtx.attr("ySc"), 14);
-	attrSet("geomZ", chGeomCtx.attr("z"), 11);
+	map<string,string> attrs;
+	attrs["geomX:7"] = chGeomCtx.attr("x");
+	attrs["geomY:8"] = chGeomCtx.attr("y");
+	attrs["geomW:9"] = chGeomCtx.attr("w");
+	attrs["geomH:10"] = chGeomCtx.attr("h");
+	attrs["geomXsc:13"] = chGeomCtx.attr("xSc");
+	attrs["geomYsc:14"] = chGeomCtx.attr("ySc");
+	attrs["geomZ:11"] = chGeomCtx.attr("z");
+	attrsSet(attrs);
 	setAllAttrLoad(false);
+	attrSet("","load",-1);	//> For reload
     }
 
     if(item != id() && wLevel() == 0)
@@ -2837,6 +2840,7 @@ void DevelWdgView::chRecord( XMLNode ch )
 
 void DevelWdgView::chUnDo( )
 {
+    map<string,string>	attrs;
     int cur = 0;
     if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= chTree->childSize()) return;
 
@@ -2845,18 +2849,20 @@ void DevelWdgView::chUnDo( )
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
     if(rlW && rule->name() == "geom")
     {
-	rlW->attrSet("geomX", rule->attr("_x"));
-	rlW->attrSet("geomY", rule->attr("_y"));
-	rlW->attrSet("geomW", rule->attr("_w"));
-	rlW->attrSet("geomH", rule->attr("_h"));
-	rlW->attrSet("geomXsc", rule->attr("_xSc"));
-	rlW->attrSet("geomYsc", rule->attr("_ySc"));
-	rlW->attrSet("geomZ", rule->attr("_z"));
+	attrs["geomX"] = rule->attr("_x");
+	attrs["geomY"] = rule->attr("_y");
+	attrs["geomW"] = rule->attr("_w");
+	attrs["geomH"] = rule->attr("_h");
+	attrs["geomXsc"] = rule->attr("_xSc");
+	attrs["geomYsc"] = rule->attr("_ySc");
+	attrs["geomZ"] = rule->attr("_z");
+	rlW->attrsSet(attrs);
     }
     else if(rlW && rule->name() == "attr")
     {
         for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-            rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->attr("prev"));
+            attrs[rule->childGet(i_ch)->attr("id")] = rule->childGet(i_ch)->attr("prev");
+        if(attrs.size()) rlW->attrsSet(attrs);
         if(rule->attr("id").size())
         {
             rlW->attrSet(rule->attr("id"), rule->attr("prev"));
@@ -2884,6 +2890,7 @@ void DevelWdgView::chUnDo( )
 
 void DevelWdgView::chReDo( )
 {
+    map<string,string>  attrs;
     int cur = 0;
     if(!chTree || !chTree->childSize() || !(cur=atoi(chTree->attr("cur").c_str()))) return;
 
@@ -2894,19 +2901,21 @@ void DevelWdgView::chReDo( )
     {
 	if(rule->name() == "geom")
 	{
-	    rlW->attrSet("geomX", rule->attr("x"));
-	    rlW->attrSet("geomY", rule->attr("y"));
-	    rlW->attrSet("geomW", rule->attr("w"));
-	    rlW->attrSet("geomH", rule->attr("h"));
-	    rlW->attrSet("geomXsc", rule->attr("xSc"));
-	    rlW->attrSet("geomYsc", rule->attr("ySc"));
-	    rlW->attrSet("geomZ", rule->attr("z"));
+	    attrs["geomX"] = rule->attr("x");
+	    attrs["geomY"] = rule->attr("y");
+	    attrs["geomW"] = rule->attr("w");
+	    attrs["geomH"] = rule->attr("h");
+	    attrs["geomXsc"] = rule->attr("xSc");
+	    attrs["geomYsc"] = rule->attr("ySc");
+	    attrs["geomZ"] = rule->attr("z");
+	    rlW->attrsSet(attrs);
 	}
 	else if(rule->name() == "attr")
         {
             if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
             for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-                rlW->attrSet(rule->childGet(i_ch)->attr("id"), rule->childGet(i_ch)->text());
+                attrs[rule->childGet(i_ch)->attr("id")] = rule->childGet(i_ch)->text();
+            if(attrs.size()) rlW->attrsSet(attrs);
         }
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
 	else if(rule->name() == "chldAdd")

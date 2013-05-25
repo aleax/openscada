@@ -326,6 +326,10 @@ void TWEB::save_( )
     TBDS::genDBSet(nodePath()+"SessLimit",TSYS::int2str(sessLimit()));
 }
 
+void TWEB::modStart( )	{ run_st = true; }
+
+void TWEB::modStop( )	{ run_st = false; }
+
 void TWEB::perSYSCall( unsigned int cnt )
 {
     try
