@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-25 17:49+0300\n"
+"POT-Creation-Date: 2013-05-28 15:24+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -610,6 +610,9 @@ msgstr "Курсор:микросек"
 
 msgid "Cursor:color"
 msgstr "Курсор:цвет"
+
+msgid "Scale:horizontal grid size, sek"
+msgstr "Шкала:размер гор. решетки, сек"
 
 msgid "Time:sek"
 msgstr "Время:сек"

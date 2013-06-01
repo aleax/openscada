@@ -926,10 +926,12 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
     else if( cfg.id() == "type" )
     {
 	//> Delete specific attributes
-	switch( prev.getI() )
+	switch(prev.getI())
 	{
-	    case 0: case 1:
-		if( cfg.getI() == 0 || cfg.getI() == 1 ) break;
+	    case 0:	//Trend
+		if(cfg.getI() != prev.getI())	cfg.owner()->attrDel("sclHorPer");
+	    case 1:	//Spectrum
+		if(cfg.getI() == 0 || cfg.getI() == 1) break;
 		cfg.owner()->attrDel("tSek");
 		cfg.owner()->attrDel("tUSek");
 		cfg.owner()->attrDel("tSize");
@@ -950,7 +952,9 @@ bool OrigDiagram::attrChange( Attr &cfg, TVariant prev )
 	//> Create specific attributes
 	switch( cfg.getI() )
 	{
-	    case 0: case 1:
+	    case 0:	//Trend
+		cfg.owner()->attrAdd( new TFld("sclHorPer",_("Scale:horizontal grid size, sek"),TFld::Real,Attr::Mutable,"","0","0;3e6","","43") );
+	    case 1:	//Spectrum
 		cfg.owner()->attrAdd( new TFld("tSek",_("Time:sek"),TFld::Integer,Attr::DateTime|Attr::Mutable,"","","","","27") );
 		cfg.owner()->attrAdd( new TFld("tUSek",_("Time:usek"),TFld::Integer,Attr::Mutable,"","","","","28") );
 		cfg.owner()->attrAdd( new TFld("tSize",_("Size, sek"),TFld::Real,Attr::Mutable,"","60","0;3e6","","29") );

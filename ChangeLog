@@ -1,3 +1,15 @@
+2013-06-01 Roman
+- SYS:Core library version is returned to "2:1:0".
+- UI.{VCAEngine,Vision,WebVision}: To view "Trend" of primitive "Diagram" added attribute "sclHorPer"
+    for force (disable automatic mode) grid period of horizontal scale set.
+- FIX:UI.Vision: Prevent exit on close last run-project window if it have not correct session opened.
+- UI.Vision: The warning dialog for request to select present session or to create new is rewrote for allow cancel and mostly to clean.
+    Antialiasing enable for draw lines width more 2 is added to primitive "Diagram".
+- UI.{Vision,WebVision}: Values dimension limit, for primitive "Diagram", is expand to 5 symbols for prevent early using exponential form.
+- FIX:UI.{Vision,WebVision}: Absolute rounding to hours of view "Trend" of primitive "Diagram" for horizontal scale length more hours is fixed
+    by hours count into Unix time value "0" (for zone 2 is 1.1.1970 3:0:0), on the grid draw.
+
+
 2013-05-25 Roman
 - !:DB: To OscadaLibs.db added counter VKT-7 from TeploCom (http://www.teplocom.spb.ru) support.
 - FIX:SYS: Fix copy default config from "oscada_start.xml" for user's projects by environment "OSCADA_ProjName".

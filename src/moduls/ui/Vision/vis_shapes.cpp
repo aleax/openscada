@@ -1599,6 +1599,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->valsForPix = vmin(10,vmax(0,atoi(val.c_str())));
 	    reld_tr_dt = 2;
 	    break;
+        case 43:	//sclHorPer
+            shD->sclHorPer = vmax(0,atof(val.c_str()))*1e6;
+            make_pct = true;
+            break;
 	default:
 	    //> Individual trend's attributes process
 	    if(uiPrmPos >= 50)
@@ -1859,7 +1863,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
                     bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
                     bool isMax = (v_pos-1-mrkHeight) < tAr.y();
                     pnt.setPen(mrkPen);
-                    labVal = TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"");
+                    labVal = TSYS::strMess("%0.5g",i_v)+(isPerc?" %":"");
                     pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
                     markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
                 }
@@ -1900,7 +1904,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    if(sclHor&SC_MARKERS)
 	    {
 		pnt.setPen(mrkPen);
-		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
+		labH = TSYS::strMess("%0.5g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
 
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(labH.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
@@ -1918,7 +1922,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		if(sclHor&SC_MARKERS)
 		{
 		    pnt.setPen(mrkPen);
-		    labH = TSYS::strMess("%0.4g", i_h/labDiv);
+		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
 		    int wdth = pnt.fontMetrics().width(labH.c_str());
 		    int tpos = vmax(h_pos-wdth/2, 0);
 		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
@@ -1941,6 +1945,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
 	//>> Prepare generic parameters
@@ -2239,7 +2244,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
 		    pnt.setPen(mrkPen);
-		    labVal = (isLogT ? TSYS::real2str(pow(10,i_v),4,'g') : TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"");
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,i_v):i_v)) + (isPerc?" %":"");
 		    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
 		    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
 		}
@@ -2264,6 +2269,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
 	while(hLen/hDiv < hmax_ln/2)	hDiv /= 2;
 
+	if(shD->sclHorPer > 0 && (hLen/shD->sclHorPer) > 2 && (tAr.width()/(hLen/shD->sclHorPer)) > 15)	hDiv = shD->sclHorPer;
+
 	if((hLen/hDiv) >= 5 && shD->trcPer)
 	{
 	    tPict = hDiv*(tEnd/hDiv+1);
@@ -2273,9 +2280,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>>> Draw horisontal grid and markers
 	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
-	    time_t tm_t;
+	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
+
+	    localtime_r(&tm_t, &ttm);
+	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
+
 	    //>>>> Draw generic grid line
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(), tAr.y()+tAr.height(), tAr.x()+tAr.width(), tAr.y()+tAr.height());
@@ -2288,8 +2299,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
 		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_tm.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
@@ -2308,7 +2319,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if(sclHor & SC_GRID) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if(sclHor&SC_MARKERS && !(i_h%hDiv) && i_h != tPict)
+		if(sclHor&SC_MARKERS && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t,&ttm);
@@ -2327,9 +2338,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
 		    if(hvLev == 5 || chLev >= 4)
-			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
-		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
+			lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
 		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
@@ -2366,7 +2378,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		}
 		//>>>> Next
 		if(i_h >= tPict) break;
-		i_h = (i_h/hDiv)*hDiv + hDiv;
+		i_h = ((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
 		if(i_h > tPict)	i_h = tPict;
 	    }
 	}
@@ -2382,6 +2394,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
 	//>> Prepare generic parameters

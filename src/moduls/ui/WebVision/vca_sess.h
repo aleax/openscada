@@ -291,7 +291,7 @@ class VCADiagram : public VCAObj
 	short	sclHor		:4;	//Horisontal scale mode
 	short	sclVer		:4;	//Vertical scale mode
 	short	holdCur		:1;	//Hold cursor
-	int64_t	tTime, curTime, tPict;	//Trend time, trend cursor's time position and picture time
+	int64_t	tTime, curTime, tPict, sclHorPer;	//Trend time, trend cursor's time position and picture time
 	float	tSize;			//Trend size (s)
 	float	fftBeg, fftEnd;
 	float	sclVerScl, sclVerSclOff;

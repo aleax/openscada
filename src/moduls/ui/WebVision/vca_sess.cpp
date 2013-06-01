@@ -5258,7 +5258,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 //* VCADiagram					  *
 //*************************************************
 VCADiagram::VCADiagram( const string &iid ) :
-    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
+    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
 {
 
 }
@@ -5541,7 +5541,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
-		    labVal = (isLogT ? TSYS::real2str(pow(10,i_v),4,'g') : TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"");
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,i_v):i_v)) + (isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);
                     markWdth = vmax(markWdth, brect[2]-brect[6]);
@@ -5572,12 +5572,18 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    tBeg = tPict-hLen;
 	}
 
+	if(sclHorPer > 0 && (hLen/sclHorPer) > 2 && (tArW/(hLen/sclHorPer)) > 15) hDiv = sclHorPer;
+
 	//>> Draw horisontal grid and markers
 	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
-	    time_t tm_t;
+	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
+
+	    localtime_r(&tm_t, &ttm);
+	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
+
 	    //>>> Draw generic grid line
 	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
@@ -5610,7 +5616,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if(sclHor & SC_GRID) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
 		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
 		//>>>> Draw markers
-		if(sclHor&SC_MARKERS && mrkHeight && !(i_h%hDiv) && i_h != tPict)
+		if(sclHor&SC_MARKERS && mrkHeight && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t, &ttm);
@@ -5628,9 +5634,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    lab_dt = lab_tm = "";
 		    //Date
 		    if(hvLev == 5 || chLev >= 4)
-			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
-		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
+			lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
 		    //Seconds
 		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
@@ -5669,7 +5676,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		}
 		//>>>> Next
 		if(i_h >= tPict) break;
-		i_h = (i_h/hDiv)*hDiv + hDiv;
+		i_h = ((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
 		if(i_h > tPict)	i_h = tPict;
 	    }
 	}
@@ -6003,7 +6010,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
-		    labVal = TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"");
+		    labVal = TSYS::strMess("%0.5g",i_v)+(isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Check for correct work combining mode
 		    markWdth = vmax(markWdth, brect[2]-brect[6]);
@@ -6043,7 +6050,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    int endMarkBrd = tArX + tArW;
 	    if(sclHor&SC_MARKERS && mrkHeight)
 	    {
-		labH = TSYS::strMess("%0.4g",fftEnd/labDiv) + Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
+		labH = TSYS::strMess("%0.5g",fftEnd/labDiv) + Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
 		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
 		int markBrd = tArX + tArW - (brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd, markBrd);
@@ -6059,7 +6066,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
 		if(sclHor&SC_MARKERS && mrkHeight)
 		{
-		    labH = TSYS::strMess("%0.4g", i_h/labDiv);
+		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
 		    gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
@@ -6286,13 +6293,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		break;
 	    }
 	    case 40:	//sclVerScl
-		if( sclVerScl == atof(req_el->text().c_str()) )		break;
-		sclVerScl = atof(req_el->text().c_str());
-		break;
+		sclVerScl = atof(req_el->text().c_str());		break;
 	    case 41:	//sclVerSclOff
-		if( sclVerSclOff == atof(req_el->text().c_str()) )	break;
-		sclVerSclOff = atof(req_el->text().c_str());
-		break;
+		sclVerSclOff = atof(req_el->text().c_str());		break;
+	    case 43:	//sclHorPer
+		sclHorPer = vmax(0,atof(req_el->text().c_str()))*1e6;	break;
 	    default:
 		//> Individual trend's attributes process
 		if(uiPrmPos >= 50)
