@@ -98,7 +98,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mUPgEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     mUPgEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mUPgEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd( new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
+    mUPgEl.fldAdd( new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000") );
 }
 
 TWEB::~TWEB()

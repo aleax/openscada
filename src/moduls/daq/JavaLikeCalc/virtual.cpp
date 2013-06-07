@@ -125,7 +125,7 @@ void TipContr::postEnable( int flag )
     fnc_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     fnc_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
     fnc_el.fldAdd( new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
-    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"10000") );
+    fnc_el.fldAdd( new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"1000000") );
 
     //> Function's IO structure
     fncio_el.fldAdd( new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,"20") );
