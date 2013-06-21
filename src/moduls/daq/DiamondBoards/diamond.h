@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DiamondBoards file: diamond.h
 /***************************************************************************
- *   Copyright (C) 2005-2012 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -51,8 +51,8 @@ class DevFeature
 	struct rng { float min, max; };
 	//Functions
         DevFeature( const string &inm, unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0 ) :
-	    name(inm), AI(iAI), AO(iAO), DIO(iDIO), DI(iDI), DO(iDO) { }
-        DevFeature( ) : AI(0), AO(0), DIO(0), DI(0), DO(0)	{ }
+	    name(inm), AI(iAI), AO(iAO), DIO(iDIO), DI(iDI), DO(iDO), aiSzFIFO(48)	{ }
+        DevFeature( ) : AI(0), AO(0), DIO(0), DI(0), DO(0), aiSzFIFO(46)		{ }
 
 	void setAITypes( const string &vl );
 	void setAOTypes( const string &vl )	{ aoTypes = vl; }
@@ -67,6 +67,7 @@ class DevFeature
 
 	string	aiTypes,	//Two string with modes indexes and names. Indexes code: [diff|range|polar][gain]
 		aoTypes;	//Two string with modes indexes and names. Indexes code: [daPol|range|polar][gain]
+	int	aiSzFIFO;	//Size FIFO for board, default is minimal 46.
 	map<int, rng>	aiRngs;	//Parsed from aiTypes ranges for voltage values calculate
 };
 
@@ -78,16 +79,19 @@ class TMdContr;
 class TMdPrm : public TParamContr
 {
     public:
+	//Data
+	enum AIMode	{ AIM_CODE = 0, AIM_PERC, AIM_VOLT };
+
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	TElem &elem( )          { return p_el; }
+	TElem &elem( )          { return pEl; }
 
         void enable( );
         void disable( );
 
-        void getVals( const string &atr = "" );
+        void getVals( const string &atr = "", bool start = false, bool stop = false );
         string modPrm( const string &prm, const string &def = "" );
 
         void setModPrm( const string &prm, const string &val );
@@ -105,19 +109,25 @@ class TMdPrm : public TParamContr
 	string errDSC( const string &func );
 
 	//Attributes
-	TElem	p_el;		//Work atribute elements
+	TElem	pEl;		//Work atribute elements
         int	&mTP,		//Board type
 		&mADDR,		//Board address
 		&mINT,		//Board interrupt
+		&mS_RATE,	//Sample rate
 		&mAImode;	//AI values mode
 	char	&asynchRd;	//Asynchronous reading
 
-        Res	dev_res;	//Resource for access to device
+        Res	devRes;		//Resource for access to device
 	DevFeature dev;
 	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
+	int	aiScInt;	//Analog inputs scan period. Too big will drop sample rate for some values
 
 	DSCB	dscb;		//Board descriptor
-	ResString acq_err;
+	DSCS	dscs;		//Sample structure
+	DSCAIOINT dscaioint;	//Interrupt IO mode description
+	DWORD	prevTrans;	//Previous processed transfer
+	int64_t	cTm, diffTm;	//Current time by DAQ board's clock and it divergency measurement start time
+	ResString acqErr;	//Acquisition error status
 };
 
 //*************************************************
@@ -138,6 +148,7 @@ class TMdContr: public TController
         int64_t	period( )	{ return mPer; }
         string	cron( )		{ return mSched; }
         int	prior( )	{ return mPrior; }
+        int64_t lag( )		{ return mLag; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -147,7 +158,7 @@ class TMdContr: public TController
 	//Methods
 	void start_( );
 	void stop_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -155,14 +166,14 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;				//Resource for enable params
-	int	&mPrior;			//Process task priority
-	TCfg	&mSched;			//Calc schedule
-	int64_t	mPer;
+	Res	enRes;			//Resource for enable params
+	int	&mPrior;		//Process task priority
+	TCfg	&mSched;		//Calc schedule
+	int64_t	mPer, mLag;
 
-        bool	prcSt,				//Process task active
-		call_st;			//Calc now stat
-        vector< AutoHD<TMdPrm> > p_hd;
+        bool	prcSt,			//Process task active
+		callSt;			//Calc now stat
+        vector< AutoHD<TMdPrm> > pHd;
 };
 
 //*************************************************

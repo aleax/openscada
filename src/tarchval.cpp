@@ -2196,9 +2196,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    while(c_tm <= buf.end())
 	    {
 	        string val = buf.getS(&c_tm,true);
-		if(n_tm) n_tm->childAdd("el")->setText(TSYS::int2str(c_tm/1000000));
-		if(n_tm) n_utm->childAdd("el")->setText(TSYS::int2str(c_tm%1000000));
-		if(n_val)n_val->childAdd("el")->setText(val);
+		if(n_tm) n_tm->childIns(0,"el")->setText(TSYS::int2str(c_tm/1000000));
+		if(n_tm) n_utm->childIns(0,"el")->setText(TSYS::int2str(c_tm%1000000));
+		if(n_val)n_val->childIns(0,"el")->setText(val);
 		c_tm++;
 	    }
     }

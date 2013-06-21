@@ -1,17 +1,17 @@
 # OpenSCADA.DAQ.DiamondBoards translate to Russian.
-# Copyright (C) 2005-2012 Roman Savochenko
+# Copyright (C) 2005-2013 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.DiamondBoards package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2012.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-30 19:44+0200\n"
+"POT-Creation-Date: 2013-06-21 20:14+0300\n"
 "PO-Revision-Date: 2007-10-28 09:43+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: LANGUAGE <ru@li.org>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +26,8 @@ msgid ""
 "Allow access to 'Diamond Systems' DAQ boards. Include main support for "
 "generic boards."
 msgstr ""
-"Предоставляет доступ к 'Diamond Systems' DAQ платам. Включает основную поддержку базовых плат."
+"Предоставляет доступ к 'Diamond Systems' DAQ платам. Включает основную "
+"поддержку базовых плат."
 
 msgid ""
 "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"
@@ -39,8 +40,8 @@ msgid ""
 "[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;[-1, +1]V;[-0.5, +0.5]V;+-Custom;[0, 10]"
 "V;[0, 5]V;[0, 2]V;[0, 1]V;+Custom"
 msgstr ""
-"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1, +1]В;[-0.5, +0.5]В;+-Пользоват.;[0, 10]"
-"В;[0, 5]В;[0, 2]В;[0, 1]В;+Пользоват."
+"[-10, +10]В;[-5, +5]В;[-2.5, +2.5]В;[-1, +1]В;[-0.5, +0.5]В;+-Пользоват.;[0, "
+"10]В;[0, 5]В;[0, 2]В;[0, 1]В;+Пользоват."
 
 msgid ""
 "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-0.625, +0.625]V;[-10, +10]V;[-5, "
@@ -88,14 +89,17 @@ msgstr "Приоритет задачи сбора"
 msgid "Standard"
 msgstr "Стандарт"
 
-msgid "Board type"
-msgstr "Тип платы"
+msgid "Board: type"
+msgstr "Плата: тип"
 
-msgid "Board address"
-msgstr "Адрес платы"
+msgid "Board: address"
+msgstr "Плата: адрес"
 
-msgid "Board interrupt"
-msgstr "Прерывание платы"
+msgid "Board: interrupt"
+msgstr "Плата: прерывание"
+
+msgid "Sample rate (single channel)"
+msgstr "Частота измерений (один канал)"
 
 msgid "Asynchronous read"
 msgstr "Асинхронное чтение"
@@ -130,6 +134,10 @@ msgstr "1:Параметр отключен."
 msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
+#, c-format
+msgid "0:AI acquisition into interrupt mode; sample rate=%g."
+msgstr "0:Опрос AI по прерыванию, частота измерений=%g."
+
 msgid "DSC driver is not initialized!"
 msgstr "DSC драйвер не инициализирован!"
 
@@ -137,6 +145,7 @@ msgstr "DSC драйвер не инициализирован!"
 msgid "Select device %d error!"
 msgstr "Ошибка выбора устройства %d!"
 
+#, c-format
 msgid "dscInitBoard '%s'(%xh) error: %s %s"
 msgstr "Ошибка dscInitBoard '%s'(%xh): %s %s"
 
@@ -148,6 +157,7 @@ msgstr "Аналоговый вход %d"
 msgid "Analog output %d"
 msgstr "Аналоговый выход %d"
 
+#, c-format
 msgid "Board's '%s' DIO configuration unsupported."
 msgstr "Не поддерживается конфигурация DIO платы '%s'."
 
@@ -159,8 +169,49 @@ msgstr "Дискретный выход %d.%d"
 msgid "Digital input %d.%d"
 msgstr "Дискретный вход %d.%d"
 
+#, c-format
+msgid ""
+"AI interrupt: Init for: ConvRate=%g; NumbConv=%lu; FIFOdepth=%d; "
+"dump_threshold=%lu; scan_interval=%d."
+msgstr ""
+"Прерывание AI: Иниц. для: ConvRate=%g; NumbConv=%lu; FIFOdepth=%d; "
+"dump_threshold=%lu; scan_interval=%d."
+
+#, c-format
+msgid "Interrupt mode disabled by dscADScanInt error: %s %s"
+msgstr "Режим работы по прерыванию отключен по ошибке dscADScanInt: %s %s"
+
+msgid ""
+"AI interrupt: Cycle: ConvRate=%g; transfers=%lu; prev_transfers=%lu; "
+"total_transfers=%lu; lag=%lld; drift=%gs."
+msgstr ""
+"Прерывание AI: Цикл: ConvRate=%g; transfers=%lu; prev_transfers=%lu; "
+"total_transfers=%lu; lag=%lld; drift=%gs."
+
+#, c-format
+msgid "AI interrupt: Lost cycles '%d'. Fast data time corrected!"
+msgstr ""
+"Прерывание AI: Потеря циклов '%d'. Время быстрых данных откорректировано!"
+
+#, c-format
+msgid "AI interrupt: Correction: dt=%d; dtSz=%lld; per=%d; crmult=%g."
+msgstr "Прерывание AI: Коррекция: dt=%d; dtSz=%lld; per=%d; crmult=%g."
+
+msgid "AI interrupt: Sample rate change to %g! Env: drift=%gs."
+msgstr "Прерывание AI: Частота выборки изменена в %g! Окруж.: drift=%gс."
+
+msgid "AI numbers process"
+msgstr "Количество обрабатываемых AI"
+
 msgid "Configuration"
 msgstr "Конфигурация"
+
+msgid "Analog inputs scan interval (us)"
+msgstr "Интервал сканирования аналоговых входов (мкс)"
+
+#, c-format
+msgid "Input %d type (all inputs)"
+msgstr "Вход %d: тип (все входы)"
 
 #, c-format
 msgid "Input %d type"
@@ -186,5 +237,6 @@ msgstr "DI %d: инверсия"
 msgid "DO %d reverse"
 msgstr "DO %d: инверсия"
 
+#, c-format
 msgid "%s error: %s %s"
 msgstr "Ошибка %s: %s %s"

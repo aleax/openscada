@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-11 09:17+0300\n"
+"POT-Creation-Date: 2013-06-19 17:42+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -808,6 +808,9 @@ msgstr "Максимальное время вычисления (сек)"
 msgid "Template program"
 msgstr "Программа шаблона"
 
+msgid "Modification timestamp"
+msgstr ""
+
 msgid "Template ID"
 msgstr "ID шаблона"
 
@@ -1317,6 +1320,9 @@ msgstr "Шаблон параметра: "
 msgid "Template"
 msgstr "Шаблон"
 
+msgid "Date of modification"
+msgstr "Дата модификации"
+
 msgid "Real;Integer;Boolean;String;Text;Object"
 msgstr "Вещественный;Целый;Логический;Строка;Текст;Объект"
 
@@ -1563,6 +1569,7 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"

@@ -1344,6 +1344,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
+    htsk.prior = priority;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1478,7 +1479,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    tsk->prior = param.sched_priority;
+    //tsk->prior = param.sched_priority;
 
 #if __GLIBC_PREREQ(2,4)
     //> Load and init CPU set
@@ -1498,7 +1499,9 @@ void *TSYS::taskWrap( void *stas )
 
     //> Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
-    tsk->thr = pthread_self();
+    //>> Set nice level without realtime if it no permitted
+    if(tsk->policy != SCHED_RR && tsk->prior > 0 && setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0) tsk->prior = 0;
+    tsk->thr = pthread_self();		//Task creation finish
 
     //> Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
     sigset_t mask;
@@ -1544,7 +1547,7 @@ int TSYS::sysSleep( float tm )
     return nanosleep(&sp_tm, NULL);
 }
 
-void TSYS::taskSleep( int64_t per, time_t cron )
+void TSYS::taskSleep( int64_t per, time_t cron, int64_t *lag )
 {
     struct timespec sp_tm;
     STask *stsk = (STask*)pthread_getspecific(sTaskKey);
@@ -1569,24 +1572,26 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 	    stsk->tm_per = cur_tm;
 	}*/
 
-	if(!per) per = 1000000000;
-	clock_gettime(CLOCK_REALTIME,&sp_tm);
-	int64_t cur_tm = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
-	int64_t pnt_tm = (cur_tm/per + 1)*per;
+	if(!per) per = 1000000000ll;
+	clock_gettime(CLOCK_REALTIME, &sp_tm);
+	int64_t cur_tm = (int64_t)sp_tm.tv_sec*1000000000ll + sp_tm.tv_nsec,
+		pnt_tm = (cur_tm/per + 1)*per,
+		wake_tm = 0;
 	do
 	{
-	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
-	    if(clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL))	return;
-	    clock_gettime(CLOCK_REALTIME,&sp_tm);
-	}while(((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm);
+	    sp_tm.tv_sec = pnt_tm/1000000000ll; sp_tm.tv_nsec = pnt_tm%1000000000ll;
+	    if(clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL)) return;
+	    clock_gettime(CLOCK_REALTIME, &sp_tm);
+	    wake_tm = (int64_t)sp_tm.tv_sec*1000000000ll + sp_tm.tv_nsec;
+	}while(wake_tm < pnt_tm);
 
 	if(stsk)
 	{
-	    if(stsk->tm_pnt && (pnt_tm/per - stsk->tm_pnt/per) > 1)
-		stsk->cycleLost += (pnt_tm/per-stsk->tm_pnt/per-1);
+	    if(stsk->tm_pnt) stsk->cycleLost += (pnt_tm/per-stsk->tm_pnt/per-1);
+	    if(lag) *lag = stsk->tm_pnt ? wake_tm-stsk->tm_pnt-per : 0;
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;
-	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
+	    stsk->tm_per = wake_tm;
 	    stsk->tm_pnt = pnt_tm;
 	}
     }

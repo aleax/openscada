@@ -176,7 +176,7 @@ class TSYS : public TCntrNode
 
 	//> Sleep task for period grid <per> on ns or to cron time.
 	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
-	static void taskSleep( int64_t per, time_t cron = 0 );
+	static void taskSleep( int64_t per, time_t cron = 0, int64_t *lag = NULL );
 	static time_t cron( const string &vl, time_t base = 0 );
 
 	//> Wait event with timeout support
@@ -291,10 +291,10 @@ class TSYS : public TCntrNode
 		enum Flgs	{ Detached = 0x01, FinishTask = 0x02 };
 
 		//Methods
-		STask( ) : thr(0), policy(0), prior(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
 		    cycleLost(0)	{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) :
-		    thr(ithr), policy(ipolicy), prior(iprior), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
+		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
 		    cycleLost(0)	{ }
 
 		//Attributes

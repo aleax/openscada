@@ -39,29 +39,30 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     mTmplib = grpAdd("tmplb_");
 
     //> Templates lib db structure
-    lb_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    lb_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    lb_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    lb_el.fldAdd( new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30") );
+    lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
+    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
 
     //> Template DB structure
-    el_tmpl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_tmpl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_tmpl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200") );
-    el_tmpl.fldAdd( new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600") );
-    el_tmpl.fldAdd( new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"1000000") );
+    el_tmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
+    el_tmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    el_tmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
+    el_tmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
+    el_tmpl.fldAdd(new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"1000000"));
+    el_tmpl.fldAdd(new TFld("TIMESTAMP",_("Modification timestamp"),TFld::Integer,TFld::DateTimeDec));
 
     //> Parameter template IO DB structure
-    el_tmpl_io.fldAdd( new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,"20") );
-    el_tmpl_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_tmpl_io.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_tmpl_io.fldAdd( new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1") );
-    el_tmpl_io.fldAdd( new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
-    el_tmpl_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50") );
-    el_tmpl_io.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
+    el_tmpl_io.fldAdd(new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,"20"));
+    el_tmpl_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
+    el_tmpl_io.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    el_tmpl_io.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    el_tmpl_io.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    el_tmpl_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50"));
+    el_tmpl_io.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 
     //> Error attributes
-    el_err.fldAdd( new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
+    el_err.fldAdd(new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
 }
 
 TDAQS::~TDAQS( )

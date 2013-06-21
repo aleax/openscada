@@ -453,9 +453,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/lst_CHANNEL" && ctrChkNode(opt))
-    {
 	for(int i_c = 0; i_c < owner().channelAllow(); i_c++)
 	    opt->childAdd("el")->setText(TSYS::int2str(i_c));
-    }
     else TParamContr::cntrCmdProc(opt);
 }

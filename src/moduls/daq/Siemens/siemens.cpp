@@ -1692,6 +1692,7 @@ void TMdPrm::loadIO()
 {
     //> Load IO and init links
     if(!enableStat())	return;
+    if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());

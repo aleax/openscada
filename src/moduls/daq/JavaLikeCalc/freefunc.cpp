@@ -384,6 +384,7 @@ int Func::funcGet( const string &path )
 	if(f_path == mFncs[i_fnc]->func().at().nodePath())
 	    return i_fnc;
     mFncs.push_back(new UFunc(ns.empty()?path:ns+"."+path));
+
     return mFncs.size()-1;
 }
 

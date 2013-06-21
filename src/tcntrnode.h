@@ -162,7 +162,7 @@ class TCntrNode
 
 	//> Modify process methods
 	int  isModify( int mflg = TCntrNode::All );	//Check for modify want
-	void modif( bool save = false );		//Set local modify
+	virtual void modif( bool save = false );	//Set local modify
 	void modifG( );					//Set group modify
 	void modifClr( bool save = false );		//Clear modify
 	void modifGClr( );				//Modify group clear

@@ -4,22 +4,19 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@fromru.com>, 2012.
+# Roman Savochenko <rom_as@fromru.com>, 2012-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DiamondBoards 2.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-30 19:44+0200\n"
+"POT-Creation-Date: 2013-06-21 20:14+0300\n"
 "PO-Revision-Date: 2009-08-17 14:02+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
-"Language-Team: de <>\n"
+"Language-Team: German <de@li.org> <>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 0.3\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 msgid "Diamond DAQ boards"
 msgstr "Datenerfassungkarte Diamond"
@@ -30,7 +27,9 @@ msgstr "Roman Savotschenko"
 msgid ""
 "Allow access to 'Diamond Systems' DAQ boards. Include main support for "
 "generic boards."
-msgstr "Bietet Zugriff auf die 'Diamond Systems Messkarten. Verfügt über ein Haupt Trägergrundplatte."
+msgstr ""
+"Bietet Zugriff auf die 'Diamond Systems Messkarten. Verfügt über ein Haupt "
+"Trägergrundplatte."
 
 msgid ""
 "[-5, +5]V;[-2.5, +2.5]V;[-1.25, +1.25]V;[-10, +10]V;[-5, +5]V;[-2.5, +2.5]V;"
@@ -92,14 +91,17 @@ msgstr "Priorität der Datenerfassung"
 msgid "Standard"
 msgstr "Standard"
 
-msgid "Board type"
-msgstr "Board-Typ"
+msgid "Board: type"
+msgstr "Board: Typ"
 
-msgid "Board address"
-msgstr "Board-Adresse"
+msgid "Board: address"
+msgstr "Board: Adresse"
 
-msgid "Board interrupt"
-msgstr "Board-Interrupt"
+msgid "Board: interrupt"
+msgstr "Board: Interrupt"
+
+msgid "Sample rate (single channel)"
+msgstr "Meßfrequenz (ein Kanal)"
 
 msgid "Asynchronous read"
 msgstr "Asynchrones Lesen"
@@ -134,6 +136,10 @@ msgstr "1:Parameter ist abgeschaltet."
 msgid "2:Acquisition is stopped."
 msgstr "2:Erfassung ist angehalten."
 
+#, c-format
+msgid "0:AI acquisition into interrupt mode; sample rate=%g."
+msgstr "0:Poll AI Interrupt, Meßfrequenz=%g."
+
 msgid "DSC driver is not initialized!"
 msgstr "DSC-Treiber ist nicht initialisiert!"
 
@@ -141,6 +147,7 @@ msgstr "DSC-Treiber ist nicht initialisiert!"
 msgid "Select device %d error!"
 msgstr "Geräteauswahl Fehler %d!"
 
+#, c-format
 msgid "dscInitBoard '%s'(%xh) error: %s %s"
 msgstr "Fehler dscInitBoard '%s'(%xh): %s %s"
 
@@ -152,6 +159,7 @@ msgstr "Analog-Eingang %d"
 msgid "Analog output %d"
 msgstr "Analog-Ausgang %d"
 
+#, c-format
 msgid "Board's '%s' DIO configuration unsupported."
 msgstr "Konfiguration ist nicht DIO Board '%s' unterstützt."
 
@@ -163,8 +171,50 @@ msgstr "Digital-Ausgang %d.%d"
 msgid "Digital input %d.%d"
 msgstr "Digital-Eingang %d.%d"
 
+#, c-format
+msgid ""
+"AI interrupt: Init for: ConvRate=%g; NumbConv=%lu; FIFOdepth=%d; "
+"dump_threshold=%lu; scan_interval=%d."
+msgstr ""
+"Unterbrechung AI: Initialisierung für: ConvRate=%g; NumbConv=%lu; FIFOdepth="
+"%d; dump_threshold=%lu; scan_interval=%d."
+
+#, c-format
+msgid "Interrupt mode disabled by dscADScanInt error: %s %s"
+msgstr ""
+"Funktionsweise des Interrupt deaktiviert für Fehler dscADScanInt: %s %s"
+
+msgid ""
+"AI interrupt: Cycle: ConvRate=%g; transfers=%lu; prev_transfers=%lu; "
+"total_transfers=%lu; lag=%lld; drift=%gs."
+msgstr ""
+"Unterbrechung AI: Zyklus: ConvRate=%g; transfers=%lu; prev_transfers=%lu; "
+"total_transfers=%lu; lag=%lld; drift=%gs."
+
+#, c-format
+msgid "AI interrupt: Lost cycles '%d'. Fast data time corrected!"
+msgstr ""
+"Unterbrechung AI: Verlorene Zyklen '%d'. Schnellen Daten zeitkorrigierten!"
+
+#, c-format
+msgid "AI interrupt: Correction: dt=%d; dtSz=%lld; per=%d; crmult=%g."
+msgstr "Unterbrechung AI: Korrektur: dt=%d; dtSz=%lld; per=%d; crmult=%g."
+
+msgid "AI interrupt: Sample rate change to %g! Env: drift=%gs."
+msgstr "Unterbrechung AI: Samplefrequenz Änderung für %g! Umwelt: drift=%gs."
+
+msgid "AI numbers process"
+msgstr "AI Zahlen Prozess"
+
 msgid "Configuration"
 msgstr "Konfiguration"
+
+msgid "Analog inputs scan interval (us)"
+msgstr "Analoge Eingänge Abtastintervall (us)"
+
+#, c-format
+msgid "Input %d type (all inputs)"
+msgstr "Eingang %d: type (alle Eingänge)"
 
 #, c-format
 msgid "Input %d type"
@@ -190,5 +240,6 @@ msgstr "DI %d Inversion"
 msgid "DO %d reverse"
 msgstr "DO %d Inversion"
 
+#, c-format
 msgid "%s error: %s %s"
 msgstr "Fehler %s: %s %s"

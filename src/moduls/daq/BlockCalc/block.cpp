@@ -98,7 +98,7 @@ string Block::name( )
 
 void Block::load_( )
 {
-    if( !SYS->chkSelDB(owner().DB()) ) return;
+    if(!SYS->chkSelDB(owner().DB())) return;
 
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
@@ -119,11 +119,12 @@ void Block::save_( )
 void Block::loadIO( const string &blk_db, const string &blk_id )
 {
     string bd_tbl, bd;
-    if( !func() ) return;
+    if(!func()) return;
+    if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());
-    if( blk_db.empty() )
+    if(blk_db.empty())
     {
 	bd_tbl = owner().cfg("BLOCK_SH").getS()+"_io";
 	bd     = owner().DB()+"."+bd_tbl;
@@ -134,20 +135,20 @@ void Block::loadIO( const string &blk_db, const string &blk_id )
 	bd_tbl = TSYS::strSepParse(bd,2,'.');
     }
 
-    for( int i_ln = 0; i_ln < ioSize(); i_ln++ )
+    for(int i_ln = 0; i_ln < ioSize(); i_ln++)
     {
-	if( i_ln >= (int)m_lnk.size() )
+	if(i_ln >= (int)m_lnk.size())
 	{
 	    m_lnk.push_back( SLnk() );
 	    m_lnk[i_ln].tp = FREE;
 	}
 
 	cfg.cfg("ID").setS(func()->io(i_ln)->id());
-	if( !SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg) ) continue;
+	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg)) continue;
 	//> Value
 	setS(i_ln,cfg.cfg("VAL").getS());
 	//> Configuration of link
-	setLink( i_ln, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS() );
+	setLink(i_ln, SET, (LnkT)cfg.cfg("TLNK").getI(), cfg.cfg("LNK").getS());
     }
 }
 

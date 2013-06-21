@@ -527,6 +527,8 @@ void TMdPrm::loadIO()
     //> Load IO and init links
     if(isStd())
     {
+	if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id());
 	string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";

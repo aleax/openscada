@@ -655,8 +655,7 @@ void ShapeFormEl::buttonToggled( bool val )
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
     map<string,string> attrs;
-    attrs["event"] = val?"ws_BtPress":"ws_BtRelease";
-    attrs["event"] = "ws_BtToggleChange";
+    attrs["event"] = string("ws_BtToggleChange\n")+(val?"ws_BtPress":"ws_BtRelease");
     attrs["value"] = TSYS::int2str(val);
     w->attrsSet(attrs);
 }
@@ -699,33 +698,35 @@ void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
     if(en) wdg->installEventFilter(view);
     else   wdg->removeEventFilter(view);
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+
+    //> Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
 }
 
 void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
+
     //> Set up current widget
-    if( en )
+    if(en)
     {
-	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+	if(isFocus && !devel)	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
     {
-	if( wdg->focusPolicy() != Qt::NoFocus )
+	if(wdg->focusPolicy() != Qt::NoFocus)
 	{
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));
 	    wdg->setFocusPolicy(Qt::NoFocus);
 	}
-	if( devel ) wdg->setMouseTracking(true);
+	if(devel) wdg->setMouseTracking(true);
     }
 
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+    //> Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
 }
 
@@ -1372,7 +1373,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
 	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
 	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }
-	    if( !sev.empty() )
+	    if(!sev.empty())
 	    {
 		switch(((QMouseEvent*)event)->button())
 		{

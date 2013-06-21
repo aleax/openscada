@@ -28,13 +28,13 @@ using namespace OSCADA;
 //* TPrmTempl                                     *
 //*************************************************
 TPrmTempl::TPrmTempl( const string &iid, const string &iname ) :
-    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), mId(cfg("ID"))
+    TFunction("tmpl_"+iid), TConfig(&SYS->daq().at().tplE()), mId(cfg("ID")), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     mId = iid;
     setName(iname);
 }
 
-TPrmTempl::~TPrmTempl(  )
+TPrmTempl::~TPrmTempl( )
 {
 
 }
@@ -42,12 +42,12 @@ TPrmTempl::~TPrmTempl(  )
 TCntrNode &TPrmTempl::operator=( TCntrNode &node )
 {
     TPrmTempl *src_n = dynamic_cast<TPrmTempl*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     exclCopy(*src_n, "ID;");
     *(TFunction *)this = *(TFunction*)src_n;
 
-    if( src_n->startStat( ) && !startStat( ) )  setStart( true );
+    if(src_n->startStat() && !startStat()) setStart(true);
 
     return *this;
 }
@@ -55,12 +55,12 @@ TCntrNode &TPrmTempl::operator=( TCntrNode &node )
 void TPrmTempl::postEnable( int flag )
 {
     //> Create default IOs
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false),0);
-	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),1);
-	ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false),2);
-	ioIns( new IO("f_err",_("Function error"),IO::String,TPrmTempl::LockAttr,"0",false),3);
+	ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 1);
+	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,TPrmTempl::LockAttr,"0",false), 2);
+	ioIns(new IO("f_err",_("Function error"),IO::String,TPrmTempl::LockAttr,"0",false), 3);
     }
 }
 
@@ -68,7 +68,7 @@ void TPrmTempl::postDisable(int flag)
 {
     try
     {
-	if( flag )
+	if(flag)
 	{
 	    SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this,true);
 	    //> Delete template's IO
@@ -76,8 +76,8 @@ void TPrmTempl::postDisable(int flag)
 	    cfg.cfg("TMPL_ID").setS(id(),true);
 	    SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
 	}
-    }catch(TError err)
-    { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TPrmTmplLib &TPrmTempl::owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
@@ -94,7 +94,7 @@ int TPrmTempl::maxCalcTm( )		{ return cfg("MAXCALCTM").getI(); }
 
 void TPrmTempl::setMaxCalcTm( int vl )	{ cfg("MAXCALCTM").setI(vl); }
 
-string TPrmTempl::progLang()
+string TPrmTempl::progLang( )
 {
     string tPrg = cfg("PROGRAM").getS();
     return tPrg.substr(0,tPrg.find("\n"));
@@ -203,6 +203,7 @@ void TPrmTempl::save_( )
     string w_db = owner().fullDB();
     string w_cfgpath = owner().owner().nodePath()+owner().tbl();
     //> Self save
+    mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(w_db,w_cfgpath,*this);
 
     //> Save IO
@@ -255,6 +256,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/tmpl/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/tmpl/st/use",_("Used"),R_R_R_,"root",SDAQ_ID,1,"tp","dec");
+		ctrMkNode("fld",opt,-1,"/tmpl/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/tmpl/cfg",_("Configuration")))
 	    {
@@ -298,6 +300,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(atoi(opt->text().c_str()));
     }
     else if(a_path == "/tmpl/st/use" && ctrChkNode(opt))	opt->setText(TSYS::int2str(startStat()?func().at().use():0));
+    else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(TSYS::int2str(mTimeStamp));
     else if(a_path == "/tmpl/cfg/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/tmpl/cfg/name")
     {
@@ -578,6 +581,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library BD"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:tmplib_"+id()).c_str(),
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))
 	    {
@@ -601,6 +605,14 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
+    }
+    else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt))
+    {
+	vector<string> tls;
+	list(tls);
+	time_t maxTm = 0;
+	for(int i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	opt->setText(TSYS::int2str(maxTm));
     }
     else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/name")

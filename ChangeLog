@@ -1,3 +1,14 @@
+2013-06-21 Roman
+- SYS: Append "lag" to function TSYS::taskSleep() for get lag from planned time. TID set to zero on init.
+    Set nice() allow instead realtime policy append.
+- TPrmTempl: TimeStamp is added to template object for changes control.
+- TArchVal: Tab "Values" items list into values table is inverted.
+- DAQ.{ModBus,LogicLev,ModBus,Siemens}: Prevent executable context reload from DB on the controller run.
+- !!:DAQ.DiamondBoards: Working into interrupt AI acquisition mode is implemented.
+- FIX:UI.Vision: Twice inundation contour drawing into primitive "ElFigure" is fixed.
+    Two events generation for buttons of primitive "FormEl" is fixed.
+
+
 2013-06-07 Roman
 - DAQ.Template,DAQ.{JavaLikeCalc,ModBus},Protocol.UserProtocol, UI.WebUser: Procedure text limit for the DB field is expand to 1000000.
 

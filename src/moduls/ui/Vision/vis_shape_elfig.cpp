@@ -3832,10 +3832,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		{
 		    map<string,string> attrs;
 		    if(!runW->hasFocus())		runW->setFocus(Qt::MouseFocusReason);
-		    if(ev->buttons()&Qt::LeftButton)	{ sev += "Left";  attrs["event"] ="ws_FigLeft"; };
-		    if(ev->buttons()&Qt::RightButton) 	{ sev += "Right"; attrs["event"] = "ws_FigRight"; }
-		    if(ev->buttons()&Qt::MidButton)    	{ sev += "Midle"; attrs["event"] = "ws_FigMiddle"; }
-		    attrs["event"] = sev;
+		    if(ev->buttons()&Qt::LeftButton)	attrs["event"] = sev+"Left\nws_FigLeft";
+		    if(ev->buttons()&Qt::RightButton)	attrs["event"] = sev+"Right\nws_FigRight";
+		    if(ev->buttons()&Qt::MidButton)	attrs["event"] = sev+"Midle\nws_FigMiddle";
 		    view->attrsSet(attrs);
 		    return false;
 		}
@@ -4130,8 +4129,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		{
 		    if(!runW->hasFocus()) runW->setFocus(Qt::MouseFocusReason);
 		    map<string,string> attrs;
-		    attrs["event"] = "ws_FigDblClick";
-		    attrs["event"] = sev+"DblClick";
+		    attrs["event"] = sev+"DblClick\nws_FigDblClick";
 		    view->attrsSet(attrs);
 		    return false;
 		}
@@ -7013,7 +7011,7 @@ void ShapeElFigure::paintImage( WdgView *view )
     for(int k = 0; k < shapeItems.size(); k++)
     {
 	flag_draw = true;
-	for(unsigned j = 0; j < shape_inund_all.size(); j++) flag_draw = (k!=shape_inund_all[j]);
+	for(unsigned j = 0; flag_draw && j < shape_inund_all.size(); j++) flag_draw = (k!=shape_inund_all[j]);
 	//>> If the figure is out of this array, then draw it (it is the figures which take part in none fill)
 	if(!flag_draw)	continue;
 	const ShapeItem &cShIt = shapeItems[k];

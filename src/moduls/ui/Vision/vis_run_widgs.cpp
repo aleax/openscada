@@ -444,10 +444,10 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_BracketRight:	mod_ev+="BracketRight";	break;
 		case Qt::Key_QuoteLeft:	mod_ev+="QuoteLeft";	break;
 		default:
-		    mod_ev+="#"+TSYS::int2str(((QKeyEvent*)event)->key(),TSYS::Hex);
+		    mod_ev += "#"+TSYS::int2str(((QKeyEvent*)event)->key(),TSYS::Hex);
 		    break;
 	    }
-	    attrs["event"] = mod_ev;
+	    attrs["event"] += (attrs["event"].size()?"\n":"")+mod_ev;
 	    attrsSet(attrs);
 	    return true;
 	case QEvent::MouseButtonPress:
