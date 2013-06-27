@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-10 11:42+0300\n"
+"POT-Creation-Date: 2013-06-25 15:41+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -47,8 +47,11 @@ msgstr "Функция объекта имеет более 255 параметр
 msgid "Get object from no object's register"
 msgstr "Получение объекта из не объектного регистра"
 
-msgid "Timeouted function calculation"
-msgstr "Исчерпано предельное время вычисления функции."
+msgid "Function execution terminated by error"
+msgstr "Выполнение функции прервано ошибкой"
+
+msgid "Timeouted function calculation %d > %d+%d"
+msgstr "Исчерпано время вычисления функции %d > %d+%d"
 
 msgid "Not supported type for operation 'Add'."
 msgstr "Не поддерживаемый тип для операции 'Add'."
@@ -62,6 +65,9 @@ msgstr "Ошибка операции %c(%xh). Функция '%s' остано�
 
 msgid "Function: "
 msgstr "Функция: "
+
+msgid "Date of modification"
+msgstr "Дата модификации"
 
 msgid "Name"
 msgstr "Имя"
@@ -84,8 +90,8 @@ msgstr ""
 msgid "Type"
 msgstr "Тип"
 
-msgid "Real;Integer;Boolean;String;Object"
-msgstr "Веществ.;Целый;Логич.;Строка;Объект"
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr "Веществ.;Целый;Логич.;Строка;Текст;Объект"
 
 msgid "Mode"
 msgstr "Режим"
@@ -187,6 +193,9 @@ msgstr "База данных"
 msgid "Formula"
 msgstr "Формула"
 
+msgid "Modification timestamp"
+msgstr "Метка времени модификации"
+
 msgid "Function ID"
 msgstr "ID функции"
 
@@ -264,9 +273,6 @@ msgstr "Вычисления"
 
 msgid "Data"
 msgstr "Данные"
-
-msgid "String;Integer;Real;Boolean;Object"
-msgstr "Строка;Целый;Веществ.;Логич.;Объект"
 
 msgid "Attribute mode"
 msgstr "Режим атрибута"

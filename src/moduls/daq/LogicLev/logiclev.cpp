@@ -458,7 +458,7 @@ void TMdPrm::enable()
 	    initTmplLnks();
 
 	    //> Load IO
-	    loadIO();
+	    loadIO(true);
 
 	    //> Init system attributes identifiers
 	    id_freq	= tmpl->val.ioId("f_frq");
@@ -493,7 +493,7 @@ void TMdPrm::enable()
     }
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
     if(!enableStat())  return;
 
@@ -522,12 +522,12 @@ void TMdPrm::load_( )
     if(enableStat()) loadIO();
 }
 
-void TMdPrm::loadIO()
+void TMdPrm::loadIO( bool force )
 {
     //> Load IO and init links
     if(isStd())
     {
-	if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+	if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id());

@@ -1644,7 +1644,7 @@ void TMdPrm::enable( )
         if(id_this >= 0) setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
 	//>> Load IO at enabling
-	if(to_make)	loadIO();
+	if(to_make)	loadIO(true);
 
 	//> Check for delete DAQ parameter's attributes
 	for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
@@ -1688,11 +1688,11 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO()
+void TMdPrm::loadIO( bool force )
 {
     //> Load IO and init links
     if(!enableStat())	return;
-    if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());

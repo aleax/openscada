@@ -375,6 +375,22 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
     return rez;
 }
 
+QString VisRun::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
+{
+    if(!fileDlg) fileDlg = new QFileDialog(this);
+    fileDlg->setFileMode(QFileDialog::AnyFile);
+    fileDlg->setAcceptMode(mode);
+    fileDlg->setWindowTitle(caption);
+    fileDlg->setNameFilter(filter);
+    if(dir.size()) fileDlg->selectFile(dir);
+#if QT_VERSION >= 0x040500
+    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
+#endif
+    if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
+
+    return "";
+}
+
 void VisRun::closeEvent( QCloseEvent* ce )
 {
     if(mod->exitLstRunPrjCls() && master_pg)	//Exit on close last run project
@@ -659,17 +675,8 @@ void VisRun::exportPg( const string &ipg )
     if(!rpg) return;
 
     QPixmap img = QPixmap::grabWidget(rpg);
-    if(!fileDlg) fileDlg = new QFileDialog(this);
-    fileDlg->setFileMode(QFileDialog::AnyFile);
-    fileDlg->setAcceptMode(QFileDialog::AcceptSave);
-    fileDlg->setWindowTitle(_("Save page's image"));
-    fileDlg->selectFile((rpg->name()+".png").c_str());
-    fileDlg->setNameFilter(_("Images (*.png *.xpm *.jpg)"));
-#if QT_VERSION >= 0x040500
-    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
-#endif
-    if(fileDlg->exec() && !fileDlg->selectedFiles().empty() && !img.save(fileDlg->selectedFiles()[0]))
-	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileDlg->selectedFiles()[0]),TVision::Error,this);
+    QString fn = getFileName(_("Save page's image"), (rpg->name()+".png").c_str(), _("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
+    if(fn.size() && !img.save(fn)) mod->postMess(mod->nodePath().c_str(), QString(_("Save to file '%1' is error.")).arg(fn), TVision::Error, this);
 }
 
 void VisRun::exportDiag( const string &idg )
@@ -708,16 +715,8 @@ void VisRun::exportDiag( const string &idg )
     if(!(rwdg=findOpenWidget(dg))) return;
 
     QPixmap img = QPixmap::grabWidget(rwdg);
-    if(!fileDlg) fileDlg = new QFileDialog(this);
-    fileDlg->setFileMode(QFileDialog::AnyFile);
-    fileDlg->setAcceptMode(QFileDialog::AcceptSave);
-    fileDlg->setWindowTitle(_("Save diagram"));
-    fileDlg->selectFile(QString(_("Trend %1.png")).arg(expDiagCnt++));
-    fileDlg->setNameFilter(_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"));
-#if QT_VERSION >= 0x040500
-    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
-#endif
-    QString fileName = (fileDlg->exec() && !fileDlg->selectedFiles().empty()) ? fileDlg->selectedFiles()[0] : "";
+    QString fileName = getFileName(_("Save diagram"), QString(_("Trend %1.png")).arg(expDiagCnt++),
+	_("Images (*.png *.xpm *.jpg);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty())
     {
 	//>> Export to CSV
@@ -844,16 +843,8 @@ void VisRun::exportDoc( const string &idoc )
     }
 
     if(!(rwdg=findOpenWidget(doc))) return;
-    if(!fileDlg) fileDlg = new QFileDialog(this);
-    fileDlg->setFileMode(QFileDialog::AnyFile);
-    fileDlg->setAcceptMode(QFileDialog::AcceptSave);
-    fileDlg->setWindowTitle(_("Save document"));
-    fileDlg->selectFile(QString(_("Document %1.html")).arg(expDocCnt++));
-    fileDlg->setNameFilter(_("XHTML (*.html);;CSV file (*.csv)"));
-#if QT_VERSION >= 0x040500
-    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
-#endif
-    QString fileName = (fileDlg->exec() && !fileDlg->selectedFiles().empty()) ? fileDlg->selectedFiles()[0] : "";
+    QString fileName = getFileName(_("Save document"), QString(_("Document %1.html")).arg(expDocCnt++),
+	_("XHTML (*.html);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty())
     {
 	int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);

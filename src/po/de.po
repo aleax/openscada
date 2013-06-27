@@ -820,7 +820,7 @@ msgid "Template program"
 msgstr "Vorlagenprogramm"
 
 msgid "Modification timestamp"
-msgstr ""
+msgstr "Änderungszeitmarken"
 
 msgid "Template ID"
 msgstr "ID der Vorlage"

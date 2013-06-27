@@ -107,7 +107,7 @@ class TMdPrm : public TParamContr
 	int lnkId( const string &id );
 	SLnk &lnk( int num );
 
-	void loadIO( );
+	void loadIO( bool force = false );
 	void saveIO( );
 	void initTmplLnks( bool checkNoLink = false );
 

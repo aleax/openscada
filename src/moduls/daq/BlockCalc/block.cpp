@@ -57,7 +57,7 @@ TCntrNode &Block::operator=( TCntrNode &node )
     if( src_n->enable() )
     {
 	setEnable(true);
-	loadIO(src_n->owner().DB()+"."+src_n->owner().cfg("BLOCK_SH").getS(),src_n->id());
+	loadIO(src_n->owner().DB()+"."+src_n->owner().cfg("BLOCK_SH").getS(), src_n->id(), true);
     }
 
     return *this;
@@ -116,11 +116,11 @@ void Block::save_( )
     saveIO();
 }
 
-void Block::loadIO( const string &blk_db, const string &blk_id )
+void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
 {
     string bd_tbl, bd;
     if(!func()) return;
-    if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     TConfig cfg(&mod->blockIOE());
     cfg.cfg("BLK_ID").setS((blk_id.size())?blk_id:id());
@@ -194,7 +194,7 @@ void Block::setEnable( bool val )
 	    id_stop  = func()->ioId("f_stop");
 	}
 	//>> Init links
-	loadIO( );
+	loadIO("", "", true);
     }
     //> Disable
     else if( !val && m_enable )

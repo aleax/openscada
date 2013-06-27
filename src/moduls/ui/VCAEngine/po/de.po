@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-28 15:24+0300\n"
+"POT-Creation-Date: 2013-06-26 18:15+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -59,6 +59,9 @@ msgid ""
 msgstr ""
 "Datenbank Parameter im Format [<DB-Modul>.<DB-Name>.<Name der Tabelle>].\n"
 "Für die Hauptdatenbank '*.*' verwenden."
+
+msgid "Date of modification"
+msgstr "Änderungsdatum"
 
 msgid "Configuration"
 msgstr "Konfig"
@@ -1256,6 +1259,9 @@ msgstr "Zeitraum der Berechnungsverfahren"
 
 msgid "Changed attributes"
 msgstr "Geänderte Attribute"
+
+msgid "Modification timestamp"
+msgstr "Änderungszeitmarken"
 
 msgid "IDW"
 msgstr ""

@@ -19,7 +19,10 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <syscall.h>
+#include <sys/resource.h>
 #include <signal.h>
+#include <errno.h>
 #include <portaudio.h>
 
 #include <tsys.h>
@@ -94,6 +97,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("SMPL_RATE",_("Card sample rate (Hz)"),TFld::Integer,0,"5","8000","1;200000"));
     fldAdd(new TFld("SMPL_TYPE",_("Card sample type"),TFld::Integer,TFld::Selected,"5",TSYS::int2str(paFloat32).c_str(),
 	TSYS::strMess("%d;%d;%d",paFloat32,paInt32,paInt16).c_str(),_("Float 32;Int 32;Int 16")));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -110,8 +114,8 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem), pEl("w_attr"),
-    mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()),
-    prcSt(false), endrunReq(false), numChan(0), smplSize(0), stream(NULL), acqSize(0)
+    mSmplRate(cfg("SMPL_RATE").getId()), mSmplType(cfg("SMPL_TYPE").getId()), mPrior(cfg("PRIOR").getId()),
+    prcSt(false), endrunReq(false), firstCall(false), numChan(0), smplSize(0), stream(NULL), cTm(0), acqSize(0)
 {
     cfg("PRM_BD").setS("SoundCard_"+name_c);
 
@@ -244,6 +248,7 @@ void TMdContr::start_( )
     PaError err = Pa_OpenStream(&stream, &iParam, NULL, mSmplRate, 0/*mSmplRate/2*/, paClipOff, recordCallback, this);
     if(err != paNoError) throw TError(nodePath().c_str(),"Pa_OpenStream: %s",Pa_GetErrorText(err));
 
+    firstCall = true;
     err = Pa_StartStream(stream);
     if(err != paNoError) throw TError(nodePath().c_str(),"Pa_StartStream: %s",Pa_GetErrorText(err));
 }
@@ -282,7 +287,23 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     cntr.prcSt = true;
     const char *bptr = (const char*)iBuf;
 
-    if(cntr.redntUse()) return cntr.endrunReq;
+    if(cntr.redntUse()) { cntr.prcSt = false; return cntr.endrunReq; }
+
+    //> Set priority for call task
+    if(cntr.firstCall)
+    {
+	int policy = SCHED_OTHER;
+	struct sched_param prior;
+
+	pthread_getschedparam(pthread_self(), &policy, &prior);
+#if __GLIBC_PREREQ(2,4)
+	if(cntr.prior() < 0)	policy = SCHED_BATCH;
+#endif
+	if(cntr.prior() > 0)	{ policy = SCHED_RR; prior.sched_priority = cntr.prior(); }
+    	if(pthread_setschedparam(pthread_self(), SCHED_FIFO, &prior) == EPERM)
+	    setpriority(PRIO_PROCESS, syscall(SYS_gettid), -cntr.prior()/5);
+	cntr.firstCall = false;
+    }
 
     //> Check for current time correction
     int64_t t_sz = (1000000ll*framesPerBuffer)/cntr.sRt;
@@ -290,9 +311,9 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     //>> Lost frames process
     if(cntr.inAdcTimePrev > 0 && err > 0.001)
     {
-	int64_t cTm = TSYS::curTime();
 	cntr.wTm += (int64_t)((double)t_sz*err);
-	//printf("TEST 00: %lu (%d); t_sz=%lld; dT=%g; diff=%lld\n",framesPerBuffer,cntr.sRt,t_sz,err,cTm-cntr.wTm);
+	mess_warning(cntr.nodePath().c_str(), _("CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err=%g; diff=%lld."),
+	    framesPerBuffer, cntr.sRt, t_sz, err, (TSYS::curTime()-cntr.wTm));
 	cntr.lostFrmsCntr++;
     }
     //>> Sound counter difference from time clock correction
@@ -300,7 +321,8 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     {
 	int64_t dTm = TSYS::curTime()-cntr.wTm;
 	if(cntr.inAdcTimeAdj > 0) cntr.sRt -= (dTm-cntr.tmAdj)*cntr.sRt/60000000;
-	//printf("TEST 01: cntr.sRt=%d; dTm=%lld\n",cntr.sRt,dTm);
+	if(cntr.messLev() == TMess::Debug)
+	    mess_debug_(cntr.nodePath().c_str(), _("CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."), cntr.sRt, dTm);
 	cntr.tmAdj = dTm;
 	cntr.inAdcTimeAdj = timeInfo->inputBufferAdcTime;
     }
@@ -321,19 +343,31 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
 		if(archAllow)
 		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
 			arch.at().setR(*(float*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
-		val.at().setR(*(float*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
+		if(SYS->sysTm() > cntr.cTm)
+		{
+		    val.at().setR(*(float*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
+		    cntr.cTm = SYS->sysTm();
+		}
 		break;
 	    case paInt32:
 		if(archAllow)
 		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
 			arch.at().setI(*(int32_t*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
-		val.at().setI(*(int32_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
+		if(SYS->sysTm() > cntr.cTm)
+		{
+		    val.at().setI(*(int32_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
+		    cntr.cTm = SYS->sysTm();
+		}
 		break;
 	    case paInt16:
 		if(archAllow)
 		    for(int64_t i_t = 0; i_t < t_sz; i_t += arch.at().period())
 			arch.at().setI(*(int16_t*)(bptr+cntr.smplSize*((i_t*framesPerBuffer/t_sz)*cntr.numChan+chn)), cntr.wTm+i_t);
-		val.at().setI(*(int16_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
+		if(SYS->sysTm() > cntr.cTm)
+		{
+		    val.at().setI(*(int16_t*)(bptr+cntr.smplSize*((framesPerBuffer-1)*cntr.numChan+chn)),cntr.wTm+(1000000ll*(framesPerBuffer-1))/cntr.sRt,true);
+		    cntr.cTm = SYS->sysTm();
+		}
 		break;
 	}
     }
@@ -366,6 +400,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_RATE",cfg("SMPL_RATE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,
 	    3,"tp","str","dest","sel_ed","sel_list",sampleRates().c_str());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SMPL_TYPE",cfg("SMPL_TYPE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	return;
     }
 

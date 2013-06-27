@@ -118,16 +118,19 @@ class TMdPrm : public TParamContr
 	char	&asynchRd;	//Asynchronous reading
 
         Res	devRes;		//Resource for access to device
-	DevFeature dev;
-	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
-	int	aiScInt;	//Analog inputs scan period. Too big will drop sample rate for some values
-
+	DevFeature dev;		//Device info
 	DSCB	dscb;		//Board descriptor
+	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each
+	ResString acqErr;	//Acquisition error status
+
+	//> Interrupt AI mode
+	int	aiScInt;	//Analog inputs scan period. Too big will drop sample rate for some values
 	DSCS	dscs;		//Sample structure
 	DSCAIOINT dscaioint;	//Interrupt IO mode description
 	DWORD	prevTrans;	//Previous processed transfer
 	int64_t	cTm, diffTm;	//Current time by DAQ board's clock and it divergency measurement start time
-	ResString acqErr;	//Acquisition error status
+	unsigned st_overflows, st_lostcycles, st_sRateCor;
+	double	st_drift;
 };
 
 //*************************************************

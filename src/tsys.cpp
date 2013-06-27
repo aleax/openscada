@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/utsname.h>
+#include <sys/resource.h>
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
@@ -200,9 +201,9 @@ string TSYS::uint2str( unsigned val, IntView view )
 string TSYS::ll2str( int64_t val, IntView view )
 {
     char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",val);
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",(long long int)val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",(long long unsigned int)val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",(long long unsigned int)val);
 
     return buf;
 }
@@ -1361,7 +1362,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 #if __GLIBC_PREREQ(2,4)
     if(priority < 0)	policy = SCHED_BATCH;
 #endif
-    if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
+    if(priority > 0)	policy = SCHED_RR;
     pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
@@ -1587,7 +1588,7 @@ void TSYS::taskSleep( int64_t per, time_t cron, int64_t *lag )
 
 	if(stsk)
 	{
-	    if(stsk->tm_pnt) stsk->cycleLost += (pnt_tm/per-stsk->tm_pnt/per-1);
+	    if(stsk->tm_pnt) stsk->cycleLost += vmax(0, pnt_tm/per-stsk->tm_pnt/per-1);
 	    if(lag) *lag = stsk->tm_pnt ? wake_tm-stsk->tm_pnt-per : 0;
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;

@@ -183,9 +183,12 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	    {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		if(DB().size())
+		{
 		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
 			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+		    ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
+		}
 	    }
 	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))
 	    {
@@ -212,6 +215,14 @@ void Lib::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
+    }
+    else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt))
+    {
+        vector<string> tls;
+        list(tls);
+        time_t maxTm = 0;
+        for(int i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+        opt->setText(TSYS::int2str(maxTm));
     }
     else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/name")

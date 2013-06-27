@@ -300,7 +300,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(atoi(opt->text().c_str()));
     }
     else if(a_path == "/tmpl/st/use" && ctrChkNode(opt))	opt->setText(TSYS::int2str(startStat()?func().at().use():0));
-    else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(TSYS::int2str(mTimeStamp));
+    else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(TSYS::int2str(timeStamp()));
     else if(a_path == "/tmpl/cfg/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/tmpl/cfg/name")
     {

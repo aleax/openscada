@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-10 11:42+0300\n"
+"POT-Creation-Date: 2013-06-25 15:41+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -52,8 +52,11 @@ msgstr "Object-Funktion haben mehr 255 Parameter."
 msgid "Get object from no object's register"
 msgstr "Lade Objekt nicht vom Objektregister"
 
-msgid "Timeouted function calculation"
-msgstr "Zeitüberschreitung Berechnung der Funktion."
+msgid "Function execution terminated by error"
+msgstr "Funktion Ausführung abgebrochen durch Fehler"
+
+msgid "Timeouted function calculation %d > %d+%d"
+msgstr "Zeitüberschreitung Berechnung der Funktion %d > %d+%d"
 
 msgid "Not supported type for operation 'Add'."
 msgstr "Typ wird nicht unterstützt für Operation 'Add' (Hinzufügen)."
@@ -67,6 +70,9 @@ msgstr "Fehler bei der Operation %c(%xh). Funktion '%s' ist angehalten."
 
 msgid "Function: "
 msgstr "Funktion: "
+
+msgid "Date of modification"
+msgstr "Änderungsdatum"
 
 msgid "Name"
 msgstr "Name"
@@ -89,8 +95,8 @@ msgstr ""
 msgid "Type"
 msgstr "Typ"
 
-msgid "Real;Integer;Boolean;String;Object"
-msgstr "Reellezahl;Ganzzahl;Logisch;Text;Objekt"
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr "Reellezahl;Ganzzahl;Logisch;Saite;Text;Objekt"
 
 msgid "Mode"
 msgstr "Mode"
@@ -191,6 +197,9 @@ msgstr "Datenbank"
 msgid "Formula"
 msgstr "Formel"
 
+msgid "Modification timestamp"
+msgstr "Änderungszeitmarken"
+
 msgid "Function ID"
 msgstr "ID Funktionen"
 
@@ -269,9 +278,6 @@ msgstr "Berechnungen"
 
 msgid "Data"
 msgstr "Daten"
-
-msgid "String;Integer;Real;Boolean;Object"
-msgstr "Text;Ganzzahl;Reellezahl;Logisch;Objekt"
 
 msgid "Attribute mode"
 msgstr "Modusattribut"

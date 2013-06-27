@@ -79,9 +79,9 @@ void TCntrNode::nodeDelAll( )
 
 void TCntrNode::setNodeMode( char mode )
 {
-    hd_res.resRequestW();
+    pthread_mutex_lock(&connM);
     m_flg = (m_flg&(~0x03))|(mode&0x03);
-    hd_res.resRelease();
+    pthread_mutex_unlock(&connM);
 }
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
@@ -116,7 +116,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 
     try
     {
-	if( !s_br.empty() && s_br[0] != '/' )
+	if(!s_br.empty() && s_br[0] != '/')
 	{
 	    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 		if(s_br.substr(0,(*chGrp)[i_g].id.size()) == (*chGrp)[i_g].id)
@@ -125,7 +125,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 		    return;
 		}
 	    //> Go to default thread
-	    if( chGrp ) chldAt(0,s_br).at().cntrCmd(opt,0,path,off);
+	    if(chGrp) chldAt(0,s_br).at().cntrCmd(opt,0,path,off);
 	    return;
 	}
 	//> Post command to node
@@ -141,13 +141,13 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	{
 	    opt->setAttr("path",s_br);
 	    cntrCmdProc(opt);
-	    if( opt->attr("rez") != "0" )
+	    if(opt->attr("rez") != "0")
 		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
 	}
     }
     catch(TError err)
     {
-	if( err.cat == "warning" )	opt->setAttr("rez","1");
+	if(err.cat == "warning") opt->setAttr("rez","1");
 	else opt->setAttr("rez","2");
 	opt->childClear();
 	opt->setAttr("mcat",err.cat);
@@ -462,6 +462,13 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     }
 }
 
+void TCntrNode::setNodeFlg( char flg )
+{
+    pthread_mutex_lock(&connM);
+    m_flg |= flg&(SelfModify|SelfModifyS|SelfSaveForceOnChild);
+    pthread_mutex_unlock(&connM);
+}
+
 unsigned TCntrNode::nodeUse( bool selfOnly )
 {
     ResAlloc res(hd_res,false);
@@ -502,9 +509,9 @@ string TCntrNode::nodePath( char sep, bool from_root )
 
 TCntrNode *TCntrNode::nodePrev( bool noex )
 {
-    if( prev.node ) return prev.node;
-    if( noex )	return NULL;
-    throw TError(nodePath().c_str(),_("Node is the root or is not connected!"));
+    if(prev.node) return prev.node;
+    if(noex)	return NULL;
+    throw TError(nodePath().c_str(), _("Node is the root or is not connected!"));
 }
 
 AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const string &user )
@@ -522,42 +529,52 @@ AutoHD<TCntrNode> TCntrNode::chldAt( int8_t igr, const string &name, const strin
 
 int TCntrNode::isModify( int f )
 {
-    ResAlloc res( hd_res, false );
+    ResAlloc res(hd_res, false);
     int rflg = 0;
 
-    if( f&Self && m_flg&SelfModify )	rflg |= Self;
-    if( f&Child )
-	for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
+    if(f&Self && m_flg&SelfModify) rflg |= Self;
+    if(f&Child)
+	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	{
 	    TMap::iterator p;
-	    for( p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-		if( p->second->isModify(Self|Child) )	{ rflg |= Child; break; }
-	    if( p != (*chGrp)[i_g].elem.end() )	break;
+	    for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+		if(p->second->isModify(Self|Child))	{ rflg |= Child; break; }
+	    if(p != (*chGrp)[i_g].elem.end())	break;
 	}
 
     return rflg;
 }
 
-void TCntrNode::modif( bool save )	{ m_flg |= (save?(SelfModifyS|SelfModify):SelfModify); }
+void TCntrNode::modif( bool save )
+{
+    pthread_mutex_lock(&connM);
+    m_flg |= (save?(SelfModifyS|SelfModify):SelfModify);
+    pthread_mutex_unlock(&connM);
+}
 
-void TCntrNode::modifClr( bool save )	{ m_flg &= ~(save?SelfModifyS:SelfModify); }
+void TCntrNode::modifClr( bool save )
+{
+    pthread_mutex_lock(&connM);
+    m_flg &= ~(save?SelfModifyS:SelfModify);
+    pthread_mutex_unlock(&connM);
+}
 
 void TCntrNode::modifG( )
 {
-    ResAlloc res( hd_res, false );
-    modif( );
-    for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-	for( TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-	    p->second->modifG( );
+    ResAlloc res(hd_res, false);
+    modif();
+    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+	    p->second->modifG();
 }
 
 void TCntrNode::modifGClr( )
 {
-    ResAlloc res( hd_res, false );
-    modifClr( );
-    for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-	for( TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p )
-	    p->second->modifGClr( );
+    ResAlloc res(hd_res, false);
+    modifClr();
+    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+	    p->second->modifGClr();
 }
 
 void TCntrNode::load( bool force )
@@ -566,7 +583,7 @@ void TCntrNode::load( bool force )
     if((isModify(Self)&Self) || force)
 	try
 	{
-	    if(nodeMode( ) == TCntrNode::Disable) nodeEn(NodeRestore|NodeShiftDel);
+	    if(nodeMode() == TCntrNode::Disable) nodeEn(NodeRestore|NodeShiftDel);
 	    modifClr(true);	//Save flag clear
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
@@ -579,7 +596,7 @@ void TCntrNode::load( bool force )
     //> Childs load process
     if((isModify(Child)&Child) || force)
     {
-	ResAlloc res( hd_res, false );
+	ResAlloc res(hd_res, false);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child)) p->second->load(force);
@@ -587,37 +604,37 @@ void TCntrNode::load( bool force )
 
 }
 
-void TCntrNode::save( )
+void TCntrNode::save( unsigned lev )
 {
-    //> Self load
-    if( isModify(Self)&Self )
-	try{ save_(); }
-	catch(TError err)
-	{
-	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-	    mess_err(nodePath().c_str(),_("Saving node error."));
-	}
-    //> Childs load process
-    if( isModify(Child)&Child )
+    int mdfFlg = isModify(All);
+    //> Self save
+    try
     {
-	ResAlloc res( hd_res, false );
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    for(unsigned i_p = 0; i_p < (*chGrp)[i_g].elem.size(); )
+	if(mdfFlg&Self || (mdfFlg&Child && m_flg&SelfSaveForceOnChild))	save_();
+	//>> Check for prev nodes flag SelfSaveForceOnChild
+	if(lev == 0)
+	{
+	    TCntrNode *nd = this;
+	    while(true)
 	    {
-		TMap::iterator p = (*chGrp)[i_g].elem.begin();
-		for(unsigned i = 0; i < i_p; i++) p++;
-
-		if(p->second->isModify(Self|Child)) p->second->save();
-		if(p->second->nodeMode() == TCntrNode::Disable)
-		{
-		    string chld_nm = p->second->nodeName();
-		    res.release();
-		    chldDel(i_g, chld_nm);
-		    res.request(false);
-		    continue;
-		}
-		i_p++;
+		nd = nd->nodePrev(true);
+		if(!nd) break;
+		if(nd->nodeFlg()&SelfSaveForceOnChild)	nd->save_();
 	    }
+	}
+    }
+    catch(TError err)
+    {
+	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+	mess_err(nodePath().c_str(),_("Saving node error."));
+    }
+    //> Childs save process
+    if(mdfFlg&Child)
+    {
+	ResAlloc res(hd_res, false);
+	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+		if(p->second->isModify(Self|Child)) p->second->save(lev+1);
     }
     modifClr( );
 }

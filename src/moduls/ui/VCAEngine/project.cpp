@@ -476,6 +476,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/obj/st/db",_("Project DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","sel_ed","select",("/db/tblList:wlb_"+id()).c_str(),
 		    "help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
+		ctrMkNode("fld",opt,-1,"/obj/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/obj/cfg",_("Configuration")))
 	    {
@@ -538,6 +539,14 @@ void Project::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setFullDB(opt->text());
+    }
+    else if(a_path == "/obj/st/timestamp" && ctrChkNode(opt))
+    {
+        vector<string> tls;
+        list(tls);
+        time_t maxTm = 0;
+        for(int i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+        opt->setText(TSYS::int2str(maxTm));
     }
     else if(a_path == "/obj/cfg/owner")
     {
@@ -777,13 +786,14 @@ void Project::cntrCmdProc( XMLNode *opt )
 //* Page: Project's page                         *
 //************************************************
 Page::Page( const string &iid, const string &isrcwdg ) :
-	Widget(iid), TConfig(&mod->elPage()), mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId())
+    Widget(iid), TConfig(&mod->elPage()), mFlgs(cfg("FLGS").getId()), mProcPer(cfg("PROC_PER").getId()), mTimeStamp(cfg("TIMESTAMP").getId())
 {
     cfg("ID").setS(id());
 
     mPage = grpAdd("pg_");
 
     setParentNm(isrcwdg);
+    setNodeFlg(TCntrNode::SelfSaveForceOnChild);
 }
 
 Page::~Page( )
@@ -842,6 +852,17 @@ string Page::ownerFullId( bool contr )
     Page *own = ownerPage( );
     if( own )	return own->ownerFullId(contr)+(contr?"/pg_":"/")+own->id();
     return string(contr?"/prj_":"/")+ownerProj()->id();
+}
+
+int Page::timeStamp( )
+{
+    int curTm = mTimeStamp;
+    vector<string> ls;
+    pageList(ls);
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	curTm = vmax(curTm, pageAt(ls[i_l]).at().timeStamp());
+
+    return curTm;
 }
 
 void Page::postEnable( int flag )
@@ -1102,6 +1123,7 @@ void Page::save_( )
     cfg("ATTRS").setS(mod->attrsSave(*this, db+"."+tbl, path(), "", true));
 
     //> Save generic widget's data
+    mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,*this);
 
     //> Save widget's attributes
@@ -1263,6 +1285,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    if(prjFlags()&Page::Empty || (ownerPage() && ownerPage()->prjFlags()&(Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
+	    ctrMkNode("fld",opt,-1,"/wdg/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	}
 	if(prjFlags()&(Page::Template|Page::Container))
 	{
@@ -1295,6 +1318,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Template))->setText(_("Template"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container|Page::Template))->setText(_("Container and template"));
     }
+    else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(TSYS::int2str(timeStamp()));
     else if(a_path == "/br/pg_" || a_path == "/page/page")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))

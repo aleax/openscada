@@ -808,7 +808,7 @@ msgid "Template program"
 msgstr "Програма шаблону"
 
 msgid "Modification timestamp"
-msgstr ""
+msgstr "Позначка часу модифікації"
 
 msgid "Template ID"
 msgstr "ID шаблону"

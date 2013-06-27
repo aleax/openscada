@@ -48,7 +48,7 @@
 using namespace VISION;
 
 VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const string &VCAstat ) :
-    winClose(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
+    fileDlg(NULL), winClose(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
 {
     setAttribute(Qt::WA_DeleteOnClose,true);
 
@@ -57,7 +57,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin( this );
 
-    setWindowTitle(_("OpenSCADA: Vision developing"));
+    setWindowTitle(TSYS::strMess(_("OpenSCADA Vision developing: %s"),SYS->name().c_str()).c_str());
     setWindowIcon(mod->icon());
 
     //> Init workspace
@@ -647,6 +647,7 @@ VisDevelop::~VisDevelop()
     //> Other data clean
     if(prjLibPropDlg)	delete prjLibPropDlg;
     if(visItPropDlg)	delete visItPropDlg;
+    if(fileDlg)		delete fileDlg;
 
     mod->unregWin(this);
 }
@@ -654,6 +655,19 @@ VisDevelop::~VisDevelop()
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
     return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+}
+
+QString VisDevelop::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
+{
+    if(!fileDlg) fileDlg = new QFileDialog(this);
+    fileDlg->setFileMode(QFileDialog::AnyFile);
+    fileDlg->setAcceptMode(mode);
+    fileDlg->setWindowTitle(caption);
+    fileDlg->setNameFilter(filter);
+    if(dir.size()) fileDlg->selectFile(dir);
+    if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
+
+    return "";
 }
 
 string VisDevelop::user( )

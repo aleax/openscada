@@ -45,7 +45,6 @@
 #include <QPushButton>
 #include <QFontDialog>
 #include <QColorDialog>
-#include <QFileDialog>
 #include <QClipboard>
 #include <QBitmap>
 
@@ -2594,8 +2593,8 @@ void DevelWdgView::makeImage( )
     QPixmap img = QPixmap::grabWidget(this);
 
     //> Call save file dialog
-    QString fileName = QFileDialog::getSaveFileName(this,_("Save widget's image"),
-	(TSYS::path2sepstr(id())+".png").c_str(), _("Images (*.png *.xpm *.jpg)"));
+    QString fileName = mainWin()->getFileName(_("Save widget's image"), (TSYS::path2sepstr(id())+".png").c_str(),
+	_("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty() && !img.save(fileName))
 	mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
 }

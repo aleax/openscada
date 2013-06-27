@@ -164,17 +164,18 @@ class Page : public Widget, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string path( );
-	string ico( );
-	string type( )		{ return "ProjPage"; }
-	string calcId( );
-	string calcLang( );
-	string calcProg( );
-	int    calcPer( );
-	string ownerFullId( bool contr = false );
-	int    prjFlags( )	{ return mFlgs; }
-	string parentNm( )	{ return cfg("PARENT").getS(); }
-	string proc( )		{ return cfg("PROC").getS(); }
+	string	path( );
+	string	ico( );
+	string	type( )		{ return "ProjPage"; }
+	string	calcId( );
+	string	calcLang( );
+	string	calcProg( );
+	int	calcPer( );
+	string	ownerFullId( bool contr = false );
+	int	prjFlags( )	{ return mFlgs; }
+	string	parentNm( )	{ return cfg("PARENT").getS(); }
+	string	proc( )		{ return cfg("PROC").getS(); }
+	int	timeStamp( );
 
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
@@ -228,9 +229,10 @@ class Page : public Widget, public TConfig
 
     private:
 	//Attributes
-	int	mPage;		//Page container identifier
-	int	&mFlgs,		//Project's flags
-		&mProcPer;	//Process period
+	int	mPage,		//Page container identifier
+		&mFlgs,		//Project's flags
+		&mProcPer,	//Process period
+		&mTimeStamp;
 };
 
 //************************************************

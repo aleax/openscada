@@ -135,6 +135,7 @@ class TCntrNode
 	    //> Flags
 	    SelfModify	= 0x04,		//Self modify
 	    SelfModifyS = 0x08,		//Self modify store
+	    SelfSaveForceOnChild = 0x10	//Save force on childs modify flag set
 	};
 	enum EnFlag
 	{
@@ -156,18 +157,19 @@ class TCntrNode
 
 	TCntrNode *nodePrev( bool noex = false );
 	char	 nodeFlg( )		{ return m_flg; }
+	void	 setNodeFlg( char flg );
 	char	 nodeMode( )		{ return m_flg&0x3; }
 	unsigned nodeUse( bool selfOnly = false );
 	unsigned nodePos( )		{ return mOi; }
 
 	//> Modify process methods
 	int  isModify( int mflg = TCntrNode::All );	//Check for modify want
-	virtual void modif( bool save = false );	//Set local modify
+	void modif( bool save = false );		//Set local modify
 	void modifG( );					//Set group modify
 	void modifClr( bool save = false );		//Clear modify
 	void modifGClr( );				//Modify group clear
 	void load( bool force = false );		//Load node, if modified
-	void save( );					//Save node, if modified
+	void save( unsigned lev = 0 );			//Save node, if modified
 
 	//> Connections counter
 	virtual void AHDConnect( );

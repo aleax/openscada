@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-29 10:56+0300\n"
+"POT-Creation-Date: 2013-06-27 08:50+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -143,8 +143,9 @@ msgstr ""
 msgid "Options help"
 msgstr "Помощь по опциям"
 
-msgid "OpenSCADA: Vision developing"
-msgstr "OpenSCADA: Vision-разработка"
+#, c-format
+msgid "OpenSCADA Vision developing: %s"
+msgstr "OpenSCADA Vision-разработка: %s"
 
 msgid "Full screen"
 msgstr "Весь экран"
@@ -908,6 +909,9 @@ msgstr "Включен:"
 msgid "Container DB:"
 msgstr "БД контейнера:"
 
+msgid "Date of modification:"
+msgstr "Дата модификации:"
+
 msgid "Configuration"
 msgstr "Конфигурация"
 
@@ -1155,7 +1159,7 @@ msgid "Resize"
 msgstr "Изм. размера"
 
 msgid "Warning! Edit widget already set."
-msgstr ""
+msgstr "Внимание! Виджет уже установлен в редактирование."
 
 msgid "Exit from widget editing"
 msgstr "Выход из редактирования виджета"
@@ -1562,8 +1566,8 @@ msgid ""
 "press \"Cancel\"."
 msgstr ""
 "Уже открыто несколько сеансов для проекта \"%1\".\n"
-"Вы можете создать новый сеанс или подключиться к существующему. "
-"Пожалуйста, выберите нужное или нажмите \"Отмена\"."
+"Вы можете создать новый сеанс или подключиться к существующему. Пожалуйста, "
+"выберите нужное или нажмите \"Отмена\"."
 
 msgid "Select session for connection or new creation"
 msgstr "Выбор сеанса для подключения или создание нового"
@@ -2030,9 +2034,3 @@ msgstr "Время инициализации '%s' %f мс."
 
 msgid "Vision dialog"
 msgstr "Vision диалог"
-
-#~ msgid "Connect"
-#~ msgstr "Подключиться"
-
-#~ msgid "Create"
-#~ msgstr "Создать"

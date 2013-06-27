@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-28 15:24+0300\n"
+"POT-Creation-Date: 2013-06-26 18:15+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -56,6 +56,9 @@ msgid ""
 msgstr ""
 "Адреса БД у форматі [<Модуль БД>.<Ім'я БД>.<Ім'я таблиці>].\n"
 "Для використання основної робочої БД встановити '*.*'."
+
+msgid "Date of modification"
+msgstr "Дата модифікації"
 
 msgid "Configuration"
 msgstr "Конфігурація"
@@ -1254,6 +1257,9 @@ msgstr "Періодичність обчислення процедури"
 
 msgid "Changed attributes"
 msgstr "Змінені атрибути"
+
+msgid "Modification timestamp"
+msgstr "Дата модифікації"
 
 msgid "IDW"
 msgstr ""

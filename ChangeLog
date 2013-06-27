@@ -1,9 +1,23 @@
+2013-06-27 Roman
+- TSYS: Some building stage warnigs is removed and cycleLost counter lower limit is set to 0.
+- !!!:TCntrNode: Force save parent nodes on save childs is added, for timestamp control.
+    For flags, and for modifications also, used connections' mutex instead node resource.
+    Deprecated feature removed from save().
+- FIX:DAQ.{ModBus,LogicLev,BlockCalc,Siemens}: Preventing executable context reload from DB on the controller run is fixed for re-enable.
+- FIX:DAQ.DiamondBoards: Some fixes and updates for the AI interrupt acquisition mode correction algorithms.
+- DAQ.JavaLikeCalc, UI.{VCAEngine,Vision}: TimeStamp is added to programming objects for changes control.
+- DAQ.SoundCard: Acquisition task, from PortAudio, priority set is provided. Some error and debug messages is added. Some performance is rose.
+- UI.Vision: QFileDialog save context moved to root object's function getFileName() for development and run modes.
+    To development mode window's title is added the station name.
+- DB: Into OpenSCADA and visual elements' libraries DB Prescription engine is some updated and fixed and element "ElCadr" improved.
+
+
 2013-06-21 Roman
 - SYS: Append "lag" to function TSYS::taskSleep() for get lag from planned time. TID set to zero on init.
     Set nice() allow instead realtime policy append.
 - TPrmTempl: TimeStamp is added to template object for changes control.
 - TArchVal: Tab "Values" items list into values table is inverted.
-- DAQ.{ModBus,LogicLev,ModBus,Siemens}: Prevent executable context reload from DB on the controller run.
+- DAQ.{ModBus,LogicLev,BlockCalc,Siemens}: Prevent executable context reload from DB on the controller run.
 - !!:DAQ.DiamondBoards: Working into interrupt AI acquisition mode is implemented.
 - FIX:UI.Vision: Twice inundation contour drawing into primitive "ElFigure" is fixed.
     Two events generation for buttons of primitive "FormEl" is fixed.

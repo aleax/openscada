@@ -272,6 +272,7 @@ class Func : public TConfig, public TFunction
 	int maxCalcTm( )		{ return max_calc_tm; }
 	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
+	int  timeStamp( )		{ return mTimeStamp; }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
@@ -382,7 +383,8 @@ class Func : public TConfig, public TFunction
 
     private:
 	//Attributes
-	int	&max_calc_tm;
+	int	&max_calc_tm,
+		&mTimeStamp;
 
 	//> Parser's data
 	string		sprg, prg;	//Build prog

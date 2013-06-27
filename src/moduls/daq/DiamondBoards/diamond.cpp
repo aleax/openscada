@@ -349,7 +349,8 @@ void TMdPrm::vlGet( TVal &val )
     {
         if(!acqErr.getVal().empty())	val.setS(acqErr.getVal(), 0, true);
         else if(dscs.op_type == OP_TYPE_INT)
-	    val.setS(TSYS::strMess(_("0:AI acquisition into interrupt mode; sample rate=%g."),dscaioint.conversion_rate), 0, true);
+	    val.setS(TSYS::strMess(_("0:AI acquisition into interrupt mode; SampleRate=%g; Drift=%gs; Overflows=%u; LostCycles=%u; SRateCor=%u."),
+		dscaioint.conversion_rate,st_drift,st_overflows,st_lostcycles,st_sRateCor), 0, true);
         else val.setS("0", 0, true);
     }
     else if(!asynchRd) getVals(val.name());
@@ -681,7 +682,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		while(dscaioint.dump_threshold > 65535) dscaioint.dump_threshold /= 2;	//Intermediately limited to "WORD" < 65536
 		dscaioint.fifo_enab = TRUE;
 		unsigned int fifoDepth = dev.aiSzFIFO;
-		while(fifoDepth > 10 && (dscaioint.num_conversions%fifoDepth))	fifoDepth--;	//>> Align FIFO size to conversions number
+		while(fifoDepth > 10 && (dscaioint.num_conversions%fifoDepth) || (fifoDepth%(dscaioint.high_channel+1))) fifoDepth--;	//>> Align FIFO size to conversions number
 		dscaioint.fifo_depth = fifoDepth;
 		if(owner().messLev() == TMess::Debug)
             	    mess_debug_(nodePath().c_str(), _("AI interrupt: Init for: ConvRate=%g; NumbConv=%lu; FIFOdepth=%d; dump_threshold=%lu; scan_interval=%d."),
@@ -698,7 +699,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		}
 		else
 		{
-		    prevTrans = dscs.transfers = dscs.overflows = 0;
+		    prevTrans = dscs.transfers = dscs.overflows = st_overflows = st_lostcycles = st_sRateCor = st_drift = 0;
             	    dscs.op_type = OP_TYPE_INT;
 		    cTm = diffTm = 0;
 		}
@@ -721,27 +722,42 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 	    int64_t dtSz = 1000000ll*(curTrans+((curTrans<prevTrans)?dscaioint.num_conversions:0)-prevTrans)/(aiSz*dscaioint.conversion_rate);
 	    int64_t curTime = TSYS::curTime();
 	    if(!cTm) cTm = diffTm = curTime-dtSz;
+	    st_drift = 1e-6*(curTime-(cTm+dtSz));
 
 	    if(owner().messLev() == TMess::Debug)
-		mess_debug_(nodePath().c_str(), _("AI interrupt: Cycle: ConvRate=%g; transfers=%lu; prev_transfers=%lu; total_transfers=%lu; lag=%lld; drift=%gs."),
-		    dscaioint.conversion_rate, dscs.transfers, prevTrans, dscs.total_transfers, owner().lag(), 1e-6*(curTime-(cTm+dtSz)));
+		mess_debug_(nodePath().c_str(), _("AI interrupt: Cycle: ConvRate=%g; transfers=%lu; prev_transfers=%lu; total_transfers=%lu; overflows=%lu; lag=%lld; drift=%gs."),
+		    dscaioint.conversion_rate, dscs.transfers, prevTrans, dscs.total_transfers, dscs.overflows, owner().lag(), st_drift);
 
-	    //> Controller cycles lost
-	    if(owner().lag()/owner().period())
+	    //> FIFO overflows
+	    if(dscs.overflows > st_overflows)
+	    {
+		cTm += 1000000ll*(dscs.overflows-st_overflows)*dscaioint.fifo_depth/(aiSz*dscaioint.conversion_rate);
+		st_drift = 1e-6*(curTime-(cTm+dtSz));
+		mess_warning(nodePath().c_str(), _("AI interrupt: Overflows '%d' corrected to %lld! Drift=%gs."),
+		    (dscs.overflows-st_overflows), 1000000ll*(dscs.overflows-st_overflows)*dscaioint.fifo_depth/(aiSz*dscaioint.conversion_rate), st_drift);
+		st_overflows = dscs.overflows;
+	    }
+	    //> Controller cycles lost or big differ
+	    else if(owner().lag()/owner().period() || fabs(st_drift) > (10*(float)wPer/1000000))
 	    {
 		cTm = diffTm = curTime-dtSz;
-		mess_warning(nodePath().c_str(), _("AI interrupt: Lost cycles '%d'. Fast data time corrected!"), (owner().lag()/owner().period()));
+		st_drift = 1e-6*(curTime-(cTm+dtSz));
+		mess_warning(nodePath().c_str(), _("AI interrupt: Lost cycles '%d'. Fast data time corrected! Drift=%gs."),
+		    owner().lag()/owner().period(), st_drift);
+		st_lostcycles += owner().lag()/owner().period();
 	    }
 	    //> Check for sample rate correction to real value
-	    else if(abs(curTime-(cTm+dtSz)) > wPer)
+	    else if(fabs(st_drift) > ((float)wPer/1000000+(float)dscaioint.dump_threshold/(aiSz*dscaioint.conversion_rate)))
 	    {
 		if(owner().messLev() == TMess::Debug)
-		    mess_debug_(nodePath().c_str(), _("AI interrupt: Correction: dt=%d; dtSz=%lld; per=%d; crmult=%g."),
-			abs(curTime-(cTm+dtSz)), dtSz, wPer, ((float)((cTm+dtSz)-curTime)/(curTime-diffTm)));
-		dscaioint.conversion_rate = TSYS::realRound(dscaioint.conversion_rate*(1+((float)((cTm+dtSz)-curTime)/(curTime-diffTm))), 0, true);
-		mess_warning(nodePath().c_str(), _("AI interrupt: Sample rate change to %g! Env: drift=%gs."), dscaioint.conversion_rate, 1e-6*(curTime-(cTm+dtSz)));
+		    mess_debug_(nodePath().c_str(), _("AI interrupt: Correction: dt=%gs; dtSz=%lld; per=%d; crmult=%g."),
+			st_drift, dtSz, wPer, -1e6*st_drift/(curTime-diffTm));
+		dscaioint.conversion_rate = TSYS::realRound(dscaioint.conversion_rate*(1-1e6*st_drift/(curTime-diffTm)), 0, true);
+		mess_warning(nodePath().c_str(), _("AI interrupt: Sample rate change to %g! Env: drift=%gs."), dscaioint.conversion_rate, st_drift);
 		dtSz = 1000000ll*(curTrans+((curTrans<prevTrans)?dscaioint.num_conversions:0)-prevTrans)/(aiSz*dscaioint.conversion_rate);
 		diffTm = cTm = curTime-dtSz;
+		st_drift = 1e-6*(curTime-(cTm+dtSz));
+		st_sRateCor++;
 	    }
 
 	    int aiCfg	= strtol(vlAt("ai0").at().fld().reserve().c_str(), NULL, 0);

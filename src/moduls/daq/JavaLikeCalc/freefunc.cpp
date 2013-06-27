@@ -38,7 +38,7 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 Func::Func( const string &iid, const string &name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
-    max_calc_tm(cfg("MAXCALCTM").getId()), parse_res(mod->parseRes())
+    max_calc_tm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parse_res(mod->parseRes())
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
@@ -183,6 +183,7 @@ void Func::save_( )
     if( owner().DB().empty() )  return;
 
     cfg("FORMULA").setNoTransl(!owner().progTr());
+    mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
 
     //> Save io config
@@ -2664,6 +2665,8 @@ void Func::cntrCmdProc( XMLNode *opt )
     {
 	TFunction::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	if(owner().DB().size())
+	    ctrMkNode("fld",opt,-1,"/func/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
 	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
@@ -2689,7 +2692,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
+    if(a_path == "/func/st/timestamp" && ctrChkNode(opt))	opt->setText(TSYS::int2str(timeStamp()));
+    else if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     else if(a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     else if(a_path == "/func/cfg/m_calc_tm")
     {

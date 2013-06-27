@@ -134,6 +134,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000") );
     wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    wdg_el.fldAdd( new TFld("TIMESTAMP",_("Modification timestamp"),TFld::Integer,TFld::DateTimeDec) );
 
     //> Make include widgets' DB structure
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
@@ -174,7 +175,7 @@ void Engine::postEnable( int flag )
     prj_el.fldAdd( new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1") );
     prj_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
 
-    //> Make pages DB structure
+    //> Make page's DB structure
     page_el.fldAdd( new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100") );
     page_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
     page_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
@@ -183,6 +184,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    page_el.fldAdd( new TFld("TIMESTAMP",_("Modification timestamp"),TFld::Integer,TFld::DateTimeDec) );
 
     //> Make sessions' IO values of projects DB structure
     prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );

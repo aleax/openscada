@@ -1082,7 +1082,7 @@ void TMdPrm::enable( )
     	    }
 
     	    //>> Load IO at enabling
-    	    if(to_make) loadIO();
+    	    if(to_make) loadIO(true);
 
 	    //>> Init links
     	    initLnks();
@@ -1148,10 +1148,10 @@ void TMdPrm::load_( )
     loadIO();
 }
 
-void TMdPrm::loadIO( )
+void TMdPrm::loadIO( bool force )
 {
     if(!enableStat() || !isLogic() || !lCtx) return;
-    if(owner().startStat()) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
+    if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
     //> Load IO and init links
     TConfig cfg(&mod->prmIOE());
