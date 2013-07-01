@@ -73,7 +73,8 @@ class VCAObj : public TCntrNode
 	//Methods
 	VCAObj( const string &iid );
 
-	string id( )	{ return m_id.c_str(); }
+	const char *nodeName( )	{ return mId.c_str(); }
+	string path( )	{ return TSYS::sepstr2path(mId); }
 
 	virtual void getReq( SSess &ses ) = 0;
 	virtual void postReq( SSess &ses ) = 0;
@@ -85,11 +86,8 @@ class VCAObj : public TCntrNode
 	string imgDef;
 
     private:
-	//Methods
-	const char *nodeName( )	{ return m_id.c_str(); }
-
 	//Attributes
-	const string	m_id;
+	const string	mId;
 };
 
 
@@ -411,7 +409,7 @@ class VCASess : public TCntrNode
 	//Methods
 	VCASess( const string &iid, bool isCreate );
 
-	string id( )			{ return m_id; }
+	string id( )			{ return mId; }
 	const string &sender( )		{ return mSender; }
 	time_t lstReq( )		{ return lst_ses_req; }
 
@@ -425,7 +423,7 @@ class VCASess : public TCntrNode
 	void objList( vector<string> &list )		{ chldList(id_objs,list); }
 	bool objPresent( const string &name )		{ return chldPresent(id_objs,name); }
 	void objAdd( VCAObj *obj );
-	void objDel( const string &name )		{ chldDel(id_objs,name); }
+	void objDel( const string &name )		{ chldDel(id_objs, name); }
 	AutoHD<VCAObj> objAt( const string &name )	{ return chldAt(id_objs,name); }
 
 	string resGet( const string &res, const string &path, const string &user, string *mime = NULL );
@@ -449,11 +447,11 @@ class VCASess : public TCntrNode
 	};
 
 	//Methods
-	const char *nodeName( )	{ return m_id.c_str(); }
+	const char *nodeName( )	{ return mId.c_str(); }
 	void postDisable( int flag );
 
 	//Attributes
-	const string		m_id;
+	const string		mId;
 	int			id_objs;	//Primitive object's container identifier
 	time_t			lst_ses_req;
 	string			mSender;

@@ -1,3 +1,9 @@
+2013-07-01 Roman
+- !!:FIX:Transport.{Serial,Sockets}: Errno EAGAIN process is added to write() for output transport for prevent errors on big data transfer.
+- !!:UI.WebVision: Session object's ID is renamed to PATH and nodeName() set to separated string by "." path.
+    PNG compression level option is added for some performance control on images build and default value set to "1".
+
+
 2013-06-27 Roman
 - TSYS: Some building stage warnigs is removed and cycleLost counter lower limit is set to 0.
 - !!!:TCntrNode: Force save parent nodes on save childs is added, for timestamp control.

@@ -467,7 +467,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    ssize_t wL = 1;
 	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
-		wL = write(s.cSock,answ.data()+wOff,answ.size()-wOff);
+		wL = write(s.cSock, answ.data()+wOff, answ.size()-wOff);
 		s.s->sock_res.resRequestW();
 		s.s->trOut += vmax(0,wL);
 		s.s->sock_res.resRelease();
@@ -788,6 +788,8 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 {
     string err(_("Unknown error"));
     ssize_t kz = 0;
+    struct timeval tv;
+    fd_set rw_fd;
     int reqTry = 0;
     bool writeReq = false;
 
@@ -805,6 +807,8 @@ repeate:
     writeReq = false;
     if(obuf != NULL && len_ob > 0)
     {
+	if(!time) time = mTmCon;
+
 	//>> Input buffer clear
 	char tbuf[100];
 	while(read(sock_fd,tbuf,sizeof(tbuf)) > 0) ;
@@ -813,18 +817,26 @@ repeate:
 	    TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
-	    kz = write(sock_fd,obuf+wOff,len_ob-wOff);
+	    kz = write(sock_fd, obuf+wOff, len_ob-wOff);
 	    if(kz <= 0)
 	    {
+		if(errno == EAGAIN)
+		{
+		    tv.tv_sec  = (time/2)/1000; tv.tv_usec = 1000*((time/2)%1000);
+		    FD_ZERO(&rw_fd); FD_SET(sock_fd, &rw_fd);
+		    kz = select(sock_fd+1, NULL, &rw_fd, NULL, &tv);
+		    if(kz > 0 && FD_ISSET(sock_fd,&rw_fd)) { kz = 0; continue; }
+		}
 		err = strerror(errno);
 		res.release();
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), _("Write mess (off=%d; size=%d:%d) error '%s (%d)'!"), wOff, len_ob-wOff, len_ob, err.c_str(), errno);
 		stop(); start();
 		res.request(true);
 		goto repeate;
 	    }
 	}
 
-	if(!time) time = mTmCon;
 	writeReq = true;
     }
     else time = mTmNext;
@@ -836,15 +848,12 @@ repeate:
     int i_b = 0;
     if(ibuf != NULL && len_ib > 0)
     {
-	fd_set rd_fd;
-	struct timeval tv;
-
 	tv.tv_sec  = time/1000; tv.tv_usec = 1000*(time%1000);
-	FD_ZERO(&rd_fd); FD_SET(sock_fd,&rd_fd);
-	kz = select(sock_fd+1,&rd_fd,NULL,NULL,&tv);
+	FD_ZERO(&rw_fd); FD_SET(sock_fd, &rw_fd);
+	kz = select(sock_fd+1, &rw_fd, NULL, NULL, &tv);
 	if(kz == 0)	{ res.release(); if(writeReq) stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if(kz < 0)	{ res.release(); stop(); mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Socket error!")); }
-	else if(FD_ISSET(sock_fd, &rd_fd))
+	else if(FD_ISSET(sock_fd, &rw_fd))
 	{
 	    i_b = read(sock_fd,ibuf,len_ib);
 	    if(i_b <= 0 && obuf)

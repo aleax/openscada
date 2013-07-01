@@ -72,7 +72,7 @@ using namespace WebVision;
 //************************************************
 //* TWEB                                         *
 //************************************************
-TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5)
+TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(1)
 {
     mod		= this;
 
@@ -275,9 +275,9 @@ TWEB::~TWEB()
 
 string TWEB::modInfo( const string &name )
 {
-    if( name == "SubType" )		return SUB_TYPE;
-    else if( name == "Auth" )		return "1";
-    else if( name == _("Developers") )	return DEVELOPERS;
+    if(name == "SubType")		return SUB_TYPE;
+    else if(name == "Auth")		return "1";
+    else if(name == _("Developers"))	return DEVELOPERS;
     else return TModule::modInfo(name);
 }
 
@@ -318,12 +318,14 @@ void TWEB::load_( )
     //> Load parameters from config-file
     setSessTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime())).c_str()));
     setSessLimit(atoi(TBDS::genDBGet(nodePath()+"SessLimit",TSYS::int2str(sessLimit())).c_str()));
+    setPNGCompLev(atoi(TBDS::genDBGet(nodePath()+"PNGCompLev",TSYS::int2str(PNGCompLev())).c_str()));
 }
 
 void TWEB::save_( )
 {
     TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime()));
     TBDS::genDBSet(nodePath()+"SessLimit",TSYS::int2str(sessLimit()));
+    TBDS::genDBSet(nodePath()+"PNGCompLev",TSYS::int2str(PNGCompLev()));
 }
 
 void TWEB::modStart( )	{ run_st = true; }
@@ -627,8 +629,13 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_))
 	{
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of session (min)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/sesLimit",_("Sessions limit"),RWRWR_,"root",SUI_ID,1,"tp","dec");
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Life time of session (min)"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/sesLimit", _("Sessions limit"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
+	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("PNG compression level"), RWRWR_, "root", SUI_ID, 4,
+		"tp","dec", "min","-1", "max","9", "help",_("PNG (ZLib) compression level:\n"
+			    "  -1  - optimal speed-size;\n"
+			    "  0   - disable;\n"
+			    "  1-9 - direct level."));
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,2,"tp","str","rows","5");
 	return;
@@ -645,6 +652,11 @@ void TWEB::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(sessLimit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(atoi(opt->text().c_str()));
+    }
+    else if(a_path == "/prm/cfg/PNGCompLev")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(PNGCompLev()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPNGCompLev(atoi(opt->text().c_str()));
     }
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)) opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
@@ -701,9 +713,9 @@ void TWEB::imgConvert(SSess &ses)
         int img_sz;
         char *img_ptr = NULL;
         gdImageSaveAlpha(sim, 1);
-        if(itp == "png")        img_ptr = (char *)gdImagePngPtr(sim,&img_sz);
-        else if(itp == "jpg")   img_ptr = (char *)gdImageJpegPtr(sim,&img_sz,-1);
-        else if(itp == "gif")   img_ptr = (char *)gdImageGifPtr(sim,&img_sz);
+        if(itp == "png")        img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, PNGCompLev());
+        else if(itp == "jpg")   img_ptr = (char *)gdImageJpegPtr(sim, &img_sz,-1);
+        else if(itp == "gif")   img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
         if(img_ptr)
         {
             ses.page.assign(img_ptr,img_sz);

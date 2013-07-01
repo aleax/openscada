@@ -1065,6 +1065,8 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 {
     ssize_t blen = 0;
     int off = 0, kz, sec;
+    fd_set rw_fd;
+    struct timeval tv;
 
     if(!noRes) ResAlloc res(nodeRes(), true);
 
@@ -1096,8 +1098,20 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 
 	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
-	    kz = write(fd,obuf+wOff,len_ob-wOff);
-	    if(kz <= 0) { mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Writing request error.")); }
+	    kz = write(fd, obuf+wOff, len_ob-wOff);
+	    if(kz <= 0)
+	    {
+		if(errno == EAGAIN)
+                {
+		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
+                    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
+                    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
+                    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
+                }
+		mLstReqTm = TSYS::curTime();
+		stop();
+		throw TError(nodePath().c_str(),_("Writing request error."));
+	    }
 	    else trOut += kz;
 	}
 
@@ -1126,16 +1140,13 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     //> Read reply
     if(ibuf != NULL && len_ib > 0)
     {
-	fd_set rd_fd;
-	struct timeval tv;
-
 	if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
 	else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
-	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
-	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
+	FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
+	kz = select(fd+1, &rw_fd, NULL, NULL, &tv);
 	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Serial error!")); }
-	else if(FD_ISSET(fd, &rd_fd))
+	else if(FD_ISSET(fd,&rw_fd))
 	{
 	    blen = read(fd, ibuf, len_ib);
 	    trIn += vmax(0, blen);

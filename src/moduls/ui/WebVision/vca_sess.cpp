@@ -38,7 +38,7 @@ using namespace WebVision;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid, bool isCreate ) : m_id(iid), mIsCreate(isCreate)
+VCASess::VCASess( const string &iid, bool isCreate ) : mId(iid), mIsCreate(isCreate)
 {
     lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
@@ -59,6 +59,7 @@ void VCASess::postDisable( int flag )
 
 void VCASess::getReq( SSess &ses )
 {
+    string oAddr;
     //> Access time to session is updating
     lst_ses_req = time(NULL);
 
@@ -159,9 +160,10 @@ void VCASess::getReq( SSess &ses )
 		continue;
 	    }
 	    //> Check for objects represent some widgets type creation if attribute "root" present, typical for init requests
-	    XMLNode *rootId = cn->getElementBy("id","root");
-	    if(rootId) objCheck(rootId->text(), caddr);
-	    if(objPresent(caddr)) objAt(caddr).at().setAttrs(*cn,ses.user);
+	    XMLNode *rootId = cn->getElementBy("id", "root");
+	    oAddr = TSYS::path2sepstr(caddr);
+	    if(rootId) objCheck(rootId->text(), oAddr);
+	    if(objPresent(oAddr)) objAt(oAddr).at().setAttrs(*cn, ses.user);
 	    if(!cn->parent())	break;
 	    cn = cn->parent();
 	    cpos = pos.back();	pos.pop_back();
@@ -185,10 +187,7 @@ void VCASess::getReq( SSess &ses )
 	} else ses.page = mod->httpHead("404 Not Found");
     }
     //> Request to primitive object. Used for data caching
-    else if(wp_com == "obj")
-    {
-	if(objPresent(ses.url)) objAt(ses.url).at().getReq(ses);
-    }
+    else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().getReq(ses);
     else
     {
 	mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
@@ -202,6 +201,7 @@ void VCASess::getReq( SSess &ses )
 
 void VCASess::postReq( SSess &ses )
 {
+    string oAddr;
     //> Commands process
     map<string,string>::iterator cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
@@ -220,23 +220,23 @@ void VCASess::postReq( SSess &ses )
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req,ses.user);
     }
-    else if(wp_com == "obj" && objPresent(ses.url)) objAt(ses.url).at().postReq(ses);
+    else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
     ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 }
 
 void VCASess::objCheck( const string &rootId, const string &wPath )
 {
     if(objPresent(wPath)) return;
-    if(rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
-    else if(rootId == "Text")	objAdd(new VCAText(wPath));
-    else if(rootId == "Diagram")objAdd(new VCADiagram(wPath));
-    else if(rootId == "Document")objAdd(new VCADocument(wPath));
+    if(rootId == "ElFigure")		objAdd(new VCAElFigure(wPath));
+    else if(rootId == "Text")		objAdd(new VCAText(wPath));
+    else if(rootId == "Diagram")	objAdd(new VCADiagram(wPath));
+    else if(rootId == "Document")	objAdd(new VCADocument(wPath));
 }
 
 void VCASess::objAdd( VCAObj *obj )
 {
     if(!obj) return;
-    if(objPresent(obj->id())) delete obj;
+    if(objPresent(obj->nodeName())) delete obj;
     else chldAdd(id_objs, obj);
 }
 
@@ -288,7 +288,7 @@ void VCASess::cacheResSet( const string &res, const string &val, const string &m
 //*************************************************
 //* VCAObj					  *
 //*************************************************
-VCAObj::VCAObj( const string &iid ) : m_id(iid)
+VCAObj::VCAObj( const string &iid ) : mId(iid)
 {
 
 }
@@ -3845,7 +3845,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    yMax = (int)TSYS::realRound( yMax, POS_PREC_DIG, true );
 
 			    gdImagePtr im_fill_in = NULL;
-			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill,id(),ses.user);
+			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill,path(),ses.user);
 			    if( !(im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromGifPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
@@ -4030,7 +4030,7 @@ void VCAElFigure::getReq( SSess &ses )
 
 	//> Get image and transfer it
 	int img_sz;
-	char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+	char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
 	ses.page.assign(img_ptr,img_sz);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
 	gdFree(img_ptr);
@@ -4647,7 +4647,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		else if( fl_img.size() ) img = TSYS::strDecode(fl_img);
 		else img = imgDef;
 
-		string imgDef_temp = owner().resGet(img,id(),user);
+		string imgDef_temp = owner().resGet(img,path(),user);
 		if( imgDef_temp == "" ) img = "";
 		inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
 	    }
@@ -5110,9 +5110,9 @@ void VCAText::getReq( SSess &ses )
 	gdImageCopyRotated(im, im_txt, scaleWidth/2, scaleHeight/2, 0, 0, rotateWidth, rotateHeight, (int)(360-orient));
 	gdImageDestroy(im_txt);
 	gdImageSaveAlpha(im, 1);
-	//- Get image and transfer it -
+	//> Get image and transfer it
 	int img_sz;
-	char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+	char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
 	ses.page.assign(img_ptr,img_sz);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
 	gdFree(img_ptr);
@@ -5158,17 +5158,12 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 		textColor =  mod->colorParse(req_el->text());
 		break;
 	    case 27:	//orient
-	    {
-		orient = (atof(req_el->text().c_str()) < 0) ? 360 + atof(req_el->text().c_str()):
-							      atof(req_el->text().c_str());
+		orient = atof(req_el->text().c_str());
+		if(orient < 0) orient = 360 + orient;
 		break;
-	    }
 	    case 28:	//wordWrap
-	    {
-		if( atoi(req_el->text().c_str()) )  wordWrap = true;
-		else				wordWrap = false;
+		wordWrap = atoi(req_el->text().c_str());
 		break;
-	    }
 	    case 29:    //align
 	    {
 		int txtAlign = atoi(req_el->text().c_str());
@@ -5265,7 +5260,7 @@ VCADiagram::VCADiagram( const string &iid ) :
 
 void VCADiagram::getReq( SSess &ses )
 {
-    switch( type )
+    switch(type)
     {
 	case 0:	makeTrendsPicture(ses);		break;
 	case 1:	makeSpectrumPicture(ses);	break;
@@ -5274,11 +5269,13 @@ void VCADiagram::getReq( SSess &ses )
 
 void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 {
-    gdImageSaveAlpha(im,1);
+    gdImageSaveAlpha(im, 1);
     int img_sz;
-    char *img_ptr = (char*)gdImagePngPtr( im, &img_sz );
-    ses.page.assign( img_ptr, img_sz );
-    ses.page = mod->httpHead( "200 OK", ses.page.size(), "image/png" ) + ses.page;
+    int64_t dbTm;
+    if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
+    char *img_ptr = (char*)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
+    ses.page.assign(img_ptr, img_sz);
+    ses.page = mod->httpHead("200 OK", ses.page.size(), "image/png") + ses.page;
     gdFree(img_ptr);
     gdImageDestroy(im);
 }
@@ -5286,6 +5283,9 @@ void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 void VCADiagram::makeTrendsPicture( SSess &ses )
 {
     ResAlloc res(mRes, true);
+
+    int64_t dbTm;
+    if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
 
     //> Check for trend's data reload
     bool rld = true;
@@ -5791,8 +5791,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	gdImageLine(im, curPos, tArY, curPos, tArY+tArH, clr_cur);
     }
 
+    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Trend creation time %gms"), 1e-3*(TSYS::curTime()-dbTm));
+
     //> Get image and transfer it
     makeImgPng(ses, im);
+
+    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("+ PNG-image(%d) creation time %gms"), ses.page.size(), 1e-3*(TSYS::curTime()-dbTm));
 }
 
 void VCADiagram::makeSpectrumPicture( SSess &ses )
@@ -6142,7 +6146,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    {
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
 		XMLNode req("set");
-		req.setAttr("path",id()+"/%2fserv%2fattr")->
+		req.setAttr("path",path()+"/%2fserv%2fattr")->
 		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(TSYS::real2str(val,6));
 		mod->cntrIfCmd(req,ses.user);
 	    }
@@ -6323,7 +6327,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     if(reld_tr_dt)
     {
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr");
 	for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
 	{
 	    trnds[i_p].loadData(user, reld_tr_dt==2);
@@ -6346,7 +6350,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	holdCur = (curTime==tTime);
 
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
 
@@ -6371,7 +6375,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	float curFrq = vmax(vmin(1e6/(float)itm,fftEnd),fftBeg);
 
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))%1000000));
 
@@ -6701,7 +6705,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 		    req_el->setText(xproc.save(XMLNode::Clean, Mess->charset()));
 		}
 		catch(TError err)
-    		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),id().c_str(),err.mess.c_str()); }
+    		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
 		break;
 	    }
 	}

@@ -81,10 +81,12 @@ class TWEB: public TUI
 
 	time_t	sessTime( )				{ return mTSess; }
 	int	sessLimit( )				{ return mSessLimit; }
+	int	PNGCompLev( )				{ return mPNGCompLev; }
 	string	CSStables( )				{ return mCSStables; }
 
 	void setSessTime( time_t vl )			{ mTSess = vmax(1,vmin(24*60,vl)); modif(); }
 	void setSessLimit( int vl )			{ mSessLimit = vmax(1,vmin(100,vl)); modif(); }
+	void setPNGCompLev( int vl )			{ mPNGCompLev = vmax(-1,vmin(9,vl)); modif(); }
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
 	//> VCA sessions
@@ -136,6 +138,7 @@ class TWEB: public TUI
 	//Attributes
 	int		mTSess;				//Time of sesion life (minutes)
 	int		mSessLimit;			//Sessions limit
+	int		mPNGCompLev;			//PNG images compression level
 	int		id_vcases;			//VCA session's container identifier
 	string		mCSStables;			//CSS tables
 	map<string,int> colors;				//Named colors
