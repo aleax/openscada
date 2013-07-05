@@ -149,6 +149,30 @@ void TTpContr::setMRCDirDevs( const string &vl )
     if(IdDir) closedir(IdDir);
 }
 
+void TTpContr::perSYSCall( unsigned int cnt )
+{
+    //> Check for restart some conrollers need
+    vector<string> cls, pls;
+    list(cls);
+    for(unsigned i_c = 0; i_c < cls.size(); i_c++)
+    {
+	AutoHD<TController> cntr = at(cls[i_c]);
+	if(!cntr.at().startStat()) continue;
+	cntr.at().list(pls);
+	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
+	{
+	    int errCode = cntr.at().at(pls[i_p]).at().vlAt("err").at().getI();
+	    if(errCode == 21)	//By MR/MC bus lost
+	    {
+		mess_warning(cntr.at().nodePath().c_str(), _("Re-enable by Reinit flag for MC/MR module."));
+		cntr.at().disable();
+		cntr.at().start();
+		break;
+	    }
+	}
+    }
+}
+
 void TTpContr::load_( )
 {
     //> Load parameters from config-file
@@ -862,15 +886,15 @@ void MRCParam::sendTune( TParamContr *ip )
 	if(tit == ePrm->dev.sects["common"].end()) break;
 	int regVal = atoi(p->modPrm(tits,TSYS::strParse(tit->second,5,"#")).c_str());
 	tune += (char)(regVal>>8);	//MSB
-    	tune += (char)regVal;	//LSB
+    	tune += (char)regVal;		//LSB
     }
-    pdu = (char)max(0,modSlot);	//Slave address
-    pdu += (char)0x10;		//Function, preset multiple registers
-    pdu += (char)0x00;		//Start address, MSB
-    pdu += (char)0x00;		//Start address, LSB
-    pdu += (char)((tune.size()/2)>>8);//Registers quantity MSB
+    pdu = (char)max(0,modSlot);		//Slave address
+    pdu += (char)0x10;			//Function, preset multiple registers
+    pdu += (char)0x00;			//Start address, MSB
+    pdu += (char)0x00;			//Start address, LSB
+    pdu += (char)((tune.size()/2)>>8);	//Registers quantity MSB
     pdu += (char)(tune.size()/2);	//Registers quantity LSB
-    pdu += (char)tune.size();	//Byte Count
+    pdu += (char)tune.size();		//Byte Count
     pdu += tune;
 
     //printf("TEST 10: Send tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
@@ -900,7 +924,7 @@ void MRCParam::getVals( TParamContr *ip )
     if(modSlot < 0)	//> MC process
     {
 	//> Read inputs
-	pduReq = (char)ePrm->SN;		//SN[0]
+	pduReq = (char)ePrm->SN;	//SN[0]
 	pduReq += (char)0x03;		//Function, read multiple registers
 	pduReq += (char)(ePrm->SN>>16);	//SN[2]
 	pduReq += (char)(ePrm->SN>>8);	//SN[1]
@@ -912,8 +936,9 @@ void MRCParam::getVals( TParamContr *ip )
 	if(rezReq.size() || pduReq.size() < 35)
 	{
 	    pduReq.resize(35);
-	    if(rezReq.empty()) rezReq = _("20:PDU short.");
+	    if(rezReq.empty())	rezReq = _("20:PDU short.");
 	}
+	//else if(pduReq[0]&0x80)	rezReq = _("21:Error respond.");
 
 	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
 	pduReq.erase(0,3);
@@ -923,6 +948,7 @@ void MRCParam::getVals( TParamContr *ip )
 
 	Inquired_t *respHd = (Inquired_t*)pduReq.data();
 	const char *off = pduReq.data() + sizeof(Inquired_t);
+	if(respHd->Reinit)	rezReq = _("21:Position lost. Need reload MR/MC bus - re-enable the controller object.");
 
 	//>> AI process
 	off += sizeof(float);
@@ -1023,6 +1049,7 @@ void MRCParam::getVals( TParamContr *ip )
 	    pduReq.resize(3+reStrSize);
 	    if(rezReq.empty()) rezReq = _("20:PDU short.");
 	}
+	//else if(pduReq[0]&0x80)	rezReq = _("21:Error respond.");
 
 	pduReq.erase(0,3);
 	//> Swap registers
@@ -1031,6 +1058,8 @@ void MRCParam::getVals( TParamContr *ip )
 
 	Inquired_t *respHd = (Inquired_t*)pduReq.data();
 	const char *off = pduReq.data() + sizeof(Inquired_t);
+	if(respHd->Reinit)	rezReq = _("21:Position lost. Need reload MR/MC bus - re-enable the controller object.");
+
 	//>> Counters process
 	for(int i_c = 1; i_c <= ePrm->CNTR; i_c++)
 	{
@@ -1085,9 +1114,6 @@ void MRCParam::getVals( TParamContr *ip )
 	    if(respHd->proc.AlarmsMR.UnknownType)	rezReq += _("Unknown MR module type; ");
 	    if(rezReq.size()) rezReq = "21:"+rezReq;
 	}
-
-	//> Reinit process
-	//if(respHd->Reinit) sendTune(ip);
     }
 
     p->acq_err.setVal(rezReq);

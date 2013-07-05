@@ -436,7 +436,7 @@ void *TSocketIn::ClTask( void *s_inf )
 
     //> Client socket process
     struct  timeval tv;
-    fd_set  rd_fd;
+    fd_set  rw_fd;
     string  req, answ;
     char    buf[s.s->bufLen()*1000 + 1];
     AutoHD<TProtocolIn> prot_in;
@@ -445,10 +445,9 @@ void *TSocketIn::ClTask( void *s_inf )
     do
     {
 	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
-	FD_ZERO(&rd_fd); FD_SET(s.cSock,&rd_fd);
-
-	int kz = select(s.cSock+1,&rd_fd,NULL,NULL,&tv);
-	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rd_fd)) continue;
+	FD_ZERO(&rw_fd); FD_SET(s.cSock,&rw_fd);
+	int kz = select(s.cSock+1,&rw_fd,NULL,NULL,&tv);
+	if(kz == 0 || (kz == -1 && errno == EINTR) || kz < 0 || !FD_ISSET(s.cSock, &rw_fd)) continue;
 	ssize_t r_len = read(s.cSock,buf,s.s->bufLen()*1000);
 	if(r_len <= 0) break;
 	s.s->sock_res.resRequestW();
@@ -468,6 +467,19 @@ void *TSocketIn::ClTask( void *s_inf )
 	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(s.cSock, answ.data()+wOff, answ.size()-wOff);
+		if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
+		else if(wL < 0)
+		{
+		    if(errno == EAGAIN)
+            	    {
+                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
+                	FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
+                	kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
+                	if(kz > 0 && FD_ISSET(s.cSock,&rw_fd)) { wL = 0; continue; }
+            	    }
+            	    mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+		    break;
+		}
 		s.s->sock_res.resRequestW();
 		s.s->trOut += vmax(0,wL);
 		s.s->sock_res.resRelease();
@@ -829,8 +841,6 @@ repeate:
 		}
 		err = strerror(errno);
 		res.release();
-		if(mess_lev() == TMess::Debug)
-		    mess_debug(nodePath().c_str(), _("Write mess (off=%d; size=%d:%d) error '%s (%d)'!"), wOff, len_ob-wOff, len_ob, err.c_str(), errno);
 		stop(); start();
 		res.request(true);
 		goto repeate;

@@ -1,3 +1,12 @@
+2013-07-05 Roman
+- Transport: "Request" tab of output transport is set accessable all time and any request send cause the transport start try.
+- DAQ.DAQGate: Alarms generation on connection problems is added.
+- DAQ.SMH2Gi: The controller object re-enable on flag "Reinit" set for modules MR/MC is added.
+- !!:FIX:Transport.{Sockets,Serial}: Check for write() errors and EAGAIN by select() into input transports is added.
+- FIX:UI.{Vision,WebVision}: The primitive "Diagram" data buffer's loading by curent data and lost old data by limit is fixed by
+    write curent values to pixel-size alignement time.
+
+
 2013-07-01 Roman
 - !!:FIX:Transport.{Serial,Sockets}: Errno EAGAIN process is added to write() for output transport for prevent errors on big data transfer.
 - !!:UI.WebVision: Session object's ID is renamed to PATH and nodeName() set to separated string by "." path.

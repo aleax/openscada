@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2012 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2013 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,12 +43,12 @@ DAQGate::TTpContr *DAQGate::mod;  //Pointer for direct access to main module obj
 extern "C"
 {
 #ifdef MOD_INCL
-    TModule::SAt daq_DAQGate_module(int n_mod)
+    TModule::SAt daq_DAQGate_module( int n_mod )
 #else
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 ) return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0) return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -58,7 +58,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) ) return new DAQGate::TTpContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new DAQGate::TTpContr(source);
 	return NULL;
     }
 }
@@ -117,7 +117,7 @@ void TTpContr::postEnable( int flag )
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return new TMdContr(name,daq_db,this);
+    return new TMdContr(name, daq_db, this);
 }
 
 //******************************************************
@@ -134,12 +134,12 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
 
 TMdContr::~TMdContr( )
 {
-    if( run_st ) stop();
+    if(run_st) stop();
 }
 
 string TMdContr::getStatus( )
 {
-    string val = TController::getStatus( );
+    string val = TController::getStatus();
 
     if(startStat() && !redntUse())
     {
@@ -261,13 +261,13 @@ void TMdContr::start_( )
     if(prcSt) return;
 
     mStatWork.clear();
-    enable_( );
+    enable_();
 
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Clear stations request counter
-    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second = 0;
+    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second = -1;
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -279,6 +279,14 @@ void TMdContr::stop_( )
 
     //> Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
+
+    //> Connection alarm clear
+    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
+    {
+	if(mStatWork[i_st].second < 0)	continue;
+	alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+	break;
+    }
 }
 
 void *TMdContr::Task( void *icntr )
@@ -455,8 +463,8 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 {
     string reqStat = TSYS::pathLev(node.attr("path"),0);
 
-    try
-    {
+    //try
+    //{
 	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
 	    if(mStatWork[i_st].first == reqStat)
 	    {
@@ -464,12 +472,32 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 		try
 		{
 		    int rez = SYS->transport().at().cntrIfCmd(node,MOD_ID+id());
+		    //> Clear alarm for gone successful connect
+		    if(mStatWork[i_st].second == 0)
+		    {
+			unsigned i_st1;
+			for(i_st1 = 0; i_st1 < mStatWork.size(); i_st1++)
+			    if(mStatWork[i_st1].second > 0) break;
+			if(i_st1 >= mStatWork.size())
+			    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
+		    }
 		    mStatWork[i_st].second -= 1;
 		    return rez;
 		}
-		catch(...){ if(call_st) mStatWork[i_st].second = mRestTm; throw; }
+		catch(TError err)
+		{
+		    if(call_st)
+		    {
+			//> Set alarm for station
+			if(mStatWork[i_st].second < 0)
+			    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source '%s': %s."),
+				id().c_str(), mStatWork[i_st].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
+			mStatWork[i_st].second = mRestTm;
+		    }
+		    throw;
+		}
 	    }
-    }catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("err","10")->setText(err.mess); }
+    //}catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("err","10")->setText(err.mess); }
 
     return atoi(node.attr("err").c_str());
 }
@@ -528,16 +556,16 @@ void TMdPrm::postEnable( int flag )
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     TParamContr::enable();
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
-    if( !enableStat() )  return;
+    if(!enableStat())	return;
 
     TParamContr::disable();
 
@@ -550,11 +578,11 @@ void TMdPrm::disable()
 
 void TMdPrm::setCntrAdr( const string &vl )
 {
-    if( vl.empty() ) { mCntrAdr = ""; return; }
+    if(vl.empty()) { mCntrAdr = ""; return; }
 
     string scntr;
-    for( int off = 0; (scntr=TSYS::strSepParse(mCntrAdr,0,';',&off)).size(); )
-	if( scntr == vl ) return;
+    for(int off = 0; (scntr=TSYS::strSepParse(mCntrAdr,0,';',&off)).size(); )
+	if(scntr == vl) return;
     mCntrAdr += vl+";";
 }
 
@@ -651,18 +679,18 @@ void TMdPrm::sync( )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if( val.name() == "err" && (!enableStat() || !owner().startStat()) ) TParamContr::vlGet(val);
+    if(val.name() == "err" && (!enableStat() || !owner().startStat())) TParamContr::vlGet(val);
 }
 
 void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
-    if( !enableStat() || !owner().startStat() )	valo.setI(EVAL_INT,0,true);
-    if( valo.getS() == EVAL_STR || valo.getS() == pvl.getS() ) return;
+    if(!enableStat() || !owner().startStat())	valo.setI(EVAL_INT,0,true);
+    if(valo.getS() == EVAL_STR || valo.getS() == pvl.getS()) return;
 
     XMLNode req("set");
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
@@ -670,12 +698,12 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     }
     //> Direct write
     string scntr;
-    for( int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
+    for(int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	try
 	{
 	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
 		childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
-	    if( owner().cntrIfCmd(req) )   throw TError(req.attr("mcat").c_str(),req.text().c_str());
+	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	}catch(TError err) { continue; }
 }
 

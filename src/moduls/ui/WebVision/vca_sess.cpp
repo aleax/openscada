@@ -6499,7 +6499,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	//> One request check and prepare
 	int trcPer = owner().trcPer*1000000;
 	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
-	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)))
+	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
 	    XMLNode req("get");
 	    req.setAttr("path",addr()+"/%2fserv%2fval")->
@@ -6507,15 +6507,15 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 		setAttr("tm_grnd","0");
 	    if(mod->cntrIfCmd(req,user,false)) return;
 
-	    int64_t lst_tm = atoll(req.attr("tm").c_str());
-	    if(lst_tm > valEnd())
+	    int64_t lst_tm = (atoll(req.attr("tm").c_str())/wantPer)*wantPer;
+	    if(lst_tm >= valEnd())
 	    {
 		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
 		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
 		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
-		else if(vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
 		else if(curVal != EVAL_REAL)
 		{
 		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;

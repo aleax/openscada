@@ -243,6 +243,8 @@ class TTpContr: public TTipDAQ
 	string MRCDirDevs( )	{ return mMRCDirDevs; }
 	void setMRCDirDevs( const string &vl );
 
+	void perSYSCall( unsigned int cnt );
+
 	//Attributes
 	map<int, DevMRCFeature>	MRCdevs;
 	Res			MRCdevsRes;

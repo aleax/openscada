@@ -2,13 +2,13 @@
 # Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.SMH2Gi package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2012.
+# Roman Savochenko <rom_as@oscada.org>, 2012-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-22 13:27+0200\n"
+"POT-Creation-Date: 2013-07-03 12:26+0300\n"
 "PO-Revision-Date: 2012-10-31 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -53,6 +53,9 @@ msgstr "Устройство шины MC"
 msgid "Request tries"
 msgstr "Попыток запроса"
 
+msgid "Re-enable by Reinit flag for MC/MR module."
+msgstr "Переподключение по флагу \"Reinit\" модуля MC/MR."
+
 msgid "MR/MC devices *.ini files directry"
 msgstr "Директория с *.ini файлами устройств MR/MC"
 
@@ -93,8 +96,8 @@ msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Ответ -> '%s': %s"
 
 #, c-format
-msgid "ModBUS ERR -> '%s': %s: %s"
-msgstr "ModBUS Ошибка -> '%s': %s: %s"
+msgid "ModBUS ERR -> %s: %s"
+msgstr "ModBUS Ошибка -> %s: %s"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
@@ -144,6 +147,12 @@ msgstr "Ошибка отправки тюн-запроса: %s."
 
 msgid "20:PDU short."
 msgstr "20:PDU короткий."
+
+msgid ""
+"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgstr ""
+"21:Потеря позиции. Необходима перегрузка MR/MC шины - переподключение "
+"объекта контроллера."
 
 msgid "Analog output overload; "
 msgstr "Аналоговый выход перегружен; "

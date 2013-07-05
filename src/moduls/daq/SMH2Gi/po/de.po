@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.SMH2Gi 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-22 13:27+0200\n"
+"POT-Creation-Date: 2013-07-03 12:26+0300\n"
 "PO-Revision-Date: 2012-10-31 10:58+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -53,6 +53,9 @@ msgstr "Busgerat-MC"
 msgid "Request tries"
 msgstr "Anfrageversuche"
 
+msgid "Re-enable by Reinit flag for MC/MR module."
+msgstr "Reaktivieren von 'Reinit' Flagge für MC/MR-Modul."
+
 msgid "MR/MC devices *.ini files directry"
 msgstr "Das Verzeichnis der *.INI-Dateien Geräten MR/MC"
 
@@ -92,9 +95,8 @@ msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
 msgid "ModBUS RESP -> '%s': %s"
 msgstr "ModBUS Antwort -> '%s': %s"
 
-#, c-format
-msgid "ModBUS ERR -> '%s': %s: %s"
-msgstr "ModBUS Fehler -> '%s': %s: %s"
+msgid "ModBUS ERR -> %s: %s"
+msgstr "ModBUS Fehler -> %s: %s"
 
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
@@ -144,6 +146,11 @@ msgstr "Thun Anfrage Fehler beim Senden: %s."
 
 msgid "20:PDU short."
 msgstr "20: PDU kurz."
+
+msgid ""
+"21:Position lost. Need reload MR/MC bus - re-enable the controller object."
+msgstr ""
+"21:Position verloren. Brauchen nachladen MR/MC-Bus - reaktivieren das Controller-Objekt."
 
 msgid "Analog output overload; "
 msgstr "Analoge Ausgang ist überlastet; "
