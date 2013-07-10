@@ -6,3 +6,4 @@ daq_AMRDevs_la_SOURCES = mod_amr.cpp da_FlowTEC.cpp da_Ergomera.cpp
 daq_AMRDevs_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)AMRDevs
+include ../../../../I18N.mk

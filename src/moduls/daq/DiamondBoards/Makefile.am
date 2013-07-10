@@ -7,3 +7,4 @@ daq_DiamondBoards_la_LIBADD  = -L./ -ldscud
 daq_DiamondBoards_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)DiamondBoards
+include ../../../../I18N.mk

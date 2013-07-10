@@ -25,6 +25,7 @@ moc_selfwidg.cpp: selfwidg.h
 	$(QT4_MOC) selfwidg.h > moc_selfwidg.cpp
 
 I18N_mod = $(oscd_modulpref)QTCfg
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f qrc_qtcfg.cpp moc_qtcfg.cpp moc_selfwidg.cpp

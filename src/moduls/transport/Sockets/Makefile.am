@@ -13,3 +13,4 @@ tr_Sockets_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_Sockets_la_SOURCES = socket.cpp
 
 I18N_mod = $(oscd_modulpref)Sockets
+include ../../../../I18N.mk

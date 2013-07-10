@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 15:41+0300\n"
+"POT-Creation-Date: 2013-07-10 20:02+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -19,6 +19,34 @@ msgstr ""
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Змінна '%s' не визначена але використана"
+
+msgid "Error constant after constant"
+msgstr "Помилка константи після константи"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиція: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ переведення лінії не дозволено у рядку, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Помилка площини найменувань або вона порожня, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Вбудована функція має дуже багато параметрів, "
+
+msgid "Function error, "
+msgstr "Помилка функції, "
+
+msgid "Symbol error, "
+msgstr "Помилка символу, "
+
+msgid "Object's properties too long, "
+msgstr "Властивості об'єкту дуже довгі, "
 
 msgid "Array have more 255 items."
 msgstr "Масив має більш 255 елементів."
@@ -50,6 +78,7 @@ msgstr "Отримання об'єкту з не об'єктного регіс�
 msgid "Function execution terminated by error"
 msgstr "Виконання функції перервано помилкою"
 
+#, c-format
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Перевищено час обчислення функції %d > %d+%d"
 
@@ -312,31 +341,3 @@ msgstr ""
 "  anm - ім'я створюваного атрибута.\n"
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "IO функції."
-
-msgid "Error constant after constant"
-msgstr "Помилка константи після константи"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиція: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ переведення лінії не дозволено у рядку, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Помилка площини найменувань або вона порожня, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Вбудована функція має дуже багато параметрів, "
-
-msgid "Function error, "
-msgstr "Помилка функції, "
-
-msgid "Symbol error, "
-msgstr "Помилка символу, "
-
-msgid "Object's properties too long, "
-msgstr "Властивості об'єкту дуже довгі, "

@@ -13,3 +13,4 @@ tr_Serial_la_LDFLAGS = -module -avoid-version -no-undefined
 tr_Serial_la_SOURCES = mod_serial.cpp
 
 I18N_mod = $(oscd_modulpref)Serial
+include ../../../../I18N.mk

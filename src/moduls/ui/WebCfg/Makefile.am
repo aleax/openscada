@@ -14,3 +14,4 @@ ui_WebCfg_la_SOURCES = web_cfg.cpp
 
 
 I18N_mod = $(oscd_modulpref)WebCfg
+include ../../../../I18N.mk

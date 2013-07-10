@@ -16,3 +16,4 @@ daq_OneWire_la_LDFLAGS = -module -avoid-version -no-undefined $(OneWire_LDLAGS)
 daq_OneWire_la_SOURCES = module.cpp
 
 I18N_mod = $(oscd_modulpref)OneWire
+include ../../../../I18N.mk

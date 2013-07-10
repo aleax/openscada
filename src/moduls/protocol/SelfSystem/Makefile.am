@@ -14,3 +14,4 @@ prot_SelfSystem_la_SOURCES = self.cpp
 
 
 I18N_mod = $(oscd_modulpref)SelfSystem
+include ../../../../I18N.mk

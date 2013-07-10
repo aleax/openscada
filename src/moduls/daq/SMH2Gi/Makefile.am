@@ -15,3 +15,4 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)SMH2Gi
+include ../../../../I18N.mk

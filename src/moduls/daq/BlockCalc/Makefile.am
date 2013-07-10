@@ -14,3 +14,4 @@ daq_BlockCalc_la_SOURCES = virtual.cpp block.cpp
 
 
 I18N_mod = $(oscd_modulpref)BlockCalc
+include ../../../../I18N.mk

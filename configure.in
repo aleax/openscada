@@ -320,20 +320,6 @@ LIBS=""
 
 AC_OUTPUT
 
-# I18N process place to *.am
-if test $ac_cv_header_libintl_h = yes; then
-    for ac_config_file in $ac_config_files; do
-	sedRez=`cat $ac_config_file | sed -n '/^I18N_mod *= *\([[^ ]]*\)\$/s//\1/p'`
-	if test "x$sedRez" != "x"; then
-	    sed "s/\(^install:.*\)\$/\1 install-I18N/" $ac_config_file |
-	    sed "s/\(^uninstall:.*\)\$/\1 uninstall-I18N/" |
-	    sed "s/\(^clean:.*\)\$/\1 clean-I18N/" > $ac_config_file.prc
-	    cat $ac_config_file.prc I18N.mk > $ac_config_file
-	    rm $ac_config_file.prc
-	fi
-    done
-fi
-
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Status:])
 AC_MSG_RESULT([  - Enable(yes)/including(incl)/for dist(dist)/disable(no) all modules = $enable_AllModuls])

@@ -14,3 +14,4 @@ bd_PostgreSQL_la_LDFLAGS = -module -avoid-version -no-undefined $(POSTGRESQL_LDF
 bd_PostgreSQL_la_SOURCES = postgre.cpp
 
 I18N_mod = $(oscd_modulpref)PostgreSQL
+include ../../../../I18N.mk

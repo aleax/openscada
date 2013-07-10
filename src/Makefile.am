@@ -14,3 +14,4 @@ liboscada_la_LIBADD = -ldl -lpthread -lrt -lcrypt -lz -lpcre $(LIB_CORE)
 liboscada_la_LDFLAGS = -no-undefined -version-info $(oscd_LIBREVISION)
 
 I18N_mod = $(PACKAGE)
+include ../I18N.mk

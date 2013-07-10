@@ -7,3 +7,4 @@ daq_SoundCard_la_LIBADD  = -lportaudio
 daq_SoundCard_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)SoundCard
+include ../../../../I18N.mk

@@ -13,3 +13,4 @@ daq_DCON_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DCON_la_SOURCES = DCON_client.cpp
 
 I18N_mod = $(oscd_modulpref)DCON
+include ../../../../I18N.mk

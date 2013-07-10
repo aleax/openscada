@@ -13,3 +13,4 @@ prot_HTTP_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_HTTP_la_SOURCES = http.cpp
 
 I18N_mod = $(oscd_modulpref)HTTP
+include ../../../../I18N.mk

@@ -13,3 +13,4 @@ arh_DBArch_la_LDFLAGS = -module -avoid-version -no-undefined
 arh_DBArch_la_SOURCES = arch.cpp mess.cpp val.cpp
 
 I18N_mod = $(oscd_modulpref)DBArch
+include ../../../../I18N.mk

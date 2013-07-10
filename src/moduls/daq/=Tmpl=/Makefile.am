@@ -25,3 +25,4 @@ daq_Tmpl_la_SOURCES = module.cpp
 
 #!!! The module name for translation files
 I18N_mod = $(oscd_modulpref)Tmpl
+include ../../../../I18N.mk

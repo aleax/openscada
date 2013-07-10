@@ -14,3 +14,4 @@ daq_System_la_SOURCES = os_contr.cpp da_cpu.cpp da_mem.cpp da_uptime.cpp da_hddt
 daq_System_la_LIBADD  = $(LIB_SENSORS)
 
 I18N_mod = $(oscd_modulpref)System
+include ../../../../I18N.mk

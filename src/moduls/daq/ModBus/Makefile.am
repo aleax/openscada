@@ -13,3 +13,4 @@ daq_ModBus_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_ModBus_la_SOURCES = moduls.cpp modbus_daq.cpp modbus_prt.cpp
 
 I18N_mod = $(oscd_modulpref)ModBus
+include ../../../../I18N.mk

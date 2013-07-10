@@ -15,3 +15,4 @@ spec_FLibSYS_la_LIBADD = $(LIB_FFTW3)
 
 
 I18N_mod = $(oscd_modulpref)FLibSYS
+include ../../../../I18N.mk

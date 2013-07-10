@@ -14,3 +14,4 @@ spec_FLibMath_la_SOURCES = statfunc.cpp
 
 
 I18N_mod = $(oscd_modulpref)FLibMath
+include ../../../../I18N.mk

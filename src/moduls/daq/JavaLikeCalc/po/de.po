@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 15:41+0300\n"
+"POT-Creation-Date: 2013-07-10 20:02+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -24,6 +24,34 @@ msgstr ""
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Die Variable '%s' wird verwendet, ist aber nicht definiert"
+
+msgid "Error constant after constant"
+msgstr "Fehler konstant nach konstanter"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, Position: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
+
+msgid "The next line symbol failed into string, "
+msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Namensbereich ist fehlerhaft oder leer, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Installierte Funktion hat zu viel Parameter, "
+
+msgid "Function error, "
+msgstr "Funktionsfehler, "
+
+msgid "Symbol error, "
+msgstr "Symbolfehler, "
+
+msgid "Object's properties too long, "
+msgstr "Eigenschaften des Objekts zu lang,"
 
 msgid "Array have more 255 items."
 msgstr "Array haben mehr 255 Artikel."
@@ -55,6 +83,7 @@ msgstr "Lade Objekt nicht vom Objektregister"
 msgid "Function execution terminated by error"
 msgstr "Funktion Ausführung abgebrochen durch Fehler"
 
+#, c-format
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Zeitüberschreitung Berechnung der Funktion %d > %d+%d"
 
@@ -318,31 +347,3 @@ msgstr ""
 "  anm - Name des gebildeten Attributs.\n"
 "  Falls 'aid' oder 'anm' nicht bestimmt sind werden sie aus dem gewählten IO "
 "der Funktion generiert."
-
-msgid "Error constant after constant"
-msgstr "Fehler konstant nach konstanter"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, Position: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Unerwartetes Programmende, erwarte Endezeichen '\"',"
-
-msgid "The next line symbol failed into string, "
-msgstr "Das Zeichen für das Zeilenende ist in der Zeichenkette, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Namensbereich ist fehlerhaft oder leer, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Installierte Funktion hat zu viel Parameter, "
-
-msgid "Function error, "
-msgstr "Funktionsfehler, "
-
-msgid "Symbol error, "
-msgstr "Symbolfehler, "
-
-msgid "Object's properties too long, "
-msgstr "Eigenschaften des Objekts zu lang,"

@@ -14,3 +14,4 @@ ui_WebUser_la_SOURCES = web_user.cpp
 
 
 I18N_mod = $(oscd_modulpref)WebUser
+include ../../../../I18N.mk

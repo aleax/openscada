@@ -13,3 +13,4 @@ prot_UserProtocol_la_LDFLAGS = -module -avoid-version -no-undefined
 prot_UserProtocol_la_SOURCES = user_prt.cpp
 
 I18N_mod = $(oscd_modulpref)UserProtocol
+include ../../../../I18N.mk

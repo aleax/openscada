@@ -23,6 +23,7 @@ moc_tuimod.cpp: tuimod.h
 	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
 
 I18N_mod = $(oscd_modulpref)QTStarter
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f qrc_qtstarter.cpp moc_tuimod.cpp

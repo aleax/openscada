@@ -39,6 +39,7 @@ moc_vis_shape_elfig.cpp: vis_shape_elfig.h
 	$(QT4_MOC) vis_shape_elfig.h > moc_vis_shape_elfig.cpp
 
 I18N_mod = $(oscd_modulpref)Vision
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f qrc_vision.cpp moc_vis_widgs.cpp moc_vis_devel.cpp moc_vis_devel_widgs.cpp moc_vis_devel_dlgs.cpp \

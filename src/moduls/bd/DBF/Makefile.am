@@ -13,3 +13,4 @@ bd_DBF_la_LDFLAGS = -module -avoid-version -no-undefined
 bd_DBF_la_SOURCES = dbf_mod.cpp dbf.cpp
 
 I18N_mod = $(oscd_modulpref)DBF
+include ../../../../I18N.mk

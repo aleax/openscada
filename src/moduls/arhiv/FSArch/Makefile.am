@@ -13,3 +13,4 @@ arh_FSArch_la_LDFLAGS = -module -avoid-version -no-undefined
 arh_FSArch_la_SOURCES = base.cpp mess.cpp val.cpp
 
 I18N_mod = $(oscd_modulpref)FSArch
+include ../../../../I18N.mk

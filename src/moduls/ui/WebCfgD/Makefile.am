@@ -37,6 +37,7 @@ VCAhtml.cpp: WebCfgDVCA.html
 	done
 
 I18N_mod = $(oscd_modulpref)WebCfgD
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f VCAhtml.cpp VCAjs.cpp

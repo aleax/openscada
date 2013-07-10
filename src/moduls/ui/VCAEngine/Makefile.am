@@ -13,3 +13,4 @@ ui_VCAEngine_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_VCAEngine_la_SOURCES = vcaengine.cpp libwidg.cpp widget.cpp origwidg.cpp project.cpp session.cpp
 
 I18N_mod = $(oscd_modulpref)VCAEngine
+include ../../../../I18N.mk

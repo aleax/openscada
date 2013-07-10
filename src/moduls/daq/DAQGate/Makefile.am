@@ -13,3 +13,4 @@ daq_DAQGate_la_LDFLAGS = -module -avoid-version -no-undefined
 daq_DAQGate_la_SOURCES = daq_gate.cpp
 
 I18N_mod = $(oscd_modulpref)DAQGate
+include ../../../../I18N.mk

@@ -1,4 +1,5 @@
 2013-07-10 Roman
+- !!:SYS,*: Include I18N.mk script direct to core and modules' *.am files.
 - !!:SYS,*: OpenSCADA modules including mechanism is rewrote to "noinst" static libraries build and direct link its to core library.
     Including modules check code is moved to the subsystem's modules enabling macro AX_MOD_{SUB}_EN.
     Drop the station id from local node's path, for simplify and exclude station id doubling on messages from other stations.

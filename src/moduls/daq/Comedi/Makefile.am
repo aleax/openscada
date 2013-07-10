@@ -7,3 +7,4 @@ daq_Comedi_la_SOURCES = module.cpp
 daq_Comedi_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)Comedi
+include ../../../../I18N.mk

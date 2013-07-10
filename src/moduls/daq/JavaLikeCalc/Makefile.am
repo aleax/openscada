@@ -15,6 +15,7 @@ daq_JavaLikeCalc_la_SOURCES = virtual.cpp freelib.cpp freefunc.cpp func_analise.
 
 I18N_mod = $(oscd_modulpref)JavaLikeCalc
 I18N_addfiles = *.ypp
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f *func_analise.cpp

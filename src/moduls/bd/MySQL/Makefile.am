@@ -15,3 +15,4 @@ bd_MySQL_la_LDFLAGS = -module -avoid-version -no-undefined $(MYSQL_LDFLAGS)
 bd_MySQL_la_SOURCES = my_sql.cpp
 
 I18N_mod = $(oscd_modulpref)MySQL
+include ../../../../I18N.mk

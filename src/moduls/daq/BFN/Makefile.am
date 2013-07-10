@@ -9,3 +9,4 @@ BFNdatadir = $(oscd_datadir)/BFN
 BFNdata_DATA = data/*
 
 I18N_mod = $(oscd_modulpref)BFN
+include ../../../../I18N.mk

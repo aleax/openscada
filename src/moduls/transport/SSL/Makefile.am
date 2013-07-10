@@ -14,3 +14,4 @@ tr_SSL_la_SOURCES = modssl.cpp
 tr_SSL_la_LIBADD  = $(LIB_OpenSSL)
 
 I18N_mod = $(oscd_modulpref)SSL
+include ../../../../I18N.mk

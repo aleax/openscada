@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-25 15:41+0300\n"
+"POT-Creation-Date: 2013-07-10 20:02+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -19,6 +19,35 @@ msgstr ""
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Переменная '%s' не определена но использована"
+
+msgid "Error constant after constant"
+msgstr "Ошибка постоянной после постоянной"
+
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиция: (%d,%d)-(%d,%d)."
+
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr ""
+"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
+
+msgid "The next line symbol failed into string, "
+msgstr "Символ перевода линии недопустим в строке, "
+
+msgid "Using namespace is error or empty, "
+msgstr "Ошибка использования области имён или она пуста, "
+
+msgid "Build in function has too much parameters, "
+msgstr "Встроенная функция имеет слишком много параметров, "
+
+msgid "Function error, "
+msgstr "Ошибка функции, "
+
+msgid "Symbol error, "
+msgstr "Ошибка символа, "
+
+msgid "Object's properties too long, "
+msgstr "Свойства объекта очень длинные, "
 
 msgid "Array have more 255 items."
 msgstr "Массив имеет более 255 элементов."
@@ -50,6 +79,7 @@ msgstr "Получение объекта из не объектного рег�
 msgid "Function execution terminated by error"
 msgstr "Выполнение функции прервано ошибкой"
 
+#, c-format
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Исчерпано время вычисления функции %d > %d+%d"
 
@@ -313,32 +343,3 @@ msgstr ""
 "  anm - имя создаваемого атрибута.\n"
 "Если 'aid' или 'anm' не установлены то они будут генерироваться из "
 "выбранного IO функции."
-
-msgid "Error constant after constant"
-msgstr "Ошибка постоянной после постоянной"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиция: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr ""
-"Неожиданное окончание программы, ожидается символ окончания строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ перевода линии недопустим в строке, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Ошибка использования области имён или она пуста, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Встроенная функция имеет слишком много параметров, "
-
-msgid "Function error, "
-msgstr "Ошибка функции, "
-
-msgid "Symbol error, "
-msgstr "Ошибка символа, "
-
-msgid "Object's properties too long, "
-msgstr "Свойства объекта очень длинные, "

@@ -14,3 +14,4 @@ spec_FLibComplex1_la_SOURCES = statfunc.cpp
 
 
 I18N_mod = $(oscd_modulpref)FLibComplex1
+include ../../../../I18N.mk
