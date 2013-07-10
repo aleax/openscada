@@ -122,6 +122,8 @@ class TMdContr: public TController
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
 
+	string	catsPat( );
+
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	//> Request to OpenSCADA control interface
@@ -137,6 +139,15 @@ class TMdContr: public TController
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
+	//Data
+	class StHd
+	{
+	    public:
+	    StHd( ) { cntr = 0; lstMess.clear(); }
+	    float cntr;
+	    map<string, time_t> lstMess;
+	};
+
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
@@ -153,7 +164,7 @@ class TMdContr: public TController
 	bool	prcSt,				//Process task active
 		call_st,        		//Calc now stat
 		endrunReq;			//Request to stop of the Process task
-	vector< pair<string,float> > mStatWork;	//Work stations and it status
+	vector< pair<string,StHd> > mStatWork;	//Work stations and it status
 
 	double	mPer, tmGath;			//Gathering time
 };

@@ -172,79 +172,40 @@ AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library usi
 AC_MSG_RESULT(========== Build modules check =============)
 #> DB modules
 AC_SUBST(DBSub_mod)
-AX_MOD_DB_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl,[
-    if test $enable_DBF = incl; then
-	LIB_CORE="${LIB_CORE} moduls/bd/DBF/.libs/*.o "
-	ModsIncl="${ModsIncl}bd_DBF "
-    fi
-])
+AX_MOD_DB_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl)
 AX_MOD_DB_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,[
     AX_LIB_MYSQL
     if test "$found_mysql" != "yes"; then AC_MSG_ERROR(DB.MySQL: MySQL development resources not found. Install or check MySQL development package!); fi
-    if test $enable_MySQL = incl; then
-	LIB_CORE="${LIB_CORE} moduls/bd/MySQL/.libs/*.o ${MYSQL_LDFLAGS} "
-	ModsIncl="${ModsIncl}bd_MySQL "
-    fi
 ])
 AX_MOD_DB_EN(SQLite,[disable or enable[=incl] build module DB.SQLite],disable,incl,[
     PKG_CHECK_MODULES([sqlite3],[sqlite3 > 3],
 	[AC_CHECK_LIB([sqlite3],[sqlite3_open],[],[AC_MSG_ERROR(SQLite3 library is not usable!)])],
 	[AC_MSG_ERROR(DB.SQLite: SQLite3 development resources not found. Install or check SQLite3 development package!)])
-    if test $enable_SQLite = incl; then
-	LIB_CORE="${LIB_CORE} moduls/bd/SQLite/.libs/*.o ${sqlite3_LIBS} "
-	ModsIncl="${ModsIncl}bd_SQLite "
-    fi
 ])
 AX_MOD_DB_EN(FireBird,[disable or enable[=incl] build module DB.FireBird],disable,incl,[
     AX_LIB_FIREBIRD([2.0.0])
     if test "$success" != "yes"; then AC_MSG_ERROR(DB.FireBird: FireBird development resources not found. Install or check FireBird development package!); fi
-    if test $enable_FireBird = incl; then
-	LIB_CORE="${LIB_CORE} moduls/bd/FireBird/.libs/*.o ${FIREBIRD_LDFLAGS} "
-	ModsIncl="${ModsIncl}bd_FireBird "
-    fi
 ])
 AX_MOD_DB_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],disable,incl,[
     AX_LIB_POSTGRESQL([8.3.0])
     if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
-    if test $enable_PostgreSQL = incl; then
-	LIB_CORE="${LIB_CORE} moduls/bd/PostgreSQL/.libs/*.o ${POSTGRESQL_LDFLAGS} "
-	ModsIncl="${ModsIncl}bd_PostgreSQL "
-    fi
 ])
 #> DAQ modules
 AC_SUBST(DAQSub_mod)
 AX_MOD_DAQ_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,[
     AX_LIB_SENSORS()
-    if test $enable_System = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/System/.libs/*.o ${LIB_SENSORS} "
-	ModsIncl="${ModsIncl}daq_System "
-    fi
 ])
-AX_MOD_DAQ_EN(BlockCalc,[disable or enable[=incl] build module DAQ.BlockCalc],disable,incl,[
-    if test $enable_BlockCalc = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/BlockCalc/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_BlockCalc "
-    fi
-])
+AX_MOD_DAQ_EN(BlockCalc,[disable or enable[=incl] build module DAQ.BlockCalc],disable,incl)
 AX_MOD_DAQ_EN(JavaLikeCalc,[disable or enable[=incl] build module DAQ.BlockCalc],disable,incl,[
     AC_PROG_YACC
     AC_CHECK_PROG(YACC_OK, bison, true, false)
     if test $YACC_OK = false; then
 	AC_MSG_ERROR([No syntax generator present! Install YACC like programm bison.])
     fi
-    if test $enable_JavaLikeCalc = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/JavaLikeCalc/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_JavaLikeCalc "
-    fi
 ])
 if test $ix86 != yes; then enable_DiamondBoards=no; fi
 AX_MOD_DAQ_EN(DiamondBoards,[enable build module DAQ.DiamondBoards],enable)
-AX_MOD_DAQ_EN(LogicLev,[disable or enable[=incl] build module DAQ.LogicLev],disable,incl,[
-    if test $enable_LogicLev = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/LogicLev/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_LogicLev "
-    fi
-])
+AX_MOD_DAQ_EN(LogicLev,[disable or enable[=incl] build module DAQ.LogicLev],disable,incl)
 AX_MOD_DAQ_EN(SNMP,[disable build module DAQ.SNMP],disable,[],[
     AC_CHECK_HEADERS([net-snmp/net-snmp-config.h],[],
 	[AC_MSG_ERROR(DAQ.SNMP: Net SNMP library headers not found. Install or check of Net SNMP developing package!)])
@@ -259,24 +220,9 @@ AX_MOD_DAQ_EN(Siemens,[disable build module DAQ.Siemens],disable,[],
     AC_CHECK_HEADERS([linux/kd.h],[],
 	[AC_MSG_ERROR(DAQ.Siemens: Linux kernel headers not found. Install or check Linux kernel headers package!)])
 ])
-AX_MOD_DAQ_EN(ModBus,[disable or enable[=incl] build module DAQ.ModBus],disable,incl,[
-    if test $enable_ModBus = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/ModBus/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_ModBus "
-    fi
-])
-AX_MOD_DAQ_EN(DCON,[disable or enable[=incl] build module DAQ.DCON],disable,incl,[
-    if test $enable_DCON = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/DCON/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_DCON "
-    fi
-])
-AX_MOD_DAQ_EN(DAQGate,[disable or enable[=incl] build module DAQ.DAQGate],disable,incl,[
-    if test $enable_DAQGate = incl; then
-	LIB_CORE="${LIB_CORE} moduls/daq/DAQGate/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_DAQGate "
-    fi
-])
+AX_MOD_DAQ_EN(ModBus,[disable or enable[=incl] build module DAQ.ModBus],disable,incl)
+AX_MOD_DAQ_EN(DCON,[disable or enable[=incl] build module DAQ.DCON],disable,incl)
+AX_MOD_DAQ_EN(DAQGate,[disable or enable[=incl] build module DAQ.DAQGate],disable,incl)
 AX_MOD_DAQ_EN(SoundCard,[disable build module DAQ.SoundCard],disable,[],[
     AC_CHECK_HEADERS([portaudio.h],[],
 	[AC_MSG_ERROR(DAQ.SoundCard: Some Portaudio headers not found. Install or check Portaudio developing package!)])
@@ -301,82 +247,35 @@ AX_MOD_DAQ_EN(Comedi,[enable build module DAQ.Comedi],enable,[],[
 	[AC_MSG_ERROR(Comedilib not found. Install or check Comedilib library package!)])
 ])
 AX_MOD_DAQ_EN(SMH2Gi,[enable build module DAQ.BFN],enable)
-AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,[],[
+AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,incl,[
     OneWire_CFLAGS="-I${oldincludedir}/owfs"
     OneWire_LDLAGS="-lowcapi"
     AC_SUBST(OneWire_CFLAGS)
     AC_SUBST(OneWire_LDLAGS)
     AC_CHECK_LIB([owcapi],[OW_init],[],[AC_MSG_ERROR(OWCAPI library is not usable!)])
-    if test $enable_OneWire = incl; then
-	LIB_CORE="${LIB_CORE} ${OneWire_LDLAGS} moduls/daq/OneWire/.libs/*.o "
-	ModsIncl="${ModsIncl}daq_OneWire "
-    fi
 ])
 #> Archive modules
 AC_SUBST(ArchSub_mod)
-AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl,[
-    if test $enable_FSArch = incl; then
-	LIB_CORE="${LIB_CORE} moduls/arhiv/FSArch/.libs/*.o "
-	ModsIncl="${ModsIncl}arh_FSArch "
-    fi
-])
-AX_MOD_Archive_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,incl,[
-    if test $enable_DBArch = incl; then
-	LIB_CORE="${LIB_CORE} moduls/arhiv/DBArch/.libs/*.o "
-	ModsIncl="${ModsIncl}arh_DBArch "
-    fi
-])
+AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl)
+AX_MOD_Archive_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,incl)
 #> Transport modules
 AC_SUBST(TranspSub_mod)
 AX_MOD_Transport_EN(Sockets,[disable or enable[=incl] build module Transport.Sockets],disable,incl,[
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
-    if test $enable_Sockets = incl; then
-	LIB_CORE="${LIB_CORE} moduls/transport/Sockets/.libs/*.o "
-	ModsIncl="${ModsIncl}tr_Sockets "
-    fi
 ])
 AX_MOD_Transport_EN(SSL,[disable or enable[=incl] build module Transport.SSL],disable,incl,[
     AX_LIB_OpenSSL()
-    if test $enable_SSL = incl; then
-	LIB_CORE="${LIB_CORE} moduls/transport/SSL/.libs/*.o ${LIB_OpenSSL} "
-	ModsIncl="${ModsIncl}tr_SSL "
-    fi
 ])
-AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl,[
-    if test $enable_Serial = incl; then
-	LIB_CORE="${LIB_CORE} moduls/transport/Serial/.libs/*.o "
-	ModsIncl="${ModsIncl}tr_Serial "
-    fi
-])
+AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl)
 #> Transport protocol modules
 AC_SUBST(ProtSub_mod)
-AX_MOD_TrProt_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl,[
-    if test $enable_HTTP = incl; then
-	LIB_CORE="${LIB_CORE} moduls/protocol/HTTP/.libs/*.o "
-	ModsIncl="${ModsIncl}prt_HTTP "
-    fi
-])
-AX_MOD_TrProt_EN(SelfSystem,[disable or enable[=incl] build module Protocol.SelfSystem],disable,incl,[
-    if test $enable_SelfSystem = incl; then
-	LIB_CORE="${LIB_CORE} moduls/protocol/SelfSystem/.libs/*.o "
-	ModsIncl="${ModsIncl}prt_SelfSystem "
-    fi
-])
-AX_MOD_TrProt_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProtocol],disable,incl,[
-    if test $enable_UserProtocol = incl; then
-	LIB_CORE="${LIB_CORE} moduls/protocol/UserProtocol/.libs/*.o "
-	ModsIncl="${ModsIncl}prt_UserProtocol "
-    fi
-])
+AX_MOD_TrProt_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl)
+AX_MOD_TrProt_EN(SelfSystem,[disable or enable[=incl] build module Protocol.SelfSystem],disable,incl)
+AX_MOD_TrProt_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProtocol],disable,incl)
 #> UI modules
 AC_SUBST(UISub_mod)
-AX_MOD_UI_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl,[
-    if test $enable_VCAEngine = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/VCAEngine/.libs/*.o "
-	ModsIncl="${ModsIncl}ui_VCAEngine "
-    fi
-])
+AX_MOD_UI_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl)
 AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,[
     AX_LIB_FFTW3()
     AX_LIB_QT4()
@@ -388,73 +287,29 @@ AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,in
 	[PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
 		[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
 	[AC_MSG_NOTICE(Phonon not found. Using is disabled!)])])
-    if test $enable_Vision = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${QtWebKit_LIBS} ${phonon_LIBS} "
-	ModsIncl="${ModsIncl}ui_Vision "
-    fi
 ])
 AX_MOD_UI_EN(QTStarter,[disable or enable[=incl] build module UI.QTStarter],disable,incl,[
     AX_LIB_QT4()
-    if test $enable_QTStarter = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/QTStarter/.libs/*.o ${QT4_LIB} "
-	ModsIncl="${ModsIncl}ui_QTStarter "
-    fi
 ])
 AX_MOD_UI_EN(QTCfg,[disable or enable[=incl] build module UI.QTCfg],disable,incl,[
     AX_LIB_QT4()
-    if test $enable_QTCfg = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/QTCfg/.libs/*.o ${QT4_LIB} "
-	ModsIncl="${ModsIncl}ui_QTCfg "
-    fi
 ])
-AX_MOD_UI_EN(WebCfg,[disable or enable[=incl] build module UI.WebCfg],disable,incl,[
-    if test $enable_WebCfg = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/WebCfg/.libs/*.o "
-	ModsIncl="${ModsIncl}ui_WebCfg "
-    fi
-])
+AX_MOD_UI_EN(WebCfg,[disable or enable[=incl] build module UI.WebCfg],disable,incl)
 AX_MOD_UI_EN(WebCfgD,[disable or enable[=incl] build module UI.WebCfgD],disable,incl,[
     AX_LIB_GD()
-    if test $enable_WebCfgD = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/WebCfgD/.libs/*.o ${LIB_GD} "
-	ModsIncl="${ModsIncl}ui_WebCfgD "
-    fi
 ])
 AX_MOD_UI_EN(WebVision,[disable or enable[=incl] build module UI.WebVision],disable,incl,[
     AX_LIB_GD()
     AX_LIB_FFTW3()
-    if test $enable_WebVision = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/WebVision/.libs/*.o ${LIB_GD} ${LIB_FFTW3} "
-	ModsIncl="${ModsIncl}ui_WebVision "
-    fi
 ])
-AX_MOD_UI_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,incl,[
-    if test $enable_WebUser = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/WebUser/.libs/*.o "
-	ModsIncl="${ModsIncl}ui_WebUser "
-    fi
-])
+AX_MOD_UI_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,incl)
 #> Special modules
 AC_SUBST(SpecSub_mod)
 AX_MOD_Special_EN(SystemTests,[disable build module Special.SystemTests],disable)
-AX_MOD_Special_EN(FLibComplex1,[disable or enable[=incl] build module Special.FLibComplex1],disable,incl,[
-    if test $enable_FLibComplex1 = incl; then
-	LIB_CORE="${LIB_CORE} moduls/special/FLibComplex1/.libs/*.o "
-	ModsIncl="${ModsIncl}spec_FLibComplex1 "
-    fi
-])
-AX_MOD_Special_EN(FLibMath,[disable or enable[=incl] build module Special.FLibMath],disable,incl,[
-    if test $enable_FLibMath = incl; then
-	LIB_CORE="${LIB_CORE} moduls/special/FLibMath/.libs/*.o "
-	ModsIncl="${ModsIncl}spec_FLibMath "
-    fi
-])
+AX_MOD_Special_EN(FLibComplex1,[disable or enable[=incl] build module Special.FLibComplex1],disable,incl)
+AX_MOD_Special_EN(FLibMath,[disable or enable[=incl] build module Special.FLibMath],disable,incl)
 AX_MOD_Special_EN(FLibSYS,[disable or enable[=incl] build module Special.FLibSYS],disable,incl,[
     AX_LIB_FFTW3()
-    if test $enable_FLibSYS = incl; then
-	LIB_CORE="${LIB_CORE} moduls/special/FLibSYS/.libs/*.o "
-	ModsIncl="${ModsIncl}spec_FLibSYS "
-    fi
 ])
 AC_MSG_RESULT(===========================================)
 

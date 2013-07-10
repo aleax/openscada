@@ -404,29 +404,29 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     mBuf[headBuf].time  = tm;
     mBuf[headBuf].utime = utm;
     mBuf[headBuf].categ = categ;
-    mBuf[headBuf].level = (TMess::Type)abs(level);
+    mBuf[headBuf].level = (TMess::Type)level;
     mBuf[headBuf].mess  = mess;
-    if( ++headBuf >= mBuf.size() ) headBuf = 0;
+    if(++headBuf >= mBuf.size()) headBuf = 0;
     //> Check to no archivated messages
-    if( headBuf == headLstread )
+    if(headBuf == headLstread)
     {
-	if( !(bufErr&0x01) )
+	if(!(bufErr&0x01))
 	{
 	    bufErr |= 0x01;
 	    res.release();
-	    mess_err(nodePath().c_str(),_("Buffer full. Messages lost!"));
+	    mess_err(nodePath().c_str(), _("Buffer full. Messages lost!"));
 	    res.request(true);
 	}
-	if( ++headLstread >= mBuf.size() ) headLstread = 0;
+	if(++headLstread >= mBuf.size()) headLstread = 0;
     }
     //> Check fill buffer speed.
-    else if( headBuf-headLstread > messBufLen( )/2 )
+    else if(headBuf-headLstread > messBufLen( )/2)
     {
-	if( !(bufErr&0x02) )
+	if(!(bufErr&0x02))
 	{
 	    bufErr |= 0x02;
 	    res.release();
-	    mess_warning(nodePath().c_str(),_("Messages buffer filling is too fast!"));
+	    mess_warning(nodePath().c_str(), _("Messages buffer filling is too fast!"));
 	    res.request(true);
 	}
     }
@@ -434,21 +434,22 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 
     //> Alarms processing. For level less 0 alarm is set
     map<string,TMess::SRec>::iterator p;
-    if( level < 0 ) mAlarms[categ] = TMess::SRec(tm,utm,categ,(TMess::Type)abs(level),mess);
-    else if( (p=mAlarms.find(categ)) != mAlarms.end() ) mAlarms.erase(p);
+    if(level < 0) mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
+    else if((p=mAlarms.find(categ)) != mAlarms.end()) mAlarms.erase(p);
 }
 
 void TArchiveS::messPut( const vector<TMess::SRec> &recs )
 {
     for(unsigned i_r = 0; i_r < recs.size(); i_r++)
-	messPut(recs[i_r].time,recs[i_r].utime,recs[i_r].categ,recs[i_r].level,recs[i_r].mess);
+	messPut(recs[i_r].time, recs[i_r].utime, recs[i_r].categ, recs[i_r].level, recs[i_r].mess);
 }
 
-void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, const string &category, int8_t level, const string &arch, time_t upTo )
+void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
+    const string &category, int8_t level, const string &arch, time_t upTo )
 {
     recs.clear();
 
-    ResAlloc res(mRes,false);
+    ResAlloc res(mRes, false);
     if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
     TRegExp re(category, "p");
 
@@ -457,7 +458,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
     while(level >= 0 && (!arch.size() || arch==BUF_ARCH_NM) && time(NULL) < upTo)
     {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
-		mBuf[i_buf].level >= level && re.test(mBuf[i_buf].categ))
+		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))
 	    recs.push_back(mBuf[i_buf]);
 	if(++i_buf >= mBuf.size()) i_buf = 0;
 	if(i_buf == headBuf) break;
@@ -472,8 +473,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs, c
 	for(unsigned i_o = 0; i_o < o_lst.size() && time(NULL) < upTo; i_o++)
 	{
 	    AutoHD<TMArchivator> archtor = at(t_lst[i_t]).at().messAt(o_lst[i_o]);
-	    if(archtor.at().startStat() && (!arch.size() || arch==archtor.at().workId()))
-		archtor.at().get(b_tm,e_tm,recs,category,level);
+	    if(archtor.at().startStat() && (!arch.size() || arch == archtor.at().workId()))
+		archtor.at().get(b_tm, e_tm, recs, category, level);
 	}
     }
 
@@ -682,11 +683,11 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  cat - messages' category
     //  lev - messages level
     //  arch - messages archivator
-    if( iid == "messGet" && prms.size() >= 2 )
+    if(iid == "messGet" && prms.size() >= 2)
     {
 	vector<TMess::SRec> recs;
-	messGet( prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
-	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")) );
+	messGet(prms[0].getI(), prms[1].getI(), recs, ((prms.size()>=3) ? prms[2].getS() : string("")),
+	    ((prms.size()>=4) ? prms[3].getI() : 0), ((prms.size()>=5) ? prms[4].getS() : string("")));
 	TArrayObj *rez = new TArrayObj();
 	for(unsigned i_m = 0; i_m < recs.size(); i_m++)
 	{
@@ -706,7 +707,7 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     //  cat - message' category
     //  lev - message level
     //  mess - message text
-    if( iid == "messPut" && prms.size() >= 5 )
+    if(iid == "messPut" && prms.size() >= 5)
     {
 	messPut(prms[0].getI(), prms[1].getI(), prms[2].getS(), prms[3].getI(), prms[4].getS());
 	return true;
@@ -724,24 +725,24 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"info",RWRWR_,"root",SARH_ID,SEC_RD))		//Messages information
 	{
 	    string arch = opt->attr("arch");
-	    opt->setAttr("end",TSYS::uint2str(messEnd(arch)));
-	    opt->setAttr("beg",TSYS::uint2str(messBeg(arch)));
+	    opt->setAttr("end", TSYS::uint2str(messEnd(arch)));
+	    opt->setAttr("beg", TSYS::uint2str(messBeg(arch)));
 	}
 	else if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	//Value's data request
 	{
-	    time_t tm      = strtoul(opt->attr("tm").c_str(),0,10);
-	    time_t tm_grnd = strtoul(opt->attr("tm_grnd").c_str(),0,10);
+	    time_t tm      = strtoul(opt->attr("tm").c_str(), 0, 10);
+	    time_t tm_grnd = strtoul(opt->attr("tm_grnd").c_str(), 0, 10);
 	    string arch    = opt->attr("arch");
 	    string cat     = opt->attr("cat");
 	    int    lev     = atoi(opt->attr("lev").c_str());
 	    vector<TMess::SRec> rez;
-	    messGet( tm_grnd, tm, rez, cat, (TMess::Type)lev, arch );
+	    messGet(tm_grnd, tm, rez, cat, (TMess::Type)lev, arch);
 	    for(unsigned i_r = 0; i_r < rez.size(); i_r++)
 		opt->childAdd("el")->
-		    setAttr("time",TSYS::uint2str(rez[i_r].time))->
-		    setAttr("utime",TSYS::uint2str(rez[i_r].utime))->
-		    setAttr("cat",rez[i_r].categ)->
-		    setAttr("lev",TSYS::int2str(rez[i_r].level))->
+		    setAttr("time", TSYS::uint2str(rez[i_r].time))->
+		    setAttr("utime", TSYS::uint2str(rez[i_r].utime))->
+		    setAttr("cat", rez[i_r].categ)->
+		    setAttr("lev", TSYS::int2str(rez[i_r].level))->
 		    setText(rez[i_r].mess);
 	}
 	else if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	//Value's data set
@@ -1013,15 +1014,14 @@ TMArchivator::TMArchivator(const string &iid, const string &idb, TElem *cf_el) :
 TCntrNode &TMArchivator::operator=( TCntrNode &node )
 {
     TMArchivator *src_n = dynamic_cast<TMArchivator*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     //> Configuration copy
     exclCopy(*src_n, "ID;");
     cfg("MODUL").setS(owner().modId());
     m_db = src_n->m_db;
 
-    if( src_n->startStat() && toStart() && !startStat() )
-        start( );
+    if(src_n->startStat() && toStart() && !startStat()) start();
 
     return *this;
 }
@@ -1033,15 +1033,14 @@ void TMArchivator::postEnable( int flag )
 
 void TMArchivator::preDisable( int flag )
 {
-    if( startStat() )	stop( );
+    if(startStat())	stop();
 }
 
 void TMArchivator::postDisable(int flag)
 {
     try
     {
-	if( flag )
-	    SYS->db().at().dataDel(fullDB(),SYS->archive().at().nodePath()+tbl(),*this,true);
+	if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -1050,7 +1049,7 @@ TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
 
 string TMArchivator::workId( )		{ return string(owner().modId())+"."+id(); }
 
-string TMArchivator::name()
+string TMArchivator::name( )
 {
     string rez = cfg("NAME").getS();
     return rez.size() ? rez : mId;
@@ -1083,7 +1082,7 @@ bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )
 
     categ(cat_ls);
 
-    if(ilvl >= level())
+    if(abs(ilvl) >= level())
 	for(unsigned i_cat = 0; i_cat < cat_ls.size(); i_cat++)
 	    if(TRegExp(cat_ls[i_cat], "p").test(icateg))
 		return true;

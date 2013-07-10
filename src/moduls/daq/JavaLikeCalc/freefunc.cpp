@@ -842,16 +842,29 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 
 Reg *Func::cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end )
 {
-    //> Make operation cod
-    p_end -= p_cmd;
-    //>> Prepare operands
+    //> Mvi cond-op1 register (insert to program)
+    string cd_tmp = prg.substr(p_cmd);
+    prg.erase(p_cmd);
     op1 = cdMvi(op1);
+    p_end += prg.size()-p_cmd;
+    p_cmd = prg.size();
+    prg += cd_tmp;
+    //> Mvi op2 register (insert to program)
+    cd_tmp = prg.substr(p_end-1);   //-1 pass end command
+    prg.erase(p_end-1);
+    op2 = cdMvi(op2);
+    p_end = prg.size()+1;
+    prg += cd_tmp;
+
+    //> Make operation code
+    p_end -= p_cmd;
     Reg::Type op1_tp = op1->vType(this);
     Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
     int op1_pos = op1->pos();
     int op2_pos = op2->pos();
     op1->free();
     op2->free();
+
     //>> Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(rez_tp);

@@ -130,9 +130,9 @@ class TSYS : public TCntrNode
 	void setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
 
 	//> Config-file functions
-	string cfgFile( )	{ return mConfFile; }
-	XMLNode &cfgRoot( )	{ return rootN; }
-	XMLNode *cfgNode( const string &path, bool create = false );
+	string	cfgFile( )	{ return mConfFile; }
+	XMLNode	&cfgRoot( )	{ return rootN; }
+	XMLNode	*cfgNode( const string &path, bool create = false );
 	void modifCfg( )	{ rootModifCnt++; }
 
 	string workDB( )	{ return mWorkDB; }

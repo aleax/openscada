@@ -1,3 +1,15 @@
+2013-07-10 Roman
+- !!:SYS,*: OpenSCADA modules including mechanism is rewrote to "noinst" static libraries build and direct link its to core library.
+    Including modules check code is moved to the subsystem's modules enabling macro AX_MOD_{SUB}_EN.
+    Drop the station id from local node's path, for simplify and exclude station id doubling on messages from other stations.
+- Messages: Writing to buffer and history is allowed for negative levels (alarms). Mostly used for replay possibility on other station.
+- DAQ.Controller: Service request "/serv/mess" to the node type is added for this DAQ source messages request allow.
+    Virtual function "catsPat()" is added for the node type messages kind set allow.
+- !!:DAQ.DAQGate: Mirrored sources' messages read and trace is added. Prefix "{station}:" add to readed messages.
+- !!:FIX:DAQ.JavaLikeCalc: Remove wrong syntax rule "expr OR CONST{" but finite action to first constande independent next operations.
+    Conditional logical commands '||' and '&&' is fixed for constants.
+
+
 2013-07-05 Roman
 - Transport: "Request" tab of output transport is set accessable all time and any request send cause the transport start try.
 - DAQ.DAQGate: Alarms generation on connection problems is added.

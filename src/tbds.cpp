@@ -189,7 +189,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 	string vl, vl_tr;
 	vector<string> cf_el;
 
-	nd = SYS->cfgNode(path);
+	nd = SYS->cfgNode(SYS->id()+"/"+path);
 	for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++)
 	{
 	    el = nd->childGet(i_fld);
@@ -268,7 +268,7 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
     string vl, vl_tr;
     vector<string> cf_el;
 
-    nd = SYS->cfgNode(path);
+    nd = SYS->cfgNode(SYS->id()+"/"+path);
 
     //>> Scan fields and fill Configuration
     for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++)
@@ -334,7 +334,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
 	vector<string> cf_el;
 	string vnm;
 
-	nd = SYS->cfgNode(path,true);
+	nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 
 	if(nd)
 	{
@@ -407,7 +407,6 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat())
 	{
-
 	    try
 	    {
 		//> Select for using all keys
@@ -440,7 +439,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
     if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == "<cfg>"))
     {
 	ResAlloc res(SYS->nodeRes(),false);
-	XMLNode *nd = SYS->cfgNode(path,true);
+	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
 	//>> Search present field
 	for(unsigned i_fld = 0, i_el; nd && i_fld < nd->childSize(); i_fld++)
@@ -477,13 +476,7 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
 	    TConfig db_el(&dbs.at());
 	    db_el.setNoTransl( !(rFlg&TBDS::UseTranslate) );
 	    db_el.cfg("user").setS(user);
-	    if(dbs.at().mSYSStPref) db_el.cfg("id").setS(path);
-	    else
-	    {
-		int off = 0;
-		TSYS::pathLev(path,0,true,&off);
-		db_el.cfg("id").setS(path.substr(off));
-	    }
+	    db_el.cfg("id").setS(dbs.at().mSYSStPref ? SYS->id()+"/"+path : path);
 	    db_el.cfg("val").setS(val);
 
 	    try
@@ -501,8 +494,8 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
 	ResAlloc res(SYS->nodeRes(),true);
 	XMLNode *tgtN = NULL;
 	if(rFlg&TBDS::UseTranslate && Mess->lang2Code().size())
-	    tgtN = SYS->cfgNode(path+"_"+Mess->lang2Code(),true);
-	if(!tgtN) tgtN = SYS->cfgNode(path,true);
+	    tgtN = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code(), true);
+	if(!tgtN) tgtN = SYS->cfgNode(SYS->id()+"/"+path, true);
 	if(tgtN) { tgtN->setText(val,true); SYS->modifCfg(); }
     }
 }
@@ -522,13 +515,7 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	    TConfig db_el(&dbs.at());
 	    db_el.setNoTransl(!(rFlg&TBDS::UseTranslate));
 	    db_el.cfg("user").setS(user);
-	    if(dbs.at().mSYSStPref) db_el.cfg("id").setS(path);
-	    else
-	    {
-		int off = 0;
-		TSYS::pathLev(path,0,true,&off);
-		db_el.cfg("id").setS(path.substr(off));
-	    }
+	    db_el.cfg("id").setS(dbs.at().mSYSStPref ? SYS->id()+"/"+path : path);
 	    try
 	    {
 		tbl.at().fieldGet(db_el);
@@ -545,8 +532,8 @@ string TBDS::genDBGet(const string &path, const string &oval, const string &user
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *tgtN = NULL;
 	if(rFlg&TBDS::UseTranslate && Mess->lang2Code().size())
-	    tgtN = SYS->cfgNode(path+"_"+Mess->lang2Code());
-	if(!tgtN) tgtN = SYS->cfgNode(path);
+	    tgtN = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code());
+	if(!tgtN) tgtN = SYS->cfgNode(SYS->id()+"/"+path);
 	if(tgtN) rez = tgtN->text(true);
     }
 

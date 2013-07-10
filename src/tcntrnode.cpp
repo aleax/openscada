@@ -348,7 +348,7 @@ int8_t TCntrNode::grpId( const string &sid )
 
 TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
 {
-    if( iid < 0 || iid >= grpSize( ) )	throw TError(nodePath().c_str(),_("Branch group '%d' error."),iid);
+    if(iid < 0 || iid >= grpSize())	throw TError(nodePath().c_str(),_("Branch group '%d' error."),iid);
     return (*chGrp)[iid];
 }
 
@@ -360,10 +360,10 @@ void TCntrNode::chldList(int8_t igr, vector<string> &list)
 
     list.clear();
     list.reserve((*chGrp)[igr].elem.size());
-    if( !(*chGrp)[igr].ordered )
+    if(!(*chGrp)[igr].ordered)
     {
-	for( TMap::iterator p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); ++p )
-	    if( p->second->nodeMode() != Disable )
+	for(TMap::iterator p = (*chGrp)[igr].elem.begin(); p != (*chGrp)[igr].elem.end(); ++p)
+	    if(p->second->nodeMode() != Disable)
 		list.push_back(p->first);
     }
     else
@@ -376,7 +376,7 @@ void TCntrNode::chldList(int8_t igr, vector<string> &list)
 		while(p->second->mOi >= list.size()) list.push_back("");
 		list[p->second->mOi] = p->first;
 	    }
-	if( disYes )
+	if(disYes)
 	    for(unsigned i_p = 0; i_p < list.size(); )
 		if(list[i_p].empty()) list.erase(list.begin()+i_p);
 		else i_p++;
@@ -486,11 +486,11 @@ unsigned TCntrNode::nodeUse( bool selfOnly )
 
 string TCntrNode::nodePath( char sep, bool from_root )
 {
-    if( sep )
+    if(sep)
     {
-	if( prev.node )
+	if(prev.node)
 	{
-	    if( from_root && !prev.node->prev.node )
+	    if(from_root && !prev.node->prev.node)
 		return ((prev.grp<0)?"":(*(prev.node->chGrp))[prev.grp].id)+nodeName();
 	    else
 		return prev.node->nodePath(sep,from_root)+string(1,sep)+
@@ -500,7 +500,7 @@ string TCntrNode::nodePath( char sep, bool from_root )
     }
     else
     {
-	if( prev.node )
+	if(prev.node)
 	    return prev.node->nodePath(sep,from_root)+
 		    ((prev.grp<0)?"":(*(prev.node->chGrp))[prev.grp].id)+nodeName()+"/";
 	else return from_root ? string("/"):(string("/")+nodeName()+"/");

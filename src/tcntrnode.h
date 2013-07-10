@@ -148,7 +148,7 @@ class TCntrNode
 	//Methods
 	virtual Res &nodeRes( )		{ return hd_res; }
 	virtual const char *nodeName( ) = 0;
-	string nodePath( char sep = 0, bool from_root = false );
+	string nodePath( char sep = 0, bool from_root = true );
 
 	void nodeList( vector<string> &list, const string& gid = "" );				//Full node list
 	AutoHD<TCntrNode> nodeAt( const string &path, int lev = 0, char sep = 0, int off = 0, bool noex = false );	//Get node for full path

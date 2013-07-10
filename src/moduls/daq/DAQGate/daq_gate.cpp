@@ -149,11 +149,11 @@ string TMdContr::getStatus( )
 	val += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tmGath).c_str());
 	bool isWork = false;
 	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
-	    if(mStatWork[i_st].second > -1)
-		val += TSYS::strMess(_("Station '%s' error, restoring in %.3g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second);
+	    if(mStatWork[i_st].second.cntr > -1)
+		val += TSYS::strMess(_("Station '%s' error, restoring in %.3g s."),mStatWork[i_st].first.c_str(),mStatWork[i_st].second.cntr);
 	    else
 	    {
-		val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[i_st].first.c_str(),-mStatWork[i_st].second);
+		val += TSYS::strMess(_("Requests to station '%s': %.6g."),mStatWork[i_st].first.c_str(),-mStatWork[i_st].second.cntr);
 		isWork = true;
 	    }
 	if(!isWork) val.replace(0,1,"10");
@@ -188,7 +188,7 @@ void TMdContr::enable_( )
     //> Station list update
     if(!mStatWork.size())
 	for(int st_off = 0; (statv=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&st_off)).size(); )
-	    mStatWork.push_back(pair<string,float>(statv,0));
+	    mStatWork.push_back(pair<string,StHd>(statv,StHd()));
 
     //> Remote station scaning. Controllers and parameters scaning
     for(int i_st = 0; i_st < mStatWork.size(); i_st++)
@@ -236,7 +236,7 @@ void TMdContr::enable_( )
     //> Removing remotely missed parameters in case all remote stations active status by actual list
     bool prmChkToDel = true;
     for(int i_st = 0; prmChkToDel && i_st < mStatWork.size(); i_st++)
-	if(mStatWork[i_st].second >= 0) prmChkToDel = false;
+	if(mStatWork[i_st].second.cntr >= 0) prmChkToDel = false;
     if(prmChkToDel && enableStat())
     {
 	list(prm_ls);
@@ -267,7 +267,7 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     //> Clear stations request counter
-    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second = -1;
+    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++) mStatWork[i_st].second.cntr = -1;
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -283,7 +283,7 @@ void TMdContr::stop_( )
     //> Connection alarm clear
     for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
     {
-	if(mStatWork[i_st].second < 0)	continue;
+	if(mStatWork[i_st].second.cntr < 0)	continue;
 	alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
 	break;
     }
@@ -309,15 +309,17 @@ void *TMdContr::Task( void *icntr )
 
 	try
 	{
-	    ResAlloc res(cntr.enRes,false);
+	    ResAlloc res(cntr.enRes, false);
 
 	    //> Allow stations presenting
 	    bool isAccess = false, needEnable = false;
 	    for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++)
 	    {
-		if(cntr.mStatWork[i_st].second > 0)	cntr.mStatWork[i_st].second = vmax(0,cntr.mStatWork[i_st].second-1e-6*(t_cnt-t_prev));
-		if(cntr.mStatWork[i_st].second <= 0)	isAccess = true;
-		if(cntr.mStatWork[i_st].second == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
+		if(isFirst)	cntr.mStatWork[i_st].second.cntr = 0;	//Reset counter for connection alarm state update
+		if(cntr.mStatWork[i_st].second.cntr > 0)
+		    cntr.mStatWork[i_st].second.cntr = vmax(0,cntr.mStatWork[i_st].second.cntr-1e-6*(t_cnt-t_prev));
+		if(cntr.mStatWork[i_st].second.cntr <= 0)	isAccess = true;
+		if(cntr.mStatWork[i_st].second.cntr == 0)	needEnable = true;	//!!!! May be only for all == 0 stations
 	    }
 	    if(!isAccess) { t_prev = t_cnt; TSYS::sysSleep(1); continue; }
 	    else
@@ -347,8 +349,9 @@ void *TMdContr::Task( void *icntr )
 		//> Station's cycle
 		for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++)
 		{
-		    if(cntr.mStatWork[i_st].second > 0) continue;
-		    XMLNode req("CntrReqs"); req.setAttr("path","/"+cntr.mStatWork[i_st].first+"/DAQ/");
+		    if(cntr.mStatWork[i_st].second.cntr > 0) continue;
+		    XMLNode req("CntrReqs"); req.setAttr("path", "/"+cntr.mStatWork[i_st].first+"/DAQ/");
+		    map<string, bool> cntrLstMA;
 
 		    //> Put attributes requests
 		    for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
@@ -358,9 +361,12 @@ void *TMdContr::Task( void *icntr )
 			for(int c_off = 0; (scntr=TSYS::strSepParse(prm.at().cntrAdr(),0,';',&c_off)).size(); )
 			{
 			    if(TSYS::pathLev(scntr,0) != cntr.mStatWork[i_st].first) continue;
+			    string aMod	= TSYS::pathLev(scntr, 2);
+			    string aCntr = TSYS::pathLev(scntr, 3);
+			    cntrLstMA[aMod+"/"+aCntr] = true;
 
-			    XMLNode *prmNd = req.childAdd("get")->setAttr("path","/"+TSYS::pathLev(scntr,2)+"/"+TSYS::pathLev(scntr,3)+"/"+prm.at().id()+"/%2fserv%2fattr");
-			    prmNd->setAttr( "hostTm", !cntr.restDtTm() ? "1" : "0" );
+			    XMLNode *prmNd = req.childAdd("get")->setAttr("path","/"+aMod+"/"+aCntr+"/"+prm.at().id()+"/%2fserv%2fattr");
+			    prmNd->setAttr("hostTm", !cntr.restDtTm() ? "1" : "0");
 
 			    //>> Prepare individual attributes list
 			    bool sepReq = !prm.at().isEVAL && ((!div && syncCnt > 0) || (div && ((it_cnt+i_p)%div)));
@@ -373,57 +379,84 @@ void *TMdContr::Task( void *icntr )
 			    for(unsigned iV = 0; iV < listV.size(); iV++)
 			    {
 				AutoHD<TVal> vl = prm.at().vlAt(listV[iV]);
-				if(sepReq && (!vl.at().arch().freeStat() || vl.at().reqFlg())) { prmNd->childAdd("el")->setAttr("id",listV[iV]); rC++; }
+				if(sepReq && (!vl.at().arch().freeStat() || vl.at().reqFlg()))
+				{
+				    prmNd->childAdd("el")->setAttr("id",listV[iV]);
+				    rC++;
+				}
 				if(!vl.at().arch().freeStat())
-				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
+				    prmNd->childAdd("ael")->setAttr("id",listV[iV])->
+					setAttr("tm",TSYS::ll2str(vmax(vl.at().arch().at().end(""),TSYS::curTime()-(int64_t)(3.6e9*cntr.restDtTm()))));
 			    }
 			    if(sepReq && rC > listV.size()/2)
 			    {
 				prmNd->childClear("el");
-				prmNd->setAttr( "sepReq", "0" );
+				prmNd->setAttr("sepReq", "0");
 			    }
 			}
 		    }
+		    //> Requests to the controllers messages prepare
+		    for(map<string,bool>::iterator i_c = cntrLstMA.begin(); i_c != cntrLstMA.end(); ++i_c)
+		    {
+			int tm_grnd = cntr.mStatWork[i_st].second.lstMess[i_c->first];
+			if(!tm_grnd) tm_grnd = SYS->sysTm() - 3600*cntr.restDtTm();
+			req.childAdd("get")->setAttr("path", "/"+i_c->first+"/%2fserv%2fmess")->setAttr("tm_grnd", TSYS::int2str(tm_grnd));
+		    }
+
 		    if(!req.childSize()) continue;
 
 		    //> Same request
 		    if(cntr.cntrIfCmd(req)) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
 
 		    //> Result process
-		    for(unsigned i_r = 0; i_r < req.childSize(); i_r++)
+		    for(unsigned i_r = 0; i_r < req.childSize(); ++i_r)
 		    {
 			XMLNode *prmNd = req.childGet(i_r);
 			if(atoi(prmNd->attr("err").c_str())) continue;
-
-			prm = cntr.at(TSYS::pathLev(prmNd->attr("path"),2));
-
-			if( prm.at().isPrcOK ) continue;
-			prm.at().isPrcOK = true;
-			prm.at().isEVAL = false;
-
-			for(unsigned i_a = 0; i_a < prmNd->childSize(); i_a++)
+			string aMod	= TSYS::pathLev(prmNd->attr("path"), 0);
+                        string aCntr	= TSYS::pathLev(prmNd->attr("path"), 1);
+			string pId	= TSYS::pathLev(prmNd->attr("path"), 2);
+			if(pId == "/serv/mess")
 			{
-			    XMLNode *aNd = prmNd->childGet(i_a);
-			    if(!prm.at().vlPresent(aNd->attr("id"))) continue;
-			    AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
-
-			    if(aNd->name() == "el")
-			    { vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true); vl.at().setReqFlg(false); }
-			    else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize())
+			    for(unsigned i_m = 0; i_m < prmNd->childSize(); i_m++)
 			    {
-				int64_t btm = atoll(aNd->attr("tm").c_str());
-				int64_t per = atoll(aNd->attr("per").c_str());
-				TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
-				for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
-				    buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
-				vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+				XMLNode *m = prmNd->childGet(i_m);
+				SYS->archive().at().messPut(atoi(m->attr("time").c_str()), atoi(m->attr("utime").c_str()),
+				    cntr.mStatWork[i_st].first+":"+m->attr("cat"), atoi(m->attr("lev").c_str()), m->text());
+			    }
+			    cntr.mStatWork[i_st].second.lstMess[aMod+"/"+aCntr] = atoi(prmNd->attr("tm").c_str());
+			}
+			else
+			{
+			    prm = cntr.at(pId);
+			    if(prm.at().isPrcOK) continue;
+			    prm.at().isPrcOK = true;
+			    prm.at().isEVAL = false;
+
+			    for(unsigned i_a = 0; i_a < prmNd->childSize(); i_a++)
+			    {
+				XMLNode *aNd = prmNd->childGet(i_a);
+				if(!prm.at().vlPresent(aNd->attr("id"))) continue;
+				AutoHD<TVal> vl = prm.at().vlAt(aNd->attr("id"));
+
+				if(aNd->name() == "el")
+				{ vl.at().setS(aNd->text(),cntr.restDtTm()?atoll(aNd->attr("tm").c_str()):0,true); vl.at().setReqFlg(false); }
+				else if(aNd->name() == "ael" && !vl.at().arch().freeStat() && aNd->childSize())
+				{
+				    int64_t btm = atoll(aNd->attr("tm").c_str());
+				    int64_t per = atoll(aNd->attr("per").c_str());
+				    TValBuf buf(vl.at().arch().at().valType(),0,per,false,true);
+				    for(unsigned i_v = 0; i_v < aNd->childSize(); i_v++)
+					buf.setS(aNd->childGet(i_v)->text(),btm+per*i_v);
+				    vl.at().arch().at().setVals(buf,buf.begin(),buf.end(),"");
+				}
 			    }
 			}
 		    }
 		}
 
 		//> Mark no processed parameters to EVAL
-		for(unsigned i_p=0; i_p < pLS.size(); i_p++)
+		for(unsigned i_p = 0; i_p < pLS.size(); i_p++)
 		{
 		    prm = cntr.at(pLS[i_p]);
 		    if(prm.at().isPrcOK || prm.at().isEVAL) continue;
@@ -453,51 +486,58 @@ void *TMdContr::Task( void *icntr )
 	TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
     }
 
-
     cntr.prcSt = false;
 
     return NULL;
+}
+
+string TMdContr::catsPat( )
+{
+    string curPat = TController::catsPat();
+
+    string statv;
+    for(int st_off = 0; (statv=TSYS::strSepParse(cfg("STATIONS").getS(),0,'\n',&st_off)).size(); )
+	curPat += "|^"+statv+":";
+
+    return curPat;
 }
 
 int TMdContr::cntrIfCmd( XMLNode &node )
 {
     string reqStat = TSYS::pathLev(node.attr("path"),0);
 
-    //try
-    //{
-	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
-	    if(mStatWork[i_st].first == reqStat)
+    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
+	if(mStatWork[i_st].first == reqStat)
+	{
+	    if(mStatWork[i_st].second.cntr > 0) break;
+	    try
 	    {
-		if(mStatWork[i_st].second > 0) break;
-		try
+		int rez = SYS->transport().at().cntrIfCmd(node,MOD_ID+id());
+		//> Clear alarm for gone successful connect
+		if(startStat() && mStatWork[i_st].second.cntr == 0)
 		{
-		    int rez = SYS->transport().at().cntrIfCmd(node,MOD_ID+id());
-		    //> Clear alarm for gone successful connect
-		    if(mStatWork[i_st].second == 0)
-		    {
-			unsigned i_st1;
-			for(i_st1 = 0; i_st1 < mStatWork.size(); i_st1++)
-			    if(mStatWork[i_st1].second > 0) break;
-			if(i_st1 >= mStatWork.size())
-			    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
-		    }
-		    mStatWork[i_st].second -= 1;
-		    return rez;
+		    unsigned i_st1;
+		    for(i_st1 = 0; i_st1 < mStatWork.size(); i_st1++)
+			if(mStatWork[i_st1].second.cntr > 0) break;
+		    if(i_st1 >= mStatWork.size())
+			alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
 		}
-		catch(TError err)
-		{
-		    if(call_st)
-		    {
-			//> Set alarm for station
-			if(mStatWork[i_st].second < 0)
-			    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source '%s': %s."),
-				id().c_str(), mStatWork[i_st].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
-			mStatWork[i_st].second = mRestTm;
-		    }
-		    throw;
-		}
+		mStatWork[i_st].second.cntr -= 1;
+		return rez;
 	    }
-    //}catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("err","10")->setText(err.mess); }
+	    catch(TError err)
+	    {
+		if(call_st)
+		{
+		    //> Set alarm for station
+		    if(mStatWork[i_st].second.cntr < 0)
+			alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source '%s': %s."),
+			    id().c_str(), mStatWork[i_st].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
+		    mStatWork[i_st].second.cntr = mRestTm;
+		}
+		throw;
+	    }
+	}
 
     return atoi(node.attr("err").c_str());
 }
