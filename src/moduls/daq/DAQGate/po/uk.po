@@ -1,14 +1,14 @@
 # OpenSCADA.DAQ.DAQGate translate to Ukrainian.
-# Copyright (C) 2007-2010 Roman Savochenko
+# Copyright (C) 2007-2013 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2007-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2007-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-15 07:54+0300\n"
+"POT-Creation-Date: 2013-07-02 16:17+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -92,16 +92,30 @@ msgstr ""
 "Помилка видалення параметру '%s', однак він відсутній у конфігурації або на "
 "віддаленій станції."
 
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: підключення до джерела даних: %s."
+
+msgid "STOP"
+msgstr "ЗУПИНЕНО"
+
 msgid "10:Data not allow."
 msgstr "10:Дані не доступні."
+
+msgid "OK"
+msgstr "НОРМА"
+
+#, c-format
+msgid "DAQ.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s: підключення до джерела даних '%s': %s."
+
+msgid "Zero for disable archive access."
+msgstr "Нуль для виключення доступу до архіву."
 
 msgid "Remote OpenSCADA stations' identifiers list used into it controller."
 msgstr ""
 "Перелік ідентифікаторів віддалених OpenSCADA станцій використаних у цьому "
 "контролері."
-
-msgid "Zero for disable archive access."
-msgstr "Нуль для виключення доступу до архіву."
 
 msgid ""
 "Remote OpenSCADA full controller's or separated controller's parameters "

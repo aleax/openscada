@@ -25,6 +25,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 
 #include <QLabel>
 #include <QDialog>
@@ -39,6 +40,7 @@
 
 using std::string;
 using std::vector;
+using std::map;
 using namespace OSCADA;
 
 class QMainWindow;
@@ -312,6 +314,7 @@ namespace VISION
 	    void	resizeF( const QSizeF &size );
 	    void	setAllAttrLoad( bool vl )	{ mAllAttrLoad = vl; }
 
+	    void	attrsSet( map<string,string> &attrs );
 	    virtual bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 	    virtual string resGet( const string &res );
 

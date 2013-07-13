@@ -11,3 +11,4 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)Serial
+include ../../../../I18N.mk

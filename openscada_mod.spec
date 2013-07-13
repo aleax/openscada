@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.8.0.6
+Version: 0.8.0.7
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -237,10 +237,11 @@ Group: Graphics
 AutoReq: noshell
 %endif
 Requires: %name-LibDB.Main %name-LibDB.VCA
-Requires: %name-DAQ.BlockCalc %name-Archive.FSArch %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System
-Requires: %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem
-Requires: %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.Sockets %name-Transport.SSL
-Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision 
+Requires: %name-DB.SQLite
+Requires: %name-Transport.Sockets %name-Transport.SSL %name-Transport.Serial %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Protocol.UserProtocol
+Requires: %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System %name-Archive.FSArch
+Requires: %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS
+Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %name-UI.WebCfgD %name-UI.WebVision
 %description Model.AGLKS
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
 The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
@@ -303,10 +304,10 @@ Summary(uk_UA.UTF8): Віртуальний пакет OpenSCADA - ПЛК.
 Summary(de_DE.UTF8): OpenSCADA - SPS virtuelles Paket.
 Group: Graphics
 BuildArch: noarch
-Requires: %name-Archive.FSArch %name-DAQ.BlockCalc %name-DAQ.JavaLikeCalc %name-DAQ.LogicLev
-Requires: %name-DAQ.ModBus %name-DAQ.System %name-DB.SQLite %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Special.FLibComplex1
-Requires: %name-Special.FLibMath %name-Special.FLibSYS %name-Transport.SSL %name-Transport.Serial %name-Transport.Sockets %name-UI.VCAEngine
-Requires: %name-UI.WebCfgD %name-UI.WebVision
+Requires: %name-DB.SQLite
+Requires: %name-Transport.Serial %name-Transport.Sockets %name-Transport.SSL %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Protocol.UserProtocol
+Requires: %name-DAQ.JavaLikeCalc %name-DAQ.BlockCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System %name-Archive.FSArch
+Requires: %name-UI.VCAEngine %name-UI.WebCfgD %name-UI.WebVision %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS
 %description plc
 The %name-plc package is virtual package for PLC.
 %description plc -l ru_RU.UTF8
@@ -1466,6 +1467,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Thu Jul 11 2013 Roman Savochenko <rom_as@oscada.org>
+- Build 0.8.0.7 update to production release.
+
 * Sat May 11 2013 Roman Savochenko <rom_as@oscada.org>
 - Build 0.8.0.6 update to production release.
 

@@ -93,6 +93,16 @@ TBD *BDMod::openBD( const string &iid )
     return new MBD(iid,&owner().openDB_E());
 }
 
+void BDMod::modStop( )
+{
+    vector<string> dbs;
+
+    //Close transactions for all DB
+    list(dbs);
+    for(unsigned i_db = 0; i_db < dbs.size(); i_db++)
+	at(dbs[i_db]).at().transCommit();
+}
+
 void BDMod::load_( )
 {
     //> Load parameters from command line

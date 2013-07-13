@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-26 17:42+0300\n"
+"POT-Creation-Date: 2013-07-02 16:28+0300\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <de@li.org>\n"
@@ -94,6 +94,13 @@ msgstr "Socket hat die Nachricht bekommen '%d' aus '%s'."
 #, c-format
 msgid "Socket replied message '%d' to '%s'."
 msgstr "Socket hat mit der Nachricht geantwortet '%d' auf '%s'."
+
+msgid "Write: reply for zero bytes."
+msgstr "Schreiben: Antwort für Null-Bytes."
+
+#, c-format
+msgid "Write: error '%s (%d)'!"
+msgstr "Schreiben: Fehler '%s (%d)'!"
 
 #, c-format
 msgid "Socket has been disconnected by '%s'!"

@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-27 18:11+0300\n"
+"POT-Creation-Date: 2013-07-01 16:30+0300\n"
 "PO-Revision-Date: 2009-08-26 08:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -55,11 +55,23 @@ msgstr "%gs"
 msgid "%gms"
 msgstr "%gms"
 
+#, c-format
+msgid "Trend creation time %gms"
+msgstr "Trend Erstellungszeit %gms"
+
+#, c-format
+msgid "+ PNG-image(%d) creation time %gms"
+msgstr "+ PNG-Bild (%d) Erstellungszeit %gms"
+
 msgid "kHz"
 msgstr "KHz"
 
 msgid "Hz"
 msgstr "Hz"
+
+#, c-format
+msgid "Document '%s' parsing is error: %s"
+msgstr "Dokument '%s' ist Parsing-Fehler: %s"
 
 msgid "Operation user interface (WEB)"
 msgstr "Benutzerschnittstelle (WEB)"
@@ -147,8 +159,19 @@ msgstr "Lebensdauer der Sitzung (Min)"
 msgid "Sessions limit"
 msgstr "Session Limit"
 
+msgid "PNG compression level"
+msgstr "PNG Komprimierungsstufe"
+
+msgid ""
+"PNG (ZLib) compression level:\n"
+"  -1  - optimal speed-size;\n"
+"  0   - disable;\n"
+"  1-9 - direct level."
+msgstr ""
+"Kompressionsstufe PNG(ZLib):\n"
+"  -1  - optimale Geschwindigkeit-Grösse;\n"
+"  0   - abgeschaltet;\n"
+"  1-9 - direkte Stufe."
+
 msgid "Options help"
 msgstr "Optionen Hilfe"
-
-#~ msgid "Checking if session is not stopped!"
-#~ msgstr "Prüfen, ob Session wird nicht gestoppt!"

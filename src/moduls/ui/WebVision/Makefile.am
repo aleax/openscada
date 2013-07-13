@@ -23,6 +23,7 @@ VCAjs.cpp: WebVisionVCA.js
 	done
 
 I18N_mod = $(oscd_modulpref)WebVision
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f VCAjs.cpp

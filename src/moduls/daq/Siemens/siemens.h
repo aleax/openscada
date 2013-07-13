@@ -125,7 +125,7 @@ class TMdPrm : public TParamContr, public TValFunc
 	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
-	void loadIO( );
+	void loadIO( bool force = false );
 	void saveIO( );
 	void initLnks( );
 

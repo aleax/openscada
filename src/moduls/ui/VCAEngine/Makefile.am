@@ -11,3 +11,4 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)VCAEngine
+include ../../../../I18N.mk

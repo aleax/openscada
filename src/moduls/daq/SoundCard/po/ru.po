@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 10:48+0200\n"
+"POT-Creation-Date: 2013-06-26 11:40+0300\n"
 "PO-Revision-Date: 2008-03-27 18:49+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -40,6 +40,9 @@ msgstr "Тип значения выборки"
 msgid "Float 32;Int 32;Int 16"
 msgstr "Веществ. 32;Целый 32;Целый 16"
 
+msgid "Gather task priority"
+msgstr "Приоритет задачи сбора"
+
 msgid "Standard"
 msgstr "Стандарт"
 
@@ -53,11 +56,13 @@ msgstr "Значение"
 msgid "Allowed %d input channels"
 msgstr "Доступно %d входных каналов"
 
+#, c-format
 msgid ""
 "Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost "
 "frames %g"
 msgstr ""
-"Сбор с %d каналов. Получено %.2f МБ. Подстроенная частота выборки %d. Потеряно кадров %g"
+"Сбор с %d каналов. Получено %.2f МБ. Подстроенная частота выборки %d. "
+"Потеряно кадров %g"
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
@@ -71,3 +76,14 @@ msgstr "Ошибка установки типа значения."
 
 msgid "Sound input stream is not stopped!"
 msgstr "Звуковой входной поток не остановлено!"
+
+#, c-format
+msgid ""
+"CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err="
+"%g; diff=%lld."
+msgstr "Обратный вызов: Коррекция потери кадров: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err="
+"%g; diff=%lld."
+
+#, c-format
+msgid "CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."
+msgstr "Обратный вызов: Исправление разницы счётчика звука: sRt=%d; dTm=%lld."

@@ -1,14 +1,14 @@
 # OpenSCADA.UI.WebVision translate to Russian.
-# Copyright (C) 2007-2010 Roman Savochenko
+# Copyright (C) 2007-2013 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebVision package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2007-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2007-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebVision 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-27 18:11+0300\n"
+"POT-Creation-Date: 2013-07-01 16:30+0300\n"
 "PO-Revision-Date: 2007-12-03 11:05+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -50,11 +50,22 @@ msgstr "%gс"
 msgid "%gms"
 msgstr "%gмс"
 
+#, c-format
+msgid "Trend creation time %gms"
+msgstr "Время создания тренда %gмс"
+
+msgid "+ PNG-image(%d) creation time %gms"
+msgstr "+ Время создания PNG-изображения (%d) %gмс"
+
 msgid "kHz"
 msgstr "кГц"
 
 msgid "Hz"
 msgstr "Гц"
+
+#, c-format
+msgid "Document '%s' parsing is error: %s"
+msgstr "Ошибка парсинга документа '%s': %s"
 
 msgid "Operation user interface (WEB)"
 msgstr "Рабочий пользовательский интерфейс (WEB)"
@@ -141,8 +152,19 @@ msgstr "Время жизни сеанса (мин)"
 msgid "Sessions limit"
 msgstr "Ограничение количества сеансов"
 
+msgid "PNG compression level"
+msgstr "Уровень сжатия PNG"
+
+msgid ""
+"PNG (ZLib) compression level:\n"
+"  -1  - optimal speed-size;\n"
+"  0   - disable;\n"
+"  1-9 - direct level."
+msgstr ""
+"Уровень компрессии PNG (ZLib):\n"
+"  -1  - оптимальный, скорость-размер;\n"
+"  0   - отключен;\n"
+"  1-9 - прямой уровень."
+
 msgid "Options help"
 msgstr "Помощь по опциям"
-
-#~ msgid "Checking if session is not stopped!"
-#~ msgstr "Проверка на факт остановки сеанса!"

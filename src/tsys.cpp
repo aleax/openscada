@@ -27,6 +27,7 @@
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/utsname.h>
+#include <sys/resource.h>
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
@@ -197,9 +198,9 @@ string TSYS::uint2str( unsigned val, IntView view )
 string TSYS::ll2str( int64_t val, IntView view )
 {
     char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",val);
+    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",(long long int)val);
+    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",(long long unsigned int)val);
+    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",(long long unsigned int)val);
 
     return buf;
 }
@@ -1333,6 +1334,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     htsk.taskArg = arg;
     htsk.flgs = 0;
     htsk.thr = 0;
+    htsk.prior = priority;
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
@@ -1349,7 +1351,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 #if __GLIBC_PREREQ(2,4)
     if(priority < 0)	policy = SCHED_BATCH;
 #endif
-    if(priority > 0 /*&& SYS->user() == "root"*/)	policy = SCHED_RR;
+    if(priority > 0)	policy = SCHED_RR;
     pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
@@ -1455,7 +1457,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    tsk->prior = param.sched_priority;
+    //tsk->prior = param.sched_priority;
 
 #if __GLIBC_PREREQ(2,4)
     //> Load and init CPU set
@@ -1475,7 +1477,9 @@ void *TSYS::taskWrap( void *stas )
 
     //> Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
-    tsk->thr = pthread_self();
+    //>> Set nice level without realtime if it no permitted
+    if(tsk->policy != SCHED_RR && tsk->prior > 0 && setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0) tsk->prior = 0;
+    tsk->thr = pthread_self();		//Task creation finish
 
     //> Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
     sigset_t mask;

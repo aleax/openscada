@@ -77,9 +77,9 @@ void TCntrNode::nodeDelAll( )
 
 void TCntrNode::setNodeMode( char mode )
 {
-    hd_res.resRequestW();
+    pthread_mutex_lock(&connM);
     m_flg = (m_flg&(~0x03))|(mode&0x03);
-    hd_res.resRelease();
+    pthread_mutex_unlock(&connM);
 }
 
 XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
@@ -538,9 +538,19 @@ int TCntrNode::isModify( int f )
     return rflg;
 }
 
-void TCntrNode::modif( bool save )	{ m_flg |= (save?(SelfModifyS|SelfModify):SelfModify); }
+void TCntrNode::modif( bool save )
+{
+    pthread_mutex_lock(&connM);
+    m_flg |= (save?(SelfModifyS|SelfModify):SelfModify);
+    pthread_mutex_unlock(&connM);
+}
 
-void TCntrNode::modifClr( bool save )	{ m_flg &= ~(save?SelfModifyS:SelfModify); }
+void TCntrNode::modifClr( bool save )
+{
+    pthread_mutex_lock(&connM);
+    m_flg &= ~(save?SelfModifyS:SelfModify);
+    pthread_mutex_unlock(&connM);
+}
 
 void TCntrNode::modifG( )
 {
@@ -600,24 +610,10 @@ void TCntrNode::save( )
     //> Childs load process
     if( isModify(Child)&Child )
     {
-	ResAlloc res( hd_res, false );
+	ResAlloc res(hd_res, false);
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	    for(unsigned i_p = 0; i_p < (*chGrp)[i_g].elem.size(); )
-	    {
-		TMap::iterator p = (*chGrp)[i_g].elem.begin();
-		for(unsigned i = 0; i < i_p; i++) p++;
-
-		if(p->second->isModify(Self|Child)) p->second->save();
-		if(p->second->nodeMode() == TCntrNode::Disable)
-		{
-		    string chld_nm = p->second->nodeName();
-		    res.release();
-		    chldDel(i_g, chld_nm);
-		    res.request(false);
-		    continue;
-		}
-		i_p++;
-	    }
+	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
+                if(p->second->isModify(Self|Child)) p->second->save();
     }
     modifClr( );
 }

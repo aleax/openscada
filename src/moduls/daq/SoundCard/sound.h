@@ -87,6 +87,7 @@ class TMdContr: public TController
 	~TMdContr( );
 
 	string	card( )		{ return cfg("CARD").getS(); }
+	int	prior( )	{ return mPrior; }
 
 	string getStatus( );
 	int channelAllow( );
@@ -119,12 +120,13 @@ class TMdContr: public TController
     private:
 	//Attributes
 	TElem	pEl;					//Work atribute elements
-	int	&mSmplRate, &mSmplType;
-	bool	prcSt, endrunReq;
+	int	&mSmplRate, &mSmplType, &mPrior;
+	bool	prcSt, endrunReq, firstCall;
 	int	numChan, smplSize;
 	vector< AutoHD<TMdPrm> > pHd;			// Parameter's process list
 
 	PaStream *stream;
+	time_t	cTm;
 	int64_t	wTm, tmAdj;
 	int	sRt;
 	float	acqSize;

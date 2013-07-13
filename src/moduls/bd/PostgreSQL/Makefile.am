@@ -12,3 +12,4 @@ install:
 endif
 
 I18N_mod = $(oscd_modulpref)PostgreSQL
+include ../../../../I18N.mk

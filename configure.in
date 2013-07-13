@@ -1,7 +1,7 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.0.6],[rom_as@oscada.org, rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.8.0.7],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
 oscd_LIBREVISION="2:0:0"
 oscd_modulpref="oscd_"
@@ -603,20 +603,6 @@ AC_DEFINE_UNQUOTED(MODS_INCL, "${ModsIncl}",[Included to core modules list.])
 LIBS=""
 
 AC_OUTPUT
-
-# I18N process place to *.am
-if test $ac_cv_header_libintl_h = yes; then
-    for ac_config_file in $ac_config_files; do
-	sedRez=`cat $ac_config_file | sed -n '/^I18N_mod *= *\([[^ ]]*\)\$/s//\1/p'`
-	if test "x$sedRez" != "x"; then
-	    sed "s/\(^install:.*\)\$/\1 install-I18N/" $ac_config_file |
-	    sed "s/\(^uninstall:.*\)\$/\1 uninstall-I18N/" |
-	    sed "s/\(^clean:.*\)\$/\1 clean-I18N/" > $ac_config_file.prc
-	    cat $ac_config_file.prc I18N.mk > $ac_config_file
-	    rm $ac_config_file.prc
-	fi
-    done
-fi
 
 AC_MSG_RESULT([============ Final configuration results ==============])
 AC_MSG_RESULT([* Status:])
