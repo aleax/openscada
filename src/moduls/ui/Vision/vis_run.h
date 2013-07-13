@@ -92,6 +92,8 @@ class VisRun : public QMainWindow
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
+	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
+
 	//> Resource cache commands
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );

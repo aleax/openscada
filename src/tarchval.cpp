@@ -1634,7 +1634,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
     //> Get image and transfer it
     int img_sz;
-    char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+    char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, 1);
     rez.assign(img_ptr,img_sz);
     gdFree(img_ptr);
     gdImageDestroy(im);
@@ -2192,9 +2192,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    while(c_tm <= buf.end())
 	    {
 	        string val = buf.getS(&c_tm,true);
-		if(n_tm) n_tm->childAdd("el")->setText(TSYS::int2str(c_tm/1000000));
-		if(n_tm) n_utm->childAdd("el")->setText(TSYS::int2str(c_tm%1000000));
-		if(n_val)n_val->childAdd("el")->setText(val);
+		if(n_tm) n_tm->childIns(0,"el")->setText(TSYS::int2str(c_tm/1000000));
+		if(n_tm) n_utm->childIns(0,"el")->setText(TSYS::int2str(c_tm%1000000));
+		if(n_val)n_val->childIns(0,"el")->setText(val);
 		c_tm++;
 	    }
     }

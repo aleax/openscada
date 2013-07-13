@@ -895,7 +895,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","bool");
 	    }
 	}
-	if(startStat() && ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID))
+	if(ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/req/tm",_("Time"),R_R___,"root",STR_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/req/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","dec","dest","select",
@@ -979,7 +979,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqAnsw","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	TBDS::genDBSet(owner().nodePath()+"ReqAnsw",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/req/send" && startStat() && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
+    else if(a_path == "/req/send" && ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))
     {
 	string answ;
 	int mode = atoi(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")).c_str());
@@ -1007,6 +1007,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 
 	int64_t stm = TSYS::curTime();
 	char buf[STR_BUF_LEN];
+	if(!startStat()) start();
 	ResAlloc resN(nodeRes(), true);
 	int resp_len = messIO(req.data(),req.size(),buf,sizeof(buf),0,true);
 	answ.assign(buf,resp_len);

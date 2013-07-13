@@ -4,13 +4,13 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2011.
+# Roman Savochenko <rom_as@oscada.org>, 2011-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-15 07:54+0300\n"
+"POT-Creation-Date: 2013-07-02 16:17+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -96,14 +96,28 @@ msgstr ""
 "Löschen des Parameters '%s' ist falsch, er fehlt in der Konfiguration oder "
 "in der entfernten Station."
 
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
+
+msgid "STOP"
+msgstr "STOP"
+
 msgid "10:Data not allow."
 msgstr "10:Daten nicht zulassen."
 
-msgid "Remote OpenSCADA stations' identifiers list used into it controller."
-msgstr "Liste von verwendeten Bezeichnern aus entfernten OpenSCADA-Stationen."
+msgid "OK"
+msgstr "OK"
+
+#, c-format
+msgid "DAQ.%s: connect to data source '%s': %s."
+msgstr "DAQ.%s: Verbindung zu Datenquelle '%s': %s."
 
 msgid "Zero for disable archive access."
 msgstr "Null für Behinderte Archiv zugreifen."
+
+msgid "Remote OpenSCADA stations' identifiers list used into it controller."
+msgstr "Liste von verwendeten Bezeichnern aus entfernten OpenSCADA-Stationen."
 
 msgid ""
 "Remote OpenSCADA full controller's or separated controller's parameters "

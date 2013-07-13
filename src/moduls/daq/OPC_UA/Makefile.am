@@ -7,3 +7,4 @@ daq_OPC_UA_la_LIBADD  = $(LIB_OpenSSL)
 daq_OPC_UA_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)OPC_UA
+include ../../../../I18N.mk
