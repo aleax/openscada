@@ -98,7 +98,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void load_( );
 	void save_( );
 
-	void loadIO( const string &blk_db = "", const string &blk_id = "" );
+	void loadIO( const string &blk_db = "", const string &blk_id = "", bool force = false );
 	void saveIO( );
 
 	const char *nodeName( )	{ return m_id.getSd(); }

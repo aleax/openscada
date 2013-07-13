@@ -8,3 +8,4 @@ daq_ICP_DAS_la_LIBADD  = $(ICP_DAS_LIBS)
 daq_ICP_DAS_la_LIBTOOLFLAGS = --tag=disable-static
 
 I18N_mod = $(oscd_modulpref)ICP_DAS
+include ../../../../I18N.mk

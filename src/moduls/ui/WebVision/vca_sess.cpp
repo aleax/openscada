@@ -38,7 +38,7 @@ using namespace WebVision;
 //*************************************************
 //* VCASess					  *
 //*************************************************
-VCASess::VCASess( const string &iid, bool isCreate ) : m_id(iid), mIsCreate(isCreate)
+VCASess::VCASess( const string &iid, bool isCreate ) : mId(iid), mIsCreate(isCreate)
 {
     lst_ses_req	= time(NULL);
     id_objs	= grpAdd("obj_");
@@ -59,6 +59,7 @@ void VCASess::postDisable( int flag )
 
 void VCASess::getReq( SSess &ses )
 {
+    string oAddr;
     //> Access time to session is updating
     lst_ses_req = time(NULL);
 
@@ -157,9 +158,10 @@ void VCASess::getReq( SSess &ses )
 		continue;
 	    }
 	    //> Check for objects represent some widgets type creation if attribute "root" present, typical for init requests
-	    XMLNode *rootId = cn->getElementBy("id","root");
-	    if(rootId) objCheck(rootId->text(), caddr);
-	    if(objPresent(caddr)) objAt(caddr).at().setAttrs(*cn,ses.user);
+	    XMLNode *rootId = cn->getElementBy("id", "root");
+	    oAddr = TSYS::path2sepstr(caddr);
+	    if(rootId) objCheck(rootId->text(), oAddr);
+	    if(objPresent(oAddr)) objAt(oAddr).at().setAttrs(*cn, ses.user);
 	    if(!cn->parent())	break;
 	    cn = cn->parent();
 	    cpos = pos.back();	pos.pop_back();
@@ -183,10 +185,7 @@ void VCASess::getReq( SSess &ses )
 	} else ses.page = mod->httpHead("404 Not Found");
     }
     //> Request to primitive object. Used for data caching
-    else if( wp_com == "obj" )
-    {
-	if( objPresent(ses.url) ) objAt(ses.url).at().getReq(ses);
-    }
+    else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().getReq(ses);
     else
     {
 	mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
@@ -197,6 +196,7 @@ void VCASess::getReq( SSess &ses )
 
 void VCASess::postReq( SSess &ses )
 {
+    string oAddr;
     //> Commands process
     map<string,string>::iterator cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
@@ -215,23 +215,23 @@ void VCASess::postReq( SSess &ses )
 	req.setAttr("path","/"+TSYS::pathLev(ses.url,0)+"/%2fserv%2fpg")->setAttr("pg",ses.url);
 	mod->cntrIfCmd(req,ses.user);
     }
-    else if(wp_com == "obj" && objPresent(ses.url)) objAt(ses.url).at().postReq(ses);
+    else if(wp_com == "obj" && objPresent(oAddr=TSYS::path2sepstr(ses.url))) objAt(oAddr).at().postReq(ses);
     ses.page = mod->httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 }
 
 void VCASess::objCheck( const string &rootId, const string &wPath )
 {
     if(objPresent(wPath)) return;
-    if(rootId == "ElFigure")	objAdd(new VCAElFigure(wPath));
-    else if(rootId == "Text")	objAdd(new VCAText(wPath));
-    else if(rootId == "Diagram")objAdd(new VCADiagram(wPath));
-    else if(rootId == "Document")objAdd(new VCADocument(wPath));
+    if(rootId == "ElFigure")		objAdd(new VCAElFigure(wPath));
+    else if(rootId == "Text")		objAdd(new VCAText(wPath));
+    else if(rootId == "Diagram")	objAdd(new VCADiagram(wPath));
+    else if(rootId == "Document")	objAdd(new VCADocument(wPath));
 }
 
 void VCASess::objAdd( VCAObj *obj )
 {
     if(!obj) return;
-    if(objPresent(obj->id())) delete obj;
+    if(objPresent(obj->nodeName())) delete obj;
     else chldAdd(id_objs, obj);
 }
 
@@ -283,7 +283,7 @@ void VCASess::cacheResSet( const string &res, const string &val, const string &m
 //*************************************************
 //* VCAObj					  *
 //*************************************************
-VCAObj::VCAObj( const string &iid ) : m_id(iid)
+VCAObj::VCAObj( const string &iid ) : mId(iid)
 {
 
 }
@@ -3840,7 +3840,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    yMax = (int)TSYS::realRound( yMax, POS_PREC_DIG, true );
 
 			    gdImagePtr im_fill_in = NULL;
-			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill,id(),ses.user);
+			    string imgDef_temp = owner().resGet(inundationItems[i].imgFill,path(),ses.user);
 			    if( !(im_fill_in = gdImageCreateFromPngPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromGifPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) &&
 				!(im_fill_in = gdImageCreateFromJpegPtr(imgDef_temp.size(), (void*)imgDef_temp.data())) )
@@ -4025,7 +4025,7 @@ void VCAElFigure::getReq( SSess &ses )
 
 	//> Get image and transfer it
 	int img_sz;
-	char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+	char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
 	ses.page.assign(img_ptr,img_sz);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
 	gdFree(img_ptr);
@@ -4642,7 +4642,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		else if( fl_img.size() ) img = TSYS::strDecode(fl_img);
 		else img = imgDef;
 
-		string imgDef_temp = owner().resGet(img,id(),user);
+		string imgDef_temp = owner().resGet(img,path(),user);
 		if( imgDef_temp == "" ) img = "";
 		inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
 	    }
@@ -5105,9 +5105,9 @@ void VCAText::getReq( SSess &ses )
 	gdImageCopyRotated(im, im_txt, scaleWidth/2, scaleHeight/2, 0, 0, rotateWidth, rotateHeight, (int)(360-orient));
 	gdImageDestroy(im_txt);
 	gdImageSaveAlpha(im, 1);
-	//- Get image and transfer it -
+	//> Get image and transfer it
 	int img_sz;
-	char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+	char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
 	ses.page.assign(img_ptr,img_sz);
 	ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
 	gdFree(img_ptr);
@@ -5153,17 +5153,12 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 		textColor =  mod->colorParse(req_el->text());
 		break;
 	    case 27:	//orient
-	    {
-		orient = (atof(req_el->text().c_str()) < 0) ? 360 + atof(req_el->text().c_str()):
-							      atof(req_el->text().c_str());
+		orient = atof(req_el->text().c_str());
+		if(orient < 0) orient = 360 + orient;
 		break;
-	    }
 	    case 28:	//wordWrap
-	    {
-		if( atoi(req_el->text().c_str()) )  wordWrap = true;
-		else				wordWrap = false;
+		wordWrap = atoi(req_el->text().c_str());
 		break;
-	    }
 	    case 29:    //align
 	    {
 		int txtAlign = atoi(req_el->text().c_str());
@@ -5250,17 +5245,17 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 }
 
 //*************************************************
-//* VCADiagram				    *
+//* VCADiagram					  *
 //*************************************************
 VCADiagram::VCADiagram( const string &iid ) :
-    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
+    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
 {
 
 }
 
 void VCADiagram::getReq( SSess &ses )
 {
-    switch( type )
+    switch(type)
     {
 	case 0:	makeTrendsPicture(ses);		break;
 	case 1:	makeSpectrumPicture(ses);	break;
@@ -5269,11 +5264,11 @@ void VCADiagram::getReq( SSess &ses )
 
 void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 {
-    gdImageSaveAlpha(im,1);
+    gdImageSaveAlpha(im, 1);
     int img_sz;
-    char *img_ptr = (char*)gdImagePngPtr( im, &img_sz );
-    ses.page.assign( img_ptr, img_sz );
-    ses.page = mod->httpHead( "200 OK", ses.page.size(), "image/png" ) + ses.page;
+    char *img_ptr = (char*)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
+    ses.page.assign(img_ptr, img_sz);
+    ses.page = mod->httpHead("200 OK", ses.page.size(), "image/png") + ses.page;
     gdFree(img_ptr);
     gdImageDestroy(im);
 }
@@ -5536,7 +5531,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
-		    labVal = (isLogT ? TSYS::real2str(pow(10,i_v),4,'g') : TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"");
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,i_v):i_v)) + (isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);
                     markWdth = vmax(markWdth, brect[2]-brect[6]);
@@ -5567,12 +5562,18 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    tBeg = tPict-hLen;
 	}
 
+	if(sclHorPer > 0 && (hLen/sclHorPer) > 2 && (tArW/(hLen/sclHorPer)) > 15) hDiv = sclHorPer;
+
 	//>> Draw horisontal grid and markers
 	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
-	    time_t tm_t;
+	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
+
+	    localtime_r(&tm_t, &ttm);
+	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
+
 	    //>>> Draw generic grid line
 	    gdImageLine(im, tArX, tArY+tArH, tArX+tArW, tArY+tArH, clr_grid);
 	    //>>> Draw full trend's data and time to the trend end position
@@ -5605,7 +5606,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		if(sclHor & SC_GRID) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
 		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
 		//>>>> Draw markers
-		if(sclHor&SC_MARKERS && mrkHeight && !(i_h%hDiv) && i_h != tPict)
+		if(sclHor&SC_MARKERS && mrkHeight && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t, &ttm);
@@ -5623,9 +5624,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    lab_dt = lab_tm = "";
 		    //Date
 		    if(hvLev == 5 || chLev >= 4)
-			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
-		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
+			lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
 		    //Seconds
 		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
@@ -5664,7 +5666,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		}
 		//>>>> Next
 		if(i_h >= tPict) break;
-		i_h = (i_h/hDiv)*hDiv + hDiv;
+		i_h = ((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
 		if(i_h > tPict)	i_h = tPict;
 	    }
 	}
@@ -5998,7 +6000,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
-		    labVal = TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"");
+		    labVal = TSYS::strMess("%0.5g",i_v)+(isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);	//!!!! Check for correct work combining mode
 		    markWdth = vmax(markWdth, brect[2]-brect[6]);
@@ -6038,7 +6040,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    int endMarkBrd = tArX + tArW;
 	    if(sclHor&SC_MARKERS && mrkHeight)
 	    {
-		labH = TSYS::strMess("%0.4g",fftEnd/labDiv) + Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
+		labH = TSYS::strMess("%0.5g",fftEnd/labDiv) + Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
 		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
 		int markBrd = tArX + tArW - (brect[2]-brect[6]);
 		endMarkBrd = vmin(endMarkBrd, markBrd);
@@ -6054,7 +6056,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
 		if(sclHor&SC_MARKERS && mrkHeight)
 		{
-		    labH = TSYS::strMess("%0.4g", i_h/labDiv);
+		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
 		    gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
 		    int wdth = brect[2]-brect[6];
 		    int tpos = vmax(h_pos-wdth/2,0);
@@ -6130,7 +6132,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    {
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
 		XMLNode req("set");
-		req.setAttr("path",id()+"/%2fserv%2fattr")->
+		req.setAttr("path",path()+"/%2fserv%2fattr")->
 		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(TSYS::real2str(val,6));
 		mod->cntrIfCmd(req,ses.user);
 	    }
@@ -6281,13 +6283,11 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		break;
 	    }
 	    case 40:	//sclVerScl
-		if( sclVerScl == atof(req_el->text().c_str()) )		break;
-		sclVerScl = atof(req_el->text().c_str());
-		break;
+		sclVerScl = atof(req_el->text().c_str());		break;
 	    case 41:	//sclVerSclOff
-		if( sclVerSclOff == atof(req_el->text().c_str()) )	break;
-		sclVerSclOff = atof(req_el->text().c_str());
-		break;
+		sclVerSclOff = atof(req_el->text().c_str());		break;
+	    case 43:	//sclHorPer
+		sclHorPer = vmax(0,atof(req_el->text().c_str()))*1e6;	break;
 	    default:
 		//> Individual trend's attributes process
 		if(uiPrmPos >= 50)
@@ -6313,7 +6313,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     if(reld_tr_dt)
     {
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr");
 	for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
 	{
 	    trnds[i_p].loadData(user, reld_tr_dt==2);
@@ -6336,7 +6336,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	holdCur = (curTime==tTime);
 
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
 
@@ -6361,7 +6361,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	float curFrq = vmax(vmin(1e6/(float)itm,fftEnd),fftBeg);
 
 	XMLNode req("set");
-	req.setAttr("path",id()+"/%2fserv%2fattr");
+	req.setAttr("path", path()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))/1000000));
 	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))%1000000));
 
@@ -6451,83 +6451,116 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     int64_t wantPer	= tSize/(int)(owner().width+0.5);
     unsigned bufLim	= 2*owner().width;
     string arch = owner().valArch;
+    XMLNode req("get");
 
     //> Clear trend for empty address and the full reload data
-    if( full || addr().empty() )
+    if(full || addr().empty())
     {
 	arh_per = arh_beg = arh_end = 0;
-	val_tp = 0;
+	val_tp = TFld::Boolean;
 	vals.clear();
-	if( addr().empty() )    return;
-    }
-    //> Get archive parameters
-    if( !arh_per || tTime > arh_end )
-    {
-	XMLNode req("info");
-	req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
-	if( mod->cntrIfCmd(req,user,false) || atoi(req.attr("vtp").c_str()) == 5 )
-	{ arh_per = arh_beg = arh_end = 0; return; }
-	else
-	{
-	    val_tp  = atoi(req.attr("vtp").c_str());
-	    arh_beg = atoll(req.attr("beg").c_str());
-	    arh_end = atoll(req.attr("end").c_str());
-	    arh_per = atoll(req.attr("per").c_str());
-	}
+	if(addr().empty()) return;
     }
 
-    //> One request check and prepare
-    int trcPer = owner().trcPer*1000000;
-    if( owner().tTimeCurent && trcPer && owner().valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
-    {
-	XMLNode req("get");
-	req.setAttr("path",addr()+"/%2fserv%2fval")->
-	    setAttr("tm",TSYS::ll2str(tTime))->
-	    setAttr("tm_grnd","0");
-	if( mod->cntrIfCmd(req,user,false) ) return;
+    bool isDataDir = (addr().compare(0,5,"data:") == 0 || addr().compare(0,5,"line:") == 0);
 
-	int64_t lst_tm = atoll(req.attr("tm").c_str());
-	if( lst_tm > valEnd() )
+    if(!isDataDir)      // From archive by address
+    {
+	//> Get archive parameters
+	if(!arh_per || tTime > arh_end)
 	{
-	    double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
-	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	    if( valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-	    else if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
-	    else if( vals[vals.size()-1].val == EVAL_REAL ) vals[vals.size()-1].val = curVal;
-	    else if( curVal != EVAL_REAL )
+	    XMLNode req("info");
+	    req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
+	    if(mod->cntrIfCmd(req,user,false) || (val_tp=atoi(req.attr("vtp").c_str())) == TFld::String || val_tp == TFld::Object)
+	    { arh_per = arh_beg = arh_end = 0; return; }
+	    else
 	    {
-		int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
-		vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
+		val_tp  = atoi(req.attr("vtp").c_str());
+		arh_beg = atoll(req.attr("beg").c_str());
+		arh_end = atoll(req.attr("end").c_str());
+		arh_per = atoll(req.attr("per").c_str());
 	    }
-	    while(vals.size() > bufLim) vals.pop_front();
 	}
-	return;
-    }
 
-    if( !arh_per )      return;
+	//> One request check and prepare
+	int trcPer = owner().trcPer*1000000;
+	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
+	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	{
+	    XMLNode req("get");
+	    req.setAttr("path",addr()+"/%2fserv%2fval")->
+		setAttr("tm",TSYS::ll2str(tTime))->
+		setAttr("tm_grnd","0");
+	    if(mod->cntrIfCmd(req,user,false)) return;
+
+	    int64_t lst_tm = (atoll(req.attr("tm").c_str())/wantPer)*wantPer;
+	    if(lst_tm >= valEnd())
+	    {
+		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
+		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		    curVal = EVAL_REAL;
+		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
+		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
+		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		else if(curVal != EVAL_REAL)
+		{
+		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
+		}
+		while(vals.size() > bufLim) vals.pop_front();
+	    }
+	    return;
+	}
+    }
+    else	//Data direct into address field by searilised XML string or horizontal line
+	try
+	{
+	    if(addr().compare(0,5,"data:") == 0) req.load(addr().substr(5));
+	    else if(addr().compare(0,5,"line:") == 0)
+		req.setAttr("vtp", TSYS::int2str(TFld::Real))->
+		    setAttr("tm", TSYS::ll2str(tTime))->
+		    setAttr("tm_grnd", TSYS::ll2str(tTimeGrnd))->
+		    setAttr("per", TSYS::ll2str(wantPer))->
+		    setText("0 "+addr().substr(5));
+
+	    val_tp  = req.attr("vtp").size() ? atoi(req.attr("vtp").c_str()) : TFld::Real;
+	    arh_beg = atoll(req.attr("tm_grnd").c_str());
+	    arh_end = atoll(req.attr("tm").c_str());
+            arh_per = atoll(req.attr("per").c_str());
+        }
+        catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
+
+    if(!arh_per) return;
+
     //> Correct request to archive border
     wantPer	= (vmax(wantPer,arh_per)/arh_per)*arh_per;
-    tTime	= vmin(tTime,arh_end);
+    tTime	= vmin(tTime, arh_end);
     //tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
+
     //> Clear data at time error
-    if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )
-	vals.clear();
-    if( tTime <= tTimeGrnd ) return;
+    if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
+    if(tTime <= tTimeGrnd) return;
+
     //> Check for request to present in buffer data
-    if( tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer )    return;
-    //> Correct request to present data
-    if( valEnd() && tTime > valEnd() )	  tTimeGrnd = valEnd()+1;
-    else if( valBeg() && tTimeGrnd < valBeg() ) tTime = valBeg()-1;
+    if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
+
+    //> Correcting request to present data
+    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+1;
+    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-1;
+
     //> Get values data
     int64_t	bbeg, bend, bper;
-    int	 curPos, prevPos;
+    int		curPos, prevPos, maxPos;
     double      curVal, prevVal;
     string      svl;
     vector<SHg> buf;
-    bool toEnd = (tTimeGrnd >= valEnd());
-    int  endBlks = 0;
-    XMLNode req("get");
-    m1: req.clear()->
+    bool	toEnd = (tTimeGrnd >= valEnd());
+    int		endBlks = 0;
+
+    m1:
+    if(!isDataDir)
+    {
+	req.clear()->
 	    setAttr("arch",arch)->
 	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
@@ -6536,45 +6569,49 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	    setAttr("mode","1")->
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100/(float)owner().height));
-    if( mod->cntrIfCmd(req,user,false) )     return;
+
+	if(mod->cntrIfCmd(req,user,false)) return;
+    }
+
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
 
-    if( !bbeg || !bend || req.text().empty() ) return;
+    if(bbeg <= 0 || bend <= 0 || bper <= 0 || bbeg > bend || req.text().empty()) return;
 
-    prevPos = 0;
-    prevVal = EVAL_REAL;
+    prevPos = 0, prevVal = EVAL_REAL, maxPos = (bend-bbeg)/bper;
     buf.clear();
-    for( int v_off = 0; true; )
+    for(int v_off = 0; true; )
     {
-	svl = TSYS::strLine(req.text(),0,&v_off);
-	if( svl.size() )
+	if((svl=TSYS::strLine(req.text(),0,&v_off)).size())
 	{
-	    sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
-	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
+	    sscanf(svl.c_str(), "%d %lf", &curPos, &curVal);
+	    if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		curVal = EVAL_REAL;
 	}
-	else curPos = ((bend-bbeg)/bper)+1;
-	for( ; prevPos < curPos; prevPos++ ) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	else curPos = maxPos+1;
+	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
+	for( ; prevPos < curPos; prevPos++) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	if(prevPos > maxPos) break;	//Normal exit
 	prevVal = curVal;
-	if( prevPos > (bend-bbeg)/bper ) break;
     }
 
     //> Append buffer to values deque
-    if( toEnd )
+    if(toEnd)
     {
-	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
+	vals.insert(vals.end()-endBlks, buf.begin(), buf.end());
 	while(vals.size() > bufLim) vals.pop_front();
-	endBlks+=buf.size();
+	endBlks += buf.size();
     }
     else
     {
-	vals.insert(vals.begin(),buf.begin(),buf.end());
+	vals.insert(vals.begin(), buf.begin(), buf.end());
 	while(vals.size() > bufLim) vals.pop_back();
     }
+
     //> Check for archive jump
-    if( arch.empty() && (bbeg-tTimeGrnd)/bper ) { tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && arch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
 }
 
 void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
@@ -6654,7 +6691,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 		    req_el->setText(xproc.save(XMLNode::Clean, Mess->charset()));
 		}
 		catch(TError err)
-    		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),id().c_str(),err.mess.c_str()); }
+    		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
 		break;
 	    }
 	}

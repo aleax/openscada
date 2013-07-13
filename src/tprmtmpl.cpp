@@ -438,10 +438,10 @@ TPrmTmplLib::~TPrmTmplLib()
 TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
 {
     TPrmTmplLib *src_n = dynamic_cast<TPrmTmplLib*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     //> Configuration copy
-    exclCopy(*src_n, "ID;");
+    exclCopy(*src_n, "ID;DB;");
     work_lib_db = src_n->work_lib_db;
 
     //> Templates copy

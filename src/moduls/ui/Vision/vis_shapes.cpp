@@ -583,20 +583,25 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	}
     }
     else
+    {
+	map<string,string> attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		if( !w->hasFocus() ) break;
-		w->attrSet("focus","1");
-		w->attrSet("event","ws_FocusIn");
+		if(!w->hasFocus()) break;
+		attrs["focus"] = "1";
+		attrs["event"] = "ws_FocusIn";
+		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		if( w->hasFocus() ) break;
-		w->attrSet("focus","0");
-		w->attrSet("event","ws_FocusOut");
+		if(w->hasFocus()) break;
+		attrs["focus"] = "0";
+		attrs["event"] = "ws_FocusOut";
+		w->attrsSet(attrs);
 		break;
 	    default:	break;
 	}
+    }
 
     return false;
 }
@@ -606,8 +611,10 @@ void ShapeFormEl::lineAccept( )
     LineEdit *el   = (LineEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
 
-    view->attrSet("value",el->value().toAscii().data());
-    view->attrSet("event","ws_LnAccept");
+    map<string,string> attrs;
+    attrs["value"] = el->value().toAscii().data();
+    attrs["event"] = "ws_LnAccept";
+    view->attrsSet(attrs);
 }
 
 void ShapeFormEl::textAccept( )
@@ -615,15 +622,20 @@ void ShapeFormEl::textAccept( )
     TextEdit *el   = (TextEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
 
-    view->attrSet("value",el->text().toAscii().data());
-    view->attrSet("event","ws_TxtAccept");
+    map<string,string> attrs;
+    attrs["value"] = el->text().toAscii().data();
+    attrs["event"] = "ws_TxtAccept";
+    view->attrsSet(attrs);
 }
 
 void ShapeFormEl::checkChange(int st)
 {
     WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
-    view->attrSet("value",TSYS::int2str(st));
-    view->attrSet("event","ws_ChkChange");
+
+    map<string,string> attrs;
+    attrs["value"] = TSYS::int2str(st);
+    attrs["event"] = "ws_ChkChange";
+    view->attrsSet(attrs);
 }
 
 void ShapeFormEl::buttonPressed( )
@@ -642,71 +654,79 @@ void ShapeFormEl::buttonToggled( bool val )
 {
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
-    w->attrSet("event",val?"ws_BtPress":"ws_BtRelease");
-    w->attrSet("event","ws_BtToggleChange");
-    w->attrSet("value",TSYS::int2str(val));
+    map<string,string> attrs;
+    attrs["event"] = string("ws_BtToggleChange\n")+(val?"ws_BtPress":"ws_BtRelease");
+    attrs["value"] = TSYS::int2str(val);
+    w->attrsSet(attrs);
 }
 
 void ShapeFormEl::comboChange(const QString &val)
 {
     WdgView *w = (WdgView *)((QWidget*)sender())->parentWidget();
-    if( ((ShpDt*)w->shpData)->evLock )	return;
+    if(((ShpDt*)w->shpData)->evLock)	return;
 
-    w->attrSet("value",val.toAscii().data());
-    w->attrSet("event","ws_CombChange");
+    map<string,string> attrs;
+    attrs["value"] = val.toAscii().data();
+    attrs["event"] = "ws_CombChange";
+    w->attrsSet(attrs);
 }
 
 void ShapeFormEl::listChange( int row )
 {
-    QListWidget *el   = (QListWidget*)sender();
-    WdgView     *w = (WdgView *)el->parentWidget();
+    QListWidget *el = (QListWidget*)sender();
+    WdgView     *w  = (WdgView *)el->parentWidget();
 
-    if( row < 0 || ((ShpDt*)w->shpData)->evLock ) return;
-
-    w->attrSet("value",el->item(row)->text().toAscii().data());
-    w->attrSet("event","ws_ListChange");
+    if(row < 0 || ((ShpDt*)w->shpData)->evLock) return;
+    map<string,string> attrs;
+    attrs["value"] = el->item(row)->text().toAscii().data();
+    attrs["event"] = "ws_ListChange";
+    w->attrsSet(attrs);
 }
 
 void ShapeFormEl::sliderMoved( int val )
 {
-    QAbstractSlider	*el   = (QAbstractSlider*)sender();
-    WdgView		*view = (WdgView *)el->parentWidget();
+    QAbstractSlider *el = (QAbstractSlider*)sender();
+    WdgView	    *w  = (WdgView *)el->parentWidget();
 
-    view->attrSet("value",TSYS::int2str(val));
-    view->attrSet("event","ws_SliderChange");
+    map<string,string> attrs;
+    attrs["value"] = TSYS::int2str(val);
+    attrs["event"] = "ws_SliderChange";
+    w->attrsSet(attrs);
 }
 
 void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
     if(en) wdg->installEventFilter(view);
     else   wdg->removeEventFilter(view);
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+
+    //> Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
 }
 
 void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
+
     //> Set up current widget
-    if( en )
+    if(en)
     {
-	if( isFocus && !devel )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+	if(isFocus && !devel)	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
     {
-	if( wdg->focusPolicy() != Qt::NoFocus )
+	if(wdg->focusPolicy() != Qt::NoFocus)
 	{
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));
 	    wdg->setFocusPolicy(Qt::NoFocus);
 	}
-	if( devel ) wdg->setMouseTracking(true);
+	if(devel) wdg->setMouseTracking(true);
     }
 
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+    //> Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
 }
 
@@ -1002,9 +1022,11 @@ void ShapeMedia::mediaFinished( )
 
 #ifdef HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
+    map<string,string> attrs;
     if(shD->videoRoll && player) player->play();
-    else w->attrSet("play","0");
-    w->attrSet("event","ws_MediaFinished");
+    else attrs["play"] = "0";
+    attrs["event"] = "ws_MediaFinished";
+    w->attrsSet(attrs);
 #endif
 }
 
@@ -1351,7 +1373,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
 	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
 	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }
-	    if( !sev.empty() )
+	    if(!sev.empty())
 	    {
 		switch(((QMouseEvent*)event)->button())
 		{
@@ -1578,6 +1600,10 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->valsForPix = vmin(10,vmax(0,atoi(val.c_str())));
 	    reld_tr_dt = 2;
 	    break;
+        case 43:	//sclHorPer
+            shD->sclHorPer = vmax(0,atof(val.c_str()))*1e6;
+            make_pct = true;
+            break;
 	default:
 	    //> Individual trend's attributes process
 	    if(uiPrmPos >= 50)
@@ -1838,7 +1864,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
                     bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
                     bool isMax = (v_pos-1-mrkHeight) < tAr.y();
                     pnt.setPen(mrkPen);
-                    labVal = TSYS::strMess("%0.4g",i_v)+(isPerc?" %":"");
+                    labVal = TSYS::strMess("%0.5g",i_v)+(isPerc?" %":"");
                     pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
                     markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
                 }
@@ -1879,7 +1905,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    if(sclHor&SC_MARKERS)
 	    {
 		pnt.setPen(mrkPen);
-		labH = TSYS::strMess("%0.4g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
+		labH = TSYS::strMess("%0.5g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
 
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(labH.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
@@ -1897,7 +1923,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		if(sclHor&SC_MARKERS)
 		{
 		    pnt.setPen(mrkPen);
-		    labH = TSYS::strMess("%0.4g", i_h/labDiv);
+		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
 		    int wdth = pnt.fontMetrics().width(labH.c_str());
 		    int tpos = vmax(h_pos-wdth/2, 0);
 		    if((tpos+wdth) < (endMarkBrd-3) && tpos > (begMarkBrd+3))
@@ -1920,6 +1946,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
 	//>> Prepare generic parameters
@@ -2219,7 +2246,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
 		    pnt.setPen(mrkPen);
-		    labVal = (isLogT ? TSYS::real2str(pow(10,i_v),4,'g') : TSYS::real2str(i_v,4,'g'))+(isPerc?" %":"");
+		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,i_v):i_v)) + (isPerc?" %":"");
 		    pnt.drawText(tAr.x()+2, v_pos-1+(isMax?mrkHeight:0), labVal.c_str());
 		    markWdth = vmax(markWdth, pnt.fontMetrics().width(labVal.c_str()));
 		}
@@ -2244,6 +2271,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	while(hLen/hDiv > hmax_ln)	hDiv *= 10;
 	while(hLen/hDiv < hmax_ln/2)	hDiv /= 2;
 
+	if(shD->sclHorPer > 0 && (hLen/shD->sclHorPer) > 2 && (tAr.width()/(hLen/shD->sclHorPer)) > 15)	hDiv = shD->sclHorPer;
+
 	if((hLen/hDiv) >= 5 && shD->trcPer)
 	{
 	    tPict = hDiv*(tEnd/hDiv+1);
@@ -2253,9 +2282,13 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	//>>> Draw horisontal grid and markers
 	if(sclHor&(SC_GRID|SC_MARKERS))
 	{
-	    time_t tm_t;
+	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
 	    string lab_tm, lab_dt;
+
+	    localtime_r(&tm_t, &ttm);
+	    int64_t UTChourDt = (int64_t)ttm.tm_hour*3600000000ll;
+
 	    //>>>> Draw generic grid line
 	    pnt.setPen(grdPen);
 	    pnt.drawLine(tAr.x(), tAr.y()+tAr.height(), tAr.x()+tAr.width(), tAr.y()+tAr.height());
@@ -2268,8 +2301,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
 		lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-		if( ttm.tm_sec == 0 && tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-		else if( tPict%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
+		if(ttm.tm_sec == 0 && tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		else if(tPict%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
 		else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(tPict%1000000)/1e6);
 		int markBrd = tAr.x()+tAr.width()-pnt.fontMetrics().width(lab_tm.c_str());
 		endMarkBrd = vmin(endMarkBrd,markBrd);
@@ -2288,7 +2321,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		if(sclHor & SC_GRID) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if(sclHor&SC_MARKERS && !(i_h%hDiv) && i_h != tPict)
+		if(sclHor&SC_MARKERS && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t,&ttm);
@@ -2307,9 +2340,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		    lab_dt.clear(), lab_tm.clear();
 		    //Date
 		    if(hvLev == 5 || chLev >= 4)
-			lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+			lab_dt = TSYS::strMess(((chLev>=5 || chLev==-1)?"%d-%02d-%d":"%d"), ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
 		    //Hours and minuts
-		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		    if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec)
+			lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
 		    //Seconds
 		    else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
 			lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
@@ -2346,7 +2380,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		}
 		//>>>> Next
 		if(i_h >= tPict) break;
-		i_h = (i_h/hDiv)*hDiv + hDiv;
+		i_h = ((i_h+UTChourDt)/hDiv)*hDiv + hDiv - UTChourDt;
 		if(i_h > tPict)	i_h = tPict;
 	    }
 	}
@@ -2362,6 +2396,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
 	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
 	//>> Prepare generic parameters
@@ -2722,87 +2757,116 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     int64_t tTimeGrnd	= tTime - tSize;
     int64_t wantPer	= tSize/(view->size().width()*shD->valsForPix);
     unsigned bufLim	= 2*view->size().width()*shD->valsForPix;
+    XMLNode req("get");
 
     //> Clear trend for empty address and for full reload data
     if(full || addr().empty())
     {
 	arh_per = arh_beg = arh_end = 0;
-	val_tp = 0;
+	val_tp = TFld::Boolean;
 	vals.clear();
-	if(addr().empty())	return;
+	if(addr().empty()) return;
     }
 
-    //> Get archive parameters
-    if(!arh_per || tTime > arh_end)
+    bool isDataDir = (addr().compare(0,5,"data:") == 0 || addr().compare(0,5,"line:") == 0);
+
+    if(!isDataDir)	// From archive by address
     {
-	XMLNode req("info");
-	req.setAttr("arch",shD->valArch)->setAttr("path",addr()+"/%2fserv%2fval");
-	if( view->cntrIfCmd(req,true) || atoi(req.attr("vtp").c_str()) == 5 )
-	{ arh_per = arh_beg = arh_end = 0; return; }
-	else
+	//> Get archive parameters
+	if(!arh_per || tTime > arh_end)
 	{
-	    val_tp  = atoi(req.attr("vtp").c_str());
-	    arh_beg = atoll(req.attr("beg").c_str());
-	    arh_end = atoll(req.attr("end").c_str());
+	    XMLNode req("info");
+	    req.setAttr("arch",shD->valArch)->setAttr("path",addr()+"/%2fserv%2fval");
+	    if(view->cntrIfCmd(req,true) || (val_tp=atoi(req.attr("vtp").c_str())) == TFld::String || val_tp == TFld::Object)
+	    { arh_per = arh_beg = arh_end = 0; return; }
+	    else
+	    {
+		val_tp  = atoi(req.attr("vtp").c_str());
+		arh_beg = atoll(req.attr("beg").c_str());
+		arh_end = atoll(req.attr("end").c_str());
+		arh_per = atoll(req.attr("per").c_str());
+	    }
+	}
+
+	//> One request check and prepare
+	int trcPer = shD->trcPer*1000000;
+	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
+	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	{
+	    XMLNode req("get");
+	    req.setAttr("path",addr()+"/%2fserv%2fval")->
+		setAttr("tm",TSYS::ll2str(tTime))->
+		setAttr("tm_grnd","0");
+	    if(view->cntrIfCmd(req,true))	return;
+
+	    int64_t lst_tm = (atoll(req.attr("tm").c_str())/wantPer)*wantPer;
+	    if(lst_tm >= valEnd())
+	    {
+		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
+		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		    curVal = EVAL_REAL;
+		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
+		else if((lst_tm-valEnd()) >= wantPer) vals.push_back(SHg(lst_tm,curVal));
+		else if((lst_tm == valEnd() && curVal != EVAL_REAL) || vals[vals.size()-1].val == EVAL_REAL) vals[vals.size()-1].val = curVal;
+		else if(curVal != EVAL_REAL)
+		{
+		    int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
+		    vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
+		}
+		while(vals.size() > bufLim)	vals.pop_front();
+	    }
+	    return;
+	}
+    }
+    else	//Data direct into address field by searilised XML string or horizontal line
+	try
+	{
+	    if(addr().compare(0,5,"data:") == 0) req.load(addr().substr(5));
+	    else if(addr().compare(0,5,"line:") == 0)
+		req.setAttr("vtp", TSYS::int2str(TFld::Real))->
+		    setAttr("tm", TSYS::ll2str(tTime))->
+		    setAttr("tm_grnd", TSYS::ll2str(tTimeGrnd))->
+		    setAttr("per", TSYS::ll2str(wantPer))->
+		    setText("0 "+addr().substr(5));
+
+	    val_tp  = req.attr("vtp").size() ? atoi(req.attr("vtp").c_str()) : TFld::Real;
+	    arh_beg = atoll(req.attr("tm_grnd").c_str());
+	    arh_end = atoll(req.attr("tm").c_str());
 	    arh_per = atoll(req.attr("per").c_str());
 	}
-    }
+	catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
 
-    //> One request check and prepare
-    int trcPer = shD->trcPer*1000000;
-    if( shD->tTimeCurent && trcPer && shD->valArch.empty() && (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(wantPer,trcPer) < 2)) )
-    {
-	XMLNode req("get");
-	req.setAttr("path",addr()+"/%2fserv%2fval")->
-	    setAttr("tm",TSYS::ll2str(tTime))->
-	    setAttr("tm_grnd","0");
-	if( view->cntrIfCmd(req,true) )	return;
+    if(!arh_per) return;
 
-	int64_t lst_tm = atoll(req.attr("tm").c_str());
-	if( lst_tm > valEnd() )
-	{
-	    double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
-	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
-	    if( valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2 ) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
-	    else if( (lst_tm-valEnd()) >= wantPer ) vals.push_back(SHg(lst_tm,curVal));
-	    else if( vals[vals.size()-1].val == EVAL_REAL ) vals[vals.size()-1].val = curVal;
-	    else if( curVal != EVAL_REAL )
-	    {
-		int s_k = lst_tm-wantPer*(lst_tm/wantPer), n_k = trcPer;
-		vals[vals.size()-1].val = (vals[vals.size()-1].val*s_k+curVal*n_k)/(s_k+n_k);
-	    }
-	    while(vals.size() > bufLim)	vals.pop_front();
-	}
-	return;
-    }
-
-    if( !arh_per )	return;
     //> Correct request to archive border
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime     = vmin(tTime,arh_end);
     //tTimeGrnd = vmax(tTimeGrnd,arh_beg);
 
     //> Clear data at time error
-    if( tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer )
-	vals.clear();
-    if( tTime <= tTimeGrnd ) return;
+    if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
+    if(tTime <= tTimeGrnd) return;
+
     //> Check for request to present in buffer data
-    if( tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer )	return;
-    //> Correct request to present data
-    if( valEnd() && tTime > valEnd() )		tTimeGrnd = valEnd()+1;
-    else if( valBeg() && tTimeGrnd < valBeg() )	tTime = valBeg()-1;
+    if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
+
+    //> Correcting request to present data
+    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+1;
+    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-1;
 
     //> Get values data
     int64_t	bbeg, bend, bper;
-    int		curPos, prevPos;
+    int		curPos, prevPos, maxPos;
     double	curVal, prevVal;
     string	svl;
     vector<SHg>	buf;
-    bool toEnd = (tTimeGrnd >= valEnd());
-    int  endBlks = 0;
-    XMLNode req("get");
+    bool	toEnd = (tTimeGrnd >= valEnd());
+    int		endBlks = 0;
 
-    m1:	req.clear()->
+    m1:
+    if(!isDataDir)
+    {
+	req.clear()->
 	    setAttr("arch",shD->valArch)->
 	    setAttr("path",addr()+"/%2fserv%2fval")->
 	    setAttr("tm",TSYS::ll2str(tTime))->
@@ -2812,46 +2876,48 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    setAttr("real_prec","6")->
 	    setAttr("round_perc","0");//TSYS::real2str(100/(float)view->size().height()));
 
-    if(view->cntrIfCmd(req,true)) return;
+	if(view->cntrIfCmd(req,true)) return;
+    }
 
     //> Get data buffer parameters
     bbeg = atoll(req.attr("tm_grnd").c_str());
     bend = atoll(req.attr("tm").c_str());
     bper = atoll(req.attr("per").c_str());
 
-    if( !bbeg || !bend || req.text().empty() ) return;
+    if(bbeg <= 0 || bend <= 0 || bper <= 0 || bbeg > bend || req.text().empty()) return;
 
-    prevPos = 0;
-    prevVal = EVAL_REAL;
+    prevPos = 0, prevVal = EVAL_REAL, maxPos = (bend-bbeg)/bper;
     buf.clear();
-    for( int v_off = 0; true; )
+    for(int v_off = 0; true; )
     {
-	svl = TSYS::strSepParse(req.text(),0,'\n',&v_off);
-	if( svl.size() )
+	if((svl=TSYS::strLine(req.text(),0,&v_off)).size())
 	{
-	    sscanf(svl.c_str(),"%d %lf",&curPos,&curVal);
-	    if( (val_tp == 0 && curVal == EVAL_BOOL) || (val_tp == 1 && curVal == EVAL_INT) ) curVal = EVAL_REAL;
+	    sscanf(svl.c_str(), "%d %lf", &curPos, &curVal);
+	    if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+		curVal = EVAL_REAL;
 	}
-	else curPos = ((bend-bbeg)/bper)+1;
-	for( ; prevPos < curPos; prevPos++ ) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	else curPos = maxPos+1;
+	if(curPos < 0 || curPos > (maxPos+1)) break;	//Out of range exit
+	for( ; prevPos < curPos; prevPos++) buf.push_back(SHg(bbeg+prevPos*bper,prevVal));
+	if(prevPos > maxPos) break;	//Normal exit
 	prevVal = curVal;
-	if( prevPos > (bend-bbeg)/bper ) break;
     }
 
     //> Append buffer to values deque
     if(toEnd)
     {
-	vals.insert(vals.end()-endBlks,buf.begin(),buf.end());
+	vals.insert(vals.end()-endBlks, buf.begin(), buf.end());
 	while(vals.size() > bufLim) vals.pop_front();
 	endBlks += buf.size();
     }
     else
     {
-	vals.insert(vals.begin(),buf.begin(),buf.end());
-	while(vals.size() > bufLim)	vals.pop_back();
+	vals.insert(vals.begin(), buf.begin(), buf.end());
+	while(vals.size() > bufLim) vals.pop_back();
     }
+
     //> Check for archive jump
-    if(shD->valArch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && shD->valArch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
 }
 
 void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
@@ -3342,18 +3408,23 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    default: break;
 	}
     else
-	switch( event->type() )
+    {
+	map<string,string> attrs;
+	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		w->attrSet("focus","1");
-		w->attrSet("event","ws_FocusIn");
+		attrs["focus"] = "1";
+		attrs["event"] = "ws_FocusIn";
+		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		w->attrSet("focus","0");
-		w->attrSet("event","ws_FocusOut");
+		attrs["focus"] = "0";
+		attrs["event"] = "ws_FocusOut";
+		w->attrsSet(attrs);
 		break;
 	    default: break;
 	}
+    }
 
     return false;
 }
@@ -3511,18 +3582,23 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    default: break;
 	}
     else
+    {
+	map<string,string> attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		w->attrSet("focus","1");
-		w->attrSet("event","ws_FocusIn");
+		attrs["focus"] = "1";
+		attrs["event"] = "ws_FocusIn";
+		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		w->attrSet("focus","0");
-		w->attrSet("event","ws_FocusOut");
+		attrs["focus"] = "0";
+		attrs["event"] = "ws_FocusOut";
+		w->attrsSet(attrs);
 		break;
 	    default: break;
 	}
+    }
 
     return false;
 }

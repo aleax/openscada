@@ -12,6 +12,7 @@ endif
 
 I18N_mod = $(oscd_modulpref)JavaLikeCalc
 I18N_addfiles = *.ypp
+include ../../../../I18N.mk
 
 clean-local:
 	rm -f *func_analise.cpp

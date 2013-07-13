@@ -481,8 +481,8 @@ void *TTrIn::Task( void *tr_in )
     ssize_t r_len = 0;
     string req, answ;
     char buf[1000];
-    fd_set fdset;
-    int sec;
+    fd_set rw_fd;
+    int kz, sec;
 
     double wCharTm = atof(TSYS::strSepParse(tr->timings(),0,':').c_str());
     int wFrTm = 1000*atoi(TSYS::strSepParse(tr->timings(),1,':').c_str());
@@ -504,9 +504,8 @@ void *TTrIn::Task( void *tr_in )
 	while(true)
 	{
 	    tv.tv_sec = 0; tv.tv_usec = (int)(1.5e3*wCharTm);
-	    FD_ZERO(&fdset); FD_SET(tr->fd, &fdset);
-
-	    if(select(tr->fd+1, &fdset, NULL, NULL, &tv) <= 0)
+	    FD_ZERO(&rw_fd); FD_SET(tr->fd, &rw_fd);
+	    if(select(tr->fd+1, &rw_fd, NULL, NULL, &tv) <= 0)
 	    {
 		if(tr->endrun || !req.empty())	break;
 		continue;
@@ -589,14 +588,28 @@ void *TTrIn::Task( void *tr_in )
     	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
 
 	    ssize_t wL = 1;
-	    for(unsigned wOff = 0; wOff != answ.size() && wL > 0; wOff += wL)
+	    unsigned wOff = 0;
+	    for( ; wOff != answ.size() && wL > 0; wOff += wL)
 	    {
 		wL = write(tr->fd, answ.data()+wOff, answ.size()-wOff);
+		if(wL == 0) { mess_err(tr->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
+		else if(wL < 0)
+		{
+		    if(errno == EAGAIN)
+		    {
+			tv.tv_sec = wFrTm/1000000; tv.tv_usec = wFrTm%1000000;
+			FD_ZERO(&rw_fd); FD_SET(tr->fd, &rw_fd);
+			kz = select(tr->fd+1, NULL, &rw_fd, NULL, &tv);
+			if(kz > 0 && FD_ISSET(tr->fd,&rw_fd)) { wL = 0; continue; }
+		    }
+		    mess_err(tr->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+                    break;
+                }
 		tr->trOut += vmax(0,wL);
 	    }
 
 	    //>> Hard read for wait request echo and transfer disable
-	    if(tr->mRTSfc)
+	    if(tr->mRTSfc && wOff == answ.size())
 	    {
 		char echoBuf[255];
 		int64_t mLstReqTm = TSYS::curTime();
@@ -644,7 +657,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600);\n"
-	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
+	    "    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
 	    "    fc - flow control:\n"
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"
@@ -1057,6 +1070,8 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 {
     ssize_t blen = 0;
     int off = 0, kz, sec;
+    fd_set rw_fd;
+    struct timeval tv;
 
     if(!noRes) ResAlloc res(nodeRes(), true);
 
@@ -1088,8 +1103,20 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 
 	for(int wOff = 0; wOff != len_ob; wOff += kz)
 	{
-	    kz = write(fd,obuf+wOff,len_ob-wOff);
-	    if(kz <= 0) { mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Writing request error.")); }
+	    kz = write(fd, obuf+wOff, len_ob-wOff);
+	    if(kz <= 0)
+	    {
+		if(errno == EAGAIN)
+                {
+		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
+                    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
+                    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
+                    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
+                }
+		mLstReqTm = TSYS::curTime();
+		stop();
+		throw TError(nodePath().c_str(),_("Writing request error."));
+	    }
 	    else trOut += kz;
 	}
 
@@ -1118,16 +1145,13 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     //> Read reply
     if(ibuf != NULL && len_ib > 0)
     {
-	fd_set rd_fd;
-	struct timeval tv;
-
 	if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
 	else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }
-	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
-	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
+	FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
+	kz = select(fd+1, &rw_fd, NULL, NULL, &tv);
 	if(kz == 0)	{ mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Timeouted!")); }
 	else if(kz < 0)	{ mLstReqTm = TSYS::curTime(); stop(); throw TError(nodePath().c_str(),_("Serial error!")); }
-	else if(FD_ISSET(fd, &rd_fd))
+	else if(FD_ISSET(fd,&rw_fd))
 	{
 	    blen = read(fd, ibuf, len_ib);
 	    trIn += vmax(0, blen);
@@ -1149,7 +1173,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
 	    "                          230400, 460800, 500000, 576000 or 921600 );\n"
-	    "    format - asynchronous data format '<size><parity><stop>' (8N1, 7E1, 5O2);\n"
+	    "    format - asynchronous data format '{size}{parity}{stop}' (8N1, 7E1, 5O2);\n"
 	    "    fc - flow control:\n"
 	    "      'h' - hardware (CRTSCTS);\n"
 	    "      's' - software (IXON|IXOFF);\n"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SoundCard 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-31 10:48+0200\n"
+"POT-Creation-Date: 2013-06-26 11:40+0300\n"
 "PO-Revision-Date: 2011-07-19 20:48+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -44,6 +44,9 @@ msgstr "Typ Abtasten der Karte"
 msgid "Float 32;Int 32;Int 16"
 msgstr "Fliesskomma 32;Ganzzahl 32;Ganzzahl 16"
 
+msgid "Gather task priority"
+msgstr "Priorität der Datenerfassung"
+
 msgid "Standard"
 msgstr "Standart"
 
@@ -57,11 +60,13 @@ msgstr "Variable"
 msgid "Allowed %d input channels"
 msgstr "Verfügbar %d Eingangskanäle"
 
+#, c-format
 msgid ""
 "Gathering from %d channels. Recieved %.2f MB. Adjusted samplerate %d. Lost "
 "frames %g"
 msgstr ""
-"Erfassung von %d Kanälen. Empfangen %.2f MB. Customized Probenahme %d. Verlorenen Frames %g"
+"Erfassung von %d Kanälen. Empfangen %.2f MB. Customized Probenahme %d. "
+"Verlorenen Frames %g"
 
 #, c-format
 msgid "Selected device '%s' is error or default device no allow."
@@ -77,3 +82,14 @@ msgstr "Fehler Bein Einstellen der Abtastung."
 
 msgid "Sound input stream is not stopped!"
 msgstr "Datenerfassung Toneingang ist nicht angehalten!"
+
+#, c-format
+msgid ""
+"CallBack: Lost frames correct: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err="
+"%g; diff=%lld."
+msgstr "Rückruffunktion: Korrektur Frame-Verlust: framesPerBuffer=%lu; sRt=%d; t_sz=%lld; err="
+"%g; diff=%lld."
+
+#, c-format
+msgid "CallBack: Sound counter difference fix: sRt=%d; dTm=%lld."
+msgstr "Rückruffunktion: Klingt Zähler Unterschied fix: sRt=%d; dTm=%lld."

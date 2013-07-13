@@ -130,7 +130,7 @@ class TMdPrm : public TParamContr
 	};
 
 	//Methods
-	void loadIO( );
+	void loadIO( bool force = false );
 	void saveIO( );
 	void initLnks( );
 

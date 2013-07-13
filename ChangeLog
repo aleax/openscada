@@ -1,3 +1,47 @@
+2013-07-11 Roman 0.8.0.7
+- TArchVal,UI.WebCfgD: Compression level for PNG creation is set to optimal for time level '1'.
+- SYS,*: Include I18N.mk script direct to core and modules' *.am files.
+- !!:FIX:DAQ.JavaLikeCalc: Remove wrong syntax rule "expr OR CONST{" but finite action to first constante independent next operations.
+    Conditional logical commands '||' and '&&' is fixed for constants.
+- Transport: "Request" tab of output transport is set accessable all time and any request send cause the transport start try.
+- DAQ.DAQGate: Alarms generation on connection problems is added.
+- !!:FIX:Transport.{Sockets,Serial}: Check for write() errors and EAGAIN by select() into input transports is added.
+- FIX:UI.{Vision,WebVision}: The primitive "Diagram" data buffer's loading by current data and lost old data by limit is fixed by
+    write current values to pixel-size alignment time.
+- !!:FIX:Transport.{Serial,Sockets}: Errno EAGAIN process is added to write() for output transport for prevent errors on big data transfer.
+- !!:UI.WebVision: Session object's ID is renamed to PATH and nodeName() set to separated string by "." path.
+    PNG compression level option is added for some performance control on images build and default value set to "1".
+- !!!:TCntrNode: For flags, and for modifications also, used connections' mutex instead node resource.
+    Deprecated feature removed from save().
+- DAQ.SoundCard: Acquisition task, from PortAudio, priority set is provided. Some error messages is added. Some performance is rose.
+- UI.Vision: QFileDialog save context moved to root object's function getFileName() for development and run modes.
+    To development mode window's title is added the station name.
+- TArchVal: Tab "Values" items list into values table is inverted.
+- DAQ.{ModBus,LogicLev,BlockCalc,Siemens}: Prevent executable context reload from DB on the controller run.
+- FIX:UI.Vision: Twice inundation contour drawing into primitive "ElFigure" is fixed.
+    Two events generation for buttons of primitive "FormEl" is fixed.
+- DAQ.Template,DAQ.{JavaLikeCalc,ModBus},Protocol.UserProtocol,UI.WebUser: Procedure text limit for the DB field is expand to 1000000.
+- UI.{VCAEngine,Vision,WebVision}: To view "Trend" of primitive "Diagram" added attribute "sclHorPer"
+    for force (disable automatic mode) grid period of horizontal scale set.
+- FIX:UI.Vision: Prevent exit on close last run-project window if it have not correct session opened.
+- UI.Vision: The warning dialog for request to select present session or to create new is rewrote for allow cancel and mostly to clean.
+    Antialiasing enable for draw lines width more 2 is added to primitive "Diagram".
+- UI.{Vision,WebVision}: Values dimension limit, for primitive "Diagram", is expand to 5 symbols for prevent early using exponential form.
+- FIX:UI.{Vision,WebVision}: Absolute rounding to hours of view "Trend" of primitive "Diagram" for horizontal scale length more hours is fixed
+    by hours count into Unix time value "0" (for zone 2 is 1.1.1970 3:0:0), on the grid draw.
+- FIX:DAQ.Template: Omit for copy "DB" field on the template library node copy.
+- !!!:UI.{VCAEngine,Vision,WebVision}: To primitive "Diagram" trends build from direct data is added, by prefix "data:" and "line:".
+- !:FIX:UI.Vision: Function WdgView::attrsSet() is added and used for group attributes set into one request,
+    for prevent several linked events lost on processing and general performance rise on network.
+- UI.WebVision: Functions modStart() and modStop() is added for the events from OpenSCADA core process.
+- !!:DB.SQLite: Opened transaction close on the module stop is added for prevent data lost after crash on some other module
+    detach, for example UI.QTStarter module is often crash, by QT4 components' problems.
+- !:FIX.UI.Vision: Primitive "ElFigure" next changes and fixes:
+    - Crash on click to common point for arc's points 1,2 and line point 1 is fixed.
+    - Not full anti-aliasing is fixed.
+    - Significant code clear.
+
+
 2013-05-11 Roman 0.8.0.6
 - !:UI.QTStarter: Wrong "QT" mostly renamed to "Qt". Messages translation from original Qt4 dialogs is fixed and appended.
 - UI.Vision: Exit on last run project close control is added for run projects.
@@ -44,16 +88,16 @@
 - !:FIX.UI.Vision: Primitive "ElFigure" changes and fixes:
     - Value range define is added and used.
     - ShapeItem::Type enumeration for figures "Line", "Arc" and "Bezier" is added.
-    - Significant code clear.
+    - Significant code clear;
     - Widths, Styles and Colors indexes copy on the figures copy is added.
-- FIX:UI.{Vision,WebVision}: Remove upper limit for primitive's "Diagram" parameters number.
+- !:UI.{Vision,WebVision}: Expanded upper limit for primitive's "Diagram" parameters number to 20.
 - !!:DAQ.DCON: Significant changes from Almaz Karimov:
     - analog inputs reading of one methods is added;
     - the method 1AO (#AA) (blocks NL-1AO, I-7021, ADAM-4021) working is fixed;
     - the method 4AO (#AACN) is added for working with block ADAM-4024;
     - the digital inputs reading methods @AA is replaced to $AA6 for compatibility with ADAM blocks;
     - the digital outputs writing methods 4DO (#AA000F), 8DO (#AA00FF), 12DO (#AA000FFF) is added for working with ADAM blocks.
-- DAQ.JavaLikeCalc: Assigns separating by symbol ',' is added to the language for like the constructions:
+- !:DAQ.JavaLikeCalc: Assigns separating by symbol ',' is added to the language for like the constructions:
     var1=1, var2=3, var4=var1+var2;
     for(var1=0, var2=0, var3=-1; var1 < 10; var1++, var2++) var3++;
 - UI.WebVision: Attribute "width='100%'" is added to primitive's "Protocol" table for fill full the widget width.

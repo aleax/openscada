@@ -90,8 +90,8 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     mUPrtEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
     mUPrtEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPrtEl.fldAdd( new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
-    mUPrtEl.fldAdd( new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"10000") );
+    mUPrtEl.fldAdd( new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000") );
+    mUPrtEl.fldAdd( new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000") );
 }
 
 TProt::~TProt()
