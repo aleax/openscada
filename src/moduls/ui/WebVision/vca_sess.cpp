@@ -2781,8 +2781,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
 			else if( ySc < 1 && ySc <= xSc ) scale = (1-ySc)/10;
 			//-- Arc --
-			Point el_p1 = scaleRotate( (pnts)[shapeItems[fig[0]].n1], xSc, ySc, true, true );
-			Point el_p2 = scaleRotate( (pnts)[shapeItems[fig[0]].n2], xSc, ySc, true, true );
 			Point el_p3 = scaleRotate( (pnts)[shapeItems[fig[0]].n3], xSc, ySc, true, true );
 			Point el_p4 = scaleRotate( (pnts)[shapeItems[fig[0]].n4], xSc, ySc, true, true );
 			Point el_p5 = scaleRotate( (pnts)[shapeItems[fig[0]].n5], xSc, ySc, true, true );
@@ -2827,10 +2825,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    P3 = Point( TSYS::realRound( P3.x, POS_PREC_DIG, true ), TSYS::realRound( P3.y, POS_PREC_DIG, true ) );
 			    P4 = Point( TSYS::realRound( P4.x, POS_PREC_DIG, true ), TSYS::realRound( P4.y, POS_PREC_DIG, true ) );
 			    //--- Line ---
-			    bool flag_vert1 = true;
-			    bool flag_vert2 = true;
-			    if( P3.x != P1.x ) flag_vert1 = false;
-			    if( P4.x != P2.x ) flag_vert2 = false;
 			    t_start = shapeItems[fig[0]].ctrlPos4.x;
 			    t_end = shapeItems[fig[0]].ctrlPos4.y;
 			    double inc_delta;
@@ -2947,11 +2941,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    P3 = Point( TSYS::realRound( P3.x, POS_PREC_DIG, true ), TSYS::realRound( P3.y, POS_PREC_DIG, true ) );
 			    P4 = Point( TSYS::realRound( P4.x, POS_PREC_DIG, true ), TSYS::realRound( P4.y, POS_PREC_DIG, true ) );
 			    //--- Line ---
-			    bool flag_vert1 = true;
-			    bool flag_vert2 = true;
 			    double inc_delta;
-			    if( P3.x != P1.x ) flag_vert1 = false;
-			    if( P4.x != P2.x ) flag_vert2 = false;
 			    if( num_pnt == shapeItems[fig[0]].n1 )
 			    {
 				delta_t = 0;
@@ -3746,8 +3736,6 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    }
 			    if( item.type == 2 )
 			    {
-				Point el_p1_rot = scaleRotate( (pnts)[item.n1], xSc, ySc, true, true );
-				Point el_p2_rot = scaleRotate( (pnts)[item.n2], xSc, ySc, true, true );
 				Point el_p3_rot = scaleRotate( (pnts)[item.n3], xSc, ySc, true, true );
 				Point el_p4_rot = scaleRotate( (pnts)[item.n4], xSc, ySc, true, true );
 				Point el_p5_rot = scaleRotate( (pnts)[item.n5], xSc, ySc, true, true );
@@ -5271,8 +5259,6 @@ void VCADiagram::makeImgPng( SSess &ses, gdImagePtr im )
 {
     gdImageSaveAlpha(im, 1);
     int img_sz;
-    int64_t dbTm;
-    if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
     char *img_ptr = (char*)gdImagePngPtrEx(im, &img_sz, mod->PNGCompLev());
     ses.page.assign(img_ptr, img_sz);
     ses.page = mod->httpHead("200 OK", ses.page.size(), "image/png") + ses.page;

@@ -66,8 +66,8 @@ TFunction &TFunction::operator=( TFunction &func )
 
 void TFunction::preDisable( int flag )
 {
-    if( mTVal ) { delete mTVal; mTVal = NULL; }
-    if( used.size() )
+    if(mTVal) { delete mTVal; mTVal = NULL; }
+    if(used.size())
     {
 	string mess;
 	for(unsigned i = 0; i < used.size(); i++)
@@ -78,12 +78,12 @@ void TFunction::preDisable( int flag )
 
 void TFunction::setId( const string &vl )
 {
-    if( !nodePrev(true) ) mId = vl;
+    if(!nodePrev(true)) mId = vl;
 }
 
 int TFunction::ioSize( )
 {
-    return mIO.size( );
+    return mIO.size();
 }
 
 IO *TFunction::io( int iid )
@@ -180,9 +180,9 @@ void TFunction::postIOCfgChange()
 void TFunction::valAtt( TValFunc *vfnc )
 {
     ResAlloc res(nodeRes(), true);
-    for( unsigned i=0; i < used.size(); i++ )
-	if( used[i] == vfnc )
-	    throw TError(nodePath().c_str(),_("Value '%s' is already attached!"),vfnc->vfName().c_str());
+    for(unsigned i=0; i < used.size(); i++)
+	if(used[i] == vfnc)
+	    throw TError(nodePath().c_str(), _("Value '%s' is already attached!"), vfnc->vfName().c_str());
     used.push_back(vfnc);
 }
 
@@ -383,15 +383,15 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     {
 	int n_tcalc = atoi(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")).c_str());
 	string wuser = opt->attr("user");
-	int64_t t_cnt = TSYS::curTime();
 	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM;
+	int64_t t_cnt = TSYS::curTime();
 	for(int i_c = 0; i_c < n_tcalc && SYS->sysTm() < tm_lim; i_c++)
 	    mTVal->calc(wuser);
-	SYS->cntrSet(nodePath('.'),TSYS::curTime()-t_cnt);
+	t_cnt = TSYS::curTime()-t_cnt;
+	SYS->cntrSet(nodePath('.'), t_cnt);
     }
     else TCntrNode::cntrCmdProc(opt);
 }
-
 
 //*************************************************
 //* IO                                            *

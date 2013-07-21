@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-02 16:17+0300\n"
+"POT-Creation-Date: 2013-07-17 16:23+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -112,6 +112,9 @@ msgstr "DAQ.%s: подключение к источнику данных '%s': 
 
 msgid "Zero for disable archive access."
 msgstr "Ноль для отключения доступа к архивам."
+
+msgid "Zero for disable periodic sync."
+msgstr "Ноль для отключения периодической синхронизации."
 
 msgid "Remote OpenSCADA stations' identifiers list used into it controller."
 msgstr ""

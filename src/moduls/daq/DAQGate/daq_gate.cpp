@@ -103,7 +103,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour)"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
-    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","1;1000"));
+    fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
 
@@ -295,6 +295,7 @@ void *TMdContr::Task( void *icntr )
     TMdContr &cntr = *(TMdContr *)icntr;
     int64_t t_cnt, t_prev = TSYS::curTime();
     double syncCnt = 0;
+    unsigned int div = 0;
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
@@ -324,9 +325,13 @@ void *TMdContr::Task( void *icntr )
 	    if(!isAccess) { t_prev = t_cnt; TSYS::sysSleep(1); continue; }
 	    else
 	    {
-		unsigned int div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
-		if(syncCnt <= 0) syncCnt = cntr.mSync;
-		syncCnt = vmax(0, syncCnt-1e-6*(t_cnt-t_prev));
+		if(cntr.syncPer() > 0.1)	//Enable sync
+		{
+		    div = cntr.period() ? vmax(2,(unsigned int)(cntr.syncPer()/(1e-9*cntr.period()))) : 0;
+		    if(syncCnt <= 0) syncCnt = cntr.syncPer();
+		    syncCnt = vmax(0, syncCnt-1e-6*(t_cnt-t_prev));
+		}
+		else { div = 0; syncCnt = 1; }	//Disable sync
 		vector<string> pLS;
 		cntr.list(pLS);
 		AutoHD<TMdPrm> prm;
@@ -554,6 +559,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REST_DT",cfg("TM_REST_DT").fld().descr(),RWRWR_,"root",SDAQ_ID,1,
 	    "help",_("Zero for disable archive access."));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SYNCPER",cfg("SYNCPER").fld().descr(),RWRWR_,"root",SDAQ_ID,1,"help",_("Zero for disable periodic sync."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/STATIONS",cfg("STATIONS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",
 	    "help",_("Remote OpenSCADA stations' identifiers list used into it controller."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/CNTRPRM",cfg("CNTRPRM").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"tp","str","cols","100","rows","4",

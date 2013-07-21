@@ -240,8 +240,8 @@ msgid "Compilation with the help of the program language %s is not supported."
 msgstr "Компиляция на языке программирования %s не поддерживается."
 
 #, c-format
-msgid "Compile error: %s\n"
-msgstr "Ошибка компиляции: %s\n"
+msgid "Compile error: %s"
+msgstr "Ошибка компиляции: %s"
 
 msgid "Load function's libraries error."
 msgstr "Ошибка загрузки библиотеки функций."

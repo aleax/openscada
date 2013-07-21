@@ -115,9 +115,6 @@ class TCntrNode
 	static bool ctrChkNode( XMLNode *nd, const char *cmd="get", int perm=0444, const char *user="root",
 	    const char *grp="root", char mode=04, const char *warn = NULL );
 
-	//>> Specific
-	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );
-
     protected:
 	//Methods
 	virtual void cntrCmdProc( XMLNode *req );
@@ -182,7 +179,7 @@ class TCntrNode
 
 	//> Childs
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list );
+	void chldList( int8_t igr, vector<string> &list, bool noex = false );
 	bool chldPresent( int8_t igr, const string &name );
 
     protected:

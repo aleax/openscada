@@ -202,7 +202,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
         if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(MRCDirDevs());
         if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMRCDirDevs(opt->text());
     }
-    else if(a_path == "/prm/dirMRCList" && ctrChkNode(opt))	ctrListFS(opt, MRCDirDevs());
+    else if(a_path == "/prm/dirMRCList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, MRCDirDevs());
     else TTipDAQ::cntrCmdProc(opt);
 }
 
@@ -439,9 +439,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/fileShmL" && ctrChkNode(opt))	ctrListFS(opt, cfg("SHM_VARS").getS(), "srv;");
-    else if(a_path == "/cntr/cfg/devMCLs" && ctrChkNode(opt))	ctrListFS(opt, cfg("MC_DEV").getS(), "<chrdev>;");
-    else if(a_path == "/cntr/cfg/devMRLs" && ctrChkNode(opt))	ctrListFS(opt, cfg("MR_DEV").getS(), "<chrdev>;");
+    if(a_path == "/cntr/cfg/fileShmL" && ctrChkNode(opt))	TSYS::ctrListFS(opt, cfg("SHM_VARS").getS(), "srv;");
+    else if(a_path == "/cntr/cfg/devMCLs" && ctrChkNode(opt))	TSYS::ctrListFS(opt, cfg("MC_DEV").getS(), "<chrdev>;");
+    else if(a_path == "/cntr/cfg/devMRLs" && ctrChkNode(opt))	TSYS::ctrListFS(opt, cfg("MR_DEV").getS(), "<chrdev>;");
     else TController::cntrCmdProc(opt);
 }
 

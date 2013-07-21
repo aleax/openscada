@@ -28,6 +28,7 @@
 #include <sys/time.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+#include <dirent.h>
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
@@ -38,6 +39,8 @@
 #include <stdlib.h>
 #include <langinfo.h>
 #include <zlib.h>
+
+#include <algorithm>
 
 #include "terror.h"
 #include "tmess.h"
@@ -1961,6 +1964,60 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
 
     return TCntrNode::objFuncCall(iid,prms,user);
+}
+
+void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
+{
+    int pathLev = 0;
+    //> Source path check and normalize
+    bool fromRoot = (fsBaseIn.size() && fsBaseIn[0] == '/');
+    nd->childAdd("el")->setText("/");
+    if(TSYS::pathLev(fsBaseIn,0) != ".") nd->childAdd("el")->setText(".");
+    string fsBase, tEl;
+    for(int off = 0; (tEl=TSYS::pathLev(fsBaseIn,0,false,&off)).size(); pathLev++)
+    {
+        fsBase += ((pathLev || fromRoot)?"/":"")+tEl;
+        nd->childAdd("el")->setText(fsBase);
+    }
+    if(fromRoot && pathLev == 0) fsBase = "/";
+    //> Previous items set
+    if(!fromRoot)
+    {
+        if(pathLev == 0) nd->childAdd("el")->setText("..");
+        else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
+    }
+    //> From work directory check
+    string fsBaseCor = fsBase;
+    if(!fsBaseCor.size() || (fsBaseCor[0] != '/' && fsBaseCor[0] != '.')) fsBaseCor = "./"+fsBaseCor;
+    //> Child items process
+    vector<string> its, fits;
+    DIR *IdDir = opendir(fsBaseCor.c_str());
+    if(IdDir != NULL)
+    {
+        dirent sDir, *sDirRez = NULL;
+        while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
+        {
+            if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
+            if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
+                    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
+                    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
+                fits.push_back(sDirRez->d_name);
+            else if(sDirRez->d_type == DT_REG && fileExt.size())
+            {
+                tEl = sDirRez->d_name;
+                size_t extPos = tEl.rfind(".");
+                tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
+                if(fileExt == "*" || (tEl.size() && fileExt.find(tEl+";") != string::npos)) fits.push_back(sDirRez->d_name);
+            }
+        }
+        closedir(IdDir);
+    }
+    sort(its.begin(),its.end());
+    for(unsigned i_it = 0; i_it < its.size(); i_it++)
+        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
+    sort(fits.begin(),fits.end());
+    for(unsigned i_it = 0; i_it < fits.size(); i_it++)
+        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
 }
 
 void TSYS::cntrCmdProc( XMLNode *opt )

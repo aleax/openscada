@@ -94,10 +94,10 @@ class TSYS : public TCntrNode
 	TSYS( int argi, char ** argb, char **env );
 	~TSYS( );
 
-	int  start( );
-	void stop( );
+	int	start( );
+	void	stop( );
 
-	int stopSignal( )	{ return mStopSignal; }
+	int	stopSignal( )	{ return mStopSignal; }
 
 	//> Programs options
 	string	id( )		{ return mId.c_str(); }
@@ -106,10 +106,10 @@ class TSYS : public TCntrNode
 	string	user( )		{ return mUser; }	//Run user name
 	string	host( );
 
-	void list( vector<string> &list )	{ chldList(mSubst,list); }
-	bool present( const string &name )	{ return chldPresent(mSubst,name); }
-	void add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
-	void del( const string &name )		{ chldDel(mSubst,name); }
+	void	list( vector<string> &list )	{ chldList(mSubst,list); }
+	bool	present( const string &name )	{ return chldPresent(mSubst,name); }
+	void	add( TSubSYS *sub )		{ chldAdd(mSubst,sub); }
+	void	del( const string &name )	{ chldDel(mSubst,name); }
 	AutoHD<TSubSYS> at( const string &name ){ return chldAt(mSubst,name); }
 
 	AutoHD<TUIS>		ui( )		{ return at("UI"); }
@@ -122,37 +122,37 @@ class TSYS : public TCntrNode
 	AutoHD<TModSchedul>	modSchedul( )	{ return at("ModSched"); }
 	AutoHD<TSecurity>	security( )	{ return at("Security"); }
 
-	string workDir( );
-	string icoDir( )	{ return mIcoDir; }
-	string modDir( )	{ return mModDir; }
-	void setWorkDir( const string &wdir );
-	void setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
-	void setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
+	string	workDir( );
+	string	icoDir( )	{ return mIcoDir; }
+	string	modDir( )	{ return mModDir; }
+	void	setWorkDir( const string &wdir );
+	void	setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
+	void	setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
 
 	//> Config-file functions
 	string	cfgFile( )	{ return mConfFile; }
 	XMLNode	&cfgRoot( )	{ return rootN; }
 	XMLNode	*cfgNode( const string &path, bool create = false );
-	void modifCfg( )	{ rootModifCnt++; }
+	void	modifCfg( )	{ rootModifCnt++; }
 
-	string workDB( )	{ return mWorkDB; }
-	string selDB( )		{ return mSelDB; }
-	bool chkSelDB( const string& wDB, bool isStrong = false );
-	void setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
-	void setSelDB( const string &vl )	{ mSelDB = vl; }
-	bool saveAtExit( )	{ return mSaveAtExit; }
-	void setSaveAtExit( bool vl )		{ mSaveAtExit = vl; modif(); }
-	int  savePeriod( )	{ return mSavePeriod; }
-	void setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
+	string	workDB( )	{ return mWorkDB; }
+	string	selDB( )	{ return mSelDB; }
+	bool	chkSelDB( const string& wDB, bool isStrong = false );
+	void	setWorkDB( const string &wdb )	{ mWorkDB = wdb; modifG(); }
+	void	setSelDB( const string &vl )	{ mSelDB = vl; }
+	bool	saveAtExit( )	{ return mSaveAtExit; }
+	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
+	int 	savePeriod( )	{ return mSavePeriod; }
+	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 
-	string optDescr( );	//print comand line options
+	string	optDescr( );	//print comand line options
 
 	static void sighandler( int signal );
 
 	//> Short time dimensions
-	bool multCPU( )		{ return mMultCPU; }
+	bool	multCPU( )	{ return mMultCPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
-	void clkCalc( );
+	void	clkCalc( );
 	uint64_t shrtCnt( )
 	{
 #if defined (__i386__) || defined (__x86_64__)
@@ -165,7 +165,7 @@ class TSYS : public TCntrNode
 	}
 	static long HZ( );
 
-	time_t sysTm( ) volatile	{ return mSysTm; }	//> System time fast access, from updated cell
+	time_t	sysTm( ) volatile	{ return mSysTm; }	//> System time fast access, from updated cell
 	static int64_t curTime( );	//> Current system time (usec)
 
 	//> Tasks control
@@ -183,10 +183,10 @@ class TSYS : public TCntrNode
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 
 	//> System counters
-	bool   cntrEmpty( );
-	double cntrGet( const string &id );
-	void   cntrSet( const string &id, double vl );
-	void   cntrIter( const string &id, double vl );
+	bool	cntrEmpty( );
+	double	cntrGet( const string &id );
+	void	cntrSet( const string &id, double vl );
+	void	cntrIter( const string &id, double vl );
 
 	//> Convert value to string
 	static string int2str( int val, IntView view = Dec );
@@ -268,6 +268,9 @@ class TSYS : public TCntrNode
 
 	//> Reentrant commandline processing
 	string getCmdOpt( int &curPos, string *argVal = NULL );
+
+	//>> System control interface functions
+	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	//Public attributes
 	static bool finalKill;	//Final object's kill flag. For dead requsted resources

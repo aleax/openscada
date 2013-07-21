@@ -441,27 +441,27 @@ void *da_LP_8x::fastTask( void *iprm )
 
     vector< AutoHD<TVal> > cnls;
     for(int i_c = 0; i_c < ePrm->prmNum; i_c++)
-        cnls.push_back(prm.vlAt(TSYS::strMess("ai%d",i_c)));
+	cnls.push_back(prm.vlAt(TSYS::strMess("ai%d",i_c)));
     float vbuf[cnls.size()];
 
     while(!prm.endRunReq)
     {
-        prm.owner().pBusRes.resRequestW( );
-        for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
-        {
-            c_mode = ePrm->cnlMode[i_c];
-            I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
-            vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017_GetCurAdChannel_Hex(prm.modSlot)/8000;
-        }
-        prm.owner().pBusRes.resRelease( );
+	prm.owner().pBusRes.resRequestW( );	//!!!! suggest for replace to mutex or futex
+	for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
+	{
+	    c_mode = ePrm->cnlMode[i_c];
+	    I8017_SetChannelGainMode(prm.modSlot,i_c,c_mode,0);
+	    vbuf[i_c] = (10.0/(c_mode?2*c_mode:1))*(float)I8017_GetCurAdChannel_Hex(prm.modSlot)/8000;
+	}
+	prm.owner().pBusRes.resRelease( );
 
-        for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
-            cnls[i_c].at().setR(vbuf[i_c], wTm, true);
+	for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
+	    cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
-        //> Calc next work time and sleep
-        wTm += (int64_t)(1e6*ePrm->fastPer);
-        sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
-        clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
+	//> Calc next work time and sleep
+	wTm += (int64_t)(1e6*ePrm->fastPer);
+	sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
+	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);
     }
 
     prm.prcSt = false;

@@ -1,3 +1,20 @@
+2013-07-21 Roman
+- SYS: Depend to module DAQ.DCON include to *-plc package.
+    Icons for modules DAQ.Comedi and DAQ.SMH2Gi is added.
+    "DESCR" DB fields size expanded from 300 to 1000 for everywhere.
+    Inline files browser function ctrListFS() is moved from TCntrNode to TSYS namespace.
+    NoEx flag is added to function TCntrNode::chldList().
+- TArchVal,UI.WebCfgD: Compression level for PNG creation is set to optimal for time level '1'.
+- !!:DAQ.{*,BlockCalc,LogicLev,ModBus},TArchVal,Transport.Serial,UI.VCAEngine:
+    DAQ parameters' attributes and the parameters browsing is moved to generic function TDAQ::ctrListPrmAttr() and used everywhere.
+- DAQ.DAQGate: Sync inter remote station period disabling is allowed by set the value to zero.
+- DAQ.JavaLikeCalc: Set default value to EVAL_REAL instead EVAL_STRING on value request is made for performance some increase.
+    "break" into the virtual machine commands is replaced to "continue" for some performance increase.
+- !!!:DAQ.ModBus: Complex type "String", registers block, support is added to DAQ by suffix "_s" to the register "R[I]".
+    Complex types "Integer" (32 bit signed), "Float" and "String" (registers block) support is added to Node object of input protocol.
+- UI.WebVision: Some code clear for primitive "ElFig".
+
+
 2013-07-10 Roman
 - !!:SYS,*: Include I18N.mk script direct to core and modules' *.am files.
 - !!:SYS,*: OpenSCADA modules including mechanism is rewrote to "noinst" static libraries build and direct link its to core library.

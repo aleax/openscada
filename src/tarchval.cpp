@@ -1634,7 +1634,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
     //> Get image and transfer it
     int img_sz;
-    char *img_ptr = (char *)gdImagePngPtr(im, &img_sz);
+    char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, 1);
     rez.assign(img_ptr,img_sz);
     gdFree(img_ptr);
     gdImageDestroy(im);
@@ -2038,26 +2038,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real))->setText(_("Real"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String))->setText(_("String"));
     }
-    else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt))
-    {
-	vector<string> list;
-	int c_lv = 0;
-	string c_path = "", c_el;
-	for(int c_off = 0; (c_el=TSYS::strSepParse(srcData(),0,'.',&c_off)).size(); c_lv++)
-	{
-	    opt->childAdd("el")->setText(c_path);
-	    if(c_lv) c_path+=".";
-	    c_path += c_el;
-	}
-	opt->childAdd("el")->setText(c_path);
-	if(c_lv != 0) c_path += ".";
-	try
-	{
-	    SYS->daq().at().nodeAt(c_path,0,'.').at().chldList(0,list);
-	    for(unsigned i_a = 0; i_a < list.size(); i_a++)
-		opt->childAdd("el")->setText(c_path+list[i_a]);
-	}catch(TError err) { }
-    }
+    else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData());
     else if(a_path == "/arch/arch")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))

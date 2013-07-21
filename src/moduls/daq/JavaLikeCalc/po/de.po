@@ -243,8 +243,8 @@ msgid "Compilation with the help of the program language %s is not supported."
 msgstr "Kompilieren mit der Programmierungssprache %s wird nicht unterstützt."
 
 #, c-format
-msgid "Compile error: %s\n"
-msgstr "Fehler bei der Kompilation: %s\n"
+msgid "Compile error: %s"
+msgstr "Fehler bei der Kompilation: %s"
 
 msgid "Load function's libraries error."
 msgstr "Fehler beim Laden der Funktionsbibliothek."

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.ModBus file: modbus_prt.h
 /***************************************************************************
- *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2013 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -84,6 +84,13 @@ class Node : public TFunction, public TConfig
 	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data
 	    LockAttr	= 0x20	//Lock attribute
 	};
+	//> Node modes
+	enum NodeModes
+	{
+	    MD_DATA = 0,	//Data
+	    MD_GT_ND = 1,	//Gate node
+	    MD_GT_NET = 2	//Gate network
+	};
 
 	//Methods
 	Node( const string &iid, const string &db, TElem *el );
@@ -99,7 +106,7 @@ class Node : public TFunction, public TConfig
 	int addr( );
 	string inTransport( );
 	string prt( );
-	int mode( );
+	NodeModes mode( );
 
 	double period( )	{ return mPer; }
 	string progLang( );
@@ -131,6 +138,15 @@ class Node : public TFunction, public TConfig
 
     private:
 	//Data
+	class SIO
+	{
+	    public:
+		SIO( ) : id(-1), sTp(0), pos(-1)	{ }
+		SIO( int iid, char isTp = 0, int ipos = 0 ) : id(iid), sTp(isTp), pos(ipos)	{ }
+
+		int id, pos;
+		char sTp;
+	};
 	class SData
 	{
 	    public:
@@ -138,7 +154,7 @@ class Node : public TFunction, public TConfig
 
 		TValFunc	val;
 		map<int,AutoHD<TVal> > lnk;
-		map<int,int> reg, coil;
+		map<int,SIO> reg, coil;
 		float rReg, wReg, rCoil, wCoil;
 	};
 
@@ -150,6 +166,7 @@ class Node : public TFunction, public TConfig
 	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &cfg );
+	void regCR( int id, const SIO &val, char tp = 'R' );
 
 	static void *Task( void *icntr );
 

@@ -102,6 +102,7 @@ void TVariant::setType( Type tp, bool fix )
 	    if(val.o) delete val.o;
 	    val.o = NULL;
 	    break;
+	default: break;
     }
 
     //> Create

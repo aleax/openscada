@@ -1388,24 +1388,14 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    int c_off = obj_tp.size();
 	    vector<string> ls;
 	    string c_path = obj_tp, c_el;
-	    opt->childAdd("el")->setText("");
-	    opt->childAdd("el")->setText(c_path);
+	    //opt->childAdd("el")->setText("");
 
 	    try
     	    {
-		if(obj_tp == "prm:")
-		{
-		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
-		    {
-			c_path += "/"+c_el;
-			opt->childAdd("el")->setText(c_path);
-		    }
-		    AutoHD<TCntrNode> DAQnd = SYS->daq().at().nodeAt(c_path.substr(4));
-		    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !is_pl) DAQnd.at().chldList(0,ls);
-		    for(unsigned i_l = 0; i_l < ls.size(); i_l++) opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
-        	}
+		if(obj_tp == "prm:")	SYS->daq().at().ctrListPrmAttr(opt, m_prm.substr(4), is_pl, 0, "prm:");
 		else if(obj_tp == "wdg:")
 		{
+		    opt->childAdd("el")->setText(c_path);
 		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
 		    {
 			c_path += (c_lv?"/":"")+c_el;

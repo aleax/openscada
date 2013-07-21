@@ -251,7 +251,7 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 	    func.free();
 	    lbAt("sys_compile").at().del(funcId.c_str());
 	}
-	throw TError(nodePath().c_str(),_("Compile error: %s\n"),err.mess.c_str());
+	throw TError(nodePath().c_str(),_("Compile error: %s"),err.mess.c_str());
     }
 
     return func.at().nodePath(0,true);

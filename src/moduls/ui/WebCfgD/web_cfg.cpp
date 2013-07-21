@@ -253,9 +253,9 @@ void TWEB::imgConvert(SSess &ses)
 	int img_sz;
 	char *img_ptr = NULL;
 	gdImageSaveAlpha(sim, 1);
-	if(itp == "png")	img_ptr = (char *)gdImagePngPtr(sim,&img_sz);
-	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim,&img_sz,-1);
-	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim,&img_sz);
+	if(itp == "png")	img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, 1);
+	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim, &img_sz, -1);
+	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
 	if(img_ptr)
 	{
 	    ses.page.assign(img_ptr,img_sz);

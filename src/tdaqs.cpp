@@ -41,13 +41,13 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     //> Templates lib db structure
     lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
     lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
-    lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
     lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
 
     //> Template DB structure
     el_tmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
     el_tmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
-    el_tmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
+    el_tmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
     el_tmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     el_tmpl.fldAdd(new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"1000000"));
     el_tmpl.fldAdd(new TFld("TIMESTAMP",_("Modification timestamp"),TFld::Integer,TFld::DateTimeDec));
@@ -105,6 +105,54 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 	    cntr = at(mls[i_m]).at().at(cls[i_c]);
 	    if(cntr.at().startStat() && (!isRun || (isRun && !cntr.at().redntUse())))
 		ls.push_back(cntr.at().workId());
+	}
+    }
+}
+
+void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char sep, const string &pref )
+{
+    int c_lv = 0, c_off;
+    string c_path = "", c_el;
+    vector<string> ls;
+    opt->childAdd("el")->setText(pref+c_path);
+
+    if(sep)
+    {
+	for(c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size(); ++c_lv)
+	{
+	    c_path += c_lv ? sep+c_el : c_el;
+	    opt->childAdd("el")->setText(pref+c_path);
+	}
+	if(c_lv) c_path += sep;
+	AutoHD<TCntrNode> DAQnd = nodeAt(c_path, 0, sep, 0, true);
+	if(!DAQnd.freeStat())
+	{
+	    if(dynamic_cast<TVal*>(&DAQnd.at()) && toPrm) opt->childDel(opt->childSize()-1);
+	    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !toPrm)
+	    {
+		DAQnd.at().chldList(0, ls, true);
+		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+		    opt->childAdd("el")->setText(pref+c_path+ls[i_l]);
+	    }
+	}
+    }
+    else
+    {
+	for(c_off = 0; (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size(); ++c_lv)
+	{
+	    c_path += "/"+c_el;
+	    opt->childAdd("el")->setText(pref+c_path);
+	}
+	AutoHD<TCntrNode> DAQnd = nodeAt(c_path, 0, 0, 0, true);
+	if(!DAQnd.freeStat())
+	{
+	    if(dynamic_cast<TVal*>(&DAQnd.at()) && toPrm) opt->childDel(opt->childSize()-1);
+	    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !toPrm)
+	    {
+		DAQnd.at().chldList(0, ls, true);
+		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+		    opt->childAdd("el")->setText(pref+c_path+"/"+ls[i_l]);
+	    }
 	}
     }
 }

@@ -59,7 +59,8 @@ TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("ADDR",_("Address"),TFld::Integer,0,"3","1","1;247"));
     mNodeEl.fldAdd(new TFld("InTR",_("Input transport"),TFld::String,0,"20","*"));
     mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
-    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0","0;1;2",_("Data;Gateway node;Gateway net")));
+    mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0",
+	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
     //>> For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",_("Calculate data period (s)"),TFld::Real,0,"5.3","1","0.001;99"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TCfg::TransltText,"1000000"));
@@ -292,7 +293,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    if(rez.size() < 7)	err = _("13:Error server respond");
 	    else
 	    {
-		unsigned resp_sz = (unsigned short)(rez[4]<<8)|(unsigned char)rez[5];
+		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
 
 		//> Wait tail
 		while(rez.size() < (resp_sz+6))
@@ -454,7 +455,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	{
 	    vector<string> lst;
 	    nList(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(nAt(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
@@ -621,9 +622,9 @@ Node::~Node( )
 TCntrNode &Node::operator=( TCntrNode &node )
 {
     Node *src_n = dynamic_cast<Node*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
-    if( enableStat( ) )	setEnable(false);
+    if(enableStat())	setEnable(false);
 
     //> Copy parameters
     exclCopy(*src_n, "ID;");
@@ -637,11 +638,11 @@ TCntrNode &Node::operator=( TCntrNode &node )
 void Node::postEnable( int flag )
 {
     //> Create default IOs
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Node::LockAttr,"1000",false),0);
-	ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,Node::LockAttr,"0",false),1);
-	ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,Node::LockAttr,"0",false),2);
+	ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Node::LockAttr,"1000",false), 0);
+	ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,Node::LockAttr,"0",false), 1);
+	ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,Node::LockAttr,"0",false), 2);
     }
 }
 
@@ -649,15 +650,15 @@ void Node::postDisable( int flag )
 {
     try
     {
-	if( flag )
+	if(flag)
 	{
-	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
+	    SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 	    TConfig cfg(&owner().nodeIOEl());
-	    cfg.cfg("NODE_ID").setS(id(),true);
-	    SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
+	    cfg.cfg("NODE_ID").setS(id(), true);
+	    SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
 	}
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TProt &Node::owner( )		{ return *(TProt*)nodePrev(); }
@@ -676,15 +677,15 @@ string Node::inTransport( )	{ return cfg("InTR").getS(); }
 
 string Node::prt( )		{ return cfg("PRT").getS(); }
 
-int Node::mode( )		{ return cfg("MODE").getI(); }
+Node::NodeModes Node::mode( )	{ return (Node::NodeModes)cfg("MODE").getI(); }
 
-string Node::progLang()
+string Node::progLang( )
 {
     string mProg = cfg("DT_PROG").getS();
-    return mProg.substr(0,mProg.find("\n"));
+    return mProg.substr(0, mProg.find("\n"));
 }
 
-string Node::prog()
+string Node::prog( )
 {
     string mProg = cfg("DT_PROG").getS();
     size_t lngEnd = mProg.find("\n");
@@ -693,19 +694,19 @@ string Node::prog()
 
 void Node::setProgLang( const string &ilng )
 {
-    cfg("DT_PROG").setS( ilng+"\n"+prog() );
+    cfg("DT_PROG").setS(ilng+"\n"+prog());
     modif();
 }
 
 void Node::setProg( const string &iprg )
 {
-    cfg("DT_PROG").setS( progLang()+"\n"+iprg );
+    cfg("DT_PROG").setS(progLang()+"\n"+iprg);
     modif();
 }
 
 bool Node::cfgChange( TCfg &ce )
 {
-    if( ce.name() == "MODE" )
+    if(ce.name() == "MODE")
     {
 	setEnable(false);
 	//> Hide all specific
@@ -725,13 +726,35 @@ bool Node::cfgChange( TCfg &ce )
     return true;
 }
 
+void Node::regCR( int id, const SIO &val, char tp )
+{
+    map<int,SIO>::iterator it;
+
+    switch(tp)
+    {
+	case 'C':
+	    if((it=data->coil.find(id)) != data->coil.end())
+		mess_warning(nodePath().c_str(), _("Coil '%d' already registered for IO '%d'. IO '%d' will be disabled for process coil '%d'!"),
+		    id, it->second.id, val.id, id);
+	    else data->coil[id] = val;
+	    break;
+	case 'R':
+	    if((it=data->reg.find(id)) != data->reg.end())
+		mess_warning(nodePath().c_str(), _("Register '%d' already registered for IO '%d'. IO '%d' will be disabled for process register '%d'!"),
+		    id, it->second.id, val.id, id);
+	    else data->reg[id] = val;
+	    break;
+	default: throw TError(nodePath().c_str(), _("ModBUS data type '%c' error!"), tp);
+    }
+}
+
 void Node::load_( )
 {
     bool en_prev = enableStat();
 
     if(!SYS->chkSelDB(DB())) return;
     cfgViewAll(true);
-    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
+    SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
     cfg("MODE").setI(cfg("MODE").getI());
 
     //> Load IO
@@ -783,16 +806,16 @@ void Node::save_( )
     //> Save IO
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
-    for( int i_io = 0; i_io < ioSize(); i_io++ )
+    for(int i_io = 0; i_io < ioSize(); i_io++)
     {
-	if( io(i_io)->flg()&Node::LockAttr ) continue;
+	if(io(i_io)->flg()&Node::LockAttr) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("FLAGS").setI(io(i_io)->flg());
 	cfg.cfg("POS").setI(i_io);
-	if( io(i_io)->flg()&Node::IsLink ) cfg.cfg("VALUE").setS(io(i_io)->rez());
-	else if( data && data->val.func( ) ) cfg.cfg("VALUE").setS(data->val.getS(i_io));
+	if(io(i_io)->flg()&Node::IsLink) cfg.cfg("VALUE").setS(io(i_io)->rez());
+	else if(data && data->val.func()) cfg.cfg("VALUE").setS(data->val.getS(i_io));
 	else cfg.cfg("VALUE").setS(io(i_io)->def());
 	SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
     }
@@ -811,58 +834,77 @@ void Node::save_( )
 
 void Node::setEnable( bool vl )
 {
-    if( mEn == vl ) return;
+    if(mEn == vl) return;
 
     cntReq = 0;
 
-    ResAlloc res(nRes,true);
+    ResAlloc res(nRes, true);
 
     //> Enable node
-    if( vl && mode( ) == 0 )
+    if(vl && mode() == MD_DATA)
     {
 	//>> Data structure allocate
-	if( !data ) data = new SData;
+	if(!data) data = new SData;
 
 	//>> Compile function
 	try
 	{
-	    if( progLang().empty() ) data->val.setFunc(this);
+	    if(progLang().empty()) data->val.setFunc(this);
 	    else
 	    {
 		string mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog());
 		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    }
-	}catch( TError err )
-	{ mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str()); throw; }
+	}
+	catch( TError err )
+	{
+	    mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str());
+	    throw;
+	}
 
 	//>> Links, registers and coins init
-	for( int i_io = 0; i_io < ioSize(); i_io++ )
+	for(int i_io = 0; i_io < ioSize(); i_io++)
 	{
-	    if( io(i_io)->flg()&Node::IsLink )
+	    IO *io_ = io(i_io);
+	    string ioId = io_->id();
+	    if(io_->flg()&Node::IsLink)	data->lnk[i_io] = SYS->daq().at().attrAt(io_->rez(), '.', true);
+	    if((tolower(ioId[0]) == 'c' || tolower(ioId[0]) == 'r') /*&& ioId.size() > 1 && isdigit(ioId[1])*/)
 	    {
-		AutoHD<TVal> lnk;
-		try
+		bool wr = (tolower(ioId[ioId.size()-1])=='w');
+		if(ioId.compare(0,3,"R_i") == 0 || ioId.compare(0,3,"R_f") == 0)
 		{
-		    lnk = SYS->daq().at().at(TSYS::strSepParse(io(i_io)->rez(),0,'.')).at().
-					  at(TSYS::strSepParse(io(i_io)->rez(),1,'.')).at().
-					  at(TSYS::strSepParse(io(i_io)->rez(),2,'.')).at().
-					  vlAt(TSYS::strSepParse(io(i_io)->rez(),3,'.'));
-		}catch( TError err ){  }
-		data->lnk[i_io] = lnk;
-	    }
-	    if( (tolower(io(i_io)->id()[0]) == 'c' || tolower(io(i_io)->id()[0]) == 'r') && io(i_io)->id().size() > 1 && isdigit(io(i_io)->id()[1]) )
-	    {
-		bool wr = (tolower(io(i_io)->id()[io(i_io)->id().size()-1])=='w');
-		int tca = atoi(io(i_io)->id().data()+1);
-		if( tolower(io(i_io)->id()[0]) == 'c' )
-		{
-		    data->coil[tca] = i_io;
-		    if( wr ) data->coil[-tca] = i_io;
+		    int tca1 = strtol(ioId.c_str()+3, NULL, 0);
+		    size_t secReg = ioId.find(",",3);
+		    int tca2 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca1+1;
+		    char sTp = (ioId.compare(0,3,"R_i") == 0) ? 'i' : 'f';
+		    regCR(tca1, SIO(i_io,sTp,0)); regCR(tca2, SIO(i_io,sTp,1));
+		    if(wr) { regCR(-tca1, SIO(i_io,sTp,0)); regCR(-tca2, SIO(i_io,sTp,1)); }
 		}
-		else
+		else if(ioId.compare(0,3,"R_s") == 0)
 		{
-		    data->reg[tca] = i_io;
-		    if( wr ) data->reg[-tca] = i_io;
+		    int tca = strtol(ioId.c_str()+3, NULL, 0);
+		    size_t strSzReg = ioId.find(",",3);
+		    int tcaN = (strSzReg != string::npos) ? vmin(100,strtol(ioId.c_str()+strSzReg+1,NULL,0)) : 0;
+		    if(!tcaN) tcaN = 10;	//Default length 10 registers and maximum 100
+		    for(int i_r = tca; i_r < (tca+tcaN); i_r++)
+		    {
+			regCR(i_r, SIO(i_io,'s',i_r-tca));
+			if(wr) regCR(-i_r, SIO(i_io,'s',i_r-tca));
+		    }
+		}
+		else if(ioId.size() > 1 && isdigit(ioId[1]))
+		{
+		    int tca = strtol(ioId.data()+1, NULL, 0);
+		    if(tolower(ioId[0]) == 'c')
+		    {
+			regCR(tca, i_io, 'C');
+			if(wr) regCR(-tca, i_io, 'C');
+		    }
+		    else
+		    {
+			regCR(tca, i_io);
+			if(wr) regCR(-tca, i_io);
+		    }
 		}
 	    }
 	}
@@ -886,17 +928,17 @@ void Node::setEnable( bool vl )
 string Node::getStatus( )
 {
     string rez = _("Disabled. ");
-    if( enableStat( ) )
+    if(enableStat())
     {
 	rez = _("Enabled. ");
 	switch(mode())
 	{
-	    case 0:
-		rez += TSYS::strMess( _("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
-		TSYS::time2str(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil );
+	    case MD_DATA:
+		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
+		    TSYS::time2str(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil);
 		break;
-	    case 1: case 2:
-		rez += TSYS::strMess( _("Requests %.4g."), cntReq );
+	    case MD_GT_ND: case MD_GT_NET:
+		rez += TSYS::strMess(_("Requests %.4g."), cntReq);
 		break;
 	}
     }
@@ -906,41 +948,41 @@ string Node::getStatus( )
 
 bool Node::req( const string &itr, const string &iprt, unsigned char inode, string &pdu )
 {
-    ResAlloc res(nRes,false);
+    ResAlloc res(nRes, false);
 
     //> Check for allow request
-    if( !enableStat( ) || pdu.empty() ||
-	!((inTransport( ) == "*" && mode()!=2) || inTransport( ) == itr) ||
-	!(addr( )==inode || mode()==2) ||
-	!(prt()=="*" || iprt==prt()) ) return false;
+    if(!enableStat() || pdu.empty() ||
+	!((inTransport() == "*" && mode() != MD_GT_NET) || inTransport() == itr) ||
+	!(addr() == inode || mode() == MD_GT_NET) ||
+	!(prt() == "*" || iprt == prt())) return false;
 
     cntReq++;
 
     //> Data mode requests process
-    if( mode() == 0 )
-	switch( pdu[0] )
+    if(mode() == MD_DATA)
+	switch(pdu[0])
 	{
 	    case 0x01:	//Read multiple coils
 	    {
 		int c_sz = 0;
-		if(pdu.size() == 5) c_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if(c_sz < 1 || c_sz > 2000) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
-		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
-		pdu.assign(1,pdu[0]);
+		if(pdu.size() == 5) c_sz = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
+		if(c_sz < 1 || c_sz > 2000) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int c_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
+		pdu.assign(1, pdu[0]);
 		pdu += (char)(c_sz/8+((c_sz%8)?1:0));
-		pdu += string(pdu[1],(char)0);
+		pdu += string(pdu[1], (char)0);
 
 		bool isData = false;
-		map<int,int>::iterator itc;
+		map<int,SIO>::iterator itc;
 		for(int i_c = c_addr; i_c < (c_addr+c_sz); i_c++)
 		{
 		    if((itc=data->coil.find(i_c)) != data->coil.end())
 		    {
-			if(data->val.getB(itc->second))	pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8));
+			if(data->val.getB(itc->second.id)) pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8));
 			isData = true;
 		    }
 		}
-		if(!isData)	{ pdu.assign(1,pdu[0]|0x80); pdu += 0x2; return true; }
+		if(!isData)	{ pdu.assign(1, pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rCoil += c_sz;
 
@@ -949,21 +991,57 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    case 0x03:	//Read multiple registers
 	    {
 		int r_sz = 0;
-		if( pdu.size() == 5 ) r_sz = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		if( r_sz < 1 || r_sz > 125 ) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
-		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
-		pdu.assign(1,pdu[0]);
+		if(pdu.size() == 5) r_sz = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
+		if(r_sz < 1 || r_sz > 125) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int r_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
+		pdu.assign(1, pdu[0]);
 		pdu += (char)(r_sz*2);
 
 		bool isData = false;
-		map<int,int>::iterator itr;
-		for( int i_r = r_addr; i_r < (r_addr+r_sz); i_r++ )
+		map<int,TVariant> grpVals;
+		map<int,SIO>::iterator itr;
+		for(int i_r = r_addr; i_r < (r_addr+r_sz); i_r++)
 		{
 		    unsigned short val = 0;
-		    if( (itr=data->reg.find(i_r)) != data->reg.end() ) { val = data->val.getI(itr->second); isData = true; }
-		    pdu += TSYS::strEncode(string((char*)&val,2),TSYS::Reverse);
+		    if((itr=data->reg.find(i_r)) != data->reg.end())
+		    {
+			switch(itr->second.sTp)
+			{
+			    case 'i':
+			    {
+				int valIO;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	valIO = grpValIt->second.getI();
+				else { valIO = data->val.getI(itr->second.id); grpVals[itr->second.id] = valIO; }
+				val = (valIO >> (itr->second.pos*16))&0xFFFF;
+				break;
+			    }
+			    case 'f':
+			    {
+				union { uint32_t i; float f; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	wl.f = grpValIt->second.getR();
+				else { wl.f = data->val.getR(itr->second.id); grpVals[itr->second.id] = wl.f; }
+				val = (wl.i >> (itr->second.pos*16))&0xFFFF;
+				break;
+			    }
+			    case 's':
+			    {
+				string valIO;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	valIO = grpValIt->second.getS();
+				else { valIO = data->val.getS(itr->second.id); grpVals[itr->second.id] = valIO; }
+				valIO.resize((itr->second.pos+1)*2, 0);
+				val = TSYS::getUnalign16(valIO.data()+itr->second.pos*2);
+				break;
+			    }
+			    default:	val = data->val.getI(itr->second.id);	break;
+			}
+			isData = true;
+		    }
+		    pdu += TSYS::strEncode(string((char*)&val,2), TSYS::Reverse);
 		}
-		if( !isData )	{ pdu.assign(1,pdu[0]|0x80); pdu += 0x2; return true; }
+		if(!isData)	{ pdu.assign(1, pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rReg += r_sz;
 
@@ -971,15 +1049,15 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x05:	//Write single coil
 	    {
-		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
-		int c_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+		if(pdu.size() != 5) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int c_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
 
-		map<int,int>::iterator ic = data->coil.find(-c_addr);
-		if(ic == data->coil.end()) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		map<int,SIO>::iterator ic = data->coil.find(-c_addr);
+		if(ic == data->coil.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
-		    data->val.setB(ic->second,(bool)pdu[3]);
-		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second);
+		    data->val.setB(ic->second.id, (bool)pdu[3]);
+		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second.id);
 		    if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setB((bool)pdu[3]);
 		}
 
@@ -989,17 +1067,48 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x06:	//Write single register
 	    {
-		if(pdu.size() != 5) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
-		int r_addr = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
+		if(pdu.size() != 5) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int r_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
 
-		map<int,int>::iterator ir = data->reg.find(-r_addr);
-		if(ir == data->reg.end()) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		map<int,AutoHD<TVal> >::iterator il;
+		map<int,SIO>::iterator ir = data->reg.find(-r_addr);
+		if(ir == data->reg.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
-		    data->val.setI(ir->second,(unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
-		    map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ir->second);
-		    if(il != data->lnk.end() && !il->second.freeStat())
-			il->second.at().setI((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		    unsigned short val = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
+		    switch(ir->second.sTp)
+		    {
+			case 'i':
+			{
+			    int valIO = data->val.getI(ir->second.id);
+			    valIO = (valIO&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
+			    data->val.setI(ir->second.id, valIO);
+			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setI(valIO);
+			    break;
+			}
+			case 'f':
+			{
+			    union { uint32_t i; float f; } wl;
+			    wl.f = data->val.getR(ir->second.id);
+			    wl.i = (wl.i&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
+			    data->val.setR(ir->second.id, wl.f);
+			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setR(wl.f);
+			    break;
+			}
+			case 's':
+			{
+			    string valIO = data->val.getS(ir->second.id);
+			    valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
+			    valIO.replace(ir->second.pos*2,2,(char*)&val,2);
+			    data->val.setS(ir->second.id, valIO);
+			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setS(valIO);
+			    break;
+			}
+			default:
+			    data->val.setI(ir->second.id, val);
+			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setI(val);
+			    break;
+		    }
 		}
 
 		data->wReg++;
@@ -1008,78 +1117,120 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 	    }
 	    case 0x0F:	//Write multiple coils
 	    {
-		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
-		int c_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
-		int c_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		if(pdu.size() < 6) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int c_aSt = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
+		int c_aCnt = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
 		int bCnt = (unsigned char)pdu[5];
-		if((int)pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
+		if((int)pdu.size() != (6+bCnt) || bCnt < (c_aCnt/8)) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
 		bool noWrReg = false;
 		for(int i_c = 0; i_c < c_aCnt; i_c++)
 		{
-		    map<int,int>::iterator ic = data->coil.find(-(c_aSt+i_c));
+		    map<int,SIO>::iterator ic = data->coil.find(-(c_aSt+i_c));
 		    if(ic == data->coil.end()) noWrReg = true;
 		    else
 		    {
-			data->val.setB(ic->second,(bool)(1&(pdu[6+i_c/8]>>(i_c%8))));
-			map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second);
-			if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setB(data->val.getB(ic->second));
+			data->val.setB(ic->second.id, (bool)(1&(pdu[6+i_c/8]>>(i_c%8))));
+			map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ic->second.id);
+			if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setB(data->val.getB(ic->second.id));
 			data->wCoil++;
 		    }
 		}
-		if(noWrReg) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		if(noWrReg) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else pdu.resize(5);
 
 		return true;
 	    }
 	    case 0x10:	//Write multiple register
 	    {
-		if(pdu.size() < 6) { pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
-		int r_aSt = ((unsigned short)(pdu[1]<<8)|(unsigned char)pdu[2]);
-		int r_aCnt = ((unsigned short)(pdu[3]<<8)|(unsigned char)pdu[4]);
+		if(pdu.size() < 6) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int r_aSt = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
+		int r_aCnt = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
 		int bCnt = (unsigned char)pdu[5];
 		if((int)pdu.size() != (6+bCnt) || bCnt < (r_aCnt*2) || r_aCnt > 123)
-		{ pdu.assign(1,pdu[0]|0x80); pdu += 0x3; return true; }
+		{ pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
 		ResAlloc res(data->val.func()->fRes(), true);
 		bool noWrReg = false;
+		map<int,TVariant> grpVals;
+		map<int,AutoHD<TVal> >::iterator il;
 		for(int i_r = 0; i_r < r_aCnt; i_r++)
 		{
-		    map<int,int>::iterator ir = data->reg.find(-(r_aSt+i_r));
+		    map<int,SIO>::iterator ir = data->reg.find(-(r_aSt+i_r));
 		    if(ir == data->reg.end()) noWrReg = true;
 		    else
 		    {
-			data->val.setI(ir->second,(unsigned short)(pdu[6+i_r*2]<<8)|(unsigned char)pdu[6+i_r*2+1]);
-			map<int,AutoHD<TVal> >::iterator il = data->lnk.find(ir->second);
-			if(il != data->lnk.end() && !il->second.freeStat()) il->second.at().setI(data->val.getI(ir->second));
+			unsigned short val = (unsigned short)(pdu[6+i_r*2]<<8) | (unsigned char)pdu[6+i_r*2+1];
+			switch(ir->second.sTp)
+			{
+			    case 'i':
+			    {
+				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
+				int valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getI() : data->val.getI(ir->second.id);
+				valIO = (valIO&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
+				grpVals[ir->second.id] = valIO;
+				break;
+			    }
+			    case 'f':
+			    {
+				union { uint32_t i; float f; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
+				wl.f = (grpValIt != grpVals.end()) ? grpValIt->second.getR() : data->val.getR(ir->second.id);
+				wl.i = (wl.i&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
+				grpVals[ir->second.id] = wl.f;
+				break;
+			    }
+			    case 's':
+			    {
+				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
+                                string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
+                                valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
+                        	valIO.replace(ir->second.pos*2,2,(char*)&val,2);
+				grpVals[ir->second.id] = valIO;
+				break;
+			    }
+			    default:
+				data->val.setI(ir->second.id, val);
+				if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat()) il->second.at().setI(val);
+				break;
+			}
 		    }
 		    data->wReg++;
 		}
+		//> Real write cached values
+		for(map<int,TVariant>::iterator i_g = grpVals.begin(); i_g != grpVals.end(); ++i_g)
+		{
+		    data->val.set(i_g->first, i_g->second);
+		    if((il=data->lnk.find(i_g->first)) != data->lnk.end() && !il->second.freeStat()) il->second.at().set(i_g->second);
+		}
 
-		if(noWrReg) { pdu.assign(1,pdu[0]|0x80); pdu += 0x2; }
+		if(noWrReg) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else pdu.resize(5);
 
 		return true;
 	    }
 	    default:
-		pdu.assign(1,pdu[0]|0x80);
+		pdu.assign(1, pdu[0]|0x80);
 		pdu += 0x1;
 		return true;
 	}
     //> Gateway mode requests process
-    else if( mode() == 1 || mode() == 2 )
+    else if(mode() == MD_GT_ND || mode() == MD_GT_NET)
     {
 	try
 	{
 	    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(cfg("TO_TR").getS(),0,'.')).at().
 							 outAt(TSYS::strSepParse(cfg("TO_TR").getS(),1,'.'));
-	    if( !tr.at().startStat() ) tr.at().start();
+	    if(!tr.at().startStat()) tr.at().start();
 
 	    XMLNode req(cfg("TO_PRT").getS());
-	    req.setAttr("id",id())->setAttr("node",(mode()==2)?TSYS::int2str(inode):cfg("TO_ADDR").getS())->setAttr("reqTry","3")->setText(pdu);
-	    tr.at().messProtIO(req,"ModBus");
+	    req.setAttr("id", id())->
+		setAttr("node", (mode()==MD_GT_NET)?TSYS::int2str(inode):cfg("TO_ADDR").getS())->
+		setAttr("reqTry", "3")->
+		setText(pdu);
+	    tr.at().messProtIO(req, "ModBus");
 
-	    if( !req.attr("err").empty() ) { pdu.assign(1,pdu[0]|0x80); pdu += 0xA; }
+	    if(!req.attr("err").empty()) { pdu.assign(1, pdu[0]|0x80); pdu += 0xA; }
 	    pdu = req.text();
-	}catch(TError err) { pdu.assign(1,pdu[0]|0x80); pdu += 0xA; }
+	}catch(TError err) { pdu.assign(1, pdu[0]|0x80); pdu += 0xA; }
 
 	return true;
     }
@@ -1108,9 +1259,9 @@ void *Node::Task( void *ind )
 	    int64_t t_cnt = TSYS::curTime();
 
 	    //> Setting special IO
-	    if(ioFrq >= 0) nd.data->val.setR(ioFrq,(float)1/nd.period());
-	    if(ioStart >= 0) nd.data->val.setB(ioStart,isStart);
-	    if(ioStop >= 0) nd.data->val.setB(ioStop,isStop);
+	    if(ioFrq >= 0) nd.data->val.setR(ioFrq, (float)1/nd.period());
+	    if(ioStart >= 0) nd.data->val.setB(ioStart, isStart);
+	    if(ioStop >= 0) nd.data->val.setB(ioStop, isStop);
 
 	    try
 	    {
@@ -1120,24 +1271,17 @@ void *Node::Task( void *ind )
 		{
 		    if(li->second.freeStat())
 		    {
-			nd.data->val.setS(li->first,EVAL_STR);
+			nd.data->val.setS(li->first, EVAL_STR);
 			if(!(clc%(int)vmax(1,(float)1/nd.period())))
-			{
-			    try
-			    {
-				li->second = SYS->daq().at().at(TSYS::strSepParse(nd.io(li->first)->rez(),0,'.')).at().
-					       at(TSYS::strSepParse(nd.io(li->first)->rez(),1,'.')).at().
-					       at(TSYS::strSepParse(nd.io(li->first)->rez(),2,'.')).at().
-					       vlAt(TSYS::strSepParse(nd.io(li->first)->rez(),3,'.'));
-			    }catch(TError err){ continue; }
-			}else continue;
+			    li->second = SYS->daq().at().attrAt(nd.io(li->first)->rez(), '.', true);
+			if(li->second.freeStat()) continue;
 		    }
 		    switch(nd.data->val.ioType(li->first))
 		    {
-			case IO::String:	nd.data->val.setS(li->first,li->second.at().getS());	break;
-			case IO::Integer:	nd.data->val.setI(li->first,li->second.at().getI());	break;
-			case IO::Real:		nd.data->val.setR(li->first,li->second.at().getR());	break;
-			case IO::Boolean:	nd.data->val.setB(li->first,li->second.at().getB());	break;
+			case IO::String:	nd.data->val.setS(li->first, li->second.at().getS());	break;
+			case IO::Integer:	nd.data->val.setI(li->first, li->second.at().getI());	break;
+			case IO::Real:		nd.data->val.setR(li->first, li->second.at().getR());	break;
+			case IO::Boolean:	nd.data->val.setB(li->first, li->second.at().getB());	break;
 			default: break;
 		    }
 		}
@@ -1159,8 +1303,8 @@ void *Node::Task( void *ind )
 	    }
 	    catch(TError err)
 	    {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str() );
-		mess_err(nd.nodePath().c_str(),_("Calculate node's function error."));
+		mess_err(err.cat.c_str(), "%s", err.mess.c_str() );
+		mess_err(nd.nodePath().c_str(), _("Calculate node's function error."));
 	    }
 
 	    //> Calc acquisition process time
@@ -1208,15 +1352,21 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(xt) xt->parent()->childDel(xt);
 	    }
 	}
-	if(mode() == 0 && ctrMkNode("area",opt,-1,"/dt",_("Data")))
+	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/dt",_("Data")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,3,"s_com","add,del,ins,move","rows","15",
 		"help",_("For \"Id\" field provide specific ModBus data form:\n"
-		         "  \"R{N}[w]\" - register;\n"
+		         "  \"R{N}[w]\" - register, can expanded by suffixes: i-Int32, f-Float, s-String;\n"
 		         "  \"C{N}[w]\" - coil.\n"
 		         "Where:\n"
-		         "  {N} - number (0...65535);\n"
-		         "  w   - optional symbol for writing allow indicate.")))
+		         "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
+		         "  w   - optional symbol for writing allow indicate.\n"
+			 "Example:\n"
+                         "  'R0x300' - register access;\n"
+                         "  'C100w' - coin access, allow for write;\n"
+                         "  'R_f200' - get float from registers 200 and 201;\n"
+                         "  'R_i300,400' - get int32 from registers 300 and 400;\n"
+                         "  'R_s15,20' - get string, registers block, from register 15 and size 20.")))
 	    {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
@@ -1229,7 +1379,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
 	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
-	if(mode() == 0 && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
+	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    for(int i_io = 0; i_io < ioSize(); i_io++)
 		if(io(i_io)->flg()&IsLink)
 		    ctrMkNode("fld",opt,-1,("/lnk/el_"+TSYS::int2str(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root",SPRT_ID,
@@ -1251,7 +1401,7 @@ void Node::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/nd/cfg/ls_itr" && ctrChkNode(opt))
     {
-	if(mode() != 2) opt->childAdd("el")->setText("*");
+	if(mode() != MD_GT_NET) opt->childAdd("el")->setText("*");
 	vector<string> sls;
 	SYS->transport().at().inTrList(sls);
 	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
@@ -1368,42 +1518,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt))
-    {
-	int c_lv = 0;
-	string l_prm = io(atoi(a_path.substr(8).c_str()))->rez();
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++)
-	{
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path+=".";
-	string prm0 = TSYS::strSepParse(l_prm,0,'.');
-	string prm1 = TSYS::strSepParse(l_prm,1,'.');
-	string prm2 = TSYS::strSepParse(l_prm,2,'.');
-	vector<string>  ls;
-	switch(c_lv)
-	{
-	    case 0:	SYS->daq().at().modList(ls);	break;
-	    case 1:
-		if(SYS->daq().at().modPresent(prm0))
-		    SYS->daq().at().at(prm0).at().list(ls);
-		break;
-	    case 2:
-		if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
-		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
-		break;
-	    case 3:
-		if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
-			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2))
-		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
+    else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, io(atoi(a_path.substr(8).c_str()))->rez());
     else if(a_path.substr(0,8) == "/lnk/el_")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))

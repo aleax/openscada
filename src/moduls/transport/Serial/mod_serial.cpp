@@ -694,7 +694,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/cntr/cfg/devLS" && ctrChkNode(opt))
     {
 	int off = 0;
-	ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
+	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
 	string suf = (off < addr().size()) ? addr().substr(off) : "";
 	for(int i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
 	    if(opt->childGet(i_t)->text().size())
@@ -1290,7 +1290,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     if(a_path == "/cntr/cfg/devLS" && ctrChkNode(opt))
     {
 	int off = 0;
-	ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
+	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
 	string suf = (off < addr().size()) ? addr().substr(off) : "";
 	for(int i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
 	    if(opt->childGet(i_t)->text().size())

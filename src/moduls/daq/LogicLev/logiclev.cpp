@@ -961,44 +961,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    initTmplLnks();
 	}
     }
-    else if(isStd() && (a_path.substr(0,12) == "/cfg/prm/pl_" || a_path.substr(0,12) == "/cfg/prm/ls_") && ctrChkNode(opt))
-    {
-	int c_lv = 0;
-	string l_prm = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
-	bool is_pl = (a_path.substr(0,12) == "/cfg/prm/pl_");
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,'.',&c_off)).size(); c_lv++)
-	{
-	    if(is_pl && c_lv>2) break;
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path+=".";
-	string prm0 = TSYS::strSepParse(l_prm,0,'.');
-	string prm1 = TSYS::strSepParse(l_prm,1,'.');
-	string prm2 = TSYS::strSepParse(l_prm,2,'.');
-	vector<string>  ls;
-	switch(c_lv)
-	{
-	    case 0:	SYS->daq().at().modList(ls);	break;
-	    case 1:
-		if(SYS->daq().at().modPresent(prm0))
-		    SYS->daq().at().at(prm0).at().list(ls);
-		break;
-	    case 2:
-		 if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
-		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
-		break;
-	    case 3:
-		if(!is_pl && SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1)
-			&& SYS->daq().at().at(prm0).at().at(prm1).at().present(prm2))
-		    SYS->daq().at().at(prm0).at().at(prm1).at().at(prm2).at().vlList(ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
+    else if(isStd() && (a_path.compare(0,12,"/cfg/prm/pl_") == 0 || a_path.compare(0,12,"/cfg/prm/ls_") == 0) && ctrChkNode(opt))
+	SYS->daq().at().ctrListPrmAttr(opt, lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr, a_path.compare(0,12,"/cfg/prm/pl_")==0);
     else if(isStd() && a_path.substr(0,12) == "/cfg/prm/el_")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
