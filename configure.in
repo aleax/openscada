@@ -484,8 +484,11 @@ AX_MOD_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,
     AC_ARG_ENABLE(Phonon,AC_HELP_STRING([--disable-Phonon], [disable using Phonon library]),[ ],
 	[PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
 	[AC_MSG_NOTICE(Phonon not found. Using is disabled!)])])
+    AC_ARG_ENABLE(SDL,AC_HELP_STRING([--disable-SDL], [disable using SDL library]),[ ],
+	[PKG_CHECK_MODULES([sdl],[sdl >= 1.2],[AC_DEFINE(HAVE_SDL,1,[SDL input devices allow.])],
+	[AC_MSG_NOTICE(SDL not found. Using is disabled!)])])
     if test $enable_Vision = incl; then
-	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${phonon_LIBS} "
+	LIB_CORE="${LIB_CORE} moduls/ui/Vision/.libs/*.o ${QT4_LIB} ${LIB_FFTW3} ${phonon_LIBS} ${SDL_LIBS}"
 	ModsIncl="${ModsIncl}ui_Vision "
     fi
 ])
@@ -626,3 +629,4 @@ AC_MSG_RESULT([* Modules' features:])
 AC_MSG_RESULT([  - FFTW3 for signal spectrum purchase: $LIB_FFTW3])
 AC_MSG_RESULT([  - Linux sensors library use:          $LIB_SENSORS])
 AC_MSG_RESULT([  - Media play engine:                  $phonon_LIBS])
+AC_MSG_RESULT([  - SDL input devices:                  $sdl_LIBS])
