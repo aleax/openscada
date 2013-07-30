@@ -1420,7 +1420,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
             int c_off = obj_tp.size();
             vector<string> ls;
             string c_path = obj_tp, c_el;
-            //opt->childAdd("el")->setText("");
+            opt->childAdd("el")->setText("");
 
             try
             {

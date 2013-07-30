@@ -1,3 +1,14 @@
+2013-07-30 Roman
+- DB: vcaTest.db library is significant updated for append primitive "ElFigure" tests and combined tests frame update.
+    Prescription frames some updated and the libraries list change to tree.
+    Translation to Ukraine is some updated.
+- DAQ.ModBus: Context help update.
+- UI.VCAEngine: Export symbols moved to file types.h and it allowed for include from visualizers.
+- UI.Vision: Inactive mode for primitive's "FormEl" items set readonly but allow for scroll and other unmodified operations.
+- UI.{VCAEngine,Vision}: View items variant "Tree" is added to primitive "FormEl".
+- FIX:UI.VCAEngine: Archive's limit for primitive "Document" is fixed for expand to 1000000.
+
+
 2013-07-21 Roman
 - SYS: Depend to module DAQ.DCON include to *-plc package.
     Icons for modules DAQ.Comedi and DAQ.SMH2Gi is added.

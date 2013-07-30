@@ -21,6 +21,7 @@
 
 #include <tsys.h>
 
+#include "types.h"
 #include "origwidg.h"
 #include "vcaengine.h"
 
@@ -341,38 +342,39 @@ void OrigFormEl::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
-	attrAdd( new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0","0;1;2;3;4;5;6;7",
-				    _("Line edit;Text edit;Check box;Button;Combo box;List;Slider;Scroll Bar"),"20") );
+    if(flag&TCntrNode::NodeConnect)
+	attrAdd(new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0",
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",F_LINE_ED,F_TEXT_ED,F_CHECK_BOX,F_BUTTON,F_COMBO,F_LIST,F_TREE,F_SLIDER,F_SCROLL_BAR).c_str(),
+	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"),"20"));
 }
 
 bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 {
-    if( cfg.flgGlob()&Attr::Active && cfg.id() == "elType" )
+    if(cfg.flgGlob()&Attr::Active && cfg.id() == "elType")
     {
 	//> Delete specific attributes
-	if( cfg.getI() != prev.getI() )
-	    switch( prev.getI() )
+	if(cfg.getI() != prev.getI())
+	    switch(prev.getI())
 	    {
-		case 0:	//Line edit
+		case F_LINE_ED:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("view");
 		    cfg.owner()->attrDel("cfg");
 		    cfg.owner()->attrDel("confirm");
 		    cfg.owner()->attrDel("font");
 		    break;
-		case 1:	//Text edit
+		case F_TEXT_ED:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("wordWrap");
 		    cfg.owner()->attrDel("confirm");
 		    cfg.owner()->attrDel("font");
 		    break;
-		case 2:	//Check box
+		case F_CHECK_BOX:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("font");
 		    cfg.owner()->attrAt("name").at().fld().setReserve("");
 		    break;
-		case 3:	//Button
+		case F_BUTTON:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("img");
 		    cfg.owner()->attrDel("color");
@@ -381,12 +383,12 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("font");
 		    cfg.owner()->attrAt("name").at().fld().setReserve("");
 		    break;
-		case 4: case 5:	//Combo box and list
+		case F_COMBO: case F_LIST: case F_TREE:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("items");
 		    cfg.owner()->attrDel("font");
 		    break;
-		case 6: case 7:	//Slider and scroll bar
+		case F_SLIDER: case F_SCROLL_BAR:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("cfg");
 		    break;
@@ -395,46 +397,47 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	//> Create specific attributes
 	switch(cfg.getI())
 	{
-	    case 0:	//Line edit
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21") );
-		cfg.owner()->attrAdd( new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,
-		    "1","0","0;1;2;3;4;5;6",_("Text;Combo;Integer;Real;Time;Date;Date and time"),"22") );
-		cfg.owner()->attrAdd( new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23") );
-		cfg.owner()->attrAdd( new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24") );
-		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
+	    case F_LINE_ED:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21"));
+		cfg.owner()->attrAdd(new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,"1","0",
+		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FL_TEXT,FL_COMBO,FL_INTEGER,FL_REAL,FL_TIME,FL_DATE,FL_DATE_TM).c_str(),
+		    _("Text;Combo;Integer;Real;Time;Date;Date and time"),"22"));
+		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23"));
+		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24"));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
 		break;
-	    case 1:	//Text edit
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","21") );
-		cfg.owner()->attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","","22") );
-		cfg.owner()->attrAdd( new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24") );
-		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
+	    case F_TEXT_ED:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","21"));
+		cfg.owner()->attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","","22"));
+		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24"));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
 		break;
-	    case 2:	//Check box
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21") );
-		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
+	    case F_CHECK_BOX:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21"));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
 		cfg.owner()->attrAt("name").at().fld().setReserve("26");
 		break;
-	    case 3:	//Button
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21") );
-		cfg.owner()->attrAdd( new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","","22") );
-		cfg.owner()->attrAdd( new TFld("color",_("Color:button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","23") );
-		cfg.owner()->attrAdd( new TFld("colorText",_("Color:text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","27") );
-		cfg.owner()->attrAdd( new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","","24") );
-		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
+	    case F_BUTTON:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21"));
+		cfg.owner()->attrAdd(new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","","22"));
+		cfg.owner()->attrAdd(new TFld("color",_("Color:button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","23"));
+		cfg.owner()->attrAdd(new TFld("colorText",_("Color:text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","27"));
+		cfg.owner()->attrAdd(new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","","24"));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
 		cfg.owner()->attrAt("name").at().fld().setReserve("26");
 		break;
-	    case 4: case 5:	//Combo box and list
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21") );
-		cfg.owner()->attrAdd( new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","22") );
-		cfg.owner()->attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
+	    case F_COMBO: case F_LIST: case F_TREE:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21"));
+		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","22"));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
 		break;
-	    case 6: case 7:	//Slider and scroll bar
-		cfg.owner()->attrAdd( new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","","21") );
-		cfg.owner()->attrAdd( new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","","22") );
+	    case F_SLIDER: case F_SCROLL_BAR:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","","21"));
+		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","","22"));
 		break;
 	}
     }
-    else if( cfg.flgGlob()&Attr::Active && cfg.id() == "view" )
+    else if(cfg.flgGlob()&Attr::Active && cfg.id() == "view")
     {
 	TFld::Type	ntp = TFld::String;
 	int		flg = Attr::Mutable;
@@ -444,9 +447,9 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal( );
 	switch(cfg.getI())
 	{
-	    case 2: case 4:	ntp = TFld::Integer;	break;
-	    case 3:		ntp = TFld::Real;	break;
-	    case 5: case 6:	ntp = TFld::Integer; flg|=Attr::DateTime;	break;
+	    case FL_INTEGER: case FL_TIME:	ntp = TFld::Integer;	break;
+	    case FL_REAL:			ntp = TFld::Real;	break;
+	    case FL_DATE: case FL_DATE_TM:	ntp = TFld::Integer; flg |= Attr::DateTime;	break;
 	}
 	int apos = cfg.owner()->attrPos("value");
 	cfg.owner()->attrDel("value");
@@ -471,12 +474,12 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	    switch(src->attrAt("elType").at().getI())
 	    {
-		case 0:	//Line edit
+		case F_LINE_ED:
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    if(!(el=ctrId(root,"/cfg",true)))	break;
 		    switch(src->attrAt("view").at().getI())
 		    {
-			case 0:	//Text
+			case FL_TEXT:
 			    el->setAttr("help",_("Enter text line by template with the char items:\n"
 				"  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
 				"  'a' - ASCII alphabetic character permitted but not required.\n"
@@ -498,16 +501,16 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 				"  '!' - Switch off case conversion.\n"
 				"  '\\' - Use to escape the special characters listed above to use them as separators."));
 			    break;
-			case 1:	//Combo
+			case FL_COMBO:
 			    el->setAttr("help",_("List of values the editable combobox by lines."));
 			    break;
-			case 2:	//Integer
+			case FL_INTEGER:
 			    el->setAttr("help",_("Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]\"."));
 			    break;
-			case 3:	//Real
+			case FL_REAL:
 			    el->setAttr("help",_("Real value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:[Suffix]:[SignsAfterDot]\"."));
 			    break;
-			case 4: case 5: case 6:	//Time;Date;Date and time
+			case FL_TIME: case FL_DATE: case FL_DATE_TM:
 			    el->setAttr("help",_("Enter date and/or time by template with the items:\n"
 				"  \"d\" - number of the day (1-31);\n"
 				"  \"dd\" - number of the day (01-31);\n"
@@ -529,20 +532,20 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			    break;
 		    }
 		    break;
-		case 1: case 2: //Text edit and checkbox
+		case F_TEXT_ED: case F_CHECK_BOX:
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
-		case 3:	//Button
+		case F_BUTTON:
 		    if((el=ctrId(root,"/img",true)))	el->setAttr("help",Widget::helpImg());
 		    if((el=ctrId(root,"/color",true)))	el->setAttr("help",Widget::helpColor());
 		    if((el=ctrId(root,"/colorText",true))) el->setAttr("help",Widget::helpColor());
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
-		case 4: case 5:	//Combo box and list
+		case F_COMBO: case F_LIST: case F_TREE:
 		    if((el=ctrId(root,"/items",true))) el->setAttr("help",_("List of items-values by lines."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
-		case 6: case 7:	//Slider and scroll bar
+		case F_SLIDER: case F_SCROLL_BAR:
 		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
 			_("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep]\".\n"
 		          "Where:\n"
@@ -1257,7 +1260,7 @@ void OrigDocument::postEnable( int flag )
 	attrAdd(new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","","24"));
 	attrAdd(new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","","23"));
 	attrAdd(new TFld("process",_("Process"),TFld::Boolean,TFld::NoWrite,"","0","","","27"));
-	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0","0;1000000","","25"));
+	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0",TSYS::strMess("0;%d",DocArhSize).c_str(),"","25"));
     }
 }
 
@@ -1284,12 +1287,14 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	{
 	    if(!cfg.owner()->attrPresent("vCur"))
 	    {
-		cfg.owner()->attrAdd(new TFld("vCur",_("Archive:cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-2;99"));
+		cfg.owner()->attrAdd(new TFld("vCur",_("Archive:cursor:view"),TFld::Integer,Attr::Mutable|Attr::Active,"","0",
+		    TSYS::strMess("-2;%d",DocArhSize-1).c_str()));
 		cfg.owner()->inheritAttr("vCur");
 	    }
 	    if(!cfg.owner()->attrPresent("aCur"))
 	    {
-		cfg.owner()->attrAdd(new TFld("aCur",_("Archive:cursor:current"),TFld::Integer,Attr::Mutable|Attr::Active,"","0","-1;99"));
+		cfg.owner()->attrAdd(new TFld("aCur",_("Archive:cursor:current"),TFld::Integer,Attr::Mutable|Attr::Active,"","0",
+		    TSYS::strMess("-1;%d",DocArhSize-1).c_str()));
 		cfg.owner()->inheritAttr("aCur");
 	    }
 	    if(!cfg.owner()->attrPresent("aDoc"))
@@ -1354,8 +1359,8 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     else if(cfg.id() == "aCur" && cfg.getI() != prev.getI())
     {
 	int n = cfg.owner()->attrAt("n").at().getI();
-	if(cfg.getI() < 0)		cfg.setI((prev.getI()+1 >= n) ? 0 : prev.getI()+1, false, true);
-	else if(cfg.getI() >= n)	cfg.setI(n-1, false, true);
+	if(cfg.getI() < 0) cfg.setI(((prev.getI()+1) >= n) ? 0 : (prev.getI()+1), false, true);
+	else if(cfg.getI() >= n) cfg.setI(n-1, false, true);
 	if(cfg.getI() != prev.getI())
 	{
 	    cfg.owner()->attrAt("aDoc").at().setS(cfg.owner()->attrAt("tmpl").at().getS());

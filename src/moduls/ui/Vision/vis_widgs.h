@@ -191,6 +191,7 @@ namespace VISION
 	    QString value( );
 	    bool isEdited( );
 
+	    void setReadOnly( bool val );
 	    void setType( LType tp );
 	    void setValue( const QString& );
 	    void setCfg( const QString& );

@@ -1083,7 +1083,6 @@ void TMdPrm::enable( )
 		    {
 			int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 			if(rN == 0) rN = 10;
-			printf("TEST 10: reg=%d; rN=%d\n", reg, rN);
 			for(int i_r = reg; i_r < (reg+rN); i_r++) owner().regVal(i_r, atp_m);
 			ai = TSYS::strMess("%d,%d", reg, rN);
 		    }
@@ -1429,20 +1428,20 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"rows","8","SnthHgl","1",
 		"help",_("Attributes configuration list. List must be written by lines in format: \"{dt}:{numb}:{rw}:{id}:{name}\".\n"
 		    "Where:\n"
-		    "  dt - Modbus data type (R-register[3,6(16)],C-coil[1,5(15)],RI-input register[4],CI-input coil[2]);\n"
-		    "       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5, s-String;\n"
-		    "       Star from symbol '#' for comment line;\n"
+		    "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
+		    "       R and RI can be expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5, s-String;\n"
+		    "       Start from symbol '#' for comment line;\n"
 		    "  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
-		    "  rw - read-write mode (r-read; w-write; rw-readwrite);\n"
+		    "  rw - read/write mode (r-read; w-write; rw-readwrite);\n"
 		    "  id - created attribute identifier;\n"
 		    "  name - created attribute name.\n"
-		    "Example:\n"
-		    "  'R:0x300:rw:var:Variable' - register access;\n"
-		    "  'C:100:rw:var1:Variable 1' - coin access;\n"
-		    "  'R_f:200:r:float:Float' - get float from registers 200 and 201;\n"
-		    "  'R_i4:300,400:r:int32:Int32' - get int32 from registers 300 and 400;\n"
-		    "  'R_b10:25:r:rBit:Reg bit' - get bit 10 from register 25;\n"
-		    "  'R_s:15,20:r:str:Reg blk' - get string, registers block, from register 15 and size 20."));
+		    "Examples:\n"
+		    "  \"R:0x300:rw:var:Variable\" - register access;\n"
+		    "  \"C:100:rw:var1:Variable 1\" - coin access;\n"
+		    "  \"R_f:200:r:float:Float\" - get float from registers 200 and 201;\n"
+		    "  \"R_i4:300,400:r:int32:Int32\" - get int32 from registers 300 and 400;\n"
+		    "  \"R_b10:25:r:rBit:Reg bit\" - get bit 10 from register 25;\n"
+		    "  \"R_s:15,20:r:str:Reg blk\" - get string, registers block, from register 15 and size 20."));
 	if(isLogic())
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/TMPL",cfg("TMPL").fld().descr(),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/tmplList");
@@ -1457,17 +1456,17 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+TSYS::int2str(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
 			    "help",_("ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
 				"Where:\n"
-				"  dt - Modbus data type (R-register[3,6(16)],C-coil[1,5(15)],RI-input register[4],CI-input coil[2]);\n"
-				"       R and RI can expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5, s-String;\n"
+				"  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
+				"       R and RI can be expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5, s-String;\n"
 				"  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
-				"  rw - read-write mode (r-read; w-write; rw-readwrite).\n"
-				"Example:\n"
-				"  'R:0x300:rw' - register access;\n"
-				"  'C:100:rw' - coin access;\n"
-				"  'R_f:200:r' - get float from registers 200 and 201;\n"
-				"  'R_i4:300,400:r' - get int32 from registers 300 and 400;\n"
-				"  'R_b10:25:r' - get bit 10 from register 25;\n"
-				"  'R_s:15,20:r' - get string, registers block, from register 15 and size 20."));
+				"  rw - read/write mode (r-read; w-write; rw-readwrite).\n"
+				"Examples:\n"
+				"  \"R:0x300:rw\" - register access;\n"
+				"  \"C:100:rw\" - coin access;\n"
+				"  \"R_f:200:r\" - get float from registers 200 and 201;\n"
+				"  \"R_i4:300,400:r\" - get int32 from registers 300 and 400;\n"
+				"  \"R_b10:25:r\" - get bit 10 from register 25;\n"
+				"  \"R_s:15,20:r\" - get string, registers block, from register 15 and size 20."));
                     else
                     {
                 	const char *tip = "str";

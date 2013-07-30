@@ -25,10 +25,10 @@
 #include <tsys.h>
 
 #include "vcaengine.h"
+#include "types.h"
 #include "widget.h"
 
 using namespace VCA;
-
 
 //************************************************
 //* Widget                                       *
@@ -147,22 +147,22 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
 	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")));
-	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","","1"));
+	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","",TSYS::int2str(A_ROOT).c_str()));
 	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
-	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","","5"));
-	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","","6"));
-	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","","7"));
-	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","","8"));
-	attrAdd(new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","","9"));
-	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","","10"));
-	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","13"));
-	attrAdd(new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","","14"));
-	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","","11"));
-	attrAdd(new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","","12"));
-	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","","15"));
-	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","","16"));
-	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","","17"));
+	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",TSYS::int2str(A_EN).c_str()));
+	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",TSYS::int2str(A_ACTIVE).c_str()));
+	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","",TSYS::int2str(A_GEOM_X).c_str()));
+	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","",TSYS::int2str(A_GEOM_Y).c_str()));
+	attrAdd(new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","",TSYS::int2str(A_GEOM_W).c_str()));
+	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","",TSYS::int2str(A_GEOM_H).c_str()));
+	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",TSYS::int2str(A_GEOM_X_SC).c_str()));
+	attrAdd(new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",TSYS::int2str(A_GEOM_Y_SC).c_str()));
+	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","",TSYS::int2str(A_GEOM_Z).c_str()));
+	attrAdd(new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",TSYS::int2str(A_GEOM_MARGIN).c_str()));
+	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","",TSYS::int2str(A_TIP_TOOL).c_str()));
+	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","",TSYS::int2str(A_TIP_STATUS).c_str()));
+	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","",TSYS::int2str(A_CTX_MENU).c_str()));
 	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200"));
     }
 }
@@ -1388,7 +1388,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    int c_off = obj_tp.size();
 	    vector<string> ls;
 	    string c_path = obj_tp, c_el;
-	    //opt->childAdd("el")->setText("");
+	    opt->childAdd("el")->setText("");
 
 	    try
     	    {

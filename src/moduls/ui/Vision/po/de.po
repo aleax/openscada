@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-27 08:50+0300\n"
+"POT-Creation-Date: 2013-07-26 16:45+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -986,6 +986,9 @@ msgstr "Schliessen"
 
 msgid "Get node '%1' information error."
 msgstr "Fehler bei der Knoteninformation '%1'."
+
+msgid "No set"
+msgstr "Kein Satz"
 
 msgid "Load icon picture"
 msgstr "Iconbild laden"

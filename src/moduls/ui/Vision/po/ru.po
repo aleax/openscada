@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-27 08:50+0300\n"
+"POT-Creation-Date: 2013-07-26 16:45+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -980,6 +980,9 @@ msgstr "Закрыть"
 
 msgid "Get node '%1' information error."
 msgstr "Ошибка запроса информации узла '%1'."
+
+msgid "No set"
+msgstr "Не установлен"
 
 msgid "Load icon picture"
 msgstr "Загрузить изображение иконки"

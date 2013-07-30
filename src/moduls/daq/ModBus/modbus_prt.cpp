@@ -1356,17 +1356,17 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,3,"s_com","add,del,ins,move","rows","15",
 		"help",_("For \"Id\" field provide specific ModBus data form:\n"
-		         "  \"R{N}[w]\" - register, can expanded by suffixes: i-Int32, f-Float, s-String;\n"
+		         "  \"R{N}[w]\" - register, can expanded by suffixes: \"i\"-Int32, \"f\"-Float, \"s\"-String;\n"
 		         "  \"C{N}[w]\" - coil.\n"
 		         "Where:\n"
 		         "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
 		         "  w   - optional symbol for writing allow indicate.\n"
-			 "Example:\n"
-                         "  'R0x300' - register access;\n"
-                         "  'C100w' - coin access, allow for write;\n"
-                         "  'R_f200' - get float from registers 200 and 201;\n"
-                         "  'R_i300,400' - get int32 from registers 300 and 400;\n"
-                         "  'R_s15,20' - get string, registers block, from register 15 and size 20.")))
+			 "Examples:\n"
+                         "  \"R0x300w\" - register access;\n"
+                         "  \"C100w\" - coin access, allow for write;\n"
+                         "  \"R_f200\" - get float from registers 200 and 201;\n"
+                         "  \"R_i300,400\" - get int32 from registers 300 and 400;\n"
+                         "  \"R_s15,20\" - get string, registers block, from register 15 and size 20.")))
 	    {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");

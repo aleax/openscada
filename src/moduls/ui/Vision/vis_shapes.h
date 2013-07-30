@@ -124,6 +124,7 @@ class ShapeFormEl : public WdgShape
 	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
+	void setActive( WdgView *view, bool val );
 
     public slots:
 	//Public slots
@@ -137,6 +138,8 @@ class ShapeFormEl : public WdgShape
 	void comboChange(const QString&);
 	//>> List events
 	void listChange(int);
+	//>> Tree events
+	void treeChange( );
 	//>> Button's events
 	void buttonPressed( );
 	void buttonReleased( );
@@ -156,8 +159,8 @@ class ShapeFormEl : public WdgShape
 		short	en	:1;
 		short	active	:1;
 		short	evLock	:1;
-		short	elType	:4;
-		short	welType	:4;
+		short	elType	:5;
+		short	welType	:5;
 		short	view	:4;
 		short	wordWrap:1;
 		short	checkable:1;
