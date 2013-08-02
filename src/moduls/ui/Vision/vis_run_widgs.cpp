@@ -36,6 +36,86 @@
 
 using namespace VISION;
 
+SDLJoystick::SDLJoystick(int index, QObject *parent) : QRunnable()
+{
+	this->index=index;
+	this->parent=parent;
+	f_stop=false;
+}
+
+void SDLJoystick::run()
+{
+#if OSC_DEBUG >= 1
+	mess_debug(__func__,"Start thread 0x%x for handling joystic %d", QThread::currentThread(), index);
+#endif
+
+	// Check if joystick is open
+	if(SDL_JoystickOpened(index))
+		return;
+
+	// Open joystick
+    SDL_Joystick *joy;
+    SDL_JoystickEventState(SDL_ENABLE);
+    joy = SDL_JoystickOpen(index);
+	if(joy)
+	{
+#if OSC_DEBUG >= 1
+    	mess_debug(__func__,"Name: %s", SDL_JoystickName(index));
+    	mess_debug(__func__,"Number of Axes: %d", SDL_JoystickNumAxes(joy));
+    	mess_debug(__func__,"Number of Buttons: %d", SDL_JoystickNumButtons(joy));
+    	mess_debug(__func__,"Number of Balls: %d", SDL_JoystickNumBalls(joy));
+#endif
+   }
+
+	else return;
+
+	SDL_Event event;
+
+#if OSC_DEBUG >= 1
+	mess_debug(__func__,"Start SDL event loop (thread 0x%x, joystick %d)", QThread::currentThread(), index);
+#endif
+	while(true)
+	{
+
+		if(f_stop)
+			break;
+
+		if( SDL_PollEvent(&event)==0 )
+			continue;
+
+		QEvent *ev = new QEvent(SdlJoystickEvent::JoystickEvent);
+		QCoreApplication::postEvent(parent, ev);
+
+		switch(event.type)
+		{
+	        case SDL_QUIT:
+	        	f_stop=true;
+	        break;
+
+	        case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */
+	        	//QEvent *jev  = new QEvent(SdlJoystickEvent::JoystickEvent);
+	        	//SdlJoystickEvent *jev = new SdlJoystickEvent(SdlJoystickEvent::JoystickEvent);
+	        	//QCoreApplication::postEvent(parent, jev);
+	        	mess_debug(__func__,"SDL event.jaxis.value: %d (thread 0x%x, joystick %d)", event.jaxis.value, QThread::currentThread(), index);
+
+	        break;
+
+	        default:	//unhandled events
+	        	mess_debug(__func__,"SDL event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
+	        break;
+
+	    }
+	}
+
+	SDL_JoystickClose(joy);
+
+#if OSC_DEBUG >= 1
+    mess_debug(__func__,"Stop thread 0x%x for handling joystic %d", QThread::currentThread(), index);
+#endif
+}
+
+
+
 //*************************************************
 //* Shape widget view runtime mode                *
 //*************************************************
@@ -47,12 +127,69 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     string lstEl = iwid.substr(endElSt+1);
     if(lstEl.size() > 4 && lstEl.substr(0,4) == "wdg_") setObjectName(lstEl.substr(4).c_str());
     if(lstEl.size() > 3 && lstEl.substr(0,3) == "pg_")  setObjectName(lstEl.substr(3).c_str());
+
+#ifdef HAVE_SDL
+    // Init libsdl
+    // Sure, we're only using the Joystick, but SDL doesn't work if video isn't initialised
+    if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != -1 )
+    {
+    	this->sdl_init=true;
+#if OSC_DEBUG >= 1
+    	mess_info(__func__, "SDL initialization successful");
+
+    	// Prints the compile time version
+    	SDL_version ver;
+    	SDL_VERSION(&ver);
+    	mess_info(__func__, "SDL compile-time version: %u.%u.%u", ver.major, ver.minor, ver.patch);
+    	ver = *SDL_Linked_Version();
+    	mess_info(__func__, "SDL runtime version: %u.%u.%u", ver.major, ver.minor, ver.patch);
+#endif
+    }
+    else
+    {
+    	mess_err(__func__, "SDL initialization error: %s", SDL_GetError());
+    	this->sdl_init=false;
+    }
+
+    if(sdl_init)
+    {
+    	int numJoy=SDL_NumJoysticks();
+    	for(int i=0; i< numJoy; i++)
+    	{
+    		SDLJoystick *Joystick = new SDLJoystick(i, this);
+    		//QThreadPool::globalInstance()->start(Joystick);
+    		sdl_handlers.start(Joystick);
+    	}
+    }
+
+#endif
 }
 
 RunWdgView::~RunWdgView( )
 {
     //> Child widgets remove before
+
     childsClear();
+
+#ifdef HAVE_SDL
+
+
+    SDL_Event quit;
+    quit.type = SDL_QUIT;
+    SDL_PushEvent(&quit);
+
+    if( sdl_handlers.waitForDone ( 100 ) != true )
+    {
+#if OSC_DEBUG >= 1
+    	mess_debug(__func__, "Wait for stop SDL threads...");
+#endif
+    	SDL_PushEvent(&quit);
+
+    }
+
+    //mess_debug(__func__, "Unload libsdl");
+    //SDL_Quit();
+#endif
 }
 
 string RunWdgView::name( )
@@ -266,6 +403,7 @@ bool RunWdgView::isVisible( QPoint pos )
 
 bool RunWdgView::event( QEvent *event )
 {
+	mess_info(__func__,"event type: %d", event->type());
     //> Force event's process
     switch(event->type())
     {
