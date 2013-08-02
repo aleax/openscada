@@ -25,11 +25,49 @@
 
 #include <QString>
 #include <QThread>
+#include <QEvent>
+#include <QThreadPool>
+#include <QRunnable>
+
+#ifdef HAVE_SDL
+#include <SDL.h>
+#endif
 
 #include "vis_widgs.h"
 
 namespace VISION
 {
+
+
+
+#ifdef HAVE_SDL
+	//*********************************************
+	//* SDL Event Type for Qt
+	//*********************************************
+	class SdlJoystickEvent : public QEvent {
+		//Q_OBJECT
+	public:
+		SdlJoystickEvent(QEvent::Type type);
+		static const QEvent::Type JoystickEvent = static_cast<QEvent::Type>(2000);
+	};
+
+    //*********************************************
+    //* SDL USB HID gamepads/joysticks
+    //*********************************************
+
+    class SDLJoystick : public QRunnable
+    {
+
+    public:
+    	SDLJoystick(int index, QObject *parent);
+    	void run();
+    private:
+    	int index;
+    	QObject *parent;
+    	bool f_stop;
+    };
+
+#endif
 
     class VisRun;
     //*********************************************
@@ -79,7 +117,15 @@ namespace VISION
 	    //Attributes
 	    char	mPermCntr :1;	//Control widget's permission
 	    char	mPermView :1;	//View widget's permission
+
+#ifdef HAVE_SDL
+	private:
+	    bool sdl_init;
+    	QThreadPool sdl_handlers;
+#endif
     };
+
+
 
     //*********************************************
     //* Shape page view runtime mode              *
