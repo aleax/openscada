@@ -36,6 +36,15 @@
 
 using namespace VISION;
 
+#ifdef HAVE_SDL
+
+QEvent::Type QSdlJoystickEventType = (QEvent::Type) QEvent::registerEventType();
+
+QSdlJoystickEvent::QSdlJoystickEvent(QEvent::Type type) : QEvent(type)
+{
+	this->type=type;
+}
+
 SDLJoystick::SDLJoystick(int index, QObject *parent) : QRunnable()
 {
 	this->index=index;
@@ -83,7 +92,9 @@ void SDLJoystick::run()
 		if( SDL_PollEvent(&event)==0 )
 			continue;
 
-		QEvent *ev = new QEvent(SdlJoystickEvent::JoystickEvent);
+		//QEvent *ev = new QEvent(SdlJoystickEvent::JoystickEvent);
+		//QEvent *ev = new SdlJoystickEvent(SdlJoystickEvent::JoystickEvent);
+		QSdlJoystickEvent *ev = new QSdlJoystickEvent(QSdlJoystickEventType);
 		QCoreApplication::postEvent(parent, ev);
 
 		switch(event.type)
@@ -114,7 +125,7 @@ void SDLJoystick::run()
 #endif
 }
 
-
+#endif
 
 //*************************************************
 //* Shape widget view runtime mode                *
@@ -134,6 +145,7 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != -1 )
     {
     	this->sdl_init=true;
+
 #if OSC_DEBUG >= 1
     	mess_info(__func__, "SDL initialization successful");
 
