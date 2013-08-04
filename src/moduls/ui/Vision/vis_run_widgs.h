@@ -44,14 +44,18 @@ namespace VISION
 	//*********************************************
 	//* SDL Event Type for Qt
 	//*********************************************
-	class SdlJoystickEvent : public QEvent {
+
+	class QSdlJoystickEvent : public QEvent {
 		//Q_OBJECT
 	public:
-		SdlJoystickEvent(QEvent::Type type);
-		static const QEvent::Type JoystickEvent = static_cast<QEvent::Type>(2000);
+		QSdlJoystickEvent(QEvent::Type type);
+
+	private:
+		QEvent::Type type;
+
 	};
 
-    //*********************************************
+	//*********************************************
     //* SDL USB HID gamepads/joysticks
     //*********************************************
 
