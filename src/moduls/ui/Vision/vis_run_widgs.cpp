@@ -38,11 +38,30 @@ using namespace VISION;
 
 #ifdef HAVE_SDL
 
-QEvent::Type QSdlJoystickEventType = (QEvent::Type) QEvent::registerEventType();
+//static const QEvent::Type QSdlJoystickAxisEventType = (QEvent::Type) QEvent::registerEventType(42001);
+//static const QEvent::Type QSdlJoystickButtonEventType = (QEvent::Type) QEvent::registerEventType(42002);
+static const QEvent::Type QSdlJoystickAxisEventType = static_cast<QEvent::Type>(42001);
+static const QEvent::Type QSdlJoystickButtonEventType = static_cast<QEvent::Type>(42002);
 
 QSdlJoystickEvent::QSdlJoystickEvent(QEvent::Type type) : QEvent(type)
 {
-	this->type=type;
+	_type=type;
+}
+
+QSdlJoystickEvent::QSdlJoystickEvent(QEvent::Type type, int axis, int value) : QEvent(type)
+{
+	_type=type;
+	_axis=axis;
+	_value=value;
+}
+
+QSdlJoystickEvent::QSdlJoystickEvent(QEvent::Type type, int act_type, int button, int state) : QEvent(type)
+{
+	_type=type;
+	_act_type=act_type;
+	_button=button;
+	_state=state;
+
 }
 
 SDLJoystick::SDLJoystick(int index, QObject *parent) : QRunnable()
@@ -92,10 +111,9 @@ void SDLJoystick::run()
 		if( SDL_PollEvent(&event)==0 )
 			continue;
 
-		//QEvent *ev = new QEvent(SdlJoystickEvent::JoystickEvent);
-		//QEvent *ev = new SdlJoystickEvent(SdlJoystickEvent::JoystickEvent);
-		QSdlJoystickEvent *ev = new QSdlJoystickEvent(QSdlJoystickEventType);
-		QCoreApplication::postEvent(parent, ev);
+		//QSdlJoystickEvent *ev = new QSdlJoystickEvent(QSdlJoystickEventType);
+		//QCoreApplication::postEvent(parent, ev);
+		QSdlJoystickEvent *ev;
 
 		switch(event.type)
 		{
@@ -104,11 +122,14 @@ void SDLJoystick::run()
 	        break;
 
 	        case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */
-	        	//QEvent *jev  = new QEvent(SdlJoystickEvent::JoystickEvent);
-	        	//SdlJoystickEvent *jev = new SdlJoystickEvent(SdlJoystickEvent::JoystickEvent);
-	        	//QCoreApplication::postEvent(parent, jev);
-	        	mess_debug(__func__,"SDL event.jaxis.value: %d (thread 0x%x, joystick %d)", event.jaxis.value, QThread::currentThread(), index);
+	        	ev = new QSdlJoystickEvent(QSdlJoystickAxisEventType, event.jaxis.axis, event.jaxis.value);
+	        	QCoreApplication::postEvent(parent, ev);
+	        break;
 
+	        case SDL_JOYBUTTONDOWN:  /* Handle Joystick Button */
+	        case SDL_JOYBUTTONUP:
+	        	ev = new QSdlJoystickEvent(QSdlJoystickButtonEventType, event.jbutton.type, event.jbutton.button, event.jbutton.state);
+	        	QCoreApplication::postEvent(parent, ev);
 	        break;
 
 	        default:	//unhandled events
@@ -415,7 +436,6 @@ bool RunWdgView::isVisible( QPoint pos )
 
 bool RunWdgView::event( QEvent *event )
 {
-	mess_info(__func__,"event type: %d", event->type());
     //> Force event's process
     switch(event->type())
     {
@@ -624,6 +644,34 @@ bool RunWdgView::event( QEvent *event )
 	    return true;
 	case QEvent::FocusIn:	attrs["focus"] = "1"; attrs["event"] = "ws_FocusIn"; attrsSet(attrs); return true;
 	case QEvent::FocusOut:	attrs["focus"] = "0"; attrs["event"] = "ws_FocusOut"; attrsSet(attrs); return true;
+
+#ifdef HAVE_SDL
+	case QSdlJoystickAxisEventType:
+		mod_ev="joy_axis";
+		mod_ev+=TSYS::int2str( ((QSdlJoystickEvent*)event)->axis() );
+		mod_ev+="_value";
+		mod_ev+=TSYS::int2str( ((QSdlJoystickEvent*)event)->value() );
+		attrSet("event", mod_ev);
+		return true;
+	case QSdlJoystickButtonEventType:
+		mod_ev="joy_button";
+		switch( ((QSdlJoystickEvent*)event)->act_type() )
+		{
+		case SDL_JOYBUTTONDOWN:
+			mod_ev+="Down";
+			break;
+		case SDL_JOYBUTTONUP:
+			mod_ev+="Up";
+			break;
+		default:
+			mod_ev+="Unknown";
+			break;
+		}
+		mod_ev+=TSYS::int2str( ((QSdlJoystickEvent*)event)->button() );
+		attrSet("event", mod_ev);
+		return true;
+#endif
+
 	default: break;
     }
 

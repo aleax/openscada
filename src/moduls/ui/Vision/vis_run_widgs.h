@@ -49,9 +49,22 @@ namespace VISION
 		//Q_OBJECT
 	public:
 		QSdlJoystickEvent(QEvent::Type type);
+		QSdlJoystickEvent(QEvent::Type type, int axis, int value);
+		QSdlJoystickEvent(QEvent::Type type, int act_type, int button, int state);
+
+		const int axis(){ return _axis;}
+		const int value(){ return _value;}
+		const int button(){ return _button;}
+		const int act_type(){ return _act_type;}
+		const int state(){ return _state;}
 
 	private:
-		QEvent::Type type;
+		QEvent::Type _type;
+		int _axis;
+		int _value;
+		int _button;
+		int _act_type;
+		int _state;
 
 	};
 
