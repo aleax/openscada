@@ -97,7 +97,7 @@ void SDLJoystick::run()
 
 	else return;
 
-	SDL_Event event;
+	SDL_Event event, prev_event;
 
 #if OSC_DEBUG >= 1
 	mess_debug(__func__,"Start SDL event loop (thread 0x%x, joystick %d)", QThread::currentThread(), index);
@@ -110,6 +110,14 @@ void SDLJoystick::run()
 
 		if( SDL_PollEvent(&event)==0 )
 			continue;
+
+		// Compare current event with previous (I have gamepad with Axis3value0 every time, without any actions)
+		// Comparation with 'memcmp' have potential problems
+		if ( memcmp(&event, &prev_event, sizeof(SDL_Event)) == 0 )
+			continue;
+		else
+			prev_event=event;
+
 
 		//QSdlJoystickEvent *ev = new QSdlJoystickEvent(QSdlJoystickEventType);
 		//QCoreApplication::postEvent(parent, ev);
