@@ -140,9 +140,11 @@ void SDLJoystick::run()
 	        	QCoreApplication::postEvent(parent, ev);
 	        break;
 
+#if OSC_DEBUG >= 1
 	        default:	//unhandled events
 	        	mess_debug(__func__,"SDL event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
 	        break;
+#endif
 
 	    }
 	}
