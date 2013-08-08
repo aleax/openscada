@@ -99,6 +99,11 @@ void SDLJoystick::run()
 
 	SDL_Event event, prev_event;
 
+	//Array for Axes filtering
+	int *prevAxesValue = new int[SDL_JoystickNumAxes(joy)];
+	for(int i=0; i<SDL_JoystickNumAxes(joy); i++)
+		prevAxesValue[i]=0;
+
 #if OSC_DEBUG >= 1
 	mess_debug(__func__,"Start SDL event loop (thread 0x%x, joystick %d)", QThread::currentThread(), index);
 #endif
@@ -130,8 +135,12 @@ void SDLJoystick::run()
 	        break;
 
 	        case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */
-	        	ev = new QSdlJoystickEvent(QSdlJoystickAxisEventType, event.jaxis.axis, event.jaxis.value);
-	        	QCoreApplication::postEvent(parent, ev);
+	        	if ( prevAxesValue[event.jaxis.axis] != event.jaxis.value )
+	        	{
+	        		prevAxesValue[event.jaxis.axis]=event.jaxis.value;
+	        		ev = new QSdlJoystickEvent(QSdlJoystickAxisEventType, event.jaxis.axis, event.jaxis.value);
+	        		QCoreApplication::postEvent(parent, ev);
+	        	}
 	        break;
 
 	        case SDL_JOYBUTTONDOWN:  /* Handle Joystick Button */
