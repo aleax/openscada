@@ -43,6 +43,7 @@
 //#include <QPolygonF>
 
 #include <tsys.h>
+#include "../VCAEngine/types.h"
 
 #include "tvision.h"
 #include "vis_devel.h"
@@ -53,6 +54,7 @@
 
 
 using namespace VISION;
+using namespace VCA;
 
 ShapeElFigure::ShapeElFigure( ) :
     WdgShape("ElFigure"), itemInMotion(NULL), count_Shapes(0), fill_index(-1), index_del(-1), rect_num(-1), dyn_num(0), status_hold(true),
@@ -79,910 +81,449 @@ void ShapeElFigure::destroy( WdgView *w )
 
 bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
-    ElFigDt *elFD = (ElFigDt*)w->shpData;
+    ElFigDt	*elFD = (ElFigDt*)w->shpData;
     DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
-    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
-    bool rel_list	= false;				//change signal
-    bool up		= false;
-    bool paint		= false;
-    QVector<ShapeItem> &shapeItems = elFD->shapeItems;
-    QVector<ShapeItem> &shapeItems_temp = elFD->shapeItems_temp;
-    QVector<inundationItem> &inundationItems = elFD->inundationItems;
-    QVector<inundationItem> &inundationItems_temp = elFD->inundationItems_temp;
-    PntMap &shapePnts_temp = elFD->shapePnts_temp;
-    WidthMap shapeWidths_unScale;// = elFD->shapeWidths_unScale;
-    WidthMap &shapeWidths_temp = elFD->shapeWidths_temp;
-    ColorMap &shapeColors_temp = elFD->shapeColors_temp;
-    ImageMap &shapeImages_temp = elFD->shapeImages_temp;
-    StyleMap &shapeStyles_temp = elFD->shapeStyles_temp;
+    RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
+    bool	rel_list= false;				//change signal
+    bool	up	= false;
+    bool	paint	= false;
+    QVector<ShapeItem> &shapeItems = elFD->shapeItems, &shapeItems_temp = elFD->shapeItems_temp;
+    QVector<inundationItem> &inundationItems = elFD->inundationItems, &inundationItems_temp = elFD->inundationItems_temp;
+    PntMap	&shapePnts_temp = elFD->shapePnts_temp;
+    WidthMap	shapeWidths_unScale;// = elFD->shapeWidths_unScale;
+    WidthMap	&shapeWidths_temp = elFD->shapeWidths_temp;
+    ColorMap	&shapeColors_temp = elFD->shapeColors_temp;
+    ImageMap	&shapeImages_temp = elFD->shapeImages_temp;
+    StyleMap	&shapeStyles_temp = elFD->shapeStyles_temp;
 
-    PntMap *pnts = &elFD->shapePnts;
-    WidthMap *widths = &elFD->shapeWidths;
-    ColorMap *colors = &elFD->shapeColors;
-    ImageMap *images = &elFD->shapeImages;
-    StyleMap *styles = &elFD->shapeStyles;
-    QPointF CtrlMotionPos_4;
-    string backimg;
-    QImage img;
+    PntMap	&pnts	= elFD->shapePnts;
+    WidthMap	&widths	= elFD->shapeWidths;
+    ColorMap	&colors	= elFD->shapeColors;
+    ImageMap	&images	= elFD->shapeImages;
+    StyleMap	&styles	= elFD->shapeStyles;
+    QPointF	CtrlMotionPos_4;
+    string	backimg;
+    QImage	img;
     rect_num = -1;
-    switch( uiPrmPos )
+    switch(uiPrmPos)
     {
-	case -1:	//load
-	    rel_list = true;
-	    break;
-	case 5:		//en
-	    if( !runW )	break;
+	case A_COM_LOAD: rel_list = true;	break;
+	case A_EN:
+	    if(!runW)	break;
 	    elFD->en = (bool)atoi(val.c_str());
-	    w->setVisible( atoi(val.c_str()) && ((RunWdgView*)w)->permView() );
+	    w->setVisible(elFD->en && runW->permView());
 	    break;
-	case 6:		//active
-	    if( !runW )	break;
+	case A_ACTIVE:
+	    if(!runW)	break;
 	    elFD->active = (bool)atoi(val.c_str());
-	    w->setFocusPolicy( (atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) ? Qt::TabFocus : Qt::NoFocus );
+	    w->setFocusPolicy((elFD->active && runW->permCntr()) ? Qt::TabFocus : Qt::NoFocus);
 	    break;
-	case 9: 	//geomW
-	    if( geomW != atoi(val.c_str()) )
-	    {
-		geomW = atoi(val.c_str());
-		flag_geom = true;
-		rel_list = true;
-	    }
+	case A_GEOM_W:
+	    if(geomW == atoi(val.c_str()))	break;
+	    geomW = atoi(val.c_str());
+	    flag_geom = rel_list = true;
 	    break;
-	case 10:	//geomH
-	    if( geomH != atoi(val.c_str()) )
-	    {
-		geomH = atoi(val.c_str());
-		flag_geom = true;
-		rel_list = true;
-	    }
+	case A_GEOM_H:
+	    if(geomH == atoi(val.c_str()))	break;
+	    geomH = atoi(val.c_str());
+	    flag_geom = rel_list = true;
 	    break;
-	case 12:	//geomMargin
-	    elFD->geomMargin = atoi(val.c_str());
-	    up = true;
-	    break;
-	case 13:	//geomXsc
-	    rel_list = true;
-	    break;
-	case 14:	//geomXsc
-	    rel_list = true;
-	    break;
-	case 20:	//lineWdth
-	    (*widths)[-5] = atof(val.c_str());
-	    rel_list = true;
-	    break;
-	case 21:	//lineClr
-	    (*colors)[-5] = getColor(val);
-	    rel_list = true;
-	    break;
-	case 22:	//lineStyle
+	case A_GEOM_MARGIN: elFD->geomMargin = atoi(val.c_str()); up = true;	break;
+	case A_GEOM_X_SC: rel_list = true;	break;
+	case A_GEOM_Y_SC: rel_list = true;	break;
+	case A_ElFigLineW: widths[ShapeItem::DefLine] = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigLineClr: colors[ShapeItem::DefLine] = getColor(val); rel_list = true;		break;
+	case A_ElFigLineStl:
 	    switch(atoi(val.c_str()))
 	    {
-		case 0:	(*styles)[-5] = Qt::SolidLine;	break;
-		case 1:	(*styles)[-5] = Qt::DashLine;	break;
-		case 2:	(*styles)[-5] = Qt::DotLine;	break;
+		case EF_SOLID:	styles[ShapeItem::DefLine] = Qt::SolidLine;	break;
+		case EF_DASH:	styles[ShapeItem::DefLine] = Qt::DashLine;	break;
+		case EF_DOT:	styles[ShapeItem::DefLine] = Qt::DotLine;	break;
 	    }
 	    rel_list = true;
 	    break;
-	case 23:	//bordWdth
-	    (*widths)[-6] = atof(val.c_str());
-	    rel_list = true;
-	    break;
-	case 24:	//bordClr
-	    (*colors)[-6] = getColor(val);
-	    rel_list = true;
-	    break;
-	case 25:	//fillClr
-	    (*colors)[-7] = getColor(val);
-	    rel_list = true;
-	    break;
-	case 26:	//fillImg
-	{
+	case A_ElFigBordW: widths[ShapeItem::DefBord] = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigBordClr: colors[ShapeItem::DefBord] = getColor(val); rel_list = true;	break;
+	case A_ElFigFillClr: colors[ShapeItem::DefFill] = getColor(val); rel_list = true;	break;
+	case A_ElFigFillImg:
 	    backimg = w->resGet(val);
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) ) (*images)[-5] = val;
-	    else (*images)[-5] = "";
+	    images[ShapeItem::DefFillImg] = (!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) ? val : "";
 	    rel_list = true;
 	    break;
-	}
-	case 28:
-	    elFD->orient = atof(val.c_str());
-	    rel_list = true;
-	    break;
-	case 27:	//elLst
-	    elFD->elLst = val.c_str();
-	    rel_list = true;
-	    break;
+	case A_ElFigOrient: elFD->orient = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigElLst: elFD->elLst = val.c_str(); rel_list = true;		break;
 	default:
-	    if( uiPrmPos >= 30 )
+	    if(uiPrmPos >= A_ElFigIts)
 	    {
-		int pnt  = (uiPrmPos-30)/6;
-		int patr = (uiPrmPos-30)%6;
-		QPointF pnt_ = (*pnts)[pnt];
-		switch( patr )
+		int pnt  = (uiPrmPos-A_ElFigIts)/A_ElFigItsSz;
+		int patr = (uiPrmPos-A_ElFigIts)%A_ElFigItsSz;
+		QPointF pnt_ = pnts[pnt];
+		switch(patr)
 		{
-		    case 0:	pnt_.setX(atof(val.c_str()));	(*pnts)[pnt] = pnt_;	break;
-		    case 1:	pnt_.setY(atof(val.c_str()));	(*pnts)[pnt] = pnt_;	break;
-		    case 2:	(*widths)[pnt] = atof(val.c_str());	break;
-		    case 3:	(*colors)[pnt] = getColor(val);		break;
-		    case 4:
+		    case A_ElFigItPntX:	pnt_.setX(atof(val.c_str()));	pnts[pnt] = pnt_;	break;
+		    case A_ElFigItPntY:	pnt_.setY(atof(val.c_str()));	pnts[pnt] = pnt_;	break;
+		    case A_ElFigItW:	widths[pnt] = atof(val.c_str());	break;
+		    case A_ElFigItClr:	colors[pnt] = getColor(val);		break;
+		    case A_ElFigItImg:
 			backimg = w->resGet(val);
 			if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-			    (*images)[pnt] = val;
-			else (*images)[pnt] = "";
+			    images[pnt] = val;
+			else images[pnt] = "";
 			break;
-		    case 5:
+		    case A_ElFigItStl:
 			switch(atoi(val.c_str()))
 			{
-			    case 0:	(*styles)[pnt] = Qt::SolidLine;	break;
-			    case 1:	(*styles)[pnt] = Qt::DashLine;	break;
-			    case 2:	(*styles)[pnt] = Qt::DotLine;	break;
+			    case EF_SOLID:	styles[pnt] = Qt::SolidLine;	break;
+			    case EF_DASH:	styles[pnt] = Qt::DashLine;	break;
+			    case EF_DOT:	styles[pnt] = Qt::DotLine;	break;
 			}
 			break;
 		}
 		rel_list = true;
 	    }
     }
-    if( rel_list && !w->allAttrLoad( ) )
+    if(rel_list && !w->allAttrLoad())
     {
-	double scale;
-	if( w->xScale(true) < w->yScale(true) ) scale = w->xScale(true);
-	else scale = w->yScale(true);
+	double scale = vmin(w->xScale(true), w->yScale(true));
 	shapeWidths_unScale = elFD->shapeWidths;
-	//> Deleting the pairs in the map with the key <= -10
-	for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); )
-	    if(pi->first <= -10 ) (*pnts).erase ( pi++ );
-	    else ++pi;
-	//> Scaling the widths which index is more than 0
-	for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
+	//> Deleting the pairs in the map with the key <= StatIts
+	for(PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
+	    if(pi->first <= ShapeItem::StatIts) pnts.erase(pi++); else ++pi;
+	//> Scaling the widths which index is more than 0 (Dynamic)
+	for(WidthMap::iterator pi = widths.begin(); pi != widths.end(); )
 	{
-	    if(pi->first <= -10 ) (*widths).erase ( pi++ );
+	    if(pi->first <= ShapeItem::StatIts) widths.erase(pi++);
 	    else
 	    {
-		if( pi->first > 0 && fabs( pi->second - 0 ) >= 0.01 )
+		if(pi->first > 0 && fabs(pi->second) >= 0.01)
 		{
-		    pi->second = vmin(1000,vmax(1,pi->second * scale));
+		    pi->second = vmin(1000, vmax(1,pi->second*scale));
 		    ++pi;
 		}
 		else ++pi;
 	    }
 	}
-	for( ColorMap::iterator pi = colors->begin(); pi != colors->end(); )
-	    if(pi->first <= -10 ) (*colors).erase ( pi++ );
-	    else ++pi;
-	for( ImageMap::iterator pi = images->begin(); pi != images->end(); )
-	    if(pi->first <= -10 ) (*images).erase ( pi++ );
-	    else ++pi;
-	for( StyleMap::iterator pi = styles->begin(); pi != styles->end(); )
-	    if(pi->first <= -10 ) (*styles).erase ( pi++ );
-	    else ++pi;
-	int map_index = -10;
-	int w_index = -10;
-	int c_index = -10;
-	int i_index = -10;
-	int s_index = -10;
+	for(ColorMap::iterator pi = colors.begin(); pi != colors.end(); )
+	    if(pi->first <= ShapeItem::StatIts) colors.erase(pi++); else ++pi;
+	for(ImageMap::iterator pi = images.begin(); pi != images.end(); )
+	    if(pi->first <= ShapeItem::StatIts) images.erase(pi++); else ++pi;
+	for(StyleMap::iterator pi = styles.begin(); pi != styles.end(); )
+	    if(pi->first <= ShapeItem::StatIts) styles.erase(pi++); else ++pi;
+	int map_index = ShapeItem::StatIts, w_index = ShapeItem::StatIts, c_index = ShapeItem::StatIts,
+	    i_index = ShapeItem::StatIts, s_index = ShapeItem::StatIts;
 	flag_ctrl = flag_A = flag_copy = false;
 	index_array.clear();
 	count_Shapes = 0;
 	itemInMotion = 0;
-	if( shapeItems.size() ) shapeItems.clear();
-	if( inundationItems.size() ) inundationItems.clear();
-	//- Parse last attributes list and make point list -
+	shapeItems.clear();
+	inundationItems.clear();
+
+	//> Parse last attributes list and make point list
 	string sel;
-	int p[5];
-	int width, bord_width, color, bord_color, style;
+	QVector<int> p;
+	int width, bord_width, color, img, bord_color, style;
 	QPointF ip[5];
-	if( fabs( (*widths)[-5] - 0) >= 0.01 ) (*widths)[-5] = vmax(1,(*widths)[-5]*scale);
-	else (*widths)[-5] = 0;
-	if( fabs( (*widths)[-6] - 0) >= 0.01 ) (*widths)[-6] = vmax(1,(*widths)[-6]*scale);
-	else (*widths)[-6] = 0;
-	for( int off = 0; (sel=TSYS::strSepParse(elFD->elLst,0,'\n',&off)).size(); )
+	widths[ShapeItem::DefLine] = (fabs(widths[ShapeItem::DefLine]) >= 0.01) ? vmax(1, widths[ShapeItem::DefLine]*scale) : 0;
+	widths[ShapeItem::DefBord] = (fabs(widths[ShapeItem::DefBord]) >= 0.01) ? vmax(1, widths[ShapeItem::DefBord]*scale) : 0;
+	for(int off = 0, el_off = 0; (sel=TSYS::strSepParse(elFD->elLst,0,'\n',&off)).size(); el_off = 0)
 	{
-	    int el_off = 0;
-	    string el = TSYS::strSepParse(sel,0,':',&el_off);
-	    if( el == "line" )
+	    string el = TSYS::strSepParse(sel, 0, ':', &el_off), el_s;
+	    ShapeItem::Type elTp;
+	    int nPnts = 0, servPnts;
+	    if(el == "line")		{ elTp = ShapeItem::Line; nPnts = 2; servPnts = 2; }
+	    else if(el == "arc")	{ elTp = ShapeItem::Arc; nPnts = 5; servPnts = 2; }
+	    else if(el == "bezier")	{ elTp = ShapeItem::Bezier; nPnts = 4; servPnts = 2; }
+	    else if(el == "fill")	{ elTp = ShapeItem::Fill; nPnts = -1; servPnts = -1; }
+	    else continue;
+
+	    //>> Reading and setting attributes for the current line
+	    //>>> Points
+	    float x_s, y_s;
+	    int w_s;
+	    bool pnts_ok = true;
+	    p.clear();
+	    for(int i_p = 0, off_last = 0; pnts_ok && (nPnts < 0 || i_p < nPnts); i_p++)
 	    {
-		//-- Reading anf setting attributes for the current line --
-		float x_s, y_s;
-		string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) != 2) p[0]  = atoi(el_s.c_str());
-		else
+		el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) == 2)
 		{
 		    bool fl = false;
 		    //>> Detecting if there is a point with same coordinates in the map.
-		    for(PntMap::reverse_iterator pi = pnts->rbegin(); !fl && pi != pnts->rend(); pi++)
-			if(pi->first <= -10)
-			    if(fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01)
-			    { p[0] = pi->first; fl = true; }
-		    if(!fl)
-		    {
-			p[0] = map_index;
-			(*pnts)[map_index] = QPointF(x_s,y_s);
-			map_index -= 1;
-		    }
+		    for(PntMap::reverse_iterator pi = pnts.rbegin(); (servPnts < 0 || i_p < servPnts) && !fl && pi != pnts.rend(); pi++)
+			if(pi->first <= ShapeItem::StatIts && fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
+			    fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01)
+			{ p.push_back(pi->first); fl = true; }
+		    if(!fl) { p.push_back(map_index--); pnts[p[i_p]] = QPointF(x_s, y_s); }
 		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts->rbegin(); pi != pnts->rend(); pi++ )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01 )
-			    {
-				p[1] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[1] = map_index;
-			(*pnts)[map_index] = QPointF(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		//-- Line width --
-		int w;
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) width  = w;
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
-		{
-		    width = w_index;
-		    if( fabs( w - 0 ) >= 1 )
-		    {
-			(*widths)[w_index] = vmin(1000,vmax(1,w*scale));
-			shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
-		    }
-		    else (*widths)[w_index] = 0;
-		    w_index -= 1;
-		}
-		else width = -5;
-		//-- Line color --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
-		else if( el_s.size() )
-		{
-		    color = c_index;
-		    (*colors)[c_index] = getColor(el_s);
-		    c_index -= 1;
-		}
-		else color = -5;
-		 //-- Border width --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) bord_width  = w;
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
-		{
-		    bord_width = w_index;
-		    if( fabs( w - 0 ) >= 1 )
-		    {
-			(*widths)[w_index] = vmin(1000,vmax(1,w*scale));
-			shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
-		    }
-		    else (*widths)[w_index] = 0;
-		    w_index -= 1;
-		}
-		else bord_width = -6;
-		//-- Border color --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = w;
-		else if( el_s.size() )
-		{
-		    bord_color = c_index;
-		    (*colors)[c_index] = getColor(el_s);
-		    c_index -= 1;
-		}
-		else bord_color = -6;
-		//-- Line style --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-		else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
-		{
-		    style = s_index;
-		    (*styles)[s_index] = (Qt::PenStyle)(atoi(el_s.c_str())+1);
-		    s_index -= 1;
-		}
-		else style = -5;
-
-		//-- Building the path of the line and adding it to container --
-		if( (*widths)[bord_width] > 0.01 )
-		    shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], -1, -1, -1, QPointF(0,0),
-					  color, bord_color, style, width, bord_width, 1, angle_temp) );
-		else if( ( (*widths)[bord_width] >= 0) && (fabs((*widths)[bord_width] - 0) < 0.01) )
-		    shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], -1, -1, -1, QPointF(0,0),
-					  color, bord_color, style, width, bord_width, 1, angle_temp) );
+		else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) p.push_back(w_s);
+		else { pnts_ok = false; el_off = off_last; }
+		off_last = el_off;
 	    }
-	    if( el == "arc" )
+	    if(!pnts_ok && nPnts > 0) continue;
+	    //>>> Other properties
+	    switch(elTp)
 	    {
-		//-- Reading and setting attributes for the current arc --
-		float x_s, y_s;
-		string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01 )
-			    {
-				p[0] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
+		case ShapeItem::Line: case ShapeItem::Arc: case ShapeItem::Bezier:
+		    //>>> Line width
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) width = w_s;
+		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1)
 		    {
-			p[0] = map_index;
-			(*pnts)[map_index] = QPointF(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::iterator pi = pnts->begin(); pi != pnts->end(); pi++ )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01 )
-			    {
-				p[1] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[1] = map_index;
-			(*pnts)[map_index] = QPointF(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
-		else
-		{
-		    p[2] = map_index;
-		    (*pnts)[map_index] = QPointF(x_s,y_s);
-		    map_index -= 1;
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
-		else
-		{
-		    p[3] = map_index;
-		    (*pnts)[map_index] = QPointF(x_s,y_s);
-		    map_index -= 1;
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[4]  = atoi(el_s.c_str());
-		else
-		{
-		    p[4] = map_index;
-		    (*pnts)[map_index] = QPointF(x_s,y_s);
-		    map_index -= 1;
-		}
-		//-- Line width --
-		int w;
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) width  = w;
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
-		{
-		    width = w_index;
-		    if( fabs( w - 0 ) >= 1 )
-		    {
-			(*widths)[w_index] = vmin(1000,vmax(1,w*scale));
-			shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
-		    }
-		    else (*widths)[w_index] = 0;
-		    w_index -= 1;
-		}
-		else width = -5;
-		//-- Line color --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
-		else if( el_s.size() )
-		{
-		    color = c_index;
-		    (*colors)[c_index] = getColor(el_s);
-		    c_index -= 1;
-		}
-		else color = -5;
-		//-- Border width --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) bord_width  = w;
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
-		{
-		    bord_width = w_index;
-		    if( fabs( w - 0 ) >= 1 )
-		    {
-			(*widths)[w_index] = vmin(1000,vmax(1,w*scale));
-			shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
-		    }
-		    else (*widths)[w_index] = 0;
-		    w_index -= 1;
-		}
-		else bord_width = -6;
-
-		//-- Border color --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = w;
-		else if( el_s.size() )
-		{
-		    bord_color = c_index;
-		    (*colors)[c_index] = getColor(el_s);
-		    c_index -= 1;
-		}
-		else bord_color = -6;
-
-		//-- Line style --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-		else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
-		{
-		    style = s_index;
-		    (*styles)[s_index] = (Qt::PenStyle)(atoi(el_s.c_str())+1);
-		    s_index -= 1;
-		}
-		else style = -5;
-		//-- Reading coordinates for the points of the line --
-		for( int i_p = 0; i_p < 5; i_p++ )
-		    ip[i_p] = (*pnts)[p[i_p]];
-
-		//-- Building the current arc --
-		CtrlMotionPos_4 = getArcStartEnd( ip[0], ip[1], ip[2], ip[3], ip[4] );
-
-		//-- Building the path of the line and adding it to container --
-		if( (*widths)[bord_width] > 0.01 )
-		    shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4,
-					  color, bord_color, style, width, bord_width, 2, angle_temp) );
-		else if( ((*widths)[bord_width] >= 0) && (fabs((*widths)[bord_width] - 0) < 0.01) )
-		    shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], p[2], p[3], p[4], CtrlMotionPos_4,
-					  color, bord_color, style, width, bord_width, 2, angle_temp) );
-	    }
-	    if( el == "bezier" )
-	    {
-		//-- Reading anf setting attributes for the current arc --
-		float x_s, y_s;
-		string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts->rbegin(); pi != pnts->rend(); pi++ )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01 )
-			    {
-				p[0] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[0] = map_index;
-			(*pnts)[map_index] = QPointF(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts->rbegin(); pi != pnts->rend(); pi++ )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01 )
-			    {
-				p[1] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[1] = map_index;
-			(*pnts)[map_index] = QPointF(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
-		else
-		{
-		    p[2] = map_index;
-		    (*pnts)[map_index] = QPointF(x_s,y_s);
-		    map_index -= 1;
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
-		else
-		{
-		    p[3] = map_index;
-		    (*pnts)[map_index] = QPointF(x_s,y_s);
-		    map_index -= 1;
-		}
-
-		//-- Line width --
-		int w;
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) width  = w;
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
-		{
-		    width = w_index;
-		    if( fabs( w - 0 ) >= 1 )
-		    {
-			(*widths)[w_index] = vmin(1000,vmax(1,w*scale));
-			shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
-		    }
-		    else (*widths)[w_index] = 0;
-		    w_index -= 1;
-		}
-		else width = -5;
-		//-- Line color --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = w;
-		else if( el_s.size() )
-		{
-		    color = c_index;
-		    (*colors)[c_index] = getColor(el_s);
-		    c_index -= 1;
-		}
-		else color = -5;
-		//-- Border width --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) bord_width  = w;
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 )
-		{
-		    bord_width = w_index;
-		    if( fabs( w - 0 ) >= 1 )
-		    {
-			(*widths)[w_index] = vmin(1000,vmax(1,w*scale));
-			shapeWidths_unScale[w_index] = vmin(1000,vmax(1,w));
-		    }
-		    else (*widths)[w_index] = 0;
-		    w_index -= 1;
-		}
-		else bord_width = -6;
-		//-- Border color --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = w;
-		else if( el_s.size() )
-		{
-		    bord_color = c_index;
-		    (*colors)[c_index] = getColor(el_s);
-		    c_index -= 1;
-		}
-		else bord_color = -6;
-		//-- Line style --
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = w;
-		else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
-		{
-		    style = s_index;
-		    (*styles)[s_index] = (Qt::PenStyle)(atoi(el_s.c_str())+1);
-		    s_index -= 1;
-		}
-		else style = -5;
-
-		if( (*widths)[bord_width] > 0.01 )
-		    shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], p[2], p[3], -1, QPointF(0,0),
-					 color, bord_color, style, width, bord_width, 3, angle_temp) );
-		else if( ((*widths)[bord_width] >= 0) && (fabs((*widths)[bord_width] - 0) < 0.01) )
-		    shapeItems.push_back( ShapeItem(newPath, newPath, p[0], p[1], p[2], p[3], -1, QPointF(0,0),
-					  color, bord_color, style, width, bord_width, 3, angle_temp) );
-	    }
-	    if( el == "fill" )
-	    {
-		int zero_pnts = 0;
-		string fl_color, fl_img;
-		QVector<int> fl_pnts;
-		float x_s, y_s;
-		int vl;
-		int wn, color, img;
-		while( true )
-		{
-		    string svl = TSYS::strSepParse( sel, 0, ':', &el_off );
-		    if( sscanf(svl.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) vl = atoi(svl.c_str());
-		    else
-		    {
-			bool fl = false;
-			//-- Detecting if there is a point with same coordinates in the map --
-			for( PntMap::reverse_iterator pi = pnts->rbegin(); pi != pnts->rend(); pi++ )
-			    if(pi->first <= -10 )
-			    {
-				if( (fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01) &&
-				    (fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01) )
-				{
-				    vl = pi->first;
-				    fl = true;
-				    break;
-				}
-			    }
-			if( !fl )
+			width = w_index--;
+			if(fabs(w_s) < 1) widths[width] = 0;
+			else
 			{
-			    vl = map_index;
-			    (*pnts)[map_index] = QPointF(x_s,y_s);
-			    map_index -= 1;
+			    widths[width] = vmin(1000, vmax(1,w_s*scale));
+			    shapeWidths_unScale[width] = vmin(1000, vmax(1,w_s));
 			}
 		    }
-		    if( vl ) fl_pnts.push_back(vl);
-		    else if( zero_pnts == 0 ) { fl_color = svl; zero_pnts++; }
-		    else if( zero_pnts == 1 ) { fl_img = svl; zero_pnts++; }
-		    else break;
-		}
-		//- Check fill color -
-		if( sscanf(fl_color.c_str(), "c%d", &wn) == 1 ) color  = wn;
-		else if( fl_color.size() )
-		{
-		    color = c_index;
-		    (*colors)[c_index] = getColor(fl_color);
-		    c_index -= 1;
-		}
-		else color = -7;
+		    else width = ShapeItem::DefLine;
 
-		//- Check fill image -
-		if( sscanf(fl_img.c_str(), "i%d", &wn) == 1 ) img  = wn;
-		else if( !w->resGet(TSYS::strDecode(fl_img)).empty() )
-		{
-		    img = i_index;
-		    (*images)[i_index] = TSYS::strDecode(fl_img);
-		    i_index -= 1;
-		}
-		else img = -5;
+		    //>>> Line color
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) color = w_s;
+		    else if(el_s.size()) colors[(color=c_index--)] = getColor(el_s);
+		    else color = ShapeItem::DefLine;
 
-		//- Make elements -
-		if( fl_pnts.size() > 1 )
-		    inundationItems.push_back( inundationItem(newPath,color,img, fl_pnts, fl_pnts) );
+		    //>>> Border width
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) bord_width = w_s;
+		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1)
+		    {
+			bord_width = w_index--;
+			if(fabs(w_s) < 1) widths[bord_width] = 0;
+			{
+			    widths[bord_width] = vmin(1000, vmax(1,w_s*scale));
+			    shapeWidths_unScale[bord_width] = vmin(1000, vmax(1,w_s));
+			}
+		    }
+		    else bord_width = ShapeItem::DefBord;
+
+		    //>>> Border color
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) bord_color = w_s;
+		    else if(el_s.size()) colors[(bord_color=c_index--)] = getColor(el_s);
+		    else bord_color = ShapeItem::DefBord;
+
+		    //>>> Line style
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"s%d",&w_s) == 1) style = w_s;
+		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1 && (w_s == EF_SOLID || w_s == EF_DASH || w_s == EF_DOT))
+			styles[(style=s_index--)] = (Qt::PenStyle)(w_s+1);
+		    else style = ShapeItem::DefLine;
+
+		    if(elTp == ShapeItem::Arc)
+		    {
+            		//>>> Building the current arc
+			//>>> Reading coordinates for the points of the line
+            		for(int i_p = 0; i_p < p.size(); i_p++) ip[i_p] = pnts[p[i_p]];
+			CtrlMotionPos_4 = getArcStartEnd(ip[0], ip[1], ip[2], ip[3], ip[4]);
+		    }
+
+		    //>>> Building the path of the line and adding it to container
+		    p.resize(5);
+		    shapeItems.push_back(ShapeItem(newPath,newPath,p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
+					    color,bord_color,style,width,bord_width,elTp,angle_temp));
+		    break;
+		case ShapeItem::Fill:
+		    //>>> Fill color
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) color = w_s;
+		    else if(el_s.size()) colors[(color=c_index--)] = getColor(el_s);
+		    else color = ShapeItem::DefFill;
+
+		    //>>> Fill image
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"i%d",&w_s) == 1) img = w_s;
+		    else if(!w->resGet(TSYS::strDecode(el_s)).empty()) images[(img=i_index--)] = TSYS::strDecode(el_s);
+		    else img = ShapeItem::DefFillImg;
+
+		    //>>> Make elements
+		    if(p.size() > 1) inundationItems.push_back(inundationItem(newPath,color,img,p,p));
+		    break;
 	    }
 	}
-	for( int i=0; i < shapeItems_temp.size(); i++ )
+	for(int i = 0; i < shapeItems_temp.size(); i++)
 	{
-	    dropPoint( shapeItems_temp[i].n1, shapeItems.size()+1, shapeItems, pnts );
-	    dropPoint( shapeItems_temp[i].n2, shapeItems.size()+1, shapeItems, pnts );
-	    dropPoint( shapeItems_temp[i].n3, shapeItems.size()+1, shapeItems, pnts );
-	    dropPoint( shapeItems_temp[i].n4, shapeItems.size()+1, shapeItems, pnts );
-	    dropPoint( shapeItems_temp[i].n5, shapeItems.size()+1, shapeItems, pnts );
+	    dropPoint(shapeItems_temp[i].n1, shapeItems.size()+1, shapeItems, &pnts);
+	    dropPoint(shapeItems_temp[i].n2, shapeItems.size()+1, shapeItems, &pnts);
+	    dropPoint(shapeItems_temp[i].n3, shapeItems.size()+1, shapeItems, &pnts);
+	    dropPoint(shapeItems_temp[i].n4, shapeItems.size()+1, shapeItems, &pnts);
+	    dropPoint(shapeItems_temp[i].n5, shapeItems.size()+1, shapeItems, &pnts);
 	}
 	up = true;
     }
-    if( up && !w->allAttrLoad( ) )
+    if(up && !w->allAttrLoad())
     {
-	//- Repainting all shapes by calling moveItemTo to each shape -
+	//> Repainting all shapes by calling moveItemTo to each shape
 	QVector<int> inundation_fig_num;
 	bool flag_push_back;
-	for( WidthMap::iterator pi = widths->begin(); pi != widths->end(); )
+	for(WidthMap::iterator pi = widths.begin(); pi != widths.end(); )
 	{
 	    bool unDel = false;
-	    for( int i=0; i < shapeItems.size(); i++ )
-		if( pi->first > 0 && ( pi->first == shapeItems[i].width || pi->first == shapeItems[i].border_width ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( pi->first > 0 && unDel == false ) (*widths).erase ( pi++ );
-	    else ++pi;
+	    for(int i = 0; !unDel && i < shapeItems.size(); i++)
+		unDel = pi->first > 0 && (pi->first == shapeItems[i].width || pi->first == shapeItems[i].border_width);
+	    if(pi->first > 0 && !unDel) widths.erase(pi++); else ++pi;
 	}
-	for( ColorMap::iterator pi = colors->begin(); pi != colors->end(); )
+	for(ColorMap::iterator pi = colors.begin(); pi != colors.end(); )
 	{
 	    bool unDel = false;
-	    for( int i=0; i < shapeItems.size(); i++ )
-		if( pi->first > 0 && ( pi->first == shapeItems[i].lineColor || pi->first == shapeItems[i].borderColor ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( !unDel )
-		for( int i=0; i < inundationItems.size(); i++  )
-		    if( pi->first > 0 && ( pi->first == inundationItems[i].brush ) )
-		    {
-			unDel = true;
-			break;
-		    }
-	    if( pi->first > 0 && unDel == false ) (*colors).erase ( pi++ );
-	    else ++pi;
+	    for(int i = 0; !unDel && i < shapeItems.size(); i++)
+		unDel = pi->first > 0 && (pi->first == shapeItems[i].lineColor || pi->first == shapeItems[i].borderColor);
+	    for(int i = 0; !unDel && i < inundationItems.size(); i++)
+		unDel = pi->first > 0 && pi->first == inundationItems[i].brush;
+	    if(pi->first > 0 && !unDel) colors.erase(pi++); else ++pi;
 	}
-	for( ImageMap::iterator pi = images->begin(); pi != images->end(); )
+	for(ImageMap::iterator pi = images.begin(); pi != images.end(); )
 	{
 	    bool unDel = false;
-	    for( int i=0; i < inundationItems.size(); i++ )
-		if( pi->first > 0 && ( pi->first == inundationItems[i].brush_img ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( pi->first > 0 && unDel == false ) (*images).erase ( pi++ );
-	    else ++pi;
+	    for(int i = 0; !unDel && i < inundationItems.size(); i++)
+		unDel = pi->first > 0 && (pi->first == inundationItems[i].brush_img);
+	    if(pi->first > 0 && !unDel) images.erase(pi++); else ++pi;
 	}
-	for( StyleMap::iterator pi = styles->begin(); pi != styles->end(); )
+	for(StyleMap::iterator pi = styles.begin(); pi != styles.end(); )
 	{
 	    bool unDel = false;
-	    for( int i=0; i < shapeItems.size(); i++ )
-		if( pi->first > 0 && ( pi->first == shapeItems[i].style ) )
-		{
+	    for(int i = 0; !unDel && i < shapeItems.size(); i++)
+		unDel = pi->first > 0 && (pi->first == shapeItems[i].style);
 		    unDel = true;
-		    break;
-		}
-	    if( pi->first > 0 && unDel == false ) (*styles).erase ( pi++ );
-	    else ++pi;
+	    if(pi->first > 0 && !unDel) styles.erase(pi++); else ++pi;
 	}
-	QVector<int> items_array;
-	for( int i=0; i < shapeItems.size(); i++ )
-	    items_array.push_back(i);
-	initShapeItems( QPointF(0,0), w, items_array );
-	bool fill_build = false;
-	bool flag_all = false;
+
+	QVector<int> items_array, fill_number;
+	bool fill_build = false, flag_all = false;
 	QVector<inundationItem> in_build;
-	QVector<int> fill_number;
-	//- Detecting if there is a necessity to rebuild inundationItem -
-	if( (shapeItems.size() != shapeItems_temp.size()) || (flag_geom && fabs( elFD->orient - 0 ) >= 0.01) ) fill_build = true;
-	else
-	    for( int i = 0; i < shapeItems.size(); i++ )
-	    {
-		//-- Detecting if the shapeItems have changed --
-		if( shapeItems[i].path != shapeItems_temp[i].path )
-		    {fill_build = true; break;}
-		if( shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple )
-		    {fill_build = true; break;}
-		if( (int)TSYS::realRound(shapeItems[i].ctrlPos4.x(), POS_PREC_DIG, true) !=
-		    (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.x(), POS_PREC_DIG, true) ||
-		    (int)TSYS::realRound(shapeItems[i].ctrlPos4.y(), POS_PREC_DIG, true) !=
-		    (int)TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(), POS_PREC_DIG, true) )
-		    {fill_build = true; break;}
-		if( TSYS::realRound((*pnts)[shapeItems[i].n1].x(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].x(),POS_PREC_DIG,true) ||
-		    TSYS::realRound((*pnts)[shapeItems[i].n1].y(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].y(),POS_PREC_DIG,true) )
-		    {fill_build = true; break;}
-		if( TSYS::realRound((*pnts)[shapeItems[i].n2].x(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].x(),POS_PREC_DIG,true) ||
-		    TSYS::realRound((*pnts)[shapeItems[i].n2].y(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].y(),POS_PREC_DIG,true) )
-		    {fill_build = true; break;}
-		if( TSYS::realRound((*pnts)[shapeItems[i].n3].x(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].x(),POS_PREC_DIG,true) ||
-		    TSYS::realRound((*pnts)[shapeItems[i].n3].y(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].y(),POS_PREC_DIG,true) )
-		    {fill_build = true; break;}
-		if( TSYS::realRound((*pnts)[shapeItems[i].n4].x(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].x(),POS_PREC_DIG,true) ||
-		    TSYS::realRound((*pnts)[shapeItems[i].n4].y(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].y(),POS_PREC_DIG,true) )
-		    {fill_build = true; break;}
-		if( TSYS::realRound((*pnts)[shapeItems[i].n5].x(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].x(),POS_PREC_DIG,true) ||
-		    TSYS::realRound((*pnts)[shapeItems[i].n5].y(),POS_PREC_DIG,true) !=  TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].y(),POS_PREC_DIG,true) )
-		    {fill_build = true; break;}
-		if( (*colors)[shapeItems[i].lineColor].rgba() != shapeColors_temp[shapeItems_temp[i].lineColor].rgba() )
-		    {fill_build = true; break;}
-		if( (*colors)[shapeItems[i].borderColor].rgba() != shapeColors_temp[shapeItems_temp[i].borderColor].rgba() )
-		    {fill_build = true; break;}
-		if( (*styles)[shapeItems[i].style] != shapeStyles_temp[shapeItems_temp[i].style] )
-		    {fill_build = true; break;}
-		if( (*widths)[shapeItems[i].width] != shapeWidths_temp[shapeItems_temp[i].width] )
-		    {fill_build = true; break;}
-		if( (*widths)[shapeItems[i].border_width] != shapeWidths_temp[shapeItems_temp[i].border_width] )
-		    {fill_build = true; break;}
-		if( shapeItems[i].type != shapeItems_temp[i].type )
-		    {fill_build = true; break;}
-		if( (int)TSYS::realRound(shapeItems[i].angle_temp, POS_PREC_DIG, true) != (int)TSYS::realRound(shapeItems_temp[i].angle_temp, POS_PREC_DIG, true) )
-		    {fill_build = true; break;}
-	    }
+
+	for(int i = 0; i < shapeItems.size(); i++) items_array.push_back(i);
+	initShapeItems(QPointF(0,0), w, items_array);
+	//> Detecting if there is a necessity to rebuild inundationItem
+	if(shapeItems.size() != shapeItems_temp.size() || (flag_geom && fabs(elFD->orient) >= 0.01)) fill_build = true;
+	//>> Detecting if the shapeItems have changed
+	else for(int i = 0; !fill_build && i < shapeItems.size(); i++)
+	    fill_build = shapeItems[i].path != shapeItems_temp[i].path || shapeItems[i].pathSimple != shapeItems_temp[i].pathSimple ||
+		TSYS::realRound(shapeItems[i].ctrlPos4.x(),POS_PREC_DIG,true) != TSYS::realRound(shapeItems_temp[i].ctrlPos4.x(),POS_PREC_DIG,true) ||
+		TSYS::realRound(shapeItems[i].ctrlPos4.y(),POS_PREC_DIG,true) != TSYS::realRound(shapeItems_temp[i].ctrlPos4.y(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n1].x(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].x(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n1].y(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n1].y(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n2].x(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].x(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n2].y(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n2].y(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n3].x(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].x(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n3].y(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n3].y(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n4].x(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].x(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n4].y(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n4].y(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n5].x(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].x(),POS_PREC_DIG,true) ||
+		TSYS::realRound(pnts[shapeItems[i].n5].y(),POS_PREC_DIG,true) != TSYS::realRound(shapePnts_temp[shapeItems_temp[i].n5].y(),POS_PREC_DIG,true) ||
+		colors[shapeItems[i].lineColor].rgba() != shapeColors_temp[shapeItems_temp[i].lineColor].rgba() ||
+		colors[shapeItems[i].borderColor].rgba() != shapeColors_temp[shapeItems_temp[i].borderColor].rgba() ||
+		styles[shapeItems[i].style] != shapeStyles_temp[shapeItems_temp[i].style] ||
+		widths[shapeItems[i].width] != shapeWidths_temp[shapeItems_temp[i].width] ||
+		widths[shapeItems[i].border_width] != shapeWidths_temp[shapeItems_temp[i].border_width] ||
+		shapeItems[i].type != shapeItems_temp[i].type ||
+		TSYS::realRound(shapeItems[i].angle_temp,POS_PREC_DIG,true) != TSYS::realRound(shapeItems_temp[i].angle_temp,POS_PREC_DIG,true);
 	paint = fill_build;
-	//-- Detecting the difference beetwen inundationItems --
-	if( inundationItems.size() != inundationItems_temp.size() )
+	//>> Detecting the difference beetwen inundationItems
+	if(inundationItems.size() != inundationItems_temp.size()) { flag_all = paint = true; in_build = inundationItems; }
+	else for(int i_f = 0; i_f < inundationItems.size(); i_f++)
 	{
-	    flag_all = true;
-	    in_build = inundationItems;
-	    paint = true;
-	}
-	else
-	{
-	    for( int i_f = 0; i_f < inundationItems.size(); i_f++ )
+	    if(inundationItems[i_f].number_shape != inundationItems_temp[i_f].number_point || fill_build)// && shapeItems != shapeItems_temp
 	    {
-		if( (inundationItems[i_f].number_shape != inundationItems_temp[i_f].number_point) || fill_build )// && shapeItems != shapeItems_temp
-		{
-		    in_build.push_back(inundationItems[i_f]);
-		    fill_number.push_back(i_f);
-		    paint = true;
-		    continue;
-		}
-		if( (*colors)[inundationItems[i_f].brush].rgba() != shapeColors_temp[inundationItems_temp[i_f].brush].rgba() ||
+		in_build.push_back(inundationItems[i_f]);
+		fill_number.push_back(i_f);
+		paint = true;
+		continue;
+	    }
+	    if(colors[inundationItems[i_f].brush].rgba() != shapeColors_temp[inundationItems_temp[i_f].brush].rgba() ||
 		      inundationItems_temp[i_f].brush != inundationItems[i_f].brush)
-		    {
-			inundationItems_temp[i_f].brush = inundationItems[i_f].brush;
-			paint = true;
-		    }
-		if( (*images)[inundationItems[i_f].brush_img] != shapeImages_temp[inundationItems_temp[i_f].brush_img] ||
-		      inundationItems[i_f].brush_img != inundationItems_temp[i_f].brush_img)
-		    {
-			inundationItems_temp[i_f].brush_img = inundationItems[i_f].brush_img;
-			paint = true;
-		    }
+	    {
+		inundationItems_temp[i_f].brush = inundationItems[i_f].brush;
+		paint = true;
+	    }
+	    if(images[inundationItems[i_f].brush_img] != shapeImages_temp[inundationItems_temp[i_f].brush_img] ||
+		inundationItems[i_f].brush_img != inundationItems_temp[i_f].brush_img)
+	    {
+		inundationItems_temp[i_f].brush_img = inundationItems[i_f].brush_img;
+		paint = true;
 	    }
 	}
 	inundationItems.clear();
 	inundationItems = in_build;
-	//-Building fills-
-	if( shapeItems.size() )
-	    for( int i=0; i < inundationItems.size(); i++ )
+	//> Building fills
+	if(shapeItems.size())
+	    for(int i = 0; i < inundationItems.size(); i++)
 	    {
-		if( inundationItems[i].number_shape.size() > 2 )
+		if(inundationItems[i].number_shape.size() > 2)
 		{
-		    for( int k=0; k < inundationItems[i].number_shape.size()-1; k++ )
-			for( int j=0; j < shapeItems.size(); j++ )
-			    if( (shapeItems[j].n1 == inundationItems[i].number_shape[k] && shapeItems[j].n2 == inundationItems[i].number_shape[k+1]) ||
-				(shapeItems[j].n1 == inundationItems[i].number_shape[k+1] && shapeItems[j].n2 == inundationItems[i].number_shape[k]) )
+		    for(int k = 0; k < inundationItems[i].number_shape.size()-1; k++)
+			for(int j = 0; j < shapeItems.size(); j++)
+			    if((shapeItems[j].n1 == inundationItems[i].number_shape[k] && shapeItems[j].n2 == inundationItems[i].number_shape[k+1]) ||
+				(shapeItems[j].n1 == inundationItems[i].number_shape[k+1] && shapeItems[j].n2 == inundationItems[i].number_shape[k]))
 			    {
 				flag_push_back = true;
-				for( int p=0; p < inundation_fig_num.size(); p++ )
-				    if( (shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n2) ||
-					(shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1) )
+				for(int p = 0; p < inundation_fig_num.size(); p++)
+				    if((shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n2) ||
+					(shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1))
 				    {
 					flag_push_back = false;
-					if( (shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j) )
-					    inundation_fig_num[p]=j;
-					if( (shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j) )
-					    inundation_fig_num[p]=j;
-					if( (shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j) )
-					    inundation_fig_num[p]=j;
+					if(((shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Line) ||
+						(shapeItems[inundation_fig_num[p]].type == ShapeItem::Bezier && shapeItems[j].type == ShapeItem::Line) ||
+						(shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Bezier)) && inundation_fig_num[p] != j)
+					    inundation_fig_num[p] = j;
 				    }
-				if( flag_push_back )
-				    inundation_fig_num.push_back(j);
+				if(flag_push_back) inundation_fig_num.push_back(j);
 			    }
-		    for( int j=0; j < shapeItems.size(); j++ )
-			if( (shapeItems[j].n1 == inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1] && shapeItems[j].n2 == inundationItems[i].number_shape[0]) ||
-			    (shapeItems[j].n1 == inundationItems[i].number_shape[0] && shapeItems[j].n2 == inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1]) )
+		    for(int j = 0; j < shapeItems.size(); j++)
+			if((shapeItems[j].n1 == inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1] && shapeItems[j].n2 == inundationItems[i].number_shape[0]) ||
+			    (shapeItems[j].n1 == inundationItems[i].number_shape[0] && shapeItems[j].n2 == inundationItems[i].number_shape[inundationItems[i].number_shape.size()-1]))
 			{
 			    flag_push_back = true;
-			    for( int p=0; p < inundation_fig_num.size(); p++ )
-				if( (shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n2) ||
-				    (shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1) )
+			    for(int p = 0; p < inundation_fig_num.size(); p++)
+				if((shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n1 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n2) ||
+				    (shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1))
 				{
 				    flag_push_back = false;
-				    if( (shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j) )
-					inundation_fig_num[p] = j;
-				    if( (shapeItems[inundation_fig_num[p]].type==3 && shapeItems[j].type==1) && (inundation_fig_num[p]!=j) )
-					inundation_fig_num[p] = j;
-				    if( (shapeItems[inundation_fig_num[p]].type==2 && shapeItems[j].type==3) && (inundation_fig_num[p]!=j) )
+				    if(((shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Line) ||
+					    (shapeItems[inundation_fig_num[p]].type == ShapeItem::Bezier && shapeItems[j].type == ShapeItem::Line) ||
+					    (shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Bezier)) && inundation_fig_num[p] != j)
 					inundation_fig_num[p] = j;
 				}
-				if( flag_push_back )
-				    inundation_fig_num.push_back(j);
+				if(flag_push_back) inundation_fig_num.push_back(j);
 			}
-		    QPainterPath temp_path = createInundationPath( inundation_fig_num, shapeItems, *pnts,w );
-		    inundation_fig_num = inundationSort( temp_path, inundation_fig_num, shapeItems, pnts, w );
-		    inundationItems[i].path = createInundationPath( inundation_fig_num, shapeItems, *pnts, w );
+		    QPainterPath temp_path = createInundationPath(inundation_fig_num, shapeItems, pnts, w);
+		    inundation_fig_num = inundationSort(temp_path, inundation_fig_num, shapeItems, &pnts, w);
+		    inundationItems[i].path = createInundationPath(inundation_fig_num, shapeItems, pnts, w);
 		    inundationItems[i].number_shape = inundation_fig_num;
-		    if( inundation_fig_num.size() > inundationItems[inundationItems.size()-1].number_shape.size() )
+		    if(inundation_fig_num.size() > inundationItems[inundationItems.size()-1].number_shape.size())
 			inundationItems[inundationItems.size()-1].path = newPath;
 		}
-		if( inundationItems[i].number_shape.size()==2 )
+		if(inundationItems[i].number_shape.size() == 2)
 		{
-		    for( int j=0; j < shapeItems.size(); j++ )
+		    for(int j = 0; j < shapeItems.size(); j++)
 		    {
-			if( ((shapeItems[j].n1 == inundationItems[i].number_shape[0]) && (shapeItems[j].n2 == inundationItems[i].number_shape[1])) ||
-			    ((shapeItems[j].n1 == inundationItems[i].number_shape[1]) && (shapeItems[j].n2 == inundationItems[i].number_shape[0])) )
+			if(((shapeItems[j].n1 == inundationItems[i].number_shape[0]) && (shapeItems[j].n2 == inundationItems[i].number_shape[1])) ||
+				((shapeItems[j].n1 == inundationItems[i].number_shape[1]) && (shapeItems[j].n2 == inundationItems[i].number_shape[0])))
 			    inundation_fig_num.push_back(j);
-			if( inundation_fig_num.size() == 2 ) break;
+			if(inundation_fig_num.size() == 2) break;
 		    }
-		    inundationItems[i].path = createInundationPath( inundation_fig_num, shapeItems, *pnts, w );
+		    inundationItems[i].path = createInundationPath(inundation_fig_num, shapeItems, pnts, w);
 		    inundationItems[i].number_shape = inundation_fig_num;
 		}
 		inundation_fig_num.clear();
 	    }
-	 if( inundationItems_temp.size() && shapeItems.size() && !flag_all )
-	 {
-	    for( int k = 0; k < fill_number.size(); k++ )
-		inundationItems_temp.replace( fill_number[k], inundationItems[k] );
+	if(inundationItems_temp.size() && shapeItems.size() && !flag_all)
+	{
+	    for(int k = 0; k < fill_number.size(); k++) inundationItems_temp.replace(fill_number[k], inundationItems[k]);
 	    inundationItems.clear();
 	    inundationItems = inundationItems_temp;
-	 }
+	}
 	itemInMotion = 0;
-	index	= -1;
-	if( rectItems.size() )	rectItems.clear();
-	flag_ctrl    = false;
+	index = -1;
+	rectItems.clear();
+	flag_ctrl = false;
     }
-    if( up && !w->allAttrLoad( ) && ( (paint || (shapeItems_temp.size() == 0) || (inundationItems_temp.size() == 0))
-	|| (flag_geom && !paint) ) )
+    if(up && !w->allAttrLoad() && (paint || !shapeItems_temp.size() || !inundationItems_temp.size() || (flag_geom && !paint)))
     {
-	if( uiPrmPos == -1 ){ paintImage( w ); }
-	else { paintImage( w ); w->update(); }
+	paintImage(w);
+	if(uiPrmPos != -1) w->update();
 	flag_geom = false;
 	shapePnts_temp = elFD->shapePnts;
 	shapeWidths_temp = elFD->shapeWidths;
@@ -992,9 +533,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	shapeItems_temp = elFD->shapeItems;
 	inundationItems_temp = elFD->inundationItems;
     }
-    //- UnScaling the widths -
-    if( rel_list && !w->allAttrLoad( ) && ( runW || (devW && !devW->edit()) ) )
-	elFD->shapeWidths = shapeWidths_unScale;
+    //> UnScaling the widths
+    if(rel_list && !w->allAttrLoad() && (runW || (devW && !devW->edit()))) elFD->shapeWidths = shapeWidths_unScale;
+
     return up;
 }
 

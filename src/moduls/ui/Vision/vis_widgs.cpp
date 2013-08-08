@@ -1009,6 +1009,26 @@ void TextEdit::find( )
     }
 }
 
+//*********************************************
+//* TreeView item delegate for ComboBox.      *
+//*********************************************
+/*TreeComboDelegate::TreeComboDelegate( QObject *parent ) : QItemDelegate(parent)
+{
+
+}
+
+void TreeComboDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    if(index.isValid() && index.column() == 0)
+    {
+	QStyleOptionViewItem opt = option;
+	opt.font = index.data(Qt::FontRole).value<QFont>();
+        drawDisplay(painter, opt, opt.rect, index.data(Qt::UserRole).toString());
+        return;
+    }
+    QItemDelegate::paint(painter, option, index);
+}*/
+
 //****************************************
 //* Shape widget view                    *
 //****************************************

@@ -1694,7 +1694,7 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	    for( int i_l = 0; i_l < types.size(); i_l++ )
 		if( atoi(TSYS::strSepParse(types[i_l].toAscii().data(),1,'|').c_str()) == index.data(Qt::DisplayRole).toInt() )
 		    val = TSYS::strSepParse(types[i_l].toAscii().data(),0,'|').c_str();
-	    drawDisplay(painter, option, option.rect,val);
+	    drawDisplay(painter, option, option.rect, val);
 	    return;
 	}
 	if( index.column() == 4 )
@@ -1710,7 +1710,7 @@ void VisItProp::ItemDelegate::paint(QPainter *painter, const QStyleOptionViewIte
 	    return;
 	}
     }
-    QItemDelegate::paint(painter,option,index);
+    QItemDelegate::paint(painter, option, index);
 }
 
 QWidget *VisItProp::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const

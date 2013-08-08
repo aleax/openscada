@@ -137,17 +137,18 @@ void OrigElFigure::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd( new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"","1","0;99","","20") );
-	attrAdd( new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"","#000000","","","21") );
-	attrAdd( new TFld("lineStyle",_("Line:style"),TFld::Integer,TFld::Selected,"","0","0;1;2",_("Solid;Dashed;Dotted"),"22") );
-	attrAdd( new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","0;99","","23") );
-	attrAdd( new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","24") );
-	attrAdd( new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","","25") );
-	attrAdd( new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","","26") );
-	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","","28") );
-	attrAdd( new TFld("elLst",_("Elements list"),TFld::String,TFld::NoStrTransl|TFld::FullText|Attr::Active,"","","","","27") );
+	attrAdd(new TFld("lineWdth",_("Line:width"),TFld::Integer,TFld::NoFlag,"","1","0;99","",TSYS::int2str(A_ElFigLineW).c_str()));
+	attrAdd(new TFld("lineClr",_("Line:color"),TFld::String,Attr::Color,"","#000000","","",TSYS::int2str(A_ElFigLineClr).c_str()));
+	attrAdd(new TFld("lineStyle",_("Line:style"),TFld::Integer,TFld::Selected,"","0",
+	    TSYS::strMess("%d;%d;%d",EF_SOLID,EF_DASH,EF_DOT).c_str(),_("Solid;Dashed;Dotted"),TSYS::int2str(A_ElFigLineStl).c_str()));
+	attrAdd(new TFld("bordWdth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","0;99","",TSYS::int2str(A_ElFigBordW).c_str()));
+	attrAdd(new TFld("bordClr",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",TSYS::int2str(A_ElFigBordClr).c_str()));
+	attrAdd(new TFld("fillColor",_("Fill:color"),TFld::String,Attr::Color,"","","","",TSYS::int2str(A_ElFigFillClr).c_str()));
+	attrAdd(new TFld("fillImg",_("Fill:image"),TFld::String,Attr::Image,"","","","",TSYS::int2str(A_ElFigFillImg).c_str()));
+	attrAdd(new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"","0","-360;360","",TSYS::int2str(A_ElFigOrient).c_str()));
+	attrAdd(new TFld("elLst",_("Elements list"),TFld::String,TFld::NoStrTransl|TFld::FullText|Attr::Active,"","","","",TSYS::int2str(A_ElFigElLst).c_str()));
     }
 }
 
@@ -166,9 +167,9 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		int p = atoi(el->attr("p").c_str());
 		switch(p)
 		{
-		    case 21: case 24: case 25:	el->setAttr("help",Widget::helpColor());	break;
-		    case 26:	el->setAttr("help",Widget::helpImg());	break;
-		    case 27:	el->setAttr("SnthHgl","1")->setAttr("help",
+		    case A_ElFigLineClr: case A_ElFigBordClr: case A_ElFigFillClr: el->setAttr("help",Widget::helpColor());	break;
+		    case A_ElFigFillImg: el->setAttr("help",Widget::helpImg());	break;
+		    case A_ElFigElLst: el->setAttr("SnthHgl","1")->setAttr("help",
 		    _("The list of elements can contain:\n"
 	              "  line:(x|y)|{1}:(x|y)|{2}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
 	              "  arc:(x|y)|{1}:(x|y)|{2}:(x|y)|{3}:(x|y)|{4}:(x|y)|{5}:[width|w{n}]:[color|c{n}]:[bord_w|w{n}]:[bord_clr|c{n}]:[line_stl|s{n}]\n"
@@ -195,10 +196,10 @@ bool OrigElFigure::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    	      "  fill:(25|50):(25|50):c2:i2\n"
 	              "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"));
 		    default:
-			switch((p-30)%6)
+			switch((p-A_ElFigIts)%A_ElFigItsSz)
 			{
-			    case 3:	el->setAttr("help",Widget::helpColor());	break;
-			    case 4:	el->setAttr("help",Widget::helpImg());		break;
+			    case A_ElFigItClr:	el->setAttr("help",Widget::helpColor());	break;
+			    case A_ElFigItImg:	el->setAttr("help",Widget::helpImg());		break;
 			}
 			break;
 		}
@@ -231,12 +232,12 @@ bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 	//> Parse last attributes list and make point list
 	for(int i_p = 0; i_p < 2; i_p++)
 	{
-	    string ls_w = (i_p==0)?ls_prev:cfg.getS();
-	    map<int,char> &pntls_w = (i_p==0)?pntls_prev:pntls;
-	    map<int,char> &wls_w = (i_p==0)?wls_prev:wls;
-	    map<int,char> &clrls_w = (i_p==0)?clrls_prev:clrls;
-	    map<int,char> &imgls_w = (i_p==0)?imgls_prev:imgls;
-	    map<int,char> &lstls_w = (i_p==0)?lstls_prev:lstls;
+	    string ls_w = (i_p == 0) ? ls_prev : cfg.getS();
+	    map<int,char> &pntls_w = (i_p == 0) ? pntls_prev : pntls;
+	    map<int,char> &wls_w = (i_p == 0) ? wls_prev : wls;
+	    map<int,char> &clrls_w = (i_p == 0) ? clrls_prev : clrls;
+	    map<int,char> &imgls_w = (i_p == 0) ? imgls_prev : imgls;
+	    map<int,char> &lstls_w = (i_p == 0) ? lstls_prev : lstls;
 	    for(int off = 0; (sel=TSYS::strSepParse(ls_w,0,'\n',&off)).size(); )
 	    {
 		int offe = 0;
@@ -263,61 +264,63 @@ bool OrigElFigure::attrChange( Attr &cfg, TVariant prev )
 
 	//> Add new dynamic items
 	//>> Add no present dynamic points
-	for( map<int,char>::iterator it = pntls.begin(); it != pntls.end(); ++it )
-	    if( it->first && pntls_prev.find(it->first) == pntls_prev.end() && !cfg.owner()->attrPresent("p"+TSYS::int2str(it->first)+"x") )
+	for(map<int,char>::iterator it = pntls.begin(); it != pntls.end(); ++it)
+	    if(it->first && pntls_prev.find(it->first) == pntls_prev.end() && !cfg.owner()->attrPresent("p"+TSYS::int2str(it->first)+"x"))
 	    {
-		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"x").c_str(),(_("Point ")+TSYS::int2str(it->first)+":x").c_str(),
-		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*6).c_str()) );
-		cfg.owner()->attrAdd( new TFld(("p"+TSYS::int2str(it->first)+"y").c_str(),(_("Point ")+TSYS::int2str(it->first)+":y").c_str(),
-		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(30+it->first*6+1).c_str()) );
+		cfg.owner()->attrAdd(new TFld(("p"+TSYS::int2str(it->first)+"x").c_str(),(_("Point ")+TSYS::int2str(it->first)+":x").c_str(),
+		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(A_ElFigIts+it->first*A_ElFigItsSz+A_ElFigItPntX).c_str()));
+		cfg.owner()->attrAdd(new TFld(("p"+TSYS::int2str(it->first)+"y").c_str(),(_("Point ")+TSYS::int2str(it->first)+":y").c_str(),
+		    TFld::Real,Attr::Mutable,"","0","","",TSYS::int2str(A_ElFigIts+it->first*A_ElFigItsSz+A_ElFigItPntY).c_str()));
 	    }
 	//>> Add no present dynamic widths
-	for( map<int,char>::iterator it = wls.begin(); it != wls.end(); ++it )
-	    if( it->first && wls_prev.find(it->first) == wls_prev.end() && !cfg.owner()->attrPresent("w"+TSYS::int2str(it->first)) )
-		cfg.owner()->attrAdd( new TFld(("w"+TSYS::int2str(it->first)).c_str(),(_("Width ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::Real,Attr::Mutable,"","1","","",TSYS::int2str(30+it->first*6+2).c_str()) );
+	for(map<int,char>::iterator it = wls.begin(); it != wls.end(); ++it)
+	    if(it->first && wls_prev.find(it->first) == wls_prev.end() && !cfg.owner()->attrPresent("w"+TSYS::int2str(it->first)))
+		cfg.owner()->attrAdd(new TFld(("w"+TSYS::int2str(it->first)).c_str(),(_("Width ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::Real,Attr::Mutable,"","1","","",TSYS::int2str(A_ElFigIts+it->first*A_ElFigItsSz+A_ElFigItW).c_str()));
 	//>> Add no present dynamic colors
-	for( map<int,char>::iterator it = clrls.begin(); it != clrls.end(); ++it )
-	    if( it->first && clrls_prev.find(it->first) == clrls_prev.end() && !cfg.owner()->attrPresent("c"+TSYS::int2str(it->first)) )
-		cfg.owner()->attrAdd( new TFld(("c"+TSYS::int2str(it->first)).c_str(),(_("Color ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::String,Attr::Mutable|Attr::Color,"","","","",TSYS::int2str(30+it->first*6+3).c_str()) );
+	for(map<int,char>::iterator it = clrls.begin(); it != clrls.end(); ++it)
+	    if(it->first && clrls_prev.find(it->first) == clrls_prev.end() && !cfg.owner()->attrPresent("c"+TSYS::int2str(it->first)))
+		cfg.owner()->attrAdd(new TFld(("c"+TSYS::int2str(it->first)).c_str(),(_("Color ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::String,Attr::Mutable|Attr::Color,"","","","",TSYS::int2str(A_ElFigIts+it->first*A_ElFigItsSz+A_ElFigItClr).c_str()));
 	//>> Add no present dynamic images
-	for( map<int,char>::iterator it = imgls.begin(); it != imgls.end(); ++it )
-	    if( it->first && imgls_prev.find(it->first) == imgls_prev.end() && !cfg.owner()->attrPresent("i"+TSYS::int2str(it->first)) )
-		cfg.owner()->attrAdd( new TFld(("i"+TSYS::int2str(it->first)).c_str(),(_("Image ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::String,Attr::Mutable|Attr::Image,"","","","",TSYS::int2str(30+it->first*6+4).c_str()) );
+	for(map<int,char>::iterator it = imgls.begin(); it != imgls.end(); ++it)
+	    if(it->first && imgls_prev.find(it->first) == imgls_prev.end() && !cfg.owner()->attrPresent("i"+TSYS::int2str(it->first)))
+		cfg.owner()->attrAdd(new TFld(("i"+TSYS::int2str(it->first)).c_str(),(_("Image ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::String,Attr::Mutable|Attr::Image,"","","","",TSYS::int2str(A_ElFigIts+it->first*A_ElFigItsSz+A_ElFigItImg).c_str()));
 	//>> Add no present line styles
-	for( map<int,char>::iterator it = lstls.begin(); it != lstls.end(); ++it )
-	    if( it->first && lstls_prev.find(it->first) == lstls_prev.end() && !cfg.owner()->attrPresent("s"+TSYS::int2str(it->first)) )
-		cfg.owner()->attrAdd( new TFld(("s"+TSYS::int2str(it->first)).c_str(),(_("Style ")+TSYS::int2str(it->first)).c_str(),
-		    TFld::Integer,Attr::Mutable|TFld::Selected,"","0","0;1;2",_("Solid;Dashed;Dotted"),TSYS::int2str(30+it->first*6+5).c_str()) );
+	for(map<int,char>::iterator it = lstls.begin(); it != lstls.end(); ++it)
+	    if(it->first && lstls_prev.find(it->first) == lstls_prev.end() && !cfg.owner()->attrPresent("s"+TSYS::int2str(it->first)))
+		cfg.owner()->attrAdd(new TFld(("s"+TSYS::int2str(it->first)).c_str(),(_("Style ")+TSYS::int2str(it->first)).c_str(),
+		    TFld::Integer,Attr::Mutable|TFld::Selected,"","0",
+		    TSYS::strMess("%d;%d;%d",EF_SOLID,EF_DASH,EF_DOT).c_str(),_("Solid;Dashed;Dotted"),
+		    TSYS::int2str(A_ElFigIts+it->first*A_ElFigItsSz+A_ElFigItStl).c_str()));
 
 	//> Delete no dynamic items
 	//>> Delete dynamic points
-	for( map<int,char>::iterator it = pntls_prev.begin(); it != pntls_prev.end(); ++it )
-	    if( it->first && pntls.find(it->first) == pntls.end() )
+	for(map<int,char>::iterator it = pntls_prev.begin(); it != pntls_prev.end(); ++it)
+	    if(it->first && pntls.find(it->first) == pntls.end())
 	    {
 		cfg.owner()->attrDel("p"+TSYS::int2str(it->first)+"x");
 		cfg.owner()->attrDel("p"+TSYS::int2str(it->first)+"y");
 	    }
 	//>> Delete dynamic widths
-	for( map<int,char>::iterator it = wls_prev.begin(); it != wls_prev.end(); ++it )
-	    if( it->first && wls.find(it->first) == wls.end() )
+	for(map<int,char>::iterator it = wls_prev.begin(); it != wls_prev.end(); ++it)
+	    if(it->first && wls.find(it->first) == wls.end())
 		cfg.owner()->attrDel("w"+TSYS::int2str(it->first));
 	//>> Delete dynamic colors
-	for( map<int,char>::iterator it = clrls_prev.begin(); it != clrls_prev.end(); ++it )
-	    if( it->first && clrls.find(it->first) == clrls.end() )
+	for(map<int,char>::iterator it = clrls_prev.begin(); it != clrls_prev.end(); ++it)
+	    if(it->first && clrls.find(it->first) == clrls.end())
 		cfg.owner()->attrDel("c"+TSYS::int2str(it->first));
 	//>> Delete dynamic images
-	for( map<int,char>::iterator it = imgls_prev.begin(); it != imgls_prev.end(); ++it )
-	    if( it->first && imgls.find(it->first) == imgls.end() )
+	for(map<int,char>::iterator it = imgls_prev.begin(); it != imgls_prev.end(); ++it)
+	    if(it->first && imgls.find(it->first) == imgls.end())
 		cfg.owner()->attrDel("i"+TSYS::int2str(it->first));
 	//>> Delete dynamic line styles
-	for( map<int,char>::iterator it = lstls_prev.begin(); it != lstls_prev.end(); ++it )
-	    if( it->first && lstls.find(it->first) == lstls.end() )
+	for(map<int,char>::iterator it = lstls_prev.begin(); it != lstls_prev.end(); ++it)
+	    if(it->first && lstls.find(it->first) == lstls.end())
 		cfg.owner()->attrDel("s"+TSYS::int2str(it->first));
     }
-    return Widget::attrChange(cfg,prev);
+    return Widget::attrChange(cfg, prev);
 }
 
 //*************************************************
@@ -345,12 +348,12 @@ void OrigFormEl::postEnable( int flag )
     if(flag&TCntrNode::NodeConnect)
 	attrAdd(new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",F_LINE_ED,F_TEXT_ED,F_CHECK_BOX,F_BUTTON,F_COMBO,F_LIST,F_TREE,F_SLIDER,F_SCROLL_BAR).c_str(),
-	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"),"20"));
+	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"),TSYS::int2str(A_FormElType).c_str()));
 }
 
 bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 {
-    if(cfg.flgGlob()&Attr::Active && cfg.id() == "elType")
+    if((cfg.flgGlob()&Attr::Active) && cfg.id() == "elType")
     {
 	//> Delete specific attributes
 	if(cfg.getI() != prev.getI())
@@ -398,53 +401,53 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	switch(cfg.getI())
 	{
 	    case F_LINE_ED:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21"));
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",TSYS::int2str(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("view",_("View"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,"1","0",
 		    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d",FL_TEXT,FL_COMBO,FL_INTEGER,FL_REAL,FL_TIME,FL_DATE,FL_DATE_TM).c_str(),
-		    _("Text;Combo;Integer;Real;Time;Date;Date and time"),"22"));
-		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","23"));
-		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24"));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
+		    _("Text;Combo;Integer;Real;Time;Date;Date and time"),TSYS::int2str(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",TSYS::int2str(A_FormElMixP2).c_str()));
+		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",TSYS::int2str(A_FormElMixP3).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",TSYS::int2str(A_FormElFont).c_str()));
 		break;
 	    case F_TEXT_ED:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","21"));
-		cfg.owner()->attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","","22"));
-		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","","24"));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",TSYS::int2str(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,Attr::Mutable,"1","1","","",TSYS::int2str(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("confirm",_("Confirm"),TFld::Boolean,Attr::Mutable,"","1","","",TSYS::int2str(A_FormElMixP3).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",TSYS::int2str(A_FormElFont).c_str()));
 		break;
 	    case F_CHECK_BOX:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21"));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
-		cfg.owner()->attrAt("name").at().fld().setReserve("26");
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","",TSYS::int2str(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",TSYS::int2str(A_FormElFont).c_str()));
+		cfg.owner()->attrAt("name").at().fld().setReserve(TSYS::int2str(A_FormElName));
 		break;
 	    case F_BUTTON:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","","21"));
-		cfg.owner()->attrAdd(new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","","22"));
-		cfg.owner()->attrAdd(new TFld("color",_("Color:button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","23"));
-		cfg.owner()->attrAdd(new TFld("colorText",_("Color:text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","","27"));
-		cfg.owner()->attrAdd(new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","","24"));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
-		cfg.owner()->attrAt("name").at().fld().setReserve("26");
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","",TSYS::int2str(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","",TSYS::int2str(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("color",_("Color:button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",TSYS::int2str(A_FormElMixP2).c_str()));
+		cfg.owner()->attrAdd(new TFld("colorText",_("Color:text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",TSYS::int2str(A_FormElMixP4).c_str()));
+		cfg.owner()->attrAdd(new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","",TSYS::int2str(A_FormElMixP3).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",TSYS::int2str(A_FormElFont).c_str()));
+		cfg.owner()->attrAt("name").at().fld().setReserve(TSYS::int2str(A_FormElName));
 		break;
 	    case F_COMBO: case F_LIST: case F_TREE:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","","21"));
-		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","","22"));
-		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25"));
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",TSYS::int2str(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",TSYS::int2str(A_FormElMixP1).c_str()));
+		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",TSYS::int2str(A_FormElFont).c_str()));
 		break;
 	    case F_SLIDER: case F_SCROLL_BAR:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","","21"));
-		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","","22"));
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Integer,Attr::Mutable,"20","0","","",TSYS::int2str(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("cfg",_("Configuration"),TFld::String,Attr::Mutable,"100","0:0:100:1:10","","",TSYS::int2str(A_FormElMixP1).c_str()));
 		break;
 	}
     }
-    else if(cfg.flgGlob()&Attr::Active && cfg.id() == "view")
+    else if((cfg.flgGlob()&Attr::Active) && cfg.id() == "view")
     {
 	TFld::Type	ntp = TFld::String;
 	int		flg = Attr::Mutable;
-	VCA::Attr::SelfAttrFlgs	sflg = cfg.owner()->attrAt("value").at().flgSelf();
+	Attr::SelfAttrFlgs	sflg = cfg.owner()->attrAt("value").at().flgSelf();
 	string		val = cfg.owner()->attrAt("value").at().getS();
-	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl( );
-	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal( );
+	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl();
+	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal();
 	switch(cfg.getI())
 	{
 	    case FL_INTEGER: case FL_TIME:	ntp = TFld::Integer;	break;
@@ -453,14 +456,14 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	}
 	int apos = cfg.owner()->attrPos("value");
 	cfg.owner()->attrDel("value");
-	cfg.owner()->attrAdd( new TFld("value",_("Value"),ntp,flg,"200","","","","21"), apos );
+	cfg.owner()->attrAdd(new TFld("value",_("Value"),ntp,flg,"200","","","",TSYS::int2str(A_FormElValue).c_str()), apos);
 	cfg.owner()->attrAt("value").at().setFlgSelf(sflg);
 	cfg.owner()->attrAt("value").at().setS(val);
 	cfg.owner()->attrAt("value").at().setCfgTempl(cfgTmpl);
 	cfg.owner()->attrAt("value").at().setCfgVal(cfgVal);
     }
 
-    return Widget::attrChange(cfg,prev);
+    return Widget::attrChange(cfg, prev);
 }
 
 bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
@@ -469,7 +472,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     //> Get page info
     if(opt->name() == "info")
     {
-	Widget::cntrCmdAttributes(opt,src);
+	Widget::cntrCmdAttributes(opt, src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	    switch(src->attrAt("elType").at().getI())
@@ -560,7 +563,7 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     }
 
     //> Process command to page
-    return Widget::cntrCmdAttributes(opt,src);
+    return Widget::cntrCmdAttributes(opt, src);
 }
 
 //************************************************

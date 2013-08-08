@@ -33,6 +33,7 @@
 #include <QVariant>
 #include <QGridLayout>
 #include <QSyntaxHighlighter>
+#include <QItemDelegate>
 
 #include <xml.h>
 
@@ -283,6 +284,18 @@ namespace VISION
 	    QMainWindow		*stWin;
 	    QTimer		*bt_tm;
     };
+
+    //*********************************************
+    //* TreeView item delegate for ComboBox.      *
+    //*********************************************
+    /*class TreeComboDelegate: public QItemDelegate
+    {
+        public:
+            //Public methods
+            TreeComboDelegate( QObject *parent = 0 );
+
+	    void paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const;
+    };*/
 
     //****************************************
     //* Shape widget view                    *

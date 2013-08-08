@@ -28,12 +28,15 @@
 #include <tsys.h>
 #include <tmess.h>
 
+#include "../VCAEngine/types.h"
+
 #include "web_vision.h"
 #include "vca_sess.h"
 
 extern char *WebVisionVCA_js;
 
 using namespace WebVision;
+using namespace VCA;
 
 //*************************************************
 //* VCASess					  *
@@ -4060,135 +4063,78 @@ void VCAElFigure::postReq( SSess &ses )
 
 void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 {
-    ResAlloc res(mRes,true);
+    ResAlloc res(mRes, true);
     XMLNode *req_el;
     Point StartMotionPos, EndMotionPos, CtrlMotionPos_1, CtrlMotionPos_2, CtrlMotionPos_3, CtrlMotionPos_4;
     rel_list = false;
     for(unsigned i_a = 0; i_a < node.childSize(); i_a++)
     {
 	req_el = node.childGet(i_a);
-	if( req_el->name() != "el" )	continue;
-	int uiPrmPos = atoi(req_el->attr("p").c_str());
+	if(req_el->name() != "el") continue;
 
-	switch( uiPrmPos )
+	int uiPrmPos = atoi(req_el->attr("p").c_str());
+	switch(uiPrmPos)
 	{
-	    case 6:	//active
-		active = (bool)atoi(req_el->text().c_str());
-		break;
-	    case 9: 	//width
-		width = atof(req_el->text().c_str());
-		break;
-	    case 10:	//height
-		height = atof(req_el->text().c_str());
-		break;
-	    case 12:	//geomMargin
-		geomMargin = atoi(req_el->text().c_str());
-		break;
-	    case 13:	//geomXsc
-		rel_list = true;
-		break;
-	    case 14:	//geomXsc
-		rel_list = true;
-		break;
-	    case 20:	//lineWdth
-		lineWdth = (int)TSYS::realRound(atof(req_el->text().c_str()));
-		rel_list = true;
-		break;
-	    case 21:	//lineClr
-		lineClr =  mod->colorParse(req_el->text());
+	    case A_ACTIVE: active = (bool)atoi(req_el->text().c_str());	break;
+	    case A_GEOM_W: width = atof(req_el->text().c_str());	break;
+	    case A_GEOM_H: height = atof(req_el->text().c_str());	break;
+	    case A_GEOM_MARGIN: geomMargin = atoi(req_el->text().c_str());	break;
+	    case A_GEOM_X_SC: rel_list = true;	break;
+	    case A_GEOM_Y_SC: rel_list = true;	break;
+	    case A_ElFigLineW: lineWdth = (int)TSYS::realRound(atof(req_el->text().c_str())); rel_list = true;	break;
+	    case A_ElFigLineClr:
+		lineClr = mod->colorParse(req_el->text());
 		if(lineClr == -1) lineClr = (127<<24)+(0<<16)+(0<<8)+0;
 		if(lineClr == 0) lineClr = (0<<24)+(250<<16)+(0<<8)+0;
 		rel_list = true;
 		break;
-	    case 22:	//lineStyle
-		lineStyle = atoi(req_el->text().c_str());
-		rel_list = true;
-		break;
-	    case 23:	//bordWdth
-		bordWdth = (int)TSYS::realRound(atof(req_el->text().c_str()));
-		rel_list = true;
-		break;
-	    case 24:	//bordClr
+	    case A_ElFigLineStl: lineStyle = atoi(req_el->text().c_str()); rel_list = true;	break;
+	    case A_ElFigBordW: bordWdth = (int)TSYS::realRound(atof(req_el->text().c_str())); rel_list = true;	break;
+	    case A_ElFigBordClr:
 		bordClr = mod->colorParse(req_el->text());
-		if(bordClr == -1) bordClr = (127<<24)+(0<<16)+(0<<8)+0;
-		if(bordClr == 0) bordClr = (0<<24)+(250<<16)+(0<<8)+0;
+		if(bordClr == -1) bordClr = 0x7F000000;
+		if(bordClr == 0)  bordClr = 0x00FA0000;
 		rel_list = true;
 		break;
-	    case 25:	//fillClr
+	    case A_ElFigFillClr:
 		fillClr = mod->colorParse(req_el->text());
-		if(fillClr == -1)fillClr = (127<<24)+(0<<16)+(0<<8)+0;
-		if(fillClr == 0) fillClr = (0<<24)+(250<<16)+(0<<8)+0;
+		if(fillClr == -1) fillClr = 0x7F000000;
+		if(fillClr == 0)  fillClr = 0x00FA0000;
 		rel_list = true;
 		break;
-	    case 26:
-	    {
-		imgDef = req_el->text();
-		rel_list = true;
-		break;
-	    }
-	    case 28:
-	    {
-		orient = atof(req_el->text().c_str());
-		rel_list = true;
-		break;
-	    }
-	    case 27:	//elLst
-		elLst = req_el->text();
-		rel_list = true;
-		break;
+	    case A_ElFigFillImg: imgDef = req_el->text(); rel_list = true;		break;
+	    case A_ElFigOrient: orient = atof(req_el->text().c_str()); rel_list = true;	break;
+	    case A_ElFigElLst: elLst = req_el->text(); rel_list = true;			break;
 	    default:
-		if( uiPrmPos >= 30 )
+		if(uiPrmPos >= A_ElFigIts)
 		{
-		    int pnt  = (uiPrmPos-30)/6;
-		    int patr = (uiPrmPos-30)%6;
-		    Point pnt_ = (pnts)[pnt];
-		    switch( patr )
+		    int pnt  = (uiPrmPos-A_ElFigIts)/A_ElFigItsSz;
+		    int patr = (uiPrmPos-A_ElFigIts)%A_ElFigItsSz;
+		    Point pnt_ = pnts[pnt];
+		    switch(patr)
 		    {
-			case 0 :
-			    pnt_.x = atof(req_el->text().c_str());
-			    (pnts)[pnt] = pnt_;
+			case A_ElFigItPntX: pnt_.x = atof(req_el->text().c_str()); pnts[pnt] = pnt_; rel_list = true;	break;
+			case A_ElFigItPntY: pnt_.y = atof(req_el->text().c_str()); pnts[pnt] = pnt_; rel_list = true;	break;
+			case A_ElFigItW: widths[pnt] = (int)TSYS::realRound(atof(req_el->text().c_str())); rel_list = true;	break;
+			case A_ElFigItClr:
+			    colors[pnt] = mod->colorParse(req_el->text());
+			    if(colors[pnt] == -1) colors[pnt] = 0x7F000000;
+			    if(colors[pnt] == 0)  colors[pnt] = 0x00FA0000;
 			    rel_list = true;
 			    break;
-			case 1 :
-			    pnt_.y = atof(req_el->text().c_str());
-			    (pnts)[pnt] = pnt_;
-			    rel_list = true;
-			    break;
-			case 2 :
-			    (widths)[pnt] = (int)TSYS::realRound(atof(req_el->text().c_str()));
-			    rel_list = true;
-			    break;
-			case 3 :
-			    (colors)[pnt] = mod->colorParse(req_el->text());
-			    if((colors)[pnt] == -1) (colors)[pnt] = (127<<24)+(0<<16)+(0<<8)+0;
-			    if((colors)[pnt] == 0) (colors)[pnt] = (0<<24)+(250<<16)+(0<<8)+0;
-			    rel_list = true;
-			    break;
-			case 4 :
-			    (images)[pnt] = req_el->text();
-			    rel_list = true;
-			    break;
-			case 5:
-			    (styles)[pnt] = atoi(req_el->text().c_str());
-			    rel_list = true;
-			    break;
+			case A_ElFigItImg: images[pnt] = req_el->text(); rel_list = true;		break;
+			case A_ElFigItStl: styles[pnt] = atoi(req_el->text().c_str()); rel_list = true;	break;
 		    }
-
 		}
 	}
     }
-    if( rel_list)
+    if(rel_list)
     {
-	for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
-	    if(pi->first <= -10 ) pnts.erase ( pi++ );
-	    else ++pi;
-	string sel;
-	int map_index = -10;
-	int  p[5];
-	int lnwidth;
-	int bord_width;
-	int color;
-	int bord_color;
+	for(PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
+	    if(pi->first <= ShapeItem::StatIts) pnts.erase(pi++); else ++pi;
+	string sel, el_s;
+	vector<int> p;
+	int map_index = ShapeItem::StatIts, lnwidth, bord_width, color, bord_color;
 	string ln_st;
 	int style;
 	double t_start, t_end, a, b, ang;
@@ -4196,506 +4142,203 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	Point ip[5];
 	shapeItems.clear();
 	inundationItems.clear();
-	for( int off = 0; (sel=TSYS::strLine(elLst,0,&off)).size(); )
+	for(int off = 0, el_off = 0; (sel=TSYS::strLine(elLst,0,&off)).size(); el_off = 0)
 	{
-	    int el_off = 0;
-	    string el = TSYS::strSepParse(sel,0,':',&el_off);
-	    if( el == "line" )
-	    {
-		//-- Reading anf setting attributes for the current line --
-		float x_s, y_s;
-		string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
-		else
+	    string el = TSYS::strSepParse(sel, 0, ':', &el_off);
+	    ShapeItem::Type elTp;
+            int nPnts = 0, servPnts;
+	    if(el == "line")            { elTp = ShapeItem::Line; nPnts = 2; servPnts = 2; }
+            else if(el == "arc")        { elTp = ShapeItem::Arc; nPnts = 5; servPnts = 2; }
+            else if(el == "bezier")     { elTp = ShapeItem::Bezier; nPnts = 4; servPnts = 2; }
+            else if(el == "fill")       { elTp = ShapeItem::Fill; nPnts = -1; servPnts = -1; }
+            else continue;
+
+	    //>> Reading anf setting attributes for the current line
+	    //>>> Points
+	    float x_s, y_s;
+	    int w_s;
+            bool pnts_ok = true;
+            p.clear();
+	    for(int i_p = 0, off_last = 0; pnts_ok && (nPnts < 0 || i_p < nPnts); i_p++)
+            {
+		el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) == 2)
 		{
 		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01 )
-			    {
-				p[0] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[0] = map_index;
-			(pnts)[map_index] = Point(x_s,y_s);
-			map_index -= 1;
-		    }
+		    //>>> Detecting if there is a point with same coordinates in the map
+		    for(PntMap::reverse_iterator pi = pnts.rbegin(); (servPnts < 0 || i_p < servPnts) && !fl && pi != pnts.rend(); ++pi)
+			if(pi->first <= ShapeItem::StatIts && fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
+			    fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01)
+			{ p.push_back(pi->first); fl = true; }
+		    if(!fl) { p.push_back(map_index--); pnts[p[i_p]] = Point(x_s, y_s); }
 		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01 )
-			    {
-				p[1] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[1] = map_index;
-			(pnts)[map_index] = Point(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
+		else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) p.push_back(w_s);
+		else { pnts_ok = false; el_off = off_last; }
+                off_last = el_off;
+            }
+            if(!pnts_ok && nPnts > 0) continue;
+	    //>>> Other properties
+            switch(elTp)
+            {
+                case ShapeItem::Line: case ShapeItem::Arc: case ShapeItem::Bezier:
+            	{
+            	    //>>> Line width
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) lnwidth  = widths[w_s];
+		    else if(sscanf(el_s.c_str(), "%d", &w_s) == 1 ) lnwidth = w_s;
+		    else lnwidth = lineWdth;
 
-		int w;
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) lnwidth  = (widths)[w];
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) lnwidth = w;
-		else lnwidth = lineWdth;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = (colors)[w];
-		else if( mod->colorParse(el_s) != -1 )
-		{
-		    if(mod->colorParse(el_s) == 0) color = (0<<24)+(250<<16)+(0<<8)+0;
-		    else color = mod->colorParse(el_s);
-		}
-		else color = lineClr;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) bord_width  = (widths)[w];
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) bord_width = w;
-		else bord_width = bordWdth;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = (colors)[w];
-		else if( mod->colorParse(el_s) != -1 )
-		{
-		    if(mod->colorParse(el_s) == 0) bord_color = (0<<24)+(250<<16)+(0<<8)+0;
-		    else bord_color = mod->colorParse(el_s);
-		}
-		else bord_color = bordClr;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
-		else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
-		    style = atoi(el_s.c_str());
-		else style = lineStyle;
-
-		//-- Reading coordinates for the points of the line --
-		for( int i_p = 0; i_p < 2; i_p++ )
-		    ip[i_p] = (pnts)[p[i_p]];
-		if( ip[0].y<=ip[1].y )
-		    ang=360-angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
-		else
-		    ang=angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
-		bool flag_brd = false;
-		if( lnwidth > 3 && bord_width == 0 )
-		{
-		    lnwidth -= 2;
-		    bord_width = 1;
-		    bord_color = color;
-		    flag_brd = true;
-		}
-		shapeItems.push_back( ShapeItem(p[0],p[1],-1,-1,-1,Point(0,0), ang,
-				      color,bord_color,lnwidth,bord_width,1,style,flag_brd) );
-	    }
-	    if( el == "arc" )
-	    {
-		//-- Reading anf setting attributes for the current arc --
-		float x_s, y_s;
-		string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str() );
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); ++pi )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01 )
-			    {
-				p[0] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[0] = map_index;
-			(pnts)[map_index] = Point(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::iterator pi = pnts.begin(); pi != pnts.end(); ++pi )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01 )
-			    {
-				p[1] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[1] = map_index;
-			(pnts)[map_index] = Point(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str() );
-		else
-		{
-		    p[2] = map_index;
-		    (pnts)[map_index] = Point(x_s,y_s);
-		    map_index -= 1;
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str() );
-		else
-		{
-		    p[3] = map_index;
-		    (pnts)[map_index] = Point(x_s,y_s);
-		    map_index -= 1;
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[4]  = atoi(el_s.c_str() );
-		else
-		{
-		    p[4] = map_index;
-		    (pnts)[map_index] = Point(x_s,y_s);
-		    map_index -= 1;
-		}
-
-		int w;
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) lnwidth  = (widths)[w];
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) lnwidth = w;
-		else lnwidth = lineWdth;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = (colors)[w];
-		else if( mod->colorParse(el_s) != -1 )
-		{
-		    if(mod->colorParse(el_s) == 0) color = (0<<24)+(250<<16)+(0<<8)+0;
-		    else color = mod->colorParse(el_s);
-		}
-		else color = lineClr;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) bord_width  = (widths)[w];
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) bord_width = w;
-		else bord_width = bordWdth;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = (colors)[w];
-		else if( mod->colorParse(el_s) != -1 )
-		{
-		    if(mod->colorParse(el_s) == 0) bord_color = (0<<24)+(250<<16)+(0<<8)+0;
-		    else bord_color = mod->colorParse(el_s);
-		}
-		else bord_color = bordClr;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
-		else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
-		    style = atoi(el_s.c_str());
-		else style = lineStyle;
-
-		  //-- Reading coordinates for the points of the line --
-		for( int i_p = 0; i_p < 5; i_p++ )
-		    ip[i_p] = (pnts)[p[i_p]];
-		StartMotionPos=ip[0];
-		EndMotionPos=ip[1];
-		CtrlMotionPos_1=ip[2];
-		CtrlMotionPos_2=ip[3];
-		CtrlMotionPos_3=ip[4];
-		MotionWidth=lnwidth;
-		if(CtrlMotionPos_3.y<=CtrlMotionPos_1.y)
-		    ang = angle( CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y) );
-		else ang = 360 - angle( CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y) );
-		a = length(CtrlMotionPos_3, CtrlMotionPos_1);
-		b = length(CtrlMotionPos_2, CtrlMotionPos_1);
-
-		CtrlMotionPos_2 = Point( CtrlMotionPos_1.x+rotate(arc(0.25,a,b),ang).x,
-					 CtrlMotionPos_1.y-rotate(arc(0.25,a,b),ang).y );
-		StartMotionPos = unrotate( StartMotionPos,ang,CtrlMotionPos_1.x,CtrlMotionPos_1.y );
-		if( StartMotionPos.x >= a )
-		{
-		    StartMotionPos.y = (StartMotionPos.y/StartMotionPos.x)*a;
-		    StartMotionPos.x = a;
-		}
-		if( StartMotionPos.x < -a )
-		{
-		    StartMotionPos.y = (StartMotionPos.y/StartMotionPos.x)*(-a);
-		    StartMotionPos.x = -a;
-		}
-		if( StartMotionPos.y <= 0 ) t_start = acos(StartMotionPos.x/a)/(2*M_PI);
-		else t_start = 1 - acos(StartMotionPos.x/a)/(2*M_PI);
-		EndMotionPos = unrotate(EndMotionPos,ang,CtrlMotionPos_1.x,CtrlMotionPos_1.y);
-		if( EndMotionPos.x < -a )
-		{
-		    EndMotionPos.y = (EndMotionPos.y/EndMotionPos.x)*(-a);
-		    EndMotionPos.x = -a;
-		}
-		if( EndMotionPos.x >= a )
-		{
-		    EndMotionPos.y = (EndMotionPos.y/EndMotionPos.x)*a;
-		    EndMotionPos.x = a;
-		}
-		if( EndMotionPos.y <= 0 ) t_end = acos(EndMotionPos.x/a)/(2*M_PI);
-		else t_end = 1-acos(EndMotionPos.x/a)/(2*M_PI);
-		if( t_start > t_end ) t_end += 1;
-		if( (t_end-1) > t_start ) t_end -= 1;
-		//if( t_start == t_end ) t_end += 1;
-		if( fabs(t_start - t_end) < 0.0027777777777 ) t_end+=1;
-		if( t_end > t_start && t_start >= 1 && t_end > 1 )
-		{
-		    t_start -= 1;
-		    t_end -= 1;
-		}
-		CtrlMotionPos_4 = Point( t_start, t_end );
-		bool flag_brd = false;
-		if( lnwidth > 3 && bord_width == 0 )
-		{
-		    lnwidth -= 2;
-		    bord_width = 1;
-		    bord_color = color;
-		    flag_brd = true;
-		}
-		shapeItems.push_back( ShapeItem(p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,ang,color,bord_color,lnwidth,bord_width,2,style,flag_brd) );
-	    }
-	    if( el == "bezier" )
-	    {
-		//-- Reading anf setting attributes for the current arc --
-		float x_s, y_s;
-		string el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[0]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
-			if( pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01 )
-			    {
-				p[0] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[0] = map_index;
-			(pnts)[map_index] = Point(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[1]  = atoi(el_s.c_str());
-		else
-		{
-		    bool fl = false;
-		    //-- Detecting if there is a point with same coordinates in the map --
-		    for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
-			if(pi->first <= -10 )
-			    if( fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01 &&
-				fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01 )
-			    {
-				p[1] = pi->first;
-				fl = true;
-				break;
-			    }
-		    if( !fl )
-		    {
-			p[1] = map_index;
-			(pnts)[map_index] = Point(x_s,y_s);
-			map_index -= 1;
-		    }
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[2]  = atoi(el_s.c_str());
-		else
-		{
-		    p[2] = map_index;
-		    (pnts)[map_index] = Point(x_s,y_s);
-		    map_index -= 1;
-		}
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) p[3]  = atoi(el_s.c_str());
-		else
-		{
-		    p[3] = map_index;
-		    (pnts)[map_index] = Point(x_s,y_s);
-		    map_index -= 1;
-		}
-
-
-		int w;
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) lnwidth  = (widths)[w];
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) lnwidth = w;
-		else lnwidth = lineWdth;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) color  = (colors)[w];
-		else if( mod->colorParse(el_s) != -1 )
-		{
-		    if(mod->colorParse(el_s) == 0) color = (0<<24)+(250<<16)+(0<<8)+0;
-		    else color = mod->colorParse(el_s);
-		}
-		else color = lineClr;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "w%d", &w) == 1 ) bord_width  = (widths)[w];
-		else if( sscanf(el_s.c_str(), "%d", &w) == 1 ) bord_width = w;
-		else bord_width = bordWdth;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "c%d", &w) == 1 ) bord_color  = (colors)[w];
-		else if( mod->colorParse(el_s) != -1 )
-		{
-		    if(mod->colorParse(el_s) == 0) bord_color = (0<<24)+(250<<16)+(0<<8)+0;
-		    else bord_color = mod->colorParse(el_s);
-		}
-		else bord_color = bordClr;
-
-		el_s = TSYS::strSepParse(sel,0,':',&el_off);
-		if( sscanf(el_s.c_str(), "s%d", &w) == 1 ) style  = (styles)[w];
-		else if( el_s.size() && (atoi(el_s.c_str()) == 0 || atoi(el_s.c_str()) == 1 || atoi(el_s.c_str()) == 2) )
-		    style = atoi(el_s.c_str());
-		else style = lineStyle;
-
-		for( int i_p = 0; i_p < 4; i_p++ )
-		    ip[i_p] = (pnts)[p[i_p]];
-		if( ip[0].y<=ip[1].y ) ang=360-angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
-		else ang=angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
-		bool flag_brd = false;
-		if( lnwidth > 3 && bord_width == 0 )
-		{
-		    lnwidth -= 2;
-		    bord_width = 1;
-		    bord_color = color;
-		    flag_brd = true;
-		}
-		shapeItems.push_back( ShapeItem(p[0], p[1], p[2], p[3],-1,Point(0,0),ang,color,bord_color,lnwidth,bord_width,3,style,flag_brd) );
-	    }
-	    if( el == "fill" )
-	    {
-		int zero_pnts = 0;
-		string fl_color_1, fl_img, img;
-		vector <int> fl_pnts;
-		float x_s, y_s;
-		int vl, wn, fl_color;
-		while( true )
-		{
-		    string svl = TSYS::strSepParse(sel,0,':',&el_off);
-		    if( sscanf(svl.c_str(), "(%f|%f)", &x_s, &y_s) != 2 ) vl = atoi(svl.c_str());
+		    //>>> Line color
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) color = colors[w_s];
 		    else
 		    {
-			bool fl = false;
-			//-- Detecting if there is a point with same coordinates in the map --
-			for( PntMap::reverse_iterator pi = pnts.rbegin(); pi != pnts.rend(); ++pi )
-			    if( pi->first <= -10 )
-			    {
-				if( (fabs(TSYS::realRound(x_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.x,POS_PREC_DIG)) < 0.01) &&
-				    (fabs(TSYS::realRound(y_s,POS_PREC_DIG) -  TSYS::realRound(pi->second.y,POS_PREC_DIG)) < 0.01) )
-				    {
-					vl = pi->first;
-					fl = true;
-					break;
-				    }
-			    }
-			if( !fl )
-			{
-			    vl = map_index;
-			    (pnts)[map_index] = Point(x_s,y_s);
-			    map_index -= 1;
-			}
-
+			color = mod->colorParse(el_s);
+			if(color == -1) color = lineClr;
+			else if(color == 0) color = 0x00FA0000;
 		    }
-		    if( vl ) fl_pnts.push_back(vl);
-		    else if( zero_pnts == 0 ) { fl_color_1 = svl; zero_pnts++; }
-		    else if( zero_pnts == 1 ) { fl_img= svl; zero_pnts++; }
-		    else break;
+
+		    //>>> Border width
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) bord_width = widths[w_s];
+		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) bord_width = w_s;
+		    else bord_width = bordWdth;
+
+		    //>>> Border color
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) bord_color = colors[w_s];
+		    else
+		    {
+			bord_color = mod->colorParse(el_s);
+			if(bord_color == -1) bord_color = bordClr;
+			else if(bord_color == 0) bord_color = 0x00FA0000;
+		    }
+
+		    //>>> Line style
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"s%d",&w_s) == 1) style = styles[w_s];
+		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1 && (w_s == EF_SOLID || w_s == EF_DASH || w_s == EF_DOT)) style = w_s;
+		    else style = lineStyle;
+
+		    //>> Reading coordinates for the points of the line
+		    for(int i_p = 0; i_p < p.size(); i_p++) ip[i_p] = pnts[p[i_p]];
+
+		    if(elTp == ShapeItem::Arc)
+                    {
+			StartMotionPos = ip[0];
+			EndMotionPos = ip[1];
+			CtrlMotionPos_1 = ip[2];
+			CtrlMotionPos_2 = ip[3];
+			CtrlMotionPos_3 = ip[4];
+			MotionWidth = lnwidth;
+			ang = angle(CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y));
+			if(CtrlMotionPos_3.y > CtrlMotionPos_1.y) ang = 360 - ang;
+			a = length(CtrlMotionPos_3, CtrlMotionPos_1);
+			b = length(CtrlMotionPos_2, CtrlMotionPos_1);
+
+			CtrlMotionPos_2 = Point(CtrlMotionPos_1.x+rotate(arc(0.25,a,b),ang).x, CtrlMotionPos_1.y-rotate(arc(0.25,a,b),ang).y);
+			StartMotionPos = unrotate(StartMotionPos, ang, CtrlMotionPos_1.x, CtrlMotionPos_1.y);
+			if(StartMotionPos.x >= a)
+			{
+			    StartMotionPos.y = (StartMotionPos.y/StartMotionPos.x)*a;
+			    StartMotionPos.x = a;
+			}
+			if(StartMotionPos.x < -a)
+			{
+			    StartMotionPos.y = (StartMotionPos.y/StartMotionPos.x)*(-a);
+			    StartMotionPos.x = -a;
+			}
+			t_start = acos(StartMotionPos.x/a)/(2*M_PI);
+			if(StartMotionPos.y > 0) t_start = 1 - t_start;
+			EndMotionPos = unrotate(EndMotionPos, ang, CtrlMotionPos_1.x, CtrlMotionPos_1.y);
+			if(EndMotionPos.x < -a)
+			{
+			    EndMotionPos.y = (EndMotionPos.y/EndMotionPos.x)*(-a);
+			    EndMotionPos.x = -a;
+			}
+			if(EndMotionPos.x >= a)
+			{
+			    EndMotionPos.y = (EndMotionPos.y/EndMotionPos.x)*a;
+			    EndMotionPos.x = a;
+			}
+			t_end = acos(EndMotionPos.x/a)/(2*M_PI);
+			if(EndMotionPos.y > 0) t_end = 1 - t_end;
+			if(t_start > t_end) t_end += 1;
+			if((t_end-1) > t_start) t_end -= 1;
+			//if( t_start == t_end ) t_end += 1;
+			if(fabs(t_start-t_end) < 0.0027777777777) t_end += 1;
+			if(t_end > t_start && t_start >= 1 && t_end > 1) { t_start -= 1; t_end -= 1; }
+			CtrlMotionPos_4 = Point(t_start, t_end);
+                    }
+		    else
+		    {
+			ang = angle(ip[0], ip[1], ip[0], Point(ip[0].x+10,ip[0].y));
+			if(ip[0].y <= ip[1].y) ang = 360-ang;
+		    }
+
+		    bool flag_brd = false;
+		    if(lnwidth > 3 && bord_width == 0)
+		    {
+			lnwidth -= 2;
+			bord_width = 1;
+			bord_color = color;
+			flag_brd = true;
+		    }
+
+		    p.resize(5);
+		    shapeItems.push_back(ShapeItem(p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,ang,color,bord_color,lnwidth,bord_width,elTp,style,flag_brd));
+		    break;
 		}
-		if( sscanf(fl_color_1.c_str(), "c%d", &wn) == 1 ) fl_color  = (colors)[wn];
-		else if( mod->colorParse(fl_color_1) != -1 ) fl_color = mod->colorParse(fl_color_1);
-		else fl_color = fillClr;
+		case ShapeItem::Fill:
+		{
+		    int fl_color;
+		    string img;
+		    //>>> Fill color
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) fl_color = colors[w_s];
+		    else if((fl_color=mod->colorParse(el_s)) == -1) fl_color = fillClr;
 
-		if( sscanf(fl_img.c_str(), "i%d", &wn) == 1 ) img  = (images)[wn];
-		else if( fl_img.size() ) img = TSYS::strDecode(fl_img);
-		else img = imgDef;
+		    //>>> Fill image
+		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
+		    if(sscanf(el_s.c_str(),"i%d",&w_s) == 1) img = images[w_s];
+		    else if(!(img=TSYS::strDecode(el_s)).size()) img = imgDef;
+		    if(owner().resGet(img,path(),user) == "") img = "";
 
-		string imgDef_temp = owner().resGet(img,path(),user);
-		if( imgDef_temp == "" ) img = "";
-		inundationItems.push_back( InundationItem(fl_pnts, fl_color, -1, img) );
+		    inundationItems.push_back(InundationItem(p,fl_color,-1,img));
+		    break;
+		}
 	    }
 	}
-	for( WidthMap::iterator pi = widths.begin(); pi != widths.end(); )
+	for(WidthMap::iterator pi = widths.begin(); pi != widths.end(); )
 	{
 	    bool unDel = false;
-	    for(unsigned i = 0; i < shapeItems.size(); i++)
-		if( pi->first > 0 && ( pi->second == shapeItems[i].width || pi->second == shapeItems[i].border_width ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( pi->first > 0 && unDel == false ) (widths).erase ( pi++ );
-	    else ++pi;
+	    for(unsigned i = 0; !unDel && i < shapeItems.size(); i++)
+		unDel = pi->first > 0 && (pi->second == shapeItems[i].width || pi->second == shapeItems[i].border_width);
+	    if(pi->first > 0 && !unDel) widths.erase(pi++); else ++pi;
 	}
-	for( ColorMap::iterator pi = colors.begin(); pi != colors.end(); )
+	for(ColorMap::iterator pi = colors.begin(); pi != colors.end(); )
 	{
 	    bool unDel = false;
-	    for(unsigned i = 0; i < shapeItems.size(); i++)
-		if( pi->first > 0 && ( pi->second == shapeItems[i].lineColor || pi->second == shapeItems[i].borderColor ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( !unDel )
-		for(unsigned i = 0; i < inundationItems.size(); i++)
-		    if( pi->first > 0 && ( pi->second == inundationItems[i].P_color ) )
-		    {
-			unDel = true;
-			break;
-		    }
-	    if( pi->first > 0 && unDel == false ) (colors).erase ( pi++ );
-	    else ++pi;
+	    for(unsigned i = 0; !unDel && i < shapeItems.size(); i++)
+		unDel = pi->first > 0 && (pi->second == shapeItems[i].lineColor || pi->second == shapeItems[i].borderColor);
+	    for(unsigned i = 0; !unDel && i < inundationItems.size(); i++)
+		unDel = pi->first > 0 && pi->second == inundationItems[i].P_color;
+	    if(pi->first > 0 && !unDel) colors.erase(pi++); else ++pi;
 	}
-	for( ImageMap::iterator pi = images.begin(); pi != images.end(); )
+	for(ImageMap::iterator pi = images.begin(); pi != images.end(); )
 	{
 	    bool unDel = false;
-	    for(unsigned i = 0; i < inundationItems.size(); i++)
-		if( pi->first > 0 && ( pi->second == inundationItems[i].imgFill ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( pi->first > 0 && unDel == false ) (images).erase ( pi++ );
-	    else ++pi;
+	    for(unsigned i = 0; !unDel && i < inundationItems.size(); i++)
+		unDel = pi->first > 0 && (pi->second == inundationItems[i].imgFill);
+	    if(pi->first > 0 && !unDel) images.erase(pi++); else ++pi;
 	}
-	for( StyleMap::iterator pi = styles.begin(); pi != styles.end(); )
+	for(StyleMap::iterator pi = styles.begin(); pi != styles.end(); )
 	{
 	    bool unDel = false;
-	    for(unsigned i = 0; i < shapeItems.size(); i++)
-		if( pi->first > 0 && ( pi->second == shapeItems[i].style ) )
-		{
-		    unDel = true;
-		    break;
-		}
-	    if( pi->first > 0 && unDel == false ) (styles).erase ( pi++ );
-	    else ++pi;
+	    for(unsigned i = 0; !unDel && i < shapeItems.size(); i++)
+		unDel = pi->first > 0 && (pi->second == shapeItems[i].style);
+	    if(pi->first > 0 && !unDel) styles.erase(pi++); else ++pi;
 	}
-
     }
 }
 

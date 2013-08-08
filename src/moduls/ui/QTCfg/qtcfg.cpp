@@ -103,9 +103,7 @@ ConfApp::ConfApp( string open_user ) :
     CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     CtrTree->setAutoScroll(false);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
-    QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Path");
-    CtrTree->setHeaderLabels(headerLabels);
+    CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
     CtrTree->header()->setStretchLastSection(false);
     CtrTree->header()->resizeSection(0,200);
     //CtrTree->header()->setSectionHidden(1,true);

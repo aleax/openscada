@@ -1,3 +1,13 @@
+2013-08-08 Roman
+- !:TVal: Stop archive is added on the object disable for unlock it and allow to finish act.
+    The problem often observed on DAQ parameter's configuration change.
+- !!:FIX:UI.{Vision,WebVision}: Items configuration loading of primitive "ElFigure" is fixed for demand to all points present.
+    The function attr{s}Set() of primitive "ElFigure", and "FormEl" into UI.Vision, full revised and set optimal.
+- UI.{VCAEngine,Vision,WebVision}: Into primitives "FormEl" and "ElFigure" are used indexes definitions from "types.h".
+- UI.Vision: Abortive (commented) implementation for view items tree into ComboBox of primitive "FormEl" is added.
+    The problems caused by wrong processing hierarchical data model.
+
+
 2013-07-30 Roman
 - DB: vcaTest.db library is significant updated for append primitive "ElFigure" tests and combined tests frame update.
     Prescription frames some updated and the libraries list change to tree.
