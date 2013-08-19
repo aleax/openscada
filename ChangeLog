@@ -1,3 +1,22 @@
+2013-08-19 Roman
+- SYS: Default string buffer size is increased from 3000 to 10000.
+    Default string buffer size for numbers is added by NSTR_BUF_LEN and set to 100.
+    *2str function implementation is changed to the switch style.
+- Transport: Address configuration record size is grown to 100.
+- !:FIX:Archive.FSArch: Messages to plain archive placing is fixed for big, on string buffer size limit.
+- !!!!:DAQ.OPC_UA: OPC UA protocol's part for Client and Server is moved to LGPL v3 library for alow and simplify using by other projects.
+    Controller's object is made simply for EndPoints and transports selection and configuration.
+    For now you can set only EndPoint and the transport will created from it. Also for the controller object enabled
+    you will take list for browsed and allowed endpoins.
+    TokenId and SessionId allowed for complexs NodeId processing and tested on Ignition OPC UA server.
+    OPC UA server fix for merged input messages processing.
+- Transport.Sockets: The output transport is allowed for stop on the address change.
+- !!:UI.{VCAEngine,Vision}: Into view "Button" of primitive "FormEl" attribute "checkable" has renamed to "mode" and has appended modes:
+    "Standard", "Checkable", "Menu", "Load", and "Save".
+- UI.Vision: Set current value of primitive "FormEl" is moved to separated function.
+- UI.WebVision: Adapted to new model data for view "Button" of primitive "FormEl", but without it full implementation.
+
+
 2013-08-08 Roman
 - !:TVal: Stop archive is added on the object disable for unlock it and allow to finish act.
     The problem often observed on DAQ parameter's configuration change.

@@ -68,7 +68,7 @@ namespace VCA
 	A_FormElValue	= 21,
 	A_FormElMixP1	= 22,	//LINE_ED:view; TEXT_ED:wordWrap; BUTTON:img; {COMBO,LIST,TREE}:items; {SLIDER,SCROLL_BAR}:cfg
 	A_FormElMixP2	= 23,	//LINE_ED:cfg; BUTTON:color
-	A_FormElMixP3	= 24,	//{LINE_ED,TEXT_ED}:confirm; BUTTON:checkable
+	A_FormElMixP3	= 24,	//{LINE_ED,TEXT_ED}:confirm; BUTTON:mode
 	A_FormElFont	= 25,
 	A_FormElName	= 26,
 	A_FormElMixP4	= 27,	//BUTTON:colorText
@@ -80,7 +80,7 @@ namespace VCA
     //FormEl preset indexes
     enum FormEl_Views	{ F_LINE_ED = 0, F_TEXT_ED, F_CHECK_BOX, F_BUTTON, F_COMBO, F_LIST, F_SLIDER, F_SCROLL_BAR, F_TREE };
     enum FormEl_LineViews { FL_TEXT = 0, FL_COMBO, FL_INTEGER, FL_REAL, FL_TIME, FL_DATE, FL_DATE_TM };
-
+    enum FormEl_BtModes { FBT_STD = 0, FBT_CHECK, FBT_MENU, FBT_LOAD, FBT_SAVE };
 }
 
 #endif //TYPES_H

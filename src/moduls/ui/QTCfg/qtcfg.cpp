@@ -2825,16 +2825,16 @@ void ConfApp::imgPopup( const QPoint &pos )
 	    {
 		//> Get path to image file
 		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
-		if( fileName.isNull( ) ) return;
+		if(fileName.isNull()) return;
 		int len;
 		char buf[STR_BUF_LEN];
 		string rez;
 
 		//> Load image file
-		int hd = open(fileName.toAscii().data(),O_RDONLY);
-		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
+		int hd = open(fileName.toAscii().data(), O_RDONLY);
+		if(hd < 0) throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
 		{
-		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
+		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
 		    ::close(hd);
 		}
 

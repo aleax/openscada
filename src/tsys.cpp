@@ -183,42 +183,50 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 
 string TSYS::int2str( int val, TSYS::IntView view )
 {
-    char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%d",val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
-
+    char buf[NSTR_BUF_LEN];
+    switch(view)
+    {
+	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", (unsigned)val);	break;
+	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", (unsigned)val);	break;
+	default: snprintf(buf, sizeof(buf), "%d", val);				break;
+    }
     return buf;
 }
 
 string TSYS::uint2str( unsigned val, IntView view )
 {
-    char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%u",val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
-
+    char buf[NSTR_BUF_LEN];
+    switch(view)
+    {
+	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", val);	break;
+	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", val);	break;
+	default: snprintf(buf, sizeof(buf), "%u", val);		break;
+    }
     return buf;
 }
 
 string TSYS::ll2str( int64_t val, IntView view )
 {
-    char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",(long long int)val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",(long long unsigned int)val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",(long long unsigned int)val);
-
+    char buf[NSTR_BUF_LEN];
+    switch(view)
+    {
+	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%llo", (long long unsigned int)val);	break;
+	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%llx", (long long unsigned int)val);	break;
+	default: snprintf(buf, sizeof(buf), "%lld", (long long int)val);			break;
+    }
     return buf;
 }
 
 string TSYS::real2str( double val, int prec, char tp )
 {
-    char buf[STR_BUF_LEN];
-    prec = vmax(0,prec);
-    if(tp == 'g') snprintf(buf,sizeof(buf),"%.*g",prec,val);
-    else if(tp == 'e') snprintf(buf,sizeof(buf),"%.*e",prec,val);
-    else snprintf(buf,sizeof(buf),"%.*f",prec,val);
-
+    char buf[NSTR_BUF_LEN];
+    prec = vmax(0, prec);
+    switch(tp)
+    {
+	case 'g': snprintf(buf, sizeof(buf), "%.*g", prec, val);	break;
+	case 'e': snprintf(buf, sizeof(buf), "%.*e", prec, val);	break;
+	default: snprintf(buf, sizeof(buf), "%.*f", prec, val);		break;
+    }
     return buf;
 }
 

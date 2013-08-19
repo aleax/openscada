@@ -39,7 +39,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
     el_in.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
     el_in.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_in.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
-    el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
+    el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
     el_in.fldAdd( new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,"50") );
     el_in.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
@@ -48,7 +48,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
     el_out.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
     el_out.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     el_out.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
-    el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"50") );
+    el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
     el_out.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
 
     //> External hosts' connection DB struct

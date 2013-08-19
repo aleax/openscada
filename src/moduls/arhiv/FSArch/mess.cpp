@@ -699,10 +699,9 @@ void MFileArch::put( TMess::SRec mess )
 	if(f == NULL) { mErr = true; return; }
 
 	//> Prepare mess
-	snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
-	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
-	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
-	string s_buf = buf;
+	string s_buf = TSYS::strMess("%x:%d %d %s %s", (unsigned int)mess.time, mess.utime, mess.level,
+            Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
+            Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str())+"\n";
 
 	//> Check for duples
 	if(mess.time <= mEnd && owner().prevDbl())

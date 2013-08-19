@@ -382,7 +382,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("img");
 		    cfg.owner()->attrDel("color");
 		    cfg.owner()->attrDel("colorText");
-		    cfg.owner()->attrDel("checkable");
+		    cfg.owner()->attrDel("mode");
 		    cfg.owner()->attrDel("font");
 		    cfg.owner()->attrAt("name").at().fld().setReserve("");
 		    break;
@@ -421,11 +421,13 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAt("name").at().fld().setReserve(TSYS::int2str(A_FormElName));
 		break;
 	    case F_BUTTON:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","",TSYS::int2str(A_FormElValue).c_str()));
+		cfg.owner()->attrAdd(new TFld("value",_("Repeat (delay-interval)"),TFld::String,Attr::Mutable,"","","","",TSYS::int2str(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("img",_("Image"),TFld::String,Attr::Image|Attr::Mutable,"","","","",TSYS::int2str(A_FormElMixP1).c_str()));
 		cfg.owner()->attrAdd(new TFld("color",_("Color:button"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",TSYS::int2str(A_FormElMixP2).c_str()));
 		cfg.owner()->attrAdd(new TFld("colorText",_("Color:text"),TFld::String,Attr::Color|Attr::Mutable,"20","","","",TSYS::int2str(A_FormElMixP4).c_str()));
-		cfg.owner()->attrAdd(new TFld("checkable",_("Checkable"),TFld::Boolean,Attr::Mutable,"","","","",TSYS::int2str(A_FormElMixP3).c_str()));
+		cfg.owner()->attrAdd(new TFld("mode",_("Mode"),TFld::Integer,TFld::Selected|Attr::Mutable|Attr::Active,"1","0",
+		    TSYS::strMess("%d;%d;%d;%d;%d",FBT_STD,FBT_CHECK,FBT_MENU,FBT_LOAD,FBT_SAVE).c_str(),
+		    _("Standard;Checkable;Menu;Load;Save"),TSYS::int2str(A_FormElMixP3).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",TSYS::int2str(A_FormElFont).c_str()));
 		cfg.owner()->attrAt("name").at().fld().setReserve(TSYS::int2str(A_FormElName));
 		break;
@@ -440,7 +442,9 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		break;
 	}
     }
-    else if((cfg.flgGlob()&Attr::Active) && cfg.id() == "view")
+    //> Value type change
+    else if((cfg.flgGlob()&Attr::Active) && (cfg.id() == "view" && cfg.owner()->attrAt("elType").at().getI() == F_LINE_ED) ||
+					    (cfg.id() == "mode" && cfg.owner()->attrAt("elType").at().getI() == F_BUTTON))
     {
 	TFld::Type	ntp = TFld::String;
 	int		flg = Attr::Mutable;
@@ -448,15 +452,27 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	string		val = cfg.owner()->attrAt("value").at().getS();
 	string		cfgTmpl = cfg.owner()->attrAt("value").at().cfgTempl();
 	string		cfgVal = cfg.owner()->attrAt("value").at().cfgVal();
-	switch(cfg.getI())
-	{
-	    case FL_INTEGER: case FL_TIME:	ntp = TFld::Integer;	break;
-	    case FL_REAL:			ntp = TFld::Real;	break;
-	    case FL_DATE: case FL_DATE_TM:	ntp = TFld::Integer; flg |= Attr::DateTime;	break;
-	}
+	string		vName = _("Value");
+	if(cfg.id() == "view")
+	    switch(cfg.getI())
+	    {
+		case FL_INTEGER: case FL_TIME:	ntp = TFld::Integer;	break;
+		case FL_REAL:			ntp = TFld::Real;	break;
+		case FL_DATE: case FL_DATE_TM:	ntp = TFld::Integer; flg |= Attr::DateTime;	break;
+	    }
+	else	// mode
+	    switch(cfg.getI())
+	    {
+		case FBT_STD:	ntp = TFld::String; vName = _("Repeat (delay-interval)");	break;
+		case FBT_CHECK:	ntp = TFld::Boolean; vName = _("Check");	break;
+		case FBT_MENU:	ntp = TFld::String; flg |= TFld::FullText; vName = _("Items");	break;
+		case FBT_LOAD: case FBT_SAVE:
+		    ntp = TFld::String; flg |= TFld::FullText; vName = _("File content");
+		    break;
+	    }
 	int apos = cfg.owner()->attrPos("value");
 	cfg.owner()->attrDel("value");
-	cfg.owner()->attrAdd(new TFld("value",_("Value"),ntp,flg,"200","","","",TSYS::int2str(A_FormElValue).c_str()), apos);
+	cfg.owner()->attrAdd(new TFld("value",vName.c_str(),ntp,flg,"200","","","",TSYS::int2str(A_FormElValue).c_str()), apos);
 	cfg.owner()->attrAt("value").at().setFlgSelf(sflg);
 	cfg.owner()->attrAt("value").at().setS(val);
 	cfg.owner()->attrAt("value").at().setCfgTempl(cfgTmpl);

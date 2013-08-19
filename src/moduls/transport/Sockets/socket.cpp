@@ -636,7 +636,7 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
 
 TSocketOut::~TSocketOut()
 {
-    if( startStat() )	stop();
+    if(startStat()) stop();
 }
 
 void TSocketOut::setTimings( const string &vl )
@@ -647,6 +647,12 @@ void TSocketOut::setTimings( const string &vl )
     mTimings = mTmRep ? TSYS::strMess("%g:%g:%g",(1e-3*mTmCon),(1e-3*mTmNext),(1e-3*mTmRep)) :
 			TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
+}
+
+void TSocketOut::setAddr( const string &addr )
+{
+    TTransportOut::setAddr(addr);
+    if(startStat()) stop();
 }
 
 string TSocketOut::getStatus( )

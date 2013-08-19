@@ -121,10 +121,11 @@ class ShapeFormEl : public WdgShape
 
 	void init( WdgView *view );
 	void destroy( WdgView *view );
-	bool attrSet( WdgView *view, int uiPrmPos, const string &val);
+	bool attrSet( WdgView *view, int uiPrmPos, const string &val );
 	bool event( WdgView *view, QEvent *event );
 	bool eventFilter( WdgView *view, QObject *object, QEvent *event );
 	void setActive( WdgView *view, bool val );
+	void setValue( WdgView *view, const string &val, bool force = false );
 
     public slots:
 	//Public slots
@@ -144,6 +145,7 @@ class ShapeFormEl : public WdgShape
 	void buttonPressed( );
 	void buttonReleased( );
 	void buttonToggled( bool val );
+	void buttonMenuTrig( );
 	//>> Sliders' events
 	void sliderMoved( int val );
 
@@ -154,16 +156,16 @@ class ShapeFormEl : public WdgShape
 	{
 	    public:
 		//Methods
-		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), welType(-1), addrWdg(NULL) { }
+		ShpDt( ) : en(true), active(true), evLock(false), elType(-1), setType(false), wordWrap(false), addrWdg(NULL) { }
 		//Attributes
 		short	en	:1;
 		short	active	:1;
 		short	evLock	:1;
 		short	elType	:5;
-		short	welType	:5;
+		short	setType	:1;
 		short	view	:4;
 		short	wordWrap:1;
-		short	checkable:1;
+		short	mode	:5;
 		QWidget	*addrWdg;
 		QFont	font;
 		string	name;

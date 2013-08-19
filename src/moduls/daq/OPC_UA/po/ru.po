@@ -1,14 +1,12 @@
 # OpenSCADA.DAQ.OPC_UA translate to Russian.
-# Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.OPC_UA package module.
-#
-# Roman Savochenko <rom_as@oscada.org>, 2010.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-01-18 12:43+0200\n"
+"POT-Creation-Date: 2013-08-19 12:01+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -27,9 +25,6 @@ msgstr "Уровень приоритета задачи сбора данных
 
 msgid "Sync inter remote station period (s)"
 msgstr "Период синхронизации с удалённой станцией (сек)"
-
-msgid "Transport address"
-msgstr "Адрес транспорта"
 
 msgid "End point"
 msgstr "Конечный узел"
@@ -83,8 +78,12 @@ msgstr "Следующий вызов по cron '%s'. "
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Затрачено времени: %s. Запросов %.6g."
 
-msgid "No secure policy found"
-msgstr "Не найдено политики безопасности"
+#, c-format
+msgid "OPC UA automatic created transport for '%s' controller."
+msgstr "OPC UA автоматически созданный транспорт для контроллера '%s'."
+
+msgid "Remote host error"
+msgstr "Ошибка удалённого хоста"
 
 msgid "Server nodes browser"
 msgstr "Обзор узлов сервера"
@@ -272,151 +271,8 @@ msgstr "Приватный ключ сервера (PEM)"
 msgid "Search and create new server error."
 msgstr "Ошибка поиска и создания нового сервера."
 
-#, c-format
-msgid "%s: request: %s"
-msgstr "%s: запрос: %s"
-
-#, c-format
-msgid "%s: response: %s"
-msgstr "%s: ответ: %s"
-
-msgid "Respond size is not coincidence."
-msgstr "Несоответствующий размер ответа."
-
-msgid "Respond don't acknowledge."
-msgstr "Несоответствие ответа."
-
-#, c-format
-msgid "%s: request, decoded: %s"
-msgstr "%s: запрос, декодирован: %s"
-
-msgid "Not full respond."
-msgstr "Неполный ответ"
-
-msgid "Client certificate thumbprint error."
-msgstr "Ошибка отпечатка сертификата клиента."
-
-msgid "Respond NodeId don't acknowledge"
-msgstr "Несоответствие NodeId ответа"
-
-msgid "Signature error"
-msgstr "Ошибка подписи"
-
-#, c-format
-msgid "Request '%s' isn't supported."
-msgstr "Запрос '%s' не поддерживается."
-
-msgid "Application signature error"
-msgstr "Ошибка подписи приложения"
-
-msgid "Service fault"
-msgstr "Сбой сервиса"
-
-#, c-format
-msgid "OPC_UA protocol '%s' isn't supported."
-msgstr "OPC_UA протокол '%s' не поддерживается."
-
-msgid "Remote host error"
-msgstr "Ошибка удалённого хоста"
-
-msgid "Buffer size is less for requested value."
-msgstr "Размер буфера меньше указанного значения."
-
-#, c-format
-msgid "Number size '%d' error."
-msgstr "Ошибка в размере '%d' числа."
-
-#, c-format
-msgid "Real number size '%d' error."
-msgstr "Ошибка в размере '%d' вещественного числа."
-
-msgid "Buffer size is less for requested string."
-msgstr "Размер буфера меньше запрошенной строки."
-
-msgid "Buffer size is less for requested NodeId."
-msgstr "Размер буфера меньше запрошенного NodeId."
-
-#, c-format
-msgid "NodeId type %d error or don't support."
-msgstr "Ошибка или не поддерживается тип NodeId %d."
-
-#, c-format
-msgid "Data type '%d' isn't supported."
-msgstr "Тип данных '%d' не поддерживается."
-
-msgid "ArrayDimensions field don't supported now."
-msgstr "Поле РазмерностьМассива не поддерживается сейчас."
-
-#, c-format
-msgid "randBytes error: %s"
-msgstr "randBytes ошибка: %s"
-
-#, c-format
-msgid "certPEM2DER error: %s"
-msgstr "certPEM2DER ошибка: %s"
-
-#, c-format
-msgid "certDER2PEM error: %s"
-msgstr "certDER2PEM ошибка: %s"
-
-#, c-format
-msgid "certThumbprint: %s"
-msgstr ""
-
-#, c-format
-msgid "asymmetricEncrypt: %s"
-msgstr ""
-
-#, c-format
-msgid "asymmetricDecrypt: %s"
-msgstr ""
-
-#, c-format
-msgid "asymmetricVerify: %s"
-msgstr ""
-
-#, c-format
-msgid "asymmetricSign: %s"
-msgstr ""
-
-#, c-format
-msgid "keyCertPem: %s"
-msgstr ""
-
 msgid "End points"
 msgstr "Конечные узлы"
-
-msgid "Server certificate thumbprint error."
-msgstr "Ошибка отпечатка сертификата сервера."
-
-msgid "Requested OpenSecureChannel NodeId don't acknowledge"
-msgstr "Запрошенный идентификатор канала не обнаружен"
-
-msgid "Secure channel unknown"
-msgstr "Канал безопасности неизвестен"
-
-msgid "Secure channel closed"
-msgstr "Канал безопасности закрыт"
-
-#, c-format
-msgid "No supported userIdentityToken '%d'."
-msgstr "userIdentityToken '%d' не поддерживается."
-
-#, c-format
-msgid "No supported request id '%d'."
-msgstr "Запрос '%d' не поддерживается."
-
-#, c-format
-msgid "Security setting %d error."
-msgstr "Ошибка в настройках безопасности %d."
-
-#, c-format
-msgid "Parent node '%s' no present for node '%s'."
-msgstr "Родительский узел '%s' отсутствует для узла '%s'."
-
-#, c-format
-msgid "No session %d present."
-msgstr "Отсутствует сеанс %d."
 
 msgid "Disabled. "
 msgstr "Отключен. "
@@ -461,11 +317,122 @@ msgstr ""
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-msgid "Allow realization of OPC UA client service."
-msgstr "Предоставляет реализацию клиентского сервиса OPC UA."
+msgid "OPC UA client service implementation."
+msgstr "Реализация OPC UA клиентского сервиса."
 
-msgid "Allow realization of OPC UA protocol."
-msgstr "Предоставляет реализацию OPC UA протокола."
+msgid "OPC UA protocol implementation."
+msgstr "Реализация OPC UA протокола."
+
+#~ msgid "Transport address"
+#~ msgstr "Адрес транспорта"
+
+#~ msgid "No secure policy found"
+#~ msgstr "Не найдено политики безопасности"
+
+#~ msgid "%s: request: %s"
+#~ msgstr "%s: запрос: %s"
+
+#~ msgid "%s: response: %s"
+#~ msgstr "%s: ответ: %s"
+
+#~ msgid "Respond size is not coincidence."
+#~ msgstr "Несоответствующий размер ответа."
+
+#~ msgid "Respond don't acknowledge."
+#~ msgstr "Несоответствие ответа."
+
+#~ msgid "%s: request, decoded: %s"
+#~ msgstr "%s: запрос, декодирован: %s"
+
+#~ msgid "Not full respond."
+#~ msgstr "Неполный ответ"
+
+#~ msgid "Client certificate thumbprint error."
+#~ msgstr "Ошибка отпечатка сертификата клиента."
+
+#~ msgid "Respond NodeId don't acknowledge"
+#~ msgstr "Несоответствие NodeId ответа"
+
+#~ msgid "Signature error"
+#~ msgstr "Ошибка подписи"
+
+#~ msgid "Request '%s' isn't supported."
+#~ msgstr "Запрос '%s' не поддерживается."
+
+#~ msgid "Application signature error"
+#~ msgstr "Ошибка подписи приложения"
+
+#~ msgid "Service fault"
+#~ msgstr "Сбой сервиса"
+
+#~ msgid "OPC_UA protocol '%s' isn't supported."
+#~ msgstr "OPC_UA протокол '%s' не поддерживается."
+
+#~ msgid "Buffer size is less for requested value."
+#~ msgstr "Размер буфера меньше указанного значения."
+
+#~ msgid "Number size '%d' error."
+#~ msgstr "Ошибка в размере '%d' числа."
+
+#~ msgid "Real number size '%d' error."
+#~ msgstr "Ошибка в размере '%d' вещественного числа."
+
+#~ msgid "Buffer size is less for requested string."
+#~ msgstr "Размер буфера меньше запрошенной строки."
+
+#~ msgid "Buffer size is less for requested NodeId."
+#~ msgstr "Размер буфера меньше запрошенного NodeId."
+
+#~ msgid "NodeId type %d error or don't support."
+#~ msgstr "Ошибка или не поддерживается тип NodeId %d."
+
+#~ msgid "Data type '%d' isn't supported."
+#~ msgstr "Тип данных '%d' не поддерживается."
+
+#~ msgid "ArrayDimensions field don't supported now."
+#~ msgstr "Поле РазмерностьМассива не поддерживается сейчас."
+
+#~ msgid "randBytes error: %s"
+#~ msgstr "randBytes ошибка: %s"
+
+#~ msgid "certPEM2DER error: %s"
+#~ msgstr "certPEM2DER ошибка: %s"
+
+#~ msgid "certDER2PEM error: %s"
+#~ msgstr "certDER2PEM ошибка: %s"
+
+#~ msgid "Server certificate thumbprint error."
+#~ msgstr "Ошибка отпечатка сертификата сервера."
+
+#~ msgid "Requested OpenSecureChannel NodeId don't acknowledge"
+#~ msgstr "Запрошенный идентификатор канала не обнаружен"
+
+#~ msgid "Secure channel unknown"
+#~ msgstr "Канал безопасности неизвестен"
+
+#~ msgid "Secure channel closed"
+#~ msgstr "Канал безопасности закрыт"
+
+#~ msgid "No supported userIdentityToken '%d'."
+#~ msgstr "userIdentityToken '%d' не поддерживается."
+
+#~ msgid "No supported request id '%d'."
+#~ msgstr "Запрос '%d' не поддерживается."
+
+#~ msgid "Security setting %d error."
+#~ msgstr "Ошибка в настройках безопасности %d."
+
+#~ msgid "Parent node '%s' no present for node '%s'."
+#~ msgstr "Родительский узел '%s' отсутствует для узла '%s'."
+
+#~ msgid "No session %d present."
+#~ msgstr "Отсутствует сеанс %d."
+
+#~ msgid "Allow realization of OPC UA client service."
+#~ msgstr "Предоставляет реализацию клиентского сервиса OPC UA."
+
+#~ msgid "Allow realization of OPC UA protocol."
+#~ msgstr "Предоставляет реализацию OPC UA протокола."
 
 #~ msgid "%s response: %s"
 #~ msgstr "%s ответ: %s"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 16:47+0300\n"
+"POT-Creation-Date: 2013-08-12 07:25+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -249,8 +249,8 @@ msgstr "Typ des Elements"
 msgid ""
 "Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"
 msgstr ""
-"Zeilenbearbeitung;Textbearbeitung;Check Box;Schaltfläche;Combo Box;Liste;Baum;"
-"Schieber;Schieberegler"
+"Zeilenbearbeitung;Textbearbeitung;Check Box;Schaltfläche;Combo Box;Liste;"
+"Baum;Schieber;Schieberegler"
 
 msgid "Value"
 msgstr "Wert"
@@ -270,6 +270,9 @@ msgstr "Schrift"
 msgid "Word wrap"
 msgstr "Zeichenumbruch"
 
+msgid "Repeat (delay-interval)"
+msgstr "Wiederholen (Delay-Intervall)"
+
 msgid "Image"
 msgstr "Bild"
 
@@ -279,11 +282,20 @@ msgstr "Farbe:Taster"
 msgid "Color:text"
 msgstr "Farbe:Text"
 
-msgid "Checkable"
-msgstr "Umschaltbar"
+msgid "Mode"
+msgstr "Modus"
+
+msgid "Standard;Checkable;Menu;Load;Save"
+msgstr "Standard;Checkable;Menü;Laden;Speichern"
 
 msgid "Items"
 msgstr "Elemente"
+
+msgid "Check"
+msgstr "Prüfung"
+
+msgid "File content"
+msgstr "Datei-Inhalt"
 
 msgid ""
 "Enter text line by template with the char items:\n"

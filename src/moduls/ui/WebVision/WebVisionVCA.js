@@ -1340,7 +1340,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		case 3:	//Button
 		    var formObj;
 		    var iconImg = this.attrs['img'];
-		    this.place.checkable = parseInt(this.attrs['checkable']);
+		    this.place.checkable = (parseInt(this.attrs['mode']) == 1);
 		    var custBut = (iconImg || this.place.checkable);
 		    if(custBut != this.place.custBut)
 			while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);

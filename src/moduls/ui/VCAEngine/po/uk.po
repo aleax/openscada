@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 16:47+0300\n"
+"POT-Creation-Date: 2013-08-12 07:25+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -248,8 +248,8 @@ msgstr "Тип елементу"
 msgid ""
 "Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"
 msgstr ""
-"Стрічка редагув.;Текстовий редактор;Check Box;Кнопка;Combo Box;Перелік;Дерево;"
-"Слайдер;Стрічка прокрутки"
+"Стрічка редагув.;Текстовий редактор;Check Box;Кнопка;Combo Box;Перелік;"
+"Дерево;Слайдер;Стрічка прокрутки"
 
 msgid "Value"
 msgstr "Значення"
@@ -269,6 +269,9 @@ msgstr "Шрифт"
 msgid "Word wrap"
 msgstr "Перенесення слів"
 
+msgid "Repeat (delay-interval)"
+msgstr "Повтор (затримка-інтервал)"
+
 msgid "Image"
 msgstr "Зображення"
 
@@ -278,11 +281,20 @@ msgstr "Колір:кнопка"
 msgid "Color:text"
 msgstr "Колір:текст"
 
-msgid "Checkable"
-msgstr "Перемикач"
+msgid "Mode"
+msgstr "Режим"
+
+msgid "Standard;Checkable;Menu;Load;Save"
+msgstr "Стандарт;Перемикач;Меню;Завантаження;Збереження"
 
 msgid "Items"
 msgstr "Елементи"
+
+msgid "Check"
+msgstr "Вибір"
+
+msgid "File content"
+msgstr "Вміст файлу"
 
 msgid ""
 "Enter text line by template with the char items:\n"
