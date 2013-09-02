@@ -85,10 +85,12 @@ namespace OSCADA_OPC
 #define OpcUa_BadNodeIdUnknown		0x80340000
 #define OpcUa_BadAttributeIdInvalid	0x80350000
 #define OpcUa_BadNotSupported		0x803D0000
+#define OpcUa_BadFilterNotAllowed	0x80450000
 #define OpcUa_BadSecurityModeRejected	0x80540000
 #define OpcUa_BadSecurityPolicyRejected	0x80550000
 #define OpcUa_BadApplicationSignatureInvalid	0x80580000
 #define OpcUa_BadBrowseNameInvalid	0x80600000
+#define OpcUa_BadNoMatch		0x806F0000
 #define OpcUa_BadWriteNotSupported	0x80730000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
@@ -117,10 +119,16 @@ namespace OSCADA_OPC
 #define OpcUa_CloseSessionResponse	476
 #define OpcUa_BrowseRequest		527
 #define OpcUa_BrowseResponse		530
+#define OpcUa_TranslateBrowsePathsToNodeIdsRequest	554
+#define OpcUa_TranslateBrowsePathsToNodeIdsResponse	557
 #define OpcUa_ReadRequest		631
 #define OpcUa_ReadResponse		634
 #define OpcUa_WriteRequest		673
 #define OpcUa_WriteResponse		676
+#define OpcUa_CreateMonitoredItemsRequest	751
+#define OpcUa_CreateMonitoredItemsResponse	754
+#define OpcUa_CreateSubscriptionRequest		787
+#define OpcUa_CreateSubscriptionResponse	790
 #define OpcUa_PublishRequest		826
 #define OpcUa_PublishResponse		829
 
@@ -133,6 +141,10 @@ namespace OSCADA_OPC
 #define OpcUa_VariableTypesFolder	89
 #define OpcUa_DataTypesFolder		90
 #define OpcUa_ReferenceTypesFolder	91
+#define OpcUa_AnonymousIdentityToken	321
+#define OpcUa_LiteralOperand		597
+#define OpcUa_EventFilter		727
+#define OpcUa_Server			2253
 
 //> ObjectType Identifiers
 #define OpcUa_BaseObjectType		58
@@ -150,6 +162,7 @@ namespace OSCADA_OPC
 #define OpcUa_TransparentRedundancyType	2036
 #define OpcUa_NonTransparentRedundancyType	2039
 #define OpcUa_BaseEventType		2041
+#define OpcUa_GeneralModelChangeEventType 2133
 #define OpcUa_StateType			2307
 #define OpcUa_TransitionType		2310
 
@@ -157,6 +170,8 @@ namespace OSCADA_OPC
 #define OpcUa_BaseVariableType		62
 #define OpcUa_BaseDataVariableType	63
 #define OpcUa_PropertyType		68
+#define OpcUa_Server_NamespaceArray	2255
+#define OpcUa_Server_ServerStatus	2256
 #define OpcUa_Server_ServerStatus_State	2259
 
 //> ReferenceType Identifiers
@@ -195,6 +210,10 @@ namespace OSCADA_OPC
 #define OpcUa_Float			10
 #define OpcUa_Double			11
 #define OpcUa_String			12
+#define OpcUa_ServerStatusDataType	862
+
+//> VariableType Identifiers
+#define OpcUa_ServerStatusType		2138
 
 enum SerializerType	{ ST_Binary };
 enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
@@ -209,6 +228,7 @@ enum AttrIds		{ AId_NodeId = 1, AId_NodeClass, AId_BrowseName, AId_DisplayName, 
 			  AId_IsAbstract, AId_Symmetric, AId_InverseName, AId_ContainsNoLoops, AId_EventNotifier, AId_Value,
 			  AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
 			  AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
+enum MonitoringMode 	{ MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
 
 //*************************************************
 //* OPCError					  *
@@ -563,7 +583,7 @@ class Server: public UA
 	{
 	    public:
 		//Methods
-		EP( );
+		EP( Server *serv );
 		~EP( );
 
 		virtual string id( ) = 0;
@@ -603,6 +623,8 @@ class Server: public UA
 
 		XML_N			objTree;
 		map<string, XML_N*>	ndMap;
+
+		Server			*serv;
 	};
 
 	//Methods

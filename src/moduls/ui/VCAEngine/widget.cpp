@@ -147,22 +147,22 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
 	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")));
-	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","",TSYS::int2str(A_ROOT).c_str()));
+	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
 	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
-	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",TSYS::int2str(A_EN).c_str()));
-	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",TSYS::int2str(A_ACTIVE).c_str()));
-	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","",TSYS::int2str(A_GEOM_X).c_str()));
-	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","",TSYS::int2str(A_GEOM_Y).c_str()));
-	attrAdd(new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","",TSYS::int2str(A_GEOM_W).c_str()));
-	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","",TSYS::int2str(A_GEOM_H).c_str()));
-	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",TSYS::int2str(A_GEOM_X_SC).c_str()));
-	attrAdd(new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",TSYS::int2str(A_GEOM_Y_SC).c_str()));
-	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","",TSYS::int2str(A_GEOM_Z).c_str()));
-	attrAdd(new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",TSYS::int2str(A_GEOM_MARGIN).c_str()));
-	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","",TSYS::int2str(A_TIP_TOOL).c_str()));
-	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","",TSYS::int2str(A_TIP_STATUS).c_str()));
-	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","",TSYS::int2str(A_CTX_MENU).c_str()));
+	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
+	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
+	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","",i2s(A_GEOM_X).c_str()));
+	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","",i2s(A_GEOM_Y).c_str()));
+	attrAdd(new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_W).c_str()));
+	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_H).c_str()));
+	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_X_SC).c_str()));
+	attrAdd(new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_Y_SC).c_str()));
+	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","",i2s(A_GEOM_Z).c_str()));
+	attrAdd(new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",i2s(A_GEOM_MARGIN).c_str()));
+	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
+	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
+	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
 	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200"));
     }
 }
@@ -904,7 +904,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     }
     else if(a_path == "/wdg/st/en")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(enable()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
     else if(a_path == "/wdg/st/parent")
@@ -928,9 +928,9 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
-	    if(a_path == "/wdg/cfg/u_a")	opt->setText(TSYS::int2str((permit()>>6)&0x7));
-	    if(a_path == "/wdg/cfg/g_a")	opt->setText(TSYS::int2str((permit()>>3)&0x7));
-	    if(a_path == "/wdg/cfg/o_a")	opt->setText(TSYS::int2str(permit()&0x7));
+	    if(a_path == "/wdg/cfg/u_a")	opt->setText(i2s((permit()>>6)&0x7));
+	    if(a_path == "/wdg/cfg/g_a")	opt->setText(i2s((permit()>>3)&0x7));
+	    if(a_path == "/wdg/cfg/o_a")	opt->setText(i2s(permit()&0x7));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
@@ -1087,7 +1087,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
 		if(el)
 		{
-		    el->setAttr("len","")->setAttr("wdgFlg",TSYS::int2str(attr.at().flgGlob()))->
+		    el->setAttr("len","")->setAttr("wdgFlg",i2s(attr.at().flgGlob()))->
 			setAttr("modif",TSYS::uint2str(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
@@ -1537,12 +1537,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
 		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
-		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().fld().type()+
+		if(n_type)	n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
 				    ((wdg.at().attrAt(lst[i_el]).at().fld().flg()&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address))<<4)));
 		if(n_wa)	n_wa->childAdd("el")->setText( wdg.at().attrAt(lst[i_el]).at().fld().values()+"|"+
 							    wdg.at().attrAt(lst[i_el]).at().fld().selNames());
-		if(n_proc)	n_proc->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
-		if(n_cfg)	n_cfg->childAdd("el")->setText(TSYS::int2str(wdg.at().attrAt(lst[i_el]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle)));
+		if(n_proc)	n_proc->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&Attr::ProcAttr));
+		if(n_cfg)	n_cfg->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle)));
 		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().cfgTempl());
 	    }
 	}
@@ -1645,7 +1645,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     }
     else if(a_path == "/proc/calc/per")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(calcPer()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcPer()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcPer(atoi(opt->text().c_str()));
     }
     else if(a_path == "/proc/calc/prog")
@@ -1690,29 +1690,29 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
     }
     else if(a_path == "/proc/tp_ls" && ctrChkNode(opt))
     {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Boolean))->setText(_("Boolean"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer))->setText(_("Integer"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real))->setText(_("Real"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String))->setText(_("String"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Object))->setText(_("Object"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(TFld::Selected<<4)))->setText(_("Select integer"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real+(TFld::Selected<<4)))->setText(_("Select real"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(TFld::Selected<<4)))->setText(_("Select string"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(TFld::FullText<<4)))->setText(_("Text"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Font<<4)))->setText(_("Font"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Integer+(Attr::DateTime<<4)))->setText(_("DateTime"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String+(Attr::Address<<4)))->setText(_("Address"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Boolean))->setText(_("Boolean"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer))->setText(_("Integer"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Real))->setText(_("Real"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String))->setText(_("String"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Object))->setText(_("Object"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer+(TFld::Selected<<4)))->setText(_("Select integer"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Real+(TFld::Selected<<4)))->setText(_("Select real"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::Selected<<4)))->setText(_("Select string"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(TFld::FullText<<4)))->setText(_("Text"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Color<<4)))->setText(_("Color"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Image<<4)))->setText(_("Image"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Font<<4)))->setText(_("Font"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer+(Attr::DateTime<<4)))->setText(_("DateTime"));
+	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Address<<4)))->setText(_("Address"));
     }
     else if(a_path == "/proc/lnk_ls" && ctrChkNode(opt))
     {
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(0))->setText(_("Not"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgConst))->setText(_("Constant"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgLnkIn))->setText(_("Input link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgLnkOut))->setText(_("Output link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::CfgLnkIn|Attr::CfgLnkOut))->setText(_("Full link"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Attr::FromStyle))->setText(_("From style"));
+	opt->childAdd("el")->setAttr("id",i2s(0))->setText(_("Not"));
+	opt->childAdd("el")->setAttr("id",i2s(Attr::CfgConst))->setText(_("Constant"));
+	opt->childAdd("el")->setAttr("id",i2s(Attr::CfgLnkIn))->setText(_("Input link"));
+	opt->childAdd("el")->setAttr("id",i2s(Attr::CfgLnkOut))->setText(_("Output link"));
+	opt->childAdd("el")->setAttr("id",i2s(Attr::CfgLnkIn|Attr::CfgLnkOut))->setText(_("Full link"));
+	opt->childAdd("el")->setAttr("id",i2s(Attr::FromStyle))->setText(_("From style"));
     }
     else return false;
 
@@ -1828,9 +1828,9 @@ string Attr::getS( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getS(true),false).getS();
     switch(fld().type())
     {
-	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? TSYS::int2str(tvl) : EVAL_STR; }
+	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? i2s(tvl) : EVAL_STR; }
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? TSYS::real2str(tvl) : EVAL_STR; }
-	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? TSYS::int2str((bool)tvl) : EVAL_STR; }
+	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
 	case TFld::Object:	{ AutoHD<TVarObj> tvl = getO(sys); return (tvl.at().objName() != "EVAL") ? tvl.at().getStrXML() : EVAL_STR; }
 	case TFld::String:
 	{
@@ -1965,7 +1965,7 @@ void Attr::setI( int val, bool strongPrev, bool sys )
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())
     {
-	case TFld::String:	setS((val!=EVAL_INT) ? TSYS::int2str(val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::String:	setS((val!=EVAL_INT) ? i2s(val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Real:	setR((val!=EVAL_INT) ? val : EVAL_REAL, strongPrev, sys);		break;
 	case TFld::Boolean:	setB((val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
 	case TFld::Integer:
@@ -2021,13 +2021,13 @@ void Attr::setB( char val, bool strongPrev, bool sys )
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())
     {
-	case TFld::String:	setS((val!=EVAL_BOOL) ? TSYS::int2str((bool)val) : EVAL_STR, strongPrev, sys);	break;
-	case TFld::Integer:	setI((val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys);			break;
-	case TFld::Real:	setR((val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev, sys);		break;
+	case TFld::String:	setS((val!=EVAL_BOOL) ? i2s((bool)val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::Integer:	setI((val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys);		break;
+	case TFld::Real:	setR((val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev, sys);	break;
 	case TFld::Boolean:
 	{
 	    if((!strongPrev && m_val.b_val == val) ||
-		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;
+		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
 	    bool t_val = m_val.b_val;
 	    m_val.b_val = val;
 	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))

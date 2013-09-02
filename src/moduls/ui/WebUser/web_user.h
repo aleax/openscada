@@ -67,20 +67,21 @@ class UserPg : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string id( )		{ return mId; }
-	string name( );
-	string descr( )		{ return cfg("DESCR").getS(); }
-	bool toEnable( )	{ return mAEn; }
-	bool enableStat( )	{ return mEn; }
-	string progLang( );
-	string prog( );
-	string workProg( )	{ return mWorkProg; }
+	string	id( )		{ return mId; }
+	string	name( );
+	string	descr( )	{ return cfg("DESCR").getS(); }
+	bool	toEnable( )	{ return mAEn; }
+	bool	enableStat( )	{ return mEn; }
+	string	progLang( );
+	string	prog( );
+	string	workProg( )	{ return mWorkProg; }
+	int	timeStamp( )	{ return mTimeStamp; }
 
-	string getStatus( );
+	string	getStatus( );
 
-	string DB( )		{ return mDB; }
-	string tbl( );
-	string fullDB( )	{ return DB()+'.'+tbl(); }
+	string	DB( )		{ return mDB; }
+	string	tbl( );
+	string	fullDB( )	{ return DB()+'.'+tbl(); }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
@@ -114,6 +115,7 @@ class UserPg : public TCntrNode, public TConfig
 	//Attributes
 	TCfg	&mId;
 	char	&mAEn, mEn;
+	int	&mTimeStamp;
 	string	mDB, mWorkProg;
 };
 

@@ -103,6 +103,8 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;1000"));
     fldAdd(new TFld("TM_REST_DT",_("Restore data depth time (hour)"),TFld::Real,TFld::NoFlag,"6.2","1","0;12"));
+    fldAdd(new TFld("GATH_MESS_LEV",_("Gather messages level"),TFld::Integer,TFld::Selected,"1","1",
+	"0;1;2;3;4;5;6;7",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)")));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","0","0;1000"));
     fldAdd(new TFld("STATIONS",_("Remote stations list"),TFld::String,TFld::FullText,"100"));
     fldAdd(new TFld("CNTRPRM",_("Remote cotrollers and parameters list"),TFld::String,TFld::FullText,"200"));
@@ -125,7 +127,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
     ::TController(name_c,daq_db,cfgelem),
-    mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()), mPerOld(cfg("PERIOD").getId()),
+    mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()), mPerOld(cfg("PERIOD").getId()),
     mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
     prcSt(false), call_st(false), endrunReq(false), mPer(1e9), tmGath(0)
 {
@@ -289,6 +291,16 @@ void TMdContr::stop_( )
     }
 }
 
+bool TMdContr::cfgChange( TCfg &icfg )
+{
+    TController::cfgChange(icfg);
+
+    if(icfg.fld().name() == "SCHEDULE" && startStat())
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+
+    return true;
+}
+
 void *TMdContr::Task( void *icntr )
 {
     map<string,float>::iterator sti;
@@ -405,7 +417,9 @@ void *TMdContr::Task( void *icntr )
 		    {
 			int tm_grnd = cntr.mStatWork[i_st].second.lstMess[i_c->first];
 			if(!tm_grnd) tm_grnd = SYS->sysTm() - 3600*cntr.restDtTm();
-			req.childAdd("get")->setAttr("path", "/"+i_c->first+"/%2fserv%2fmess")->setAttr("tm_grnd", TSYS::int2str(tm_grnd));
+			req.childAdd("get")->setAttr("path", "/"+i_c->first+"/%2fserv%2fmess")->
+					     setAttr("tm_grnd", TSYS::int2str(tm_grnd))->
+					     setAttr("lev", cntr.mMessLev.getS());
 		    }
 
 		    if(!req.childSize()) continue;
@@ -554,7 +568,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,
             "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/TM_REST_DT",cfg("TM_REST_DT").fld().descr(),RWRWR_,"root",SDAQ_ID,1,

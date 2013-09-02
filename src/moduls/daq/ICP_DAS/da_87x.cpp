@@ -347,8 +347,11 @@ da_87x::DevFeature da_87x::getDev( TMdPrm *p, const string &nm )
 	wdev.DO = (atoi(p->modPrm("modDOtp","0").c_str())<<8) | atoi(p->modPrm("modDO","0").c_str());
 	wdev.CNTR = atoi(p->modPrm("modCNTR","0").c_str());
     }
-    else if(wdev.AO && (cntrSet=atoi(p->modPrm("modAO","-1").c_str())) > 0)	wdev.AO = vmin(cntrSet,wdev.AO);
-    else if(wdev.CNTR && (cntrSet=atoi(p->modPrm("modCNTR","-1").c_str())) > 0)	wdev.CNTR = vmin(cntrSet,wdev.CNTR);
+    else
+    {
+	if(wdev.AO && (cntrSet=atoi(p->modPrm("modAO","-1").c_str())) >= 0)	wdev.AO = vmin(cntrSet,wdev.AO);
+	if(wdev.CNTR && (cntrSet=atoi(p->modPrm("modCNTR","-1").c_str())) >= 0)	wdev.CNTR = vmin(cntrSet,wdev.CNTR);
+    }
 
     return wdev;
 }

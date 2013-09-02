@@ -86,19 +86,20 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mDefPg("*")
     mSource	= name;
 
     //> Reg export functions
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
-    modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
+	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
+    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost));
 
     mPgU = grpAdd("up_");
 
     //> User page DB structure
-    mUPgEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    mUPgEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    mUPgEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    mUPgEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPgEl.fldAdd( new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000") );
+    mUPgEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    mUPgEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    mUPgEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    mUPgEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
+    mUPgEl.fldAdd(new TFld("PROG",_("Program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
+    mUPgEl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 }
 
 TWEB::~TWEB()
@@ -166,6 +167,7 @@ void TWEB::load_( )
 
 void TWEB::save_( )
 {
+
     TBDS::genDBSet(nodePath()+"DefPg",defPg());
 }
 
@@ -447,7 +449,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 //* UserPrt                                       *
 //*************************************************
 UserPg::UserPg( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), cntReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
+    TConfig(el), cntReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mTimeStamp(cfg("TIMESTAMP").getId()), mDB(idb)
 {
     mId = iid;
 }
@@ -524,6 +526,7 @@ void UserPg::load_( )
 
 void UserPg::save_( )
 {
+    mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
@@ -536,25 +539,25 @@ bool UserPg::cfgChange( TCfg &cfg )
 
 void UserPg::setEnable( bool vl )
 {
-    if( mEn == vl ) return;
+    if(mEn == vl) return;
 
     cntReq = 0;
 
-    if( vl )
+    if(vl)
     {
 	//> Prepare and compile page function
-	if( !prog().empty() )
+	if(!prog().empty())
 	{
 	    TFunction funcIO("upg_"+id());
-	    funcIO.ioIns( new IO("rez",_("Result"),IO::String,IO::Return,"200 OK"),0);
-	    funcIO.ioIns( new IO("HTTPreq",_("HTTP request"),IO::String,IO::Default,"GET"),1);
-	    funcIO.ioIns( new IO("url",_("URL"),IO::String,IO::Default),2);
-	    funcIO.ioIns( new IO("page",_("Page"),IO::String,IO::Output),3);
-	    funcIO.ioIns( new IO("sender",_("Sender"),IO::String,IO::Default),4);
-	    funcIO.ioIns( new IO("user",_("User"),IO::String,IO::Default),5);
-	    funcIO.ioIns( new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default),6);
-	    funcIO.ioIns( new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default),7);
-	    funcIO.ioIns( new IO("cnts",_("Content items"),IO::Object,IO::Default),8);
+	    funcIO.ioIns(new IO("rez",_("Result"),IO::String,IO::Return,"200 OK"), 0);
+	    funcIO.ioIns(new IO("HTTPreq",_("HTTP request"),IO::String,IO::Default,"GET"), 1);
+	    funcIO.ioIns(new IO("url",_("URL"),IO::String,IO::Default), 2);
+	    funcIO.ioIns(new IO("page",_("Page"),IO::String,IO::Output), 3);
+	    funcIO.ioIns(new IO("sender",_("Sender"),IO::String,IO::Default), 4);
+	    funcIO.ioIns(new IO("user",_("User"),IO::String,IO::Default), 5);
+	    funcIO.ioIns(new IO("HTTPvars",_("HTTP variables"),IO::Object,IO::Default), 6);
+	    funcIO.ioIns(new IO("URLprms",_("URL's parameters"),IO::Object,IO::Default), 7);
+	    funcIO.ioIns(new IO("cnts",_("Content items"),IO::Object,IO::Default), 8);
 
 	    mWorkProg = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(progLang(),1,'.'),funcIO,prog());
@@ -591,11 +594,13 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SUI_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+		ctrMkNode("fld",opt,-1,"/up/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SUI_ID,RWRWR_);
-		ctrRemoveNode(opt,"/up/cfg/PROG");
+		ctrRemoveNode(opt, "/up/cfg/PROG");
+		ctrRemoveNode(opt, "/up/cfg/TIMESTAMP");
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prgm",_("Program")))
 	    {
@@ -628,6 +633,7 @@ void UserPg::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDB(opt->text());
     }
+    else if(a_path == "/up/st/timestamp" && ctrChkNode(opt))	opt->setText(TSYS::int2str(timeStamp()));
     else if(a_path == "/up/cfg/plangLs" && ctrChkNode(opt))
     {
 	string tplng = progLang();

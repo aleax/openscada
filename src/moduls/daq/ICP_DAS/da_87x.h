@@ -37,7 +37,7 @@ class da_87x: public DA
         class DevFeature
         {
             public:
-                DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0, unsigned iCNTR = 0 ) :
+                DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDI = 0, unsigned iDO = 0, unsigned iCNTR = 0 ) :
                     AI(iAI), AO(iAO), DI(iDI), DO(iDO), CNTR(iCNTR)	{ }
                 DevFeature( ) : AI(0), AO(0), DI(0), DO(0), CNTR(0)	{ }
 

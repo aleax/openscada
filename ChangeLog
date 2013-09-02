@@ -1,10 +1,44 @@
+2013-09-02 Roman
+- SYS: To openscada_start script the OpenSCADA project selection is added from the link name.
+    Inline links added to global functions i2s()->TSYS::int2str(), u2s()->TSYS::uint2str(), ll2s()->TSYS::ll2str(), r2s()->TSYS::real2str().
+    String labels enumeration is added by strLabEnum().
+    Command line parameter "--StatName=<name>" is added for station name set.
+    Station no present warning message disabled for no station select.
+- DB: To simple prescription widget the program selection by menu on button is added.
+    Prescription import and export by selection dialog on button is added.
+    Hold events is added to the value set and increment level rising after each 3 second of "ElCadr"
+    OPC_UA client and server certifies is updated.
+    Some fixes.
+- DAQ.DAQGate: Gather messages level selection is added for controller object.
+- FIX:DAQ.ICP_DAS: DI and DO I87k modules support is fixed. CNTR number set is fixed for I87k modules.
+- FIX:DAQ.JavaLikeCalc: System functions removing is allowed.
+- DAQ.ModBus: Attributes list field size is increased to 100000.
+- DAQ.Templates,Protocol.ModBus: Previous row using as template at one new creation is added.
+- DAQ.{ModBus,SMH2Gi}: Connection error message set conditional up to level TMess::Error.
+- DAQ.{DAQGate,ModBus}: Gather task hot sheduling change is added.
+- FIX:DAQ.ModBus: Wrong EVAL set by link id on error writing by output link is fixed.
+- {Lib,Protocol}.OPC_UA: Services "OpcUa_CreateSubscriptionRequest", "OpcUa_CreateMonitoredItemsRequest",
+	"OpcUa_TranslateBrowsePathsToNodeIdsRequest", "OpcUa_PublishRequest" first implementation is added.
+    Server objects and variables is added: "Server"->("ServerStatus"->"State", "NamespaceArray").
+    Generic node's attributes processing mosly improved and expanded.
+- UI.VCAEngine: TSYS::int2str() replaced to i2s(). Context help for modes and values of view "Button" of primitive "FormEl" is added.
+    Primitive "Box" moved to predefined indexes.
+- !!:FIX:UI.Vision: Vector index_array reforming fixed for points 1 and 2 for place only common figures and once
+    (exclude Arc, for connection points 1 and 2). Fix crash on Lines and Arcs (previous wrong fix).
+- UI.Vision: Separated "Load" and "Save" modes processing of view "Button" of primitive "FormEl".
+    Loading data user limit is added.
+- UI.{Vision,WebVision}: Set background palette of run-time window to unbordered master page.
+- FIX:UI.WebCfg: Date fields display for table and other is fixed.
+- UI.WebUser: TimeStamp is added to programming objects for changes control.
+
+
 2013-08-19 Roman
 - SYS: Default string buffer size is increased from 3000 to 10000.
     Default string buffer size for numbers is added by NSTR_BUF_LEN and set to 100.
     *2str function implementation is changed to the switch style.
 - Transport: Address configuration record size is grown to 100.
 - !:FIX:Archive.FSArch: Messages to plain archive placing is fixed for big, on string buffer size limit.
-- !!!!:DAQ.OPC_UA: OPC UA protocol's part for Client and Server is moved to LGPL v3 library for alow and simplify using by other projects.
+- !!!!:DAQ.OPC_UA: OPC UA protocol's part for Client and Server is moved to LGPL v3 library for allow and simplify using by other projects.
     Controller's object is made simply for EndPoints and transports selection and configuration.
     For now you can set only EndPoint and the transport will created from it. Also for the controller object enabled
     you will take list for browsed and allowed endpoins.

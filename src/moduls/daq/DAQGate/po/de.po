@@ -1,5 +1,4 @@
 # OpenSCADA.DAQ.DAQGate translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
@@ -10,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 16:23+0300\n"
+"POT-Creation-Date: 2013-08-29 16:39+0300\n"
 "PO-Revision-Date: 2009-08-17 12:07+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -49,6 +48,14 @@ msgstr "Zeitüberschreitung bei der Wiederherstellung (s)"
 
 msgid "Restore data depth time (hour)"
 msgstr "Wiederherstellen von Daten Tiefe der Zeit (Stunde)"
+
+msgid "Gather messages level"
+msgstr "Sammeln Meldungen Ebene"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7)"
+msgstr ""
 
 msgid "Sync inter remote station period (s)"
 msgstr "Wiederholungsrate Synchronisierung entfernte Station (sek)"

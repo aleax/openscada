@@ -80,7 +80,7 @@ void TModule::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore)	return;
 
-    mess_info(nodePath().c_str(),_("Connect module!"));
+    mess_info(nodePath().c_str(),_("Connect module."));
 }
 
 TSubSYS &TModule::owner( )	{ return *(TSubSYS*)nodePrev(); }

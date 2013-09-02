@@ -28,8 +28,11 @@ namespace VCA
     enum AttrID
     {
 	//> Generic
+	A_COM_FOCUS	= -2,
 	A_COM_LOAD	= -1,
 	A_ROOT		= 1,
+	A_PG_OPEN_SRC	= 3,
+	A_PG_GRP	= 4,
 	A_EN		= 5,
 	A_ACTIVE	= 6,
 	A_GEOM_X	= 7,
@@ -72,6 +75,13 @@ namespace VCA
 	A_FormElFont	= 25,
 	A_FormElName	= 26,
 	A_FormElMixP4	= 27,	//BUTTON:colorText
+
+	//> Primitive "Box" specific
+	A_BoxBackClr	= 20,
+	A_BoxBackImg	= 21,
+	A_BoxBordWdth	= 22,
+	A_BoxBordClr	= 23,
+	A_BoxBordStl	= 24,
     };
 
     //ElFigure preset indexes
@@ -81,6 +91,9 @@ namespace VCA
     enum FormEl_Views	{ F_LINE_ED = 0, F_TEXT_ED, F_CHECK_BOX, F_BUTTON, F_COMBO, F_LIST, F_SLIDER, F_SCROLL_BAR, F_TREE };
     enum FormEl_LineViews { FL_TEXT = 0, FL_COMBO, FL_INTEGER, FL_REAL, FL_TIME, FL_DATE, FL_DATE_TM };
     enum FormEl_BtModes { FBT_STD = 0, FBT_CHECK, FBT_MENU, FBT_LOAD, FBT_SAVE };
+
+    //Box preset indexes
+    enum Box_BordStls	{ FBRD_NONE = 0, FBRD_DOT, FBRD_DASH, FBRD_SOL, FBRD_DBL, FBRD_GROOVE, FBRD_RIDGE, FBRD_INSET, FBRD_OUTSET };
 }
 
 #endif //TYPES_H

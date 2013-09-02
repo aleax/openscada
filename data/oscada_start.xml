@@ -8,7 +8,7 @@
 	Describe internal parameters for station.
 	The station is OpenSCADA program.
 	-->
-	<prm id="StName">Work station</prm>
+	<!--<prm id="StName">Work station</prm>-->
 	<prm id="WorkDB">SQLite.GenDB</prm>
 	<prm id="LogTarget">10</prm>
 	<prm id="SaveAtExit">0</prm>

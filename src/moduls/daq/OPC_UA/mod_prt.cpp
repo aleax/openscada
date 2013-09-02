@@ -258,7 +258,7 @@ bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
 //* OPCEndPoint                                   *
 //*************************************************
 OPCEndPoint::OPCEndPoint( const string &iid, const string &idb, TElem *el ) :
-    TConfig(el), mId(cfg("ID")), mName(cfg("NAME")), mDescr(cfg("DESCR")), mURL(cfg("URL")),
+    TConfig(el), EP(modPrt), mId(cfg("ID")), mName(cfg("NAME")), mDescr(cfg("DESCR")), mURL(cfg("URL")),
     mSerType(cfg("SerialzType").getId()), mAEn(cfg("EN").getBd()),
     mDB(idb)
 {
@@ -603,41 +603,80 @@ string OPCEndPoint::reqData( int reqTp, const string &rb )
 		UA::iS(rb, off);			//indexRange
 		UA::iSqlf(rb, off);			//dataEncoding
 
-		//> For temporary ????
-		if(nid.ns() == 0 && nid.numbVal() == OpcUa_Server_ServerStatus_State)
-		{
-		    switch(aid)
-		    {
-			case AId_NodeId:modPrt->oDataValue(respEp, eMsk, nid.toAddr(), OpcUa_NodeId);	break;
-			case AId_Value:	modPrt->oDataValue(respEp, eMsk, 0, OpcUa_Int32);		break;
-			default: modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);	break;
-		    }
-		    continue;
-		}
-
 		//> Get node from objects tree
 		map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
 		if(ndX != ndMap.end())
 		{
-		    if(aid == AId_NodeId)		modPrt->oDataValue(respEp, eMsk, nid.toAddr(), OpcUa_NodeId);
-		    else if(aid == AId_NodeClass)	modPrt->oDataValue(respEp, eMsk, ndX->second->attr("NodeClass"), OpcUa_Int32);
-		    else if(aid == AId_BrowseName)	modPrt->oDataValue(respEp, eMsk, ndX->second->attr("name"), OpcUa_QualifiedName);
-		    else if(aid == AId_DisplayName)
-			modPrt->oDataValue(respEp, eMsk, ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"),OpcUa_LocalizedText);
-		    else if(aid == AId_WriteMask || aid == AId_UserWriteMask)	modPrt->oDataValue(respEp, eMsk, 0, OpcUa_UInt32);
-		    else if(aid == AId_IsAbstract && !ndX->second->attr("IsAbstract").empty())
-			modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("IsAbstract").c_str()), OpcUa_Boolean);
-		    else if(aid == AId_Symmetric && !ndX->second->attr("Symmetric").empty())
-			modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("Symmetric").c_str()), OpcUa_Boolean);
-		    else if(aid == AId_InverseName && !ndX->second->attr("InverseName").empty())
-			modPrt->oDataValue(respEp, eMsk, ndX->second->attr("InverseName"), OpcUa_LocalizedText);
-		    else if(aid == AId_EventNotifier && !ndX->second->attr("EventNotifier").empty())
-			modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("EventNotifier").c_str()), OpcUa_Byte);
-		    else if(aid == AId_DataType && !ndX->second->attr("DataType").empty())
-			modPrt->oDataValue(respEp, eMsk, ndX->second->attr("DataType"), OpcUa_NodeId);
-		    else if(aid == AId_ValueRank && !ndX->second->attr("ValueRank").empty())
-			modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("ValueRank").c_str()), OpcUa_Int32);
-		    else modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);
+		    switch(aid)
+		    {
+			case AId_NodeId: modPrt->oDataValue(respEp, eMsk, nid.toAddr(), OpcUa_NodeId);				continue;
+			case AId_NodeClass: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("NodeClass"), OpcUa_Int32);	continue;
+			case AId_BrowseName: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("name"), OpcUa_QualifiedName);	continue;
+			case AId_DisplayName:
+			    modPrt->oDataValue(respEp, eMsk, ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"),OpcUa_LocalizedText);
+			    continue;
+			case AId_Descr: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("Descr"), OpcUa_LocalizedText);	continue;
+			case AId_WriteMask: case AId_UserWriteMask: modPrt->oDataValue(respEp, eMsk, 0, OpcUa_UInt32);		continue;
+			case AId_IsAbstract:
+			    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("IsAbstract").c_str()), OpcUa_Boolean);
+			    continue;
+			case AId_Symmetric:
+			    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("Symmetric").c_str()), OpcUa_Boolean);
+			    continue;
+			case AId_InverseName:
+			    modPrt->oDataValue(respEp, eMsk, ndX->second->attr("InverseName"), OpcUa_LocalizedText);
+			    continue;
+			case AId_EventNotifier:
+			    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("EventNotifier").c_str()), OpcUa_Byte);
+			    continue;
+			default:
+			{
+			    string dtType = ndX->second->attr("DataType");
+			    if(dtType.empty())	break;
+			    switch(aid)
+			    {
+				case AId_Value: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("Value"), atoi(dtType.c_str()));	continue;
+				case AId_DataType: modPrt->oDataValue(respEp, eMsk, (atoi(dtType.c_str())&(~0x80)), OpcUa_NodeId);	continue;
+				case AId_ValueRank:
+				{
+				    string val = ndX->second->attr("ValueRank");
+				    modPrt->oDataValue(respEp, eMsk, val.empty() ? -1 : atoi(val.c_str()), OpcUa_Int32);
+				    continue;
+				}
+				case AId_ArrayDimensions:
+				{
+				    string val = ndX->second->attr("Value");
+				    int cnt = 0;
+				    if(atoi(dtType.c_str())&0x80)
+					for(int off = 0; TSYS::strLine(val, 0, &off).size(); cnt++) ;
+				    modPrt->oDataValue(respEp, eMsk, cnt, 0x80|OpcUa_Int32);
+				    continue;
+				}
+				case AId_AccessLevel:
+				{
+				    string val = ndX->second->attr("AccessLevel");
+				    modPrt->oDataValue(respEp, eMsk, (val.empty() ? ACS_Read : atoi(val.c_str())), OpcUa_Byte);
+				    continue;
+				}
+				case AId_UserAccessLevel:
+				{
+				    string val = ndX->second->attr("UserAccessLevel");
+				    modPrt->oDataValue(respEp, eMsk, (val.empty() ? ACS_Read|ACS_Write : atoi(val.c_str())), OpcUa_Byte);
+				    continue;
+				}
+				case AId_MinimumSamplingInterval:
+				{
+				    string val = ndX->second->attr("MinimumSamplingInterval");
+				    modPrt->oDataValue(respEp, eMsk, val.empty() ? -1 : atoi(val.c_str()), OpcUa_Double);
+				    continue;
+				}
+				case AId_Historizing:
+				    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("Historizing").c_str()), OpcUa_Boolean);
+				    continue;
+			    }
+			}
+		    }
+		    modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);
 		    continue;
 		}
 
@@ -657,6 +696,7 @@ string OPCEndPoint::reqData( int reqTp, const string &rb )
 			{
 			    case AId_NodeId: modPrt->oDataValue(respEp, eMsk, nid.toAddr(), OpcUa_NodeId);	break;
 			    case AId_BrowseName: modPrt->oDataValue(respEp, eMsk, cNd.at().nodeName(), OpcUa_QualifiedName);	break;
+			    case AId_InverseName: modPrt->oDataValue(respEp, eMsk, "", OpcUa_LocalizedText);	break;
 			    case AId_WriteMask: case AId_UserWriteMask: modPrt->oDataValue(respEp, eMsk, 0, OpcUa_UInt32);	break;
 			    default:
 				//>>> Variable

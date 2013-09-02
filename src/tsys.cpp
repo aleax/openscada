@@ -311,6 +311,22 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
+string TSYS::strLabEnum( const string &base )
+{
+    //> Get number from end
+    unsigned numbDig = base.size(), numbXDig = base.size();
+    for(int i_c = base.size()-1; i_c >= 0; i_c--)
+	if(numbDig == base.size() && !isdigit(base[i_c])) numbDig = i_c+1;
+	else if(!isxdigit(base[i_c]))	{ numbXDig = i_c+1; break; }
+
+    //> Process number and increment
+    if(numbXDig < numbDig && (base.size()-numbXDig) > 2 && strncasecmp(base.c_str()+numbXDig,"0x",2) == 0)
+	return base.substr(0, numbXDig) + "0x" + int2str(strtol(base.c_str()+numbXDig,NULL,0)+1, TSYS::Hex);
+    if((base.size()-numbDig) > 1 && base[numbDig] == '0')
+	return base.substr(0, numbDig) + "0" + int2str(strtol(base.c_str()+numbDig,NULL,0)+1, TSYS::Oct);
+    return base.substr(0, numbDig) + int2str(strtol(base.c_str()+numbDig,NULL,0)+1);
+}
+
 string TSYS::optDescr( )
 {
     utsname buf;
@@ -324,7 +340,8 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"-h, --help             Info message about system options.\n"
 	"    --Config=<path>    Config-file path.\n"
-	"    --Station=<id>     Station identifier.\n"
+	"    --Station=<id>     The station identifier.\n"
+	"    --StatName=<name>  The station name.\n"
 	"    --demon            Start into demon mode.\n"
 	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
 	"    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -404,6 +421,7 @@ bool TSYS::cfgFileLoad( )
 	}
 	else if(argCom == "Config") 	mConfFile = argVl;
 	else if(argCom == "Station")	mId = argVl;
+	else if(argCom == "StatName")	mName = argVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
@@ -438,8 +456,9 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId)
 		{
-		    mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
-			mId.c_str(), stat_n->attr("id").c_str());
+		    if(mId != "EmptySt")
+			mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
+			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();

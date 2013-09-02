@@ -354,6 +354,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
     }
     catch(TError ierr) { err = "10:"+ierr.mess; }
 
+    if(messLev() >= TMess::Error && err.size()) mess_err(nodePath().c_str(), "%s", err.c_str());
     if(messLev() == TMess::Debug && err.size())
 	mess_debug_(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin).c_str(), err.c_str());
 

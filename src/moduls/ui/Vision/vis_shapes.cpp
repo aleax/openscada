@@ -916,12 +916,38 @@ void ShapeFormEl::buttonReleased( )
     {
 	case FBT_STD: w->attrSet("event","ws_BtRelease");	break;
 	case FBT_SAVE:
-	    if(!shD->wordWrap)
+	{
+	    if(!shD->wordWrap)	//The event from timer
 	    {
 		w->attrSet("event","ws_BtRelease");
 		break;
 	    }
 	    shD->wordWrap = false;
+
+	    int off = 0, hd;
+	    string  fHead	= TSYS::strLine(shD->value, 0, &off);
+	    string  fCtx	= shD->value.substr(off);
+	    off = 0;
+	    string  fTmpl	= TSYS::strParse(fHead, 0, "|", &off),
+		    fTitle	= TSYS::strParse(fHead, 0, "|", &off),
+		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off);
+	    if(fTmpl.empty())	break;
+	    if(fTitle.empty())	fTitle = (shD->mode==FBT_LOAD) ? _("Load file") : _("Save file");
+	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptSave);
+	    if(fn.size())
+	    {
+		if((hd=open(fn.toAscii().data(), O_CREAT|O_TRUNC|O_WRONLY, 0664)) < 0)
+		{
+		    mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(strerror(errno)), TVision::Error);
+		    break;
+		}
+		if(write(hd, fCtx.data(), fCtx.size()) != fCtx.size())
+		    mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(fn), TVision::Error);
+		close(hd);
+	    }
+	    w->attrSet("value","");	//Clear previous
+	    break;
+	}
 	case FBT_LOAD:
 	{
 	    int off = 0, hd;
@@ -933,67 +959,29 @@ void ShapeFormEl::buttonReleased( )
 		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off);
 	    if(fTmpl.empty())	break;
 	    if(fTitle.empty())	fTitle = (shD->mode==FBT_LOAD) ? _("Load file") : _("Save file");
-	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(),
-		(shD->mode==FBT_LOAD) ? QFileDialog::AcceptOpen : QFileDialog::AcceptSave);
+	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptOpen);
 	    if(!fn.size()) break;
-	    if(shD->mode == FBT_LOAD)
+	    if((hd=open(fn.toAscii().data(), O_RDONLY)) < 0)
 	    {
-		if((hd=open(fn.toAscii().data(), O_RDONLY)) < 0)
-		{
-		    mod->postMess(mod->nodePath().c_str(), 
-			TSYS::strMess(_("Open file %s error: %s."),fn.toAscii().data(),strerror(errno)).c_str(), TVision::Error);
-		    break;
-		}
-		string rez;
-		char buf[STR_BUF_LEN];
-		for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf, len);
-		close(hd);
-
-		map<string,string> attrs;
-		attrs["event"] = string("ws_BtLoad");
-		attrs["value"] = fHead+"\n"+rez;
-		w->attrsSet(attrs);
+		mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(strerror(errno)), TVision::Error);
+		break;
 	    }
-	    else
+	    string rez;
+	    char buf[STR_BUF_LEN];
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0 && rez.size() < USER_FILE_LIMIT; ) rez.append(buf, len);
+	    close(hd);
+	    if(rez.size() >= USER_FILE_LIMIT)
 	    {
-		if((hd=open(fn.toAscii().data(), O_CREAT|O_TRUNC|O_WRONLY, 0664)) < 0)
-		{
-		    mod->postMess(mod->nodePath().c_str(), 
-			TSYS::strMess(_("Open file %s error: %s."),fn.toAscii().data(),strerror(errno)).c_str(), TVision::Error);
-		    break;
-		}
-		write(hd, fCtx.data(), fCtx.size());
-		close(hd);
-
-		w->attrSet("value","");	//Clear previous write
+		mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fn), TVision::Error);
+		break;
 	    }
+
+	    map<string,string> attrs;
+	    attrs["event"] = string("ws_BtLoad");
+	    attrs["value"] = fHead+"\n"+rez;
+	    w->attrsSet(attrs);
 	    break;
 	}
-		/*{
-		    if(!runW) break;
-		    int off = 0;
-		    string  fHead = TSYS::strLine(shD->value, 0, &off);
-		    string  fCtx  = shD->value.substr(off);
-		    if(fHead.empty() || fCtx.empty())	break;
-		    off = 0;
-		    string  fTmpl       = TSYS::strParse(fHead, 0, "|", &off),
-			    fTitle      = TSYS::strParse(fHead, 0, "|", &off),
-			    fDefFile    = TSYS::strParse(fHead, 0, "|", &off);
-		    if(fTmpl.empty())   break;
-        	    if(fTitle.empty())  fTitle = _("Load file");
-		    QString fn = runW->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptSave);
-		    if(!fn.size()) break;
-		    int hd = open(fn.toAscii().data(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-        	    if(hd < 0)	mod->postMess(mod->nodePath().c_str(), TSYS::strMess(_("Open file %s error."),fn.toAscii().data()).c_str(), TVision::Error);
-		    else
-		    {
-			write(hd, fCtx.data(), fCtx.size());
-			close(hd);
-		    }
-		    //w->attrSet("value",);
-		    break;
-		}*/
-
     }
 }
 
@@ -1011,7 +999,7 @@ void ShapeFormEl::buttonMenuTrig( )
 {
     QAction *act = (QAction*)sender();
     WdgView *w = (WdgView *)act->parentWidget()->parentWidget();
-    w->attrSet("event", "ws_ButMenu="+act->data().toString().toStdString());
+    w->attrSet("event", "ws_BtMenu="+act->data().toString().toStdString());
 }
 
 void ShapeFormEl::comboChange(const QString &val)
@@ -1660,7 +1648,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
 			if(tfid >= 0)
 			{
-			    write(tfid, sdata.data(), sdata.size());
+			    if(write(tfid, sdata.data(), sdata.size()) != sdata.size())
+				mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
 			    mSrc = MediaSource(QString(tfile.c_str()));
 			}
@@ -4108,122 +4097,129 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     bool up = true;
     ShpDt *shD = (ShpDt*)w->shpData;
+    RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
+    RunPageView	*runP = runW ? qobject_cast<RunPageView*>(w) : NULL;
 
     switch(uiPrmPos)
     {
-	case -1:	//load
+	case A_COM_LOAD:
 	    up = true;
-	    if(qobject_cast<RunWdgView*>(w) && shD->inclWidget)
-		shD->inclWidget->setMinimumSize(w->size());
+	    if(runW && shD->inclWidget)	shD->inclWidget->setMinimumSize(w->size());
 	    break;
-	case -2:	//focus
-	    //if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
-	    break;
-        case 5:         //en
-	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
+	case A_COM_FOCUS: break;
+        case A_EN:
+	    if(!runW)	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible(shD->en && (((RunWdgView*)w)->permView() || dynamic_cast<RunPageView*>(w)));
+	    w->setVisible(shD->en && (runW->permView() || runP));
 	    break;
-	case 6:		//active
-	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
-	    if(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
+	case A_ACTIVE:
+	    if(!runW)	{ up = false; break; }
+	    if(atoi(val.c_str()) && runW->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
 	    else w->setFocusPolicy(Qt::NoFocus);
 	    break;
-	case 12:	//geomMargin
+	case A_GEOM_MARGIN:
 	    shD->geomMargin = atoi(val.c_str());
 	    if(w->layout()) w->layout()->setMargin(shD->geomMargin);
 	    break;
-	case 20: 	//backColor
+	case A_BoxBackClr:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setColor(shD->backGrnd.color());
-	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
-	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
+
+	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
+
 	    break;
 	}
-	case 21: 	//backImg
+	case A_BoxBackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
-	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
+
+	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
+
 	    break;
 	}
-	case 22:	//bordWidth
-	    shD->border.setWidth(atoi(val.c_str()));	break;
-	case 23:	//bordColor
-	    shD->border.setColor(getColor(val));	break;
-	case 24:	//bordStyle
-	    shD->bordStyle = atoi(val.c_str());	break;
-	case 3:		//pgOpenSrc
+	case A_BoxBordWdth:
+	    shD->border.setWidth(atoi(val.c_str()));
+
+	    if(runP && runP->mainWin()->masterPg() == w) runP->mainWin()->setPalette(shD->border.width() ? QPalette() : w->palette());
+
+	    break;
+	case A_BoxBordClr: shD->border.setColor(getColor(val));	break;
+	case A_BoxBordStl: shD->bordStyle = atoi(val.c_str());	break;
+	case A_PG_OPEN_SRC:
 	{
-	    if( !qobject_cast<RunWdgView*>(w) || qobject_cast<RunPageView*>(w) )	{ up = false; break; }
+	    if(!runW || runP)	{ up = false; break; }
 
 	    //>> Put previous include widget to page cache
-	    if( (shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()) )
+	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()))
 	    {
-		if( shD->inclWidget )
+		if(shD->inclWidget)
 		{
 		    shD->inclWidget->setReqTm(shD->inclWidget->mainWin()->reqTm());
-		    ((RunPageView*)w)->mainWin()->pgCacheAdd(shD->inclWidget);
+		    runW->mainWin()->pgCacheAdd(shD->inclWidget);
 		    shD->inclWidget->setEnabled(false);
 		    shD->inclWidget->setVisible(false);
 		    shD->inclScrl->takeWidget();
 		    shD->inclWidget->setParent(NULL);
-		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale( );
-		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale( );
+		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale();
+		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale();
 		    shD->inclWidget = NULL;
-		    w->setProperty("inclPg","");
+		    w->setProperty("inclPg", "");
 		}
 		//>> Create new include widget
-		if( val.size() )
+		if(val.size())
 		{
-		    if( !shD->inclScrl )
+		    if(!shD->inclScrl)
 		    {
 			QGridLayout *wlay = (QGridLayout*)w->layout();
-			if( !wlay ) wlay = new QGridLayout(w);
+			if(!wlay) wlay = new QGridLayout(w);
 			wlay->setMargin(0/*shD->geomMargin*/);
 			shD->inclScrl = new QScrollArea(w);
-			shD->inclScrl->setFocusPolicy( Qt::NoFocus );
-			shD->inclScrl->setFrameShape( QFrame::NoFrame );
+			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
+			shD->inclScrl->setFrameShape(QFrame::NoFrame);
 			wlay->addWidget(shD->inclScrl);
 		    }
 
-		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()),shD->inclWidget);
+		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()), shD->inclWidget);
 		    lab->setAlignment(Qt::AlignCenter);
 		    lab->setWordWrap(true);
 		    lab->resize(w->size());
 		    QPalette plt = lab->palette();
-		    plt.setColor(QPalette::WindowText,shD->border.color());
+		    plt.setColor(QPalette::WindowText, shD->border.color());
 		    lab->setPalette(plt);
 		    lab->setLineWidth(shD->border.width());
 		    lab->setFrameShape(QFrame::Box);
 		    shD->inclScrl->setWidget(lab);
 		    qApp->processEvents();
 
-		    shD->inclWidget = ((RunWdgView*)w)->mainWin()->pgCacheGet(val);
-		    if( shD->inclWidget )
+		    shD->inclWidget = runW->mainWin()->pgCacheGet(val);
+		    if(shD->inclWidget)
 		    {
-			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
+			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setEnabled(true);
 			shD->inclWidget->setVisible(true);
 			shD->inclWidget->setMinimumSize(w->size());
-			if( shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
-				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale() )
+			if(shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
+				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale())
 			    shD->inclWidget->load("");
 			else
 			{
@@ -4241,7 +4237,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget->setMinimumSize(w->size());
 			shD->inclWidget->load("");
 		    }
-		    w->setProperty("inclPg",TSYS::addr2str(shD->inclWidget).c_str());
+		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}
 	    } else up = false;
 	    break;
@@ -4249,7 +4245,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	default: up = false;
     }
 
-    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 )	w->update();
+    if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
 
     return up;
 }

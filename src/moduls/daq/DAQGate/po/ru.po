@@ -1,5 +1,4 @@
 # OpenSCADA.DAQ.DAQGate translate to Russian.
-# Copyright (C) 2007-2013 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.DAQGate package module.
 #
 # Roman Savochenko <rom_as@fromru.com>, 2007-2013.
@@ -8,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-17 16:23+0300\n"
+"POT-Creation-Date: 2013-08-29 16:39+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -46,6 +45,14 @@ msgstr "Интервал восстановления (с)"
 
 msgid "Restore data depth time (hour)"
 msgstr "Глубина времени восстановления данных (часов)"
+
+msgid "Gather messages level"
+msgstr "Уровень запрашиваемых сообщений"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7)"
+msgstr ""
 
 msgid "Sync inter remote station period (s)"
 msgstr "Периодичность синхронизации с удалённой станцией (с)"

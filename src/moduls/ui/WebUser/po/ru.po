@@ -1,14 +1,13 @@
 # OpenSCADA.UI.WebUser translate to Russian.
-# Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2010.
+# Roman Savochenko <rom_as@fromru.com>, 2010, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebUser 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-25 22:05+0200\n"
+"POT-Creation-Date: 2013-08-23 16:14+0300\n"
 "PO-Revision-Date: 2010-03-05 15:57+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -24,7 +23,8 @@ msgstr "Роман Савоченко"
 
 msgid "Allow creation self-user web-interfaces on any OpenSCADA language."
 msgstr ""
-"Позволяет создавать собственные пользовательские web-интерфейсы на языке OpenSCADA."
+"Позволяет создавать собственные пользовательские web-интерфейсы на языке "
+"OpenSCADA."
 
 msgid "ID"
 msgstr ""
@@ -40,6 +40,9 @@ msgstr "Включать"
 
 msgid "Program"
 msgstr "Программа"
+
+msgid "Date of modification"
+msgstr "Дата модификации"
 
 msgid "Search and create new user page error."
 msgstr "Ошибка поиска и создание новой страницы пользователя."

@@ -5351,27 +5351,28 @@ void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_n
 {
     flag_rect = true;
     count_rects = 0;
-    QVector <int> index_array_temp;
+    QVector<int> index_array_temp;
+
     //> detecting the common points for all connected figures
     for(int i = 0; i <= count_holds; i++)
-	if((*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n1] ||
-	    (*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n2])
-	{
-	    index_array_temp.push_back(index_array[i]);
-	    rect_array.push_back(((*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n1]) ? 0 : 1);
-	    count_rects++;
-	    flag_rect = true;
-	}
-	else
-	{
-	    index_array_temp.push_back(-1);
-	    rect_array.push_back(0);
-	}
-
+    {
+        if((*pnts)[rectItems[rect_num_temp].num] == (*pnts)[shapeItems[index_array[i]].n1])
+        {
+            index_array_temp.push_back(index_array[i]);
+            rect_array.push_back(0);
+            count_rects++;
+        }
+        if((*pnts)[rectItems[rect_num_temp].num]==(*pnts)[shapeItems[index_array[i]].n2])
+        {
+            index_array_temp.push_back(index_array[i]);
+            rect_array.push_back(1);
+            count_rects++;
+        }
+    }
     index_array.clear();
-    for(int i = 0; i < (count_rects+1); i++)	index_array.push_back(-1);
-    for(int i = 0; i < count_rects; i++)	index_array[i] = index_array_temp[i];
-    // if there is an arc in "index_array" we put it on the first place in it.
+    for(int i = 0; i < count_rects; i++)	index_array.push_back(index_array_temp[i]);
+
+    //> if there is an arc in "index_array" we put it on the first place in it.
     int num_arc = -1;
     for(int i = 0; i < count_rects; i++)
 	if(shapeItems[index_array[i]].type == ShapeItem::Arc)
@@ -5397,7 +5398,6 @@ void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_n
 	    flag_hold_arc = false;
 	}
     }
-    index_array_temp.clear();
 }
 
 void ShapeElFigure::rectNum3_4( const QVector<ShapeItem> &shapeItems)

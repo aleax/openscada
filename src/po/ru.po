@@ -1,5 +1,4 @@
 # OpenSCADA core translate to Russian.
-# Copyright (C) 2003 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA package.
 #
 # Roman Savochenko <rom_as@fromru.com>, 2003-2013.
@@ -8,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-06-19 17:42+0300\n"
+"POT-Creation-Date: 2013-08-28 16:41+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -808,8 +807,8 @@ msgstr "Максимальное время вычисления (сек)"
 msgid "Template program"
 msgstr "Программа шаблона"
 
-msgid "Modification timestamp"
-msgstr "Метка времени модификации"
+msgid "Date of modification"
+msgstr "Дата модификации"
 
 msgid "Template ID"
 msgstr "ID шаблона"
@@ -1268,8 +1267,8 @@ msgstr "Автор"
 msgid "License"
 msgstr "Лицензия"
 
-msgid "Connect module!"
-msgstr "Подключение модуля!"
+msgid "Connect module."
+msgstr "Подключение модуля."
 
 #, c-format
 msgid "Function '%s' is not present in the module!"
@@ -1319,9 +1318,6 @@ msgstr "Шаблон параметра: "
 
 msgid "Template"
 msgstr "Шаблон"
-
-msgid "Date of modification"
-msgstr "Дата модификации"
 
 msgid "Real;Integer;Boolean;String;Text;Object"
 msgstr "Вещественный;Целый;Логический;Строка;Текст;Объект"
@@ -1569,7 +1565,6 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
-#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1580,7 +1575,8 @@ msgid ""
 "===========================================================================\n"
 "-h, --help             Info message about system options.\n"
 "    --Config=<path>    Config-file path.\n"
-"    --Station=<id>     Station identifier.\n"
+"    --Station=<id>     The station identifier.\n"
+"    --StatName=<name>  The station name.\n"
 "    --demon            Start into demon mode.\n"
 "    --CoreDumpAllow\tSet limits for core dump creation allow on crash.\n"
 "    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -1618,7 +1614,8 @@ msgstr ""
 "===========================================================================\n"
 "-h, --help             Информация по опциям системы.\n"
 "    --Config=<путь>    Конфигурационный файл.\n"
-"    --Station=<имя>    Имя станции.\n"
+"    --Station=<ид>     Идентификатор станции.\n"
+"    --StatName=<имя>   Имя станции.\n"
 "    --demon            Запуск в режиме демона.\n"
 "    --CoreDumpAllow\tУстановить ограничения для разрешения генерации дампа "
 "памяти при крушении.\n"
@@ -2247,9 +2244,3 @@ msgstr "Входной транспорт не поддерживается!"
 
 msgid "Output transport no support!"
 msgstr "Выходных транспорт не поддерживается!"
-
-#~ msgid "*.*.[TableName]"
-#~ msgstr "*.*.[ИмяТаблицы]"
-
-#~ msgid "<cfg>.[TableName]"
-#~ msgstr "<cfg>.[ИмяТаблицы]"

@@ -1,7 +1,14 @@
 #!/bin/sh
 
-ProjName=$OSCADA_ProjName
+ProjName=
+# Get the project name from filename openscada_{ProjName}
+if test -n "$(which sed)"; then ProjName=`echo $0 | sed -n "/.*openscada_\(.*\)/s//\1/p"`; fi
+# Get the project name from variable "OSCADA_ProjName"
+if test "x$ProjName" = "x"; then ProjName=$OSCADA_ProjName; fi
+# Set the project name to default "start"
 if test "x$ProjName" = "x"; then ProjName=start; fi
+
+echo "Set the project name to: $ProjName"
 
 # Work directory check and prepare
 StartOrigCfgFile=@sysconfdir_full@/oscada_start.xml
@@ -20,8 +27,8 @@ if test ! -w $WorkDir/$ProjName; then
     fi
     CfgFile=$WorkDir/$ProjName/oscada.xml
     if test ! -e $CfgFile -a -f $StartCfgFile; then cp $StartCfgFile $CfgFile; fi
-    if test ! -e $CfgFile -a -f $StartOrigCfgFile; then cp $StartOrigCfgFile $CfgFile; fi
 fi
+if test ! -e $CfgFile -a -f $StartOrigCfgFile; then cp $StartOrigCfgFile $CfgFile; fi
 ## Check for local copy need for libraries DBs directory
 if test -d $StartWorkDir/LibsDB -a ! -d $WorkDir/LibsDB; then cp -R $StartWorkDir/LibsDB $WorkDir; fi
 if test ! -d $WorkDir/$ProjName/LibsDB -a ! -L $WorkDir/$ProjName/LibsDB; then ln -s ../LibsDB $WorkDir/$ProjName/LibsDB; fi
@@ -34,7 +41,7 @@ fi
 cd $WorkDir/$ProjName
 
 # Programm command and lock file
-pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgFile"
+pCmd="@bindir_full@/openscada --CoreDumpAllow --Config=$CfgFile --StatName=$ProjName"
 pLock=".openscada.lock"
 
 # Check for already started programm present

@@ -500,8 +500,8 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 		{
 		    struct tm tm_tm;
 		    time_t tm_t = dt_req.text().size() ? atoi(dt_req.text().c_str()) : time(NULL);
-		    localtime_r(&tm_t,&tm_tm);
-		    if(!wr) ses.page += "<b>"+TSYS::time2str(tm_t)+"</b>";
+		    localtime_r(&tm_t, &tm_tm);
+		    if(!wr) ses.page += "<b>"+TSYS::time2str(tm_t,"%d-%m-%Y %H:%M:%S")+"</b>";
 		    else
 		    {
 			string s_id = node.attr("id");
@@ -638,7 +638,7 @@ bool TWEB::getVal( SSess &ses, XMLNode &node, string a_path, bool rd )
 
 		XMLNode *x_el = t_lsel->childGet(i_rw);
 		if(t_linf->attr("tp") == "time")
-		    ses.page += "<td nowrap='nowrap'>"+TSYS::time2str(atoi(x_el->text().c_str()))+"</td>";
+		    ses.page += "<td nowrap='nowrap'>"+TSYS::time2str(atoi(x_el->text().c_str()),"%d-%m-%Y %H:%M:%S")+"</td>";
 		else if((t_linf->attr("dest") == "select" || t_linf->attr("dest") == "sel_ed") && c_wr)
 		{
 		    ses.page += "<td><select name='"+TSYS::int2str(i_rw)+":"+t_linf->attr("id")+"'>";
@@ -845,7 +845,7 @@ int TWEB::postCmd( SSess &ses, XMLNode &node, string prs_path )
 	    mess_info(nodePath().c_str(),_("%s| Go to link '%s'"),ses.user.c_str(),url.c_str());
 
 	    ses.page += "<meta http-equiv='Refresh' content='0; url="+url+"'>\n";
-	    messPost(ses.page,nodePath(),"Go to <"+url+"> !",TWEB::Info);
+	    messPost(ses.page, nodePath(), TSYS::strMess(_("Go to '%s'."),url.c_str()), TWEB::Info);
 	    return 0x01|0x02;  //No error. That no draw current page
 	}
 
@@ -933,7 +933,7 @@ int TWEB::postList( SSess &ses, XMLNode &node, string prs_path )
 	//printf("GO URL: %s\n",url.c_str());
 
 	ses.page += "<meta http-equiv='Refresh' content='0; url="+url+"'/>\n";
-	messPost(ses.page, nodePath(), "Go to <"+url+"> !",TWEB::Info);
+	messPost(ses.page, nodePath(), TSYS::strMess(_("Go to '%s'."),url.c_str()), TWEB::Info);
 	return 0x01|0x02;  //No error. That no draw current page
     }
 

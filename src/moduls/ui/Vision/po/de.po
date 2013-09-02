@@ -1,17 +1,16 @@
 # OpenSCADA.UI.Vision translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2011.
 # Joan Zimmermann <j.zimmermann@fetron.de>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@oscada.org>, 2010-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 16:45+0300\n"
+"POT-Creation-Date: 2013-08-22 12:28+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1925,6 +1924,18 @@ msgstr "Koordinaten(x,y): (%1, %2)"
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Widgetsgestalt '%1' ist nicht verfügbar!"
 
+msgid "Load file"
+msgstr "Datei laden"
+
+msgid "Save file"
+msgstr "Datei speichern"
+
+msgid "Write file '%1' is fail."
+msgstr "Fehler beim Schreiben in die Datei '%1'."
+
+msgid "Loadable file '%1' is too large."
+msgstr "Ladbarer Datei '%1' ist zu groß."
+
 msgid "kHz"
 msgstr "kHz"
 
@@ -2056,9 +2067,3 @@ msgstr "Zeit der Initialisation '%s' %f ms."
 
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
-
-#~ msgid "Connect"
-#~ msgstr "Verbinden"
-
-#~ msgid "Create"
-#~ msgstr "Erstellen"

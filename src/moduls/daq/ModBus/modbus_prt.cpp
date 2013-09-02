@@ -1437,12 +1437,19 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Default)); modif();
+	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
+	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()));
+	    else ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Default));
+	    modif();
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
 	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    ioIns(new IO("new",_("New IO"),IO::Integer,IO::Default), atoi(opt->attr("row").c_str())); modif();
+	    int row = atoi(opt->attr("row").c_str());
+	    IO *ioPrev = row ? io(row-1) : NULL;
+	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()), row);
+	    else ioIns(new IO("new",_("New IO"),IO::Integer,IO::Default), row);
+	    modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
@@ -1468,7 +1475,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if(col == "id")		io(row)->setId(opt->text());
 	    else if(col == "nm")	io(row)->setName(opt->text());
 	    else if(col == "tp")	io(row)->setType((IO::Type)atoi(opt->text().c_str()));
-	    else if(col == "lnk")	io(row)->setFlg( atoi(opt->text().c_str()) ? (io(row)->flg()|Node::IsLink) : (io(row)->flg() & ~Node::IsLink) );
+	    else if(col == "lnk")	io(row)->setFlg(atoi(opt->text().c_str()) ? (io(row)->flg()|Node::IsLink) : (io(row)->flg() & ~Node::IsLink));
 	    else if(col == "vl")	(data && data->val.func()) ? data->val.setS(row,opt->text()) : io(row)->setDef(opt->text());
 	    modif();
 	}

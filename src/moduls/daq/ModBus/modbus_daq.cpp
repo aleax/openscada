@@ -81,7 +81,7 @@ void TTpContr::postEnable( int flag )
     //> Parameter type bd structure
     //>> Standard parameter type by symple attributes list
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"1000",""));
+    tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"100000",""));
     //>> Extended logical parameter type by DAQ parameter's template
     t_prm = tpParmAdd("logic","PRM_BD_L",_("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
@@ -245,12 +245,14 @@ bool TMdContr::cfgChange( TCfg &icfg )
 {
     TController::cfgChange(icfg);
 
-    if( icfg.fld().name() == "PROT" )
+    if(icfg.fld().name() == "SCHEDULE" && startStat())
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    else if(icfg.fld().name() == "PROT")
     {
 	cfg("REQ_TRY").setView(icfg.getS()!="TCP");
-	if( startStat() ) stop();
+	if(startStat()) stop();
     }
-    else if( icfg.fld().name() == "FRAG_MERGE" && enableStat( ) ) disable( );
+    else if(icfg.fld().name() == "FRAG_MERGE" && enableStat()) disable();
 
     return true;
 }
@@ -677,7 +679,7 @@ string TMdContr::modBusReq( string &pdu )
     {
 	if(atoi(req.attr("err").c_str()) == 14) numErrCon++;
 	else numErrResp++;
-	mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
+	if(messLev() >= TMess::Error) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());
 	return req.attr("err");
     }
     pdu = req.text();
@@ -923,7 +925,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",mAddr.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/cntr/cfg/trLst");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/NODE",cfg("NODE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/MAX_BLKSZ",cfg("MAX_BLKSZ").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),/*startStat()?R_R_R_:*/RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/FRAG_MERGE",cfg("FRAG_MERGE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,
@@ -1326,7 +1328,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
     	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
 		if(lCtx->ioMdf(lCtx->lnk(i_l).io_id))
 		    if(!owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).real, w_err))
-			lCtx->setS(i_l,EVAL_STR);
+			lCtx->setS(lCtx->lnk(i_l).io_id, EVAL_STR);
 
 	    //> Put fixed system attributes
 	    if(lCtx->id_nm >= 0)  setName(lCtx->getS(lCtx->id_nm));
@@ -1336,11 +1338,11 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    elem().fldList(ls);
 	    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	    {
-		pVal = vlAt(ls[i_el]);
-    		int id_lnk = lCtx->lnkId(pVal.at().name());
+    		int id_lnk = lCtx->lnkId(ls[i_el]);
     		if(id_lnk >= 0 && lCtx->lnk(id_lnk).real.empty()) id_lnk = -1;
-    		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(pVal.at().name())),0,true);
-    		else pVal.at().set(owner().getVal(lCtx->lnk(id_lnk).real,acq_err),0,true);
+    		pVal = vlAt(ls[i_el]);
+    		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[i_el])), 0, true);
+    		else pVal.at().set(owner().getVal(lCtx->lnk(id_lnk).real,acq_err), 0, true);
 	    }
 	}catch(TError err)
 	{

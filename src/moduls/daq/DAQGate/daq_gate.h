@@ -117,7 +117,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	double	period( )	{ return mPer; }
-	string	cron( )		{ return cfg("SCHEDULE").getS(); }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
@@ -137,6 +137,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &cfg );
 
     private:
 	//Data
@@ -154,6 +155,8 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	enRes;				//Resource for enable params and request to remote OpenSCADA station
+	TCfg	&mSched,			//Calc schedule
+		&mMessLev;			//Messages level for gather
 	double	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestDtTm;			//Restore data maximum length time (hour)

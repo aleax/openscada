@@ -134,7 +134,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000") );
     wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
-    wdg_el.fldAdd( new TFld("TIMESTAMP",_("Modification timestamp"),TFld::Integer,TFld::DateTimeDec) );
+    wdg_el.fldAdd( new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec) );
 
     //> Make include widgets' DB structure
     inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
@@ -184,7 +184,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
     page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
     page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
-    page_el.fldAdd( new TFld("TIMESTAMP",_("Modification timestamp"),TFld::Integer,TFld::DateTimeDec) );
+    page_el.fldAdd( new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec) );
 
     //> Make sessions' IO values of projects DB structure
     prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );

@@ -29,6 +29,7 @@
 #define PACKAGE_SITE	"http://oscada.org"
 
 //> Other system's constants
+#define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
 #define NSTR_BUF_LEN	100	// Length of string buffers for number
 #define STD_WAIT_DELAY	100	// Standard wait dalay (ms)
@@ -218,6 +219,7 @@ class TSYS : public TCntrNode
 	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
 	static string strDecode( const string &in, Code tp = Custom );
 	static string strMess( const char *fmt, ... );
+	static string strLabEnum( const string &base );
 
 	static string strCompr( const string &in, int lev = -1 );
 	static string strUncompr( const string &in );
@@ -359,6 +361,13 @@ class TSYS : public TCntrNode
 
 	map<string,double>	mCntrs;
 };
+
+//*************************************************
+//* Global functions for OSCADA namespace         *
+inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2str(val, view); }
+inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
+inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
+inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
 
 extern TSYS *SYS;
 }

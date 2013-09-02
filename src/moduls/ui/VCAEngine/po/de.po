@@ -1,5 +1,4 @@
 # OpenSCADA.UI.VCAEngine translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.VCAEngine package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009, 2010.
@@ -10,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-12 07:25+0300\n"
+"POT-Creation-Date: 2013-08-23 16:17+0300\n"
 "PO-Revision-Date: 2010-10-21 19:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -270,8 +269,8 @@ msgstr "Schrift"
 msgid "Word wrap"
 msgstr "Zeichenumbruch"
 
-msgid "Repeat (delay-interval)"
-msgstr "Wiederholen (Delay-Intervall)"
+msgid "Repeat"
+msgstr "Wiederholen"
 
 msgid "Image"
 msgstr "Bild"
@@ -397,6 +396,49 @@ msgstr ""
 "  \"s\" - Sekunden (0-59);\n"
 "  \"ss\" - Sekunden (00-59);\n"
 "  \"AP,ap\" - auf AM/PM-Anzeige oder am/pm."
+
+msgid ""
+"The button operation mode:\n"
+"  \"Standard\" - normal button which allow events repeat on it hold (the "
+"parameters into \"value\");\n"
+"  \"Checkable\" - fixed button (values into \"value\");\n"
+"  \"Menu\" - open menu on press (items list into \"value\");\n"
+"  \"Load\" - provides user-space small files loading through the visual "
+"interface;\n"
+"             on the mode the button press will open selection file dialog "
+"for loading and\n"
+"             the file content next saving to attribute \"value\";\n"
+"  \"Save\" - provides user-space small files saving through the visual "
+"interface;\n"
+"             on the file content writing to \"value\" attribute for user "
+"will open selection/set file dialog\n"
+"             and next saving the attribute \"value\" content to the file and "
+"next the attribute \"value\" will set clean."
+msgstr ""
+
+msgid ""
+"Repeating parameters of events on holding \"{delay}-{interval}\", time in "
+"milliseconds."
+msgstr ""
+
+#, fuzzy
+msgid "Toggle value."
+msgstr "Wert der Nachricht"
+
+msgid "Addresses of menu elements list like \"/grp1/grp2/item1\"."
+msgstr ""
+
+msgid ""
+"Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and loaded "
+"file content.\n"
+"Files template like \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."
+msgstr ""
+
+msgid ""
+"Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and saved file "
+"content.\n"
+"Files template like \"Images (*.png *.xpm *.jpg);;CSV-file (*.csv)\"."
+msgstr ""
 
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
@@ -1272,9 +1314,6 @@ msgstr "Zeitraum der Berechnungsverfahren"
 
 msgid "Changed attributes"
 msgstr "Geänderte Attribute"
-
-msgid "Modification timestamp"
-msgstr "Änderungszeitmarken"
 
 msgid "IDW"
 msgstr ""

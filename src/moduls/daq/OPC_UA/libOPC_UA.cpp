@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "openssl/bio.h"
 #include "openssl/ssl.h"
@@ -513,11 +514,11 @@ string UA::iSl( const string &rb, int &off, string *locale )
     string sloc;
     if(encMsk & 0x01)
     {
-	sloc = iS(rb,off);
+	sloc = iS(rb, off);
 	if(locale) *locale = sloc;
     }
     if(encMsk & 0x02) return iS(rb, off);
-    return sloc;
+    return "";//sloc;
 }
 
 string UA::iSqlf( const string &rb, int &off, uint16_t *nsIdx )
@@ -616,7 +617,7 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
 		case OpcUa_LocalizedText:
 		{
 		    string loc, vl;
-		    vl = iSl(buf,off,&loc);
+		    vl = iSl(buf, off, &loc);
 		    rezVl += loc+":"+vl;
 		    break;
 		}
@@ -775,7 +776,8 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const OPCVariant &vl, uint8_t vE
 		case OpcUa_StatusCode:	oNu(buf, strtoll(setVl.getS().c_str(),NULL,0), 4);	break;
 		case OpcUa_QualifiedName: oSqlf(buf, setVl.getS());	break;
 		case OpcUa_LocalizedText: oSl(buf, setVl.getS(), lang2CodeSYS());	break;
-		default: throw OPCError(OpcUa_BadDecodingError, "Data type '%d' isn't supported.", vEMsk&0x3F);
+		default: //oS(buf, setVl.getS());	break;
+		    throw OPCError(OpcUa_BadDecodingError, "Data type '%d' isn't supported.", vEMsk&0x3F);
 	    }
 	}
 	//> ArrayDimension
@@ -2470,8 +2472,8 @@ nextReq:
 		{
 		    //>> Request
 								//> clientSignature
-		    string alg = iS(rb,off);			//algorithm
-		    string sign = iS(rb,off);			//signature
+		    string alg = iS(rb, off);			//algorithm
+		    string sign = iS(rb, off);			//signature
 		    if(scHd.secPolicy != "None")
 		    {
 			if(!asymmetricVerify(certPEM2DER(wep->cert())+wep->sessGet(sesTokId).servNonce, sign, scHd.clCert))
@@ -2480,16 +2482,16 @@ nextReq:
 
 		    iNu(rb, off, 4);				//clientSoftwareCertificates []
 								//> localeIds []
-		    uint32_t ln = iNu(rb,off,4);		//List number
+		    uint32_t ln = iNu(rb, off, 4);		//List number
 		    for(unsigned i_l = 0; i_l < ln; i_l++)
 			iS(rb, off);				//localeId
 								//> userIdentityToken
-		    uint32_t userIdTk = iNodeId(rb,off).numbVal();	//TypeId
+		    uint32_t userIdTk = iNodeId(rb, off).numbVal();	//TypeId
 		    iNu(rb, off, 1);				//Encode
 		    iNu(rb, off, 4);				//Length
 		    switch(userIdTk)
 		    {
-			case 321:				//AnonymousIdentityToken
+			case OpcUa_AnonymousIdentityToken:	//AnonymousIdentityToken
 			    iS(rb, off);			//policyId
 			    break;
 			default:
@@ -2517,6 +2519,101 @@ nextReq:
 		    //>> Respond
 		    reqTp = OpcUa_CloseSessionResponse;
 		    break;
+		case OpcUa_CreateSubscriptionRequest:		//!!!! Should next implemented full
+		    //>> Request
+		    iR(rb, off, 8);		//requestedPublishingInterval
+		    iNu(rb, off, 4);		//requestedLifetimeCount
+		    iNu(rb, off, 4);		//requestedMaxKeepAliveCount
+		    iNu(rb, off, 4);		//maxNotificationsPerPublish
+		    iNu(rb, off, 1);		//publishingEnabled
+		    iNu(rb, off, 1);		//priority
+
+		    //>> Respond
+		    reqTp = OpcUa_CreateSubscriptionResponse;
+		    respEp.reserve(100);
+		    oNu(respEp, 0/*subScrId++*/, 4);	//subscriptionId
+		    oR(respEp, 0, 8); 			//revisedPublishingInterval
+		    oNu(respEp, 0, 4);			//revisedLifetimeCount
+		    oNu(respEp, 0, 4);			//revisedMaxKeepAliveCount
+		    break;
+		case OpcUa_CreateMonitoredItemsRequest:	//!!!! Should next implemented full
+		{
+		    //>> Request
+		    iN(rb, off, 4);			//subscriptionId
+		    iN(rb, off, 4);			//timestampsToReturn
+							//> itemsToCreate []
+		    uint32_t ic = iNu(rb, off, 4); 	//MonitoredItems
+
+		    //>> Respond
+		    reqTp = OpcUa_CreateMonitoredItemsResponse;
+		    oNu(respEp, ic, 4);			//results []
+
+		    //>> Nodes list process and request form
+		    for(uint32_t i_c = 0; i_c < ic; i_c++)
+        	    {
+							//>> itemToMonitor
+			NodeId nid = iNodeId(rb, off);	//nodeId
+            		uint32_t aid = iNu(rb, off, 4);	//attributeId
+			iS(rb, off);			//indexRange
+			iSqlf(rb, off);			//dataEncoding
+							//>> monitoringMode
+			iN(rb, off, 4);
+							//>> requestedParameters
+			iN(rb, off, 4);			//clientHandle
+			iR(rb, off, 8);			//samplingInterval
+							//>>> filter (ExtensibleParameterMonitoringFilter)
+			NodeId fTp = iNodeId(rb, off);	//TypeId
+			iNu(rb, off, 1);		//EncodingMask
+			uint32_t eSz = iNu(rb, off, 4);	//ExtObj size
+							//No event filterssupport - simple pass
+			//if(fTp.numbVal() == OpcUa_EventFilter)
+			iVal(rb, off, eSz);
+
+			iNu(rb, off, 4);		//>>> queueSize
+			iNu(rb, off, 1);		//>>> discardOldest
+
+			//>>> Node result
+			oNu(respEp, OpcUa_BadFilterNotAllowed, 4);	//statusCode, 0x80450000 (BadFilterNotAllowed)
+			oN(respEp, 0, 4);				//monitoredItemId, 0
+			oR(respEp, -1, 8);				//revisedSamplingInterval, -1
+			oNu(respEp, 0, 4);				//revisedQueueSize, 0
+			oNodeId(respEp, 0u);				//filterResult, 0
+			oNu(respEp, 0, 1);				//encodingMask, 0
+		    }
+		    oN(respEp, -1, 4);				//diagnosticInfos [], -1
+		    break;
+		}
+		case OpcUa_TranslateBrowsePathsToNodeIdsRequest: //!!!! Error always
+		{
+		    //>> Request
+							//> browsePaths []
+		    uint32_t ip = iNu(rb, off, 4); 	//paths number
+
+		    //>> Respond
+		    reqTp = OpcUa_TranslateBrowsePathsToNodeIdsResponse;
+		    oNu(respEp, ip, 4);			//results []
+
+		    //>> Pathes list process and request form
+		    for(unsigned i_p = 0; i_p < ip; i_p++)
+		    {
+			iNodeId(rb, off);		//startingNode
+							//>> relativePath
+			uint32_t irp = iNu(rb, off, 4);	//rpaths number
+			for(unsigned i_rp = 0; i_rp < irp; i_rp++)
+			{
+			    iNodeId(rb, off);		//referenceTypeId
+			    iNu(rb, off, 1);		//isInverse
+			    iNu(rb, off, 1);		//includeSubtypes
+			    iSqlf(rb, off);		//targetName
+			}
+
+			//>>> Path result
+			oNu(respEp, OpcUa_BadNoMatch, 4);	//statusCode, 0x806f0000 (BadNoMatch)
+			oNu(respEp, 0, 4);		//targets [], 0 !!!!
+		    }
+		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
+		    break;
+		}
 		case OpcUa_ReadRequest:
 		    respEp = wep->reqData(reqTp, rb.substr(off));
 		    reqTp = OpcUa_ReadResponse;
@@ -2529,6 +2626,21 @@ nextReq:
 		    respEp = wep->reqData(reqTp, rb.substr(off));
 		    reqTp = OpcUa_WriteResponse;
 		    break;
+		case OpcUa_PublishRequest:	//!!!! Should next implemented full
+		{
+		    //>> Request
+							//> subscription Acknowledgements []
+		    uint32_t sa = iNu(rb, off, 4);	//Acknowledgements
+		    for(unsigned i_a = 0; i_a < sa; i_a++)
+		    {
+			iN(rb, off, 4);			//subscriptionId
+			iNu(rb, off, 4);		//sequenceNumber
+		    }
+		    //> No response now
+		    throw OPCError(0, "", "");
+		    reqTp = OpcUa_PublishResponse;
+		    break;
+		}
 		case OpcUa_ServiceFault:	break;
 		default:
 		    throw OPCError(OpcUa_BadNotSupported, "No supported request id '%d'.", reqTp);
@@ -2622,7 +2734,7 @@ Server::Sess::Sess( ) : tInact(0), tAccess(0)
 //*************************************************
 //* Server::EP					  *
 //*************************************************
-Server::EP::EP( ) : mEn(false), cntReq(0), objTree("root")
+Server::EP::EP( Server *iserv ) : mEn(false), cntReq(0), objTree("root"), serv(iserv)
 {
 
 }
@@ -2644,6 +2756,13 @@ void Server::EP::setEnable( bool vl )
      nodeReg(0u,OpcUa_RootFolder,"Root",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
       nodeReg(OpcUa_RootFolder,OpcUa_ViewsFolder,"Views",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
       nodeReg(OpcUa_RootFolder,OpcUa_ObjectsFolder,"Objects",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
+       nodeReg(OpcUa_ObjectsFolder,OpcUa_Server,"Server",NC_Object,OpcUa_Organizes,OpcUa_ServerType);
+        nodeReg(OpcUa_Server,OpcUa_Server_ServerStatus,"ServerStatus",NC_Variable,OpcUa_HasComponent,OpcUa_ServerStatusType)->
+    	    setAttr("Value","Running")->setAttr("DataType",int2str(OpcUa_String/*OpcUa_ServerStatusDataType*/));
+	 nodeReg(OpcUa_Server_ServerStatus,OpcUa_Server_ServerStatus_State,"State",NC_Variable,OpcUa_HasComponent,OpcUa_BaseDataVariableType)->
+    	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
+        nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("ValueRank","1")->setAttr("Value","http://opcfundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
        //nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),1),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->setAttr("DisplayName",SYS->daq().at().subName());
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
@@ -2787,13 +2906,13 @@ XML_N *Server::EP::nodeReg( const NodeId &parent, const NodeId &ndId, const stri
 	setAttr("referenceTypeId", refTypeId.toAddr())->
 	setAttr("typeDefinition", typeDef.toAddr());
 
-    switch(ndClass)
+    /*switch(ndClass)
     {
 	case NC_Object:	cNx->setAttr("EventNotifier", "0");				break;
 	case NC_ObjectType: case NC_DataType: cNx->setAttr("IsAbstract", "0");		break;
 	case NC_ReferenceType: cNx->setAttr("IsAbstract", "0")->setAttr("Symmetric", "0");	break;
 	case NC_VariableType: cNx->setAttr("IsAbstract", "0")->setAttr("DataType", "0:0")->setAttr("ValueRank", "-2");	break;
-    }
+    }*/
 
     ndMap[ndId.toAddr()] = cNx;
 

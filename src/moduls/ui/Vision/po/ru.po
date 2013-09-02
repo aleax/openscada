@@ -1,14 +1,13 @@
 # OpenSCADA.UI.Vision translate to Russian.
-# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-26 16:45+0300\n"
+"POT-Creation-Date: 2013-08-22 12:25+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1905,6 +1904,18 @@ msgstr "Координаты(x,y): (%1, %2)"
 
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Образ виджета '%1' ещё не реализован!"
+
+msgid "Load file"
+msgstr "Загрузка файла."
+
+msgid "Save file"
+msgstr "Сохранение файла."
+
+msgid "Write file '%1' is fail."
+msgstr "Ошибка записи в файл '%1'."
+
+msgid "Loadable file '%1' is too large."
+msgstr "Загружаемый файл '%1' очень большой."
 
 msgid "kHz"
 msgstr "кГц"
