@@ -162,8 +162,8 @@ class ShapeElFigure : public WdgShape
 	void init( WdgView *w );
 	void destroy( WdgView *w );
 
-	void editEnter( WdgView *w );
-	void editExit( WdgView *w );
+	void editEnter( DevelWdgView *w );
+	void editExit( DevelWdgView *w );
 	void wdgPopup( WdgView *w, QMenu &menu );
 
 	bool attrSet( WdgView *w, int uiPrmPos, const string &val );

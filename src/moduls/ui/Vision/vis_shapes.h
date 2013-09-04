@@ -65,6 +65,7 @@ namespace VISION
 {
 
 class WdgView;
+class DevelWdgView;
 
 //*************************************************
 //* Widget shape abstract object                  *
@@ -84,8 +85,8 @@ class WdgShape : public QObject
 	virtual void init( WdgView *view )						{ }
 	virtual void destroy( WdgView *view )						{ }
 
-	virtual void editEnter( WdgView *view )						{ }
-	virtual void editExit( WdgView *view )						{ }
+	virtual void editEnter( DevelWdgView *view )					{ }
+	virtual void editExit( DevelWdgView *view )					{ }
 	virtual void wdgPopup( WdgView *view, QMenu &menu )				{ }
 
 	virtual bool attrSet( WdgView *view, int uiPrmPos, const string &val );

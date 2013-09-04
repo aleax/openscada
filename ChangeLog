@@ -1,3 +1,10 @@
+2013-09-04 Roman
+- FIX:SYS: String labels enumeration into strLabEnum() mostly fixed for "Hex".
+- FIX:UI.Vision: Primitive "ElFigure" fixed for scale and unscale widths by move scaling direct to the figures paint.
+- FIX:UI.{Vision,WebVision}: Primitive "Diagram" fix to fill the trend buffer for duplicates on request to the archive for single value
+    and the requests moved to single request for current.
+
+
 2013-09-02 Roman
 - SYS: To openscada_start script the OpenSCADA project selection is added from the link name.
     Inline links added to global functions i2s()->TSYS::int2str(), u2s()->TSYS::uint2str(), ll2s()->TSYS::ll2str(), r2s()->TSYS::real2str().

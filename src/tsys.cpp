@@ -315,15 +315,19 @@ string TSYS::strLabEnum( const string &base )
 {
     //> Get number from end
     unsigned numbDig = base.size(), numbXDig = base.size();
+    bool noDig = false;
     for(int i_c = base.size()-1; i_c >= 0; i_c--)
-	if(numbDig == base.size() && !isdigit(base[i_c])) numbDig = i_c+1;
-	else if(!isxdigit(base[i_c]))	{ numbXDig = i_c+1; break; }
+    {
+	if(!noDig && isdigit(base[i_c])) numbDig = i_c; else noDig = true;
+	if(!(isxdigit(base[i_c]) || (i_c && strncasecmp(base.c_str()+i_c-1,"0x",2) == 0))) break;
+	else if(!isxdigit(base[i_c])) { numbXDig = i_c-1; break; }
+    }
 
     //> Process number and increment
     if(numbXDig < numbDig && (base.size()-numbXDig) > 2 && strncasecmp(base.c_str()+numbXDig,"0x",2) == 0)
-	return base.substr(0, numbXDig) + "0x" + int2str(strtol(base.c_str()+numbXDig,NULL,0)+1, TSYS::Hex);
+	return base.substr(0, numbXDig) + "0x" + int2str(strtol(base.c_str()+numbXDig,NULL,16)+1, TSYS::Hex);
     if((base.size()-numbDig) > 1 && base[numbDig] == '0')
-	return base.substr(0, numbDig) + "0" + int2str(strtol(base.c_str()+numbDig,NULL,0)+1, TSYS::Oct);
+	return base.substr(0, numbDig) + "0" + int2str(strtol(base.c_str()+numbDig,NULL,8)+1, TSYS::Oct);
     return base.substr(0, numbDig) + int2str(strtol(base.c_str()+numbDig,NULL,0)+1);
 }
 

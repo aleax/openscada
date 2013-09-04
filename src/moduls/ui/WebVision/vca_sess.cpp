@@ -6128,7 +6128,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	//> One request check and prepare
 	int trcPer = owner().trcPer*1000000;
 	if(owner().tTimeCurent && trcPer && owner().valArch.empty() &&
-	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
 	    XMLNode req("get");
 	    req.setAttr("path",addr()+"/%2fserv%2fval")->
@@ -6188,8 +6188,8 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
 
     //> Correcting request to present data
-    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+1;
-    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-1;
+    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+wantPer;//1;
+    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
     //> Get values data
     int64_t	bbeg, bend, bper;
