@@ -73,9 +73,9 @@ SDLJoystick::SDLJoystick(int index, QObject *parent) : QRunnable()
 
 void SDLJoystick::run()
 {
-#if OSC_DEBUG >= 1
+//#if OSC_DEBUG >= 1
 	mess_debug(__func__,"Start thread 0x%x for handling joystic %d", QThread::currentThread(), index);
-#endif
+//#endif
 
 	// Check if joystick is open
 	if(SDL_JoystickOpened(index))
@@ -87,12 +87,12 @@ void SDLJoystick::run()
     joy = SDL_JoystickOpen(index);
 	if(joy)
 	{
-#if OSC_DEBUG >= 1
+//#if OSC_DEBUG >= 1
     	mess_debug(__func__,"Name: %s", SDL_JoystickName(index));
     	mess_debug(__func__,"Number of Axes: %d", SDL_JoystickNumAxes(joy));
     	mess_debug(__func__,"Number of Buttons: %d", SDL_JoystickNumButtons(joy));
     	mess_debug(__func__,"Number of Balls: %d", SDL_JoystickNumBalls(joy));
-#endif
+//#endif
    }
 
 	else return;
@@ -124,9 +124,9 @@ void SDLJoystick::run()
 			prev_event=event;
 
 
-		//QSdlJoystickEvent *ev = new QSdlJoystickEvent(QSdlJoystickEventType);
-		//QCoreApplication::postEvent(parent, ev);
 		QSdlJoystickEvent *ev;
+
+		//mess_debug(__func__,"SDL event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
 
 		switch(event.type)
 		{
@@ -137,6 +137,7 @@ void SDLJoystick::run()
 	        case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */
 	        	if ( prevAxesValue[event.jaxis.axis] != event.jaxis.value )
 	        	{
+	        		mess_debug(__func__,"SDL_JOYAXISMOTION: %d (thread 0x%x, joystick %d)", event.jaxis.value, QThread::currentThread(), index);
 	        		prevAxesValue[event.jaxis.axis]=event.jaxis.value;
 	        		ev = new QSdlJoystickEvent(QSdlJoystickAxisEventType, event.jaxis.axis, event.jaxis.value);
 	        		QCoreApplication::postEvent(parent, ev);
@@ -145,15 +146,16 @@ void SDLJoystick::run()
 
 	        case SDL_JOYBUTTONDOWN:  /* Handle Joystick Button */
 	        case SDL_JOYBUTTONUP:
+	        	mess_debug(__func__,"SDL_JOYBUTTONUP(/DONW): %d (thread 0x%x, joystick %d)", event.jbutton.button, QThread::currentThread(), index);
 	        	ev = new QSdlJoystickEvent(QSdlJoystickButtonEventType, event.jbutton.type, event.jbutton.button, event.jbutton.state);
 	        	QCoreApplication::postEvent(parent, ev);
 	        break;
 
-#if OSC_DEBUG >= 1
+//#if OSC_DEBUG >= 1
 	        default:	//unhandled events
-	        	mess_debug(__func__,"SDL event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
+	        	//mess_debug(__func__,"SDL unhandled event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
 	        break;
-#endif
+//#endif
 
 	    }
 	}
@@ -186,7 +188,7 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     {
     	this->sdl_init=true;
 
-#if OSC_DEBUG >= 1
+//#if OSC_DEBUG >= 1
     	mess_info(__func__, "SDL initialization successful");
 
     	// Prints the compile time version
@@ -195,7 +197,7 @@ RunWdgView::RunWdgView( const string &iwid, int ilevel, VisRun *mainWind, QWidge
     	mess_info(__func__, "SDL compile-time version: %u.%u.%u", ver.major, ver.minor, ver.patch);
     	ver = *SDL_Linked_Version();
     	mess_info(__func__, "SDL runtime version: %u.%u.%u", ver.major, ver.minor, ver.patch);
-#endif
+//#endif
     }
     else
     {
@@ -229,15 +231,16 @@ RunWdgView::~RunWdgView( )
     SDL_Event quit;
     quit.type = SDL_QUIT;
     SDL_PushEvent(&quit);
+    sdl_handlers.waitForDone();
 
-    if( sdl_handlers.waitForDone ( 100 ) != true )
+    /*if( sdl_handlers.waitForDone ( 100 ) != true )
     {
 #if OSC_DEBUG >= 1
     	mess_debug(__func__, "Wait for stop SDL threads...");
 #endif
     	SDL_PushEvent(&quit);
 
-    }
+    }*/
 
     //mess_debug(__func__, "Unload libsdl");
     //SDL_Quit();
@@ -518,6 +521,7 @@ bool RunWdgView::event( QEvent *event )
     {
 	case QEvent::Paint:	return true;
 	case QEvent::KeyPress:
+	    mess_debug(__func__,"QEvent::KeyPress");	//DEBUG
 	    mod_ev = "key_pres";
 	case QEvent::KeyRelease:
 	    if(((QKeyEvent*)event)->key() == Qt::Key_Tab) { mod_ev = ""; break; }
@@ -641,6 +645,7 @@ bool RunWdgView::event( QEvent *event )
 	    return true;
 	case QEvent::MouseButtonPress:
 	    mod_ev = "key_mousePres";
+	    mess_debug(__func__,"QEvent::MouseButtonPress");	//DEBUG
 	case QEvent::MouseButtonRelease:
 	    if(mod_ev.empty()) mod_ev = "key_mouseRels";
 	    switch(((QMouseEvent*)event)->button())
@@ -666,13 +671,17 @@ bool RunWdgView::event( QEvent *event )
 
 #ifdef HAVE_SDL
 	case QSdlJoystickAxisEventType:
+		mess_debug(__func__,"QSdlJoystickAxisEventType");	//DEBUG
 		mod_ev="joy_axis";
 		mod_ev+=TSYS::int2str( ((QSdlJoystickEvent*)event)->axis() );
 		mod_ev+="_value";
 		mod_ev+=TSYS::int2str( ((QSdlJoystickEvent*)event)->value() );
-		attrSet("event", mod_ev);
+	    attrs["event"] += (attrs["event"].size()?"\n":"")+mod_ev;
+	    attrsSet(attrs);
+		//attrSet("event", mod_ev);
 		return true;
 	case QSdlJoystickButtonEventType:
+		mess_debug(__func__,"QSdlJoystickButtonEventType");	//DEBUG
 		mod_ev="joy_button";
 		switch( ((QSdlJoystickEvent*)event)->act_type() )
 		{
@@ -687,7 +696,9 @@ bool RunWdgView::event( QEvent *event )
 			break;
 		}
 		mod_ev+=TSYS::int2str( ((QSdlJoystickEvent*)event)->button() );
-		attrSet("event", mod_ev);
+	    attrs["event"] += (attrs["event"].size()?"\n":"")+mod_ev;
+	    attrsSet(attrs);
+		//attrSet("event", mod_ev);
 		return true;
 #endif
 
