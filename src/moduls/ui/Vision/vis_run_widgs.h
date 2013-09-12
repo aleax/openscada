@@ -72,7 +72,7 @@ namespace VISION
     //* SDL USB HID gamepads/joysticks
     //*********************************************
 
-    class SDLJoystick : public QRunnable
+    class SDLJoystick : public QThread
     {
 
     public:
