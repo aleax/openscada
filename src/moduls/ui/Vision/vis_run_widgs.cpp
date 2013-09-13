@@ -68,14 +68,13 @@ SDLJoystick::SDLJoystick(int index, QObject *parent) : QThread()
 {
 	this->index=index;
 	this->parent=parent;
-	f_stop=false;
 }
 
 void SDLJoystick::run()
 {
-#if OSC_DEBUG >= 5
+//#if OSC_DEBUG >= 5
 	mess_debug(__func__,"Start thread 0x%x for handling joystic %d", QThread::currentThread(), index);
-#endif
+//#endif
 
 	// Check if joystick is open
 	if(SDL_JoystickOpened(index))
@@ -110,30 +109,15 @@ void SDLJoystick::run()
 	while(true)
 	{
 
-		if(f_stop)
-			break;
-
 		if( SDL_PollEvent(&event)==0 )
 			continue;
 
-		// Compare current event with previous (I have gamepad with Axis3value0 every time, without any actions)
-		// Comparation with 'memcmp' have potential problems
-		if ( memcmp(&event, &prev_event, sizeof(SDL_Event)) == 0 )
-			continue;
-		else
-			prev_event=event;
-
-
 		QSdlJoystickEvent *ev;
 
-		//mess_debug(__func__,"SDL event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
+		mess_debug(__func__,"SDL event %d in thread 0x%x for handling joystic %d", event.type, QThread::currentThread(), index);
 
 		switch(event.type)
 		{
-	        case SDL_QUIT:
-	        	f_stop=true;
-	        break;
-
 	        case SDL_JOYAXISMOTION:  /* Handle Joystick Motion */
 	        	if ( prevAxesValue[event.jaxis.axis] != event.jaxis.value )
 	        	{
@@ -151,9 +135,9 @@ void SDLJoystick::run()
 
 
 	        default:	//unhandled events
-#if OSC_DEBUG >= 5
+//#if OSC_DEBUG >= 5
 	        	mess_debug(__func__,"SDL unhandled event.type: %d (thread 0x%x, joystick %d)", event.type, QThread::currentThread(), index);
-#endif
+//#endif
 	        break;
 
 
@@ -162,9 +146,9 @@ void SDLJoystick::run()
 
 	SDL_JoystickClose(joy);
 
-#if OSC_DEBUG >= 5
+//#if OSC_DEBUG >= 5
     mess_debug(__func__,"Stop thread 0x%x for handling joystic %d", QThread::currentThread(), index);
-#endif
+//#endif
 }
 
 #endif

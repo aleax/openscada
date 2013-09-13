@@ -293,6 +293,44 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //> Init session
     initSess(prj_it,crSessForce);
 
+    //> Init joystick
+#ifdef HAVE_SDL
+    // Init libsdl
+    bool sdl_init=false;
+    // Sure, we're only using the Joystick, but SDL doesn't work if video isn't initialised
+    if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != -1 )
+    {
+    	sdl_init=true;
+//#if OSC_DEBUG >= 1
+    	mess_info(__func__, "SDL initialization successful");
+    	// Prints the compile time version
+    	SDL_version ver;
+    	SDL_VERSION(&ver);
+    	mess_info(__func__, "SDL compile-time version: %u.%u.%u", ver.major, ver.minor, ver.patch);
+    	ver = *SDL_Linked_Version();
+    	mess_info(__func__, "SDL runtime version: %u.%u.%u", ver.major, ver.minor, ver.patch);
+//#endif
+    }
+    else
+    {
+    	mess_err(__func__, "SDL initialization error: %s", SDL_GetError());
+    	sdl_init=false;
+    }
+
+    if(sdl_init)
+    {
+    	int numJoy=SDL_NumJoysticks();
+    	for(int i=0; i< numJoy; i++)
+    	{
+    		SDLJoystick *Joystick = new SDLJoystick(i, this->master_pg);
+    		connect(Joystick, SIGNAL(finished()),
+    				Joystick, SLOT(deleteLater()));
+    		Joystick->start();
+    	}
+    }
+
+#endif
+
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
 
@@ -1139,43 +1177,6 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     //> Start timer
     updateTimer->start(period());
-
-#ifdef HAVE_SDL
-    // Init libsdl
-    bool sdl_init=false;
-    // Sure, we're only using the Joystick, but SDL doesn't work if video isn't initialised
-    if ( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) != -1 )
-    {
-    	sdl_init=true;
-//#if OSC_DEBUG >= 1
-    	mess_info(__func__, "SDL initialization successful");
-    	// Prints the compile time version
-    	SDL_version ver;
-    	SDL_VERSION(&ver);
-    	mess_info(__func__, "SDL compile-time version: %u.%u.%u", ver.major, ver.minor, ver.patch);
-    	ver = *SDL_Linked_Version();
-    	mess_info(__func__, "SDL runtime version: %u.%u.%u", ver.major, ver.minor, ver.patch);
-//#endif
-    }
-    else
-    {
-    	mess_err(__func__, "SDL initialization error: %s", SDL_GetError());
-    	sdl_init=false;
-    }
-
-    if(sdl_init)
-    {
-    	int numJoy=SDL_NumJoysticks();
-    	for(int i=0; i< numJoy; i++)
-    	{
-    		SDLJoystick *Joystick = new SDLJoystick(i, this->master_pg);
-    		connect(Joystick, SIGNAL(finished()),
-    				Joystick, SLOT(deleteLater()));
-    		Joystick->start();
-    	}
-    }
-
-#endif
 
 }
 
