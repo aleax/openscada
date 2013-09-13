@@ -1,3 +1,18 @@
+2013-09-13 Roman
+- !!:SYS: To start script openscada_start appended the project selection from symbol link like openscada_{ProjNm} and menu provided
+    for select or new project by dialog, kdialog, zenity or Xdialog.
+- DB: To prescription frames added: programms sorting, renaming.
+- FYX:SYS: User API function getStrXML() is fixed for XMLNodeObj argument 1.
+- FIX:DAQ.ParamTempl: LockAttr flag copy prevented from locked attributes "f_*" on append and insert new.
+- DAQ.OPC_UA: Linking the module with library libOPC_UA changed to direct file include libOPC_UA.cpp for allow parralel building by -j2.
+    Some fixes and preparing to BrowseNext support.
+- UI.{Vision,VCAEngine}: Resources list and files inline browsing is added for image/media attributes.
+    Primitive "Media" is clean and used named indexes.
+    Mime table of containers is allowed for direct download, not only to selected, and mime detect from extension;
+    mime also used for unload files. Set limit for downloaded files size.
+- UI.VCAEngine: The include widgets to box change parent on widget library's or page's parent change is added, on the enable.
+
+
 2013-09-04 Roman
 - FIX:SYS: String labels enumeration into strLabEnum() mostly fixed for "Hex".
 - FIX:UI.Vision: Primitive "ElFigure" fixed for scale and unscale widths by move scaling direct to the figures paint.

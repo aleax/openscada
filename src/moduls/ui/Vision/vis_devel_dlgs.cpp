@@ -703,9 +703,8 @@ void LibProjProp::showEvent( QShowEvent * event )
 void LibProjProp::addMimeData( )
 {
     XMLNode req("add");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));    
-    if( owner()->cntrIfCmd(req) )
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl));
+    if(owner()->cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 
     tabChanged(1);
 }
@@ -713,7 +712,7 @@ void LibProjProp::addMimeData( )
 void LibProjProp::delMimeData( )
 {
     int row = mimeDataTable->currentRow( );
-    if( row < 0 ) { mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this ); return; }
+    if(row < 0) { mod->postMess( mod->nodePath().c_str(),_("No one row is selected."),TVision::Warning,this ); return; }
 
     XMLNode req("del");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
@@ -726,21 +725,25 @@ void LibProjProp::delMimeData( )
 
 void LibProjProp::loadMimeData( )
 {
-    int row = mimeDataTable->currentRow( );
-    if(row < 0) { mod->postMess(mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this); return; }
-
     QString fileName = owner()->getFileName(_("Load data"),"",_("All files (*.*)"));
     if(fileName.isEmpty())	return;
     QFile file(fileName);
     if(!file.open(QFile::ReadOnly))
-	mod->postMess(mod->nodePath().c_str(),
-		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()),TVision::Error,this);
+    {
+	mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
+	return;
+    }
+    if(file.size() >= USER_FILE_LIMIT)
+    {
+	mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fileName), TVision::Error, this);
+	return;
+    }
     QByteArray data = file.readAll();
 
     XMLNode req("set");
-    req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
-	setAttr("col","dt")->
-	setAttr("key_id",mimeDataTable->item(row,0)->text().toAscii().data())->
+    req.setAttr("path", ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->
+	setAttr("col", "dt")->
+	setAttr("key_id", mimeDataTable->selectedItems().empty() ? QFileInfo(fileName).fileName().toStdString() : mimeDataTable->selectedItems()[0]->text().toStdString())->
 	setText(TSYS::strEncode(string(data.data(),data.size()),TSYS::base64));
     if(owner()->cntrIfCmd(req))
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
@@ -753,12 +756,17 @@ void LibProjProp::unloadMimeData( )
     int row = mimeDataTable->currentRow();
     if(row < 0) { mod->postMess( mod->nodePath().c_str(), _("No one row is selected."), TVision::Warning, this ); return; }
 
-    QString fileName = owner()->getFileName(_("Save data"), mimeDataTable->item(row,0)->text(), _("All files (*.*)"), QFileDialog::AcceptSave);
+    string fext = TSYS::pathLev(mimeDataTable->item(row,1)->text().toStdString(),1);
+    QString fileName = owner()->getFileName(_("Save data"), mimeDataTable->item(row,0)->text()+(fext.size()?("."+fext).c_str():""),
+	_("All files (*.*)"), QFileDialog::AcceptSave);
     if(fileName.isEmpty())	return;
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
+    {
 	mod->postMess(mod->nodePath().c_str(),
 		QString(_("Open file '%1' is fail: %2")).arg(fileName).arg(file.errorString()), TVision::Error, this);
+	return;
+    }
 
     XMLNode req("get");
     req.setAttr("path",ed_it+"/"+TSYS::strEncode("/mime/mime",TSYS::PathEl))->

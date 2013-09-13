@@ -577,6 +577,12 @@ class Server: public UA
 		double		tInact;
 		int64_t		tAccess;
 		string		servNonce;
+
+		//>> Continuation points
+		//????
+		//string			brNode;
+		//unsigned		brNextPos;
+
 	};
 	//* End Point
 	class EP

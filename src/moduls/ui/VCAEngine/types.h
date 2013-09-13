@@ -76,6 +76,28 @@ namespace VCA
 	A_FormElName	= 26,
 	A_FormElMixP4	= 27,	//BUTTON:colorText
 
+	//> Primitive "Media" specific
+	A_MediaBackClr	= 20,
+	A_MediaBackImg	= 21,
+	A_MediaBordWdth	= 22,
+	A_MediaBordClr	= 23,
+	A_MediaBordStl	= 24,
+	A_MediaSrc	= 25,
+	A_MediaFit	= 26,
+	A_MediaType	= 27,
+	A_MediaAreas	= 28,
+	A_MediaSpeedPlay= 29,
+	A_MediaRoll	= 30,
+	A_MediaPause	= 31,
+	A_MediaSize	= 32,
+	A_MediaSeek	= 33,
+	A_MediaVolume	= 34,
+	A_MediaArs	= 40,
+	A_MediaArsSz	= 3,
+	A_MediaArShape	= 0,
+	A_MediaArCoord	= 1,
+	A_MediaArTitle	= 2,
+
 	//> Primitive "Box" specific
 	A_BoxBackClr	= 20,
 	A_BoxBackImg	= 21,
@@ -91,6 +113,10 @@ namespace VCA
     enum FormEl_Views	{ F_LINE_ED = 0, F_TEXT_ED, F_CHECK_BOX, F_BUTTON, F_COMBO, F_LIST, F_SLIDER, F_SCROLL_BAR, F_TREE };
     enum FormEl_LineViews { FL_TEXT = 0, FL_COMBO, FL_INTEGER, FL_REAL, FL_TIME, FL_DATE, FL_DATE_TM };
     enum FormEl_BtModes { FBT_STD = 0, FBT_CHECK, FBT_MENU, FBT_LOAD, FBT_SAVE };
+
+    //Media preset indexes
+    enum Media_Types	{ FM_IMG = 0, FM_ANIM, FM_FULL_VIDEO };
+    enum Media_ArShapes	{ FM_RECT = 0, FM_POLY, FM_CIRCLE };
 
     //Box preset indexes
     enum Box_BordStls	{ FBRD_NONE = 0, FBRD_DOT, FBRD_DASH, FBRD_SOL, FBRD_DBL, FBRD_GROOVE, FBRD_RIDGE, FBRD_INSET, FBRD_OUTSET };

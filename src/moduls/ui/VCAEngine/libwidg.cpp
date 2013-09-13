@@ -93,7 +93,7 @@ void WidgetLib::preDisable( int flag )
 
 void WidgetLib::postDisable( int flag )
 {
-    if( flag )
+    if(flag)
     {
 	//> Delete libraries record
 	SYS->db().at().dataDel(DB()+"."+mod->wlbTable(),mod->nodePath()+"LIB/",*this,true);
@@ -284,7 +284,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	close(hd);
 
 	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
-	if(mimeData)	*mimeData = TSYS::strEncode(rez,TSYS::base64);
+	if(mimeData) *mimeData = TSYS::strEncode(rez,TSYS::base64);
 
 	return true;
     }
@@ -454,7 +454,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		    }
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime","image/new;0","");
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataSet("newMime","media/unknown;0","");
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	mimeDataDel(opt->attr("key_id"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
@@ -479,8 +479,13 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	    else if(idcol == "dt")
 	    {
 		string mimeType;
-		if(mimeDataGet("res:"+idmime, mimeType))
-		    mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text());
+		if(!mimeDataGet("res:"+idmime, mimeType))
+		{
+		    size_t extP = idmime.rfind(".");
+		    if(extP == string::npos || extP == 0 || extP == (idmime.size()-1)) mimeType = "media/unknown";
+		    else { mimeType = "media/"+idmime.substr(extP+1); idmime = idmime.substr(0,extP); }
+		}
+		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}
     }
@@ -613,6 +618,35 @@ void LWidget::setParentNm( const string &isw )
     if(enable() && cfg("PARENT").getS() != isw) setEnable(false);
     cfg("PARENT").setS(isw);
     modif();
+}
+
+void LWidget::setEnable( bool val )
+{
+    if(enable() == val) return;
+
+    Widget::setEnable(val);
+
+    //> Include widgets link update on the parrent change
+    if(val)
+    {
+        if(mParentNmPrev.size() && parentNm() != mParentNmPrev)
+        {
+            vector<string> lst;
+            wdgList(lst, true);
+            for(unsigned i_l = 0; i_l < lst.size(); i_l++)
+                try
+                {
+                    AutoHD<Widget> iw = wdgAt(lst[i_l]);
+                    if(iw.at().parentNm().compare(0,mParentNmPrev.size(),mParentNmPrev) == 0)
+                    {
+                        iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
+                        iw.at().setEnable(true);
+                    }
+                }
+                catch(TError err) { }
+        }
+        mParentNmPrev = parentNm();
+    }
 }
 
 void LWidget::setEnableByNeed( )
@@ -760,13 +794,26 @@ AutoHD<CWidget> LWidget::wdgAt( const string &wdg )
     return Widget::wdgAt(wdg);
 }
 
+void LWidget::resourceList( vector<string> &ls )
+{
+    //> Append to the map for doublets remove
+    map<string,bool> sortLs;
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    ownerLib().mimeDataList(ls);
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++) sortLs[ls[i_l]] = true;
+    ls.clear();
+    for(map<string,bool>::iterator i_l = sortLs.begin(); i_l != sortLs.end(); ++i_l) ls.push_back(i_l->first);
+
+    if(!parent().freeStat()) parent().at().resourceList(ls);
+}
+
 string LWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if( !ownerLib().mimeDataGet( id, mimeType, &mimeData ) && !parent().freeStat() )
-	mimeData = parent().at().resourceGet( id, &mimeType );
-    if( mime )	*mime = mimeType;
+    if(!ownerLib().mimeDataGet(id,mimeType,&mimeData) && !parent().freeStat())
+	mimeData = parent().at().resourceGet(id, &mimeType);
+    if(mime) *mime = mimeType;
 
     return mimeData;
 }
@@ -983,13 +1030,19 @@ void CWidget::wClear( )
     cfg("ATTRS").setS("");
 }
 
+void CWidget::resourceList( vector<string> &ls )
+{
+    ownerLWdg().resourceList(ls);
+    if(!parent().freeStat()) parent().at().resourceList(ls);
+}
+
 string CWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if( (mimeData=ownerLWdg().resourceGet( id, &mimeType )).empty() && !parent().freeStat() )
-	mimeData = parent().at().resourceGet( id, &mimeType );
-    if( mime )	*mime = mimeType;
+    if((mimeData=ownerLWdg().resourceGet( id, &mimeType )).empty() && !parent().freeStat())
+	mimeData = parent().at().resourceGet(id, &mimeType);
+    if(mime) *mime = mimeType;
 
     return mimeData;
 }
@@ -997,8 +1050,8 @@ string CWidget::resourceGet( const string &id, string *mime )
 void CWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
-    Widget::inheritAttr( attr );
-    if( !mdf )  modifClr( );
+    Widget::inheritAttr(attr);
+    if(!mdf)  modifClr( );
 }
 
 void CWidget::cntrCmdProc( XMLNode *opt )

@@ -1,21 +1,71 @@
-#!/bin/sh
+#!/bin/bash
 
-ProjName=
+export TEXTDOMAIN=openscada
+export TEXTDOMAINDIR=@datadir_full@/locale
+TERM_=`env | sed -n "/^TERM=\(.*\)/s//\1/p"`
+tmpfile=`mktemp`
+StartOrigCfgPref=@sysconfdir_full@
+StartOrigCfgFile=$StartOrigCfgPref/oscada_start.xml
+StartWorkDir=@oscd_datadir_full@
+WorkDir=$StartWorkDir
+DESKTOP_DIR=
+if [ -n "$(which xdg-user-dir)" ] && [ -n "$(xdg-user-dir DESKTOP)" ]; then DESKTOP_DIR="$(xdg-user-dir DESKTOP)"; fi
+
 # Get the project name from filename openscada_{ProjName}
-if test -n "$(which sed)"; then ProjName=`echo $0 | sed -n "/.*openscada_\(.*\)/s//\1/p"`; fi
+ProjName=`echo $0 | sed -n "/.*openscada_\(.*\)/s//\1/p"`;
 # Get the project name from variable "OSCADA_ProjName"
-if test "x$ProjName" = "x"; then ProjName=$OSCADA_ProjName; fi
+if test "x$ProjName" = "x" -o "$ProjName" = "start"; then ProjName=$OSCADA_ProjName; fi
 # Set the project name to default "start"
-if test "x$ProjName" = "x"; then ProjName=start; fi
+if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
+    if test -n "$TERM_" -a -n "$(which dialog)" || test -n "$DISPLAY" -a -n "$(which kdialog || which zenity || which Xdialog)"; then
+	prjList=("start" "<$(gettext "Default")>" "<new>" "<$(gettext "New project")>")
+	if test ! -w $WorkDir/$ProjName; then
+	    prjList=("${prjList[@]}" "<*>" "==== $(gettext "User directory copy projects") ===")
+	    for fit in `ls ~/.openscada`; do
+		if test -d ~/.openscada/$fit && test -f ~/.openscada/$fit/oscada.xml; then prjList=("${prjList[@]}" "$fit" "$fit"); fi
+	    done
+	    prjList=("${prjList[@]}" "<*>" "==== $(gettext "Pre-installed projects") ===")
+	fi
+	# Projects list obtaine from preinstalled projects
+	for fit in `ls $StartWorkDir`; do
+	    if test -d $StartWorkDir/$fit && test -f $StartOrigCfgPref/oscada_$fit.xml; then prjList=("${prjList[@]}" "$fit" "$fit"); fi
+	done
 
-echo "Set the project name to: $ProjName"
+	rez=
+	if test -n "$TERM_" -a -n "$(which dialog)"; then dialog --menu "$(gettext "Select project for start.")" 20 60 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`;
+	elif test -n "$(which kdialog)"; then rez=`kdialog --title "$(gettext "OpenSCADA start")" --menu "$(gettext "Select project for start.")" "${prjList[@]}"`;
+	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$(gettext "OpenSCADA start")" --list --text="$(gettext "Select project for start.")" --column="Tag" --column="Project" --hide-header --hide-column=1 "${prjList[@]}"`;
+	elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --no-tags --menubox "$(gettext "Select project for start.")" 20 50 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`; fi
+	ProjName=$rez
+	if test "x$ProjName" = "x" -o "x$ProjName" = "x<*>"; then ProjName=;
+	# New project create
+	elif test "x$ProjName" = "x<new>"; then
+	    rez=
+	    if test -n "$TERM_" -a -n "$(which dialog)"; then dialog --inputbox "$(gettext "Enter new project ID. Do not use spaces!")" 10 50 2> $tmpfile; rez=`cat $tmpfile`;
+	    elif test -n "$(which kdialog)"; then rez=`kdialog --title "$(gettext "OpenSCADA start")" --inputbox "$(gettext "Enter new project ID. Do not use spaces!")" 'NewProject'`;
+	    elif test -n "$(which zenity)"; then rez=`zenity --title "$(gettext "OpenSCADA start")" --entry --text "$(gettext "Enter new project ID. Do not use spaces!")" --entry-text="NewProject"`;
+	    elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --inputbox "$(gettext "Enter new project ID. Do not use spaces!")" 10 50 2> $tmpfile; rez=`cat $tmpfile`; fi
+	    ProjName=$rez
+	    if test "x$ProjName" = "x"; then ProjName=;
+	    # Move and prepare start ico to desktop
+	    elif [ -n "$DESKTOP_DIR" ] && [ ! -f "$DESKTOP_DIR/openscada_$ProjName.desktop" ]; then
+		cp @datadir_full@/applications/openscada.desktop "$DESKTOP_DIR/openscada_$ProjName.desktop";
+		subst "s/Exec=/Exec=env OSCADA_ProjName=$ProjName /" "$DESKTOP_DIR/openscada_$ProjName.desktop"
+		subst "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $ProjName/" "$DESKTOP_DIR/openscada_$ProjName.desktop"
+	    fi
+	fi
+    else ProjName=start; fi
+fi
+
+rm -f $tmpfile
+
+if [ -z "$ProjName" ]; then echo "$(gettext "No a project set!")"; exit 1; fi
+
+echo "$(gettext "Set the project name to:") \"$ProjName\""
 
 # Work directory check and prepare
-StartOrigCfgFile=@sysconfdir_full@/oscada_start.xml
-StartCfgFile=@sysconfdir_full@/oscada_$ProjName.xml
-StartWorkDir=@oscd_datadir_full@
+StartCfgFile=$StartOrigCfgPref/oscada_$ProjName.xml
 CfgFile=$StartCfgFile
-WorkDir=$StartWorkDir
 
 ## Check for work directory moving to user's home directory "~/.openscada" needs
 if test -w $WorkDir -a ! -d $WorkDir/$ProjName; then mkdir -p $WorkDir/$ProjName; fi

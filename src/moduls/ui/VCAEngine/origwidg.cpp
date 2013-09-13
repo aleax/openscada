@@ -764,35 +764,37 @@ void OrigMedia::postEnable( int flag )
 
     if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF","","","20"));
-	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21"));
-	attrAdd(new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22"));
-	attrAdd(new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23"));
-	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-						_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24"));
-	attrAdd(new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","","25"));
-	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0","0;1;2",_("Image;Animation;Full video"),"27"));
-	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","","28"));
+	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","#FFFFFF","","",i2s(A_MediaBackClr).c_str()));
+	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_MediaBackImg).c_str()));
+	attrAdd(new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_MediaBordWdth).c_str()));
+	attrAdd(new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_MediaBordClr).c_str()));
+	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3",
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
+	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_MediaBordStl).c_str()));
+	attrAdd(new TFld("src",_("Source"),TFld::String,TFld::NoFlag,"50","","","",i2s(A_MediaSrc).c_str()));
+	attrAdd(new TFld("type",_("Type"),TFld::Integer,TFld::Selected|Attr::Active,"1","0",
+	    TSYS::strMess("%d;%d;%d",FM_IMG,FM_ANIM,FM_FULL_VIDEO).c_str(),_("Image;Animation;Full video"),i2s(A_MediaType).c_str()));
+	attrAdd(new TFld("areas",_("Map areas"),TFld::Integer,Attr::Active,"2","0","0;10","",i2s(A_MediaAreas).c_str()));
     }
 }
 
 bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 {
-    if( cfg.flgGlob()&Attr::Active )
+    if(cfg.flgGlob()&Attr::Active)
     {
-	if( cfg.id() == "type" )
+	if(cfg.id() == "type")
 	{
 	    //> Delete specific attributes
 	    switch(prev.getI())
 	    {
-		case 0:	//Image
+		case FM_IMG:
 		    cfg.owner()->attrDel("fit");
 		    break;
-		case 1:	//Animation
+		case FM_ANIM:
 		    cfg.owner()->attrDel("fit");
 		    cfg.owner()->attrDel("speed");
 		    break;
-		case 2:	//Full vudeo
+		case FM_FULL_VIDEO:
 		    cfg.owner()->attrDel("play");
 		    cfg.owner()->attrDel("roll");
 		    cfg.owner()->attrDel("pause");
@@ -805,20 +807,20 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 	    //> Create specific attributes
 	    switch(cfg.getI())
 	    {
-		case 0:	//Image
-		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","","26"));
+		case FM_IMG:
+		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
 		    break;
-		case 1:	//Animation
-		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","","26"));
-		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","","29"));
+		case FM_ANIM:
+		    cfg.owner()->attrAdd(new TFld("fit",_("Fit to widget size"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_MediaFit).c_str()));
+		    cfg.owner()->attrAdd(new TFld("speed",_("Play speed"),TFld::Integer,Attr::Mutable,"","100","1;900","",i2s(A_MediaSpeedPlay).c_str()));
 		    break;
-		case 2:	//Video
-		    cfg.owner()->attrAdd(new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable,"","0","","","29"));
-		    cfg.owner()->attrAdd(new TFld("roll",_("Roll play"),TFld::Boolean,Attr::Mutable,"","0","","","30"));
-		    cfg.owner()->attrAdd(new TFld("pause",_("Pause"),TFld::Boolean,Attr::Mutable,"","0","","","31"));
-		    cfg.owner()->attrAdd(new TFld("size",_("Size"),TFld::Real,Attr::Mutable,"","0","0;1e300","","32"));
-		    cfg.owner()->attrAdd(new TFld("seek",_("Seek"),TFld::Real,Attr::Mutable,"","0","0;1e300","","33"));
-		    cfg.owner()->attrAdd(new TFld("volume",_("Volume"),TFld::Real,Attr::Mutable,"","50","0;100","","34"));
+		case FM_FULL_VIDEO:
+		    cfg.owner()->attrAdd(new TFld("play",_("Play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaSpeedPlay).c_str()));
+		    cfg.owner()->attrAdd(new TFld("roll",_("Roll play"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaRoll).c_str()));
+		    cfg.owner()->attrAdd(new TFld("pause",_("Pause"),TFld::Boolean,Attr::Mutable,"","0","","",i2s(A_MediaPause).c_str()));
+		    cfg.owner()->attrAdd(new TFld("size",_("Size"),TFld::Real,Attr::Mutable,"","0","0;1e300","",i2s(A_MediaSize).c_str()));
+		    cfg.owner()->attrAdd(new TFld("seek",_("Seek"),TFld::Real,Attr::Mutable,"","0","0;1e300","",i2s(A_MediaSeek).c_str()));
+		    cfg.owner()->attrAdd(new TFld("volume",_("Volume"),TFld::Real,Attr::Mutable,"","50","0;100","",i2s(A_MediaVolume).c_str()));
 		    break;
 	    }
 	}
@@ -843,12 +845,12 @@ bool OrigMedia::attrChange( Attr &cfg, TVariant prev )
 		fidp = fid+i2s(i_p);
 		fnmp = fnm+i2s(i_p);
 		if(cfg.owner()->attrPresent(fidp+"shp")) continue;
-		cfg.owner()->attrAdd(new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),
-					       TFld::Integer,TFld::Selected|Attr::Mutable,"1","0","0;1;2",_("Rect;Poly;Circle"),i2s(40+3*i_p).c_str()));
-		cfg.owner()->attrAdd(new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",i2s(41+3*i_p).c_str()));
-		cfg.owner()->attrAdd(new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",i2s(42+3*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"shp").c_str(),(fnmp+_(":shape")).c_str(),TFld::Integer,TFld::Selected|Attr::Mutable,"1","0",
+		    TSYS::strMess("%d;%d;%d",FM_RECT,FM_POLY,FM_CIRCLE).c_str(),_("Rect;Poly;Circle"),i2s(A_MediaArs+A_MediaArShape+A_MediaArsSz*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"coord").c_str(),(fnmp+_(":coordinates")).c_str(),TFld::String,Attr::Mutable,"","",
+		    "","",i2s(A_MediaArs+A_MediaArCoord+A_MediaArsSz*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"title").c_str(),(fnmp+_(":title")).c_str(),TFld::String,Attr::Mutable,"","",
+		    "","",i2s(A_MediaArs+A_MediaArTitle+A_MediaArsSz*i_p).c_str()));
 	    }
 	}
     }
@@ -871,9 +873,9 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
                 int p = atoi(el->attr("p").c_str());
                 switch(p)
                 {
-		    case 20: case 23: el->setAttr("help",Widget::helpColor());	break;
-		    case 21:	el->setAttr("help",Widget::helpImg());		break;
-		    case 25:	el->setAttr("help",
+		    case A_MediaBackClr: case A_MediaBordClr: el->setAttr("help",Widget::helpColor());	break;
+		    case A_MediaBackImg: el->setAttr("help",Widget::helpImg());		break;
+		    case A_MediaSrc: el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+el->attr("id"))->setAttr("help",
 			_("Media source name in form \"[src:]name\", where:\n"
         		"  \"src\" - source:\n"
         		"    file - direct from local (visualizator or engine) file by path;\n"
@@ -886,7 +888,7 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
         		"  \"file:/var/tmp/workMedia.mng\" - from local file by path \"/var/tmp/workMedia.mng\";\n"
         		"  \"stream:http://localhost.localhost:5050\" - video and audio stream play from URL."));
         		break;
-        	    case 27:	el->setAttr("help",
+        	    case A_MediaType: el->setAttr("help",
         		_("Media type variant:\n"
         		"  \"Image\" - raster or vector(can not support) image, like: PNG, JPEG, GIF;\n"
         		"  \"Animation\" - simple animation image, like: GIF, MNG;\n"
@@ -900,9 +902,9 @@ bool OrigMedia::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if(!el) continue;
 		switch(src->attrAt(TSYS::strMess("area%dshp",i_a)).at().getI())
 		{
-		    case 0: el->setAttr("help",_("Rectangle area in form \"x1,y1,x2,y2\"."));		break;
-		    case 1: el->setAttr("help",_("Polygon area in form \"x1,y1,x2,y2,xN,yN\"."));	break;
-		    case 2: el->setAttr("help",_("Circle area in form \"x,y,r\"."));			break;
+		    case FM_RECT: el->setAttr("help",_("Rectangle area in form \"x1,y1,x2,y2\"."));	break;
+		    case FM_POLY: el->setAttr("help",_("Polygon area in form \"x1,y1,x2,y2,xN,yN\"."));	break;
+		    case FM_CIRCLE: el->setAttr("help",_("Circle area in form \"x,y,r\"."));		break;
 		}
 	    }
 	}

@@ -343,7 +343,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
-	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()));
+	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)));
 	    else ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
 	    modif();
 	}
@@ -351,7 +351,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
             IO *ioPrev = row ? io(row-1) : NULL;
-            if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()), row);
+            if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)), row);
 	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
 	    modif();
 	}

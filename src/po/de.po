@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-28 16:41+0300\n"
+"POT-Creation-Date: 2013-09-11 15:46+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1582,6 +1582,7 @@ msgstr ""
 msgid "B"
 msgstr ""
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1778,6 +1779,9 @@ msgstr "%s Station: \"%s\""
 
 msgid "Station"
 msgstr "Station"
+
+msgid "Station name"
+msgstr "Stationsnamen"
 
 msgid "Version"
 msgstr "Version"

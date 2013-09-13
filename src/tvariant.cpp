@@ -946,7 +946,7 @@ void XMLNodeObj::setText( const string &vl )
     oRes.resRelease();
 }
 
-void XMLNodeObj::childAdd(AutoHD<XMLNodeObj> nd)
+void XMLNodeObj::childAdd( AutoHD<XMLNodeObj> nd )
 {
     if(&nd.at() == this) return;
     oRes.resRequestW();
@@ -955,7 +955,7 @@ void XMLNodeObj::childAdd(AutoHD<XMLNodeObj> nd)
     oRes.resRelease();
 }
 
-void XMLNodeObj::childIns(unsigned id, AutoHD<XMLNodeObj> nd)
+void XMLNodeObj::childIns( unsigned id, AutoHD<XMLNodeObj> nd )
 {
     if(&nd.at() == this) return;
     oRes.resRequestW();
@@ -975,7 +975,7 @@ void XMLNodeObj::childDel( unsigned id )
     oRes.resRelease();
 }
 
-AutoHD<XMLNodeObj> XMLNodeObj::childGet(unsigned id)
+AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
 {
     if(id < 0 || id >= mChilds.size()) throw TError("XMLNodeObj",_("Child '%d' is not allow."),id);
     oRes.resRequestR();
@@ -984,7 +984,7 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet(unsigned id)
     return rez;
 }
 
-string XMLNodeObj::getStrXML(const string &oid)
+string XMLNodeObj::getStrXML( const string &oid )
 {
     string nd("<XMLNodeObj:"+name());
     if(!oid.empty()) nd += " p='"+oid+"'";
@@ -1063,7 +1063,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     if(id == "childIns" && prms.size())
     {
 	AutoHD<XMLNodeObj> no;
-	if(prms.size() > 1 && prms[1].type() == TVariant::Object && !(no=prms[0].getO()).freeStat()) ;
+	if(prms.size() > 1 && prms[1].type() == TVariant::Object && !(no=prms[1].getO()).freeStat()) ;
 	else if(prms.size() > 1) no = new XMLNodeObj(prms[1].getS());
 	else no = new XMLNodeObj();
 	childIns(prms[0].getI(), no);

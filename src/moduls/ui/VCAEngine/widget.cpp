@@ -1071,7 +1071,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 {
     if(!src) src = this;
 
-    if(!parent().freeStat()) return parent().at().cntrCmdAttributes(opt,src);
+    if(!parent().freeStat()) return parent().at().cntrCmdAttributes(opt, src);
 
     //> Get page info
     if(opt->name() == "info")
@@ -1088,7 +1088,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		if(el)
 		{
 		    el->setAttr("len","")->setAttr("wdgFlg",i2s(attr.at().flgGlob()))->
-			setAttr("modif",TSYS::uint2str(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
+			setAttr("modif",u2s(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
 		    else if(list_a[i_el] == "parent")	el->setAttr("help",_("Path to parent widget."));
 		    else if(list_a[i_el] == "owner")	el->setAttr("help",_("The widget owner and group in form \"[owner]:[group]\"."));
@@ -1117,10 +1117,10 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 					     "  ws_BtPress:/go_graph:open:/pg_so/*/ggraph"));
 		    else switch(atoi(attr.at().fld().reserve().c_str()))
 		    {
-			case 1:		//root
+			case A_ROOT:
 			    el->setAttr("help",_("Primitive identifier in the widget ground."));
 			    break;
-			case 17:	//contextMenu
+			case A_CTX_MENU:
 			    el->setAttr("SnthHgl","1")->
 				setAttr("help",_("Context menu in form strings list: \"[ItName]:[Signal]\".\n"
 						 "Where:\n"
@@ -1128,6 +1128,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 						 "  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."));
 			    break;
 		    }
+		    if(attr.at().flgGlob()&Attr::Image)	el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[i_el]);
 		}
 	    }
 	}
@@ -1136,7 +1137,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/attr/")
+    if(a_path.compare(0,6,"/attr/") == 0)
     {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
@@ -1161,6 +1162,26 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		 childAdd("rule")->setAttr("expr","\\w+")->setAttr("color","blue");*/
 	    opt->childAdd("rule")->setAttr("expr","^[^:]*:")->setAttr("color","darkorange");
 	}
+    }
+    else if(a_path.compare(0,13,"/attrImg/sel_") == 0 && ctrChkNode(opt))
+    {
+	string a_val = src->attrAt(a_path.substr(13)).at().getS();
+	if(a_val == "res:")
+	{
+	    vector<string> ls;
+	    src->resourceList(ls);
+	    for(int i_t = 0; i_t < ls.size(); i_t++)
+                opt->childAdd("el")->setText("res:"+ls[i_t]);
+	}
+	else if(a_val.compare(0,5,"file:") == 0)
+	{
+	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;");
+	    for(int i_t = 0; i_t < opt->childSize(); i_t++)
+                opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
+	}
+	opt->childIns(0,"el")->setText("res:");
+	opt->childIns(1,"el")->setText("file:");
+
     }
     else return false;
 

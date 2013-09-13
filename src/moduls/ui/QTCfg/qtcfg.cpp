@@ -1768,14 +1768,14 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    //>>> addon parameters
 		    string tp = t_s.attr("tp");
-		    if( t_s.attr("dest") == "sel_ed" )
+		    if(t_s.attr("dest") == "sel_ed")
 		    {
-			val_w->setMinimumSize(100,0);
-			val_w->setType( LineEdit::Combo );
+			val_w->setMinimumSize(100, 0);
+			val_w->setType(LineEdit::Combo);
 		    }
-		    else if( tp == "dec" )
+		    else if(tp == "dec")
 		    {
-			val_w->setFixedWidth( 5*15+30 );
+			val_w->setFixedWidth(5*15+30);
 			val_w->setType( LineEdit::Integer );
 			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
 			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
@@ -1875,7 +1875,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else
 		    {
 			XMLNode x_lst("get");
-			x_lst.setAttr("path",TSYS::strEncode( t_s.attr("select"),TSYS::PathEl));
+			x_lst.setAttr("path", TSYS::strEncode(t_s.attr("select"),TSYS::PathEl));
 			if(!cntrIfCmd(x_lst))
 			    for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
 				if(x_lst.childGet(i_el)->name() == "el")

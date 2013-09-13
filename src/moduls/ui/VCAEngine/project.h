@@ -203,6 +203,7 @@ class Page : public Widget, public TConfig
 	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
 	//> Data access
+	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -233,6 +234,7 @@ class Page : public Widget, public TConfig
 		&mFlgs,		//Project's flags
 		&mProcPer,	//Process period
 		&mTimeStamp;
+	string	mParentNmPrev;	//Previous parent name after successful enable
 };
 
 //************************************************
@@ -265,6 +267,7 @@ class PageWdg : public Widget, public TConfig
 	void saveIO( );
 
 	//> Data access
+	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );

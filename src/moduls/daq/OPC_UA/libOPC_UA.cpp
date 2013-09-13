@@ -2775,7 +2775,7 @@ void Server::EP::setEnable( bool vl )
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_VendorServerInfoType,"VendorServerInfoType",NC_ObjectType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_ServerRedundancyType,"ServerRedundancyType",NC_ObjectType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_ModellingRuleType,"ModellingRuleType",NC_ObjectType,OpcUa_HasSubtype);
-	 nodeReg(OpcUa_BaseObjectType,OpcUa_FolderType,"FolderType",NC_ObjectType,OpcUa_HasSubtype);
+	 nodeReg(OpcUa_BaseObjectType,OpcUa_FolderType,"FolderType",NC_ObjectType,OpcUa_HasTypeDefinition);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_DataTypeEncodingType,"DataTypeEncodingType",NC_ObjectType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_DataTypeSystemType,"DataTypeSystemType",NC_ObjectType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_StateType,"StateType",NC_ObjectType,OpcUa_HasSubtype);
@@ -2799,6 +2799,7 @@ void Server::EP::setEnable( bool vl )
 	  nodeReg(OpcUa_HierarchicalReferences,OpcUa_HasEventSource,"HasEventSource",NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","EventSourceOf");
 	  nodeReg(OpcUa_HierarchicalReferences,OpcUa_Organizes,"Organizes",NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","OrganizedBy");
 	 nodeReg(OpcUa_References,OpcUa_NonHierarchicalReferences,"NonHierarchicalReferences",NC_ReferenceType,OpcUa_HasSubtype)->setAttr("IsAbstract","1");
+	  nodeReg(OpcUa_NonHierarchicalReferences,OpcUa_HasTypeDefinition,"HasTypeDefinition",NC_ReferenceType,OpcUa_HasSubtype)->setAttr("InverseName","Defines");
        nodeReg(OpcUa_TypesFolder,OpcUa_DataTypesFolder,"DataTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
 	nodeReg(OpcUa_DataTypesFolder,OpcUa_BaseDataType,"BaseDataType",NC_DataType,OpcUa_Organizes)->setAttr("IsAbstract","1");
 	 nodeReg(OpcUa_BaseDataType,OpcUa_Boolean,"Boolean",NC_DataType,OpcUa_HasSubtype);

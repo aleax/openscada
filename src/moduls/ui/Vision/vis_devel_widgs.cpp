@@ -196,10 +196,10 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	Item *curit = it;
 
 	//>> Get next item
-	while( idst[it_lev] < curit->childCount() )
+	while(idst[it_lev] < curit->childCount())
 	{
 	    //>> Process next attribute
-	    if( curit->child(idst[it_lev])->type( ) == Item::Attr )
+	    if(curit->child(idst[it_lev])->type( ) == Item::Attr)
 	    {
 		string it_id = curit->child(idst[it_lev])->id();
 		//>>> Find into present attributes list
@@ -255,17 +255,17 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
 	{
 	    XMLNode *gnd = root->childGet(i_a);
-	    if( grpW && !(atoi(gnd->attr("acs").c_str())&SEC_WR) ) continue;
+	    if(grpW && !(atoi(gnd->attr("acs").c_str())&SEC_WR)) continue;
 
 	    string a_id = gnd->attr("id");
 	    string a_nm = gnd->attr("dscr");
 	    Item *cur_it = it;
 	    //>> Parse attributes group
-	    if( TSYS::strSepParse(a_nm,1,':').size() )
-		for( int i_l = 0; true; i_l++ )
+	    if(TSYS::strSepParse(a_nm,1,':').size())
+		for(int i_l = 0; true; i_l++)
 		{
 		    string c_sel = TSYS::strSepParse(a_nm,i_l,':');
-		    if( TSYS::strSepParse(a_nm,i_l+1,':').size() )
+		    if(TSYS::strSepParse(a_nm,i_l+1,':').size())
 		    {
 			int ga_id = cur_it->childGet(c_sel);
 			if( ga_id < 0 ) ga_id = cur_it->childInsert(c_sel,-1,Item::AttrGrp);
@@ -309,8 +309,22 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		if(req.childSize() > 1)	cur_it->child(ga_id)->setSnthHgl(req.childGet(1)->save());
 	    }
 	    //>>> Get selected list
-	    if(gnd->attr("dest") == "select")
-		cur_it->child(ga_id)->setDataEdit(QString(gnd->attr("sel_list").c_str()).split(";"));
+	    if(gnd->attr("dest") == "select" || gnd->attr("dest") == "sel_ed")
+	    {
+		cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::Select);
+		QStringList selLs;
+		if(gnd->attr("select").empty()) selLs = QString(gnd->attr("sel_list").c_str()).split(";");
+		else
+		{
+		    cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::SelEd);
+		    XMLNode req1("get");
+		    req1.setAttr("path", itId+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
+		    if(!mainWin()->cntrIfCmd(req1))
+			for(unsigned i_ch = 0; i_ch < req1.childSize(); i_ch++)
+			    selLs << req1.childGet(i_ch)->text().c_str();
+		}
+		cur_it->child(ga_id)->setDataEdit(selLs);
+	    }
 	}
 
 	if(grp_it.isValid() && !grpW)
@@ -390,45 +404,45 @@ int ModInspAttr::columnCount( const QModelIndex &parent ) const
 QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 {
     QVariant val;
-    if( index.isValid() )
+    if(index.isValid())
     {
 	Item *it = static_cast<Item*>(index.internalPointer());
 
-	if( index.column() == 0 )
+	if(index.column() == 0)
 	    switch(role)
 	    {
 		case Qt::DisplayRole:	val = it->name().c_str();	break;
 		case Qt::ForegroundRole:
-		    if( it->modify() )	val = QBrush(Qt::blue);
+		    if(it->modify())	val = QBrush(Qt::blue);
 		    break;
 	    }
-	if( index.column() == 1 )
+	if(index.column() == 1)
 	    switch(role)
 	    {
 		case Qt::DisplayRole:
 		    val = it->data();
-		    if( val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime )
+		    if(val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
 			val = QDateTime::fromTime_t(val.toInt()?val.toInt():time(NULL)).toString("dd.MM.yyyy hh:mm:ss");
 		    break;
 		case Qt::EditRole:	val = it->dataEdit();	break;
 		case Qt::UserRole:	val = it->flag();	break;
 		case (Qt::UserRole+1):	val = it->snthHgl().c_str();	break;
 		case Qt::DecorationRole:
-		    if( it->flag()&ModInspAttr::Item::Color )
+		    if(it->flag()&ModInspAttr::Item::Color)
 		    {
 			QPixmap pct(16,16);
 			pct.fill("white");
 			QPainter painter(&pct);
 			QColor clr;
 			size_t found = it->data().toString().toStdString().find("-");
-			if (found != string::npos)
+			if(found != string::npos)
 			{
-			    clr = QColor( it->data().toString().toStdString().substr(0,found).c_str() );
-			    clr.setAlpha( atoi(it->data().toString().toStdString().substr(found+1).c_str()) );
+			    clr = QColor(it->data().toString().toStdString().substr(0,found).c_str());
+			    clr.setAlpha(atoi(it->data().toString().toStdString().substr(found+1).c_str()));
 			}
 			else clr = QColor(it->data().toString());
 
-			if( clr.isValid() )
+			if(clr.isValid())
 			{
 			    painter.fillRect(pct.rect(),QBrush(clr));
 			    painter.drawRect(pct.rect().adjusted(0,0,-1,-1));
@@ -436,7 +450,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			    val = pct;
 			}
 		    }
-		    else if( it->flag()&ModInspAttr::Item::Font )
+		    else if(it->flag()&ModInspAttr::Item::Font)
 		    {
 			QPixmap pct(24,24);
 			QPainter painter(&pct);
@@ -457,7 +471,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			painter.end();
 			val = pct;
 		    }
-		    else if( it->flag()&ModInspAttr::Item::Image )
+		    else if(it->flag()&ModInspAttr::Item::Image)
 		    {
 			Item *tit = it;
 			while( tit && tit->type() != ModInspAttr::Item::Wdg )	tit = tit->parent();
@@ -541,7 +555,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index,index);
-		if(it->flag()&Item::Active) setWdg(cur_wdg);
+		if(it->flag()&(Item::Active|Item::SelEd)) setWdg(cur_wdg);
 	    }
 	}
     }catch(...){ return false; }
@@ -791,8 +805,12 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if( flag&ModInspAttr::Item::Select )	w_del = new QComboBox(parent);
-    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::FullText )
+    if(flag&ModInspAttr::Item::Select)
+    {
+	w_del = new QComboBox(parent);
+	if(flag&ModInspAttr::Item::SelEd) ((QComboBox*)w_del)->setEditable(true);
+    }
+    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::FullText)
     {
 	w_del = new QTextEdit(parent);
 	((QTextEdit*)w_del)->setTabStopWidth(40);
@@ -809,23 +827,23 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
 	    snt_hgl->setSnthHgl(rules);
 	}
     }
-    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Font )
+    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Font)
 	w_del = new LineEditProp(parent,LineEditProp::Font);
-    else if( value.type() == QVariant::String && flag&ModInspAttr::Item::Color )
+    else if(value.type() == QVariant::String && flag&ModInspAttr::Item::Color)
 	w_del = new LineEditProp(parent,LineEditProp::Color);
-    else if( value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime )
+    else if(value.type() == QVariant::Int && flag&ModInspAttr::Item::DateTime)
     {
 	w_del = new QDateTimeEdit(parent);
 	((QDateTimeEdit*)w_del)->setCalendarPopup(true);
 	((QDateTimeEdit*)w_del)->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     }
-    else if( value.type() == QVariant::Int )
+    else if(value.type() == QVariant::Int)
     {
 	w_del = new QSpinBox(parent);
 	((QSpinBox*)w_del)->setMinimum(-2147483647);
 	((QSpinBox*)w_del)->setMaximum(2147483647);
     }
-    else if( value.type() == QVariant::Double )
+    else if(value.type() == QVariant::Double)
     {
 	w_del = new QDoubleSpinBox(parent);
 	((QDoubleSpinBox*)w_del)->setMinimum(-1e100);
@@ -848,11 +866,12 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
 
-    if(flag&ModInspAttr::Item::Select && dynamic_cast<QComboBox*>(editor))
+    if((flag&ModInspAttr::Item::Select) && dynamic_cast<QComboBox*>(editor))
     {
 	QComboBox *comb = (QComboBox*)editor;
 	comb->addItems(value.toStringList());
-	comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
+	if(flag&ModInspAttr::Item::SelEd) comb->setEditText(index.data(Qt::DisplayRole).toString());
+	else comb->setCurrentIndex(comb->findText(index.data(Qt::DisplayRole).toString()));
     }
     else if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText && dynamic_cast<QTextEdit*>(editor))
 	((QTextEdit*)editor)->setPlainText(value.toString());

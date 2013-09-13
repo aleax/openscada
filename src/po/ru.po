@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-28 16:41+0300\n"
+"POT-Creation-Date: 2013-09-11 15:46+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1565,6 +1565,7 @@ msgstr "КиБ"
 msgid "B"
 msgstr "Б"
 
+#, c-format
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -1764,6 +1765,9 @@ msgstr "%s станция: \"%s\""
 
 msgid "Station"
 msgstr "Станция"
+
+msgid "Station name"
+msgstr "Имя станции"
 
 msgid "Version"
 msgstr "Версия"

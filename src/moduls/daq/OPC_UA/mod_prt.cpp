@@ -418,13 +418,16 @@ string OPCEndPoint::reqData( int reqTp, const string &rb )
 	    UA::iTm(rb, off);			//timestamp
 	    UA::iNu(rb, off, 4);		//viewVersion
 
-	    UA::iNu(rb, off, 4);		//requestedMax ReferencesPerNode
+	    unsigned rPn = UA::iNu(rb, off, 4);	//requestedMax ReferencesPerNode
 						//> nodesToBrowse
 	    uint32_t nc = UA::iNu(rb, off, 4);	//Nodes
 
 	    //>> Respond
 						//> results []
 	    UA::oNu(respEp, nc, 4);		//Nodes
+
+	    //>> Process limit for "rPn"
+	    //????
 
 	    //>>> Nodes list processing
 	    for(uint32_t i_c = 0; i_c < nc; i_c++)
@@ -438,7 +441,7 @@ string OPCEndPoint::reqData( int reqTp, const string &rb )
 
 		uint32_t stCode = 0, refNumb = 0;
 		int stCodeOff = respEp.size(); UA::oNu(respEp, stCode, 4);	//statusCode
-		UA::oS(respEp, "");						//continuationPoint
+		UA::oS(respEp, "");						//continuationPoint ????
 		int refNumbOff = respEp.size(); UA::oNu(respEp, refNumb, 4);	//References [] = 0
 
 		if(rtId.numbVal() != OpcUa_HierarchicalReferences && rtId.numbVal() != OpcUa_References) continue;

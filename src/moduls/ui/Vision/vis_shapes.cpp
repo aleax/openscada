@@ -98,25 +98,25 @@ bool WdgShape::event( WdgView *view, QEvent *event )
 void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 {
     int bordWidth = bpen.width();
-    if( bordStyle && bordWidth )
+    if(bordStyle && bordWidth)
     switch(bordStyle)
     {
-	case 1:	//Dotted
+	case FBRD_DOT:
 	    bpen.setStyle(Qt::DotLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
-	case 2:	//Dashed
+	case FBRD_DASH:
 	    bpen.setStyle(Qt::DashLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
-	case 3:	//Solid
+	case FBRD_SOL:
 	    bpen.setStyle(Qt::SolidLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
-	case 4:	//Double
+	case FBRD_DBL:
 	    bpen.setStyle(Qt::SolidLine);
 	    if( bordWidth/3 )
 	    {
@@ -134,7 +134,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    }
 	    break;
-	case 5:	//Groove
+	case FBRD_GROOVE:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -142,7 +142,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    qDrawShadeRect(&pnt,dA,plt,true,bordWidth/2);
 	    break;
 	}
-	case 6:	//Ridge
+	case FBRD_RIDGE:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -150,7 +150,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    qDrawShadeRect(&pnt,dA,plt,false,bordWidth/2);
 	    break;
 	}
-	case 7:	//Inset
+	case FBRD_INSET:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -158,7 +158,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    qDrawShadePanel(&pnt,dA,plt,true,bordWidth);
 	    break;
 	}
-	case 8:	//Outset
+	case FBRD_OUTSET:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -182,7 +182,7 @@ QFont WdgShape::getFont( const string &val, float fsc, bool pixSize )
     int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
     sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
     rez.setFamily(QString(family).replace(QRegExp("_")," "));
-    if( pixSize ) rez.setPixelSize((int)(fsc*(float)size));
+    if(pixSize) rez.setPixelSize((int)(fsc*(float)size));
     else rez.setPointSize((int)(fsc*(float)size));
     rez.setBold(bold);
     rez.setItalic(italic);
@@ -196,11 +196,11 @@ QColor WdgShape::getColor( const string &val )
 {
     QColor res_color;
     size_t fPs = val.find("-");
-    if( fPs == string::npos )	res_color = QColor(val.c_str());
+    if(fPs == string::npos) res_color = QColor(val.c_str());
     else
     {
-	res_color = QColor( val.substr(0,fPs).c_str() );
-	res_color.setAlpha( atoi(val.substr(fPs+1).c_str()) );
+	res_color = QColor(val.substr(0,fPs).c_str());
+	res_color.setAlpha(atoi(val.substr(fPs+1).c_str()));
     }
     return res_color;
 }
@@ -730,30 +730,6 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    shD->wordWrap = true;
 		    QTimer::singleShot(100, wdg, SIGNAL(released()));
 		    break;
-		/*{
-		    if(!runW) break;
-		    int off = 0;
-		    string  fHead = TSYS::strLine(shD->value, 0, &off);
-		    string  fCtx  = shD->value.substr(off);
-		    if(fHead.empty() || fCtx.empty())	break;
-		    off = 0;
-		    string  fTmpl       = TSYS::strParse(fHead, 0, "|", &off),
-			    fTitle      = TSYS::strParse(fHead, 0, "|", &off),
-			    fDefFile    = TSYS::strParse(fHead, 0, "|", &off);
-		    if(fTmpl.empty())   break;
-        	    if(fTitle.empty())  fTitle = _("Load file");
-		    QString fn = runW->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptSave);
-		    if(!fn.size()) break;
-		    int hd = open(fn.toAscii().data(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
-        	    if(hd < 0)	mod->postMess(mod->nodePath().c_str(), TSYS::strMess(_("Open file %s error."),fn.toAscii().data()).c_str(), TVision::Error);
-		    else
-		    {
-			write(hd, fCtx.data(), fCtx.size());
-			close(hd);
-		    }
-		    //w->attrSet("value",);
-		    break;
-		}*/
 	    }
 	    break;
 	}
@@ -924,7 +900,7 @@ void ShapeFormEl::buttonReleased( )
 	    }
 	    shD->wordWrap = false;
 
-	    int off = 0, hd;
+	    int off = 0;//, hd;
 	    string  fHead	= TSYS::strLine(shD->value, 0, &off);
 	    string  fCtx	= shD->value.substr(off);
 	    off = 0;
@@ -932,25 +908,27 @@ void ShapeFormEl::buttonReleased( )
 		    fTitle	= TSYS::strParse(fHead, 0, "|", &off),
 		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off);
 	    if(fTmpl.empty())	break;
-	    if(fTitle.empty())	fTitle = (shD->mode==FBT_LOAD) ? _("Load file") : _("Save file");
+	    if(fTitle.empty())	fTitle = _("Save file");
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptSave);
 	    if(fn.size())
 	    {
-		if((hd=open(fn.toAscii().data(), O_CREAT|O_TRUNC|O_WRONLY, 0664)) < 0)
+		QFile file(fn);
+		if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
 		{
-		    mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(strerror(errno)), TVision::Error);
-		    break;
-		}
-		if(write(hd, fCtx.data(), fCtx.size()) != fCtx.size())
-		    mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(fn), TVision::Error);
-		close(hd);
+		    mod->postMess(mod->nodePath().c_str(),
+			QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
+    		    break;
+    		}
+		if(file.write(fCtx.data(),fCtx.size()) != fCtx.size())
+        	    mod->postMess(mod->nodePath().c_str(),
+        		QString(_("Write data to file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 	    }
 	    w->attrSet("value","");	//Clear previous
 	    break;
 	}
 	case FBT_LOAD:
 	{
-	    int off = 0, hd;
+	    int off = 0;//, hd;
 	    string  fHead	= TSYS::strLine(shD->value, 0, &off);
 	    string  fCtx	= shD->value.substr(off);
 	    off = 0;
@@ -958,27 +936,25 @@ void ShapeFormEl::buttonReleased( )
 		    fTitle	= TSYS::strParse(fHead, 0, "|", &off),
 		    fDefFile	= TSYS::strParse(fHead, 0, "|", &off);
 	    if(fTmpl.empty())	break;
-	    if(fTitle.empty())	fTitle = (shD->mode==FBT_LOAD) ? _("Load file") : _("Save file");
+	    if(fTitle.empty())	fTitle = _("Load file");
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptOpen);
 	    if(!fn.size()) break;
-	    if((hd=open(fn.toAscii().data(), O_RDONLY)) < 0)
+	    QFile file(fn);
+	    if(!file.open(QFile::ReadOnly))
 	    {
-		mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(strerror(errno)), TVision::Error);
+		mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		break;
 	    }
-	    string rez;
-	    char buf[STR_BUF_LEN];
-	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0 && rez.size() < USER_FILE_LIMIT; ) rez.append(buf, len);
-	    close(hd);
-	    if(rez.size() >= USER_FILE_LIMIT)
+	    if(file.size() >= USER_FILE_LIMIT)
 	    {
 		mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fn), TVision::Error);
 		break;
 	    }
+	    QByteArray data = file.readAll();
 
 	    map<string,string> attrs;
 	    attrs["event"] = string("ws_BtLoad");
-	    attrs["value"] = fHead+"\n"+rez;
+	    attrs["value"] = fHead+"\n"+string(data.data(),data.size());
 	    w->attrsSet(attrs);
 	    break;
 	}
@@ -1360,16 +1336,13 @@ void ShapeMedia::clear( WdgView *w )
 	    lab->clear();
 	}
 #ifdef HAVE_PHONON
-	if(shD->mediaType == 2) { lab->deleteLater(); shD->addrWdg = NULL; }
+	if(shD->mediaType == FM_FULL_VIDEO) { lab->deleteLater(); shD->addrWdg = NULL; }
 #endif
     }
 
 #ifdef HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
-    if(player)
-    {
-	if(shD->mediaType == 0 || shD->mediaType == 1)	{ player->deleteLater(); shD->addrWdg = NULL; }
-    }
+    if(player && (shD->mediaType == FM_IMG || shD->mediaType == FM_ANIM)) { player->deleteLater(); shD->addrWdg = NULL; }
 #endif
 }
 
@@ -1400,25 +1373,23 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    reld_cfg = true;
-	    break;
-	case 5:		//en
+	case A_COM_LOAD: reld_cfg = true;	break;
+	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
 	    w->setVisible(shD->en && ((RunWdgView*)w)->permView());
 	    break;
-	case 6:		//active
+	case A_ACTIVE:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = atoi(val.c_str());
 	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
 	    w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
 	    break;
-	case 12:	//geomMargin
+	case A_GEOM_MARGIN:
 	    shD->geomMargin = atoi(val.c_str());
 	    w->layout()->setMargin( shD->geomMargin );
 	    break;
-	case 20:	//backColor
+	case A_MediaBackClr:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
@@ -1431,7 +1402,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setPalette(plt);
 	    break;
 	}
-	case 21:	//backImg
+	case A_MediaBackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
@@ -1447,39 +1418,36 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setPalette(plt);
 	    break;
 	}
-	case 22:	//bordWidth
-	    shD->border.setWidth(atoi(val.c_str()));	break;
-	case 23:	//bordColor
-	    shD->border.setColor(getColor(val));	break;
-	case 24:	//bordStyle
-	    shD->bordStyle = atoi(val.c_str());		break;
-	case 25:	//src
+	case A_MediaBordWdth: shD->border.setWidth(atoi(val.c_str()));	break;
+	case A_MediaBordClr:  shD->border.setColor(getColor(val));	break;
+	case A_MediaBordStl:  shD->bordStyle = atoi(val.c_str());	break;
+	case A_MediaSrc:
 	    if(shD->mediaSrc == val)	break;
 	    shD->mediaSrc = val;
 	    reld_cfg = true;
 	    break;
-	case 26:	//fit
+	case A_MediaFit:
 	    shD->mediaFit = (bool)atoi(val.c_str());
 	    lab = dynamic_cast<QLabel*>(shD->addrWdg);
 	    if(lab) lab->setScaledContents(shD->mediaFit);
 	    break;
-	case 27:	//type
+	case A_MediaType:
 	    if(shD->mediaType == atoi(val.c_str()))	break;
 	    shD->mediaType = atoi(val.c_str());
 	    reld_cfg = true;
 	    break;
-	case 28:	//areas
+	case A_MediaAreas:
 	{
 	    int numbMAr = atoi(val.c_str());
 	    while((int)shD->maps.size() < numbMAr) shD->maps.push_back(MapArea());
 	    while((int)shD->maps.size() > numbMAr) shD->maps.pop_back();
 	    break;
 	}
-	case 29: 	//speed, play
+	case A_MediaSpeedPlay:
 	    switch(shD->mediaType)
 	    {
-		case 0: case 1: shD->mediaSpeed = atoi(val.c_str());	break;
-		case 2: shD->videoPlay = (bool)atoi(val.c_str());	break;
+		case FM_IMG: case FM_ANIM: shD->mediaSpeed = atoi(val.c_str());	break;
+		case FM_FULL_VIDEO: shD->videoPlay = (bool)atoi(val.c_str());	break;
 	    }
 	    if((lab=dynamic_cast<QLabel*>(shD->addrWdg)))
 	    {
@@ -1505,10 +1473,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 #endif
 	    break;
 #ifdef HAVE_PHONON
-	case 30:	//roll
-	    shD->videoRoll = (bool)atoi(val.c_str());
-	    break;
-	case 31:	//pause
+	case A_MediaRoll: shD->videoRoll = (bool)atoi(val.c_str());	break;
+	case A_MediaPause:
 	    shD->videoPause = (bool)atoi(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
 	    {
@@ -1516,12 +1482,12 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		if(!shD->videoPause && player->isPaused()) player->play();
 	    }
 	    break;
-	case 33:	//seek
+	case A_MediaSeek:
 	    if(shD->videoSeek == atof(val.c_str())) break;
 	    shD->videoSeek = atof(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->seek(shD->videoSeek);
 	    break;
-	case 34:	//volume
+	case A_MediaVolume:
 	    if(shD->audioVolume == atof(val.c_str())) break;
 	    shD->audioVolume = atof(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume);
@@ -1529,15 +1495,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 #endif
 	default:
 	    //> Individual arguments process
-	    if(uiPrmPos >= 40)
+	    if(uiPrmPos >= A_MediaArs)
 	    {
-		int areaN = (uiPrmPos-40)/3;
+		int areaN = (uiPrmPos-A_MediaArs)/A_MediaArsSz;
 		if(areaN >= (int)shD->maps.size()) break;
-		switch((uiPrmPos-40)%3)
+		switch((uiPrmPos-A_MediaArs)%A_MediaArsSz)
 		{
-		    case 0:	//shape
-			shD->maps[areaN].shp = atoi(val.c_str());	break;
-		    case 1:	//coordinates
+		    case A_MediaArShape: shD->maps[areaN].shp = atoi(val.c_str());	break;
+		    case A_MediaArCoord:
 		    {
 			string stmp;
 			shD->maps[areaN].pnts.clear();
@@ -1545,8 +1510,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			    if(!(pos%2)) shD->maps[areaN].pnts.push_back(QPoint(atoi(stmp.c_str()),0));
 			    else         shD->maps[areaN].pnts[shD->maps[areaN].pnts.size()-1].setY(atoi(stmp.c_str()));
 		    }
-		    case 2:	//title
-			shD->maps[areaN].title = val;	break;
+		    case A_MediaArTitle: shD->maps[areaN].title = val;	break;
 		}
 	    }
     }
@@ -1556,7 +1520,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	bool mk_new = false;
 	switch(shD->mediaType)
 	{
-	    case 0:	//Image
+	    case FM_IMG:
 	    {
 		QImage img;
 		//> Free movie data, if set
@@ -1579,7 +1543,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		else lab->setText("");
 		break;
 	    }
-	    case 1:	//Animation
+	    case FM_ANIM:
 	    {
 		//> Clear previous movie data
 		clear(w);
@@ -1615,7 +1579,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		break;
 	    }
 #ifdef HAVE_PHONON
-	    case 2:	//Full video
+	    case FM_FULL_VIDEO:
 	    {
 		//> Clear previous movie data
 		clear(w);
@@ -1691,11 +1655,11 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
     ShpDt *shD = (ShpDt*)w->shpData;
     if(!shD->en) return false;
 
-    switch( event->type() )
+    switch(event->type())
     {
 	case QEvent::Paint:
 	{
-	    QPainter pnt( w );
+	    QPainter pnt(w);
 
 	    //> Prepare draw area
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
@@ -1771,16 +1735,16 @@ bool ShapeMedia::eventFilter( WdgView *w, QObject *object, QEvent *event )
 //*************************************************
 bool ShapeMedia::MapArea::containsPoint( const QPoint & point )
 {
-    switch( shp )
+    switch(shp)
     {
-	case 0:		//rect
-	    if( pnts.size() < 2 ) return false;
+	case FM_RECT:
+	    if(pnts.size() < 2) return false;
 	    return QRect(pnts[0],pnts[1]).contains(point);
-	case 1:		//poly
+	case FM_POLY:
 	    return QPolygon(pnts).containsPoint(point,Qt::OddEvenFill);
-	case 2: 	//circle
+	case FM_CIRCLE:
 	{
-	    if( pnts.size() < 2 ) return false;
+	    if(pnts.size() < 2) return false;
 	    QPoint work = point-pnts[0];
 	    return (pow(pow((float)work.x(),2)+pow((float)work.y(),2),0.5) < pnts[1].x());
 	}
