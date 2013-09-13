@@ -81,7 +81,6 @@ namespace VISION
     private:
     	int index;
     	QObject *parent;
-    	bool f_stop;
     };
 
 #endif
