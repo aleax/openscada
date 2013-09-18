@@ -702,9 +702,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	else if(this.attrs['root'] == 'Box')
 	{
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
+	    backStyle = '';
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
-		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
-	    if(this.attrs['backImg'])   elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+		backStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
+	    if(this.attrs['backImg'])   backStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
+	    if(this == masterPage) document.body.style.cssText = parseInt(this.attrs['bordWidth']) ? '' : backStyle;
+	    elStyle += backStyle;
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    switch(parseInt(this.attrs['bordStyle']))

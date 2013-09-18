@@ -39,11 +39,11 @@ TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
 {
     m_cntr = grpAdd("cntr_");
 
-    fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    fldAdd( new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0") );
-    fldAdd( new TFld("START",_("To start"),TFld::Boolean,0,"1","0") );
+    fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
+    fldAdd(new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0"));
+    fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
 }
 
 TTipDAQ::~TTipDAQ( )

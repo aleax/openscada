@@ -180,6 +180,8 @@ class OrigProtocol : public PrWidget
 //************************************************
 class SessWdg;
 
+#define DocArhSize	1000000
+
 class OrigDocument : public PrWidget
 {
     public:

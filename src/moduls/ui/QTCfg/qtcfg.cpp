@@ -103,9 +103,7 @@ ConfApp::ConfApp( string open_user ) :
     CtrTree->setSelectionMode(QAbstractItemView::ExtendedSelection);
     CtrTree->setAutoScroll(false);
     //splitter->setSizeConstraint(QSplitter::KeepSize);
-    QStringList headerLabels;
-    headerLabels << _("Name") << _("Type") << _("Path");
-    CtrTree->setHeaderLabels(headerLabels);
+    CtrTree->setHeaderLabels(QStringList() << _("Name") << _("Type") << _("Path"));
     CtrTree->header()->setStretchLastSection(false);
     CtrTree->header()->resizeSection(0,200);
     //CtrTree->header()->setSectionHidden(1,true);
@@ -1776,14 +1774,14 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 
 		    //>>> addon parameters
 		    string tp = t_s.attr("tp");
-		    if( t_s.attr("dest") == "sel_ed" )
+		    if(t_s.attr("dest") == "sel_ed")
 		    {
-			val_w->setMinimumSize(100,0);
-			val_w->setType( LineEdit::Combo );
+			val_w->setMinimumSize(100, 0);
+			val_w->setType(LineEdit::Combo);
 		    }
-		    else if( tp == "dec" )
+		    else if(tp == "dec")
 		    {
-			val_w->setFixedWidth( 5*15+30 );
+			val_w->setFixedWidth(5*15+30);
 			val_w->setType( LineEdit::Integer );
 			QString	max = t_s.attr("max").empty() ? "9999999999" : t_s.attr("max").c_str();
 			QString	min = t_s.attr("min").empty() ? "-9999999999" : t_s.attr("min").c_str();
@@ -1883,7 +1881,7 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    else
 		    {
 			XMLNode x_lst("get");
-			x_lst.setAttr("path",TSYS::strEncode( t_s.attr("select"),TSYS::PathEl));
+			x_lst.setAttr("path", TSYS::strEncode(t_s.attr("select"),TSYS::PathEl));
 			if(!cntrIfCmd(x_lst))
 			    for(unsigned i_el = 0; i_el < x_lst.childSize(); i_el++)
 				if(x_lst.childGet(i_el)->name() == "el")
@@ -2835,16 +2833,16 @@ void ConfApp::imgPopup( const QPoint &pos )
 	    {
 		//> Get path to image file
 		QString fileName = QFileDialog::getOpenFileName(this,_("Load picture"),"",_("Images (*.png *.jpg)"));
-		if( fileName.isNull( ) ) return;
+		if(fileName.isNull()) return;
 		int len;
 		char buf[STR_BUF_LEN];
 		string rez;
 
 		//> Load image file
-		int hd = open(fileName.toAscii().data(),O_RDONLY);
-		if( hd < 0 )	throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
+		int hd = open(fileName.toAscii().data(), O_RDONLY);
+		if(hd < 0) throw TError(mod->nodePath().c_str(),_("Open file %s error\n"),fileName.toAscii().data());
 		{
-		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
+		    while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf, len);
 		    ::close(hd);
 		}
 
