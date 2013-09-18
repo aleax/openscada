@@ -1,5 +1,4 @@
 # OpenSCADA core translate to German.
-# Copyright (C) 2008-2010 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA package.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2008-2011.
@@ -10,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-19 21:47+0200\n"
+"POT-Creation-Date: 2013-09-11 15:46+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1270,8 +1269,8 @@ msgstr "Autor"
 msgid "License"
 msgstr "Lizenz"
 
-msgid "Connect module!"
-msgstr "Modul verbinden!"
+msgid "Connect module."
+msgstr "Modul verbinden."
 
 #, c-format
 msgid "Function '%s' is not present in the module!"
@@ -1581,7 +1580,8 @@ msgid ""
 "===========================================================================\n"
 "-h, --help             Info message about system options.\n"
 "    --Config=<path>    Config-file path.\n"
-"    --Station=<id>     Station identifier.\n"
+"    --Station=<id>     The station identifier.\n"
+"    --StatName=<name>  The station name.\n"
 "    --demon            Start into demon mode.\n"
 "    --CoreDumpAllow\tSet limits for core dump creation allow on crash.\n"
 "    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -1618,7 +1618,8 @@ msgstr ""
 "===========================================================================\n"
 "-h, --help             Info Nachricht über System-Optionen.\n"
 "    --Config=<path>    Pfad der Konfigurationsdatei.\n"
-"    --Station=<id>     Name der Station.\n"
+"    --Station=<id>     Station-ID.\n"
+"    --StatName=<name>  Name der Station.\n"
 "    --demon            Start im Hintergrund-Modus.\n"
 "    --CoreDumpAllow\tFestlegen von Limits für Core-Dump-Erstellung auf Crash "
 "erlauben.\n"
@@ -1762,6 +1763,9 @@ msgstr "%s Station: \"%s\""
 
 msgid "Station"
 msgstr "Station"
+
+msgid "Station name"
+msgstr "Stationsnamen"
 
 msgid "Version"
 msgstr "Version"
@@ -2230,9 +2234,3 @@ msgstr "Eingangsübertragung wird nicht unterstützt!"
 
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
-
-#~ msgid "*.*.[TableName]"
-#~ msgstr "*.*.[Tabellenname]"
-
-#~ msgid "<cfg>.[TableName]"
-#~ msgstr "<cfg>.[Tabellenname]"

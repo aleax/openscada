@@ -177,7 +177,7 @@ class TCntrNode
 
 	//> Childs
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
-	void chldList( int8_t igr, vector<string> &list );
+	void chldList( int8_t igr, vector<string> &list, bool noex = false );
 	bool chldPresent( int8_t igr, const string &name );
 
     protected:
