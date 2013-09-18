@@ -28,6 +28,7 @@
 #include <sys/time.h>
 #include <sys/utsname.h>
 #include <sys/resource.h>
+#include <dirent.h>
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
@@ -38,6 +39,8 @@
 #include <stdlib.h>
 #include <langinfo.h>
 #include <zlib.h>
+
+#include <algorithm>
 
 #include "terror.h"
 #include "tmess.h"
@@ -177,42 +180,50 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 
 string TSYS::int2str( int val, TSYS::IntView view )
 {
-    char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%d",val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
-
+    char buf[NSTR_BUF_LEN];
+    switch(view)
+    {
+	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", (unsigned)val);	break;
+	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", (unsigned)val);	break;
+	default: snprintf(buf, sizeof(buf), "%d", val);				break;
+    }
     return buf;
 }
 
 string TSYS::uint2str( unsigned val, IntView view )
 {
-    char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%u",val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%o",val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%x",val);
-
+    char buf[NSTR_BUF_LEN];
+    switch(view)
+    {
+	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", val);	break;
+	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", val);	break;
+	default: snprintf(buf, sizeof(buf), "%u", val);		break;
+    }
     return buf;
 }
 
 string TSYS::ll2str( int64_t val, IntView view )
 {
-    char buf[STR_BUF_LEN];
-    if(view == TSYS::Dec)	snprintf(buf,sizeof(buf),"%lld",(long long int)val);
-    else if(view == TSYS::Oct)	snprintf(buf,sizeof(buf),"%llo",(long long unsigned int)val);
-    else if(view == TSYS::Hex)	snprintf(buf,sizeof(buf),"%llx",(long long unsigned int)val);
-
+    char buf[NSTR_BUF_LEN];
+    switch(view)
+    {
+	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%llo", (long long unsigned int)val);	break;
+	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%llx", (long long unsigned int)val);	break;
+	default: snprintf(buf, sizeof(buf), "%lld", (long long int)val);			break;
+    }
     return buf;
 }
 
 string TSYS::real2str( double val, int prec, char tp )
 {
-    char buf[STR_BUF_LEN];
-    prec = vmax(0,prec);
-    if(tp == 'g') snprintf(buf,sizeof(buf),"%.*g",prec,val);
-    else if(tp == 'e') snprintf(buf,sizeof(buf),"%.*e",prec,val);
-    else snprintf(buf,sizeof(buf),"%.*f",prec,val);
-
+    char buf[NSTR_BUF_LEN];
+    prec = vmax(0, prec);
+    switch(tp)
+    {
+	case 'g': snprintf(buf, sizeof(buf), "%.*g", prec, val);	break;
+	case 'e': snprintf(buf, sizeof(buf), "%.*e", prec, val);	break;
+	default: snprintf(buf, sizeof(buf), "%.*f", prec, val);		break;
+    }
     return buf;
 }
 
@@ -297,6 +308,26 @@ string TSYS::strMess( const char *fmt, ... )
     return str;
 }
 
+string TSYS::strLabEnum( const string &base )
+{
+    //> Get number from end
+    unsigned numbDig = base.size(), numbXDig = base.size();
+    bool noDig = false;
+    for(int i_c = base.size()-1; i_c >= 0; i_c--)
+    {
+	if(!noDig && isdigit(base[i_c])) numbDig = i_c; else noDig = true;
+	if(!(isxdigit(base[i_c]) || (i_c && strncasecmp(base.c_str()+i_c-1,"0x",2) == 0))) break;
+	else if(!isxdigit(base[i_c])) { numbXDig = i_c-1; break; }
+    }
+
+    //> Process number and increment
+    if(numbXDig < numbDig && (base.size()-numbXDig) > 2 && strncasecmp(base.c_str()+numbXDig,"0x",2) == 0)
+	return base.substr(0, numbXDig) + "0x" + int2str(strtol(base.c_str()+numbXDig,NULL,16)+1, TSYS::Hex);
+    if((base.size()-numbDig) > 1 && base[numbDig] == '0')
+	return base.substr(0, numbDig) + "0" + int2str(strtol(base.c_str()+numbDig,NULL,8)+1, TSYS::Oct);
+    return base.substr(0, numbDig) + int2str(strtol(base.c_str()+numbDig,NULL,0)+1);
+}
+
 string TSYS::optDescr( )
 {
     utsname buf;
@@ -310,7 +341,8 @@ string TSYS::optDescr( )
 	"===========================================================================\n"
 	"-h, --help             Info message about system options.\n"
 	"    --Config=<path>    Config-file path.\n"
-	"    --Station=<id>     Station identifier.\n"
+	"    --Station=<id>     The station identifier.\n"
+	"    --StatName=<name>  The station name.\n"
 	"    --demon            Start into demon mode.\n"
 	"    --CoreDumpAllow	Set limits for core dump creation allow on crash.\n"
 	"    --MessLev=<level>  Process messages <level> (0-7).\n"
@@ -389,6 +421,7 @@ bool TSYS::cfgFileLoad( )
 	}
 	else if(argCom == "Config") 	mConfFile = argVl;
 	else if(argCom == "Station")	mId = argVl;
+	else if(argCom == "StatName")	mName = argVl;
 
     //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
@@ -423,8 +456,9 @@ bool TSYS::cfgFileLoad( )
 		    }
 		if(stat_n && stat_n->attr("id") != mId)
 		{
-		    mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
-			mId.c_str(), stat_n->attr("id").c_str());
+		    if(mId != "EmptySt")
+			mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
+			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
@@ -1926,6 +1960,60 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     return TCntrNode::objFuncCall(iid,prms,user);
 }
 
+void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
+{
+    int pathLev = 0;
+    //> Source path check and normalize
+    bool fromRoot = (fsBaseIn.size() && fsBaseIn[0] == '/');
+    nd->childAdd("el")->setText("/");
+    if(TSYS::pathLev(fsBaseIn,0) != ".") nd->childAdd("el")->setText(".");
+    string fsBase, tEl;
+    for(int off = 0; (tEl=TSYS::pathLev(fsBaseIn,0,false,&off)).size(); pathLev++)
+    {
+        fsBase += ((pathLev || fromRoot)?"/":"")+tEl;
+        nd->childAdd("el")->setText(fsBase);
+    }
+    if(fromRoot && pathLev == 0) fsBase = "/";
+    //> Previous items set
+    if(!fromRoot)
+    {
+        if(pathLev == 0) nd->childAdd("el")->setText("..");
+        else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
+    }
+    //> From work directory check
+    string fsBaseCor = fsBase;
+    if(!fsBaseCor.size() || (fsBaseCor[0] != '/' && fsBaseCor[0] != '.')) fsBaseCor = "./"+fsBaseCor;
+    //> Child items process
+    vector<string> its, fits;
+    DIR *IdDir = opendir(fsBaseCor.c_str());
+    if(IdDir != NULL)
+    {
+        dirent sDir, *sDirRez = NULL;
+        while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
+        {
+            if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
+            if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
+                    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
+                    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
+                fits.push_back(sDirRez->d_name);
+            else if(sDirRez->d_type == DT_REG && fileExt.size())
+            {
+                tEl = sDirRez->d_name;
+                size_t extPos = tEl.rfind(".");
+                tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
+                if(fileExt == "*" || (tEl.size() && fileExt.find(tEl+";") != string::npos)) fits.push_back(sDirRez->d_name);
+            }
+        }
+        closedir(IdDir);
+    }
+    sort(its.begin(),its.end());
+    for(unsigned i_it = 0; i_it < its.size(); i_it++)
+        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
+    sort(fits.begin(),fits.end());
+    for(unsigned i_it = 0; i_it < fits.size(); i_it++)
+        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
+}
+
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[STR_BUF_LEN];
@@ -1942,7 +2030,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_))
 	{
 	    ctrMkNode("fld",opt,-1,"/gen/id",_("ID"),R_R_R_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station"),RWRWR_,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station name"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Program"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/ver",_("Version"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/host",_("Host name"),R_R_R_,"root","root",1,"tp","str");
@@ -1952,9 +2040,9 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/clk_res",_("Real-time clock resolution"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/icoDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root","root",2,"tp","bool",
@@ -2062,16 +2150,19 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
     }
+    else if(a_path == "/gen/workDirList" && ctrChkNode(opt))	ctrListFS(opt, workDir());
     else if(a_path == "/gen/icodir")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
     }
+    else if(a_path == "/gen/icoDirList" && ctrChkNode(opt))	ctrListFS(opt, icoDir());
     else if(a_path == "/gen/moddir")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(modDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setModDir(opt->text().c_str());
     }
+    else if(a_path == "/gen/modDirList" && ctrChkNode(opt))     ctrListFS(opt, modDir());
     else if(a_path == "/gen/lang")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());

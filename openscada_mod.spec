@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.8.0.7
+Version: 0.8.0.8
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -306,7 +306,7 @@ Group: Graphics
 BuildArch: noarch
 Requires: %name-DB.SQLite
 Requires: %name-Transport.Serial %name-Transport.Sockets %name-Transport.SSL %name-Protocol.HTTP %name-Protocol.SelfSystem %name-Protocol.UserProtocol
-Requires: %name-DAQ.JavaLikeCalc %name-DAQ.BlockCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System %name-Archive.FSArch
+Requires: %name-DAQ.JavaLikeCalc %name-DAQ.BlockCalc %name-DAQ.LogicLev %name-DAQ.ModBus %name-DAQ.System %name-DAQ.DCON %name-Archive.FSArch
 Requires: %name-UI.VCAEngine %name-UI.WebCfgD %name-UI.WebVision %name-Special.FLibComplex1 %name-Special.FLibMath %name-Special.FLibSYS
 %description plc
 The %name-plc package is virtual package for PLC.
@@ -1467,6 +1467,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Mon Sep 16 2013 Roman Savochenko <rom_as@oscada.org>
+- Build 0.8.0.8 update to production release.
+
 * Thu Jul 11 2013 Roman Savochenko <rom_as@oscada.org>
 - Build 0.8.0.7 update to production release.
 

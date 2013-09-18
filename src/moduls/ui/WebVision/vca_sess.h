@@ -97,6 +97,11 @@ class VCAObj : public TCntrNode
 class ShapeItem
 {
     public:
+	//Data
+	enum Type { Line = 1, Arc = 2, Bezier = 3, Fill = 4 };
+	enum SpecIdx { DefLine = -5, DefBord = -6, DefFill = -7, DefFillImg = -5, StatIts = -10 };
+
+	//Methods
 	ShapeItem( )	{ }
 	ShapeItem(const int num_1,const int num_2, const int num_3, const int num_4,const int num_5,
 		  const Point &ctrlpos_4, const double iang, const int color, const int bcolor, const int iwidth,

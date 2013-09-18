@@ -427,8 +427,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     {
 	TVArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Full archives size"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
-	    "tp","str","help",_("Path to directory for archivator's of values files."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
+	    "tp","str","dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to directory for archivator's of values files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/add/tm",_("Archive's file time size (hours)"),RWRWR_,"root",SARH_ID,2,"tp","real","help",
@@ -475,7 +475,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
+    if(a_path == "/prm/cfg/dirList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, addr());
+    else if(a_path == "/prm/st/fsz" && ctrChkNode(opt))	opt->setText(TSYS::cpct2str(curCapacity()));
     else if(a_path == "/prm/add/tm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(fileTimeSize(),6));

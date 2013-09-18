@@ -1,15 +1,15 @@
 # OpenSCADA.UI.WebCfg translate to German.
-# Copyright (C) 2009 Irina Popkova
 # This file is distributed under the same license as the OpenSCADA.UI.WebCfg package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
+# Roman Savochenko <rom_as@fromru.com>, 2013.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.WebCfg 1.5.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-27 15:45+0300\n"
+"POT-Creation-Date: 2013-08-22 10:13+0300\n"
 "PO-Revision-Date: 2009-08-26 08:08+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -126,6 +126,9 @@ msgstr "%s| Änderung <%s:%s> in %s"
 #, c-format
 msgid "%s| Go to link '%s'"
 msgstr "%s| Gehen zum Link '%s'"
+
+msgid "Go to '%s'."
+msgstr "Gehe zu '%s'."
 
 #, c-format
 msgid "%s| Put command <%s:%s>"
