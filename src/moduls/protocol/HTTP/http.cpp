@@ -348,7 +348,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,0,"/prm",_("Protocol")))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/lf_tm",_("Life time of the authentication (min)"),RWRWR_,"root",SPRT_ID,1,"tp","dec");
-	    ctrMkNode("fld",opt,-1,"/prm/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,1,"tp","str");
+	    ctrMkNode("fld",opt,-1,"/prm/tmpl",_("HTML-template"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/prm/tmplList");
 	    if(ctrMkNode("table",opt,-1,"/prm/alog",_("Auto login"),RWRWR_,"root",SPRT_ID,2,"s_com","add,del,ins",
 		"help",_("For address field you can use address templates list, for example \"192.168.1.*;192.168.2.*\".")))
 	    {
@@ -402,6 +402,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(tmpl());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setTmpl(opt->text());
     }
+    else if(a_path == "/prm/tmplList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, tmpl(), "html;xhtml;xml;");
     else if(a_path == "/prm/usr_ls" && ctrChkNode(opt))
     {
 	vector<string> ls;

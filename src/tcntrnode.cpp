@@ -24,7 +24,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <unistd.h>
-#include <dirent.h>
 #include <stdarg.h>
 #include <limits.h>
 
@@ -352,11 +351,11 @@ TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
     return (*chGrp)[iid];
 }
 
-void TCntrNode::chldList(int8_t igr, vector<string> &list)
+void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
 {
-    ResAlloc res(hd_res,false);
-    if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
-    if(nodeMode() == Disable)	throw TError(nodePath().c_str(),"Node is disabled!");
+    ResAlloc res(hd_res, false);
+    if(!chGrp || igr >= (int)chGrp->size()) { if(noex) return; else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr); }
+    if(nodeMode() == Disable) { if(noex) return; else throw TError(nodePath().c_str(),"Node is disabled!"); }
 
     list.clear();
     list.reserve((*chGrp)[igr].elem.size());

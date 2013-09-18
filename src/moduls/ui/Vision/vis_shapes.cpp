@@ -22,6 +22,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <math.h>
+#include <errno.h>
 #include <algorithm>
 
 #include <QApplication>
@@ -50,6 +51,7 @@
 #include <QPlastiqueStyle>
 
 #include <tsys.h>
+#include "../VCAEngine/types.h"
 #include "tvision.h"
 #include "vis_devel.h"
 #include "vis_run.h"
@@ -64,6 +66,7 @@
 
 
 using namespace VISION;
+using namespace VCA;
 
 //*************************************************
 //* Widget shape abstract object                  *
@@ -95,25 +98,25 @@ bool WdgShape::event( WdgView *view, QEvent *event )
 void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 {
     int bordWidth = bpen.width();
-    if( bordStyle && bordWidth )
+    if(bordStyle && bordWidth)
     switch(bordStyle)
     {
-	case 1:	//Dotted
+	case FBRD_DOT:
 	    bpen.setStyle(Qt::DotLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
-	case 2:	//Dashed
+	case FBRD_DASH:
 	    bpen.setStyle(Qt::DashLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
-	case 3:	//Solid
+	case FBRD_SOL:
 	    bpen.setStyle(Qt::SolidLine);
 	    pnt.setPen(bpen);
 	    pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    break;
-	case 4:	//Double
+	case FBRD_DBL:
 	    bpen.setStyle(Qt::SolidLine);
 	    if( bordWidth/3 )
 	    {
@@ -131,7 +134,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    }
 	    break;
-	case 5:	//Groove
+	case FBRD_GROOVE:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -139,7 +142,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    qDrawShadeRect(&pnt,dA,plt,true,bordWidth/2);
 	    break;
 	}
-	case 6:	//Ridge
+	case FBRD_RIDGE:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -147,7 +150,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    qDrawShadeRect(&pnt,dA,plt,false,bordWidth/2);
 	    break;
 	}
-	case 7:	//Inset
+	case FBRD_INSET:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -155,7 +158,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    qDrawShadePanel(&pnt,dA,plt,true,bordWidth);
 	    break;
 	}
-	case 8:	//Outset
+	case FBRD_OUTSET:
 	{
 	    QPalette plt;
 	    plt.setColor(QPalette::Light,bpen.color().lighter(150));
@@ -179,7 +182,7 @@ QFont WdgShape::getFont( const string &val, float fsc, bool pixSize )
     int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
     sscanf(val.c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
     rez.setFamily(QString(family).replace(QRegExp("_")," "));
-    if( pixSize ) rez.setPixelSize((int)(fsc*(float)size));
+    if(pixSize) rez.setPixelSize((int)(fsc*(float)size));
     else rez.setPointSize((int)(fsc*(float)size));
     rez.setBold(bold);
     rez.setItalic(italic);
@@ -193,11 +196,11 @@ QColor WdgShape::getColor( const string &val )
 {
     QColor res_color;
     size_t fPs = val.find("-");
-    if( fPs == string::npos )	res_color = QColor(val.c_str());
+    if(fPs == string::npos) res_color = QColor(val.c_str());
     else
     {
-	res_color = QColor( val.substr(0,fPs).c_str() );
-	res_color.setAlpha( atoi(val.substr(fPs+1).c_str()) );
+	res_color = QColor(val.substr(0,fPs).c_str());
+	res_color.setAlpha(atoi(val.substr(fPs+1).c_str()));
     }
     return res_color;
 }
@@ -232,312 +235,322 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     bool rel_cfg = false;	//Reload configuration
 
     shD->evLock = true;
-    switch( uiPrmPos )
+    switch(uiPrmPos)
     {
-	case -1:	//load
-	    rel_cfg = true;
-	    break;
-	case 5:		//en
+	case A_COM_LOAD:	rel_cfg = true;	break;
+	case A_EN:
 	    if(!runW)	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    runW->setVisible( atoi(val.c_str()) && runW->permView() );
-	    if( shD->elType >= 0 ) shD->addrWdg->setVisible( atoi(val.c_str()) && runW->permView() );
+	    runW->setVisible(shD->en && runW->permView());
+	    if(shD->elType >= 0) shD->addrWdg->setVisible(shD->en && runW->permView());
 	    break;
-	case 6:		//active
+	case A_ACTIVE:
 	    if(!runW)	break;
 	    shD->active = (bool)atoi(val.c_str());
-	    if( shD->elType >= 0 )
-	    {
-		setFocus(w,shD->addrWdg,atoi(val.c_str()) && runW->permCntr());
-		shD->addrWdg->setEnabled(atoi(val.c_str()) && runW->permCntr());
-	    }
+	    setActive(w, shD->active && runW->permCntr());
 	    break;
-	case 12:	//geomMargin
-	    w->layout()->setMargin(atoi(val.c_str()));	break;
-	case 20:	//elType
-	    if( shD->elType == atoi(val.c_str()) ) break;
+	case A_GEOM_MARGIN:	w->layout()->setMargin(atoi(val.c_str()));	break;
+	case A_FormElType:
+	    if(shD->elType == atoi(val.c_str())) break;
 	    shD->elType = atoi(val.c_str());
-	    shD->welType = -1;
+	    shD->setType = false;
 	    rel_cfg = true;
 	    break;
-	case 21:	//value
-	    shD->value = val;
-	    if( !shD->addrWdg ) break;
-	    switch( shD->welType )
-	    {
-		case 0:
-		    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
-		    break;
-		case 1:	((TextEdit*)shD->addrWdg)->setText(val.c_str());	break;
-		case 2:	((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
-		case 3:	((QPushButton*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
-		case 4:
-		    if(((QComboBox*)shD->addrWdg)->findText(val.c_str()) < 0) ((QComboBox*)shD->addrWdg)->addItem(val.c_str());
-			((QComboBox*)shD->addrWdg)->setCurrentIndex(((QComboBox*)shD->addrWdg)->findText(val.c_str()));
-		    break;
-		case 5:
-		{
-		    QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(val.c_str(),Qt::MatchExactly);
-		    ((QListWidget*)shD->addrWdg)->setCurrentItem(its.size()?its[0]:NULL);
-		    break;
-		}
-		case 6: case 7:
-		    shD->addrWdg->blockSignals(true);
-		    ((QAbstractSlider*)shD->addrWdg)->setValue(atoi(val.c_str()));
-		    shD->addrWdg->blockSignals(false);
-		    break;
-	    }
+	case A_FormElValue:
+	    if(shD->value != val) setValue(w, val);
 	    break;
-	case 22:	//view, wordWrap, img, items, cfg
+	case A_FormElMixP1:
 	    rel_cfg = true;
-	    switch( shD->elType )
+	    switch(shD->elType)
 	    {
-		case 0:		//view
-		    shD->view = atoi(val.c_str());	break;
-		case 1:		//wordWrap
-		    shD->wordWrap = atoi(val.c_str());	break;
-		case 3:		//img
-		    shD->img = val;		break;
-		case 4: case 5:	//items
-		    shD->items = val;		break;
-		case 6: case 7:	//cfg
-		    shD->cfg = val;		break;
+		case F_LINE_ED:	shD->view = atoi(val.c_str());		break;
+		case F_TEXT_ED:	shD->wordWrap = atoi(val.c_str());	break;
+		case F_BUTTON:	shD->img = val;		break;
+		case F_COMBO: case F_LIST: case F_TREE: shD->items = val;	break;
+		case F_SLIDER: case F_SCROLL_BAR: shD->cfg = val;		break;
 		default: rel_cfg = false;
 	    }
 	    break;
-	case 23:	//cfg, color
+	case A_FormElMixP2:
 	    rel_cfg = true;
-	    switch( shD->elType )
+	    switch(shD->elType)
 	    {
-		case 0:	//cfg
-		    shD->cfg = val;
-		    //((LineEdit*)shD->addrWdg)->setCfg(val.c_str());
-		    break;
-		case 3:	//color
-		    shD->color = val;
-		    //((QPushButton*)shD->addrWdg)->setPalette( QColor(val.c_str()).isValid() ? QPalette(QColor(val.c_str())) : QPalette() );
-		    break;
+		case F_LINE_ED:	shD->cfg = val;		break;
+		case F_BUTTON:	shD->color = val;	break;
 		default: rel_cfg = false;
 	    }
 	    break;
-	case 24:	//checkable
-	    shD->checkable = (bool)atoi(val.c_str());
-	    rel_cfg = true;
+	case A_FormElMixP3: shD->checkable = (bool)atoi(val.c_str()); rel_cfg = true;	break;
+	case A_FormElFont: shD->font = getFont(val); rel_cfg = true;	break;
+	case A_FormElName:
+	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
+	    if(!shD->setType) break;
+	    switch(shD->elType)
+	    {
+		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
+		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
+		case F_TREE:
+		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
+		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
+		    break;
+	    }
 	    break;
-	case 25:	//font
-	    shD->font = getFont(val);
-	    rel_cfg = true;
-	    break;
-	case 26:	//name
-	    shD->name = TSYS::strEncode(val,TSYS::ShieldSimb);
-	    if(shD->welType == 2)	((QCheckBox*)shD->addrWdg)->setText(TSYS::strEncode(val,TSYS::ShieldSimb).c_str());
-	    else if(shD->welType == 3)	((QPushButton*)shD->addrWdg)->setText(TSYS::strEncode(val,TSYS::ShieldSimb).c_str());
-	    break;
-	case 27:	//colorText
-	    shD->colorText = val;
-	    rel_cfg = true;
-	    break;
+	case A_FormElMixP4: shD->colorText = val; rel_cfg = true;	break;
     }
-    if( rel_cfg && !w->allAttrLoad() )
+    if(rel_cfg && !w->allAttrLoad())
     {
 	bool mk_new = false;
 	Qt::Alignment wAlign = 0;
 	QFont elFnt = shD->font;
-	if( elFnt.pixelSize() > 0 )
+	if(elFnt.pixelSize() > 0)
 	    elFnt.setPixelSize((int)((float)elFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true))));
-	switch( shD->elType )
+	switch(shD->elType)
 	{
-	    case 0:	//Line edit
+	    case F_LINE_ED:
 	    {
-		if( !shD->addrWdg || !qobject_cast<LineEdit*>(shD->addrWdg) )
+		LineEdit *wdg = (LineEdit*)shD->addrWdg;
+		if(!wdg || !qobject_cast<LineEdit*>(wdg))
 		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new LineEdit(w,LineEdit::Text,!shD->checkable);
-		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(lineAccept()) );
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new LineEdit(w, LineEdit::Text, !shD->checkable);
+		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(lineAccept()));
 		    mk_new = true;
 		}
 		//> View
 		LineEdit::LType tp = LineEdit::Text;
 		switch(shD->view)
 		{
-		    case 0: tp = LineEdit::Text;	break;
-		    case 1: tp = LineEdit::Combo;	break;
-		    case 2: tp = LineEdit::Integer;	break;
-		    case 3: tp = LineEdit::Real;	break;
-		    case 4: tp = LineEdit::Time;	break;
-		    case 5: tp = LineEdit::Date;	break;
-		    case 6: tp = LineEdit::DateTime;	break;
+		    case FL_TEXT:	tp = LineEdit::Text;	break;
+		    case FL_COMBO:	tp = LineEdit::Combo;	break;
+		    case FL_INTEGER:	tp = LineEdit::Integer;	break;
+		    case FL_REAL:	tp = LineEdit::Real;	break;
+		    case FL_TIME:	tp = LineEdit::Time;	break;
+		    case FL_DATE:	tp = LineEdit::Date;	break;
+		    case FL_DATE_TM:	tp = LineEdit::DateTime;break;
 		}
-		if( ((LineEdit*)shD->addrWdg)->type() != tp )
-		{ ((LineEdit*)shD->addrWdg)->setType(tp); mk_new = true; }
-		//> Cfg
-		((LineEdit*)shD->addrWdg)->setCfg(shD->cfg.c_str());
-		//> Value
-		((LineEdit*)shD->addrWdg)->setValue(shD->value.c_str());
-		//> Font
-		shD->addrWdg->setFont(elFnt);
+		if(wdg->type() != tp) { wdg->setType(tp); mk_new = true; }
+		wdg->setCfg(shD->cfg.c_str());	//Cfg
+		wdg->setFont(elFnt);		//Font
+		setValue(w, shD->value, true);	//Value
 		break;
 	    }
-	    case 1:	//Text edit
-		if( !shD->addrWdg || !qobject_cast<TextEdit*>(shD->addrWdg) )
-		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new TextEdit(w,!shD->checkable);
-		    if( runW ) connect( shD->addrWdg, SIGNAL(apply()), this, SLOT(textAccept()) );
-		    mk_new = true;
-		}
-		//- Value -
-		((TextEdit*)shD->addrWdg)->setText(shD->value.c_str());
-		//- WordWrap -
-		((TextEdit*)shD->addrWdg)->workWdg()->setLineWrapMode( shD->wordWrap ? QTextEdit::WidgetWidth : QTextEdit::NoWrap );
-		//- Font -
-		shD->addrWdg->setFont(elFnt);
-		break;
-	    case 2:	//Chek box
-		if( !shD->addrWdg || !qobject_cast<QCheckBox*>(shD->addrWdg) )
-		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new QCheckBox("test",w);
-		    if( runW ) connect( shD->addrWdg, SIGNAL(stateChanged(int)), this, SLOT(checkChange(int)) );
-		    mk_new = true;
-		}
-		//- Name -
-		((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());
-		//- Value -
-		((QCheckBox*)shD->addrWdg)->setChecked(atoi(shD->value.c_str()));
-		//- Font -
-		shD->addrWdg->setFont(elFnt);
-		break;
-	    case 3:	//Button
+	    case F_TEXT_ED:
 	    {
-		if( !shD->addrWdg || !qobject_cast<QPushButton*>(shD->addrWdg) )
+		TextEdit *wdg = (TextEdit*)shD->addrWdg;
+		if(!wdg || !qobject_cast<TextEdit*>(wdg))
 		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new QPushButton("test",w);
-		    shD->addrWdg->setStyle(new QPlastiqueStyle());
-		    shD->addrWdg->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
-		    if( runW )
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new TextEdit(w, !shD->checkable);
+		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(textAccept()));
+		    mk_new = true;
+		}
+		wdg->setFont(elFnt);		//Font
+		setValue(w, shD->value, true);	//Value
+		wdg->workWdg()->setLineWrapMode(shD->wordWrap ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);	//WordWrap
+		break;
+	    }
+	    case F_CHECK_BOX:
+	    {
+		QCheckBox *wdg = (QCheckBox*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QCheckBox*>(wdg))
+		{
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new QCheckBox("test", w);
+		    if(runW) connect(wdg, SIGNAL(stateChanged(int)), this, SLOT(checkChange(int)));
+		    mk_new = true;
+		}
+		wdg->setFont(elFnt);		//Font
+		wdg->setText(shD->name.c_str());//Name
+		setValue(w, shD->value, true);	//Value
+		break;
+	    }
+	    case F_BUTTON:
+	    {
+		QPushButton *wdg = (QPushButton*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QPushButton*>(wdg))
+		{
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new QPushButton("test", w);
+		    wdg->setStyle(new QPlastiqueStyle());
+		    wdg->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+		    if(runW)
 		    {
-			connect( shD->addrWdg, SIGNAL(pressed()), this, SLOT(buttonPressed()) );
-			connect( shD->addrWdg, SIGNAL(released()), this, SLOT(buttonReleased()) );
-			connect( shD->addrWdg, SIGNAL(toggled(bool)), this, SLOT(buttonToggled(bool)) );
+			connect(wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()));
+			connect(wdg, SIGNAL(released()), this, SLOT(buttonReleased()));
+			connect(wdg, SIGNAL(toggled(bool)), this, SLOT(buttonToggled(bool)));
 		    }
 		    mk_new = true;
 		}
-		//- Name -
-		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());
-		//- Img -
+		wdg->setText(shD->name.c_str());	//Name
+		//> Img
 		QImage img;
 		string backimg = w->resGet(shD->img);
-		if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
 		{
 		    int ic_sz = vmin(w->size().width(), w->size().height()) - w->layout()->margin() - 5;
-		    ((QPushButton*)shD->addrWdg)->setIconSize(QSize(ic_sz,ic_sz));
-		    ((QPushButton*)shD->addrWdg)->setIcon(QPixmap::fromImage(img));
-		} else ((QPushButton*)shD->addrWdg)->setIcon(QPixmap());
-		//- Color -
+		    wdg->setIconSize(QSize(ic_sz,ic_sz));
+		    wdg->setIcon(QPixmap::fromImage(img));
+		} else wdg->setIcon(QPixmap());
+		//> Color
 		QPalette plt;
 		QColor clr = getColor(shD->color);
-		if( clr.isValid() )	plt.setColor(QPalette::Button,clr);
+		if(clr.isValid())	plt.setColor(QPalette::Button, clr);
 		clr = getColor(shD->colorText);
-		if( clr.isValid() )	plt.setColor(QPalette::ButtonText,clr);
-		((QPushButton*)shD->addrWdg)->setPalette(plt);
-		//- Checkable -
-		((QPushButton*)shD->addrWdg)->setCheckable(shD->checkable);
-		//- Value -
-		((QPushButton*)shD->addrWdg)->setChecked(atoi(shD->value.c_str()));
-		//- Font -
-		shD->addrWdg->setFont(elFnt);
+		if(clr.isValid())	plt.setColor(QPalette::ButtonText, clr);
+		wdg->setPalette(plt);
+		wdg->setFont(elFnt);				//Font
+		setValue(w, shD->value, true);			//Value
 		break;
 	    }
-	    case 4:	//Combo box
+	    case F_COMBO:
 	    {
-		if( !shD->addrWdg || !qobject_cast<QComboBox*>(shD->addrWdg) )
+		QComboBox *wdg = (QComboBox*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QComboBox*>(wdg))
 		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new QComboBox(w);
-		    if( runW ) connect( shD->addrWdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)) );
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new QComboBox(w);
+		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)));
 		    mk_new = true;
 		}
-		//- Items -
-		((QComboBox*)shD->addrWdg)->clear();
-		((QComboBox*)shD->addrWdg)->addItems(QString(shD->items.c_str()).split("\n"));
-		//- Value -
-		if( ((QComboBox*)shD->addrWdg)->findText(shD->value.c_str()) < 0 ) ((QComboBox*)shD->addrWdg)->addItem(shD->value.c_str());
-		((QComboBox*)shD->addrWdg)->setCurrentIndex(((QComboBox*)shD->addrWdg)->findText(shD->value.c_str()));
-		//- Font -
-		shD->addrWdg->setFont(elFnt);
+		//> Font
+		wdg->setFont(elFnt);
+		//> Items
+		wdg->clear();
+		wdg->addItems(QString(shD->items.c_str()).split("\n"));
+		setValue(w, shD->value, true);	//Value
 		break;
 	    }
-	    case 5:	//List
+	    case F_LIST:
 	    {
-		if( !shD->addrWdg || !qobject_cast<QListWidget*>(shD->addrWdg) )
+		QListWidget *wdg = (QListWidget*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QListWidget*>(wdg))
 		{
-		    if( shD->addrWdg ) shD->addrWdg->deleteLater();
-		    shD->addrWdg = new QListWidget(w);
-		    if( runW ) connect( shD->addrWdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)) );
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new QListWidget(w);
+		    if(runW) connect(wdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)));
 		    mk_new = true;
 		}
-		//- Items -
-		((QListWidget*)shD->addrWdg)->clear();
-		((QListWidget*)shD->addrWdg)->addItems(QString(shD->items.c_str()).split("\n"));
-		//- Value -
-		QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(shD->value.c_str(),Qt::MatchExactly);
-		if( its.size() ) ((QListWidget*)shD->addrWdg)->setCurrentItem(its[0]);
-		//- Font -
-		shD->addrWdg->setFont(elFnt);
+		//> Items
+		wdg->clear();
+		wdg->addItems(QString(shD->items.c_str()).split("\n"));
+
+		wdg->setFont(elFnt);		//Font
+		setValue(w, shD->value, true);	//Value
 		break;
 	    }
-	    case 6:	//Slider
-	    case 7:	//Scroll bar
+	    case F_TREE:
 	    {
-		if(!shD->addrWdg || (shD->elType==6 && !qobject_cast<QSlider*>(shD->addrWdg)) || (shD->elType==7 && !qobject_cast<QScrollBar*>(shD->addrWdg)))
+		QTreeWidget *wdg = (QTreeWidget*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QTreeWidget*>(wdg))
 		{
-		    if(shD->addrWdg) shD->addrWdg->deleteLater();
-		    shD->addrWdg = (shD->elType==6 ? (QWidget *)new QSlider(w) : (QWidget *)new QScrollBar(w));
-		    ((QAbstractSlider*)shD->addrWdg)->setTracking(false);
-		    if(runW) connect(shD->addrWdg, SIGNAL(valueChanged(int)), this, SLOT(sliderMoved(int)));
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new QTreeWidget(w);
+		    wdg->setAlternatingRowColors(true);
+		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
+		    wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
+		    wdg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+		    wdg->setHeaderLabels(QStringList() << shD->name.c_str());
+		    wdg->headerItem()->setHidden(!shD->name.size());
+		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(treeChange()));
+		    mk_new = true;
+		}
+		//> Items
+		wdg->clear();
+		string ipath, item;
+		QTreeWidgetItem *cur_it = NULL, *t_it = NULL;
+		shD->addrWdg->blockSignals(true);
+		QFont noSelFnt = elFnt;
+		noSelFnt.setItalic(true);
+		for(int off = 0; (ipath=TSYS::strLine(shD->items,0,&off)).size(); )
+		{
+		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
+			if(lev == 0)
+			{
+			    cur_it = NULL;
+			    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
+				if(wdg->topLevelItem(i_r)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(i_r);
+			    if(!cur_it)
+			    {
+				cur_it = new QTreeWidgetItem(0);
+				cur_it->setText(0, item.c_str());
+				cur_it->setFlags(cur_it->flags()&(~Qt::ItemIsSelectable));
+				cur_it->setData(0, Qt::FontRole, noSelFnt);
+				wdg->addTopLevelItem(cur_it);
+			    }
+			}
+			else
+			{
+			    t_it = NULL;
+			    for(int i_r = 0; !t_it && i_r < cur_it->childCount(); i_r++)
+				if(cur_it->child(i_r)->text(0) == item.c_str())	t_it = cur_it->child(i_r);
+			    if(!t_it)
+			    {
+				t_it = new QTreeWidgetItem(cur_it);
+				t_it->setText(0, item.c_str());
+                                t_it->setFlags(cur_it->flags()&(~Qt::ItemIsSelectable));
+				t_it->setData(0, Qt::FontRole, noSelFnt);
+			    }
+			    cur_it = t_it;
+			}
+		    if(cur_it)
+		    {
+			cur_it->setFlags(cur_it->flags()|Qt::ItemIsSelectable);
+			cur_it->setData(0, Qt::FontRole, elFnt);
+		    }
+		}
+		shD->addrWdg->blockSignals(false);
+
+		wdg->setFont(elFnt);		//Font
+		setValue(w, shD->value, true);	//Value
+		break;
+	    }
+	    case F_SLIDER: case F_SCROLL_BAR:
+	    {
+		QAbstractSlider *wdg = (QAbstractSlider*)shD->addrWdg;
+		if(!wdg || (shD->elType == F_SLIDER && !qobject_cast<QSlider*>(wdg)) ||
+			   (shD->elType == F_SCROLL_BAR && !qobject_cast<QScrollBar*>(wdg)))
+		{
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = (shD->elType == F_SLIDER ? (QAbstractSlider*)new QSlider(w) : (QAbstractSlider*)new QScrollBar(w));
+		    wdg->setTracking(false);
+		    if(runW) connect(wdg, SIGNAL(valueChanged(int)), this, SLOT(sliderMoved(int)));
 		    mk_new = true;
 		}
 		int cfgOff = 0;
-		if( shD->elType == 6 )	((QSlider*)shD->addrWdg)->setTickPosition(QSlider::TicksBothSides);
-		if( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) )
+		if(shD->elType == F_SLIDER)	((QSlider*)wdg)->setTickPosition(QSlider::TicksBothSides);
+		if(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()))
 		{
-		    ((QAbstractSlider*)shD->addrWdg)->setOrientation( Qt::Vertical );
+		    wdg->setOrientation(Qt::Vertical);
 		    wAlign = Qt::AlignHCenter;
 		}
 		else
 		{
-		    ((QAbstractSlider*)shD->addrWdg)->setOrientation( Qt::Horizontal );
+		    wdg->setOrientation(Qt::Horizontal);
 		    wAlign = Qt::AlignVCenter;
 		}
-		shD->addrWdg->blockSignals(true);
-		((QAbstractSlider*)shD->addrWdg)->setMinimum( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
-		((QAbstractSlider*)shD->addrWdg)->setMaximum( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
-		((QAbstractSlider*)shD->addrWdg)->setSingleStep( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
-		((QAbstractSlider*)shD->addrWdg)->setPageStep( atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()) );
-		((QAbstractSlider*)shD->addrWdg)->setValue(atoi(shD->value.c_str()));
-		shD->addrWdg->blockSignals(false);
+		wdg->blockSignals(true);
+		wdg->setMinimum(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()));
+		wdg->setMaximum(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()));
+		wdg->setSingleStep(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()));
+		wdg->setPageStep(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()));
+		wdg->blockSignals(false);
+		setValue(w, shD->value, true);
 		break;
 	    }
 	}
-	if( mk_new )
+	shD->setType = true;
+	if(mk_new)
 	{
 	    //>> Install event's filter and disable focus
-	    eventFilterSet(w,shD->addrWdg,true);
+	    eventFilterSet(w, shD->addrWdg, true);
 	    w->setFocusProxy(shD->addrWdg);
-	    if( devW )	setFocus(w,shD->addrWdg,false,devW);
-	    if( runW )
-	    {
-		setFocus( w, shD->addrWdg, shD->active && runW->permCntr() );
-		shD->addrWdg->setEnabled( shD->active && runW->permCntr() );
-	    }
+	    if(devW) setFocus(w, shD->addrWdg, false, devW);
+	    if(runW) setActive(w, shD->active && runW->permCntr());
 	    shD->addrWdg->setVisible(shD->en);
 	    //>> Fix widget
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
-	if( wAlign ) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg,wAlign);
-	shD->welType = shD->elType;
+	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
     }
 
     shD->evLock = false;
@@ -545,17 +558,102 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
     return true;
 }
 
+void ShapeFormEl::setActive( WdgView *w, bool val )
+{
+    ShpDt *shD = (ShpDt*)w->shpData;
+    if(!shD->setType)	return;
+    switch(shD->elType)
+    {
+	case F_LINE_ED:	((LineEdit*)shD->addrWdg)->setReadOnly(!val);			break;
+	case F_TEXT_ED: ((TextEdit*)shD->addrWdg)->workWdg()->setReadOnly(!val);	break;
+	default: shD->addrWdg->setEnabled(val);
+    }
+    setFocus(w, shD->addrWdg, val);
+}
+
+void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
+{
+    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
+    ShpDt *shD = (ShpDt*)w->shpData;
+
+    shD->value = val;
+    if(!shD->addrWdg || (!force && !shD->setType)) return;
+
+    switch(shD->elType)
+    {
+	case F_LINE_ED:
+	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
+	    break;
+	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->setText(val.c_str());		break;
+	case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
+	case F_BUTTON:
+	{
+	    QPushButton *wdg = (QPushButton*)shD->addrWdg;
+	    wdg->setCheckable(false);
+	    wdg->setAutoRepeat(false);
+	    if(wdg->menu()) { wdg->menu()->deleteLater(); wdg->setMenu(NULL); }
+	    if(shD->checkable) { wdg->setCheckable(true); wdg->setChecked(atoi(shD->value.c_str())); }
+	    break;
+	}
+	case F_COMBO:
+	    if(((QComboBox*)shD->addrWdg)->findText(val.c_str()) < 0) ((QComboBox*)shD->addrWdg)->addItem(val.c_str());
+	    ((QComboBox*)shD->addrWdg)->setCurrentIndex(((QComboBox*)shD->addrWdg)->findText(val.c_str()));
+	    break;
+	case F_LIST:
+	{
+	    QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(val.c_str(),Qt::MatchExactly);
+	    ((QListWidget*)shD->addrWdg)->setCurrentItem(its.size()?its[0]:NULL);
+	    break;
+	}
+	case F_TREE:
+	{
+	    QTreeWidget *wdg = (QTreeWidget*)shD->addrWdg;
+	    QTreeWidgetItem *cur_it = NULL;
+	    string item;
+	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,true,&off)).size(); lev++)
+		if(lev == 0)
+		{
+		    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
+			if(wdg->topLevelItem(i_r)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(i_r);
+		    if(!cur_it)	break;
+		}
+		else
+		{
+		    bool findOK = false;
+		    for(int i_r = 0; !findOK && i_r < cur_it->childCount(); i_r++)
+			if(cur_it->child(i_r)->text(0) == item.c_str())	{ cur_it = cur_it->child(i_r); findOK = true; }
+		    if(!findOK)	{ cur_it = NULL; break; }
+		}
+	    while(wdg->selectedItems().size())	wdg->selectedItems()[0]->setSelected(false);
+	    if(cur_it)
+	    {
+		shD->addrWdg->blockSignals(true);
+		cur_it->setSelected(true);
+		shD->addrWdg->blockSignals(false);
+		//> Expand all parents for visible selected
+		for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
+	    }
+	    break;
+	}
+	case F_SLIDER: case F_SCROLL_BAR:
+	    shD->addrWdg->blockSignals(true);
+	    ((QAbstractSlider*)shD->addrWdg)->setValue(atoi(val.c_str()));
+	    shD->addrWdg->blockSignals(false);
+	    break;
+    }
+}
+
 bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
-    if( event->type() == QEvent::Hide && qobject_cast<RunWdgView*>(w) )
+    if(event->type() == QEvent::Hide && qobject_cast<RunWdgView*>(w))
     {
 	ShpDt *shD = (ShpDt*)w->shpData;
-	switch( shD->elType )
+	switch(shD->elType)
 	{
-	    case 0:	//Line edit
+	    case F_LINE_ED:
 		((LineEdit*)shD->addrWdg)->setValue(((LineEdit*)shD->addrWdg)->value());
 		break;
-	    case 1:	//Text edit
+	    case F_TEXT_ED:
 		((TextEdit*)shD->addrWdg)->setText(((TextEdit*)shD->addrWdg)->text());
 		break;
 	}
@@ -666,7 +764,7 @@ void ShapeFormEl::comboChange(const QString &val)
     if(((ShpDt*)w->shpData)->evLock)	return;
 
     map<string,string> attrs;
-    attrs["value"] = val.toAscii().data();
+    attrs["value"] = val.toStdString();
     attrs["event"] = "ws_CombChange";
     w->attrsSet(attrs);
 }
@@ -680,6 +778,22 @@ void ShapeFormEl::listChange( int row )
     map<string,string> attrs;
     attrs["value"] = el->item(row)->text().toAscii().data();
     attrs["event"] = "ws_ListChange";
+    w->attrsSet(attrs);
+}
+
+void ShapeFormEl::treeChange( )
+{
+    QTreeWidget *el = (QTreeWidget*)sender();
+    WdgView	*w  = (WdgView *)el->parentWidget();
+
+    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
+
+    string itPath;
+    QTreeWidgetItem *cur_it = el->selectedItems()[0];
+    while(cur_it) { itPath = "/"+TSYS::strEncode(cur_it->text(0).toStdString(),TSYS::PathEl)+itPath; cur_it = cur_it->parent(); }
+    map<string,string> attrs;
+    attrs["value"] = itPath;
+    attrs["event"] = "ws_TreeChange";
     w->attrsSet(attrs);
 }
 
@@ -1002,16 +1116,13 @@ void ShapeMedia::clear( WdgView *w )
 	    lab->clear();
 	}
 #ifdef HAVE_PHONON
-	if(shD->mediaType == 2) { lab->deleteLater(); shD->addrWdg = NULL; }
+	if(shD->mediaType == FM_FULL_VIDEO) { lab->deleteLater(); shD->addrWdg = NULL; }
 #endif
     }
 
 #ifdef HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
-    if(player)
-    {
-	if(shD->mediaType == 0 || shD->mediaType == 1)	{ player->deleteLater(); shD->addrWdg = NULL; }
-    }
+    if(player && (shD->mediaType == FM_IMG || shD->mediaType == FM_ANIM)) { player->deleteLater(); shD->addrWdg = NULL; }
 #endif
 }
 
@@ -1042,25 +1153,23 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    reld_cfg = true;
-	    break;
-	case 5:		//en
+	case A_COM_LOAD: reld_cfg = true;	break;
+	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
 	    w->setVisible(shD->en && ((RunWdgView*)w)->permView());
 	    break;
-	case 6:		//active
+	case A_ACTIVE:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = atoi(val.c_str());
 	    if(shD->addrWdg) shD->addrWdg->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
 	    w->setMouseTracking(shD->active && ((RunWdgView*)w)->permCntr());
 	    break;
-	case 12:	//geomMargin
+	case A_GEOM_MARGIN:
 	    shD->geomMargin = atoi(val.c_str());
 	    w->layout()->setMargin( shD->geomMargin );
 	    break;
-	case 20:	//backColor
+	case A_MediaBackClr:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
@@ -1073,7 +1182,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setPalette(plt);
 	    break;
 	}
-	case 21:	//backImg
+	case A_MediaBackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
@@ -1089,39 +1198,36 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setPalette(plt);
 	    break;
 	}
-	case 22:	//bordWidth
-	    shD->border.setWidth(atoi(val.c_str()));	break;
-	case 23:	//bordColor
-	    shD->border.setColor(getColor(val));	break;
-	case 24:	//bordStyle
-	    shD->bordStyle = atoi(val.c_str());		break;
-	case 25:	//src
+	case A_MediaBordWdth: shD->border.setWidth(atoi(val.c_str()));	break;
+	case A_MediaBordClr:  shD->border.setColor(getColor(val));	break;
+	case A_MediaBordStl:  shD->bordStyle = atoi(val.c_str());	break;
+	case A_MediaSrc:
 	    if(shD->mediaSrc == val)	break;
 	    shD->mediaSrc = val;
 	    reld_cfg = true;
 	    break;
-	case 26:	//fit
+	case A_MediaFit:
 	    shD->mediaFit = (bool)atoi(val.c_str());
 	    lab = dynamic_cast<QLabel*>(shD->addrWdg);
 	    if(lab) lab->setScaledContents(shD->mediaFit);
 	    break;
-	case 27:	//type
+	case A_MediaType:
 	    if(shD->mediaType == atoi(val.c_str()))	break;
 	    shD->mediaType = atoi(val.c_str());
 	    reld_cfg = true;
 	    break;
-	case 28:	//areas
+	case A_MediaAreas:
 	{
 	    int numbMAr = atoi(val.c_str());
 	    while((int)shD->maps.size() < numbMAr) shD->maps.push_back(MapArea());
 	    while((int)shD->maps.size() > numbMAr) shD->maps.pop_back();
 	    break;
 	}
-	case 29: 	//speed, play
+	case A_MediaSpeedPlay:
 	    switch(shD->mediaType)
 	    {
-		case 0: case 1: shD->mediaSpeed = atoi(val.c_str());	break;
-		case 2: shD->videoPlay = (bool)atoi(val.c_str());	break;
+		case FM_IMG: case FM_ANIM: shD->mediaSpeed = atoi(val.c_str());	break;
+		case FM_FULL_VIDEO: shD->videoPlay = (bool)atoi(val.c_str());	break;
 	    }
 	    if((lab=dynamic_cast<QLabel*>(shD->addrWdg)))
 	    {
@@ -1147,10 +1253,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 #endif
 	    break;
 #ifdef HAVE_PHONON
-	case 30:	//roll
-	    shD->videoRoll = (bool)atoi(val.c_str());
-	    break;
-	case 31:	//pause
+	case A_MediaRoll: shD->videoRoll = (bool)atoi(val.c_str());	break;
+	case A_MediaPause:
 	    shD->videoPause = (bool)atoi(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg)))
 	    {
@@ -1158,12 +1262,12 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		if(!shD->videoPause && player->isPaused()) player->play();
 	    }
 	    break;
-	case 33:	//seek
+	case A_MediaSeek:
 	    if(shD->videoSeek == atof(val.c_str())) break;
 	    shD->videoSeek = atof(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->seek(shD->videoSeek);
 	    break;
-	case 34:	//volume
+	case A_MediaVolume:
 	    if(shD->audioVolume == atof(val.c_str())) break;
 	    shD->audioVolume = atof(val.c_str());
 	    if((player=dynamic_cast<VideoPlayer*>(shD->addrWdg))) player->setVolume(shD->audioVolume);
@@ -1171,15 +1275,14 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 #endif
 	default:
 	    //> Individual arguments process
-	    if(uiPrmPos >= 40)
+	    if(uiPrmPos >= A_MediaArs)
 	    {
-		int areaN = (uiPrmPos-40)/3;
+		int areaN = (uiPrmPos-A_MediaArs)/A_MediaArsSz;
 		if(areaN >= (int)shD->maps.size()) break;
-		switch((uiPrmPos-40)%3)
+		switch((uiPrmPos-A_MediaArs)%A_MediaArsSz)
 		{
-		    case 0:	//shape
-			shD->maps[areaN].shp = atoi(val.c_str());	break;
-		    case 1:	//coordinates
+		    case A_MediaArShape: shD->maps[areaN].shp = atoi(val.c_str());	break;
+		    case A_MediaArCoord:
 		    {
 			string stmp;
 			shD->maps[areaN].pnts.clear();
@@ -1187,8 +1290,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			    if(!(pos%2)) shD->maps[areaN].pnts.push_back(QPoint(atoi(stmp.c_str()),0));
 			    else         shD->maps[areaN].pnts[shD->maps[areaN].pnts.size()-1].setY(atoi(stmp.c_str()));
 		    }
-		    case 2:	//title
-			shD->maps[areaN].title = val;	break;
+		    case A_MediaArTitle: shD->maps[areaN].title = val;	break;
 		}
 	    }
     }
@@ -1198,7 +1300,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	bool mk_new = false;
 	switch(shD->mediaType)
 	{
-	    case 0:	//Image
+	    case FM_IMG:
 	    {
 		QImage img;
 		//> Free movie data, if set
@@ -1221,7 +1323,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		else lab->setText("");
 		break;
 	    }
-	    case 1:	//Animation
+	    case FM_ANIM:
 	    {
 		//> Clear previous movie data
 		clear(w);
@@ -1257,7 +1359,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 		break;
 	    }
 #ifdef HAVE_PHONON
-	    case 2:	//Full video
+	    case FM_FULL_VIDEO:
 	    {
 		//> Clear previous movie data
 		clear(w);
@@ -1290,7 +1392,8 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
 			if(tfid >= 0)
 			{
-			    write(tfid, sdata.data(), sdata.size());
+			    if(write(tfid, sdata.data(), sdata.size()) != sdata.size())
+				mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
 			    mSrc = MediaSource(QString(tfile.c_str()));
 			}
@@ -1332,11 +1435,11 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
     ShpDt *shD = (ShpDt*)w->shpData;
     if(!shD->en) return false;
 
-    switch( event->type() )
+    switch(event->type())
     {
 	case QEvent::Paint:
 	{
-	    QPainter pnt( w );
+	    QPainter pnt(w);
 
 	    //> Prepare draw area
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
@@ -1412,16 +1515,16 @@ bool ShapeMedia::eventFilter( WdgView *w, QObject *object, QEvent *event )
 //*************************************************
 bool ShapeMedia::MapArea::containsPoint( const QPoint & point )
 {
-    switch( shp )
+    switch(shp)
     {
-	case 0:		//rect
-	    if( pnts.size() < 2 ) return false;
+	case FM_RECT:
+	    if(pnts.size() < 2) return false;
 	    return QRect(pnts[0],pnts[1]).contains(point);
-	case 1:		//poly
+	case FM_POLY:
 	    return QPolygon(pnts).containsPoint(point,Qt::OddEvenFill);
-	case 2: 	//circle
+	case FM_CIRCLE:
 	{
-	    if( pnts.size() < 2 ) return false;
+	    if(pnts.size() < 2) return false;
 	    QPoint work = point-pnts[0];
 	    return (pow(pow((float)work.x(),2)+pow((float)work.y(),2),0.5) < pnts[1].x());
 	}
@@ -2791,7 +2894,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	//> One request check and prepare
 	int trcPer = shD->trcPer*1000000;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
-	    (!arh_per || (arh_per >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
+	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
 	    XMLNode req("get");
 	    req.setAttr("path",addr()+"/%2fserv%2fval")->
@@ -2840,7 +2943,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 
     //> Correct request to archive border
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
-    tTime     = vmin(tTime,arh_end);
+    tTime     = vmin(tTime, arh_end);
     //tTimeGrnd = vmax(tTimeGrnd,arh_beg);
 
     //> Clear data at time error
@@ -2851,8 +2954,8 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     if(tTime/wantPer <= valEnd()/wantPer && tTimeGrnd/wantPer >= valBeg()/wantPer) return;
 
     //> Correcting request to present data
-    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+1;
-    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-1;
+    if(valEnd() && tTime > valEnd())		tTimeGrnd = valEnd()+wantPer;//1;
+    else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
     //> Get values data
     int64_t	bbeg, bend, bper;
@@ -3728,122 +3831,129 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     bool up = true;
     ShpDt *shD = (ShpDt*)w->shpData;
+    RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
+    RunPageView	*runP = runW ? qobject_cast<RunPageView*>(w) : NULL;
 
     switch(uiPrmPos)
     {
-	case -1:	//load
+	case A_COM_LOAD:
 	    up = true;
-	    if(qobject_cast<RunWdgView*>(w) && shD->inclWidget)
-		shD->inclWidget->setMinimumSize(w->size());
+	    if(runW && shD->inclWidget)	shD->inclWidget->setMinimumSize(w->size());
 	    break;
-	case -2:	//focus
-	    //if( (bool)atoi(val.c_str()) == w->hasFocus() )	up = false;
-	    break;
-        case 5:         //en
-	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
+	case A_COM_FOCUS: break;
+        case A_EN:
+	    if(!runW)	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible(shD->en && (((RunWdgView*)w)->permView() || dynamic_cast<RunPageView*>(w)));
+	    w->setVisible(shD->en && (runW->permView() || runP));
 	    break;
-	case 6:		//active
-	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
-	    if(atoi(val.c_str()) && ((RunWdgView*)w)->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
+	case A_ACTIVE:
+	    if(!runW)	{ up = false; break; }
+	    if(atoi(val.c_str()) && runW->permCntr()) w->setFocusPolicy(Qt::TabFocus /*Qt::StrongFocus*/);
 	    else w->setFocusPolicy(Qt::NoFocus);
 	    break;
-	case 12:	//geomMargin
+	case A_GEOM_MARGIN:
 	    shD->geomMargin = atoi(val.c_str());
 	    if(w->layout()) w->layout()->setMargin(shD->geomMargin);
 	    break;
-	case 20: 	//backColor
+	case A_BoxBackClr:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setColor(shD->backGrnd.color());
-	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
-	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
+
+	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
+
 	    break;
 	}
-	case 21: 	//backImg
+	case A_BoxBackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
-	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
+
+	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
+
 	    break;
 	}
-	case 22:	//bordWidth
-	    shD->border.setWidth(atoi(val.c_str()));	break;
-	case 23:	//bordColor
-	    shD->border.setColor(getColor(val));	break;
-	case 24:	//bordStyle
-	    shD->bordStyle = atoi(val.c_str());	break;
-	case 3:		//pgOpenSrc
+	case A_BoxBordWdth:
+	    shD->border.setWidth(atoi(val.c_str()));
+
+	    if(runP && runP->mainWin()->masterPg() == w) runP->mainWin()->setPalette(shD->border.width() ? QPalette() : w->palette());
+
+	    break;
+	case A_BoxBordClr: shD->border.setColor(getColor(val));	break;
+	case A_BoxBordStl: shD->bordStyle = atoi(val.c_str());	break;
+	case A_PG_OPEN_SRC:
 	{
-	    if( !qobject_cast<RunWdgView*>(w) || qobject_cast<RunPageView*>(w) )	{ up = false; break; }
+	    if(!runW || runP)	{ up = false; break; }
 
 	    //>> Put previous include widget to page cache
-	    if( (shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()) )
+	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()))
 	    {
-		if( shD->inclWidget )
+		if(shD->inclWidget)
 		{
 		    shD->inclWidget->setReqTm(shD->inclWidget->mainWin()->reqTm());
-		    ((RunPageView*)w)->mainWin()->pgCacheAdd(shD->inclWidget);
+		    runW->mainWin()->pgCacheAdd(shD->inclWidget);
 		    shD->inclWidget->setEnabled(false);
 		    shD->inclWidget->setVisible(false);
 		    shD->inclScrl->takeWidget();
 		    shD->inclWidget->setParent(NULL);
-		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale( );
-		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale( );
+		    shD->inclWidget->wx_scale = shD->inclWidget->mainWin()->xScale();
+		    shD->inclWidget->wy_scale = shD->inclWidget->mainWin()->yScale();
 		    shD->inclWidget = NULL;
-		    w->setProperty("inclPg","");
+		    w->setProperty("inclPg", "");
 		}
 		//>> Create new include widget
-		if( val.size() )
+		if(val.size())
 		{
-		    if( !shD->inclScrl )
+		    if(!shD->inclScrl)
 		    {
 			QGridLayout *wlay = (QGridLayout*)w->layout();
-			if( !wlay ) wlay = new QGridLayout(w);
+			if(!wlay) wlay = new QGridLayout(w);
 			wlay->setMargin(0/*shD->geomMargin*/);
 			shD->inclScrl = new QScrollArea(w);
-			shD->inclScrl->setFocusPolicy( Qt::NoFocus );
-			shD->inclScrl->setFrameShape( QFrame::NoFrame );
+			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
+			shD->inclScrl->setFrameShape(QFrame::NoFrame);
 			wlay->addWidget(shD->inclScrl);
 		    }
 
-		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()),shD->inclWidget);
+		    QLabel *lab = new QLabel(QString(_("Loading page: '%1'.")).arg(val.c_str()), shD->inclWidget);
 		    lab->setAlignment(Qt::AlignCenter);
 		    lab->setWordWrap(true);
 		    lab->resize(w->size());
 		    QPalette plt = lab->palette();
-		    plt.setColor(QPalette::WindowText,shD->border.color());
+		    plt.setColor(QPalette::WindowText, shD->border.color());
 		    lab->setPalette(plt);
 		    lab->setLineWidth(shD->border.width());
 		    lab->setFrameShape(QFrame::Box);
 		    shD->inclScrl->setWidget(lab);
 		    qApp->processEvents();
 
-		    shD->inclWidget = ((RunWdgView*)w)->mainWin()->pgCacheGet(val);
-		    if( shD->inclWidget )
+		    shD->inclWidget = runW->mainWin()->pgCacheGet(val);
+		    if(shD->inclWidget)
 		    {
-			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
+			shD->inclWidget->setProperty("cntPg", TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setEnabled(true);
 			shD->inclWidget->setVisible(true);
 			shD->inclWidget->setMinimumSize(w->size());
-			if( shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
-				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale() )
+			if(shD->inclWidget->wx_scale != shD->inclWidget->mainWin()->xScale() ||
+				shD->inclWidget->wy_scale != shD->inclWidget->mainWin()->yScale())
 			    shD->inclWidget->load("");
 			else
 			{
@@ -3861,7 +3971,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget->setMinimumSize(w->size());
 			shD->inclWidget->load("");
 		    }
-		    w->setProperty("inclPg",TSYS::addr2str(shD->inclWidget).c_str());
+		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}
 	    } else up = false;
 	    break;
@@ -3869,7 +3979,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	default: up = false;
     }
 
-    if( up && !w->allAttrLoad( ) && uiPrmPos != -1 )	w->update();
+    if(up && !w->allAttrLoad() && uiPrmPos != -1) w->update();
 
     return up;
 }

@@ -86,7 +86,7 @@ class VisRun : public QMainWindow
 	string wAttrGet( const string &path, const string &attr );
 	bool wAttrSet( const string &path, const string &attr, const string &val );
 
-	RunPageView *masterPg()					{ return master_pg; }
+	RunPageView *masterPg( )				{ return master_pg; }
 	RunPageView *findOpenPage( const string &pg );
 	RunWdgView *findOpenWidget( const string &wdg );
 
