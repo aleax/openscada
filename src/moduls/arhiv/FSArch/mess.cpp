@@ -319,8 +319,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/fsz",_("Archivator files size"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,2,
-	    "tp","str","help",_("Path to directory for archivator's of messages files."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SARH_ID,4,
+	    "tp","str","dest","sel_ed","select","/prm/cfg/dirList","help",_("Path to directory for archivator's of messages files."));
 	if(ctrMkNode("area",opt,-1,"/prm/add",_("Additional options"),R_R_R_,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/prm/add/xml",_("XML archive files"),RWRWR_,"root",SARH_ID,2,"tp","bool","help",
@@ -359,7 +359,8 @@ void ModMArch::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::cpct2str(size()));
+    if(a_path == "/prm/cfg/dirList" && ctrChkNode(opt))		TSYS::ctrListFS(opt, addr());
+    else if(a_path == "/prm/st/fsz" && ctrChkNode(opt))		opt->setText(TSYS::cpct2str(size()));
     else if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::time2str(tmCalc));
     else if(a_path == "/prm/add/xml")
     {
@@ -698,10 +699,9 @@ void MFileArch::put( TMess::SRec mess )
 	if(f == NULL) { mErr = true; return; }
 
 	//> Prepare mess
-	snprintf(buf,sizeof(buf),"%x:%d %d %s %s\n",(unsigned int)mess.time,mess.utime,mess.level,
-	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
-	    Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str());
-	string s_buf = buf;
+	string s_buf = TSYS::strMess("%x:%d %d %s %s", (unsigned int)mess.time, mess.utime, mess.level,
+            Mess->codeConvOut(mChars,TSYS::strEncode(mess.categ,TSYS::Custom," \n\t%")).c_str(),
+            Mess->codeConvOut(mChars,TSYS::strEncode(mess.mess,TSYS::Custom," \n\t%")).c_str())+"\n";
 
 	//> Check for duples
 	if(mess.time <= mEnd && owner().prevDbl())

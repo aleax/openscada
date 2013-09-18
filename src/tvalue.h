@@ -103,6 +103,7 @@ class TVal : public TCntrNode
 
     protected:
 	//Methods
+	void preDisable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

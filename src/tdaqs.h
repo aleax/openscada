@@ -58,6 +58,7 @@ class TDAQS : public TSubSYS
 	AutoHD<TTipDAQ> at( const string &name )		{ return modAt(name); }
 	AutoHD<TValue> prmAt( const string &path, char sep = 0, bool noex = false );
 	AutoHD<TVal> attrAt( const string &path, char sep = 0, bool noex = false );
+	void ctrListPrmAttr( XMLNode *nd, const string &addrBase, bool toPrm = false, char sep = '.', const string &pref = "" );
 
 	//> Parameter's templates library
 	string tmplLibTable( )					{ return "ParamTemplLibs"; }
