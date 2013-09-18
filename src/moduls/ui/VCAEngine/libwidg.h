@@ -126,6 +126,7 @@ class LWidget : public Widget, public TConfig
 	string parentNm( )	{ return cfg("PARENT").getS(); }
 	string proc( )		{ return cfg("PROC").getS(); }
 
+	void setEnable( bool val );
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
 	void setCalcLang( const string &ilng );
 	void setCalcProg( const string &iprg );
@@ -142,6 +143,7 @@ class LWidget : public Widget, public TConfig
 	void saveIO( );
 
 	//> Data access
+	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );
@@ -166,6 +168,7 @@ class LWidget : public Widget, public TConfig
     private:
 	//Attributes
 	int	&m_proc_per;	//Widget period
+	string	mParentNmPrev;  //Previous parent name after successful enable
 };
 
 //************************************************
@@ -196,6 +199,7 @@ class CWidget : public Widget, public TConfig
 	void saveIO( );
 
 	//> Data access
+	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
 	void inheritAttr( const string &attr = "" );

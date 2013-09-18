@@ -58,8 +58,8 @@ void TValue::detElem( TElem *el )
 void TValue::addFld( TElem *el, unsigned id_val )
 {
     int i_off = l_cfg;
-    for( unsigned i_e = 0; i_e < elem.size(); i_e++ )
-	if( elem[i_e]->elName() == el->elName() ) break;
+    for(unsigned i_e = 0; i_e < elem.size(); i_e++)
+	if(elem[i_e]->elName() == el->elName()) break;
 	else i_off += elem[i_e]->fldSize();
 
     TVal *vl = vlNew();
@@ -69,8 +69,8 @@ void TValue::addFld( TElem *el, unsigned id_val )
 
 void TValue::delFld( TElem *el, unsigned id_val )
 {
-    if( nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()) )
-	chldDel(m_vl,el->fldAt(id_val).name());
+    if(nodeMode() == TCntrNode::Enable && chldPresent(m_vl,el->fldAt(id_val).name()))
+	chldDel(m_vl, el->fldAt(id_val).name());
 }
 
 void TValue::setVlCfg( TConfig *cfg )
@@ -945,6 +945,11 @@ TVariant TVal::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "reserve")return fld().reserve();
 
     return TCntrNode::objFuncCall(iid,prms,user);
+}
+
+void TVal::preDisable( int flag )
+{
+    if(!arch().freeStat()) arch().at().stop();
 }
 
 void TVal::cntrCmdProc( XMLNode *opt )

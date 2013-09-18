@@ -775,7 +775,7 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	case Reg::BitAnd:	prg += (uint8_t)Reg::BitAnd;	break;
 	case Reg::BitXor:	prg += (uint8_t)Reg::BitXor;	break;
 	case Reg::BitShLeft:	prg += (uint8_t)Reg::BitShLeft;	rez->setType(Reg::Int);	break;
-	case Reg::BitShRight:	prg += (uint8_t)Reg::BitShRight;	rez->setType(Reg::Int);	break;
+	case Reg::BitShRight:	prg += (uint8_t)Reg::BitShRight;rez->setType(Reg::Int);	break;
 	case Reg::LOr:		prg += (uint8_t)Reg::LOr;	rez->setType(Reg::Bool);	break;
 	case Reg::LAnd:		prg += (uint8_t)Reg::LAnd;	rez->setType(Reg::Bool);	break;
 	case Reg::LT:		prg += (uint8_t)Reg::LT;	rez->setType(Reg::Bool);	break;
@@ -1450,7 +1450,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 
 TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 {
-    TVariant vl(string(EVAL_STR));
+    TVariant vl(EVAL_REAL);
 
     //> Get base value
     switch(rg.type())
@@ -1535,8 +1535,8 @@ int Func::getValI( TValFunc *io, RegW &rg )
 
 double Func::getValR( TValFunc *io, RegW &rg )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
 	    case Reg::Bool:	return (rg.val().b_el != EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_REAL;
 	    case Reg::Int:	return (rg.val().i_el != EVAL_INT) ? rg.val().i_el : EVAL_REAL;
@@ -1554,8 +1554,8 @@ double Func::getValR( TValFunc *io, RegW &rg )
 
 char Func::getValB( TValFunc *io, RegW &rg )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
 	    case Reg::Bool:	return rg.val().b_el;
 	    case Reg::Int:	return (rg.val().i_el != EVAL_INT) ? (bool)rg.val().i_el : EVAL_BOOL;
@@ -1637,50 +1637,50 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 
 void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
-	    case Reg::Var:	io->setS(rg.val().io,val);		break;
+	    case Reg::Var:	io->setS(rg.val().io, val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setS(val);	break;
 	    default: rg = val; break;
 	}
-    else setVal(io,rg,val);
+    else setVal(io, rg, val);
 }
 
 void Func::setValI( TValFunc *io, RegW &rg, int val )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
-	    case Reg::Var:	io->setI(rg.val().io,val);		break;
+	    case Reg::Var:	io->setI(rg.val().io, val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
 	    default: rg = val; break;
 	}
-    else setVal(io,rg,val);
+    else setVal(io, rg, val);
 }
 
 void Func::setValR( TValFunc *io, RegW &rg, double val )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
-	    case Reg::Var:	io->setR(rg.val().io,val);		break;
+	    case Reg::Var:	io->setR(rg.val().io, val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setR(val);	break;
 	    default: rg = val; break;
 	}
-    else setVal(io,rg,val);
+    else setVal(io, rg, val);
 }
 
 void Func::setValB( TValFunc *io, RegW &rg, char val )
 {
-    if( rg.propEmpty( ) )
-	switch( rg.type() )
+    if(rg.propEmpty())
+	switch(rg.type())
 	{
-	    case Reg::Var:	io->setB(rg.val().io,val);		break;
+	    case Reg::Var:	io->setB(rg.val().io, val);		break;
 	    case Reg::PrmAttr:	rg.val().p_attr->at().setB(val);	break;
 	    default: rg = val; break;
 	}
-    else setVal(io,rg,val);
+    else setVal(io, rg, val);
 }
 
 void Func::setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val )
@@ -1751,7 +1751,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load bool %d to reg %d.\n",ptr->val,ptr->reg);
 #endif
 		reg[ptr->reg] = ptr->val;
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::MviI:
 	    {
@@ -1761,7 +1761,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load integer %d to reg %d.\n",ptr->val,ptr->reg);
 #endif
 		reg[ptr->reg] = ptr->val;
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::MviR:
 	    {
@@ -1771,7 +1771,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load real %f to reg %d.\n",ptr->val,ptr->reg);
 #endif
 		reg[ptr->reg] = ptr->val;
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::MviS:
             {
@@ -1781,7 +1781,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load string %s(%d) to reg %d.\n",string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(),ptr->len,ptr->reg);
 #endif
 		reg[ptr->reg] = string((const char*)(cprg+sizeof(SCode)),ptr->len);
-		cprg += sizeof(SCode)+ptr->len; break;
+		cprg += sizeof(SCode)+ptr->len; continue;
 	    }
 	    case Reg::MviObject:
 	    {
@@ -1791,7 +1791,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load object to reg %d.\n",ptr->reg);
 #endif
 		reg[ptr->reg] = AutoHD<TVarObj>(new TVarObj());
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::MviArray:
 	    {
@@ -1811,14 +1811,14 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			switch(reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].vType(this) )
 			{
 			    case Reg::Bool: ar->propSet(TSYS::int2str(i_p),getValB(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));		break;
+			    case Reg::Int: ar->propSet(TSYS::int2str(i_p),getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
 			    case Reg::Real: ar->propSet(TSYS::int2str(i_p),getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
 			    case Reg::String: ar->propSet(TSYS::int2str(i_p),getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
 			    case Reg::Obj: ar->propSet(TSYS::int2str(i_p), *reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].val().o_el);	break;
 			    default:	break;
 			}
 		reg[ptr->reg] = AutoHD<TVarObj>(ar);
-		cprg += sizeof(SCode) + ptr->numb*sizeof(uint16_t); break;
+		cprg += sizeof(SCode) + ptr->numb*sizeof(uint16_t); continue;
 	    }
 	    case Reg::MviRegExp:
 	    {
@@ -1828,7 +1828,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load RegExpr to reg %d = (%d,%d).\n",ptr->rez,ptr->expr,ptr->arg);
 #endif
 		reg[ptr->rez] = AutoHD<TVarObj>(new TRegExp(getValS(val,reg[ptr->expr]), getValS(val,reg[ptr->arg])));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::MviSysObject:
 	    {
@@ -1838,7 +1838,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load system object %s(%d) to reg %d.\n",string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(),ptr->len,ptr->reg);
 #endif
 		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user()));
-		cprg += sizeof(SCode)+ptr->len; break;
+		cprg += sizeof(SCode)+ptr->len; continue;
 	    }
 	    case Reg::MviFuncArg:
 	    {
@@ -1848,7 +1848,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Load the function arguments object to reg %d.\n",ptr->reg);
 #endif
 		reg[ptr->reg] = AutoHD<TVarObj>(new TFuncArgsObj(*val));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    //>> Assign codes
 	    case Reg::Ass:
@@ -1861,14 +1861,14 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		if(!reg[ptr->toR].propSize())
 		    switch(reg[ptr->fromR].vType(this))
 		    {
-			case Reg::Bool:		setValB(val,reg[ptr->toR],getValB(val,reg[ptr->fromR]));	break;
-			case Reg::Int:		setValI(val,reg[ptr->toR],getValI(val,reg[ptr->fromR]));	break;
-			case Reg::Real:		setValR(val,reg[ptr->toR],getValR(val,reg[ptr->fromR]));	break;
-			case Reg::String:	setValS(val,reg[ptr->toR],getValS(val,reg[ptr->fromR]));	break;
-			default:		setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));		break;
+			case Reg::Bool:		setValB(val,reg[ptr->toR], getValB(val,reg[ptr->fromR]));	break;
+			case Reg::Int:		setValI(val,reg[ptr->toR], getValI(val,reg[ptr->fromR]));	break;
+			case Reg::Real:		setValR(val,reg[ptr->toR], getValR(val,reg[ptr->fromR]));	break;
+			case Reg::String:	setValS(val,reg[ptr->toR], getValS(val,reg[ptr->fromR]));	break;
+			default:		setVal(val,reg[ptr->toR], getVal(val,reg[ptr->fromR]));		break;
 		    }
-		else setVal(val,reg[ptr->toR],getVal(val,reg[ptr->fromR]));
-		cprg += sizeof(SCode); break;
+		else setVal(val,reg[ptr->toR], getVal(val,reg[ptr->fromR]));
+		cprg += sizeof(SCode); continue;
 	    }
 	    //>> Mov codes
 	    case Reg::Mov:
@@ -1887,7 +1887,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    case Reg::Obj:	reg[ptr->toR] = getVal(val,reg[ptr->fromR]);	break;
 		    default:	break;
 		}
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    //>> Load properties for object
 	    case Reg::OPrpSt:
@@ -1898,7 +1898,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Set object's %d properties to string len %d(%s)\n",ptr->reg,ptr->len,string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str());
 #endif
 		reg[ptr->reg].propAdd(string((const char*)(cprg+sizeof(SCode)),ptr->len));
-		cprg += sizeof(SCode) + ptr->len; break;
+		cprg += sizeof(SCode) + ptr->len; continue;
 	    }
 	    case Reg::OPrpDin:
 	    {
@@ -1908,7 +1908,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Set object's %d properties to register's %d value\n",ptr->reg,ptr->val);
 #endif
 		reg[ptr->reg].propAdd(getValS(val,reg[ptr->val]));
-		cprg += sizeof(SCode);  break;
+		cprg += sizeof(SCode);  continue;
 	    }
 	    //>> Binary operations
 	    case Reg::Add:
@@ -1943,7 +1943,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::Sub:
 	    {
@@ -1953,7 +1953,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d - %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) - getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::Mul:
 	    {
@@ -1963,7 +1963,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d * %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) * getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::Div:
 	    {
@@ -1973,7 +1973,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d / %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) / getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::RstI:
 	    {
@@ -1983,7 +1983,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d %% %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) % getValI(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitOr:
 	    {
@@ -1993,7 +1993,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d | %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) | getValI(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitAnd:
 	    {
@@ -2003,7 +2003,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d & %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) & getValI(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitXor:
 	    {
@@ -2013,7 +2013,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d ^ %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) ^ getValI(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitShLeft:
 	    {
@@ -2023,7 +2023,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d << %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) << getValI(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitShRight:
 	    {
@@ -2033,7 +2033,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d >> %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) >> getValI(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::LOr:
 	    {
@@ -2043,7 +2043,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d || %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) || (getValB(val,reg[ptr->a2])==1);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::LCOr:
 	    {
@@ -2058,7 +2058,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    reg[ptr->rez] = (getValB(val,reg[ptr->a2])==true);
 		}
 		else reg[ptr->rez] = true;
-		cprg += ptr->end; break;
+		cprg += ptr->end; continue;
 	    }
 	    case Reg::LAnd:
 	    {
@@ -2068,7 +2068,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d && %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) && (getValB(val,reg[ptr->a2])==1);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::LCAnd:
 	    {
@@ -2083,7 +2083,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    reg[ptr->rez] = (getValB(val,reg[ptr->a2])==true);
 		}
 		else reg[ptr->rez] = false;
-		cprg += ptr->end; break;
+		cprg += ptr->end; continue;
 	    }
 	    case Reg::LT:
 	    {
@@ -2093,7 +2093,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d < %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) < getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::GT:
 	    {
@@ -2103,7 +2103,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d > %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) > getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::LEQ:
 	    {
@@ -2113,7 +2113,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d <= %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) <= getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::GEQ:
 	    {
@@ -2123,7 +2123,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = %d >= %d.\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) >= getValR(val,reg[ptr->a2]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::EQU:
 	    {
@@ -2155,14 +2155,15 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    reg[ptr->rez] = op1.getR() == getValR(val,reg[ptr->a2]);
 			    break;
 			case TVariant::String:
-			    reg[ptr->rez] = op1.getS() == getValS(val,reg[ptr->a2]); break;
+			    reg[ptr->rez] = op1.getS() == getValS(val,reg[ptr->a2]);
+			    break;
 			default:
 			    reg[ptr->rez] = false;
 			    break;
 			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'EQU'."));
 		    }
 		}
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::NEQ:
 	    {
@@ -2200,7 +2201,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			    //throw TError(nodePath().c_str(),_("Not supported type for operation 'Add'."));
 		    }
 		}
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    //>> Unary operations
 	    case Reg::Not:
@@ -2211,7 +2212,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = !%d.\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = !getValB(val,reg[ptr->a]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::BitNot:
 	    {
@@ -2221,7 +2222,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = ~%d.\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = ~getValI(val,reg[ptr->a]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::Neg:
 	    {
@@ -2231,7 +2232,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: %d = -%d.\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = -getValR(val,reg[ptr->a]);
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    //>> Condition
 	    case Reg::If:
@@ -2293,8 +2294,8 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		cprg += ptr->end;
 		continue;
 	    }
-	    case Reg::Break:	dt.flg|=0x03;	break;
-	    case Reg::Continue:	dt.flg|=0x05;	break;
+	    case Reg::Break:	dt.flg|=0x03;	continue;
+	    case Reg::Continue:	dt.flg|=0x05;	continue;
 	    //>> Buildin functions
 	    case Reg::FSin:
 	    {
@@ -2304,7 +2305,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=sin(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = sin(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FCos:
 	    {
@@ -2314,7 +2315,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=cos(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = cos(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FTan:
 	    {
@@ -2324,7 +2325,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=tan(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = tan(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FSinh:
 	    {
@@ -2334,7 +2335,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=sinh(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = sinh(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FCosh:
 	    {
@@ -2344,7 +2345,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=cosh(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = cosh(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FTanh:
 	    {
@@ -2354,7 +2355,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=tanh(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = tanh(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FAsin:
 	    {
@@ -2364,7 +2365,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=asin(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = asin(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FAcos:
 	    {
@@ -2374,7 +2375,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=acos(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = acos(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FAtan:
 	    {
@@ -2384,7 +2385,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=atan(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = atan(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FRand:
 	    {
@@ -2394,7 +2395,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=rand(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a])*(double)rand()/(double)RAND_MAX;
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FLg:
 	    {
@@ -2404,7 +2405,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=lg(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = log10(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FLn:
 	    {
@@ -2414,7 +2415,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=ln(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = log(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FExp:
 	    {
@@ -2424,7 +2425,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=exp(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = exp(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FPow:
 	    {
@@ -2434,7 +2435,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=pow(%d,%d).\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = pow(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FMin:
 	    {
@@ -2444,7 +2445,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=min(%d,%d).\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = vmin(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FMax:
 	    {
@@ -2454,7 +2455,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=max(%d,%d).\n",ptr->rez,ptr->a1,ptr->a2);
 #endif
 		reg[ptr->rez] = vmax(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FSqrt:
 	    {
@@ -2464,7 +2465,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=sqrt(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = sqrt(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FAbs:
 	    {
@@ -2474,7 +2475,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=abs(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = fabs(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FSign:
 	    {
@@ -2484,7 +2485,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=sign(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = (getValR(val,reg[ptr->a])>=0)?1:-1;
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FCeil:
 	    {
@@ -2494,7 +2495,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=ceil(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = ceil(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FFloor:
 	    {
@@ -2504,7 +2505,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		printf("CODE: Function %d=floor(%d).\n",ptr->rez,ptr->a);
 #endif
 		reg[ptr->rez] = floor(getValR(val,reg[ptr->a]));
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::FTypeOf:
 	    {
@@ -2525,7 +2526,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    case TVariant::Object:	rez = vl.getO().at().objName(); break;
 		}
 		reg[ptr->rez] = rez;
-		cprg += sizeof(SCode); break;
+		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::CProc:
 	    case Reg::CFunc:
@@ -2590,7 +2591,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 			case IO::Object:	reg[ptr->rez] = vfnc->getO(r_pos); break;
 		    }
 
-		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); break;
+		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    case Reg::CFuncObj:
 	    {
@@ -2636,7 +2637,7 @@ void Func::exec( TValFunc *val, RegW *reg, const uint8_t *cprg, ExecData &dt )
 		    default:	break;
 		}
 
-		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); break;
+		cprg += sizeof(SCode) + ptr->n*sizeof(uint16_t); continue;
 	    }
 	    default:
 		setStart(false);
@@ -2651,7 +2652,7 @@ void Func::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TFunction::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),/*owner().DB().empty()?R_R_R_:*/RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
 	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
@@ -2751,7 +2752,7 @@ Reg &Reg::operator=( Reg &irg )
     setType(irg.type());
     switch(type())
     {
-	case Bool:	el.b_el = irg.el.b_el;	 break;
+	case Bool:	el.b_el = irg.el.b_el;	break;
 	case Int:	el.i_el = irg.el.i_el;	break;
 	case Real:	el.r_el = irg.el.r_el;	break;
 	case String:	*el.s_el = *irg.el.s_el;break;
@@ -2831,7 +2832,7 @@ void RegW::operator=( const TVariant &ivar )
 {
     switch(ivar.type())
     {
-	case TVariant::Null:	*this = string(EVAL_STR);break;
+	case TVariant::Null:	*this = EVAL_REAL;	break;
 	case TVariant::Boolean:	*this = ivar.getB();	break;
 	case TVariant::Integer:	*this = ivar.getI();	break;
 	case TVariant::Real:	*this = ivar.getR();	break;

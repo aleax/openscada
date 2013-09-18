@@ -1317,8 +1317,8 @@ string SessWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    mimeData = parent().at().resourceGet( id, &mimeType );
-    if(mime)	*mime = mimeType;
+    mimeData = parent().at().resourceGet(id, &mimeType);
+    if(mime) *mime = mimeType;
 
     return mimeData;
 }
