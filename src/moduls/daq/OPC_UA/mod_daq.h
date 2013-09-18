@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_daq.h
 /***************************************************************************
- *   Copyright (C) 2009-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2009-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,12 +29,15 @@
 
 #include <tsys.h>
 
+#include "libOPC_UA.h"
+
 #undef _
 #define _(mess) mod->I18N(mess)
 
 using std::string;
 using std::vector;
 using namespace OSCADA;
+using namespace OSCADA_OPC;
 
 //*************************************************
 //* DAQ modul info!                               *
@@ -44,7 +47,7 @@ using namespace OSCADA;
 #define DAQ_SUBVER	SDAQ_VER
 #define DAQ_MVER	"0.6.2"
 #define DAQ_AUTOR	_("Roman Savochenko")
-#define DAQ_DESCR	_("Allow realization of OPC UA client service.")
+#define DAQ_DESCR	_("OPC UA client service implementation.")
 #define DAQ_LICENSE	"GPL2"
 //*************************************************
 
@@ -95,7 +98,7 @@ class TMdPrm : public TParamContr
 //*************************************************
 //* OPC_UA::TMdContr                              *
 //*************************************************
-class TMdContr: public TController
+class TMdContr: public TController, public Client
 {
     friend class TMdPrm;
     public:
@@ -106,31 +109,39 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-	string	cron( )		{ return cfg("SCHEDULE").getS(); }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	string	addr( )		{ return cfg("ADDR").getS(); }
 	double	syncPer( )	{ return mSync; }
-	string	endPoint( )	{ return cfg("EndPoint").getS(); }
-	string	secPolicy( )	{ return cfg("SecPolicy").getS(); }
+	string	endPoint( )	{ return mEndP; }
+	string	secPolicy( )	{ return mSecPol; }
 	int	secMessMode( )	{ return mSecMessMode; }
-	string	cert( );
-	string	pvKey( );
+	string	cert( )		{ return mCert; }
+	string	pvKey( )	{ return mPvKey; }
 	int	pAttrLim( )	{ return mPAttrLim; }
+	string	epParse( string *uri = NULL );
 
-	void	setEndPoint( const string &iep ){ if(cfg("EndPoint").getS() != iep) { cfg("EndPoint").setS(iep); } }
-	void	setSecPolicy( const string &isp )	{ cfg("SecPolicy").setS(isp); }
-	void	setSecMessMode( int smm )	{ mSecMessMode = smm; modif(); }
+	void	setEndPoint( const string &iep )	{ mEndP = iep; }
+	void	setSecPolicy( const string &isp )	{ mSecPol = isp; }
+	void	setSecMessMode( int smm )		{ mSecMessMode = smm; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void reqOPC( XMLNode &io );
+	void reqService( XML_N &io );
 
 	Res &nodeRes( )		{ return cntrRes; }
+
+	//OPC_UA Client methods
+	string sessionName( )	{ return "OpenSCADA station "+SYS->id(); }
+	void protIO( XML_N &io );
+	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
+	void debugMess( const string &mess, const string &data );
 
     protected:
 	//Methods
 	void prmEn( const string &id, bool val );
 
+	void enable_( );
+	void disable_( );
 	void start_( );
 	void stop_( );
 
@@ -138,51 +149,21 @@ class TMdContr: public TController
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
-	//Data
-	class SSess
-	{
-	    public:
-		SSess( )		{ clearFull( ); }
-		void clearSess( )	{ sesId = authTkId = 0; sesLifeTime = 1.2e6; }
-		void clearFull( )
-		{
-		    endPoint = servCert = clKey = servKey = "";
-		    secPolicy = "None"; secMessMode = 1;
-		    secChnl = secToken = reqHndl = 0;
-		    sqNumb = 33;
-		    sqReqId = 1; 
-		    secLifeTime = 0; 
-		    sesAccess = 0;
-		    clearSess( );
-		}
-
-		string		endPoint;
-		uint32_t	secChnl;
-		uint32_t	secToken;
-		uint32_t	sqNumb;
-		uint32_t	sqReqId;
-		uint32_t	reqHndl;
-		int		secLifeTime;
-		uint32_t	sesId;
-		uint32_t	authTkId;
-		int64_t		sesAccess;
-		double		sesLifeTime;
-		string		servCert;
-		string		secPolicy;
-		char		secMessMode;
-		string		clKey, servKey;
-	};
-
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	int	&mPrior;	//Process task priority
-	double	&mSync;		//Synchronization inter remote station: attributes list update.
-	int	&mSecMessMode,	//Security policy mode
-		&mPAttrLim;	//Parameter attributes number limit
+	TCfg	&mSched,	//Schedule
+		&mPrior,	//Process task priority
+		&mSync,		//Synchronization inter remote station: attributes list update.
+		&mEndP,		//Target endpoint
+		&mSecPol,	//Security policy
+		&mSecMessMode,	//Security policy mode
+		&mCert,		//Client certificate
+		&mPvKey;	//Client certificate's private key
+	int	&mPAttrLim;	//Parameter attributes number limit
 	int64_t	mPer;
 
 	bool	prc_st,		//Process task active
@@ -190,13 +171,13 @@ class TMdContr: public TController
 		endrun_req,	//Request to stop of the Process task
 		mPCfgCh;	//Parameter's configuration is changed
 
+	AutoHD<TTransportOut>	tr;
 	vector< AutoHD<TMdPrm> > p_hd;
 
-	SSess	sess;
-
-	string	mBrwsVar;
+	string		mBrwsVar;
 
 	ResString	acq_err;
+	map<string, SecuritySetting> epLst;
 
 	double		tm_gath;	//Gathering time
 	float		tmDelay;	//Delay time for next try connect

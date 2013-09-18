@@ -209,12 +209,12 @@ class Widget : public TCntrNode
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
 	//> Widget's attributes
-	void attrList(vector<string> &list);
-	void attrAdd(TFld *attr, int pos = -1, bool inher = false);
-	void attrDel(const string &attr, bool allInher = false);
-	virtual bool attrPresent(const string &attr);
-	int  attrPos(const string &iattr);
-	virtual AutoHD<Attr> attrAt(const string &attr, int lev = -1);
+	void attrList( vector<string> &list );
+	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
+	void attrDel( const string &attr, bool allInher = false );
+	virtual bool attrPresent( const string &attr );
+	int  attrPos( const string &iattr );
+	virtual AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
 
 	//> Include widgets
 	void wdgList( vector<string> &list, bool fromLnk = false );
@@ -224,6 +224,7 @@ class Widget : public TCntrNode
 	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
 	//> Data access
+	virtual void resourceList( vector<string> &ls )				{ }
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
 	//> Context helps
