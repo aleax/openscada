@@ -303,7 +303,7 @@ void TSocketIn::stop()
     if(type == SOCK_UNIX) remove(path.c_str());
 }
 
-void *TSocketIn::Task(void *sock_in)
+void *TSocketIn::Task( void *sock_in )
 {
     char		*buf = NULL;
     fd_set		rd_fd;
@@ -336,12 +336,12 @@ void *TSocketIn::Task(void *sock_in)
 
 	struct sockaddr_in name_cl;
 	socklen_t          name_cl_len = sizeof(name_cl);
-	if( sock->type == SOCK_TCP )
+	if(sock->type == SOCK_TCP)
 	{
 	    int sock_fd_CL = accept(sock->sock_fd, (sockaddr *)&name_cl, &name_cl_len);
-	    if( sock_fd_CL != -1 )
+	    if(sock_fd_CL != -1)
 	    {
-		if( sock->maxFork() <= (int)sock->cl_id.size() )
+		if(sock->maxFork() <= (int)sock->cl_id.size())
 		{
 		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
@@ -352,7 +352,8 @@ void *TSocketIn::Task(void *sock_in)
 		{
 		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
-		}catch(TError err)
+		}
+		catch(TError err)
 		{
 		    delete sin;
 		    mess_err(err.cat.c_str(),err.mess.c_str());
@@ -360,27 +361,28 @@ void *TSocketIn::Task(void *sock_in)
 		}
 	    }
 	}
-	else if( sock->type == SOCK_UNIX )
+	else if(sock->type == SOCK_UNIX)
 	{
 	    int sock_fd_CL = accept(sock->sock_fd, NULL, NULL);
-	    if( sock_fd_CL != -1 )
+	    if(sock_fd_CL != -1)
 	    {
-		if( sock->maxFork() <= (int)sock->cl_id.size() )
+		if(sock->maxFork() <= (int)sock->cl_id.size())
 		{
 		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
 		}
-		SSockIn *sin = new SSockIn(sock,sock_fd_CL,"");
+		SSockIn *sin = new SSockIn(sock, sock_fd_CL, "");
 		try
 		{
 		    SYS->taskCreate(sock->nodePath('.',true)+"."+TSYS::int2str(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
-		}catch(TError err)
+		}
+		catch(TError err)
 		{
 		    delete sin;
-		    mess_err(err.cat.c_str(),err.mess.c_str());
-		    mess_err(sock->nodePath().c_str(),_("Error creation of the thread!"));
+		    mess_err(err.cat.c_str(), err.mess.c_str());
+		    mess_err(sock->nodePath().c_str(), _("Error creation of the thread!"));
 		}
 	    }
 	}
@@ -408,7 +410,7 @@ void *TSocketIn::Task(void *sock_in)
     }
     pthread_attr_destroy(&pthr_attr);
 
-    if( sock->type == SOCK_UDP ) delete []buf;
+    if(sock->type == SOCK_UDP) delete []buf;
     //> Client tasks stop command
     sock->endrun_cl = true;
     ResAlloc res(sock->sock_res,false);
@@ -416,7 +418,7 @@ void *TSocketIn::Task(void *sock_in)
     for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
         pthread_kill(sock->cl_id[i_id].cl_id,SIGALRM);
     res.release();
-    TSYS::eventWait( sock->cl_free, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
+    TSYS::eventWait(sock->cl_free, true, string(MOD_ID)+": "+sock->id()+_(" client task is stopping...."));
 
     sock->run_st = false;
 
@@ -514,26 +516,28 @@ void *TSocketIn::ClTask( void *s_inf )
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
 {
     AutoHD<TProtocol> proto;
-    string n_pr = id()+TSYS::int2str(sock);
+    string n_pr = id() + TSYS::int2str(sock);
     try
     {
-	if( !SYS->protocol().at().modPresent(protocol()) ) throw TError(nodePath().c_str(),_("The protocol '%s' is not present."),protocol().c_str());
+	if(!SYS->protocol().at().modPresent(protocol()))
+	    throw TError(nodePath().c_str(),_("The protocol '%s' is not present."),protocol().c_str());
 	proto = SYS->protocol().at().modAt(protocol());
-	if( prot_in.freeStat() )
+	if(prot_in.freeStat())
 	{
-	    if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr, workId() );
-	    prot_in = proto.at().at( n_pr );
+	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, workId());
+	    prot_in = proto.at().at(n_pr);
 	}
-	if( prot_in.at().mess(request,answer,sender) ) return;
+	if(prot_in.at().mess(request,answer,sender)) return;
 	prot_in.free();
-	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
-    }catch(TError err)
+	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
+    }
+    catch(TError err)
     {
 	prot_in.free();
-	if( !proto.freeStat() && proto.at().openStat(n_pr) ) proto.at().close( n_pr );
+	if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
 
-	mess_err(nodePath().c_str(),"%s",err.mess.c_str() );
-	mess_err(nodePath().c_str(),_("Error request to protocol."));
+	mess_err(nodePath().c_str(), "%s", err.mess.c_str());
+	mess_err(nodePath().c_str(), _("Error request to protocol."));
     }
 }
 

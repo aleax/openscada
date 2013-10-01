@@ -72,8 +72,8 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
-	virtual void start( )	{ };
-	virtual void stop( )	{ };
+	virtual void start( )	{ }
+	virtual void stop( )	{ }
 
 	TTipTransport &owner( );
 

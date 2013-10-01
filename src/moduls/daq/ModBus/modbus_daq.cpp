@@ -151,6 +151,7 @@ string TMdContr::getStatus( )
 
     if(startStat() && !redntUse())
     {
+	if(!prc_st) val += TSYS::strMess(_("Task terminated! "));
 	if(tmDelay > -1)
 	{
 	    val += TSYS::strMess(_("Connection error. Restoring in %.6g s."),tmDelay);
@@ -171,7 +172,7 @@ string TMdContr::getStatus( )
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return new TMdPrm( name, &owner().tpPrmAt(type) );
+    return new TMdPrm(name, &owner().tpPrmAt(type));
 }
 
 void TMdContr::disable_( )
@@ -269,7 +270,7 @@ void TMdContr::prmEn( const string &id, bool val )
     if(!val && i_prm < p_hd.size())     p_hd.erase(p_hd.begin()+i_prm);
 }
 
-void TMdContr::regVal(int reg, const string &dt)
+void TMdContr::regVal( int reg, const string &dt )
 {
     if(reg < 0)	return;
 
@@ -471,6 +472,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	    {
 		int vl = getValR(aid, w_err);
 		if(vl != EVAL_INT) wrRez = setValR(val.getB() ? (vl|(1<<atoi(atp_sub.c_str()+1))) : (vl & ~(1<<atoi(atp_sub.c_str()+1))), aid, w_err);
+		else if(tmDelay == 0) wrRez = true;	//By no previous data present but need for connect try
 		break;
 	    }
 	    case 'f':
@@ -957,7 +959,7 @@ TMdContr::SDataRec::SDataRec( int ioff, int v_rez ) : off(ioff)
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm(string name, TTipParam *tp_prm) : TParamContr(name, tp_prm), p_el("w_attr"), lCtx(NULL)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name, tp_prm), p_el("w_attr"), lCtx(NULL)
 {
     acq_err.setVal("");
     if(isLogic()) lCtx = new TLogCtx(name+"_ModBusPrm");

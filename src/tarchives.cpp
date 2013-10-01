@@ -406,7 +406,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     mBuf[headBuf].categ = categ;
     mBuf[headBuf].level = (TMess::Type)level;
     mBuf[headBuf].mess  = mess;
-    if(++headBuf >= mBuf.size()) headBuf = 0;
+    if((++headBuf) >= mBuf.size()) headBuf = 0;
     //> Check to no archivated messages
     if(headBuf == headLstread)
     {
@@ -420,7 +420,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	if(++headLstread >= mBuf.size()) headLstread = 0;
     }
     //> Check fill buffer speed.
-    else if(headBuf-headLstread > messBufLen( )/2)
+    else if((headBuf-headLstread) > messBufLen()/2)
     {
 	if(!(bufErr&0x02))
 	{

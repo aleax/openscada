@@ -2,9 +2,8 @@
 Encoding=UTF-8
 Categories=Graphics;Development;
 Type=Application
-Exec=@bindir_full@/openscada_start
+Exec=TERM= @bindir_full@/openscada_start
 Icon=openscada
-Terminal=false
 Name=OpenSCADA
 GenericName=Open SCADA system
 Comment=Open supervisory control and data acquisition
@@ -12,3 +11,5 @@ GenericName[ru]=Открытая SCADA система
 Comment[ru]=Открытая система визуального контроля и сбора данных
 GenericName[uk]=Відкрита SCADA система
 Comment[uk]=Відкрита система візуального контроля та збору даних
+StartupNotify=false
+Terminal=false

@@ -109,18 +109,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	//> Security policies
-	string secPolicy( int isec );
-	MessageSecurityMode secMessageMode( int isec );
-
-	//> Sessions
-	int sessCreate( const string &iName, double iTInact );
-	void sessServNonceSet( int sid, const string &servNonce );
-	bool sessActivate( int sid, uint32_t secCnl, bool check = false );
-	void sessClose( int sid );
-	Server::Sess sessGet( int sid );
-
-	string reqData( int reqTp, const string &rb );
+	int reqData( int reqTp, XML_N &req );
 
 	TProt &owner( );
 

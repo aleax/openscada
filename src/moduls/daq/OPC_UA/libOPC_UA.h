@@ -86,6 +86,8 @@ namespace OSCADA_OPC
 #define OpcUa_BadAttributeIdInvalid	0x80350000
 #define OpcUa_BadNotSupported		0x803D0000
 #define OpcUa_BadFilterNotAllowed	0x80450000
+#define OpcUa_BadContinuationPointInvalid	0x804A0000
+#define OpcUa_BadNoContinuationPoints	0x804B0000
 #define OpcUa_BadSecurityModeRejected	0x80540000
 #define OpcUa_BadSecurityPolicyRejected	0x80550000
 #define OpcUa_BadApplicationSignatureInvalid	0x80580000
@@ -119,6 +121,8 @@ namespace OSCADA_OPC
 #define OpcUa_CloseSessionResponse	476
 #define OpcUa_BrowseRequest		527
 #define OpcUa_BrowseResponse		530
+#define OpcUa_BrowseNextRequest		533
+#define OpcUa_BrowseNextResponse	536
 #define OpcUa_TranslateBrowsePathsToNodeIdsRequest	554
 #define OpcUa_TranslateBrowsePathsToNodeIdsResponse	557
 #define OpcUa_ReadRequest		631
@@ -383,7 +387,7 @@ class NodeId
 	NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
 	~NodeId( );
 
-	NodeId &operator=( NodeId &node );
+	NodeId &operator=( const NodeId &node );
 
 	Type	type( ) const	{ return mTp; }
 	bool	isNull( ) const	{ return (mTp == Numeric && numb == 0); }
@@ -452,13 +456,13 @@ class UA
 	static void oN( string &buf, int32_t val, char sz, int off = -1 );
 	static void oNu( string &buf, uint32_t val, char sz, int off = -1 );
 	static void oR( string &buf, double val, char sz = 4 );
-	static void oS( string &buf, const string &val );
+	static void oS( string &buf, const string &val, int off = -1 );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
 	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
 	static void oTm( string &buf, int64_t val );
 	static void oNodeId( string &buf, const NodeId &val );
 	static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
-	bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
+			bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
 	void oDataValue( string &buf, uint8_t eMsk, const OPCVariant &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
 
 	static string randBytes( int num );
@@ -549,40 +553,58 @@ class Server: public UA
 	class SecCnl
 	{
 	    public:
-		//Methods
-		SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode );
-		SecCnl( );
+	    //Methods
+	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode );
+	    SecCnl( );
 
-		//Attributes
-		string		endPoint;
-		string		secPolicy;
-		char		secMessMode;
-		int64_t		tCreate;
-		int32_t		tLife;
-		uint32_t	TokenId;
-		string		clCert;
-		string		servKey, clKey;
+	    //Attributes
+	    string	endPoint;
+	    string	secPolicy;
+	    char	secMessMode;
+	    int64_t	tCreate;
+	    int32_t	tLife;
+	    uint32_t	TokenId;
+	    string	clCert;
+	    string	servKey, clKey;
 	};
 	//* Sess
 	class Sess
 	{
 	    public:
+	    //Data
+	    class ContPoint
+	    {
+		public:
 		//Methods
-		Sess( const string &iName, double iTInact );
-		Sess( );
+		ContPoint( ) : brDir(0), refPerN(100), nClassMask(0), resMask(0) { }
+		ContPoint( const string &i_brNode, const string &i_lstNode,
+			uint32_t i_brDir, uint32_t i_refPerN, const string &i_refTypeId, uint32_t i_nClassMask, uint32_t i_resMask ) :
+		    brNode(i_brNode), lstNode(i_lstNode), brDir(i_brDir), refPerN(i_refPerN),
+		    nClassMask(i_nClassMask), refTypeId(i_refTypeId), resMask(i_resMask) { }
+
+		bool empty( ) const	{ return brNode.empty(); }
 
 		//Attributes
-		string		name;
-		vector<uint32_t> secCnls;
-		double		tInact;
-		int64_t		tAccess;
-		string		servNonce;
+		uint32_t brDir,		//Browse direction
+			refPerN,	//References per node
+			nClassMask,	//Node class mask
+			resMask;	//Result mask
+		string	brNode, lstNode,
+			refTypeId;	//Reference type id
+	    };
 
-		//>> Continuation points
-		//????
-		//string			brNode;
-		//unsigned		brNextPos;
+	    //Methods
+	    Sess( const string &iName, double iTInact );
+	    Sess( );
 
+	    //Attributes
+	    string	name;
+	    vector<uint32_t> secCnls;
+	    double	tInact;
+	    int64_t	tAccess;
+	    string	servNonce;
+
+	    map<string, ContPoint> cntPnts;	//>> Continuation points
 	};
 	//* End Point
 	class EP
@@ -602,17 +624,19 @@ class Server: public UA
 
 		//> Security policies
 		int secSize( )			{ return mSec.size(); }
-		virtual string secPolicy( int isec );
-		virtual MessageSecurityMode secMessageMode( int isec );
+		string secPolicy( int isec );
+		MessageSecurityMode secMessageMode( int isec );
 
 		//> Sessions
-		virtual int sessCreate( const string &iName, double iTInact );
-		virtual void sessServNonceSet( int sid, const string &servNonce );
-		virtual bool sessActivate( int sid, uint32_t secCnl, bool check = false );
-		virtual void sessClose( int sid );
-		virtual Sess sessGet( int sid );
+		int sessCreate( const string &iName, double iTInact );
+		void sessServNonceSet( int sid, const string &servNonce );
+		bool sessActivate( int sid, uint32_t secCnl, bool check = false );
+		void sessClose( int sid );
+		Sess sessGet( int sid );
+		Sess::ContPoint sessCpGet( int sid, const string &cpId );
+		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
 
-		virtual string reqData( int reqTp, const string &rb ) = 0;
+		virtual int reqData( int reqTp, XML_N &req );
 
 	    protected:
 		//Methods
@@ -629,6 +653,7 @@ class Server: public UA
 
 		XML_N			objTree;
 		map<string, XML_N*>	ndMap;
+		pthread_mutex_t		mtxData;
 
 		Server			*serv;
 	};

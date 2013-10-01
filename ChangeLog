@@ -1,12 +1,28 @@
+2013-10-01 Roman
+- SYS: The changelog to syntax some fix.
+- SYS: "StartupNotify=false" line is added to *.desktop files.
+    "TERM=" to "Exec" is added for prevent console "dialog" start into openscada_start.
+    For terminal checking use "tput init" into openscada_start.
+- FIX:DAQ.ModBus: Task terminated state display is added to status.
+    No lost connection restore for synchronous write mode and bits from register using is fixed.
+- !!:DAQ.OPC_UA: Server part function reqData() is separated for OPC_UA binary encoding part into library and
+    same data request depend from the server data model specific for data services "Browse", "Read" and "Write".
+    Service "BrowseNext" and ContinuationPoints for it is added.
+    For access to EndPoints (EP) data is added and used self pthread_mutex_t mutex.
+- Transport.Serial: field "/cntr/cfg/devLS" is renamed to "/prm/cfg/devLS".
+- Transport.Sockets: Some code clear.
+- UI.Vision: Deprecated QPalette::Background is replaced to QPalette::Window.
+
+
 2013-09-13 Roman
 - !!:SYS: To start script openscada_start appended the project selection from symbol link like openscada_{ProjNm} and menu provided
     for select or new project by dialog, kdialog, zenity or Xdialog.
 - DB: To prescription frames added: programms sorting, renaming.
-- FYX:SYS: User API function getStrXML() is fixed for XMLNodeObj argument 1.
+- FIX:SYS: User API function childIns() is fixed for XMLNodeObj argument 1.
 - FIX:DAQ.ParamTempl: LockAttr flag copy prevented from locked attributes "f_*" on append and insert new.
 - DAQ.OPC_UA: Linking the module with library libOPC_UA changed to direct file include libOPC_UA.cpp for allow parralel building by -j2.
     Some fixes and preparing to BrowseNext support.
-- UI.{Vision,VCAEngine}: Resources list and files inline browsing is added for image/media attributes.
+- UI.{Vision,VCAEngine}: Resources list and files in-line browsing is added for image/media attributes.
     Primitive "Media" is clean and used named indexes.
     Mime table of containers is allowed for direct download, not only to selected, and mime detect from extension;
     mime also used for unload files. Set limit for downloaded files size.
@@ -22,7 +38,7 @@
 
 2013-09-02 Roman
 - SYS: To openscada_start script the OpenSCADA project selection is added from the link name.
-    Inline links added to global functions i2s()->TSYS::int2str(), u2s()->TSYS::uint2str(), ll2s()->TSYS::ll2str(), r2s()->TSYS::real2str().
+    In-line links added to global functions i2s()->TSYS::int2str(), u2s()->TSYS::uint2str(), ll2s()->TSYS::ll2str(), r2s()->TSYS::real2str().
     String labels enumeration is added by strLabEnum().
     Command line parameter "--StatName=<name>" is added for station name set.
     Station no present warning message disabled for no station select.
@@ -42,7 +58,7 @@
 - {Lib,Protocol}.OPC_UA: Services "OpcUa_CreateSubscriptionRequest", "OpcUa_CreateMonitoredItemsRequest",
 	"OpcUa_TranslateBrowsePathsToNodeIdsRequest", "OpcUa_PublishRequest" first implementation is added.
     Server objects and variables is added: "Server"->("ServerStatus"->"State", "NamespaceArray").
-    Generic node's attributes processing mosly improved and expanded.
+    Generic node's attributes processing mostly improved and expanded.
 - UI.VCAEngine: TSYS::int2str() replaced to i2s(). Context help for modes and values of view "Button" of primitive "FormEl" is added.
     Primitive "Box" moved to predefined indexes.
 - !!:FIX:UI.Vision: Vector index_array reforming fixed for points 1 and 2 for place only common figures and once
@@ -64,7 +80,7 @@
     Controller's object is made simply for EndPoints and transports selection and configuration.
     For now you can set only EndPoint and the transport will created from it. Also for the controller object enabled
     you will take list for browsed and allowed endpoins.
-    TokenId and SessionId allowed for complexs NodeId processing and tested on Ignition OPC UA server.
+    TokenId and SessionId allowed for complex NodeId processing and tested on Ignition OPC UA server.
     OPC UA server fix for merged input messages processing.
 - Transport.Sockets: The output transport is allowed for stop on the address change.
 - !!:UI.{VCAEngine,Vision}: Into view "Button" of primitive "FormEl" attribute "checkable" has renamed to "mode" and has appended modes:
@@ -74,7 +90,7 @@
 
 
 2013-08-08 Roman
-- !:TVal: Stop archive is added on the object disable for unlock it and allow to finish act.
+- !:FIX:TVal: Stop archive is added on the object disable for unlock it and allow to finish act.
     The problem often observed on DAQ parameter's configuration change.
 - !!:FIX:UI.{Vision,WebVision}: Items configuration loading of primitive "ElFigure" is fixed for demand to all points present.
     The function attr{s}Set() of primitive "ElFigure", and "FormEl" into UI.Vision, full revised and set optimal.
@@ -98,7 +114,7 @@
 - SYS: Depend to module DAQ.DCON include to *-plc package.
     Icons for modules DAQ.Comedi and DAQ.SMH2Gi is added.
     "DESCR" DB fields size expanded from 300 to 1000 for everywhere.
-    Inline files browser function ctrListFS() is moved from TCntrNode to TSYS namespace.
+    In-line files browser function ctrListFS() is moved from TCntrNode to TSYS namespace.
     NoEx flag is added to function TCntrNode::chldList().
 - TArchVal,UI.WebCfgD: Compression level for PNG creation is set to optimal for time level '1'.
 - !!:DAQ.{*,BlockCalc,LogicLev,ModBus},TArchVal,Transport.Serial,UI.VCAEngine:
@@ -632,7 +648,7 @@
 
 2012-09-10 Roman
 - !!:DAQ.ICP_DAS: Version 1.0.0 is released.
-- FIX:DAQ.ICP_DAS: AO writing alow is fixed for I-8xxx modules series.
+- FIX:DAQ.ICP_DAS: AO writing allow is fixed for I-8xxx modules series.
 
 
 2012-09-06 Roman
@@ -1872,7 +1888,7 @@
 
 2011-08-29 Roman
 - FIX:SYS: Save to config file first table's item is fixed.
-- FIX:DB.MySQL: Key limit to 1000 (300 UTF8) symbols hack is added for alow DB copy from SQLite to MySQL.
+- FIX:DB.MySQL: Key limit to 1000 (300 UTF8) symbols hack is added for allow DB copy from SQLite to MySQL.
 - !!!!:FIX:Transport.Sockets: No init length for return value of getsockopt() is fixed.
 
 
@@ -2241,7 +2257,7 @@
 
 
 2011-05-25 Roman
-- Archive: Regular expression using alow is described in context tooltips of messages get by the category template.
+- Archive: Regular expression using allow is described in context tooltips of messages get by the category template.
 - XMLNode: New save flag XMLNode::XHTMLHeader is added for standard XHTML header place at save.
     Target codepage set is added to save function.
     Caseinsensible search node by tag name is added.
@@ -4614,7 +4630,7 @@
 
 
 2009-04-27 Roman
-- FIX:/SYS: owner() method is changed to no inline for all objects.
+- FIX:/SYS: owner() method is changed to no in-line for all objects.
 - !!:/SYS/Archive: Added archive selection parameter to function TVArchive::period().
 - !!:/SYS/Value: Created mechanism for inherite TVal() into modules.
 - !!!!:/SYS/Value: Archive's data getting is added to attributes request service function.
@@ -5003,7 +5019,7 @@
 
 2009-02-09 Roman
 - FIX:/Archive: #define BUF_ARCH_NM"<buffer>" syntax error is fixed and declaration is moved to TSYS.
-- /Archive: Some inline helps is added to config-fields. Selection is added to archivator select string of accessing to values.
+- /Archive: Some in-line helps is added to config-fields. Selection is added to archivator select string of accessing to values.
     Core translation is updated to Russian, Ukrainian and German (partially).
 - !!:/UI/VCAEngune: Checking for widget's parts update is moved to separated function modifChk() for RunTime session.
     Realised support main calc clock reseting by resolution limit.
@@ -5513,7 +5529,7 @@
 - !:/Transport/Socket: Documentation is updated.
 - !!:/SYS: Debug messages print mechanism is reviewed. Now debug enabled by OSC_DEBUG in debug level value from 0 to 5.
   New mechanism is included to all modules.
-- !:/SYS: New function TSYS::strMess() is added for inline format string support.
+- !:/SYS: New function TSYS::strMess() is added for in-line format string support.
 - !:/Transports: Added virtual function getStatus( ) to input and output transports interfaces for connection status get.
 - FIX:/DAQ/BlockClac: Small values seting allow into real block's atributes is fixed.
 - !!:/SYS: Demo DB is updated.

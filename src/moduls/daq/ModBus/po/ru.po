@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-22 16:45+0300\n"
+"POT-Creation-Date: 2013-09-25 11:29+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -81,6 +81,9 @@ msgstr ""
 
 msgid "Value"
 msgstr "Значение"
+
+msgid "Task terminated! "
+msgstr "Задача прервана! "
 
 #, c-format
 msgid "Connection error. Restoring in %.6g s."

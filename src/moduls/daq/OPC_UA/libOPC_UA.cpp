@@ -288,7 +288,7 @@ NodeId::~NodeId( )
     }
 }
 
-NodeId &NodeId::operator=( NodeId &node )
+NodeId &NodeId::operator=( const NodeId &node )
 {
     setNs(node.ns());
     switch(node.type())
@@ -660,10 +660,13 @@ void UA::oR( string &buf, double val, char sz )
     else throw OPCError(OpcUa_BadEncodingError, "Real number size '%d' error.", sz);
 }
 
-void UA::oS( string &buf, const string &val )
+void UA::oS( string &buf, const string &val, int off )
 {
-    oN(buf, (val.size()?(int)val.size():-1), 4);
-    buf.append(val);
+    int prevSz = 0;
+    bool toRepl = (off >= 0 && (off+4) <= (int)buf.size() && (off+4+(prevSz=getUnalign32(buf.data()+off)) <= (int)buf.size()));
+    oN(buf, (val.size()?(int)val.size():-1), 4, (toRepl?off:-1));
+    if(toRepl) buf.replace(off+4, std::max(0,prevSz), val);
+    else buf.append(val);
 }
 
 void UA::oSl( string &buf, const string &val, const string &locale )
@@ -2614,18 +2617,194 @@ nextReq:
 		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
 		    break;
 		}
-		case OpcUa_ReadRequest:
-		    respEp = wep->reqData(reqTp, rb.substr(off));
-		    reqTp = OpcUa_ReadResponse;
-		    break;
 		case OpcUa_BrowseRequest:
-		    respEp = wep->reqData(reqTp, rb.substr(off));
+		{
+		    XML_N req("data");
+		    //>> Request
+							//> view
+		    iNodeId(rb, off);			//viewId
+		    iTm(rb, off);			//timestamp
+		    iNu(rb, off, 4);			//viewVersion
+
+		    uint32_t rPn = iNu(rb, off, 4);	//requestedMax ReferencesPerNode
+							//> nodesToBrowse
+		    uint32_t nc = iNu(rb, off, 4);	//Nodes
+
+		    //>> Respond
+							//> results []
+		    oNu(respEp, nc, 4);			//Nodes
+
+		    //>>> Nodes list processing
+		    for(uint32_t i_c = 0; i_c < nc; i_c++)
+		    {
+			NodeId nid = iNodeId(rb, off);		//nodeId
+			uint32_t bd = iNu(rb, off, 4);		//browseDirection
+			NodeId rtId = iNodeId(rb, off);		//referenceTypeId
+			iNu(rb, off, 1);			//includeSubtypes
+			uint32_t nClass = iNu(rb, off, 4);	//nodeClassMask
+			uint32_t resMask = iNu(rb, off, 4);	//resultMask
+
+			uint32_t stCode = 0, refNumb = 0;
+			int stCodeOff = respEp.size();	oNu(respEp, stCode, 4);	//statusCode
+			int cPntOff = respEp.size();	oS(respEp, "");		//continuationPoint
+			int refNumbOff = respEp.size();	oNu(respEp, refNumb, 4);//References [] = 0
+
+			if(rtId.numbVal() != OpcUa_HierarchicalReferences && rtId.numbVal() != OpcUa_References) continue;
+
+			req.clear()->setAttr("node", nid.toAddr())->setAttr("BrDir", uint2str(bd))->setAttr("RefTpId", rtId.toAddr())->
+				    setAttr("ClassMask", uint2str(nClass))->setAttr("rPn", uint2str(rPn));
+			stCode = wep->reqData(reqTp, req);
+			refNumb = req.childSize();
+			for(unsigned i_ref = 0; !stCode && i_ref < req.childSize(); i_ref++)
+			{
+			    XML_N *chN = req.childGet(i_ref);
+			    oRef(respEp, resMask, NodeId::fromAddr(chN->attr("NodeId")),
+				NodeId::fromAddr(chN->attr("referenceTypeId")),
+				atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
+				NodeId::fromAddr(chN->attr("typeDefinition")));
+			}
+
+			if(stCode)	oNu(respEp, stCode, 4, stCodeOff);
+			if(rPn && refNumb >= rPn && req.attr("LastNode").size()) //continuationPoint prepare
+			{
+			    string cP;
+			    while(!wep->sessCpGet(sesTokId,(cP=randBytes(16))).empty()) ;
+			    wep->sessCpSet(sesTokId, cP, Sess::ContPoint(nid.toAddr(),req.attr("LastNode"),bd,rPn,rtId.toAddr(),nClass,resMask));
+                	    oS(respEp, cP, cPntOff);
+			    refNumbOff += cP.size();
+                	}
+			if(refNumb)	oNu(respEp, refNumb, 4, refNumbOff);
+		    }
+		    oS(respEp, "");			//diagnosticInfos []
+
 		    reqTp = OpcUa_BrowseResponse;
+
 		    break;
+		}
+		case OpcUa_BrowseNextRequest:
+		{
+		    XML_N req("data");
+		    bool rCp = iNu(rb, off, 1);		//releaseContinuationPoints
+		    uint32_t nCp = iNu(rb, off, 4);	//continuationPoints []
+
+		    //>> Respond
+							//> results []
+		    oNu(respEp, nCp, 4);		//continuationPoints
+
+		    //>>> Continuation points list processing
+		    for(uint32_t i_cp = 0; i_cp < nCp; i_cp++)
+		    {
+			string cp = iS(rb, off);	//continuationPoint
+
+			uint32_t stCode = 0, refNumb = 0;
+			int stCodeOff = respEp.size();	oNu(respEp, stCode, 4);	//statusCode
+			int cPntOff = respEp.size();	oS(respEp, "");		//continuationPoint
+			int refNumbOff = respEp.size();	oNu(respEp, refNumb, 4);//References [] = 0
+			Sess::ContPoint cPo = wep->sessCpGet(sesTokId, cp);
+
+			if(!cPo.empty())
+			{
+			    req.clear()->setAttr("node", cPo.brNode)->setAttr("LastNode", cPo.lstNode)->
+					setAttr("BrDir", uint2str(cPo.brDir))->setAttr("RefTpId", cPo.refTypeId)->
+					setAttr("ClassMask", uint2str(cPo.nClassMask))->setAttr("rPn", uint2str(cPo.refPerN));
+			    stCode = wep->reqData(reqTp, req);
+			    refNumb = req.childSize();
+			    for(unsigned i_ref = 0; !stCode && i_ref < req.childSize(); i_ref++)
+			    {
+				XML_N *chN = req.childGet(i_ref);
+				oRef(respEp, cPo.resMask, NodeId::fromAddr(chN->attr("NodeId")),
+				    NodeId::fromAddr(chN->attr("referenceTypeId")),
+				    atoi(chN->attr("dir").c_str()), chN->attr("name"), atoi(chN->attr("NodeClass").c_str()),
+				    NodeId::fromAddr(chN->attr("typeDefinition")));
+			    }
+			    wep->sessCpSet(sesTokId, cp);	//Free previous continuationPoint. Unknown using "rCp" here!!!!
+			}
+			else stCode = OpcUa_BadContinuationPointInvalid;
+
+			if(stCode)	oNu(respEp, stCode, 4, stCodeOff);
+			if(refNumb >= cPo.refPerN && req.attr("LastNode").size()) //continuationPoint prepare
+			{
+			    string cP;
+			    while(!wep->sessCpGet(sesTokId,(cP=randBytes(16))).empty()) ;
+			    wep->sessCpSet(sesTokId, cP,
+				Sess::ContPoint(cPo.brNode,req.attr("LastNode"),cPo.brDir,cPo.refPerN,cPo.refTypeId,cPo.nClassMask,cPo.resMask));
+                	    oS(respEp, cP, cPntOff);
+			    refNumbOff += cP.size();
+                	}
+			if(refNumb)	oNu(respEp, refNumb, 4, refNumbOff);
+		    }
+		    oS(respEp, "");			//diagnosticInfos []
+
+		    reqTp = OpcUa_BrowseNextResponse;
+
+		    break;
+		}
+		case OpcUa_ReadRequest:
+		{
+		    XML_N req("data");
+		    //>> Request
+		    iR(rb, off, 8);				//maxAge
+		    uint32_t tmStRet = iNu(rb, off, 4);		//timestampsTo Return
+								//> nodesToRead []
+		    uint32_t nc = iNu(rb, off, 4);		//nodes
+		    uint8_t eMsk = 0x01;
+		    switch(tmStRet)
+		    {
+			case TS_SOURCE: eMsk |= 0x04;   break;
+			case TS_SERVER: eMsk |= 0x08;   break;
+			case TS_BOTH:   eMsk |= 0x0C;   break;
+		    }
+
+		    //>> Respond
+		    oNu(respEp, nc, 4);				//Numbers
+		    //>>> Nodes list processing
+		    for(uint32_t i_c = 0; i_c < nc; i_c++)
+		    {
+			NodeId nid = iNodeId(rb, off);		//nodeId
+			uint32_t aid = iNu(rb, off, 4);		//attributeId
+			iS(rb, off);				//indexRange
+			iSqlf(rb, off);				//dataEncoding
+
+			req.setAttr("node", nid.toAddr())->setAttr("aid",uint2str(aid));
+			int rez = wep->reqData(reqTp, req);
+			if(!rez) oDataValue(respEp, eMsk, req.text(), atoi(req.attr("type").c_str()));
+			else oDataValue(respEp, 0x02, rez);
+		    }
+
+		    oS(respEp, "");				//diagnosticInfos []
+
+		    reqTp = OpcUa_ReadResponse;
+
+		    break;
+		}
 		case OpcUa_WriteRequest:
-		    respEp = wep->reqData(reqTp, rb.substr(off));
+		{
+		    XML_N req("data");
+		    //>> Request
+							//> nodesToWrite []
+		    uint32_t nc = iNu(rb, off, 4);	//nodes
+
+		    //>> Respond
+		    oNu(respEp, nc, 4);			//Numbers
+		    for(unsigned i_n = 0; i_n < nc; i_n++)
+		    {
+			NodeId nid = iNodeId(rb, off);	//nodeId
+			uint32_t aid = iNu(rb, off, 4);	//attributeId (Value)
+			iS(rb, off);			//indexRange
+			XML_N nVal;
+			iDataValue(rb, off, nVal);	//value
+
+			req.setAttr("node", nid.toAddr())->setAttr("aid",uint2str(aid))->setText(nVal.text());
+			int rez = wep->reqData(reqTp, req);
+
+			//>>> Write result status code
+            		oNu(respEp, rez, 4);		//StatusCode
+		    }
+
 		    reqTp = OpcUa_WriteResponse;
+
 		    break;
+		}
 		case OpcUa_PublishRequest:	//!!!! Should next implemented full
 		{
 		    //>> Request
@@ -2702,6 +2881,7 @@ nextReq:
     return false;
 }
 
+
 //*************************************************
 //* SecCnl					  *
 //*************************************************
@@ -2736,12 +2916,13 @@ Server::Sess::Sess( ) : tInact(0), tAccess(0)
 //*************************************************
 Server::EP::EP( Server *iserv ) : mEn(false), cntReq(0), objTree("root"), serv(iserv)
 {
-
+    pthread_mutex_init(&mtxData, NULL);
 }
 
 Server::EP::~EP( )
 {
-
+    pthread_mutex_lock(&mtxData);
+    pthread_mutex_destroy(&mtxData);
 }
 
 void Server::EP::setEnable( bool vl )
@@ -2829,57 +3010,107 @@ void Server::EP::setEnable( bool vl )
 
 string Server::EP::secPolicy( int isec )
 {
-    if(isec < 0 || isec >= (int)mSec.size()) throw OPCError("Security setting %d error.");
-    return mSec[isec].policy;
+    string rez;
+    pthread_mutex_lock(&mtxData);
+    if(isec >= 0 && isec < (int)mSec.size()) rez = mSec[isec].policy;
+    pthread_mutex_unlock(&mtxData);
+
+    return rez;
 }
 
 MessageSecurityMode Server::EP::secMessageMode( int isec )
 {
-    if(isec < 0 || isec >= (int)mSec.size()) throw OPCError("Security setting %d error.");
-    return mSec[isec].messageMode;
+    MessageSecurityMode rez = (MessageSecurityMode)0;
+    pthread_mutex_lock(&mtxData);
+    if(isec >= 0 || isec < (int)mSec.size()) rez = mSec[isec].messageMode;
+    pthread_mutex_unlock(&mtxData);
+
+    return rez;
 }
 
 int Server::EP::sessCreate( const string &iName, double iTInact )
 {
     int i_s;
+    pthread_mutex_lock(&mtxData);
     for(i_s = 0; i_s < (int)mSess.size(); i_s++)
 	if(!mSess[i_s].tAccess) break;
     if(i_s < (int)mSess.size()) mSess[i_s] = Sess(iName, iTInact);
     else mSess.push_back(Sess(iName,iTInact));
+    pthread_mutex_unlock(&mtxData);
 
     return i_s+1;
 }
 
 void Server::EP::sessServNonceSet( int sid, const string &servNonce )
 {
-    if(sid <= 0 || sid > (int)mSess.size()) return;
-    mSess[sid-1].servNonce = servNonce;
+    pthread_mutex_lock(&mtxData);
+    if(sid > 0 && sid <= (int)mSess.size()) mSess[sid-1].servNonce = servNonce;
+    pthread_mutex_unlock(&mtxData);
 }
 
 bool Server::EP::sessActivate( int sid, uint32_t secCnl, bool check )
 {
-    if(sid <= 0 || sid > (int)mSess.size() || !mSess[sid-1].tAccess) return false;
-    mSess[sid-1].tAccess = curTime();
-    int i_s;
-    for(i_s = 0; i_s < (int)mSess[sid-1].secCnls.size(); i_s++)
-	if(mSess[sid-1].secCnls[i_s] == secCnl)
-	    break;
-    if(check && i_s >= (int)mSess[sid-1].secCnls.size()) return false;
-    if(i_s >= (int)mSess[sid-1].secCnls.size()) mSess[sid-1].secCnls.push_back(secCnl);
-    return true;
+    bool rez = false;
+
+    pthread_mutex_lock(&mtxData);
+    if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess)
+    {
+	mSess[sid-1].tAccess = curTime();
+	int i_s;
+	for(i_s = 0; i_s < (int)mSess[sid-1].secCnls.size(); i_s++)
+	    if(mSess[sid-1].secCnls[i_s] == secCnl)
+		break;
+	if(!check || i_s < (int)mSess[sid-1].secCnls.size())
+	{
+	    if(i_s >= (int)mSess[sid-1].secCnls.size()) mSess[sid-1].secCnls.push_back(secCnl);
+	    rez = true;
+	}
+    }
+    pthread_mutex_unlock(&mtxData);
+
+    return rez;
 }
 
 void Server::EP::sessClose( int sid )
 {
-    if(sid <= 0 || sid > (int)mSess.size() || !mSess[sid-1].tAccess)
-	throw OPCError("No session %d present.", sid-1);
-    mSess[sid-1] = Sess();
+    pthread_mutex_lock(&mtxData);
+    if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess) mSess[sid-1] = Sess();
+    pthread_mutex_unlock(&mtxData);
 }
 
 Server::Sess Server::EP::sessGet( int sid )
 {
-    if(sid <= 0 || sid > (int)mSess.size()) return Sess();
-    return mSess[sid-1];
+    Server::Sess rez;
+    pthread_mutex_lock(&mtxData);
+    if(sid > 0 && sid <= (int)mSess.size()) rez = mSess[sid-1];
+    pthread_mutex_unlock(&mtxData);
+
+    return rez;
+}
+
+Server::Sess::ContPoint Server::EP::sessCpGet( int sid, const string &cpId )
+{
+    Server::Sess::ContPoint rez;
+
+    pthread_mutex_lock(&mtxData);
+    map<string, Server::Sess::ContPoint>::iterator cpPrev;
+    if(sid > 0 && sid <= (int)mSess.size() && (cpPrev=mSess[sid-1].cntPnts.find(cpId)) != mSess[sid-1].cntPnts.end())
+	rez = cpPrev->second;
+    pthread_mutex_unlock(&mtxData);
+
+    return rez;
+}
+
+void Server::EP::sessCpSet( int sid, const string &cpId, const Server::Sess::ContPoint &cp )
+{
+    pthread_mutex_lock(&mtxData);
+    if(sid > 0 && sid <= (int)mSess.size())
+    {
+	if(cp.empty() && mSess[sid-1].cntPnts.find(cpId) != mSess[sid-1].cntPnts.end())
+	    mSess[sid-1].cntPnts.erase(cpId);
+	else mSess[sid-1].cntPnts[cpId] = cp;
+    }
+    pthread_mutex_unlock(&mtxData);
 }
 
 XML_N *Server::EP::nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
@@ -2918,6 +3149,150 @@ XML_N *Server::EP::nodeReg( const NodeId &parent, const NodeId &ndId, const stri
     ndMap[ndId.toAddr()] = cNx;
 
     return cNx;
+}
+
+int Server::EP::reqData( int reqTp, XML_N &req )
+{
+    switch(reqTp)
+    {
+	case OpcUa_BrowseRequest: case OpcUa_BrowseNextRequest:
+	{
+	    NodeId nid = NodeId::fromAddr(req.attr("node"));
+            map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
+            if(ndX == ndMap.end()) return OpcUa_BadBrowseNameInvalid;
+	    int rPn = atoi(req.attr("rPn").c_str());
+            NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
+	    uint32_t bd = atoi(req.attr("BrDir").c_str());
+	    uint32_t nClass = atoi(req.attr("ClassMask").c_str());
+	    string lstNd = req.attr("LastNode"); req.setAttr("LastNode","");
+
+	    //> typeDefinition reference process
+	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH))       //!!!! Check for other call
+	    {
+        	map<string, XML_N*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
+            	if(ndTpDef != ndMap.end())
+                {
+                    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
+                    if(!nClass || nClass == cnClass)
+			req.childAdd("ref")->setAttr("NodeId", ndTpDef->second->attr("NodeId"))->
+			    setAttr("referenceTypeId", ndTpDef->second->attr("referenceTypeId"))->
+			    setAttr("dir", "1")->setAttr("name", ndTpDef->second->attr("name"))->
+			    setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", ndTpDef->second->attr("typeDefinition"));
+		}
+	    }
+	    //> Inverse hierarchical references process (only parent)
+	    if(lstNd.empty() && (bd == BD_INVERSE || bd == BD_BOTH) && ndX->second->parent())
+	    {
+		XML_N *chNd = ndX->second->parent();
+		unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
+		if(!nClass || nClass == cnClass)
+		    req.childAdd("ref")->setAttr("NodeId", chNd->attr("NodeId"))->
+			setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
+			setAttr("dir", "0")->setAttr("name", chNd->attr("name"))->
+			setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", chNd->attr("typeDefinition"));
+	    }
+	    //> Forward hierarchical references process
+	    bool lstOK = lstNd.empty() ? true : false;
+	    for(unsigned i_ch = 0; (bd == BD_FORWARD || bd == BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++)
+	    {
+		XML_N *chNd = ndX->second->childGet(i_ch);
+		if(!lstOK) { lstOK = (lstNd==chNd->attr("NodeId")); continue; }
+		unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
+		if(nClass && nClass != cnClass) continue;
+		req.childAdd("ref")->setAttr("NodeId", chNd->attr("NodeId"))->
+		    setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
+		    setAttr("dir", "1")->setAttr("name", chNd->attr("name"))->
+		    setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", chNd->attr("typeDefinition"));
+		if(rPn && req.childSize() >= rPn && (i_ch+1) < ndX->second->childSize())
+                {
+                    req.setAttr("LastNode", chNd->attr("NodeId"));
+                    break;
+                }
+	    }
+	    return 0;
+	}
+	case OpcUa_ReadRequest:
+	{
+	    NodeId nid = NodeId::fromAddr(req.attr("node"));
+	    map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
+	    if(ndX == ndMap.end()) return OpcUa_BadNodeIdUnknown;
+	    uint32_t aid = atoi(req.attr("aid").c_str());
+	    switch(aid)
+	    {
+		//>> Generic attributes process
+		case AId_NodeId: req.setAttr("type", int2str(OpcUa_NodeId))->setText(nid.toAddr());				return 0;
+		case AId_NodeClass: req.setAttr("type", int2str(OpcUa_Int32))->setText(ndX->second->attr("NodeClass"));		return 0;
+		case AId_BrowseName: req.setAttr("type", int2str(OpcUa_QualifiedName))->setText(ndX->second->attr("name"));	return 0;
+		case AId_DisplayName:
+		    req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"), OpcUa_LocalizedText);
+		    return 0;
+		case AId_Descr: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("Descr"));		return 0;
+		case AId_WriteMask: case AId_UserWriteMask: req.setAttr("type", int2str(OpcUa_UInt32))->setText("0");		return 0;
+		case AId_IsAbstract: req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("IsAbstract"));	return 0;
+		case AId_Symmetric: req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("Symmetric"));	return 0;
+		case AId_InverseName: req.setAttr("type", int2str(OpcUa_LocalizedText))->setText(ndX->second->attr("InverseName"));	return 0;
+		case AId_EventNotifier: req.setAttr("type", int2str(OpcUa_Byte))->setText(ndX->second->attr("EventNotifier"));	return 0;
+		default:
+		{
+		    string dtType = ndX->second->attr("DataType");
+		    if(dtType.empty()) return OpcUa_BadAttributeIdInvalid;
+		    //>> Values' attributes processing
+		    switch(aid)
+		    {
+			case AId_Value: req.setAttr("type", dtType)->setText(ndX->second->attr("Value"));			return 0;
+			case AId_DataType: req.setAttr("type", int2str(OpcUa_NodeId))->setText(int2str(atoi(dtType.c_str())&(~0x80)));	return 0;
+			case AId_ValueRank:
+			{
+			    string val = ndX->second->attr("ValueRank");
+			    req.setAttr("type", int2str(OpcUa_Int32))->setText(val.empty()?"-1":val);
+			    return 0;
+			}
+			case AId_ArrayDimensions:
+			{
+			    string val = ndX->second->attr("Value");
+			    int cnt = 0;
+			    if(atoi(dtType.c_str())&0x80)	//Array flag
+				for(int off = 0; strParse(val,0,"\n",&off).size(); cnt++) ;
+			    req.setAttr("type", int2str(0x80|OpcUa_Int32))->setText(int2str(cnt));
+			    return 0;
+			}
+			case AId_AccessLevel:
+			{
+			    string val = ndX->second->attr("AccessLevel");
+			    req.setAttr("type", int2str(OpcUa_Byte))->setText(val.empty()?int2str(ACS_Read):val);
+			    return 0;
+			}
+			case AId_UserAccessLevel:
+			{
+			    string val = ndX->second->attr("UserAccessLevel");
+			    req.setAttr("type", int2str(OpcUa_Byte))->setText(val.empty()?int2str(ACS_Read|ACS_Write):val);
+			    return 0;
+			}
+			case AId_MinimumSamplingInterval:
+			{
+			    string val = ndX->second->attr("MinimumSamplingInterval");
+			    req.setAttr("type", int2str(OpcUa_Double))->setText(val.empty()?"-1":val);
+			    return 0;
+			}
+			case AId_Historizing:
+			    req.setAttr("type", int2str(OpcUa_Boolean))->setText(ndX->second->attr("Historizing"));
+			    return 0;
+		    }
+		    return OpcUa_BadAttributeIdInvalid;
+		}
+	    }
+	    return OpcUa_BadAttributeIdInvalid;
+	}
+	case OpcUa_WriteRequest:
+	{
+	    NodeId nid = NodeId::fromAddr(req.attr("node"));
+	    map<string,XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
+	    if(ndX == ndMap.end()) return OpcUa_BadNodeIdUnknown;
+	    return OpcUa_BadNothingToDo;
+	}
+    }
+
+    return OpcUa_BadNodeIdUnknown;
 }
 
 //*************************************************

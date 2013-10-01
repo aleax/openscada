@@ -4090,11 +4090,11 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 
 	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
@@ -4110,10 +4110,10 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 
 	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
@@ -4159,6 +4159,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
 			shD->inclScrl->setFrameShape(QFrame::NoFrame);
+			//shD->inclScrl->setPalette(w->palette());
+			//shD->inclScrl->setBackgroundRole(QPalette::NoRole);
 			wlay->addWidget(shD->inclScrl);
 		    }
 
