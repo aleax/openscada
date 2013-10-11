@@ -109,6 +109,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //>>> What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
     actWhatIs->setToolTip(_("The button for question about GUI elements"));
     actWhatIs->setWhatsThis(_("Get respond about user interface elements"));
     actWhatIs->setStatusTip(_("Press to respond about user interface elements."));
@@ -1086,9 +1087,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     //QAction *cact = (QAction *)sender();
     string own_wdg = iOwn.empty() ? TSYS::strSepParse(work_wdg,0,';') : iOwn;
     string par_nm = cact->objectName().toAscii().data();
+    QMdiSubWindow *actSubW = work_space->activeSubWindow();
 
-    if(work_space->activeSubWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
-	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow()->widget())->widget())->edit())
+    if(actSubW && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
+	    !((DevelWdgView*)((QScrollArea*)actSubW->widget())->widget())->edit())
 	return;
 
     //> Count level
@@ -1097,7 +1099,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     string sid1 = TSYS::pathLev(own_wdg,0);
 
     //> Make request id and name dialog
-    InputDlg dlg(this,cact->icon(),
+    InputDlg dlg(this, cact->icon(),
 	    _("Enter new widget's/page's identifier and name."),_("Create widget/page"),true,true);
     dlg.setIdLen(30);
 
@@ -1178,9 +1180,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		if(!chNoWr)
 		{
             	    DevelWdgView *dw = work_space->findChild<DevelWdgView*>(own_wdg.c_str());
-            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path",new_wdg)->setAttr("id",w_id)->setAttr("name",w_nm)->setAttr("parent",par_nm)->
-            			setAttr("x",TSYS::real2str(pnt.x()))->setAttr("y",TSYS::real2str(pnt.y())));
+            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path",new_wdg)->setAttr("id",w_id)->setAttr("name",w_nm)->
+            		setAttr("parent",par_nm)->setAttr("x",TSYS::real2str(pnt.x()))->setAttr("y",TSYS::real2str(pnt.y())));
             	}
+		work_space->setActiveSubWindow(actSubW);	//For set focus to target subwindow and the new widget select
 	    }
 	    if(err) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    emit modifiedItem(new_wdg);

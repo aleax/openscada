@@ -90,6 +90,7 @@ class TSYS : public TCntrNode
 	    DBRowNoPresent,	//no present of requested row
 	    DBReadOnly		//read only db
 	};
+	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04 };
 
 	//Public methods
 	TSYS( int argi, char ** argb, char **env );
@@ -126,9 +127,9 @@ class TSYS : public TCntrNode
 	string	workDir( );
 	string	icoDir( )	{ return mIcoDir; }
 	string	modDir( )	{ return mModDir; }
-	void	setWorkDir( const string &wdir );
-	void	setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
-	void	setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
+	void	setWorkDir( const string &wdir, bool init = false );
+	void	setIcoDir( const string &idir, bool init = false );
+	void	setModDir( const string &mdir, bool init = false );
 
 	//> Config-file functions
 	string	cfgFile( )	{ return mConfFile; }
@@ -346,6 +347,7 @@ class TSYS : public TCntrNode
 	string	rootCfgFl;	// Root node's config-file name
 	time_t	rootFlTm;	// Root node's config-file's modify time
 	unsigned rootModifCnt;	// Root tree modify counter, used for save tree to file detect
+	unsigned sysModifFlgs;	// System fields modif flags
 
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id

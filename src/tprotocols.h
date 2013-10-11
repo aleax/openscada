@@ -48,8 +48,12 @@ class TProtocolIn : public TCntrNode
 
 	string	name( )		{ return mName.c_str(); }
 	const string &srcTr( )	{ return mSrcTr; }
+	int thrId( )		{ return mThrId; }
 
 	void setSrcTr( const string &vl )	{ mSrcTr = vl; }
+	void setThrId( int vl )			{ mThrId = vl; }
+
+	int writeTo( const string &data );
 
 	//> Process input messages
 	virtual bool mess( const string &request, string &answer, const string &sender )
@@ -64,6 +68,7 @@ class TProtocolIn : public TCntrNode
 	//Attributes
 	string	mName;
 	string	mSrcTr;
+	int	mThrId;		//Transport's thread id
 };
 
 //************************************************

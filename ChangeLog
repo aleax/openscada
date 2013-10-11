@@ -1,3 +1,21 @@
+2013-10-11 Roman
+- !:SYS.I18N.mk: To I18N messages obtaining rule "messages" and "I18N" addon 1 rule is added by "I18N_add1" for join different to C/C++
+    languages texts. New addon 1 is used for get messages from "openscada_start.in" start script and translation create for its.
+    "--no-location" option is removed from xgettext calls.
+- !:TSYS: Modification controled writing to the config file is added for prevent writing unmodified fields dependent from system environment.
+- !!:{TTransport,TProtocol}.In,Transport.Socket,DAQ.OPC_UA:
+    Experimental implementing for independ writing to sender of this input transport is added by function TTransportIn::writeTo().
+    Used for answers send into OPC_UA protocol.
+- DB: To functions TBDS::dataGet() and TBDS::dataSet() "forceCfg" flag is added for allow system data storing priority into config file.
+    For the system data set data bases connections table "DB".
+    Prevent writing to the config file empty fields for appropriate empty tags write.
+- Protocol.UserProtocol: To input transport's process procedure context is added attribute "tr" for input transport object represent.
+- UI.{QTCfg,Vision}: Bind key combination Shif+F1 for WhatThis calls.
+- UI.VCAEngine: Map areas limit for primitive "Media" is expanded to 100.
+- FIX:UI.Vision: Set focus to MDIArea window after a widget drop to the window. Some fix moving mouse pointer on widget-continer
+    resize from keyboard. Allow "MousePress" event forming at the primitive "Media" map area click, after self specific event forming.
+
+
 2013-10-01 Roman
 - SYS: The changelog to syntax some fix.
 - SYS: "StartupNotify=false" line is added to *.desktop files.

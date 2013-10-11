@@ -985,7 +985,7 @@ bool InspAttrDock::hasFocus( )
 
 void InspAttrDock::setWdg( const string &iwdg )
 {
-    if( !hasFocus( ) )	ainsp_w->setWdg(iwdg);
+    if(!hasFocus()) ainsp_w->setWdg(iwdg);
 }
 
 //****************************************
@@ -3176,7 +3176,7 @@ bool DevelWdgView::event( QEvent *event )
 	    case QEvent::Drop:
 	    {
 		QDropEvent *ev = static_cast<QDropEvent*>(event);
-		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
+		if(ev->mimeData()->hasFormat("application/OpenSCADA-libwdg"))
 		{
 		    QByteArray itemData = ev->mimeData()->data("application/OpenSCADA-libwdg");
 		    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
@@ -3441,13 +3441,13 @@ bool DevelWdgView::event( QEvent *event )
 			    if(!(QApplication::keyboardModifiers()&Qt::ControlModifier))	break;
 			    for(int i_c = children().size()-1; i_c >= 0; i_c--)
 				if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-				    ((DevelWdgView*)children().at(i_c))->setSelect(true,PrcChilds);
-			    setSelect(true,PrcChilds);
+				    ((DevelWdgView*)children().at(i_c))->setSelect(true, PrcChilds);
+			    setSelect(true, PrcChilds);
 			    break;
 			case Qt::Key_Left: case Qt::Key_Right: case Qt::Key_Up: case Qt::Key_Down:
 			{
 			    QPointF dP(0,0);
-			    switch( key->key() )
+			    switch(key->key())
 			    {
 				case Qt::Key_Left:	dP.setX(-1/xScale(true));	break;
 				case Qt::Key_Right:	dP.setX(1/xScale(true));	break;
@@ -3457,8 +3457,6 @@ bool DevelWdgView::event( QEvent *event )
 			    if(dP.isNull())	break;
 			    dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
 			    wdgsMoveResize(dP);
-			    if(cursor().shape() != Qt::ArrowCursor)
-				QCursor::setPos((QCursor::pos()+dP).toPoint());
 			    //> Save geometry
 			    bool isSel = false;
 			    for(int i_c = 0; i_c < children().size(); i_c++)
@@ -3475,6 +3473,7 @@ bool DevelWdgView::event( QEvent *event )
 				saveGeom(id());
 				if(fMakeScale) load("");
 			    }
+			    if(cursor().shape() != Qt::ArrowCursor) QCursor::setPos((QCursor::pos()+(dP/=(isSel?1:2))).toPoint());
 			    fMakeScale = false;
 			    return true;
 			}

@@ -109,6 +109,9 @@ TProtocolIn::~TProtocolIn()
 
 }
 
-
+int TProtocolIn::writeTo( const string &data )
+{
+    return SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().inAt(TSYS::strParse(srcTr(),1,".")).at().writeTo(thrId(), data);
+}
 
 TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }

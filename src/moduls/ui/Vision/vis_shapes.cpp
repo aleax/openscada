@@ -1695,7 +1695,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    string sev;
 	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
 	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
-	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }
+	        { sev = "ws_MapAct"+TSYS::int2str(i_a); break; }
 	    if(!sev.empty())
 	    {
 		switch(((QMouseEvent*)event)->button())
@@ -1705,8 +1705,8 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 		    case Qt::MidButton:		sev += "Midle";	break;
 		    default: return false;
 		}
-		w->attrSet("event",sev);
-		return true;
+		w->attrSet("event", sev);
+		//return true;	//For common Press event produce
 	    }
 	    break;
 	}

@@ -267,22 +267,22 @@ void TSocketIn::start()
 	    }
 	}
     }
-    else if( type == SOCK_UNIX )
+    else if(type == SOCK_UNIX)
     {
 	path	= TSYS::strSepParse(addr(),1,':');
-	mode	= atoi( TSYS::strSepParse(addr(),2,':').c_str() );
-	if( !path.size() ) path = "/tmp/oscada";
-	remove( path.c_str());
+	mode	= atoi(TSYS::strSepParse(addr(),2,':').c_str());
+	if(!path.size()) path = "/tmp/oscada";
+	remove(path.c_str());
 	struct sockaddr_un  name_un;
-	memset(&name_un,0,sizeof(name_un));
+	memset(&name_un, 0, sizeof(name_un));
 	name_un.sun_family = AF_UNIX;
-	strncpy( name_un.sun_path,path.c_str(),sizeof(name_un.sun_path) );
-	if( bind(sock_fd,(sockaddr *)&name_un,sizeof(name_un) ) == -1)
+	strncpy(name_un.sun_path, path.c_str(), sizeof(name_un.sun_path));
+	if(bind(sock_fd,(sockaddr*)&name_un,sizeof(name_un)) == -1)
 	{
-	    close( sock_fd );
+	    close(sock_fd);
 	    throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to '%s'!"),addr().c_str());
 	}
-	listen(sock_fd,maxQueue());
+	listen(sock_fd, maxQueue());
     }
 
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
@@ -290,7 +290,7 @@ void TSocketIn::start()
 
 void TSocketIn::stop()
 {
-    if( !run_st ) return;
+    if(!run_st) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -298,9 +298,46 @@ void TSocketIn::stop()
 
     SYS->taskDestroy(nodePath('.',true), &endrun);
 
-    shutdown(sock_fd,SHUT_RDWR);
+    shutdown(sock_fd, SHUT_RDWR);
     close(sock_fd);
     if(type == SOCK_UNIX) remove(path.c_str());
+}
+
+int TSocketIn::writeTo( int thrId, const string &data )
+{
+    fd_set		rw_fd;
+    struct timeval	tv;
+
+    switch(type)
+    {
+	case SOCK_TCP: case SOCK_UNIX:
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Socket write message '%d'."), data.size());
+	    ssize_t wL = 1;
+	    unsigned wOff = 0;
+	    for( ; wOff != data.size() && wL > 0; wOff += wL)
+	    {
+		wL = write(thrId, data.data()+wOff, data.size()-wOff);
+		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
+		else if(wL < 0)
+		{
+		    if(errno == EAGAIN)
+            	    {
+                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
+                	FD_ZERO(&rw_fd); FD_SET(thrId, &rw_fd);
+                	int kz = select(thrId+1, NULL, &rw_fd, NULL, &tv);
+                	if(kz > 0 && FD_ISSET(thrId,&rw_fd)) { wL = 0; continue; }
+            	    }
+            	    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+		    break;
+		}
+		sock_res.resRequestW();
+		trOut += vmax(0,wL);
+		sock_res.resRelease();
+	    }
+	    return wOff;
+    }
+
+    return 0;
 }
 
 void *TSocketIn::Task( void *sock_in )
@@ -390,7 +427,7 @@ void *TSocketIn::Task( void *sock_in )
 	{
 	    string req, answ;
 
-	    ssize_t r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
+	    ssize_t r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0, (sockaddr*)&name_cl, &name_cl_len);
 	    if(r_len <= 0) continue;
 	    sock->trIn += r_len;
 	    req.assign(buf, r_len);
@@ -398,7 +435,7 @@ void *TSocketIn::Task( void *sock_in )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(sock->nodePath().c_str(), _("Socket received datagram '%d' from '%s'!"), r_len, inet_ntoa(name_cl.sin_addr));
 
-	    sock->messPut(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr),prot_in);
+	    sock->messPut(sock->sock_fd, req, answ, inet_ntoa(name_cl.sin_addr), prot_in);
 	    if(!prot_in.freeStat()) continue;
 
 	    if(mess_lev() == TMess::Debug)
@@ -526,6 +563,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	{
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, workId());
 	    prot_in = proto.at().at(n_pr);
+	    prot_in.at().setThrId(sock);
 	}
 	if(prot_in.at().mess(request,answer,sender)) return;
 	prot_in.free();
@@ -720,7 +758,7 @@ void TSocketOut::start()
 	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
 		throw TError(nodePath().c_str(),_("Socket name '%s' error!"),host.c_str());
-	    name_in.sin_addr.s_addr = *( (int *) (loc_host_nm->h_addr_list[0]) );
+	    name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;
 	//> Get system port for "oscada" /etc/services

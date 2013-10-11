@@ -310,6 +310,7 @@ ConfApp::ConfApp( string open_user ) :
     //>> What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
     actWhatIs->setToolTip(_("Question about GUI elements"));
     actWhatIs->setWhatsThis(_("The button for requesting the information about user interface elements"));
     actWhatIs->setStatusTip(_("Press for requesting about user interface elements"));

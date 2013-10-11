@@ -241,8 +241,9 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     return false;
 }
 
-bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
+bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg )
 {
+    bool db_true = false;
     string bdn = realDBName(ibdn);
 
     //> Load from DB
@@ -251,14 +252,14 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat())
 	{
-	    bool db_true = true;
+	    db_true = true;
 	    try{ tbl.at().fieldGet(cfg); }
 	    catch(TError err)
 	    {
 		if(err.cod != TSYS::DBRowNoPresent) mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		db_true = false;
 	    }
-	    if(db_true) return true;
+	    if(db_true && !forceCfg) return true;
 	}
     }
 
@@ -305,16 +306,16 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 	    }
 	}
     }
-    //throw TError(nodePath().c_str(),"Field '%s' no present.",path.c_str());
-    return false;
+
+    return db_true;
 }
 
-bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
+bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg )
 {
     string bdn = realDBName(ibdn);
 
     //> Save to DB
-    if(bdn.size() && TSYS::strParse(bdn,0,".") != "<cfg>")
+    if(!forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != "<cfg>")
     {
 	AutoHD<TTable> tbl = open(bdn,true);
 	if(!tbl.freeStat())
@@ -327,7 +328,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
     }
 
     //> Save to config
-    if(TSYS::strParse(bdn,0,".") == "<cfg>")
+    if(forceCfg || TSYS::strParse(bdn,0,".") == "<cfg>")
     {
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *nd, *wel = NULL, *fnd;
@@ -462,7 +463,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
     return db_true;
 }
 
-void TBDS::genDBSet(const string &path, const string &val, const string &user, char rFlg )
+void TBDS::genDBSet( const string &path, const string &val, const string &user, char rFlg )
 {
     bool bd_ok = false;
 
@@ -470,8 +471,8 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg))
     {
 	AutoHD<TBDS> dbs = SYS->db();
-	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(),true);
-	if( !tbl.freeStat() )
+	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(), true);
+	if(!tbl.freeStat())
 	{
 	    TConfig db_el(&dbs.at());
 	    db_el.setNoTransl( !(rFlg&TBDS::UseTranslate) );
@@ -491,16 +492,17 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     //> Set to config
     if(!bd_ok && (SYS->workDB() == "<cfg>" || rFlg&TBDS::OnlyCfg))
     {
-	ResAlloc res(SYS->nodeRes(),true);
+	if(genDBGet(path,"",user,(rFlg|OnlyCfg)) == val) return;
+	ResAlloc res(SYS->nodeRes(), true);
 	XMLNode *tgtN = NULL;
-	if(rFlg&TBDS::UseTranslate && Mess->lang2Code().size())
+	if((rFlg&TBDS::UseTranslate) && Mess->lang2Code().size())
 	    tgtN = SYS->cfgNode(SYS->id()+"/"+path+"_"+Mess->lang2Code(), true);
 	if(!tgtN) tgtN = SYS->cfgNode(SYS->id()+"/"+path, true);
 	if(tgtN) { tgtN->setText(val,true); SYS->modifCfg(); }
     }
 }
 
-string TBDS::genDBGet(const string &path, const string &oval, const string &user, char rFlg )
+string TBDS::genDBGet( const string &path, const string &oval, const string &user, char rFlg )
 {
     bool bd_ok = false;
     string rez = oval;
@@ -735,8 +737,7 @@ void TBD::postDisable(int flag)
 {
     try
     {
-	if( flag )
-	    SYS->db().at().dataDel(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this,true);
+	if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -775,14 +776,14 @@ void TBD::open( const string &table, bool create )
 
 void TBD::load_( )
 {
-    if( !SYS->chkSelDB(SYS->workDB()) ) return;
-    SYS->db().at().dataGet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
-    if( !enableStat() && toEnable() )	enable();
+    if(!SYS->chkSelDB(SYS->workDB()))	return;
+    SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+    if(!enableStat() && toEnable())	enable();
 }
 
 void TBD::save_( )
 {
-    SYS->db().at().dataSet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
+    SYS->db().at().dataSet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
 }
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

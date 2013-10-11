@@ -669,7 +669,8 @@ class Server: public UA
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
-	virtual bool inReq( string &request, string &answer, const string &sender );
+	virtual bool inReq( string &request, string &answer, const string &sender, const string &threadId );
+	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
 	//> Channel manipulation functions
 	int chnlOpen( const string &iEp, int32_t lifeTm = 0, const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
