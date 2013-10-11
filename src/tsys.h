@@ -90,7 +90,6 @@ class TSYS : public TCntrNode
 	    DBRowNoPresent,	//no present of requested row
 	    DBReadOnly		//read only db
 	};
-	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04 };
 
 	//Public methods
 	TSYS( int argi, char ** argb, char **env );
@@ -290,6 +289,8 @@ class TSYS : public TCntrNode
 
     private:
 	//Data
+	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04 };
+
 	class STask
 	{
 	    public:

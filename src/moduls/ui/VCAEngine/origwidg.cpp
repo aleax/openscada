@@ -490,8 +490,9 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     {
 	Widget::cntrCmdAttributes(opt, src);
 	XMLNode *root, *el;
+	int elTp = 0;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
-	    switch(src->attrAt("elType").at().getI())
+	    switch((elTp=src->attrAt("elType").at().getI()))
 	    {
 		case F_LINE_ED:
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
@@ -583,7 +584,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			}
 		    break;
 		case F_COMBO: case F_LIST: case F_TREE:
-		    if((el=ctrId(root,"/items",true))) el->setAttr("help",_("List of items-values by lines."));
+		    if((el=ctrId(root,"/items",true)))	el->setAttr("help",
+			(elTp==F_TREE)?_("List of hierarchical items in path \"/{DIR}/{DIR}/{ITEM}\" by lines."):_("List of items-values by lines."));
 		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 		case F_SLIDER: case F_SCROLL_BAR:
