@@ -53,7 +53,7 @@ TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX),
 TCntrNode::~TCntrNode()
 {
     nodeDelAll();
-    if( chGrp ) delete chGrp;
+    if(chGrp) delete chGrp;
 }
 
 TCntrNode &TCntrNode::operator=( TCntrNode &node )
@@ -63,11 +63,11 @@ TCntrNode &TCntrNode::operator=( TCntrNode &node )
 
 void TCntrNode::nodeDelAll( )
 {
-    if( nodeMode() != Disable )     nodeDis( );
+    if(nodeMode() != Disable)	nodeDis();
 
     TMap::iterator p;
-    for( unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++ )
-	while( (p = (*chGrp)[i_g].elem.begin()) != (*chGrp)[i_g].elem.end() )
+    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
+	while((p = (*chGrp)[i_g].elem.begin()) != (*chGrp)[i_g].elem.end())
 	{
 	    delete p->second;
 	    (*chGrp)[i_g].elem.erase(p);
@@ -306,7 +306,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
     if( i_b < 0 ) throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
 
     //> Connect or create new destination node
-    if( !dst_n.at().chldPresent( i_b, d_el ) )
+    if(!dst_n.at().chldPresent(i_b,d_el))
     {
 	br_req.clear()->setName("add")->setAttr("user",user)->setAttr("path","/%2fbr%2f"+n_grp);
 	if( idm ) br_req.setAttr("id",d_el);
@@ -325,12 +325,27 @@ unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
 
     unsigned g_id;
     for(g_id = 0; g_id < chGrp->size(); g_id++)
-	if((*chGrp)[g_id].id == iid) break;
+	if((*chGrp)[g_id].id == "<free>" || (*chGrp)[g_id].id == iid) break;
     if(g_id == chGrp->size())	chGrp->push_back(GrpEl());
     (*chGrp)[g_id].id = iid;
     (*chGrp)[g_id].ordered = iordered;
 
     return g_id;
+}
+
+void TCntrNode::grpDel( int8_t id )
+{
+    if(!chGrp || id < 0 || id >= chGrp->size())	return;
+
+    //> Clear childs
+    TMap::iterator p;
+    while((p = (*chGrp)[id].elem.begin()) != (*chGrp)[id].elem.end())
+    {
+	delete p->second;
+	(*chGrp)[id].elem.erase(p);
+    }
+    //> Mark for free
+    (*chGrp)[id].id = "<free>";
 }
 
 int8_t TCntrNode::grpSize( )	{ return chGrp ? chGrp->size() : 0; }
@@ -814,9 +829,9 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	//>> Get node modify flag
 	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	//>> Do load node
-	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR))	load( );
+	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR))	load(atoi(opt->attr("force").c_str()));
 	//>> Do save node
-	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR))	save( );
+	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR))	{ if(atoi(opt->attr("force").c_str())) modifG(); save(); }
 	//>> Do copy node
 	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));

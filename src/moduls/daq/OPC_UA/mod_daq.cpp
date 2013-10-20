@@ -101,7 +101,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")),
     mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")), mPAttrLim(cfg("AttrsLimit").getId()),
-    prc_st(false), call_st(false), endrun_req(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
+    prcSt(false), callSt(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -134,7 +134,7 @@ string TMdContr::getStatus( )
 	}
 	else
 	{
-	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), TSYS::time2str(1e-3*period()).c_str());
 	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), TSYS::time2str(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), TSYS::time2str(tm_gath).c_str(),-tmDelay);
@@ -194,13 +194,13 @@ void TMdContr::start_( )
     tmDelay = 0;
 
     //> Start the gathering data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
+    if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
-    SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    SYS->taskDestroy(nodePath('.',true));
 }
 
 void TMdContr::protIO( XML_N &io )
@@ -241,21 +241,20 @@ void *TMdContr::Task( void *icntr )
     string		nId;
     TMdContr &cntr = *(TMdContr *)icntr;
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.prcSt = true;
     bool firstCall = true;
 
     XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
 
     try
     {
-	for(unsigned int it_cnt = cntr.p_hd.size(); !cntr.endrun_req; it_cnt++)
+	for(unsigned int it_cnt = cntr.p_hd.size(); !TSYS::taskEndRun(); it_cnt++)
 	{
 	    if(cntr.redntUse())	{ TSYS::sysSleep(1); continue; }
 	    if(cntr.tmDelay > 0){ TSYS::sysSleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
 
 	    int64_t t_cnt = TSYS::curTime();
-	    cntr.call_st = true;
+	    cntr.callSt = true;
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
 
 	    ResAlloc res(cntr.en_res, false);
@@ -316,14 +315,14 @@ void *TMdContr::Task( void *icntr )
 
 	    firstCall = false;
 	    cntr.tm_gath = TSYS::curTime()-t_cnt;
-	    cntr.call_st = false;
+	    cntr.callSt = false;
 
 	    TSYS::taskSleep(cntr.period(), cntr.period() ? 0 : TSYS::cron(cntr.cron()));
 	}
     }
     catch(TError err){ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttipdaq.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -63,7 +63,7 @@ class TTipDAQ : public TModule, public TElem
 	//> Parameter types (DB structure)
 	bool tpPrmPresent( const string &name_t );
 	int tpPrmToId( const string &name_t );
-	int tpParmAdd( const char *id, const char *n_db, const char *name );
+	int tpParmAdd( const char *id, const char *n_db, const char *name, bool isPrmCntr = false );
 	int tpParmAdd( TTipParam *tp );
 	unsigned tpPrmSize( )			{ return( paramt.size()); }
 	TTipParam &tpPrmAt( unsigned id );

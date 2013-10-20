@@ -166,9 +166,8 @@ class TMdContr: public TController, public Client
 	int	&mPAttrLim;	//Parameter attributes number limit
 	int64_t	mPer;
 
-	bool	prc_st,		//Process task active
-		call_st,        //Calc now stat
-		endrun_req,	//Request to stop of the Process task
+	bool	prcSt,		//Process task active
+		callSt,		//Calc now stat
 		mPCfgCh;	//Parameter's configuration is changed
 
 	AutoHD<TTransportOut>	tr;

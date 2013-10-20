@@ -1,0 +1,97 @@
+# OpenSCADA.DAQ.MMS translate to Russian.
+# This file is distributed under the same license as the OpenSCADA.DAQ.MMS package module.
+#
+# Roman Savochenko <rom_as@oscada.org>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenSCADA.DAQ.MMS 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-20 15:55+0300\n"
+"PO-Revision-Date: 2013-10-20 11:50+0300\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
+"Language-Team: <ru@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: module.cpp:38
+msgid "MMS(IEC-9506), IEC-61850"
+msgstr "MMS(IEC-9506), IEC-61850"
+
+#: module.cpp:42
+msgid "Roman Savochenko"
+msgstr "Роман Савоченко"
+
+#: module.cpp:43
+msgid "MMS(IEC-9506) and based IEC-61850 devices access, by libiec61850."
+msgstr "Доступ к устройствам MMS(IEC-9506) и основанным IEC-61850, посредством libiec61850."
+
+#: module.cpp:93
+msgid "Parameteres table"
+msgstr "Таблица параметров"
+
+#: module.cpp:94
+msgid "Acquisition schedule"
+msgstr "Планирование опроса"
+
+#: module.cpp:95
+msgid "Gather task priority"
+msgstr "Уровень приоритета задачи сбора данных"
+
+#: module.cpp:96
+msgid "Sync inter remote station period (s)"
+msgstr "Период синхронизации с удалённой станцией (сек)"
+
+#: module.cpp:97
+msgid "Server address"
+msgstr "Адрес сервера"
+
+#: module.cpp:100
+msgid "Standard"
+msgstr "Стандарт"
+
+#: module.cpp:101
+msgid "Variables list (next line separated)"
+msgstr "Перечень переменных (разделение след. строкой)"
+
+#: module.cpp:154
+#, c-format
+msgid "Connection error. Restoring in %.6g s."
+msgstr "Ошибка подключения. Восстановление через %.6g с."
+
+#: module.cpp:159
+msgid "Call now. "
+msgstr "Вызов сейчас. "
+
+#: module.cpp:160
+#, c-format
+msgid "Call by period: %s. "
+msgstr "Вызовы с периодом: %s. "
+
+#: module.cpp:161
+#, c-format
+msgid "Call next by cron '%s'. "
+msgstr "Следующий вызов по cron '%s'. "
+
+#: module.cpp:162
+#, c-format
+msgid "Spent time: %s. Requests %.6g."
+msgstr "Затрачено времени: %s. Запросов %.6g."
+
+#: module.cpp:217
+msgid "Connect to server failed!"
+msgstr "Ошибка подключения к серверу!"
+
+#: module.cpp:313
+#, c-format
+msgid "Value type read %d is not implemented."
+msgstr "Чтение значения типа %d не реализовано."
+
+#: module.cpp:450
+msgid "Value type %d is not implemented for '%s'."
+msgstr "Значения типа %d не реализовано для '%s'."
+
+#: module.cpp:493
+msgid "Append variable"
+msgstr "Добавить переменную"

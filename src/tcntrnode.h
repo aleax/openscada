@@ -210,6 +210,7 @@ class TCntrNode
 	int8_t	grpId( const string &sid );
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
+	void	grpDel( int8_t id );
 
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }

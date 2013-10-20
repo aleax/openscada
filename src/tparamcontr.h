@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tparamcontr.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -48,6 +48,7 @@ class TParamContr : public TConfig, public TValue
 	string objName( );
 
 	string DAQPath( );
+	string ownerPath( bool inclSelf = false );	//Owner parameter path
 
 	TCntrNode &operator=( TCntrNode &node );
 
@@ -55,22 +56,28 @@ class TParamContr : public TConfig, public TValue
 	string	name( );
 	string	descr( );
 	bool toEnable( )	{ return cfg("EN").getB(); }
-	bool enableStat( )	{ return m_en; }
+	bool enableStat( )	{ return mEn; }
 	bool dataActive( );
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
-	void setToEnable( bool vl )		{ cfg("EN").setB(vl); modif(); }
+	void setToEnable( bool vl )		{ cfg("EN").setB(vl); }
+
+	//> Included parameters
+        void list( vector<string> &list );
+        bool present( const string &name );
+        void add( const string &name, unsigned type = 0 );
+        void del( const string &name, bool full = false );
+        AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
 
 	TTipParam &type( )	{ return *tipparm; }
 
 	virtual void enable( );			// Enable parameter and open access to value
 	virtual void disable( );		// Disable parameter and close access to value
 
-	bool operator==( TParamContr & PrmCntr )
-	{ if( id() == PrmCntr.id() ) return true; return false; };
+	bool operator==( TParamContr &PrmCntr )	{ return (id() == PrmCntr.id()); }
 
-	TParamContr &operator=( TParamContr & PrmCntr );
+	TParamContr &operator=( TParamContr &PrmCntr );
 
 	TController &owner( );
 
@@ -83,6 +90,8 @@ class TParamContr : public TConfig, public TValue
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
+
+	virtual TParamContr *ParamAttach( const string &name, int type );
 
 	bool cfgChange( TCfg &cfg );
 
@@ -98,8 +107,11 @@ class TParamContr : public TConfig, public TValue
 	//Methods
 	const char *nodeName( )	{ return mId.c_str(); }
 
+	void LoadParmCfg( );
+
 	//Attributes
-	bool	m_en;
+	char	mPrm;		//Included parameters group identifier
+	bool	mEn;
 	string	mId;
 	TElem	el_err;		//Error atributes
 

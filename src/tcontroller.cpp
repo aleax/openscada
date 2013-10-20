@@ -197,7 +197,7 @@ void TController::start( )
 
 void TController::stop( )
 {
-    if( !run_st ) return;
+    if(!run_st)	return;
 
     mess_info(nodePath().c_str(),_("Stop controller!"));
 
@@ -278,6 +278,7 @@ void TController::LoadParmCfg( )
 	{
 	    TConfig c_el(&owner().tpPrmAt(i_tp));
 	    c_el.cfgViewAll(false);
+	    c_el.cfg("OWNER").setS("", TCfg::ForceUse);
 
 	    //>>> Search new into DB and Config-file
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),

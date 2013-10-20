@@ -134,7 +134,7 @@ class TController : public TCntrNode, public TConfig
 	//Private methods
 	const char *nodeName( )	{ return mId.getSd(); }
 
-	void LoadParmCfg(  );
+	void LoadParmCfg( );
 
 	//Private attributes
 	TCfg	&mId, &mMessLev;

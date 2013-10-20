@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttiparam.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2013 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,7 @@ class TTipParam : public TElem
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb );
+	TTipParam( const char *iid, const char *iname, const char *idb, bool i_isPrmCntr = false );
 
 	virtual void enable( TParamContr *prm )			{ }
 	virtual void disable( TParamContr *prm )		{ }
@@ -56,9 +56,10 @@ class TTipParam : public TElem
 	virtual bool cntrCmdProc( TParamContr *prm, XMLNode *opt )	{ return false; }
 
 	//Attributes
-	string name;
-	string descr;
-	string db;
+	string	name;
+	string	descr;
+	string	db;
+	bool	isPrmCntr;	//The parameter type also container for other parameters
 };
 
 }

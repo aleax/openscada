@@ -1,3 +1,13 @@
+2013-10-20 Roman
+- !!!!:DAQ: New module "MMS" for support MMS(IEC-9506) and IEC-61850 devices protocol as added. It is initial implementation by libiec61850.
+- TCntrNode: function grpDel() is added for groups full control.
+    The attribute "force" is added to node control interface's commands "load" and "save".
+- !!!:DAQ: Parameters including to other parameter initial support is added and enabled for new module "MMS".
+    Subsystem DAQ modules version is rose to 7.
+- DAQ, DAQ.JavaLikeCalc: "Null" value set to return false for cast to Boolean. For no present object return set Null.
+- DAQ.OPC_UA: Some variables is renamed and TSYS::taskEndRun() used for a task end command detect.
+
+
 2013-10-11 Roman
 - !:SYS.I18N.mk: To I18N messages obtaining rule "messages" and "I18N" addon 1 rule is added by "I18N_add1" for join different to C/C++
     languages texts. New addon 1 is used for get messages from "openscada_start.in" start script and translation create for its.
