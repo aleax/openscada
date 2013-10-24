@@ -71,7 +71,6 @@ class TMdPrm : public TParamContr
 
     protected:
 	//Methods
-	TParamContr *ParamAttach( const string &name, int type );
 	void load_( );
 	void save_( );
 

@@ -1525,7 +1525,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, io(atoi(a_path.substr(8).c_str()))->rez());
+    else if(a_path.substr(0,8) == "/lnk/ls_" && ctrChkNode(opt))
+	SYS->daq().at().ctrListPrmAttr(opt, io(atoi(a_path.substr(8).c_str()))->rez(), false, '.');
     else if(a_path.substr(0,8) == "/lnk/el_")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))

@@ -178,6 +178,8 @@ class TCntrNode
 	virtual TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	//> Childs
+	int8_t	grpSize( );
+	int8_t	grpId( const string &sid );
 	virtual AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
 	void chldList( int8_t igr, vector<string> &list, bool noex = false );
 	bool chldPresent( int8_t igr, const string &name );
@@ -201,16 +203,12 @@ class TCntrNode
 	void setNodePrev( TCntrNode *node )	{ prev.node = node; }
 	void setNodeMode( char mode );
 
-	//> Childs
-	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
-	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
-
-	//> Conteiners
-	int8_t	grpSize( );
-	int8_t	grpId( const string &sid );
+	//> Childs and containers
 	GrpEl	&grpAt( int8_t id );
 	unsigned grpAdd( const string &id, bool ordered = false );
 	void	grpDel( int8_t id );
+	virtual void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
+	void chldDel( int8_t igr, const string &name, long tm = -1, int flag = 0, bool shDel = false );
 
 	virtual void preEnable( int flag )	{ }
 	virtual void postEnable( int flag )	{ }

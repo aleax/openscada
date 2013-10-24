@@ -1458,7 +1458,12 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
             try
             {
-                if(obj_tp == "prm:")	SYS->daq().at().ctrListPrmAttr(opt, m_prm.substr(4), is_pl, 0, "prm:");
+                if(obj_tp == "prm:")
+                {
+		    m_prm = m_prm.substr(4);
+                    if(is_pl && !SYS->daq().at().attrAt(m_prm,0,true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("/"));
+                    SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, 0, "prm:");
+		}
                 else if(obj_tp == "wdg:")
                 {
         	    opt->childAdd("el")->setText(c_path);

@@ -62,7 +62,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
     elVal.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
     elVal.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
-    elVal.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"50") );
+    elVal.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"100") );
     elVal.fldAdd( new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000") );
     elVal.fldAdd( new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000") );
 

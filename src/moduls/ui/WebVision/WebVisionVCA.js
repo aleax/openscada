@@ -662,8 +662,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    var toInit = !this.place.childNodes.length;
 	    var figObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
-	    if(toInit || this.attrsMdf["geomW"]) figObj.width = geomW;
-	    if(toInit || this.attrsMdf["geomH"]) figObj.height = geomH;
+	    figObj.width = geomW; figObj.height = geomH;
 	    //>> Src update always therefore for any changes is shape update
 	    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
@@ -756,6 +755,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.place.appendChild(iPg.place);
 		    }
 		}
+		elStyle += "overflow: scroll; ";
 	    }
 	    this.place.wdgLnk = this;
 	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };

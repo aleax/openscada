@@ -366,11 +366,16 @@ TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
 
 void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
 {
+    list.clear();
+
     ResAlloc res(hd_res, false);
-    if(!chGrp || igr >= (int)chGrp->size()) { if(noex) return; else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr); }
+    if(!chGrp || igr < 0 || igr >= (int)chGrp->size())
+    {
+	if(noex) return;
+	else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
+    }
     if(nodeMode() == Disable) { if(noex) return; else throw TError(nodePath().c_str(),"Node is disabled!"); }
 
-    list.clear();
     list.reserve((*chGrp)[igr].elem.size());
     if(!(*chGrp)[igr].ordered)
     {

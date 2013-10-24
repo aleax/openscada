@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2013 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -345,31 +345,31 @@ TCntrNode &TMdPrm::operator=( TCntrNode &node )
     return *this;
 }
 
-bool TMdPrm::isStd( )	{ return type().name == "std"; }
+bool TMdPrm::isStd( )	{ return (type().name == "std"); }
 
-bool TMdPrm::isPRefl( )	{ return type().name == "pRefl"; }
+bool TMdPrm::isPRefl( )	{ return (type().name == "pRefl"); }
 
 void TMdPrm::postEnable( int flag )
 {
-    TParamContr::postEnable( flag );
+    TParamContr::postEnable(flag);
     if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
 }
 
-void TMdPrm::postDisable(int flag)
+void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
     try
     {
-	if( flag )
+	if(flag)
 	{
 	    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
 	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(id(),true);
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
+	    cfg.cfg("PRM_ID").setS(id(), true);
+	    SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io", cfg);
 	}
-    }catch(TError err)
-    { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdPrm::setType( const string &tpId )
@@ -387,7 +387,7 @@ void TMdPrm::setType( const string &tpId )
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
@@ -588,16 +588,8 @@ void TMdPrm::initTmplLnks( bool checkNoLink )
 	try
 	{
 	    lnk(i_l).aprm.free();
-
-	    off = 0;
-	    nmod = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
-	    ncntr = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
-	    nprm = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
-	    nattr = TSYS::strParse(lnk(i_l).prm_attr,0,".",&off);
-	    if(nmod.empty() || ncntr.empty() || nprm.empty() || nattr.empty()) continue;
-
-	    lnk(i_l).aprm = SYS->daq().at().at(nmod).at().at(ncntr).at().at(nprm).at().vlAt(nattr);
-	    tmpl->val.setS(lnk(i_l).io_id,lnk(i_l).aprm.at().getS());
+	    lnk(i_l).aprm = SYS->daq().at().attrAt(lnk(i_l).prm_attr, '.', true);
+	    if(!lnk(i_l).aprm.freeStat()) tmpl->val.setS(lnk(i_l).io_id, lnk(i_l).aprm.at().getS());
 	}catch(TError err){ chk_lnk_need = true; }
     }
 }
@@ -867,38 +859,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		cfg("PRM").setS(opt->text());
 	    } catch(...){ disable(); throw; }
     }
-    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt))
-    {
-	int c_lv = 0;
-	string c_path = "", c_el;
-	opt->childAdd("el")->setText(c_path);
-	string prmValm = cfg("PSRC").getS();
-	for(int c_off = 0; (c_el=TSYS::strSepParse(prmValm,0,'.',&c_off)).size(); c_lv++)
-	{
-	    c_path += c_lv ? "."+c_el : c_el;
-	    opt->childAdd("el")->setText(c_path);
-	}
-	if(c_lv) c_path += ".";
-	string prm0 = TSYS::strSepParse(prmValm, 0, '.');
-	string prm1 = TSYS::strSepParse(prmValm, 1, '.');
-	vector<string>  ls;
-	switch(c_lv)
-	{
-	    case 0:
-		SYS->daq().at().modList(ls);
-		break;
-	    case 1:
-		if(SYS->daq().at().modPresent(prm0))
-		    SYS->daq().at().at(prm0).at().list(ls);
-		break;
-	    case 2:
-		if(SYS->daq().at().modPresent(prm0) && SYS->daq().at().at(prm0).at().present(prm1))
-		    SYS->daq().at().at(prm0).at().at(prm1).at().list(ls);
-		break;
-	}
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	    opt->childAdd("el")->setText(c_path+ls[i_l]);
-    }
+    else if(a_path == "/prm/cfg/prmp_lst" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, cfg("PSRC").getS(), true, '.');
     else if(isStd() && a_path == "/cfg/attr_only")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(mod->nodePath()+"onlAttr","0",opt->attr("user")));
@@ -909,12 +870,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    string lnk_val = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
-	    int c_lvl = 0;
-	    for(int c_off = 0; TSYS::strSepParse(lnk_val,0,'.',&c_off).size(); c_lvl++);
-	    if(c_lvl == 4)
+	    if(!SYS->daq().at().attrAt(lnk_val,'.',true).freeStat())
 	    {
 		opt->setText(lnk_val.substr(0,lnk_val.rfind(".")));
-		if(!SYS->daq().at().prmAt(opt->text(),'.',true).freeStat()) opt->setText(opt->text()+" (+)");
+		opt->setText(opt->text()+" (+)");
 	    }
 	    else opt->setText(lnk_val);
 	}
@@ -924,19 +883,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
-	    int c_lvl = 0;
-	    for(int c_off = 0; TSYS::strSepParse(p_vl,0,'.',&c_off).size(); c_lvl++);
-	    AutoHD<TValue> prm;
-	    if(c_lvl == 3)
-	    {
-		if(TSYS::strSepParse(p_vl,0,'.') == owner().owner().modId() &&
-			TSYS::strSepParse(p_vl,1,'.') == owner().id() &&
-			TSYS::strSepParse(p_vl,2,'.') == id())
-		    throw TError(nodePath().c_str(),_("Self to self linking error."));
-		prm = SYS->daq().at().at(TSYS::strSepParse(p_vl,0,'.')).at().
-				      at(TSYS::strSepParse(p_vl,1,'.')).at().
-				      at(TSYS::strSepParse(p_vl,2,'.'));
-	    }
+	    if(p_vl == DAQPath()) throw TError(nodePath().c_str(),_("Self to self linking error."));
+	    AutoHD<TValue> prm = SYS->daq().at().prmAt(p_vl, '.', true);
+
 	    for(int i_l = 0; i_l < lnkSize(); i_l++)
 		if(p_nm == TSYS::strSepParse(tmpl->val.func()->io(lnk(i_l).io_id)->def(),0,'|'))
 		{
@@ -953,16 +902,21 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			else no_set += p_attr+",";
 		    }
 		}
-	    if(!prm.freeStat())
+	    /*if(!prm.freeStat())
 	    {
 		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Parameter has no one attribute!"));
 		else if(no_set.size())	throw TError(nodePath().c_str(),_("Parameter has not attributes: %s !"),no_set.c_str());
-	    }
+	    }*/
 	    initTmplLnks();
 	}
     }
     else if(isStd() && (a_path.compare(0,12,"/cfg/prm/pl_") == 0 || a_path.compare(0,12,"/cfg/prm/ls_") == 0) && ctrChkNode(opt))
-	SYS->daq().at().ctrListPrmAttr(opt, lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr, a_path.compare(0,12,"/cfg/prm/pl_")==0);
+    {
+	bool is_pl = (a_path.compare(0,12,"/cfg/prm/pl_") == 0);
+	string m_prm = lnk(lnkId(atoi(a_path.substr(12).c_str()))).prm_attr;
+	if(is_pl && !SYS->daq().at().attrAt(m_prm,'.',true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("."));
+	SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, '.');
+    }
     else if(isStd() && a_path.substr(0,12) == "/cfg/prm/el_")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))

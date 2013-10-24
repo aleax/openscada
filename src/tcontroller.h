@@ -40,6 +40,8 @@ class TTipDAQ;
 
 class TController : public TCntrNode, public TConfig
 {
+    friend class TParamContr;
+
     public:
 	//Public Data
 	enum Redundant

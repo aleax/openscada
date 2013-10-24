@@ -206,21 +206,22 @@ void TMess::setSelDebCats( const string &vl )
     SYS->modif();
 }
 
-void TMess::setLang( const string &lng )
+void TMess::setLang( const string &lng, bool init )
 {
     char *prvLng = NULL;
-    if((prvLng=getenv("LANGUAGE")) && strlen(prvLng) ) setenv( "LANGUAGE", lng.c_str(), 1);
+    if((prvLng=getenv("LANGUAGE")) && strlen(prvLng)) setenv("LANGUAGE", lng.c_str(), 1);
     else setenv("LC_MESSAGES", lng.c_str(), 1);
     setlocale(LC_ALL, "");
 
     IOCharSet = nl_langinfo(CODESET);
 
     mLang2Code = lang();
-    if( mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C" ) mLang2Code = "en";
-    else mLang2Code = mLang2Code.substr(0,2);
+    if(mLang2Code.size() < 2 || mLang2Code == "POSIX" || mLang2Code == "C") mLang2Code = "en";
+    else mLang2Code = mLang2Code.substr(0, 2);
     mIsUTF8 = (IOCharSet == "UTF-8" || IOCharSet == "UTF8" || IOCharSet == "utf8");
 
-    SYS->modif();
+    if(init) SYS->sysModifFlgs &= ~TSYS::MDF_LANG;
+    else { SYS->sysModifFlgs |= TSYS::MDF_LANG; SYS->modif(); }
 }
 
 string TMess::codeConv( const string &fromCH, const string &toCH, const string &mess )
@@ -307,7 +308,7 @@ void TMess::load( )
     setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));
     setSelDebCats(TBDS::genDBGet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg));
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg).c_str()));
-    setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg));
+    setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
 }
 
@@ -316,7 +317,7 @@ void TMess::save()
     TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
+    if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
 }
 

@@ -369,11 +369,6 @@ void TMdPrm::postEnable( int flag )
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
-TParamContr *TMdPrm::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().owner().tpPrmAt(type));
-}
-
 void TMdPrm::enable( )
 {
     if(enableStat())	return;
@@ -490,15 +485,19 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Append variable"),RWRWR_,"root",SDAQ_ID,3,"dest","select","select","/prm/cfg/SEL_VAR_lst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable"),RWRW__,"root",SDAQ_ID,3,"dest","select","select","/prm/cfg/SEL_VAR_lst");
 	return;
     }
 
     //> Process command to page
     if(a_path == "/prm/cfg/SEL_VAR")
     {
-	if(ctrChkNode(opt,"get")) opt->setText("");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_RD))	setVarList(varList()+"\n"+opt->text());
+	if(ctrChkNode(opt,"get")) opt->setText(owner().con?_("Select for append"):_("No connection"));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_RD))
+	{
+	    string vLs = varList();
+	    setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
+	}
     }
     else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt) && owner().con)
     {

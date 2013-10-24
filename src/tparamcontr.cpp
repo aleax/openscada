@@ -52,7 +52,11 @@ TParamContr::~TParamContr( )
 
 string TParamContr::objName( )	{ return TValue::objName()+":TParamContr"; }
 
-string TParamContr::DAQPath( )	{ return owner().DAQPath()+ownerPath()+"."+id(); }
+string TParamContr::DAQPath( )
+{
+    string oPath = ownerPath();
+    return owner().DAQPath()+(oPath.size()?".":"")+oPath+"."+id();
+}
 
 string TParamContr::ownerPath( bool inclSelf )
 {
@@ -60,11 +64,8 @@ string TParamContr::ownerPath( bool inclSelf )
 
     if(inclSelf) rez = nodeName();
     TCntrNode *own = nodePrev();
-    while(dynamic_cast<TParamContr*>(own))
-    {
-	own = own->nodePrev();
+    for(TCntrNode *own = nodePrev(); dynamic_cast<TParamContr*>(own); own = own->nodePrev())
 	rez = rez.empty() ? string(own->nodeName()) : (string(own->nodeName())+"."+rez);
-    }
 
     return rez;
 }
@@ -137,7 +138,7 @@ bool TParamContr::present( const string &name )
 void TParamContr::add( const string &name, unsigned type )
 {
     if(mPrm < 0) return;
-    chldAdd(mPrm, ParamAttach(name,type));
+    chldAdd(mPrm, owner().ParamAttach(name,type));
 }
 
 void TParamContr::del( const string &name, bool full )
@@ -150,11 +151,6 @@ AutoHD<TParamContr> TParamContr::at( const string &name, const string &who )
 {
     if(mPrm < 0) return AutoHD<TParamContr>();
     return chldAt(mPrm, name);
-}
-
-TParamContr *TParamContr::ParamAttach( const string &name, int type )
-{
-    return new TParamContr(name, &owner().owner().tpPrmAt(type));
 }
 
 void TParamContr::LoadParmCfg( )

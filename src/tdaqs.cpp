@@ -111,48 +111,36 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 
 void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char sep, const string &pref )
 {
-    int c_lv = 0, c_off;
+    int c_lv = 0;
     string c_path = "", c_el;
     vector<string> ls;
     opt->childAdd("el")->setText(pref+c_path);
 
-    if(sep)
+    AutoHD<TCntrNode> DAQnd = this;
+    const char *c_grp = "mod_";
+    for(int c_off = 0; (sep && (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size()) ||
+		   (!sep && (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size()); ++c_lv)
     {
-	for(c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size(); ++c_lv)
-	{
-	    c_path += c_lv ? sep+c_el : c_el;
-	    opt->childAdd("el")->setText(pref+c_path);
-	}
-	if(c_lv) c_path += sep;
-	AutoHD<TCntrNode> DAQnd = nodeAt(c_path, 0, sep, 0, true);
-	if(!DAQnd.freeStat())
-	{
-	    if(dynamic_cast<TVal*>(&DAQnd.at()) && toPrm) opt->childDel(opt->childSize()-1);
-	    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !toPrm)
-	    {
-		DAQnd.at().chldList(0, ls, true);
-		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		    opt->childAdd("el")->setText(pref+c_path+ls[i_l]);
-	    }
-	}
+	c_path += sep ? (c_lv?sep+c_el:c_el) : "/"+c_el;
+	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(DAQnd.freeStat()) break;
+	opt->childAdd("el")->setText(pref+c_path);
+	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
     }
-    else
+    if(sep && c_lv) c_path += sep;
+    if(!DAQnd.freeStat())
     {
-	for(c_off = 0; (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size(); ++c_lv)
+	DAQnd.at().chldList(DAQnd.at().grpId(c_grp), ls, true);
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(pref+c_path+(sep?ls[i_l]:("/"+ls[i_l])));
+
+	//Get attributes
+	if(!toPrm && strcmp(c_grp,"prm_") == 0)
 	{
-	    c_path += "/"+c_el;
-	    opt->childAdd("el")->setText(pref+c_path);
-	}
-	AutoHD<TCntrNode> DAQnd = nodeAt(c_path, 0, 0, 0, true);
-	if(!DAQnd.freeStat())
-	{
-	    if(dynamic_cast<TVal*>(&DAQnd.at()) && toPrm) opt->childDel(opt->childSize()-1);
-	    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !toPrm)
-	    {
-		DAQnd.at().chldList(0, ls, true);
-		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		    opt->childAdd("el")->setText(pref+c_path+"/"+ls[i_l]);
-	    }
+	    DAQnd.at().chldList(DAQnd.at().grpId("a_"), ls, true);
+	    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+		opt->childAdd("el")->setText(pref+c_path+(sep?ls[i_l]:("/"+ls[i_l])));
 	}
     }
 }
@@ -462,16 +450,53 @@ void TDAQS::subStop( )
 
 AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TValue> rez = nodeAt(path, 0, sep, 0, true);
-    if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No parameter present '%s'."),path.c_str());
-    return rez;
+    string c_el;
+    AutoHD<TCntrNode> DAQnd = this;
+    const char *c_grp = "mod_";
+    for(int c_off = 0, c_lv = 0; (sep && (c_el=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
+		   (!sep && (c_el=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
+    {
+	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(DAQnd.freeStat())
+	{
+	    if(noex) return AutoHD<TValue>();
+	    else throw TError(nodePath().c_str(),_("No parameter present '%s'."),path.c_str());
+	}
+	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
+    }
+    if(!dynamic_cast<TValue*>(&DAQnd.at()))
+    {
+	if(noex) return AutoHD<TValue>();
+	else throw TError(nodePath().c_str(),_("Pointed node is not parameter '%s'."),path.c_str());
+    }
+
+    return DAQnd;
 }
 
 AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TVal> rez = nodeAt(path, 0, sep, 0, true);
-    if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No attribute present '%s'."),path.c_str());
-    return rez;
+    string c_el;
+    AutoHD<TCntrNode> DAQnd = this;
+    const char *c_grp = "mod_";
+    for(int c_off = 0, c_lv = 0; (sep && (c_el=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
+		   (!sep && (c_el=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
+    {
+	if(c_lv > 2 && c_off >= path.size()) c_grp = "a_";
+	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(DAQnd.freeStat())
+	{
+	    if(noex) return AutoHD<TValue>();
+	    else throw TError(nodePath().c_str(),_("No attribute present '%s'."),path.c_str());
+	}
+	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
+    }
+    if(!dynamic_cast<TVal*>(&DAQnd.at()))
+    {
+	if(noex) return AutoHD<TVal>();
+	else throw TError(nodePath().c_str(),_("Pointed node is not attribute '%s'."),path.c_str());
+    }
+
+    return DAQnd;
 }
 
 bool TDAQS::rdActive( )

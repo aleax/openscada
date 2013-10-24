@@ -91,8 +91,6 @@ class TParamContr : public TConfig, public TValue
 	void preDisable( int flag );
 	void postDisable( int flag );
 
-	virtual TParamContr *ParamAttach( const string &name, int type );
-
 	bool cfgChange( TCfg &cfg );
 
 	void vlGet( TVal &val );

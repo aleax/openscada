@@ -72,6 +72,8 @@ namespace OSCADA
 //*************************************************
 class TSYS : public TCntrNode
 {
+    friend class TMess;
+
     public:
 	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
@@ -289,7 +291,7 @@ class TSYS : public TCntrNode
 
     private:
 	//Data
-	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04 };
+	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08 };
 
 	class STask
 	{

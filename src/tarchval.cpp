@@ -989,7 +989,7 @@ AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
     {
 	if(TSYS::strParse(srcPath,0,".") == "sub_DAQ" || TSYS::strParse(srcPath,0,".") == "DAQ")
 	    attr = SYS->nodeAt(srcPath,0,'.');
-	else attr = SYS->daq().at().nodeAt(srcPath,0,'.');
+	else attr = SYS->daq().at().attrAt(srcPath,'.');
     }
     catch(TError err) { }
     return attr;
@@ -2038,7 +2038,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::Real))->setText(_("Real"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TFld::String))->setText(_("String"));
     }
-    else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData());
+    else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData(), false, '.');
     else if(a_path == "/arch/arch")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))

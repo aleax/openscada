@@ -595,7 +595,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 
-    if( ldGen )	return;
+    if(ldGen)	return;
 
     //> Load widget's user attributes
     wdb = fullDB+"_uio";
@@ -658,7 +658,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
 	}
 	//> User attributes store
-	else if( !ldGen )
+	else if(!ldGen)
 	{
 	    c_elu.cfg("ID").setS( als[i_a] );
 	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
@@ -678,7 +678,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	}
     }
 
-    if( !ldGen )
+    if(!ldGen)
     {
 	//> Clear no present IO for main io table
 	c_el.cfgViewAll(false);

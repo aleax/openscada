@@ -1,3 +1,15 @@
+2013-10-24 Roman
+- Archive,DAQ.{BlockCalc,LogicLev,ModBus},UI.VCAEngine:
+    Link to DAQ parameters and attributes is adapted for parameters to parameters including path like "{Mod}.{Cntr}.{Prm1}.{PrmN}.{Attr}".
+- FIX:TCntrNode: chldList() fix for negative group index correct processing and list clear anytime.
+- DAQ: Functions TDAQS::ctrListPrmAttr(), TDAQS::prmAt() and TDAQS::attrAt() adapted for DAQ parameters to parameters including.
+- !:TSYS: Modification controled writing to the config file is added for field "Lang" for prevent writing unmodified.
+- FIX:DAQ: TParamContr::DAQPath() is fixed for including to the other parameter owner append.
+- DAQ.MMS: Variables insertion Combo some improved.
+- UI.VCAEngine: Negative widget's position coordinate is allowed.
+- FIX:UI.WebVision: Primitive "ElFigure" update at parent scaling change is fixed. Scroll for Box-containers is enabled.
+
+
 2013-10-20 Roman
 - !!!!:DAQ: New module "MMS" for support MMS(IEC-9506) and IEC-61850 devices protocol as added. It is initial implementation by libiec61850.
 - TCntrNode: function grpDel() is added for groups full control.
