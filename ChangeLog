@@ -1,3 +1,20 @@
+2013-10-30 Roman
+- DB:Select item from tree dialog is added and used into short prescriptions control widget.
+    ElContr is some expanded for disable by default all dynamic items and use all aviable space for NAME field.
+- DB.SQLite: Check for new key's fields present and return false from function fieldSeek(), only for zero row.
+    Used for prevent hierarchical and cyclic same fields loading, for DAQ parameter to parameter including of present
+    single-level configuration.
+- !!:DAQ.LogicLev: Parameter to parameter including is enabled and empty parameters as clean container cration allow.
+- !!!!:FIX:UI.VCAEngine: Lost attribute "name" the global ability to see after change primitive "FormEl" view from "Button"
+    to "Tree", "List" and other is fixed by static index (A_NAME:2) to field "name" assign but compatibility lost for remote
+    connection from and to previous version UI.Vision.
+    Fix possibility for open and include new page to container the page into the "f_start" stage.
+    "prm:*" dynamic links wrong set is fixed by remove prefix "a_" from last item - attribute.
+- FIX:UI.Vision: No actions update on the library's widget rename or remove is fixed.
+    Tool windows centering is disabled and new pages loading by load("") is moved to constructor RunPageView for
+    allow DE for custom control to the windows placing behaviour.
+
+
 2013-10-24 Roman
 - Archive,DAQ.{BlockCalc,LogicLev,ModBus},UI.VCAEngine:
     Link to DAQ parameters and attributes is adapted for parameters to parameters including path like "{Mod}.{Cntr}.{Prm1}.{PrmN}.{Attr}".

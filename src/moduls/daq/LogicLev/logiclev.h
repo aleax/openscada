@@ -140,7 +140,7 @@ class TMdContr: public TController
 
     protected:
 	//Methods
-	void prmEn( const string &id, bool val );
+	void prmEn( TMdPrm *p, bool val );
 	void postDisable( int flag );		//Delete all DB if flag 1
 
 	void load_( );

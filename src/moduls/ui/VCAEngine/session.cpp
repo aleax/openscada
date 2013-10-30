@@ -884,8 +884,8 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	{
 	    if(cfg.getB())
 	    {
+		ownerSess()->openReg(path());	//Moved up for allow access and pages including from "f_start"
 		if(!process())	setProcess(true);
-		ownerSess()->openReg(path());
 	    }
 	    else
 	    {
@@ -957,7 +957,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 				  TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>" &&
 				  (attr.at().cfgVal().empty() || attr.at().flgGlob()&Attr::Address)))	continue;
 			    atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
-			    if(prml.at().vlPresent(atr_id))	attr.at().setCfgVal("prm:"+prm_lnk+"/a_"+atr_id);
+			    if(prml.at().vlPresent(atr_id))	attr.at().setCfgVal("prm:"+prm_lnk+"/"+atr_id);
 			}
 		    }
 		}

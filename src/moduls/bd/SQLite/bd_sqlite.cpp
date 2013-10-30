@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.SQLite file: bd_sqlite.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2013 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -355,6 +355,21 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = time(NULL);
+
+    //> Check for no present and no empty keys allow
+    if(row == 0)
+    {
+	vector<string> cf_el;
+	cfg.cfgList(cf_el);
+	for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+	{
+    	    TCfg &cf = cfg.cfg(cf_el[i_c]);
+	    if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+	    for( ; i_fld < tblStrct.size(); i_fld++)
+    		if(cf.name() == tblStrct[i_fld][1]) break;
+    	    if(i_fld >= tblStrct.size()) return false;
+	}
+    }
 
     string sid;
     //> Make WHERE

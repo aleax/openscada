@@ -31,6 +31,7 @@ namespace VCA
 	A_COM_FOCUS	= -2,
 	A_COM_LOAD	= -1,
 	A_ROOT		= 1,
+	A_NAME		= 2,
 	A_PG_OPEN_SRC	= 3,
 	A_PG_GRP	= 4,
 	A_EN		= 5,
@@ -73,7 +74,6 @@ namespace VCA
 	A_FormElMixP2	= 23,	//LINE_ED:cfg; BUTTON:color
 	A_FormElMixP3	= 24,	//{LINE_ED,TEXT_ED}:confirm; BUTTON:mode
 	A_FormElFont	= 25,
-	A_FormElName	= 26,
 	A_FormElMixP4	= 27,	//BUTTON:colorText
 
 	//> Primitive "Media" specific

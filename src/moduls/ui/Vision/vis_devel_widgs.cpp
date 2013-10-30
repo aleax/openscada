@@ -1435,9 +1435,9 @@ void WdgTree::updateTree( const string &vca_it )
 
     //> Get elements number into VCA item
     int vca_lev = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
+    for(int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
 
-    if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_") )	return;
+    if(vca_lev && TSYS::pathLev(vca_it,0).compare(0,4,"wlb_") != 0) return;
     string upd_lb   = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
     string upd_wdg  = (vca_lev>=2) ? TSYS::pathLev(vca_it,1).substr(4) : "";
     string upd_wdgi = (vca_lev>=3) ? TSYS::pathLev(vca_it,2).substr(4) : "";
@@ -1450,29 +1450,29 @@ void WdgTree::updateTree( const string &vca_it )
 	mess_debug(mod->nodePath().c_str(), _("Widgets' development tree '%s' request time %f ms."), vca_it.c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 
     //> Remove no present libraries
-    for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
+    for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
     {
 	nit = treeW->topLevelItem(i_top);
-	if( !upd_lb.empty() && upd_lb != nit->text(2).toAscii().data() ) continue;
-	for( i_l = 0; i_l < req.childSize(); i_l++ )
-	    if( req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == nit->text(2).toAscii().data() )
+	if(!upd_lb.empty() && upd_lb != nit->text(2).toStdString()) continue;
+	for(i_l = 0; i_l < req.childSize(); i_l++)
+	    if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == nit->text(2).toStdString())
 		break;
-	if( i_l < req.childSize() )	continue;
+	if(i_l < req.childSize())	continue;
 	delete treeW->takeTopLevelItem(i_top);
 	i_top--;
     }
 
     //> Delete library tool bars and menus
-    if( vca_lev != 3 )
+    if(vca_lev != 3)
     {
 	//>> Delete toolbars
-	for( i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++ )
+	for(i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
 	{
-	    if( !upd_lb.empty() && upd_lb != owner()->lb_toolbar[i_t]->objectName().toAscii().data() ) continue;
-	    for( i_l = 0; i_l < req.childSize(); i_l++ )
-		if( req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_toolbar[i_t]->objectName().toAscii().data() )
+	    if(!upd_lb.empty() && upd_lb != owner()->lb_toolbar[i_t]->objectName().toStdString()) continue;
+	    for(i_l = 0; i_l < req.childSize(); i_l++)
+		if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_toolbar[i_t]->objectName().toStdString())
 		    break;
-	    if( i_l >= req.childSize() )
+	    if(i_l >= req.childSize())
 	    {
 		delete owner()->lb_toolbar[i_t];
 		owner()->lb_toolbar.erase(owner()->lb_toolbar.begin()+i_t);
@@ -1481,13 +1481,13 @@ void WdgTree::updateTree( const string &vca_it )
 	}
 
 	//>> Delete menus
-	for( i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
+	for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
 	{
-	    if( !upd_lb.empty() && upd_lb != owner()->lb_menu[i_m]->objectName().toAscii().data() ) continue;
-	    for( i_l = 0; i_l < req.childSize(); i_l++ )
-		if( req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_menu[i_m]->objectName().toAscii().data() )
+	    if(!upd_lb.empty() && upd_lb != owner()->lb_menu[i_m]->objectName().toStdString()) continue;
+	    for(i_l = 0; i_l < req.childSize(); i_l++)
+		if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_menu[i_m]->objectName().toStdString())
 		    break;
-	    if( i_l >= req.childSize() )
+	    if(i_l >= req.childSize())
 	    {
 		delete owner()->lb_menu[i_m];
 		owner()->lb_menu.erase(owner()->lb_menu.begin()+i_m);
@@ -1497,66 +1497,65 @@ void WdgTree::updateTree( const string &vca_it )
     }
 
     //> Add new libraries
-    for( i_l = 0; i_l < req.childSize(); i_l++ )
+    for(i_l = 0; i_l < req.childSize(); i_l++)
     {
-	XMLNode *wlbN =  req.childGet(i_l);
+	XMLNode *wlbN = req.childGet(i_l);
 	string wlbId = wlbN->attr("id");
-	if( wlbN->name() != "wlb" || (!upd_lb.empty() && upd_lb != wlbId) )	continue;
+	if(wlbN->name() != "wlb" || (!upd_lb.empty() && upd_lb != wlbId)) continue;
 
-	for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
-	    if( wlbId == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
+	for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
+	    if(wlbId == treeW->topLevelItem(i_top)->text(2).toStdString())
 		break;
-	if( i_top >= treeW->topLevelItemCount() ) nit = new QTreeWidgetItem(treeW);
-	else nit = treeW->topLevelItem(i_top);
+	nit = (i_top >= treeW->topLevelItemCount()) ? new QTreeWidgetItem(treeW) : treeW->topLevelItem(i_top);
 
 	//>> Update libraries data
 	img = QImage();
 	simg = TSYS::strDecode(wlbN->childGet("ico")->text(),TSYS::base64);
 	img.loadFromData((const uchar*)simg.c_str(),simg.size());
-	if( !img.isNull() ) nit->setIcon(0,QPixmap::fromImage(img));
+	if(!img.isNull()) nit->setIcon(0,QPixmap::fromImage(img));
 	nit->setText(0,wlbN->text().c_str());
 	nit->setText(1,_("Library"));
 	nit->setText(2,wlbId.c_str());
 
 	//>> Add toolbars and menus
-	if( vca_lev != 3 )
+	if(vca_lev != 3)
 	{
 	    is_create = root_allow = false;
-	    for( i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
-		if( owner()->lb_toolbar[i_t]->objectName() == wlbId.c_str() )
+	    for(i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
+		if(owner()->lb_toolbar[i_t]->objectName() == wlbId.c_str())
 		    break;
-	    if( i_t >= (int)owner()->lb_toolbar.size() )
+	    if(i_t >= (int)owner()->lb_toolbar.size())
 	    {
-		owner()->lb_toolbar.push_back( new QToolBar(QString(_("Library: %1")).arg(wlbId.c_str()),this) );
+		owner()->lb_toolbar.push_back(new QToolBar(QString(_("Library: %1")).arg(wlbId.c_str()),this));
 		owner()->lb_toolbar[i_t]->setObjectName(wlbId.c_str());
 		owner()->addToolBar(owner()->lb_toolbar[i_t]);
 		owner()->lb_toolbar[i_t]->setMovable(true);
 		owner()->mn_view->addAction(owner()->lb_toolbar[i_t]->toggleViewAction());
 		is_create = true;
 	    }
-	    for( i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++ )
-		if( owner()->lb_menu[i_m]->objectName() == wlbId.c_str() )
+	    for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
+		if(owner()->lb_menu[i_m]->objectName() == wlbId.c_str())
 		    break;
-	    if( i_m >= (int)owner()->lb_menu.size() )
+	    if(i_m >= (int)owner()->lb_menu.size())
 	    {
-		owner()->lb_menu.push_back( new QMenu(QString(_("Library: %1")).arg(wlbId.c_str())) );
+		owner()->lb_menu.push_back(new QMenu(QString(_("Library: %1")).arg(wlbId.c_str())));
 		owner()->lb_menu[i_m]->setObjectName(wlbId.c_str());
 		owner()->mn_widg->addMenu(owner()->lb_menu[i_m]);
 	    }
 	    //>>> Update menu icon
-	    if( !img.isNull() ) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
+	    if(!img.isNull()) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
 	}
 
 	//>>> Remove no present widgets
-	for( i_topwl = 0; i_topwl < nit->childCount(); i_topwl++ )
+	for(i_topwl = 0; i_topwl < nit->childCount(); i_topwl++)
 	{
 	    nit_w = nit->child(i_topwl);
-	    if( upd_wdg.empty() ) i_w = wlbN->childSize();
+	    if(upd_wdg.empty()) i_w = wlbN->childSize();
 	    else
 	    {
-		if( upd_wdg != nit_w->text(2).toAscii().data() ) continue;
+		if(upd_wdg != nit_w->text(2).toStdString()) continue;
 		for(i_w = 0; i_w < wlbN->childSize(); i_w++)
-		    if( wlbN->childGet(i_w)->name() == "w" && wlbN->childGet(i_w)->attr("id") == nit_w->text(2).toAscii().data() )
+		    if(wlbN->childGet(i_w)->name() == "w" && wlbN->childGet(i_w)->attr("id") == nit_w->text(2).toStdString())
 			break;
 	    }
 	    if(i_w < wlbN->childSize())	continue;
@@ -1565,65 +1564,63 @@ void WdgTree::updateTree( const string &vca_it )
 	}
 
 	//>>> Delete widget's actions from toolbar and menu
-	if( vca_lev != 3 )
+	if(vca_lev != 3)
 	{
 	    QList<QAction*> use_act = owner()->lb_toolbar[i_t]->actions();
-	    for( i_a = 0; i_a < use_act.size(); i_a++ )
+	    for(i_a = 0; upd_wdg.size() && i_a < use_act.size(); i_a++)
 	    {
-		if(upd_wdg.empty()) i_w = wlbN->childSize();
-		else
-		{
-		    if(upd_wdg != use_act[i_a]->objectName().toAscii().data()) continue;
-		    for(i_w = 0; i_w < wlbN->childSize(); i_w++)
-			if( wlbN->childGet(i_w)->name() == "w" && ("/wlb_"+wlbId+"/wdg_"+wlbN->childGet(i_w)->attr("id")) == use_act[i_a]->objectName().toAscii().data() )
-			    break;
-		}
-		if(i_w < wlbN->childSize()) continue;
-		delete use_act[i_a];
+		if(vca_it != use_act[i_a]->objectName().toStdString()) continue;
+		for(i_w = 0; i_w < wlbN->childSize(); i_w++)
+		    if(wlbN->childGet(i_w)->name() == "w" && ("/wlb_"+wlbId+"/wdg_"+wlbN->childGet(i_w)->attr("id")) == use_act[i_a]->objectName().toStdString())
+			break;
+		if(i_w >= wlbN->childSize()) { delete use_act[i_a]; break; }
 	    }
 	}
 
 	//>>> Add new widgets
 	for(i_w = 0; i_w < wlbN->childSize(); i_w++)
 	{
-	    XMLNode *wdgN =  wlbN->childGet(i_w);
-	    if( wdgN->name() != "w" ) continue;
+	    XMLNode *wdgN = wlbN->childGet(i_w);
+	    if(wdgN->name() != "w") continue;
 	    string wdgId = wdgN->attr("id");
-	    if( upd_wdg.empty() ) i_topwl = nit->childCount();
+	    if(upd_wdg.empty()) i_topwl = nit->childCount();
 	    else
 	    {
-		if( upd_wdg != wdgId )	continue;
-		for( i_topwl = 0; i_topwl < nit->childCount(); i_topwl++ )
-		    if( wdgId == nit->child(i_topwl)->text(2).toAscii().data() )
+		if(upd_wdg != wdgId)	continue;
+		for(i_topwl = 0; i_topwl < nit->childCount(); i_topwl++)
+		    if(wdgId == nit->child(i_topwl)->text(2).toStdString())
 			break;
 	    }
-	    if( i_topwl >= nit->childCount() ) nit_w = new QTreeWidgetItem(nit);
-	    else nit_w = nit->child(i_topwl);
+	    nit_w = (i_topwl >= nit->childCount()) ? new QTreeWidgetItem(nit) : nit->child(i_topwl);
 
 	    //>>> Update widget's data
 	    img = QImage();
 	    simg = TSYS::strDecode(wdgN->childGet("ico")->text(),TSYS::base64);
 	    img.loadFromData((const uchar*)simg.c_str(),simg.size());
-	    if( !img.isNull() ) nit_w->setIcon(0,QPixmap::fromImage(img));
+	    if(!img.isNull()) nit_w->setIcon(0,QPixmap::fromImage(img));
 	    nit_w->setText(0,wdgN->text().c_str());
 	    nit_w->setText(1,_("Widget"));
 	    nit_w->setText(2,wdgId.c_str());
 
 	    //>>> Add widget's actions to toolbar and menu
-	    if( vca_lev != 3 )
+	    if(vca_lev != 3)
 	    {
 		QList<QAction*> use_act = owner()->lb_toolbar[i_t]->actions();
 		QAction *cur_act;
 		string wipath = "/wlb_"+wlbId+"/wdg_"+wdgId;
 		//>>>> Get parent name
-		if( !root_allow && wdgN->attr("parent") == "root" ) root_allow = true;
+		if(!root_allow && wdgN->attr("parent") == "root") root_allow = true;
 		//>>>> Add action
-		if( upd_wdg.empty() ) i_a = use_act.size();
+		if(upd_wdg.empty()) i_a = use_act.size();
 		else
-		    for( i_a = 0; i_a < use_act.size(); i_a++ )
-			if( use_act[i_a]->objectName() == wipath.c_str() )
+		    for(i_a = 0; i_a < use_act.size(); i_a++)
+			if(use_act[i_a]->objectName() == wipath.c_str())
 			    break;
-		if( i_a < use_act.size() ) cur_act = use_act[i_a];
+		if(i_a < use_act.size())
+		{
+		    cur_act = use_act[i_a];
+		    cur_act->setText(wdgN->text().c_str());
+		}
 		else
 		{
 		    //>>>>> Create new action
@@ -1640,52 +1637,51 @@ void WdgTree::updateTree( const string &vca_it )
 		    owner()->lb_menu[i_m]->addAction(cur_act);
 		}
 		//>>>> Update action
-		if( !img.isNull() )	cur_act->setIcon(QPixmap::fromImage(img));
+		if(!img.isNull()) cur_act->setIcon(QPixmap::fromImage(img));
 	    }
 
 	    //>>>> Remove no present widgets
-	    for( i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++ )
+	    for(i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++)
 	    {
 		nit_cw = nit_w->child(i_topcwl);
-		if( upd_wdgi.empty() ) i_cw = wdgN->childSize();
+		if(upd_wdgi.empty()) i_cw = wdgN->childSize();
 		else
 		{
-		    if( upd_wdgi != nit_cw->text(2).toAscii().data() ) continue;
-		    for( i_cw = 0; i_cw < wdgN->childSize(); i_cw++ )
-			if( wdgN->childGet(i_cw)->name() == "cw" && wdgN->childGet(i_cw)->attr("id") == nit_cw->text(2).toAscii().data() )
+		    if(upd_wdgi != nit_cw->text(2).toStdString()) continue;
+		    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++)
+			if(wdgN->childGet(i_cw)->name() == "cw" && wdgN->childGet(i_cw)->attr("id") == nit_cw->text(2).toStdString())
 			    break;
 		}
-		if( i_cw < wdgN->childSize() )	continue;
+		if(i_cw < wdgN->childSize())	continue;
 		delete nit_w->takeChild(i_topcwl);
 		i_topcwl--;
 	    }
 	    //>>>> Add new widgets
-	    for( i_cw = 0; i_cw < wdgN->childSize(); i_cw++ )
+	    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++)
 	    {
 		XMLNode *cwdgN = wdgN->childGet(i_cw);
-		if( cwdgN->name() != "cw" ) continue;
+		if(cwdgN->name() != "cw") continue;
 		string cwdgId = cwdgN->attr("id");
-		if( upd_wdgi.empty() ) i_topcwl = nit_w->childCount();
+		if(upd_wdgi.empty()) i_topcwl = nit_w->childCount();
 		else
 		{
-		    if( upd_wdgi != cwdgId ) continue;
-		    for( i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++ )
-			if( cwdgId == nit_w->child(i_topcwl)->text(2).toAscii().data())
+		    if(upd_wdgi != cwdgId) continue;
+		    for(i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++)
+			if(cwdgId == nit_w->child(i_topcwl)->text(2).toStdString())
 			    break;
 		}
-		if( i_topcwl >= nit_w->childCount() ) nit_cw = new QTreeWidgetItem(nit_w);
-		else nit_cw = nit_w->child(i_topcwl);
+		nit_cw = (i_topcwl >= nit_w->childCount()) ? new QTreeWidgetItem(nit_w) : nit_w->child(i_topcwl);
 		//>>> Update widget's data
 		img = QImage();
 		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(),TSYS::base64);
 		img.loadFromData((const uchar*)simg.c_str(),simg.size());
-		if( !img.isNull() ) nit_cw->setIcon(0,QPixmap::fromImage(img));
+		if(!img.isNull()) nit_cw->setIcon(0,QPixmap::fromImage(img));
 		nit_cw->setText(0,cwdgN->text().c_str());
 		nit_cw->setText(1,_("Container's widget"));
 		nit_cw->setText(2,cwdgId.c_str());
 	    }
 	}
-	if( vca_lev != 3 && is_create )
+	if(vca_lev != 3 && is_create)
 	{
 	    owner()->lb_toolbar[i_t]->setVisible(root_allow);
 	    owner()->lb_menu[i_m]->setProperty("rootLib",root_allow);
@@ -1801,7 +1797,7 @@ void ProjTree::selectItem( bool force )
     QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toStdString());
 	cur_el=cur_el->parent();
     }
 

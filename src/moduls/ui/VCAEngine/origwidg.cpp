@@ -375,7 +375,6 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		case F_CHECK_BOX:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("font");
-		    cfg.owner()->attrAt("name").at().fld().setReserve("");
 		    break;
 		case F_BUTTON:
 		    cfg.owner()->attrDel("value");
@@ -384,7 +383,6 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("colorText");
 		    cfg.owner()->attrDel("mode");
 		    cfg.owner()->attrDel("font");
-		    cfg.owner()->attrAt("name").at().fld().setReserve("");
 		    break;
 		case F_COMBO: case F_LIST: case F_TREE:
 		    cfg.owner()->attrDel("value");
@@ -418,7 +416,6 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	    case F_CHECK_BOX:
 		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::Boolean,Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
-		cfg.owner()->attrAt("name").at().fld().setReserve(i2s(A_FormElName));
 		break;
 	    case F_BUTTON:
 		cfg.owner()->attrAdd(new TFld("value",_("Repeat"),TFld::String,Attr::Mutable,"","","","",i2s(A_FormElValue).c_str()));
@@ -429,7 +426,6 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    TSYS::strMess("%d;%d;%d;%d;%d",FBT_STD,FBT_CHECK,FBT_MENU,FBT_LOAD,FBT_SAVE).c_str(),
 		    _("Standard;Checkable;Menu;Load;Save"),i2s(A_FormElMixP3).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
-		cfg.owner()->attrAt("name").at().fld().setReserve(i2s(A_FormElName));
 		break;
 	    case F_COMBO: case F_LIST: case F_TREE:
 		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));

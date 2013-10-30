@@ -1232,24 +1232,24 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	    case TVariant::Object:	return vl.getO().at().funcCall(prop, prms);
 	    case TVariant::Boolean:
 		// bool isEVal( ) - check value to "EVAL"
-		if( prop == "isEVal" )	return (vl.getB() == EVAL_BOOL);
+		if(prop == "isEVal")	return (vl.getB() == EVAL_BOOL);
 		// string toString( ) - performs the value as the string “true” or “false”
-		if( prop == "toString" )return string(vl.getB() ? "true" : "false");
+		if(prop == "toString")	return string(vl.getB() ? "true" : "false");
 		return false;
 		//throw TError(nodePath().c_str(),_("Boolean type have not function '%s' or not enough parameters for it."),prop.c_str());
 	    case TVariant::Integer:
 		// bool isEVal( ) - check value to "EVAL"
-		if( prop == "isEVal" )	return (vl.getI() == EVAL_INT);
+		if(prop == "isEVal")	return (vl.getI() == EVAL_INT);
 	    case TVariant::Real:
 		// bool isEVal( ) - check value to "EVAL"
-		if( prop == "isEVal" )	return (vl.getR() == EVAL_REAL);
+		if(prop == "isEVal")	return (vl.getR() == EVAL_REAL);
 		// string toExponential(int numbs = -1) - return the string of the number, formatted in exponential notation, 
 		//      and with the number of significant digits <numbs>
 		//  numbs - number of significant digits, if is missing the number of digits will have as much as needed
-		if( prop == "toExponential" )
+		if(prop == "toExponential")
 		{
 		    int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : -1;
-		    if( n < 0 )	return TSYS::strMess("%e",vl.getR());
+		    if(n < 0) return TSYS::strMess("%e",vl.getR());
 		    return TSYS::strMess("%.*e",n,vl.getR());
 		}
 		// string toFixed(int numbs = 0, int len = 0, bool sign = false) - return the string of the number, formatted in the notation of fixed-point,
@@ -1315,7 +1315,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		}
 		// string concat(string val1, string val2, ...) - returns a new string formed by joining the values <val1> etc
 		//  val1, val2 - appended values
-		if( prop == "concat" && prms.size() )
+		if(prop == "concat" && prms.size())
 		{
 		    string rez = vl.getS();
 		    for(unsigned i_p = 0; i_p < prms.size(); i_p++)
@@ -1326,7 +1326,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//       row from the position <start>
 		//  substr - requested substring value
 		//  start - start position for search
-		if( prop == "indexOf" && prms.size() )
+		if(prop == "indexOf" && prms.size())
 		{
 		    size_t sp = 0;
 		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
@@ -1337,7 +1337,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//       one beginning from the position of <start> when searching from the end
 		//  substr - requested substring value
 		//  start - start position for search from end
-		if( prop == "lastIndexOf" && prms.size() )
+		if(prop == "lastIndexOf" && prms.size())
 		{
 		    size_t sp = string::npos;
 		    if(prms.size() > 1) sp = vmax(0,vmin(vl.getS().size()-1,(unsigned)prms[1].getI()));
@@ -1376,7 +1376,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//       and ending be the <end>
 		//  beg - begin position
 		//  end - end position
-		if( (prop == "slice" || prop == "substring") && prms.size() )
+		if((prop == "slice" || prop == "substring") && prms.size())
 		{
 		    int beg = prms[0].getI();
 		    if(beg < 0) beg = vl.getS().size()+beg;
@@ -1393,7 +1393,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		//  limit - items limit
 		// Array split(RegExp pat, int limit) - return the array of strings separated by RegExp pattern <pat> with the limit of the number of elements <limit>.
 		//  pat - regular expression pattern.
-		if( prop == "split" && prms.size() )
+		if(prop == "split" && prms.size())
 		{
 		    //> Use RegExp for split
 		    if(prms[0].type() == TVariant::Object && !AutoHD<TRegExp>(prms[0].getO()).freeStat())
@@ -1415,7 +1415,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// string insert(int pos, string substr) - insert substring <substr> into this string's position <pos>
 		//  pos - position for insert
 		//  substr - substring for insert
-		if( prop == "insert" && prms.size() >= 2 )
+		if(prop == "insert" && prms.size() >= 2)
 		    return vl.getS().insert(vmax(0,vmin(vl.getS().size(),(unsigned)prms[0].getI())), prms[1].getS() );
 		// string replace(int pos, int n, string str) - replace substring into position <pos> and length <n> to string <str>.
 		//  pos - position for start replace
@@ -1480,7 +1480,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		// string path2sep(string sep = ".") - convert path into this string to separated by <sep> string.
 		//  sep - item separator
 		if(prop == "path2sep")
-		    return TSYS::path2sepstr( vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.' );
+		    return TSYS::path2sepstr(vl.getS(), (prms.size() && prms[0].getS().size()) ? prms[0].getS()[0] : '.');
 
 		return false;
 		//throw TError(nodePath().c_str(),_("String type have not properties '%s' or not enough parameters for it."),prop.c_str());

@@ -516,7 +516,8 @@ bool RunWdgView::event( QEvent *event )
 RunPageView::RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent, Qt::WindowFlags f ) :
     RunWdgView(iwid,0,mainWind,parent,f), wx_scale(1.0), wy_scale(1.0)
 {
-
+    resize(50, 50);
+    load("");
 }
 
 RunPageView::~RunPageView( )
@@ -609,12 +610,12 @@ bool RunPageView::callPage( const string &pg_it, const string &pgGrp, const stri
     //> Check for open child page or for unknown and empty source pages open as master page child windows
     if((pgGrp.empty() && pgSrc == id()) || this == mainWin()->master_pg)
     {
-	RunPageView *pg = new RunPageView(pg_it, mainWin(), this);
-	pg->setAttribute( Qt::WA_DeleteOnClose );
-	pg->setWindowFlags( Qt::Tool );
-	pg->load("");
-	pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
-			  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
+	RunPageView *pg = new RunPageView(pg_it, mainWin(), this, Qt::Tool);
+	pg->setAttribute(Qt::WA_DeleteOnClose);
+	//pg->load("");
+	//pg->moveF(QCursor::pos());
+	//pg->moveF(QPointF(mapToGlobal(pos()).x()+sizeF().width()/2-pg->sizeF().width()/2,
+	//		  mapToGlobal(pos()).y()+sizeF().height()/2-pg->sizeF().height()/2));
 	pg->setMinimumSize(pg->frameGeometry().size());
 	pg->setMaximumSize(pg->frameGeometry().size());
 	pg->setWindowState(pg->windowState() | Qt::WindowActive);

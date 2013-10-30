@@ -244,6 +244,19 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    runW->setVisible(shD->en && runW->permView());
 	    if(shD->elType >= 0) shD->addrWdg->setVisible(shD->en && runW->permView());
 	    break;
+	case A_NAME:
+	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
+	    if(!shD->setType) break;
+	    switch(shD->elType)
+	    {
+		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
+		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
+		case F_TREE:
+		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
+		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
+		    break;
+	    }
+	    break;
 	case A_ACTIVE:
 	    if(!runW)	break;
 	    shD->active = (bool)atoi(val.c_str());
@@ -282,19 +295,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case A_FormElMixP3: shD->mode = atoi(val.c_str()); rel_cfg = true;	break;
 	case A_FormElFont: shD->font = getFont(val); rel_cfg = true;	break;
-	case A_FormElName:
-	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
-	    if(!shD->setType) break;
-	    switch(shD->elType)
-	    {
-		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
-		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
-		case F_TREE:
-		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
-		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
-		    break;
-	    }
-	    break;
 	case A_FormElMixP4: shD->colorText = val; rel_cfg = true;	break;
     }
     if(rel_cfg && !w->allAttrLoad())
@@ -4201,7 +4201,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setMinimumSize(w->size());
-			shD->inclWidget->load("");
+			//shD->inclWidget->load("");
 		    }
 		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}

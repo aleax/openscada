@@ -1187,9 +1187,9 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
 
 	//>> Create widget view
 	master_pg = new RunPageView(pg_it,this,centralWidget());
-	master_pg->load("");
+	//master_pg->load("");
 	master_pg->setFocusPolicy(Qt::StrongFocus);
-	((QScrollArea *)centralWidget())->setWidget( master_pg );
+	((QScrollArea *)centralWidget())->setWidget(master_pg);
 	if(!(windowState()&(Qt::WindowFullScreen|Qt::WindowMaximized)))
 	{
 	    QRect ws = QApplication::desktop()->availableGeometry(this);
