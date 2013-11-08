@@ -234,33 +234,33 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 {
     int i_clm;
 
-    ResAlloc res(m_res,false);
+    ResAlloc res(m_res, false);
 
-    i_ln = findKeyLine(cfg,i_ln,true);
-    if( i_ln < 0 ) return false;
+    i_ln = findKeyLine(cfg, i_ln, true);
+    if(i_ln < 0) return false;
 
     //> Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //> Write data to cfg
-    for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    //> Seek and get data
+    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
 	//>> Find collumn
 	db_str_rec *fld_rec;
-	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
+	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
+	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
 	if(fld_rec == NULL) continue;
 
 	//>> Get table volume
 	string val;
-	if( basa->GetFieldIt( i_ln, i_clm, val ) < 0)
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0)
 	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
 
 	//>> Write value
-	setVal(e_cfg,val);
+	setVal(e_cfg, val);
     }
 
     return true;
@@ -313,14 +313,14 @@ void MTable::fieldSet( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //> Check and fix structure of table
-    for( unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++ )
+    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
 	//>> Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if( cf_el[i_cf].substr(0,10) == fld_rec->name ) break;
+	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
 	if(fld_rec == NULL)
 	{
 	    //>> Create new collumn

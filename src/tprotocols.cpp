@@ -83,10 +83,11 @@ TProtocol::~TProtocol()
 
 }
 
-void TProtocol::open( const string &name, const string &tr )
+void TProtocol::open( const string &name, TTransportIn *tr, const string &sender )
 {
-    chldAdd(m_pr,in_open(name));
+    chldAdd(m_pr, in_open(name));
     at(name).at().setSrcTr(tr);
+    at(name).at().setSrcAddr(sender);
 }
 
 void TProtocol::close( const string &name )
@@ -111,7 +112,7 @@ TProtocolIn::~TProtocolIn()
 
 int TProtocolIn::writeTo( const string &data )
 {
-    return SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().inAt(TSYS::strParse(srcTr(),1,".")).at().writeTo(thrId(), data);
+    return srcTr().at().writeTo(srcAddr(), data);
 }
 
 TProtocol &TProtocolIn::owner( )	{ return *(TProtocol*)nodePrev(); }

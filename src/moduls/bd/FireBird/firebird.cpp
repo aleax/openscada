@@ -236,10 +236,10 @@ void MBD::transOpen( )
     {
 	if(isc_start_transaction(status, &htrans, 1, &hdb, 0, NULL))
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error: %s"),getErr(status).c_str());
-	trOpenTm = time(NULL);
+	trOpenTm = SYS->sysTm();
     }
     reqCnt++;
-    reqCntTm = time(NULL);
+    reqCntTm = SYS->sysTm();
 }
 
 void MBD::transCommit( )
@@ -256,7 +256,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if(reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60 ))
+    if(reqCnt && ((SYS->sysTm()-reqCntTm) > 10*60 || (SYS->sysTm()-trOpenTm) > 10*60 ))
 	transCommit();
 }
 
@@ -511,7 +511,7 @@ void MTable::getStructDB( vector< vector<string> > &tblStrct )
 void MTable::fieldStruct( TConfig &cfg )
 {
     if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
 
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
@@ -537,7 +537,22 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     vector< vector<string> > tbl;
 
     if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
+
+    //> Check for no present and no empty keys allow
+    if(row == 0)
+    {
+        vector<string> cf_el;
+        cfg.cfgList(cf_el);
+        for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+        {
+            TCfg &cf = cfg.cfg(cf_el[i_c]);
+            if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+            for( ; i_fld < tblStrct.size(); i_fld++)
+                if(cf.name() == tblStrct[i_fld][0]) break;
+            if(i_fld >= tblStrct.size()) return false;
+        }
+    }
 
     //> Make WHERE
     string req = "SELECT FIRST 1 SKIP "+TSYS::int2str(row)+" ", req_where = "WHERE ", sid;
@@ -592,7 +607,7 @@ void MTable::fieldGet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
 
     //> Prepare request
     string req = "SELECT ", req_where, sid, first_key;
@@ -647,7 +662,7 @@ void MTable::fieldSet( TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
     if(tblStrct.empty()) fieldFix(cfg);
 
     string sid, sval;
@@ -733,7 +748,7 @@ void MTable::fieldSet( TConfig &cfg )
 void MTable::fieldDel( TConfig &cfg )
 {
     if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
 
     //> Get config fields list
     vector<string> cf_el;

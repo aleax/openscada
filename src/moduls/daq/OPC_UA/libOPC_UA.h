@@ -669,7 +669,7 @@ class Server: public UA
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
-	virtual bool inReq( string &request, string &answer, const string &sender, const string &threadId );
+	virtual bool inReq( string &request, string &answer, const string &inPrtId );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
 	//> Channel manipulation functions

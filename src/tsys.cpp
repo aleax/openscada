@@ -673,11 +673,11 @@ void TSYS::sighandler( int signal )
     switch(signal)
     {
 	case SIGINT:
-	    SYS->mStopSignal=signal;
+	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
 	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received. Server is being stopped!"));
-	    SYS->mStopSignal=signal;
+	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
 	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
@@ -714,16 +714,28 @@ void TSYS::clkCalc( )
     sysSleep(0.1);
     mSysclc = 10*(shrtCnt()-st_pnt);
 
-    //Try read file /proc/cpuinfo for CPU frequency get
     if(!mSysclc)
     {
-        float frq;
         char buf[255];
-        FILE *fp = fopen("/proc/cpuinfo", "r");
-        if(fp)
+	FILE *fp = NULL;
+	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
+	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r")))
+	{
+	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
+	    mSysclc = uint64_t(atof(buf)*1e3);
+	    fclose(fp);
+	}
+
+	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
+        if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r")))
         {
+	    float frq;
             while(fgets(buf,sizeof(buf),fp) != NULL)
-                if(sscanf(buf,"BogoMIPS : %f\n",&frq))	{ mSysclc = (uint64_t)(frq*1e6); break; }
+		if(sscanf(buf,"cpu MHz : %f\n",&frq) || sscanf(buf,"bogomips : %f\n",&frq) || sscanf(buf,"BogoMIPS : %f\n",&frq))
+		{
+		    mSysclc = (uint64_t)(frq*1e6);
+		    break;
+		}
             fclose(fp);
         }
     }

@@ -284,7 +284,7 @@ TProtIn::~TProtIn()
 
 }
 
-bool TProtIn::mess( const string &request, string &answer, const string &sender )
+bool TProtIn::mess( const string &request, string &answer )
 {
     int64_t d_tm;
     int ses_id = -1;

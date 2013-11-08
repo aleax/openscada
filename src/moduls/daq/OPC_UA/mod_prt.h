@@ -66,7 +66,7 @@ class TProtIn: public TProtocolIn
 	TProtIn( string name );
 	~TProtIn( );
 
-	bool mess( const string &request, string &answer, const string &sender );
+	bool mess( const string &request, string &answer );
 
 	TProt &owner( );
 
@@ -165,8 +165,8 @@ class TProt: public TProtocol, public Server
 	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
 
 	void discoveryUrls( vector<string> &ls );
-	bool inReq( string &request, string &answer, const string &sender, const string &threadId );
-	int writeToClient( const string &threadId, const string &data );
+	bool inReq( string &request, string &answer, const string &inPrtId );
+	int writeToClient( const string &inPrtId, const string &data );
 
 	TElem &endPntEl( )			{ return mEndPntEl; }
 

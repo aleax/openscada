@@ -1,3 +1,29 @@
+2013-11-08 Roman
+- DB: Recipe's frames is some updated into vcaBase.db.
+- SYS: Prefix "env" to openscada.desktop is added for ensure work on Maemo (N800, N900).
+    openscada_start is adapted for start on BusyBOX variant "mktemp", "tput" miss and old version of "zenity".
+    For the CPU frequency obtain used /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq and fields "cpu MHz",
+    "bogomips", "BogoMIPS" of /proc/cpuinfo in that order.
+- !!!!:TransportIn: Virtual function writeTo() for allow bacward requests is added.
+- !!!!:TProtocolIn, Protocol.*, Transport.*, DAQ.{ModBus,OPC_UA}:
+    The input transport store by locked header instead the path for faster access, API functions changed: srcTr(), setSrcTr().
+    The input transport sender address stores also into the input transport protocol object and used for
+	backward and asynchronous messages send to sender.
+- !:TTransportOut: The output transport restart is set on the address change for allow to change the from internal procedures.
+- DB.{FireBird,MySQL,PostgreSQL,SQLite}: Check for new key's fields present and return false from function fieldSeek(), only for zero row.
+    Used for prevent hierarchical and cyclic same fields loading, for DAQ parameter to parameter including of present
+    single-level configuration.
+    Instead time(NULL) everywhere used SYS->sysTm();
+- FIX:DAQ.LogicLev: Reconnect try to broken links restore is fixed.
+- FIX:Transport.Serial: Set writing modem's exit command without next line symbols.
+- FIX:UI.VCAEngine: Restore compatibility by remove A_NAME index and create A_FormElName and
+    fixed set it for all "name" attributes of primitive "FormEl".
+    Disable empty template attribute using for document generaton for primitive "Document".
+    Remove wrong inline navigator at media-resources for no "String" attributes.
+- FIX:UI.Vision: Disable encoding and decoding of path items of view "Tree" of primitive "FormEl" for prevent inconsistency
+    items into list to selected item value.
+
+
 2013-10-30 Roman
 - DB:Select item from tree dialog is added and used into short prescriptions control widget.
     ElContr is some expanded for disable by default all dynamic items and use all aviable space for NAME field.

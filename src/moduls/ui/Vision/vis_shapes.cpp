@@ -244,19 +244,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    runW->setVisible(shD->en && runW->permView());
 	    if(shD->elType >= 0) shD->addrWdg->setVisible(shD->en && runW->permView());
 	    break;
-	case A_NAME:
-	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
-	    if(!shD->setType) break;
-	    switch(shD->elType)
-	    {
-		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
-		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
-		case F_TREE:
-		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
-		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
-		    break;
-	    }
-	    break;
 	case A_ACTIVE:
 	    if(!runW)	break;
 	    shD->active = (bool)atoi(val.c_str());
@@ -271,6 +258,19 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case A_FormElValue:
 	    if(shD->value != val) setValue(w, val);
+	    break;
+	case A_FormElName:
+	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
+	    if(!shD->setType) break;
+	    switch(shD->elType)
+	    {
+		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
+		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
+		case F_TREE:
+		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
+		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
+		    break;
+	    }
 	    break;
 	case A_FormElMixP1:
 	    rel_cfg = true;
@@ -417,83 +417,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//> Items
 		wdg->clear();
 		wdg->addItems(QString(shD->items.c_str()).split("\n"));
-		//> Check and prepare tree or simple list view
-		/*if(shD->items.size() && shD->items[0] == '/')
-		{
-		    QTreeWidget* treeW = new QTreeWidget();
-		    treeW->setAlternatingRowColors(true);
-		    treeW->setSelectionMode(QAbstractItemView::SingleSelection);
-		    treeW->setSelectionBehavior(QAbstractItemView::SelectRows);
-		    treeW->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-		    treeW->header()->setResizeMode(QHeaderView::ResizeToContents);
-		    treeW->header()->setStretchLastSection(false);
-		    treeW->header()->setHidden(true);
-		    treeW->setItemDelegate(new TreeComboDelegate);
-		    wdg->setModel(treeW->model());
-		    wdg->setView(treeW);
-		    treeW->setMinimumHeight(10*15);
-		    treeW->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-		    //wdg->clear();
-
-		    string ipath, item, treeItPath;
-		    QTreeWidgetItem *cur_it = NULL, *t_it = NULL;
-		    QFont noSelFnt = elFnt;
-		    noSelFnt.setItalic(true);
-		    for(int off = 0; (ipath=TSYS::strLine(shD->items,0,&off)).size(); )
-		    {
-			treeItPath = "";
-			for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
-			{
-			    treeItPath += "/"+item;
-			    if(lev == 0)
-			    {
-				cur_it = NULL;
-				for(int i_r = 0; !cur_it && i_r < treeW->topLevelItemCount(); i_r++)
-				    if(treeW->topLevelItem(i_r)->data(0,Qt::UserRole) == item.c_str()) cur_it = treeW->topLevelItem(i_r);
-				if(!cur_it)
-				{
-				    cur_it = new QTreeWidgetItem(0);
-				    cur_it->setData(0, Qt::UserRole, item.c_str());
-				    printf("TEST 10: %s\n", item.c_str());
-				    cur_it->setText(0, treeItPath.c_str());
-				    cur_it->setFlags(cur_it->flags()&(~Qt::ItemIsSelectable));
-				    cur_it->setData(0, Qt::FontRole, noSelFnt);
-				    treeW->addTopLevelItem(cur_it);
-				}
-			    }
-			    else
-			    {
-				t_it = NULL;
-				for(int i_r = 0; !t_it && i_r < cur_it->childCount(); i_r++)
-				    if(cur_it->child(i_r)->data(0,Qt::UserRole) == item.c_str()) t_it = cur_it->child(i_r);
-				if(!t_it)
-				{
-				    t_it = new QTreeWidgetItem(cur_it);
-				    t_it->setData(0, Qt::UserRole, item.c_str());
-				    printf("TEST 11: %s\n", item.c_str());
-				    t_it->setText(0, treeItPath.c_str());
-                            	    t_it->setFlags(cur_it->flags()&(~Qt::ItemIsSelectable));
-				    t_it->setData(0, Qt::FontRole, noSelFnt);
-				}
-				cur_it = t_it;
-			    }
-			}
-			if(cur_it)
-			{
-			    cur_it->setFlags(cur_it->flags()|Qt::ItemIsSelectable);
-			    cur_it->setData(0, Qt::FontRole, elFnt);
-			}
-		    }
-		    printf("TEST 20: '%s' = %d(%d)\n",shD->value.c_str(), wdg->findText(shD->value.c_str()), wdg->count());
-		    //> Value
-		    wdg->setCurrentIndex(wdg->findText(shD->value.c_str()));
-		}
-		else
-		{
-		    QListView* listW = new QListView();
-		    listW->setModel(wdg->model());
-		    wdg->setView(listW);
-		}*/
 		setValue(w, shD->value, true);	//Value
 		break;
 	    }
@@ -540,7 +463,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		noSelFnt.setItalic(true);
 		for(int off = 0; (ipath=TSYS::strLine(shD->items,0,&off)).size(); )
 		{
-		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
+		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,false,&off1)).size(); lev++)
 			if(lev == 0)
 			{
 			    cur_it = NULL;
@@ -661,8 +584,8 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	case F_LINE_ED:
 	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
 	    break;
-	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->setText(val.c_str());		break;
-	case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
+	case F_TEXT_ED:	  ((TextEdit*)shD->addrWdg)->setText(val.c_str());		break;
+	case F_CHECK_BOX: ((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
 	case F_BUTTON:
 	{
 	    QPushButton *wdg = (QPushButton*)shD->addrWdg;
@@ -748,7 +671,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    QTreeWidget *wdg = (QTreeWidget*)shD->addrWdg;
 	    QTreeWidgetItem *cur_it = NULL;
 	    string item;
-	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,true,&off)).size(); lev++)
+	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,false,&off)).size(); lev++)
 		if(lev == 0)
 		{
 		    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
@@ -1010,7 +933,7 @@ void ShapeFormEl::treeChange( )
 
     string itPath;
     QTreeWidgetItem *cur_it = el->selectedItems()[0];
-    while(cur_it) { itPath = "/"+TSYS::strEncode(cur_it->text(0).toStdString(),TSYS::PathEl)+itPath; cur_it = cur_it->parent(); }
+    while(cur_it) { itPath = "/"+/*TSYS::strEncode(*/cur_it->text(0).toStdString()/*,TSYS::PathEl)*/+itPath; cur_it = cur_it->parent(); }
     map<string,string> attrs;
     attrs["value"] = itPath;
     attrs["event"] = "ws_TreeChange";

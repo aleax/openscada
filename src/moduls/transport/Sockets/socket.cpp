@@ -303,7 +303,7 @@ void TSocketIn::stop()
     if(type == SOCK_UNIX) remove(path.c_str());
 }
 
-int TSocketIn::writeTo( int thrId, const string &data )
+int TSocketIn::writeTo( const string &sender, const string &data )
 {
     fd_set		rw_fd;
     struct timeval	tv;
@@ -311,21 +311,24 @@ int TSocketIn::writeTo( int thrId, const string &data )
     switch(type)
     {
 	case SOCK_TCP: case SOCK_UNIX:
+	{
+	    int sId = atoi(TSYS::strLine(sender,1).c_str());
+	    if(sId < 0) return -1;
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Socket write message '%d'."), data.size());
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
 	    for( ; wOff != data.size() && wL > 0; wOff += wL)
 	    {
-		wL = write(thrId, data.data()+wOff, data.size()-wOff);
+		wL = write(sId, data.data()+wOff, data.size()-wOff);
 		if(wL == 0) { mess_err(nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
 		else if(wL < 0)
 		{
 		    if(errno == EAGAIN)
             	    {
                 	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
-                	FD_ZERO(&rw_fd); FD_SET(thrId, &rw_fd);
-                	int kz = select(thrId+1, NULL, &rw_fd, NULL, &tv);
-                	if(kz > 0 && FD_ISSET(thrId,&rw_fd)) { wL = 0; continue; }
+                	FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
+                	int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
+                	if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
             	    }
             	    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
@@ -335,6 +338,7 @@ int TSocketIn::writeTo( int thrId, const string &data )
 		sock_res.resRelease();
 	    }
 	    return wOff;
+	}
     }
 
     return 0;
@@ -561,11 +565,10 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	proto = SYS->protocol().at().modAt(protocol());
 	if(prot_in.freeStat())
 	{
-	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, workId());
+	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	    prot_in = proto.at().at(n_pr);
-	    prot_in.at().setThrId(sock);
 	}
-	if(prot_in.at().mess(request,answer,sender)) return;
+	if(prot_in.at().mess(request,answer)) return;
 	prot_in.free();
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
     }
@@ -939,7 +942,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Socket's output transport has address format:\n"
 	    "  TCP:{addr}:{port} - TCP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"

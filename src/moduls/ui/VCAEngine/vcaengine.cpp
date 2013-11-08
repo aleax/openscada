@@ -543,8 +543,8 @@ string Engine::callSynth( const string &itxt )
     //> Write text to pipe
     if( textToPipe )	fwrite( txt.c_str(), txt.size(), 1, fp );
     //> Read result from pipe
-    if( rezFromPipe )
-	while((comPos=fread( buf, 1, sizeof(buf), fp)))
+    if(rezFromPipe)
+	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
     pclose(fp);
     //> Read result from result file
@@ -552,7 +552,7 @@ string Engine::callSynth( const string &itxt )
     {
 	FILE *fp = fopen( synthRez, "r" );
 	if( !fp ) return "";
-	while((comPos=fread( buf, 1, sizeof(buf), fp)))
+	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
 	fclose(fp);
 	remove( synthRez );

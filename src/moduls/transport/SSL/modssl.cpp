@@ -535,18 +535,18 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
     try
     {
 	proto = SYS->protocol().at().modAt(protocol());
-	if( prot_in.freeStat() )
+	if(prot_in.freeStat())
 	{
-	    if( !proto.at().openStat(n_pr) ) proto.at().open( n_pr, workId() );
-	    prot_in = proto.at().at( n_pr );
+	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
+	    prot_in = proto.at().at(n_pr);
 	}
-	if( prot_in.at().mess(request,answer,sender) ) return;
+	if(prot_in.at().mess(request,answer)) return;
 	prot_in.free();
-	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
+	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
     }catch(TError err)
     {
 	prot_in.free();
-	if( !proto.freeStat() && proto.at().openStat(n_pr) ) proto.at().close( n_pr );
+	if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close( n_pr );
 
 	mess_err(nodePath().c_str(),"%s",err.mess.c_str() );
 	mess_err(nodePath().c_str(),_("Error request to protocol."));
@@ -964,7 +964,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("SSL output transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - remote SSL host address;\n"

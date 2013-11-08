@@ -248,15 +248,14 @@ TProtIn::~TProtIn()
 
 TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
-bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answer )
 {
     try
     {
 	//> Find user protocol for using
 	if(!funcV.func())
 	{
-	    AutoHD<TTransportIn> tri = SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().
-							     inAt(TSYS::strParse(srcTr(),1,"."));
+	    AutoHD<TTransportIn> tri = srcTr();
 	    string selNode = TSYS::strParse(tri.at().protocolFull(),1,".");
 	    if(!owner().uPrtPresent(selNode)) return false;
 	    up = owner().uPrtAt(selNode);
@@ -266,10 +265,10 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	}
 
 	//> Load inputs
-	funcV.setB(0,false);
-	funcV.setS(1,funcV.getS(1)+reqst);
-	funcV.setS(2,"");
-	funcV.setS(3,sender);
+	funcV.setB(0, false);
+	funcV.setS(1, funcV.getS(1)+reqst);
+	funcV.setS(2, "");
+	funcV.setS(3, TSYS::strLine(srcAddr(),0));
 	//> Call processing
 	funcV.calc( );
 	//> Get outputs

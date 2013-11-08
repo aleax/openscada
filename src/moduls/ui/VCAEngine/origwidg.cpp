@@ -346,9 +346,12 @@ void OrigFormEl::postEnable( int flag )
     LWidget::postEnable(flag);
 
     if(flag&TCntrNode::NodeConnect)
+    {
 	attrAdd(new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0",
 	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",F_LINE_ED,F_TEXT_ED,F_CHECK_BOX,F_BUTTON,F_COMBO,F_LIST,F_TREE,F_SLIDER,F_SCROLL_BAR).c_str(),
 	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"),i2s(A_FormElType).c_str()));
+	attrAt("name").at().fld().setReserve(i2s(A_FormElName));
+    }
 }
 
 bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
@@ -1613,7 +1616,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     vector<string> als;
 
     //> Parse template
-    try{ xdoc.load(XHTML_entity+tmpl, true, Mess->charset()); }
+    try{ if(!tmpl.empty()) xdoc.load(XHTML_entity+tmpl, true, Mess->charset()); }
     catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());

@@ -263,10 +263,10 @@ void MBD::transOpen( )
 	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error!"));
 	}
 	PQclear(res);
-	trOpenTm = time(NULL);
+	trOpenTm = SYS->sysTm();
     }
     reqCnt++;
-    reqCntTm = time(NULL);
+    reqCntTm = SYS->sysTm();
 }
 
 void MBD::transCommit( )
@@ -291,7 +291,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if( reqCnt && ((time(NULL)-reqCntTm) > 10*60 || (time(NULL)-trOpenTm) > 10*60 ) )
+    if( reqCnt && ((SYS->sysTm()-reqCntTm) > 10*60 || (SYS->sysTm()-trOpenTm) > 10*60 ) )
 	transCommit();
 }
 
@@ -476,7 +476,7 @@ void MTable::getStructDB( string name, vector< vector<string> > &tblStrct )
 void MTable::fieldStruct( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
     for( unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
     {
 	int pr1;
@@ -503,32 +503,48 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 {
     vector< vector<string> > tbl;
 
-    if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
-    mLstUse = time(NULL);
+    if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    mLstUse = SYS->sysTm();
+
+    //> Check for no present and no empty keys allow
+    if(row == 0)
+    {
+        vector<string> cf_el;
+        cfg.cfgList(cf_el);
+        for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+        {
+            TCfg &cf = cfg.cfg(cf_el[i_c]);
+            if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+            for( ; i_fld < tblStrct.size(); i_fld++)
+                if(cf.name() == tblStrct[i_fld][0]) break;
+            if(i_fld >= tblStrct.size()) return false;
+        }
+    }
+
     string sid;
     //> Make SELECT and WHERE
     string req = "SELECT ";
     string req_where = "WHERE ";
     //> Add use keys to list
     bool first_sel = true, next = false, trPresent = false;
-    for( unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	sid = tblStrct[i_fld][0];
 	TCfg *u_cfg = cfg.at(sid,true);
-	if( !cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") )
+	if(!cfg.noTransl() && !u_cfg && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#"))
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText) ) continue;
+	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
 	    trPresent = true;
 	}
-	if( !u_cfg ) continue;
+	if(!u_cfg) continue;
 
-	if( u_cfg->fld().flg()&TCfg::Key && u_cfg->keyUse() )
+	if(u_cfg->fld().flg()&TCfg::Key && u_cfg->keyUse())
 	{
 	    req_where = req_where + (next?"AND \"":"\"") + TSYS::strEncode(sid,TSYS::SQL) + "\"='" + TSYS::strEncode(getVal(*u_cfg),TSYS::SQL) + "' ";
 	    next = true;
 	}
-	else if( u_cfg->fld().flg()&TCfg::Key || u_cfg->view() )
+	else if(u_cfg->fld().flg()&TCfg::Key || u_cfg->view())
 	{
 	    req = req + (first_sel?"\"":",\"") + TSYS::strEncode(sid,TSYS::SQL) + "\"";
 	    first_sel = false;
@@ -536,19 +552,19 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     }
 
     //> Request
-    if( first_sel ) return false;
+    if(first_sel) return false;
     req = req + " FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " + (next?req_where:"") + " LIMIT 1 OFFSET " + TSYS::int2str(row);
-    owner().sqlReq( req, &tbl, false );
-    if( tbl.size() < 2 ) return false;
-    for( unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++ )
+    owner().sqlReq(req, &tbl, false);
+    if(tbl.size() < 2) return false;
+    for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++)
     {
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid,true);
-	if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
-	else if( trPresent && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") && tbl[1][i_fld].size() )
+	if(u_cfg) setVal(*u_cfg,tbl[1][i_fld]);
+	else if(trPresent && sid.size() > 3 && sid.substr(0,3) == (Mess->lang2Code()+"#") && tbl[1][i_fld].size())
 	{
 	    u_cfg = cfg.at(sid.substr(3),true);
-	    if( u_cfg ) setVal(*u_cfg,tbl[1][i_fld]);
+	    if(u_cfg) setVal(*u_cfg,tbl[1][i_fld]);
 	}
     }
     return true;
@@ -559,7 +575,7 @@ void MTable::fieldGet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
     string sid;
     //> Prepare request
     string req = "SELECT ";
@@ -616,7 +632,7 @@ void MTable::fieldSet( TConfig &cfg )
     vector< vector<string> > tbl;
 
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
@@ -701,7 +717,7 @@ void MTable::fieldSet( TConfig &cfg )
 void MTable::fieldDel( TConfig &cfg )
 {
     if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
-    mLstUse = time(NULL);
+    mLstUse = SYS->sysTm();
 
     //> Get config fields list
     vector<string> cf_el;

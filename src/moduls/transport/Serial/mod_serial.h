@@ -208,7 +208,7 @@ class TTr: public TTipTransport
 	TTransportIn  *In( const string &name, const string &idb );
 	TTransportOut *Out( const string &name, const string &idb );
 
-	static void writeLine( int fd, const string &ln );
+	static void writeLine( int fd, const string &ln, bool noNewLn = false );
 	static string expect( int fd, const string& expLst, int tm );
 
 	bool devLock( const string &dn, bool check = false );

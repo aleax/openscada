@@ -28,6 +28,7 @@
 #include <string>
 
 #include "tsubsys.h"
+#include "ttransports.h"
 
 using std::string;
 
@@ -46,18 +47,19 @@ class TProtocolIn : public TCntrNode
 	TProtocolIn( const string &name );
 	virtual ~TProtocolIn( );
 
-	string	name( )		{ return mName.c_str(); }
-	const string &srcTr( )	{ return mSrcTr; }
-	int thrId( )		{ return mThrId; }
+	string	name( )			{ return mName.c_str(); }
+	AutoHD<TTransportIn> &srcTr( )	{ return mSrcTr; }	//Source or return address
+	const string &srcAddr( )	{ return mSrcAddr; }
 
-	void setSrcTr( const string &vl )	{ mSrcTr = vl; }
-	void setThrId( int vl )			{ mThrId = vl; }
+	void setSrcTr( TTransportIn *vl )	{ mSrcTr = vl; }
+	void setSrcAddr( const string &vl )	{ mSrcAddr = vl; }
 
-	int writeTo( const string &data );
+	int writeTo( const string &data );	//Backward request to source, for asynchronous responds to requests mostly
 
 	//> Process input messages
-	virtual bool mess( const string &request, string &answer, const string &sender )
-	{ answer = ""; return false; }
+	//* mess( ) - Send messages point from transports.
+	//            False return for full request came and true for need tail or just wait.
+	virtual bool mess( const string &request, string &answer )	{ answer = ""; return false; }
 
 	TProtocol &owner( );
 
@@ -66,8 +68,10 @@ class TProtocolIn : public TCntrNode
 	const char *nodeName( )	{ return mName.c_str(); }
 
 	//Attributes
-	string	mName;
-	string	mSrcTr;
+	string	mName,
+		mSrcAddr;	//Source or return address into readable, first line, and service information,
+				//second line, for backward requests by writeTo()
+	AutoHD<TTransportIn>	mSrcTr;
 	int	mThrId;		//Transport's thread id
 };
 
@@ -88,7 +92,7 @@ class TProtocol: public TModule
 	//> Input protocol
 	void list( vector<string> &list )		{ chldList(m_pr,list); }
 	bool openStat( const string &name )		{ return chldPresent(m_pr,name); }
-	void open( const string &name, const string &tr );
+	void open( const string &name, TTransportIn *tr = NULL, const string &sender = "" );
 	void close( const string &name );
 	AutoHD<TProtocolIn> at( const string &name )	{ return chldAt(m_pr,name); }
 

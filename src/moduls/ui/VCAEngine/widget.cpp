@@ -148,7 +148,7 @@ void Widget::postEnable( int flag )
 	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
 	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")));
 	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
-	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic,"","","","",i2s(A_NAME).c_str()));
+	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
 	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
@@ -1128,7 +1128,8 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 						 "  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."));
 			    break;
 		    }
-		    if(attr.at().flgGlob()&Attr::Image)	el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[i_el]);
+		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&Attr::Image)
+			el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[i_el]);
 		}
 	    }
 	}

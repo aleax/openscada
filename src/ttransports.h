@@ -74,7 +74,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	virtual void start( )	{ }
 	virtual void stop( )	{ }
-	virtual int writeTo( int thrId, const string &data )	{ }
+	virtual int writeTo( const string &sender, const string &data )	{ }
 
 	TTipTransport &owner( );
 
@@ -158,7 +158,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &cfg );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 

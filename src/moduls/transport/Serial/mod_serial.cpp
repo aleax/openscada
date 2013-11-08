@@ -156,9 +156,9 @@ void TTr::perSYSCall( unsigned int cnt )
 	catch(TError err){ }
 }
 
-void TTr::writeLine( int fd, const string &ln )
+void TTr::writeLine( int fd, const string &ln, bool noNewLn )
 {
-    string obuf = ln+"\x0D\x0A";
+    string obuf = ln + (noNewLn?"":"\x0D\x0A");
     for(unsigned wOff = 0, kz = 0; wOff != obuf.size(); wOff += kz)
 	if((kz=write(fd,obuf.data()+wOff,obuf.size()-wOff)) <= 0)
 	    throw TError(mod->nodePath().c_str(),_("Write line error."));
@@ -455,7 +455,7 @@ void TTrIn::stop()
 {
     if( !run_st ) return;
 
-    if( mMdmMode && mMdmDataMode ) mod->devUnLock(mDevPort);
+    if(mMdmMode && mMdmDataMode) mod->devUnLock(mDevPort);
 
     mMdmMode = mMdmDataMode = false;
 
@@ -567,11 +567,12 @@ void *TTrIn::Task( void *tr_in )
 	    {
 		AutoHD<TProtocol> proto = SYS->protocol().at().modAt(tr->protocol());
 		string n_pr = tr->id()+TSYS::int2str(tr->fd);
-		if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr->workId());
+		if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, tr, "\n"+i2s(tr->fd));
 		prot_in = proto.at().at(n_pr);
 	    }
-	    prot_in.at().mess(req, answ, "");
-	}catch(TError err)
+	    prot_in.at().mess(req, answ);
+	}
+	catch(TError err)
 	{
 	    mess_err(tr->nodePath().c_str(),"%s",err.mess.c_str() );
 	    mess_err(tr->nodePath().c_str(),_("Error request to protocol."));
@@ -1046,7 +1047,7 @@ void TTrOut::stop()
 
     if(mMdmDataMode)
     {
-	TTr::writeLine(fd,mdmExit());
+	TTr::writeLine(fd, mdmExit(), true);
 	if(mdmPreInit() > 0) TSYS::sysSleep(mdmPreInit());
 	//> HangUp
 	TTr::writeLine(fd,mdmHangUp());
@@ -1246,7 +1247,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,4,
 	    "tp","str","dest","sel_ed","select","/prm/cfg/devLS","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"

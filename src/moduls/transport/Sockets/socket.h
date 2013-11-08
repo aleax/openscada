@@ -101,7 +101,7 @@ class TSocketIn: public TTransportIn
 
 	void start( );
 	void stop( );
-	int writeTo( int thrId, const string &data );
+	int writeTo( const string &sender, const string &data );
 
     protected:
 	//Methods

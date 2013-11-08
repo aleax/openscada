@@ -61,7 +61,7 @@ TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
     el_ext.fldAdd( new TFld("PASS",_("Request password"),TFld::String,0,"30") );
 }
 
-TTransportS::~TTransportS(  )
+TTransportS::~TTransportS( )
 {
 
 }
@@ -376,12 +376,10 @@ TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &
 
 AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const string &pref )
 {
-    if( !host.id.size() || !modPresent(host.transp) )
-	throw TError(nodePath().c_str(),_("Remote host error!"));
+    if(!host.id.size() || !modPresent(host.transp)) throw TError(nodePath().c_str(),_("Remote host error!"));
 
-    if( !at(host.transp).at().outPresent(pref+host.id) )
-	at(host.transp).at().outAdd(pref+host.id);
-    if( at(host.transp).at().outAt(pref+host.id).at().addr() != host.addr )
+    if(!at(host.transp).at().outPresent(pref+host.id)) at(host.transp).at().outAdd(pref+host.id);
+    if(at(host.transp).at().outAt(pref+host.id).at().addr() != host.addr)
     {
 	at(host.transp).at().outAt(pref+host.id).at().setAddr(host.addr);
 	at(host.transp).at().outAt(pref+host.id).at().stop();
@@ -625,9 +623,9 @@ void TTransportIn::postDisable(int flag)
 {
     try
     {
-        if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+        if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
+    }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 string TTransportIn::getStatus( )
@@ -780,7 +778,7 @@ TCntrNode &TTransportOut::operator=( TCntrNode &node )
 
 TTipTransport &TTransportOut::owner( )	{ return *(TTipTransport*)nodePrev(); }
 
-string TTransportOut::name()
+string TTransportOut::name( )
 {
     string rez = cfg("NAME").getS();
     return rez.size() ? rez : mId;
@@ -794,9 +792,16 @@ void TTransportOut::postDisable(int flag)
 {
     try
     {
-	if( flag ) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
+	if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
     }
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+bool TTransportOut::cfgChange( TCfg &cfg )
+{
+    if(cfg.name() == "ADDR") stop();	//By the address change and reconnect need ordinary
+    modif();
+    return true;
 }
 
 string TTransportOut::getStatus( )

@@ -596,6 +596,7 @@ void TMdPrm::initTmplLnks( bool checkNoLink )
 	    lnk(i_l).aprm.free();
 	    lnk(i_l).aprm = SYS->daq().at().attrAt(lnk(i_l).prm_attr, '.', true);
 	    if(!lnk(i_l).aprm.freeStat()) tmpl->val.setS(lnk(i_l).io_id, lnk(i_l).aprm.at().getS());
+	    else chk_lnk_need = true;
 	}catch(TError err){ chk_lnk_need = true; }
     }
 }

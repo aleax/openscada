@@ -103,15 +103,15 @@ Server::EP *TProt::epEnAt( const string &ep )
     return NULL;
 }
 
-bool TProt::inReq( string &request, string &answer, const string &sender, const string &threadId )
+bool TProt::inReq( string &request, string &answer, const string &inPrtId )
 {
     ResAlloc res(en_res, false);
-    return Server::inReq(request, answer, sender, threadId);
+    return Server::inReq(request, answer, inPrtId);
 }
 
-int TProt::writeToClient( const string &threadId, const string &data )
+int TProt::writeToClient( const string &inPrtId, const string &data )
 {
-    return at(threadId).at().writeTo(data);
+    return at(inPrtId).at().writeTo(data);
 }
 
 void TProt::discoveryUrls( vector<string> &ls )
@@ -253,10 +253,11 @@ TProtIn::~TProtIn( )
 
 TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
-bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
-    return owner().inReq(mBuf, answ, sender, name());
+    //printf("TEST 00: '%s'\n", sender.c_str());
+    return owner().inReq(mBuf, answ, name());
 }
 
 //*************************************************

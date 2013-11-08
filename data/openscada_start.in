@@ -2,8 +2,10 @@
 
 export TEXTDOMAIN=openscada
 export TEXTDOMAINDIR=@datadir_full@/locale
-tput init; TERM_REZ=$?
-tmpfile=`mktemp`
+if [ -n "$(which tput)" ]; then tput init; TERM_REZ=$?;
+elif [ "x$TERM" = "xxterm" ]; then TERM_REZ=0;
+else TERM_REZ=1; fi
+tmpfile=`mktemp -t oscada_XXXXXX`
 
 StartOrigCfgPref=@sysconfdir_full@
 StartOrigCfgFile=$StartOrigCfgPref/oscada_start.xml
@@ -35,7 +37,7 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
 	rez=
 	if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --menu "$(gettext "Select project for start.")" 20 60 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`;
 	elif test -n "$(which kdialog)"; then rez=`kdialog --title "$(gettext "OpenSCADA start")" --menu "$(gettext "Select project for start.")" "${prjList[@]}"`;
-	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$(gettext "OpenSCADA start")" --list --text="$(gettext "Select project for start.")" --column="Tag" --column="Project" --hide-header --hide-column=1 "${prjList[@]}"`;
+	elif test -n "$(which zenity)"; then rez=`zenity --height=400 --width=300 --title "$(gettext "OpenSCADA start")" --list --text="$(gettext "Select project for start.")" --column="Tag" --column="Project" --hide-column=1 "${prjList[@]}"`;
 	elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --no-tags --menubox "$(gettext "Select project for start.")" 20 50 20 "${prjList[@]}" 2> $tmpfile; rez=`cat $tmpfile`; fi
 	ProjName=$rez
 	if test "x$ProjName" = "x" -o "x$ProjName" = "x<*>"; then ProjName=;
@@ -51,7 +53,7 @@ if test "x$ProjName" = "x" -o "$ProjName" = "start"; then
 	    # Move and prepare start ico to desktop
 	    elif [ -n "$DESKTOP_DIR" ] && [ ! -f "$DESKTOP_DIR/openscada_$ProjName.desktop" ]; then
 		cp @datadir_full@/applications/openscada.desktop "$DESKTOP_DIR/openscada_$ProjName.desktop";
-		subst "s/Exec=/Exec=OSCADA_ProjName=$ProjName /" "$DESKTOP_DIR/openscada_$ProjName.desktop"
+		subst "s/Exec=/Exec=env OSCADA_ProjName=$ProjName /" "$DESKTOP_DIR/openscada_$ProjName.desktop"
 		subst "s/\(^\(Generic\|\)Name\(=\|\\[.*\\]=\).*\)/\1: $ProjName/" "$DESKTOP_DIR/openscada_$ProjName.desktop"
 	    fi
 	fi

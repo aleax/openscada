@@ -1999,7 +1999,7 @@ string Server::mkError( uint32_t errId, const string &err )
     return rez;
 }
 
-bool Server::inReq( string &rba, string &answ, const string &sender, const string &threadId )
+bool Server::inReq( string &rba, string &answ, const string &inPrtId )
 {
     uint32_t mSz;
     int off = 0;
@@ -2873,7 +2873,7 @@ nextReq:
     }
     catch(OPCError er)	{ if(er.cod) out = mkError(er.cod, er.mess); }
 
-    writeToClient(threadId, out);
+    writeToClient(inPrtId, out);
     //answ.append(out);
 
     rba.erase(0, mSz);

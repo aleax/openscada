@@ -495,7 +495,7 @@ TProtIn::~TProtIn()
 
 TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
-bool TProtIn::mess( const string &ireqst, string &answer, const string &sender )
+bool TProtIn::mess( const string &ireqst, string &answer )
 {
     //> Check for protocol type
     unsigned char node = 0;
@@ -547,7 +547,7 @@ retry:
     modPrt->nList(nls);
     unsigned i_n;
     for(i_n = 0; i_n < nls.size(); i_n++)
-	if(modPrt->nAt(nls[i_n]).at().req(srcTr(),prt,node,pdu)) break;
+	if(modPrt->nAt(nls[i_n]).at().req(srcTr().at().workId(),prt,node,pdu)) break;
     if(i_n >= nls.size()) return false;
 
     answer = "";
@@ -584,7 +584,8 @@ retry:
 
     if(owner().prtLen( ) && prt.size() && answer.size())
     {
-	string mess = TSYS::time2str(time(NULL),"")+" "+prt+": "+srcTr()+"("+sender+") --> "+TSYS::int2str(node)+"\n";
+	string mess = TSYS::time2str(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
+	    		"("+TSYS::strLine(srcAddr(),0)+") --> "+TSYS::int2str(node)+"\n";
 	mess += _("REQ -> ");
 	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin);
 	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);

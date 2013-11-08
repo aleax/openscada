@@ -57,7 +57,7 @@ class TProtIn: public TProtocolIn
 	~TProtIn( );
 
 	//!!! The inherited (virtual) function of process input and preparint output data for called input transport
-	bool mess( const string &request, string &answer, const string &sender );
+	bool mess( const string &request, string &answer );
 };
 
 //!!! Root module object define. Add methods and attributes for your need.

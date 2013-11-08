@@ -438,12 +438,13 @@ string TProtIn::httpHead( const string &rcode, int cln, const string &addattr, b
 	   (defCtx?("Content-Type: text/html;charset="+Mess->charset()+"\x0D\x0A"):string(""))+addattr+"\x0D\x0A";
 }
 
-bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
+bool TProtIn::mess( const string &reqst, string &answer )
 {
     bool KeepAlive = false;
     string req, sel, userAgent;
     int sesId = 0;
     vector<string> vars;
+    string sender = TSYS::strLine(srcAddr(),0);
 
     //> Continue for full reqst
     if(m_nofull)
