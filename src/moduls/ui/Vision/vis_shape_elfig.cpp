@@ -1024,7 +1024,7 @@ QPointF ShapeElFigure::getArcStartEnd( QPointF StartMotionPos, QPointF EndMotion
 void ShapeElFigure::editEnter( DevelWdgView *w )
 {
     itemInMotion = NULL;
-    index = -1; status = false;
+    index = -1; status = fMoveHoldMove = false;
 
     w->mainWin()->elFigTool->setVisible(true);
 
@@ -1377,6 +1377,7 @@ void ShapeElFigure::toolAct( QAction *act )
     WidthMap &widths	= elFD->shapeWidths;
     StyleMap &styles	= elFD->shapeStyles;
     ColorMap &clrs	= elFD->shapeColors;
+    ImageMap &imgs	= elFD->shapeImages;
 
     if(act->objectName() == "cursor" || act->objectName() == "line" || act->objectName() == "arc" || act->objectName() == "besier")
 	for(int i_a = 0; i_a < w->mainWin()->elFigTool->actions().size(); i_a++)
@@ -1478,8 +1479,13 @@ void ShapeElFigure::toolAct( QAction *act )
 		inund_figs.clear();
 	    }
 	    for(map<int, QVector<int> >::iterator pi = inund_map.begin(); pi != inund_map.end(); pi++)
+	    {
 		inundationItems.push_back(inundationItem(createInundationPath(pi->second,shapeItems,pnts,w),
-					  inundationItems[pi->first].brush,inundationItems[pi->first].brush_img,pi->second,pi->second));
+			inundationItems[pi->first].brush, inundationItems[pi->first].brush_img,	pi->second,pi->second));
+		inundationItem &newIt = inundationItems[inundationItems.size()-1];
+		if(!vrng(newIt.brush,ShapeItem::StatIts+1,0)) newIt.brush = appendColor(clrs[newIt.brush],&clrs,(newIt.brush <= ShapeItem::StatIts));
+		if(!vrng(newIt.brush_img,ShapeItem::StatIts+1,0)) newIt.brush_img = appendImage(imgs[newIt.brush_img],&imgs,(newIt.brush_img <= ShapeItem::StatIts));
+	    }
 	    flag_copy = flag_A = true;
 	    if(rect_array.size())
 	    {
@@ -3660,6 +3666,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 	    if( devW )
 	    {
 		bool fl_dashedRect = false;
+		fMoveHoldMove = false;
 		if( !flag_down && !flag_up && !flag_left && !flag_right )
 		{
 		    if( flag_move && ev->button() == Qt::LeftButton && !(QApplication::keyboardModifiers()&Qt::ControlModifier) )
@@ -3693,7 +3700,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			fl_dashedRect = true;
 			view->repaint();
 		    }
-		    if( ev->button() == Qt::LeftButton && itemInMotion )
+		    if(index >= 0 && index < shapeItems.size() && ev->button() == Qt::LeftButton && itemInMotion)
 		    {
 			bool paint_im = false;
 			flag_inund_break = false;
@@ -3958,7 +3965,13 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 	    if(devW)
 	    {
 		Mouse_pos = ev->pos();
-		if((ev->buttons()&Qt::LeftButton) && itemInMotion && (!status || fl_status_move))
+
+		if(!fMoveHoldMove && ev->buttons()&Qt::LeftButton &&
+			(Mouse_pos-mousePress_pos).manhattanLength() >= QApplication::startDragDistance())
+		    fMoveHoldMove = true;
+
+		//> Move item, often second point, at append
+		if((fMoveHoldMove || status) && (ev->buttons()&Qt::LeftButton) && itemInMotion && (!status || fl_status_move))
 		{
 		    flag_m = true;
 		    if(count_holds)
@@ -4015,7 +4028,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    paintImage(view);
 			    view->repaint();
 			}
-			else if(!flag_ctrl)
+			else if(!flag_ctrl && index >= 0 && index < shapeItems.size())
 		    	{
 			    count_Shapes = 1;
 			    count_moveItemTo = 1;
@@ -4085,9 +4098,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    paintImage(view);
 			    view->repaint();
 			}
-			if( rect_num != -1 )	temp = realRectNum( rect_num, shapeItems );
+			if(rect_num >= 0 && rect_num < rectItems.size()) temp = realRectNum( rect_num, shapeItems );
 			//- if the figure or it's rect is not connected to other one -
-			if( status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)) )
+			if(index >= 0 && index < shapeItems.size() && status_hold && (rect_num == -1|| ((temp == 0 || temp == 1) && !flag_rect)))
 			{
 			    current_se = current_ss = current_ee = current_es = -1;
 			    ellipse_draw_startPath = newPath;
@@ -4151,7 +4164,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		    flag_first_move = true;
 		}
 		//> Group selection by rect
-		else if((ev->buttons()&Qt::LeftButton) && !itemInMotion && !status && index_temp == -1 && !(QApplication::keyboardModifiers()&Qt::ControlModifier))
+		else if(fMoveHoldMove && (ev->buttons()&Qt::LeftButton) && !itemInMotion && !status && index_temp == -1 && !(QApplication::keyboardModifiers()&Qt::ControlModifier))
 		{
 		    if( !flag_move )
 		    {

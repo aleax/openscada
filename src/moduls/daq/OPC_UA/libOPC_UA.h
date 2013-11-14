@@ -133,8 +133,12 @@ namespace OSCADA_OPC
 #define OpcUa_CreateMonitoredItemsResponse	754
 #define OpcUa_CreateSubscriptionRequest		787
 #define OpcUa_CreateSubscriptionResponse	790
+#define OpcUa_SetPublishingModeRequest	799
+#define OpcUa_SetPublishingModeResponse	802
 #define OpcUa_PublishRequest		826
 #define OpcUa_PublishResponse		829
+#define OpcUa_DeleteSubscriptionsRequest	847
+#define OpcUa_DeleteSubscriptionsResponse	850
 
 //> Object Identifiers
 #define OpcUa_RootFolder		84

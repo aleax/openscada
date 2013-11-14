@@ -1176,7 +1176,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	}
 	else if(a_val.compare(0,5,"file:") == 0)
 	{
-	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;");
+	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;");
 	    for(int i_t = 0; i_t < opt->childSize(); i_t++)
                 opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}

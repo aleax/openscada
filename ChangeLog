@@ -1,3 +1,23 @@
+2013-11-14-Roman
+- DB: Recipe's frames is some updated into vcaBase.db.
+- Archive.Val: To makeTrendImg() argument for file type provide is added.
+    Test forming archive's values trand into "SVG" at LibGD miss is added.
+- FIX:DAQ.TController: The controller's object strange reenable after its a parameter copy is commented.
+- DAQ.TParameter: At the parameter's copy the child parameters recursive copy is added.
+- DAQ.OPC_UA: Terminated functions SetPublishingMode and DeleteSubscriptions is implemented into input
+    protocol's library part for allow no-terminable working with UAExpert. The path next will be used into LTS but
+    for the work version will be implemented full "Subscription" service support by new asynchronous responds API.
+- UI.VCAEngine: The original "Alignment" variants text list for texts is fixed.
+    SVG extension is added for media-files inline navigation.
+- !:FIX:UI.Vision.ElFigure: The dead-area for figures moving start is added. Color's and Image's indexes copy on inundations copy is added.
+    Some checks to allowing the indexes is added for prevent crashes by out of range.
+    The mouse and keyboard development mode event will soon full revised and fixed for make the work direct!
+- UI.Vision.FormEl: To view "Tree" the items decoding is restored and for set to "value" selected item used original item.
+    To views "Tree" and "List" set scroll and expand to selected item is added.
+- FIX:UI.Vision: To generic widget editable combo checking for equal to set text is added for prevent selection and cursor position lost.
+- UI.WebCfgD: Type for media-file using is added for other to png images, like "svg" allow.
+
+
 2013-11-08 Roman
 - DB: Recipe's frames is some updated into vcaBase.db.
 - SYS: Prefix "env" to openscada.desktop is added for ensure work on Maemo (N800, N900).

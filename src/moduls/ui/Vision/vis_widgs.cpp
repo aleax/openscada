@@ -561,12 +561,12 @@ void LineEdit::setValue( const QString &txt )
 	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
 	    break;
 	case Date: case DateTime:
-	    if( ((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible() ) break;
+	    if(((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
 	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
-	    if( ((QComboBox*)ed_fld)->findText(txt) < 0 ) ((QComboBox*)ed_fld)->addItem(txt);
-	    ((QComboBox*)ed_fld)->setEditText(txt);
+	    if(((QComboBox*)ed_fld)->findText(txt) < 0) ((QComboBox*)ed_fld)->addItem(txt);
+	    if(txt != value())	((QComboBox*)ed_fld)->setEditText(txt);
 	    break;
     }
     if(ed_fld) ed_fld->blockSignals(false);

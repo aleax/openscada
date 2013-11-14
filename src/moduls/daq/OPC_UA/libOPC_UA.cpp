@@ -2539,6 +2539,24 @@ nextReq:
 		    oNu(respEp, 0, 4);			//revisedLifetimeCount
 		    oNu(respEp, 0, 4);			//revisedMaxKeepAliveCount
 		    break;
+		case OpcUa_DeleteSubscriptionsRequest:	//!!!! Should next implemented full
+		{
+		    //>> Request
+		    uint32_t sn = iNu(rb, off, 4);	//subscriptionIds []
+
+		    //>> Respond
+		    reqTp = OpcUa_DeleteSubscriptionsResponse;
+		    respEp.reserve(100);
+		    oNu(respEp, sn, 4);			//results []
+
+		    for(uint32_t i_s = 0; i_s < sn; i_s++)
+		    {
+			iNu(rb, off, 4);		//subscriptionId
+			oNu(respEp, 0, 4);		//statusCode, 0x00000000
+		    }
+		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
+		    break;
+		}
 		case OpcUa_CreateMonitoredItemsRequest:	//!!!! Should next implemented full
 		{
 		    //>> Request
@@ -2584,6 +2602,25 @@ nextReq:
 			oNu(respEp, 0, 1);				//encodingMask, 0
 		    }
 		    oN(respEp, -1, 4);				//diagnosticInfos [], -1
+		    break;
+		}
+		case OpcUa_SetPublishingModeRequest:		//!!!! Should next implemented full
+		{
+		    //>> Request
+		    iNu(rb, off, 1);			//publishingEnabled
+		    uint32_t sn = iNu(rb, off, 4);	//subscriptionIds []
+
+		    //>> Respond
+		    reqTp = OpcUa_SetPublishingModeResponse;
+		    respEp.reserve(100);
+		    oNu(respEp, sn, 4);			//results []
+
+		    for(uint32_t i_s = 0; i_s < sn; i_s++)
+		    {
+			iNu(rb, off, 4);		//subscriptionId
+			oNu(respEp, 0, 4);		//statusCode, 0x00000000
+		    }
+		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
 		    break;
 		}
 		case OpcUa_TranslateBrowsePathsToNodeIdsRequest: //!!!! Error always

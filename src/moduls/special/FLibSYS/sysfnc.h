@@ -73,10 +73,10 @@ class dbReqSQL : public TFunction
     public:
 	dbReqSQL( ) : TFunction("dbReqSQL",SSPC_ID)
 	{
-	    ioAdd( new IO("rez",_("Result"),IO::Object,IO::Return) );
-	    ioAdd( new IO("addr",_("DB address"),IO::String,IO::Default) );
-	    ioAdd( new IO("req",_("SQL request"),IO::String,IO::Default) );
-	    ioAdd( new IO("trans",_("Transaction"),IO::Boolean,IO::Default,TSYS::int2str(EVAL_BOOL).c_str()) );
+	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("addr",_("DB address"),IO::String,IO::Default));
+	    ioAdd(new IO("req",_("SQL request"),IO::String,IO::Default));
+	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,TSYS::int2str(EVAL_BOOL).c_str()));
 	}
 
 	string name( )	{ return _("DB: SQL request"); }

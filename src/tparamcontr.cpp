@@ -100,6 +100,20 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
 	    vlAt(a_ls[i_a]).at().setArch();
 	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
         }
+
+	//> Parameters copy
+	if(mPrm >= 0)
+	{
+	    vector<string> prm_ls;
+	    src_n->list(prm_ls);
+	    for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
+	    {
+		if(!owner().owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name)) continue;
+		if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
+		(TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
+		//if(toEnable() && !enableStat()) enable();
+    	    }
+	}
     }
 
     return *this;

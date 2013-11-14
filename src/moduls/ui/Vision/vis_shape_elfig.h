@@ -257,6 +257,7 @@ class ShapeElFigure : public WdgShape
 	unsigned fl_orto_move		:1;	//Flag for using during the orthogonal line or bezier curve drawing
 	unsigned fl_orto_disable	:1;	//Flag for disabling the orthogonal drawing in the moveItemTo function
 	unsigned status			:1;	//Check fo any primitive paint key pressed
+	unsigned fMoveHoldMove		:1;	//Moving processing flag hysteresis
 
 	int count_holds, count_rects, rect_num_arc, arc_rect;
 	double t_start, t_end; //Start and end values of the arc

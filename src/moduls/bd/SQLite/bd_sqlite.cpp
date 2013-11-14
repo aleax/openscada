@@ -317,7 +317,7 @@ MTable::~MTable(  )
 
 }
 
-void MTable::postDisable(int flag)
+void MTable::postDisable( int flag )
 {
     owner().transCommit();
     if( flag )

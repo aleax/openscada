@@ -252,12 +252,11 @@ string XMLNode::save( unsigned flg, const string &cp )
     string xml;
     xml.reserve(10000);
 
-    if(flg&XMLHeader) xml += "<?xml version='1.0' encoding='"+cp+"' ?>\n";
+    if(flg&(XMLHeader|XHTMLHeader)) xml += "<?xml version='1.0' encoding='"+cp+"' ?>\n";
     if(flg&XHTMLHeader)
-	xml += "<?xml version='1.0' encoding='"+cp+"' ?>\n"
-	       "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n";
+	xml += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\n";
 
-    saveNode(flg,xml,cp);
+    saveNode(flg, xml, cp);
     return xml;
 }
 

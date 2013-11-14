@@ -642,7 +642,7 @@ void OrigText::postEnable( int flag )
 	attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
 			    _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
-			    "V center left; V center right; Center; V center justify"),"29") );
+			    "V center left;V center right;Center;V center justify"),"29") );
 	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","","30") );
 	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","","40") );
     }

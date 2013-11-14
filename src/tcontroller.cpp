@@ -76,7 +76,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
 	    if(!owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name)) continue;
 	    if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
 	    (TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
-	    if(toEnable() && !enableStat()) enable();
+	    //if(toEnable() && !enableStat()) enable();
 	}
     }
 

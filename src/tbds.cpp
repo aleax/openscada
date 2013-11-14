@@ -788,7 +788,7 @@ void TBD::save_( )
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // Array SQLReq(string req) - formation of the SQL-request to the DB.
+    // Array SQLReq(string req, bool tr = EVAL_BOOL) - formation of the SQL-request to the DB.
     //  req - SQL-request text
     if(iid == "SQLReq" && prms.size() >= 1)
     {

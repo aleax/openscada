@@ -463,7 +463,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		noSelFnt.setItalic(true);
 		for(int off = 0; (ipath=TSYS::strLine(shD->items,0,&off)).size(); )
 		{
-		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,false,&off1)).size(); lev++)
+		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
 			if(lev == 0)
 			{
 			    cur_it = NULL;
@@ -496,6 +496,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    {
 			cur_it->setFlags(cur_it->flags()|Qt::ItemIsSelectable);
 			cur_it->setData(0, Qt::FontRole, elFnt);
+			cur_it->setData(0, Qt::UserRole, ipath.c_str());
 		    }
 		}
 		shD->addrWdg->blockSignals(false);
@@ -662,8 +663,14 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    break;
 	case F_LIST:
 	{
-	    QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(val.c_str(),Qt::MatchExactly);
-	    ((QListWidget*)shD->addrWdg)->setCurrentItem(its.size()?its[0]:NULL);
+	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
+	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
+	    if(its.size())
+	    {
+		wdg->setCurrentItem(its[0]);
+		wdg->scrollToItem(its[0]);
+	    }
+	    else wdg->setCurrentItem(NULL);
 	    break;
 	}
 	case F_TREE:
@@ -671,7 +678,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    QTreeWidget *wdg = (QTreeWidget*)shD->addrWdg;
 	    QTreeWidgetItem *cur_it = NULL;
 	    string item;
-	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,false,&off)).size(); lev++)
+	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,true,&off)).size(); lev++)
 		if(lev == 0)
 		{
 		    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
@@ -691,8 +698,9 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		shD->addrWdg->blockSignals(true);
 		cur_it->setSelected(true);
 		shD->addrWdg->blockSignals(false);
+		wdg->scrollToItem(cur_it);
 		//> Expand all parents for visible selected
-		for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
+		//for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
 	    }
 	    break;
 	}
@@ -931,11 +939,8 @@ void ShapeFormEl::treeChange( )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
 
-    string itPath;
-    QTreeWidgetItem *cur_it = el->selectedItems()[0];
-    while(cur_it) { itPath = "/"+/*TSYS::strEncode(*/cur_it->text(0).toStdString()/*,TSYS::PathEl)*/+itPath; cur_it = cur_it->parent(); }
     map<string,string> attrs;
-    attrs["value"] = itPath;
+    attrs["value"] = el->selectedItems()[0]->data(0, Qt::UserRole).toString().toStdString();
     attrs["event"] = "ws_TreeChange";
     w->attrsSet(attrs);
 }
