@@ -2257,7 +2257,7 @@ nextReq:
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
 	    //>> Session check
-	    if(sesTokId && reqTp != OpcUa_CreateSessionRequest && !wep->sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest))
+	    if(sesTokId && reqTp != OpcUa_CreateSessionRequest && !wep->sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest,inPrtId))
 	    { stCode = OpcUa_BadSessionIdInvalid; reqTp = OpcUa_ServiceFault; }
 	    iTm(rb, off);					 //timestamp
 	    int32_t reqHndl = iN(rb, off, 4);			//requestHandle
@@ -2385,7 +2385,7 @@ nextReq:
 
 		    //>> Try for session reusing
 		    int sessId = 0;
-		    if(!sesTokId && wep->sessActivate(sesTokId,secId,true)) sessId = sesTokId;
+		    if(!sesTokId && wep->sessActivate(sesTokId,secId,true,inPrtId)) sessId = sesTokId;
 		    //>> Create new session
 		    if(!sessId) sessId = wep->sessCreate(sessNm, rStm);
 		    string servNonce = randBytes(32);
@@ -2950,6 +2950,30 @@ Server::Sess::Sess( ) : tInact(0), tAccess(0)
 }
 
 //*************************************************
+//* Server::Sess::Subscr                          *
+//*************************************************
+Server::Sess::Subscr::State Server::Sess::Subscr::setState( Server::Sess::Subscr::State ist )
+{
+    if(ist == st) return st;
+    switch(ist)
+    {
+	case GET_STATE:	return st;
+	case CLOSED:	//Clear the object
+	    mItems.clear();
+	    retrQueue.clear();
+	    en = false;
+	    seqN = 1;
+	    break;
+	case CREATING: case NORMAL: case LATE: case KEEPALIVE:
+	    break;
+    }
+
+    st = ist;
+
+    return st;
+}
+
+//*************************************************
 //* Server::EP					  *
 //*************************************************
 Server::EP::EP( Server *iserv ) : mEn(false), cntReq(0), objTree("root"), serv(iserv)
@@ -3046,6 +3070,41 @@ void Server::EP::setEnable( bool vl )
     mEn = vl;
 }
 
+void Server::EP::publishCycle( unsigned cntr )
+{
+    pthread_mutex_lock(&mtxData);
+
+    for(unsigned i_ss = 0; i_ss < mSess.size(); i_ss++)
+    {
+	Sess &s = mSess[i_ss];
+	if(!s.tAccess) break;
+	for(unsigned i_sc = 0; i_sc < s.subscrs.size(); i_sc++)
+	{
+	    Sess::Subscr &scr = s.subscrs[i_sc];
+	    if(scr.st == Sess::Subscr::CLOSED || cntr%(unsigned)(scr.publInterv/publishCyclePer())) continue;
+	    if(s.publishReqs.size())
+	    {
+		pthread_mutex_unlock(&mtxData);
+		scr.wLT = 0;
+		string req = s.publishReqs.front(), answ;
+		serv->inReq(req, answ, s.inPrtId);
+		pthread_mutex_lock(&mtxData);
+	    }
+	    else
+	    {
+		if((++scr.wLT) >= scr.cntrLifeTime)
+		{
+		    //> Send StatusChangeNotification with Bad_Timeout
+		    //????
+		    scr.setState(Server::Sess::Subscr::CLOSED);	//Free Subscription
+		}
+	    }
+	}
+    }
+
+    pthread_mutex_unlock(&mtxData);
+}
+
 string Server::EP::secPolicy( int isec )
 {
     string rez;
@@ -3086,7 +3145,7 @@ void Server::EP::sessServNonceSet( int sid, const string &servNonce )
     pthread_mutex_unlock(&mtxData);
 }
 
-bool Server::EP::sessActivate( int sid, uint32_t secCnl, bool check )
+bool Server::EP::sessActivate( int sid, uint32_t secCnl, bool check, const string &inPrtId )
 {
     bool rez = false;
 
@@ -3094,6 +3153,7 @@ bool Server::EP::sessActivate( int sid, uint32_t secCnl, bool check )
     if(sid > 0 && sid <= (int)mSess.size() && mSess[sid-1].tAccess)
     {
 	mSess[sid-1].tAccess = curTime();
+	mSess[sid-1].inPrtId = inPrtId;
 	int i_s;
 	for(i_s = 0; i_s < (int)mSess[sid-1].secCnls.size(); i_s++)
 	    if(mSess[sid-1].secCnls[i_s] == secCnl)

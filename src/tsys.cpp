@@ -642,7 +642,7 @@ int TSYS::start( )
     mess_info(nodePath().c_str(),_("Stop!"));
     if(saveAtExit() || savePeriod())	save();
     cfgFileSave();
-    for(int i_a=lst.size()-1; i_a >= 0; i_a--)
+    for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError err)
 	{

@@ -929,7 +929,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			    emptyPresnt = true;
 			}
 		    }
-		    //> Find links into source if no link find
+		    //> Find links into source if no link found
 		    if(prm_lnk.empty())
 		    {
 			vector<string> sAtrLs;
@@ -947,9 +947,9 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		    //> Fill parameter's links for other attributes
 		    if(emptyPresnt && !prm_lnk.empty())
 		    {
-			AutoHD<TValue> prml;
-			prm_lnk = "/"+TSYS::pathLev(prm_lnk,0)+"/"+TSYS::pathLev(prm_lnk,1)+"/"+TSYS::pathLev(prm_lnk,2);
-			try{ prml = SYS->daq().at().nodeAt(prm_lnk); } catch(TError err) { }
+			size_t aPos = prm_lnk.rfind("/");
+			if(aPos != string::npos) prm_lnk.erase(aPos);
+			AutoHD<TValue> prml = SYS->daq().at().prmAt(prm_lnk,0,true);
 			for(unsigned i_al = 0; !prml.freeStat() && i_al < cAtrLs.size(); i_al++)
 			{
 			    AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
@@ -1501,7 +1501,10 @@ void SessWdg::calc( bool first, bool last )
 			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
 
 			if(attr.at().flgGlob()&Attr::Address)
-			    attr.at().setS("/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+			{
+			    string nP = vl.at().nodePath(0,true);
+			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+			}
 			else attr.at().set(vl.at().get());
 		    }
 		    else if(obj_tp == "wdg:")

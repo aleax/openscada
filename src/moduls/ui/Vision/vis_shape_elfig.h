@@ -53,7 +53,7 @@ class ShapeItem
     public:
 	//Data
 	enum Type { Line = 1, Arc = 2, Bezier = 3, Fill = 4 };
-	enum SpecIdx { DefLine = -5, DefBord = -6, DefFill = -7, DefFillImg = -5, StatIts = -10 };
+	enum SpecIdx { NullIt = -1, DefLine = -5, DefBord = -6, DefFill = -7, DefFillImg = -5, StatIts = -10 };
 
 	//Methods
 	ShapeItem( )	{ }
@@ -105,7 +105,9 @@ class RectItem
 {
     public:
 	RectItem( ) { }
-	RectItem( const QPainterPath &ipath, int inum, const QBrush &ibrush, const QPen &ipen ) :
+	RectItem( int inum, const QPainterPath &ipath = QPainterPath(),
+		const QBrush &ibrush = QBrush(QColor(0,255,0,128),Qt::SolidPattern),
+		const QPen &ipen = QPen(QColor(0,0,0),1,Qt::SolidLine,Qt::FlatCap,Qt::RoundJoin) ) :
 	    path(ipath), num(inum), brush(ibrush), pen(ipen)    { }
 
 	QPainterPath path;
@@ -129,8 +131,8 @@ class ElFigDt : public QObject
 	short   geomMargin	:8;
 	double  orient;
 	string  elLst;
-	QVector<ShapeItem> shapeItems, shapeItems_temp;
-	QVector<inundationItem> inundationItems, inundationItems_temp;
+	QVector<ShapeItem> shapeItems;
+	QVector<inundationItem> inundationItems;
 	PntMap  shapePnts, shapePnts_temp;
 	WidthMap shapeWidths, shapeWidths_temp;
 	ColorMap shapeColors, shapeColors_temp;
@@ -177,20 +179,20 @@ class ShapeElFigure : public WdgShape
     private:
 	//Methods
 	int itemAt( const QPointF &pos, const QVector<ShapeItem> &shapeItems, WdgView *w );			//Check for figure type under cursor
-	void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );	//Move figure procedure
+	void moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap &pnts, WdgView *w );	//Move figure procedure
 
 	QPointF rotate( const QPointF &pnt, double alpha );						     //Rotate the point around the centre of the widget
 	QPointF unRotate( const QPointF &pnt, double alpha, double a, double b );			       //Unrotate the point around the centre of the widget
 	QPointF arc( double t, double a, double b);								//Compute the point of the arc due to the given parameter "t"
 	double angle( const QLineF &l, const QLineF &l1 );						      //Compute the angle between two lines
 	double length( const QPointF &pt1, const QPointF &pt2 );						//Compute the lenght between two points
-	bool holds( const QVector<ShapeItem> &shapeItems, PntMap *pnts );				       //Compute the number of connected figures with the given one
-	void moveUpDown( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w ); //Moving the figure(s) with the help of keyboard
+	bool holds( const QVector<ShapeItem> &shapeItems, PntMap &pnts );				       //Compute the number of connected figures with the given one
+	void moveUpDown( QVector<ShapeItem> &shapeItems, PntMap &pnts, QVector<inundationItem> &inundationItems, WdgView *w ); //Moving the figure(s) with the help of keyboard
 	int  realRectNum( int rect_num_old, const QVector<ShapeItem> &shapeItems );			     //Compute the real rect number of the figure when several figures are selected
-	void rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_num_temp, PntMap *pnts, WdgView *w );
+	void rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_num_temp, PntMap &pnts, WdgView *w );
 	void rectNum3_4( const QVector<ShapeItem> &shapeItems);
-	void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems, WdgView *w );
-	void checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, PntMap *pnts, QVector<inundationItem> &inundationItems );
+	void moveAll( const QPointF &pos, QVector<ShapeItem> &shapeItems, PntMap &pnts, QVector<inundationItem> &inundationItems, WdgView *w );
+	void checkPoint_checkInundation( QVector<ShapeItem> &shapeItems, PntMap &pnts, QVector<inundationItem> &inundationItems );
 	void paintImage( WdgView *view );								       //Building the image to be drawn in the Paint event
 	void initShapeItems( const QPointF &pos, WdgView *w, QVector<int> &items_array );		       //Creating the paths for the figures
 	QPointF getArcStartEnd( QPointF StartMotionPos, QPointF EndMotionPos, QPointF CtrlMotionPos_1, QPointF CtrlMotionPos_2, QPointF CtrlMotionPos_3 );//Calculate the t_start and t_end for the arc
@@ -200,21 +202,21 @@ class ShapeElFigure : public WdgShape
 	QPainterPath painterPathSimple( int el_type, double el_ang,
 		QPointF el_p1 = QPointF(0,0), QPointF el_p2 = QPointF(0,0), QPointF el_p3 = QPointF(0,0),
 		QPointF el_p4 = QPointF(0,0), QPointF el_p5 = QPointF(0,0), QPointF el_p6 = QPointF(0,0) );
-	int appendPoint( const QPointF &pos, const QVector<ShapeItem> &shapeItems, PntMap *pnts, bool flag_down ); //Append the new point to the points' map
-	void dropPoint( int num, int num_shape, const QVector<ShapeItem> &shapeItems, PntMap *pnts );	      //Drop the point from the points' map
+	int appendPoint( const QPointF &pos, const QVector<ShapeItem> &shapeItems, PntMap &pnts, bool flag_down ); //Append the new point to the points' map
+	void dropPoint( int num, int num_shape, const QVector<ShapeItem> &shapeItems, PntMap &pnts );	      //Drop the point from the points' map
 	void removeFill( QVector<int> ind_array, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, int count );
 	int appendWidth( const float &width, WidthMap *widths, bool flag_down );				   //Append the new width to the widths' map
 	int appendColor( const QColor &color, ColorMap *colors, bool flag_down );				  //Append the new color to the colors' map
 	int appendStyle( const Qt::PenStyle &style, StyleMap *styles, bool flag_down );			    //Append the new style to the styles' map
 	int appendImage( const string &image, ImageMap *images, bool flag_down );				  //Append the new image to the images' map
 	void step( int s, int f, int p, const QVector<int> &vect, int N ); //The function for the calculation of the minimum path to be filled
-	bool inundation( const QPointF &point, const QVector<ShapeItem> &shapeItems, PntMap *pnts, const QVector<int> &vect, int N, WdgView *w ); //Building the inundation(fill) if there are more then 2 figures in its path
-	bool inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap *pnts, WdgView *w, int number ); //Building the inundation(fill) if there are 2 pr 1 figures in its path
+	bool inundation( const QPointF &point, const QVector<ShapeItem> &shapeItems, PntMap &pnts, const QVector<int> &vect, int N, WdgView *w ); //Building the inundation(fill) if there are more then 2 figures in its path
+	bool inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap &pnts, WdgView *w, int number ); //Building the inundation(fill) if there are 2 pr 1 figures in its path
 	int  buildMatrix( const QVector<ShapeItem> &shapeItems ); ////The function for the calculation of the minimum path to be filled
 	QPointF scaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate ); //Scale or/and rotate of the point
 	QPointF unScaleRotate( const QPointF &point, WdgView *w, bool flag_scale, bool flag_rotate ); //Redo the scale or/and rotate of the point
 	QPainterPath createInundationPath( const QVector<int> &in_fig_num, const QVector<ShapeItem> &shapeItems, PntMap &pnts, WdgView *w ); //Creation the filling(inundation) path from the 'fill' string of the attributes inspector
-	QVector<int> inundationSort( const QPainterPath &inundationPath, QVector<int> &inundation_fig_num, const QVector<ShapeItem> &shapeItems, PntMap *pnts, WdgView *w );
+	QVector<int> inundationSort( const QPainterPath &inundationPath, QVector<int> &inundation_fig_num, const QVector<ShapeItem> &shapeItems, PntMap &pnts, WdgView *w );
 
 	//Attributes
 	QPointF StartLine, EndLine,				//Start and end points for paint created figure
@@ -257,7 +259,7 @@ class ShapeElFigure : public WdgShape
 	unsigned fl_orto_move		:1;	//Flag for using during the orthogonal line or bezier curve drawing
 	unsigned fl_orto_disable	:1;	//Flag for disabling the orthogonal drawing in the moveItemTo function
 	unsigned status			:1;	//Check fo any primitive paint key pressed
-	unsigned fMoveHoldMove		:1;	//Moving processing flag hysteresis
+	//unsigned fMoveHoldMove		:1;	//Moving processing flag hysteresis
 
 	int count_holds, count_rects, rect_num_arc, arc_rect;
 	double t_start, t_end; //Start and end values of the arc
@@ -273,14 +275,13 @@ class ShapeElFigure : public WdgShape
 	QVector<int> incl;
 	QVector<int> inundation_vector;
 	QPointF Prev_pos_1, Prev_pos_2;
-	QVector<int> num_vector;
+	QVector<int> num_vector;		//????
 	double angle_temp;
 	int rect_dyn;
 	QPixmap rect_img;
 
 	QVector<RectItem> rectItems;		//RectItem's container
 	QPainterPath	newPath,		//Null path
-			rectPath,		//Path for RectItem creation
 			ellipse_startPath,
 			ellipse_endPath,
 			ellipse_draw_startPath,

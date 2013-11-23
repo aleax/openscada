@@ -1616,7 +1616,11 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     vector<string> als;
 
     //> Parse template
-    try{ if(!tmpl.empty()) xdoc.load(XHTML_entity+tmpl, true, Mess->charset()); }
+    try
+    {
+	if(!tmpl.empty()) xdoc.load(XHTML_entity+tmpl, true, Mess->charset());
+	else return "";
+    }
     catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Document parsing error: %s."),err.mess.c_str());
@@ -1624,27 +1628,27 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     }
 
     //> Prepare call instructions environment
-    if( strcasecmp(xdoc.name().c_str(),"body") == 0 )
+    if(strcasecmp(xdoc.name().c_str(),"body") == 0)
     {
 	iLang = xdoc.attr("docProcLang");
 	lstTime = atoi(xdoc.attr("docTime").c_str());
     }
-    if( TSYS::strNoSpace(iLang).empty() )	iLang = "JavaLikeCalc.JavaScript";
-    if( !lstTime )		lstTime = wdg->attrAt("bTime").at().getI();
+    if(TSYS::strNoSpace(iLang).empty())	iLang = "JavaLikeCalc.JavaScript";
+    if(!lstTime) lstTime = wdg->attrAt("bTime").at().getI();
 
     //>> Add generic io
-    funcIO.ioIns( new IO("rez",_("Result"),IO::String,IO::Return),0);
-    funcIO.ioIns( new IO("time",_("Document time"),IO::Integer,IO::Default),1);
-    funcIO.ioIns( new IO("bTime",_("Document begin time"),IO::Integer,IO::Default),2);
-    funcIO.ioIns( new IO("lTime",_("Last time"),IO::Integer,IO::Default),3);
-    funcIO.ioIns( new IO("rTime",_("Repeat time (s)"),IO::Integer,IO::Default),4);
-    funcIO.ioIns( new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default),5);
-    funcIO.ioIns( new IO("rPer",_("Repeat period"),IO::Real,IO::Default),6);
-    funcIO.ioIns( new IO("mTime",_("Message time"),IO::Integer,IO::Default),7);
-    funcIO.ioIns( new IO("mTimeU",_("Message time (mcs)"),IO::Integer,IO::Default),8);
-    funcIO.ioIns( new IO("mLev",_("Message level"),IO::Integer,IO::Default),9);
-    funcIO.ioIns( new IO("mCat",_("Message category"),IO::String,IO::Default),10);
-    funcIO.ioIns( new IO("mVal",_("Message value"),IO::String,IO::Default),11);
+    funcIO.ioIns(new IO("rez",_("Result"),IO::String,IO::Return), 0);
+    funcIO.ioIns(new IO("time",_("Document time"),IO::Integer,IO::Default), 1);
+    funcIO.ioIns(new IO("bTime",_("Document begin time"),IO::Integer,IO::Default), 2);
+    funcIO.ioIns(new IO("lTime",_("Last time"),IO::Integer,IO::Default), 3);
+    funcIO.ioIns(new IO("rTime",_("Repeat time (s)"),IO::Integer,IO::Default), 4);
+    funcIO.ioIns(new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default), 5);
+    funcIO.ioIns(new IO("rPer",_("Repeat period"),IO::Real,IO::Default), 6);
+    funcIO.ioIns(new IO("mTime",_("Message time"),IO::Integer,IO::Default), 7);
+    funcIO.ioIns(new IO("mTimeU",_("Message time (mcs)"),IO::Integer,IO::Default), 8);
+    funcIO.ioIns(new IO("mLev",_("Message level"),IO::Integer,IO::Default), 9);
+    funcIO.ioIns(new IO("mCat",_("Message category"),IO::String,IO::Default), 10);
+    funcIO.ioIns(new IO("mVal",_("Message value"),IO::String,IO::Default), 11);
     //>> Add user io
     wdg->attrList(als);
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
@@ -1660,9 +1664,9 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	//>> Connect to compiled function
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wProgO)).at());
 	//>> Load values of generic IO
-	funcV.setI(1,wdg->attrAt("time").at().getI());
-	funcV.setI(2,wdg->attrAt("bTime").at().getI());
-	funcV.setI(3,lstTime);
+	funcV.setI(1, wdg->attrAt("time").at().getI());
+	funcV.setI(2, wdg->attrAt("bTime").at().getI());
+	funcV.setI(3, lstTime);
 	//>> Load values of user IO
 	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
 	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
@@ -1685,12 +1689,12 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	"</BODY>"),STD_INTERF_TM), false, Mess->charset());
 
     //> Node proocess
-    OrigDocument::nodeProcess( wdg, &xdoc, funcV, funcIO, iLang );
+    OrigDocument::nodeProcess(wdg, &xdoc, funcV, funcIO, iLang);
 
     //> Remove warning timeout message subtree
     xdoc.childDel(xdoc.childSize()-1);
 
-    xdoc.setAttr("docTime",i2s(funcV.getI(1)));
+    xdoc.setAttr("docTime", i2s(funcV.getI(1)));
 
     return xdoc.save(0, Mess->charset());
 }

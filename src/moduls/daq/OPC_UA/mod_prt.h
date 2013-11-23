@@ -95,6 +95,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string url( )		{ return mURL; }
 	string cert( );
 	string pvKey( );
+	double publishCyclePer( ) { return 100; }
 
 	string getStatus( );
 
@@ -126,6 +127,8 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &cfg );
+
+	static void *Task( void *ep );
 
 	//Attributes
 	TCfg	&mId,

@@ -320,6 +320,25 @@ bool OPCEndPoint::cfgChange( TCfg &ce )
     return true;
 }
 
+void *OPCEndPoint::Task( void *iep )
+{
+    OPCEndPoint &ep = *(OPCEndPoint *)iep;
+
+    for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++)
+    {
+	try
+	{
+	    ep.publishCycle(cntr);
+	}
+	catch(OPCError err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
+	catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
+
+	TSYS::taskSleep((int64_t)(ep.publishCyclePer()*1000000));
+    }
+
+    return NULL;
+}
+
 void OPCEndPoint::load_( )
 {
     if(!SYS->chkSelDB(DB())) return;
@@ -353,7 +372,11 @@ void OPCEndPoint::setEnable( bool vl )
     owner().epEn(id(), vl);
     Server::EP::setEnable(vl);
     if(vl)
+    {
 	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),1),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->setAttr("DisplayName",SYS->daq().at().subName());
+	SYS->taskCreate(nodePath('.',true), 0/*mPrior*/, OPCEndPoint::Task, this);
+    }
+    else SYS->taskDestroy(nodePath('.',true));
 }
 
 string OPCEndPoint::getStatus( )

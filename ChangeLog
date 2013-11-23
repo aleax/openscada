@@ -1,4 +1,28 @@
-2013-11-14-Roman
+2013-11-23 Roman
+- DB: Widget ElCadr is some expanded for negative precision process for exponential form accuracy into vcaBase.db.
+    Input analog parameter's template fix for lag after EVAL and zero value temporary set.
+- !!:FIX:SYS.Archive.Val: allow access to next level archive into single request, like from 1m to 10m.
+- SYS.TCntrNode: Commented path forming variant without simbol '/' at end is added.
+- SYS.DAQ.Parameter: User's API function "DAQ.{Cntr}.{Prm}.cntr()" is added for access to the controller's object
+    from any level parameter object.
+- FIX:DAQ.LogicLev: The parameters enabling to processing is made typical for nested parameters processing allow.
+- !:DAQ.OPC_UA: "Subscr" class and background that processing task is added for service "Subscription" support. Not finished yet!
+- FIX:UI.QTCfg: Detected node select by search into field from bellow is fixed for copy to the field.
+- UI.QTCfg: Copy a node into the branch and no select direct the parent node, by copy to self, support is added.
+- FIX:UI.VCAEngine: Document generation from empty template "tmpl" fix, for primitive "Document".
+    Dynamic linking to nested parameters is fixed.
+- FIX:UI.Vision: Mouse cursor shape changing allow into included editable widgets is fixed for the parent widget size
+    containing or equal to the widget.
+    Some original texts into the source is fixed.
+    For primitive ElFigure:
+	- next code clean and refactoring, mostly for moveItemTo();
+	- control points set smaler and different coloring for linked and other;
+	- the dead-area from previous commit is disabled for omit some unclean problems, up to events processing rewrite;
+	- reloading is fixed after some figures append;
+	- bordered figures width scale is fixed.
+
+
+2013-11-14 Roman
 - DB: Recipe's frames is some updated into vcaBase.db.
 - Archive.Val: To makeTrendImg() argument for file type provide is added.
     Test forming archive's values trand into "SVG" at LibGD miss is added.

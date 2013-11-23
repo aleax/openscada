@@ -25,11 +25,13 @@
 #include <stdint.h>
 
 #include <string>
+#include <deque>
 #include <vector>
 #include <map>
 #include <algorithm>
 
 using std::string;
+using std::deque;
 using std::vector;
 using std::pair;
 using std::map;
@@ -494,6 +496,7 @@ class Client: public UA
 	class SClntSess
 	{
 	    public:
+		//Methods
 		SClntSess( )		{ clearFull( ); }
 		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
 		void clearFull( )
@@ -523,6 +526,7 @@ class Client: public UA
 		string		secPolicy;
 		char		secMessMode;
 		string		clKey, servKey;
+
 	};
 
 	//Methods
@@ -596,19 +600,50 @@ class Server: public UA
 		string	brNode, lstNode,
 			refTypeId;	//Reference type id
 	    };
+	    class Subscr
+	    {
+		public:
+		    //Data
+		    class MonitItem
+		    {
+		    
+		    };
+		    enum State	{ GET_STATE = 0, CLOSED, CREATING, NORMAL, LATE, KEEPALIVE };
+
+		    //Methods
+		    Subscr( ) : st(CLOSED), en(false), publInterv(100), seqN(1), cntrKeepAlive(50), wKA(0), cntrLifeTime(12000), wLT(0)	{ }
+
+		    State setState( State st = GET_STATE );
+
+		    //Attributes
+		    State	st;			//Subscription status
+		    bool	en;			//Enable state
+		    double	publInterv;		//Publish interval (ms)
+		    uint32_t	seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
+				cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond
+				cntrLifeTime, wLT;	//Counter after that miss notifications from client remove the object and
+							//send StatusChangeNotification with Bad_Timeout
+		    vector<MonitItem> mItems;
+		    deque<string> retrQueue;		//Retransmission queue; used by Republish request;
+							//cleared to deep by KeepAlive! or by field Acknowledgements sets
+	    };
 
 	    //Methods
 	    Sess( const string &iName, double iTInact );
 	    Sess( );
 
 	    //Attributes
-	    string	name;
+	    string	name, inPrtId;
 	    vector<uint32_t> secCnls;
 	    double	tInact;
 	    int64_t	tAccess;
 	    string	servNonce;
 
 	    map<string, ContPoint> cntPnts;	//>> Continuation points
+
+	    //> Subscription
+	    deque<string>	publishReqs;	//Publish requests queue
+	    vector<Subscr>	subscrs;	//Subscriptions list
 	};
 	//* End Point
 	class EP
@@ -622,19 +657,21 @@ class Server: public UA
 		virtual string url( ) = 0;
 		virtual string cert( ) = 0;
 		virtual string pvKey( ) = 0;
+		virtual double publishCyclePer( ) = 0;	//Generic minimum cycle period of publishes processing
 		bool enableStat( )	{ return mEn; }
 
 		virtual void setEnable( bool vl );
+		void publishCycle( unsigned cntr );	//Publish processing cycle
 
 		//> Security policies
-		int secSize( )			{ return mSec.size(); }
+		int secSize( )		{ return mSec.size(); }
 		string secPolicy( int isec );
 		MessageSecurityMode secMessageMode( int isec );
 
 		//> Sessions
 		int sessCreate( const string &iName, double iTInact );
 		void sessServNonceSet( int sid, const string &servNonce );
-		bool sessActivate( int sid, uint32_t secCnl, bool check = false );
+		bool sessActivate( int sid, uint32_t secCnl, bool check = false, const string &inPrtId = "" );
 		void sessClose( int sid );
 		Sess sessGet( int sid );
 		Sess::ContPoint sessCpGet( int sid, const string &cpId );

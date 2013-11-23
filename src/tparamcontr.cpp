@@ -410,6 +410,9 @@ void TParamContr::setType( const string &tpId )
 
 TVariant TParamContr::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // TCntrNodeObj cntr() - get the controller node
+    if(iid == "cntr")	return new TCntrNodeObj(AutoHD<TCntrNode>(&owner()), user);
+
     //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
@@ -507,6 +510,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
     else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
     {
+	opt->childAdd("el")->setText("");
         vector<string> lls, ls;
 	SYS->daq().at().tmplLibList(lls);
 	for(unsigned i_l = 0; i_l < lls.size(); i_l++)

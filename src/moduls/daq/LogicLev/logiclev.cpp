@@ -195,13 +195,6 @@ void TMdContr::start_( )
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
 
-    //> Former process parameters list
-    vector<string> list_p;
-    list(list_p);
-    for(unsigned i_prm = 0; i_prm < list_p.size(); i_prm++)
-	if(at(list_p[i_prm]).at().enableStat())
-	    prmEn(&at(list_p[i_prm]).at(), true);
-
     //> Start the request data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
@@ -210,9 +203,6 @@ void TMdContr::stop_( )
 {
     //> Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
-
-    //> Clear process parameters list
-    p_hd.clear();
 }
 
 void TMdContr::prmEn( TMdPrm *p, bool val )
@@ -492,22 +482,18 @@ void TMdPrm::enable( )
             catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    if(owner().startStat())
-    {
-	calc(true, false, 0);
-	owner().prmEn(this, true);
-    }
+    if(owner().startStat()) calc(true, false, 0);
+
+    owner().prmEn(this, true);
 }
 
 void TMdPrm::disable( )
 {
     if(!enableStat())  return;
 
-    if(owner().startStat())
-    {
-	owner().prmEn(this, false);
-	calc(false, true, 0);
-    }
+    owner().prmEn(this, false);
+
+    if(owner().startStat()) calc(false, true, 0);
 
     if(isPRefl() && prm_refl) prm_refl->free();
     else if(isStd() && tmpl)

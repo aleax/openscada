@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2013 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -373,7 +373,7 @@ ConfApp::ConfApp( string open_user ) :
     toolBar->addAction(actStopUpd);
 
     //> Init status bar
-    connect( statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
+    connect(statusBar(), SIGNAL(messageChanged(const QString&)), this, SLOT(stMessChanged(const QString&)));
     w_user = new UserStBar(open_user.c_str(), this);
     w_user->setWhatsThis(_("This label displays current user."));
     w_user->setToolTip(_("Field for display of the current user."));
@@ -432,18 +432,18 @@ bool ConfApp::exitModifChk( )
     //> Check for no saved local station
     XMLNode req("modify");
     req.setAttr("path","/"+SYS->id()+"/%2fobj");
-    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
+    if(!cntrIfCmd(req) && atoi(req.text().c_str()))
     {
 	bool saveExit = false;
 	req.clear()->setName("get")->setAttr("path","/"+SYS->id()+"/%2fgen%2fsaveExit");
-	if( !cntrIfCmd(req) )	saveExit |= atoi(req.text().c_str());
+	if(!cntrIfCmd(req))	saveExit |= atoi(req.text().c_str());
 	req.setAttr("path","/"+SYS->id()+"/%2fgen%2fsavePeriod");
-	if( !cntrIfCmd(req) )	saveExit |= atoi(req.text().c_str());
-	if( !saveExit )
+	if(!cntrIfCmd(req))	saveExit |= atoi(req.text().c_str());
+	if(!saveExit)
 	{
 	    int ret = QMessageBox::information(this,_("Changes save"),
 		_("Some changing is made. Save changing to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
-	    switch( ret )
+	    switch(ret)
 	    {
 		case QMessageBox::Yes:
 		    req.clear()->setName("save")->setAttr("path","/"+SYS->id()+"/%2fobj");
@@ -474,7 +474,7 @@ void ConfApp::endRunChk( )
 
 void ConfApp::treeSearch( )
 {
-    if( !sender() ) return;
+    if(!sender()) return;
     QLineEdit *sl = (QLineEdit*)sender();
     QString wvl = TSYS::strNoSpace(sl->text().toStdString()).c_str();
     bool fromCur = !sl->isModified();
@@ -482,36 +482,35 @@ void ConfApp::treeSearch( )
 
     //> Get current element selection
     QTreeWidgetItem *si = (CtrTree->selectedItems().size()==1) ? CtrTree->selectedItems()[0] : NULL;
-    if( !si || wvl.isEmpty() ) return;
+    if(!si || wvl.isEmpty()) return;
 
     QTreeWidgetItem *pi = si->parent();
-    if( !pi || !pi->isExpanded() ) return;
+    if(!pi || !pi->isExpanded()) return;
 
     bool curReach = false;
     int i_c;
-    for( i_c = 0; i_c < pi->childCount(); i_c++ )
+    for(i_c = 0; i_c < pi->childCount(); i_c++)
     {
-	if( fromCur && !curReach )
+	if(fromCur && !curReach)
 	{
-	    if( pi->child(i_c) == si ) curReach = true;
+	    if(pi->child(i_c) == si) curReach = true;
 	    continue;
 	}
-	if( pi->child(i_c)->text(0).contains(wvl,Qt::CaseInsensitive) ) break;
+	if(pi->child(i_c)->text(0).contains(wvl,Qt::CaseInsensitive)) break;
 	else
 	{
 	    //>> Get last item from path
 	    string itpth, tstr;
-	    for( int off = 0; (tstr=TSYS::pathLev(pi->child(i_c)->text(2).toStdString(),0,true,&off)).size(); )
-		itpth = tstr;
-	    if( QString(itpth.c_str()).contains(wvl,Qt::CaseInsensitive) ) break;
+	    for(int off = 0; (tstr=TSYS::pathLev(pi->child(i_c)->text(2).toStdString(),0,true,&off)).size(); ) itpth = tstr;
+	    if(QString(itpth.c_str()).contains(wvl,Qt::CaseInsensitive)) break;
 	}
     }
-    if( i_c < pi->childCount() )
+    if(i_c < pi->childCount())
     {
-	pi->treeWidget()->setCurrentItem(pi->child(i_c));
+	pi->treeWidget()->setCurrentItem(pi->child(i_c), 0, QItemSelectionModel::Clear|QItemSelectionModel::Select);
 	pi->treeWidget()->scrollTo(pi->treeWidget()->currentIndex());
     }
-    else if( fromCur ) { sl->setModified(true); treeSearch(); }
+    else if(fromCur) { sl->setModified(true); treeSearch(); }
 }
 
 void ConfApp::pageUp()
@@ -669,8 +668,8 @@ void ConfApp::itCopy( )
 {
     copy_buf = "0";
     QList<QTreeWidgetItem *> sel_ls = CtrTree->selectedItems();
-    if( sel_ls.size() <= 1 ) copy_buf += sel_path;
-	else for( int i_el = 0; i_el < sel_ls.size(); i_el++ )
+    if(sel_ls.size() <= 1) copy_buf += sel_path;
+    else for(int i_el = 0; i_el < sel_ls.size(); i_el++)
 	    copy_buf += sel_ls.at(i_el)->text(2).toStdString()+"\n";
     editToolUpdate();
 }
@@ -678,27 +677,30 @@ void ConfApp::itCopy( )
 void ConfApp::itPaste( )
 {
     int off;
-    string s_el, s_elp, t_el, b_grp, copyEl;
+    string s_el, s_elp, t_el, b_grp, copyEl, to_path;
     QCheckBox *prcReq = NULL, *prcAlrPres = NULL;
     bool prcReqMiss = false, prcAlrPresMiss = false;
 
     bool isCut = (copy_buf[0] == '1');
     bool isMult = !TSYS::strParse(copy_buf,1,"\n").empty();
 
-    for( int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
+    for(int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
     {
+	to_path = sel_path;
+
 	//> Src elements calc
 	int n_sel = 0;
-	for( off = 0; !(t_el=TSYS::pathLev(copyEl,0,true,&off)).empty(); n_sel++ )
-	{ if( n_sel ) s_elp += ("/"+s_el); s_el = t_el; }
+	for(off = 0; !(t_el=TSYS::pathLev(copyEl,0,true,&off)).empty(); n_sel++)
+	{ if(n_sel) s_elp += ("/"+s_el); s_el = t_el; }
 
-	if( TSYS::pathLev(copyEl,0) != TSYS::pathLev(sel_path,0) )
-	{ mod->postMess( mod->nodePath().c_str(), _("Copy is impossible."), TUIMod::Error, this ); return; }
+	if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(to_path,0))
+	{ mod->postMess(mod->nodePath().c_str(), _("Copy is impossible."), TUIMod::Error, this); return; }
+	if(copyEl == to_path) to_path = s_elp;	//For copy into the branch and no select direct the parent node
 
 	vector<string> brs;
-	if( atoi(root->attr("acs").c_str())&SEC_WR ) brs.push_back(string("-1\n0\n\n")+_("Selected"));
+	if(atoi(root->attr("acs").c_str())&SEC_WR) brs.push_back(string("-1\n0\n\n")+_("Selected"));
 
-	XMLNode *branch = root->childGet("id","br",true);
+	XMLNode *branch = root->childGet("id", "br", true);
 	if(branch)
 	    for(unsigned i_b = 0; i_b < branch->childSize(); i_b++)
 		if(atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR)
@@ -709,29 +711,28 @@ void ConfApp::itPaste( )
 		}
 
 	//> Make request dialog
-	ReqIdNameDlg dlg(this,actItAdd->icon(),"",_("Move or copy node"));
+	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Move or copy node"));
 	dlg.setTargets(brs);
-	dlg.setMess( QString(isCut ? _("Move node '%1' to '%2'.\n") : _("Copy node '%1' to '%2'.\n")).
-		arg(copyEl.c_str()).arg(sel_path.c_str()) );
-	dlg.setId( s_el.substr(b_grp.size()).c_str() );
-	if( isMult )
+	dlg.setMess(QString(isCut?_("Move node '%1' to '%2'.\n"):_("Copy node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(to_path.c_str()));
+	dlg.setId(s_el.substr(b_grp.size()).c_str());
+	if(isMult)
 	{
-	    prcReq = new QCheckBox(_("Do not the question anymore."),&dlg);
-	    dlg.ed_lay->addWidget(prcReq,5,0,1,2);
+	    prcReq = new QCheckBox(_("Do not the question anymore."), &dlg);
+	    dlg.ed_lay->addWidget(prcReq, 5, 0, 1, 2);
 	}
-	if( !prcReqMiss && dlg.exec() != QDialog::Accepted ) return;
-	if( !prcReqMiss && prcReq && prcReq->checkState() == Qt::Checked ) prcReqMiss = true;
+	if(!prcReqMiss && dlg.exec() != QDialog::Accepted) return;
+	if(!prcReqMiss && prcReq && prcReq->checkState() == Qt::Checked) prcReqMiss = true;
 
 	string stat_nm, src_nm, dst_nm;
-	off = 0; stat_nm = TSYS::pathLev(copyEl,0,true,&off); src_nm = copyEl.substr(off);
-	off = 0; stat_nm = TSYS::pathLev(sel_path,0,true,&off); dst_nm = sel_path.substr(off);
+	off = 0; stat_nm = TSYS::pathLev(copyEl, 0, true, &off);	src_nm = copyEl.substr(off);
+	off = 0; stat_nm = TSYS::pathLev(to_path, 0, true, &off);	dst_nm = to_path.substr(off);
 
-	if( atoi(TSYS::strSepParse(dlg.target( ),0,'\n').c_str()) >= 0 )
+	if(atoi(TSYS::strSepParse(dlg.target(),0,'\n').c_str()) >= 0)
 	{
 	    dst_nm = dst_nm + "/" +TSYS::strSepParse(dlg.target( ),2,'\n') + dlg.id().toAscii().data();
 	    //> Check for already present node
 	    XMLNode req("get");
-	    req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
+	    req.setAttr("path",to_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
 	    for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
 		if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toAscii().data()) ||
@@ -758,25 +759,25 @@ void ConfApp::itPaste( )
 	if(isCut) itDel(copyEl);
     }
 
-    if( isCut ) copy_buf = "0";
+    if(isCut) copy_buf = "0";
 
-    treeUpdate( );
-    pageRefresh( );
+    treeUpdate();
+    pageRefresh();
 }
 
 void ConfApp::editToolUpdate( )
 {
-    actItCut->setEnabled( (!sel_path.empty()&&root&&atoi(root->attr("acs").c_str())&SEC_WR) ? true : false );
-    actItCopy->setEnabled( !sel_path.empty() );
-    actItPaste->setEnabled( false );
+    actItCut->setEnabled((!sel_path.empty()&&root&&atoi(root->attr("acs").c_str())&SEC_WR) ? true : false);
+    actItCopy->setEnabled(!sel_path.empty());
+    actItPaste->setEnabled(false);
 
-    if( TSYS::strParse(copy_buf,1,"\n").empty() )
+    if(TSYS::strParse(copy_buf,1,"\n").empty())
     {
 	//> Src and destination elements calc
-	if( copy_buf.size() <= 1 || copy_buf.substr(1) == sel_path || TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0) )
+	if(copy_buf.size() <= 1 || /*copy_buf.substr(1) == sel_path ||*/ TSYS::pathLev(copy_buf.substr(1),0) != TSYS::pathLev(sel_path,0))
 	    return;
 	string s_elp, s_el, t_el;
-	for( int off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); )
+	for(int off = 0; !(t_el=TSYS::pathLev(copy_buf.substr(1),0,true,&off)).empty(); )
 	{ s_elp += ("/"+s_el); s_el = t_el; }
 
 	if( atoi(root->attr("acs").c_str())&SEC_WR ) actItPaste->setEnabled(true);

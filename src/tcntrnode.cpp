@@ -515,13 +515,10 @@ string TCntrNode::nodePath( char sep, bool from_root )
 	}
 	else return nodeName();
     }
-    else
-    {
-	if(prev.node)
-	    return prev.node->nodePath(sep,from_root)+
-		    ((prev.grp<0)?"":(*(prev.node->chGrp))[prev.grp].id)+nodeName()+"/";
-	else return from_root ? string("/"):(string("/")+nodeName()+"/");
-    }
+    //else return prev.node ? (prev.node->nodePath(sep,from_root)+"/"+((prev.grp<0)?"":(*(prev.node->chGrp))[prev.grp].id)+nodeName()) :
+    //			    (from_root?"":string("/")+nodeName());
+    else return prev.node ? (prev.node->nodePath(sep,from_root)+((prev.grp<0)?"":(*(prev.node->chGrp))[prev.grp].id)+nodeName()+"/") :
+			    (from_root?string("/"):(string("/")+nodeName()+"/"));
 }
 
 TCntrNode *TCntrNode::nodePrev( bool noex )

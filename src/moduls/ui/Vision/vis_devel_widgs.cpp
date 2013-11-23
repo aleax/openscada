@@ -2327,20 +2327,17 @@ bool DevelWdgView::grepAnchor( const QPointF &apnt, const QPoint &cpnt )
 
 void DevelWdgView::upMouseCursors( const QPoint &curp )
 {
-    if( fMoveHold ) return;
+    if(fMoveHold) return;
 
     Qt::CursorShape new_shp = Qt::ArrowCursor;
     //> Widget geometry
-    if( grepAnchor(rect().bottomRight(),curp) )
-	new_shp = Qt::SizeFDiagCursor;
-    else if( curp.x()>(rect().width()-4) && curp.x()<(rect().width()+4) )
-	new_shp = Qt::SizeHorCursor;
-    else if( curp.y()>(rect().height()-4) && curp.y()<(rect().height()+4) )
-	new_shp = Qt::SizeVerCursor;
-    if( new_shp != Qt::ArrowCursor )
+    if(grepAnchor(rect().bottomRight(),curp))					new_shp = Qt::SizeFDiagCursor;
+    else if(curp.x() > (rect().width()-4) && curp.x() < (rect().width()+4))	new_shp = Qt::SizeHorCursor;
+    else if(curp.y() > (rect().height()-4) && curp.y() < (rect().height()+4))	new_shp = Qt::SizeVerCursor;
+    if(new_shp != Qt::ArrowCursor)
     {
 	fHoldChild = false;
-	if( new_shp != cursor().shape() ) setCursor(new_shp);
+	if(new_shp != cursor().shape()) setCursor(new_shp);
 	return;
     }
 
@@ -2350,30 +2347,29 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     //>> Check child's anchor selection and widget's geometry
     QRectF selRect;
     bool firs_nosel = true, noSelUp = false;
-    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
-	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+    for(int i_c = children().size()-1; i_c >= 0; i_c--)
+	if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 	{
-	    if( ((DevelWdgView*)children().at(i_c))->select( ) )
-	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false;  }
-	    else if( firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp) )	noSelUp = true;
+	    if(((DevelWdgView*)children().at(i_c))->select())
+	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false; }
+	    else if(firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp))	noSelUp = true;
 	}
 
     //>> Select childs anchors
-    if( !selRect.isNull() )
+    if(!selRect.isNull())
     {
-	if( grepAnchor(selRect.topLeft(),curp) )
-	{ new_shp = Qt::SizeFDiagCursor; fLeftTop = true; }
-	else if( grepAnchor(selRect.bottomRight(),curp) )					new_shp = Qt::SizeFDiagCursor;
-	else if( grepAnchor(selRect.bottomLeft(),curp) )					{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
-	else if( grepAnchor(selRect.topRight(),curp) )						new_shp = Qt::SizeBDiagCursor;
-	else if( grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp) )			{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
-	else if( grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp) )	new_shp = Qt::SizeVerCursor;
-	else if( grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp) )			{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
-	else if( grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp) )	new_shp = Qt::SizeHorCursor;
-	else if( /*!noSelUp &&*/ selRect.contains(curp) )					new_shp = Qt::PointingHandCursor;
-	if( new_shp != Qt::ArrowCursor )	fHoldChild = true;
+	if(grepAnchor(selRect.topLeft(),curp))						{ new_shp = Qt::SizeFDiagCursor; fLeftTop = true; }
+	else if(grepAnchor(selRect.bottomRight(),curp))					new_shp = Qt::SizeFDiagCursor;
+	else if(grepAnchor(selRect.bottomLeft(),curp))					{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
+	else if(grepAnchor(selRect.topRight(),curp))					new_shp = Qt::SizeBDiagCursor;
+	else if(grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp))		{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
+	else if(grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp)) new_shp = Qt::SizeVerCursor;
+	else if(grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp))		{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
+	else if(grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp)) new_shp = Qt::SizeHorCursor;
+	else if(/*!noSelUp &&*/ selRect.contains(curp))					new_shp = Qt::PointingHandCursor;
+	if(new_shp != Qt::ArrowCursor)	fHoldChild = true;
     }
-    if( new_shp != cursor().shape() ) setCursor(new_shp);
+    if(new_shp != cursor().shape()) setCursor(new_shp);
 }
 
 void DevelWdgView::wdgViewTool( QAction *act )
@@ -2527,19 +2523,19 @@ void DevelWdgView::wdgPopup( )
 	popup.addSeparator();
 	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
 	{
-	    QAction *actEnterEdit = new QAction(_("Enter for widget editing"),this);
-	    actEnterEdit->setStatusTip(_("Press to enter for widget editing."));
+	    QAction *actEnterEdit = new QAction(_("Enter for the widget editing"),this);
+	    actEnterEdit->setStatusTip(_("Press to enter for the widget editing."));
 	    connect(actEnterEdit, SIGNAL(triggered()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
 	//>> Make widget icon
-	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
-	actMakeIco->setStatusTip(_("Press to make icon from widget."));
+	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from the widget"),this);
+	actMakeIco->setStatusTip(_("Press to make icon from the widget."));
 	connect(actMakeIco, SIGNAL(triggered()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
 	//>> Make widget image
-	QAction *actMakeImg = new QAction(_("Make image from widget"),this);
-	actMakeImg->setStatusTip(_("Press to make image from widget."));
+	QAction *actMakeImg = new QAction(_("Make image from the widget"),this);
+	actMakeImg->setStatusTip(_("Press to make image from the widget."));
 	connect(actMakeImg, SIGNAL(triggered()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();
@@ -3557,7 +3553,7 @@ void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 
 void SizePntWdg::apply( )
 {
-    if(mWSize.width() > 2 && mWSize.height() > 2)
+    if(mWSize.width() > 2 && mWSize.height() > 2 && !QRectF(mWPos,mWSize).toRect().contains(rect()))
     {
 	QRegion reg;
 	QRect   wrect, irect;
@@ -3592,15 +3588,15 @@ void SizePntWdg::apply( )
 
 bool SizePntWdg::event( QEvent *ev )
 {
-    switch( ev->type() )
+    switch(ev->type())
     {
 	case QEvent::Paint:
-	    if( rect().isValid() )
+	    if(rect().isValid())
 	    {
-		QPainter pnt( this );
-		pnt.setWindow( rect() );
+		QPainter pnt(this);
+		pnt.setWindow(rect());
 
-		switch( view )
+		switch(view)
 		{
 		    case SizeDots:
 			pnt.setPen(QColor("black"));

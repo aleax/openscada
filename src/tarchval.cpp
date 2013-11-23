@@ -1730,7 +1730,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		if(i_asel >= 0)
 		{
 		    buf.setPeriod(vmax((int64_t)(1e6*arch_el[i_asel]->archivator().valPeriod()),period));
-		    arch_el[i_asel]->getVals(buf, tm_grnd, tm, local);
+		    arch_el[i_asel]->getVals(buf, vmax(tm_grnd,arch_el[i_asel]->begin()), tm, local);	//vmax for allow access to next level archive
+													//into single request, like from 1m to 10m
 		    opt->setAttr("arch",arch_el[i_asel]->archivator().workId());
 		}
 		res.release();
