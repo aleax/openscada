@@ -1769,7 +1769,7 @@ void Client::protIO( XML_N &io )
 			}
 			case OpcUa_BrowseResponse:
 			{
-			    if( iTpId != OpcUa_BrowseRequest )
+			    if(iTpId != OpcUa_BrowseRequest)
 				throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Respond NodeId don't acknowledge");
 									//> results []
 			    int resN = iNu(rez, off, 4);		//Numbers
@@ -3271,7 +3271,7 @@ int Server::EP::reqData( int reqTp, XML_N &req )
             	if(ndTpDef != ndMap.end())
                 {
                     unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-                    if(!nClass || nClass == cnClass)
+                    if(!nClass || nClass&cnClass)
 			req.childAdd("ref")->setAttr("NodeId", ndTpDef->second->attr("NodeId"))->
 			    setAttr("referenceTypeId", ndTpDef->second->attr("referenceTypeId"))->
 			    setAttr("dir", "1")->setAttr("name", ndTpDef->second->attr("name"))->
@@ -3283,7 +3283,7 @@ int Server::EP::reqData( int reqTp, XML_N &req )
 	    {
 		XML_N *chNd = ndX->second->parent();
 		unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
-		if(!nClass || nClass == cnClass)
+		if(!nClass || nClass&cnClass)
 		    req.childAdd("ref")->setAttr("NodeId", chNd->attr("NodeId"))->
 			setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
 			setAttr("dir", "0")->setAttr("name", chNd->attr("name"))->
@@ -3296,7 +3296,7 @@ int Server::EP::reqData( int reqTp, XML_N &req )
 		XML_N *chNd = ndX->second->childGet(i_ch);
 		if(!lstOK) { lstOK = (lstNd==chNd->attr("NodeId")); continue; }
 		unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
-		if(nClass && nClass != cnClass) continue;
+		if(nClass && !(nClass&cnClass)) continue;
 		req.childAdd("ref")->setAttr("NodeId", chNd->attr("NodeId"))->
 		    setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
 		    setAttr("dir", "1")->setAttr("name", chNd->attr("name"))->

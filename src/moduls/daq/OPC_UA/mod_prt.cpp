@@ -436,7 +436,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		if(ndTpDef != ndMap.end())
 		{
 		    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-		    if(!nClass || nClass == cnClass)
+		    if(!nClass || nClass&cnClass)
 			req.childAdd("ref")->setAttr("NodeId", ndTpDef->second->attr("NodeId"))->
                             setAttr("referenceTypeId", ndTpDef->second->attr("referenceTypeId"))->
                             setAttr("dir", "1")->setAttr("name", ndTpDef->second->attr("name"))->
@@ -444,13 +444,13 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		}
 	    }
 	    //>> Inverse browse
-	    if(lstNd.empty() && (!nClass || nClass == NC_Object) && (bd == BD_INVERSE || bd == BD_BOTH) && nid.strVal() != "DAQ")
+	    if(lstNd.empty() && (!nClass || nClass&NC_Object) && (bd == BD_INVERSE || bd == BD_BOTH) && nid.strVal() != "DAQ")
 		req.childAdd("ref")->setAttr("NodeId", NodeId(nid.strVal().substr(0,nid.strVal().rfind(".")),1).toAddr())->
                     setAttr("referenceTypeId", i2s(OpcUa_Organizes))->
                     setAttr("dir", "0")->setAttr("name", TSYS::strParse(nid.strVal(),nLev,"."))->
                     setAttr("NodeClass", i2s(NC_Object))->setAttr("typeDefinition", i2s(OpcUa_FolderType));
 	    //>> Forward browse
-	    if((!nClass || nClass == NC_Object) && (bd == BD_FORWARD || bd == BD_BOTH))
+	    if((!nClass || nClass&NC_Object) && (bd == BD_FORWARD || bd == BD_BOTH))
 	    {
 		NodeId	tDef, refTpId = OpcUa_Organizes;
 		uint32_t nCl = NC_Object;

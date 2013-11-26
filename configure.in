@@ -156,8 +156,10 @@ if test $enable_LibGD = yes; then
     AC_CHECK_HEADERS([gd.h],
 	[
 	    AC_CHECK_LIB([gd],[gdImageCreate],
-	    [AC_MSG_NOTICE([LibGD: Pass global library using]); LIB_CORE="${LIB_CORE}-lgd "],
-	    [AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
+	    [
+		AC_DEFINE(HAVE_GD_CORE,1,[LibGD: Pass library using into core])
+		LIB_CORE="${LIB_CORE}-lgd "
+	    ],[AC_MSG_ERROR(GD library not found. Install or check GDlib package!)])
 	],
 	[AC_MSG_ERROR(GD library headers not found. Install or check GD developing package!)])
 fi

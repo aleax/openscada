@@ -1,3 +1,9 @@
+2013-11-26 Roman
+- !!:SYS.TArchVal: LibGD2 using into core is fixed by set variable HAVE_GD_CORE.
+    Value archive's trend build is implemented through SVG for LibGD2 into core disable.
+- FIX:DAQ.OPC_UA: nodeClassMask processing into service "Browse" is fixed for input part.
+
+
 2013-11-23 Roman
 - DB: Widget ElCadr is some expanded for negative precision process for exponential form accuracy into vcaBase.db.
     Input analog parameter's template fix for lag after EVAL and zero value temporary set.

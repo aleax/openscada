@@ -32,7 +32,7 @@
 #include "tarchives.h"
 #include "tarchval.h"
 
-#if HAVE_GD_H
+#if HAVE_GD_CORE
 #include <gd.h>
 #endif
 
@@ -1379,7 +1379,6 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 {
     string rez;
 
-#if HAVE_GD_H
     string lab_tm, lab_dt;
     time_t tm_t;
     struct tm ttm, ttm1 = ttm;
@@ -1402,11 +1401,14 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     v_w_size  = vsz-v_w_start-hv_border;
 
     int mrkHeight = 0;
+
+#if HAVE_GD_CORE
     int brect[8];
     char *gdR = gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000");
     if(gdR) mess_err(nodePath().c_str(), _("gdImageStringFT for font '%s' error: %s."), sclMarkFont.c_str(), gdR);
     else mrkHeight = brect[3]-brect[7];
     //if( mrkHeight <= 0 ) return rez;
+    int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15);
 
     v_w_size -= 2*mrkHeight;
 
@@ -1420,11 +1422,30 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     gdImageFilledRectangle(im, 0, 0, hsz-1, vsz-1, clr_backgr);
     gdImageRectangle(im, h_w_start, v_w_start, h_w_start+h_w_size, v_w_start+v_w_size, clr_grid);
 
+#else
+    mrkHeight = mrkFontSize;
+    int mrkWidth = 5*mrkFontSize;
+    int hmax_ln = vsz / 15;
+    v_w_size -= 2*mrkHeight;
+    const char	*clr_backgr = "#353535",
+		*clr_grid = "#8e8e8e",
+		*clr_symb = "#11ff5f",
+		*clr_trnd = "#1ff2ff";
+
+    XMLNode im("svg");
+    im.setAttr("xmlns","http://www.w3.org/2000/svg")->setAttr("version","1.1")->setAttr("width",i2s(hsz))->setAttr("height",i2s(vsz));
+    im.childAdd("rect")->setAttr("width",i2s(hsz))->setAttr("height",i2s(vsz))->
+	setAttr("stroke","none")->setAttr("stroke-width","0")->setAttr("fill",clr_backgr);
+    /*im.childAdd("rect")->setAttr("x",i2s(h_w_start))->setAttr("y",i2s(v_w_start))->
+	setAttr("width",i2s(h_w_size))->setAttr("height",i2s(v_w_size))->
+	setAttr("stroke",clr_grid)->setAttr("stroke-width","1")->setAttr("fill","none");*/
+    XMLNode *trPath = NULL;
+#endif
+
     //> Make horisontal grid and symbols
     int64_t h_div = 1;
     int64_t h_min = ibeg;
     int64_t h_max = iend;
-    int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15);
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;
@@ -1453,7 +1474,13 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	}
 
 	getVals(buf, h_min, h_max, rarch, 600000);
-	if(!buf.end() || !buf.begin())	{ gdImageDestroy(im); return rez; }
+	if(!buf.end() || !buf.begin())
+	{
+#if HAVE_GD_CORE
+	    gdImageDestroy(im);
+#endif
+	    return rez;
+	}
 
 	//>> Draw full trend's data and time to the trend end position
 	if(mrkHeight)
@@ -1465,6 +1492,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	    else if(iend%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
 	    else lab_tm = TSYS::strMess("%d:%02d:%g", ttm.tm_hour, ttm.tm_min, (float)ttm.tm_sec+(float)(iend%1000000)/1e6);
 
+#if HAVE_GD_CORE
 	    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
 	    int markBrd = h_w_start + h_w_size - (brect[2]-brect[6]);
 	    endMarkBrd = markBrd;
@@ -1473,6 +1501,15 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	    markBrd = h_w_start + h_w_size - (brect[2]-brect[6]);
 	    endMarkBrd = vmin(endMarkBrd, markBrd);
 	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0, markBrd, v_w_start+v_w_size+3+mrkHeight, (char*)lab_tm.c_str());
+#else
+	    endMarkBrd = h_w_start + h_w_size - mrkWidth;
+	    im.childAdd("text")->setAttr("text-anchor","end")->setAttr("stroke","none")->
+		setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+		setAttr("x",i2s(h_w_start+h_w_size))->setAttr("y",i2s(v_w_start+v_w_size+3+2*mrkHeight))->setText(lab_dt);
+	    im.childAdd("text")->setAttr("text-anchor","end")->setAttr("stroke","none")->
+		setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+		setAttr("x",i2s(h_w_start+h_w_size))->setAttr("y",i2s(v_w_start+v_w_size+3+mrkHeight))->setText(lab_tm);
+#endif
 	}
 
 	//>> Draw grid and/or markers
@@ -1481,7 +1518,12 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	{
 	    //>>> Draw grid
 	    int h_pos = h_w_start + h_w_size*(i_h-h_min)/(h_max-h_min);
+#if HAVE_GD_CORE
 	    gdImageLine(im, h_pos, v_w_start, h_pos, v_w_start+v_w_size, clr_grid);
+#else
+	    im.childAdd("rect")->setAttr("x",i2s(h_pos))->setAttr("y",i2s(v_w_start))->
+		setAttr("width","1")->setAttr("height",i2s(v_w_size))->setAttr("stroke","none")->setAttr("fill",clr_grid);
+#endif
 
 	    if(mrkHeight && !(i_h%h_div) && i_h != iend)
 	    {
@@ -1514,6 +1556,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 			     (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					  TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
 		int wdth, tpos, endPosTm = 0, endPosDt = 0;
+#if HAVE_GD_CORE
 		if(lab_dt.size())
 		{
 		    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
@@ -1537,6 +1580,25 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		    }
 		}
 		begMarkBrd = vmax(begMarkBrd, vmax(endPosTm,endPosDt));
+#else
+		tpos = vmax(h_pos-mrkWidth/2, hv_border);
+		if((tpos+mrkWidth) < endMarkBrd && tpos > begMarkBrd)
+		{
+		    if(lab_dt.size())
+		    {
+			im.childAdd("text")->setAttr("text-anchor","middle")->setAttr("stroke","none")->
+			    setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+			    setAttr("x",i2s(tpos+mrkWidth/2))->setAttr("y",i2s(v_w_start+v_w_size+3+2*mrkHeight))->setText(lab_dt);
+		    }
+		    if(lab_tm.size())
+		    {
+			im.childAdd("text")->setAttr("text-anchor","middle")->setAttr("stroke","none")->
+			    setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+			    setAttr("x",i2s(tpos+mrkWidth/2))->setAttr("y",i2s(v_w_start+v_w_size+3+mrkHeight))->setText(lab_tm);
+		    }
+		    begMarkBrd = vmax(begMarkBrd, tpos+mrkWidth);
+		}
+#endif
 		memcpy((char*)&ttm1, (char*)&ttm, sizeof(tm));
 		first_m = false;
 	    }
@@ -1556,7 +1618,13 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	v_min = vmin(v_min, c_val);
 	v_max = vmax(v_max, c_val);
     }
-    if(v_max == -3e300)	{ gdImageDestroy(im); return rez; }
+    if(v_max == -3e300)
+    {
+#if HAVE_GD_CORE
+	gdImageDestroy(im);
+#endif
+	return rez;
+    }
     else if((v_max-v_min) < 1e-30 && fabs(v_max) < 1e-30)
     { v_max += 0.5; v_min -= 0.5; }
     else if((v_max-v_min) / fabs(v_min+(v_max-v_min)/2) < 0.001)
@@ -1583,11 +1651,19 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     for(double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div)
     {
 	int v_pos = v_w_start + v_w_size - (int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
+#if HAVE_GD_CORE
 	gdImageLine(im, h_w_start, v_pos, h_w_start+h_w_size, v_pos, clr_grid);
-	bool isMax = (fabs((v_max-i_v)/v_div) < 0.1);
 	if(mrkHeight)
-	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0, hv_border+2, v_pos+(isMax?mrkHeight:0),
-		(char*)TSYS::strMess("%g",i_v).c_str());
+	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+		hv_border+2, v_pos+((fabs((v_max-i_v)/v_div) < 0.1)?mrkHeight:0), (char*)TSYS::strMess("%g",i_v).c_str());
+#else
+	im.childAdd("rect")->setAttr("x",i2s(h_w_start))->setAttr("y",i2s(v_pos))->
+	    setAttr("width",i2s(h_w_size))->setAttr("height","1")->setAttr("stroke","none")->setAttr("fill",clr_grid);
+	if(mrkHeight)
+	    im.childAdd("text")->setAttr("x",i2s(hv_border+2))->setAttr("y",i2s(v_pos+((fabs((v_max-i_v)/v_div) < 0.1)?mrkHeight:0)))->
+		setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("stroke","none")->
+		setAttr("fill",clr_symb)->setText(TSYS::strMess("%g",i_v));
+#endif
     }
 
     //> Draw trend
@@ -1616,9 +1692,11 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	    continue;
 	}
 	//Write point and line
+#if HAVE_GD_CORE
 	if(aver_vl != EVAL_REAL)
 	{
 	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
+
 	    gdImageSetPixel(im, aver_pos, c_vpos, clr_trnd);
 	    if(prev_vl != EVAL_REAL)
 	    {
@@ -1626,6 +1704,24 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		gdImageLine(im, prev_pos, c_vpos_prv, aver_pos, c_vpos, clr_trnd);
 	    }
 	}
+#else
+	if(aver_vl != EVAL_REAL)
+	{
+	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
+	    if(!trPath) trPath = im.childAdd("path")->setAttr("stroke",clr_trnd)->setAttr("stroke-width","1")->setAttr("fill","none");
+	    if(prev_vl == EVAL_REAL) trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("M%d,%d",aver_pos,c_vpos));	//Set single point
+	    else
+	    {
+		int c_vpos_prv = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
+		trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("L%d,%d",aver_pos,c_vpos));
+	    }
+	}
+	else if(prev_vl != EVAL_REAL)
+	{
+	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
+	    trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("L%d.1,%d.1",prev_pos,c_vpos));
+	}
+#endif
 	prev_vl  = aver_vl;
 	prev_pos = aver_pos;
 	aver_vl  = c_val;
@@ -1635,6 +1731,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     }
 
     //> Get image and transfer it
+#if HAVE_GD_CORE
     int img_sz;
     char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, 1);
     rez.assign(img_ptr,img_sz);
@@ -1643,11 +1740,6 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 
     if(tp) *tp = "png";
 #else
-    XMLNode im("svg");
-    im.setAttr("xmlns","http://www.w3.org/2000/svg")->setAttr("width","1061")->setAttr("height","300");
-    im.childAdd("rect")->setAttr("x","0")->setAttr("y","0")->setAttr("width","1061")->setAttr("height","300")->
-			setAttr("stroke","none")->setAttr("stroke-width","0")->setAttr("fill","black");
-
     rez = im.save(XMLNode::XMLHeader);
     if(tp) *tp = "svg+xml";
 #endif
