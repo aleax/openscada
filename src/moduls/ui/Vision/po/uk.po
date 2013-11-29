@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-17 16:29+0200\n"
+"POT-Creation-Date: 2013-11-28 18:00+0200\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1521,84 +1521,84 @@ msgstr "Зміна розміру"
 msgid "Warning! Edit widget already set."
 msgstr "Увага! Віджет вже встановлено у редагування."
 
-#: vis_devel_widgs.cpp:2502
+#: vis_devel_widgs.cpp:2498
 msgid "Exit from widget editing"
 msgstr "Вихід з редагування віджету"
 
-#: vis_devel_widgs.cpp:2503
+#: vis_devel_widgs.cpp:2499
 msgid "Press to exit from widget editing."
 msgstr "Натиснути для виходу з редагування віджету."
 
-#: vis_devel_widgs.cpp:2530
+#: vis_devel_widgs.cpp:2526
 msgid "Enter for the widget editing"
 msgstr "Вхід до редагування віджету"
 
-#: vis_devel_widgs.cpp:2531
+#: vis_devel_widgs.cpp:2527
 msgid "Press to enter for the widget editing."
 msgstr "Натиснути для входу до редагування віджету."
 
-#: vis_devel_widgs.cpp:2536
+#: vis_devel_widgs.cpp:2532
 msgid "Make icon from the widget"
 msgstr "Створити іконку з віджета"
 
-#: vis_devel_widgs.cpp:2537
+#: vis_devel_widgs.cpp:2533
 msgid "Press to make icon from the widget."
 msgstr "Натиснути для створення іконки з віджета."
 
-#: vis_devel_widgs.cpp:2541
+#: vis_devel_widgs.cpp:2537
 msgid "Make image from the widget"
 msgstr "Створити зображення з віджету"
 
-#: vis_devel_widgs.cpp:2542
+#: vis_devel_widgs.cpp:2538
 msgid "Press to make image from the widget."
 msgstr "Натиснути для створення зображення з віджету."
 
-#: vis_devel_widgs.cpp:2547
+#: vis_devel_widgs.cpp:2543
 msgid "Zoom in (+10%)"
 msgstr "Збільшити (+10%)"
 
-#: vis_devel_widgs.cpp:2549
+#: vis_devel_widgs.cpp:2545
 msgid "Press to increase the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб збільшити візуальний масштаб віджету на 10%."
 
-#: vis_devel_widgs.cpp:2552
+#: vis_devel_widgs.cpp:2548
 msgid "Zoom out (-10%)"
 msgstr "Зменшити (-10%)"
 
-#: vis_devel_widgs.cpp:2554
+#: vis_devel_widgs.cpp:2550
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб зменшити візуальний масштаб віджету на 10%."
 
-#: vis_devel_widgs.cpp:2557
+#: vis_devel_widgs.cpp:2553
 msgid "Reset zoom (100%)"
 msgstr "Скинути масштаб (100%)"
 
-#: vis_devel_widgs.cpp:2559
+#: vis_devel_widgs.cpp:2555
 msgid "Press to set the visual scale of the widget to 100%."
 msgstr "Натисніть, щоб встановитии візуальний масштаб віджету у 100%."
 
-#: vis_devel_widgs.cpp:2611
+#: vis_devel_widgs.cpp:2607
 msgid "Save widget's image"
 msgstr "Збереження зображення віджету"
 
-#: vis_devel_widgs.cpp:2612 vis_run.cpp:678
+#: vis_devel_widgs.cpp:2608 vis_run.cpp:678
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: vis_devel_widgs.cpp:2614 vis_run.cpp:679 vis_run.cpp:729 vis_run.cpp:808
+#: vis_devel_widgs.cpp:2610 vis_run.cpp:679 vis_run.cpp:729 vis_run.cpp:808
 #: vis_run.cpp:853
 msgid "Save to file '%1' is error."
 msgstr "Помилка збереження у файл '%1'."
 
-#: vis_devel_widgs.cpp:2744
+#: vis_devel_widgs.cpp:2740
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
 msgstr "Вибрані елементи --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2773
+#: vis_devel_widgs.cpp:2769
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Сторінка: '%1' --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2973 vis_devel_widgs.cpp:2978
+#: vis_devel_widgs.cpp:2969 vis_devel_widgs.cpp:2974
 #, c-format
 msgid ""
 "\n"
@@ -1607,39 +1607,39 @@ msgstr ""
 "\n"
 "... більше пунктів (%d)"
 
-#: vis_devel_widgs.cpp:2985
+#: vis_devel_widgs.cpp:2981
 msgid "geometry"
 msgstr "геометрія"
 
-#: vis_devel_widgs.cpp:2987
+#: vis_devel_widgs.cpp:2983
 #, c-format
 msgid "attribute '%s'"
 msgstr "атрибут '%s'"
 
-#: vis_devel_widgs.cpp:2989
+#: vis_devel_widgs.cpp:2985
 #, c-format
 msgid "new widget '%s' from '%s'"
 msgstr "новий віджет '%s' від '%s'"
 
-#: vis_devel_widgs.cpp:2990
+#: vis_devel_widgs.cpp:2986
 msgid "remove widget"
 msgstr "видалення віджету"
 
-#: vis_devel_widgs.cpp:2992
+#: vis_devel_widgs.cpp:2988
 #, c-format
 msgid "copy past widget '%s' from '%s'"
 msgstr "копіювання-вставка віджету '%s' з '%s'"
 
-#: vis_devel_widgs.cpp:2993
+#: vis_devel_widgs.cpp:2989
 msgid "unknown"
 msgstr "невідомо"
 
-#: vis_devel_widgs.cpp:3139
+#: vis_devel_widgs.cpp:3135
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"
 
-#: vis_devel_widgs.cpp:3247
-msgid "Select elements: '%1'"
+#: vis_devel_widgs.cpp:3242 vis_devel_widgs.cpp:3304
+msgid "Selected elements: '%1'"
 msgstr "Обрано елементи: '%1'"
 
 #: vis_run.cpp:70
@@ -2109,315 +2109,315 @@ msgstr "Оберіть Ваш стиль з переліку."
 msgid "Style select"
 msgstr "Вибір стилю"
 
-#: vis_shape_elfig.cpp:831
+#: vis_shape_elfig.cpp:821
 msgid "Elementary figure"
 msgstr "Елементарна фігура"
 
-#: vis_shape_elfig.cpp:1153
+#: vis_shape_elfig.cpp:1143
 msgid "Make this point dynamic"
 msgstr "Зробити цю точку динамічною"
 
-#: vis_shape_elfig.cpp:1155
+#: vis_shape_elfig.cpp:1145
 msgid "Press to make this point dynamic"
 msgstr "Натисніть, щоб зробити цю точку динамічною."
 
-#: vis_shape_elfig.cpp:1162
+#: vis_shape_elfig.cpp:1152
 msgid "Make this point static"
 msgstr "Зробити цю точку статичною"
 
-#: vis_shape_elfig.cpp:1164
+#: vis_shape_elfig.cpp:1154
 msgid "Press to make this point static"
 msgstr "Натисніть, щоб зробити цю точку статичною."
 
-#: vis_shape_elfig.cpp:1173
+#: vis_shape_elfig.cpp:1163
 msgid "Make line width dynamic"
 msgstr "Зробити ширину лінії динамічною"
 
-#: vis_shape_elfig.cpp:1175
+#: vis_shape_elfig.cpp:1165
 msgid "Press to make line width dynamic"
 msgstr "Натисніть, щоб зробити ширину лінії динамічною."
 
-#: vis_shape_elfig.cpp:1181
+#: vis_shape_elfig.cpp:1171
 msgid "Make line width static"
 msgstr "Зробити ширину лінії статичною"
 
-#: vis_shape_elfig.cpp:1183
+#: vis_shape_elfig.cpp:1173
 msgid "Press to make line width static"
 msgstr "Натисніть, щоб зробити ширину лінії динамічною."
 
-#: vis_shape_elfig.cpp:1189
+#: vis_shape_elfig.cpp:1179
 msgid "Make line color dynamic"
 msgstr "Зробити колір лінії динамічним"
 
-#: vis_shape_elfig.cpp:1191
+#: vis_shape_elfig.cpp:1181
 msgid "Press to make line color dynamic"
 msgstr "Натисніть, щоб зробити колір лінії динамічним."
 
-#: vis_shape_elfig.cpp:1197
+#: vis_shape_elfig.cpp:1187
 msgid "Make line color static"
 msgstr "Зробити колір лінії статичним"
 
-#: vis_shape_elfig.cpp:1199
+#: vis_shape_elfig.cpp:1189
 msgid "Press to make line color static"
 msgstr "Натисніть, щоб зробити колір лінії статичним."
 
-#: vis_shape_elfig.cpp:1207
+#: vis_shape_elfig.cpp:1197
 msgid "Make border width dynamic"
 msgstr "Зробити ширину границі динамічною"
 
-#: vis_shape_elfig.cpp:1209
+#: vis_shape_elfig.cpp:1199
 msgid "Press to make border width dynamic"
 msgstr "Натисніть, щоб зробити ширину границі динамічною."
 
-#: vis_shape_elfig.cpp:1215
+#: vis_shape_elfig.cpp:1205
 msgid "Make border width static"
 msgstr "Зробити ширину границі статичною"
 
-#: vis_shape_elfig.cpp:1217
+#: vis_shape_elfig.cpp:1207
 msgid "Press to make border width static"
 msgstr "Натисніть, щоб зробити ширину границі статичною."
 
-#: vis_shape_elfig.cpp:1223
+#: vis_shape_elfig.cpp:1213
 msgid "Make border color dynamic"
 msgstr "Зробити колір границі динамічним"
 
-#: vis_shape_elfig.cpp:1225
+#: vis_shape_elfig.cpp:1215
 msgid "Press to make border color dynamic"
 msgstr "Натисніть, щоб зробити колір границі динамічним."
 
-#: vis_shape_elfig.cpp:1231
+#: vis_shape_elfig.cpp:1221
 msgid "Make border color static"
 msgstr "Зробити колір границі статичним"
 
-#: vis_shape_elfig.cpp:1233
+#: vis_shape_elfig.cpp:1223
 msgid "Press to make border color static"
 msgstr "Натисніть, щоб зробити колір границі статичним."
 
-#: vis_shape_elfig.cpp:1240
+#: vis_shape_elfig.cpp:1230
 msgid "Make line style dynamic"
 msgstr "Зробити стиль лінії динамічним"
 
-#: vis_shape_elfig.cpp:1242
+#: vis_shape_elfig.cpp:1232
 msgid "Press to make line style dynamic"
 msgstr "Натисніть, щоб зробити стиль лінії динамічним."
 
-#: vis_shape_elfig.cpp:1248
+#: vis_shape_elfig.cpp:1238
 msgid "Make line style static"
 msgstr "Зробити стиль лінії статичним"
 
-#: vis_shape_elfig.cpp:1250
+#: vis_shape_elfig.cpp:1240
 msgid "Press to make line style static"
 msgstr "Натисніть, щоб зробити стиль лінії статичним."
 
-#: vis_shape_elfig.cpp:1254
+#: vis_shape_elfig.cpp:1244
 msgid "Show the figure's properties"
 msgstr "Показати властивості елементарної фігури"
 
-#: vis_shape_elfig.cpp:1262
+#: vis_shape_elfig.cpp:1252
 msgid "Press to show the properties dialog"
 msgstr "Натиснути для отримання властивостей елементарної фігури."
 
-#: vis_shape_elfig.cpp:1306
+#: vis_shape_elfig.cpp:1296
 msgid "Delete the current fill"
 msgstr "Видалити заповнення"
 
-#: vis_shape_elfig.cpp:1308
+#: vis_shape_elfig.cpp:1298
 msgid "Press to delete the current fill"
 msgstr "Натиснути для видалення заповнення."
 
-#: vis_shape_elfig.cpp:1314
+#: vis_shape_elfig.cpp:1304
 msgid "Make fill color dynamic"
 msgstr "Зробити колір заповнення динамічним"
 
-#: vis_shape_elfig.cpp:1316
+#: vis_shape_elfig.cpp:1306
 msgid "Press to make fill color dynamic"
 msgstr "Натисніть, щоб зробити колір заповнення динамічним."
 
-#: vis_shape_elfig.cpp:1322
+#: vis_shape_elfig.cpp:1312
 msgid "Make fill color static"
 msgstr "Зробити колір заповнення статичним"
 
-#: vis_shape_elfig.cpp:1324
+#: vis_shape_elfig.cpp:1314
 msgid "Press to make fill color static"
 msgstr "Натисніть, щоб зробити колір заповнення статичним."
 
-#: vis_shape_elfig.cpp:1330
+#: vis_shape_elfig.cpp:1320
 msgid "Make fill image dynamic"
 msgstr "Зробити зображення заповнення динамічним"
 
-#: vis_shape_elfig.cpp:1332
+#: vis_shape_elfig.cpp:1322
 msgid "Press to make fill image dynamic"
 msgstr "Натисніть, щоб зробити зображення заповнення динамічним."
 
-#: vis_shape_elfig.cpp:1338
+#: vis_shape_elfig.cpp:1328
 msgid "Make fill image static"
 msgstr "Зробити зображення заповнення статичним"
 
-#: vis_shape_elfig.cpp:1340
+#: vis_shape_elfig.cpp:1330
 msgid "Press to make fill image static"
 msgstr "Натисніть, щоб зробити зображення заповнення статичним."
 
-#: vis_shape_elfig.cpp:1346
+#: vis_shape_elfig.cpp:1336
 msgid "Show the fill's properties"
 msgstr "Показати властивості заповнення"
 
-#: vis_shape_elfig.cpp:1348
+#: vis_shape_elfig.cpp:1338
 msgid "Press to show the fill's properties dialog"
 msgstr "Натиснути для отримання властивостей заповнення."
 
-#: vis_shape_elfig.cpp:1356
+#: vis_shape_elfig.cpp:1346
 msgid "Make all values of the widget the static ones"
 msgstr "Зробити усі величини віджета статичними"
 
-#: vis_shape_elfig.cpp:1358
+#: vis_shape_elfig.cpp:1348
 msgid "Press to make all values of the widget static ones"
 msgstr "Натисніть, щоб зробити усі величини віджета статичними."
 
-#: vis_shape_elfig.cpp:2167
+#: vis_shape_elfig.cpp:2156
 msgid "Properties for the %1 figures."
 msgstr "Властивості для фігур: %1."
 
-#: vis_shape_elfig.cpp:2169
+#: vis_shape_elfig.cpp:2158
 msgid "Properties for the '%1' figure: '%2'."
 msgstr "Властивості для '%1' фігури: '%2'."
 
-#: vis_shape_elfig.cpp:2171
+#: vis_shape_elfig.cpp:2160
 msgid "Elementary figure properties."
 msgstr "Властивості елементарних фігур."
 
-#: vis_shape_elfig.cpp:2173
+#: vis_shape_elfig.cpp:2162
 msgid "Line:"
 msgstr "Лінія:"
 
-#: vis_shape_elfig.cpp:2180
+#: vis_shape_elfig.cpp:2169
 msgid "Border:"
 msgstr "Границя:"
 
-#: vis_shape_elfig.cpp:2185
+#: vis_shape_elfig.cpp:2174
 msgid "Points:"
 msgstr "Точки:"
 
-#: vis_shape_elfig.cpp:2186
+#: vis_shape_elfig.cpp:2175
 msgid "x"
 msgstr "x"
 
-#: vis_shape_elfig.cpp:2187
+#: vis_shape_elfig.cpp:2176
 msgid "y"
 msgstr "y"
 
-#: vis_shape_elfig.cpp:2190
+#: vis_shape_elfig.cpp:2179
 msgid "Point 3:"
 msgstr "Точка 3:"
 
-#: vis_shape_elfig.cpp:2192
+#: vis_shape_elfig.cpp:2181
 msgid "Point 4:"
 msgstr "Точка 4:"
 
-#: vis_shape_elfig.cpp:2194
+#: vis_shape_elfig.cpp:2183
 msgid "Point 5:"
 msgstr "Точка 5:"
 
-#: vis_shape_elfig.cpp:2219
+#: vis_shape_elfig.cpp:2208
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill color from the properties list."
 msgstr ""
 "Включити(вибраний)/Виключити(невибраний) колір заповнення зі списку "
 "властивостей."
 
-#: vis_shape_elfig.cpp:2221
+#: vis_shape_elfig.cpp:2210
 msgid "Fill Color"
 msgstr "Колір заповнення"
 
-#: vis_shape_elfig.cpp:2224
+#: vis_shape_elfig.cpp:2213
 msgid "Set the default fill color."
 msgstr "Встановити колір заповнення за замовчуванням."
 
-#: vis_shape_elfig.cpp:2234
+#: vis_shape_elfig.cpp:2223
 msgid ""
 "Include(checked)/Exclude(unchecked) the fill image from the properties list."
 msgstr ""
 "Включити(вибраний)/Виключити(невибраний) зображення заповнення зі списку "
 "властивостей."
 
-#: vis_shape_elfig.cpp:2236
+#: vis_shape_elfig.cpp:2225
 msgid "Fill Image"
 msgstr "Зображення заповнення"
 
-#: vis_shape_elfig.cpp:2239
+#: vis_shape_elfig.cpp:2228
 msgid "Set the default fill image."
 msgstr "Встановити зображення заповнення за замовчуванням."
 
-#: vis_shape_elfig.cpp:2241
+#: vis_shape_elfig.cpp:2230
 msgid "Make the fill color Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити колір заповнення Динамічним(вибрана)/Статичним(невибрана)."
 
-#: vis_shape_elfig.cpp:2242 vis_shape_elfig.cpp:2245 vis_shape_elfig.cpp:2289
-#: vis_shape_elfig.cpp:2308 vis_shape_elfig.cpp:2327 vis_shape_elfig.cpp:2348
-#: vis_shape_elfig.cpp:2367 vis_shape_elfig.cpp:2389 vis_shape_elfig.cpp:2396
-#: vis_shape_elfig.cpp:2403 vis_shape_elfig.cpp:2410 vis_shape_elfig.cpp:2417
+#: vis_shape_elfig.cpp:2231 vis_shape_elfig.cpp:2234 vis_shape_elfig.cpp:2278
+#: vis_shape_elfig.cpp:2297 vis_shape_elfig.cpp:2316 vis_shape_elfig.cpp:2337
+#: vis_shape_elfig.cpp:2356 vis_shape_elfig.cpp:2378 vis_shape_elfig.cpp:2385
+#: vis_shape_elfig.cpp:2392 vis_shape_elfig.cpp:2399 vis_shape_elfig.cpp:2406
 msgid "Dyn/Stat"
 msgstr "Дін/Стат"
 
-#: vis_shape_elfig.cpp:2244
+#: vis_shape_elfig.cpp:2233
 msgid "Make the fill image Dynamic(checked)/Static(unchecked)."
 msgstr ""
 "Зробити зображення заповнення Динамічним(вибрана)/Статичним(невибрана)."
 
-#: vis_shape_elfig.cpp:2278
+#: vis_shape_elfig.cpp:2267
 msgid ""
 "Include(checked)/Exclude(unchecked) the line width from the properties list."
 msgstr ""
 "Включити(вибраний)/Виключити(невибраний) ширину лінії зі списку властивостей."
 
-#: vis_shape_elfig.cpp:2282
+#: vis_shape_elfig.cpp:2271
 msgid "Line width"
 msgstr "Ширина лінії"
 
-#: vis_shape_elfig.cpp:2286
+#: vis_shape_elfig.cpp:2275
 msgid "Set the default line width."
 msgstr "Встановити ширину лінії за замовчуванням."
 
-#: vis_shape_elfig.cpp:2288
+#: vis_shape_elfig.cpp:2277
 msgid "Make the line width Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити ширину лінії Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2298
+#: vis_shape_elfig.cpp:2287
 msgid ""
 "Include(checked)/Exclude(unchecked) the line color from the properties list."
 msgstr ""
 "Включити(вибраний)/Виключити(невибраний) колір лінії зі списку властивостей."
 
-#: vis_shape_elfig.cpp:2302
+#: vis_shape_elfig.cpp:2291
 msgid "Line color"
 msgstr "Колір лінії"
 
-#: vis_shape_elfig.cpp:2305
+#: vis_shape_elfig.cpp:2294
 msgid "Set the default line color."
 msgstr "Встановити колір лінії за замовчуванням."
 
-#: vis_shape_elfig.cpp:2307
+#: vis_shape_elfig.cpp:2296
 msgid "Make the line color Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити колір лінії Динамічним(вибрана)/Статичним(невибрана)."
 
-#: vis_shape_elfig.cpp:2317
+#: vis_shape_elfig.cpp:2306
 msgid ""
 "Include(checked)/Exclude(unchecked) the line style from the properties list."
 msgstr ""
 "Включити(вибраний)/Виключити(невибраний) стиль лінії зі списку властивостей."
 
-#: vis_shape_elfig.cpp:2321
+#: vis_shape_elfig.cpp:2310
 msgid "Line style"
 msgstr "Стиль лінії"
 
-#: vis_shape_elfig.cpp:2324
+#: vis_shape_elfig.cpp:2313
 msgid "Set the default line style."
 msgstr "Встановити стиль лінії за замовчуванням."
 
-#: vis_shape_elfig.cpp:2326
+#: vis_shape_elfig.cpp:2315
 msgid "Make the line style Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити стиль лінії Динамічним(вибрана)/Статичним(невибрана)."
 
-#: vis_shape_elfig.cpp:2337
+#: vis_shape_elfig.cpp:2326
 msgid ""
 "Include(checked)/Exclude(unchecked) the border width from the properties "
 "list."
@@ -2425,19 +2425,19 @@ msgstr ""
 "Включити(вибраний)/Виключити(невибраний) ширину границі зі списку "
 "властивостей."
 
-#: vis_shape_elfig.cpp:2341
+#: vis_shape_elfig.cpp:2330
 msgid "Border width"
 msgstr "Ширина границі"
 
-#: vis_shape_elfig.cpp:2345
+#: vis_shape_elfig.cpp:2334
 msgid "Set the default line's border width."
 msgstr "Встановити ширину границі за замовчуванням."
 
-#: vis_shape_elfig.cpp:2347
+#: vis_shape_elfig.cpp:2336
 msgid "Make the border width Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити ширину границі Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2357
+#: vis_shape_elfig.cpp:2346
 msgid ""
 "Include(checked)/Exclude(unchecked) the border color from the properties "
 "list."
@@ -2445,64 +2445,64 @@ msgstr ""
 "Включити(вибраний)/Виключити(невибраний) колір границі зі списку "
 "властивостей."
 
-#: vis_shape_elfig.cpp:2361
+#: vis_shape_elfig.cpp:2350
 msgid "Border color"
 msgstr "Колір границі"
 
-#: vis_shape_elfig.cpp:2364
+#: vis_shape_elfig.cpp:2353
 msgid "Set the default line's border color."
 msgstr "Встановити колір границі за замовчуванням."
 
-#: vis_shape_elfig.cpp:2366
+#: vis_shape_elfig.cpp:2355
 msgid "Make the border color Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити колір границі Динамічним(вибрана)/Статичним(невибрана)."
 
-#: vis_shape_elfig.cpp:2384
+#: vis_shape_elfig.cpp:2373
 msgid "Point 1:"
 msgstr "Точка 1:"
 
-#: vis_shape_elfig.cpp:2389
+#: vis_shape_elfig.cpp:2378
 msgid "Make the 1 point Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити 1 точку Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2391
+#: vis_shape_elfig.cpp:2380
 msgid "Point 2:"
 msgstr "Точка 2:"
 
-#: vis_shape_elfig.cpp:2396
+#: vis_shape_elfig.cpp:2385
 msgid "Make the 2 point Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити 2 точку Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2403
+#: vis_shape_elfig.cpp:2392
 msgid "Make the 3 point Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити 3 точку Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2410
+#: vis_shape_elfig.cpp:2399
 msgid "Make the 4 point Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити 4 точку Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2417
+#: vis_shape_elfig.cpp:2406
 msgid "Make the 5 point Dynamic(checked)/Static(unchecked)."
 msgstr "Зробити 5 точку Динамічною(вибрана)/Статичною(невибрана)."
 
-#: vis_shape_elfig.cpp:2512
+#: vis_shape_elfig.cpp:2501
 msgid "Solid"
 msgstr "Суцільна"
 
-#: vis_shape_elfig.cpp:2512
+#: vis_shape_elfig.cpp:2501
 msgid "Dashed"
 msgstr "Пунктир"
 
-#: vis_shape_elfig.cpp:2512
+#: vis_shape_elfig.cpp:2501
 msgid "Dotted"
 msgstr "Крапкова"
 
-#: vis_shape_elfig.cpp:4646 vis_shape_elfig.cpp:4723 vis_shape_elfig.cpp:4840
-#: vis_shape_elfig.cpp:4870 vis_shape_elfig.cpp:4912
+#: vis_shape_elfig.cpp:4551 vis_shape_elfig.cpp:4617 vis_shape_elfig.cpp:4710
+#: vis_shape_elfig.cpp:4737 vis_shape_elfig.cpp:4769
 msgid "Point coordinates(x,y): (%1, %2)"
 msgstr "Координати точки(x,y): (%1, %2)"
 
-#: vis_shape_elfig.cpp:5577
+#: vis_shape_elfig.cpp:5372
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Координати(x,y): (%1, %2)"
 

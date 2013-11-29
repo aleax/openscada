@@ -1,3 +1,8 @@
+2013-11-29 Roman
+- !:DB.MySQL: MULTI_STATEMENTS requests is enabled, but process and return only first result.
+- FIX:UI.Vision: UnDo records for align events, into development mode, set only for real changed widgets.
+
+
 2013-11-26 Roman
 - !!:SYS.TArchVal: LibGD2 using into core is fixed by set variable HAVE_GD_CORE.
     Value archive's trend build is implemented through SVG for LibGD2 into core disable.

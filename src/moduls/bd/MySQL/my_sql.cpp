@@ -20,9 +20,9 @@
  ***************************************************************************/
 
 #include <string>
-#include <mysql/mysql.h>
-#include <mysql/errmsg.h>
-#include <mysql/mysqld_error.h>
+#include <mysql.h>
+#include <errmsg.h>
+#include <mysqld_error.h>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -51,7 +51,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -61,7 +61,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
 	    return new BDMySQL::BDMod( source );
 	return NULL;
     }
@@ -72,7 +72,7 @@ using namespace BDMySQL;
 //************************************************
 //* BDMySQL::BDMod				 *
 //************************************************
-BDMod::BDMod(string name) : TTipBD(MOD_ID)
+BDMod::BDMod( string name ) : TTipBD(MOD_ID)
 {
     mod		= this;
 
@@ -85,7 +85,7 @@ BDMod::BDMod(string name) : TTipBD(MOD_ID)
     mSource	= name;
 }
 
-BDMod::~BDMod()
+BDMod::~BDMod( )
 {
 
 }
@@ -118,13 +118,13 @@ void MBD::postDisable(int flag)
 {
     TBD::postDisable(flag);
 
-    if( flag && owner().fullDeleteDB() )
+    if(flag && owner().fullDeleteDB())
     {
 	MYSQL connect;
 
 	if(!mysql_init(&connect)) throw TError(TSYS::DBInit,nodePath().c_str(),_("Error initializing client."));
 	connect.reconnect = 1;
-	if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
+	if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 	    throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),mysql_error(&connect));
 
 	string req = "DROP DATABASE `"+bd+"`";
@@ -137,7 +137,7 @@ void MBD::postDisable(int flag)
 
 void MBD::enable( )
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
     host = TSYS::strSepParse(addr(),0,';');
     user = TSYS::strSepParse(addr(),1,';');
@@ -161,13 +161,13 @@ void MBD::enable( )
 	if(tTm) mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, (const char*)&tTm);
     }
     connect.reconnect = 1;
-    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size())?u_sock.c_str():NULL,0))
+    if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 	throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),mysql_error(&connect));
 
     TBD::enable( );
 
     sqlReq("CREATE DATABASE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
-    if( !names.empty() ) sqlReq("SET NAMES '"+names+"'");
+    if(!names.empty()) sqlReq("SET NAMES '"+names+"'");
 }
 
 void MBD::disable( )
@@ -202,63 +202,69 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 {
     MYSQL_RES *res = NULL;
 
-    if( tbl ) tbl->clear();
-    if( !enableStat() ) return;
+    if(tbl) tbl->clear();
+    if(!enableStat()) return;
 
-    string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
+    string req = Mess->codeConvOut(cd_pg.c_str(), ireq);
 
-    ResAlloc resource(conn_res,true);
+    ResAlloc resource(conn_res, true);
 
     int irez;
     rep:
     if((irez = mysql_real_query(&connect,req.c_str(),req.size())))
     {
-	if( irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST )
+	if(irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST)
 	{
 	    resource.release();
 	    disable();
 	    enable();
 	    resource.request(true);
-	    irez = mysql_real_query(&connect,req.c_str(),req.size());
+	    irez = mysql_real_query(&connect, req.c_str(), req.size());
 	}
-	if( irez )
+	if(irez)
 	{
-	    if( mysql_errno(&connect) == ER_NO_DB_ERROR )
+	    if(mysql_errno(&connect) == ER_NO_DB_ERROR)
 	    {
 		resource.release();
 		sqlReq("USE `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
 		resource.request(true);
 		goto rep;
 	    }
-	    //mess_debug(nodePath().c_str(),_("Query '%s' is error."),ireq.c_str());
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error %d: %s"),irez,mysql_error(&connect));
+	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),_("Query '%s' is error."),ireq.c_str());
+	    throw TError(TSYS::DBRequest, nodePath().c_str(), _("Query to DB error %d: %s"), irez, mysql_error(&connect));
 	}
     }
-    if( mysql_field_count(&connect) == 0 ) return;
-    if( !(res = mysql_store_result(&connect)) )
-	throw TError(TSYS::DBRequest,nodePath().c_str(),_("Store result error: %s"),mysql_error(&connect));
 
-    if( tbl )
+    do
     {
-	int num_fields = mysql_num_fields(res);
-	MYSQL_ROW row;
+	if(!(res=mysql_store_result(&connect)) && mysql_field_count(&connect))
+	    throw TError(TSYS::DBRequest, nodePath().c_str(), _("Store result error: %s"), mysql_error(&connect));
 
-	vector<string> fld;
-	//> Add head
-	for( int i=0; i < num_fields; i++ )
-	    fld.push_back(mysql_fetch_field_direct(res,i)->name);
-	tbl->push_back(fld);
-	//> Add data
-	while( (row = mysql_fetch_row(res)) )
+	if(res && tbl && tbl->empty())	//Process only first statement's result
 	{
-	    fld.clear();
-	    for(int i=0; i < num_fields; i++)
-		fld.push_back(row[i]?Mess->codeConvIn(cd_pg.c_str(),row[i]):"");
-	    tbl->push_back(fld);
-	}
-    }
+	    int num_fields = mysql_num_fields(res);
+	    MYSQL_ROW row;
 
-    mysql_free_result(res);
+	    vector<string> fld;
+	    //> Add head
+	    for(int i=0; i < num_fields; i++)
+		fld.push_back(mysql_fetch_field_direct(res,i)->name);
+	    tbl->push_back(fld);
+	    //> Add data
+	    while((row = mysql_fetch_row(res)))
+	    {
+		fld.clear();
+		for(int i = 0; i < num_fields; i++)
+		    fld.push_back(row[i]?Mess->codeConvIn(cd_pg.c_str(),row[i]):"");
+		tbl->push_back(fld);
+	    }
+	}
+
+	if(res) mysql_free_result(res);
+
+	if((irez=mysql_next_result(&connect)) > 0)
+	    throw TError(TSYS::DBRequest, nodePath().c_str(), _("Could not execute statement: %s"), mysql_error(&connect));
+    }while(irez == 0);
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
@@ -294,11 +300,11 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
 
     setNodePrev(iown);
 
-    if( create )
+    if(create)
     {
 	req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
 	    TSYS::strEncode(name,TSYS::SQL)+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
-	owner().sqlReq( req );
+	owner().sqlReq(req);
     }
     //> Get table structure description
     req ="DESCRIBE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name,TSYS::SQL)+"`";
@@ -307,7 +313,7 @@ MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
     //owner().sqlReq( req );
 }
 
-MTable::~MTable(  )
+MTable::~MTable( )
 {
 
 }

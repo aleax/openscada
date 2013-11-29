@@ -10,7 +10,7 @@ bd_MySQL_la_CXXFLAGS =
 bd_MySQL_la_LIBTOOLFLAGS = --tag=disable-static
 endif
 
-bd_MySQL_la_CXXFLAGS += -DUSE_OLD_FUNCTIONS $(MYSQL_CFLAGS)
+bd_MySQL_la_CXXFLAGS += $(MYSQL_CFLAGS)
 bd_MySQL_la_LDFLAGS = -module -avoid-version -no-undefined $(MYSQL_LDFLAGS)
 bd_MySQL_la_SOURCES = my_sql.cpp
 

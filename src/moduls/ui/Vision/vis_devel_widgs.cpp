@@ -2374,6 +2374,7 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 
 void DevelWdgView::wdgViewTool( QAction *act )
 {
+    DevelWdgView *cwdg = NULL, *ewdg = NULL;
     if(edit())    return;
     QStringList sact = act->objectName().split('_');
     if(sact.at(0) == "align")
@@ -2381,41 +2382,31 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	//> Get selected rect
 	QRectF selRect;
 	int sel_cnt = 0;
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-	    if( cwdg && cwdg->select( ) )
+	for(int i_c = 0; i_c < children().size(); i_c++)
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
 	    {
 		selRect = selRect.united(cwdg->geometryF());
 		sel_cnt++;
 	    }
-	}
-	if( sel_cnt == 0 ) return;
-	if( sel_cnt == 1 ) selRect = selRect.united(QRectF(QPointF(0,0),sizeF()));
+	if(sel_cnt == 0) return;
+	if(sel_cnt == 1) selRect = selRect.united(QRectF(QPointF(0,0),sizeF()));
 
 	//> Update selected widgets position
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-	    if( cwdg && cwdg->select( ) )
+	for(int i_c = 0; i_c < children().size(); i_c++)
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
 	    {
-		if( sact.at(1) == "left" )
-		    cwdg->moveF(QPointF(selRect.x(),cwdg->posF().y()));
-		else if( sact.at(1) == "right" )
-		    cwdg->moveF(QPointF(selRect.x()+selRect.width()-cwdg->sizeF().width(),cwdg->posF().y()));
-		else if( sact.at(1) == "vcenter" )
-		    cwdg->moveF(QPointF(selRect.x()+(selRect.width()-cwdg->sizeF().width())/2,cwdg->posF().y()));
-		else if( sact.at(1) == "top" )
-		    cwdg->moveF(QPointF(cwdg->posF().x(),selRect.y()));
-		else if( sact.at(1) == "bottom" )
-		    cwdg->moveF(QPointF(cwdg->posF().x(),selRect.y()+selRect.height()-cwdg->sizeF().height()));
-		else if( sact.at(1) == "hcenter" )
-		    cwdg->moveF(QPointF(cwdg->posF().x(),selRect.y()+(selRect.height()-cwdg->sizeF().height())/2));
+		QPointF toPnt = cwdg->posF();
+		if(sact.at(1) == "left")	toPnt = QPointF(selRect.x(),cwdg->posF().y());
+		else if(sact.at(1) == "right")	toPnt = QPointF(selRect.x()+selRect.width()-cwdg->sizeF().width(),cwdg->posF().y());
+		else if(sact.at(1) == "vcenter")toPnt = QPointF(selRect.x()+(selRect.width()-cwdg->sizeF().width())/2,cwdg->posF().y());
+		else if(sact.at(1) == "top")	toPnt = QPointF(cwdg->posF().x(),selRect.y());
+		else if(sact.at(1) == "bottom")	toPnt = QPointF(cwdg->posF().x(),selRect.y()+selRect.height()-cwdg->sizeF().height());
+		else if(sact.at(1) == "hcenter")toPnt = QPointF(cwdg->posF().x(),selRect.y()+(selRect.height()-cwdg->sizeF().height())/2);
+		if(toPnt != cwdg->posF()) { cwdg->moveF(toPnt); saveGeom(cwdg->id()); }
 	    }
-	}
-	saveGeom("");
+	//saveGeom("");
     }
-    else if( sact.at(0) == "level" )
+    else if(sact.at(0) == "level")
     {
 	bool is_rise = (sact.at(1) == "rise");
 	bool is_up   = (sact.at(1) == "up");
@@ -2424,45 +2415,42 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	string sel_ws = selectChilds();
 	string sel_w;
 
-	if( is_rise || is_up )
-	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
+	if(is_rise || is_up)
+	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
 	    {
 		bool is_move = false;
-		DevelWdgView *cwdg = NULL;
-		DevelWdgView *ewdg = NULL;
-		for( int i_c = 0; i_c < children().size(); i_c++ )
+		cwdg = ewdg = NULL;
+		for(int i_c = 0; i_c < children().size(); i_c++)
 		{
-		    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
+		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-		    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-		    else if( is_rise && !is_move && cwdg && !ewdg->select() &&
-			    ewdg->geometryF().intersects(cwdg->geometryF()) )
+		    if(ewdg->id() == sel_w.c_str()) cwdg = ewdg;
+		    else if(is_rise && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
-			cwdg->stackUnder(ewdg);
-			ewdg->stackUnder(cwdg);
+			cwdg->stackUnder(ewdg); ewdg->stackUnder(cwdg);
+			saveGeom(cwdg->id()); saveGeom(ewdg->id());
 			is_move = true;
 		    }
 		}
-		if(is_up && cwdg && ewdg && cwdg!=ewdg)
+		if(is_up && cwdg && ewdg && cwdg != ewdg)
 		{
-		    cwdg->stackUnder(ewdg);
-		    ewdg->stackUnder(cwdg);
+		    cwdg->stackUnder(ewdg); ewdg->stackUnder(cwdg);
+		    saveGeom(cwdg->id()); saveGeom(ewdg->id());
 		}
 	    }
 
-	if( is_lower || is_down )
-	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
+	if(is_lower || is_down)
+	{
+	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
 	    {
 		bool is_move = false;
-		DevelWdgView *cwdg = NULL;
-		DevelWdgView *ewdg = NULL;
-		for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+		cwdg = ewdg = NULL;
+		for(int i_c = children().size()-1; i_c >= 0; i_c--)
 		{
-		    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
+		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-		    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-		    else if( is_lower && !is_move && cwdg && !ewdg->select() &&
-			    ewdg->geometryF().intersects(cwdg->geometryF()) )
+		    if(ewdg->id() == sel_w.c_str())   cwdg = ewdg;
+		    else if(is_lower && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
 			cwdg->stackUnder(ewdg);
 			is_move = true;
@@ -2470,7 +2458,8 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		}
 		if(is_down && cwdg && ewdg && cwdg != ewdg) cwdg->stackUnder(ewdg);
 	    }
-	saveGeom("");
+	    saveGeom("");
+	}
     }
 }
 
@@ -2822,6 +2811,7 @@ void DevelWdgView::cacheResSet( const string &res, const string &val )
 
 void DevelWdgView::chRecord( XMLNode ch )
 {
+    printf("TEST 10: '%s'\n", id().c_str());
     if(wLevel() > 0) levelWidget(0)->chRecord(*ch.setAttr("wdg",id()));
     if(!chTree)	return;
     int cur = atoi(chTree->attr("cur").c_str());
@@ -3239,9 +3229,7 @@ bool DevelWdgView::event( QEvent *event )
 
 			upMouseCursors(mapFromGlobal(cursor().pos()));
 
-			//>> Update status bar
-			mainWin()->statusBar()->showMessage(QString(_("Select elements: '%1'")).
-							arg(selectChilds().c_str()), 10000 );
+			mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selectChilds().c_str()), 10000);
 
 			//>> Hold select rect paint
 			if(!chld_sel && root() == "Box")
@@ -3302,6 +3290,8 @@ bool DevelWdgView::event( QEvent *event )
 			else setCursor(Qt::ArrowCursor);
 			setSelect(true, PrcChilds);
 		    }
+
+		    mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selectChilds().c_str()), 10000);
 		}
 
 		if(fSelChange)
