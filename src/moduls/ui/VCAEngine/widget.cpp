@@ -805,7 +805,8 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	}
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
-	        attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
+	        try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
+	        catch(TError) { }
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD))	//Get attributes all updated elements' of the branch
     {

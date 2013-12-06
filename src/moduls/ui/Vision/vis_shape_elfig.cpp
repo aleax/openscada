@@ -130,23 +130,23 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_GEOM_MARGIN: elFD->geomMargin = atoi(val.c_str()); up = true;	break;
 	case A_GEOM_X_SC: rel_list = true;	break;
 	case A_GEOM_Y_SC: rel_list = true;	break;
-	case A_ElFigLineW: widths[ShapeItem::DefLine] = atof(val.c_str()); rel_list = true;	break;
-	case A_ElFigLineClr: colors[ShapeItem::DefLine] = getColor(val); rel_list = true;	break;
+	case A_ElFigLineW: widths[SpI_DefLine] = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigLineClr: colors[SpI_DefLine] = getColor(val); rel_list = true;	break;
 	case A_ElFigLineStl:
 	    switch(atoi(val.c_str()))
 	    {
-		case EF_SOLID:	styles[ShapeItem::DefLine] = Qt::SolidLine;	break;
-		case EF_DASH:	styles[ShapeItem::DefLine] = Qt::DashLine;	break;
-		case EF_DOT:	styles[ShapeItem::DefLine] = Qt::DotLine;	break;
+		case EF_SOLID:	styles[SpI_DefLine] = Qt::SolidLine;	break;
+		case EF_DASH:	styles[SpI_DefLine] = Qt::DashLine;	break;
+		case EF_DOT:	styles[SpI_DefLine] = Qt::DotLine;	break;
 	    }
 	    rel_list = true;
 	    break;
-	case A_ElFigBordW: widths[ShapeItem::DefBord] = atof(val.c_str()); rel_list = true;	break;
-	case A_ElFigBordClr: colors[ShapeItem::DefBord] = getColor(val); rel_list = true;	break;
-	case A_ElFigFillClr: colors[ShapeItem::DefFill] = getColor(val); rel_list = true;	break;
+	case A_ElFigBordW: widths[SpI_DefBord] = atof(val.c_str()); rel_list = true;	break;
+	case A_ElFigBordClr: colors[SpI_DefBord] = getColor(val); rel_list = true;	break;
+	case A_ElFigFillClr: colors[SpI_DefFill] = getColor(val); rel_list = true;	break;
 	case A_ElFigFillImg:
 	    backimg = w->resGet(val);
-	    images[ShapeItem::DefFillImg] = (!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) ? val : "";
+	    images[SpI_DefFillImg] = (!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size())) ? val : "";
 	    rel_list = true;
 	    break;
 	case A_ElFigOrient: elFD->orient = atof(val.c_str()); rel_list = true;	break;
@@ -183,17 +183,16 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
     }
     if(rel_list && !w->allAttrLoad())
     {
-	//> Deleting the pairs in the map with the key <= StatIts
+	//> Deleting the pairs in the map with the key <= SpI_StatIts
 	for(PntMap::iterator pi = pnts.begin(); pi != pnts.end(); )
-	    if(pi->first <= ShapeItem::StatIts) pnts.erase(pi++); else ++pi;
+	    if(pi->first <= SpI_StatIts) pnts.erase(pi++); else ++pi;
 	for(ColorMap::iterator pi = colors.begin(); pi != colors.end(); )
-	    if(pi->first <= ShapeItem::StatIts) colors.erase(pi++); else ++pi;
+	    if(pi->first <= SpI_StatIts) colors.erase(pi++); else ++pi;
 	for(ImageMap::iterator pi = images.begin(); pi != images.end(); )
-	    if(pi->first <= ShapeItem::StatIts) images.erase(pi++); else ++pi;
+	    if(pi->first <= SpI_StatIts) images.erase(pi++); else ++pi;
 	for(StyleMap::iterator pi = styles.begin(); pi != styles.end(); )
-	    if(pi->first <= ShapeItem::StatIts) styles.erase(pi++); else ++pi;
-	int map_index = ShapeItem::StatIts, w_index = ShapeItem::StatIts,
-	    c_index = ShapeItem::StatIts, i_index = ShapeItem::StatIts, s_index = ShapeItem::StatIts;
+	    if(pi->first <= SpI_StatIts) styles.erase(pi++); else ++pi;
+	int map_index = SpI_StatIts, w_index = SpI_StatIts, c_index = SpI_StatIts, i_index = SpI_StatIts, s_index = SpI_StatIts;
 	flag_ctrl = flag_A = flag_copy = false;
 	index_array.clear();
 	count_Shapes = 0;
@@ -209,12 +208,12 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	for(int off = 0, el_off = 0; (sel=TSYS::strSepParse(elFD->elLst,0,'\n',&off)).size(); el_off = 0)
 	{
 	    string el = TSYS::strSepParse(sel, 0, ':', &el_off), el_s;
-	    ShapeItem::Type elTp;
+	    ShapeType elTp;
 	    int nPnts = 0, servPnts;
-	    if(el == "line")		{ elTp = ShapeItem::Line; nPnts = 2; servPnts = 2; }
-	    else if(el == "arc")	{ elTp = ShapeItem::Arc; nPnts = 5; servPnts = 2; }
-	    else if(el == "bezier")	{ elTp = ShapeItem::Bezier; nPnts = 4; servPnts = 2; }
-	    else if(el == "fill")	{ elTp = ShapeItem::Fill; nPnts = -1; servPnts = -1; }
+	    if(el == "line")		{ elTp = ShT_Line; nPnts = 2; servPnts = 2; }
+	    else if(el == "arc")	{ elTp = ShT_Arc; nPnts = 5; servPnts = 2; }
+	    else if(el == "bezier")	{ elTp = ShT_Bezier; nPnts = 4; servPnts = 2; }
+	    else if(el == "fill")	{ elTp = ShT_Fill; nPnts = -1; servPnts = -1; }
 	    else continue;
 
 	    //>> Reading and setting attributes for the current line
@@ -231,7 +230,7 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    bool fl = false;
 		    //>> Detecting if there is a point with same coordinates in the map.
 		    for(PntMap::reverse_iterator pi = pnts.rbegin(); (servPnts < 0 || i_p < servPnts) && !fl && pi != pnts.rend(); pi++)
-			if(pi->first <= ShapeItem::StatIts && fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
+			if(pi->first <= SpI_StatIts && fabs(TSYS::realRound(x_s,POS_PREC_DIG) - TSYS::realRound(pi->second.x(),POS_PREC_DIG)) < 0.01 &&
 			    fabs(TSYS::realRound(y_s,POS_PREC_DIG) - TSYS::realRound(pi->second.y(),POS_PREC_DIG)) < 0.01)
 			{ p.push_back(pi->first); fl = true; }
 		    if(!fl) { p.push_back(map_index--); pnts[p[i_p]] = QPointF(x_s, y_s); }
@@ -244,39 +243,39 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    //>>> Other properties
 	    switch(elTp)
 	    {
-		case ShapeItem::Line: case ShapeItem::Arc: case ShapeItem::Bezier:
+		case ShT_Line: case ShT_Arc: case ShT_Bezier:
 		    //>>> Line width
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) width = w_s;
 		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) widths[(width=w_index--)] = (fabs(w_s) < 1) ? 0 : vmin(1000, vmax(1,w_s));
-		    else width = ShapeItem::DefLine;
+		    else width = SpI_DefLine;
 
 		    //>>> Line color
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) color = w_s;
 		    else if(el_s.size()) colors[(color=c_index--)] = getColor(el_s);
-		    else color = ShapeItem::DefLine;
+		    else color = SpI_DefLine;
 
 		    //>>> Border width
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"w%d",&w_s) == 1) bord_width = w_s;
 		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1) widths[(bord_width=w_index--)] = (fabs(w_s) < 1) ? 0 : vmin(1000, vmax(1,w_s));
-		    else bord_width = ShapeItem::DefBord;
+		    else bord_width = SpI_DefBord;
 
 		    //>>> Border color
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) bord_color = w_s;
 		    else if(el_s.size()) colors[(bord_color=c_index--)] = getColor(el_s);
-		    else bord_color = ShapeItem::DefBord;
+		    else bord_color = SpI_DefBord;
 
 		    //>>> Line style
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"s%d",&w_s) == 1) style = w_s;
 		    else if(sscanf(el_s.c_str(),"%d",&w_s) == 1 && (w_s == EF_SOLID || w_s == EF_DASH || w_s == EF_DOT))
 			styles[(style=s_index--)] = (Qt::PenStyle)(w_s+1);
-		    else style = ShapeItem::DefLine;
+		    else style = SpI_DefLine;
 
-		    if(elTp == ShapeItem::Arc)
+		    if(elTp == ShT_Arc)
 		    {
             		//>>> Building the current arc
 			//>>> Reading coordinates for the points of the line
@@ -289,18 +288,18 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shapeItems.push_back(ShapeItem(newPath,newPath,p[0],p[1],p[2],p[3],p[4],CtrlMotionPos_4,
 					    color,bord_color,style,width,bord_width,elTp,angle_temp));
 		    break;
-		case ShapeItem::Fill:
+		case ShT_Fill:
 		    //>>> Fill color
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"c%d",&w_s) == 1) color = w_s;
 		    else if(el_s.size()) colors[(color=c_index--)] = getColor(el_s);
-		    else color = ShapeItem::DefFill;
+		    else color = SpI_DefFill;
 
 		    //>>> Fill image
 		    el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		    if(sscanf(el_s.c_str(),"i%d",&w_s) == 1) img = w_s;
 		    else if(!w->resGet(TSYS::strDecode(el_s)).empty()) images[(img=i_index--)] = TSYS::strDecode(el_s);
-		    else img = ShapeItem::DefFillImg;
+		    else img = SpI_DefFillImg;
 
 		    //>>> Make elements
 		    if(p.size() > 1) inundationItems.push_back(inundationItem(newPath,color,img,p,p));
@@ -428,9 +427,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 					(shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1))
 				    {
 					flag_push_back = false;
-					if(((shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Line) ||
-						(shapeItems[inundation_fig_num[p]].type == ShapeItem::Bezier && shapeItems[j].type == ShapeItem::Line) ||
-						(shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Bezier)) && inundation_fig_num[p] != j)
+					if(((shapeItems[inundation_fig_num[p]].type == ShT_Arc && shapeItems[j].type == ShT_Line) ||
+						(shapeItems[inundation_fig_num[p]].type == ShT_Bezier && shapeItems[j].type == ShT_Line) ||
+						(shapeItems[inundation_fig_num[p]].type == ShT_Arc && shapeItems[j].type == ShT_Bezier)) && inundation_fig_num[p] != j)
 					    inundation_fig_num[p] = j;
 				    }
 				if(flag_push_back) inundation_fig_num.push_back(j);
@@ -445,9 +444,9 @@ bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				    (shapeItems[inundation_fig_num[p]].n1 == shapeItems[j].n2 && shapeItems[inundation_fig_num[p]].n2 == shapeItems[j].n1))
 				{
 				    flag_push_back = false;
-				    if(((shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Line) ||
-					    (shapeItems[inundation_fig_num[p]].type == ShapeItem::Bezier && shapeItems[j].type == ShapeItem::Line) ||
-					    (shapeItems[inundation_fig_num[p]].type == ShapeItem::Arc && shapeItems[j].type == ShapeItem::Bezier)) && inundation_fig_num[p] != j)
+				    if(((shapeItems[inundation_fig_num[p]].type == ShT_Arc && shapeItems[j].type == ShT_Line) ||
+					    (shapeItems[inundation_fig_num[p]].type == ShT_Bezier && shapeItems[j].type == ShT_Line) ||
+					    (shapeItems[inundation_fig_num[p]].type == ShT_Arc && shapeItems[j].type == ShT_Bezier)) && inundation_fig_num[p] != j)
 					inundation_fig_num[p] = j;
 				}
 				if(flag_push_back) inundation_fig_num.push_back(j);
@@ -512,7 +511,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
     ImageMap &images = elFD->shapeImages;
     StyleMap &styles = elFD->shapeStyles;
     string elList;
-    map<string,string> stAttrs;
+    AttrValS stAttrs;
 
     //> Building attributes for all el_figures and fills
     //>>for el_figures
@@ -520,37 +519,38 @@ void ShapeElFigure::shapeSave( WdgView *w )
     {
 	switch(shapeItems[i_s].type)
 	{
-	    case ShapeItem::Line:
+	    case ShT_Line:
 		elList += "line:";
 		if(shapeItems[i_s].n1 > 0) elList += i2s(shapeItems[i_s].n1) + ":";
-		else if(shapeItems[i_s].n1 <= ShapeItem::StatIts)
+		else if(shapeItems[i_s].n1 <= SpI_StatIts)
 		    elList += "(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n1].x(),POS_PREC_DIG)) + "|"
 				  + r2s(TSYS::realRound(pnts[shapeItems[i_s].n1].y(),POS_PREC_DIG)) + ")" + ":";
 		if(shapeItems[i_s].n2 > 0) elList += i2s(shapeItems[i_s].n2) + ":";
-		else if(shapeItems[i_s].n2 <= ShapeItem::StatIts)
+		else if(shapeItems[i_s].n2 <= SpI_StatIts)
 		    elList += "(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n2].x(),POS_PREC_DIG)) + "|"
 				  + r2s(TSYS::realRound(pnts[shapeItems[i_s].n2].y(),POS_PREC_DIG)) + ")" + ":";
-		if(shapeItems[i_s].width <= ShapeItem::StatIts || shapeItems[i_s].width == ShapeItem::DefLine)
-		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].width]) == (int)TSYS::realRound(widths[ShapeItem::DefLine])) ? "" :
+		if(shapeItems[i_s].width <= SpI_StatIts || shapeItems[i_s].width == SpI_DefLine)
+		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].width]) == (int)TSYS::realRound(widths[SpI_DefLine])) ? "" :
 				i2s((int)TSYS::realRound(widths[shapeItems[i_s].width]))) + ":";
 		else if(shapeItems[i_s].width > 0) elList += "w" + i2s(shapeItems[i_s].width) + ":";
-		if(shapeItems[i_s].lineColor <= ShapeItem::StatIts || shapeItems[i_s].lineColor == ShapeItem::DefLine)
+
+		if(shapeItems[i_s].lineColor <= SpI_StatIts || shapeItems[i_s].lineColor == SpI_DefLine)
 		{
 		    if(colors[shapeItems[i_s].lineColor].alpha() < 255)
 		    {
-			if(colors[shapeItems[i_s].lineColor].rgba() == colors[ShapeItem::DefLine].rgba()) elList += ":";
+			if(colors[shapeItems[i_s].lineColor].rgba() == colors[SpI_DefLine].rgba()) elList += ":";
 			else elList += colors[shapeItems[i_s].lineColor].name().toStdString() + "-" +
 				       i2s(colors[shapeItems[i_s].lineColor].alpha()) + ":";
 		    }
-		    else elList = elList + ((colors[shapeItems[i_s].lineColor].name() == colors[ShapeItem::DefLine].name()) ? "" :
+		    else elList = elList + ((colors[shapeItems[i_s].lineColor].name() == colors[SpI_DefLine].name()) ? "" :
 				  colors[shapeItems[i_s].lineColor].name().toAscii().data()) + ":";
 		}
 		else if(shapeItems[i_s].lineColor > 0) elList += "c" + i2s(shapeItems[i_s].lineColor) + ":";
 
 		//!!!! Continue for clear from here
 
-		if(shapeItems[i_s].border_width <= ShapeItem::StatIts || shapeItems[i_s].border_width == ShapeItem::DefBord)
-		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].border_width]) == (int)TSYS::realRound(widths[ShapeItem::DefBord])) ? "" :
+		if(shapeItems[i_s].border_width <= SpI_StatIts || shapeItems[i_s].border_width == SpI_DefBord)
+		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].border_width]) == (int)TSYS::realRound(widths[SpI_DefBord])) ? "" :
 			      i2s((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
 		else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
 		if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
@@ -617,6 +617,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 					     colors[shapeItems[i_s].lineColor].name().toAscii().data())+":";
 		}
 		else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].lineColor) + ":";
+
 		if( shapeItems[i_s].border_width <= -10 || shapeItems[i_s].border_width == -6 )
 		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].border_width]) == (int)TSYS::realRound(widths[-6])) ? "" :
 			      TSYS::int2str((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
@@ -824,7 +825,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	chCtx.setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList);
 	devW->chLoadCtx(chCtx, "", "elLst");
     }
-    stAttrs["elLst"] = elList;
+    stAttrs.push_back(std::make_pair("elLst",elList));
     elFD->elLst = elList;
     //devW->chRecord(*XMLNode("attr").setAttr("id","elLst")->setAttr("noMerge","1")->setAttr("prev",elFD->elLst)->setText(elList));
 
@@ -848,8 +849,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"x")->setAttr("prev","0")->setText(TSYS::real2str(pnt_next.x(),POS_PREC_DIG));
 		chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"y")->setAttr("prev","0")->setText(TSYS::real2str(pnt_next.y(),POS_PREC_DIG));
 	    }
-	    stAttrs["p"+TSYS::int2str(pi->first)+"x"] = TSYS::real2str(pnt_next.x());
-	    stAttrs["p"+TSYS::int2str(pi->first)+"y"] = TSYS::real2str(pnt_next.y());
+	    stAttrs.push_back(std::make_pair("p"+TSYS::int2str(pi->first)+"x",r2s(pnt_next.x())));
+	    stAttrs.push_back(std::make_pair("p"+TSYS::int2str(pi->first)+"y",r2s(pnt_next.y())));
 	}
 	elFD->shapePnts_temp = elFD->shapePnts;
     //- Write shapes widths to data model -
@@ -867,7 +868,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    }
 	    else
 		chCtx.childAdd("attr")->setAttr("id","w"+TSYS::int2str(pi->first))->setAttr("prev","0")->setText(TSYS::real2str(wdt_next,POS_PREC_DIG));
-	    stAttrs["w"+TSYS::int2str(pi->first)] = TSYS::real2str(TSYS::realRound(pi->second,POS_PREC_DIG));
+	    stAttrs.push_back(std::make_pair("w"+TSYS::int2str(pi->first),r2s(TSYS::realRound(pi->second,POS_PREC_DIG))));
 	}
     elFD->shapeWidths_temp = elFD->shapeWidths;
      //- Write shapes colors to data model -
@@ -894,8 +895,8 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		else chCtx.childAdd("attr")->setAttr("id","c"+TSYS::int2str(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString());
 	    }
 	    if( pi->second.alpha() < 255 )
-		stAttrs["c"+TSYS::int2str(pi->first)] = pi->second.name().toStdString()+"-"+TSYS::int2str(pi->second.alpha());
-	    else stAttrs["c"+TSYS::int2str(pi->first)] = pi->second.name().toAscii().data();
+		stAttrs.push_back(std::make_pair("c"+TSYS::int2str(pi->first),pi->second.name().toStdString()+"-"+TSYS::int2str(pi->second.alpha())));
+	    else stAttrs.push_back(std::make_pair("c"+TSYS::int2str(pi->first),pi->second.name().toStdString()));
 	}
     elFD->shapeColors_temp = elFD->shapeColors;
      //- Write fills images to data model -
@@ -912,7 +913,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		    chCtx.childAdd("attr")->setAttr("id","i"+TSYS::int2str(pi->first))->setAttr("prev",img_prev)->setText(img_next);
 	    }
 	    else chCtx.childAdd("attr")->setAttr("id","i"+TSYS::int2str(pi->first))->setAttr("prev","")->setText(img_next);
-	    stAttrs["i"+TSYS::int2str(pi->first)] = pi->second.c_str();
+	    stAttrs.push_back(std::make_pair("i"+TSYS::int2str(pi->first),pi->second.c_str()));
 	}
     elFD->shapeImages_temp = elFD->shapeImages;
      //- Write shapes styles to data model -
@@ -929,7 +930,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		    chCtx.childAdd("attr")->setAttr("id","s"+TSYS::int2str(pi->first))->setAttr("prev",TSYS::int2str(stl_prev-1))->setText(TSYS::int2str(stl_next-1));
 	    }
 	    else chCtx.childAdd("attr")->setAttr("id","s"+TSYS::int2str(pi->first))->setAttr("prev","0")->setText(TSYS::int2str(stl_next-1));
-	    stAttrs["s"+TSYS::int2str(pi->first)] = TSYS::int2str(pi->second-1);
+	    stAttrs.push_back(std::make_pair("s"+TSYS::int2str(pi->first),i2s(pi->second-1)));
 	}
     if(stAttrs.size()) w->attrsSet(stAttrs);
     elFD->shapeStyles_temp = elFD->shapeStyles;
@@ -949,10 +950,10 @@ void ShapeElFigure::initShapeItems( const QPointF &pos, WdgView *w, QVector<int>
 	    for(int j = 0; j < shapeItems.size(); j++)
 	    {
 		if((shapeItems[j].n1 == shapeItems[items_array[i]].n1 || shapeItems[j].n1 == shapeItems[items_array[i]].n2) &&
-			items_array[i] != j && shapeItems[j].type == ShapeItem::Arc)
+			items_array[i] != j && shapeItems[j].type == ShT_Arc)
 		    shapeItems[j].n1 = appendPoint(pnts[shapeItems[j].n1], shapeItems, pnts, true);
 		if((shapeItems[j].n2 == shapeItems[items_array[i]].n1 || shapeItems[j].n2 == shapeItems[items_array[i]].n2) &&
-			items_array[i] != j && shapeItems[j].type == ShapeItem::Arc)
+			items_array[i] != j && shapeItems[j].type == ShT_Arc)
 		    shapeItems[j].n2 = appendPoint(pnts[shapeItems[j].n2], shapeItems, pnts, true);
 	    }
 	    count_moveItemTo	= 1;
@@ -1450,7 +1451,7 @@ void ShapeElFigure::toolAct( QAction *act )
 		for(int h_p = 0; h_p < index_array.size(); h_p++)
 		{
 		    ShapeItem &iP = shapeItems[index_array[i]], &hP = shapeItems[index_array[h_p]];
-		    if(h_p == i || (iP.type == ShapeItem::Arc && hP.type == ShapeItem::Arc)) continue;
+		    if(h_p == i || (iP.type == ShT_Arc && hP.type == ShT_Arc)) continue;
 
 		    if(fabs(pnts[iP.n1].x()-pnts[hP.n1].x()) < 0.01 && fabs(pnts[iP.n1].y()-pnts[hP.n1].y()) < 0.01)
 		    { dropPoint(hP.n1, index_array[h_p], shapeItems, pnts); hP.n1 = iP.n1; }
@@ -1473,8 +1474,8 @@ void ShapeElFigure::toolAct( QAction *act )
 		inundationItems.push_back(inundationItem(createInundationPath(pi->second,shapeItems,pnts,w),
 			inundationItems[pi->first].brush, inundationItems[pi->first].brush_img,	pi->second,pi->second));
 		inundationItem &newIt = inundationItems[inundationItems.size()-1];
-		if(!vrng(newIt.brush,ShapeItem::StatIts+1,0)) newIt.brush = appendColor(clrs[newIt.brush],&clrs,(newIt.brush <= ShapeItem::StatIts));
-		if(!vrng(newIt.brush_img,ShapeItem::StatIts+1,0)) newIt.brush_img = appendImage(imgs[newIt.brush_img],&imgs,(newIt.brush_img <= ShapeItem::StatIts));
+		if(!vrng(newIt.brush,SpI_StatIts+1,0)) newIt.brush = appendColor(clrs[newIt.brush],&clrs,(newIt.brush <= SpI_StatIts));
+		if(!vrng(newIt.brush_img,SpI_StatIts+1,0)) newIt.brush_img = appendImage(imgs[newIt.brush_img],&imgs,(newIt.brush_img <= SpI_StatIts));
 	    }
 	    flag_copy = flag_A = true;
 	    if(rect_array.size())
@@ -1758,9 +1759,9 @@ void ElFigDt::dynamic( )
     real = -4;
     switch(num)
     {
-	case 0:
+	case 0:	// Dynamic/static point
 	{
-	    if(elF->rect_dyn == -1 || elF->index == -1)	break;
+	    if(elF->rect_dyn == SpI_NullIt || elF->index == SpI_NullIt)	break;
 	    ShapeItem &newIt = shapeItems[elF->index];
 	    switch(elF->rect_dyn)
 	    {
@@ -1787,42 +1788,43 @@ void ElFigDt::dynamic( )
 	    }
 	    break;
 	}
-	case 1:
-	    if( elF->index != -1 )
+	case 1:	// Dynamic/static width
+	    if(elF->index != SpI_NullIt)
 	    {
-		if( (shapeItems[elF->index].width == -5 || shapeItems[elF->index].width <= -10) && !elF->flag_def_stat )
+		if((shapeItems[elF->index].width == SpI_DefLine || shapeItems[elF->index].width <= SpI_StatIts) && !elF->flag_def_stat)
 		{
 		    temp_w = widths[shapeItems[elF->index].width];
 		    tmp = shapeItems[elF->index].width;
-		    real = elF->appendWidth( temp_w, &widths, false );
+		    real = elF->appendWidth(temp_w, &widths, false);
 		}
-		else if( shapeItems[elF->index].width > 0 || (shapeItems[elF->index].width == -5 && elF->flag_def_stat) )
+		else if(shapeItems[elF->index].width > 0 || (shapeItems[elF->index].width == SpI_DefLine && elF->flag_def_stat))
 		{
 		    temp_w = widths[shapeItems[elF->index].width];
 		    tmp = shapeItems[elF->index].width;
-		    real = elF->appendWidth( temp_w, &widths, true );
+		    real = elF->appendWidth(temp_w, &widths, true);
 		}
 	    }
 	    break;
-	case 2:
-	    if( elF->index != -1 )
+	case 2:	// Dynamic/static color
+
+	    if(elF->index != SpI_NullIt)
 	    {
-		if( (shapeItems[elF->index].lineColor == -5 || shapeItems[elF->index].lineColor <= -10) && !elF->flag_def_stat )
+		if((shapeItems[elF->index].lineColor == SpI_DefLine || shapeItems[elF->index].lineColor <= SpI_StatIts) && !elF->flag_def_stat)
 		{
 		    temp_c = colors[shapeItems[elF->index].lineColor];
 		    tmp = shapeItems[elF->index].lineColor;
-		    real = elF->appendColor( temp_c, &colors, false );
+		    real = elF->appendColor(temp_c, &colors, false);
 		}
-		else if( shapeItems[elF->index].lineColor > 0 || (shapeItems[elF->index].lineColor == -5 && elF->flag_def_stat) )
+		else if(shapeItems[elF->index].lineColor > 0 || (shapeItems[elF->index].lineColor == SpI_DefLine && elF->flag_def_stat))
 		{
 		    temp_c = colors[shapeItems[elF->index].lineColor];
 		    tmp = shapeItems[elF->index].lineColor;
-		    real = elF->appendColor( temp_c, &colors, true );
+		    real = elF->appendColor(temp_c, &colors, true);
 		}
 	    }
 	    break;
 	case 3:
-	    if( elF->index != -1 )
+	    if(elF->index != -1)
 	    {
 		if( (shapeItems[elF->index].border_width == -6 || shapeItems[elF->index].border_width <= -10) && !elF->flag_def_stat )
 		{
@@ -2015,14 +2017,15 @@ void ElFigDt::dynamic( )
 	    }
 	    break;
     }
-    if( ( (tmp <= -10 || tmp == -5 || tmp == -6 || tmp == -7) && real > 0 ) ||
-	  ( tmp > 0 && real <= -10 ) || ( (tmp == -5 || tmp == -6 || tmp == -7) && real <= -10 )  )
+
+    if(((tmp <= SpI_StatIts || tmp == SpI_DefLine || tmp == SpI_DefBord || tmp == SpI_DefFill) && real > 0) ||
+	  (tmp > 0 && real <= SpI_StatIts) || ((tmp == SpI_DefLine || tmp == SpI_DefBord || tmp == SpI_DefFill) && real <= SpI_StatIts))
     {
 	bool upd = false;
-	switch( num )
+	switch(num)
 	{
-	    case 0:
-		for( int i = 0; i < shapeItems.size(); i++ )
+	    case 0:	// Dynamic/static point
+		for(int i = 0; i < shapeItems.size(); i++)
 		{
 		    if( shapeItems[i].n1 == tmp ) { shapeItems[i].n1 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
 		    if( shapeItems[i].n2 == tmp ) { shapeItems[i].n2 = real; elF->rectItems.clear(); elF->rect_num = -1; upd = true; }
@@ -2032,7 +2035,7 @@ void ElFigDt::dynamic( )
 		}
 		elF->dropPoint(tmp, elF->index, shapeItems, pnts);
 		break;
-	    case 1:
+	    case 1:	// Dynamic/static width
 	    {
 		shapeItems[elF->index].width = real;
 		bool fl_keep = false;
@@ -2043,15 +2046,15 @@ void ElFigDt::dynamic( )
 		if( tmp != -5 && !fl_keep ) widths.erase(tmp);
 		break;
 	    }
-	    case 2:
+	    case 2:	// Dynamic/static color
 	    {
 		shapeItems[elF->index].lineColor = real;
 		bool fl_keep = false;
-		if( tmp > 0 )
-		    for( int p = 0; p < shapeItems.size(); p++ )
-			if( p != elF->index && tmp == shapeItems[p].lineColor )
+		if(tmp > 0)
+		    for(int p = 0; p < shapeItems.size(); p++)
+			if(p != elF->index && tmp == shapeItems[p].lineColor)
 			{ fl_keep = true; break; }
-		if( tmp != -5 && !fl_keep ) colors.erase(tmp);
+		if(tmp != SpI_DefLine && !fl_keep) colors.erase(tmp);
 		break;
 	    }
 	    case 3:
@@ -2099,10 +2102,10 @@ void ElFigDt::dynamic( )
 		break;
 
 	}
-	if( elF->flag_dyn_save )
+	if(elF->flag_dyn_save)
 	{
-	    elF->shapeSave( w );
-	    if( elF->rectItems.size() || upd )
+	    elF->shapeSave(w);
+	    if(elF->rectItems.size() || upd)
 	    {
 		elF->rectItems.clear();
 		elF->paintImage(w);
@@ -3287,11 +3290,11 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			sev = "ws_Fig"+TSYS::int2str(i);
 		if(!sev.empty())
 		{
-		    map<string,string> attrs;
+		    AttrValS attrs;
 		    if(!runW->hasFocus())		runW->setFocus(Qt::MouseFocusReason);
-		    if(ev->buttons()&Qt::LeftButton)	attrs["event"] = sev+"Left\nws_FigLeft";
-		    if(ev->buttons()&Qt::RightButton)	attrs["event"] = sev+"Right\nws_FigRight";
-		    if(ev->buttons()&Qt::MidButton)	attrs["event"] = sev+"Midle\nws_FigMiddle";
+		    if(ev->buttons()&Qt::LeftButton)	attrs.push_back(std::make_pair("event",sev+"Left\nws_FigLeft"));
+		    if(ev->buttons()&Qt::RightButton)	attrs.push_back(std::make_pair("event",sev+"Right\nws_FigRight"));
+		    if(ev->buttons()&Qt::MidButton)	attrs.push_back(std::make_pair("event",sev+"Midle\nws_FigMiddle"));
 		    view->attrsSet(attrs);
 		    return false;
 		}
@@ -3361,9 +3364,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 				    int rect_num_temp = rect_num;
 				    rect_num = realRectNum(rect_num, shapeItems);
 				    itemInMotion = &shapeItems[index];
-				    if((rect_num == 2 || rect_num == 3) && shapeItems[index].type == ShapeItem::Bezier) flag_rect = false;
+				    if((rect_num == 2 || rect_num == 3) && shapeItems[index].type == ShT_Bezier) flag_rect = false;
 				    if(rect_num == 0 || rect_num == 1) rectNum0_1(shapeItems, rect_num_temp, pnts, view);
-				    if((rect_num == 3 || rect_num == 4) && shapeItems[index].type == ShapeItem::Arc)
+				    if((rect_num == 3 || rect_num == 4) && shapeItems[index].type == ShT_Arc)
 				    {
 					Prev_pos_1 = scaleRotate(pnts[shapeItems[index].n1], view, flag_scale, flag_rotate);
 					Prev_pos_2 = scaleRotate(pnts[shapeItems[index].n2], view, flag_scale, flag_rotate);
@@ -3424,9 +3427,9 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    int rect_num_temp = rect_num;
 			    rect_num = realRectNum(rect_num, shapeItems);
 			    itemInMotion = &shapeItems[index];
-			    if((rect_num == 2 || rect_num == 3) && shapeItems[index].type == ShapeItem::Bezier)	flag_rect=false;
+			    if((rect_num == 2 || rect_num == 3) && shapeItems[index].type == ShT_Bezier)	flag_rect=false;
 			    if(rect_num == 0 || rect_num == 1) rectNum0_1(shapeItems, rect_num_temp, pnts, view);
-			    if((rect_num == 3 || rect_num == 4) && shapeItems[index].type == ShapeItem::Arc)
+			    if((rect_num == 3 || rect_num == 4) && shapeItems[index].type == ShT_Arc)
 			    {
 				Prev_pos_1 = scaleRotate(pnts[shapeItems[index].n1], view, flag_scale, flag_rotate);
 				Prev_pos_2 = scaleRotate(pnts[shapeItems[index].n2], view, flag_scale, flag_rotate);
@@ -3443,20 +3446,20 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		    QPainterPath circlePath, bigPath;
 		    switch(shapeType)
 		    {
-			case ShapeItem::Line:
+			case ShT_Line:
 			{
 			    scale = vmin(view->xScale(true), view->yScale(true));
 			    StartLine = EndLine = ev->pos();
 			    ang = 360 - angle(QLineF(StartLine,EndLine), QLineF(StartLine,QPointF(StartLine.x()+10,StartLine.y())));
-			    if(widths[ShapeItem::DefBord] > 0)
+			    if(widths[SpI_DefBord] > 0)
 			    {
-				circlePath = painterPath(widths[ShapeItem::DefLine]*scaleW, widths[ShapeItem::DefBord], 1, ang, StartLine, EndLine);
+				circlePath = painterPath(widths[SpI_DefLine]*scaleW, widths[SpI_DefBord], 1, ang, StartLine, EndLine);
 				shapeItems.push_back(ShapeItem(circlePath,newPath,-1,-1,-1,-1,-1,QPointF(),-5,-6,-5,-5,-6,1,angle_temp));
 			    }
-			    else if(fabs(widths[ShapeItem::DefBord]) < 0.01)
+			    else if(fabs(widths[SpI_DefBord]) < 0.01)
 			    {
 				circlePath = painterPathSimple(1, ang, StartLine, EndLine);
-				QPainterPath bigPath = painterPath(vmax(1,widths[ShapeItem::DefLine])+1, widths[ShapeItem::DefBord], 1, ang, StartLine, EndLine);
+				QPainterPath bigPath = painterPath(vmax(1,widths[SpI_DefLine])+1, widths[SpI_DefBord], 1, ang, StartLine, EndLine);
 				shapeItems.push_back(ShapeItem(bigPath,circlePath,-1,-1,-1,-1,-1,QPointF(),-5,-6,-5,-5,-6,1,angle_temp));
 			    }
 			    StartLine = unScaleRotate( StartLine, view, flag_scale, flag_rotate );
@@ -3470,7 +3473,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    previousPosition_all = ev->pos();
 			    break;
 			}
-			case ShapeItem::Arc:
+			case ShT_Arc:
 			{
 			    QPointF CtrlPos_1, CtrlPos_2, CtrlPos_3, CtrlPos_4;
 			    double a, b;
@@ -3511,7 +3514,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    previousPosition_all = ev->pos();
 			    break;
 			}
-			case ShapeItem::Bezier:
+			case ShT_Bezier:
 			{
 			    QPointF CtrlPos_1, CtrlPos_2, EndLine_temp;
 			    StartLine = EndLine = ev->pos();
@@ -3577,8 +3580,8 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		if(!sev.empty())
 		{
 		    if(!runW->hasFocus()) runW->setFocus(Qt::MouseFocusReason);
-		    map<string,string> attrs;
-		    attrs["event"] = sev+"DblClick\nws_FigDblClick";
+		    AttrValS attrs;
+		    attrs.push_back(std::make_pair("event",sev+"DblClick\nws_FigDblClick"));
 		    view->attrsSet(attrs);
 		    return false;
 		}
@@ -3956,8 +3959,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			offset = ev->pos()-previousPosition_all;
 			count_moveItemTo = 0;
 			if(flag_rect || flag_arc_rect_3_4)	count_Shapes = count_rects;
-			flag_hold_arc = false;
-			if(shapeItems[index_array[0]].type == ShapeItem::Arc)	flag_hold_arc = true;
+			flag_hold_arc = (index_array.size() && index_array[0] >= 0 && index_array[0] < shapeItems.size() && shapeItems[index_array[0]].type == ShT_Arc);
 			moveAll(ev->pos(), shapeItems, pnts, inundationItems, view);
 			paintImage(view);
 			view->repaint();
@@ -3975,7 +3977,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    count_Shapes = 1;
 			    itemInMotion = &shapeItems[index];
 			    if(rect_num == 2 && itemInMotion->type == 2) offset = QPointF(0,0);
-			    if(itemInMotion->type == ShapeItem::Arc && rect_num != 2) rect_num = rect_num_arc;
+			    if(itemInMotion->type == ShT_Arc && rect_num != 2) rect_num = rect_num_arc;
 			    num_vector.clear();
 			    moveItemTo(ev->pos(), shapeItems, pnts, view);
 			    for(int i = 0; i < inundationItems.size(); i++)
@@ -4003,7 +4005,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 			    itemInMotion = &shapeItems[index];
 
 			    //> Circle contour gap
-			    if(newIt.type == ShapeItem::Arc && !vrng(newIt.n2,-9,0) && newIt.n2 == newIt.n1)
+			    if(newIt.type == ShT_Arc && !vrng(newIt.n2,-9,0) && newIt.n2 == newIt.n1)
 				newIt.n2 = appendPoint(pnts[newIt.n2], shapeItems, pnts, (newIt.n2<=-10));
 
 			    if(flag_check_point || !flag_first_move)
@@ -4012,10 +4014,10 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 				{
 				    if(i == index) continue;
 				    ShapeItem &curIt = shapeItems[i];
-				    if(newIt.type == ShapeItem::Arc && !vrng(newIt.n5,-9,0) &&
+				    if(newIt.type == ShT_Arc && !vrng(newIt.n5,-9,0) &&
 					    (newIt.n5 == curIt.n1 || newIt.n5 == curIt.n2 || newIt.n5 == curIt.n3 || newIt.n5 == curIt.n4 || newIt.n5 == curIt.n5))
 					newIt.n5 = appendPoint(pnts[newIt.n5], shapeItems, pnts, (newIt.n5<=-10));
-				    if(newIt.type == ShapeItem::Arc || newIt.type == ShapeItem::Bezier)
+				    if(newIt.type == ShT_Arc || newIt.type == ShT_Bezier)
 				    {
 					if(!vrng(newIt.n4,-9,0) && (newIt.n4 == curIt.n1 || newIt.n4 == curIt.n2 || newIt.n4 == curIt.n3 ||
 						newIt.n4 == curIt.n4 || newIt.n4 == curIt.n5))
@@ -4036,7 +4038,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 
 			    moveItemTo(ev->pos(), shapeItems, pnts, view);
 			    //> deleting fill's
-			    if(inundationItems.size() && newIt.type == ShapeItem::Arc)
+			    if(inundationItems.size() && newIt.type == ShT_Arc)
 			      	for(int i=0; i < inundationItems.size(); i++)
 			  	{
 		      		    if(inundationItems[i].number_shape.size() == 1 && inundationItems[i].number_shape[0] == index)
@@ -4529,7 +4531,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w, flag_scale, flag_rotate) + offset;
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w, flag_scale, flag_rotate) + offset;
 	}
-	if(shapeType == ShapeItem::Arc)
+	if(shapeType == ShT_Arc)
 	{
 	    CtrlMotionPos_4 = itemInMotion->ctrlPos4;
 	    //CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w, flag_scale, flag_rotate) + offset;
@@ -4552,7 +4554,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 		arg(TSYS::realRound(pnts[itemInMotion->n1].x(),POS_PREC_DIG)).arg(TSYS::realRound(pnts[itemInMotion->n1].y(),POS_PREC_DIG)), 10000);
 	EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w, flag_scale, flag_rotate);
 
-	if(shapeType == ShapeItem::Arc)
+	if(shapeType == ShT_Arc)
 	{
 	    StartMotionPos = Mouse_pos;
 	    if(flag_up || flag_down || flag_right || flag_left) StartMotionPos = pnts[itemInMotion->n1]+offset;
@@ -4618,7 +4620,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 		arg(TSYS::realRound(pnts[itemInMotion->n2].x(),POS_PREC_DIG)).arg(TSYS::realRound(pnts[itemInMotion->n2].y(),POS_PREC_DIG)), 10000);
 	StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w, flag_scale, flag_rotate);
 
-	if(shapeType == ShapeItem::Arc)
+	if(shapeType == ShT_Arc)
 	{
 	    EndMotionPos = Mouse_pos;
 	    if(flag_up || flag_down || flag_right || flag_left)
@@ -4711,7 +4713,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 		arg(TSYS::realRound(pnts[itemInMotion->n3].x(),POS_PREC_DIG)).arg(TSYS::realRound(pnts[itemInMotion->n3].y(),POS_PREC_DIG)), 10000);
 	StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w, flag_scale, flag_rotate);
 	EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w, flag_scale, flag_rotate);
-	if(shapeType == ShapeItem::Arc)
+	if(shapeType == ShT_Arc)
 	{
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w, flag_scale, flag_rotate);
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w, flag_scale, flag_rotate);
@@ -4738,7 +4740,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 		arg(TSYS::realRound(pnts[itemInMotion->n4].x(),POS_PREC_DIG)).arg(TSYS::realRound(pnts[itemInMotion->n4].y()),POS_PREC_DIG), 10000);
 	StartMotionPos = scaleRotate(pnts[itemInMotion->n1], w, flag_scale, flag_rotate);
 	EndMotionPos = scaleRotate(pnts[itemInMotion->n2], w, flag_scale, flag_rotate);
-	if(shapeType == ShapeItem::Arc)
+	if(shapeType == ShT_Arc)
 	{
 	    CtrlMotionPos_1 = scaleRotate(pnts[itemInMotion->n3], w, flag_scale, flag_rotate);
 	    CtrlMotionPos_2 = scaleRotate(pnts[itemInMotion->n4], w, flag_scale, flag_rotate) + offset;
@@ -4785,7 +4787,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     if(!flag_ctrl || (!flag_ctrl_move && count_Shapes == (count_moveItemTo+count_Shapes-1))) rectItems.clear();
 
     //> building the line
-    if(shapeType == ShapeItem::Line)
+    if(shapeType == ShT_Line)
     {
 	ang = angle(QLineF(StartMotionPos, EndMotionPos), QLineF(StartMotionPos, QPointF(StartMotionPos.x()+10,StartMotionPos.y())));
 	if(StartMotionPos.y() <= EndMotionPos.y()) ang = 360 - ang;
@@ -4804,7 +4806,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 	pnts[MotionNum_2] = EndMotionPos;
     }
     //> building the arc
-    if(shapeType == ShapeItem::Arc)
+    if(shapeType == ShT_Arc)
     {
 	CtrlMotionPos_2 = QPointF(CtrlMotionPos_1.x()+rotate(arc(0.25,a,b),ang).x(), CtrlMotionPos_1.y()-rotate(arc(0.25,a,b),ang).y());
 	CtrlMotionPos_4 = QPointF(t_start, t_end);
@@ -4836,7 +4838,7 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
 	pnts[MotionNum_5] = CtrlMotionPos_3;
     }
     //> building the bezier curve
-    if(shapeType == ShapeItem::Bezier)
+    if(shapeType == ShT_Bezier)
     {
 	ang = angle(QLineF(StartMotionPos, EndMotionPos), QLineF(StartMotionPos, QPointF(StartMotionPos.x()+10,StartMotionPos.y())));
 	if(StartMotionPos.y() <= EndMotionPos.y()) ang = 360 - ang;
@@ -4939,9 +4941,9 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap &pnts, QV
 		{
 		    rect_num_temp = rect_num;
 		    rect_num = realRectNum(rect_num, shapeItems);// detecting the number of the rect for moveItemTo
-		    if((rect_num == 2 || rect_num == 3) && shapeItems[index].type == ShapeItem::Bezier)	flag_rect = false;
+		    if((rect_num == 2 || rect_num == 3) && shapeItems[index].type == ShT_Bezier)	flag_rect = false;
 		    if(rect_num == 0 || rect_num == 1)	rectNum0_1(shapeItems, rect_num_temp, pnts, w);
-		    if((rect_num == 3 || rect_num == 4) && shapeItems[index].type == ShapeItem::Arc) rectNum3_4(shapeItems);
+		    if((rect_num == 3 || rect_num == 4) && shapeItems[index].type == ShT_Arc) rectNum3_4(shapeItems);
 		}
 	    }
 	    // if there is the rect number of figures to move becomes equal to the number of figures, connected with this rect
@@ -4963,17 +4965,17 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap &pnts, QV
 	    count_Shapes = 1;
 
 	    //> Circle contour gap
-	    if(newIt.type == ShapeItem::Arc && !vrng(newIt.n2,-9,0) && newIt.n2 == newIt.n1)
+	    if(newIt.type == ShT_Arc && !vrng(newIt.n2,-9,0) && newIt.n2 == newIt.n1)
                 newIt.n2 = appendPoint(pnts[newIt.n2], shapeItems, pnts, (newIt.n2<=-10));
 
 	    for(int i = 0; /*!status_hold &&*/ !flag_first_move && i < shapeItems.size(); i++)
 	    {
 		if(i == index) continue;
 		ShapeItem &curIt = shapeItems[i];
-		if(newIt.type == ShapeItem::Arc && !vrng(newIt.n5,-9,0) &&
+		if(newIt.type == ShT_Arc && !vrng(newIt.n5,-9,0) &&
 			(newIt.n5 == curIt.n1 || newIt.n5 == curIt.n2 || newIt.n5 == curIt.n3 || newIt.n5 == curIt.n4 || newIt.n5 == curIt.n5))
 		    newIt.n5 = appendPoint(pnts[newIt.n5], shapeItems, pnts, (newIt.n5<=-10));
-		if(newIt.type == ShapeItem::Arc || newIt.type == ShapeItem::Bezier)
+		if(newIt.type == ShT_Arc || newIt.type == ShT_Bezier)
 		{
 		    if(!vrng(newIt.n4,-9,0) && (newIt.n4 == curIt.n1 || newIt.n4 == curIt.n2 || newIt.n4 == curIt.n3 || newIt.n4 == curIt.n4 || newIt.n4 == curIt.n5))
 			newIt.n4 = appendPoint(pnts[newIt.n4], shapeItems, pnts, (newIt.n4<=-10));
@@ -4990,11 +4992,11 @@ void ShapeElFigure::moveUpDown( QVector<ShapeItem> &shapeItems, PntMap &pnts, QV
 	    if(inundationItems.size())
 	    {
 		bool flag_single_arc = false;
-		for(int p = 0; newIt.type == ShapeItem::Arc && p < inundationItems.size(); p++)
+		for(int p = 0; newIt.type == ShT_Arc && p < inundationItems.size(); p++)
 		    if(inundationItems[p].number_shape.size() == 1 && inundationItems[p].number_shape[0] == index)
 			flag_single_arc = true;
-		if((newIt.type == ShapeItem::Arc && (rect_num == 3 || rect_num == 4 || rect_num == -1) && (flag_single_arc || status_hold)) ||
-			(newIt.type == ShapeItem::Bezier && (rect_num == 2 || rect_num == 3) && status_hold))
+		if((newIt.type == ShT_Arc && (rect_num == 3 || rect_num == 4 || rect_num == -1) && (flag_single_arc || status_hold)) ||
+			(newIt.type == ShT_Bezier && (rect_num == 2 || rect_num == 3) && status_hold))
 		    for(int i = 0; i < inundationItems.size(); i++)
 		    {
 			flag_break_move = false;
@@ -5102,7 +5104,7 @@ void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_n
     //> if there is an arc in "index_array" we put it on the first place in it.
     int num_arc = -1;
     for(int i = 0; i < count_rects; i++)
-	if(shapeItems[index_array[i]].type == ShapeItem::Arc)
+	if(shapeItems[index_array[i]].type == ShT_Arc)
 	{
 	    flag_hold_arc = true;
 	    num_arc = i;
@@ -5119,7 +5121,7 @@ void ShapeElFigure::rectNum0_1( const QVector<ShapeItem> &shapeItems, int rect_n
     if(count_rects == 1)
     {
 	flag_rect = false;
-	if(shapeItems[index_array[0]].type == ShapeItem::Arc)
+	if(shapeItems[index_array[0]].type == ShT_Arc)
 	{
 	    rect_num_arc = rect_num;
 	    flag_hold_arc = false;
@@ -5577,7 +5579,7 @@ int ShapeElFigure::appendPoint( const QPointF &pos, const QVector<ShapeItem> &sh
 // Deleting the point from data model
 void ShapeElFigure::dropPoint( int num, int num_shape, const QVector<ShapeItem> &shapeItems, PntMap &pnts )
 {
-    if(num == ShapeItem::NullIt) return;
+    if(num == SpI_NullIt) return;
     bool equal = false;
     for(int i = 0; !equal && i < shapeItems.size(); i++)
 	equal = (i != num_shape && (num == shapeItems[i].n1 || num == shapeItems[i].n2 ||
@@ -6071,7 +6073,7 @@ void ShapeElFigure::paintImage( WdgView *view )
 		const ShapeItem &cShIt = shapeItems[inundationItems[i].number_shape[p]];
 		switch(cShIt.type)
 		{
-		    case ShapeItem::Line:
+		    case ShT_Line:
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
 			if(!fl_)
@@ -6089,7 +6091,7 @@ void ShapeElFigure::paintImage( WdgView *view )
 			    number_vector.push_back(cShIt.n2);
 			}
 			break;
-		    case ShapeItem::Arc:
+		    case ShT_Arc:
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
 			if(!fl_)
@@ -6111,7 +6113,7 @@ void ShapeElFigure::paintImage( WdgView *view )
 			tmp_pnts[cShIt.n4] = unScaleRotate(scaleRotate(pnts[cShIt.n4],view,true,true), view, false, true);
 			tmp_pnts[cShIt.n5] = unScaleRotate(scaleRotate(pnts[cShIt.n5],view,true,true), view, false, true);
 			break;
-		    case ShapeItem::Bezier:
+		    case ShT_Bezier:
 			fl_ = false;
 			for(int k = 0; !fl_ && k < number_vector.size(); k++) fl_ = (cShIt.n1 == number_vector[k]);
 			if(!fl_)

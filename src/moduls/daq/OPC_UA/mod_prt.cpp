@@ -103,10 +103,10 @@ Server::EP *TProt::epEnAt( const string &ep )
     return NULL;
 }
 
-bool TProt::inReq( string &request, string &answer, const string &inPrtId )
+void TProt::inReq( string &request, const string &inPrtId )
 {
     ResAlloc res(en_res, false);
-    return Server::inReq(request, answer, inPrtId);
+    Server::inReq(request, inPrtId);
 }
 
 int TProt::writeToClient( const string &inPrtId, const string &data )
@@ -256,8 +256,8 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
-    //printf("TEST 00: '%s'\n", sender.c_str());
-    return owner().inReq(mBuf, answ, name());
+    owner().inReq(mBuf, name());
+    return true;
 }
 
 //*************************************************
@@ -326,14 +326,11 @@ void *OPCEndPoint::Task( void *iep )
 
     for(unsigned cntr = 0; !TSYS::taskEndRun(); cntr++)
     {
-	try
-	{
-	    ep.publishCycle(cntr);
-	}
+	try { ep.subScrCycle(cntr); }
 	catch(OPCError err)	{ mess_err(ep.nodePath().c_str(), err.mess.c_str()); }
 	catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
-	TSYS::taskSleep((int64_t)(ep.publishCyclePer()*1000000));
+	TSYS::taskSleep((int64_t)(ep.subscrProcPer()*1000000));
     }
 
     return NULL;
@@ -500,6 +497,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		try { cNd = cNd.at().nodeAt(sel); } catch(TError err) { break; }
 
 	    if(!sel.empty()) return OpcUa_BadNodeIdUnknown;
+
 	    switch(aid)
 	    {
 		case AId_NodeId: req.setAttr("type", i2s(OpcUa_NodeId))->setText(nid.toAddr());				return 0;
@@ -511,6 +509,8 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    if(dynamic_cast<TVal*>(&cNd.at()))
 		    {
 			AutoHD<TVal> val = cNd;
+			if(atoi(req.attr("dtPerGet").c_str()))
+			    req.setAttr("dtPer", (val.at().arch().freeStat()?"0":r2s(val.at().arch().at().period()*1e-6)));
 			//>>> Variable
 			switch(aid)
 			{
@@ -518,15 +518,20 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 			    case AId_DisplayName: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(val.at().name());	return 0;
 			    case AId_Descr: req.setAttr("type", i2s(OpcUa_String))->setText(val.at().fld().descr());		return 0;
 			    case AId_Value:
+			    {
+				int64_t tm = 0;
+				bool dtOK = true;
 				switch(val.at().fld().type())
 				{
-				    case TFld::Boolean: req.setAttr("type", i2s(OpcUa_Boolean))->setText(val.at().getS());	return 0;
-				    case TFld::Integer: req.setAttr("type", i2s(OpcUa_Int32))->setText(val.at().getS());	return 0;
-				    case TFld::Real: req.setAttr("type", i2s(OpcUa_Double))->setText(val.at().getS());		return 0;
-				    case TFld::String: req.setAttr("type", i2s(OpcUa_String))->setText(val.at().getS());	return 0;
-				    default: break;
+				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(val.at().getS(&tm));	break;
+				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int32))->setText(val.at().getS(&tm));	break;
+				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(val.at().getS(&tm));	break;
+				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(val.at().getS(&tm));	break;
+				    default: dtOK = false;
 				}
+				if(dtOK) { if(atoi(req.attr("dtTmGet").c_str())) req.setAttr("dtTm",ll2s(tm)); return 0; }
 				break;
+			    }
 			    case AId_DataType:
 				switch(val.at().fld().type())
 				{

@@ -22,6 +22,9 @@
 #ifndef LIBOPC_UA_H
 #define LIBOPC_UA_H
 
+//Used for some specific problems reprodiction and debug
+//#define DEBUG_SPEC
+
 #include <stdint.h>
 
 #include <string>
@@ -45,6 +48,8 @@ namespace OSCADA_OPC
 #define OpcUa_SendBufferSize	0x10000
 #define OpcUa_MaxMessageSize	0x1000000
 #define OpcUa_MaxChunkCount	5000
+
+#define OpcUa_NPosID		0xFFFFFFFF
 
 //> Built-in Data Types
 #define OpcUa_Boolean		1
@@ -81,12 +86,15 @@ namespace OSCADA_OPC
 #define OpcUa_BadTimeout		0x800A0000
 #define OpcUa_BadServiceUnsupported	0x800B0000
 #define OpcUa_BadNothingToDo		0x800F0000
+#define OpcUa_BadTooManyOperations	0x80100000
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
+#define OpcUa_BadSubscriptionIdInvalid	0x80280000
 #define OpcUa_BadNodeIdInvalid		0x80330000
 #define OpcUa_BadNodeIdUnknown		0x80340000
 #define OpcUa_BadAttributeIdInvalid	0x80350000
 #define OpcUa_BadNotSupported		0x803D0000
+#define OpcUa_BadMonitoredItemIdInvalid	0x80420000
 #define OpcUa_BadFilterNotAllowed	0x80450000
 #define OpcUa_BadContinuationPointInvalid	0x804A0000
 #define OpcUa_BadNoContinuationPoints	0x804B0000
@@ -96,6 +104,7 @@ namespace OSCADA_OPC
 #define OpcUa_BadBrowseNameInvalid	0x80600000
 #define OpcUa_BadNoMatch		0x806F0000
 #define OpcUa_BadWriteNotSupported	0x80730000
+#define OpcUa_BadTooManySubscriptions	0x80770000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
@@ -133,12 +142,22 @@ namespace OSCADA_OPC
 #define OpcUa_WriteResponse		676
 #define OpcUa_CreateMonitoredItemsRequest	751
 #define OpcUa_CreateMonitoredItemsResponse	754
+#define OpcUa_ModifyMonitoredItemsRequest	763
+#define OpcUa_ModifyMonitoredItemsResponse	766
+#define OpcUa_SetMonitoringModeRequest	769
+#define OpcUa_SetMonitoringModeResponse	772
+#define OpcUa_DeleteMonitoredItemsRequest	780
+#define OpcUa_DeleteMonitoredItemsResponse	783
 #define OpcUa_CreateSubscriptionRequest		787
 #define OpcUa_CreateSubscriptionResponse	790
+#define OpcUa_ModifySubscriptionRequest		793
+#define OpcUa_ModifySubscriptionResponse	796
 #define OpcUa_SetPublishingModeRequest	799
 #define OpcUa_SetPublishingModeResponse	802
 #define OpcUa_PublishRequest		826
 #define OpcUa_PublishResponse		829
+#define OpcUa_TransferSubscriptionsRequest	841
+#define OpcUa_TransferSubscriptionsResponse	844
 #define OpcUa_DeleteSubscriptionsRequest	847
 #define OpcUa_DeleteSubscriptionsResponse	850
 
@@ -154,6 +173,7 @@ namespace OSCADA_OPC
 #define OpcUa_AnonymousIdentityToken	321
 #define OpcUa_LiteralOperand		597
 #define OpcUa_EventFilter		727
+#define OpcUa_DataChangeNotification	811
 #define OpcUa_Server			2253
 
 //> ObjectType Identifiers
@@ -230,15 +250,16 @@ enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
 enum NodeClasses	{ NC_Object = 1, NC_Variable = 2, NC_Method = 4, NC_ObjectType = 8, NC_VariableType = 16,
 			  NC_ReferenceType = 32, NC_DataType = 64, NC_View = 128 };
 enum BrowseDirection	{ BD_FORWARD, BD_INVERSE, BD_BOTH };
-enum TimestampsToReturn	{ TS_SOURCE, TS_SERVER, TS_BOTH, TS_NEITHER };
+enum TimestampsToReturn	{ TS_SOURCE = 0, TS_SERVER, TS_BOTH, TS_NEITHER };
 enum Access		{ ACS_Read = 0x01, ACS_Write = 0x02, ACS_HistRead = 0x04, ACS_HistWrite = 0x08, ACS_SemChange = 0x10 };
 enum RefDscrResMask	{ RdRm_RefType = 0x01, RdRm_IsForward = 0x02, RdRm_NodeClass = 0x04, RdRm_BrowseName = 0x08,
 			  RdRm_DisplayName = 0x10, RdRm_TypeDef = 0x20 };
-enum AttrIds		{ AId_NodeId = 1, AId_NodeClass, AId_BrowseName, AId_DisplayName, AId_Descr, AId_WriteMask, AId_UserWriteMask,
-			  AId_IsAbstract, AId_Symmetric, AId_InverseName, AId_ContainsNoLoops, AId_EventNotifier, AId_Value,
-			  AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
+enum AttrIds		{ Aid_Error = 0, AId_NodeId, AId_NodeClass, AId_BrowseName, AId_DisplayName, AId_Descr, AId_WriteMask,
+			  AId_UserWriteMask, AId_IsAbstract, AId_Symmetric, AId_InverseName, AId_ContainsNoLoops, AId_EventNotifier,
+			  AId_Value, AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
 			  AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
-enum MonitoringMode 	{ MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
+enum SubScrSt		{ SS_CUR = 0, SS_CLOSED, SS_CREATING, SS_NORMAL, SS_LATE, SS_KEEPALIVE };
+enum MonitoringMode 	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
 
 //*************************************************
 //* OPCError					  *
@@ -414,11 +435,16 @@ class NodeId
 	//Attributes
 	uint16_t mNs;
 	Type	mTp;
+#ifdef DEBUG_SPEC
 	union
 	{
 	    uint32_t	numb;
 	    string	*str;
 	};
+#else
+	uint32_t numb;
+        string	 str;
+#endif
 };
 
 //*************************************************
@@ -575,11 +601,12 @@ class Server: public UA
 	    string	clCert;
 	    string	servKey, clKey;
 	};
-	//* Sess
+	//* Session
 	class Sess
 	{
 	    public:
 	    //Data
+	    //* Connection point for Browse and BrowseNext services
 	    class ContPoint
 	    {
 		public:
@@ -600,33 +627,6 @@ class Server: public UA
 		string	brNode, lstNode,
 			refTypeId;	//Reference type id
 	    };
-	    class Subscr
-	    {
-		public:
-		    //Data
-		    class MonitItem
-		    {
-		    
-		    };
-		    enum State	{ GET_STATE = 0, CLOSED, CREATING, NORMAL, LATE, KEEPALIVE };
-
-		    //Methods
-		    Subscr( ) : st(CLOSED), en(false), publInterv(100), seqN(1), cntrKeepAlive(50), wKA(0), cntrLifeTime(12000), wLT(0)	{ }
-
-		    State setState( State st = GET_STATE );
-
-		    //Attributes
-		    State	st;			//Subscription status
-		    bool	en;			//Enable state
-		    double	publInterv;		//Publish interval (ms)
-		    uint32_t	seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
-				cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond
-				cntrLifeTime, wLT;	//Counter after that miss notifications from client remove the object and
-							//send StatusChangeNotification with Bad_Timeout
-		    vector<MonitItem> mItems;
-		    deque<string> retrQueue;		//Retransmission queue; used by Republish request;
-							//cleared to deep by KeepAlive! or by field Acknowledgements sets
-	    };
 
 	    //Methods
 	    Sess( const string &iName, double iTInact );
@@ -643,11 +643,74 @@ class Server: public UA
 
 	    //> Subscription
 	    deque<string>	publishReqs;	//Publish requests queue
-	    vector<Subscr>	subscrs;	//Subscriptions list
+
 	};
+
+	//* Subscription object by monitoreditems set
+	class Subscr
+	{
+	    public:
+		//Data
+		//* Monitored item
+		class MonitItem
+		{
+		    public:
+			class Val
+			{
+			    public:
+				Val( ) { }
+				Val( const string &ivl, int64_t itm ) : vl(ivl), tm(itm) { }
+
+				string	vl;
+				int64_t	tm;
+			};
+
+			//Methods
+			MonitItem( ) : md(MM_DISABLED), aid(0), tmToRet(TS_SOURCE), smplItv(1000), qSz(OpcUa_NPosID),
+			    dO(false), cH(0), vTp(0), dtTm(0)	{ }
+
+			//Attributes
+			MonitoringMode	md;		//Monitoring mode
+			NodeId		nd;		//Target node
+			uint32_t	aid;		//The node's attribute ID
+			TimestampsToReturn tmToRet;	//Timestamps to return
+			double		smplItv;	//Sample interval
+			uint32_t	qSz;		//Queue size
+			bool		dO;		//Discard oldest
+			uint32_t	cH;		//Client handle
+
+			int		vTp;		//Values type
+			int64_t		dtTm;		//Last value time
+			deque<Val>	vQueue;		//Values queue
+		};
+
+		//Methods
+		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), publInterv(100), seqN(1),
+		    cntrLifeTime(12000), wLT(0), cntrKeepAlive(50), wKA(0), maxNotPerPubl(0), pr(0) 	{ }
+
+		Subscr copy( bool noWorkData = true );
+		SubScrSt setState( SubScrSt st = SS_CUR );
+
+		//Attributes
+		SubScrSt st;			//Subscription status
+		int	sess;			//Session assign
+		bool	en;			//Enable state
+		double	publInterv;		//Publish interval (ms)
+		uint32_t seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
+			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object and
+			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond
+						//send StatusChangeNotification with Bad_Timeout
+			 maxNotPerPubl;		//Maximum notifications per single Publish response
+		uint8_t	pr;			//Priority
+		vector<MonitItem> mItems;
+		deque<string> retrQueue;	//Retransmission queue; used by Republish request;
+						//cleared to deep by KeepAlive! or by field Acknowledgements sets
+	};
+
 	//* End Point
 	class EP
 	{
+	    friend class Server;
 	    public:
 		//Methods
 		EP( Server *serv );
@@ -657,11 +720,16 @@ class Server: public UA
 		virtual string url( ) = 0;
 		virtual string cert( ) = 0;
 		virtual string pvKey( ) = 0;
-		virtual double publishCyclePer( ) = 0;	//Generic minimum cycle period of publishes processing
+		virtual double subscrProcPer( ) = 0;	//Generic minimum cycle period of publishes and the data processing
+
+		//> Limits
+		virtual uint32_t limSubScr( )	{ return 10; }
+		virtual uint32_t limMonitItms( ){ return 1000; }
+
 		bool enableStat( )	{ return mEn; }
 
 		virtual void setEnable( bool vl );
-		void publishCycle( unsigned cntr );	//Publish processing cycle
+		void subScrCycle( unsigned cntr );	//Subscriptions processing cycle
 
 		//> Security policies
 		int secSize( )		{ return mSec.size(); }
@@ -674,8 +742,19 @@ class Server: public UA
 		bool sessActivate( int sid, uint32_t secCnl, bool check = false, const string &inPrtId = "" );
 		void sessClose( int sid );
 		Sess sessGet( int sid );
+		//>> Continuation points by Browse and BrowseNext
 		Sess::ContPoint sessCpGet( int sid, const string &cpId );
 		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
+		//>> Subsciption
+		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = OpcUa_NPosID for new create
+		    double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0,
+		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
+		Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
+		//>> Monitored items
+		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = OpcUa_NPosID for new create
+		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
+		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
+		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
 
 		virtual int reqData( int reqTp, XML_N &req );
 
@@ -683,6 +762,7 @@ class Server: public UA
 		//Methods
 		XML_N *nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
 		    int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
+		Sess *sessGet_( int sid );	//Unresourced
 
 		//Attributes
 		char			mEn;
@@ -691,6 +771,7 @@ class Server: public UA
 
 		vector<SecuritySetting>	mSec;
 		vector<Sess>		mSess;
+		vector<Subscr>		mSubScr;	//Subscriptions list
 
 		XML_N			objTree;
 		map<string, XML_N*>	ndMap;
@@ -710,7 +791,7 @@ class Server: public UA
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
-	virtual bool inReq( string &request, string &answer, const string &inPrtId );
+	virtual void inReq( string &request, const string &inPrtId );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
 	//> Channel manipulation functions

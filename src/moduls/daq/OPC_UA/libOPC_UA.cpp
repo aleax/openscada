@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <math.h>
 
 #include "openssl/bio.h"
 #include "openssl/ssl.h"
@@ -283,7 +284,9 @@ NodeId::~NodeId( )
 {
     if(type() != NodeId::Numeric)
     {
+#ifdef DEBUG_SPEC
 	delete str;
+#endif
 	mTp = NodeId::Numeric;
     }
 }
@@ -304,28 +307,52 @@ NodeId &NodeId::operator=( const NodeId &node )
 uint32_t NodeId::numbVal( ) const
 {
     if(type() == NodeId::Numeric) return numb;
+#ifdef DEBUG_SPEC
     return strtoul(str->c_str(), NULL, 0);
+#else
+    return strtoul(str.c_str(), NULL, 0);
+#endif
 }
 
 string NodeId::strVal( ) const
 {
     if(type() == NodeId::Numeric) return uint2str(numb);
+
+#ifdef DEBUG_SPEC
     return *str;
+#else
+    return str;
+#endif
 }
 
 void NodeId::setNumbVal( uint32_t in )
 {
-    if(type() == NodeId::String) delete str;
-    mTp = NodeId::Numeric;
+    if(type() != NodeId::Numeric)
+    {
+#ifdef DEBUG_SPEC
+	delete str;
+#endif
+	mTp = NodeId::Numeric;
+    }
     numb = in;
 }
 
 void NodeId::setStrVal( const string &istr, NodeId::Type tp )
 {
     if(tp == NodeId::Numeric) return;
-    if(type() == NodeId::Numeric) str = new string(istr);
+#ifdef DEBUG_SPEC
+    if(type() == NodeId::Numeric)
+    {
+	str = new string;
+	//Strange allocing equal to previous NodeId object
+	printf("TEST 42: str='%s' > alloc=%ph(this=%ph)\n", istr.c_str(), str, this);
+    }
     mTp = tp;
     *str = istr;
+#else
+    mTp = tp;
+    str = istr;
+#endif
 }
 
 NodeId NodeId::fromAddr( const string &strAddr )
@@ -1999,19 +2026,18 @@ string Server::mkError( uint32_t errId, const string &err )
     return rez;
 }
 
-bool Server::inReq( string &rba, string &answ, const string &inPrtId )
+void Server::inReq( string &rba, const string &inPrtId )
 {
     uint32_t mSz;
     int off = 0;
-    answ = "";
     bool dbg = debug( );
 
 nextReq:
-    if(rba.size() <= 0) return false;
+    if(rba.size() <= 0) return;
     string rb, out;
     off = 4;
     mSz = iNu(rba, off, 4);
-    if(rba.size() < 8 || rba.size() < mSz) return true;
+    if(rba.size() < 8 || rba.size() < mSz) return;
     rb = rba.substr(0, mSz);
 
     try
@@ -2522,103 +2548,268 @@ nextReq:
 		    //>> Respond
 		    reqTp = OpcUa_CloseSessionResponse;
 		    break;
-		case OpcUa_CreateSubscriptionRequest:		//!!!! Should next implemented full
+		case OpcUa_CreateSubscriptionRequest:
+		{
 		    //>> Request
-		    iR(rb, off, 8);		//requestedPublishingInterval
-		    iNu(rb, off, 4);		//requestedLifetimeCount
-		    iNu(rb, off, 4);		//requestedMaxKeepAliveCount
-		    iNu(rb, off, 4);		//maxNotificationsPerPublish
-		    iNu(rb, off, 1);		//publishingEnabled
-		    iNu(rb, off, 1);		//priority
+		    double pi = iR(rb, off, 8);			//requestedPublishingInterval
+		    uint32_t lt = iNu(rb, off, 4);		//requestedLifetimeCount
+		    uint32_t ka = iNu(rb, off, 4);		//requestedMaxKeepAliveCount
+		    uint32_t npp = iNu(rb, off, 4);		//maxNotificationsPerPublish
+		    bool en = iNu(rb, off, 1);			//publishingEnabled
+		    uint8_t pr = iNu(rb, off, 1);		//priority
+
+		    uint32_t subScrId = wep->subscrSet(OpcUa_NPosID, SS_CREATING, en, sesTokId, pi, lt, ka, npp, pr);
+		    if(subScrId > wep->limSubScr())
+		    {
+			wep->subscrSet(subScrId, SS_CLOSED);
+			throw OPCError(OpcUa_BadTooManySubscriptions, "Subscriptions limit achieved.");
+		    }
+		    Subscr ss = wep->subscrGet(subScrId);
 
 		    //>> Respond
 		    reqTp = OpcUa_CreateSubscriptionResponse;
-		    respEp.reserve(100);
-		    oNu(respEp, 0/*subScrId++*/, 4);	//subscriptionId
-		    oR(respEp, 0, 8); 			//revisedPublishingInterval
-		    oNu(respEp, 0, 4);			//revisedLifetimeCount
-		    oNu(respEp, 0, 4);			//revisedMaxKeepAliveCount
+		    respEp.reserve(20);
+		    oNu(respEp, subScrId, 4);			//subscriptionId
+		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
+		    oNu(respEp, ss.cntrLifeTime, 4);		//revisedLifetimeCount
+		    oNu(respEp, ss.cntrKeepAlive, 4);		//revisedMaxKeepAliveCount
 		    break;
-		case OpcUa_DeleteSubscriptionsRequest:	//!!!! Should next implemented full
+		}
+		case OpcUa_ModifySubscriptionRequest:
 		{
 		    //>> Request
-		    uint32_t sn = iNu(rb, off, 4);	//subscriptionIds []
+		    uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
+		    double pi = iR(rb, off, 8);			//requestedPublishingInterval
+		    uint32_t lt = iNu(rb, off, 4);		//requestedLifetimeCount
+		    uint32_t ka = iNu(rb, off, 4);		//requestedMaxKeepAliveCount
+		    uint32_t npp = iNu(rb, off, 4);		//maxNotificationsPerPublish
+		    bool en = iNu(rb, off, 1);			//publishingEnabled
+		    uint8_t pr = iNu(rb, off, 1);		//priority
+
+		    Subscr ss = wep->subscrGet(subScrId);
+		    if(ss.st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    wep->subscrSet(subScrId, SS_CUR, en, sesTokId, pi, lt, ka, npp, pr);
+		    ss = wep->subscrGet(subScrId);
 
 		    //>> Respond
-		    reqTp = OpcUa_DeleteSubscriptionsResponse;
-		    respEp.reserve(100);
-		    oNu(respEp, sn, 4);			//results []
+		    reqTp = OpcUa_ModifySubscriptionResponse;
+		    respEp.reserve(20);
+		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
+		    oNu(respEp, ss.cntrLifeTime, 4);		//revisedLifetimeCount
+		    oNu(respEp, ss.cntrKeepAlive, 4);		//revisedMaxKeepAliveCount
+		    break;
+		}
+		/*case OpcUa_TransferSubscriptionsRequest:
+		{
+		    //>> Request
+		    uint32_t sn = iNu(rb, off, 4);		//subscriptionIds []
+
+		    //>> Respond
+		    reqTp = OpcUa_TransferSubscriptionsResponse;
+		    respEp.reserve(20);
+		    oNu(respEp, sn, 4);				//results []
 
 		    for(uint32_t i_s = 0; i_s < sn; i_s++)
 		    {
-			iNu(rb, off, 4);		//subscriptionId
-			oNu(respEp, 0, 4);		//statusCode, 0x00000000
+			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
+			Subscr ss = wep->subscrGet(subScrId);
+			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
 		    }
-		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
+		    iNu(rb, off, 1);				//sendInitialValues
+
 		    break;
-		}
-		case OpcUa_CreateMonitoredItemsRequest:	//!!!! Should next implemented full
+		}*/
+		case OpcUa_DeleteSubscriptionsRequest:
 		{
 		    //>> Request
-		    iN(rb, off, 4);			//subscriptionId
-		    iN(rb, off, 4);			//timestampsToReturn
-							//> itemsToCreate []
-		    uint32_t ic = iNu(rb, off, 4); 	//MonitoredItems
+		    uint32_t sn = iNu(rb, off, 4);		//subscriptionIds []
 
 		    //>> Respond
-		    reqTp = OpcUa_CreateMonitoredItemsResponse;
-		    oNu(respEp, ic, 4);			//results []
+		    reqTp = OpcUa_DeleteSubscriptionsResponse;
+		    respEp.reserve(20);
+		    oNu(respEp, sn, 4);				//results []
 
-		    //>> Nodes list process and request form
-		    for(uint32_t i_c = 0; i_c < ic; i_c++)
-        	    {
-							//>> itemToMonitor
-			NodeId nid = iNodeId(rb, off);	//nodeId
-            		uint32_t aid = iNu(rb, off, 4);	//attributeId
-			iS(rb, off);			//indexRange
-			iSqlf(rb, off);			//dataEncoding
-							//>> monitoringMode
-			iN(rb, off, 4);
-							//>> requestedParameters
-			iN(rb, off, 4);			//clientHandle
-			iR(rb, off, 8);			//samplingInterval
-							//>>> filter (ExtensibleParameterMonitoringFilter)
-			NodeId fTp = iNodeId(rb, off);	//TypeId
-			iNu(rb, off, 1);		//EncodingMask
-			uint32_t eSz = iNu(rb, off, 4);	//ExtObj size
-							//No event filterssupport - simple pass
-			//if(fTp.numbVal() == OpcUa_EventFilter)
-			iVal(rb, off, eSz);
-
-			iNu(rb, off, 4);		//>>> queueSize
-			iNu(rb, off, 1);		//>>> discardOldest
-
-			//>>> Node result
-			oNu(respEp, OpcUa_BadFilterNotAllowed, 4);	//statusCode, 0x80450000 (BadFilterNotAllowed)
-			oN(respEp, 0, 4);				//monitoredItemId, 0
-			oR(respEp, -1, 8);				//revisedSamplingInterval, -1
-			oNu(respEp, 0, 4);				//revisedQueueSize, 0
-			oNodeId(respEp, 0u);				//filterResult, 0
-			oNu(respEp, 0, 1);				//encodingMask, 0
+		    for(uint32_t i_s = 0; i_s < sn; i_s++)
+		    {
+			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
+			Subscr ss = wep->subscrGet(subScrId);
+			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
+			wep->subscrSet(subScrId, SS_CLOSED);
 		    }
 		    oN(respEp, -1, 4);				//diagnosticInfos [], -1
 		    break;
 		}
-		case OpcUa_SetPublishingModeRequest:		//!!!! Should next implemented full
+		case OpcUa_CreateMonitoredItemsRequest:
 		{
 		    //>> Request
-		    iNu(rb, off, 1);			//publishingEnabled
-		    uint32_t sn = iNu(rb, off, 4);	//subscriptionIds []
+		    uint32_t subScrId = iNu(rb, off, 4);	//>subscriptionId
+		    if(wep->subscrGet(subScrId).st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+
+		    TimestampsToReturn tmStRet = (TimestampsToReturn)iNu(rb, off, 4);	//>timestampsToReturn
+		    uint32_t ni = iNu(rb, off, 4);		//>itemsToCreate []
+
+		    //>> Respond
+		    reqTp = OpcUa_CreateMonitoredItemsResponse;
+		    oNu(respEp, ni, 4);				//<results []
+
+		    //>> Nodes list process and request form
+		    for(uint32_t i_m = 0; i_m < ni; i_m++)
+		    {
+								//> itemToMonitor
+			NodeId nid = iNodeId(rb, off);		//>  nodeId
+			uint32_t aid = iNu(rb, off, 4);		//>  attributeId
+			iS(rb, off);				//>  indexRange
+			iSqlf(rb, off);				//>  dataEncoding
+
+			MonitoringMode mM = (MonitoringMode)iNu(rb, off, 4);	//> monitoringMode
+								//> requestedParameters
+			uint32_t cH = iNu(rb, off, 4);		//>  clientHandle
+			double sI = iR(rb, off, 8);		//>  samplingInterval
+			NodeId fid = iNodeId(rb, off);		//>  filter
+			iNu(rb, off, 1);			//>   EncodingMask
+			if(fid.numbVal() != 0)
+			{
+			    uint32_t eSz = iNu(rb, off, 4);	//>   ExtObj
+			    iVal(rb, off, eSz);			//>    No filters support - simple pass
+			}
+			uint32_t qSz = iNu(rb, off, 4);		//>  queueSize
+			bool dO = iNu(rb, off, 1);		//>  discardOldest
+
+			//>>> Node result
+			uint32_t st = 0;
+			uint32_t mIt = 0;
+
+			if(fid.numbVal() != 0)	st = OpcUa_BadFilterNotAllowed;
+			else
+			{
+			    //Create new monitored item
+			    mIt = wep->mItSet(subScrId, OpcUa_NPosID, mM, nid, aid, tmStRet, sI, qSz, dO, cH);
+			    if(mIt == OpcUa_NPosID) st = OpcUa_BadSubscriptionIdInvalid;
+			    else if(mIt > wep->limMonitItms()) st = OpcUa_BadTooManyOperations;
+			    else
+			    {
+				Subscr::MonitItem mItO = wep->mItGet(subScrId, mIt);
+				if(mItO.nd.isNull()) st = OpcUa_BadNodeIdInvalid;
+				else if(mItO.aid == Aid_Error) st = OpcUa_BadAttributeIdInvalid;
+				else
+				{
+				    sI = mItO.smplItv;
+				    qSz = mItO.qSz;
+				}
+			    }
+			    if(st) { wep->mItSet(subScrId, mIt, MM_DISABLED); mIt = 0; }
+			}
+
+			oNu(respEp, st, 4);				//< statusCode
+			oN(respEp, mIt, 4);				//< monitoredItemId
+			oR(respEp, sI, 8);				//< revisedSamplingInterval
+			oNu(respEp, qSz, 4);				//< revisedQueueSize
+			oNodeId(respEp, 0u);				//< filterResult
+			oNu(respEp, 0, 1);				//< encodingMask
+		    }
+		    oN(respEp, -1, 4);					//<diagnosticInfos [], -1
+		    break;
+		}
+		case OpcUa_ModifyMonitoredItemsRequest:
+		{
+		    //>> Request
+		    uint32_t subScrId = iNu(rb, off, 4);		//>subscriptionId
+		    if(wep->subscrGet(subScrId).st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    TimestampsToReturn tmStRet = (TimestampsToReturn)iNu(rb, off, 4);	//>timestampsToReturn
+		    uint32_t ni = iNu(rb, off, 4);			//>itemsToModify []
+
+		    //>> Respond
+		    reqTp = OpcUa_ModifyMonitoredItemsResponse;
+		    oNu(respEp, ni, 4);				//<results []
+		    //>> Nodes list process and request form
+		    for(uint32_t i_m = 0; i_m < ni; i_m++)
+		    {
+			uint32_t mIt = iNu(rb, off, 4);		//> monitoredItemId
+								//> requestedParameters
+			uint32_t cH = iNu(rb, off, 4);		//>  clientHandle
+			double sI = iR(rb, off, 8);		//>  samplingInterval
+			NodeId fid = iNodeId(rb, off);		//>  filter
+			iNu(rb, off, 1);			//>   EncodingMask
+			if(fid.numbVal() != 0)
+			{
+			    uint32_t eSz = iNu(rb, off, 4);	//>   ExtObj
+			    iVal(rb, off, eSz);			//>    No filters support - simple pass
+			}
+			uint32_t qSz = iNu(rb, off, 4);		//>  queueSize
+			bool dO = iNu(rb, off, 1);		//>  discardOldest
+
+			//>>> Node result
+			uint32_t st = 0;
+			if(fid.numbVal() != 0)	st = OpcUa_BadFilterNotAllowed;
+			//Modify monitored item
+			else if(wep->mItGet(subScrId,mIt).md == MM_DISABLED) st = OpcUa_BadMonitoredItemIdInvalid;
+			else
+			{
+			    wep->mItSet(subScrId, mIt, MM_CUR, NodeId(), OpcUa_NPosID, tmStRet, sI, qSz, dO, cH);
+			    Subscr::MonitItem mItO = wep->mItGet(subScrId, mIt);
+			    sI = mItO.smplItv;
+			    qSz = mItO.qSz;
+			}
+
+			oNu(respEp, st, 4);				//< statusCode
+			oN(respEp, mIt, 4);				//< monitoredItemId
+			oR(respEp, sI, 8);				//< revisedSamplingInterval
+			oNu(respEp, qSz, 4);				//< revisedQueueSize
+			oNodeId(respEp, 0u);				//< filterResult
+			oNu(respEp, 0, 1);				//< encodingMask
+		    }
+		    oN(respEp, -1, 4);					//<diagnosticInfos [], -1
+		    break;
+		}
+		case OpcUa_SetMonitoringModeRequest:
+		case OpcUa_DeleteMonitoredItemsRequest:
+		{
+		    //>> Request
+		    uint32_t subScrId = iNu(rb, off, 4);		//>subscriptionId
+		    MonitoringMode mM = MM_DISABLED;
+		    if(wep->subscrGet(subScrId).st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    if(reqTp == OpcUa_SetMonitoringModeRequest)
+		    {
+			mM = (MonitoringMode)iNu(rb, off, 4);		//>monitoringMode
+			reqTp = OpcUa_SetMonitoringModeResponse;
+		    }
+		    else reqTp = OpcUa_DeleteMonitoredItemsResponse;
+		    uint32_t ni = iNu(rb, off, 4);			//>itemsToModify []
+
+		    //>> Respond
+		    oNu(respEp, ni, 4);					//<results []
+		    //>> Nodes list process and request form
+		    for(uint32_t i_m = 0; i_m < ni; i_m++)
+		    {
+			uint32_t mIt = iNu(rb, off, 4);			//> monitoredItemId
+
+			//>>> Node result
+			uint32_t st = 0;
+			//Modify monitored item
+			if(wep->mItGet(subScrId,mIt).md == MM_DISABLED) st = OpcUa_BadMonitoredItemIdInvalid;
+			else wep->mItSet(subScrId, mIt, mM);
+			oNu(respEp, st, 4);				//< statusCode
+		    }
+		    oN(respEp, -1, 4);					//<diagnosticInfos [], -1
+		    break;
+		}
+		case OpcUa_SetPublishingModeRequest:
+		{
+		    //>> Request
+		    bool en = iNu(rb, off, 1);			//publishingEnabled
+		    uint32_t sn = iNu(rb, off, 4);		//subscriptionIds []
 
 		    //>> Respond
 		    reqTp = OpcUa_SetPublishingModeResponse;
-		    respEp.reserve(100);
-		    oNu(respEp, sn, 4);			//results []
+		    respEp.reserve(20);
+		    oNu(respEp, sn, 4);				//results []
 
 		    for(uint32_t i_s = 0; i_s < sn; i_s++)
 		    {
-			iNu(rb, off, 4);		//subscriptionId
-			oNu(respEp, 0, 4);		//statusCode, 0x00000000
+			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
+			Subscr ss = wep->subscrGet(subScrId);
+			if(ss.st != SS_CLOSED) wep->subscrSet(subScrId, SS_CUR, en);
+			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
 		    }
 		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
 		    break;
@@ -2842,7 +3033,7 @@ nextReq:
 
 		    break;
 		}
-		case OpcUa_PublishRequest:	//!!!! Should next implemented full
+		case OpcUa_PublishRequest:
 		{
 		    //>> Request
 							//> subscription Acknowledgements []
@@ -2852,9 +3043,99 @@ nextReq:
 			iN(rb, off, 4);			//subscriptionId
 			iNu(rb, off, 4);		//sequenceNumber
 		    }
-		    //> No response now
-		    throw OPCError(0, "", "");
+
 		    reqTp = OpcUa_PublishResponse;
+
+		    //> The publish request queue and/or process
+		    pthread_mutex_lock(&wep->mtxData);
+		    Sess *s = wep->sessGet_(sesTokId);
+		    if(s)
+		    {
+			unsigned i_p = 0;
+			bool findOK = false;
+			for( ; i_p < s->publishReqs.size(); ++i_p)
+			    if(findOK=(rba.compare(0,mSz,s->publishReqs[i_p])==0)) break;
+			if(i_p >= s->publishReqs.size()) s->publishReqs.push_back(rba.substr(0,mSz));
+			if(findOK || s->publishReqs.size() == 1)
+			{
+			    unsigned prSS = wep->mSubScr.size();
+			    for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
+				if((wep->mSubScr[i_ss].st == SS_LATE || wep->mSubScr[i_ss].st == SS_KEEPALIVE) &&
+					(prSS == wep->mSubScr.size() || wep->mSubScr[i_ss].pr > wep->mSubScr[prSS].pr))
+				    prSS = i_ss;
+			    if(prSS < wep->mSubScr.size())
+			    {
+				Subscr &ss = wep->mSubScr[prSS];
+				if(ss.st == SS_LATE)
+				{
+				    ss.setState(SS_NORMAL);
+				    respEp.reserve(100);
+				    oNu(respEp, prSS, 4);		//subscriptionId
+				    oNu(respEp, 0, 4);			//availableSequence Numbers [], ???? process for retransmission
+				    int moreNtfOff = respEp.size();
+				    oNu(respEp, 0, 1);			//moreNotifications, FALSE, ???? check for limit "maxNotPerPubl"
+									//notificationMessage
+				    oNu(respEp, ss.seqN++, 4);		// sequenceNumber
+				    oTm(respEp, curTime());		// publishTime
+				    int nNtfOff = respEp.size();
+				    oNu(respEp, 1, 4);			// notificationData []
+				    oNodeId(respEp, NodeId(OpcUa_DataChangeNotification));	//  TypeId
+				    oNu(respEp, 1, 1);			//  encodingMask
+				    int extObjOff = respEp.size();
+				    oNu(respEp, 0, 4);			//  extension object size
+				    int mItOff = respEp.size();
+				    oNu(respEp, 0, 4);			//  monitoredItems []
+				    unsigned i_mIt = 0;
+				    for(unsigned i_m = 0; i_m < ss.mItems.size(); i_m++)
+				    {
+					Subscr::MonitItem &mIt = ss.mItems[i_m];
+					if(!(mIt.md == MM_REPORTING && mIt.vQueue.size())) continue;
+					uint8_t eMsk = 0x01;
+					switch(mIt.tmToRet)
+					{
+					    case TS_SOURCE: eMsk |= 0x04;   break;
+					    case TS_SERVER: eMsk |= 0x08;   break;
+					    case TS_BOTH:   eMsk |= 0x0C;   break;
+					}
+					while(mIt.vQueue.size())
+					{
+					    oNu(respEp, mIt.cH, 4);		//   clientHandle
+					    oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//   value
+					    mIt.vQueue.pop_front();
+					    i_mIt++;
+					}
+				    }
+				    oS(respEp, "");				//   diagnosticInfos []
+				    oNu(respEp, i_mIt, 4, mItOff);		//  monitoredItems [], real items number write
+				    oNu(respEp, respEp.size()-extObjOff-4, 4, extObjOff);	//  extension object real size write
+
+				    oNu(respEp, 0, 4);				//results []
+				    oS(respEp, "");				//diagnosticInfos []
+
+				    s->publishReqs.erase(s->publishReqs.begin()+i_p);
+				}
+				else if(ss.st == SS_KEEPALIVE)
+				{
+				    ss.setState(SS_NORMAL);
+				    respEp.reserve(10);
+				    oNu(respEp, prSS, 4);		//subscriptionId
+				    oNu(respEp, 0, 4);			//availableSequence Numbers []
+				    oNu(respEp, 0, 1);			//moreNotifications, FALSE
+									//notificationMessage
+				    oNu(respEp, ss.seqN, 4);		// sequenceNumber
+				    oTm(respEp, curTime());		// publishTime
+				    oNu(respEp, 0, 4);			// notificationData []
+				    oNu(respEp, 0, 4);			//results []
+				    oS(respEp, "");			//diagnosticInfos []
+
+				    s->publishReqs.erase(s->publishReqs.begin()+i_p);
+				}
+			    }
+			}
+		    }
+		    pthread_mutex_unlock(&wep->mtxData);
+
+		    if(respEp.empty())	throw OPCError(0, "", "");	//> No response now
 		    break;
 		}
 		case OpcUa_ServiceFault:	break;
@@ -2911,12 +3192,9 @@ nextReq:
     catch(OPCError er)	{ if(er.cod) out = mkError(er.cod, er.mess); }
 
     writeToClient(inPrtId, out);
-    //answ.append(out);
 
     rba.erase(0, mSz);
     goto nextReq;
-
-    return false;
 }
 
 
@@ -2950,21 +3228,48 @@ Server::Sess::Sess( ) : tInact(0), tAccess(0)
 }
 
 //*************************************************
-//* Server::Sess::Subscr                          *
+//* Server::Subscr                                *
 //*************************************************
-Server::Sess::Subscr::State Server::Sess::Subscr::setState( Server::Sess::Subscr::State ist )
+Server::Subscr Server::Subscr::copy( bool noWorkData )
+{
+    Subscr rez;
+    if(!noWorkData) rez = *this;
+    else
+    {
+	rez.st = st;
+	rez.sess = sess;
+	rez.en = en;
+        rez.publInterv = publInterv;
+	rez.cntrLifeTime = cntrLifeTime;
+	rez.cntrKeepAlive = cntrKeepAlive;
+	rez.maxNotPerPubl = maxNotPerPubl;
+	rez.pr = pr;
+    }
+
+    return rez;
+}
+
+SubScrSt Server::Subscr::setState( SubScrSt ist )
 {
     if(ist == st) return st;
     switch(ist)
     {
-	case GET_STATE:	return st;
-	case CLOSED:	//Clear the object
+	case SS_CUR:	return st;
+	case SS_CLOSED:	//Clear the object
 	    mItems.clear();
 	    retrQueue.clear();
 	    en = false;
 	    seqN = 1;
+	    wLT = wKA = 0;
 	    break;
-	case CREATING: case NORMAL: case LATE: case KEEPALIVE:
+	case SS_NORMAL:
+	    switch(st)
+	    {
+		case SS_KEEPALIVE: wKA = 0; break;
+		default: break;
+	    }
+	    break;
+	case SS_CREATING: case SS_LATE: case SS_KEEPALIVE:
 	    break;
     }
 
@@ -3070,36 +3375,67 @@ void Server::EP::setEnable( bool vl )
     mEn = vl;
 }
 
-void Server::EP::publishCycle( unsigned cntr )
+void Server::EP::subScrCycle( unsigned cntr )
 {
     pthread_mutex_lock(&mtxData);
 
-    for(unsigned i_ss = 0; i_ss < mSess.size(); i_ss++)
+    //Subscription process
+    vector<int>	sls;
+    Sess *s = NULL;
+    int64_t vTm = 0;
+    for(unsigned i_sc = 0; i_sc < mSubScr.size(); i_sc++)
     {
-	Sess &s = mSess[i_ss];
-	if(!s.tAccess) break;
-	for(unsigned i_sc = 0; i_sc < s.subscrs.size(); i_sc++)
+	Subscr &scr = mSubScr[i_sc];
+	if(scr.st == SS_CLOSED) continue;
+	if(!(s=sessGet_(scr.sess)) || !s->tAccess) { scr.setState(SS_CLOSED); continue; }
+	// Monitored items processing
+	bool hasData = false;
+	XML_N req("data");
+	for(unsigned i_m = 0; i_m < scr.mItems.size(); ++i_m)
 	{
-	    Sess::Subscr &scr = s.subscrs[i_sc];
-	    if(scr.st == Sess::Subscr::CLOSED || cntr%(unsigned)(scr.publInterv/publishCyclePer())) continue;
-	    if(s.publishReqs.size())
+	    Subscr::MonitItem &mIt = scr.mItems[i_m];
+	    if(mIt.md == MM_DISABLED || (cntr%(unsigned)(mIt.smplItv/subscrProcPer())))	continue;
+	    //  Read data
+	    req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtTmGet","1");
+		//setAttr("dtTmGet",(mIt.tmToRet==TS_SOURCE||mIt.tmToRet==TS_BOTH)?"1":"0");
+	    if(!reqData(OpcUa_ReadRequest, req) && (vTm=strtoll(req.attr("dtTm").c_str(),NULL,10)) > mIt.dtTm)
 	    {
-		pthread_mutex_unlock(&mtxData);
-		scr.wLT = 0;
-		string req = s.publishReqs.front(), answ;
-		serv->inReq(req, answ, s.inPrtId);
-		pthread_mutex_lock(&mtxData);
-	    }
-	    else
-	    {
-		if((++scr.wLT) >= scr.cntrLifeTime)
+		mIt.vTp = atoi(req.attr("type").c_str());
+		mIt.dtTm = vTm;
+		mIt.vQueue.push_back(Subscr::MonitItem::Val(req.text(),vTm));
+		if(mIt.vQueue.size() > mIt.qSz)
 		{
-		    //> Send StatusChangeNotification with Bad_Timeout
-		    //????
-		    scr.setState(Server::Sess::Subscr::CLOSED);	//Free Subscription
+		    if(mIt.dO) mIt.vQueue.pop_front();
+		    else mIt.vQueue.pop_back();
 		}
+		hasData = true;
 	    }
 	}
+	if(hasData) scr.setState(SS_LATE);
+	// Publish processing
+	if((cntr%(unsigned)(scr.publInterv/subscrProcPer())))	continue;
+	if(s->publishReqs.size())
+	{
+	    scr.wLT = 0;
+	    if(scr.st == SS_LATE)			{ scr.wKA = 0; sls.push_back(scr.sess); }
+	    else if((++scr.wKA) >= scr.cntrKeepAlive)	{ scr.setState(SS_KEEPALIVE); sls.push_back(scr.sess); }
+	}
+	else if((++scr.wLT) >= scr.cntrLifeTime)
+	{
+	    // Send StatusChangeNotification with Bad_Timeout
+	    //????
+	    scr.setState(SS_CLOSED);	//Free Subscription
+	}
+    }
+
+    //> Publish call
+    for(int i_s = 0; i_s < sls.size(); i_s++)
+    {
+	if(!(s=sessGet_(sls[i_s]))) continue;
+	string req = s->publishReqs.front(), inPrt = s->inPrtId;
+	pthread_mutex_unlock(&mtxData);
+	serv->inReq(req, inPrt);
+	pthread_mutex_lock(&mtxData);
     }
 
     pthread_mutex_unlock(&mtxData);
@@ -3178,12 +3514,20 @@ void Server::EP::sessClose( int sid )
 
 Server::Sess Server::EP::sessGet( int sid )
 {
-    Server::Sess rez;
+    Server::Sess rez, *ws;
+
     pthread_mutex_lock(&mtxData);
-    if(sid > 0 && sid <= (int)mSess.size()) rez = mSess[sid-1];
+    if((ws=sessGet_(sid))) rez = *ws;
     pthread_mutex_unlock(&mtxData);
 
     return rez;
+}
+
+Server::Sess *Server::EP::sessGet_( int sid )
+{
+    if(sid > 0 && sid <= (int)mSess.size()) return &mSess[sid-1];
+
+    return NULL;
 }
 
 Server::Sess::ContPoint Server::EP::sessCpGet( int sid, const string &cpId )
@@ -3209,6 +3553,104 @@ void Server::EP::sessCpSet( int sid, const string &cpId, const Server::Sess::Con
 	else mSess[sid-1].cntPnts[cpId] = cp;
     }
     pthread_mutex_unlock(&mtxData);
+}
+
+uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, double publInterv,
+    uint32_t cntrLifeTime, uint32_t cntrKeepAlive, uint32_t maxNotPerPubl, int pr )
+{
+    pthread_mutex_lock(&mtxData);
+
+    if(ssId >= mSubScr.size())
+    {
+	//> Find for Subscription on CLOSED state for reusing
+	for(ssId = 0; ssId < mSubScr.size(); ssId++)
+	    if(mSubScr[ssId].st == SS_CLOSED) break;
+	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
+    }
+    Subscr &ss = mSubScr[ssId];
+
+    //> Set parameters
+    ss.en = en;
+    if(sess >= 0) ss.sess = sess;
+    if(publInterv != 0) ss.publInterv = ceil(publInterv/subscrProcPer())*subscrProcPer();
+    if(cntrKeepAlive != 0) ss.cntrKeepAlive = cntrKeepAlive;
+    if(cntrLifeTime != 0) ss.cntrLifeTime = std::max(ss.cntrKeepAlive*3,cntrLifeTime);
+    if(maxNotPerPubl != OpcUa_NPosID) ss.maxNotPerPubl = maxNotPerPubl;
+    if(pr < 0) ss.pr = pr;
+    ss.setState(st);
+
+    pthread_mutex_unlock(&mtxData);
+
+    return ssId;
+}
+
+Server::Subscr Server::EP::subscrGet( uint32_t ssId, bool noWorkData )
+{
+    pthread_mutex_lock(&mtxData);
+
+    Subscr ss;
+    if(ssId < mSubScr.size()) ss = mSubScr[ssId].copy(noWorkData);
+
+    pthread_mutex_unlock(&mtxData);
+
+    return ss;
+}
+
+uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, const NodeId &nd, uint32_t aid,
+    TimestampsToReturn tmToRet, double smplItv, uint32_t qSz, int8_t dO, uint32_t cH )
+{
+    pthread_mutex_lock(&mtxData);
+
+    if(ssId >= mSubScr.size())	return OpcUa_NPosID;
+    else
+    {
+	Subscr &ss = mSubScr[ssId];
+	if(mItId >= ss.mItems.size())
+	{
+	    //> Find for MonitItem on DISABLED state for reusing
+	    for(mItId = 0; mItId < ss.mItems.size(); mItId++)
+		if(ss.mItems[mItId].md == MM_DISABLED) break;
+	    if(mItId >= ss.mItems.size()) { mItId = ss.mItems.size(); ss.mItems.push_back(Subscr::MonitItem()); }
+	}
+	Subscr::MonitItem &mIt = ss.mItems[mItId];
+	if(md != MM_CUR)
+	{
+	    if(md == MM_DISABLED && md != mIt.md) mIt = Subscr::MonitItem();
+	    mIt.md = md;
+	}
+	if(!nd.isNull())	mIt.nd = nd;
+	if(aid != OpcUa_NPosID)	mIt.aid = aid;
+	if(tmToRet != -1)	mIt.tmToRet = tmToRet;
+	if(qSz != OpcUa_NPosID)	mIt.qSz = qSz;
+	if(dO >= 0)		mIt.dO = dO;
+	if(cH != OpcUa_NPosID)	mIt.cH = cH;
+
+	//> Checkings for data
+	XML_N req("data");
+	req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtPerGet",(smplItv==0)?"1":"0");
+	int rez = reqData(OpcUa_ReadRequest, req);
+	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
+	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;
+	if(smplItv == 0)  smplItv = atof(req.attr("dtPer").c_str())*1000;
+	if(smplItv == -1) smplItv = ss.publInterv;
+	if(smplItv != -2) mIt.smplItv = ceil(std::max(smplItv,subscrProcPer())/subscrProcPer())*subscrProcPer();
+    }
+
+    pthread_mutex_unlock(&mtxData);
+
+    return mItId;
+}
+
+Server::Subscr::MonitItem Server::EP::mItGet( uint32_t ssId, uint32_t mItId )
+{
+    pthread_mutex_lock(&mtxData);
+
+    Subscr::MonitItem mIt;
+    if(ssId < mSubScr.size() && mItId < mSubScr[ssId].mItems.size())	mIt = mSubScr[ssId].mItems[mItId];
+
+    pthread_mutex_unlock(&mtxData);
+
+    return mIt;
 }
 
 XML_N *Server::EP::nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,

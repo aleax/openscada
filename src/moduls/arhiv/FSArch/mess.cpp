@@ -822,7 +822,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	    b_rec.categ = mNode->childGet(i_ch)->attr("cat");
 	    b_rec.level = (TMess::Type)atoi( mNode->childGet(i_ch)->attr("lv").c_str() );
 	    b_rec.mess  = mNode->childGet(i_ch)->text();
-	    if(b_rec.time >= b_tm && b_rec.time <= e_tm && b_rec.level >= level && re.test(b_rec.categ))
+	    if(b_rec.time >= b_tm && b_rec.time <= e_tm && abs(b_rec.level) >= level && re.test(b_rec.categ))
 	    {
 		bool equal = false;
 		int i_p = mess.size();
@@ -861,7 +861,7 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	    if( b_rec.time >= e_tm ) break;
 	    if( b_rec.time >= b_tm )
 	    {
-		if( b_rec.level < level ) continue;
+		if(abs(b_rec.level) < level) continue;
 		char m_cat[1001], m_mess[1001];
 		sscanf(buf,"%*x:%*d %*d %1000s %1000s",m_cat,m_mess);
 		b_rec.categ = TSYS::strDecode(Mess->codeConvIn(mChars,m_cat),TSYS::HttpURL);

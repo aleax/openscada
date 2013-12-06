@@ -751,19 +751,19 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     }
     else
     {
-	map<string,string> attrs;
+	AttrValS attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
 		if(!w->hasFocus()) break;
-		attrs["focus"] = "1";
-		attrs["event"] = "ws_FocusIn";
+		attrs.push_back(std::make_pair("focus","1"));
+		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
 		if(w->hasFocus()) break;
-		attrs["focus"] = "0";
-		attrs["event"] = "ws_FocusOut";
+		attrs.push_back(std::make_pair("focus","0"));
+		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
 	    default:	break;
@@ -778,9 +778,9 @@ void ShapeFormEl::lineAccept( )
     LineEdit *el   = (LineEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = el->value().toAscii().data();
-    attrs["event"] = "ws_LnAccept";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->value().toAscii().data()));
+    attrs.push_back(std::make_pair("event","ws_LnAccept"));
     view->attrsSet(attrs);
 }
 
@@ -789,9 +789,9 @@ void ShapeFormEl::textAccept( )
     TextEdit *el   = (TextEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = el->text().toAscii().data();
-    attrs["event"] = "ws_TxtAccept";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->text().toAscii().data()));
+    attrs.push_back(std::make_pair("event","ws_TxtAccept"));
     view->attrsSet(attrs);
 }
 
@@ -799,9 +799,9 @@ void ShapeFormEl::checkChange(int st)
 {
     WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = TSYS::int2str(st);
-    attrs["event"] = "ws_ChkChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",i2s(st)));
+    attrs.push_back(std::make_pair("event","ws_ChkChange"));
     view->attrsSet(attrs);
 }
 
@@ -883,9 +883,9 @@ void ShapeFormEl::buttonReleased( )
 	    }
 	    QByteArray data = file.readAll();
 
-	    map<string,string> attrs;
-	    attrs["event"] = string("ws_BtLoad");
-	    attrs["value"] = fHead+"\n"+string(data.data(),data.size());
+	    AttrValS attrs;
+	    attrs.push_back(std::make_pair("event","ws_BtLoad"));
+	    attrs.push_back(std::make_pair("value",fHead+"\n"+string(data.data(),data.size())));
 	    w->attrsSet(attrs);
 	    break;
 	}
@@ -896,9 +896,9 @@ void ShapeFormEl::buttonToggled( bool val )
 {
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
-    map<string,string> attrs;
-    attrs["event"] = string("ws_BtToggleChange\n")+(val?"ws_BtPress":"ws_BtRelease");
-    attrs["value"] = TSYS::int2str(val);
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("event",string("ws_BtToggleChange\n")+(val?"ws_BtPress":"ws_BtRelease")));
+    attrs.push_back(std::make_pair("value",TSYS::int2str(val)));
     w->attrsSet(attrs);
 }
 
@@ -914,9 +914,9 @@ void ShapeFormEl::comboChange(const QString &val)
     WdgView *w = (WdgView *)((QWidget*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
 
-    map<string,string> attrs;
-    attrs["value"] = val.toStdString();
-    attrs["event"] = "ws_CombChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",val.toStdString()));
+    attrs.push_back(std::make_pair("event","ws_CombChange"));
     w->attrsSet(attrs);
 }
 
@@ -926,9 +926,9 @@ void ShapeFormEl::listChange( int row )
     WdgView     *w  = (WdgView *)el->parentWidget();
 
     if(row < 0 || ((ShpDt*)w->shpData)->evLock) return;
-    map<string,string> attrs;
-    attrs["value"] = el->item(row)->text().toAscii().data();
-    attrs["event"] = "ws_ListChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->item(row)->text().toStdString()));
+    attrs.push_back(std::make_pair("event","ws_ListChange"));
     w->attrsSet(attrs);
 }
 
@@ -939,9 +939,9 @@ void ShapeFormEl::treeChange( )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
 
-    map<string,string> attrs;
-    attrs["value"] = el->selectedItems()[0]->data(0, Qt::UserRole).toString().toStdString();
-    attrs["event"] = "ws_TreeChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->selectedItems()[0]->data(0,Qt::UserRole).toString().toStdString()));
+    attrs.push_back(std::make_pair("event","ws_TreeChange"));
     w->attrsSet(attrs);
 }
 
@@ -950,9 +950,9 @@ void ShapeFormEl::sliderMoved( int val )
     QAbstractSlider *el = (QAbstractSlider*)sender();
     WdgView	    *w  = (WdgView *)el->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = TSYS::int2str(val);
-    attrs["event"] = "ws_SliderChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",i2s(val)));
+    attrs.push_back(std::make_pair("event","ws_SliderChange"));
     w->attrsSet(attrs);
 }
 
@@ -1281,10 +1281,10 @@ void ShapeMedia::mediaFinished( )
 
 #ifdef HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
-    map<string,string> attrs;
+    AttrValS attrs;
     if(shD->videoRoll && player) player->play();
-    else attrs["play"] = "0";
-    attrs["event"] = "ws_MediaFinished";
+    else attrs.push_back(std::make_pair("play","0"));
+    attrs.push_back(std::make_pair("event","ws_MediaFinished"));
     w->attrsSet(attrs);
 #endif
 }
@@ -3086,7 +3086,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     //> Correct request to archive border
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime     = vmin(tTime, arh_end);
-    //tTimeGrnd = vmax(tTimeGrnd,arh_beg);
+    tTimeGrnd = vmax(tTimeGrnd, arh_beg);	//For prevent possible cycling
 
     //> Clear data at time error
     if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
@@ -3100,7 +3100,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
     //> Get values data
-    int64_t	bbeg, bend, bper;
+    int64_t	bbeg, bend, bper, bbeg_prev = tTime;
     int		curPos, prevPos, maxPos;
     double	curVal, prevVal;
     string	svl;
@@ -3162,7 +3162,12 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     }
 
     //> Check for archive jump
-    if(!isDataDir && shD->valArch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && shD->valArch.empty() && (bbeg-tTimeGrnd)/bper && bper < bbeg_prev)
+    {
+	bbeg_prev = bper;
+	tTime = bbeg-bper;
+	goto m1;
+    }
 }
 
 void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
@@ -3654,17 +3659,17 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	}
     else
     {
-	map<string,string> attrs;
+	AttrValS attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		attrs["focus"] = "1";
-		attrs["event"] = "ws_FocusIn";
+		attrs.push_back(std::make_pair("focus","1"));
+		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		attrs["focus"] = "0";
-		attrs["event"] = "ws_FocusOut";
+		attrs.push_back(std::make_pair("focus","0"));
+		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
 	    default: break;
@@ -3844,17 +3849,17 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	}
     else
     {
-	map<string,string> attrs;
+	AttrValS attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		attrs["focus"] = "1";
-		attrs["event"] = "ws_FocusIn";
+		attrs.push_back(std::make_pair("focus","1"));
+		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		attrs["focus"] = "0";
-		attrs["event"] = "ws_FocusOut";
+		attrs.push_back(std::make_pair("focus","0"));
+		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
 	    default: break;

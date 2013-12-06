@@ -6178,7 +6178,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     //> Correct request to archive border
     wantPer	= (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime	= vmin(tTime, arh_end);
-    //tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
+    tTimeGrnd	= vmax(tTimeGrnd, arh_beg);	//For prevent possible cycling
 
     //> Clear data at time error
     if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
@@ -6192,7 +6192,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
     //> Get values data
-    int64_t	bbeg, bend, bper;
+    int64_t	bbeg, bend, bper, bbeg_prev = tTime;
     int		curPos, prevPos, maxPos;
     double      curVal, prevVal;
     string      svl;
@@ -6254,7 +6254,12 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     }
 
     //> Check for archive jump
-    if(!isDataDir && arch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && arch.empty() && (bbeg-tTimeGrnd)/bper && bper < bbeg_prev)
+    {
+	bbeg_prev = bper;
+	tTime = bbeg-bper;
+	goto m1;
+    }
 }
 
 void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )

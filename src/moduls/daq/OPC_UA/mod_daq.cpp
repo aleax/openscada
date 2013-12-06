@@ -206,7 +206,7 @@ void TMdContr::stop_( )
 void TMdContr::protIO( XML_N &io )
 {
     ResAlloc resN(tr.at().nodeRes(), true);
-    if(messLev()==TMess::Debug) io.setAttr("debug", "1");
+    if(messLev() == TMess::Debug) io.setAttr("debug", "1");
     try { Client::protIO(io); }
     catch(TError er)
     { io.setAttr("err", TSYS::strMess("0x%x:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }

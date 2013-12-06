@@ -45,16 +45,15 @@ typedef map<int,Qt::PenStyle> StyleMap;
 namespace VISION
 {
 
+enum SpecIdx { SpI_NullIt = -1, SpI_DefLine = -5, SpI_DefBord = -6, SpI_DefFill = -7, SpI_DefFillImg = -5, SpI_StatIts = -10 };
+enum ShapeType { ShT_Line = 1, ShT_Arc = 2, ShT_Bezier = 3, ShT_Fill = 4 };
+
 //************************************************
 //* ShapeItem					 *
 //************************************************
 class ShapeItem
 {
     public:
-	//Data
-	enum Type { Line = 1, Arc = 2, Bezier = 3, Fill = 4 };
-	enum SpecIdx { NullIt = -1, DefLine = -5, DefBord = -6, DefFill = -7, DefFillImg = -5, StatIts = -10 };
-
 	//Methods
 	ShapeItem( )	{ }
 	ShapeItem( const QPainterPath &ipath, const QPainterPath &path_simple, short num_1, short num_2, short num_3,

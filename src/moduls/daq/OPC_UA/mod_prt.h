@@ -95,7 +95,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string url( )		{ return mURL; }
 	string cert( );
 	string pvKey( );
-	double publishCyclePer( ) { return 100; }
+	double subscrProcPer( ) { return 100; }
 
 	string getStatus( );
 
@@ -168,7 +168,7 @@ class TProt: public TProtocol, public Server
 	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
 
 	void discoveryUrls( vector<string> &ls );
-	bool inReq( string &request, string &answer, const string &inPrtId );
+	void inReq( string &request, const string &inPrtId );
 	int writeToClient( const string &inPrtId, const string &data );
 
 	TElem &endPntEl( )			{ return mEndPntEl; }

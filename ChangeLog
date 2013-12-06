@@ -1,3 +1,15 @@
+2013-12-06 Roman
+- DB.VCABase: To field "Archives" of the graphics control panel the archivators list is set generation dynamic.
+- DB.OscadaLibs: base.anUnif template is significant expanded.
+- FIX:Archive.{FSArch,DBArch}: Alarm messages by negative level requesting from messages archive is fixed.
+- !!!:DAQ.OPC_UA: Publish, Subscribe and MonitoredItem related services support for input protocol's part is added.
+- FIX:UI.{VCAEngine,Vision}: Group attributes requesting function Vision::attrsSet() is rewrited for strong ordering for
+    fix unordered writing to some yet missed attributes that appeared after upper changes. Detected on primitive "ElFig".
+- UI.Vision: Internal object's indexes SpecIdx and ShapeType are moved to global space.
+- FIX:UI.{Vision,WebVision}: Two method applied for prevent primitive "Diagram" possible hung on some data combination begin
+    from different archivators.
+
+
 2013-11-29 Roman
 - !:DB.MySQL: MULTI_STATEMENTS requests is enabled, but process and return only first result.
 - FIX:UI.Vision: UnDo records for align events, into development mode, set only for real changed widgets.
