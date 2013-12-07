@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2013 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -1355,7 +1355,7 @@ void VisDevelop::visualItClear( const string &el_wa )
     string clrW;
     string work_wdg_loc, work_attr;
 
-    if( el_wa.empty() )
+    if(el_wa.empty())
     {
 	work_wdg_loc = work_wdg;
 
@@ -1363,7 +1363,7 @@ void VisDevelop::visualItClear( const string &el_wa )
 		QString(_("Are you sure of clear all changes for visual items: '%1'?\n"
 			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(QString(work_wdg_loc.c_str()).replace(";","; ")),
 		_("Visual items' changes clear"),false,false);
-	if( dlg.exec() != QDialog::Accepted )	return;
+	if(dlg.exec() != QDialog::Accepted)	return;
     }
     else
     {
@@ -1409,6 +1409,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     string work_wdg_w = wdst.empty() ? work_wdg : wdst;
     vector<string> copy_els;
     QCheckBox *wInher = NULL;
+    int zLev = 0;
 
     InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);
     dlg.setIdLen(30);
@@ -1490,22 +1491,10 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    else
 	    {
-		unsigned i_w = 0;
-		for(i_w = 0; i_w < req.childSize(); i_w++)
-		    if(req.childGet(i_w)->attr("id") == t1_el)
-			break;
-		if(i_w < req.childSize())
-		{
-		    int no_numb = t1_el.size()-1;
-		    while(no_numb >= 0 && t1_el[no_numb] >= '0' && t1_el[no_numb] <= '9') no_numb--;
-		    if(no_numb >= 0) t1_el = t1_el.substr(0,no_numb+1);
-		    //>>> New identifier generator
-		    unsigned i_c = 1, i_w = 0;
-		    while(i_w < req.childSize())
-			if(req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c)) { i_w = 0; i_c++; }
-			else i_w++;
-		    t1_el += TSYS::int2str(i_c);
-		}
+		zLev = req.childSize();
+		for(unsigned i_w = 0; i_w < req.childSize(); )
+		    if(req.childGet(i_w)->attr("id") == t1_el) { i_w = 0; t1_el = TSYS::strLabEnum(t1_el); }
+		    else i_w++;
 	    }
 	}
 	//>> Make request dialog
@@ -1533,10 +1522,8 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    //>>> Make copy
 	    else
 	    {
-		req.clear()->setName("set")->
-		    setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
-		    setAttr("src", s_elp+"/"+s_el)->
-		    setAttr("dst", d_elp+"/"+d_el);
+		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
+		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		if(cntrIfCmd(req))
 		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 		else
@@ -1552,13 +1539,16 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    if(n_del < 2) copy_els.push_back(d_elp+"/"+d_el);
 		    else
 		    {
-			if(!last_del.empty() && last_del != d_elp)
-			    copy_els.push_back(last_del);
+			//  geomZ set to UP
+			req.clear()->setName("set")->setAttr("path",d_elp+"/"+d_el+"/%2fattr%2fgeomZ")->setText(i2s(zLev));
+			cntrIfCmd(req);
+
+			if(!last_del.empty() && last_del != d_elp) copy_els.push_back(last_del);
 			last_del = d_elp;
 		    }
 		    del_els += copy_buf_el+";";
 
-		    //> Send change request to opened for edit widget
+		    // Send change request to opened for edit widget
             	    if(!chNoWr)
             	    {
                 	DevelWdgView *dw = work_space->findChild<DevelWdgView*>(d_elp.c_str());

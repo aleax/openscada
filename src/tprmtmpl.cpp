@@ -413,7 +413,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
-	if(c_lv) c_path+=".";
+	if(c_lv) c_path += ".";
 	vector<string>  ls;
 	switch(c_lv)
 	{
@@ -644,7 +644,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	{
 	    vector<string> lst;
 	    list(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
