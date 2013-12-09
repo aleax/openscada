@@ -791,7 +791,7 @@ class Server: public UA
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
-	virtual void inReq( string &request, const string &inPrtId );
+	virtual void inReq( string &request, const string &inPrtId, string *answ = NULL );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
 	//> Channel manipulation functions

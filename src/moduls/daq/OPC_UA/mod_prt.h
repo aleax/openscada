@@ -168,7 +168,7 @@ class TProt: public TProtocol, public Server
 	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
 
 	void discoveryUrls( vector<string> &ls );
-	void inReq( string &request, const string &inPrtId );
+	void inReq( string &request, const string &inPrtId, string *answ = NULL );
 	int writeToClient( const string &inPrtId, const string &data );
 
 	TElem &endPntEl( )			{ return mEndPntEl; }

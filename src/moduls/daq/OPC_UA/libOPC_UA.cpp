@@ -2026,7 +2026,7 @@ string Server::mkError( uint32_t errId, const string &err )
     return rez;
 }
 
-void Server::inReq( string &rba, const string &inPrtId )
+void Server::inReq( string &rba, const string &inPrtId, string *answ )
 {
     uint32_t mSz;
     int off = 0;
@@ -2122,7 +2122,7 @@ nextReq:
 	    if(iNodeId(rb,off).numbVal() != OpcUa_OpenSecureChannelRequest)	//TypeId
 		throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Requested OpenSecureChannel NodeId don't acknowledge");
 								//>> Request Header
-	    iVal(rb, off, 2);					//Session AuthenticationToken
+	    iNodeId(rb, off);					//Session AuthenticationToken
 	    iTm(rb, off);					 //timestamp
 	    int32_t rqHndl = iN(rb, off, 4);			//requestHandle
 	    iNu(rb, off, 4);					//returnDiagnostics
@@ -2283,8 +2283,11 @@ nextReq:
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
 	    //>> Session check
-	    if(sesTokId && reqTp != OpcUa_CreateSessionRequest && !wep->sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest,inPrtId))
+	    if(!(reqTp == OpcUa_CreateSessionRequest || reqTp == OpcUa_FindServersRequest || reqTp == OpcUa_GetEndpointsRequest) &&
+		!wep->sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest,inPrtId))
 	    { stCode = OpcUa_BadSessionIdInvalid; reqTp = OpcUa_ServiceFault; }
+	    //if(sesTokId && reqTp != OpcUa_CreateSessionRequest && !wep->sessActivate(sesTokId,secId,reqTp!=OpcUa_ActivateSessionRequest,inPrtId))
+	    //{ stCode = OpcUa_BadSessionIdInvalid; reqTp = OpcUa_ServiceFault; }
 	    iTm(rb, off);					 //timestamp
 	    int32_t reqHndl = iN(rb, off, 4);			//requestHandle
 	    iNu(rb, off, 4);					//returnDiagnostics
@@ -3191,7 +3194,8 @@ nextReq:
     }
     catch(OPCError er)	{ if(er.cod) out = mkError(er.cod, er.mess); }
 
-    writeToClient(inPrtId, out);
+    if(answ) answ->append(out);
+    else writeToClient(inPrtId, out);
 
     rba.erase(0, mSz);
     goto nextReq;
