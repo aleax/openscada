@@ -679,6 +679,7 @@ void ConfApp::itPaste( )
     int off;
     string s_el, s_elp, t_el, b_grp, copyEl, to_path;
     QCheckBox *prcReq = NULL, *prcAlrPres = NULL;
+    XMLNode parNode("info"), *rootW = root;
     bool prcReqMiss = false, prcAlrPresMiss = false;
 
     bool isCut = (copy_buf[0] == '1');
@@ -686,6 +687,7 @@ void ConfApp::itPaste( )
 
     for(int elOff = 1; (copyEl=TSYS::strParse(copy_buf,0,"\n",&elOff)).size(); )
     {
+	rootW = root;
 	to_path = sel_path;
 
 	//> Src elements calc
@@ -695,20 +697,25 @@ void ConfApp::itPaste( )
 
 	if(TSYS::pathLev(copyEl,0) != TSYS::pathLev(to_path,0))
 	{ mod->postMess(mod->nodePath().c_str(), _("Copy is impossible."), TUIMod::Error, this); return; }
-	if(copyEl == to_path) to_path = s_elp;	//For copy into the branch and no select direct the parent node
 
 	vector<string> brs;
-	if(atoi(root->attr("acs").c_str())&SEC_WR) brs.push_back(string("-1\n0\n\n")+_("Selected"));
+	if(copyEl == to_path)	//For copy into the branch and no select direct the parent node
+	{
+	    to_path = s_elp;
+	    parNode.setAttr("path",to_path);
+	    if(cntrIfCmd(parNode)) continue;
+	    rootW = parNode.childGet(0);
+	}
+	if(atoi(rootW->attr("acs").c_str())&SEC_WR) brs.push_back(string("-1\n0\n\n")+_("Selected"));
 
-	XMLNode *branch = root->childGet("id", "br", true);
-	if(branch)
-	    for(unsigned i_b = 0; i_b < branch->childSize(); i_b++)
-		if(atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR)
-		{
-		    string gbrId = branch->childGet(i_b)->attr("id");
-		    brs.push_back(branch->childGet(i_b)->attr("idSz")+"\n0\n"+gbrId+"\n"+branch->childGet(i_b)->attr("dscr"));
-		    if(s_el.substr(0,gbrId.size()) == gbrId) { brs[brs.size()-1] = brs[brs.size()-1]+"\n1"; b_grp = gbrId; }
-		}
+	XMLNode *branch = rootW->childGet("id", "br", true);
+	for(unsigned i_b = 0; branch && i_b < branch->childSize(); i_b++)
+	    if(atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR)
+	    {
+		string gbrId = branch->childGet(i_b)->attr("id");
+		brs.push_back(branch->childGet(i_b)->attr("idSz")+"\n0\n"+gbrId+"\n"+branch->childGet(i_b)->attr("dscr"));
+		if(s_el.substr(0,gbrId.size()) == gbrId) { brs[brs.size()-1] = brs[brs.size()-1]+"\n1"; b_grp = gbrId; }
+	    }
 
 	//> Make request dialog
 	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Move or copy node"));

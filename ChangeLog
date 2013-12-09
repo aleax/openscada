@@ -1,4 +1,5 @@
 2013-12-09 Roman
+- UI.QTCfg: Copy a node into the branch and no select direct the parent node, by copy to self, is improved and fixed.
 - DAQ.OPC_UA: Synchronous input requests processing support return and disabled, enabled for LTS.
     Force session check is added for messages' services not OpcUa_CreateSessionRequest, OpcUa_FindServersRequest and OpcUa_GetEndpointsRequest.
 
