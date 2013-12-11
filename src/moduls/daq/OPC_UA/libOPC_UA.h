@@ -87,6 +87,7 @@ namespace OSCADA_OPC
 #define OpcUa_BadServiceUnsupported	0x800B0000
 #define OpcUa_BadNothingToDo		0x800F0000
 #define OpcUa_BadTooManyOperations	0x80100000
+#define OpcUa_BadUserAccessDenied	0x801F0000
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
 #define OpcUa_BadSubscriptionIdInvalid	0x80280000
@@ -171,6 +172,8 @@ namespace OSCADA_OPC
 #define OpcUa_DataTypesFolder		90
 #define OpcUa_ReferenceTypesFolder	91
 #define OpcUa_AnonymousIdentityToken	321
+#define OpcUa_UserNameIdentityToken	324
+#define OpcUa_X509IdentityToken		327
 #define OpcUa_LiteralOperand		597
 #define OpcUa_EventFilter		727
 #define OpcUa_DataChangeNotification	811
@@ -246,6 +249,7 @@ namespace OSCADA_OPC
 #define OpcUa_ServerStatusType		2138
 
 enum SerializerType	{ ST_Binary };
+enum SC_ReqTP		{ SC_ISSUE = 0, SC_RENEW = 1 };
 enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
 enum NodeClasses	{ NC_Object = 1, NC_Variable = 2, NC_Method = 4, NC_ObjectType = 8, NC_VariableType = 16,
 			  NC_ReferenceType = 32, NC_DataType = 64, NC_View = 128 };
@@ -597,7 +601,7 @@ class Server: public UA
 	    char	secMessMode;
 	    int64_t	tCreate;
 	    int32_t	tLife;
-	    uint32_t	TokenId;
+	    uint32_t	TokenId, TokenIdPrev;
 	    string	clCert;
 	    string	servKey, clKey;
 	};
@@ -633,7 +637,8 @@ class Server: public UA
 	    Sess( );
 
 	    //Attributes
-	    string	name, inPrtId;
+	    string	name, inPrtId,
+			idPolicyId, user;
 	    vector<uint32_t> secCnls;
 	    double	tInact;
 	    int64_t	tAccess;
@@ -739,7 +744,8 @@ class Server: public UA
 		//> Sessions
 		int sessCreate( const string &iName, double iTInact );
 		void sessServNonceSet( int sid, const string &servNonce );
-		bool sessActivate( int sid, uint32_t secCnl, bool check = false, const string &inPrtId = "" );
+		virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
+		    const string &inPrtId = "", const XML_N &identTkn = XML_N() );
 		void sessClose( int sid );
 		Sess sessGet( int sid );
 		//>> Continuation points by Browse and BrowseNext
@@ -795,7 +801,8 @@ class Server: public UA
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
 	//> Channel manipulation functions
-	int chnlOpen( const string &iEp, int32_t lifeTm = 0, const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
+	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
+	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
 	void chnlSecSet( int cid, const string &servKey, const string &clKey );

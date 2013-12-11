@@ -116,7 +116,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	if(!s_br.empty() && s_br[0] != '/')
 	{
 	    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-		if(s_br.substr(0,(*chGrp)[i_g].id.size()) == (*chGrp)[i_g].id)
+		if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0)
 		{
 		    chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().cntrCmd(opt,0,path,off);
 		    return;

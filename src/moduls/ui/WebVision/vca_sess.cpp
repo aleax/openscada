@@ -5414,6 +5414,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if(active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict))
     {
 	//>> Set trend's pen
+	gdImageSetThickness(im, 1);
 	int clr_cur = TWEB::colorResolve(im, curColor);
 	//gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
 	int curPos = tArX + tArW*(curTime-tBeg)/(tPict-tBeg);

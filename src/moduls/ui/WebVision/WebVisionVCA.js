@@ -308,16 +308,18 @@ function setWAttrs( wId, attrs, val )
     servSet(wId, 'com=attrs', body);
 }
 /***************************************************
- * getFont - Parse font                            *
+ * getFont( fStr, fSc, opt ) - Parse font          *
+ *  opt - options: 1-punkts; 2-return size         *
  ***************************************************/
-function getFont( fStr, fSc, inPt )
+function getFont( fStr, fSc, opt )
 {
     var rez = '';
     if(fStr)
     {
 	var allFnt = fStr.split(' ');
+	if(opt == 2) return (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0);
 	if(allFnt.length >= 1) rez += 'font-family: ' + allFnt[0].replace(/_/g,' ') + '; ';
-	if(allFnt.length >= 2) rez += 'font-size: ' + (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (inPt?'pt; ':'px; ');
+	if(allFnt.length >= 2) rez += 'font-size: ' + (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0) + (opt==1?'pt; ':'px; ');
 	if(allFnt.length >= 3) rez += 'font-weight: ' + (parseInt(allFnt[2])?'bold':'normal') + '; ';
 	if(allFnt.length >= 4) rez += 'font-style: ' + (parseInt(allFnt[3])?'italic':'normal') + '; ';
     }
@@ -723,7 +725,6 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
 	    {
-    		//elStyle += 'overflow: auto; ';
 		if(this.inclOpen)
 		{
 		    servSet(this.inclOpen,'com=pgClose','');
@@ -754,6 +755,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.pages[this.inclOpen] = iPg;
 			this.place.appendChild(iPg.place);
 		    }
+		    //Oppress scroll for include page size equal to the continer
+		    if(this.place.width = this.pages[this.inclOpen].place.width) this.pages[this.inclOpen].place.width--;
+		    if(this.place.height = this.pages[this.inclOpen].place.height) this.pages[this.inclOpen].place.height--;
 		}
 		elStyle += "overflow: scroll; ";
 	    }
@@ -804,6 +808,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    else if(argCfg[1] == 'e')	argVal = parseFloat(this.attrs['arg'+i+'val']).toExponential(Math.max(0,argCfg[2]));
 			    else if(argCfg[1] == 'f')	argVal = parseFloat(this.attrs['arg'+i+'val']).toFixed(Math.max(0,argCfg[2]));
 			    else argVal = this.attrs['arg'+i+'val'];
+			    if(isNaN(argVal)) argVal = 0;
 			    break;
 		    }
 		    var argSize = Math.max(-1000,Math.min(1000,parseInt(argCfg[0])));
@@ -914,6 +919,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(allFnt.length >= 1) this.place.fontCfg += allFnt[0].replace(/_/g,' ')+' ';
 		}
 	    }
+	    var fntSz = Math.min(geomH,(getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0));
 	    switch(elTp)
 	    {
 		case 0:	//Line edit
@@ -923,8 +929,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font'])
 		    {
 			var geomWint = geomW-4;
-			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-20)/2)+'px; width: '+geomWint+'px; '+
-						'height: '+Math.min(geomH,16)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
+			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
+						'height: '+(fntSz-2)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
 		    }
 		    if(formObj.valSet && this.attrsMdf['value']) formObj.valSet(this.attrs['value']);
 		    this.place.view = parseInt(this.attrs['view']);
@@ -940,7 +946,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 1:		//Combo
 				var combImg = this.place.ownerDocument.createElement('img');
 				combImg.src = '/'+MOD_ID+'/img_combar';
-				combImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-20)/2)+'px; width: 16px; height: 20px; cursor: pointer; ';
+				combImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
 				combImg.onclick = function()
@@ -993,7 +999,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				if(this.place.childNodes.length >= 2) break;
 				var spinImg = this.place.ownerDocument.createElement('img');
 				spinImg.src = '/'+MOD_ID+'/img_spinar';
-				spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-20)/2)+'px; width: 16px; height: 20px; cursor: pointer; ';
+				spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
 				spinImg.border = '0';
 				formObj.style.width = (geomWint-16)+'px';
 				spinImg.onclick = function(e)
@@ -1001,7 +1007,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    if(!e) e = window.event;
 				    var formObj = this.parentNode.childNodes[0];
 				    var argCfg = this.parentNode.cfg.split(':');
-				    if((e.clientY-posGetY(this)) < 10)
+				    if((e.clientY-posGetY(this)) < fntSz/2)
 					formObj.valSet(formObj.valGet()+((argCfg.length>2)?((this.parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1));
 				    else formObj.valSet(formObj.valGet()-((argCfg.length>2)?((this.parentNode.view==2)?parseInt(argCfg[2]):parseFloat(argCfg[2])):1));
 				    formObj.setModify(true);
@@ -1456,8 +1462,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var formObj = toInit ? this.place.ownerDocument.createElement('select') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 		    if(toInit || this.attrsMdf['geomW'] || this.attrsMdf['geomH'] || this.attrsMdf['font'])
-			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-20)/2:0)+'px; '+
-					    'height: '+((elTp==4)?Math.min(geomH,20):(geomH-4))+'px; width: '+(geomW-4)+'px; '+
+			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
+					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
 					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px; ';
 		    if(this.attrsMdf['items'] || this.attrsMdf['value'])
 		    {
@@ -1787,7 +1793,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.attrsMdf["style"] || this.attrsMdf["font"] ||
 		(this.attrsMdf["doc"] && this.attrs["doc"].length) || (this.attrsMdf["tmpl"] && !this.attrs["doc"].length))
 	    {
-		this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),true);
+		this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),1);
 
 		var ifrmObj = this.place.childNodes[0];
 		try

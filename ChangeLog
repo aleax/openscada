@@ -1,3 +1,12 @@
+2013-12-11 Roman
+- DAQ.OPC_UA: Auth methods UserName and X509Identity processing is added, but not check yet for real users into OpenSCADA.
+    Secure channel's TokenId renew support into input part is implemented and some fixed into output part.
+- FIX:UI.WebVision: Primitive "Diagram" cursor scale is fixed.
+    Oppress scroll for include page size equal to the continer.
+    NaN value display prevented by check argument's result of the primitive "Text".
+- UI.WebVision: Font's size obtain by getFont() is added and used for "FormEl" elements height tune.
+
+
 2013-12-09 Roman
 - UI.QTCfg: Copy a node into the branch and no select direct the parent node, by copy to self, is improved and fixed.
 - DAQ.OPC_UA: Synchronous input requests processing support return and disabled, enabled for LTS.
