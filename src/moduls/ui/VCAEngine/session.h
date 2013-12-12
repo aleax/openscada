@@ -208,6 +208,7 @@ class SessWdg : public Widget, public TValFunc
 
 	//> Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	SessWdg  *ownerSessWdg( bool base = false );
 	SessPage *ownerPage( );
@@ -282,8 +283,8 @@ class SessPage : public SessWdg
 	void alarmSet( bool isSet = false );
 	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 
-	bool attrPresent(const string &attr);
-	AutoHD<Attr> attrAt(const string &attr, int lev = -1);
+	bool attrPresent( const string &attr );
+	AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
 
     protected:
 	//Methods

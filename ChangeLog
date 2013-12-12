@@ -1,3 +1,11 @@
+2013-12-12 Roman
+- Transport.{,Sockets}: Resource is added to input transport, for writeTo().
+- !:DAQ.OPC_UA: RePublish service and retransmission queue processing is added. Maximum notes per publish processing is added.
+- UI.VCAEngine: Session widget's user API function mime() and mimeSet() is added for allow access to mime data,
+    processing the data and change by set to the session context table.
+    Too usefull for dynamic forming some images like SVG (simple process XML) or PNG,JPEG,GIF by LibGD2 API (will append further).
+
+
 2013-12-11 Roman
 - DAQ.OPC_UA: Auth methods UserName and X509Identity processing is added, but not check yet for real users into OpenSCADA.
     Secure channel's TokenId renew support into input part is implemented and some fixed into output part.

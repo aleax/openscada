@@ -78,6 +78,8 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	TTipTransport &owner( );
 
+	Res &nodeRes( )			{ return nRes; }
+
     protected:
 	//Methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
@@ -102,6 +104,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	TCfg	&mId;
 	char	&mStart;
 	string	mDB;
+	Res	nRes;
 };
 
 //************************************************

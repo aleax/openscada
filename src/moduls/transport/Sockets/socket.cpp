@@ -308,6 +308,8 @@ int TSocketIn::writeTo( const string &sender, const string &data )
     fd_set		rw_fd;
     struct timeval	tv;
 
+    ResAlloc resN(nodeRes(), true);	//Prevent simultaneous writing
+
     switch(type)
     {
 	case SOCK_TCP: case SOCK_UNIX:
@@ -831,7 +833,7 @@ void TSocketOut::start()
 
 void TSocketOut::stop()
 {
-    ResAlloc res( wres, true );
+    ResAlloc res(wres, true);
 
     if( !run_st ) return;
 

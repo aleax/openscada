@@ -3060,19 +3060,9 @@ nextReq:
 		}
 		case OpcUa_PublishRequest:
 		{
-		    //>> Request
-							//> subscription Acknowledgements []
-		    uint32_t sa = iNu(rb, off, 4);	//Acknowledgements
-		    for(unsigned i_a = 0; i_a < sa; i_a++)
-		    {
-			iN(rb, off, 4);			//subscriptionId
-			iNu(rb, off, 4);		//sequenceNumber
-		    }
-
-		    reqTp = OpcUa_PublishResponse;
+		    pthread_mutex_lock(&wep->mtxData);
 
 		    //> The publish request queue and/or process
-		    pthread_mutex_lock(&wep->mtxData);
 		    Sess *s = wep->sessGet_(sesTokId);
 		    if(s)
 		    {
@@ -3091,27 +3081,69 @@ nextReq:
 			    if(prSS < wep->mSubScr.size())
 			    {
 				Subscr &ss = wep->mSubScr[prSS];
+
+				//>> Request
+				string respAck;
+				int32_t sa = iN(rb, off, 4);			//>subscription Acknowledgements []
+				oN(respAck, sa, 4);				//<results []
+				for(unsigned i_a = 0; i_a < sa; i_a++)
+				{
+				    uint32_t prSS = iNu(rb, off, 4);		//> subscriptionId
+				    uint32_t seqN = iNu(rb, off, 4);		//> sequenceNumber
+				    uint32_t st = OpcUa_BadSequenceNumberUnknown;
+				    if(prSS < wep->mSubScr.size())
+					for(deque<string>::iterator iRQ = wep->mSubScr[prSS].retrQueue.begin();
+						iRQ != wep->mSubScr[prSS].retrQueue.end(); ++iRQ)
+					{
+					    int rOff = 0;
+					    if(iNu(*iRQ,rOff,4) == seqN) { wep->mSubScr[prSS].retrQueue.erase(iRQ); st = 0; break; }
+					}
+				    oNu(respAck, st, 4);			//< results
+				}
+
+				respEp.reserve(100);
+				oNu(respEp, prSS, 4);				//<subscriptionId
+
 				if(ss.st == SS_LATE)
 				{
 				    ss.setState(SS_NORMAL);
-				    respEp.reserve(100);
-				    oNu(respEp, prSS, 4);		//subscriptionId
-				    oNu(respEp, 0, 4);			//availableSequence Numbers [], ???? process for retransmission
+
+				    int aSeqOff = respEp.size(), aSeqN = 1;
+				    oN(respEp, aSeqN, 4);	//<availableSequence Numbers [], reserve
+				    for(deque<string>::iterator iRQ = ss.retrQueue.begin(); iRQ != ss.retrQueue.end(); )
+				    {
+					int rOff = 0;
+					uint32_t rSeq = iNu(*iRQ, rOff, 4);	//>sequenceNumber
+					int64_t rPblTm = iTm(*iRQ, rOff);	//>publishTime
+					//Check for remove from queue by long age
+					if((curTime()-rPblTm) > ((int64_t)ss.cntrKeepAlive*ss.publInterv*1000))
+					{
+					    ss.retrQueue.erase(iRQ++);
+					    continue;
+					}
+					oNu(respEp, rSeq, 4);			//< sequenceNumber
+					++iRQ;
+					aSeqN++;
+				    }
+				    oN(respEp, aSeqN, 4, aSeqOff);		//<availableSequence Numbers [], real
+				    oNu(respEp, ss.seqN, 4);			//< sequenceNumber, current
+
 				    int moreNtfOff = respEp.size();
-				    oNu(respEp, 0, 1);			//moreNotifications, FALSE, ???? check for limit "maxNotPerPubl"
-									//notificationMessage
-				    oNu(respEp, ss.seqN++, 4);		// sequenceNumber
-				    oTm(respEp, curTime());		// publishTime
+				    oNu(respEp, 0, 1);				//<moreNotifications, FALSE
+				    int ntfMsgOff = respEp.size();		//<notificationMessage
+				    oNu(respEp, ss.seqN, 4);			//< sequenceNumber
+				    oTm(respEp, curTime());			//< publishTime
 				    int nNtfOff = respEp.size();
-				    oNu(respEp, 1, 4);			// notificationData []
-				    oNodeId(respEp, NodeId(OpcUa_DataChangeNotification));	//  TypeId
-				    oNu(respEp, 1, 1);			//  encodingMask
+				    oN(respEp, 1, 4);				//< notificationData []
+				    oNodeId(respEp, NodeId(OpcUa_DataChangeNotification));	//<  TypeId
+				    oNu(respEp, 1, 1);				//<  encodingMask
 				    int extObjOff = respEp.size();
-				    oNu(respEp, 0, 4);			//  extension object size
+				    oNu(respEp, 0, 4);				//<  extension object size
 				    int mItOff = respEp.size();
-				    oNu(respEp, 0, 4);			//  monitoredItems []
+				    oN(respEp, 0, 4);				//<  monitoredItems []
 				    unsigned i_mIt = 0;
-				    for(unsigned i_m = 0; i_m < ss.mItems.size(); i_m++)
+				    bool maxNotPerPublLim = false;
+				    for(unsigned i_m = 0; !maxNotPerPublLim && i_m < ss.mItems.size(); i_m++)
 				    {
 					Subscr::MonitItem &mIt = ss.mItems[i_m];
 					if(!(mIt.md == MM_REPORTING && mIt.vQueue.size())) continue;
@@ -3124,43 +3156,74 @@ nextReq:
 					}
 					while(mIt.vQueue.size())
 					{
-					    oNu(respEp, mIt.cH, 4);		//   clientHandle
-					    oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//   value
+					    if(ss.maxNotPerPubl && i_mIt >= ss.maxNotPerPubl) { maxNotPerPublLim = true; break; }
+					    oNu(respEp, mIt.cH, 4);		//<   clientHandle
+					    oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//<   value
 					    mIt.vQueue.pop_front();
 					    i_mIt++;
 					}
 				    }
-				    oS(respEp, "");				//   diagnosticInfos []
-				    oNu(respEp, i_mIt, 4, mItOff);		//  monitoredItems [], real items number write
-				    oNu(respEp, respEp.size()-extObjOff-4, 4, extObjOff);	//  extension object real size write
+				    oS(respEp, "");				//<   diagnosticInfos []
+				    oNu(respEp, maxNotPerPublLim, 1, moreNtfOff);//<moreNotifications, real value write
+				    oN(respEp, i_mIt, 4, mItOff);		//<  monitoredItems [], real items number write
+				    oNu(respEp, respEp.size()-extObjOff-4, 4, extObjOff);	//<  extension object real size write
 
-				    oNu(respEp, 0, 4);				//results []
-				    oS(respEp, "");				//diagnosticInfos []
-
-				    s->publishReqs.erase(s->publishReqs.begin()+i_p);
+				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
+				    ss.seqN++;
 				}
 				else if(ss.st == SS_KEEPALIVE)
 				{
 				    ss.setState(SS_NORMAL);
-				    respEp.reserve(10);
-				    oNu(respEp, prSS, 4);		//subscriptionId
-				    oNu(respEp, 0, 4);			//availableSequence Numbers []
+				    oN(respEp, 0, 4);			//<availableSequence Numbers []
 				    oNu(respEp, 0, 1);			//moreNotifications, FALSE
 									//notificationMessage
 				    oNu(respEp, ss.seqN, 4);		// sequenceNumber
 				    oTm(respEp, curTime());		// publishTime
-				    oNu(respEp, 0, 4);			// notificationData []
-				    oNu(respEp, 0, 4);			//results []
-				    oS(respEp, "");			//diagnosticInfos []
-
-				    s->publishReqs.erase(s->publishReqs.begin()+i_p);
+				    oN(respEp, 0, 4);			// notificationData []
 				}
+				s->publishReqs.erase(s->publishReqs.begin()+i_p);	//Remove the publish request from queue
+
+				//oN(respEp, -1, 4);			//<results [], empty
+				respEp += respAck;			//<results []
+				oS(respEp, "");				//<diagnosticInfos []
 			    }
 			}
 		    }
 		    pthread_mutex_unlock(&wep->mtxData);
 
 		    if(respEp.empty())	throw OPCError(0, "", "");	//> No response now
+
+		    reqTp = OpcUa_PublishResponse;
+
+		    break;
+		}
+		case OpcUa_RepublishRequest:
+		{
+		    //>> Request
+		    uint32_t prSS = iNu(rb, off, 4);			//> subscriptionId
+		    uint32_t seqN = iNu(rb, off, 4);			//> retransmitSequenceNumber
+		    if(wep->subscrGet(prSS).st == SS_CLOSED)	{ stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault; break; }
+
+		    pthread_mutex_lock(&wep->mtxData);
+		    Subscr &ss = wep->mSubScr[prSS];
+		    deque<string>::iterator iRQ = ss.retrQueue.begin();
+		    for( ; iRQ != ss.retrQueue.end(); ++iRQ)
+		    {
+			int rOff = 0;
+			if(iNu(*iRQ,rOff,4) == seqN)	break;
+		    }
+		    if(iRQ == ss.retrQueue.end())
+		    {
+			stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault;
+			pthread_mutex_unlock(&wep->mtxData);
+                        break;
+		    }
+
+		    //>> Respond
+		    reqTp = OpcUa_RepublishResponse;
+		    respEp = *iRQ;
+
+		    pthread_mutex_unlock(&wep->mtxData);
 		    break;
 		}
 		case OpcUa_ServiceFault:	break;

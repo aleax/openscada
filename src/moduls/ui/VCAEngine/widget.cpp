@@ -606,7 +606,7 @@ bool Widget::attrPresent(const string &attr)
 AutoHD<Attr> Widget::attrAt(const string &attr, int lev)
 {
     //> Local atribute request
-    if(lev < 0 )
+    if(lev < 0)
     {
 	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p = mAttrs.find(attr);

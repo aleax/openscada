@@ -1304,10 +1304,49 @@ string SessWdg::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
+    //Try load from the session table
+    int off = 0;
+    string db  = ownerSess()->parent().at().DB();
+    string tbl = ownerSess()->parent().at().tbl()+"_ses";
+
+    TConfig c_el(&mod->elPrjSes());
+    TSYS::pathLev(path(),0,true,&off);
+    c_el.cfg("IDW").setS(path().substr(off));
+    c_el.cfg("ID").setS("media://"+id);
+    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
+    {
+	off = 0;
+	mimeData = c_el.cfg("IO_VAL").getS(); c_el.cfg("IO_VAL").setS("");
+	mimeType = TSYS::strLine(mimeData, 0, &off);
+	if(mime) *mime = mimeType;
+	return TSYS::strDecode(mimeData.substr(off), TSYS::base64);
+    }
+
+    //Load original
     mimeData = parent().at().resourceGet(id, &mimeType);
     if(mime) *mime = mimeType;
 
     return mimeData;
+}
+
+void SessWdg::resourceSet( const string &id, const string &data, const string &mime )
+{
+    int off = 0;
+    string db  = ownerSess()->parent().at().DB();
+    string tbl = ownerSess()->parent().at().tbl()+"_ses";
+
+    TConfig c_el(&mod->elPrjSes());
+    TSYS::pathLev(path(),0,true,&off);
+    c_el.cfg("IDW").setS(path().substr(off));
+    c_el.cfg("ID").setS("media://"+id);
+
+    if(data.empty())	//Clear the media into the session table
+        SYS->db().at().dataDel(db+"."+tbl,mod->nodePath()+tbl,c_el);
+    else		//Set the media into the session table
+    {
+        c_el.cfg("IO_VAL").setS(mime+"\n"+TSYS::strEncode(data,TSYS::base64));
+        SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+    }
 }
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
@@ -1757,6 +1796,43 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 	if(prms.size() >= 3 && prms[2].getB()) req.setAttr("path",TSYS::strMess("/links/lnk/pr_%s",prms[0].getS().c_str()));
 	else req.setAttr("path",TSYS::strMess("/links/lnk/el_%s",prms[0].getS().c_str()));
 	return cntrCmdLinks(&req);
+    }
+    // string mime(string addr, string type = "") - read mime data from the session table or primal source
+    //  addr - address to mime by link attribute to mime or direct mime address
+    //  type - return attribute for mime type store
+    if(iid == "mime" && prms.size() >= 1)
+    {
+	string addr = prms[0], rez, tp;
+	//Check for likely attribute
+	if(attrPresent(addr))
+	{
+	    AutoHD<Attr> a = attrAt(addr);
+	    if(a.at().type() == TFld::String && a.at().flgGlob()&Attr::Image) addr = a.at().getS();
+	}
+	rez = resourceGet(addr, &tp);
+	if(prms.size() >= 2) { prms[1].setS(tp); prms[1].setModify(); }
+
+	return rez;
+    }
+    // int mimeSet(string addr, string data, string type = "") - set or clear data to the session table
+    //  addr - address to mime by link attribute to mime or direct mime address
+    //  data - set to the mime data, empty for clear into 
+    //  type - mime type for store data
+    if(iid == "mimeSet" && prms.size() >= 2)
+    {
+	string addr = prms[0];
+	//Check for likely attribute
+	AutoHD<Attr> a;
+	if(attrPresent(addr))
+	{
+	    a = attrAt(addr);
+	    if(a.at().type() == TFld::String && a.at().flgGlob()&Attr::Image) addr = a.at().getS();
+	    else a.free();
+	}
+	resourceSet(addr, prms[1], (prms.size()>=3)?prms[2]:"");	//???? Store to the session's context table
+	if(!a.freeStat()) a.at().setS(a.at().getS(), false, true);	//Mark the attribute to modify state
+
+	return (int)prms[1].getS().size();
     }
 
     //> Request to primitive
