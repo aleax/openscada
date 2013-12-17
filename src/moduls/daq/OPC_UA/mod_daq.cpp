@@ -212,9 +212,9 @@ void TMdContr::protIO( XML_N &io )
     { io.setAttr("err", TSYS::strMess("0x%x:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
 }
 
-int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
+int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
-    tr.at().messIO(obuf, len_ob, ibuf, len_ib, time, noRes);
+    tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
 }
 
 void TMdContr::debugMess( const string &mess, const string &data )

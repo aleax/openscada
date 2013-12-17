@@ -1,7 +1,7 @@
 
-//OpenSCADA system module Special.FLibSYS file: statfunc.h
+//OpenSCADA system module Special.FLibSYS file: gd.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2013 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,57 +19,46 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef STATFUNC_H
-#define STATFUNC_H
+#include "gd.h"
 
-#include <string>
-#include <vector>
-
-#include <tspecials.h>
-#include <tarchval.h>
-
-#undef _
-#define _(mess) mod->I18N(mess)
-
-using std::string;
-using std::vector;
-using namespace OSCADA;
-
-namespace FLibSYS
-{
+using namespace FLibSYS;
 
 //*************************************************
-//* Lib: Complex1 functions library               *
+//* GDObj object (stream, file)                   *
 //*************************************************
-class Lib : public TSpecial
+GDObj::GDObj( const string &inm, bool file )
 {
-    public:
-	//Methods
-	Lib( string src );
-	~Lib( );
 
-	void modStart( );
-	void modStop( );
+}
 
-	void list( vector<string> &ls ) 	{ chldList(mFnc,ls); }
-	bool present( const string &id )	{ return chldPresent(mFnc,id); }
-	AutoHD<TFunction> at( const string &id ){ return chldAt(mFnc,id); }
-	void reg( TFunction *fnc )		{ chldAdd(mFnc,fnc); }
-	void unreg( const char *id )		{ chldDel(mFnc,id); }
+GDObj::~GDObj( )
+{
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+}
 
-    private:
-	//Methods
-	void postEnable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+bool GDObj::load( const string &inm, bool file )
+{
 
-	//Attributes
-	int	mFnc;
-};
+}
 
-extern Lib *mod;
+string GDObj::save( const string &inm, bool file )
+{
 
-} //End namespace FLibSYS
+    return "";
+}
 
-#endif //STATFUNC_H
+TVariant GDObj::propGet( const string &id )
+{
+    throw TError("GDObj", _("Properties no supported by the object."));
+}
+
+void GDObj::propSet( const string &id, TVariant val )
+{
+    throw TError("GDObj", _("Properties no supported by the object."));
+}
+
+TVariant GDObj::funcCall( const string &id, vector<TVariant> &prms )
+{
+    //????
+    throw TError("GDObj",_("Function '%s' error or not enough parameters."),id.c_str());
+}

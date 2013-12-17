@@ -29,7 +29,7 @@
 
 #include <tprotocols.h>
 
-#include "libOPC_UA.h"
+#include "libOPC_UA/libOPC_UA.h"
 
 #undef _
 #define _(mess) modPrt->I18N(mess)
@@ -37,7 +37,7 @@
 using std::string;
 using std::map;
 using namespace OSCADA;
-using namespace OSCADA_OPC;
+using namespace OPC;
 
 //*************************************************
 //* Protocol modul info!                          *

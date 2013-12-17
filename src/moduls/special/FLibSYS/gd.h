@@ -1,7 +1,7 @@
 
-//OpenSCADA system module Special.FLibSYS file: statfunc.h
+//OpenSCADA system module Special.FLibSYS file: gd.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2013 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -19,57 +19,59 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef STATFUNC_H
-#define STATFUNC_H
+#ifndef GD_H
+#define GD_H
 
-#include <string>
-#include <vector>
+#include <tfunction.h>
+#include <tvariant.h>
 
-#include <tspecials.h>
-#include <tarchval.h>
-
-#undef _
-#define _(mess) mod->I18N(mess)
-
-using std::string;
-using std::vector;
-using namespace OSCADA;
+#include "statfunc.h"
 
 namespace FLibSYS
 {
 
 //*************************************************
-//* Lib: Complex1 functions library               *
+//* GDObj object (stream, file)			  *
 //*************************************************
-class Lib : public TSpecial
+class GDObj : public TVarObj
 {
     public:
-	//Methods
-	Lib( string src );
-	~Lib( );
+        //Methods
+        GDObj( const string &inm, bool file = false );
+        ~GDObj( );
 
-	void modStart( );
-	void modStop( );
+        string objName( )       { return "GD"; }
 
-	void list( vector<string> &ls ) 	{ chldList(mFnc,ls); }
-	bool present( const string &id )	{ return chldPresent(mFnc,id); }
-	AutoHD<TFunction> at( const string &id ){ return chldAt(mFnc,id); }
-	void reg( TFunction *fnc )		{ chldAdd(mFnc,fnc); }
-	void unreg( const char *id )		{ chldDel(mFnc,id); }
+        bool load( const string &inm, bool file = false );
+        string save( const string &inm, bool file = false );
 
-	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
+        TVariant propGet( const string &id );
+        void propSet( const string &id, TVariant val );
+        TVariant funcCall( const string &id, vector<TVariant> &prms );
 
     private:
-	//Methods
-	void postEnable( int flag );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-
 	//Attributes
-	int	mFnc;
 };
 
-extern Lib *mod;
+//*************************************************
+//* GD object creation function			  *
+//*************************************************
+class GD : public TFunction
+{
+    public:
+	GD( ) : TFunction("GD", SSPC_ID)
+	{
+	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
+	    ioAdd(new IO("name",_("Name"),IO::String,IO::Default));
+	    ioAdd(new IO("file",_("From file"),IO::Boolean,IO::Default,"0"));
+	}
 
-} //End namespace FLibSYS
+	string name( )	{ return _("LibGD2"); }
+	string descr( )	{ return _("Graphical library GD2 images processing."); }
 
-#endif //STATFUNC_H
+	void calc( TValFunc *val )	{ val->setO(0, new GDObj(val->getS(1),val->getB(2))); }
+};
+
+}
+
+#endif //GD_H

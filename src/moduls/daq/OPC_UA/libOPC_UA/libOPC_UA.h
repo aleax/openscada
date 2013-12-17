@@ -39,7 +39,7 @@ using std::vector;
 using std::pair;
 using std::map;
 
-namespace OSCADA_OPC
+namespace OPC
 {
 
 //> Constants
@@ -267,6 +267,15 @@ enum AttrIds		{ Aid_Error = 0, AId_NodeId, AId_NodeClass, AId_BrowseName, AId_Di
 			  AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
 enum SubScrSt		{ SS_CUR = 0, SS_CLOSED, SS_CREATING, SS_NORMAL, SS_LATE, SS_KEEPALIVE };
 enum MonitoringMode 	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
+
+//* External functions                        */
+extern int64_t curTime( );
+extern string int2str( int val );
+extern string uint2str( unsigned val );
+extern string ll2str( int64_t val );
+extern string real2str( double val, int prec = 15, char tp = 'g' );
+extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
+extern string strMess( const char *fmt, ... );
 
 //*************************************************
 //* OPCError					  *
@@ -566,15 +575,18 @@ class Client: public UA
 	Client( );
 	~Client( );
 
+	// Main variables
 	virtual string	sessionName( ) = 0;
 	virtual string	endPoint( ) = 0;
-	virtual void	setEndPoint( const string &iep ) = 0;
 	virtual string	secPolicy( ) = 0;
 	virtual int	secMessMode( ) = 0;
 	virtual string	cert( ) = 0;
 	virtual string	pvKey( ) = 0;
 
-	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false ) = 0;
+	// External imlementations
+	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 ) = 0;
+
+	// Main call methods
 	virtual void	protIO( XML_N &io );
 	virtual void	reqService( XML_N &io );
 

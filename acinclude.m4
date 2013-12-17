@@ -1377,7 +1377,7 @@ AC_DEFUN([AX_LIB_QT4],
 #
 # SYNOPSIS
 #
-#   AX_MOD_EN([ModName],[Help],[En],[InclAllow],[ActionIfEnable][ActionElse])
+#   AX_MOD_EN([ModName],[Help],[En],[InclAllow],[ActionCheck],[ActionEnable])
 #
 # DESCRIPTION
 #
@@ -1424,7 +1424,7 @@ AC_DEFUN([AX_MOD_EN],
 	fi
     ])
     AM_CONDITIONAL([$1Incl],[test "x$4" = "xincl" -a $enable_$1 = incl])
-    AS_IF([test $enable_$1 = yes || test "x$4" = "xincl" -a $enable_$1 = incl], [$5], [$6])
+    AS_IF([test $enable_$1 = yes || test "x$4" = "xincl" -a $enable_$1 = incl], [$5 $6])
 ])
 
 AC_DEFUN([AX_MOD_DB_EN],
@@ -1448,8 +1448,9 @@ AC_DEFUN([AX_MOD_DB_EN],
 		LIB_CORE="${LIB_CORE} moduls/bd/$1/bd_$1.la "
     		ModsIncl="${ModsIncl}bd_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 AC_DEFUN([AX_MOD_DAQ_EN],
@@ -1473,8 +1474,9 @@ AC_DEFUN([AX_MOD_DAQ_EN],
 		LIB_CORE="${LIB_CORE} moduls/daq/$1/daq_$1.la "
     		ModsIncl="${ModsIncl}daq_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 AC_DEFUN([AX_MOD_Archive_EN],
@@ -1498,8 +1500,9 @@ AC_DEFUN([AX_MOD_Archive_EN],
 		LIB_CORE="${LIB_CORE} moduls/arhiv/$1/arh_$1.la "
     		ModsIncl="${ModsIncl}arh_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 AC_DEFUN([AX_MOD_Transport_EN],
@@ -1523,8 +1526,9 @@ AC_DEFUN([AX_MOD_Transport_EN],
 		LIB_CORE="${LIB_CORE} moduls/transport/$1/tr_$1.la "
     		ModsIncl="${ModsIncl}tr_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 AC_DEFUN([AX_MOD_TrProt_EN],
@@ -1548,8 +1552,9 @@ AC_DEFUN([AX_MOD_TrProt_EN],
 		LIB_CORE="${LIB_CORE} moduls/protocol/$1/prot_$1.la "
     		ModsIncl="${ModsIncl}prot_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 AC_DEFUN([AX_MOD_UI_EN],
@@ -1573,8 +1578,9 @@ AC_DEFUN([AX_MOD_UI_EN],
 		LIB_CORE="${LIB_CORE} moduls/ui/$1/ui_$1.la "
     		ModsIncl="${ModsIncl}ui_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 AC_DEFUN([AX_MOD_Special_EN],
@@ -1598,8 +1604,9 @@ AC_DEFUN([AX_MOD_Special_EN],
 		LIB_CORE="${LIB_CORE} moduls/special/$1/spec_$1.la "
     		ModsIncl="${ModsIncl}spec_$1 "
 	    fi
-	    AS_IF([test $enable_$1 = dist],[$6],[$5])
-	],[$6])
+	    AS_IF([test $enable_$1 != dist],[$5])
+	    $6
+	])
 ])
 
 # ===========================================================================

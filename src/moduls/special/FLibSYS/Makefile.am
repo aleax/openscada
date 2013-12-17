@@ -10,7 +10,7 @@ spec_FLibSYS_la_LIBTOOLFLAGS = --tag=disable-static
 endif
 
 spec_FLibSYS_la_LDFLAGS = -module -avoid-version -no-undefined
-spec_FLibSYS_la_SOURCES = statfunc.cpp xmlfnc.cpp varchfnc.cpp
+spec_FLibSYS_la_SOURCES = statfunc.cpp xmlfnc.cpp varchfnc.cpp io.cpp gd.cpp
 spec_FLibSYS_la_LIBADD = $(LIB_FFTW3)
 
 

@@ -1,3 +1,12 @@
+2013-12-17 Roman
+- SYS: Autoconf templates AX_MOD_*_EN changed to syntax: AX_MOD_*_EN([ModName],[Help],[En],[InclAllow],[ActionCheck],[ActionEnable])
+- !!:DAQ.OPC_UA: All library's files moved to separated folder libOPC_UA. The library libOPC_UA simple test program is added.
+    The library libOPC_UA namespace is changed from OSCADA_OPC to OPC.
+    From function messIO() two last arguments are removed.
+- !!:Special.FLibSYS: Some code clear. Object's IO and GD first implemention is added.
+- Transport.Sockets: Some code clear.
+
+
 2013-12-12 Roman
 - Transport.{,Sockets}: Resource is added to input transport, for writeTo().
 - !:DAQ.OPC_UA: RePublish service and retransmission queue processing is added. Maximum notes per publish processing is added.

@@ -37,7 +37,7 @@
 
 #include "libOPC_UA.h"
 
-namespace OSCADA_OPC
+namespace OPC
 {
 //*************************************************
 //* Static methods, mostly from OpenSCADA::TSYS   *
@@ -70,7 +70,7 @@ string ll2str( int64_t val )
     return buf;
 }
 
-string real2str( double val, int prec = 15, char tp = 'g' )
+string real2str( double val, int prec, char tp )
 {
     char buf[250];
     prec = std::max(0, prec);
@@ -83,7 +83,7 @@ string real2str( double val, int prec = 15, char tp = 'g' )
     return buf;
 }
 
-string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false )
+string strParse( const string &path, int level, const string &sep, int *off, bool mergeSepSymb )
 {
     int an_dir = off ? *off : 0;
     int t_lev = 0;
@@ -1217,7 +1217,7 @@ void Client::protIO( XML_N &io )
 		if(debug) debugMess("HELLO Req", rez);
 
 		//> Send request
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf), 0, true);
+		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
 
 		if(debug) debugMess("HELLO Resp", rez);
@@ -1296,12 +1296,12 @@ void Client::protIO( XML_N &io )
 		}
 		if(debug) debugMess("OPN Req", rez);
 		//> Send request and wait respond
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf), 0, true);
+		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
 		int off = 4;
 		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4)
 		{
-		    resp_len = messIO(NULL, 0, buf, sizeof(buf), 0, true);
+		    resp_len = messIO(NULL, 0, buf, sizeof(buf));
 		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "Not full respond.");
 		    rez.append(buf, resp_len);
 		}
@@ -1414,7 +1414,7 @@ void Client::protIO( XML_N &io )
 
 		if(debug) debugMess("CLO Req", rez);
 		//> Send request and don't wait response
-		messIO(rez.data(), rez.size(), NULL, 0, 0, true);
+		messIO(rez.data(), rez.size(), NULL, 0);
 	    }
 	    else
 	    {
@@ -1593,12 +1593,12 @@ void Client::protIO( XML_N &io )
 
 		if(debug) debugMess(io.attr("id")+" Req", rez);
 		//> Send request and wait respond
-		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf), 0, true);
+		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
 		int off = 4;
 		for( ; rez.size() < 8 || rez.size() < iNu(rez,off,4); off = 4)
 		{
-		    resp_len = messIO(NULL, 0, buf, sizeof(buf), 0, true);
+		    resp_len = messIO(NULL, 0, buf, sizeof(buf));
 		    if(!resp_len) throw OPCError(OpcUa_BadCommunicationError, "Not full respond.");
 		    rez.append(buf, resp_len);
 		}

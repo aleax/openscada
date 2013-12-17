@@ -29,7 +29,7 @@
 
 #include <tsys.h>
 
-#include "libOPC_UA.h"
+#include "libOPC_UA/libOPC_UA.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -37,7 +37,7 @@
 using std::string;
 using std::vector;
 using namespace OSCADA;
-using namespace OSCADA_OPC;
+using namespace OPC;
 
 //*************************************************
 //* DAQ modul info!                               *
@@ -130,10 +130,10 @@ class TMdContr: public TController, public Client
 
 	Res &nodeRes( )		{ return cntrRes; }
 
-	//OPC_UA Client methods
+	// OPC_UA Client methods
 	string sessionName( )	{ return "OpenSCADA station "+SYS->id(); }
 	void protIO( XML_N &io );
-	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );
+	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
 	void debugMess( const string &mess, const string &data );
 
     protected:

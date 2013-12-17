@@ -26,6 +26,8 @@
 #include "timefnc.h"
 #include "xmlfnc.h"
 #include "varchfnc.h"
+#include "io.h"
+#include "gd.h"
 #include "statfunc.h"
 
 //*************************************************
@@ -51,7 +53,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -61,8 +63,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new FLibSYS::Lib( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new FLibSYS::Lib(source);
 	return NULL;
     }
 }
@@ -85,56 +86,68 @@ Lib::Lib( string src ) : TSpecial(MOD_ID)
     mLicense	= MOD_LICENSE;
     mSource	= src;
 
-    mFnc = grpAdd("fnc_",true);
+    mFnc = grpAdd("fnc_", true);
 }
 
-Lib::~Lib()
+Lib::~Lib( )
 {
 
 }
 
 void Lib::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TModule::postEnable(flag);
 
-    if( flag&TCntrNode::NodeRestore )	return;
+    if(flag&TCntrNode::NodeRestore) return;
 
-    //> Reg functions
-    reg( new sysCall() );
-    reg( new dbReqSQL() );
-    reg( new xmlNode() );
-    reg( new xmlCntrReq() );
-    reg( new vArh() );
-    reg( new vArhBuf() );
+    //Reg functions
+    // SYS functions
+    reg(new sysCall());
+    reg(new dbReqSQL());
 
-    reg( new tmDate() );
-    reg( new tmTime() );
-    reg( new tmFStr() );
-    reg( new tmStr2Tm() );
-    reg( new tmCron() );
+    reg(new messGet());
+    reg(new messPut());
 
-    reg( new messGet() );
-    reg( new messPut() );
+    reg(new strSize());
+    reg(new strSubstr());
+    reg(new strInsert());
+    reg(new strReplace());
+    reg(new strParse());
+    reg(new strParsePath());
+    reg(new strPath2Sep());
+    reg(new strEnc2HTML());
+    reg(new strEnc2Bin());
+    reg(new strDec4Bin());
+    reg(new real2str());
+    reg(new int2str());
+    reg(new str2real());
+    reg(new str2int());
 
-    reg( new strSize() );
-    reg( new strSubstr() );
-    reg( new strInsert() );
-    reg( new strReplace() );
-    reg( new strParse() );
-    reg( new strParsePath() );
-    reg( new strPath2Sep() );
-    reg( new strEnc2HTML() );
-    reg( new strEnc2Bin() );
-    reg( new strDec4Bin() );
-    reg( new real2str() );
-    reg( new int2str() );
-    reg( new str2real() );
-    reg( new str2int() );
+    reg(new floatSplitWord());
+    reg(new floatMergeWord());
 
-    reg( new floatSplitWord() );
-    reg( new floatMergeWord() );
+    // Time functions
+    reg(new tmFStr());
+    reg(new tmDate());
+    reg(new tmTime());
+    reg(new tmStr2Tm());
+    reg(new tmCron());
 
-    //> Enable functions
+    // XML object and functions
+    reg(new xmlNode());
+    reg(new xmlCntrReq());
+
+    // Value archive's object
+    reg(new vArh());
+    reg(new vArhBuf());
+
+    // IO object
+    reg(new IOCall());
+
+    // LibGD2 images processing object
+    reg(new GD());
+
+    //Enable functions
     vector<string> lst;
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
