@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-25 11:29+0300\n"
+"POT-Creation-Date: 2013-12-18 10:52+0200\n"
 "PO-Revision-Date: 2010-10-10 23:11+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -21,90 +21,118 @@ msgstr ""
 "X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: modbus_daq.cpp:66
 msgid "Parameters table"
 msgstr "Tabelle der Parameter"
 
+#: modbus_daq.cpp:67
 msgid "Logical parameters table"
 msgstr "Logische Parameter der Tabelle"
 
+#: modbus_daq.cpp:68
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
+#: modbus_daq.cpp:69
 msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
 
+#: modbus_daq.cpp:70
 msgid "Modbus protocol"
 msgstr "Modbus-Protokoll"
 
+#: modbus_daq.cpp:70
 msgid "TCP/IP;RTU;ASCII"
 msgstr ""
 
+#: modbus_daq.cpp:71
 msgid "Transport address"
 msgstr "Adresse der Übertragung"
 
+#: modbus_daq.cpp:72
 msgid "Destination node"
 msgstr "Zielknoten"
 
+#: modbus_daq.cpp:73
 msgid "Data fragments merge"
 msgstr "Datenfragmente zusammenfügen"
 
+#: modbus_daq.cpp:74
 msgid "Use multi-items write functions (15,16)"
 msgstr "Verwenden Sie Multi-Artikel schreiben Funktionen (15,16)"
 
+#: modbus_daq.cpp:75
 msgid "Asynchronous write"
 msgstr "Asynchronous Rekord"
 
+#: modbus_daq.cpp:76
 msgid "Connection timeout (ms)"
 msgstr "Zeitüberschreitung beim Verbinden (msek)"
 
+#: modbus_daq.cpp:77
 msgid "Restore timeout (s)"
 msgstr "Zeit der Wiederherstellung (sek)"
 
+#: modbus_daq.cpp:78
 msgid "Request tries"
 msgstr "Anfrageversuche"
 
+#: modbus_daq.cpp:79
 msgid "Maximum request block size (bytes)"
 msgstr "Die Maximalgröße der Anfrage Block (Bytes)"
 
+#: modbus_daq.cpp:83
 msgid "Standard"
 msgstr "Standard"
 
+#: modbus_daq.cpp:84
 msgid "Attributes list"
 msgstr "Liste der Attribute"
 
+#: modbus_daq.cpp:86
 msgid "Logical"
 msgstr "Logische"
 
+#: modbus_daq.cpp:87
 msgid "Parameter template"
 msgstr "Template-Parameter"
 
+#: modbus_daq.cpp:89
 msgid "Parameter ID"
 msgstr "ID der Parameter"
 
+#: modbus_daq.cpp:90 modbus_prt.cpp:55 modbus_prt.cpp:74
 msgid "ID"
 msgstr ""
 
+#: modbus_daq.cpp:91 modbus_prt.cpp:78 modbus_prt.cpp:1379
 msgid "Value"
 msgstr "Wert"
 
+#: modbus_daq.cpp:154
 msgid "Task terminated! "
 msgstr "Task gekündigt! "
 
+#: modbus_daq.cpp:157
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Fehler beim Verbinden. Wiederherstellung in %.6g sek."
 
+#: modbus_daq.cpp:162
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
+#: modbus_daq.cpp:163
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf mit einer Periode: %s. "
 
+#: modbus_daq.cpp:164
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#: modbus_daq.cpp:165
 #, c-format
 msgid ""
 "Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g "
@@ -113,25 +141,33 @@ msgstr ""
 "Verbrauchte Zeit: %s. Gelesen %g(%g) Register, %g(%g) Bits. Geschrieben %g "
 "Register, %g Bits. Fehler in der Verbindung %g, in der Antwort %g."
 
+#: modbus_daq.cpp:236 modbus_daq.cpp:877 modbus_daq.cpp:902
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
 
+#: modbus_daq.cpp:236
 msgid "STOP"
 msgstr "STOP"
 
+#: modbus_daq.cpp:353 modbus_daq.cpp:450
 msgid "10:Connection error or no response."
 msgstr "10:Verbindungsfehler oder keine Antwort."
 
+#: modbus_daq.cpp:748 modbus_daq.cpp:779 modbus_daq.cpp:810 modbus_daq.cpp:840
+#: modbus_prt.cpp:379
 msgid "4:Server failure."
 msgstr "4:Serverfehler."
 
+#: modbus_daq.cpp:760 modbus_daq.cpp:791 modbus_daq.cpp:822 modbus_daq.cpp:852
 msgid "15:Response PDU size error."
 msgstr "15:Fehler des Umfangs der PDU - Antwort."
 
+#: modbus_daq.cpp:877
 msgid "OK"
 msgstr "OK"
 
+#: modbus_daq.cpp:934
 msgid ""
 "Merge not adjacent fragments of registers to single block for request.\n"
 "Attention! Some devices don't support accompany request wrong registers into "
@@ -142,6 +178,7 @@ msgstr ""
 "Achtung! Einige Geräte unterstützen nicht begleiten Antrag falsch Register "
 "in einzelnen Block."
 
+#: modbus_daq.cpp:937
 msgid ""
 "Individual connection timeout for device requested by the task.\n"
 "For zero value used generic connection timeout from used output transport."
@@ -150,18 +187,23 @@ msgstr ""
 "Für den Nullpunkt verwendet generische Verbindungszeit aus gebrauchten "
 "Transport-Ausgang."
 
+#: modbus_daq.cpp:956
 msgid "11:Value not gathered."
 msgstr "11:Werte sind nicht erfasst."
 
+#: modbus_daq.cpp:1352
 msgid "Error calculate template."
 msgstr "Fehler in der Berechnung Vorlage."
 
+#: modbus_daq.cpp:1365
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
+#: modbus_daq.cpp:1366
 msgid "2:Acquisition is stopped."
 msgstr "2:Anfrage ist angehalten."
 
+#: modbus_daq.cpp:1433
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "\"{dt}:{numb}:{rw}:{id}:{name}\".\n"
@@ -208,12 +250,15 @@ msgstr ""
 "  \"R_s:15,20:r:str:Reg blk\" - Den Stringdie, Register Block, aus dem "
 "Register 15 und Größe 20."
 
+#: modbus_daq.cpp:1452
 msgid "Template configuration"
 msgstr "Konfiguration Vorlage"
 
+#: modbus_daq.cpp:1454
 msgid "Parameters"
 msgstr "Optionen"
 
+#: modbus_daq.cpp:1461
 msgid ""
 "ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
 "Where:\n"
@@ -250,157 +295,207 @@ msgstr ""
 "  \"R_s:15,20:r\" - Den Stringdie, Register Block, aus dem Register 15 und "
 "Größe 20."
 
+#: modbus_daq.cpp:1561
 msgid "Parameter id error."
 msgstr "Parameter-ID Fehler."
 
+#: modbus_prt.cpp:56 modbus_prt.cpp:75 modbus_prt.cpp:1374
 msgid "Name"
 msgstr "Name"
 
+#: modbus_prt.cpp:57
 msgid "Description"
 msgstr "Beschreibung"
 
+#: modbus_prt.cpp:58
 msgid "To enable"
 msgstr "Einschalten"
 
+#: modbus_prt.cpp:59
 msgid "Address"
 msgstr "Adresse"
 
+#: modbus_prt.cpp:60
 msgid "Input transport"
 msgstr "Eingangsübertragung"
 
+#: modbus_prt.cpp:61
 msgid "Protocol"
 msgstr "Protokoll"
 
+#: modbus_prt.cpp:61
 msgid "RTU;ASCII;TCP/IP;All"
 msgstr "RTU;ASCII;TCP/IP;Alle"
 
+#: modbus_prt.cpp:62
 msgid "Mode"
 msgstr "Modus"
 
+#: modbus_prt.cpp:63
 msgid "Data;Gateway node;Gateway net"
 msgstr "Daten;Knotenschnittstelle;Netzschnittstelle"
 
+#: modbus_prt.cpp:65
 msgid "Calculate data period (s)"
 msgstr "Daten Rechenzeit (sek)"
 
+#: modbus_prt.cpp:66 modbus_prt.cpp:1382
 msgid "Program"
 msgstr "Programm"
 
+#: modbus_prt.cpp:68
 msgid "To transport"
 msgstr "Zur Übertragung"
 
+#: modbus_prt.cpp:69
 msgid "To protocol"
 msgstr "Ins Protokoll"
 
+#: modbus_prt.cpp:69
 msgid "RTU;ASCII;TCP/IP"
 msgstr ""
 
+#: modbus_prt.cpp:70
 msgid "To address"
 msgstr "An die Adresse"
 
+#: modbus_prt.cpp:73
 msgid "Node ID"
 msgstr "Knoten-ID"
 
+#: modbus_prt.cpp:76
 msgid "Value type"
 msgstr "Typ des Wertes"
 
+#: modbus_prt.cpp:77
 msgid "Flags"
 msgstr "Schalter"
 
+#: modbus_prt.cpp:79
 msgid "Real position"
 msgstr "Reale Position"
 
+#: modbus_prt.cpp:127
 msgid "Search and create new node error."
 msgstr "Fehler dem Suchen und Erstellen des neuen Knotens."
 
+#: modbus_prt.cpp:293
 msgid "13:Error server respond"
 msgstr "13:Fehler in der Antwort des Server"
 
+#: modbus_prt.cpp:302
 msgid "Not full respond"
 msgstr "Nicht voll antworten"
 
+#: modbus_prt.cpp:329
 msgid "13:Error respond: Too short."
 msgstr "13:Fehler in der Antwort: Zu kurz."
 
+#: modbus_prt.cpp:331
 msgid "13:Error respond: CRC check error."
 msgstr "13:Fehler in der Antwort: Fehler der CRC-Prüfung."
 
+#: modbus_prt.cpp:358
 msgid "13:Error respond: Error format."
 msgstr "13:Fehler in der Antwort: Formatfehler."
 
+#: modbus_prt.cpp:361
 msgid "13:Error respond: LRC check error."
 msgstr "13:Fehler in der Antwort: Fehler der LRC-Prüfung."
 
+#: modbus_prt.cpp:367
 #, c-format
 msgid "Protocol '%s' error."
 msgstr "Fehler des Protokolls '%s'."
 
+#: modbus_prt.cpp:372
 msgid "13:Error respond"
 msgstr "13:Fehler in der Antwort"
 
+#: modbus_prt.cpp:376
 #, c-format
 msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Funktion wird nicht unterstützt."
 
+#: modbus_prt.cpp:377
 msgid "2:Requested address not allow or request area too long."
 msgstr ""
 "2:Angefragte Adresse ist nicht zulässig oder Anfragebereich ist zu groß."
 
+#: modbus_prt.cpp:378
 msgid "3:Illegal data value into request."
 msgstr "3:Illegale Datenwert in der Anfrage."
 
+#: modbus_prt.cpp:380
 msgid "5:Request requires too long time for execute."
 msgstr "5:Anfrage benötigt zu viel Zeit für die Ausführung."
 
+#: modbus_prt.cpp:381
 msgid "6:Server is busy."
 msgstr "6:Server ist beschäftigt."
 
+#: modbus_prt.cpp:382
 msgid "7:Program function is error. By request functions 13 or 14."
 msgstr "7:Fehler in Programmfunktion. In Anfragefunctions 13 or 14."
 
+#: modbus_prt.cpp:383
 msgid "10:Gateway problem."
 msgstr "10:Schnittstellenproblem."
 
+#: modbus_prt.cpp:384
 #, c-format
 msgid "12:%02X:Unknown error."
 msgstr "12:%02X:Unbekannter Fehler."
 
+#: modbus_prt.cpp:387
 msgid "14:Device error: "
 msgstr "14:Fehler im Baustein: "
 
+#: modbus_prt.cpp:395 modbus_prt.cpp:589
 msgid "REQ -> "
 msgstr "Anfrage -> "
 
+#: modbus_prt.cpp:400 modbus_prt.cpp:594
 msgid "RESP -> "
 msgstr "Antwort -> "
 
+#: modbus_prt.cpp:401
 msgid "ERR -> "
 msgstr "Fehler -> "
 
+#: modbus_prt.cpp:437 modbus_prt.cpp:1336
 msgid "Node"
 msgstr "Knoten"
 
+#: modbus_prt.cpp:438 modbus_prt.cpp:439
 msgid "Nodes"
 msgstr "Knoten"
 
+#: modbus_prt.cpp:440 modbus_prt.cpp:445
 msgid "Report"
 msgstr "Bericht"
 
+#: modbus_prt.cpp:442
 msgid "Report length"
 msgstr "Berichtsgrösse"
 
+#: modbus_prt.cpp:443
 msgid "Zero use for report disabling"
 msgstr "Null wird für das Abschalten des Berichtes verwendet."
 
+#: modbus_prt.cpp:644
 msgid "Function calculate frequency (Hz)"
 msgstr "Funktionberechnungsfrequenz (Hz)"
 
+#: modbus_prt.cpp:645
 msgid "Function start flag"
 msgstr "Schalter für das Anhalten der Funktion"
 
+#: modbus_prt.cpp:646
 msgid "Function stop flag"
 msgstr "Schalter für das Starten der Funktion"
 
+#: modbus_prt.cpp:738
 #, c-format
 msgid ""
 "Coil '%d' already registered for IO '%d'. IO '%d' will be disabled for "
@@ -409,6 +504,7 @@ msgstr ""
 "Coil '%d' bereits eingetragen für IO '%d'. IO '%d' wird für die Prozess-Coil "
 "'%d' deaktiviert zu sein!"
 
+#: modbus_prt.cpp:745
 #, c-format
 msgid ""
 "Register '%d' already registered for IO '%d'. IO '%d' will be disabled for "
@@ -417,20 +513,25 @@ msgstr ""
 "Register '%d' bereits eingetragen für IO '%d'. IO '%d' wird für die Prozess-"
 "Register '%d' deaktiviert zu sein!"
 
+#: modbus_prt.cpp:749
 #, c-format
 msgid "ModBUS data type '%c' error!"
 msgstr "ModBUS Datentyp '%c' error!"
 
+#: modbus_prt.cpp:863
 #, c-format
 msgid "Compile function by language '%s' error: %s"
 msgstr "Fehler für die Sprache '%s' bei der Funktionskompilation : %s"
 
+#: modbus_prt.cpp:932
 msgid "Disabled. "
 msgstr "Abgeschaltet. "
 
+#: modbus_prt.cpp:935
 msgid "Enabled. "
 msgstr "Eingeschaltet. "
 
+#: modbus_prt.cpp:939
 #, c-format
 msgid ""
 "Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
@@ -439,37 +540,48 @@ msgstr ""
 "Verbrauchte Zeit: %s. Anfragen %.4g. Gelesen %.4g Register, %.4g Bits. "
 "Geschrieben %.4g Register, %.4g Bits."
 
+#: modbus_prt.cpp:943
 #, c-format
 msgid "Requests %.4g."
 msgstr "Anfragen %.4g."
 
+#: modbus_prt.cpp:1309
 msgid "Calculate node's function error."
 msgstr "Fehler bei der Berechnung der Funktion des Knotens."
 
+#: modbus_prt.cpp:1335
 msgid "Node: "
 msgstr "Knoten: "
 
+#: modbus_prt.cpp:1338
 msgid "State"
 msgstr "Zustand"
 
+#: modbus_prt.cpp:1340
 msgid "Status"
 msgstr "Status"
 
+#: modbus_prt.cpp:1341
 msgid "Enable"
 msgstr "Einschalten"
 
+#: modbus_prt.cpp:1342
 msgid "DB"
 msgstr "DB"
 
+#: modbus_prt.cpp:1345
 msgid "Configuration"
 msgstr "Konfiguration"
 
+#: modbus_prt.cpp:1357
 msgid "Data"
 msgstr "Daten"
 
+#: modbus_prt.cpp:1359
 msgid "IO"
 msgstr ""
 
+#: modbus_prt.cpp:1360
 msgid ""
 "For \"Id\" field provide specific ModBus data form:\n"
 "  \"R{N}[w]\" - register, can expanded by suffixes: \"i\"-Int32, \"f\"-"
@@ -500,45 +612,60 @@ msgstr ""
 "  \"R_s15,20\" - Den Stringdie, Register Block, aus dem Register 15 und "
 "Größe 20."
 
+#: modbus_prt.cpp:1373
 msgid "Id"
 msgstr ""
 
+#: modbus_prt.cpp:1375
 msgid "Type"
 msgstr "Typ"
 
+#: modbus_prt.cpp:1377
 msgid "Real;Integer;Boolean;String"
 msgstr "Reelle Zahl;Ganz Zahl;Logisch;Text"
 
+#: modbus_prt.cpp:1378
 msgid "Link"
 msgstr "Verbindung"
 
+#: modbus_prt.cpp:1381
 msgid "Program language"
 msgstr "Programmsprache."
 
+#: modbus_prt.cpp:1384
 msgid "Links"
 msgstr "Verbindungen"
 
+#: modbus_prt.cpp:1441 modbus_prt.cpp:1449 modbus_prt.cpp:1458
+#: modbus_prt.cpp:1467 modbus_prt.cpp:1474
 msgid "Disable node for this operation"
 msgstr "Knoten abschalten für diese Operation"
 
+#: modbus_prt.cpp:1444 modbus_prt.cpp:1453
 msgid "New IO"
 msgstr "Neu IO"
 
-msgid "Deleting lock attribute in not allow."
+#: modbus_prt.cpp:1461
+msgid "Deleting lock attribute is not allowed."
 msgstr "Löschen Verriegelungsattribut ist nicht erlaubt."
 
+#: modbus_prt.cpp:1475
 msgid "Changing locked attribute is not allowed."
 msgstr "Änderung des verriegelten Attributs ist nicht erlaubt"
 
+#: modbus_prt.cpp:1476
 msgid "Empty value is not valid."
 msgstr "Leerer Wert ist nicht zulässig."
 
+#: modbus_daq.h:44 modbus_prt.h:42
 msgid "ModBUS"
 msgstr ""
 
+#: modbus_daq.h:48 modbus_prt.h:46
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
+#: modbus_daq.h:49
 msgid ""
 "Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
 "and Modbus/ASCII protocols."
@@ -546,6 +673,7 @@ msgstr ""
 "Ermöglicht die Realisierung des Klientservices des ModBus-Protokolls. "
 "Unterstützt werden Modbus/TCP, Modbus/RTU und Modbus/ASCII Protokolle."
 
+#: modbus_prt.h:47
 msgid ""
 "Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
 "Modbus/ASCII protocols."

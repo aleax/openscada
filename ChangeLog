@@ -1,3 +1,8 @@
+2013-12-18 Roman
+- FIX:DAQ.ModBus: Node's lock attributes into the protocol Node's mode "Data" is fixed.
+- FIX:DAQ.OPC_UA: EXTRA_DIST content for libOPC_UA library is appended.
+
+
 2013-12-17 Roman
 - SYS: Autoconf templates AX_MOD_*_EN changed to syntax: AX_MOD_*_EN([ModName],[Help],[En],[InclAllow],[ActionCheck],[ActionEnable])
 - !!:DAQ.OPC_UA: All library's files moved to separated folder libOPC_UA. The library libOPC_UA simple test program is added.

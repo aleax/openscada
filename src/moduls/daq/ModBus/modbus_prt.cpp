@@ -1439,7 +1439,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    IO *ioPrev = ioSize() ? io(ioSize()-1) : NULL;
-	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()));
+	    if(ioPrev) ioAdd(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~Node::LockAttr)));
 	    else ioAdd(new IO("new",_("New IO"),IO::Integer,IO::Default));
 	    modif();
 	}
@@ -1448,7 +1448,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    int row = atoi(opt->attr("row").c_str());
 	    IO *ioPrev = row ? io(row-1) : NULL;
-	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()), row);
+	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~Node::LockAttr)), row);
 	    else ioIns(new IO("new",_("New IO"),IO::Integer,IO::Default), row);
 	    modif();
 	}
@@ -1456,8 +1456,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    if(enableStat()) throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    int row = atoi(opt->attr("row").c_str());
-	    if(io(row)->flg()&TPrmTempl::LockAttr)
-		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
+	    if(io(row)->flg()&Node::LockAttr)
+		throw TError(nodePath().c_str(),_("Deleting lock attribute is not allowed."));
 	    ioDel(row);
 	    modif();
 	}
@@ -1471,7 +1471,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    int row = atoi(opt->attr("row").c_str());
 	    string col = opt->attr("col");
 	    if(enableStat( ) && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
-	    if(io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
+	    if(io(row)->flg()&Node::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if(col == "id")		io(row)->setId(opt->text());
 	    else if(col == "nm")	io(row)->setName(opt->text());
