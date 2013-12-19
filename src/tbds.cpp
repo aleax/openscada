@@ -34,18 +34,18 @@ using namespace OSCADA;
 TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
 {
     //> Generic system DB
-    fldAdd( new TFld("user","User",TFld::String,TCfg::Key,"20") );
-    fldAdd( new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100") );
-    fldAdd( new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000") );
+    fldAdd(new TFld("user","User",TFld::String,TCfg::Key,OBJ_ID_SZ));
+    fldAdd(new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100"));
+    fldAdd(new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000"));
 
     //> Open data bases DB structure
-    el_db.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_db.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
-    el_db.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
-    el_db.fldAdd( new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20") );
-    el_db.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1") );
+    el_db.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_db.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_db.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    el_db.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
+    el_db.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    el_db.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
+    el_db.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
 }
 
 TBDS::~TBDS(  )
@@ -640,12 +640,13 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),RWRW__,"root",SDB_ID,2,
 		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simply closed."));
-	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","db_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
 	}
 	return;
     }
@@ -853,7 +854,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SDB_ID,3,"tp","str","cols","100","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,4,

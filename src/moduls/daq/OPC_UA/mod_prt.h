@@ -185,7 +185,7 @@ class TProt: public TProtocol, public Server
 	void save_( );
 
 	bool debug( );
-	void debugMess( const string &mess, const string &data );
+	void debugMess( const string &mess );
 	void epEnList( vector<string> &ls );
 	EP *epEnAt( const string &ep );
 

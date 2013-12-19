@@ -1,3 +1,12 @@
+2013-12-19 Roman
+- DAQ.MMS: All library's files build moved to self folder libiec61850.
+- DB:AGLKS.St.db: For input transport testOPC all KeepAlive parameters disabled.
+- !!:SYS: Global definitions OBJ_ID_SZ and OBJ_NM_SZ is added and used for all configuration's ID and NAME. OBJ_NM_SZ is rose from 50 to 100.
+    Field's NAME limit length pass to configurators by field "idm", through OpenSCADA control interface.
+- FIX:DAQ.OPC_UA: Call tr.at().messIO() without return is fixed. Removed request's messages binary dump for debug messages.
+- UI.QTCfg: Field "NAME" limit length apply to nodes append dialog is added.
+
+
 2013-12-18 Roman
 - FIX:DAQ.ModBus: Node's lock attributes into the protocol Node's mode "Data" is fixed.
 - FIX:DAQ.OPC_UA: EXTRA_DIST content for libOPC_UA library is appended.

@@ -684,15 +684,15 @@ function selectChildRecArea( node, aPath, cBlk )
 	      var posId = this.options[this.selectedIndex].getAttribute('posId');
 	      if( posId == 'go' )
 	        selectPage(selPath+'/'+(this.parentNode.srcNode.getAttribute('br_pref')+this.parentNode.lsId).replace(/%/g,'%25').replace(/\//g,'%2f'));
-	      else if( posId == 'add' || posId == 'ins' || posId == 'edit' )
+	      else if(posId == 'add' || posId == 'ins' || posId == 'edit')
 	      {
 		dlgWin = ReqIdNameDlg('/'+MOD_ID+'/ico');
 		setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Item name set###');
 		var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
 		fIdVal.maxLength = this.parentNode.srcNode.getAttribute('idSz');
-		if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
+		if(!fIdVal.maxLength) fIdVal.maxLength = 1000;
 		dlgWin.document.getElementById('wDlgType').style.display = 'none';
-		dlgWin.document.getElementById('wDlgName').style.display = idm?'':'none';
+		dlgWin.document.getElementById('wDlgName').style.display = idm ? '' : 'none';
 		var actOkFld = dlgWin.document.getElementById('wDlgActOk');
 		actOkFld.itPath = this.parentNode.itPath;
 		actOkFld.srcNode = this.parentNode.srcNode;
@@ -2071,13 +2071,13 @@ function itAdd( )
 
   //> Load branches list
   var typeCfg = '';
-  for( var i_b = 0; i_b < branchS.childNodes.length; i_b++ )
-    if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR )
-      typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
-		     "' gid='"+branchS.childNodes[i_b].getAttribute('id')+
-		     "' idm='"+(parseInt(branchS.childNodes[i_b].getAttribute('idm'))?"1":"0")+"'>"+
+  for(var i_b = 0; i_b < branchS.childNodes.length; i_b++)
+    if(parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR)
+      typeCfg += "<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
+			"' gid='"+branchS.childNodes[i_b].getAttribute('id')+
+			"' idm='"+(parseInt(branchS.childNodes[i_b].getAttribute('idm'))?"1":"0")+"'>"+
 		branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
-  if( !typeCfg.length ) { alert('###No one editable container present.###'); return; }
+  if(!typeCfg.length) { alert('###No one editable container present.###'); return; }
 
   dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Add item to node '%1'.###").replace('%1',selPath));
   setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Add node###');

@@ -214,12 +214,12 @@ void TMdContr::protIO( XML_N &io )
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
-    tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
+    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
 }
 
-void TMdContr::debugMess( const string &mess, const string &data )
+void TMdContr::debugMess( const string &mess )
 {
-    mess_debug_(nodePath().c_str(), "%s: %s", mess.c_str(), TSYS::strDecode(data,TSYS::Bin).c_str());
+    mess_debug_(nodePath().c_str(), "%s", mess.c_str());
 }
 
 void TMdContr::prmEn( const string &id, bool val )

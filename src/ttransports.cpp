@@ -35,30 +35,30 @@ using namespace OSCADA;
 TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
 {
     //> Input transport BD structure
-    el_in.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_in.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
-    el_in.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_in.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
-    el_in.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
-    el_in.fldAdd( new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,"50") );
-    el_in.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
+    el_in.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_in.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_in.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    el_in.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500"));
+    el_in.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    el_in.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(atoi(OBJ_ID_SZ)*3).c_str()));
+    el_in.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //> Output transport BD structure
-    el_out.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_out.fldAdd( new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,"20") );
-    el_out.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_out.fldAdd( new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500") );
-    el_out.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
-    el_out.fldAdd( new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1") );
+    el_out.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_out.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_out.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    el_out.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500"));
+    el_out.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    el_out.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //> External hosts' connection DB struct
-    el_ext.fldAdd( new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,"20") );
-    el_ext.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_ext.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_ext.fldAdd( new TFld("TRANSP",_("Transport"),TFld::String,0,"20") );
-    el_ext.fldAdd( new TFld("ADDR",_("Transport address"),TFld::String,0,"50") );
-    el_ext.fldAdd( new TFld("USER",_("Request user"),TFld::String,0,"20") );
-    el_ext.fldAdd( new TFld("PASS",_("Request password"),TFld::String,0,"30") );
+    el_ext.fldAdd(new TFld("OP_USER",_("Open user"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_ext.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_ext.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    el_ext.fldAdd(new TFld("TRANSP",_("Transport"),TFld::String,0,OBJ_ID_SZ));
+    el_ext.fldAdd(new TFld("ADDR",_("Transport address"),TFld::String,0,"50"));
+    el_ext.fldAdd(new TFld("USER",_("Request user"),TFld::String,0,OBJ_ID_SZ));
+    el_ext.fldAdd(new TFld("PASS",_("Request password"),TFld::String,0,"30"));
 }
 
 TTransportS::~TTransportS( )
@@ -535,12 +535,14 @@ void TTipTransport::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),RWRWR_,"root",STR_ID,2,"idm","1","idSz","20");
-	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),RWRWR_,"root",STR_ID,2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/in_",_("Input transport"),RWRWR_,"root",STR_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/out_",_("Output transport"),RWRWR_,"root",STR_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/tr",_("Transports")))
 	{
-	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),RWRWR_,"root",STR_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","in_","idSz","20");
-	    ctrMkNode("list",opt,-1,"/tr/out",_("Output"),RWRWR_,"root",STR_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","out_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/tr/in",_("Input"),RWRWR_,"root",STR_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","in_","idSz",OBJ_ID_SZ);
+	    ctrMkNode("list",opt,-1,"/tr/out",_("Output"),RWRWR_,"root",STR_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","out_","idSz",OBJ_ID_SZ);
 	}
 	return;
     }
@@ -678,7 +680,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),RWRWR_,"root",STR_ID,3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),RWRWR_,"root",STR_ID,3,"tp","str","dest","select","select","/prm/cfg/p_mod");
@@ -894,7 +896,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),RWRWR_,"root",STR_ID,3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","bool");

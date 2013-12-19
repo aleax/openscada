@@ -53,8 +53,8 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPnt = grpAdd("ep_");
 
     //> Node DB structure
-    mEndPntEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
-    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    mEndPntEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mEndPntEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     mEndPntEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selected,"1","0","0",_("Binary")));
@@ -82,9 +82,9 @@ void TProt::epAdd( const string &iid, const string &db )
 
 bool TProt::debug( )	{ return (mess_lev()==TMess::Debug); }
 
-void TProt::debugMess( const string &mess, const string &data )
+void TProt::debugMess( const string &mess )
 {
-    mess_debug(nodePath().c_str(), "%s: %s", mess.c_str(), TSYS::strDecode(data,TSYS::Bin).c_str());
+    mess_debug(nodePath().c_str(), "%s", mess.c_str());
 }
 
 void TProt::epEnList( vector<string> &ls )
@@ -210,10 +210,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm","1", "idSz","20");
+	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm",OBJ_NM_SZ, "idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/ep",_("End points")))
 	    ctrMkNode("list", opt, -1, "/ep/ep", _("End points"), RWRWR_, "root", SPRT_ID, 5,
-		"tp","br", "idm","1", "s_com","add,del", "br_pref","ep_", "idSz","20");
+		"tp","br", "idm",OBJ_NM_SZ, "s_com","add,del", "br_pref","ep_", "idSz",OBJ_ID_SZ);
 	return;
     }
 
@@ -435,9 +435,9 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
 		    if(!nClass || nClass&cnClass)
 			req.childAdd("ref")->setAttr("NodeId", ndTpDef->second->attr("NodeId"))->
-                            setAttr("referenceTypeId", ndTpDef->second->attr("referenceTypeId"))->
-                            setAttr("dir", "1")->setAttr("name", ndTpDef->second->attr("name"))->
-                            setAttr("NodeClass", i2s(cnClass))->setAttr("typeDefinition", ndTpDef->second->attr("typeDefinition"));
+			    setAttr("referenceTypeId", ndTpDef->second->attr("referenceTypeId"))->
+			    setAttr("dir", "1")->setAttr("name", ndTpDef->second->attr("name"))->
+			    setAttr("NodeClass", i2s(cnClass))->setAttr("typeDefinition", ndTpDef->second->attr("typeDefinition"));
 		}
 	    }
 	    //>> Inverse browse
@@ -466,15 +466,15 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		{
 		    if(!lstOK) { lstOK = (lstNd==NodeId(nid.strVal()+"."+chLs[i_ch],1).toAddr()); continue; }
 		    req.childAdd("ref")->setAttr("NodeId", NodeId(nid.strVal()+"."+chLs[i_ch],1).toAddr())->
-                        setAttr("referenceTypeId", refTpId.toAddr())->
-                        setAttr("dir", "1")->setAttr("name", chLs[i_ch])->
-                        setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", tDef.toAddr());
-                    if(rPn && req.childSize() >= rPn && (i_ch+1) < chLs.size())
-                    {
+			setAttr("referenceTypeId", refTpId.toAddr())->
+			setAttr("dir", "1")->setAttr("name", chLs[i_ch])->
+			setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", tDef.toAddr());
+		    if(rPn && req.childSize() >= rPn && (i_ch+1) < chLs.size())
+		    {
 			req.setAttr("LastNode", NodeId(nid.strVal()+"."+chLs[i_ch],1).toAddr());
 			break;
-                    }
-                }
+		    }
+		}
 	    }
 	    return 0;
 	}

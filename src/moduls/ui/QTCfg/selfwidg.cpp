@@ -803,19 +803,19 @@ void InputDlg::showEvent( QShowEvent * event )
 //* ReqIdNameDlg: Request node identifier and/or name *
 //*****************************************************
 ReqIdNameDlg::ReqIdNameDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg ) :
-    InputDlg( parent, icon, mess, ndlg , 20, 500 )
+    InputDlg(parent, icon, mess, ndlg , 20, 500)
 {
     itTpLab = new QLabel(_("Item type:"),this);
-    ed_lay->addWidget( itTpLab, 0, 0 );
+    ed_lay->addWidget(itTpLab, 0, 0);
     itTp = new QComboBox(this);
-    itTp->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed) );
-    ed_lay->addWidget( itTp, 0, 1 );
-    connect( itTp, SIGNAL( currentIndexChanged(int) ), this, SLOT( selectItTp(int) ) );
+    itTp->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+    ed_lay->addWidget(itTp, 0, 1);
+    connect(itTp, SIGNAL(currentIndexChanged(int)), this, SLOT(selectItTp(int)));
 }
 
 string ReqIdNameDlg::target( )
 {
-    if( itTp->count() <= 0 ) return "";
+    if(itTp->count() <= 0) return "";
 
     return itTp->itemData(itTp->currentIndex()).toString().toAscii().data();
 }
@@ -837,12 +837,13 @@ void ReqIdNameDlg::setTargets( const vector<string> &tgs )
 
 void ReqIdNameDlg::selectItTp( int it )
 {
-    if( it < 0 ) return;
-    string its = itTp->itemData(it).toString().toAscii().data();
+    if(it < 0) return;
+    string its = itTp->itemData(it).toString().toStdString();
     int idSz = atoi(TSYS::strSepParse(its,0,'\n').c_str());
-    if( idSz>0 ) mId->setMaxLength(idSz);
+    if(idSz > 0) mId->setMaxLength(idSz);
     mIdLab->setVisible(idSz>=0); mId->setVisible(idSz>=0);
-    bool idm = atoi(TSYS::strSepParse(its,1,'\n').c_str());
+    int idm = atoi(TSYS::strSepParse(its,1,'\n').c_str());	//Default idm is boolean for id-mode, enable name
+    if(idm > 1)	mName->setMaxLength(idm);
     mNameLab->setVisible(idm); mName->setVisible(idm);
 }
 

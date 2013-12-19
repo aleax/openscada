@@ -1214,13 +1214,13 @@ void Client::protIO( XML_N &io )
 		oS(rez, io.attr("EndPoint"));		//EndpointURL
 		oNu(rez, rez.size(), 4, 4);		//Real message size
 
-		if(debug) debugMess("HELLO Req", rez);
+		if(debug) debugMess(strMess("HELLO Req(%d): ep='%s'",rez.size(),io.attr("EndPoint").c_str()));
 
 		//> Send request
 		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
 
-		if(debug) debugMess("HELLO Resp", rez);
+		if(debug) debugMess(strMess("HELLO Resp(%d)",rez.size()));
 
 		int off = 4;
 		if(rez.size() < 8 || rez.size() > 4096 || iNu(rez,off,4) != rez.size())
@@ -1291,10 +1291,10 @@ void Client::protIO( XML_N &io )
 		    //> Signature
 		    rez += asymmetricSign(rez, io.attr("PvKey"));
 		    //> Encoding
-		    if(debug) debugMess("OPN Req (decoded)", rez);
+		    if(debug) debugMess("OPN Req (decoded)");
 		    rez.replace(begEncBlck, rez.size()-begEncBlck, asymmetricEncrypt(rez.substr(begEncBlck),io.attr("ServCert"),secPlc));
 		}
-		if(debug) debugMess("OPN Req", rez);
+		if(debug) debugMess("OPN Req");
 		//> Send request and wait respond
 		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
@@ -1314,7 +1314,7 @@ void Client::protIO( XML_N &io )
 		    err = strMess("0x%x:%s", OpcUa_BadTcpMessageTypeInvalid, "Respond don't acknowledge.");
 		else
 		{
-		    if(debug) debugMess("OPN Resp", rez);
+		    if(debug) debugMess("OPN Resp");
 		    iNu(rez, off, 4);					//Secure channel identifier
 		    iS(rez, off);					//Security policy URI
 		    string servCert = iS(rez, off);			//ServerCertificate
@@ -1412,7 +1412,7 @@ void Client::protIO( XML_N &io )
 		io.setAttr("SecChnId", ""); io.setAttr("SecTokenId", "");
 		io.setAttr("SeqNumber", ""); io.setAttr("SeqReqId", "");
 
-		if(debug) debugMess("CLO Req", rez);
+		if(debug) debugMess("CLO Req");
 		//> Send request and don't wait response
 		messIO(rez.data(), rez.size(), NULL, 0);
 	    }
@@ -1591,7 +1591,7 @@ void Client::protIO( XML_N &io )
 			rez.replace(begEncBlck, rez.size()-begEncBlck, symmetricEncrypt(rez.substr(begEncBlck),servKey,secPolicy));
 		}
 
-		if(debug) debugMess(io.attr("id")+" Req", rez);
+		if(debug) debugMess(io.attr("id")+" Req");
 		//> Send request and wait respond
 		int resp_len = messIO(rez.data(), rez.size(), buf, sizeof(buf));
 		rez.assign(buf, resp_len);
@@ -1603,7 +1603,7 @@ void Client::protIO( XML_N &io )
 		    rez.append(buf, resp_len);
 		}
 
-		if(debug) debugMess(io.attr("id")+" Resp", rez);
+		if(debug) debugMess(io.attr("id")+" Resp");
 
 		off = 4;
 		if(rez.size() < 8 || iNu(rez,off,4) != rez.size())
@@ -2059,7 +2059,7 @@ nextReq:
 	{
 	    if(rb.size() > 4096) throw OPCError(OpcUa_BadTcpMessageTooLarge, "", "");
 
-	    if(dbg) debugMess("HELLO Req", rb);
+	    if(dbg) debugMess("HELLO Req");
 
 	    off = 8;
 	    iNu(rb, off, 4);				//Protocol version
@@ -2084,12 +2084,12 @@ nextReq:
 	    oNu(out, OpcUa_MaxMessageSize, 4);		//Max message size
 	    oNu(out, OpcUa_MaxChunkCount, 4);		//Max chunk count
 
-	    if(dbg) debugMess("HELLO Resp", out);
+	    if(dbg) debugMess("HELLO Resp");
 	}
 	//> Check for Open SecureChannel message type
 	else if(rb.compare(0,4,"OPNF") == 0)
 	{
-	    if(dbg) debugMess("OPN Req", rb);
+	    if(dbg) debugMess("OPN Req");
 
 	    off = 8;
 	    uint32_t chnlId = iNu(rb, off, 4);			//>SecureChannelId
@@ -2124,7 +2124,7 @@ nextReq:
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Server certificate thumbprint error.");
 		//>> Decode message block
 		rb.replace(off, rb.size()-off, asymmetricDecrypt(rb.substr(off),wep->pvKey(),secPlc));
-		if(dbg) debugMess("OPN Req (decrypted)", rb);
+		if(dbg) debugMess("OPN Req (decrypted)");
 	    }
 	    uint32_t secNumb = iNu(rb, off, 4);			//>Sequence number
 	    uint32_t reqId = iNu(rb, off, 4);			//>RequestId
@@ -2217,12 +2217,12 @@ nextReq:
 		oNu(out, out.size(), 4, 4);			//Real message size
 	    }
 
-	    if(dbg) debugMess("OPN Resp", out);
+	    if(dbg) debugMess("OPN Resp");
 	}
 	//> Check for Close SecureChannel message type
 	else if(rb.compare(0,4,"CLOF") == 0)
 	{
-	    if(dbg) debugMess("CLO Req", rb);
+	    if(dbg) debugMess("CLO Req");
 
 	    off = 8;
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
@@ -2265,7 +2265,7 @@ nextReq:
 	//> Check for SecureChannel message type
 	else if(rb.compare(0,4,"MSGF") == 0)
 	{
-	    if(dbg) debugMess("MSG Req", rb);
+	    if(dbg) debugMess("MSG Req");
 
 	    off = 8;
 	    uint32_t stCode = 0;
@@ -3273,7 +3273,7 @@ nextReq:
 		    out.replace(begEncBlck, out.size()-begEncBlck, symmetricEncrypt(out.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
 	    }
 
-	    if(dbg) debugMess("MSG Resp", rb);
+	    if(dbg) debugMess("MSG Resp");
 	}
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }

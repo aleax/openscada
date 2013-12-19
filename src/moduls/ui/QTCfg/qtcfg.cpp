@@ -570,11 +570,11 @@ void ConfApp::itAdd( )
     vector<string> brs;
     for(unsigned i_b = 0; i_b < branch->childSize(); i_b++)
 	if(atoi(branch->childGet(i_b)->attr("acs").c_str())&SEC_WR)
-	    brs.push_back( branch->childGet(i_b)->attr("idSz")+"\n"+branch->childGet(i_b)->attr("idm")+"\n"+
-			   branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
+	    brs.push_back(branch->childGet(i_b)->attr("idSz")+"\n"+branch->childGet(i_b)->attr("idm")+"\n"+
+			  branch->childGet(i_b)->attr("id")+"\n"+branch->childGet(i_b)->attr("dscr"));
     if(!brs.size()) { mod->postMess(mod->nodePath().c_str(),_("No one editable container is present."),TUIMod::Info,this); return; }
 
-    ReqIdNameDlg dlg(this,actItAdd->icon(), QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),_("Add node"));
+    ReqIdNameDlg dlg(this, actItAdd->icon(), QString(_("Add item to node: '%1'.")).arg(sel_path.c_str()),_("Add node"));
     dlg.setTargets(brs);
     if(dlg.exec() != QDialog::Accepted)   return;
 
@@ -2548,8 +2548,8 @@ void ConfApp::listBoxPopup( )
 	{
 	    string p_text, p_id;
 	    string text, id;
-	    bool ind_m = atoi(n_el->attr("idm").c_str());
-	    int  c_id  = lbox->currentRow();
+	    int ind_m = atoi(n_el->attr("idm").c_str());
+	    int	c_id  = lbox->currentRow();
 
 	    if(item != NULL)
 	    {

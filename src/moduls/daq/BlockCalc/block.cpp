@@ -478,7 +478,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/blck/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/blck/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/blck/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","90","rows","4");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");

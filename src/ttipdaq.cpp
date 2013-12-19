@@ -39,8 +39,8 @@ TTipDAQ::TTipDAQ( const string &id ) : TModule(id)
 {
     m_cntr = grpAdd("cntr_");
 
-    fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
-    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
     fldAdd(new TFld("ENABLE",_("To enable"),TFld::Boolean,0,"1","0"));
     fldAdd(new TFld("START",_("To start"),TFld::Boolean,0,"1","0"));
@@ -156,9 +156,10 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/cntr_",_("Controller"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/tctr",_("Controllers")))
-	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","cntr_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/tctr/ctr",_("Controllers"),RWRWR_,"root",SDAQ_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","cntr_","idSz",OBJ_ID_SZ);
 	return;
     }
     //> Process command to page
@@ -189,9 +190,9 @@ TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool 
     name(iid), descr(iname), db(idb), isPrmCntr(i_isPrmCntr)
 {
     //> Add typical structure fields
-    fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
+    fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key|TFld::NoWrite,"100"));
-    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
     fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 }

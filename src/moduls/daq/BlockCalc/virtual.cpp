@@ -110,32 +110,32 @@ void TipContr::postEnable( int flag )
     TTipDAQ::postEnable( flag );
 
     //Controllers BD structure
-    fldAdd( new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block") );
-    fldAdd( new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100","1") );
-    fldAdd( new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
-    fldAdd( new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99") );
+    fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("BLOCK_SH",_("Block's table"),TFld::String,TFld::NoFlag,"30","block"));
+    fldAdd(new TFld("PERIOD",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
+    fldAdd(new TFld("SCHEDULE",_("Calculate schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",_("Calculate task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("ITER",_("Iteration number into calculate period"),TFld::Integer,TFld::NoFlag,"2","1","0;99"));
 
     //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::TransltText|TCfg::NoVal,"1000") );
+    tpPrmAt(t_prm).fldAdd(new TFld("IO",_("Blocks' IOs"),TFld::String,TFld::FullText|TCfg::TransltText|TCfg::NoVal,"1000"));
 
     //Blok's db structure
-    blk_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    blk_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    blk_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
-    blk_el.fldAdd( new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75") );
-    blk_el.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    blk_el.fldAdd( new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    blk_el.fldAdd( new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200") );
+    blk_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    blk_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    blk_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300"));
+    blk_el.fldAdd(new TFld("FUNC",_("Function"),TFld::String,TFld::NoFlag,"75"));
+    blk_el.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blk_el.fldAdd(new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    blk_el.fldAdd(new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200"));
 
     //IO blok's db structure
-    blkio_el.fldAdd( new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,"20") );
-    blkio_el.fldAdd( new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,"20") );
-    blkio_el.fldAdd( new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2") );
-    blkio_el.fldAdd( new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"50") );
-    blkio_el.fldAdd( new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"20") );
+    blkio_el.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    blkio_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    blkio_el.fldAdd(new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
+    blkio_el.fldAdd(new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"50"));
+    blkio_el.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"20"));
 }
 
 void TipContr::preDisable(int flag)
@@ -472,15 +472,16 @@ void Contr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
-        ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
+	ctrMkNode("grp",opt,-1,"/br/blk_",_("Block"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	if(ctrMkNode("area",opt,-1,"/scheme",_("Blocks scheme")))
 	{
 	    ctrMkNode("fld",opt,-1,"/scheme/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","blk_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/scheme/sch",_("Blocks"),RWRWR_,"root",SDAQ_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","blk_","idSz",OBJ_ID_SZ);
 	}
 	return;
     }

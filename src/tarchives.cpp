@@ -47,48 +47,48 @@ TArchiveS::TArchiveS( ) :
     mAval = grpAdd("va_");
 
     //> Message archivator DB structure
-    elMess.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    elMess.fldAdd( new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,"20") );
-    elMess.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    elMess.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
-    elMess.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1") );
-    elMess.fldAdd( new TFld("CATEG",_("Messages categories"),TFld::String,0,"100") );
-    elMess.fldAdd( new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","0","0;7") );
-    elMess.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"100") );
+    elMess.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elMess.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elMess.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elMess.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
+    elMess.fldAdd(new TFld("START",_("Start archive"),TFld::Boolean,0,"1"));
+    elMess.fldAdd(new TFld("CATEG",_("Messages categories"),TFld::String,0,"100"));
+    elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","0","0;7"));
+    elMess.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
 
     //> Value archivator DB structure
-    elVal.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    elVal.fldAdd( new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,"20") );
-    elVal.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    elVal.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
-    elVal.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
-    elVal.fldAdd( new TFld("ADDR",_("Address"),TFld::String,0,"100") );
-    elVal.fldAdd( new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000") );
-    elVal.fldAdd( new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000") );
+    elVal.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elVal.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    elVal.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elVal.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
+    elVal.fldAdd(new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0"));
+    elVal.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
+    elVal.fldAdd(new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000"));
+    elVal.fldAdd(new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000"));
 
     //> Value archive DB structure
-    elAval.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    elAval.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    elAval.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
-    elAval.fldAdd( new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0") );
-    elAval.fldAdd( new TFld("SrcMode",_("Source mode"),TFld::Integer,TFld::Selected,"1","0",
+    elAval.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
+    elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    elAval.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
+    elAval.fldAdd(new TFld("START",_("Start archive"),TFld::Boolean,0,"1","0"));
+    elAval.fldAdd(new TFld("SrcMode",_("Source mode"),TFld::Integer,TFld::Selected,"1","0",
 	TSYS::strMess("%d;%d;%d",TVArchive::Passive,TVArchive::PassiveAttr,TVArchive::ActiveAttr).c_str(),
-	_("Passive;Passive param. attribute;Active param. attribute")) );
-    elAval.fldAdd( new TFld("Source",_("Source"),TFld::String,0,"100") );
-    elAval.fldAdd( new TFld("CombMode",_("Data combining mode"),TFld::Integer,TFld::Selected,"1","0",
+	_("Passive;Passive param. attribute;Active param. attribute")));
+    elAval.fldAdd(new TFld("Source",_("Source"),TFld::String,0,"100"));
+    elAval.fldAdd(new TFld("CombMode",_("Data combining mode"),TFld::Integer,TFld::Selected,"1","0",
 	TSYS::strMess("%d;%d;%d;%d",TVArchive::MovAver,TVArchive::LastVal,TVArchive::MinVal,TVArchive::MaxVal).c_str(),
-	_("Moving average;Single;Minimum;Maximum")) );
-    elAval.fldAdd( new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1") );
-    elAval.fldAdd( new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000") );
-    elAval.fldAdd( new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"8","100","10;10000000") );
-    elAval.fldAdd( new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1") );
-    elAval.fldAdd( new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0") );
-    elAval.fldAdd( new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500") );
+	_("Moving average;Single;Minimum;Maximum")));
+    elAval.fldAdd(new TFld("VTYPE",_("Value type"),TFld::Integer,0,"1"));
+    elAval.fldAdd(new TFld("BPER",_("Buffer period (sec)"),TFld::Real,0,"9.6","1","0;10000"));
+    elAval.fldAdd(new TFld("BSIZE",_("Buffer size (items)"),TFld::Integer,0,"8","100","10;10000000"));
+    elAval.fldAdd(new TFld("BHGRD",_("Buffer in hard time grid"),TFld::Boolean,0,"1","1"));
+    elAval.fldAdd(new TFld("BHRES",_("Buffer in high time resolution"),TFld::Boolean,0,"1","0"));
+    elAval.fldAdd(new TFld("ArchS",_("Process into archivators"),TFld::String,0,"500"));
 
-    setMessBufLen( BUF_SIZE_DEF );
+    setMessBufLen(BUF_SIZE_DEF);
 }
 
-TArchiveS::~TArchiveS(  )
+TArchiveS::~TArchiveS( )
 {
     //> Stop subsystem
     if(prcStMess || prcStVal) subStop();
@@ -760,7 +760,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/va_",_("Value archive"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz","20");
 	if(ctrMkNode("area",opt,1,"/m_arch",_("Messages archive"),R_R_R_,"root",SARH_ID))
 	{
 	    ctrMkNode("fld",opt,-1,"/m_arch/size",_("Messages buffer size"),RWRWR_,"root",SARH_ID,2,"tp","dec","min",TSYS::int2str(BUF_SIZE_DEF).c_str());
@@ -771,12 +771,12 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/m_arch/view/size",_("Size (s)"),RWRW__,"root",SARH_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/m_arch/view/cat",_("Category pattern"),RWRW__,"root",SARH_ID,2,"tp","str","help",
 		    _("Messages category template or regular expression.\n"
-            	      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
-                      "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
+		      "Use template symbols for group selection:\n  '*' - any substring;\n  '?' - any symbol.\n"
+		      "Regular expression enclosed in symbols '/' (/mod_(System|LogicLev)/)."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/lvl",_("Level"),RWRW__,"root",SARH_ID,5,"tp","dec","dest","select",
-            	    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
-            	    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);"
-            		         "Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"),
+		    "sel_id","0;1;2;3;4;5;6;7;-1;-2;-3;-4;-5;-6;-7",
+		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7);"
+			         "Information (1), ALARMS;Notice (2), ALARMS;Warning (3), ALARMS;Error (4), ALARMS;Critical (5), ALARMS;Alert (6), ALARMS;Emergency (7), ALARMS"),
 		    "help",_("Get messages for level more and equal it."));
 		ctrMkNode("fld",opt,-1,"/m_arch/view/archtor",_("Archivator"),RWRW__,"root",SARH_ID,4,"tp","str","dest","select","select","/m_arch/lstAMess",
 		    "help",_("Messages archivator.\nNo set archivator for process by buffer and all archivators.\nSet '<buffer>' for process by buffer."));
@@ -795,7 +795,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/v_arch/per",_("Get data period (ms)"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/v_arch/prior",_("Get data task priority level"),RWRWR_,"root",SARH_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),R_R_R_,"root",SARH_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","va_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","va_","idSz","20");
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SARH_ID,3,"tp","str","cols","90","rows","10");
 	return;
@@ -955,10 +955,12 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
     {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/arch",_("Archivators"));
-	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),RWRWR_,"root",SARH_ID,2,"idm","1","idSz","20");
-	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),RWRWR_,"root",SARH_ID,2,"idm","1","idSz","20");
-	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivators"),RWRWR_,"root",SARH_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","mess_","idSz","20");
-	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),RWRWR_,"root",SARH_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","val_","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/mess_",_("Message archivator"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("grp",opt,-1,"/br/val_",_("Value archivator"),RWRWR_,"root",SARH_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	ctrMkNode("list",opt,-1,"/arch/mess",_("Message archivators"),RWRWR_,"root",SARH_ID,5,
+	    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","mess_","idSz",OBJ_ID_SZ);
+	ctrMkNode("list",opt,-1,"/arch/val",_("Value archivators"),RWRWR_,"root",SARH_ID,5,
+	    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","val_","idSz",OBJ_ID_SZ);
 	return;
     }
     //> Process command to page
@@ -1125,7 +1127,7 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","90","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lvl",cfg("LEVEL").fld().descr(),RWRWR_,"root",SARH_ID,5,"tp","dec","dest","select",

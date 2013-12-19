@@ -116,9 +116,9 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("std", "PRM_BD", _("Logical"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("PRM",_("Parameter template"),TFld::String,TCfg::NoVal,"100",""));
     //>>> Logical level parameter IO BD structure
-    el_prm_io.fldAdd( new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,"20") );
-    el_prm_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_prm_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"200") );
+    el_prm_io.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_prm_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_prm_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"200"));
 
     //>> A parameter direct reflection
     t_prm = tpParmAdd("pRefl", "PRM_BD_REFL", _("Parameter reflection"), true);

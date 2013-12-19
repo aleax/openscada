@@ -485,7 +485,7 @@ class UA
 	~UA( );
 
 	virtual string lang2CodeSYS( )	{ return "en"; }
-	virtual void debugMess( const string &mess, const string &data ) { }
+	virtual void debugMess( const string &mess ) { }
 
 	//> Protocol's data processing
 	//----------------------------------------------------
