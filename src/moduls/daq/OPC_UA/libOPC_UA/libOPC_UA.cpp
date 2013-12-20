@@ -2038,18 +2038,18 @@ string Server::mkError( uint32_t errId, const string &err )
     return rez;
 }
 
-void Server::inReq( string &rba, const string &inPrtId, string *answ )
+bool Server::inReq( string &rba, const string &inPrtId, string *answ )
 {
     uint32_t mSz;
     int off = 0;
     bool dbg = debug( );
 
 nextReq:
-    if(rba.size() <= 0) return;
+    if(rba.size() <= 0) return true;
     string rb, out;
     off = 4;
     mSz = iNu(rba, off, 4);
-    if(rba.size() < 8 || rba.size() < mSz) return;
+    if(rba.size() < 8 || rba.size() < mSz) return true;
     rb = rba.substr(0, mSz);
 
     try
@@ -2260,7 +2260,7 @@ nextReq:
 	    chnlClose(secId);
 
 	    //> No respond. Close socket
-	    throw OPCError(0, "", "");
+	    return false;	//Close socket
 	}
 	//> Check for SecureChannel message type
 	else if(rb.compare(0,4,"MSGF") == 0)
@@ -3294,6 +3294,8 @@ nextReq:
 
     rba.erase(0, mSz);
     goto nextReq;
+
+    return true;
 }
 
 

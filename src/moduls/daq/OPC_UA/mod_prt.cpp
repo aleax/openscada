@@ -103,10 +103,10 @@ Server::EP *TProt::epEnAt( const string &ep )
     return NULL;
 }
 
-void TProt::inReq( string &request, const string &inPrtId, string *answ )
+bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 {
     ResAlloc res(en_res, false);
-    Server::inReq(request, inPrtId, answ);
+    return Server::inReq(request, inPrtId, answ);
 }
 
 int TProt::writeToClient( const string &inPrtId, const string &data )
@@ -256,8 +256,7 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ )
 {
     mBuf += reqst;
-    owner().inReq(mBuf, name());
-    return true;
+    return owner().inReq(mBuf, name());
 }
 
 //*************************************************
