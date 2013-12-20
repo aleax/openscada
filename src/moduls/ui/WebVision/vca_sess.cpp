@@ -4934,7 +4934,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     int mrkFontSize = 0;
-    int mrkHeight = 0;
+    int mrkHeight = 0, mrkWidth = 0;
     int clr_grid = 0, clr_mrk = 0;					//Colors
 
     //> Get generic parameters
@@ -4986,7 +4986,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
-	    else mrkHeight = brect[3]-brect[7];
+	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor & SC_MARKERS)
 	    {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
@@ -5183,7 +5183,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Calc horizontal scale
     int64_t hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
+    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkWidth)?mrkWidth:15.0*vmin(xSc,ySc));
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;
@@ -5441,7 +5441,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     if(rld) for(unsigned i_p = 0; i_p < trnds.size(); i_p++) trnds[i_p].loadData(ses.user);
 
     int mrkFontSize = 0;
-    int mrkHeight = 0;
+    int mrkHeight = 0, mrkWidth = 0;
     int clr_grid = 0, clr_mrk = 0;					//Colors
 
     //> Get generic parameters
@@ -5491,7 +5491,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
-	    else mrkHeight = brect[3]-brect[7];
+	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor&SC_MARKERS)
 	    {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
@@ -5661,7 +5661,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     fftBeg = 1e6/(double)tSz;			//Minimum frequency or maximum period time (s)
     fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;				//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkHeight)?(brect[2]-brect[6]):(15*vmin(xSc,ySc)));
+    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkWidth)?mrkWidth:(15*vmin(xSc,ySc)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;

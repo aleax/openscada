@@ -1923,7 +1923,7 @@ void ShapeDiagram::makePicture( WdgView *w )
 void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 {
     QPen grdPen, mrkPen;
-    int  mrkHeight = 0;
+    int  mrkHeight = 0, mrkWidth = 0;
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
@@ -1957,6 +1957,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
+	    mrkWidth = pnt.fontMetrics().width("000000");
 	    if(sclHor&SC_MARKERS)
 	    {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
@@ -2131,7 +2132,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     double fftBeg = 1e6/(double)tSize;			//Minimum frequency or maximum period time (s)
     double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -2268,7 +2269,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 {
     int64_t d_cnt;
     QPen grdPen, mrkPen;
-    int  mrkHeight = 0;
+    int  mrkHeight = 0, mrkWidth = 0;
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
@@ -2308,6 +2309,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
+	    mrkWidth = pnt.fontMetrics().width("000000");
 	    if(sclHor&SC_MARKERS)
 	    {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
@@ -2508,7 +2510,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     //> Calc horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;

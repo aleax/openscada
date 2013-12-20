@@ -2566,13 +2566,23 @@ nextReq:
 		    break;
 		}
 		case OpcUa_CloseSessionRequest:
+		{
 		    //>> Request
-		    iNu(rb, off, 1);				//deleteSubscriptions
+		    bool subScrDel = iNu(rb, off, 1);		//deleteSubscriptions
 		    wep->sessClose(sesTokId);
+		    if(subScrDel)
+		    {
+			pthread_mutex_lock(&wep->mtxData);
+			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
+			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == sesTokId)
+				wep->mSubScr[i_ss].setState(SS_CLOSED);
+			pthread_mutex_unlock(&wep->mtxData);
+		    }
 
 		    //>> Respond
 		    reqTp = OpcUa_CloseSessionResponse;
 		    break;
+		}
 		case OpcUa_CreateSubscriptionRequest:
 		{
 		    //>> Request
@@ -3400,7 +3410,6 @@ void Server::EP::setEnable( bool vl )
     	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
         nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
 	    setAttr("ValueRank","1")->setAttr("Value","http://opcfundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
-       //nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),1),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->setAttr("DisplayName",SYS->daq().at().subName());
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
 	nodeReg(OpcUa_ObjectTypesFolder,OpcUa_BaseObjectType,"BaseObjectType",NC_ObjectType,OpcUa_Organizes);
@@ -3418,9 +3427,6 @@ void Server::EP::setEnable( bool vl )
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_StateType,"StateType",NC_ObjectType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_TransitionType,"TransitionType",NC_ObjectType,OpcUa_HasSubtype);
 	 nodeReg(OpcUa_BaseObjectType,OpcUa_ServerType,"ServerType",NC_ObjectType,OpcUa_HasSubtype);
-	 nodeReg(OpcUa_BaseObjectType,NodeId("DAQModuleObjectType",1),"DAQModuleObjectType",NC_ObjectType,OpcUa_HasSubtype);
-	 nodeReg(OpcUa_BaseObjectType,NodeId("DAQControllerObjectType",1),"DAQControllerObjectType",NC_ObjectType,OpcUa_HasSubtype);
-	 nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",1),"DAQParameterObjectType",NC_ObjectType,OpcUa_HasSubtype);
        nodeReg(OpcUa_TypesFolder,OpcUa_VariableTypesFolder,"VariableTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
 	nodeReg(OpcUa_VariableTypesFolder,OpcUa_BaseVariableType,"BaseVariableType",NC_VariableType,OpcUa_Organizes);
 	 nodeReg(OpcUa_BaseVariableType,OpcUa_BaseDataVariableType,"BaseDataVariableType",NC_VariableType,OpcUa_HasSubtype);

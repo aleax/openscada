@@ -1528,7 +1528,7 @@ install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 * Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
 
-* Sat Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Sun Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - menu files included
 
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
@@ -1547,5 +1547,5 @@ install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 - add languages: ru, uk
 - make packages from 'make -dist' package;
 
-* Thu Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
+* Wed Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
 - Starting

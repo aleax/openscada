@@ -489,7 +489,7 @@ TProtIn::TProtIn( string name ) : TProtocolIn(name)
 
 }
 
-TProtIn::~TProtIn()
+TProtIn::~TProtIn( )
 {
 
 }
@@ -728,24 +728,28 @@ bool Node::cfgChange( TCfg &ce )
     return true;
 }
 
-void Node::regCR( int id, const SIO &val, char tp )
+void Node::regCR( int id, const SIO &val, char tp, bool wr )
 {
     map<int,SIO>::iterator it;
 
     switch(tp)
     {
 	case 'C':
-	    if((it=data->coil.find(id)) != data->coil.end())
-		mess_warning(nodePath().c_str(), _("Coil '%d' already registered for IO '%d'. IO '%d' will be disabled for process coil '%d'!"),
-		    id, it->second.id, val.id, id);
-	    else data->coil[id] = val;
+	{
+	    map<int,SIO> &blk = wr ? data->coilW : data->coilR;
+	    if((it=blk.find(id)) == blk.end()) blk[id] = val;
+	    else mess_warning(nodePath().c_str(), _("Coil '%d' already registered for IO '%d'. IO '%d' will be disabled for process coil '%d'!"),
+						    id, it->second.id, val.id, id);
 	    break;
+	}
 	case 'R':
-	    if((it=data->reg.find(id)) != data->reg.end())
-		mess_warning(nodePath().c_str(), _("Register '%d' already registered for IO '%d'. IO '%d' will be disabled for process register '%d'!"),
-		    id, it->second.id, val.id, id);
-	    else data->reg[id] = val;
+	{
+	    map<int,SIO> &blk = wr ? data->regW : data->regR;
+	    if((it=blk.find(id)) == blk.end())	blk[id] = val;
+	    else mess_warning(nodePath().c_str(), _("Register '%d' already registered for IO '%d'. IO '%d' will be disabled for process register '%d'!"),
+						    id, it->second.id, val.id, id);
 	    break;
+	}
 	default: throw TError(nodePath().c_str(), _("ModBUS data type '%c' error!"), tp);
     }
 }
@@ -879,8 +883,8 @@ void Node::setEnable( bool vl )
 		    size_t secReg = ioId.find(",",3);
 		    int tca2 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca1+1;
 		    char sTp = (ioId.compare(0,3,"R_i") == 0) ? 'i' : 'f';
-		    regCR(tca1, SIO(i_io,sTp,0)); regCR(tca2, SIO(i_io,sTp,1));
-		    if(wr) { regCR(-tca1, SIO(i_io,sTp,0)); regCR(-tca2, SIO(i_io,sTp,1)); }
+		    regCR(tca1, SIO(i_io,sTp,0), 'R'); regCR(tca2, SIO(i_io,sTp,1), 'R');
+		    if(wr) { regCR(tca1, SIO(i_io,sTp,0), 'R', true); regCR(tca2, SIO(i_io,sTp,1), 'R', true); }
 		}
 		else if(ioId.compare(0,3,"R_s") == 0)
 		{
@@ -890,8 +894,8 @@ void Node::setEnable( bool vl )
 		    if(!tcaN) tcaN = 10;	//Default length 10 registers and maximum 100
 		    for(int i_r = tca; i_r < (tca+tcaN); i_r++)
 		    {
-			regCR(i_r, SIO(i_io,'s',i_r-tca));
-			if(wr) regCR(-i_r, SIO(i_io,'s',i_r-tca));
+			regCR(i_r, SIO(i_io,'s',i_r-tca), 'R');
+			if(wr) regCR(i_r, SIO(i_io,'s',i_r-tca), 'R', true);
 		    }
 		}
 		else if(ioId.size() > 1 && isdigit(ioId[1]))
@@ -900,12 +904,12 @@ void Node::setEnable( bool vl )
 		    if(tolower(ioId[0]) == 'c')
 		    {
 			regCR(tca, i_io, 'C');
-			if(wr) regCR(-tca, i_io, 'C');
+			if(wr) regCR(tca, i_io, 'C', true);
 		    }
 		    else
 		    {
-			regCR(tca, i_io);
-			if(wr) regCR(-tca, i_io);
+			regCR(tca, i_io, 'R');
+			if(wr) regCR(tca, i_io, 'R', true);
 		    }
 		}
 	    }
@@ -978,7 +982,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		map<int,SIO>::iterator itc;
 		for(int i_c = c_addr; i_c < (c_addr+c_sz); i_c++)
 		{
-		    if((itc=data->coil.find(i_c)) != data->coil.end())
+		    if((itc=data->coilR.find(i_c)) != data->coilR.end())
 		    {
 			if(data->val.getB(itc->second.id)) pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8));
 			isData = true;
@@ -1005,7 +1009,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		for(int i_r = r_addr; i_r < (r_addr+r_sz); i_r++)
 		{
 		    unsigned short val = 0;
-		    if((itr=data->reg.find(i_r)) != data->reg.end())
+		    if((itr=data->regR.find(i_r)) != data->regR.end())
 		    {
 			switch(itr->second.sTp)
 			{
@@ -1054,8 +1058,8 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		if(pdu.size() != 5) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
 		int c_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
 
-		map<int,SIO>::iterator ic = data->coil.find(-c_addr);
-		if(ic == data->coil.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
+		map<int,SIO>::iterator ic = data->coilW.find(c_addr);
+		if(ic == data->coilW.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
 		    data->val.setB(ic->second.id, (bool)pdu[3]);
@@ -1073,8 +1077,8 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		int r_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
 
 		map<int,AutoHD<TVal> >::iterator il;
-		map<int,SIO>::iterator ir = data->reg.find(-r_addr);
-		if(ir == data->reg.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
+		map<int,SIO>::iterator ir = data->regW.find(r_addr);
+		if(ir == data->regW.end()) { pdu.assign(1, pdu[0]|0x80); pdu += 0x2; }
 		else
 		{
 		    unsigned short val = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
@@ -1127,8 +1131,8 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		bool noWrReg = false;
 		for(int i_c = 0; i_c < c_aCnt; i_c++)
 		{
-		    map<int,SIO>::iterator ic = data->coil.find(-(c_aSt+i_c));
-		    if(ic == data->coil.end()) noWrReg = true;
+		    map<int,SIO>::iterator ic = data->coilW.find(c_aSt+i_c);
+		    if(ic == data->coilW.end()) noWrReg = true;
 		    else
 		    {
 			data->val.setB(ic->second.id, (bool)(1&(pdu[6+i_c/8]>>(i_c%8))));
@@ -1156,8 +1160,8 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		map<int,AutoHD<TVal> >::iterator il;
 		for(int i_r = 0; i_r < r_aCnt; i_r++)
 		{
-		    map<int,SIO>::iterator ir = data->reg.find(-(r_aSt+i_r));
-		    if(ir == data->reg.end()) noWrReg = true;
+		    map<int,SIO>::iterator ir = data->regW.find(r_aSt+i_r);
+		    if(ir == data->regW.end()) noWrReg = true;
 		    else
 		    {
 			unsigned short val = (unsigned short)(pdu[6+i_r*2]<<8) | (unsigned char)pdu[6+i_r*2+1];

@@ -1,3 +1,15 @@
+2013-12-20 Roman
+- FIX:SYS: Date format into spec-files some fixed.
+- DAQ: Function TDAQS::daqAt() is added for access to any DAQ path's items by TCntrNode.
+    The function also used now into TDAQS::prmAt() and TDAQS::attrAt().
+- FIX:Protocol.ModBUS: For node's mode "Data" the register's and coils's blocks separated to read and write, for zero item's problem fix.
+- DAQ.OPC_UA: Removing for assigned subscriptions at the session closing is added.
+    Client's services Browse, Read and Write is adapted for DAQ parameter to other parameter including.
+    Client's services Browse and Read is set for field "Name" of nodes return for OPC UA "BrowseName" request.
+- FIX:UI.{Vision,WebVision}: Primitive "Diagram" horizontal scale width calculation is improved and fixed (for WebVision).
+- UI.WebCfgD: Field "NAME" limit length apply to nodes append dialog is added.
+
+
 2013-12-19 Roman
 - DAQ.MMS: All library's files build moved to self folder libiec61850.
 - DB:AGLKS.St.db: For input transport testOPC all KeepAlive parameters disabled.

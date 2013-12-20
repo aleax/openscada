@@ -448,7 +448,7 @@ void TDAQS::subStop( )
     TSubSYS::subStop( );
 }
 
-AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
+AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool waitForAttr )
 {
     string c_el;
     AutoHD<TCntrNode> DAQnd = this;
@@ -456,15 +456,25 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
     for(int c_off = 0, c_lv = 0; (sep && (c_el=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
 		   (!sep && (c_el=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
     {
-	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
-	if(DAQnd.freeStat())
+	bool lastEl = (c_lv > 2 && c_off >= path.size());
+	if(waitForAttr && lastEl) c_grp = "a_";
+	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(tNd.freeStat() && !(c_grp != "a_" && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+c_el,0,sep,0,true)).freeStat()))
 	{
 	    if(noex) return AutoHD<TValue>();
-	    else throw TError(nodePath().c_str(),_("No parameter present '%s'."),path.c_str());
+	    else throw TError(nodePath().c_str(),_("No DAQ node present '%s'."),path.c_str());
 	}
 	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
+	DAQnd = tNd;
     }
-    if(!dynamic_cast<TValue*>(&DAQnd.at()))
+
+    return DAQnd;
+}
+
+AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
+{
+    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
+    if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at()))
     {
 	if(noex) return AutoHD<TValue>();
 	else throw TError(nodePath().c_str(),_("Pointed node is not parameter '%s'."),path.c_str());
@@ -475,22 +485,8 @@ AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
 
 AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
 {
-    string c_el;
-    AutoHD<TCntrNode> DAQnd = this;
-    const char *c_grp = "mod_";
-    for(int c_off = 0, c_lv = 0; (sep && (c_el=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
-		   (!sep && (c_el=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
-    {
-	if(c_lv > 2 && c_off >= path.size()) c_grp = "a_";
-	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
-	if(DAQnd.freeStat())
-	{
-	    if(noex) return AutoHD<TValue>();
-	    else throw TError(nodePath().c_str(),_("No attribute present '%s'."),path.c_str());
-	}
-	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
-    }
-    if(!dynamic_cast<TVal*>(&DAQnd.at()))
+    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
+    if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at()))
     {
 	if(noex) return AutoHD<TVal>();
 	else throw TError(nodePath().c_str(),_("Pointed node is not attribute '%s'."),path.c_str());
