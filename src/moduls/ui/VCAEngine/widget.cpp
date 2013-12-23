@@ -152,8 +152,8 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
 	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
 	attrAdd(new TFld("active",_("Active"),TFld::Boolean,Attr::Active,"","0","","",i2s(A_ACTIVE).c_str()));
-	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","0;10000","",i2s(A_GEOM_X).c_str()));
-	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","0;10000","",i2s(A_GEOM_Y).c_str()));
+	attrAdd(new TFld("geomX",_("Geometry:x"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_X).c_str()));
+	attrAdd(new TFld("geomY",_("Geometry:y"),TFld::Real,Attr::Generic,"","0","-10000;10000","",i2s(A_GEOM_Y).c_str()));
 	attrAdd(new TFld("geomW",_("Geometry:width"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_W).c_str()));
 	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_H).c_str()));
 	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_X_SC).c_str()));
@@ -798,7 +798,8 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	}
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
-	        attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text());
+	        try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
+	        catch(TError) { }
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD))	//Get attributes all updated elements' of the branch
     {
@@ -1121,7 +1122,8 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 						 "  \"Signal\" - signal name and result signal name is \"usr_[Signal]\"."));
 			    break;
 		    }
-		    if(attr.at().flgGlob()&Attr::Image)	el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[i_el]);
+		    if(attr.at().type() == TFld::String && attr.at().flgGlob()&Attr::Image)
+			el->setAttr("dest","sel_ed")->setAttr("select","/attrImg/sel_"+list_a[i_el]);
 		}
 	    }
 	}
@@ -1168,7 +1170,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	}
 	else if(a_val.compare(0,5,"file:") == 0)
 	{
-	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;");
+	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;");
 	    for(int i_t = 0; i_t < opt->childSize(); i_t++)
                 opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}
@@ -1406,7 +1408,12 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 
 	    try
     	    {
-		if(obj_tp == "prm:")	SYS->daq().at().ctrListPrmAttr(opt, m_prm.substr(4), is_pl, 0, "prm:");
+		if(obj_tp == "prm:")
+		{
+		    m_prm = m_prm.substr(4);
+		    if(is_pl && !SYS->daq().at().attrAt(m_prm,0,true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("/"));
+		    SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, 0, "prm:");
+		}
 		else if(obj_tp == "wdg:")
 		{
 		    opt->childAdd("el")->setText(c_path);

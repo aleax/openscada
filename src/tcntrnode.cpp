@@ -116,7 +116,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	if( !s_br.empty() && s_br[0] != '/' )
 	{
 	    for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-		if(s_br.substr(0,(*chGrp)[i_g].id.size()) == (*chGrp)[i_g].id)
+		if(s_br.compare(0,(*chGrp)[i_g].id.size(),(*chGrp)[i_g].id) == 0)
 		{
 		    chldAt(i_g,s_br.substr((*chGrp)[i_g].id.size())).at().cntrCmd(opt,0,path,off);
 		    return;
@@ -353,11 +353,16 @@ TCntrNode::GrpEl &TCntrNode::grpAt( int8_t iid )
 
 void TCntrNode::chldList( int8_t igr, vector<string> &list, bool noex )
 {
+    list.clear();
+
     ResAlloc res(hd_res, false);
-    if(!chGrp || igr >= (int)chGrp->size()) { if(noex) return; else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr); }
+    if(!chGrp || igr < 0 || igr >= (int)chGrp->size())
+    {
+	if(noex) return;
+	else throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
+    }
     if(nodeMode() == Disable) { if(noex) return; else throw TError(nodePath().c_str(),"Node is disabled!"); }
 
-    list.clear();
     list.reserve((*chGrp)[igr].elem.size());
     if( !(*chGrp)[igr].ordered )
     {
@@ -795,9 +800,9 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	//>> Get node modify flag
 	if(ctrChkNode(opt,"modify",R_R_R_))	opt->setText(isModify(TCntrNode::All)?"1":"0");
 	//>> Do load node
-	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR))	load( );
+	else if(ctrChkNode(opt,"load",RWRWRW,"root","root",SEC_WR))	load(atoi(opt->attr("force").c_str()));
 	//>> Do save node
-	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR))	save( );
+	else if(ctrChkNode(opt,"save",RWRWRW,"root","root",SEC_WR))	{ if(atoi(opt->attr("force").c_str())) modifG(); save(); }
 	//>> Do copy node
 	else if(ctrChkNode(opt,"copy",RWRWRW,"root","root",SEC_WR))
 	    nodeCopy(opt->attr("src"),opt->attr("dst"),opt->attr("user"));

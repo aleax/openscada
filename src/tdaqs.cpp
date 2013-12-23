@@ -39,26 +39,26 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     mTmplib = grpAdd("tmplb_");
 
     //> Templates lib db structure
-    lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
-    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
     lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
 
     //> Template DB structure
-    el_tmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
-    el_tmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    el_tmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_tmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     el_tmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
     el_tmpl.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     el_tmpl.fldAdd(new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"1000000"));
 
     //> Parameter template IO DB structure
-    el_tmpl_io.fldAdd( new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,"20") );
-    el_tmpl_io.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_tmpl_io.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_tmpl_io.fldAdd( new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1") );
-    el_tmpl_io.fldAdd( new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
-    el_tmpl_io.fldAdd( new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50") );
-    el_tmpl_io.fldAdd( new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4") );
+    el_tmpl_io.fldAdd(new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_tmpl_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_tmpl_io.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    el_tmpl_io.fldAdd(new TFld("TYPE",_("Value type"),TFld::Integer,TFld::NoFlag,"1"));
+    el_tmpl_io.fldAdd(new TFld("FLAGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
+    el_tmpl_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50"));
+    el_tmpl_io.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 
     //> Error attributes
     el_err.fldAdd( new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead) );
@@ -110,48 +110,36 @@ void TDAQS::rdActCntrList( vector<string> &ls, bool isRun )
 
 void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char sep, const string &pref )
 {
-    int c_lv = 0, c_off;
+    int c_lv = 0;
     string c_path = "", c_el;
     vector<string> ls;
     opt->childAdd("el")->setText(pref+c_path);
 
-    if(sep)
+    AutoHD<TCntrNode> DAQnd = this;
+    const char *c_grp = "mod_";
+    for(int c_off = 0; (sep && (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size()) ||
+		   (!sep && (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size()); ++c_lv)
     {
-	for(c_off = 0; (c_el=TSYS::strSepParse(l_prm,0,sep,&c_off)).size(); ++c_lv)
-	{
-	    c_path += c_lv ? sep+c_el : c_el;
-	    opt->childAdd("el")->setText(pref+c_path);
-	}
-	if(c_lv) c_path += sep;
-	AutoHD<TCntrNode> DAQnd = nodeAt(c_path, 0, sep, 0, true);
-	if(!DAQnd.freeStat())
-	{
-	    if(dynamic_cast<TVal*>(&DAQnd.at()) && toPrm) opt->childDel(opt->childSize()-1);
-	    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !toPrm)
-	    {
-		DAQnd.at().chldList(0, ls, true);
-		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		    opt->childAdd("el")->setText(pref+c_path+ls[i_l]);
-	    }
-	}
+	c_path += sep ? (c_lv?sep+c_el:c_el) : "/"+c_el;
+	DAQnd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(DAQnd.freeStat()) break;
+	opt->childAdd("el")->setText(pref+c_path);
+	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
     }
-    else
+    if(sep && c_lv) c_path += sep;
+    if(!DAQnd.freeStat())
     {
-	for(c_off = 0; (c_el=TSYS::pathLev(l_prm,0,true,&c_off)).size(); ++c_lv)
+	DAQnd.at().chldList(DAQnd.at().grpId(c_grp), ls, true);
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	    opt->childAdd("el")->setText(pref+c_path+(sep?ls[i_l]:("/"+ls[i_l])));
+
+	//Get attributes
+	if(!toPrm && strcmp(c_grp,"prm_") == 0)
 	{
-	    c_path += "/"+c_el;
-	    opt->childAdd("el")->setText(pref+c_path);
-	}
-	AutoHD<TCntrNode> DAQnd = nodeAt(c_path, 0, 0, 0, true);
-	if(!DAQnd.freeStat())
-	{
-	    if(dynamic_cast<TVal*>(&DAQnd.at()) && toPrm) opt->childDel(opt->childSize()-1);
-	    if(!dynamic_cast<TValue*>(&DAQnd.at()) || !toPrm)
-	    {
-		DAQnd.at().chldList(0, ls, true);
-		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		    opt->childAdd("el")->setText(pref+c_path+"/"+ls[i_l]);
-	    }
+	    DAQnd.at().chldList(DAQnd.at().grpId("a_"), ls, true);
+	    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
+	    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+		opt->childAdd("el")->setText(pref+c_path+(sep?ls[i_l]:("/"+ls[i_l])));
 	}
     }
 }
@@ -375,18 +363,18 @@ void TDAQS::subStart(  )
 
 	//> Enable controllers
 	modList(m_l);
-	for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+	for(unsigned i_m = 0; i_m < m_l.size(); i_m++)
 	{
 	    vector<string> c_l;
 	    at(m_l[i_m]).at().list(c_l);
-	    for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	    for(unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	    {
 		AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
-		if( /*!cntr.at().enableStat() &&*/ cntr.at().toEnable() )
+		if(/*!cntr.at().enableStat() &&*/ cntr.at().toEnable())
 		    try{ cntr.at().enable(); }
 		    catch(TError err)
 		    {
-			if( try_cnt )
+			if(try_cnt)
 			{
 			    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 			    mess_err(nodePath().c_str(),_("Enable controller '%s' error."),(m_l[i_m]+"."+c_l[i_c]).c_str());
@@ -397,10 +385,10 @@ void TDAQS::subStart(  )
 	}
 	try_cnt++;
     }
-    while( reply && try_cnt < 2 );
+    while(reply && try_cnt < 2);
 
     //> Archive subsystem start
-    if(!SYS->archive().at().subStartStat() || !SYS->stopSignal()) SYS->archive().at().subStart( );
+    if(!SYS->archive().at().subStartStat() || !SYS->stopSignal()) SYS->archive().at().subStart();
 
     //> Redundant task start
     if(!prcStRd) SYS->taskCreate(nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this, 5, NULL, &prcStRd);
@@ -421,15 +409,15 @@ void TDAQS::subStop( )
 
     //> Stop
     modList(m_l);
-    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+    for(unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
 	at(m_l[i_m]).at().list(c_l);
-	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	for(unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
-	    if( cntr.at().startStat() )
-		try{ cntr.at().stop( ); }
+	    if(cntr.at().startStat())
+		try{ cntr.at().stop(); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -438,15 +426,15 @@ void TDAQS::subStop( )
 	}
     }
     //> Disable
-    for( unsigned i_m = 0; i_m < m_l.size(); i_m++)
+    for(unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
 	at(m_l[i_m]).at().list(c_l);
-	for( unsigned i_c = 0; i_c < c_l.size(); i_c++)
+	for(unsigned i_c = 0; i_c < c_l.size(); i_c++)
 	{
 	    AutoHD<TController> cntr = at(m_l[i_m]).at().at(c_l[i_c]);
-	    if( cntr.at().enableStat() )
-		try{ cntr.at().disable( ); }
+	    if(cntr.at().enableStat())
+		try{ cntr.at().disable(); }
 		catch(TError err)
 		{
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
@@ -463,25 +451,58 @@ void TDAQS::subStop( )
     TSubSYS::subStop( );
 }
 
+AutoHD<TCntrNode> TDAQS::daqAt( const string &path, char sep, bool noex, bool waitForAttr )
+{
+    string c_el;
+    AutoHD<TCntrNode> DAQnd = this;
+    const char *c_grp = "mod_";
+    for(int c_off = 0, c_lv = 0; (sep && (c_el=TSYS::strSepParse(path,0,sep,&c_off)).size()) ||
+		   (!sep && (c_el=TSYS::pathLev(path,0,true,&c_off)).size()); ++c_lv)
+    {
+	bool lastEl = (c_lv > 2 && c_off >= path.size());
+	if(waitForAttr && lastEl) c_grp = "a_";
+	AutoHD<TCntrNode> tNd = DAQnd.at().nodeAt(c_grp+c_el, 0, sep, 0, true);
+	if(tNd.freeStat() && !(c_grp != "a_" && lastEl && !(tNd=DAQnd.at().nodeAt("a_"+c_el,0,sep,0,true)).freeStat()))
+	{
+	    if(noex) return AutoHD<TValue>();
+	    else throw TError(nodePath().c_str(),_("No DAQ node present '%s'."),path.c_str());
+	}
+	c_grp = (c_lv == 0) ? "cntr_" : "prm_";
+	DAQnd = tNd;
+    }
+
+    return DAQnd;
+}
+
 AutoHD<TValue> TDAQS::prmAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TValue> rez = nodeAt(path, 0, sep, 0, true);
-    if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No parameter present '%s'."),path.c_str());
-    return rez;
+    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex);
+    if(DAQnd.freeStat() || !dynamic_cast<TValue*>(&DAQnd.at()))
+    {
+	if(noex) return AutoHD<TValue>();
+	else throw TError(nodePath().c_str(),_("Pointed node is not parameter '%s'."),path.c_str());
+    }
+
+    return DAQnd;
 }
 
 AutoHD<TVal> TDAQS::attrAt( const string &path, char sep, bool noex )
 {
-    AutoHD<TVal> rez = nodeAt(path, 0, sep, 0, true);
-    if(rez.freeStat() && !noex) throw TError(nodePath().c_str(),_("No attribute present '%s'."),path.c_str());
-    return rez;
+    AutoHD<TCntrNode> DAQnd = daqAt(path, sep, noex, true);
+    if(DAQnd.freeStat() || !dynamic_cast<TVal*>(&DAQnd.at()))
+    {
+	if(noex) return AutoHD<TVal>();
+	else throw TError(nodePath().c_str(),_("Pointed node is not attribute '%s'."),path.c_str());
+    }
+
+    return DAQnd;
 }
 
 bool TDAQS::rdActive( )
 {
-    ResAlloc res(nodeRes(),false);
-    for( map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++ )
-	if( sit->second.isLive ) return true;
+    ResAlloc res(nodeRes(), false);
+    for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
+	if(sit->second.isLive) return true;
     return false;
 }
 
@@ -492,7 +513,7 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
     map<string,bool>::iterator cit;
 
     string lcPath = req.attr("path");
-    ResAlloc res(nodeRes(),false);
+    ResAlloc res(nodeRes(), false);
     for(sit = mSt.begin(); sit != mSt.end(); sit++)
     {
 	if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr)) != sit->second.actCntr.end() && (!toRun || cit->second))
@@ -503,17 +524,17 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
 		continue;
 	    }
 	    //> Real request
-	    req.setAttr("path","/"+sit->first+lcPath);
+	    req.setAttr("path", "/"+sit->first+lcPath);
 	    try
 	    {
-		SYS->transport().at().cntrIfCmd(req,"DAQRedundant");
+		SYS->transport().at().cntrIfCmd(req, "DAQRedundant");
 		sit->second.cnt++;
 		return sit->first;
 	    }
-	    catch( TError err )
+	    catch(TError err)
 	    {
 		sit->second.isLive = false;
-		sit->second.cnt = rdRestConnTm( );
+		sit->second.cnt = rdRestConnTm();
 		sit->second.lev = 0;
 		sit->second.actCntr.clear();
 		continue;
@@ -544,16 +565,16 @@ void *TDAQS::RdTask( void *param )
 
 	//> Update wait time for dead stations and process connections to stations
 	ResAlloc res(daq.nodeRes(),false);
-	for( sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++ )
+	for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
 	{
 	    //>> Live stations and connect to new station process
-	    if( sit->second.isLive || (!sit->second.isLive && sit->second.cnt <= 0) )
+	    if(sit->second.isLive || (!sit->second.isLive && sit->second.cnt <= 0))
 	    {
 		//>> Send request for configuration to remote station
 		req.clear()->setAttr("path","/"+sit->first+"/DAQ/%2fserv%2fredundant");
 		try
 		{
-		    if( SYS->transport().at().cntrIfCmd(req,"DAQRedundant") ) continue;
+		    if(SYS->transport().at().cntrIfCmd(req,"DAQRedundant")) continue;
 		    sit->second.lev = atoi(req.attr("StLevel").c_str());
 		    sit->second.actCntr.clear();
 		    for(unsigned i_c = 0; i_c < req.childSize(); i_c++)
@@ -571,7 +592,7 @@ void *TDAQS::RdTask( void *param )
 		}
 	    }
 	    //>> Reconnect counter process
-	    if( !sit->second.isLive && sit->second.cnt > 0 ) sit->second.cnt -= daq.rdTaskPer();
+	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= daq.rdTaskPer();
 	}
 	res.release();
 	daq.prcStRd = true;
@@ -582,55 +603,55 @@ void *TDAQS::RdTask( void *param )
 	{
 	    cntr = daq.at(TSYS::strSepParse(cls[i_c],0,'.')).at().at(TSYS::strSepParse(cls[i_c],1,'.'));
 	    //>> Check contoller run plane
-	    if( cntr.at().redntMode() == TController::Off ) cntr.at().setRedntUse(false);
+	    if(cntr.at().redntMode() == TController::Off) cntr.at().setRedntUse(false);
 	    else
 	    {
 		res.request(false);
-		if( cntr.at().redntRun( ) == "<high>" )
+		if(cntr.at().redntRun( ) == "<high>")
 		{
 		    int wLev = daq.rdStLevel();
-		    for( sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++ )
-			if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() && cit->second )
+		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
+			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() && cit->second)
 			    wLev = vmax(wLev,sit->second.lev);
-		    cntr.at().setRedntUse( daq.rdStLevel() < wLev );
+		    cntr.at().setRedntUse(daq.rdStLevel() < wLev);
 		}
-		else if( cntr.at().redntRun( ) == "<low>" )
+		else if(cntr.at().redntRun( ) == "<low>")
 		{
 		    int wLev = daq.rdStLevel();
-		    for( sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++ )
-			if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() && cit->second )
+		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
+			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() && cit->second)
 			    wLev = vmin(wLev,sit->second.lev);
 		    cntr.at().setRedntUse( daq.rdStLevel()>wLev );
 		}
-		else if( cntr.at().redntRun( ) == "<optimal>" )
+		else if(cntr.at().redntRun( ) == "<optimal>")
 		{
 		    vector<string> cls_lc;
 		    daq.rdActCntrList(cls_lc,true);
 		    bool remPresent = false;
-		    for( sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++ )
-			if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() )
+		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
+			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end())
 			{
-			    if( !remPresent ) remPresent = cit->second;
+			    if(!remPresent) remPresent = cit->second;
 			    int aCntr = 0;
-			    for( map<string,bool>::iterator scit = sit->second.actCntr.begin(); scit != sit->second.actCntr.end(); scit++ )
-				if( scit->second ) aCntr++;
-			    if( ((int)cls_lc.size()-aCntr) >= 0 && cit->second ) break;
+			    for(map<string,bool>::iterator scit = sit->second.actCntr.begin(); scit != sit->second.actCntr.end(); scit++)
+				if(scit->second) aCntr++;
+			    if(((int)cls_lc.size()-aCntr) >= 0 && cit->second) break;
 			}
-		    cntr.at().setRedntUse( sit != daq.mSt.end() );
+		    cntr.at().setRedntUse(sit != daq.mSt.end());
 		}
 		else
 		{
-		    for( sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++ )
-			if( sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() &&
-				cit->second && cntr.at().redntRun( ) == sit->first )
+		    for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
+			if(sit->second.isLive && (cit=sit->second.actCntr.find(cntr.at().workId())) != sit->second.actCntr.end() &&
+				cit->second && cntr.at().redntRun( ) == sit->first)
 			    break;
-		    cntr.at().setRedntUse( sit != daq.mSt.end() );
+		    cntr.at().setRedntUse(sit != daq.mSt.end());
 		}
 		res.release();
 	    }
 
 	    //>> Process remote run controllers
-	    if( cntr.at().startStat() && cntr.at().redntUse() ) cntr.at().redntDataUpdate( );
+	    if(cntr.at().startStat() && cntr.at().redntUse()) cntr.at().redntDataUpdate();
 
 	    cntr.free();
 	}
@@ -638,7 +659,7 @@ void *TDAQS::RdTask( void *param )
 	daq.mRdPrcTm = SYS->curTime()-work_tm;
 
 	TSYS::taskSleep((int64_t)(daq.rdTaskPer()*1e9));
-    } catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     daq.prcStRd = false;
 
@@ -662,9 +683,9 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
     //> Service commands process
-    if( a_path == "/serv/redundant" )	//Redundant service requests
+    if(a_path == "/serv/redundant")	//Redundant service requests
     {
-	if( ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD) )
+	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
 	    opt->setAttr("StLevel",TSYS::int2str(rdStLevel()));
 	    map<string,bool> cntrLs;
@@ -680,18 +701,18 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
     }
 
     //> Get page info
-    if( opt->name() == "info" )
+    if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,0,"/redund",_("Redundancy")) )
+	ctrMkNode("grp",opt,-1,"/br/tmplb_",_("Template library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	if(ctrMkNode("area",opt,0,"/redund",_("Redundancy")))
 	{
 	    ctrMkNode("fld",opt,-1,"/redund/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/redund/statLev",_("Station level"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/tskPer",_("Redundant task period (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	    ctrMkNode("fld",opt,-1,"/redund/restConn",_("Restore connection timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
 	    ctrMkNode("fld",opt,-1,"/redund/restDtTm",_("Restore data depth time (hour)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
-	    if( ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root",SDAQ_ID,2,"key","st","s_com","add,del") )
+	    if(ctrMkNode("table",opt,-1,"/redund/sts",_("Stations"),RWRWR_,"root",SDAQ_ID,2,"key","st","s_com","add,del"))
 	    {
 		ctrMkNode("list",opt,-1,"/redund/sts/st",_("ID"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/redund/lsSt");
 		ctrMkNode("list",opt,-1,"/redund/sts/name",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -701,7 +722,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/sts/run",_("Run"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 	    }
 	    ctrMkNode("comm",opt,-1,"/redund/hostLnk",_("Go to remote stations list configuration"),0660,"root","Transport",1,"tp","lnk");
-	    if( ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root",SDAQ_ID,1,"key","id") )
+	    if(ctrMkNode("table",opt,-1,"/redund/cntr",_("Controllers"),RWRWR_,"root",SDAQ_ID,1,"key","id"))
 	    {
 		ctrMkNode("list",opt,-1,"/redund/cntr/id",_("Controller"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/redund/cntr/nm",_("Name"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
@@ -713,8 +734,9 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/redund/cntr/remoted",_("Remote"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
-	if( ctrMkNode("area",opt,1,"/tpllibs",_("Template libraries")) )
-	    ctrMkNode("list",opt,-1,"/tpllibs/lb",_("Template libraries"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","tmplb_","idSz","20");
+	if(ctrMkNode("area",opt,1,"/tpllibs",_("Template libraries")))
+	    ctrMkNode("list",opt,-1,"/tpllibs/lb",_("Template libraries"),RWRWR_,"root",SDAQ_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","tmplb_","idSz",OBJ_ID_SZ);
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SDAQ_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }

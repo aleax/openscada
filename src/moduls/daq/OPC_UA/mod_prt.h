@@ -29,7 +29,7 @@
 
 #include <tprotocols.h>
 
-#include "libOPC_UA.h"
+#include "libOPC_UA/libOPC_UA.h"
 
 #undef _
 #define _(mess) modPrt->I18N(mess)
@@ -37,7 +37,7 @@
 using std::string;
 using std::map;
 using namespace OSCADA;
-using namespace OSCADA_OPC;
+using namespace OPC;
 
 //*************************************************
 //* Protocol modul info!                          *
@@ -95,6 +95,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	string url( )		{ return mURL; }
 	string cert( );
 	string pvKey( );
+	double subscrProcPer( )	{ return 0; }	//Disabled
 
 	string getStatus( );
 
@@ -109,18 +110,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	//> Security policies
-	string secPolicy( int isec );
-	MessageSecurityMode secMessageMode( int isec );
-
-	//> Sessions
-	int sessCreate( const string &iName, double iTInact );
-	void sessServNonceSet( int sid, const string &servNonce );
-	bool sessActivate( int sid, uint32_t secCnl, bool check = false );
-	void sessClose( int sid );
-	Server::Sess sessGet( int sid );
-
-	string reqData( int reqTp, const string &rb );
+	int reqData( int reqTp, XML_N &req );
 
 	TProt &owner( );
 
@@ -176,7 +166,8 @@ class TProt: public TProtocol, public Server
 	AutoHD<OPCEndPoint> epAt( const string &id )	{ return chldAt(mEndPnt,id); }
 
 	void discoveryUrls( vector<string> &ls );
-	bool inReq( string &request, string &answer, const string &sender );
+	bool inReq( string &request, const string &inPrtId, string *answ = NULL );
+	int writeToClient( const string &inPrtId, const string &data )	{ return 0; }
 
 	TElem &endPntEl( )			{ return mEndPntEl; }
 
@@ -192,7 +183,7 @@ class TProt: public TProtocol, public Server
 	void save_( );
 
 	bool debug( );
-	void debugMess( const string &mess, const string &data );
+	void debugMess( const string &mess );
 	void epEnList( vector<string> &ls );
 	EP *epEnAt( const string &ep );
 

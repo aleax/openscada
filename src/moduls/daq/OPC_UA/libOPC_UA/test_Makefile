@@ -1,0 +1,4 @@
+
+
+all:
+	g++ -O2 libOPC_UA.cpp test.cpp -o testOPC_UA -lssl -lcrypto

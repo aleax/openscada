@@ -171,6 +171,7 @@ char TVariant::getB( ) const
 {
     switch(type())
     {
+	case Null:	return false;
 	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(tvl.c_str()); }
 	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_BOOL : (bool)tvl; }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_BOOL : (bool)tvl; }

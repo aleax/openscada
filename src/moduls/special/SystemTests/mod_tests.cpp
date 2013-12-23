@@ -272,11 +272,12 @@ void TTest::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSpecial::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root",SSPC_ID,2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/test_",_("Test"),R_R_R_,"root",SSPC_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,1,"/tests",_("Tests")))
 	{
 	    ctrMkNode("fld",opt,-1,"/tests/nmb",_("Number"),R_R_R_,"root",SSPC_ID,1,"tp","str");
-	    ctrMkNode("list",opt,-1,"/tests/tests",_("Tests"),R_R_R_,"root",SSPC_ID,4,"tp","br","idm","1","br_pref","test_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/tests/tests",_("Tests"),R_R_R_,"root",SSPC_ID,4,
+		"tp","br","idm",OBJ_NM_SZ,"br_pref","test_","idSz",OBJ_ID_SZ);
 	}
 	return;
     }

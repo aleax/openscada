@@ -4926,7 +4926,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     int mrkFontSize = 0;
-    int mrkHeight = 0;
+    int mrkHeight = 0, mrkWidth = 0;
     int clr_grid = 0, clr_mrk = 0;					//Colors
 
     //> Get generic parameters
@@ -4978,7 +4978,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
-	    else mrkHeight = brect[3]-brect[7];
+	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor & SC_MARKERS)
 	    {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
@@ -5175,7 +5175,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Calc horizontal scale
     int64_t hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkHeight)?(brect[2]-brect[6]):15.0*vmin(xSc,ySc));
+    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkWidth)?mrkWidth:15.0*vmin(xSc,ySc));
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;
@@ -5406,6 +5406,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     if(active && curTime && tBeg && tPict && (curTime >= tBeg || curTime <= tPict))
     {
 	//>> Set trend's pen
+	gdImageSetThickness(im, 1);
 	int clr_cur = TWEB::colorResolve(im, curColor);
 	//gdImageColorAllocate(im,(uint8_t)(curColor>>16),(uint8_t)(curColor>>8),(uint8_t)curColor);
 	int curPos = tArX + tArW*(curTime-tBeg)/(tPict-tBeg);
@@ -5428,7 +5429,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     if(rld) for(unsigned i_p = 0; i_p < trnds.size(); i_p++) trnds[i_p].loadData(ses.user);
 
     int mrkFontSize = 0;
-    int mrkHeight = 0;
+    int mrkHeight = 0, mrkWidth = 0;
     int clr_grid = 0, clr_mrk = 0;					//Colors
 
     //> Get generic parameters
@@ -5478,7 +5479,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    //gdImageColorAllocate(im,(uint8_t)(sclMarkColor>>16),(uint8_t)(sclMarkColor>>8),(uint8_t)sclMarkColor);
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
-	    else mrkHeight = brect[3]-brect[7];
+	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
 	    if(sclHor&SC_MARKERS)
 	    {
 		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
@@ -5648,7 +5649,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     fftBeg = 1e6/(double)tSz;			//Minimum frequency or maximum period time (s)
     fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;				//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkHeight)?(brect[2]-brect[6]):(15*vmin(xSc,ySc)));
+    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkWidth)?mrkWidth:(15*vmin(xSc,ySc)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -6166,7 +6167,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     //> Correct request to archive border
     wantPer	= (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime	= vmin(tTime, arh_end);
-    //tTimeGrnd	= vmax(tTimeGrnd,arh_beg);
+    tTimeGrnd	= vmax(tTimeGrnd, arh_beg);	//For prevent possible cycling
 
     //> Clear data at time error
     if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
@@ -6180,7 +6181,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
     //> Get values data
-    int64_t	bbeg, bend, bper;
+    int64_t	bbeg, bend, bper, bbeg_prev = tTime;
     int		curPos, prevPos, maxPos;
     double      curVal, prevVal;
     string      svl;
@@ -6242,7 +6243,12 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     }
 
     //> Check for archive jump
-    if(!isDataDir && arch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && arch.empty() && (bbeg-tTimeGrnd)/bper && bper < bbeg_prev)
+    {
+	bbeg_prev = bper;
+	tTime = bbeg-bper;
+	goto m1;
+    }
 }
 
 void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )

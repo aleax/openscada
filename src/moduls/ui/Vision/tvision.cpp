@@ -100,7 +100,7 @@ TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), end_run(false), 
     modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
 }
 
-TVision::~TVision()
+TVision::~TVision( )
 {
     //> Free widget's shapes
     for(unsigned i_sw = 0; i_sw < shapesWdg.size(); i_sw++)

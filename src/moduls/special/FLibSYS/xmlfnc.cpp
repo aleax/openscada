@@ -37,17 +37,16 @@ void xmlCntrReq::calc( TValFunc *val )
 	string path = req.attr("path");
 	if(val->getS(2).empty())
 	{
-	    req.setAttr("user",val->user());
+	    req.setAttr("user", val->user());
 	    SYS->cntrCmd(&req);
 	}
 	else
 	{
-	    req.setAttr("path","/"+val->getS(2)+path);
-	    SYS->transport().at().cntrIfCmd(req,"xmlCntrReq");
-	    req.setAttr("path",path);
+	    req.setAttr("path", "/"+val->getS(2)+path);
+	    SYS->transport().at().cntrIfCmd(req, "xmlCntrReq");
+	    req.setAttr("path", path);
 	}
 	xnd.at().fromXMLNode(req);
-	val->setS(0,"0");
-    }catch(TError err){ val->setS(0,TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
+	val->setS(0, "0");
+    }catch(TError err){ val->setS(0, TSYS::strMess(_("1:Request error: %s"),err.mess.c_str())); }
 }
-

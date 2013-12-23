@@ -4,7 +4,7 @@ Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
-Version: 0.8.0.8
+Version: 0.8.0.9
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -1467,6 +1467,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Mon Dec 09 2013 Roman Savochenko <rom_as@oscada.org>
+- Build 0.8.0.9 update to production release.
+
 * Mon Sep 16 2013 Roman Savochenko <rom_as@oscada.org>
 - Build 0.8.0.8 update to production release.
 
@@ -1544,7 +1547,7 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 * Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
 
-* Sat Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Sun Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
 - menu files included
 
 * Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
@@ -1563,5 +1566,5 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 - add languages: ru, uk
 - make packages from 'make -dist' package;
 
-* Thu Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
+* Wed Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
 - Starting

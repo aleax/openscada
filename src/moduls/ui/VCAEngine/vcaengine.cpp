@@ -116,78 +116,78 @@ void Engine::postEnable( int flag )
     if(!(flag&TCntrNode::NodeConnect)) return;
 
     //> Make lib's DB structure
-    lbwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    lbwdg_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    lbwdg_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
-    lbwdg_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
-    lbwdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
+    lbwdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    lbwdg_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    lbwdg_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300"));
+    lbwdg_el.fldAdd(new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30"));
+    lbwdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
 
     //> Make library widgets' data container
-    wdgdata_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    wdgdata_el.fldAdd( new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30") );
-    wdgdata_el.fldAdd( new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000") );
+    wdgdata_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    wdgdata_el.fldAdd(new TFld("MIME",_("Mime type"),TFld::String,TFld::NoFlag,"30"));
+    wdgdata_el.fldAdd(new TFld("DATA",_("Mime data"),TFld::String,TFld::NoFlag,"500000"));
 
     //> Make widgets' DB structure
-    wdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    wdg_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
-    wdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    wdg_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000") );
-    wdg_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
-    wdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    wdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
+    wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
+    wdg_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
     //> Make include widgets' DB structure
-    inclwdg_el.fldAdd( new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100") );
-    inclwdg_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    inclwdg_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    inclwdg_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    inclwdg_el.fldAdd(new TFld("IDW",_("IDW"),TFld::String,TCfg::Key,"100"));
+    inclwdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    inclwdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    inclwdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
     //> Make widget's IO DB structure
-    wdgio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
-    wdgio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
-    wdgio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
-    wdgio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
-    wdgio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
-    wdgio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30") );
-    wdgio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000") );
+    wdgio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
+    wdgio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61"));
+    wdgio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
+    wdgio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000"));
+    wdgio_el.fldAdd(new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5"));
+    wdgio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30"));
+    wdgio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000"));
 
     //> Make widget's user IO DB structure
-    wdguio_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100") );
-    wdguio_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61") );
-    wdguio_el.fldAdd( new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30") );
-    wdguio_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"100") );
-    wdguio_el.fldAdd( new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10") );
-    wdguio_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000") );
-    wdguio_el.fldAdd( new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5") );
-    wdguio_el.fldAdd( new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30") );
-    wdguio_el.fldAdd( new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000") );
+    wdguio_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"100"));
+    wdguio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"61"));
+    wdguio_el.fldAdd(new TFld("IDC",_("Child ID"),TFld::String,TCfg::Key,"30"));
+    wdguio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"100"));
+    wdguio_el.fldAdd(new TFld("IO_TYPE",_("Attribute generic flags and type"),TFld::Integer,TFld::NoFlag,"10"));
+    wdguio_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TCfg::TransltText,"100000"));
+    wdguio_el.fldAdd(new TFld("SELF_FLG",_("Attribute self flags"),TFld::Integer,TFld::NoFlag,"5"));
+    wdguio_el.fldAdd(new TFld("CFG_TMPL",_("Configuration template"),TFld::String,TCfg::TransltText,"30"));
+    wdguio_el.fldAdd(new TFld("CFG_VAL",_("Configuration value"),TFld::String,TCfg::TransltText,"1000"));
 
     //> Make project's DB structure
-    prj_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    prj_el.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    prj_el.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300") );
-    prj_el.fldAdd( new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30") );
-    prj_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
-    prj_el.fldAdd( new TFld("USER",_("User"),TFld::String,TFld::NoFlag,"20","root") );
-    prj_el.fldAdd( new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,"20","UI") );
-    prj_el.fldAdd( new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436") );
-    prj_el.fldAdd( new TFld("PER",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"4","100") );
-    prj_el.fldAdd( new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1") );
-    prj_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4") );
+    prj_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    prj_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    prj_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300"));
+    prj_el.fldAdd(new TFld("DB_TBL",_("Data base"),TFld::String,TFld::NoFlag,"30"));
+    prj_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
+    prj_el.fldAdd(new TFld("USER",_("User"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"root"));
+    prj_el.fldAdd(new TFld("GRP",_("Group"),TFld::String,TFld::NoFlag,OBJ_ID_SZ,"UI"));
+    prj_el.fldAdd(new TFld("PERMIT",_("Permission"),TFld::Integer,TFld::OctDec,"3","436"));
+    prj_el.fldAdd(new TFld("PER",_("Calculate period (ms)"),TFld::Integer,TFld::NoFlag,"4","100"));
+    prj_el.fldAdd(new TFld("STYLE",_("Work style"),TFld::Integer,TFld::NoFlag,"2","-1"));
+    prj_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"4"));
 
     //> Make pages DB structure
-    page_el.fldAdd( new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100") );
-    page_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    page_el.fldAdd( new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000") );
-    page_el.fldAdd( new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200") );
-    page_el.fldAdd( new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000") );
-    page_el.fldAdd( new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1") );
-    page_el.fldAdd( new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0") );
-    page_el.fldAdd( new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*") );
+    page_el.fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key,"100"));
+    page_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
+    page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
+    page_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
+    page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
+    page_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
 
     //> Make sessions' IO values of projects DB structure
-    prj_ses_el.fldAdd( new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200") );
-    prj_ses_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    prj_ses_el.fldAdd( new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000") );
+    prj_ses_el.fldAdd(new TFld("IDW",_("Widget ID"),TFld::String,TCfg::Key,"200"));
+    prj_ses_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    prj_ses_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
     //> Make styles' IO DB structure
     prjStl_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
@@ -541,8 +541,8 @@ string Engine::callSynth( const string &itxt )
     //> Write text to pipe
     if( textToPipe )	fwrite( txt.c_str(), txt.size(), 1, fp );
     //> Read result from pipe
-    if( rezFromPipe )
-	while((comPos=fread( buf, 1, sizeof(buf), fp)))
+    if(rezFromPipe)
+	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
     pclose(fp);
     //> Read result from result file
@@ -550,7 +550,7 @@ string Engine::callSynth( const string &itxt )
     {
 	FILE *fp = fopen( synthRez, "r" );
 	if( !fp ) return "";
-	while((comPos=fread( buf, 1, sizeof(buf), fp)))
+	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
 	fclose(fp);
 	remove( synthRez );
@@ -593,7 +593,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 
-    if( ldGen )	return;
+    if(ldGen)	return;
 
     //> Load widget's user attributes
     wdb = fullDB+"_uio";
@@ -656,7 +656,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
 	}
 	//> User attributes store
-	else if( !ldGen )
+	else if(!ldGen)
 	{
 	    c_elu.cfg("ID").setS( als[i_a] );
 	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
@@ -676,7 +676,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	}
     }
 
-    if( !ldGen )
+    if(!ldGen)
     {
 	//> Clear no present IO for main io table
 	c_el.cfgViewAll(false);

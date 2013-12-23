@@ -32,7 +32,7 @@
 #include "tarchives.h"
 #include "tarchval.h"
 
-#if HAVE_GD_H
+#if HAVE_GD_CORE
 #include <gd.h>
 #endif
 
@@ -988,7 +988,7 @@ AutoHD<TVal> TVArchive::srcPAttr( bool force, const string &ipath )
     {
 	if(TSYS::strParse(srcPath,0,".") == "sub_DAQ" || TSYS::strParse(srcPath,0,".") == "DAQ")
 	    attr = SYS->nodeAt(srcPath,0,'.');
-	else attr = SYS->daq().at().nodeAt(srcPath,0,'.');
+	else attr = SYS->daq().at().attrAt(srcPath,'.');
     }
     catch(TError err) { }
     return attr;
@@ -1375,11 +1375,10 @@ void TVArchive::archivatorSort()
     while(rep_try);
 }
 
-string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch, int hsz, int vsz, double valmax, double valmin )
+string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch, int hsz, int vsz, double valmax, double valmin, string *tp )
 {
     string rez;
 
-#if HAVE_GD_H
     string lab_tm, lab_dt;
     time_t tm_t;
     struct tm ttm, ttm1 = ttm;
@@ -1402,47 +1401,69 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     v_w_size  = vsz-v_w_start-hv_border;
 
     int mrkHeight = 0;
+
+#if HAVE_GD_CORE
     int brect[8];
-    char *gdR = gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000");
-    if( gdR ) mess_err(nodePath().c_str(),_("gdImageStringFT for font '%s' error: %s."),sclMarkFont.c_str(),gdR);
+    char *gdR = gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000");
+    if(gdR) mess_err(nodePath().c_str(), _("gdImageStringFT for font '%s' error: %s."), sclMarkFont.c_str(), gdR);
     else mrkHeight = brect[3]-brect[7];
     //if( mrkHeight <= 0 ) return rez;
+    int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15);
 
     v_w_size -= 2*mrkHeight;
 
     //> Create image
-    gdImagePtr im = gdImageCreate(hsz,vsz);
-    int clr_backgr = gdImageColorAllocate(im,0x35,0x35,0x35);
-    int clr_grid   = gdImageColorAllocate(im,0x8e,0x8e,0x8e);
-    int clr_symb   = gdImageColorAllocate(im,0x11,0xff,0x5f);
-    int clr_trnd   = gdImageColorAllocate(im,0x1f,0xf2,0xff);
+    gdImagePtr im = gdImageCreate(hsz, vsz);
+    int clr_backgr = gdImageColorAllocate(im, 0x35, 0x35, 0x35);
+    int clr_grid   = gdImageColorAllocate(im, 0x8e, 0x8e, 0x8e);
+    int clr_symb   = gdImageColorAllocate(im, 0x11, 0xff, 0x5f);
+    int clr_trnd   = gdImageColorAllocate(im, 0x1f, 0xf2, 0xff);
 
-    gdImageFilledRectangle(im,0,0,hsz-1,vsz-1,clr_backgr);
-    gdImageRectangle(im,h_w_start,v_w_start,h_w_start+h_w_size,v_w_start+v_w_size,clr_grid);
+    gdImageFilledRectangle(im, 0, 0, hsz-1, vsz-1, clr_backgr);
+    gdImageRectangle(im, h_w_start, v_w_start, h_w_start+h_w_size, v_w_start+v_w_size, clr_grid);
+
+#else
+    mrkHeight = mrkFontSize;
+    int mrkWidth = 5*mrkFontSize;
+    int hmax_ln = vsz / 15;
+    v_w_size -= 2*mrkHeight;
+    const char	*clr_backgr = "#353535",
+		*clr_grid = "#8e8e8e",
+		*clr_symb = "#11ff5f",
+		*clr_trnd = "#1ff2ff";
+
+    XMLNode im("svg");
+    im.setAttr("xmlns","http://www.w3.org/2000/svg")->setAttr("version","1.1")->setAttr("width",i2s(hsz))->setAttr("height",i2s(vsz));
+    im.childAdd("rect")->setAttr("width",i2s(hsz))->setAttr("height",i2s(vsz))->
+	setAttr("stroke","none")->setAttr("stroke-width","0")->setAttr("fill",clr_backgr);
+    /*im.childAdd("rect")->setAttr("x",i2s(h_w_start))->setAttr("y",i2s(v_w_start))->
+	setAttr("width",i2s(h_w_size))->setAttr("height",i2s(v_w_size))->
+	setAttr("stroke",clr_grid)->setAttr("stroke-width","1")->setAttr("fill","none");*/
+    XMLNode *trPath = NULL;
+#endif
 
     //> Make horisontal grid and symbols
     int64_t h_div = 1;
     int64_t h_min = ibeg;
     int64_t h_max = iend;
-    int hmax_ln = vsz / (mrkHeight?(brect[2]-brect[6]):15.0);
-    if( hmax_ln >= 2 )
+    if(hmax_ln >= 2)
     {
 	int hvLev = 0;
 	int64_t hLen = iend - ibeg;
-	if( hLen/86400000000ll >= 2 )		{ hvLev = 5; h_div = 86400000000ll; }	//Days
-	else if( hLen/3600000000ll >= 2 )	{ hvLev = 4; h_div =  3600000000ll; }	//Hours
-	else if( hLen/60000000 >= 2 )		{ hvLev = 3; h_div =    60000000; }	//Minutes
-	else if( hLen/1000000 >= 2 )		{ hvLev = 2; h_div =     1000000; }	//Seconds
-	else if( hLen/1000 >= 2 )		{ hvLev = 1; h_div =        1000; }	//Milliseconds
-	while( hLen/h_div > hmax_ln )		h_div *= 10;
-	while( hLen/h_div < hmax_ln/2 )		h_div /= 2;
+	if(hLen/86400000000ll >= 2)	{ hvLev = 5; h_div = 86400000000ll; }	//Days
+	else if(hLen/3600000000ll >= 2)	{ hvLev = 4; h_div =  3600000000ll; }	//Hours
+	else if(hLen/60000000 >= 2)	{ hvLev = 3; h_div =    60000000; }	//Minutes
+	else if(hLen/1000000 >= 2)	{ hvLev = 2; h_div =     1000000; }	//Seconds
+	else if(hLen/1000 >= 2)		{ hvLev = 1; h_div =        1000; }	//Milliseconds
+	while(hLen/h_div > hmax_ln)	h_div *= 10;
+	while(hLen/h_div < hmax_ln/2)	h_div /= 2;
 
 	//>> Select most like archivator
 	string rarch = iarch;
-	if( rarch.empty() && !vOK(ibeg,iend) )
+	if(rarch.empty() && !vOK(ibeg,iend))
 	{
 	    double best_a_per = 0;
-	    ResAlloc res(aRes,false);
+	    ResAlloc res(aRes, false);
 	    for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 		if(arch_el[i_a]->archivator().valPeriod() > best_a_per &&
 		    arch_el[i_a]->archivator().valPeriod() <= (double)(h_max-h_min)/(1e5*hsz))
@@ -1452,109 +1473,158 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		}
 	}
 
-	getVals(buf,h_min,h_max,rarch,600000);
-	if(!buf.end() || !buf.begin())	{ gdImageDestroy(im); return rez; }
+	getVals(buf, h_min, h_max, rarch, 600000);
+	if(!buf.end() || !buf.begin())
+	{
+#if HAVE_GD_CORE
+	    gdImageDestroy(im);
+#endif
+	    return rez;
+	}
 
 	//>> Draw full trend's data and time to the trend end position
-	if( mrkHeight )
+	if(mrkHeight)
 	{
 	    tm_t = iend/1000000;
-	    localtime_r(&tm_t,&ttm);
-	    lab_dt = TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900);
-	    if( ttm.tm_sec == 0 && iend%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
-	    else if( iend%1000000 == 0 ) lab_tm = TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec);
-	    else lab_tm = TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(iend%1000000)/1e6);
+	    localtime_r(&tm_t, &ttm);
+	    lab_dt = TSYS::strMess("%d-%02d-%d", ttm.tm_mday, ttm.tm_mon+1, ttm.tm_year+1900);
+	    if(ttm.tm_sec == 0 && iend%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
+	    else if(iend%1000000 == 0) lab_tm = TSYS::strMess("%d:%02d:%02d", ttm.tm_hour, ttm.tm_min, ttm.tm_sec);
+	    else lab_tm = TSYS::strMess("%d:%02d:%g", ttm.tm_hour, ttm.tm_min, (float)ttm.tm_sec+(float)(iend%1000000)/1e6);
 
-	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
-	    int markBrd = h_w_start+h_w_size-(brect[2]-brect[6]);
+#if HAVE_GD_CORE
+	    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
+	    int markBrd = h_w_start + h_w_size - (brect[2]-brect[6]);
 	    endMarkBrd = markBrd;
-	    gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,v_w_start+v_w_size+3+2*mrkHeight,(char*)lab_dt.c_str());
-	    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
-	    markBrd = h_w_start+h_w_size-(brect[2]-brect[6]);
-	    endMarkBrd = vmin(endMarkBrd,markBrd);
-	    gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,markBrd,v_w_start+v_w_size+3+mrkHeight,(char*)lab_tm.c_str());
+	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0, markBrd, v_w_start+v_w_size+3+2*mrkHeight, (char*)lab_dt.c_str());
+	    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_tm.c_str());
+	    markBrd = h_w_start + h_w_size - (brect[2]-brect[6]);
+	    endMarkBrd = vmin(endMarkBrd, markBrd);
+	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0, markBrd, v_w_start+v_w_size+3+mrkHeight, (char*)lab_tm.c_str());
+#else
+	    endMarkBrd = h_w_start + h_w_size - mrkWidth;
+	    im.childAdd("text")->setAttr("text-anchor","end")->setAttr("stroke","none")->
+		setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+		setAttr("x",i2s(h_w_start+h_w_size))->setAttr("y",i2s(v_w_start+v_w_size+3+2*mrkHeight))->setText(lab_dt);
+	    im.childAdd("text")->setAttr("text-anchor","end")->setAttr("stroke","none")->
+		setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+		setAttr("x",i2s(h_w_start+h_w_size))->setAttr("y",i2s(v_w_start+v_w_size+3+mrkHeight))->setText(lab_tm);
+#endif
 	}
 
 	//>> Draw grid and/or markers
 	bool first_m = true;
-	for( int64_t i_h = h_min; true; )
+	for(int64_t i_h = h_min; true; )
 	{
 	    //>>> Draw grid
-	    int h_pos = h_w_start+h_w_size*(i_h-h_min)/(h_max-h_min);
-	    gdImageLine(im,h_pos,v_w_start,h_pos,v_w_start+v_w_size,clr_grid);
+	    int h_pos = h_w_start + h_w_size*(i_h-h_min)/(h_max-h_min);
+#if HAVE_GD_CORE
+	    gdImageLine(im, h_pos, v_w_start, h_pos, v_w_start+v_w_size, clr_grid);
+#else
+	    im.childAdd("rect")->setAttr("x",i2s(h_pos))->setAttr("y",i2s(v_w_start))->
+		setAttr("width","1")->setAttr("height",i2s(v_w_size))->setAttr("stroke","none")->setAttr("fill",clr_grid);
+#endif
 
-	    if( mrkHeight && !(i_h%h_div) && i_h != iend )
+	    if(mrkHeight && !(i_h%h_div) && i_h != iend)
 	    {
 		tm_t = i_h/1000000;
-		localtime_r(&tm_t,&ttm);
+		localtime_r(&tm_t, &ttm);
 		int chLev = -1;
-		if( !first_m )
+		if(!first_m)
 		{
-		    if( ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year )  chLev = 5;
-		    else if( ttm.tm_mday > ttm1.tm_mday )  chLev = 4;
-		    else if( ttm.tm_hour > ttm1.tm_hour )  chLev = 3;
-		    else if( ttm.tm_min > ttm1.tm_min )    chLev = 2;
-		    else if( ttm.tm_sec > ttm1.tm_sec )    chLev = 1;
+		    if(ttm.tm_mon > ttm1.tm_mon || ttm.tm_year > ttm1.tm_year)  chLev = 5;
+		    else if(ttm.tm_mday > ttm1.tm_mday)	chLev = 4;
+		    else if(ttm.tm_hour > ttm1.tm_hour)	chLev = 3;
+		    else if(ttm.tm_min > ttm1.tm_min)	chLev = 2;
+		    else if(ttm.tm_sec > ttm1.tm_sec)	chLev = 1;
 		    else chLev = 0;
 		}
 		lab_dt = lab_tm = "";
 		//Date
-		if( hvLev == 5 || chLev >= 4 )
-		    lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) : TSYS::strMess("%d",ttm.tm_mday);
+		if(hvLev == 5 || chLev >= 4)
+		    lab_dt = (chLev>=5 || chLev==-1) ? TSYS::strMess("%d-%02d-%d",ttm.tm_mday,ttm.tm_mon+1,ttm.tm_year+1900) :
+						       TSYS::strMess("%d",ttm.tm_mday);
 		//Hours and minuts
-		if( (hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec ) lab_tm = TSYS::strMess("%d:%02d",ttm.tm_hour,ttm.tm_min);
+		if((hvLev == 4 || hvLev == 3 || ttm.tm_hour || ttm.tm_min) && !ttm.tm_sec) lab_tm = TSYS::strMess("%d:%02d", ttm.tm_hour, ttm.tm_min);
 		//Seconds
-		else if( (hvLev == 2 || ttm.tm_sec) && !(i_h%1000000) )
-		    lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) : TSYS::strMess(_("%ds"),ttm.tm_sec);
+		else if((hvLev == 2 || ttm.tm_sec) && !(i_h%1000000))
+		    lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%02d",ttm.tm_hour,ttm.tm_min,ttm.tm_sec) :
+						       TSYS::strMess(_("%ds"),ttm.tm_sec);
 		//Milliseconds
-		else if( hvLev <= 1 || i_h%1000000 )
+		else if(hvLev <= 1 || i_h%1000000)
 		    lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 			     (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					  TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
 		int wdth, tpos, endPosTm = 0, endPosDt = 0;
-		if( lab_dt.size() )
+#if HAVE_GD_CORE
+		if(lab_dt.size())
 		{
-		    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_dt.c_str());
-		    wdth = brect[2]-brect[6];
-		    tpos = vmax(h_pos-wdth/2,hv_border);
-		    if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+		    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
+		    wdth = brect[2] - brect[6];
+		    tpos = vmax(h_pos-wdth/2, hv_border);
+		    if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd)
 		    {
-			gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,v_w_start+v_w_size+3+2*mrkHeight,(char*)lab_dt.c_str());
-			endPosTm = tpos+wdth;
+			gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, v_w_start+v_w_size+3+2*mrkHeight, (char*)lab_dt.c_str());
+			endPosTm = tpos + wdth;
 		    }
 		}
-		if( lab_tm.size() )
+		if(lab_tm.size())
 		{
-		    gdImageStringFT(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,0,0,(char*)lab_tm.c_str());
-		    wdth = brect[2]-brect[6];
+		    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_tm.c_str());
+		    wdth = brect[2] - brect[6];
 		    tpos = vmax(h_pos-wdth/2,hv_border);
-		    if( (tpos+wdth) < endMarkBrd && tpos > begMarkBrd )
+		    if((tpos+wdth) < endMarkBrd && tpos > begMarkBrd)
 		    {
-			gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,tpos,v_w_start+v_w_size+3+mrkHeight,(char*)lab_tm.c_str());
-			endPosDt = tpos+wdth;
+			gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0, tpos, v_w_start+v_w_size+3+mrkHeight, (char*)lab_tm.c_str());
+			endPosDt = tpos + wdth;
 		    }
 		}
-		begMarkBrd = vmax(begMarkBrd,vmax(endPosTm,endPosDt));
-		memcpy((char*)&ttm1,(char*)&ttm,sizeof(tm));
+		begMarkBrd = vmax(begMarkBrd, vmax(endPosTm,endPosDt));
+#else
+		tpos = vmax(h_pos-mrkWidth/2, hv_border);
+		if((tpos+mrkWidth) < endMarkBrd && tpos > begMarkBrd)
+		{
+		    if(lab_dt.size())
+		    {
+			im.childAdd("text")->setAttr("text-anchor","middle")->setAttr("stroke","none")->
+			    setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+			    setAttr("x",i2s(tpos+mrkWidth/2))->setAttr("y",i2s(v_w_start+v_w_size+3+2*mrkHeight))->setText(lab_dt);
+		    }
+		    if(lab_tm.size())
+		    {
+			im.childAdd("text")->setAttr("text-anchor","middle")->setAttr("stroke","none")->
+			    setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("fill",clr_symb)->
+			    setAttr("x",i2s(tpos+mrkWidth/2))->setAttr("y",i2s(v_w_start+v_w_size+3+mrkHeight))->setText(lab_tm);
+		    }
+		    begMarkBrd = vmax(begMarkBrd, tpos+mrkWidth);
+		}
+#endif
+		memcpy((char*)&ttm1, (char*)&ttm, sizeof(tm));
 		first_m = false;
 	    }
 	    //>>> Next
-	    if( i_h >= iend )	break;
+	    if(i_h >= iend)	break;
 	    i_h = (i_h/h_div)*h_div + h_div;
-	    if( i_h > iend )	i_h = iend;
+	    if(i_h > iend)	i_h = iend;
 	}
     }
 
     //> Make vertical grid and symbols
-    double	c_val = EVAL_REAL, v_max = -3e300, v_min = 3e300;
-    for( c_tm = buf.begin(); c_tm <= buf.end(); c_tm++ )
+    double c_val = EVAL_REAL, v_max = -3e300, v_min = 3e300;
+    for(c_tm = buf.begin(); c_tm <= buf.end(); c_tm++)
     {
-	c_val = buf.getR(&c_tm,true);
+	c_val = buf.getR(&c_tm, true);
 	if(c_val == EVAL_REAL)	continue;
-	v_min = vmin(v_min,c_val);
-	v_max = vmax(v_max,c_val);
+	v_min = vmin(v_min, c_val);
+	v_max = vmax(v_max, c_val);
     }
-    if(v_max == -3e300)	{ gdImageDestroy(im); return rez; }
+    if(v_max == -3e300)
+    {
+#if HAVE_GD_CORE
+	gdImageDestroy(im);
+#endif
+	return rez;
+    }
     else if((v_max-v_min) < 1e-30 && fabs(v_max) < 1e-30)
     { v_max += 0.5; v_min -= 0.5; }
     else if((v_max-v_min) / fabs(v_min+(v_max-v_min)/2) < 0.001)
@@ -1565,8 +1635,8 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     }
     if(valmax > valmin)
     {
-	v_max = vmax(v_max,valmax);
-	v_min = vmin(v_min,valmin);
+	v_max = vmax(v_max, valmax);
+	v_min = vmin(v_min, valmin);
     }
 
     if(TSYS::realRound(v_max,3) == TSYS::realRound(v_min,3))	{ v_max+=1.0; v_min-=1.0; }
@@ -1578,14 +1648,22 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     v_max = ceil(v_max/v_div)*v_div;
     while(((v_max-v_min)/v_div) < 5) v_div /= 2;
     //>> Draw vertical grid and symbols
-    for( double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div )
+    for(double i_v = v_min; (v_max-i_v)/v_div > -0.1; i_v += v_div)
     {
-	int v_pos = v_w_start+v_w_size-(int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
-	gdImageLine(im,h_w_start,v_pos,h_w_start+h_w_size,v_pos,clr_grid);
-	bool isMax = (fabs((v_max-i_v)/v_div) < 0.1);
-	if( mrkHeight )
-	    gdImageStringFT(im,NULL,clr_symb,(char*)sclMarkFont.c_str(),mrkFontSize,0.0,hv_border+2,v_pos+(isMax?mrkHeight:0),
-		(char*)TSYS::strMess("%g",i_v).c_str());
+	int v_pos = v_w_start + v_w_size - (int)((double)v_w_size*(i_v-v_min)/(v_max-v_min));
+#if HAVE_GD_CORE
+	gdImageLine(im, h_w_start, v_pos, h_w_start+h_w_size, v_pos, clr_grid);
+	if(mrkHeight)
+	    gdImageStringFT(im, NULL, clr_symb, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
+		hv_border+2, v_pos+((fabs((v_max-i_v)/v_div) < 0.1)?mrkHeight:0), (char*)TSYS::strMess("%g",i_v).c_str());
+#else
+	im.childAdd("rect")->setAttr("x",i2s(h_w_start))->setAttr("y",i2s(v_pos))->
+	    setAttr("width",i2s(h_w_size))->setAttr("height","1")->setAttr("stroke","none")->setAttr("fill",clr_grid);
+	if(mrkHeight)
+	    im.childAdd("text")->setAttr("x",i2s(hv_border+2))->setAttr("y",i2s(v_pos+((fabs((v_max-i_v)/v_div) < 0.1)?mrkHeight:0)))->
+		setAttr("font-family",sclMarkFont)->setAttr("font-size",TSYS::strMess("%dpx",mrkFontSize))->setAttr("stroke","none")->
+		setAttr("fill",clr_symb)->setText(TSYS::strMess("%g",i_v));
+#endif
     }
 
     //> Draw trend
@@ -1595,49 +1673,75 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
     int64_t aver_lsttm = 0;
     double prev_vl = EVAL_REAL;
     int    prev_pos = 0;
-    for( c_tm = buf.begin(); true; c_tm++ )
+    for(c_tm = buf.begin(); true; c_tm++)
     {
 	int c_pos;
 	if(c_tm <= buf.end())
 	{
-	    c_val = buf.getR(&c_tm,true);
+	    c_val = buf.getR(&c_tm, true);
 	    c_pos = h_w_start+h_w_size*(vmax(vmin(c_tm,h_max),h_min)-h_min)/(h_max-h_min);
 	}else c_pos = 0;
 	//Square Average
-	if( aver_pos == c_pos )
+	if(aver_pos == c_pos)
 	{
-	    if( aver_vl == EVAL_REAL )	aver_vl = c_val;
-	    else if( c_val != EVAL_REAL )
+	    if(aver_vl == EVAL_REAL)	aver_vl = c_val;
+	    else if(c_val != EVAL_REAL)
 		aver_vl = (aver_vl*(double)(c_tm-aver_tm)+c_val*(double)(c_tm-aver_lsttm))/
 			  ((double)(2*c_tm-aver_tm-aver_lsttm));
 	    aver_lsttm = c_tm;
 	    continue;
 	}
 	//Write point and line
-	if( aver_vl != EVAL_REAL )
+#if HAVE_GD_CORE
+	if(aver_vl != EVAL_REAL)
 	{
-	    int c_vpos = v_w_start+v_w_size-(int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
-	    gdImageSetPixel(im,aver_pos,c_vpos,clr_trnd);
-	    if( prev_vl != EVAL_REAL )
+	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
+
+	    gdImageSetPixel(im, aver_pos, c_vpos, clr_trnd);
+	    if(prev_vl != EVAL_REAL)
 	    {
-		int c_vpos_prv = v_w_start+v_w_size-(int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
-		gdImageLine(im,prev_pos,c_vpos_prv,aver_pos,c_vpos,clr_trnd);
+		int c_vpos_prv = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
+		gdImageLine(im, prev_pos, c_vpos_prv, aver_pos, c_vpos, clr_trnd);
 	    }
 	}
+#else
+	if(aver_vl != EVAL_REAL)
+	{
+	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
+	    if(!trPath) trPath = im.childAdd("path")->setAttr("stroke",clr_trnd)->setAttr("stroke-width","1")->setAttr("fill","none");
+	    if(prev_vl == EVAL_REAL) trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("M%d,%d",aver_pos,c_vpos));	//Set single point
+	    else
+	    {
+		int c_vpos_prv = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
+		trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("L%d,%d",aver_pos,c_vpos));
+	    }
+	}
+	else if(prev_vl != EVAL_REAL)
+	{
+	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
+	    trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("L%d.1,%d.1",prev_pos,c_vpos));
+	}
+#endif
 	prev_vl  = aver_vl;
 	prev_pos = aver_pos;
 	aver_vl  = c_val;
 	aver_pos = c_pos;
 	aver_tm = aver_lsttm = c_tm;
-	if( !c_pos ) break;
+	if(!c_pos) break;
     }
 
     //> Get image and transfer it
+#if HAVE_GD_CORE
     int img_sz;
     char *img_ptr = (char *)gdImagePngPtrEx(im, &img_sz, 1);
     rez.assign(img_ptr,img_sz);
     gdFree(img_ptr);
     gdImageDestroy(im);
+
+    if(tp) *tp = "png";
+#else
+    rez = im.save(XMLNode::XMLHeader);
+    if(tp) *tp = "svg+xml";
 #endif
 
     return rez;
@@ -1716,7 +1820,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		if(i_asel >= 0)
 		{
 		    buf.setPeriod(vmax((int64_t)(1e6*arch_el[i_asel]->archivator().valPeriod()),period));
-		    arch_el[i_asel]->getVals(buf, tm_grnd, tm, local);
+		    arch_el[i_asel]->getVals(buf, vmax(tm_grnd,arch_el[i_asel]->begin()), tm, local);	//vmax for allow access to next level archive
+													//into single request, like from 1m to 10m
 		    opt->setAttr("arch",arch_el[i_asel]->archivator().workId());
 		}
 		res.release();
@@ -1902,7 +2007,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",mId.fld().descr(),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/vtp",cfg("VTYPE").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","dec","dest","select","select","/cfg/vtp_ls");
@@ -2034,7 +2139,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::PassiveAttr))->setText(_("Passive param. attribute"));
 	opt->childAdd("el")->setAttr("id",TSYS::int2str(TVArchive::ActiveAttr))->setText(_("Active param. attribute"));
     }
-    else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData());
+    else if(a_path == "/cfg/prm_atr_ls" && ctrChkNode(opt)) SYS->daq().at().ctrListPrmAttr(opt, srcData(), false, '.');
     else if(a_path == "/arch/arch")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))
@@ -2190,8 +2295,9 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	if( !(end/1000000) )	end = (int64_t)time(NULL) * 1000000;
 	int64_t beg = end - (int64_t)(atof(TBDS::genDBGet(owner().nodePath()+"vaSize","1",opt->attr("user")).c_str())*1e6);
 
-	opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH,vMax,vMin),TSYS::base64));
-	opt->setAttr("tp","png");
+	string tp = "png";
+	opt->setText(TSYS::strEncode(makeTrendImg(beg,end,TBDS::genDBGet(owner().nodePath()+"vArch","",opt->attr("user")),vPctW,vPctH,vMax,vMin,&tp),TSYS::base64));
+	opt->setAttr("tp", tp);
     }
     else TCntrNode::cntrCmdProc(opt);
 }
@@ -2431,7 +2537,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",mId.fld().descr(),R_R_R_,"root",SARH_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SARH_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/vper",mVPer.fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/aper",mAPer.fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","dec");

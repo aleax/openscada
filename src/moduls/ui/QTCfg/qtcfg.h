@@ -173,7 +173,7 @@ class ConfApp: public QMainWindow
 
 	vector<string>	stMess;
 
-	bool 		tbl_init;
+	bool		tbl_init;
     };
 
 }

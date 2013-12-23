@@ -97,7 +97,7 @@ class TMess
 	int messLevel( )	{ return mMessLevel; }
 	bool isUTF8( )		{ return mIsUTF8; }
 
-	void setLang( const string &lang );
+	void setLang( const string &lang, bool init = false );
 	void setLang2CodeBase( const string &vl );
 	void setLogDirect( int dir );
 	void setMessLevel( int level );

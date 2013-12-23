@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-11 15:46+0300\n"
+"POT-Creation-Date: 2013-10-24 19:13+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -808,6 +808,10 @@ msgstr "Реальное положение"
 msgid "Error"
 msgstr "Ошибка"
 
+#: tdaqs.cpp:141
+msgid "=== Attributes ==="
+msgstr "=== Атрибуты ==="
+
 msgid "Load template's libraries error."
 msgstr "Ошибка загрузки библиотек шаблонов."
 
@@ -838,10 +842,19 @@ msgstr "Ошибка отключения контроллера '%s'."
 msgid "No parameter present '%s'."
 msgstr "Отсутствует параметр '%s'."
 
+#: tdaqs.cpp:470
+msgid "Pointed node is not parameter '%s'."
+msgstr "Указанный узел не параметр '%s'."
+
 #, c-format
 msgid "No attribute present '%s'."
 msgstr "Отсутствует атрибут '%s'."
 
+#, c-format
+msgid "Pointed node is not attribute '%s'."
+msgstr "Указанный узел не атрибут '%s'."
+
+#: tdaqs.cpp:673
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"

@@ -200,7 +200,7 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 	for(int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg); )
 	{
 	    TMess::SRec rc(t_c,cfg.cfg("TMU").getI(),cfg.cfg("CATEG").getS(),(TMess::Type)cfg.cfg("LEV").getI(),cfg.cfg("MESS").getS());
-	    if(rc.level >= level && re.test(rc.categ))
+	    if(abs(rc.level) >= level && re.test(rc.categ))
 	    {
 		bool equal = false;
 		int i_p = mess.size();

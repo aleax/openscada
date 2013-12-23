@@ -383,7 +383,11 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		XMLNode req("get"); req.setAttr("path",ses.url);
 		if( mod->cntrIfCmd(req,ses.user) || atoi(req.attr("rez").c_str()) || req.text().empty() )
 		    ses.page = TUIS::icoGet("stop",&itp);
-		else ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		else
+		{
+		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
+		    if(req.attr("tp").size()) itp = req.attr("tp");
+		}
 		page = mod->httpHead("200 OK",ses.page.size(),"image/"+itp)+ses.page;
 		return;
 	    }
@@ -492,11 +496,8 @@ string TWEB::trMessReplace( const string &tsrc )
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user )
 {
-    try
-    {
-	return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user);
-    }catch( TError err )
-    { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
+    try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
+    catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
     return atoi(node.attr("rez").c_str());
 }
@@ -517,7 +518,7 @@ string TWEB::getCookie( string name, vector<string> &vars )
 string TWEB::cntGet( SSess &ses, const string &nm )
 {
     map<string,string>::iterator prmEl = ses.cnt.find(nm);
-    if( prmEl != ses.cnt.end() ) return prmEl->second;
+    if(prmEl != ses.cnt.end()) return prmEl->second;
     return "<empty>";
 }
 

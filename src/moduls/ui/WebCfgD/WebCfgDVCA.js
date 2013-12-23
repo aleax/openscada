@@ -684,15 +684,15 @@ function selectChildRecArea( node, aPath, cBlk )
 	      var posId = this.options[this.selectedIndex].getAttribute('posId');
 	      if( posId == 'go' )
 	        selectPage(selPath+'/'+(this.parentNode.srcNode.getAttribute('br_pref')+this.parentNode.lsId).replace(/%/g,'%25').replace(/\//g,'%2f'));
-	      else if( posId == 'add' || posId == 'ins' || posId == 'edit' )
+	      else if(posId == 'add' || posId == 'ins' || posId == 'edit')
 	      {
 		dlgWin = ReqIdNameDlg('/'+MOD_ID+'/ico');
 		setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Item name set###');
-		var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
-		fIdVal.maxLength = this.parentNode.srcNode.getAttribute('idSz');
-		if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
+		var idSz = parseInt(this.parentNode.srcNode.getAttribute('idSz'));
+		dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = ((idSz > 0) ? idSz : 1000);
 		dlgWin.document.getElementById('wDlgType').style.display = 'none';
-		dlgWin.document.getElementById('wDlgName').style.display = idm?'':'none';
+		dlgWin.document.getElementById('wDlgName').style.display = idm ? '' : 'none';
+		dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].maxLength = ((idm > 1) ? idm : 1000);
 		var actOkFld = dlgWin.document.getElementById('wDlgActOk');
 		actOkFld.itPath = this.parentNode.itPath;
 		actOkFld.srcNode = this.parentNode.srcNode;
@@ -2062,22 +2062,22 @@ function pageNext( )
  **************************************************/
 function itAdd( )
 {
-  if( !selPath.length ) return;
+  if(!selPath.length) return;
   var branchS = null;
-  for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
-    if( root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
+  for(var i_ch = 0; i_ch < root.childNodes.length; i_ch++)
+    if(root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br')
       branchS =  root.childNodes[i_ch];
-  if( !branchS ) return;
+  if(!branchS) return;
 
   //> Load branches list
   var typeCfg = '';
-  for( var i_b = 0; i_b < branchS.childNodes.length; i_b++ )
-    if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR )
-      typeCfg+="<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
-		     "' gid='"+branchS.childNodes[i_b].getAttribute('id')+
-		     "' idm='"+(parseInt(branchS.childNodes[i_b].getAttribute('idm'))?"1":"0")+"'>"+
+  for(var i_b = 0; i_b < branchS.childNodes.length; i_b++)
+    if(parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR)
+      typeCfg += "<option idSz='"+branchS.childNodes[i_b].getAttribute('idSz')+
+			"' gid='"+branchS.childNodes[i_b].getAttribute('id')+
+			"' idm='"+branchS.childNodes[i_b].getAttribute('idm')+"'>"+
 		branchS.childNodes[i_b].getAttribute('dscr')+"</option>";
-  if( !typeCfg.length ) { alert('###No one editable container present.###'); return; }
+  if(!typeCfg.length) { alert('###No one editable container present.###'); return; }
 
   dlgWin = ReqIdNameDlg(document.getElementById('actAddIt').childNodes[0].src,("###Add item to node '%1'.###").replace('%1',selPath));
   setNodeText(dlgWin.document.getElementById('wDlgHeader'),'###Add node###');
@@ -2085,11 +2085,12 @@ function itAdd( )
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
   {
-    if( this.selectedIndex < 0 ) return;
-    var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
-    fIdVal.maxLength = this.options[this.selectedIndex].getAttribute('idSz');
-    if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
-    dlgWin.document.getElementById('wDlgName').style.display = parseInt(this.options[this.selectedIndex].getAttribute('idm'))?'':'none';
+    if(this.selectedIndex < 0) return;
+    var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
+    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
+    var idm = parseInt(this.options[this.selectedIndex].getAttribute('idm'));
+    dlgWin.document.getElementById('wDlgName').style.display = idm ? '' : 'none';
+    dlgWin.document.getElementById('wDlgName').childNodes[1].childNodes[0].maxLength = (idm > 1) ? idm : 1000;
   }
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();
   dlgWin.document.getElementById('wDlgActOk').onclick = function()
@@ -2187,10 +2188,10 @@ function itPaste( )
 
   if( pathLev(copyBuf.substr(1),0) != pathLev(selPath,0) ) { alert('###Copy is impossible.###'); return; }
 
-  if( parseInt(root.getAttribute('acs'))&SEC_WR ) { typeCfg+="<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
-  for( var i_ch = 0; i_ch < root.childNodes.length; i_ch++ )
-    if( root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br' )
-      branchS =  root.childNodes[i_ch];
+  if(parseInt(root.getAttribute('acs'))&SEC_WR) { typeCfg += "<option idSz='-1' gid=''>###Selected###</option>"; itCnt++; }
+  for(var i_ch = 0; i_ch < root.childNodes.length; i_ch++)
+    if(root.childNodes[i_ch].nodeName.toLowerCase() == 'branches' && root.childNodes[i_ch].getAttribute('id') == 'br')
+      branchS = root.childNodes[i_ch];
   if( branchS )
     for( var i_b = 0; i_b < branchS.childNodes.length; i_b++, itCnt++ )
       if( parseInt(branchS.childNodes[i_b].getAttribute('acs'))&SEC_WR )
@@ -2212,15 +2213,10 @@ function itPaste( )
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].innerHTML = typeCfg;
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange = function( )
   {
-    if( this.selectedIndex < 0 ) return;
+    if(this.selectedIndex < 0) return;
     var idSz = parseInt(this.options[this.selectedIndex].getAttribute('idSz'));
-    if( idSz < 0 ) dlgWin.document.getElementById('wDlgId').style.display = 'none';
-    else
-    {
-      dlgWin.document.getElementById('wDlgId').style.display = '';
-      var fIdVal = dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0];
-      fIdVal.maxLength = idSz; if( !fIdVal.maxLength ) fIdVal.maxLength = 1000;
-    }
+    dlgWin.document.getElementById('wDlgId').style.display = (idSz >= 0) ? '' : 'none';
+    dlgWin.document.getElementById('wDlgId').childNodes[1].childNodes[0].maxLength = (idSz > 0) ? idSz : 1000;
   }
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].selectedIndex = defIt;
   dlgWin.document.getElementById('wDlgType').childNodes[1].childNodes[0].onchange();

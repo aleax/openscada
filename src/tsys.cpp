@@ -56,7 +56,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), mStopSignal(-1), mMultCPU(false)
+    mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mMultCPU(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -130,13 +130,28 @@ string TSYS::workDir( )
     return getcwd(buf,sizeof(buf));
 }
 
-void TSYS::setWorkDir( const string &wdir )
+void TSYS::setWorkDir( const string &wdir, bool init )
 {
     if(wdir.empty() || workDir() == wdir) return;
     if(chdir(wdir.c_str()) != 0)
 	mess_warning(nodePath().c_str(),_("Change work directory to '%s' error: %s. Perhaps current directory already set correct to '%s'."),
 	    wdir.c_str(),strerror(errno),workDir().c_str());
-    modif( );
+    else if(init) sysModifFlgs &= ~MDF_WorkDir;
+    else { sysModifFlgs |= MDF_WorkDir; modif(); }
+}
+
+void TSYS::setIcoDir( const string &idir, bool init )
+{
+    mIcoDir = idir;
+    if(init) sysModifFlgs &= ~MDF_IcoDir;
+    else { sysModifFlgs |= MDF_IcoDir; modif(); }
+}
+
+void TSYS::setModDir( const string &mdir, bool init )
+{
+    mModDir = mdir;
+    if(init) sysModifFlgs &= ~MDF_ModDir;
+    else { sysModifFlgs |= MDF_ModDir; modif(); }
 }
 
 XMLNode *TSYS::cfgNode( const string &path, bool create )
@@ -491,9 +506,9 @@ void TSYS::cfgPrmLoad( )
     //System parameters
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str());
-    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg));
-    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg));
+    setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
+    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
+    setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
     setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
     setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
 }
@@ -554,17 +569,14 @@ void TSYS::load_()
 
 void TSYS::save_( )
 {
-    char buf[STR_BUF_LEN];
-
     mess_info(nodePath().c_str(),_("Save!"));
 
     //> System parameters
-    getcwd(buf,sizeof(buf));
     TBDS::genDBSet(nodePath()+"StName",mName,"root",TBDS::UseTranslate);
     TBDS::genDBSet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"Workdir",buf,"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir",workDir(),"root",TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod",TSYS::int2str(savePeriod()));
 
@@ -622,7 +634,7 @@ int TSYS::start( )
     mess_info(nodePath().c_str(),_("Stop!"));
     if(saveAtExit() || savePeriod())	save();
     cfgFileSave();
-    for(int i_a=lst.size()-1; i_a >= 0; i_a--)
+    for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
 	catch(TError err)
 	{
@@ -650,11 +662,11 @@ void TSYS::sighandler( int signal )
     switch(signal)
     {
 	case SIGINT:
-	    SYS->mStopSignal=signal;
+	    SYS->mStopSignal = signal;
 	    break;
 	case SIGTERM:
 	    mess_warning(SYS->nodePath().c_str(),_("The Terminate signal is received. Server is being stopped!"));
-	    SYS->mStopSignal=signal;
+	    SYS->mStopSignal = signal;
 	    break;
 	case SIGFPE:
 	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
@@ -691,16 +703,28 @@ void TSYS::clkCalc( )
     sysSleep(0.1);
     mSysclc = 10*(shrtCnt()-st_pnt);
 
-    //Try read file /proc/cpuinfo for CPU frequency get
     if(!mSysclc)
     {
-        float frq;
         char buf[255];
-        FILE *fp = fopen("/proc/cpuinfo", "r");
-        if(fp)
+	FILE *fp = NULL;
+	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
+	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r")))
+	{
+	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
+	    mSysclc = uint64_t(atof(buf)*1e3);
+	    fclose(fp);
+	}
+
+	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
+        if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r")))
         {
+	    float frq;
             while(fgets(buf,sizeof(buf),fp) != NULL)
-                if(sscanf(buf,"BogoMIPS : %f\n",&frq))	{ mSysclc = (uint64_t)(frq*1e6); break; }
+		if(sscanf(buf,"cpu MHz : %f\n",&frq) || sscanf(buf,"bogomips : %f\n",&frq) || sscanf(buf,"BogoMIPS : %f\n",&frq))
+		{
+		    mSysclc = (uint64_t)(frq*1e6);
+		    break;
+		}
             fclose(fp);
         }
     }
@@ -2132,18 +2156,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/wrk_db" )
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(mWorkDB);
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(workDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setWorkDB(opt->text());
     }
     else if(a_path == "/gen/saveExit")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText( int2str(saveAtExit()) );
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(int2str(saveAtExit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(atoi(opt->text().c_str()));
     }
     else if(a_path == "/gen/savePeriod")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText( int2str(savePeriod()) );
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod( atoi(opt->text().c_str()) );
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(int2str(savePeriod()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(atoi(opt->text().c_str()));
     }
     else if(a_path == "/gen/workdir")
     {

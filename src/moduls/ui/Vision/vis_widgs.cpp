@@ -561,12 +561,12 @@ void LineEdit::setValue( const QString &txt )
 	    ((QTimeEdit*)ed_fld)->setTime(QTime().addSecs(txt.toInt()));
 	    break;
 	case Date: case DateTime:
-	    if( ((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible() ) break;
+	    if(((QDateTimeEdit*)ed_fld)->calendarWidget()->isVisible()) break;
 	    ((QDateTimeEdit*)ed_fld)->setDateTime(QDateTime::fromTime_t(txt.toInt()));
 	    break;
 	case Combo:
-	    if( ((QComboBox*)ed_fld)->findText(txt) < 0 ) ((QComboBox*)ed_fld)->addItem(txt);
-	    ((QComboBox*)ed_fld)->setEditText(txt);
+	    if(((QComboBox*)ed_fld)->findText(txt) < 0) ((QComboBox*)ed_fld)->addItem(txt);
+	    if(txt != value())	((QComboBox*)ed_fld)->setEditText(txt);
 	    break;
     }
     if(ed_fld) ed_fld->blockSignals(false);
@@ -1166,12 +1166,12 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     return true;
 }
 
-void WdgView::attrsSet( map<string,string> &attrs )
+void WdgView::attrsSet( AttrValS &attrs )
 {
     XMLNode req("set");
     req.setAttr("path", id()+"/%2fserv%2fattr");
     string attrId, attrPos;
-    for(map<string,string>::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++)
+    for(AttrValS::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++)
     {
 	int off = 0;
 	attrId = TSYS::strParse(i_a->first, 0, ":", &off);

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2013 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -985,7 +985,7 @@ bool InspAttrDock::hasFocus( )
 
 void InspAttrDock::setWdg( const string &iwdg )
 {
-    if( !hasFocus( ) )	ainsp_w->setWdg(iwdg);
+    if(!hasFocus()) ainsp_w->setWdg(iwdg);
 }
 
 //****************************************
@@ -1436,9 +1436,9 @@ void WdgTree::updateTree( const string &vca_it )
 
     //> Get elements number into VCA item
     int vca_lev = 0;
-    for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
+    for(int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
 
-    if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "wlb_") )	return;
+    if(vca_lev && TSYS::pathLev(vca_it,0).compare(0,4,"wlb_") != 0) return;
     string upd_lb   = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
     string upd_wdg  = (vca_lev>=2) ? TSYS::pathLev(vca_it,1).substr(4) : "";
     string upd_wdgi = (vca_lev>=3) ? TSYS::pathLev(vca_it,2).substr(4) : "";
@@ -1452,29 +1452,29 @@ void WdgTree::updateTree( const string &vca_it )
 #endif
 
     //> Remove no present libraries
-    for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
+    for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
     {
 	nit = treeW->topLevelItem(i_top);
-	if( !upd_lb.empty() && upd_lb != nit->text(2).toAscii().data() ) continue;
-	for( i_l = 0; i_l < req.childSize(); i_l++ )
-	    if( req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == nit->text(2).toAscii().data() )
+	if(!upd_lb.empty() && upd_lb != nit->text(2).toStdString()) continue;
+	for(i_l = 0; i_l < req.childSize(); i_l++)
+	    if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == nit->text(2).toStdString())
 		break;
-	if( i_l < req.childSize() )	continue;
+	if(i_l < req.childSize())	continue;
 	delete treeW->takeTopLevelItem(i_top);
 	i_top--;
     }
 
     //> Delete library tool bars and menus
-    if( vca_lev != 3 )
+    if(vca_lev != 3)
     {
 	//>> Delete toolbars
-	for( i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++ )
+	for(i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
 	{
-	    if( !upd_lb.empty() && upd_lb != owner()->lb_toolbar[i_t]->objectName().toAscii().data() ) continue;
-	    for( i_l = 0; i_l < req.childSize(); i_l++ )
-		if( req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_toolbar[i_t]->objectName().toAscii().data() )
+	    if(!upd_lb.empty() && upd_lb != owner()->lb_toolbar[i_t]->objectName().toStdString()) continue;
+	    for(i_l = 0; i_l < req.childSize(); i_l++)
+		if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_toolbar[i_t]->objectName().toStdString())
 		    break;
-	    if( i_l >= req.childSize() )
+	    if(i_l >= req.childSize())
 	    {
 		delete owner()->lb_toolbar[i_t];
 		owner()->lb_toolbar.erase(owner()->lb_toolbar.begin()+i_t);
@@ -1483,13 +1483,13 @@ void WdgTree::updateTree( const string &vca_it )
 	}
 
 	//>> Delete menus
-	for( i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
+	for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
 	{
-	    if( !upd_lb.empty() && upd_lb != owner()->lb_menu[i_m]->objectName().toAscii().data() ) continue;
-	    for( i_l = 0; i_l < req.childSize(); i_l++ )
-		if( req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_menu[i_m]->objectName().toAscii().data() )
+	    if(!upd_lb.empty() && upd_lb != owner()->lb_menu[i_m]->objectName().toStdString()) continue;
+	    for(i_l = 0; i_l < req.childSize(); i_l++)
+		if(req.childGet(i_l)->name() == "wlb" && req.childGet(i_l)->attr("id") == owner()->lb_menu[i_m]->objectName().toStdString())
 		    break;
-	    if( i_l >= req.childSize() )
+	    if(i_l >= req.childSize())
 	    {
 		delete owner()->lb_menu[i_m];
 		owner()->lb_menu.erase(owner()->lb_menu.begin()+i_m);
@@ -1499,66 +1499,65 @@ void WdgTree::updateTree( const string &vca_it )
     }
 
     //> Add new libraries
-    for( i_l = 0; i_l < req.childSize(); i_l++ )
+    for(i_l = 0; i_l < req.childSize(); i_l++)
     {
-	XMLNode *wlbN =  req.childGet(i_l);
+	XMLNode *wlbN = req.childGet(i_l);
 	string wlbId = wlbN->attr("id");
-	if( wlbN->name() != "wlb" || (!upd_lb.empty() && upd_lb != wlbId) )	continue;
+	if(wlbN->name() != "wlb" || (!upd_lb.empty() && upd_lb != wlbId)) continue;
 
-	for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
-	    if( wlbId == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
+	for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
+	    if(wlbId == treeW->topLevelItem(i_top)->text(2).toStdString())
 		break;
-	if( i_top >= treeW->topLevelItemCount() ) nit = new QTreeWidgetItem(treeW);
-	else nit = treeW->topLevelItem(i_top);
+	nit = (i_top >= treeW->topLevelItemCount()) ? new QTreeWidgetItem(treeW) : treeW->topLevelItem(i_top);
 
 	//>> Update libraries data
 	img = QImage();
 	simg = TSYS::strDecode(wlbN->childGet("ico")->text(),TSYS::base64);
 	img.loadFromData((const uchar*)simg.c_str(),simg.size());
-	if( !img.isNull() ) nit->setIcon(0,QPixmap::fromImage(img));
+	if(!img.isNull()) nit->setIcon(0,QPixmap::fromImage(img));
 	nit->setText(0,wlbN->text().c_str());
 	nit->setText(1,_("Library"));
 	nit->setText(2,wlbId.c_str());
 
 	//>> Add toolbars and menus
-	if( vca_lev != 3 )
+	if(vca_lev != 3)
 	{
 	    is_create = root_allow = false;
-	    for( i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
-		if( owner()->lb_toolbar[i_t]->objectName() == wlbId.c_str() )
+	    for(i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
+		if(owner()->lb_toolbar[i_t]->objectName() == wlbId.c_str())
 		    break;
-	    if( i_t >= (int)owner()->lb_toolbar.size() )
+	    if(i_t >= (int)owner()->lb_toolbar.size())
 	    {
-		owner()->lb_toolbar.push_back( new QToolBar(QString(_("Library: %1")).arg(wlbId.c_str()),this) );
+		owner()->lb_toolbar.push_back(new QToolBar(QString(_("Library: %1")).arg(wlbId.c_str()),this));
 		owner()->lb_toolbar[i_t]->setObjectName(wlbId.c_str());
 		owner()->addToolBar(owner()->lb_toolbar[i_t]);
 		owner()->lb_toolbar[i_t]->setMovable(true);
 		owner()->mn_view->addAction(owner()->lb_toolbar[i_t]->toggleViewAction());
 		is_create = true;
 	    }
-	    for( i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++ )
-		if( owner()->lb_menu[i_m]->objectName() == wlbId.c_str() )
+	    for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
+		if(owner()->lb_menu[i_m]->objectName() == wlbId.c_str())
 		    break;
-	    if( i_m >= (int)owner()->lb_menu.size() )
+	    if(i_m >= (int)owner()->lb_menu.size())
 	    {
-		owner()->lb_menu.push_back( new QMenu(QString(_("Library: %1")).arg(wlbId.c_str())) );
+		owner()->lb_menu.push_back(new QMenu(QString(_("Library: %1")).arg(wlbId.c_str())));
 		owner()->lb_menu[i_m]->setObjectName(wlbId.c_str());
 		owner()->mn_widg->addMenu(owner()->lb_menu[i_m]);
 	    }
 	    //>>> Update menu icon
-	    if( !img.isNull() ) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
+	    if(!img.isNull()) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
 	}
 
 	//>>> Remove no present widgets
-	for( i_topwl = 0; i_topwl < nit->childCount(); i_topwl++ )
+	for(i_topwl = 0; i_topwl < nit->childCount(); i_topwl++)
 	{
 	    nit_w = nit->child(i_topwl);
-	    if( upd_wdg.empty() ) i_w = wlbN->childSize();
+	    if(upd_wdg.empty()) i_w = wlbN->childSize();
 	    else
 	    {
-		if( upd_wdg != nit_w->text(2).toAscii().data() ) continue;
+		if(upd_wdg != nit_w->text(2).toStdString()) continue;
 		for(i_w = 0; i_w < wlbN->childSize(); i_w++)
-		    if( wlbN->childGet(i_w)->name() == "w" && wlbN->childGet(i_w)->attr("id") == nit_w->text(2).toAscii().data() )
+		    if(wlbN->childGet(i_w)->name() == "w" && wlbN->childGet(i_w)->attr("id") == nit_w->text(2).toStdString())
 			break;
 	    }
 	    if(i_w < wlbN->childSize())	continue;
@@ -1567,65 +1566,63 @@ void WdgTree::updateTree( const string &vca_it )
 	}
 
 	//>>> Delete widget's actions from toolbar and menu
-	if( vca_lev != 3 )
+	if(vca_lev != 3)
 	{
 	    QList<QAction*> use_act = owner()->lb_toolbar[i_t]->actions();
-	    for( i_a = 0; i_a < use_act.size(); i_a++ )
+	    for(i_a = 0; upd_wdg.size() && i_a < use_act.size(); i_a++)
 	    {
-		if(upd_wdg.empty()) i_w = wlbN->childSize();
-		else
-		{
-		    if(upd_wdg != use_act[i_a]->objectName().toAscii().data()) continue;
-		    for(i_w = 0; i_w < wlbN->childSize(); i_w++)
-			if( wlbN->childGet(i_w)->name() == "w" && ("/wlb_"+wlbId+"/wdg_"+wlbN->childGet(i_w)->attr("id")) == use_act[i_a]->objectName().toAscii().data() )
-			    break;
-		}
-		if(i_w < wlbN->childSize()) continue;
-		delete use_act[i_a];
+		if(vca_it != use_act[i_a]->objectName().toStdString()) continue;
+		for(i_w = 0; i_w < wlbN->childSize(); i_w++)
+		    if(wlbN->childGet(i_w)->name() == "w" && ("/wlb_"+wlbId+"/wdg_"+wlbN->childGet(i_w)->attr("id")) == use_act[i_a]->objectName().toStdString())
+			break;
+		if(i_w >= wlbN->childSize()) { delete use_act[i_a]; break; }
 	    }
 	}
 
 	//>>> Add new widgets
 	for(i_w = 0; i_w < wlbN->childSize(); i_w++)
 	{
-	    XMLNode *wdgN =  wlbN->childGet(i_w);
-	    if( wdgN->name() != "w" ) continue;
+	    XMLNode *wdgN = wlbN->childGet(i_w);
+	    if(wdgN->name() != "w") continue;
 	    string wdgId = wdgN->attr("id");
-	    if( upd_wdg.empty() ) i_topwl = nit->childCount();
+	    if(upd_wdg.empty()) i_topwl = nit->childCount();
 	    else
 	    {
-		if( upd_wdg != wdgId )	continue;
-		for( i_topwl = 0; i_topwl < nit->childCount(); i_topwl++ )
-		    if( wdgId == nit->child(i_topwl)->text(2).toAscii().data() )
+		if(upd_wdg != wdgId)	continue;
+		for(i_topwl = 0; i_topwl < nit->childCount(); i_topwl++)
+		    if(wdgId == nit->child(i_topwl)->text(2).toStdString())
 			break;
 	    }
-	    if( i_topwl >= nit->childCount() ) nit_w = new QTreeWidgetItem(nit);
-	    else nit_w = nit->child(i_topwl);
+	    nit_w = (i_topwl >= nit->childCount()) ? new QTreeWidgetItem(nit) : nit->child(i_topwl);
 
 	    //>>> Update widget's data
 	    img = QImage();
 	    simg = TSYS::strDecode(wdgN->childGet("ico")->text(),TSYS::base64);
 	    img.loadFromData((const uchar*)simg.c_str(),simg.size());
-	    if( !img.isNull() ) nit_w->setIcon(0,QPixmap::fromImage(img));
+	    if(!img.isNull()) nit_w->setIcon(0,QPixmap::fromImage(img));
 	    nit_w->setText(0,wdgN->text().c_str());
 	    nit_w->setText(1,_("Widget"));
 	    nit_w->setText(2,wdgId.c_str());
 
 	    //>>> Add widget's actions to toolbar and menu
-	    if( vca_lev != 3 )
+	    if(vca_lev != 3)
 	    {
 		QList<QAction*> use_act = owner()->lb_toolbar[i_t]->actions();
 		QAction *cur_act;
 		string wipath = "/wlb_"+wlbId+"/wdg_"+wdgId;
 		//>>>> Get parent name
-		if( !root_allow && wdgN->attr("parent") == "root" ) root_allow = true;
+		if(!root_allow && wdgN->attr("parent") == "root") root_allow = true;
 		//>>>> Add action
-		if( upd_wdg.empty() ) i_a = use_act.size();
+		if(upd_wdg.empty()) i_a = use_act.size();
 		else
-		    for( i_a = 0; i_a < use_act.size(); i_a++ )
-			if( use_act[i_a]->objectName() == wipath.c_str() )
+		    for(i_a = 0; i_a < use_act.size(); i_a++)
+			if(use_act[i_a]->objectName() == wipath.c_str())
 			    break;
-		if( i_a < use_act.size() ) cur_act = use_act[i_a];
+		if(i_a < use_act.size())
+		{
+		    cur_act = use_act[i_a];
+		    cur_act->setText(wdgN->text().c_str());
+		}
 		else
 		{
 		    //>>>>> Create new action
@@ -1642,52 +1639,51 @@ void WdgTree::updateTree( const string &vca_it )
 		    owner()->lb_menu[i_m]->addAction(cur_act);
 		}
 		//>>>> Update action
-		if( !img.isNull() )	cur_act->setIcon(QPixmap::fromImage(img));
+		if(!img.isNull()) cur_act->setIcon(QPixmap::fromImage(img));
 	    }
 
 	    //>>>> Remove no present widgets
-	    for( i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++ )
+	    for(i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++)
 	    {
 		nit_cw = nit_w->child(i_topcwl);
-		if( upd_wdgi.empty() ) i_cw = wdgN->childSize();
+		if(upd_wdgi.empty()) i_cw = wdgN->childSize();
 		else
 		{
-		    if( upd_wdgi != nit_cw->text(2).toAscii().data() ) continue;
-		    for( i_cw = 0; i_cw < wdgN->childSize(); i_cw++ )
-			if( wdgN->childGet(i_cw)->name() == "cw" && wdgN->childGet(i_cw)->attr("id") == nit_cw->text(2).toAscii().data() )
+		    if(upd_wdgi != nit_cw->text(2).toStdString()) continue;
+		    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++)
+			if(wdgN->childGet(i_cw)->name() == "cw" && wdgN->childGet(i_cw)->attr("id") == nit_cw->text(2).toStdString())
 			    break;
 		}
-		if( i_cw < wdgN->childSize() )	continue;
+		if(i_cw < wdgN->childSize())	continue;
 		delete nit_w->takeChild(i_topcwl);
 		i_topcwl--;
 	    }
 	    //>>>> Add new widgets
-	    for( i_cw = 0; i_cw < wdgN->childSize(); i_cw++ )
+	    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++)
 	    {
 		XMLNode *cwdgN = wdgN->childGet(i_cw);
-		if( cwdgN->name() != "cw" ) continue;
+		if(cwdgN->name() != "cw") continue;
 		string cwdgId = cwdgN->attr("id");
-		if( upd_wdgi.empty() ) i_topcwl = nit_w->childCount();
+		if(upd_wdgi.empty()) i_topcwl = nit_w->childCount();
 		else
 		{
-		    if( upd_wdgi != cwdgId ) continue;
-		    for( i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++ )
-			if( cwdgId == nit_w->child(i_topcwl)->text(2).toAscii().data())
+		    if(upd_wdgi != cwdgId) continue;
+		    for(i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++)
+			if(cwdgId == nit_w->child(i_topcwl)->text(2).toStdString())
 			    break;
 		}
-		if( i_topcwl >= nit_w->childCount() ) nit_cw = new QTreeWidgetItem(nit_w);
-		else nit_cw = nit_w->child(i_topcwl);
+		nit_cw = (i_topcwl >= nit_w->childCount()) ? new QTreeWidgetItem(nit_w) : nit_w->child(i_topcwl);
 		//>>> Update widget's data
 		img = QImage();
 		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(),TSYS::base64);
 		img.loadFromData((const uchar*)simg.c_str(),simg.size());
-		if( !img.isNull() ) nit_cw->setIcon(0,QPixmap::fromImage(img));
+		if(!img.isNull()) nit_cw->setIcon(0,QPixmap::fromImage(img));
 		nit_cw->setText(0,cwdgN->text().c_str());
 		nit_cw->setText(1,_("Container's widget"));
 		nit_cw->setText(2,cwdgId.c_str());
 	    }
 	}
-	if( vca_lev != 3 && is_create )
+	if(vca_lev != 3 && is_create)
 	{
 	    owner()->lb_toolbar[i_t]->setVisible(root_allow);
 	    owner()->lb_menu[i_m]->setProperty("rootLib",root_allow);
@@ -1804,7 +1800,7 @@ void ProjTree::selectItem( bool force )
     QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toStdString());
 	cur_el=cur_el->parent();
     }
 
@@ -2205,14 +2201,14 @@ void DevelWdgView::saveGeom( const string& item )
 	chGeomCtx.setAttr("z", TSYS::int2str(parent()->children().indexOf(this)));
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);
-	map<string,string> attrs;
-	attrs["geomX:7"] = chGeomCtx.attr("x");
-	attrs["geomY:8"] = chGeomCtx.attr("y");
-	attrs["geomW:9"] = chGeomCtx.attr("w");
-	attrs["geomH:10"] = chGeomCtx.attr("h");
-	attrs["geomXsc:13"] = chGeomCtx.attr("xSc");
-	attrs["geomYsc:14"] = chGeomCtx.attr("ySc");
-	attrs["geomZ:11"] = chGeomCtx.attr("z");
+	AttrValS attrs;
+	attrs.push_back(std::make_pair("geomX:7",chGeomCtx.attr("x")));
+	attrs.push_back(std::make_pair("geomY:8",chGeomCtx.attr("y")));
+	attrs.push_back(std::make_pair("geomW:9",chGeomCtx.attr("w")));
+	attrs.push_back(std::make_pair("geomH:10",chGeomCtx.attr("h")));
+	attrs.push_back(std::make_pair("geomXsc:13",chGeomCtx.attr("xSc")));
+	attrs.push_back(std::make_pair("geomYsc:14",chGeomCtx.attr("ySc")));
+	attrs.push_back(std::make_pair("geomZ:11",chGeomCtx.attr("z")));
 	attrsSet(attrs);
 	setAllAttrLoad(false);
 	attrSet("","load",-1);	//> For reload
@@ -2333,20 +2329,17 @@ bool DevelWdgView::grepAnchor( const QPointF &apnt, const QPoint &cpnt )
 
 void DevelWdgView::upMouseCursors( const QPoint &curp )
 {
-    if( fMoveHold ) return;
+    if(fMoveHold) return;
 
     Qt::CursorShape new_shp = Qt::ArrowCursor;
     //> Widget geometry
-    if( grepAnchor(rect().bottomRight(),curp) )
-	new_shp = Qt::SizeFDiagCursor;
-    else if( curp.x()>(rect().width()-4) && curp.x()<(rect().width()+4) )
-	new_shp = Qt::SizeHorCursor;
-    else if( curp.y()>(rect().height()-4) && curp.y()<(rect().height()+4) )
-	new_shp = Qt::SizeVerCursor;
-    if( new_shp != Qt::ArrowCursor )
+    if(grepAnchor(rect().bottomRight(),curp))					new_shp = Qt::SizeFDiagCursor;
+    else if(curp.x() > (rect().width()-4) && curp.x() < (rect().width()+4))	new_shp = Qt::SizeHorCursor;
+    else if(curp.y() > (rect().height()-4) && curp.y() < (rect().height()+4))	new_shp = Qt::SizeVerCursor;
+    if(new_shp != Qt::ArrowCursor)
     {
 	fHoldChild = false;
-	if( new_shp != cursor().shape() ) setCursor(new_shp);
+	if(new_shp != cursor().shape()) setCursor(new_shp);
 	return;
     }
 
@@ -2356,34 +2349,34 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
     //>> Check child's anchor selection and widget's geometry
     QRectF selRect;
     bool firs_nosel = true, noSelUp = false;
-    for( int i_c = children().size()-1; i_c >= 0; i_c-- )
-	if( qobject_cast<DevelWdgView*>(children().at(i_c)) )
+    for(int i_c = children().size()-1; i_c >= 0; i_c--)
+	if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 	{
-	    if( ((DevelWdgView*)children().at(i_c))->select( ) )
-	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false;  }
-	    else if( firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp) )	noSelUp = true;
+	    if(((DevelWdgView*)children().at(i_c))->select())
+	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false; }
+	    else if(firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp))	noSelUp = true;
 	}
 
     //>> Select childs anchors
-    if( !selRect.isNull() )
+    if(!selRect.isNull())
     {
-	if( grepAnchor(selRect.topLeft(),curp) )
-	{ new_shp = Qt::SizeFDiagCursor; fLeftTop = true; }
-	else if( grepAnchor(selRect.bottomRight(),curp) )					new_shp = Qt::SizeFDiagCursor;
-	else if( grepAnchor(selRect.bottomLeft(),curp) )					{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
-	else if( grepAnchor(selRect.topRight(),curp) )						new_shp = Qt::SizeBDiagCursor;
-	else if( grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp) )			{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
-	else if( grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp) )	new_shp = Qt::SizeVerCursor;
-	else if( grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp) )			{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
-	else if( grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp) )	new_shp = Qt::SizeHorCursor;
-	else if( /*!noSelUp &&*/ selRect.contains(curp) )					new_shp = Qt::PointingHandCursor;
-	if( new_shp != Qt::ArrowCursor )	fHoldChild = true;
+	if(grepAnchor(selRect.topLeft(),curp))						{ new_shp = Qt::SizeFDiagCursor; fLeftTop = true; }
+	else if(grepAnchor(selRect.bottomRight(),curp))					new_shp = Qt::SizeFDiagCursor;
+	else if(grepAnchor(selRect.bottomLeft(),curp))					{ new_shp = Qt::SizeBDiagCursor; fLeftTop = true; }
+	else if(grepAnchor(selRect.topRight(),curp))					new_shp = Qt::SizeBDiagCursor;
+	else if(grepAnchor(QPointF(selRect.center().x(),selRect.y()),curp))		{ new_shp = Qt::SizeVerCursor; fLeftTop = true; }
+	else if(grepAnchor(QPointF(selRect.center().x(),selRect.bottomRight().y()),curp)) new_shp = Qt::SizeVerCursor;
+	else if(grepAnchor(QPointF(selRect.x(),selRect.center().y()),curp))		{ new_shp = Qt::SizeHorCursor; fLeftTop = true; }
+	else if(grepAnchor(QPointF(selRect.bottomRight().x(),selRect.center().y()),curp)) new_shp = Qt::SizeHorCursor;
+	else if(/*!noSelUp &&*/ selRect.contains(curp))					new_shp = Qt::PointingHandCursor;
+	if(new_shp != Qt::ArrowCursor)	fHoldChild = true;
     }
-    if( new_shp != cursor().shape() ) setCursor(new_shp);
+    if(new_shp != cursor().shape()) setCursor(new_shp);
 }
 
 void DevelWdgView::wdgViewTool( QAction *act )
 {
+    DevelWdgView *cwdg = NULL, *ewdg = NULL;
     if(edit())    return;
     QStringList sact = act->objectName().split('_');
     if(sact.at(0) == "align")
@@ -2391,41 +2384,31 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	//> Get selected rect
 	QRectF selRect;
 	int sel_cnt = 0;
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-	    if( cwdg && cwdg->select( ) )
+	for(int i_c = 0; i_c < children().size(); i_c++)
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
 	    {
 		selRect = selRect.united(cwdg->geometryF());
 		sel_cnt++;
 	    }
-	}
-	if( sel_cnt == 0 ) return;
-	if( sel_cnt == 1 ) selRect = selRect.united(QRectF(QPointF(0,0),sizeF()));
+	if(sel_cnt == 0) return;
+	if(sel_cnt == 1) selRect = selRect.united(QRectF(QPointF(0,0),sizeF()));
 
 	//> Update selected widgets position
-	for( int i_c = 0; i_c < children().size(); i_c++ )
-	{
-	    DevelWdgView *cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-	    if( cwdg && cwdg->select( ) )
+	for(int i_c = 0; i_c < children().size(); i_c++)
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
 	    {
-		if( sact.at(1) == "left" )
-		    cwdg->moveF(QPointF(selRect.x(),cwdg->posF().y()));
-		else if( sact.at(1) == "right" )
-		    cwdg->moveF(QPointF(selRect.x()+selRect.width()-cwdg->sizeF().width(),cwdg->posF().y()));
-		else if( sact.at(1) == "vcenter" )
-		    cwdg->moveF(QPointF(selRect.x()+(selRect.width()-cwdg->sizeF().width())/2,cwdg->posF().y()));
-		else if( sact.at(1) == "top" )
-		    cwdg->moveF(QPointF(cwdg->posF().x(),selRect.y()));
-		else if( sact.at(1) == "bottom" )
-		    cwdg->moveF(QPointF(cwdg->posF().x(),selRect.y()+selRect.height()-cwdg->sizeF().height()));
-		else if( sact.at(1) == "hcenter" )
-		    cwdg->moveF(QPointF(cwdg->posF().x(),selRect.y()+(selRect.height()-cwdg->sizeF().height())/2));
+		QPointF toPnt = cwdg->posF();
+		if(sact.at(1) == "left")	toPnt = QPointF(selRect.x(),cwdg->posF().y());
+		else if(sact.at(1) == "right")	toPnt = QPointF(selRect.x()+selRect.width()-cwdg->sizeF().width(),cwdg->posF().y());
+		else if(sact.at(1) == "vcenter")toPnt = QPointF(selRect.x()+(selRect.width()-cwdg->sizeF().width())/2,cwdg->posF().y());
+		else if(sact.at(1) == "top")	toPnt = QPointF(cwdg->posF().x(),selRect.y());
+		else if(sact.at(1) == "bottom")	toPnt = QPointF(cwdg->posF().x(),selRect.y()+selRect.height()-cwdg->sizeF().height());
+		else if(sact.at(1) == "hcenter")toPnt = QPointF(cwdg->posF().x(),selRect.y()+(selRect.height()-cwdg->sizeF().height())/2);
+		if(toPnt != cwdg->posF()) { cwdg->moveF(toPnt); saveGeom(cwdg->id()); }
 	    }
-	}
-	saveGeom("");
+	//saveGeom("");
     }
-    else if( sact.at(0) == "level" )
+    else if(sact.at(0) == "level")
     {
 	bool is_rise = (sact.at(1) == "rise");
 	bool is_up   = (sact.at(1) == "up");
@@ -2434,45 +2417,42 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	string sel_ws = selectChilds();
 	string sel_w;
 
-	if( is_rise || is_up )
-	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
+	if(is_rise || is_up)
+	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
 	    {
 		bool is_move = false;
-		DevelWdgView *cwdg = NULL;
-		DevelWdgView *ewdg = NULL;
-		for( int i_c = 0; i_c < children().size(); i_c++ )
+		cwdg = ewdg = NULL;
+		for(int i_c = 0; i_c < children().size(); i_c++)
 		{
-		    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
+		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-		    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-		    else if( is_rise && !is_move && cwdg && !ewdg->select() &&
-			    ewdg->geometryF().intersects(cwdg->geometryF()) )
+		    if(ewdg->id() == sel_w.c_str()) cwdg = ewdg;
+		    else if(is_rise && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
-			cwdg->stackUnder(ewdg);
-			ewdg->stackUnder(cwdg);
+			cwdg->stackUnder(ewdg); ewdg->stackUnder(cwdg);
+			saveGeom(cwdg->id()); saveGeom(ewdg->id());
 			is_move = true;
 		    }
 		}
-		if(is_up && cwdg && ewdg && cwdg!=ewdg)
+		if(is_up && cwdg && ewdg && cwdg != ewdg)
 		{
-		    cwdg->stackUnder(ewdg);
-		    ewdg->stackUnder(cwdg);
+		    cwdg->stackUnder(ewdg); ewdg->stackUnder(cwdg);
+		    saveGeom(cwdg->id()); saveGeom(ewdg->id());
 		}
 	    }
 
-	if( is_lower || is_down )
-	    for( int w_off=0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
+	if(is_lower || is_down)
+	{
+	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
 	    {
 		bool is_move = false;
-		DevelWdgView *cwdg = NULL;
-		DevelWdgView *ewdg = NULL;
-		for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+		cwdg = ewdg = NULL;
+		for(int i_c = children().size()-1; i_c >= 0; i_c--)
 		{
-		    if( !qobject_cast<DevelWdgView*>(children().at(i_c)) )   continue;
+		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-		    if( ewdg->id() == sel_w.c_str() )   cwdg = ewdg;
-		    else if( is_lower && !is_move && cwdg && !ewdg->select() &&
-			    ewdg->geometryF().intersects(cwdg->geometryF()) )
+		    if(ewdg->id() == sel_w.c_str())   cwdg = ewdg;
+		    else if(is_lower && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
 			cwdg->stackUnder(ewdg);
 			is_move = true;
@@ -2480,7 +2460,8 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		}
 		if(is_down && cwdg && ewdg && cwdg != ewdg) cwdg->stackUnder(ewdg);
 	    }
-	saveGeom("");
+	    saveGeom("");
+	}
     }
 }
 
@@ -2533,19 +2514,19 @@ void DevelWdgView::wdgPopup( )
 	popup.addSeparator();
 	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
 	{
-	    QAction *actEnterEdit = new QAction(_("Enter for widget editing"),this);
-	    actEnterEdit->setStatusTip(_("Press to enter for widget editing."));
+	    QAction *actEnterEdit = new QAction(_("Enter for the widget editing"),this);
+	    actEnterEdit->setStatusTip(_("Press to enter for the widget editing."));
 	    connect(actEnterEdit, SIGNAL(triggered()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
 	//>> Make widget icon
-	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from widget"),this);
-	actMakeIco->setStatusTip(_("Press to make icon from widget."));
+	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from the widget"),this);
+	actMakeIco->setStatusTip(_("Press to make icon from the widget."));
 	connect(actMakeIco, SIGNAL(triggered()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
 	//>> Make widget image
-	QAction *actMakeImg = new QAction(_("Make image from widget"),this);
-	actMakeImg->setStatusTip(_("Press to make image from widget."));
+	QAction *actMakeImg = new QAction(_("Make image from the widget"),this);
+	actMakeImg->setStatusTip(_("Press to make image from the widget."));
 	connect(actMakeImg, SIGNAL(triggered()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();
@@ -2860,7 +2841,7 @@ void DevelWdgView::chRecord( XMLNode ch )
 
 void DevelWdgView::chUnDo( )
 {
-    map<string,string>	attrs;
+    AttrValS	attrs;
     int cur = 0;
     if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= chTree->childSize()) return;
 
@@ -2869,19 +2850,19 @@ void DevelWdgView::chUnDo( )
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
     if(rlW && rule->name() == "geom")
     {
-	attrs["geomX"] = rule->attr("_x");
-	attrs["geomY"] = rule->attr("_y");
-	attrs["geomW"] = rule->attr("_w");
-	attrs["geomH"] = rule->attr("_h");
-	attrs["geomXsc"] = rule->attr("_xSc");
-	attrs["geomYsc"] = rule->attr("_ySc");
-	attrs["geomZ"] = rule->attr("_z");
+	attrs.push_back(std::make_pair("geomX",rule->attr("_x")));
+	attrs.push_back(std::make_pair("geomY",rule->attr("_y")));
+	attrs.push_back(std::make_pair("geomW",rule->attr("_w")));
+	attrs.push_back(std::make_pair("geomH",rule->attr("_h")));
+	attrs.push_back(std::make_pair("geomXsc",rule->attr("_xSc")));
+	attrs.push_back(std::make_pair("geomYsc",rule->attr("_ySc")));
+	attrs.push_back(std::make_pair("geomZ",rule->attr("_z")));
 	rlW->attrsSet(attrs);
     }
     else if(rlW && rule->name() == "attr")
     {
         for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-            attrs[rule->childGet(i_ch)->attr("id")] = rule->childGet(i_ch)->attr("prev");
+            attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->attr("prev")));
         if(attrs.size()) rlW->attrsSet(attrs);
         if(rule->attr("id").size())
         {
@@ -2910,7 +2891,7 @@ void DevelWdgView::chUnDo( )
 
 void DevelWdgView::chReDo( )
 {
-    map<string,string>  attrs;
+    AttrValS	attrs;
     int cur = 0;
     if(!chTree || !chTree->childSize() || !(cur=atoi(chTree->attr("cur").c_str()))) return;
 
@@ -2921,20 +2902,20 @@ void DevelWdgView::chReDo( )
     {
 	if(rule->name() == "geom")
 	{
-	    attrs["geomX"] = rule->attr("x");
-	    attrs["geomY"] = rule->attr("y");
-	    attrs["geomW"] = rule->attr("w");
-	    attrs["geomH"] = rule->attr("h");
-	    attrs["geomXsc"] = rule->attr("xSc");
-	    attrs["geomYsc"] = rule->attr("ySc");
-	    attrs["geomZ"] = rule->attr("z");
+	    attrs.push_back(std::make_pair("geomX",rule->attr("x")));
+	    attrs.push_back(std::make_pair("geomY",rule->attr("y")));
+	    attrs.push_back(std::make_pair("geomW",rule->attr("w")));
+	    attrs.push_back(std::make_pair("geomH",rule->attr("h")));
+	    attrs.push_back(std::make_pair("geomXsc",rule->attr("xSc")));
+	    attrs.push_back(std::make_pair("geomYsc",rule->attr("ySc")));
+	    attrs.push_back(std::make_pair("geomZ",rule->attr("z")));
 	    rlW->attrsSet(attrs);
 	}
 	else if(rule->name() == "attr")
         {
             if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
             for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-                attrs[rule->childGet(i_ch)->attr("id")] = rule->childGet(i_ch)->text();
+                attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->text()));
             if(attrs.size()) rlW->attrsSet(attrs);
         }
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
@@ -3178,7 +3159,7 @@ bool DevelWdgView::event( QEvent *event )
 	    case QEvent::Drop:
 	    {
 		QDropEvent *ev = static_cast<QDropEvent*>(event);
-		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
+		if(ev->mimeData()->hasFormat("application/OpenSCADA-libwdg"))
 		{
 		    QByteArray itemData = ev->mimeData()->data("application/OpenSCADA-libwdg");
 		    QDataStream dataStream(&itemData, QIODevice::ReadOnly);
@@ -3249,9 +3230,7 @@ bool DevelWdgView::event( QEvent *event )
 
 			upMouseCursors(mapFromGlobal(cursor().pos()));
 
-			//>> Update status bar
-			mainWin()->statusBar()->showMessage(QString(_("Select elements: '%1'")).
-							arg(selectChilds().c_str()), 10000 );
+			mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selectChilds().c_str()), 10000);
 
 			//>> Hold select rect paint
 			if(!chld_sel && root() == "Box")
@@ -3312,6 +3291,8 @@ bool DevelWdgView::event( QEvent *event )
 			else setCursor(Qt::ArrowCursor);
 			setSelect(true, PrcChilds);
 		    }
+
+		    mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selectChilds().c_str()), 10000);
 		}
 
 		if(fSelChange)
@@ -3443,13 +3424,13 @@ bool DevelWdgView::event( QEvent *event )
 			    if(!(QApplication::keyboardModifiers()&Qt::ControlModifier))	break;
 			    for(int i_c = children().size()-1; i_c >= 0; i_c--)
 				if(qobject_cast<DevelWdgView*>(children().at(i_c)))
-				    ((DevelWdgView*)children().at(i_c))->setSelect(true,PrcChilds);
-			    setSelect(true,PrcChilds);
+				    ((DevelWdgView*)children().at(i_c))->setSelect(true, PrcChilds);
+			    setSelect(true, PrcChilds);
 			    break;
 			case Qt::Key_Left: case Qt::Key_Right: case Qt::Key_Up: case Qt::Key_Down:
 			{
 			    QPointF dP(0,0);
-			    switch( key->key() )
+			    switch(key->key())
 			    {
 				case Qt::Key_Left:	dP.setX(-1/xScale(true));	break;
 				case Qt::Key_Right:	dP.setX(1/xScale(true));	break;
@@ -3459,8 +3440,6 @@ bool DevelWdgView::event( QEvent *event )
 			    if(dP.isNull())	break;
 			    dP *= ((QApplication::keyboardModifiers()&Qt::ShiftModifier) ? 1 : 5);
 			    wdgsMoveResize(dP);
-			    if(cursor().shape() != Qt::ArrowCursor)
-				QCursor::setPos((QCursor::pos()+dP).toPoint());
 			    //> Save geometry
 			    bool isSel = false;
 			    for(int i_c = 0; i_c < children().size(); i_c++)
@@ -3477,6 +3456,7 @@ bool DevelWdgView::event( QEvent *event )
 				saveGeom(id());
 				if(fMakeScale) load("");
 			    }
+			    if(cursor().shape() != Qt::ArrowCursor) QCursor::setPos((QCursor::pos()+(dP/=(isSel?1:2))).toPoint());
 			    fMakeScale = false;
 			    return true;
 			}
@@ -3564,7 +3544,7 @@ void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 
 void SizePntWdg::apply( )
 {
-    if(mWSize.width() > 2 && mWSize.height() > 2)
+    if(mWSize.width() > 2 && mWSize.height() > 2 && !QRectF(mWPos,mWSize).toRect().contains(rect()))
     {
 	QRegion reg;
 	QRect   wrect, irect;
@@ -3599,15 +3579,15 @@ void SizePntWdg::apply( )
 
 bool SizePntWdg::event( QEvent *ev )
 {
-    switch( ev->type() )
+    switch(ev->type())
     {
 	case QEvent::Paint:
-	    if( rect().isValid() )
+	    if(rect().isValid())
 	    {
-		QPainter pnt( this );
-		pnt.setWindow( rect() );
+		QPainter pnt(this);
+		pnt.setWindow(rect());
 
-		switch( view )
+		switch(view)
 		{
 		    case SizeDots:
 			pnt.setPen(QColor("black"));

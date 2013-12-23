@@ -81,11 +81,11 @@ class TestDB : public TFunction
 
 		mod->mess(id(),_("Create DB configuration."));
 		TConfig bd_cfg;
-		bd_cfg.elem().fldAdd( new TFld("name",_("Name field"),TFld::String,TCfg::Key,"20") );
-		bd_cfg.elem().fldAdd( new TFld("descr",_("Description field"),TFld::String,0,"50") );
-		bd_cfg.elem().fldAdd( new TFld("val",_("Field value"),TFld::Real,0,"10.2","5") );
-		bd_cfg.elem().fldAdd( new TFld("id",_("Field id"),TFld::Integer,0,"7","34") );
-		bd_cfg.elem().fldAdd( new TFld("stat",_("Field stat"),TFld::Boolean,0,"1","1") );
+		bd_cfg.elem().fldAdd(new TFld("name",_("Name field"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+		bd_cfg.elem().fldAdd(new TFld("descr",_("Description field"),TFld::String,0,OBJ_NM_SZ));
+		bd_cfg.elem().fldAdd(new TFld("val",_("Field value"),TFld::Real,0,"10.2","5"));
+		bd_cfg.elem().fldAdd(new TFld("id",_("Field id"),TFld::Integer,0,"7","34"));
+		bd_cfg.elem().fldAdd(new TFld("stat",_("Field stat"),TFld::Boolean,0,"1","1"));
 
 		//Test for create records
 		mod->mess(id(),_("Create records."));
