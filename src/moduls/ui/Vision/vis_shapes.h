@@ -234,7 +234,7 @@ class ShapeText : public WdgShape
 			text;
 		QColor	color;
 		QBrush	backGrnd;
-		QFont	font;
+		string	font;
 		QPen	border;
 		vector<ArgObj>	args;
 	};

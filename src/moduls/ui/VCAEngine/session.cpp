@@ -1769,9 +1769,8 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // TCntrNodeObj attrSet(string attr, ElTp vl)
     if(iid == "attrSet" && prms.size() >= 2)
     {
-	if(!attrPresent(prms[0].getS())) return -1;
-	attrAt(prms[0].getS()).at().set(prms[1]);
-	return new TCntrNodeObj(this,user);
+	if(attrPresent(prms[0].getS())) attrAt(prms[0].getS()).at().set(prms[1]);
+	return new TCntrNodeObj(this, user);
     }
     // string link(string attr, bool prm = false) - get link for attribute or attribute block (prm)
     //  attr - attribute identifier

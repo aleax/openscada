@@ -487,32 +487,13 @@ AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )
 TVariant TArrayObj::propGet( const string &id )
 {
     if(id == "length") return (int)mEls.size();
-    if(id.size() && isdigit(id[0]))
-    {
-	int vid = atoi(id.c_str());
-	oRes.resRequestR();
-	if(vid >= 0 && vid < (int)mEls.size())
-	{
-	    TVariant rez = mEls[vid];
-	    oRes.resRelease();
-	    return rez;
-	}
-	oRes.resRelease();
-    }
+    if(id.size() && isdigit(id[0]))	return arGet(atoi(id.c_str()));
     return TVarObj::propGet(id);
 }
 
 void TArrayObj::propSet( const string &id, TVariant val )
 {
-    if(id.size() && isdigit(id[0]))
-    {
-	int vid = atoi(id.c_str());
-	if(vid < 0) throw TError("ArrayObj",_("Negative id is not allow for array."));
-	oRes.resRequestW();
-	while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
-	mEls[vid] = val;
-	oRes.resRelease();
-    }
+    if(id.size() && isdigit(id[0]))	arSet(atoi(id.c_str()), val);
     else TVarObj::propSet(id,val);
 }
 
@@ -568,7 +549,7 @@ AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 	if(!vl.isNull())
 	{
 	    if(p.size()) rez->mProps[p] = vl;
-    	    else rez->mEls.push_back(vl);
+	    else rez->mEls.push_back(vl);
 	}
     }
     return rez;
@@ -694,6 +675,24 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
 
     return TVarObj::funcCall(id, prms);
+}
+
+TVariant TArrayObj::arGet( int vid )
+{
+    TVariant rez;
+    oRes.resRequestR();
+    if(vid >= 0 && vid < (int)mEls.size()) rez = mEls[vid];
+    oRes.resRelease();
+    return rez;
+}
+
+void TArrayObj::arSet( int vid, TVariant val )
+{
+    if(vid < 0) return;//throw TError("ArrayObj",_("Negative id is not allow for array."));
+    oRes.resRequestW();
+    while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
+    mEls[vid] = val;
+    oRes.resRelease();
 }
 
 bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )

@@ -3061,8 +3061,9 @@ nextReq:
 			int rez = wep->reqData(reqTp, req);
 
 			//>>> Write result status code
-            		oNu(respEp, rez, 4);		//StatusCode
+            		oNu(respEp, rez, 4);		// StatusCode
 		    }
+		    oS(respEp, "");			//diagnosticInfos []
 
 		    reqTp = OpcUa_WriteResponse;
 
@@ -3310,7 +3311,7 @@ Server::SecCnl::SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm,
 
 }
 
-Server::SecCnl::SecCnl( ) : secMessMode(0), tCreate(curTime()), tLife(600000), TokenId(0), TokenIdPrev(0)
+Server::SecCnl::SecCnl( ) : secMessMode(MS_None), tCreate(curTime()), tLife(600000), TokenId(0), TokenIdPrev(0)
 {
 
 }

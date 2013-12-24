@@ -198,6 +198,9 @@ class TArrayObj : public TVarObj
 
 	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
+	TVariant arGet( int id );
+	void arSet( int id, TVariant val );
+
     private:
 	//Attributes
 	vector<TVariant> mEls;

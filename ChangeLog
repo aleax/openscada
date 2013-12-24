@@ -1,9 +1,21 @@
+2013-12-24 Roman
+- FIX:SYS: ChangeLog some fix
+- DB:AGLKS.St.db: Client's and Server's certificate of OPC UA is generated for all demands resolve.
+- TArrayObj: New direct access functions arGet() and arSet() is added, for fast access from internal.
+- FIX:DAQ.MMS: EXTRA_DIST content for libiec61850 library is appended.
+- FIX:DAQ.OPC_UA: libOPC_UA is fixed for client's service Write respond.
+- Special.FLibSYS: Object IO more implementation continued.
+- UI.{VCAEngine,Vision}: Named indexes into types.h are used for primitive "Text".
+- FIX:UI.VCAEngine: No Widget::attrSet() return -1 for wrong attribute set.
+- FIX:UI.Vision: "Text" primitive update font size is fixed at it's scale change.
+
+
 2013-12-20 Roman
 - DB:AGLKS.St.db: For input transport testOPC hold mode disabled.
 - DAQ.OPC_UA: Close input socket by CloseSecureChannel request.
     Removing for assigned subscriptions at the session closing is added.
-    Client's services Browse, Read and Write is adapted for DAQ parameter to other parameter including.
-    Client's services Browse and Read is set for field "Name" of nodes return for OPC UA "BrowseName" request.
+    Server's services Browse, Read and Write is adapted for DAQ parameter to other parameter including.
+    Server's services Browse and Read is set for field "Name" of nodes return for OPC UA "BrowseName" request.
 - FIX:SYS: Date format into spec-files some fixed.
 - DAQ: Function TDAQS::daqAt() is added for access to any DAQ path's items by TCntrNode.
     The function also used now into TDAQS::prmAt() and TDAQS::attrAt().
@@ -45,9 +57,9 @@
 
 2013-12-11 Roman
 - DAQ.OPC_UA: Auth methods UserName and X509Identity processing is added, but not check yet for real users into OpenSCADA.
-    Secure channel's TokenId renew support into input part is implemented and some fixed into output part.
+    Secure channel's TokenId renew support into server part is implemented and some fixed into client part.
 - FIX:UI.WebVision: Primitive "Diagram" cursor scale is fixed.
-    Oppress scroll for include page size equal to the continer.
+    Oppress scroll for include page size equal to the container.
     NaN value display prevented by check argument's result of the primitive "Text".
 - UI.WebVision: Font's size obtain by getFont() is added and used for "FormEl" elements height tune.
 
@@ -67,9 +79,9 @@
 - DB.VCABase: To field "Archives" of the graphics control panel the archivators list is set generation dynamic.
 - DB.OscadaLibs: base.anUnif template is significant expanded.
 - FIX:Archive.{FSArch,DBArch}: Alarm messages by negative level requesting from messages archive is fixed.
-- !!!:DAQ.OPC_UA: Publish, Subscribe and MonitoredItem related services support for input protocol's part is added.
-- FIX:UI.{VCAEngine,Vision}: Group attributes requesting function Vision::attrsSet() is rewrited for strong ordering for
-    fix unordered writing to some yet missed attributes that appeared after upper changes. Detected on primitive "ElFig".
+- !!!:DAQ.OPC_UA: Publish, Subscribe, MonitoredItem and related services support for input protocol's part is added.
+- FIX:UI.{VCAEngine,Vision}: Group attributes setting function Vision::attrsSet() is rewrited for strong ordering for
+    fix unordered writing to some yet missed attributes that appeared after upper changes; detected on primitive "ElFig".
 - UI.Vision: Internal object's indexes SpecIdx and ShapeType are moved to global space.
 - FIX:UI.{Vision,WebVision}: Two method applied for prevent primitive "Diagram" possible hung on some data combination begin
     from different archivators.
@@ -150,7 +162,7 @@
 - FIX:Transport.Serial: Set writing modem's exit command without next line symbols.
 - FIX:UI.VCAEngine: Restore compatibility by remove A_NAME index and create A_FormElName and
     fixed set it for all "name" attributes of primitive "FormEl".
-    Disable empty template attribute using for document generaton for primitive "Document".
+    Disable empty template attribute using for document generation for primitive "Document".
     Remove wrong inline navigator at media-resources for no "String" attributes.
 - FIX:UI.Vision: Disable encoding and decoding of path items of view "Tree" of primitive "FormEl" for prevent inconsistency
     items into list to selected item value.
@@ -170,12 +182,12 @@
     "prm:*" dynamic links wrong set is fixed by remove prefix "a_" from last item - attribute.
 - FIX:UI.Vision: No actions update on the library's widget rename or remove is fixed.
     Tool windows centering is disabled and new pages loading by load("") is moved to constructor RunPageView for
-    allow DE for custom control to the windows placing behaviour.
+    allow DE for custom control to the windows placing behavior.
 
 
 2013-10-24 Roman
 - Archive,DAQ.{BlockCalc,LogicLev,ModBus},UI.VCAEngine:
-    Link to DAQ parameters and attributes is adapted for parameters to parameters including path like "{Mod}.{Cntr}.{Prm1}.{PrmN}.{Attr}".
+    Links to DAQ parameters and attributes is adapted for parameters to parameters including path like "{Mod}.{Cntr}.{Prm1}.{PrmN}.{Attr}".
 - FIX:TCntrNode: chldList() fix for negative group index correct processing and list clear anytime.
 - DAQ: Functions TDAQS::ctrListPrmAttr(), TDAQS::prmAt() and TDAQS::attrAt() adapted for DAQ parameters to parameters including.
 - !:TSYS: Modification controled writing to the config file is added for field "Lang" for prevent writing unmodified.
@@ -209,7 +221,7 @@
 - Protocol.UserProtocol: To input transport's process procedure context is added attribute "tr" for input transport object represent.
 - UI.{QTCfg,Vision}: Bind key combination Shif+F1 for WhatThis calls.
 - UI.VCAEngine: Map areas limit for primitive "Media" is expanded to 100.
-- FIX:UI.Vision: Set focus to MDIArea window after a widget drop to the window. Some fix moving mouse pointer on widget-continer
+- FIX:UI.Vision: Set focus to MDIArea window after a widget drop to the window. Some fix moving mouse pointer on widget-container
     resize from keyboard. Allow "MousePress" event forming at the primitive "Media" map area click, after self specific event forming.
 
 
@@ -1329,7 +1341,7 @@
 2012-03-16 Roman
 - !:FIX:Archive: Value archive begin() calculate for empty buffer is fixed.
 - !!:FIX:Function: IO set for different types is fixed for modify checking fails (Real to Integer).
-- FIX:UI.Vision: Slider and Scroll bars realization of primitive "FormEl" is fixed for event generaton prevent
+- FIX:UI.Vision: Slider and Scroll bars realization of primitive "FormEl" is fixed for event generation prevent
     on value set from model and generic init. Tracking is disabled for prevent more events generation.
 - SYS, TSubSYS, TDAQS, TModule, TTipDAQ, TController, TValue, TParamContr, TVal:
     Virtual function TCntrNode::objName() is added for allow object type purchase from user API by function
@@ -2521,7 +2533,7 @@
 
 
 2011-05-11 Roman
-- FIX:DAQ.ModBus: Error generaton on connection lost or no reply on timeout is fixed.
+- FIX:DAQ.ModBus: Error generation on connection lost or no reply on timeout is fixed.
 - UI.WebCfgD: JavaScript code is updated for: string encoding rewrite and first realisation full request function servReq().
 
 
@@ -4919,7 +4931,7 @@
 - FIX:/SYS/CntrNode: Use counter is expanded to short integer. Use counter limit control is added.
 - /DAQ/DCON: Documentation is updated.
 - FIX:/JavaLikeCalc: Resource request for calc is fixed.
-- /UI/VCAEngine: String alloc for direct readed value is fixed. Config template and value combined to one string continer.
+- /UI/VCAEngine: String alloc for direct readed value is fixed. Config template and value combined to one string container.
 
 
 2009-04-13 Maxim

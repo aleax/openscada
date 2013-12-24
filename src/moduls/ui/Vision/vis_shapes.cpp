@@ -1019,99 +1019,80 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    up = reform = true;
-	    break;
-	case 5:		//en
-	    if( !qobject_cast<RunWdgView*>(w) )	{ up = false; break; }
+	case A_COM_LOAD: up = reform = true;	break;
+	case A_EN:
+	    if(!qobject_cast<RunWdgView*>(w))	{ up = false; break; }
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible( atoi(val.c_str()) && ((RunWdgView*)w)->permView() );
+	    w->setVisible(atoi(val.c_str()) && ((RunWdgView*)w)->permView());
 	    break;
-	case 6:		//active
-	    if( !qobject_cast<RunWdgView*>(w) ) break;
+	case A_ACTIVE:
+	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->active = (bool)atoi(val.c_str());
-	    w->setFocusPolicy( (atoi(val.c_str())&&((RunWdgView*)w)->permCntr()) ? Qt::StrongFocus : Qt::NoFocus );
+	    w->setFocusPolicy((atoi(val.c_str())&&((RunWdgView*)w)->permCntr()) ? Qt::StrongFocus : Qt::NoFocus);
 	    break;
-	case 12:	//geomMargin
-	    shD->geomMargin = atoi(val.c_str());	up = true;
-	    break;
-	case 20:	//backColor
+	case A_GEOM_MARGIN: shD->geomMargin = atoi(val.c_str()); up = true;	break;
+	case A_TextBackClr:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setColor(shD->backGrnd.color());
-	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
-	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
 	    plt.setBrush(QPalette::Background,brsh);
 	    w->setPalette(plt);
 
 	    up = true;
 	    break;
 	}
-	case 21:	//backImg
+	case A_TextBackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
-		shD->backGrnd.setTextureImage(img);
-	    else shD->backGrnd.setTextureImage(QImage());
+	    shD->backGrnd.setTextureImage((!backimg.empty()&&img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))?img:QImage());
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
-	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Base,brsh);
 	    w->setPalette(plt);
 
 	    up = true;
 	    break;
 	}
-	case 22:	//bordWidth
-	    shD->border.setWidth(atoi(val.c_str()));	up = true;	break;
-	case 23:	//bordColor
-	    shD->border.setColor(getColor(val));	up = true;	break;
-	case 24:	//bordStyle
-	    shD->bordStyle = atoi(val.c_str()); up = true; break;
-	case 25:	//font
-	    shD->font = getFont(val,vmin(w->xScale(true),w->yScale(true))); up = true; break;
-	case 26:	//color
-	    shD->color = getColor(val); break;
-	case 27:	//orient
-	    shD->orient = atoi(val.c_str()); break;
-	case 28:	//wordWrap
-	{
-	    if( atoi(val.c_str()) )	shD->text_flg |= Qt::TextWordWrap;
-	    else			shD->text_flg &= (~Qt::TextWordWrap);
+	case A_TextBordWidth: shD->border.setWidth(atoi(val.c_str())); up = true;	break;
+	case A_TextBordColor: shD->border.setColor(getColor(val)); up = true;		break;
+	case A_TextBordStyle: shD->bordStyle = atoi(val.c_str()); up = true;		break;
+	case A_TextFont: shD->font = val; up = true;					break;
+	case A_TextColor: shD->color = getColor(val);					break;
+	case A_TextOrient: shD->orient = atoi(val.c_str());				break;
+	case A_TextWordWrap:
+	    if(atoi(val.c_str())) shD->text_flg |= Qt::TextWordWrap; else shD->text_flg &= (~Qt::TextWordWrap);
 	    break;
-	}
-	case 29:	//alignment
-	{
+	case A_TextAlignment:
 	    shD->text_flg &= ~(Qt::AlignLeft|Qt::AlignRight|Qt::AlignHCenter|Qt::AlignJustify|Qt::AlignTop|Qt::AlignBottom|Qt::AlignVCenter);
-	    switch( atoi(val.c_str())&0x3 )
+	    switch(atoi(val.c_str())&0x3)
 	    {
 		case 0: shD->text_flg |= Qt::AlignLeft;		break;
 		case 1: shD->text_flg |= Qt::AlignRight;	break;
 		case 2: shD->text_flg |= Qt::AlignHCenter;	break;
 		case 3: shD->text_flg |= Qt::AlignJustify;	break;
 	    }
-	    switch( atoi(val.c_str())>>2 )
+	    switch(atoi(val.c_str())>>2)
 	    {
 		case 0: shD->text_flg |= Qt::AlignTop;		break;
 		case 1: shD->text_flg |= Qt::AlignBottom;	break;
 		case 2: shD->text_flg |= Qt::AlignVCenter;	break;
 	    }
 	    break;
-	}
-	case 30:	//text
-	{
-	    if( shD->text_tmpl == val.c_str() )	break;
+	case A_TextText:
+	    if(shD->text_tmpl == val.c_str())	break;
 	    shD->text_tmpl = val;
 	    reform = true;
 	    break;
-	}
-	case 40:	//numbArg
+	case A_TextNumbArg:
 	{
 	    int numbArg = atoi(val.c_str());
 	    while((int)shD->args.size() < numbArg) shD->args.push_back(ArgObj());
@@ -1214,7 +1195,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 
 	    //> Draw text
 	    pnt.setPen(shD->color);
-	    pnt.setFont(shD->font);
+	    pnt.setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true))));
 	    pnt.drawText(dA, shD->text_flg, shD->text.c_str());
 
 	    event->accept( );

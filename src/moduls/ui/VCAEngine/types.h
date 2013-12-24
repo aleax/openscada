@@ -76,6 +76,20 @@ namespace VCA
 	A_FormElName	= 26,
 	A_FormElMixP4	= 27,	//BUTTON:colorText
 
+	//> Primitive "Text" specific
+	A_TextBackClr	= 20,
+	A_TextBackImg	= 21,
+	A_TextBordWidth	= 22,
+	A_TextBordColor	= 23,
+	A_TextBordStyle	= 24,
+	A_TextFont	= 25,
+	A_TextColor	= 26,
+	A_TextOrient	= 27,
+	A_TextWordWrap	= 28,
+	A_TextAlignment	= 29,
+	A_TextText	= 30,
+	A_TextNumbArg	= 40,
+
 	//> Primitive "Media" specific
 	A_MediaBackClr	= 20,
 	A_MediaBackImg	= 21,

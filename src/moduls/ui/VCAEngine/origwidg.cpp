@@ -629,39 +629,39 @@ void OrigText::postEnable( int flag )
 
     if( flag&TCntrNode::NodeConnect )
     {
-	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
-	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
-	attrAdd( new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","","22") );
-	attrAdd( new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","","23") );
-	attrAdd( new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-					_("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),"24") );
-	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","","25") );
-	attrAdd( new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000","","","26") );
-	attrAdd( new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-360;360","","27") );
-	attrAdd( new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","","28") );
-	attrAdd( new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
+	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","",i2s(A_TextBackClr).c_str()));
+	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_TextBackImg).c_str()));
+	attrAdd(new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_TextBordWidth).c_str()));
+	attrAdd(new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_TextBordColor).c_str()));
+	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
+			    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_TextBordStyle).c_str()));
+	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_TextFont).c_str()));
+	attrAdd(new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000","","",i2s(A_TextColor).c_str()));
+	attrAdd(new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-360;360","",i2s(A_TextOrient).c_str()));
+	attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","",i2s(A_TextWordWrap).c_str()));
+	attrAdd(new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
 			    _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
-			    "V center left;V center right;Center;V center justify"),"29") );
-	attrAdd( new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","","30") );
-	attrAdd( new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","","40") );
+			    "V center left;V center right;Center;V center justify"),i2s(A_TextAlignment).c_str()));
+	attrAdd(new TFld("text",_("Text"),TFld::String,TFld::FullText,"0","Text","","",i2s(A_TextText).c_str()));
+	attrAdd(new TFld("numbArg",_("Arguments number"),TFld::Integer,Attr::Active,"","0","0;20","",i2s(A_TextNumbArg).c_str()));
     }
 }
 
 bool OrigText::attrChange( Attr &cfg, TVariant prev )
 {
-    if( cfg.flgGlob()&Attr::Active )
+    if(cfg.flgGlob()&Attr::Active)
     {
 	int aid = atoi(cfg.fld().reserve().c_str());
-	if( cfg.id() == "numbArg" )
+	if(cfg.id() == "numbArg")
 	{
 	    string fid("arg"), fnm(_("Argument ")), fidp, fnmp;
 	    //> Delete specific unnecessary attributes of parameters
-	    for( int i_p = 0; true; i_p++ )
+	    for(int i_p = 0; true; i_p++)
 	    {
 		fidp = fid+i2s(i_p);
-		if( !cfg.owner()->attrPresent( fidp+"val" ) )	break;
-		else if( i_p >= cfg.getI() )
+		if(!cfg.owner()->attrPresent(fidp+"val")) break;
+		else if(i_p >= cfg.getI())
 		{
 		    cfg.owner()->attrDel(fidp+"val");
 		    cfg.owner()->attrDel(fidp+"tp");
@@ -669,20 +669,20 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 		}
 	    }
 	    //> Create ullage attributes of parameters
-	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    for(int i_p = 0; i_p < cfg.getI(); i_p++)
 	    {
 		fidp = fid+i2s(i_p);
 		fnmp = fnm+i2s(i_p);
-		if( cfg.owner()->attrPresent( fidp+"val" ) ) continue;
-		cfg.owner()->attrAdd( new TFld((fidp+"tp").c_str(),(fnmp+_(":type")).c_str(),
-		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0","0;1;2",_("Integer;Real;String"),i2s(51+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
-		    TFld::Integer,Attr::Mutable,"","","","",i2s(50+10*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"cfg").c_str(),(fnmp+_(":config")).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",i2s(52+10*i_p).c_str()) );
+		if(cfg.owner()->attrPresent(fidp+"val")) continue;
+		cfg.owner()->attrAdd(new TFld((fidp+"tp").c_str(),(fnmp+_(":type")).c_str(),
+		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0","0;1;2",_("Integer;Real;String"),i2s(51+10*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
+		    TFld::Integer,Attr::Mutable,"","","","",i2s(50+10*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"cfg").c_str(),(fnmp+_(":config")).c_str(),
+		    TFld::String,Attr::Mutable,"","","","",i2s(52+10*i_p).c_str()));
 	    }
 	}
-	else if( aid >= 50 && (aid%10) == 1 && prev.getI() != cfg.getI() )
+	else if(aid >= 50 && (aid%10) == 1 && prev.getI() != cfg.getI())
 	{
 	    int narg = (aid/10)-5;
 	    string fid = "arg"+i2s(narg)+"val";

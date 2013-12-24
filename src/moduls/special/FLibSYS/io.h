@@ -57,10 +57,27 @@ class IOObj : public TVarObj
         TVariant funcCall( const string &id, vector<TVariant> &prms );
 
     private:
+	//Data
+	class TpDescr
+	{
+	    public:
+		TpDescr( ) : szBt(1), real(false), sign(true) { }
+		TpDescr( char iSzBt, bool iReal = false, bool iSign = false ) : szBt(iSzBt), real(iReal), sign(iSign) { }
+
+		unsigned szBt : 4;
+		unsigned real : 1;
+		unsigned sign : 1;
+	};
+
+	//Methods
+	TpDescr	&getTp( const string &dtT );
+
 	//Attributes
 	FILE 	*fhd;	//Openned file hd. For fhd < 0 used local string into "strFnm"
 	string	str;	//String stream
 	long	pos;	//String stream current position
+
+	map<string,TpDescr> dTPs;
 };
 
 //*************************************************
@@ -73,7 +90,7 @@ class IOCall : public TFunction
 	{
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("name",_("File name or data (for string stream)"),IO::String,IO::Default));
-	    ioAdd(new IO("perm",_("File permition access (''-string stream;'r'-read;'w'-write from zero;'a'-append;...)"),IO::String,IO::Default));
+	    ioAdd(new IO("perm",_("File permition access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
 	    ioAdd(new IO("machineFmt",_("Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
 	    ioAdd(new IO("encIn",_("Input string encoding"),IO::String,IO::Default));
 	}

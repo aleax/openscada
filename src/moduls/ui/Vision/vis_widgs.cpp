@@ -45,11 +45,13 @@
 
 #include <tsys.h>
 
+#include "../VCAEngine/types.h"
 #include "vis_shapes.h"
 #include "vis_widgs.h"
 #include "vis_run_widgs.h"
 
 using namespace VISION;
+using namespace VCA;
 
 //*************************************************
 //* Id and name input dialog                      *
@@ -1108,53 +1110,39 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    up = true;
-	    break;
+	case A_COM_LOAD: up = true;	break;
 	case 0:	return false;
-	case 1:		//root
+	case A_ROOT:
 	    if(shape && shape->id() == val)	break;
 	    if(shape) shape->destroy(this);
 	    shape = mod->getWdgShape(val);
 	    if(shape) shape->init(this);
 	    break;
-	case 7:		//geomX
+	case A_GEOM_X:
 	    if(wLevel() == 0)	break;
 	    mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
 	    up = true;
 	    break;
-	case 8:		//geomY
+	case A_GEOM_Y:
 	    if(wLevel() == 0)	break;
 	    mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
 	    up = true;
 	    break;
-	case 9:		//geomW
-	    mWSize = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height());
-	    up = true;
-	    break;
-	case 10:	//geomH
-	    mWSize = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str()));
-	    up = true;
-	    break;
-	case 11:	//geomZ
-	    if(wLevel() > 0) z_coord = atoi(val.c_str());
-	    break;
-	case 13:	//geomXsc
+	case A_GEOM_W: mWSize = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()); up = true;	break;
+	case A_GEOM_H: mWSize = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())); up = true;	break;
+	case A_GEOM_Z: if(wLevel() > 0) z_coord = atoi(val.c_str());					break;
+	case A_GEOM_X_SC:
 	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
 	    x_scale = atof(val.c_str());
 	    up = upChlds = true;
 	    break;
-	case 14:	//geomYsc
+	case A_GEOM_Y_SC:
 	    mWSize = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
 	    y_scale = atof(val.c_str());
 	    up = upChlds = true;
 	    break;
-	case 15:	//tipTool
-	    setToolTip(val.c_str());
-	    break;
-	case 16:	//tipStatus
-	    setStatusTip(val.c_str());
-	    break;
+	case A_TIP_TOOL: setToolTip(val.c_str());	break;
+	case A_TIP_STATUS: setStatusTip(val.c_str());	break;
     }
     if(up && !allAttrLoad())
     {

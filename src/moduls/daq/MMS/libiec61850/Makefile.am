@@ -1,4 +1,4 @@
-EXTRA_DIST = *.h po/*
+EXTRA_DIST = CHANGELOG inc src
 
 INCLUDES = -Iinc -Isrc/common -Isrc/hal -Isrc/hal/socket -Isrc/hal/thread -Isrc/mms/asn1 \
     -Isrc/mms/iso_client -Isrc/mms/iso_acse -Isrc/mms/iso_cotp -Isrc/mms/iso_session -Isrc/mms/iso_presentation \
