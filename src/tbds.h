@@ -243,8 +243,8 @@ class TBDS : public TSubSYS, public TElem
 
 	//> Get Data from DB or config file. If <tbl> cleaned then load from config-file
 	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false );
-	bool dataGet( const string &bdn, const string &path, TConfig &cfg );
-	bool dataSet( const string &bdn, const string &path, TConfig &cfg );
+	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false );
+	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false );
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false );
 
 	//> Generic DB table

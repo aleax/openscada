@@ -197,20 +197,19 @@ void Block::setEnable( bool val )
 	loadIO("", "", true);
     }
     //> Disable
-    else if( !val && m_enable )
+    else if(!val && m_enable)
     {
-	if( process() ) setProcess(false);
+	if(process()) setProcess(false);
 	//>> Save IO config
 	//saveIO();
 
 	//>> Clean IO
-	for( unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++ )
-	    setLink( i_ln, SET, FREE );
+	for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++) setLink(i_ln, SET, FREE);
 	m_lnk.clear();
 
 	//>> Free func
 	setFunc(NULL);
-	id_freq=id_start=id_stop=-1;
+	id_freq = id_start = id_stop = -1;
     }
     m_enable = val;
 }
@@ -294,7 +293,7 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 	m_lnk[iid].lnk = vlnk;
     }
     //> Connect new link and init
-    if( cmd == INIT || (cmd == SET && process()) )
+    if(cmd == INIT || (cmd == SET && process()))
     {
 	string lo1 = TSYS::strSepParse(m_lnk[iid].lnk,0,'.');
 	string lo2 = TSYS::strSepParse(m_lnk[iid].lnk,1,'.');
@@ -322,13 +321,8 @@ void Block::setLink( unsigned iid, LnkCmd cmd, LnkT lnk, const string &vlnk )
 		}
 		break;
 	    case I_PRM: case O_PRM:
-		m_lnk[iid].aprm->free();
-		try { *m_lnk[iid].aprm = SYS->daq().at().at(lo1).at().at(lo2).at().at(lo3).at().vlAt(lo4); }
-		catch( TError err)
-		{
-		    try{ *m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk,0,'.'); }
-		    catch( TError err) { }
-		}
+		*m_lnk[iid].aprm = SYS->daq().at().attrAt(m_lnk[iid].lnk, '.', true);
+		if(m_lnk[iid].aprm->freeStat()) *m_lnk[iid].aprm = SYS->nodeAt(m_lnk[iid].lnk, 0, '.', 0, true);
 		break;
 	    default: break;
 	}
@@ -484,7 +478,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/blck/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/blck/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/blck/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/blck/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/blck/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","90","rows","4");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toen",_("To enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/blck/cfg/toprc",_("To process"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
@@ -669,7 +663,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 		    catch(TError) { }
 		    break;
 		case '3':
-		    if(m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM) SYS->daq().at().ctrListPrmAttr(opt, lnk);
+		    if(m_lnk[id].tp == I_PRM || m_lnk[id].tp == O_PRM) SYS->daq().at().ctrListPrmAttr(opt, lnk, false, '.');
 		    else
 		    {
 			int c_lv = 0;

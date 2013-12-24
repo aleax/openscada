@@ -259,6 +259,19 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_FormElValue:
 	    if(shD->value != val) setValue(w, val);
 	    break;
+	case A_FormElName:
+	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
+	    if(!shD->setType) break;
+	    switch(shD->elType)
+	    {
+		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
+		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
+		case F_TREE:
+		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
+		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
+		    break;
+	    }
+	    break;
 	case A_FormElMixP1:
 	    rel_cfg = true;
 	    switch(shD->elType)
@@ -282,19 +295,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    break;
 	case A_FormElMixP3: shD->checkable = (bool)atoi(val.c_str()); rel_cfg = true;	break;
 	case A_FormElFont: shD->font = getFont(val); rel_cfg = true;	break;
-	case A_FormElName:
-	    shD->name = TSYS::strEncode(val, TSYS::ShieldSimb);
-	    if(!shD->setType) break;
-	    switch(shD->elType)
-	    {
-		case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setText(shD->name.c_str());		break;
-		case F_BUTTON:		((QPushButton*)shD->addrWdg)->setText(shD->name.c_str());	break;
-		case F_TREE:
-		    ((QTreeWidget*)shD->addrWdg)->setHeaderLabels(QStringList() << shD->name.c_str());
-		    ((QTreeWidget*)shD->addrWdg)->headerItem()->setHidden(!shD->name.size());
-		    break;
-	    }
-	    break;
 	case A_FormElMixP4: shD->colorText = val; rel_cfg = true;	break;
     }
     if(rel_cfg && !w->allAttrLoad())
@@ -496,6 +496,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    {
 			cur_it->setFlags(cur_it->flags()|Qt::ItemIsSelectable);
 			cur_it->setData(0, Qt::FontRole, elFnt);
+			cur_it->setData(0, Qt::UserRole, ipath.c_str());
 		    }
 		}
 		shD->addrWdg->blockSignals(false);
@@ -584,8 +585,8 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	case F_LINE_ED:
 	    if(!((LineEdit*)shD->addrWdg)->isEdited()) ((LineEdit*)shD->addrWdg)->setValue(val.c_str());
 	    break;
-	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->setText(val.c_str());		break;
-	case F_CHECK_BOX:	((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
+	case F_TEXT_ED:	  ((TextEdit*)shD->addrWdg)->setText(val.c_str());		break;
+	case F_CHECK_BOX: ((QCheckBox*)shD->addrWdg)->setChecked(atoi(val.c_str()));	break;
 	case F_BUTTON:
 	{
 	    QPushButton *wdg = (QPushButton*)shD->addrWdg;
@@ -601,8 +602,14 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    break;
 	case F_LIST:
 	{
-	    QList<QListWidgetItem *> its = ((QListWidget*)shD->addrWdg)->findItems(val.c_str(),Qt::MatchExactly);
-	    ((QListWidget*)shD->addrWdg)->setCurrentItem(its.size()?its[0]:NULL);
+	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
+	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
+	    if(its.size())
+	    {
+		wdg->setCurrentItem(its[0]);
+		wdg->scrollToItem(its[0]);
+	    }
+	    else wdg->setCurrentItem(NULL);
 	    break;
 	}
 	case F_TREE:
@@ -630,8 +637,9 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		shD->addrWdg->blockSignals(true);
 		cur_it->setSelected(true);
 		shD->addrWdg->blockSignals(false);
+		wdg->scrollToItem(cur_it);
 		//> Expand all parents for visible selected
-		for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
+		//for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
 	    }
 	    break;
 	}
@@ -682,19 +690,19 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
     }
     else
     {
-	map<string,string> attrs;
+	AttrValS attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
 		if(!w->hasFocus()) break;
-		attrs["focus"] = "1";
-		attrs["event"] = "ws_FocusIn";
+		attrs.push_back(std::make_pair("focus","1"));
+		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
 		if(w->hasFocus()) break;
-		attrs["focus"] = "0";
-		attrs["event"] = "ws_FocusOut";
+		attrs.push_back(std::make_pair("focus","0"));
+		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
 	    default:	break;
@@ -709,9 +717,9 @@ void ShapeFormEl::lineAccept( )
     LineEdit *el   = (LineEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = el->value().toAscii().data();
-    attrs["event"] = "ws_LnAccept";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->value().toAscii().data()));
+    attrs.push_back(std::make_pair("event","ws_LnAccept"));
     view->attrsSet(attrs);
 }
 
@@ -720,9 +728,9 @@ void ShapeFormEl::textAccept( )
     TextEdit *el   = (TextEdit*)sender();
     WdgView  *view = (WdgView *)el->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = el->text().toAscii().data();
-    attrs["event"] = "ws_TxtAccept";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->text().toAscii().data()));
+    attrs.push_back(std::make_pair("event","ws_TxtAccept"));
     view->attrsSet(attrs);
 }
 
@@ -730,9 +738,9 @@ void ShapeFormEl::checkChange(int st)
 {
     WdgView *view = (WdgView *)((QCheckBox*)sender())->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = TSYS::int2str(st);
-    attrs["event"] = "ws_ChkChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",i2s(st)));
+    attrs.push_back(std::make_pair("event","ws_ChkChange"));
     view->attrsSet(attrs);
 }
 
@@ -752,9 +760,9 @@ void ShapeFormEl::buttonToggled( bool val )
 {
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
-    map<string,string> attrs;
-    attrs["event"] = string("ws_BtToggleChange\n")+(val?"ws_BtPress":"ws_BtRelease");
-    attrs["value"] = TSYS::int2str(val);
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("event",string("ws_BtToggleChange\n")+(val?"ws_BtPress":"ws_BtRelease")));
+    attrs.push_back(std::make_pair("value",TSYS::int2str(val)));
     w->attrsSet(attrs);
 }
 
@@ -763,9 +771,9 @@ void ShapeFormEl::comboChange(const QString &val)
     WdgView *w = (WdgView *)((QWidget*)sender())->parentWidget();
     if(((ShpDt*)w->shpData)->evLock)	return;
 
-    map<string,string> attrs;
-    attrs["value"] = val.toStdString();
-    attrs["event"] = "ws_CombChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",val.toStdString()));
+    attrs.push_back(std::make_pair("event","ws_CombChange"));
     w->attrsSet(attrs);
 }
 
@@ -775,9 +783,9 @@ void ShapeFormEl::listChange( int row )
     WdgView     *w  = (WdgView *)el->parentWidget();
 
     if(row < 0 || ((ShpDt*)w->shpData)->evLock) return;
-    map<string,string> attrs;
-    attrs["value"] = el->item(row)->text().toAscii().data();
-    attrs["event"] = "ws_ListChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->item(row)->text().toStdString()));
+    attrs.push_back(std::make_pair("event","ws_ListChange"));
     w->attrsSet(attrs);
 }
 
@@ -788,12 +796,9 @@ void ShapeFormEl::treeChange( )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
 
-    string itPath;
-    QTreeWidgetItem *cur_it = el->selectedItems()[0];
-    while(cur_it) { itPath = "/"+TSYS::strEncode(cur_it->text(0).toStdString(),TSYS::PathEl)+itPath; cur_it = cur_it->parent(); }
-    map<string,string> attrs;
-    attrs["value"] = itPath;
-    attrs["event"] = "ws_TreeChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",el->selectedItems()[0]->data(0,Qt::UserRole).toString().toStdString()));
+    attrs.push_back(std::make_pair("event","ws_TreeChange"));
     w->attrsSet(attrs);
 }
 
@@ -802,9 +807,9 @@ void ShapeFormEl::sliderMoved( int val )
     QAbstractSlider *el = (QAbstractSlider*)sender();
     WdgView	    *w  = (WdgView *)el->parentWidget();
 
-    map<string,string> attrs;
-    attrs["value"] = TSYS::int2str(val);
-    attrs["event"] = "ws_SliderChange";
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("value",i2s(val)));
+    attrs.push_back(std::make_pair("event","ws_SliderChange"));
     w->attrsSet(attrs);
 }
 
@@ -1133,10 +1138,10 @@ void ShapeMedia::mediaFinished( )
 
 #ifdef HAVE_PHONON
     VideoPlayer *player = dynamic_cast<VideoPlayer*>(shD->addrWdg);
-    map<string,string> attrs;
+    AttrValS attrs;
     if(shD->videoRoll && player) player->play();
-    else attrs["play"] = "0";
-    attrs["event"] = "ws_MediaFinished";
+    else attrs.push_back(std::make_pair("play","0"));
+    attrs.push_back(std::make_pair("event","ws_MediaFinished"));
     w->attrsSet(attrs);
 #endif
 }
@@ -1475,7 +1480,7 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 	    string sev;
 	    for(unsigned i_a = 0; i_a < shD->maps.size(); i_a++)
 	        if(shD->maps[i_a].containsPoint(w->mapFromGlobal(w->cursor().pos())))
-	        { sev="ws_MapAct"+TSYS::int2str(i_a); break; }
+	        { sev = "ws_MapAct"+TSYS::int2str(i_a); break; }
 	    if(!sev.empty())
 	    {
 		switch(((QMouseEvent*)event)->button())
@@ -1485,8 +1490,8 @@ bool ShapeMedia::event( WdgView *w, QEvent *event )
 		    case Qt::MidButton:		sev += "Midle";	break;
 		    default: return false;
 		}
-		w->attrSet("event",sev);
-		return true;
+		w->attrSet("event", sev);
+		//return true;	//For common Press event produce
 	    }
 	    break;
 	}
@@ -1775,7 +1780,7 @@ void ShapeDiagram::makePicture( WdgView *w )
 void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 {
     QPen grdPen, mrkPen;
-    int  mrkHeight = 0;
+    int  mrkHeight = 0, mrkWidth = 0;
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
@@ -1809,6 +1814,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
+	    mrkWidth = pnt.fontMetrics().width("000000");
 	    if(sclHor&SC_MARKERS)
 	    {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
@@ -1983,7 +1989,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     double fftBeg = 1e6/(double)tSize;			//Minimum frequency or maximum period time (s)
     double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -2119,7 +2125,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 void ShapeDiagram::makeTrendsPicture( WdgView *w )
 {
     QPen grdPen, mrkPen;
-    int  mrkHeight = 0;
+    int  mrkHeight = 0, mrkWidth = 0;
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
@@ -2161,6 +2167,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    mrkFnt.setPixelSize((double)mrkFnt.pixelSize()*vmin(w->xScale(true),w->yScale(true)));
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
+	    mrkWidth = pnt.fontMetrics().width("000000");
 	    if(sclHor&SC_MARKERS)
 	    {
 		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
@@ -2361,7 +2368,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     //> Calc horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?pnt.fontMetrics().width("000000"):15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;
@@ -2944,7 +2951,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     //> Correct request to archive border
     wantPer   = (vmax(wantPer,arh_per)/arh_per)*arh_per;
     tTime     = vmin(tTime, arh_end);
-    //tTimeGrnd = vmax(tTimeGrnd,arh_beg);
+    tTimeGrnd = vmax(tTimeGrnd, arh_beg);	//For prevent possible cycling
 
     //> Clear data at time error
     if(tTime <= tTimeGrnd || tTimeGrnd/wantPer > valEnd()/wantPer || tTime/wantPer < valBeg()/wantPer) vals.clear();
@@ -2958,7 +2965,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     else if(valBeg() && tTimeGrnd < valBeg())	tTime = valBeg()-wantPer;//1;
 
     //> Get values data
-    int64_t	bbeg, bend, bper;
+    int64_t	bbeg, bend, bper, bbeg_prev = tTime;
     int		curPos, prevPos, maxPos;
     double	curVal, prevVal;
     string	svl;
@@ -3020,7 +3027,12 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     }
 
     //> Check for archive jump
-    if(!isDataDir && shD->valArch.empty() && (bbeg-tTimeGrnd)/bper)	{ tTime = bbeg-bper; goto m1; }
+    if(!isDataDir && shD->valArch.empty() && (bbeg-tTimeGrnd)/bper && bper < bbeg_prev)
+    {
+	bbeg_prev = bper;
+	tTime = bbeg-bper;
+	goto m1;
+    }
 }
 
 void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
@@ -3512,17 +3524,17 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	}
     else
     {
-	map<string,string> attrs;
+	AttrValS attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		attrs["focus"] = "1";
-		attrs["event"] = "ws_FocusIn";
+		attrs.push_back(std::make_pair("focus","1"));
+		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		attrs["focus"] = "0";
-		attrs["event"] = "ws_FocusOut";
+		attrs.push_back(std::make_pair("focus","0"));
+		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
 	    default: break;
@@ -3686,17 +3698,17 @@ bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	}
     else
     {
-	map<string,string> attrs;
+	AttrValS attrs;
 	switch(event->type())
 	{
 	    case QEvent::FocusIn:
-		attrs["focus"] = "1";
-		attrs["event"] = "ws_FocusIn";
+		attrs.push_back(std::make_pair("focus","1"));
+		attrs.push_back(std::make_pair("event","ws_FocusIn"));
 		w->attrsSet(attrs);
 		break;
 	    case QEvent::FocusOut:
-		attrs["focus"] = "0";
-		attrs["event"] = "ws_FocusOut";
+		attrs.push_back(std::make_pair("focus","0"));
+		attrs.push_back(std::make_pair("event","ws_FocusOut"));
 		w->attrsSet(attrs);
 		break;
 	    default: break;
@@ -3860,11 +3872,11 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setColor(shD->backGrnd.color());
-	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Window).color());
 	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 
 	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
@@ -3880,10 +3892,10 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
-	    QBrush brsh = plt.brush(QPalette::Background);
+	    QBrush brsh = plt.brush(QPalette::Window);
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Background, brsh);
+	    plt.setBrush(QPalette::Window, brsh);
 	    w->setPalette(plt);
 
 	    if(runP && runP->mainWin()->masterPg() == w && !shD->border.width()) runP->mainWin()->setPalette(plt);
@@ -3929,6 +3941,8 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
 			shD->inclScrl->setFrameShape(QFrame::NoFrame);
+			//shD->inclScrl->setPalette(w->palette());
+			//shD->inclScrl->setBackgroundRole(QPalette::NoRole);
 			wlay->addWidget(shD->inclScrl);
 		    }
 
@@ -3969,7 +3983,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget->setProperty("cntPg",TSYS::addr2str(w).c_str());
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setMinimumSize(w->size());
-			shD->inclWidget->load("");
+			//shD->inclWidget->load("");
 		    }
 		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}

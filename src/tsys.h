@@ -29,6 +29,8 @@
 #define PACKAGE_SITE	"http://oscada.org"
 
 //> Other system's constants
+#define OBJ_ID_SZ	"20"	// Typical object's ID size. Warning the size can cause key limit on MySQL like DB.
+#define OBJ_NM_SZ	"50"	// Typical object's NAME size.
 #define USER_FILE_LIMIT	1048576	// Loading and processing files limit into userspace
 #define STR_BUF_LEN	10000	// Length of string buffers (no string class)
 #define NSTR_BUF_LEN	100	// Length of string buffers for number
@@ -72,6 +74,8 @@ namespace OSCADA
 //*************************************************
 class TSYS : public TCntrNode
 {
+    friend class TMess;
+
     public:
 	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
@@ -126,9 +130,9 @@ class TSYS : public TCntrNode
 	string	workDir( );
 	string	icoDir( )	{ return mIcoDir; }
 	string	modDir( )	{ return mModDir; }
-	void	setWorkDir( const string &wdir );
-	void	setIcoDir( const string &idir )	{ mIcoDir = idir; modif(); }
-	void	setModDir( const string &mdir )	{ mModDir = mdir; modif(); }
+	void	setWorkDir( const string &wdir, bool init = false );
+	void	setIcoDir( const string &idir, bool init = false );
+	void	setModDir( const string &mdir, bool init = false );
 
 	//> Config-file functions
 	string cfgFile( )	{ return mConfFile; }
@@ -287,6 +291,8 @@ class TSYS : public TCntrNode
 
     private:
 	//Data
+	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08 };
+
 	class STask
 	{
 	    public:
@@ -340,6 +346,7 @@ class TSYS : public TCntrNode
 	string	rootCfgFl;	// Root node's config-file name
 	time_t	rootFlTm;	// Root node's config-file's modify time
 	unsigned rootModifCnt;	// Root tree modify counter, used for save tree to file detect
+	unsigned sysModifFlgs;	// System fields modif flags
 
 	int	mStopSignal,	// Stop station signal
 		mSubst;		// Subsystem tree id

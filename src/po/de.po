@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-11 15:46+0300\n"
+"POT-Creation-Date: 2013-10-24 19:13+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -820,6 +820,10 @@ msgstr "Reale Stelle"
 msgid "Error"
 msgstr "Fehler"
 
+#: tdaqs.cpp:141
+msgid "=== Attributes ==="
+msgstr "=== Attribute ==="
+
 msgid "Load template's libraries error."
 msgstr "Fehler beim Laden der Vorlagenbibliotheken."
 
@@ -850,10 +854,20 @@ msgstr "Fehler beim Abschalten des Controllers '%s'."
 msgid "No parameter present '%s'."
 msgstr "Es gibt keine Option '%s'."
 
+#: tdaqs.cpp:470
+#, fuzzy, c-format
+msgid "Pointed node is not parameter '%s'."
+msgstr "Fehler beim Hinzufügen des Parameters '%s'."
+
 #, c-format
 msgid "No attribute present '%s'."
 msgstr "Es ist kein Attribut '%s'."
 
+#, c-format
+msgid "Pointed node is not attribute '%s'."
+msgstr ""
+
+#: tdaqs.cpp:673
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"

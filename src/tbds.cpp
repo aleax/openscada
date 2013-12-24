@@ -34,18 +34,18 @@ using namespace OSCADA;
 TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
 {
     //> Generic system DB
-    fldAdd( new TFld("user","User",TFld::String,TCfg::Key,"20") );
-    fldAdd( new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100") );
-    fldAdd( new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000") );
+    fldAdd(new TFld("user","User",TFld::String,TCfg::Key,OBJ_ID_SZ));
+    fldAdd(new TFld("id",_("Value ID"),TFld::String,TCfg::Key,"100"));
+    fldAdd(new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000"));
 
     //> Open data bases DB structure
-    el_db.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,"20") );
-    el_db.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    el_db.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200") );
-    el_db.fldAdd( new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100") );
-    el_db.fldAdd( new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20") );
-    el_db.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1") );
+    el_db.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_db.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_db.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    el_db.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
+    el_db.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
+    el_db.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
+    el_db.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
 }
 
 TBDS::~TBDS(  )
@@ -241,8 +241,9 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
     return false;
 }
 
-bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
+bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg )
 {
+    bool db_true = false;
     string bdn = realDBName(ibdn);
 
     //> Load from DB
@@ -251,14 +252,14 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 	AutoHD<TTable> tbl = open(bdn);
 	if(!tbl.freeStat())
 	{
-	    bool db_true = true;
+	    db_true = true;
 	    try{ tbl.at().fieldGet(cfg); }
 	    catch(TError err)
 	    {
 		if(err.cod != TSYS::DBRowNoPresent) mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		db_true = false;
 	    }
-	    if(db_true) return true;
+	    if(db_true && !forceCfg) return true;
 	}
     }
 
@@ -305,16 +306,16 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg )
 	    }
 	}
     }
-    //throw TError(nodePath().c_str(),"Field '%s' no present.",path.c_str());
-    return false;
+
+    return db_true;
 }
 
-bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
+bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg )
 {
     string bdn = realDBName(ibdn);
 
     //> Save to DB
-    if(bdn.size() && TSYS::strParse(bdn,0,".") != "<cfg>")
+    if(!forceCfg && bdn.size() && TSYS::strParse(bdn,0,".") != "<cfg>")
     {
 	AutoHD<TTable> tbl = open(bdn,true);
 	if(!tbl.freeStat())
@@ -327,7 +328,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg )
     }
 
     //> Save to config
-    if(TSYS::strParse(bdn,0,".") == "<cfg>")
+    if(forceCfg || TSYS::strParse(bdn,0,".") == "<cfg>")
     {
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *nd, *wel = NULL, *fnd;
@@ -463,7 +464,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
     return db_true;
 }
 
-void TBDS::genDBSet(const string &path, const string &val, const string &user, char rFlg )
+void TBDS::genDBSet( const string &path, const string &val, const string &user, char rFlg )
 {
     bool bd_ok = false;
 
@@ -471,8 +472,8 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     if(SYS->present(SDB_ID) && !(rFlg&TBDS::OnlyCfg))
     {
 	AutoHD<TBDS> dbs = SYS->db();
-	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(),true);
-	if( !tbl.freeStat() )
+	AutoHD<TTable> tbl = dbs.at().open(dbs.at().fullDBSYS(), true);
+	if(!tbl.freeStat())
 	{
 	    TConfig db_el(&dbs.at());
 	    db_el.setNoTransl( !(rFlg&TBDS::UseTranslate) );
@@ -498,16 +499,17 @@ void TBDS::genDBSet(const string &path, const string &val, const string &user, c
     //> Set to config
     if(!bd_ok && (SYS->workDB() == "<cfg>" || rFlg&TBDS::OnlyCfg))
     {
-	ResAlloc res(SYS->nodeRes(),true);
+	if(genDBGet(path,"",user,(rFlg|OnlyCfg)) == val) return;
+	ResAlloc res(SYS->nodeRes(), true);
 	XMLNode *tgtN = NULL;
-	if(rFlg&TBDS::UseTranslate && Mess->lang2Code().size())
+	if((rFlg&TBDS::UseTranslate) && Mess->lang2Code().size())
 	    tgtN = SYS->cfgNode(path+"_"+Mess->lang2Code(),true);
 	if(!tgtN) tgtN = SYS->cfgNode(path,true);
 	if(tgtN) { tgtN->setText(val,true); SYS->modifCfg(); }
     }
 }
 
-string TBDS::genDBGet(const string &path, const string &oval, const string &user, char rFlg )
+string TBDS::genDBGet( const string &path, const string &oval, const string &user, char rFlg )
 {
     bool bd_ok = false;
     string rez = oval;
@@ -651,12 +653,13 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm","1","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/db_",_("DB"),RWRWR_,"root",SDB_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/db",_("DB"),R_R_R_))
 	{
 	    ctrMkNode("fld",opt,-1,"/db/ful_db_del",_("Full DB delete"),RWRW__,"root",SDB_ID,2,
 		"tp","bool","help",_("Select for full deletion DB on DB close. Else DB will be simply closed."));
-	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","db_","idSz","20");
+	    ctrMkNode("list",opt,-1,"/db/odb",_("DB"),RWRWR_,"root",SDB_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","db_","idSz",OBJ_ID_SZ);
 	}
 	return;
     }
@@ -748,8 +751,7 @@ void TBD::postDisable(int flag)
 {
     try
     {
-	if( flag )
-	    SYS->db().at().dataDel(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this,true);
+	if(flag) SYS->db().at().dataDel(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
     }catch(TError err)
     { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -788,19 +790,19 @@ void TBD::open( const string &table, bool create )
 
 void TBD::load_( )
 {
-    if( !SYS->chkSelDB(SYS->workDB()) ) return;
-    SYS->db().at().dataGet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
-    if( !enableStat() && toEnable() )	enable();
+    if(!SYS->chkSelDB(SYS->workDB()))	return;
+    SYS->db().at().dataGet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
+    if(!enableStat() && toEnable())	enable();
 }
 
 void TBD::save_( )
 {
-    SYS->db().at().dataSet(owner().owner().fullDB(),SYS->db().at().nodePath()+"DB/",*this);
+    SYS->db().at().dataSet(owner().owner().fullDB(), SYS->db().at().nodePath()+"DB/", *this, true);
 }
 
 TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    // Array SQLReq(string req) - formation of the SQL-request to the DB.
+    // Array SQLReq(string req, bool tr = EVAL_BOOL) - formation of the SQL-request to the DB.
     //  req - SQL-request text
     if(iid == "SQLReq" && prms.size() >= 1)
     {
@@ -865,7 +867,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len","50");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SDB_ID,3,"tp","str","cols","100","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,4,

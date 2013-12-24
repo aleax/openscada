@@ -1,3 +1,3 @@
 # Remember to also add subdirs in configure.in
-SUBDIRS = bd arhiv special transport protocol daq ui
+SUBDIRS = bd daq arhiv transport protocol ui special
 

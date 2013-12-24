@@ -53,7 +53,7 @@ class Lib : public TSpecial
 
 	void list( vector<string> &ls ) 	{ chldList(mFnc,ls); }
 	bool present( const string &id )	{ return chldPresent(mFnc,id); }
-	AutoHD<TFunction> at( const string &id )	{ return chldAt(mFnc,id); }
+	AutoHD<TFunction> at( const string &id ){ return chldAt(mFnc,id); }
 	void reg( TFunction *fnc )		{ chldAdd(mFnc,fnc); }
 	void unreg( const char *id )		{ chldDel(mFnc,id); }
 

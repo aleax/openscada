@@ -53,8 +53,8 @@ TProt::TProt( string name ) : TProtocol(PRT_ID)
     mEndPnt = grpAdd("ep_");
 
     //> Node DB structure
-    mEndPntEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20"));
-    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50"));
+    mEndPntEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    mEndPntEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mEndPntEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     mEndPntEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
     mEndPntEl.fldAdd(new TFld("SerialzType",_("Serializer type"),TFld::Integer,TFld::Selected,"1","0","0",_("Binary")));
@@ -82,9 +82,9 @@ void TProt::epAdd( const string &iid, const string &db )
 
 bool TProt::debug( )	{ return false/*(mess_lev()==TMess::Debug)*/; }
 
-void TProt::debugMess( const string &mess, const string &data )
+void TProt::debugMess( const string &mess )
 {
-    mess_debug(nodePath().c_str(), "%s: %s", mess.c_str(), TSYS::strDecode(data,TSYS::Bin).c_str());
+    mess_debug(nodePath().c_str(), "%s", mess.c_str());
 }
 
 void TProt::epEnList( vector<string> &ls )
@@ -103,10 +103,10 @@ Server::EP *TProt::epEnAt( const string &ep )
     return NULL;
 }
 
-bool TProt::inReq( string &request, string &answer, const string &sender )
+bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 {
     ResAlloc res(en_res, false);
-    return Server::inReq(request, answer, sender);
+    return Server::inReq(request, inPrtId, answ);
 }
 
 void TProt::discoveryUrls( vector<string> &ls )
@@ -205,10 +205,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm","1", "idSz","20");
+	ctrMkNode("grp", opt, -1, "/br/ep_", _("End point"), RWRWR_, "root", SPRT_ID, 2, "idm",OBJ_NM_SZ, "idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/ep",_("End points")))
 	    ctrMkNode("list", opt, -1, "/ep/ep", _("End points"), RWRWR_, "root", SPRT_ID, 5,
-		"tp","br", "idm","1", "s_com","add,del", "br_pref","ep_", "idSz","20");
+		"tp","br", "idm",OBJ_NM_SZ, "s_com","add,del", "br_pref","ep_", "idSz",OBJ_ID_SZ);
 	return;
     }
 
@@ -251,7 +251,7 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 bool TProtIn::mess( const string &reqst, string &answ, const string &sender )
 {
     mBuf += reqst;
-    return owner().inReq(mBuf, answ, sender);
+    return owner().inReq(mBuf, name(), &answ);
 }
 
 //*************************************************
@@ -308,48 +308,6 @@ string OPCEndPoint::cert( )	{ return cfg("ServCert").getS(); }
 
 string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
-string OPCEndPoint::secPolicy( int isec )
-{
-    ResAlloc res(nodeRes(), false);
-    return Server::EP::secPolicy(isec);
-}
-
-MessageSecurityMode OPCEndPoint::secMessageMode( int isec )
-{
-    ResAlloc res(nodeRes(), false);
-    return Server::EP::secMessageMode(isec);
-}
-
-int OPCEndPoint::sessCreate( const string &iName, double iTInact )
-{
-    ResAlloc res(nodeRes(), true);
-    return Server::EP::sessCreate(iName, iTInact);
-}
-
-void OPCEndPoint::sessServNonceSet( int sid, const string &servNonce )
-{
-    ResAlloc res(nodeRes(), false);
-    return Server::EP::sessServNonceSet(sid, servNonce);
-}
-
-bool OPCEndPoint::sessActivate( int sid, uint32_t secCnl, bool check )
-{
-    ResAlloc res( nodeRes(), true );
-    return Server::EP::sessActivate(sid, secCnl, check);
-}
-
-void OPCEndPoint::sessClose( int sid )
-{
-    ResAlloc res(nodeRes(), true);
-    return Server::EP::sessClose(sid);
-}
-
-Server::Sess OPCEndPoint::sessGet( int sid )
-{
-    ResAlloc res(nodeRes(), false);
-    return Server::EP::sessGet(sid);
-}
-
 bool OPCEndPoint::cfgChange( TCfg &ce )
 {
     modif();
@@ -389,7 +347,13 @@ void OPCEndPoint::setEnable( bool vl )
     owner().epEn(id(), vl);
     Server::EP::setEnable(vl);
     if(vl)
-	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),1),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->setAttr("DisplayName",SYS->daq().at().subName());
+    {
+	nodeReg(OpcUa_BaseObjectType,NodeId("DAQModuleObjectType",1),"DAQModuleObjectType",NC_ObjectType,OpcUa_HasSubtype);
+	nodeReg(OpcUa_BaseObjectType,NodeId("DAQControllerObjectType",1),"DAQControllerObjectType",NC_ObjectType,OpcUa_HasSubtype);
+	nodeReg(OpcUa_BaseObjectType,NodeId("DAQParameterObjectType",1),"DAQParameterObjectType",NC_ObjectType,OpcUa_HasSubtype);
+	nodeReg(OpcUa_ObjectsFolder,NodeId(SYS->daq().at().subId(),1),SYS->daq().at().subId(),NC_Object,OpcUa_Organizes,OpcUa_FolderType)->
+	    setAttr("DisplayName",SYS->daq().at().subName());
+    }
 }
 
 string OPCEndPoint::getStatus( )
@@ -404,433 +368,280 @@ string OPCEndPoint::getStatus( )
     return rez;
 }
 
-string OPCEndPoint::reqData( int reqTp, const string &rb )
+int OPCEndPoint::reqData( int reqTp, XML_N &req )
 {
-    string respEp;
-    int off = 0;
+    cntReq++;
+
     switch(reqTp)
     {
-	case OpcUa_BrowseRequest:
+	case OpcUa_BrowseRequest: case OpcUa_BrowseNextRequest:
 	{
-	    //>> Request
-						//> view
-	    UA::iNodeId(rb, off);		//viewId
-	    UA::iTm(rb, off);			//timestamp
-	    UA::iNu(rb, off, 4);		//viewVersion
+	    TDAQS *nDAQ = NULL;
+	    TTipDAQ *nTpDAQ = NULL;
+	    TController *nCntr = NULL;
+	    TParamContr *nPrm = NULL;
 
-	    unsigned rPn = UA::iNu(rb, off, 4);	//requestedMax ReferencesPerNode
-						//> nodesToBrowse
-	    uint32_t nc = UA::iNu(rb, off, 4);	//Nodes
+	    int rez = Server::EP::reqData(reqTp, req);
+	    //if(rez != OpcUa_BadBrowseNameInvalid) return rez;
 
-	    //>> Respond
-						//> results []
-	    UA::oNu(respEp, nc, 4);		//Nodes
+	    NodeId nid = NodeId::fromAddr(req.attr("node"));
+	    int rPn = atoi(req.attr("rPn").c_str());
 
-	    //>> Process limit for "rPn"
-	    //????
+	    //> Check for DAQ subsystem data
+	    if(nid.ns() != 1 || TSYS::strParse(nid.strVal(),0,".") != SYS->daq().at().subId() || (rPn && req.childSize() >= rPn)) return rez;
+	    NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
+            uint32_t bd = atoi(req.attr("BrDir").c_str());
+            uint32_t nClass = atoi(req.attr("ClassMask").c_str());
+	    string lstNd = req.attr("LastNode"); req.setAttr("LastNode","");
 
-	    //>>> Nodes list processing
-	    for(uint32_t i_c = 0; i_c < nc; i_c++)
+	    //>> Connect to DAQ node
+	    int addrOff = 0;
+	    string firstEl = TSYS::strParse(nid.strVal(),0,".",&addrOff);
+	    AutoHD<TCntrNode> cNd = SYS->daq().at().daqAt(nid.strVal().substr(addrOff), '.', true);
+	    if(cNd.freeStat()) return OpcUa_BadBrowseNameInvalid;
+
+	    //> typeDefinition reference browse
+	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH) && !dynamic_cast<TDAQS*>(&cNd.at()))
 	    {
-		NodeId nid = UA::iNodeId(rb, off);	//nodeId
-		uint32_t bd = UA::iNu(rb, off, 4);	//browseDirection
-		NodeId rtId = UA::iNodeId(rb, off);	//referenceTypeId
-		UA::iNu(rb, off, 1);			//includeSubtypes
-		uint32_t nClass = UA::iNu(rb, off, 4);	//nodeClassMask
-		uint32_t resMask = UA::iNu(rb, off, 4);	//resultMask
-
-		uint32_t stCode = 0, refNumb = 0;
-		int stCodeOff = respEp.size(); UA::oNu(respEp, stCode, 4);	//statusCode
-		UA::oS(respEp, "");						//continuationPoint ????
-		int refNumbOff = respEp.size(); UA::oNu(respEp, refNumb, 4);	//References [] = 0
-
-		if(rtId.numbVal() != OpcUa_HierarchicalReferences && rtId.numbVal() != OpcUa_References) continue;
-
-		map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
-		if(ndX == ndMap.end())
-		{
-		    stCode = OpcUa_BadBrowseNameInvalid;
-		    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "Browse request to unknown node: %s", nid.toAddr().c_str());
-		}
-		else
-		{
-		    //> typeDefinition reference process
-		    if(rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH))
-		    {
-			map<string, XML_N*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
-			if(ndTpDef != ndMap.end())
-			{
-			    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-			    if(!nClass || nClass == cnClass)
-			    {
-				UA::oRef(respEp, resMask, NodeId::fromAddr(ndTpDef->second->attr("NodeId")),
-				    NodeId::fromAddr(ndTpDef->second->attr("referenceTypeId")), 1,
-				    ndTpDef->second->attr("name"), cnClass,
-				    NodeId::fromAddr(ndTpDef->second->attr("typeDefinition")));
-				refNumb++;
-			    }
-			}
-		    }
-		    //> Forward hierarchical references process
-		    for(unsigned i_ch = 0; (bd == BD_FORWARD || bd == BD_BOTH) && i_ch < ndX->second->childSize(); i_ch++)
-		    {
-			XML_N *chNd = ndX->second->childGet(i_ch);
-			unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
-			if(nClass && nClass != cnClass) continue;
-			UA::oRef(respEp, resMask, NodeId::fromAddr(chNd->attr("NodeId")),
-			    NodeId::fromAddr(chNd->attr("referenceTypeId")), 1, chNd->attr("name"), cnClass,
-			    NodeId::fromAddr(chNd->attr("typeDefinition")));
-			refNumb++;
-		    }
-		    //> Inverse hierarchical references process
-		    if((bd == BD_INVERSE || bd == BD_BOTH) && ndX->second->parent())
-		    {
-			XML_N *chNd = ndX->second->parent();
-			unsigned cnClass = atoi(chNd->attr("NodeClass").c_str());
-			if(!nClass || nClass == cnClass)
-			{
-			    UA::oRef(respEp, resMask, NodeId::fromAddr(chNd->attr("NodeId")),
-				NodeId::fromAddr(chNd->attr("referenceTypeId")), 0, chNd->attr("name"), cnClass,
-				NodeId::fromAddr(chNd->attr("typeDefinition")));
-			    refNumb++;
-			}
-		    }
-		}
-		//> Check for DAQ subsystem data
-		if(nid.ns() == 1 && TSYS::strParse(nid.strVal(),0,".") == SYS->daq().at().subId())
-		{
-		    vector<string> chLs;
-		    stCode = 0;
-		    //>> Connect to DAQ node
-		    AutoHD<TCntrNode> cNd = SYS->daq();
-		    string sel;
-		    int nLev = 0;
-		    for(int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++)
-			try { cNd = cNd.at().nodeAt(sel); }
-			catch(TError err) { stCode = OpcUa_BadBrowseNameInvalid; break; }
-		    if(!stCode)
-		    {
-			//> typeDefinition reference browse
-			if(nLev && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH))
-			{
-			    map<string, XML_N*>::iterator ndTpDef;
-			    switch(nLev)
-			    {
-				case 1:	ndTpDef = ndMap.find(NodeId("DAQModuleObjectType",1).toAddr());		break;
-				case 2:	ndTpDef = ndMap.find(NodeId("DAQControllerObjectType",1).toAddr());	break;
-				case 3:	ndTpDef = ndMap.find(NodeId("DAQParameterObjectType",1).toAddr());	break;
-				case 4:	ndTpDef = ndMap.find(NodeId(OpcUa_BaseDataVariableType).toAddr());	break;
-			    }
-			    if(ndTpDef != ndMap.end())
-			    {
-				unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-				if(!nClass || nClass == cnClass)
-				{
-				    UA::oRef(respEp, resMask, NodeId::fromAddr(ndTpDef->second->attr("NodeId")),
-					NodeId::fromAddr(ndTpDef->second->attr("referenceTypeId")), 1,
-					ndTpDef->second->attr("name"), cnClass,
-					NodeId::fromAddr(ndTpDef->second->attr("typeDefinition")));
-				    refNumb++;
-				}
-			    }
-			}
-			//>> Forward browse
-			if((!nClass || nClass == NC_Object) && (bd == BD_FORWARD || bd == BD_BOTH))
-			{
-			    switch(nLev)
-			    {
-				case 0:		//>>> Subsystem
-				    ((AutoHD<TDAQS>)cNd).at().modList(chLs);
-				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
-					UA::oRef(respEp, resMask, NodeId(nid.strVal()+"."+chLs[i_ch],1), OpcUa_Organizes,
-					    true, chLs[i_ch], NC_Object, NodeId("DAQModuleObjectType",1));
-				    break;
-				case 1:		//>>> Module
-				    ((AutoHD<TTipDAQ>)cNd).at().list(chLs);
-				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
-					UA::oRef(respEp, resMask, NodeId(nid.strVal()+"."+chLs[i_ch],1), OpcUa_Organizes,
-					    true, chLs[i_ch], NC_Object, NodeId("DAQControllerObjectType",1));
-				    break;
-				case 2:		//>>> Controller
-				    ((AutoHD<TController>)cNd).at().list(chLs);
-				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
-					UA::oRef(respEp, resMask, NodeId(nid.strVal()+"."+chLs[i_ch],1), OpcUa_Organizes,
-					    true, chLs[i_ch], NC_Object, NodeId("DAQParameterObjectType",1));
-				    break;
-				case 3:		//>>> Parameter
-				    ((AutoHD<TParamContr>)cNd).at().vlList(chLs);
-				    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++, refNumb++)
-					UA::oRef(respEp, resMask, NodeId(nid.strVal()+"."+chLs[i_ch],1), OpcUa_HasComponent,
-					    true, chLs[i_ch], NC_Variable, OpcUa_BaseDataVariableType);
-				    break;
-			    }
-			}
-			//>> Inverse browse
-			if((!nClass || nClass == NC_Object) && (bd == BD_INVERSE || bd == BD_BOTH) && nid.strVal() != "DAQ")
-			{
-			    UA::oRef(respEp, resMask, NodeId(nid.strVal().substr(0,nid.strVal().rfind(".")),1), OpcUa_Organizes,
-				false, TSYS::strParse(nid.strVal(),nLev,"."), NC_Object, OpcUa_FolderType);
-			    refNumb++;
-			}
-		    }
-		}
-		if(stCode)	UA::oNu(respEp, stCode, 4, stCodeOff);
-		if(refNumb)	UA::oNu(respEp, refNumb, 4, refNumbOff);
+		XML_N *ndTpDef = ndMap[NodeId(OpcUa_BaseDataVariableType).toAddr()];
+		if(dynamic_cast<TTipDAQ*>(&cNd.at()))		ndTpDef = ndMap[NodeId("DAQModuleObjectType",1).toAddr()];
+		else if(dynamic_cast<TController*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQControllerObjectType",1).toAddr()];
+		else if(dynamic_cast<TParamContr*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQParameterObjectType",1).toAddr()];
+		unsigned cnClass;
+		if(ndTpDef && (!nClass || nClass&(cnClass=atoi(ndTpDef->attr("NodeClass").c_str()))))
+		    req.childAdd("ref")->setAttr("NodeId", ndTpDef->attr("NodeId"))->
+			setAttr("referenceTypeId", ndTpDef->attr("referenceTypeId"))->
+			setAttr("dir", "1")->setAttr("name", ndTpDef->attr("name"))->
+			setAttr("NodeClass", i2s(cnClass))->setAttr("typeDefinition", ndTpDef->attr("typeDefinition"));
 	    }
-	    UA::oS(respEp, "");		//diagnosticInfos []
-	    break;
+	    //>> Inverse browse
+	    if(lstNd.empty() && (!nClass || nClass&NC_Object) && (bd == BD_INVERSE || bd == BD_BOTH) && !dynamic_cast<TDAQS*>(&cNd.at()))
+	    {
+		XML_N *ndTpDef = NULL,
+		      *rN = req.childAdd("ref")->setAttr("referenceTypeId", i2s(OpcUa_Organizes))->setAttr("dir", "0")->
+						 setAttr("NodeClass", i2s(NC_Object));
+		TCntrNode* ndUp = cNd.at().nodePrev();
+		if((nDAQ=dynamic_cast<TDAQS*>(ndUp)))
+		{
+		    ndTpDef = ndMap[NodeId(OpcUa_FolderType).toAddr()];
+		    rN->setAttr("NodeId", NodeId("DAQ",1).toAddr())->setAttr("name", nDAQ->subName())->
+                	setAttr("typeDefinition", ndTpDef?ndTpDef->attr("typeDefinition"):"");
+		}
+		else if((nTpDAQ=dynamic_cast<TTipDAQ*>(ndUp)))
+		{
+		    ndTpDef = ndMap[NodeId("DAQModuleObjectType",1).toAddr()];
+		    rN->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->DAQPath(),1).toAddr())->setAttr("name", nTpDAQ->modName())->
+                	setAttr("typeDefinition", ndTpDef?ndTpDef->attr("typeDefinition"):"");
+		}
+		else if((nCntr=dynamic_cast<TController*>(ndUp)))
+		{
+		    ndTpDef = ndMap[NodeId("DAQControllerObjectType",1).toAddr()];
+		    rN->setAttr("NodeId", NodeId("DAQ."+nCntr->DAQPath(),1).toAddr())->setAttr("name", nCntr->name())->
+                	setAttr("typeDefinition", ndTpDef?ndTpDef->attr("typeDefinition"):"");
+		}
+		else if((nPrm=dynamic_cast<TParamContr*>(ndUp)))
+		{
+		    ndTpDef = ndMap[NodeId("DAQParameterObjectType",1).toAddr()];
+		    rN->setAttr("NodeId", NodeId("DAQ."+nPrm->DAQPath(),1).toAddr())->setAttr("name", nPrm->name())->
+                	setAttr("typeDefinition", ndTpDef?ndTpDef->attr("typeDefinition"):"");
+		}
+            }
+	    //>> Forward browse
+	    if((!nClass || nClass&NC_Object) && (bd == BD_FORWARD || bd == BD_BOTH))
+	    {
+		NodeId	tDef, refTpId = OpcUa_Organizes;
+		uint32_t nCl = NC_Object;
+		vector<string> chLs;
+		XML_N prevLs("PrevLs");
+
+		if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at())))
+		{
+		    nDAQ->modList(chLs);
+		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nDAQ->at(chLs[i_ch]).at().DAQPath(),1).toAddr())->
+			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nDAQ->at(chLs[i_ch]).at().modName())->
+			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId(OpcUa_FolderType).toAddr());
+		}
+		else if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))
+		{
+		    nTpDAQ->list(chLs);
+		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nTpDAQ->at(chLs[i_ch]).at().DAQPath(),1).toAddr())->
+			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nTpDAQ->at(chLs[i_ch]).at().name())->
+			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId("DAQControllerObjectType",1).toAddr());
+		}
+		else if((nCntr=dynamic_cast<TController*>(&cNd.at())))
+		{
+		    nCntr->list(chLs);
+		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nCntr->at(chLs[i_ch]).at().DAQPath(),1).toAddr())->
+			    setAttr("referenceTypeId", refTpId.toAddr())->setAttr("dir", "1")->setAttr("name", nCntr->at(chLs[i_ch]).at().name())->
+			    setAttr("NodeClass", i2s(nCl))->setAttr("typeDefinition", NodeId("DAQParameterObjectType",1).toAddr());
+		}
+		else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))
+		{
+		    nPrm->vlList(chLs);
+		    for(unsigned i_ch = 0; i_ch < chLs.size(); i_ch++)
+			prevLs.childAdd("ref")->setAttr("NodeId", NodeId("DAQ."+nPrm->vlAt(chLs[i_ch]).at().DAQPath(),1).toAddr())->
+			    setAttr("referenceTypeId", NodeId(OpcUa_HasComponent).toAddr())->setAttr("dir", "1")->
+			    setAttr("name", nPrm->vlAt(chLs[i_ch]).at().name())->
+			    setAttr("NodeClass", i2s(NC_Variable))->setAttr("typeDefinition", NodeId(OpcUa_BaseDataVariableType).toAddr());
+		}
+
+		bool lstOK = lstNd.empty() ? true : false;
+		for(unsigned i_p = 0; i_p < prevLs.childSize(); i_p++)
+		{
+		    XML_N *pN = prevLs.childGet(i_p);
+		    if(!lstOK) { lstOK = (lstNd==pN->attr("NodeId")); continue; }
+		    *(req.childAdd("ref")) = *pN;
+		    if(rPn && req.childSize() >= rPn && (i_p+1) < prevLs.childSize())
+		    {
+			req.setAttr("LastNode", pN->attr("NodeId"));
+			break;
+		    }
+		}
+	    }
+	    return 0;
 	}
 	case OpcUa_ReadRequest:
 	{
-	    //>> Request
-	    UA::iR(rb, off, 8);				//maxAge
-	    uint32_t tmStRet = UA::iNu(rb, off, 4);	//timestampsTo Return
-							//> nodesToRead []
-	    uint32_t nc = UA::iNu(rb, off, 4);		//nodes
-	    uint8_t eMsk = 0x01;
-	    switch(tmStRet)
+	    TDAQS *nDAQ = NULL;
+	    TTipDAQ *nTpDAQ = NULL;
+	    TController *nCntr = NULL;
+	    TParamContr *nPrm = NULL;
+	    TVal *nVal = NULL;
+
+	    int rez = Server::EP::reqData(reqTp, req);
+	    if(rez != OpcUa_BadNodeIdUnknown) return rez;
+
+	    NodeId nid = NodeId::fromAddr(req.attr("node"));
+
+	    //OpenSCADA DAQ parameter's attribute
+	    if(nid.ns() != 1)	return OpcUa_BadNodeIdUnknown;
+	    uint32_t aid = atoi(req.attr("aid").c_str());
+
+	    //>> Connect to DAQ node
+	    int addrOff = 0;
+	    string firstEl = TSYS::strParse(nid.strVal(),0,".",&addrOff);
+	    AutoHD<TCntrNode> cNd = SYS->daq().at().daqAt(nid.strVal().substr(addrOff), '.', true);
+	    if(cNd.freeStat()) return OpcUa_BadNodeIdUnknown;
+
+	    switch(aid)
 	    {
-		case TS_SOURCE:	eMsk |= 0x04;	break;
-		case TS_SERVER:	eMsk |= 0x08;	break;
-		case TS_BOTH:	eMsk |= 0x0C;	break;
-	    }
-
-	    //>> Respond
-	    UA::oNu(respEp, nc, 4);			//Numbers
-
-	    //>>> Nodes list processing
-	    for(uint32_t i_c = 0; i_c < nc; i_c++)
-	    {
-		NodeId nid = UA::iNodeId(rb, off);	//nodeId
-		uint32_t aid = UA::iNu(rb, off, 4);	//attributeId
-		UA::iS(rb, off);			//indexRange
-		UA::iSqlf(rb, off);			//dataEncoding
-
-		//> Get node from objects tree
-		map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
-		if(ndX != ndMap.end())
+		case AId_NodeId: req.setAttr("type", i2s(OpcUa_NodeId))->setText(nid.toAddr());				return 0;
+		case AId_BrowseName:
 		{
-		    switch(aid)
-		    {
-			case AId_NodeId: modPrt->oDataValue(respEp, eMsk, nid.toAddr(), OpcUa_NodeId);				continue;
-			case AId_NodeClass: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("NodeClass"), OpcUa_Int32);	continue;
-			case AId_BrowseName: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("name"), OpcUa_QualifiedName);	continue;
-			case AId_DisplayName:
-			    modPrt->oDataValue(respEp, eMsk, ndX->second->attr(ndX->second->attr("DisplayName").empty()?"name":"DisplayName"),OpcUa_LocalizedText);
-			    continue;
-			case AId_Descr: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("Descr"), OpcUa_LocalizedText);	continue;
-			case AId_WriteMask: case AId_UserWriteMask: modPrt->oDataValue(respEp, eMsk, 0, OpcUa_UInt32);		continue;
-			case AId_IsAbstract:
-			    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("IsAbstract").c_str()), OpcUa_Boolean);
-			    continue;
-			case AId_Symmetric:
-			    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("Symmetric").c_str()), OpcUa_Boolean);
-			    continue;
-			case AId_InverseName:
-			    modPrt->oDataValue(respEp, eMsk, ndX->second->attr("InverseName"), OpcUa_LocalizedText);
-			    continue;
-			case AId_EventNotifier:
-			    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("EventNotifier").c_str()), OpcUa_Byte);
-			    continue;
-			default:
-			{
-			    string dtType = ndX->second->attr("DataType");
-			    if(dtType.empty())	break;
-			    switch(aid)
-			    {
-				case AId_Value: modPrt->oDataValue(respEp, eMsk, ndX->second->attr("Value"), atoi(dtType.c_str()));	continue;
-				case AId_DataType: modPrt->oDataValue(respEp, eMsk, (atoi(dtType.c_str())&(~0x80)), OpcUa_NodeId);	continue;
-				case AId_ValueRank:
-				{
-				    string val = ndX->second->attr("ValueRank");
-				    modPrt->oDataValue(respEp, eMsk, val.empty() ? -1 : atoi(val.c_str()), OpcUa_Int32);
-				    continue;
-				}
-				case AId_ArrayDimensions:
-				{
-				    string val = ndX->second->attr("Value");
-				    int cnt = 0;
-				    if(atoi(dtType.c_str())&0x80)
-					for(int off = 0; TSYS::strLine(val, 0, &off).size(); cnt++) ;
-				    modPrt->oDataValue(respEp, eMsk, cnt, 0x80|OpcUa_Int32);
-				    continue;
-				}
-				case AId_AccessLevel:
-				{
-				    string val = ndX->second->attr("AccessLevel");
-				    modPrt->oDataValue(respEp, eMsk, (val.empty() ? ACS_Read : atoi(val.c_str())), OpcUa_Byte);
-				    continue;
-				}
-				case AId_UserAccessLevel:
-				{
-				    string val = ndX->second->attr("UserAccessLevel");
-				    modPrt->oDataValue(respEp, eMsk, (val.empty() ? ACS_Read|ACS_Write : atoi(val.c_str())), OpcUa_Byte);
-				    continue;
-				}
-				case AId_MinimumSamplingInterval:
-				{
-				    string val = ndX->second->attr("MinimumSamplingInterval");
-				    modPrt->oDataValue(respEp, eMsk, val.empty() ? -1 : atoi(val.c_str()), OpcUa_Double);
-				    continue;
-				}
-				case AId_Historizing:
-				    modPrt->oDataValue(respEp, eMsk, atoi(ndX->second->attr("Historizing").c_str()), OpcUa_Boolean);
-				    continue;
-			    }
-			}
-		    }
-		    modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);
-		    continue;
+		    req.setAttr("type", i2s(OpcUa_QualifiedName));
+		    if((nDAQ=dynamic_cast<TDAQS*>(&cNd.at())))			req.setText(nDAQ->subName());
+		    else if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
+		    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->name());
+		    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->name());
+		    else if((nVal=dynamic_cast<TVal*>(&cNd.at())))		req.setText(nVal->name());
+		    else req.setText(cNd.at().nodeName());
+		    return 0;
 		}
-
-		//OpenSCADA DAQ parameter's attribute
-		if(nid.ns() == 1)
+		case AId_InverseName: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText("");			return 0;
+		case AId_WriteMask: case AId_UserWriteMask: req.setAttr("type", i2s(OpcUa_UInt32))->setText("0");	return 0;
+		default:
 		{
-		    //>> Connect to DAQ node
-		    AutoHD<TCntrNode> cNd = SYS->daq();
-		    string sel;
-		    int nLev = 0;
-		    for(int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++)
-			try { cNd = cNd.at().nodeAt(sel); } catch(TError err) { break; }
-
-		    if(sel.empty())
+		    if((nVal=dynamic_cast<TVal*>(&cNd.at())))
 		    {
+			if(atoi(req.attr("dtPerGet").c_str()))
+			    req.setAttr("dtPer", (nVal->arch().freeStat()?"0":r2s(nVal->arch().at().period()*1e-6)));
+			//>>> Variable
 			switch(aid)
 			{
-			    case AId_NodeId: modPrt->oDataValue(respEp, eMsk, nid.toAddr(), OpcUa_NodeId);	break;
-			    case AId_BrowseName: modPrt->oDataValue(respEp, eMsk, cNd.at().nodeName(), OpcUa_QualifiedName);	break;
-			    case AId_InverseName: modPrt->oDataValue(respEp, eMsk, "", OpcUa_LocalizedText);	break;
-			    case AId_WriteMask: case AId_UserWriteMask: modPrt->oDataValue(respEp, eMsk, 0, OpcUa_UInt32);	break;
-			    default:
-				//>>> Variable
-				if(dynamic_cast<TVal*>(&cNd.at()))
-				    switch(aid)
-				    {
-					case AId_NodeClass: modPrt->oDataValue(respEp, eMsk, NC_Variable, OpcUa_Int32);	break;
-					case AId_DisplayName: modPrt->oDataValue(respEp, eMsk, cNd.at().nodeName(), OpcUa_LocalizedText);	break;
-					case AId_Descr: modPrt->oDataValue(respEp, eMsk, ((AutoHD<TVal>)cNd).at().fld().descr(), OpcUa_String);	break;
-					case AId_Value:
-					    switch(((AutoHD<TVal>)cNd).at().fld().type())
-					    {
-						case TFld::Boolean:
-						    modPrt->oDataValue(respEp, eMsk, ((AutoHD<TVal>)cNd).at().getB(), OpcUa_Boolean);
-						    break;
-						case TFld::Integer:
-						    modPrt->oDataValue(respEp, eMsk, ((AutoHD<TVal>)cNd).at().getI(), OpcUa_Int32);
-						    break;
-						case TFld::Real:
-						    modPrt->oDataValue(respEp, eMsk, ((AutoHD<TVal>)cNd).at().getR(), OpcUa_Double);
-						    break;
-						case TFld::String:
-						    modPrt->oDataValue(respEp, eMsk, ((AutoHD<TVal>)cNd).at().getS(), OpcUa_String);
-						    break;
-						default: break;
-					    }
-					    break;
-					case AId_DataType:
-					{
-					    NodeId dt;
-					    switch(((AutoHD<TVal>)cNd).at().fld().type())
-					    {
-						case TFld::Boolean: dt.setNumbVal(OpcUa_Boolean);	break;
-						case TFld::Integer: dt.setNumbVal(OpcUa_Int32);		break;
-						case TFld::Real:    dt.setNumbVal(OpcUa_Double);	break;
-						case TFld::String:  dt.setNumbVal(OpcUa_String);	break;
-						default: break;
-					    }
-					    modPrt->oDataValue(respEp, eMsk, dt.toAddr(), OpcUa_NodeId);
-					    break;
-					}
-					case AId_ValueRank: modPrt->oDataValue(respEp, eMsk, -1, OpcUa_Int32);			break;
-					case AId_ArrayDimensions: modPrt->oDataValue(respEp, eMsk, "", 0x80|OpcUa_Int32);	break;
-					case AId_AccessLevel: case AId_UserAccessLevel:
-					    modPrt->oDataValue(respEp, eMsk, ACS_Read | (((AutoHD<TVal>)cNd).at().fld().flg()&TFld::NoWrite ? 0 : ACS_Write), OpcUa_Byte);
-					    break;
-					case AId_MinimumSamplingInterval: modPrt->oDataValue(respEp, eMsk, 0, OpcUa_Double);	break;
-					case AId_Historizing: modPrt->oDataValue(respEp, eMsk, false, OpcUa_Boolean);		break;
-					default: modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);
-				    }
-				//>>> Objects
-				else
-				    switch(aid)
-				    {
-					case AId_NodeClass: modPrt->oDataValue(respEp, eMsk, NC_Object, OpcUa_Int32);	break;
-					case AId_DisplayName:
-					    if(dynamic_cast<TModule*>(&cNd.at()))
-						modPrt->oDataValue(respEp, eMsk, ((AutoHD<TModule>)cNd).at().modName(), OpcUa_LocalizedText);
-					    else if(dynamic_cast<TController*>(&cNd.at()))
-						modPrt->oDataValue(respEp, eMsk, ((AutoHD<TController>)cNd).at().name(), OpcUa_LocalizedText);
-					    else if(dynamic_cast<TParamContr*>(&cNd.at()))
-						modPrt->oDataValue(respEp, eMsk, ((AutoHD<TParamContr>)cNd).at().name(), OpcUa_LocalizedText);
-					    else modPrt->oDataValue(respEp, eMsk, cNd.at().nodeName(), OpcUa_LocalizedText);
-					    break;
-					case AId_Descr:
-					    if(dynamic_cast<TModule*>(&cNd.at()))
-						modPrt->oDataValue(respEp, eMsk, ((AutoHD<TModule>)cNd).at().modInfo("Description"), OpcUa_LocalizedText);
-					    else if(dynamic_cast<TController*>(&cNd.at()))
-						modPrt->oDataValue(respEp, eMsk, ((AutoHD<TController>)cNd).at().descr(), OpcUa_LocalizedText);
-					    else if(dynamic_cast<TParamContr*>(&cNd.at()))
-						modPrt->oDataValue(respEp, eMsk, ((AutoHD<TParamContr>)cNd).at().descr(), OpcUa_LocalizedText);
-					    else modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);
-					    break;
-					case AId_EventNotifier: modPrt->oDataValue(respEp, eMsk, 0, OpcUa_Byte);	break;
-					default: modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadAttributeIdInvalid);
-				    }
+			    case AId_NodeClass: req.setAttr("type", i2s(OpcUa_Int32))->setText(i2s(NC_Variable));	return 0;
+			    case AId_DisplayName: req.setAttr("type", i2s(OpcUa_LocalizedText))->setText(nVal->name());	return 0;
+			    case AId_Descr: req.setAttr("type", i2s(OpcUa_String))->setText(nVal->fld().descr());	return 0;
+			    case AId_Value:
+			    {
+				int64_t tm = 0;
+				bool dtOK = true;
+				switch(nVal->fld().type())
+				{
+				    case TFld::Boolean:	req.setAttr("type", i2s(OpcUa_Boolean))->setText(nVal->getS(&tm));	break;
+				    case TFld::Integer:	req.setAttr("type", i2s(OpcUa_Int32))->setText(nVal->getS(&tm));	break;
+				    case TFld::Real:	req.setAttr("type", i2s(OpcUa_Double))->setText(nVal->getS(&tm));	break;
+				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
+				    default: dtOK = false;
+				}
+				if(dtOK) { if(atoi(req.attr("dtTmGet").c_str())) req.setAttr("dtTm",ll2s(tm)); return 0; }
+				break;
+			    }
+			    case AId_DataType:
+				switch(nVal->fld().type())
+				{
+				    case TFld::Boolean: req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Boolean));	return 0;
+				    case TFld::Integer: req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Int32));	return 0;
+				    case TFld::Real:    req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_Double));	return 0;
+				    case TFld::String:  req.setAttr("type", i2s(OpcUa_NodeId))->setText(i2s(OpcUa_String));	return 0;
+				    default: break;
+				}
+				break;
+			    case AId_ValueRank: req.setAttr("type", i2s(OpcUa_Int32))->setText("-1");				return 0;
+			    case AId_ArrayDimensions: req.setAttr("type", i2s(0x80|OpcUa_Int32))->setText("");			return 0;
+			    case AId_AccessLevel: case AId_UserAccessLevel:
+				req.setAttr("type", i2s(OpcUa_Byte))->setText(i2s(ACS_Read | (nVal->fld().flg()&TFld::NoWrite ? 0 : ACS_Write)));
+				return 0;
+			    case AId_MinimumSamplingInterval: req.setAttr("type", i2s(OpcUa_Double))->setText("0");		return 0;
+			    case AId_Historizing: req.setAttr("type", i2s(OpcUa_Boolean))->setText("0");			return 0;
+			    default: return OpcUa_BadAttributeIdInvalid;
 			}
-			continue;
+		    }
+		    //>>> Objects
+		    else switch(aid)
+		    {
+			case AId_NodeClass: req.setAttr("type", i2s(OpcUa_Int32))->setText(i2s(NC_Object));			return 0;
+			case AId_DisplayName:
+			{
+			    req.setAttr("type", i2s(OpcUa_LocalizedText));
+			    if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modName());
+			    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->name());
+			    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->name());
+			    else if((nVal=dynamic_cast<TVal*>(&cNd.at())))		req.setText(nVal->name());
+			    else req.setText(cNd.at().nodeName());
+			    return 0;
+			}
+			case AId_Descr:
+			    req.setAttr("type", i2s(OpcUa_LocalizedText));
+			    if((nTpDAQ=dynamic_cast<TTipDAQ*>(&cNd.at())))		req.setText(nTpDAQ->modInfo("Description"));
+			    else if((nCntr=dynamic_cast<TController*>(&cNd.at())))	req.setText(nCntr->descr());
+			    else if((nPrm=dynamic_cast<TParamContr*>(&cNd.at())))	req.setText(nPrm->descr());
+			    else return OpcUa_BadAttributeIdInvalid;
+			    return 0;
+			case AId_EventNotifier: req.setAttr("type", i2s(OpcUa_Byte))->setText("0");				return 0;
+			default: return OpcUa_BadAttributeIdInvalid;
 		    }
 		}
-
-		modPrt->oDataValue(respEp, 0x02, (int)OpcUa_BadNodeIdUnknown);
 	    }
-	    UA::oS(respEp, "");		//diagnosticInfos []
-	    break;
+	    return OpcUa_BadNodeIdUnknown;
 	}
 	case OpcUa_WriteRequest:
 	{
-	    //>> Request
-							//> nodesToWrite []
-	    uint32_t nc = UA::iNu(rb, off, 4);		//nodes
+	    int rez = Server::EP::reqData(reqTp, req);
+            if(rez != OpcUa_BadNodeIdUnknown) return rez;
 
-	    //>> Respond
-	    UA::oNu(respEp, nc, 4);			//Numbers
-	    for(unsigned i_n = 0; i_n < nc; i_n++)
-	    {
-		uint32_t rezSt = 0;
-		NodeId nid = UA::iNodeId(rb, off);	//nodeId
-		uint32_t aid = UA::iNu(rb, off, 4);	//attributeId (Value)
-		UA::iS(rb, off);			//indexRange
-		XML_N nVal;
-		UA::iDataValue(rb, off, nVal);		//value
+	    NodeId nid = NodeId::fromAddr(req.attr("node"));
 
-		//> Get node from objects tree
-		map<string,XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
-		if(ndX != ndMap.end()) rezSt = OpcUa_BadNothingToDo;
-		else if(nid.ns() == 1)
-		{
-		    //>> Connect to DAQ node
-		    AutoHD<TCntrNode> cNd = SYS->daq();
-		    string sel;
-		    int nLev = 0;
-		    for(int off = 0; (sel=TSYS::strParse(nid.strVal(),off?0:1,".",&off)).size(); nLev++)
-			try { cNd = cNd.at().nodeAt(sel); } catch(TError err) { break; }
+	    //OpenSCADA DAQ parameter's attribute
+	    if(nid.ns() != 1)	return OpcUa_BadNodeIdUnknown;
+	    uint32_t aid = atoi(req.attr("aid").c_str());
 
-		    if(!sel.empty())	rezSt = OpcUa_BadNodeIdUnknown;
-		    else if(aid != AId_Value || !dynamic_cast<TVal*>(&cNd.at())) rezSt = OpcUa_BadNothingToDo;
-		    else ((AutoHD<TVal>)cNd).at().setS(nVal.text());
-		}
+	    //>> Connect to DAQ node
+	    int addrOff = 0;
+	    string firstEl = TSYS::strParse(nid.strVal(),0,".",&addrOff);
+	    AutoHD<TCntrNode> cNd = SYS->daq().at().daqAt(nid.strVal().substr(addrOff), '.', true);
+	    if(cNd.freeStat()) return OpcUa_BadNodeIdUnknown;
 
-		//>>> Write result status code
-		UA::oNu(respEp, rezSt, 4);		//StatusCode
-	    }
-	    UA::oS(respEp, "");		//diagnosticInfos []
-	    break;
+	    if(aid != AId_Value || !dynamic_cast<TVal*>(&cNd.at())) return OpcUa_BadNothingToDo;
+	    ((AutoHD<TVal>)cNd).at().setS(req.text());
+
+	    return 0;
 	}
     }
 
-    cntReq++;
-
-    return respEp;
+    return OpcUa_BadNodeIdUnknown;
 }
 
 void OPCEndPoint::cntrCmdProc( XMLNode *opt )

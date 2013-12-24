@@ -154,7 +154,7 @@ class Node : public TFunction, public TConfig
 
 		TValFunc	val;
 		map<int,AutoHD<TVal> > lnk;
-		map<int,SIO> reg, coil;
+		map<int,SIO> regR, regW, coilR, coilW;
 		float rReg, wReg, rCoil, wCoil;
 	};
 
@@ -166,7 +166,7 @@ class Node : public TFunction, public TConfig
 	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
 	bool cfgChange( TCfg &cfg );
-	void regCR( int id, const SIO &val, char tp = 'R' );
+	void regCR( int id, const SIO &val, char tp, bool wr = false );
 
 	static void *Task( void *icntr );
 

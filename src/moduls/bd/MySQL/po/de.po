@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 12:59+0300\n"
+"POT-Creation-Date: 2013-11-29 14:12+0200\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -20,38 +20,57 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: my_sql.cpp:35
 msgid "DB MySQL"
 msgstr "DB MySQL"
 
+#: my_sql.cpp:39
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
+#: my_sql.cpp:40
 msgid "BD module. Provides support of the BD MySQL."
 msgstr "Modul unterstützt die MySQL Datenbank."
 
+#: my_sql.cpp:125 my_sql.cpp:153
 msgid "Error initializing client."
 msgstr "Fehler beim Initialisieren des Clients."
 
+#: my_sql.cpp:128 my_sql.cpp:165
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Fehler: %s beim Verbinden mit der Datenbank"
 
+#: my_sql.cpp:132
 #, c-format
 msgid "Query to DB error: %s"
 msgstr "Fehler bei der Abfrage an Datenbank: %s"
 
+#: my_sql.cpp:196
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
+#: my_sql.cpp:233
+msgid "Query '%s' is error."
+msgstr "Fehler bei der Abfrage '%s'."
+
+#: my_sql.cpp:234
 #, c-format
 msgid "Query to DB error %d: %s"
 msgstr "Fehler %d bei der Abfrage an Datenbank: %s"
 
+#: my_sql.cpp:241
 #, c-format
 msgid "Store result error: %s"
 msgstr "Fehler beim Speichern des Ergebnisses : %s"
 
+#: my_sql.cpp:266
+#, c-format
+msgid "Could not execute statement: %s"
+msgstr ""
+
+#: my_sql.cpp:277
 msgid ""
 "MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;"
 "<u_sock>;<names>;<tms>].\n"
@@ -85,8 +104,11 @@ msgstr ""
 "utf8;5,2,2].\n"
 "Für entfernte Datenbank: [server.nm.org;roman;123456;OpenSCADA;3306]."
 
+#: my_sql.cpp:338 my_sql.cpp:375 my_sql.cpp:449 my_sql.cpp:507 my_sql.cpp:594
+#: my_sql.cpp:622
 msgid "Table is empty!"
 msgstr "Tabelle ist leer!"
 
+#: my_sql.cpp:487
 msgid "Row is not present!"
 msgstr "Datensatz ist nicht vorhanden!"

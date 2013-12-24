@@ -86,12 +86,12 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mPrtU = grpAdd("up_");
 
     //> User protocol DB structure
-    mUPrtEl.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,"20") );
-    mUPrtEl.fldAdd( new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,"50") );
-    mUPrtEl.fldAdd( new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300") );
-    mUPrtEl.fldAdd( new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0") );
-    mUPrtEl.fldAdd( new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000") );
-    mUPrtEl.fldAdd( new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000") );
+    mUPrtEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
+    mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
+    mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
+    mUPrtEl.fldAdd(new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
+    mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
 }
 
 TProt::~TProt()
@@ -205,9 +205,10 @@ void TProt::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TProtocol::cntrCmdProc(opt);
-	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),RWRWR_,"root",SPRT_ID,2,"idm","1","idSz","20");
-	if( ctrMkNode("area",opt,0,"/up",_("User protocols")) )
-	    ctrMkNode("list",opt,-1,"/up/up",_("Protocols"),RWRWR_,"root",SPRT_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","up_","idSz","20");
+	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),RWRWR_,"root",SPRT_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	if(ctrMkNode("area",opt,0,"/up",_("User protocols")))
+	    ctrMkNode("list",opt,-1,"/up/up",_("Protocols"),RWRWR_,"root",SPRT_ID,5,
+		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","up_","idSz",OBJ_ID_SZ);
 	return;
     }
 
@@ -253,14 +254,16 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
     try
     {
 	//> Find user protocol for using
-	if( !funcV.func() )
+	if(!funcV.func())
 	{
-	    string selNode = TSYS::strParse(SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().
-				    inAt(TSYS::strParse(srcTr(),1,".")).at().protocolFull(),1,".");
-	    if( !owner().uPrtPresent(selNode) ) return false;
+	    AutoHD<TTransportIn> tri = SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().
+							     inAt(TSYS::strParse(srcTr(),1,"."));
+	    string selNode = TSYS::strParse(tri.at().protocolFull(),1,".");
+	    if(!owner().uPrtPresent(selNode)) return false;
 	    up = owner().uPrtAt(selNode);
-	    if( !up.at().enableStat() || up.at().workInProg().empty() ) return false;
+	    if(!up.at().enableStat() || up.at().workInProg().empty()) return false;
 	    funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(up.at().workInProg())).at());
+	    funcV.setO(4,new TCntrNodeObj(AutoHD<TCntrNode>(&tri.at()),"root"));
 	}
 
 	//> Load inputs
@@ -272,7 +275,7 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	funcV.calc( );
 	//> Get outputs
 	bool rez = funcV.getB(0);
-	if( !rez ) funcV.setS(1,"");
+	if(!rez) funcV.setS(1,"");
 	answer = funcV.getS(2);
 
 	up.at().cntInReq++;
@@ -301,7 +304,7 @@ UserPrt::~UserPrt( )
 TCntrNode &UserPrt::operator=( TCntrNode &node )
 {
     UserPrt *src_n = dynamic_cast<UserPrt*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     if( enableStat( ) )	setEnable(false);
 
@@ -399,37 +402,38 @@ void UserPrt::save_( )
 
 bool UserPrt::cfgChange( TCfg &cfg )
 {
-    modif( );
+    modif();
 
     return true;
 }
 
 void UserPrt::setEnable( bool vl )
 {
-    if( mEn == vl ) return;
+    if(mEn == vl) return;
 
     cntInReq = cntOutReq = 0;
 
-    if( vl )
+    if(vl)
     {
 	//> Prepare and compile input transport function
-	if( !inProg().empty() )
+	if(!inProg().empty())
 	{
 	    TFunction funcIO("uprt_"+id()+"_in");
-	    funcIO.ioIns( new IO("rez",_("Result"),IO::Boolean,IO::Return),0);
-	    funcIO.ioIns( new IO("request",_("Request"),IO::String,IO::Default),1);
-	    funcIO.ioIns( new IO("answer",_("Answer"),IO::String,IO::Output),2);
-	    funcIO.ioIns( new IO("sender",_("Sender"),IO::String,IO::Default),3);
+	    funcIO.ioIns(new IO("rez",_("Result"),IO::Boolean,IO::Return), 0);
+	    funcIO.ioIns(new IO("request",_("Request"),IO::String,IO::Default), 1);
+	    funcIO.ioIns(new IO("answer",_("Answer"),IO::String,IO::Output), 2);
+	    funcIO.ioIns(new IO("sender",_("Sender"),IO::String,IO::Default), 3);
+	    funcIO.ioIns(new IO("tr",_("Transport"),IO::Object,IO::Default), 4);
 
 	    mWorkInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
 	} else mWorkInProg = "";
 	//> Prepare and compile input transport function
-	if( !outProg().empty() )
+	if(!outProg().empty())
 	{
 	    TFunction funcIO("uprt_"+id()+"_out");
-	    funcIO.ioIns( new IO("io",_("IO"),IO::Object,IO::Default),0);
-	    funcIO.ioIns( new IO("tr",_("Transport"),IO::Object,IO::Default),1);
+	    funcIO.ioIns(new IO("io",_("IO"),IO::Object,IO::Default), 0);
+	    funcIO.ioIns(new IO("tr",_("Transport"),IO::Object,IO::Default), 1);
 
 	    mWorkOutProg = SYS->daq().at().at(TSYS::strSepParse(outProgLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(outProgLang(),1,'.'),funcIO,outProg());
@@ -442,7 +446,7 @@ void UserPrt::setEnable( bool vl )
 string UserPrt::getStatus( )
 {
     string rez = _("Disabled. ");
-    if( enableStat( ) )
+    if(enableStat())
     {
 	rez = _("Enabled. ");
 	rez += TSYS::strMess( _("Requests input %.4g, output %.4g."), cntInReq, cntOutReq );
@@ -481,7 +485,8 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 			    "   'rez' - processing result (false-full request;true-not full request);\n"
 			    "   'request' - request message;\n"
 			    "   'answer' - answer message;\n"
-			    "   'sender' - request sender."));
+			    "   'sender' - request sender;\n"
+			    "   'tr' - sender transport."));
 	    }
 	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID))
 	    {

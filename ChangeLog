@@ -1,3 +1,113 @@
+2013-12-21 Roman 0.8.0.9
+- SYS: "StartupNotify=false" line is added to *.desktop files.
+    TCntrNode: The attribute "force" is added to node control interface's commands "load" and "save".
+    !: Modification controlled writing to the config file is added for prevent writing unmodified fields dependent from system environment.
+    For the CPU frequency obtain used /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq and fields "cpu MHz",
+	"bogomips", "BogoMIPS" of /proc/cpuinfo in that order.
+    !!: Global definitions OBJ_ID_SZ and OBJ_NM_SZ is added and used for all configuration's ID and NAME.
+    Field's NAME limit length pass to configurators by field "idm", through OpenSCADA control interface.
+    FIX:TCntrNode: chldList() fix for negative group index correct processing and list clear anytime.
+    FIX: Date format into spec-files some fixed.
+- DB: To functions TBDS::dataGet() and TBDS::dataSet() "forceCfg" flag is added for allow system data storing priority into config file.
+    For the system data set data bases connections table "DB".
+    Prevent writing to the config file empty fields for appropriate empty tags write.
+    !:MySQL: MULTI_STATEMENTS requests is enabled, but process and return only first result.
+- TTransport: The output transport restart is set on the address change for allow to change the from internal procedures.
+    FIX:Serial: Set writing modem's exit command without next line symbols.
+    Sockets: Some code clear.
+- Protocol.UserProtocol: To input transport's process procedure context is added attribute "tr" for input transport object represent.
+- DAQ.{BlockCalc,LogicLev,ModBus},Archive,UI.VCAEngine:
+    Links to DAQ parameters and attributes is adapted for parameters to parameters including path like "{Mod}.{Cntr}.{Prm1}.{PrmN}.{Attr}".
+- DAQ: Functions TDAQS::ctrListPrmAttr(), TDAQS::prmAt() and TDAQS::attrAt() are unified for no depending from order.
+    Function TDAQS::daqAt() is added for access to any DAQ path's items by TCntrNode, also used into TDAQS::prmAt() and TDAQS::attrAt().
+    Parameter: User's API function "DAQ.{Cntr}.{Prm}.cntr()" is added for access to the controller's object from any level parameter object.
+    FIX:TController: The controller's object strange reenable after its a parameter copy is commented.
+    JavaLikeCalc: "Null" value set to return false for cast to Boolean. For no present object return set Null.
+	Syntax highlight rules some improved for keywords "in" and "var" not higlight into variable form.
+    FIX:LogicLev: The parameters enabling to processing is made typical for nested parameters processing allow.
+    !!:LogicLev: Empty parameters as clean container creation allow.
+    FIX:DAQ.ModBus: Task terminated state display is added to status.
+	No lost connection restore for synchronous write mode and bits from register using is fixed.
+	Node's lock attributes into the protocol Node's mode "Data" is fixed.
+	For node's mode "Data" the register's and coils's blocks separated to read and write, for zero item's problem fix.
+    !!!!:OPC_UA: Publish, Subscribe, MonitoredItem and related services support for input protocol's part is added
+	    (No Publish responds for LTS).
+	For access to EndPoints (EP) data is added and used self pthread_mutex_t.
+	Some variables is renamed and TSYS::taskEndRun() used for a task end command detect.
+	Service "BrowseNext" and ContinuationPoints for it is added.
+	Server part function reqData() is separated for OPC_UA binary encoding part into library and
+	    same data request depend from the server data model specific for data services "Browse", "Read" and "Write".
+	Auth methods UserName and X509Identity processing is added, but not check yet for real users into OpenSCADA.
+	Secure channel's TokenId renew support into server part is implemented and some fixed into client part.
+	RePublish service and retransmission queue processing is added. Maximum notes per publish processing is added.
+	All library's files moved to separated folder libOPC_UA. The library libOPC_UA simple test program is added.
+	The library libOPC_UA namespace is changed from OSCADA_OPC to OPC.
+	From function messIO() two last arguments are removed.
+	Removing for assigned subscriptions at the session closing is added.
+	Server's services Browse, Read and Write is mostly rewrited.
+	Server's services Browse and Read is set for field "Name" of nodes return for OPC UA "BrowseName" request.
+	FIX: nodeClassMask processing into service "Browse" is fixed for input part.
+	FIX: Call tr.at().messIO() without return is fixed. Removed request's messages binary dump for debug messages.
+	FIX: Close input socket by CloseSecureChannel request.
+- !!:TArchVal: LibGD2 using into core is fixed by set variable HAVE_GD_CORE.
+    To makeTrendImg() the argument for file type provide is added.
+    Test forming archive's values trend into "SVG" at LibGD miss is added.
+    Value archive's trend build is implemented through SVG for LibGD2 into core disable.
+- FIX:Archive.{FSArch,DBArch}: Alarm messages by negative level requesting from messages archive is fixed.
+- !!:FIX:TArchVal: allow access to next level archive into single request, like from 1m to 10m.
+- UI:
+    {QTCfg,Vision}: Bind key combination Shif+F1 for WhatThis calls.
+    {VCAEngine,Vision}: Group attributes setting function Vision::attrsSet() is rewrited for strong ordering for
+	fix unordered writing to some yet missed attributes that appeared after upper changes; detected on primitive "ElFig".
+    FIX:{Vision,WebVision}: Two method applied for prevent primitive "Diagram" possible hung on some data combination begin
+	from different archivators.
+	Primitive "Diagram" horizontal scale width calculation is improved and fixed (for WebVision).
+    FIX:QTCfg: Detected node select by search into field from bellow is fixed for copy to the field.
+    QTCfg: Copy a node into the branch and no select direct the parent node, by copy to self, support is added.
+	Field "NAME" limit length apply to nodes append dialog is added.
+    WebCfgD: Type for media-file using is added for other to png images, like "svg" allow.
+	Field "NAME" limit length apply to nodes append dialog is added.
+    VCAEngine: Negative widget's position coordinate is allowed.
+	SVG extension is added for media-files inline navigation.
+	Map areas limit for primitive "Media" is expanded to 20.
+	FIX: The original "Alignment" variants text list for texts is fixed.
+	FIX: Dynamic linking to nested parameters is fixed.
+	FIX: Disable empty template attribute using for document generaton for primitive "Document".
+	FIX: Remove wrong inline navigator at media-resources for no "String" attributes.
+	!!!!:FIX: Lost attribute "name" the global ability to see after change primitive "FormEl" view from "Button"
+	    to "Tree", "List" and other is fixed by A_FormElName force set it for all "name" attributes of primitive "FormEl".
+	FIX: Possibility for open and include new page to container the page into the "f_start" stage.
+	FIX: "prm:*" dynamic links wrong set is fixed by remove prefix "a_" from last item - attribute.
+    Vision: Tool windows centering is disabled and new pages loading by load("") is moved to constructor RunPageView for
+	    allow DE for custom control to the windows placing behaviour.
+	Deprecated QPalette::Background is replaced to QPalette::Window.
+	GeomZ set to UP for the widget copy is added. New widget's id enumerated generation is made simpler.
+	FIX: UnDo records for align events, into development mode, set only for real changed widgets.
+	FIX: Mouse cursor shape changing allow into included editable widgets is fixed for the parent widget size
+	    containing or equal to the widget.
+	FIX: Some original texts into the source is fixed.
+	FIX: To generic widget editable combo checking for equal to set text is added for prevent selection and cursor position lost.
+	FIX: No actions update on the library's widget rename or remove is fixed.
+	FIX: Set focus to MDIArea window after a widget drop to the window.
+	FIX: Some fix moving mouse pointer on widget-container resize from keyboard.
+	FIX: Allow "MousePress" event forming at the primitive "Media" map area click, after self specific event forming.
+	ElFig: Internal object's indexes SpecIdx and ShapeType are moved to global space.
+	    Next code clean and refactoring, mostly for moveItemTo().
+	    Control points set smaler and different coloring for linked and other.
+	    FIX: Reloading is fixed after some figures append.
+	    FIX: Bordered figures width scale is fixed.
+	    FIX: Color's and Image's indexes copy on inundations copy is added.
+	    FIX: Some checks to allowing the indexes is added for prevent different crashes by out of range.
+	FormEl: To view "Tree" set to "value" selected item used original item.
+	    To views "Tree" and "List" set scroll and expand to selected item is added.
+    WebVision: Font's size obtain by getFont() is added and used for "FormEl" elements height tune.
+	FIX: Primitive "ElFigure" update at parent scaling change is fixed. Scroll for Box-containers is enabled.
+	FIX: Primitive "Diagram" cursor scale is fixed.
+	FIX: Oppress scroll for include page size equal to the container.
+	FIX: NaN value display prevented by check argument's result of the primitive "Text".
+- !!:Special.FLibSYS: Some code clear.
+
+
 2013-09-15 Roman 0.8.0.8
 - FIX:SYS: User API function childIns() is fixed for XMLNodeObj argument 1.
 - !:FIX:Archive.FSArch: Messages to plain archive placing is fixed for big, on string buffer size limit.
@@ -4281,7 +4391,7 @@ Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
 - FIX:/SYS/CntrNode: Use counter is expanded to short integer. Use counter limit control is added.
 - /DAQ/DCON: Documentation is updated.
 - FIX:/JavaLikeCalc: Resource request for calc is fixed.
-- /UI/VCAEngine: String alloc for direct readed value is fixed. Config template and value combined to one string continer.
+- /UI/VCAEngine: String alloc for direct readed value is fixed. Config template and value combined to one string container.
 
 
 2009-04-13 Maxim

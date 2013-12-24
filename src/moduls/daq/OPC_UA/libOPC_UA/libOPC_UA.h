@@ -22,19 +22,24 @@
 #ifndef LIBOPC_UA_H
 #define LIBOPC_UA_H
 
+//Used for some specific problems reprodiction and debug
+//#define DEBUG_SPEC
+
 #include <stdint.h>
 
 #include <string>
+#include <deque>
 #include <vector>
 #include <map>
 #include <algorithm>
 
 using std::string;
+using std::deque;
 using std::vector;
 using std::pair;
 using std::map;
 
-namespace OSCADA_OPC
+namespace OPC
 {
 
 //> Constants
@@ -43,6 +48,8 @@ namespace OSCADA_OPC
 #define OpcUa_SendBufferSize	0x10000
 #define OpcUa_MaxMessageSize	0x1000000
 #define OpcUa_MaxChunkCount	5000
+
+#define OpcUa_NPosID		0xFFFFFFFF
 
 //> Built-in Data Types
 #define OpcUa_Boolean		1
@@ -79,19 +86,27 @@ namespace OSCADA_OPC
 #define OpcUa_BadTimeout		0x800A0000
 #define OpcUa_BadServiceUnsupported	0x800B0000
 #define OpcUa_BadNothingToDo		0x800F0000
+#define OpcUa_BadTooManyOperations	0x80100000
+#define OpcUa_BadUserAccessDenied	0x801F0000
 #define OpcUa_BadSecureChannelIdInvalid	0x80220000
 #define OpcUa_BadSessionIdInvalid	0x80250000
+#define OpcUa_BadSubscriptionIdInvalid	0x80280000
 #define OpcUa_BadNodeIdInvalid		0x80330000
 #define OpcUa_BadNodeIdUnknown		0x80340000
 #define OpcUa_BadAttributeIdInvalid	0x80350000
 #define OpcUa_BadNotSupported		0x803D0000
+#define OpcUa_BadMonitoredItemIdInvalid	0x80420000
 #define OpcUa_BadFilterNotAllowed	0x80450000
+#define OpcUa_BadContinuationPointInvalid	0x804A0000
+#define OpcUa_BadNoContinuationPoints	0x804B0000
 #define OpcUa_BadSecurityModeRejected	0x80540000
 #define OpcUa_BadSecurityPolicyRejected	0x80550000
 #define OpcUa_BadApplicationSignatureInvalid	0x80580000
 #define OpcUa_BadBrowseNameInvalid	0x80600000
 #define OpcUa_BadNoMatch		0x806F0000
 #define OpcUa_BadWriteNotSupported	0x80730000
+#define OpcUa_BadTooManySubscriptions	0x80770000
+#define OpcUa_BadSequenceNumberUnknown	0x807A0000
 #define OpcUa_BadTcpMessageTypeInvalid	0x807E0000
 #define OpcUa_BadTcpMessageTooLarge	0x80800000
 #define OpcUa_BadTcpEndpointUrlInvalid	0x80830000
@@ -103,34 +118,52 @@ namespace OSCADA_OPC
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
 
 //> Requests types
-#define OpcUa_ServiceFault		397
-#define OpcUa_FindServersRequest	422
-#define OpcUa_FindServersResponse	425
-#define OpcUa_GetEndpointsRequest	428
-#define OpcUa_GetEndpointsResponse	431
-#define OpcUa_OpenSecureChannelRequest	446
-#define OpcUa_OpenSecureChannelResponse	449
-#define OpcUa_CloseSecureChannelRequest	452
-#define OpcUa_CreateSessionRequest	461
-#define OpcUa_CreateSessionResponse	464
-#define OpcUa_ActivateSessionRequest	467
-#define OpcUa_ActivateSessionResponse	470
-#define OpcUa_CloseSessionRequest	473
-#define OpcUa_CloseSessionResponse	476
-#define OpcUa_BrowseRequest		527
-#define OpcUa_BrowseResponse		530
+#define OpcUa_ServiceFault			397
+#define OpcUa_FindServersRequest		422
+#define OpcUa_FindServersResponse		425
+#define OpcUa_GetEndpointsRequest		428
+#define OpcUa_GetEndpointsResponse		431
+#define OpcUa_OpenSecureChannelRequest		446
+#define OpcUa_OpenSecureChannelResponse		449
+#define OpcUa_CloseSecureChannelRequest		452
+#define OpcUa_CreateSessionRequest		461
+#define OpcUa_CreateSessionResponse		464
+#define OpcUa_ActivateSessionRequest		467
+#define OpcUa_ActivateSessionResponse		470
+#define OpcUa_CloseSessionRequest		473
+#define OpcUa_CloseSessionResponse		476
+#define OpcUa_BrowseRequest			527
+#define OpcUa_BrowseResponse			530
+#define OpcUa_BrowseNextRequest			533
+#define OpcUa_BrowseNextResponse		536
 #define OpcUa_TranslateBrowsePathsToNodeIdsRequest	554
 #define OpcUa_TranslateBrowsePathsToNodeIdsResponse	557
-#define OpcUa_ReadRequest		631
-#define OpcUa_ReadResponse		634
-#define OpcUa_WriteRequest		673
-#define OpcUa_WriteResponse		676
+#define OpcUa_ReadRequest			631
+#define OpcUa_ReadResponse			634
+#define OpcUa_WriteRequest			673
+#define OpcUa_WriteResponse			676
 #define OpcUa_CreateMonitoredItemsRequest	751
 #define OpcUa_CreateMonitoredItemsResponse	754
+#define OpcUa_ModifyMonitoredItemsRequest	763
+#define OpcUa_ModifyMonitoredItemsResponse	766
+#define OpcUa_SetMonitoringModeRequest		769
+#define OpcUa_SetMonitoringModeResponse		772
+#define OpcUa_DeleteMonitoredItemsRequest	780
+#define OpcUa_DeleteMonitoredItemsResponse	783
 #define OpcUa_CreateSubscriptionRequest		787
 #define OpcUa_CreateSubscriptionResponse	790
-#define OpcUa_PublishRequest		826
-#define OpcUa_PublishResponse		829
+#define OpcUa_ModifySubscriptionRequest		793
+#define OpcUa_ModifySubscriptionResponse	796
+#define OpcUa_SetPublishingModeRequest		799
+#define OpcUa_SetPublishingModeResponse		802
+#define OpcUa_PublishRequest			826
+#define OpcUa_PublishResponse			829
+#define OpcUa_RepublishRequest			832
+#define OpcUa_RepublishResponse			835
+#define OpcUa_TransferSubscriptionsRequest	841
+#define OpcUa_TransferSubscriptionsResponse	844
+#define OpcUa_DeleteSubscriptionsRequest	847
+#define OpcUa_DeleteSubscriptionsResponse	850
 
 //> Object Identifiers
 #define OpcUa_RootFolder		84
@@ -142,8 +175,11 @@ namespace OSCADA_OPC
 #define OpcUa_DataTypesFolder		90
 #define OpcUa_ReferenceTypesFolder	91
 #define OpcUa_AnonymousIdentityToken	321
+#define OpcUa_UserNameIdentityToken	324
+#define OpcUa_X509IdentityToken		327
 #define OpcUa_LiteralOperand		597
 #define OpcUa_EventFilter		727
+#define OpcUa_DataChangeNotification	811
 #define OpcUa_Server			2253
 
 //> ObjectType Identifiers
@@ -216,19 +252,30 @@ namespace OSCADA_OPC
 #define OpcUa_ServerStatusType		2138
 
 enum SerializerType	{ ST_Binary };
+enum SC_ReqTP		{ SC_ISSUE = 0, SC_RENEW = 1 };
 enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
 enum NodeClasses	{ NC_Object = 1, NC_Variable = 2, NC_Method = 4, NC_ObjectType = 8, NC_VariableType = 16,
 			  NC_ReferenceType = 32, NC_DataType = 64, NC_View = 128 };
 enum BrowseDirection	{ BD_FORWARD, BD_INVERSE, BD_BOTH };
-enum TimestampsToReturn	{ TS_SOURCE, TS_SERVER, TS_BOTH, TS_NEITHER };
+enum TimestampsToReturn	{ TS_SOURCE = 0, TS_SERVER, TS_BOTH, TS_NEITHER };
 enum Access		{ ACS_Read = 0x01, ACS_Write = 0x02, ACS_HistRead = 0x04, ACS_HistWrite = 0x08, ACS_SemChange = 0x10 };
 enum RefDscrResMask	{ RdRm_RefType = 0x01, RdRm_IsForward = 0x02, RdRm_NodeClass = 0x04, RdRm_BrowseName = 0x08,
 			  RdRm_DisplayName = 0x10, RdRm_TypeDef = 0x20 };
-enum AttrIds		{ AId_NodeId = 1, AId_NodeClass, AId_BrowseName, AId_DisplayName, AId_Descr, AId_WriteMask, AId_UserWriteMask,
-			  AId_IsAbstract, AId_Symmetric, AId_InverseName, AId_ContainsNoLoops, AId_EventNotifier, AId_Value,
-			  AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
+enum AttrIds		{ Aid_Error = 0, AId_NodeId, AId_NodeClass, AId_BrowseName, AId_DisplayName, AId_Descr, AId_WriteMask,
+			  AId_UserWriteMask, AId_IsAbstract, AId_Symmetric, AId_InverseName, AId_ContainsNoLoops, AId_EventNotifier,
+			  AId_Value, AId_DataType, AId_ValueRank, AId_ArrayDimensions, AId_AccessLevel, AId_UserAccessLevel,
 			  AId_MinimumSamplingInterval, AId_Historizing, AId_Executable, AId_UserExecutable };
-enum MonitoringMode 	{ MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
+enum SubScrSt		{ SS_CUR = 0, SS_CLOSED, SS_CREATING, SS_NORMAL, SS_LATE, SS_KEEPALIVE };
+enum MonitoringMode 	{ MM_CUR = -1, MM_DISABLED = 0, MM_SAMPLING, MM_REPORTING };
+
+//* External functions                        */
+extern int64_t curTime( );
+extern string int2str( int val );
+extern string uint2str( unsigned val );
+extern string ll2str( int64_t val );
+extern string real2str( double val, int prec = 15, char tp = 'g' );
+extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
+extern string strMess( const char *fmt, ... );
 
 //*************************************************
 //* OPCError					  *
@@ -383,7 +430,7 @@ class NodeId
 	NodeId( const string &istr, uint16_t ins = 0, Type tp = String );
 	~NodeId( );
 
-	NodeId &operator=( NodeId &node );
+	NodeId &operator=( const NodeId &node );
 
 	Type	type( ) const	{ return mTp; }
 	bool	isNull( ) const	{ return (mTp == Numeric && numb == 0); }
@@ -404,11 +451,16 @@ class NodeId
 	//Attributes
 	uint16_t mNs;
 	Type	mTp;
+#ifdef DEBUG_SPEC
 	union
 	{
 	    uint32_t	numb;
 	    string	*str;
 	};
+#else
+	uint32_t numb;
+        string	 str;
+#endif
 };
 
 //*************************************************
@@ -433,7 +485,7 @@ class UA
 	~UA( );
 
 	virtual string lang2CodeSYS( )	{ return "en"; }
-	virtual void debugMess( const string &mess, const string &data ) { }
+	virtual void debugMess( const string &mess ) { }
 
 	//> Protocol's data processing
 	//----------------------------------------------------
@@ -452,13 +504,13 @@ class UA
 	static void oN( string &buf, int32_t val, char sz, int off = -1 );
 	static void oNu( string &buf, uint32_t val, char sz, int off = -1 );
 	static void oR( string &buf, double val, char sz = 4 );
-	static void oS( string &buf, const string &val );
+	static void oS( string &buf, const string &val, int off = -1 );
 	static void oSl( string &buf, const string &val, const string &locale = "" );
 	static void oSqlf( string &buf, const string &val, uint16_t nsIdx = 0 );
 	static void oTm( string &buf, int64_t val );
 	static void oNodeId( string &buf, const NodeId &val );
 	static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
-	bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
+			bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
 	void oDataValue( string &buf, uint8_t eMsk, const OPCVariant &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
 
 	static string randBytes( int num );
@@ -486,6 +538,7 @@ class Client: public UA
 	class SClntSess
 	{
 	    public:
+		//Methods
 		SClntSess( )		{ clearFull( ); }
 		void clearSess( )	{ sesId = authTkId = ""; sesLifeTime = 1.2e6; }
 		void clearFull( )
@@ -515,21 +568,25 @@ class Client: public UA
 		string		secPolicy;
 		char		secMessMode;
 		string		clKey, servKey;
+
 	};
 
 	//Methods
 	Client( );
 	~Client( );
 
+	// Main variables
 	virtual string	sessionName( ) = 0;
 	virtual string	endPoint( ) = 0;
-	virtual void	setEndPoint( const string &iep ) = 0;
 	virtual string	secPolicy( ) = 0;
 	virtual int	secMessMode( ) = 0;
 	virtual string	cert( ) = 0;
 	virtual string	pvKey( ) = 0;
 
-	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false ) = 0;
+	// External imlementations
+	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 ) = 0;
+
+	// Main call methods
 	virtual void	protIO( XML_N &io );
 	virtual void	reqService( XML_N &io );
 
@@ -549,44 +606,131 @@ class Server: public UA
 	class SecCnl
 	{
 	    public:
-		//Methods
-		SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode );
-		SecCnl( );
+	    //Methods
+	    SecCnl( const string &iEp, uint32_t iTokenId, int32_t iLifeTm, const string &iClCert, const string &iSecPolicy, char iSecMessMode );
+	    SecCnl( );
 
-		//Attributes
-		string		endPoint;
-		string		secPolicy;
-		char		secMessMode;
-		int64_t		tCreate;
-		int32_t		tLife;
-		uint32_t	TokenId;
-		string		clCert;
-		string		servKey, clKey;
+	    //Attributes
+	    string	endPoint;
+	    string	secPolicy;
+	    char	secMessMode;
+	    int64_t	tCreate;
+	    int32_t	tLife;
+	    uint32_t	TokenId, TokenIdPrev;
+	    string	clCert;
+	    string	servKey, clKey;
 	};
-	//* Sess
+	//* Session
 	class Sess
 	{
 	    public:
+	    //Data
+	    //* Connection point for Browse and BrowseNext services
+	    class ContPoint
+	    {
+		public:
 		//Methods
-		Sess( const string &iName, double iTInact );
-		Sess( );
+		ContPoint( ) : brDir(0), refPerN(100), nClassMask(0), resMask(0) { }
+		ContPoint( const string &i_brNode, const string &i_lstNode,
+			uint32_t i_brDir, uint32_t i_refPerN, const string &i_refTypeId, uint32_t i_nClassMask, uint32_t i_resMask ) :
+		    brNode(i_brNode), lstNode(i_lstNode), brDir(i_brDir), refPerN(i_refPerN),
+		    nClassMask(i_nClassMask), refTypeId(i_refTypeId), resMask(i_resMask) { }
+
+		bool empty( ) const	{ return brNode.empty(); }
 
 		//Attributes
-		string		name;
-		vector<uint32_t> secCnls;
-		double		tInact;
-		int64_t		tAccess;
-		string		servNonce;
+		uint32_t brDir,		//Browse direction
+			refPerN,	//References per node
+			nClassMask,	//Node class mask
+			resMask;	//Result mask
+		string	brNode, lstNode,
+			refTypeId;	//Reference type id
+	    };
 
-		//>> Continuation points
-		//????
-		//string			brNode;
-		//unsigned		brNextPos;
+	    //Methods
+	    Sess( const string &iName, double iTInact );
+	    Sess( );
+
+	    //Attributes
+	    string	name, inPrtId,
+			idPolicyId, user;
+	    vector<uint32_t> secCnls;
+	    double	tInact;
+	    int64_t	tAccess;
+	    string	servNonce;
+
+	    map<string, ContPoint> cntPnts;	//>> Continuation points
+
+	    //> Subscription
+	    deque<string>	publishReqs;	//Publish requests queue
 
 	};
+
+	//* Subscription object by monitoreditems set
+	class Subscr
+	{
+	    public:
+		//Data
+		//* Monitored item
+		class MonitItem
+		{
+		    public:
+			class Val
+			{
+			    public:
+				Val( ) { }
+				Val( const string &ivl, int64_t itm ) : vl(ivl), tm(itm) { }
+
+				string	vl;
+				int64_t	tm;
+			};
+
+			//Methods
+			MonitItem( ) : md(MM_DISABLED), aid(0), tmToRet(TS_SOURCE), smplItv(1000), qSz(OpcUa_NPosID),
+			    dO(false), cH(0), vTp(0), dtTm(0)	{ }
+
+			//Attributes
+			MonitoringMode	md;		//Monitoring mode
+			NodeId		nd;		//Target node
+			uint32_t	aid;		//The node's attribute ID
+			TimestampsToReturn tmToRet;	//Timestamps to return
+			double		smplItv;	//Sample interval
+			uint32_t	qSz;		//Queue size
+			bool		dO;		//Discard oldest
+			uint32_t	cH;		//Client handle
+
+			int		vTp;		//Values type
+			int64_t		dtTm;		//Last value time
+			deque<Val>	vQueue;		//Values queue
+		};
+
+		//Methods
+		Subscr( ) : st(SS_CLOSED), sess(-1), en(false), publInterv(100), seqN(1),
+		    cntrLifeTime(12000), wLT(0), cntrKeepAlive(50), wKA(0), maxNotPerPubl(0), pr(0) 	{ }
+
+		Subscr copy( bool noWorkData = true );
+		SubScrSt setState( SubScrSt st = SS_CUR );
+
+		//Attributes
+		SubScrSt st;			//Subscription status
+		int	sess;			//Session assign
+		bool	en;			//Enable state
+		double	publInterv;		//Publish interval (ms)
+		uint32_t seqN,			//Sequence number for responds, rolls over 1, no increment for KeepAlive messages
+			 cntrLifeTime, wLT,	//Counter after that miss notifications from client remove the object and
+			 cntrKeepAlive, wKA,	//Counter after that neet send empty publish respond
+						//send StatusChangeNotification with Bad_Timeout
+			 maxNotPerPubl;		//Maximum notifications per single Publish response
+		uint8_t	pr;			//Priority
+		vector<MonitItem> mItems;
+		deque<string> retrQueue;	//Retransmission queue; used by Republish request;
+						//cleared to deep by KeepAlive! or by field Acknowledgements sets
+	};
+
 	//* End Point
 	class EP
 	{
+	    friend class Server;
 	    public:
 		//Methods
 		EP( Server *serv );
@@ -596,28 +740,50 @@ class Server: public UA
 		virtual string url( ) = 0;
 		virtual string cert( ) = 0;
 		virtual string pvKey( ) = 0;
+		virtual double subscrProcPer( ) = 0;	//Generic minimum cycle period of publishes and the data processing
+
+		//> Limits
+		virtual uint32_t limSubScr( )	{ return 10; }
+		virtual uint32_t limMonitItms( ){ return 1000; }
+
 		bool enableStat( )	{ return mEn; }
 
 		virtual void setEnable( bool vl );
+		void subScrCycle( unsigned cntr );	//Subscriptions processing cycle
 
 		//> Security policies
-		int secSize( )			{ return mSec.size(); }
-		virtual string secPolicy( int isec );
-		virtual MessageSecurityMode secMessageMode( int isec );
+		int secSize( )		{ return mSec.size(); }
+		string secPolicy( int isec );
+		MessageSecurityMode secMessageMode( int isec );
 
 		//> Sessions
-		virtual int sessCreate( const string &iName, double iTInact );
-		virtual void sessServNonceSet( int sid, const string &servNonce );
-		virtual bool sessActivate( int sid, uint32_t secCnl, bool check = false );
-		virtual void sessClose( int sid );
-		virtual Sess sessGet( int sid );
+		int sessCreate( const string &iName, double iTInact );
+		void sessServNonceSet( int sid, const string &servNonce );
+		virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
+		    const string &inPrtId = "", const XML_N &identTkn = XML_N() );
+		void sessClose( int sid );
+		Sess sessGet( int sid );
+		//>> Continuation points by Browse and BrowseNext
+		Sess::ContPoint sessCpGet( int sid, const string &cpId );
+		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
+		//>> Subsciption
+		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = OpcUa_NPosID for new create
+		    double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0,
+		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
+		Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
+		//>> Monitored items
+		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = OpcUa_NPosID for new create
+		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
+		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
+		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
 
-		virtual string reqData( int reqTp, const string &rb ) = 0;
+		virtual int reqData( int reqTp, XML_N &req );
 
 	    protected:
 		//Methods
 		XML_N *nodeReg( const NodeId &parent, const NodeId &ndId, const string &name,
 		    int ndClass, const NodeId &refTypeId, const NodeId &typeDef = 0 );
+		Sess *sessGet_( int sid );	//Unresourced
 
 		//Attributes
 		char			mEn;
@@ -626,9 +792,11 @@ class Server: public UA
 
 		vector<SecuritySetting>	mSec;
 		vector<Sess>		mSess;
+		vector<Subscr>		mSubScr;	//Subscriptions list
 
 		XML_N			objTree;
 		map<string, XML_N*>	ndMap;
+		pthread_mutex_t		mtxData;
 
 		Server			*serv;
 	};
@@ -644,10 +812,12 @@ class Server: public UA
 	virtual bool debug( )	{ return false; }
 
 	virtual void discoveryUrls( vector<string> &ls ) = 0;
-	virtual bool inReq( string &request, string &answer, const string &sender );
+	virtual bool inReq( string &request, const string &inPrtId, string *answ = NULL );
+	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
 	//> Channel manipulation functions
-	int chnlOpen( const string &iEp, int32_t lifeTm = 0, const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
+	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
+	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
 	void chnlClose( int cid );
 	SecCnl chnlGet( int cid );
 	void chnlSecSet( int cid, const string &servKey, const string &clKey );

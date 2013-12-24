@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2013 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -109,6 +109,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //>>> What is
     if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
     actWhatIs->setToolTip(_("The button for question about GUI elements"));
     actWhatIs->setWhatsThis(_("Get respond about user interface elements"));
     actWhatIs->setStatusTip(_("Press to respond about user interface elements."));
@@ -1086,9 +1087,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     //QAction *cact = (QAction *)sender();
     string own_wdg = iOwn.empty() ? TSYS::strSepParse(work_wdg,0,';') : iOwn;
     string par_nm = cact->objectName().toAscii().data();
+    QMdiSubWindow *actSubW = work_space->activeSubWindow();
 
-    if(work_space->activeSubWindow() && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
-	    !((DevelWdgView*)((QScrollArea*)work_space->activeSubWindow()->widget())->widget())->edit())
+    if(actSubW && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
+	    !((DevelWdgView*)((QScrollArea*)actSubW->widget())->widget())->edit())
 	return;
 
     //> Count level
@@ -1097,7 +1099,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     string sid1 = TSYS::pathLev(own_wdg,0);
 
     //> Make request id and name dialog
-    InputDlg dlg(this,cact->icon(),
+    InputDlg dlg(this, cact->icon(),
 	    _("Enter new widget's/page's identifier and name."),_("Create widget/page"),true,true);
     dlg.setIdLen(30);
 
@@ -1178,9 +1180,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		if(!chNoWr)
 		{
             	    DevelWdgView *dw = work_space->findChild<DevelWdgView*>(own_wdg.c_str());
-            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path",new_wdg)->setAttr("id",w_id)->setAttr("name",w_nm)->setAttr("parent",par_nm)->
-            			setAttr("x",TSYS::real2str(pnt.x()))->setAttr("y",TSYS::real2str(pnt.y())));
+            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path",new_wdg)->setAttr("id",w_id)->setAttr("name",w_nm)->
+            		setAttr("parent",par_nm)->setAttr("x",TSYS::real2str(pnt.x()))->setAttr("y",TSYS::real2str(pnt.y())));
             	}
+		work_space->setActiveSubWindow(actSubW);	//For set focus to target subwindow and the new widget select
 	    }
 	    if(err) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    emit modifiedItem(new_wdg);
@@ -1352,7 +1355,7 @@ void VisDevelop::visualItClear( const string &el_wa )
     string clrW;
     string work_wdg_loc, work_attr;
 
-    if( el_wa.empty() )
+    if(el_wa.empty())
     {
 	work_wdg_loc = work_wdg;
 
@@ -1360,7 +1363,7 @@ void VisDevelop::visualItClear( const string &el_wa )
 		QString(_("Are you sure of clear all changes for visual items: '%1'?\n"
 			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(QString(work_wdg_loc.c_str()).replace(";","; ")),
 		_("Visual items' changes clear"),false,false);
-	if( dlg.exec() != QDialog::Accepted )	return;
+	if(dlg.exec() != QDialog::Accepted)	return;
     }
     else
     {
@@ -1406,6 +1409,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     string work_wdg_w = wdst.empty() ? work_wdg : wdst;
     vector<string> copy_els;
     QCheckBox *wInher = NULL;
+    int zLev = 0;
 
     InputDlg dlg(this,actVisItPaste->icon(),"",_("Visual items move or copy"),true,true);
     dlg.setIdLen(30);
@@ -1487,22 +1491,10 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 	    else
 	    {
-		unsigned i_w = 0;
-		for(i_w = 0; i_w < req.childSize(); i_w++)
-		    if(req.childGet(i_w)->attr("id") == t1_el)
-			break;
-		if(i_w < req.childSize())
-		{
-		    int no_numb = t1_el.size()-1;
-		    while(no_numb >= 0 && t1_el[no_numb] >= '0' && t1_el[no_numb] <= '9') no_numb--;
-		    if(no_numb >= 0) t1_el = t1_el.substr(0,no_numb+1);
-		    //>>> New identifier generator
-		    unsigned i_c = 1, i_w = 0;
-		    while(i_w < req.childSize())
-			if(req.childGet(i_w)->attr("id") == t1_el+TSYS::int2str(i_c)) { i_w = 0; i_c++; }
-			else i_w++;
-		    t1_el += TSYS::int2str(i_c);
-		}
+		zLev = req.childSize();
+		for(unsigned i_w = 0; i_w < req.childSize(); )
+		    if(req.childGet(i_w)->attr("id") == t1_el) { i_w = 0; t1_el = TSYS::strLabEnum(t1_el); }
+		    else i_w++;
 	    }
 	}
 	//>> Make request dialog
@@ -1530,10 +1522,8 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    //>>> Make copy
 	    else
 	    {
-		req.clear()->setName("set")->
-		    setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
-		    setAttr("src", s_elp+"/"+s_el)->
-		    setAttr("dst", d_elp+"/"+d_el);
+		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
+		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		if(cntrIfCmd(req))
 		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
 		else
@@ -1549,13 +1539,16 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    if(n_del < 2) copy_els.push_back(d_elp+"/"+d_el);
 		    else
 		    {
-			if(!last_del.empty() && last_del != d_elp)
-			    copy_els.push_back(last_del);
+			//  geomZ set to UP
+			req.clear()->setName("set")->setAttr("path",d_elp+"/"+d_el+"/%2fattr%2fgeomZ")->setText(i2s(zLev));
+			cntrIfCmd(req);
+
+			if(!last_del.empty() && last_del != d_elp) copy_els.push_back(last_del);
 			last_del = d_elp;
 		    }
 		    del_els += copy_buf_el+";";
 
-		    //> Send change request to opened for edit widget
+		    // Send change request to opened for edit widget
             	    if(!chNoWr)
             	    {
                 	DevelWdgView *dw = work_space->findChild<DevelWdgView*>(d_elp.c_str());

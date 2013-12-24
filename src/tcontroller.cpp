@@ -75,7 +75,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
 	    if(!owner().tpPrmPresent(src_n->at(prm_ls[i_p]).at().type().name)) continue;
 	    if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
 	    (TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
-	    if(toEnable() && !enableStat()) enable();
+	    //if(toEnable() && !enableStat()) enable();
 	}
     }
 
@@ -309,10 +309,10 @@ void TController::LoadParmCfg( )
     if(!SYS->selDB().empty())
     {
 	vector<string> it_ls;
-    	list(it_ls);
-    	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-    	    if(itReg.find(it_ls[i_it]) == itReg.end())
-            	del(it_ls[i_it]);
+	list(it_ls);
+	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+	    if(itReg.find(it_ls[i_it]) == itReg.end())
+		del(it_ls[i_it]);
     }
 
     //> Force load present parameters
@@ -345,7 +345,7 @@ void TController::setRedntRun( const string &vl )	{ cfg("REDNT_RUN").setS(vl); m
 
 void TController::setRedntUse( bool vl )
 {
-    if( mRedntUse == vl ) return;
+    if(mRedntUse == vl) return;
     mRedntUse = vl;
 }
 
@@ -482,13 +482,13 @@ void TController::cntrCmdProc( XMLNode *opt )
 	}
 	if(owner().tpPrmSize())
 	{
-	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm","1","idSz","20");
+	    ctrMkNode("grp",opt,-1,"/br/prm_",_("Parameter"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	    if(ctrMkNode("area",opt,-1,"/prm",_("Parameters")))
 	    {
 		if(owner().tpPrmSize() > 1)
 		    ctrMkNode("fld",opt,-1,"/prm/t_prm",_("To add parameters"),RWRW__,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/t_lst");
 		ctrMkNode("fld",opt,-1,"/prm/nmb",_("Number"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","prm_","idSz","20");
+		ctrMkNode("list",opt,-1,"/prm/prm",_("Parameters"),RWRWR_,"root",SDAQ_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","prm_","idSz",OBJ_ID_SZ);
 	    }
 	}
 	return;
