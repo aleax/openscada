@@ -267,10 +267,20 @@ class TSYS : public TCntrNode
 	}
 
 	//> Endian convert
+	static uint16_t i16_LE( uint16_t in );
+	static uint32_t i32_LE( uint32_t in );
+	static uint64_t i64_LE( uint64_t in );
+	static uint16_t i16_BE( uint16_t in );
+	static uint32_t i32_BE( uint32_t in );
+	static uint64_t i64_BE( uint64_t in );
 	static float floatLE( float in );
 	static float floatLErev( float in );
 	static double doubleLE( double in );
 	static double doubleLErev( double in );
+	static float floatBE( float in );
+	static float floatBErev( float in );
+	static double doubleBE( double in );
+	static double doubleBErev( double in );
 
 	//> Reentrant commandline processing
 	string getCmdOpt( int &curPos, string *argVal = NULL );

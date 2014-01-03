@@ -46,11 +46,21 @@ class TFld
 	//Data
 	enum Type	//Field's types
 	{
+	    // Generic
 	    Boolean	= 0,
 	    Integer	= 1,
 	    Real	= 4,
 	    String	= 5,
-	    Object	= 6
+	    Object	= 6,
+
+	    GenMask	= 0x0F,
+
+	    // Extended
+	    Int16	= 0x11,
+	    Int32	= 0x01,
+	    Int64	= 0x21,
+	    Float	= 0x14,
+	    Double	= 0x04
 	};
 	enum AttrFlg	//Base field's flags
 	{
@@ -107,9 +117,10 @@ class TFld
 	const vector<string> &selNm();
 
 	string selVl2Nm( const string &val );
-	string selVl2Nm( int val );
+	string selVl2Nm( int64_t val );
 	string selVl2Nm( double val );
 	string selVl2Nm( bool val );
+	string selVl2Nm( char val )	{ return selVl2Nm(val); }
 
 	string	selNm2VlS( const string &name );
 	int	selNm2VlI( const string &name );

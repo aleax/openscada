@@ -80,9 +80,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     // {string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mchFmtEnc = "n|NoEnc") -
     //		read value <valType> in <cnt> for machine format or string encodeIn <mchFmtEnc>
-    //  cnt - values by data type counter; for no strings and multiply counter used Array as result (-1 up to end);
-    //  valType - value type (char,int,float,real*4,...)
-    //  mchFmtEnc - machine format or encodeIn for string (native(n), ieee-be(b), ieee-le(l))
+    //	valType - value type (char,int,float,real*4,...)
+    //	cnt - values by data type counter; for no strings and multiply counter used Array as result (-1 up to end);
+    //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
     if(id == "read" && prms.size() >= 1)
     {
 	TpDescr &tpD = getTp((prms.size()>=1) ? prms[0].getS() : "char");
@@ -93,7 +93,11 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(tpD.szBt == 1)
 	{
 	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : "";
-	    if(!fhd) rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
+	    if(!fhd)
+	    {
+		rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
+		pos = vmax(str.size(), pos+cnt);
+	    }
 	    else
 	    {
 		char buf[STR_BUF_LEN];
@@ -109,6 +113,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	{
 	    TArrayObj *ao = NULL;
 	    int64_t rez = 0;
+	    string mach = (prms.size()>=3) ? prms[2].getS() : "n";
+	    if(mach.empty()) mach = "n";
 	    // From string stream
 	    if(!fhd)
 	    {
@@ -117,9 +123,39 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		{
 		    switch(tpD.szBt)
 		    {
-			case 2:	rez = TSYS::getUnalign16(str.data()+pos);	break;
-			case 4:	rez = TSYS::getUnalign32(str.data()+pos);	break;
-			case 8:	rez = TSYS::getUnalign64(str.data()+pos);	break;
+			case 2:
+			{
+			    uint16_t v = TSYS::getUnalign16(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i16_LE(v);	break;
+				case 'b': v = TSYS::i16_BE(v);	break;
+			    }
+			    rez = tpD.sign ? (int16_t)v : v;
+			    break;
+			}
+			case 4:
+			{
+			    uint32_t v = TSYS::getUnalign32(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i32_LE(v);	break;
+				case 'b': v = TSYS::i32_BE(v);	break;
+			    }
+			    rez = tpD.sign ? (int32_t)v : v;
+			    break;
+			}
+			case 8:
+			{
+			    uint64_t v = TSYS::getUnalign64(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i64_LE(v);	break;
+				case 'b': v = TSYS::i64_BE(v);	break;
+			    }
+			    rez = tpD.sign ? (int64_t)v : v;
+			    break;
+			}
 		    }
 		    if(cnt == 1) return (int)rez;
 		    ao->arSet(i_cnt, (int)rez);
@@ -136,12 +172,42 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		{
 		    switch(tpD.szBt)
 		    {
-			case 2:	rez = *(uint16_t*)(str.data()+pos);	break;
-			case 4:	rez = *(uint32_t*)(str.data()+pos);	break;
-			case 8:	rez = *(uint64_t*)(str.data()+pos);	break;
+			case 2:
+			{
+			    uint16_t v = *(uint16_t*)(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i16_LE(v);	break;
+				case 'b': v = TSYS::i16_BE(v);	break;
+			    }
+			    rez = tpD.sign ? (int16_t)v : v;
+			    break;
+			}
+			case 4:
+			{
+			    uint32_t v = *(uint32_t*)(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i32_LE(v);	break;
+				case 'b': v = TSYS::i32_BE(v);	break;
+			    }
+			    rez = tpD.sign ? (int32_t)v : v;
+			    break;
+			}
+			case 8:
+			{
+			    uint64_t v = *(uint64_t*)(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i64_LE(v);	break;
+				case 'b': v = TSYS::i64_BE(v);	break;
+			    }
+			    rez = tpD.sign ? (int64_t)v : v;
+			    break;
+			}
 		    }
-		    if(cnt == 1) return (int)rez;
-		    ao->arSet(i_cnt, (int)rez);
+		    if(cnt == 1) return rez;
+		    ao->arSet(i_cnt, rez);
 		}
 	    return ao;
 	}
@@ -150,6 +216,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	{
 	    TArrayObj *ao = NULL;
 	    double rez = 0;
+	    string mach = (prms.size()>=3) ? prms[2].getS() : "n";
 	    // From string stream
 	    if(!fhd)
 	    {
@@ -158,8 +225,27 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		{
 		    switch(tpD.szBt)
 		    {
-			case 4:	rez = TSYS::getUnalignFloat(str.data()+pos);	break;
-			case 8:	rez = TSYS::getUnalignDbl(str.data()+pos);	break;
+			case 4:
+			{
+			    float v = TSYS::getUnalignFloat(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::floatLErev(v);	break;
+				case 'b': v = TSYS::floatBErev(v);	break;
+			    }
+			    rez = v;
+			    break;
+			}
+			case 8:
+			{
+			    rez = TSYS::getUnalignDbl(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': rez = TSYS::doubleLErev(rez);	break;
+				case 'b': rez = TSYS::doubleBErev(rez);	break;
+			    }
+			    break;
+			}
 		    }
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
@@ -176,8 +262,27 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		{
 		    switch(tpD.szBt)
 		    {
-			case 4:	rez = *(float*)(str.data()+pos);	break;
-			case 8:	rez = *(double*)(str.data()+pos);	break;
+			case 4:
+			{
+			    float v = *(float*)(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::floatLErev(v);	break;
+				case 'b': v = TSYS::floatBErev(v);	break;
+			    }
+			    rez = v;
+			    break;
+			}
+			case 8:
+			{
+			    rez = *(double*)(str.data()+pos);
+			    switch(mach[0])
+			    {
+				case 'l': rez = TSYS::doubleLErev(rez);	break;
+				case 'b': rez = TSYS::doubleBErev(rez);	break;
+			    }
+			    break;
+			}
 		    }
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
@@ -187,12 +292,41 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 
 	return false;
     }
-    if(id == "write")
+    // IO write({string|int|double|TArray} vals, string valType = "char", string mchFmtEnc = "n|NoEnc") -
+    //		write value[s] <vals> for type <valType> for machine format or string encodeIn <mchFmtEnc>
+    //	vals - single value or values array for write;
+    //	valType - value type (char,int,float,real*4,...)
+    //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
+    if(id == "write" && prms.size() >= 1)
     {
+	TVariant &vals = prms[0];
+	TpDescr tpD;
+	if(prms.size() >= 2) tpD = getTp(prms[1].getS());
+	//!!!! Check for real data type
 
+	//Char stream
+	if(tpD.szBt == 1)
+	{
+	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : "";
+	    /*if(!fhd) rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
+	    else
+	    {
+	    }*/
+	}
+	//Integer
+	else if(!tpD.real)
+	{
+	    //????
 
+	}
+	//Real
+	else
+	{
+	    //????
 
-	return 0;
+	}
+
+	return this;
     }
 
     throw TError("IOObj",_("Function '%s' error or not enough parameters."),id.c_str());

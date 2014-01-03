@@ -200,7 +200,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res     req_res, en_res, asWr_res;
-	int	&mPrior,			//Process task priority
+	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
 	TCfg	&mSched,			//Calc schedule
@@ -209,7 +209,7 @@ class TMdContr: public TController
 	char	&mMerge,			//Fragments of register merge
 		&mMltWr,			//Use multi-write functions(15,16)
 		&mAsynchWr;			//Asynchronous write
-	int	&reqTm,				//Request timeout in ms
+	int64_t	&reqTm,				//Request timeout in ms
 		&restTm,			//Restore timeout in s
 		&connTry;			//Connections try
 	int64_t	mPer;

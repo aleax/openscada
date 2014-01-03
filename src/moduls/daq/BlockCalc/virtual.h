@@ -132,7 +132,7 @@ class Contr: public TController
 		call_st,        // Calc now stat
 		endrun_req,	// Endrun calc request
 		sync_st;	// Sync DB status
-	int	&mPerOld,	// Clock period (ms)
+	int64_t	&mPerOld,	// Clock period (ms)
 		&mPrior,	// Process data task priority
 		&mIter;		// Iteration into clock
 

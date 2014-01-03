@@ -155,7 +155,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;				//Resource for enable params
-	int	&mPerOld,			// ms
+	int64_t	&mPerOld,			// ms
 		&mPrior;			// Process task priority
 
 	bool	prc_st,				// Process task active

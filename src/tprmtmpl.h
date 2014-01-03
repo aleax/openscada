@@ -65,7 +65,7 @@ class TPrmTempl: public TFunction, public TConfig
 	int	maxCalcTm( );
 	string	progLang( );
 	string	prog( );
-	int	timeStamp( )	{ return mTimeStamp; }
+	int64_t	timeStamp( )	{ return mTimeStamp; }
 
 	void setName( const string &inm );
 	void setDescr( const string &idsc );
@@ -96,7 +96,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	//Attributes
 	TCfg	&mId;
-	int	&mTimeStamp;
+	int64_t	&mTimeStamp;
 	string	work_prog;
 };
 

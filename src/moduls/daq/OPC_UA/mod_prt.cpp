@@ -391,7 +391,7 @@ string OPCEndPoint::getStatus( )
     return rez;
 }
 
-int OPCEndPoint::reqData( int reqTp, XML_N &req )
+uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 {
     cntReq++;
 
@@ -411,7 +411,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    int rPn = atoi(req.attr("rPn").c_str());
 
 	    //> Check for DAQ subsystem data
-	    if(nid.ns() != 1 || TSYS::strParse(nid.strVal(),0,".") != SYS->daq().at().subId() || (rPn && req.childSize() >= rPn)) return rez;
+	    if(nid.ns() != 1 || TSYS::strParse(nid.strVal(),0,".") != SYS->daq().at().subId() || (rPn && (int)req.childSize() >= rPn)) return rez;
 	    NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
             uint32_t bd = atoi(req.attr("BrDir").c_str());
             uint32_t nClass = atoi(req.attr("ClassMask").c_str());
@@ -430,7 +430,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		if(dynamic_cast<TTipDAQ*>(&cNd.at()))		ndTpDef = ndMap[NodeId("DAQModuleObjectType",1).toAddr()];
 		else if(dynamic_cast<TController*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQControllerObjectType",1).toAddr()];
 		else if(dynamic_cast<TParamContr*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQParameterObjectType",1).toAddr()];
-		unsigned cnClass;
+		unsigned cnClass = 0;
 		if(ndTpDef && (!nClass || nClass&(cnClass=atoi(ndTpDef->attr("NodeClass").c_str()))))
 		    req.childAdd("ref")->setAttr("NodeId", ndTpDef->attr("NodeId"))->
 			setAttr("referenceTypeId", ndTpDef->attr("referenceTypeId"))->
@@ -522,7 +522,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 		    XML_N *pN = prevLs.childGet(i_p);
 		    if(!lstOK) { lstOK = (lstNd==pN->attr("NodeId")); continue; }
 		    *(req.childAdd("ref")) = *pN;
-		    if(rPn && req.childSize() >= rPn && (i_p+1) < prevLs.childSize())
+		    if(rPn && (int)req.childSize() >= rPn && (i_p+1) < prevLs.childSize())
 		    {
 			req.setAttr("LastNode", pN->attr("NodeId"));
 			break;
@@ -539,7 +539,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    TParamContr *nPrm = NULL;
 	    TVal *nVal = NULL;
 
-	    int rez = Server::EP::reqData(reqTp, req);
+	    uint32_t rez = Server::EP::reqData(reqTp, req);
 	    if(rez != OpcUa_BadNodeIdUnknown) return rez;
 
 	    NodeId nid = NodeId::fromAddr(req.attr("node"));
@@ -647,7 +647,7 @@ int OPCEndPoint::reqData( int reqTp, XML_N &req )
 	}
 	case OpcUa_WriteRequest:
 	{
-	    int rez = Server::EP::reqData(reqTp, req);
+	    uint32_t rez = Server::EP::reqData(reqTp, req);
             if(rez != OpcUa_BadNodeIdUnknown) return rez;
 
 	    NodeId nid = NodeId::fromAddr(req.attr("node"));

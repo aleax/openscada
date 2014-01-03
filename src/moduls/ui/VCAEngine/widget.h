@@ -100,7 +100,7 @@ class Attr
 	TVariant get( bool sys = false );
 	string getS( bool sys = false );
 	double getR( bool sys = false );
-	int    getI( bool sys = false );
+	int64_t getI( bool sys = false );
 	char   getB( bool sys = false );
 	AutoHD<TVarObj> getO( bool sys = false );
 
@@ -109,7 +109,7 @@ class Attr
 	void set( const TVariant &val, bool strongPrev = false, bool sys = false );
 	void setS( const string &val, bool strongPrev = false, bool sys = false );
 	void setR( double val, bool strongPrev = false, bool sys = false );
-	void setI( int val, bool strongPrev = false, bool sys = false );
+	void setI( int64_t val, bool strongPrev = false, bool sys = false );
 	void setB( char val, bool strongPrev = false, bool sys = false );
 	void setO( AutoHD<TVarObj> val, bool strongPrev = false, bool sys = false );
 
@@ -128,7 +128,7 @@ class Attr
 	{
 	    string	*s_val;		//String
 	    double	r_val;		//Real
-	    int		i_val;		//Integer
+	    int64_t	i_val;		//Integer
 	    char	b_val;		//Boolean
 	    AutoHD<TVarObj>	*o_val;	//Object
 	}m_val;

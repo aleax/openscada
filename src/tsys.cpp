@@ -20,6 +20,7 @@
  ***************************************************************************/
 
 #include <features.h>
+#include <byteswap.h>
 #include <ieee754.h>
 #include <syscall.h>
 #include <sys/types.h>
@@ -1235,7 +1236,61 @@ string TSYS::strUncompr( const string &in )
     return rez;
 }
 
-float TSYS::floatLE(float in)
+uint16_t TSYS::i16_LE( uint16_t in )
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return bswap_16(in);
+#endif
+
+    return in;
+}
+
+uint32_t TSYS::i32_LE( uint32_t in )
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return bswap_32(in);
+#endif
+
+    return in;
+}
+
+uint64_t TSYS::i64_LE( uint64_t in )
+{
+#if __BYTE_ORDER == __BIG_ENDIAN
+    return bswap_64(in);
+#endif
+
+    return in;
+}
+
+uint16_t TSYS::i16_BE( uint16_t in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return bswap_16(in);
+#endif
+
+    return in;
+}
+
+uint32_t TSYS::i32_BE( uint32_t in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return bswap_32(in);
+#endif
+
+    return in;
+}
+
+uint64_t TSYS::i64_BE( uint64_t in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    return bswap_64(in);
+#endif
+
+    return in;
+}
+
+float TSYS::floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
     ieee754_float ieee754_be;
@@ -1261,7 +1316,7 @@ float TSYS::floatLE(float in)
     return in;
 }
 
-float TSYS::floatLErev(float in)
+float TSYS::floatLErev( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
     ieee754_float ieee754_be;
@@ -1287,7 +1342,7 @@ float TSYS::floatLErev(float in)
     return in;
 }
 
-double TSYS::doubleLE(double in)
+double TSYS::doubleLE( double in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN || __FLOAT_WORD_ORDER == __BIG_ENDIAN
     ieee754_double ieee754_be;
@@ -1315,7 +1370,7 @@ double TSYS::doubleLE(double in)
     return in;
 }
 
-double TSYS::doubleLErev(double in)
+double TSYS::doubleLErev( double in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN || __FLOAT_WORD_ORDER == __BIG_ENDIAN
     ieee754_double ieee754_be;
@@ -1343,7 +1398,115 @@ double TSYS::doubleLErev(double in)
     return in;
 }
 
-long TSYS::HZ()
+float TSYS::floatBE( float in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_float ieee754_le;
+    union ieee754_be
+    {
+	float f;
+	struct
+        {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_le.f = in;
+    ieee754_be.ieee.mantissa	= ieee754_le.ieee.mantissa;
+    ieee754_be.ieee.exponent	= ieee754_le.ieee.exponent;
+    ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
+
+    return ieee754_be.f;
+#endif
+
+    return in;
+}
+
+float TSYS::floatBErev( float in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_float ieee754_le;
+    union ieee754_be
+    {
+	float f;
+	struct
+        {
+	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int mantissa:23;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_be.f = in;
+    ieee754_le.ieee.mantissa	= ieee754_be.ieee.mantissa;
+    ieee754_le.ieee.exponent	= ieee754_be.ieee.exponent;
+    ieee754_le.ieee.negative	= ieee754_be.ieee.negative;
+
+    return ieee754_le.f;
+#endif
+
+    return in;
+}
+
+double TSYS::doubleBE( double in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_double ieee754_le;
+    union ieee754_be
+    {
+	double d;
+	struct
+        {
+	    unsigned int negative:1;
+	    unsigned int exponent:11;
+	    unsigned int mantissa0:20;
+	    unsigned int mantissa1:32;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_le.d = in;
+    ieee754_be.ieee.mantissa0	= ieee754_le.ieee.mantissa0;
+    ieee754_be.ieee.mantissa1	= ieee754_le.ieee.mantissa1;
+    ieee754_be.ieee.exponent	= ieee754_le.ieee.exponent;
+    ieee754_be.ieee.negative	= ieee754_le.ieee.negative;
+
+    return ieee754_be.d;
+#endif
+
+    return in;
+}
+
+double TSYS::doubleBErev( double in )
+{
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    ieee754_double ieee754_le;
+    union ieee754_be
+    {
+	double d;
+	struct
+        {
+	    unsigned int negative:1;
+	    unsigned int exponent:11;
+	    unsigned int mantissa0:20;
+	    unsigned int mantissa1:32;
+	} ieee;
+    } ieee754_be;
+
+    ieee754_be.d = in;
+    ieee754_le.ieee.mantissa0	= ieee754_be.ieee.mantissa0;
+    ieee754_le.ieee.mantissa1	= ieee754_be.ieee.mantissa1;
+    ieee754_le.ieee.exponent	= ieee754_be.ieee.exponent;
+    ieee754_le.ieee.negative	= ieee754_be.ieee.negative;
+
+    return ieee754_le.d;
+#endif
+
+    return in;
+}
+
+long TSYS::HZ( )
 {
     return sysconf(_SC_CLK_TCK);
 }

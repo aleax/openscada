@@ -89,8 +89,8 @@ class Reg
 	    End,	//[E]: End program.
 	    EndFull,	//[E]: Full end from program.
 	    MviB,	//[CRRB]: Load Boolean <B> to register <R>.
-	    MviI,	//[CRR____]: Load Integer <____> to register <R>.
-	    MviR,	//[CRR______]: Load Real <______> to register <R>.
+	    MviI,	//[CRR________]: Load Integer <________> to register <R>.
+	    MviR,	//[CRR________]: Load Real <________> to register <R>.
 	    MviS,	//[CRRn_____]: Load String len <n> to register <R>.
 	    MviObject,	//[CRR]: Load object.
 	    MviArray,	//[CRRnrr....]: Load array from registers list.
@@ -159,7 +159,7 @@ class Reg
 	union El
 	{
 	    char	b_el;	//Boolean for constant and local variable
-	    int		i_el;	//Integer for constant and local variable
+	    int64_t	i_el;	//Integer for constant and local variable
 	    double	r_el;	//Real for constant and local variable
 	    string	*s_el;	//String for constant and local variable
 	    AutoHD<TVarObj>	*o_el;	//Object for constant and local variable
@@ -176,6 +176,7 @@ class Reg
 	void operator=( bool ivar )		{ setType(Bool);	el.b_el = ivar; }
 	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
 	void operator=( int ivar )		{ setType(Int);		el.i_el = ivar; }
+	void operator=( int64_t ivar )		{ setType(Int);		el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Real);	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
 	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);		*el.o_el = ivar;}
@@ -219,6 +220,7 @@ class RegW
 
 	void operator=( char ivar )		{ setType(Reg::Bool);	el.b_el = ivar; }
 	void operator=( int ivar )		{ setType(Reg::Int);	el.i_el = ivar; }
+	void operator=( int64_t ivar )		{ setType(Reg::Int);	el.i_el = ivar; }
 	void operator=( double ivar )		{ setType(Reg::Real);	el.r_el = ivar; }
 	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
 	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o_el = ivar;}
@@ -272,7 +274,7 @@ class Func : public TConfig, public TFunction
 	int maxCalcTm( )		{ return max_calc_tm; }
 	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
-	int  timeStamp( )		{ return mTimeStamp; }
+	int64_t	timeStamp( )		{ return mTimeStamp; }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
@@ -333,14 +335,14 @@ class Func : public TConfig, public TFunction
 	//> Variable access
 	TVariant getVal( TValFunc *io, RegW &rg, bool fObj = false );
 	string	getValS( TValFunc *io, RegW &rg );
-	int	getValI( TValFunc *io, RegW &rg );
+	int64_t	getValI( TValFunc *io, RegW &rg );
 	char	getValB( TValFunc *io, RegW &rg );
 	double	getValR( TValFunc *io, RegW &rg );
 	AutoHD<TVarObj>	getValO( TValFunc *io, RegW &rg );
 
 	void setVal( TValFunc *io, RegW &rg, const TVariant &val );
 	void setValS( TValFunc *io, RegW &rg, const string &val );
-	void setValI( TValFunc *io, RegW &rg, int val );
+	void setValI( TValFunc *io, RegW &rg, int64_t val );
 	void setValR( TValFunc *io, RegW &rg, double val );
 	void setValB( TValFunc *io, RegW &rg, char val );
 	void setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val );
@@ -383,7 +385,7 @@ class Func : public TConfig, public TFunction
 
     private:
 	//Attributes
-	int	&max_calc_tm,
+	int64_t	&max_calc_tm,
 		&mTimeStamp;
 
 	//> Parser's data

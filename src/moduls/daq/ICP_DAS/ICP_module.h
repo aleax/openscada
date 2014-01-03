@@ -68,8 +68,8 @@ class TMdPrm : public TParamContr
 	TElem	p_el;		//Work atribute elements
 	void	*extPrms;
 	TCfg	&modTp;		//I-7000,I-8000 module type
-	int	&modAddr;	//I-7000,I-8000 module address
-	int	&modSlot;	//I-8000 module slot
+	int64_t	&modAddr;	//I-7000,I-8000 module address
+	int64_t	&modSlot;	//I-8000 module slot
 
 	ResString	acq_err;
 
@@ -138,7 +138,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;				//Resource for enable params
-	int	&mPrior,			//Process task priority
+	int64_t	&mPrior,			//Process task priority
 		&mBus,				//Serial port address: 0-COM1(LP), 1-COM1, 2-COM2, ...
 		&mBaud,				//Baudrate
 		&connTry;			//Connections try

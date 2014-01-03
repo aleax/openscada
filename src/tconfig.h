@@ -84,7 +84,7 @@ class TCfg : public TVariant
 	//> Direct access. Use only for readonly config-fields by no resourced!
 	const char *getSd( );
 	double	&getRd( );
-	int	&getId( );
+	int64_t	&getId( );
 	char	&getBd( );
 
 	void	setSEL( const string &val, char RqFlg = 0 );
@@ -92,16 +92,17 @@ class TCfg : public TVariant
 	void	setS( const string &val, char RqFlg );
 	void	setR( double val );
 	void	setR( double val, char RqFlg );
-	void	setI( int val );
-	void	setI( int val, char RqFlg );
+	void	setI( int64_t val );
+	void	setI( int64_t val, char RqFlg );
 	void	setB( char val );
 	void	setB( char val, char RqFlg );
 
 	TCfg	&operator=( const string &vl )	{ setS(vl); return *this; }
 	TCfg	&operator=( const char *vl )	{ setS(vl); return *this; }
-	TCfg	&operator=( double vl )	{ setR(vl); return *this; }
-	TCfg	&operator=( int vl )	{ setI(vl); return *this; }
-	TCfg	&operator=( bool vl )	{ setB(vl); return *this; }
+	TCfg	&operator=( double vl )		{ setR(vl); return *this; }
+	TCfg	&operator=( int vl )		{ setI(vl); return *this; }
+	TCfg	&operator=( int64_t vl )	{ setI(vl); return *this; }
+	TCfg	&operator=( bool vl )		{ setB(vl); return *this; }
 
     private:
 	//Attributes

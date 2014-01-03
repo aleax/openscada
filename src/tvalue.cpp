@@ -587,7 +587,7 @@ string TVal::getS( int64_t *tm, bool sys )
     return EVAL_STR;
 }
 
-int TVal::getI( int64_t *tm, bool sys )
+int64_t TVal::getI( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
@@ -759,7 +759,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
     }
 }
 
-void TVal::setI( int value, int64_t tm, bool sys )
+void TVal::setI( int64_t value, int64_t tm, bool sys )
 {
     switch(fld().type())
     {

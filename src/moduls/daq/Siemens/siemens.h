@@ -230,7 +230,7 @@ class TMdContr: public TController
 	};
 
 	//Attributes
-	int	&mPerOld,		// ms
+	int64_t	&mPerOld,		// ms
 		&mPrior,		// Process task priority
 		&mType,			// Connection type
 		&mSlot,

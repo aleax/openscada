@@ -579,31 +579,29 @@ void MTable::fieldSet( TConfig &cfg )
 
 void MTable::fieldDel( TConfig &cfg )
 {
-    if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
+    if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty."));
     mLstUse = SYS->sysTm();
 
-    //> Get config fields list
-    vector<string> cf_el;
-    cfg.cfgList(cf_el);
-
-    //> Prepare request
+    //Prepare request
     string req = "DELETE FROM '"+mod->sqlReqCode(name())+"' WHERE ";
-    //>> Add key list to queue
+    // Add key list to queue
     bool next = false;
-    for( unsigned i_el = 0; i_el < cf_el.size(); i_el++ )
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
+	string sid = tblStrct[i_fld][1];
+	TCfg &u_cfg = *cfg.at(sid,true);
+	if(u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse())
 	{
-	    req = req + (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	    req = req + (next?" AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
 	    next = true;
 	}
     }
+
     req += ";";
-    try{ owner().sqlReq(req, NULL, true); }
-    catch( TError err )
+    try { owner().sqlReq(req, NULL, true); }
+    catch(TError err)
     {
-	if( (err.cod-100) == SQLITE_READONLY )
+	if((err.cod-100) == SQLITE_READONLY)
 	    throw TError(TSYS::DBReadOnly,nodePath().c_str(),_("Deletion is not permitted. Data base is read only."));
 	throw;
     }

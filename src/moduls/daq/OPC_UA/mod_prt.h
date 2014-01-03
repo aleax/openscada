@@ -110,7 +110,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	int reqData( int reqTp, XML_N &req );
+	uint32_t reqData( int reqTp, XML_N &req );
 
 	TProt &owner( );
 
@@ -135,7 +135,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 		&mName,
 		&mDescr,
 		&mURL;
-	int	&mSerType;
+	int64_t	&mSerType;
 	char	&mAEn;
 	string	mDB;
 };

@@ -74,7 +74,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	virtual void start( )	{ }
 	virtual void stop( )	{ }
-	virtual int writeTo( const string &sender, const string &data )	{ }
+	virtual int writeTo( const string &sender, const string &data )	{ return 0; }
 
 	TTipTransport &owner( );
 

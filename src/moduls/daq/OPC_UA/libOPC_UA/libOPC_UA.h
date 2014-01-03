@@ -633,8 +633,8 @@ class Server: public UA
 		ContPoint( ) : brDir(0), refPerN(100), nClassMask(0), resMask(0) { }
 		ContPoint( const string &i_brNode, const string &i_lstNode,
 			uint32_t i_brDir, uint32_t i_refPerN, const string &i_refTypeId, uint32_t i_nClassMask, uint32_t i_resMask ) :
-		    brNode(i_brNode), lstNode(i_lstNode), brDir(i_brDir), refPerN(i_refPerN),
-		    nClassMask(i_nClassMask), refTypeId(i_refTypeId), resMask(i_resMask) { }
+		    brDir(i_brDir), refPerN(i_refPerN), nClassMask(i_nClassMask), resMask(i_resMask), brNode(i_brNode), lstNode(i_lstNode),
+		    refTypeId(i_refTypeId) { }
 
 		bool empty( ) const	{ return brNode.empty(); }
 
@@ -777,7 +777,7 @@ class Server: public UA
 		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
 		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );
 
-		virtual int reqData( int reqTp, XML_N &req );
+		virtual uint32_t reqData( int reqTp, XML_N &req );
 
 	    protected:
 		//Methods

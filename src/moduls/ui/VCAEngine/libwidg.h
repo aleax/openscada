@@ -125,7 +125,7 @@ class LWidget : public Widget, public TConfig
 	int	calcPer( );
 	string	parentNm( )	{ return cfg("PARENT").getS(); }
 	string	proc( )		{ return cfg("PROC").getS(); }
-	int	timeStamp( )	{ return mTimeStamp; }
+	int64_t	timeStamp( )	{ return mTimeStamp; }
 
 	void setEnable( bool val );
 	void setIco( const string &iico )	{ cfg("ICO").setS(iico); }
@@ -168,7 +168,7 @@ class LWidget : public Widget, public TConfig
 
     private:
 	//Attributes
-	int	&m_proc_per,	//Widget period
+	int64_t	&m_proc_per,	//Widget period
 		&mTimeStamp;
 	string	mParentNmPrev;  //Previous parent name after successful enable
 };

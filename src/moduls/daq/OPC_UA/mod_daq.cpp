@@ -672,12 +672,10 @@ string TMdPrm::attrPrc( )
 		TFld::Type vtp = TFld::String;
 		switch(atoi(req.childGet(3)->attr("EncodingMask").c_str()) & 0x3F)
 		{
-		    case OpcUa_Boolean:
-			vtp = TFld::Boolean;	break;
-		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16: case OpcUa_Int32: case OpcUa_UInt32:
-			vtp = TFld::Integer;	break;
-		    case OpcUa_Int64: case OpcUa_UInt64: case OpcUa_Float: case OpcUa_Double:
-			vtp = TFld::Real;	break;
+		    case OpcUa_Boolean:								vtp = TFld::Boolean;	break;
+		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+		    case OpcUa_Int32: case OpcUa_UInt32: case OpcUa_Int64: case OpcUa_UInt64:	vtp = TFld::Integer;	break;
+		    case OpcUa_Float: case OpcUa_Double:					vtp = TFld::Real;	break;
 		}
 
 		//>> Browse name

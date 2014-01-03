@@ -270,7 +270,7 @@ double &TCfg::getRd( )
     return val.r;
 }
 
-int &TCfg::getId( )
+int64_t &TCfg::getId( )
 {
     if(type() != TVariant::Integer)	throw TError("Cfg",_("Element type is not int!"));
     return val.i;
@@ -360,7 +360,7 @@ void TCfg::setR( double val )
     }
 }
 
-void TCfg::setI( int val )
+void TCfg::setI( int64_t val )
 {
     switch(type())
     {
@@ -425,7 +425,7 @@ void TCfg::setR( double val, char RqFlg )
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
-void TCfg::setI( int val, char RqFlg )
+void TCfg::setI( int64_t val, char RqFlg )
 {
     setI(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }

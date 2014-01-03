@@ -160,7 +160,7 @@ class TMdContr: public TController
 	double	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestDtTm;			//Restore data maximum length time (hour)
-	int	&mPerOld,			//Acquisition task (seconds)
+	int64_t	&mPerOld,			//Acquisition task (seconds)
 		&mRestTm,			//Restore timeout in s
 		&mPrior;			//Process task priority
 

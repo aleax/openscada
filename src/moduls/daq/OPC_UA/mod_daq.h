@@ -163,7 +163,7 @@ class TMdContr: public TController, public Client
 		&mSecMessMode,	//Security policy mode
 		&mCert,		//Client certificate
 		&mPvKey;	//Client certificate's private key
-	int	&mPAttrLim;	//Parameter attributes number limit
+	int64_t	&mPAttrLim;	//Parameter attributes number limit
 	int64_t	mPer;
 
 	bool	prcSt,		//Process task active

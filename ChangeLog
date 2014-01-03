@@ -1,3 +1,15 @@
+2013-01-03 Roman
+- !!!!:SYS.*: Integer value type expanded to int64_t and generic field types "bool", "integer", "real", "string", "Object"
+    expanded by types "Int16", "Int32", "Int64", "Float", "Double".
+    "TSYS::i{bits}_LE()", "TSYS::i{bits}_BE()", "floatBE{rev}()", "doubleBErev()" functions is added for endians processing.
+- DB.SQLite: MTable::fieldDel() is adapted to remove fields with keys real miss into the DB's table.
+- DAQ.JavaLikeCalc: The virtual machine is adapted for integer 64-bits operations.
+- DAQ.OPC_UA: LGPL COPYING file is added to the library. Some adapting to main integer value type int64_t.
+- Special.LibSYS: Function IO::read() mostly finished and IO::write() implementing start.
+- !:UI.{VCAEngine,Vision}: Update "ID" value to validated and return it by control interface for allow next modifications
+    make from UI.Vision.
+
+
 2013-12-24 Roman
 - FIX:SYS: ChangeLog some fix
 - DB:AGLKS.St.db: Client's and Server's certificate of OPC UA is generated for all demands resolve.

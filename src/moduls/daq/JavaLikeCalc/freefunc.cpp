@@ -21,6 +21,7 @@
 
 #include <string.h>
 #include <limits.h>
+#include <stdint.h>
 #include <math.h>
 
 #include <tsys.h>
@@ -267,6 +268,9 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 	for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
 	    switch(mRegs[i_rg]->type())
 	    {
+		/*case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String:	//Further for constants saving
+		    if(mRegs[i_rg].lock()) reg[i_rg] = mRegs[i_rg];
+		    break;*/
 		case Reg::Var:
 		    reg[i_rg].setType(Reg::Var);
 		    reg[i_rg].val().io = mRegs[i_rg]->val().io;
@@ -275,7 +279,7 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 		    reg[i_rg].setType(Reg::PrmAttr);
 		    *reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
 		    break;
-		default:	break;
+		default: break;
 	    }
     }
 }
@@ -481,7 +485,7 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	case Reg::Int:
 	    prg += (uint8_t)Reg::MviI;
 	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg.append((char *)&rez->val().i_el,sizeof(int));
+	    prg.append((char *)&rez->val().i_el,sizeof(int64_t));
 	    break;
 	case Reg::Real:
 	    prg += (uint8_t)Reg::MviR;
@@ -632,13 +636,13 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		    switch(rez->vType(this))
 		    {
 			case Reg::Bool:
-			    *rez = (rez->val().b_el != EVAL_BOOL) ? (int)rez->val().b_el : EVAL_INT;
+			    *rez = (rez->val().b_el != EVAL_BOOL) ? (int64_t)rez->val().b_el : EVAL_INT;
 			    break;
 			case Reg::Real:
 			//    *rez = (int)rez->val().r_el;
 			    break;
 			case Reg::String:
-			    *rez = (*rez->val().s_el != EVAL_STR) ? atoi(rez->val().s_el->c_str()) : EVAL_INT;
+			    *rez = (*rez->val().s_el != EVAL_STR) ? strtoll(rez->val().s_el->c_str(),NULL,0) : EVAL_INT;
 			    break;
 			default: break;
 		    }
@@ -751,11 +755,11 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 		    case Reg::Sub:	*op1 = op1->val().r_el - op2->val().r_el;	break;
 		    case Reg::Mul:	*op1 = op1->val().r_el * op2->val().r_el;	break;
 		    case Reg::Div:	*op1 = op1->val().r_el / op2->val().r_el;	break;
-		    case Reg::BitOr:	*op1 = (int)op1->val().r_el | (int)op2->val().r_el;	break;
-		    case Reg::BitAnd:	*op1 = (int)op1->val().r_el & (int)op2->val().r_el;	break;
-		    case Reg::BitXor:	*op1 = (int)op1->val().i_el ^ (int)op2->val().i_el;	break;
-		    case Reg::BitShLeft: *op1 = (int)op1->val().i_el << (int)op2->val().i_el;	break;
-		    case Reg::BitShRight: *op1 = (int)op1->val().i_el >> (int)op2->val().i_el;	break;
+		    case Reg::BitOr:	*op1 = (int64_t)op1->val().r_el | (int64_t)op2->val().r_el;	break;
+		    case Reg::BitAnd:	*op1 = (int64_t)op1->val().r_el & (int64_t)op2->val().r_el;	break;
+		    case Reg::BitXor:	*op1 = (int64_t)op1->val().i_el ^ (int64_t)op2->val().i_el;	break;
+		    case Reg::BitShLeft: *op1 = (int64_t)op1->val().i_el << (int64_t)op2->val().i_el;	break;
+		    case Reg::BitShRight: *op1 = (int64_t)op1->val().i_el >> (int64_t)op2->val().i_el;	break;
 		    case Reg::LOr:	*op1 = op1->val().r_el || op2->val().r_el;	break;
 		    case Reg::LAnd:	*op1 = op1->val().r_el && op2->val().r_el;	break;
 		    case Reg::LT:	*op1 = op1->val().r_el < op2->val().r_el;	break;
@@ -1199,18 +1203,18 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 	case TVariant::Object:	return vl.getO().at().propGet(prop);
 	case TVariant::Boolean:	return TVariant();
 	case TVariant::Integer:
-	    if(prop == "MAX_VALUE")	return INT_MAX;
-	    if(prop == "MIN_VALUE")	return INT_MIN;
-	    if(prop == "NaN")		return EVAL_INT;
+	    if(prop == "MAX_VALUE")	return (int64_t) 9223372036854775807LL;
+	    if(prop == "MIN_VALUE")	return (int64_t)-9223372036854775807LL;
+	    if(prop == "NaN")		return (int64_t)EVAL_INT;
 	    return TVariant();
 	case TVariant::Real:
-	    if(prop == "MAX_VALUE")	return 3.4e300;
+	    if(prop == "MAX_VALUE")	return  3.4e300;
 	    if(prop == "MIN_VALUE")	return -3.4e300;
 	    if(prop == "NaN")		return EVAL_REAL;
 	    return TVariant();
 	case TVariant::String:
 	{
-	    if(prop == "length")	return (int)vl.getS().size();
+	    if(prop == "length")	return (int64_t)vl.getS().size();
 	    int sid = atoi(prop.c_str());
 	    if(sid < 0 || sid >= (int)vl.getS().size()) return "";
 	    return vl.getS().substr(sid,1);
@@ -1310,8 +1314,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "charCodeAt" && prms.size())
 		{
 		    int n = prms[0].getI();
-		    if(n < 0 || n >= (int)vl.getS().size())	return EVAL_INT;
-		    return (int)(unsigned char)vl.getS()[n];
+		    if(n < 0 || n >= (int)vl.getS().size())	return (int64_t)EVAL_INT;
+		    return (int64_t)(unsigned char)vl.getS()[n];
 		}
 		// string concat(string val1, string val2, ...) - returns a new string formed by joining the values <val1> etc
 		//  val1, val2 - appended values
@@ -1489,7 +1493,10 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 	return false;
 	//throw TError(nodePath().c_str(),_("Unknown type '%d' for property '%s'."),vl.type(),prop.c_str());
     }
-    catch(TError err){ mess_debug(nodePath().c_str(),"%s",err.mess.c_str()); }
+    catch(TError err)
+    {
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),"%s",err.mess.c_str());
+    }
     return false;
 }
 
@@ -1559,7 +1566,7 @@ string Func::getValS( TValFunc *io, RegW &rg )
     return EVAL_STR;
 }
 
-int Func::getValI( TValFunc *io, RegW &rg )
+int64_t Func::getValI( TValFunc *io, RegW &rg )
 {
     if(rg.propEmpty())
 	switch(rg.type())
@@ -1692,7 +1699,7 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
     else setVal(io, rg, val);
 }
 
-void Func::setValI( TValFunc *io, RegW &rg, int val )
+void Func::setValI( TValFunc *io, RegW &rg, int64_t val )
 {
     if(rg.propEmpty())
 	switch(rg.type())
@@ -1775,17 +1782,17 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; char val; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load bool %d to reg %d.", ptr->val, ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load bool %d to reg %d.", ptr->val, ptr->reg);
 #endif
 		reg[ptr->reg] = ptr->val;
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::MviI:
 	    {
-		struct SCode { uint8_t cod; uint16_t reg; int val; } __attribute__((packed));
+		struct SCode { uint8_t cod; uint16_t reg; int64_t val; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load integer %d to reg %d.", ptr->val, ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load integer %d to reg %d.", ptr->val, ptr->reg);
 #endif
 		reg[ptr->reg] = ptr->val;
 		cprg += sizeof(SCode); continue;
@@ -1795,7 +1802,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; double val; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load real %f to reg %d.", ptr->val, ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load real %f to reg %d.", ptr->val, ptr->reg);
 #endif
 		reg[ptr->reg] = ptr->val;
 		cprg += sizeof(SCode); continue;
@@ -1805,7 +1812,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load string %s(%d) to reg %d.", string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(), ptr->len, ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load string %s(%d) to reg %d.", string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(), ptr->len, ptr->reg);
 #endif
 		reg[ptr->reg] = string((const char*)(cprg+sizeof(SCode)),ptr->len);
 		cprg += sizeof(SCode)+ptr->len; continue;
@@ -1815,7 +1822,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load object to reg %d.", ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load object to reg %d.", ptr->reg);
 #endif
 		reg[ptr->reg] = AutoHD<TVarObj>(new TVarObj());
 		cprg += sizeof(SCode); continue;
@@ -1825,7 +1832,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; uint8_t numb; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load array elements %d to reg %d.", ptr->numb, ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load array elements %d to reg %d.", ptr->numb, ptr->reg);
 #endif
 		TArrayObj *ar = new TArrayObj();
 		//>>> Fill array by empty elements number
@@ -1852,7 +1859,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t expr; uint16_t arg; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load RegExpr to reg %d = (%d,%d).", ptr->rez, ptr->expr, ptr->arg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load RegExpr to reg %d = (%d,%d).", ptr->rez, ptr->expr, ptr->arg);
 #endif
 		reg[ptr->rez] = AutoHD<TVarObj>(new TRegExp(getValS(val,reg[ptr->expr]), getValS(val,reg[ptr->arg])));
 		cprg += sizeof(SCode); continue;
@@ -1862,7 +1869,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load system object %s(%d) to reg %d.", string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(), ptr->len, ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load system object %s(%d) to reg %d.", string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str(), ptr->len, ptr->reg);
 #endif
 		reg[ptr->reg] = AutoHD<TVarObj>(new TCntrNodeObj(SYS->nodeAt(string((const char*)(cprg+sizeof(SCode)),ptr->len),0,'.'),val->user()));
 		cprg += sizeof(SCode)+ptr->len; continue;
@@ -1872,7 +1879,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Load the function arguments object to reg %d.", ptr->reg);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Load the function arguments object to reg %d.", ptr->reg);
 #endif
 		reg[ptr->reg] = AutoHD<TVarObj>(new TFuncArgsObj(*val));
 		cprg += sizeof(SCode); continue;
@@ -1883,7 +1890,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t toR; uint16_t fromR; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Assign from %d to %d.", ptr->fromR, ptr->toR);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Assign from %d to %d.", ptr->fromR, ptr->toR);
 #endif
 		if(!reg[ptr->toR].propSize())
 		    switch(reg[ptr->fromR].vType(this))
@@ -1903,7 +1910,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t toR; uint16_t fromR; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Move from %d to %d.", ptr->fromR, ptr->toR);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Move from %d to %d.", ptr->fromR, ptr->toR);
 #endif
 		switch(reg[ptr->fromR].vType(this))
 		{
@@ -1922,7 +1929,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; uint8_t len; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Set object's %d properties to string len %d(%s).", ptr->reg, ptr->len, string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str());
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Set object's %d properties to string len %d(%s).", ptr->reg, ptr->len, string((const char*)(cprg+sizeof(SCode)),ptr->len).c_str());
 #endif
 		reg[ptr->reg].propAdd(string((const char*)(cprg+sizeof(SCode)),ptr->len));
 		cprg += sizeof(SCode) + ptr->len; continue;
@@ -1932,7 +1939,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t reg; uint16_t val; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Set object's %d properties to register's %d value.", ptr->reg, ptr->val);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Set object's %d properties to register's %d value.", ptr->reg, ptr->val);
 #endif
 		reg[ptr->reg].propAdd(getValS(val,reg[ptr->val]));
 		cprg += sizeof(SCode);  continue;
@@ -1943,7 +1950,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d + %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d + %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		if(!reg[ptr->a1].propSize())
 		    switch(reg[ptr->a1].vType(this))
@@ -1977,7 +1984,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d - %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d - %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) - getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -1987,7 +1994,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d * %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d * %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) * getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -1997,7 +2004,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d / %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d / %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) / getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2007,7 +2014,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d %% %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d %% %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) % getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2017,7 +2024,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d | %d.\n", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d | %d.\n", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) | getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2027,7 +2034,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d & %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d & %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) & getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2037,7 +2044,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d ^ %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d ^ %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) ^ getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2047,7 +2054,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d << %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d << %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) << getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2057,7 +2064,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d >> %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d >> %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) >> getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2067,7 +2074,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d || %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d || %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) || (getValB(val,reg[ptr->a2])==1);
 		cprg += sizeof(SCode); continue;
@@ -2077,7 +2084,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; uint16_t end; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d c|| %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d c|| %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		if(getValB(val,reg[ptr->a1]) != true)
 		{
@@ -2092,7 +2099,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d && %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d && %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = (getValB(val,reg[ptr->a1])==1) && (getValB(val,reg[ptr->a2])==1);
 		cprg += sizeof(SCode); continue;
@@ -2102,7 +2109,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; uint16_t end; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d c&& %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d c&& %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		if(getValB(val,reg[ptr->a1]) == true)
 		{
@@ -2117,7 +2124,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d < %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d < %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) < getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2127,7 +2134,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d > %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d > %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) > getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2137,7 +2144,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d <= %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d <= %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) <= getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2147,7 +2154,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d >= %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d >= %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a1]) >= getValR(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2157,7 +2164,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d == %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d == %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		if(!reg[ptr->a1].propSize())
 		    switch(reg[ptr->a1].vType(this))
@@ -2197,7 +2204,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = %d != %d.", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d != %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		if(!reg[ptr->a1].propSize())
 		    switch(reg[ptr->a1].vType(this))
@@ -2236,7 +2243,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = !%d.", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = !%d.", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = !getValB(val,reg[ptr->a]);
 		cprg += sizeof(SCode); continue;
@@ -2246,7 +2253,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = ~%d.", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = ~%d.", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = ~getValI(val,reg[ptr->a]);
 		cprg += sizeof(SCode); continue;
@@ -2256,7 +2263,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: %d = -%d.", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = -%d.", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = -getValR(val,reg[ptr->a]);
 		cprg += sizeof(SCode); continue;
@@ -2267,7 +2274,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t cond; uint16_t toFalse; uint16_t end; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Condition %d: %d|%d|%d.", ptr->cond, sizeof(SCode), ptr->toFalse, ptr->end);
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "CODE: Condition %d: %d|%d|%d.", ptr->cond, sizeof(SCode), ptr->toFalse, ptr->end);
 #endif
 		if(getValB(val,reg[ptr->cond]))	exec(val, cprg+sizeof(SCode), dt);
 		else if(ptr->toFalse != ptr->end) exec(val, cprg+ptr->toFalse, dt);
@@ -2279,7 +2287,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t cond; uint16_t body; uint16_t after; uint16_t end; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Cycle %d: %d|%d|%d|%d.", ptr->cond, sizeof(SCode), ptr->body, ptr->after, ptr->end);
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "CODE: Cycle %d: %d|%d|%d|%d.", ptr->cond, sizeof(SCode), ptr->body, ptr->after, ptr->end);
 #endif
 		while(!(dt.flg&0x01))
 		{
@@ -2301,7 +2310,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t obj; uint16_t body; uint16_t val; uint16_t end; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: CycleObj %d: %d|%d|%d.", ptr->obj, ptr->body, ptr->val, ptr->end);
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "CODE: CycleObj %d: %d|%d|%d.", ptr->obj, ptr->body, ptr->val, ptr->end);
 #endif
 		TVariant obj = getVal(val,reg[ptr->obj]);
 		if(obj.type() == TVariant::Object)
@@ -2329,7 +2339,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=sin(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=sin(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = sin(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2339,7 +2349,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=cos(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=cos(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = cos(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2349,7 +2359,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=tan(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=tan(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = tan(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2359,7 +2369,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=sinh(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=sinh(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = sinh(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2369,7 +2379,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=cosh(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=cosh(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = cosh(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2379,7 +2389,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=tanh(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=tanh(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = tanh(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2389,7 +2399,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=asin(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=asin(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = asin(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2399,7 +2409,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=acos(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=acos(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = acos(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2409,7 +2419,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=atan(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=atan(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = atan(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2419,7 +2429,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=rand(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=rand(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = getValR(val,reg[ptr->a])*(double)rand()/(double)RAND_MAX;
 		cprg += sizeof(SCode); continue;
@@ -2429,7 +2439,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=lg(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=lg(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = log10(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2439,7 +2449,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=ln(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=ln(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = log(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2449,7 +2459,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=exp(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=exp(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = exp(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2459,7 +2469,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=pow(%d,%d).", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=pow(%d,%d).", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = pow(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
 		cprg += sizeof(SCode); continue;
@@ -2469,7 +2479,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=min(%d,%d).", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=min(%d,%d).", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = vmin(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
 		cprg += sizeof(SCode); continue;
@@ -2479,7 +2489,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=max(%d,%d).", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=max(%d,%d).", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = vmax(getValR(val,reg[ptr->a1]),getValR(val,reg[ptr->a2]));
 		cprg += sizeof(SCode); continue;
@@ -2489,7 +2499,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=sqrt(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=sqrt(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = sqrt(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2499,7 +2509,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=abs(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=abs(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = fabs(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2509,7 +2519,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=sign(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=sign(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = (getValR(val,reg[ptr->a])>=0)?1:-1;
 		cprg += sizeof(SCode); continue;
@@ -2519,7 +2529,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=ceil(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=ceil(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = ceil(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2529,7 +2539,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=floor(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=floor(%d).", ptr->rez, ptr->a);
 #endif
 		reg[ptr->rez] = floor(getValR(val,reg[ptr->a]));
 		cprg += sizeof(SCode); continue;
@@ -2539,7 +2549,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Function %d=typeof(%d).", ptr->rez, ptr->a);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=typeof(%d).", ptr->rez, ptr->a);
 #endif
 		string rez = "undefined";
 		TVariant vl = getVal(val, reg[ptr->a]);
@@ -2568,7 +2578,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		    val->ctxSet(ptr->f,vfnc);
 		}
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Call function/procedure %d = %s(%d).", ptr->rez, vfnc->func()->id().c_str(), ptr->n);
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "CODE: Call function/procedure %d = %s(%d).", ptr->rez, vfnc->func()->id().c_str(), ptr->n);
 #endif
 		//>>> Get return position
 		int r_pos, i_p, p_p;
@@ -2625,7 +2636,8 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t obj; uint8_t n; uint16_t rez; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		mess_debug(nodePath().c_str(), "CODE: Call object's function %d = %d(%d).", ptr->rez, ptr->obj, ptr->n);
+		if(mess_lev() == TMess::Debug)
+		    mess_debug(nodePath().c_str(), "CODE: Call object's function %d = %d(%d).", ptr->rez, ptr->obj, ptr->n);
 #endif
 		if(reg[ptr->obj].propEmpty())
 		    throw TError(nodePath().c_str(),_("Call object's function for no object or function name is empty."));

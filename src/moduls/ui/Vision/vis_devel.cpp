@@ -998,23 +998,22 @@ void VisDevelop::itDBSave( )
 	if(mStModify->text() != "*") return;
 	own_wdg = "/";
     }
-    if( !own_wdg.empty() )
+    if(!own_wdg.empty())
     {
 	//> Request to confirm
-	InputDlg dlg(this,actDBSave->icon(),
+	InputDlg dlg(this, actDBSave->icon(),
 		(own_wdg == "/" ? QString(_("Are you sure of saving all modifications to DB?")) :
 		QString(_("Are you sure of saving visual items '%1' to DB?")).arg(QString(own_wdg.c_str()).replace(";","; "))),
-		_("Save visual item's data to DB"),false,false);
-	if( dlg.exec() == QDialog::Accepted )
+		_("Save visual item's data to DB"), false, false);
+	if(dlg.exec() == QDialog::Accepted)
 	{
 	    string cur_wdg;
-	    for( int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
+	    for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
 	    {
 		//>> Send load request
 		XMLNode req("save");
-		req.setAttr("path",cur_wdg+"/%2fobj");
-		if( cntrIfCmd(req) )
-		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+		req.setAttr("path", cur_wdg+"/%2fobj");
+		if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    }
 	}
     }
@@ -1023,7 +1022,7 @@ void VisDevelop::itDBSave( )
 
 void VisDevelop::prjRun( )
 {
-    string own_wdg = TSYS::strSepParse(work_wdg,0,';');
+    string own_wdg = TSYS::strSepParse(work_wdg, 0, ';');
 
     VisRun *sess = new VisRun(own_wdg, user(), password(), VCAStation());
     sess->show();
@@ -1033,50 +1032,40 @@ void VisDevelop::prjRun( )
 
 void VisDevelop::prjNew( )
 {
-    InputDlg dlg(this,actPrjNew->icon(),
-	    _("Enter new project's identifier and name."),_("New project"),true,true);
+    InputDlg dlg(this, actPrjNew->icon(), _("Enter new project's identifier and name."), _("New project"), true, true);
     dlg.setIdLen(30);
-    if( dlg.exec() == QDialog::Accepted )
+    if(dlg.exec() == QDialog::Accepted)
     {
 	XMLNode req("add");
-	req.setAttr("path","/%2fprm%2fcfg%2fprj")->
-	    setAttr("id",dlg.id().toAscii().data())->
-	    setText(dlg.name().toAscii().data());
-	if( cntrIfCmd(req) )
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	req.setAttr("path", "/%2fprm%2fcfg%2fprj")->setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
+	    string nId = req.attr("id");
 	    //>> Set enable for item container
-	    req.clear()->setName("set")->
-			 setAttr("path",string("/prj_")+dlg.id().toAscii().data()+"/%2fobj%2fst%2fen")->
-			 setText("1");
+	    req.clear()->setName("set")->setAttr("path", "/prj_"+nId+"/%2fobj%2fst%2fen")->setText("1");
 	    cntrIfCmd(req);
-	    emit modifiedItem(string("prj_")+dlg.id().toAscii().data());
+	    emit modifiedItem("prj_"+nId);
 	}
     }
 }
 
 void VisDevelop::libNew( )
 {
-    InputDlg dlg(this,actPrjNew->icon(),
-	    _("Enter new widget's library identifier and name."),_("New widget's library"),true,true);
+    InputDlg dlg(this, actPrjNew->icon(), _("Enter new widget's library identifier and name."), _("New widget's library"), true, true);
     dlg.setIdLen(30);
-    if( dlg.exec() == QDialog::Accepted )
+    if(dlg.exec() == QDialog::Accepted)
     {
 	XMLNode req("add");
-	req.setAttr("path","/%2fprm%2fcfg%2fwlb")->
-	    setAttr("id",dlg.id().toAscii().data())->
-	    setText(dlg.name().toAscii().data());
-	if( cntrIfCmd(req) )
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id",dlg.id().toStdString())->setText(dlg.name().toStdString());
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
+	    string nId = req.attr("id");
 	    //>> Set enable for item container
-	    req.clear()->setName("set")->
-			 setAttr("path",string("/wlb_")+dlg.id().toAscii().data()+"/%2fobj%2fst%2fen")->
-			 setText("1");
+	    req.clear()->setName("set")->setAttr("path", "/wlb_"+nId+"/%2fobj%2fst%2fen")->setText("1");
 	    cntrIfCmd(req);
-	    emit modifiedItem(string("wlb_")+dlg.id().toAscii().data());
+	    emit modifiedItem("wlb_"+nId);
 	}
     }
 }
@@ -1086,7 +1075,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     XMLNode req("get");
     //QAction *cact = (QAction *)sender();
     string own_wdg = iOwn.empty() ? TSYS::strSepParse(work_wdg,0,';') : iOwn;
-    string par_nm = cact->objectName().toAscii().data();
+    string par_nm = cact->objectName().toStdString();
     QMdiSubWindow *actSubW = work_space->activeSubWindow();
 
     if(actSubW && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
@@ -1096,20 +1085,19 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     //> Count level
     int p_el_cnt = 0;
     for(int i_off = 0; TSYS::pathLev(own_wdg,0,true,&i_off).size(); p_el_cnt++) ;
-    string sid1 = TSYS::pathLev(own_wdg,0);
+    string sid1 = TSYS::pathLev(own_wdg, 0);
 
     //> Make request id and name dialog
-    InputDlg dlg(this, cact->icon(),
-	    _("Enter new widget's/page's identifier and name."),_("Create widget/page"),true,true);
+    InputDlg dlg(this, cact->icon(), _("Enter new widget's/page's identifier and name."), _("Create widget/page"), true, true);
     dlg.setIdLen(30);
 
     if(p_el_cnt > 1 && iWid.empty())
     {
 	//>> New include item id generator
 	//>>> Present include widgets list request
-	if(sid1.substr(0,4) == "prj_" && pnt.isNull()) req.setAttr("path",own_wdg+"/%2fpage%2fpage");
-	else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg");
-	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	if(!sid1.compare(0,4,"prj_") && pnt.isNull()) req.setAttr("path", own_wdg+"/%2fpage%2fpage");
+	else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg");
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
 	    //>>> Get parent widget id
@@ -1119,73 +1107,73 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	    while(i_w < req.childSize())
 		if(req.childGet(i_w)->attr("id") == base_nm+TSYS::int2str(i_c))	{ i_w = 0; i_c++; }
 		else i_w++;
-	    dlg.setId((base_nm+TSYS::int2str(i_c)).c_str());
+	    dlg.setId((base_nm+i2s(i_c)).c_str());
 	}
     }
 
     //>> Execute dialog
     if(!iWid.empty() || dlg.exec() == QDialog::Accepted)
     {
-	string w_id = iWid.empty() ? dlg.id().toAscii().data() : iWid;
-	string w_nm = iWid.empty() ? dlg.name().toAscii().data() : iWnm;
+	string w_id = iWid.empty() ? dlg.id().toStdString() : iWid;
+	string w_nm = iWid.empty() ? dlg.name().toStdString() : iWnm;
 
 	//>> Check for widget's library
 	req.clear()->setName("add");
 	string new_wdg;
-	if(sid1.substr(0,4) == "wlb_")
+	if(!sid1.compare(0,4,"wlb_"))
 	{
-	    if(p_el_cnt == 1)
-		req.setAttr("path",own_wdg+"/%2fwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-	    else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-	    new_wdg = own_wdg+"/wdg_"+w_id;
+	    if(p_el_cnt == 1) req.setAttr("path", own_wdg+"/%2fwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+	    else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+	    new_wdg = own_wdg + "/wdg_";
 	}
-	else if(sid1.substr(0,4) == "prj_")
+	else if(!sid1.compare(0,4,"prj_"))
 	{
 	    if(pnt.isNull())
 	    {
-		req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
-		new_wdg = own_wdg+"/pg_"+w_id;
+		req.setAttr("path", own_wdg+"/%2fpage%2fpage")->setAttr("id", w_id)->setText(w_nm);
+		new_wdg = own_wdg + "/pg_";
 	    }
 	    else
 	    {
-		req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-		new_wdg = own_wdg+"/wdg_"+w_id;
+		req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+		new_wdg = own_wdg + "/wdg_";
 	    }
 	}
 
 	//>> Create widget
 	int err = cntrIfCmd(req);
-	if(err) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
+	    new_wdg += req.attr("id");
 	    //>>> Set some parameters
 	    req.clear()->setName("set");
 	    if(!par_nm.empty())
 	    {
 		//>>>> Set parent widget name and enable item
-		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
+		req.setAttr("path", new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
 		err = cntrIfCmd(req);
-		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
+		req.setAttr("path", new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
 		err = cntrIfCmd(req);
 	    }
 	    //>>>> Set geometry for include widget
 	    if(!err && !pnt.isNull())
 	    {
-		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::real2str(pnt.x()));
+		req.setAttr("path", new_wdg+"/%2fattr%2fgeomX")->setText(r2s(pnt.x()));
 		err = cntrIfCmd(req);
-		req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::real2str(pnt.y()));
+		req.setAttr("path", new_wdg+"/%2fattr%2fgeomY")->setText(r2s(pnt.y()));
 		err = cntrIfCmd(req);
 
 		//> Send change request to opened for edit widget
 		if(!chNoWr)
 		{
             	    DevelWdgView *dw = work_space->findChild<DevelWdgView*>(own_wdg.c_str());
-            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path",new_wdg)->setAttr("id",w_id)->setAttr("name",w_nm)->
-            		setAttr("parent",par_nm)->setAttr("x",TSYS::real2str(pnt.x()))->setAttr("y",TSYS::real2str(pnt.y())));
+            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path", new_wdg)->setAttr("id", w_id)->setAttr("name", w_nm)->
+            		setAttr("parent", par_nm)->setAttr("x",r2s(pnt.x()))->setAttr("y",r2s(pnt.y())));
             	}
 		work_space->setActiveSubWindow(actSubW);	//For set focus to target subwindow and the new widget select
 	    }
-	    if(err) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    emit modifiedItem(new_wdg);
 	}
     }
@@ -1227,33 +1215,26 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	//Check for widget's library
 	if(sid1.empty())
 	{
-	    if(it_id.substr(0,4) == "wlb_")
-		req.setAttr("path","/%2fprm%2fcfg%2fwlb")->setAttr("id",it_id.substr(4));
-	    else if(it_id.substr(0,4) == "prj_")
-		req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
+	    if(!it_id.compare(0,4,"wlb_")) req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id", it_id.substr(4));
+	    else if(!it_id.compare(0,4,"prj_")) req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
 	}
-	else if(sid1.substr(0,4) == "wlb_")
+	else if(!sid1.compare(0,4,"wlb_"))
 	{
-	    if(p_el_cnt <= 2)
-		req.setAttr("path",it_own+"/%2fwdg%2fwdg")->setAttr("id",it_id.substr(4));
-	    else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
+	    if(p_el_cnt <= 2) req.setAttr("path", it_own+"/%2fwdg%2fwdg")->setAttr("id", it_id.substr(4));
+	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
-	else if(sid1.substr(0,4) == "prj_")
+	else if(!sid1.compare(0,4,"prj_"))
 	{
-	    if(p_el_cnt <= 2)
-		req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
-	    else if(it_id.substr(0,3) == "pg_")
-		req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
-	    else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
+	    if(p_el_cnt <= 2) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
+	    else if(!it_id.compare(0,3,"pg_")) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
+	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
 
 	//> Save removed widget context for change record
-	if(!chNoWr && (dw=work_space->findChild<DevelWdgView*>(del_wdg.c_str())))
-	    dw->chLoadCtx(chCtx, "parent;");
+	if(!chNoWr && (dw=work_space->findChild<DevelWdgView*>(del_wdg.c_str()))) dw->chLoadCtx(chCtx, "parent;");
 
 	//> Send remove context
-	if(cntrIfCmd(req))
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	if(cntrIfCmd(req))	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else if(p_el_cnt < 3)	emit modifiedItem(del_wdg);
 	else
 	{

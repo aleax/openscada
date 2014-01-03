@@ -1044,6 +1044,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	{
 	    string sid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    wdgAdd(sid.c_str(),opt->text(),"");
+	    opt->setAttr("id", sid);
 	    //> GeomZ set to include widgets number
 	    if(wdgPresent(sid))
 	    {
@@ -1871,7 +1872,7 @@ string Attr::getS( bool sys )
     return EVAL_STR;
 }
 
-int Attr::getI( bool sys )
+int64_t Attr::getI( bool sys )
 {
     if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getI();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getI(true),false).getI();
@@ -1988,7 +1989,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
     }
 }
 
-void Attr::setI( int val, bool strongPrev, bool sys )
+void Attr::setI( int64_t val, bool strongPrev, bool sys )
 {
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())

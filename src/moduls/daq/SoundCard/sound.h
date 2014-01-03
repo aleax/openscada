@@ -51,8 +51,8 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	int iCnl( )			{ return mCnl; }
-	void setICnl( int val )		{ mCnl = val; modif(); }
+	int64_t iCnl( )			{ return mCnl; }
+	void setICnl( int64_t val )	{ mCnl = val; modif(); }
 
 	void load_( );
 	void enable( );
@@ -70,7 +70,7 @@ class TMdPrm : public TParamContr
 
     private:
 	//Attributes
-	int	&mCnl;
+	int64_t	&mCnl;
 };
 
 //*************************************************
@@ -120,7 +120,7 @@ class TMdContr: public TController
     private:
 	//Attributes
 	TElem	pEl;					//Work atribute elements
-	int	&mSmplRate, &mSmplType, &mPrior;
+	int64_t	&mSmplRate, &mSmplType, &mPrior;
 	bool	prcSt, endrunReq, firstCall;
 	int	numChan, smplSize;
 	vector< AutoHD<TMdPrm> > pHd;			// Parameter's process list

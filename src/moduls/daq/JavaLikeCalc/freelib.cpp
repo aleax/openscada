@@ -222,7 +222,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
         vector<string> tls;
         list(tls);
         time_t maxTm = 0;
-        for(int i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+        for(size_t i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
         opt->setText(TSYS::int2str(maxTm));
     }
     else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());

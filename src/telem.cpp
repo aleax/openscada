@@ -445,7 +445,7 @@ string TFld::selVl2Nm( const string &val )
     throw TError("Field",_("Select error! Val: '%s'."),val.c_str());
 }
 
-string TFld::selVl2Nm( int val )
+string TFld::selVl2Nm( int64_t val )
 {
     if( flg()&TFld::Selected && type() == TFld::Integer )
     {

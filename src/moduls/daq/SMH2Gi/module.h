@@ -217,7 +217,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		// Resource for enable params
-	int	&m_prior,	// Process task priority
+	int64_t	&m_prior,	// Process task priority
                 &connTry;	// Connections try
 	int64_t	mPer;
 

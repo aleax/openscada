@@ -150,7 +150,7 @@ class Contr: public TController, public TValFunc
 	bool	prc_st,		// Process task active
 		call_st,	// Calc now stat
 		endrun_req;	// Request to stop of the Process task
-	int	&mPrior,	// Calc task priority
+	int64_t	&mPrior,	// Calc task priority
 		&mIter;		// iteration number
 
 	int	id_freq, id_start, id_stop;

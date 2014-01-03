@@ -134,7 +134,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		// Resource for enable params
-	int	&m_prior,	// Process task priority
+	int64_t	&m_prior,	// Process task priority
 		&m_pattr_lim,	// Parameter's attributes limit
 		&m_retr,	// Request retries
 		&m_tm;		// Request timeout

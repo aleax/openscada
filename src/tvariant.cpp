@@ -36,40 +36,23 @@ using namespace OSCADA;
 //*************************************************
 //* TVariant                                      *
 //*************************************************
-TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)
-{
+TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)			{ }
 
-}
+TVariant::TVariant( bool ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setB(ivl); }
 
-TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setB(ivl);
-}
+TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setB(ivl); }
 
-TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setI(ivl);
-}
+TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setI(ivl); }
 
-TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setR(ivl);
-}
+TVariant::TVariant( int64_t ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setI(ivl); }
 
-TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setS(ivl);
-}
+TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)		{ setR(ivl); }
 
-TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setS(ivl);
-}
+TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setS(ivl); }
 
-TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setO(ivl);
-}
+TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setS(ivl); }
+
+TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false){ setO(ivl); }
 
 TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)
 {
@@ -182,7 +165,7 @@ char TVariant::getB( ) const
     return EVAL_BOOL;
 }
 
-int TVariant::getI( ) const
+int64_t TVariant::getI( ) const
 {
     switch(type())
     {
@@ -246,7 +229,7 @@ void TVariant::setB( char ivl )
     }
 }
 
-void TVariant::setI( int ivl )
+void TVariant::setI( int64_t ivl )
 {
     if(type() != Integer && !mFixedTp) setType(Integer);
     switch(type())

@@ -238,7 +238,7 @@ XMLNode* XMLNode::setAttr( const string &name, const string &val )
     return this;
 }
 
-XMLNode* XMLNode::clear()
+XMLNode* XMLNode::clear( )
 {
     attrClear();
     mText.clear();

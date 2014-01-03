@@ -44,7 +44,8 @@ namespace OSCADA
 //*************************************************
 //* TValBuf                                       *
 //*   Value buffer object. Contain a massif of    *
-//* values types: bool, decimal, real or string.  *
+//* values types: bool, integer (16, 32, 64),     *
+//*               real (float, double) or string. *
 //*************************************************
 class TValBuf
 {
@@ -58,7 +59,7 @@ class TValBuf
 
 	void clear( );
 
-	TFld::Type valType( )	{ return mValTp; }
+	TFld::Type valType( bool full = false )	{ return full ? mValTp : (TFld::Type)(mValTp&TFld::GenMask); }
 	bool hardGrid( )	{ return mHrdGrd; }
 	bool highResTm( )	{ return mHgResTm; }
 	int size( )		{ return mSize; }
@@ -82,7 +83,7 @@ class TValBuf
 	TVariant get( int64_t *tm = NULL, bool up_ord = false );
 	virtual string getS( int64_t *tm = NULL, bool up_ord = false );
 	virtual double getR( int64_t *tm = NULL, bool up_ord = false );
-	virtual int    getI( int64_t *tm = NULL, bool up_ord = false );
+	virtual int64_t getI( int64_t *tm = NULL, bool up_ord = false );
 	virtual char   getB( int64_t *tm = NULL, bool up_ord = false );
 
 	//> Set value
@@ -90,7 +91,7 @@ class TValBuf
 	void set( const TVariant &value, int64_t tm = 0 );
 	virtual void setS( const string &value, int64_t tm = 0 );
 	virtual void setR( double value, int64_t tm = 0 );
-	virtual void setI( int value, int64_t tm = 0 );
+	virtual void setI( int64_t value, int64_t tm = 0 );
 	virtual void setB( char value, int64_t tm = 0 );
 
 	void makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool hg_res );	//Create new or change buffer mode (all data into buffer will lost)
@@ -270,7 +271,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 
 	char	&mStart;	//Starting flag
 	//> Buffer params
-	int	&mVType;	//Value type (int, real, bool, string)
+	int64_t	&mVType;	//Value type (int, real, bool, string)
 	char	&mBHGrd,	//Buffer use hard time griding
 		&mBHRes;	//Buffer use high time resolution
 	//> Mode params
@@ -379,7 +380,7 @@ class TVArchEl
 
     public:
 	//Public methods
-	TVArchEl( TVArchive &iachive, TVArchivator &iarchivator );
+	TVArchEl( TVArchive &iarchive, TVArchivator &iarchivator );
 	virtual ~TVArchEl( );
 	virtual void fullErase( )	{ }
 

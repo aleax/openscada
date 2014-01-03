@@ -76,7 +76,7 @@ TValBuf::~TValBuf( )
 
 TValBuf &TValBuf::operator=( TValBuf &src )
 {
-    makeBuf( src.mValTp, src.mSize, src.mPer, src.mHrdGrd, src.mHgResTm );
+    makeBuf(src.mValTp, src.mSize, src.mPer, src.mHrdGrd, src.mHgResTm);
 
     switch(mValTp)
     {
@@ -144,22 +144,22 @@ bool TValBuf::vOK( int64_t ibeg, int64_t iend )
     return true;
 }
 
-void TValBuf::setValType( TFld::Type vl )	{ makeBuf(vl, mSize, mPer, mHrdGrd, mHgResTm ); }
+void TValBuf::setValType( TFld::Type vl )	{ makeBuf(vl, mSize, mPer, mHrdGrd, mHgResTm); }
 
-void TValBuf::setHardGrid( bool vl )		{ makeBuf( mValTp, mSize, mPer, vl, mHgResTm ); }
+void TValBuf::setHardGrid( bool vl )		{ makeBuf(mValTp, mSize, mPer, vl, mHgResTm); }
 
-void TValBuf::setHighResTm( bool vl )		{ makeBuf( mValTp, mSize, mPer, mHrdGrd, vl ); }
+void TValBuf::setHighResTm( bool vl )		{ makeBuf(mValTp, mSize, mPer, mHrdGrd, vl); }
 
-void TValBuf::setSize( int vl )			{ makeBuf( mValTp, vl, mPer, mHrdGrd, mHgResTm ); }
+void TValBuf::setSize( int vl )			{ makeBuf(mValTp, vl, mPer, mHrdGrd, mHgResTm); }
 
-void TValBuf::setPeriod( int64_t vl )		{ makeBuf( mValTp, mSize, vl, mHrdGrd, mHgResTm ); }
+void TValBuf::setPeriod( int64_t vl )		{ makeBuf(mValTp, mSize, vl, mHrdGrd, mHgResTm); }
 
 void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool hg_res )
 {
-    ResAlloc res(bRes,true);
+    ResAlloc res(bRes, true);
 
     //Destroy buffer
-    if( v_tp != mValTp && buf.bl )
+    if(v_tp != mValTp && buf.bl)
     {
 	switch(mValTp)
 	{
@@ -172,26 +172,26 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 	buf.bl = NULL;
     }
 
-    if( !buf.bl )
+    if(!buf.bl)
     {
 	//Make new buffer
 	switch(v_tp)
 	{
-	    case TFld::Boolean:	buf.bl = new TBuf<char>( EVAL_BOOL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
-	    case TFld::Integer:	buf.dec = new TBuf<int>( EVAL_INT, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
-	    case TFld::Real:	buf.real = new TBuf<double>( EVAL_REAL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
-	    case TFld::String:	buf.str = new TBuf<string>( EVAL_STR, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt );	break;
+	    case TFld::Boolean:	buf.bl = new TBuf<char>(EVAL_BOOL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
+	    case TFld::Integer:	buf.dec = new TBuf<int>(EVAL_INT, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
+	    case TFld::Real:	buf.real = new TBuf<double>(EVAL_REAL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
+	    case TFld::String:	buf.str = new TBuf<string>(EVAL_STR, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
 	    default: break;
 	}
 	mValTp = v_tp;
     }
-    if( isz != mSize || ipr != mPer || hd_grd != mHrdGrd || hg_res != mHgResTm )
+    if(isz != mSize || ipr != mPer || hd_grd != mHrdGrd || hg_res != mHgResTm)
 	switch(mValTp)
 	{
-	    case TFld::Boolean:	buf.bl->makeBuf( isz, ipr, hd_grd, hg_res );	break;
-	    case TFld::Integer:	buf.dec->makeBuf( isz, ipr, hd_grd, hg_res );	break;
-	    case TFld::Real:	buf.real->makeBuf( isz, ipr, hd_grd, hg_res );	break;
-	    case TFld::String:	buf.str->makeBuf( isz, ipr, hd_grd, hg_res );	break;
+	    case TFld::Boolean:	buf.bl->makeBuf(isz, ipr, hd_grd, hg_res);	break;
+	    case TFld::Integer:	buf.dec->makeBuf(isz, ipr, hd_grd, hg_res);	break;
+	    case TFld::Real:	buf.real->makeBuf(isz, ipr, hd_grd, hg_res);	break;
+	    case TFld::String:	buf.str->makeBuf(isz, ipr, hd_grd, hg_res);	break;
 	    default: break;
 	}
 }
@@ -236,7 +236,7 @@ double TValBuf::getR( int64_t *itm, bool up_ord )
     return EVAL_REAL;
 }
 
-int TValBuf::getI( int64_t *itm, bool up_ord )
+int64_t TValBuf::getI( int64_t *itm, bool up_ord )
 {
     switch(valType())
     {
@@ -302,7 +302,7 @@ void TValBuf::setR( double value, int64_t tm )
     }
 }
 
-void TValBuf::setI( int value, int64_t tm )
+void TValBuf::setI( int64_t value, int64_t tm )
 {
     switch(valType())
     {

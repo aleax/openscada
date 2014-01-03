@@ -1803,7 +1803,7 @@ void Client::protIO( XML_N &io )
 			    for(int i_r = 0; i_r < resN && i_r < (int)io.childSize(); i_r++)
 			    {
 				XML_N *rno = io.childGet(i_r);
-				strtoul(rno->attr("resultMask").c_str(), NULL, 0);	//resultMask
+				//strtoul(rno->attr("resultMask").c_str(), NULL, 0);	//resultMask
 				rno->setAttr("statusCode", uint2str(iNu(rez,off,4)));	//statusCode
 				iS(rez, off);				//continuationPoint
 									//>> References []
@@ -2574,7 +2574,7 @@ nextReq:
 		    {
 			pthread_mutex_lock(&wep->mtxData);
 			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
-			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == sesTokId)
+			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == (int)sesTokId)
 				wep->mSubScr[i_ss].setState(SS_CLOSED);
 			pthread_mutex_unlock(&wep->mtxData);
 		    }
@@ -3080,7 +3080,7 @@ nextReq:
 			unsigned i_p = 0;
 			bool findOK = false;
 			for( ; i_p < s->publishReqs.size(); ++i_p)
-			    if(findOK=(rba.compare(0,mSz,s->publishReqs[i_p])==0)) break;
+			    if((findOK=(rba.compare(0,mSz,s->publishReqs[i_p])==0))) break;
 			if(i_p >= s->publishReqs.size()) s->publishReqs.push_back(rba.substr(0,mSz));
 			if(findOK || s->publishReqs.size() == 1)
 			{
@@ -3097,7 +3097,7 @@ nextReq:
 				string respAck;
 				int32_t sa = iN(rb, off, 4);			//>subscription Acknowledgements []
 				oN(respAck, sa, 4);				//<results []
-				for(unsigned i_a = 0; i_a < sa; i_a++)
+				for(int i_a = 0; i_a < sa; i_a++)
 				{
 				    uint32_t prSS = iNu(rb, off, 4);		//> subscriptionId
 				    uint32_t seqN = iNu(rb, off, 4);		//> sequenceNumber
@@ -3144,7 +3144,7 @@ nextReq:
 				    int ntfMsgOff = respEp.size();		//<notificationMessage
 				    oNu(respEp, ss.seqN, 4);			//< sequenceNumber
 				    oTm(respEp, curTime());			//< publishTime
-				    int nNtfOff = respEp.size();
+				    //int nNtfOff = respEp.size();
 				    oN(respEp, 1, 4);				//< notificationData []
 				    oNodeId(respEp, NodeId(OpcUa_DataChangeNotification));	//<  TypeId
 				    oNu(respEp, 1, 1);				//<  encodingMask
@@ -3161,9 +3161,10 @@ nextReq:
 					uint8_t eMsk = 0x01;
 					switch(mIt.tmToRet)
 					{
-					    case TS_SOURCE: eMsk |= 0x04;   break;
-					    case TS_SERVER: eMsk |= 0x08;   break;
-					    case TS_BOTH:   eMsk |= 0x0C;   break;
+					    case TS_SOURCE: eMsk |= 0x04;	break;
+					    case TS_SERVER: eMsk |= 0x08;	break;
+					    case TS_BOTH:   eMsk |= 0x0C;	break;
+					    default:				break;
 					}
 					while(mIt.vQueue.size())
 					{
@@ -3527,7 +3528,7 @@ void Server::EP::subScrCycle( unsigned cntr )
     }
 
     //> Publish call
-    for(int i_s = 0; i_s < sls.size(); i_s++)
+    for(size_t i_s = 0; i_s < sls.size(); i_s++)
     {
 	if(!(s=sessGet_(sls[i_s]))) continue;
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
@@ -3727,7 +3728,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	//> Checkings for data
 	XML_N req("data");
 	req.setAttr("node", mIt.nd.toAddr())->setAttr("aid", uint2str(mIt.aid))->setAttr("dtPerGet",(smplItv==0)?"1":"0");
-	int rez = reqData(OpcUa_ReadRequest, req);
+	uint32_t rez = reqData(OpcUa_ReadRequest, req);
 	if(rez == OpcUa_BadNodeIdUnknown)		mIt.nd = NodeId();
 	else if(rez == OpcUa_BadAttributeIdInvalid)	mIt.aid = Aid_Error;
 	if(smplItv == 0)  smplItv = atof(req.attr("dtPer").c_str())*1000;
@@ -3790,7 +3791,7 @@ XML_N *Server::EP::nodeReg( const NodeId &parent, const NodeId &ndId, const stri
     return cNx;
 }
 
-int Server::EP::reqData( int reqTp, XML_N &req )
+uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 {
     switch(reqTp)
     {
@@ -3842,7 +3843,7 @@ int Server::EP::reqData( int reqTp, XML_N &req )
 		    setAttr("referenceTypeId", chNd->attr("referenceTypeId"))->
 		    setAttr("dir", "1")->setAttr("name", chNd->attr("name"))->
 		    setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", chNd->attr("typeDefinition"));
-		if(rPn && req.childSize() >= rPn && (i_ch+1) < ndX->second->childSize())
+		if(rPn && (int)req.childSize() >= rPn && (i_ch+1) < ndX->second->childSize())
                 {
                     req.setAttr("LastNode", chNd->attr("NodeId"));
                     break;

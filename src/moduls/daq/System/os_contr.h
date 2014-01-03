@@ -105,7 +105,7 @@ class TMdContr: public TController
 
 	double period( ){ return mPer; }
 	string cron( )	{ return cfg("SCHEDULE").getS(); }
-	int prior( )	{ return mPrior; }
+	int64_t prior( ){ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -127,7 +127,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	int	&mPerOld,	// ms
+	int64_t	&mPerOld,	// ms
 		&mPrior;	// Process task priority
 
 	bool	prc_st,		// Process task active

@@ -63,17 +63,17 @@ class TMdPrm : public TParamContr
 	//Attributes
 	TElem	p_el;		//Work atribute elements
 
-	int	&mod_addr;	//Module address
+	int64_t	&mod_addr;	//Module address
 	char	&crc_ctrl;	//DCON CRC control mode
-	int	&host_signal;
+	int64_t	&host_signal;
 
-	int	&ai_method;
-	int	&ai_range;
-	int	&ao_method;
-	int	&ao_range;
-	int	&di_method;
-	int	&do_method;
-	int	&ci_method;
+	int64_t	&ai_method,
+		&ai_range,
+		&ao_method,
+		&ao_range,
+		&di_method,
+		&do_method,
+		&ci_method;
 
 	ResString ai_err, ao_err, di_err, do_err, ci_err;
 
@@ -134,7 +134,7 @@ class TMdContr: public TController
 	//Attributes
 	Res	en_res, req_res;		//Resource for enable params and request values
 	TCfg	&mAddr;				//Transport device address
-	int	&mPerOld,			//Acquisition task (seconds)
+	int64_t	&mPerOld,			//Acquisition task (seconds)
 		&mPrior,			//Process task priority
 		&connTry;			//Connections try
 

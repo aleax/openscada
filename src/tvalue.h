@@ -73,7 +73,7 @@ class TVal : public TCntrNode
 	TVariant get( int64_t *tm = NULL, bool sys = false );
 	string	getS( int64_t *tm = NULL, bool sys = false );
 	double	getR( int64_t *tm = NULL, bool sys = false );
-	int	getI( int64_t *tm = NULL, bool sys = false );
+	int64_t	getI( int64_t *tm = NULL, bool sys = false );
 	char	getB( int64_t *tm = NULL, bool sys = false );
 	AutoHD<TVarObj> getO( int64_t *tm = NULL, bool sys = false );
 
@@ -82,7 +82,7 @@ class TVal : public TCntrNode
 	void set( const TVariant &value, int64_t tm = 0, bool sys = false );
 	void setS( const string &value, int64_t tm = 0, bool sys = false );
 	void setR( double value, int64_t tm = 0, bool sys = false );
-	void setI( int value, int64_t tm = 0, bool sys = false );
+	void setI( int64_t value, int64_t tm = 0, bool sys = false );
 	void setB( char value, int64_t tm = 0, bool sys = false );
 	void setO( AutoHD<TVarObj> value, int64_t tm = 0, bool sys = false );
 
@@ -117,7 +117,7 @@ class TVal : public TCntrNode
 	{
 	    string	*val_s;		//String value
 	    double	val_r;		//Real value
-	    int		val_i;		//Integer value
+	    int64_t	val_i;		//Integer value
 	    char	val_b;		//Boolean value
 	    AutoHD<TVarObj> *val_o;	//Object value
 	} val;

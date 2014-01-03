@@ -252,7 +252,7 @@ void TParamContr::preDisable( int flag )
     if(enableStat())	disable();
 }
 
-void TParamContr::postDisable(int flag)
+void TParamContr::postDisable( int flag )
 {
     if(flag)
     {
@@ -294,7 +294,7 @@ void TParamContr::save_( )
 
 bool TParamContr::cfgChange( TCfg &cfg )	{ modif( ); return true; }
 
-TParamContr & TParamContr::operator=( TParamContr & PrmCntr )
+TParamContr &TParamContr::operator=( TParamContr & PrmCntr )
 {
     TConfig::operator=(PrmCntr);
 

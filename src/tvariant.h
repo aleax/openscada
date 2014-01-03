@@ -64,8 +64,10 @@ class TVariant
 
 	//Methods
 	TVariant( );
+	TVariant( bool ivl );
 	TVariant( char ivl );
 	TVariant( int ivl );
+	TVariant( int64_t ivl );
 	TVariant( double ivl );
 	TVariant( const string &ivl );
 	TVariant( const char *var );
@@ -87,19 +89,20 @@ class TVariant
 	void setModify( bool vl = true )	{ mModify = vl; }
 
 	virtual char	getB( ) const;
-	virtual int 	getI( ) const;
+	virtual int64_t	getI( ) const;
 	virtual double	getR( ) const;
 	virtual string	getS( ) const;
 	virtual AutoHD<TVarObj> getO( ) const;
 
 	operator char( )	{ return getB(); }
 	operator int( )		{ return getI(); }
+	operator int64_t( )	{ return getI(); }
 	operator double( )	{ return getR(); }
 	operator string( )	{ return getS(); }
 	operator AutoHD<TVarObj>( )	{ return getO(); }
 
 	virtual void setB( char val );
-	virtual void setI( int val );
+	virtual void setI( int64_t val );
 	virtual void setR( double val );
 	virtual void setS( const string &val );
 	virtual void setO( AutoHD<TVarObj> val );
@@ -110,7 +113,7 @@ class TVariant
 	union
 	{
 	    char	b;
-	    int		i;
+	    int64_t	i;
 	    double	r;
 	    char	*sPtr;
 	    char	sMini[8];

@@ -99,7 +99,7 @@ class Project : public TCntrNode, public TConfig
 	//> Styles
 	void stlList( vector<string> &ls );
 	int stlSize( );
-	int stlCurent( )	{ return mStyleIdW; }
+	int64_t stlCurent( )			{ return mStyleIdW; }
 	void stlCurentSet( int sid );
 	string stlGet( int sid );
 	void stlSet( int sid, const string &stl );
@@ -131,7 +131,7 @@ class Project : public TCntrNode, public TConfig
 	TCfg	&mId;		//Identifier
 	string	workPrjDB,	//Work DB
 		mOldDB;
-	int	&mPermit,	//Access permission
+	int64_t	&mPermit,	//Access permission
 		&mPer,		//Calculate period
 		&mFlgs,		//Project's flags
 		&mStyleIdW;	//Work style
@@ -230,8 +230,8 @@ class Page : public Widget, public TConfig
 
     private:
 	//Attributes
-	int	mPage,		//Page container identifier
-		&mFlgs,		//Project's flags
+	int	mPage;		//Page container identifier
+	int64_t	&mFlgs,		//Project's flags
 		&mProcPer,	//Process period
 		&mTimeStamp;
 	string	mParentNmPrev;	//Previous parent name after successful enable

@@ -365,7 +365,7 @@ retry:
 	if(tp == 1)
 	{
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,10);
+	    *yylval.reg = (int64_t)strtoll(prog.substr(st_pos,pos-st_pos).c_str(),NULL,10);
 	    return CONST;
 	}
 	else if(tp == 2)
