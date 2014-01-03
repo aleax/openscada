@@ -642,7 +642,7 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 			//    *rez = (int)rez->val().r_el;
 			    break;
 			case Reg::String:
-			    *rez = (*rez->val().s_el != EVAL_STR) ? strtoll(rez->val().s_el->c_str(),NULL,0) : EVAL_INT;
+			    *rez = (*rez->val().s_el != EVAL_STR) ? (int64_t)strtoll(rez->val().s_el->c_str(),NULL,0) : EVAL_INT;
 			    break;
 			default: break;
 		    }
