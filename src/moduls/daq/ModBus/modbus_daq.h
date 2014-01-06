@@ -160,7 +160,7 @@ class TMdContr: public TController
 
 	void regVal( int reg, const string &dt = "R" );			//Register value for acquisition
 	TVariant getVal( const string &addr, ResString &err );		//Unified value request from string address
-	int  getValR( int addr, ResString &err, bool in = false );	//Get register value
+	int64_t getValR( int addr, ResString &err, bool in = false );	//Get register value
 	char getValC( int addr, ResString &err, bool in = false );	//Get coins value
 	bool setVal( const TVariant &val, const string &addr, ResString &err, bool chkAssync = false );	//Unified value set by string address
 	bool setValR( int val, int addr, ResString &err );		//Set register value

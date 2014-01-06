@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -83,6 +83,7 @@ class VFileArch
 	    unsigned char	vtp   :3;	//Value type (bool, int, real, string)
 	    unsigned char	hgrid :1;	//Hard griding flag (reserved)
 	    unsigned char	hres  :1;	//High resolution value time (reserved)
+	    unsigned char	vtpExt:3;	//Value type extension (int16, int32, int64, float(4), double(8))
 	    char		reserve[14];	//Reserved
 	    char		term;		//Header terminator (0x55)
 	};
@@ -205,8 +206,8 @@ class ModVArch: public TVArchivator
 	void setPackTm( int vl )		{ mPackTm = vl; modif(); }
 	void setPackInfoFiles( bool vl )	{ mPackInfoFiles = vl; modif(); }
 
-	void start();
-	void stop();
+	void start( );
+	void stop( );
 
 	void checkArchivator( bool now = false );
 

@@ -636,13 +636,13 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		    switch(rez->vType(this))
 		    {
 			case Reg::Bool:
-			    *rez = (rez->val().b_el != EVAL_BOOL) ? (int64_t)rez->val().b_el : EVAL_INT;
+			    *rez = (rez->val().b_el != EVAL_BOOL) ? (int64_t)rez->val().b_el : (int64_t)EVAL_INT;
 			    break;
 			case Reg::Real:
 			//    *rez = (int)rez->val().r_el;
 			    break;
 			case Reg::String:
-			    *rez = (*rez->val().s_el != EVAL_STR) ? (int64_t)strtoll(rez->val().s_el->c_str(),NULL,0) : EVAL_INT;
+			    *rez = (*rez->val().s_el != EVAL_STR) ? (int64_t)strtoll(rez->val().s_el->c_str(),NULL,0) : (int64_t)EVAL_INT;
 			    break;
 			default: break;
 		    }

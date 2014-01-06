@@ -591,7 +591,7 @@ void MTable::fieldSet( TConfig &cfg )
 
 void MTable::fieldDel( TConfig &cfg )
 {
-    if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
     mLstUse = SYS->sysTm();
 
     //> Get config fields list
@@ -602,12 +602,13 @@ void MTable::fieldDel( TConfig &cfg )
     string req = "DELETE FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` WHERE ";
     //>> Add key list to query
     bool next = false;
-    for( unsigned i_el = 0; i_el < cf_el.size(); i_el++ )
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	if( u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse() )
+	string sid = tblStrct[i_fld][0];
+	TCfg &u_cfg = *cfg.at(sid,true);
+	if(u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse())
 	{
-	    req = req + (next?"AND `":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "`='" + TSYS::strEncode(getVal(u_cfg),TSYS::SQL) + "' ";
+	    req = req + (next?"AND `":"`") + TSYS::strEncode(sid,TSYS::SQL) + "`='" + TSYS::strEncode(getVal(u_cfg),TSYS::SQL) + "' ";
 	    next = true;
 	}
     }

@@ -143,7 +143,7 @@ void TipContr::postEnable( int flag )
     rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
     rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
     rvl = EVAL_REAL; mConst.push_back(NConst(TFld::Real,"EVAL_REAL",string((char*)&rvl,sizeof(rvl))));
-    int ivl;
+    int64_t ivl;
     ivl = EVAL_INT; mConst.push_back(NConst(TFld::Integer,"EVAL_INT",string((char*)&ivl,sizeof(ivl))));
     ivl = EVAL_BOOL; mConst.push_back(NConst(TFld::Boolean,"EVAL_BOOL",string((char*)&ivl,1)));
 

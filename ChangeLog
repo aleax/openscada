@@ -1,3 +1,18 @@
+2013-01-06 Roman
+- !!!!:SYS: Core files by name "core.*" processing is added.
+    Moving to int64_t rise CPU consumption on AGLKS model from 63% to 65% (on AMD Turion 1.6).
+    EVAL for generic integer type set to -9223372036854775807ll and for real to -1.79E308.
+    EVAL values for extended types define: EVAL_INT16(-32767), EVAL_INT32(-2147483647), EVAL_INT64(-9223372036854775807ll),
+	EVAL_RFlt(-3.29E38), EVAL_RDbl(-1.79E308).
+- !!!!:Archive: Value archive's buffer is expanded to store and work with different from generic data types:
+    Int16, Int32, Int64, Real(Float), Real(Double).
+- TFunction: Integer type expanded to int64_t.
+- Archive::DBArch: Some code clear.
+- !!!!:Archive::FSArch: Storing into extended types Int16, Int32, Int64, Real(Float), Real(Double) support is added.
+- DB.{FireBird,MySQL,PostgreSQL}: MTable::fieldDel() is adapted to remove fields with keys real miss into the DB's table.
+- FIX:DAQ.{JavaLikeCalc,ModBus,SoundCard},Special.FLibSYS,: Some builds and moving to int64_t fix.
+
+
 2013-01-03 Roman
 - !!!!:SYS.*: Integer value type expanded to int64_t and generic field types "bool", "integer", "real", "string", "Object"
     expanded by types "Int16", "Int32", "Int64", "Float", "Double".

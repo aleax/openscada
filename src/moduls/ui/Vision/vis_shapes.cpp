@@ -2891,7 +2891,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	}
 	w->cntrIfCmd(req);
     }
-    else if( shD->type == 1 )
+    else if(shD->type == 1)
     {
 	float curFrq = vmax(vmin(1e6/(float)itm,shD->fftEnd),shD->fftBeg);
 	shD->curTime = 1e6/curFrq;

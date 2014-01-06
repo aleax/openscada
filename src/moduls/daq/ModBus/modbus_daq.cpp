@@ -362,7 +362,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
     int aid = strtol(aids.c_str(),NULL,0);
     string mode = TSYS::strParse(addr, 0, ":", &off);
 
-    if(tp.empty() || !(mode.empty() || mode == "r" || mode == "rw")) return EVAL_INT;
+    if(tp.empty() || !(mode.empty() || mode == "r" || mode == "rw")) return (int64_t)EVAL_INT;
     if(tp[0] == 'C') return getValC(aid,w_err,isInputs);
     if(tp[0] == 'R')
     {
@@ -386,7 +386,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 		    case '4':
 		    {
 			int vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
-			if(vl == EVAL_INT || vl2 == EVAL_INT) return EVAL_INT;
+			if(vl == EVAL_INT || vl2 == EVAL_INT) return (int64_t)EVAL_INT;
 			return (int)(((vl2&0xffff)<<16)|(vl&0xffff));
 		    }
 		}
@@ -406,12 +406,12 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 	    default: return vl;
 	}
     }
-    return EVAL_INT;
+    return (int64_t)EVAL_INT;
 }
 
-int TMdContr::getValR( int addr, ResString &err, bool in )
+int64_t TMdContr::getValR( int addr, ResString &err, bool in )
 {
-    int rez = EVAL_INT;
+    int64_t rez = EVAL_INT;
     ResAlloc res(req_res, false);
     vector< SDataRec >	&workCnt = in ? acqBlksIn : acqBlks;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)

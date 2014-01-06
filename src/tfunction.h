@@ -200,7 +200,7 @@ class TValFunc
 	//> get IO value
 	TVariant get( unsigned id );
 	string	getS( unsigned id );
-	int	getI( unsigned id );
+	int64_t	getI( unsigned id );
 	double	getR( unsigned id );
 	char	getB( unsigned id );
 	AutoHD<TVarObj>	getO( unsigned id );
@@ -208,7 +208,7 @@ class TValFunc
 	//> set IO value
 	void set( unsigned id, const TVariant &val );
 	void setS( unsigned id, const string &val );
-	void setI( unsigned id, int val );
+	void setI( unsigned id, int64_t val );
 	void setR( unsigned id, double val );
 	void setB( unsigned id, char val );
 	void setO( unsigned id, AutoHD<TVarObj> val );
@@ -239,10 +239,10 @@ class TValFunc
 	    unsigned short	mdf	: 1;
 	    union
 	    {
-		string *s;
-		double r;
-		int    i;
-		char   b;
+		string	*s;
+		double	r;
+		int64_t	i;
+		char	b;
 		AutoHD<TVarObj>	*o;
 	    }val;
 	};

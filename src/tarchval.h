@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tarchval.h
 /***************************************************************************
- *   Copyright (C) 2006-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -142,10 +142,13 @@ class TValBuf
 	TFld::Type	mValTp;		//Store values type
 	union
 	{
-	    TBuf<char>	*bl;
-	    TBuf<int>	*dec;
-	    TBuf<double>*real;
-	    TBuf<string>*str;
+	    TBuf<char>		*bl;
+	    TBuf<int16_t>	*i16;
+	    TBuf<int32_t>	*i32;
+	    TBuf<int64_t>	*i64;
+	    TBuf<float>		*rFlt;
+	    TBuf<double>	*rDbl;
+	    TBuf<string>	*str;
 	} buf;
 
 	bool	mHgResTm,		//High resolution time use (microseconds)
@@ -195,7 +198,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	int64_t end( const string &arch = BUF_ARCH_NM );
 	int64_t begin( const string &arch = BUF_ARCH_NM );
 	int64_t period( const string &arch = BUF_ARCH_NM );
-	TFld::Type valType( )	{ return TValBuf::valType(); }
+	TFld::Type valType( bool full = false )	{ return TValBuf::valType(full); }
 	bool hardGrid( )	{ return TValBuf::hardGrid(); }
 	bool highResTm( )	{ return TValBuf::highResTm(); }
 	int size( )		{ return TValBuf::size(); }
@@ -261,18 +264,16 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	Res	aRes;
 	bool	runSt;
 	string	mDB;
-	//> Base params
+
 	TCfg	&mId,		//ID
+		&mVType,	//Value type (int, real, bool, string)
 		&mSrcMode,	//Source mode
 		&mSource,	//Source
 		&mCombMode,	//Data combining mode (Moving average, Single, Minimum, Maximum)
 		&mBPer,		//Buffer period
 		&mBSize;	//Buffer size
-
-	char	&mStart;	//Starting flag
-	//> Buffer params
-	int64_t	&mVType;	//Value type (int, real, bool, string)
-	char	&mBHGrd,	//Buffer use hard time griding
+	char	&mStart,	//Starting flag
+		&mBHGrd,	//Buffer use hard time griding
 		&mBHRes;	//Buffer use high time resolution
 	//> Mode params
 	AutoHD<TVal>	pattr_src;

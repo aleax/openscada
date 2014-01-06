@@ -507,7 +507,7 @@ void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 	    switch( val.tp )
 	    {
 		case IO::String:	val.val.s = new string(mFunc->io(i_vl)->def());		break;
-		case IO::Integer:	val.val.i = atoi(mFunc->io(i_vl)->def().c_str());	break;
+		case IO::Integer:	val.val.i = atoll(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Real:		val.val.r = atof(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Boolean:	val.val.b = atoi(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
@@ -593,7 +593,7 @@ string TValFunc::getS( unsigned id )
     return EVAL_STR;
 }
 
-int TValFunc::getI( unsigned id )
+int64_t TValFunc::getI( unsigned id )
 {
     if(id >= mVal.size()) throw TError("ValFnc",_("%s: Id or IO %d error!"),"getI()",id);
     switch(mVal[id].tp)
@@ -676,7 +676,7 @@ void TValFunc::setS( unsigned id, const string &val )
     }
 }
 
-void TValFunc::setI( unsigned id, int val )
+void TValFunc::setI( unsigned id, int64_t val )
 {
     if(id >= mVal.size())	throw TError("ValFnc",_("%s: Id or IO %d error!"),"setI()",id);
     switch(mVal[id].tp)

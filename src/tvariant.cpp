@@ -54,20 +54,11 @@ TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(fa
 
 TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false){ setO(ivl); }
 
-TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setO(AutoHD<TVarObj>(ivl));
-}
+TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setO(AutoHD<TVarObj>(ivl)); }
 
-TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    operator=(var);
-}
+TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false){ operator=(var); }
 
-TVariant::~TVariant( )
-{
-    setType(Null);
-}
+TVariant::~TVariant( )	{ setType(Null); }
 
 void TVariant::setType( Type tp, bool fix )
 {

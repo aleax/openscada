@@ -758,12 +758,13 @@ void MTable::fieldDel( TConfig &cfg )
     string req = "DELETE FROM \""+mod->sqlReqCode(name(),'"')+"\" WHERE ";
     //>> Add key list to queue
     bool next = false;
-    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
+    for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
-	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+	string sid = tblStrct[i_fld][0];
+	TCfg &u_cfg = *cfg.at(sid, true);
 	if(u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse())
 	{
-	    req = req + (next?"AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	    req = req + (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
 	    next = true;
 	}
     }

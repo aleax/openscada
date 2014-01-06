@@ -34,11 +34,18 @@ using std::string;
 using std::vector;
 using std::map;
 
-//Error values
+//Error values, generic
 #define EVAL_BOOL	2
-#define EVAL_INT	-2147483647
-#define EVAL_REAL	-3.3E308
+#define EVAL_INT	-9223372036854775807ll
+#define EVAL_REAL	-1.79E308
 #define EVAL_STR	"<EVAL>"
+
+//Error values, extended
+#define EVAL_INT16	-32767
+#define EVAL_INT32	-2147483647
+#define EVAL_INT64	-9223372036854775807ll
+#define EVAL_RFlt	-3.29E38
+#define EVAL_RDbl	-1.79E308
 
 namespace OSCADA
 {

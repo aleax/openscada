@@ -108,7 +108,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(isArch())	vtm = arch().at().begin((prms.size()>=2) ? prms[1].getS() : "");
 	else
 	{
-	    if(!buf()) return EVAL_INT;
+	    if(!buf()) return (int64_t)EVAL_INT;
 	    vtm = buf()->begin();
 	}
 	if(prms.size() >= 1) { prms[0].setI(vtm%1000000); prms[0].setModify(); }
@@ -120,7 +120,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(isArch())	vtm = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
 	else
 	{
-	    if(!buf()) return EVAL_INT;
+	    if(!buf()) return (int64_t)EVAL_INT;
 	    vtm = buf()->end();
 	}
 	if(prms.size() >= 1) { prms[0].setI(vtm%1000000); prms[0].setModify(); }
@@ -132,7 +132,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(isArch())	vper = arch().at().period((prms.size()>=2) ? prms[1].getS() : "");
 	else
 	{
-	    if(!buf()) return EVAL_INT;
+	    if(!buf()) return (int64_t)EVAL_INT;
 	    vper = buf()->period();
 	}
 	if(prms.size() >= 1) { prms[0].setI(vper%1000000); prms[0].setModify(); }

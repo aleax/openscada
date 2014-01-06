@@ -519,7 +519,7 @@ retry:
 	    switch(cnst_v->tp)
 	    {
 		case TFld::Real:	*yylval.reg = TSYS::getUnalignDbl(cnst_v->val.data());	break;
-		case TFld::Integer:	*yylval.reg = TSYS::getUnalignInt(cnst_v->val.data());	break;
+		case TFld::Integer:	*yylval.reg = (int64_t)TSYS::getUnalign64(cnst_v->val.data());	break;
 		case TFld::Boolean:	*yylval.reg = (char)cnst_v->val[0];	break;
 		case TFld::String:	*yylval.reg = cnst_v->val;		break;
 		default: break;
