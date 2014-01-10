@@ -262,8 +262,8 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    fftw_execute(p);
 	    fftw_destroy_plan(p);
 	    for(int i_v = 0; i_v < (fftN/2+1); i_v++)
-		if(!i_v) ao->propSet(TSYS::int2str(i_v),fftOut[i_v][0]/fftN);
-		else ao->propSet(TSYS::int2str(i_v),pow(pow(fftOut[i_v][0],2)+pow(fftOut[i_v][1],2),0.5)/(fftN/2));
+		if(!i_v) ao->arSet(i_v, fftOut[i_v][0]/fftN);
+		else ao->arSet(i_v, pow(pow(fftOut[i_v][0],2)+pow(fftOut[i_v][1],2),0.5)/(fftN/2));
 	    delete fftIn;
 	    delete fftOut;
 	}

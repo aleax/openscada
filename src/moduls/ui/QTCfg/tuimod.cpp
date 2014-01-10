@@ -168,7 +168,7 @@ QMainWindow *TUIMod::openWindow( )
 		postMess(nodePath().c_str(),_("Auth is wrong!!!"));
 		continue;
 	    }
-	    user_open = d_usr.user().toAscii().data();
+	    user_open = d_usr.user().toStdString();
 	    break;
 	}
     return new ConfApp(user_open);

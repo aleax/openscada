@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -621,7 +621,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     for(int i_ch = 0; i_ch < children().size(); i_ch++)
     {
 	if(!qobject_cast<QToolBar*>(children()[i_ch])) continue;
-	int icSz = atoi(mod->uiPropGet((children()[i_ch]->objectName()+"_icSz").toAscii().data(),user()).c_str());
+	int icSz = atoi(mod->uiPropGet((children()[i_ch]->objectName()+"_icSz").toStdString(),user()).c_str());
 	if(icSz) ((QToolBar*)children()[i_ch])->setIconSize(QSize(icSz,icSz));
     }
 
@@ -673,17 +673,17 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
 
 string VisDevelop::user( )
 {
-    return mWUser->user().toAscii().data();
+    return mWUser->user().toStdString();
 }
 
 string VisDevelop::password( )
 {
-    return mWUser->pass().toAscii().data();
+    return mWUser->pass().toStdString();
 }
 
 string VisDevelop::VCAStation( )
 {
-    return mWUser->VCAStation().toAscii().data();
+    return mWUser->VCAStation().toStdString();
 }
 
 bool VisDevelop::wdgScale( )
@@ -698,12 +698,12 @@ void VisDevelop::setWdgScale( bool val )
 
 double VisDevelop::wdgVisScale( )
 {
-    return atof(mWVisScale->text().toAscii().data());
+    return atof(mWVisScale->text().toStdString().c_str());
 }
 
 void VisDevelop::setWdgVisScale(double val )
 {
-    mWVisScale->setText((TSYS::real2str(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
+    mWVisScale->setText((r2s(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )
@@ -767,12 +767,12 @@ void VisDevelop::setToolIconSize( )
 {
     if(!sender()) return;
 
-    QToolBar *tb = qobject_cast<QToolBar*>((QToolBar*)TSYS::str2addr(sender()->property("toolAddr").toString().toAscii().data()));
-    int icSz = atoi(sender()->objectName().toAscii().data());
+    QToolBar *tb = qobject_cast<QToolBar*>((QToolBar*)TSYS::str2addr(sender()->property("toolAddr").toString().toStdString()));
+    int icSz = atoi(sender()->objectName().toStdString().c_str());
     if(tb)
     {
 	tb->setIconSize(QSize(icSz,icSz));
-	mod->uiPropSet((tb->objectName()+"_icSz").toAscii().data(),TSYS::int2str(icSz),user());
+	mod->uiPropSet((tb->objectName()+"_icSz").toStdString(), i2s(icSz), user());
     }
 }
 
@@ -1105,7 +1105,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	    if(!par_nm.empty())	base_nm = TSYS::pathLev(par_nm,1,true).substr(4);
 	    unsigned i_c = 1, i_w = 0;
 	    while(i_w < req.childSize())
-		if(req.childGet(i_w)->attr("id") == base_nm+TSYS::int2str(i_c))	{ i_w = 0; i_c++; }
+		if(req.childGet(i_w)->attr("id") == base_nm+i2s(i_c))	{ i_w = 0; i_c++; }
 		else i_w++;
 	    dlg.setId((base_nm+i2s(i_c)).c_str());
 	}
@@ -1412,7 +1412,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	if(s_el.substr(0,4) == "prj_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Project '%1' move.\n") : _("Project '%1' copy.\n"))+
-		_("Enter new project's identifier and name.")).arg(s_el.substr(4).c_str()).toAscii().data();
+		_("Enter new project's identifier and name.")).arg(s_el.substr(4).c_str()).toStdString();
 	    req.setAttr("path","/%2fprm%2fcfg%2fprj");
 	    d_el = "prj_";
 	    t1_el = s_el.substr(4);
@@ -1421,7 +1421,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	else if(s_el.substr(0,4) == "wlb_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Widget's library '%1' move.\n") : _("Widget's library '%1' copy.\n"))+
-		_("Enter new widget's library identifier and name.")).arg(s_el.substr(4).c_str()).toAscii().data();
+		_("Enter new widget's library identifier and name.")).arg(s_el.substr(4).c_str()).toStdString();
 	    req.setAttr("path","/%2fprm%2fcfg%2fwlb");
 	    d_el = "wlb_";
 	    t1_el = s_el.substr(4);
@@ -1430,7 +1430,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	else if(s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_"))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move page '%1' to '%2'.\n") : _("Copy page '%1' to '%2'.\n"))+
-		_("Enter new widget's/page's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+		_("Enter new widget's/page's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
 	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
 	    else req.setAttr("path",work_wdg_w+"/%2fpage%2fpage");
 	    d_elp += ("/"+d_el);
@@ -1442,7 +1442,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del == 2)))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
-		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
 	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
 	    else req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
 	    d_elp += ("/"+d_el);
@@ -1453,7 +1453,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	else if(s_el.substr(0,4) == "wdg_" && d_el.substr(0,4) == "wdg_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
-		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
 	    req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
 	    t1_el = d_el.substr(4);
 	    d_el = "wdg_";
@@ -1490,15 +1490,15 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	}
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted)
 	{
-	    d_el += dlg.id().toAscii().data();
-	    string it_nm = wnm.empty() ? dlg.name().toAscii().data() : wnm;
+	    d_el += dlg.id().toStdString();
+	    string it_nm = wnm.empty() ? dlg.name().toStdString() : wnm;
 
 	    //>>> Make link
 	    if(wInher && wInher->isChecked())
 	    {
 		QAction addAct(NULL);
 		addAct.setObjectName((s_elp+"/"+s_el).c_str());
-		visualItAdd(&addAct, QPointF(), dlg.id().toAscii().data(), it_nm, d_elp);
+		visualItAdd(&addAct, QPointF(), dlg.id().toStdString(), it_nm, d_elp);
 	    }
 	    //>>> Make copy
 	    else

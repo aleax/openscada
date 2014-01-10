@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -73,12 +73,12 @@ VisRun *RunWdgView::mainWin( )
 
 string RunWdgView::pgGrp( )
 {
-    return property("pgGrp").toString().toAscii().data();
+    return property("pgGrp").toString().toStdString();
 }
 
 string RunWdgView::pgOpenSrc( )
 {
-    return property("pgOpenSrc").toString().toAscii().data();
+    return property("pgOpenSrc").toString().toStdString();
 }
 
 void RunWdgView::setPgOpenSrc( const string &vl )
@@ -104,7 +104,7 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
     {
 	aBr = new XMLNode("get");
 	aBr->setAttr("path",id()+"/%2fserv%2fattrBr")->
-	    setAttr("tm",TSYS::uint2str(full?0:mainWin()->reqTm()))->setAttr("FullTree",FullTree?"1":"0");
+	    setAttr("tm",u2s(full?0:mainWin()->reqTm()))->setAttr("FullTree",FullTree?"1":"0");
 	cntrIfCmd(*aBr);
 	reqBrCr = true;
     }
@@ -300,7 +300,7 @@ bool RunWdgView::event( QEvent *event )
 		QAction *actTmp;
 		QMenu popup;
 		string sln;
-		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toAscii().data(),0,'\n',&off)).size(); )
+		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toStdString(),0,'\n',&off)).size(); )
 		{
 		    actTmp = new QAction(TSYS::strSepParse(sln,0,':').c_str(),this);
 		    actTmp->setWhatsThis(TSYS::strSepParse(sln,1,':').c_str());
@@ -443,7 +443,7 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_BracketRight: mod_ev += "BracketRight"; break;
 		case Qt::Key_QuoteLeft:	mod_ev += "QuoteLeft";	break;
 		default:
-		    mod_ev += "#"+TSYS::int2str(((QKeyEvent*)event)->key(),TSYS::Hex);
+		    mod_ev += "#"+i2s(((QKeyEvent*)event)->key(),TSYS::Hex);
 		    break;
 	    }
 	    evs += (evs.size()?"\n":"")+mod_ev;
@@ -572,7 +572,7 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
 	if(rwdg->property("isVisible").toBool() && rwdg->root() == "Box")
 	{
 	    if(rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty())
-		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toAscii().data());
+		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toStdString());
 	    if(((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget)
 	    {
 		pg = ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget->findOpenPage(ipg);
@@ -750,9 +750,9 @@ bool StylesStBar::styleSel( )
 	    stls->setCurrentIndex(i_s);
     }
     dlg.resize(300,120);
-    if( dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0 )
+    if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0)
     {
-	setStyle( stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toAscii().data() );
+	setStyle( stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toStdString() );
 	emit styleChanged( );
 	return true;
     }

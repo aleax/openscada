@@ -307,26 +307,217 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//Char stream
 	if(tpD.szBt == 1)
 	{
-	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : "";
-	    /*if(!fhd) rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
-	    else
+	    string outCd = (prms.size()>=3) ? prms[2].getS() : "";
+	    string sval = Mess->codeConvOut(outCd, prms[0].getS());
+	    if(!fhd)
 	    {
-	    }*/
+		if(pos >= str.size()) str.append(sval);
+		else str.replace(pos, vmax(0,vmin(str.size()-pos,sval.size())), sval);
+		pos += sval.size();
+		return (int64_t)sval.size();
+	    }
+	    return (int64_t)fwrite(sval.data(), 1, sval.size(), fhd);
 	}
-	//Integer
-	else if(!tpD.real)
-	{
-	    //????
 
+	int64_t rez = 0;
+	bool isSingle = false;
+	TArrayObj *ai = NULL;
+	if(vals.type() == TVariant::Object && !AutoHD<TArrayObj>(vals.getO()).freeStat()) ai = (TArrayObj*)&vals.getO().at();
+	else { ai = new TArrayObj(); ai->arSet(0, vals); isSingle = true; }
+	string mach = (prms.size()>=3) ? prms[2].getS() : "n";
+
+	//Integer
+	if(!tpD.real)
+	{
+	    // To string stream
+	    if(!fhd)
+	    {
+		switch(tpD.szBt)
+		{
+		    case 2:
+		    {
+			uint16_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    //!!!! Check for signed pass
+			    v = ai->arGet(i_a).getI();
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i16_LE(v);	break;
+				case 'b': v = TSYS::i16_BE(v);	break;
+			    }
+			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
+			    else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
+			}
+			break;
+		    }
+		    case 4:
+		    {
+			uint32_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i32_LE(v);	break;
+				case 'b': v = TSYS::i32_BE(v);	break;
+			    }
+			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
+			    else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
+			}
+			break;
+		    }
+		    case 8:
+		    {
+			uint64_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i64_LE(v);	break;
+				case 'b': v = TSYS::i64_BE(v);	break;
+			    }
+			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
+			    else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
+			}
+			break;
+		    }
+		}
+		pos += tpD.szBt;
+		rez = ai->arSize()*tpD.szBt;
+	    }
+	    else // To file
+		switch(tpD.szBt)
+		{
+		    case 2:
+		    {
+			//!!!! Check for signed pass
+			uint16_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i16_LE(v);	break;
+				case 'b': v = TSYS::i16_BE(v);	break;
+			    }
+			    rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
+			}
+			break;
+		    }
+		    case 4:
+		    {
+			uint32_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i32_LE(v);	break;
+				case 'b': v = TSYS::i32_BE(v);	break;
+			    }
+			    rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
+			}
+			break;
+		    }
+		    case 8:
+		    {
+			uint64_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    switch(mach[0])
+			    {
+				case 'l': v = TSYS::i64_LE(v);	break;
+				case 'b': v = TSYS::i64_BE(v);	break;
+			    }
+			    rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
+			}
+			break;
+		    }
+		}
+	    if(isSingle) delete ai;
+	    return rez;
 	}
 	//Real
-	else
+	// To string stream
+	if(!fhd)
 	{
-	    //????
-
+	    switch(tpD.szBt)
+	    {
+		case 4:
+		{
+		    float v = 0;
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+		    {
+			v = ai->arGet(i_a).getR();
+			switch(mach[0])
+			{
+			    case 'l': v = TSYS::floatLE(v);	break;
+			    case 'b': v = TSYS::floatBE(v);	break;
+			}
+			if(pos >= str.size()) str.append((char*)&v,sizeof(v));
+			else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
+		    }
+		    break;
+		}
+		case 8:
+		{
+		    double v = 0;
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+		    {
+			v = ai->arGet(i_a).getR();
+			switch(mach[0])
+			{
+			    case 'l': v = TSYS::doubleLE(v);	break;
+			    case 'b': v = TSYS::doubleBE(v);	break;
+			}
+			if(pos >= str.size()) str.append((char*)&v, sizeof(v));
+			else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
+		    }
+		    break;
+		}
+	    }
+	    pos += tpD.szBt;
+	    rez = ai->arSize()*tpD.szBt;
 	}
-
-	return this;
+	else // To file
+	    switch(tpD.szBt)
+	    {
+		case 4:
+		{
+		    float v = 0;
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+		    {
+			v = ai->arGet(i_a).getR();
+			switch(mach[0])
+			{
+			    case 'l': v = TSYS::floatLE(v);	break;
+			    case 'b': v = TSYS::floatBE(v);	break;
+			}
+			rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
+		    }
+		    break;
+		}
+		case 8:
+		{
+		    double v = 0;
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+		    {
+			v = ai->arGet(i_a).getR();
+			switch(mach[0])
+			{
+			    case 'l': v = TSYS::doubleLE(v);	break;
+			    case 'b': v = TSYS::doubleBE(v);	break;
+			}
+			rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
+		    }
+		    break;
+		}
+	    }
+	if(isSingle) delete ai;
+	return rez;
     }
 
     throw TError("IOObj",_("Function '%s' error or not enough parameters."),id.c_str());

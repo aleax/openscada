@@ -3,7 +3,7 @@
 /***************************************************************************
  *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)
  *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)
- *		   2012-2013 by Roman Savochenko (rom_as@oscada.org, rom_as@fromru.com)
+ *		   2012-2014 by Roman Savochenko (rom_as@oscada.org, rom_as@fromru.com)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -543,7 +543,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 				       i2s(colors[shapeItems[i_s].lineColor].alpha()) + ":";
 		    }
 		    else elList = elList + ((colors[shapeItems[i_s].lineColor].name() == colors[SpI_DefLine].name()) ? "" :
-				  colors[shapeItems[i_s].lineColor].name().toAscii().data()) + ":";
+				  colors[shapeItems[i_s].lineColor].name().toStdString()) + ":";
 		}
 		else if(shapeItems[i_s].lineColor > 0) elList += "c" + i2s(shapeItems[i_s].lineColor) + ":";
 
@@ -552,7 +552,7 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		if(shapeItems[i_s].border_width <= SpI_StatIts || shapeItems[i_s].border_width == SpI_DefBord)
 		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].border_width]) == (int)TSYS::realRound(widths[SpI_DefBord])) ? "" :
 			      i2s((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
-		else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
+		else if( shapeItems[i_s].border_width > 0  ) elList += "w" + i2s(shapeItems[i_s].border_width) + ":";
 		if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
 		{
 		    if( colors[shapeItems[i_s].borderColor].alpha() < 255 )
@@ -560,49 +560,49 @@ void ShapeElFigure::shapeSave( WdgView *w )
 			if( colors[shapeItems[i_s].borderColor].rgba() == colors[-6].rgba() )
 			    elList = elList + "" + ":";
 			else
-			    elList = elList +  colors[shapeItems[i_s].borderColor].name().toAscii().data()+"-"+
-					       TSYS::int2str(colors[shapeItems[i_s].borderColor].alpha())+":";
+			    elList = elList +  colors[shapeItems[i_s].borderColor].name().toStdString()+"-"+
+					       i2s(colors[shapeItems[i_s].borderColor].alpha())+":";
 		    }
 		    else elList = elList + ((colors[shapeItems[i_s].borderColor].name() == colors[-6].name()) ? "" :
-					     colors[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+					     colors[shapeItems[i_s].borderColor].name().toStdString())+":";
 		}
-		else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
+		else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" + i2s(shapeItems[i_s].borderColor) + ":";
 		if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
 		    elList = elList + ((styles[shapeItems[i_s].style] == styles[-5]) ? "" :
-			     TSYS::int2str(styles[shapeItems[i_s].style]-1))+"\n";
-		else if( shapeItems[i_s].style > 0  ) elList = elList + "s" +  TSYS::int2str(shapeItems[i_s].style)+"\n";
+			     i2s(styles[shapeItems[i_s].style]-1))+"\n";
+		else if( shapeItems[i_s].style > 0  ) elList = elList + "s" + i2s(shapeItems[i_s].style)+"\n";
 		break;
 	    case 2:
 		elList+="arc:";
 		if( shapeItems[i_s].n1 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n1)+":";
+		    elList += i2s(shapeItems[i_s].n1)+":";
 		else if( shapeItems[i_s].n1 <= -10 )
-		    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[i_s].n1].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[i_s].n1].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n1].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n2 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n2)+":";
+		    elList += i2s(shapeItems[i_s].n2)+":";
 		else if( shapeItems[i_s].n2 <= -10 )
-		    elList +="(" + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n2].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n2].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n3 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n3)+":";
+		    elList += i2s(shapeItems[i_s].n3)+":";
 		else if( shapeItems[i_s].n3 <= -10 )
-		    elList +="(" + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n3].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n3].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n3].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n3].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n4 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n4)+":";
+		    elList += i2s(shapeItems[i_s].n4)+":";
 		else if( shapeItems[i_s].n4 <= -10 )
-		    elList +="(" + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n4].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n4].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n4].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n4].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n5 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n5)+":";
+		    elList += i2s(shapeItems[i_s].n5)+":";
 		else if( shapeItems[i_s].n5 <= -10 )
-		    elList +="(" + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n5].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n5].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n5].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n5].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].width <= -10 || shapeItems[i_s].width == -5 )
 		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].width]) == (int)TSYS::realRound(widths[-5])) ? "" :
-			      TSYS::int2str((int)TSYS::realRound(widths[shapeItems[i_s].width])))+":";
-		else if( shapeItems[i_s].width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].width) + ":";
+			      i2s((int)TSYS::realRound(widths[shapeItems[i_s].width])))+":";
+		else if( shapeItems[i_s].width > 0  ) elList += "w" + i2s(shapeItems[i_s].width) + ":";
 		if( shapeItems[i_s].lineColor <= -10 || shapeItems[i_s].lineColor == -5 )
 		{
 		    if( colors[shapeItems[i_s].lineColor].alpha() < 255 )
@@ -610,18 +610,18 @@ void ShapeElFigure::shapeSave( WdgView *w )
 			if( colors[shapeItems[i_s].lineColor].rgba() == colors[-5].rgba() )
 			    elList = elList + "" + ":";
 			else
-			    elList = elList + colors[shapeItems[i_s].lineColor].name().toAscii().data()+"-"+
-					      TSYS::int2str(colors[shapeItems[i_s].lineColor].alpha())+":";
+			    elList = elList + colors[shapeItems[i_s].lineColor].name().toStdString()+"-"+
+					      i2s(colors[shapeItems[i_s].lineColor].alpha())+":";
 		    }
 		    else elList = elList + ((colors[shapeItems[i_s].lineColor].name() == colors[-5].name()) ? "" :
-					     colors[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+					     colors[shapeItems[i_s].lineColor].name().toStdString())+":";
 		}
-		else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].lineColor) + ":";
+		else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" + i2s(shapeItems[i_s].lineColor) + ":";
 
 		if( shapeItems[i_s].border_width <= -10 || shapeItems[i_s].border_width == -6 )
 		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].border_width]) == (int)TSYS::realRound(widths[-6])) ? "" :
-			      TSYS::int2str((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
-		else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
+			      i2s((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
+		else if( shapeItems[i_s].border_width > 0  ) elList += "w" + i2s(shapeItems[i_s].border_width) + ":";
 		if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
 		{
 		    if( colors[shapeItems[i_s].borderColor].alpha() < 255 )
@@ -629,45 +629,45 @@ void ShapeElFigure::shapeSave( WdgView *w )
 			if( colors[shapeItems[i_s].borderColor].rgba() == colors[-6].rgba() )
 			    elList = elList + "" + ":";
 			else
-			    elList = elList +  colors[shapeItems[i_s].borderColor].name().toAscii().data()+"-"+
-					       TSYS::int2str(colors[shapeItems[i_s].borderColor].alpha())+":";
+			    elList = elList +  colors[shapeItems[i_s].borderColor].name().toStdString()+"-"+
+					       i2s(colors[shapeItems[i_s].borderColor].alpha())+":";
 		    }
 		    else elList = elList + ((colors[shapeItems[i_s].borderColor].name() == colors[-6].name()) ? "" :
-					     colors[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+					     colors[shapeItems[i_s].borderColor].name().toStdString())+":";
 		}
-		else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
+		else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" + i2s(shapeItems[i_s].borderColor) + ":";
 
 		if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
 		    elList = elList + ((styles[shapeItems[i_s].style] == styles[-5]) ? "" :
-			     TSYS::int2str(styles[shapeItems[i_s].style]-1))+"\n";
-		else if( shapeItems[i_s].style > 0  ) elList = elList + "s" +  TSYS::int2str(shapeItems[i_s].style)+"\n";
+			     i2s(styles[shapeItems[i_s].style]-1))+"\n";
+		else if( shapeItems[i_s].style > 0  ) elList = elList + "s" + i2s(shapeItems[i_s].style)+"\n";
 		break;
 	    case 3:
 		elList+="bezier:";
 		if( shapeItems[i_s].n1 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n1)+":";
+		    elList += i2s(shapeItems[i_s].n1)+":";
 		else if( shapeItems[i_s].n1 <= -10 )
-		    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[i_s].n1].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[i_s].n1].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n1].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n2 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n2)+":";
+		    elList += i2s(shapeItems[i_s].n2)+":";
 		else if( shapeItems[i_s].n2 <= -10 )
-		    elList +="(" + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n2].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n2].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n3 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n3)+":";
+		    elList += i2s(shapeItems[i_s].n3)+":";
 		else if( shapeItems[i_s].n3 <= -10 )
-		    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[i_s].n3].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n3].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[i_s].n3].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n3].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].n4 > 0 )
-		    elList += TSYS::int2str(shapeItems[i_s].n4)+":";
+		    elList += i2s(shapeItems[i_s].n4)+":";
 		else if( shapeItems[i_s].n4 <= -10 )
-		    elList +="(" + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n4].x(),POS_PREC_DIG) ) + "|"
-				 + TSYS::real2str(TSYS::realRound(pnts[shapeItems[i_s].n4].y(),POS_PREC_DIG) ) + ")" + ":";
+		    elList +="(" + r2s(TSYS::realRound(pnts[shapeItems[i_s].n4].x(),POS_PREC_DIG) ) + "|"
+				 + r2s(TSYS::realRound(pnts[shapeItems[i_s].n4].y(),POS_PREC_DIG) ) + ")" + ":";
 		if( shapeItems[i_s].width <= -10 || shapeItems[i_s].width == -5 )
 		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].width]) == (int)TSYS::realRound(widths[-5])) ? "" :
-			      TSYS::int2str((int)TSYS::realRound(widths[shapeItems[i_s].width])))+":";
-		else if( shapeItems[i_s].width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].width) + ":";
+			      i2s((int)TSYS::realRound(widths[shapeItems[i_s].width])))+":";
+		else if( shapeItems[i_s].width > 0  ) elList += "w" + i2s(shapeItems[i_s].width) + ":";
 		if( shapeItems[i_s].lineColor <= -10 || shapeItems[i_s].lineColor == -5 )
 		{
 		    if( colors[shapeItems[i_s].lineColor].alpha() < 255 )
@@ -675,17 +675,17 @@ void ShapeElFigure::shapeSave( WdgView *w )
 			if( colors[shapeItems[i_s].lineColor].rgba() == colors[-5].rgba() )
 			    elList = elList + "" + ":";
 			else
-			    elList = elList + colors[shapeItems[i_s].lineColor].name().toAscii().data()+"-"+
-					      TSYS::int2str(colors[shapeItems[i_s].lineColor].alpha())+":";
+			    elList = elList + colors[shapeItems[i_s].lineColor].name().toStdString()+"-"+
+					      i2s(colors[shapeItems[i_s].lineColor].alpha())+":";
 		    }
 		    else elList = elList + ((colors[shapeItems[i_s].lineColor].name() == colors[-5].name()) ? "" :
-					      colors[shapeItems[i_s].lineColor].name().toAscii().data())+":";
+					      colors[shapeItems[i_s].lineColor].name().toStdString())+":";
 		}
-		else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].lineColor) + ":";
+		else if( shapeItems[i_s].lineColor > 0  ) elList = elList + "c" + i2s(shapeItems[i_s].lineColor) + ":";
 		if( shapeItems[i_s].border_width <= -10 || shapeItems[i_s].border_width == -6 )
 		    elList += (((int)TSYS::realRound(widths[shapeItems[i_s].border_width]) == (int)TSYS::realRound(widths[-6])) ? "" :
-			      TSYS::int2str((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
-		else if( shapeItems[i_s].border_width > 0  ) elList += "w" +  TSYS::int2str(shapeItems[i_s].border_width) + ":";
+			      i2s((int)TSYS::realRound(widths[shapeItems[i_s].border_width])))+":";
+		else if( shapeItems[i_s].border_width > 0  ) elList += "w" + i2s(shapeItems[i_s].border_width) + ":";
 		if( shapeItems[i_s].borderColor <= -10 || shapeItems[i_s].borderColor == -6 )
 		{
 		    if( colors[shapeItems[i_s].borderColor].alpha() < 255 )
@@ -693,18 +693,18 @@ void ShapeElFigure::shapeSave( WdgView *w )
 			if( colors[shapeItems[i_s].borderColor].rgba() == colors[-6].rgba() )
 			    elList = elList + "" + ":";
 			else
-			    elList = elList +  colors[shapeItems[i_s].borderColor].name().toAscii().data()+"-"+
-					       TSYS::int2str(colors[shapeItems[i_s].borderColor].alpha())+":";
+			    elList = elList +  colors[shapeItems[i_s].borderColor].name().toStdString()+"-"+
+					       i2s(colors[shapeItems[i_s].borderColor].alpha())+":";
 		    }
 		    else elList = elList + ((colors[shapeItems[i_s].borderColor].name() == colors[-6].name()) ? "" :
-					     colors[shapeItems[i_s].borderColor].name().toAscii().data())+":";
+					     colors[shapeItems[i_s].borderColor].name().toStdString())+":";
 		}
-		else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" +  TSYS::int2str(shapeItems[i_s].borderColor) + ":";
+		else if( shapeItems[i_s].borderColor > 0  ) elList = elList + "c" + i2s(shapeItems[i_s].borderColor) + ":";
 
 		if( shapeItems[i_s].style <= -10 || shapeItems[i_s].style == -5 )
 		    elList = elList + ((styles[shapeItems[i_s].style] == styles[-5]) ? "" :
-			     TSYS::int2str(styles[shapeItems[i_s].style]-1))+"\n";
-		else if( shapeItems[i_s].style > 0  ) elList = elList + "s" +  TSYS::int2str(shapeItems[i_s].style)+"\n";
+			     i2s(styles[shapeItems[i_s].style]-1))+"\n";
+		else if( shapeItems[i_s].style > 0  ) elList = elList + "s" + i2s(shapeItems[i_s].style)+"\n";
 		break;
 	}
     }
@@ -727,28 +727,28 @@ void ShapeElFigure::shapeSave( WdgView *w )
 			(shapeItems[inundationItems[i].number_shape[k]].n1 == shapeItems[inundationItems[i].number_shape[k+1]].n2) )
 		    {
 			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
-			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+			    elList += i2s(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
 			else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
-			    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
-					+ TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+			    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
+					+ r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 			if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
-			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+			    elList += i2s(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
 			else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
-			    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
-					+ TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+			    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
+					+ r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
 		    }
 		    else
 		    {
 			if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
-			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+			    elList += i2s(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
 			else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
-			    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
-					+ TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+			    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
+					+ r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
 			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
-			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+			    elList += i2s(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
 			else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
-			    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
-					+ TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+			    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
+					+ r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 		    }
 		    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n1 );
 		    temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
@@ -764,20 +764,20 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		    if( flag_n1 && temp.size()<inundationItems[i].number_shape.size() )
 		    {
 			if( shapeItems[inundationItems[i].number_shape[k]].n2 > 0 )
-			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
+			    elList += i2s(shapeItems[inundationItems[i].number_shape[k]].n2)+":";
 			else if( shapeItems[inundationItems[i].number_shape[k]].n2 <= -10 )
-			    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
-					+ TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+			    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].x(),POS_PREC_DIG) ) + "|"
+					+ r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 
 			temp.push_back( shapeItems[inundationItems[i].number_shape[k]].n2 );
 		    }
 		    if( flag_n2 && temp.size()<inundationItems[i].number_shape.size() )
 		    {
 			if( shapeItems[inundationItems[i].number_shape[k]].n1 > 0 )
-			    elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
+			    elList += i2s(shapeItems[inundationItems[i].number_shape[k]].n1)+":";
 			else if( shapeItems[inundationItems[i].number_shape[k]].n1 <= -10 )
-			    elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
-					+ TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+			    elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].x(),POS_PREC_DIG) ) + "|"
+					+ r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[k]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
 			temp.push_back(shapeItems[inundationItems[i].number_shape[k]].n1);
 		    }
 		}
@@ -786,15 +786,15 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	if( inundationItems[i].number_shape.size() <= 2 )
 	{
 	    if( shapeItems[inundationItems[i].number_shape[0]].n1 > 0 )
-		elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n1)+":";
+		elList += i2s(shapeItems[inundationItems[i].number_shape[0]].n1)+":";
 	    else if( shapeItems[inundationItems[i].number_shape[0]].n1 <= -10 )
-		elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n1].x(),POS_PREC_DIG) ) + "|"
-			     + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
+		elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n1].x(),POS_PREC_DIG) ) + "|"
+			     + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n1].y(),POS_PREC_DIG) ) + ")" + ":";
 	    if( shapeItems[inundationItems[i].number_shape[0]].n2 > 0 )
-		elList += TSYS::int2str(shapeItems[inundationItems[i].number_shape[0]].n2)+":";
+		elList += i2s(shapeItems[inundationItems[i].number_shape[0]].n2)+":";
 	    else if( shapeItems[inundationItems[i].number_shape[0]].n2 <= -10 )
-		elList +="(" + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n2].x(),POS_PREC_DIG) ) + "|"
-			     + TSYS::real2str( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
+		elList +="(" + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n2].x(),POS_PREC_DIG) ) + "|"
+			     + r2s( TSYS::realRound(pnts[shapeItems[inundationItems[i].number_shape[0]].n2].y(),POS_PREC_DIG) ) + ")" + ":";
 	}
 
 	if( inundationItems[i].brush <= -10 || inundationItems[i].brush == -7 )
@@ -804,19 +804,19 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		if( colors[inundationItems[i].brush].rgba() == colors[-7].rgba() )
 		    elList = elList + "" + ":";
 		else
-		    elList = elList + colors[inundationItems[i].brush].name().toAscii().data()+"-"+
-				      TSYS::int2str(colors[inundationItems[i].brush].alpha())+":";
+		    elList = elList + colors[inundationItems[i].brush].name().toStdString()+"-"+
+				      i2s(colors[inundationItems[i].brush].alpha())+":";
 	    }
 	    else elList = elList + ((colors[inundationItems[i].brush].name() == colors[-7].name()) ? "" :
-				     colors[inundationItems[i].brush].name().toAscii().data())+":";
+				     colors[inundationItems[i].brush].name().toStdString())+":";
 
 	}
-	else if( inundationItems[i].brush > 0  ) elList = elList + "c" +  TSYS::int2str(inundationItems[i].brush) + ":";
+	else if( inundationItems[i].brush > 0  ) elList = elList + "c" + i2s(inundationItems[i].brush) + ":";
 
 	if( inundationItems[i].brush_img <= -10 || inundationItems[i].brush_img == -5 )
 		    elList = elList + ((images[inundationItems[i].brush_img] == images[-5]) ? "" :
 		    images[inundationItems[i].brush_img].c_str())+"\n";
-	else if( inundationItems[i].brush_img > 0  ) elList = elList + "i" +  TSYS::int2str(inundationItems[i].brush_img)+"\n";
+	else if( inundationItems[i].brush_img > 0  ) elList = elList + "i" +  i2s(inundationItems[i].brush_img)+"\n";
     }
     XMLNode chCtx("attr");
     chCtx.setAttr("name",_("Elementary figure"));
@@ -840,17 +840,17 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		QPointF pnt_prev = QPointF(TSYS::realRound(pt->second.x(),POS_PREC_DIG), TSYS::realRound(pt->second.y(),POS_PREC_DIG));
 		if( pnt_prev != pnt_next )
 		{
-		    chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"x")->setAttr("prev",TSYS::real2str(pnt_prev.x(),POS_PREC_DIG))->setText(TSYS::real2str(pnt_next.x(),POS_PREC_DIG));
-		    chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"y")->setAttr("prev",TSYS::real2str(pnt_prev.y(),POS_PREC_DIG))->setText(TSYS::real2str(pnt_next.y(),POS_PREC_DIG));
+		    chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"x")->setAttr("prev",r2s(pnt_prev.x(),POS_PREC_DIG))->setText(r2s(pnt_next.x(),POS_PREC_DIG));
+		    chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"y")->setAttr("prev",r2s(pnt_prev.y(),POS_PREC_DIG))->setText(r2s(pnt_next.y(),POS_PREC_DIG));
 		}
 	    }
 	    else
 	    {
-		chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"x")->setAttr("prev","0")->setText(TSYS::real2str(pnt_next.x(),POS_PREC_DIG));
-		chCtx.childAdd("attr")->setAttr("id","p"+TSYS::int2str(pi->first)+"y")->setAttr("prev","0")->setText(TSYS::real2str(pnt_next.y(),POS_PREC_DIG));
+		chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"x")->setAttr("prev","0")->setText(r2s(pnt_next.x(),POS_PREC_DIG));
+		chCtx.childAdd("attr")->setAttr("id","p"+i2s(pi->first)+"y")->setAttr("prev","0")->setText(r2s(pnt_next.y(),POS_PREC_DIG));
 	    }
-	    stAttrs.push_back(std::make_pair("p"+TSYS::int2str(pi->first)+"x",r2s(pnt_next.x())));
-	    stAttrs.push_back(std::make_pair("p"+TSYS::int2str(pi->first)+"y",r2s(pnt_next.y())));
+	    stAttrs.push_back(std::make_pair("p"+i2s(pi->first)+"x",r2s(pnt_next.x())));
+	    stAttrs.push_back(std::make_pair("p"+i2s(pi->first)+"y",r2s(pnt_next.y())));
 	}
 	elFD->shapePnts_temp = elFD->shapePnts;
     //- Write shapes widths to data model -
@@ -864,11 +864,11 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    {
 		float wdt_prev = TSYS::realRound(pt->second, POS_PREC_DIG);
 		if( wdt_prev != wdt_next )
-		    chCtx.childAdd("attr")->setAttr("id","w"+TSYS::int2str(pi->first))->setAttr("prev",TSYS::real2str(wdt_prev,POS_PREC_DIG))->setText(TSYS::real2str(wdt_next,POS_PREC_DIG));
+		    chCtx.childAdd("attr")->setAttr("id","w"+i2s(pi->first))->setAttr("prev",r2s(wdt_prev,POS_PREC_DIG))->setText(r2s(wdt_next,POS_PREC_DIG));
 	    }
 	    else
-		chCtx.childAdd("attr")->setAttr("id","w"+TSYS::int2str(pi->first))->setAttr("prev","0")->setText(TSYS::real2str(wdt_next,POS_PREC_DIG));
-	    stAttrs.push_back(std::make_pair("w"+TSYS::int2str(pi->first),r2s(TSYS::realRound(pi->second,POS_PREC_DIG))));
+		chCtx.childAdd("attr")->setAttr("id","w"+i2s(pi->first))->setAttr("prev","0")->setText(r2s(wdt_next,POS_PREC_DIG));
+	    stAttrs.push_back(std::make_pair("w"+i2s(pi->first),r2s(TSYS::realRound(pi->second,POS_PREC_DIG))));
 	}
     elFD->shapeWidths_temp = elFD->shapeWidths;
      //- Write shapes colors to data model -
@@ -884,19 +884,19 @@ void ShapeElFigure::shapeSave( WdgView *w )
 		if( clr_prev != clr_next )
 		{
 		    if( clr_next.alpha() < 255 )
-			chCtx.childAdd("attr")->setAttr("id","c"+TSYS::int2str(pi->first))->setAttr("prev",clr_prev.name().toStdString() + "-" + TSYS::int2str(clr_prev.alpha()))->setText(clr_next.name().toStdString() + "-" + TSYS::int2str(clr_next.alpha()));
-		    else chCtx.childAdd("attr")->setAttr("id","c"+TSYS::int2str(pi->first))->setAttr("prev",clr_prev.name().toStdString())->setText(clr_next.name().toStdString());
+			chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev",clr_prev.name().toStdString() + "-" + i2s(clr_prev.alpha()))->setText(clr_next.name().toStdString() + "-" + i2s(clr_next.alpha()));
+		    else chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev",clr_prev.name().toStdString())->setText(clr_next.name().toStdString());
 		}
 	    }
 	    else
 	    {
 		if( clr_next.alpha() < 255 )
-		    chCtx.childAdd("attr")->setAttr("id","c"+TSYS::int2str(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString() + "-" + TSYS::int2str(clr_next.alpha()));
-		else chCtx.childAdd("attr")->setAttr("id","c"+TSYS::int2str(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString());
+		    chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString() + "-" + i2s(clr_next.alpha()));
+		else chCtx.childAdd("attr")->setAttr("id","c"+i2s(pi->first))->setAttr("prev","black")->setText(clr_next.name().toStdString());
 	    }
 	    if( pi->second.alpha() < 255 )
-		stAttrs.push_back(std::make_pair("c"+TSYS::int2str(pi->first),pi->second.name().toStdString()+"-"+TSYS::int2str(pi->second.alpha())));
-	    else stAttrs.push_back(std::make_pair("c"+TSYS::int2str(pi->first),pi->second.name().toStdString()));
+		stAttrs.push_back(std::make_pair("c"+i2s(pi->first),pi->second.name().toStdString()+"-"+i2s(pi->second.alpha())));
+	    else stAttrs.push_back(std::make_pair("c"+i2s(pi->first),pi->second.name().toStdString()));
 	}
     elFD->shapeColors_temp = elFD->shapeColors;
      //- Write fills images to data model -
@@ -910,10 +910,10 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    {
 		string img_prev = pt->second;
 		if( img_prev != img_next )
-		    chCtx.childAdd("attr")->setAttr("id","i"+TSYS::int2str(pi->first))->setAttr("prev",img_prev)->setText(img_next);
+		    chCtx.childAdd("attr")->setAttr("id","i"+i2s(pi->first))->setAttr("prev",img_prev)->setText(img_next);
 	    }
-	    else chCtx.childAdd("attr")->setAttr("id","i"+TSYS::int2str(pi->first))->setAttr("prev","")->setText(img_next);
-	    stAttrs.push_back(std::make_pair("i"+TSYS::int2str(pi->first),pi->second.c_str()));
+	    else chCtx.childAdd("attr")->setAttr("id","i"+i2s(pi->first))->setAttr("prev","")->setText(img_next);
+	    stAttrs.push_back(std::make_pair("i"+i2s(pi->first),pi->second.c_str()));
 	}
     elFD->shapeImages_temp = elFD->shapeImages;
      //- Write shapes styles to data model -
@@ -927,10 +927,10 @@ void ShapeElFigure::shapeSave( WdgView *w )
 	    {
 		Qt::PenStyle stl_prev = pt->second;
 		if( stl_prev != stl_next )
-		    chCtx.childAdd("attr")->setAttr("id","s"+TSYS::int2str(pi->first))->setAttr("prev",TSYS::int2str(stl_prev-1))->setText(TSYS::int2str(stl_next-1));
+		    chCtx.childAdd("attr")->setAttr("id","s"+i2s(pi->first))->setAttr("prev",i2s(stl_prev-1))->setText(i2s(stl_next-1));
 	    }
-	    else chCtx.childAdd("attr")->setAttr("id","s"+TSYS::int2str(pi->first))->setAttr("prev","0")->setText(TSYS::int2str(stl_next-1));
-	    stAttrs.push_back(std::make_pair("s"+TSYS::int2str(pi->first),i2s(pi->second-1)));
+	    else chCtx.childAdd("attr")->setAttr("id","s"+i2s(pi->first))->setAttr("prev","0")->setText(i2s(stl_next-1));
+	    stAttrs.push_back(std::make_pair("s"+i2s(pi->first),i2s(pi->second-1)));
 	}
     if(stAttrs.size()) w->attrsSet(stAttrs);
     elFD->shapeStyles_temp = elFD->shapeStyles;
@@ -1359,7 +1359,7 @@ void ShapeElFigure::wdgPopup( WdgView *w, QMenu &menu )
 
 void ShapeElFigure::toolAct( QAction *act )
 {
-    DevelWdgView *w = dynamic_cast<DevelWdgView*>((WdgView*)TSYS::str2addr(act->property("wdgAddr").toString().toAscii().data()));
+    DevelWdgView *w = dynamic_cast<DevelWdgView*>((WdgView*)TSYS::str2addr(act->property("wdgAddr").toString().toStdString()));
     if(!w) return;
     ElFigDt *elFD = (ElFigDt*)w->shpData;
     QVector<ShapeItem> &shapeItems = elFD->shapeItems;
@@ -2244,7 +2244,7 @@ void ElFigDt::properties( )
 	connect(fi_check, SIGNAL(toggled(bool)), fi_c, SLOT(setDisabled(bool)));
 
 	f_color->setValue((*colors)[inundationItems[elF->fill_index].brush].name() + "-" +
-			    QString(TSYS::int2str( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()));
+			    QString(i2s( (*colors)[inundationItems[elF->fill_index].brush].alpha() ).c_str()));
 	if(inundationItems[elF->fill_index].brush == -7) fc_check->setChecked(true);
 	f_image->setText(QString( (*images)[inundationItems[elF->fill_index].brush_img].c_str()));
 	if(inundationItems[elF->fill_index].brush_img == -5) fi_check->setChecked(true);
@@ -2497,7 +2497,7 @@ void ElFigDt::properties( )
 	if( shapeItems[elF->index].width == -5 ) lw_check->setChecked(true);
 	if( shapeItems[elF->index].width > 0 ) lw_c->setChecked(true);
 	l_color->setValue( (*colors)[shapeItems[elF->index].lineColor].name() + "-" +
-		QString(TSYS::int2str( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
+		QString(i2s( (*colors)[shapeItems[elF->index].lineColor].alpha() ).c_str()) );
 	if( shapeItems[elF->index].lineColor == -5 ) lc_check->setChecked(true);
 	if( shapeItems[elF->index].lineColor > 0 ) lc_c->setChecked(true);
 	QStringList line_styles;
@@ -2510,7 +2510,7 @@ void ElFigDt::properties( )
 	if( shapeItems[elF->index].border_width == -6 ) lbw_check->setChecked(true);
 	if( shapeItems[elF->index].border_width > 0 ) lbw_c->setChecked(true);
 	lb_color->setValue( (*colors)[shapeItems[elF->index].borderColor].name() + "-" +
-		QString(TSYS::int2str( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
+		QString(i2s( (*colors)[shapeItems[elF->index].borderColor].alpha() ).c_str()) );
 	if( shapeItems[elF->index].borderColor == -6 ) lbc_check->setChecked(true);
 	if( shapeItems[elF->index].borderColor > 0 ) lbc_c->setChecked(true);
 	propDlg.edLay()->setColumnMinimumWidth ( 2, 100 );
@@ -3287,7 +3287,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		string sev;
 		for(int i = 0; i < inundationItems.size(); i++)
 		    if(inundationItems[i].path.contains(view->mapFromGlobal(view->cursor().pos())))
-			sev = "ws_Fig"+TSYS::int2str(i);
+			sev = "ws_Fig"+i2s(i);
 		if(!sev.empty())
 		{
 		    AttrValS attrs;
@@ -3576,7 +3576,7 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		string sev;
 		for(int i = 0; i < inundationItems.size(); i++)
 		    if(inundationItems[i].path.contains(ev->pos()))
-			sev = "ws_Fig"+TSYS::int2str(i);
+			sev = "ws_Fig"+i2s(i);
 		if(!sev.empty())
 		{
 		    if(!runW->hasFocus()) runW->setFocus(Qt::MouseFocusReason);

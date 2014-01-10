@@ -1963,22 +1963,23 @@ reload:
 
 TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    bool alt1 = false;
     // int message(string cat, int level, string mess) - formation of the system message <mess> with the category <cat>, level <level>
     //  cat - message category
     //  level - message level
     //  mess - message text
-    if(iid == "message" && prms.size() >= 3)	{ message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() ); return 0; }
+    if(iid == "message" && prms.size() >= 3)	{ message(prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str()); return 0; }
     // int messDebug(string cat, string mess) - formation of the system message <mess> with the category <cat> and the appropriate level
     //  cat - message category
     //  mess - message text
-    if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messInfo" && prms.size() >= 2)	{ mess_info( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messNote" && prms.size() >= 2)	{ mess_note( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messWarning" && prms.size() >= 2){ mess_warning( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messErr" && prms.size() >= 2)	{ mess_err( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messInfo" && prms.size() >= 2)	{ mess_info(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messNote" && prms.size() >= 2)	{ mess_note(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messWarning" && prms.size() >= 2){ mess_warning(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messErr" && prms.size() >= 2)	{ mess_err(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
@@ -2065,12 +2066,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  usec - microseconds of time
     if(iid == "time")
     {
-	if(prms.empty()) return (int)time(NULL);
+	if(prms.empty()) return (int64_t)time(NULL);
 	int64_t tm = curTime();
 	prms[0].setI(tm%1000000); prms[0].setModify();
-	return (int)(tm/1000000);
+	return (int64_t)(tm/1000000);
     }
-    // int localtime(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst) 
+    // int {localtime|gmtime}(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
     //      - returns the full date based on the absolute time in seconds <fullsec> from the epoch 1.1.1970
     //  fullsec - source time ins seconds from the epoch 1.1.1970
     //  sec - seconds
@@ -2082,11 +2083,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if(iid == "localtime" && prms.size() >= 2)
+    if((iid == "localtime" || (alt1=(iid=="gmtime"))) && prms.size() >= 2)
     {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
-	localtime_r(&tm_t,&tm_tm);
+	if(alt1) gmtime_r(&tm_t, &tm_tm);
+	else localtime_r(&tm_t, &tm_tm);
 
 	prms[1].setI(tm_tm.tm_sec); prms[1].setModify();
 	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_min); prms[2].setModify(); }
@@ -2110,7 +2112,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if(iid == "mktime")
+    if(iid == "mktime" || (alt1=(iid=="timegm")))
     {
 	struct tm tm_tm;
 	tm_tm.tm_sec	= (prms.size()>=1) ? prms[0].getI() : 0;
@@ -2122,7 +2124,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	tm_tm.tm_wday	= (prms.size()>=7) ? prms[6].getI() : -1;
 	tm_tm.tm_yday	= (prms.size()>=8) ? prms[7].getI() : -1;
 	tm_tm.tm_isdst	= (prms.size()>=9) ? prms[8].getI() : -1;
-	time_t rez = mktime(&tm_tm);
+	time_t rez = alt1 ? timegm(&tm_tm) : mktime(&tm_tm);
 	if(prms.size() >= 1)	{ prms[0].setI(tm_tm.tm_sec);	prms[0].setModify(); }
 	if(prms.size() >= 2)	{ prms[1].setI(tm_tm.tm_min);	prms[1].setModify(); }
 	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_hour);	prms[2].setModify(); }
@@ -2133,37 +2135,39 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	if(prms.size() >= 8)	{ prms[7].setI(tm_tm.tm_yday);	prms[7].setModify(); }
 	if(prms.size() >= 9)	{ prms[8].setI(tm_tm.tm_isdst);	prms[8].setModify(); }
 
-	return (int)rez;
+	return (int64_t)rez;
     }
-    // string strftime(int sec, string form = "%Y-%m-%d %H:%M:%S") - converts an absolute time <sec> to the string of the desired format <form>
+    // string {strftime|strftimegm}(int sec, string form = "%Y-%m-%d %H:%M:%S")
+    //      - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
     //  form - result string format
-    if(iid == "strftime" && !prms.empty())
+    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty())
     {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
-	localtime_r(&tm_t,&tm_tm);
+	if(alt1) gmtime_r(&tm_t, &tm_tm);
+	else localtime_r(&tm_t, &tm_tm);
 	char buf[1000];
 	int rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
 	return (rez>0) ? string(buf,rez) : "";
     }
-    // int strptime(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
+    // int {strptime|strptimegm}(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>
     //  str - source time in string
     //  form - string's time template in format POSIX-function "strptime"
-    if(iid == "strptime" && !prms.empty())
+    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty())
     {
 	struct tm stm;
 	stm.tm_isdst = -1;
 	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
-	return (int)mktime(&stm);
+	return (int64_t)(alt1 ? timegm(&stm) : mktime(&stm));
     }
     // int cron(string cronreq, int base = 0) - returns the time, planned in the format of the standard Cron <cronreq>,
     //      beginning from basic time <base> or from the current, if the basic is not specified
     //  cronreq - shedule in standard Cron format
     //  base - base time
     if(iid == "cron" && !prms.empty())
-	return (int)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
+	return (int64_t)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
     if(iid == "strFromCharCode")

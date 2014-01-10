@@ -2,7 +2,7 @@
 //OpenSCADA system module UI.VISION file: tvision.cpp
 /***************************************************************************
  *   Copyright (C) 2005-2006 by Evgen Zaichuk
- *                 2006-2010 by Roman Savochenko (rom_as@oscada.org)
+ *                 2006-2014 by Roman Savochenko (rom_as@oscada.org)
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -157,7 +157,7 @@ void TVision::load_( )
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setRunPrjsSt(atoi(TBDS::genDBGet(nodePath()+"RunPrjsSt","1").c_str()));
     setExitLstRunPrjCls(atoi(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls","1").c_str()));
-    setCachePgLife(atof(TBDS::genDBGet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife())).c_str()));
+    setCachePgLife(atof(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife())).c_str()));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
 }
@@ -167,14 +167,14 @@ void TVision::save_( )
     mess_debug(nodePath().c_str(),_("Save module."));
 
     //> Save parameters to DB
-    TBDS::genDBSet(nodePath()+"StartUser",startUser());
-    TBDS::genDBSet(nodePath()+"UserPass",userPass());
-    TBDS::genDBSet(nodePath()+"RunPrjs",runPrjs());
-    TBDS::genDBSet(nodePath()+"RunPrjsSt",TSYS::int2str(runPrjsSt()));
-    TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls",TSYS::int2str(exitLstRunPrjCls()));
-    TBDS::genDBSet(nodePath()+"CachePgLife",TSYS::real2str(cachePgLife()));
-    TBDS::genDBSet(nodePath()+"VCAstation",VCAStation());
-    TBDS::genDBSet(nodePath()+"PlayCom",playCom());
+    TBDS::genDBSet(nodePath()+"StartUser", startUser());
+    TBDS::genDBSet(nodePath()+"UserPass", userPass());
+    TBDS::genDBSet(nodePath()+"RunPrjs", runPrjs());
+    TBDS::genDBSet(nodePath()+"RunPrjsSt", i2s(runPrjsSt()));
+    TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
+    TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
+    TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
+    TBDS::genDBSet(nodePath()+"PlayCom", playCom());
 }
 
 void TVision::postEnable( int flag )
@@ -256,8 +256,8 @@ QMainWindow *TVision::openWindow()
 		postMess(nodePath().c_str(),_("Auth wrong!!!"));
 		continue;
 	    }
-	    user_open = d_usr.user().toAscii().data();
-	    user_pass = d_usr.password().toAscii().data();
+	    user_open = d_usr.user().toStdString();
+	    user_pass = d_usr.password().toStdString();
 	    break;
 	}
 
@@ -371,7 +371,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/disp_n" && ctrChkNode(opt))		opt->setText(TSYS::int2str(mScrnCnt));
+    if(a_path == "/prm/st/disp_n" && ctrChkNode(opt))		opt->setText(i2s(mScrnCnt));
     else if(a_path == "/prm/cfg/start_user")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
@@ -384,7 +384,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/cachePgLife")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::real2str(cachePgLife()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(r2s(cachePgLife()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCachePgLife(atof(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/run_prj")
@@ -394,12 +394,12 @@ void TVision::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/exit_on_lst_run_prj_cls")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(exitLstRunPrjCls()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(exitLstRunPrjCls()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setExitLstRunPrjCls(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/run_prj_st")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(runPrjsSt()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(runPrjsSt()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjsSt(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/stationVCA")
@@ -443,9 +443,9 @@ void TVision::cntrCmdProc( XMLNode *opt )
 void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLev type, QWidget *parent )
 {
     //> Put system message
-    message(cat.toAscii().data(),(type==TVision::Crit) ? TMess::Crit :
+    message(cat.toStdString().c_str(), (type==TVision::Crit) ? TMess::Crit :
 			(type==TVision::Error)?TMess::Error:
-			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toAscii().data());
+			(type==TVision::Warning)?TMess::Warning:TMess::Info,"%s",mess.toStdString().c_str());
     //> QT message
     switch(type)
     {

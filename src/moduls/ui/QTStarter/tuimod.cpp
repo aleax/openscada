@@ -138,13 +138,15 @@ void TUIMod::postEnable( int flag )
 	//> Set Qt environments
 	qtArgC = qtArgEnd = 0;
 	if(SYS->argc) toQtArg(SYS->argv[0]);
+#if QT_VERSION < 0x050000
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());	//codepage for Qt across QString recode!
+#endif
 
 	//> Check command line for options no help and no daemon
 	bool isHelp = false;
 	string argCom, argVl;
 	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-    	    if(argCom == "h" || argCom == "help") isHelp = true;
+	    if(argCom == "h" || argCom == "help") isHelp = true;
 	    else if(argCom == "demon") demon_mode = true;
 		    //>Qt bind options (debug)
 	    else if(argCom == "sync" || argCom == "widgetcount" ||
@@ -405,10 +407,10 @@ void WinControl::checkForEnd( )
 void WinControl::callQTModule( )
 {
     QObject *obj = (QObject *)sender();
-    if(string("*exit*") == obj->objectName().toAscii().data())	SYS->stop();
+    if(obj->objectName() == "*exit*")	SYS->stop();
     else
     {
-	try{ callQTModule(obj->objectName().toAscii().data()); }
+	try{ callQTModule(obj->objectName().toStdString()); }
 	catch(TError err) {  }
     }
 }

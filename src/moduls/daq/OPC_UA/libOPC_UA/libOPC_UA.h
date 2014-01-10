@@ -549,7 +549,7 @@ class Client: public UA
 		    sqNumb = 33;
 		    sqReqId = 1;
 		    secLifeTime = 0;
-		    sesAccess = 0;
+		    sessOpen = 0;
 		    clearSess( );
 		}
 
@@ -562,7 +562,7 @@ class Client: public UA
 		int		secLifeTime;
 		string		sesId;
 		string		authTkId;
-		int64_t		sesAccess;
+		int64_t		sessOpen;
 		double		sesLifeTime;
 		string		servCert;
 		string		secPolicy;

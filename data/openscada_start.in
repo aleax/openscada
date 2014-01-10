@@ -115,7 +115,7 @@ wait $pPid
 echo "Program rezult: $?"
 
 # Core dump files "core[.*]" into work directory process
-if [ -n "$(which gdb)" ]; then
+if [ -n "$(which gdb 2> /dev/null)" ]; then
     cd $WorkDir/$ProjName
     for fit in `ls core* 2> /dev/null`; do
 	echo "Core dump process for back trace purchase to file crash_${fit}_${ProjName}_$(date +%F_%H:%M).txt"

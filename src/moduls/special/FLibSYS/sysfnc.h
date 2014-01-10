@@ -76,7 +76,7 @@ class dbReqSQL : public TFunction
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("addr",_("DB address"),IO::String,IO::Default));
 	    ioAdd(new IO("req",_("SQL request"),IO::String,IO::Default));
-	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,TSYS::int2str(EVAL_BOOL).c_str()));
+	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,i2s(EVAL_BOOL).c_str()));
 	}
 
 	string name( )	{ return _("DB: SQL request"); }
@@ -94,9 +94,8 @@ class dbReqSQL : public TFunction
 		for(unsigned i_r = 0; i_r < rtbl.size(); i_r++)
 		{
 		    TArrayObj *row = new TArrayObj();
-		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++)
-			row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
-		    rez->propSet(TSYS::int2str(i_r),AutoHD<TVarObj>(row));
+		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++) row->arSet(i_c, rtbl[i_r][i_c]);
+		    rez->arSet(i_r, AutoHD<TVarObj>(row));
 		}
 	    }
 	    catch(...){ }
@@ -140,7 +139,7 @@ class messGet : public TFunction
 		am->propSet("categ", recs[i_m].categ);
 		am->propSet("level", recs[i_m].level);
 		am->propSet("mess", recs[i_m].mess);
-		rez->propSet(TSYS::int2str(i_m), AutoHD<TVarObj>(am));
+		rez->arSet(i_m, AutoHD<TVarObj>(am));
 	    }
 	    val->setO(0,rez);
 	}
@@ -431,7 +430,7 @@ class real2str : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    val->setS(0,TSYS::real2str(val->getR(1),val->getI(2),val->getS(3).size()?val->getS(3)[0]:'f') );
+	    val->setS(0, r2s(val->getR(1),val->getI(2),val->getS(3).size()?val->getS(3)[0]:'f'));
 	}
 };
 
@@ -455,9 +454,9 @@ class int2str : public TFunction
 	{
 	    switch( val->getI(2) )
 	    {
-		case 8:	val->setS(0,TSYS::int2str(val->getI(1),TSYS::Oct));	break;
-		case 10:val->setS(0,TSYS::int2str(val->getI(1),TSYS::Dec));	break;
-		case 16:val->setS(0,TSYS::int2str(val->getI(1),TSYS::Hex));	break;
+		case 8:	val->setS(0, i2s(val->getI(1),TSYS::Oct));	break;
+		case 10:val->setS(0, i2s(val->getI(1),TSYS::Dec));	break;
+		case 16:val->setS(0, i2s(val->getI(1),TSYS::Hex));	break;
 		default: val->setS(0,"");
 	    }
 	}

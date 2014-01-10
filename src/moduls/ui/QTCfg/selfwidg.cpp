@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: selfwidg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2004-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -37,7 +37,11 @@
 #include <QToolTip>
 #include <QStatusBar>
 #include <QMenu>
+#if QT_VERSION < 0x050000
 #include <QPlastiqueStyle>
+#else
+#include <QCommonStyle>
+#endif
 #include <QScrollBar>
 
 #include <tsys.h>
@@ -246,11 +250,11 @@ void LineEdit::setCfg(const QString &cfg)
 	    string	pref, suff;
 	    if( !cfg.isEmpty() )
 	    {
-		minv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
-		maxv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
-		sstep = atoi(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
-		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
-		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
+		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
+		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
+		sstep = atoi(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
+		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 	    }
 	    ((QSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QSpinBox*)ed_fld)->setSingleStep(sstep);
@@ -265,12 +269,12 @@ void LineEdit::setCfg(const QString &cfg)
 	    int    dec = 2;
 	    if( !cfg.isEmpty() )
 	    {
-		minv  = atof(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
-		maxv  = atof(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
-		sstep = atof(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
-		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
-		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
-		dec   = atoi(TSYS::strSepParse(cfg.toAscii().data(),5,':').c_str());
+		minv  = atof(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
+		maxv  = atof(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
+		sstep = atof(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
+		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
+		dec   = atoi(TSYS::strSepParse(cfg.toStdString(),5,':').c_str());
 	    }
 	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
@@ -410,9 +414,9 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 
 	//> Process minimal rule
 	rl = irl->childGet(minRule);
-        kForm.setForeground(QColor(rl->attr("color").c_str()));
-        kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
-        kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
+	kForm.setForeground(QColor(rl->attr("color").c_str()));
+	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
+	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
 
 	if(rl->name() == "rule")
 	{
@@ -420,8 +424,8 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 	    expr.setMinimal(atoi(rl->attr("min").c_str()));
 	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
-            //> Call include rules
-            if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
+	    //> Call include rules
+	    if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
 	    i_t = rul_pos[minRule]+expr.matchedLength();
 	}
 	else if(rl->name() == "blk")
@@ -437,21 +441,21 @@ void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
 	    QRegExp eExpr(rl->attr("end").c_str());
 	    eExpr.setMinimal(atoi(rl->attr("min").c_str()));
 	    endIndex = eExpr.indexIn(text, startBlk);
-            if(endIndex == -1 || eExpr.matchedLength() <= 0)
-            {
-        	setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
-                sizeBlk = text.length()-startBlk;
-                i_t = text.length();
-            }
-            else
-            {
-                setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
-                sizeBlk = endIndex-startBlk;
-                i_t = endIndex + eExpr.matchedLength();
-            }
-            //> Call include rules
-            if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
-            if(endIndex == -1 || eExpr.matchedLength() <= 0)
+	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
+	    {
+		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
+		sizeBlk = text.length()-startBlk;
+		i_t = text.length();
+	    }
+	    else
+	    {
+		setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
+		sizeBlk = endIndex-startBlk;
+		i_t = endIndex + eExpr.matchedLength();
+	    }
+	    //> Call include rules
+	    if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
+	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
 		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
 	    else setCurrentBlockState(currentBlockState()& ~(0xFFFFFFFF<<(lev*8)));
 	}
@@ -476,7 +480,11 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     box->setSpacing(0);
 
     ed_fld = new QTextEdit(this);
+#if QT_VERSION < 0x050000
     ed_fld->setStyle(new QPlastiqueStyle());	//> Force style set for resize allow everywhere
+#else
+    ed_fld->setStyle(new QCommonStyle());	//> Force style set for resize allow everywhere
+#endif
     ed_fld->setContextMenuPolicy(Qt::CustomContextMenu);
     ed_fld->setTabStopWidth(20);
     ed_fld->setAcceptRichText(false);
@@ -658,7 +666,11 @@ void TextEdit::find( )
 //************************************************
 CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 {
+#if QT_VERSION < 0x050000
     setStyle(new QPlastiqueStyle());	//> Force style set for resize allow everywhere
+#else
+    setStyle(new QCommonStyle());	//> Force style set for resize allow everywhere
+#endif
 }
 
 bool CfgTable::event( QEvent *e )
@@ -817,7 +829,7 @@ string ReqIdNameDlg::target( )
 {
     if(itTp->count() <= 0) return "";
 
-    return itTp->itemData(itTp->currentIndex()).toString().toAscii().data();
+    return itTp->itemData(itTp->currentIndex()).toString().toStdString();
 }
 
 void ReqIdNameDlg::setTargets( const vector<string> &tgs )
@@ -918,9 +930,9 @@ void DlgUser::finish( int result )
 {
     if( result )
     {
-	//- Check user -
-	if( SYS->security().at().usrPresent(user().toAscii().data()) &&
-		SYS->security().at().usrAt(user().toAscii().data()).at().auth(password().toAscii().data()) )
+	//Check user
+	if(SYS->security().at().usrPresent(user().toStdString()) &&
+		SYS->security().at().usrAt(user().toStdString()).at().auth(password().toStdString()))
 	    setResult(SelOK);
 	else setResult(SelErr);
     }

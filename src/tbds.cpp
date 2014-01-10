@@ -803,10 +803,10 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 		TArrayObj *row = new TArrayObj();
 		for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++)
 		{
-		    row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
+		    row->arSet(i_c, rtbl[i_r][i_c]);
 		    if(i_r) row->TVarObj::propSet(rtbl[0][i_c], rtbl[i_r][i_c]);
 		}
-		rez->propSet(TSYS::int2str(i_r),row);
+		rez->arSet(i_r, row);
 	    }
 	}catch(...){ }
 	return rez;
@@ -952,7 +952,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/sql/trans")
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(TSYS::int2str(userSQLTrans));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(userSQLTrans));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLTrans = atoi(opt->text().c_str());
     }
     else if(a_path == "/sql/send" && enableStat( ) && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))
@@ -1025,10 +1025,10 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		    default: break;
 	        }
 		XMLNodeObj *el = new XMLNodeObj(icfg.name());
-		el->propSet("type",stp);
-		el->propSet("len",TSYS::int2str(icfg.fld().len())+"."+TSYS::int2str(icfg.fld().dec()));
-		el->propSet("def",icfg.fld().def());
-		el->propSet("key",(icfg.fld().flg()&TCfg::Key)?"1":"0");
+		el->propSet("type", stp);
+		el->propSet("len", TSYS::strMess("%d.%d",icfg.fld().len(),icfg.fld().dec()));
+		el->propSet("def", icfg.fld().def());
+		el->propSet("key", (icfg.fld().flg()&TCfg::Key)?"1":"0");
 		rez->childAdd(el);
 	    }
 	} catch(TError err) { }
@@ -1064,7 +1064,7 @@ TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const s
 		cfg.cfg(xel.at().name()).setS(xel.at().text());
 	    }
 
-	    if(iid == "fieldSeek")	{ rez = TSYS::int2str(fieldSeek(prms[0].getI(), cfg)); isRet = true; }
+	    if(iid == "fieldSeek")	{ rez = i2s(fieldSeek(prms[0].getI(),cfg)); isRet = true; }
 	    else if(iid == "fieldGet")	{ fieldGet(cfg); isRet = true; }
 	    else if(iid == "fieldSet")	fieldSet(cfg);
 	    else if(iid == "fieldDel")	fieldDel(cfg);
@@ -1119,7 +1119,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/cfg/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
     else if(a_path == "/prm/tblOff")
     {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(TSYS::int2str(tblOff));
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblOff));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = atoi(opt->text().c_str());
     }
     else if(a_path == "/prm/tbl")

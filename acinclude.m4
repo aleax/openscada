@@ -1274,9 +1274,9 @@ AC_DEFUN([AX_LIB_OpenSSL],
 [
     if test "x${OpenSSLuse}" = "x"; then
 	AC_CHECK_HEADERS([openssl/ssl.h openssl/err.h openssl/bio.h],[],
-    	    [AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
+	    [AC_MSG_ERROR(Transport.SSL: Some OpenSSL headers not found. Install or check OpenSSL developing package!)])
 	AC_CHECK_LIB([ssl],[SSL_library_init],[AC_MSG_NOTICE([LibSSL: Pass global library using])],
-    	    [AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
+	    [AC_MSG_ERROR(Transport.SSL: OpenSSL library not found. Install or check OpenSSL installation!)])
 	LIB_OpenSSL="-lssl -lcrypto"
 	AC_SUBST(LIB_OpenSSL)
 	OpenSSLuse=true
@@ -1333,21 +1333,22 @@ AC_DEFUN([AX_LIB_FFTW3],
 #
 # SYNOPSIS
 #
-#   AX_LIB_QT4()
+#   AX_LIB_Qt()
 #
 # DESCRIPTION
 #
-#   This macro provides tests of availability QT4 library.
+#   This macro provides tests of availability Qt4 or Qt5 library.
 #
 #   This macro calls:
 #
 #     PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0])
-#     AC_SUBST(QT4_MOC)
+#     PKG_CHECK_MODULES([Qt5Gui],[Qt5Gui > 5.1.0])
+#     AC_SUBST(Qt_MOC)
 #     AC_SUBST(QT4_RCC)
 #
 #   And sets:
 #
-#     QT4use=true
+#     Qt_use=true
 #
 # LICENSE
 #
@@ -1357,17 +1358,26 @@ AC_DEFUN([AX_LIB_FFTW3],
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
-AC_DEFUN([AX_LIB_QT4],
+AC_DEFUN([AX_LIB_Qt],
 [
-    if test "x${QT4use}" = "x"; then
-	PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0],[],[AC_MSG_ERROR(QT4 library QtGui not found! Install QT4 library development package.)])
-	AC_SUBST(QT4_MOC)
-	AC_SUBST(QT4_RCC)
-	QT4_MOC="$(pkg-config --variable=moc_location QtGui)"
-	QT4_RCC="$(pkg-config --variable=rcc_location QtGui)";
-	if test "x${QT4_MOC}" = "x"; then QT4_MOC="$(pkg-config --variable=prefix QtGui)/bin/moc"; fi
-	if test "x${QT4_RCC}" = "x"; then QT4_RCC="$(pkg-config --variable=prefix QtGui)/bin/rcc"; fi
-	QT4use=true
+    if test "x${Qt_use}" = "x"; then
+	QtGui=QtGui
+	PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0],[],
+	[
+	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],[AC_MSG_ERROR(QT4 or Qt5 library QtGui not found! Install Qt4 or Qt5 library development package.)])
+	    PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],[AC_MSG_ERROR(Qt5 library Qt5PrintSupport not found! Install Qt5 library development package.)])
+	    QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
+	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
+	    QtGui=Qt5Widgets
+	    Qt5_use=true
+	])
+	AC_SUBST(Qt_MOC)
+	AC_SUBST(Qt_RCC)
+	Qt_MOC="$(pkg-config --variable=moc_location ${QtGui})"
+	Qt_RCC="$(pkg-config --variable=rcc_location ${QtGui})";
+	if test "x${Qt_MOC}" = "x"; then Qt_MOC="$(pkg-config --variable=prefix ${QtGui})/bin/moc"; fi
+	if test "x${Qt_RCC}" = "x"; then Qt_RCC="$(pkg-config --variable=prefix ${QtGui})/bin/rcc"; fi
+	Qt_use=true
     fi
 ])
 
@@ -1472,7 +1482,7 @@ AC_DEFUN([AX_MOD_DAQ_EN],
 	    DAQSub_mod="${DAQSub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/daq/$1/daq_$1.la "
-    		ModsIncl="${ModsIncl}daq_$1 "
+		ModsIncl="${ModsIncl}daq_$1 "
 	    fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
@@ -1498,7 +1508,7 @@ AC_DEFUN([AX_MOD_Archive_EN],
 	    ArchSub_mod="${ArchSub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/arhiv/$1/arh_$1.la "
-    		ModsIncl="${ModsIncl}arh_$1 "
+		ModsIncl="${ModsIncl}arh_$1 "
 	    fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
@@ -1524,7 +1534,7 @@ AC_DEFUN([AX_MOD_Transport_EN],
 	    TranspSub_mod="${TranspSub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/transport/$1/tr_$1.la "
-    		ModsIncl="${ModsIncl}tr_$1 "
+		ModsIncl="${ModsIncl}tr_$1 "
 	    fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
@@ -1550,7 +1560,7 @@ AC_DEFUN([AX_MOD_TrProt_EN],
 	    ProtSub_mod="${ProtSub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/protocol/$1/prot_$1.la "
-    		ModsIncl="${ModsIncl}prot_$1 "
+		ModsIncl="${ModsIncl}prot_$1 "
 	    fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
@@ -1576,7 +1586,7 @@ AC_DEFUN([AX_MOD_UI_EN],
 	    UISub_mod="${UISub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/ui/$1/ui_$1.la "
-    		ModsIncl="${ModsIncl}ui_$1 "
+		ModsIncl="${ModsIncl}ui_$1 "
 	    fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
@@ -1602,7 +1612,7 @@ AC_DEFUN([AX_MOD_Special_EN],
 	    SpecSub_mod="${SpecSub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/special/$1/spec_$1.la "
-    		ModsIncl="${ModsIncl}spec_$1 "
+		ModsIncl="${ModsIncl}spec_$1 "
 	    fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6

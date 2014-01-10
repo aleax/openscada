@@ -1273,7 +1273,7 @@ void Client::protIO( XML_N &io )
 		oNu(rez, 0, 1);				//Encoding
 							//>>>> Standard request
 		oNu(rez, OpcUa_ProtocolVersion, 4);	//ClienUAocolVersion
-		oNu(rez, 0, 4);				//RequestType
+		oNu(rez, atoi(io.attr("ReqType").c_str()), 4);	//RequestType
 		oN(rez, atoi(io.attr("SecurityMode").c_str()), 4);	//SecurityMode
 		string clNonce = isSecNone ? string("\000") : randBytes(symKeySz);
 		oS(rez, clNonce);			//ClientNonce
@@ -1839,7 +1839,7 @@ void Client::reqService( XML_N &io )
 {
     io.setAttr("err", "");
     XML_N req("opc.tcp");
-    if(!sess.secChnl || !sess.secToken || (1e-3*(curTime()-sess.sesAccess) >= 0.75*sess.secLifeTime) ||
+    if(!sess.secChnl || !sess.secToken || (1e-3*(curTime()-sess.sessOpen) >= sess.secLifeTime) ||
 	sess.endPoint != endPoint() || sess.secPolicy != secPolicy() || sess.secMessMode != secMessMode())
     {
 	//> Close previous session for policy or endpoint change
@@ -1873,11 +1873,12 @@ void Client::reqService( XML_N &io )
 	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
 
 	//>> Send Open SecureChannel message for no secure policy
-	req.setAttr("id", "OPN")->setAttr("SecChnId", "0"/*uint2str(sess.secChnl)*/)->
+	req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->setAttr("ReqType", int2str(SC_ISSUE))->
 	    setAttr("SecPolicy", "None")->setAttr("SecurityMode", "1")->setAttr("SecLifeTm", "300000")->
 	    setAttr("SeqNumber", "51")->setAttr("SeqReqId", "1")->setAttr("ReqHandle", "0");
 	protIO(req);
 	if(!req.attr("err").empty())	{ io.setAttr("err", req.attr("err")); return; }
+	sess.sessOpen = curTime();
 	sess.sqNumb = 51;
 	sess.sqReqId = 1;
 	sess.reqHndl = 0;
@@ -1916,12 +1917,13 @@ void Client::reqService( XML_N &io )
 	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
 
 	    //>> Send Open SecureChannel message for secure policy
-	    req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->
+	    req.setAttr("id", "OPN")->setAttr("SecChnId", "0")->setAttr("ReqType", int2str(SC_ISSUE))->
 		setAttr("ClntCert", cert())->setAttr("ServCert", servCert)->setAttr("PvKey", pvKey())->
 		setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(secMessMode))->
 		setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", "51")->setAttr("SeqReqId", "1")->setAttr("ReqHandle", "0");
 	    protIO(req);
 	    if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
+	    sess.sessOpen = curTime();
 	    sess.sqNumb = 51;
 	    sess.sqReqId = 1;
 	    sess.reqHndl = 0;
@@ -1936,11 +1938,29 @@ void Client::reqService( XML_N &io )
 	sess.endPoint = endPoint( );
 	sess.secPolicy = secPolicy( );
     }
+    //Renew channel request send
+    else if(1e-3*(curTime()-sess.sessOpen) >= 0.75*sess.secLifeTime)
+    {
+	req.setAttr("id", "OPN")->setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("ReqType", int2str(SC_RENEW))->
+	    setAttr("ClntCert", cert())->setAttr("ServCert", sess.servCert)->setAttr("PvKey", pvKey())->
+	    setAttr("SecPolicy", secPolicy())->setAttr("SecurityMode", int2str(sess.secMessMode))->
+	    setAttr("SecLifeTm", "3600000")->setAttr("SeqNumber", uint2str(sess.sqNumb++))->
+	    setAttr("SeqReqId", uint2str(sess.sqReqId++))->setAttr("ReqHandle", uint2str(sess.reqHndl++));
+	protIO(req);
+	if(!req.attr("err").empty()) { io.setAttr("err",req.attr("err")); return; }
+	sess.sessOpen = curTime();
+	sess.secChnl = strtoul(req.attr("SecChnId").c_str(),NULL,10);
+	sess.secToken = strtoul(req.attr("SecTokenId").c_str(),NULL,10);
+	sess.secLifeTime = atoi(req.attr("SecLifeTm").c_str());
+	sess.clKey = req.attr("clKey");
+	sess.servKey = req.attr("servKey");
+    }
+
     io.setAttr("SecChnId", uint2str(sess.secChnl))->setAttr("SecTokenId", uint2str(sess.secToken))->
 	setAttr("SecPolicy", sess.secPolicy)->setAttr("SecurityMode", int2str(sess.secMessMode));
 
     string ireq = io.attr("id");
-    if(ireq != "FindServers" && ireq != "GetEndpoints" && (!sess.authTkId.size() || 1e-3*(curTime()-sess.sesAccess) >= sess.sesLifeTime))
+    if(ireq != "FindServers" && ireq != "GetEndpoints" && (!sess.authTkId.size() /*|| 1e-3*(curTime()-sess.sessOpen) >= sess.sesLifeTime*/))
     {
 	//>> Send CreateSession message
 	req.setAttr("id", "CreateSession")->setAttr("EndPoint", endPoint())->setAttr("sesTm", "1.2e6")->
@@ -1963,7 +1983,6 @@ void Client::reqService( XML_N &io )
 	if(!req.attr("err").empty())	{ io.setAttr("err",req.attr("err")); return; }
     }
 
-    sess.sesAccess = curTime();
     io.setAttr("authTokenId", sess.authTkId)->setAttr("ReqHandle", uint2str(sess.reqHndl++))->
 	setAttr("SeqNumber", uint2str(sess.sqNumb++))->setAttr("SeqReqId", uint2str(sess.sqReqId++))->
 	setAttr("clKey", sess.clKey)->setAttr("servKey", sess.servKey);

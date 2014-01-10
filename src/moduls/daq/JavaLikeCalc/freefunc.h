@@ -232,11 +232,7 @@ class RegW
 
 	Reg::El &val( )				{ return el; }
 
-	//> Object's properties
-	bool propEmpty( )			{ return mPrps.empty(); }
-	int propSize( )				{ return mPrps.size(); }
-	string propGet( int id );
-	void propAdd( const string &vl );
+	vector<string> &props( )		{ return mPrps; }
 
     private:
 	Reg::Type	mTp;

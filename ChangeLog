@@ -1,4 +1,16 @@
-2013-01-06 Roman
+2014-01-10 Roman
+- !!!!:SYS,UI.{QTStarter,QTCfg,Vision}: Adapted for build with Qt5, exclude Phonon.
+- SYS: Warning messages drop for no "gdb" present.
+    User's API functions gmtime(), timegm(), strftimegm(), strptimegm() for time into GMT(UTC) processing allow.
+- SYS,DB,TVariant,DAQ.JavaLikeCalc,Special.FLibSYS: Direct access, into backend, to user space object TArrayObj is set.
+- TVariant,DAQ.{JavaLikeCalc,Siemens}: Integer type expanded next to int64_t.
+- FIX:DB.{SQLite,MySQL,FireBird,PostgreSQL}: MTable::fieldDel() is fixed for no present-translated fields process.
+- DAQ.JavaLikeCalc: Direct access to object's properties set for some performance rise.
+- FIX:DAQ.OPC_UA: LifeTime for session processing into client's part is fixed and SC_RENEW support is added.
+- Special.FLibSYS: Object IO "write" implementation finished.
+
+
+2014-01-06 Roman
 - !!!!:SYS: Core files by name "core.*" processing is added.
     Moving to int64_t rise CPU consumption on AGLKS model from 63% to 65% (on AMD Turion 1.6).
     EVAL for generic integer type set to -9223372036854775807ll and for real to -1.79E308.
@@ -13,7 +25,7 @@
 - FIX:DAQ.{JavaLikeCalc,ModBus,SoundCard},Special.FLibSYS,: Some builds and moving to int64_t fix.
 
 
-2013-01-03 Roman
+2014-01-03 Roman
 - !!!!:SYS.*: Integer value type expanded to int64_t and generic field types "bool", "integer", "real", "string", "Object"
     expanded by types "Int16", "Int32", "Int64", "Float", "Double".
     "TSYS::i{bits}_LE()", "TSYS::i{bits}_BE()", "floatBE{rev}()", "doubleBErev()" functions is added for endians processing.

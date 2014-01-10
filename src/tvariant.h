@@ -208,6 +208,7 @@ class TArrayObj : public TVarObj
 
 	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
+	size_t arSize( )	{ return mEls.size(); }
 	TVariant arGet( int id );
 	void arSet( int id, TVariant val );
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,7 +46,9 @@
 #include <QFontDialog>
 #include <QColorDialog>
 #include <QClipboard>
+#include <QDrag>
 #include <QBitmap>
+#include <QMimeData>
 
 #include <tsys.h>
 
@@ -162,7 +164,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	}
     }
 
-    if( full_reset )	reset();
+    if(full_reset) { beginResetModel(); endResetModel(); }
     else emit layoutChanged();
 }
 
@@ -459,7 +461,8 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			QFont fnt;
 			char family[101]; strcpy(family,"Arial");
 			int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
-			sscanf(it->data().toString().toAscii().data(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+			sscanf(it->data().toString().toStdString().c_str(), "%100s %d %d %d %d %d",
+			    family, &size, &bold, &italic, &underline, &strike);
 			fnt.setStrikeOut(strike);
 			fnt.setUnderline(underline);
 			fnt.setItalic(italic);
@@ -478,7 +481,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			if( tit && tit->type() == ModInspAttr::Item::Wdg )
 			{
 			    XMLNode req("get");
-			    req.setAttr("path",tit->id()+"/%2fwdg%2fres")->setAttr("id",it->data().toString().toAscii().data());
+			    req.setAttr("path",tit->id()+"/%2fwdg%2fres")->setAttr("id",it->data().toString().toStdString());
 			    req.setText(TSYS::strDecode(req.text(),TSYS::base64));
 			    QImage img;
 			    if( !const_cast<ModInspAttr*>(this)->mainWin()->cntrIfCmd(req) )
@@ -526,7 +529,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 	if(it->data() == value && !isGrp) return true;
 	XMLNode chCtx("attr");
 
-	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();
+	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
 	XMLNode req("set"), reqPrev("get");
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); )
 	{
@@ -1081,7 +1084,7 @@ void InspLnk::setWdg( const string &iwdg )
 	QTreeWidgetItem *wdg_it;
 	int i_it;
 	for(i_it = 0; i_it < topLevelItemCount(); i_it++)
-	    if(lnwdg == topLevelItem(i_it)->text(0).toAscii().data())
+	    if(lnwdg == topLevelItem(i_it)->text(0).toStdString())
 		break;
 	if(i_it < topLevelItemCount()) wdg_it = topLevelItem(i_it);
 	else
@@ -1094,7 +1097,7 @@ void InspLnk::setWdg( const string &iwdg )
 	{
 	    //>> Search group
 	    for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
-		if(lngrp == wdg_it->child(i_it)->text(0).toAscii().data())
+		if(lngrp == wdg_it->child(i_it)->text(0).toStdString())
 		    break;
 	    if(i_it < wdg_it->childCount()) wdg_it = wdg_it->child(i_it);
 	    else
@@ -1118,7 +1121,7 @@ void InspLnk::setWdg( const string &iwdg )
 	//>> Search parameter
 	QTreeWidgetItem *prm_it;
 	for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
-	    if(lnatr == wdg_it->child(i_it)->text(0).toAscii().data())
+	    if(lnatr == wdg_it->child(i_it)->text(0).toStdString())
 		break;
 	if(i_it < wdg_it->childCount()) prm_it = wdg_it->child(i_it);
 	else
@@ -1142,9 +1145,9 @@ void InspLnk::setWdg( const string &iwdg )
 
 	    unsigned i_l;
 	    for(i_l = 0; i_l < rootel->childSize(); i_l++)
-		if(rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
+		if(rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toStdString() &&
 			((wdg_g==wdg_it && rootel->childGet(i_l)->attr("elGrp").empty()) ||
-			(wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toAscii().data())))
+			(wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toStdString())))
 			//((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
 		    break;
 	    if(i_l >= rootel->childSize())
@@ -1181,11 +1184,11 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 {
     if( col != 1 || show_init ) return;
 
-    string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();
+    string attr_id = index->data(0,Qt::UserRole).toString().toStdString();
 
     XMLNode req("set");
     req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
-	setText(index->text(1).toAscii().data());
+	setText(index->text(1).toStdString());
     if( mainWin()->cntrIfCmd(req) )
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,mainWin());
     setWdg(it_wdg);
@@ -1211,9 +1214,9 @@ QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewI
     QWidget *w_del;
     if(!index.isValid() || !index.parent().isValid() || index.column() == 0) return 0;
 
-    string wdg_it  = index.model()->index(0,0).data(Qt::UserRole).toString().toAscii().data();
+    string wdg_it  = index.model()->index(0,0).data(Qt::UserRole).toString().toStdString();
     QModelIndex id_it = index.model()->index(index.row(),0,index.parent());
-    string attr_id = id_it.data(Qt::UserRole).toString().toAscii().data();
+    string attr_id = id_it.data(Qt::UserRole).toString().toStdString();
 
     //> Get combobox values
     XMLNode req("get");
@@ -1366,7 +1369,7 @@ bool WdgTree::eventFilter( QObject *target, QEvent *event )
 	    QTreeWidgetItem *cur_el = item;
 	    while(cur_el)
 	    {
-	        work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
+	        work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
 	        cur_el=cur_el->parent();
 	        w_lev++;
 	    }
@@ -1413,7 +1416,7 @@ void WdgTree::selectItem( bool force )
     QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
 	cur_el=cur_el->parent();
     }
 
@@ -1843,7 +1846,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	{
 	    unsigned i_l;
 	    for(i_l = 0; i_l < list_pr.size(); i_l++)
-		if(list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data())
+		if(list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toStdString())
 		    break;
 	    if(i_l < list_pr.size()) continue;
 	    delete treeW->takeTopLevelItem(i_top);
@@ -1856,7 +1859,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	    if(!upd_prj.empty() && upd_prj != list_pr[i_l]) continue;
 	    int i_top;
 	    for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
-		if(list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data())
+		if(list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toStdString())
 		    break;
 	    nit = (i_top >= treeW->topLevelItemCount()) ? new QTreeWidgetItem(treeW) : treeW->topLevelItem(i_top);
 
@@ -1887,7 +1890,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     int vca_lev = 0;
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toStdString());
 	cur_el = cur_el->parent();
 	vca_lev++;
     }
@@ -1911,7 +1914,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     {
 	unsigned i_p;
 	for(i_p = 0; i_p < list_pg.size(); i_p++)
-	    if(list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data())
+	    if(list_pg[i_p] == nit->child(i_pit)->text(2).toStdString())
 		break;
 	if(i_p < list_pg.size()) continue;
 	delete nit->takeChild(i_pit);
@@ -1924,7 +1927,7 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	//if( !upd_pg.empty() && upd_pg != list_pg[i_p] ) continue;
 	int i_pit;
 	for(i_pit = 0; i_pit < nit->childCount(); i_pit++)
-	    if(list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data())
+	    if(list_pg[i_p] == nit->child(i_pit)->text(2).toStdString())
 		break;
 	nit_pg = (i_pit >= it->childCount()) ? new QTreeWidgetItem(it) : it->child(i_pit);
 
@@ -2016,20 +2019,20 @@ void LineEditProp::setValue( const QString &val )
 
 void LineEditProp::callDlg( )
 {
-    if( type() == LineEditProp::Font )
+    if(type() == LineEditProp::Font)
     {
-	FontDlg fnt_dlg(this,value().toAscii().data());
-	if( fnt_dlg.exec() )	setValue(fnt_dlg.font());
+	FontDlg fnt_dlg(this, value());
+	if(fnt_dlg.exec()) setValue(fnt_dlg.font());
 	setFocus();
     }
-    else if( type() == LineEditProp::Color )
+    else if(type() == LineEditProp::Color)
     {
         QColor clr;
         size_t found = value().toStdString().find("-");
-        if (found != string::npos)
+        if(found != string::npos)
         {
-            clr = QColor( value().toStdString().substr(0,found).c_str() );
-            clr.setAlpha( atoi(value().toStdString().substr(found+1).c_str()) );
+            clr = QColor(value().toStdString().substr(0,found).c_str());
+            clr.setAlpha(atoi(value().toStdString().substr(found+1).c_str()));
         }
         else clr = QColor(value());
 #if QT_VERSION >= 0x040500
@@ -2043,7 +2046,7 @@ void LineEditProp::callDlg( )
 #endif
         setFocus();
     }
-    if( toClose ) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
+    if(toClose) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }
 
 //*********************************************
@@ -2190,13 +2193,13 @@ void DevelWdgView::saveGeom( const string& item )
 {
     if(item.empty() || item == id())
     {
-	chGeomCtx.setAttr("x", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("y", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("w", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("h", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("xSc", TSYS::real2str(TSYS::realRound(x_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("ySc", TSYS::real2str(TSYS::realRound(y_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("z", TSYS::int2str(parent()->children().indexOf(this)));
+	chGeomCtx.setAttr("x", r2s(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("y", r2s(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("w", r2s(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("h", r2s(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("xSc", r2s(TSYS::realRound(x_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("ySc", r2s(TSYS::realRound(y_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("z", i2s(parent()->children().indexOf(this)));
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);
 	AttrValS attrs;
@@ -2815,7 +2818,7 @@ void DevelWdgView::chRecord( XMLNode ch )
     if(!chTree)	return;
     int cur = atoi(chTree->attr("cur").c_str());
     while(cur) chTree->childDel(--cur);
-    chTree->setAttr("cur",TSYS::int2str(cur));
+    chTree->setAttr("cur", i2s(cur));
 
     //> Merge equal changes
     if(chTree->childSize() && chTree->childGet(0)->name() == ch.name() && chTree->childGet(0)->attr("wdg") == ch.attr("wdg"))
@@ -2883,7 +2886,7 @@ void DevelWdgView::chUnDo( )
     if(rlW) load(rlW->id()); else load(id());
 
     //> Move cursor
-    chTree->setAttr("cur",TSYS::int2str(vmin(chTree->childSize(),cur+1)));
+    chTree->setAttr("cur", i2s(vmin(chTree->childSize(),cur+1)));
     chUpdate();
 }
 
@@ -2921,11 +2924,11 @@ void DevelWdgView::chReDo( )
 	{
 	    QAction addAct(NULL);
 	    addAct.setObjectName(rule->attr("parent").c_str());
-            mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())),
-        	rule->attr("id"), rule->attr("name"), rlW->id(), true);
-        }
-        else if(rule->name() == "chldPaste")
-            mainWin()->visualItPaste("0"+rule->attr("src"), rule->attr("dst"), rule->attr("name"), true);
+	    mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())),
+		rule->attr("id"), rule->attr("name"), rlW->id(), true);
+	}
+	else if(rule->name() == "chldPaste")
+	    mainWin()->visualItPaste("0"+rule->attr("src"), rule->attr("dst"), rule->attr("name"), true);
     }
 
     //> For top items (like inspector) data update
@@ -2933,7 +2936,7 @@ void DevelWdgView::chReDo( )
     if(rlW) load(rlW->id()); else load(id());
 
     //> Move cursor
-    chTree->setAttr("cur",TSYS::int2str(vmax(0,cur-1)));
+    chTree->setAttr("cur", i2s(vmax(0,cur-1)));
     chUpdate();
 }
 

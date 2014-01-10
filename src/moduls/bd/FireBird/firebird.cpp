@@ -761,10 +761,10 @@ void MTable::fieldDel( TConfig &cfg )
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++)
     {
 	string sid = tblStrct[i_fld][0];
-	TCfg &u_cfg = *cfg.at(sid, true);
-	if(u_cfg.fld().flg()&TCfg::Key && u_cfg.keyUse())
+	TCfg *u_cfg = cfg.at(sid, true);
+	if(u_cfg && u_cfg->fld().flg()&TCfg::Key && u_cfg->keyUse())
 	{
-	    req = req + (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
+	    req = req + (next?"AND \"":"\"") + mod->sqlReqCode(sid,'"') + "\"='" + mod->sqlReqCode(getVal(*u_cfg)) + "' ";
 	    next = true;
 	}
     }

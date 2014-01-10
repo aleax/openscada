@@ -191,12 +191,12 @@ class TMdContr: public TController
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
 	//> Values process
 	char getValB( SValData ival, ResString &err );
-	int  getValI( SValData ival, ResString &err );
+	int64_t getValI( SValData ival, ResString &err );
 	double getValR( SValData ival, ResString &err );
 	string getValS( SValData ival, ResString &err );
 
 	void setValB( bool ivl, SValData ival, ResString &err );
-	void setValI( int ivl, SValData ival, ResString &err );
+	void setValI( int64_t ivl, SValData ival, ResString &err );
 	void setValR( double ivl, SValData ival, ResString &err );
 	void setValS( const string &ivl, SValData ival, ResString &err );
 

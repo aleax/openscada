@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,6 @@
 #include <QDialogButtonBox>
 #include <QPainter>
 #include <QToolBar>
-#include <QPrinter>
 #include <QPrintDialog>
 #include <QDateTime>
 #include <QTextStream>
@@ -327,11 +326,11 @@ VisRun::~VisRun()
     if(fileDlg)	delete fileDlg;
 }
 
-string VisRun::user( )		{ return mWUser->user().toAscii().data(); }
+string VisRun::user( )		{ return mWUser->user().toStdString(); }
 
-string VisRun::password( )	{ return mWUser->pass().toAscii().data(); }
+string VisRun::password( )	{ return mWUser->pass().toStdString(); }
 
-string VisRun::VCAStation( )	{ return mWUser->VCAStation().toAscii().data(); }
+string VisRun::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
@@ -461,7 +460,7 @@ void VisRun::printPg( const string &ipg )
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
 	if(sdlg.exec() != QDialog::Accepted)	return;
-	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	pg = spg->itemData(spg->currentIndex()).toString().toStdString();
     }
 
     //> Find need page
@@ -534,7 +533,7 @@ void VisRun::printDiag( const string &idg )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
-	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -622,7 +621,7 @@ void VisRun::printDoc( const string &idoc )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
-	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    doc = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -666,7 +665,7 @@ void VisRun::exportPg( const string &ipg )
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
 	if(sdlg.exec() != QDialog::Accepted)	return;
-	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	pg = spg->itemData(spg->currentIndex()).toString().toStdString();
     }
 
     //> Find need page
@@ -708,7 +707,7 @@ void VisRun::exportDiag( const string &idg )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
-	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -723,7 +722,7 @@ void VisRun::exportDiag( const string &idg )
 	if(fileName.indexOf(QRegExp("\\.csv$")) != -1)
 	{
 	    //>>> Open destination file
-	    int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	    int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	    if(fd < 0)
 	    {
 		mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
@@ -753,14 +752,14 @@ void VisRun::exportDiag( const string &idg )
 		for(unsigned i_v = 0; i_v < baseVls.size() && baseVls[i_v].tm <= eTmVl; i_v++)
 		{
 		    if(baseVls[i_v].tm < bTmVl) continue;
-		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+TSYS::int2str(baseVls[i_v].tm%1000000);
+		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+i2s(baseVls[i_v].tm%1000000);
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
 		    {
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
-    			if(cPrm.val().size() && cPrm.color().isValid())
-    			{
+			if(cPrm.val().size() && cPrm.color().isValid())
+			{
 			    vPos = cPrm.val(baseVls[i_v].tm);
-			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toAscii().data():"");
+			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toStdString():"");
 			}
 		    }
 		    CSVr += "\x0D\x0A";
@@ -838,7 +837,7 @@ void VisRun::exportDoc( const string &idoc )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
-	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    doc = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -847,7 +846,7 @@ void VisRun::exportDoc( const string &idoc )
 	_("XHTML (*.html);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty())
     {
-	int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	if(fd < 0)
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
@@ -972,7 +971,7 @@ void VisRun::styleChanged( )
 {
     //> Get current style
     XMLNode req("set");
-    req.setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle")->setText(TSYS::int2str(style()));
+    req.setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle")->setText(i2s(style()));
     if( cntrIfCmd(req) )
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
@@ -1015,12 +1014,12 @@ void VisRun::alarmAct( QAction *alrm )
 
     XMLNode req("quittance");
     req.setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm")->
-	setAttr("tmpl",TSYS::uint2str(quittance))->
+	setAttr("tmpl",u2s(quittance))->
 	setAttr("wdg",qwdg);
     cntrIfCmd(req);
 
     //> Send event to master page
-    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
+    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toStdString());
 }
 
 void VisRun::initSess( const string &prj_it, bool crSessForce )
@@ -1051,7 +1050,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	ls_wdg->setCurrentRow(0);
 
 	if(conreq.exec() == QDialog::Accepted && ls_wdg->currentItem())
-	    work_sess = (ls_wdg->currentRow() > 0) ? ls_wdg->currentItem()->text().toAscii().data() : "";
+	    work_sess = (ls_wdg->currentRow() > 0) ? ls_wdg->currentItem()->text().toStdString() : "";
 	else { close(); return; }
 
     }
@@ -1287,7 +1286,7 @@ void VisRun::alarmSet( unsigned alarm )
 
     //> Alarm types init
     //>> Set momo sound alarm
-    if( isMaster && (ch_tp>>16)&TVision::Alarm )
+    if(isMaster && (ch_tp>>16)&TVision::Alarm)
     {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
@@ -1299,7 +1298,7 @@ void VisRun::alarmSet( unsigned alarm )
 	    ev.type = EV_SND;
 	    ev.code = SND_TONE;
 	    ev.value = ((alarm>>16)&TVision::Alarm) ? 1000 : 0;
-	    write(hd,&ev,sizeof(ev));
+	    write(hd, &ev, sizeof(ev));
 	    ::close(hd);
 	}
     }
@@ -1380,7 +1379,7 @@ void VisRun::updatePage( )
 
     //> Pages update
     XMLNode req("openlist");
-    req.setAttr("tm",TSYS::uint2str(reqtm))->
+    req.setAttr("tm",u2s(reqtm))->
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 
     if(!(rez=cntrIfCmd(req)))
@@ -1394,7 +1393,7 @@ void VisRun::updatePage( )
 		    break;
 	    if(i_ch < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[i_p])))) continue;
 	    if(!pg->property("cntPg").toString().isEmpty())
-		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toAscii().data()))->setPgOpenSrc("");
+		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toStdString()))->setPgOpenSrc("");
 	    else
 	    {
 		if(pg != master_pg)	pg->deleteLater();
@@ -1432,29 +1431,29 @@ void VisRun::updatePage( )
 	unsigned wAlrmSt = alarmSt( );
 	req.clear()->
 	    setName("get")->
-	    setAttr("mode","stat")->
-	    setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm");
-	if( !cntrIfCmd(req) ) wAlrmSt = atoi(req.attr("alarmSt").c_str());
+	    setAttr("mode", "stat")->
+	    setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm");
+	if(!cntrIfCmd(req)) wAlrmSt = atoi(req.attr("alarmSt").c_str());
 
 	//>> Get sound resources for play
-	if( alarmTp(TVision::Sound,true) && !alrmPlay->isRunning() )
+	if(alarmTp(TVision::Sound,true) && !alrmPlay->isRunning())
 	{
 	    req.clear()->
 		setName("get")->
-		setAttr("mode","sound")->
-		setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm")->
-		setAttr("tm",TSYS::uint2str(alrmPlay->time()))->
-		setAttr("wdg",alrmPlay->widget());
-	    if( !cntrIfCmd(req) )
+		setAttr("mode", "sound")->
+		setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm")->
+		setAttr("tm", u2s(alrmPlay->time()))->
+		setAttr("wdg", alrmPlay->widget());
+	    if(!cntrIfCmd(req))
 	    {
-		alrmPlay->setTime( strtoul(req.attr("tm").c_str(),NULL,10) );
-		alrmPlay->setWidget( req.attr("wdg") );
-		alrmPlay->setData( TSYS::strDecode(req.text(),TSYS::base64) );
+		alrmPlay->setTime(strtoul(req.attr("tm").c_str(),NULL,10));
+		alrmPlay->setWidget(req.attr("wdg"));
+		alrmPlay->setData(TSYS::strDecode(req.text(),TSYS::base64));
 	    }
 	}
 
 	//>> Set alarm
-	alarmSet( wAlrmSt );
+	alarmSet(wAlrmSt);
     }
 
     //> Old pages from cache for close checking

@@ -18,11 +18,11 @@ ui_QTCfg_la_LIBADD = $(QtGui_LIBS)
 
 
 qrc_qtcfg.cpp: qtcfg.qrc
-	$(QT4_RCC) -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp
+	$(Qt_RCC) -name QTCfg qtcfg.qrc -o qrc_qtcfg.cpp
 moc_qtcfg.cpp: qtcfg.h
-	$(QT4_MOC) qtcfg.h > moc_qtcfg.cpp
+	$(Qt_MOC) qtcfg.h > moc_qtcfg.cpp
 moc_selfwidg.cpp: selfwidg.h
-	$(QT4_MOC) selfwidg.h > moc_selfwidg.cpp
+	$(Qt_MOC) selfwidg.h > moc_selfwidg.cpp
 
 I18N_mod = $(oscd_modulpref)QTCfg
 include ../../../../I18N.mk

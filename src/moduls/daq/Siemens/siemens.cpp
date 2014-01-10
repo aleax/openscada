@@ -1220,7 +1220,7 @@ char TMdContr::getValB( SValData ival, ResString &err )
     return EVAL_BOOL;
 }
 
-int TMdContr::getValI( SValData ival, ResString &err )
+int64_t TMdContr::getValI( SValData ival, ResString &err )
 {
     int iv_sz = valSize( IO::Integer, ival.sz );
     for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
@@ -1239,7 +1239,7 @@ int TMdContr::getValI( SValData ival, ResString &err )
 	}
     if(err.getVal().empty()) err.setVal( _("11:Value is not gathered.") );
 
-    return EVAL_INT;
+    return (int64_t)EVAL_INT;
 }
 
 double TMdContr::getValR( SValData ival, ResString &err )
@@ -1306,7 +1306,7 @@ void TMdContr::setValB( bool ivl, SValData ival, ResString &err )
     catch(TError cerr) { if(err.getVal().empty()) err.setVal(cerr.mess); }
 }
 
-void TMdContr::setValI( int ivl, SValData ival, ResString &err )
+void TMdContr::setValI( int64_t ivl, SValData ival, ResString &err )
 {
     int val = getValI(ival, err);
     if(val == EVAL_INT || val == ivl) return;

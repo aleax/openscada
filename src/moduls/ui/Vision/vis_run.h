@@ -30,6 +30,7 @@
 #include <QMainWindow>
 #include <QLabel>
 #include <QFileDialog>
+#include <QPrinter>
 
 #include "tvision.h"
 

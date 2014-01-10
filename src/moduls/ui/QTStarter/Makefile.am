@@ -18,9 +18,9 @@ ui_QTStarter_la_LIBADD = $(QtGui_LIBS)
 
 
 qrc_qtstarter.cpp: qtstarter.qrc
-	$(QT4_RCC) -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
+	$(Qt_RCC) -name QTStarter qtstarter.qrc -o qrc_qtstarter.cpp
 moc_tuimod.cpp: tuimod.h
-	$(QT4_MOC) tuimod.h > moc_tuimod.cpp
+	$(Qt_MOC) tuimod.h > moc_tuimod.cpp
 
 I18N_mod = $(oscd_modulpref)QTStarter
 include ../../../../I18N.mk

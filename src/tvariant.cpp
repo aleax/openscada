@@ -147,7 +147,7 @@ char TVariant::getB( ) const
     {
 	case Null:	return false;
 	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(tvl.c_str()); }
-	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_BOOL : (bool)tvl; }
+	case Integer:	{ int64_t tvl = getI(); return (tvl==EVAL_INT) ? EVAL_BOOL : (bool)tvl; }
 	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_BOOL : (bool)tvl; }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_BOOL : true; }
 	case Boolean:	return val.b;
@@ -160,8 +160,8 @@ int64_t TVariant::getI( ) const
 {
     switch(type())
     {
-	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_INT : atoi(tvl.c_str()); }
-	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_INT : (int)tvl; }
+	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_INT : atoll(tvl.c_str()); }
+	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_INT : (int64_t)tvl; }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_INT : tvl; }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_INT : 1; }
 	case Integer:	return val.i;
@@ -175,7 +175,7 @@ double TVariant::getR( ) const
     switch(type())
     {
 	case String:	{ string tvl = getS(); return (tvl==EVAL_STR) ? EVAL_REAL : atof(tvl.c_str()); }
-	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_REAL : tvl; }
+	case Integer:	{ int64_t tvl = getI();return (tvl==EVAL_INT) ? EVAL_REAL : tvl; }
 	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_REAL : tvl; }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_REAL : 1; }
 	case Real:	return val.r;
@@ -188,9 +188,9 @@ string TVariant::getS( ) const
 {
     switch(type())
     {
-	case Integer:	{ int tvl = getI();    return (tvl==EVAL_INT) ? EVAL_STR : TSYS::int2str(tvl); }
-	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_STR : TSYS::real2str(tvl); }
-	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(tvl); }
+	case Integer:	{ int64_t tvl = getI();return (tvl==EVAL_INT) ? EVAL_STR : ll2s(tvl); }
+	case Real:	{ double tvl = getR(); return (tvl==EVAL_REAL) ? EVAL_STR : r2s(tvl); }
+	case Boolean:	{ char tvl = getB();   return (tvl==EVAL_BOOL) ? EVAL_STR : i2s(tvl); }
 	case Object:	{ AutoHD<TVarObj> tvl = getO(); return (tvl.at().objName() == "EVAL") ? EVAL_STR : tvl.at().getStrXML(); }
 	case String:
 	    if(mSize < sizeof(val.sMini)) return string(val.sMini,mSize);
@@ -212,10 +212,10 @@ void TVariant::setB( char ivl )
     if(type() != Boolean && !mFixedTp) setType(Boolean);
     switch(type())
     {
-	case String:	setS((ivl==EVAL_BOOL) ? EVAL_STR : TSYS::int2str(ivl));	break;
+	case String:	setS((ivl==EVAL_BOOL) ? EVAL_STR : i2s(ivl));	break;
 	case Integer:	setI((ivl==EVAL_BOOL) ? EVAL_INT : ivl);	break;
 	case Real:	setR((ivl==EVAL_BOOL) ? EVAL_REAL : ivl);	break;
-	case Boolean:	val.b = ivl;	break;
+	case Boolean:	val.b = ivl;					break;
 	default: break;
     }
 }
@@ -225,8 +225,8 @@ void TVariant::setI( int64_t ivl )
     if(type() != Integer && !mFixedTp) setType(Integer);
     switch(type())
     {
-	case String:	setS((ivl==EVAL_INT) ? EVAL_STR : TSYS::int2str(ivl));	break;
-	case Integer:	val.i = ivl;	break;
+	case String:	setS((ivl==EVAL_INT) ? EVAL_STR : ll2s(ivl));	break;
+	case Integer:	val.i = ivl;					break;
 	case Real:	setR((ivl==EVAL_INT) ? EVAL_REAL : ivl);	break;
 	case Boolean:	setB((ivl==EVAL_INT) ? EVAL_BOOL : (bool)ivl);	break;
 	default: break;
@@ -238,10 +238,10 @@ void TVariant::setR( double ivl )
     if(type() != Real && !mFixedTp) setType(Real);
     switch(type())
     {
-	case String:	setS((ivl==EVAL_REAL) ? EVAL_STR : TSYS::real2str(ivl));	break;
-	case Integer:	setI((ivl==EVAL_REAL) ? EVAL_INT : (int)ivl);	break;
-	case Real:	val.r = ivl;	break;
-	case Boolean:	setB((ivl==EVAL_REAL) ? EVAL_BOOL : (bool)ivl);	break;
+	case String:	setS((ivl==EVAL_REAL) ? EVAL_STR : r2s(ivl));	break;
+	case Integer:	setI((ivl==EVAL_REAL) ? EVAL_INT : (int64_t)ivl);	break;
+	case Real:	val.r = ivl;						break;
+	case Boolean:	setB((ivl==EVAL_REAL) ? EVAL_BOOL : (bool)ivl);		break;
 	default: break;
     }
 }
@@ -274,7 +274,7 @@ void TVariant::setS( const string &ivl )
 	    }
 	    mSize = ivl.size();
 	    break;
-	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : atoi(ivl.c_str()));	break;
+	case Integer:	setI((ivl==EVAL_STR) ? EVAL_INT : atoll(ivl.c_str()));	break;
 	case Real:	setR((ivl==EVAL_STR) ? EVAL_REAL : atof(ivl.c_str()));	break;
 	case Boolean:	setB((ivl==EVAL_STR) ? EVAL_BOOL : (bool)atoi(ivl.c_str()));	break;
 	case Object:	setO((ivl==EVAL_STR) ? AutoHD<TVarObj>(new TEValObj()) : TVarObj::parseStrXML(ivl,NULL,getO())); break;
@@ -393,7 +393,7 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
 	{
 	    XMLNode *cNd = nd->childGet(i_ch);
 	    if(cNd->name() == "str")		rez->mProps[cNd->attr("p")] = cNd->text();
-	    else if(cNd->name() == "int")	rez->mProps[cNd->attr("p")] = atoi(cNd->text().c_str());
+	    else if(cNd->name() == "int")	rez->mProps[cNd->attr("p")] = (int64_t)atoll(cNd->text().c_str());
 	    else if(cNd->name() == "real")	rez->mProps[cNd->attr("p")] = atof(cNd->text().c_str());
 	    else if(cNd->name() == "bool")	rez->mProps[cNd->attr("p")] = (char)atoi(cNd->text().c_str());
 	    else if(cNd->name() == "TVarObj")	rez->mProps[cNd->attr("p")] = TVarObj::parseStrXML("", cNd);
@@ -516,7 +516,7 @@ AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 	string p = cNd->attr("p");
 	TVariant vl;
 	if(cNd->name() == "str")		vl = cNd->text();
-	else if(cNd->name() == "int")		vl = atoi(cNd->text().c_str());
+	else if(cNd->name() == "int")		vl = (int64_t)atoll(cNd->text().c_str());
 	else if(cNd->name() == "real")		vl = atof(cNd->text().c_str());
 	else if(cNd->name() == "bool")		vl = (char)atoi(cNd->text().c_str());
 	else vl = TVarObj::parseStrXML("", cNd);
@@ -533,7 +533,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     // string join(string sep = ",") - join items to string
     //  sep - items separator
-    if( id == "join" || id == "toString" || id == "valueOf" )
+    if(id == "join" || id == "toString" || id == "valueOf")
     {
 	string rez, sep = prms.size() ? prms[0].getS() : ",";
 	oRes.resRequestR();
@@ -544,17 +544,17 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // TArrayObj concat(TArrayObj arr) - concatenate array
     //  arr - source array
-    if( id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat() )
+    if(id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat())
     {
 	oRes.resRequestW();
-	for(int i_p = 0; i_p < prms[0].getO().at().propGet("length").getI(); i_p++)
-	    mEls.push_back(prms[0].getO().at().propGet(TSYS::int2str(i_p)));
+	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
+	for(int i_p = 0; i_p < sArr->mEls.size(); i_p++) mEls.push_back(sArr->mEls[i_p]);
 	oRes.resRelease();
 	return this;
     }
     // int push(ElTp var, ...) - push variables to array
     //  var - variable
-    if( id == "push" && prms.size() )
+    if(id == "push" && prms.size())
     {
 	oRes.resRequestW();
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.push_back(prms[i_p]);
@@ -562,9 +562,9 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	return (int)mEls.size();
     }
     // ElTp pop( ) - pop variable from array
-    if( id == "pop" )
+    if(id == "pop")
     {
-	if(mEls.empty()) throw TError("ArrayObj",_("Array is empty."));
+	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
 	oRes.resRequestW();
 	TVariant val = mEls.back();
 	mEls.pop_back();
@@ -572,7 +572,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	return val;
     }
     // Array reverse( ) - reverse array's items order
-    if( id == "reverse" )
+    if(id == "reverse")
     {
 	oRes.resRequestW();
 	reverse(mEls.begin(),mEls.end());
@@ -580,9 +580,9 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	return this;
     }
     // ElTp shift( ) - shift array's items upward
-    if( id == "shift" )
+    if(id == "shift")
     {
-	if(mEls.empty()) throw TError("ArrayObj",_("Array is empty."));
+	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
 	oRes.resRequestW();
 	TVariant val = mEls.front();
 	mEls.erase(mEls.begin());
@@ -591,17 +591,17 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
     // int unshift(ElTp var, ...) - shift items to array upward
     //  var - variable
-    if( id == "unshift" && prms.size() )
+    if(id == "unshift" && prms.size())
     {
 	oRes.resRequestW();
-	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.insert(mEls.begin()+i_p,prms[i_p]);
+	for(unsigned i_p = 0; i_p < prms.size(); i_p++) mEls.insert(mEls.begin()+i_p, prms[i_p]);
 	oRes.resRelease();
 	return (int)mEls.size();
     }
     // Array slice(int beg, int end) - get array part from positon <beg> to <end> (exclude)
     //  beg - begin position
     //  end - end position
-    if( id == "slice" && prms.size() )
+    if(id == "slice" && prms.size())
     {
 	oRes.resRequestR();
 	int beg = prms[0].getI();
@@ -613,7 +613,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	end = vmin(end,(int)mEls.size());
 	TArrayObj *rez = new TArrayObj();
 	for(int i_p = beg; i_p < end; i_p++)
-	    rez->propSet(TSYS::int2str(i_p-beg), mEls[i_p]);
+	    rez->arSet(i_p-beg, mEls[i_p]);
 	oRes.resRelease();
 	return rez;
     }
@@ -621,16 +621,16 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     //  beg - start position
     //  remN - removed items number
     //  val1, val2, ... - values for insert
-    if( id == "splice" && prms.size() >= 1 )
+    if(id == "splice" && prms.size() >= 1)
     {
 	oRes.resRequestW();
-	int beg = vmax(0,prms[0].getI());
+	int beg = vmax(0, prms[0].getI());
 	int cnt = (prms.size()>1) ? prms[1].getI() : mEls.size();
 	//> Delete elements
 	TArrayObj *rez = new TArrayObj();
 	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++)
 	{
-	    rez->propSet(TSYS::int2str(i_c), mEls[beg]);
+	    rez->arSet(i_c, mEls[beg]);
 	    mEls.erase(mEls.begin()+beg);
 	}
 	//> Insert elements
@@ -726,14 +726,14 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
 
     if(all && global)
 	for(int curPos = 0, i_n = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
-	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[0],capv[1]-capv[0]));
+	    rez->arSet(i_n, string(vl.data()+capv[0],capv[1]-capv[0]));
     else
     {
 	int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
 	for(int i_n = 0; i_n < n; i_n++)
-	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
+	    rez->arSet(i_n, string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
 	if(global) lastIndex = (n>0) ? capv[1] : 0;
-	if(n > 0) { rez->propSet("index",capv[0]); rez->propSet("input",vl); }
+	if(n > 0) { rez->propSet("index", capv[0]); rez->propSet("input", vl); }
     }
     return rez;
 }
@@ -757,11 +757,11 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
     int curPos = 0, i_n = 0;
     for(int se = 0; (se=pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && (!limit || i_n < limit); curPos = capv[1])
     {
-	rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,capv[0]-curPos));
+	rez->arSet(i_n++, string(vl.data()+curPos,capv[0]-curPos));
 	for(int i_se = 1; i_se < se && (!limit || i_n < limit); i_se++)
-	    rez->propSet(TSYS::int2str(i_n++), string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
+	    rez->arSet(i_n++, string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
     }
-    if(curPos <= (int)vl.size() && (!limit || i_n < limit)) rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,vl.size()-curPos));
+    if(curPos <= (int)vl.size() && (!limit || i_n < limit)) rez->arSet(i_n++, string(vl.data()+curPos,vl.size()-curPos));
     return rez;
 }
 
@@ -1146,7 +1146,7 @@ void XMLNodeObj::fromXMLNode(XMLNode &nd)
     vector<string> alst;
     nd.attrList(alst);
     for(unsigned i_a = 0; i_a < alst.size(); i_a++)
-	propSet(alst[i_a],nd.attr(alst[i_a]));
+	propSet(alst[i_a], nd.attr(alst[i_a]));
 
     for(unsigned i_ch = 0; i_ch < nd.childSize(); i_ch++)
     {

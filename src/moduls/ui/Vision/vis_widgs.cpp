@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -215,10 +215,10 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
 
     connect(this, SIGNAL(finished(int)), this, SLOT(finish(int)));
 
-    //- Fill users list -
+    //Fill users list
     XMLNode req("get");
     req.setAttr("path","/Security/%2fusgr%2fusers");
-    if( !mod->cntrIfCmd(req,iuser.toAscii().data(),ipass.toAscii().data(),iVCAstat.toAscii().data(),true) )
+    if(!mod->cntrIfCmd(req,iuser.toStdString(),ipass.toStdString(),iVCAstat.toStdString(),true))
 	for(unsigned i_u = 0; i_u < req.childSize(); i_u++)
 	    users->addItem(req.childGet(i_u)->text().c_str());
 
@@ -241,8 +241,8 @@ void DlgUser::finish( int result )
     {
 	//> Check user auth
 	XMLNode req("get");
-	req.setAttr("path",string("/Security/")+user().toAscii().data()+"/%2fauth")->setAttr("password",password().toAscii().data());
-	if(!mod->cntrIfCmd(req,user().toAscii().data(),password().toAscii().data(),VCAstat.toAscii().data(),true) && atoi(req.text().c_str()))
+	req.setAttr("path",string("/Security/")+user().toStdString()+"/%2fauth")->setAttr("password",password().toStdString());
+	if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true) && atoi(req.text().c_str()))
 	    setResult(SelOK);
 	else setResult(SelErr);
     }
@@ -345,7 +345,7 @@ void FontDlg::setFont( const QString &fnt )
 {
     char family[101]; strcpy(family,"Arial");
     int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
-    sscanf(fnt.toAscii().data(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+    sscanf(fnt.toStdString().c_str(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
     fntSel->setCurrentFont(QFont(QString(family).replace(QRegExp("_")," ")));
     spBox->setValue(size);
     chBold->setCheckState(bold?Qt::Checked:Qt::Unchecked);
@@ -589,11 +589,11 @@ void LineEdit::setCfg(const QString &cfg)
 	    string	pref, suff;
 	    if( !cfg.isEmpty() )
 	    {
-		minv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
-		maxv  = atoi(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
-		sstep = atoi(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
-		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
-		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
+		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
+		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
+		sstep = atoi(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
+		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 	    }
 	    ((QSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QSpinBox*)ed_fld)->setSingleStep(sstep);
@@ -608,12 +608,12 @@ void LineEdit::setCfg(const QString &cfg)
 	    int    dec = 2;
 	    if( !cfg.isEmpty() )
 	    {
-		minv  = atof(TSYS::strSepParse(cfg.toAscii().data(),0,':').c_str());
-		maxv  = atof(TSYS::strSepParse(cfg.toAscii().data(),1,':').c_str());
-		sstep = atof(TSYS::strSepParse(cfg.toAscii().data(),2,':').c_str());
-		pref  = TSYS::strSepParse(cfg.toAscii().data(),3,':');
-		suff  = TSYS::strSepParse(cfg.toAscii().data(),4,':');
-		dec   = atoi(TSYS::strSepParse(cfg.toAscii().data(),5,':').c_str());
+		minv  = atof(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
+		maxv  = atof(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
+		sstep = atof(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
+		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
+		dec   = atoi(TSYS::strSepParse(cfg.toStdString(),5,':').c_str());
 	    }
 	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
