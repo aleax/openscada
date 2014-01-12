@@ -178,7 +178,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    ao->arSet(i_cnt, (int)rez);
 		}
 		if(ao) return ao;
-		return EVAL_INT;
+		return (int64_t)EVAL_INT;
 	    }
 	    // From file
 	    char buf[STR_BUF_LEN];
@@ -227,7 +227,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    ao->arSet(i_cnt, rez);
 		}
 	    if(ao) return ao;
-	    return EVAL_INT;
+	    return (int64_t)EVAL_INT;
 	}
 	//Real
 	else
