@@ -64,7 +64,7 @@ void Session::setUser( const string &it )
 
 void Session::setEnable( bool val )
 {
-    int64_t d_tm;
+    int64_t d_tm = 0;
     ResAlloc res(mCalcRes, true);
 
     if(val == enable())	return;
@@ -149,7 +149,7 @@ void Session::setEnable( bool val )
 
 void Session::setStart( bool val )
 {
-    int64_t d_tm;
+    int64_t d_tm = 0;
 
     ResAlloc res(mCalcRes, true);
 

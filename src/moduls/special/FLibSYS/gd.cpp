@@ -39,6 +39,7 @@ GDObj::~GDObj( )
 bool GDObj::load( const string &inm, bool file )
 {
 
+    return true;
 }
 
 string GDObj::save( const string &inm, bool file )

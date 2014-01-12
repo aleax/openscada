@@ -1,3 +1,16 @@
+2014-01-12 Roman
+- !!!!:SYS: Removed separated start scripts "openscada_demo", "openscada_AGLKS", "openscada_Boiler" and used instead
+	appropriated symbol links to "openscada_start".
+    Mostly build warnings resolved and some hiden bugs fixed.
+    FIX:Debug labels disable processing is fixed.
+- FIX:Archive.FSArch: Closing messages file on write error is fixed.
+- !:DB:DBF: Mostly code clean.
+- DAQ.{AMRDevs,BFN,Comedi}: Integer type expanded next to int64_t.
+- FIX:DAQ.SMH2Gi: AO forming and processing is fixed.
+- Special.FLibSYS: Object IO tested and adapted for main functions.
+- !:FIX:Special.SystemTests: Tests execution rules from config file fix.
+
+
 2014-01-10 Roman
 - !!!!:SYS,UI.{QTStarter,QTCfg,Vision}: Adapted for build with Qt5, exclude Phonon.
 - SYS: Warning messages drop for no "gdb" present.

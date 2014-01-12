@@ -327,7 +327,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), m_auto(false), m_da(NULL), daData(NULL)
+    TParamContr(name,tp_prm), daData(NULL), m_auto(false), m_da(NULL)
 {
 
 }

@@ -71,9 +71,8 @@ void UpTime::getVal( TMdPrm *prm )
     {
 	FILE *f = fopen("/proc/uptime","r");
 	if(f == NULL) return;
-	fscanf(f,"%lu",&val);
+	devOK = (fscanf(f,"%lu",&val) == 1);
 	fclose(f);
-	devOK = true;
     }
     else { val = time(NULL) - st_tm; devOK = true; }
 

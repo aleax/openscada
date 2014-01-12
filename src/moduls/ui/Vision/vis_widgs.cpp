@@ -1187,7 +1187,7 @@ string WdgView::resGet( const string &res )
 
 void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     if(mess_lev() == TMess::Debug && wLevel() == 0) d_cnt = TSYS::curTime();
 
     isReload = shape;

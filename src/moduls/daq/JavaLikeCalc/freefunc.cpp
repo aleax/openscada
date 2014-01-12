@@ -1537,7 +1537,7 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 	default: break;
     }
 
-    for(int i_p = 0; i_p < rg.props().size(); i_p++)
+    for(unsigned i_p = 0; i_p < rg.props().size(); i_p++)
     {
 	if(fObj && i_p == (rg.props().size()-1)) break;
 	if(vl.isNull())	return TVariant();	//Null //return false;
@@ -1681,7 +1681,7 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
     else if(rg.type() == Reg::Obj)
     {
 	TVariant vl(*rg.val().o_el);
-	for(int i_p = 0; i_p < rg.props().size(); i_p++)
+	for(unsigned i_p = 0; i_p < rg.props().size(); i_p++)
 	    if(i_p < (rg.props().size()-1)) vl = vl.getO().at().propGet(rg.props()[i_p]);
 	    else vl.getO().at().propSet(rg.props()[i_p], val);
     }

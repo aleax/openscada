@@ -26,9 +26,9 @@ using namespace FLibSYS;
 //*************************************************
 //* IOObj object (stream, file)                   *
 //*************************************************
-IOObj::IOObj( const string &nm, const string &perm, const string &mchFormt, const string &encIn ) : fhd(NULL), pos(0)
+IOObj::IOObj( const string &nm, const string &perm, const string &mchFormt, const string &ienc ) : fhd(NULL), pos(0)
 {
-    open(nm, perm, mchFormt, encIn);
+    open(nm, perm, mchFormt, ienc);
 }
 
 IOObj::~IOObj( )
@@ -36,16 +36,19 @@ IOObj::~IOObj( )
     close();
 }
 
-bool IOObj::open( const string &nm, const string &perm, const string &mchFormt, const string &encIn )
+void IOObj::open( const string &nm, const string &perm, const string &mchFormt, const string &ienc )
 {
     //Try for file open
+    close();
     if(perm.size()) fhd = fopen(nm.c_str(), perm.c_str());
     else { str = nm; pos = 0; }
+    mForm = mchFormt;
+    strEnc = ienc;
 }
 
 void IOObj::close( )
 {
-    if(fhd) fclose(fhd);
+    if(fhd) { fclose(fhd); fhd = NULL; }
     str = ""; pos = 0;
 }
 
@@ -53,14 +56,14 @@ TVariant IOObj::propGet( const string &id )
 {
     if(id == "length")
     {
-	if(!fhd) return (int)str.size();
+	if(!fhd) return (int64_t)str.size();
 	pos = ftell(fhd);
 	fseek(fhd, 0, SEEK_END);
-	int end = ftell(fhd);
-	fseek(fhd, pos, SEEK_CUR);
+	int64_t end = ftell(fhd);
+	fseek(fhd, pos, SEEK_SET);
 	return end;
     }
-    if(id == "pos") return fhd ? (int)ftell(fhd) : (int)str.size();
+    if(id == "pos") return fhd ? (int64_t)ftell(fhd) : (int64_t)str.size();
 
     throw TError("IOObj", _("Properties no supported by the object."));
 }
@@ -72,18 +75,32 @@ void IOObj::propSet( const string &id, TVariant val )
 	if(fhd)	fseek(fhd, pos, SEEK_CUR);
 	else pos = vmin(str.size(),vmax(0,val.getI()));
     }
-
-    throw TError("IOObj", _("Properties no supported by the object."));
+    else throw TError("IOObj", _("Properties no supported by the object."));
 }
 
 TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 {
+    bool sec1 = false;
+    // bool open(string name = "", string perm = "", string machineFmt = "n", string enc = "") -
+    //          Open for new stream by string <name> or file <name>.
+    //  name - file name or string content
+    //  perm - file permition access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)
+    //  machineFmt - machine format (native(n), ieee-be(b), ieee-le(l))
+    //  enc - encoding for chars
+    if(id == "open" && prms.size() >= 1)
+    {
+	open(prms[0].getS(), ((prms.size() >= 2)?prms[1].getS():""),
+	    ((prms.size() >= 3)?prms[2].getS():"n"), ((prms.size() >= 4)?prms[3].getS():""));
+	return true;
+    }
+    // bool close() - close curent stream.
+    if(id == "close") { close(); return true; }
     // {string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mchFmtEnc = "n|NoEnc") -
     //		read value <valType> in <cnt> for machine format or string encodeIn <mchFmtEnc>
     //	valType - value type (char,int,float,real*4,...)
     //	cnt - values by data type counter; for no strings and multiply counter used Array as result (-1 up to end);
     //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
-    if(id == "read" && prms.size() >= 1)
+    if(id == "read")
     {
 	TpDescr &tpD = getTp((prms.size()>=1) ? prms[0].getS() : "char");
 	long cnt = (prms.size()>=2) ? prms[1].getI() : -1;
@@ -92,7 +109,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//Char stream
 	if(tpD.szBt == 1)
 	{
-	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : "";
+	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    if(!fhd)
 	    {
 		rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
@@ -113,13 +130,13 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	{
 	    TArrayObj *ao = NULL;
 	    int64_t rez = 0;
-	    string mach = (prms.size()>=3) ? prms[2].getS() : "n";
+	    string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
 	    if(mach.empty()) mach = "n";
 	    // From string stream
 	    if(!fhd)
 	    {
 		if(cnt != 1) ao = new TArrayObj();
-		for(unsigned i_cnt = 0; (cnt < 0 || i_cnt < cnt) && pos <= (str.size()-tpD.szBt); pos += tpD.szBt, i_cnt++)
+		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && pos <= (str.size()-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {
@@ -160,21 +177,21 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    if(cnt == 1) return (int)rez;
 		    ao->arSet(i_cnt, (int)rez);
 		}
-		return ao;
+		if(ao) return ao;
+		return EVAL_INT;
 	    }
 	    // From file
 	    char buf[STR_BUF_LEN];
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
-	    cnt *= tpD.szBt;
-	    for(int r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
+	    for(long r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
 		for(unsigned i_cnt = 0, pos = 0; pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {
 			case 2:
 			{
-			    uint16_t v = *(uint16_t*)(str.data()+pos);
+			    uint16_t v = *(uint16_t*)(buf+pos);
 			    switch(mach[0])
 			    {
 				case 'l': v = TSYS::i16_LE(v);	break;
@@ -185,7 +202,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			case 4:
 			{
-			    uint32_t v = *(uint32_t*)(str.data()+pos);
+			    uint32_t v = *(uint32_t*)(buf+pos);
 			    switch(mach[0])
 			    {
 				case 'l': v = TSYS::i32_LE(v);	break;
@@ -196,7 +213,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			case 8:
 			{
-			    uint64_t v = *(uint64_t*)(str.data()+pos);
+			    uint64_t v = *(uint64_t*)(buf+pos);
 			    switch(mach[0])
 			    {
 				case 'l': v = TSYS::i64_LE(v);	break;
@@ -209,19 +226,21 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    if(cnt == 1) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
-	    return ao;
+	    if(ao) return ao;
+	    return EVAL_INT;
 	}
 	//Real
 	else
 	{
 	    TArrayObj *ao = NULL;
 	    double rez = 0;
-	    string mach = (prms.size()>=3) ? prms[2].getS() : "n";
+	    string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
+	    if(mach.empty()) mach = "n";
 	    // From string stream
 	    if(!fhd)
 	    {
 		if(cnt != 1) ao = new TArrayObj();
-		for(unsigned i_cnt = 0; (cnt < 0 || i_cnt < cnt) && pos <= (str.size()-tpD.szBt); pos += tpD.szBt, i_cnt++)
+		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && pos <= (str.size()-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {
@@ -250,13 +269,13 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
-		return ao;
+		if(ao) return ao;
+		return EVAL_REAL;
 	    }
 	    // From file
 	    char buf[STR_BUF_LEN];
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
-	    cnt *= tpD.szBt;
 	    for(int r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
 		for(unsigned i_cnt = 0, pos = 0; pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
@@ -264,7 +283,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    {
 			case 4:
 			{
-			    float v = *(float*)(str.data()+pos);
+			    float v = *(float*)(buf+pos);
 			    switch(mach[0])
 			    {
 				case 'l': v = TSYS::floatLErev(v);	break;
@@ -275,7 +294,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			case 8:
 			{
-			    rez = *(double*)(str.data()+pos);
+			    rez = *(double*)(buf+pos);
 			    switch(mach[0])
 			    {
 				case 'l': rez = TSYS::doubleLErev(rez);	break;
@@ -287,7 +306,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
-	    return ao;
+	    if(ao) return ao;
+	    return EVAL_REAL;
 	}
 
 	return false;
@@ -297,34 +317,38 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
     //	vals - single value or values array for write;
     //	valType - value type (char,int,float,real*4,...)
     //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
-    if(id == "write" && prms.size() >= 1)
+    if((id == "write" || (sec1=(id=="wr"))) && prms.size() >= 1)
     {
 	TVariant &vals = prms[0];
 	TpDescr tpD;
 	if(prms.size() >= 2) tpD = getTp(prms[1].getS());
+	int64_t rez = 0;
 	//!!!! Check for real data type
 
 	//Char stream
 	if(tpD.szBt == 1)
 	{
-	    string outCd = (prms.size()>=3) ? prms[2].getS() : "";
+	    string outCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    string sval = Mess->codeConvOut(outCd, prms[0].getS());
 	    if(!fhd)
 	    {
 		if(pos >= str.size()) str.append(sval);
 		else str.replace(pos, vmax(0,vmin(str.size()-pos,sval.size())), sval);
 		pos += sval.size();
+		if(sec1) return this;
 		return (int64_t)sval.size();
 	    }
-	    return (int64_t)fwrite(sval.data(), 1, sval.size(), fhd);
+	    rez = (int64_t)fwrite(sval.data(), 1, sval.size(), fhd);
+	    if(sec1) return this;
+	    return rez;
 	}
 
-	int64_t rez = 0;
 	bool isSingle = false;
 	TArrayObj *ai = NULL;
 	if(vals.type() == TVariant::Object && !AutoHD<TArrayObj>(vals.getO()).freeStat()) ai = (TArrayObj*)&vals.getO().at();
 	else { ai = new TArrayObj(); ai->arSet(0, vals); isSingle = true; }
-	string mach = (prms.size()>=3) ? prms[2].getS() : "n";
+	string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
+	if(mach.empty()) mach = "n";
 
 	//Integer
 	if(!tpD.real)
@@ -438,6 +462,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		}
 	    if(isSingle) delete ai;
+	    if(sec1) return this;
 	    return rez;
 	}
 	//Real
@@ -517,6 +542,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		}
 	    }
 	if(isSingle) delete ai;
+	if(sec1) return this;
 	return rez;
     }
 

@@ -208,8 +208,9 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	{
 	    //>> Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, buf, head.period, head.vtp|(head.vtpExt<<4));
-	    write(hd, si.data(), si.size());
+	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
 	    close(hd);
+	    if(!fOK) return false;
 	}
     }
 
@@ -334,13 +335,15 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 
 	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
 	if(hd == -1) return;
-	write(hd, &rif, sizeof(rif));
-	write(hd, &chnk, sizeof(chnk));
-	write(hd, &wv_form, sizeof(wv_form));
+	bool fOK = true;
+
+	fOK = fOK && (write(hd,&rif,sizeof(rif)) == sizeof(rif));
+	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
+	fOK = fOK && (write(hd,&wv_form,sizeof(wv_form)) == sizeof(wv_form));
 	strncpy(chnk.chunk_id, "data", 4);
 	chnk.chunksize = 0;				//Set temporary size buf.realSize()*sizeof(float);
 	off_t sz_pos = lseek(hd, 0, SEEK_CUR);
-	write(hd, &chnk, sizeof(chnk));
+	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
 
 	//> Calc overage and scale of value
 	float c_val, v_over = 0, v_max = -1e30, v_min = 1e30;
@@ -367,26 +370,26 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	//> Transver value
 	int val_cnt = 0;
 	c_tm = (int64_t)beg*1000000;
-	while(c_tm && c_tm < (int64_t)end*1000000)
+	while(fOK && c_tm && c_tm < (int64_t)end*1000000)
 	{
 	    int64_t end_tm = c_tm+buf_sz*buf_per-buf_per;
 	    end_tm = vmin(end_tm, (int64_t)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf, c_tm, end_tm, workId());
 
-	    for( ; c_tm <= buf.end(); c_tm += buf_per, val_cnt++)
+	    for( ; fOK && c_tm <= buf.end(); c_tm += buf_per, val_cnt++)
 	    {
 		c_val = buf.getR(&c_tm, true);
 		if(!c_tm) break;
 		if(c_val == EVAL_REAL)	c_val = v_over;
 		c_val = 2.*(c_val-v_over)/(v_max-v_min);
-		write(hd, &c_val, sizeof(float));
+		fOK = fOK && (write(hd,&c_val,sizeof(float)) == sizeof(float));
 	    }
 	}
 
 	//> Write value count
 	lseek(hd, sz_pos, SEEK_SET);
 	chnk.chunksize = val_cnt*sizeof(float);
-	write(hd, &chnk, sizeof(chnk));
+	fOK = fOK && (write(hd,&chnk,sizeof(chnk)) == sizeof(chnk));
 
 	close(hd);
     }
@@ -395,19 +398,20 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 	char c_val[40];
 	int hd = open((file_nm+"."+file_tp).c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
 	if(hd == -1) return;
+	bool fOK = true;
 
 	c_tm = (int64_t)beg*1000000;
-	while(c_tm && c_tm < (int64_t)end*1000000)
+	while(fOK && c_tm && c_tm < (int64_t)end*1000000)
 	{
 	    int64_t end_tm = c_tm + buf_sz*buf_per - buf_per;
 	    end_tm = vmin(end_tm, (int64_t)end*1000000);
 	    SYS->archive().at().valAt(arch_nm).at().getVals(buf, c_tm, end_tm, workId());
 
-	    for( ; c_tm <= buf.end(); c_tm += buf_per)
+	    for( ; fOK && c_tm <= buf.end(); c_tm += buf_per)
 	    {
 		sprintf(c_val, "%g\n", buf.getR(&c_tm,true));
 		if(!c_tm) break;
-		write(hd, c_val, strlen(c_val));
+		fOK = fOK && (write(hd,c_val,strlen(c_val)) == (int)strlen(c_val));
 	    }
 	}
 	close(hd);
@@ -851,6 +855,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     //> Open/create new archive file
     int hd = open(name().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0666);
     if(hd <= 0) throw TError(owner().archivator().nodePath().c_str(),_("Can not create file: '%s'!"),name().c_str());
+    bool fOK = true;
 
     //> Prepare and write the file archive header
     FHead head;
@@ -865,7 +870,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     head.hgrid = owner().archive().hardGrid();
     head.hres = owner().archive().highResTm();
     head.term = 0x55;
-    write(hd, &head, sizeof(FHead));
+    fOK = (write(hd,&head,sizeof(FHead)) == sizeof(FHead));
 
     //> Create bit table and init first value
     mpos = (end()-begin())/period();
@@ -882,12 +887,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for(int i_bt = 0; i_bt < mpos*vSize; i_bt++, i_buf++)
 	    {
-		if(i_buf == sizeof(buf)) { write(hd, buf, i_buf); i_buf = 0; }
+		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
 		buf[i_buf] = i_bt ? 0 : strlen(EVAL_STR);
 	    }
-	    if(i_buf)	write(hd, buf, i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd, s_val.c_str(), s_val.size());
+	    fOK = fOK && (write(hd,s_val.c_str(),s_val.size()) == (int)s_val.size());
 	    break;
 	}
 	case TFld::Int16:
@@ -900,12 +905,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++)
 	    {
-		if(i_buf == sizeof(buf)) { write(hd,buf,i_buf); i_buf = 0; }
+		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
 		buf[i_buf] = i_bt ? 0 : 1;
 	    }
-	    if(i_buf)	write(hd, buf, i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd, &s_val, sizeof(s_val));
+	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
 	}
 	case TFld::Int32:
@@ -918,12 +923,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++)
 	    {
-		if(i_buf == sizeof(buf)) { write(hd,buf,i_buf); i_buf = 0; }
+		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
 		buf[i_buf] = i_bt ? 0 : 1;
 	    }
-	    if(i_buf)	write(hd, buf, i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd, &s_val, sizeof(s_val));
+	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
 	}
 	case TFld::Int64:
@@ -936,12 +941,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++)
 	    {
-		if(i_buf == sizeof(buf)) { write(hd,buf,i_buf); i_buf = 0; }
+		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
 		buf[i_buf] = i_bt ? 0 : 1;
 	    }
-	    if(i_buf)	write(hd, buf, i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd, &s_val, sizeof(s_val));
+	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
 	}
 	case TFld::Float:
@@ -954,12 +959,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++)
 	    {
-		if(i_buf == sizeof(buf)) { write(hd, buf, i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt?0:1;
+		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
+		buf[i_buf] = i_bt ? 0 : 1;
 	    }
-	    if(i_buf)	write(hd, buf, i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd, &s_val, sizeof(s_val));
+	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
 	}
 	case TFld::Double:
@@ -972,12 +977,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for(int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++)
 	    {
-		if(i_buf == sizeof(buf)) { write(hd, buf, i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt?0:1;
+		if(i_buf == sizeof(buf)) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
+		buf[i_buf] = i_bt ? 0 : 1;
 	    }
-	    if(i_buf)	write(hd, buf, i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd, &s_val, sizeof(s_val));
+	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
 	}
 	case TFld::Boolean:
@@ -990,12 +995,12 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
 	    int i_buf = 0;
 	    for( int i_bt = 0; i_bt < (mpos/8+(bool)(mpos%8)); i_bt++, i_buf++ )
 	    {
-		if( i_buf == sizeof(buf) ) { write(hd,buf,i_buf); i_buf = 0; }
-		buf[i_buf] = i_bt?0:1;
+		if( i_buf == sizeof(buf) ) { fOK = fOK && (write(hd,buf,i_buf) == i_buf); i_buf = 0; }
+		buf[i_buf] = i_bt ? 0 : 1;
 	    }
-	    if(i_buf)	write(hd,buf,i_buf);
+	    if(i_buf)	fOK = fOK && (write(hd,buf,i_buf) == i_buf);
 
-	    write(hd,&s_val,sizeof(s_val));
+	    fOK = fOK && (write(hd,&s_val,sizeof(s_val)) == sizeof(s_val));
 	    break;
 	}
 	default: break;
@@ -1060,7 +1065,7 @@ void VFileArch::attach( const string &name )
 	    {
 		fixVl = true;
 		vSize = sizeof(int64_t);
-		int s_val = EVAL_INT64;
+		int64_t s_val = EVAL_INT64;
 		eVal.assign((char*)&s_val, vSize);
 		break;
 	    }
@@ -1164,11 +1169,7 @@ void VFileArch::check( )
 
 	//>> Get file size
 	int hd = open(mName.c_str(), O_RDONLY);
-	if(hd > 0)
-	{
-	    mSize = lseek(hd, 0, SEEK_END);
-	    close(hd);
-	}
+	if(hd > 0) { mSize = lseek(hd, 0, SEEK_END); close(hd);	}
 
 	if(!owner().archivator().packInfoFiles())
 	{
@@ -1186,7 +1187,8 @@ void VFileArch::check( )
 	{
 	    //>> Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d",begin(),end(),owner().archive().id().c_str(),period(),type());
-	    write(hd,si.data(),si.size());
+	    if(write(hd,si.data(),si.size()) != (int)si.size())
+		mess_err(mod->nodePath().c_str(), _("Write to '%s' error!"), (mName+".info").c_str());
 	    close(hd);
 	}
     }
@@ -1231,7 +1233,7 @@ int64_t VFileArch::endData( )
 void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 {
     int vpos_beg, vpos_end, voff_beg, vlen_beg, voff_end, vlen_end;
-    char *pid_b, *val_b;
+    char *pid_b, *val_b = NULL;
 
     ResAlloc res(mRes, false);
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
@@ -1256,6 +1258,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     //> Open archive file
     int hd = open(name().c_str(), O_RDONLY);
     if(hd <= 0) { mErr = true; return; }
+    bool fOK = true;
 
     res.request(true);
     voff_beg = calcVlOff(hd, vpos_beg, &vlen_beg);
@@ -1269,17 +1272,19 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	int i_end = sizeof(FHead) + vpos_end/8+1;
 	lseek(hd, i_beg, SEEK_SET);
 	pid_b = (char*)malloc(i_end-i_beg);
-	read(hd, pid_b, i_end-i_beg);
-	//>> Calc end offset
-	voff_end = voff_beg;
-	for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++)
-	    voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);
-	//>> Get value block
-	i_beg = voff_beg;
-	i_end = voff_end+vSize;
-	lseek(hd, i_beg, SEEK_SET);
-	val_b = (char*)malloc(i_end-i_beg);
-	read(hd, val_b, i_end-i_beg);
+	if((fOK=(read(hd,pid_b,i_end-i_beg) == (i_end-i_beg))))
+	{
+	    //>> Calc end offset
+	    voff_end = voff_beg;
+	    for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++)
+		voff_end += vSize*(bool)((0x01<<(i_pos%8))&pid_b[(i_pos/8)-(vpos_beg/8)]);
+	    //>> Get value block
+	    i_beg = voff_beg;
+	    i_end = voff_end+vSize;
+	    lseek(hd, i_beg, SEEK_SET);
+	    val_b = (char*)malloc(i_end-i_beg);
+	    fOK = (read(hd,val_b,i_end-i_beg) == (i_end-i_beg));
+	}
     }
     else
     {
@@ -1288,27 +1293,29 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
 	int i_end = sizeof(FHead) + vpos_end*vSize+vSize;
 	lseek(hd, i_beg, SEEK_SET);
 	pid_b = (char*)malloc(i_end-i_beg);
-	read(hd, pid_b, i_end-i_beg);
-	//>> Calc end offset
-	voff_end = voff_beg;
-	vlen_end = vlen_beg;
-	for(int i_pos = vpos_beg+1; i_pos <= vpos_end; i_pos++)
+	if((fOK=(read(hd,pid_b,i_end-i_beg) == (i_end-i_beg))))
 	{
-	    int pk_vl = 0;
-	    for(int i_e = 0; i_e < vSize; i_e++)
-		pk_vl += pid_b[vSize*(i_pos-vpos_beg)+i_e]<<(8*i_e);
-	    if(pk_vl)
+	    //>> Calc end offset
+	    voff_end = voff_beg;
+	    vlen_end = vlen_beg;
+	    for(int i_pos = (vpos_beg+1); i_pos <= vpos_end; i_pos++)
 	    {
-		voff_end += vlen_end;
-		vlen_end = pk_vl;
+		int pk_vl = 0;
+		for(int i_e = 0; i_e < vSize; i_e++)
+		    pk_vl += pid_b[vSize*(i_pos-vpos_beg)+i_e]<<(8*i_e);
+		if(pk_vl)
+		{
+		    voff_end += vlen_end;
+		    vlen_end = pk_vl;
+		}
 	    }
+	    //>> Get value block
+	    i_beg = voff_beg;
+	    i_end = voff_end+vlen_end;
+	    lseek(hd, i_beg, SEEK_SET);
+	    val_b = (char*)malloc(i_end-i_beg);
+	    fOK = (read(hd,val_b,i_end-i_beg) == (i_end-i_beg));
 	}
-	//>> Get value block
-	i_beg = voff_beg;
-	i_end = voff_end+vlen_end;
-	lseek(hd, i_beg, SEEK_SET);
-	val_b = (char*)malloc(i_end-i_beg);
-	read(hd, val_b, i_end-i_beg);
     }
 
     //> Free file resource and close file
@@ -1320,7 +1327,7 @@ void VFileArch::getVals( TValBuf &buf, int64_t beg, int64_t end )
     int pid_off = vpos_beg;
     voff_end -= voff_beg;
     voff_beg = 0;
-    while(true)
+    while(fOK)
     {
 	switch(type())
 	{
@@ -1574,6 +1581,7 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //> Open archive file
     int hd = open(name().c_str(), O_RDWR);
     if(hd <= 0) { mErr = true; return; }
+    bool fOK = true;
 
     //> Get block geometry from file
     int foff_beg_len, foff_beg, foff_begprev_len, foff_begprev = 0, foff_end_len, foff_end, foff_endnext_len, foff_endnext = 0;
@@ -1616,10 +1624,10 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	//>> Merge begin and end pack values
  	char tmp_pb;
 	lseek(hd, sizeof(FHead)+vpos_beg/8, SEEK_SET);
-	read(hd, &tmp_pb, 1);
+	fOK = fOK && (read(hd,&tmp_pb,1) == 1);
 	pid_b[0] |= (~(0xFF<<(vpos_beg%8)))&tmp_pb;
 	lseek(hd, sizeof(FHead)+vpos_end/8, SEEK_SET);
-	read(hd, &tmp_pb, 1);
+	fOK = fOK && (read(hd,&tmp_pb,1) == 1);
 	pid_b[vpos_end/8-vpos_beg/8] |= (0xFE<<(vpos_end%8))&tmp_pb;
     }
     else
@@ -1665,14 +1673,14 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	lseek(hd, sizeof(FHead)+vSize*vpos_beg, SEEK_SET);
 	pid_b_sz = vSize*(vpos_end-vpos_beg+1);
     }
-    if(pid_b.size() < pid_b_sz) mess_err(mod->nodePath().c_str(),_("Warning! Allocated buffer size %d for indexes lesser for used %d."),pid_b.size(),pid_b_sz);
-    write(hd, pid_b.data(), pid_b_sz);
+    if((int)pid_b.size() < pid_b_sz) mess_err(mod->nodePath().c_str(),_("Warning! Allocated buffer size %d for indexes lesser for used %d."),pid_b.size(),pid_b_sz);
+    fOK = fOK && (write(hd,pid_b.data(),pid_b_sz) == pid_b_sz);
     moveTail(hd, foff_end, foff_end+(val_b.size()-(foff_end-foff_beg)));
     lseek(hd, foff_beg, SEEK_SET);
-    write(hd, val_b.data(), val_b.size());
+    fOK = fOK && (write(hd,val_b.data(),val_b.size()) == (int)val_b.size());
 
     //> Check for write to end correct
-    if(mod->copyErrValFiles && fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
+    if(fOK && mod->copyErrValFiles && fixVl && iend > owner().end() && iend < end() && !((mSize-foff_end) == vSize ||
 		((mSize-foff_end) == 0 && (int)val_b.size() >= vSize && val_b.compare(val_b.size()-vSize,vSize,eVal) == 0)))
 	mess_err(mod->nodePath().c_str(), _("Write data block to archive file '%s' error. Will structure break. mSize=%d, foff_end=%d, vSize=%d"),name().c_str(),mSize,foff_end,vSize);
 
@@ -1689,22 +1697,27 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 
 string VFileArch::getValue( int hd, int voff, int vsz )
 {
+    bool fOK = true;
     string get_vl;
     get_vl.reserve(10);
 
-    lseek(hd,voff,SEEK_SET);
-    read(hd,&tbt,1);
-    get_vl.assign((char *)&tbt,sizeof(char));
-    for( int i_vs = 0; i_vs < vsz-1; i_vs++ )
+    lseek(hd, voff, SEEK_SET);
+    if((fOK=(read(hd,&tbt,1)==1)))
     {
-	read(hd,&tbt,1);
-	get_vl.append((char *)&tbt,sizeof(char));
+	get_vl.assign((char *)&tbt,sizeof(char));
+	for(int i_vs = 0; fOK && i_vs < (vsz-1); i_vs++)
+	    if((fOK=(read(hd,&tbt,1)==1)))
+		get_vl.append((char *)&tbt,sizeof(char));
     }
+
+    if(!fOK) mess_err(mod->nodePath().c_str(), _("Access to file '%s' error!"), mName.c_str());
+
     return get_vl;
 }
 
 int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 {
+    bool fOK = true;
     int b_sz = 0, i_bf = 0;
     char buf[4096];
     int voff;
@@ -1720,7 +1733,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	cach_pos++;
 	int i_ps = cach_pos;
 
-	for(int n_pos = 0; i_ps <= vpos; i_ps = n_pos)
+	for(int n_pos = 0; fOK && i_ps <= vpos; i_ps = n_pos)
 	{
 	    //> Fast algorithm for big blocks
 	    //if(!((i_ps%8) || ((i_ps/8)%4)) && (i_ps/32) < (vpos/32))
@@ -1731,7 +1744,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		{
 		    lseek(hd, sizeof(FHead)+i_ps/8, SEEK_SET);
 		    b_sz = vmin((vpos/8)-(i_ps/8)+1, (int)sizeof(buf));
-		    read(hd, &buf, b_sz);
+		    fOK = (read(hd,&buf,b_sz) == b_sz);
 		    i_bf = 0;
 		}
 		//> Count
@@ -1751,7 +1764,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		{
 		    lseek(hd, sizeof(FHead)+i_ps/8, SEEK_SET);
 		    b_sz = vmin((vpos/8)-(i_ps/8)+1, (int)sizeof(buf));
-		    read(hd, &buf, b_sz);
+		    fOK = (read(hd,&buf,b_sz) == b_sz);
 		    i_bf = 0;
 		}
 		//> Count
@@ -1772,7 +1785,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 	else voff = sizeof(FHead)+mpos*vSize;
 	lseek(hd, sizeof(FHead)+cach_pos*vSize, SEEK_SET);
 
-	for(int i_ps = cach_pos; i_ps <= vpos; i_ps++)
+	for(int i_ps = cach_pos; fOK && i_ps <= vpos; i_ps++)
 	{
 	    int pk_vl = 0;
 	    for(int i_e = 0; i_e < vSize; ++i_e)
@@ -1780,7 +1793,7 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 		if(++i_bf >= b_sz)
 		{
 		    b_sz = vmin(vSize*(vpos-i_ps+1), (int)sizeof(buf));
-		    read(hd, &buf, b_sz);
+		    fOK = (read(hd,&buf,b_sz) == b_sz);
 		    i_bf = 0;
 		}
 		pk_vl += buf[i_bf]<<(8*i_e);
@@ -1802,16 +1815,18 @@ int VFileArch::calcVlOff( int hd, int vpos, int *vsz, bool wr )
 
 void VFileArch::setValue( int hd, int voff, const string &val )
 {
-    lseek(hd,voff,SEEK_SET);
-    write(hd,val.c_str(),val.size());
+    lseek(hd, voff, SEEK_SET);
+    if(write(hd,val.c_str(),val.size()) != (int)val.size())
+	mess_err(mod->nodePath().c_str(), _("Write to file '%s' error!"), mName.c_str());
 }
 
 void VFileArch::moveTail( int hd, int old_st, int new_st )
 {
+    bool fOK = true;
     char buf[STR_BUF_LEN];
 
     if(old_st == new_st) return;
-    if(new_st > old_st)
+    if(new_st > old_st && fOK)
     {
 	//> Move down (insert)
 	int beg_cur;
@@ -1822,75 +1837,78 @@ void VFileArch::moveTail( int hd, int old_st, int new_st )
 	{
 	    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
 	    lseek(hd,beg_cur,SEEK_SET);
-	    read(hd,buf,mv_end-beg_cur);
-	    lseek(hd,beg_cur+(new_st-old_st),SEEK_SET);
-	    write(hd,buf,mv_end-beg_cur);
-	    mv_end-=sizeof(buf);
+	    fOK = fOK && (read(hd,buf,mv_end-beg_cur) == (mv_end-beg_cur));
+	    lseek(hd, beg_cur+(new_st-old_st), SEEK_SET);
+	    fOK = fOK && (write(hd,buf,mv_end-beg_cur) == (mv_end-beg_cur));
+	    mv_end -= sizeof(buf);
 	}
-	while(beg_cur != mv_beg);
+	while(beg_cur != mv_beg && fOK);
     }
     else
     {
 	//> Move up (erase)
 	int end_cur;
 	int mv_beg = old_st;
-	int mv_end = lseek(hd,0,SEEK_END);
-	if(mv_end > mv_beg)
+	int mv_end = lseek(hd, 0, SEEK_END);
+	if(mv_end > mv_beg && fOK)
 	{
 	    do
 	    {
 		end_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_beg+sizeof(buf) : mv_end;
-		lseek(hd,mv_beg,SEEK_SET);
-		read(hd,buf,end_cur-mv_beg);
-		lseek(hd,mv_beg-(old_st-new_st),SEEK_SET);
-		write(hd,buf,end_cur-mv_beg);
+		lseek(hd, mv_beg, SEEK_SET);
+		fOK = fOK && (read(hd,buf,end_cur-mv_beg) == (end_cur-mv_beg));
+		lseek(hd, mv_beg-(old_st-new_st), SEEK_SET);
+		fOK = fOK && (write(hd,buf,end_cur-mv_beg) == (end_cur-mv_beg));
 		mv_beg += sizeof(buf);
 	    }
-	    while(end_cur != mv_end);
+	    while(end_cur != mv_end && fOK);
 	}
 
 	//> Truncate tail
-	ftruncate(hd,mv_end-(old_st-new_st));
+	fOK = fOK && (ftruncate(hd,mv_end-(old_st-new_st)) == 0);
     }
 }
 
 int VFileArch::getPkVal( int hd, int vpos )
 {
+    bool fOK = true;
     int pk_val = 0;
 
     if(fixVl)
     {
-	lseek(hd,sizeof(FHead)+vpos/8,SEEK_SET);
-	read(hd,&tbt,1);
+	lseek(hd, sizeof(FHead)+vpos/8, SEEK_SET);
+	fOK = (read(hd,&tbt,1) == 1);
 	pk_val = ((0x01<<(vpos%8))&tbt)?1:0;
     }
     else
     {
-	lseek(hd,sizeof(FHead)+vpos*vSize,SEEK_SET);
-	for(int v_psz = 0; v_psz < vSize; v_psz++ )
+	lseek(hd, sizeof(FHead)+vpos*vSize, SEEK_SET);
+	for(int v_psz = 0; fOK && v_psz < vSize; v_psz++)
 	{
-	read(hd,&tbt,1);
+	    fOK = (read(hd,&tbt,1) == 1);
 	    pk_val += tbt<<(v_psz*8);
 	}
     }
+
     return pk_val;
 }
 
 void VFileArch::setPkVal( int hd, int vpos, int vl )
 {
+    bool fOK = true;
     if(fixVl)
     {
-	lseek(hd,sizeof(FHead)+vpos/8,SEEK_SET);
-	read(hd,&tbt,1);
-	tbt=vl?((0x01<<(vpos%8))|tbt):(~(0x01<<(vpos%8))&tbt);
-	lseek(hd,-1,SEEK_CUR);
-	write(hd,&tbt,1);
+	lseek(hd, sizeof(FHead)+vpos/8, SEEK_SET);
+	fOK = (read(hd,&tbt,1) == 1);
+	tbt = vl ? ((0x01<<(vpos%8))|tbt) : (~(0x01<<(vpos%8))&tbt);
+	lseek(hd, -1, SEEK_CUR);
+	fOK = fOK && (write(hd,&tbt,1) == 1);
     }
     else
     {
-	lseek(hd,sizeof(FHead)+vpos*vSize,SEEK_SET);
-	for(int v_psz = 0; v_psz < vSize; v_psz++ )
-	    write(hd,((char *)&vl)+v_psz,1);
+	lseek(hd, sizeof(FHead)+vpos*vSize, SEEK_SET);
+	for(int v_psz = 0; fOK && v_psz < vSize; v_psz++)
+	    fOK = (write(hd, ((char *)&vl)+v_psz, 1) == 1);
     }
 }
 
@@ -1899,6 +1917,7 @@ void VFileArch::repairFile( int hd )
     int v_sz;
     if(!mPack)
     {
+	bool fOK = true;
 	int f_sz = lseek(hd, 0, SEEK_END);
 	int f_off = calcVlOff(hd, mpos, &v_sz);
 	if(fixVl)
@@ -1916,22 +1935,21 @@ void VFileArch::repairFile( int hd )
 		else
 		{
 		    lseek(hd, 0, SEEK_SET);
-		    for(int rs = 0; (rs=read(hd, cpBuf, sizeof(cpBuf))) > 0; )
-			write(ehd, cpBuf, rs);
+		    for(int rs = 0; fOK && (rs=read(hd, cpBuf, sizeof(cpBuf))) > 0; )
+			fOK = (write(ehd,cpBuf,rs) == rs);
 		    close(ehd);
 		}
 	    }
 	    //> Fix file
-	    if(dt > 0)
+	    if(dt > 0 && fOK)
 	    {
-		mSize = f_off+vSize;
-		ftruncate(hd, mSize);
-		setValue(hd, f_off, eVal);
+		mSize = f_off + vSize;
+		if((fOK=(ftruncate(hd,mSize)==0))) setValue(hd, f_off, eVal);
 	    }
 	    else
 	    {
-		f_sz = f_off-vSize*((f_off-f_sz)/vSize);
-		while(f_sz <= f_off) { setValue(hd,f_sz,eVal); f_sz+=vSize; }
+		f_sz = f_off - vSize*((f_off-f_sz)/vSize);
+		while(f_sz <= f_off) { setValue(hd,f_sz,eVal); f_sz += vSize; }
 	    }
 	}
 	else

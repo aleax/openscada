@@ -682,7 +682,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		while(dscaioint.dump_threshold > 65535) dscaioint.dump_threshold /= 2;	//Intermediately limited to "WORD" < 65536
 		dscaioint.fifo_enab = TRUE;
 		unsigned int fifoDepth = dev.aiSzFIFO;
-		while(fifoDepth > 10 && (dscaioint.num_conversions%fifoDepth) || (fifoDepth%(dscaioint.high_channel+1))) fifoDepth--;	//>> Align FIFO size to conversions number
+		while(fifoDepth > 10 && ((dscaioint.num_conversions%fifoDepth) || (fifoDepth%(dscaioint.high_channel+1)))) fifoDepth--;	//>> Align FIFO size to conversions number
 		dscaioint.fifo_depth = fifoDepth;
 		if(owner().messLev() == TMess::Debug)
             	    mess_debug_(nodePath().c_str(), _("AI interrupt: Init for: ConvRate=%g; NumbConv=%lu; FIFOdepth=%d; dump_threshold=%lu; scan_interval=%d."),
@@ -774,7 +774,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		    AutoHD<TVArchive> arch = ai.at().arch();
 		    int64_t wTm = cTm;
 		    int code;
-		    double rVal;
+		    double rVal = 0;
 		    for(DWORD i_s = prevTrans+i_a; true; )
 		    {
 			code = dscaioint.sample_values[i_s];
@@ -831,7 +831,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
     if(atr.empty() && !asynchRd)   return;
 
     //> Direct channels process
-    for(int i_a = 0; i_a < als.size(); i_a++)
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
         AutoHD<TVal> val = vlAt(als[i_a]);
 
@@ -990,7 +990,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    }
 	    //> AO processing
             for(int i_v = 0; tdev.aoTypes.size() && i_v < (tdev.AO&0xFF); i_v++)
-		XMLNode *tnd = ctrMkNode("fld", opt, -1, TSYS::strMess("/cfg/outTp%d",i_v).c_str(),
+		ctrMkNode("fld", opt, -1, TSYS::strMess("/cfg/outTp%d",i_v).c_str(),
 			TSYS::strMess(_("Output %d type"),i_v).c_str(), enableStat()?R_R_R_:RWRWR_, "root", SDAQ_ID,
 			4, "tp","hex", "dest","select", "sel_id",TSYS::strParse(tdev.aoTypes,0,"\n").c_str(),
 							"sel_list",TSYS::strParse(tdev.aoTypes,1,"\n").c_str());

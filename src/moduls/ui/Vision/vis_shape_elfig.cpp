@@ -82,7 +82,6 @@ void ShapeElFigure::destroy( WdgView *w )
 bool ShapeElFigure::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     ElFigDt	*elFD = (ElFigDt*)w->shpData;
-    DevelWdgView *devW = qobject_cast<DevelWdgView*>(w);
     RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
     bool	rel_list= false;				//change signal
     bool	up	= false;
@@ -5856,7 +5855,6 @@ QVector<int> ShapeElFigure::inundationSort( const QPainterPath &inundationPath, 
 //- detecting the figures, which count <=2, for filling -
 bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem> &shapeItems, QVector<inundationItem> &inundationItems, PntMap &pnts, WdgView *view, int number )
 {
-    ElFigDt *elFD = (ElFigDt*)view->shpData;
     QPainterPath inundationPath_1_2;
     QVector<int> in_fig_num;
     bool flag_break;

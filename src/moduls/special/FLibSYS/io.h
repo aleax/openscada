@@ -44,12 +44,12 @@ class IOObj : public TVarObj
 {
     public:
         //Methods
-        IOObj( const string &nm, const string &perm = "", const string &mchFormt = "", const string &encIn = "" );
+        IOObj( const string &nm, const string &perm = "", const string &mchFormt = "", const string &ienc = "" );
         ~IOObj( );
 
         string objName( )       { return "IO"; }
 
-        bool open( const string &inm, const string &perm = "", const string &mchFormt = "", const string &encIn = "" );
+        void open( const string &inm, const string &perm = "", const string &mchFormt = "", const string &ienc = "" );
         void close( );
 
         TVariant propGet( const string &id );
@@ -74,8 +74,8 @@ class IOObj : public TVarObj
 
 	//Attributes
 	FILE 	*fhd;	//Openned file hd. For fhd < 0 used local string into "strFnm"
-	string	str;	//String stream
-	long	pos;	//String stream current position
+	string	str, mForm, strEnc;	//String stream
+	unsigned long	pos;	//String stream current position
 
 	map<string,TpDescr> dTPs;
 };
@@ -92,13 +92,13 @@ class IOCall : public TFunction
 	    ioAdd(new IO("name",_("File name or data (for string stream)"),IO::String,IO::Default));
 	    ioAdd(new IO("perm",_("File permition access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
 	    ioAdd(new IO("machineFmt",_("Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
-	    ioAdd(new IO("encIn",_("Input string encoding"),IO::String,IO::Default));
+	    ioAdd(new IO("enc",_("String encoding into file"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("IO"); }
 	string descr( )	{ return _("Input/Output access."); }
 
-	void calc( TValFunc *val )	{ val->setO(0, new IOObj(val->getS(1),val->getS(2))); }
+	void calc( TValFunc *val )	{ val->setO(0, new IOObj(val->getS(1),val->getS(2),val->getS(3),val->getS(4))); }
 };
 
 }

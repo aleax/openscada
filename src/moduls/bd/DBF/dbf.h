@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf.h
 /***************************************************************************
- *   Copyright (C) 2001-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2001-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -59,8 +59,8 @@ class TBasaDBF
 {
     public:
 	//Methods
-	TBasaDBF(  );
-	~TBasaDBF(  );
+	TBasaDBF( );
+	~TBasaDBF( );
 
 	int LoadFields( db_str_rec * fields, int number );
 	int addField( int pos, db_str_rec * field_ptr );

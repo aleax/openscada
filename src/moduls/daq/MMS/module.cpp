@@ -132,9 +132,9 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
-    ::TController(name_c,daq_db,cfgelem), prcSt(false), callSt(false), tmGath(0), tmDelay(0),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), con(NULL)
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
+    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")),
+    prcSt(false), callSt(false), tmGath(0), tmDelay(0), con(NULL)
 {
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
 }
@@ -228,7 +228,7 @@ void TMdContr::disconnectServer( )
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    int i_prm;
+    unsigned i_prm;
 
     ResAlloc res(enRes, true);
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -294,7 +294,7 @@ void *TMdContr::Task( void *icntr )
 			case MMS_BIT_STRING:
 			{
 			    string vl;
-			    for(unsigned i_vl = 0; i_vl < value->value.bitString.size; i_vl++)
+			    for(int i_vl = 0; i_vl < value->value.bitString.size; i_vl++)
 				vl += ((value->value.bitString.buf[i_vl/8]>>(i_vl%8))&1) ? "1" : "0";
 			    pVal.at().setS(vl, 0, true);
 			    break;
@@ -471,7 +471,7 @@ void TMdPrm::setEval( )
 {
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
         vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 

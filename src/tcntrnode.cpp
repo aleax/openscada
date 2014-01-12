@@ -335,7 +335,7 @@ unsigned TCntrNode::grpAdd( const string &iid, bool iordered )
 
 void TCntrNode::grpDel( int8_t id )
 {
-    if(!chGrp || id < 0 || id >= chGrp->size())	return;
+    if(!chGrp || id < 0 || id >= (int8_t)chGrp->size())	return;
 
     //> Clear childs
     TMap::iterator p;

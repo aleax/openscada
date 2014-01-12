@@ -286,7 +286,7 @@ TProtIn::~TProtIn()
 
 bool TProtIn::mess( const string &request, string &answer )
 {
-    int64_t d_tm;
+    int64_t d_tm = 0;
     int ses_id = -1;
     int req_sz = 0;
     char user[256] = "", pass[256] = "";

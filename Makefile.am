@@ -6,7 +6,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = openscada.pc
 
 if ResourcesAllow
-bin_SCRIPTS = data/openscada_start data/ModelsDB/AGLKS/openscada_AGLKS data/ModelsDB/AGLKS/openscada_demo data/ModelsDB/Boiler/openscada_Boiler
+bin_SCRIPTS = data/openscada_start
 sysconf_DATA = data/oscada.xml data/oscada_start.xml data/ModelsDB/AGLKS/oscada_AGLKS.xml data/ModelsDB/Boiler/oscada_Boiler.xml
 
 sysicodir = $(datadir)/icons

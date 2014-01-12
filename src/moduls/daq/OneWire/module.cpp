@@ -195,9 +195,9 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) :
-    ::TController(name_c,daq_db,cfgelem), prcSt(false), callSt(false), tmGath(0),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mBus(cfg("BUS")), mSimult(cfg("Simult"))
+TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
+    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mBus(cfg("BUS")), mSimult(cfg("Simult")),
+    prcSt(false), callSt(false), tmGath(0)
 {
     cfg("PRM_BD").setS("OneWirePrm_"+name_c);
 }
@@ -253,7 +253,7 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
+    unsigned i_prm;
 
     ResAlloc res(en_res, true);
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -287,7 +287,7 @@ void *TMdContr::Task( void *icntr )
 	//> Write simultaneous/temperature for all temperature chips prepare
 	if(cntr.mSimult.getR() > 0.1)
 	{
-	    int rez = mod->OWFSPut("/bus."+TSYS::int2str(cntr.bus())+"/simultaneous/temperature","1");
+	    mod->OWFSPut("/bus."+TSYS::int2str(cntr.bus())+"/simultaneous/temperature","1");
 	    TSYS::sysSleep(cntr.mSimult.getR());
 	}
 
@@ -424,7 +424,7 @@ void TMdPrm::getVals( )
     vlList(als);
     string tvl;
 
-    for(int i_a = 0; i_a < als.size(); i_a++)
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
         AutoHD<TVal> val = vlAt(als[i_a]);
         if((val.at().get().isEVal() && (als[i_a] == "address" || als[i_a] == "type" || als[i_a] == "power")) ||
@@ -440,7 +440,7 @@ void TMdPrm::setEval( )
 {
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
         vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 

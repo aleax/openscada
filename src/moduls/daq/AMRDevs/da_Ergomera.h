@@ -59,7 +59,7 @@ class Ergomera: public DA
 	//Methods
 	void regVal( int reg );			//Register value for acquisition
 	string modBusReq( string &pdu );
-	int getValR( int addr, ResString &err );
+	int64_t getValR( int addr, ResString &err );
 
 	//Attributes
 	int	devAddr;			//Device address

@@ -312,10 +312,11 @@ void *TSocketIn::Task( void *sock_in )
 
 	//> Write certificate and private key to temorary file
 	cfile = tmpnam(err);
-	int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	if(icfile < 0) throw TError(s.nodePath().c_str(),_("Open temporary file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
-	write(icfile,s.certKey().data(),s.certKey().size());
+	int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0644);
+	if(icfile < 0) throw TError(s.nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
+	bool fOK = (write(icfile,s.certKey().data(),s.certKey().size()) == (int)s.certKey().size());
 	close(icfile);
+	if(!fOK) throw TError(s.nodePath().c_str(), _("Error write to file '%s'."), cfile.c_str());
 
 	//>> Set private key password
 	SSL_CTX_set_default_passwd_cb_userdata(s.ctx,(char*)s.pKeyPass().c_str());
@@ -804,9 +805,10 @@ void TSocketOut::start()
 	    //>> Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(),O_EXCL|O_CREAT|O_WRONLY,0644);
-	    if(icfile < 0) throw TError(nodePath().c_str(),_("Open temporary file '%s' error: '%s'"),cfile.c_str(),strerror(errno));
-	    write(icfile,certKey().data(),certKey().size());
+	    if(icfile < 0) throw TError(nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
+	    bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());
 	    close(icfile);
+	    if(!fOK) throw TError(nodePath().c_str(), _("Error write to file '%s'."), cfile.c_str());
 
 	    //>> Set private key password
 	    SSL_CTX_set_default_passwd_cb_userdata(ctx,(char*)pKeyPass().c_str());

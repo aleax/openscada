@@ -109,9 +109,9 @@ class TMdContr: public TController
 
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return cfg("SCHEDULE").getS(); }
-	int	prior( )	{ return mPrior; }
-	int	restTm( )	{ return mRestTm; }
-	int	connTry( )	{ return mConnTry; }
+	int64_t	prior( )	{ return mPrior; }
+	int64_t	restTm( )	{ return mRestTm; }
+	int64_t	connTry( )	{ return mConnTry; }
 
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -131,7 +131,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res	en_res;		//Resource for enable params
-	int	&mPrior,	//Process task priority
+	int64_t	&mPrior,	//Process task priority
 		&mRestTm,	//Restore timeout in s
 		&mConnTry;	//Connections try
 	int64_t	mPer;

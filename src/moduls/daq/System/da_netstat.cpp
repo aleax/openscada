@@ -86,7 +86,7 @@ void NetStat::dList( vector<string> &list, bool part )
 void NetStat::getVal( TMdPrm *prm )
 {
     unsigned long rcv, trns;
-    double rcvVl, trnsVl;
+    double rcvVl = 0, trnsVl = 0;
     char sc_pat[50] = "",
 	 buf[256] = "";
     bool devOK = false;

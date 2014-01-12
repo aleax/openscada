@@ -154,7 +154,7 @@ DA *TTpContr::daGet( TMdPrm *prm )
     {
 	vector<string> tpl;
 	m_da[i_da]->tpList(prm,tpl);
-	for(int i_t = 0; i_t < tpl.size(); i_t++)
+	for(unsigned i_t = 0; i_t < tpl.size(); i_t++)
 	    if(tpl[i_t] == prm->modTp.getS())
 		return m_da[i_da];
     }
@@ -388,10 +388,10 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //******************************************************
 //* TMdPrm                                             *
 //******************************************************
-TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
     TParamContr(name, tp_prm),
-    p_el("w_attr"), modTp(cfg("MOD_TP")), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
-    endRunReq(false), prcSt(false), clcCnt(0), da(NULL), extPrms(NULL), wTm(0)
+    p_el("w_attr"), extPrms(NULL), modTp(cfg("MOD_TP")), modAddr(cfg("MOD_ADDR").getId()), modSlot(cfg("MOD_SLOT").getId()),
+    endRunReq(false), prcSt(false), wTm(0), clcCnt(0), da(NULL)
 {
     for(int i_c = 0; i_c < 10; i_c++) dInOutRev[i_c] = 0;
 }

@@ -102,7 +102,7 @@ class TMdContr: public TController
 
 	int64_t period( )       { return mPer; }
         string  cron( )         { return mSched; }
-	int	prior( )	{ return mPrior; }
+	int64_t	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -121,7 +121,7 @@ class TMdContr: public TController
 
 	//Attributes
 	Res     en_res;                         //Resource for enable params
-	int	&mPrior;			//Process task priority
+	int64_t	&mPrior;			//Process task priority
 	TCfg    &mSched;                        //Calc schedule
 	int64_t mPer;
 

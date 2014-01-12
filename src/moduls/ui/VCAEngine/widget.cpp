@@ -1173,13 +1173,13 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	{
 	    vector<string> ls;
 	    src->resourceList(ls);
-	    for(int i_t = 0; i_t < ls.size(); i_t++)
+	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
                 opt->childAdd("el")->setText("res:"+ls[i_t]);
 	}
 	else if(a_val.compare(0,5,"file:") == 0)
 	{
 	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;");
-	    for(int i_t = 0; i_t < opt->childSize(); i_t++)
+	    for(unsigned i_t = 0; i_t < opt->childSize(); i_t++)
                 opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}
 	opt->childIns(0,"el")->setText("res:");
@@ -1801,6 +1801,7 @@ void Attr::setFld( TFld *fld, bool inher )
 		m_val.o_val = new AutoHD<TVarObj>(new TVarObj);
 		break;
 	    }
+	    default: break;
 	}
 
     if(mFld)
@@ -1847,6 +1848,7 @@ TVariant Attr::get( bool sys )
 	case TFld::Boolean:	return getB(sys);
 	case TFld::String:	return getS(sys);
 	case TFld::Object:	return getO(sys);
+	default: break;
     }
     return EVAL_STR;
 }
@@ -1868,6 +1870,7 @@ string Attr::getS( bool sys )
 	    pthread_mutex_unlock(&owner()->mtxAttr());
 	    return tvl;
 	}
+	default: break;
     }
     return EVAL_STR;
 }
@@ -1952,6 +1955,7 @@ void Attr::set( const TVariant &val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB(val.getB(), strongPrev, sys);	break;
 	case TFld::String:	setS(val.getS(), strongPrev, sys);	break;
 	case TFld::Object:	setO(val.getO(), strongPrev, sys);	break;
+	default: break;
     }
 }
 
@@ -2081,6 +2085,7 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 	case TFld::Integer: case TFld::Real: case TFld::Boolean:
 				setB(true, strongPrev, sys);		break;
 	case TFld::Object:
+	{
 	    if((!strongPrev && *m_val.o_val == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
 	    pthread_mutex_lock(&owner()->mtxAttr());
@@ -2100,7 +2105,9 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 		return;
 	    }
 	    break;
-        }
+	}
+	default: break;
+    }
 }
 
 string Attr::cfgTempl( )

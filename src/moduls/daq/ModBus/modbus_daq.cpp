@@ -505,7 +505,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 		string vl = val.getS();
 		vl.resize(strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)*2);
 		map<int,int> regs;
-		for(int i_r = aid; i_r < aid+vl.size()/2; i_r++)
+		for(int i_r = aid; i_r < (aid+(int)vl.size()/2); i_r++)
 		    regs[i_r] = TSYS::getUnalign16(vl.data()+(i_r-aid)*2);
 		wrRez = setValRs(regs, w_err);
 		break;
@@ -698,7 +698,7 @@ void *TMdContr::Task( void *icntr )
 
     bool is_start = true;
     bool is_stop  = false;
-    int64_t t_cnt, t_prev = TSYS::curTime();
+    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     try
     {

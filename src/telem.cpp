@@ -189,6 +189,7 @@ TFld::Type TFld::type(IO::Type tp)
         case IO::Real:          return Real;
         case IO::Boolean:       return Boolean;
         case IO::Object:        return Object;
+	default: break;
     }
     return String;
 }
@@ -202,6 +203,7 @@ IO::Type TFld::typeIO( )
         case Real:	return IO::Real;
         case String:	return IO::String;
         case Object:	return IO::Object;
+        default: break;
     }
     return IO::String;
 }
@@ -549,6 +551,7 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
 	    case TFld::Real:	n_e->setAttr("tp","real");	break;
 	    case TFld::Boolean:	n_e->setAttr("tp","bool");	break;
 	    case TFld::Object:	n_e->setAttr("tp","str")->setAttr("cols","100")->setAttr("rows","4");	break;
+	    default: break;
 	}
     }
     return n_e;

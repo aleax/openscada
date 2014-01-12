@@ -691,8 +691,8 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	int off = 0;
 	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
-	string suf = (off < addr().size()) ? addr().substr(off) : "";
-	for(int i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
+	string suf = (off < (int)addr().size()) ? addr().substr(off) : "";
+	for(unsigned i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
 	    if(opt->childGet(i_t)->text().size())
 		opt->childGet(i_t)->setText(opt->childGet(i_t)->text()+":"+suf);
     }
@@ -1292,8 +1292,8 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	int off = 0;
 	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
-	string suf = (off < addr().size()) ? addr().substr(off) : "";
-	for(int i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
+	string suf = (off < (int)addr().size()) ? addr().substr(off) : "";
+	for(unsigned i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
 	    if(opt->childGet(i_t)->text().size())
 		opt->childGet(i_t)->setText(opt->childGet(i_t)->text()+":"+suf);
     }

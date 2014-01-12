@@ -442,8 +442,8 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 	}
     }
     //> Value type change
-    else if((cfg.flgGlob()&Attr::Active) && (cfg.id() == "view" && cfg.owner()->attrAt("elType").at().getI() == F_LINE_ED) ||
-					    (cfg.id() == "mode" && cfg.owner()->attrAt("elType").at().getI() == F_BUTTON))
+    else if((cfg.flgGlob()&Attr::Active) && ((cfg.id() == "view" && cfg.owner()->attrAt("elType").at().getI() == F_LINE_ED) ||
+					     (cfg.id() == "mode" && cfg.owner()->attrAt("elType").at().getI() == F_BUTTON)))
     {
 	TFld::Type	ntp = TFld::String;
 	int		flg = Attr::Mutable;

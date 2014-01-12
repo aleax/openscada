@@ -256,7 +256,7 @@ void Engine::preDisable( int flag )
 
 void Engine::load_( )
 {
-    int64_t d_tm;
+    int64_t d_tm = 0;
 
     mess_info(nodePath().c_str(),_("Load module."));
 
@@ -538,17 +538,19 @@ string Engine::callSynth( const string &itxt )
     if( rezFromPipe && textToPipe )	return "";
 
     //> Open pipe
-    FILE *fp = popen( com.c_str(), textToPipe?"w":"r" );
-    if( !fp )	return "";
+    FILE *fp = popen(com.c_str(), textToPipe ? "w" : "r");
+    if(!fp) return "";
+    bool fOK = true;
     //> Write text to pipe
-    if( textToPipe )	fwrite( txt.c_str(), txt.size(), 1, fp );
+    if(textToPipe) fOK = (fwrite(txt.c_str(),txt.size(),1,fp) == txt.size());
     //> Read result from pipe
-    if(rezFromPipe)
-	while((comPos=fread(buf,1,sizeof(buf),fp)))
-	    rez.append(buf,comPos);
+    while(fOK && rezFromPipe && (comPos=fread(buf,1,sizeof(buf),fp)))
+	rez.append(buf,comPos);
     pclose(fp);
+    if(!fOK) return "";
+
     //> Read result from result file
-    if( !rezFromPipe )
+    if(!rezFromPipe)
     {
 	FILE *fp = fopen( synthRez, "r" );
 	if( !fp ) return "";

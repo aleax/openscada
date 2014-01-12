@@ -121,8 +121,7 @@ AC_CONFIG_FILES(Makefile openscada.pc
 
 if test -d data; then
     AC_CONFIG_FILES(data/openscada.desktop data/openscada_start data/oscada.xml
-	data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/AGLKS/openscada_AGLKS data/ModelsDB/AGLKS/openscada_demo
-	data/ModelsDB/Boiler/openscada_Boiler.desktop data/ModelsDB/Boiler/openscada_Boiler)
+	data/ModelsDB/AGLKS/openscada_AGLKS.desktop data/ModelsDB/Boiler/openscada_Boiler.desktop)
 fi
 
 #====== Generic functions enable/disable ======

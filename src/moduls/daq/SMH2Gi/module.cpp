@@ -118,7 +118,7 @@ void TTpContr::postEnable( int flag )
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return new TMdContr(name,daq_db,this);
+    return new TMdContr(name, daq_db, this);
 }
 
 void TTpContr::setMRCDirDevs( const string &vl )
@@ -210,8 +210,8 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* SMH2Gi::TMdContr                              *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c,daq_db,cfgelem), prcSt(false), callSt(false), endrunReq(false), smv(NULL), tmGath(0),
-    m_prior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId())
+    ::TController(name_c,daq_db,cfgelem), smv(NULL), m_prior(cfg("PRIOR").getId()), connTry(cfg("REQ_TRY").getId()),
+    prcSt(false), callSt(false), endrunReq(false), tmGath(0)
 {
     cfg("PRM_BD_SHM").setS("SMH2GiPrmSHM_"+name_c);
     cfg("PRM_BD_MRC").setS("SMH2GiPrmMRC_"+name_c);
@@ -247,10 +247,16 @@ void TMdContr::enable_( )
 
     //> MC bus init by send reset to GPIO PC30
     //>> Open GPIO PC30 (/sys/class/gpio/gpio94)
-    int hd = open("/sys/class/gpio/gpio94/value",O_WRONLY);
-    if(hd < 0) throw TError(nodePath().c_str(),_("Error GPIO PC30 open for MC reset."));
-    lseek(hd,0,SEEK_SET); write(hd,"1",1); TSYS::sysSleep(50e-3);	//50ms
-    lseek(hd,0,SEEK_SET); write(hd,"0",1); TSYS::sysSleep(200e-3);	//200ms
+    int hd = open("/sys/class/gpio/gpio94/value", O_WRONLY);
+    if(hd < 0) throw TError(nodePath().c_str(), _("Error GPIO PC30 open for MC reset."));
+    lseek(hd, 0, SEEK_SET);
+    if(write(hd,"1",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
+    TSYS::sysSleep(50e-3);	//50ms
+
+    lseek(hd, 0, SEEK_SET);
+    if(write(hd,"0",1) != 1) mess_err(nodePath().c_str(), _("Write to gpio94 error!"));
+    TSYS::sysSleep(200e-3);	//200ms
+
     close(hd);
 
     //> MR bus init by send 250*0xCC symbols
@@ -287,7 +293,7 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    int i_prm;
+    unsigned i_prm;
 
     ResAlloc res(en_res,true);
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -394,7 +400,7 @@ void *TMdContr::Task( void *icntr )
 	{
 	    string pdu;
 	    //> Swap registers
-	    for(int i_p = 0; i_p < cntr.MRWrFrm.size()-1; i_p += 2)
+	    for(int i_p = 0; i_p < (int)cntr.MRWrFrm.size()-1; i_p += 2)
 	    { char t_sw = cntr.MRWrFrm[i_p]; cntr.MRWrFrm[i_p] = cntr.MRWrFrm[i_p+1]; cntr.MRWrFrm[i_p+1] = t_sw; }
 
 	    //>> Prepare header
@@ -587,7 +593,7 @@ void TMdPrm::setEval( )
 {
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 
@@ -855,7 +861,7 @@ void MRCParam::enable( TParamContr *ip )
 	    throw TError(p->nodePath().c_str(),_("Parameters request error: %s."),rezReq.c_str());
 	pdu.erase(0,3);
 	//> Swap registers
-	for(int i_p = 0; i_p < pdu.size()-1; i_p += 2)
+	for(int i_p = 0; i_p < (int)pdu.size()-1; i_p += 2)
 	{ char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
 	Inquired_t *resp = (Inquired_t*)pdu.data();
 	//> Compare with configured module type
@@ -916,7 +922,7 @@ void MRCParam::getVals( TParamContr *ip )
     string pdu, pduReq, data, rezReq;
     TMdPrm *p = (TMdPrm *)ip;
     tval *ePrm = (tval*)p->extPrms;
-    int modSlot = p->cfg("MOD_SLOT").getI(), vl;
+    int modSlot = p->cfg("MOD_SLOT").getI();
 
     //>> ID and SN attributes set
     if(p->vlPresent("id")) p->vlAt("id").at().setI(ePrm->dev.HardID, 0, true);
@@ -944,7 +950,7 @@ void MRCParam::getVals( TParamContr *ip )
 	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
 	pduReq.erase(0,3);
 	//> Swap registers
-	for(int i_p = 0; i_p < pduReq.size()-1; i_p += 2)
+	for(int i_p = 0; i_p < (int)pduReq.size()-1; i_p += 2)
 	{ char t_sw = pduReq[i_p]; pduReq[i_p] = pduReq[i_p+1]; pduReq[i_p+1] = t_sw; }
 
 	Inquired_t *respHd = (Inquired_t*)pduReq.data();
@@ -988,7 +994,7 @@ void MRCParam::getVals( TParamContr *ip )
 	    for(int i_n = 0; i_n < 8; i_n++)
 		data += (char)((i_n == vmax(0,modSlot))?8:(8+10));
 	    //> Swap registers
-	    for(int i_p = 0; i_p < data.size()-1; i_p += 2)
+	    for(int i_p = 0; i_p < (int)data.size()-1; i_p += 2)
 	    { char t_sw = data[i_p]; data[i_p] = data[i_p+1]; data[i_p+1] = t_sw; }
 
 	    //>> MR_broadcast_t.Data
@@ -1004,7 +1010,7 @@ void MRCParam::getVals( TParamContr *ip )
     	    data += (char)(vl>>8); data += (char)vl;
 
 	    //>>> Analog outputs place
-	    for(int i_a; i_a < 4; i_a++)
+	    for(int i_a = 0; i_a < 4; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
@@ -1054,7 +1060,7 @@ void MRCParam::getVals( TParamContr *ip )
 
 	pduReq.erase(0,3);
 	//> Swap registers
-	for(int i_p = 0; i_p < pduReq.size()-1; i_p += 2)
+	for(int i_p = 0; i_p < (int)pduReq.size()-1; i_p += 2)
 	{ char t_sw = pduReq[i_p]; pduReq[i_p] = pduReq[i_p+1]; pduReq[i_p+1] = t_sw; }
 
 	Inquired_t *respHd = (Inquired_t*)pduReq.data();
@@ -1088,7 +1094,7 @@ void MRCParam::getVals( TParamContr *ip )
     		data += (char)vl; data += (char)(vl>>8);
     	    }
 	    //>> Analog outputs place
-	    for(int i_a; i_a < ePrm->AO; i_a++)
+	    for(int i_a = 0; i_a < ePrm->AO; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
@@ -1097,7 +1103,7 @@ void MRCParam::getVals( TParamContr *ip )
 	    //>> Append to generic MR write frame
 	    if(data.size() && p->owner().MRWrFrm[modSlot] == ((modSlot<7)?p->owner().MRWrFrm[modSlot+1]:p->owner().MRWrFrm.size()))
 	    {
-		if(p->owner().MRWrFrm[modSlot] >= p->owner().MRWrFrm.size()) p->owner().MRWrFrm.append(data);
+		if(p->owner().MRWrFrm[modSlot] >= (int)p->owner().MRWrFrm.size()) p->owner().MRWrFrm.append(data);
 		else p->owner().MRWrFrm.insert(p->owner().MRWrFrm[modSlot], data);
 
 		for(int i_n = modSlot+1; i_n < 8; i_n++)
@@ -1122,7 +1128,7 @@ void MRCParam::getVals( TParamContr *ip )
 
 void MRCParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
 {
-    TMdPrm *p = (TMdPrm *)ip;
+
 }
 
 bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )

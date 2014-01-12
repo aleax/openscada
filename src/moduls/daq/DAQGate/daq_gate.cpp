@@ -193,7 +193,7 @@ void TMdContr::enable_( )
 	    mStatWork.push_back(pair<string,StHd>(statv,StHd()));
 
     //> Remote station scaning. Controllers and parameters scaning
-    for(int i_st = 0; i_st < mStatWork.size(); i_st++)
+    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
 	for(int cp_off = 0; (cp_el=TSYS::strSepParse(cfg("CNTRPRM").getS(),0,'\n',&cp_off)).size(); )
 	    try
 	    {
@@ -237,7 +237,7 @@ void TMdContr::enable_( )
 
     //> Removing remotely missed parameters in case all remote stations active status by actual list
     bool prmChkToDel = true;
-    for(int i_st = 0; prmChkToDel && i_st < mStatWork.size(); i_st++)
+    for(unsigned i_st = 0; prmChkToDel && i_st < mStatWork.size(); i_st++)
 	if(mStatWork[i_st].second.cntr >= 0) prmChkToDel = false;
     if(prmChkToDel && enableStat())
     {

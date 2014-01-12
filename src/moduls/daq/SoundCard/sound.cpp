@@ -332,7 +332,6 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     ResAlloc res(cntr.nodeRes(),false);
     for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
     {
-	const char *rptr = (const char*)iBuf;
 	int  chn = cntr.pHd[i_p].at().iCnl();
 	AutoHD<TVal> val = cntr.pHd[i_p].at().vlAt("val");
 	AutoHD<TVArchive> arch = val.at().arch();

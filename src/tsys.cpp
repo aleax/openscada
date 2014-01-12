@@ -171,7 +171,7 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 
     for(int l_off = 0, nLev = 0; true; nLev++)
     {
-	s_el = TSYS::pathLev(path,0,true,&l_off);
+	s_el = TSYS::pathLev(path, 0, true, &l_off);
 	if(s_el.empty()) return t_node;
 	bool ok = false;
 	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
@@ -448,18 +448,22 @@ bool TSYS::cfgFileLoad( )
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
+	bool fOK = true;
 	string s_buf;
-	int cf_sz = lseek(hd,0,SEEK_END);
+	int cf_sz = lseek(hd, 0, SEEK_END);
 	if(cf_sz > 0)
 	{
-	    lseek(hd,0,SEEK_SET);
-	    char *buf = (char *)malloc(cf_sz+1);
-	    read(hd,buf,cf_sz);
-	    buf[cf_sz] = 0;
-	    s_buf = buf;
+	    lseek(hd, 0, SEEK_SET);
+	    char *buf = (char*)malloc(cf_sz+1);
+	    if((fOK=(read(hd,buf,cf_sz) == cf_sz)))
+	    {
+		buf[cf_sz] = 0;
+		s_buf = buf;
+	    }
 	    free(buf);
 	}
 	close(hd);
+	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
 
 	try
 	{
@@ -1759,6 +1763,8 @@ void *TSYS::HPrTask( void *icntr )
 
 	TSYS::taskSleep(1000000000);
     }
+
+    return NULL;
 }
 
 int TSYS::sysSleep( float tm )
@@ -2562,9 +2568,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		}
 		if(Mess->debugCats[opt->attr("key_cat")]) { Mess->selectDebugCats.push_back(opt->attr("key_cat")); modif(); }
 	    }
-	    else for(unsigned i_sdc = 0; i_sdc < Mess->selectDebugCats.size(); i_sdc)
-		if(Mess->selectDebugCats[i_sdc] == opt->attr("key_cat"))
-		{
+	    else for(unsigned i_sdc = 0; i_sdc < Mess->selectDebugCats.size(); i_sdc++)
+		if(Mess->selectDebugCats[i_sdc] == opt->attr("key_cat")) {
 		    Mess->selectDebugCats.erase(Mess->selectDebugCats.begin()+i_sdc);
 		    modif();
 		    break;

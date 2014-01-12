@@ -63,7 +63,6 @@ string TParamContr::ownerPath( bool inclSelf )
     string rez;
 
     if(inclSelf) rez = nodeName();
-    TCntrNode *own = nodePrev();
     for(TCntrNode *own = nodePrev(); dynamic_cast<TParamContr*>(own); own = own->nodePrev())
 	rez = rez.empty() ? string(own->nodeName()) : (string(own->nodeName())+"."+rez);
 

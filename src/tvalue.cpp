@@ -273,6 +273,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
         		case TFld::Real:	sType = _("Real");	break;
         		case TFld::Boolean:	sType = _("Boolean");	break;
         		case TFld::Object:	sType = _("Object");	break;
+        		default: break;
     		    }
     		    if(vl.at().fld().flg()&TFld::Selected) sType = _("-select");
     		    n_e->setAttr("help",

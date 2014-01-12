@@ -359,6 +359,7 @@ void TValBuf::set( const TVariant &value, int64_t tm )
 	case TVariant::Integer:	setI(value.getI(), tm);	break;
 	case TVariant::Real:	setR(value.getR(), tm);	break;
 	case TVariant::String:	setS(value.getS(), tm);	break;
+	default: break;
     }
 }
 
@@ -2840,6 +2841,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 				    break;
 				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
 				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+				default: break;
 			    }
 			wPrevVal.assign((char*)&c_val,sizeof(float));
 			wPrevTm = c_tm;
@@ -2884,6 +2886,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 				    break;
 				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
 				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+				default: break;
 			    }
 			wPrevVal.assign((char*)&c_val,sizeof(int64_t));
 			wPrevTm = c_tm;
@@ -2917,6 +2920,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 				    break;
 				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
 				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+				default: break;
 			    }
 			wPrevVal.assign((char*)&c_val,sizeof(double));
 			wPrevTm = c_tm;

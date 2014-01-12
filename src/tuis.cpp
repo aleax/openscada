@@ -74,7 +74,7 @@ void TUIS::subStop( )
 
 string TUIS::icoGet( const string &inm, string *tp, bool retPath )
 {
-    unsigned i_t;
+    unsigned i_t = 0;
     int hd = -1;
     string rez, pathi;
     char types[][5] = {"png","gif","jpg","jpeg"};

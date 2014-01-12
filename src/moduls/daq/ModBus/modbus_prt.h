@@ -141,8 +141,8 @@ class Node : public TFunction, public TConfig
 	class SIO
 	{
 	    public:
-		SIO( ) : id(-1), sTp(0), pos(-1)	{ }
-		SIO( int iid, char isTp = 0, int ipos = 0 ) : id(iid), sTp(isTp), pos(ipos)	{ }
+		SIO( ) : id(-1), pos(-1), sTp(0)	{ }
+		SIO( int iid, char isTp = 0, int ipos = 0 ) : id(iid), pos(ipos), sTp(isTp)	{ }
 
 		int id, pos;
 		char sTp;

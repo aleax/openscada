@@ -248,22 +248,22 @@ Requires: %name-UI.QTCfg %name-UI.QTStarter %name-UI.VCAEngine %name-UI.Vision %
 %description Model.AGLKS
 The %{name}-Model.AGLKS package includes model "AGLKS" data bases and config.
 The Model is used for OpenSCADA demo and allowed for English, Russian and Ukrainian languages.
-For start use command <openscada_demo> or <openscada_AGLKS>.
+For start use command <openscada_AGLKS>.
 For access use account "root" and password "openscada" or account "user" and password "user".
 %description Model.AGLKS -l ru_RU.UTF8
 Пакет %{name}-Model.AGLKS включает БД и конфигурацию модели "АГЛКС".
 Модель используется для демонстрации OpenSCADA и доступна на Английском, Русском и Украинском языках.
-Для старта используйте команду <openscada_demo> мли <openscada_AGLKS>.
+Для старта используйте команду <openscada_AGLKS>.
 Для доступа используйте запись "root" и пароль "openscada" или запись "user" и пароль "user".
 %description Model.AGLKS -l uk_UA.UTF8
 Пакет %{name}-Model.AGLKS включає БД та конфігурацію моделі "АГЛКС".
 Модель використано для демонстрації OpenSCADA та доступно на Англійській, Російській та Українській мовах.
-Для старту використовуйте команду <openscada_demo> та <openscada_AGLKS>.
+Для старту використовуйте команду <openscada_AGLKS>.
 Для доступу використовуйте запис "root" та пароль "openscada" або запис "user" та пароль "user".
 %description Model.AGLKS -l de_DE.UTF8
 Das Paket %{name}-Model.AGLKS enthaelt Datenbanken und Konfigurationsdateien Modell "AGLKS".
 Das Modell wird verwendet, um OpenSCADA demonstrieren und ist verfügbar in Englisch, Russisch und Ukrainisch.
-Fuers Starten wird Kommando <openscada_demo> oder <openscada_AGLKS> benutzt.
+Fuers Starten wird Kommando <openscada_AGLKS> benutzt.
 Fuer den Zugang die Aufzeichnung "root" und das Kennwort "openscada" benutzen.
 
 %package Model.Boiler
@@ -1129,6 +1129,9 @@ install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 #echo "OpenSCADA messages archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/MESS/.info
 #echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VAL/.info
 
+ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
+ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
+
 %files
 
 %clean
@@ -1199,7 +1202,6 @@ install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 %defattr(-,root,root)
 %config(noreplace) %_sysconfdir/oscada_AGLKS.xml
 %_bindir/openscada_AGLKS
-%_bindir/openscada_demo
 %_desktopdir/openscada_AGLKS.desktop
 %_iconsdir/openscada_AGLKS.png
 %_datadir/openscada/icons/AGLKS.png

@@ -548,7 +548,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     {
 	oRes.resRequestW();
 	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
-	for(int i_p = 0; i_p < sArr->mEls.size(); i_p++) mEls.push_back(sArr->mEls[i_p]);
+	for(unsigned i_p = 0; i_p < sArr->mEls.size(); i_p++) mEls.push_back(sArr->mEls[i_p]);
 	oRes.resRelease();
 	return this;
     }
@@ -1063,19 +1063,21 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	if(prms.size() >= 2 && prms[1].getB())
 	{
 	    string s_buf;
-	    int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"),prms[0].getS().c_str(),strerror(errno));
-	    int cf_sz = lseek(hd,0,SEEK_END);
+	    int hd = open(prms[0].getS().c_str(), O_RDONLY);
+	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"), prms[0].getS().c_str(), strerror(errno));
+	    bool fOK = true;
+	    int cf_sz = lseek(hd, 0, SEEK_END);
 	    if(cf_sz > 0)
 	    {
-		lseek(hd,0,SEEK_SET);
+		lseek(hd, 0, SEEK_SET);
 		char *buf = (char *)malloc(cf_sz+1);
-		read(hd,buf,cf_sz);
+		fOK = (read(hd,buf,cf_sz) == cf_sz);
 		buf[cf_sz] = 0;
 		s_buf = buf;
 		free(buf);
 	    }
 	    close(hd);
+	    if(!fOK) return TSYS::strMess(_("3:Load file '%s' error."), prms[0].getS().c_str());
 
 	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
 	    catch(TError err) { return "1:"+err.mess; }
@@ -1103,11 +1105,13 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	toXMLNode(nd);
 	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():Mess->charset());
 	//> Save to file
-	if( prms.size() >= 2 )
+	if(prms.size() >= 2)
 	{
-	    int hd = open( prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664 );
-	    if( hd < 0 ) return string("");
-	    write(hd,s_buf.data(),s_buf.size());
+	    int hd = open(prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664);
+	    if(hd < 0)	return "";
+	    bool fOK = (write(hd,s_buf.data(),s_buf.size()) == (int)s_buf.size());
+	    close(hd);
+	    if(!fOK)	return "";
 	}
 	return s_buf;
     }

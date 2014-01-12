@@ -123,7 +123,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
 	//>> Switch to software trigger/transfer mode
 	ixisa_reg_t reg;
 	reg.id = IXISA_ADMCR;
-	if(reg.value=(ePrm->dev.AI>>8)) ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
+	if((reg.value=(ePrm->dev.AI>>8))) ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
     }
 
     //> AO processing
@@ -138,7 +138,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
     if(ePrm->dev.DIO)
     {
     	int directDIO = atoi(p->modPrm("DirectDIO").c_str());
-    	for(int i_ch = 0; i_ch < ePrm->dev.DIO; i_ch++)
+    	for(unsigned i_ch = 0; i_ch < ePrm->dev.DIO; i_ch++)
     	{
 	    p->dInOutRev[i_ch] = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
     	    //> Set board configuration
@@ -156,7 +156,7 @@ void da_ISA::enable( TMdPrm *p, vector<string> &als )
             	case 4: reg.id = IXISA_CN4CR;   break;
             	case 5: reg.id = IXISA_CN5CR;   break;
     	    }
-    	    int rez = ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
+    	    ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
 
     	    //> Attributes create
 	    if((directDIO>>i_ch)&1)
@@ -254,7 +254,7 @@ void da_ISA::getVal( TMdPrm *p )
     if(ePrm->dev.DIO)
     {
         int directDIO = atoi(p->modPrm("DirectDIO").c_str());
-        for(int i_ch = 0; i_ch < ePrm->dev.DIO; i_ch++)
+        for(unsigned i_ch = 0; i_ch < ePrm->dev.DIO; i_ch++)
             for(int i_p = 0; i_p < 3; i_p++)
             {
                 ixisa_reg_t data;
@@ -384,7 +384,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 	    case 7:	reg.id = IXISA_AO7;	break;
 	}
 	reg.value = valo.getI();
-	int rez = ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
+	ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
     }
 
     //> DIO processing
@@ -440,7 +440,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
             if(p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_p*8+i_o)).at().getB(0, true)) data.value |= 1;
         }
         data.value ^= (p->dInOutRev[i_ch]>>(i_p*8))&0xFF;
-        int rez = ioctl(ePrm->devFd, IXISA_WRITE_REG, &data);
+        ioctl(ePrm->devFd, IXISA_WRITE_REG, &data);
     }
 
     //> DO processing
@@ -498,7 +498,7 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
             if(p->vlAt(TSYS::strMess("o%d_%d",i_ch,i_o)).at().getB(0, true)) data.value |= 1;
         }
         data.value ^= p->dInOutRev[i_ch+(ePrm->dev.DI&0xFF)];
-        int rez = ioctl(ePrm->devFd, IXISA_WRITE_REG, &data);
+        ioctl(ePrm->devFd, IXISA_WRITE_REG, &data);
     }
 }
 

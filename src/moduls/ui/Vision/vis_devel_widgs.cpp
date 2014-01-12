@@ -1425,7 +1425,7 @@ void WdgTree::selectItem( bool force )
 
 void WdgTree::updateTree( const string &vca_it )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     bool is_create = false, root_allow = false;
@@ -1809,7 +1809,7 @@ void ProjTree::selectItem( bool force )
 
 void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     vector<string> list_pr, list_pg;
     QTreeWidgetItem *nit, *nit_pg;
     string t_el, simg;

@@ -1529,7 +1529,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 			int tfid = open(tfile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
 			if(tfid >= 0)
 			{
-			    if(write(tfid, sdata.data(), sdata.size()) != sdata.size())
+			    if(write(tfid, sdata.data(), sdata.size()) != (ssize_t)sdata.size())
 				mod->postMess(mod->nodePath().c_str(), QString(_("Write file '%1' is fail.")).arg(tfile.c_str()), TVision::Error);
 			    close(tfid);
 			    mSrc = MediaSource(QString(tfile.c_str()));
@@ -2042,7 +2042,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
     //> Draw main and individual vertical scales
     double vmax_ln = tAr.height() / ((sclVer&SC_MARKERS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
-    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
+    for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
 	bool	vsPercT;
 	char	sclVerT;
@@ -2256,7 +2256,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
 void ShapeDiagram::makeTrendsPicture( WdgView *w )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     QPen grdPen, mrkPen;
     int  mrkHeight = 0, mrkWidth = 0;
 
@@ -2422,7 +2422,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     //> Draw main and individual vertical scales
     float vmax_ln = tAr.height() / ((sclVer&SC_MARKERS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
-    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)	//prmsInd[i]=-1 - for main scale
+    for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)	//prmsInd[i]=-1 - for main scale
     {
 	bool	isLogT, vsPercT;
 	char	sclVerT;
@@ -2760,7 +2760,7 @@ void ShapeDiagram::tracing( )
 
 bool ShapeDiagram::event( WdgView *w, QEvent *event )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!shD->en) return false;

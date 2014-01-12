@@ -799,8 +799,9 @@ void VisRun::exportDiag( const string &idg )
 #endif
 	    }
 	    //>>> Save to file
-	    ::write(fd,CSVr.data(),CSVr.size());
+	    bool fOK = (write(fd,CSVr.data(),CSVr.size()) == (int)CSVr.size());
 	    ::close(fd);
+	    if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error write to: %1.")).arg(fileName), TVision::Error, this);
 	}
 	//>> Export to image
 	else if(!img.save(fileName))
@@ -919,9 +920,11 @@ void VisRun::exportDoc( const string &idoc )
 	//>> Export to XHTML
 	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
 
+	bool fOK = true;
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
-	else ::write(fd,rez.data(),rez.size());
+	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
 	::close(fd);
+	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error write to: %1.")).arg(fileName), TVision::Error, this);
     }
 }
 
@@ -1290,7 +1293,7 @@ void VisRun::alarmSet( unsigned alarm )
     {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
-	if( hd < 0 )	mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
+	if(hd < 0) mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
 	else
 	{
 	    input_event ev;
@@ -1298,17 +1301,17 @@ void VisRun::alarmSet( unsigned alarm )
 	    ev.type = EV_SND;
 	    ev.code = SND_TONE;
 	    ev.value = ((alarm>>16)&TVision::Alarm) ? 1000 : 0;
-	    write(hd, &ev, sizeof(ev));
+	    bool fOK = (write(hd,&ev,sizeof(ev)) == sizeof(ev));
 	    ::close(hd);
+	    if(!fOK) mess_warning(mod->nodePath().c_str(), _("Error write to: %s"), spkEvDev);
 	}
     }
     //>> Set speach or sound alarm
-    if( isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty() )
-	alrmPlay->start( );
+    if(isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty()) alrmPlay->start();
 
     //> Alarm action indicators update
     //>> Alarm level icon update
-    if( ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet )
+    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet)
     {
 	int alarmLev = alarm&0xFF;
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
@@ -1370,7 +1373,7 @@ void VisRun::cacheResSet( const string &res, const string &val )
 
 void VisRun::updatePage( )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     if(winClose) return;
 
     int rez;

@@ -400,7 +400,7 @@ void TMdPrm::disable()
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
-    for(int i_el = 0; i_el < ls.size(); i_el++)
+    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
 
     ResAlloc res(dev_res,true);
@@ -418,7 +418,7 @@ void TMdPrm::getVals( const string &atr )
     else als.push_back(atr);
 
     ResAlloc res(dev_res,true);
-    for(int i_a = 0; i_a < als.size(); i_a++)
+    for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	AutoHD<TVal> val = vlAt(als[i_a]);
 	int i_sd  = atoi(TSYS::strParse(val.at().fld().reserve(),0,".").c_str()),
@@ -434,7 +434,7 @@ void TMdPrm::getVals( const string &atr )
 	    if(rez != -1 && aiTm > 20)
 	    {
 		TSYS::sysSleep((float)aiTm*1e-6);
-		int rez = comedi_data_read_delayed(devH, i_sd, i_chnl, i_rng, 1, &data, 0);
+		comedi_data_read_delayed(devH, i_sd, i_chnl, i_rng, 1, &data, 0);
 	    }
 	    comedi_range *rng = comedi_get_range(devH,i_sd,i_chnl,i_rng);
 	    int maxVal = comedi_get_maxdata(devH,i_sd,i_chnl);

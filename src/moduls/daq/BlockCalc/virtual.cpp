@@ -370,7 +370,7 @@ void *Contr::Task( void *icontr )
 
     bool is_start = true;
     bool is_stop  = false;
-    int64_t t_cnt, t_prev = TSYS::curTime();
+    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     while(true)
     {

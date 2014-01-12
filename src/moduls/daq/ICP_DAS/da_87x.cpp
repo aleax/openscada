@@ -93,7 +93,6 @@ void da_87x::tpList( TMdPrm *p, vector<string> &tpl, vector<string> *ntpl )
 
 void da_87x::enable( TMdPrm *p, vector<string> &als )
 {
-    int cntrSet;
     string chnId, chnNm;
 
     if(!p->extPrms) p->extPrms = new tval();
@@ -191,7 +190,7 @@ void da_87x::getVal( TMdPrm *p )
 	rez = p->owner().serReq(TSYS::strMess("~%02X31%02X",(p->owner().bus()==0)?0:p->modAddr,(int)(10*p->wTm)), p->modSlot);
 
     //>> AO back processing ($AA8N)
-    for(int i_v = 0; i_v < ePrm->dev.AO; i_v++)
+    for(unsigned i_v = 0; i_v < ePrm->dev.AO; i_v++)
     {
         if(!rez.empty()) rez = p->owner().serReq(TSYS::strMess("$%02X8%d",(p->owner().bus()==0)?0:p->modAddr,i_v), p->modSlot);
         p->vlAt(TSYS::strMess("ao%d",i_v)).at().setR((rez.size() != 10 || rez[0]!='!') ? EVAL_REAL : atof(rez.data()+3), 0, true);
@@ -223,7 +222,7 @@ void da_87x::getVal( TMdPrm *p )
 	else rez = "";
 
 	//>> DO
-	int DOsz = (ePrm->dev.DO && (ePrm->dev.DO>>8) == 0) ? ePrm->dev.DO&0xFF : 0;
+	unsigned DOsz = (ePrm->dev.DO && (ePrm->dev.DO>>8) == 0) ? ePrm->dev.DO&0xFF : 0;
 	bool isErr = ((1+DOsz*2) >= rez.size() || rez[0] != '>');
 	ePrm->doVal = isErr ? 0 : strtoul(rez.substr(1,DOsz*2).c_str(),NULL,16);
 	for(unsigned i_ch = 0; i_ch < DOsz; i_ch++)
@@ -232,7 +231,7 @@ void da_87x::getVal( TMdPrm *p )
         	    (((ePrm->doVal>>(i_ch*8))^p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch])>>i_d)&1, 0, true);
 
 	//>> DI
-	int DIsz = (ePrm->dev.DI && (ePrm->dev.DI>>8) == 0) ? ePrm->dev.DI&0xFF : 0;
+	unsigned DIsz = (ePrm->dev.DI && (ePrm->dev.DI>>8) == 0) ? ePrm->dev.DI&0xFF : 0;
 	isErr = ((1+(DOsz+DIsz)*2) >= rez.size() || rez[0] != '>');
 	uint32_t diVal = isErr ? 0 : strtoul(rez.substr(1+DOsz*2,DIsz*2).c_str(),NULL,16);
 	for(unsigned i_ch = 0; i_ch < DIsz; i_ch++)
@@ -337,7 +336,7 @@ void da_87x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 
 da_87x::DevFeature da_87x::getDev( TMdPrm *p, const string &nm )
 {
-    int cntrSet;
+    int cntrSet = 0;
     DevFeature wdev = devs[nm];
     if(nm == "I-87xxx")
     {
@@ -349,8 +348,8 @@ da_87x::DevFeature da_87x::getDev( TMdPrm *p, const string &nm )
     }
     else
     {
-	if(wdev.AO && (cntrSet=atoi(p->modPrm("modAO","-1").c_str())) >= 0)	wdev.AO = vmin(cntrSet,wdev.AO);
-	if(wdev.CNTR && (cntrSet=atoi(p->modPrm("modCNTR","-1").c_str())) >= 0)	wdev.CNTR = vmin(cntrSet,wdev.CNTR);
+	if(wdev.AO && (cntrSet=atoi(p->modPrm("modAO","-1").c_str())) >= 0)	wdev.AO = vmin(cntrSet, wdev.AO);
+	if(wdev.CNTR && (cntrSet=atoi(p->modPrm("modCNTR","-1").c_str())) >= 0)	wdev.CNTR = vmin(cntrSet, wdev.CNTR);
     }
 
     return wdev;
@@ -493,7 +492,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	else if(p->owner().startStat() && a_path == "/cfg/mod/vPon" && p->ctrChkNode(opt))
 	{
     	    string cnt;
-    	    for(int i_c = 0; i_c < dev.AO; i_c++)
+    	    for(unsigned i_c = 0; i_c < dev.AO; i_c++)
     	    {
 		//>>> $AA7N
         	rez = p->owner().serReq(TSYS::strMess("$%02X7%d",(p->owner().bus()==0)?0:p->modAddr,i_c), p->modSlot);
@@ -503,12 +502,12 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     	    opt->setText(cnt);
 	}
 	else if(p->owner().startStat() && a_path == "/cfg/mod/vPonSet" && p->ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-    	    for(int i_c = 0; i_c < dev.AO; i_c++)	// $AA4N
+    	    for(unsigned i_c = 0; i_c < dev.AO; i_c++)	// $AA4N
         	p->owner().serReq(TSYS::strMess("$%02X4%d",(p->owner().bus()==0)?0:p->modAddr,i_c), p->modSlot);
 	else if(p->owner().startStat() && a_path == "/cfg/mod/vSf" && p->ctrChkNode(opt))
 	{
     	    string cnt;
-    	    for(int i_c = 0; i_c < dev.AO; i_c++)
+    	    for(unsigned i_c = 0; i_c < dev.AO; i_c++)
     	    {
 		//>>> ~AA4N
         	rez = p->owner().serReq(TSYS::strMess("~%02X4%d",(p->owner().bus()==0)?0:p->modAddr,i_c), p->modSlot);
@@ -518,7 +517,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     	    opt->setText(cnt);
     	}
 	else if(p->owner().startStat() && a_path == "/cfg/mod/vSfSet" && p->ctrChkNode(opt,"seet",RWRW__,"root",SDAQ_ID,SEC_WR))
-    	    for(int i_c = 0; i_c < dev.AO; i_c++)	// ~AA5N
+    	    for(unsigned i_c = 0; i_c < dev.AO; i_c++)	// ~AA5N
         	p->owner().serReq(TSYS::strMess("~%02X5%d",(p->owner().bus()==0)?0:p->modAddr,i_c), p->modSlot);
 	else return false;
     }
@@ -571,7 +570,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     		{
         	    string cnt;
         	    uint32_t vl = strtol(rez.data()+3,NULL,16);
-        	    for(int i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+        	    for(unsigned i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
         	    opt->setText(cnt);
     		}
 	    }
@@ -587,7 +586,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     		{
         	    string cnt;
         	    int vl = strtol(rez.data()+3,NULL,16);
-        	    for(int i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
+        	    for(unsigned i_o = 0; i_o < (dev.DO&0xFF)*8; i_o++) cnt += ((vl>>i_o)&0x01)?"1 ":"0 ";
         	    opt->setText(cnt);
     		}
 	    }

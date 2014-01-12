@@ -4221,7 +4221,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		    else style = lineStyle;
 
 		    //>> Reading coordinates for the points of the line
-		    for(int i_p = 0; i_p < p.size(); i_p++) ip[i_p] = pnts[p[i_p]];
+		    for(unsigned i_p = 0; i_p < p.size(); i_p++) ip[i_p] = pnts[p[i_p]];
 
 		    if(elTp == ShapeItem::Arc)
                     {
@@ -4913,7 +4913,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 {
     ResAlloc res(mRes, true);
 
-    int64_t dbTm;
+    int64_t dbTm = 0;
     if(mess_lev() == TMess::Debug) dbTm = TSYS::curTime();
 
     //> Check for trend's data reload
@@ -5110,7 +5110,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Draw main and individual vertical scales
     float vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
-    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
+    for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
         bool	isLogT, vsPercT;
         char	sclVerT;
@@ -5588,7 +5588,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //> Draw main and individual vertical scales
     double vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
-    for(int i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
+    for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
 	bool    vsPercT;
         char    sclVerT;

@@ -115,9 +115,9 @@ void Ergomera::regVal( int reg )
 	workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
 }
 
-int Ergomera::getValR( int addr, ResString &err )
+int64_t Ergomera::getValR( int addr, ResString &err )
 {
-    int rez = EVAL_INT;
+    int64_t rez = EVAL_INT;
     vector< SDataRec >	&workCnt = acqBlks;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))

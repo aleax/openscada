@@ -2117,7 +2117,7 @@ void ConfApp::tabSelect( int idx )
 
 void ConfApp::viewChildRecArea( QTreeWidgetItem *i, bool upTree )
 {
-    int64_t d_cnt;
+    int64_t d_cnt = 0;
     if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 
     QStringList grps = i->data(2,Qt::UserRole).toStringList();

@@ -89,13 +89,13 @@ void HddStat::dList( vector<string> &list, bool part )
 void HddStat::getVal( TMdPrm *prm )
 {
     unsigned long rd, rd1, wr, wr1;
-    double rdVl, wrVl;
+    double rdVl = 0, wrVl = 0;
     char sc_pat[50], buf[256];
     FILE *f = NULL;
     bool devOK = false;
 
     string dev = prm->cfg("SUBT").getS();
-    if(f=fopen("/proc/diskstats","r"))
+    if((f=fopen("/proc/diskstats","r")))
     {
 	//major minor name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
         //--or for a partition--
