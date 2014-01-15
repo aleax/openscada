@@ -3148,7 +3148,7 @@ nextReq:
 					//Check for remove from queue by long age
 					if((curTime()-rPblTm) > ((int64_t)ss.cntrKeepAlive*ss.publInterv*1000))
 					{
-					    ss.retrQueue.erase(iRQ++);
+					    iRQ = ss.retrQueue.erase(iRQ);
 					    continue;
 					}
 					oNu(respEp, rSeq, 4);			//< sequenceNumber

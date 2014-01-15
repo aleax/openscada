@@ -5039,15 +5039,14 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
 	    {
 		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
-		cP.adjL -= wnt_dp/2;
-		cP.adjU += wnt_dp/2;
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
 	    }
 	}
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
 	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
 
 	cP.wScale = cP.mScale&(sclVer|SC_LOG);
-        if(cP.wScale&(SC_GRID|SC_MARKERS))      continue;
+	if(cP.wScale&(SC_GRID|SC_MARKERS))      continue;
 
 	//>>> Check for value border allow
 	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
@@ -5063,32 +5062,36 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     vector<int> prmsInd;
     for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
     {
-        TrendObj &cP = trnds[i_p];
-        cP.isIndiv = false;
-        if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
-        //>> Check for include to present or create new group and exclude from individual
-        if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
-            (cP.mScale&SC_LOG) == (sclVer&SC_LOG))
-        {
-            vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
-            prmInGrp++; prmGrpLast = i_p;
-            continue;
-        }
-        cP.isIndiv = true;
-        prmIndiv++;
-        if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
-        else prmsInd.push_back(i_p);
-        if(cP.mScale&SC_LOG)
-        {
-            cP.adjU = log10(vmax(1e-100,cP.adjU));
-            cP.adjL = log10(vmax(1e-100,cP.adjL));
-        }
-        if(isScale)     //Vertical scale and offset apply
-        {
-            float vsDif = cP.adjU - cP.adjL;
-            cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
-            cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
-        }
+	TrendObj &cP = trnds[i_p];
+	cP.isIndiv = false;
+	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	//>> Check for include to present or create new group and exclude from individual
+	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
+	    (cP.mScale&SC_LOG) == (sclVer&SC_LOG))
+	{
+	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+	    prmInGrp++; prmGrpLast = i_p;
+	    continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	else prmsInd.push_back(i_p);
+	if(cP.mScale&SC_LOG)
+	{
+	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
+	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001)
+	    {
+		double wnt_dp = 0.0001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+	    }
+	}
+	if(isScale)     //Vertical scale and offset apply
+	{
+	    float vsDif = cP.adjU - cP.adjL;
+	    cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
+	    cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
+	}
     }
     if(prmInGrp) prmsInd.push_back(-1);
     if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
@@ -5098,8 +5101,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     else vsPerc = false;
     if(isLog)
     {
-	vsMax = log10(vmax(1e-100,vsMax));
-	vsMin = log10(vmax(1e-100,vsMin));
+	vsMax = log10(vmax(1e-100,vsMax)); vsMin = log10(vmax(1e-100,vsMin));
+	if((vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.0001)
+	{
+	    double wnt_dp = 0.0001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+	    vsMin -= wnt_dp/2; vsMax += wnt_dp/2;
+	}
     }
     if(isScale)	//Vertical scale and offset apply
     {
@@ -5112,46 +5119,46 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     float vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
     for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
-        bool	isLogT, vsPercT;
-        char	sclVerT;
+	bool	isLogT, vsPercT;
+	char	sclVerT;
 	int     clrGridT = TWEB::colorResolve(im, sclColor);
-        double	vsMinT, vsMaxT;
-        double	vDiv = 1;
-        if(prmsInd[i_p] < 0)    //Main scale process
-        {
-            //>> Draw environment
-            vsPercT = vsPerc;
-            isLogT = isLog;
-            sclVerT = sclVer;
-            clrGridT = TWEB::colorResolve(im, sclColor);
+	double	vsMinT, vsMaxT;
+	double	vDiv = 1;
+	if(prmsInd[i_p] < 0)    //Main scale process
+	{
+	    //>> Draw environment
+	    vsPercT = vsPerc;
+	    isLogT = isLog;
+	    sclVerT = sclVer;
+	    clrGridT = TWEB::colorResolve(im, sclColor);
 	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
-            if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
+	    if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
 		clrGridT = clr_mrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
-            //>> Rounding
-            double v_len = vsMax - vsMin;
-            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
-            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-            if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-            while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
-            vsMinT = vsMin; vsMaxT = vsMax;
-        }
-        else    //Individual scale process
+	    //>> Rounding
+	    double v_len = vsMax - vsMin;
+	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
+	    while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale) { vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+	    while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = vsMin; vsMaxT = vsMax;
+	}
+	else    //Individual scale process
         {
-            TrendObj &cP = trnds[prmsInd[i_p]];
-            //>> Draw environment
-            vsPercT = false;
-            isLogT = cP.mScale&SC_LOG;
-            sclVerT = cP.wScale;
+	    TrendObj &cP = trnds[prmsInd[i_p]];
+	    //>> Draw environment
+	    vsPercT = false;
+	    isLogT = cP.mScale&SC_LOG;
+	    sclVerT = cP.wScale;
 	    clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
-            //>> Rounding
-            double v_len = cP.adjU - cP.adjL;
-            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
-            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-            if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
-            while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
-            vsMinT = cP.adjL; vsMaxT = cP.adjU;
-        }
-        if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+	    //>> Rounding
+	    double v_len = cP.adjU - cP.adjL;
+	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
+	    while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale) { cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
+	}
+	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
 
 	//>> Draw vertical grid and markers
 	int markWdth = 0;
@@ -5173,7 +5180,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 		    labVal = TSYS::strMess("%0.5g",(isLogT?pow(10,i_v):i_v)) + (isPerc?" %":"");
 		    gdImageStringFTEx(im, &brect[0], clr_mrk, (char*)sclMarkFont.c_str(), mrkFontSize, 0,
 			tArX+2, v_pos-1+(isMax?mrkHeight:0), (char*)labVal.c_str(), &strex);
-                    markWdth = vmax(markWdth, brect[2]-brect[6]);
+		    markWdth = vmax(markWdth, brect[2]-brect[6]);
 		}
 	    }
 	}
@@ -5328,9 +5335,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	int aPosBeg = cP.val(aVbeg);;
 	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
 	bool vsPercT = cP.isIndiv ? false : vsPerc;
-        bool isLogT = cP.isIndiv ? (cP.wScale&SC_LOG) : isLog;
-        double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
-        double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
+	bool isLogT = cP.isIndiv ? (cP.wScale&SC_LOG) : isLog;
+	double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+	double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
 	//>> Prepare border for percent trend
 	float bordL = cP.bordL();
@@ -5536,7 +5543,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
 
 	cP.wScale = cP.mScale&(sclVer|SC_LOG);
-        if(cP.wScale&(SC_GRID|SC_MARKERS)) continue;
+	if(cP.wScale&(SC_GRID|SC_MARKERS)) continue;
 
 	//>>> Check for value border allow
 	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
@@ -5552,26 +5559,26 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     vector<int> prmsInd;
     for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
     {
-        TrendObj &cP = trnds[i_p];
-        cP.isIndiv = false;
-        if(!cP.fftN || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
-        //>> Check for include to present or create new group and exclude from individual
-        if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
-        {
-            vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
-            prmInGrp++; prmGrpLast = i_p;
-            continue;
-        }
-        cP.isIndiv = true;
-        prmIndiv++;
-        if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
-        else prmsInd.push_back(i_p);
-        if(isScale)     //Vertical scale and offset apply
-        {
-            float vsDif = cP.adjU - cP.adjL;
-            cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
-            cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
-        }
+	TrendObj &cP = trnds[i_p];
+	cP.isIndiv = false;
+	if(!cP.fftN || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	//>> Check for include to present or create new group and exclude from individual
+	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
+	{
+	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
+	    prmInGrp++; prmGrpLast = i_p;
+	    continue;
+	}
+	cP.isIndiv = true;
+	prmIndiv++;
+	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	else prmsInd.push_back(i_p);
+	if(isScale)     //Vertical scale and offset apply
+	{
+	    float vsDif = cP.adjU - cP.adjL;
+	    cP.adjU += sclVerSclOff*vsDif/100;		cP.adjL += sclVerSclOff*vsDif/100;
+	    cP.adjU += (sclVerScl*vsDif/100-vsDif)/2;	cP.adjL -= (sclVerScl*vsDif/100-vsDif)/2;
+	}
     }
     if(prmInGrp) prmsInd.push_back(-1);
     if(prmIndivSc >= 0) prmsInd.push_back(prmIndivSc);
@@ -5590,44 +5597,44 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     double vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
     for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
-	bool    vsPercT;
-        char    sclVerT;
-        int	clrGridT = TWEB::colorResolve(im, sclColor);
-        double  vsMinT, vsMaxT;
-        double  vDiv = 1;
-        if(prmsInd[i_p] < 0)    //Main scale process
-        {
-            //>> Draw environment
-            vsPercT = vsPerc;
-            sclVerT = sclVer;
-            clrGridT = TWEB::colorResolve(im, sclColor);
+	bool	vsPercT;
+	char	sclVerT;
+	int	clrGridT = TWEB::colorResolve(im, sclColor);
+	double	vsMinT, vsMaxT;
+	double	vDiv = 1;
+	if(prmsInd[i_p] < 0)    //Main scale process
+	{
+	    //>> Draw environment
+	    vsPercT = vsPerc;
+	    sclVerT = sclVer;
+	    clrGridT = TWEB::colorResolve(im, sclColor);
 	    clr_mrk = TWEB::colorResolve(im, sclMarkColor);
-            if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
+	    if(prmInGrp == 1 && prmGrpLast >= 0)        //Set color for single parameter in main group
 		clrGridT = clr_mrk = TWEB::colorResolve(im, trnds[prmGrpLast].color());
-            //>> Rounding
-            double v_len = vsMax - vsMin;
-            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
-            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-            if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
-            while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
-            vsMinT = vsMin; vsMaxT = vsMax;
-        }
-        else    //Individual scale process
+	    //>> Rounding
+	    double v_len = vsMax - vsMin;
+	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+	    while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+	    while(((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = vsMin; vsMaxT = vsMax;
+	}
+	else    //Individual scale process
 	{
 	    TrendObj &cP = trnds[prmsInd[i_p]];
-            //>> Draw environment
-            vsPercT = false;
-            sclVerT = cP.wScale;
-            clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
-            //>> Rounding
-            double v_len = cP.adjU - cP.adjL;
-            while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
-            while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-            if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
-            while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
-            vsMinT = cP.adjL; vsMaxT = cP.adjU;
-        }
-        if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+	    //>> Draw environment
+	    vsPercT = false;
+	    sclVerT = cP.wScale;
+	    clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
+	    //>> Rounding
+	    double v_len = cP.adjU - cP.adjL;
+	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
+	    while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+	    while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
+	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
+	}
+	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
 
 	//>>> Draw vertical grid and markers
 	int markWdth = 0;
@@ -5727,8 +5734,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	double fftDt = (1e6/(double)tSz)*(double)width/cP.fftN;
 
 	bool vsPercT = cP.isIndiv ? false : vsPerc;
-        double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
-        double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
+	double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
+	double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
 	//>>> Prepare border for percent trend
 	double bordL = cP.bordL();
@@ -6340,7 +6347,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 		    req_el->setText(xproc.save(XMLNode::Clean, Mess->charset()));
 		}
 		catch(TError err)
-    		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
+		{ mess_err(mod->nodePath().c_str(),_("Document '%s' parsing is error: %s"),path().c_str(),err.mess.c_str()); }
 		break;
 	    }
 	}

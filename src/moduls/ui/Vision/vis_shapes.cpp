@@ -1923,7 +1923,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     QPainter pnt(&shD->pictObj);
 
     //> Get generic parameters
-    int64_t tSize = (int64_t)(1e6*shD->tSize);			//Time size (us)
+    int64_t tSize = (int64_t)(1e6*shD->tSize);				//Time size (us)
     if(shD->prms.empty() || tSize <= 0) return;
     int sclHor = shD->sclHor;						//Horisontal scale mode
     int sclVer = shD->sclVer;						//Vertical scale mode
@@ -2351,8 +2351,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
 	    {
 		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
-		cP.adjL -= wnt_dp/2;
-		cP.adjU += wnt_dp/2;
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
 	    }
 	}
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
@@ -2392,8 +2391,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else prmsInd.push_back(i_p);
 	if(cP.mScale&SC_LOG)
 	{
-	    cP.adjU = log10(vmax(1e-100,cP.adjU));
-	    cP.adjL = log10(vmax(1e-100,cP.adjL));
+	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
+	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001)
+	    {
+		double wnt_dp = 0.0001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
+		cP.adjL -= wnt_dp/2; cP.adjU += wnt_dp/2;
+	    }
 	}
 	if(isScale)	//Vertical scale and offset apply
 	{
@@ -2410,8 +2413,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     else vsPerc = false;
     if(isLog)
     {
-	vsMax = log10(vmax(1e-100,vsMax));
-	vsMin = log10(vmax(1e-100,vsMin));
+	vsMax = log10(vmax(1e-100,vsMax)); vsMin = log10(vmax(1e-100,vsMin));
+	if((vsMax-vsMin) / fabs(vsMin+(vsMax-vsMin)/2) < 0.0001)
+	{
+	    double wnt_dp = 0.0001*fabs(vsMin+(vsMax-vsMin)/2)-(vsMax-vsMin);
+	    vsMin -= wnt_dp/2; vsMax += wnt_dp/2;
+	}
     }
     if(isScale)	//Vertical scale and offset apply
     {
@@ -2444,9 +2451,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    }
 	    //>> Rounding
 	    double v_len = vsMax - vsMin;
-	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
-	    while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-	    if(!isScale)	{ vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
+	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
+	    while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale) { vsMin = floor(vsMin/vDiv)*vDiv; vsMax = ceil(vsMax/vDiv)*vDiv; }
 	    while(!isLogT && ((vsMax-vsMin)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = vsMin; vsMaxT = vsMax;
 	}
@@ -2461,9 +2468,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    mrkPen.setColor(cP.color());
 	    //>> Rounding
 	    double v_len = cP.adjU - cP.adjL;
-	    while(v_len > vmax_ln)	{ vDiv *= 10; v_len /= 10; }
-	    while(v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
-	    if(!isScale)	{ cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
+	    while(v_len > vmax_ln)		{ vDiv *= 10; v_len /= 10; }
+	    while(v_len && v_len < vmax_ln/10)	{ vDiv /= 10; v_len *= 10; }
+	    if(!isScale) { cP.adjL = floor(cP.adjL/vDiv)*vDiv; cP.adjU = ceil(cP.adjU/vDiv)*vDiv; }
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
