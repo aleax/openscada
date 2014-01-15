@@ -58,7 +58,7 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, QWidget *parent ) :
     QMainWindow(parent), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
-    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF),
+    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF),
     isConErr(false)
 {
     QImage ico_t;
@@ -416,9 +416,10 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
-	    //> Proportional scale
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
-	}else x_scale = y_scale = 1.0;
+	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
+	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
+	}else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
@@ -957,14 +958,15 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     bool oldMenuVis = menuBar()->isVisible();
     menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     QApplication::processEvents();
-    if( master_pg )
+    if(master_pg)
     {
-	if( oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) )
+	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen))
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
-	    //> Proportional scale
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
+	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
+	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
 	}
 	fullUpdatePgs();
     }

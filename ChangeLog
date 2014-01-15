@@ -1,5 +1,7 @@
 2014-01-15 Roman
-- FIX:DAQ.OPC_UA: Possible crash on retract queue clean is fixed.
+- UI.Vision: Scale on maximize and fullscreen is prevented for 1 > scale < 1.05.
+- FIX:DAQ.OPC_UA: Close socket on server part at error and malformed packages.
+    Possible crash on retract queue clean is fixed.
 - FIX:UI.{Vision,WebVision}: Possible hang into primitive "Diagram" for parameters into logarithm and mostly individual scale,
     by prevent negative and zero values.
 

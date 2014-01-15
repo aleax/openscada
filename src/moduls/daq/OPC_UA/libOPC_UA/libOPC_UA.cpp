@@ -2061,14 +2061,14 @@ bool Server::inReq( string &rba, const string &inPrtId, string *answ )
 {
     uint32_t mSz;
     int off = 0;
-    bool dbg = debug( );
+    bool dbg = debug(), holdConn = true;
 
 nextReq:
-    if(rba.size() <= 0) return true;
+    if(rba.size() <= 0) return holdConn;
     string rb, out;
     off = 4;
     mSz = iNu(rba, off, 4);
-    if(rba.size() < 8 || rba.size() < mSz) return true;
+    if(rba.size() < 8 || rba.size() < mSz) return false;
     rb = rba.substr(0, mSz);
 
     try
@@ -3308,7 +3308,7 @@ nextReq:
 	}
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }
-    catch(OPCError er)	{ if(er.cod) out = mkError(er.cod, er.mess); }
+    catch(OPCError er)	{ if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; } }
 
     if(answ) answ->append(out);
     else writeToClient(inPrtId, out);
