@@ -744,7 +744,7 @@ void MTable::fieldDel( TConfig &cfg )
 void MTable::fieldFix( TConfig &cfg )
 {
     bool next = false, next_key = false;
-    if( tblStrct.empty() ) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
+    if(tblStrct.empty()) throw TError(TSYS::DBTableEmpty,nodePath().c_str(),_("Table is empty!"));
 
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
     //> Get config fields list
@@ -755,12 +755,12 @@ void MTable::fieldFix( TConfig &cfg )
     string req = "ALTER TABLE \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" DROP CONSTRAINT \"" + TSYS::strEncode(name(),TSYS::SQL) + "_pkey\", ";
 
     //> DROP fields
-    for( unsigned i_fld = 1, i_cf; i_fld < tblStrct.size(); i_fld++ )
+    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size(); i_fld++)
     {
-	for( i_cf = 0; i_cf < cf_el.size(); i_cf++ )
-	    if( cf_el[i_cf] == tblStrct[i_fld][0] ||
+	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
+	    if(cf_el[i_cf] == tblStrct[i_fld][0] ||
 		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 &&
-		    tblStrct[i_fld][0].substr(2) == ("#"+cf_el[i_cf]) && tblStrct[i_fld][0].substr(0,2) != Mess->lang2CodeBase()) )
+		    tblStrct[i_fld][0].substr(2) == ("#"+cf_el[i_cf]) && tblStrct[i_fld][0].substr(0,2) != Mess->lang2CodeBase()))
 	    {
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 		bool isEqual = false;
@@ -769,29 +769,28 @@ void MTable::fieldFix( TConfig &cfg )
 		    case TFld::String:
 		    {
 			int pr1 = -1;
-			if( (tblStrct[i_fld][1] == "text") || (tblStrct[i_fld][1] == "character varying") )
+			if((tblStrct[i_fld][1] == "text") || (tblStrct[i_fld][1] == "character varying"))
 			    isEqual = true;
-			else if( ( sscanf(tblStrct[i_fld][1].c_str(),"character(%d)",&pr1) ||
-				   sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1) ) && 
-				 (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0 )
+			else if((sscanf(tblStrct[i_fld][1].c_str(),"character(%d)",&pr1) ||
+				 sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1)) &&
+				 (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0)
 			    isEqual = true;
 			break;
 		    }
 		    case TFld::Integer:
-			if( u_cfg.fld().flg()&TFld::DateTimeDec && (tblStrct[i_fld][1] == "timestamp with time zone") )
+			if(u_cfg.fld().flg()&TFld::DateTimeDec && (tblStrct[i_fld][1] == "timestamp with time zone"))
 			    isEqual = true;
-			else if( (tblStrct[i_fld][1] == "integer") ||
-				 (tblStrct[i_fld][1] == "bigint") )
+			else if((tblStrct[i_fld][1] == "integer") || (tblStrct[i_fld][1] == "bigint"))
 			    isEqual = true;
 			break;
-		    case TFld::Real:	if( tblStrct[i_fld][1] == "double precision" ) isEqual = true;	break;
-		    case TFld::Boolean:	if( tblStrct[i_fld][1] == "smallint" ) isEqual = true;	break;
+		    case TFld::Real:	if(tblStrct[i_fld][1] == "double precision") isEqual = true;	break;
+		    case TFld::Boolean:	if(tblStrct[i_fld][1] == "smallint") isEqual = true;		break;
 		    default: break;
 		}
-		if( isEqual ) break;
+		if(isEqual) break;
 		continue;
 	    }
-	if( i_cf >= cf_el.size() )
+	if(i_cf >= cf_el.size())
 	{
 	    req = req + (next?",DROP \"":"DROP \"") + TSYS::strEncode(tblStrct[i_fld][0],TSYS::SQL) + "\" ";
 	    tblStrct.erase(tblStrct.begin()+i_fld);
@@ -802,29 +801,29 @@ void MTable::fieldFix( TConfig &cfg )
 
     string pr_keys;
     //Add fields
-    for( unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++ )
+    for(unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 	//>> Check primary key
-	if( u_cfg.fld().flg()&TCfg::Key )
+	if(u_cfg.fld().flg()&TCfg::Key)
 	{
 	    pr_keys = pr_keys + (next_key?",\"":"\"") + TSYS::strEncode(u_cfg.name(),TSYS::SQL) + "\"";
 	    next_key = true;
 	}
 
-	for( i_fld = 1; i_fld < tblStrct.size(); i_fld++ )
-	    if( cf_el[i_cf] == tblStrct[i_fld][0] ) break;
+	for(i_fld = 1; i_fld < tblStrct.size(); i_fld++)
+	    if(cf_el[i_cf] == tblStrct[i_fld][0]) break;
 
 	string f_tp;
 	switch(u_cfg.fld().type())
 	{
 	    case TFld::String:
-		if( u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key )
+		if(u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key)
 		    f_tp = "CHARACTER VARYING("+SYS->int2str(vmax(10,vmin(255,u_cfg.fld().len())))+") DEFAULT '"+u_cfg.fld().def()+"' ";
 		else f_tp = "TEXT DEFAULT '"+u_cfg.fld().def()+"' ";
 		break;
 	    case TFld::Integer:
-		if( u_cfg.fld().flg()&TFld::DateTimeDec )
+		if(u_cfg.fld().flg()&TFld::DateTimeDec)
 		    f_tp = "TIMESTAMP WITH TIME ZONE DEFAULT '"+UTCtoSQL(atoi(u_cfg.fld().def().c_str()))+"' ";
 		else f_tp = "INTEGER DEFAULT '"+TSYS::int2str(atoi(u_cfg.fld().def().c_str()))+"' ";
 		break;
@@ -837,21 +836,21 @@ void MTable::fieldFix( TConfig &cfg )
 	    default: break;
 	}
 
-	if( i_fld >= tblStrct.size() )
+	if(i_fld >= tblStrct.size())
 	{
-	    if( !next ) next = true; else req=req+",";
+	    if(!next) next = true; else req=req+",";
 	    //>> Add field
 	    req = req + "ADD \"" + TSYS::strEncode(cf_el[i_cf],TSYS::SQL) + "\" " + f_tp;
 	}
 	//> Check other languages
-	if( u_cfg.fld().flg()&TCfg::TransltText )
+	if(u_cfg.fld().flg()&TCfg::TransltText)
 	{
 	    unsigned i_c;
-	    for( i_c = i_fld; i_c < tblStrct.size(); i_c++ )
-		if( tblStrct[i_c][0].size() > 3 && tblStrct[i_c][0].substr(2) == ("#"+cf_el[i_cf]) && 
-		    tblStrct[i_c][0].substr(0,2) != Mess->lang2CodeBase() &&
-		    tblStrct[i_c][0].substr(0,2) == Mess->lang2Code() ) break;
-	    if( i_c >= tblStrct.size() && isVarTextTransl )
+	    for(i_c = i_fld; i_c < tblStrct.size(); i_c++)
+		if(tblStrct[i_c][0].size() > 3 && tblStrct[i_c][0].substr(2) == ("#"+cf_el[i_cf]) &&
+		   tblStrct[i_c][0].substr(0,2) != Mess->lang2CodeBase() &&
+		   tblStrct[i_c][0].substr(0,2) == Mess->lang2Code()) break;
+	    if(i_c >= tblStrct.size() && isVarTextTransl)
 	    {
 		req = req + (next?",ADD \"":"ADD \"") + TSYS::strEncode(Mess->lang2Code()+"#"+cf_el[i_cf],TSYS::SQL) + "\" " + f_tp;
 		next = true;
@@ -860,11 +859,11 @@ void MTable::fieldFix( TConfig &cfg )
     }
     req = req + ",ADD PRIMARY KEY (" + pr_keys + ") ";
 
-    if( next )
+    if(next)
     {
-	owner().sqlReq( req, NULL, false );
+	owner().sqlReq(req, NULL, false);
 	//> Update structure information
-	getStructDB( name(), tblStrct );
+	getStructDB(name(), tblStrct);
     }
 }
 

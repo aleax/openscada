@@ -1,3 +1,11 @@
+2014-01-16 Roman
+- FIX:SYS: Debug cats processing is rewrote for clean.
+- FIX:Archive.FSArch: Check deleting Archives cycle is fixed.
+- DB.PostgreSQL: Code clean.
+- FIX:DAQ.OPC_UA: Try send publish response for no pesent into queue publish request is fixed.
+- !!!:UI.{Vision,WebVision}: View "Table" is added to primitive "FormEl".
+
+
 2014-01-15 Roman
 - UI.Vision: Scale on maximize and fullscreen is prevented for 1 > scale < 1.05.
 - FIX:DAQ.OPC_UA: Close socket on server part at error and malformed packages.

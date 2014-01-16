@@ -86,7 +86,7 @@ void XMLNode::childDel( XMLNode *nd )
 	if(mChildren[i_ch] == nd)
 	{
 	    delete mChildren[i_ch];
-	    mChildren.erase( mChildren.begin()+i_ch );
+	    mChildren.erase(mChildren.begin()+i_ch);
 	    break;
 	}
 }

@@ -216,7 +216,7 @@ bool Session::modifChk( unsigned int tm, unsigned int iMdfClc )
 
 string Session::ico( )
 {
-    if( !parent().freeStat() )	return parent().at().ico();
+    if(!parent().freeStat()) return parent().at().ico();
     return "";
 }
 
@@ -226,8 +226,8 @@ AutoHD<Project> Session::parent( )	{ return mParent; }
 
 void Session::add( const string &iid, const string &iparent )
 {
-    if( present(iid) )	return;
-    chldAdd(mPage,new SessPage(iid,iparent,this));
+    if(present(iid))	return;
+    chldAdd(mPage, new SessPage(iid,iparent,this));
 }
 
 void Session::openReg( const string &iid )

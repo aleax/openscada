@@ -3549,7 +3549,7 @@ void Server::EP::subScrCycle( unsigned cntr )
     //> Publish call
     for(size_t i_s = 0; i_s < sls.size(); i_s++)
     {
-	if(!(s=sessGet_(sls[i_s]))) continue;
+	if(!(s=sessGet_(sls[i_s])) || s->publishReqs.empty()) continue;
 	string req = s->publishReqs.front(), inPrt = s->inPrtId;
 	pthread_mutex_unlock(&mtxData);
 	serv->inReq(req, inPrt);
@@ -4241,7 +4241,7 @@ void XML_N::childDel( XML_N *nd )
 	if(mChildren[i_ch] == nd)
 	{
 	    delete mChildren[i_ch];
-	    mChildren.erase( mChildren.begin()+i_ch );
+	    mChildren.erase(mChildren.begin()+i_ch);
 	    break;
 	}
 }

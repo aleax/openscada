@@ -284,7 +284,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		case F_LINE_ED:	shD->view = atoi(val.c_str());		break;
 		case F_TEXT_ED:	shD->wordWrap = atoi(val.c_str());	break;
 		case F_BUTTON:	shD->img = val;		break;
-		case F_COMBO: case F_LIST: case F_TREE: shD->items = val;	break;
+		case F_COMBO: case F_LIST: case F_TREE: case F_TABLE: shD->items = val;	break;
 		case F_SLIDER: case F_SCROLL_BAR: shD->cfg = val;		break;
 		default: rel_cfg = false;
 	    }
@@ -514,6 +514,81 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		setValue(w, shD->value, true);	//Value
 		break;
 	    }
+	    case F_TABLE:
+	    {
+		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
+		if(!wdg || !qobject_cast<QTableWidget*>(wdg))
+		{
+		    if(wdg) wdg->deleteLater();
+		    shD->addrWdg = wdg = new QTableWidget(w);
+		    wdg->setAlternatingRowColors(true);
+		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
+		    wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
+		    //wdg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(tableChange()));
+		    mk_new = true;
+		}
+
+		wdg->setFont(elFnt);		//Font
+
+		//> Items
+		shD->addrWdg->blockSignals(true);
+		XMLNode tX("tbl");
+		bool hdrPresent = false;
+		int maxCols = 0, maxRows = 0;
+		try{ tX.load(shD->items); } catch(...) { }
+		if(tX.name() != "tbl") wdg->clear();
+		else for(unsigned i_r = 0, i_ch = 0; i_ch < tX.childSize() || i_r < wdg->rowCount(); i_ch++)
+		{
+		    XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
+		    bool isH = false;
+		    string wVl;
+		    QTableWidgetItem *tit = NULL;
+		    if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
+		    if(!isH && i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
+		    for(unsigned i_c = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) || i_c < wdg->columnCount(); i_ch1++)
+		    {
+			XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
+			//if(tC->name() != "c") continue;
+			if(tC && i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
+			if(isH)	//Header process
+			{
+			    if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
+			    tit->setText(tC?tC->text().c_str():"");
+			}
+			else	//Rows content process
+			{
+			    if(!(tit=wdg->item(i_r,i_c))) wdg->setItem(i_r, i_c, (tit=new QTableWidgetItem()));
+			    if(tC)
+			    {
+				QVariant v;
+				switch(tC->name()[0])
+				{
+				    case 'b': v = (bool)atoi(tC->text().c_str());	break;
+				    case 'i': v = atoll(tC->text().c_str());	break;
+				    case 'r': v = atof(tC->text().c_str());		break;
+				    default: v = tC->text().c_str();		break;
+				}
+				tit->setData(Qt::DisplayRole, v);
+				if((wVl=tC->attr("color")).size()) tit->setData(Qt::DecorationRole, QColor(wVl.c_str()));
+			    }
+			    else { tit->setData(Qt::DisplayRole, ""); tit->setData(Qt::DecorationRole, ""); }
+			}
+			i_c++;
+			maxCols = vmax(maxCols, i_c);
+		    }
+		    if(!isH) { i_r++; maxRows = vmax(maxRows, i_r); }
+		    else hdrPresent = true;
+		}
+		wdg->horizontalHeader()->setVisible(hdrPresent);
+		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
+		if(maxRows) wdg->resizeRowsToContents();
+		if(maxCols > 1) wdg->resizeColumnsToContents();
+		shD->addrWdg->blockSignals(false);
+
+		setValue(w, shD->value, true);	//Value
+		break;
+	    }
 	    case F_SLIDER: case F_SCROLL_BAR:
 	    {
 		QAbstractSlider *wdg = (QAbstractSlider*)shD->addrWdg;
@@ -575,7 +650,7 @@ void ShapeFormEl::setActive( WdgView *w, bool val )
     switch(shD->elType)
     {
 	case F_LINE_ED:	((LineEdit*)shD->addrWdg)->setReadOnly(!val);			break;
-	case F_TEXT_ED: ((TextEdit*)shD->addrWdg)->workWdg()->setReadOnly(!val);	break;
+	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->workWdg()->setReadOnly(!val);	break;
 	default: shD->addrWdg->setEnabled(val);
     }
     setFocus(w, shD->addrWdg, val);
@@ -583,7 +658,7 @@ void ShapeFormEl::setActive( WdgView *w, bool val )
 
 void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 {
-    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
+    RunWdgView	*runW = qobject_cast<RunWdgView*>(w);
     ShpDt *shD = (ShpDt*)w->shpData;
 
     shD->value = val;
@@ -3235,17 +3310,17 @@ void ShapeProtocol::init( WdgView *w )
     shD->addrWdg = new QTableWidget(w);
     shD->addrWdg->setSelectionBehavior(QAbstractItemView::SelectRows);
     //shD->addrWdg->setSortingEnabled(true);
-    eventFilterSet(w,shD->addrWdg,true);
-    w->setFocusProxy( shD->addrWdg );
-    if( qobject_cast<DevelWdgView*>(w) ) setFocus(w,shD->addrWdg,false,true);
+    eventFilterSet(w, shD->addrWdg, true);
+    w->setFocusProxy(shD->addrWdg);
+    if(qobject_cast<DevelWdgView*>(w)) setFocus(w, shD->addrWdg, false, true);
     lay->addWidget(shD->addrWdg);
     //> Init tracing timer
     shD->trcTimer = new QTimer(w);
-    connect( shD->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()) );
+    connect(shD->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()));
 
     //> Bckground palette init
     QPalette plt(shD->addrWdg->palette());
-    plt.setBrush(QPalette::Background,QPalette().brush(QPalette::Background));
+    plt.setBrush(QPalette::Background, QPalette().brush(QPalette::Background));
     shD->addrWdg->setPalette(plt);
 }
 
@@ -3262,20 +3337,20 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    switch( uiPrmPos )
+    switch(uiPrmPos)
     {
 	case -1:	//load
 	    reld_dt = 2;
 	    break;
 	case 5:		//en
-	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    w->setVisible( (bool)atoi(val.c_str()) && ((RunWdgView*)w)->permView() );
+	    if(!qobject_cast<RunWdgView*>(w))	break;
+	    w->setVisible((bool)atoi(val.c_str()) && ((RunWdgView*)w)->permView());
 	    break;
 	case 6:		//active
-	    if( !qobject_cast<RunWdgView*>(w) ) break;
+	    if(!qobject_cast<RunWdgView*>(w)) break;
 	    shD->active = (bool)atoi(val.c_str()) && ((RunWdgView*)w)->permCntr();
-	    setFocus( w, shD->addrWdg, shD->active );
-	    shD->addrWdg->setSelectionMode( shD->active ? QAbstractItemView::SingleSelection : QAbstractItemView::NoSelection );
+	    setFocus(w, shD->addrWdg, shD->active);
+	    shD->addrWdg->setSelectionMode(shD->active ? QAbstractItemView::SingleSelection : QAbstractItemView::NoSelection);
 //	    shD->addrWdg->setEnabled( shD->active && ((RunWdgView*)w)->permCntr() );
 	    break;
 	case 12:	//geomMargin
@@ -3285,7 +3360,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
 	    brsh.setColor(getColor(val));
-	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Base).color());
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Base).color());
 	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
 	    plt.setBrush(QPalette::Base,brsh);
 	    shD->addrWdg->setPalette(plt);
@@ -3297,9 +3372,9 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
 	    string backimg = w->resGet(val);
-	    if( !backimg.empty() ) img.loadFromData((const uchar*)backimg.c_str(),backimg.size());
+	    if(!backimg.empty()) img.loadFromData((const uchar*)backimg.c_str(),backimg.size());
 	    brsh.setTextureImage(img);
-	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Base,brsh);
 	    shD->addrWdg->setPalette(plt);
 	    break;
@@ -3338,20 +3413,20 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case 27:	//arch
-	    if( shD->arch == val ) break;
+	    if(shD->arch == val) break;
 	    shD->arch = val; reld_dt = 2; break;
 	case 28:	//tmpl
-	    if( shD->tmpl == val ) break;
+	    if(shD->tmpl == val) break;
 	    shD->tmpl = val; reld_dt = 2; break;
 	case 29:	//lev
-	    if( shD->lev == atoi(val.c_str()) ) break;
+	    if(shD->lev == atoi(val.c_str())) break;
 	    shD->lev = atoi(val.c_str()); reld_dt = 2; break;
 	case 30:	//viewOrd
-	    if( shD->viewOrd == atoi(val.c_str()) )	break;
+	    if(shD->viewOrd == atoi(val.c_str()))	break;
 	    shD->viewOrd = atoi(val.c_str()); reld_dt = 1; break;
 	case 31:	//col
-	    if( shD->col == val ) break;
-	    shD->col =  val; reld_dt = 1; break;
+	    if(shD->col == val) break;
+	    shD->col = val; reld_dt = 1; break;
 	case 32:	//itProp
 	{
 	    int itNum = atoi(val.c_str());
@@ -3362,12 +3437,12 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	}
 	default:
 	    //> Item's properties configuration
-	    if( uiPrmPos >= 40 )
+	    if(uiPrmPos >= 40)
 	    {
 		int itNum = (uiPrmPos-40)/5;
 		if(itNum >= (int)shD->itProps.size()) break;
 		reld_dt = 1;
-		switch( uiPrmPos%5 )
+		switch(uiPrmPos%5)
 		{
 		    case 0: shD->itProps[itNum].lev = atoi(val.c_str());	break;	//lev
 		    case 1: shD->itProps[itNum].tmpl = val;			break;	//tmpl
@@ -3379,8 +3454,7 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    }
     }
 
-    if( reld_dt && !w->allAttrLoad( ) )
-	loadData(w,reld_dt==2);
+    if(reld_dt && !w->allAttrLoad())	loadData(w, (reld_dt==2));
 
     return true;
 }
@@ -3412,58 +3486,58 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     int c_tm = -1, c_tmu = -1, c_lev = -1, c_cat = -1, c_mess = -1;
     shD->addrWdg->verticalHeader()->setVisible(false);
     string clm;
-    for( int c_off = 0; (clm=TSYS::strSepParse(shD->col,0,';',&c_off)).size(); )
+    for(int c_off = 0; (clm=TSYS::strSepParse(shD->col,0,';',&c_off)).size(); )
     {
 	string clmNm;
 	int ncl;
-	for( ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++ )
-	    if( shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString() == clm.c_str() )
+	for(ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++)
+	    if(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString() == clm.c_str())
 		break;
-	if( clm == "pos" )	shD->addrWdg->verticalHeader()->setVisible(true);
-	else if( clm == "tm" )	{ clmNm = _("Date and time"); c_tm = ncl; }
-	else if( clm == "utm" )	{ clmNm = _("mcsec"); c_tmu = ncl; }
-	else if( clm == "lev" )	{ clmNm = _("Level"); c_lev = ncl; }
-	else if( clm == "cat" )	{ clmNm = _("Category"); c_cat = ncl; }
-	else if( clm == "mess" ){ clmNm = _("Message"); c_mess = ncl; }
-	if( clmNm.empty() || ncl < shD->addrWdg->columnCount() )	continue;
+	if(clm == "pos")	shD->addrWdg->verticalHeader()->setVisible(true);
+	else if(clm == "tm")	{ clmNm = _("Date and time"); c_tm = ncl; }
+	else if(clm == "utm")	{ clmNm = _("mcsec"); c_tmu = ncl; }
+	else if(clm == "lev")	{ clmNm = _("Level"); c_lev = ncl; }
+	else if(clm == "cat")	{ clmNm = _("Category"); c_cat = ncl; }
+	else if(clm == "mess")	{ clmNm = _("Message"); c_mess = ncl; }
+	if(clmNm.empty() || ncl < shD->addrWdg->columnCount())	continue;
 
 	ncl = shD->addrWdg->columnCount();
 	shD->addrWdg->setColumnCount(ncl+1);
-	shD->addrWdg->setHorizontalHeaderItem(ncl,new QTableWidgetItem());
+	shD->addrWdg->setHorizontalHeaderItem(ncl, new QTableWidgetItem());
 	shD->addrWdg->horizontalHeaderItem(ncl)->setText(clmNm.c_str());
-	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::UserRole,clm.c_str());
+	shD->addrWdg->horizontalHeaderItem(ncl)->setData(Qt::UserRole, clm.c_str());
 	newFill = true;
     }
 
     newFill = newFill || !shD->messList.size();
 
-    if( shD->lev < 0 ) shD->messList.clear();
+    if(shD->lev < 0) shD->messList.clear();
     else
     {
 	//> Clear loaded data
-	if( full )
+	if(full)
 	{
 	    shD->messList.clear();
 	    arhBeg = arhEnd = 0;
 	}
 
 	//> Get archive parameters
-	if( !arhBeg || !arhEnd || tTime > arhEnd )
+	if(!arhBeg || !arhEnd || tTime > arhEnd)
 	{
 	    XMLNode req("info");
 	    req.setAttr("arch",shD->arch)->setAttr("path","/Archive/%2fserv%2fmess");
-	    if( w->cntrIfCmd(req,true) )	arhBeg = arhEnd = 0;
+	    if(w->cntrIfCmd(req,true))	arhBeg = arhEnd = 0;
 	    else
 	    {
-		arhBeg = strtoul(req.attr("beg").c_str(),0,10);
-		arhEnd = strtoul(req.attr("end").c_str(),0,10);
+		arhBeg = strtoul(req.attr("beg").c_str(), 0, 10);
+		arhEnd = strtoul(req.attr("end").c_str(), 0, 10);
 	    }
 	}
-	if( !arhBeg || !arhEnd )	return;
+	if(!arhBeg || !arhEnd)	return;
 
 	//> Correct request to archive border
-	tTime     = vmin(tTime,arhEnd);
-	tTimeGrnd = vmax(tTimeGrnd,arhBeg);
+	tTime     = vmin(tTime, arhEnd);
+	tTimeGrnd = vmax(tTimeGrnd, arhBeg);
     }
 
     //> Clear data at time error
@@ -3473,7 +3547,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     while(shD->messList.size() && (valBeg=shD->messList[shD->messList.size()-1].time) < tTimeGrnd) { shD->messList.pop_back(); isDtChang = true; }
     if(shD->messList.empty()) valEnd = valBeg = 0;
 
-    if( tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg) )
+    if(tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg))
     {
 	shD->messList.clear();
 	shD->addrWdg->setRowCount(0);
@@ -3563,8 +3637,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		sortIts.push_back( pair<string,int>(shD->messList[i_m].mess,i_m) );
 	    break;
     }
-    sort(sortIts.begin(),sortIts.end());
-    if( shD->viewOrd&0x4 ) reverse(sortIts.begin(),sortIts.end());
+    sort(sortIts.begin(), sortIts.end());
+    if(shD->viewOrd&0x4) reverse(sortIts.begin(),sortIts.end());
 
     //> Write to table
     shD->addrWdg->setRowCount(sortIts.size());
@@ -3583,26 +3657,26 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		if( shD->messList[sortIts[i_m].second].level == shD->itProps[i_it].lev ) break;
 		lst_lev = shD->itProps[i_it].lev;
 	    }
-	if( clr.isValid() )
+	if(clr.isValid())
 	    fclr = ((0.3*clr.red()+0.59*clr.green()+0.11*clr.blue()) > 128) ? Qt::black : Qt::white;
 
-	for( int i_cl = 0; i_cl < shD->addrWdg->columnCount(); i_cl++ )
+	for(int i_cl = 0; i_cl < shD->addrWdg->columnCount(); i_cl++)
 	{
 	    tit = NULL;
-	    if( i_cl == c_tm )
+	    if(i_cl == c_tm)
 	    {
 		QDateTime	dtm;
 		dtm.setTime_t(shD->messList[sortIts[i_m].second].time);
-		shD->addrWdg->setItem( i_m, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")) );
+		shD->addrWdg->setItem(i_m, c_tm, tit=new QTableWidgetItem(dtm.toString("dd.MM.yyyy hh:mm:ss")));
 	    }
-	    else if( i_cl == c_tmu )
-		shD->addrWdg->setItem( i_m, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].utime)) );
-	    else if( i_cl == c_lev )
-		shD->addrWdg->setItem( i_m, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].level)) );
-	    else if( i_cl == c_cat )
-		shD->addrWdg->setItem( i_m, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].categ.c_str()) );
-	    else if( i_cl == c_mess )
-		shD->addrWdg->setItem( i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()) );
+	    else if(i_cl == c_tmu)
+		shD->addrWdg->setItem(i_m, c_tmu, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].utime)));
+	    else if(i_cl == c_lev)
+		shD->addrWdg->setItem(i_m, c_lev, tit=new QTableWidgetItem(QString::number(shD->messList[sortIts[i_m].second].level)));
+	    else if(i_cl == c_cat)
+		shD->addrWdg->setItem(i_m, c_cat, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].categ.c_str()));
+	    else if(i_cl == c_mess)
+		shD->addrWdg->setItem(i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()));
 	    else continue;
 	    tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 	    tit->setData(Qt::FontRole,fnt);
@@ -3611,12 +3685,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	}
     }
 
-    if( newFill )
+    if(newFill)
     {
 	shD->addrWdg->resizeColumnsToContents();
 	//Resize too long columns
 	int max_col_sz = vmax(w->size().width()/2,40);
-	for( int i_c = 0; i_c < shD->addrWdg->columnCount(); i_c++ )
+	for(int i_c = 0; i_c < shD->addrWdg->columnCount(); i_c++)
 	    shD->addrWdg->setColumnWidth(i_c,vmin(max_col_sz,shD->addrWdg->columnWidth(i_c)));
 	shD->addrWdg->horizontalHeader()->setStretchLastSection(true);
     }
@@ -3627,10 +3701,10 @@ void ShapeProtocol::tracing( )
 {
     WdgView *w = (WdgView *)((QTimer*)sender())->parent();
     ShpDt *shD = (ShpDt*)w->shpData;
-    if( !w->isEnabled() ) return;
+    if(!w->isEnabled()) return;
 
-    if( shD->timeCurent )	shD->time = (unsigned int)time(NULL);
-    else if( shD->time )	shD->time += shD->trcPer;
+    if(shD->timeCurent)	shD->time = (unsigned int)time(NULL);
+    else if(shD->time)	shD->time += shD->trcPer;
     loadData(w);
 }
 

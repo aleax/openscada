@@ -2551,29 +2551,32 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))
 	{
 	    ResAlloc res(Mess->mRes, true);
-	    Mess->debugCats[opt->attr("key_cat")] = atoi(opt->text().c_str());
-	    if(atoi(opt->text().c_str()))
+	    //Check for set category
+	    if((Mess->debugCats[opt->attr("key_cat")]=atoi(opt->text().c_str())))
 	    {
-		for(unsigned i_sdc = 0; i_sdc < Mess->selectDebugCats.size(); i_sdc++)
+		for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); )
 		{
-		    if(Mess->selectDebugCats[i_sdc] == opt->attr("key_cat")) continue;
-		    if(Mess->selectDebugCats[i_sdc].compare(0,opt->attr("key_cat").size(),opt->attr("key_cat")) == 0)
+		    if(*iDC != opt->attr("key_cat"))
 		    {
-			Mess->debugCats[Mess->selectDebugCats[i_sdc]] = false;
-			Mess->selectDebugCats.erase(Mess->selectDebugCats.begin()+i_sdc);
-			i_sdc--;
+			if(iDC->compare(0,opt->attr("key_cat").size(),opt->attr("key_cat")) == 0)
+			{
+			    Mess->debugCats[*iDC] = false;
+			    iDC = Mess->selectDebugCats.erase(iDC);
+			    continue;
+			}
+			else if(opt->attr("key_cat").compare(0,iDC->size(),*iDC) == 0)
+			{
+			    Mess->debugCats[opt->attr("key_cat")] = false;
+			    break;
+			}
 		    }
-		    else if(opt->attr("key_cat").compare(0,Mess->selectDebugCats[i_sdc].size(),Mess->selectDebugCats[i_sdc]) == 0)
-		    { Mess->debugCats[opt->attr("key_cat")] = false; break; }
+		    ++iDC;
 		}
 		if(Mess->debugCats[opt->attr("key_cat")]) { Mess->selectDebugCats.push_back(opt->attr("key_cat")); modif(); }
 	    }
-	    else for(unsigned i_sdc = 0; i_sdc < Mess->selectDebugCats.size(); i_sdc++)
-		if(Mess->selectDebugCats[i_sdc] == opt->attr("key_cat")) {
-		    Mess->selectDebugCats.erase(Mess->selectDebugCats.begin()+i_sdc);
-		    modif();
-		    break;
-		}
+	    //Check for clear category
+	    else for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); iDC++)
+		if(*iDC == opt->attr("key_cat")) { Mess->selectDebugCats.erase(iDC); modif(); break; }
 	}
     }
     else if(a_path == "/debug/mess" && ctrChkNode(opt,"get"))	opt->setText(archive().at().nodePath(0,true));

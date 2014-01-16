@@ -348,8 +348,8 @@ void OrigFormEl::postEnable( int flag )
     if(flag&TCntrNode::NodeConnect)
     {
 	attrAdd(new TFld("elType",_("Element type"),TFld::Integer,TFld::Selected|Attr::Active,"2","0",
-	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",F_LINE_ED,F_TEXT_ED,F_CHECK_BOX,F_BUTTON,F_COMBO,F_LIST,F_TREE,F_SLIDER,F_SCROLL_BAR).c_str(),
-	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Slider;Scroll Bar"),i2s(A_FormElType).c_str()));
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",F_LINE_ED,F_TEXT_ED,F_CHECK_BOX,F_BUTTON,F_COMBO,F_LIST,F_TREE,F_TABLE,F_SLIDER,F_SCROLL_BAR).c_str(),
+	    _("Line edit;Text edit;Check box;Button;Combo box;List;Tree;Table;Slider;Scroll Bar"),i2s(A_FormElType).c_str()));
 	attrAt("name").at().fld().setReserve(i2s(A_FormElName));
     }
 }
@@ -387,7 +387,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("mode");
 		    cfg.owner()->attrDel("font");
 		    break;
-		case F_COMBO: case F_LIST: case F_TREE:
+		case F_COMBO: case F_LIST: case F_TREE: case F_TABLE:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("items");
 		    cfg.owner()->attrDel("font");
@@ -430,7 +430,7 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    _("Standard;Checkable;Menu;Load;Save"),i2s(A_FormElMixP3).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
-	    case F_COMBO: case F_LIST: case F_TREE:
+	    case F_COMBO: case F_LIST: case F_TREE: case F_TABLE:
 		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
@@ -567,9 +567,9 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 			  "  \"Load\" - provides user-space small files loading through the visual interface;\n"
 			  "             on the mode the button press will open selection file dialog for loading and\n"
 			  "             the file content next saving to attribute \"value\";\n"
-                          "  \"Save\" - provides user-space small files saving through the visual interface;\n"
-                          "             on the file content writing to \"value\" attribute for user will open selection/set file dialog\n"
-                          "             and next saving the attribute \"value\" content to the file and next the attribute \"value\" will set clean."));
+			  "  \"Save\" - provides user-space small files saving through the visual interface;\n"
+			  "             on the file content writing to \"value\" attribute for user will open selection/set file dialog\n"
+			  "             and next saving the attribute \"value\" content to the file and next the attribute \"value\" will set clean."));
 		    if((el=ctrId(root,"/value",true)))
 			switch(src->attrAt("mode").at().getI())
 			{
@@ -590,19 +590,36 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		case F_SLIDER: case F_SCROLL_BAR:
 		    if((el=ctrId(root,"/cfg",true))) el->setAttr("help",
 			_("Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:[SinglStep]:[PageStep]\".\n"
-		          "Where:\n"
-		          "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
-		          "  \"Min\" - minimum value;\n"
-		          "  \"Max\" - maximum value;\n"
-		          "  \"SinglStep\" - the size of a single step;\n"
-		          "  \"PageStep\" - the size of the page step."));
+			  "Where:\n"
+			  "  \"VertOrient\" - sign of a vertical orientation, the default is the horizontal orientation;\n"
+			  "  \"Min\" - minimum value;\n"
+			  "  \"Max\" - maximum value;\n"
+			  "  \"SinglStep\" - the size of a single step;\n"
+			  "  \"PageStep\" - the size of the page step."));
+		    break;
+		case F_TABLE:
+		    if((el=ctrId(root,"/items",true)))  el->setAttr("SnthHgl","1")->setAttr("help",
+			_("XML tag \"tbl\" for the table fill:\n"
+			  "<tbl>\n<h><s>Col1</s><s>Col2</s></h>\n<r><s>Col1ValS</s><i>Col2ValI</i></r>\n</table>"));
+		    if((el=ctrId(root,"/font",true)))	el->setAttr("help",Widget::helpFont());
 		    break;
 	    }
 	return true;
     }
 
     //> Process command to page
-    return Widget::cntrCmdAttributes(opt, src);
+    if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
+    {
+	opt->childAdd("blk")->setAttr("beg","<!--")->setAttr("end","-->")->setAttr("color","gray")->setAttr("font_italic","1");
+	opt->childAdd("blk")->setAttr("beg","<\\?")->setAttr("end","\\?>")->setAttr("color","#666666");
+	XMLNode *tag = opt->childAdd("blk")->setAttr("beg","<\\w+")->setAttr("end","\\/?>")->setAttr("font_weight","1");
+	    tag->childAdd("rule")->setAttr("expr","\\b\\w+[ ]*(?==)")->setAttr("color","blue");
+	    tag->childAdd("rule")->setAttr("expr","[ ]?\"[^\"]+\"")->setAttr("color","darkgreen");
+	    tag->childAdd("rule")->setAttr("expr","[ ]?'[^']+'")->setAttr("color","darkgreen");
+	opt->childAdd("rule")->setAttr("expr","<\\/[\\w]+>")->setAttr("font_weight","1");
+	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
+    }
+    else return Widget::cntrCmdAttributes(opt, src);
 }
 
 //************************************************
@@ -710,11 +727,11 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
-            {
-                el = root->childGet(i_ch);
-                int p = atoi(el->attr("p").c_str());
-                switch(p)
-                {
+	    {
+		el = root->childGet(i_ch);
+		int p = atoi(el->attr("p").c_str());
+		switch(p)
+		{
 		    case 20: case 23: case 26: el->setAttr("help",Widget::helpColor());	break;
 		    case 25: el->setAttr("help",Widget::helpFont());	break;
 		    case 21: el->setAttr("help",Widget::helpImg());	break;

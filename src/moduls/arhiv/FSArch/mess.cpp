@@ -261,13 +261,13 @@ void ModMArch::checkArchivator( bool now )
 
 	//> Check deleting Archives
 	res.request(true);
-	for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
+	for(unsigned i_arh = 0; i_arh < arh_s.size(); )
 	    if(!arh_s[i_arh]->scan)
 	    {
 		delete arh_s[i_arh];
 		arh_s.erase(arh_s.begin() + i_arh);
-		i_arh--;
 	    }
+	    else i_arh++;
 	res.release();
 
 	//> Check file count and delete odd files

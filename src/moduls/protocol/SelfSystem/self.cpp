@@ -86,7 +86,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mCo
 TProt::~TProt( )
 {
     ResAlloc res(ses_res,true);
-    while( auth_lst.size() )	auth_lst.erase(auth_lst.begin());
+    while(auth_lst.size()) auth_lst.erase(auth_lst.begin());
     res.release();
 }
 
