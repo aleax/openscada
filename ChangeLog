@@ -1,3 +1,16 @@
+2014-01-19 Roman
+- FIX:SYS: openscada_start is fixed for generate crash reports file name "${ProjName}_${fit}_$(date +%F_%H.%M).crash".
+    To debian/ build tree added files openscada-model.aglks.links and openscada-model.boiler.links for links to openscada_start.
+- !!!:Transport: External hosts configuration improved for allow modes "User", "System", "User and System" select into single table.
+- FIX:DAQ.OPC_UA: Indexes for DeleteMonitoredItems service fix.
+- UI.QTCfg: Start page change for set into localhost space and no warnings on the set on user change.
+- UI.{VCAEngine,Vision,WebVision}: The primitive "Diagram" is moved to indexes from types.h.
+- FIX:UI.Vision: ReadOnly for file dialogs set from RunTime user's fix.
+- !!:UI.Vision: To primitive "Diagram" set trace time to real data time is allowed, for now only data time lesser to display.
+    View "Table" of primitive "Diagram" some improved and for select actions process.
+    RunTime scale debug messages is added.
+
+
 2014-01-16 Roman
 - FIX:SYS: Debug cats processing is rewrote for clean.
 - FIX:Archive.FSArch: Check deleting Archives cycle is fixed.

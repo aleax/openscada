@@ -523,7 +523,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->addrWdg = wdg = new QTableWidget(w);
 		    wdg->setAlternatingRowColors(true);
 		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
-		    wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
+		    wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
 		    //wdg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(tableChange()));
 		    mk_new = true;
@@ -531,59 +531,78 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 		wdg->setFont(elFnt);		//Font
 
-		//> Items
+		//Items
 		shD->addrWdg->blockSignals(true);
 		XMLNode tX("tbl");
 		bool hdrPresent = false;
 		int maxCols = 0, maxRows = 0;
-		try{ tX.load(shD->items); } catch(...) { }
+		string wVl, rClr;
+		try { tX.load(shD->items); } catch(...) { }
 		if(tX.name() != "tbl") wdg->clear();
-		else for(unsigned i_r = 0, i_ch = 0; i_ch < tX.childSize() || i_r < wdg->rowCount(); i_ch++)
+		else
 		{
-		    XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
-		    bool isH = false;
-		    string wVl;
-		    QTableWidgetItem *tit = NULL;
-		    if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-		    if(!isH && i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
-		    for(unsigned i_c = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) || i_c < wdg->columnCount(); i_ch1++)
+		    // Generic properties set
+		    if((wVl=tX.attr("sel")) == "row")	wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
+		    else if(wVl == "col")		wdg->setSelectionBehavior(QAbstractItemView::SelectColumns);
+		    else				wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
+
+		    // Items
+		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || i_r < wdg->rowCount(); i_ch++)
 		    {
-			XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
-			//if(tC->name() != "c") continue;
-			if(tC && i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
-			if(isH)	//Header process
+			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
+			bool isH = false;
+			QTableWidgetItem *tit = NULL;
+			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
+			if(!isH && i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
+			if(!isH) rClr = tR->attr("color");
+			for(unsigned i_c = 0, i_cR = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) || i_c < wdg->columnCount(); i_ch1++)
 			{
-			    if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
-			    tit->setText(tC?tC->text().c_str():"");
-			}
-			else	//Rows content process
-			{
-			    if(!(tit=wdg->item(i_r,i_c))) wdg->setItem(i_r, i_c, (tit=new QTableWidgetItem()));
-			    if(tC)
+			    XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
+			    if(tC && i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
+			    if(isH)	//Header process
 			    {
-				QVariant v;
-				switch(tC->name()[0])
-				{
-				    case 'b': v = (bool)atoi(tC->text().c_str());	break;
-				    case 'i': v = atoll(tC->text().c_str());	break;
-				    case 'r': v = atof(tC->text().c_str());		break;
-				    default: v = tC->text().c_str();		break;
-				}
-				tit->setData(Qt::DisplayRole, v);
-				if((wVl=tC->attr("color")).size()) tit->setData(Qt::DecorationRole, QColor(wVl.c_str()));
+				if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
+				tit->setText(tC?tC->text().c_str():"");
 			    }
-			    else { tit->setData(Qt::DisplayRole, ""); tit->setData(Qt::DecorationRole, ""); }
+			    else	//Rows content process
+			    {
+				if(!(tit=wdg->item(i_r,i_c))) wdg->setItem(i_r, i_c, (tit=new QTableWidgetItem()));
+				// Value
+				QVariant v;
+				if(tC)
+				    switch(tC->name()[0])
+				    {
+					case 'b': v = (bool)atoi(tC->text().c_str());	break;
+					case 'i': v = atoll(tC->text().c_str());	break;
+					case 'r': v = atof(tC->text().c_str());		break;
+					default: v = tC->text().c_str();		break;
+				    }
+				tit->setData(Qt::DisplayRole, v);
+				// Back color
+				if((tC && (wVl=tC->attr("color")).size()) || rClr.size())
+				    tit->setData(Qt::BackgroundRole, QColor((wVl.size()?wVl:rClr).c_str()));
+				else tit->setData(Qt::BackgroundRole, QVariant());
+				// Cell image
+				QImage img;
+				if(tC && (wVl=w->resGet(tC->attr("img"))).size() && img.loadFromData((const uchar*)wVl.data(),wVl.size()))
+				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
+				else tit->setData(Qt::DecorationRole, QVariant());
+			    }
+			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, i_cR); }
+			    i_c++;
 			}
-			i_c++;
-			maxCols = vmax(maxCols, i_c);
+			if(!isH)
+			{
+			    if(tR)	{ ++i_rR; maxRows = vmax(maxRows, i_rR); }
+			    i_r++;
+			}
+			else hdrPresent = true;
 		    }
-		    if(!isH) { i_r++; maxRows = vmax(maxRows, i_r); }
-		    else hdrPresent = true;
 		}
 		wdg->horizontalHeader()->setVisible(hdrPresent);
 		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
-		if(maxRows) wdg->resizeRowsToContents();
 		if(maxCols > 1) wdg->resizeColumnsToContents();
+		if(maxRows) wdg->resizeRowsToContents();
 		shD->addrWdg->blockSignals(false);
 
 		setValue(w, shD->value, true);	//Value
@@ -1019,13 +1038,38 @@ void ShapeFormEl::listChange( int row )
 void ShapeFormEl::treeChange( )
 {
     QTreeWidget *el = (QTreeWidget*)sender();
-    WdgView	*w  = (WdgView *)el->parentWidget();
+    WdgView	*w  = (WdgView*)el->parentWidget();
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
 
     AttrValS attrs;
     attrs.push_back(std::make_pair("value",el->selectedItems()[0]->data(0,Qt::UserRole).toString().toStdString()));
     attrs.push_back(std::make_pair("event","ws_TreeChange"));
+    w->attrsSet(attrs);
+}
+
+void ShapeFormEl::tableChange( )
+{
+    QTableWidget *el = (QTableWidget*)sender();
+    WdgView	 *w  = (WdgView*)el->parentWidget();
+
+    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
+
+    AttrValS attrs;
+    string value = el->selectedItems()[0]->text().toStdString();
+    switch(el->selectionBehavior())
+    {
+	case QAbstractItemView::SelectRows:
+	    value = el->selectedItems()[0]->tableWidget()->item(el->selectedItems()[0]->row(),0)->text().toStdString();
+	    break;
+	case QAbstractItemView::SelectColumns:
+	    value = el->selectedItems()[0]->tableWidget()->item(0,el->selectedItems()[0]->column())->text().toStdString();
+	    break;
+    }
+
+    //Events prepare
+    attrs.push_back(std::make_pair("value",value));
+    attrs.push_back(std::make_pair("event","ws_TableChangeSel"));
     w->attrsSet(attrs);
 }
 
@@ -1115,7 +1159,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setFocusPolicy((atoi(val.c_str())&&((RunWdgView*)w)->permCntr()) ? Qt::StrongFocus : Qt::NoFocus);
 	    break;
 	case A_GEOM_MARGIN: shD->geomMargin = atoi(val.c_str()); up = true;	break;
-	case A_TextBackClr:
+	case A_BackColor:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
@@ -1130,7 +1174,7 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = true;
 	    break;
 	}
-	case A_TextBackImg:
+	case A_BackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
@@ -1146,9 +1190,9 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    up = true;
 	    break;
 	}
-	case A_TextBordWidth: shD->border.setWidth(atoi(val.c_str())); up = true;	break;
-	case A_TextBordColor: shD->border.setColor(getColor(val)); up = true;		break;
-	case A_TextBordStyle: shD->bordStyle = atoi(val.c_str()); up = true;		break;
+	case A_BordWidth: shD->border.setWidth(atoi(val.c_str())); up = true;	break;
+	case A_BordColor: shD->border.setColor(getColor(val)); up = true;		break;
+	case A_BordStyle: shD->bordStyle = atoi(val.c_str()); up = true;		break;
 	case A_TextFont: shD->font = val; up = true;					break;
 	case A_TextColor: shD->color = getColor(val);					break;
 	case A_TextOrient: shD->orient = atoi(val.c_str());				break;
@@ -1382,7 +1426,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->geomMargin = atoi(val.c_str());
 	    w->layout()->setMargin( shD->geomMargin );
 	    break;
-	case A_MediaBackClr:
+	case A_BackColor:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
@@ -1395,7 +1439,7 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setPalette(plt);
 	    break;
 	}
-	case A_MediaBackImg:
+	case A_BackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
@@ -1411,9 +1455,9 @@ bool ShapeMedia::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    w->setPalette(plt);
 	    break;
 	}
-	case A_MediaBordWdth: shD->border.setWidth(atoi(val.c_str()));	break;
-	case A_MediaBordClr:  shD->border.setColor(getColor(val));	break;
-	case A_MediaBordStl:  shD->bordStyle = atoi(val.c_str());	break;
+	case A_BordWidth: shD->border.setWidth(atoi(val.c_str()));	break;
+	case A_BordColor:  shD->border.setColor(getColor(val));	break;
+	case A_BordStyle:  shD->bordStyle = atoi(val.c_str());	break;
 	case A_MediaSrc:
 	    if(shD->mediaSrc == val)	break;
 	    shD->mediaSrc = val;
@@ -1758,7 +1802,7 @@ void ShapeDiagram::init( WdgView *w )
 
     //> Init tracing timer
     ((ShpDt*)w->shpData)->trcTimer = new QTimer(w);
-    connect( ((ShpDt*)w->shpData)->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()) );
+    connect(((ShpDt*)w->shpData)->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()));
 }
 
 void ShapeDiagram::destroy( WdgView *w )
@@ -1778,121 +1822,92 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    up = make_pct = true;
-	    reld_tr_dt = 2;
-	    break;
-	case -2:	//focus
-	    if( (bool)atoi(val.c_str()) != w->hasFocus() )	up = true;
-	    break;
-	case 5:		//en
-	    if( !qobject_cast<RunWdgView*>(w) )	break;
+	case A_COM_LOAD: up = make_pct = true; reld_tr_dt = 2;	break;
+	case A_COM_FOCUS: up = ((bool)atoi(val.c_str()) != w->hasFocus()); break;
+	case A_EN:
+	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    w->setVisible( shD->en && ((RunWdgView*)w)->permView() );
+	    w->setVisible(shD->en && ((RunWdgView*)w)->permView());
 	    up = true;
 	    break;
-	case 6:		//active
+	case A_ACTIVE:
 	    shD->active = (bool)atoi(val.c_str());
-	    if( !qobject_cast<RunWdgView*>(w) )	break;
-	    if( shD->active && ((RunWdgView*)w)->permCntr() )	w->setFocusPolicy(Qt::StrongFocus);
-	    else w->setFocusPolicy(Qt::NoFocus);
+	    if(!qobject_cast<RunWdgView*>(w))	break;
+	    w->setFocusPolicy((shD->active&&((RunWdgView*)w)->permCntr())?Qt::StrongFocus:Qt::NoFocus);
 	    break;
-	case 9:	case 10: make_pct = true;	break;
-	case 12:	//geomMargin
-	    shD->geomMargin = atoi(val.c_str()); make_pct = true; break;
-	case 20:	//backColor
+	case A_GEOM_W: case A_GEOM_H: make_pct = true;	break;
+	case A_GEOM_MARGIN: shD->geomMargin = atoi(val.c_str()); make_pct = true; break;
+	case A_BackColor:
 	{
-	    shD->backGrnd.setColor( getColor(val) );
+	    shD->backGrnd.setColor(getColor(val));
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setColor(shD->backGrnd.color());
-	    if( !brsh.color().isValid() ) brsh.setColor(QPalette().brush(QPalette::Background).color());
-	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
-	    plt.setBrush(QPalette::Background,brsh);
+	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Background).color());
+	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
+	    plt.setBrush(QPalette::Background, brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
 	}
-	case 21:	//backImg
+	case A_BackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
 	    shD->backGrnd.setTextureImage(QImage());
-	    if( !backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()) )
+	    if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
 		shD->backGrnd.setTextureImage(img);
 
 	    QPalette plt(w->palette());
 	    QBrush brsh = plt.brush(QPalette::Background);
 	    brsh.setTextureImage(img);
-	    brsh.setStyle( !brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern );
+	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
 	    plt.setBrush(QPalette::Background,brsh);
 	    w->setPalette(plt);
 	    up = true;
 	    break;
 	}
-	case 22:	//bordWidth
-	    shD->border.setWidth(atoi(val.c_str())); make_pct = true; break;
-	case 23:	//bordColor
-	    shD->border.setColor(getColor(val)); up = true; break;
-	case 24:	//bordStyle
-	    shD->bordStyle = atoi(val.c_str()); up = true; break;
-	case 25:	//trcPer
+	case A_BordWidth: shD->border.setWidth(atoi(val.c_str())); make_pct = true;	break;
+	case A_BordColor: shD->border.setColor(getColor(val)); up = true;		break;
+	case A_BordStyle: shD->bordStyle = atoi(val.c_str()); up = true;		break;
+	case A_DiagramTrcPer:
 	    shD->trcPer = atoi(val.c_str());
-	    if( shD->trcPer )	shD->trcTimer->start(shD->trcPer*1000);
+	    if(shD->trcPer) shD->trcTimer->start(shD->trcPer*1000);
 	    else shD->trcTimer->stop();
 	    break;
-	case 26:	//type
-	    shD->type = atoi(val.c_str());
-	    reld_tr_dt = 2;
-	    break;
-	case 27:	//tSek
+	case A_DiagramType: shD->type = atoi(val.c_str()); reld_tr_dt = 2;		break;
+	case A_DiagramTSek:
 	    shD->tTimeCurent = false;
-	    if( atoll(val.c_str()) == 0 )
+	    if(atoll(val.c_str()) == 0)
 	    {
 		shD->tTime = (int64_t)time(NULL)*1000000;
 		shD->tTimeCurent = true;
 	    } else shD->tTime = atoll(val.c_str())*1000000 + shD->tTime%1000000;
 	    reld_tr_dt = 1;
 	    break;
-	case 28: 	//tUSek
-	    shD->tTime = 1000000ll*(shD->tTime/1000000)+atoll(val.c_str());
-	    reld_tr_dt = 1;
-	    break;
-	case 29:	//tSize
-	    shD->tSize = vmax(1e-3,atof(val.c_str()));
-	    reld_tr_dt = 2;
-	    break;
-	case 30:	//curSek
-	    if( (shD->curTime/1000000) == atoi(val.c_str()) ) break;
+	case A_DiagramTUSek: shD->tTime = 1000000ll*(shD->tTime/1000000)+atoll(val.c_str()); reld_tr_dt = 1;	break;
+	case A_DiagramTSize: shD->tSize = vmax(1e-3,atof(val.c_str())); reld_tr_dt = 2;	break;
+	case A_DiagramCurSek:
+	    if((shD->curTime/1000000) == atoi(val.c_str())) break;
 	    shD->curTime = atoll(val.c_str())*1000000 + shD->curTime%1000000;
 	    shD->holdCur = (shD->curTime>=shD->tTime);
 	    up = true;
 	    break;
-	case 31:	//curUSek
-	    if( (shD->curTime%1000000) == atoi(val.c_str()) ) break;
+	case A_DiagramCurUSek:
+	    if((shD->curTime%1000000) == atoi(val.c_str())) break;
 	    shD->curTime = 1000000ll*(shD->curTime/1000000)+atoll(val.c_str());
 	    shD->holdCur = (shD->curTime>=shD->tTime);
 	    up = true;
 	    break;
-	case 32:	//curColor
-	    shD->curColor = getColor(val);	up = true;		break;
-	case 33:	//sclColor
-	    shD->sclColor = getColor(val);	make_pct = true;	break;
-	case 34:	//sclHor
-	    shD->sclHor = atoi(val.c_str());	make_pct = true;	break;
-	case 35:	//sclVer
-	    shD->sclVer = atoi(val.c_str());	make_pct = true;	break;
-	case 36:	//sclMarkColor
-	    shD->sclMarkColor = getColor(val);	make_pct = true;	break;
-	case 37:	//sclMarkFont
-	    shD->sclMarkFont = getFont(val);	make_pct = true;	break;
-	case 38:	//valArch
-	    if( shD->valArch == val )	break;
-	    shD->valArch = val;
-	    reld_tr_dt = 2;
-	    break;
-	case 39:	//parNum
+	case A_DiagramCurColor: shD->curColor = getColor(val); up = true;	break;
+	case A_DiagramSclColor: shD->sclColor = getColor(val); make_pct = true;	break;
+	case A_DiagramSclHor: shD->sclHor = atoi(val.c_str()); make_pct = true;	break;
+	case A_DiagramSclVer: shD->sclVer = atoi(val.c_str()); make_pct = true;	break;
+	case A_DiagramSclMarkColor: shD->sclMarkColor = getColor(val); make_pct = true;	break;
+	case A_DiagramSclMarkFont: shD->sclMarkFont = getFont(val); make_pct = true;	break;
+	case A_DiagramValArch: if(shD->valArch != val) { shD->valArch = val; reld_tr_dt = 2; }	break;
+	case A_DiagramParNum:
 	{
 	    int parNum = atoi(val.c_str());
 	    while((int)shD->prms.size() < parNum) shD->prms.push_back(TrendObj(w));
@@ -1900,45 +1915,38 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    make_pct = true;
 	    break;
 	}
-	case 40:	//sclVerScl
-	    if(shD->sclVerScl == atof(val.c_str()))	break;
-	    shD->sclVerScl = atof(val.c_str());
-	    make_pct = true;
+	case A_DiagramSclVerScl:
+	    if(shD->sclVerScl != atof(val.c_str())) { shD->sclVerScl = atof(val.c_str()); make_pct = true; }
 	    break;
-	case 41:	//sclVerSclOff
-	    if(shD->sclVerSclOff == atof(val.c_str()))	break;
-	    shD->sclVerSclOff = atof(val.c_str());
-	    make_pct = true;
+	case A_DiagramSclVerSclOff:
+	    if(shD->sclVerSclOff != atof(val.c_str())) { shD->sclVerSclOff = atof(val.c_str()); make_pct = true; }
 	    break;
-	case 42:	//valsForPix
+	case A_DiagramValsForPix:
 	    if(shD->valsForPix == vmin(10,vmax(0,atoi(val.c_str()))))	break;
 	    shD->valsForPix = vmin(10,vmax(0,atoi(val.c_str())));
 	    reld_tr_dt = 2;
 	    break;
-        case 43:	//sclHorPer
-            shD->sclHorPer = vmax(0,atof(val.c_str()))*1e6;
-            make_pct = true;
-            break;
+        case A_DiagramSclHorPer: shD->sclHorPer = vmax(0, atof(val.c_str()))*1e6; make_pct = true;	break;
 	default:
 	    //> Individual trend's attributes process
-	    if(uiPrmPos >= 50)
+	    if(uiPrmPos >= A_DiagramTrs)
 	    {
-		int trndN = (uiPrmPos/10)-5;
+		int trndN = (uiPrmPos-A_DiagramTrs)/A_DiagramTrsSz;
 		if(trndN >= (int)shD->prms.size()) break;
 		make_pct = true;
-		switch(uiPrmPos%10)
+		switch(uiPrmPos%A_DiagramTrsSz)
 		{
-		    case 0: shD->prms[trndN].setAddr(val);			break;		//addr
-		    case 1: shD->prms[trndN].setBordL(atof(val.c_str()));	break;		//bordL
-		    case 2: shD->prms[trndN].setBordU(atof(val.c_str()));	break;		//bordU
-		    case 3: shD->prms[trndN].setColor(getColor(val));		break;		//color
-		    case 4:									//value
+		    case A_DiagramTrAddr: shD->prms[trndN].setAddr(val);			break;
+		    case A_DiagramTrBordL: shD->prms[trndN].setBordL(atof(val.c_str()));	break;
+		    case A_DiagramTrBordU: shD->prms[trndN].setBordU(atof(val.c_str()));	break;
+		    case A_DiagramTrClr: shD->prms[trndN].setColor(getColor(val));		break;
+		    case A_DiagramTrVal:
 			shD->prms[trndN].setCurVal((val==EVAL_STR) ? EVAL_REAL : atof(val.c_str()));
 			make_pct = false;
 			break;
-		    case 5: shD->prms[trndN].setScale(atoi(val.c_str()));	break;		//scale
-		    case 6: shD->prms[trndN].setWidth(atoi(val.c_str()));	break;		//width
-		    case 7: make_pct = false;					break;		//prop
+		    case A_DiagramTrScl: shD->prms[trndN].setScale(atoi(val.c_str()));		break;
+		    case A_DiagramTrWdth: shD->prms[trndN].setWidth(atoi(val.c_str()));		break;
+		    case A_DiagramTrProp: make_pct = false;					break;
 		}
 	    }
     }
@@ -1979,8 +1987,8 @@ void ShapeDiagram::makePicture( WdgView *w )
     if(!shD->en) return;
     switch(shD->type)
     {
-	case 0:	makeTrendsPicture(w);	break;
-	case 1:	makeSpectrumPicture(w);	break;
+	case FD_TRND:	makeTrendsPicture(w);	break;
+	case FD_SPECTR:	makeSpectrumPicture(w);	break;
     }
 }
 
@@ -2007,14 +2015,14 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));	//Curves of spectrum area rect
 
     //> Main scales definition
-    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
+    if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS)
     {
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
 	grdPen.setStyle(Qt::SolidLine);
 	grdPen.setWidth(vmax(1,TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
 	//>> Set markers font and color
-	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
+	if(sclHor&FD_MARKS || sclVer&FD_MARKS)
 	{
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
@@ -2022,12 +2030,12 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height() - pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
-	    if(sclHor&SC_MARKERS)
+	    if(sclHor&FD_MARKS)
 	    {
-		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
+		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(FD_MARKS);
 		else tAr.adjust(0,0,0,-mrkHeight);
 	    }
-	    if(sclVer&SC_MARKERS && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclVer &= ~(SC_MARKERS);
+	    if(sclVer&FD_MARKS && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclVer &= ~(FD_MARKS);
 	}
     }
 
@@ -2064,8 +2072,8 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	}
 	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
 
-	cP.wScale = cP.mScale&(sclVer|SC_LOG);
-	if(cP.wScale&(SC_GRID|SC_MARKERS)) continue;
+	cP.wScale = cP.mScale&(sclVer|FD_LOG);
+	if(cP.wScale&FD_GRD_MARKS) continue;
 
 	//>> Check for value border allow
 	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
@@ -2083,7 +2091,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     {
 	TrendObj &cP = shD->prms[i_p];
 	cP.isIndiv = false;
-	if(!cP.fftN || !cP.color().isValid() || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	if(!cP.fftN || !cP.color().isValid() || !(cP.wScale&FD_GRD_MARKS)) continue;
 	//>> Check for include to present or create new group and exclude from individual
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
 	{
@@ -2093,7 +2101,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	}
 	cP.isIndiv = true;
 	prmIndiv++;
-	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = i_p;
 	else prmsInd.push_back(i_p);
 	if(isScale)     //Vertical scale and offset apply
 	{
@@ -2116,7 +2124,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     }
 
     //> Draw main and individual vertical scales
-    double vmax_ln = tAr.height() / ((sclVer&SC_MARKERS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
+    double vmax_ln = tAr.height() / ((sclVer&FD_MARKS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
     for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
 	bool	vsPercT;
@@ -2160,11 +2168,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(FD_GRD);  //Hide grid for no last scale
 
 	//>> Draw vertical grid and markers
 	int markWdth = 0;
-	if(sclVerT & (SC_GRID|SC_MARKERS))
+	if(sclVerT&FD_GRD_MARKS)
 	{
 	    string labVal;
 	    pnt.setPen(grdPenT);
@@ -2172,10 +2180,10 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
 	    {
 		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMinT)/(vsMaxT-vsMinT));
-		if(sclVerT & SC_GRID) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
+		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
 
-		if(sclVerT & SC_MARKERS)
+		if(sclVerT&FD_MARKS)
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
@@ -2196,7 +2204,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     double fftBeg = 1e6/(double)tSize;			//Minimum frequency or maximum period time (s)
     double fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&FD_MARKS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -2207,7 +2215,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv/=2;
 
 	//>> Draw horisontal grid and markers
-	if(sclHor & (SC_GRID|SC_MARKERS))
+	if(sclHor&FD_GRD_MARKS)
 	{
 	    string labH;
 	    double labDiv = 1;
@@ -2218,7 +2226,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tAr.x()+tAr.width();
-	    if(sclHor&SC_MARKERS)
+	    if(sclHor&FD_MARKS)
 	    {
 		pnt.setPen(mrkPen);
 		labH = TSYS::strMess("%0.5g",fftEnd/labDiv)+((labDiv==1000)?_("kHz"):_("Hz"));
@@ -2233,10 +2241,10 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		//>>>> Draw grid
 		pnt.setPen(grdPen);
 		int h_pos = tAr.x()+(int)((double)tAr.width()*(i_h-fftBeg)/(fftEnd-fftBeg));
-		if(sclHor & SC_GRID) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
+		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if(sclHor&SC_MARKERS)
+		if(sclHor&FD_MARKS)
 		{
 		    pnt.setPen(mrkPen);
 		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
@@ -2348,6 +2356,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     //> Get generic parameters
     int64_t tSize = (int64_t)(1e6*shD->tSize);				//Trends size (us)
     int64_t tEnd  = shD->tTime;						//Trends end point (us)
+    if(shD->tTimeCurent) tEnd = shD->arhEnd(shD->tTime);
     int64_t tPict = tEnd;
     int64_t tBeg  = tEnd - tSize;					//Trends begin point (us)
     if(shD->prms.empty() || tSize <= 0) return;
@@ -2358,7 +2367,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     QRect tAr  = w->rect().adjusted(1,1,-2*(shD->geomMargin+shD->border.width()+1),-2*(shD->geomMargin+shD->border.width()+1));
 
     //> Main scales definition
-    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
+    if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS)
     {
 	//>> Set grid pen
 	grdPen.setColor(shD->sclColor);
@@ -2366,7 +2375,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	grdPen.setWidth(vmax(1,(int)TSYS::realRound(vmin(w->xScale(true),w->yScale(true)))));
 
 	//>> Set markers font and color
-	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
+	if(sclHor&FD_MARKS || sclVer&FD_MARKS)
 	{
 	    mrkPen.setColor(shD->sclMarkColor);
 	    QFont mrkFnt = shD->sclMarkFont;
@@ -2374,12 +2383,12 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    pnt.setFont(mrkFnt);
 	    mrkHeight = pnt.fontMetrics().height()-pnt.fontMetrics().descent();
 	    mrkWidth = pnt.fontMetrics().width("000000");
-	    if(sclHor&SC_MARKERS)
+	    if(sclHor&FD_MARKS)
 	    {
-		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(SC_MARKERS);
+		if(tAr.height() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclHor &= ~(FD_MARKS);
 		else tAr.adjust(0,0,0,-2*mrkHeight);
 	    }
-	    if(sclVer&SC_MARKERS && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclVer &= ~(SC_MARKERS);
+	    if(sclVer&FD_MARKS && tAr.width() < (int)(100*vmin(w->xScale(true),w->yScale(true)))) sclVer &= ~(FD_MARKS);
 	}
     }
 
@@ -2387,7 +2396,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     int64_t	aVend;			//Corrected for allow data the trend end point
     int64_t	aVbeg;			//Corrected for allow data the trend begin point
     bool	vsPerc = true;		//Vertical scale percent mode
-    bool	isLog = sclVer&SC_LOG;	//Logarithmic scale
+    bool	isLog = sclVer&FD_LOG;	//Logarithmic scale
     double	curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
     bool	isScale = (fabs(shD->sclVerSclOff) > 1 || fabs(shD->sclVerScl-100) > 1);
 
@@ -2432,8 +2441,8 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
 	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
 
-	cP.wScale = cP.mScale&(sclVer|SC_LOG);
-	if(cP.wScale&(SC_GRID|SC_MARKERS))	continue;
+	cP.wScale = cP.mScale&(sclVer|FD_LOG);
+	if(cP.wScale&FD_GRD_MARKS) continue;
 
 	//>> Check for value border allow
 	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
@@ -2451,10 +2460,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     {
 	TrendObj &cP = shD->prms[i_p];
 	cP.isIndiv = false;
-	if(!cP.val().size() || !cP.color().isValid() || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	if(!cP.val().size() || !cP.color().isValid() || !(cP.wScale&FD_GRD_MARKS)) continue;
 	//>> Check for include to present or create new group and exclude from individual
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
-	    (cP.mScale&SC_LOG) == (sclVer&SC_LOG))
+	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
 	{
 	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
 	    prmInGrp++; prmGrpLast = i_p;
@@ -2462,9 +2471,9 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
 	cP.isIndiv = true;
 	prmIndiv++;
-	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = i_p;
 	else prmsInd.push_back(i_p);
-	if(cP.mScale&SC_LOG)
+	if(cP.mScale&FD_LOG)
 	{
 	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
 	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001)
@@ -2503,7 +2512,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
     }
 
     //> Draw main and individual vertical scales
-    float vmax_ln = tAr.height() / ((sclVer&SC_MARKERS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
+    float vmax_ln = tAr.height() / ((sclVer&FD_MARKS)?(2*mrkHeight):(int)(15*vmin(w->xScale(true),w->yScale(true))));
     for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)	//prmsInd[i]=-1 - for main scale
     {
 	bool	isLogT, vsPercT;
@@ -2537,7 +2546,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    TrendObj &cP = shD->prms[prmsInd[i_p]];
 	    //>> Draw environment
 	    vsPercT = false;
-	    isLogT = cP.mScale&SC_LOG;
+	    isLogT = cP.mScale&FD_LOG;
 	    sclVerT = cP.wScale;
 	    grdPenT.setColor(cP.color());
 	    mrkPen.setColor(cP.color());
@@ -2549,11 +2558,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(i_p < (prmsInd.size()-1))	sclVerT &= ~(SC_GRID);	//Hide grid for no last scale
+	if(i_p < (prmsInd.size()-1))	sclVerT &= ~(FD_GRD);	//Hide grid for no last scale
 
 	//>> Draw vertical grid and markers
 	int markWdth = 0;
-	if(sclVerT & (SC_GRID|SC_MARKERS))
+	if(sclVerT&FD_GRD_MARKS)
 	{
 	    string labVal;
 	    pnt.setPen(grdPenT);
@@ -2561,10 +2570,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
 	    {
 		int v_pos = tAr.y()+tAr.height()-(int)((double)tAr.height()*(i_v-vsMinT)/(vsMaxT-vsMinT));
-		if(sclVerT & SC_GRID) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
+		if(sclVerT&FD_GRD) { pnt.setPen(grdPen); pnt.drawLine(tAr.x(), v_pos, tAr.x()+tAr.width(), v_pos); }
 		else { pnt.setPen(grdPenT); pnt.drawLine(tAr.x()-3, v_pos, tAr.x()+3, v_pos); }
 
-		if(sclVerT & SC_MARKERS)
+		if(sclVerT&FD_MARKS)
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tAr.y();
@@ -2581,7 +2590,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
     //> Calc horizontal scale
     int64_t hDiv = 1;	//Horisontal scale divisor
-    int hmax_ln = tAr.width() / (int)((sclHor&SC_MARKERS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
+    int hmax_ln = tAr.width() / (int)((sclHor&FD_MARKS)?mrkWidth:15*vmin(w->xScale(true),w->yScale(true)));
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;
@@ -2603,7 +2612,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	}
 
 	//>>> Draw horisontal grid and markers
-	if(sclHor&(SC_GRID|SC_MARKERS))
+	if(sclHor&FD_GRD_MARKS)
 	{
 	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
@@ -2618,7 +2627,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	    //>>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tAr.x()+tAr.width();
-	    if(sclHor&SC_MARKERS)
+	    if(sclHor&FD_MARKS)
 	    {
 		pnt.setPen(mrkPen);
 		tm_t = tPict/1000000;
@@ -2641,10 +2650,10 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 		//>>>> Draw grid
 		pnt.setPen(grdPen);
 		int h_pos = tAr.x()+tAr.width()*(i_h-tBeg)/(tPict-tBeg);
-		if(sclHor & SC_GRID) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
+		if(sclHor&FD_GRD) pnt.drawLine(h_pos, tAr.y(), h_pos, tAr.y()+tAr.height());
 		else pnt.drawLine(h_pos, tAr.y()+tAr.height()-3, h_pos, tAr.y()+tAr.height()+3);
 
-		if(sclHor&SC_MARKERS && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
+		if(sclHor&FD_MARKS && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t,&ttm);
@@ -2730,7 +2739,7 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	int aPosBeg = cP.val(aVbeg);
 	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
 	bool vsPercT = cP.isIndiv ? false : vsPerc;
-	bool isLogT = cP.isIndiv ? (cP.wScale&SC_LOG) : isLog;
+	bool isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
 	double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
 	double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
@@ -2855,25 +2864,25 @@ bool ShapeDiagram::event( WdgView *w, QEvent *event )
 	    if(mess_lev() == TMess::Debug) d_cnt = TSYS::curTime();
 	    QPainter pnt(w);
 
-	    //> Decoration draw
+	    // Decoration draw
 	    QRect dA = w->rect().adjusted(0,0,-2*shD->geomMargin,-2*shD->geomMargin);
 	    pnt.setWindow(dA);
 	    pnt.setViewport(w->rect().adjusted(shD->geomMargin,shD->geomMargin,-shD->geomMargin,-shD->geomMargin));
 
-	    //> Draw decoration
+	    // Draw decoration
 	    if(shD->backGrnd.color().isValid()) pnt.fillRect(dA,shD->backGrnd.color());
 	    if(!shD->backGrnd.textureImage().isNull()) pnt.fillRect(dA,shD->backGrnd.textureImage());
 
-	    //> Draw border
+	    // Draw border
 	    borderDraw(pnt, dA, shD->border, shD->bordStyle);
 
-	    //> Trend's picture
+	    // Trend's picture
 	    pnt.drawImage(shD->border.width(), shD->border.width(), shD->pictObj);
 
-	    //> Draw focused border
+	    // Draw focused border
 	    if(w->hasFocus()) qDrawShadeRect(&pnt,dA.x(),dA.y(),dA.width(),dA.height(),w->palette());
 
-	    //> Draw cursor
+	    // Draw cursor
 	    int curPos = -1;
 	    if(shD->type == 0 && shD->active)
 	    {
@@ -2948,7 +2957,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    if( shD->type == 0 )
+    if(shD->type == FD_TRND)
     {
 	int64_t tTimeGrnd = shD->tTime - (int64_t)(1e6*shD->tSize);
 	int64_t curTime   = vmax(vmin(itm,shD->tTime),tTimeGrnd);
@@ -2981,7 +2990,7 @@ void ShapeDiagram::setCursor( WdgView *w, int64_t itm )
 	}
 	w->cntrIfCmd(req);
     }
-    else if(shD->type == 1)
+    else if(shD->type == FD_SPECTR)
     {
 	float curFrq = vmax(vmin(1e6/(float)itm,shD->fftEnd),shD->fftBeg);
 	shD->curTime = 1e6/curFrq;
@@ -3029,14 +3038,14 @@ ShapeDiagram::TrendObj::~TrendObj( )
 #endif
 }
 
-int64_t ShapeDiagram::TrendObj::valBeg()
+int64_t ShapeDiagram::TrendObj::valBeg( )
 {
-    return vals.empty() ? 0 : vals[0].tm;
+    return vals.empty() ? 0 : vals.front().tm;
 }
 
-int64_t ShapeDiagram::TrendObj::valEnd()
+int64_t ShapeDiagram::TrendObj::valEnd( )
 {
-    return vals.empty() ? 0 : vals[vals.size()-1].tm;
+    return vals.empty() ? 0 : vals.back().tm;
 }
 
 int ShapeDiagram::TrendObj::val( int64_t tm )
@@ -3061,8 +3070,8 @@ void ShapeDiagram::TrendObj::loadData( bool full )
     ShpDt *shD = (ShpDt*)view->shpData;
     switch(shD->type)
     {
-	case 0: loadTrendsData(full);	break;
-	case 1: loadSpectrumData(full);	break;
+	case FD_TRND: loadTrendsData(full);	break;
+	case FD_SPECTR: loadSpectrumData(full);	break;
     }
 }
 
@@ -3077,7 +3086,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     unsigned bufLim	= 2*view->size().width()*shD->valsForPix;
     XMLNode req("get");
 
-    //> Clear trend for empty address and for full reload data
+    // Clear trend for empty address and for full reload data
     if(full || addr().empty())
     {
 	arh_per = arh_beg = arh_end = 0;
@@ -3088,9 +3097,9 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 
     bool isDataDir = (addr().compare(0,5,"data:") == 0 || addr().compare(0,5,"line:") == 0);
 
-    if(!isDataDir)	// From archive by address
+    if(!isDataDir)	//From archive by address
     {
-	//> Get archive parameters
+	// Get archive parameters
 	if(!arh_per || tTime > arh_end)
 	{
 	    XMLNode req("info");
@@ -3103,10 +3112,13 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 		arh_beg = atoll(req.attr("beg").c_str());
 		arh_end = atoll(req.attr("end").c_str());
 		arh_per = atoll(req.attr("per").c_str());
+
+		//  Correct to real data
+		if(shD->tTimeCurent) tTimeGrnd = (tTime=shD->arhEnd(tTime)) - tSize;
 	    }
 	}
 
-	//> One request check and prepare
+	// One request check and prepare
 	int trcPer = shD->trcPer*1000000;
 	if(shD->tTimeCurent && trcPer && shD->valArch.empty() &&
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
@@ -3289,6 +3301,15 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     fftw_execute(p);
     fftw_destroy_plan(p);
 #endif
+}
+
+int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
+{
+    int64_t rez = def;
+    for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP)
+	if(iP->arh_end) rez = (rez==def) ? iP->arh_end : vmax(rez, iP->arh_end);
+
+    return rez;
 }
 
 //************************************************
@@ -4090,7 +4111,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->geomMargin = atoi(val.c_str());
 	    if(w->layout()) w->layout()->setMargin(shD->geomMargin);
 	    break;
-	case A_BoxBackClr:
+	case A_BackColor:
 	{
 	    shD->backGrnd.setColor(getColor(val));
 
@@ -4106,7 +4127,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 	    break;
 	}
-	case A_BoxBackImg:
+	case A_BackImg:
 	{
 	    QImage img;
 	    string backimg = w->resGet(val);
@@ -4125,14 +4146,14 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 	    break;
 	}
-	case A_BoxBordWdth:
+	case A_BordWidth:
 	    shD->border.setWidth(atoi(val.c_str()));
 
 	    if(runP && runP->mainWin()->masterPg() == w) runP->mainWin()->setPalette(shD->border.width() ? QPalette() : w->palette());
 
 	    break;
-	case A_BoxBordClr: shD->border.setColor(getColor(val));	break;
-	case A_BoxBordStl: shD->bordStyle = atoi(val.c_str());	break;
+	case A_BordColor: shD->border.setColor(getColor(val));	break;
+	case A_BordStyle: shD->bordStyle = atoi(val.c_str());	break;
 	case A_PG_OPEN_SRC:
 	{
 	    if(!runW || runP)	{ up = false; break; }

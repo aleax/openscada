@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -144,7 +144,8 @@ void TTransportS::load_( )
                 	at(m_ls[i_m]).at().inDel(db_ls[i_it]);
             }
         }
-    }catch( TError err )
+    }
+    catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new input transports error.")); 
@@ -172,19 +173,20 @@ void TTransportS::load_( )
 	    }
 
 	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
+	if(!SYS->selDB().empty())
+	{
 	    vector<string> m_ls;
 	    modList(m_ls);
 	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++)
 	    {
 		at(m_ls[i_m]).at().outList(db_ls);
-        	for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-            	    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().outAt(db_ls[i_it]).at().DB()))
-                	at(m_ls[i_m]).at().outDel(db_ls[i_it]);
+		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().outAt(db_ls[i_it]).at().DB()))
+			at(m_ls[i_m]).at().outDel(db_ls[i_it]);
             }
         }
-    }catch( TError err )
+    }
+    catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new input transports error."));
@@ -196,7 +198,7 @@ void TTransportS::load_( )
 	TConfig c_el(&el_ext);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
 	{
-	    ExtHost host("","","","","","","");
+	    ExtHost host("", "");
 	    host.user_open	= c_el.cfg("OP_USER").getS();
 	    host.id		= c_el.cfg("ID").getS();
 	    host.name		= c_el.cfg("NAME").getS();
@@ -206,7 +208,8 @@ void TTransportS::load_( )
 	    host.pass		= c_el.cfg("PASS").getS();
 	    extHostSet(host);
 	}
-    }catch( TError err )
+    }
+    catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and load external hosts DB error."));
@@ -216,7 +219,7 @@ void TTransportS::load_( )
 void TTransportS::save_( )
 {
     //> Save external transports
-    ResAlloc res(extHostRes,false);
+    ResAlloc res(extHostRes, false);
     TConfig c_el(&el_ext);
     for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
     {
@@ -327,13 +330,18 @@ string TTransportS::optDescr( )
     return(buf);
 }
 
-void TTransportS::extHostList( const string &user, vector<string> &list )
+void TTransportS::extHostList( const string &user, vector<string> &list, bool andSYS )
 {
     list.clear();
-    ResAlloc res(extHostRes,false);
+    ResAlloc res(extHostRes, false);
     for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-	if(!user.size() || user == extHostLs[i_h].user_open)
-	    list.push_back(extHostLs[i_h].id);
+	if(!user.size() || user == extHostLs[i_h].user_open || (andSYS && extHostLs[i_h].user_open == "*"))
+	{
+	    bool itSet = false;
+	    for(vector<string>::iterator iL = list.begin(); (!user.size() || andSYS) && !itSet && iL != list.end(); ++iL)
+		itSet = (*iL == extHostLs[i_h].id);
+	    if(!itSet) list.push_back(extHostLs[i_h].id);
+	}
 }
 
 bool TTransportS::extHostPresent( const string &user, const string &iid )
@@ -345,38 +353,77 @@ bool TTransportS::extHostPresent( const string &user, const string &iid )
     return false;
 }
 
-void TTransportS::extHostSet( const ExtHost &host )
+void TTransportS::extHostSet( const ExtHost &host, bool andSYS )
 {
-    ResAlloc res(extHostRes,true);
-    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-	if(host.user_open == extHostLs[i_h].user_open && extHostLs[i_h].id == host.id)
-	{ extHostLs[i_h] = host; modif(); return; }
-    extHostLs.push_back(host);
+    ResAlloc res(extHostRes, true);
+    int usrHstId = -1, sysHstId = -1;
+    for(int i_h = 0; i_h < (int)extHostLs.size() && (usrHstId < 0 || sysHstId < 0); i_h++)
+	if(extHostLs[i_h].id == host.id)
+	{
+	    if(host.mode < 0) { if(host.user_open == extHostLs[i_h].user_open) { usrHstId = i_h; break; } }
+	    else if(extHostLs[i_h].user_open == host.user_open)	usrHstId = i_h;
+	    else if(extHostLs[i_h].user_open == "*")		sysHstId = i_h;
+	}
+    if(host.mode < 0 || !andSYS)
+    {
+	if(usrHstId < 0) extHostLs.push_back(host);
+	else extHostLs[usrHstId] = host;
+    }
+    else
+    {
+	//Append or update
+	if(host.mode == ExtHost::User || host.mode == ExtHost::UserSystem)
+	{
+	    if(usrHstId < 0) extHostLs.push_back(host);
+	    else extHostLs[usrHstId] = host;
+	}
+	if(host.mode == ExtHost::System || host.mode == ExtHost::UserSystem)
+	{
+	    if(sysHstId < 0) { extHostLs.push_back(host); extHostLs.back().user_open = "*"; }
+	    else { extHostLs[sysHstId] = host; extHostLs[sysHstId].user_open = "*"; }
+	}
+	//Remove
+	if(host.mode == ExtHost::User && sysHstId >= 0) extHostLs.erase(extHostLs.begin() + sysHstId);
+	if(host.mode == ExtHost::System && usrHstId >= 0 && usrHstId != sysHstId) extHostLs.erase(extHostLs.begin() + usrHstId);
+    }
+
     modif();
 }
 
-void TTransportS::extHostDel( const string &user, const string &id )
+void TTransportS::extHostDel( const string &user, const string &id, bool andSYS )
 {
-    ResAlloc res(extHostRes,true);
+    ResAlloc res(extHostRes, true);
     for(unsigned i_h = 0; i_h < extHostLs.size(); )
-	if((!user.size() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id)
+	if(extHostLs[i_h].id == id &&
+		(!user.size() || user == extHostLs[i_h].user_open || (andSYS && extHostLs[i_h].user_open == "*")))
 	    extHostLs.erase(extHostLs.begin()+i_h);
 	else i_h++;
     modif();
 }
 
-TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &id )
+TTransportS::ExtHost TTransportS::extHostGet( const string &user, const string &id, bool andSYS )
 {
-    ResAlloc res(extHostRes,false);
+    ResAlloc res(extHostRes, false);
+    ExtHost eh(user, "");
     for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-	if((user.empty() || user == extHostLs[i_h].user_open) && extHostLs[i_h].id == id)
-	    return extHostLs[i_h];
-    return ExtHost(user,"","","","","","");
+	if(extHostLs[i_h].id == id &&
+		(user.empty() || user == extHostLs[i_h].user_open || (andSYS && extHostLs[i_h].user_open == "*")))
+	{
+	    if(eh.mode < 0)
+	    {
+		eh = extHostLs[i_h];
+		eh.mode = (eh.user_open == "*") ? ExtHost::System : ExtHost::User;
+	    }
+	    else if(eh.user_open != extHostLs[i_h].user_open) { eh.mode = ExtHost::UserSystem; break; }
+	}
+    if(eh.user_open == "*" && user.size() && user != eh.user_open) eh.user_open = user;
+    return eh;
 }
 
 AutoHD<TTransportOut> TTransportS::extHost( TTransportS::ExtHost host, const string &pref )
 {
-    if(!host.id.size() || !modPresent(host.transp)) throw TError(nodePath().c_str(),_("Remote host error!"));
+    if(!host.id.size() || !modPresent(host.transp))
+	throw TError(nodePath().c_str(), _("Remote host '%s' error!"), host.id.c_str());
 
     if(!at(host.transp).at().outPresent(pref+host.id)) at(host.transp).at().outAdd(pref+host.id);
     if(at(host.transp).at().outAt(pref+host.id).at().addr() != host.addr)
@@ -422,18 +469,19 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_))
+	if(ctrMkNode("area",opt,0,"/sub",_("Subsystem"),R_R_R_) &&
+	    ctrMkNode("table",opt,-1,"/sub/ehost",_("External hosts poll"),RWRWRW,"root",STR_ID,2,"s_com","add,del","key","id"))
 	{
-	    ctrMkNode("fld",opt,-1,"/sub/sysHosts",_("System's external hosts"),RWRW__,"root",STR_ID,1,"tp","bool");
-	    if(ctrMkNode("table",opt,-1,"/sub/ehost",_("External hosts poll"),RWRWRW,"root",STR_ID,2,"s_com","add,del","key","id"))
-	    {
-		ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Id"),RWRWRW,"root",STR_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/name",_("Name"),RWRWRW,"root",STR_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/transp",_("Transport"),RWRWRW,"root",STR_ID,4,"tp","str","idm","1","dest","select","select","/sub/transps");
-	        ctrMkNode("list",opt,-1,"/sub/ehost/addr",_("Address"),RWRWRW,"root",STR_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/user",_("User"),RWRWRW,"root",STR_ID,1,"tp","str");
-		ctrMkNode("list",opt,-1,"/sub/ehost/pass",_("Password"),RWRWRW,"root",STR_ID,1,"tp","str");
-	    }
+	    ctrMkNode("list",opt,-1,"/sub/ehost/id",_("Id"),RWRWRW,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/name",_("Name"),RWRWRW,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/transp",_("Transport"),RWRWRW,"root",STR_ID,4,"tp","str",
+		"idm","1","dest","select","select","/sub/transps");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/addr",_("Address"),RWRWRW,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/user",_("User"),RWRWRW,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/pass",_("Password"),RWRWRW,"root",STR_ID,1,"tp","str");
+	    ctrMkNode("list",opt,-1,"/sub/ehost/mode",_("Mode"),RWRW__,"root",STR_ID,4,"tp","int","dest","select",
+		"sel_id",TSYS::strMess("%d;%d;%d",ExtHost::User,ExtHost::System,ExtHost::UserSystem).c_str(),
+		"sel_list",_("User;System;User and System"));
 	}
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",STR_ID,3,"tp","str","cols","90","rows","10");
 	return;
@@ -441,11 +489,6 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     //> Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",STR_ID))	opt->setText(optDescr());
-    else if(a_path == "/sub/sysHosts")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText( TSYS::int2str(sysHost()) );
-	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR))	setSysHost( atoi(opt->text().c_str()) );
-    }
     else if(a_path == "/sub/transps" && ctrChkNode(opt))
     {
 	vector<string>  list;
@@ -455,48 +498,50 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/sub/ehost")
     {
-	string sHstsUser = (sysHost() && SYS->security().at().access(opt->attr("user"),SEC_WR,"root","Transport",RWRWR_))?"*":opt->attr("user");
+	bool sysHostAcs = SYS->security().at().access(opt->attr("user"),SEC_WR,"root",STR_ID,RWRWR_);
 	if(ctrChkNode(opt,"get",RWRWRW,"root",STR_ID,SEC_RD))
 	{
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",RWRWRW);
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",RWRWRW);
-	    XMLNode *n_tr	= ctrMkNode("list",opt,-1,"/sub/ehost/transp","",RWRWRW);
-	    XMLNode *n_addr	= ctrMkNode("list",opt,-1,"/sub/ehost/addr","",RWRWRW);
-	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/sub/ehost/user","",RWRWRW);
-	    XMLNode *n_pass	= ctrMkNode("list",opt,-1,"/sub/ehost/pass","",RWRWRW);
+	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",RWRWRW,"root",STR_ID);
+	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",RWRWRW,"root",STR_ID);
+	    XMLNode *n_tr	= ctrMkNode("list",opt,-1,"/sub/ehost/transp","",RWRWRW,"root",STR_ID);
+	    XMLNode *n_addr	= ctrMkNode("list",opt,-1,"/sub/ehost/addr","",RWRWRW,"root",STR_ID);
+	    XMLNode *n_user	= ctrMkNode("list",opt,-1,"/sub/ehost/user","",RWRWRW,"root",STR_ID);
+	    XMLNode *n_pass	= ctrMkNode("list",opt,-1,"/sub/ehost/pass","",RWRWRW,"root",STR_ID);
+	    XMLNode *n_mode	= sysHostAcs ? ctrMkNode("list",opt,-1,"/sub/ehost/mode","",RWRW__,"root",STR_ID) : NULL;
 
 	    vector<string> list;
-	    extHostList(sHstsUser,list);
+	    extHostList(opt->attr("user"), list, n_mode);
 	    for(unsigned i_h = 0; i_h < list.size(); i_h++)
 	    {
-		ExtHost host = extHostGet(sHstsUser,list[i_h]);
+		ExtHost host = extHostGet(opt->attr("user"), list[i_h], n_mode);
 		if(n_id)	n_id->childAdd("el")->setText(host.id);
 		if(n_nm)	n_nm->childAdd("el")->setText(host.name);
 		if(n_tr)	n_tr->childAdd("el")->setText(host.transp);
 		if(n_addr)	n_addr->childAdd("el")->setText(host.addr);
 		if(n_user)	n_user->childAdd("el")->setText(host.user);
 		if(n_pass)	n_pass->childAdd("el")->setText(host.pass.size()?"*******":"");
+		if(n_mode)	n_mode->childAdd("el")->setText(i2s(host.mode));
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))
-	    extHostSet(ExtHost(sHstsUser,"newHost",_("New external host"),"","",opt->attr("user"),""));
-	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR))
-	    extHostDel(sHstsUser,opt->attr("key_id") );
+	    extHostSet(ExtHost(opt->attr("user"),"newHost",_("New external host"),"","",opt->attr("user")));
+	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR))	extHostDel(opt->attr("user"), opt->attr("key_id"), sysHostAcs);
 	if(ctrChkNode(opt,"set",RWRWRW,"root",STR_ID,SEC_WR))
 	{
 	    string col   = opt->attr("col");
-	    ExtHost host = extHostGet(sHstsUser,opt->attr("key_id"));
+	    ExtHost host = extHostGet(opt->attr("user"), opt->attr("key_id"), sysHostAcs);
 	    if(col == "id")
 	    {
 		host.id = opt->text();
-		extHostDel(sHstsUser,opt->attr("key_id"));
+		extHostDel(opt->attr("user"), opt->attr("key_id"), sysHostAcs);
 	    }
-	    else if(col == "name")	host.name = opt->text();
-	    else if(col == "transp")	host.transp = opt->text();
-	    else if(col == "addr")	host.addr = opt->text();
-	    else if(col == "user")	host.user = opt->text();
-	    else if(col == "pass")	host.pass = opt->text();
-	    extHostSet(host);
+	    else if(col == "name")  host.name = opt->text();
+	    else if(col == "transp")host.transp = opt->text();
+	    else if(col == "addr")  host.addr = opt->text();
+	    else if(col == "user")  host.user = opt->text();
+	    else if(col == "pass")  host.pass = opt->text();
+	    else if(col == "mode")  host.mode = atoi(opt->text().c_str());
+	    extHostSet(host, sysHostAcs);
 	}
     }
     else TSubSYS::cntrCmdProc(opt);

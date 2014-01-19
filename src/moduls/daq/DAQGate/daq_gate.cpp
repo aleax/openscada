@@ -586,11 +586,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
-    {
-	SYS->transport().at().setSysHost(true);
-	opt->setText("/Transport");
-    }
+    if(a_path == "/cntr/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText("/Transport");
     else TController::cntrCmdProc(opt);
 }
 

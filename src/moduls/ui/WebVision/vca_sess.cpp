@@ -2351,12 +2351,12 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 		    ((inundationItems[i].number_point[1] == shapeItems[k].n2) && (inundationItems[i].number_point[0] == shapeItems[k].n1)))
 		{
 		    shape_temp.push_back(k);
-		    width_shape.push_back( shapeItems[k].width );
-		    border_width_shape.push_back( shapeItems[k].border_width );
-		    line_color_shape.push_back( shapeItems[k].lineColor );
-		    if( shapeItems[k].border_width != 0 ) border_color_shape.push_back( shapeItems[k].borderColor );
-		    else border_color_shape.push_back( shapeItems[k].lineColor );
-		    if( shape_temp.size() == 2 ) break;
+		    width_shape.push_back(shapeItems[k].width);
+		    border_width_shape.push_back(shapeItems[k].border_width);
+		    line_color_shape.push_back(shapeItems[k].lineColor);
+		    if(shapeItems[k].border_width != 0) border_color_shape.push_back(shapeItems[k].borderColor);
+		    else border_color_shape.push_back(shapeItems[k].lineColor);
+		    if(shape_temp.size() == 2) break;
 		}
 	}
 	else
@@ -4883,8 +4883,8 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 //*************************************************
 //* VCADiagram					  *
 //*************************************************
-VCADiagram::VCADiagram( const string &iid ) :
-    VCAObj(iid), type(0), tTimeCurent(false), holdCur(false), tTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
+VCADiagram::VCADiagram( const string &iid ) : VCAObj(iid), type(0),
+    tTimeCurent(false), holdCur(false), tTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0), lstTrc(false)
 {
 
 }
@@ -4893,8 +4893,8 @@ void VCADiagram::getReq( SSess &ses )
 {
     switch(type)
     {
-	case 0:	makeTrendsPicture(ses);		break;
-	case 1:	makeSpectrumPicture(ses);	break;
+	case FD_TRND: makeTrendsPicture(ses);		break;
+	case FD_SPECTR: makeSpectrumPicture(ses);	break;
     }
 }
 
@@ -4972,13 +4972,13 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     strex.vdpi = 72;
     strex.hdpi = 72;
 
-    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
+    if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS)
     {
 	gdImageSetThickness(im, vmax(1,(int)TSYS::realRound(vmin(xSc,ySc))));
 	//>> Set grid color
 	clr_grid = TWEB::colorResolve(im, sclColor);
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
-	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
+	if(sclHor&FD_MARKS || sclVer&FD_MARKS)
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (float)sclMarkFontSize * vmin(xSc,ySc);
@@ -4987,12 +4987,12 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    char *rez = gdImageStringFTEx(NULL,&brect[0],0,(char*)sclMarkFont.c_str(),mrkFontSize,0.,0,0,(char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
 	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
-	    if(sclHor & SC_MARKERS)
+	    if(sclHor & FD_MARKS)
 	    {
-		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
+		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
 		else tArH -= 2*(mrkHeight+2);
 	    }
-	    if(sclVer&SC_MARKERS && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(SC_MARKERS);
+	    if(sclVer&FD_MARKS && tArW < (int)(100*vmin(xSc,ySc)) ) sclVer &= ~(FD_MARKS);
 	}
     }
 
@@ -5000,7 +5000,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     int64_t aVend;					//Corrected for allow data the trend end point
     int64_t aVbeg;					//Corrected for allow data the trend begin point
     bool    vsPerc = true;				//Vertical scale percent mode
-    bool    isLog = sclVer&SC_LOG;			//Logarithmic scale
+    bool    isLog = sclVer&FD_LOG;			//Logarithmic scale
     bool    isScale = (fabs(sclVerSclOff) > 1 || fabs(sclVerScl-100) > 1);
     double  curVl, vsMax = -3e300, vsMin = 3e300;	//Trend's vertical scale border
 
@@ -5045,8 +5045,8 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	else if(cP.bordU() <= cP.bordL() && cP.valTp() == 0)	{ cP.adjU = 1.5; cP.adjL = -0.5; }
 	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
 
-	cP.wScale = cP.mScale&(sclVer|SC_LOG);
-	if(cP.wScale&(SC_GRID|SC_MARKERS))      continue;
+	cP.wScale = cP.mScale&(sclVer|FD_LOG);
+	if(cP.wScale&FD_GRD_MARKS)      continue;
 
 	//>>> Check for value border allow
 	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
@@ -5064,10 +5064,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     {
 	TrendObj &cP = trnds[i_p];
 	cP.isIndiv = false;
-	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	if(!cP.val().size() || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS)) continue;
 	//>> Check for include to present or create new group and exclude from individual
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)) &&
-	    (cP.mScale&SC_LOG) == (sclVer&SC_LOG))
+	    (cP.mScale&FD_LOG) == (sclVer&FD_LOG))
 	{
 	    vsMin = vmin(vsMin, cP.adjL); vsMax = vmax(vsMax, cP.adjU);
 	    prmInGrp++; prmGrpLast = i_p;
@@ -5075,9 +5075,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	}
 	cP.isIndiv = true;
 	prmIndiv++;
-	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = i_p;
 	else prmsInd.push_back(i_p);
-	if(cP.mScale&SC_LOG)
+	if(cP.mScale&FD_LOG)
 	{
 	    cP.adjU = log10(vmax(1e-100,cP.adjU)); cP.adjL = log10(vmax(1e-100,cP.adjL));
 	    if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.0001)
@@ -5116,7 +5116,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
     }
 
     //> Draw main and individual vertical scales
-    float vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
+    float vmax_ln = tArH / ((sclVer&FD_MARKS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
     for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
 	bool	isLogT, vsPercT;
@@ -5147,7 +5147,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    TrendObj &cP = trnds[prmsInd[i_p]];
 	    //>> Draw environment
 	    vsPercT = false;
-	    isLogT = cP.mScale&SC_LOG;
+	    isLogT = cP.mScale&FD_LOG;
 	    sclVerT = cP.wScale;
 	    clrGridT = clr_mrk = TWEB::colorResolve(im, cP.color());
 	    //>> Rounding
@@ -5158,11 +5158,11 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    while(!isLogT && ((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(FD_GRD);  //Hide grid for no last scale
 
 	//>> Draw vertical grid and markers
 	int markWdth = 0;
-	if(sclVerT & (SC_GRID|SC_MARKERS))
+	if(sclVerT&FD_GRD_MARKS)
 	{
 	    string labVal;
 	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
@@ -5170,10 +5170,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    {
 		//>>> Draw grid
 		int v_pos = tArY + tArH - (int)((double)tArH*(i_v-vsMinT)/(vsMaxT-vsMinT));
-		if(sclVerT & SC_GRID) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
+		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
 		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
 		//>>> Draw markers
-		if(sclVerT&SC_MARKERS && mrkHeight)
+		if(sclVerT&FD_MARKS && mrkHeight)
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
@@ -5190,7 +5190,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Calc horizontal scale
     int64_t hDiv = 1;					//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkWidth)?mrkWidth:15.0*vmin(xSc,ySc));
+    int hmax_ln = tArW / (int)((sclHor&FD_MARKS && mrkWidth)?mrkWidth:15.0*vmin(xSc,ySc));
     if(hmax_ln >= 2)
     {
 	int hvLev = 0;
@@ -5211,7 +5211,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	if(sclHorPer > 0 && (hLen/sclHorPer) > 2 && (tArW/(hLen/sclHorPer)) > 15) hDiv = sclHorPer;
 
 	//>> Draw horisontal grid and markers
-	if(sclHor&(SC_GRID|SC_MARKERS))
+	if(sclHor&FD_GRD_MARKS)
 	{
 	    time_t tm_t = 0;
 	    struct tm ttm, ttm1 = ttm;
@@ -5225,7 +5225,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX+tArW;
-	    if(sclHor&SC_MARKERS && mrkHeight)
+	    if(sclHor&FD_MARKS && mrkHeight)
 	    {
 		tm_t = tPict/1000000;
 		localtime_r(&tm_t,&ttm);
@@ -5249,10 +5249,10 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	    {
 		//>>>> Draw grid
 		int h_pos = tArX + tArW*(i_h-tBeg)/(tPict-tBeg);
-		if(sclHor & SC_GRID) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
+		if(sclHor&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
 		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
 		//>>>> Draw markers
-		if(sclHor&SC_MARKERS && mrkHeight && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
+		if(sclHor&FD_MARKS && mrkHeight && !((i_h+UTChourDt)%hDiv) && i_h != tPict)
 		{
 		    tm_t = i_h/1000000;
 		    localtime_r(&tm_t, &ttm);
@@ -5335,7 +5335,7 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 	int aPosBeg = cP.val(aVbeg);;
 	if(aPosBeg && cP.val()[aPosBeg].tm > aVbeg) aPosBeg--;
 	bool vsPercT = cP.isIndiv ? false : vsPerc;
-	bool isLogT = cP.isIndiv ? (cP.wScale&SC_LOG) : isLog;
+	bool isLogT = cP.isIndiv ? (cP.wScale&FD_LOG) : isLog;
 	double vsMaxT = cP.isIndiv ? cP.adjU : vsMax;
 	double vsMinT = cP.isIndiv ? cP.adjL : vsMin;
 
@@ -5484,13 +5484,13 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     strex.hdpi = 72;
 
     //> Process scale
-    if(sclHor&(SC_GRID|SC_MARKERS) || sclVer&(SC_GRID|SC_MARKERS))
+    if(sclHor&FD_GRD_MARKS || sclVer&FD_GRD_MARKS)
     {
 	gdImageSetThickness(im, vmax(1,TSYS::realRound(vmin(xSc,ySc))));
 	//>> Set grid color
 	clr_grid = TWEB::colorResolve(im, sclColor);
 	//gdImageColorAllocate(im,(uint8_t)(sclColor>>16),(uint8_t)(sclColor>>8),(uint8_t)sclColor);
-	if(sclHor&SC_MARKERS || sclVer&SC_MARKERS)
+	if(sclHor&FD_MARKS || sclVer&FD_MARKS)
 	{
 	    //>> Set markers font and color
 	    mrkFontSize = (double)sclMarkFontSize*vmin(xSc, ySc);
@@ -5499,12 +5499,12 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    char *rez = gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)"000000", &strex);
 	    if(rez) mess_err(nodePath().c_str(),_("gdImageStringFTEx for font '%s' error: %s."),sclMarkFont.c_str(),rez);
 	    else { mrkHeight = brect[3]-brect[7]; mrkWidth = brect[2]-brect[6]; }
-	    if(sclHor&SC_MARKERS)
+	    if(sclHor&FD_MARKS)
 	    {
-		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(SC_MARKERS);
+		if(tArH < (int)(100*vmin(xSc,ySc))) sclHor &= ~(FD_MARKS);
 		else tArH -= mrkHeight+4;
 	    }
-	    if(sclVer&SC_MARKERS && tArW < (int)(100*vmin(xSc,ySc))) sclVer &= ~(SC_MARKERS);
+	    if(sclVer&FD_MARKS && tArW < (int)(100*vmin(xSc,ySc))) sclVer &= ~(FD_MARKS);
 	}
     }
 
@@ -5542,8 +5542,8 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	}
 	else { cP.adjU = cP.bordU(); cP.adjL = cP.bordL(); }
 
-	cP.wScale = cP.mScale&(sclVer|SC_LOG);
-	if(cP.wScale&(SC_GRID|SC_MARKERS)) continue;
+	cP.wScale = cP.mScale&(sclVer|FD_LOG);
+	if(cP.wScale&FD_GRD_MARKS) continue;
 
 	//>>> Check for value border allow
 	if(!mainPerc && (vsMin > vsMax || vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2))
@@ -5561,7 +5561,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     {
 	TrendObj &cP = trnds[i_p];
 	cP.isIndiv = false;
-	if(!cP.fftN || ((cP.color()>>31)&0x01) || !(cP.wScale&(SC_GRID|SC_MARKERS))) continue;
+	if(!cP.fftN || ((cP.color()>>31)&0x01) || !(cP.wScale&FD_GRD_MARKS)) continue;
 	//>> Check for include to present or create new group and exclude from individual
 	if((!prmInGrp || (vsMin < vsMax && vmax(fabs((vsMax-cP.adjL)/(vsMax-vsMin)-1),fabs((cP.adjU-vsMin)/(vsMax-vsMin)-1)) < 0.2)))
 	{
@@ -5571,7 +5571,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	}
 	cP.isIndiv = true;
 	prmIndiv++;
-	if(prmIndivSc < 0 && cP.mScale&SC_GRID) prmIndivSc = i_p;
+	if(prmIndivSc < 0 && cP.mScale&FD_GRD) prmIndivSc = i_p;
 	else prmsInd.push_back(i_p);
 	if(isScale)     //Vertical scale and offset apply
 	{
@@ -5594,7 +5594,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     }
 
     //> Draw main and individual vertical scales
-    double vmax_ln = tArH / ((sclVer&SC_MARKERS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
+    double vmax_ln = tArH / ((sclVer&FD_MARKS && mrkHeight)?(2*mrkHeight):(int)(15*vmin(xSc,ySc)));
     for(unsigned i_p = 0; vmax_ln >= 2 && i_p < prmsInd.size(); i_p++)       //prmsInd[i]=-1 - for main scale
     {
 	bool	vsPercT;
@@ -5634,20 +5634,20 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    while(((cP.adjU-cP.adjL)/vDiv) < vmax_ln/2) vDiv /= 2;
 	    vsMinT = cP.adjL; vsMaxT = cP.adjU;
 	}
-	if(i_p < (prmsInd.size()-1))    sclVerT &= ~(SC_GRID);  //Hide grid for no last scale
+	if(i_p < (prmsInd.size()-1)) sclVerT &= ~(FD_GRD);  //Hide grid for no last scale
 
 	//>>> Draw vertical grid and markers
 	int markWdth = 0;
-	if(sclVerT & (SC_GRID|SC_MARKERS))
+	if(sclVerT&FD_GRD_MARKS)
 	{
 	    string labVal;
 	    gdImageLine(im, tArX-1, tArY, tArX-1, tArH, clrGridT);
 	    for(double i_v = ceil(vsMinT/vDiv)*vDiv; (vsMaxT-i_v)/vDiv > -0.1; i_v += vDiv)
 	    {
 		int v_pos = tArY + tArH - (int)((double)tArH*(i_v-vsMinT)/(vsMaxT-vsMinT));
-		if(sclVerT & SC_GRID) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
+		if(sclVerT&FD_GRD) gdImageLine(im, tArX, v_pos, tArX+tArW, v_pos, clr_grid);
 		else gdImageLine(im, tArX-3, v_pos, tArX+3, v_pos, clrGridT);
-		if(sclVerT & SC_MARKERS && mrkHeight)
+		if(sclVerT&FD_MARKS && mrkHeight)
 		{
 		    bool isPerc = vsPercT && ((vsMaxT-i_v-vDiv)/vDiv <= -0.1);
 		    bool isMax = (v_pos-1-mrkHeight) < tArY;
@@ -5668,7 +5668,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
     fftBeg = 1e6/(double)tSz;			//Minimum frequency or maximum period time (s)
     fftEnd = (double)fftN*fftBeg/2;		//Maximum frequency or minimum period time (s)
     double hDiv = 1;				//Horisontal scale divisor
-    int hmax_ln = tArW / (int)((sclHor&SC_MARKERS && mrkWidth)?mrkWidth:(15*vmin(xSc,ySc)));
+    int hmax_ln = tArW / (int)((sclHor&FD_MARKS && mrkWidth)?mrkWidth:(15*vmin(xSc,ySc)));
     if(hmax_ln >= 2)
     {
 	double hLen = fftEnd-fftBeg;
@@ -5679,7 +5679,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	while(((fftEnd-fftBeg)/hDiv) < hmax_ln/2) hDiv /= 2;
 
 	//>> Draw horisontal grid and markers
-	if(sclHor&(SC_GRID|SC_MARKERS))
+	if(sclHor&FD_GRD_MARKS)
 	{
 	    string labH;
 	    double labDiv = 1;
@@ -5689,7 +5689,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    //>>> Draw full trend's data and time to the trend end position
 	    int begMarkBrd = -5;
 	    int endMarkBrd = tArX + tArW;
-	    if(sclHor&SC_MARKERS && mrkHeight)
+	    if(sclHor&FD_MARKS && mrkHeight)
 	    {
 		labH = TSYS::strMess("%0.5g",fftEnd/labDiv) + Mess->codeConvOut("UTF-8",(labDiv==1000)?_("kHz"):_("Hz"));
 		gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
@@ -5702,10 +5702,10 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 	    {
 		//>>>> Draw grid
 		int h_pos = tArX + (int)((double)tArW*(i_h-fftBeg)/(fftEnd-fftBeg));
-		if(sclHor & SC_GRID) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
+		if(sclHor&FD_GRD) gdImageLine(im, h_pos, tArY, h_pos, tArY+tArH, clr_grid);
 		else gdImageLine(im, h_pos, tArY+tArH-3, h_pos, tArY+tArH+3, clr_grid);
 
-		if(sclHor&SC_MARKERS && mrkHeight)
+		if(sclHor&FD_MARKS && mrkHeight)
 		{
 		    labH = TSYS::strMess("%0.5g", i_h/labDiv);
 		    gdImageStringFTEx(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)labH.c_str(), &strex);
@@ -5815,15 +5815,18 @@ void VCADiagram::postReq( SSess &ses )
 	prmEl = ses.prm.find("x");
 	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
 	if(x_coord >= tArX && x_coord <= (tArX+tArW))
-	{
-	    if(type == 0)
+	    switch(type)
 	    {
-		int64_t tTimeGrnd = tPict - (int64_t)(1e6*tSize);
-		setCursor(tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user);
+		case FD_TRND:
+		{
+		    int64_t tTimeGrnd = tPict - (int64_t)(1e6*tSize);
+		    setCursor(tTimeGrnd + (tPict-tTimeGrnd)*(x_coord-tArX)/tArW, ses.user);
+		    break;
+		}
+		case FD_SPECTR:
+		    setCursor((int64_t)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user);
+		    break;
 	    }
-	    else if(type == 1)
-		setCursor((int64_t)(1e6/(fftBeg+(fftEnd-fftBeg)*(x_coord-tArX)/tArW)), ses.user);
-	}
     }
 }
 
@@ -5837,35 +5840,20 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     for(unsigned i_a = 0; i_a < node.childSize(); i_a++)
     {
 	req_el = node.childGet(i_a);
-	if( req_el->name() != "el" )	continue;
+	if(req_el->name() != "el") continue;
 	int uiPrmPos = atoi(req_el->attr("p").c_str());
-	switch( uiPrmPos )
+	switch(uiPrmPos)
 	{
-	    case 6:	//active
-		active = (bool)atoi(req_el->text().c_str());
-		break;
-	    case 9: 	//width
-		width = (int)(atof(req_el->text().c_str())+0.5);
-		break;
-	    case 10:	//height
-		height = (int)(atof(req_el->text().c_str())+0.5);
-		break;
-	    case 12:	//geomMargin
-		geomMargin = atoi(req_el->text().c_str());
-		break;
-	    case 22:	//bordWidth
-		bordWidth = atoi(req_el->text().c_str());
-		break;
-	    case 25:	//trcPer
-		trcPer = atoi(req_el->text().c_str());
-		break;
-	    case 26:	//type
-		type = atoi(req_el->text().c_str());
-		reld_tr_dt = 2;
-		break;
-	    case 27:	//tSek
+	    case A_ACTIVE: active = (bool)atoi(req_el->text().c_str());		break;
+	    case A_GEOM_W: width = (int)(atof(req_el->text().c_str())+0.5);	break;
+	    case A_GEOM_H: height = (int)(atof(req_el->text().c_str())+0.5);	break;
+	    case A_GEOM_MARGIN: geomMargin = atoi(req_el->text().c_str());	break;
+	    case A_BordWidth: bordWidth = atoi(req_el->text().c_str());		break;
+	    case A_DiagramTrcPer: trcPer = atoi(req_el->text().c_str());	break;
+	    case A_DiagramType: type = atoi(req_el->text().c_str()); reld_tr_dt = 2;	break;
+	    case A_DiagramTSek:
 		tTimeCurent = false;
-		if( atoll(req_el->text().c_str()) == 0 )
+		if(atoll(req_el->text().c_str()) == 0)
 		{
 		    tTime = (int64_t)time(NULL)*1000000;
 		    tTimeCurent = true;
@@ -5873,38 +5861,30 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
-	    case 28:	//tUSek
+	    case A_DiagramTUSek:
 		tTime = 1000000ll*(tTime/1000000)+atoll(req_el->text().c_str());
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
-	    case 29:	//tSize
-		tSize = vmax(1e-3,atof(req_el->text().c_str()));
-		reld_tr_dt = 2;
-		break;
-	    case 30:	//curSek
+	    case A_DiagramTSize: tSize = vmax(1e-3,atof(req_el->text().c_str())); reld_tr_dt = 2;	break;
+	    case A_DiagramCurSek:
 		if((curTime/1000000) == atoi(req_el->text().c_str())) break;
 		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;
 		holdCur = (curTime>=tTime);
 		setCursor(curTime, user);
 		break;
-	    case 31:	//curUSek
+	    case A_DiagramCurUSek:
 		if((curTime%1000000) == atoi(req_el->text().c_str())) break;
 		curTime = 1000000ll*(curTime/1000000)+atoll(req_el->text().c_str());
 		holdCur = (curTime>=tTime);
 		setCursor(curTime, user);
 		break;
-	    case 32:	//curColor
-		curColor = mod->colorParse(req_el->text());				break;
-	    case 33:	//sclColor
-		sclColor = mod->colorParse(req_el->text());				break;
-	    case 34:	//sclHor
-		sclHor = atoi(req_el->text().c_str());					break;
-	    case 35:	//sclVer
-		sclVer = atoi(req_el->text().c_str());					break;
-	    case 36:	//sclMarkColor
-		sclMarkColor = mod->colorParse(req_el->text());				break;
-	    case 37:	//sclMarkFont
+	    case A_DiagramCurColor: curColor = mod->colorParse(req_el->text());		break;
+	    case A_DiagramSclColor: sclColor = mod->colorParse(req_el->text());		break;
+	    case A_DiagramSclHor: sclHor = atoi(req_el->text().c_str());		break;
+	    case A_DiagramSclVer: sclVer = atoi(req_el->text().c_str());		break;
+	    case A_DiagramSclMarkColor: sclMarkColor = mod->colorParse(req_el->text());	break;
+	    case A_DiagramSclMarkFont:
 	    {
 		char family[101]; strcpy(family,"Arial");
 		int bold = 0, italic = 0;
@@ -5921,41 +5901,35 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		    sclMarkFontSize = (int)((float)sclMarkFontSize*((float)sclMarkFontSize/(float)(brect[3]-brect[7])));*/
 		break;
 	    }
-	    case 38:	//valArch
-		valArch = req_el->text();
-		reld_tr_dt = 2;
-		break;
-	    case 39:	//parNum
+	    case A_DiagramValArch: valArch = req_el->text(); reld_tr_dt = 2;		break;
+	    case A_DiagramParNum:
 	    {
 		unsigned parNum = atoi(req_el->text().c_str());
 		if(parNum == trnds.size())	break;
 		while(trnds.size() > parNum)	trnds.pop_back();
-		while(parNum > trnds.size())	trnds.push_back( TrendObj(this) );
+		while(parNum > trnds.size())	trnds.push_back(TrendObj(this));
 		break;
 	    }
-	    case 40:	//sclVerScl
-		sclVerScl = atof(req_el->text().c_str());		break;
-	    case 41:	//sclVerSclOff
-		sclVerSclOff = atof(req_el->text().c_str());		break;
-	    case 43:	//sclHorPer
-		sclHorPer = vmax(0,atof(req_el->text().c_str()))*1e6;	break;
+	    case A_DiagramSclVerScl: sclVerScl = atof(req_el->text().c_str());		break;
+	    case A_DiagramSclVerSclOff: sclVerSclOff = atof(req_el->text().c_str());	break;
+	    case A_DiagramSclHorPer: sclHorPer = vmax(0,atof(req_el->text().c_str()))*1e6;	break;
 	    default:
 		//> Individual trend's attributes process
-		if(uiPrmPos >= 50)
+		if(uiPrmPos >= A_DiagramTrs)
 		{
-		    unsigned trndN = (uiPrmPos/10)-5;
+		    unsigned trndN = (uiPrmPos-A_DiagramTrs)/A_DiagramTrsSz;
 		    if(trndN >= trnds.size())	break;
-		    switch(uiPrmPos%10)
+		    switch(uiPrmPos%A_DiagramTrsSz)
 		    {
-			case 0: trnds[trndN].setAddr(req_el->text());			break;	//addr
-			case 1: trnds[trndN].setBordL(atof(req_el->text().c_str()));	break;	//bordL
-			case 2: trnds[trndN].setBordU(atof(req_el->text().c_str()));	break;	//bordU
-			case 3: trnds[trndN].setColor(mod->colorParse(req_el->text()));	break;	//color
-			case 4:									//value
+			case A_DiagramTrAddr: trnds[trndN].setAddr(req_el->text());			break;
+			case A_DiagramTrBordL: trnds[trndN].setBordL(atof(req_el->text().c_str()));	break;
+			case A_DiagramTrBordU: trnds[trndN].setBordU(atof(req_el->text().c_str()));	break;
+			case A_DiagramTrClr: trnds[trndN].setColor(mod->colorParse(req_el->text()));	break;
+			case A_DiagramTrVal:
 			    trnds[trndN].setCurVal((req_el->text()==EVAL_STR) ? EVAL_REAL : atof(req_el->text().c_str()));
 			    break;
-			case 5: trnds[trndN].setScale(atoi(req_el->text().c_str()));	break;	//scale
-			case 6:	trnds[trndN].setWidth(atoi(req_el->text().c_str()));	break;	//width
+			case A_DiagramTrScl: trnds[trndN].setScale(atoi(req_el->text().c_str()));	break;
+			case A_DiagramTrWdth: trnds[trndN].setWidth(atoi(req_el->text().c_str()));	break;
 		    }
 		}
 	}
@@ -5979,7 +5953,7 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 
 void VCADiagram::setCursor( int64_t itm, const string& user )
 {
-    if( type == 0 )
+    if(type == FD_TRND)
     {
 	int64_t tTimeGrnd = tTime - (int64_t)(1e6*tSize);
 	curTime = vmax(vmin(itm,tTime),tTimeGrnd);
@@ -6007,7 +5981,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	}
 	mod->cntrIfCmd(req,user);
     }
-    else if( type == 1 )
+    else if(type == FD_SPECTR)
     {
 	float curFrq = vmax(vmin(1e6/(float)itm,fftEnd),fftBeg);
 
@@ -6049,29 +6023,20 @@ VCADiagram::TrendObj::TrendObj( VCADiagram *iowner ) :
 VCADiagram::TrendObj::~TrendObj( )
 {
 #if HAVE_FFTW3_H
-    if( fftOut ) { delete fftOut; fftN = 0; }
+    if(fftOut) { delete fftOut; fftN = 0; }
 #endif
 }
 
-VCADiagram &VCADiagram::TrendObj::owner( )
-{
-    return *m_owner;
-}
+VCADiagram &VCADiagram::TrendObj::owner( )	{ return *m_owner; }
 
-int64_t VCADiagram::TrendObj::valBeg()
-{
-    return vals.empty() ? 0 : vals[0].tm;
-}
+int64_t VCADiagram::TrendObj::valBeg( )		{ return vals.empty() ? 0 : vals[0].tm; }
 
-int64_t VCADiagram::TrendObj::valEnd()
-{
-    return vals.empty() ? 0 : vals[vals.size()-1].tm;
-}
+int64_t VCADiagram::TrendObj::valEnd( )		{ return vals.empty() ? 0 : vals[vals.size()-1].tm; }
 
 int VCADiagram::TrendObj::val( int64_t tm )
 {
     unsigned i_p = 0;
-    for(unsigned d_win = vals.size()/2; d_win > 10; d_win/=2)
+    for(unsigned d_win = vals.size()/2; d_win > 10; d_win /= 2)
 	if(tm > vals[i_p+d_win].tm) i_p += d_win;
     for( ; i_p < vals.size(); i_p++)
 	if(vals[i_p].tm >= tm) return i_p;
@@ -6089,8 +6054,8 @@ void VCADiagram::TrendObj::loadData( const string &user, bool full )
 {
     switch(owner().type)
     {
-	case 0:	loadTrendsData(user,full);	break;
-	case 1:	loadSpectrumData(user,full);	break;
+	case FD_TRND: loadTrendsData(user,full);	break;
+	case FD_SPECTR:	loadSpectrumData(user,full);	break;
     }
 }
 
@@ -6272,12 +6237,12 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 
 void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
 {
-    loadTrendsData(user,full);
+    loadTrendsData(user, full);
 
-    if( !valBeg( ) || !valEnd( ) ) return;
+    if(!valBeg() || !valEnd()) return;
 
 #if HAVE_FFTW3_H
-    if( fftOut ) { delete fftOut; fftN = 0; }
+    if(fftOut) { delete fftOut; fftN = 0; }
 
     int64_t tSize	= (int64_t)(1e6*owner().tSize);
     int64_t tTime	= owner().tTime;
@@ -6295,22 +6260,22 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
     for(unsigned a_pos = val(tTimeGrnd); a_pos < val().size() && val()[a_pos].tm <= tTime; a_pos++)
     {
 	int fftPos = (val()[a_pos].tm-tTimeGrnd)/workPer;
-	if( fftPos >= fftN ) break;
-	if( val()[a_pos].val == EVAL_REAL ) continue;
-	if( fftFirstPos < 0 ) fftFirstPos = fftPos;
+	if(fftPos >= fftN) break;
+	if(val()[a_pos].val == EVAL_REAL) continue;
+	if(fftFirstPos < 0) fftFirstPos = fftPos;
 
-	if( fftLstPos == fftPos ) fftIn[fftPos-fftFirstPos] = (fftIn[fftPos-fftFirstPos]+val()[a_pos].val)/2;
+	if(fftLstPos == fftPos) fftIn[fftPos-fftFirstPos] = (fftIn[fftPos-fftFirstPos]+val()[a_pos].val)/2;
 	else fftIn[fftPos-fftFirstPos] = val()[a_pos].val;
 
-	for( ; fftLstPos >= 0 && (fftLstPos+1) < fftPos; fftLstPos++ )
+	for( ; fftLstPos >= 0 && (fftLstPos+1) < fftPos; fftLstPos++)
 	    fftIn[fftLstPos-fftFirstPos+1] = fftIn[fftLstPos-fftFirstPos];
 	fftLstPos = fftPos;
     }
 
     fftN = fftLstPos-fftFirstPos;
-    if( fftN < 20 ) { delete fftOut; fftOut = NULL; fftN = 0; return; }
+    if(fftN < 20) { delete fftOut; fftOut = NULL; fftN = 0; return; }
 
-    fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
+    fftw_plan p = fftw_plan_dft_r2c_1d(fftN, fftIn, fftOut, FFTW_ESTIMATE);
     fftw_execute(p);
     fftw_destroy_plan(p);
 #endif

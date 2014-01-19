@@ -118,8 +118,8 @@ echo "Program rezult: $?"
 if [ -n "$(which gdb 2> /dev/null)" ]; then
     cd $WorkDir/$ProjName
     for fit in `ls core* 2> /dev/null`; do
-	echo "Core dump process for back trace purchase to file ${fit}_${ProjName}_$(date +%F_%H:%M).crash"
-	gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > ${fit}_${ProjName}_$(date +%F_%H:%M).crash
+	echo "Core dump process for back trace purchase to file ${ProjName}_${fit}_$(date +%F_%H.%M).crash"
+	gdb @bindir_full@/openscada --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > ${ProjName}_${fit}_$(date +%F_%H.%M).crash
 	rm -f ${fit}
     done
 fi

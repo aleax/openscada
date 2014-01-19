@@ -291,7 +291,7 @@ QMainWindow *TVision::openWindow()
     return new VisDevelop( user_open, user_pass, VCAStation() );
 }
 
-void TVision::modStart()
+void TVision::modStart( )
 {
     mess_debug(nodePath().c_str(),_("Start module."));
 
@@ -299,7 +299,7 @@ void TVision::modStart()
     run_st  = true;
 }
 
-void TVision::modStop()
+void TVision::modStop( )
 {
     mess_debug(nodePath().c_str(),_("Stop module."));
 
@@ -407,11 +407,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(VCAStation());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVCAStation(opt->text());
     }
-    else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD))
-    {
-	SYS->transport().at().setSysHost(true);
-	opt->setText("/Transport");
-    }
+    else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
     else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt))
     {

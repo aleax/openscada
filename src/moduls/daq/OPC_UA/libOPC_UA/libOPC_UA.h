@@ -148,8 +148,8 @@ namespace OPC
 #define OpcUa_ModifyMonitoredItemsResponse	766
 #define OpcUa_SetMonitoringModeRequest		769
 #define OpcUa_SetMonitoringModeResponse		772
-#define OpcUa_DeleteMonitoredItemsRequest	780
-#define OpcUa_DeleteMonitoredItemsResponse	783
+#define OpcUa_DeleteMonitoredItemsRequest	781
+#define OpcUa_DeleteMonitoredItemsResponse	784
 #define OpcUa_CreateSubscriptionRequest		787
 #define OpcUa_CreateSubscriptionResponse	790
 #define OpcUa_ModifySubscriptionRequest		793

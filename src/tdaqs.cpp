@@ -819,11 +819,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_h = 0; i_h < hls.size(); i_h++)
 	    opt->childAdd("el")->setText(hls[i_h]);
     }
-    else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD))
-    {
-	SYS->transport().at().setSysHost(true);
-	opt->setText("/Transport");
-    }
+    else if(a_path == "/redund/hostLnk" && ctrChkNode(opt,"get",0660,"root","Transport",SEC_RD)) opt->setText("/Transport");
     else if(a_path == "/redund/cntr")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))

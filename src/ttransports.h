@@ -237,11 +237,13 @@ class TTransportS : public TSubSYS
 	class ExtHost
 	{
 	    public:
+		//Data
+		enum Mode { User = 0, System, UserSystem };
 		//Methods
-		ExtHost( const string &iuser_open, const string &iid, const string &iname,
-			    const string &itransp, const string &iaddr, const string &iuser, const string &ipass ) :
+		ExtHost( const string &iuser_open, const string &iid, const string &iname = "",
+			const string &itransp = "", const string &iaddr = "", const string &iuser = "", const string &ipass = "" ) :
 		    user_open(iuser_open), id(iid), name(iname), transp(itransp), addr(iaddr),
-		    user(iuser), pass(ipass), link_ok(false) { }
+		    user(iuser), pass(ipass), link_ok(false), mode(-1) { }
 
 		//Attributes
 		string	user_open;	//User which open remote host
@@ -252,6 +254,8 @@ class TTransportS : public TSubSYS
 		string	user;		//External host user
 		string	pass;		//External host password
 		bool	link_ok;	//Link OK
+
+		int8_t	mode;		//Mode; Only dynamic set
 	};
 
 	//Methods
@@ -263,15 +267,13 @@ class TTransportS : public TSubSYS
 	void outTrList( vector<string> &ls );
 
 	//> External hosts
-	bool sysHost( )			{ return sys_host; }
-	void setSysHost( bool vl )	{ sys_host = vl; }
 	string extHostsDB( );
-	void extHostList( const string &user, vector<string> &list );
+	void extHostList( const string &user, vector<string> &list, bool andSYS = false );
 	bool extHostPresent( const string &user, const string &id );
 	AutoHD<TTransportOut> extHost( TTransportS::ExtHost host, const string &pref = "" );
-	ExtHost extHostGet( const string &user, const string &id );
-	void extHostSet( const ExtHost &host );
-	void extHostDel( const string &user, const string &id );
+	ExtHost extHostGet( const string &user, const string &id, bool andSYS = false );
+	void extHostSet( const ExtHost &host, bool andSYS = false );
+	void extHostDel( const string &user, const string &id, bool andSYS = false );
 
 	//> Request to remote or local OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &senderPref, const string &user = "" );
@@ -294,7 +296,6 @@ class TTransportS : public TSubSYS
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	//Attributes
-	bool	sys_host;
 	TElem	el_in, el_out, el_ext;
 
 	Res	extHostRes;             //External hosts resource

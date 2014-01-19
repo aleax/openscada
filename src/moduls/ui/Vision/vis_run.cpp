@@ -374,7 +374,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
     return rez;
 }
 
-QString VisRun::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
+QString VisRun::getFileName( const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode )
 {
     if(!fileDlg) fileDlg = new QFileDialog(this);
     fileDlg->setFileMode(QFileDialog::AnyFile);
@@ -383,7 +383,7 @@ QString VisRun::getFileName(const QString &caption, const QString &dir, const QS
     fileDlg->setNameFilter(filter);
     if(dir.size()) fileDlg->selectFile(dir);
 #if QT_VERSION >= 0x040500
-    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
+    fileDlg->setReadOnly(!menuBar()->isVisible());
 #endif
     if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
 
@@ -421,6 +421,7 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
 	}else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
+	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
 }
@@ -658,7 +659,7 @@ void VisRun::exportPg( const string &ipg )
 	//> Make select page dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("export",NULL,true).c_str())) ico_t.load(":/images/export.png");
-	InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select page for export."), _("Page export."), false, false );
+	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select page for export."), _("Page export."), false, false);
 	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
 	QComboBox *spg = new QComboBox(&sdlg);
 	sdlg.edLay()->addWidget( spg, 2, 1 );
@@ -943,9 +944,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     //> Try second connect to session for permission check
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
-    if( cntrIfCmd(req) )
+    if(cntrIfCmd(req))
     {
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	mWUser->setUser(oldUser);
 	mWUser->setPass(oldPass);
 	return;
@@ -967,6 +968,7 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
 	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
+	    mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
 	}
 	fullUpdatePgs();
     }

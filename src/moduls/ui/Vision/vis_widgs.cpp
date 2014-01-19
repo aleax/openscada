@@ -1176,11 +1176,11 @@ void WdgView::attrsSet( AttrValS &attrs )
 
 string WdgView::resGet( const string &res )
 {
-    if( res.empty() )	return "";
+    if(res.empty())	return "";
 
     XMLNode req("get");
-    req.setAttr("path",id()+"/%2fwdg%2fres")->setAttr("id",res);
-    if( !cntrIfCmd(req) )	return TSYS::strDecode(req.text(),TSYS::base64);
+    req.setAttr("path", id()+"/%2fwdg%2fres")->setAttr("id", res);
+    if(!cntrIfCmd(req))	return TSYS::strDecode(req.text(), TSYS::base64);
 
     return "";
 }

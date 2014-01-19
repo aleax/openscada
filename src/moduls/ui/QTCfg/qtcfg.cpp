@@ -411,7 +411,7 @@ ConfApp::ConfApp( string open_user ) :
 
     //>> Display root page and init external pages
     initHosts();
-    try{ pageDisplay(mod->startPath()); } catch(TError err) { pageDisplay("/"+SYS->id()); }
+    try{ pageDisplay("/"+SYS->id()+"/"+mod->startPath()); } catch(TError err) { pageDisplay("/"+SYS->id()); }
 }
 
 ConfApp::~ConfApp()
@@ -550,14 +550,14 @@ void ConfApp::pageNext()
 void ConfApp::itDBLoad( )
 {
     XMLNode req("load"); req.setAttr("path",sel_path+"/%2fobj");
-    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     else pageRefresh();
 }
 
 void ConfApp::itDBSave( )
 {
     XMLNode req("save"); req.setAttr("path",sel_path+"/%2fobj");
-    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     else pageRefresh();
 }
 
@@ -597,7 +597,7 @@ void ConfApp::itAdd( )
     if( atoi(TSYS::strSepParse(dlg.target(),1,'\n').c_str()) )
 	req.setAttr("id",dlg.id().toStdString())->setText(dlg.name().toStdString());
     else req.setText(dlg.id().toStdString());
-    if( cntrIfCmd(req) ) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
+    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Info,this);
     else { treeUpdate(); pageRefresh(); }
 }
 
@@ -808,8 +808,8 @@ void ConfApp::userSel()
 {
     pg_info.setAttr("path","");
 
-    try{ pageDisplay(mod->startPath()); }
-    catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    try{ pageDisplay("/"+SYS->id()+"/"+mod->startPath()); }
+    catch(TError err) { pageDisplay("/"+SYS->id()); }
 
     initHosts();
 }
@@ -1912,11 +1912,11 @@ void ConfApp::viewChild( QTreeWidgetItem * i )
 void ConfApp::pageDisplay( const string &path )
 {
     //> Chek Up
-    actUp->setEnabled( path.rfind("/") != string::npos && path.rfind("/") != 0 );
+    actUp->setEnabled(path.rfind("/") != string::npos && path.rfind("/") != 0);
 
     //> Check Prev and Next
-    actPrev->setEnabled( prev.size() );
-    actNext->setEnabled( next.size() );
+    actPrev->setEnabled(prev.size());
+    actNext->setEnabled(next.size());
 
     if(path != pg_info.attr("path"))
     {
@@ -1969,14 +1969,14 @@ loadGenReqDate:
     //> Stop complex request forming
     if(genReqs.attr("fillMode") == "1")
     {
-        genReqs.attrDel("fillMode");
-        if(cntrIfCmd(genReqs))
-        {
-    	    mod->postMess(genReqs.attr("mcat"),genReqs.text(),TUIMod::Error,this);
+	genReqs.attrDel("fillMode");
+	if(cntrIfCmd(genReqs))
+	{
+	    mod->postMess(genReqs.attr("mcat"),genReqs.text(),TUIMod::Error,this);
 	    genReqs.clear();
-    	    return;
-    	}
-        goto loadGenReqDate;
+	    return;
+	}
+	goto loadGenReqDate;
     }
     else genReqs.clear();
 

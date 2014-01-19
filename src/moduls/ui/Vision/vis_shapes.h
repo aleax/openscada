@@ -130,29 +130,31 @@ class ShapeFormEl : public WdgShape
 
     public slots:
 	//Public slots
-	//>> Edit line events
+	// Edit line events
 	void lineAccept( );
-	//>> Edit text events
+	// Edit text events
 	void textAccept( );
-	//>> Check box events
+	// Check box events
 	void checkChange(int);
-	//>> Combo box and list events
+	// Combo box and list events
 	void comboChange(const QString&);
-	//>> List events
+	// List events
 	void listChange(int);
-	//>> Tree events
+	// Tree events
 	void treeChange( );
-	//>> Button's events
+	// Table events
+	void tableChange( );
+	// Button's events
 	void buttonPressed( );
 	void buttonReleased( );
 	void buttonToggled( bool val );
 	void buttonMenuTrig( );
-	//>> Sliders' events
+	// Sliders' events
 	void sliderMoved( int val );
 
     private:
 	//Data
-	//> Shape node date
+	// Shape node date
 	class ShpDt
 	{
 	    public:
@@ -178,7 +180,7 @@ class ShapeFormEl : public WdgShape
 	};
 
 	//Methods
-	//Recursively widgets process for disable focusable and events filter set
+	// Recursively widgets process for disable focusable and events filter set
 	void eventFilterSet( WdgView *view, QWidget *wdg, bool en );
 	void setFocus(WdgView *view, QWidget *wdg, bool en = false, bool devel = false );
 };
@@ -314,8 +316,6 @@ class ShapeDiagram : public WdgShape
     Q_OBJECT
 
     public:
-	//Data
-	enum Scale { SC_GRID = 0x01, SC_MARKERS = 0x02, SC_LOG = 0x04 };
 	//> Trend object's class
 	class TrendObj
 	{
@@ -393,6 +393,9 @@ class ShapeDiagram : public WdgShape
 		//Methods
 		ShpDt( ) : en(true), active(true), holdCur(true), geomMargin(0), tTimeCurent(false), trcPer(0), valsForPix(1),
 		    tTime(0), tPict(0), curTime(0), sclHorPer(0), tSize(1), sclVerScl(100), sclVerSclOff(0)	{ }
+
+		int64_t	arhEnd( int64_t def = 0 );
+
 		//Attributes
 		unsigned en		:1;
 		unsigned active		:1;

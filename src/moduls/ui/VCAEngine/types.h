@@ -27,7 +27,7 @@ namespace VCA
     //Attributes preset indexes
     enum AttrID
     {
-	//> Generic
+	// Generic
 	A_COM_FOCUS	= -2,
 	A_COM_LOAD	= -1,
 	A_ROOT		= 1,
@@ -47,7 +47,15 @@ namespace VCA
 	A_TIP_STATUS	= 16,
 	A_CTX_MENU	= 17,
 
-	//> Primitive "ElFigure" specific
+	//  BackGround
+	A_BackColor	= 20,
+	A_BackImg	= 21,
+	//  Border
+	A_BordWidth	= 22,
+	A_BordColor	= 23,
+	A_BordStyle	= 24,
+
+	// Primitive "ElFigure" specific
 	A_ElFigLineW	= 20,
 	A_ElFigLineClr	= 21,
 	A_ElFigLineStl	= 22,
@@ -66,7 +74,7 @@ namespace VCA
 	A_ElFigItImg	= 4,
 	A_ElFigItStl	= 5,
 
-	//> Primitive "FormEl" specific
+	// Primitive "FormEl" specific
 	A_FormElType	= 20,
 	A_FormElValue	= 21,
 	A_FormElMixP1	= 22,	//LINE_ED:view; TEXT_ED:wordWrap; BUTTON:img; {COMBO,LIST,TREE}:items; {SLIDER,SCROLL_BAR}:cfg
@@ -76,12 +84,7 @@ namespace VCA
 	A_FormElName	= 26,
 	A_FormElMixP4	= 27,	//BUTTON:colorText
 
-	//> Primitive "Text" specific
-	A_TextBackClr	= 20,
-	A_TextBackImg	= 21,
-	A_TextBordWidth	= 22,
-	A_TextBordColor	= 23,
-	A_TextBordStyle	= 24,
+	// Primitive "Text" specific
 	A_TextFont	= 25,
 	A_TextColor	= 26,
 	A_TextOrient	= 27,
@@ -90,12 +93,7 @@ namespace VCA
 	A_TextText	= 30,
 	A_TextNumbArg	= 40,
 
-	//> Primitive "Media" specific
-	A_MediaBackClr	= 20,
-	A_MediaBackImg	= 21,
-	A_MediaBordWdth	= 22,
-	A_MediaBordClr	= 23,
-	A_MediaBordStl	= 24,
+	// Primitive "Media" specific
 	A_MediaSrc	= 25,
 	A_MediaFit	= 26,
 	A_MediaType	= 27,
@@ -112,13 +110,42 @@ namespace VCA
 	A_MediaArCoord	= 1,
 	A_MediaArTitle	= 2,
 
-	//> Primitive "Box" specific
-	A_BoxBackClr	= 20,
-	A_BoxBackImg	= 21,
-	A_BoxBordWdth	= 22,
-	A_BoxBordClr	= 23,
-	A_BoxBordStl	= 24,
+	// Primitive "Diagram" specific
+        A_DiagramTrcPer		= 25,
+        A_DiagramType		= 26,
+	A_DiagramTSek		= 27,
+	A_DiagramTUSek		= 28,
+	A_DiagramTSize		= 29,
+	A_DiagramCurSek		= 30,
+	A_DiagramCurUSek	= 31,
+	A_DiagramCurColor	= 32,
+	A_DiagramSclColor	= 33,
+	A_DiagramSclHor		= 34,
+	A_DiagramSclVer		= 35,
+	A_DiagramSclMarkColor	= 36,
+	A_DiagramSclMarkFont	= 37,
+	A_DiagramValArch	= 38,
+	A_DiagramParNum		= 39,
+	A_DiagramSclVerScl	= 40,
+	A_DiagramSclVerSclOff	= 41,
+	A_DiagramValsForPix	= 42,
+	A_DiagramSclHorPer	= 43,
+	A_DiagramTrs	= 50,
+	A_DiagramTrsSz	= 10,
+	A_DiagramTrAddr = 0,
+	A_DiagramTrBordL= 1,
+	A_DiagramTrBordU= 2,
+	A_DiagramTrClr	= 3,
+	A_DiagramTrVal	= 4,
+	A_DiagramTrScl	= 5,
+	A_DiagramTrWdth = 6,
+	A_DiagramTrProp	= 7,
+
+	// Primitive "Box" specific
     };
+
+    //Generic preset indexes
+    enum BordStls	{ FBRD_NONE = 0, FBRD_DOT, FBRD_DASH, FBRD_SOL, FBRD_DBL, FBRD_GROOVE, FBRD_RIDGE, FBRD_INSET, FBRD_OUTSET };
 
     //ElFigure preset indexes
     enum ElFig_LineSt	{ EF_SOLID = 0, EF_DASH, EF_DOT };
@@ -132,8 +159,9 @@ namespace VCA
     enum Media_Types	{ FM_IMG = 0, FM_ANIM, FM_FULL_VIDEO };
     enum Media_ArShapes	{ FM_RECT = 0, FM_POLY, FM_CIRCLE };
 
-    //Box preset indexes
-    enum Box_BordStls	{ FBRD_NONE = 0, FBRD_DOT, FBRD_DASH, FBRD_SOL, FBRD_DBL, FBRD_GROOVE, FBRD_RIDGE, FBRD_INSET, FBRD_OUTSET };
+    //Diagram preset indexes
+    enum Diagram_Types	{ FD_TRND = 0, FD_SPECTR };
+    enum Diagram_Scale	{ FD_NO = 0, FD_GRD, FD_MARKS, FD_GRD_MARKS, FD_LOG, FD_GRD_LOG, FD_MARKS_LOG, FD_GRD_MARKS_LOG };
 }
 
 #endif //TYPES_H
