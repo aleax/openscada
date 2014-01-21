@@ -39,18 +39,6 @@
 #include "ber_encoder.h"
 #include "ber_decode.h"
 
-#define MMS_REJECT_UNRECOGNIZED_SERVICE 1
-#define MMS_REJECT_UNKNOWN_PDU_TYPE 2
-#define MMS_REJECT_OTHER 3
-
-typedef enum {
-	MMS_ERROR_TYPE_OK,
-	MMS_ERROR_TYPE_OBJECT_NON_EXISTENT,
-	MMS_ERROR_TYPE_OBJECT_ACCESS_UNSUPPORTED,
-	MMS_ERROR_TYPE_ACCESS_DENIED,
-	MMS_ERROR_TYPE_RESPONSE_EXCEEDS_MAX_PDU_SIZE
-} MmsConfirmedErrorType;
-
 /* write_out function required for ASN.1 encoding */
 int
 mmsServer_write_out(const void *buffer, size_t size, void *app_key);
@@ -79,7 +67,7 @@ MmsPdu_t*
 mmsServer_createConfirmedResponse(uint32_t invokeId);
 
 void
-mmsServer_createConfirmedErrorPdu(uint32_t invokeId, ByteBuffer* response, MmsConfirmedErrorType errorType);
+mmsServer_createConfirmedErrorPdu(uint32_t invokeId, ByteBuffer* response, MmsError errorType);
 
 void
 mmsServer_writeConcludeResponsePdu(ByteBuffer* response);
@@ -105,7 +93,7 @@ mmsServer_handleGetNameListRequest(
 		uint32_t invokeId,
 		ByteBuffer* response);
 
-int /* MmsServiceError */
+void
 mmsServer_handleWriteRequest(
 		MmsServerConnection* connection,
 		uint8_t* buffer, int bufPos, int maxBufPos,

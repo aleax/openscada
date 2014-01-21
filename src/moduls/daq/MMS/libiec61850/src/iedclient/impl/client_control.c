@@ -30,10 +30,16 @@
 #include "mms_client_connection.h"
 #include "mms_mapping.h"
 
+#include "ied_connection_private.h"
+
 #include <stdio.h>
 
 #if _MSC_VER
 #define snprintf _snprintf
+#endif
+
+#ifndef DEBUG_IED_CLIENT
+#define DEBUG_IED_CLIENT 0
 #endif
 
 struct sControlObjectClient {
@@ -108,13 +114,14 @@ ControlObjectClient_create(char* objectReference, IedConnection connection)
 
 	strncat(itemId, "$ctlModel", 129);
 
-	MmsClientError mmsError;
+	MmsError mmsError;
 
 	MmsValue* ctlModel = MmsConnection_readVariable(IedConnection_getMmsConnection(connection),
 			&mmsError, domainId, itemId);
 
 	if (ctlModel == NULL) {
-		printf("ControlObjectClient_create: failed to get ctlModel from server\n");
+	    if (DEBUG_IED_CLIENT)
+	        printf("IED_CLIENT: ControlObjectClient_create: failed to get ctlModel from server\n");
 		return NULL;
 	}
 
@@ -128,7 +135,8 @@ ControlObjectClient_create(char* objectReference, IedConnection connection)
 			IedConnection_getDataDirectory(connection, &error, objectReference);
 
 	if (dataDirectory == NULL) {
-		printf("ControlObjectClient_create: failed to get data directory of control object\n");
+		if (DEBUG_IED_CLIENT)
+		    printf("IED_CLIENT: ControlObjectClient_create: failed to get data directory of control object\n");
 		return NULL;
 	}
 
@@ -158,7 +166,8 @@ ControlObjectClient_create(char* objectReference, IedConnection connection)
 	LinkedList_destroy(dataDirectory);
 
 	if (hasOper == false) {
-		printf("control is missing required element \"Oper\"\n");
+		if (DEBUG_IED_CLIENT)
+		    printf("IED_CLIENT: control is missing required element \"Oper\"\n");
 		return NULL;
 	}
 
@@ -204,7 +213,7 @@ ControlObjectClient_create(char* objectReference, IedConnection connection)
 	MmsValue_setElement(oper, 0, NULL);
 	MmsValue_delete(oper);
 
-	IedConnectionPrivate_addControlClient(connection, self);
+	private_IedConnection_addControlClient(connection, self);
 
 	return self;
 }
@@ -214,7 +223,7 @@ ControlObjectClient_destroy(ControlObjectClient self)
 {
 	free(self->objectReference);
 
-	IedConnectionPrivate_removeControlClient(self->connection, self);
+	private_IedConnection_removeControlClient(self->connection, self);
 
 	if (self->ctlVal != NULL)
 		MmsValue_delete(self->ctlVal);
@@ -289,9 +298,9 @@ ControlObjectClient_operate(ControlObjectClient self, MmsValue* ctlVal, uint64_t
 
 	strncat(itemId, "$Oper", 129);
 
-	if (DEBUG) printf("operate: %s/%s\n", domainId, itemId);
+	if (DEBUG_IED_CLIENT) printf("IED_CLIENT: operate: %s/%s\n", domainId, itemId);
 
-	MmsClientError mmsError;
+	MmsError mmsError;
 
 	MmsIndication indication =
 			MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
@@ -301,7 +310,7 @@ ControlObjectClient_operate(ControlObjectClient self, MmsValue* ctlVal, uint64_t
 	MmsValue_delete(operParameters);
 
 	if (indication != MMS_OK) {
-		if (DEBUG) printf("operate failed!\n");
+		if (DEBUG_IED_CLIENT) printf("IED_CLIENT: operate failed!\n");
 		return false;
 	}
 
@@ -321,9 +330,9 @@ ControlObjectClient_selectWithValue(ControlObjectClient self, MmsValue* ctlVal)
 
 	strncat(itemId, "$SBOw", 129);
 
-	if (DEBUG) printf("select with value: %s/%s\n", domainId, itemId);
+	if (DEBUG_IED_CLIENT) printf("IED_CLIENT: select with value: %s/%s\n", domainId, itemId);
 
-	MmsClientError mmsError;
+	MmsError mmsError;
 
 	MmsValue* selValParameters;
 
@@ -372,7 +381,7 @@ ControlObjectClient_selectWithValue(ControlObjectClient self, MmsValue* ctlVal)
 	MmsValue_delete(selValParameters);
 
 	if (indication != MMS_OK) {
-		if (DEBUG) printf("select-with-value failed!\n");
+		if (DEBUG_IED_CLIENT) printf("IED_CLIENT: select-with-value failed!\n");
 		return false;
 	}
 
@@ -392,9 +401,9 @@ ControlObjectClient_select(ControlObjectClient self)
 
 	strncat(itemId, "$SBO", 129);
 
-	if (DEBUG) printf("select: %s/%s\n", domainId, itemId);
+	if (DEBUG_IED_CLIENT) printf("IED_CLIENT: select: %s/%s\n", domainId, itemId);
 
-	MmsClientError mmsError;
+	MmsError mmsError;
 
 	MmsValue* value = MmsConnection_readVariable(IedConnection_getMmsConnection(self->connection),
 			&mmsError, domainId, itemId);
@@ -402,7 +411,7 @@ ControlObjectClient_select(ControlObjectClient self)
 	int selected = false;
 
 	if (value == NULL) {
-		if (DEBUG) printf("select: read SBO failed!\n");
+		if (DEBUG_IED_CLIENT) printf("IED_CLIENT: select: read SBO failed!\n");
 		return false;
 	}
 
@@ -419,11 +428,12 @@ ControlObjectClient_select(ControlObjectClient self)
 	        selected = true;
 	    }
 	    else {
-	        printf("select-response: (%s)\n", MmsValue_toString(value));
+	        if (DEBUG_IED_CLIENT)
+	            printf("IED_CLIENT: select-response: (%s)\n", MmsValue_toString(value));
 	    }
 	}
 	else {
-	    if (DEBUG) printf("select: unexpected response from server!\n");
+	    if (DEBUG_IED_CLIENT) printf("IED_CLIENT: select: unexpected response from server!\n");
 	}
 
 	MmsValue_delete(value);
@@ -482,9 +492,9 @@ ControlObjectClient_cancel(ControlObjectClient self)
 
 	strncat(itemId, "$Cancel", 129);
 
-	if (DEBUG) printf("cancel: %s/%s\n", domainId, itemId);
+	if (DEBUG_IED_CLIENT) printf("IED_CLIENT: cancel: %s/%s\n", domainId, itemId);
 
-	MmsClientError mmsError;
+	MmsError mmsError;
 
 	MmsIndication indication =
 			MmsConnection_writeVariable(IedConnection_getMmsConnection(self->connection),
@@ -494,7 +504,7 @@ ControlObjectClient_cancel(ControlObjectClient self)
 	MmsValue_delete(cancelParameters);
 
 	if (indication != MMS_OK) {
-		if (DEBUG) printf("cancel failed!\n");
+		if (DEBUG_IED_CLIENT) printf("IED_CLIENT: cancel failed!\n");
 		return false;
 	}
 

@@ -37,7 +37,7 @@ void
 memcpyReverseByteOrder(uint8_t* dst, uint8_t* src, int size);
 
 MmsValue*
-mmsClient_parseListOfAccessResults(AccessResult_t** accessResultList, int listSize)
+mmsClient_parseListOfAccessResults(AccessResult_t** accessResultList, int listSize, bool createArray)
 {
     MmsValue* valueList = NULL;
     MmsValue* value = NULL;
@@ -45,7 +45,7 @@ mmsClient_parseListOfAccessResults(AccessResult_t** accessResultList, int listSi
 
     int elementCount = listSize;
 
-    if (elementCount > 1)
+    if ((elementCount > 1) || createArray)
         valueList = MmsValue_createEmtpyArray(elementCount);
 
     int i = 0;
@@ -229,8 +229,12 @@ mmsClient_parseListOfAccessResults(AccessResult_t** accessResultList, int listSi
 }
 
 
+/*
+ * \param createArray if multiple variables should be read (e.g. if a data set is read) an array should
+ *                    be created that contains the access results.
+ */
 MmsValue*
-mmsClient_parseReadResponse(ByteBuffer* message, uint32_t* invokeId)
+mmsClient_parseReadResponse(ByteBuffer* message, uint32_t* invokeId, bool createArray)
 {
 	MmsPdu_t* mmsPdu = 0; /* allow asn1c to allocate structure */
 	MmsIndication retVal =  MMS_OK;
@@ -255,7 +259,7 @@ mmsClient_parseReadResponse(ByteBuffer* message, uint32_t* invokeId)
 			int elementCount = response->listOfAccessResult.list.count;
 
 			valueList = mmsClient_parseListOfAccessResults(response->listOfAccessResult.list.array,
-			        elementCount);
+			        elementCount, createArray);
 		}
 		else {
 			retVal = MMS_ERROR;

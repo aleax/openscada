@@ -302,7 +302,13 @@ AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,in
     AS_IF([test "x${Qt5_use}" = "x"],[
 	AC_ARG_ENABLE(Phonon,AC_HELP_STRING([--disable-Phonon], [disable using Phonon library]),[ ],[
 	    PKG_CHECK_MODULES([phonon],[phonon > 4.3.0],
-		[AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])],
+		[
+		    AC_DEFINE(HAVE_PHONON,1,[Phonon media player engine allow.])
+		    SAVE_CXXFLAGS="$CXXFLAGS"
+		    CXXFLAGS="$CXXFLAGS $phonon_CFLAGS"
+		    AC_CHECK_HEADERS([phonon/VideoPlayer],[],[])
+		    CXXFLAGS="$SAVE_CXXFLAGS"
+		],
 		[AC_MSG_NOTICE(Phonon not found. Using is disabled!)])])
     ])
 ])

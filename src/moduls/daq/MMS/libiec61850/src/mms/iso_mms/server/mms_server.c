@@ -255,7 +255,8 @@ isoConnectionIndicationHandler(IsoConnectionIndication indication,
         if (mmsServer->connectionHandler != NULL)
             mmsServer->connectionHandler(mmsServer->connectionHandlerParameter,
                     mmsCon, MMS_SERVER_NEW_CONNECTION);
-    } else if (indication == ISO_CONNECTION_CLOSED) {
+    }
+    else if (indication == ISO_CONNECTION_CLOSED) {
         MmsServerConnection* mmsCon = (MmsServerConnection*) Map_removeEntry(
                 mmsServer->openConnections, connection, false);
 

@@ -27,6 +27,7 @@
 #include "stack_config.h"
 #include "ber_encoder.h"
 #include "ber_decode.h"
+#include "buffer_chain.h"
 
 static uint8_t callingPresentationSelector[] = {0x00, 0x00, 0x00, 0x01};
 static uint8_t calledPresentationSelector[] = {0x00, 0x00, 0x00, 0x01};
@@ -51,7 +52,7 @@ encodeAcceptBer(uint8_t* buffer, int bufPos)
 	return bufPos;
 }
 
-static int
+static int //TODO remove me
 encodeUserData(uint8_t* buffer, int bufPos,
         ByteBuffer* payload, bool encode, uint8_t contextId)
 {
@@ -92,53 +93,43 @@ encodeUserData(uint8_t* buffer, int bufPos,
 	}
 }
 
-static void
-createAcceptPdu(IsoPresentation* self, ByteBuffer* writeBuffer, ByteBuffer* payload)
+static int
+encodeUserDataBC(uint8_t* buffer, int bufPos,
+        BufferChain payload, bool encode, uint8_t contextId)
 {
-	int contentLength = 0;
+    int payloadLength = payload->length;
 
-	/* mode-selector */
-	contentLength += 5;
+    int encodedDataSetLength = 3; /* presentation-selector */
 
-	int normalModeLength = 0;
+    /* presentation-data */
+    encodedDataSetLength += payloadLength + 1;
+    encodedDataSetLength += BerEncoder_determineLengthSize(payloadLength);
 
-	normalModeLength += 6; /* responding-presentation-selector */
+    int fullyEncodedDataLength = encodedDataSetLength;
 
-	normalModeLength += 20; /* context-definition-result-list */
+    fullyEncodedDataLength += BerEncoder_determineLengthSize(encodedDataSetLength) + 1;
 
-	normalModeLength += encodeUserData(NULL, 0, payload, false, self->acseContextId);
 
-	contentLength += normalModeLength;
+    if (encode) {
+        /* fully-encoded-data */
+        bufPos = BerEncoder_encodeTL(0x61, fullyEncodedDataLength, buffer, bufPos);
+        bufPos = BerEncoder_encodeTL(0x30, encodedDataSetLength, buffer, bufPos);
 
-	contentLength += BerEncoder_determineLengthSize(normalModeLength) + 1;
+        /* presentation-selector acse */
+        bufPos = BerEncoder_encodeTL(0x02, 1, buffer, bufPos);
+        buffer[bufPos++] = contextId;
 
-	uint8_t* buffer = writeBuffer->buffer;
-	int bufPos = 0;
+        /* presentation-data (= acse payload) */
+        bufPos = BerEncoder_encodeTL(0xa0, payloadLength, buffer, bufPos);
 
-	bufPos = BerEncoder_encodeTL(0x31, contentLength, buffer, bufPos);
+        return bufPos;
+    }
+    else {
+        int encodedUserDataLength = fullyEncodedDataLength + 1;
+        encodedUserDataLength += BerEncoder_determineLengthSize(fullyEncodedDataLength);
 
-	/* mode-selector */
-	bufPos = BerEncoder_encodeTL(0xa0, 3, buffer, bufPos);
-	bufPos = BerEncoder_encodeTL(0x80, 1, buffer, bufPos);
-	buffer[bufPos++] = 1; /* 1 = normal-mode */
-
-	/* normal-mode-parameters */
-	bufPos = BerEncoder_encodeTL(0xa2, normalModeLength, buffer, bufPos);
-
-	/* responding-presentation-selector */
-	bufPos = BerEncoder_encodeTL(0x83, 4, buffer, bufPos);
-	memcpy(buffer + bufPos, calledPresentationSelector, 4);
-	bufPos += 4;
-
-	/* context-definition-result-list */
-	bufPos = BerEncoder_encodeTL(0xa5, 18, buffer, bufPos);
-	bufPos = encodeAcceptBer(buffer, bufPos); /* accept for acse */
-	bufPos = encodeAcceptBer(buffer, bufPos); /* accept for mms */
-
-	/* encode user data */
-	bufPos = encodeUserData(buffer, bufPos, payload, true, self->acseContextId);
-
-	writeBuffer->size = bufPos;
+        return encodedUserDataLength;
+    }
 }
 
 static void
@@ -454,74 +445,7 @@ parseNormalModeParameters(IsoPresentation* self, uint8_t* buffer, int len, int b
 	return bufPos;
 }
 
-static IsoPresentationIndication
-parseConnectPdu
-(
-		IsoPresentation* self,
-		ByteBuffer* byteBuffer
-)
-{
-	uint8_t* buffer = byteBuffer->buffer;
-	int maxBufPos = byteBuffer->size;
-
-	int bufPos = 0;
-
-	uint8_t cpTag = buffer[bufPos++];
-
-	if (cpTag != 0x31) {
-		if (DEBUG) printf("PRES: not a CP type\n");
-		return PRESENTATION_ERROR;
-	}
-
-	int len;
-
-	bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, maxBufPos);
-
-	if (DEBUG) printf("PRES: CPType with len %i\n", len);
-
-	while (bufPos < maxBufPos) {
-		uint8_t tag = buffer[bufPos++];
-
-		bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, maxBufPos);
-
-		if (bufPos < 0) {
-			if (DEBUG) printf("PRES: wrong parameter length\n");
-			return PRESENTATION_ERROR;
-		}
-
-		switch (tag) {
-		case 0xa0: /* mode-selection */
-			{
-				if (buffer[bufPos++] != 0x80) {
-					if (DEBUG) printf("PRES: mode-value of wrong type!\n");
-					return PRESENTATION_ERROR;
-				}
-				bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, maxBufPos);
-				uint32_t modeSelector =  BerDecoder_decodeUint32(buffer, len, bufPos);
-				if (DEBUG) printf("PRES: modesel %ui\n", modeSelector);
-				bufPos += len;
-			}
-			break;
-		case 0xa2: /* normal-mode-parameters */
-			bufPos = parseNormalModeParameters(self, buffer, len, bufPos);
-
-			if (bufPos < 0) {
-				if (DEBUG) printf("PRES: error parsing normal-mode-parameters\n");
-				return PRESENTATION_ERROR;
-			}
-
-			break;
-		default: /* unsupported element */
-			if (DEBUG) printf("PRES: tag %i not recognized\n", tag);
-			bufPos += len;
-			break;
-		}
-	}
-
-	return PRESENTATION_OK;
-}
-
-IsoPresentationIndication
+int
 IsoPresentation_parseAcceptMessage(IsoPresentation* self, ByteBuffer* byteBuffer)
 {
 	bool hasModeSelector = false;
@@ -536,7 +460,7 @@ IsoPresentation_parseAcceptMessage(IsoPresentation* self, ByteBuffer* byteBuffer
 
 	if (cpTag != 0x31) {
 		if (DEBUG) printf("PRES: not a CPA message\n");
-		return PRESENTATION_ERROR;
+		return 0;
 	}
 
 	int len;
@@ -550,7 +474,7 @@ IsoPresentation_parseAcceptMessage(IsoPresentation* self, ByteBuffer* byteBuffer
 
 			if (bufPos < 0) {
 				if (DEBUG) printf("PRES: wrong parameter length\n");
-				return PRESENTATION_ERROR;
+				return 0;
 			}
 
 			switch (tag) {
@@ -563,7 +487,7 @@ IsoPresentation_parseAcceptMessage(IsoPresentation* self, ByteBuffer* byteBuffer
 
 				if (bufPos < 0) {
 					if (DEBUG) printf("PRES: error parsing normal-mode-parameters\n");
-					return PRESENTATION_ERROR;
+					return 0;
 				}
 
 				break;
@@ -574,18 +498,18 @@ IsoPresentation_parseAcceptMessage(IsoPresentation* self, ByteBuffer* byteBuffer
 			}
 	}
 
-	return PRESENTATION_OK;
+	return 1;
 }
 
 
 void
-IsoPresentation_init(IsoPresentation* session)
+IsoPresentation_init(IsoPresentation* self)
 {
 
 }
 
 
-IsoPresentationIndication
+void //TODO remove me
 IsoPresentation_createUserData(IsoPresentation* self, ByteBuffer* writeBuffer, ByteBuffer* payload)
 {
 	int bufPos =  ByteBuffer_getSize(writeBuffer);
@@ -613,11 +537,39 @@ IsoPresentation_createUserData(IsoPresentation* self, ByteBuffer* writeBuffer, B
 	ByteBuffer_setSize(writeBuffer, bufPos);
 
 	ByteBuffer_append(writeBuffer, ByteBuffer_getBuffer(payload), payloadLength);
-
-	return PRESENTATION_OK;
 }
 
-IsoPresentationIndication
+void
+IsoPresentation_createUserDataBC(IsoPresentation* self, BufferChain writeBuffer, BufferChain payload)
+{
+    int bufPos = 0;
+    uint8_t* buffer = writeBuffer->buffer;
+
+    int payloadLength = payload->length;
+
+    int userDataLengthFieldSize = BerEncoder_determineLengthSize(payloadLength);
+;
+    int pdvListLength = payloadLength + (userDataLengthFieldSize + 4);
+
+    int pdvListLengthFieldSize = BerEncoder_determineLengthSize(pdvListLength);
+    int presentationLength = pdvListLength + (pdvListLengthFieldSize + 1);
+
+    bufPos = BerEncoder_encodeTL(0x61, presentationLength, buffer, bufPos);
+
+    bufPos = BerEncoder_encodeTL(0x30, pdvListLength, buffer, bufPos);
+
+    buffer[bufPos++] = (uint8_t) 0x02;
+    buffer[bufPos++] = (uint8_t) 0x01;
+    buffer[bufPos++] = (uint8_t) self->mmsContextId; /* mms context id */
+
+    bufPos = BerEncoder_encodeTL(0xa0, payloadLength, buffer, bufPos);
+
+    writeBuffer->partLength = bufPos;
+    writeBuffer->length = bufPos + payloadLength;
+    writeBuffer->nextPart = payload;
+}
+
+int
 IsoPresentation_parseUserData(IsoPresentation* self, ByteBuffer* readBuffer)
 {
 	int length = readBuffer->size;
@@ -626,30 +578,30 @@ IsoPresentation_parseUserData(IsoPresentation* self, ByteBuffer* readBuffer)
 	int bufPos = 0;
 
 	if (length < 9)
-		return PRESENTATION_ERROR;
+		return 0;
 
 	if (buffer[bufPos++] != 0x61)
-		return PRESENTATION_ERROR;
+		return 0;
 
 	int len;
 
 	bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, length);
 
 	if (buffer[bufPos++] != 0x30)
-		return PRESENTATION_ERROR;
+		return 0;
 
 	bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, length);
 
 	if (buffer[bufPos++] != 0x02)
-		return PRESENTATION_ERROR;
+		return 0;
 
 	if (buffer[bufPos++] != 0x01)
-		return PRESENTATION_ERROR;
+		return 0;
 
 	self->nextContextId = buffer[bufPos++];
 
 	if (buffer[bufPos++] != 0xa0)
-		return PRESENTATION_ERROR;;
+		return 0;
 
 	int userDataLength;
 
@@ -657,13 +609,70 @@ IsoPresentation_parseUserData(IsoPresentation* self, ByteBuffer* readBuffer)
 
 	ByteBuffer_wrap(&(self->nextPayload), buffer + bufPos, userDataLength, userDataLength);
 
-	return PRESENTATION_OK;
+	return 1;
 }
 
-IsoPresentationIndication
-IsoPresentation_parseConnect(IsoPresentation* self, ByteBuffer* buffer)
+int
+IsoPresentation_parseConnect(IsoPresentation* self, ByteBuffer* byteBuffer)
 {
-	return parseConnectPdu(self, buffer);
+    uint8_t* buffer = byteBuffer->buffer;
+    int maxBufPos = byteBuffer->size;
+
+    int bufPos = 0;
+
+    uint8_t cpTag = buffer[bufPos++];
+
+    if (cpTag != 0x31) {
+        if (DEBUG) printf("PRES: not a CP type\n");
+        return 0;
+    }
+
+    int len;
+
+    bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, maxBufPos);
+
+    if (DEBUG) printf("PRES: CPType with len %i\n", len);
+
+    while (bufPos < maxBufPos) {
+        uint8_t tag = buffer[bufPos++];
+
+        bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, maxBufPos);
+
+        if (bufPos < 0) {
+            if (DEBUG) printf("PRES: wrong parameter length\n");
+            return 0;
+        }
+
+        switch (tag) {
+        case 0xa0: /* mode-selection */
+            {
+                if (buffer[bufPos++] != 0x80) {
+                    if (DEBUG) printf("PRES: mode-value of wrong type!\n");
+                    return 0;
+                }
+                bufPos = BerDecoder_decodeLength(buffer, &len, bufPos, maxBufPos);
+                uint32_t modeSelector =  BerDecoder_decodeUint32(buffer, len, bufPos);
+                if (DEBUG) printf("PRES: modesel %ui\n", modeSelector);
+                bufPos += len;
+            }
+            break;
+        case 0xa2: /* normal-mode-parameters */
+            bufPos = parseNormalModeParameters(self, buffer, len, bufPos);
+
+            if (bufPos < 0) {
+                if (DEBUG) printf("PRES: error parsing normal-mode-parameters\n");
+                return 0;
+            }
+
+            break;
+        default: /* unsupported element */
+            if (DEBUG) printf("PRES: tag %i not recognized\n", tag);
+            bufPos += len;
+            break;
+        }
+    }
+
+    return 1;
 }
 
 void
@@ -674,8 +683,102 @@ IsoPresentation_createConnectPdu(IsoPresentation* self, ByteBuffer* buffer, Byte
 	createConnectPdu(self, buffer, payload);
 }
 
-void
-IsoPresentation_createCpaMessage(IsoPresentation* self, ByteBuffer* buffer, ByteBuffer* payload)
+void //TODO remove me
+IsoPresentation_createCpaMessage(IsoPresentation* self, ByteBuffer* writeBuffer, ByteBuffer* payload)
 {
-	createAcceptPdu(self, buffer, payload);
+    int contentLength = 0;
+
+    /* mode-selector */
+    contentLength += 5;
+
+    int normalModeLength = 0;
+
+    normalModeLength += 6; /* responding-presentation-selector */
+
+    normalModeLength += 20; /* context-definition-result-list */
+
+    normalModeLength += encodeUserData(NULL, 0, payload, false, self->acseContextId);
+
+    contentLength += normalModeLength;
+
+    contentLength += BerEncoder_determineLengthSize(normalModeLength) + 1;
+
+    uint8_t* buffer = writeBuffer->buffer;
+    int bufPos = 0;
+
+    bufPos = BerEncoder_encodeTL(0x31, contentLength, buffer, bufPos);
+
+    /* mode-selector */
+    bufPos = BerEncoder_encodeTL(0xa0, 3, buffer, bufPos);
+    bufPos = BerEncoder_encodeTL(0x80, 1, buffer, bufPos);
+    buffer[bufPos++] = 1; /* 1 = normal-mode */
+
+    /* normal-mode-parameters */
+    bufPos = BerEncoder_encodeTL(0xa2, normalModeLength, buffer, bufPos);
+
+    /* responding-presentation-selector */
+    bufPos = BerEncoder_encodeTL(0x83, 4, buffer, bufPos);
+    memcpy(buffer + bufPos, calledPresentationSelector, 4);
+    bufPos += 4;
+
+    /* context-definition-result-list */
+    bufPos = BerEncoder_encodeTL(0xa5, 18, buffer, bufPos);
+    bufPos = encodeAcceptBer(buffer, bufPos); /* accept for acse */
+    bufPos = encodeAcceptBer(buffer, bufPos); /* accept for mms */
+
+    /* encode user data */
+    bufPos = encodeUserData(buffer, bufPos, payload, true, self->acseContextId);
+
+    writeBuffer->size = bufPos;
+}
+
+void
+IsoPresentation_createCpaMessageBC(IsoPresentation* self, BufferChain writeBuffer, BufferChain payload)
+{
+    int contentLength = 0;
+
+    /* mode-selector */
+    contentLength += 5;
+
+    int normalModeLength = 0;
+
+    normalModeLength += 6; /* responding-presentation-selector */
+
+    normalModeLength += 20; /* context-definition-result-list */
+
+    normalModeLength += encodeUserDataBC(NULL, 0, payload, false, self->acseContextId);
+
+    contentLength += normalModeLength;
+
+    contentLength += BerEncoder_determineLengthSize(normalModeLength) + 1;
+
+    uint8_t* buffer = writeBuffer->buffer;
+    int bufPos = 0;
+
+    bufPos = BerEncoder_encodeTL(0x31, contentLength, buffer, bufPos);
+
+    /* mode-selector */
+    bufPos = BerEncoder_encodeTL(0xa0, 3, buffer, bufPos);
+    bufPos = BerEncoder_encodeTL(0x80, 1, buffer, bufPos);
+    buffer[bufPos++] = 1; /* 1 = normal-mode */
+
+    /* normal-mode-parameters */
+    bufPos = BerEncoder_encodeTL(0xa2, normalModeLength, buffer, bufPos);
+
+    /* responding-presentation-selector */
+    bufPos = BerEncoder_encodeTL(0x83, 4, buffer, bufPos);
+    memcpy(buffer + bufPos, calledPresentationSelector, 4);
+    bufPos += 4;
+
+    /* context-definition-result-list */
+    bufPos = BerEncoder_encodeTL(0xa5, 18, buffer, bufPos);
+    bufPos = encodeAcceptBer(buffer, bufPos); /* accept for acse */
+    bufPos = encodeAcceptBer(buffer, bufPos); /* accept for mms */
+
+    /* encode user data */
+    bufPos = encodeUserDataBC(buffer, bufPos, payload, true, self->acseContextId);
+
+    writeBuffer->partLength = bufPos;
+    writeBuffer->length = bufPos + payload->length;
+    writeBuffer->nextPart = payload;
 }

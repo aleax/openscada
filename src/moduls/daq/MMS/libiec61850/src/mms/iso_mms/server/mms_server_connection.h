@@ -63,18 +63,34 @@ MmsIndication
 MmsServerConnection_parseMessage
 (MmsServerConnection* connection, ByteBuffer* message, ByteBuffer* response);
 
-void /* send information report for a single VMD specific variable */
+
+/** \brief send information report for a single VMD specific variable
+ *
+ *   \param handlerMode send this message in the context of a stack callback handler
+ */
+void
 MmsServerConnection_sendInformationReportSingleVariableVMDSpecific(MmsServerConnection* self,
-		char* itemId, MmsValue* value);
+		char* itemId, MmsValue* value, bool handlerMode);
 
+
+/** \brief send information report for a VMD specific named variable list
+ *
+ *   \param handlerMode send this message in the context of a stack callback handler
+ */
 void /* send information report for a VMD specific named variable list */
-MmsServerConnection_sendInformationReportVMDSpecific(MmsServerConnection* self, char* itemId, LinkedList values);
+MmsServerConnection_sendInformationReportVMDSpecific(MmsServerConnection* self, char* itemId, LinkedList values
+        , bool handlerMode);
 
+/** \brief send information report for list of variables
+ *
+ *   \param handlerMode send this message in the context of a stack callback handler
+ */
 void
 MmsServerConnection_sendInformationReportListOfVariables(
         MmsServerConnection* self,
         LinkedList /* MmsVariableAccessSpecification */ variableAccessDeclarations,
-        LinkedList /* MmsValue */ values
+        LinkedList /* MmsValue */ values,
+        bool handlerMode
         );
 
 void

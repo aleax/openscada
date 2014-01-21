@@ -27,6 +27,7 @@
 #include "MmsPdu.h"
 #include "linked_list.h"
 #include "mms_client_connection.h"
+#include "ber_decode.h"
 
 #include "thread.h"
 
@@ -52,13 +53,14 @@ struct sMmsConnection {
 	Semaphore lastResponseLock;
     uint32_t responseInvokeId;
 	ByteBuffer* lastResponse;
+	uint32_t lastResponseBufPos;
+	MmsError lastResponseError;
 
 	Semaphore outstandingCallsLock;
 	uint32_t* outstandingCalls;
 
 	uint32_t requestTimeout;
 
-	MmsClientError lastError;
 	IsoClientConnection isoClient;
 	AssociationState associationState;
 	ConnectionState connectionState;
@@ -71,6 +73,9 @@ struct sMmsConnection {
 
 	MmsInformationReportHandler reportHandler;
 	void* reportHandlerParameter;
+
+	MmsConnectionLostHandler connectionLostHandler;
+	void* connectionLostHandlerParameter;
 };
 
 
@@ -83,7 +88,7 @@ typedef enum {
 } MmsObjectClass;
 
 MmsValue*
-mmsClient_parseListOfAccessResults(AccessResult_t** accessResultList, int listSize);
+mmsClient_parseListOfAccessResults(AccessResult_t** accessResultList, int listSize, bool createArray);
 
 uint32_t
 mmsClient_getInvokeId(ConfirmedResponsePdu_t* confirmedResponse);
@@ -108,7 +113,7 @@ mmsClient_createGetNameListRequestDomainSpecific(long invokeId, char* domainName
 		ByteBuffer* writeBuffer, MmsObjectClass objectClass, char* continueAfter);
 
 MmsValue*
-mmsClient_parseReadResponse(ByteBuffer* message, uint32_t* invokeId);
+mmsClient_parseReadResponse(ByteBuffer* message, uint32_t* invokeId, bool createArray);
 
 int
 mmsClient_createReadRequest(uint32_t invokeId, char* domainId, char* itemId, ByteBuffer* writeBuffer);

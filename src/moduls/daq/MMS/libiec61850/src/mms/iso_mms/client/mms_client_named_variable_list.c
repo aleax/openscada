@@ -183,7 +183,7 @@ mmsClient_createGetNamedVariableListAttributesRequest(uint32_t invokeId, ByteBuf
 	asn_DEF_MmsPdu.free_struct(&asn_DEF_MmsPdu, mmsPdu, 0);
 }
 
-static LinkedList
+static LinkedList /* <MmsVariableAccessSpecification*> */
 parseNamedVariableAttributes(GetNamedVariableListAttributesResponse_t* response, bool* deletable)
 {
 	if (deletable != NULL)
@@ -195,18 +195,25 @@ parseNamedVariableAttributes(GetNamedVariableListAttributesResponse_t* response,
 	LinkedList attributes = LinkedList_create();
 
 	for (i = 0; i < attributesCount; i++) {
+
+
 		//TODO add checks
 
-		char* itemName = mmsMsg_createStringFromAsnIdentifier(response->listOfVariable.list.array[i]->
+	    char* domainId = mmsMsg_createStringFromAsnIdentifier(response->listOfVariable.list.array[i]->
+	            variableSpecification.choice.name.choice.domainspecific.domainId);
+
+		char* itemId = mmsMsg_createStringFromAsnIdentifier(response->listOfVariable.list.array[i]->
 				variableSpecification.choice.name.choice.domainspecific.itemId);
 
-		LinkedList_add(attributes, itemName);
+		MmsVariableAccessSpecification* listEntry = MmsVariableAccessSpecification_create(domainId, itemId);
+
+		LinkedList_add(attributes, listEntry);
 	}
 
 	return attributes;
 }
 
-LinkedList
+LinkedList /* <MmsVariableAccessSpecification*> */
 mmsClient_parseGetNamedVariableListAttributesResponse(ByteBuffer* message, uint32_t* invokeId,
 		bool* /*OUT*/ deletable)
 {

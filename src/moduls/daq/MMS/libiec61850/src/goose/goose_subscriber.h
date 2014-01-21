@@ -52,7 +52,7 @@ typedef void (*GooseListener)(GooseSubscriber subscriber, void* parameter);
  * the data set elements. It is intended that the provided MmsValue instance has been created by the
  * IedConnection_getDataSet() method before.
  *
- * \param dataSetRef a string containing the IEC 61850 object reference of the data set, the
+ * \param dataSetRef a string containing the IEC 61850 object reference of the data set the
  *        GOOSE publisher uses.
  * \param dataSetValues the MmsValue object where the data set values will be written.
  */
@@ -70,13 +70,18 @@ void
 GooseSubscriber_setInterfaceId(GooseSubscriber self, char* interfaceId);
 
 /**
- * \brief start listening for GOOSE messages
+ * \brief Start listening to GOOSE messages
  *
  * \param self GooseSubscriber instance to operate on.
  */
 void
 GooseSubscriber_subscribe(GooseSubscriber self);
 
+/**
+ * \brief Stop listening to GOOSE messages
+ *
+ * \param self GooseSubscriber instance to operate on.
+ */
 void
 GooseSubscriber_unsubscribe(GooseSubscriber self);
 

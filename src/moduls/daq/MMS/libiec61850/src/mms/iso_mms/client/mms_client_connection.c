@@ -78,7 +78,7 @@ handleUnconfirmedMmsPdu(MmsConnection self, ByteBuffer* message)
 							int listSize = report->listOfAccessResult.list.count;
 
 							MmsValue* values = mmsClient_parseListOfAccessResults(
-								report->listOfAccessResult.list.array, listSize);
+								report->listOfAccessResult.list.array, listSize, true);
 
 							self->reportHandler(self->reportHandlerParameter, domainId, variableListName, values, true);
 
@@ -104,7 +104,7 @@ handleUnconfirmedMmsPdu(MmsConnection self, ByteBuffer* message)
 						}
 
 						MmsValue* values = mmsClient_parseListOfAccessResults(
-														report->listOfAccessResult.list.array, listSize);
+														report->listOfAccessResult.list.array, listSize, false);
 
 						int i;
 						for (i = 0; i < variableSpecSize; i++) {
@@ -168,13 +168,14 @@ checkForOutstandingCall(MmsConnection self, uint32_t invokeId)
     int i = 0;
 
     Semaphore_wait(self->outstandingCallsLock);
+
     for (i = 0; i < OUTSTANDING_CALLS; i++) {
         if (self->outstandingCalls[i] == invokeId) {
             Semaphore_post(self->outstandingCallsLock);
             return true;
         }
-
     }
+
     Semaphore_post(self->outstandingCallsLock);
 
     return false;
@@ -229,6 +230,8 @@ sendRequestAndWaitForResponse(MmsConnection self, uint32_t invokeId, ByteBuffer*
 
     uint64_t currentTime = startTime;
 
+    bool success = false;
+
     addToOutstandingCalls(self, invokeId);
 
     IsoClientConnection_sendMessage(self->isoClient, message);
@@ -236,12 +239,16 @@ sendRequestAndWaitForResponse(MmsConnection self, uint32_t invokeId, ByteBuffer*
     while (currentTime < waitUntilTime) {
         uint32_t receivedInvokeId;
 
+        if (self->associationState == MMS_STATE_CLOSED)
+            goto connection_lost;
+
         Semaphore_wait(self->lastResponseLock);
         receivedInvokeId = self->responseInvokeId;
         Semaphore_post(self->lastResponseLock);
 
         if (receivedInvokeId == invokeId) {
             receivedMessage = self->lastResponse;
+            success = true;
             break;
         }
 
@@ -249,6 +256,13 @@ sendRequestAndWaitForResponse(MmsConnection self, uint32_t invokeId, ByteBuffer*
 
         currentTime = Hal_getTimeInMs();
     }
+
+    if (!success) {
+       if (DEBUG) printf("TIMEOUT for request %u: \n", invokeId);
+       self->lastResponseError = MMS_ERROR_SERVICE_TIMEOUT;
+    }
+
+connection_lost:
 
     removeFromOutstandingCalls(self, invokeId);
 
@@ -262,6 +276,7 @@ releaseResponse(MmsConnection self)
 
     Semaphore_wait(self->lastResponseLock);
     self->responseInvokeId = 0;
+    self->lastResponseError = MMS_ERROR_NONE;
     Semaphore_post(self->lastResponseLock);
 }
 
@@ -289,6 +304,183 @@ waitUntilLastResponseHasBeenProcessed(MmsConnection self)
     }
 }
 
+typedef struct sMmsServiceError {
+    int errorClass;
+    int errorCode;
+} MmsServiceError;
+
+static MmsError
+convertServiceErrorToMmsError(MmsServiceError serviceError)
+{
+    MmsError mmsError;
+
+    switch(serviceError.errorClass) {
+    case 0: /* class: vmd-state */
+        mmsError = MMS_ERROR_VMDSTATE_OTHER;
+        break;
+
+    case 1: /* class: application-reference */
+        mmsError = MMS_ERROR_APPLICATION_REFERENCE_OTHER;
+        break;
+
+    case 2: /* class: definition */
+        switch (serviceError.errorCode) {
+        case 1:
+            mmsError = MMS_ERROR_DEFINITION_OBJECT_UNDEFINED;
+            break;
+        case 2:
+            mmsError = MMS_ERROR_DEFINITION_INVALID_ADDRESS;
+            break;
+        case 3:
+            mmsError = MMS_ERROR_DEFINITION_TYPE_UNSUPPORTED;
+            break;
+        case 4:
+            mmsError = MMS_ERROR_DEFINITION_TYPE_INCONSISTENT;
+            break;
+        case 5:
+            mmsError = MMS_ERROR_DEFINITION_OBJECT_EXISTS;
+            break;
+        case 6:
+            mmsError = MMS_ERROR_DEFINITION_OBJECT_ATTRIBUTE_INCONSISTENT;
+            break;
+        default:
+            mmsError = MMS_ERROR_DEFINITION_OTHER;
+            break;
+        }
+        break;
+
+    case 3: /* class: resource */
+        mmsError = MMS_ERROR_RESOURCE_OTHER;
+        break;
+
+    case 4: /* class: service */
+        mmsError = MMS_ERROR_SERVICE_OTHER;
+        break;
+
+    case 5: /* class: service-preempt */
+        mmsError = MMS_ERROR_SERVICE_PREEMPT_OTHER;
+        break;
+
+    case 6: /* class: time-resolution */
+        mmsError = MMS_ERROR_TIME_RESOLUTION_OTHER;
+        break;
+
+    case 7: /* class: access */
+        switch (serviceError.errorCode) {
+        case 1:
+            mmsError = MMS_ERROR_ACCESS_OBJECT_ACCESS_UNSUPPORTED;
+            break;
+        case 2:
+            mmsError = MMS_ERROR_ACCESS_OBJECT_NON_EXISTENT;
+            break;
+        case 3:
+            mmsError = MMS_ERROR_ACCESS_OBJECT_ACCESS_DENIED;
+            break;
+        case 4:
+            mmsError = MMS_ERROR_ACCESS_OBJECT_INVALIDATED;
+            break;
+        default:
+            mmsError = MMS_ERROR_ACCESS_OTHER;
+            break;
+        }
+        break;
+
+    default:
+        mmsError = MMS_ERROR_OTHER;
+    }
+
+    return mmsError;
+}
+
+static int
+parseServiceError(uint8_t* buffer, int bufPos, int maxLength, MmsServiceError* error)
+{
+    int endPos = bufPos + maxLength;
+    int length;
+
+    while (bufPos < endPos) {
+       uint8_t tag = buffer[bufPos++];
+       bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, endPos);
+
+       if (bufPos < 0) return -1;
+
+       switch (tag) {
+       case 0xa0: /* errorClass */ {
+           uint8_t errorClassTag = buffer[bufPos++];
+           bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, endPos);
+
+           if (bufPos < 0) return -1;
+
+           error->errorClass = errorClassTag - 0x80;
+           error->errorCode = BerDecoder_decodeUint32(buffer, length, bufPos);
+
+           bufPos += length;
+           }
+           break;
+       case 0x81: /* additionalCode */
+           bufPos += length; /* ignore */
+           break;
+       case 0x82: /* additionalDescription */
+           bufPos += length; /* ignore */
+           break;
+       case 0xa3: /* serviceSpecificInfo */
+           bufPos += length; /* ignore */
+           break;
+       }
+    }
+
+    return bufPos;
+}
+
+static int
+parseConfirmedErrorPDU(ByteBuffer* message, uint32_t* invokeId, MmsServiceError* serviceError)
+{
+    uint8_t* buffer = message->buffer;
+    int maxBufPos = message->size;
+    int bufPos = 0;
+    int length;
+
+    uint8_t tag = buffer[bufPos++];
+    if (tag != 0xa2) goto exit_error;
+
+    bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+    if (bufPos < 0) goto exit_error;
+
+    int endPos = bufPos + length;
+
+    if (endPos > maxBufPos) {
+        if (DEBUG) printf("parseConfirmedErrorPDU: message to short!\n");
+        goto exit_error;
+    }
+
+    while (bufPos < endPos) {
+        tag = buffer[bufPos++];
+        bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
+
+        if (bufPos < 0) goto exit_error;
+
+        switch (tag) {
+        case 0x80: /* invoke Id */
+            if (invokeId != NULL)
+                *invokeId = BerDecoder_decodeUint32(buffer, length, bufPos);
+            bufPos += length;
+            break;
+        case 0x81: /* modifierPosition */
+            bufPos += length; /* ignore */
+            break;
+        case 0xa2: /* serviceError */
+            bufPos = parseServiceError(buffer, bufPos, length, serviceError);
+            if (bufPos < 0) goto exit_error;
+            break;
+        }
+    }
+
+    return bufPos;
+
+exit_error:
+    return -1;
+}
+
 static void
 mmsIsoCallback(IsoIndication indication, void* parameter, ByteBuffer* payload)
 {
@@ -297,16 +489,23 @@ mmsIsoCallback(IsoIndication indication, void* parameter, ByteBuffer* payload)
 	if (DEBUG) printf("mmsIsoCallback called with indication %i\n", indication);
 
 	if (indication == ISO_IND_CLOSED) {
+	    if (DEBUG) printf("mmsIsoCallback: Connection lost or closed by client!\n");
 	    self->connectionState = MMS_CON_IDLE;
 	    self->associationState = MMS_STATE_CLOSED;
+
+	    /* Call user provided callback function */
+	    if (self->connectionLostHandler != NULL)
+	        self->connectionLostHandler(self, self->connectionLostHandlerParameter);
+
 	    return;
 	}
 
 	if (indication == ISO_IND_ASSOCIATION_FAILED) {
+	    if (DEBUG) printf("mmsIsoCallback: association failed!\n");
 	    self->connectionState = MMS_CON_ASSOCIATION_FAILED;
+	    self->associationState = MMS_STATE_CLOSED;
 	    return;
 	}
-
 
 	if (payload != NULL) {
         if (ByteBuffer_getSize(payload) < 1) {
@@ -336,6 +535,31 @@ mmsIsoCallback(IsoIndication indication, void* parameter, ByteBuffer* payload)
 	    handleUnconfirmedMmsPdu(self, payload);
 	    IsoClientConnection_releasePayloadBuffer(self->isoClient, payload);
 	}
+	else if (tag == 0xa2) { /* confirmed error PDU */
+	    if (DEBUG) printf("Confirmed error PDU!\n");
+	    uint32_t invokeId;
+	    MmsServiceError serviceError;
+
+	    if (parseConfirmedErrorPDU(payload, &invokeId, &serviceError) < 0) {
+	        if (DEBUG) printf("Error parsing confirmedErrorPDU!\n");
+	    }
+	    else {
+            if (checkForOutstandingCall(self, invokeId)) {
+
+                waitUntilLastResponseHasBeenProcessed(self);
+
+                Semaphore_wait(self->lastResponseLock);
+                self->lastResponseError = convertServiceErrorToMmsError(serviceError);
+                self->responseInvokeId = invokeId;
+                Semaphore_post(self->lastResponseLock);
+            }
+            else {
+                if (DEBUG) printf("unexpected message from server!\n");
+                IsoClientConnection_releasePayloadBuffer(self->isoClient, payload);
+                return;
+            }
+	    }
+	}
 	else if (tag == 0xa1) { /* confirmed response PDU */
 
 	    int length;
@@ -353,6 +577,10 @@ mmsIsoCallback(IsoIndication indication, void* parameter, ByteBuffer* payload)
 	        uint32_t invokeId =
 	                BerDecoder_decodeUint32(buf, invokeIdLength, bufPos);
 
+	        if (DEBUG)
+	            printf("mms_client_connection: rcvd confirmed resp - invokeId: %i length: %i bufLen: %i\n",
+	                    invokeId, length, payload->size);
+
 	        bufPos += invokeIdLength;
 
 	        if (checkForOutstandingCall(self, invokeId)) {
@@ -361,11 +589,12 @@ mmsIsoCallback(IsoIndication indication, void* parameter, ByteBuffer* payload)
 
 	            Semaphore_wait(self->lastResponseLock);
 	            self->lastResponse = payload;
+	            self->lastResponseBufPos = bufPos;
 	            self->responseInvokeId = invokeId;
 	            Semaphore_post(self->lastResponseLock);
 	        }
 	        else {
-	            printf("unexpected message from server!\n");
+	            if (DEBUG) printf("unexpected message from server!\n");
                 IsoClientConnection_releasePayloadBuffer(self->isoClient, payload);
                 return;
 	        }
@@ -378,7 +607,7 @@ mmsIsoCallback(IsoIndication indication, void* parameter, ByteBuffer* payload)
 
 exit_with_error:
 
-    printf("received malformed message from server!\n");
+    if (DEBUG) printf("received malformed message from server!\n");
     IsoClientConnection_releasePayloadBuffer(self->isoClient, payload);
 	return;
 }
@@ -400,6 +629,8 @@ MmsConnection_create()
 	self->lastInvokeIdLock = Semaphore_create(1);
 	self->lastResponseLock = Semaphore_create(1);
 	self->outstandingCallsLock = Semaphore_create(1);
+
+	self->lastResponseError = MMS_ERROR_NONE;
 
 	self->outstandingCalls = (uint32_t*) calloc(OUTSTANDING_CALLS, sizeof(uint32_t));
 
@@ -423,6 +654,13 @@ MmsConnection_destroy(MmsConnection self)
 
 	free(self->buffer);
 	free(self);
+}
+
+void
+MmsConnection_setConnectionLostHandler(MmsConnection self, MmsConnectionLostHandler handler, void* handlerParameter)
+{
+    self->connectionLostHandler = handler;
+    self->connectionLostHandlerParameter = handlerParameter;
 }
 
 void
@@ -450,12 +688,6 @@ MmsConnection_setIsoConnectionParameters(MmsConnection self, IsoConnectionParame
 	self->isoParameters = params;
 }
 
-
-MmsClientError
-MmsConnection_getError(MmsConnection self) {
-	return self->lastError;
-}
-
 static void
 waitForConnectResponse(MmsConnection self)
 {
@@ -464,7 +696,6 @@ waitForConnectResponse(MmsConnection self)
     uint64_t waitUntilTime = startTime + self->requestTimeout;
 
     uint64_t currentTime = startTime;
-
 
     while (currentTime < waitUntilTime) {
         uint32_t receivedInvokeId;
@@ -479,8 +710,8 @@ waitForConnectResponse(MmsConnection self)
 
 }
 
-MmsIndication
-MmsConnection_connect(MmsConnection self, MmsClientError* mmsError, char* serverName, int serverPort)
+bool
+MmsConnection_connect(MmsConnection self, MmsError* mmsError, char* serverName, int serverPort)
 {
 	self->isoClient = IsoClientConnection_create((IsoIndicationCallback) mmsIsoCallback, (void*) self);
 
@@ -509,6 +740,9 @@ MmsConnection_connect(MmsConnection self, MmsClientError* mmsError, char* server
 
 	waitForConnectResponse(self);
 
+	if (DEBUG)
+	    printf("MmsConnection_connect: received response conState: %i\n", self->connectionState);
+
 	if (self->connectionState == MMS_CON_ASSOCIATED) {
 		mmsClient_parseInitiateResponse(self);
 
@@ -522,10 +756,17 @@ MmsConnection_connect(MmsConnection self, MmsClientError* mmsError, char* server
 
 	self->connectionState = MMS_CON_IDLE;
 
-	if (self->associationState == MMS_STATE_CONNECTED)
-		return MMS_OK;
-	else
-		return MMS_ERROR;
+	if (DEBUG)
+	        printf("MmsConnection_connect: states: con %i ass %i\n", self->connectionState, self->associationState);
+
+	if (self->associationState == MMS_STATE_CONNECTED) {
+	    *mmsError = MMS_ERROR_NONE;
+		return true;
+	}
+	else {
+	    *mmsError = MMS_ERROR_CONNECTION_REJECTED;
+		return false;
+	}
 }
 
 
@@ -541,7 +782,7 @@ bool
 mmsClient_getNameListSingleRequest(
 		LinkedList* nameList,
 		MmsConnection self,
-		MmsClientError* mmsError,
+		MmsError* mmsError,
 		char* domainId,
 		MmsObjectClass objectClass,
 		bool associationSpecific,
@@ -569,24 +810,28 @@ mmsClient_getNameListSingleRequest(
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		bool moreFollows = mmsClient_parseGetNameListResponse(nameList, self->lastResponse,	NULL);
+	bool moreFollows = false;
 
-		releaseResponse(self);
+//    if (self->lastResponseError != MMS_ERROR_NONE)
+//        *mmsError = self->lastResponseError;
 
-		return moreFollows;
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
 
-	return false;
+
+    //else
+    if (responseMessage != NULL)
+        moreFollows = mmsClient_parseGetNameListResponse(nameList, self->lastResponse, NULL);
+
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
+
+	return moreFollows;
 }
 
 
 static LinkedList /* <char*> */
-mmsClient_getNameList(MmsConnection self, MmsClientError *mmsError,
+mmsClient_getNameList(MmsConnection self, MmsError *mmsError,
 		char* domainId,
 		MmsObjectClass objectClass,
 		bool associationSpecific)
@@ -613,31 +858,28 @@ mmsClient_getNameList(MmsConnection self, MmsClientError *mmsError,
 }
 
 LinkedList /* <char*> */
-MmsConnection_getDomainNames(MmsConnection self, MmsClientError* mmsError) {
+MmsConnection_getDomainNames(MmsConnection self, MmsError* mmsError) {
 	return mmsClient_getNameList(self, mmsError, NULL, MMS_NAMED_VARIABLE, false);
 }
 
 LinkedList /* <char*> */
-MmsConnection_getDomainVariableNames(MmsConnection self, MmsClientError* mmsError, char* domainId) {
+MmsConnection_getDomainVariableNames(MmsConnection self, MmsError* mmsError, char* domainId) {
 	return mmsClient_getNameList(self, mmsError, domainId, MMS_NAMED_VARIABLE, false);
 }
 
 LinkedList /* <char*> */
-MmsConnection_getDomainVariableListNames(MmsConnection self, MmsClientError* mmsError, char* domainId) {
+MmsConnection_getDomainVariableListNames(MmsConnection self, MmsError* mmsError, char* domainId) {
 	return mmsClient_getNameList(self, mmsError, domainId, MMS_NAMED_VARIABLE_LIST, false);
 }
 
 LinkedList /* <char*> */
-MmsConnection_getVariableListNamesAssociationSpecific(MmsConnection self, MmsClientError* mmsError)
+MmsConnection_getVariableListNamesAssociationSpecific(MmsConnection self, MmsError* mmsError)
 {
 	return mmsClient_getNameList(self, mmsError, NULL, MMS_NAMED_VARIABLE_LIST, true);
 }
 
-
-
-
 MmsValue*
-MmsConnection_readVariable(MmsConnection self, MmsClientError* mmsError,
+MmsConnection_readVariable(MmsConnection self, MmsError* mmsError,
         char* domainId, char* itemId)
 {
     ByteBuffer payload;
@@ -652,21 +894,21 @@ MmsConnection_readVariable(MmsConnection self, MmsClientError* mmsError,
 
     ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-    if (responseMessage != NULL) {
-        value = mmsClient_parseReadResponse(self->lastResponse, NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        value = mmsClient_parseReadResponse(self->lastResponse, NULL, false);
 
-        releaseResponse(self);
-    }
-    else {
-        if (self->associationState == MMS_STATE_CLOSED)
-            *mmsError = MMS_ERROR_CONNECTION_LOST;
-    }
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
     return value;
 }
 
 MmsValue*
-MmsConnection_readArrayElements(MmsConnection self, MmsClientError* mmsError,
+MmsConnection_readArrayElements(MmsConnection self, MmsError* mmsError,
 		char* domainId, char* itemId,
 		uint32_t startIndex, uint32_t numberOfElements)
 {
@@ -683,21 +925,21 @@ MmsConnection_readArrayElements(MmsConnection self, MmsClientError* mmsError,
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		value = mmsClient_parseReadResponse(self->lastResponse, NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        value = mmsClient_parseReadResponse(self->lastResponse, NULL, true);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return value;
 }
 
 MmsValue*
-MmsConnection_readMultipleVariables(MmsConnection self, MmsClientError* mmsError,
+MmsConnection_readMultipleVariables(MmsConnection self, MmsError* mmsError,
 		char* domainId, LinkedList /*<char*>*/ items)
 {
 	ByteBuffer payload;
@@ -712,21 +954,21 @@ MmsConnection_readMultipleVariables(MmsConnection self, MmsClientError* mmsError
 
     ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		value = mmsClient_parseReadResponse(self->lastResponse, NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        value = mmsClient_parseReadResponse(self->lastResponse, NULL, true);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return value;
 }
 
 MmsValue*
-MmsConnection_readNamedVariableListValues(MmsConnection self, MmsClientError* mmsError,
+MmsConnection_readNamedVariableListValues(MmsConnection self, MmsError* mmsError,
 		char* domainId, char* listName,
 		bool specWithResult)
 {
@@ -744,21 +986,24 @@ MmsConnection_readNamedVariableListValues(MmsConnection self, MmsClientError* mm
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		value = mmsClient_parseReadResponse(self->lastResponse, NULL);
-		releaseResponse(self);
+	if (self->lastResponseError != MMS_ERROR_NONE) {
+	    *mmsError = self->lastResponseError;
 	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
+	else if (responseMessage != NULL) {
+		value = mmsClient_parseReadResponse(self->lastResponse, NULL, true);
 	}
+
+	releaseResponse(self);
+
+	if (self->associationState == MMS_STATE_CLOSED)
+	    *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return value;
 }
 
 MmsValue*
 MmsConnection_readNamedVariableListValuesAssociationSpecific(
-		MmsConnection self, MmsClientError* mmsError,
+		MmsConnection self, MmsError* mmsError,
 		char* listName,
 		bool specWithResult)
 {
@@ -776,20 +1021,22 @@ MmsConnection_readNamedVariableListValuesAssociationSpecific(
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		value = mmsClient_parseReadResponse(self->lastResponse, NULL);
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        value = mmsClient_parseReadResponse(self->lastResponse, NULL, true);
+
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
+
 
 	return value;
 }
 
-LinkedList /* <char*> */
-MmsConnection_readNamedVariableListDirectory(MmsConnection self,  MmsClientError* mmsError,
+LinkedList /* <MmsVariableAccessSpecification*> */
+MmsConnection_readNamedVariableListDirectory(MmsConnection self,  MmsError* mmsError,
 		char* domainId, char* listName,	bool* deletable)
 {
 	ByteBuffer payload;
@@ -806,22 +1053,22 @@ MmsConnection_readNamedVariableListDirectory(MmsConnection self,  MmsClientError
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		attributes = mmsClient_parseGetNamedVariableListAttributesResponse(self->lastResponse, NULL,
-				deletable);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        attributes = mmsClient_parseGetNamedVariableListAttributesResponse(self->lastResponse, NULL,
+                        deletable);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return attributes;
 }
 
 MmsIndication
-MmsConnection_defineNamedVariableList(MmsConnection self,  MmsClientError* mmsError,
+MmsConnection_defineNamedVariableList(MmsConnection self,  MmsError* mmsError,
 		char* domainId, char* listName, LinkedList variableSpecs)
 {
 	ByteBuffer payload;
@@ -838,22 +1085,23 @@ MmsConnection_defineNamedVariableList(MmsConnection self,  MmsClientError* mmsEr
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		indication = mmsClient_parseDefineNamedVariableResponse(self->lastResponse, NULL);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        indication = mmsClient_parseDefineNamedVariableResponse(self->lastResponse, NULL);
+
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return indication;
 }
 
 MmsIndication
 MmsConnection_defineNamedVariableListAssociationSpecific(MmsConnection self,
-		 MmsClientError* mmsError, char* listName, LinkedList variableSpecs)
+        MmsError* mmsError, char* listName, LinkedList variableSpecs)
 {
 	ByteBuffer payload;
 	ByteBuffer_wrap(&payload, self->buffer, 0, self->parameters.maxPduSize);
@@ -869,21 +1117,21 @@ MmsConnection_defineNamedVariableListAssociationSpecific(MmsConnection self,
 
 	MmsIndication indication = MMS_ERROR;
 
-	if (responseMessage != NULL) {
-		indication = mmsClient_parseDefineNamedVariableResponse(self->lastResponse, NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        indication = mmsClient_parseDefineNamedVariableResponse(self->lastResponse, NULL);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+              *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return indication;
 }
 
 MmsIndication
-MmsConnection_deleteNamedVariableList(MmsConnection self,  MmsClientError* mmsError,
+MmsConnection_deleteNamedVariableList(MmsConnection self,  MmsError* mmsError,
 		char* domainId, char* listName)
 {
 	ByteBuffer payload;
@@ -899,22 +1147,22 @@ MmsConnection_deleteNamedVariableList(MmsConnection self,  MmsClientError* mmsEr
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		indication = mmsClient_parseDeleteNamedVariableListResponse(self->lastResponse,NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        indication = mmsClient_parseDeleteNamedVariableListResponse(self->lastResponse,NULL);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return indication;
 }
 
 MmsIndication
 MmsConnection_deleteAssociationSpecificNamedVariableList(MmsConnection self,
-		 MmsClientError* mmsError, char* listName)
+        MmsError* mmsError, char* listName)
 {
 	ByteBuffer payload;
 	ByteBuffer_wrap(&payload, self->buffer, 0, self->parameters.maxPduSize);
@@ -930,21 +1178,21 @@ MmsConnection_deleteAssociationSpecificNamedVariableList(MmsConnection self,
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		indication = mmsClient_parseDeleteNamedVariableListResponse(self->lastResponse, NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        indication = mmsClient_parseDeleteNamedVariableListResponse(self->lastResponse, NULL);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return indication;
 }
 
 MmsVariableSpecification*
-MmsConnection_getVariableAccessAttributes(MmsConnection self,  MmsClientError* mmsError,
+MmsConnection_getVariableAccessAttributes(MmsConnection self,  MmsError* mmsError,
 		char* domainId, char* itemId)
 {
 	ByteBuffer payload;
@@ -959,22 +1207,21 @@ MmsConnection_getVariableAccessAttributes(MmsConnection self,  MmsClientError* m
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		typeSpec = mmsClient_parseGetVariableAccessAttributesResponse(self->lastResponse,
-				NULL);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        typeSpec = mmsClient_parseGetVariableAccessAttributesResponse(self->lastResponse, NULL);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *mmsError = MMS_ERROR_CONNECTION_LOST;
-	}
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return typeSpec;
 }
 
 MmsServerIdentity*
-MmsConnection_identify(MmsConnection self, MmsClientError* mmsError)
+MmsConnection_identify(MmsConnection self, MmsError* mmsError)
 {
     ByteBuffer payload;
     ByteBuffer_wrap(&payload, self->buffer, 0, self->parameters.maxPduSize);
@@ -988,21 +1235,21 @@ MmsConnection_identify(MmsConnection self, MmsClientError* mmsError)
 
     ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-    if (responseMessage != NULL) {
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
         identity = mmsClient_parseIdentifyResponse(self->lastResponse, NULL);
 
-        releaseResponse(self);
-    }
-    else {
-        if (self->associationState == MMS_STATE_CLOSED)
-            *mmsError = MMS_ERROR_CONNECTION_LOST;
-    }
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
     return identity;
 }
 
 MmsIndication
-MmsConnection_writeVariable(MmsConnection self, MmsClientError* clientError,
+MmsConnection_writeVariable(MmsConnection self, MmsError* mmsError,
 		char* domainId, char* itemId,
 		MmsValue* value)
 {
@@ -1010,7 +1257,7 @@ MmsConnection_writeVariable(MmsConnection self, MmsClientError* clientError,
 	ByteBuffer payload;
 	ByteBuffer_wrap(&payload, self->buffer, 0, self->parameters.maxPduSize);
 
-	*clientError = MMS_ERROR_NONE;
+	*mmsError = MMS_ERROR_NONE;
 
 	uint32_t invokeId = getNextInvokeId(self);
 
@@ -1018,24 +1265,21 @@ MmsConnection_writeVariable(MmsConnection self, MmsClientError* clientError,
 
 	ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-	if (responseMessage != NULL) {
-		indication = mmsClient_parseWriteResponse(self->lastResponse);
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL)
+        indication = mmsClient_parseWriteResponse(self->lastResponse);
 
-		if (indication != MMS_OK)
-		    *clientError = MMS_ERROR_SERVICE_ERROR;
+    releaseResponse(self);
 
-		releaseResponse(self);
-	}
-	else {
-	    if (self->associationState == MMS_STATE_CLOSED)
-	        *clientError = MMS_ERROR_CONNECTION_LOST;
-	}
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
 	return indication;
 }
 
 MmsIndication
-MmsConnection_writeMultipleVariables(MmsConnection self, MmsClientError* mmsError, char* domainId,
+MmsConnection_writeMultipleVariables(MmsConnection self, MmsError* mmsError, char* domainId,
         LinkedList /*<char*>*/ items,
         LinkedList /* <MmsValue*> */ values,
         /* OUTPUT */ LinkedList* /* <MmsValue*> */ accessResults)
@@ -1052,21 +1296,23 @@ MmsConnection_writeMultipleVariables(MmsConnection self, MmsClientError* mmsErro
 
     ByteBuffer* responseMessage = sendRequestAndWaitForResponse(self, invokeId, &payload);
 
-    if (responseMessage != NULL) {
+    if (self->lastResponseError != MMS_ERROR_NONE)
+        *mmsError = self->lastResponseError;
+    else if (responseMessage != NULL) {
 
         int numberOfItems = LinkedList_size(items);
 
         indication = mmsClient_parseWriteMultipleItemsResponse(self->lastResponse, numberOfItems, accessResults);
 
         if (indication != MMS_OK)
-            *mmsError = MMS_ERROR_SERVICE_ERROR;
+            *mmsError = MMS_ERROR_PARSING_RESPONSE;
 
-        releaseResponse(self);
     }
-    else {
-        if (self->associationState == MMS_STATE_CLOSED)
-            *mmsError = MMS_ERROR_CONNECTION_LOST;
-    }
+
+    releaseResponse(self);
+
+    if (self->associationState == MMS_STATE_CLOSED)
+        *mmsError = MMS_ERROR_CONNECTION_LOST;
 
     return indication;
 }

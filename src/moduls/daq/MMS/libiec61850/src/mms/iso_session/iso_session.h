@@ -25,6 +25,7 @@
 #define ISE_SESSION_H_
 
 #include "byte_buffer.h"
+#include "buffer_chain.h"
 
 typedef struct {
 	uint16_t callingSessionSelector;
@@ -59,5 +60,11 @@ IsoSession_createAcceptSpdu(IsoSession* session, ByteBuffer* buffer, uint8_t pay
 
 IsoSessionIndication
 IsoSession_parseMessage(IsoSession* session, ByteBuffer* message);
+
+void
+IsoSession_createDataSpduBC(IsoSession* session, BufferChain buffer, BufferChain payload);
+
+void
+IsoSession_createAcceptSpduBC(IsoSession* self, BufferChain buffer, BufferChain payload);
 
 #endif /* ISE_SESSION_H_ */

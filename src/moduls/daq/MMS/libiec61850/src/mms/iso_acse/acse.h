@@ -24,6 +24,7 @@
 #include "libiec61850_platform_includes.h"
 #include "stack_config.h"
 #include "byte_buffer.h"
+#include "buffer_chain.h"
 
 #ifndef ACSE_H_
 #define ACSE_H_
@@ -47,7 +48,13 @@ typedef enum eAcseConnectionState {
 } AcseConnectionState;
 
 typedef enum eAcseIndication {
-	ACSE_ERROR, ACSE_ASSOCIATE, ACSE_ASSOCIATE_FAILED, ACSE_OK
+	ACSE_ERROR,
+	ACSE_ASSOCIATE,
+	ACSE_ASSOCIATE_FAILED,
+	ACSE_OK,
+	ACSE_ABORT,
+	ACSE_RELEASE_REQUEST,
+	ACSE_RELEASE_RESPONSE
 } AcseIndication;
 
 typedef struct sAcseConnection {
@@ -86,10 +93,27 @@ AcseConnection_createAssociateResponseMessage(
 );
 
 void
+AcseConnection_createAssociateResponseMessageBC(
+        AcseConnection* self,
+        uint8_t resultCode,
+        BufferChain acseWriteBuffer,
+        BufferChain payloadBuffer
+);
+
+void
 AcseConnection_createAssociateRequestMessage(
 		AcseConnection* self,
 		ByteBuffer* writeBuffer,
 		ByteBuffer* payload
 );
+
+void
+AcseConnection_createAbortMessage(AcseConnection* self, ByteBuffer* writeBuffer, bool isProvider);
+
+void
+AcseConnection_createReleaseRequestMessage(AcseConnection* self, ByteBuffer* writeBuffer);
+
+void
+AcseConnection_createReleaseResponseMessage(AcseConnection* self, ByteBuffer* writeBuffer);
 
 #endif /* ACSE_H_ */

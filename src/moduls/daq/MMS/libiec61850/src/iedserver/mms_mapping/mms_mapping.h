@@ -99,6 +99,15 @@ MmsMapping_freeDynamicallyCreatedDataSet(DataSet* dataSet);
 MmsVariableAccessSpecification*
 MmsMapping_ObjectReferenceToVariableAccessSpec(char* objectReference);
 
+char*
+MmsMapping_varAccessSpecToObjectReference(MmsVariableAccessSpecification* varAccessSpec);
+
+void
+MmsMapping_setIedServer(MmsMapping* self, IedServer iedServer);
+
+void
+MmsMapping_setConnectionIndicationHandler(MmsMapping* self, IedConnectionIndicationHandler handler, void* parameter);
+
 MmsDataAccessError
 Control_writeAccessControlObject(MmsMapping* self, MmsDomain* domain, char* variableIdOrig,
                          MmsValue* value, MmsServerConnection* connection);

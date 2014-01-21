@@ -30,12 +30,17 @@
 #include "mms_goose.h"
 #include "reporting.h"
 #include "control.h"
+#include "ied_server_private.h"
+
+#ifndef DEBUG_IDE_SERVER
+#define DEBUG_IDE_SERVER 0
+#endif
 
 typedef struct sAttributeObserver
 {
     DataAttribute* attribute;
-    void
-    (*handler)(DataAttribute* dataAttribute);
+
+    AttributeChangedHandler handler;
 } AttributeObserver;
 
 MmsValue*
@@ -232,7 +237,7 @@ createNamedVariableFromDataAttribute(DataAttribute* attribute)
             MmsMapping_createPhyComAddrStructure(namedVariable);
             break;
         default:
-            printf("MMS-MAPPING: type cannot be mapped %i\n", attribute->type);
+            if (DEBUG_IDE_SERVER) printf("MMS-MAPPING: type cannot be mapped %i\n", attribute->type);
             break;
         }
     }
@@ -273,7 +278,19 @@ createFCNamedVariableFromDataObject(DataObject* dataObject,
 {
     MmsVariableSpecification* namedVariable = (MmsVariableSpecification*) calloc(1,
             sizeof(MmsVariableSpecification));
+
+    MmsVariableSpecification* completeNamedVariable = namedVariable;
+
     namedVariable->name = copyString(dataObject->name);
+
+    if (dataObject->elementCount > 0) {
+        namedVariable->type = MMS_ARRAY;
+        namedVariable->typeSpec.array.elementCount = dataObject->elementCount;
+        namedVariable->typeSpec.array.elementTypeSpec = (MmsVariableSpecification*) calloc(1,
+                sizeof(MmsVariableSpecification));
+        namedVariable = namedVariable->typeSpec.array.elementTypeSpec;
+    }
+
     namedVariable->type = MMS_STRUCTURE;
 
     int elementCount = countChildrenWithFc(dataObject, fc);
@@ -310,7 +327,8 @@ createFCNamedVariableFromDataObject(DataObject* dataObject,
     }
 
     namedVariable->typeSpec.structure.elementCount = elementCount;
-    return namedVariable;
+
+    return completeNamedVariable;
 }
 
 static MmsVariableSpecification*
@@ -318,7 +336,7 @@ createFCNamedVariable(LogicalNode* logicalNode, FunctionalConstraint fc)
 {
     MmsVariableSpecification* namedVariable = (MmsVariableSpecification*) calloc(1,
             sizeof(MmsVariableSpecification));
-    namedVariable->name = copyString(FunctionalConstrained_toString(fc));
+    namedVariable->name = copyString(FunctionalConstraint_toString(fc));
     namedVariable->type = MMS_STRUCTURE;
 
     int dataObjectCount = 0;
@@ -460,7 +478,7 @@ createNamedVariableFromLogicalNode(MmsMapping* self, MmsDomain* domain,
 
     int componentCount = determineLogicalNodeComponentCount(logicalNode);
 
-    if (DEBUG)
+    if (DEBUG_IDE_SERVER)
         printf("LogicalNode %s has %i fc components\n", logicalNode->name,
                 componentCount);
 
@@ -468,7 +486,7 @@ createNamedVariableFromLogicalNode(MmsMapping* self, MmsDomain* domain,
     true);
 
     if (brcbCount > 0) {
-        if (DEBUG)
+        if (DEBUG_IDE_SERVER)
             printf("  and %i buffered RCBs\n", brcbCount);
         componentCount++;
     }
@@ -477,7 +495,7 @@ createNamedVariableFromLogicalNode(MmsMapping* self, MmsDomain* domain,
     false);
 
     if (urcbCount > 0) {
-        if (DEBUG)
+        if (DEBUG_IDE_SERVER)
             printf("  and %i unbuffered RCBs\n", urcbCount);
         componentCount++;
     }
@@ -487,7 +505,7 @@ createNamedVariableFromLogicalNode(MmsMapping* self, MmsDomain* domain,
     int gseCount = countGSEControlBlocksForLogicalNode(self, logicalNode);
 
     if (gseCount > 0) {
-        if (DEBUG)
+        if (DEBUG_IDE_SERVER)
             printf("   and %i GSE control blocks\n", gseCount);
         componentCount++;
     }
@@ -966,7 +984,7 @@ mmsWriteHandler(void* parameter, MmsDomain* domain,
 {
     MmsMapping* self = (MmsMapping*) parameter;
 
-    if (DEBUG)
+    if (DEBUG_IDE_SERVER)
         printf("Write requested %s\n", variableId);
 
     int variableIdLen = strlen(variableId);
@@ -1037,22 +1055,26 @@ mmsWriteHandler(void* parameter, MmsDomain* domain,
                 variableId);
 
         if (cachedValue != NULL) {
-            MmsValue_update(cachedValue, value);
+            if (MmsValue_update(cachedValue, value) == false)
+                return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
+            else {
 
-            LinkedList element = LinkedList_getNext(self->observedObjects);
+                /* Call observer callbacks */
+                LinkedList element = LinkedList_getNext(self->observedObjects);
 
-            while (element != NULL) {
-                AttributeObserver* observer = (AttributeObserver*) element->data;
-                DataAttribute* dataAttribute = observer->attribute;
+                while (element != NULL) {
+                    AttributeObserver* observer = (AttributeObserver*) element->data;
+                    DataAttribute* dataAttribute = observer->attribute;
 
-                if (checkIfValueBelongsToModelNode(dataAttribute, cachedValue)) {
-                    observer->handler(dataAttribute);
+                    if (checkIfValueBelongsToModelNode(dataAttribute, cachedValue)) {
+                        observer->handler(dataAttribute, (ClientConnection) connection);
+                    }
+
+                    element = LinkedList_getNext(element);
                 }
 
-                element = LinkedList_getNext(element);
+                return DATA_ACCESS_ERROR_SUCCESS;
             }
-
-            return DATA_ACCESS_ERROR_SUCCESS;
         }
         else
             return DATA_ACCESS_ERROR_OBJECT_VALUE_INVALID;
@@ -1068,8 +1090,7 @@ MmsMapping_addObservedAttribute(MmsMapping* self, DataAttribute* dataAttribute,
     AttributeObserver* observer = (AttributeObserver*) malloc(sizeof(struct sAttributeObserver));
 
     observer->attribute = dataAttribute;
-    observer->handler = (void
-    (*)(DataAttribute*)) handler;
+    observer->handler = (AttributeChangedHandler) handler;
 
     LinkedList_add(self->observedObjects, observer);
 }
@@ -1126,8 +1147,8 @@ mmsReadHandler(void* parameter, MmsDomain* domain, char* variableId, MmsServerCo
 {
     MmsMapping* self = (MmsMapping*) parameter;
 
-    if (DEBUG)
-        printf("Requested %s\n", variableId);
+    if (DEBUG_IDE_SERVER)
+        printf("mmsReadHandler: Requested %s\n", variableId);
 
     char* separator = strchr(variableId, '$');
 
@@ -1244,14 +1265,40 @@ deactivateReportsForConnection(MmsMapping* self, MmsServerConnection* connection
     }
 }
 
-static void
+static void /* is called by MMS server layer */
 mmsConnectionHandler(void* parameter, MmsServerConnection* connection, MmsServerEvent event)
 {
     MmsMapping* self = (MmsMapping*) parameter;
 
     if (event == MMS_SERVER_CONNECTION_CLOSED) {
+        ClientConnection clientConnection = private_IedServer_getClientConnectionByHandle(self->iedServer, connection);
+
+        /* call user provided handler function */
+        if (self->connectionIndicationHandler != NULL)
+                self->connectionIndicationHandler(self->iedServer, clientConnection, false,
+                        self->connectionIndicationHandlerParameter);
+
+        private_IedServer_removeClientConnection(self->iedServer, clientConnection);
+
+        /* wait until control threads are finished */
+        while (private_ClientConnection_getTasksCount(clientConnection) > 0)
+            Thread_sleep(10);
+
         deactivateReportsForConnection(self, connection);
         unselectControlsForConnection(self, connection);
+
+        private_ClientConnection_destroy(clientConnection);
+    }
+    else if (event == MMS_SERVER_NEW_CONNECTION) {
+        /* call user provided handler function */
+        ClientConnection newClientConnection = private_ClientConnection_create(connection);
+
+        private_IedServer_addNewClientConnection(self->iedServer, newClientConnection);
+
+        /* call user provided handler function */
+        if (self->connectionIndicationHandler != NULL)
+            self->connectionIndicationHandler(self->iedServer, newClientConnection, true,
+                    self->connectionIndicationHandlerParameter);
     }
 }
 
@@ -1261,6 +1308,19 @@ MmsMapping_installHandlers(MmsMapping* self)
     MmsServer_installReadHandler(self->mmsServer, mmsReadHandler, (void*) self);
     MmsServer_installWriteHandler(self->mmsServer, mmsWriteHandler, (void*) self);
     MmsServer_installConnectionHandler(self->mmsServer, mmsConnectionHandler, (void*) self);
+}
+
+void
+MmsMapping_setIedServer(MmsMapping* self, IedServer iedServer)
+{
+    self->iedServer = iedServer;
+}
+
+void
+MmsMapping_setConnectionIndicationHandler(MmsMapping* self, IedConnectionIndicationHandler handler, void* parameter)
+{
+    self->connectionIndicationHandler = handler;
+    self->connectionIndicationHandlerParameter = parameter;
 }
 
 static bool
@@ -1318,7 +1378,8 @@ MmsMapping_triggerReportObservers(MmsMapping* self, MmsValue* value, ReportInclu
                     continue;
                 break;
             case REPORT_CONTROL_VALUE_CHANGED:
-                if ((rc->triggerOps & TRG_OPT_DATA_CHANGED) == 0)
+                if (((rc->triggerOps & TRG_OPT_DATA_CHANGED) == 0) &&
+                        ((rc->triggerOps & TRG_OPT_DATA_UPDATE) == 0))
                     continue;
                 break;
             case REPORT_CONTROL_QUALITY_CHANGED:
@@ -1440,7 +1501,7 @@ MmsMapping_createMmsVariableNameFromObjectReference(char* objectReference,
     else
         i++;
 
-    char* fcString = FunctionalConstrained_toString(fc);
+    char* fcString = FunctionalConstraint_toString(fc);
 
     if (fcString == NULL)
         return NULL;
@@ -1521,7 +1582,7 @@ eventWorkerThread(MmsMapping* self)
         running = self->reportThreadRunning;
     }
 
-    if (DEBUG)
+    if (DEBUG_IDE_SERVER)
         printf("event worker thread finished!\n");
 }
 
@@ -1641,47 +1702,176 @@ MmsMapping_ObjectReferenceToVariableAccessSpec(char* objectReference)
 
     int domainIdLen = domainIdEnd - objectReference;
 
+    char* fcStart = strchr(objectReference, '[');
+
+    if (fcStart == NULL) /* no FC present */
+        return NULL;
+
+    char* fcEnd = strchr(fcStart, ']');
+
+    if (fcEnd == NULL) /* syntax error in FC */
+        return NULL;
+
+    if ((fcEnd - fcStart) != 3) /* syntax error in FC */
+        return NULL;
+
+    FunctionalConstraint fc = FunctionalConstraint_fromString(fcStart + 1);
+
     MmsVariableAccessSpecification* accessSpec =
             (MmsVariableAccessSpecification*) calloc(1, sizeof(MmsVariableAccessSpecification));
 
     accessSpec->domainId = createStringFromBuffer((uint8_t*) objectReference, domainIdLen);
 
-    char* itemIdEnd = strchr(domainIdEnd, '(');
+    char* indexBrace = strchr(domainIdEnd, '(');
+
+    char* itemIdEnd = indexBrace;
+
+    if (itemIdEnd == NULL)
+        itemIdEnd = strchr(domainIdEnd, '[');
 
     int objRefLen = strlen(objectReference);
 
-    if (itemIdEnd == NULL) {
-        int itemIdLen = objRefLen - domainIdLen - 1;
+    accessSpec->arrayIndex = -1; /* -1 --> not present */
 
-        accessSpec->itemId = createStringFromBuffer((uint8_t*) (domainIdEnd + 1), itemIdLen);
-
-        StringUtils_replace(accessSpec->itemId, '.', '$');
-    }
-    else {
+    if (itemIdEnd != NULL) {
         int itemIdLen = itemIdEnd - domainIdEnd - 1;
 
-        accessSpec->itemId = createStringFromBuffer((uint8_t*) (domainIdEnd + 1), itemIdLen);
+        char* itemIdStr = (char*) alloca(129);
 
-        StringUtils_replace(accessSpec->itemId, '.', '$');
+        memcpy(itemIdStr,  (domainIdEnd + 1), itemIdLen);
+        itemIdStr[itemIdLen] = 0;
 
-        char* indexStart = itemIdEnd + 1;
+        accessSpec->itemId = MmsMapping_createMmsVariableNameFromObjectReference(itemIdStr, fc, NULL);
 
-        char* indexEnd = strchr(indexStart, ')');
+        if (indexBrace != NULL) {
 
-        int indexLen = indexEnd - indexStart;
+            char* indexStart = itemIdEnd + 1;
 
-        int index = StringUtils_digitsToInt(indexStart, indexLen);
+            char* indexEnd = strchr(indexStart, ')');
 
-        accessSpec->arrayIndex = (int32_t) index;
+            int indexLen = indexEnd - indexStart;
 
-        int componentNameLen = objRefLen - ((indexEnd + 2) - objectReference);
+            int index = StringUtils_digitsToInt(indexStart, indexLen);
 
-        if (componentNameLen > 0) {
-            accessSpec->componentName = createStringFromBuffer((uint8_t*) (indexEnd + 2), componentNameLen);
-            StringUtils_replace(accessSpec->componentName, '.', '$');
+            accessSpec->arrayIndex = (int32_t) index;
+
+            int componentNameLen = objRefLen - ((indexEnd + 2) - objectReference) - 4;
+
+            if (componentNameLen > 0) {
+                accessSpec->componentName = createStringFromBuffer((uint8_t*) (indexEnd + 2), componentNameLen);
+                StringUtils_replace(accessSpec->componentName, '.', '$');
+            }
         }
     }
 
     return accessSpec;
+}
+
+static int
+getNumberOfDigits(int value)
+{
+    int numberOfDigits = 1;
+
+    while (value > 9) {
+        numberOfDigits++;
+        value /= 10;
+    }
+
+    return numberOfDigits;
+}
+
+char*
+MmsMapping_varAccessSpecToObjectReference(MmsVariableAccessSpecification* varAccessSpec)
+{
+    char* domainId = varAccessSpec->domainId;
+
+    int domainIdLen = strlen(domainId);
+
+    char* itemId = varAccessSpec->itemId;
+
+    char* separator = strchr(itemId, '$');
+
+    int itemIdLen = strlen(itemId);
+
+    int arrayIndexLen = 0;
+
+    int componentPartLen = 0;
+
+    if (varAccessSpec->componentName != NULL)
+        componentPartLen = strlen(varAccessSpec->componentName);
+
+    if (varAccessSpec->arrayIndex > -1)
+        arrayIndexLen = 2 + getNumberOfDigits(varAccessSpec->arrayIndex);
+
+    int newStringLen = (domainIdLen + 1) + (itemIdLen - 2) + arrayIndexLen + 4 /* for FC */ + componentPartLen + 1;
+
+    char* newString = (char*) malloc(newStringLen);
+
+    char* targetPos = newString;
+
+    /* Copy domain id part */
+    char* currentPos = domainId;
+
+    while (currentPos < (domainId + domainIdLen)) {
+        *targetPos = *currentPos;
+        targetPos++;
+        currentPos++;
+    }
+
+    *targetPos = '/'; targetPos++;
+
+    /* Copy item id parts */
+    currentPos = itemId;
+
+    while (currentPos < separator) {
+        *targetPos = *currentPos;
+        targetPos++;
+        currentPos++;
+    }
+
+    *targetPos = '.'; targetPos++;
+
+    currentPos = separator + 4;
+
+    while (currentPos < (itemId + itemIdLen)) {
+        if (*currentPos == '$')
+            *targetPos = '.';
+        else
+            *targetPos = *currentPos;
+
+        targetPos++;
+        currentPos++;
+    }
+
+    /* Add array index part */
+    if (varAccessSpec->arrayIndex > -1) {
+        sprintf(targetPos, "(%i)", varAccessSpec->arrayIndex);
+        targetPos += arrayIndexLen;
+    }
+
+    /* Add component part */
+    if (varAccessSpec->componentName != NULL) {
+        *targetPos = '.'; targetPos++;
+
+        int i;
+        for (i = 0; i < componentPartLen; i++) {
+            if (varAccessSpec->componentName[i] == '$')
+                *targetPos = '.';
+            else
+                *targetPos = varAccessSpec->componentName[i];
+
+            targetPos++;
+        }
+    }
+
+    /* add FC part */
+    *targetPos = '['; targetPos++;
+    *targetPos = *(separator + 1); targetPos++;
+    *targetPos = *(separator + 2); targetPos++;
+    *targetPos = ']'; targetPos++;
+
+    *targetPos = 0; /* add terminator */
+
+    return newString;
 }
 

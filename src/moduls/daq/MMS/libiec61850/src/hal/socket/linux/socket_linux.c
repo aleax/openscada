@@ -29,13 +29,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <errno.h>
+
+#include <fcntl.h>
 
 #include <netinet/tcp.h> // required for TCP keepalive
 
+#include "stack_config.h"
+
 #ifndef SOL_TCP
 #define SOL_TCP IPPROTO_TCP
+#endif
+
+#ifndef DEBUG_SOCKET
+#define DEBUG_SOCKET 0
 #endif
 
 #include "stack_config.h"
@@ -71,7 +81,7 @@ activateKeepAlive(int sd)
 #endif
 }
 
-static void
+static bool
 prepareServerAddress(char* address, int port, struct sockaddr_in* sockaddr)
 {
 
@@ -80,6 +90,9 @@ prepareServerAddress(char* address, int port, struct sockaddr_in* sockaddr)
 	if (address != NULL) {
 		struct hostent *server;
 		server = gethostbyname(address);
+
+		if (server == NULL) return false;
+
 		memcpy((char *) &sockaddr->sin_addr.s_addr, (char *) server->h_addr, server->h_length);
 	}
 	else
@@ -87,6 +100,15 @@ prepareServerAddress(char* address, int port, struct sockaddr_in* sockaddr)
 
     sockaddr->sin_family = AF_INET;
     sockaddr->sin_port = htons(port);
+
+    return true;
+}
+
+static void
+setSocketNonBlocking(Socket self)
+{
+    int flags = fcntl(self->fd, F_GETFL, 0);
+    fcntl(self->fd, F_SETFL, flags | O_NONBLOCK);
 }
 
 ServerSocket
@@ -99,7 +121,10 @@ TcpServerSocket_create(char* address, int port)
     if ((fd = socket(AF_INET, SOCK_STREAM, 0)) >= 0) {
         struct sockaddr_in serverAddress;
 
-        prepareServerAddress(address, port, &serverAddress);
+        if (!prepareServerAddress(address, port, &serverAddress)) {
+            close(fd);
+            return NULL;
+        }
 
         //TODO check if this works with BSD
         int optionReuseAddr = 1;
@@ -115,7 +140,7 @@ TcpServerSocket_create(char* address, int port)
             return NULL ;
         }
 
-#if (CONFIG_ACTIVATE_TCP_KEEPALIVE == 1)
+#if CONFIG_ACTIVATE_TCP_KEEPALIVE == 1
         activateKeepAlive(fd);
 #endif
     }
@@ -156,6 +181,10 @@ static void
 closeAndShutdownSocket(int socketFd)
 {
     if (socketFd != -1) {
+
+        if (DEBUG_SOCKET)
+            printf("socket_linux.c: call shutdown for %i!\n", socketFd);
+
         // shutdown is required to unblock read or accept in another thread!
         int res = shutdown(socketFd, SHUT_RDWR);
 
@@ -186,12 +215,16 @@ Socket_connect(Socket self, char* address, int port)
 {
     struct sockaddr_in serverAddress;
 
-    prepareServerAddress(address, port, &serverAddress);
+    if (DEBUG_SOCKET)
+        printf("Socket_connect: %s:%i\n", address, port);
+
+    if (!prepareServerAddress(address, port, &serverAddress))
+        return 0;
 
     self->fd = socket(AF_INET, SOCK_STREAM, 0);
 
-#if (CONFIG_ACTIVATE_TCP_KEEPALIVE == 1)
-        activateKeepAlive(self->fd);
+#if CONFIG_ACTIVATE_TCP_KEEPALIVE == 1
+    activateKeepAlive(self->fd);
 #endif
 
     if (connect(self->fd, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0)
@@ -211,22 +244,30 @@ Socket_getPeerAddress(Socket self)
     char addrString[INET6_ADDRSTRLEN + 7];
     int port;
 
+    bool isIPv6;
+
     if (addr.ss_family == AF_INET) {
         struct sockaddr_in* ipv4Addr = (struct sockaddr_in*) &addr;
         port = ntohs(ipv4Addr->sin_port);
         inet_ntop(AF_INET, &(ipv4Addr->sin_addr), addrString, INET_ADDRSTRLEN);
+        isIPv6 = false;
     }
     else if (addr.ss_family == AF_INET6) {
         struct sockaddr_in6* ipv6Addr = (struct sockaddr_in6*) &addr;
         port = ntohs(ipv6Addr->sin6_port);
         inet_ntop(AF_INET6, &(ipv6Addr->sin6_addr), addrString, INET6_ADDRSTRLEN);
+        isIPv6 = true;
     }
     else
         return NULL ;
 
-    char* clientConnection = malloc(strlen(addrString) + 8);
+    char* clientConnection = malloc(strlen(addrString) + 9);
 
-    sprintf(clientConnection, "%s[%i]", addrString, port);
+
+    if (isIPv6)
+        sprintf(clientConnection, "[%s]:%i", addrString, port);
+    else
+        sprintf(clientConnection, "%s:%i", addrString, port);
 
     return clientConnection;
 }
@@ -234,7 +275,25 @@ Socket_getPeerAddress(Socket self)
 int
 Socket_read(Socket socket, uint8_t* buf, int size)
 {
-    return read(socket->fd, buf, size);
+    int read_bytes = read(socket->fd, buf, size);
+
+    if (read_bytes == -1) {
+        int error = errno;
+
+        switch (error) {
+
+            case EAGAIN:
+                return 0;
+            case EBADF:
+                return -1;
+
+            default:
+                return -1;
+        }
+    }
+    else  {
+        return read_bytes;
+    }
 }
 
 int

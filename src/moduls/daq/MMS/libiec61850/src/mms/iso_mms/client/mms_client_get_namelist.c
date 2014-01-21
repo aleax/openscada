@@ -196,8 +196,7 @@ exit_error:
         LinkedList_destroy(*nameList);
     }
 
-    //if (DEBUG)
-      printf("parseNameListResponse: error parsing message!\n");
+    if (DEBUG) printf("parseNameListResponse: error parsing message!\n");
     return false;
 }
 

@@ -118,8 +118,6 @@ mmsClient_parseInitiateResponse(MmsConnection self)
 		if (initiateResponse->localDetailCalled != NULL) {
 			long maxPduSize;
 
-			//asn_INTEGER2long(initiateResponse->localDetailCalled, &maxPduSize);
-
 			maxPduSize = *(initiateResponse->localDetailCalled);
 
 			self->parameters.maxPduSize = maxPduSize;
@@ -128,8 +126,6 @@ mmsClient_parseInitiateResponse(MmsConnection self)
 		if (initiateResponse->negotiatedDataStructureNestingLevel != NULL) {
 			long nestingLevel;
 
-			//asn_INTEGER2long(initiateResponse->negotiatedDataStructureNestingLevel, &nestingLevel);
-
 			nestingLevel = *(initiateResponse->negotiatedDataStructureNestingLevel);
 
 			self->parameters.dataStructureNestingLevel = nestingLevel;
@@ -137,16 +133,11 @@ mmsClient_parseInitiateResponse(MmsConnection self)
 
 		long maxServerOutstandingCalled;
 
-//		asn_INTEGER2long(&initiateResponse->negotiatedMaxServOutstandingCalled,
-//				&maxServerOutstandingCalled);
-
 		maxServerOutstandingCalled = initiateResponse->negotiatedMaxServOutstandingCalled;
 
 		self->parameters.maxServOutstandingCalled = maxServerOutstandingCalled;
 
 		long maxServerOutstandingCalling;
-//		asn_INTEGER2long(&initiateResponse->negotiatedMaxServOutstandingCalling,
-//				&maxServerOutstandingCalling);
 
 		maxServerOutstandingCalling = initiateResponse->negotiatedMaxServOutstandingCalling;
 

@@ -5,22 +5,22 @@
  *
  *  Copyright 2013 Michael Zillgith
  *
- *	This file is part of libIEC61850.
+ *  This file is part of libIEC61850.
  *
- *	libIEC61850 is free software: you can redistribute it and/or modify
- *	it under the terms of the GNU General Public License as published by
- *	the Free Software Foundation, either version 3 of the License, or
- *	(at your option) any later version.
+ *  libIEC61850 is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
  *
- *	libIEC61850 is distributed in the hope that it will be useful,
- *	but WITHOUT ANY WARRANTY; without even the implied warranty of
- *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *	GNU General Public License for more details.
+ *  libIEC61850 is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
  *
- *	You should have received a copy of the GNU General Public License
- *	along with libIEC61850.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU General Public License
+ *  along with libIEC61850.  If not, see <http://www.gnu.org/licenses/>.
  *
- *	See COPYING file for the complete license text.
+ *  See COPYING file for the complete license text.
  *
  */
 
@@ -34,7 +34,15 @@
 #include "mms_server.h"
 #include "model.h"
 
+/**
+ * An opaque handle for an IED server instance
+ */
 typedef struct sIedServer* IedServer;
+
+/**
+ * An opaque handle for a client connection
+ */
+typedef struct sClientConnection* ClientConnection;
 
 /**
  * \brief Create a new IedServer instance
@@ -81,6 +89,9 @@ IedServer_stop(IedServer self);
 bool
 IedServer_isRunning(IedServer self);
 
+MmsServer
+IedServer_getMmsServer(IedServer self);
+
 /**
  * \brief get the IsoServer instance for this IedServer object
  *
@@ -92,6 +103,39 @@ IsoServer
 IedServer_getIsoServer(IedServer self);
 
 /**
+ * \brief get the peer address of this connection as string
+ *
+ * Note: the returned string is only valid as long as the client connection exists. It is save to use
+ * the string inside of the connection indication callback function.
+ *
+ * \param self the ClientConnection instance
+ * \return peer address as C string.
+ */
+char*
+ClientConnection_getPeerAddress(ClientConnection self);
+
+/**
+ * \brief User provided callback function that is invoked whenever a new client connects or an existing connection is closed
+ *        or detected as lost.
+ *
+ * \param self the instance of IedServer where the connection event occured.
+ * \param connection the new or closed client connect object
+ * \param connected true if a new connection is indicated, false if the connection has been closed or detected as lost.
+ * \param parameter a user provided parameter
+ */
+typedef void (*IedConnectionIndicationHandler) (IedServer self, ClientConnection connection, bool connected, void* parameter);
+
+/**
+ * \brief set a callback function that will be called on connection events (open or close).
+ *
+ * \param self the instance of IedServer to operate on.
+ * \param handler the user provided callback function
+ * \param parameter a user provided parameter that is passed to the callback function.
+ */
+void
+IedServer_setConnectionIndicationHandler(IedServer self, IedConnectionIndicationHandler handler, void* parameter);
+
+/**
  * \brief Get data attribute value
  *
  * Get the MmsValue object of an MMS Named Variable that is part of the device model.
@@ -99,43 +143,43 @@ IedServer_getIsoServer(IedServer self);
  * the IedServer_updateValue method.
  *
  * \param self the instance of IedServer to operate on.
- * \param node the data attribute handle
+ * \param dataAttribute the data attribute handle
  *
  * \return MmsValue object of the MMS Named Variable or NULL if the value does not exist.
  */
 MmsValue*
-IedServer_getAttributeValue(IedServer self, ModelNode* node);
+IedServer_getAttributeValue(IedServer self, DataAttribute* dataAttribute);
 
 
 /**
  * \brief Update the MmsValue object of an IEC 61850 data attribute.
  *
- * The data attribute handle of type ModelNode* are imported with static_model.h.
+ * The data attribute handle of type DataAttribute* are imported with static_model.h.
  * You should use this function instead of directly operating on the MmsValue instance
  * that is hold by the MMS server. Otherwise the IEC 61850 server is not aware of the
  * changed value and will e.g. not generate a report.
  *
  * \param self the instance of IedServer to operate on.
- * \param node the data attribute handle
+ * \param dataAttribute the data attribute handle
  * \param value MmsValue object used to update the value cached by the server.
  *
  * \return MmsValue object of the MMS Named Variable or NULL if the value does not exist.
  */
 void
-IedServer_updateAttributeValue(IedServer self, DataAttribute* node, MmsValue* value);
+IedServer_updateAttributeValue(IedServer self, DataAttribute* dataAttribute, MmsValue* value);
 
 /**
  * \brief Inform the IEC 61850 stack that the quality of a data attribute has changed.
  *
- * The data attribute handle of type ModelNode* are imported with static_model.h.
+ * The data attribute handle of type DataAttribute* are imported with static_model.h.
  * This function is required to trigger reports that have been configured with
  * QUALITY CHANGE trigger condition.
  *
  * \param self the instance of IedServer to operate on.
- * \param node the data attribute handle
+ * \param dataAttribute the data attribute handle
  */
 void
-IedServer_attributeQualityChanged(IedServer self, ModelNode* node);
+IedServer_attributeQualityChanged(IedServer self, DataAttribute* dataAttribute);
 
 /**
  * \brief Control model callback to perform the static tests (optional).
@@ -149,10 +193,12 @@ IedServer_attributeQualityChanged(IedServer self, ModelNode* node);
  * \param ctlVal the control value of the control operation.
  * \param test indicates if the operate request is a test operation
  * \param interlockCheck the interlockCheck parameter provided by the client
+ * \param connection the connection object of the client connection that invoked the control operation
  *
  * \return true if the static tests had been successful, false otherwise
  */
-typedef bool (*ControlPerformCheckHandler) (void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck);
+typedef bool (*ControlPerformCheckHandler) (void* parameter, MmsValue* ctlVal, bool test, bool interlockCheck,
+        ClientConnection connection);
 
 /**
  * \brief Control model callback to perform the dynamic tests (optional).
@@ -276,15 +322,17 @@ IedServer_enableGoosePublishing(IedServer self);
  * multiple times and distinguish data attributes by the dataAttribute parameter.
  *
  * \param the data attribute that has been written by an MMS client.
+ * \param connection the connection object of the client connection that invoked the write operation
  */
-typedef void (*AttributeChangedHandler) (DataAttribute* dataAttribute);
+typedef void (*AttributeChangedHandler) (DataAttribute* dataAttribute, ClientConnection connection);
 
 /**
  * \brief Install an observer for a data attribute.
  *
  * This instructs the server to monitor write attempts by MMS clients to specific
  * data attributes. If a successful write attempt happens the server will call
- * the provided callback function to inform the application.
+ * the provided callback function to inform the application. This can be used to
+ * monitor important configuration values.
  *
  * \param self the instance of IedServer to operate on.
  * \param dataAttribute the data attribute to monitor

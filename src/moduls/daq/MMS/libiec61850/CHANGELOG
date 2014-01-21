@@ -1,3 +1,19 @@
+Changes to version 0.6
+------------------------
+- Client API: getDataSetDirectory ACSI service
+- Client API: create and delete data set ACSI services
+- Client API: added getRCBValue/setRCBValues ACSI services to improve client support for reporting
+- client side stack: improved error handling
+- Client API: Methods to allow clients track the connection state
+- Client API: Report handler provides access to reason-for-inclusion
+- Server API: added callbacks for connection events 
+- Server API: new ClientConnection object that will be handed over to some callback functions to allow connection specific reactions on events -> some callback handler signatures have changed! 
+- Added server side support for indexed RCBs
+- more efficient server side buffer handling
+- added BeagleBone LED control demo
+- DEBUG output can be switched on/off for stack components
+- and a lot of small improvements and bug fixes
+
 Changes to version 0.5.3
 ------------------------
 - MMS client/server: multiple variables can be written with a single MMS write request

@@ -38,7 +38,7 @@
  *************************************************************************************/
 
 /**
- * Create an Array and initialize elements with default values.
+ * \brief Create an Array and initialize elements with default values.
  *
  * \param elementType type description for the elements the new array
  * \param size the size of the new array
@@ -49,7 +49,7 @@ MmsValue*
 MmsValue_createArray(MmsVariableSpecification* elementType, int size);
 
 /**
- * Get the size of an array.
+ * \brief Get the size of an array.
  *
  * \param self MmsValue instance to operate on. Has to be of type MMS_ARRAY.
  *
@@ -59,7 +59,7 @@ uint32_t
 MmsValue_getArraySize(MmsValue* self);
 
 /**
- * Get an element of an array or structure.
+ * \brief Get an element of an array or structure.
  *
  * \param self MmsValue instance to operate on. Has to be of type MMS_ARRAY or MMS_STRUCTURE.
  * \param index ndex of the requested array or structure element
@@ -70,7 +70,7 @@ MmsValue*
 MmsValue_getElement(MmsValue* array, int index);
 
 /**
- * Create an emtpy array.
+ * \brief Create an emtpy array.
  *
  * \param size the size of the new array
  *
@@ -91,7 +91,7 @@ MmsDataAccessError
 MmsValue_getDataAccessError(MmsValue* self);
 
 /**
- * Get the int64_t value of a MmsValue object.
+ * \brief Get the int64_t value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_INTEGER or MMS_UNSIGNED
  *
@@ -101,7 +101,7 @@ int64_t
 MmsValue_toInt64(MmsValue* self);
 
 /**
- * Get the int32_t value of a MmsValue object.
+ * \brief Get the int32_t value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_INTEGER or MMS_UNSIGNED
  *
@@ -111,7 +111,7 @@ int32_t
 MmsValue_toInt32(MmsValue* value);
 
 /**
- * Get the uint32_t value of a MmsValue object.
+ * \brief Get the uint32_t value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_INTEGER or MMS_UNSIGNED
  *
@@ -121,7 +121,7 @@ uint32_t
 MmsValue_toUint32(MmsValue* value);
 
 /**
- * Get the double value of a MmsValue object.
+ * \brief Get the double value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of type MMS_FLOAT.
  *
@@ -131,7 +131,7 @@ double
 MmsValue_toDouble(MmsValue* self);
 
 /**
- * Get the float value of a MmsValue object.
+ * \brief Get the float value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of type MMS_FLOAT.
  *
@@ -141,7 +141,7 @@ float
 MmsValue_toFloat(MmsValue* self);
 
 /**
- * Get the unix timestamp of a MmsValue object of type MMS_UTCTIME.
+ * \brief Get the unix timestamp of a MmsValue object of type MMS_UTCTIME.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_UTC_TIME.
  *
@@ -151,7 +151,7 @@ uint32_t
 MmsValue_toUnixTimestamp(MmsValue* self);
 
 /**
- * Set the float value of a MmsValue object.
+ * \brief Set the float value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_FLOAT.
  */
@@ -159,7 +159,7 @@ void
 MmsValue_setFloat(MmsValue* self, float newFloatValue);
 
 /**
- * Set the double value of a MmsValue object.
+ * \brief Set the double value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_FLOAT.
  */
@@ -167,7 +167,7 @@ void
 MmsValue_setDouble(MmsValue* self, double newFloatValue);
 
 /**
- * Set the Int32 value of a MmsValue object.
+ * \brief Set the Int32 value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_INTEGER.
  */
@@ -180,9 +180,12 @@ MmsValue_setUint8(MmsValue* value, uint8_t integer);
 void
 MmsValue_setUint16(MmsValue* value, uint16_t integer);
 
+void
+MmsValue_setUint32(MmsValue* value, uint32_t integer);
+
 
 /**
- * Set the bool value of a MmsValue object.
+ * \brief Set the bool value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_BOOLEAN.
  * \param boolValue a bool value
@@ -191,7 +194,7 @@ void
 MmsValue_setBoolean(MmsValue* value, bool boolValue);
 
 /**
- * Get the bool value of a MmsValue object.
+ * \brief Get the bool value of a MmsValue object.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_BOOLEAN.
  * \return  the MmsValue value as bool value
@@ -207,7 +210,7 @@ MmsValue_setVisibleString(MmsValue* self, char* string);
 
 
 /**
- * Set a single bit (set to one) of an MmsType object of type MMS_BITSTRING
+ * \brief Set a single bit (set to one) of an MmsType object of type MMS_BITSTRING
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_BITSTRING.
  * \param bitPos the position of the bit in the bit string. Starting with 0. The bit
@@ -262,7 +265,24 @@ void
 MmsValue_setAllBitStringBits(MmsValue* self);
 
 /**
- * Update an MmsValue object of UtcTime type with a timestamp in s
+ * \brief Convert a bit string to an unsigned integer
+ *
+ * \param self MmsValue instance to operate on. Has to be of a type MMS_BITSTRING.
+ */
+uint32_t
+MmsValue_getBitStringAsInteger(MmsValue* self);
+
+/**
+ * \brief Convert an unsigned integer to a bit string
+ *
+ * \param self MmsValue instance to operate on. Has to be of a type MMS_BITSTRING.
+ * \param intValue the integer value that is used to set the bit string
+ */
+void
+MmsValue_setBitStringFromInteger(MmsValue* self, uint32_t intValue);
+
+/**
+ * \brief Update an MmsValue object of UtcTime type with a timestamp in s
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_BOOLEAN.
  * \param timeval the new value in seconds since epoch (1970/01/01 00:00 UTC)
@@ -271,7 +291,7 @@ MmsValue*
 MmsValue_setUtcTime(MmsValue* self, uint32_t timeval);
 
 /**
- * Update an MmsValue object of type MMS_UTCTIME with a millisecond time.
+ * \brief Update an MmsValue object of type MMS_UTCTIME with a millisecond time.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_UTCTIME.
  * \param timeval the new value in milliseconds since epoch (1970/01/01 00:00 UTC)
@@ -280,7 +300,7 @@ MmsValue*
 MmsValue_setUtcTimeMs(MmsValue* self, uint64_t timeval);
 
 /**
- * Update an MmsValue object of type MMS_UTCTIME with a buffer containing a BER encoded UTCTime.
+ * \brief Update an MmsValue object of type MMS_UTCTIME with a buffer containing a BER encoded UTCTime.
  *
  * The buffer must have a size of 8 bytes!
  *
@@ -291,7 +311,7 @@ void
 MmsValue_setUtcTimeByBuffer(MmsValue* self, uint8_t* buffer);
 
 /**
- * Get a millisecond time value from an MmsValue object of MMS_UTCTIME type.
+ * \brief Get a millisecond time value from an MmsValue object of MMS_UTCTIME type.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_UTCTIME.
  *
@@ -301,7 +321,7 @@ uint64_t
 MmsValue_getUtcTimeInMs(MmsValue* value);
 
 /**
- * Update an MmsValue object of type MMS_BINARYTIME with a millisecond time.
+ * \brief Update an MmsValue object of type MMS_BINARYTIME with a millisecond time.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_UTCTIME.
  * \param timeval the new value in milliseconds since epoch (1970/01/01 00:00 UTC)
@@ -310,7 +330,7 @@ void
 MmsValue_setBinaryTime(MmsValue* self, uint64_t timestamp);
 
 /**
- * Get a millisecond time value from an MmsValue object of type MMS_BINARYTIME.
+ * \brief Get a millisecond time value from an MmsValue object of type MMS_BINARYTIME.
  *
  * \param self MmsValue instance to operate on. Has to be of a type MMS_BINARYTIME.
  *
@@ -320,7 +340,7 @@ uint64_t
 MmsValue_getBinaryTimeAsUtcMs(MmsValue* self);
 
 /**
- * Set the value of an MmsValue object of type MMS_OCTET_STRING.
+ * \brief Set the value of an MmsValue object of type MMS_OCTET_STRING.
  *
  * This method will copy the provided buffer to the internal buffer of the
  * MmsValue instance. This will only happen if the internal buffer size is large
@@ -334,7 +354,7 @@ void
 MmsValue_setOctetString(MmsValue* self, uint8_t* buf, int size);
 
 /**
- * Update the value of an MmsValue instance by the value of another MmsValue instance.
+ * \brief Update the value of an MmsValue instance by the value of another MmsValue instance.
  *
  * Both instances should be of same time. E.g. is self is of type MMS_INTEGER then
  * source has also to be of type MMS_INTEGER. Otherwise the call will have no effect.
@@ -348,7 +368,7 @@ bool
 MmsValue_update(MmsValue* self, MmsValue* source);
 
 /**
- * Check if two instances of MmsValue have the same value.
+ * \brief Check if two instances of MmsValue have the same value.
  *
  * Both instances should be of same time. E.g. is self is of type MMS_INTEGER then
  * source has also to be of type MMS_INTEGER. Otherwise the call will return false.
@@ -385,7 +405,7 @@ MmsValue*
 MmsValue_newBoolean(bool boolean);
 
 /**
- * Create a new MmsValue instance of type MMS_BITSTRING.
+ * \brief Create a new MmsValue instance of type MMS_BITSTRING.
  *
  * \param bitSize the size of the bit string in bit
  *
@@ -425,7 +445,7 @@ MmsValue*
 MmsValue_newDouble(double variable);
 
 /**
- * Create a (deep) copy of an MmsValue instance
+ * \brief Create a (deep) copy of an MmsValue instance
  *
  * This operation will allocate dynamic memory. It is up to the caller to
  * free this memory by calling MmsValue_delete() later.
@@ -438,7 +458,7 @@ MmsValue*
 MmsValue_clone(MmsValue* self);
 
 /**
- * Delete an MmsValue instance.
+ * \brief Delete an MmsValue instance.
  *
  * This operation frees all dynamically allocated memory of the MmsValue instance.
  * If the instance is of type MMS_STRUCTURE or MMS_ARRAY all child elements will
@@ -450,7 +470,19 @@ void
 MmsValue_delete(MmsValue* self);
 
 /**
- * Create a new MmsValue instance of type MMS_VISIBLE_STRING.
+ * \brief Delete an MmsValue instance if the provided pointer is not NULL
+ *
+ * This operation frees all dynamically allocated memory of the MmsValue instance.
+ * If the instance is of type MMS_STRUCTURE or MMS_ARRAY all child elements will
+ * be deleted too.
+ *
+ * \param self the MmsValue instance to be deleted.
+ */
+void
+MmsValue_deleteIfNotNull(MmsValue* value);
+
+/**
+ * \brief Create a new MmsValue instance of type MMS_VISIBLE_STRING.
  *
  * \param string a text string that should be the value of the new instance of NULL for an empty string.
  *
@@ -460,7 +492,7 @@ MmsValue*
 MmsValue_newVisibleString(char* string);
 
 /**
- * Create a new MmsValue instance of type MMS_BINARYTIME.
+ * \brief Create a new MmsValue instance of type MMS_BINARYTIME.
  *
  * If the timeOfDay parameter is set to true then the resulting
  * MMS_BINARYTIME object is only 4 octets long and includes only
@@ -477,7 +509,7 @@ MmsValue*
 MmsValue_newVisibleStringFromByteArray(uint8_t* byteArray, int size);
 
 /**
- * Create a new MmsValue instance of type MMS_STRING.
+ * \brief Create a new MmsValue instance of type MMS_STRING.
  *
  * \param string a text string that should be the value of the new instance of NULL for an empty string.
  *
@@ -490,7 +522,7 @@ void
 MmsValue_setMmsString(MmsValue* value, char* string);
 
 /**
- * Create a new MmsValue instance of type MMS_UTCTIME.
+ * \brief Create a new MmsValue instance of type MMS_UTCTIME.
  *
  * \param timeval time value as UNIX timestamp (seconds since epoch)
  *
@@ -500,7 +532,7 @@ MmsValue*
 MmsValue_newUtcTime(uint32_t timeval);
 
 /**
- * Create a new MmsValue instance of type MMS_UTCTIME.
+ * \brief Create a new MmsValue instance of type MMS_UTCTIME.
  *
  * \param timeval time value as millisecond timestamp (milliseconds since epoch)
  *
@@ -514,7 +546,7 @@ void
 MmsValue_setDeletable(MmsValue* self);
 
 /**
- * Check if the MmsValue instance has the deletable flag set.
+ * \brief Check if the MmsValue instance has the deletable flag set.
  *
  * The deletable flag indicates if an libiec61850 API client should call the
  * MmsValue_delete() method or not if the MmsValue instance was passed to the
@@ -528,7 +560,7 @@ int
 MmsValue_isDeletable(MmsValue* self);
 
 /**
- * Get the MmsType of an MmsValue instance
+ * \brief Get the MmsType of an MmsValue instance
  *
  * \param self the MmsValue instance
  */

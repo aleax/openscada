@@ -1,5 +1,5 @@
 /*
- *  mms_mapping_internal.h
+ *  iso_server_private.h
  *
  *  Copyright 2013 Michael Zillgith
  *
@@ -21,27 +21,16 @@
  *  See COPYING file for the complete license text.
  */
 
-#ifndef MMS_MAPPING_INTERNAL_H_
-#define MMS_MAPPING_INTERNAL_H_
+#ifndef ISO_SERVER_PRIVATE_H_
+#define ISO_SERVER_PRIVATE_H_
 
-#include "thread.h"
-#include "linked_list.h"
+void
+private_IsoServer_increaseConnectionCounter(IsoServer self);
 
-struct sMmsMapping {
-    IedModel* model;
-    MmsDevice* mmsDevice;
-    MmsServer mmsServer;
-    LinkedList reportControls;
-    LinkedList gseControls;
-    LinkedList controlObjects;
-    LinkedList observedObjects;
-    bool reportThreadRunning;
-    Thread reportWorkerThread;
+void
+private_IsoServer_decreaseConnectionCounter(IsoServer self);
 
-    IedServer iedServer;
+int
+private_IsoServer_getConnectionCounter(IsoServer self);
 
-    IedConnectionIndicationHandler connectionIndicationHandler;
-    void* connectionIndicationHandlerParameter;
-};
-
-#endif /* MMS_MAPPING_INTERNAL_H_ */
+#endif /* ISO_SERVER_PRIVATE_H_ */

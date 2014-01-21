@@ -6252,7 +6252,7 @@ void VCADiagram::TrendObj::loadSpectrumData( const string &user, bool full )
     tTimeGrnd = vmax(tTimeGrnd,valBeg());
     tTime = vmin(tTime,valEnd());
 
-    fftN = (tTime-tTimeGrnd)/workPer;
+    if((fftN=vmax(0,(tTime-tTimeGrnd)/workPer)) == 0) return;
     double fftIn[fftN];
     fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
 

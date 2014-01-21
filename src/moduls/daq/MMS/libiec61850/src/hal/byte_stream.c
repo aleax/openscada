@@ -79,14 +79,18 @@ ByteStream_writeUint8(ByteStream self, uint8_t byte)
 int
 ByteStream_readUint8(ByteStream self, uint8_t* byte)
 {
-    int bytes_read;
+    int bytesRead;
+
     uint64_t start = Hal_getTimeInMs();
 
     do {
-        bytes_read = Socket_read(self->socket, byte, 1);
-    } while ((bytes_read == 0) && ((Hal_getTimeInMs() - start) < CONFIG_TCP_READ_TIMEOUT_MS));
+        bytesRead = Socket_read(self->socket, byte, 1);
 
-    if (bytes_read != 1) {
+        if (bytesRead == -1) break;
+
+    } while ((bytesRead < 1) && ((Hal_getTimeInMs() - start) < CONFIG_TCP_READ_TIMEOUT_MS));
+
+    if (bytesRead != 1) {
         return -1;
     }
 
@@ -97,13 +101,13 @@ int
 ByteStream_readUint16(ByteStream self, uint16_t* value)
 {
     uint8_t byte[2];
-    int bytes_read;
+    int bytes_read = 0;
 
     uint64_t start = Hal_getTimeInMs();
 
     do {
-        bytes_read = Socket_read(self->socket, byte, 2);
-    } while ((bytes_read == 0)
+        bytes_read += Socket_read(self->socket, byte + bytes_read, 2);
+    } while ((bytes_read < 2)
             && ((Hal_getTimeInMs() - start) < CONFIG_TCP_READ_TIMEOUT_MS));
 
     if (bytes_read != 2) {

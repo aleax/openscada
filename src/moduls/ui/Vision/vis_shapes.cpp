@@ -65,8 +65,13 @@
 #include "vis_shapes.h"
 
 #ifdef HAVE_PHONON
+#ifdef HAVE_PHONON_VIDEOPLAYER
 #include <phonon/VideoPlayer>
 #include <phonon/VideoWidget>
+#else
+#include <Phonon/VideoPlayer>
+#include <Phonon/VideoWidget>
+#endif
 #endif
 
 
@@ -541,11 +546,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		if(tX.name() != "tbl") wdg->clear();
 		else
 		{
-		    // Generic properties set
-		    if((wVl=tX.attr("sel")) == "row")	wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
-		    else if(wVl == "col")		wdg->setSelectionBehavior(QAbstractItemView::SelectColumns);
-		    else				wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
-
 		    // Items
 		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || i_r < wdg->rowCount(); i_ch++)
 		    {
@@ -598,6 +598,21 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			}
 			else hdrPresent = true;
 		    }
+
+		    // Generic properties set
+		    int keyID = atoi(tX.attr("keyID").c_str());
+		    if((wVl=tX.attr("sel")) == "row")
+		    {
+			wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
+			keyID = vmin(keyID, maxCols-1);
+		    }
+		    else if(wVl == "col")
+		    {
+			wdg->setSelectionBehavior(QAbstractItemView::SelectColumns);
+			keyID = vmin(keyID, maxRows-1);
+		    }
+		    else wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
+		    wdg->setProperty("keyID", keyID);
 		}
 		wdg->horizontalHeader()->setVisible(hdrPresent);
 		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
@@ -804,6 +819,35 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		wdg->scrollToItem(cur_it);
 		//> Expand all parents for visible selected
 		//for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
+	    }
+	    break;
+	}
+	case F_TABLE:
+	{
+	    QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
+	    QList<QTableWidgetItem*> foundIts = wdg->findItems(val.c_str(), Qt::MatchExactly);
+	    QTableWidgetItem *selIt = NULL;
+	    switch(wdg->selectionBehavior())
+	    {
+		case QAbstractItemView::SelectRows:
+		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
+			if((*iIt)->column() == wdg->property("keyID").toInt()) selIt = *iIt;
+		    break;
+		case QAbstractItemView::SelectColumns:
+		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
+			if((*iIt)->row() == wdg->property("keyID").toInt()) selIt = *iIt;
+		    break;
+		default:
+		    if(foundIts.length()) selIt = foundIts.front();
+		    break;
+	    }
+	    if(selIt)
+	    {
+		shD->addrWdg->blockSignals(true);
+		wdg->setCurrentItem(selIt);
+		//selIt->setSelected(true);
+		shD->addrWdg->blockSignals(false);
+		wdg->scrollToItem(selIt);
 	    }
 	    break;
 	}
@@ -1060,10 +1104,12 @@ void ShapeFormEl::tableChange( )
     switch(el->selectionBehavior())
     {
 	case QAbstractItemView::SelectRows:
-	    value = el->selectedItems()[0]->tableWidget()->item(el->selectedItems()[0]->row(),0)->text().toStdString();
+	    value = el->selectedItems()[0]->tableWidget()->item(el->selectedItems()[0]->row(),
+							el->property("keyID").toInt())->text().toStdString();
 	    break;
 	case QAbstractItemView::SelectColumns:
-	    value = el->selectedItems()[0]->tableWidget()->item(0,el->selectedItems()[0]->column())->text().toStdString();
+	    value = el->selectedItems()[0]->tableWidget()->item(el->property("keyID").toInt(),
+							el->selectedItems()[0]->column())->text().toStdString();
 	    break;
     }
 
@@ -3269,12 +3315,13 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     int64_t tSize	= (int64_t)(1e6*shD->tSize);
     int64_t tTime	= shD->tTime;
     int64_t tTimeGrnd	= tTime - tSize;
+    if(shD->tTimeCurent) tTimeGrnd = (tTime=shD->arhEnd(tTime)) - tSize;
     int64_t workPer	= tSize/view->size().width();
 
-    tTimeGrnd = vmax(tTimeGrnd,valBeg());
-    tTime = vmin(tTime,valEnd());
+    tTimeGrnd = vmax(tTimeGrnd, valBeg());
+    tTime = vmin(tTime, valEnd());
 
-    fftN = (tTime-tTimeGrnd)/workPer;
+    if((fftN=vmax(0,(tTime-tTimeGrnd)/workPer)) == 0) return;
     double fftIn[fftN];
     fftOut = (fftw_complex*)malloc(sizeof(fftw_complex)*(fftN/2+1));
 
@@ -3282,11 +3329,11 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     for(unsigned a_pos = val(tTimeGrnd); a_pos < val().size() && val()[a_pos].tm <= tTime; a_pos++)
     {
 	int fftPos = (val()[a_pos].tm-tTimeGrnd)/workPer;
-	if( fftPos >= fftN ) break;
-	if( val()[a_pos].val == EVAL_REAL ) continue;
-	if( fftFirstPos < 0 ) fftFirstPos = fftPos;
+	if(fftPos >= fftN) break;
+	if(val()[a_pos].val == EVAL_REAL) continue;
+	if(fftFirstPos < 0) fftFirstPos = fftPos;
 
-	if( fftLstPos == fftPos ) fftIn[fftPos-fftFirstPos] = (fftIn[fftPos-fftFirstPos]+val()[a_pos].val)/2;
+	if(fftLstPos == fftPos) fftIn[fftPos-fftFirstPos] = (fftIn[fftPos-fftFirstPos]+val()[a_pos].val)/2;
 	else fftIn[fftPos-fftFirstPos] = val()[a_pos].val;
 
 	for( ; fftLstPos >= 0 && (fftLstPos+1) < fftPos; fftLstPos++ )
@@ -3295,7 +3342,7 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
     }
 
     fftN = fftLstPos-fftFirstPos;
-    if( fftN < 20 ) { delete fftOut; fftOut = NULL; fftN = 0; return; }
+    if(fftN < 20) { delete fftOut; fftOut = NULL; fftN = 0; return; }
 
     fftw_plan p = fftw_plan_dft_r2c_1d( fftN, fftIn, fftOut, FFTW_ESTIMATE );
     fftw_execute(p);

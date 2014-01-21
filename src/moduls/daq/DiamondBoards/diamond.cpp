@@ -682,7 +682,7 @@ void TMdPrm::getVals( const string &atr, bool start, bool stop )
 		while(dscaioint.dump_threshold > 65535) dscaioint.dump_threshold /= 2;	//Intermediately limited to "WORD" < 65536
 		dscaioint.fifo_enab = TRUE;
 		unsigned int fifoDepth = dev.aiSzFIFO;
-		while(fifoDepth > 10 && ((dscaioint.num_conversions%fifoDepth) || (fifoDepth%(dscaioint.high_channel+1)))) fifoDepth--;	//>> Align FIFO size to conversions number
+		while(fifoDepth > 10 && ((dscaioint.dump_threshold%fifoDepth) || (fifoDepth%(dscaioint.high_channel+1)))) fifoDepth--;	//>> Align FIFO size to conversions number
 		dscaioint.fifo_depth = fifoDepth;
 		if(owner().messLev() == TMess::Debug)
             	    mess_debug_(nodePath().c_str(), _("AI interrupt: Init for: ConvRate=%g; NumbConv=%lu; FIFOdepth=%d; dump_threshold=%lu; scan_interval=%d."),

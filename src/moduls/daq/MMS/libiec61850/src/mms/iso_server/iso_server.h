@@ -71,8 +71,14 @@ void
 IsoConnection_installListener(IsoConnection self, MessageReceivedHandler handler,
 		void* parameter);
 
+/**
+ * \brief send a message over an ISO connection
+ *
+ * \param handlerMode specifies if this function is used in the context of the connection handling thread
+ *        (handlerMode)
+ */
 void
-IsoConnection_sendMessage(IsoConnection self, ByteBuffer* message);
+IsoConnection_sendMessage(IsoConnection self, ByteBuffer* message, bool handlerMode);
 
 IsoServer
 IsoServer_create();

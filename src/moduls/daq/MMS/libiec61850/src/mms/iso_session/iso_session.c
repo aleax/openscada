@@ -24,6 +24,7 @@
 #include "libiec61850_platform_includes.h"
 #include "stack_config.h"
 #include "iso_session.h"
+#include "buffer_chain.h"
 
 static int
 parseAcceptParameters(IsoSession* session, ByteBuffer* message, int startOffset, int parameterLength)
@@ -196,6 +197,17 @@ IsoSession_createDataSpdu(IsoSession* session, ByteBuffer* buffer)
 	buffer->size = offset;
 }
 
+static const uint8_t dataSpdu[] = {0x01, 0x00, 0x01, 0x00};
+
+void
+IsoSession_createDataSpduBC(IsoSession* session, BufferChain buffer, BufferChain payload)
+{
+    buffer->buffer = (uint8_t*) dataSpdu;
+    buffer->partLength = 4;
+    buffer->length = 4 + payload->length;
+    buffer->nextPart = payload;
+}
+
 
 static int
 encodeConnectAcceptItem(uint8_t* buf, int offset, uint8_t options)
@@ -281,7 +293,7 @@ IsoSession_createConnectSpdu(IsoSession* self, ByteBuffer* buffer, uint8_t paylo
 	buffer->size = offset;
 }
 
-void
+void //TODO remove me
 IsoSession_createAcceptSpdu(IsoSession* self, ByteBuffer* buffer, uint8_t payloadLength)
 {
 	int offset = buffer->size;
@@ -304,6 +316,35 @@ IsoSession_createAcceptSpdu(IsoSession* self, ByteBuffer* buffer, uint8_t payloa
 	buf[lengthOffset] = spduLength;
 
 	buffer->size = offset;
+}
+
+void
+IsoSession_createAcceptSpduBC(IsoSession* self, BufferChain buffer, BufferChain payload)
+{
+    int offset = 0;
+    uint8_t* buf = buffer->buffer;
+    int lengthOffset;
+
+    int payloadLength = payload->length;
+
+    buf[offset++] = 14; /* ACCEPT SPDU */
+    lengthOffset = offset; offset++;
+
+    offset = encodeConnectAcceptItem(buf, offset, self->protocolOptions);
+
+    offset = encodeSessionRequirement(self, buf, offset);
+
+    offset = encodeCalledSessionSelector(self, buf, offset);
+
+    offset = encodeSessionUserData(self, buf, offset, payloadLength);
+
+    int spduLength = (offset - lengthOffset - 1) + payloadLength;
+
+    buf[lengthOffset] = spduLength;
+
+    buffer->partLength = offset;
+    buffer->length = offset + payloadLength;
+    buffer->nextPart = payload;
 }
 
 void

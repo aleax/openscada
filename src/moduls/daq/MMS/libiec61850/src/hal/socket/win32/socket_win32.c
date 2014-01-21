@@ -24,6 +24,7 @@
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdio.h>
+#include <stdbool.h>
 #include <windows.h>
 
 #pragma comment (lib, "Ws2_32.lib")
@@ -66,7 +67,7 @@ activateKeepAlive(SOCKET s)
 	 }
 }
 
-static void
+static bool
 prepareServerAddress(char* address, int port, struct sockaddr_in* sockaddr)
 {
 
@@ -75,6 +76,9 @@ prepareServerAddress(char* address, int port, struct sockaddr_in* sockaddr)
 	if (address != NULL) {
 		struct hostent *server;
 		server = gethostbyname(address);
+
+		if (server == NULL) return false;
+
 		memcpy((char *) &sockaddr->sin_addr.s_addr, (char *) server->h_addr, server->h_length);
 	}
 	else
@@ -82,6 +86,8 @@ prepareServerAddress(char* address, int port, struct sockaddr_in* sockaddr)
 
     sockaddr->sin_family = AF_INET;
     sockaddr->sin_port = htons(port);
+
+    return true;
 }
 
 ServerSocket
@@ -99,12 +105,13 @@ TcpServerSocket_create(char* address, int port)
 
 	struct sockaddr_in server_addr;
 
-	prepareServerAddress(address, port, &server_addr);
+	if (!prepareServerAddress(address, port, &server_addr))
+	    return NULL;
 
 	listen_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-#if (CONFIG_ACTIVATE_TCP_KEEPALIVE == 1)
-	activateKeepAlive(listen_socket);
+#if CONFIG_ACTIVATE_TCP_KEEPALIVE == 1
+    activateKeepAlive(listen_socket);
 #endif
 
 	if (listen_socket == INVALID_SOCKET) {
@@ -192,13 +199,15 @@ Socket_connect(Socket self, char* address, int port)
 		return 0;
 	}
 
-	prepareServerAddress(address, port, &serverAddress);
+	if (!prepareServerAddress(address, port, &serverAddress))
+	    return 0;
 
 	self->fd = socket(AF_INET, SOCK_STREAM, 0);
 
-#if (CONFIG_ACTIVATE_TCP_KEEPALIVE == 1)
-        activateKeepAlive(self->fd);
+#if CONFIG_ACTIVATE_TCP_KEEPALIVE == 1
+    activateKeepAlive(self->fd);
 #endif
+
 	if (connect(self->fd, (struct sockaddr *) &serverAddress,sizeof(serverAddress)) < 0) {
 		printf("Socket failed connecting!\n");
 		return 0;
@@ -219,12 +228,15 @@ Socket_getPeerAddress(Socket self)
 	int addrStringLen = INET6_ADDRSTRLEN + 7;
 	int port;
 
+	bool isIPv6;
+
 	if (addr.ss_family == AF_INET)  {
 		struct sockaddr_in* ipv4Addr = (struct sockaddr_in*) &addr;
 		port = ntohs(ipv4Addr->sin_port);
 		ipv4Addr->sin_port = 0;
 		WSAAddressToString((LPSOCKADDR) ipv4Addr, sizeof(struct sockaddr_storage), NULL, 
 			(LPSTR) addrString, (LPDWORD) &addrStringLen);
+		isIPv6 = false;
 	}
 	else if (addr.ss_family == AF_INET6){
 		struct sockaddr_in6* ipv6Addr = (struct sockaddr_in6*) &addr;
@@ -232,13 +244,17 @@ Socket_getPeerAddress(Socket self)
 		ipv6Addr->sin6_port = 0;
 		WSAAddressToString((LPSOCKADDR) ipv6Addr, sizeof(struct sockaddr_storage), NULL, 
 			(LPSTR) addrString, (LPDWORD) &addrStringLen);
+		isIPv6 = true;
 	}
 	else
 		return NULL;
 
-	char* clientConnection = (char*) malloc(strlen(addrString) + 8);
+	char* clientConnection = (char*) malloc(strlen(addrString) + 9);
 
-	sprintf(clientConnection, "%s[%i]", addrString, port);
+    if (isIPv6)
+        sprintf(clientConnection, "[%s]:%i", addrString, port);
+    else
+        sprintf(clientConnection, "%s:%i", addrString, port);
 
 	return clientConnection;
 }

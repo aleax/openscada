@@ -221,7 +221,7 @@ autoreconf -ivf
 
 %configure
 
-%if %_vendor == "suse"
+%if %_vendor == "redhat" || %_vendor == "suse"
 %__make
 %else
 %make

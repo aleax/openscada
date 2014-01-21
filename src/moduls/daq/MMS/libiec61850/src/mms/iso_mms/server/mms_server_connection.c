@@ -100,15 +100,20 @@ mmsServer_writeMmsRejectPdu(uint32_t* invokeId, int reason, ByteBuffer* response
 		asn_long2INTEGER(mmsPdu->choice.rejectPDU.originalInvokeID, *invokeId);
 	}
 
-	if (reason == MMS_REJECT_UNRECOGNIZED_SERVICE) {
+	if (reason == MMS_ERROR_REJECT_UNRECOGNIZED_SERVICE) {
 		mmsPdu->choice.rejectPDU.rejectReason.present = RejectPDU__rejectReason_PR_confirmedRequestPDU;
 		mmsPdu->choice.rejectPDU.rejectReason.choice.confirmedResponsePDU =
 			RejectPDU__rejectReason__confirmedRequestPDU_unrecognizedService;
 	}
-	else if(reason == MMS_REJECT_UNKNOWN_PDU_TYPE) {
+	else if(reason == MMS_ERROR_REJECT_UNKNOWN_PDU_TYPE) {
 		mmsPdu->choice.rejectPDU.rejectReason.present = RejectPDU__rejectReason_PR_pduError;
 		asn_long2INTEGER(&mmsPdu->choice.rejectPDU.rejectReason.choice.pduError,
 				RejectPDU__rejectReason__pduError_unknownPduType);
+	}
+	else if (reason == MMS_ERROR_REJECT_REQUEST_INVALID_ARGUMENT) {
+	    mmsPdu->choice.rejectPDU.rejectReason.present = RejectPDU__rejectReason_PR_confirmedRequestPDU;
+	    mmsPdu->choice.rejectPDU.rejectReason.choice.confirmedResponsePDU =
+	                RejectPDU__rejectReason__confirmedRequestPDU_invalidArgument;
 	}
 	else {
 		mmsPdu->choice.rejectPDU.rejectReason.present = RejectPDU__rejectReason_PR_confirmedRequestPDU;
@@ -116,10 +121,7 @@ mmsServer_writeMmsRejectPdu(uint32_t* invokeId, int reason, ByteBuffer* response
 			RejectPDU__rejectReason__confirmedRequestPDU_other;
 	}
 
-	asn_enc_rval_t rval;
-
-	rval = der_encode(&asn_DEF_MmsPdu, mmsPdu,
-			mmsServer_write_out, (void*) response);
+	der_encode(&asn_DEF_MmsPdu, mmsPdu,	mmsServer_write_out, (void*) response);
 
 	if (DEBUG) xer_fprint(stdout, &asn_DEF_MmsPdu, mmsPdu);
 
@@ -132,8 +134,7 @@ mmsServer_writeMmsRejectPdu(uint32_t* invokeId, int reason, ByteBuffer* response
 
 
 static int
-encodeInitResponseDetail(uint8_t parameterCBB[], uint8_t servicesSupported[], uint8_t* buffer, int bufPos,
-		bool encode)
+encodeInitResponseDetail(uint8_t* buffer, int bufPos, bool encode)
 {
 	int initResponseDetailSize = 14 + 5 + 3;
 
@@ -165,7 +166,7 @@ createInitiateResponse(MmsServerConnection* self, ByteBuffer* writeBuffer)
 	initiateResponseLength += 2 + BerEncoder_UInt32determineEncodedSize(self->maxServOutstandingCalled);
 	initiateResponseLength += 2 + BerEncoder_UInt32determineEncodedSize(self->dataStructureNestingLevel);
 
-	initiateResponseLength += encodeInitResponseDetail(parameterCBB, servicesSupported, NULL, 0, false);
+	initiateResponseLength += encodeInitResponseDetail(NULL, 0, false);
 
 	/* Initiate response pdu */
 	bufPos = BerEncoder_encodeTL(0xa9, initiateResponseLength, buffer, bufPos);
@@ -178,7 +179,7 @@ createInitiateResponse(MmsServerConnection* self, ByteBuffer* writeBuffer)
 
 	bufPos = BerEncoder_encodeUInt32WithTL(0x83, self->dataStructureNestingLevel, buffer, bufPos);
 
-	bufPos = encodeInitResponseDetail(parameterCBB, servicesSupported, buffer, bufPos, true);
+	bufPos = encodeInitResponseDetail(buffer, bufPos, true);
 
 	writeBuffer->size = bufPos;
 
@@ -316,7 +317,7 @@ handleConfirmedRequestPdu(
 		bufPos = BerDecoder_decodeLength(buffer, &length, bufPos, maxBufPos);
 
 		if (bufPos < 0)  {
-			mmsServer_writeMmsRejectPdu(&invokeId, MMS_REJECT_UNRECOGNIZED_SERVICE, response);
+			mmsServer_writeMmsRejectPdu(&invokeId, MMS_ERROR_REJECT_UNRECOGNIZED_SERVICE, response);
 			return;
 		}
 
@@ -366,7 +367,7 @@ handleConfirmedRequestPdu(
 					invokeId, response);
 			break;
 		default:
-			mmsServer_writeMmsRejectPdu(&invokeId, MMS_REJECT_UNRECOGNIZED_SERVICE, response);
+			mmsServer_writeMmsRejectPdu(&invokeId, MMS_ERROR_REJECT_UNRECOGNIZED_SERVICE, response);
 			return;
 			break;
 		}
@@ -412,14 +413,12 @@ parseMmsPdu(MmsServerConnection* self, ByteBuffer* message, ByteBuffer* response
 		IsoConnection_close(self->isoConnection);
 		retVal = MMS_CONCLUDE;
 		break;
-	case 0xa4: /* Reject PDU */
-		//TODO evaluate reject PDU
-	    printf("received reject PDU!\n");
-		/* silently ignore */
+	case 0xa4: /* Reject PDU - silently ignore */
+	    if (DEBUG) printf("received reject PDU!\n");
 		retVal = MMS_OK;
 		break;
 	default:
-		mmsServer_writeMmsRejectPdu(NULL, MMS_REJECT_UNKNOWN_PDU_TYPE, response);
+		mmsServer_writeMmsRejectPdu(NULL, MMS_ERROR_REJECT_UNKNOWN_PDU_TYPE, response);
 		retVal = MMS_ERROR;
 		break;
 	}

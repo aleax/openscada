@@ -620,6 +620,8 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	opt->childAdd("rule")->setAttr("expr","&([a-zA-Z]*|#\\d*);")->setAttr("color","#AF7E00");
     }
     else return Widget::cntrCmdAttributes(opt, src);
+
+    return true;
 }
 
 //************************************************

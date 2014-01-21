@@ -378,6 +378,36 @@ MmsValue_getBitStringBit(MmsValue* self, int bitPos)
 	else return false; /* out of range bits are always zero */
 }
 
+uint32_t
+MmsValue_getBitStringAsInteger(MmsValue* self)
+{
+    uint32_t value = 0;
+
+    int bitPos;
+
+    for (bitPos = 0; bitPos < self->value.bitString.size; bitPos++) {
+        if (MmsValue_getBitStringBit(self, bitPos)) {
+            value += (1 << bitPos);
+        }
+    }
+
+    return value;
+}
+
+void
+MmsValue_setBitStringFromInteger(MmsValue* self, uint32_t intValue)
+{
+    int bitPos;
+
+    for (bitPos = 0; bitPos < self->value.bitString.size; bitPos++) {
+        if ((intValue & 1) == 1)
+            MmsValue_setBitStringBit(self, bitPos, true);
+        else
+            MmsValue_setBitStringBit(self, bitPos, false);
+
+        intValue = intValue >> 1;
+    }
+}
 
 
 MmsValue*
@@ -454,9 +484,19 @@ MmsValue_setInt32(MmsValue* value, int32_t integer)
 		if (Asn1PrimitiveValue_getMaxSize(value->value.integer) >= 4) {
 			BerInteger_setInt32(value->value.integer, integer);
 		}
-		//TODO signal error ???
 	}
 }
+
+void
+MmsValue_setUint32(MmsValue* value, uint32_t integer)
+{
+    if (value->type == MMS_UNSIGNED) {
+        if (Asn1PrimitiveValue_getMaxSize(value->value.integer) >= 4) {
+            BerInteger_setUint32(value->value.integer, integer);
+        }
+    }
+}
+
 
 void
 MmsValue_setUint16(MmsValue* value, uint16_t integer)
@@ -466,8 +506,8 @@ MmsValue_setUint16(MmsValue* value, uint16_t integer)
             BerInteger_setUint16(value->value.integer, integer);
         }
     }
-
 }
+
 
 void
 MmsValue_setUint8(MmsValue* value, uint8_t integer)
@@ -799,6 +839,13 @@ uint32_t
 MmsValue_getArraySize(MmsValue* value)
 {
 	return value->value.structure.size;
+}
+
+void
+MmsValue_deleteIfNotNull(MmsValue* value)
+{
+    if (value != NULL)
+        MmsValue_delete(value);
 }
 
 void

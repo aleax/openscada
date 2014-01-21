@@ -26,7 +26,7 @@
 #include "libiec61850_platform_includes.h"
 
 char*
-FunctionalConstrained_toString(FunctionalConstraint fc) {
+FunctionalConstraint_toString(FunctionalConstraint fc) {
     switch (fc) {
     case ST:
         return "ST";
@@ -57,4 +57,65 @@ FunctionalConstrained_toString(FunctionalConstraint fc) {
     default:
         return NULL;
     }
+}
+
+FunctionalConstraint
+FunctionalConstraint_fromString(char* fcString)
+{
+    if (fcString[0] == 'S') {
+        if (fcString[1] == 'T')
+            return ST;
+        if (fcString[1] == 'P')
+            return SP;
+        if (fcString[1] == 'V')
+            return SV;
+        if (fcString[1] == 'G')
+            return SG;
+        if (fcString[1] == 'E')
+            return SE;
+        if (fcString[1] == 'R')
+            return SR;
+
+        return NONE;
+    }
+
+    if (fcString[0] == 'M') {
+        if (fcString[1] == 'X')
+            return MX;
+        return NONE;
+    }
+
+    if (fcString[0] == 'C') {
+        if (fcString[1] == 'F')
+            return CF;
+        if (fcString[1] == 'O')
+            return CO;
+        return NONE;
+    }
+
+    if (fcString[0] == 'D') {
+        if (fcString[1] == 'C')
+            return DC;
+        return NONE;
+    }
+
+    if (fcString[0] == 'O') {
+        if (fcString[1] == 'R')
+            return OR;
+        return NONE;
+    }
+
+    if (fcString[0] == 'B') {
+        if (fcString[1] == 'L')
+            return BL;
+        return NONE;
+    }
+
+    if (fcString[0] == 'E') {
+        if (fcString[1] == 'X')
+            return EX;
+        return NONE;
+    }
+
+    return NONE;
 }

@@ -31,6 +31,10 @@
 #include "reporting.h"
 #include "mms_mapping_internal.h"
 
+#ifndef DEBUG_IED_SERVER
+#define DEBUG_IED_SERVER 0
+#endif
+
 ReportControl*
 ReportControl_create(bool buffered)
 {
@@ -260,7 +264,7 @@ sendReport(ReportControl* self, bool isIntegrity, bool isGI)
         self->inclusionFlags[i] = REPORT_CONTROL_NONE;
     }
 
-    MmsServerConnection_sendInformationReportVMDSpecific(self->clientConnection, "RPT", reportElements);
+    MmsServerConnection_sendInformationReportVMDSpecific(self->clientConnection, "RPT", reportElements, false);
 
     /* Increase sequence number */
     self->sqNum++;
@@ -738,7 +742,7 @@ Reporting_RCBWriteAccessHandler(MmsMapping* self, ReportControl* rc, char* eleme
             if (rc->enabled == true)
                 return DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE;
 
-            if (DEBUG)
+            if (DEBUG_IED_SERVER)
                 printf("Activate report for client %s\n",
                         MmsServerConnection_getClientAddress(connection));
 
@@ -819,7 +823,7 @@ Reporting_RCBWriteAccessHandler(MmsMapping* self, ReportControl* rc, char* eleme
             if (((rc->enabled) || (rc->reserved)) && (rc->clientConnection != connection))
                 return DATA_ACCESS_ERROR_TEMPORARILY_UNAVAILABLE;
 
-            if (DEBUG)
+            if (DEBUG_IED_SERVER)
                 printf("Deactivate report for client %s\n",
                         MmsServerConnection_getClientAddress(connection));
 

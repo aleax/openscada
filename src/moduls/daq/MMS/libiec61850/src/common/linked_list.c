@@ -119,8 +119,9 @@ LinkedList_remove(LinkedList list, void* data)
     LinkedList currentElement = list->next;
 
     while (currentElement != NULL) {
-        if (currentElement == data) {
+        if (currentElement->data == data) {
             lastElement->next = currentElement->next;
+            free(currentElement);
             return true;
         }
 

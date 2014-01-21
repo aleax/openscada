@@ -46,7 +46,7 @@ mmsServer_createConfirmedResponse(uint32_t invokeId)
 
 
 void
-mmsServer_createConfirmedErrorPdu(uint32_t invokeId, ByteBuffer* response, MmsConfirmedErrorType errorType)
+mmsServer_createConfirmedErrorPdu(uint32_t invokeId, ByteBuffer* response, MmsError errorType)
 {
 	MmsPdu_t* mmsPdu = (MmsPdu_t*) calloc(1, sizeof(MmsPdu_t));
 	mmsPdu->present = MmsPdu_PR_confirmedErrorPDU;
@@ -54,32 +54,38 @@ mmsServer_createConfirmedErrorPdu(uint32_t invokeId, ByteBuffer* response, MmsCo
 	asn_long2INTEGER(&(mmsPdu->choice.confirmedErrorPDU.invokeID),
 			invokeId);
 
-	if (errorType == MMS_ERROR_TYPE_OBJECT_NON_EXISTENT) {
+	if (errorType == MMS_ERROR_ACCESS_OBJECT_NON_EXISTENT) {
 		mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.present =
 				ServiceError__errorClass_PR_access;
 
 		asn_long2INTEGER(&mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.choice.access,
 						ServiceError__errorClass__access_objectnonexistent);
 	}
-	else if (errorType == MMS_ERROR_TYPE_ACCESS_DENIED) {
+	else if (errorType == MMS_ERROR_ACCESS_OBJECT_ACCESS_DENIED) {
 		mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.present =
 				ServiceError__errorClass_PR_access;
 
 		asn_long2INTEGER(&mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.choice.access,
 				ServiceError__errorClass__access_objectaccessdenied);
 	}
-	else if (errorType == MMS_ERROR_TYPE_OBJECT_ACCESS_UNSUPPORTED) {
+	else if (errorType == MMS_ERROR_ACCESS_OBJECT_ACCESS_UNSUPPORTED) {
 		mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.present =
 				ServiceError__errorClass_PR_access;
 
 		asn_long2INTEGER(&mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.choice.access,
 				ServiceError__errorClass__access_objectaccessunsupported);
 	}
-	else if (errorType == MMS_ERROR_TYPE_RESPONSE_EXCEEDS_MAX_PDU_SIZE) {
-		mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.present =
-						ServiceError__errorClass_PR_service;
-		asn_long2INTEGER(&mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.choice.access,
-						ServiceError__errorClass__service_other);
+	else if (errorType == MMS_ERROR_SERVICE_OTHER) {
+	    mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.present =
+	                            ServiceError__errorClass_PR_service;
+        asn_long2INTEGER(&mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.choice.access,
+                        ServiceError__errorClass__service_other);
+	}
+	else if (errorType == MMS_ERROR_DEFINITION_OBJECT_EXISTS) {
+	    mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.present =
+                        ServiceError__errorClass_PR_definition;
+        asn_long2INTEGER(&mmsPdu->choice.confirmedErrorPDU.serviceError.errorClass.choice.access,
+                        ServiceError__errorClass__definition_objectexists);
 	}
 
 	der_encode(&asn_DEF_MmsPdu, mmsPdu,

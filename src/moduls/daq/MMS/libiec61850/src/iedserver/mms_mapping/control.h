@@ -32,7 +32,7 @@
 typedef struct sControlObject ControlObject;
 
 ControlObject*
-ControlObject_create(MmsServer mmsServer, MmsDomain* domain, char* lnName, char* name);
+ControlObject_create(IedServer iedServer, MmsDomain* domain, char* lnName, char* name);
 
 void
 ControlObject_destroy(ControlObject* self);

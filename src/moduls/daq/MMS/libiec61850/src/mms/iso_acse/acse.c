@@ -376,6 +376,15 @@ AcseConnection_parseMessage(AcseConnection* self, ByteBuffer* message)
     case 0x61:
     	indication = parseAarePdu(self, buffer, bufPos, messageSize);
 		break;
+    case 0x62: /* A_RELEASE.request RLRQ-apdu */
+        indication = ACSE_RELEASE_REQUEST;
+        break;
+    case 0x63: /* A_RELEASE.response RLRE-apdu */
+        indication = ACSE_RELEASE_RESPONSE;
+        break;
+    case 0x64: /* A_ABORT */
+        indication = ACSE_ABORT;
+        break;
     default:
     	if (DEBUG) printf("ACSE: Unknown ACSE message\n");
     	indication = ACSE_ERROR;
@@ -489,6 +498,106 @@ AcseConnection_createAssociateResponseMessage(AcseConnection* self,
 	writeBuffer->size = bufPos;
 }
 
+void
+AcseConnection_createAssociateResponseMessageBC(AcseConnection* self,
+        uint8_t acseResult,
+        BufferChain writeBuffer,
+        BufferChain payload
+        )
+{
+    int appContextLength = 9;
+    int resultLength = 5;
+    int resultDiagnosticLength = 5;
+
+    int fixedContentLength = appContextLength + resultLength + resultDiagnosticLength;
+
+    int variableContentLength = 0;
+
+    int payloadLength;
+    int assocDataLength;
+    int userInfoLength;
+    int nextRefLength;
+
+    if (payload != NULL) {
+        payloadLength = payload->length;
+
+        /* single ASN1 type tag */
+        variableContentLength += payloadLength;
+        variableContentLength += 1;
+        variableContentLength += BerEncoder_determineLengthSize(payloadLength);
+
+        /* indirect reference */
+        nextRefLength = BerEncoder_UInt32determineEncodedSize(self->nextReference);
+        variableContentLength += nextRefLength;
+        variableContentLength += 2;
+
+        /* direct-reference BER */
+        variableContentLength += 4;
+
+        /* association data */
+        assocDataLength = variableContentLength;
+        variableContentLength += BerEncoder_determineLengthSize(assocDataLength);
+        variableContentLength += 1;
+
+        /* user information */
+        userInfoLength = variableContentLength;
+        variableContentLength += BerEncoder_determineLengthSize(userInfoLength);
+        variableContentLength += 1;
+
+        variableContentLength += 2;
+    }
+
+    int contentLength = fixedContentLength + variableContentLength;
+
+    //TODO check if buffer is large enough!
+    //if (writeBuffer->partMaxLength >= (contentLength - payloadLength))
+
+    uint8_t* buffer = writeBuffer->buffer;
+    int bufPos = 0;
+
+    bufPos = BerEncoder_encodeTL(0x61, contentLength, buffer, bufPos);
+
+    /* application context name */
+    bufPos = BerEncoder_encodeTL(0xa1, 7, buffer, bufPos);
+    bufPos = BerEncoder_encodeTL(0x06, 5, buffer, bufPos);
+    memcpy(buffer + bufPos, appContextNameMms, 5);
+    bufPos += 5;
+
+    /* result */
+    bufPos = BerEncoder_encodeTL(0xa2, 3, buffer, bufPos);
+    bufPos = BerEncoder_encodeTL(0x02, 1, buffer, bufPos);
+    buffer[bufPos++] = acseResult;
+
+    /* result source diagnostics */
+    bufPos = BerEncoder_encodeTL(0xa3, 5, buffer, bufPos);
+    bufPos = BerEncoder_encodeTL(0xa1, 3, buffer, bufPos);
+    bufPos = BerEncoder_encodeTL(0x02, 1, buffer, bufPos);
+    buffer[bufPos++] = 0;
+
+    if (payload != NULL) {
+        /* user information */
+        bufPos = BerEncoder_encodeTL(0xbe, userInfoLength, buffer, bufPos);
+
+        /* association data */
+        bufPos = BerEncoder_encodeTL(0x28, assocDataLength, buffer, bufPos);
+
+        /* direct-reference BER */
+        bufPos = BerEncoder_encodeTL(0x06, 2, buffer, bufPos);
+        buffer[bufPos++] = berOid[0];
+        buffer[bufPos++] = berOid[1];
+
+        /* indirect-reference */
+        bufPos = BerEncoder_encodeTL(0x02, nextRefLength, buffer, bufPos);
+        bufPos = BerEncoder_encodeUInt32(self->nextReference, buffer, bufPos);
+
+        /* single ASN1 type */
+        bufPos = BerEncoder_encodeTL(0xa0, payloadLength, buffer, bufPos);
+    }
+
+    writeBuffer->partLength = bufPos;
+    writeBuffer->length = bufPos + payloadLength;
+    writeBuffer->nextPart = payload;
+}
 
 void
 AcseConnection_createAssociateRequestMessage(AcseConnection* self,
@@ -612,11 +721,10 @@ AcseConnection_createAssociateRequestMessage(AcseConnection* self,
 		/* sender requirements */
 		bufPos = BerEncoder_encodeTL(0x8a, 2, buffer, bufPos);
 		buffer[bufPos++] = 0x04;
-		buffer[bufPos++] = requirements_authentication[0];
 
 		if (self->authentication->mechanism == AUTH_PASSWORD) {
+		    buffer[bufPos++] = requirements_authentication[0];
 
-			/* mechanism name */
 			bufPos = BerEncoder_encodeTL(0x8b, 3, buffer, bufPos);
 			memcpy(buffer + bufPos, auth_mech_password_oid, 3);
 			bufPos += 3;
@@ -626,6 +734,9 @@ AcseConnection_createAssociateRequestMessage(AcseConnection* self,
 			bufPos = BerEncoder_encodeTL(0x80, passwordLength, buffer, bufPos);
 			memcpy(buffer + bufPos, self->authentication->value.password.string, passwordLength);
 			bufPos += passwordLength;
+		}
+		else { /* AUTH_NONE */
+		    buffer[bufPos++] = 0;
 		}
 	}
 
@@ -653,5 +764,39 @@ AcseConnection_createAssociateRequestMessage(AcseConnection* self,
 	}
 
 	writeBuffer->size = bufPos;
+}
+
+void
+AcseConnection_createAbortMessage(AcseConnection* self, ByteBuffer* writeBuffer, bool isProvider)
+{
+    uint8_t* buffer = writeBuffer->buffer;
+
+    buffer[0] = 0x61;
+    buffer[1] = 3;
+    buffer[2] = 80;
+    buffer[3] = 1;
+
+    if (isProvider)
+        buffer[4] = 1;
+    else
+        buffer[4] = 0;
+}
+
+void
+AcseConnection_createReleaseRequestMessage(AcseConnection* self, ByteBuffer* writeBuffer)
+{
+    uint8_t* buffer = writeBuffer->buffer;
+
+    buffer[0] = 0x62;
+    buffer[1] = 0;
+}
+
+void
+AcseConnection_createReleaseResponseMessage(AcseConnection* self, ByteBuffer* writeBuffer)
+{
+    uint8_t* buffer = writeBuffer->buffer;
+
+    buffer[0] = 0x63;
+    buffer[1] = 0;
 }
 

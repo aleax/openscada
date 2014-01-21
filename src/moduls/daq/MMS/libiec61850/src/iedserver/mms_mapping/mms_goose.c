@@ -55,6 +55,7 @@ struct sMmsGooseControlBlock {
 
     LinkedList dataSetValues;
     uint64_t nextPublishTime;
+    int retransmissionsLeft; /* number of retransmissions left for the last event */
     Semaphore publisherMutex;
 
     MmsMapping* mmsMapping;
@@ -277,8 +278,26 @@ MmsGooseControlBlock_checkAndPublish(MmsGooseControlBlock self, uint64_t current
 
         GoosePublisher_publish(self->publisher, self->dataSetValues);
 
-        self->nextPublishTime = currentTime +
+        if (self->retransmissionsLeft > 0) {
+            self->nextPublishTime = currentTime + CONFIG_GOOSE_EVENT_RETRANSMISSION_INTERVAL;
+
+
+            if (self->retransmissionsLeft > 1)
+                GoosePublisher_setTimeAllowedToLive(self->publisher,
+                        CONFIG_GOOSE_EVENT_RETRANSMISSION_INTERVAL * 3);
+            else
+                GoosePublisher_setTimeAllowedToLive(self->publisher,
+                        CONFIG_GOOSE_STABLE_STATE_TRANSMISSION_INTERVAL * 3);
+
+            self->retransmissionsLeft--;
+        }
+        else {
+            GoosePublisher_setTimeAllowedToLive(self->publisher,
+                                CONFIG_GOOSE_STABLE_STATE_TRANSMISSION_INTERVAL * 3);
+
+            self->nextPublishTime = currentTime +
                 CONFIG_GOOSE_STABLE_STATE_TRANSMISSION_INTERVAL;
+        }
 
         Semaphore_post(self->publisherMutex);
     }
@@ -291,8 +310,22 @@ MmsGooseControlBlock_observedObjectChanged(MmsGooseControlBlock self)
 
     uint64_t currentTime = GoosePublisher_increaseStNum(self->publisher);
 
-    self->nextPublishTime = currentTime +
+    self->retransmissionsLeft = CONFIG_GOOSE_EVENT_RETRANSMISSION_COUNT;
+
+    if (self->retransmissionsLeft > 0) {
+        self->nextPublishTime = currentTime +
+                CONFIG_GOOSE_EVENT_RETRANSMISSION_INTERVAL;
+
+        GoosePublisher_setTimeAllowedToLive(self->publisher,
+                           CONFIG_GOOSE_EVENT_RETRANSMISSION_INTERVAL * 3);
+    }
+    else {
+        self->nextPublishTime = currentTime +
             CONFIG_GOOSE_STABLE_STATE_TRANSMISSION_INTERVAL;
+
+        GoosePublisher_setTimeAllowedToLive(self->publisher,
+                           CONFIG_GOOSE_STABLE_STATE_TRANSMISSION_INTERVAL * 3);
+    }
 
     GoosePublisher_publish(self->publisher, self->dataSetValues);
 

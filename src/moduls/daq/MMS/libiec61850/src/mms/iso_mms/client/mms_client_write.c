@@ -100,6 +100,77 @@ mmsClient_parseWriteMultipleItemsResponse(ByteBuffer* message, int itemCount, Li
     return retVal;
 }
 
+
+static MmsError
+mapDataAccessErrorToMmsError(uint32_t dataAccessError)
+{
+    switch (dataAccessError) {
+    case 0:
+        return MMS_ERROR_ACCESS_OBJECT_INVALIDATED;
+    case 1:
+        return MMS_ERROR_HARDWARE_FAULT;
+    case 2:
+        return MMS_ERROR_ACCESS_TEMPORARILY_UNAVAILABLE;
+    case 3:
+        return MMS_ERROR_ACCESS_OBJECT_ACCESS_DENIED;
+    case 4:
+        return MMS_ERROR_DEFINITION_OBJECT_UNDEFINED;
+    case 5:
+        return MMS_ERROR_DEFINITION_INVALID_ADDRESS;
+    case 6:
+        return MMS_ERROR_DEFINITION_TYPE_UNSUPPORTED;
+    case 7:
+        return MMS_ERROR_DEFINITION_TYPE_INCONSISTENT;
+    case 8:
+        return MMS_ERROR_DEFINITION_OBJECT_ATTRIBUTE_INCONSISTENT;
+    case 9:
+        return MMS_ERROR_ACCESS_OBJECT_ACCESS_UNSUPPORTED;
+    case 10:
+        return MMS_ERROR_ACCESS_OBJECT_NON_EXISTENT;
+    case 11:
+        return MMS_ERROR_ACCESS_OBJECT_VALUE_INVALID;
+    default:
+        return MMS_ERROR_OTHER;
+    }
+}
+
+MmsIndication
+mmsClient_parseWriteResponse2(ByteBuffer* message, uint32_t bufPos, MmsError* mmsError)
+{
+    uint8_t* buf = message->buffer;
+    int size = message->size;
+
+    int length;
+
+    *mmsError = MMS_ERROR_NONE;
+
+    uint8_t tag = buf[bufPos++];
+
+    if (tag == 0xa5) {
+
+        bufPos = BerDecoder_decodeLength(buf, &length, bufPos, size);
+
+        if (bufPos == -1) goto exit_with_error;
+
+        tag = buf[bufPos++];
+
+        if (tag == 0x81)
+            return MMS_OK;
+
+        if (tag == 0x80) {
+            bufPos = BerDecoder_decodeLength(buf, &length, bufPos, size);
+
+            uint32_t dataAccessErrorCode =
+                    BerDecoder_decodeUint32(buf, length, bufPos);
+
+            *mmsError = mapDataAccessErrorToMmsError(dataAccessErrorCode);
+        }
+    }
+
+exit_with_error:
+    return MMS_ERROR;
+}
+
 MmsIndication
 mmsClient_parseWriteResponse(ByteBuffer* message)
 {
@@ -128,8 +199,12 @@ mmsClient_parseWriteResponse(ByteBuffer* message)
 			if (response->list.count > 0) {
 				if (response->list.array[0]->present == WriteResponse__Member_PR_success)
 					retVal = MMS_OK;
-				else
+				else {
+				    if (response->list.array[0]->present == WriteResponse__Member_PR_failure) {
+				        //response->list.array[0]->choice.failure.
+				    }
 					retVal = MMS_ERROR;
+				}
 			}
 			else
 				retVal = MMS_ERROR;
@@ -247,6 +322,7 @@ mmsClient_createWriteMultipleItemsRequest(uint32_t invokeId, char* domainId, Lin
         request->listOfData.list.array[i] = mmsMsg_createBasicDataElement(value);
 
         item = LinkedList_getNext(item);
+        valueElement = LinkedList_getNext(valueElement);
     }
 
     asn_enc_rval_t rval;

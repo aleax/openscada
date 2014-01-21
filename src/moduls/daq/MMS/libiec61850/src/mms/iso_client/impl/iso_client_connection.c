@@ -35,6 +35,15 @@
 #include "iso_client_connection.h"
 #include "acse.h"
 
+#ifndef DEBUG_ISO_CLIENT
+#ifdef DEBUG
+#define DEBUG_ISO_CLIENT 1
+#else
+#define DEBUG_ISO_CLIENT 0
+#endif /*DEBUG */
+#endif /* DEBUG_ISO_SERVER */
+
+
 #define STATE_IDLE 0
 #define STATE_ASSOCIATED 1
 #define STATE_ERROR 2
@@ -63,25 +72,27 @@ connectionHandlingThread(void* threadParameter)
 	IsoClientConnection self = (IsoClientConnection) threadParameter;
 
 	IsoSessionIndication sessionIndication;
-	IsoPresentationIndication presentationIndication;
+
+	if (DEBUG_ISO_CLIENT)
+	    printf("ISO_CLIENT_CONNECTION: new connection\n");
 
 	while (CotpConnection_parseIncomingMessage(self->cotpConnection) == DATA_INDICATION) {
+
+	    ByteBuffer* buf = CotpConnection_getPayload(self->cotpConnection);
 
 		sessionIndication =
 				IsoSession_parseMessage(self->session,
 						CotpConnection_getPayload(self->cotpConnection));
 
+		if (DEBUG_ISO_CLIENT) printf("ISO_CLIENT_CONNECTION: parse message\n");
+
 		if (sessionIndication != SESSION_DATA) {
-			if (DEBUG) printf("connectionHandlingThread: Invalid session message\n");
+			if (DEBUG_ISO_CLIENT) printf("ISO_CLIENT_CONNECTION: Invalid session message\n");
 			break;
 		}
 
-		presentationIndication =
-				IsoPresentation_parseUserData(self->presentation,
-						IsoSession_getUserData(self->session));
-
-		if (presentationIndication != PRESENTATION_OK) {
-			if (DEBUG) printf("connectionHandlingThread: Invalid presentation message\n");
+		if (!IsoPresentation_parseUserData(self->presentation, IsoSession_getUserData(self->session))) {
+			if (DEBUG_ISO_CLIENT) printf("ISO_CLIENT_CONNECTION: Invalid presentation message\n");
 			break;
 		}
 
@@ -92,6 +103,9 @@ connectionHandlingThread(void* threadParameter)
 	}
 
 	self->callback(ISO_IND_CLOSED, self->callbackParameter, NULL);
+
+    if (DEBUG_ISO_CLIENT)
+        printf("ISO_CLIENT_CONNECTION: exit connection\n");
 
 	return NULL;
 }
@@ -134,6 +148,9 @@ IsoClientConnection_sendMessage(IsoClientConnection self, ByteBuffer* payload)
 void
 IsoClientConnection_close(IsoClientConnection self)
 {
+    if (DEBUG_ISO_CLIENT)
+        printf("ISO_CLIENT: IsoClientConnection_close\n");
+
 	if (self->socket != NULL)
 		Socket_destroy(self->socket);
 
@@ -143,6 +160,9 @@ IsoClientConnection_close(IsoClientConnection self)
 void
 IsoClientConnection_destroy(IsoClientConnection self)
 {
+    if (DEBUG_ISO_CLIENT)
+        printf("ISO_CLIENT: IsoClientConnection_destroy\n");
+
 	if (self->state == STATE_ASSOCIATED)
 		IsoClientConnection_close(self);
 
@@ -241,12 +261,7 @@ IsoClientConnection_associate(IsoClientConnection self, IsoConnectionParameters*
 		goto returnError;
 	}
 
-
-	IsoPresentationIndication presentationIndication;
-	presentationIndication =
-			IsoPresentation_parseAcceptMessage(self->presentation, IsoSession_getUserData(self->session));
-
-	if (presentationIndication != PRESENTATION_OK) {
+	if (!IsoPresentation_parseAcceptMessage(self->presentation, IsoSession_getUserData(self->session))) {
 		if (DEBUG) printf("IsoClientConnection_associate: no presentation ok indication\n");
 		goto returnError;
 	}
@@ -285,5 +300,5 @@ returnError:
 void
 IsoClientConnection_releasePayloadBuffer(IsoClientConnection self, ByteBuffer* buffer)
 {
-	//TODO implement me
+	//TODO implement me if needed
 }

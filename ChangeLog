@@ -1,3 +1,14 @@
+2014-01-21 Roman
+- SYS: openscada.spec is adapted for build on "redhat" based environments.
+    Checking for header phonon/VideoPlayer is added for allow automatic build with old Phonon configuration's headers path "Phonon/*".
+- FIX:DAQ.DiamondBoards: "fifoDepth" fitting is fixed for multiple into "dump_threshold" but not into num_conversions.
+- !:DAQ.MMS: libiec61850 is updated to 0.6 version. Write values support is added.
+- FIX:UI.VCAEngine: cntrCmdAttributes() return for primitive "FormEl" is fixed.
+- UI.Vision: Select and scroll to value's item (cell, row or column) is added.
+    "keyID" (row or column number) for selection by column or row is added.
+- FIX:UI.{Vision,WebVision}: Possible crash on view "Spectrum" of primitive "Diagram" build is fixed, for tTime lesser of tTimeGrnd.
+
+
 2014-01-19 Roman
 - FIX:SYS: openscada_start is fixed for generate crash reports file name "${ProjName}_${fit}_$(date +%F_%H.%M).crash".
     To debian/ build tree added files openscada-model.aglks.links and openscada-model.boiler.links for links to openscada_start.
