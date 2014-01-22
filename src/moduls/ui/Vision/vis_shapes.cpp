@@ -529,7 +529,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->setAlternatingRowColors(true);
 		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
 		    wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
-		    //wdg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+		    wdg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(tableChange()));
 		    mk_new = true;
 		}
@@ -554,7 +554,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			QTableWidgetItem *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
 			if(!isH && i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
-			if(!isH) rClr = tR->attr("color");
+			if(!isH && tR) rClr = tR->attr("color");
 			for(unsigned i_c = 0, i_cR = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) || i_c < wdg->columnCount(); i_ch1++)
 			{
 			    XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -541,9 +541,9 @@ void *TSocketIn::ClTask( void *s_inf )
     if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
+	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	prot_in.free();
-	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(s.s->protocol());
-	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
+	proto.at().close(n_pr);
     }
 
     s.s->clientUnreg(pthread_self());
@@ -559,23 +559,29 @@ void *TSocketIn::ClTask( void *s_inf )
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
 {
     AutoHD<TProtocol> proto;
-    string n_pr = id() + TSYS::int2str(sock);
+    string n_pr;
     try
     {
-	if(!SYS->protocol().at().modPresent(protocol()))
-	    throw TError(nodePath().c_str(),_("The protocol '%s' is not present."),protocol().c_str());
-	proto = SYS->protocol().at().modAt(protocol());
 	if(prot_in.freeStat())
 	{
+	    proto = SYS->protocol().at().modAt(protocol());
+	    n_pr = id() + i2s(sock);
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	    prot_in = proto.at().at(n_pr);
 	}
 	if(prot_in.at().mess(request,answer)) return;
+	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	n_pr = prot_in.at().name();
 	prot_in.free();
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
     }
     catch(TError err)
     {
+	if(!prot_in.freeStat())
+	{
+	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    n_pr = prot_in.at().name();
+	}
 	prot_in.free();
 	if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
 
@@ -627,6 +633,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:{name}:{mode} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root",STR_ID,2,"tp","dec","help",_("Used for TCP and UNIX sockets."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/bfLn",_("Input buffer (kbyte)"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","dec");

@@ -1,3 +1,10 @@
+2014-01-22 Roman
+- DB.{AGLKS,Boiler}: St.db clear from old unneeded output transports.
+- Transport.*: For input transport, using protocol() set only on create for some performance rise.
+    Disable write access to field "Protocol" at running input transport.
+- FIX:UI.Vision: Crash on view "Table" of primitive "FormEl" items clean is fixed.
+
+
 2014-01-21 Roman
 - SYS: openscada.spec is adapted for build on "redhat" based environments.
     Checking for header phonon/VideoPlayer is added for allow automatic build with old Phonon configuration's headers path "Phonon/*".

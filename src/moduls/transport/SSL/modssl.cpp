@@ -511,15 +511,15 @@ void *TSocketIn::ClTask( void *s_inf )
     BIO_free(s.bio);
 
     //> Close protocol on broken connection
-    if( !prot_in.freeStat() )
+    if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
+	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	prot_in.free();
-	AutoHD<TProtocol> proto = SYS->protocol().at().modAt(s.s->protocol());
-	if( proto.at().openStat(n_pr) ) proto.at().close(n_pr);
+	proto.at().close(n_pr);
     }
 
-    s.s->clientUnreg( pthread_self() );
+    s.s->clientUnreg(pthread_self());
 
     if(mess_lev() == TMess::Debug)
 	mess_debug(s.s->nodePath().c_str(),_("Socket has been disconnected (%d)."),s.s->cl_id.size());
@@ -532,25 +532,34 @@ void *TSocketIn::ClTask( void *s_inf )
 void TSocketIn::messPut( int sock, string &request, string &answer, string sender, AutoHD<TProtocolIn> &prot_in )
 {
     AutoHD<TProtocol> proto;
-    string n_pr = mod->modId()+"_"+id()+"_"+TSYS::int2str(sock);
+    string n_pr;
     try
     {
-	proto = SYS->protocol().at().modAt(protocol());
 	if(prot_in.freeStat())
 	{
+	    proto = SYS->protocol().at().modAt(protocol());
+            n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	    prot_in = proto.at().at(n_pr);
 	}
 	if(prot_in.at().mess(request,answer)) return;
-	prot_in.free();
-	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
-    }catch(TError err)
+        if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
+        n_pr = prot_in.at().name();
+        prot_in.free();
+        if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
+    }
+    catch(TError err)
     {
-	prot_in.free();
-	if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close( n_pr );
+        if(!prot_in.freeStat())
+        {
+            if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
+            n_pr = prot_in.at().name();
+        }
+        prot_in.free();
+        if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
 
-	mess_err(nodePath().c_str(),"%s",err.mess.c_str() );
-	mess_err(nodePath().c_str(),_("Error request to protocol."));
+        mess_err(nodePath().c_str(), "%s", err.mess.c_str());
+        mess_err(nodePath().c_str(), _("Error request to protocol."));
     }
 }
 
@@ -607,6 +616,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","str");

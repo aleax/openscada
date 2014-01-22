@@ -1134,7 +1134,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setObjectName(br_path.c_str());
 		QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		sp.setVerticalStretch(1);
-		tbl->setSizePolicy( sp );
+		tbl->setSizePolicy(sp);
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
@@ -1255,7 +1255,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable);
 		    }
 		}
-		if( adjCol && tbl->columnCount() )
+		if(adjCol && tbl->columnCount())
 		{
 		    tbl->resizeColumnsToContents();
 

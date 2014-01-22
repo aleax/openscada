@@ -633,11 +633,12 @@ void *TTrIn::Task( void *tr_in )
     }
 
     //> Close protocol
-    if( !prot_in.freeStat() )
+    if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
+	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	prot_in.free();
-	SYS->protocol().at().at(tr->protocol()).at().close(n_pr);
+	proto.at().close(n_pr);
     }
 
     tr->run_st = false;
@@ -664,6 +665,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
