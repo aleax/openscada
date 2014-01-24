@@ -121,8 +121,8 @@ ConfApp::ConfApp( string open_user ) :
 
     //> Create search field
     QLineEdit *trSrchW = new QLineEdit;
-    connect( trSrchW, SIGNAL( textChanged(const QString) ), this, SLOT( treeSearch() ) );
-    connect( trSrchW, SIGNAL( returnPressed() ), this, SLOT( treeSearch() ) );
+    connect(trSrchW, SIGNAL(textChanged(const QString)), this, SLOT(treeSearch()));
+    connect(trSrchW, SIGNAL(returnPressed()), this, SLOT(treeSearch()));
     vlay->addWidget(trSrchW);
     frm->setLayout(vlay);
 
@@ -1251,7 +1251,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			else thd_it->setData(Qt::DisplayRole,t_linf->childGet(i_el)->text().c_str());
 
 			//>>>> Set access
-			if( !c_wr ) thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
+			if(!c_wr) thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 			else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable);
 		    }
 		}

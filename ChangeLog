@@ -1,3 +1,11 @@
+2014-01-24 Roman
+- UI.{VCAEngine,Vision,WebVision}: The primitive "Document" is moved to indexes from types.h.
+- UI.Vision: Cursor position into status display on "Ctrl" hold is added.
+    QRectMask set pass only for edition border.
+    FIX: Items editable is disabled for view "Table" of primitive "FormEl".
+    FIX: Real last-curent data obtain and display for primitive "Diagram".
+
+
 2014-01-22 Roman
 - DB.{AGLKS,Boiler}: St.db clear from old unneeded output transports.
 - Transport.*: For input transport, using protocol() set only on create for some performance rise.

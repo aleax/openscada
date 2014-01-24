@@ -681,17 +681,17 @@ void InspAttr::setWdg( const string &iwdg )
 bool InspAttr::event( QEvent *event )
 {
     if(event->type() == QEvent::KeyPress &&
-	    static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space && currentIndex().isValid() )
+	    static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space && currentIndex().isValid())
     {
 	QModelIndex ed_id = modelData.index(currentIndex().row(),1,currentIndex().parent());
-	if( modelData.flags(ed_id)&Qt::ItemIsEditable )
+	if(modelData.flags(ed_id)&Qt::ItemIsEditable)
 	{
 	    emit setCurrentIndex(ed_id);
 	    emit edit(ed_id);
 	}
 	return true;
     }
-    return QTreeView::event( event );
+    return QTreeView::event(event);
 }
 
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
@@ -702,14 +702,14 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     ModInspAttr::Item *it = NULL;
 
     //Attribute
-    if( selectedIndexes().size() && selectedIndexes()[0].isValid() )
+    if(selectedIndexes().size() && selectedIndexes()[0].isValid())
     {
 	it = static_cast<ModInspAttr::Item*>(selectedIndexes()[0].internalPointer());
 	nattr = it->id();
 	//Attribute widget
 	ModInspAttr::Item *cit = it;
 	while(cit)
-	    if( cit->type() == ModInspAttr::Item::Wdg )
+	    if(cit->type() == ModInspAttr::Item::Wdg)
 	    {
 		nwdg = cit->id();
 		break;
@@ -720,7 +720,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     QMenu popup;
 
     //Add actions
-    if( it )
+    if(it)
     {
 	//> Copy action
 	QImage ico_t;
@@ -735,7 +735,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	}
 
 	//> Changes clear action
-	if( it->modify() )
+	if(it->modify())
 	{
 	    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
 	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
@@ -744,12 +744,11 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	}
     }
 
-    if( !popup.isEmpty() )
+    if(!popup.isEmpty())
     {
 	QAction *rez = popup.exec(QCursor::pos());
-	if( actCopy && rez == actCopy )
-	    QApplication::clipboard()->setText(it->data().toString());
-	else if( actEdit && rez == actEdit )
+	if(actCopy && rez == actCopy) QApplication::clipboard()->setText(it->data().toString());
+	else if(actEdit && rez == actEdit)
 	{
 	    InputDlg dlg(this, actEdit->icon(),_("Full text of the attribute edit."),
 		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
@@ -783,7 +782,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())
 		model()->setData(selectedIndexes()[0], tEd->text(), Qt::EditRole);
 	}
-	else if( actClr && rez == actClr )
+	else if(actClr && rez == actClr)
 	{
 	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
 	    modelData.setWdg(modelData.curWdg());
@@ -1018,20 +1017,19 @@ string InspLnk::user( )
 
 bool InspLnk::event( QEvent *event )
 {
-    if( event->type() == QEvent::KeyPress &&
-	    static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space &&
-	    currentItem() && currentItem()->flags()&Qt::ItemIsEditable )
+    if(event->type() == QEvent::KeyPress && static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space &&
+	currentItem() && currentItem()->flags()&Qt::ItemIsEditable)
     {
-	editItem(currentItem(),1);
+	editItem(currentItem(), 1);
 	return true;
     }
-    return QTreeWidget::event( event );
+    return QTreeWidget::event(event);
 }
 
 void InspLnk::contextMenuEvent( QContextMenuEvent *event )
 {
     QAction *actCopy = NULL;
-    if( !currentItem() ) return;
+    if(!currentItem()) return;
 
     QMenu popup;
 
@@ -1041,10 +1039,10 @@ void InspLnk::contextMenuEvent( QContextMenuEvent *event )
     actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
     popup.addAction(actCopy);
 
-    if( !popup.isEmpty() )
+    if(!popup.isEmpty())
     {
 	QAction *rez = popup.exec(QCursor::pos());
-	if( actCopy && rez == actCopy )
+	if(actCopy && rez == actCopy)
 	    QApplication::clipboard()->setText(currentItem()->data(1,Qt::DisplayRole).toString());
 
 	popup.clear();
@@ -3121,9 +3119,9 @@ bool DevelWdgView::event( QEvent *event )
 		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
 	}
 	//> Check widget
-	if( !shape )
+	if(!shape)
 	{
-	    pnt.drawImage(rect(),QImage(":/images/attention.png"));
+	    pnt.drawImage(rect(), QImage(":/images/attention.png"));
 	    setToolTip(QString(_("Widget is not enabled or shape is not supported!")));
 	}
 
@@ -3143,13 +3141,13 @@ bool DevelWdgView::event( QEvent *event )
     }
 
     //> Other events process
-    if( wLevel() == 0 )
-	switch( event->type() )
+    if(wLevel() == 0)
+	switch(event->type())
 	{
 	    case QEvent::DragEnter:
 	    {
 		QDragEnterEvent *ev = static_cast<QDragEnterEvent*>(event);
-		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
+		if(ev->mimeData()->hasFormat("application/OpenSCADA-libwdg"))
 		{
 		    ev->acceptProposedAction();
 		    emit selected(id());
@@ -3379,14 +3377,14 @@ bool DevelWdgView::event( QEvent *event )
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
-		//> Select board draw
+		// Select board draw
 		if(fHoldSelRect)
 		{
 		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder);
 		    return true;
 		}
 
-		//> New widget add cursor view
+		// New widget add cursor view
 		if(mainWin()->actGrpWdgAdd->checkedAction() &&
 		    mainWin()->actGrpWdgAdd->checkedAction()->isChecked())
 		{
@@ -3394,12 +3392,11 @@ bool DevelWdgView::event( QEvent *event )
 		    return true;
 		}
 
-		//> Update move cursors
+		// Update move cursors
 		upMouseCursors(curp);
 
-		//> Move widgets control
-		if(fMoveHold && cursor().shape() != Qt::ArrowCursor &&
-		    ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
+		// Move widgets control
+		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance())
 		{
 		    dragStartPos = QPoint(-100,-100);
@@ -3410,6 +3407,11 @@ bool DevelWdgView::event( QEvent *event )
 		    return true;
 		}
 		if(fMoveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton)) fMoveHold = false;
+
+		// Cursor position to status on Ctrl hold
+		if(QApplication::keyboardModifiers()&Qt::ControlModifier)
+		    mainWin()->statusBar()->showMessage(QString(_("Cursor --- xy(%1:%2)")).
+			arg(curp.x()/xScale(true)).arg(curp.y()/yScale(true)),10000);
 
 		break;
 	    }
@@ -3545,7 +3547,7 @@ void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 
 void SizePntWdg::apply( )
 {
-    if(mWSize.width() > 2 && mWSize.height() > 2 && !QRectF(mWPos,mWSize).toRect().contains(rect()))
+    if(mWSize.width() > 2 && mWSize.height() > 2)
     {
 	QRegion reg;
 	QRect   wrect, irect;
@@ -3561,6 +3563,7 @@ void SizePntWdg::apply( )
 				   irect.y()+(i_p/3)*((irect.height()-6)/2),6,6));
 		break;
 	    case EditBorder:
+		if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
 		wrect = parentWidget()->rect();
 		reg = QRegion(wrect).subtracted(QRegion(QRectF(mWPos,mWSize).toRect()));
 		break;
@@ -3572,7 +3575,7 @@ void SizePntWdg::apply( )
 	    default: break;
 	}
 	if(geometry() != wrect)	setGeometry(wrect);
-	setMask(reg);
+	if(!reg.isEmpty()) setMask(reg);
 	if(!isVisible()) show();
     }
     else hide();
@@ -3583,46 +3586,45 @@ bool SizePntWdg::event( QEvent *ev )
     switch(ev->type())
     {
 	case QEvent::Paint:
-	    if(rect().isValid())
-	    {
-		QPainter pnt(this);
-		pnt.setWindow(rect());
+	{
+	    if(!rect().isValid()) break;
 
-		switch(view)
-		{
-		    case SizeDots:
-			pnt.setPen(QColor("black"));
-			pnt.setBrush(QBrush(QColor("lightgreen")));
-			for(int i_p = 0; i_p < 9; i_p++)
-			{
-			    if(i_p == 4) continue;
-			    QRect anch(rect().x()+(i_p%3)*((rect().width()-6)/2),
-				rect().y()+(i_p/3)*((rect().height()-6)/2),5,5);
-			    pnt.drawRect(anch);
-			}
-			break;
-		    case EditBorder:
-			if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
-			pnt.fillRect(rect(),QColor(127,127,127,190));
-			pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
-			pnt.setPen(QColor("black"));
-			pnt.drawRect(QRectF(mWPos,mWSize).adjusted(-1,-1,0,0));
-			break;
-		    case SelectBorder:
+	    QPainter pnt(this);
+	    pnt.setWindow(rect());
+
+	    switch(view)
+	    {
+		case SizeDots:
+		    pnt.setPen(QColor("black"));
+		    pnt.setBrush(QBrush(QColor("lightgreen")));
+		    for(int i_p = 0; i_p < 9; i_p++)
 		    {
-			pnt.setPen("white");
-			pnt.drawRect(rect().adjusted(0,0,-1,-1));
-			QPen pen(QColor("black"));
-			pen.setStyle(Qt::DashDotLine);
-			pnt.setPen(pen);
-			pnt.drawRect(rect().adjusted(0,0,-1,-1));
-			break;
+			if(i_p == 4) continue;
+			QRect anch(rect().x()+(i_p%3)*((rect().width()-6)/2), rect().y()+(i_p/3)*((rect().height()-6)/2), 5, 5);
+			pnt.drawRect(anch);
 		    }
-		    default: break;
+		    break;
+		case EditBorder:
+		    if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
+		    pnt.fillRect(rect(),QColor(127,127,127,190));
+		    pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
+		    pnt.setPen(QColor("black"));
+		    pnt.drawRect(QRectF(mWPos,mWSize).adjusted(-1,-1,0,0));
+		    break;
+		case SelectBorder:
+		{
+		    pnt.setPen("white");
+		    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+		    QPen pen(QColor("black"));
+		    pen.setStyle(Qt::DashDotLine);
+		    pnt.setPen(pen);
+		    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+		    break;
 		}
-		return true;
+		default: break;
 	    }
-	    break;
+	    return true;
+	}
 	//case QEvent::MouseButtonPress:
 	//case QEvent::MouseButtonRelease:
 	//    return QApplication::sendEvent(parent(),ev);

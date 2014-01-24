@@ -1290,10 +1290,10 @@ void WdgView::orderUpdate( )
 
     vector< pair<int,QObject*> > arr;
     arr.reserve(children().size());
-    for( int i_c = 0; i_c < ols.size(); i_c++ )
+    for(int i_c = 0; i_c < ols.size(); i_c++)
     {
 	WdgView *cw = qobject_cast<WdgView*>(ols[i_c]);
-	if( cw ) arr.push_back(pair<int,QObject*>(cw->z(),cw));
+	if(cw) arr.push_back(pair<int,QObject*>(cw->z(),cw));
 	else arr.push_back(pair<int,QObject*>(100000,ols[i_c]));
     }
     make_heap(arr.begin(),arr.end());
@@ -1309,7 +1309,7 @@ bool WdgView::event( QEvent *event )
     if(event->type() == QEvent::Paint)
     {
 	//> Self widget view
-	if(shape) return shape->event(this,event);
+	if(shape) return shape->event(this, event);
 	return true;
     }
 

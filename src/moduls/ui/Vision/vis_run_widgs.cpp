@@ -536,13 +536,13 @@ RunPageView::~RunPageView( )
 
 float RunPageView::xScale( bool full )
 {
-    if( full ) return mainWin()->xScale()*WdgView::xScale();
+    if(full) return mainWin()->xScale()*WdgView::xScale();
     return WdgView::xScale();
 }
 
 float RunPageView::yScale( bool full )
 {
-    if( full ) return mainWin()->yScale()*WdgView::yScale();
+    if(full) return mainWin()->yScale()*WdgView::yScale();
     return WdgView::yScale();
 }
 
@@ -716,8 +716,8 @@ VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
 void StylesStBar::setStyle( int istl, const string &nm )
 {
     mStyle = istl;
-    if( mStyle < 0 ) setText( _("No style") );
-    else if( !nm.empty() ) setText( nm.c_str() );
+    if(mStyle < 0) setText(_("No style"));
+    else if(!nm.empty()) setText(nm.c_str());
     else
     {
 	XMLNode req("get");
@@ -736,14 +736,14 @@ bool StylesStBar::styleSel( )
     req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
     mainWin()->cntrIfCmd(req);
 
-    if( req.childSize() <= 1 ) return false;
+    if(req.childSize() <= 1) return false;
 
-    InputDlg dlg( this, mainWin()->windowIcon(),_("Select your style from list."),_("Style select"),false,false);
+    InputDlg dlg(this, mainWin()->windowIcon(), _("Select your style from list."), _("Style select"), false, false);
     QLabel *lab = new QLabel(_("Style:"),&dlg);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    dlg.edLay()->addWidget( lab, 0, 0 );
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+    dlg.edLay()->addWidget(lab, 0, 0);
     QComboBox *stls = new QComboBox(&dlg);
-    dlg.edLay()->addWidget( stls, 0, 1 );
+    dlg.edLay()->addWidget(stls, 0, 1);
     for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
     {
 	stls->addItem(req.childGet(i_s)->text().c_str(),atoi(req.childGet(i_s)->attr("id").c_str()));
@@ -753,8 +753,8 @@ bool StylesStBar::styleSel( )
     dlg.resize(300,120);
     if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0)
     {
-	setStyle( stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toStdString() );
-	emit styleChanged( );
+	setStyle(stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toStdString());
+	emit styleChanged();
 	return true;
     }
 
@@ -763,6 +763,6 @@ bool StylesStBar::styleSel( )
 
 bool StylesStBar::event( QEvent *event )
 {
-    if( event->type() == QEvent::MouseButtonDblClick )	styleSel();
-    return QLabel::event( event );
+    if(event->type() == QEvent::MouseButtonDblClick)	styleSel();
+    return QLabel::event(event);
 }

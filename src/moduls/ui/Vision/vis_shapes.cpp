@@ -91,7 +91,7 @@ bool WdgShape::event( WdgView *view, QEvent *event )
     switch(event->type())
     {
 	case QEvent::Paint:
-	    if( qobject_cast<DevelWdgView*>(view) )
+	    if(qobject_cast<DevelWdgView*>(view))
 	    {
 		QPainter pnt( view );
 		pnt.setWindow(view->rect());
@@ -128,7 +128,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    break;
 	case FBRD_DBL:
 	    bpen.setStyle(Qt::SolidLine);
-	    if( bordWidth/3 )
+	    if(bordWidth/3)
 	    {
 		int brdLnSpc = bordWidth-2*(bordWidth/3);
 		bordWidth/=3;
@@ -577,6 +577,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 					case 'r': v = atof(tC->text().c_str());		break;
 					default: v = tC->text().c_str();		break;
 				    }
+				tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
 				tit->setData(Qt::DisplayRole, v);
 				// Back color
 				if((tC && (wVl=tC->attr("color")).size()) || rClr.size())
@@ -3146,7 +3147,7 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     if(!isDataDir)	//From archive by address
     {
 	// Get archive parameters
-	if(!arh_per || tTime > arh_end)
+	if(!arh_per || tTime > arh_end || shD->tTimeCurent)
 	{
 	    XMLNode req("info");
 	    req.setAttr("arch",shD->valArch)->setAttr("path",addr()+"/%2fserv%2fval");
@@ -3352,11 +3353,11 @@ void ShapeDiagram::TrendObj::loadSpectrumData( bool full )
 
 int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
 {
-    int64_t rez = def;
+    int64_t rez = 0;
     for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP)
-	if(iP->arh_end) rez = (rez==def) ? iP->arh_end : vmax(rez, iP->arh_end);
+	rez = vmax(rez, iP->arh_end);
 
-    return rez;
+    return rez ? rez : def;
 }
 
 //************************************************
@@ -3903,46 +3904,35 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    relDoc = true;
-	    break;
-	case 5:		//en
+	case A_COM_LOAD: relDoc = true;	break;
+	case A_EN:
 	    if(!runW)	break;
 	    shD->en = (bool)atoi(val.c_str());
-	    shD->web->setVisible( shD->en && runW->permView() );
+	    shD->web->setVisible(shD->en && runW->permView());
 	    break;
-	case 6:		//active
+	case A_ACTIVE:
 	    if(!runW)	break;
 	    shD->active = (bool)atoi(val.c_str());
-	    setFocus( w, shD->web, shD->active && runW->permCntr() );
-	    shD->web->setEnabled( shD->active && runW->permCntr() );
+	    setFocus(w, shD->web, shD->active && runW->permCntr());
+	    shD->web->setEnabled(shD->active && runW->permCntr());
 	    break;
-	case 12:	//geomMargin
-	    w->layout()->setMargin(atoi(val.c_str()));	break;
-	case 20:	//style
-	    if(shD->style == val) break;
-	    shD->style = val;
-	    relDoc = true;
-	    break;
-	case 21:	//tmpl
+	case A_GEOM_MARGIN: w->layout()->setMargin(atoi(val.c_str()));	break;
+	case A_DocStyle: if(shD->style != val) { shD->style = val; relDoc = true; }	break;
+	case A_DocTmpl:
 	    if((!shD->doc.empty() && !shD->tmpl) || shD->doc == val) break;
 	    shD->doc = val;
 	    relDoc = true;
 	    shD->tmpl = true;
 	    break;
-	case 22:	//doc
+	case A_DocDoc:
 	    if(TSYS::strNoSpace(val).empty() || shD->doc == val) break;
 	    shD->doc = val;
 	    relDoc = true;
 	    shD->tmpl = false;
 	    break;
-	case 26:	//font
-	    if(shD->font == val) break;
-	    shD->font = val;
-	    relDoc = true;
-	    break;
+	case A_DocFont: if(shD->font != val) { shD->font = val; relDoc = true;}		break;
     }
-    if( relDoc && !w->allAttrLoad() )
+    if(relDoc && !w->allAttrLoad())
     {
 	shD->web->setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true)),false));
 

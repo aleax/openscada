@@ -141,6 +141,28 @@ namespace VCA
 	A_DiagramTrWdth = 6,
 	A_DiagramTrProp	= 7,
 
+	// Primitive "Document" specific
+	A_DocStyle	= 20,
+	A_DocTmpl	= 21,
+	A_DocDoc	= 22,
+	A_DocTime	= 23,
+	A_DocBTime	= 24,
+	A_DocN		= 25,
+	A_DocFont	= 26,
+	A_DocProcess	= 27,
+	A_DocCalcPrmRez		= 0,
+	A_DocCalcPrmTime	= 1,
+	A_DocCalcPrmBTime	= 2,
+	A_DocCalcPrmLTime	= 3,
+	A_DocCalcPrmRTime	= 4,
+	A_DocCalcPrmRTimeU	= 5,
+	A_DocCalcPrmRPer	= 6,
+	A_DocCalcPrmMTime	= 7,
+	A_DocCalcPrmMTimeU	= 8,
+	A_DocCalcPrmMLev	= 9,
+	A_DocCalcPrmMCat	= 10,
+	A_DocCalcPrmMVal	= 11,
+
 	// Primitive "Box" specific
     };
 

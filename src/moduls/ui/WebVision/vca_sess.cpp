@@ -6297,8 +6297,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
 	if(req_el->name() != "el")	continue;
 	switch(atoi(req_el->attr("p").c_str()))
 	{
-	    case 21: 	//tmpl
-	    case 22:	//doc
+	    case A_DocTmpl: case A_DocDoc:
 	    {
 		if(TSYS::strNoSpace(req_el->text()).empty())	break;
 		const char *XHTML_entity =

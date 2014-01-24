@@ -1294,20 +1294,11 @@ const char *OrigDocument::XHTML_entity =
     "  <!ENTITY nbsp \"&#160;\" >\n"
     "]>\n";
 
-OrigDocument::OrigDocument( ) : PrWidget("Document")
-{
+OrigDocument::OrigDocument( ) : PrWidget("Document")	{ }
 
-}
+string OrigDocument::name( )	{ return _("Document"); }
 
-string OrigDocument::name( )
-{
-    return _("Document");
-}
-
-string OrigDocument::descr( )
-{
-    return _("Document widget of the finite visualization.");
-}
+string OrigDocument::descr( )	{ return _("Document widget of the finite visualization."); }
 
 void OrigDocument::postEnable( int flag )
 {
@@ -1315,21 +1306,18 @@ void OrigDocument::postEnable( int flag )
 
     if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd(new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","","20"));
-	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","","21"));
-	attrAdd(new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","","22"));
-	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","26"));
-	attrAdd(new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","","24"));
-	attrAdd(new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","","23"));
-	attrAdd(new TFld("process",_("Process"),TFld::Boolean,TFld::NoWrite,"","0","","","27"));
-	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0",TSYS::strMess("0;%d",DocArhSize).c_str(),"","25"));
+	attrAdd(new TFld("style",_("CSS"),TFld::String,TFld::FullText,"","","","",i2s(A_DocStyle).c_str()));
+	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::FullText,"","","","",i2s(A_DocTmpl).c_str()));
+	attrAdd(new TFld("doc",_("Document"),TFld::String,TFld::FullText,"","","","",i2s(A_DocDoc).c_str()));
+	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_DocFont).c_str()));
+	attrAdd(new TFld("bTime",_("Time:begin"),TFld::Integer,Attr::DateTime,"","0","","",i2s(A_DocBTime).c_str()));
+	attrAdd(new TFld("time",_("Time:current"),TFld::Integer,Attr::DateTime|Attr::Active,"","0","","",i2s(A_DocTime).c_str()));
+	attrAdd(new TFld("process",_("Process"),TFld::Boolean,TFld::NoWrite,"","0","","",i2s(A_DocProcess).c_str()));
+	attrAdd(new TFld("n",_("Archive size"),TFld::Integer,Attr::Active,"","0",TSYS::strMess("0;%d",DocArhSize).c_str(),"",i2s(A_DocN).c_str()));
     }
 }
 
-void OrigDocument::disable( Widget *base )
-{
-    SYS->taskDestroy(base->nodePath('.',true)+".doc");
-}
+void OrigDocument::disable( Widget *base )	{ SYS->taskDestroy(base->nodePath('.',true)+".doc"); }
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
@@ -1512,18 +1500,20 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
                 int p = atoi(el->attr("p").c_str());
                 switch(p)
                 {
-		    case 20: el->setAttr("SnthHgl","1")->setAttr("help",
+		    case A_DocStyle: el->setAttr("SnthHgl","1")->setAttr("help",
 			_("CSS rules in rows like \"body { background-color:#818181; }\""));
 			break;
-		    case 21: el->setAttr("SnthHgl","1")->setAttr("help",
+		    case A_DocTmpl: el->setAttr("SnthHgl","1")->setAttr("help",
 			_("Document's template in XHTML. Start from tag \"body\" and include procedures parts:\n"
 			"<body docProcLang=\"JavaLikeCalc.JavaScript\">\n<h1>Value<?dp return wCod+1.314;?></h1>\n</body>"));
 			break;
-		    case 22:
+		    case A_DocDoc:
 			el->setAttr("SnthHgl","1")->setAttr("help",_("Final document in XHTML. Start from tag \"body\"."));
 			break;
-		    case 23: el->setAttr("help",_("Write the time for document generation from that point or zero for regeneration."));	break;
-		    case 26: el->setAttr("help",Widget::helpFont());	break;
+		    case A_DocTime:
+			el->setAttr("help",_("Write the time for document generation from that point or zero for regeneration."));
+			break;
+		    case A_DocFont: el->setAttr("help",Widget::helpFont());	break;
 		    default:
 			if(el->attr("id") == "aDoc")
 			    el->setAttr("SnthHgl","1")->setAttr("help",_("Current archive document in XHTML. Start from tag \"body\"."));
@@ -1655,18 +1645,18 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     if(!lstTime) lstTime = wdg->attrAt("bTime").at().getI();
 
     //>> Add generic io
-    funcIO.ioIns(new IO("rez",_("Result"),IO::String,IO::Return), 0);
-    funcIO.ioIns(new IO("time",_("Document time"),IO::Integer,IO::Default), 1);
-    funcIO.ioIns(new IO("bTime",_("Document begin time"),IO::Integer,IO::Default), 2);
-    funcIO.ioIns(new IO("lTime",_("Last time"),IO::Integer,IO::Default), 3);
-    funcIO.ioIns(new IO("rTime",_("Repeat time (s)"),IO::Integer,IO::Default), 4);
-    funcIO.ioIns(new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default), 5);
-    funcIO.ioIns(new IO("rPer",_("Repeat period"),IO::Real,IO::Default), 6);
-    funcIO.ioIns(new IO("mTime",_("Message time"),IO::Integer,IO::Default), 7);
-    funcIO.ioIns(new IO("mTimeU",_("Message time (mcs)"),IO::Integer,IO::Default), 8);
-    funcIO.ioIns(new IO("mLev",_("Message level"),IO::Integer,IO::Default), 9);
-    funcIO.ioIns(new IO("mCat",_("Message category"),IO::String,IO::Default), 10);
-    funcIO.ioIns(new IO("mVal",_("Message value"),IO::String,IO::Default), 11);
+    funcIO.ioIns(new IO("rez",_("Result"),IO::String,IO::Return), A_DocCalcPrmRez);
+    funcIO.ioIns(new IO("time",_("Document time"),IO::Integer,IO::Default), A_DocCalcPrmTime);
+    funcIO.ioIns(new IO("bTime",_("Document begin time"),IO::Integer,IO::Default), A_DocCalcPrmBTime);
+    funcIO.ioIns(new IO("lTime",_("Last time"),IO::Integer,IO::Default), A_DocCalcPrmLTime);
+    funcIO.ioIns(new IO("rTime",_("Repeat time (s)"),IO::Integer,IO::Default), A_DocCalcPrmRTime);
+    funcIO.ioIns(new IO("rTimeU",_("Repeat time (us)"),IO::Integer,IO::Default), A_DocCalcPrmRTimeU);
+    funcIO.ioIns(new IO("rPer",_("Repeat period"),IO::Real,IO::Default), A_DocCalcPrmRPer);
+    funcIO.ioIns(new IO("mTime",_("Message time"),IO::Integer,IO::Default), A_DocCalcPrmMTime);
+    funcIO.ioIns(new IO("mTimeU",_("Message time (mcs)"),IO::Integer,IO::Default), A_DocCalcPrmMTimeU);
+    funcIO.ioIns(new IO("mLev",_("Message level"),IO::Integer,IO::Default), A_DocCalcPrmMLev);
+    funcIO.ioIns(new IO("mCat",_("Message category"),IO::String,IO::Default), A_DocCalcPrmMCat);
+    funcIO.ioIns(new IO("mVal",_("Message value"),IO::String,IO::Default), A_DocCalcPrmMVal);
     //>> Add user io
     wdg->attrList(als);
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
@@ -1682,13 +1672,14 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
 	//>> Connect to compiled function
 	funcV.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(wProgO)).at());
 	//>> Load values of generic IO
-	funcV.setI(1, wdg->attrAt("time").at().getI());
-	funcV.setI(2, wdg->attrAt("bTime").at().getI());
-	funcV.setI(3, lstTime);
+	funcV.setI(A_DocCalcPrmTime, wdg->attrAt("time").at().getI());
+	funcV.setI(A_DocCalcPrmBTime, wdg->attrAt("bTime").at().getI());
+	funcV.setI(A_DocCalcPrmLTime, lstTime);
 	//>> Load values of user IO
 	for(int i_a = 12; i_a < funcV.ioSize( ); i_a++)
 	    funcV.set(i_a,wdg->attrAt(funcV.func()->io(i_a)->id()).at().get());
-    }catch(TError err)
+    }
+    catch(TError err)
     {
 	mess_err(wdg->nodePath().c_str(),_("Compile function for document is error: %s"),err.mess.c_str());
 	return "";
@@ -1712,7 +1703,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     //> Remove warning timeout message subtree
     xdoc.childDel(xdoc.childSize()-1);
 
-    xdoc.setAttr("docTime", i2s(funcV.getI(1)));
+    xdoc.setAttr("docTime", i2s(funcV.getI(A_DocCalcPrmTime)));
 
     return xdoc.save(0, Mess->charset());
 }
@@ -1741,11 +1732,11 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		SYS->daq().at().at(TSYS::strSepParse(iLang,0,'.')).
 		       at().compileFunc(TSYS::strSepParse(iLang,1,'.'), funcIO, curPrc->text());
 		//>>> Call
-		funcV.setS(0,"");
-		funcV.calc( );
+		funcV.setS(A_DocCalcPrmRez, "");
+		funcV.calc();
 		//>>> Load result to XML tree
 		XMLNode xproc;
-		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(0)+"</i>", true, Mess->charset());
+		xproc.load(string(XHTML_entity)+"<i>"+funcV.getS(A_DocCalcPrmRez)+"</i>", true, Mess->charset());
 		//>>> Set result
 		for(unsigned i_tr = 0; i_tr < xproc.childSize(); i_tr++)
 		    *(xcur->childAdd()) = *xproc.childGet(i_tr);
@@ -1767,15 +1758,15 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	XMLNode *reptN = xcur->childGet(i_c);
 	if(reptN->name().size() && reptN->name()[0] == '<') continue;
 	//>> Repeat tags
-	if(funcV.getI(2) && (dRpt=atof(reptN->attr("docRept").c_str())) > 1e-6)
+	if(funcV.getI(A_DocCalcPrmBTime) && (dRpt=atof(reptN->attr("docRept").c_str())) > 1e-6)
 	{
 	    int rCnt = 0;
 
 	    bool docRevers = atoi(reptN->attr("docRevers").c_str());
-	    funcV.setR(6,dRpt);
-	    int64_t wTime = (int64_t)funcV.getI(1)*1000000;
-	    int64_t bTime = (int64_t)funcV.getI(2)*1000000;
-	    int64_t lstTime = (int64_t)funcV.getI(3)*1000000;
+	    funcV.setR(A_DocCalcPrmRPer, dRpt);
+	    int64_t wTime = (int64_t)funcV.getI(A_DocCalcPrmTime)*1000000;
+	    int64_t bTime = (int64_t)funcV.getI(A_DocCalcPrmBTime)*1000000;
+	    int64_t lstTime = (int64_t)funcV.getI(A_DocCalcPrmLTime)*1000000;
 	    int64_t perRpt = (int64_t)(1000000*dRpt);
 	    int64_t rTime = bTime + perRpt*((lstTime-bTime)/perRpt);
 	    if(lstTime && lstTime < bTime) rTime -= perRpt;
@@ -1813,12 +1804,16 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		    rCnt++;
 		}
 		int64_t rTimeT = vmin(rTime+perRpt,wTime);
-		funcV.setI(4,rTimeT/1000000); funcV.setI(5,rTimeT%1000000); funcV.setR(6,(rTimeT-rTime)/1000000.0);
-		OrigDocument::nodeProcess(wdg,reptN,funcV,funcIO,iLang,false,upTo);
-		reptN->setAttr("docRptEnd",((rTimeT-rTime)==perRpt)?"1":"0");
+		funcV.setI(A_DocCalcPrmRTime, rTimeT/1000000);
+		funcV.setI(A_DocCalcPrmRTimeU, rTimeT%1000000);
+		funcV.setR(A_DocCalcPrmRPer, (rTimeT-rTime)/1000000.0);
+		OrigDocument::nodeProcess(wdg, reptN, funcV, funcIO, iLang, false, upTo);
+		reptN->setAttr("docRptEnd", ((rTimeT-rTime)==perRpt)?"1":"0");
 		rTime = rTimeT;
 	    }
-	    funcV.setI(4,0); funcV.setI(5,0); funcV.setR(6,0);
+	    funcV.setI(A_DocCalcPrmRTime, 0);
+	    funcV.setI(A_DocCalcPrmRTimeU, 0);
+	    funcV.setR(A_DocCalcPrmRPer, 0);
 	    if(docRevers) i_c += rCnt;
 
 	    progrNode->childGet(progrNode->childSize()-1)->setText(TSYS::strMess(_("Data block %d: %0.2f%% loaded."),progrNode->childSize(),100));
@@ -1835,7 +1830,7 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 	    string dATmpl = dAMess.substr(off);
 
 	    vector<TMess::SRec> mess;
-	    SYS->archive().at().messGet( funcV.getI(3), funcV.getI(1), mess, dATmpl, (TMess::Type)dACat );
+	    SYS->archive().at().messGet(funcV.getI(A_DocCalcPrmLTime), funcV.getI(A_DocCalcPrmTime), mess, dATmpl, (TMess::Type)dACat);
 
 	    //>> Progress bar prepare
 	    if(!progrNode)
@@ -1868,18 +1863,22 @@ void OrigDocument::nodeProcess( Widget *wdg, XMLNode *xcur, TValFunc &funcV, TFu
 		    if(!docRevers) i_c++;
 		    rCnt++;
 		}
-		funcV.setI(7,mess[i_r].time);
-		funcV.setI(8,mess[i_r].utime);
-		funcV.setI(9,mess[i_r].level);
-		funcV.setS(10,mess[i_r].categ);
-		funcV.setS(11,mess[i_r].mess);
-		nodeProcess(wdg,reptN,funcV,funcIO,iLang,false,upTo);
-		reptN->setAttr("docRptEnd","1");
+		funcV.setI(A_DocCalcPrmMTime, mess[i_r].time);
+		funcV.setI(A_DocCalcPrmMTimeU, mess[i_r].utime);
+		funcV.setI(A_DocCalcPrmMLev, mess[i_r].level);
+		funcV.setS(A_DocCalcPrmMCat, mess[i_r].categ);
+		funcV.setS(A_DocCalcPrmMVal, mess[i_r].mess);
+		nodeProcess(wdg, reptN, funcV, funcIO, iLang, false, upTo);
+		reptN->setAttr("docRptEnd", "1");
 	    }
 
 	    progrNode->childGet(progrNode->childSize()-1)->setText(TSYS::strMess(_("Messages block %d: %0.2f%% loaded."),progrNode->childSize(),100));
 
-	    funcV.setI(7,0); funcV.setI(8,0); funcV.setI(9,0); funcV.setS(10,""); funcV.setS(11,"");
+	    funcV.setI(A_DocCalcPrmMTime, 0);
+	    funcV.setI(A_DocCalcPrmMTimeU, 0);
+	    funcV.setI(A_DocCalcPrmMLev, 0);
+	    funcV.setS(A_DocCalcPrmMCat, "");
+	    funcV.setS(A_DocCalcPrmMVal, "");
 	    if(docRevers) i_c += rCnt;
 	}
 	else nodeProcess(wdg,xcur->childGet(i_c),funcV,funcIO,iLang,instrDel,upTo);
