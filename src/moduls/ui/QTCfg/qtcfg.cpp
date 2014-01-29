@@ -304,8 +304,8 @@ ConfApp::ConfApp( string open_user ) :
     //>> About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
-    actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
-    actQtAbout->setStatusTip(_("Press to get the using QT information."));
+    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
+    actQtAbout->setStatusTip(_("Press to get the using Qt information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //>> What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");

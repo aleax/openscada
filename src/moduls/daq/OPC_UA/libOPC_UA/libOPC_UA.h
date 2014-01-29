@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.h
 /******************************************************************************
- *   Copyright (C) 2009-2013 by Roman Savochenko			      *
+ *   Copyright (C) 2009-2014 by Roman Savochenko			      *
  *   rom_as@oscada.org, rom_as@fromru.com				      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *

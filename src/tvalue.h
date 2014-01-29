@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tvalue.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -41,7 +41,7 @@ namespace OSCADA
 class TValue;
 class TVArchive;
 
-class TVal : public TCntrNode
+class TVal: public TCntrNode
 {
     public:
 	//Data
@@ -90,9 +90,9 @@ class TVal : public TCntrNode
 	void setArch( const AutoHD<TVArchive> &vl );
 	string setArch( const string &nm = "" );
 
-	bool reqFlg( )	{ return mReqFlg; }
-	bool resB1( )	{ return mResB1; }
-	bool resB2( )	{ return mResB2; }
+	bool reqFlg( )			{ return mReqFlg; }
+	bool resB1( )			{ return mResB1; }
+	bool resB2( )			{ return mResB2; }
 
 	void setReqFlg( bool vl )	{ mReqFlg = vl; }
 	void setResB1( bool vl )	{ mResB1 = vl; }
@@ -153,9 +153,9 @@ class TValue: public TCntrNode, public TValElem
 	virtual string DAQPath( );
 
 	//> Atributes
-	void vlList( vector<string> &list )	{ chldList(m_vl,list); }
-	bool vlPresent( const string &name )	{ return chldPresent(m_vl,name); }
-	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl,name); }
+	void vlList( vector<string> &list )	{ chldList(m_vl, list); }
+	bool vlPresent( const string &name )	{ return chldPresent(m_vl, name); }
+	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl, name); }
 
     protected:
 	//Methods

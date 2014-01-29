@@ -490,27 +490,27 @@ TValFunc::~TValFunc( )
 
 void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 {
-    if( mFunc )	funcDisConnect(att_det);
-    if( ifunc )
+    if(mFunc)	funcDisConnect(att_det);
+    if(ifunc)
     {
 	mFunc = ifunc;
-	if( att_det )
+	if(att_det)
 	{
 	    mFunc->AHDConnect();
 	    mFunc->valAtt(this);
 	}
-	for( int i_vl = 0; i_vl < mFunc->ioSize(); i_vl++ )
+	for(int i_vl = 0; i_vl < mFunc->ioSize(); i_vl++)
 	{
 	    SVl val;
 	    val.tp = mFunc->io(i_vl)->type();
 	    val.mdf = false;
-	    switch( val.tp )
+	    switch(val.tp)
 	    {
 		case IO::String:	val.val.s = new string(mFunc->io(i_vl)->def());		break;
 		case IO::Integer:	val.val.i = atoll(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Real:		val.val.r = atof(mFunc->io(i_vl)->def().c_str());	break;
 		case IO::Boolean:	val.val.b = atoi(mFunc->io(i_vl)->def().c_str());	break;
-		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);	break;
+		case IO::Object:	val.val.o = new AutoHD<TVarObj>(new TVarObj);		break;
 	    }
 	    mVal.push_back(val);
 	}

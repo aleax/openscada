@@ -1,3 +1,16 @@
+2014-01-29 Roman
+- Archive,UI.{Vision,WebVision}:
+    Service "/serv/val" of OpenSCADA is adapted for return EVAL_STR as EVAL for all string representing data modes.
+- FIX:DAQ.JavaLikeCalc: Expanding to int64_t is fixed for integer's constants into octal and hex view.
+- DAQ.OPC_UA: Debug messages "MSG Req" and "MSG Req" are expanded and added added for "SubScription".
+    SubScriptions limit for 10 is set for sessions independent.
+    No error message but only service status set for some services.
+- Special.FLibSYS: IO::write() expanded for fourth argument set with repaete scalars counter and 8-bit's integer scalars process fix.
+    Unified CRC() calculation function is added.
+- UI.{QTStarter,QTCfg}: Next "QT" to "Qt" renaming.
+- FIX:UI.Vision: Set master-page palete to main window is fixed, for start with empty master-page.
+
+
 2014-01-24 Roman
 - UI.{VCAEngine,Vision,WebVision}: The primitive "Document" is moved to indexes from types.h.
 - UI.Vision: Cursor position into status display on "Ctrl" hold is added.

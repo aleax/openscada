@@ -301,7 +301,7 @@ void *TUIMod::Task( void * )
     int op_wnd = 0;
     mod->owner().modList(list);
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
 		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
 	{
 	    //>> Search module into start list
@@ -310,7 +310,7 @@ void *TUIMod::Task( void * )
 	    while((s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size())
 		if(s_el == list[i_l])	break;
 	    if(!s_el.empty() || !i_off)
-		if(winCntr->callQTModule(list[i_l])) op_wnd++;
+		if(winCntr->callQtModule(list[i_l])) op_wnd++;
 	}
 
     delete splash;
@@ -359,7 +359,7 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
     {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQTmod");
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
 	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
@@ -371,12 +371,12 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startMod());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartMod(opt->text());
     }
-    else if(a_path == "/prm/cfg/lsQTmod" && ctrChkNode(opt))
+    else if(a_path == "/prm/cfg/lsQtMod" && ctrChkNode(opt))
     {
 	vector<string> list;
 	mod->owner().modList(list);
 	for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	    if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+	    if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
 		    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[i_l]);
     }
@@ -404,13 +404,13 @@ void WinControl::checkForEnd( )
     qApp->closeAllWindows();
 }
 
-void WinControl::callQTModule( )
+void WinControl::callQtModule( )
 {
     QObject *obj = (QObject *)sender();
     if(obj->objectName() == "*exit*")	SYS->stop();
     else
     {
-	try{ callQTModule(obj->objectName().toStdString()); }
+	try{ callQtModule(obj->objectName().toStdString()); }
 	catch(TError err) {  }
     }
 }
@@ -421,7 +421,7 @@ void WinControl::lastWinClose( )
     else startDialog( );
 }
 
-bool WinControl::callQTModule( const string &nm )
+bool WinControl::callQtModule( const string &nm )
 {
     vector<string> list;
 
@@ -446,7 +446,7 @@ bool WinControl::callQTModule( const string &nm )
 
     mod->owner().modList(list);
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
-	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
 	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
     {
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
@@ -464,7 +464,7 @@ bool WinControl::callQTModule( const string &nm )
 	//act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
 	act_1->setToolTip(qt_mod.at().modName().c_str());
 	act_1->setWhatsThis(qt_mod.at().modInfo("Description").c_str());
-	QObject::connect(act_1, SIGNAL(triggered()), this, SLOT(callQTModule()));
+	QObject::connect(act_1, SIGNAL(triggered()), this, SLOT(callQtModule()));
 
 	if( toolBar ) toolBar->addAction(act_1);
 	if( menu ) menu->addAction(act_1);
@@ -499,7 +499,7 @@ StartDialog::StartDialog( WinControl *wcntr )
 
     mod->owner().modList(list);
     for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "QT" &&
+	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
 	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
     {
 	QIcon icon;
@@ -514,7 +514,7 @@ StartDialog::StartDialog( WinControl *wcntr )
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
 	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),centralWidget());
 	butt->setObjectName(list[i_l].c_str());
-	QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQTModule()));
+	QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
 	wnd_lay->addWidget( butt, 0, 0 );
     }
 
@@ -527,11 +527,11 @@ StartDialog::StartDialog( WinControl *wcntr )
 
     QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), centralWidget());
     butt->setObjectName("*exit*");
-    QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQTModule()));
+    QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
     wnd_lay->addWidget( butt, 0, 0 );
 }
 
-void StartDialog::closeEvent( QCloseEvent* ce )
+void StartDialog::closeEvent( QCloseEvent *ce )
 {
     unsigned winCnt = 0;
     for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)

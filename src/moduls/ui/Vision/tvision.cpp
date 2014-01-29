@@ -41,10 +41,10 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"Vision"
-#define MOD_NAME	_("Operation user interface (QT)")
+#define MOD_NAME	_("Operation user interface (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define SUB_TYPE	"QT"
+#define SUB_TYPE	"Qt"
 #define MOD_VER		"1.3.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DEVELOPERS	_("Roman Savochenko, Lysenko Maxim, Yashina Kseniya")
@@ -96,8 +96,8 @@ TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), end_run(false), 
     mSource	= name;
 
     //> Export functions
-    modFuncReg( new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TVision::icon) );
-    modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TVision::openWindow) );
+    modFuncReg( new ExpFunc("QIcon icon();","Module Qt-icon",(void(TModule::*)( )) &TVision::icon) );
+    modFuncReg( new ExpFunc("QMainWindow *openWindow();","Start Qt GUI.",(void(TModule::*)( )) &TVision::openWindow) );
 }
 
 TVision::~TVision( )

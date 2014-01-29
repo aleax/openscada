@@ -126,6 +126,8 @@ void Lib::postEnable( int flag )
     reg(new floatSplitWord());
     reg(new floatMergeWord());
 
+    reg(new CRC());
+
     // Time functions
     reg(new tmFStr());
     reg(new tmDate());

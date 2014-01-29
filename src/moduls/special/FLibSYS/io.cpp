@@ -312,11 +312,12 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 
 	return false;
     }
-    // IO write({string|int|double|TArray} vals, string valType = "char", string mchFmtEnc = "n|NoEnc") -
+    // IO write({string|int|double|TArray} vals, string valType = "char", string mchFmtEnc = "n|NoEnc", int cnt = 1) -
     //		write value[s] <vals> for type <valType> for machine format or string encodeIn <mchFmtEnc>
     //	vals - single value or values array for write;
     //	valType - value type (char,int,float,real*4,...)
     //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
+    //	cnt - integer and real types write multiple count
     if((id == "write" || (sec1=(id=="wr"))) && prms.size() >= 1)
     {
 	TVariant &vals = prms[0];
@@ -326,7 +327,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//!!!! Check for real data type
 
 	//Char stream
-	if(tpD.szBt == 1)
+	if(tpD.szBt == 1 && prms[0].type() == TVariant::String)
 	{
 	    string outCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    string sval = Mess->codeConvOut(outCd, prms[0].getS());
@@ -344,9 +345,15 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	}
 
 	bool isSingle = false;
+	int cntr = (prms.size() < 4) ? 1 : prms[3].getI();
 	TArrayObj *ai = NULL;
 	if(vals.type() == TVariant::Object && !AutoHD<TArrayObj>(vals.getO()).freeStat()) ai = (TArrayObj*)&vals.getO().at();
-	else { ai = new TArrayObj(); ai->arSet(0, vals); isSingle = true; }
+	else
+	{
+	    ai = new TArrayObj();
+	    for(int i_c = 0; i_c < cntr; i_c++) ai->arSet(i_c, vals);
+	    isSingle = true;
+	}
 	string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
 	if(mach.empty()) mach = "n";
 
@@ -358,12 +365,22 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    {
 		switch(tpD.szBt)
 		{
+		    case 1:
+		    {
+			uint8_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
+			    else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
+			}
+			break;
+		    }
 		    case 2:
 		    {
 			uint16_t v = 0;
 			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
 			{
-			    //!!!! Check for signed pass
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -414,9 +431,18 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    else // To file
 		switch(tpD.szBt)
 		{
+		    case 1:
+		    {
+			uint8_t v = 0;
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			{
+			    v = ai->arGet(i_a).getI();
+			    rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
+			}
+			break;
+		    }
 		    case 2:
 		    {
-			//!!!! Check for signed pass
 			uint16_t v = 0;
 			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
 			{

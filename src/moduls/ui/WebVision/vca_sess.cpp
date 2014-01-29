@@ -6168,7 +6168,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     int64_t	bbeg, bend, bper, bbeg_prev = tTime;
     int		curPos, prevPos, maxPos;
     double      curVal, prevVal;
-    string      svl;
+    string      svl, curValS;
     vector<SHg> buf;
     bool	toEnd = (tTimeGrnd >= valEnd());
     int		endBlks = 0;
@@ -6198,12 +6198,15 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 
     prevPos = 0, prevVal = EVAL_REAL, maxPos = (bend-bbeg)/bper;
     buf.clear();
-    for(int v_off = 0; true; )
+    for(int v_off = 0, var_off = 0; true; )
     {
 	if((svl=TSYS::strLine(req.text(),0,&v_off)).size())
 	{
-	    sscanf(svl.c_str(), "%d %lf", &curPos, &curVal);
-	    if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
+	    var_off = 0;
+	    curPos = atoi(TSYS::strParse(svl,0," ",&var_off,true).c_str());
+	    curVal = atof((curValS=TSYS::strParse(svl,0," ",&var_off,true)).c_str());
+	    if(curValS == EVAL_STR || (val_tp == TFld::Boolean && curVal == EVAL_BOOL) ||
+				      (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		curVal = EVAL_REAL;
 	}
 	else curPos = maxPos+1;

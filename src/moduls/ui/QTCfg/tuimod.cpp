@@ -34,13 +34,13 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"QTCfg"
-#define MOD_NAME	_("System configurator (QT)")
+#define MOD_NAME	_("System configurator (Qt)")
 #define MOD_TYPE	SUI_ID
 #define VER_TYPE	SUI_VER
-#define SUB_TYPE	"QT"
+#define SUB_TYPE	"Qt"
 #define MOD_VER		"2.1.1"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow the QT based OpenSCADA system configurator.")
+#define DESCRIPTION	_("Allow the Qt based OpenSCADA system configurator.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -87,8 +87,8 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID), start_path(string("/")+SYS->id()), 
     mSource	= name;
 
     //Public export functions
-    modFuncReg(new ExpFunc("QIcon icon();","Module QT-icon",(void(TModule::*)( )) &TUIMod::icon));
-    modFuncReg(new ExpFunc("QMainWindow *openWindow();","Start QT GUI.",(void(TModule::*)( )) &TUIMod::openWindow));
+    modFuncReg(new ExpFunc("QIcon icon();","Module Qt-icon",(void(TModule::*)( )) &TUIMod::icon));
+    modFuncReg(new ExpFunc("QMainWindow *openWindow();","Start Qt GUI.",(void(TModule::*)( )) &TUIMod::openWindow));
 }
 
 TUIMod::~TUIMod( )

@@ -357,7 +357,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
         QBrush brsh = plt.brush(QPalette::Background);
         brsh.setColor(Qt::red);
         brsh.setStyle(Qt::SolidPattern);
-        plt.setBrush(QPalette::Background,brsh);
+        plt.setBrush(QPalette::Background, brsh);
         conErr->setPalette(plt);
         //> Calc size and position
 	conErr->resize(300,100);
@@ -1182,10 +1182,10 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     string pgSrc = wAttrGet(pg_it,"pgOpenSrc");
 
     //> Check for master page replace
-    if( !master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp )
+    if(!master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp)
     {
 	//>> Send close command
-	if( master_pg )
+	if(master_pg)
 	{
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);

@@ -376,7 +376,7 @@ retry:
 	    { pos++; yylloc.last_column++; }
 
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,8);
+	    *yylval.reg = (int64_t)strtoll(prog.substr(st_pos,pos-st_pos).c_str(),NULL,8);
 	    return CONST;
 	}
 	else if(tp == 3)
@@ -386,7 +386,7 @@ retry:
 	    { pos++; yylloc.last_column++; }
 
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = (int)strtol(prog.substr(st_pos,pos-st_pos).c_str(),NULL,16);
+	    *yylval.reg = (int64_t)strtoll(prog.substr(st_pos,pos-st_pos).c_str(),NULL,16);
 	    return CONST;
 	}
 	else if(tp == 4)
@@ -577,14 +577,14 @@ retry:
 	}
 
 	//> Check allow registers
-	if( p_fnc->regGet(smb_nm) >= 0 )
+	if(p_fnc->regGet(smb_nm) >= 0)
 	{
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm));
 	    return VAR;
 	}
 
 	//> Global attributes and object's parameters.
-	if( is_dot )
+	if(is_dot)
 	{
 	    //>> Check to parameter attribute (TValue)
 	    try
@@ -602,7 +602,7 @@ retry:
 
 	    //>> Check for object's parameters
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');
-	    if( (yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))) )
+	    if((yylval.reg=p_fnc->regAt(p_fnc->regGet(sel))) || (yylval.reg=p_fnc->regAt(p_fnc->ioGet(sel))))
 	    {
 		pos -= (smb_nm.size()-sel.size());
 		yylloc.last_column -= (smb_nm.size()-sel.size());
@@ -616,8 +616,8 @@ retry:
 	if((yylval.reg=p_fnc->regAt(p_fnc->ioGet(smb_nm))))	return VAR;
 
 	//Keywords
-	if( smb_nm == "in" )		return IN;
-	if( smb_nm == "var" )		return VAR_DIR;
+	if(smb_nm == "in")	return IN;
+	if(smb_nm == "var")	return VAR_DIR;
 
 	//Get new register
 	yylval.reg = p_fnc->regAt(p_fnc->regNew(true));
@@ -626,7 +626,7 @@ retry:
 	return VAR;
     }
     //Object's properties or functions
-    else if( c == '.' && (pos+1) < prog.size() )
+    else if(c == '.' && (pos+1) < prog.size())
     {
 	st_pos = ++pos;
 	yylloc.last_column++;

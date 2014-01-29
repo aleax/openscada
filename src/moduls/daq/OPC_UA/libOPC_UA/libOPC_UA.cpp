@@ -1,7 +1,7 @@
 
 //OpenSCADA OPC_UA implementation library file: libOPC_UA.cpp
 /******************************************************************************
- *   Copyright (C) 2009-2013 by Roman Savochenko			      *
+ *   Copyright (C) 2009-2014 by Roman Savochenko			      *
  *   rom_as@oscada.org, rom_as@fromru.com				      *
  *									      *
  *   This library is free software; you can redistribute it and/or modify     *
@@ -2284,8 +2284,6 @@ nextReq:
 	//> Check for SecureChannel message type
 	else if(rb.compare(0,4,"MSGF") == 0)
 	{
-	    if(dbg) debugMess("MSG Req");
-
 	    off = 8;
 	    uint32_t stCode = 0;
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
@@ -2326,6 +2324,8 @@ nextReq:
 								//>>> Extensible parameter
 	    iNodeId(rb, off);					//TypeId (0)
 	    iNu(rb, off, 1);					//Encoding
+
+	    if(dbg) debugMess(strMess("MSG Req: %d",reqTp));
 
 	    //> Prepare respond message
 	    string respEp;
@@ -2594,7 +2594,10 @@ nextReq:
 			pthread_mutex_lock(&wep->mtxData);
 			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
 			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == (int)sesTokId)
+			    {
 				wep->mSubScr[i_ss].setState(SS_CLOSED);
+				if(dbg) debugMess(strMess("EP: SubScription %d closed.",i_ss));
+			    }
 			pthread_mutex_unlock(&wep->mtxData);
 		    }
 
@@ -2613,11 +2616,8 @@ nextReq:
 		    uint8_t pr = iNu(rb, off, 1);		//priority
 
 		    uint32_t subScrId = wep->subscrSet(OpcUa_NPosID, SS_CREATING, en, sesTokId, pi, lt, ka, npp, pr);
-		    if(subScrId > wep->limSubScr())
-		    {
-			wep->subscrSet(subScrId, SS_CLOSED);
-			throw OPCError(OpcUa_BadTooManySubscriptions, "Subscriptions limit achieved.");
-		    }
+		    if(subScrId == OpcUa_NPosID) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadTooManySubscriptions; break; }
+		    if(dbg) debugMess(strMess("EP: SubScription %d created.",subScrId));
 		    Subscr ss = wep->subscrGet(subScrId);
 
 		    //>> Respond
@@ -2641,7 +2641,7 @@ nextReq:
 		    uint8_t pr = iNu(rb, off, 1);		//priority
 
 		    Subscr ss = wep->subscrGet(subScrId);
-		    if(ss.st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    if(ss.st == SS_CLOSED) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadSubscriptionIdInvalid; break; }
 		    wep->subscrSet(subScrId, SS_CUR, en, sesTokId, pi, lt, ka, npp, pr);
 		    ss = wep->subscrGet(subScrId);
 
@@ -2689,6 +2689,7 @@ nextReq:
 			Subscr ss = wep->subscrGet(subScrId);
 			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
 			wep->subscrSet(subScrId, SS_CLOSED);
+			if(dbg) debugMess(strMess("EP: SubScription %d closed.",subScrId));
 		    }
 		    oN(respEp, -1, 4);				//diagnosticInfos [], -1
 		    break;
@@ -2697,7 +2698,7 @@ nextReq:
 		{
 		    //>> Request
 		    uint32_t subScrId = iNu(rb, off, 4);	//>subscriptionId
-		    if(wep->subscrGet(subScrId).st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    if(wep->subscrGet(subScrId).st == SS_CLOSED) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadSubscriptionIdInvalid; break; }
 
 		    TimestampsToReturn tmStRet = (TimestampsToReturn)iNu(rb, off, 4);	//>timestampsToReturn
 		    uint32_t ni = iNu(rb, off, 4);		//>itemsToCreate []
@@ -2768,7 +2769,7 @@ nextReq:
 		{
 		    //>> Request
 		    uint32_t subScrId = iNu(rb, off, 4);		//>subscriptionId
-		    if(wep->subscrGet(subScrId).st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    if(wep->subscrGet(subScrId).st == SS_CLOSED) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadSubscriptionIdInvalid; break; }
 		    TimestampsToReturn tmStRet = (TimestampsToReturn)iNu(rb, off, 4);	//>timestampsToReturn
 		    uint32_t ni = iNu(rb, off, 4);			//>itemsToModify []
 
@@ -2821,7 +2822,7 @@ nextReq:
 		    //>> Request
 		    uint32_t subScrId = iNu(rb, off, 4);		//>subscriptionId
 		    MonitoringMode mM = MM_DISABLED;
-		    if(wep->subscrGet(subScrId).st == SS_CLOSED) throw OPCError(OpcUa_BadSubscriptionIdInvalid, "Subscription Id invalid.");
+		    if(wep->subscrGet(subScrId).st == SS_CLOSED) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadSubscriptionIdInvalid; break; }
 		    if(reqTp == OpcUa_SetMonitoringModeRequest)
 		    {
 			mM = (MonitoringMode)iNu(rb, off, 4);		//>monitoringMode
@@ -3233,7 +3234,7 @@ nextReq:
 		    //>> Request
 		    uint32_t prSS = iNu(rb, off, 4);			//> subscriptionId
 		    uint32_t seqN = iNu(rb, off, 4);			//> retransmitSequenceNumber
-		    if(wep->subscrGet(prSS).st == SS_CLOSED)	{ stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault; break; }
+		    if(wep->subscrGet(prSS).st == SS_CLOSED) { stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault; break; }
 
 		    pthread_mutex_lock(&wep->mtxData);
 		    Subscr &ss = wep->mSubScr[prSS];
@@ -3304,7 +3305,7 @@ nextReq:
 		    out.replace(begEncBlck, out.size()-begEncBlck, symmetricEncrypt(out.substr(begEncBlck),scHd.clKey,scHd.secPolicy));
 	    }
 
-	    if(dbg) debugMess("MSG Resp");
+	    if(dbg) debugMess(strMess("MSG Resp: %d",reqTp));
 	}
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }
@@ -3681,9 +3682,15 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 
     if(ssId >= mSubScr.size())
     {
-	//> Find for Subscription on CLOSED state for reusing
-	for(ssId = 0; ssId < mSubScr.size(); ssId++)
-	    if(mSubScr[ssId].st == SS_CLOSED) break;
+	uint32_t nSubScrPerSess = 0;
+	ssId = mSubScr.size();
+	//> Find for Subscription on CLOSED state for reusing and subscriptions per session calculation
+	for(uint32_t i_ss = 0; i_ss < mSubScr.size(); i_ss++)
+	{
+	    if(ssId >= mSubScr.size() && mSubScr[i_ss].st == SS_CLOSED) ssId = i_ss;
+	    if(sess >= 0 && mSubScr[i_ss].sess == sess) nSubScrPerSess++;
+	}
+	if(nSubScrPerSess >= limSubScr()) return OpcUa_NPosID;
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
     }
     Subscr &ss = mSubScr[ssId];
