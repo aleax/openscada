@@ -91,7 +91,7 @@ TValBuf *VArchObj::buf( )
 
 TVariant VArchObj::propGet( const string &id )
 {
-    throw TError("VArchObj", _("Properties no supported by th object."));
+    throw TError("VArchObj", _("Properties no supported by the object."));
 }
 
 void VArchObj::propSet( const string &id, TVariant val )

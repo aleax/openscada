@@ -44,12 +44,12 @@ class IOObj : public TVarObj
 {
     public:
         //Methods
-        IOObj( const string &nm, const string &perm = "", const string &mchFormt = "", const string &ienc = "" );
+        IOObj( const string &nm, const string &perm = "", const string &mFormat = "", const string &ienc = "" );
         ~IOObj( );
 
         string objName( )       { return "IO"; }
 
-        void open( const string &inm, const string &perm = "", const string &mchFormt = "", const string &ienc = "" );
+        void open( const string &inm, const string &perm = "", const string &mFormat = "", const string &ienc = "" );
         void close( );
 
         TVariant propGet( const string &id );
@@ -73,9 +73,9 @@ class IOObj : public TVarObj
 	TpDescr	&getTp( const string &dtT );
 
 	//Attributes
-	FILE 	*fhd;	//Openned file hd. For fhd < 0 used local string into "strFnm"
-	string	str, mForm, strEnc;	//String stream
-	unsigned long	pos;	//String stream current position
+	FILE 	*fhd;			//Openned file hd. For fhd < 0 used local string into "strFnm"
+	string	str, mFormat, strEnc;	//String stream
+	unsigned long	pos;		//String stream current position
 
 	map<string,TpDescr> dTPs;
 };
@@ -90,13 +90,13 @@ class IOCall : public TFunction
 	{
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("name",_("File name or data (for string stream)"),IO::String,IO::Default));
-	    ioAdd(new IO("perm",_("File permition access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
-	    ioAdd(new IO("machineFmt",_("Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
-	    ioAdd(new IO("enc",_("String encoding into file"),IO::String,IO::Default));
+	    ioAdd(new IO("accs",_("File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));
+	    ioAdd(new IO("mFormat",_("Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"),IO::String,IO::Default,"n"));
+	    ioAdd(new IO("enc",_("String encoding in file"),IO::String,IO::Default));
 	}
 
 	string name( )	{ return _("IO"); }
-	string descr( )	{ return _("Input/Output access."); }
+	string descr( )	{ return _("Input/Output to: file, string stream."); }
 
 	void calc( TValFunc *val )	{ val->setO(0, new IOObj(val->getS(1),val->getS(2),val->getS(3),val->getS(4))); }
 };

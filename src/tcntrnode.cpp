@@ -880,7 +880,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 	vector<string> c_list;
 	SYS->db().at().dbList(c_list);
 	opt->childAdd("el")->setText(tblList.size() ? ("*.*."+tblList) : "*.*");
-	opt->childAdd("el")->setText(tblList.size() ? ("<cfg>."+tblList) : "<cfg>");
+	opt->childAdd("el")->setText(tblList.size() ? (DB_CFG"."+tblList) : DB_CFG);
 	for(unsigned i_db = 0; i_db < c_list.size(); i_db++)
 	    opt->childAdd("el")->setText(tblList.size() ? c_list[i_db]+"."+tblList : c_list[i_db]);
     }

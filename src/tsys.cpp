@@ -57,7 +57,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
-    mIcoDir("icons;"oscd_datadir_full"/icons"), mModDir(oscd_moddir_full), mWorkDB("<cfg>"),
+    mIcoDir("icons;"oscd_datadir_full"/icons"), mModDir(oscd_moddir_full), mWorkDB(DB_CFG),
     mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mMultCPU(false), mSysTm(time(NULL))
 {
     finalKill = false;
@@ -498,7 +498,7 @@ bool TSYS::cfgFileLoad( )
 
 void TSYS::cfgFileSave( )
 {
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(nodeRes(), true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
@@ -645,7 +645,7 @@ int TSYS::start( )
     }
 
     mess_info(nodePath().c_str(),_("Stop!"));
-    if(saveAtExit() || savePeriod())	save();
+    if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
     for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
@@ -758,7 +758,7 @@ void TSYS::cfgFileScan( bool first, bool up )
     if(up && !first)
     {
 	modifG();
-	setSelDB("<cfg>");
+	setSelDB(DB_CFG);
 	load();
 	setSelDB("");
     }
@@ -891,14 +891,14 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
     while(true)
     {
 	t_dir = path.find("/",an_dir);
-	if( t_dir == string::npos )
+	if(t_dir == string::npos)
 	{
-	    if( off ) *off = path.size();
+	    if(off) *off = path.size();
 	    return (t_lev == level) ? (decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir)) : "";
 	}
-	else if( t_lev == level )
+	else if(t_lev == level)
 	{
-	    if( off ) *off = t_dir;
+	    if(off) *off = t_dir;
 	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
 	}
 	an_dir = t_dir;

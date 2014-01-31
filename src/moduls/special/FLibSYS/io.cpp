@@ -26,9 +26,9 @@ using namespace FLibSYS;
 //*************************************************
 //* IOObj object (stream, file)                   *
 //*************************************************
-IOObj::IOObj( const string &nm, const string &perm, const string &mchFormt, const string &ienc ) : fhd(NULL), pos(0)
+IOObj::IOObj( const string &nm, const string &perm, const string &mFormat, const string &ienc ) : fhd(NULL), pos(0)
 {
-    open(nm, perm, mchFormt, ienc);
+    open(nm, perm, mFormat, ienc);
 }
 
 IOObj::~IOObj( )
@@ -36,13 +36,13 @@ IOObj::~IOObj( )
     close();
 }
 
-void IOObj::open( const string &nm, const string &perm, const string &mchFormt, const string &ienc )
+void IOObj::open( const string &nm, const string &perm, const string &imFormat, const string &ienc )
 {
     //Try for file open
     close();
     if(perm.size()) fhd = fopen(nm.c_str(), perm.c_str());
     else { str = nm; pos = 0; }
-    mForm = mchFormt;
+    mFormat = imFormat;
     strEnc = ienc;
 }
 
@@ -64,6 +64,9 @@ TVariant IOObj::propGet( const string &id )
 	return end;
     }
     if(id == "pos") return fhd ? (int64_t)ftell(fhd) : (int64_t)str.size();
+    if(id == "string")		return str;
+    if(id == "mFormat")		return mFormat;
+    if(id == "stringEncode")	return strEnc;
 
     throw TError("IOObj", _("Properties no supported by the object."));
 }
@@ -75,14 +78,17 @@ void IOObj::propSet( const string &id, TVariant val )
 	if(fhd)	fseek(fhd, pos, SEEK_CUR);
 	else pos = vmin(str.size(),vmax(0,val.getI()));
     }
+    else if(id == "string" && !fhd)	{ str = val.getS(); pos = 0; }
+    else if(id == "mFormat")		mFormat = val.getS();
+    else if(id == "stringEncode")	strEnc = val.getS();
     else throw TError("IOObj", _("Properties no supported by the object."));
 }
 
 TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     bool sec1 = false;
-    // bool open(string name = "", string perm = "", string machineFmt = "n", string enc = "") -
-    //          Open for new stream by string <name> or file <name>.
+    // bool open(string name = "", string accs = "", string mFormat = "n", string enc = "") -
+    //          Open for new stream by string or file <name>.
     //  name - file name or string content
     //  perm - file permition access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)
     //  machineFmt - machine format (native(n), ieee-be(b), ieee-le(l))
@@ -93,13 +99,13 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    ((prms.size() >= 3)?prms[2].getS():"n"), ((prms.size() >= 4)?prms[3].getS():""));
 	return true;
     }
-    // bool close() - close curent stream.
+    // bool close() - Close current stream.
     if(id == "close") { close(); return true; }
-    // {string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mchFmtEnc = "n|NoEnc") -
-    //		read value <valType> in <cnt> for machine format or string encodeIn <mchFmtEnc>
+    // {string|int|real|Array[int|real]} read(string valType = "char", int cnt = -1, string mFormatEnc = "n|NoEnc") -
+    //		Read value <valType> in <cnt> for machine format or string encodeIn <mFormatEnc>.
     //	valType - value type (char,int,float,real*4,...)
     //	cnt - values by data type counter; for no strings and multiply counter used Array as result (-1 up to end);
-    //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
+    //	mFormatEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
     if(id == "read")
     {
 	TpDescr &tpD = getTp((prms.size()>=1) ? prms[0].getS() : "char");
@@ -130,7 +136,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	{
 	    TArrayObj *ao = NULL;
 	    int64_t rez = 0;
-	    string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
+	    string mach = (prms.size()>=3) ? prms[2].getS() : mFormat;
 	    if(mach.empty()) mach = "n";
 	    // From string stream
 	    if(!fhd)
@@ -234,7 +240,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	{
 	    TArrayObj *ao = NULL;
 	    double rez = 0;
-	    string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
+	    string mach = (prms.size()>=3) ? prms[2].getS() : mFormat;
 	    if(mach.empty()) mach = "n";
 	    // From string stream
 	    if(!fhd)
@@ -312,11 +318,12 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 
 	return false;
     }
-    // IO write({string|int|double|TArray} vals, string valType = "char", string mchFmtEnc = "n|NoEnc", int cnt = 1) -
-    //		write value[s] <vals> for type <valType> for machine format or string encodeIn <mchFmtEnc>
+    // {int|IO} {write|wr}({string|int|double|Array} vals, string valType = "char", string mFormatEnc = "n|NoEnc", int cnt = 1) -
+    //		Write value[s] <vals> for type <valType> for machine format or string encodeIn <mFormatEnc>,
+    //		and scalar values repeat for <cnt>.
     //	vals - single value or values array for write;
     //	valType - value type (char,int,float,real*4,...)
-    //	mchFmtEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
+    //	mFormatEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
     //	cnt - integer and real types write multiple count
     if((id == "write" || (sec1=(id=="wr"))) && prms.size() >= 1)
     {
@@ -327,7 +334,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//!!!! Check for real data type
 
 	//Char stream
-	if(tpD.szBt == 1 && prms[0].type() == TVariant::String)
+	if(tpD.szBt == 1 && vals.type() == TVariant::String)
 	{
 	    string outCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    string sval = Mess->codeConvOut(outCd, prms[0].getS());
@@ -354,7 +361,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    for(int i_c = 0; i_c < cntr; i_c++) ai->arSet(i_c, vals);
 	    isSingle = true;
 	}
-	string mach = (prms.size()>=3) ? prms[2].getS() : mForm;
+	string mach = (prms.size()>=3) ? prms[2].getS() : mFormat;
 	if(mach.empty()) mach = "n";
 
 	//Integer
@@ -368,7 +375,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    case 1:
 		    {
 			uint8_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
 			{
 			    v = ai->arGet(i_a).getI();
 			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
@@ -379,7 +386,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    case 2:
 		    {
 			uint16_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
 			{
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
@@ -395,7 +402,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    case 4:
 		    {
 			uint32_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
 			{
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
@@ -411,7 +418,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    case 8:
 		    {
 			uint64_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
 			{
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
@@ -425,7 +432,6 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			break;
 		    }
 		}
-		pos += tpD.szBt;
 		rez = ai->arSize()*tpD.szBt;
 	    }
 	    else // To file
@@ -500,7 +506,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		case 4:
 		{
 		    float v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
 		    {
 			v = ai->arGet(i_a).getR();
 			switch(mach[0])
@@ -516,7 +522,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		case 8:
 		{
 		    double v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
 		    {
 			v = ai->arGet(i_a).getR();
 			switch(mach[0])
@@ -530,7 +536,6 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    break;
 		}
 	    }
-	    pos += tpD.szBt;
 	    rez = ai->arSize()*tpD.szBt;
 	}
 	else // To file

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Special.FLibSYS 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 21:35+0200\n"
+"POT-Creation-Date: 2014-01-29 18:53+0200\n"
 "PO-Revision-Date: 2011-07-19 20:52+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,360 +17,548 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "System API functions"
-msgstr "System-API Bibliothek"
-
-msgid "Roman Savochenko"
-msgstr "Roman Savotschenko"
-
-msgid "Allow system API functions library of the user programming area."
-msgstr "Bibliothek mit System-API für spezifische Programmierung."
-
-msgid "Function"
-msgstr "Funktion"
-
-msgid "Functions"
-msgstr "Funktionen"
-
-msgid "Properties no supported by object."
+#: gd.cpp:53 gd.cpp:58 io.cpp:68 io.cpp:78 varchfnc.cpp:94 varchfnc.cpp:99
+#, fuzzy
+msgid "Properties no supported by the object."
 msgstr "Eigenschaften werden vom Objekt nicht unterstützt."
 
+#: gd.cpp:64 io.cpp:575 varchfnc.cpp:274
 #, c-format
 msgid "Function '%s' error or not enough parameters."
 msgstr "Funktion '%s' Fehler oder zuwenig Parameter."
 
+#: statfunc.cpp:36
+msgid "System API functions"
+msgstr "System-API Bibliothek"
+
+#: statfunc.cpp:41
+msgid "Roman Savochenko"
+msgstr "Roman Savotschenko"
+
+#: statfunc.cpp:42
+msgid "Allow system API functions library of the user programming area."
+msgstr "Bibliothek mit System-API für spezifische Programmierung."
+
+#: statfunc.cpp:193
+msgid "Function"
+msgstr "Funktion"
+
+#: statfunc.cpp:194
+msgid "Functions"
+msgstr "Funktionen"
+
+#: xmlfnc.cpp:35
 msgid "1:Request is not object!"
 msgstr "1:Anfrage ist kein Objekt!"
 
+#: xmlfnc.cpp:51
 #, c-format
 msgid "1:Request error: %s"
 msgstr "1:Anfrage Fehler: %s"
 
+#: gd.h:64 io.h:91 sysfnc.h:46 sysfnc.h:76 sysfnc.h:118 sysfnc.h:181
+#: sysfnc.h:202 sysfnc.h:285 sysfnc.h:312 sysfnc.h:337 sysfnc.h:359
+#: sysfnc.h:380 sysfnc.h:401 sysfnc.h:422 sysfnc.h:445 sysfnc.h:473
+#: sysfnc.h:491 sysfnc.h:535 sysfnc.h:559 varchfnc.h:74 varchfnc.h:97
+#: xmlfnc.h:41 xmlfnc.h:59
 msgid "Result"
 msgstr "Ergebnis"
 
+#: gd.h:65 varchfnc.h:75 xmlfnc.h:42
+msgid "Name"
+msgstr "Name"
+
+#: gd.h:66
+msgid "From file"
+msgstr ""
+
+#: gd.h:69
+msgid "LibGD2"
+msgstr ""
+
+#: gd.h:70
+msgid "Graphical library GD2 images processing."
+msgstr ""
+
+#: io.h:92
+msgid "File name or data (for string stream)"
+msgstr ""
+
+#: io.h:93
+msgid ""
+"File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-"
+"append;...)"
+msgstr ""
+
+#: io.h:94
+msgid "Machine data format ('n'-sys order;'b'-BigEndian;'l'-LittleEndian)"
+msgstr ""
+
+#: io.h:95
+#, fuzzy
+msgid "String encoding in file"
+msgstr "Zeile: Kodierung der Zeile in HTML"
+
+#: io.h:98
+msgid "IO"
+msgstr ""
+
+#: io.h:99
+msgid "Input/Output to: file, string stream."
+msgstr ""
+
+#: sysfnc.h:47
 msgid "Command"
 msgstr "Kommando"
 
+#: sysfnc.h:50
 msgid "Sys: Call"
 msgstr "System: Aufruf"
 
+#: sysfnc.h:51
 msgid "System call commands."
 msgstr "Kommando Systemaufruf."
 
+#: sysfnc.h:77
 msgid "DB address"
 msgstr "Datenbank Name"
 
+#: sysfnc.h:78
 msgid "SQL request"
 msgstr "SQL Anfrage"
 
+#: sysfnc.h:79
 msgid "Transaction"
 msgstr "Transaktion"
 
+#: sysfnc.h:82
 msgid "DB: SQL request"
 msgstr "Datenbank: SQL Anfrage"
 
+#: sysfnc.h:83
 msgid "Send SQL request to DB."
 msgstr "Sende SQL Anfrage an Datenbank"
 
+#: sysfnc.h:119
 msgid "Begin time"
 msgstr "Anfangszeit"
 
+#: sysfnc.h:120
 msgid "End time"
 msgstr "Endezeit"
 
+#: sysfnc.h:121 sysfnc.h:156
 msgid "Category"
 msgstr "Kategorie"
 
+#: sysfnc.h:122 sysfnc.h:157 sysfnc.h:287 sysfnc.h:314
 msgid "Level"
 msgstr "Stufe"
 
+#: sysfnc.h:123
 msgid "Archivator"
 msgstr "Archivar"
 
+#: sysfnc.h:126
 msgid "Mess: Get"
 msgstr "Nachricht: Laden"
 
+#: sysfnc.h:127
 msgid "Get messages from system."
 msgstr "Nachricht aus dem System laden."
 
+#: sysfnc.h:158
 msgid "Message"
 msgstr "Nachricht"
 
+#: sysfnc.h:161
 msgid "Mess: Put"
 msgstr "Nachricht: Speichern"
 
+#: sysfnc.h:162
 msgid "Put message to system."
 msgstr "Die Nachricht ins System speichern."
 
+#: sysfnc.h:182 sysfnc.h:203 sysfnc.h:231 sysfnc.h:256 sysfnc.h:286
 msgid "String"
 msgstr "Zeile"
 
+#: sysfnc.h:185
 msgid "String: Get size"
 msgstr "Zeile: Größe erhalten"
 
+#: sysfnc.h:186
 msgid "Use for string size getting."
 msgstr "Wird verwendet um die Größe der Zeile zu erhalten."
 
+#: sysfnc.h:204 sysfnc.h:232 sysfnc.h:257
 msgid "Position"
 msgstr "Position"
 
+#: sysfnc.h:205 sysfnc.h:258
 msgid "Number"
 msgstr "Anzahl"
 
+#: sysfnc.h:208
 msgid "String: Get substring"
 msgstr "Zeile: Subzeile erhalten"
 
+#: sysfnc.h:209
 msgid "Use for substring getting."
 msgstr "Wird verwendet um eine Subzeile zu erhalten."
 
+#: sysfnc.h:233
 msgid "Insert string"
 msgstr "Zeile einsetzen"
 
+#: sysfnc.h:236
 msgid "String: Insert string to other string"
 msgstr "Zeile: eine Zeile in die andere einsetzen"
 
+#: sysfnc.h:237
 msgid "Use for insertion string to other string."
 msgstr "Wird verwendet um eine Zeile in die einzusetzen. "
 
+#: sysfnc.h:259
 msgid "Replace string"
 msgstr "Ersatzzeile"
 
+#: sysfnc.h:262
 msgid "String: Replace part string on other string"
 msgstr "Zeile: einen Zeilenteil durch eine andere Zeile ersetzen"
 
+#: sysfnc.h:263
 msgid "Use for replacing part string on other string."
 msgstr ""
 "Wird verwendet um einen Zeilenteil durch eine andere Zeile zu ersetzen. "
 
+#: sysfnc.h:288 sysfnc.h:339
 msgid "Separator"
 msgstr "Trennzeichen"
 
+#: sysfnc.h:289 sysfnc.h:315
 msgid "Offset"
 msgstr "Offset"
 
+#: sysfnc.h:292
 msgid "String: Parse on separator"
 msgstr "Zeile: Auswertung nach dem Trennzeichen"
 
+#: sysfnc.h:293
 msgid "Use for parse string on separator."
 msgstr "Wird verwendet für die Auswertung der Zeile dem Trennzeichen nach."
 
+#: sysfnc.h:313
 msgid "Path"
 msgstr "Pfad"
 
+#: sysfnc.h:318
 msgid "String: Path parse"
 msgstr "Text: Auswertung des Pfades"
 
+#: sysfnc.h:319
 msgid "Use for parse path on elements."
 msgstr "Wird verwendet um den Pfad der Elemente auszuwerten."
 
+#: sysfnc.h:338 sysfnc.h:360 sysfnc.h:381 sysfnc.h:402
 msgid "Source"
 msgstr "Quelle"
 
+#: sysfnc.h:342
 msgid "String: Path to separated string"
 msgstr "Zeile: Pfad in die Zeile mit dem Trennzeichen"
 
+#: sysfnc.h:343
 msgid "Use for convert path to separated string."
 msgstr ""
 "Wird verwendet um den Pfad zu einer Zeile mit dem Trennzeichen zu "
 "konvertieren."
 
+#: sysfnc.h:363
 msgid "String: Encode string to HTML"
 msgstr "Zeile: Kodierung der Zeile in HTML"
 
+#: sysfnc.h:364
 msgid "Use for encode string for use into HTML source."
 msgstr ""
 "Wird verwendet für die Kodierung der Zeile für die Benutzung in HTML-Source."
 
+#: sysfnc.h:384
 msgid "String: Encode text to bin"
 msgstr "Zeile: Kodierung des Textes in die binäre Form"
 
+#: sysfnc.h:385
 msgid "Use for encode text to bin, from format <00 A0 FA DE>."
 msgstr ""
 "Wird für die Kodierung des Textes in die binäre From verwendet, aus dem "
 "Format <00 A0 FA DE>."
 
+#: sysfnc.h:405
 msgid "String: Decode text from bin"
 msgstr "Zeile: Dekodierung des Textes aus der binären Form"
 
+#: sysfnc.h:406
 msgid "Use for decode text from bin to format <00 A0 FA DE>."
 msgstr ""
 "Wird für die Dekodierung des Textes aus der binären From verwendet, in das "
 "Format <00 A0 FA DE>."
 
+#: sysfnc.h:423 sysfnc.h:446 sysfnc.h:474 sysfnc.h:492 sysfnc.h:510
 msgid "Value"
 msgstr "Wert"
 
+#: sysfnc.h:424
 msgid "Precision"
 msgstr "Genauigkeit"
 
+#: sysfnc.h:425 varchfnc.h:98
 msgid "Type"
 msgstr "Typ"
 
+#: sysfnc.h:428
 msgid "String: Real to string"
 msgstr "Zeile: Reelle Zahl in die Zeile"
 
+#: sysfnc.h:429
 msgid "Convert real to string."
 msgstr "Konvertierung einer reellen Zahl in eine Zeile."
 
+#: sysfnc.h:447 sysfnc.h:493
 msgid "Base"
 msgstr "Basis"
 
+#: sysfnc.h:450
 msgid "String: Integer to string"
 msgstr "Zeile: Ganzzahl in die Zeile"
 
+#: sysfnc.h:451
 msgid "Convert integer to string."
 msgstr "Konvertierung einer Ganzzahl in eine Zeile."
 
+#: sysfnc.h:477
 msgid "String: String to real"
 msgstr "Zeile: Zeile in die reelle Zahl"
 
+#: sysfnc.h:478
 msgid "Convert string to real."
 msgstr "Konvertierung einer Zeile in eine reelle Zahl."
 
+#: sysfnc.h:496
 msgid "String: String to integer"
 msgstr "Zeile: Zeile in die Ganzzahl"
 
+#: sysfnc.h:497
 msgid "Convert string to integer."
 msgstr "Konvertierung einer Zeile in eine Ganzzahl."
 
+#: sysfnc.h:511 sysfnc.h:536
 msgid "Word 1"
 msgstr "Wort 1"
 
+#: sysfnc.h:512 sysfnc.h:537
 msgid "Word 2"
 msgstr "Wort 2"
 
+#: sysfnc.h:515
 msgid "Float: Split to words"
 msgstr "Fliesskomma: Aufteilen"
 
+#: sysfnc.h:516
 msgid "Split float (4 byte) to words (2 byte)."
 msgstr "Aufteilen Fliesskomma (4 Bytes) in Wörter (2 Bytes)."
 
+#: sysfnc.h:540
 msgid "Float: Merge from words"
 msgstr "Fliesskomma: Zusammenfügen"
 
+#: sysfnc.h:541
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Zusammenfügen Fliesskomma (4 Bytes)  aus Wörtern (2 Bytes)."
 
+#: sysfnc.h:560
+msgid "Data"
+msgstr ""
+
+#: sysfnc.h:561
+msgid "Polynomial (reversion)"
+msgstr ""
+
+#: sysfnc.h:562
+msgid "Width"
+msgstr ""
+
+#: sysfnc.h:563
+msgid "Initial"
+msgstr ""
+
+#: sysfnc.h:566
+msgid "Cyclic Redundancy Code (CRC)"
+msgstr ""
+
+#: sysfnc.h:567
+msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
+msgstr ""
+
+#: timefnc.h:41 timefnc.h:137
 msgid "Date and time string"
 msgstr "Zeile für Datum und Zeit"
 
+#: timefnc.h:42 timefnc.h:69 timefnc.h:109 timefnc.h:136
 msgid "Seconds"
 msgstr "Sekunden"
 
+#: timefnc.h:43 timefnc.h:138
 msgid "Date and time format"
 msgstr "Datum- und Zeitenformat"
 
+#: timefnc.h:46
 msgid "Time: String time"
 msgstr "Zeit: Zeit in die Zeile"
 
+#: timefnc.h:47
 msgid "Formatted string time."
 msgstr "Formatierte Zeitenzeile."
 
+#: timefnc.h:68
 msgid "Full seconds"
 msgstr "Volle Sekunden"
 
+#: timefnc.h:70
 msgid "Minutes"
 msgstr "Minuten"
 
+#: timefnc.h:71
 msgid "Hours"
 msgstr "Stunden"
 
+#: timefnc.h:72
 msgid "Day of the month"
 msgstr "Tag im Monat"
 
+#: timefnc.h:73
 msgid "Month"
 msgstr "Monat"
 
+#: timefnc.h:74
 msgid "Year"
 msgstr "Jahr"
 
+#: timefnc.h:75
 msgid "Day of the week"
 msgstr "Wochentag"
 
+#: timefnc.h:76
 msgid "Day of the year"
 msgstr "Tag im Jahr"
 
+#: timefnc.h:77
 msgid "Daylight saving time"
 msgstr "Sommerzeit"
 
+#: timefnc.h:80
 msgid "Time: Date"
 msgstr "Zeit: Datum"
 
+#: timefnc.h:81
 msgid "Full date."
 msgstr "Ganzes Datum."
 
+#: timefnc.h:110
 msgid "Microseconds"
 msgstr "Mikrosekunden"
 
+#: timefnc.h:113
 msgid "Time: Time"
 msgstr "Zeit: Uhrzeit"
 
+#: timefnc.h:114
 msgid "Full time (since 01.01.1970)."
 msgstr "Absolute Zeit (seit 01.01.1970)."
 
+#: timefnc.h:141
 msgid "Time: String to time"
 msgstr "Zeit: Zeile in Zeit"
 
+#: timefnc.h:142
 msgid "Convert a string representation of time to a time."
 msgstr "Konvertierung einer Zeile in eine absolute Zeit."
 
+#: timefnc.h:161
 msgid "Result, seconds"
 msgstr "Ergebnis, Sekunden"
 
+#: timefnc.h:162
 msgid "Cron"
 msgstr ""
 
+#: timefnc.h:163
 msgid "Base time, seconds"
 msgstr "Anfangszeit Sekunden"
 
+#: timefnc.h:166
 msgid "Time: Cron plane time"
 msgstr "Zeit: Cron Format"
 
+#: timefnc.h:167
 msgid "Plane time by cron standard."
 msgstr "Berechnet die nächste absolute Zeit nach Cron Format"
 
-msgid "Name"
-msgstr "Name"
-
+#: varchfnc.h:78
 msgid "Val: Archive"
 msgstr "Wert: Archiv speichern."
 
+#: varchfnc.h:79
 msgid "Get value archive object."
 msgstr "Objekt aus dem Wertearchiv laden."
 
+#: varchfnc.h:99
 msgid "Size"
 msgstr "Größe"
 
+#: varchfnc.h:100
 msgid "Period (us)"
 msgstr "Periode (usek)"
 
+#: varchfnc.h:101
 msgid "Hard grid"
 msgstr "Gitter"
 
+#: varchfnc.h:102
 msgid "High resolution"
 msgstr "Hohe Auflösung"
 
+#: varchfnc.h:105
 msgid "Val: Archive buffer"
 msgstr "Wert: Archiv speichern."
 
+#: varchfnc.h:106
 msgid "Get value buffer object for temporary values storing."
 msgstr "Öffnung Wertepuffers für Zwischenspeicherung der Werte."
 
+#: xmlfnc.h:45
 msgid "XML: Node"
 msgstr "XML: Knoten"
 
+#: xmlfnc.h:46
 msgid "XML node object creation."
 msgstr "XML Knoten erstellen"
 
+#: xmlfnc.h:60
 msgid "Request"
 msgstr "Anfrage"
 
+#: xmlfnc.h:61
 msgid "Station"
 msgstr "Station"
 
+#: xmlfnc.h:64
 msgid "XML: Control request"
 msgstr "XML: Kontrollanfrage"
 
+#: xmlfnc.h:65
 msgid "Control request to system by XML."
 msgstr "XML Kontrollanfrage an das System"
+
+#, fuzzy
+#~ msgid "Properties no supported by th object."
+#~ msgstr "Eigenschaften werden vom Objekt nicht unterstützt."

@@ -558,13 +558,13 @@ class CRC : public TFunction
 	{
 	    ioAdd(new IO("rez",_("Result"),IO::Integer,IO::Return));
 	    ioAdd(new IO("data",_("Data"),IO::String,IO::Default));
-	    ioAdd(new IO("pat",_("Pattern"),IO::Integer,IO::Default,"40961"));	//0xA001
-	    ioAdd(new IO("width",_("Pattern (reversion)"),IO::Integer,IO::Default,"16"));
+	    ioAdd(new IO("poly",_("Polynomial (reversion)"),IO::Integer,IO::Default,"40961"));	//0xA001
+	    ioAdd(new IO("width",_("Width"),IO::Integer,IO::Default,"16"));
 	    ioAdd(new IO("init",_("Initial"),IO::Integer,IO::Default,"-1"));	//0xFFFFFFFFFFFFFFFF
 	}
 
 	string name( )	{ return _("Cyclic Redundancy Code (CRC)"); }
-	string descr( )	{ return _("Wide mode Cyclic Redundancy Code implement."); }
+	string descr( )	{ return _("Unified Cyclic Redundancy Code implement for 8-64 bits width."); }
 
 	void calc( TValFunc *val )
 	{
@@ -573,14 +573,10 @@ class CRC : public TFunction
 	    uint64_t CRC = val->getI(4) & mask;
 	    uint64_t pat = val->getI(2) & mask;
 	    string data = val->getS(1);
-	    printf("TEST 00: data=%d; wdth=%d; pat=%llx; init=%llx (%llx)\n", data.size(), wdth, pat, CRC, val->getI(4));
 	    for(unsigned i = 0; i < data.size(); i++)
 	    {
 		CRC ^= (uint8_t)data[i];
-		printf("TEST 01: CRC=%llx\n", CRC);
-		for(char j = 0; j < 8; j++)
-		    CRC = (CRC&1) ? (CRC>>1)^pat : (CRC>>1);
-		printf("TEST 02: CRC=%llx\n", CRC);
+		for(char j = 0; j < 8; j++) CRC = (CRC&1) ? (CRC>>1)^pat : (CRC>>1);
 	    }
 	    val->setI(0, (int64_t)CRC);
 	}

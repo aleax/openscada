@@ -139,7 +139,7 @@ void TWEB::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPg",nodePath()+modId()+"_uPg",fld_cnt++,g_cfg); )
 	    {

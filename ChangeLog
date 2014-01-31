@@ -1,3 +1,12 @@
+2014-01-31 Roman
+- SYS: Variable DB_CFG is defined to "<cfg>" and used everywhere.
+- Transport: User API function SYS.Transport.in_{Tr}.writeTo() is added.
+- Protocol.UserProtocol: Allowed full sender value, for input transport.
+- Special.FLibSYS.IO: Properties names and descriptions is made unified. IO.{string,mFormat,stringEncode} properties are added.
+    Multiple scalars by <cnt> writing is fixed.
+- FIX:UI.VCAEngine: DB prefix "wlb_" is changed to "prj_" for projects' DB select.
+
+
 2014-01-29 Roman
 - Archive,UI.{Vision,WebVision}:
     Service "/serv/val" of OpenSCADA is adapted for return EVAL_STR as EVAL for all string representing data modes.

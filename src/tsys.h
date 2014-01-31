@@ -38,6 +38,7 @@
 #define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
+#define DB_CFG		"<cfg>"
 
 #include <unistd.h>
 #include <stdint.h>

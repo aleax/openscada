@@ -120,7 +120,7 @@ void TTransportS::load_( )
 
 	//>>> Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_in",nodePath()+subId()+"_in",fld_cnt++,c_el); )
 	    {
@@ -161,7 +161,7 @@ void TTransportS::load_( )
 
 	//>>> Search new into DB and Config-file
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_out",nodePath()+subId()+"_out",fld_cnt++,c_el); )
 	    {
@@ -298,7 +298,8 @@ void TTransportS::subStop( )
 	    {
 		AutoHD<TTransportIn> in = mod.at().inAt(o_lst[i_o]);
 		if(in.at().startStat()) in.at().stop();
-	    }catch(TError err)
+	    }
+	    catch(TError err)
 	    {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Stop input transport '%s' error."),o_lst[i_o].c_str());
@@ -635,7 +636,7 @@ TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
     mId = iid;
 }
 
-TTransportIn::~TTransportIn()
+TTransportIn::~TTransportIn( )
 {
 
 }
@@ -682,13 +683,13 @@ string TTransportIn::getStatus( )
 
 void TTransportIn::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
-    SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
+    if(!SYS->chkSelDB(DB())) return;
+    SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
 void TTransportIn::save_( )
 {
-    SYS->db().at().dataSet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
+    SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
 void TTransportIn::preEnable(int flag)
@@ -699,6 +700,15 @@ void TTransportIn::preEnable(int flag)
 
 TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    // string writeTo(string sender, string mess) - send the message <mess> to sender <sender>
+    //  sender - sender address
+    //  mess - message for send
+    if(iid == "writeTo" && prms.size() >= 2)
+    {
+	try { return writeTo(prms[0].getS(), prms[1].getS()); }	catch(TError) { }
+	return 0;
+    }
+
     //> Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;

@@ -163,7 +163,7 @@ void TDAQS::load_( )
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+tmplLibTable(),nodePath()+"tmplib",lib_cnt++,c_el); )
 	    {
@@ -202,7 +202,7 @@ void TDAQS::load_( )
 
 	    //>> Search into DB and create new controllers
 	    SYS->db().at().dbList(db_ls,true);
-	    db_ls.push_back("<cfg>");
+	    db_ls.push_back(DB_CFG);
 	    for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 		for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_"+wmod.at().modId(),wmod.at().nodePath()+"DAQ",fld_cnt++,g_cfg); )
 		{
