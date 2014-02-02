@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -158,13 +158,13 @@ class Reg
 
 	union El
 	{
-	    char	b_el;	//Boolean for constant and local variable
-	    int64_t	i_el;	//Integer for constant and local variable
-	    double	r_el;	//Real for constant and local variable
-	    string	*s_el;	//String for constant and local variable
-	    AutoHD<TVarObj>	*o_el;	//Object for constant and local variable
-	    int		io;	//IO id for IO variable
-	    AutoHD<TVal>*p_attr;//Parameter attribute
+	    char		b;	//Boolean for constant and local variable
+	    int64_t		i;	//Integer for constant and local variable
+	    double		r;	//Real for constant and local variable
+	    string		*s;	//String for constant and local variable
+	    AutoHD<TVarObj>	*o;	//Object for constant and local variable
+	    int			io;	//IO id for IO variable
+	    AutoHD<TVal>	*pA;	//Parameter attribute
 	};
 
 	//Methods
@@ -173,13 +173,13 @@ class Reg
 	~Reg( );
 
 	Reg &operator=( Reg &irg );
-	void operator=( bool ivar )		{ setType(Bool);	el.b_el = ivar; }
-	void operator=( char ivar )		{ setType(Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ setType(Int);		el.i_el = ivar; }
-	void operator=( int64_t ivar )		{ setType(Int);		el.i_el = ivar; }
-	void operator=( double ivar )		{ setType(Real);	el.r_el = ivar; }
-	void operator=( const string &ivar )	{ setType(String);	*el.s_el = ivar;}
-	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);		*el.o_el = ivar;}
+	void operator=( bool ivar )		{ setType(Bool);   el.b = ivar;  }
+	void operator=( char ivar )		{ setType(Bool);   el.b = ivar;  }
+	void operator=( int ivar )		{ setType(Int);	   el.i = ivar;  }
+	void operator=( int64_t ivar )		{ setType(Int);	   el.i = ivar;  }
+	void operator=( double ivar )		{ setType(Real);   el.r = ivar;  }
+	void operator=( const string &ivar )	{ setType(String); *el.s = ivar; }
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Obj);	   *el.o = ivar; }
 
 	string name( ) const			{ return mNm; }
 	Type type( ) const			{ return mTp; }
@@ -193,7 +193,7 @@ class Reg
 	void setLock( bool vl )			{ mLock = vl; }
 	void setObjEl( )			{ mObjEl = true; }
 	void setVar( int ivar )			{ setType(Var);	el.io = ivar; }
-	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.p_attr = ivattr; }
+	void setPAttr( const AutoHD<TVal> &ivattr )	{ setType(PrmAttr); *el.pA = ivattr; }
 
 	void free( );
 
@@ -215,15 +215,15 @@ class Reg
 class RegW
 {
     public:
-	RegW( ) : mTp(Reg::Free)		{  }
+	RegW( ) : mTp(Reg::Free)		{ }
 	~RegW( )				{ setType(Reg::Free); }
 
-	void operator=( char ivar )		{ setType(Reg::Bool);	el.b_el = ivar; }
-	void operator=( int ivar )		{ setType(Reg::Int);	el.i_el = ivar; }
-	void operator=( int64_t ivar )		{ setType(Reg::Int);	el.i_el = ivar; }
-	void operator=( double ivar )		{ setType(Reg::Real);	el.r_el = ivar; }
-	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s_el = ivar;}
-	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o_el = ivar;}
+	void operator=( char ivar )		{ setType(Reg::Bool);	el.b = ivar; }
+	void operator=( int ivar )		{ setType(Reg::Int);	el.i = ivar; }
+	void operator=( int64_t ivar )		{ setType(Reg::Int);	el.i = ivar; }
+	void operator=( double ivar )		{ setType(Reg::Real);	el.r = ivar; }
+	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s = ivar;}
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o = ivar;}
 	void operator=( const TVariant &ivar );
 
 	Reg::Type type( ) const			{ return mTp; }
@@ -247,8 +247,8 @@ class Lib;
 
 class Func : public TConfig, public TFunction
 {
-    friend int yylex( );
-    friend int yyparse( );
+    friend int yylex();
+    friend int yyparse();
     friend void yyerror(const char*);
     public:
 	//> Addition flags for IO
@@ -271,6 +271,7 @@ class Func : public TConfig, public TFunction
 	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
 	int64_t	timeStamp( )		{ return mTimeStamp; }
+	unsigned cnstStatLim( )		{ return 32767; }
 
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
@@ -292,7 +293,7 @@ class Func : public TConfig, public TFunction
 	void funcClear( );
 
 	//> Registers` list functions
-	int regNew( bool var = false );
+	int regNew( bool sep = false );
 	int regGet( const string &nm );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }

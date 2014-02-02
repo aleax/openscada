@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: freefunc.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,17 +52,16 @@ Func::~Func( )
 
 void Func::postEnable( int flag )
 {
-    if( owner().DB().empty() )	modifClr();
+    if(owner().DB().empty()) modifClr();
 }
 
 void Func::postDisable( int flag )
 {
     setStart(false);
-    if( flag && !owner().DB().empty() )
+    if(flag && !owner().DB().empty())
     {
-	try{ del( ); }
-	catch(TError err)
-	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	try{ del(); }
+	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }
 
@@ -130,10 +129,10 @@ void Func::setProg( const string &prg )
 
 void Func::load_( )
 {
-    if( owner().DB().empty() || (!SYS->chkSelDB(owner().DB())) )	return;
+    if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	return;
 
     cfg("FORMULA").setNoTransl(!owner().progTr());
-    SYS->db().at().dataGet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
+    SYS->db().at().dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     loadIO( );
 }
@@ -143,7 +142,7 @@ void Func::loadIO( )
     TConfig cfg(&mod->elFncIO());
 
     vector<string> u_pos;
-    cfg.cfg("F_ID").setS(id(),true);
+    cfg.cfg("F_ID").setS(id(), true);
     for(int fld_cnt=0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++)
     {
 	string sid = cfg.cfg("ID").getS();
@@ -154,8 +153,7 @@ void Func::loadIO( )
 	while(pos >= (int)u_pos.size())	u_pos.push_back("");
 	u_pos[pos] = sid;
 
-	if(ioId(sid) < 0)
-	    ioIns(new IO(sid.c_str(),"",IO::Real,IO::Default), pos);
+	if(ioId(sid) < 0) ioIns(new IO(sid.c_str(),"",IO::Real,IO::Default), pos);
 
 	//> Set values
 	int id = ioId(sid);
@@ -181,14 +179,14 @@ void Func::loadIO( )
 
 void Func::save_( )
 {
-    if( owner().DB().empty() )  return;
+    if(owner().DB().empty()) return;
 
     cfg("FORMULA").setNoTransl(!owner().progTr());
     mTimeStamp = SYS->sysTm();
-    SYS->db().at().dataSet(owner().fullDB(),mod->nodePath()+owner().tbl(),*this);
+    SYS->db().at().dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     //> Save io config
-    saveIO( );
+    saveIO();
 }
 
 void Func::saveIO( )
@@ -199,10 +197,10 @@ void Func::saveIO( )
     string io_cfgpath = mod->nodePath()+owner().tbl()+"_io/";
 
     //> Save allow IO
-    cfg.cfg("F_ID").setS(id(),true);
-    for( int i_io = 0; i_io < ioSize(); i_io++ )
+    cfg.cfg("F_ID").setS(id(), true);
+    for(int i_io = 0; i_io < ioSize(); i_io++)
     {
-	if( io(i_io)->flg()&Func::SysAttr ) continue;
+	if(io(i_io)->flg()&Func::SysAttr) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
@@ -226,19 +224,19 @@ void Func::saveIO( )
 
 void Func::del( )
 {
-    if( !owner().DB().size() )  return;
+    if(!owner().DB().size())  return;
 
-    SYS->db().at().dataDel(owner().fullDB(),mod->nodePath()+owner().tbl(),*this,true);
+    SYS->db().at().dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, true);
 
     //> Delete io from DB
-    delIO( );
+    delIO();
 }
 
 void Func::delIO( )
 {
     TConfig cfg(&mod->elFncIO());
-    cfg.cfg("F_ID").setS(id(),true);
-    SYS->db().at().dataDel(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",cfg);
+    cfg.cfg("F_ID").setS(id(), true);
+    SYS->db().at().dataDel(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
 }
 
 void Func::valAtt( TValFunc *vfnc )
@@ -266,21 +264,21 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 	RegW *reg = (RegW*)vfnc->exCtx;
 	//> Init list of registers
 	for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
-	    switch(mRegs[i_rg]->type())
+	{
+	    Reg *tR = mRegs[i_rg];
+	    switch(tR->type())
 	    {
-		/*case Reg::Bool: case Reg::Int: case Reg::Real: case Reg::String:	//Further for constants saving
-		    if(mRegs[i_rg].lock()) reg[i_rg] = mRegs[i_rg];
-		    break;*/
-		case Reg::Var:
-		    reg[i_rg].setType(Reg::Var);
-		    reg[i_rg].val().io = mRegs[i_rg]->val().io;
-		    break;
-		case Reg::PrmAttr:
-		    reg[i_rg].setType(Reg::PrmAttr);
-		    *reg[i_rg].val().p_attr = *mRegs[i_rg]->val().p_attr;
-		    break;
+		//Saved constants check
+		case Reg::Bool:	  if(tR->lock() && tR->name().empty()) reg[i_rg] = tR->val().b;	break;
+		case Reg::Int:	  if(tR->lock() && tR->name().empty()) reg[i_rg] = tR->val().i;	break;
+		case Reg::Real:	  if(tR->lock() && tR->name().empty()) reg[i_rg] = tR->val().r;	break;
+		case Reg::String: if(tR->lock() && tR->name().empty()) reg[i_rg] = *tR->val().s;break;
+
+		case Reg::Var:	  reg[i_rg].setType(Reg::Var); reg[i_rg].val().io = tR->val().io;	break;
+		case Reg::PrmAttr:reg[i_rg].setType(Reg::PrmAttr); *reg[i_rg].val().pA = *tR->val().pA;	break;
 		default: break;
 	    }
+	}
     }
 }
 
@@ -340,7 +338,7 @@ void Func::progCompile( )
     p_fnc  = this;	//Parse func
     p_err  = "";	//Clear error messages
     la_pos = 0;		//LA position
-    sprg = cfg("FORMULA").getS();
+    sprg   = cfg("FORMULA").getS();
     prg.clear();	//Clear program
     regClear();		//Clear registers list
     regTmpClean( );	//Clear temporary registers list
@@ -351,17 +349,16 @@ void Func::progCompile( )
 	prg.clear();
 	sprg.clear();
 	regClear();
-	regTmpClean( );
+	regTmpClean();
 	funcClear();
 	run_st = false;
-	throw TError(nodePath().c_str(),"%s",p_err.c_str());
+	throw TError(nodePath().c_str(), "%s", p_err.c_str());
     }
     sprg.clear();
-    regTmpClean( );
+    regTmpClean();
 
     //> Work registers update for calc contexts
-    for(unsigned i = 0; i < used.size(); i++)
-	workRegControl(used[i]);
+    for(unsigned i = 0; i < used.size(); i++) workRegControl(used[i]);
 }
 
 int Func::funcGet( const string &path )
@@ -371,16 +368,16 @@ int Func::funcGet( const string &path )
     //> Check to correct function's path
     try
     {
-	if( dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()) )
+	if(dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()))
 	    f_path = SYS->nodeAt(path,0,'.').at().nodePath();
     }catch(...){ }
 
-    if( f_path.empty() )
+    if(f_path.empty())
     {
-	for( int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
-	    try{ if( dynamic_cast<TFunction*>(&SYS->nodeAt(ns+"."+path,0,'.').at()) ) break; }
+	for(int off = 0; !(ns=TSYS::strSepParse(mUsings,0,';',&off)).empty(); )
+	    try{ if(dynamic_cast<TFunction*>(&SYS->nodeAt(ns+"."+path,0,'.').at())) break; }
 	    catch(...){ continue; }
-	if( ns.empty() ) return -1;
+	if(ns.empty()) return -1;
 	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
     }
 
@@ -400,11 +397,11 @@ void Func::funcClear( )
     mFncs.clear();
 }
 
-int Func::regNew( bool var )
+int Func::regNew( bool sep )
 {
     //> Get new register
     unsigned i_rg = mRegs.size();
-    if(!var)
+    if(!sep)
 	for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
 	    if(!mRegs[i_rg]->lock() && mRegs[i_rg]->type() == Reg::Free)
 		break;
@@ -465,10 +462,59 @@ void Func::regTmpClean( )
 
 Reg *Func::cdMvi( Reg *op, bool no_code )
 {
+    Reg *rez = NULL, *tR = NULL;
     if(op->pos() >= 0) return op;	//Already load
+
+    //Check for place use and set standalone
+    int i_rg = -1;
+    switch(op->type())
+    {
+	case Reg::Bool:
+	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
+		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().b == op->val().b)
+		    break;
+	    break;
+	case Reg::Int:
+	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
+		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().i == op->val().i)
+		    break;
+	    break;
+	case Reg::Real:
+	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
+		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().r == op->val().r)
+		    break;
+	    break;
+	case Reg::String:
+	    for(i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
+		if((tR=mRegs[i_rg])->name().empty() && tR->type() == op->type() && tR->lock() && tR->val().s == op->val().s)
+		    break;
+	    break;
+	default: break;
+    }
+    if(i_rg >= 0)
+    {
+	if(i_rg < (int)mRegs.size())
+	{
+	    rez = mRegs[i_rg];
+#ifdef OSC_DEBUG
+	    SYS->cntrIter("ReusedConstants",1);
+#endif
+	}
+	else if(mRegs.size() < cnstStatLim())
+	{
+	    *(rez=regAt(p_fnc->regNew(true))) = *op;
+	    rez->setLock(true);
+	    op->free();
+#ifdef OSC_DEBUG
+	    SYS->cntrIter("FixConstants",1);
+#endif
+	}
+	if(rez) return rez;
+    }
+
+    //Same mvi
     int r_id = p_fnc->regNew();
-    Reg *rez = regAt(r_id);
-    *rez = *op;
+    *(rez=regAt(r_id)) = *op;
     op->free();
     if(no_code) return rez;
     uint16_t addr = rez->pos();
@@ -479,33 +525,33 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    throw TError(nodePath().c_str(),_("Variable '%s' is used but undefined"),rez->name().c_str());
 	case Reg::Bool:
 	    prg += (uint8_t)Reg::MviB;
-	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg += (uint8_t)rez->val().b_el;
+	    prg.append((char *)&addr, sizeof(uint16_t));
+	    prg += (uint8_t)rez->val().b;
 	    break;
 	case Reg::Int:
 	    prg += (uint8_t)Reg::MviI;
 	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg.append((char *)&rez->val().i_el,sizeof(int64_t));
+	    prg.append((char *)&rez->val().i, sizeof(int64_t));
 	    break;
 	case Reg::Real:
 	    prg += (uint8_t)Reg::MviR;
 	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg.append((char *)&rez->val().r_el,sizeof(double));
+	    prg.append((char *)&rez->val().r, sizeof(double));
 	    break;
 	case Reg::String:
 	{
-	    string sval = *rez->val().s_el;
+	    string sval = *rez->val().s;
 	    //if(sval.size() > 255) throw TError(nodePath().c_str(),_("String constant size is more 255 symbols."));
 	    prg += (uint8_t)Reg::MviS;
-	    prg.append((char *)&addr,sizeof(uint16_t));
-	    prg += (uint8_t)vmin(255,sval.size());
-	    prg += sval.substr(0,vmin(255,sval.size()));
+	    prg.append((char*)&addr, sizeof(uint16_t));
+	    prg += (uint8_t)vmin(255, sval.size());
+	    prg += sval.substr(0, vmin(255,sval.size()));
 	    //> Load and append next parts for big string (>255)
 	    for(unsigned i_chunk = 1; i_chunk < (sval.size()/255+((sval.size()%255)?1:0)); i_chunk++)
 	    {
 		Reg *treg = regTmpNew();
-		*treg = sval.substr(i_chunk*255,vmin(255,(sval.size()-i_chunk*255)));
-		rez = cdBinaryOp(Reg::Add,rez,treg);
+		*treg = sval.substr(i_chunk*255, vmin(255,(sval.size()-i_chunk*255)));
+		rez = cdBinaryOp(Reg::Add, rez, treg);
 	    }
 	    break;
 	}
@@ -513,13 +559,13 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 	    if(rez->name() == "SYS")
 	    {
 		prg += (uint8_t)Reg::MviSysObject;
-		prg.append((char*)&addr,sizeof(uint16_t));
+		prg.append((char*)&addr, sizeof(uint16_t));
 		prg += (char)0;
 	    }
 	    else if(rez->name() == "arguments")
 	    {
 		prg += (uint8_t)Reg::MviFuncArg;
-		prg.append((char*)&addr,sizeof(uint16_t));
+		prg.append((char*)&addr, sizeof(uint16_t));
 	    }
 	    break;
 	default: break;
@@ -536,7 +582,7 @@ Reg *Func::cdMviObject( )
     //> Make code
     uint16_t addr;
     prg += (uint8_t)Reg::MviObject;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
 
     return rez;
 }
@@ -602,9 +648,9 @@ Reg *Func::cdMviRegExp( int p_cnt )
     //> Make code
     uint16_t addr;
     prg += (uint8_t)Reg::MviRegExp;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    addr = p_expr; prg.append((char*)&addr,sizeof(uint16_t));
-    addr = p_arg; prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    addr = p_expr; prg.append((char*)&addr, sizeof(uint16_t));
+    addr = p_arg; prg.append((char*)&addr, sizeof(uint16_t));
 
     return rez;
 }
@@ -620,60 +666,36 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 		case Reg::Bool:
 		    switch(rez->vType(this))
 		    {
-		        case Reg::Int:
-			    *rez = (char)((rez->val().i_el!=EVAL_INT) ? (bool)rez->val().i_el : (char)EVAL_BOOL);
-			    break;
-			case Reg::Real:
-			    *rez = (char)((rez->val().r_el!=EVAL_REAL) ? (bool)rez->val().r_el : (char)EVAL_BOOL);
-			    break;
-			case Reg::String:
-			    *rez = (char)((*rez->val().s_el!=EVAL_STR) ? (bool)atoi(rez->val().s_el->c_str()) : (char)EVAL_BOOL);
-			    break;
+		        case Reg::Int: *rez = (char)((rez->val().i!=EVAL_INT) ? (bool)rez->val().i : (char)EVAL_BOOL);	break;
+			case Reg::Real:*rez = (char)((rez->val().r!=EVAL_REAL) ? (bool)rez->val().r : (char)EVAL_BOOL);	break;
+			case Reg::String: *rez = (char)((*rez->val().s!=EVAL_STR) ? (bool)atoi(rez->val().s->c_str()) : (char)EVAL_BOOL); break;
 			default: break;
 		    }
 		    break;
 		case Reg::Int:
 		    switch(rez->vType(this))
 		    {
-			case Reg::Bool:
-			    *rez = (rez->val().b_el != EVAL_BOOL) ? (int64_t)rez->val().b_el : (int64_t)EVAL_INT;
-			    break;
-			case Reg::Real:
-			//    *rez = (int)rez->val().r_el;
-			    break;
-			case Reg::String:
-			    *rez = (*rez->val().s_el != EVAL_STR) ? (int64_t)atoll(rez->val().s_el->c_str()) : (int64_t)EVAL_INT;
-			    break;
+			case Reg::Bool: *rez = (rez->val().b != EVAL_BOOL) ? (int64_t)rez->val().b : (int64_t)EVAL_INT;	break;
+			case Reg::Real:	break;
+			case Reg::String:*rez = (*rez->val().s != EVAL_STR) ? (int64_t)atoll(rez->val().s->c_str()) : (int64_t)EVAL_INT; break;
 			default: break;
 		    }
 		    break;
 		case Reg::Real:
 		    switch(rez->vType(this))
 		    {
-			case Reg::Bool:
-			    *rez = (rez->val().b_el != EVAL_BOOL) ? (double)rez->val().b_el : EVAL_REAL;
-			    break;
-			case Reg::Int:
-			    *rez = (rez->val().i_el != EVAL_INT) ? (double)rez->val().i_el : EVAL_REAL;
-			    break;
-			case Reg::String:
-			    *rez = (*rez->val().s_el != EVAL_STR) ? atof(rez->val().s_el->c_str()) : EVAL_REAL;
-			    break;
+			case Reg::Bool:	  *rez = (rez->val().b != EVAL_BOOL) ? (double)rez->val().b : EVAL_REAL;	break;
+			case Reg::Int:    *rez = (rez->val().i != EVAL_INT) ? (double)rez->val().i : EVAL_REAL;		break;
+			case Reg::String: *rez = (*rez->val().s != EVAL_STR) ? atof(rez->val().s->c_str()) : EVAL_REAL;	break;
 			default: break;
 		    }
 		    break;
 		case Reg::String:
 		    switch(rez->vType(this))
 		    {
-			case Reg::Bool:
-			    *rez = (rez->val().b_el != EVAL_BOOL) ? i2s(rez->val().b_el) : EVAL_STR;
-			    break;
-			case Reg::Int:
-			    *rez = (rez->val().i_el != EVAL_INT) ? ll2s(rez->val().i_el) : EVAL_STR;
-			    break;
-			case Reg::Real:
-			    *rez = (rez->val().r_el != EVAL_REAL) ? r2s(rez->val().r_el) : EVAL_STR;
-			    break;
+			case Reg::Bool: *rez = (rez->val().b != EVAL_BOOL) ? i2s(rez->val().b) : EVAL_STR;	break;
+			case Reg::Int:  *rez = (rez->val().i != EVAL_INT) ? ll2s(rez->val().i) : EVAL_STR;	break;
+			case Reg::Real: *rez = (rez->val().r != EVAL_REAL) ? r2s(rez->val().r) : EVAL_STR;	break;
 			default: break;
 		    }
 		    break;
@@ -688,27 +710,27 @@ Reg *Func::cdTypeConv( Reg *op, Reg::Type tp, bool no_code )
 void Func::cdAssign( Reg *rez, Reg *op )
 {
     uint16_t addr;
-    if( op->pos() < 0 ) op = cdMvi( op );
+    if(op->pos() < 0) op = cdMvi(op);
     prg += (uint8_t)Reg::Ass;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    addr = op->pos();  prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    addr = op->pos();  prg.append((char*)&addr, sizeof(uint16_t));
 
     op->free();		//> Free temp operands
 }
 
 Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 {
-    if( !force && !op->lock() ) return op;
+    if(!force && !op->lock()) return op;
 
     uint16_t addr;
-    Reg *rez_n=rez;
-    op = cdMvi( op );
-    if( rez_n == NULL ) rez_n = regAt(regNew());
-    rez_n = cdMvi( rez_n, true );
+    Reg *rez_n = rez;
+    op = cdMvi(op);
+    if(rez_n == NULL) rez_n = regAt(regNew());
+    rez_n = cdMvi(rez_n, true);
     rez_n->setType(op->vType(this));
     prg += (uint8_t)Reg::Mov;
-    addr = rez_n->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    addr = op->pos();    prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez_n->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    addr = op->pos();    prg.append((char*)&addr, sizeof(uint16_t));
 
     op->free();	//> Free temp operands
 
@@ -718,9 +740,9 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
     //> Check allow the buildin calc and calc
-    if( op1->pos() < 0 && op2->pos() < 0 )
+    if(op1->pos() < 0 && op2->pos() < 0)
     {
-	switch( cod )
+	switch(cod)
 	{
 	    case Reg::Add: case Reg::Sub: case Reg::Mul:
 	    case Reg::Div: case Reg::LT: case Reg::GT:
@@ -732,62 +754,62 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	}
 
 	op2 = cdTypeConv( op2, op1->vType(this), true);
-	switch( op1->vType(this) )
+	switch(op1->vType(this))
 	{
 	    case Reg::Int:
 		switch(cod)
 		{
-		    case Reg::RstI:	*op1 = op1->val().i_el % op2->val().i_el;	break;
-		    case Reg::BitOr:	*op1 = op1->val().i_el | op2->val().i_el;	break;
-		    case Reg::BitAnd:	*op1 = op1->val().i_el & op2->val().i_el;	break;
-		    case Reg::BitXor:	*op1 = op1->val().i_el ^ op2->val().i_el;	break;
-		    case Reg::BitShLeft: *op1 = op1->val().i_el << op2->val().i_el;	break;
-		    case Reg::BitShRight: *op1 = op1->val().i_el >> op2->val().i_el;	break;
-		    case Reg::LOr:	*op1 = op1->val().i_el || op2->val().i_el;	break;
-		    case Reg::LAnd:	*op1 = op1->val().i_el && op2->val().i_el;	break;
+		    case Reg::RstI:	*op1 = op1->val().i % op2->val().i;	break;
+		    case Reg::BitOr:	*op1 = op1->val().i | op2->val().i;	break;
+		    case Reg::BitAnd:	*op1 = op1->val().i & op2->val().i;	break;
+		    case Reg::BitXor:	*op1 = op1->val().i ^ op2->val().i;	break;
+		    case Reg::BitShLeft:*op1 = op1->val().i << op2->val().i;	break;
+		    case Reg::BitShRight:*op1 = op1->val().i >> op2->val().i;	break;
+		    case Reg::LOr:	*op1 = op1->val().i || op2->val().i;	break;
+		    case Reg::LAnd:	*op1 = op1->val().i && op2->val().i;	break;
 		    default: break;
 		}
 		break;
 	    case Reg::Real:
 		switch(cod)
 		{
-		    case Reg::Add:	*op1 = op1->val().r_el + op2->val().r_el;	break;
-		    case Reg::Sub:	*op1 = op1->val().r_el - op2->val().r_el;	break;
-		    case Reg::Mul:	*op1 = op1->val().r_el * op2->val().r_el;	break;
-		    case Reg::Div:	*op1 = op1->val().r_el / op2->val().r_el;	break;
-		    case Reg::BitOr:	*op1 = (int64_t)op1->val().r_el | (int64_t)op2->val().r_el;	break;
-		    case Reg::BitAnd:	*op1 = (int64_t)op1->val().r_el & (int64_t)op2->val().r_el;	break;
-		    case Reg::BitXor:	*op1 = (int64_t)op1->val().i_el ^ (int64_t)op2->val().i_el;	break;
-		    case Reg::BitShLeft: *op1 = (int64_t)op1->val().i_el << (int64_t)op2->val().i_el;	break;
-		    case Reg::BitShRight: *op1 = (int64_t)op1->val().i_el >> (int64_t)op2->val().i_el;	break;
-		    case Reg::LOr:	*op1 = op1->val().r_el || op2->val().r_el;	break;
-		    case Reg::LAnd:	*op1 = op1->val().r_el && op2->val().r_el;	break;
-		    case Reg::LT:	*op1 = op1->val().r_el < op2->val().r_el;	break;
-		    case Reg::GT:	*op1 = op1->val().r_el > op2->val().r_el;	break;
-		    case Reg::LEQ:	*op1 = op1->val().r_el <= op2->val().r_el;	break;
-		    case Reg::GEQ:	*op1 = op1->val().r_el >= op2->val().r_el;	break;
-		    case Reg::EQU:	*op1 = op1->val().r_el == op2->val().r_el;	break;
-		    case Reg::NEQ:	*op1 = op1->val().r_el != op2->val().r_el;	break;
+		    case Reg::Add:	*op1 = op1->val().r + op2->val().r;	break;
+		    case Reg::Sub:	*op1 = op1->val().r - op2->val().r;	break;
+		    case Reg::Mul:	*op1 = op1->val().r * op2->val().r;	break;
+		    case Reg::Div:	*op1 = op1->val().r / op2->val().r;	break;
+		    case Reg::BitOr:	*op1 = (int64_t)op1->val().r | (int64_t)op2->val().r;	break;
+		    case Reg::BitAnd:	*op1 = (int64_t)op1->val().r & (int64_t)op2->val().r;	break;
+		    case Reg::BitXor:	*op1 = (int64_t)op1->val().i ^ (int64_t)op2->val().i;	break;
+		    case Reg::BitShLeft:*op1 = (int64_t)op1->val().i << (int64_t)op2->val().i;	break;
+		    case Reg::BitShRight:*op1 = (int64_t)op1->val().i >> (int64_t)op2->val().i;	break;
+		    case Reg::LOr:	*op1 = op1->val().r || op2->val().r;	break;
+		    case Reg::LAnd:	*op1 = op1->val().r && op2->val().r;	break;
+		    case Reg::LT:	*op1 = op1->val().r < op2->val().r;	break;
+		    case Reg::GT:	*op1 = op1->val().r > op2->val().r;	break;
+		    case Reg::LEQ:	*op1 = op1->val().r <= op2->val().r;	break;
+		    case Reg::GEQ:	*op1 = op1->val().r >= op2->val().r;	break;
+		    case Reg::EQU:	*op1 = op1->val().r == op2->val().r;	break;
+		    case Reg::NEQ:	*op1 = op1->val().r != op2->val().r;	break;
 		    default: break;
 		}
 		break;
 	    case Reg::Bool:
 		switch(cod)
 		{
-		    case Reg::RstI:	*op1 = op1->val().b_el % op2->val().b_el;	break;
-		    case Reg::BitOr:	*op1 = op1->val().b_el | op2->val().b_el;	break;
-		    case Reg::BitAnd:	*op1 = op1->val().b_el & op2->val().b_el;	break;
-		    case Reg::BitXor:	*op1 = op1->val().b_el ^ op2->val().b_el;	break;
-		    case Reg::LOr:	*op1 = op1->val().b_el || op2->val().b_el;	break;
-		    case Reg::LAnd:	*op1 = op1->val().b_el && op2->val().b_el;	break;
+		    case Reg::RstI:	*op1 = op1->val().b % op2->val().b;	break;
+		    case Reg::BitOr:	*op1 = op1->val().b | op2->val().b;	break;
+		    case Reg::BitAnd:	*op1 = op1->val().b & op2->val().b;	break;
+		    case Reg::BitXor:	*op1 = op1->val().b ^ op2->val().b;	break;
+		    case Reg::LOr:	*op1 = op1->val().b || op2->val().b;	break;
+		    case Reg::LAnd:	*op1 = op1->val().b && op2->val().b;	break;
 		    default: break;
 		}
 	    case Reg::String:
 		switch(cod)
 		{
-		    case Reg::Add:	*op1->val().s_el += *op2->val().s_el;		break;
-		    case Reg::EQU:	*op1 = (char)(*op1->val().s_el == *op2->val().s_el);	break;
-		    case Reg::NEQ:	*op1 = (char)(*op1->val().s_el != *op2->val().s_el);	break;
+		    case Reg::Add:	*op1->val().s += *op2->val().s;		break;
+		    case Reg::EQU:	*op1 = (char)(*op1->val().s == *op2->val().s);	break;
+		    case Reg::NEQ:	*op1 = (char)(*op1->val().s != *op2->val().s);	break;
 		    default: break;
 		}
 		break;
@@ -799,12 +821,12 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 
     //> Make operation cod
     //>> Prepare operands
-    op1 = cdMvi( op1 );
+    op1 = cdMvi(op1);
     Reg::Type op1_tp = op1->vType(this);
     Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
     int op1_pos = op1->pos();
-    if( op1_tp != Reg::Dynamic ) op2 = cdTypeConv(op2,op1_tp);
-    else if( op2->pos() < 0 ) op2 = cdMvi( op2 );
+    if(op1_tp != Reg::Dynamic) op2 = cdTypeConv(op2, op1_tp);
+    else if(op2->pos() < 0) op2 = cdMvi(op2);
     int op2_pos = op2->pos();
     //>> Prepare rezult
     Reg *rez = regAt(regNew());
@@ -837,9 +859,9 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     }
 
     uint16_t addr;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    addr = op1_pos;    prg.append((char*)&addr,sizeof(uint16_t));
-    addr = op2_pos;    prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    addr = op1_pos;    prg.append((char*)&addr, sizeof(uint16_t));
+    addr = op2_pos;    prg.append((char*)&addr, sizeof(uint16_t));
 
     return rez;
 }
@@ -886,16 +908,16 @@ Reg *Func::cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end )
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
     //> Check allow the buildin calc and calc
-    if( op->pos() < 0 )
+    if(op->pos() < 0)
     {
 	switch(op->vType(this))
 	{
 	    case Reg::Int:
 		switch(cod)
 		{
-		    case Reg::Not:	*op = !op->val().i_el;	break;
-		    case Reg::BitNot:	*op = ~op->val().i_el;	break;
-		    case Reg::Neg:	*op = -op->val().i_el;	break;
+		    case Reg::Not:	*op = !op->val().i;	break;
+		    case Reg::BitNot:	*op = ~op->val().i;	break;
+		    case Reg::Neg:	*op = -op->val().i;	break;
 		    default: break;
 		}
 		break;
@@ -903,18 +925,18 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	    case Reg::Real:
 		switch(cod)
 		{
-		    case Reg::Not:	*op = !op->val().r_el;	break;
-		    case Reg::BitNot:	*op = ~(int)op->val().r_el;	break;
-		    case Reg::Neg:	*op = -op->val().r_el;	break;
+		    case Reg::Not:	*op = !op->val().r;	break;
+		    case Reg::BitNot:	*op = ~(int)op->val().r;break;
+		    case Reg::Neg:	*op = -op->val().r;	break;
 		    default: break;
 		}
 		break;
 	    case Reg::Bool:
 		switch(cod)
 		{
-		    case Reg::Not:	*op = !op->val().b_el;	break;
-		    case Reg::BitNot:	*op = ~op->val().b_el;	break;
-		    case Reg::Neg:	*op = -op->val().b_el;	break;
+		    case Reg::Not:	*op = !op->val().b;	break;
+		    case Reg::BitNot:	*op = ~op->val().b;	break;
+		    case Reg::Neg:	*op = -op->val().b;	break;
 		    default: break;
 		}
 	    default: break;
@@ -924,7 +946,7 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 
     //> Make operation cod
     //>> Prepare operand
-    op = cdMvi( op );
+    op = cdMvi(op);
     Reg::Type op_tp = op->vType(this);
     int op_pos = op->pos();
     op->free();
@@ -940,8 +962,8 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	default: throw TError(nodePath().c_str(),_("Don't support operation code %d."),cod);
     }
     uint16_t addr;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    addr = op_pos;     prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    addr = op_pos;     prg.append((char*)&addr, sizeof(uint16_t));
 
     return rez;
 }
@@ -1003,23 +1025,23 @@ void Func::cdCycle( int p_cmd, Reg *cond, int p_solve, int p_end, int p_postiter
     cd_tmp = prg.substr(p_body);
     prg.erase(p_body);
     cond = cdMvi(cond);
-    p_solve+=prg.size()-p_body;
-    p_end+=prg.size()-p_body;
-    if( p_postiter ) p_postiter+=prg.size()-p_body;
-    prg+=cd_tmp;
+    p_solve += prg.size()-p_body;
+    p_end += prg.size()-p_body;
+    if(p_postiter) p_postiter += prg.size()-p_body;
+    prg += cd_tmp;
     uint16_t p_cond = cond->pos();
     cond->free();
 
     //> Make apropos adress
     p_solve -= p_cmd;
     p_end   -= p_cmd;
-    if( p_postiter ) p_postiter -= p_cmd;
+    if(p_postiter) p_postiter -= p_cmd;
 
     //> [CRRbbaann]
-    prg.replace(p_cmd+1,sizeof(uint16_t),(char*)&p_cond,sizeof(uint16_t));
-    prg.replace(p_cmd+3,a_sz,((char *)&p_solve),a_sz);
-    prg.replace(p_cmd+3+a_sz,a_sz,((char *)&p_postiter),a_sz);
-    prg.replace(p_cmd+3+2*a_sz,a_sz,((char *)&p_end),a_sz);
+    prg.replace(p_cmd+1, sizeof(uint16_t), (char*)&p_cond, sizeof(uint16_t));
+    prg.replace(p_cmd+3, a_sz, ((char*)&p_solve), a_sz);
+    prg.replace(p_cmd+3+a_sz, a_sz, ((char*)&p_postiter), a_sz);
+    prg.replace(p_cmd+3+2*a_sz, a_sz, ((char*)&p_end), a_sz);
 }
 
 void Func::cdCycleObj( int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var )
@@ -1046,10 +1068,10 @@ void Func::cdCycleObj( int p_cmd, Reg *cond, int p_solve, int p_end, Reg *var )
 
     //> [COObbRRnn]
     prg[p_cmd] = (uint8_t)Reg::CycleObj;
-    prg.replace(p_cmd+1,sizeof(uint16_t),(char*)&p_cond,sizeof(uint16_t));
-    prg.replace(p_cmd+3,sizeof(uint16_t),((char *)&p_solve),sizeof(uint16_t));
-    prg.replace(p_cmd+3+sizeof(uint16_t),sizeof(uint16_t),(char*)&p_var,sizeof(uint16_t));
-    prg.replace(p_cmd+3+2*sizeof(uint16_t),sizeof(uint16_t),((char *)&p_end),sizeof(uint16_t));
+    prg.replace(p_cmd+1, sizeof(uint16_t), (char*)&p_cond, sizeof(uint16_t));
+    prg.replace(p_cmd+3, sizeof(uint16_t), ((char*)&p_solve), sizeof(uint16_t));
+    prg.replace(p_cmd+3+sizeof(uint16_t), sizeof(uint16_t), (char*)&p_var, sizeof(uint16_t));
+    prg.replace(p_cmd+3+2*sizeof(uint16_t), sizeof(uint16_t), ((char*)&p_end), sizeof(uint16_t));
 }
 
 Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
@@ -1062,20 +1084,18 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     //	(prm2 && !prm2->objEl() && prm2->vType(this) == Reg::String) )
     //	throw TError(nodePath().c_str(),_("Buildin functions don't support string type"));
     //> Free parameter's registers
-    if( prm1 )	{ prm1 = cdMvi( prm1 ); p1_pos = prm1->pos(); }
-    if( prm2 )	{ prm2 = cdMvi( prm2 ); p2_pos = prm2->pos(); }
-    if( prm1 )	prm1->free();
-    if( prm2 )	prm2->free();
+    if(prm1)	{ prm1 = cdMvi(prm1); p1_pos = prm1->pos(); }
+    if(prm2)	{ prm2 = cdMvi(prm2); p2_pos = prm2->pos(); }
+    if(prm1)	prm1->free();
+    if(prm2)	prm2->free();
     //> Get rezult register
     rez = regAt(regNew());
     rez->setType(Reg::Dynamic/*Reg::Real*/);
     //> Make code
     prg += (uint8_t)f_cod;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-    if( p1_pos >= 0 )
-    { addr = p1_pos; prg.append((char*)&addr,sizeof(uint16_t)); }
-    if( p2_pos >= 0 )
-    { addr = p2_pos; prg.append((char*)&addr,sizeof(uint16_t)); }
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+    if(p1_pos >= 0) { addr = p1_pos; prg.append((char*)&addr, sizeof(uint16_t)); }
+    if(p2_pos >= 0) { addr = p2_pos; prg.append((char*)&addr, sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1088,28 +1108,26 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 
     //> Check return IO position
     bool ret_ok = false;
-    for( r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++ )
-	if( funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return )
-	{ ret_ok=true; break; }
+    for(r_pos = 0; !ret_ok && r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++)
+	ret_ok = (bool)(funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return);
     //> Check IO and parameters count
-    if( p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok )
-        throw TError(nodePath().c_str(),_("More than %d(%d) parameters are specified for function '%s'"),
-	    (funcAt(f_id)->func().at().ioSize()-ret_ok),p_cnt,funcAt(f_id)->func().at().id().c_str());
+    if(p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok)
+        throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
+	    (funcAt(f_id)->func().at().ioSize()-ret_ok), p_cnt, funcAt(f_id)->func().at().id().c_str());
     //> Check the present return for fuction
-    if( !proc && !ret_ok )
-	throw TError(nodePath().c_str(),_("Function is requested '%s', but it doesn't have return of IO"),funcAt(f_id)->func().at().id().c_str());
+    if(!proc && !ret_ok)
+	throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), funcAt(f_id)->func().at().id().c_str());
     //> Mvi all parameters
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
-	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++) f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
     //> Get parameters. Add check parameters type !!!!
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++)
     {
-	p_pos.push_front( f_prmst.front()->pos() );
+	p_pos.push_front(f_prmst.front()->pos());
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }
     //> Make result
-    if( !proc )
+    if(!proc)
     {
 	rez = regAt(regNew());
 	switch(funcAt(f_id)->func().at().io(r_pos)->type())
@@ -1136,20 +1154,18 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 
 Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
 {
-    if( !obj->objEl( ) )
-	throw TError(nodePath().c_str(),_("No object variable for function"));
-    if( p_cnt > 255 ) throw TError(nodePath().c_str(),_("Object's function have more 255 parameters."));
+    if(!obj->objEl())	throw TError(nodePath().c_str(), _("No object variable for function"));
+    if(p_cnt > 255)	throw TError(nodePath().c_str(), _("Object's function have more 255 parameters."));
 
     Reg *rez = NULL;
     deque<int> p_pos;
 
     //> Mvi all parameters
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
-	f_prmst[i_prm] = cdMvi( f_prmst[i_prm] );
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++) f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
     //> Get parameters
-    for( int i_prm = 0; i_prm < p_cnt; i_prm++ )
+    for(int i_prm = 0; i_prm < p_cnt; i_prm++)
     {
-	p_pos.push_front( f_prmst.front()->pos() );
+	p_pos.push_front(f_prmst.front()->pos());
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }
@@ -1160,12 +1176,12 @@ Reg *Func::cdObjFnc( Reg *obj, int p_cnt )
     //> Make code
     uint16_t addr;
     prg += (uint8_t)Reg::CFuncObj;
-    addr = obj->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = obj->pos(); prg.append((char*)&addr, sizeof(uint16_t));
     prg += (uint8_t)p_cnt;
-    addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+    addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
 
     for(unsigned i_prm = 0; i_prm < p_pos.size(); i_prm++)
-    { addr = p_pos[i_prm]; prg.append((char*)&addr,sizeof(uint16_t)); }
+    { addr = p_pos[i_prm]; prg.append((char*)&addr, sizeof(uint16_t)); }
 
     return rez;
 }
@@ -1176,20 +1192,20 @@ Reg *Func::cdProp( Reg *obj, const string &sprp, Reg *dprp )
     Reg *ro = obj;
     if(!ro->objEl()) { ro = cdMove(NULL, cdMvi(ro), false); ro->setObjEl(); }
 
-    if( !dprp )
+    if(!dprp)
     {
 	prg += (uint8_t)Reg::OPrpSt;
-	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+	addr = ro->pos(); prg.append((char*)&addr, sizeof(uint16_t));
 	prg += (uint8_t)sprp.size();
 	prg += sprp;
     }
     else
     {
-	dprp = cdMvi( dprp );
+	dprp = cdMvi(dprp);
 
 	prg += (uint8_t)Reg::OPrpDin;
-	addr = ro->pos(); prg.append((char*)&addr,sizeof(uint16_t));
-	addr = dprp->pos(); prg.append((char*)&addr,sizeof(uint16_t));
+	addr = ro->pos(); prg.append((char*)&addr, sizeof(uint16_t));
+	addr = dprp->pos(); prg.append((char*)&addr, sizeof(uint16_t));
 
 	dprp->free();
     }
@@ -1200,8 +1216,8 @@ TVariant Func::oPropGet( TVariant vl, const string &prop )
 {
     switch(vl.type())
     {
-	case TVariant::Object:	return vl.getO().at().propGet(prop);
-	case TVariant::Boolean:	return TVariant();
+	case TVariant::Object:		return vl.getO().at().propGet(prop);
+	case TVariant::Boolean:		return TVariant();
 	case TVariant::Integer:
 	    if(prop == "MAX_VALUE")	return (int64_t) 9223372036854775807LL;
 	    if(prop == "MIN_VALUE")	return (int64_t)-9223372036854775807LL;
@@ -1253,8 +1269,8 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
 		if(prop == "toExponential")
 		{
 		    int n = prms.size() ? vmax(0,vmin(20,prms[0].getI())) : -1;
-		    if(n < 0) return TSYS::strMess("%e",vl.getR());
-		    return TSYS::strMess("%.*e",n,vl.getR());
+		    if(n < 0) return TSYS::strMess("%e", vl.getR());
+		    return TSYS::strMess("%.*e", n, vl.getR());
 		}
 		// string toFixed(int numbs = 0, int len = 0, bool sign = false) - return the string of the number, formatted in the notation of fixed-point,
 		//      and with the number of significant digits after the decimal point <numbs>
@@ -1495,7 +1511,7 @@ TVariant Func::oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &pr
     }
     catch(TError err)
     {
-	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(),"%s",err.mess.c_str());
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "%s", err.mess.c_str());
     }
     return false;
 }
@@ -1507,10 +1523,10 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
     //> Get base value
     switch(rg.type())
     {
-	case Reg::Bool:		vl = rg.val().b_el;	break;
-	case Reg::Int:		vl = rg.val().i_el;	break;
-	case Reg::Real:		vl = rg.val().r_el;	break;
-	case Reg::String:	vl = *rg.val().s_el;	break;
+	case Reg::Bool:	  vl = rg.val().b;	break;
+	case Reg::Int:	  vl = rg.val().i;	break;
+	case Reg::Real:	  vl = rg.val().r;	break;
+	case Reg::String: vl = *rg.val().s;	break;
 	case Reg::Var:
 	    switch(io->ioType(rg.val().io))
 	    {
@@ -1523,17 +1539,17 @@ TVariant Func::getVal( TValFunc *io, RegW &rg, bool fObj )
 	    }
 	    break;
 	case Reg::PrmAttr:
-	    switch(rg.val().p_attr->at().fld().type())
+	    switch(rg.val().pA->at().fld().type())
 	    {
-		case TFld::Boolean:	vl = rg.val().p_attr->at().getB();	break;
-		case TFld::Integer:	vl = rg.val().p_attr->at().getI();	break;
-		case TFld::Real:	vl = rg.val().p_attr->at().getR();	break;
-		case TFld::String:	vl = rg.val().p_attr->at().getS();	break;
-		case TFld::Object:	vl = rg.val().p_attr->at().getO();	break;
+		case TFld::Boolean:	vl = rg.val().pA->at().getB();	break;
+		case TFld::Integer:	vl = rg.val().pA->at().getI();	break;
+		case TFld::Real:	vl = rg.val().pA->at().getR();	break;
+		case TFld::String:	vl = rg.val().pA->at().getS();	break;
+		case TFld::Object:	vl = rg.val().pA->at().getO();	break;
 		default: vl = EVAL_BOOL;
 	    }
 	    break;
-	case Reg::Obj:	vl = *rg.val().o_el;	break;
+	case Reg::Obj:	vl = *rg.val().o;	break;
 	default: break;
     }
 
@@ -1552,13 +1568,13 @@ string Func::getValS( TValFunc *io, RegW &rg )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Bool:	return (rg.val().b_el != EVAL_BOOL) ? i2s((bool)rg.val().b_el) : EVAL_STR;
-	    case Reg::Int:	return (rg.val().i_el != EVAL_INT) ? ll2s(rg.val().i_el) : EVAL_STR;
-	    case Reg::Real:	return (rg.val().r_el != EVAL_REAL) ? r2s(rg.val().r_el) : EVAL_STR;
-	    case Reg::String:	return *rg.val().s_el;
+	    case Reg::Bool:	return (rg.val().b != EVAL_BOOL) ? i2s((bool)rg.val().b) : EVAL_STR;
+	    case Reg::Int:	return (rg.val().i != EVAL_INT) ? ll2s(rg.val().i) : EVAL_STR;
+	    case Reg::Real:	return (rg.val().r != EVAL_REAL) ? r2s(rg.val().r) : EVAL_STR;
+	    case Reg::String:	return *rg.val().s;
 	    case Reg::Var:	return io->getS(rg.val().io);
-	    case Reg::PrmAttr:	return rg.val().p_attr->at().getS();
-	    case Reg::Obj:	return rg.val().o_el->at().getStrXML();
+	    case Reg::PrmAttr:	return rg.val().pA->at().getS();
+	    case Reg::Obj:	return rg.val().o->at().getStrXML();
 	    default:	break;
 	}
     else return getVal(io,rg).getS();
@@ -1571,12 +1587,12 @@ int64_t Func::getValI( TValFunc *io, RegW &rg )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Bool:	return (rg.val().b_el != EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_INT;
-	    case Reg::Int:	return rg.val().i_el;
-	    case Reg::Real:	return (rg.val().r_el != EVAL_REAL) ? (int64_t)rg.val().r_el : EVAL_INT;
-	    case Reg::String:	return ((*rg.val().s_el) != EVAL_STR) ? atoll(rg.val().s_el->c_str()) : EVAL_INT;
+	    case Reg::Bool:	return (rg.val().b != EVAL_BOOL) ? (bool)rg.val().b : EVAL_INT;
+	    case Reg::Int:	return rg.val().i;
+	    case Reg::Real:	return (rg.val().r != EVAL_REAL) ? (int64_t)rg.val().r : EVAL_INT;
+	    case Reg::String:	return ((*rg.val().s) != EVAL_STR) ? atoll(rg.val().s->c_str()) : EVAL_INT;
 	    case Reg::Var:	return io->getI(rg.val().io);
-	    case Reg::PrmAttr:	return rg.val().p_attr->at().getI();
+	    case Reg::PrmAttr:	return rg.val().pA->at().getI();
 	    case Reg::Obj:	return 1;
 	    default:	break;
 	}
@@ -1590,12 +1606,12 @@ double Func::getValR( TValFunc *io, RegW &rg )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Bool:	return (rg.val().b_el != EVAL_BOOL) ? (bool)rg.val().b_el : EVAL_REAL;
-	    case Reg::Int:	return (rg.val().i_el != EVAL_INT) ? rg.val().i_el : EVAL_REAL;
-	    case Reg::Real:	return rg.val().r_el;
-	    case Reg::String:	return ((*rg.val().s_el) != EVAL_STR) ? atof(rg.val().s_el->c_str()) : EVAL_REAL;
+	    case Reg::Bool:	return (rg.val().b != EVAL_BOOL) ? (bool)rg.val().b : EVAL_REAL;
+	    case Reg::Int:	return (rg.val().i != EVAL_INT) ? rg.val().i : EVAL_REAL;
+	    case Reg::Real:	return rg.val().r;
+	    case Reg::String:	return ((*rg.val().s) != EVAL_STR) ? atof(rg.val().s->c_str()) : EVAL_REAL;
 	    case Reg::Var:	return io->getR(rg.val().io);
-	    case Reg::PrmAttr:	return rg.val().p_attr->at().getR();
+	    case Reg::PrmAttr:	return rg.val().pA->at().getR();
 	    case Reg::Obj:	return 1;
 	    default:	break;
 	}
@@ -1609,12 +1625,12 @@ char Func::getValB( TValFunc *io, RegW &rg )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Bool:	return rg.val().b_el;
-	    case Reg::Int:	return (rg.val().i_el != EVAL_INT) ? (bool)rg.val().i_el : EVAL_BOOL;
-	    case Reg::Real:	return (rg.val().r_el != EVAL_REAL) ? (bool)rg.val().r_el : EVAL_BOOL;
-	    case Reg::String:	return ((*rg.val().s_el) != EVAL_STR) ? (bool)atoi(rg.val().s_el->c_str()) : EVAL_BOOL;
+	    case Reg::Bool:	return rg.val().b;
+	    case Reg::Int:	return (rg.val().i != EVAL_INT) ? (bool)rg.val().i : EVAL_BOOL;
+	    case Reg::Real:	return (rg.val().r != EVAL_REAL) ? (bool)rg.val().r : EVAL_BOOL;
+	    case Reg::String:	return ((*rg.val().s) != EVAL_STR) ? (bool)atoi(rg.val().s->c_str()) : EVAL_BOOL;
 	    case Reg::Var:	return io->getB(rg.val().io);
-	    case Reg::PrmAttr:	return rg.val().p_attr->at().getB();
+	    case Reg::PrmAttr:	return rg.val().pA->at().getB();
 	    case Reg::Obj:	return true;
 	    default:	break;
 	}
@@ -1629,7 +1645,7 @@ AutoHD<TVarObj> Func::getValO( TValFunc *io, RegW &rg )
     {
 	switch(rg.type())
 	{
-	    case Reg::Obj:	return *rg.val().o_el;
+	    case Reg::Obj:	return *rg.val().o;
 	    case Reg::Var:
 		if(io->ioType(rg.val().io) == IO::Object) return io->getO(rg.val().io);
 	    default:	break;
@@ -1658,12 +1674,12 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 	    case Reg::PrmAttr:
 		switch(val.type())
 		{
-		    case TVariant::Boolean:	rg.val().p_attr->at().setB(val.getB());	break;
-		    case TVariant::Integer:	rg.val().p_attr->at().setI(val.getI());	break;
-		    case TVariant::Real:	rg.val().p_attr->at().setR(val.getR());	break;
-		    case TVariant::String:	rg.val().p_attr->at().setS(val.getS());	break;
-		    case TVariant::Object:	rg.val().p_attr->at().setO(val.getO());	break;
-		    default:			rg.val().p_attr->at().setB(EVAL_BOOL);
+		    case TVariant::Boolean:	rg.val().pA->at().setB(val.getB());	break;
+		    case TVariant::Integer:	rg.val().pA->at().setI(val.getI());	break;
+		    case TVariant::Real:	rg.val().pA->at().setR(val.getR());	break;
+		    case TVariant::String:	rg.val().pA->at().setS(val.getS());	break;
+		    case TVariant::Object:	rg.val().pA->at().setO(val.getO());	break;
+		    default:			rg.val().pA->at().setB(EVAL_BOOL);
 		}
 		break;
 	    default:
@@ -1680,7 +1696,7 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 	}
     else if(rg.type() == Reg::Obj)
     {
-	TVariant vl(*rg.val().o_el);
+	TVariant vl(*rg.val().o);
 	for(unsigned i_p = 0; i_p < rg.props().size(); i_p++)
 	    if(i_p < (rg.props().size()-1)) vl = vl.getO().at().propGet(rg.props()[i_p]);
 	    else vl.getO().at().propSet(rg.props()[i_p], val);
@@ -1692,8 +1708,8 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Var:	io->setS(rg.val().io, val);		break;
-	    case Reg::PrmAttr:	rg.val().p_attr->at().setS(val);	break;
+	    case Reg::Var:	io->setS(rg.val().io, val);	break;
+	    case Reg::PrmAttr:	rg.val().pA->at().setS(val);	break;
 	    default: rg = val; break;
 	}
     else setVal(io, rg, val);
@@ -1704,8 +1720,8 @@ void Func::setValI( TValFunc *io, RegW &rg, int64_t val )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Var:	io->setI(rg.val().io, val);		break;
-	    case Reg::PrmAttr:	rg.val().p_attr->at().setI(val);	break;
+	    case Reg::Var:	io->setI(rg.val().io, val);	break;
+	    case Reg::PrmAttr:	rg.val().pA->at().setI(val);	break;
 	    default: rg = val; break;
 	}
     else setVal(io, rg, val);
@@ -1716,8 +1732,8 @@ void Func::setValR( TValFunc *io, RegW &rg, double val )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Var:	io->setR(rg.val().io, val);		break;
-	    case Reg::PrmAttr:	rg.val().p_attr->at().setR(val);	break;
+	    case Reg::Var:	io->setR(rg.val().io, val);	break;
+	    case Reg::PrmAttr:	rg.val().pA->at().setR(val);	break;
 	    default: rg = val; break;
 	}
     else setVal(io, rg, val);
@@ -1728,8 +1744,8 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
     if(rg.props().empty())
 	switch(rg.type())
 	{
-	    case Reg::Var:	io->setB(rg.val().io, val);		break;
-	    case Reg::PrmAttr:	rg.val().p_attr->at().setB(val);	break;
+	    case Reg::Var:	io->setB(rg.val().io, val);	break;
+	    case Reg::PrmAttr:	rg.val().pA->at().setB(val);	break;
 	    default: rg = val; break;
 	}
     else setVal(io, rg, val);
@@ -1767,7 +1783,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 	//> Calc time control mechanism
 	if(SYS->sysTm() > (dt.start_tm+max_calc_tm))
 	{
-	    mess_err(nodePath().c_str(),_("Timeouted function calculation %d > %d+%d"),SYS->sysTm(),dt.start_tm,max_calc_tm);
+	    mess_err(nodePath().c_str(), _("Timeouted function calculation %d > %d+%d"), SYS->sysTm(), dt.start_tm, max_calc_tm);
 	    dt.flg |= 0x09;
 	    return;
 	}
@@ -1848,7 +1864,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			    case Reg::Int:	ar->arSet(i_p, getValI(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
 			    case Reg::Real:	ar->arSet(i_p, getValR(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
 			    case Reg::String:	ar->arSet(i_p, getValS(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))]));	break;
-			    case Reg::Obj:	ar->arSet(i_p, *reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].val().o_el);	break;
+			    case Reg::Obj:	ar->arSet(i_p, *reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))].val().o);	break;
 			    default:	break;
 			}
 		reg[ptr->reg] = AutoHD<TVarObj>(ar);
@@ -2024,7 +2040,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		struct SCode { uint8_t cod; uint16_t rez; uint16_t a1; uint16_t a2; } __attribute__((packed));
 		const struct SCode *ptr = (const struct SCode *)cprg;
 #ifdef OSC_DEBUG
-		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d | %d.\n", ptr->rez, ptr->a1, ptr->a2);
+		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: %d = %d | %d.", ptr->rez, ptr->a1, ptr->a2);
 #endif
 		reg[ptr->rez] = getValI(val,reg[ptr->a1]) | getValI(val,reg[ptr->a2]);
 		cprg += sizeof(SCode); continue;
@@ -2694,7 +2710,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	if(owner().DB().size())
 	    ctrMkNode("fld",opt,-1,"/func/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
-	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
+	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "tp","str","cols","100","rows","5");
 	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program")))
 	{
@@ -2718,7 +2735,7 @@ void Func::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/func/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
+    if(a_path == "/func/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/func/cfg/name" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     else if(a_path == "/func/cfg/descr" && ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     else if(a_path == "/func/cfg/m_calc_tm")
@@ -2783,23 +2800,20 @@ void Func::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* Reg                                           *
 //*************************************************
-Reg::~Reg( )
-{
-    setType(Free);
-}
+Reg::~Reg( )	{ setType(Free); }
 
 Reg &Reg::operator=( Reg &irg )
 {
     setType(irg.type());
     switch(type())
     {
-	case Bool:	el.b_el = irg.el.b_el;	break;
-	case Int:	el.i_el = irg.el.i_el;	break;
-	case Real:	el.r_el = irg.el.r_el;	break;
-	case String:	*el.s_el = *irg.el.s_el;break;
-	case Obj:	*el.o_el = *irg.el.o_el;break;
+	case Bool:	el.b = irg.el.b;	break;
+	case Int:	el.i = irg.el.i;	break;
+	case Real:	el.r = irg.el.r;	break;
+	case String:	*el.s = *irg.el.s;	break;
+	case Obj:	*el.o = *irg.el.o;	break;
 	case Var:	el.io = irg.el.io;	break;
-	case PrmAttr:	*el.p_attr = *irg.el.p_attr;	break;
+	case PrmAttr:	*el.pA = *irg.el.pA;	break;
 	default:	break;
     }
     setName(irg.name());	//name
@@ -2813,17 +2827,17 @@ void Reg::setType( Type tp )
     //Free old type
     switch(mTp)
     {
-	case Reg::String:	delete el.s_el;		break;
-	case Reg::Obj:		delete el.o_el;		break;
-	case Reg::PrmAttr:	delete el.p_attr;	break;
+	case Reg::String:	delete el.s;	break;
+	case Reg::Obj:		delete el.o;	break;
+	case Reg::PrmAttr:	delete el.pA;	break;
 	default:	break;
     }
     //Set new type
     switch(tp)
     {
-	case Reg::String:	el.s_el = new string;	break;
-	case Reg::Obj:		el.o_el = new AutoHD<TVarObj>;	break;
-	case Reg::PrmAttr:	el.p_attr = new AutoHD<TVal>;	break;
+	case Reg::String:	el.s = new string;		break;
+	case Reg::Obj:		el.o = new AutoHD<TVarObj>;	break;
+	case Reg::PrmAttr:	el.pA = new AutoHD<TVal>;	break;
 	default:	break;
     }
     mTp = tp;
@@ -2844,7 +2858,7 @@ Reg::Type Reg::vType( Func *fnc )
 		case IO::Object:	return Obj;
 	    }
 	case PrmAttr:
-	    switch(val().p_attr->at().fld().type())
+	    switch(val().pA->at().fld().type())
 	    {
 		case TFld::Boolean:	return Bool;
 		case TFld::Integer:	return Int;
@@ -2889,17 +2903,17 @@ void RegW::setType( Reg::Type tp )
     //Free old type
     switch(mTp)
     {
-	case Reg::String:	delete el.s_el;		break;
-	case Reg::Obj:		delete el.o_el;		break;
-	case Reg::PrmAttr:	delete el.p_attr;	break;
+	case Reg::String:	delete el.s;	break;
+	case Reg::Obj:		delete el.o;	break;
+	case Reg::PrmAttr:	delete el.pA;	break;
 	default:	break;
     }
     //Set new type
     switch(tp)
     {
-	case Reg::String:	el.s_el = new string;	break;
-	case Reg::Obj:		el.o_el = new AutoHD<TVarObj>(new TVarObj()); break;
-	case Reg::PrmAttr:	el.p_attr = new AutoHD<TVal>;	break;
+	case Reg::String:	el.s = new string;		break;
+	case Reg::Obj:		el.o = new AutoHD<TVarObj>(new TVarObj()); break;
+	case Reg::PrmAttr:	el.pA = new AutoHD<TVal>;	break;
 	default:	break;
     }
     mTp = tp;
@@ -2921,7 +2935,7 @@ Reg::Type RegW::vType( Func *fnc )
 	    }
 	    break;
 	case Reg::PrmAttr:
-	    switch(val().p_attr->at().fld().type())
+	    switch(val().pA->at().fld().type())
 	    {
 		case TFld::Boolean:	return Reg::Bool;
 		case TFld::Integer:	return Reg::Int;

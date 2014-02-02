@@ -2320,7 +2320,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    }
 	if((mess_lev() == TMess::Debug || !cntrEmpty()) && ctrMkNode("area",opt,-1,"/debug",_("Debug")))
 	{
-	    if(ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root"))
+	    if(!cntrEmpty() && ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root"))
 	    {
 		ctrMkNode("list",opt,-1,"/debug/cntr/id","ID",R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/debug/cntr/vl",_("Value"),R_R_R_,"root","root",1,"tp","real");

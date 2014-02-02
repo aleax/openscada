@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Transport.Sockets file: socket.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -88,14 +88,14 @@ class TSocketIn: public TTransportIn
 	int maxQueue( )		{ return mMaxQueue; }
 	int maxFork( )		{ return mMaxFork; }
 	int bufLen( )		{ return mBufLen; }
-	int keepAliveCon( )	{ return mKeepAliveCon; }
+	int keepAliveReqs( )	{ return mKeepAliveReqs; }
 	int keepAliveTm( )	{ return mKeepAliveTm; }
 	int taskPrior( )	{ return mTaskPrior; }
 
 	void setMaxQueue( int vl )	{ mMaxQueue = vmax(1,vmin(100,vl)); modif(); }
 	void setMaxFork( int vl )	{ mMaxFork = vmax(1,vmin(1000,vl)); modif(); }
 	void setBufLen( int vl )	{ mBufLen = vmax(1,vmin(1024,vl)); modif(); }
-	void setKeepAliveCon( int vl )	{ mKeepAliveCon = vmax(0,vl); modif(); }
+	void setKeepAliveReqs( int vl )	{ mKeepAliveReqs = vmax(0,vl); modif(); }
 	void setKeepAliveTm( int vl )	{ mKeepAliveTm = vmax(0,vl); modif(); }
 	void setTaskPrior( int vl )	{ mTaskPrior = vmax(-1,vmin(99,vl)); modif(); }
 
@@ -136,7 +136,7 @@ class TSocketIn: public TTransportIn
 	int		mMaxQueue,		// max queue for TCP, UNIX sockets
 			mMaxFork,		// maximum forking (opened sockets)
 			mBufLen,		// input buffer length
-			mKeepAliveCon,		// KeepAlive connections
+			mKeepAliveReqs,		// KeepAlive requests
 			mKeepAliveTm,		// KeepAlive timeout
 			mTaskPrior;		// Requests processing task prioritet
 

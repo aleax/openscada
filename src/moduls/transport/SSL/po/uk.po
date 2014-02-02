@@ -1,14 +1,14 @@
 # OpenSCADA.Transport.SSL translate to Ukrainian.
-# Copyright (C) 2008-2010 Roman Savochenko
+# Copyright (C) 2008-2014 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Transport.SSL package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2008-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2008-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.SSL 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-11-23 15:56+0200\n"
+"POT-Creation-Date: 2014-02-01 20:41+0200\n"
 "PO-Revision-Date: 2008-10-13 19:06+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -16,12 +16,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: modssl.cpp:42
 msgid "SSL"
 msgstr ""
 
+#: modssl.cpp:46
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
+#: modssl.cpp:47
 msgid ""
 "Allow security socket layer based transport. Used OpenSSL and supported "
 "SSLv2, SSLv3 and TLSv1."
@@ -29,12 +32,15 @@ msgstr ""
 "Надає транспорт базований на безпечному шарі сокетів. Використано OpenSSL та "
 "підтримуються SSLv2, SSLv3 та TLSv1."
 
+#: modssl.cpp:125 modssl.cpp:126
 msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
+#: modssl.cpp:196
 msgid "Start error: "
 msgstr "Помилка запуску: "
 
+#: modssl.cpp:198
 #, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
@@ -43,39 +49,54 @@ msgstr ""
 "Підключень %d, відкрито %d. Трафік вхідний %s, вихідний %s. Закрито з'єднань "
 "за лімітом %d."
 
+#: modssl.cpp:310 modssl.cpp:817
 #, c-format
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Помилка відкриття тимчасового файлу '%s': '%s'"
 
+#: modssl.cpp:313 modssl.cpp:820
+#, c-format
+msgid "Error write to file '%s'."
+msgstr "Помилка запису до файлу '%s'."
+
+#: modssl.cpp:371
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закрито вхідний транспорт за помилкою: %s"
 
+#: modssl.cpp:399
 msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
+#: modssl.cpp:408
 msgid " client tasks is stopping...."
 msgstr " зупинка клієнтських задач...."
 
+#: modssl.cpp:437
 #, c-format
 msgid "Socket has been connected by '%s'!"
 msgstr "Підключення до сокету з '%s'!"
 
+#: modssl.cpp:480 modssl.cpp:968
 #, c-format
 msgid "The message is received with the size '%d'."
 msgstr "Отримано повідомлення розміром '%d'."
 
+#: modssl.cpp:490
 #, c-format
 msgid "The message is replied with the size '%d'."
 msgstr "Відповідь повідомленням розміром '%d'."
 
+#: modssl.cpp:522
 #, c-format
 msgid "Socket has been disconnected (%d)."
 msgstr "Відключення від сокету (%d)."
 
+#: modssl.cpp:559
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
+#: modssl.cpp:611
 msgid ""
 "SSL input transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
@@ -91,58 +112,106 @@ msgstr ""
 "    port - мережевий порт (/etc/services);\n"
 "    mode - SSL режим та версія (SSLv2, SSLv3, SSLv23 та TLSv1)."
 
+#: modssl.cpp:617 modssl.cpp:985
 msgid "Certificates and private key"
 msgstr "Сертифікати та приватний ключ"
 
+#: modssl.cpp:618 modssl.cpp:986
 msgid "SSL PAM certificates chain and private key."
 msgstr "Ланцюг SSL PAM сертифікатів та приватний ключ."
 
+#: modssl.cpp:619 modssl.cpp:987
 msgid "Private key password"
 msgstr "Пароль приватного ключа"
 
+#: modssl.cpp:620
 msgid "Clients maximum"
 msgstr "Максимум клієнтів"
 
+#: modssl.cpp:621
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
-msgid "Keep alive connections"
-msgstr "Keep alive з'єднань"
+#: modssl.cpp:622
+msgid "Keep alive requests"
+msgstr "Keep alive запитів"
 
+#: modssl.cpp:623
+msgid ""
+"Close the connection after specified requests.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закриття підключення після визначеної кількості запитів.\n"
+"Нульове значення для відключення (не закривається ніколи)."
+
+#: modssl.cpp:624
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive час очікування (с)"
 
+#: modssl.cpp:625
+msgid ""
+"Close the connection after no requests at specified timeout.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закриття підключення після відсутності запитів протягом визначеного часу.\n"
+"Нульове значення для відключення (не закривається ніколи)."
+
+#: modssl.cpp:626
 msgid "Priority"
 msgstr "Пріоритет"
 
+#: modssl.cpp:696
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафік вхідний %s, вихідний %s."
 
+#: modssl.cpp:773
+#, c-format
+msgid "Socket name '%s' error!"
+msgstr "Помилка ім'я '%s' сокету!"
+
+#: modssl.cpp:784
+#, c-format
+msgid "Error creation TCP socket: %s!"
+msgstr "Помилка створення TCP сокету: %s!"
+
+#: modssl.cpp:802
+#, c-format
+msgid "Connect to Internet socket error: %s!"
+msgstr "Помилка підключення до Internet сокету: %s!"
+
+#: modssl.cpp:828
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"
 msgstr ""
 
+#: modssl.cpp:834
 #, c-format
 msgid "SSL_CTX_use_PrivateKey_file: %s"
 msgstr ""
 
+#: modssl.cpp:910
 msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
+#: modssl.cpp:913
 msgid "Connection error"
 msgstr "Помилка підключення"
 
+#: modssl.cpp:931
 #, c-format
 msgid "The message is sent with the size '%d'."
 msgstr "Надсилання повідомлення розміром '%d'."
 
+#: modssl.cpp:955
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
+#: modssl.cpp:956
 msgid "Socket error!"
 msgstr "Помилка сокету!"
 
+#: modssl.cpp:980
 msgid ""
 "SSL output transport has address format:\n"
 "  [addr]:[port]:[mode] - where:\n"
@@ -156,9 +225,11 @@ msgstr ""
 "    port - мережевий порт (/etc/services);\n"
 "    mode - SSL режим та версія (SSLv2, SSLv3, SSLv23 та TLSv1)."
 
+#: modssl.cpp:988
 msgid "Timings"
 msgstr "Інтервали часу"
 
+#: modssl.cpp:989
 msgid ""
 "Connection timings in format: \"[conn]:[next]\". Where:\n"
 "    conn - maximum time for connection respond wait, in seconds;\n"

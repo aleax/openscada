@@ -1,3 +1,13 @@
+2014-02-02 Roman
+- FIX:SYS: Empty counters request into tab "Debug" is fixed.
+- !!!:DAQ.JavaLikeCalc: Static, fixed into registers constants support is added, up to 32767 constants.
+    Fixed constants implement for some performance increase and memory consumption decrease by its reusing.
+    Some code clear.
+- FIX:Transport.{SSL,Sockets}: KeepAlive processing for requests with responds through writeTo() is fixed.
+    KeepAlive parameters of input transport is made unifical and descriptions append.
+    Some code clear.
+
+
 2014-01-31 Roman
 - SYS: Variable DB_CFG is defined to "<cfg>" and used everywhere.
 - Transport: User API function SYS.Transport.in_{Tr}.writeTo() is added.
