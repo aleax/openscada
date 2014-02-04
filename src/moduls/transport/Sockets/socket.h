@@ -29,13 +29,15 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define S_NM_TCP  "TCP"
-#define S_NM_UDP  "UDP"
-#define S_NM_UNIX "UNIX"
+#define S_NM_SOCK	"SOCK"
+#define S_NM_TCP	"TCP"
+#define S_NM_UDP	"UDP"
+#define S_NM_UNIX	"UNIX"
 
-#define SOCK_TCP  0
-#define SOCK_UDP  1
-#define SOCK_UNIX 2
+#define SOCK_FORCE	-1
+#define SOCK_TCP	0
+#define SOCK_UDP	1
+#define SOCK_UNIX	2
 
 using namespace OSCADA;
 

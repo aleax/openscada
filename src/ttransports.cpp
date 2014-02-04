@@ -32,7 +32,7 @@ using namespace OSCADA;
 //************************************************
 //* TTransportS					 *
 //************************************************
-TTransportS::TTransportS( ) : TSubSYS(STR_ID,"Transports",true)
+TTransportS::TTransportS( ) : TSubSYS(STR_ID, "Transports", true)
 {
     //> Input transport BD structure
     el_in.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -94,10 +94,7 @@ void TTransportS::outTrList( vector<string> &ls )
     }
 }
 
-string TTransportS::extHostsDB()
-{
-    return SYS->workDB()+".CfgExtHosts";
-}
+string TTransportS::extHostsDB( )	{ return SYS->workDB()+".CfgExtHosts"; }
 
 void TTransportS::load_( )
 {
@@ -318,7 +315,7 @@ void TTransportS::subStop( )
 	    }
     }
 
-    TSubSYS::subStop( );
+    TSubSYS::subStop();
 }
 
 string TTransportS::optDescr( )
@@ -816,15 +813,12 @@ TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) 
     mId = iid;
 }
 
-TTransportOut::~TTransportOut( )
-{
-
-}
+TTransportOut::~TTransportOut( )	{ }
 
 TCntrNode &TTransportOut::operator=( TCntrNode &node )
 {
     TTransportOut *src_n = dynamic_cast<TTransportOut*>(&node);
-    if( !src_n ) return *this;
+    if(!src_n) return *this;
 
     exclCopy(*src_n, "ID;");
     cfg("MODULE").setS(owner().modId());
@@ -845,7 +839,7 @@ string TTransportOut::workId( )		{ return owner().modId()+"."+id(); }
 
 string TTransportOut::tbl( )		{ return owner().owner().subId()+"_out"; }
 
-void TTransportOut::postDisable(int flag)
+void TTransportOut::postDisable( int flag )
 {
     try
     {
@@ -868,16 +862,16 @@ string TTransportOut::getStatus( )
 
 void TTransportOut::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
-    SYS->db().at().dataGet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
+    if(!SYS->chkSelDB(DB())) return;
+    SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
-void TTransportOut::save_()
+void TTransportOut::save_( )
 {
-    SYS->db().at().dataSet(fullDB(),SYS->transport().at().nodePath()+tbl(),*this);
+    SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
-void TTransportOut::preEnable(int flag)
+void TTransportOut::preEnable( int flag )
 {
     cfg("MODULE").setS(owner().modId());
     try{ load(); }catch(...){ }

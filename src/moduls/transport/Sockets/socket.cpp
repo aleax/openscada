@@ -389,6 +389,18 @@ void *TSocketIn::Task( void *sock_in )
 		    close(sock_fd_CL);
 		    continue;
 		}
+		//Create presenting the client connection output transport
+		if(sock->protocol().empty())
+		{
+		    string inRepNm = "inClnt"+sock->id()+"_"+i2s(sock_fd_CL);
+		    sock->owner().outAdd(inRepNm);
+		    AutoHD<TTransportOut> oTr = sock->owner().outAt(inRepNm);
+		    oTr.at().setAddr("SOCK:"+i2s(sock_fd_CL));
+		    oTr.at().start();
+		    continue;
+		}
+
+		//Thread create for input requests process.
 		SSockIn *sin = new SSockIn(sock, sock_fd_CL, inet_ntoa(name_cl.sin_addr));
 		try
 		{
@@ -516,7 +528,7 @@ void *TSocketIn::ClTask( void *s_inf )
 		{
 		    if(errno == EAGAIN)
             	    {
-                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
+                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
                 	FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
                 	kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
                 	if(kz > 0 && FD_ISSET(s.cSock,&rw_fd)) { wL = 0; continue; }
@@ -756,12 +768,14 @@ void TSocketOut::start()
     //> Connect to remote host
     string s_type = TSYS::strSepParse(addr(), 0, ':');
 
-    if(s_type == S_NM_TCP)	 type = SOCK_TCP;
-    else if(s_type == S_NM_UDP)  type = SOCK_UDP;
-    else if(s_type == S_NM_UNIX) type = SOCK_UNIX;
+    if(s_type == S_NM_SOCK)	type = SOCK_FORCE;
+    else if(s_type == S_NM_TCP)	type = SOCK_TCP;
+    else if(s_type == S_NM_UDP)	type = SOCK_UDP;
+    else if(s_type == S_NM_UNIX)type = SOCK_UNIX;
     else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
 
-    if(type == SOCK_TCP || type == SOCK_UDP)
+    if(type == SOCK_FORCE)	sock_fd = atoi(TSYS::strSepParse(addr(),1,':').c_str());
+    else if(type == SOCK_TCP || type == SOCK_UDP)
     {
 	memset(&name_in, 0, sizeof(name_in));
 	name_in.sin_family = AF_INET;

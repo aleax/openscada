@@ -262,25 +262,25 @@ void TValue::cntrCmdProc( XMLNode *opt )
 		{
 		    string sType = _("Unknown");
 		    switch(vl.at().fld().type())
-    		    {
+		    {
 			case TFld::String:	sType = _("String");	break;
-        		case TFld::Integer:	sType = _("Integer");	break;
-        		case TFld::Real:	sType = _("Real");	break;
-        		case TFld::Boolean:	sType = _("Boolean");	break;
-        		case TFld::Object:	sType = _("Object");	break;
-        		default: break;
-    		    }
-    		    if(vl.at().fld().flg()&TFld::Selected) sType = _("-select");
-    		    n_e->setAttr("help",
-        		TSYS::strMess(_("Parameter's attribute\n"
-                            "  ID: '%s'\n"
-                            "  Name: '%s'\n"
-                            "  Type: '%s'"),
-                            vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str()));
-    		    if(vl.at().fld().values().size())
-    			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
-    		    if(vl.at().fld().selNames().size())
-    			n_e->setAttr("help",n_e->attr("help")+_("\n  Selected names: ")+vl.at().fld().selNames());
+			case TFld::Integer:	sType = _("Integer");	break;
+			case TFld::Real:	sType = _("Real");	break;
+			case TFld::Boolean:	sType = _("Boolean");	break;
+			case TFld::Object:	sType = _("Object");	break;
+			default: break;
+		    }
+		    if(vl.at().fld().flg()&TFld::Selected) sType = _("-select");
+		    n_e->setAttr("help",
+			TSYS::strMess(_("Parameter's attribute\n"
+			    "  ID: '%s'\n"
+			    "  Name: '%s'\n"
+			    "  Type: '%s'"),
+			    vl.at().fld().name().c_str(),vl.at().fld().descr().c_str(),sType.c_str()));
+		    if(vl.at().fld().values().size())
+			n_e->setAttr("help",n_e->attr("help")+_("\n  Values: ")+vl.at().fld().values());
+		    if(vl.at().fld().selNames().size())
+			n_e->setAttr("help",n_e->attr("help")+_("\n  Selected names: ")+vl.at().fld().selNames());
 		}
 	    }
 	}
@@ -412,8 +412,8 @@ TVal::TVal( TCfg &cfg ) : mCfg(false), mTime(0)
 
 TVal::~TVal( )
 {
-    if(!mCfg && src.fld->type() == TFld::String)delete val.val_s;
-    if(!mCfg && src.fld->type() == TFld::Object)delete val.val_o;
+    if(!mCfg && src.fld->type() == TFld::String)delete val.s;
+    if(!mCfg && src.fld->type() == TFld::Object)delete val.o;
     if(!mCfg && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 }
 
@@ -429,8 +429,8 @@ void TVal::setFld( TFld &fld )
     if(!mCfg && src.fld)
 	switch(src.fld->type())
 	{
-	    case TFld::String:	delete val.val_s;	break;
-	    case TFld::Object:	delete val.val_o;	break;
+	    case TFld::String:	delete val.s;	break;
+	    case TFld::Object:	delete val.o;	break;
 	    default: break;
 	}
     if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
@@ -445,17 +445,11 @@ void TVal::setFld( TFld &fld )
 
     switch(src.fld->type())
     {
-	case TFld::String:
-	    val.val_s = new string(src.fld->def().empty() ? string(EVAL_STR) : src.fld->def());
-	    break;
-	case TFld::Integer:
-	    val.val_i = src.fld->def().empty() ? EVAL_INT : atoi(src.fld->def().c_str());	break;
-	case TFld::Real:
-	    val.val_r = src.fld->def().empty() ? EVAL_REAL : atof(src.fld->def().c_str());	break;
-	case TFld::Boolean:
-	    val.val_b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
-	case TFld::Object:
-	    val.val_o = new AutoHD<TVarObj>(new TEValObj); break;
+	case TFld::String:  val.s = new string(src.fld->def().empty() ? string(EVAL_STR) : src.fld->def());	break;
+	case TFld::Integer: val.i = src.fld->def().empty() ? EVAL_INT : atoi(src.fld->def().c_str());	break;
+	case TFld::Real:    val.r = src.fld->def().empty() ? EVAL_REAL : atof(src.fld->def().c_str());	break;
+	case TFld::Boolean: val.b = src.fld->def().empty() ? EVAL_BOOL : atoi(src.fld->def().c_str());	break;
+	case TFld::Object:  val.o = new AutoHD<TVarObj>(new TEValObj);	break;
 	default: break;
     }
 
@@ -465,7 +459,7 @@ void TVal::setFld( TFld &fld )
 void TVal::setCfg( TCfg &cfg )
 {
     //> Delete previous
-    if(!mCfg && src.fld && src.fld->type() == TFld::String)	delete val.val_s;
+    if(!mCfg && src.fld && src.fld->type() == TFld::String)	delete val.s;
     if(!mCfg && src.fld && src.fld->flg()&TFld::SelfFld)	delete src.fld;
 
     //> Set cfg
@@ -548,7 +542,7 @@ string TVal::getS( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
-	case TFld::Integer:	{ int vl = getI(tm,sys); return (vl!=EVAL_INT)  ? i2s(vl) : EVAL_STR; }
+	case TFld::Integer:	{ int64_t vl = getI(tm,sys); return (vl!=EVAL_INT)  ? ll2s(vl) : EVAL_STR; }
 	case TFld::Real:	{ double vl = getR(tm,sys); return (vl!=EVAL_REAL) ? r2s(vl) : EVAL_STR; }
 	case TFld::Boolean:	{ char vl = getB(tm,sys); return (vl!=EVAL_BOOL) ? i2s((bool)vl) : EVAL_STR; }
 	case TFld::Object:	return (getO().at().objName()!="EVAL") ? getO().at().getStrXML() : EVAL_STR;
@@ -568,7 +562,7 @@ string TVal::getS( int64_t *tm, bool sys )
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
 	    nodeRes().resRequestR();
-	    string rez(val.val_s->data(), val.val_s->size());
+	    string rez(val.s->data(), val.s->size());
 	    nodeRes().resRelease();
 	    return rez;
 	}
@@ -581,8 +575,8 @@ int64_t TVal::getI( int64_t *tm, bool sys )
 {
     switch(fld().type())
     {
-	case TFld::String:	{ string vl = getS(tm,sys); return (vl!=EVAL_STR) ? atoi(vl.c_str()) : EVAL_INT; }
-	case TFld::Real:	{ double vl = getR(tm,sys); return (vl!=EVAL_REAL) ? (int)vl : EVAL_INT; }
+	case TFld::String:	{ string vl = getS(tm,sys); return (vl!=EVAL_STR) ? atoll(vl.c_str()) : EVAL_INT; }
+	case TFld::Real:	{ double vl = getR(tm,sys); return (vl!=EVAL_REAL) ? (int64_t)vl : EVAL_INT; }
 	case TFld::Boolean:	{ char vl = getB(tm,sys); return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_INT; }
 	case TFld::Object:	return (getO().at().objName()!="EVAL") ? 1 : EVAL_INT;
 	case TFld::Integer:
@@ -599,7 +593,7 @@ int64_t TVal::getI( int64_t *tm, bool sys )
 	    //> Get current value
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
-	    return val.val_i;
+	    return val.i;
 	default: break;
     }
     return EVAL_INT;
@@ -610,7 +604,7 @@ double TVal::getR( int64_t *tm, bool sys )
     switch(fld().type())
     {
 	case TFld::String:	{ string vl = getS(tm,sys); return (vl!=EVAL_STR) ? atof(vl.c_str()) : EVAL_REAL; }
-	case TFld::Integer:	{ int vl = getI(tm,sys); return (vl!=EVAL_INT) ? vl : EVAL_REAL; }
+	case TFld::Integer:	{ int64_t vl = getI(tm,sys); return (vl!=EVAL_INT) ? vl : EVAL_REAL; }
 	case TFld::Boolean:	{ char vl = getB(tm,sys); return (vl!=EVAL_BOOL) ? (bool)vl : EVAL_REAL; }
 	case TFld::Object:	return (getO().at().objName()!="EVAL") ? 1 : EVAL_REAL;
 	case TFld::Real:
@@ -627,7 +621,7 @@ double TVal::getR( int64_t *tm, bool sys )
 	    //> Get current value
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
-	    return val.val_r;
+	    return val.r;
 	default: break;
     }
     return EVAL_REAL;
@@ -638,7 +632,7 @@ char TVal::getB( int64_t *tm, bool sys )
     switch(fld().type())
     {
 	case TFld::String:	{ string vl = getS(tm,sys); return (vl!=EVAL_STR) ? (bool)atoi(vl.c_str()) : EVAL_BOOL; }
-	case TFld::Integer:	{ int vl = getI(tm,sys); return (vl!=EVAL_INT) ? (bool)vl : EVAL_BOOL; }
+	case TFld::Integer:	{ int64_t vl = getI(tm,sys); return (vl!=EVAL_INT) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Real:	{ double vl = getR(tm,sys); return (vl!=EVAL_REAL) ? (bool)vl : EVAL_BOOL; }
 	case TFld::Object:	return (getO().at().objName()!="EVAL") ? true : EVAL_BOOL;
 	case TFld::Boolean:
@@ -655,7 +649,7 @@ char TVal::getB( int64_t *tm, bool sys )
 	    //> Get current value
 	    if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
 	    if(tm) *tm = time();
-	    return val.val_b;
+	    return val.b;
 	default: break;
     }
     return EVAL_BOOL;
@@ -673,7 +667,7 @@ AutoHD<TVarObj> TVal::getO( int64_t *tm, bool sys )
     if(fld().flg()&TVal::DirRead && !sys) owner().vlGet(*this);
     if(tm) *tm = time();
     nodeRes().resRequestR();
-    AutoHD<TVarObj> rez = *val.val_o;
+    AutoHD<TVarObj> rez = *val.o;
     nodeRes().resRelease();
     return rez;
 }
@@ -708,7 +702,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 {
     switch(fld().type())
     {
-	case TFld::Integer:	setI((value!=EVAL_STR) ? atoi(value.c_str()) : EVAL_INT, tm, sys);	break;
+	case TFld::Integer:	setI((value!=EVAL_STR) ? atoll(value.c_str()) : EVAL_INT, tm, sys);	break;
 	case TFld::Real:	setR((value!=EVAL_STR) ? atof(value.c_str()) : EVAL_REAL, tm, sys);	break;
 	case TFld::Boolean:	setB((value!=EVAL_STR) ? (bool)atoi(value.c_str()) : EVAL_BOOL, tm, sys);	break;
 	case TFld::Object:
@@ -721,9 +715,9 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    if(!sys && fld().flg()&TFld::NoWrite)	throw TError("Val",_("Write access is denied!"));
 	    //> Set current value and time
 	    nodeRes().resRequestW();
-	    string pvl = *val.val_s;
-	    val.val_s->assign(value.data(), value.size());
-            nodeRes().resRelease();
+	    string pvl = *val.s;
+	    val.s->assign(value.data(), value.size());
+	    nodeRes().resRelease();
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, pvl);
@@ -741,7 +735,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 {
     switch(fld().type())
     {
-	case TFld::String:	setS((value!=EVAL_INT) ? i2s(value) : EVAL_STR, tm, sys);	break;
+	case TFld::String:	setS((value!=EVAL_INT) ? ll2s(value) : EVAL_STR, tm, sys);	break;
 	case TFld::Real:	setR((value!=EVAL_INT) ? value : EVAL_REAL, tm, sys);		break;
 	case TFld::Boolean:	setB((value!=EVAL_INT) ? (bool)value : EVAL_BOOL, tm, sys);	break;
 	case TFld::Integer:
@@ -749,11 +743,11 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //> Set value to config
 	    if(mCfg)	{ src.cfg->setI(value); return; }
 	    //> Check to write
-            if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
 	    //> Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
 		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
-	    int pvl = val.val_i; val.val_i = value;
+	    int pvl = val.i; val.i = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
@@ -769,10 +763,10 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 
 void TVal::setR( double value, int64_t tm, bool sys )
 {
-    switch( fld().type() )
+    switch(fld().type())
     {
 	case TFld::String:	setS((value!=EVAL_REAL) ? r2s(value) : EVAL_STR, tm, sys);	break;
-	case TFld::Integer:	setI((value!=EVAL_REAL) ? (int)value : EVAL_INT, tm, sys);	break;
+	case TFld::Integer:	setI((value!=EVAL_REAL) ? (int64_t)value : EVAL_INT, tm, sys);	break;
 	case TFld::Boolean:	setB((value!=EVAL_REAL) ? (bool)value : EVAL_BOOL, tm, sys);	break;
 	case TFld::Real:
 	{
@@ -783,7 +777,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //> Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
 		value = vmin(fld().selValR()[1],vmax(fld().selValR()[0],value));
-	    double pvl = val.val_r; val.val_r = value;
+	    double pvl = val.r; val.r = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
@@ -811,7 +805,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //> Check to write
 	    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val", _("Write access is denied!"));
 	    //> Set current value and time
-	    char pvl = val.val_b; val.val_b = value;
+	    char pvl = val.b; val.b = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
 	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
@@ -833,8 +827,8 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
     //> Set current value and time
     nodeRes().resRequestW();
-    AutoHD<TVarObj> pvl = *val.val_o;
-    *val.val_o = value;
+    AutoHD<TVarObj> pvl = *val.o;
+    *val.o = value;
     nodeRes().resRelease();
     mTime = tm;
     if(!mTime) mTime = TSYS::curTime();

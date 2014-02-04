@@ -2953,9 +2953,9 @@ nextReq:
 			    string cP;
 			    while(!wep->sessCpGet(sesTokId,(cP=randBytes(16))).empty()) ;
 			    wep->sessCpSet(sesTokId, cP, Sess::ContPoint(nid.toAddr(),req.attr("LastNode"),bd,rPn,rtId.toAddr(),nClass,resMask));
-                	    oS(respEp, cP, cPntOff);
+			    oS(respEp, cP, cPntOff);
 			    refNumbOff += cP.size();
-                	}
+			}
 			if(refNumb)	oNu(respEp, refNumb, 4, refNumbOff);
 		    }
 		    oS(respEp, "");			//diagnosticInfos []
@@ -3011,9 +3011,9 @@ nextReq:
 			    while(!wep->sessCpGet(sesTokId,(cP=randBytes(16))).empty()) ;
 			    wep->sessCpSet(sesTokId, cP,
 				Sess::ContPoint(cPo.brNode,req.attr("LastNode"),cPo.brDir,cPo.refPerN,cPo.refTypeId,cPo.nClassMask,cPo.resMask));
-                	    oS(respEp, cP, cPntOff);
+			    oS(respEp, cP, cPntOff);
 			    refNumbOff += cP.size();
-                	}
+			}
 			if(refNumb)	oNu(respEp, refNumb, 4, refNumbOff);
 		    }
 		    oS(respEp, "");			//diagnosticInfos []
@@ -3081,7 +3081,7 @@ nextReq:
 			int rez = wep->reqData(reqTp, req);
 
 			//>>> Write result status code
-            		oNu(respEp, rez, 4);		// StatusCode
+			oNu(respEp, rez, 4);		// StatusCode
 		    }
 		    oS(respEp, "");			//diagnosticInfos []
 
@@ -3248,7 +3248,7 @@ nextReq:
 		    {
 			stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault;
 			pthread_mutex_unlock(&wep->mtxData);
-                        break;
+			break;
 		    }
 
 		    //>> Respond
@@ -3362,7 +3362,7 @@ Server::Subscr Server::Subscr::copy( bool noWorkData )
 	rez.st = st;
 	rez.sess = sess;
 	rez.en = en;
-        rez.publInterv = publInterv;
+	rez.publInterv = publInterv;
 	rez.cntrLifeTime = cntrLifeTime;
 	rez.cntrKeepAlive = cntrKeepAlive;
 	rez.maxNotPerPubl = maxNotPerPubl;
@@ -3428,11 +3428,11 @@ void Server::EP::setEnable( bool vl )
       nodeReg(OpcUa_RootFolder,OpcUa_ViewsFolder,"Views",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
       nodeReg(OpcUa_RootFolder,OpcUa_ObjectsFolder,"Objects",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_ObjectsFolder,OpcUa_Server,"Server",NC_Object,OpcUa_Organizes,OpcUa_ServerType);
-        nodeReg(OpcUa_Server,OpcUa_Server_ServerStatus,"ServerStatus",NC_Variable,OpcUa_HasComponent,OpcUa_ServerStatusType)->
-    	    setAttr("Value","Running")->setAttr("DataType",int2str(OpcUa_String/*OpcUa_ServerStatusDataType*/));
+	nodeReg(OpcUa_Server,OpcUa_Server_ServerStatus,"ServerStatus",NC_Variable,OpcUa_HasComponent,OpcUa_ServerStatusType)->
+	    setAttr("Value","Running")->setAttr("DataType",int2str(OpcUa_String/*OpcUa_ServerStatusDataType*/));
 	 nodeReg(OpcUa_Server_ServerStatus,OpcUa_Server_ServerStatus_State,"State",NC_Variable,OpcUa_HasComponent,OpcUa_BaseDataVariableType)->
-    	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
-        nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
+	nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
 	    setAttr("ValueRank","1")->setAttr("Value","http://opcfundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
@@ -3690,7 +3690,7 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	    if(ssId >= mSubScr.size() && mSubScr[i_ss].st == SS_CLOSED) ssId = i_ss;
 	    if(sess >= 0 && mSubScr[i_ss].sess == sess) nSubScrPerSess++;
 	}
-	if(nSubScrPerSess >= limSubScr()) return OpcUa_NPosID;
+	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return OpcUa_NPosID; }
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
     }
     Subscr &ss = mSubScr[ssId];
@@ -3824,10 +3824,10 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 	case OpcUa_BrowseRequest: case OpcUa_BrowseNextRequest:
 	{
 	    NodeId nid = NodeId::fromAddr(req.attr("node"));
-            map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
-            if(ndX == ndMap.end()) return OpcUa_BadBrowseNameInvalid;
+	    map<string, XML_N*>::iterator ndX = ndMap.find(nid.toAddr());
+	    if(ndX == ndMap.end()) return OpcUa_BadBrowseNameInvalid;
 	    int rPn = atoi(req.attr("rPn").c_str());
-            NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
+	    NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
 	    uint32_t bd = atoi(req.attr("BrDir").c_str());
 	    uint32_t nClass = atoi(req.attr("ClassMask").c_str());
 	    string lstNd = req.attr("LastNode"); req.setAttr("LastNode","");
@@ -3835,11 +3835,11 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 	    //> typeDefinition reference process
 	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH))       //!!!! Check for other call
 	    {
-        	map<string, XML_N*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
-            	if(ndTpDef != ndMap.end())
-                {
-                    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
-                    if(!nClass || nClass&cnClass)
+		map<string, XML_N*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
+		if(ndTpDef != ndMap.end())
+		{
+		    unsigned cnClass = atoi(ndTpDef->second->attr("NodeClass").c_str());
+		    if(!nClass || nClass&cnClass)
 			req.childAdd("ref")->setAttr("NodeId", ndTpDef->second->attr("NodeId"))->
 			    setAttr("referenceTypeId", ndTpDef->second->attr("referenceTypeId"))->
 			    setAttr("dir", "1")->setAttr("name", ndTpDef->second->attr("name"))->
@@ -3870,10 +3870,10 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 		    setAttr("dir", "1")->setAttr("name", chNd->attr("name"))->
 		    setAttr("NodeClass", int2str(cnClass))->setAttr("typeDefinition", chNd->attr("typeDefinition"));
 		if(rPn && (int)req.childSize() >= rPn && (i_ch+1) < ndX->second->childSize())
-                {
-                    req.setAttr("LastNode", chNd->attr("NodeId"));
-                    break;
-                }
+		{
+		    req.setAttr("LastNode", chNd->attr("NodeId"));
+		    break;
+		}
 	    }
 	    return 0;
 	}

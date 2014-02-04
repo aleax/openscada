@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ModBus file: modbus_daq.h
 /***************************************************************************
- *   Copyright (C) 2007-2011 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -81,7 +81,7 @@ class TMdPrm : public TParamContr
     protected:
 	//Methods
 	void load_( );
-        void save_( );
+	void save_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	void setType( const string &tpId );
 
@@ -93,40 +93,40 @@ class TMdPrm : public TParamContr
 	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
-        //Attributes
+	//Attributes
 	TElem		p_el;		//Work atribute elements
 	ResString	acq_err;
 
 	//> Logical type by template
-        //Data
-        //***************************************************
-        //* Logical type parameter's context                *
+	//Data
+	//***************************************************
+	//* Logical type parameter's context                *
 	class TLogCtx : public TValFunc
 	{
 	    public:
-    	    //Data
-    	    //>> Link structure
-    	    class SLnk
-    	    {
-    		public:
-    		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
+	    //Data
+	    //>> Link structure
+	    class SLnk
+	    {
+		public:
+		SLnk(int iid, const string &iaddr = "") : io_id(iid), addr(iaddr) { }
 
-            	int     io_id;		//Template function io index
-            	string  addr, real;	//Full item address: R:23
-    	    };
+		int	io_id;		//Template function io index
+		string	addr, real;	//Full item address: R:23
+	    };
 
 	    //Methods
 	    TLogCtx( const string &name );
 
 	    //>> Link operations
-    	    int lnkSize( )		{ return plnk.size(); }
-    	    int lnkId( int id );
-    	    int lnkId( const string &id );
-    	    SLnk &lnk( int num );
+	    int lnkSize( )		{ return plnk.size(); }
+	    int lnkId( int id );
+	    int lnkId( const string &id );
+	    SLnk &lnk( int num );
 
 	    //Attributes
-    	    int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;     //Fixed system attributes identifiers
-    	    vector<SLnk>    plnk;  		//Parameter's links
+	    int	id_freq, id_start, id_stop, id_err, id_sh, id_nm, id_dscr;	//Fixed system attributes identifiers
+	    vector<SLnk>	plnk;		//Parameter's links
 	};
 
 	//Methods
@@ -135,7 +135,7 @@ class TMdPrm : public TParamContr
 	void initLnks( );
 
 	//Attributes
-        TLogCtx	*lCtx;
+	TLogCtx	*lCtx;
 };
 
 //******************************************************
@@ -204,8 +204,8 @@ class TMdContr: public TController
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
 	TCfg	&mSched,			//Calc schedule
-                &mPrt,                          //Protocol
-                &mAddr;                         //Transport device address
+		&mPrt,                          //Protocol
+		&mAddr;                         //Transport device address
 	char	&mMerge,			//Fragments of register merge
 		&mMltWr,			//Use multi-write functions(15,16)
 		&mAsynchWr;			//Asynchronous write
@@ -226,7 +226,7 @@ class TMdContr: public TController
 
 	float	tmDelay;			//Delay time for next try connect
 
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> > p_hd;
 
 	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
 };

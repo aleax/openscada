@@ -139,7 +139,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
 	void setPrm1( int vl )				{ mPrm1 = vl; }
 	void setPrm2( int vl )				{ mPrm2 = vl; }
-	void setToStart( bool val )			{ mStart = val; modif(); }
+	void setToStart( bool vl )			{ mStart = vl; modif(); }
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 

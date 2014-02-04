@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.ModBus file: modbus_prt.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2008-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -114,14 +114,15 @@ void TProt::load_( )
 	    }
 
 	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
-            nList(db_ls);
-            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(nAt(db_ls[i_it]).at().DB()))
-                    nDel(db_ls[i_it]);
-        }
-    }catch(TError err)
+	if(!SYS->selDB().empty())
+	{
+	    nList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(nAt(db_ls[i_it]).at().DB()))
+		    nDel(db_ls[i_it]);
+	}
+    }
+    catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new node error."));
@@ -1187,9 +1188,9 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			    case 's':
 			    {
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
-                                string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
-                                valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
-                        	valIO.replace(ir->second.pos*2,2,(char*)&val,2);
+				string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
+				valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
+				valIO.replace(ir->second.pos*2,2,(char*)&val,2);
 				grpVals[ir->second.id] = valIO;
 				break;
 			    }
@@ -1368,11 +1369,11 @@ void Node::cntrCmdProc( XMLNode *opt )
 		         "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
 		         "  w   - optional symbol for writing allow indicate.\n"
 			 "Examples:\n"
-                         "  \"R0x300w\" - register access;\n"
-                         "  \"C100w\" - coin access, allow for write;\n"
-                         "  \"R_f200\" - get float from registers 200 and 201;\n"
-                         "  \"R_i300,400\" - get int32 from registers 300 and 400;\n"
-                         "  \"R_s15,20\" - get string, registers block, from register 15 and size 20.")))
+			 "  \"R0x300w\" - register access;\n"
+			 "  \"C100w\" - coin access, allow for write;\n"
+			 "  \"R_f200\" - get float from registers 200 and 201;\n"
+			 "  \"R_i300,400\" - get int32 from registers 300 and 400;\n"
+			 "  \"R_s15,20\" - get string, registers block, from register 15 and size 20.")))
 	    {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
@@ -1496,11 +1497,11 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(prog());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProg(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
-            try
-            {
-                SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
-                                compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
-            } catch(...){ }
+	    try
+	    {
+		SYS->daq().at().at(TSYS::strParse(progLang(),0,".")).at().
+				compileFuncSynthHighl(TSYS::strParse(progLang(),1,"."),*opt);
+	    } catch(...){ }
     }
     else if(a_path == "/dt/plang_ls" && ctrChkNode(opt))
     {

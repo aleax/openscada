@@ -123,7 +123,7 @@ class TFld
 	string selVl2Nm( char val )	{ return selVl2Nm(val); }
 
 	string	selNm2VlS( const string &name );
-	int	selNm2VlI( const string &name );
+	int64_t	selNm2VlI( const string &name );
 	double	selNm2VlR( const string &name );
 	bool	selNm2VlB( const string &name );
 
@@ -144,10 +144,10 @@ class TFld
 
 	union
 	{
-	    vector<string>	*v_s;
-	    vector<double>	*v_r;
-	    vector<int>		*v_i;
-	    vector<bool>	*v_b;
+	    vector<string>	*s;
+	    vector<double>	*r;
+	    vector<int>		*i;
+	    vector<bool>	*b;
 	}m_val;
 	vector<string>     *m_sel;
 };

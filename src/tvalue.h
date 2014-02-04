@@ -115,11 +115,11 @@ class TVal: public TCntrNode
 	//Attributes
 	union
 	{
-	    string	*val_s;		//String value
-	    double	val_r;		//Real value
-	    int64_t	val_i;		//Integer value
-	    char	val_b;		//Boolean value
-	    AutoHD<TVarObj> *val_o;	//Object value
+	    string	*s;		//String value
+	    double	r;		//Real value
+	    int64_t	i;		//Integer value
+	    char	b;		//Boolean value
+	    AutoHD<TVarObj> *o;		//Object value
 	} val;
 
 	unsigned char	mCfg	: 1;		//Configuration id

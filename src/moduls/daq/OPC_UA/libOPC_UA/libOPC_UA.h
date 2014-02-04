@@ -459,7 +459,7 @@ class NodeId
 	};
 #else
 	uint32_t numb;
-        string	 str;
+	string   str;
 #endif
 };
 

@@ -1,3 +1,9 @@
+2014-02-04 Roman
+- SYS.{TElem,TValue},DAQ.ModBus: Continue adapting to int64_t. Some code clear.
+- FIX:DAQ.OPC_UA: Unlock miss is fixed into function subscrSet().
+- Transport.Sockets: Creation output transport for connections to the input and without protocol assign is added.
+
+
 2014-02-02 Roman
 - FIX:SYS: Empty counters request into tab "Debug" is fixed.
 - !!!:DAQ.JavaLikeCalc: Static, fixed into registers constants support is added, up to 32767 constants.
