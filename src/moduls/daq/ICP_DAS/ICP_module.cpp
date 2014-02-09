@@ -83,7 +83,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {
     nodeDelAll();
     for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
@@ -93,7 +93,7 @@ TTpContr::~TTpContr()
 
 void TTpContr::postEnable( int flag )
 {
-    TTipDAQ::postEnable( flag );
+    TTipDAQ::postEnable(flag);
 
     //> Init DA sources
     daReg(new da_LP_8x());
@@ -125,14 +125,14 @@ void TTpContr::load_( )
 
 }
 
-void TTpContr::save_()
+void TTpContr::save_( )
 {
 
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return new TMdContr(name,daq_db,this);
+    return new TMdContr(name, daq_db, this);
 }
 
 void TTpContr::daReg( DA *da )
@@ -177,7 +177,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 
 TMdContr::~TMdContr()
 {
-    if( run_st ) stop();
+    if(run_st) stop();
 }
 
 string TMdContr::getStatus( )
@@ -398,19 +398,19 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
 
 TMdPrm::~TMdPrm( )
 {
-    disable( );
-    nodeDelAll( );
+    disable();
+    nodeDelAll();
 }
 
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
+    if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
@@ -578,7 +578,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/MOD_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/modLst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,
+	    "dest","select","select","/prm/cfg/modLst");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",cfg("MOD_SLOT").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_ADDR",cfg("MOD_ADDR").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
 	if(owner().mBus != 0) ctrRemoveNode(opt, "/prm/cfg/MOD_SLOT");

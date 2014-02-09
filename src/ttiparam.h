@@ -37,16 +37,25 @@ namespace OSCADA
 //*************************************************
 //* TTipParam                                     *
 //*************************************************
+class TController;
 class TParamContr;
 
 class TTipParam : public TElem
 {
     public:
 	//Methods
-	TTipParam( const char *iid, const char *iname, const char *idb, bool i_isPrmCntr = false );
+	TTipParam( const char *iid, const char *iname, const char *idb = "", bool i_isPrmCntr = false );
+
+	virtual void create( TParamContr *prm )			{ }
+	virtual void destroy( TParamContr *prm )		{ }
+
+	virtual string DB( TController *cntr );
+	void setDB( TController *cntr, const string &vl );
 
 	virtual void enable( TParamContr *prm )			{ }
 	virtual void disable( TParamContr *prm )		{ }
+
+	virtual bool cfgChange( TParamContr *prm, TCfg &cfg )	{ return true; }
 
 	virtual void vlGet( TParamContr *prm, TVal &val )	{ }
 	virtual void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl )	{ }
@@ -58,7 +67,7 @@ class TTipParam : public TElem
 	//Attributes
 	string	name;
 	string	descr;
-	string	db;
+	string	mDB;
 	bool	isPrmCntr;	//The parameter type also container for other parameters
 };
 

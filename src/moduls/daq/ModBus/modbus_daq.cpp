@@ -985,10 +985,10 @@ void TMdPrm::postDisable(int flag)
     {
 	if(flag && isLogic())
 	{
-	    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	    TConfig cfg(&mod->prmIOE());
 	    cfg.cfg("PRM_ID").setS(id(),true);
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
+	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
 	}
     }
     catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
@@ -1216,12 +1216,12 @@ void TMdPrm::loadIO( bool force )
     //> Load IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
-    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     for(int i_io = 0; i_io < lCtx->ioSize(); i_io++)
     {
 	cfg.cfg("ID").setS(lCtx->func()->io(i_io)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg)) continue;
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg)) continue;
 	if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) lCtx->lnk(lCtx->lnkId(i_io)).addr = cfg.cfg("VALUE").getS();
 	else lCtx->setS(i_io,cfg.cfg("VALUE").getS());
     }
@@ -1241,13 +1241,13 @@ void TMdPrm::saveIO()
 
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
-    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
     for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++)
     {
 	cfg.cfg("ID").setS(lCtx->func()->io(i_io)->id());
 	if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) cfg.cfg("VALUE").setS(lCtx->lnk(lCtx->lnkId(i_io)).addr);
 	else cfg.cfg("VALUE").setS(lCtx->getS(i_io));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
+	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
     }
 }
 

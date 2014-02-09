@@ -233,7 +233,7 @@ void Ergomera::getVals( )
 
 bool Ergomera::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    // Get page info
     if(opt->name() == "info")
     {
 	mPrm->ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_ADDR",mPrm->cfg("DEV_ADDR").fld().descr().c_str(),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","1","max","65535");
@@ -252,7 +252,7 @@ bool Ergomera::cntrCmdProc( XMLNode *opt )
 	return true;
     }
 
-    //> Process command to page
+    // Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/attrs")
     {

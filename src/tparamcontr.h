@@ -64,11 +64,11 @@ class TParamContr : public TConfig, public TValue
 	void setToEnable( bool vl )		{ cfg("EN").setB(vl); }
 
 	//> Included parameters
-        void list( vector<string> &list );
-        bool present( const string &name );
-        void add( const string &name, unsigned type = 0 );
-        void del( const string &name, bool full = false );
-        AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
+	void list( vector<string> &list );
+	bool present( const string &name );
+	void add( const string &name, unsigned type = 0 );
+	void del( const string &name, bool full = false );
+	AutoHD<TParamContr> at( const string &name, const string &who = "th_prm" );
 
 	TTipParam &type( )	{ return *tipparm; }
 
@@ -108,7 +108,7 @@ class TParamContr : public TConfig, public TValue
 	void LoadParmCfg( );
 
 	//Attributes
-	char	mPrm;		//Included parameters group identifier
+	int8_t	mPrm;		//Included parameters group identifier
 	bool	mEn;
 	string	mId;
 	TElem	el_err;		//Error atributes

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.AMRDevs file: mod_amr.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
+ *   Copyright (C) 2010-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,8 +29,9 @@
 #include <ttiparam.h>
 #include <tdaqs.h>
 
-#include "da_FlowTEC.h"
-#include "da_Ergomera.h"
+//#include "da_FlowTEC.h"
+//#include "da_Ergomera.h"
+#include "da_Kontar.h"
 #include "mod_amr.h"
 
 //*************************************************
@@ -51,14 +52,13 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new AMRDevs::TTpContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new AMRDevs::TTpContr(source);
 	return NULL;
     }
 }
@@ -81,7 +81,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {
 
 }
@@ -154,19 +154,14 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Controler's bd structure
-    fldAdd( new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30","") );
-    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1") );
-    fldAdd( new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
-    fldAdd( new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;3600") );
-    fldAdd( new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10") );
+    //> Controler's bd generic structure
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
+    fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;3600"));
+    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
-    //> Parameter type bd structure
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("DEV_TP",_("Device type"),TFld::String,TCfg::NoVal,"20") );
-    tpPrmAt(t_prm).fldAdd( new TFld("ADDR",_("Transport's address"),TFld::String,TCfg::NoVal,"30","") );
-    tpPrmAt(t_prm).fldAdd( new TFld("DEV_ADDR",_("Device address"),TFld::String,TCfg::NoVal,"50") );
-    tpPrmAt(t_prm).fldAdd( new TFld("DEV_PRMS",_("Device addon parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"1000") );
+    //> Parameter types append
+    tpParmAdd(new Kontar());
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -178,24 +173,24 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-	::TController(name_c,daq_db,cfgelem),
-	mPrior(cfg("PRIOR").getId()), mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
-	prc_st(false), endrun_req(false), tm_gath(0)
+    ::TController(name_c, daq_db, cfgelem),
+    mPrior(cfg("PRIOR").getId()), mRestTm(cfg("TM_REST").getId()), mConnTry(cfg("REQ_TRY").getId()),
+    prc_st(false), endrun_req(false), tm_gath(0)
 {
-    cfg("PRM_BD").setS("AMRDevsPrm_"+name_c);
+
 }
 
 TMdContr::~TMdContr( )
 {
-    if( run_st ) stop();
+    if(run_st) stop();
 }
 
 string TMdContr::getStatus( )
 {
-    string val = TController::getStatus( );
-    if( startStat() && !redntUse( ) )
+    string val = TController::getStatus();
+    if(startStat() && !redntUse())
     {
-	if( period() ) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
     }
@@ -204,12 +199,12 @@ string TMdContr::getStatus( )
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return new TMdPrm(name,&owner().tpPrmAt(type));
+    return new TMdPrm(name, &owner().tpPrmAt(type));
 }
 
 void TMdContr::start_( )
 {
-    if( prc_st ) return;
+    if(prc_st) return;
 
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
@@ -226,7 +221,7 @@ void TMdContr::stop_( )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res,true);
+    ResAlloc res(en_res, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -238,25 +233,25 @@ void TMdContr::prmEn( const string &id, bool val )
 
 void *TMdContr::Task( void *icntr )
 {
-    TMdContr &cntr = *(TMdContr *)icntr;
+    TMdContr &cntr = *(TMdContr*)icntr;
 
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while( !cntr.endrun_req )
+    while(!cntr.endrun_req)
     {
 	int64_t t_cnt = TSYS::curTime();
 
 	//> Update controller's data
 	cntr.en_res.resRequestR( );
-	for( unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++ )
-	    try { cntr.p_hd[i_p].at().getVals( ); }
+	for(unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
+	    try { cntr.p_hd[i_p].at().type().getVals((TParamContr*)&cntr); }
 	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;
 
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(),cntr.period() ? 0 : TSYS::cron(cntr.cron()));
     }
 
     cntr.prc_st = false;
@@ -282,122 +277,57 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), p_el("w_attr"), needApply(false), mDA(NULL)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr")
 {
 
 }
 
-TMdPrm::~TMdPrm( )
-{
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if( !vlElemPresent(&p_el) )	vlElemAtt(&p_el);
+    if(!vlElemPresent(&els))	vlElemAtt(&els);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
-void TMdPrm::enable()
+void TMdPrm::enable( )
 {
-    if( enableStat() )	return;
+    if(enableStat())	return;
 
+    als.clear();
     TParamContr::enable();
 
-    //> Delete DAQ parameter's attributes
-    for(unsigned i_f = 0; i_f < p_el.fldSize(); )
+    //Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < (int)els.fldSize(); i_p++)
     {
-	try { p_el.fldDel(i_f); }
-	catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); i_f++; }
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(els.fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try { els.fldDel(i_p); i_p--; }
+	    catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
+    als.clear();
 
-    //> Connect device's code
-
-    if(devTp() == "FLowTC_UGTAA55")	mDA = new FlowTEC(this);
-    else if(devTp() == "Ergomera")	mDA = new Ergomera(this);
-    else throw TError(nodePath().c_str(),_("No one device selected."));
-
-    owner().prmEn( id(), true );
-
-    needApply = false;
+    owner().prmEn(id(), true);
 }
 
 void TMdPrm::disable()
 {
-    if( !enableStat() )  return;
+    if(!enableStat())	return;
 
-    owner().prmEn( id(), false );
+    owner().prmEn(id(), false);
 
     TParamContr::disable();
-
-    if( mDA ) delete mDA;
-    mDA = NULL;
 
     //> Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR,0,true);
-
-    needApply = false;
-}
-
-string TMdPrm::extPrmGet( const string &prm, bool isText )
-{
-    try
-    {
-	XMLNode prmNd;
-	ResAlloc res( nodeRes(), false );
-	prmNd.load(cfg("DEV_PRMS").getS());
-	if( !isText ) return prmNd.attr(prm);
-	return prmNd.childGet(prm)->text();
-    } catch(...){ }
-    return "";
-}
-
-void TMdPrm::extPrmSet( const string &prm, const string &val, bool isText, bool nApply )
-{
-    XMLNode prmNd("prms");
-    ResAlloc res( nodeRes(), false );
-    try{ prmNd.load(cfg("DEV_PRMS").getS()); } catch(...){ }
-    if( !isText ) prmNd.setAttr(prm,val);
-    else
-    {
-	XMLNode *pNd = prmNd.childGet(prm,0,true);
-	if( !pNd ) pNd = prmNd.childAdd(prm);
-	pNd->setText(val);
-    }
-    res.request(true);
-    cfg("DEV_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
-    modif();
-    if( nApply && enableStat() ) needApply = true;
-}
-
-void TMdPrm::getVals( )
-{
-    if( mDA ) mDA->getVals();
-}
-
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
-
-void TMdPrm::save_( )
-{
-    TParamContr::save_();
-}
-
-bool TMdPrm::cfgChange( TCfg &icfg )
-{
-    TParamContr::cfgChange(icfg);
-
-    if( icfg.name() == "DEV_TP" && enableStat() ) disable( );
-
-    return true;
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
@@ -407,10 +337,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/DEV_TP",cfg("DEV_TP").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/cfg/devLst");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","select","/prm/cfg/trLst");
-	ctrRemoveNode(opt,"/prm/cfg/DEV_PRMS");
-	if( mDA ) mDA->cntrCmdProc( opt );
 	return;
     }
 
@@ -419,37 +345,23 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/status" && ctrChkNode(opt))
     {
 	string rez;
+	ResAlloc res(rData, false);
 	if(!enableStat())		rez = TSYS::strMess("2:%s. ",_("Disabled"));
 	else if(!owner().startStat())	rez = TSYS::strMess("1:%s. ",_("Enabled"));
-	else if(mErr.getVal().empty())	rez = TSYS::strMess("0:%s. ",_("Processed"));
+	else if(mErr.empty())		rez = TSYS::strMess("0:%s. ",_("Processed"));
 	else rez = TSYS::strMess("%s:%s. %s. ",
-	    TSYS::strSepParse(mErr.getVal(),0,':').c_str(),_("Processed"),TSYS::strSepParse(mErr.getVal(),1,':').c_str());
-	if(needApply)	rez += _("Need re-enable for configuration apply! ");
+	    TSYS::strSepParse(mErr,0,':').c_str(),_("Processed"),TSYS::strSepParse(mErr,1,':').c_str());
 	opt->setText(rez);
-    }
-    else if(mDA && mDA->cntrCmdProc(opt)) ;
-    else if(a_path == "/prm/cfg/devLst" && ctrChkNode(opt))
-    {
-	opt->childAdd("el")->setAttr("id","FLowTC_UGTAA55")->setText(_("FLowTEC UGT-AA55"));
-	opt->childAdd("el")->setAttr("id","Ergomera")->setText(_("Ergomera"));
-    }
-    else if(a_path == "/prm/cfg/trLst" && ctrChkNode(opt))
-    {
-	vector<string> sls;
-	if(SYS->transport().at().modPresent("Serial"))
-	    SYS->transport().at().at("Serial").at().outList(sls);
-	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
-	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else TParamContr::cntrCmdProc(opt);
 }
 
-void TMdPrm::vlGet( TVal &val )
+/*void TMdPrm::vlGet( TVal &val )
 {
-    if( val.name() == "err" )
+    if(val.name() == "err")
     {
 	TParamContr::vlGet(val);
-	if( val.getS(NULL,true) == "0" && !mErr.getVal().empty() ) val.setS(mErr.getVal(),0,true);
+	if(val.getS(NULL,true) == "0" && !mErr.getVal().empty()) val.setS(mErr.getVal(),0,true);
     }
 }
 
@@ -462,4 +374,4 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
     val.arch().at().setHighResTm(true);
-}
+}*/

@@ -66,7 +66,7 @@ class da_LP_8x: public DA
         {
             public:
                 tval( ) : init(false), prmNum(8), fastPer(0), doVal(0)
-                { for( int ip = 0; ip < 16; ip++ ) cnlMode[ip] = 0; }
+                { for(int ip = 0; ip < 16; ip++) cnlMode[ip] = 0; }
 
 		DevFeature dev;
 

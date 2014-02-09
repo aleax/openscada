@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.AMRDevs file: mod_tmpl.h
 /***************************************************************************
- *   Copyright (C) 2010 by Roman Savochenko                                *
+ *   Copyright (C) 2010-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -31,7 +31,7 @@
 #include <ttipdaq.h>
 #include <tparamcontr.h>
 
-#include "da.h"
+//#include "da.h"
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -50,48 +50,31 @@ class TMdContr;
 
 class TMdPrm : public TParamContr
 {
-    friend class DA;
     public:
 	//Methods
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	string	devTp( )	{ return cfg("DEV_TP").getS(); }
-	string	devAddr( )	{ return cfg("DEV_ADDR").getS(); }
-	string	addr( )		{ return cfg("ADDR").getS(); }
-
-	TElem &elem( )		{ return p_el; }
+	TElem &elem( )		{ return els; }
 
 	void enable( );
 	void disable( );
 
-	string extPrmGet( const string &prm, bool isText = false );
-	void extPrmSet( const string &prm, const string &val, bool isText = false, bool needApply = true );
-
-	void getVals( );
-
 	TMdContr &owner( );
 
 	//Attributes
-	TElem	p_el;		//Work atribute elements
-	bool	needApply;	//Configuration changed and need apply
-
-	ResString mErr;
-
-    protected:
-	//Methods
-	void load_( );
-	void save_( );
-	bool cfgChange( TCfg &cfg );
+	TElem	els;		//Work atribute elements
+	void 	*extPrms;
+	Res	rData;
+	string	mErr;
+	vector<string>	als;
 
     private:
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
-	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
-
-	DA	*mDA;
+	/*void vlGet( TVal &val );
+	void vlArchMake( TVal &val );*/
 };
 
 //*************************************************
@@ -154,7 +137,7 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	uint16_t	CRC16( const string &src );
+	uint16_t CRC16( const string &src );
 
     protected:
 	//Methods

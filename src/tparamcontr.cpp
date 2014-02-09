@@ -38,13 +38,15 @@ TParamContr::TParamContr( const string &name, TTipParam *tpprm ) : TConfig(tpprm
     cfg("SHIFR") = mId = name;	//!! For prevent ID location change on parameter type change
 
     setName(name);
-    if(tpprm->isPrmCntr) mPrm = grpAdd("prm_");
+    if(type().isPrmCntr) mPrm = grpAdd("prm_");
+    type().create(this);
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQParamCntr",1);
 }
 
 TParamContr::~TParamContr( )
 {
+    type().destroy(this);
     nodeDelAll();
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("DAQParamCntr",-1);
@@ -92,13 +94,13 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
 	//> Archives creation and copy
         vector<string> a_ls;
 	vlList(a_ls);
-        for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
-        {
-            if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
+	for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
+	{
+	    if(!src_n->vlPresent(a_ls[i_a]) || src_n->vlAt(a_ls[i_a]).at().arch().freeStat()) continue;
 
 	    vlAt(a_ls[i_a]).at().setArch();
 	    (TCntrNode&)vlAt(a_ls[i_a]).at().arch().at() = (TCntrNode&)src_n->vlAt(a_ls[i_a]).at().arch().at();
-        }
+	}
 
 	//> Parameters copy
 	if(mPrm >= 0)
@@ -111,7 +113,7 @@ TCntrNode &TParamContr::operator=( TCntrNode &node )
 		if(!present(prm_ls[i_p])) add(prm_ls[i_p], owner().owner().tpPrmToId(src_n->at(prm_ls[i_p]).at().type().name));
 		(TCntrNode&)at(prm_ls[i_p]).at() = (TCntrNode&)src_n->at(prm_ls[i_p]).at();
 		//if(toEnable() && !enableStat()) enable();
-    	    }
+	    }
 	}
     }
 
@@ -175,7 +177,7 @@ void TParamContr::LoadParmCfg( )
     //> Search and create new parameters
     for(unsigned i_tp = 0; i_tp < owner().owner().tpPrmSize(); i_tp++)
     {
-	if(owner().owner().tpPrmAt(i_tp).db.empty()) continue;
+	if(owner().owner().tpPrmAt(i_tp).DB(&owner()).empty()) continue;
 	try
 	{
 	    TConfig c_el(&owner().owner().tpPrmAt(i_tp));
@@ -183,8 +185,8 @@ void TParamContr::LoadParmCfg( )
 	    c_el.cfg("OWNER").setS(ownerPath(true), TCfg::ForceUse);
 
 	    //>>> Search new into DB and Config-file
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().DB()+"."+owner().cfg(owner().owner().tpPrmAt(i_tp).db).getS(),
-		    owner().owner().nodePath()+owner().cfg(owner().owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().DB()+"."+owner().owner().tpPrmAt(i_tp).DB(&owner()),
+		    owner().owner().nodePath()+owner().owner().tpPrmAt(i_tp).DB(&owner()),fld_cnt++,c_el); )
 	    {
 		try
 		{
@@ -205,14 +207,15 @@ void TParamContr::LoadParmCfg( )
 	    mess_err(nodePath().c_str(),_("Search and create new parameters error."));
 	}
     }
+
     //>>> Check for remove items removed from DB
     if(!SYS->selDB().empty())
     {
-        vector<string> it_ls;
-        list(it_ls);
-        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-            if(itReg.find(it_ls[i_it]) == itReg.end())
-                del(it_ls[i_it]);
+	vector<string> it_ls;
+	list(it_ls);
+	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+	    if(itReg.find(it_ls[i_it]) == itReg.end())
+		del(it_ls[i_it]);
     }
 
     //> Force load present parameters
@@ -220,8 +223,8 @@ void TParamContr::LoadParmCfg( )
     list(prm_ls);
     for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
     {
-        at(prm_ls[i_p]).at().modifG();
-        at(prm_ls[i_p]).at().load( );
+	at(prm_ls[i_p]).at().modifG();
+	at(prm_ls[i_p]).at().load();
     }
 }
 
@@ -259,8 +262,7 @@ void TParamContr::postDisable( int flag )
 	try
 	{
 	    cfg("OWNER") = ownerPath();
-	    SYS->db().at().dataDel(owner().DB()+"."+owner().cfg(type().db).getS(),
-				   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this,true);
+	    SYS->db().at().dataDel(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this, true);
 	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
     }
 }
@@ -271,8 +273,7 @@ void TParamContr::load_( )
 
     cfgViewAll(true);
     cfg("OWNER") = ownerPath();
-    SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),
-			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+    SYS->db().at().dataGet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
 
     LoadParmCfg();
 }
@@ -280,8 +281,7 @@ void TParamContr::load_( )
 void TParamContr::save_( )
 {
     cfg("OWNER") = ownerPath();
-    SYS->db().at().dataSet(owner().DB()+"."+owner().cfg(type().db).getS(),
-			   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this);
+    SYS->db().at().dataSet(owner().DB()+"."+type().DB(&owner()), owner().owner().nodePath()+type().DB(&owner()), *this);
 
     //> Save archives
     vector<string> a_ls;
@@ -291,7 +291,11 @@ void TParamContr::save_( )
 	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
-bool TParamContr::cfgChange( TCfg &cfg )	{ modif( ); return true; }
+bool TParamContr::cfgChange( TCfg &cfg )
+{
+    modif();
+    return type().cfgChange(this, cfg);
+}
 
 TParamContr &TParamContr::operator=( TParamContr & PrmCntr )
 {
@@ -300,7 +304,7 @@ TParamContr &TParamContr::operator=( TParamContr & PrmCntr )
     return *this;
 }
 
-void TParamContr::enable()
+void TParamContr::enable( )
 {
     type().enable(this);
 
@@ -377,6 +381,7 @@ void TParamContr::setType( const string &tpId )
 	grpDel(mPrm); mPrm = -1;
     }
 
+    type().destroy(this);
     setNodeMode(TCntrNode::Disable);
 
     try
@@ -403,6 +408,8 @@ void TParamContr::setType( const string &tpId )
     setNodeMode(TCntrNode::Enable);
 
     setVlCfg(this);
+
+    type().create(this);
 
     modif();
 }
@@ -462,7 +469,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 
-        return;
+	return;
     }
     //> Process command to page
     if(a_path == "/prm/st/type")
@@ -482,35 +489,35 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
     else if(mPrm >= 0 && a_path == "/iPrms/nmb" && ctrChkNode(opt))
     {
 	vector<string> c_list;
-        list(c_list);
-        unsigned e_c = 0;
-        for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
-            if(at(c_list[i_a]).at().enableStat()) e_c++;
-        opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
+	list(c_list);
+	unsigned e_c = 0;
+	for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
+	    if(at(c_list[i_a]).at().enableStat()) e_c++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if((a_path == "/br/prm_" || a_path == "/iPrms/prm"))
     {
-        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-        {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	{
 	    vector<string> c_list;
-            list(c_list);
-            for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
-                opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
-        }
-        if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        {
-            string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
-            add(vid);
-            at(vid).at().setName(opt->text());
-        }
-        if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
+	    list(c_list);
+	    for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
+	        opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	}
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	{
+	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
+	    add(vid);
+	    at(vid).at().setName(opt->text());
+	}
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
     }
     else if(type().cntrCmdProc(this, opt)) /* Process OK */;
     else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
     else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setText("");
-        vector<string> lls, ls;
+	vector<string> lls, ls;
 	SYS->daq().at().tmplLibList(lls);
 	for(unsigned i_l = 0; i_l < lls.size(); i_l++)
 	{

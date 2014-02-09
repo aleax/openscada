@@ -55,7 +55,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
     //> Individual DB names store
     vector<string> dbNms;
     for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
-	dbNms.push_back(cfg(owner().tpPrmAt(i_tp).db).getS());
+	dbNms.push_back(owner().tpPrmAt(i_tp).DB(this));
 
     //> Configuration copy
     exclCopy(*src_n, "ID;");
@@ -63,7 +63,7 @@ TCntrNode &TController::operator=( TCntrNode &node )
 
     //> Individual DB names restore
     for(unsigned i_tp = 0; i_tp < owner().tpPrmSize() && i_tp < dbNms.size(); i_tp++)
-	cfg(owner().tpPrmAt(i_tp).db).setS(dbNms[i_tp]);
+	owner().tpPrmAt(i_tp).setDB(this, dbNms[i_tp]);
 
     //> Parameters copy
     if(src_n->enableStat())
@@ -101,7 +101,7 @@ void TController::postDisable(int flag)
 	    //> Delete parameter's tables
 	    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
 	    {
-		string tbl = DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS();
+		string tbl = DB()+"."+owner().tpPrmAt(i_tp).DB(this);
 		SYS->db().at().open(tbl);
 		SYS->db().at().close(tbl,true);
 	    }
@@ -164,7 +164,7 @@ void TController::load_( )
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
-    LoadParmCfg( );
+    LoadParmCfg();
 
     if(!en_st && en_st_prev) enable();
     if(!run_st && run_st_prev) start();
@@ -273,7 +273,7 @@ void TController::LoadParmCfg( )
     //> Search and create new parameters
     for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
     {
-	if(owner().tpPrmAt(i_tp).db.empty()) continue;
+	if(owner().tpPrmAt(i_tp).DB(this).empty()) continue;
 	try
 	{
 	    TConfig c_el(&owner().tpPrmAt(i_tp));
@@ -281,8 +281,8 @@ void TController::LoadParmCfg( )
 	    c_el.cfg("OWNER").setS("", TCfg::ForceUse);
 
 	    //>>> Search new into DB and Config-file
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+cfg(owner().tpPrmAt(i_tp).db).getS(),
-					   owner().nodePath()+cfg(owner().tpPrmAt(i_tp).db).getS(),fld_cnt++,c_el); )
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(DB()+"."+owner().tpPrmAt(i_tp).DB(this),
+					   owner().nodePath()+owner().tpPrmAt(i_tp).DB(this),fld_cnt++,c_el); )
 	    {
 		try
 		{
@@ -319,7 +319,7 @@ void TController::LoadParmCfg( )
     for(unsigned i_p = 0; i_p < prm_ls.size(); i_p++)
     {
 	at(prm_ls[i_p]).at().modifG();
-	at(prm_ls[i_p]).at().load( );
+	at(prm_ls[i_p]).at().load();
     }
 }
 
@@ -596,8 +596,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	TConfig::cntrCmdProc(opt, TSYS::pathLev(a_path,2), "root", SDAQ_ID, RWRWR_);
 	if(ctrChkNode(opt,"set",RWRWR_,"root","DAQ",SEC_WR))
 	    for(unsigned i_t = 0; i_t < owner().tpPrmSize(); i_t++)
-		if(owner().tpPrmAt(i_t).db == TSYS::pathLev(a_path,2))
-		     modifG();
+		if(owner().tpPrmAt(i_t).mDB == TSYS::pathLev(a_path,2))
+		{ modifG(); break; }
     }
     else if(a_path == "/mess/tm")
     {

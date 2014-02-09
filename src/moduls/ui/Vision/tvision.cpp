@@ -265,30 +265,30 @@ QMainWindow *TVision::openWindow()
     string sprj;
     int  screen;
     VisRun *fsess = NULL;
-    for( int p_off = 0; (sprj=TSYS::strSepParse(run_prjs,0,';',&p_off)).size(); )
+    for(int p_off = 0; (sprj=TSYS::strSepParse(runPrjs(),0,';',&p_off)).size(); )
     {
 	screen = 0;
 	size_t iSep = sprj.find("-");
-	if( iSep != string::npos ) screen = atoi(sprj.substr(iSep+1).c_str());
+	if(iSep != string::npos) screen = atoi(sprj.substr(iSep+1).c_str());
 	sprj = sprj.substr(0,iSep);
 
 	//QDesktopWidget().screen(1)
 	//>> Find for already opened run window
 	unsigned i_w;
 	for(i_w = 0; i_w < mn_winds.size(); i_w++)
-	    if( qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject( ) == sprj &&
-		    QDesktopWidget().screenNumber(mn_winds[i_w]) == screen )
+	    if(qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject() == sprj &&
+		    QDesktopWidget().screenNumber(mn_winds[i_w]) == screen)
 		break;
-	if( i_w < mn_winds.size() || screen >= QDesktopWidget().numScreens() ) continue;
-	VisRun *sess = new VisRun( "/prj_"+sprj, user_open, user_pass, VCAStation(), true, QDesktopWidget().screen(screen) );
+	if(i_w < mn_winds.size() || screen >= QDesktopWidget().numScreens()) continue;
+	VisRun *sess = new VisRun("/prj_"+sprj, user_open, user_pass, VCAStation(), true, QDesktopWidget().screen(screen));
 	sess->show();
 	sess->raise();
 	sess->activateWindow();
 	if( !fsess ) fsess = sess;
     }
 
-    if( fsess ) return fsess;
-    return new VisDevelop( user_open, user_pass, VCAStation() );
+    if(fsess) return fsess;
+    return new VisDevelop(user_open, user_pass, VCAStation());
 }
 
 void TVision::modStart( )

@@ -1,3 +1,13 @@
+2014-02-09 Roman
+- SYS: Check for EVAL into description on TCntrNode::ctrMkNode() is added, for present save. Some code clear.
+- !!:SYS.TCntrNode,DAQ.{*,AMRDevs}: Expanded for checking parameters DB name for allow fixed set (without storing the into DB field).
+- !!:SYS.TCntrNode,DAQ.AMRDevs: Expanded API for type specific calls by append TTipParam::{create,destroy,DB,setDB,cfgChange}().
+- FIX:DAQ.TParamContr: Group of included parameters is fixed for variable "mPrm" unsigned type "char" on ARM.
+- !!!!:DAQ.AMRDevs: The module mostly conceptual rewrote for append protocol Kontar first stage implementing and
+    unfinished "Ergomera", "FlowTec" disabled.
+- DAQ.{ICP_DAS,SMH2Gi}, UI.Vision: Some code clear.
+
+
 2014-02-04 Roman
 - SYS.{TElem,TValue},DAQ.ModBus: Continue adapting to int64_t. Some code clear.
 - FIX:DAQ.OPC_UA: Unlock miss is fixed into function subscrSet().

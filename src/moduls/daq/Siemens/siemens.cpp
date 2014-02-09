@@ -1572,10 +1572,10 @@ void TMdPrm::postDisable(int flag)
     {
 	if(flag)
 	{
-	    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	    TConfig cfg(&mod->prmIOE());
 	    cfg.cfg("PRM_ID").setS(id(),true);
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
+	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
 	}
     }catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
@@ -1696,13 +1696,12 @@ void TMdPrm::loadIO( bool force )
 
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
-    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     for(int i_io = 0; i_io < ioSize(); i_io++)
     {
 	cfg.cfg("ID").setS(func()->io(i_io)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg))
-	    continue;
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg)) continue;
 	if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    lnk(lnkId(i_io)).db_addr = cfg.cfg("VALUE").getS();
 	else setS(i_io,cfg.cfg("VALUE").getS());
@@ -1723,7 +1722,7 @@ void TMdPrm::saveIO()
 
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
-    string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
+    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     for(int i_io = 0; i_io < func()->ioSize(); i_io++)
     {
@@ -1731,7 +1730,7 @@ void TMdPrm::saveIO()
 	if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).db_addr);
 	else cfg.cfg("VALUE").setS(getS(i_io));
-	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+owner().cfg(type().db).getS()+"_io",cfg);
+	SYS->db().at().dataSet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
     }
 }
 

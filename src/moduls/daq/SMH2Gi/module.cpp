@@ -190,17 +190,18 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-        TTipDAQ::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,0,"/prm","SMH2Gi"))
-            ctrMkNode("fld",opt,-1,"/prm/dirMRC",_("MR/MC devices *.ini files directry"),RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","sel_ed","select","/prm/dirMRCList");
-        return;
+	TTipDAQ::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,0,"/prm","SMH2Gi"))
+	    ctrMkNode("fld",opt,-1,"/prm/dirMRC",_("MR/MC devices *.ini files directry"),RWRWR_,"root",SDAQ_ID,3,
+		"tp","str","dest","sel_ed","select","/prm/dirMRCList");
+	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/dirMRC")
     {
-        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(MRCDirDevs());
-        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMRCDirDevs(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(MRCDirDevs());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMRCDirDevs(opt->text());
     }
     else if(a_path == "/prm/dirMRCList" && ctrChkNode(opt))	TSYS::ctrListFS(opt, MRCDirDevs());
     else TTipDAQ::cntrCmdProc(opt);
@@ -288,7 +289,7 @@ void TMdContr::stop_( )
     //> Set EVal
     ResAlloc res(en_res,false);
     for(unsigned i_p = 0; i_p < p_hd.size(); i_p++)
-        p_hd[i_p].at().setEval();
+	p_hd[i_p].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -338,23 +339,23 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	{
 	    if(messLev() == TMess::Debug)
 		mess_debug_(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
-    	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
+	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
 	    if(broadCast) { err = ""; break; }
-    	    rez.assign(buf, resp_len);
-    	    //> Wait tail
-    	    while(resp_len)
-    	    {
-        	try{ resp_len = tro.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-        	rez.append(buf, resp_len);
-    	    }
+	    rez.assign(buf, resp_len);
+	    //> Wait tail
+	    while(resp_len)
+	    {
+		try{ resp_len = tro.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+		rez.append(buf, resp_len);
+	    }
 
-    	    if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
-    	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
-    	    { err = _("13:Error respond: CRC check error."); continue; }
+	    if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
+	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
+	    { err = _("13:Error respond: CRC check error."); continue; }
 	    if(messLev() == TMess::Debug)
 		mess_debug_(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
-    	    pdu = rez.substr(0, rez.size()-2);
-    	    err = "";
+	    pdu = rez.substr(0, rez.size()-2);
+	    err = "";
 	    break;
 	}
     }
@@ -409,9 +410,9 @@ void *TMdContr::Task( void *icntr )
 	    pdu += (char)0;
 	    pdu += (char)0;
 	    pdu += (char)((cntr.MRWrFrm.size()/2)>>8);	//Registers quantity MSB
-    	    pdu += (char)(cntr.MRWrFrm.size()/2);	//Registers quantity LSB
-    	    pdu += (char)cntr.MRWrFrm.size();		//Byte Count
-    	    pdu += cntr.MRWrFrm;
+	    pdu += (char)(cntr.MRWrFrm.size()/2);	//Registers quantity LSB
+	    pdu += (char)cntr.MRWrFrm.size();		//Byte Count
+	    pdu += cntr.MRWrFrm;
 
 	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
 	    cntr.modBusReq(pdu, false, true);
@@ -499,9 +500,9 @@ uint16_t TMdContr::CRC16( const string &mbap )
     uint16_t index;
     for(unsigned i_b = 0; i_b < mbap.size(); i_b++)
     {
-        index = lo^(uint8_t)mbap[i_b];
-        lo = hi^CRCHi[index];
-        hi = CRCLo[index];
+	index = lo^(uint8_t)mbap[i_b];
+	lo = hi^CRCHi[index];
+	hi = CRCLo[index];
     }
     return hi|(lo<<8);
 }
@@ -515,10 +516,7 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
 
 }
 
-TMdPrm::~TMdPrm( )
-{
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
 void TMdPrm::postEnable( int flag )
 {
@@ -538,14 +536,15 @@ void TMdPrm::enable( )
     //> Check for delete DAQ parameter's attributes
     for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
     {
-        unsigned i_l;
-        for(i_l = 0; i_l < als.size(); i_l++)
-            if(p_el.fldAt(i_p).name() == als[i_l])
-                break;
-        if(i_l >= als.size())
-            try{ p_el.fldDel(i_p); i_p--; }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(p_el.fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try{ p_el.fldDel(i_p); i_p--; }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
+    als.clear();
 
     owner().prmEn(id(), true);
 }
@@ -565,21 +564,21 @@ void TMdPrm::vlGet( TVal &val )
 {
     if(!enableStat() || !owner().startStat())
     {
-        if(val.name() == "err")
-        {
-            if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
-            else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
-        }
-        else val.setS(EVAL_STR,0,true);
-        return;
+	if(val.name() == "err")
+	{
+	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
+	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
+	}
+	else val.setS(EVAL_STR,0,true);
+	return;
     }
 
     if(owner().redntUse()) return;
 
     if(val.name() == "err")
     {
-        if(acq_err.getVal().empty())	val.setS("0",0,true);
-        else				val.setS(acq_err.getVal(),0,true);
+	if(acq_err.getVal().empty())	val.setS("0",0,true);
+	else				val.setS(acq_err.getVal(),0,true);
     }
 }
 
@@ -603,13 +602,13 @@ string TMdPrm::modPrm( const string &prm, const string &def )
     XMLNode prmNd;
     try
     {
-        prmNd.load(cfg("MOD_PRMS").getS());
-        string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
-        if(!sa.size())  return (rez=prmNd.attr(prm)).empty()?def:rez;
-        //> Internal node
-        for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
-            if(prmNd.childGet(i_n)->name() == sobj)
-                return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
+	prmNd.load(cfg("MOD_PRMS").getS());
+	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
+	if(!sa.size())  return (rez=prmNd.attr(prm)).empty()?def:rez;
+	//> Internal node
+	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
+	    if(prmNd.childGet(i_n)->name() == sobj)
+		return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
     } catch(...){ }
 
     return def;
@@ -626,12 +625,12 @@ void TMdPrm::setModPrm( const string &prm, const string &val )
     //> Internal node
     else
     {
-        unsigned i_n;
-        for(i_n = 0; i_n < prmNd.childSize(); i_n++)
-            if(prmNd.childGet(i_n)->name() == sobj)
-            { prmNd.childGet(i_n)->setAttr(sa,val); break; }
-        if(i_n >= prmNd.childSize())
-            prmNd.childAdd(sobj)->setAttr(sa,val);
+	unsigned i_n;
+	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
+	    if(prmNd.childGet(i_n)->name() == sobj)
+	    { prmNd.childGet(i_n)->setAttr(sa,val); break; }
+	if(i_n >= prmNd.childSize())
+	    prmNd.childAdd(sobj)->setAttr(sa,val);
     }
 
     cfg("MOD_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
@@ -663,9 +662,9 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-        TParamContr::cntrCmdProc(opt);
-        ctrRemoveNode(opt,"/prm/cfg/MOD_PRMS");
-        return;
+	TParamContr::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/MOD_PRMS");
+	return;
     }
     //> Process command to page
     //string a_path = opt->attr("path");
@@ -757,7 +756,7 @@ bool SHMParam::cntrCmdProc( TParamContr *p, XMLNode *opt )
     if(opt->name() == "info")
     {
 	p->ctrMkNode("fld",opt,-1,"/prm/cfg/VAR_LS",p->cfg("VAR_LS").fld().descr(),(p->enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
-        return true;
+	return true;
     }
     //> Process command to page
     //string a_path = opt->attr("path");
@@ -780,22 +779,22 @@ struct Inquired_t
 	    unsigned short	AOutOverload:1;	// Analog output overvoltage
 	    unsigned short	Reserved2:11;
 	} AlarmsMC;
-	struct {      				// MR alarm codes
-    	    unsigned short	Reserved1:3;
-    	    unsigned short	HighVoltage:1;	// High voltage
+	struct {				// MR alarm codes
+	    unsigned short	Reserved1:3;
+	    unsigned short	HighVoltage:1;	// High voltage
 	    unsigned short	LowVoltage:1;	// Low voltage
-    	    unsigned short	AOutOverload:1;	// Analog output overvoltage
-    	    unsigned short	PSOverload:1;	// Internal power supply overvoltage
+	    unsigned short	AOutOverload:1;	// Analog output overvoltage
+	    unsigned short	PSOverload:1;	// Internal power supply overvoltage
 	    unsigned short	NoTunes:1;	// No tunes get
-    	    unsigned short	UnknownType:1;	// Не определен тип МР
+	    unsigned short	UnknownType:1;	// Не определен тип МР
 	    unsigned short	Reserved2:7;
 	} AlarmsMR;				//used on normal processing
     } proc;
-    unsigned long	SerialNum:24;   	// unique serial number
-    unsigned long	Reinit:1;       	// МР need reinit
+    unsigned long	SerialNum:24;		// unique serial number
+    unsigned long	Reinit:1;		// МР need reinit
     unsigned long	MCAinsValid:1;		// Values ain0...ain7 valid
-    unsigned long	Reserved3:5;     	// reserve
-    unsigned long	AlarmsInID:1;       	// Alarms into struct Alarms
+    unsigned long	Reserved3:5;		// reserve
+    unsigned long	AlarmsInID:1;		// Alarms into struct Alarms
 }__attribute__((packed));
 
 MRCParam::MRCParam( ) : TTipParam("MRC", _("MR and MC bus parameters"), "PRM_BD_MRC")
@@ -851,7 +850,7 @@ void MRCParam::enable( TParamContr *ip )
 	pdu += (char)0x00;		//Start address, MSB
 	pdu += (char)0x00;		//Start address, LSB
 	pdu += (char)((bSz/2)>>8);	//Registers quantity MSB
-        pdu += (char)(bSz/2);		//Registers quantity LSB
+	pdu += (char)(bSz/2);		//Registers quantity LSB
 
 	//printf("TEST 10: Request parameters: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
 
@@ -936,7 +935,7 @@ void MRCParam::getVals( TParamContr *ip )
 	pduReq += (char)(ePrm->SN>>16);	//SN[2]
 	pduReq += (char)(ePrm->SN>>8);	//SN[1]
 	pduReq += (char)0x00;		//Registers quantity MSB
-    	pduReq += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
+	pduReq += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
 
 	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
@@ -980,10 +979,10 @@ void MRCParam::getVals( TParamContr *ip )
 	//>> Digit inputs process
 	int vl = TSYS::getUnalign16(off);
 	for(int i_d = 0; i_d <= 10; i_d++)
-    	{
-    	    if(i_d == 10)	p->vlAt("cr_ack_din8_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
-    	    else if(i_d == 9)	p->vlAt("cr_ack_din7_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
-    	    else p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:((vl^ePrm->diRev)>>i_d)&1, 0, true);
+	{
+	    if(i_d == 10)	p->vlAt("cr_ack_din8_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+	    else if(i_d == 9)	p->vlAt("cr_ack_din7_").at().setB(rezReq.size()?EVAL_BOOL:(vl>>i_d)&1, 0, true);
+	    else p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:((vl^ePrm->diRev)>>i_d)&1, 0, true);
 	}
 
 	//> Send outputs
@@ -1001,20 +1000,20 @@ void MRCParam::getVals( TParamContr *ip )
 	    //>>> Digital outputs prepare and place
 	    vl = 0;
 	    for(int i_d = 11; i_d >= 0; i_d--)
-    	    {
-    		vl = vl << 1;
-        	if(i_d == 11)		{ if(p->vlAt("crst_din8_").at().getB(0, true) == true) vl |= 1; }
-        	else if(i_d == 10)	{ if(p->vlAt("crst_din7_").at().getB(0, true) == true) vl |= 1; }
-        	else if((p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0,true)^(ePrm->doRev>>i_d))&1) vl |= 1;
-    	    }
-    	    data += (char)(vl>>8); data += (char)vl;
+	    {
+		vl = vl << 1;
+		if(i_d == 11)		{ if(p->vlAt("crst_din8_").at().getB(0, true) == true) vl |= 1; }
+		else if(i_d == 10)	{ if(p->vlAt("crst_din7_").at().getB(0, true) == true) vl |= 1; }
+		else if((p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0,true)^(ePrm->doRev>>i_d))&1) vl |= 1;
+	    }
+	    data += (char)(vl>>8); data += (char)vl;
 
 	    //>>> Analog outputs place
 	    for(int i_a = 0; i_a < 4; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
-    		data += (char)(vl>>8); data += (char)vl;
+		data += (char)(vl>>8); data += (char)vl;
 	    }
 
 	    //>> Prepare broadcast header
@@ -1023,9 +1022,9 @@ void MRCParam::getVals( TParamContr *ip )
 	    pdu += (char)0;
 	    pdu += (char)0;
 	    pdu += (char)((data.size()/2)>>8);	//Registers quantity MSB
-    	    pdu += (char)(data.size()/2);	//Registers quantity LSB
-    	    pdu += (char)data.size();	//Byte Count
-    	    pdu += data;
+	    pdu += (char)(data.size()/2);	//Registers quantity LSB
+	    pdu += (char)data.size();	//Byte Count
+	    pdu += data;
 	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
 	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
 	}
@@ -1047,7 +1046,7 @@ void MRCParam::getVals( TParamContr *ip )
 	pduReq += (char)(ePrm->SN>>16);		//SN[2]
 	pduReq += (char)(ePrm->SN>>8);		//SN[1]
 	pduReq += (char)((reStrSize/2)>>8);	//Registers quantity MSB
-    	pduReq += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
+	pduReq += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
 	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
 	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
@@ -1076,7 +1075,7 @@ void MRCParam::getVals( TParamContr *ip )
 	//>> Digit inputs process
 	int vl = ePrm->DI ? TSYS::getUnalign16(off) : 0;
 	for(int i_d = 0; i_d < ePrm->DI; i_d++)
-    	    p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:((vl^ePrm->diRev)>>i_d)&1, 0, true);
+	    p->vlAt(TSYS::strMess("din%d",i_d)).at().setB(rezReq.size()?EVAL_BOOL:((vl^ePrm->diRev)>>i_d)&1, 0, true);
 
 	//> Send outputs
 	if(!rezReq.size() && (ePrm->DO || ePrm->AO))
@@ -1087,18 +1086,18 @@ void MRCParam::getVals( TParamContr *ip )
 	    {
 		int vl = 0;
 		for(int i_d = (ePrm->DO-1); i_d >= 0; i_d--)
-    		{
-        	    vl = vl << 1;
-        	    if((p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0,true)^(ePrm->doRev>>i_d))&1) vl |= 1;
+		{
+		    vl = vl << 1;
+		    if((p->vlAt(TSYS::strMess("dou%d",i_d)).at().getB(0,true)^(ePrm->doRev>>i_d))&1) vl |= 1;
 		}
-    		data += (char)vl; data += (char)(vl>>8);
-    	    }
+		data += (char)vl; data += (char)(vl>>8);
+	    }
 	    //>> Analog outputs place
 	    for(int i_a = 0; i_a < ePrm->AO; i_a++)
 	    {
 		vl = p->vlAt(TSYS::strMess("aou%d",i_a)).at().getI(0, true);
 		if(vl == EVAL_INT) vl = 0;
-    		data += (char)vl; data += (char)(vl>>8);
+		data += (char)vl; data += (char)(vl>>8);
 	    }
 	    //>> Append to generic MR write frame
 	    if(data.size() && p->owner().MRWrFrm[modSlot] == ((modSlot<7)?p->owner().MRWrFrm[modSlot+1]:p->owner().MRWrFrm.size()))
@@ -1192,7 +1191,7 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 			p->ctrMkNode("fld",opt,-1,("/cfg/"+titbs).c_str(),bnm.c_str(),(!p->enableStat() && view != "sys")?RWRWR_:R_R_R_,
 			    "root",SDAQ_ID,2,"tp","bool","help",bhelp.c_str());
 		    }
-            }
+	    }
 	    //> Digital signals revers configuration
 	    XMLNode *tReq = p->ctrMkNode("area",opt,-1,"/cfg/digRev",_("Digital signals reverse"));
 	    for(map<string, DevMRCFeature::SVal>::iterator itv = dMRC.vars.begin(); tReq && itv != dMRC.vars.end(); itv++)
@@ -1206,19 +1205,19 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 			p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	    if(tReq && !tReq->childSize()) tReq->parent()->childDel(tReq);
-        }
-        return true;
+	}
+	return true;
     }
     //> Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/modLst" && p->ctrChkNode(opt))
     {
-        opt->childAdd("el")->setAttr("id","0")->setText(_("<No select>"));
+	opt->childAdd("el")->setAttr("id","0")->setText(_("<No select>"));
 	for(map<int, DevMRCFeature>::iterator i_d = mod->MRCdevs.begin(); i_d != mod->MRCdevs.end(); i_d++)
 	{
 	    if(!i_d->second.HardID) continue;
-            opt->childAdd("el")->setAttr("id",TSYS::int2str(i_d->second.HardID))->setText(i_d->second.name);
-        }
+	    opt->childAdd("el")->setAttr("id",TSYS::int2str(i_d->second.HardID))->setText(i_d->second.name);
+	}
     }
     else if(a_path.compare(0,9,"/cfg/tune") == 0)
     {
@@ -1238,8 +1237,8 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 		if(i_tb >= 0) opt->setText(((atoi(opt->text().c_str())>>i_tb)&1)?"1":"0");
 	    }
 	}
-        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && view != "sys")
-        {
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR) && view != "sys")
+	{
 	    if(view == "ain")
 	    {
 		p->setModPrm(tits+"val",opt->text());
@@ -1265,18 +1264,18 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     else if(a_path.compare(0,14,"/cfg/digRev/DI") == 0)
     {
 	int dN = atoi(a_path.c_str()+14);
-        int dVl = atoi(p->modPrm("DIRev").c_str());
-        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((dVl&(1<<dN))?"1":"0");
-        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-            p->setModPrm("DIRev", TSYS::int2str(atoi(opt->text().c_str()) ? (dVl|(1<<dN)) : (dVl & ~(1<<dN))));
+	int dVl = atoi(p->modPrm("DIRev").c_str());
+	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((dVl&(1<<dN))?"1":"0");
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    p->setModPrm("DIRev", TSYS::int2str(atoi(opt->text().c_str()) ? (dVl|(1<<dN)) : (dVl & ~(1<<dN))));
     }
     else if(a_path.compare(0,14,"/cfg/digRev/DO") == 0)
     {
 	int dN = atoi(a_path.c_str()+14);
-        int dVl = atoi(p->modPrm("DORev").c_str());
-        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((dVl&(1<<dN))?"1":"0");
-        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-            p->setModPrm("DORev", TSYS::int2str(atoi(opt->text().c_str()) ? (dVl|(1<<dN)) : (dVl & ~(1<<dN))));
+	int dVl = atoi(p->modPrm("DORev").c_str());
+	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((dVl&(1<<dN))?"1":"0");
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    p->setModPrm("DORev", TSYS::int2str(atoi(opt->text().c_str()) ? (dVl|(1<<dN)) : (dVl & ~(1<<dN))));
     }
     else return false;
 
@@ -1347,7 +1346,7 @@ bool DevMRCFeature::load( const string &iniFile )
 		else if(propNm == "visible")	cVar->second.visible = propVal;
 	    }
 	}
-        delete reRez;
+	delete reRez;
     }
 
     fclose(fp);

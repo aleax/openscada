@@ -187,7 +187,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 //* TTipParam                                     *
 //*************************************************
 TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool i_isPrmCntr ) :
-    name(iid), descr(iname), db(idb), isPrmCntr(i_isPrmCntr)
+    name(iid), descr(iname), mDB(idb), isPrmCntr(i_isPrmCntr)
 {
     //> Add typical structure fields
     fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
@@ -196,3 +196,7 @@ TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool 
     fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
     fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TCfg::NoVal,"1","0"));
 }
+
+string TTipParam::DB( TController *cntr )	{ return mDB.size() ? cntr->cfg(mDB).getS() : ""; }
+
+void TTipParam::setDB( TController *cntr, const string &vl )	{ if(mDB.size()) cntr->cfg(mDB).setS(vl); }

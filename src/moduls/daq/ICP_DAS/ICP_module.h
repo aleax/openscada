@@ -71,7 +71,7 @@ class TMdPrm : public TParamContr
 	int64_t	&modAddr;	//I-7000,I-8000 module address
 	int64_t	&modSlot;	//I-8000 module slot
 
-	ResString	acq_err;
+	ResString acq_err;
 
 	bool	endRunReq, prcSt;
 	uint32_t dInOutRev[10];	//Up to 10 channels with 32 io each

@@ -90,16 +90,16 @@ XMLNode *TCntrNode::ctrId( XMLNode *inf, const string &name_id, bool noex )
     while(true)
     {
 	s_el = TSYS::pathLev(name_id,0,true,&l_off);
-	if( s_el.empty() ) return t_node;
+	if(s_el.empty()) return t_node;
 	bool ok = false;
-	for( unsigned i_f = 0; i_f < t_node->childSize(); i_f++)
-	    if( t_node->childGet(i_f)->attr("id") == s_el )
+	for(unsigned i_f = 0; i_f < t_node->childSize(); i_f++)
+	    if(t_node->childGet(i_f)->attr("id") == s_el)
 	    {
 		t_node = t_node->childGet(i_f);
 		ok = true;
 		break;
 	    }
-	if( !ok ) break;
+	if(!ok) break;
     }
 
     if(noex) return NULL;
@@ -615,7 +615,6 @@ void TCntrNode::load( bool force )
 	    for(TMap::iterator p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child)) p->second->load(force);
     }
-
 }
 
 void TCntrNode::save( unsigned lev )
@@ -678,7 +677,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
     //  grp - nodes group
     //  path - path to source node
-    if( iid == "nodeList" )
+    if(iid == "nodeList")
     {
 	try
 	{
@@ -686,8 +685,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	    TArrayObj *rez = new TArrayObj();
 	    vector<string> nls;
 	    nd.at().nodeList(nls, (prms.size() >= 1) ? prms[0].getS() : string(""));
-	    for(unsigned i_l = 0; i_l < nls.size(); i_l++)
-		rez->propSet(TSYS::int2str(i_l),nls[i_l]);
+	    for(unsigned i_l = 0; i_l < nls.size(); i_l++) rez->propSet(i2s(i_l), nls[i_l]);
 	    return rez;
 	}
 	catch(TError)	{ }
@@ -731,50 +729,51 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 
     //> Check displaing node
     int itbr = 0;
-    for( int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff=i_off )
-	if( reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)) )
+    for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff = i_off)
+	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)))
 	{
-	    if( !reqt1.empty() ) return NULL;
+	    if(!reqt1.empty()) return NULL;
 	    itbr = 1;
 	    break;
 	}
 
     //> Check permission
-    char n_acs = SYS->security().at().access(nd->attr("user"),SEC_RD|SEC_WR|SEC_XT,user,grp,perm);
-    if( !(n_acs&SEC_RD) ) return NULL;
-    if( itbr )	return nd;
+    char n_acs = SYS->security().at().access(nd->attr("user"), SEC_RD|SEC_WR|SEC_XT, user, grp, perm);
+    if(!(n_acs&SEC_RD)) return NULL;
+    if(itbr)	return nd;
 
     XMLNode *obj = nd;
-    if( obj->name() == "info" )	obj = nd->childGet(0,true);
-    if( !obj )
+    if(obj->name() == "info")	obj = nd->childGet(0, true);
+    if(!obj)
     {
 	obj = nd->childAdd();
-	nd->setAttr("rez","0");
+	nd->setAttr("rez", "0");
     }
 
     //> Go to element
-    for( ;(reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1=reqt )
+    for( ;(reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1 = reqt)
     {
-	XMLNode *obj1 = obj->childGet("id",reqt,true);
-	if( obj1 ) { obj = obj1; continue; }
+	XMLNode *obj1 = obj->childGet("id", reqt, true);
+	if(obj1) { obj = obj1; continue; }
 	//int wofft = woff;
-	if( TSYS::pathLev(path,0,true,&woff).size() )
-	    throw TError("ContrItfc",_("Some tags on path '%s' are missed!"),req.c_str());
+	if(TSYS::pathLev(path,0,true,&woff).size())
+	    throw TError("ContrItfc", _("Some tags on path '%s' are missed!"), req.c_str());
 	obj = obj->childIns(pos);
     }
-    obj->setName(n_nd)->setAttr("id",reqt1)->setAttr("dscr",dscr)->setAttr("acs",TSYS::int2str(n_acs));
+    obj->setName(n_nd)->setAttr("id", reqt1)->setAttr("acs", i2s(n_acs));
+    if(dscr != EVAL_STR) obj->setAttr("dscr", dscr);
 
     //> Get addon attributes
-    if( n_attr )
+    if(n_attr)
     {
 	char *atr_id, *atr_vl;
 	va_list argptr;
 	va_start(argptr,n_attr);
-	for( int i_a = 0; i_a < n_attr; i_a++ )
+	for(int i_a = 0; i_a < n_attr; i_a++)
 	{
-	    atr_id = va_arg(argptr, char *);
-	    atr_vl = va_arg(argptr, char *);
-	    obj->setAttr(atr_id,atr_vl);
+	    atr_id = va_arg(argptr, char*);
+	    atr_vl = va_arg(argptr, char*);
+	    obj->setAttr(atr_id, atr_vl);
 	}
 	va_end(argptr);
     }
@@ -856,7 +855,7 @@ void TCntrNode::cntrCmdProc( XMLNode *opt )
 		    //>>>> Check icon
 		    XMLNode reqIco("get"); reqIco.setAttr("path","/ico")->setAttr("user",opt->attr("user"));
 		    ch.at().cntrCmdProc(&reqIco);
-		    if(icoCheck) chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
+		    if(icoCheck) chN->setAttr("icoSize", i2s(reqIco.text().size()));
 		    else chN->childAdd("ico")->setText(reqIco.text());
 		    //>>>> Process groups
 		    XMLNode brReq("info"); brReq.setAttr("path","/br")->setAttr("user",opt->attr("user"));
