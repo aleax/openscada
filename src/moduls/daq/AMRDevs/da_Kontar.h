@@ -27,6 +27,9 @@
 
 #define MaxLenReq 1024
 
+#define ROTL32(X,C) (((X)<<(C))|((X)>>(32-(C))))
+#define ROTR32(X,C) (((X)>>(C))|((X)<<(32-(C))))
+
 namespace AMRDevs
 {
 
@@ -52,10 +55,22 @@ class Kontar: public TTipParam
 	class tval
 	{
 	    public:
-		tval( )	{ }
+		//Methods
+		tval( ) : rounds(10)	{ }
 
+		// RC5 encoding
+		void rc5_encrypt( uint32_t* cdata, int blocks );
+		void rc5_decrypt( uint32_t* cdata, int blocks );
+		void rc5_key( uint8_t* key, short keylen );
+
+		//Atributes
 		XMLNode	cfg;
 		vector<SMemBlk> mBlks;	//Acquisition memory blocks for values
+
+	    private:
+		// RC5 encoding
+		uint32_t keybuf[22];
+		int	rounds;
         };
 
 	//Methods
@@ -78,18 +93,10 @@ class Kontar: public TTipParam
 
     private:
 	//Methods
-	/*void regVal( int reg );			//Register value for acquisition
-	string req( string &pdu );
-	//int64_t getValR( int addr, ResString &err );
-	void rc5_encrypt( unsigned long* cdata, int blocks );
-	void rc5_decrypt( unsigned long* cdata, int blocks );
-	void rc5_key( unsigned char* key, short keylen );
+	void regVal( TMdPrm *prm, int off, int sz );	//Register value for acquisition
 
-	//Attributes
-	int	devAddr;			//Device address
-	string	mAttrs;
-	bool	mMerge;
-	float	numReg;*/
+	///string req( string &pdu );
+	//int64_t getValR( int addr, ResString &err );
 };
 
 } //End namespace

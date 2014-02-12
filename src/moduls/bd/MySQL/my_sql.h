@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -85,7 +85,7 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( string iid, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void disable( );
@@ -103,11 +103,12 @@ class MBD : public TBD
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	string host, user, pass, bd, u_sock, cd_pg, names;
-	int    port;
+	string	host, user, pass, bd, u_sock, cd_pg, names;
+	int	port;
 
-	MYSQL  connect;
-	Res    conn_res;
+	MYSQL	connect;
+	Res	conn_res;
+	bool	notFullConn;
 };
 
 //************************************************

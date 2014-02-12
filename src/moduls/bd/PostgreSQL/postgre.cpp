@@ -1,8 +1,8 @@
 // 
 //OpenSCADA system module BD.PostgreSQL file: postgre.cpp
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko                                   *
- *   mlisenko@oscada.org                                                   *
+ *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
+ *                 2013-2014 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -121,9 +121,9 @@ void MBD::postDisable(int flag)
 	ResAlloc resource(conn_res,true);
 	PGconn * connection = NULL;
 	PGresult *res;
-        try
+	try
 	{
-            if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
+	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
 	    if(PQstatus(connection) != CONNECTION_OK)
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
@@ -153,14 +153,15 @@ void MBD::enable( )
 {
     if(enableStat())	return;
 
+    bool forceEn = false;
     int off = 0;
-    host = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
-    hostaddr = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
-    user = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
-    pass = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
-    db   = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
-    port = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
-    connect_timeout = TSYS::strNoSpace(TSYS::strSepParse(addr(),0,';',&off));
+    host = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
+    hostaddr = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
+    user = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
+    pass = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
+    db   = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
+    port = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
+    connect_timeout = (off < addr().size()) ? TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off)) : "1";
 
     conninfo.clear();
     if(host.empty() && hostaddr.empty()) host = "localhost";
@@ -184,9 +185,10 @@ nextTry:
 	    PQfinish(connection);
 	    if((connection=PQconnectdb((conninfo+"dbname=template1").c_str())) == NULL)
 		throw TError(TSYS::DBInit,nodePath().c_str(),_("Fatal error - unable to allocate connection."));
+	    TBD::enable();
+	    forceEn = true;
 	    if(PQstatus(connection) != CONNECTION_OK)
 		throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage(connection));
-	    TBD::enable();
 
 	    vector< vector<string> > tbl;
 	    sqlReq("SELECT count(*) FROM pg_catalog.pg_database WHERE datname = '"+db+"'", &tbl);
@@ -202,8 +204,11 @@ nextTry:
     }
     catch(...)
     {
-	if(connection) PQfinish(connection);
-	TBD::disable();
+	if(!forceEn)
+	{
+	    if(connection) PQfinish(connection);
+	    TBD::disable();
+	}
 	throw;
     }
 }
@@ -247,20 +252,22 @@ TTable *MBD::openTable( const string &inm, bool create )
 void MBD::transOpen( )
 {
     //> Check for limit into one trinsaction
-    if(reqCnt > 1000) transCommit( );
+    if(reqCnt > 1000) transCommit();
 
-    ResAlloc resource(conn_res,true);
+    ResAlloc resource(conn_res, true);
     PGTransactionStatusType tp;
-    tp = PQtransactionStatus( connection );
+    tp = PQtransactionStatus(connection);
 
-    if( tp != PQTRANS_INTRANS )
+    if(tp != PQTRANS_INTRANS)
     {
 	PGresult *res;
 	res = PQexec(connection, "BEGIN");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 	    PQclear(res);
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error!"));
+	    mess_warning(nodePath().c_str(),_("Start transaction error!"));
+	    return;
+	    //throw TError(TSYS::DBRequest,nodePath().c_str(),_("Start transaction error!"));
 	}
 	PQclear(res);
 	trOpenTm = SYS->sysTm();
@@ -271,17 +278,19 @@ void MBD::transOpen( )
 
 void MBD::transCommit( )
 {
-    ResAlloc resource(conn_res,true);
+    ResAlloc resource(conn_res, true);
     PGTransactionStatusType tp;
-    tp = PQtransactionStatus( connection );
-    if( tp != PQTRANS_IDLE )
+    tp = PQtransactionStatus(connection);
+    if(tp != PQTRANS_IDLE)
     {
 	PGresult *res;
 	res = PQexec(connection, "COMMIT");
 	if(!res || PQresultStatus(res) != PGRES_COMMAND_OK)
 	{
 	    PQclear(res);
-	    throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop transaction error!"));
+	    mess_warning(nodePath().c_str(),_("Stop transaction error!"));
+	    return;
+	    //throw TError(TSYS::DBRequest,nodePath().c_str(),_("Stop transaction error!"));
 	}
 	PQclear(res);
     }
@@ -291,7 +300,7 @@ void MBD::transCommit( )
 
 void MBD::transCloseCheck( )
 {
-    if( reqCnt && ((SYS->sysTm()-reqCntTm) > 10*60 || (SYS->sysTm()-trOpenTm) > 10*60 ) )
+    if(reqCnt && ((SYS->sysTm()-reqCntTm) > 10*60 || (SYS->sysTm()-trOpenTm) > 10*60))
 	transCommit();
 }
 
@@ -299,35 +308,37 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 {
     PGresult *res;
 
-    if( tbl ) tbl->clear();
-    if( !enableStat() ) return;
+    if(tbl) tbl->clear();
+    if(!enableStat()) return;
 
-    string req = Mess->codeConvOut(cd_pg.c_str(),ireq);
+    string req = Mess->codeConvOut(cd_pg.c_str(), ireq);
 
-    if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
-    else if(!intoTrans && reqCnt)		transCommit();
-
-    ResAlloc resource(conn_res,true);
-
-    if( PQstatus( connection ) != CONNECTION_OK  )
+    ResAlloc resource(conn_res, false);
+    if(PQstatus(connection) != CONNECTION_OK)
     {
 	resource.release();
 	disable();
 	enable();
-	resource.request(true);
     }
-    if( (res = PQexec(connection,req.c_str())) == NULL )
+    else resource.release();
+
+    if(intoTrans && intoTrans != EVAL_BOOL)	transOpen();
+    else if(!intoTrans && reqCnt)		transCommit();
+
+    resource.request(true);
+
+    if((res = PQexec(connection,req.c_str())) == NULL)
 	throw TError(TSYS::DBRequest,nodePath().c_str(),_("Connect to DB error: %s"),PQerrorMessage( connection ));
-    if( ( PQresultStatus( res ) != PGRES_COMMAND_OK ) && ( PQresultStatus( res ) != PGRES_TUPLES_OK ) )
+    if(PQresultStatus(res) != PGRES_COMMAND_OK && PQresultStatus(res) != PGRES_TUPLES_OK)
     {
 	string err, err1;
-	err = PQresStatus( PQresultStatus( res ));
-	err1 = PQresultErrorMessage( res );
-	PQclear( res );
+	err = PQresStatus(PQresultStatus(res));
+	err1 = PQresultErrorMessage(res);
+	PQclear(res);
 	throw TError(TSYS::DBRequest,nodePath().c_str(),_("Query to DB error: %s. %s"),err.c_str(),err1.c_str());
     }
 
-    if( tbl )
+    if(tbl)
     {
 	int num_fields = PQnfields( res );
 	int row;
@@ -390,7 +401,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
 //************************************************
 //* BDPostgreSQL::Table                          *
 //************************************************
-MTable::MTable(string name, MBD *iown, bool create ) : TTable(name)
+MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
 {
     string req;
 
@@ -509,16 +520,16 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     //> Check for no present and no empty keys allow
     if(row == 0)
     {
-        vector<string> cf_el;
-        cfg.cfgList(cf_el);
-        for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
-        {
-            TCfg &cf = cfg.cfg(cf_el[i_c]);
-            if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
-            for( ; i_fld < tblStrct.size(); i_fld++)
-                if(cf.name() == tblStrct[i_fld][0]) break;
-            if(i_fld >= tblStrct.size()) return false;
-        }
+	vector<string> cf_el;
+	cfg.cfgList(cf_el);
+	for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+	{
+	    TCfg &cf = cfg.cfg(cf_el[i_c]);
+	    if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+	    for( ; i_fld < tblStrct.size(); i_fld++)
+		if(cf.name() == tblStrct[i_fld][0]) break;
+	    if(i_fld >= tblStrct.size()) return false;
+	}
     }
 
     string sid;
@@ -657,7 +668,7 @@ void MTable::fieldSet( TConfig &cfg )
     string req_where = "WHERE ";
     //>> Add key list to query
     bool next = false;
-    for( unsigned i_el = 0; i_el < cf_el.size(); i_el++ )
+    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if( !(u_cfg.fld().flg()&TCfg::Key) ) continue;

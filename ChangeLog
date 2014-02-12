@@ -1,3 +1,13 @@
+2014-02-12 Roman
+- SYS: configure.in file renamed to configure.ac.
+- !:DB.MySQL: Allow enabling DB object at connection errors for mind the connection appear at further.
+    The default timeouts force set to 1 second.
+- !:DB.PostgreSQL: Allow enabling DB object at connection errors and the restore try for any SQL requests
+    for mind the connection appear at further.
+    The default connection timeout force set to 1 second.
+- DAQ.AMRDevs: Kontar implementing further progress for variables blocks prepare and RC5 encoding/decoding.
+
+
 2014-02-09 Roman
 - SYS: Check for EVAL into description on TCntrNode::ctrMkNode() is added, for present save. Some code clear.
 - !!:SYS.TCntrNode,DAQ.{*,AMRDevs}: Expanded for checking parameters DB name for allow fixed set (without storing the into DB field).

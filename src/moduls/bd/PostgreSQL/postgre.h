@@ -1,8 +1,8 @@
 
 //OpenSCADA system module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko                                   *
- *   mlisenko@oscada.org                                                   *
+ *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
+ *                 2013-2014 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -106,7 +106,7 @@ class MBD : public TBD
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-        string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
+	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
 	PGconn	*connection;
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;

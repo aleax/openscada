@@ -47,43 +47,34 @@ Kontar::~Kontar( )
 
 }
 
-/*void Kontar::regVal( int reg )
+void Kontar::regVal( TMdPrm *p, int off, int sz )
 {
-    if(reg < 0)	return;
+    if(off < 0)	return;
 
     //> Register to acquisition block
-    vector< SDataRec > &workCnt = acqBlks;
+    vector<SMemBlk> &wCnt = ((tval*)p->extPrms)->mBlks;
     unsigned i_b;
-    for(i_b = 0; i_b < workCnt.size(); i_b++)
+    for(i_b = 0; i_b < wCnt.size(); i_b++)
     {
-	if((reg*2) < workCnt[i_b].off)
+	if(off < wCnt[i_b].off)
 	{
-	    if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < MaxLenReq)
+	    if((wCnt[i_b].val.size()+wCnt[i_b].off-off) < MaxLenReq)
 	    {
-		workCnt[i_b].val.insert(0,workCnt[i_b].off-reg*2,0);
-		workCnt[i_b].off = reg*2;
+		wCnt[i_b].val.insert(0, wCnt[i_b].off-off, 0);
+		wCnt[i_b].off = off;
 	    }
-	    else workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
+	    else wCnt.insert(wCnt.begin()+i_b, SMemBlk(off,sz));
 	}
-	else if((reg*2+2) > (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
+	else if((off+sz) > (wCnt[i_b].off+(int)wCnt[i_b].val.size()))
 	{
-	    if((mMerge || reg*2 <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < MaxLenReq)
-	    {
-		workCnt[i_b].val.append((reg*2+2)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
-		//>> Check for allow mergin to next block
-		if(!mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+(int)workCnt[i_b].val.size()) >= workCnt[i_b+1].off)
-		{
-		    workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
-		    workCnt.erase(workCnt.begin()+i_b+1);
-		}
-	    }
+	    if((off+sz-wCnt[i_b].off) < MaxLenReq)
+		wCnt[i_b].val.append((off+sz)-(wCnt[i_b].off+wCnt[i_b].val.size()), 0);
 	    else continue;
 	}
 	break;
     }
-    if(i_b >= workCnt.size())
-	workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
-}*/
+    if(i_b >= wCnt.size()) wCnt.insert(wCnt.begin()+i_b,SMemBlk(off,sz));
+}
 
 /*int64_t Kontar::getValR( int addr, ResString &err )
 {
@@ -186,10 +177,11 @@ void Kontar::enable( TParamContr *ip )
 		else { aid += "_"+nId->text(); pNm = lsNm + ": " + _("Parameter")+nId->text(); }
 		aid = TSYS::strEncode(aid, TSYS::oscdID);
 		string pTp = (nNm=nPrm->childGet("Type",0,true)) ? nNm->text() : "Float";
-		TFld::Type tp = TFld::Real;
-		if(strcasecmp(pTp.c_str(),"int") == 0) tp = TFld::Integer;
-		else if(strcasecmp(pTp.c_str(),"bool") == 0) tp = TFld::Boolean;
-		else if(strcasecmp(pTp.c_str(),"time") == 0 || strcasecmp(pTp.c_str(),"date") == 0) tp = TFld::String;
+		TFld::Type tp = TFld::Real; int tpSz = 4;
+		if(strcasecmp(pTp.c_str(),"int") == 0)		{ tp = TFld::Integer; tpSz = 2; }
+		else if(strcasecmp(pTp.c_str(),"bool") == 0)	{ tp = TFld::Boolean; tpSz = 1; }
+		else if(strcasecmp(pTp.c_str(),"time") == 0 ||
+			strcasecmp(pTp.c_str(),"date") == 0)	{ tp = TFld::String; tpSz = 2; }
 		if(!p->els.fldPresent(aid) || p->els.fldAt(p->els.fldId(aid)).type() != tp)
 		{
 		    if(p->els.fldPresent(aid)) p->els.fldDel(p->els.fldId(aid));
@@ -198,7 +190,7 @@ void Kontar::enable( TParamContr *ip )
 		int el_id = p->els.fldId(aid);
 		p->els.fldAt(el_id).setDescr(pNm);
 		p->els.fldAt(el_id).setReserve(pTp+":"+nId->text());
-		//p->regVal(nId->text(), pTp);
+		regVal(p, atoi(nId->text().c_str()), tpSz);
 		p->als.push_back(aid);
 	    }
 	}
@@ -349,10 +341,10 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     return true;
 }
 
-/*void Kontar::rc5_encrypt( unsigned long* cdata, int blocks )
+void Kontar::tval::rc5_encrypt( uint32_t *cdata, int blocks )
 {
     int	rc;
-    unsigned long *d = cdata;
+    uint32_t *d = cdata;
     for(int h = 0; h < blocks; h++)
     {
 	d[0] += keybuf[0];
@@ -367,7 +359,7 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	    rc = d[0]&31;
 	    d[1] = ROTL32(d[1], rc);
 	    d[1] += keybuf[i+1];
-        }
+	}
 	d += 2;
     }
 
@@ -383,16 +375,16 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     }
 }
 
-void Kontar::rc5_decrypt( unsigned long* cdata, int blocks )
+void Kontar::tval::rc5_decrypt( uint32_t *cdata, int blocks )
 {
     char tmp;
     union R
     {
-	unsigned long l;
+	uint32_t l;
 	char c[4];
     }R;
 
-    unsigned long *d = cdata;
+    uint32_t *d = cdata;
     for(int h = 0, rc; h < blocks; h++)
     {
 	for(int i = rounds*2-2; i >= 0; i -= 2)
@@ -423,19 +415,19 @@ void Kontar::rc5_decrypt( unsigned long* cdata, int blocks )
 	R.c[3] = tmp;
 	tmp = R.c[1];
 	R.c[1] = R.c[2];
-    	R.c[2] = tmp;
+	R.c[2] = tmp;
 	d[1] = R.l;
 	d += 2;
     }
 }
 
-void rc5_key( unsigned char* key, short keylen )
+void Kontar::tval::rc5_key( uint8_t *key, short keylen )
 {
-    unsigned long *cp, pk[2], A, B;
-    unsigned char rc, xk_len, pk_len, i, num_steps;
+    uint32_t *cp, pk[2], A, B;
+    uint8_t rc, xk_len, pk_len, i, num_steps;
     union K
     {
-	unsigned long	l;
+	uint32_t	l;
 	char		c[4];
     }K;
 
@@ -460,8 +452,7 @@ void rc5_key( unsigned char* key, short keylen )
     for(A = B = i = 0; i < num_steps; i++)
     {
 	A = keybuf[i%xk_len] = ROTL32(keybuf[i%xk_len]+A+B, 3);
-      	rc = (A+B)&31;
+	rc = (A+B)&31;
 	B = pk[i%pk_len]=ROTL32(pk[i%pk_len]+A+B,rc);
     }
-}*/
-
+}

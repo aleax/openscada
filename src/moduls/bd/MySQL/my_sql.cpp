@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -104,7 +104,7 @@ void BDMod::load_( )
 //************************************************
 //* BDMySQL::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid,cf_el), notFullConn(false)
 {
     setAddr("localhost;root;123456;test;;;utf8");
 }
@@ -139,32 +139,38 @@ void MBD::enable( )
 {
     if(enableStat())	return;
 
-    host = TSYS::strSepParse(addr(),0,';');
-    user = TSYS::strSepParse(addr(),1,';');
-    pass = TSYS::strSepParse(addr(),2,';');
-    bd   = TSYS::strSepParse(addr(),3,';');
-    port = atoi(TSYS::strSepParse(addr(),4,';').c_str());
-    u_sock = TSYS::strSepParse(addr(),5,';');
-    names = TSYS::strSepParse(addr(),6,';');
+    //Address parse
+    int off = 0;
+    host = TSYS::strParse(addr(),0,";",&off);
+    user = TSYS::strParse(addr(),0,";",&off);
+    pass = TSYS::strParse(addr(),0,";",&off);
+    bd   = TSYS::strParse(addr(),0,";",&off);
+    port = atoi(TSYS::strParse(addr(),0,";",&off).c_str());
+    u_sock = TSYS::strParse(addr(),0,";",&off);
+    names = TSYS::strParse(addr(),0,";",&off);
+    string tms = TSYS::strParse(addr(),0,";",&off);
     cd_pg  = codePage().size()?codePage():Mess->charset();
-    string tms = TSYS::strSepParse(addr(),7,';');
 
-    if(!mysql_init(&connect))
-	throw TError(TSYS::DBInit,nodePath().c_str(),_("Error initializing client."));
-    if(!tms.empty())
-    {
-	unsigned int tTm = atoi(TSYS::strParse(tms,0,",").c_str());
-	if(tTm) mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)&tTm);
-	tTm = atoi(TSYS::strParse(tms,1,",").c_str());
-	if(tTm) mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, (const char*)&tTm);
-	tTm = atoi(TSYS::strParse(tms,2,",").c_str());
-	if(tTm) mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, (const char*)&tTm);
-    }
+    //API init
+    if(!mysql_init(&connect)) throw TError(TSYS::DBInit,nodePath().c_str(),_("Error initializing client."));
+
+    //Timeouts parse
+    off = 0;
+    unsigned int tTm;
+    if(!(tTm=atoi(TSYS::strParse(tms,0,",",&off).c_str())))	tTm = 1;
+    mysql_options(&connect, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)&tTm);
+    if(!(tTm=atoi(TSYS::strParse(tms,0,",",&off).c_str())))	tTm = 1;
+    mysql_options(&connect, MYSQL_OPT_READ_TIMEOUT, (const char*)&tTm);
+    if(!(tTm=atoi(TSYS::strParse(tms,0,",",&off).c_str())))	tTm = 1;
+    mysql_options(&connect, MYSQL_OPT_WRITE_TIMEOUT, (const char*)&tTm);
+
     connect.reconnect = 1;
+
+    TBD::enable();
+    notFullConn = true;
     if(!mysql_real_connect(&connect,host.c_str(),user.c_str(),pass.c_str(),"",port,(u_sock.size()?u_sock.c_str():NULL),CLIENT_MULTI_STATEMENTS))
 	throw TError(TSYS::DBConn,nodePath().c_str(),_("Connect to DB error: %s"),mysql_error(&connect));
-
-    TBD::enable( );
+    notFullConn = false;
 
     sqlReq("CREATE DATABASE IF NOT EXISTS `"+TSYS::strEncode(bd,TSYS::SQL)+"`");
     if(!names.empty()) sqlReq("SET NAMES '"+names+"'");
@@ -172,11 +178,11 @@ void MBD::enable( )
 
 void MBD::disable( )
 {
-    if( !enableStat() )  return;
+    if(!enableStat())  return;
 
-    TBD::disable( );
+    TBD::disable();
 
-    ResAlloc resource(conn_res,true);
+    ResAlloc resource(conn_res, true);
     mysql_close(&connect);
 }
 
@@ -186,13 +192,13 @@ void MBD::allowList( vector<string> &list )
     list.clear();
     vector< vector<string> > tbl;
     sqlReq("SHOW TABLES FROM `"+TSYS::strEncode(bd,TSYS::SQL)+"`",&tbl);
-    for( unsigned i_t = 1; i_t < tbl.size(); i_t++ )
+    for(unsigned i_t = 1; i_t < tbl.size(); i_t++)
 	list.push_back(tbl[i_t][0]);
 }
 
 TTable *MBD::openTable( const string &inm, bool create )
 {
-    if( !enableStat() )
+    if(!enableStat())
 	throw TError(TSYS::DBOpen,nodePath().c_str(),_("Error open table '%s'. DB is disabled."),inm.c_str());
 
     return new MTable(inm,this,create);
@@ -211,9 +217,10 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     int irez;
     rep:
-    if((irez = mysql_real_query(&connect,req.c_str(),req.size())))
+    if(notFullConn || (irez=mysql_real_query(&connect,req.c_str(),req.size())))
     {
-	if(irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST)
+	if(notFullConn || irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST ||
+	    mysql_errno(&connect) == CR_SERVER_GONE_ERROR || mysql_errno(&connect) == CR_CONN_HOST_ERROR)
 	{
 	    resource.release();
 	    disable();
@@ -378,17 +385,17 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
         //> Check for no present and no empty keys allow
     if(row == 0)
     {
-        vector<string> cf_el;
-        cfg.cfgList(cf_el);
+	vector<string> cf_el;
+	cfg.cfgList(cf_el);
 
-        for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
-        {
-            TCfg &cf = cfg.cfg(cf_el[i_c]);
-            if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+	for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+	{
+	    TCfg &cf = cfg.cfg(cf_el[i_c]);
+	    if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
 	    for( ; i_fld < tblStrct.size(); i_fld++)
-                if(cf.name() == tblStrct[i_fld][0]) break;
-            if(i_fld >= tblStrct.size()) return false;
-        }
+		if(cf.name() == tblStrct[i_fld][0]) break;
+	    if(i_fld >= tblStrct.size()) return false;
+	}
     }
 
     string sid;
@@ -534,7 +541,7 @@ void MTable::fieldSet( TConfig &cfg )
     for( unsigned i_el = 0; i_el < cf_el.size(); i_el++ )
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	if( !(u_cfg.fld().flg()&TCfg::Key) ) continue;
+	if(!(u_cfg.fld().flg()&TCfg::Key)) continue;
 	req_where = req_where + (next?"AND `":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "`='" + TSYS::strEncode(getVal(u_cfg),TSYS::SQL) + "' ";
 	next = true;
     }
@@ -542,9 +549,9 @@ void MTable::fieldSet( TConfig &cfg )
     //> Prepare query
     //>> Try for get already present field
     string req = "SELECT 1 FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` " + req_where;
-    try{ owner().sqlReq( req, &tbl ); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq( req ); }
-    if( tbl.size() < 2 )
+    try{ owner().sqlReq(req, &tbl); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req); }
+    if(tbl.size() < 2)
     {
 	//>> Add new record
 	req = "INSERT INTO `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` ";
