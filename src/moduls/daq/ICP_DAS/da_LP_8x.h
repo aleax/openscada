@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_LP_8x.h
 /***************************************************************************
- *   Copyright (C) 2012 by Roman Savochenko                                *
+ *   Copyright (C) 2012-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -52,38 +52,38 @@ class da_LP_8x: public DA
 
     private:
 	//Data
-        class DevFeature
-        {
-            public:
-                DevFeature( unsigned iDI, unsigned iDO = 0 ) : DI(iDI), DO(iDO)	{ }
-                DevFeature( ) : DI(0), DO(0)	{ }
+	class DevFeature
+	{
+	    public:
+		DevFeature( unsigned iDI, unsigned iDO = 0 ) : DI(iDI), DO(iDO)	{ }
+		DevFeature( ) : DI(0), DO(0)	{ }
 
-                unsigned DI;    //[mode][cnls]	0x0002  cnls*8	mode:0-DI_8(32);1-DIO_DI_8(16)
-                unsigned DO;    //[mode][cnls]  0x0002  cnls*8  mode:0-DO_8(32);1-DIO_DO_8(16)
-        };
+		unsigned DI;    //[mode][cnls]	0x0002  cnls*8	mode:0-DI_8(32);1-DIO_DI_8(16)
+		unsigned DO;    //[mode][cnls]  0x0002  cnls*8  mode:0-DO_8(32);1-DIO_DO_8(16)
+	};
 
-        class tval
-        {
-            public:
-                tval( ) : init(false), prmNum(8), fastPer(0), doVal(0)
-                { for(int ip = 0; ip < 16; ip++) cnlMode[ip] = 0; }
+	class tval
+	{
+	    public:
+		tval( ) : init(false), prmNum(8), fastPer(0), doVal(0)
+		{ for(int ip = 0; ip < 16; ip++) cnlMode[ip] = 0; }
 
 		DevFeature dev;
 
 		//> I-8017
-                bool    init;
-                char    prmNum;
-                float   fastPer;
-                char    cnlMode[16];
+		bool	init;
+		char	prmNum;
+		float	fastPer;
+		char	cnlMode[16];
 
 		uint32_t doVal; //current values for DO channels
-        };
+	};
 
 	//Methods
 	static void *fastTask( void *iprm );
 
 	//Attributes
-        map<string, DevFeature> devs;
+	map<string, DevFeature> devs;
 };
 
 } //End namespace

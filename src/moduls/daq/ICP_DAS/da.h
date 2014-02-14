@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da.h
 /***************************************************************************
- *   Copyright (C) 2012 by Roman Savochenko                                *
+ *   Copyright (C) 2012-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,7 +44,7 @@ class DA
 
 	virtual void tpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl = NULL ) = 0;
 
-	virtual void enable( TMdPrm *prm, vector<string> &als ) { }
+	virtual void enable( TMdPrm *prm, vector<string> &als )	{ }
 	virtual void disable( TMdPrm *prm )			{ }
 
 	virtual void getVal( TMdPrm *prm )			{ }

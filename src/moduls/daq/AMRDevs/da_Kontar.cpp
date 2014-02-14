@@ -91,50 +91,51 @@ void Kontar::regVal( TMdPrm *p, int off, int sz )
     return rez;
 }*/
 
-/*string Kontar::req( string &pdu )
+string Kontar::req( TMdPrm *p, string &pdu )
 {
     string mbap, err, rez;
     char buf[1000];
 
     try
     {
-	//> Connect to transport
-	AutoHD<TTransportOut> tr = SYS->transport().at().at("Serial").at().outAt(mPrm->addr());
-	if( !tr.at().startStat() ) tr.at().start();
+	//Check for output or input represented output transport
+	//????
 
-	mbap.reserve( pdu.size()+3 );
-	mbap += devAddr;		//Unit identifier
-	mbap += (devAddr>>8);	//Unit identifier
+	//Connect to output transport
+	string tAddr = p->cfg("ADDR");
+	AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(tAddr,0,".")).at().outAt(TSYS::strParse(tAddr,1,"."));
+	if(!tr.at().startStat()) tr.at().start();
+
+	mbap.reserve(pdu.size()+17);
+	mbap += string(4,0);				//???? Where the take for client
+	string sPass = p->cfg("PASS").getS(); sPass.resize(8,0);
+	mbap += sPass;					//Password
+	mbap += (char)0;				//Unused
+	uint32_t cntrN = p->cfg("PLC").getI();
+	mbap += string((char*)&cntrN,sizeof(cntrN));	//PLC number
 	mbap += pdu;
-	uint16_t crc = mod->CRC16( mbap );
-	mbap += (crc>>8);
-	mbap += crc;
 
-	ResAlloc resN( tr.at().nodeRes(), true );
-
+	ResAlloc resN(tr.at().nodeRes(), true);
 	//> Send request
-	for( int i_tr = 0; i_tr < vmax(1,vmin(10,mPrm->owner().connTry())); i_tr++ )
+	int resp_len = tr.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
+	rez.assign(buf, resp_len);
+	//> Wait tail
+	while(resp_len)
 	{
-	    int resp_len = tr.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
-	    rez.assign( buf, resp_len );
-	    //> Wait tail
-	    while(resp_len)
-	    {
-		try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-		rez.append(buf, resp_len);
-	    }
+	    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+	    rez.append(buf, resp_len);
+	}
 
-	    if( rez.size() < 3 )	{ err = _("13:Error respond: Too short."); continue; }
-	    if( mod->CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]) )
-	    { err = _("13:Error respond: CRC check error."); continue; }
-	    pdu = rez.substr( 2, rez.size()-4 );
+	if(rez.size() < 17)	err = _("13:Error respond: Too short.");
+	else
+	{
+	    pdu = rez.substr(17);
 	    err = "";
-	    break;
 	}
     }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     return err;
-}*/
+}
 
 void Kontar::create( TParamContr *ip )
 {
@@ -189,7 +190,7 @@ void Kontar::enable( TParamContr *ip )
 		}
 		int el_id = p->els.fldId(aid);
 		p->els.fldAt(el_id).setDescr(pNm);
-		p->els.fldAt(el_id).setReserve(pTp+":"+nId->text());
+		p->els.fldAt(el_id).setReserve(pTp+":"+i2s(tpSz)+":"+nId->text());
 		regVal(p, atoi(nId->text().c_str()), tpSz);
 		p->als.push_back(aid);
 	    }
@@ -224,60 +225,56 @@ bool Kontar::cfgChange( TParamContr *ip, TCfg &cfg )
     return true;
 }
 
-void Kontar::getVals( TParamContr *prm )
+void Kontar::getVals( TParamContr *ip )
 {
-    /*string pdu;
-    //> Request blocks
-    for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
+    TMdPrm *p = (TMdPrm *)ip;
+    tval *ePrm = (tval*)p->extPrms;
+
+    //Request blocks
+    string pdu;
+    for(unsigned i_b = 0; i_b < ePrm->mBlks.size(); i_b++)
     {
-	//>> Encode request PDU (Protocol Data Units)
-	pdu = (char)0x3;				//Function, read multiple registers
-	pdu += (char)((acqBlks[i_b].off/2)>>8);		//Address MSB
-	pdu += (char)(acqBlks[i_b].off/2);		//Address LSB
-	pdu += (char)((acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
-	pdu += (char)(acqBlks[i_b].val.size()/2);	//Number of registers LSB
-	//>> Request to remote server
-	acqBlks[i_b].err.setVal(modBusReq(pdu));
-	if(acqBlks[i_b].err.getVal().empty())
+	// Encode request
+	pdu = (char)0x67;				//Read memory
+	pdu += (char)0x04;				//Memory, PARAMETER
+	pdu += (char)0x00;
+	pdu += (char)(ePrm->mBlks[i_b].off>>8);		//Address MSB
+	pdu += (char)(ePrm->mBlks[i_b].off);		//Address LSB
+	pdu += (char)(ePrm->mBlks[i_b].val.size()>>8);	//Number of registers MSB
+	pdu += (char)(ePrm->mBlks[i_b].val.size());	//Number of registers LSB
+	// Request to remote server
+	ePrm->mBlks[i_b].err.setVal(req(p,pdu));
+	if(ePrm->mBlks[i_b].err.getVal().empty())
 	{
-	    if(acqBlks[i_b].val.size() != (pdu.size()-3)) acqBlks[i_b].err.setVal(_("15:Response PDU size error."));
-	    else
-	    {
-		acqBlks[i_b].val.replace(0,acqBlks[i_b].val.size(),pdu.data()+3,acqBlks[i_b].val.size());
-		numReg += acqBlks[i_b].val.size()/2;
-	    }
-	}
-	else if(atoi(acqBlks[i_b].err.getVal().c_str()) == 14)
-	{
-	    //setCntrDelay(cntr.acqBlks[i_b].err.getVal());
-	    break;
+	    if(ePrm->mBlks[i_b].val.size() != pdu.size()) ePrm->mBlks[i_b].err.setVal(_("15:Response PDU size error."));
+	    else { ePrm->mBlks[i_b].val = pdu; p->numBytes += pdu.size(); }
 	}
     }
 
-    //> Load values to attributes
-    for(unsigned i_a = 0; i_a < mPrm->p_el.fldSize(); i_a++)
+    //Load values to attributes
+    for(unsigned i_a = 0; i_a < p->els.fldSize(); i_a++)
     {
-	AutoHD<TVal> val = mPrm->vlAt(mPrm->p_el.fldAt(i_a).name());
+	AutoHD<TVal> val = p->vlAt(p->els.fldAt(i_a).name());
 	int off = 0;
-	string tp = TSYS::strSepParse(val.at().fld().reserve(),0,':',&off);
-	int aid = strtol(TSYS::strSepParse(val.at().fld().reserve(),0,':',&off).c_str(),NULL,0);
-	int vl = getValR(aid, mPrm->mErr);
-	if(tp == "F")
+	string pTp = TSYS::strParse(val.at().fld().reserve(),0,":",&off);
+	int pTpSz = atoi(TSYS::strParse(val.at().fld().reserve(),0,":",&off).c_str());
+	int aoff = strtol(TSYS::strParse(val.at().fld().reserve(),0,":",&off).c_str(),NULL,0);
+	char *dt = NULL;//getVal(aoff, pTpSz, p->mErr);
+	switch(val.at().fld().type())
 	{
-	    int vl2 = getValR(aid+1, mPrm->mErr);
-	    if(vl == EVAL_INT || vl2 == EVAL_INT) val.at().setR(EVAL_REAL,0,true);
-	    union { uint32_t i; float f; } wl;
-	    wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
-	    val.at().setR(wl.f,0,true);
+	    case TFld::Boolean:	val.at().setB(dt?*dt:EVAL_BOOL, 0, true);	break;
+	    case TFld::Integer:	val.at().setI(dt?(int16_t)TSYS::getUnalign16(dt):EVAL_INT, 0, true);	break;
+	    case TFld::Real:	val.at().setR(dt?TSYS::getUnalignFloat(dt):EVAL_REAL, 0, true);		break;
+	    case TFld::String:
+	    {
+		string vl = EVAL_STR;
+		if(dt && strcasecmp(pTp.c_str(),"time") == 0)	  vl = TSYS::strMess("%d:%d", *dt, *(dt+1));
+		else if(dt && strcasecmp(pTp.c_str(),"date") == 0)vl = TSYS::strMess("%d-%d", *dt, *(dt+1));
+		val.at().setS(vl, 0, true);
+		break;
+	    }
 	}
-	else if(tp == "LI")
-	{
-	    int vl2 = getValR(aid+1, mPrm->mErr);
-	    if(vl == EVAL_INT || vl2 == EVAL_INT) val.at().setI(EVAL_INT,0,true);
-	    val.at().setI((int)(((vl2&0xffff)<<16)|(vl&0xffff)),0,true);
-	}
-	else val.at().setI(((vl==EVAL_INT)?EVAL_INT:(int16_t)vl), 0, true);
-    }*/
+    }
 }
 
 bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )

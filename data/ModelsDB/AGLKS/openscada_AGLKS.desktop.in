@@ -6,7 +6,7 @@ Exec=env OSCADA_ProjName=AGLKS @bindir_full@/openscada_start
 Icon=openscada_AGLKS
 Name=OpenSCADA: Model "AGLKS"
 GenericName=Model "AGLKS" on open SCADA system
-Comment=Model "AGLKS" no open supervisory control and data acquisition system
+Comment=Model "AGLKS" on open supervisory control and data acquisition system
 GenericName[ru]=Модель "АГЛКС" на открытой SCADA системе
 Comment[ru]=Модель "АГЛКС" на открытой системе визуального контроля и сбора данных
 GenericName[uk]=Модель "АГЛКС" на відкритій SCADA системі

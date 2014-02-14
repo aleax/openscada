@@ -2,6 +2,7 @@
 //OpenSCADA system module DAQ.DCON file: DCON_client.h
 /***************************************************************************
  *   Copyright (C) 2008-2011 by Almaz Karimov                              *
+ *		   2008-2014 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -84,7 +85,7 @@ class TMdPrm : public TParamContr
     protected:
 	//Methods
 	bool cfgChange( TCfg &cfg );
-        void cntrCmdProc( XMLNode *opt );    //Control interface command process
+	void cntrCmdProc( XMLNode *opt );    //Control interface command process
 
     private:
 	//Methods

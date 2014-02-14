@@ -1042,7 +1042,7 @@ void TTrOut::start( )
     run_st = true;
 }
 
-void TTrOut::stop()
+void TTrOut::stop( )
 {
     ResAlloc res(nodeRes(), true);
     if(!run_st) return;
@@ -1073,8 +1073,8 @@ void TTrOut::check( )
 {
     bool reRs = false;
     bool toStop = (mMdmMode && mMdmDataMode && (reRs=nodeRes().resTryW()) && (TSYS::curTime()-mLstReqTm)/1000000 > mdmLifeTime());
-    if( reRs ) nodeRes().resRelease();
-    if( toStop ) stop();
+    if(reRs) nodeRes().resRelease();
+    if(toStop) stop();
 }
 
 int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )

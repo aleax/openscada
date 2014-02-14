@@ -68,6 +68,7 @@ class TMdPrm : public TParamContr
 	Res	rData;
 	string	mErr;
 	vector<string>	als;
+	double	numBytes;
 
     private:
 	//Methods
@@ -95,7 +96,6 @@ class TMdContr: public TController
 	int64_t	prior( )	{ return mPrior; }
 	int64_t	restTm( )	{ return mRestTm; }
 	int64_t	connTry( )	{ return mConnTry; }
-
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_ISA.h
 /***************************************************************************
- *   Copyright (C) 2012 by Roman Savochenko                                *
+ *   Copyright (C) 2012-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -56,9 +56,9 @@ class da_ISA: public DA
 	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
 
     private:
-        //Data
-        class DevFeature
-        {
+	//Data
+	class DevFeature
+	{
 	    public:
 		DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDIO = 0, unsigned iDI = 0, unsigned iDO = 0 ) :
 		    AI(iAI), AO(iAO), DIO(iDIO), DI(iDI), DO(iDO), aiTm(200)	{ }
@@ -71,16 +71,16 @@ class da_ISA: public DA
 		unsigned DO;	//[mode][cnls]	0x0002	cnls*8	mode:0-IXISA_DO_A(N);1-IXISA_DOL(H);2-IXISA_DIO_A(N)
 
 		int aiTm;	//Analog input settle timeout (us)
-        };
+	};
 
-        class tval
-        {
-            public:
-                tval( ) : devFd(-1)	{ }
+	class tval
+	{
+	    public:
+		tval( ) : devFd(-1)	{ }
 
 		int	devFd;
 		DevFeature dev;
-        };
+	};
 
 	//Attributes
 	map<string, DevFeature>	devs;

@@ -1,7 +1,8 @@
 
 //OpenSCADA system module DAQ.DCON file: DCON_client.cpp
 /***************************************************************************
- *   Copyright (C) 2008-2011 by Roman Savochenko, Almaz Karimov            *
+ *   Copyright (C) 2008-2011 by Almaz Karimov                              *
+ *		   2008-2014 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -88,7 +89,7 @@ TTpContr::TTpContr(string name) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {
 
 }
@@ -102,8 +103,8 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PERIOD",_("Gather data period (s)"),TFld::Integer,TFld::NoFlag,"6","0","0;100"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    fldAdd(new TFld("ADDR",_("Serial transport"),TFld::String,TFld::NoFlag,"41",""));
-    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","3","1;10"));
+    fldAdd(new TFld("ADDR",_("Transport"),TFld::String,TFld::NoFlag,"41",""));
+    fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
@@ -140,7 +141,7 @@ void TTpContr::load_( )
     //> Load parameters from command line
 }
 
-void TTpContr::save_()
+void TTpContr::save_( )
 {
 
 }
@@ -162,7 +163,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
     cfg("PRM_BD").setS("DCONPrm_"+name_c);
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
     if(run_st) stop();
 }
@@ -195,7 +196,7 @@ void TMdContr::load_( )
     TController::load_( );
 
     //> Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::int2str(mPerOld)); mPerOld = 0; }
+    if(mPerOld) { cfg("SCHEDULE").setS(i2s(mPerOld)); mPerOld = 0; }
 }
 
 void TMdContr::disable_( )
@@ -267,11 +268,11 @@ string TMdContr::DCONReq( string &pdu, bool CRC, unsigned acqLen, char resOK )
 	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), pdu.c_str());
 	pdu += "\r";
 
-	ResAlloc resN( tr.at().nodeRes(), true );
+	ResAlloc resN(tr.at().nodeRes(), true);
 
 	for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++)
 	{
-	    int resp_len = tr.at().messIO( pdu.data(), pdu.size(), buf, sizeof(buf), 0, true );
+	    int resp_len = tr.at().messIO(pdu.data(), pdu.size(), buf, sizeof(buf), 0, true);
 	    rez.assign(buf,resp_len);
 
 	    //> Wait tail
@@ -342,7 +343,7 @@ void *TMdContr::Task( void *icntr )
 			case 116: if(!n) n = 8;
 			    //#AA
 			    //> Request with module
-			    pdu = TSYS::strMess("#%02X",cntr.p_hd[i_p].at().mod_addr);
+			    pdu = TSYS::strMess("#%02X",(int)cntr.p_hd[i_p].at().mod_addr);
 			    m = (cntr.p_hd[i_p].at().ai_range == 0) ? 7 : 4;
 			    ai_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,(m*n+1));
 			    for(i = 0; i < n; i++)
@@ -358,7 +359,7 @@ void *TMdContr::Task( void *icntr )
 			    {
 				//^AA
 				//> Request with module
-				pdu = TSYS::strMess("^%02X",cntr.p_hd[i_p].at().mod_addr);
+				pdu = TSYS::strMess("^%02X",(int)cntr.p_hd[i_p].at().mod_addr);
 				m = (cntr.p_hd[i_p].at().ai_range == 0) ? 7 : 4;
 				ai_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
 				for(i = 0; i < n; i++)
@@ -380,8 +381,8 @@ void *TMdContr::Task( void *icntr )
 			    for(i = 0; i < n; i++)
 			    {
 				if((cntr.p_hd[i_p].at().ai_method == 210)||(cntr.p_hd[i_p].at().ai_method == 220))
-				    pdu = TSYS::strMess("#%02X%02X",cntr.p_hd[i_p].at().mod_addr,i);
-				else pdu = TSYS::strMess("#%02X%d",cntr.p_hd[i_p].at().mod_addr,i);
+				    pdu = TSYS::strMess("#%02X%02X",(int)cntr.p_hd[i_p].at().mod_addr,i);
+				else pdu = TSYS::strMess("#%02X%d",(int)cntr.p_hd[i_p].at().mod_addr,i);
 				ai_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,(m+1));
 				if(ai_txterr != "0") cntr.p_hd[i_p].at().AI[i] = EVAL_REAL;
 				else
@@ -399,7 +400,7 @@ void *TMdContr::Task( void *icntr )
 				m = (cntr.p_hd[i_p].at().ai_range == 0) ? 7 : 4;
 				for(i = 0; i < n; i++)
 				{
-				    pdu = TSYS::strMess("^%02X%d",cntr.p_hd[i_p].at().mod_addr,i);
+				    pdu = TSYS::strMess("^%02X%d",(int)cntr.p_hd[i_p].at().mod_addr,i);
 				    ai_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
 				    if(ai_txterr != "0") cntr.p_hd[i_p].at().AI[i] = EVAL_REAL;
 				    else
@@ -461,9 +462,9 @@ void *TMdContr::Task( void *icntr )
 				    default:    ao_txterr = _("23:Undefined range");    break;
 				}
 				//> Request with module
-				if(cntr.p_hd[i_p].at().ao_method == 1) pdu = TSYS::strMess("#%02X%s",cntr.p_hd[i_p].at().mod_addr,str.c_str());
-				else if (cntr.p_hd[i_p].at().ao_method == 14) pdu = TSYS::strMess("#%02XC%d%s",cntr.p_hd[i_p].at().mod_addr,i,str.c_str());
-				else pdu = TSYS::strMess("#%02X%d%s",cntr.p_hd[i_p].at().mod_addr,i,str.c_str());
+				if(cntr.p_hd[i_p].at().ao_method == 1) pdu = TSYS::strMess("#%02X%s",(int)cntr.p_hd[i_p].at().mod_addr,str.c_str());
+				else if (cntr.p_hd[i_p].at().ao_method == 14) pdu = TSYS::strMess("#%02XC%d%s",(int)cntr.p_hd[i_p].at().mod_addr,i,str.c_str());
+				else pdu = TSYS::strMess("#%02X%d%s",(int)cntr.p_hd[i_p].at().mod_addr,i,str.c_str());
 				if((ao_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 				else if(pdu.size() && pdu[0] == '?') ao_txterr = _("24:Module out of range");
 				else if(pdu.size() && pdu[0] == '!') ao_txterr = _("25:Command ignored (host watchdog).");
@@ -483,7 +484,7 @@ void *TMdContr::Task( void *icntr )
 			case 16:if(!n) n = 16;	//16DI ($AA6)
 			case 201:if(!n) n = 8;	//8DI ($AA6,FF00)
 			    //> Request with module
-			    pdu = TSYS::strMess("$%02X6",cntr.p_hd[i_p].at().mod_addr);
+			    pdu = TSYS::strMess("$%02X6",(int)cntr.p_hd[i_p].at().mod_addr);
 			    di_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,7,'!');
 			    if(di_txterr == "0") DI = strtoul(pdu.substr(1,4).c_str(),NULL,16);
 			    if(cntr.p_hd[i_p].at().di_method == 201) DI = DI>>8;
@@ -492,7 +493,7 @@ void *TMdContr::Task( void *icntr )
 			    break;
 			case 101:		//1DI (@AADI)
 			    //> Request with module
-			    pdu = TSYS::strMess("@%02XDI",cntr.p_hd[i_p].at().mod_addr);
+			    pdu = TSYS::strMess("@%02XDI",(int)cntr.p_hd[i_p].at().mod_addr);
 			    di_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,7,'!');
 			    cntr.p_hd[i_p].at().DI[0] = (di_txterr == "0") ? (char)strtoul(pdu.substr(6,2).c_str(),NULL,16) : EVAL_BOOL;
 			    break;
@@ -507,73 +508,73 @@ void *TMdContr::Task( void *icntr )
 			case 2://2DO (@AA,0300)
 			    //> Request with module
 			    code = (cntr.p_hd[i_p].at().DO[1]?2:0)+(cntr.p_hd[i_p].at().DO[0]?1:0);
-			    pdu = TSYS::strMess("@%02X%02X00",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%02X00",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 604://4DO (@AA,0F00)
 			    for(unsigned i_n = 0; i_n < 4; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%02X00",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%02X00",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 608://8DO (@AA,FF00)
 			    for(unsigned i_n = 0; i_n < 8; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%02X00",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%02X00",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 3://3DO (@AA,7)
 			    for(unsigned i_n = 0; i_n < 3; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%01X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%01X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 4://4DO (@AA,F)
 			    for(unsigned i_n = 0; i_n < 4; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%01X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%01X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 5://5DO (@AA,1F)
 			    for(unsigned i_n = 0; i_n < 5; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 7://7DO (@AA,7F)
 			    for(unsigned i_n = 0; i_n < 7; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 8://8DO (@AA,FF)
 			    for(unsigned i_n = 0; i_n < 8; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 12://12DO (@AA,0FFF)
 			    for(unsigned i_n = 0; i_n < 12; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%04X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%04X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 13://13DO (@AA,1FFF)
 			    for(unsigned i_n = 0; i_n < 13; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%04X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%04X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 16://16DO (@AA,FFFF)
 			    for(unsigned i_n = 0; i_n < 16; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02X%04X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02X%04X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    if((do_txterr=cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1)) == "0") ;
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 102://2DO (^AADOVVV)
 			    //> Request with module
-			    pdu = TSYS::strMess("^%02XDO",cntr.p_hd[i_p].at().mod_addr);
+			    pdu = TSYS::strMess("^%02XDO",(int)cntr.p_hd[i_p].at().mod_addr);
 			    pdu += cntr.p_hd[i_p].at().DO[0] ? "1" : "0";
 			    pdu += cntr.p_hd[i_p].at().DO[1] ? "1" : "0";
 			    pdu += "0";
@@ -581,7 +582,7 @@ void *TMdContr::Task( void *icntr )
 			    else if(pdu.size() && pdu[0] == '!') do_txterr = _("25:Command ignored (host watchdog).");
 			    break;
 			case 103://3DO (^AADOVVV)
-			    pdu = TSYS::strMess("^%02XDO",cntr.p_hd[i_p].at().mod_addr);
+			    pdu = TSYS::strMess("^%02XDO",(int)cntr.p_hd[i_p].at().mod_addr);
 			    pdu += cntr.p_hd[i_p].at().DO[0] ? "1" : "0";
 			    pdu += cntr.p_hd[i_p].at().DO[1] ? "1" : "0";
 			    pdu += cntr.p_hd[i_p].at().DO[2] ? "1" : "0";
@@ -596,44 +597,44 @@ void *TMdContr::Task( void *icntr )
 			    {
 				//> Request with module
 				for(unsigned i_n = 0; i_n < 2; i_n++) if(cntr.p_hd[i_p].at().DO[i_r*2+i_n]) code += (1<<i_n);
-				pdu = TSYS::strMess("@%02XDO%01X%01X",cntr.p_hd[i_p].at().mod_addr,i_r,code);
+				pdu = TSYS::strMess("@%02XDO%01X%01X",(int)cntr.p_hd[i_p].at().mod_addr,i_r,code);
 				do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3,'!');
 			    }
 			    break;
 			case 306://6DO (@AADODD)
 			    //> Request with module
 			    for(unsigned i_n = 0; i_n < 6; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02XDO%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3,'!');
 			    break;
 			case 402://2DO (@AADO0D)
 			    for(unsigned i_n = 0; i_n < 2; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("@%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02XDO%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3,'!');
 			    break;
 			case 504://4DO (@(^)AADO0D)
 			    //> Request with module
 			    code = (cntr.p_hd[i_p].at().DO[1]?2:0)+(cntr.p_hd[i_p].at().DO[0]?1:0);
-			    pdu = TSYS::strMess("@%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("@%02XDO%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3,'!');
 			    //> Request with module
 			    code = (cntr.p_hd[i_p].at().DO[3]?2:0)+(cntr.p_hd[i_p].at().DO[2]?1:0);
-			    pdu = TSYS::strMess("^%02XDO%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("^%02XDO%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,3,'!');
 			    break;
 			case 704://4DO (#AA000F)
 			    for(unsigned i_n = 0; i_n < 4; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("#%02X00%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("#%02X00%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
 			    break;
 			case 708://8DO (#AA00FF)
 			    for(unsigned i_n = 0; i_n < 8; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("#%02X00%02X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("#%02X00%02X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
 			    break;
 			case 712://12DO (#AA000FFF)
 			    for(unsigned i_n = 0; i_n < 12; i_n++) if(cntr.p_hd[i_p].at().DO[i_n]) code += (1<<i_n);
-			    pdu = TSYS::strMess("#%02X00%04X",cntr.p_hd[i_p].at().mod_addr,code);
+			    pdu = TSYS::strMess("#%02X00%04X",(int)cntr.p_hd[i_p].at().mod_addr,code);
 			    do_txterr = cntr.DCONReq(pdu,cntr.p_hd[i_p].at().crc_ctrl,1);
 			    break;
 		    }
@@ -649,7 +650,7 @@ void *TMdContr::Task( void *icntr )
 			    for(int i_n = 0; i_n < n; i_n++)
 			    {
 				//> Request with module
-				pdu = TSYS::strMess("#%02X%d",cntr.p_hd[i_p].at().mod_addr,i_n);
+				pdu = TSYS::strMess("#%02X%d",(int)cntr.p_hd[i_p].at().mod_addr,i_n);
 				if(cntr.p_hd[i_p].at().crc_ctrl) pdu += cntr.DCONCRC(pdu);
 				if((ci_txterr=cntr.DCONReq(pdu,false,cntr.p_hd[i_p].at().crc_ctrl?11:9)) == "0")
 				{
@@ -791,7 +792,7 @@ void TMdPrm::enable()
     }
     if(itCnt)
     {
-	string sai_method = TSYS::int2str(ai_method);
+	string sai_method = i2s(ai_method);
 	p_el.fldAdd(new TFld("ai_err","ai_err",TFld::String,TFld::NoWrite|TVal::DirRead,"","","","",sai_method.c_str()));
 	for(unsigned i_p = 0; i_p < itCnt; i_p++)
 	    p_el.fldAdd(new TFld(TSYS::strMess("AI%d",i_p).c_str(),TSYS::strMess("AI%d",i_p).c_str(),
@@ -826,7 +827,7 @@ void TMdPrm::enable()
     }
     if(itCnt)
     {
-	string sao_method = TSYS::int2str(ao_method);
+	string sao_method = i2s(ao_method);
 	p_el.fldAdd(new TFld("ao_err","ao_err",TFld::String,TFld::NoWrite|TVal::DirRead,"","","","",sao_method.c_str()) );
 	for(unsigned i_p = 0; i_p < itCnt; i_p++)
 	    p_el.fldAdd(new TFld(TSYS::strMess("AO%d",i_p).c_str(),TSYS::strMess("AO%d",i_p).c_str(),
@@ -848,7 +849,7 @@ void TMdPrm::enable()
     }
     if(itCnt)
     {
-	string sdi_method = TSYS::int2str(di_method);
+	string sdi_method = i2s(di_method);
 	p_el.fldAdd(new TFld("di_err","di_err",TFld::String,TFld::NoWrite|TVal::DirRead,"","","","",sdi_method.c_str()));
 	for(unsigned i_p = 0; i_p < itCnt; i_p++)
 	    p_el.fldAdd(new TFld(TSYS::strMess("DI%d",i_p).c_str(),TSYS::strMess("DI%d",i_p).c_str(),
@@ -883,7 +884,7 @@ void TMdPrm::enable()
     }
     if(itCnt)
     {
-	string sdo_method = TSYS::int2str(do_method);
+	string sdo_method = i2s(do_method);
 	p_el.fldAdd(new TFld("do_err","do_err",TFld::String,TFld::NoWrite|TVal::DirRead,"","","","",sdo_method.c_str()) );
 	for(unsigned i_p = 0; i_p < itCnt; i_p++)
 	    p_el.fldAdd(new TFld(TSYS::strMess("DO%d",i_p).c_str(),TSYS::strMess("DO%d",i_p).c_str(),
@@ -899,7 +900,7 @@ void TMdPrm::enable()
     }
     if(itCnt)
     {
-	string sci_method = TSYS::int2str(ci_method);
+	string sci_method = i2s(ci_method);
 	p_el.fldAdd(new TFld("ci_err","ci_err",TFld::String,TFld::NoWrite|TVal::DirRead,"","","","",sci_method.c_str()));
 	for(unsigned i_p = 0; i_p < itCnt; i_p++)
 	    p_el.fldAdd( new TFld(TSYS::strMess("CI%d",i_p).c_str(),TSYS::strMess("CI%d",i_p).c_str(),

@@ -1,3 +1,17 @@
+2014-02-14 Roman
+- DAQ.AMRDevs:  Kontar implementing further progress.
+- DAQ.BlockCalc: Field "VAL" size for block's IO table increased from 20 to 10000 and "LNK" from 50 to 100.
+- FIX:DAQ.{DCON,ICP_DAS}: Fix for address field type change from int(32) to int64_t and break out strMess() requests.
+    Config field "ADDR" renamed to "Transport". Default requests try set to 1.
+- !!!:DAQ.ICP_DAS: Serial requests by OpenSCADA transport is added for modules I-87k series.
+    AI types is added for module I-87017ZW.
+    FIX: DI modules of I-87k series processing fix.
+    CRC control is added to serial requests for modules I-87k series.
+    New modules I-87017ZW, I-87040W, I-87041W and extension rack I-87K9 is tested.
+    Some code clean up.
+- DAQ.MMS: Connection timeout is added. Lock connection is added for prevent twice the.
+
+
 2014-02-12 Roman
 - SYS: configure.in file renamed to configure.ac.
 - !:DB.MySQL: Allow enabling DB object at connection errors for mind the connection appear at further.

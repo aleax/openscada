@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: ICP_module.cpp
 /***************************************************************************
- *   Copyright (C) 2010-2012 by Roman Savochenko                           *
+ *   Copyright (C) 2010-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -104,7 +104,9 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
-    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::NoFlag,"2","1"));
+    fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selected,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
+	    _("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
+    fldAdd(new TFld("TR_OSCD",_("Use OpenSCADA transport"),TFld::String,TFld::NoFlag,i2s(2*atoi(OBJ_ID_SZ)+5).c_str(),TrIcpDasNm));
     fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selected,"6","115200",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
@@ -145,7 +147,7 @@ void TTpContr::daTpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl 
     tpl.clear();
     if(ntpl) ntpl->clear();
     for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
-        m_da[i_da]->tpList(prm, tpl, ntpl);
+	m_da[i_da]->tpList(prm, tpl, ntpl);
 }
 
 DA *TTpContr::daGet( TMdPrm *prm )
@@ -168,7 +170,7 @@ DA *TTpContr::daGet( TMdPrm *prm )
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	TController(name_c, daq_db, cfgelem),
 	mPrior(cfg("PRIOR").getId()), mBus(cfg("BUS").getId()),
-	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")),
+	mBaud(cfg("BAUD").getId()), connTry(cfg("REQ_TRY").getId()), mSched(cfg("SCHEDULE")), mTrOscd(cfg("TR_OSCD")),
 	mPer(100000000), prcSt(false), call_st(false), endRunReq(false), tm_gath(0), mCurSlot(-1), numReq(0), numErr(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ICPDASPrm_"+name_c);
@@ -182,13 +184,13 @@ TMdContr::~TMdContr()
 
 string TMdContr::getStatus( )
 {
-    string val = TController::getStatus( );
+    string val = TController::getStatus();
 
     if(startStat() && !redntUse())
     {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
-        if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s. Serial requests %g, errors %g. "), TSYS::time2str(tm_gath).c_str(), numReq, numErr);
     }
 
@@ -197,7 +199,7 @@ string TMdContr::getStatus( )
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
-    return new TMdPrm( name, &owner().tpPrmAt(type) );
+    return new TMdPrm(name, &owner().tpPrmAt(type));
 }
 
 void TMdContr::disable_( )
@@ -212,14 +214,21 @@ void TMdContr::start_( )
     if(mBus == 0)
     {
 	ResAlloc res(pBusRes, true);
-	if(Open_SlotAll() > 0) throw TError( nodePath().c_str(), _("Open All LP-slots error.") );
-	if(Open_Slot(9) > 0) { Close_SlotAll(); throw TError( nodePath().c_str(), _("Open LP-slot 9 error.") ); }
+	if(Open_SlotAll() > 0) throw TError(nodePath().c_str(), _("Open All LP-slots error."));
+	if(Open_Slot(9) > 0) { Close_SlotAll(); throw TError(nodePath().c_str(), _("Open LP-slot 9 error.")); }
     }
 
     try
     {
-	if(mBus >= 0 && Open_Com((mBus?mBus:1), mBus?mBaud:115200, Data8Bit, NonParity, OneStopBit) > 0)
-	    throw TError(nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1));
+	if(mBus >= 0)
+	{
+	    if(trOscd() == TrIcpDasNm)
+	    {
+		if(Open_Com((mBus?mBus:1), mBus?mBaud:115200, Data8Bit, NonParity, OneStopBit) > 0)
+		    throw TError(nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1));
+	    }
+	    else tr = SYS->transport().at().at(TSYS::strParse(trOscd(),0,".")).at().outAt(TSYS::strParse(trOscd(),1,"."));
+	}
 
 	numReq = numErr = numErrResp = 0;
 
@@ -242,7 +251,11 @@ void TMdContr::stop_( )
     SYS->taskDestroy(nodePath('.',true), &endRunReq);
 
     //tr.free();
-    if(mBus >= 0) Close_Com((mBus?mBus:1));
+    if(mBus >= 0)
+    {
+	if(trOscd() == TrIcpDasNm) Close_Com(mBus?mBus:1);
+	else tr.free();
+    }
     if(mBus == 0) { pBusRes.resRequestW(); Close_Slot(9); Close_SlotAll(); pBusRes.resRelease(); }
 }
 
@@ -250,15 +263,16 @@ bool TMdContr::cfgChange( TCfg &icfg )
 {
     TController::cfgChange(icfg);
 
-    if(icfg.name() == "BUS")
-    {
-	cfg("BAUD").setView(icfg.getI() > 0 );
-	cfg("REQ_TRY").setView(icfg.getI() >= 0);
-	if(startStat()) stop();
-    }
-    else if(icfg.name() == "BAUD" && startStat()) stop();
+    if((icfg.name() == "BUS" || icfg.name() == "BAUD") && startStat()) stop();
 
     return true;
+}
+
+string TMdContr::DCONCRC( string str )
+{
+    unsigned char CRC = 0;
+    for(unsigned i = 0; i < str.size(); i++) CRC += (unsigned char)str[i];
+    return TSYS::strMess("%02X",CRC);
 }
 
 string TMdContr::prmLP( const string &prm )
@@ -321,7 +335,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //> Watchdog timer process
-	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res( cntr.reqRes, true ); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
+	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
 
 	    cntr.prcSt = true;
 
@@ -329,32 +343,84 @@ void *TMdContr::Task( void *icntr )
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 	}
     }
-    catch( TError err )	{ mess_err( err.cat.c_str(), err.mess.c_str() ); }
+    catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
     //> Watchdog timer disable
-    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res( cntr.reqRes, true ); DisableWDT(); res.release(); }
+    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); DisableWDT(); res.release(); }
 
     cntr.prcSt = false;
 
     return NULL;
 }
 
-string TMdContr::serReq( string req, char mSlot )
+string TMdContr::serReq( string req, char mSlot, bool CRC )
 {
-    ResAlloc res( reqRes, true );
-    if(mBus == 0 && mSlot != mCurSlot) { pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
-
-    WORD wT;
-    char szReceive[255];
-
+    string err;
     numReq++;
 
+    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), req.c_str());
+
+    //Request by OpenSCADA output transport
+    if(bus() > 0 && trOscd() != TrIcpDasNm)
+    {
+	string rez;
+	try
+	{
+	    if(!tr.at().startStat()) tr.at().start();
+	    if(CRC) req += DCONCRC(req);
+	    req += "\r";
+	    char buf[1000];
+
+	    ResAlloc resN(tr.at().nodeRes(), true);
+	    for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++)
+	    {
+		int resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf), 0, true);
+		rez.assign(buf, resp_len);
+		// Wait tail
+		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r'))
+		{
+		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
+		    rez.append(buf, resp_len);
+		}
+		if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
+		rez = rez.substr(0,rez.size()-1);
+		if(CRC)
+		{
+		    if(strtol(rez.substr(rez.size()-2).c_str(),NULL,16) != strtol(DCONCRC(rez.substr(0,rez.size()-2)).c_str(),NULL,16))
+		    { err = _("21:Invalid module CRC."); continue; }
+		    rez = rez.substr(0,rez.size()-2);
+		}
+
+		if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("RESP -> '%s'"), rez.c_str());
+
+		return rez;
+	    }
+	} catch(TError er) { err = "10:" + er.mess; }
+
+	if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("ERR -> '%s': %s"), rez.c_str(), err.c_str());
+
+	numErr++;
+	return "";
+    }
+
+    //Request by ICP DAS serial API
+    ResAlloc res(reqRes, true);
+    if(mBus == 0 && mSlot != mCurSlot) { pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
+
+    WORD wT, rez;
+    char szReceive[255]; szReceive[0] = 0;
+
     for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++)
-	if(!Send_Receive_Cmd(mBus?mBus:1,(char*)req.c_str(),szReceive,1,0,&wT))
+	if(!(rez=Send_Receive_Cmd(mBus?mBus:1,(char*)req.c_str(),szReceive,1,CRC,&wT)))
+	{
+	    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("RESP -> '%s'"), szReceive);
 	    return szReceive;
+	}
+	else err = TSYS::strMess(_("13:Send_Receive_Cmd() error: %d."), rez);
+
+    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("ERR -> '%s': %s"), szReceive, err.c_str());
 
     numErr++;
-
     return "";
 }
 
@@ -365,19 +431,29 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/LP_PRMS");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-            "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",cfg("BUS").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
-	    "sel_id","-1;0;1;2;3;4;5;6;7;8;9;10",
-            "sel_list",_("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10"));
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	if(mBus <= 0) ctrRemoveNode(opt,"/cntr/cfg/TR_OSCD");
+	else ctrMkNode("fld",opt,-1,"/cntr/cfg/TR_OSCD",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","select","select","/cntr/cfg/trLst");
+	if(mBus <= 0 || trOscd() != TrIcpDasNm) ctrRemoveNode(opt,"/cntr/cfg/BAUD");
+	if(mBus < 0) ctrRemoveNode(opt,"/cntr/cfg/REQ_TRY");
 	if(mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC"))
 	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(mBus == 0 && a_path == "/LPcfg/wTm")
+    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
+    {
+        vector<string> sls;
+        opt->childAdd("el")->setText(TrIcpDasNm);
+        SYS->transport().at().outTrList(sls);
+        for(unsigned i_s = 0; i_s < sls.size(); i_s++)
+            opt->childAdd("el")->setText(sls[i_s]);
+    }
+    else if(mBus == 0 && a_path == "/LPcfg/wTm")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prmLP("wTm"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setPrmLP("wTm",opt->text());
@@ -426,13 +502,13 @@ void TMdPrm::enable( )
     //> Check for delete DAQ parameter's attributes
     for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
     {
-        unsigned i_l;
-        for(i_l = 0; i_l < als.size(); i_l++)
-            if(p_el.fldAt(i_p).name() == als[i_l])
-                break;
-        if(i_l >= als.size())
-            try{ p_el.fldDel(i_p); i_p--; }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(p_el.fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try{ p_el.fldDel(i_p); i_p--; }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     owner().prmEn(id(), true);
@@ -578,10 +654,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/MOD_PRMS");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",cfg("MOD_TP").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",EVAL_STR,(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,
 	    "dest","select","select","/prm/cfg/modLst");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",cfg("MOD_SLOT").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_ADDR",cfg("MOD_ADDR").fld().descr(),(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_SLOT",EVAL_STR,(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_ADDR",EVAL_STR,(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID);
 	if(owner().mBus != 0) ctrRemoveNode(opt, "/prm/cfg/MOD_SLOT");
 	if(owner().mBus <= 0) ctrRemoveNode(opt, "/prm/cfg/MOD_ADDR");
 	if(da) da->cntrCmdProc(this,opt);

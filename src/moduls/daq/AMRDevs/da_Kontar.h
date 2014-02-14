@@ -95,7 +95,7 @@ class Kontar: public TTipParam
 	//Methods
 	void regVal( TMdPrm *prm, int off, int sz );	//Register value for acquisition
 
-	///string req( string &pdu );
+	string req( TMdPrm *prm, string &pdu );
 	//int64_t getValR( int addr, ResString &err );
 };
 

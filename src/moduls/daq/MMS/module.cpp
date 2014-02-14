@@ -95,6 +95,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
+    fldAdd(new TFld("CON_TM",_("Connect timeout (ms)"),TFld::Integer,TFld::NoFlag,"4","1000","0;10000"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
@@ -150,12 +151,12 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(tmDelay > -1)
-        {
-            rez += TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
-            rez.replace(0, 1, "10");
-        }
-        else
-        {
+	{
+	    rez += TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
+	    rez.replace(0, 1, "10");
+	}
+	else
+	{
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -172,7 +173,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::enable_( )
 {
-    try{ connectServer(); }
+    try { connectServer(); }
     catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 }
 
@@ -206,7 +207,9 @@ void TMdContr::connectServer( )
 {
     if(con) disconnectServer();
 
+    ResAlloc res(nodeRes(), true);
     con = MmsConnection_create();
+    MmsConnection_setRequestTimeout(con, cfg("CON_TM").getI());
     MmsError mmsError;
     bool rez = MmsConnection_connect(con, &mmsError, (char*)TSYS::strParse(addr(),0,":").c_str(), atoi(TSYS::strParse(addr(),1,":").c_str()));
     if(!rez)
@@ -221,6 +224,7 @@ void TMdContr::disconnectServer( )
 {
     if(!con)	return;
 
+    ResAlloc res(nodeRes(), true);
     MmsConnection_destroy(con);
     con = NULL;
 }
@@ -335,12 +339,12 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     //> Get page info
     if(opt->name() == "info")
     {
-        TController::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-            "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",mAddr.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-        return;
+	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");

@@ -189,7 +189,7 @@ void TMdContr::start_( )
     if(prc_st) return;
 
     //> Establish connection
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
     try { tr.at().start(); }
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
@@ -665,7 +665,7 @@ bool TMdContr::setValC( char val, int addr, ResString &err )
 
 string TMdContr::modBusReq( string &pdu )
 {
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strSepParse(addr(),0,'.')).at().outAt(TSYS::strSepParse(addr(),1,'.'));
+    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
 
     XMLNode req(mPrt);
     req.setAttr("id", id())->

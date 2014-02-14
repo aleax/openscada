@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_87x.h
 /***************************************************************************
- *   Copyright (C) 2012 by Roman Savochenko                                *
+ *   Copyright (C) 2012-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,29 +33,29 @@ namespace ICP_DAS_DAQ
 class da_87x: public DA
 {
     public:
-        //Data
-        class DevFeature
-        {
-            public:
-                DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDI = 0, unsigned iDO = 0, unsigned iCNTR = 0 ) :
-                    AI(iAI), AO(iAO), DI(iDI), DO(iDO), CNTR(iCNTR)	{ }
-                DevFeature( ) : AI(0), AO(0), DI(0), DO(0), CNTR(0)	{ }
+	//Data
+	class DevFeature
+	{
+	    public:
+		DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDI = 0, unsigned iDO = 0, unsigned iCNTR = 0 ) :
+		    AI(iAI), AO(iAO), DI(iDI), DO(iDO), CNTR(iCNTR)	{ }
+		DevFeature( ) : AI(0), AO(0), DI(0), DO(0), CNTR(0)	{ }
 
-                unsigned AI;    //[mode][cnls]	0x0108	mode:0-#AA;1-$AA3,#AA
-                unsigned AO;    //[cnls]        2	#AAN(Data),~AA0-5
-                unsigned DI;    //[mode][cnls]  0x0002  mode:0-@AA(cnls*8);1-@AADI(cnls*8)
-                unsigned DO;    //[mode][cnls]  0x0002  mode:0-@AA(Data)(cnls*8);1-@AADODD(cnls*8)
-                unsigned CNTR;	//[cntrs]	8	#AAN
+		unsigned AI;	//[mode][cnls]	0x0108	mode:0-#AA;1-$AA3,#AA
+		unsigned AO;	//[cnls]	2	#AAN(Data),~AA0-5
+		unsigned DI;	//[mode][cnls]	0x0002	mode:0-@AA(cnls*8);1-@AADI(cnls*8)
+		unsigned DO;	//[mode][cnls]	0x0002	mode:0-@AA(Data)(cnls*8);1-@AADODD(cnls*8)
+		unsigned CNTR;	//[cntrs]	8	#AAN
 
 		string	aiTypes;
-        };
+	};
 
-        class tval
-        {
-            public:
-                tval( ) : doVal(0)	{ }
+	class tval
+	{
+	    public:
+		tval( ) : doVal(0)	{ }
 
-                DevFeature dev;
+		DevFeature dev;
 		uint32_t doVal;	//current values for DO channels
         };
 
@@ -79,8 +79,8 @@ class da_87x: public DA
 	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
 
 
-        //Attributes
-        map<string, DevFeature> devs;
+	//Attributes
+	map<string, DevFeature> devs;
 };
 
 } //End namespace

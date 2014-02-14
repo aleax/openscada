@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.ICP_DAS file: da_LP_8x.cpp
 /***************************************************************************
- *   Copyright (C) 2012 by Roman Savochenko                                *
+ *   Copyright (C) 2012-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -75,8 +75,8 @@ void da_LP_8x::tpList( TMdPrm *p, vector<string> &tpl, vector<string> *ntpl )
     if(p->owner().bus() != 0)	return;
     for(map<string, DevFeature>::iterator i_d = devs.begin(); i_d != devs.end(); i_d++)
     {
-        tpl.push_back(i_d->first);
-        if(ntpl) ntpl->push_back(i_d->first);
+	tpl.push_back(i_d->first);
+	if(ntpl) ntpl->push_back(i_d->first);
     }
 }
 
@@ -90,58 +90,58 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
 
     if(p->modTp.getS() == "LP-8xxx")		//> Individual LP-8xxx processing
     {
-        p->p_el.fldAdd(new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite)); als.push_back("serial");
-        p->p_el.fldAdd(new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite)); als.push_back("SDK");
-        p->p_el.fldAdd(new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite)); als.push_back("DIP");
+	p->p_el.fldAdd(new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite)); als.push_back("serial");
+	p->p_el.fldAdd(new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite)); als.push_back("SDK");
+	p->p_el.fldAdd(new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite)); als.push_back("DIP");
     }
     else if(p->modTp.getS() == "I-8017")	//> Individual I-8017 processing
     {
-        ePrm->prmNum = vmin(8,vmax(0,atoi(p->modPrm("cnls","8").c_str())));
-        ePrm->fastPer = atof(p->modPrm("fastPer").c_str());
-        for(int i_i = 0; i_i < 16; i_i++)
-        {
-            ePrm->cnlMode[i_i] = atoi(p->modPrm(TSYS::strMess("cnl:%d",i_i)).c_str());
-            chnId = TSYS::strMess("ai%d",i_i); chnNm = TSYS::strMess(_("Input %d"),i_i);
-            p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
-            if(i_i < 8)
-            {
+	ePrm->prmNum = vmin(8,vmax(0,atoi(p->modPrm("cnls","8").c_str())));
+	ePrm->fastPer = atof(p->modPrm("fastPer").c_str());
+	for(int i_i = 0; i_i < 16; i_i++)
+	{
+	    ePrm->cnlMode[i_i] = atoi(p->modPrm(TSYS::strMess("cnl:%d",i_i)).c_str());
+	    chnId = TSYS::strMess("ai%d",i_i); chnNm = TSYS::strMess(_("Input %d"),i_i);
+	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite)); als.push_back(chnId);
+	    if(i_i < 8)
+	    {
 		chnId = TSYS::strMess("ha%d",i_i); chnNm = TSYS::strMess(_("H/A %d"),i_i);
-        	p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
+		p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
 		chnId = TSYS::strMess("la%d",i_i); chnNm = TSYS::strMess(_("L/A %d"),i_i);
-        	p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
+		p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite)); als.push_back(chnId);
 	    }
-        }
+	}
     }
     else if(p->modTp.getS() == "I-8024")	//> Individual I-8024 processing
-        for(int i_o = 0; i_o < 8; i_o++)
-        {
-            chnId = TSYS::strMess("ao%d",i_o); chnNm = TSYS::strMess(_("Output %d"),i_o);
-            p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite)); als.push_back(chnId);
+	for(int i_o = 0; i_o < 8; i_o++)
+	{
+	    chnId = TSYS::strMess("ao%d",i_o); chnNm = TSYS::strMess(_("Output %d"),i_o);
+	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite)); als.push_back(chnId);
 	}
     //> Other typical modules processing
     else
 	//> DI and DO processing
 	for(unsigned i_ch = 0; i_ch < ((ePrm->dev.DI&0xFF)+(ePrm->dev.DO&0xFF)); i_ch++)
 	{
-    	    //> Reverse configuration load
-    	    p->dInOutRev[i_ch] = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
+	    //> Reverse configuration load
+	    p->dInOutRev[i_ch] = atoi(p->modPrm("dIORev"+i2s(i_ch)).c_str());
 
-    	    //> Attributes create
-    	    if(i_ch < (ePrm->dev.DI&0xFF))
-        	for(int i_i = 0; i_i < 8; i_i++)
-        	{
-            	    chnId = TSYS::strMess("di%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
-            	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
-            	    als.push_back(chnId);
-        	}
-    	    else
-        	for(int i_o = 0; i_o < 8; i_o++)
-        	{
-            	    chnId = TSYS::strMess("do%d_%d",i_ch-(ePrm->dev.DI&0xFF),i_o);
-            	    chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch-(ePrm->dev.DI&0xFF),i_o);
-            	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
-            	    als.push_back(chnId);
-        	}
+	    //> Attributes create
+	    if(i_ch < (ePrm->dev.DI&0xFF))
+		for(int i_i = 0; i_i < 8; i_i++)
+		{
+		    chnId = TSYS::strMess("di%d_%d",i_ch,i_i); chnNm = TSYS::strMess(_("Digital input %d.%d"),i_ch,i_i);
+		    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite));
+		    als.push_back(chnId);
+		}
+	    else
+		for(int i_o = 0; i_o < 8; i_o++)
+		{
+		    chnId = TSYS::strMess("do%d_%d",i_ch-(ePrm->dev.DI&0xFF),i_o);
+		    chnNm = TSYS::strMess(_("Digital out %d.%d"),i_ch-(ePrm->dev.DI&0xFF),i_o);
+		    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite));
+		    als.push_back(chnId);
+		}
 	}
 }
 
@@ -161,41 +161,41 @@ void da_LP_8x::getVal( TMdPrm *p )
 
     if(p->modTp.getS() == "LP-8xxx")	//> Individual LP-8xxx processing
     {
-        //> Read serial number
-        AutoHD<TVal> vl = p->vlAt("serial");
-        if(vl.at().getS() == EVAL_STR)
-        {
-            ResAlloc res(p->owner().reqRes, true);
-            unsigned char sN[8];
-            Read_SN(sN);
-            res.release();
-            vl.at().setS( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]), 0, true );
-        }
-        //> Read SDK version
-        vl = p->vlAt("SDK");
-        if(vl.at().getR() == EVAL_REAL) vl.at().setR(GetSDKversion(), 0, true);
+	//> Read serial number
+	AutoHD<TVal> vl = p->vlAt("serial");
+	if(vl.at().getS() == EVAL_STR)
+	{
+	    ResAlloc res(p->owner().reqRes, true);
+	    unsigned char sN[8];
+	    Read_SN(sN);
+	    res.release();
+	    vl.at().setS( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]), 0, true );
+	}
+	//> Read SDK version
+	vl = p->vlAt("SDK");
+	if(vl.at().getR() == EVAL_REAL) vl.at().setR(GetSDKversion(), 0, true);
 
-        //> Read DIP switch status
-        p->owner().pBusRes.resRequestW();
-        int dpSw = GetDIPswitch();
-        p->owner().pBusRes.resRelease();
-        p->vlAt("DIP").at().setI(dpSw,0,true);
+	//> Read DIP switch status
+	p->owner().pBusRes.resRequestW();
+	int dpSw = GetDIPswitch();
+	p->owner().pBusRes.resRelease();
+	p->vlAt("DIP").at().setI(dpSw,0,true);
     }
     else if(p->modTp.getS() == "I-8017")//> Individual I-8017 processing
     {
-        //> Check for I8017 init
-        if(!ePrm->init)	{ p->owner().pBusRes.resRequestW(); I8017_Init(p->modSlot); ePrm->init = true; p->owner().pBusRes.resRelease(); }
-        //> Check for I8017 fast task start
-        if(ePrm->fastPer && !p->prcSt) SYS->taskCreate(p->nodePath('.',true), 32, fastTask, p);
-        //> Get values direct
-        for(int i_v = 0; i_v < 16; i_v++)
-            if(i_v >= ePrm->prmNum) p->vlAt(TSYS::strMess("ai%d",i_v)).at().setR(EVAL_REAL,0,true);
-            else if(!ePrm->fastPer)
-            {
-                ResAlloc res(p->owner().pBusRes, true);
-                I8017_SetChannelGainMode(p->modSlot, i_v, ePrm->cnlMode[i_v], 0);
-                p->vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(p->modSlot), 0, true );
-            }
+	//> Check for I8017 init
+	if(!ePrm->init)	{ p->owner().pBusRes.resRequestW(); I8017_Init(p->modSlot); ePrm->init = true; p->owner().pBusRes.resRelease(); }
+	//> Check for I8017 fast task start
+	if(ePrm->fastPer && !p->prcSt) SYS->taskCreate(p->nodePath('.',true), 32, fastTask, p);
+	//> Get values direct
+	for(int i_v = 0; i_v < 16; i_v++)
+	    if(i_v >= ePrm->prmNum) p->vlAt(TSYS::strMess("ai%d",i_v)).at().setR(EVAL_REAL,0,true);
+	    else if(!ePrm->fastPer)
+	    {
+		ResAlloc res(p->owner().pBusRes, true);
+		I8017_SetChannelGainMode(p->modSlot, i_v, ePrm->cnlMode[i_v], 0);
+		p->vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(p->modSlot), 0, true );
+	    }
     }
     //> Other typical modules processing
     //>> DI
@@ -275,22 +275,22 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 
     if(p->modTp.getS() == "I-8017")	//> Individual I-8017 processing
     {
-        bool ha = (valo.name().substr(0,2) == "ha");
-        bool la = (valo.name().substr(0,2) == "la");
-        if(!(ha||la) || !ePrm->init) return;
+	bool ha = (valo.name().substr(0,2) == "ha");
+	bool la = (valo.name().substr(0,2) == "la");
+	if(!(ha||la) || !ePrm->init) return;
 
-        //> Create previous value
-        int hvl = 0, lvl = 0;
-        for(int i_v = 7; i_v >= 0; i_v--)
-        {
-            hvl = hvl << 1;
-            lvl = lvl << 1;
-            if(p->vlAt(TSYS::strMess("ha%d",i_v)).at().getB(0, true) == true) hvl |= 1;
-            if(p->vlAt(TSYS::strMess("la%d",i_v)).at().getB(0, true) == true) lvl |= 1;
-        }
-        p->owner().pBusRes.resRequestW(1000);
-        I8017_SetLed(p->modSlot,(lvl<<8)|hvl);
-        p->owner().pBusRes.resRelease();
+	//> Create previous value
+	int hvl = 0, lvl = 0;
+	for(int i_v = 7; i_v >= 0; i_v--)
+	{
+	    hvl = hvl << 1;
+	    lvl = lvl << 1;
+	    if(p->vlAt(TSYS::strMess("ha%d",i_v)).at().getB(0, true) == true) hvl |= 1;
+	    if(p->vlAt(TSYS::strMess("la%d",i_v)).at().getB(0, true) == true) lvl |= 1;
+	}
+	p->owner().pBusRes.resRequestW(1000);
+	I8017_SetLed(p->modSlot,(lvl<<8)|hvl);
+	p->owner().pBusRes.resRelease();
     }
     else if(p->modTp.getS() == "I-8024")	//> Individual I-8024 processing
     {
@@ -303,22 +303,22 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     else if(valo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
     {
 	uint32_t val = ePrm->doVal;
-        int i_ch = 0, i_p = 0;
-        if(sscanf(valo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
-        if((int)valo.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))  val |= 1<<((i_ch*8)+i_p);
-        else val &= ~(1<<((i_ch*8)+i_p));
-        ePrm->doVal = val;
-        /*for(int i_ch = (ePrm->dev.DO&0xFF)-1; i_ch >= 0; i_ch--)
-        {
-            for(int i_o = 7; i_o >= 0; i_o--)
-            {
-                val = val << 1;
-                if(p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_o)).at().getB(0, true)) val |= 1;
-            }
-            val ^= p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch];
-        }*/
+	int i_ch = 0, i_p = 0;
+	if(sscanf(valo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
+	if((int)valo.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))  val |= 1<<((i_ch*8)+i_p);
+	else val &= ~(1<<((i_ch*8)+i_p));
+	ePrm->doVal = val;
+	/*for(int i_ch = (ePrm->dev.DO&0xFF)-1; i_ch >= 0; i_ch--)
+	{
+	    for(int i_o = 7; i_o >= 0; i_o--)
+	    {
+		val = val << 1;
+		if(p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_o)).at().getB(0, true)) val |= 1;
+	    }
+	    val ^= p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch];
+	}*/
 
-        p->owner().pBusRes.resRequestW(1000);
+	p->owner().pBusRes.resRequestW(1000);
 	switch(ePrm->dev.DO>>8)
 	{
 	    case 0:	//DO_8(32)
@@ -342,13 +342,13 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 
     /*else if(p->modTp.getS() == "I-8042")
     {
-        bool vl = valo.getB(0,true);
-        if(vl == EVAL_BOOL || vl == pvl.getB()) return;
-        int chnl = atoi(valo.name().c_str()+1);
+	bool vl = valo.getB(0,true);
+	if(vl == EVAL_BOOL || vl == pvl.getB()) return;
+	int chnl = atoi(valo.name().c_str()+1);
 
-        p->owner().pBusRes.resRequestW(1000);
-        DO_16(p->modSlot, ((vl^(p->dInOutRev[1]>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));
-        p->owner().pBusRes.resRelease();
+	p->owner().pBusRes.resRequestW(1000);
+	DO_16(p->modSlot, ((vl^(p->dInOutRev[1]>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));
+	p->owner().pBusRes.resRelease();
     }*/
 }
 
@@ -362,26 +362,26 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	if(p->modTp.getS() == "LP-8xxx") p->ctrRemoveNode(opt, "/prm/cfg/MOD_SLOT");
 	//> Individual I-8017 processing
 	if(p->modTp.getS() == "I-8017" && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
-        {
-            p->ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
-            p->ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,2,"tp","real","help",_("Use 0 for disable"));
-            if(p->ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")))
-                for(int i_v = 0; i_v < 16; i_v++)
-                    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),
-                	RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
-                	"sel_id","0;1;2;3;4",
-                	"sel_list",_("-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with 125 ohms resistor)"));
-        }
+	{
+	    p->ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
+	    p->ctrMkNode("fld",opt,-1,"/cfg/fastPer",_("Fast data get period (s)"),RWRWR_,"root",SDAQ_ID,2,"tp","real","help",_("Use 0 for disable"));
+	    if(p->ctrMkNode("area",opt,-1,"/cfg/mode",_("Mode")))
+		for(int i_v = 0; i_v < 16; i_v++)
+		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/mode/in%d",i_v).c_str(),TSYS::strMess(_("Input %d"),i_v).c_str(),
+			RWRWR_,"root",SDAQ_ID,4,"tp","dec","dest","select",
+			"sel_id","0;1;2;3;4",
+			"sel_list",_("-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with 125 ohms resistor)"));
+	}
 	//>> DI and DO processing
-        else if((dev.DI || dev.DO) && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
-        {
-            for(unsigned i_ch = 0; i_ch < ((dev.DI&0xFF)+(dev.DO&0xFF)); i_ch++)
-                for(unsigned i_n = 0; i_n < 8; i_n++)
-                    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(), (i_n==0) ?
-                        ((i_ch < (dev.DI&0xFF)) ? TSYS::strMess(_("DI %d reverse"),i_ch).c_str() :
-                                                 TSYS::strMess(_("DO %d reverse"),i_ch-(dev.DI&0xFF)).c_str()) : "",
-                        p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-        }
+	else if((dev.DI || dev.DO) && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
+	{
+	    for(unsigned i_ch = 0; i_ch < ((dev.DI&0xFF)+(dev.DO&0xFF)); i_ch++)
+		for(unsigned i_n = 0; i_n < 8; i_n++)
+		    p->ctrMkNode("fld",opt,-1,TSYS::strMess("/cfg/nRevs%d_%d",i_ch,i_n).c_str(), (i_n==0) ?
+			((i_ch < (dev.DI&0xFF)) ? TSYS::strMess(_("DI %d reverse"),i_ch).c_str() :
+						  TSYS::strMess(_("DO %d reverse"),i_ch-(dev.DI&0xFF)).c_str()) : "",
+			p->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+	}
 
 	return true;
     }
@@ -392,35 +392,35 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     {
 	if(a_path == "/cfg/prms" )
 	{
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(ePrm?TSYS::int2str(ePrm->prmNum):p->modPrm("cnls","8"));
-    	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-    		ePrm ? p->setModPrm("cnls",TSYS::int2str(ePrm->prmNum = atoi(opt->text().c_str()))) : p->setModPrm("cnls",opt->text());
+	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(ePrm?i2s(ePrm->prmNum):p->modPrm("cnls","8"));
+	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+		ePrm ? p->setModPrm("cnls",i2s(ePrm->prmNum = atoi(opt->text().c_str()))) : p->setModPrm("cnls",opt->text());
 	}
 	else if(a_path == "/cfg/fastPer")
 	{
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(ePrm?TSYS::real2str(ePrm->fastPer,5):p->modPrm("fastPer","0"));
-    	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	ePrm ? p->setModPrm("fastPer",TSYS::real2str(ePrm->fastPer = atof(opt->text().c_str()),5)) : p->setModPrm("fastPer",opt->text());
+	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(ePrm?r2s(ePrm->fastPer,5):p->modPrm("fastPer","0"));
+	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+		ePrm ? p->setModPrm("fastPer",r2s(ePrm->fastPer = atof(opt->text().c_str()),5)) : p->setModPrm("fastPer",opt->text());
 	}
 	else if(a_path.substr(0,12) == "/cfg/mode/in")
 	{
-    	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-    		opt->setText(ePrm?TSYS::int2str(ePrm->cnlMode[atoi(a_path.substr(12).c_str())]):p->modPrm("cnl:"+a_path.substr(12),"0"));
-    	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-        	ePrm ? p->setModPrm("cnl:"+a_path.substr(12),TSYS::int2str(ePrm->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()))) :
-        	       p->setModPrm("cnl:"+a_path.substr(12),opt->text());
+	    if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
+		opt->setText(ePrm?i2s(ePrm->cnlMode[atoi(a_path.substr(12).c_str())]):p->modPrm("cnl:"+a_path.substr(12),"0"));
+	    if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+		ePrm ? p->setModPrm("cnl:"+a_path.substr(12),i2s(ePrm->cnlMode[atoi(a_path.substr(12).c_str())] = atoi(opt->text().c_str()))) :
+		       p->setModPrm("cnl:"+a_path.substr(12),opt->text());
 	}
 	else return false;
     }
     //> DI and DO processing
     if((dev.DI || dev.DO) && a_path.compare(0,10,"/cfg/nRevs") == 0)
     {
-        int i_ch = 0, i_n = 0;
-        sscanf(a_path.c_str(),"/cfg/nRevs%d_%d",&i_ch,&i_n);
-        int chVl = atoi(p->modPrm("dIORev"+TSYS::int2str(i_ch)).c_str());
-        if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
-        if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
-            p->setModPrm("dIORev"+TSYS::int2str(i_ch), TSYS::int2str(atoi(opt->text().c_str()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
+	int i_ch = 0, i_n = 0;
+	sscanf(a_path.c_str(),"/cfg/nRevs%d_%d",&i_ch,&i_n);
+	int chVl = atoi(p->modPrm("dIORev"+i2s(i_ch)).c_str());
+	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) opt->setText((chVl&(1<<i_n))?"1":"0");
+	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
+	    p->setModPrm("dIORev"+i2s(i_ch), i2s(atoi(opt->text().c_str()) ? (chVl|(1<<i_n)) : (chVl & ~(1<<i_n))));
     }
     else return false;
 

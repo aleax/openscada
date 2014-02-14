@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DCON 0.5.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-20 16:29+0200\n"
+"POT-Creation-Date: 2014-02-13 18:21+0200\n"
 "PO-Revision-Date: 2008-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -16,54 +16,70 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: DCON_client.cpp:38
 msgid "DCON client"
 msgstr "DCON клієнт"
 
+#: DCON_client.cpp:42
 msgid "Roman Savochenko, Almaz Karimov"
 msgstr "Роман Савоченко, Алмаз Каримов"
 
+#: DCON_client.cpp:43
 msgid ""
 "Allow realization of DCON client service. Supported I-7000 DCON protocol."
 msgstr ""
 "Надає реалізацію клієнтського сервісу DCON. Підтримується I-7000 DCON "
 "протокол."
 
+#: DCON_client.cpp:101
 msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
+#: DCON_client.cpp:102
 msgid "Gather data period (s)"
 msgstr "Період збору даних (с)"
 
+#: DCON_client.cpp:103
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
+#: DCON_client.cpp:104
 msgid "Gather task priority"
 msgstr "Рівень пріоритету задачі збору даних"
 
-msgid "Serial transport"
-msgstr "Послідовний транспорт"
+#: DCON_client.cpp:105
+msgid "Transport"
+msgstr "Транспорт"
 
+#: DCON_client.cpp:106
 msgid "Request tries"
 msgstr "Спроб запиту"
 
+#: DCON_client.cpp:109
 msgid "Standard"
 msgstr "Стандарт"
 
+#: DCON_client.cpp:110
 msgid "Module address"
 msgstr "Адреса модуля"
 
+#: DCON_client.cpp:111
 msgid "CRC control"
 msgstr "Контроль CRC"
 
+#: DCON_client.cpp:112
 msgid "Host signal"
 msgstr "Сигнал головного"
 
+#: DCON_client.cpp:113
 msgid "No signal;HostOK"
 msgstr "Немає сигналу;Головний у нормі"
 
+#: DCON_client.cpp:114
 msgid "AI method"
 msgstr "Метод AI"
 
+#: DCON_client.cpp:116
 msgid ""
 "No AI;1AI (#AA);2AI (#AA);3AI (#AA);4AI (#AA);6AI (#AA);8AI (#AA);10AI "
 "(#AA);20AI (#AA);16AI (#AA^AA);1AI (#AAN);2AI (#AAN);3AI (#AAN);4AI "
@@ -73,17 +89,21 @@ msgstr ""
 "(#AA);20AI (#AA);16AI (#AA^AA);1AI (#AAN);2AI (#AAN);3AI (#AAN);4AI "
 "(#AAN);6AI (#AAN);8AI (#AAN);10AI (#AANN);20AI (#AANN);16AI (#AAN^AAN)"
 
+#: DCON_client.cpp:118
 msgid "Engineer or percent;Hexadecimal (0000 FFFF);Hexadecimal (8000 7FFF)"
 msgstr ""
 "Інженерний або відсотковий;Шістнадцятковий (0000 FFFF);Шістнадцятковий (8000 "
 "7FFF)"
 
+#: DCON_client.cpp:119
 msgid "AO method"
 msgstr "Метод AO"
 
+#: DCON_client.cpp:120
 msgid "No AO;1AO (#AA);2AO (#AAN);4AO (#AAN);4AO (#AACN)"
 msgstr "Немає AO;1AO (#AA);2AO (#AAN);4AO (#AAN);4AO (#AACN)"
 
+#: DCON_client.cpp:123
 msgid ""
 "Engineer (00.000 20.000);Engineer (04.000 20.000);Engineer (00.000 10.000);"
 "Engineer (+00.000 +20.000);Engineer (+04.000 +20.000);Engineer (+00.000 "
@@ -96,9 +116,11 @@ msgstr ""
 "Інженерний (-05.000 +05.000);Відсотковий (+000.00 +100.00);Шістнадцятковий "
 "(000 FFF)"
 
+#: DCON_client.cpp:126
 msgid "DI method"
 msgstr "Метод DI"
 
+#: DCON_client.cpp:128
 msgid ""
 "No DI;3DI ($AA6);4DI ($AA6);7DI ($AA6);8DI ($AA6);14DI ($AA6);16DI "
 "($AA6);1DI (@AADI);8DI ($AA6,FF00)"
@@ -106,9 +128,11 @@ msgstr ""
 "Немає DI;3DI ($AA6);4DI ($AA6);7DI ($AA6);8DI ($AA6);14DI ($AA6);16DI "
 "($AA6);1DI (@AADI);8DI ($AA6,FF00)"
 
+#: DCON_client.cpp:129
 msgid "DO method"
 msgstr "Метод DO"
 
+#: DCON_client.cpp:131
 msgid ""
 "No DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO "
 "(@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO "
@@ -116,71 +140,94 @@ msgid ""
 "AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO "
 "(#AA000FFF)"
 msgstr ""
-"Немає DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO (@AA,7F);8DO "
-"(@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO (^AADOVVV);3DO "
-"(^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO (@AADO0D);4DO (@(^)"
-"AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO (#AA00FF);12DO "
-"(#AA000FFF)"
+"Немає DO;2DO (@AA,0300);3DO (@AA,7);4DO (@AA,F);5DO (@AA,1F);7DO "
+"(@AA,7F);8DO (@AA,FF);12DO (@AA,0FFF);13DO (@AA,1FFF);16DO (@AA,FFFF);2DO "
+"(^AADOVVV);3DO (^AADOVVV);2DO (@AADO);4DO (@AADO);6DO (@AADODD);2DO "
+"(@AADO0D);4DO (@(^)AADO0D);4DO (@AA,0F00);8DO (@AA,FF00);4DO (#AA000F);8DO "
+"(#AA00FF);12DO (#AA000FFF)"
 
+#: DCON_client.cpp:134
 msgid "CI method"
 msgstr "Метод CI"
 
+#: DCON_client.cpp:135
 msgid "No CI;2CI (#AA);3CI (#AA)"
 msgstr "Немає CI;2CI (#AA);3CI (#AA)"
 
+#: DCON_client.cpp:176
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
+#: DCON_client.cpp:177
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
+#: DCON_client.cpp:178
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
+#: DCON_client.cpp:179
 #, c-format
 msgid "Spent time: %s. "
 msgstr "Витрачено часу: %s. "
 
+#: DCON_client.cpp:267
 #, c-format
 msgid "REQ -> '%s'"
 msgstr "Запит -> '%s'"
 
+#: DCON_client.cpp:283
 msgid "13:Error respond: Not full."
 msgstr "13:Помилка відповіді: Не повна."
 
+#: DCON_client.cpp:285 DCON_client.cpp:291
 msgid "20:Respond length error."
 msgstr "20:Помилка довжини пакету модуля."
 
+#: DCON_client.cpp:287 DCON_client.cpp:660
 msgid "21:Invalid module CRC."
 msgstr "21:Помилка контрольної суми."
 
+#: DCON_client.cpp:290
 msgid "22:Invalid module response."
 msgstr "22:Помилка відповіді модуля."
 
+#: DCON_client.cpp:294
 #, c-format
 msgid "RESP -> '%s'"
 msgstr "Відпов. -> '%s'"
 
+#: DCON_client.cpp:299
 msgid "10:Transport error: "
 msgstr "10:Помилка транспорту: "
 
+#: DCON_client.cpp:303
 #, c-format
 msgid "ERR -> '%s': %s"
 msgstr "Помилка -> '%s': %s"
 
+#: DCON_client.cpp:461
 msgid "23:Undefined range"
 msgstr "23:Невизначений діапазон"
 
+#: DCON_client.cpp:468
 msgid "24:Module out of range"
 msgstr "24:Вихід за межі діапазону у модулі"
 
+#: DCON_client.cpp:469 DCON_client.cpp:512 DCON_client.cpp:518
+#: DCON_client.cpp:524 DCON_client.cpp:530 DCON_client.cpp:536
+#: DCON_client.cpp:542 DCON_client.cpp:548 DCON_client.cpp:554
+#: DCON_client.cpp:560 DCON_client.cpp:566 DCON_client.cpp:572
+#: DCON_client.cpp:581 DCON_client.cpp:589
 msgid "25:Command ignored (host watchdog)."
 msgstr "25:Команду ігноровано (сторожовий таймер)."
 
+#: DCON_client.cpp:933
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
+#: DCON_client.cpp:934
 msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."

@@ -277,7 +277,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr")
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), numBytes(0)
 {
 
 }
@@ -296,6 +296,7 @@ void TMdPrm::enable( )
 {
     if(enableStat())	return;
 
+    numBytes = 0;
     als.clear();
     TParamContr::enable();
 
