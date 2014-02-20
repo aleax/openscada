@@ -2067,12 +2067,13 @@ nextReq:
     if(rba.size() <= 0) return holdConn;
     string rb, out;
     off = 4;
-    mSz = iNu(rba, off, 4);
-    if(rba.size() < 8 || rba.size() < mSz) return false;
-    rb = rba.substr(0, mSz);
 
     try
     {
+	mSz = iNu(rba, off, 4);
+	if(rba.size() < 8 || rba.size() < mSz) return false;
+	rb = rba.substr(0, mSz);
+
 	//> Check for hello message type
 	if(rb.compare(0,4,"HELF") == 0)
 	{
