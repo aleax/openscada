@@ -517,8 +517,8 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
     if(n_e)
     {
 	if(flg()&TFld::Selected)
-	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest","select")->
-		setAttr("sel_list",selNames());
+	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest",(flg()&TFld::SelEdit)?"sel_ed":"select")->
+		setAttr("sel_id",values())->setAttr("sel_list",selNames());
 	else switch(type())
 	{
 	    case TFld::String:

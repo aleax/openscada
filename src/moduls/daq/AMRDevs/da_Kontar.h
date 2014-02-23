@@ -45,11 +45,11 @@ class Kontar: public TTipParam
 	{
 	    public:
 		SMemBlk( int ioff, int v_rez ) : off(ioff)
-		{ val.assign(v_rez,0); err.setVal(_("11:Value not gathered.")); }
+		{ val.assign(v_rez,0); err = _("11:Value not gathered."); }
 
-		int		off;		//Data block start offset
-		string		val;		//Data block values kadr
-		ResString	err;		//Acquisition error text
+		int	off;		//Data block start offset
+		string	val,		//Data block values kadr
+			err;		//Acquisition error text
 	};
 	//* tval - The parameter specific values object
 	class tval
@@ -61,17 +61,18 @@ class Kontar: public TTipParam
 		// RC5 encoding
 		void rc5_encrypt( uint32_t* cdata, int blocks );
 		void rc5_decrypt( uint32_t* cdata, int blocks );
-		void rc5_key( uint8_t* key, short keylen );
+		void rc5_key( const char* key, short keylen );
 
 		//Atributes
 		XMLNode	cfg;
+		string	prevTr;
 		vector<SMemBlk> mBlks;	//Acquisition memory blocks for values
 
 	    private:
 		// RC5 encoding
 		uint32_t keybuf[22];
 		int	rounds;
-        };
+	};
 
 	//Methods
 	Kontar( );
@@ -96,7 +97,7 @@ class Kontar: public TTipParam
 	void regVal( TMdPrm *prm, int off, int sz );	//Register value for acquisition
 
 	string req( TMdPrm *prm, string &pdu );
-	//int64_t getValR( int addr, ResString &err );
+	const char *getVal( TMdPrm *prm, int off, int dtSz );
 };
 
 } //End namespace

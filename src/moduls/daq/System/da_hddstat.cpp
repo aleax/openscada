@@ -98,7 +98,7 @@ void HddStat::getVal( TMdPrm *prm )
     if((f=fopen("/proc/diskstats","r")))
     {
 	//major minor name rio rmerge rsect ruse wio wmerge wsect wuse running use aveq
-        //--or for a partition--
+	//--or for a partition--
 	//major minor name rio rsect wio wsect
 	snprintf(sc_pat, sizeof(sc_pat), "%%*d %%*d %s %%*d %%lu %%lu %%lu %%*d %%*d %%lu", dev.c_str());
 	for(int n; fgets(buf,sizeof(buf),f) != NULL; )
@@ -122,8 +122,8 @@ void HddStat::getVal( TMdPrm *prm )
 		rdVl = (double)rd*512;
 		wrVl = (double)wr*512;
 		devOK = true;
-    		break;
-    	    }
+		break;
+	    }
 	fclose(f);
     }
 
@@ -143,11 +143,11 @@ void HddStat::getVal( TMdPrm *prm )
     else if(!prm->daErr.getVal().size())
     {
 	prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
-void HddStat::makeActiveDA( TMdContr *a_cntr )
+void HddStat::makeActiveDA( TMdContr *aCntr )
 {
     string ap_nm = "Statistic_";
 
@@ -155,17 +155,26 @@ void HddStat::makeActiveDA( TMdContr *a_cntr )
     dList(list,true);
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
-        string hddprm = ap_nm+list[i_hd];
-        if(!a_cntr->present(hddprm))
-        {
-            a_cntr->add(hddprm,0);
-	    AutoHD<TMdPrm> dprm = a_cntr->at(hddprm);
-	    dprm.at().setName(_("HD statistic: ")+list[i_hd]);
-	    dprm.at().autoC(true);
-            dprm.at().cfg("TYPE").setS(id());
-    	    dprm.at().cfg("SUBT").setS(list[i_hd]);
-            dprm.at().cfg("EN").setB(true);
-            if(a_cntr->enableStat()) dprm.at().enable();
-        }
+	vector<string> pLs;
+	// Find propper parameter's object
+	aCntr->list(pLs);
+	int i_p;
+	for(i_p = 0; i_p < pLs.size(); i_p++)
+	{
+	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
+	}
+	if(i_p < pLs.size()) continue;
+
+	string hddprm = ap_nm+list[i_hd];
+	while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
+	aCntr->add(hddprm, 0);
+	AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
+	dprm.at().setName(_("HD statistic: ")+list[i_hd]);
+	dprm.at().autoC(true);
+	dprm.at().cfg("TYPE").setS(id());
+	dprm.at().cfg("SUBT").setS(list[i_hd]);
+	dprm.at().cfg("EN").setB(true);
+	if(aCntr->enableStat()) dprm.at().enable();
     }
 }

@@ -318,17 +318,11 @@ void TValue::cntrCmdProc( XMLNode *opt )
 	}
 	AutoHD<TVal> vl = vlAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_RD))
-	{
-	    if(vl.at().fld().flg()&TFld::Selected) opt->setText(vl.at().getSEL());
-	    else opt->setText((vl.at().fld().type()==TFld::Real) ?
+	    opt->setText((vl.at().fld().type()==TFld::Real) ?
 		    ((vl.at().getR()==EVAL_REAL) ? EVAL_STR : r2s(vl.at().getR(),6)) :
 		    vl.at().getS());
-	}
 	if(ctrChkNode(opt,"set",(vl.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SDAQ_ID,SEC_WR))
-	{
-	    if(vl.at().fld().flg()&TFld::Selected)	vl.at().setSEL(opt->text());
-	    else					vl.at().setS(opt->text());
-	}
+	    vl.at().setS(opt->text());
     }
     else if(a_path == "/arch/arch")
     {

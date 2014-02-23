@@ -194,7 +194,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 	    {
 		ResAlloc res(p->owner().pBusRes, true);
 		I8017_SetChannelGainMode(p->modSlot, i_v, ePrm->cnlMode[i_v], 0);
-		p->vlAt(TSYS::strMess("i%d",i_v)).at().setR( I8017_GetCurAdChannel_Float_Cal(p->modSlot), 0, true );
+		p->vlAt(TSYS::strMess("ai%d",i_v)).at().setR(I8017_GetCurAdChannel_Float_Cal(p->modSlot), 0, true);
 	    }
     }
     //> Other typical modules processing
@@ -220,17 +220,17 @@ void da_LP_8x::getVal( TMdPrm *p )
 		switch(ePrm->dev.DI&0xFF)
 		{
 		    case 1:	val = DIO_DI_8(p->modSlot);	break;
-		    case 2:	val = DIO_DI_16(p->modSlot);break;
+		    case 2:	val = DIO_DI_16(p->modSlot);	break;
 		    default:	isErr = true;
 		}
 		break;
-	    default:    isErr = true;
+	    default:	isErr = true;
 	}
 	p->owner().pBusRes.resRelease();
 
 	for(unsigned i_ch = 0; i_ch < (ePrm->dev.DI&0xFF); i_ch++)
 	    for(int i_i = 0; i_i < 8; i_i++)
-		p->vlAt(TSYS::strMess("di%d_%d",i_ch,i_i)).at().setB(isErr ? EVAL_BOOL : 
+		p->vlAt(TSYS::strMess("di%d_%d",i_ch,i_i)).at().setB(isErr ? EVAL_BOOL :
 		    (((val>>(i_ch*8))^p->dInOutRev[i_ch])>>i_i)&1, 0, true);
     }
     //>> DO back read

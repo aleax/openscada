@@ -1151,57 +1151,49 @@ bool OrigDiagram::cntrCmdAttributes( XMLNode *opt, Widget *src )
 //************************************************
 //* OrigProtocol: Protocol original widget       *
 //************************************************
-OrigProtocol::OrigProtocol( ) : PrWidget("Protocol")
-{
+OrigProtocol::OrigProtocol( ) : PrWidget("Protocol")	{ }
 
-}
+string OrigProtocol::name( )	{ return _("Protocol"); }
 
-string OrigProtocol::name( )
-{
-    return _("Protocol");
-}
-
-string OrigProtocol::descr( )
-{
-    return _("Protocol widget of the finite visualization.");
-}
+string OrigProtocol::descr( )	{ return _("Protocol widget of the finite visualization."); }
 
 void OrigProtocol::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
-	attrAdd( new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","","20") );
-	attrAdd( new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","","21") );
-	attrAdd( new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","","22") );
-	attrAdd( new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","","23") );
-	attrAdd( new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","","24") );
-	attrAdd( new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","","25") );
-	attrAdd( new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","","26") );
-	attrAdd( new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","","27") );
-	attrAdd( new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","","28") );
-	attrAdd( new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","","29") );
-	attrAdd( new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
-	    "0;1;2;3;4;5;6;7",_("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),"30") );
-	attrAdd( new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","","31") );
-	attrAdd( new TFld("itProp",_("Item properties"),TFld::Integer,Attr::Active,"","","","","32") );
+	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","",i2s(A_BackColor).c_str()));
+	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
+	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"","Arial 11","","",i2s(A_ProtFont).c_str()));
+	attrAdd(new TFld("headVis",_("Header visible"),TFld::Boolean,TFld::NoFlag,"","1","","",i2s(A_ProtHeadVis).c_str()));
+	attrAdd(new TFld("time",_("Time, sek"),TFld::Integer,Attr::DateTime,"","","","",i2s(A_ProtTime).c_str()));
+	attrAdd(new TFld("tSize",_("Size, sek"),TFld::Integer,TFld::NoFlag,"","60","0;50000000","",i2s(A_ProtTSize).c_str()));
+	attrAdd(new TFld("trcPer",_("Tracing period (s)"),TFld::Integer,TFld::NoFlag,"","0","0;360","",i2s(A_ProtTrcPer).c_str()));
+	attrAdd(new TFld("arch",_("Archivator"),TFld::String,TFld::NoFlag,"","","","",i2s(A_ProtArch).c_str()));
+	attrAdd(new TFld("tmpl",_("Template"),TFld::String,TFld::NoFlag,"","","","",i2s(A_ProtTmpl).c_str()));
+	attrAdd(new TFld("lev",_("Level"),TFld::Integer,TFld::NoFlag,"","0","-7;7","",i2s(A_ProtLev).c_str()));
+	attrAdd(new TFld("viewOrd",_("View order"),TFld::Integer,TFld::Selected,"","0",
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d",FP_ON_TM,FP_ON_LEV,FP_ON_CAT,FP_ON_MESS,FP_ON_TM_REV,FP_ON_LEV_REV,FP_ON_CAT_REV,FP_ON_MESS_REV).c_str(),
+	    _("On time;On level;On category;On messages;On time (reverse);On level (reverse);On category (reverse);On messages (reverse)"),i2s(A_ProtViewOrd).c_str()));
+	attrAdd(new TFld("col",_("View columns"),TFld::String,TFld::NoFlag,"","pos;tm;utm;lev;cat;mess","","",i2s(A_ProtCol).c_str()));
+	attrAdd(new TFld("itProp",_("Item properties"),TFld::Integer,Attr::Active,"","","","",i2s(A_ProtItProp).c_str()));
     }
 }
 
 bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 {
-    if( cfg.flgGlob()&Attr::Active )
+    if(cfg.flgGlob()&Attr::Active)
     {
-	if( cfg.id() == "itProp" )
+	if(cfg.id() == "itProp")
 	{
 	    string fid("it"), fnm(_("Item ")), fidp, fnmp;
 	    //> Delete specific unnecessary items
-	    for( int i_p = 0; true; i_p++ )
+	    for(int i_p = 0; true; i_p++)
 	    {
-		fidp = fid+i2s(i_p);
-		if( !cfg.owner()->attrPresent( fidp+"lev" ) )	break;
-		else if( i_p >= cfg.getI() )
+		fidp = fid + i2s(i_p);
+		if(!cfg.owner()->attrPresent(fidp+"lev")) break;
+		else if(i_p >= cfg.getI())
 		{
 		    cfg.owner()->attrDel(fidp+"lev");
 		    cfg.owner()->attrDel(fidp+"tmpl");
@@ -1210,23 +1202,23 @@ bool OrigProtocol::attrChange( Attr &cfg, TVariant prev )
 		}
 	    }
 	    //> Create ullage items
-	    for( int i_p = 0; i_p < cfg.getI(); i_p++ )
+	    for(int i_p = 0; i_p < cfg.getI(); i_p++)
 	    {
-		fidp = fid+i2s(i_p);
-		fnmp = fnm+i2s(i_p);
-		if( cfg.owner()->attrPresent( fidp+"lev" ) ) continue;
-		cfg.owner()->attrAdd( new TFld((fidp+"lev").c_str(),(fnmp+_(":level")).c_str(),
-					       TFld::Integer,Attr::Mutable,"","0","0;7","",i2s(40+5*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"tmpl").c_str(),(fnmp+_(":template")).c_str(),
-					       TFld::String,Attr::Mutable,"","","","",i2s(41+5*i_p).c_str()) );
-		cfg.owner()->attrAdd( new TFld((fidp+"fnt").c_str(),(fnmp+_(":font")).c_str(),
-					       TFld::String,Attr::Font|Attr::Mutable,"","","","",i2s(42+5*i_p).c_str()) );
+		fidp = fid + i2s(i_p);
+		fnmp = fnm + i2s(i_p);
+		if(cfg.owner()->attrPresent(fidp+"lev")) continue;
+		cfg.owner()->attrAdd(new TFld((fidp+"lev").c_str(),(fnmp+_(":level")).c_str(),
+		    TFld::Integer,Attr::Mutable,"","0","0;7","",i2s(A_ProtProps+A_ProtPropLev+A_ProtPropsSz*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"tmpl").c_str(),(fnmp+_(":template")).c_str(),
+		    TFld::String,Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropTmpl+A_ProtPropsSz*i_p).c_str()));
+		cfg.owner()->attrAdd(new TFld((fidp+"fnt").c_str(),(fnmp+_(":font")).c_str(),
+		    TFld::String,Attr::Font|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropFnt+A_ProtPropsSz*i_p).c_str()));
 		cfg.owner()->attrAdd( new TFld((fidp+"color").c_str(),(fnmp+_(":color")).c_str(),
-					       TFld::String,Attr::Color|Attr::Mutable,"","","","",i2s(43+5*i_p).c_str()) );
+		    TFld::String,Attr::Color|Attr::Mutable,"","","","",i2s(A_ProtProps+A_ProtPropClr+A_ProtPropsSz*i_p).c_str()));
 	    }
 	}
     }
-    return Widget::attrChange(cfg,prev);
+    return Widget::attrChange(cfg, prev);
 }
 
 bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
@@ -1240,24 +1232,24 @@ bool OrigProtocol::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
 	    for(unsigned i_ch = 0; i_ch < root->childSize(); i_ch++)
-            {
-                el = root->childGet(i_ch);
-                int p = atoi(el->attr("p").c_str());
-                switch(p)
-                {
-		    case 20: el->setAttr("help",Widget::helpColor());	break;
-		    case 21: el->setAttr("help",Widget::helpImg());	break;
-		    case 22: el->setAttr("help",Widget::helpFont());	break;
-		    case 27: el->setAttr("help",_("Messages archivator in form \"ArchMod.ArchivatorId\"."));	break;
-		    case 29: el->setAttr("help",_("Set value to < 0 for get current alarms."));	break;
-		    case 25: el->setAttr("help",_("Set value to '0' for get all alarms, for \"lev\" < 0."));	break;
-		    case 28: el->setAttr("help",
+	    {
+		el = root->childGet(i_ch);
+		int p = atoi(el->attr("p").c_str());
+		switch(p)
+		{
+		    case A_BackColor: el->setAttr("help",Widget::helpColor());	break;
+		    case A_BackImg: el->setAttr("help",Widget::helpImg());	break;
+		    case A_ProtFont: el->setAttr("help",Widget::helpFont());	break;
+		    case A_ProtArch: el->setAttr("help",_("Messages archivator in form \"ArchMod.ArchivatorId\"."));	break;
+		    case A_ProtLev: el->setAttr("help",_("Set value to < 0 for get current alarms."));	break;
+		    case A_ProtTSize: el->setAttr("help",_("Set value to '0' for get all alarms, for \"lev\" < 0."));	break;
+		    case A_ProtTmpl: el->setAttr("help",
 			_("Category template or regular expression \"/{re}/\". For template reserved special symbols:\n"
 			"  '*' - any multiply symbols group;\n"
 			"  '?' - any one symbol;\n"
 			"  '\\' - use for shield special simbols."));
 			break;
-		    case 31: el->setAttr("help",
+		    case A_ProtCol: el->setAttr("help",
 			_("Visible and order columns list separated by symbol ';'. Supported columns:\n"
 			"  \"pos\" - row number;\n"
 			"  \"tm\" - date and time of the message;\n"

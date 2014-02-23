@@ -184,10 +184,7 @@ TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
     setAddr("localhost:10042");
 }
 
-TSocketIn::~TSocketIn( )
-{
-    try{ stop(); }catch(...){ }
-}
+TSocketIn::~TSocketIn( )	{ }
 
 string TSocketIn::getStatus( )
 {
@@ -247,6 +244,8 @@ void TSocketIn::start( )
 
     //> Wait connection main task start
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
+
+    TTransportIn::start();
 }
 
 void TSocketIn::stop( )
@@ -260,6 +259,8 @@ void TSocketIn::stop( )
 
     //> Wait connection main task stop
     SYS->taskDestroy(nodePath('.',true), &endrun);
+
+    TTransportIn::stop();
 }
 
 void *TSocketIn::Task( void *sock_in )
@@ -675,10 +676,7 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) : TTransportOu
     setTimings("5:1");
 }
 
-TSocketOut::~TSocketOut( )
-{
-    if(startStat()) stop();
-}
+TSocketOut::~TSocketOut( )	{ }
 
 void TSocketOut::setTimings( const string &vl )
 {
@@ -877,6 +875,8 @@ void TSocketOut::start()
     }
 
     run_st = true;
+
+    TTransportOut::start();
 }
 
 void TSocketOut::stop( )
@@ -896,6 +896,8 @@ void TSocketOut::stop( )
     SSL_CTX_free(ctx);
 
     run_st = false;
+
+    TTransportOut::stop();
 }
 
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )

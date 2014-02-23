@@ -290,7 +290,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     resize(600, 400);
 
     //> Init session
-    initSess(prj_it,crSessForce);
+    initSess(prj_it, crSessForce);
 
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
@@ -298,7 +298,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     alarmSet(0);
 }
 
-VisRun::~VisRun()
+VisRun::~VisRun( )
 {
     winClose = true;
 
@@ -354,16 +354,16 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	conErr->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 	conErr->setAutoFillBackground(true);
 	QPalette plt(conErr->palette());
-        QBrush brsh = plt.brush(QPalette::Background);
-        brsh.setColor(Qt::red);
-        brsh.setStyle(Qt::SolidPattern);
-        plt.setBrush(QPalette::Background, brsh);
-        conErr->setPalette(plt);
-        //> Calc size and position
+	QBrush brsh = plt.brush(QPalette::Background);
+	brsh.setColor(Qt::red);
+	brsh.setStyle(Qt::SolidPattern);
+	plt.setBrush(QPalette::Background, brsh);
+	conErr->setPalette(plt);
+	//> Calc size and position
 	conErr->resize(300,100);
 	conErr->move((master_pg->size().width()-conErr->size().width())/2,(master_pg->size().height()-conErr->size().height())/2);
-        conErr->show();
-        isConErr = true;
+	conErr->show();
+	isConErr = true;
     }
     //> Remove error message about connection error
     else if(rez != 10 && isConErr && (conErr=master_pg->findChild<QLabel*>("==ConnError==")))
@@ -1425,7 +1425,7 @@ void VisRun::updatePage( )
     {
 	mess_warning(mod->nodePath().c_str(),_("Session creation restore for '%s'."),prj_it.c_str());
 	updateTimer->stop();
-	initSess(prj_it,crSessForce);
+	initSess(prj_it, crSessForce);
 	return;
     }
 

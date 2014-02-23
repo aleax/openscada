@@ -1,9 +1,14 @@
-
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.1],[rom_as@oscada.org, rom_as@fromru.com])
+# After LTS relese append third stabilisation level/number to the version
+AC_INIT([OpenSCADA],[0.9],[rom_as@oscada.org, rom_as@fromru.com])
+
+# Increase major for next Work version.
+# Increase minor after significant changes into API of the Work version
+# Full freeze for LTS stabilisation levels/updates, after the release
+oscd_LIBREVISION="3:0:0"
+
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="2:1:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET
@@ -257,6 +262,7 @@ AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,incl,[
 ])
 AX_MOD_DAQ_EN(MMS,[enable build module DAQ.MMS],enable,[],[],
     [AC_CONFIG_FILES(src/moduls/daq/MMS/libiec61850/Makefile)])
+AX_MOD_DAQ_EN(EPICS,[enable build module DAQ.EPICS],enable,[],[],[])
 #> Archive modules
 AC_SUBST(ArchSub_mod)
 AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl)

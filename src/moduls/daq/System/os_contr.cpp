@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -40,6 +40,7 @@
 #include "da_smart.h"
 #include "da_hddstat.h"
 #include "da_netstat.h"
+#include "da_ups.h"
 #include "os_contr.h"
 
 //*************************************************
@@ -50,7 +51,8 @@
 #define VER_TYPE	SDAQ_VER
 #define MOD_VER		"1.7.5"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("Allow operation system data acquisition. Support OS Linux data sources: HDDTemp, Sensors, Uptime, Memory, CPU and other.")
+#define DESCRIPTION	_("Allow operation system data acquisition. Support OS Linux data sources:\
+ HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -64,7 +66,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID, MOD_TYPE, VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -74,8 +76,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new SystemCntr::TTpContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new SystemCntr::TTpContr(source);
 	return NULL;
     }
 }
@@ -83,7 +84,7 @@ extern "C"
 using namespace SystemCntr;
 
 //*************************************************
-//* TTpContr                                      * 
+//* TTpContr                                      *
 //*************************************************
 TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 {
@@ -98,7 +99,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr()
+TTpContr::~TTpContr( )
 {
     nodeDelAll();
     for(unsigned i_da = 0; i_da < m_da.size(); i_da++)	delete m_da[i_da];
@@ -116,21 +117,22 @@ void TTpContr::postEnable( int flag )
     TTipDAQ::postEnable(flag);
 
     //> Init DA sources
-    daReg( new CPU() );
-    daReg( new Mem() );
-    daReg( new Sensors() );
-    daReg( new Hddtemp() );
-    daReg( new UpTime() );
-    daReg( new HddSmart() );
-    daReg( new HddStat() );
-    daReg( new NetStat() );
+    daReg(new CPU());
+    daReg(new Mem());
+    daReg(new Sensors());
+    daReg(new Hddtemp());
+    daReg(new UpTime());
+    daReg(new HddSmart());
+    daReg(new HddStat());
+    daReg(new NetStat());
+    daReg(new UPS());
 
     //> Controler's bd structure
-    fldAdd( new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0") );
-    fldAdd( new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system") );
-    fldAdd( new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000") );	//!!!! Remove at further
-    fldAdd( new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1") );
-    fldAdd( new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99") );
+    fldAdd(new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0"));
+    fldAdd(new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system"));
+    fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
+    fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
+    fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
     //> Parameter type bd structure
     //>> Make enumerated
@@ -144,13 +146,13 @@ void TTpContr::postEnable( int flag )
 	el_name = el_name+_(daGet(list[i_ls])->name().c_str())+";";
     }
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
-    tpPrmAt(t_prm).fldAdd( new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()) );
-    tpPrmAt(t_prm).fldAdd( new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"10") );
+    tpPrmAt(t_prm).fldAdd(new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
+    tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"255"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return new TMdContr(name,daq_db,this);
+    return new TMdContr(name, daq_db, this);
 }
 
 void TTpContr::daList( vector<string> &da )
@@ -160,10 +162,7 @@ void TTpContr::daList( vector<string> &da )
 	da.push_back(m_da[i_da]->id());
 }
 
-void TTpContr::daReg( DA *da )
-{
-    m_da.push_back(da);
-}
+void TTpContr::daReg( DA *da )	{ m_da.push_back(da); }
 
 DA *TTpContr::daGet( const string &da )
 {
@@ -185,7 +184,7 @@ void TTpContr::perSYSCall( unsigned int cnt )
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem) : TController(name_c,daq_db,cfgelem),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
     prc_st(false), call_st(false), endrun_req(false), mPer(1e9), tm_calc(0)
 {
@@ -194,17 +193,17 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::T
 
 TMdContr::~TMdContr( )
 {
-    if( run_st ) stop();
+    if(run_st) stop();
 }
 
 string TMdContr::getStatus( )
 {
-    string rez = TController::getStatus( );
+    string rez = TController::getStatus();
     if(startStat() && !redntUse())
     {
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
     }
     return rez;
@@ -230,13 +229,13 @@ void TMdContr::load_( )
 {
     if(!SYS->chkSelDB(DB())) return;
 
-    TController::load_( );
+    TController::load_();
 
     //> Check for get old period method value
     if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
 }
 
-void TMdContr::enable_(  )
+void TMdContr::enable_( )
 {
     devUpdate();
 }
@@ -256,14 +255,14 @@ void TMdContr::stop_( )
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
     //> Set Eval for parameters
-    ResAlloc res(en_res,true);
+    ResAlloc res(en_res, true);
     for(unsigned i_prm = 0; i_prm < p_hd.size(); i_prm++)
         p_hd[i_prm].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res,true);
+    ResAlloc res(en_res, true);
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
 	if(p_hd[i_prm].at().id() == id) break;
@@ -290,13 +289,13 @@ void *TMdContr::Task( void *icntr )
 		int64_t t_cnt = TSYS::curTime();
 
 		cntr.en_res.resRequestR();
-		for( unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++ )
+		for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		    cntr.p_hd[i_p].at().getVal();
 		cntr.en_res.resRelease();
 
 		cntr.tm_calc = TSYS::curTime()-t_cnt;
-	    } catch(TError err)
-	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+	    }
+	    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    cntr.call_st = false;
 	}
 
@@ -315,9 +314,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     {
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
-	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	return;
     }
     TController::cntrCmdProc(opt);
@@ -354,14 +353,14 @@ void TMdPrm::enable( )
     if(enableStat())	return;
     cfg("TYPE").setS(cfg("TYPE").getS());
     TParamContr::enable();
-    ((TMdContr&)owner()).prmEn( id(), true );	//Put to process
+    ((TMdContr&)owner()).prmEn(id(), true);	//Put to process
 }
 
 void TMdPrm::disable( )
 {
     if(!enableStat())	return;
-    ((TMdContr&)owner()).prmEn( id(), false );	//Remove from process
-    setEval( );
+    ((TMdContr&)owner()).prmEn(id(), false);	//Remove from process
+    setEval();
     TParamContr::disable();
 }
 
@@ -409,6 +408,10 @@ void TMdPrm::setEval( )
 	    vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
 }
 
+void TMdPrm::vlElemAtt( TElem *ValEl )	{ TValue::vlElemAtt(ValEl); }
+
+void TMdPrm::vlElemDet( TElem *ValEl )	{ TValue::vlElemDet(ValEl); }
+
 void TMdPrm::vlArchMake( TVal &val )
 {
     TParamContr::vlArchMake(val);
@@ -448,11 +451,8 @@ void TMdPrm::setType( const string &da_id )
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {
     //> Change TYPE parameter
-    if( i_cfg.name() == "TYPE" )
-    {
-	setType(i_cfg.getS());
-	return true;
-    }
-    if( !autoC( ) ) modif();
+    if(i_cfg.name() == "TYPE") { setType(i_cfg.getS()); return true; }
+    if(m_da) m_da->cfgChange(i_cfg);
+    if(!autoC()) modif();
     return true;
 }

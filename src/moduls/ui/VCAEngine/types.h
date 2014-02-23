@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: types.h
 /***************************************************************************
- *   Copyright (C) 2013 by Roman Savochenko                                *
+ *   Copyright (C) 2014 by Roman Savochenko                                *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -111,8 +111,8 @@ namespace VCA
 	A_MediaArTitle	= 2,
 
 	// Primitive "Diagram" specific
-        A_DiagramTrcPer		= 25,
-        A_DiagramType		= 26,
+	A_DiagramTrcPer		= 25,
+	A_DiagramType		= 26,
 	A_DiagramTSek		= 27,
 	A_DiagramTUSek		= 28,
 	A_DiagramTSize		= 29,
@@ -140,6 +140,25 @@ namespace VCA
 	A_DiagramTrScl	= 5,
 	A_DiagramTrWdth = 6,
 	A_DiagramTrProp	= 7,
+
+	// Primitive "Protocol" specific
+	A_ProtFont	= 22,
+	A_ProtHeadVis	= 23,
+	A_ProtTime	= 24,
+	A_ProtTSize	= 25,
+	A_ProtTrcPer	= 26,
+	A_ProtArch	= 27,
+	A_ProtTmpl	= 28,
+	A_ProtLev	= 29,
+	A_ProtViewOrd	= 30,
+	A_ProtCol	= 31,
+	A_ProtItProp	= 32,
+	A_ProtProps	= 40,
+	A_ProtPropsSz	= 5,
+	A_ProtPropLev	= 0,
+	A_ProtPropTmpl	= 1,
+	A_ProtPropFnt	= 2,
+	A_ProtPropClr	= 3,
 
 	// Primitive "Document" specific
 	A_DocStyle	= 20,
@@ -184,6 +203,8 @@ namespace VCA
     //Diagram preset indexes
     enum Diagram_Types	{ FD_TRND = 0, FD_SPECTR };
     enum Diagram_Scale	{ FD_NO = 0, FD_GRD, FD_MARKS, FD_GRD_MARKS, FD_LOG, FD_GRD_LOG, FD_MARKS_LOG, FD_GRD_MARKS_LOG };
+
+    enum Prot_ViewOrd	{ FP_ON_TM = 0, FP_ON_LEV, FP_ON_CAT, FP_ON_MESS, FP_ON_TM_REV, FP_ON_LEV_REV, FP_ON_CAT_REV, FP_ON_MESS_REV };
 }
 
 #endif //TYPES_H

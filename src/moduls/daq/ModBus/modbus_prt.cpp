@@ -1349,7 +1349,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration")))
 	    {
-		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root",SPRT_ID,RWRWR_);
+		TConfig::cntrCmdMake(opt, "/nd/cfg", 0, "root", SPRT_ID, RWRWR_);
 		//>> Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
 		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");

@@ -1144,19 +1144,16 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
     {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
-	{
-	    if(attr.at().fld().flg()&TFld::Selected)	opt->setText(attr.at().getSEL());
-	    else opt->setText(attr.at().getS());
-	}
+	    opt->setText(attr.at().getS());
 	else if(ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_WR))
 	{
-	    if(attr.at().fld().flg()&TFld::Selected)	{ attr.at().setSEL(opt->text()); opt->setText(attr.at().getSEL()); }
-	    else { attr.at().setS(opt->text()); opt->setText(attr.at().getS()); }
+	    attr.at().setS(opt->text());
+	    opt->setText(attr.at().getS());
 	}
 	else if(attr.at().id() == "contextMenu" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
-	    opt->childAdd("rule")->setAttr("expr",":.*$")->setAttr("color","darkorange");
-	    opt->childAdd("rule")->setAttr("expr","^.*:")->setAttr("color","darkgreen");
+	    opt->childAdd("rule")->setAttr("expr", ":.*$")->setAttr("color", "darkorange");
+	    opt->childAdd("rule")->setAttr("expr", "^.*:")->setAttr("color", "darkgreen");
 	}
 	else if(attr.at().id() == "evProc" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
@@ -1860,7 +1857,7 @@ string Attr::getS( bool sys )
     switch(fld().type())
     {
 	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? i2s(tvl) : EVAL_STR; }
-	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? TSYS::real2str(tvl) : EVAL_STR; }
+	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? r2s(tvl) : EVAL_STR; }
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
 	case TFld::Object:	{ AutoHD<TVarObj> tvl = getO(sys); return (tvl.at().objName() != "EVAL") ? tvl.at().getStrXML() : EVAL_STR; }
 	case TFld::String:
@@ -2026,9 +2023,9 @@ void Attr::setR( double val, bool strongPrev, bool sys )
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())
     {
-	case TFld::String:	setS((val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev, sys);	break;
-	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys);			break;
-	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
+	case TFld::String:	setS((val!=EVAL_REAL) ? r2s(val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys);	break;
+	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);break;
 	case TFld::Real:
 	{
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1])

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_smart.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,18 +39,15 @@ const char *HddSmart::smartval_cmd = "smartctl -A -v N,raw48 %s 2> /dev/null";
 //*************************************************
 //* HddSmart                                      *
 //*************************************************
-HddSmart::HddSmart( )
-{
+HddSmart::HddSmart( )	{ }
 
-}
-
-HddSmart::~HddSmart( )
-{
-
-}
+HddSmart::~HddSmart( )	{ }
 
 void HddSmart::init( TMdPrm *prm )
 {
+    prm->daData = new tval();
+    prm->vlElemAtt(&((tval*)prm->daData)->els);
+
     TCfg &c_subt = prm->cfg("SUBT");
 
     //Create Configuration
@@ -65,6 +62,13 @@ void HddSmart::init( TMdPrm *prm )
     c_subt.fld().setSelNames(dls);
 
     if(list.size() && !TRegExp("(^|;)"+c_subt.getS()+";").test(dls)) c_subt.setS(list[0]);
+}
+
+void HddSmart::deInit( TMdPrm *prm )
+{
+    prm->vlElemDet(&((tval*)prm->daData)->els);
+    delete (tval*)prm->daData;
+    prm->daData = NULL;
 }
 
 void HddSmart::dList( vector<string> &list, bool part )
@@ -118,7 +122,7 @@ void HddSmart::getVal( TMdPrm *prm )
     {
 	if(sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3) continue;
 	string s_id = TSYS::int2str(id);
-	if(!prm->vlPresent(s_id)) fldAdd(new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite));
+	if(!prm->vlPresent(s_id)) ((tval*)prm->daData)->els.fldAdd(new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite));
 	prm->vlAt(s_id).at().setI(val,0,true);
 	devOK = true;
     }
@@ -132,7 +136,7 @@ void HddSmart::getVal( TMdPrm *prm )
     }
 }
 
-void HddSmart::makeActiveDA( TMdContr *a_cntr )
+void HddSmart::makeActiveDA( TMdContr *aCntr )
 {
     string ap_nm = "Smart_";
 
@@ -140,15 +144,26 @@ void HddSmart::makeActiveDA( TMdContr *a_cntr )
     dList(list);
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
+	vector<string> pLs;
+	// Find propper parameter's object
+	aCntr->list(pLs);
+	int i_p;
+	for(i_p = 0; i_p < pLs.size(); i_p++)
+	{
+	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
+	}
+	if(i_p < pLs.size()) continue;
+
 	string hddprm = ap_nm+list[i_hd];
-	if(a_cntr->present(hddprm))	continue;
-	a_cntr->add(hddprm,0);
-	AutoHD<TMdPrm> dprm = a_cntr->at(hddprm);
+	while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
+	aCntr->add(hddprm,0);
+	AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
 	dprm.at().setName(_("HD smart: ")+list[i_hd]);
 	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
 	dprm.at().cfg("SUBT").setS(list[i_hd]);
 	dprm.at().cfg("EN").setB(true);
-	if(a_cntr->enableStat()) dprm.at().enable();
+	if(aCntr->enableStat()) dprm.at().enable();
     }
 }

@@ -111,25 +111,25 @@ void NetStat::getVal( TMdPrm *prm )
 
     if(devOK)
     {
-        prm->daErr = "";
-        double lstVl = prm->vlAt("rcv").at().getR(0, true);
-        prm->vlAt("rcvSp").at().setR((lstVl != EVAL_REAL && rcvVl > lstVl) ?
-        	1e6*(rcvVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rcv").at().time()) : 0, 0, true);
-        lstVl = prm->vlAt("trns").at().getR(0, true);
-        prm->vlAt("trnsSp").at().setR((lstVl != EVAL_REAL && trnsVl > lstVl) ?
-    		1e6*(trnsVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("trns").at().time()) : 0, 0, true);
+	prm->daErr = "";
+	double lstVl = prm->vlAt("rcv").at().getR(0, true);
+	prm->vlAt("rcvSp").at().setR((lstVl != EVAL_REAL && rcvVl > lstVl) ?
+		1e6*(rcvVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("rcv").at().time()) : 0, 0, true);
+	lstVl = prm->vlAt("trns").at().getR(0, true);
+	prm->vlAt("trnsSp").at().setR((lstVl != EVAL_REAL && trnsVl > lstVl) ?
+		1e6*(trnsVl-lstVl)/vmax(1,TSYS::curTime()-prm->vlAt("trns").at().time()) : 0, 0, true);
 
 	prm->vlAt("rcv").at().setR(rcvVl,0,true);
 	prm->vlAt("trns").at().setR(trnsVl,0,true);
     }
     else if(!prm->daErr.getVal().size())
     {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
-void NetStat::makeActiveDA( TMdContr *a_cntr )
+void NetStat::makeActiveDA( TMdContr *aCntr )
 {
     string ap_nm = "Interface_";
 
@@ -137,15 +137,26 @@ void NetStat::makeActiveDA( TMdContr *a_cntr )
     dList(list);
     for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
     {
+	vector<string> pLs;
+	// Find propper parameter's object
+	aCntr->list(pLs);
+	int i_p;
+	for(i_p = 0; i_p < pLs.size(); i_p++)
+	{
+	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
+	}
+	if(i_p < pLs.size()) continue;
+
 	string intprm = ap_nm+list[i_hd];
-	if(a_cntr->present(intprm))	continue;
-	a_cntr->add(intprm,0);
-	AutoHD<TMdPrm> dprm = a_cntr->at(intprm);
+	while(aCntr->present(intprm)) intprm = TSYS::strLabEnum(intprm);
+	aCntr->add(intprm, 0);
+	AutoHD<TMdPrm> dprm = aCntr->at(intprm);
 	dprm.at().setName(_("Interface statistic: ")+list[i_hd]);
 	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
 	dprm.at().cfg("SUBT").setS(list[i_hd]);
 	dprm.at().cfg("EN").setB(true);
-	if(a_cntr->enableStat()) dprm.at().enable();
+	if(aCntr->enableStat()) dprm.at().enable();
     }
 }

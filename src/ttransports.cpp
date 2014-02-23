@@ -635,7 +635,22 @@ TTransportIn::TTransportIn( const string &iid, const string &idb, TElem *el ) :
 
 TTransportIn::~TTransportIn( )
 {
+    try{ stop(); }catch(...){ }
+}
 
+void TTransportIn::preEnable(int flag)
+{
+    cfg("MODULE").setS(owner().modId());
+    try{ load(); }catch(...){ }
+}
+
+void TTransportIn::postDisable(int flag)
+{
+    try
+    {
+        if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
+    }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TCntrNode &TTransportIn::operator=( TCntrNode &node )
@@ -664,19 +679,7 @@ string TTransportIn::tbl( )		{ return owner().owner().subId()+"_in"; }
 
 string TTransportIn::protocol( )	{ return TSYS::strParse(protocolFull(),0,"."); }
 
-void TTransportIn::postDisable(int flag)
-{
-    try
-    {
-        if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-}
-
-string TTransportIn::getStatus( )
-{
-    return startStat() ? _("Started. ") : _("Stoped. ");
-}
+string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Stoped. "); }
 
 void TTransportIn::load_( )
 {
@@ -689,10 +692,77 @@ void TTransportIn::save_( )
     SYS->db().at().dataSet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
-void TTransportIn::preEnable(int flag)
+void TTransportIn::stop( )
 {
-    cfg("MODULE").setS(owner().modId());
-    try{ load(); }catch(...){ }
+    //Remove assigned output transports
+    ResAlloc resN(nodeRes(), true);
+    string oTrId;
+    while(mAssTrO.size())
+    {
+	oTrId = mAssTrO.back().at().id();
+	mAssTrO.pop_back();
+	try { owner().outDel(oTrId); }
+	catch(TError er) { mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str()); }
+    }
+}
+
+vector<AutoHD<TTransportOut> > TTransportIn::assTrs( )
+{
+    vector<AutoHD<TTransportOut> > rez;
+    ResAlloc resN(nodeRes(), false);
+    rez = mAssTrO;
+    resN.unlock();
+
+    return rez;
+}
+
+string TTransportIn::assTrO( const string &addr )
+{
+    ResAlloc resN(nodeRes(), true);
+    string oTrId;
+    int trFor = -1;
+    //Find proper for replace and clean up stopped transports
+    for(int i_ass = 0; i_ass < (int)mAssTrO.size(); i_ass++)
+    {
+	if(!mAssTrO[i_ass].freeStat() && mAssTrO[i_ass].at().startStat()) continue;
+	if(trFor < 0) trFor = i_ass;
+	else
+	{
+	    oTrId = mAssTrO[i_ass].at().id();
+	    mAssTrO[i_ass].free();
+	    try
+	    {
+		owner().outDel(oTrId);
+		mAssTrO.erase(mAssTrO.begin()+i_ass);
+		i_ass--;
+	    }
+	    catch(TError er)
+	    {
+		mAssTrO[i_ass] = owner().outAt(oTrId);
+		mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str());
+	    }
+	}
+    }
+
+    //Create new assigned transport
+    if(trFor < 0)
+    {
+	string assTrNm = "inAss"+id()+"_0";
+	while(owner().outPresent(assTrNm)) assTrNm = TSYS::strLabEnum(assTrNm);
+	owner().outAdd(assTrNm);
+	mAssTrO.push_back(owner().outAt(assTrNm));
+	trFor = mAssTrO.size()-1;
+    }
+    mAssTrO[trFor].at().setAddr(addr);
+    mAssTrO[trFor].at().setName("");
+    mAssTrO[trFor].at().setDscr("");
+    mAssTrO[trFor].at().setPrm1(0);
+    mAssTrO[trFor].at().setPrm2(0);
+    mAssTrO[trFor].at().modifGClr();
+    try{ mAssTrO[trFor].at().start(); }
+    catch(TError er) { mess_err(nodePath().c_str(), _("Delete node error: %s"), er.mess.c_str()); }
+
+    return mAssTrO[trFor].at().id();
 }
 
 TVariant TTransportIn::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
@@ -813,7 +883,10 @@ TTransportOut::TTransportOut( const string &iid, const string &idb, TElem *el ) 
     mId = iid;
 }
 
-TTransportOut::~TTransportOut( )	{ }
+TTransportOut::~TTransportOut( )
+{
+    try{ stop(); }catch(...){ }
+}
 
 TCntrNode &TTransportOut::operator=( TCntrNode &node )
 {

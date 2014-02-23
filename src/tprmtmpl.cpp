@@ -370,6 +370,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    int col = atoi(opt->attr("col").c_str());
 	    if(io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if((col == 0 || col == 1) && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
+	    modif();
 	    switch(col)
 	    {
 		case 0:	io(row)->setId(opt->text());	break;
@@ -383,7 +384,6 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
 		case 6: io(row)->setDef(opt->text()); setStart(false); break;
 	    }
-	    modif();
 	}
     }
     else if(a_path == "/io/prog_lang")

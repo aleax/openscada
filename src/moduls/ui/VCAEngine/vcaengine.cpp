@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: vcaengine.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2010 by Roman Savochenko                           * 
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           * 
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -192,17 +192,17 @@ void Engine::postEnable( int flag )
     prj_ses_el.fldAdd(new TFld("IO_VAL",_("Attribute value"),TFld::String,TFld::NoFlag,"100000"));
 
     //> Make styles' IO DB structure
-    prjStl_el.fldAdd( new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30") );
-    prjStl_el.fldAdd( new TFld("V_0",_("Value 0"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_1",_("Value 1"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_2",_("Value 2"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_3",_("Value 3"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_4",_("Value 4"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_5",_("Value 5"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_6",_("Value 6"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_7",_("Value 7"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_8",_("Value 8"),TFld::String,TFld::NoFlag,"100") );
-    prjStl_el.fldAdd( new TFld("V_9",_("Value 9"),TFld::String,TFld::NoFlag,"100") );
+    prjStl_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
+    prjStl_el.fldAdd(new TFld("V_0",_("Value 0"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_1",_("Value 1"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_2",_("Value 2"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_3",_("Value 3"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_4",_("Value 4"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_5",_("Value 5"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_6",_("Value 6"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_7",_("Value 7"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_8",_("Value 8"),TFld::String,TFld::NoFlag,"100"));
+    prjStl_el.fldAdd(new TFld("V_9",_("Value 9"),TFld::String,TFld::NoFlag,"100"));
 
     //> Init original widgets library
     wlbAdd("originals",_("Original widgets"));
@@ -210,23 +210,23 @@ void Engine::postEnable( int flag )
     if(TUIS::icoGet("VCA.lwdg_root",NULL,true).size())
         wlbAt("originals").at().setIco(TSYS::strEncode(TUIS::icoGet("VCA.lwdg_root"),TSYS::base64));
     //>> Add main original widgets
-    wlbAt("originals").at().add( new OrigElFigure() );
-    wlbAt("originals").at().add( new OrigFormEl() );
-    wlbAt("originals").at().add( new OrigText() );
-    wlbAt("originals").at().add( new OrigMedia() );
-    wlbAt("originals").at().add( new OrigDiagram() );
-    wlbAt("originals").at().add( new OrigProtocol() );
-    wlbAt("originals").at().add( new OrigDocument() );
-    //wlbAt("originals").at().add( new OrigFunction() );
-    wlbAt("originals").at().add( new OrigBox() );
+    wlbAt("originals").at().add(new OrigElFigure());
+    wlbAt("originals").at().add(new OrigFormEl());
+    wlbAt("originals").at().add(new OrigText());
+    wlbAt("originals").at().add(new OrigMedia());
+    wlbAt("originals").at().add(new OrigDiagram());
+    wlbAt("originals").at().add(new OrigProtocol());
+    wlbAt("originals").at().add(new OrigDocument());
+    //wlbAt("originals").at().add(new OrigFunction());
+    wlbAt("originals").at().add(new OrigBox());
 
     //>> User functions
-    chldAdd( idFnc, new nodePresent() );
-    chldAdd( idFnc, new wdgList() );
-    chldAdd( idFnc, new attrList() );
-    chldAdd( idFnc, new attrGet() );
-    chldAdd( idFnc, new attrSet() );
-    chldAdd( idFnc, new sesUser() );
+    chldAdd(idFnc, new nodePresent());
+    chldAdd(idFnc, new wdgList());
+    chldAdd(idFnc, new attrList());
+    chldAdd(idFnc, new attrGet());
+    chldAdd(idFnc, new attrSet());
+    chldAdd(idFnc, new sesUser());
 }
 
 void Engine::preDisable( int flag )
@@ -290,13 +290,13 @@ void Engine::load_( )
 	    }
 
 	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
-            wlbList(db_ls);
-            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wlbAt(db_ls[i_it]).at().DB()))
-                    wlbDel(db_ls[i_it]);
-        }
+	if(!SYS->selDB().empty())
+	{
+	    wlbList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wlbAt(db_ls[i_it]).at().DB()))
+		    wlbDel(db_ls[i_it]);
+	}
 
 	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
@@ -342,13 +342,13 @@ void Engine::load_( )
 	    }
 
 	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
-            prjList(db_ls);
-            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(prjAt(db_ls[i_it]).at().DB()))
-                    prjDel(db_ls[i_it]);
-        }
+	if(!SYS->selDB().empty())
+	{
+	    prjList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(prjAt(db_ls[i_it]).at().DB()))
+		    prjDel(db_ls[i_it]);
+	}
 
 	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
 
@@ -519,23 +519,21 @@ string Engine::callSynth( const string &itxt )
     const char	*synthRez = "/var/tmp/oscadaSynthTmp";
     string	txt = Mess->codeConvOut(synthCode(),itxt);
 
-    ResAlloc res( mSynthRes, true );
+    ResAlloc res(mSynthRes, true);
 
     string com = synthCom( );
 
     //> Put text to command
     bool textToPipe = false;
-    if( (comPos=com.find("%t")) != string::npos )
-	com.replace( comPos, 2, txt );
+    if((comPos=com.find("%t")) != string::npos)	com.replace(comPos, 2, txt);
     else textToPipe = true;
 
     //> Put result file name to command
     bool rezFromPipe = false;
-    if( (comPos=com.find("%f")) != string::npos )
-	com.replace( comPos, 2, synthRez );
+    if((comPos=com.find("%f")) != string::npos)	com.replace(comPos, 2, synthRez);
     else rezFromPipe = true;
 
-    if( rezFromPipe && textToPipe )	return "";
+    if(rezFromPipe && textToPipe) return "";
 
     //> Open pipe
     FILE *fp = popen(com.c_str(), textToPipe ? "w" : "r");
@@ -583,7 +581,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	    continue;
 
 	c_el.cfg("ID").setS(tstr);
-        c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
+	c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
 	c_el.cfg("CFG_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))/* &&
@@ -753,8 +751,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    {
 		//>>> Prepare session name
 		sess = prj;
-		for(int p_cnt = 0; sesPresent(sess); p_cnt++)
-		    sess = prj+TSYS::int2str(p_cnt);
+		for(int p_cnt = 0; sesPresent(sess); p_cnt++) sess = prj + i2s(p_cnt);
 		sesAdd(sess, prj);
 		sesAt(sess).at().setUser(opt->attr("user"));
 		sesAt(sess).at().setStart(true);
@@ -766,7 +763,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	{
 	    string sess = opt->attr("sess");
 	    sesAt(sess).at().disconnect();
-	    if(sesAt(sess).at().connects( ) == 0 && !sesAt(sess).at().backgrnd())
+	    if(sesAt(sess).at().connects() == 0 && !sesAt(sess).at().backgrnd())
 		sesDel(sess);
 	}
 	return;

@@ -1583,7 +1583,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 		    //> Get archive parameters
 		    var tTime = parseInt(this.attrs['time']);
-		    if(!tTime) tTime = (new Date()).getTime()/1000;
+		    var tTimeCurent = false;
+		    if(!tTime)
+		    {
+			tTimeCurent = true;
+			tTime = (new Date()).getTime()/1000;
+		    }
 		    var srcTime = tTime;
 		    var tTimeGrnd = tTime - parseInt(this.attrs['tSize']);
 
@@ -1621,7 +1626,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(parseInt(this.curLev) < 0) this.messList = new Array();
 		    else
 		    {
-			if(!this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd)
+			if(!this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd || tTimeCurent)
 			{
 			    var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>",true);
 			    if(!rez || parseInt(rez.getAttribute('rez')) != 0)	this.arhBeg = this.arhEnd = 0;
@@ -1635,7 +1640,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(!this.arhBeg || !this.arhEnd) return;
 
 			//> Correct request to archive border
-			tTime = Math.min(tTime,this.arhEnd); tTimeGrnd = Math.max(tTimeGrnd,this.arhBeg);
+			tTime = tTimeCurent ? this.arhEnd : Math.min(tTime,this.arhEnd);
+			tTimeGrnd = Math.max(tTimeGrnd, this.arhBeg);
 		    }
 
 		    //> Clear data at time error

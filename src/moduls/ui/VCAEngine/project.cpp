@@ -348,7 +348,7 @@ bool Project::mimeDataGet( const string &iid, string &mimeType, string *mimeData
 	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);
 
-	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
+	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+i2s(rez.size());
 	if( mimeData )  *mimeData = TSYS::strEncode(rez,TSYS::base64);
 	return true;
     }
@@ -532,7 +532,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/obj/st/en")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(enable()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
     else if(a_path == "/obj/st/db")
@@ -546,7 +546,7 @@ void Project::cntrCmdProc( XMLNode *opt )
         list(tls);
         time_t maxTm = 0;
         for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
-        opt->setText(TSYS::int2str(maxTm));
+        opt->setText(i2s(maxTm));
     }
     else if(a_path == "/obj/cfg/owner")
     {
@@ -562,9 +562,9 @@ void Project::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
-	    if(a_path == "/obj/cfg/u_a")	opt->setText(TSYS::int2str((permit()>>6)&0x7));
-	    if(a_path == "/obj/cfg/g_a")	opt->setText(TSYS::int2str((permit()>>3)&0x7));
-	    if(a_path == "/obj/cfg/o_a")	opt->setText(TSYS::int2str(permit()&0x7));
+	    if(a_path == "/obj/cfg/u_a")	opt->setText(i2s((permit()>>6)&0x7));
+	    if(a_path == "/obj/cfg/g_a")	opt->setText(i2s((permit()>>3)&0x7));
+	    if(a_path == "/obj/cfg/o_a")	opt->setText(i2s(permit()&0x7));
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
@@ -591,13 +591,13 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/per")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(period()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(period()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPeriod(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/obj/cfg/flgs" && ctrChkNode(opt))	opt->setText(TSYS::int2str(prjFlags()));
+    else if(a_path == "/obj/cfg/flgs" && ctrChkNode(opt))	opt->setText(i2s(prjFlags()));
     else if(a_path == "/obj/cfg/runWin")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(prjFlags()&(Maximize|FullScreen)));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(prjFlags()&(Maximize|FullScreen)));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    setPrjFlags((prjFlags()&(~(Maximize|FullScreen)))|atoi(opt->text().c_str()));
     }
@@ -703,13 +703,13 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    {
 		string mimeType;
 		if(mimeDataGet("res:"+idmime, mimeType))
-		    mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024.,6),opt->text());
+		    mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024.,6),opt->text());
 	    }
 	}
     }
     else if(a_path == "/style/style")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(stlCurent()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(stlCurent()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
 	    if(atoi(opt->text().c_str()) >= -1) stlCurentSet(atoi(opt->text().c_str()));
@@ -733,7 +733,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     {
 	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
 	for(int iSt = 0; iSt < stlSize(); iSt++)
-	    opt->childAdd("el")->setAttr("id",TSYS::int2str(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
+	    opt->childAdd("el")->setAttr("id", i2s(iSt))->setText(TSYS::strSepParse(stlGet(iSt),0,';'));
 	if(stlSize() < 10) opt->childAdd("el")->setAttr("id","-2")->setText(_("Create new style"));
     }
     else if(a_path == "/style/name")
@@ -1341,19 +1341,19 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	opt->childIns(0,"el")->setText("..");
     else if(a_path == "/wdg/st/pgTp")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(prjFlags()&(Page::Container|Page::Template|Page::Empty)));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(prjFlags()&(Page::Container|Page::Template|Page::Empty)));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    setPrjFlags(prjFlags()^((prjFlags()^atoi(opt->text().c_str()))&(Page::Container|Page::Template|Page::Empty)));
     }
     else if(a_path == "/wdg/st/pgTpLst" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setAttr("id","0")->setText(_("Standard"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container))->setText(_("Container"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container|Page::Empty))->setText(_("Logical container"));	
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Template))->setText(_("Template"));
-	opt->childAdd("el")->setAttr("id",TSYS::int2str(Page::Container|Page::Template))->setText(_("Container and template"));
+	opt->childAdd("el")->setAttr("id", i2s(Page::Container))->setText(_("Container"));
+	opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Empty))->setText(_("Logical container"));
+	opt->childAdd("el")->setAttr("id", i2s(Page::Template))->setText(_("Template"));
+	opt->childAdd("el")->setAttr("id", i2s(Page::Container|Page::Template))->setText(_("Container and template"));
     }
-    else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(TSYS::int2str(timeStamp()));
+    else if(a_path == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else if(a_path == "/br/pg_" || a_path == "/page/page")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))

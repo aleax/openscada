@@ -96,18 +96,29 @@ void Mem::getVal( TMdPrm *prm )
     }
 }
 
-void Mem::makeActiveDA( TMdContr *a_cntr )
+void Mem::makeActiveDA( TMdContr *aCntr )
 {
-    FILE *f = fopen("/proc/meminfo","r");
-    if(f && !a_cntr->present("MemInfo"))
+    FILE *f = fopen("/proc/meminfo", "r");
+    if(f && !aCntr->present("MemInfo"))
     {
-	a_cntr->add("MemInfo",0);
-	AutoHD<TMdPrm> dprm = a_cntr->at("MemInfo");
-	dprm.at().setName(_("Memory info"));
-	dprm.at().autoC(true);
-	dprm.at().cfg("TYPE").setS(id());
-	dprm.at().cfg("EN").setB(true);
-	if(a_cntr->enableStat()) dprm.at().enable();
+	vector<string> pLs;
+	// Find propper parameter's object
+	aCntr->list(pLs);
+	int i_p;
+	for(i_p = 0; i_p < pLs.size(); i_p++)
+	    if(aCntr->at(pLs[i_p]).at().cfg("TYPE").getS() == id()) break;
+	if(i_p >= pLs.size())
+	{
+	    string pId = "MemInfo";
+	    while(aCntr->present(pId)) pId = TSYS::strLabEnum(pId);
+	    aCntr->add(pId, 0);
+	    AutoHD<TMdPrm> dprm = aCntr->at(pId);
+	    dprm.at().setName(_("Memory info"));
+	    dprm.at().autoC(true);
+	    dprm.at().cfg("TYPE").setS(id());
+	    dprm.at().cfg("EN").setB(true);
+	    if(aCntr->enableStat()) dprm.at().enable();
+	}
     }
     if(f) fclose(f);
 }

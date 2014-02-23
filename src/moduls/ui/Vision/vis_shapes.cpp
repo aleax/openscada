@@ -958,7 +958,8 @@ void ShapeFormEl::buttonPressed( )
     WdgView *w = (WdgView *)((QPushButton*)sender())->parentWidget();
     switch(((ShpDt*)w->shpData)->mode)
     {
-	case FBT_STD: case FBT_SAVE: w->attrSet("event","ws_BtPress");	break;
+	case FBT_STD:
+	case FBT_SAVE: w->attrSet("event","ws_BtPress");	break;
     }
 }
 
@@ -1375,7 +1376,7 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 
 	    event->accept( );
 	    return true;
-        }
+	}
 	default: break;
     }
     return false;
@@ -3171,9 +3172,9 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
 	    (!arh_per || (vmax(arh_per,wantPer) >= trcPer && (tTime-valEnd())/vmax(arh_per,vmax(wantPer,trcPer)) < 2)))
 	{
 	    XMLNode req("get");
-	    req.setAttr("path",addr()+"/%2fserv%2fval")->
-		setAttr("tm",ll2s(tTime))->
-		setAttr("tm_grnd","0");
+	    req.setAttr("path", addr()+"/%2fserv%2fval")->
+		setAttr("tm", ll2s(tTime))->
+		setAttr("tm_grnd", "0");
 	    if(view->cntrIfCmd(req,true))	return;
 
 	    int64_t lst_tm = (atoll(req.attr("tm").c_str())/wantPer)*wantPer;
@@ -3244,14 +3245,14 @@ void ShapeDiagram::TrendObj::loadTrendsData( bool full )
     if(!isDataDir)
     {
 	req.clear()->
-	    setAttr("arch",shD->valArch)->
-	    setAttr("path",addr()+"/%2fserv%2fval")->
-	    setAttr("tm",ll2s(tTime))->
-	    setAttr("tm_grnd",ll2s(tTimeGrnd))->
-	    setAttr("per",ll2s(wantPer))->
-	    setAttr("mode","1")->
-	    setAttr("real_prec","6")->
-	    setAttr("round_perc","0");//r2s(100/(float)view->size().height()));
+	    setAttr("arch", shD->valArch)->
+	    setAttr("path", addr()+"/%2fserv%2fval")->
+	    setAttr("tm", ll2s(tTime))->
+	    setAttr("tm_grnd", ll2s(tTimeGrnd))->
+	    setAttr("per", ll2s(wantPer))->
+	    setAttr("mode", "1")->
+	    setAttr("real_prec", "6")->
+	    setAttr("round_perc", "0");//r2s(100/(float)view->size().height()));
 
 	if(view->cntrIfCmd(req,true)) return;
     }
@@ -3366,10 +3367,7 @@ int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
 //************************************************
 //* Protocol view shape widget                   *
 //************************************************
-ShapeProtocol::ShapeProtocol( ) : WdgShape("Protocol")
-{
-
-}
+ShapeProtocol::ShapeProtocol( ) : WdgShape("Protocol")	{ }
 
 void ShapeProtocol::init( WdgView *w )
 {
@@ -3377,7 +3375,7 @@ void ShapeProtocol::init( WdgView *w )
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
-    //> Init main widget
+    //Init main widget
     QVBoxLayout *lay = new QVBoxLayout(w);
     shD->addrWdg = new QTableWidget(w);
     shD->addrWdg->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -3386,11 +3384,11 @@ void ShapeProtocol::init( WdgView *w )
     w->setFocusProxy(shD->addrWdg);
     if(qobject_cast<DevelWdgView*>(w)) setFocus(w, shD->addrWdg, false, true);
     lay->addWidget(shD->addrWdg);
-    //> Init tracing timer
+    //Init tracing timer
     shD->trcTimer = new QTimer(w);
     connect(shD->trcTimer, SIGNAL(timeout()), this, SLOT(tracing()));
 
-    //> Bckground palette init
+    //Bckground palette init
     QPalette plt(shD->addrWdg->palette());
     plt.setBrush(QPalette::Background, QPalette().brush(QPalette::Background));
     shD->addrWdg->setPalette(plt);
@@ -3405,40 +3403,37 @@ void ShapeProtocol::destroy( WdgView *w )
 
 bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
-    int  reld_dt = 0;	//Reload data ( 1-reload addons, 2-full reload )
+    int	reld_dt = 0;	//Reload data ( 1-reload addons, 2-full reload )
 
     ShpDt *shD = (ShpDt*)w->shpData;
 
     switch(uiPrmPos)
     {
-	case -1:	//load
-	    reld_dt = 2;
-	    break;
-	case 5:		//en
+	case A_COM_LOAD: reld_dt = 2;	break;
+	case A_EN:
 	    if(!qobject_cast<RunWdgView*>(w))	break;
 	    w->setVisible((bool)atoi(val.c_str()) && ((RunWdgView*)w)->permView());
 	    break;
-	case 6:		//active
+	case A_ACTIVE:
 	    if(!qobject_cast<RunWdgView*>(w)) break;
 	    shD->active = (bool)atoi(val.c_str()) && ((RunWdgView*)w)->permCntr();
 	    setFocus(w, shD->addrWdg, shD->active);
 	    shD->addrWdg->setSelectionMode(shD->active ? QAbstractItemView::SingleSelection : QAbstractItemView::NoSelection);
 //	    shD->addrWdg->setEnabled( shD->active && ((RunWdgView*)w)->permCntr() );
 	    break;
-	case 12:	//geomMargin
-	    w->layout()->setMargin(atoi(val.c_str()));	break;
-	case 20:	//backColor
+	case A_GEOM_MARGIN: w->layout()->setMargin(atoi(val.c_str()));	break;
+	case A_BackColor:
 	{
 	    QPalette plt(shD->addrWdg->palette());
 	    QBrush brsh = plt.brush(QPalette::Base);
 	    brsh.setColor(getColor(val));
 	    if(!brsh.color().isValid()) brsh.setColor(QPalette().brush(QPalette::Base).color());
-	    brsh.setStyle( brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern );
-	    plt.setBrush(QPalette::Base,brsh);
+	    brsh.setStyle(brsh.textureImage().isNull() ? Qt::SolidPattern : Qt::TexturePattern);
+	    plt.setBrush(QPalette::Base, brsh);
 	    shD->addrWdg->setPalette(plt);
 	    break;
 	}
-	case 21:	//backImg
+	case A_BackImg:
 	{
 	    QImage img;
 	    QPalette plt(shD->addrWdg->palette());
@@ -3447,81 +3442,71 @@ bool ShapeProtocol::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    if(!backimg.empty()) img.loadFromData((const uchar*)backimg.c_str(),backimg.size());
 	    brsh.setTextureImage(img);
 	    brsh.setStyle(!brsh.textureImage().isNull() ? Qt::TexturePattern : Qt::SolidPattern);
-	    plt.setBrush(QPalette::Base,brsh);
+	    plt.setBrush(QPalette::Base, brsh);
 	    shD->addrWdg->setPalette(plt);
 	    break;
 	}
-	case 22:	//font
-	    shD->addrWdg->setFont(getFont(val,vmin(w->xScale(true),w->yScale(true)))); break;
-	case 23:	//headVis
+	case A_ProtFont: shD->addrWdg->setFont(getFont(val,vmin(w->xScale(true),w->yScale(true))));	break;
+	case A_ProtHeadVis:
 	    shD->addrWdg->horizontalHeader()->setVisible(atoi(val.c_str()));
 	    shD->addrWdg->verticalHeader()->setVisible(atoi(val.c_str()));
 	    break;
-	case 24:	//time
+	case A_ProtTime:
 	{
-	    unsigned int tm = strtoul(val.c_str(),0,10);
-	    //if( shD->time == tm ) break;
-	    shD->timeCurent = false;
-	    if( tm == 0 )
+	    unsigned int tm = strtoul(val.c_str(), 0, 10);
+	    //if(shD->time == tm) break;
+	    shD->tTimeCurent = false;
+	    if(tm == 0)
 	    {
 		shD->time = (unsigned int)time(NULL);
-		shD->timeCurent = true;
+		shD->tTimeCurent = true;
 	    }else shD->time = tm;
 	    reld_dt = 1;
 	    break;
 	}
-	case 25:	//tSize
-	    if( shD->tSize == strtoul(val.c_str(),0,10) ) break;
-	    shD->tSize = (unsigned int)strtoul(val.c_str(),0,10);
+	case A_ProtTSize:
+	    if(shD->tSize == strtoul(val.c_str(),0,10)) break;
+	    shD->tSize = (unsigned int)strtoul(val.c_str(), 0, 10);
 	    reld_dt = 1;
 	    break;
-	case 26:	//trcPer
+	case A_ProtTrcPer:
 	{
-	    int trcPer = vmax(0,atoi(val.c_str()));
+	    int trcPer = vmax(0, atoi(val.c_str()));
 	    if(shD->trcPer == trcPer) break;
 	    shD->trcPer = trcPer;
 	    if(trcPer)	shD->trcTimer->start(trcPer*1000);
 	    else	shD->trcTimer->stop();
 	    break;
 	}
-	case 27:	//arch
-	    if(shD->arch == val) break;
-	    shD->arch = val; reld_dt = 2; break;
-	case 28:	//tmpl
-	    if(shD->tmpl == val) break;
-	    shD->tmpl = val; reld_dt = 2; break;
-	case 29:	//lev
-	    if(shD->lev == atoi(val.c_str())) break;
-	    shD->lev = atoi(val.c_str()); reld_dt = 2; break;
-	case 30:	//viewOrd
-	    if(shD->viewOrd == atoi(val.c_str()))	break;
-	    shD->viewOrd = atoi(val.c_str()); reld_dt = 1; break;
-	case 31:	//col
-	    if(shD->col == val) break;
-	    shD->col = val; reld_dt = 1; break;
-	case 32:	//itProp
+	case A_ProtArch: if(shD->arch != val) { shD->arch = val; reld_dt = 2; } break;
+	case A_ProtTmpl: if(shD->tmpl != val) { shD->tmpl = val; reld_dt = 2; } break;
+	case A_ProtLev: if(shD->lev != atoi(val.c_str())) { shD->lev = atoi(val.c_str()); reld_dt = 2; } break;
+	case A_ProtViewOrd: if(shD->viewOrd != atoi(val.c_str())) { shD->viewOrd = atoi(val.c_str()); reld_dt = 1; } break;
+	case A_ProtCol: if(shD->col != val) { shD->col = val; reld_dt = 1; } break;
+	case A_ProtItProp:
 	{
 	    int itNum = atoi(val.c_str());
 	    if((int)shD->itProps.size() == itNum) break;
 	    while((int)shD->itProps.size() < itNum) shD->itProps.push_back(ShpDt::ItProp());
 	    while((int)shD->itProps.size() > itNum) shD->itProps.pop_back();
-	    reld_dt = 1; break;
+	    reld_dt = 1;
+	    break;
 	}
 	default:
-	    //> Item's properties configuration
-	    if(uiPrmPos >= 40)
+	    //Item's properties configuration
+	    if(uiPrmPos >= A_ProtProps)
 	    {
-		int itNum = (uiPrmPos-40)/5;
+		int itNum = (uiPrmPos-A_ProtProps)/A_ProtPropsSz;
 		if(itNum >= (int)shD->itProps.size()) break;
 		reld_dt = 1;
-		switch(uiPrmPos%5)
+		switch(uiPrmPos%A_ProtPropsSz)
 		{
-		    case 0: shD->itProps[itNum].lev = atoi(val.c_str());	break;	//lev
-		    case 1: shD->itProps[itNum].tmpl = val;			break;	//tmpl
-		    case 2:								//fnt
+		    case A_ProtPropLev: shD->itProps[itNum].lev = atoi(val.c_str());	break;
+		    case A_ProtPropTmpl: shD->itProps[itNum].tmpl = val;		break;
+		    case A_ProtPropFnt:
 			shD->itProps[itNum].font = val.empty() ? shD->addrWdg->font() : getFont(val,vmin(w->xScale(true),w->yScale(true)));
 			break;
-		    case 3: shD->itProps[itNum].clr = getColor(val);		break;	//color
+		    case A_ProtPropClr: shD->itProps[itNum].clr = getColor(val);	break;
 		}
 	    }
     }
@@ -3544,8 +3529,8 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		newFill = false,
 		isDbl = false;
 
-    //> Check table structure
-    //> Clear collumns
+    //Check table structure
+    //Clear collumns
     for(int ncl = 0; ncl < shD->addrWdg->columnCount(); ncl++)
 	if(shD->col.find(shD->addrWdg->horizontalHeaderItem(ncl)->data(Qt::UserRole).toString().toStdString()) == string::npos)
 	{
@@ -3554,7 +3539,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    newFill = true;
 	}
 
-    //> Get collumns indexes
+    //Get collumns indexes
     int c_tm = -1, c_tmu = -1, c_lev = -1, c_cat = -1, c_mess = -1;
     shD->addrWdg->verticalHeader()->setVisible(false);
     string clm;
@@ -3586,15 +3571,15 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     if(shD->lev < 0) shD->messList.clear();
     else
     {
-	//> Clear loaded data
+	//Clear loaded data
 	if(full)
 	{
 	    shD->messList.clear();
 	    arhBeg = arhEnd = 0;
 	}
 
-	//> Get archive parameters
-	if(!arhBeg || !arhEnd || tTime > arhEnd)
+	//Get archive parameters
+	if(!arhBeg || !arhEnd || tTime > arhEnd || shD->tTimeCurent)
 	{
 	    XMLNode req("info");
 	    req.setAttr("arch",shD->arch)->setAttr("path","/Archive/%2fserv%2fmess");
@@ -3607,12 +3592,12 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	}
 	if(!arhBeg || !arhEnd)	return;
 
-	//> Correct request to archive border
-	tTime     = vmin(tTime, arhEnd);
+	//Correct request to archive border
+	tTime = shD->tTimeCurent ? arhEnd : vmin(tTime, arhEnd);
 	tTimeGrnd = vmax(tTimeGrnd, arhBeg);
     }
 
-    //> Clear data at time error
+    //Clear data at time error
     unsigned int valEnd = 0, valBeg = 0;
 
     while(shD->messList.size() && (valEnd=shD->messList[0].time) > tTime) { shD->messList.pop_front(); isDtChang = true; }
@@ -3627,14 +3612,14 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	return;
     }
 
-    //> Correct request to present data
+    //Correct request to present data
     if(shD->time > shD->tmPrev) { if(valEnd) tTimeGrnd = valEnd; toUp = true; }
     else if((shD->time-shD->tSize) < shD->tmGrndPrev) { if(valBeg) tTime = valBeg-1; }
     else return;
     shD->tmPrev = shD->time;
     shD->tmGrndPrev = shD->time-shD->tSize;
 
-    //> Get values data
+    //Get values data
     XMLNode req("get");
     req.clear()->
 	setAttr("arch", shD->arch)->
@@ -3649,9 +3634,10 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for(unsigned i_req = 0; i_req < req.childSize(); i_req++)
 	{
 	    XMLNode *rcd = req.childGet(i_req);
-	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10),atoi(rcd->attr("utime").c_str()),rcd->attr("cat"),(TMess::Type)atoi(rcd->attr("lev").c_str()),rcd->text());
+	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), atoi(rcd->attr("utime").c_str()),
+		rcd->attr("cat"), (TMess::Type)atoi(rcd->attr("lev").c_str()), rcd->text());
 
-	    //>> Check for dublicates
+	    // Check for dublicates
 	    isDbl = false;
 	    for(unsigned i_p = 0; !isDbl && i_p < shD->messList.size(); i_p++)
 	    {
@@ -3661,7 +3647,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    }
 	    if(isDbl) continue;
 
-	    //>> Insert new row
+	    // Insert new row
 	    shD->messList.push_front(mess);
 	    isDtChang = true;
 	}
@@ -3669,9 +3655,10 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	for(int i_req = req.childSize()-1; i_req >= 0; i_req--)
 	{
 	    XMLNode *rcd = req.childGet(i_req);
-	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10),atoi(rcd->attr("utime").c_str()),rcd->attr("cat"),(TMess::Type)atoi(rcd->attr("lev").c_str()),rcd->text());
+	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), atoi(rcd->attr("utime").c_str()),
+		rcd->attr("cat"), (TMess::Type)atoi(rcd->attr("lev").c_str()), rcd->text());
 
-	    //>> Check for dublicates
+	    // Check for dublicates
 	    isDbl = false;
 	    for(int i_p = shD->messList.size()-1; !isDbl && i_p >= 0; i_p--)
 	    {
@@ -3681,52 +3668,52 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	    }
 	    if(isDbl) continue;
 
-	    //>> Insert new row
+	    // Insert new row
 	    shD->messList.push_back(mess);
 	    isDtChang = true;
 	}
 
     if(shD->addrWdg->rowCount() == (int)shD->messList.size() && !isDtChang) return;
 
-    //> Sort data
+    //Sort data
     vector< pair<string,int> > sortIts;
-    switch( shD->viewOrd&0x3 )
+    switch(shD->viewOrd&0x3)
     {
-	case 0:
+	case FP_ON_TM:
 	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
 		sortIts.push_back(pair<string,int>(u2s(shD->messList[i_m].time)+" "+u2s(shD->messList[i_m].utime),i_m));
 	    break;
-	case 1:
+	case FP_ON_LEV:
 	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
 		sortIts.push_back(pair<string,int>(i2s(shD->messList[i_m].level),i_m));
 	    break;
-	case 2:
+	case FP_ON_CAT:
 	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
-		sortIts.push_back( pair<string,int>(shD->messList[i_m].categ,i_m) );
+		sortIts.push_back(pair<string,int>(shD->messList[i_m].categ,i_m));
 	    break;
-	case 3:
+	case FP_ON_MESS:
 	    for(unsigned i_m = 0; i_m < shD->messList.size(); i_m++)
-		sortIts.push_back( pair<string,int>(shD->messList[i_m].mess,i_m) );
+		sortIts.push_back(pair<string,int>(shD->messList[i_m].mess,i_m));
 	    break;
     }
     sort(sortIts.begin(), sortIts.end());
     if(shD->viewOrd&0x4) reverse(sortIts.begin(),sortIts.end());
 
-    //> Write to table
+    //Write to table
     shD->addrWdg->setRowCount(sortIts.size());
     QTableWidgetItem *tit;
     for(unsigned i_m = 0; i_m < sortIts.size(); i_m++)
     {
 	QFont fnt;
 	QColor clr, fclr;
-	//>> Check properties
+	// Check properties
 	for(int i_it = 0, lst_lev = -1; i_it < (int)shD->itProps.size(); i_it++)
 	    if(shD->messList[sortIts[i_m].second].level >= shD->itProps[i_it].lev && shD->itProps[i_it].lev > lst_lev &&
 		TRegExp(shD->itProps[i_it].tmpl, "p").test(shD->messList[sortIts[i_m].second].categ))
 	    {
 		fnt = shD->itProps[i_it].font;
 		clr = shD->itProps[i_it].clr;
-		if( shD->messList[sortIts[i_m].second].level == shD->itProps[i_it].lev ) break;
+		if(shD->messList[sortIts[i_m].second].level == shD->itProps[i_it].lev) break;
 		lst_lev = shD->itProps[i_it].lev;
 	    }
 	if(clr.isValid())
@@ -3751,9 +3738,9 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 		shD->addrWdg->setItem(i_m, c_mess, tit=new QTableWidgetItem(shD->messList[sortIts[i_m].second].mess.c_str()));
 	    else continue;
 	    tit->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable);
-	    tit->setData(Qt::FontRole,fnt);
-	    tit->setData(Qt::BackgroundRole,clr.isValid() ? clr : QVariant());
-	    tit->setData(Qt::ForegroundRole,fclr.isValid() ? fclr : QVariant());
+	    tit->setData(Qt::FontRole, fnt);
+	    tit->setData(Qt::BackgroundRole, clr.isValid() ? clr : QVariant());
+	    tit->setData(Qt::ForegroundRole, fclr.isValid() ? fclr : QVariant());
 	}
     }
 
@@ -3761,7 +3748,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
     {
 	shD->addrWdg->resizeColumnsToContents();
 	//Resize too long columns
-	int max_col_sz = vmax(w->size().width()/2,40);
+	int max_col_sz = vmax(w->size().width()/2, 40);
 	for(int i_c = 0; i_c < shD->addrWdg->columnCount(); i_c++)
 	    shD->addrWdg->setColumnWidth(i_c,vmin(max_col_sz,shD->addrWdg->columnWidth(i_c)));
 	shD->addrWdg->horizontalHeader()->setStretchLastSection(true);
@@ -3775,19 +3762,16 @@ void ShapeProtocol::tracing( )
     ShpDt *shD = (ShpDt*)w->shpData;
     if(!w->isEnabled()) return;
 
-    if(shD->timeCurent)	shD->time = (unsigned int)time(NULL);
+    if(shD->tTimeCurent)shD->time = (unsigned int)time(NULL);
     else if(shD->time)	shD->time += shD->trcPer;
     loadData(w);
 }
 
-bool ShapeProtocol::event( WdgView *w, QEvent *event )
-{
-    return false;
-}
+bool ShapeProtocol::event( WdgView *w, QEvent *event )	{ return false; }
 
 bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    if( qobject_cast<DevelWdgView*>(w) )
+    if(qobject_cast<DevelWdgView*>(w))
 	switch(event->type())
 	{
 	    case QEvent::Enter:
@@ -3825,39 +3809,39 @@ bool ShapeProtocol::eventFilter( WdgView *w, QObject *object, QEvent *event )
 
 void ShapeProtocol::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
 {
-    if( en )	wdg->installEventFilter(view);
+    if(en)	wdg->installEventFilter(view);
     else	wdg->removeEventFilter(view);
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
+    //Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	{
-	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
-	    if( en ) ((QWidget*)wdg->children().at(i_c))->setMouseTracking(true);
+	    eventFilterSet(view, (QWidget*)wdg->children().at(i_c), en);
+	    if(en) ((QWidget*)wdg->children().at(i_c))->setMouseTracking(true);
 	}
 }
 
 void ShapeProtocol::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
-    //- Set up current widget -
-    if( en )
+    //Set up current widget
+    if(en)
     {
-	if( isFocus )	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
+	if(isFocus) wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
     else
     {
-	if( wdg->focusPolicy() != Qt::NoFocus )
+	if(wdg->focusPolicy() != Qt::NoFocus)
 	{
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));
 	    wdg->setFocusPolicy(Qt::NoFocus);
 	}
-	if( devel ) wdg->setMouseTracking(true);
+	if(devel) wdg->setMouseTracking(true);
     }
 
-    //- Process childs -
-    for( int i_c = 0; i_c < wdg->children().size(); i_c++ )
-	if( qobject_cast<QWidget*>(wdg->children().at(i_c)) )
-	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);
+    //Process childs
+    for(int i_c = 0; i_c < wdg->children().size(); i_c++)
+	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
+	    setFocus(view, (QWidget*)wdg->children().at(i_c), en, devel);
 }
 
 //************************************************
@@ -3868,10 +3852,7 @@ const char *ShapeDocument::XHTML_entity =
     "  <!ENTITY nbsp \"&#160;\" >\n"
     "]>\n";
 
-ShapeDocument::ShapeDocument( ) : WdgShape("Document")
-{
-
-}
+ShapeDocument::ShapeDocument( ) : WdgShape("Document")	{ }
 
 void ShapeDocument::init( WdgView *w )
 {
@@ -3901,7 +3882,7 @@ void ShapeDocument::destroy( WdgView *w )
 bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {
     ShpDt *shD = (ShpDt*)w->shpData;
-    RunWdgView   *runW = qobject_cast<RunWdgView*>(w);
+    RunWdgView *runW = qobject_cast<RunWdgView*>(w);
 
     bool relDoc = false;	//Reload configuration
 
@@ -3959,10 +3940,7 @@ bool ShapeDocument::attrSet( WdgView *w, int uiPrmPos, const string &val )
     return true;
 }
 
-bool ShapeDocument::event( WdgView *w, QEvent *event )
-{
-    return false;
-}
+bool ShapeDocument::event( WdgView *w, QEvent *event )	{ return false; }
 
 bool ShapeDocument::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
@@ -4046,7 +4024,7 @@ string ShapeDocument::ShpDt::toHtml( )
     XMLNode xproc("body");
     try{ if(!doc.empty()) xproc.load(string(XHTML_entity)+doc, true, Mess->charset()); }
     catch(TError err)
-    { mess_err(mod->nodePath().c_str(),_("Document parsing error: %s"),err.mess.c_str()); }
+    { mess_err(mod->nodePath().c_str(), _("Document parsing error: %s"), err.mess.c_str()); }
 
     nodeProcess(&xproc);
 
@@ -4108,20 +4086,11 @@ ShapeFunction::ShapeFunction( ) : WdgShape("Function")
 //************************************************
 //* User element shape widget                    *
 //************************************************
-ShapeBox::ShapeBox( ) : WdgShape("Box")
-{
+ShapeBox::ShapeBox( ) : WdgShape("Box")	{ }
 
-}
+void ShapeBox::init( WdgView *w )	{ w->shpData = new ShpDt(); }
 
-void ShapeBox::init( WdgView *w )
-{
-    w->shpData = new ShpDt();
-}
-
-void ShapeBox::destroy( WdgView *w )
-{
-    delete (ShpDt*)w->shpData;
-}
+void ShapeBox::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
 bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 {

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_shapes.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko
+ *   Copyright (C) 2007-2014 by Roman Savochenko
  *   rom_as@diyaorg.dp.ua
  *
  *   This program is free software; you can redistribute it and/or modify
@@ -484,10 +484,10 @@ class ShapeProtocol : public WdgShape
 			QFont font;
 		};
 		//Methods
-		ShpDt( ) : active(true), timeCurent(false), time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
+		ShpDt( ) : active(true), tTimeCurent(false), time(0), tSize(60), tmPrev(0), tmGrndPrev(0), arhBeg(0), arhEnd(0)	{ }
 		//Attributes
 		short active	:1;
-		short timeCurent:1;
+		short tTimeCurent:1;
 		short trcPer	:10;
 		short lev	:4;
 		short viewOrd	:4;

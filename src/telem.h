@@ -66,6 +66,7 @@ class TFld
 	{
 	    NoFlag	= 0x00,		//No flag
 	    Selected	= 0x01,		//Connnect to simple elements
+	    SelEdit	= 0x40,		//Editable list
 	    SelfFld	= 0x02,		//Create self field
 	    NoWrite	= 0x04,		//No writeable
 	    HexDec	= 0x08,		//Decimal value type: hexodecimal view prefer

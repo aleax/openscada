@@ -64,9 +64,9 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	els;		//Work atribute elements
-	void 	*extPrms;
-	Res	rData;
-	string	mErr;
+	void	*extPrms;
+	pthread_mutex_t	dataM;
+	MtxString mErr;
 	vector<string>	als;
 	double	numBytes;
 

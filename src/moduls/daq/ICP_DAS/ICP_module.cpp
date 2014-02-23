@@ -106,7 +106,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("BUS",_("Bus"),TFld::Integer,TFld::Selected,"2","1","-1;0;1;2;3;4;5;6;7;8;9;10",
 	    _("ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;COM 9;COM 10")));
-    fldAdd(new TFld("TR_OSCD",_("Use OpenSCADA transport"),TFld::String,TFld::NoFlag,i2s(2*atoi(OBJ_ID_SZ)+5).c_str(),TrIcpDasNm));
+    fldAdd(new TFld("TR_OSCD",_("Transport"),TFld::String,TFld::NoFlag,i2s(2*atoi(OBJ_ID_SZ)+5).c_str(),TrIcpDasNm));
     fldAdd(new TFld("BAUD",_("Baudrate"),TFld::Integer,TFld::Selected,"6","115200",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600",
 	"300;600;1200;2400;4800;9600;19200;38400;57600;115200;230400;460800;500000;576000;921600"));
@@ -360,8 +360,11 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
     if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), req.c_str());
 
+    //Request by ICP DAS serial API
+    if(mBus == 0 && mSlot != mCurSlot)	{ pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
+
     //Request by OpenSCADA output transport
-    if(bus() > 0 && trOscd() != TrIcpDasNm)
+    if(bus() >= 0 && trOscd() != TrIcpDasNm)
     {
 	string rez;
 	try
@@ -405,7 +408,6 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
     //Request by ICP DAS serial API
     ResAlloc res(reqRes, true);
-    if(mBus == 0 && mSlot != mCurSlot) { pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
 
     WORD wT, rez;
     char szReceive[255]; szReceive[0] = 0;
@@ -435,7 +437,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
-	if(mBus <= 0) ctrRemoveNode(opt,"/cntr/cfg/TR_OSCD");
+	if(mBus < 0) ctrRemoveNode(opt,"/cntr/cfg/TR_OSCD");
 	else ctrMkNode("fld",opt,-1,"/cntr/cfg/TR_OSCD",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","select","select","/cntr/cfg/trLst");
 	if(mBus <= 0 || trOscd() != TrIcpDasNm) ctrRemoveNode(opt,"/cntr/cfg/BAUD");
 	if(mBus < 0) ctrRemoveNode(opt,"/cntr/cfg/REQ_TRY");
@@ -495,6 +497,7 @@ void TMdPrm::enable( )
     TParamContr::enable();
 
     wTm = vmin(25.5,vmax(0,atof(modPrm("wTm").c_str())));
+    acq_err = "";
 
     vector<string> als;
     da->enable(this, als);

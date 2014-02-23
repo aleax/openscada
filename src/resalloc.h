@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: resalloc.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,9 +32,9 @@ using std::string;
 namespace OSCADA
 {
 
-//********************************************
-//* Resource object                          *
-//********************************************
+//***********************************************************
+//* Resource RW lock object				    *
+//***********************************************************
 class Res
 {
     public:
@@ -54,9 +54,9 @@ class Res
 #endif
 };
 
-//********************************************
-//* Automatic resource allocator/deallocator *
-//********************************************
+//***********************************************************
+//* Automatic resource RW lock allocator/deallocator        *
+//***********************************************************
 class ResAlloc
 {
     public:
@@ -66,7 +66,9 @@ class ResAlloc
 	~ResAlloc( );
 
 	void request( bool write = false, unsigned short tm = 0 );
+	void lock( bool write = false, unsigned short tm = 0 )	{ request(write, tm); }
 	void release( );
+	void unlock( )	{ release(); }
 
     private:
 	//Attributes
@@ -75,7 +77,7 @@ class ResAlloc
 };
 
 //********************************************
-//* String+resource for			     *
+//* String+resource RW lock for		     *
 //********************************************
 class ResString
 {
@@ -97,6 +99,52 @@ class ResString
     private:
 	//Attributes
 	pthread_mutex_t	mRes;
+	string	str;
+};
+
+//***********************************************************
+//* Automatic POSIX mutex allocator/deallocator		    *
+//***********************************************************
+class MtxAlloc
+{
+    public:
+	//Methods
+	MtxAlloc( pthread_mutex_t &iM, bool lock = false );
+	~MtxAlloc( );
+
+	int lock( );
+	int tryLock( );
+	int unlock( );
+
+    private:
+	//Attributes
+	pthread_mutex_t	&m;
+	bool	mLock;
+};
+
+//********************************************
+//* String + reference mutex lock for	     *
+//********************************************
+class MtxString
+{
+    public:
+	//Methods
+	MtxString( pthread_mutex_t &iM );
+	~MtxString( );
+
+	MtxString &operator=( const string &val );
+	operator string( )	{ return getVal(); }
+
+	size_t size( );
+	bool   empty( );
+
+	void setVal( const string &vl );
+	string getVal( );
+	const string &getValRef( )	{ return str; }
+
+    private:
+	//Attributes
+	pthread_mutex_t	&m;
 	string	str;
 };
 

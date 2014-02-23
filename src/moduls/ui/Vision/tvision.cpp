@@ -72,9 +72,9 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-        if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
-            return new VISION::TVision( source );
-        return NULL;
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
+	    return new VISION::TVision( source );
+	return NULL;
     }
 }
 
@@ -459,10 +459,10 @@ void TVision::postMess( const QString &cat, const QString &mess, TVision::MessLe
 int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob )
 {
     //> Check for local VCAEngine path
-    if( !glob ) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
+    if(!glob) node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
 
     //> Local station request
-    if( VCAStat.empty() || VCAStat == "." )
+    if(VCAStat.empty() || VCAStat == ".")
     {
 	node.setAttr("user",user);
 	SYS->cntrCmd(&node);
@@ -474,7 +474,7 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
     {
 	TTransportS::ExtHost host = SYS->transport().at().extHostGet("*",VCAStat);
 	AutoHD<TTransportOut> tr = SYS->transport().at().extHost(host,"UIVision");
-	if( !tr.at().startStat() )	tr.at().start();
+	if(!tr.at().startStat()) tr.at().start();
 
 	bool trUser = (user.empty()||user==host.user);
 	node.setAttr("rqDir",trUser?"0":"1")->
@@ -484,11 +484,11 @@ int TVision::cntrIfCmd( XMLNode &node, const string &user, const string &passwor
 
 	return atoi(node.attr("rez").c_str());
     }
-    catch( TError err )
+    catch(TError err)
     {
 	node.childClear();
-	node.setAttr("rez","10");
-	node.setAttr("mcat",err.cat);
+	node.setAttr("rez", "10");
+	node.setAttr("mcat", err.cat);
 	node.setText(err.mess);
 	return 10;
     }

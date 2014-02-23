@@ -35,7 +35,7 @@ namespace SystemCntr
 class TMdPrm;
 class TMdContr;
 
-class DA: public ::TElem
+class DA: public TElem
 {
     public:
 	//Methods
@@ -47,6 +47,9 @@ class DA: public ::TElem
 
 	virtual void init( TMdPrm *prm ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
+
+	virtual void cfgChange( TCfg &i_cfg )	{ }
+
 	virtual void getVal( TMdPrm *prm )	{ }
 
 	virtual void makeActiveDA( TMdContr *a_cntr )	{ }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttransports.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,6 +38,7 @@ namespace OSCADA
 //* TTransportIn				 *
 //************************************************
 class TTipTransport;
+class TTransportOut;
 
 class TTransportIn : public TCntrNode, public TConfig
 {
@@ -57,7 +58,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	string	protocol( );
 	virtual string getStatus( );
 
-	bool toStart( ) 	{ return mStart; }
+	bool toStart( )		{ return mStart; }
 	bool startStat( )	{ return run_st; }
 
 	string DB( )		{ return mDB; }
@@ -73,8 +74,10 @@ class TTransportIn : public TCntrNode, public TConfig
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
 	virtual void start( )	{ }
-	virtual void stop( )	{ }
+	virtual void stop( );
 	virtual int writeTo( const string &sender, const string &data )	{ return 0; }
+
+	vector<AutoHD<TTransportOut> > assTrs( );	//Assigned transports
 
 	TTipTransport &owner( );
 
@@ -82,6 +85,8 @@ class TTransportIn : public TCntrNode, public TConfig
 
     protected:
 	//Methods
+	string assTrO( const string &addr );	//Assign new output transport
+
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void preEnable( int flag );
@@ -105,6 +110,7 @@ class TTransportIn : public TCntrNode, public TConfig
 	char	&mStart;
 	string	mDB;
 	Res	nRes;
+	vector<AutoHD<TTransportOut> >	mAssTrO;
 };
 
 //************************************************
@@ -124,6 +130,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	name( );
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
 	string	addr( )		{ return cfg("ADDR").getS(); }
+	virtual string timings( ) { return ""; }
 	int	prm1( )		{ return mPrm1; }
 	int	prm2( )		{ return mPrm2; }
 	bool	toStart( )	{ return mStart; }
@@ -137,6 +144,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
 	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	virtual void setTimings( const string &vl )	{ }
 	void setPrm1( int vl )				{ mPrm1 = vl; }
 	void setPrm2( int vl )				{ mPrm2 = vl; }
 	void setToStart( bool vl )			{ mStart = vl; modif(); }

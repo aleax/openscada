@@ -84,8 +84,6 @@ void TMess::setLogDirect( int dir )
     SYS->modif();
 }
 
-
-
 void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 {
     if(abs(vmin(Emerg, vmax(-Emerg,level))) < messLevel()) return;

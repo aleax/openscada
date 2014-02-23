@@ -66,7 +66,7 @@ Sensors::~Sensors( )
 void Sensors::init( TMdPrm *prm )
 {
     prm->cfg("SUBT").setView(false);
-    getSensors(prm,true);
+    getSensors(prm, true);
 }
 
 void Sensors::deInit( TMdPrm *prm )
@@ -163,84 +163,90 @@ void Sensors::getSensors( TMdPrm *prm, bool onlyCreate )
     if(devOK) prm->daErr = "";
     else if(!onlyCreate && !prm->daErr.getVal().size())
     {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
-void Sensors::makeActiveDA( TMdContr *a_cntr )
+void Sensors::makeActiveDA( TMdContr *aCntr )
 {
     char buf[100], name[31];
     float val;
     string ap_nm = "SensorsData";
 
-    if( !a_cntr->present(ap_nm) )
+    vector<string> pLs;
+    // Find propper parameter's object
+    aCntr->list(pLs);
+    int i_p;
+    for(i_p = 0; i_p < pLs.size(); i_p++)
+	if(aCntr->at(pLs[i_p]).at().cfg("TYPE").getS() == id()) break;
+    if(i_p < pLs.size()) return;
+    while(aCntr->present(ap_nm)) ap_nm = TSYS::strLabEnum(ap_nm);
+
+    bool sens_allow = false;
+    //> Use libsensor check
+    if(libsensor_ok)
     {
-	bool sens_allow = false;
-	//> Use libsensor check
-	if( libsensor_ok )
-	{
 #if HAVE_SENSORS_SENSORS_H
-	    int nr = 0;
-	    const sensors_chip_name	*name;
+	int nr = 0;
+	const sensors_chip_name	*name;
 #if SENSORS_API_VERSION >= 0x400
-	    while((name=sensors_get_detected_chips(NULL,&nr)))
+	while((name=sensors_get_detected_chips(NULL,&nr)))
+	{
+	    const sensors_subfeature *feature = NULL;
+	    const sensors_feature *main_feature;
+	    int nr1 = 0;
+	    while((main_feature = sensors_get_features(name, &nr1)))
 	    {
-		const sensors_subfeature *feature = NULL;
-		const sensors_feature *main_feature;
-		int nr1 = 0;
-		while((main_feature = sensors_get_features(name, &nr1)))
+		switch(main_feature->type)
 		{
-		    switch(main_feature->type)
-		    {
-			case SENSORS_FEATURE_IN:
-			    feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
-			    break;
-			case SENSORS_FEATURE_FAN:
-			    feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_FAN_INPUT);
-			    break;
-			case SENSORS_FEATURE_TEMP:
-			    feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_TEMP_INPUT);
-			    break;
-			default: break;
-		    }
-		    if(feature) { sens_allow |= true; break; }
+		    case SENSORS_FEATURE_IN:
+			feature = sensors_get_subfeature(name,main_feature,SENSORS_SUBFEATURE_IN_INPUT);
+			break;
+		    case SENSORS_FEATURE_FAN:
+			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_FAN_INPUT);
+			break;
+		    case SENSORS_FEATURE_TEMP:
+			feature = sensors_get_subfeature(name, main_feature, SENSORS_SUBFEATURE_TEMP_INPUT);
+			break;
+		    default: break;
 		}
+		if(feature) { sens_allow |= true; break; }
 	    }
+	}
 #else
-	    while( name = sensors_get_detected_chips(&nr) )
-	    {
-		const sensors_feature_data *feature;
-		int nr1 = 0, nr2 = 0;
-		while( feature = sensors_get_all_features( *name, &nr1, &nr2 ) )
-		    if( sensors_get_ignored( *name, feature->number ) == 1 && feature->mapping == SENSORS_NO_MAPPING )
-		    { sens_allow |= true; break; }
-	    }
+	while(name = sensors_get_detected_chips(&nr))
+	{
+	    const sensors_feature_data *feature;
+	    int nr1 = 0, nr2 = 0;
+	    while(feature = sensors_get_all_features(*name,&nr1,&nr2))
+		if(sensors_get_ignored(*name,feature->number) == 1 && feature->mapping == SENSORS_NO_MAPPING)
+		{ sens_allow |= true; break; }
+	}
 #endif
 #endif
-	}
-	//> Check monitor present
-	else
+    }
+    //> Check monitor present
+    else
+    {
+	FILE *fp = popen(mbmon_cmd, "r");
+	if(fp != NULL)
 	{
-	    FILE *fp = popen(mbmon_cmd,"r");
-	    if( fp != NULL )
-	    {
-		while(fgets(buf,sizeof(buf),fp))
-		    if( sscanf(buf, "%31s : %f", name, &val) == 2 )
-		    { sens_allow = true; break; }
-		pclose(fp);
-	    }
+	    while(fgets(buf,sizeof(buf),fp))
+		if(sscanf(buf,"%31s : %f",name,&val) == 2)
+		{ sens_allow = true; break; }
+	    pclose(fp);
 	}
-	//> Sensor parameter create
-	if( sens_allow )
-	{
-	    a_cntr->add(ap_nm,0);
-	    AutoHD<TMdPrm> dprm = a_cntr->at(ap_nm);
-	    dprm.at().setName(_("Data sensors"));
-	    dprm.at().autoC(true);
-	    dprm.at().cfg("TYPE").setS(id());
-	    dprm.at().cfg("EN").setB(true);
-	    if(a_cntr->enableStat()) dprm.at().enable();
-	}
+    }
+    //> Sensor parameter create
+    if(sens_allow)
+    {
+	aCntr->add(ap_nm, 0);
+	AutoHD<TMdPrm> dprm = aCntr->at(ap_nm);
+	dprm.at().setName(_("Data sensors"));
+	dprm.at().autoC(true);
+	dprm.at().cfg("TYPE").setS(id());
+	dprm.at().cfg("EN").setB(true);
+	if(aCntr->enableStat()) dprm.at().enable();
     }
 }

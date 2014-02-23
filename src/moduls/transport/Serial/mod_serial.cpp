@@ -216,10 +216,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     setTimings("6:320");
 }
 
-TTrIn::~TTrIn()
-{
-    try{ stop(); }catch(...){ }
-}
+TTrIn::~TTrIn( )	{ }
 
 void TTrIn::load_( )
 {
@@ -437,9 +434,9 @@ void TTrIn::connect( )
     }
 }
 
-void TTrIn::start()
+void TTrIn::start( )
 {
-    if( run_st ) return;
+    if(run_st) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -449,11 +446,13 @@ void TTrIn::start()
 
     //> Start listen task
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
+
+    TTransportIn::start();
 }
 
-void TTrIn::stop()
+void TTrIn::stop( )
 {
-    if( !run_st ) return;
+    if(!run_st) return;
 
     if(mMdmMode && mMdmDataMode) mod->devUnLock(mDevPort);
 
@@ -467,6 +466,8 @@ void TTrIn::stop()
 
     if(fd >= 0) close(fd);
     fd = -1;
+
+    TTransportIn::stop();
 }
 
 void *TTrIn::Task( void *tr_in )
@@ -769,10 +770,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     setTimings("640:6");
 }
 
-TTrOut::~TTrOut()
-{
-    if( startStat() )	stop();
-}
+TTrOut::~TTrOut( )	{ }
 
 void TTrOut::load_( )
 {
@@ -828,9 +826,9 @@ void TTrOut::save_( )
 
 string TTrOut::getStatus( )
 {
-    string rez = TTransportOut::getStatus( );
+    string rez = TTransportOut::getStatus();
 
-    if( startStat() )
+    if(startStat())
 	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str());
 
     return rez;
@@ -1040,6 +1038,8 @@ void TTrOut::start( )
 
     mKeepAliveLstTm = TSYS::curTime();
     run_st = true;
+
+    TTransportOut::start();
 }
 
 void TTrOut::stop( )
@@ -1067,6 +1067,8 @@ void TTrOut::stop( )
 
     run_st = false;
     mMdmMode = false;
+
+    TTransportOut::stop();
 }
 
 void TTrOut::check( )

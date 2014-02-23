@@ -149,7 +149,7 @@ void CPU::getVal( TMdPrm *prm )
     }
 }
 
-void CPU::makeActiveDA( TMdContr *a_cntr )
+void CPU::makeActiveDA( TMdContr *aCntr )
 {
     char buf[256];
 
@@ -170,15 +170,26 @@ void CPU::makeActiveDA( TMdContr *a_cntr )
 		pSTp = TSYS::int2str(n_cpu);
 	    }
 
-	    if(a_cntr->present(pId))	continue;
-	    a_cntr->add(pId,0);
-	    AutoHD<TMdPrm> dprm = a_cntr->at(pId);
+	    vector<string> pLs;
+	    // Find propper parameter's object
+	    aCntr->list(pLs);
+	    int i_p;
+	    for(i_p = 0; i_p < pLs.size(); i_p++)
+	    {
+		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+		if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == pSTp)	break;
+	    }
+	    if(i_p < pLs.size()) continue;
+
+	    while(aCntr->present(pId)) pId = TSYS::strLabEnum(pId);
+	    aCntr->add(pId, 0);
+	    AutoHD<TMdPrm> dprm = aCntr->at(pId);
 	    dprm.at().setName(pNm);
 	    dprm.at().autoC(true);
 	    dprm.at().cfg("TYPE").setS(id());
 	    dprm.at().cfg("SUBT").setS(pSTp);
 	    dprm.at().cfg("EN").setB(true);
-	    if(a_cntr->enableStat()) dprm.at().enable();
+	    if(aCntr->enableStat()) dprm.at().enable();
 	}
     fclose(f);
 }

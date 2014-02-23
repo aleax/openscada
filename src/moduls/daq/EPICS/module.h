@@ -1,8 +1,8 @@
 
-//OpenSCADA system module DAQ.System file: os_contr.h
+//OpenSCADA system module DAQ.EPICS file: module.h
 /***************************************************************************
- *   Copyright (C) 2005-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2014 by Roman Savochenko                                *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,18 +19,17 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef OS_CONTR_H
-#define OS_CONTR_H
-
-#include <tmodule.h>
-#include <tcontroller.h>
-#include <ttipdaq.h>
-#include <tparamcontr.h>
+#ifndef MODULE_H
+#define MODULE_H
 
 #include <string>
 #include <vector>
 
-#include "da.h"
+#include <tcontroller.h>
+#include <ttipdaq.h>
+#include <tparamcontr.h>
+
+#include <epics/cadef.h>
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -39,11 +38,11 @@ using std::string;
 using std::vector;
 using namespace OSCADA;
 
-namespace SystemCntr
+namespace ModEPICS
 {
 
 //*************************************************
-//* TMdPrm                                        *
+//* ModEPICS::TMdPrm                              *
 //*************************************************
 class TMdContr;
 
@@ -54,95 +53,99 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	string varList( )			{ return cfg("VAR_LS").getS(); }
+	void setVarList( const string &vl )	{ cfg("VAR_LS").setS(vl); }
+
+	TElem &elem( )				{ return p_el; }
+
 	void enable( );
 	void disable( );
 
-	void autoC( bool val )	{ m_auto = val; }
-	bool autoC( )		{ return m_auto; }
-
-	//> Set perameter type
-	void setType( const string &da_id );
-	//> Get new value
-	void getVal( );
+	//void attrPrc( MmsVariableSpecification *iVal = NULL, vector<string> *iAls = NULL, const string &vid = "" );
+	void getVals( );
 	void setEval( );
 
-	void vlElemAtt( TElem *ValEl );
-	void vlElemDet( TElem *ValEl );
-
 	TMdContr &owner( );
-
-	//Attributes
-	ResString daErr;		//DA error
-	void	*daData;		//DA personal data
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
 
-	bool cfgChange( TCfg &cfg );	//config change
-
-	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
-
-	void postEnable( int flag );
-
     private:
+	//Methods
+	void postEnable( int flag );
+	void cntrCmdProc( XMLNode *opt );
+	void vlArchMake( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
+
 	//Attributes
-	bool	m_auto;			//Autocreated
-	DA	*m_da;
+	TElem	p_el;	//Work atribute elements
 };
 
 //*************************************************
-//* TMdContr                                      *
+//* ModEPICS::TMdContr                            *
 //*************************************************
 class TMdContr: public TController
 {
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr( string name_c, const string &daq_db, TElem *cfgelem );
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
 	string getStatus( );
 
-	double period( ){ return mPer; }
-	string cron( )	{ return cfg("SCHEDULE").getS(); }
-	int64_t prior( ){ return mPrior; }
+	int64_t	period( )	{ return mPer; }
+	string  cron( )		{ return mSched; }
+	int	prior( )	{ return mPrior; }
+	double  syncPer( )	{ return mSync; }
+	string	addr( )		{ return mAddr; }
 
-	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+	//AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
-	void devUpdate( );
+	Res &nodeRes( )		{ return cntrRes; }
+
+	void connectServer( );
+        void disconnectServer( );
 
     protected:
 	//Methods
-	void load_( );
-	void start_( );
+	void prmEn( TMdPrm *prm, bool val );
+
 	void enable_( );
+	void disable_( );
+	void start_( );
 	void stop_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
-	void prmEn( const string &id, bool val );
 
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
-	int64_t	&mPerOld,	// ms
-		&mPrior;	// Process task priority
+	Res	enRes, cntrRes;	// Resource for enable params and 
+	TCfg	&mSched,	// Schedule
+		&mPrior,	// Process task priority
+		&mSync,		// Synchronization inter remote station: attributes list update.
+		&mAddr;		// EPICS server address
+	int64_t	mPer;
 
-	bool	prc_st,		// Process task active
-		call_st,        // Calc now stat
-		endrun_req;	// Request to stop of the Process task
+	bool	prcSt,		// Process task active
+ 		callSt;		// Calc now stat
+
 	vector< AutoHD<TMdPrm> >  p_hd;
 
-	double	mPer, tm_calc;	// Scheme's calc time
+	double	tmGath;		// Gathering time
+	float	tmDelay;	//Delay time for next try connect
+
+	chid	chan;
+	//MmsConnection	con;
 };
 
 //*************************************************
-//* TTpContr                                      *
+//* ModEPICS::TTpContr                            *
 //*************************************************
 class TTpContr: public TTipDAQ
 {
@@ -151,32 +154,23 @@ class TTpContr: public TTipDAQ
 	TTpContr( string name );
 	~TTpContr( );
 
-	void	daList( vector<string> &da );
-	void	daReg( DA *da );
-	DA	*daGet( const string &da );
-
-	AutoHD<TMdContr> at( const string &name, const string &who = "" )
-	{ return TTipDAQ::at(name,who); }
-
-	void perSYSCall( unsigned int cnt );
-
     protected:
 	//Methods
 	void postEnable( int flag );
+
 	void load_( );
+	void save_( );
 
 	bool redntAllow( )	{ return true; }
 
     private:
 	//Methods
 	TController *ContrAttach( const string &name, const string &daq_db );
-
-	//Attributes
-	vector<DA *> m_da;
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 };
 
 extern TTpContr *mod;
 
-} //End namespace
+} //End namespace ModEPICS
 
-#endif //OS_CONTR_H
+#endif //MODULE_H

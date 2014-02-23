@@ -92,35 +92,52 @@ void UpTime::getVal( TMdPrm *prm )
     }
 }
 
-void UpTime::makeActiveDA( TMdContr *a_cntr )
+void UpTime::makeActiveDA( TMdContr *aCntr )
 {
-    string ap_nm = "UpTimeSystem";
-    if(!a_cntr->present(ap_nm))
+    vector<string> pLs;
+    aCntr->list(pLs);
+    int i_p;
+
+    for(i_p = 0; i_p < pLs.size(); i_p++)
     {
+	AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == "sys") break;
+    }
+    if(i_p >= pLs.size())
+    {
+	string ap_nm = "UpTimeSystem";
+	while(aCntr->present(ap_nm)) ap_nm = TSYS::strLabEnum(ap_nm);
 	FILE *f = fopen("/proc/uptime","r");
-	if( f != NULL )
+	if(f != NULL)
 	{
-	    a_cntr->add(ap_nm,0);
-	    AutoHD<TMdPrm> dprm = a_cntr->at(ap_nm);
+	    aCntr->add(ap_nm, 0);
+	    AutoHD<TMdPrm> dprm = aCntr->at(ap_nm);
 	    dprm.at().setName(_("System up time"));
 	    dprm.at().autoC(true);
 	    dprm.at().cfg("TYPE").setS(id());
 	    dprm.at().cfg("SUBT").setS("sys");
 	    dprm.at().cfg("EN").setB(true);
-	    if(a_cntr->enableStat()) dprm.at().enable();
+	    if(aCntr->enableStat()) dprm.at().enable();
 	    fclose(f);
 	}
     }
-    ap_nm = "UpTimeStation";
-    if(!a_cntr->present(ap_nm))
+
+    for(i_p = 0; i_p < pLs.size(); i_p++)
     {
-	a_cntr->add(ap_nm,0);
-	AutoHD<TMdPrm> dprm = a_cntr->at(ap_nm);
+	AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
+	if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == "stat") break;
+    }
+    if(i_p >= pLs.size())
+    {
+	string ap_nm = "UpTimeStation";
+	while(aCntr->present(ap_nm)) ap_nm = TSYS::strLabEnum(ap_nm);
+	aCntr->add(ap_nm, 0);
+	AutoHD<TMdPrm> dprm = aCntr->at(ap_nm);
 	dprm.at().setName(_("Station up time"));
 	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
 	dprm.at().cfg("SUBT").setS("stat");
 	dprm.at().cfg("EN").setB(true);
-	if(a_cntr->enableStat()) dprm.at().enable();
+	if(aCntr->enableStat()) dprm.at().enable();
     }
 }

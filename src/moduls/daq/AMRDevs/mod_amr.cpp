@@ -245,7 +245,7 @@ void *TMdContr::Task( void *icntr )
 	//> Update controller's data
 	cntr.en_res.resRequestR( );
 	for(unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
-	    try { cntr.p_hd[i_p].at().type().getVals((TParamContr*)&cntr); }
+	    try { cntr.p_hd[i_p].at().type().getVals(&cntr.p_hd[i_p].at()); }
 	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
 
@@ -277,12 +277,21 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), numBytes(0)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), numBytes(0), mErr(dataM)
 {
-
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&dataM, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 }
 
-TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
+TMdPrm::~TMdPrm( )
+{
+    nodeDelAll();
+
+    pthread_mutex_destroy(&dataM);
+}
 
 void TMdPrm::postEnable( int flag )
 {
@@ -346,7 +355,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/st/status" && ctrChkNode(opt))
     {
 	string rez;
-	ResAlloc res(rData, false);
+	MtxAlloc res(dataM, true);
 	if(!enableStat())		rez = TSYS::strMess("2:%s. ",_("Disabled"));
 	else if(!owner().startStat())	rez = TSYS::strMess("1:%s. ",_("Enabled"));
 	else if(mErr.empty())		rez = TSYS::strMess("0:%s. ",_("Processed"));

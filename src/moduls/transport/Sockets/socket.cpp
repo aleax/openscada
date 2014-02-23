@@ -135,10 +135,7 @@ TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
     setAddr("TCP:localhost:10002:0");
 }
 
-TSocketIn::~TSocketIn()
-{
-    try{ stop(); }catch(...){ }
-}
+TSocketIn::~TSocketIn( )	{ }
 
 string TSocketIn::getStatus( )
 {
@@ -146,7 +143,7 @@ string TSocketIn::getStatus( )
 
     if(startStat())
 	rez += TSYS::strMess(_("Connections %d, opened %d. Traffic in %s, out %s. Closed connections by limit %d."),
-				connNumb, cl_id.size(), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
+				connNumb, (protocol().empty()?assTrs().size():cl_id.size()), TSYS::cpct2str(trIn).c_str(), TSYS::cpct2str(trOut).c_str(), clsConnByLim);
 
     return rez;
 }
@@ -285,6 +282,8 @@ void TSocketIn::start( )
     }
 
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
+
+    TTransportIn::start();
 }
 
 void TSocketIn::stop( )
@@ -300,6 +299,8 @@ void TSocketIn::stop( )
     shutdown(sock_fd, SHUT_RDWR);
     close(sock_fd);
     if(type == SOCK_UNIX) remove(path.c_str());
+
+    TTransportIn::stop();
 }
 
 int TSocketIn::writeTo( const string &sender, const string &data )
@@ -325,13 +326,13 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 		else if(wL < 0)
 		{
 		    if(errno == EAGAIN)
-            	    {
-                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
-                	FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
-                	int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
-                	if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
-            	    }
-            	    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+		    {
+			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time take?
+			FD_ZERO(&rw_fd); FD_SET(sId, &rw_fd);
+			int kz = select(sId+1, NULL, &rw_fd, NULL, &tv);
+			if(kz > 0 && FD_ISSET(sId,&rw_fd)) { wL = 0; continue; }
+		    }
+		    mess_err(nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
 		}
 		sock_res.resRequestW();
@@ -390,13 +391,10 @@ void *TSocketIn::Task( void *sock_in )
 		    continue;
 		}
 		//Create presenting the client connection output transport
-		if(sock->protocol().empty())
+		if(sock->protocol().empty() && sock->assTrs().size() <= sock->maxFork())
 		{
-		    string inRepNm = "inClnt"+sock->id()+"_"+i2s(sock_fd_CL);
-		    sock->owner().outAdd(inRepNm);
-		    AutoHD<TTransportOut> oTr = sock->owner().outAt(inRepNm);
-		    oTr.at().setAddr("SOCK:"+i2s(sock_fd_CL));
-		    oTr.at().start();
+		    sock->assTrO("SOCK:"+i2s(sock_fd_CL));
+		    sock->connNumb++;
 		    continue;
 		}
 
@@ -527,13 +525,13 @@ void *TSocketIn::ClTask( void *s_inf )
 		else if(wL < 0)
 		{
 		    if(errno == EAGAIN)
-            	    {
-                	tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
-                	FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
-                	kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
-                	if(kz > 0 && FD_ISSET(s.cSock,&rw_fd)) { wL = 0; continue; }
-            	    }
-            	    mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
+		    {
+			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
+			FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
+			kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
+			if(kz > 0 && FD_ISSET(s.cSock,&rw_fd)) { wL = 0; continue; }
+		    }
+		    mess_err(s.s->nodePath().c_str(), _("Write: error '%s (%d)'!"), strerror(errno), errno);
 		    break;
 		}
 		s.s->sock_res.resRequestW();
@@ -700,13 +698,10 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), sock_fd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
-    setTimings("5:1");
+    setTimings("5:0.01");
 }
 
-TSocketOut::~TSocketOut( )
-{
-    if(startStat()) stop();
-}
+TSocketOut::~TSocketOut( )	{ }
 
 void TSocketOut::setTimings( const string &vl )
 {
@@ -756,7 +751,7 @@ void TSocketOut::save_( )
     TTransportOut::save_();
 }
 
-void TSocketOut::start()
+void TSocketOut::start( )
 {
     ResAlloc res(wres, true);
 
@@ -774,7 +769,16 @@ void TSocketOut::start()
     else if(s_type == S_NM_UNIX)type = SOCK_UNIX;
     else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
 
-    if(type == SOCK_FORCE)	sock_fd = atoi(TSYS::strSepParse(addr(),1,':').c_str());
+    if(type == SOCK_FORCE)
+    {
+	sock_fd = atoi(TSYS::strSepParse(addr(),1,':').c_str());
+	int rez;
+	if((rez=fcntl(sock_fd,F_GETFL,0)) < 0 || fcntl(sock_fd,F_SETFL,rez|O_NONBLOCK) < 0)
+	{
+	    close(sock_fd);
+	    throw TError(nodePath().c_str(), _("Error force socket %d using: %s!"), sock_fd, strerror(errno));
+	}
+    }
     else if(type == SOCK_TCP || type == SOCK_UDP)
     {
 	memset(&name_in, 0, sizeof(name_in));
@@ -853,6 +857,8 @@ void TSocketOut::start()
     mLstReqTm = TSYS::curTime();
 
     run_st = true;
+
+    TTransportOut::start();
 }
 
 void TSocketOut::stop( )
@@ -871,6 +877,8 @@ void TSocketOut::stop( )
 	close(sock_fd);
     }
     run_st = false;
+
+    TTransportOut::stop();
 }
 
 int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )

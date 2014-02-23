@@ -283,7 +283,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	while((len=read(hd,buf,sizeof(buf))) > 0) rez.append(buf,len);
 	close(hd);
 
-	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+TSYS::int2str(rez.size());
+	mimeType = ((filepath.rfind(".") != string::npos) ? filepath.substr(filepath.rfind(".")+1)+";" : "file/unknown;")+i2s(rez.size());
 	if(mimeData) *mimeData = TSYS::strEncode(rez,TSYS::base64);
 
 	return true;
@@ -375,7 +375,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/obj/st/en")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(enable()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
     else if(a_path == "/obj/st/db")
@@ -389,7 +389,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
         list(tls);
         time_t maxTm = 0;
         for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
-        opt->setText(TSYS::int2str(maxTm));
+        opt->setText(i2s(maxTm));
     }
     else if(a_path == "/obj/cfg/ico" || a_path == "/ico")
     {
@@ -486,7 +486,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 		    if(extP == string::npos || extP == 0 || extP == (idmime.size()-1)) mimeType = "media/unknown";
 		    else { mimeType = "media/"+idmime.substr(extP+1); idmime = idmime.substr(0,extP); }
 		}
-		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+TSYS::real2str((float)opt->text().size()/1024,6),opt->text());
+		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}
     }
@@ -841,7 +841,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
 	return;
     }
     if(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || cntrCmdLinks(opt) || cntrCmdProcess(opt)) ;
-    else if(opt->attr("path") == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(TSYS::int2str(timeStamp()));
+    else if(opt->attr("path") == "/wdg/st/timestamp" && ctrChkNode(opt)) opt->setText(i2s(timeStamp()));
     else TCntrNode::cntrCmdProc(opt);
 }
 

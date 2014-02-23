@@ -1,5 +1,41 @@
+2014-02-20 Roman
+- !!!!:SYS: Move to new Work version scheme naming 0.9-rNNNN. Next LTS version will 0.9.N.
+    The work version set to 0.9.
+    Core library version scheme set to
+      Increase major for next Work version.
+      Increase minor after significant changes into API of the Work version
+      Full freeze for LTS stabilisation levels/updates, after the release.
+    Core library version set to 3:0:0.
+    New resources allocation objects MtxAlloc and MtxString is added. To ResAlloc is added lock() and unlock().
+- DAQ: EPICS CA initial module is added.
+- !!:SYS,TConfig,TValue,UI.VCAEngine: Editable listed configure fields and DAQ attributes by TFld::SelEdit support is added.
+- DAQ: Modify flag set at using template edit try is fixed.
+- !!:Transport: Assigned output transports to the input transport support is added by functions: TTransportIn::{assTrs,assTrO}().
+- !!:Transport,Transport.*: To output transports virtual functions timings() and setTimings() is added.
+- !:DAQ.ICP_DAS: Serial requests by OpenSCADA transport is added for modules I-87k series into master bus of COM1 of LP-8x81.
+    Acquisition error clear for other to I-87k modules.
+    FIX:I-8017 module processing fix for different channel's mode.
+- !:DAQ.System: New DA-type "UPS", by NUT-protocol is added.
+    Active DA check and creation is fixed for same origin parameters test, no the parameter identifiers.
+    Self atributes support allowed and used into DA-sources "Smart" and "UPS".
+    Mostly code clean up.
+- Transport.Sockets: Status and limit of the input transports for assigned output transports is added.
+    Default timeouts for output transports are set to "5:0.01".
+    NONBLOCK set for input transport of type SOCK_FORCE.
+- UI.{VCAEngine,Vision}: The primitive "Protocol" is moved to indexes from types.h.
+- !!:UI.Vision: To session object plain resources allocation dataM (pthread_mutexattr_t) is added and used for mOpen, mStProp.
+    FIX:Service <openlist path="/serv/pg"/> is fixed for errors at page's widgets miss and recreate session try.
+    mCalcRes moved to pthread_mutexattr_t.
+    Mostly code clean up.
+- UI.{Vision,WebVision}: To primitive "Protocol" set trace time to real data time is allowed, for now only data time lesser to display.
+
+
+2014-02-18 Roman
+- FIX:DAQ.OPC_UA: Input protocol exception abort fix at short messages recieve.
+
+
 2014-02-14 Roman
-- DAQ.AMRDevs:  Kontar implementing further progress.
+- DAQ.AMRDevs: Kontar implementing further progress.
 - DAQ.BlockCalc: Field "VAL" size for block's IO table increased from 20 to 10000 and "LNK" from 50 to 100.
 - FIX:DAQ.{DCON,ICP_DAS}: Fix for address field type change from int(32) to int64_t and break out strMess() requests.
     Config field "ADDR" renamed to "Transport". Default requests try set to 1.

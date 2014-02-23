@@ -1067,7 +1067,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    sout.reserve(in.size());
 	    for(int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
 		for(int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
-		    sout+=(char)strtol(evl.c_str(),NULL,16);
+		    sout += (char)strtol(evl.c_str(),NULL,16);
 	    break;
 	}
 	case TSYS::Reverse:
