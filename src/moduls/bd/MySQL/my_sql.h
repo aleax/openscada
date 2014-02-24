@@ -30,8 +30,6 @@
 #undef _
 #define _(mess) mod->I18N(mess)
 
-#define EVAL_REAL_MYSQL -1.79E308
-
 using std::string;
 using namespace OSCADA;
 
@@ -60,7 +58,7 @@ class MTable : public TTable
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt = 1 );
 
@@ -93,13 +91,15 @@ class MBD : public TBD
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
+	void transCloseCheck( );
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
@@ -107,8 +107,7 @@ class MBD : public TBD
 	int	port;
 
 	MYSQL	connect;
-	Res	conn_res;
-	bool	notFullConn;
+	pthread_mutex_t	connRes;
 };
 
 //************************************************
@@ -119,7 +118,7 @@ class BDMod: public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod();
+	~BDMod( );
 
     protected:
 	//Protected methods

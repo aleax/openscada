@@ -58,7 +58,7 @@ class MTable : public TTable
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 	void getStructDB( string name, vector< vector<string> > &tblStrct );
@@ -84,7 +84,7 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( string iid, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void disable( );
@@ -102,7 +102,7 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
@@ -110,7 +110,7 @@ class MBD : public TBD
 	PGconn	*connection;
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;
-	Res	conn_res;
+	pthread_mutex_t	connRes;
 };
 
 //************************************************
@@ -121,7 +121,7 @@ class BDMod: public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod();
+	~BDMod( );
 
     private:
 	//Private methods

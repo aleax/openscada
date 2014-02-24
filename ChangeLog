@@ -1,4 +1,12 @@
-2014-02-20 Roman
+2014-02-24 Roman
+- !!!!:DB.{FireBird,PostgreSQL,MySQL}: Connection for network DB restore mechanism is changed
+    to enabling for toEnable() and disabled DB into transactions check cycle.
+    Requests to DB the resources allocation is changed to use pthread_mutex_t.
+    Complex tests pass for lost connections restore and generic test of module Special.SystemTests.
+    Mostly code clean up.
+
+
+2014-02-23 Roman
 - !!!!:SYS: Move to new Work version scheme naming 0.9-rNNNN. Next LTS version will 0.9.N.
     The work version set to 0.9.
     Core library version scheme set to
