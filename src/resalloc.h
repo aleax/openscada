@@ -55,7 +55,7 @@ class Res
 };
 
 //***********************************************************
-//* Automatic resource RW lock allocator/deallocator        *
+//* Automatic resource RW unlock object			    *
 //***********************************************************
 class ResAlloc
 {
@@ -103,7 +103,7 @@ class ResString
 };
 
 //***********************************************************
-//* Automatic POSIX mutex allocator/deallocator		    *
+//* Automatic POSIX mutex unlock object			    *
 //***********************************************************
 class MtxAlloc
 {

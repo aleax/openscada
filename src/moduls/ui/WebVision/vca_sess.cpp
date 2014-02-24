@@ -52,7 +52,7 @@ void VCASess::postDisable( int flag )
     TCntrNode::postDisable(flag);
 
     //> Disconnect/delete session
-    if( mIsCreate )
+    if(mIsCreate)
     {
 	XMLNode req("disconnect");
 	req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",id());
@@ -312,7 +312,7 @@ VCAElFigure::VCAElFigure( const string &iid ) : VCAObj(iid), im(NULL)
 
 VCAElFigure::~VCAElFigure( )
 {
-    if( im ) gdImageDestroy(im);
+    if(im) { gdImageDestroy(im); im = NULL; }
 }
 
 #define SAME_SIGNS(a, b) ((a) * (b) >= 0)
@@ -1206,7 +1206,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 
 	    }
 	    //---- Drawing the solid arc with borders' width <4 ----
@@ -1350,7 +1350,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 	    }
 	    //---- Drawing the solid arc with borders' width >=4 ----
 	    if( item.border_width >= 4 && ( item.style == 0 || !flag_style ) )
@@ -1479,7 +1479,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 	    }
 	    //---- Recalculating the points of the arc to make them really belonging to the arc ----
 	    el_p1 = scaleRotate( (pnts)[item.n1], xScale, yScale, true, true );
@@ -1707,7 +1707,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 
 	    }
 	    //----- Drawing the solid bezier curve with borders' width < 4 -----
@@ -1840,7 +1840,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 
 	    }
 	    if( item.border_width >=4 && ( item.style == 0 || !flag_style ) )//----- Drawing the solid bezier curve with borders' width >= 4 -----
@@ -1955,7 +1955,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 	    }
 	}
     }
@@ -2092,7 +2092,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 
 	    }
 	    //----- Drawing the solid line with borders' width == 1(for lines with width > 3) -----
@@ -2186,7 +2186,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 
 	    }
 	    //----- Drawing the solid borders of the line -----
@@ -2267,7 +2267,7 @@ void VCAElFigure::paintFigure( gdImagePtr im, ShapeItem item, double xScale, dou
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 	    }
 	}
     }
@@ -2503,7 +2503,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 		gdImageAlphaBlending(im2,1);
 		gdImageSaveAlpha(im2, 1);
 		gdImageCopy(im, im2, 0, 0, 0, 0, scaleWidth, scaleHeight);
-		if( im2 ) gdImageDestroy(im2);
+		if(im2) { gdImageDestroy(im2); im2 = NULL; }
 	    }
 	}
 	int tmp_clr;
@@ -3824,7 +3824,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    if( gdImageGetPixel( im1, (int)TSYS::realRound(clickPnt.x,POS_PREC_DIG,true), (int)TSYS::realRound(clickPnt.y,POS_PREC_DIG,true) )
 				!= gdImageColorResolveAlpha(im1,0,0,0,127) )
 			    {
-				if( im1 ) gdImageDestroy(im1);
+				if(im1) gdImageDestroy(im1);
 				return i;
 			    }
 			}
@@ -4008,7 +4008,7 @@ void VCAElFigure::getReq( SSess &ses )
 
     scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
-    if(im) gdImageDestroy(im);
+    if(im) { gdImageDestroy(im); im = NULL; }
     im = gdImageCreateTrueColor(scaleWidth, scaleHeight);
     if(!im) ses.page = mod->httpHead("200 OK",ses.page.size(),"image/png")+ses.page;
     else
@@ -4352,7 +4352,7 @@ VCAText::VCAText( const string &iid ) : VCAObj(iid), im(NULL)
 
 VCAText::~VCAText( )
 {
-    if( im ) gdImageDestroy(im);
+    if(im) { gdImageDestroy(im); im = NULL; }
 }
 
 Point VCAText::rot( const Point pnt, double alpha, const Point center )

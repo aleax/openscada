@@ -131,8 +131,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	dscr( )		{ return cfg("DESCRIPT").getS(); }
 	string	addr( )		{ return cfg("ADDR").getS(); }
 	virtual string timings( ) { return ""; }
-	int	prm1( )		{ return mPrm1; }
-	int	prm2( )		{ return mPrm2; }
+	int64_t	prm1( )		{ return mPrm1; }
+	int64_t	prm2( )		{ return mPrm2; }
 	bool	toStart( )	{ return mStart; }
 	bool	startStat( )	{ return run_st; }
 	virtual	string getStatus( );
@@ -145,8 +145,8 @@ class TTransportOut : public TCntrNode, public TConfig
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
 	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
 	virtual void setTimings( const string &vl )	{ }
-	void setPrm1( int vl )				{ mPrm1 = vl; }
-	void setPrm2( int vl )				{ mPrm2 = vl; }
+	void setPrm1( int64_t vl )			{ mPrm1 = vl; }
+	void setPrm2( int64_t vl )			{ mPrm2 = vl; }
 	void setToStart( bool vl )			{ mStart = vl; modif(); }
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
@@ -189,7 +189,7 @@ class TTransportOut : public TCntrNode, public TConfig
 	string	mDB;
 
 	//> Reserve parameters
-	int	mPrm1, mPrm2;
+	int64_t	mPrm1, mPrm2;
 	Res	nRes;
 };
 

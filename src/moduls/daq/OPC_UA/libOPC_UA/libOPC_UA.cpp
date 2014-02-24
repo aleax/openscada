@@ -2129,7 +2129,7 @@ nextReq:
 	    EP *wep = NULL;
 	    for(int i_ep = 0; i_epOk < 0 && i_ep < (int)epLs.size(); i_ep++)
 	    {
-		wep = epEnAt(epLs[i_ep]);
+		if(!(wep=epEnAt(epLs[i_ep])))	continue;
 		for(int i_s = 0; i_epOk < 0 && i_s < wep->secSize(); i_s++)
 		    if(wep->secPolicy(i_s) == secPlc)
 			i_epOk = i_ep;
@@ -2296,6 +2296,7 @@ nextReq:
 		throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    if(curTime() > (scHd.tCreate+(int64_t)scHd.tLife*1000)) throw OPCError(OpcUa_BadSecureChannelIdInvalid, "Secure channel renew expired");
 	    EP *wep = epEnAt(scHd.endPoint);
+	    if(!wep) throw OPCError(OpcUa_BadTcpEndpointUrlInvalid, "No propper Endpoint present");
 	    //>> Decrypt message block and signature check
 	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)
 	    {
@@ -3435,6 +3436,8 @@ void Server::EP::setEnable( bool vl )
 	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
 	nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
 	    setAttr("ValueRank","1")->setAttr("Value","http://opcfundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
+	nodeReg(OpcUa_Server,OpcUa_Server_ServerArray,"ServerArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
+	    setAttr("ValueRank","1")->setAttr("Value",serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
        nodeReg(OpcUa_TypesFolder,OpcUa_ObjectTypesFolder,"ObjectTypes",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
 	nodeReg(OpcUa_ObjectTypesFolder,OpcUa_BaseObjectType,"BaseObjectType",NC_ObjectType,OpcUa_Organizes);

@@ -2814,6 +2814,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 
     //>> Combining
     TVArchive::CombMode combM = archive().combMode();
+    bool setOK = false;
     if(a_per > ibuf.period())
     {
 	TValBuf obuf(ibuf.valType(), 0, a_per, true, true);
@@ -2937,10 +2938,13 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		default: break;
 	    }
 	}
-	setValsProc(obuf, obuf.begin(), end);
+	setOK = setValsProc(obuf, obuf.begin(), end);
     }
-    else setValsProc(ibuf, beg, end);
+    else setOK = setValsProc(ibuf, beg, end);
 
-    if(end > mLastGet) mLastGet = end+1;
-    if(&archive() == &ibuf || end > archive().end()) { prev_tm = wPrevTm; prev_val = wPrevVal; }
+    if(setOK)
+    {
+	if(end > mLastGet) mLastGet = end+1;
+	if(&archive() == &ibuf || end > archive().end()) { prev_tm = wPrevTm; prev_val = wPrevVal; }
+    }
 }

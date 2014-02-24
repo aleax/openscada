@@ -278,7 +278,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
-	    _("MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;<u_sock>;<names>;<tms>].\n"
+	    _("MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;{u_sock}[;{names}[;{tms}]]]\".\n"
 	      "Where:\n"
 	      "  host - MySQL server hostname;\n"
 	      "  user - DB user name;\n"
@@ -287,9 +287,9 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  port - DB server port (default 3306);\n"
 	      "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql.sock);\n"
 	      "  names - MySQL SET NAMES charset;\n"
-	      "  tms - MySQL timeouts in form [<connect>,<read>,<write>] and in seconds.\n"
-	      "For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2].\n"
-	      "For remote DB: [server.nm.org;roman;123456;OpenSCADA;3306]."));
+	      "  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
+	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2\".\n"
+	      "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."));
 	return;
     }
     TBD::cntrCmdProc(opt);

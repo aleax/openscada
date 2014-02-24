@@ -206,9 +206,11 @@ namespace OPC
 #define OpcUa_BaseVariableType		62
 #define OpcUa_BaseDataVariableType	63
 #define OpcUa_PropertyType		68
+#define OpcUa_Server_ServerArray	2254
 #define OpcUa_Server_NamespaceArray	2255
 #define OpcUa_Server_ServerStatus	2256
 #define OpcUa_Server_ServerStatus_State	2259
+#define OpcUa_Server_Auditing		2994
 
 //> ReferenceType Identifiers
 #define OpcUa_References		31

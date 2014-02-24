@@ -237,7 +237,7 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     switch(mFld->type())
     {
 	case TFld::String:	setType(TVariant::String, true);  TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(atoi(mFld->def().c_str()));	break;
+	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(atoll(mFld->def().c_str()));	break;
 	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(atof(mFld->def().c_str()));	break;
 	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)atoi(mFld->def().c_str()));break;
 	default: break;
@@ -302,7 +302,7 @@ void TCfg::setS( const string &val )
 {
     switch(type())
     {
-	case TVariant::Integer:	setI(atoi(val.c_str()));	break;
+	case TVariant::Integer:	setI(atoll(val.c_str()));	break;
 	case TVariant::Real:	setR(atof(val.c_str()));	break;
 	case TVariant::Boolean:	setB((bool)atoi(val.c_str()));	break;
 	case TVariant::String:

@@ -1,14 +1,13 @@
 # OpenSCADA.DB.MySQL translate to Ukrainian.
-# Copyright (C) 2003-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DB.MySQL module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2003-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-29 14:12+0200\n"
+"POT-Creation-Date: 2014-02-24 12:34+0200\n"
 "PO-Revision-Date: 2007-10-23 12:23+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -28,16 +27,16 @@ msgstr "Роман Савоченко"
 msgid "BD module. Provides support of the BD MySQL."
 msgstr "Модуль БД. Надає підтримку БД MySQL."
 
-#: my_sql.cpp:125 my_sql.cpp:153
+#: my_sql.cpp:120 my_sql.cpp:151
 msgid "Error initializing client."
 msgstr "Помилка ініціалізації клієнта."
 
-#: my_sql.cpp:128 my_sql.cpp:165
+#: my_sql.cpp:123 my_sql.cpp:165
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Помилка підключення до БД: %s"
 
-#: my_sql.cpp:132
+#: my_sql.cpp:127
 #, c-format
 msgid "Query to DB error: %s"
 msgstr "Помилка запиту до БД: %s"
@@ -47,29 +46,34 @@ msgstr "Помилка запиту до БД: %s"
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Помилка відкриття таблиці '%s'. БД вимкнено."
 
-#: my_sql.cpp:233
+#: my_sql.cpp:221
+msgid "Connect to DB error %d: %s"
+msgstr "Помилка підключення до БД %d: %s"
+
+#: my_sql.cpp:232
+#, c-format
 msgid "Query '%s' is error."
 msgstr "Помилка запиту '%s'."
 
-#: my_sql.cpp:234
+#: my_sql.cpp:233
 #, c-format
 msgid "Query to DB error %d: %s"
 msgstr "Помилка %d запиту до БД: %s"
 
-#: my_sql.cpp:241
+#: my_sql.cpp:240
 #, c-format
 msgid "Store result error: %s"
 msgstr "Помилка збереження результату: %s"
 
-#: my_sql.cpp:266
+#: my_sql.cpp:265
 #, c-format
 msgid "Could not execute statement: %s"
-msgstr ""
+msgstr "Неможливо виконати заяву: %s"
 
-#: my_sql.cpp:277
+#: my_sql.cpp:281
 msgid ""
-"MySQL DB address must be written as: [<host>;<user>;<pass>;<db>;<port>;"
-"<u_sock>;<names>;<tms>].\n"
+"MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;"
+"{u_sock}[;{names}[;{tms}]]]\".\n"
 "Where:\n"
 "  host - MySQL server hostname;\n"
 "  user - DB user name;\n"
@@ -79,13 +83,13 @@ msgid ""
 "  u_sock - UNIX-socket name, for local access to DB (/var/lib/mysql/mysql."
 "sock);\n"
 "  names - MySQL SET NAMES charset;\n"
-"  tms - MySQL timeouts in form [<connect>,<read>,<write>] and in seconds.\n"
-"For local DB: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;"
-"utf8;5,2,2].\n"
-"For remote DB: [server.nm.org;roman;123456;OpenSCADA;3306]."
+"  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
+"For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;"
+"utf8;5,2,2\".\n"
+"For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
 msgstr ""
-"Адреса MySQL БД записується таким чином: [<host>;<user>;<pass>;<db>;<port>;"
-"<u_sock>;<names>;<tms>].\n"
+"Адреса MySQL БД записується таким чином: \"{host};{user};{pass};{db};{port}[;"
+"{u_sock}[;{names}[;{tms}]]]\".\n"
 "Де:\n"
 "  host - адреса хосту MySQL сервера;\n"
 "  user - ім'я користувача БД;\n"
@@ -95,16 +99,16 @@ msgstr ""
 "  u_sock - Ім'я UNIX-сокету, для локального доступу до БД (/var/lib/mysql/"
 "mysql.sock);\n"
 "  names - MySQL кодування передавання даних, яка встановлюється SET NAMES;\n"
-"  tms - таймаути MySQL у формі [<connect>,<read>,<write>] та секундах.\n"
-"Для локальної БД: [;roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;"
-"utf8;5,2,2].\n"
-"Для віддаленої БД: [server.nm.org;roman;123456;OpenSCADA;3306]."
+"  tms - таймаути MySQL у формі \"{connect},{read},{write}\" та секундах.\n"
+"Для локальної БД: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;"
+"utf8;5,2,2\".\n"
+"Для віддаленої БД: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
 
-#: my_sql.cpp:338 my_sql.cpp:375 my_sql.cpp:449 my_sql.cpp:507 my_sql.cpp:594
-#: my_sql.cpp:622
+#: my_sql.cpp:335 my_sql.cpp:372 my_sql.cpp:446 my_sql.cpp:504 my_sql.cpp:591
+#: my_sql.cpp:620
 msgid "Table is empty!"
 msgstr "Таблиця порожня!"
 
-#: my_sql.cpp:487
+#: my_sql.cpp:484
 msgid "Row is not present!"
 msgstr "Запис відсутній!"

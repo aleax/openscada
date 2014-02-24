@@ -66,6 +66,7 @@ class Kontar: public TTipParam
 		//Atributes
 		XMLNode	cfg;
 		string	prevTr;
+		string	pass;
 		vector<SMemBlk> mBlks;	//Acquisition memory blocks for values
 
 	    private:

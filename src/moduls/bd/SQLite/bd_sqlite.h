@@ -104,7 +104,7 @@ class MBD : public TBD
 	sqlite3	*m_db;
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;
-	Res	conn_res;
+	pthread_mutex_t	connRes;
 	int	trans_reqs;
 };
 

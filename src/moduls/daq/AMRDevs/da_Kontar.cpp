@@ -36,9 +36,10 @@ using namespace AMRDevs;
 Kontar::Kontar( ) : TTipParam("kontar", _("Kontar"))
 {
     fldAdd(new TFld("ADDR",_("Input transport"),TFld::String,TCfg::NoVal,"30"));
+    fldAdd(new TFld("PASS",_("Master password"),TFld::String,TCfg::NoVal,"10",""));
+    fldAdd(new TFld("M_PLC",_("Master PLC serial number"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","0"));
     fldAdd(new TFld("CNTR_NET_CFG",_("Controllers network config-file"),TFld::String,TCfg::NoVal,"100"));
     fldAdd(new TFld("PLC",_("PLC serial number"),TFld::Integer,TCfg::NoVal,"10","0"));
-    fldAdd(new TFld("PASS",_("Password"),TFld::String,TCfg::NoVal,"10","12345678"));
 }
 
 Kontar::~Kontar( )	{ }
@@ -104,16 +105,16 @@ void Kontar::enable( TParamContr *ip )
     }
 
     //Password to RC5-key parse
-    string sPass = ip->cfg("PASS").getS(); sPass.resize(8,0);
-    mess_debug_(p->nodePath().c_str(), _("Password sequence: '%s'\n"),TSYS::strDecode(sPass,TSYS::Bin).c_str());
-    ePrm->rc5_key(string(8,0).data()/*sPass.data()*/, 4/*sPass.size()*/);
+    //string sPass = ip->cfg("PASS").getS(); sPass.resize(8,0);
+    //mess_debug_(p->nodePath().c_str(), _("Password sequence: '%s'\n"),TSYS::strDecode(sPass,TSYS::Bin).c_str());
+    //ePrm->rc5_key(string(8,0).data()/*sPass.data()*/, 4/*sPass.size()*/);
 
     //Test part for decoding
-    string strBlk = TSYS::strEncode("80 40 03 b8 af af 88 0b",TSYS::Bin);
+    //string strBlk = TSYS::strEncode("80 40 03 b8 af af 88 0b",TSYS::Bin);
 		    //TSYS::strEncode("ae f7 f9 46 2d 2e 99 c6 9c 46 ee b3 e4 37 8b 43 55 bc 50 80 73 11 30 2c",TSYS::Bin);
-    mess_debug_(p->nodePath().c_str(), _("Input sequence: '%s'\n"),TSYS::strDecode(strBlk,TSYS::Bin).c_str());
-    ePrm->rc5_encrypt((uint32_t*)strBlk.data(), strBlk.size()/4);
-    mess_debug_(p->nodePath().c_str(), _("Encrypt result: '%s'\n"),TSYS::strDecode(strBlk,TSYS::Bin).c_str());
+    //mess_debug_(p->nodePath().c_str(), _("Input sequence: '%s'\n"),TSYS::strDecode(strBlk,TSYS::Bin).c_str());
+    //ePrm->rc5_encrypt((uint32_t*)strBlk.data(), strBlk.size()/4);
+    //mess_debug_(p->nodePath().c_str(), _("Encrypt result: '%s'\n"),TSYS::strDecode(strBlk,TSYS::Bin).c_str());
 }
 
 void Kontar::regVal( TMdPrm *p, int off, int sz )
@@ -168,8 +169,11 @@ const char *Kontar::getVal( TMdPrm *ip, int off, int dtSz )
 string Kontar::req( TMdPrm *p, string &pdu )
 {
     tval *ePrm = (tval*)p->extPrms;
-    string mbap, err, rez;
-    char buf[1000];
+    string mbap, err;
+    char buf[2000];
+    int bufPos = 0;
+
+    uint32_t cntrMN = p->cfg("M_PLC").getI();
 
     try
     {
@@ -177,19 +181,26 @@ string Kontar::req( TMdPrm *p, string &pdu )
 	AutoHD<TTipTransport> ttr = SYS->transport().at().at("Sockets");
 	AutoHD<TTransportOut> trO;
 	if(!(ePrm->prevTr.size() && ttr.at().outPresent(ePrm->prevTr) &&
-		(trO=ttr.at().outAt(ePrm->prevTr)).at().startStat() && trO.at().prm1() == p->cfg("PLC").getI()))
+		(trO=ttr.at().outAt(ePrm->prevTr)).at().startStat() && trO.at().prm1() == cntrMN))
+	{
+	    ePrm->prevTr = "";
 	    trO.free();
+	}
 
 	//Find for proper transport by send master PLC serial number request
 	if(trO.freeStat())
 	{
+	    //Prepare for Master Key
+	    string sPass = p->cfg("PASS").getS(); sPass.resize(8,0);
+	    ePrm->rc5_key(sPass.data(), sPass.size());
+
+	    //Same find
 	    vector<AutoHD<TTransportOut> > trsO = ttr.at().inAt(p->cfg("ADDR")).at().assTrs();
 	    for(unsigned i_t = 0; i_t < trsO.size() && trO.freeStat(); i_t++)
 	    {
 		if(!trsO[i_t].at().startStat())	continue;
 		// Serial number request
 		if(!trsO[i_t].at().prm1())
-		{
 		    try
 		    {
 			int resp_len = 0;
@@ -198,18 +209,25 @@ string Kontar::req( TMdPrm *p, string &pdu )
 			if(p->owner().messLev() == TMess::Debug)
 			    mess_debug_(p->nodePath().c_str(), _("PLC ID Request: '%s'\n"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
 
-			if((resp_len=trsO[i_t].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) == 4)
+			if((resp_len=trsO[i_t].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
 			{
 			    trsO[i_t].at().setPrm1(TSYS::i32_BE(*(uint32_t*)buf));
 			    trsO[i_t].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
+			    if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0)
+			    {
+				ePrm->rc5_decrypt((uint32_t*)(buf+5), (resp_len-5)/sizeof(uint32_t));
+				ePrm->pass.assign(buf+5, 8);
+				ePrm->rc5_key(buf+5, 8);
+				if(p->owner().messLev() == TMess::Debug)
+				    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'\n"), TSYS::strDecode(string(buf+5,8),TSYS::Bin).c_str());
+			    }
 			}
 
 			if(p->owner().messLev() == TMess::Debug)
 			    mess_debug_(p->nodePath().c_str(), _("PLC ID Response: '%s'\n"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin).c_str());
 		    }
 		    catch(...) { }
-		}
-		if(trsO[i_t].at().prm1() == p->cfg("PLC").getI()) trO = trsO[i_t];
+		if(trsO[i_t].at().prm1() == cntrMN) { trO = trsO[i_t]; ePrm->prevTr = trO.at().id(); }
 	    }
 	}
 	if(trO.freeStat()) throw TError(p->nodePath().c_str(), _("No a propper connection from PLC."));
@@ -217,10 +235,9 @@ string Kontar::req( TMdPrm *p, string &pdu )
 	//Main request prepare
 	mbap.reserve(pdu.size()+17);
 	mbap += string(4,0);				//???? Where the take for client
-	string sPass = p->cfg("PASS").getS(); sPass.resize(8,0);
-	mbap += sPass;					//Password
+	mbap += ePrm->pass;				//Password
 	mbap += (char)0;				//Unused
-	uint32_t cntrN = p->cfg("PLC").getI();
+	uint32_t cntrN = TSYS::i32_BE(p->cfg("PLC").getI());
 	mbap += string((char*)&cntrN,sizeof(cntrN));	//PLC number
 	mbap += pdu;
 
@@ -229,41 +246,41 @@ string Kontar::req( TMdPrm *p, string &pdu )
 	if(p->owner().messLev() == TMess::Debug)
 	    mess_debug_(p->nodePath().c_str(), _("Request: '%s'\n"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
 	int resp_len = trO.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
-	rez.assign(buf, resp_len);
-	//Wait tail
-	while(resp_len)
-	{
-	    try{ resp_len = trO.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-	    rez.append(buf, resp_len);
-	}
 
-	if(rez.size() < 5)	err = _("13:Error respond: Too short.");
+	//Wait tail
+	for(bufPos = resp_len; resp_len && bufPos < sizeof(buf); bufPos += resp_len)
+	    try { resp_len = trO.at().messIO(NULL, 0, buf+bufPos, sizeof(buf)-bufPos, 0, true); } catch(TError err){ break; }
+
+	if(bufPos < 5)	err = _("13:Error respond: Too short.");
 	else
 	{
-	    if(TSYS::i32_BE(*(uint32_t*)rez.data()) != cntrN)
-		err = TSYS::strMess(_("13:Unapt PLC ID: %d != %d"),TSYS::i32_BE(*(uint32_t*)rez.data()), cntrN);
-	    else switch((uint8_t)rez[4])
+	    if(TSYS::i32_BE(*(uint32_t*)buf) != cntrMN)
+		err = TSYS::strMess(_("13:Unapt MasterPLC ID: %xh != %xh"),TSYS::i32_BE(*(uint32_t*)buf), cntrN);
+	    else switch((uint8_t)buf[4])
 	    {
 		case 0xA0:	break;	//OK
+		case 0xC0:	//The password encripted by master key.
+		    //err = TSYS::strMess(_("12:PLC: The password encripted by master key."));
+		    ePrm->rc5_decrypt((uint32_t*)(buf+5), (bufPos-5)/sizeof(uint32_t));
+		    break;
 		case 0xE0:	err = TSYS::strMess(_("12:PLC: Error."));			break;
 		case 0xE1:	err = TSYS::strMess(_("12:PLC: Unknown command."));		break;
 		case 0xE2:	err = TSYS::strMess(_("12:PLC: Wrong command format."));	break;
 		case 0xE5:	err = TSYS::strMess(_("12:PLC: Error read from slave."));	break;
 		case 0xE6:	err = TSYS::strMess(_("12:PLC: Network update in process."));	break;
-		case 0xC0:	err = TSYS::strMess(_("12:PLC: The password encripted by master key."));	break;
 		case 0xD0:	err = TSYS::strMess(_("12:PLC: The data encripted the access password."));	break;
 	    }
 	    if(err.empty())
 	    {
 		if(p->owner().messLev() == TMess::Debug)
-		    mess_debug_(p->nodePath().c_str(), _("Response: '%s'\n"),TSYS::strDecode(rez,TSYS::Bin).c_str());
-		pdu = rez.substr(5);
+		    mess_debug_(p->nodePath().c_str(), _("Response: '%s'\n"),TSYS::strDecode(string(buf,bufPos),TSYS::Bin).c_str());
+		pdu.assign(buf+5, bufPos-5);
 	    }
 	}
     }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     if(!err.empty() && p->owner().messLev() == TMess::Debug)
-	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'\n"),err.c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
+	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'\n"),err.c_str(), TSYS::strDecode(string(buf,bufPos),TSYS::Bin).c_str());
 
     return err;
 }
@@ -355,16 +372,19 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     // Get page info
     if(opt->name() == "info")
     {
-	ip->ctrMkNode("fld",opt,0,"/prm/cfg/ADDR",EVAL_STR,ip->owner().startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/trLst");
-	ip->ctrMkNode("fld",opt,0,"/prm/cfg/CNTR_NET_CFG",EVAL_STR,ip->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"dest","sel_ed","select","/prm/cfg/fileList");
-	ip->ctrMkNode("fld",opt,0,"/prm/cfg/PLC",EVAL_STR,ip->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"idm","1","dest","select","select","/prm/cfg/PLCList");
+	ip->ctrMkNode("fld",opt,0,"/prm/cfg/ADDR",EVAL_STR,ip->owner().startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,
+	    "dest","select","select","/prm/cfg/trLst");
+	ip->ctrMkNode("fld",opt,0,"/prm/cfg/M_PLC",EVAL_STR,RWRWR_,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/mPLCLst");
+	ip->ctrMkNode("fld",opt,0,"/prm/cfg/CNTR_NET_CFG",EVAL_STR,ip->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,
+	    "dest","sel_ed","select","/prm/cfg/fileList");
+	ip->ctrMkNode("fld",opt,0,"/prm/cfg/PLC",EVAL_STR,ip->enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "idm","1","dest","select","select","/prm/cfg/PLCList");
 	return true;
     }
 
     // Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/trLst" && ip->ctrChkNode(opt,"get"))
-    {
 	try
 	{
 	    vector<string> sls;
@@ -372,9 +392,15 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	    for(unsigned i_s = 0; i_s < sls.size(); i_s++) opt->childAdd("el")->setText(sls[i_s]);
 	    //SYS->transport().at().at("Sockets").at().outList(sls);
 	    //for(unsigned i_s = 0; i_s < sls.size(); i_s++) opt->childAdd("el")->setText("out_"+sls[i_s]);
-	}
-	catch(TError err) { }
-    }
+	} catch(TError err) { }
+    else if(a_path == "/prm/cfg/mPLCLst" && ip->ctrChkNode(opt,"get"))
+	try
+	{
+	    vector<AutoHD<TTransportOut> > trsO = SYS->transport().at().at("Sockets").at().inAt(p->cfg("ADDR")).at().assTrs();
+	    for(unsigned i_t = 0; i_t < trsO.size(); i_t++)
+		if(trsO[i_t].at().startStat())
+		    opt->childAdd("el")->setText(u2s(trsO[i_t].at().prm1()));
+	} catch(TError err) { }
     else if(a_path == "/prm/cfg/fileList" && ip->ctrChkNode(opt,"get")) TSYS::ctrListFS(opt, ip->cfg("CNTR_NET_CFG"), "xml;");
     else if(a_path == "/prm/cfg/PLCList" && ip->ctrChkNode(opt,"get"))
     {

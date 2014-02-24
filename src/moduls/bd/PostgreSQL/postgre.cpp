@@ -373,7 +373,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
-	    _("PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;<db>;<port>;<connect_timeout>].\n"
+	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db};{port}[;{connect_timeout}]\".\n"
 	      "Where:\n"
 	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
 	      "         it specifies Unix domain communication rather than TCP/IP communication;\n"
@@ -872,10 +872,8 @@ string MTable::getVal( TCfg &cfg )
 	case TFld::String:	return (cfg.fld().len() > 0) ? cfg.getS().substr(0,cfg.fld().len()) : cfg.getS();
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
-	    else		return i2s(cfg.getI());
-	case TFld::Real:	return r2s(cfg.getR());
-	case TFld::Boolean:	return i2s(cfg.getB());
-	default: break;
+	    else		return cfg.getS();
+	default: return cfg.getS();
     }
     return "";
 }
@@ -884,14 +882,11 @@ void MTable::setVal( TCfg &cfg, const string &val )
 {
     switch(cfg.fld().type())
     {
-	case TFld::String:	cfg.setS(val);	break;
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec)	cfg.setI(SQLtoUTC(val));
-	    else cfg.setI(atoi(val.c_str()));
+	    else cfg.setS(val);
 	    break;
-	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
-	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
-	default: break;
+	default: cfg.setS(val); break;
     }
 }
 

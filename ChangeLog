@@ -1,4 +1,14 @@
 2014-02-24 Roman
+- Transport: Extended parameters prm1 and prm2 type of output transport is changet to int64_t.
+- FIX:TConfig,DB:{FireBird,PostgreSQL,SQLite}: Moving to int64_t for integer is fixed.
+- FIX:DB.{MySQL,PostgreSQL}: Context help fix.
+- DB.SQLite: Requests to DB the resources allocation is changed to use pthread_mutex_t. Mostly code clean up.
+- TArchive,Archive.DBArch: To TVArchEl::setValsProc() added result for allow archive's buffer's part write control.
+    Used for rewrite to network DB by DBArch.
+- Archive.DBArch: Allow start Values and Messages archivators for DB error, predict restore the connection.
+- DAQ.AMRDevs: Kontar implementing further progress.
+- FIX:DAQ.OPC_UA: OpcUa_Server_ServerArray variable process append. epEnAt() result process append for some crash prevent.
+- FIX:UI.WebVision: Posible crash into primitive ElFig fix.
 - !!!!:DB.{FireBird,PostgreSQL,MySQL}: Connection for network DB restore mechanism is changed
     to enabling for toEnable() and disabled DB into transactions check cycle.
     Requests to DB the resources allocation is changed to use pthread_mutex_t.

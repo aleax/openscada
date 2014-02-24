@@ -608,7 +608,7 @@ void *TArchiveS::ArhMessTask( void *param )
 	if(arh.headLstread != arh.headBuf)
 	    try
 	    {
-		ResAlloc res(arh.mRes,false);
+		ResAlloc res(arh.mRes, false);
 
 		//>> Get new messages
 		unsigned new_headLstread = arh.headBuf;

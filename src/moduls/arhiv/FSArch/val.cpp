@@ -761,10 +761,10 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     return EVAL_REAL;
 }
 
-void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
+bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
     //> Check border
-    if(!buf.vOK(beg,end)) return;
+    if(!buf.vOK(beg,end)) return false;
     beg = vmax(beg,buf.begin());
     end = vmin(end,buf.end());
     int64_t b_prev = 0;
@@ -772,7 +772,7 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     int64_t v_per = (int64_t)(archivator().valPeriod()*1e6);
 
     //> Put values to files
-    ResAlloc res(mRes,true);
+    ResAlloc res(mRes, true);
     for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
 	if( !arh_f[i_a]->err() && beg <= end )
 	{
@@ -826,7 +826,9 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	beg = n_end+v_per;
     }
 
-    realEnd = vmax(realEnd,end);
+    realEnd = vmax(realEnd, end);
+
+    return true;
 }
 
 //*************************************************
@@ -1010,10 +1012,7 @@ VFileArch::VFileArch( const string &iname, int64_t ibeg, int64_t iend, int64_t i
     mAcces = time(NULL);
 }
 
-VFileArch::~VFileArch()
-{
-
-}
+VFileArch::~VFileArch( )	{ }
 
 void VFileArch::delFile()
 {

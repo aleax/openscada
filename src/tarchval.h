@@ -400,7 +400,7 @@ class TVArchEl
 	//Protected methods
 	virtual TVariant getValProc( int64_t *tm, bool up_ord );
 	virtual void getValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ }
-	virtual void setValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ }
+	virtual bool setValsProc( TValBuf &buf, int64_t beg, int64_t end )	{ return false; }
 
 	//> Previous averaging value
 	int64_t	prev_tm;

@@ -880,28 +880,6 @@ void MTable::fieldFix( TConfig &cfg )
     }
 }
 
-string MTable::getVal( TCfg &cfg )
-{
-    switch(cfg.fld().type())
-    {
-	case TFld::String:	return cfg.getS();
-	case TFld::Integer:	return i2s(cfg.getI());
-	case TFld::Real:	return r2s(cfg.getR());
-	case TFld::Boolean:	return i2s(cfg.getB());
-	default: break;
-    }
+string MTable::getVal( TCfg &cfg )	{ return cfg.getS(); }
 
-    return "";
-}
-
-void MTable::setVal( TCfg &cfg, const string &val )
-{
-    switch(cfg.fld().type())
-    {
-	case TFld::String:	cfg.setS(val);			break;
-	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
-	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
-	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
-	default: break;
-    }
-}
+void MTable::setVal( TCfg &cfg, const string &val )	{ cfg.setS(val); }

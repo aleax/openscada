@@ -58,7 +58,7 @@ class ModVArchEl: public TVArchEl
 	//Methods
 	TVariant getValProc( int64_t *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
-	void setValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
     private:
 	//Attributes

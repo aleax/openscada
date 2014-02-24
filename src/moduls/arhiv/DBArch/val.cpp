@@ -74,31 +74,29 @@ void ModVArch::save_( )
     TVArchivator::save_();
 }
 
-void ModVArch::start()
+void ModVArch::start( )
 {
-    //> Connection to DB and enable status check
+    //Connection to DB and enable status check
     string wdb = TBDS::realDBName(addr());
     AutoHD<TBD> db = SYS->db().at().nodeAt(wdb,0,'.');
-    if(!db.at().enableStat()) db.at().enable();
+    try { if(!db.at().enableStat()) db.at().enable(); }
+    catch(TError err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
 
-    //> Start getting data cycle
+    //Start getting data cycle
     TVArchivator::start();
 }
 
-void ModVArch::stop()
+void ModVArch::stop( )
 {
-    //> Stop getting data cicle an detach archives
+    //Stop getting data cicle an detach archives
     TVArchivator::stop();
 }
 
-TVArchEl *ModVArch::getArchEl( TVArchive &arch )
-{
-    return new ModVArchEl(arch, *this);
-}
+TVArchEl *ModVArch::getArchEl( TVArchive &arch )	{ return new ModVArchEl(arch, *this); }
 
 void ModVArch::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TVArchivator::cntrCmdProc(opt);
@@ -108,7 +106,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/sz")
     {
@@ -124,15 +122,15 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive,iarchivator), mBeg(0), mEnd(0), mPer(0)
 {
-    //> Load message archive parameters
+    //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
     if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg))
     {
-	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
-	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);
-	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(),NULL,10);
-	//>> Check for delete archivator table
+	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(), NULL, 10);
+	mEnd = strtoll(cfg.cfg("END").getS().c_str(), NULL, 10);
+	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(), NULL, 10);
+	// Check for delete archivator table
 	if(mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*3600000000.)))
 	{
 	    SYS->db().at().open(archivator().addr()+"."+archTbl());
@@ -143,54 +141,48 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     if(!mPer) mPer = (int64_t)(archivator().valPeriod()*1000000.);
 }
 
-ModVArchEl::~ModVArchEl( )
-{
+ModVArchEl::~ModVArchEl( )	{ }
 
-}
+string ModVArchEl::archTbl( )	{ return "DBAVl_"+archivator().id()+"_"+archive().id(); }
 
-string ModVArchEl::archTbl( )
+void ModVArchEl::fullErase( )
 {
-    return "DBAVl_"+archivator().id()+"_"+archive().id();
-}
-
-void ModVArchEl::fullErase()
-{
-    //> Remove info record
+    //Remove info record
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl(), true);
     SYS->db().at().dataDel(archivator().addr()+"."+mod->mainTbl(), "", cfg);
 
-    //> Remove archive's DB table
+    //Remove archive's DB table
     SYS->db().at().open(archivator().addr()+"."+archTbl());
     SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
 }
 
 void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 {
-    //> Request by single values for most big buffer period
+    //Request by single values for most big buffer period
     if(buf.period()/2 > period())
     {
-        ibegIn = (ibegIn/buf.period())*buf.period();
-        for(int64_t ctm; ibegIn <= iendIn; ibegIn += buf.period())
-        {
-            ctm = ibegIn;
-            TVariant vl = getValProc(&ctm, false);
-            buf.set(vl, ibegIn);
-        }
-        return;
+	ibegIn = (ibegIn/buf.period())*buf.period();
+	for(int64_t ctm; ibegIn <= iendIn; ibegIn += buf.period())
+	{
+	    ctm = ibegIn;
+	    TVariant vl = getValProc(&ctm, false);
+	    buf.set(vl, ibegIn);
+	}
+	return;
     }
 
-    //> Going border to period time
+    //Going border to period time
     ibegIn = (ibegIn/period())*period();
     iendIn = (iendIn/period())*period();
 
-    //> Prepare border
+    //Prepare border
     int64_t ibeg = vmax(ibegIn, begin());
     int64_t iend = vmin(iendIn, end());
 
     if(iend < ibeg)	return;
 
-    //> Get values
+    //Get values
     for(int64_t c_tm = ibegIn; c_tm < ibeg; c_tm += period()) buf.setR(EVAL_REAL, c_tm);
     switch(archive().valType())
     {
@@ -274,20 +266,21 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     return EVAL_REAL;
 }
 
-void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
+bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
-    //> Check border
-    if(!buf.vOK(beg,end)) return;
+    //Check border
+    if(!buf.vOK(beg,end)) return false;
     beg = vmax(beg, buf.begin());
     end = vmin(end, buf.end());
 
-    //> Table struct init
+    //Table struct init
     TConfig cfg((archive().valType()==TFld::Real) ? (&mod->vlRealEl()) :
 		(archive().valType()==TFld::String) ? (&mod->vlStrEl()) : &mod->vlIntEl());
 
     AutoHD<TTable> tbl = SYS->db().at().open(archivator().addr()+"."+archTbl(), true);
-    if(tbl.freeStat()) return;
-    //> Write data to table
+    if(tbl.freeStat()) return false;
+
+    //Write data to table
     for(int64_t ctm; beg <= end; beg++)
     {
 	switch(archive().valType())
@@ -302,12 +295,12 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	cfg.cfg("TM").setI(ctm/1000000);
 	cfg.cfg("TMU").setI(ctm%1000000);
 	tbl.at().fieldSet(cfg);
-	//> Archive time border update
+	//Archive time border update
 	mBeg = mBeg ? vmin(mBeg,ctm) : ctm;
 	mEnd = mEnd ? vmax(mEnd,ctm) : ctm;
     }
 
-    //> Archive size limit process
+    //Archive size limit process
     if((mEnd-mBeg) > (int64_t)(archivator().maxSize()*3600000000.))
     {
 	int64_t n_end = ((mEnd-(int64_t)(archivator().maxSize()*3600000000.))/period())*period();
@@ -322,12 +315,12 @@ void ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     tbl.free();
     SYS->db().at().close(archivator().addr()+"."+archTbl());
 
-    //> Update archive info
+    //Update archive info
     cfg.setElem(&mod->archEl());
     cfg.cfgViewAll(false);
     cfg.cfg("TBL").setS(archTbl(), true);
     cfg.cfg("BEGIN").setS(ll2s(mBeg), true);
     cfg.cfg("END").setS(ll2s(mEnd), true);
     cfg.cfg("PRM1").setS(ll2s(mPer), true);
-    SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg);
+    return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg);
 }
