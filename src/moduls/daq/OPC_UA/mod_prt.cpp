@@ -69,7 +69,7 @@ TProt::~TProt()
     nodeDelAll();
 }
 
-string TProt::applicationUri( )		{ return SYS->host()+"/OpenSCADA/DAQ.OPC_UA"; }
+string TProt::applicationUri( )		{ return "uri://"+SYS->host()+"/OpenSCADA/DAQ.OPC_UA"; }
 
 string TProt::productUri( )		{ return PACKAGE_SITE; }
 
