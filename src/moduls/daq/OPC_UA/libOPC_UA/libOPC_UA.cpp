@@ -2693,7 +2693,7 @@ nextReq:
 			wep->subscrSet(subScrId, SS_CLOSED);
 			if(dbg) debugMess(strMess("EP: SubScription %d closed.",subScrId));
 		    }
-		    oN(respEp, -1, 4);				//diagnosticInfos [], -1
+		    oN(respEp, 0, 4);				//diagnosticInfos []
 		    break;
 		}
 		case OpcUa_CreateMonitoredItemsRequest:
@@ -2764,7 +2764,7 @@ nextReq:
 			oNodeId(respEp, 0u);				//< filterResult
 			oNu(respEp, 0, 1);				//< encodingMask
 		    }
-		    oN(respEp, -1, 4);					//<diagnosticInfos [], -1
+		    oN(respEp, 0, 4);					//<diagnosticInfos []
 		    break;
 		}
 		case OpcUa_ModifyMonitoredItemsRequest:
@@ -2815,7 +2815,7 @@ nextReq:
 			oNodeId(respEp, 0u);				//< filterResult
 			oNu(respEp, 0, 1);				//< encodingMask
 		    }
-		    oN(respEp, -1, 4);					//<diagnosticInfos [], -1
+		    oN(respEp, 0, 4);					//<diagnosticInfos []
 		    break;
 		}
 		case OpcUa_SetMonitoringModeRequest:
@@ -2847,7 +2847,7 @@ nextReq:
 			else wep->mItSet(subScrId, mIt, mM);
 			oNu(respEp, st, 4);				//< statusCode
 		    }
-		    oN(respEp, -1, 4);					//<diagnosticInfos [], -1
+		    oN(respEp, 0, 4);					//<diagnosticInfos []
 		    break;
 		}
 		case OpcUa_SetPublishingModeRequest:
@@ -2868,7 +2868,7 @@ nextReq:
 			if(ss.st != SS_CLOSED) wep->subscrSet(subScrId, SS_CUR, en);
 			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
 		    }
-		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
+		    oN(respEp, 0, 4);			//diagnosticInfos []
 		    break;
 		}
 		case OpcUa_TranslateBrowsePathsToNodeIdsRequest: //!!!! Error always
@@ -2899,7 +2899,7 @@ nextReq:
 			oNu(respEp, OpcUa_BadNoMatch, 4);	//statusCode, 0x806f0000 (BadNoMatch)
 			oNu(respEp, 0, 4);		//targets [], 0 !!!!
 		    }
-		    oN(respEp, -1, 4);			//diagnosticInfos [], -1
+		    oN(respEp, 0, 4);			//diagnosticInfos []
 		    break;
 		}
 		case OpcUa_BrowseRequest:
