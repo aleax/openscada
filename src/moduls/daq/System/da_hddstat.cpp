@@ -158,7 +158,8 @@ void HddStat::makeActiveDA( TMdContr *aCntr )
 	vector<string> pLs;
 	// Find propper parameter's object
 	aCntr->list(pLs);
-	int i_p;
+
+	unsigned i_p;
 	for(i_p = 0; i_p < pLs.size(); i_p++)
 	{
 	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);

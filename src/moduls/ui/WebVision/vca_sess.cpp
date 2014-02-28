@@ -2778,7 +2778,7 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			double delta_real;
 			double scale;
 			double ang, ang1;
-			double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end,delta_t;
+			double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t = 0;
 			Point P1, P2, P3, P4;
 			scale = 0.0;
 			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
@@ -2894,10 +2894,10 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			    point_num[0] = tp1;
 			}
 			Point new_pnt, new_pnt_1, new_pnt_2;
-			double delta_real, delta_t, delta_temp_1 = 0, delta_temp_2 = 0;
+			double delta_real, delta_t = 0, delta_temp_1 = 0, delta_temp_2 = 0;
 			double scale;
 			double ang, ang1;
-			int num_bezier;
+			int num_bezier = 0;
 			Point P1, P2, P3, P4, el_p1, el_p2, el_p3, el_p4;
 			scale = 0.0;
 			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
@@ -3123,9 +3123,9 @@ int VCAElFigure::drawElF( SSess &ses, double xSc, double ySc, Point clickPnt )
 			Point new_pnt, new_pnt_1, new_pnt_2;
 			double delta_real;
 			double scale;
-			double ang, ang1, delta_temp_1 = 0, delta_temp_2 = 0, delta_t;
+			double ang, ang1, delta_temp_1 = 0, delta_temp_2 = 0, delta_t = 0;
 			double arc_a, arc_b, arc_a_small, arc_b_small, t_start, t_end, delta_t_arc, delta_t_bez;
-			int num_bezier;
+			int num_bezier = 0;
 			Point P1, P2, P3, P4;
 			scale = 0.0;
 			if( xSc < 1 && xSc <= ySc ) scale = (1-xSc)/10;
@@ -4138,7 +4138,6 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	string ln_st;
 	int style;
 	double t_start, t_end, a, b, ang;
-	int MotionWidth;
 	Point ip[5];
 	shapeItems.clear();
 	inundationItems.clear();
@@ -4146,21 +4145,21 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	{
 	    string el = TSYS::strSepParse(sel, 0, ':', &el_off);
 	    ShapeItem::Type elTp;
-            int nPnts = 0, servPnts;
+	    int nPnts = 0, servPnts;
 	    if(el == "line")            { elTp = ShapeItem::Line; nPnts = 2; servPnts = 2; }
-            else if(el == "arc")        { elTp = ShapeItem::Arc; nPnts = 5; servPnts = 2; }
-            else if(el == "bezier")     { elTp = ShapeItem::Bezier; nPnts = 4; servPnts = 2; }
-            else if(el == "fill")       { elTp = ShapeItem::Fill; nPnts = -1; servPnts = -1; }
-            else continue;
+	    else if(el == "arc")        { elTp = ShapeItem::Arc; nPnts = 5; servPnts = 2; }
+	    else if(el == "bezier")     { elTp = ShapeItem::Bezier; nPnts = 4; servPnts = 2; }
+	    else if(el == "fill")       { elTp = ShapeItem::Fill; nPnts = -1; servPnts = -1; }
+	    else continue;
 
 	    //>> Reading anf setting attributes for the current line
 	    //>>> Points
 	    float x_s, y_s;
 	    int w_s;
-            bool pnts_ok = true;
-            p.clear();
+	    bool pnts_ok = true;
+	    p.clear();
 	    for(int i_p = 0, off_last = 0; pnts_ok && (nPnts < 0 || i_p < nPnts); i_p++)
-            {
+	    {
 		el_s = TSYS::strSepParse(sel, 0, ':', &el_off);
 		if(sscanf(el_s.c_str(),"(%f|%f)",&x_s,&y_s) == 2)
 		{
@@ -4230,7 +4229,6 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 			CtrlMotionPos_1 = ip[2];
 			CtrlMotionPos_2 = ip[3];
 			CtrlMotionPos_3 = ip[4];
-			MotionWidth = lnwidth;
 			ang = angle(CtrlMotionPos_1, CtrlMotionPos_3, CtrlMotionPos_1, Point(CtrlMotionPos_1.x+10,CtrlMotionPos_1.y));
 			if(CtrlMotionPos_3.y > CtrlMotionPos_1.y) ang = 360 - ang;
 			a = length(CtrlMotionPos_3, CtrlMotionPos_1);

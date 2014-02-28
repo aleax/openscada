@@ -146,7 +146,7 @@ void MBD::enable( )
     fdb   = TSYS::strParse(addr(), 0, ";", &off);
     user  = TSYS::strParse(addr(), 0, ";", &off);
     pass  = TSYS::strParse(addr(), 0, ";", &off);
-    conTm = (off < addr().size()) ? TSYS::strParse(addr(), 0, ";", &off) : "1";
+    conTm = (off < (int)addr().size()) ? TSYS::strParse(addr(), 0, ";", &off) : "1";
     cd_pg = codePage().size() ? codePage() : Mess->charset();
 
     //Attach to DB

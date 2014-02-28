@@ -871,7 +871,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    bool noonly_no_set = true;
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
@@ -889,16 +888,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			{
 			    lnk(i_l).prm_attr= p_vl+"."+p_attr;
 			    modif();
-			    noonly_no_set = false;
 			}
 			else no_set += p_attr+",";
 		    }
 		}
-	    /*if(!prm.freeStat())
-	    {
-		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Parameter has no one attribute!"));
-		else if(no_set.size())	throw TError(nodePath().c_str(),_("Parameter has not attributes: %s !"),no_set.c_str());
-	    }*/
 	    initTmplLnks();
 	}
     }

@@ -82,18 +82,15 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mLicense	= LICENSE;
     mSource	= name;
 
-    //> Once init of Net-SNMP
+    //Once init of Net-SNMP
     init_snmp("OpenSCADA SNMP client");
 }
 
-TTpContr::~TTpContr( )
-{
-
-}
+TTpContr::~TTpContr( )	{ }
 
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
 }
 
@@ -101,7 +98,7 @@ void TTpContr::postEnable(int flag)
 {
     TTipDAQ::postEnable(flag);
 
-    //> Controler's bd structure
+    //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
@@ -113,14 +110,14 @@ void TTpContr::postEnable(int flag)
     fldAdd(new TFld("V3",_("V3 parameters"),TFld::String,TFld::NoFlag,"50","authNoPriv:MD5::DES:"));
     fldAdd(new TFld("PATTR_LIM",_("Parameter's attributes limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
-    //> Parameter type bd structure
+    //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
-TController *TTpContr::ContrAttach(const string &name, const string &daq_db)
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 {
-    return new TMdContr(name,daq_db,this);
+    return new TMdContr(name, daq_db, this);
 }
 
 //*************************************************
@@ -134,10 +131,7 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
-TMdContr::~TMdContr( )
-{
-    if(run_st) stop();
-}
+TMdContr::~TMdContr( )	{ if(run_st) stop(); }
 
 string TMdContr::getStatus( )
 {
@@ -149,16 +143,16 @@ string TMdContr::getStatus( )
 	{
 	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-            else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-            rez += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
-        }
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
+	}
     }
     return rez;
 }
 
 struct snmp_session *TMdContr::getSess( )
 {
-    //> Session init
+    //Session init
     snmp_sess_init(&session);
     session.version = SNMP_VERSION_1;
     if(ver() == "1")		session.version = SNMP_VERSION_1;
@@ -231,86 +225,68 @@ struct snmp_session *TMdContr::getSess( )
     return &session;
 }
 
-string TMdContr::secLev( )
-{
-    return TSYS::strParse(cfg("V3").getS(), 0, ":");
-}
+string TMdContr::secLev( )	{ return TSYS::strParse(cfg("V3").getS(), 0, ":"); }
 
-void TMdContr::setSecLev(const string &vl)
+void TMdContr::setSecLev( const string &vl )
 {
     cfg("V3").setS(vl+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass());
 }
 
-string TMdContr::secAuthProto( )
-{
-    return TSYS::strParse(cfg("V3").getS(), 1, ":");
-}
+string TMdContr::secAuthProto( ){ return TSYS::strParse(cfg("V3").getS(), 1, ":"); }
 
-void TMdContr::setSecAuthProto(const string &vl)
+void TMdContr::setSecAuthProto( const string &vl )
 {
     cfg("V3").setS(secLev()+":"+vl+":"+secAuthPass()+":"+secPrivProto()+":"+secPrivPass());
 }
 
-string TMdContr::secAuthPass( )
-{
-    return TSYS::strParse(cfg("V3").getS(), 2, ":");
-}
+string TMdContr::secAuthPass( )	{ return TSYS::strParse(cfg("V3").getS(), 2, ":"); }
 
-void TMdContr::setSecAuthPass(const string &vl)
+void TMdContr::setSecAuthPass( const string &vl )
 {
     cfg("V3").setS(secLev()+":"+secAuthProto()+":"+vl+":"+secPrivProto()+":"+secPrivPass());
 }
 
-string TMdContr::secPrivProto( )
-{
-    return TSYS::strParse(cfg("V3").getS(), 3, ":");
-}
+string TMdContr::secPrivProto( ){ return TSYS::strParse(cfg("V3").getS(), 3, ":"); }
 
-void TMdContr::setSecPrivProto(const string &vl)
+void TMdContr::setSecPrivProto( const string &vl )
 {
     cfg("V3").setS(secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+vl+":"+secPrivPass());
 }
 
-string TMdContr::secPrivPass( )
-{
-    return TSYS::strParse(cfg("V3").getS(), 4, ":");
-}
+string TMdContr::secPrivPass( )	{ return TSYS::strParse(cfg("V3").getS(), 4, ":"); }
 
-void TMdContr::setSecPrivPass(const string &vl)
+void TMdContr::setSecPrivPass( const string &vl )
 {
     cfg("V3").setS(secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+vl);
 }
 
-TParamContr *TMdContr::ParamAttach(const string &name, int type)
+TParamContr *TMdContr::ParamAttach( const string &name, int type )
 {
     return new TMdPrm(name,&owner().tpPrmAt(type));
 }
 
-void TMdContr::enable_( )
-{
-    prmEnErr = false;
-}
+void TMdContr::enable_( )	{ prmEnErr = false; }
 
 void TMdContr::start_( )
 {
-    //> Schedule process
+    //Schedule process
     mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     getSess();
 
-    //> Start the gathering data task
+    //Start the gathering data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
 void TMdContr::prmEn(const string &id, bool val)
 {
-    ResAlloc res(en_res,true);
+    ResAlloc res(en_res, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -320,13 +296,13 @@ void TMdContr::prmEn(const string &id, bool val)
     if(!val && i_prm < p_hd.size()) p_hd.erase(p_hd.begin()+i_prm);
 }
 
-void *TMdContr::Task(void *icntr)
+void *TMdContr::Task( void *icntr )
 {
     TMdContr &cntr = *(TMdContr *)icntr;
 
     string	daqerr;
 
-    //> Start SNMP-net session
+    //Start SNMP-net session
     void *ss =  snmp_sess_open(cntr.getSess());
     if(!ss) { mess_err(mod->nodePath().c_str(), "%s", _("Error SNMP session open.")); return NULL; }
 
@@ -338,9 +314,9 @@ void *TMdContr::Task(void *icntr)
 	cntr.call_st = true;
 	int64_t t_cnt = TSYS::curTime();
 
-	//>> Update controller's data
+	// Update controller's data
 	daqerr.clear();
-	cntr.en_res.resRequestR( );
+	cntr.en_res.resRequestR();
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
 	    try { cntr.p_hd[i_p].at().upVal(ss); }
 	    catch(TError err) { daqerr = err.mess; }
@@ -350,7 +326,7 @@ void *TMdContr::Task(void *icntr)
 
 	cntr.acq_err.setVal(daqerr);
 
-	TSYS::taskSleep(cntr.period(),cntr.period()?0:TSYS::cron(cntr.cron()));
+	TSYS::taskSleep(cntr.period(), cntr.period()?0:TSYS::cron(cntr.cron()));
     }
 
     snmp_sess_close(ss);
@@ -360,7 +336,7 @@ void *TMdContr::Task(void *icntr)
     return NULL;
 }
 
-string TMdContr::oid2str(oid *ioid, size_t isz)
+string TMdContr::oid2str( oid *ioid, size_t isz )
 {
     string rez;
     for(unsigned i_el = 0; i_el < isz; i_el++)
@@ -379,7 +355,7 @@ void TMdContr::str2oid( const string &str, oid *ioid, size_t &isz )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
@@ -417,7 +393,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
         return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/cntr/cfg/SecLev")
     {
@@ -457,12 +433,9 @@ TMdPrm::TMdPrm(string name, TTipParam *tp_prm) :
 
 }
 
-TMdPrm::~TMdPrm( )
-{
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
-void TMdPrm::postEnable(int flag)
+void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
     if(!vlElemPresent(&p_el)) vlElemAtt(&p_el);
@@ -480,8 +453,8 @@ void TMdPrm::enable( )
 
     parseOIDList(OIDList());
 
-    //> Init attributes call
-    //>> Start SNMP-net session
+    //Init attributes call
+    // Start SNMP-net session
     if(owner().enableStat() || !owner().prmEnErr)
     {
 	void *ss =  snmp_sess_open(owner().getSess());
@@ -506,7 +479,7 @@ void TMdPrm::disable( )
 
     TParamContr::disable();
 
-    //> Set EVAL to parameter attributes
+    //Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
@@ -515,7 +488,6 @@ void TMdPrm::disable( )
 
 void TMdPrm::upVal( void *ss, bool onlyInit )
 {
-    bool	some_fld_add = false;
     int		el_cnt = 0;
     string      soid;
     char	tbuf[100];
@@ -547,12 +519,11 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			running = false;
 			continue;
 		    }
-		    //>> Get or create element
+		    // Get or create element
 		    soid = owner().oid2str(var->name,var->name_length);
 		    als.push_back(soid);
 		    if(!elem().fldPresent(soid))
 		    {
-			some_fld_add = true;
 			snprint_objid(tbuf,sizeof(tbuf),var->name,var->name_length);
 			switch(var->type)
 			{
@@ -560,11 +531,11 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Boolean,TFld::NoWrite));
 				break;
 			    case ASN_INTEGER:
-		    		elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Integer,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
-	    			break;
+				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Integer,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
+				break;
 			    case ASN_OPAQUE_FLOAT:
 			    case ASN_OPAQUE_DOUBLE:
-    				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
+				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
 				break;
 			    case ASN_GAUGE:
 			    case ASN_COUNTER:
@@ -590,7 +561,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				break;
 			}
 		    }
-		    //>> Set value
+		    // Set value
 		    if(!onlyInit)
 		    {
 			AutoHD<TVal> attr = vlAt(soid);
@@ -614,7 +585,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 				break;
 			    case ASN_IPADDRESS:
 			    {
-    				u_char *ip = (u_char*)var->val.string;
+				u_char *ip = (u_char*)var->val.string;
 				attr.at().setS(TSYS::strMess("%d.%d.%d.%d",ip[0], ip[1], ip[2], ip[3]),0,true);
 				break;
 			    }
@@ -663,23 +634,20 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	}
     }
 
-    //> Check for delete DAQ parameter's attributes
+    //Check for delete DAQ parameter's attributes
     for(int i_p = 0; onlyInit && i_p < (int)elem().fldSize(); i_p++)
     {
-        unsigned i_l;
-        for(i_l = 0; i_l < als.size(); i_l++)
-            if(elem().fldAt(i_p).name() == als[i_l])
-                break;
-        if(i_l >= als.size())
-            try{ elem().fldDel(i_p); i_p--; }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(elem().fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try{ elem().fldDel(i_p); i_p--; }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 }
 
-void TMdPrm::load_( )
-{
-    TParamContr::load_();
-}
+void TMdPrm::load_( )	{ TParamContr::load_(); }
 
 void TMdPrm::parseOIDList(const string &ioid)
 {
@@ -701,11 +669,11 @@ void TMdPrm::parseOIDList(const string &ioid)
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //> Service commands process
+    //Service commands process
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
@@ -718,7 +686,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     TParamContr::cntrCmdProc(opt);
 }
 
@@ -726,7 +694,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 {
     if(!enableStat() || !owner().startStat()) { valo.setS(EVAL_STR, 0, true); return; }
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
         if(valo.getS(NULL,true) == pvl.getS()) return;
@@ -736,7 +704,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
         return;
     }
 
-    //> Direct write
+    //Direct write
     void *ss;
     char vtp = 0;
     oid oidn[MAX_OID_LEN];
@@ -753,7 +721,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	case ASN_COUNTER:	vtp = 'c';	break;
 	case ASN_TIMETICKS:	vtp = 't';	break;
 	case ASN_UINTEGER:	vtp = '3';	break;
-        case ASN_OCTET_STR:
+	case ASN_OCTET_STR:
 	case ASN_OPAQUE:	vtp = 's';	break;
 	case ASN_IPADDRESS:	vtp = 'a';	break;
 	case ASN_OBJECT_ID:	vtp = 'o';	break;

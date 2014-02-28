@@ -771,9 +771,9 @@ void MFileArch::put( TMess::SRec mess )
 		{
 		    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
 		    fseek(f, beg_cur, SEEK_SET);
-		    fOK = fOK && (fread(buf, mv_end-beg_cur, 1, f) == (mv_end-beg_cur));
+		    fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == (unsigned)(mv_end-beg_cur));
 		    fseek(f, beg_cur+s_buf.size(), SEEK_SET);
-		    fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == (mv_end-beg_cur));
+		    fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == (unsigned)(mv_end-beg_cur));
 		    mv_end -= sizeof(buf);
 		}
 		while(fOK && beg_cur != mv_beg);

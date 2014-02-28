@@ -547,18 +547,19 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		else
 		{
 		    // Items
-		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || i_r < wdg->rowCount(); i_ch++)
+		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++)
 		    {
 			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
 			bool isH = false;
 			QTableWidgetItem *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
-			if(!isH && i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
+			if(!isH && (int)i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
 			if(!isH && tR) rClr = tR->attr("color");
-			for(unsigned i_c = 0, i_cR = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) || i_c < wdg->columnCount(); i_ch1++)
+			for(unsigned i_c = 0, i_cR = 0, i_ch1 = 0; (tR && i_ch1 < tR->childSize()) ||
+								    (int)i_c < wdg->columnCount(); i_ch1++)
 			{
 			    XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
-			    if(tC && i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
+			    if(tC && (int)i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
 			    if(isH)	//Header process
 			    {
 				if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
@@ -589,12 +590,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
 				else tit->setData(Qt::DecorationRole, QVariant());
 			    }
-			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, i_cR); }
+			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, (int)i_cR); }
 			    i_c++;
 			}
 			if(!isH)
 			{
-			    if(tR)	{ ++i_rR; maxRows = vmax(maxRows, i_rR); }
+			    if(tR)	{ ++i_rR; maxRows = vmax(maxRows, (int)i_rR); }
 			    i_r++;
 			}
 			else hdrPresent = true;
@@ -999,7 +1000,7 @@ void ShapeFormEl::buttonReleased( )
 			QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		    break;
 		}
-		if(file.write(fCtx.data(),fCtx.size()) != fCtx.size())
+		if(file.write(fCtx.data(),fCtx.size()) != (int)fCtx.size())
 		    mod->postMess(mod->nodePath().c_str(),
 			QString(_("Write data to file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 	    }
@@ -1113,6 +1114,7 @@ void ShapeFormEl::tableChange( )
 	    value = el->selectedItems()[0]->tableWidget()->item(el->property("keyID").toInt(),
 							el->selectedItems()[0]->column())->text().toStdString();
 	    break;
+	default: break;
     }
 
     //Events prepare

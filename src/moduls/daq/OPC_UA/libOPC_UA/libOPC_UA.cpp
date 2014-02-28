@@ -2969,7 +2969,7 @@ nextReq:
 		case OpcUa_BrowseNextRequest:
 		{
 		    XML_N req("data");
-		    bool rCp = iNu(rb, off, 1);		//releaseContinuationPoints
+		    iNu(rb, off, 1);			//releaseContinuationPoints
 		    uint32_t nCp = iNu(rb, off, 4);	//continuationPoints []
 
 		    //>> Respond

@@ -99,7 +99,7 @@ void UPS::getVal( TMdPrm *prm )
 	int aOff = 0;
 	string UPS = TSYS::strParse(addr, 0, "@", &aOff);
 	char var[51] = "", vVal[256] = "";
-	if(aOff < addr.size())
+	if(aOff < (int)addr.size())
 	{
 	    string val = reqUPS(addr,"LIST VAR "+UPS+"\x0A");
 	    for(int off = 0, lstSec = false; (c_el=TSYS::strLine(val,0,&off)).size(); )
@@ -181,7 +181,8 @@ void UPS::makeActiveDA( TMdContr *aCntr )
 	    vector<string> pLs;
 	    // Find propper parameter's object
 	    aCntr->list(pLs);
-	    int i_p;
+
+	    unsigned i_p;
 	    for(i_p = 0; i_p < pLs.size(); i_p++)
 	    {
 		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);

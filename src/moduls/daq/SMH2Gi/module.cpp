@@ -1050,7 +1050,7 @@ void MRCParam::getVals( TParamContr *ip )
 	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
 	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
-	if(rezReq.size() || pduReq.size() < (3+reStrSize))
+	if(rezReq.size() || (int)pduReq.size() < (3+reStrSize))
 	{
 	    pduReq.resize(3+reStrSize);
 	    if(rezReq.empty()) rezReq = _("20:PDU short.");
@@ -1100,7 +1100,7 @@ void MRCParam::getVals( TParamContr *ip )
 		data += (char)vl; data += (char)(vl>>8);
 	    }
 	    //>> Append to generic MR write frame
-	    if(data.size() && p->owner().MRWrFrm[modSlot] == ((modSlot<7)?p->owner().MRWrFrm[modSlot+1]:p->owner().MRWrFrm.size()))
+	    if(data.size() && p->owner().MRWrFrm[modSlot] == ((modSlot<7)?p->owner().MRWrFrm[modSlot+1]:(int)p->owner().MRWrFrm.size()))
 	    {
 		if(p->owner().MRWrFrm[modSlot] >= (int)p->owner().MRWrFrm.size()) p->owner().MRWrFrm.append(data);
 		else p->owner().MRWrFrm.insert(p->owner().MRWrFrm[modSlot], data);

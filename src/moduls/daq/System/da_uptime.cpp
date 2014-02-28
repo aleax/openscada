@@ -96,8 +96,8 @@ void UpTime::makeActiveDA( TMdContr *aCntr )
 {
     vector<string> pLs;
     aCntr->list(pLs);
-    int i_p;
 
+    unsigned i_p;
     for(i_p = 0; i_p < pLs.size(); i_p++)
     {
 	AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);

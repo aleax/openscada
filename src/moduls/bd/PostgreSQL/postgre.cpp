@@ -150,7 +150,6 @@ void MBD::enable( )
     MtxAlloc resource(connRes, true);
     if(enableStat())	return;
 
-    bool forceEn = false;
     int off = 0;
     host = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
     hostaddr = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
@@ -158,7 +157,7 @@ void MBD::enable( )
     pass = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
     db   = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
     port = TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off));
-    connect_timeout = (off < addr().size()) ? TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off)) : "1";
+    connect_timeout = (off < (int)addr().size()) ? TSYS::strNoSpace(TSYS::strParse(addr(),0,";",&off)) : "1";
 
     conninfo.clear();
     if(host.empty() && hostaddr.empty()) host = "localhost";

@@ -517,15 +517,15 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(atoi(errCon.getVal().c_str()))
-        {
-            rez += TSYS::strParse(errCon.getVal(),1,":");
-            rez.replace(0,1,TSYS::strParse(errCon,0,":"));
-        }
-        else
-        {
+	{
+	    rez += TSYS::strParse(errCon.getVal(),1,":");
+	    rez.replace(0,1,TSYS::strParse(errCon,0,":"));
+	}
+	else
+	{
 	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-    	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
 	}
     }
@@ -993,16 +993,16 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    ADSread->len = buffer.size();
 
 	    //> Request
-            int resp_len;
-            try { resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
-            catch(TError err) { errCon = _("10:Connection error."); throw; }
-            int full_len = resp_len;
-            if(full_len < (int)sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
+	    int resp_len;
+	    try { resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
+	    catch(TError err) { errCon = _("10:Connection error."); throw; }
+	    int full_len = resp_len;
+	    if(full_len < (int)sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
-            unsigned resp_sz = AmsHD->len;
+	    unsigned resp_sz = AmsHD->len;
 
 	    //> Wait tail
-	    while(full_len < (resp_sz+sizeof(AMS_TCP_HEAD)))
+	    while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD)))
 	    {
 		resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len, 0, true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("13:Not full respond"));
@@ -1018,7 +1018,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    if(AmsHD->errCod) throw TError(nodePath().c_str(),_("13:Error server respond: %d"),AmsHD->errCod);
 	    if(full_len < (resp_len+=sizeof(ADS_ReadResp)))	throw TError(nodePath().c_str(),_("13:Error server '%s' respond"),"Read");
 	    if(ADSreadResp->res) throw TError(nodePath().c_str(),_("13:Error server '%s' respond: %d"),"Read",ADSreadResp->res);
-	    if(ADSreadResp->len != buffer.size() || full_len < (resp_len+ADSreadResp->len))
+	    if(ADSreadResp->len != buffer.size() || full_len < (int)(resp_len+ADSreadResp->len))
 		throw TError(nodePath().c_str(),_("13:Error server '%s' respond"),"Read");
 	    buffer.assign(res+resp_len,buffer.size());
 
@@ -1173,15 +1173,15 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    memcpy(ADSreq+1,buffer.data(),buffer.size());
 
 	    //> Request
-            int resp_len;
-            try{ resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
-            catch(TError err) { errCon = _("10:Connection error."); throw; }
-            int full_len = resp_len;
-            if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(nodePath().c_str(),_("13:Error server respond"));
+	    int resp_len;
+	    try{ resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
+	    catch(TError err) { errCon = _("10:Connection error."); throw; }
+	    int full_len = resp_len;
+	    if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
-            unsigned resp_sz = AmsHD->len;
+	    unsigned resp_sz = AmsHD->len;
 	    //> Wait tail
-	    while(full_len < (resp_sz+sizeof(AMS_TCP_HEAD)))
+	    while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD)))
 	    {
 		resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len, 0, true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("13:Not full respond"));

@@ -1331,7 +1331,6 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
-	    bool noonly_no_set = true;
 	    string no_set;
 	    string cfg_val = TSYS::strParse(opt->text(), 0, " ");
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
@@ -1352,19 +1351,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    if(!prm.freeStat() || !dstwdg.freeStat())
 		    {
 			if((!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
-			    (!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
-			{
+				(!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
 			    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val+((obj_tp == "wdg:")?"/a_":"/")+p_attr);
-			    noonly_no_set = false;
-			}
 			else no_set += p_attr+",";
 		    }
 		}
-	    /*if(!prm.freeStat() || !dstwdg.freeStat())
-	    {
-		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Destination has no any necessary attribute!"));
-		else if(no_set.size())	throw TError(nodePath().c_str(),_("Destination has no attributes: %s !"),no_set.c_str());
-	    }*/
 	}
     }
     else if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt))

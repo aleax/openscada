@@ -285,7 +285,7 @@ void TMdContr::regVal( int reg, const string &dt )
 	{
 	    if((reg*2) < workCnt[i_b].off)
 	    {
-		if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < blkMaxSz)
+		if((mMerge || (reg*2+2) >= workCnt[i_b].off) && (int)(workCnt[i_b].val.size()+workCnt[i_b].off-(reg*2)) < blkMaxSz)
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg*2,0);
 		    workCnt[i_b].off = reg*2;
@@ -319,7 +319,7 @@ void TMdContr::regVal( int reg, const string &dt )
 	{
 	    if(reg < workCnt[i_b].off)
 	    {
-		if((mMerge || (reg+1) >= workCnt[i_b].off) && (workCnt[i_b].val.size()+workCnt[i_b].off-reg) < blkMaxSz*8)
+		if((mMerge || (reg+1) >= workCnt[i_b].off) && (int)(workCnt[i_b].val.size()+workCnt[i_b].off-reg) < blkMaxSz*8)
 		{
 		    workCnt[i_b].val.insert(0,workCnt[i_b].off-reg,0);
 		    workCnt[i_b].off = reg;

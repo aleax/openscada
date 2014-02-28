@@ -82,7 +82,7 @@ class TVariant
 	TVariant( TVarObj *ivl );
 	TVariant( const TVariant &var );
 
-	~TVariant( );
+	virtual ~TVariant( );
 
 	bool operator==( const TVariant &vr );
 	bool operator!=( const TVariant &vr );

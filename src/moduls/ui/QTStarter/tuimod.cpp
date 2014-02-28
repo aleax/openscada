@@ -257,7 +257,6 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 void *TUIMod::Task( void * )
 {
     vector<string> list;
-    bool first_ent = true;
     QImage ico_t;
     time_t st_time = time(NULL);
     vector<TMess::SRec> recs;
@@ -345,7 +344,6 @@ void *TUIMod::Task( void * )
 
     //> Qt application object free
     delete QtApp;
-    first_ent = false;
 
     mod->run_st = false;
 

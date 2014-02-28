@@ -46,7 +46,7 @@ TArchiveS::TArchiveS( ) :
 {
     mAval = grpAdd("va_");
 
-    //> Message archivator DB structure
+    //Message archivator DB structure
     elMess.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elMess.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elMess.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
@@ -56,7 +56,7 @@ TArchiveS::TArchiveS( ) :
     elMess.fldAdd(new TFld("LEVEL",_("Messages level"),TFld::Integer,0,"1","0","0;7"));
     elMess.fldAdd(new TFld("ADDR",_("Address"),TFld::String,0,"100"));
 
-    //> Value archivator DB structure
+    //Value archivator DB structure
     elVal.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elVal.fldAdd(new TFld("MODUL",_("Module(plugin) name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     elVal.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
@@ -66,7 +66,7 @@ TArchiveS::TArchiveS( ) :
     elVal.fldAdd(new TFld("V_PER",_("Value period (sec)"),TFld::Real,0,"12.6","1","0;1000000"));
     elVal.fldAdd(new TFld("A_PER",_("Period archiving (sec)"),TFld::Integer,0,"4","60","0;1000"));
 
-    //> Value archive DB structure
+    //Value archive DB structure
     elAval.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"20"));
     elAval.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     elAval.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
@@ -92,10 +92,10 @@ TArchiveS::TArchiveS( ) :
 
 TArchiveS::~TArchiveS( )
 {
-    //> Stop subsystem
+    //Stop subsystem
     if(prcStMess || prcStVal) subStop();
 
-    //> Free other resources
+    //Free other resources
     nodeDelAll();
 }
 
@@ -105,19 +105,19 @@ void TArchiveS::setValPrior( int ivl )	{ mValPrior = vmax(-1,vmin(99,ivl)); modi
 
 void TArchiveS::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
         if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    //> Load parameters
+    //Load parameters
     setMessBufLen(atoi(TBDS::genDBGet(nodePath()+"MessBufSize",i2s(messBufLen())).c_str()));
     setMessPeriod(atoi(TBDS::genDBGet(nodePath()+"MessPeriod",i2s(mMessPer)).c_str()));
     setValPeriod(atoi(TBDS::genDBGet(nodePath()+"ValPeriod",i2s(mValPer)).c_str()));
     setValPrior(atoi(TBDS::genDBGet(nodePath()+"ValPriority",i2s(mValPrior)).c_str()));
 
-    //> LidDB
-    //>> Message archivators load
+    //LidDB
+    // Message archivators load
     string id,type;
     map<string, bool>	itReg;
     try
@@ -126,8 +126,8 @@ void TArchiveS::load_( )
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>> Search int DB and create new archivators
-	SYS->db().at().dbList(db_ls,true);
+	// Search int DB and create new archivators
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_mess_proc",nodePath()+subId()+"_mess_proc",fld_cnt++,c_el); )
@@ -139,7 +139,7 @@ void TArchiveS::load_( )
 		itReg[type+"."+id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
+	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty())
 	{
 	    vector<string> m_ls;
@@ -159,7 +159,7 @@ void TArchiveS::load_( )
 	mess_err(nodePath().c_str(),_("Message archivators load error."));
     }
 
-    //>> Value archivators load
+    // Value archivators load
     try
     {
 	TConfig c_el(&elVal);
@@ -167,7 +167,7 @@ void TArchiveS::load_( )
 	vector<string> db_ls;
 	itReg.clear();
 
-	//>> Search into DB and create new archivators
+	//  Search into DB and create new archivators
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -180,7 +180,7 @@ void TArchiveS::load_( )
 		itReg[type+"."+id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
+	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty())
 	{
 	    vector<string> m_ls;
@@ -200,7 +200,7 @@ void TArchiveS::load_( )
 	mess_err(nodePath().c_str(),_("Value archivators load error."));
     }
 
-    //>> Value archives load
+    // Value archives load
     try
     {
 	TConfig c_el(&elAval);
@@ -208,20 +208,20 @@ void TArchiveS::load_( )
 	vector<string> db_ls;
 	itReg.clear();
 
-	//>> Search into DB and create new archives
-	SYS->db().at().dbList(db_ls,true);
+	//  Search into DB and create new archives
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+subId()+"_val",nodePath()+subId()+"_val",fld_cnt++,c_el); )
 	    {
 		id = c_el.cfg("ID").getS();
 		if(!valPresent(id)) valAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
-		//> For force loading after creation from archivator storage
+		//   For force loading after creation from archivator storage
 		else if(valAt(id).at().DB() == "*.*" && db_ls[i_db] != SYS->workDB()) valAt(id).at().setDB(db_ls[i_db]);
 		itReg[id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
+	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty())
 	{
 	    valList(db_ls);
@@ -241,7 +241,7 @@ void TArchiveS::save_( )
 {
     vector<string> t_lst, o_lst;
 
-    //> Save parameters
+    //Save parameters
     TBDS::genDBSet(nodePath()+"MessBufSize", i2s(messBufLen()));
     TBDS::genDBSet(nodePath()+"MessPeriod", i2s(messPeriod()));
     TBDS::genDBSet(nodePath()+"ValPeriod", i2s(valPeriod()));
@@ -257,7 +257,7 @@ void TArchiveS::valAdd( const string &iid, const string &idb )
 string TArchiveS::optDescr(  )
 {
     char buf[STR_BUF_LEN];
-    snprintf(buf,sizeof(buf),_(
+    snprintf(buf, sizeof(buf), _(
 	"======================== Subsystem \"Archives\" options ===================\n"
 	"------------ Parameters of section '%s' in config-file -----------\n"
 	"MessBufSize   <items>       Messages buffer size.\n"
@@ -266,7 +266,7 @@ string TArchiveS::optDescr(  )
 	"ValPriority   <level>	     Values task priority level.\n"
 	"MaxReqMess    <items>       Maximum request messages.\n"
 	"MaxReqVals    <items>       Maximum request values.\n\n"
-	),nodePath().c_str());
+	), nodePath().c_str());
 
     return buf;
 }
@@ -284,12 +284,12 @@ void TArchiveS::subStart( )
     {
 	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
 
-	//> Message archivators start
+	//Message archivators start
 	mod.at().messList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	{
 	    AutoHD<TMArchivator> mess = mod.at().messAt(o_lst[i_o]);
-	    if( /*!mess.at().startStat() &&*/ mess.at().toStart() )
+	    if(mess.at().toStart())
 		try{ mess.at().start(); }
 		catch(TError err)
 		{
@@ -297,27 +297,27 @@ void TArchiveS::subStart( )
 		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),o_lst[i_o].c_str());
 		}
 	}
-	//> Value archivators start
+	//Value archivators start
 	mod.at().valList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	{
 	    AutoHD<TVArchivator> val = mod.at().valAt(o_lst[i_o]);
-	    if( /*!val.at().startStat() &&*/ val.at().toStart() )
+	    if(val.at().toStart())
 		try{ val.at().start(); }
 		catch(TError err)
 		{
-		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_err(nodePath().c_str(),_("Value archivator '%s' start error."),val.at().workId().c_str());
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
 		}
 	}
     }
 
-    //> Value archives start
+    //Value archives start
     valList(o_lst);
     for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
     {
 	AutoHD<TVArchive> aval = valAt(o_lst[i_o]);
-	if( /*!aval.at().startStat() &&*/ aval.at().toStart() )
+	if(aval.at().toStart())
 	    try{ aval.at().start(); }
 	    catch(TError err)
 	    {
@@ -326,9 +326,9 @@ void TArchiveS::subStart( )
 	    }
     }
 
-    //> Start messages values acquisition task
+    //Start messages values acquisition task
     if(!prcStMess) SYS->taskCreate(nodePath('.',true)+".mess", 0, TArchiveS::ArhMessTask, this);
-    if(!prcStVal) SYS->taskCreate(nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this);
+    if(!prcStVal)  SYS->taskCreate(nodePath('.',true)+".vals", valPrior(), TArchiveS::ArhValTask, this);
 
     TSubSYS::subStart( );
 
@@ -343,16 +343,16 @@ void TArchiveS::subStop( )
 
     vector<string> t_lst, o_lst;
 
-    //> Messages and Values acquisition task stop
+    //Messages and Values acquisition task stop
     if(prcStMess) SYS->taskDestroy(nodePath('.',true)+".mess");
-    if(prcStVal) SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
+    if(prcStVal)  SYS->taskDestroy(nodePath('.',true)+".vals", &endrunReqVal);
 
-    //> Archivators stop
+    //Archivators stop
     modList(t_lst);
     for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
     {
 	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
-	//Value archives stop
+	// Value archives stop
 	mod.at().valList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
 	{
@@ -380,7 +380,7 @@ void TArchiveS::subStop( )
 	}
     }
 
-    //> Value archives stop
+    //Value archives stop
     valList(o_lst);
     for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
     {
@@ -404,7 +404,7 @@ void TArchiveS::perSYSCall( unsigned int cnt )
 
 void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, const string &mess )
 {
-    //> Put message to buffer
+    //Put message to buffer
     ResAlloc res(mRes,true);
     mBuf[headBuf].time  = tm;
     mBuf[headBuf].utime = utm;
@@ -412,7 +412,8 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     mBuf[headBuf].level = (TMess::Type)level;
     mBuf[headBuf].mess  = mess;
     if((++headBuf) >= mBuf.size()) headBuf = 0;
-    //> Check to no archivated messages
+
+    //Check to no archivated messages
     if(headBuf == headLstread)
     {
 	if(!(bufErr&0x01))
@@ -424,7 +425,8 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	}
 	if(++headLstread >= mBuf.size()) headLstread = 0;
     }
-    //> Check fill buffer speed.
+
+    //Check fill buffer speed.
     else if((headBuf-headLstread) > messBufLen()/2)
     {
 	if(!(bufErr&0x02))
@@ -437,7 +439,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     }
     else bufErr = 0;
 
-    //> Alarms processing. For level less 0 alarm is set
+    //Alarms processing. For level less 0 alarm is set
     map<string,TMess::SRec>::iterator p;
     if(level < 0) mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
     else if((p=mAlarms.find(categ)) != mAlarms.end()) mAlarms.erase(p);
@@ -458,7 +460,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
     if(!upTo) upTo = time(NULL)+STD_INTERF_TM;
     TRegExp re(category, "p");
 
-    //> Get records from buffer
+    //Get records from buffer
     unsigned i_buf = headBuf;
     while(level >= 0 && (!arch.size() || arch==BUF_ARCH_NM) && time(NULL) < upTo)
     {
@@ -469,7 +471,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	if(i_buf == headBuf) break;
     }
 
-    //> Get records from archives
+    //Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
     for(unsigned i_t = 0; level >= 0 && i_t < t_lst.size(); i_t++)
@@ -483,7 +485,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	}
     }
 
-    //> Alarms request processing
+    //Alarms request processing
     if(level < 0)
     {
 	vector< pair<int64_t,TMess::SRec* > > mb;
@@ -499,7 +501,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 time_t TArchiveS::messBeg( const string &arch )
 {
     time_t rez = 0;
-    ResAlloc res(mRes,false);
+    ResAlloc res(mRes, false);
     if(arch.empty() || arch == BUF_ARCH_NM)
     {
 	unsigned i_buf = headBuf;
@@ -512,7 +514,7 @@ time_t TArchiveS::messBeg( const string &arch )
 	if( !arch.empty() ) return rez;
     }
 
-    //> Get records from archives
+    //Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
     AutoHD<TMArchivator> archtor;
@@ -546,7 +548,7 @@ time_t TArchiveS::messEnd( const string &arch )
 	if(!arch.empty()) return rez;
     }
 
-    //> Get records from archives
+    //Get records from archives
     vector<string> t_lst, o_lst;
     modList(t_lst);
     AutoHD<TMArchivator> archtor;
@@ -564,14 +566,14 @@ time_t TArchiveS::messEnd( const string &arch )
     return rez;
 }
 
-void TArchiveS::setMessBufLen(unsigned len)
+void TArchiveS::setMessBufLen( unsigned len )
 {
-    ResAlloc res(mRes,true);
-    len = vmin(BUF_SIZE_MAX,vmax(BUF_SIZE_DEF,len));
+    ResAlloc res(mRes, true);
+    len = vmin(BUF_SIZE_MAX, vmax(BUF_SIZE_DEF,len));
     while(mBuf.size() > len)
     {
 	mBuf.erase(mBuf.begin() + headBuf);
-	if(headBuf >= mBuf.size()) headBuf = 0;
+	if(headBuf >= mBuf.size())	headBuf = 0;
 	if(headLstread >= mBuf.size())	headLstread = mBuf.size()-1;
     }
     while(mBuf.size() < len) mBuf.insert(mBuf.begin() + headBuf, TMess::SRec());
@@ -582,14 +584,12 @@ void TArchiveS::setActValArch( const string &id, bool val )
 {
     unsigned i_arch;
 
-    ResAlloc res(vRes,true);
-    for( i_arch = 0; i_arch < actUpSrc.size(); i_arch++ )
-	if( actUpSrc[i_arch].at().id() == id ) break;
+    ResAlloc res(vRes, true);
+    for(i_arch = 0; i_arch < actUpSrc.size(); i_arch++)
+	if(actUpSrc[i_arch].at().id() == id) break;
 
-    if( val && i_arch >= actUpSrc.size() )
-	actUpSrc.push_back(valAt(id));
-    if( !val && i_arch < actUpSrc.size() )
-	actUpSrc.erase(actUpSrc.begin()+i_arch);
+    if(val && i_arch >= actUpSrc.size()) actUpSrc.push_back(valAt(id));
+    if(!val && i_arch < actUpSrc.size()) actUpSrc.erase(actUpSrc.begin()+i_arch);
 }
 
 void *TArchiveS::ArhMessTask( void *param )
@@ -598,19 +598,20 @@ void *TArchiveS::ArhMessTask( void *param )
     arh.prcStMess = true;
     bool isLast = false;
 
-    //> First wait
+    //First wait
     TSYS::taskSleep(1000000000ll*arh.messPeriod());
-    //> Turns cycle
+
+    //Turns cycle
     while(true)
     {
 	if(TSYS::taskEndRun()) isLast = true;
-	//> Message buffer read
+	//Message buffer read
 	if(arh.headLstread != arh.headBuf)
 	    try
 	    {
 		ResAlloc res(arh.mRes, false);
 
-		//>> Get new messages
+		// Get new messages
 		unsigned new_headLstread = arh.headBuf;
 		unsigned i_m = arh.headLstread;
 		vector<TMess::SRec> o_mess;
@@ -623,7 +624,7 @@ void *TArchiveS::ArhMessTask( void *param )
 
 		res.release();
 
-		//>> Put to archivators
+		// Put to archivators
 		vector<string> t_lst, o_lst;
 		arh.modList(t_lst);
 		for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
@@ -660,16 +661,15 @@ void *TArchiveS::ArhValTask( void *param )
     {
 	int64_t work_tm = SYS->curTime();
 
-	arh.vRes.resRequestR( );
+	arh.vRes.resRequestR();
 	for(unsigned i_arh = 0; i_arh < arh.actUpSrc.size(); i_arh++)
 	    try
 	    {
 		if(work_tm/arh.actUpSrc[i_arh].at().period() > arh.actUpSrc[i_arh].at().end()/arh.actUpSrc[i_arh].at().period())
 		    arh.actUpSrc[i_arh].at().getActiveData();
 	    }
-	    catch(TError err)
-	    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
-	arh.vRes.resRelease( );
+	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	arh.vRes.resRelease();
 
 	TSYS::taskSleep((int64_t)arh.valPeriod()*1000000);
     }
@@ -697,12 +697,12 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	for(unsigned i_m = 0; i_m < recs.size(); i_m++)
 	{
 	    TVarObj *am = new TVarObj();
-	    am->propSet("tm",(int)recs[i_m].time);
-	    am->propSet("utm",recs[i_m].utime);
-	    am->propSet("categ",recs[i_m].categ);
-	    am->propSet("level",recs[i_m].level);
-	    am->propSet("mess",recs[i_m].mess);
-	    rez->propSet(i2s(i_m),am);
+	    am->propSet("tm", (int)recs[i_m].time);
+	    am->propSet("utm", recs[i_m].utime);
+	    am->propSet("categ", recs[i_m].categ);
+	    am->propSet("level", recs[i_m].level);
+	    am->propSet("mess", recs[i_m].mess);
+	    rez->propSet(i2s(i_m), am);
 	}
 	return rez;
     }
@@ -718,13 +718,14 @@ TVariant TArchiveS::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	return true;
     }
 
-    return TCntrNode::objFuncCall(iid,prms,user);
+    return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void TArchiveS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //> Service commands process
+
+    //Service commands process
     if(a_path == "/serv/mess")		//Messages access
     {
 	if(ctrChkNode(opt,"info",RWRWR_,"root",SARH_ID,SEC_RD))		//Messages information
@@ -761,7 +762,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
@@ -807,7 +808,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     if(a_path == "/m_arch/per")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(i2s(messPeriod()));
@@ -823,7 +824,7 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SARH_ID,SEC_RD))
 	{
 	    opt->setText(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")));
-	    if( !atoi(opt->text().c_str()) )    opt->setText(i2s(time(NULL)));
+	    if(!atoi(opt->text().c_str()))	opt->setText(i2s(time(NULL)));
 	}
 	if(ctrChkNode(opt,"set",RWRW__,"root",SARH_ID,SEC_WR))
 	    TBDS::genDBSet(nodePath()+"messTm",(atoi(opt->text().c_str())>=time(NULL))?"0":opt->text(),opt->attr("user"));
@@ -865,12 +866,12 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
     {
 	vector<TMess::SRec> rec;
 	time_t gtm = atoi(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")).c_str());
-	if( !gtm ) gtm = time(NULL);
+	if(!gtm) gtm = time(NULL);
 	int gsz = atoi(TBDS::genDBGet(nodePath()+"messSize","60",opt->attr("user")).c_str());
-	messGet( gtm-gsz, gtm, rec,
-		 TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
-		 atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str()),
-		 TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")) );
+	messGet(gtm-gsz, gtm, rec,
+		TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user")),
+		atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str()),
+		TBDS::genDBGet(nodePath()+"messArch","",opt->attr("user")));
 
 	XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0","",R_R___,"root",SARH_ID);
 	XMLNode *n_tmu	= ctrMkNode("list",opt,-1,"/m_arch/view/mess/0a","",R_R___,"root",SARH_ID);
@@ -934,29 +935,17 @@ TTipArchivator::TTipArchivator( const string &id ) : TModule(id)
     mMess = grpAdd("mess_");
 }
 
-TTipArchivator::~TTipArchivator()
-{
-    nodeDelAll();
-}
+TTipArchivator::~TTipArchivator( )	{ nodeDelAll(); }
 
-TArchiveS &TTipArchivator::owner()
-{
-    return (TArchiveS &)TModule::owner();
-}
+TArchiveS &TTipArchivator::owner( )	{ return (TArchiveS &)TModule::owner(); }
 
-void TTipArchivator::messAdd(const string &name, const string &idb )
-{
-    chldAdd(mMess, AMess(name,idb));
-}
+void TTipArchivator::messAdd(const string &name, const string &idb )	{ chldAdd(mMess, AMess(name,idb)); }
 
-void TTipArchivator::valAdd( const string &iid, const string &idb )
-{
-    chldAdd(mVal, AVal(iid,idb));
-}
+void TTipArchivator::valAdd( const string &iid, const string &idb )	{ chldAdd(mVal, AVal(iid,idb)); }
 
 void TTipArchivator::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
@@ -969,7 +958,8 @@ void TTipArchivator::cntrCmdProc( XMLNode *opt )
 	    "tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","val_","idSz",OBJ_ID_SZ);
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/br/mess_" || a_path == "/arch/mess")
     {
@@ -1024,7 +1014,7 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     TMArchivator *src_n = dynamic_cast<TMArchivator*>(&node);
     if(!src_n) return *this;
 
-    //> Configuration copy
+    //Configuration copy
     exclCopy(*src_n, "ID;");
     cfg("MODUL").setS(owner().modId());
     m_db = src_n->m_db;
@@ -1034,23 +1024,20 @@ TCntrNode &TMArchivator::operator=( TCntrNode &node )
     return *this;
 }
 
-void TMArchivator::postEnable( int flag )
-{
-    cfg("MODUL").setS(owner().modId());
-}
+void TMArchivator::postEnable( int flag )	{ cfg("MODUL").setS(owner().modId()); }
 
 void TMArchivator::preDisable( int flag )
 {
-    if(startStat())	stop();
+    if(startStat()) stop();
 }
 
-void TMArchivator::postDisable(int flag)
+void TMArchivator::postDisable( int flag )
 {
     try
     {
 	if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
-    }catch(TError err)
-    { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
@@ -1067,20 +1054,17 @@ string TMArchivator::tbl( )		{ return string(owner().owner().subId())+"_mess_pro
 
 void TMArchivator::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
-    SYS->db().at().dataGet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
+    if(!SYS->chkSelDB(DB()))	return;
+    SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
 }
 
-void TMArchivator::save_( )
-{
-    SYS->db().at().dataSet(fullDB(),SYS->archive().at().nodePath()+tbl(),*this);
-}
+void TMArchivator::save_( )	{ SYS->db().at().dataSet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this); }
 
 void TMArchivator::categ( vector<string> &list )
 {
     list.clear();
     string c_vl, cat = cfg("CATEG").getS();
-    for( int i_off = 0; (c_vl=TSYS::strSepParse(cat,0,';',&i_off)).size(); )
+    for(int i_off = 0; (c_vl=TSYS::strSepParse(cat,0,';',&i_off)).size(); )
 	list.push_back(c_vl);
 }
 
@@ -1094,19 +1078,20 @@ bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )
 	for(unsigned i_cat = 0; i_cat < cat_ls.size(); i_cat++)
 	    if(TRegExp(cat_ls[i_cat], "p").test(icateg))
 		return true;
+
    return false;
 }
 
 TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // bool status() - get archivator status.
-    if(iid == "status") return startStat();
+    if(iid == "status")	return startStat();
     // int end() - get archivator data end time.
-    if(iid == "end") return (int)end();
+    if(iid == "end")	return (int64_t)end();
     // int begin() - get archivator data begin time.
-    if(iid == "begin") return (int)begin();
+    if(iid == "begin")	return (int64_t)begin();
 
-    //> Configuration functions call
+    //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -1115,7 +1100,7 @@ TVariant TMArchivator::objFuncCall( const string &iid, vector<TVariant> &prms, c
 
 void TMArchivator::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -1170,7 +1155,8 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/st")
     {
@@ -1244,12 +1230,12 @@ void TMArchivator::cntrCmdProc( XMLNode *opt )
     {
 	vector<TMess::SRec> rec;
 	time_t end = atoi(TBDS::genDBGet(nodePath()+"messTm","0",opt->attr("user")).c_str());
-	if( !end ) end = time(NULL);
+	if(!end) end = time(NULL);
 	time_t beg = end - atoi(TBDS::genDBGet(nodePath()+"messSize","10",opt->attr("user")).c_str());
 	string cat = TBDS::genDBGet(nodePath()+"messCat","",opt->attr("user"));
 	char   lev = atoi(TBDS::genDBGet(nodePath()+"messLev","0",opt->attr("user")).c_str());
 
-	get( beg, end, rec, cat, lev );
+	get(beg, end, rec, cat, lev);
 
 	XMLNode *n_tm	= ctrMkNode("list",opt,-1,"/mess/mess/0","",R_R___,"root",SARH_ID);
 	XMLNode *n_tmu	= ctrMkNode("list",opt,-1,"/mess/mess/0a","",R_R___,"root",SARH_ID);

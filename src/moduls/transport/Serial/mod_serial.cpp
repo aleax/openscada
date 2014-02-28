@@ -1120,12 +1120,12 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    if(kz <= 0)
 	    {
 		if(errno == EAGAIN)
-                {
+		{
 		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
-                    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
-                    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
-                    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
-                }
+		    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
+		    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
+		    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
+		}
 		mLstReqTm = TSYS::curTime();
 		stop();
 		throw TError(nodePath().c_str(),_("Writing request error."));
@@ -1140,7 +1140,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    mLstReqTm = TSYS::curTime();
 	    for(int r_off = 0; r_off < len_ob; )
 	    {
-		kz = read(fd,echoBuf,vmin(len_ob-r_off,sizeof(echoBuf)));
+		kz = read(fd, echoBuf, vmin(len_ob-r_off,(int)sizeof(echoBuf)));
 		if(kz == 0 || (kz == -1 && errno == EAGAIN))
 		{
 		    if((TSYS::curTime()-mLstReqTm) > wCharTm*len_ob*1e3) throw TError(nodePath().c_str(),_("Timeouted!"));

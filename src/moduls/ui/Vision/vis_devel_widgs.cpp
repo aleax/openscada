@@ -2347,13 +2347,13 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 
     //>> Check child's anchor selection and widget's geometry
     QRectF selRect;
-    bool firs_nosel = true, noSelUp = false;
+    //bool firs_nosel = true, noSelUp = false;
     for(int i_c = children().size()-1; i_c >= 0; i_c--)
 	if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 	{
 	    if(((DevelWdgView*)children().at(i_c))->select())
-	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false; }
-	    else if(firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp))	noSelUp = true;
+	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); /*firs_nosel = false;*/ }
+	    //else if(firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp))	noSelUp = true;
 	}
 
     //>> Select childs anchors
@@ -2842,7 +2842,7 @@ void DevelWdgView::chUnDo( )
 {
     AttrValS	attrs;
     int cur = 0;
-    if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= chTree->childSize()) return;
+    if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= (int)chTree->childSize()) return;
 
     //> Get change on cursor and make it
     XMLNode *rule = chTree->childGet(cur);
@@ -2884,7 +2884,7 @@ void DevelWdgView::chUnDo( )
     if(rlW) load(rlW->id()); else load(id());
 
     //> Move cursor
-    chTree->setAttr("cur", i2s(vmin(chTree->childSize(),cur+1)));
+    chTree->setAttr("cur", i2s(vmin((int)chTree->childSize(),cur+1)));
     chUpdate();
 }
 

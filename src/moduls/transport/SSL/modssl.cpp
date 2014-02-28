@@ -307,7 +307,7 @@ void *TSocketIn::Task( void *sock_in )
 
 	//> Write certificate and private key to temorary file
 	cfile = tmpnam(err);
-	int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0644);
+	int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	if(icfile < 0) throw TError(s.nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
 	bool fOK = (write(icfile,s.certKey().data(),s.certKey().size()) == (int)s.certKey().size());
 	close(icfile);
@@ -811,7 +811,7 @@ void TSocketOut::start()
 	{
 	    //>> Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
-	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0644);
+	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	    if(icfile < 0) throw TError(nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
 	    bool fOK = (write(icfile,certKey().data(),certKey().size()) == (int)certKey().size());
 	    close(icfile);

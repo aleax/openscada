@@ -40,6 +40,7 @@ Kontar::Kontar( ) : TTipParam("kontar", _("Kontar"))
     fldAdd(new TFld("M_PLC",_("Master PLC serial number"),TFld::Integer,TFld::HexDec|TCfg::NoVal,"10","0"));
     fldAdd(new TFld("CNTR_NET_CFG",_("Controllers network config-file"),TFld::String,TCfg::NoVal,"100"));
     fldAdd(new TFld("PLC",_("PLC serial number"),TFld::Integer,TCfg::NoVal,"10","0"));
+    fldAdd(new TFld("SET_CLC",_("Set clock on different for more (s)"),TFld::Integer,TCfg::NoVal,"3","0;999"));
 }
 
 Kontar::~Kontar( )	{ }
@@ -103,25 +104,13 @@ void Kontar::enable( TParamContr *ip )
 	    }
 	}
     }
-
-    //Password to RC5-key parse
-    //string sPass = ip->cfg("PASS").getS(); sPass.resize(8,0);
-    //mess_debug_(p->nodePath().c_str(), _("Password sequence: '%s'\n"),TSYS::strDecode(sPass,TSYS::Bin).c_str());
-    //ePrm->rc5_key(string(8,0).data()/*sPass.data()*/, 4/*sPass.size()*/);
-
-    //Test part for decoding
-    //string strBlk = TSYS::strEncode("80 40 03 b8 af af 88 0b",TSYS::Bin);
-		    //TSYS::strEncode("ae f7 f9 46 2d 2e 99 c6 9c 46 ee b3 e4 37 8b 43 55 bc 50 80 73 11 30 2c",TSYS::Bin);
-    //mess_debug_(p->nodePath().c_str(), _("Input sequence: '%s'\n"),TSYS::strDecode(strBlk,TSYS::Bin).c_str());
-    //ePrm->rc5_encrypt((uint32_t*)strBlk.data(), strBlk.size()/4);
-    //mess_debug_(p->nodePath().c_str(), _("Encrypt result: '%s'\n"),TSYS::strDecode(strBlk,TSYS::Bin).c_str());
 }
 
 void Kontar::regVal( TMdPrm *p, int off, int sz )
 {
     if(off < 0)	return;
 
-    //> Register to acquisition block
+    //Register to acquisition block
     vector<SMemBlk> &wCnt = ((tval*)p->extPrms)->mBlks;
     unsigned i_b;
     for(i_b = 0; i_b < wCnt.size(); i_b++)
@@ -170,8 +159,7 @@ string Kontar::req( TMdPrm *p, string &pdu )
 {
     tval *ePrm = (tval*)p->extPrms;
     string mbap, err;
-    char buf[2000];
-    int bufPos = 0;
+    char buf[1000];
 
     uint32_t cntrMN = p->cfg("M_PLC").getI();
 
@@ -190,10 +178,6 @@ string Kontar::req( TMdPrm *p, string &pdu )
 	//Find for proper transport by send master PLC serial number request
 	if(trO.freeStat())
 	{
-	    //Prepare for Master Key
-	    string sPass = p->cfg("PASS").getS(); sPass.resize(8,0);
-	    ePrm->rc5_key(sPass.data(), sPass.size());
-
 	    //Same find
 	    vector<AutoHD<TTransportOut> > trsO = ttr.at().inAt(p->cfg("ADDR")).at().assTrs();
 	    for(unsigned i_t = 0; i_t < trsO.size() && trO.freeStat(); i_t++)
@@ -215,11 +199,10 @@ string Kontar::req( TMdPrm *p, string &pdu )
 			    trsO[i_t].at().setDscr(TSYS::strMess(_("Connection from PLC Kontar %xh."),(int)TSYS::i32_BE(*(uint32_t*)buf)));
 			    if(resp_len >= 13 && (uint8_t)buf[4] == 0xC0)
 			    {
-				ePrm->rc5_decrypt((uint32_t*)(buf+5), (resp_len-5)/sizeof(uint32_t));
-				ePrm->pass.assign(buf+5, 8);
-				ePrm->rc5_key(buf+5, 8);
+				ePrm->pass = ePrm->RC5Decr(string(buf+5,8), ePrm->RC5Key(p->cfg("PASS").getS()));
+				ePrm->key = ePrm->RC5Key(ePrm->pass);
 				if(p->owner().messLev() == TMess::Debug)
-				    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'\n"), TSYS::strDecode(string(buf+5,8),TSYS::Bin).c_str());
+				    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'\n"), TSYS::strDecode(ePrm->pass,TSYS::Bin).c_str());
 			    }
 			}
 
@@ -234,53 +217,64 @@ string Kontar::req( TMdPrm *p, string &pdu )
 
 	//Main request prepare
 	mbap.reserve(pdu.size()+17);
-	mbap += string(4,0);				//???? Where the take for client
+	mbap.assign("\x7F\x00\x00\x01",4);		//???? Where the take for client
 	mbap += ePrm->pass;				//Password
 	mbap += (char)0;				//Unused
 	uint32_t cntrN = TSYS::i32_BE(p->cfg("PLC").getI());
 	mbap += string((char*)&cntrN,sizeof(cntrN));	//PLC number
 	mbap += pdu;
 
+	if(p->owner().messLev() == TMess::Debug)
+	    mess_debug_(p->nodePath().c_str(), _("Request: '%s'\n"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+
+	mbap = ePrm->RC5Encr(mbap, ePrm->key);
+
 	ResAlloc resN(trO.at().nodeRes(), true);
 	//Send request
 	if(p->owner().messLev() == TMess::Debug)
-	    mess_debug_(p->nodePath().c_str(), _("Request: '%s'\n"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	    mess_debug_(p->nodePath().c_str(), _("Request (enc): '%s'\n"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+
 	int resp_len = trO.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
 
 	//Wait tail
-	for(bufPos = resp_len; resp_len && bufPos < sizeof(buf); bufPos += resp_len)
-	    try { resp_len = trO.at().messIO(NULL, 0, buf+bufPos, sizeof(buf)-bufPos, 0, true); } catch(TError err){ break; }
+	mbap.assign(buf, resp_len);
+	while(resp_len)
+	    try
+	    {
+		resp_len = trO.at().messIO(NULL, 0, buf, sizeof(buf), 0, true);
+		mbap.append(buf, resp_len);
+	    }
+	    catch(TError err){ break; }
 
-	if(bufPos < 5)	err = _("13:Error respond: Too short.");
+	if(mbap.size() < 5)	err = _("13:Error respond: Too short.");
 	else
 	{
-	    if(TSYS::i32_BE(*(uint32_t*)buf) != cntrMN)
-		err = TSYS::strMess(_("13:Unapt MasterPLC ID: %xh != %xh"),TSYS::i32_BE(*(uint32_t*)buf), cntrN);
-	    else switch((uint8_t)buf[4])
+	    if(TSYS::i32_BE(*(uint32_t*)mbap.data()) != cntrMN)
+		err = TSYS::strMess(_("13:Unapt MasterPLC ID: %xh != %xh"),TSYS::i32_BE(*(uint32_t*)mbap.data()), cntrN);
+	    else switch((uint8_t)mbap.data()[4])
 	    {
 		case 0xA0:	break;	//OK
-		case 0xC0:	//The password encripted by master key.
-		    //err = TSYS::strMess(_("12:PLC: The password encripted by master key."));
-		    ePrm->rc5_decrypt((uint32_t*)(buf+5), (bufPos-5)/sizeof(uint32_t));
-		    break;
+		case 0xC0:	err = TSYS::strMess(_("12:PLC: The password encripted by master key."));	break;
 		case 0xE0:	err = TSYS::strMess(_("12:PLC: Error."));			break;
 		case 0xE1:	err = TSYS::strMess(_("12:PLC: Unknown command."));		break;
 		case 0xE2:	err = TSYS::strMess(_("12:PLC: Wrong command format."));	break;
 		case 0xE5:	err = TSYS::strMess(_("12:PLC: Error read from slave."));	break;
 		case 0xE6:	err = TSYS::strMess(_("12:PLC: Network update in process."));	break;
-		case 0xD0:	err = TSYS::strMess(_("12:PLC: The data encripted the access password."));	break;
+		case 0xD0:	//The data encripted the access password
+		    mbap.replace(5, string::npos, ePrm->RC5Decr(mbap.substr(5),ePrm->key));
+		    break;
 	    }
 	    if(err.empty())
 	    {
 		if(p->owner().messLev() == TMess::Debug)
-		    mess_debug_(p->nodePath().c_str(), _("Response: '%s'\n"),TSYS::strDecode(string(buf,bufPos),TSYS::Bin).c_str());
-		pdu.assign(buf+5, bufPos-5);
+		    mess_debug_(p->nodePath().c_str(), _("Response: '%s'\n"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+		pdu = mbap.substr(5);
 	    }
 	}
     }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     if(!err.empty() && p->owner().messLev() == TMess::Debug)
-	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'\n"),err.c_str(), TSYS::strDecode(string(buf,bufPos),TSYS::Bin).c_str());
+	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'\n"),err.c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
 
     return err;
 }
@@ -316,13 +310,16 @@ void Kontar::getVals( TParamContr *ip )
 {
     TMdPrm *p = (TMdPrm *)ip;
     tval *ePrm = (tval*)p->extPrms;
+    string err;
 
     //Request blocks
     string pdu;
     for(unsigned i_b = 0; i_b < ePrm->mBlks.size(); i_b++)
     {
+	if(err.size())	{ ePrm->mBlks[i_b].err = err; continue; }
+
 	// Encode request
-	pdu = (char)0x67;				//Read memory
+	pdu  = (char)0x67;				//Read memory
 	pdu += (char)0x04;				//Memory, PARAMETER
 	pdu += (char)0x00;
 	pdu += (char)(ePrm->mBlks[i_b].off>>8);		//Address MSB
@@ -330,11 +327,11 @@ void Kontar::getVals( TParamContr *ip )
 	pdu += (char)(ePrm->mBlks[i_b].val.size()>>8);	//Number of registers MSB
 	pdu += (char)(ePrm->mBlks[i_b].val.size());	//Number of registers LSB
 	// Request to remote server
-	ePrm->mBlks[i_b].err = req(p,pdu);
-	if(ePrm->mBlks[i_b].err.empty())
+	if((err=ePrm->mBlks[i_b].err=req(p,pdu)).empty())
 	{
-	    if(ePrm->mBlks[i_b].val.size() != pdu.size()) ePrm->mBlks[i_b].err = _("15:Response PDU size error.");
-	    else { ePrm->mBlks[i_b].val = pdu; p->numBytes += pdu.size(); }
+	    if(pdu.size() < ePrm->mBlks[i_b].val.size())
+		ePrm->mBlks[i_b].err = TSYS::strMess(_("15:Response PDU size (%d from %d) error."),pdu.size(),ePrm->mBlks[i_b].val.size());
+	    else { ePrm->mBlks[i_b].val.assign(pdu,0,ePrm->mBlks[i_b].val.size()); p->numBytes += pdu.size(); }
 	}
     }
 
@@ -359,6 +356,57 @@ void Kontar::getVals( TParamContr *ip )
 		else if(dt && strcasecmp(pTp.c_str(),"date") == 0)vl = TSYS::strMess("%d-%d", *dt, *(dt+1));
 		val.at().setS(vl, 0, true);
 		break;
+	    }
+	}
+    }
+
+    //Check and set clock at PLC
+    if(err.empty() && (time(NULL)-ePrm->lstClcSet) > 60 && p->cfg("SET_CLC").getI() > 0)
+    {
+	pdu = (char)0x67;	//Read memory
+	pdu += (char)0x04;	//Memory, PARAMETER
+	pdu += (char)0x00;
+	pdu += (char)0x00;	//Address MSB
+	pdu += (char)0x4D;	//Address LSB
+	pdu += (char)0x00;	//Number of registers MSB
+	pdu += (char)0x07;	//Number of registers LSB
+	// Request to remote server
+	time_t sysTm = time(NULL);
+	if((err=req(p,pdu)).empty() && pdu.size() >= 7)
+	{
+	    p->numBytes += pdu.size();
+
+	    struct tm tm_tm;
+	    gmtime_r(&sysTm, &tm_tm);
+	    tm_tm.tm_sec	= atoi(i2s(pdu[0],TSYS::Hex).c_str());
+	    tm_tm.tm_min	= atoi(i2s(pdu[1],TSYS::Hex).c_str());
+	    tm_tm.tm_hour	= atoi(i2s(pdu[2],TSYS::Hex).c_str());
+	    tm_tm.tm_mday	= atoi(i2s(pdu[4],TSYS::Hex).c_str());
+	    tm_tm.tm_mon	= atoi(i2s(pdu[5],TSYS::Hex).c_str())-1;
+	    tm_tm.tm_year	= 100+atoi(i2s(pdu[6],TSYS::Hex).c_str());
+	    tm_tm.tm_wday	= atoi(i2s(pdu[3]-1,TSYS::Hex).c_str());
+	    tm_tm.tm_yday	= -1;
+	    tm_tm.tm_isdst	= -1;
+	    time_t PLC_Tm = timegm(&tm_tm);
+	    printf("TEST 00: '%d': %d-%d-%d %d:%d:%d\n",
+		(int)(sysTm-PLC_Tm), tm_tm.tm_mday, tm_tm.tm_mon, tm_tm.tm_year, tm_tm.tm_hour, tm_tm.tm_min, tm_tm.tm_sec);
+	    // Set new time
+	    if(llabs(sysTm-PLC_Tm) > p->cfg("SET_CLC").getI())
+	    {
+		PLC_Tm = time(NULL);
+		gmtime_r(&PLC_Tm, &tm_tm);
+		pdu  = (char)0x5A;	//Set clock
+		pdu += (char)0x00;
+		pdu += (char)strtol(i2s(tm_tm.tm_sec).c_str(),0,16);
+		pdu += (char)strtol(i2s(tm_tm.tm_min).c_str(),0,16);
+		pdu += (char)strtol(i2s(tm_tm.tm_hour).c_str(),0,16);
+		pdu += (char)strtol(i2s(tm_tm.tm_wday+1).c_str(),0,16);
+		pdu += (char)strtol(i2s(tm_tm.tm_mday).c_str(),0,16);
+		pdu += (char)strtol(i2s(tm_tm.tm_mon+1).c_str(),0,16);
+		pdu += (char)strtol(i2s(tm_tm.tm_year-100).c_str(),0,16);
+		printf("TEST 01: '%s'\n", TSYS::strDecode(pdu,TSYS::Bin).c_str());
+		err = req(p, pdu);
+		ePrm->lstClcSet = time(NULL);
 	    }
 	}
     }
@@ -390,8 +438,6 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 	    vector<string> sls;
 	    SYS->transport().at().at("Sockets").at().inList(sls);
 	    for(unsigned i_s = 0; i_s < sls.size(); i_s++) opt->childAdd("el")->setText(sls[i_s]);
-	    //SYS->transport().at().at("Sockets").at().outList(sls);
-	    //for(unsigned i_s = 0; i_s < sls.size(); i_s++) opt->childAdd("el")->setText("out_"+sls[i_s]);
 	} catch(TError err) { }
     else if(a_path == "/prm/cfg/mPLCLst" && ip->ctrChkNode(opt,"get"))
 	try
@@ -434,8 +480,15 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
     return true;
 }
 
-void Kontar::tval::rc5_encrypt( uint32_t *cdata, int blocks )
+string Kontar::tval::RC5Encr( const string &src, const string &key )
 {
+    int blocks = src.size()/4+((src.size()%4)?1:0);
+    uint32_t cdata[blocks*2];
+    memcpy(cdata, src.data(), src.size());
+    if(key.size() < 20*4) return src;
+    const uint32_t *keybuf = (const uint32_t *)key.data();
+    int rounds = 10;
+
     int	rc;
     uint32_t *d = cdata;
     for(int h = 0; h < blocks; h++)
@@ -466,10 +519,19 @@ void Kontar::tval::rc5_encrypt( uint32_t *cdata, int blocks )
 	*(ptr1+2) = *(ptr+1);
 	*(ptr+1) = tmp;
     }
+
+    return string((char*)cdata, src.size());
 }
 
-void Kontar::tval::rc5_decrypt( uint32_t *cdata, int blocks )
+string Kontar::tval::RC5Decr( const string &src, const string &key )
 {
+    int blocks = src.size()/4 + ((src.size()%4)?1:0);
+    uint32_t cdata[blocks*2];
+    memcpy(cdata, src.data(), src.size());
+    if(key.size() < 20*4) return src;
+    const uint32_t *keybuf = (const uint32_t *)key.data();
+    int rounds = 10;
+
     char tmp;
     union R
     {
@@ -512,10 +574,17 @@ void Kontar::tval::rc5_decrypt( uint32_t *cdata, int blocks )
 	d[1] = R.l;
 	d += 2;
     }
+
+    return string((char*)cdata, src.size());
 }
 
-void Kontar::tval::rc5_key( const char *key, short keylen )
+string Kontar::tval::RC5Key( const string &ikey )
 {
+    string key = ikey;
+    key.resize(8, 0);
+    uint32_t keybuf[22];
+    int rounds = 10;
+
     uint32_t *cp, pk[2], A, B;
     uint8_t rc, xk_len, pk_len, i, num_steps;
     union K
@@ -525,8 +594,7 @@ void Kontar::tval::rc5_key( const char *key, short keylen )
     }K;
 
     xk_len = rounds*2 + 2;
-    pk_len = keylen/4;
-    if(keylen%4) pk_len++;
+    pk_len = key.size()/4 + ((key.size()%4)?1:0);
     pk[0] = pk[1] = 0;
     K.c[3] = key[0];
     K.c[2] = key[1];
@@ -548,4 +616,6 @@ void Kontar::tval::rc5_key( const char *key, short keylen )
 	rc = (A+B)&31;
 	B = pk[i%pk_len]=ROTL32(pk[i%pk_len]+A+B,rc);
     }
+
+    return string((char*)keybuf, sizeof(keybuf));
 }

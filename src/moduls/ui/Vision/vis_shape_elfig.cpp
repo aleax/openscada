@@ -3441,13 +3441,12 @@ bool ShapeElFigure::event( WdgView *view, QEvent *event )
 		//> getting start point for drawing and draw the figure
 		if((ev->button() == Qt::LeftButton) && status)
 		{
-		    double scale, ang;
+		    double ang;
 		    QPainterPath circlePath, bigPath;
 		    switch(shapeType)
 		    {
 			case ShT_Line:
 			{
-			    scale = vmin(view->xScale(true), view->yScale(true));
 			    StartLine = EndLine = ev->pos();
 			    ang = 360 - angle(QLineF(StartLine,EndLine), QLineF(StartLine,QPointF(StartLine.x()+10,StartLine.y())));
 			    if(widths[SpI_DefBord] > 0)
@@ -4841,7 +4840,6 @@ void ShapeElFigure::moveItemTo( const QPointF &pos, QVector<ShapeItem> &shapeIte
     {
 	ang = angle(QLineF(StartMotionPos, EndMotionPos), QLineF(StartMotionPos, QPointF(StartMotionPos.x()+10,StartMotionPos.y())));
 	if(StartMotionPos.y() <= EndMotionPos.y()) ang = 360 - ang;
-	QPointF orto_pnt = fl_orto ? CtrlMotionPos_4 : QPointF(0,0);
 	shapeItems.append(ShapeItem(painterPath(widths[MotionWidth]*scaleW,widths[MotionBorderWidth],3,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2),
 			            painterPathSimple(3,ang,StartMotionPos,EndMotionPos,CtrlMotionPos_1,CtrlMotionPos_2),
 				    MotionNum_1,MotionNum_2,MotionNum_3,MotionNum_4,-1,CtrlMotionPos_4,MotionLineColor,MotionBorderColor,MotionStyle,MotionWidth,MotionBorderWidth,3,angle_temp));
@@ -5857,8 +5855,6 @@ bool ShapeElFigure::inundation1_2( const QPointF &point, const QVector<ShapeItem
 {
     QPainterPath inundationPath_1_2;
     QVector<int> in_fig_num;
-    bool flag_break;
-    flag_break = false;
     //for( int i = 0; i < shapeItems.size(); i++ )
     for( int i = shapeItems.size()-1; i >= 0; i-- )
     {

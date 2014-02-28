@@ -76,7 +76,7 @@ void IOObj::propSet( const string &id, TVariant val )
     if(id == "pos")
     {
 	if(fhd)	fseek(fhd, pos, SEEK_CUR);
-	else pos = vmin(str.size(),vmax(0,val.getI()));
+	else pos = vmin((int)str.size(),vmax(0,val.getI()));
     }
     else if(id == "string" && !fhd)	{ str = val.getS(); pos = 0; }
     else if(id == "mFormat")		mFormat = val.getS();
@@ -190,7 +190,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    char buf[STR_BUF_LEN];
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
-	    for(long r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
+	    for(long r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
 		for(unsigned i_cnt = 0, pos = 0; pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
@@ -282,8 +282,8 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    char buf[STR_BUF_LEN];
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
-	    for(int r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
-		for(unsigned i_cnt = 0, pos = 0; pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
+	    for(int r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
+		for(unsigned i_cnt = 0, pos = 0; (int)pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {

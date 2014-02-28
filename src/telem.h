@@ -164,7 +164,7 @@ class TElem
     public:
 	//Methods
 	TElem( const string &name = "" );
-	~TElem( );
+	virtual ~TElem( );
 
 	string &elName( )			{ return m_name; }
 

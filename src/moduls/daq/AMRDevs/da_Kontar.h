@@ -56,23 +56,19 @@ class Kontar: public TTipParam
 	{
 	    public:
 		//Methods
-		tval( ) : rounds(10)	{ }
+		tval( ) : lstClcSet(0)	{ }
 
 		// RC5 encoding
-		void rc5_encrypt( uint32_t* cdata, int blocks );
-		void rc5_decrypt( uint32_t* cdata, int blocks );
-		void rc5_key( const char* key, short keylen );
+		string RC5Encr( const string &src, const string &key );
+		string RC5Decr( const string &src, const string &key );
+		string RC5Key( const string &key );
 
 		//Atributes
 		XMLNode	cfg;
 		string	prevTr;
-		string	pass;
+		string	pass, key;
 		vector<SMemBlk> mBlks;	//Acquisition memory blocks for values
-
-	    private:
-		// RC5 encoding
-		uint32_t keybuf[22];
-		int	rounds;
+		time_t	lstClcSet;
 	};
 
 	//Methods

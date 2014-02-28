@@ -1,3 +1,9 @@
+2014-02-28 Roman
+- !!:SYS: The code clean up for mostly warnings for build by GCC-4.8.
+- DAQ.AMRDevs: Kontar implementation achives work stage for read properties and clock sync try.
+- Transport.SSL: Permition to temporary certificate file restrict to 0600.
+
+
 2014-02-24 Roman
 - Transport: Extended parameters prm1 and prm2 type of output transport is changet to int64_t.
 - FIX:TConfig,DB:{FireBird,PostgreSQL,SQLite}: Moving to int64_t for integer is fixed.

@@ -1105,7 +1105,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			case 's':
 			{
 			    string valIO = data->val.getS(ir->second.id);
-			    valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
+			    valIO.resize(vmax((int)valIO.size(),(ir->second.pos+1)*2), 0);
 			    valIO.replace(ir->second.pos*2,2,(char*)&val,2);
 			    data->val.setS(ir->second.id, valIO);
 			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setS(valIO);
@@ -1189,7 +1189,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			    {
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
 				string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
-				valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
+				valIO.resize(vmax((int)valIO.size(),(ir->second.pos+1)*2), 0);
 				valIO.replace(ir->second.pos*2,2,(char*)&val,2);
 				grpVals[ir->second.id] = valIO;
 				break;
