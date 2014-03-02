@@ -40,7 +40,7 @@
 #define MOD_NAME	_("AMR devices")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.0.1"
+#define MOD_VER		"0.5.0"
 #define AUTHORS		_("Roman Savochenko")
 #define DESCRIPTION	_("Allow access to automatic meter reading devices. Supported devices: ")
 #define LICENSE		"GPL2"
@@ -81,20 +81,11 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr( )
-{
+TTpContr::~TTpContr( )	{ }
 
-}
+void TTpContr::load_( )	{ }
 
-void TTpContr::load_( )
-{
-
-}
-
-void TTpContr::save_( )
-{
-
-}
+void TTpContr::save_( )	{ }
 
 uint8_t TTpContr::CRCHi[] =
 {
@@ -154,13 +145,13 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Controler's bd generic structure
+    //Controler's bd generic structure
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("TM_REST",_("Restore timeout (s)"),TFld::Integer,TFld::NoFlag,"3","30","1;3600"));
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
-    //> Parameter types append
+    //Parameter types append
     tpParmAdd(new Kontar());
 }
 
@@ -188,7 +179,7 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string val = TController::getStatus();
-    if(startStat() && !redntUse())
+    if(startStat())
     {
 	if(period()) val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -206,16 +197,16 @@ void TMdContr::start_( )
 {
     if(prc_st) return;
 
-    //> Schedule process
+    //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
-    //> Start the gathering data task
+    //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
@@ -242,9 +233,9 @@ void *TMdContr::Task( void *icntr )
     {
 	int64_t t_cnt = TSYS::curTime();
 
-	//> Update controller's data
+	//Update controller's data
 	cntr.en_res.resRequestR( );
-	for(unsigned i_p=0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
+	for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++)
 	    try { cntr.p_hd[i_p].at().type().getVals(&cntr.p_hd[i_p].at()); }
 	    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	cntr.en_res.resRelease( );
@@ -261,7 +252,7 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
@@ -270,7 +261,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",cfg("PRIOR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     TController::cntrCmdProc(opt);
 }
 
@@ -325,7 +317,7 @@ void TMdPrm::enable( )
     owner().prmEn(id(), true);
 }
 
-void TMdPrm::disable()
+void TMdPrm::disable( )
 {
     if(!enableStat())	return;
 
@@ -333,7 +325,7 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
-    //> Set EVAL to parameter attributes
+    //Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
@@ -342,7 +334,7 @@ void TMdPrm::disable()
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
@@ -350,7 +342,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/status" && ctrChkNode(opt))
     {
@@ -366,12 +358,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else TParamContr::cntrCmdProc(opt);
 }
 
-/*void TMdPrm::vlGet( TVal &val )
+void TMdPrm::vlGet( TVal &val )
 {
     if(val.name() == "err")
     {
 	TParamContr::vlGet(val);
-	if(val.getS(NULL,true) == "0" && !mErr.getVal().empty()) val.setS(mErr.getVal(),0,true);
+	if(val.getS(NULL,true) == "0" && !mErr.getVal().empty()) val.setS(mErr.getVal(), 0, true);
     }
 }
 
@@ -383,5 +375,5 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setSrcMode(TVArchive::PassiveAttr);
     val.arch().at().setPeriod(owner().period() ? owner().period()/1000 : 1000000);
     val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
-}*/
+    val.arch().at().setHighResTm(false);
+}

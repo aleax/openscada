@@ -66,7 +66,7 @@ class TMdPrm : public TParamContr
 	TElem	els;		//Work atribute elements
 	void	*extPrms;
 	pthread_mutex_t	dataM;
-	MtxString mErr;
+	MtxString	mErr;
 	vector<string>	als;
 	double	numBytes;
 
@@ -74,8 +74,8 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
-	/*void vlGet( TVal &val );
-	void vlArchMake( TVal &val );*/
+	void vlGet( TVal &val );
+	void vlArchMake( TVal &val );
 };
 
 //*************************************************
@@ -146,7 +146,7 @@ class TTpContr: public TTipDAQ
 	void load_( );
 	void save_( );
 
-	bool redntAllow( )	{ return true; }
+	bool redntAllow( )	{ return false; }
 
     private:
 	//Methods

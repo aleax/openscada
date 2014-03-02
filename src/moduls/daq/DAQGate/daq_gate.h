@@ -114,7 +114,7 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
 	double	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }

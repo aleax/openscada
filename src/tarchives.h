@@ -48,13 +48,15 @@ class TTipArchivator;
 
 class TMArchivator : public TCntrNode, public TConfig
 {
+    friend class TArchiveS;
+
     public:
 	//Public methods
 	TMArchivator( const string &id, const string &db, TElem *cf_el );
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string	id( )	{ return mId; }
+	string	id( )		{ return mId; }
 	string	workId( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
@@ -76,13 +78,13 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	void setDB( const string &idb )		{ m_db = idb; modifG(); }
 
-	virtual void start( )	{ };
-	virtual void stop( )	{ };
+	virtual void start( );
+	virtual void stop( );
 
 	virtual time_t begin( )	{ return 0; }
 	virtual time_t end( )	{ return 0; }
-	virtual void put( vector<TMess::SRec> &mess ){ };
-	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 ) { };
+	virtual bool put( vector<TMess::SRec> &mess )	{ return false; };
+	virtual void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 )	{ };
 
 	TTipArchivator &owner( );
 
@@ -104,6 +106,7 @@ class TMArchivator : public TCntrNode, public TConfig
 
 	//Protected atributes
 	bool	run_st;
+	int	messHead;			//Last read and archived head of messages buffer
 
     private:
 	//Private methods
@@ -198,7 +201,8 @@ class TArchiveS : public TSubSYS
 	void valDel( const string &iid, bool db = false )	{ chldDel(mAval,iid,-1,db); }
 	AutoHD<TVArchive> valAt( const string &iid )		{ return chldAt(mAval,iid); }
 
-	void setActValArch( const string &id, bool val );
+	void setActMess( TMArchivator *a, bool val );
+	void setActVal( TVArchive *a, bool val );
 
 	//> Archivators
 	AutoHD<TTipArchivator> at( const string &name )		{ return modAt(name); }
@@ -246,14 +250,13 @@ class TArchiveS : public TSubSYS
 	int	mMessPer;		//Message archiving period
 	bool	prcStMess;		//Process messages flag
 	//> Messages buffer
-	Res	mRes;			//Mess access resource
-	unsigned headBuf,		//Head of messages buffer
-		headLstread;		//Last read and archived head of messages buffer
+	pthread_mutex_t	mRes;		//Mess access resource
+	unsigned headBuf;		//Head of messages buffer
 	vector<TMess::SRec> mBuf;	//Messages buffer
 	map<string,TMess::SRec> mAlarms;//Alarms buffer
 
 	//> Value archiving
-	Res	vRes;			//Value access resource
+	pthread_mutex_t	vRes;		//Value access resource
 	int	mValPer;		//Value archiving period
 	int	mValPrior;		//Value archive task priority
 	bool	prcStVal;		//Process value flag
@@ -261,7 +264,8 @@ class TArchiveS : public TSubSYS
 	bool	toUpdate;
 	int	mAval;
 
-	vector< AutoHD<TVArchive> > actUpSrc;
+	vector<AutoHD<TMArchivator> >	actMess;
+	vector<AutoHD<TVArchive> >	actVal;
 };
 
 }

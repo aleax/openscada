@@ -216,7 +216,7 @@ void TController::enable( )
 	//> Enable for children
 	enable_();
 
-	mRedntUse = (bool)redntMode();
+	mRedntUse = owner().redntAllow() && (bool)redntMode();
     }
 
     bool enErr = false;

@@ -1170,7 +1170,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     //> Disable all links
     if(!pattr_src.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData()))
     {
-	owner().setActValArch(id(), false);
+	owner().setActVal(this, false);
 	srcPAttr().at().setArch(AutoHD<TVArchive>());
 	pattr_src.free();
     }
@@ -1195,7 +1195,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	    else
 	    {
 		pattr_src.at().setArch(AutoHD<TVArchive>(this));
-		owner().setActValArch(id(), true);
+		owner().setActVal(this, true);
 	    }
 	}
     }

@@ -1,38 +1,42 @@
 # OpenSCADA.DAQ.AMRDevs translate to Ukrainian.
-# Copyright (C) 2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 #
-# Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010.
+# Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010-2014.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
+"Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-20 07:42+0300\n"
+"POT-Creation-Date: 2014-03-02 10:15+0200\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
 
+#: da_Ergomera.cpp:166 da_Kontar.cpp:251
 msgid "13:Error respond: Too short."
 msgstr "13:Помилка відповіді: Не повна."
 
+#: da_Ergomera.cpp:168
 msgid "13:Error respond: CRC check error."
 msgstr "13:Помилка відповіді: Помилка перевірки CRC."
 
+#: da_Ergomera.cpp:173 da_Kontar.cpp:278
 #, c-format
 msgid "14:Connection error - %s"
 msgstr "14:Помилка підключення - %s"
 
+#: da_Ergomera.cpp:194
 msgid "15:Response PDU size error."
 msgstr "15:Помилка розміру PDU відповіді."
 
+#: da_Ergomera.cpp:240
 msgid "Attributes list"
 msgstr "Перелік атрибутів"
 
+#: da_Ergomera.cpp:241
 msgid ""
 "Attributes configuration list. List must be written by lines in format: [dt:"
 "numb:id:name]\n"
@@ -58,127 +62,248 @@ msgstr ""
 "  'F:200:float:Float' - отримання реального з регістрів 200 та 201;\n"
 "  'LI:300:int32:Int32' - отримання int32 з регістрів 300 та 301."
 
+#: da_Ergomera.cpp:251
 msgid "Registers' fragments merge"
 msgstr "Поєднання фрагментів регістрів"
 
+#: da_FlowTEC.cpp:41
 msgid "Value"
 msgstr "Значення"
 
+#: da_FlowTEC.cpp:42
 msgid "Pressure"
 msgstr "Тиск"
 
+#: da_FlowTEC.cpp:43
 msgid "Temperature"
 msgstr "Температура"
 
+#: da_FlowTEC.cpp:46 da_FlowTEC.cpp:54
 msgid "Current flow"
 msgstr "Поточні витрати"
 
+#: da_FlowTEC.cpp:47 da_FlowTEC.cpp:55
 msgid "Quantity for start day"
 msgstr "Кількість з початку доби"
 
+#: da_FlowTEC.cpp:48 da_FlowTEC.cpp:56
 msgid "Quantity for last day"
 msgstr "Кількість за попередню добу"
 
+#: da_FlowTEC.cpp:49 da_FlowTEC.cpp:57
 msgid "Quantity for start"
 msgstr "Кількість з початку вимірювання"
 
+#: da_FlowTEC.cpp:53
 msgid "Caloric"
 msgstr "Калорійність"
 
+#: da_FlowTEC.cpp:112
 msgid "14:Connection error or respond size short."
 msgstr "14:Помилка підключення або коротка відповідь."
 
+#: da_FlowTEC.cpp:113
 msgid "10:Respond error."
 msgstr "10:Помилка відповіді."
 
+#: da_FlowTEC.cpp:114
 msgid "11:Request broken."
 msgstr "11:Помилка запиту."
 
+#: da_FlowTEC.cpp:115
 msgid "15:Respond thread broken."
 msgstr "15:Помилкова нитка у відповіді."
 
+#: da_FlowTEC.cpp:144
 msgid "Thread number"
 msgstr "Номер нитки"
 
+#: da_FlowTEC.cpp:145
 msgid "Firmware version"
 msgstr "Версія ПЗ"
 
+#: da_Kontar.cpp:36
+msgid "Kontar"
+msgstr ""
+
+#: da_Kontar.cpp:38
+msgid "Input transport"
+msgstr "Вхідний транспорт"
+
+#: da_Kontar.cpp:39
+msgid "Master password"
+msgstr "Мастер пароль"
+
+#: da_Kontar.cpp:40
+msgid "Master PLC serial number"
+msgstr "Серійний номер МастерПЛК"
+
+#: da_Kontar.cpp:41
+msgid "Controllers network config-file"
+msgstr "Конф. файл мережі контролерів"
+
+#: da_Kontar.cpp:42
+msgid "PLC serial number"
+msgstr "Серійний номер ПЛК"
+
+#: da_Kontar.cpp:43
+msgid "Set PLC clock on different for more (s)"
+msgstr "Вст. годинника ПЛК при відхилені більш (с)"
+
+#: da_Kontar.cpp:44
+msgid "PLC clock's zone"
+msgstr "Зона годинника ПЛК"
+
+#: da_Kontar.cpp:80
+msgid "List"
+msgstr "Перелік"
+
+#: da_Kontar.cpp:87
+msgid "Parameter"
+msgstr "Параметр"
+
+#: da_Kontar.cpp:196
+msgid "Master PLC ID Request: '%s'"
+msgstr "Запит ID МастерПЛК: '%s'"
+
+#: da_Kontar.cpp:201
+#, c-format
+msgid "Connection from PLC Kontar %xh."
+msgstr "Підключення з ПЛК Контар %xh."
+
+#: da_Kontar.cpp:207
+#, c-format
+msgid "Password sequence set: '%s'."
+msgstr "Вст. послідовн. пароля: '%s'."
+
+#: da_Kontar.cpp:212
+#, c-format
+msgid "Master PLC ID Response: '%s'"
+msgstr "Відповідь ID МастерПЛК: '%s'"
+
+#: da_Kontar.cpp:218
+msgid "No a propper connection from PLC."
+msgstr "Немає придатного підключення з ПЛК."
+
+#: da_Kontar.cpp:230
+msgid "Request: '%s'"
+msgstr "Запит: '%s'"
+
+#: da_Kontar.cpp:237
+msgid "Request (enc): '%s'"
+msgstr "Запит (код): '%s'"
+
+#: da_Kontar.cpp:255
+#, c-format
+msgid "13:Unapt MasterPLC ID: %xh != %xh"
+msgstr "13:Непридатний ID МастерПЛК: %xh != %xh"
+
+#: da_Kontar.cpp:259
+msgid "12:PLC: The password encripted by master key."
+msgstr "12:ПЛК: Пароль кодовано мастер ключем."
+
+#: da_Kontar.cpp:260
+msgid "12:PLC: Error."
+msgstr "12:ПЛК: Помилка."
+
+#: da_Kontar.cpp:261
+msgid "12:PLC: Unknown command."
+msgstr "12:ПЛК: Невідома команда."
+
+#: da_Kontar.cpp:262
+msgid "12:PLC: Wrong command format."
+msgstr "12:ПЛК: Помилковий формат команди."
+
+#: da_Kontar.cpp:263
+msgid "12:PLC: Error read from slave."
+msgstr "12:ПЛК: Помилка читання підлеглого."
+
+#: da_Kontar.cpp:264
+msgid "12:PLC: Network update in process."
+msgstr "12:ПЛК: Оновлення мережі в процесі."
+
+#: da_Kontar.cpp:267
+msgid "Response (enc): '%s'"
+msgstr "Відповідь (код): '%s'"
+
+#: da_Kontar.cpp:274
+msgid "Response: '%s'"
+msgstr "Відповідь: '%s'"
+
+#: da_Kontar.cpp:281
+#, c-format
+msgid "Error: '%s': '%s'"
+msgstr "Помилка: '%s': '%s'"
+
+#: da_Kontar.cpp:337
+msgid "15:Response PDU size (%d from %d) error."
+msgstr "15:Помилка розміру PDU (%d з %d) відповіді."
+
+#: da_Kontar.cpp:505
+msgid "<No select>"
+msgstr "<Не обрано>"
+
+#: mod_amr.cpp:40
 msgid "AMR devices"
 msgstr "Пристрої АСКО"
 
+#: mod_amr.cpp:44
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
+#: mod_amr.cpp:45
 msgid "Allow access to automatic meter reading devices. Supported devices: "
 msgstr ""
 "Надає доступ до пристроїв лічильників комерцевого обліку. Підтримуються "
 "пристрої: "
 
-msgid "Parameteres table"
-msgstr "Таблиця параметрів"
-
+#: mod_amr.cpp:149
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
+#: mod_amr.cpp:150
 msgid "Gather task priority"
 msgstr "Рівень пріорітету задачі збору даних"
 
+#: mod_amr.cpp:151
 msgid "Restore timeout (s)"
 msgstr "Час відновлення (с)"
 
+#: mod_amr.cpp:152
 msgid "Request tries"
 msgstr "Спроб запиту"
 
-msgid "Standard"
-msgstr "Стандарт"
-
-msgid "Device type"
-msgstr "Тип пристрою"
-
-msgid "Transport's address"
-msgstr "Адреса транспорту"
-
-msgid "Device address"
-msgstr "Адреса пристрою"
-
-msgid "Device addon parameters"
-msgstr "Додаткові параметри пристрою"
-
+#: mod_amr.cpp:184
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
+#: mod_amr.cpp:185
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
+#: mod_amr.cpp:186
 #, c-format
 msgid "Spent time: %s."
 msgstr "Витрачено часу: %s."
 
-msgid "No one device selected."
-msgstr "Не вибрано пристрій."
-
+#: mod_amr.cpp:341
 msgid "Status"
 msgstr "Стан"
 
+#: mod_amr.cpp:351
 msgid "Disabled"
 msgstr "Виключено"
 
+#: mod_amr.cpp:352
 msgid "Enabled"
 msgstr "Включено"
 
+#: mod_amr.cpp:353 mod_amr.cpp:355
 msgid "Processed"
 msgstr "Обслуговування"
 
-msgid "Need re-enable for configuration apply! "
-msgstr "Потрібно переувімкнути для активації конфігурації! "
-
-msgid "FLowTEC UGT-AA55"
-msgstr "ФлоуТЕК  UGT-AA55"
-
-msgid "Ergomera"
-msgstr "Ергомера"
-
+#: da_Ergomera.h:52 da_Kontar.h:48
 msgid "11:Value not gathered."
 msgstr "11:Значення не отримано."

@@ -281,7 +281,6 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	vector<TVArchEl*> arch_el;	//Links
 };
 
-
 //*************************************************
 //* TVArchivator                                  *
 //*************************************************

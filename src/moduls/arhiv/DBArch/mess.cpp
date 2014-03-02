@@ -34,7 +34,7 @@ using namespace DBArch;
 //* DBArch::ModMArch - Messages archivator       *
 //************************************************
 ModMArch::ModMArch( const string &iid, const string &idb, TElem *cf_el ) :
-    TMArchivator(iid,idb,cf_el), tm_calc(0), mBeg(0), mEnd(0), mMaxSize(24)
+    TMArchivator(iid, idb, cf_el), tm_calc(0), mBeg(0), mEnd(0), mMaxSize(24)
 {
     setAddr("*.*");
 }
@@ -114,21 +114,21 @@ void ModMArch::start( )
     try { if(!db.at().enableStat()) db.at().enable(); }
     catch(TError err) { mess_warning(nodePath().c_str(), _("Enable target DB error: %s"), err.mess.c_str()); }
 
-    run_st = true;
+    TMArchivator::start();
 }
 
-void ModMArch::stop( )		{ run_st = false; }
+void ModMArch::stop( )	{ TMArchivator::stop(); }
 
 time_t ModMArch::begin( )	{ return mBeg; }
 
 time_t ModMArch::end( )		{ return mEnd; }
 
-void ModMArch::put( vector<TMess::SRec> &mess )
+bool ModMArch::put( vector<TMess::SRec> &mess )
 {
     if(!run_st) throw TError(nodePath().c_str(), _("Archive is not started!"));
 
     AutoHD<TTable> tbl = SYS->db().at().open(addr()+"."+archTbl(), true);
-    if(tbl.freeStat()) return;
+    if(tbl.freeStat()) return false;
 
     TConfig cfg(&mod->messEl());
     int64_t t_cnt = TSYS::curTime();
@@ -168,9 +168,11 @@ void ModMArch::put( vector<TMess::SRec> &mess )
     cfg.cfg("TBL").setS(archTbl(),true);
     cfg.cfg("BEGIN").setS(TSYS::int2str(mBeg),true);
     cfg.cfg("END").setS(TSYS::int2str(mEnd),true);
-    SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg);
+    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg);
 
     tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
+
+    return rez;
 }
 
 void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category, char level, time_t upTo )

@@ -81,10 +81,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr( )
-{
-
-}
+TTpContr::~TTpContr( )	{ }
 
 void TTpContr::load_( )
 {

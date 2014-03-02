@@ -1,3 +1,19 @@
+2014-03-02 Roman
+- !!!:Archive.{TMArchivator,*}: Reimplemented messages archivation for allow the messages into the buffer resend at
+	the messages storage connection restore.
+    {start,stop}() functions implement into base class for active archivators of the messages list manage,
+	run state manage and messages header reset.
+    Result to function put() is added for accomplish writing control.
+    "messHead" attribute of the archivator for point to the messages buffer, instead global "headLstread".
+    setActValArch() renamed to setActVal() and container "actUpSrc" renamed to "actVal".
+    setActMess() is added for register active messages archivators to container "actMess".
+    Resource allocators mRes and vRes moved to pthread_mutex_t.
+- FIX:DAQ: Disabled redundant mode work is fixed into TController::enable().
+- !:DAQ.AMRDevs.Kontar: Clock set fix and timezone added.
+    Value set support is added. Password restore at it or MasterPassword change support is added.
+    Messages translation to Ukrainian and Russian is added.
+
+
 2014-02-28 Roman
 - !!:SYS: The code clean up for mostly warnings for build by GCC-4.8.
 - DAQ.AMRDevs: Kontar implementation achives work stage for read properties and clock sync try.

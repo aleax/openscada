@@ -49,7 +49,7 @@ class TMdPrm : public TParamContr
     friend class TMdContr;
     public:
 	//Methods
-	TMdPrm(string name, TTipParam *tp_prm);
+	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
 	TElem &elem( )		{ return p_el; }
@@ -68,15 +68,15 @@ class TMdPrm : public TParamContr
 
     private:
 	//Methods
-	void postEnable(int flag);
-	void vlArchMake(TVal &val);
-	void vlGet(TVal &val);
+	void postEnable( int flag );
+	void vlArchMake( TVal &val );
+	void vlGet( TVal &val );
 
 	//Attributes
 	int	curAlrmsId;
 	TElem	p_el;			//Work atribute elements
 
-	ResString       acq_err;
+	ResString acq_err;
 };
 
 //*************************************************
@@ -87,18 +87,18 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem);
+	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
 	string getStatus( );
 
-	int64_t period( )	{ return mPer; }
+	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int64_t	prior( )	{ return mPrior; }
 	string	addr( )		{ return cfg("ADDR").getS(); }
 	double	syncPer( )	{ return mSync; }
 
-	AutoHD<TMdPrm> at(const string &nm)	{ return TController::at(nm); }
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	void reqBFN( XMLNode &io );
 
@@ -106,7 +106,7 @@ class TMdContr: public TController
 
     protected:
 	//Methods
-	void prmEn(const string &id, bool val);
+	void prmEn( const string &id, bool val );
 
 	void enable_( );
 	void start_( );
@@ -116,8 +116,8 @@ class TMdContr: public TController
 
     private:
 	//Methods
-	TParamContr *ParamAttach(const string &name, int type);
-	static void *Task(void *icntr);
+	TParamContr *ParamAttach( const string &name, int type );
+	static void *Task( void *icntr );
 
 	//Attributes
 	Res	en_res, req_res;// Resource for enable params
@@ -147,7 +147,7 @@ class TTpContr: public TTipDAQ
 	{
 	    public:
 		AlrmSymb( ) : text(""), code(0)						{ }
-		AlrmSymb(const string &itxt, unsigned icod) : text(itxt), code(icod)	{ }
+		AlrmSymb( const string &itxt, unsigned icod ) : text(itxt), code(icod)	{ }
 
 		string	 text;
 		unsigned code;
@@ -157,14 +157,14 @@ class TTpContr: public TTipDAQ
 	~TTpContr( );
 
 	string symbDB( );
-	string getSymbolCode(const string &id);
-	AlrmSymb getSymbolAlarm(const string &id);
+	string getSymbolCode( const string &id );
+	AlrmSymb getSymbolAlarm( const string &id );
 
-	void setSymbDB(const string &idb);
+	void setSymbDB( const string &idb );
 
     protected:
 	//Methods
-	void postEnable(int flag);
+	void postEnable( int flag );
 
 	void load_( );
 	void save_( );

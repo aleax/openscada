@@ -86,6 +86,7 @@ class Kontar: public TTipParam
 	bool cfgChange( TParamContr *prm, TCfg &cfg );
 
 	void getVals( TParamContr *prm );
+	void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl );
 
 	bool cntrCmdProc( TParamContr *prm, XMLNode *opt );
 
@@ -93,7 +94,7 @@ class Kontar: public TTipParam
 	//Methods
 	void regVal( TMdPrm *prm, int off, int sz );	//Register value for acquisition
 
-	string req( TMdPrm *prm, string &pdu );
+	string req( TMdPrm *prm, string &pdu, bool passUpdate = false );
 	const char *getVal( TMdPrm *prm, int off, int dtSz );
 };
 

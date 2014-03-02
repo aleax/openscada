@@ -1387,7 +1387,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     TVariant vl = valo.get(0,true);
     if(vl.isEVal() || vl == pvl) return;
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
 	XMLNode req("set");
@@ -1396,11 +1396,11 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
 	return;
     }
 
-    //> Direct write
+    //Direct write
     bool wrRez = false;
-    //>> Standard type request
+    // Standard type request
     if(isStd())	wrRez = owner().setVal(vl, valo.fld().reserve(), acq_err, true);
-    //>> Logical type request
+    // Logical type request
     else if(isLogic())
     {
 	int id_lnk = lCtx->lnkId(valo.name());
