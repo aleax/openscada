@@ -20,6 +20,9 @@
  ***************************************************************************/
 
 #include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 extern "C"
 {
 #include "lincon.h"
@@ -93,6 +96,7 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
 	p->p_el.fldAdd(new TFld("serial",_("Serial number"),TFld::String,TFld::NoWrite)); als.push_back("serial");
 	p->p_el.fldAdd(new TFld("SDK",_("SDK version"),TFld::Real,TFld::NoWrite)); als.push_back("SDK");
 	p->p_el.fldAdd(new TFld("DIP",_("DIP switch"),TFld::Integer,TFld::NoWrite)); als.push_back("DIP");
+	p->p_el.fldAdd(new TFld("RS",_("Rotary switch"),TFld::Integer,TFld::NoWrite)); als.push_back("RS");
     }
     else if(p->modTp.getS() == "I-8017")	//> Individual I-8017 processing
     {
@@ -118,15 +122,15 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
 	    chnId = TSYS::strMess("ao%d",i_o); chnNm = TSYS::strMess(_("Output %d"),i_o);
 	    p->p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite)); als.push_back(chnId);
 	}
-    //> Other typical modules processing
+    //Other typical modules processing
     else
-	//> DI and DO processing
+	// DI and DO processing
 	for(unsigned i_ch = 0; i_ch < ((ePrm->dev.DI&0xFF)+(ePrm->dev.DO&0xFF)); i_ch++)
 	{
-	    //> Reverse configuration load
+	    //  Reverse configuration load
 	    p->dInOutRev[i_ch] = atoi(p->modPrm("dIORev"+i2s(i_ch)).c_str());
 
-	    //> Attributes create
+	    //  Attributes create
 	    if(i_ch < (ePrm->dev.DI&0xFF))
 		for(int i_i = 0; i_i < 8; i_i++)
 		{
@@ -147,7 +151,7 @@ void da_LP_8x::enable( TMdPrm *p, vector<string> &als )
 
 void da_LP_8x::disable( TMdPrm *p )
 {
-    //> Free module object
+    //Free module object
     if(p->extPrms)
     {
 	delete (tval*)p->extPrms;
@@ -161,7 +165,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 
     if(p->modTp.getS() == "LP-8xxx")	//> Individual LP-8xxx processing
     {
-	//> Read serial number
+	//Read serial number
 	AutoHD<TVal> vl = p->vlAt("serial");
 	if(vl.at().getS() == EVAL_STR)
 	{
@@ -171,23 +175,41 @@ void da_LP_8x::getVal( TMdPrm *p )
 	    res.release();
 	    vl.at().setS( TSYS::strMess("%x%x%x%x%x%x%x%x",sN[0],sN[1],sN[2],sN[3],sN[4],sN[5],sN[6],sN[7]), 0, true );
 	}
-	//> Read SDK version
+
+	//Read SDK version
 	vl = p->vlAt("SDK");
 	if(vl.at().getR() == EVAL_REAL) vl.at().setR(GetSDKversion(), 0, true);
 
-	//> Read DIP switch status
+	//Read DIP switch status
 	p->owner().pBusRes.resRequestW();
 	int dpSw = GetDIPswitch();
 	p->owner().pBusRes.resRelease();
 	p->vlAt("DIP").at().setI(dpSw,0,true);
+
+	//Read Rotary switch status
+	int hd = open("/dev/port", O_RDONLY);
+	if(!hd) p->vlAt("RS").at().setI(EVAL_INT, 0, true);
+	else
+	{
+	    uint16_t val;
+	    lseek(hd, 0x63, SEEK_SET);
+	    read(hd, &val, 2);
+	    printf("TEST 00: %xh\n", val);
+
+	    lseek(hd, 0x300, SEEK_SET);
+	    read(hd, &val, 1);
+	    val = (val>>1)&0x0f;
+	    val = ~(((val&0x08) >> 3) | ((val&0x04) >> 1) | ((val&0x02) << 1) | ((val&0x01) << 3)) & 0x0f;
+	    p->vlAt("RS").at().setI(val, 0, true);
+	}
     }
     else if(p->modTp.getS() == "I-8017")//> Individual I-8017 processing
     {
-	//> Check for I8017 init
+	//Check for I8017 init
 	if(!ePrm->init)	{ p->owner().pBusRes.resRequestW(); I8017_Init(p->modSlot); ePrm->init = true; p->owner().pBusRes.resRelease(); }
-	//> Check for I8017 fast task start
+	//Check for I8017 fast task start
 	if(ePrm->fastPer && !p->prcSt) SYS->taskCreate(p->nodePath('.',true), 32, fastTask, p);
-	//> Get values direct
+	//Get values direct
 	for(int i_v = 0; i_v < 16; i_v++)
 	    if(i_v >= ePrm->prmNum) p->vlAt(TSYS::strMess("ai%d",i_v)).at().setR(EVAL_REAL,0,true);
 	    else if(!ePrm->fastPer)
@@ -197,8 +219,8 @@ void da_LP_8x::getVal( TMdPrm *p )
 		p->vlAt(TSYS::strMess("ai%d",i_v)).at().setR(I8017_GetCurAdChannel_Float_Cal(p->modSlot), 0, true);
 	    }
     }
-    //> Other typical modules processing
-    //>> DI
+    //Other typical modules processing
+    // DI
     else if(ePrm->dev.DI)
     {
 	bool isErr = false;
@@ -233,7 +255,7 @@ void da_LP_8x::getVal( TMdPrm *p )
 		p->vlAt(TSYS::strMess("di%d_%d",i_ch,i_i)).at().setB(isErr ? EVAL_BOOL :
 		    (((val>>(i_ch*8))^p->dInOutRev[i_ch])>>i_i)&1, 0, true);
     }
-    //>> DO back read
+    // DO back read
     else if(ePrm->dev.DO)
     {
 	bool isErr = false;
@@ -273,13 +295,13 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 {
     tval *ePrm = (tval*)p->extPrms;
 
-    if(p->modTp.getS() == "I-8017")	//> Individual I-8017 processing
+    if(p->modTp.getS() == "I-8017")	//Individual I-8017 processing
     {
 	bool ha = (valo.name().substr(0,2) == "ha");
 	bool la = (valo.name().substr(0,2) == "la");
 	if(!(ha||la) || !ePrm->init) return;
 
-	//> Create previous value
+	//Create previous value
 	int hvl = 0, lvl = 0;
 	for(int i_v = 7; i_v >= 0; i_v--)
 	{
@@ -292,14 +314,14 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 	I8017_SetLed(p->modSlot,(lvl<<8)|hvl);
 	p->owner().pBusRes.resRelease();
     }
-    else if(p->modTp.getS() == "I-8024")	//> Individual I-8024 processing
+    else if(p->modTp.getS() == "I-8024")	//Individual I-8024 processing
     {
 	p->owner().pBusRes.resRequestW(1000);
 	I8024_VoltageOut(p->modSlot, atoi(valo.name().c_str()+2), valo.getR(0, true));
 	p->owner().pBusRes.resRelease();
     }
-    //> Other typical modules processing
-    //>> DO
+    //Other typical modules processing
+    // DO
     else if(valo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
     {
 	uint32_t val = ePrm->doVal;
@@ -360,7 +382,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
     if(opt->name() == "info")
     {
 	if(p->modTp.getS() == "LP-8xxx") p->ctrRemoveNode(opt, "/prm/cfg/MOD_SLOT");
-	//> Individual I-8017 processing
+	//Individual I-8017 processing
 	if(p->modTp.getS() == "I-8017" && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
 	{
 	    p->ctrMkNode("fld",opt,-1,"/cfg/prms",_("Process parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","dec");
@@ -372,7 +394,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 			"sel_id","0;1;2;3;4",
 			"sel_list",_("-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with 125 ohms resistor)"));
 	}
-	//>> DI and DO processing
+	// DI and DO processing
 	else if((dev.DI || dev.DO) && p->ctrMkNode("area",opt,-1,"/cfg",_("Configuration")))
 	{
 	    for(unsigned i_ch = 0; i_ch < ((dev.DI&0xFF)+(dev.DO&0xFF)); i_ch++)
@@ -386,7 +408,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	return true;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(p->modTp.getS() == "I-8017")
     {
@@ -412,7 +434,7 @@ bool da_LP_8x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	}
 	else return false;
     }
-    //> DI and DO processing
+    //DI and DO processing
     if((dev.DI || dev.DO) && a_path.compare(0,10,"/cfg/nRevs") == 0)
     {
 	int i_ch = 0, i_n = 0;
@@ -458,7 +480,7 @@ void *da_LP_8x::fastTask( void *iprm )
 	for(unsigned i_c = 0; prm.owner().startStat() && i_c < cnls.size(); i_c++)
 	    cnls[i_c].at().setR(vbuf[i_c], wTm, true);
 
-	//> Calc next work time and sleep
+	//Calc next work time and sleep
 	wTm += (int64_t)(1e6*ePrm->fastPer);
 	sp_tm.tv_sec = wTm/1000000; sp_tm.tv_nsec = 1000*(wTm%1000000);
 	clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL);

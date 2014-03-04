@@ -88,7 +88,7 @@ void Kontar::enable( TParamContr *ip )
 		aid = TSYS::strEncode(aid, TSYS::oscdID);
 		string pTp = (nNm=nPrm->childGet("Type",0,true)) ? nNm->text() : "Float";
 		TFld::Type tp = TFld::Real; int tpSz = 4;
-		if(strcasecmp(pTp.c_str(),"int") == 0)		{ tp = TFld::Integer; tpSz = 2; }
+		if(strcasecmp(pTp.c_str(),"short") == 0)	{ tp = TFld::Integer; tpSz = 2; }
 		else if(strcasecmp(pTp.c_str(),"bool") == 0)	{ tp = TFld::Boolean; tpSz = 1; }
 		else if(strcasecmp(pTp.c_str(),"time") == 0 ||
 			strcasecmp(pTp.c_str(),"date") == 0)	{ tp = TFld::String; tpSz = 2; }
@@ -361,8 +361,16 @@ void Kontar::getVals( TParamContr *ip )
 	switch(val.at().fld().type())
 	{
 	    case TFld::Boolean:	val.at().setB(dt?*dt:EVAL_BOOL, 0, true);	break;
-	    case TFld::Integer:	val.at().setI(dt?(int16_t)TSYS::getUnalign16(dt):EVAL_INT, 0, true);	break;
-	    case TFld::Real:	val.at().setR(dt?TSYS::getUnalignFloat(dt):EVAL_REAL, 0, true);		break;
+	    case TFld::Integer:	val.at().setI(dt?(int16_t)TSYS::i16_BE(TSYS::getUnalign16(dt)):EVAL_INT, 0, true);	break;
+	    case TFld::Real:
+		if(!dt) val.at().setR(EVAL_REAL, 0, true);
+		else
+		{
+		    union { uint32_t i; float f; } wl;
+		    wl.i = TSYS::i32_BE(TSYS::getUnalign32(dt));
+		    val.at().setR(wl.f, 0, true);
+		}
+		break;
 	    case TFld::String:
 	    {
 		string vl = EVAL_STR;
@@ -454,8 +462,15 @@ void Kontar::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
     switch(val.fld().type())
     {
 	case TFld::Boolean:	{ pdu += char(val.getB(0,true)); break; }
-	case TFld::Integer:	{ int16_t tvl = val.getI(0, true); pdu.append((char*)&tvl,sizeof(tvl));	break; }
-	case TFld::Real:	{ float tvl = val.getR(0, true); pdu.append((char*)&tvl,sizeof(tvl));	break; }
+	case TFld::Integer:	{ int16_t tvl = TSYS::i16_BE(val.getI(0,true)); pdu.append((char*)&tvl,sizeof(tvl));	break; }
+	case TFld::Real:
+	{
+	    union { uint32_t i; float f; } wl;
+	    wl.f = val.getR(0,true);
+	    wl.i = TSYS::i32_BE(wl.i);
+	    pdu.append((char*)&wl.i,sizeof(wl.i));
+	    break;
+	}
 	case TFld::String:
 	{
 	    int16_t tvl = 0;

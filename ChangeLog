@@ -1,3 +1,9 @@
+2014-03-04 Roman
+- DAQ.OPC_UA: Session ID set to NS:100.
+- !:DAQ.AMRDevs.Kontar: Integer type naming changed to "short". Read and write attributes test and fix for Integer and Real.
+- DAQ.ICP_DAS: Rotary switch value is added for LP-8x81 PLC.
+
+
 2014-03-02 Roman
 - !!!:Archive.{TMArchivator,*}: Reimplemented messages archivation for allow the messages into the buffer resend at
 	the messages storage connection restore.
