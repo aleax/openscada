@@ -2456,7 +2456,7 @@ nextReq:
 		    reqTp = OpcUa_CreateSessionResponse;
 
 		    respEp.reserve(2000);
-		    oNodeId(respEp, sessId);			//sessionId
+		    oNodeId(respEp, NodeId(sessId,100));	//sessionId
 		    oNodeId(respEp, sessId);			//authentication Token
 		    oR(respEp, wep->sessGet(sessId).tInact, 8);	//revisedSession Timeout, ms
 		    oS(respEp, servNonce);			//serverNonce
