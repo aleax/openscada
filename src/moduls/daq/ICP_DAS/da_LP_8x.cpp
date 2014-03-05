@@ -182,26 +182,25 @@ void da_LP_8x::getVal( TMdPrm *p )
 
 	//Read DIP switch status
 	p->owner().pBusRes.resRequestW();
-	int dpSw = GetDIPswitch();
+	int dpSw = (~GetDIPswitch())&0xFF;
 	p->owner().pBusRes.resRelease();
-	p->vlAt("DIP").at().setI(dpSw,0,true);
+	p->vlAt("DIP").at().setI(dpSw, 0, true);
 
 	//Read Rotary switch status
+	int64_t val = EVAL_INT;
 	int hd = open("/dev/port", O_RDONLY);
-	if(!hd) p->vlAt("RS").at().setI(EVAL_INT, 0, true);
-	else
+	if(hd >= 0)
 	{
-	    uint16_t val;
-	    lseek(hd, 0x63, SEEK_SET);
-	    read(hd, &val, 2);
-	    printf("TEST 00: %xh\n", val);
-
+	    uint8_t rV;
 	    lseek(hd, 0x300, SEEK_SET);
-	    read(hd, &val, 1);
-	    val = (val>>1)&0x0f;
-	    val = ~(((val&0x08) >> 3) | ((val&0x04) >> 1) | ((val&0x02) << 1) | ((val&0x01) << 3)) & 0x0f;
-	    p->vlAt("RS").at().setI(val, 0, true);
+	    if(read(hd,&rV,1) == 1)
+	    {
+		rV = (rV>>1)&0x0f;
+		val = ~(((rV&0x08) >> 3) | ((rV&0x04) >> 1) | ((rV&0x02) << 1) | ((rV&0x01) << 3)) & 0x0f;
+	    }
+	    close(hd);
 	}
+	p->vlAt("RS").at().setI(val, 0, true);
     }
     else if(p->modTp.getS() == "I-8017")//> Individual I-8017 processing
     {

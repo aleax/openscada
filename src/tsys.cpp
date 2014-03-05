@@ -502,12 +502,15 @@ void TSYS::cfgFileSave( )
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
-
-    string rezFile = rootN.save(XMLNode::XMLHeader);
-    int rez = write(hd, rezFile.data(), rezFile.size());
-    if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
-    rootModifCnt = 0;
-    rootFlTm = time(NULL);
+    else
+    {
+	string rezFile = rootN.save(XMLNode::XMLHeader);
+	int rez = write(hd, rezFile.data(), rezFile.size());
+	if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
+	rootModifCnt = 0;
+	rootFlTm = time(NULL);
+	close(hd);
+    }
 }
 
 void TSYS::cfgPrmLoad( )
@@ -2009,7 +2012,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	char buf[STR_BUF_LEN];
 	string rez;
 	int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	if(hd != -1)
+	if(hd >= 0)
 	{
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	    close(hd);
@@ -2024,7 +2027,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
 	int hd = open(prms[0].getS().c_str(), wflags, 0664);
-	if(hd != -1)
+	if(hd >= 0)
 	{
 	    wcnt = write(hd,val.data(),val.size());
 	    close(hd);

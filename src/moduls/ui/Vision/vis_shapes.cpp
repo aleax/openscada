@@ -4169,10 +4169,9 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_BordColor: shD->border.setColor(getColor(val));	break;
 	case A_BordStyle: shD->bordStyle = atoi(val.c_str());	break;
 	case A_PG_OPEN_SRC:
-	{
 	    if(!runW || runP)	{ up = false; break; }
 
-	    //>> Put previous include widget to page cache
+	    //Put previous include widget to page cache
 	    if((shD->inclWidget && val != shD->inclWidget->id()) || (!shD->inclWidget && !val.empty()))
 	    {
 		if(shD->inclWidget)
@@ -4188,7 +4187,7 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    shD->inclWidget = NULL;
 		    w->setProperty("inclPg", "");
 		}
-		//>> Create new include widget
+		// Create new include widget
 		if(val.size())
 		{
 		    if(!shD->inclScrl)
@@ -4199,8 +4198,6 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclScrl = new QScrollArea(w);
 			shD->inclScrl->setFocusPolicy(Qt::NoFocus);
 			shD->inclScrl->setFrameShape(QFrame::NoFrame);
-			//shD->inclScrl->setPalette(w->palette());
-			//shD->inclScrl->setBackgroundRole(QPalette::NoRole);
 			wlay->addWidget(shD->inclScrl);
 		    }
 
@@ -4242,12 +4239,16 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclScrl->setWidget(shD->inclWidget);
 			shD->inclWidget->setMinimumSize(w->size());
 			//shD->inclWidget->load("");
+
+			//  Set palette to transparent background
+			QPalette plt = shD->inclWidget->palette();
+			plt.setBrush(QPalette::Window,QColor(0,0,0,0));
+			shD->inclWidget->setPalette(plt);
 		    }
 		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}
 	    } else up = false;
 	    break;
-	}
 	default: up = false;
     }
 

@@ -300,15 +300,15 @@ void ModMArch::checkArchivator( bool now )
     //Call files checking
     ResAlloc res(mRes, false);
     for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
-        arh_s[i_arh]->check();
+	arh_s[i_arh]->check();
 }
 
-int ModMArch::size()
+int ModMArch::size( )
 {
     int rez = 0;
     ResAlloc res(mRes, false);
     for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
-        rez += arh_s[i_arh]->size();
+	rez += arh_s[i_arh]->size();
 
     return rez;
 }
@@ -457,7 +457,7 @@ MFileArch::MFileArch( const string &iname, time_t ibeg, ModMArch *iowner, const 
     mAcces = time(NULL);
 }
 
-MFileArch::~MFileArch()
+MFileArch::~MFileArch( )
 {
     check();	//Check XML-archive
 
@@ -649,6 +649,9 @@ void MFileArch::put( TMess::SRec mess )
 	try { mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
 	mPack = false;
     }
+
+    mAcces = time(NULL);
+
     if(!mLoad)
     {
 	res.release(); attach(mName); res.request(true);
@@ -658,8 +661,6 @@ void MFileArch::put( TMess::SRec mess )
 	    throw TError(owner().nodePath().c_str(),_("Archive file '%s' isn't attached!"),mName.c_str());
 	}
     }
-
-    mAcces = time(NULL);
 
     if(xmlM())
     {
@@ -730,11 +731,11 @@ void MFileArch::put( TMess::SRec mess )
 		mEnd = mess.time;
 		snprintf(buf, sizeof(buf), "%s %s %s %8x %8x\n",
 		    mod->modId().c_str(), mod->modInfo("Version").c_str(), mChars.c_str(), (unsigned int)mBeg, (unsigned int)mEnd);
-		fOK = (fwrite(buf,strlen(buf),1,f) > 0);
+		fOK = (fwrite(buf,strlen(buf),1,f) == 1);
 	    }
 	    //Put mess to end file
 	    fseek(f,0,SEEK_END);
-	    fOK = fOK && (fwrite(s_buf.data(),s_buf.size(),1,f) > 0);
+	    fOK = fOK && (fwrite(s_buf.data(),s_buf.size(),1,f) == 1);
 	}
 	//Put message to inwards
 	else
@@ -771,15 +772,15 @@ void MFileArch::put( TMess::SRec mess )
 		{
 		    beg_cur = ((mv_end-mv_beg) >= (int)sizeof(buf)) ? mv_end-sizeof(buf) : mv_beg;
 		    fseek(f, beg_cur, SEEK_SET);
-		    fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == (unsigned)(mv_end-beg_cur));
+		    fOK = fOK && (fread(buf, mv_end-beg_cur,1,f) == 1);
 		    fseek(f, beg_cur+s_buf.size(), SEEK_SET);
-		    fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == (unsigned)(mv_end-beg_cur));
+		    fOK = fOK && (fwrite(buf,mv_end-beg_cur,1,f) == 1);
 		    mv_end -= sizeof(buf);
 		}
 		while(fOK && beg_cur != mv_beg);
 		//  Write a new message
 		fseek(f, mv_beg, SEEK_SET);
-		fOK = fOK && (fwrite(s_buf.c_str(), s_buf.size(), 1, f) == s_buf.size());
+		fOK = fOK && (fwrite(s_buf.c_str(),s_buf.size(),1,f) == 1);
 		cacheUpdate(mess.time, s_buf.size());
 		//  Put last value to cache
 		cacheSet(mess.time, mv_beg, true);
@@ -806,13 +807,15 @@ void MFileArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const 
 	try { mName = mod->unPackArch(name()); } catch(TError err) { mErr = true; throw; }
 	mPack = false;
     }
+
+    mAcces = time(NULL);
+
     if(!mLoad)
     {
 	res.release(); attach(mName); res.request(false);
 	if(mErr || !mLoad) throw TError(owner().nodePath().c_str(),_("Archive file isn't attached!"));
     }
 
-    mAcces = time(NULL);
     TRegExp re(category, "p");
 
     if(xmlM())

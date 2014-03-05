@@ -1388,16 +1388,17 @@ TVariant VFileArch::getVal( int vpos )
 {
     ResAlloc res(mRes, false);
     if(mErr) throw TError(owner().archivator().nodePath().c_str(), _("Archive file error!"));
+
+    mAcces = time(NULL);
+
     if(mPack)
     {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
 	mPack = false;
-	res.release();
+	res.request(false);
     }
 
-    mAcces = time(NULL);
-    res.request(false);
     //> Open archive file
     int hd = open(name().c_str(), O_RDONLY);
     if(hd <= 0) { mErr = true; return EVAL_REAL; }
@@ -1466,6 +1467,8 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     ibeg = vmax(ibeg, begin());
     iend = vmin(iend, end());
     if(ibeg > iend)	return;
+
+    mAcces = time(NULL);
 
     if(mPack)
     {
@@ -1686,8 +1689,6 @@ void VFileArch::setVals( TValBuf &buf, int64_t ibeg, int64_t iend )
     //> Drop cache
     cacheDrop(vpos_beg);
     cacheSet(vpos_end, foff_beg+val_b.size()-value_end.size(), value_end.size(), true, true);
-
-    mAcces = time(NULL);
 
     mSize = lseek(hd, 0, SEEK_END);
 

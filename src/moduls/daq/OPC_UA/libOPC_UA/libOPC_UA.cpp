@@ -2074,7 +2074,7 @@ nextReq:
 	if(rba.size() < 8 || rba.size() < mSz) return false;
 	rb = rba.substr(0, mSz);
 
-	//> Check for hello message type
+	//Check for hello message type
 	if(rb.compare(0,4,"HELF") == 0)
 	{
 	    if(rb.size() > 4096) throw OPCError(OpcUa_BadTcpMessageTooLarge, "", "");
@@ -2089,12 +2089,12 @@ nextReq:
 	    iNu(rb, off, 4);				//Max chunk count
 	    string EndpntURL = iS(rb, off);		//EndpointURL
 
-	    //>> Find accessable endpoint
+	    // Find accessable endpoint
 	    vector<string> epLs;
 	    epEnList(epLs);
 	    if(!epLs.size()) throw OPCError(OpcUa_BadTcpEndpointUrlInvalid, "", "");
 
-	    //> Prepare acknowledge message
+	    // Prepare acknowledge message
 	    out.reserve(28);
 	    out.append("ACKF");				//Acknowledge message type
 	    oNu(out, 28, 4);				//Message size
@@ -2106,7 +2106,7 @@ nextReq:
 
 	    if(dbg) debugMess("HELLO Resp");
 	}
-	//> Check for Open SecureChannel message type
+	//Check for Open SecureChannel message type
 	else if(rb.compare(0,4,"OPNF") == 0)
 	{
 	    if(dbg) debugMess("OPN Req");
@@ -2122,7 +2122,7 @@ nextReq:
 	    else if(secPlc == "Basic256")	{ symKeySz = 32; asymKeyPad = 42; }
 	    else throw OPCError(OpcUa_BadSecurityPolicyRejected, "", "");
 
-	    //>> Find server with that policy
+	    // Find server with that policy
 	    vector<string> epLs;
 	    epEnList(epLs);
 	    int i_epOk = -1;
@@ -2142,7 +2142,7 @@ nextReq:
 	    {
 		if(serverCertThmbp != certThumbprint(wep->cert()))//>ServerCertificateThumbprint
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Server certificate thumbprint error.");
-		//>> Decode message block
+		// Decode message block
 		rb.replace(off, rb.size()-off, asymmetricDecrypt(rb.substr(off),wep->pvKey(),secPlc));
 		if(dbg) debugMess("OPN Req (decrypted)");
 	    }
@@ -2174,7 +2174,7 @@ nextReq:
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
 	    }
 
-	    //>> Find message secure mode
+	    // Find message secure mode
 	    bool secModOK = false;
 	    for(int i_s = 0; !secModOK && i_s < wep->secSize(); i_s++)
 		if(wep->secPolicy(i_s) == secPlc && wep->secMessageMode(i_s) == secMode)
@@ -2183,7 +2183,7 @@ nextReq:
 
 	    chnlId = chnlSet((reqTp==SC_RENEW?chnlId:0), wep->id(), reqLifeTm, clntCert, secPlc, secMode);
 
-	    //> Prepare respond message
+	    // Prepare respond message
 	    out.reserve(200);
 	    out.append("OPNF");					//OpenSecureChannel message type
 	    oNu(out, 0, 4);					//Message size
@@ -2215,20 +2215,21 @@ nextReq:
 
 	    if(!isSecNone)
 	    {
-		//> Generate nonce
+		// Generate nonce
 		string servNonce = randBytes(symKeySz);
 		oS(out, servNonce);				//nonce
-		//> Padding place
+		// Padding place
 		int kSz = asymmetricKeyLength(wep->cert());
 		int paddingSize = ((out.size()-begEncBlck+1+kSz+(kSz-asymKeyPad)-1)/(kSz-asymKeyPad))*(kSz-asymKeyPad)-(out.size()+kSz-begEncBlck);
 		out += string(paddingSize, (char)(paddingSize-1));
-		//Real message size calc and place
+
+		// Real message size calc and place
 		oNu(out, begEncBlck + kSz*((out.size()-begEncBlck+kSz)/(kSz-asymKeyPad)), 4, 4);
-		//> Signature
+		// Signature
 		out += asymmetricSign(out, wep->pvKey());
-		//> Encoding
+		// Encoding
 		out.replace(begEncBlck, out.size()-begEncBlck, asymmetricEncrypt(out.substr(begEncBlck),clntCert,secPlc));
-		//> Set channel secure properties
+		// Set channel secure properties
 		chnlSecSet(chnlId, deriveKey(servNonce,clNonce,symKeySz*3), deriveKey(clNonce,servNonce,symKeySz*3));
 	    }
 	    else
@@ -2239,7 +2240,7 @@ nextReq:
 
 	    if(dbg) debugMess("OPN Resp");
 	}
-	//> Check for Close SecureChannel message type
+	//Check for Close SecureChannel message type
 	else if(rb.compare(0,4,"CLOF") == 0)
 	{
 	    if(dbg) debugMess("CLO Req");
@@ -2248,10 +2249,10 @@ nextReq:
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
 	    uint32_t tokId = iNu(rb, off, 4);			//TokenId
 	    SecCnl scHd = chnlGet(secId);
-	    //>> Secure channel and token check
+	    // Secure channel and token check
 	    if(!scHd.TokenId) throw OPCError(0, "", "");
 	    if(scHd.TokenId != tokId)	throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
-	    //>> Decrypt message block
+	    // Decrypt message block
 	    if(scHd.secMessMode == MS_SignAndEncrypt)
 		rb.replace(off, rb.size()-off, symmetricDecrypt(rb.substr(off),scHd.servKey,scHd.secPolicy));
 								//> Sequence header
@@ -2279,10 +2280,10 @@ nextReq:
 
 	    chnlClose(secId);
 
-	    //> No respond. Close socket
+	    // No respond. Close socket
 	    return false;	//Close socket
 	}
-	//> Check for SecureChannel message type
+	//Check for SecureChannel message type
 	else if(rb.compare(0,4,"MSGF") == 0)
 	{
 	    off = 8;
@@ -2290,14 +2291,14 @@ nextReq:
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
 	    uint32_t tokId = iNu(rb, off, 4);			//TokenId
 	    SecCnl scHd = chnlGet(secId);
-	    //>> Secure channel and token check
+	    // Secure channel and token check
 	    if(!scHd.TokenId) throw OPCError(OpcUa_BadSecureChannelClosed, "Secure channel closed");
 	    if(!(tokId == scHd.TokenId || (tokId == scHd.TokenIdPrev && (curTime() < 1000ll*(scHd.tCreate+0.25*scHd.tLife)))))
 		throw OPCError(OpcUa_BadSecureChannelTokenUnknown, "Secure channel unknown");
 	    if(curTime() > (scHd.tCreate+(int64_t)scHd.tLife*1000)) throw OPCError(OpcUa_BadSecureChannelIdInvalid, "Secure channel renew expired");
 	    EP *wep = epEnAt(scHd.endPoint);
 	    if(!wep) throw OPCError(OpcUa_BadTcpEndpointUrlInvalid, "No propper Endpoint present");
-	    //>> Decrypt message block and signature check
+	    // Decrypt message block and signature check
 	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)
 	    {
 		if(scHd.secMessMode == MS_SignAndEncrypt)
@@ -2312,7 +2313,7 @@ nextReq:
 	    int reqTp = iNodeId(rb,off).numbVal();		//TypeId request
 								//>> Request Header
 	    uint32_t sesTokId = iNodeId(rb, off).numbVal();	//Session AuthenticationToken
-	    //>> Session check
+	    // Session check
 	    if(!(reqTp == OpcUa_CreateSessionRequest || reqTp == OpcUa_FindServersRequest || reqTp == OpcUa_GetEndpointsRequest ||
 		    reqTp == OpcUa_ActivateSessionRequest) && (stCode=wep->sessActivate(sesTokId,secId,true,inPrtId)))
 		reqTp = OpcUa_ServiceFault;
@@ -2329,18 +2330,18 @@ nextReq:
 
 	    if(dbg) debugMess(strMess("MSG Req: %d",reqTp));
 
-	    //> Prepare respond message
+	    // Prepare respond message
 	    string respEp;
 	    switch(reqTp)
 	    {
 		case OpcUa_FindServersRequest:
 		{
-		    //>> Request
+		    //  Request
 		    iS(rb, off);				//endpointUrl
 		    iS(rb, off);				//localeIds []
 		    iS(rb, off);				//serverUris []
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_FindServersResponse;
 		    oNu(respEp, 1, 4);				//ApplicationDescription list items
 								//>>>> ApplicationDescription 1
@@ -2360,17 +2361,17 @@ nextReq:
 		}
 		case OpcUa_GetEndpointsRequest:
 		{
-		    //>> Request
+		    //  Request
 		    iS(rb, off);				//endpointUrl
 		    iS(rb, off);				//localeIds []
 		    iS(rb, off);				//profileUris []
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_GetEndpointsResponse;
 
 		    respEp.reserve(2000);
 		    oNu(respEp, 0, 4);				//EndpointDescrNubers list items
-		    //>> Get enpoints policies list
+		    //  Get enpoints policies list
 		    vector<string> epLs;
 		    epEnList(epLs);
 		    unsigned epCnt = 0;
@@ -2426,7 +2427,7 @@ nextReq:
 		}
 		case OpcUa_CreateSessionRequest:
 		{
-		    //>> Request
+		    //  Request
 								//> clientDescription (Application Description)
 		    iS(rb, off);				//applicationUri
 		    iS(rb, off);				//productUri
@@ -2444,27 +2445,27 @@ nextReq:
 		    double rStm = iR(rb, off, 8);		//Requested SessionTimeout, ms
 		    iNu(rb, off, 4);				//maxResponse MessageSize
 
-		    //>> Try for session reusing
+		    //  Try for session reusing
 		    int sessId = 0;
 		    if(!sesTokId && !wep->sessActivate(sesTokId,secId,true,inPrtId)) sessId = sesTokId;
-		    //>> Create new session
+		    //  Create new session
 		    if(!sessId) sessId = wep->sessCreate(sessNm, rStm);
 		    string servNonce = randBytes(32);
 		    wep->sessServNonceSet(sessId, servNonce);
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_CreateSessionResponse;
 
 		    respEp.reserve(2000);
 		    oNodeId(respEp, NodeId(sessId,100));	//sessionId
-		    oNodeId(respEp, sessId);			//authentication Token
+		    oNodeId(respEp, NodeId(sessId,100));	//authentication Token
 		    oR(respEp, wep->sessGet(sessId).tInact, 8);	//revisedSession Timeout, ms
 		    oS(respEp, servNonce);			//serverNonce
 		    oS(respEp, certPEM2DER(wep->cert()));	//serverCertificate
 								//> EndpointDescr []
 		    int enpNumperPos = respEp.size();
 		    oNu(respEp, 0, 4);				//EndpointDescrNubers list items
-		    //>> Get enpoints policies list
+		    //  Get enpoints policies list
 		    vector<string> epLs;
 		    epEnList(epLs);
 		    unsigned epCnt = 0;
@@ -2534,7 +2535,7 @@ nextReq:
 		}
 		case OpcUa_ActivateSessionRequest:
 		{
-		    //>> Request
+		    //  Request
 								//>clientSignature
 		    string alg = iS(rb, off);			//> algorithm
 		    string sign = iS(rb, off);			//> signature
@@ -2576,7 +2577,7 @@ nextReq:
 		    iS(rb, off);				//signature
 		    iS(rb, off);				//algorithm
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_ActivateSessionResponse;
 		    respEp.reserve(100);
 		    string servNonce = randBytes(32);
@@ -2588,7 +2589,7 @@ nextReq:
 		}
 		case OpcUa_CloseSessionRequest:
 		{
-		    //>> Request
+		    //  Request
 		    bool subScrDel = iNu(rb, off, 1);		//deleteSubscriptions
 		    wep->sessClose(sesTokId);
 		    if(subScrDel)
@@ -2603,13 +2604,13 @@ nextReq:
 			pthread_mutex_unlock(&wep->mtxData);
 		    }
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_CloseSessionResponse;
 		    break;
 		}
 		case OpcUa_CreateSubscriptionRequest:
 		{
-		    //>> Request
+		    //  Request
 		    double pi = iR(rb, off, 8);			//requestedPublishingInterval
 		    uint32_t lt = iNu(rb, off, 4);		//requestedLifetimeCount
 		    uint32_t ka = iNu(rb, off, 4);		//requestedMaxKeepAliveCount
@@ -2622,7 +2623,7 @@ nextReq:
 		    if(dbg) debugMess(strMess("EP: SubScription %d created.",subScrId));
 		    Subscr ss = wep->subscrGet(subScrId);
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_CreateSubscriptionResponse;
 		    respEp.reserve(20);
 		    oNu(respEp, subScrId, 4);			//subscriptionId
@@ -2633,7 +2634,7 @@ nextReq:
 		}
 		case OpcUa_ModifySubscriptionRequest:
 		{
-		    //>> Request
+		    //  Request
 		    uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 		    double pi = iR(rb, off, 8);			//requestedPublishingInterval
 		    uint32_t lt = iNu(rb, off, 4);		//requestedLifetimeCount
@@ -2647,7 +2648,7 @@ nextReq:
 		    wep->subscrSet(subScrId, SS_CUR, en, sesTokId, pi, lt, ka, npp, pr);
 		    ss = wep->subscrGet(subScrId);
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_ModifySubscriptionResponse;
 		    respEp.reserve(20);
 		    oR(respEp, ss.publInterv, 8);		//revisedPublishingInterval
@@ -2677,10 +2678,10 @@ nextReq:
 		}*/
 		case OpcUa_DeleteSubscriptionsRequest:
 		{
-		    //>> Request
+		    //  Request
 		    uint32_t sn = iNu(rb, off, 4);		//subscriptionIds []
 
-		    //>> Respond
+		    //  Respond
 		    reqTp = OpcUa_DeleteSubscriptionsResponse;
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
@@ -3589,7 +3590,8 @@ int Server::EP::sessCreate( const string &iName, double iTInact )
     int i_s;
     pthread_mutex_lock(&mtxData);
     for(i_s = 0; i_s < (int)mSess.size(); i_s++)
-	if(!mSess[i_s].tAccess) break;
+	if(!mSess[i_s].tAccess || 1e-3*(curTime()-mSess[i_s].tAccess) > mSess[i_s].tInact)
+	    break;
     if(i_s < (int)mSess.size()) mSess[i_s] = Sess(iName, iTInact);
     else mSess.push_back(Sess(iName,iTInact));
     pthread_mutex_unlock(&mtxData);

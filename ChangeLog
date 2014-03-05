@@ -1,3 +1,15 @@
+2014-03-05 Roman
+- FIX:SYS: Close opened config file is fixed.
+- FIX:Archive.FSArch: Some access control fix for prevent use packed files. fwrite() result for items is fixed.
+- DAQ.ICP_DAS.LP-8x81: DIP-switch value inverted. Rotary switch implement finish and translated.
+- DAQ.OPC_UA: Authentication Token NS set to 100. Session lifetime process is added.
+- UI.Vision: Select-group areas control of Development mode is moved to function selAreaUpdate() and moved
+	from Paint-event to particular places, mostly for fix dotted-box on selected moving for primitive
+	"Document" based on WebKit.
+    Set transparent background palete for the pages included to container.
+    Some code clean up.
+
+
 2014-03-04 Roman
 - DAQ.OPC_UA: Session ID set to NS:100.
 - !:DAQ.AMRDevs.Kontar: Integer type naming changed to "short". Read and write attributes test and fix for Integer and Real.

@@ -1,14 +1,13 @@
 # OpenSCADA.DAQ.ICP_DAS translate to Ukrainian.
-# Copyright (C) 2009-2014 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.ICP_DAS package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2009-2012.
+# Roman Savochenko <rom_as@fromru.com>, 2009-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-13 15:47+0200\n"
+"POT-Creation-Date: 2014-03-05 11:19+0200\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -42,7 +41,7 @@ msgstr ""
 msgid "Cold-Junction Compensation(CJC) temperature"
 msgstr "Температура компенсації холодних спаїв"
 
-#: da_87x.cpp:117 da_LP_8x.cpp:104 da_LP_8x.cpp:370
+#: da_87x.cpp:117 da_LP_8x.cpp:108 da_LP_8x.cpp:391
 #, c-format
 msgid "Input %d"
 msgstr "Вхід %d"
@@ -52,12 +51,12 @@ msgstr "Вхід %d"
 msgid "Out %d"
 msgstr "Вихід %d"
 
-#: da_87x.cpp:143 da_ISA.cpp:172 da_ISA.cpp:189 da_LP_8x.cpp:133
+#: da_87x.cpp:143 da_ISA.cpp:172 da_ISA.cpp:189 da_LP_8x.cpp:137
 #, c-format
 msgid "Digital input %d.%d"
 msgstr "Дискретний вхід %d.%d"
 
-#: da_87x.cpp:150 da_ISA.cpp:165 da_ISA.cpp:196 da_LP_8x.cpp:141
+#: da_87x.cpp:150 da_ISA.cpp:165 da_ISA.cpp:196 da_LP_8x.cpp:145
 #, c-format
 msgid "Digital out %d.%d"
 msgstr "Дискретний вихід %d.%d"
@@ -100,7 +99,7 @@ msgid "Counters number, #AAN"
 msgstr "Кількість лічильників, #AAN"
 
 #: da_87x.cpp:404 da_87x.cpp:413 da_87x.cpp:426 da_87x.cpp:436 da_ISA.cpp:511
-#: da_LP_8x.cpp:364 da_LP_8x.cpp:376
+#: da_LP_8x.cpp:385 da_LP_8x.cpp:397
 msgid "Configuration"
 msgstr "Конфігурація"
 
@@ -141,12 +140,12 @@ msgstr "Безпечні значення"
 msgid "Set safe values from current"
 msgstr "Встановити безпечні значення у поточні"
 
-#: da_87x.cpp:431 da_ISA.cpp:540 da_LP_8x.cpp:381
+#: da_87x.cpp:431 da_ISA.cpp:540 da_LP_8x.cpp:402
 #, c-format
 msgid "DI %d reverse"
 msgstr "DI %d, реверс"
 
-#: da_87x.cpp:432 da_ISA.cpp:541 da_LP_8x.cpp:382
+#: da_87x.cpp:432 da_ISA.cpp:541 da_LP_8x.cpp:403
 #, c-format
 msgid "DO %d reverse"
 msgstr "DO %d, реверс"
@@ -204,50 +203,54 @@ msgstr "Канал %d вихід"
 msgid "IO %d reverse"
 msgstr "IO %d, реверс"
 
-#: da_LP_8x.cpp:93
+#: da_LP_8x.cpp:96
 msgid "Serial number"
 msgstr "Серійний номер"
 
-#: da_LP_8x.cpp:94
+#: da_LP_8x.cpp:97
 msgid "SDK version"
 msgstr "Версія SDK"
 
-#: da_LP_8x.cpp:95
+#: da_LP_8x.cpp:98
 msgid "DIP switch"
 msgstr "DIP перемикач"
 
-#: da_LP_8x.cpp:108
+#: da_LP_8x.cpp:99
+msgid "Rotary switch"
+msgstr "Поворотний перемикач"
+
+#: da_LP_8x.cpp:112
 #, c-format
 msgid "H/A %d"
 msgstr ""
 
-#: da_LP_8x.cpp:110
+#: da_LP_8x.cpp:114
 #, c-format
 msgid "L/A %d"
 msgstr ""
 
-#: da_LP_8x.cpp:118
+#: da_LP_8x.cpp:122
 #, c-format
 msgid "Output %d"
 msgstr "Вихід %d"
 
-#: da_LP_8x.cpp:366
+#: da_LP_8x.cpp:387
 msgid "Process parameters"
 msgstr "Обробка параметрів"
 
-#: da_LP_8x.cpp:367
+#: da_LP_8x.cpp:388
 msgid "Fast data get period (s)"
 msgstr "Період швидкого збору даних (с)"
 
-#: da_LP_8x.cpp:367
+#: da_LP_8x.cpp:388
 msgid "Use 0 for disable"
-msgstr ""
+msgstr "Використати 0 для вимкнення"
 
-#: da_LP_8x.cpp:368
+#: da_LP_8x.cpp:389
 msgid "Mode"
 msgstr "Режим"
 
-#: da_LP_8x.cpp:373
+#: da_LP_8x.cpp:394
 msgid ""
 "-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with "
 "125 ohms resistor)"
@@ -296,8 +299,8 @@ msgstr ""
 "COM 9;COM 10"
 
 #: ICP_module.cpp:109
-msgid "Use OpenSCADA transport"
-msgstr "Використовувати OpenSCADA транспорт"
+msgid "Transport"
+msgstr "Транспорт"
 
 #: ICP_module.cpp:110
 msgid "Baudrate"
@@ -358,60 +361,61 @@ msgstr "Помилка відкриття всіх LP-слотів."
 msgid "Open LP-slot 9 error."
 msgstr "Помилка відкриття LP-слоту 9."
 
-#: ICP_module.cpp:224
+#: ICP_module.cpp:228
 #, c-format
 msgid "Open COM%d port error."
 msgstr "Помилка відкриття COM%d порту."
 
-#: ICP_module.cpp:350
+#: ICP_module.cpp:361
 #, c-format
 msgid "REQ -> '%s'"
 msgstr "Запит -> '%s'"
 
-#: ICP_module.cpp:375
+#: ICP_module.cpp:388
 msgid "13:Error respond: Not full."
 msgstr "13:Помилка відповіді: Не повна."
 
-#: ICP_module.cpp:378
+#: ICP_module.cpp:393
 msgid "21:Invalid module CRC."
 msgstr "21:Помилка контрольної суми."
 
-#: ICP_module.cpp:380 ICP_module.cpp:402
+#: ICP_module.cpp:397 ICP_module.cpp:418
 #, c-format
 msgid "RESP -> '%s'"
 msgstr "Відпов. -> '%s'"
 
-#: ICP_module.cpp:386 ICP_module.cpp:407
+#: ICP_module.cpp:403 ICP_module.cpp:423
+#, c-format
 msgid "ERR -> '%s': %s"
 msgstr "Помилка -> '%s': %s"
 
-#: ICP_module.cpp:405
+#: ICP_module.cpp:421
 #, c-format
 msgid "13:Send_Receive_Cmd() error: %d."
 msgstr "13:Send_Receive_Cmd() помилка: %d."
 
-#: ICP_module.cpp:429
+#: ICP_module.cpp:445
 msgid "Watchdog timeout (s)"
 msgstr "Час сторожового таймеру (с)"
 
-#: ICP_module.cpp:479
+#: ICP_module.cpp:495
 msgid "No a device selected."
 msgstr "Жодного пристрою не обрано."
 
-#: ICP_module.cpp:585
+#: ICP_module.cpp:602
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-#: ICP_module.cpp:586
+#: ICP_module.cpp:603
 msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."
 
-#: ICP_module.cpp:618
+#: ICP_module.cpp:635
 #, c-format
 msgid "Write value to attribute '%s' error: %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
-#: ICP_module.cpp:658
+#: ICP_module.cpp:675
 msgid "<No select>"
 msgstr "<Не обрано>"
 

@@ -210,18 +210,18 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    setPermCntr(atoi(val.c_str())&SEC_WR);
 	    setPermView(atoi(val.c_str())&SEC_RD);
 	    return true;
-	case -4:        //page name
-            setWindowTitle(val.c_str());
-            break;
+	case -4:	//page name
+	    setWindowTitle(val.c_str());
+	    break;
 	case 3:		//pgOpenSrc
 	    setProperty("pgOpenSrc",val.c_str());
 	    return true;
 	case 4:		//pgGrp
 	    setProperty("pgGrp",val.c_str());
 	    return true;
-	case 5:         //en
-            setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));
-            return true;
+	case 5:		//en
+	    setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));
+	    return true;
 	case 6:		//active
 	    setProperty("active",(bool)atoi(val.c_str()));
 	    return true;
@@ -256,11 +256,12 @@ string RunWdgView::resGet( const string &res )
 
 bool RunWdgView::isVisible( QPoint pos )
 {
-    //> Clear background and draw transparent
+    //Clear background and draw transparent
     QPalette plt = palette();
     plt.setBrush(QPalette::Window,QColor(0,0,0,0));
     setPalette(plt);
-    //> Grab widget and check it for no zero
+
+    //Grab widget and check it for no zero
     return QPixmap::grabWidget(this).toImage().pixel(pos);
 }
 

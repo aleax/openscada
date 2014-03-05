@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-13 15:47+0200\n"
+"POT-Creation-Date: 2014-03-05 11:19+0200\n"
 "PO-Revision-Date: 2010-10-13 22:21+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Cold-Junction Compensation(CJC) temperature"
 msgstr "Temperatur der Kompensation der kalten Fugen"
 
-#: da_87x.cpp:117 da_LP_8x.cpp:104 da_LP_8x.cpp:370
+#: da_87x.cpp:117 da_LP_8x.cpp:108 da_LP_8x.cpp:391
 #, c-format
 msgid "Input %d"
 msgstr "Eingang %d"
@@ -56,12 +56,12 @@ msgstr "Eingang %d"
 msgid "Out %d"
 msgstr "Ausgang %d"
 
-#: da_87x.cpp:143 da_ISA.cpp:172 da_ISA.cpp:189 da_LP_8x.cpp:133
+#: da_87x.cpp:143 da_ISA.cpp:172 da_ISA.cpp:189 da_LP_8x.cpp:137
 #, c-format
 msgid "Digital input %d.%d"
 msgstr "Digital-Eingang %d.%d"
 
-#: da_87x.cpp:150 da_ISA.cpp:165 da_ISA.cpp:196 da_LP_8x.cpp:141
+#: da_87x.cpp:150 da_ISA.cpp:165 da_ISA.cpp:196 da_LP_8x.cpp:145
 #, c-format
 msgid "Digital out %d.%d"
 msgstr "Digital-Ausgang %d.%d"
@@ -104,7 +104,7 @@ msgid "Counters number, #AAN"
 msgstr "Anzahl Messuhr, #AAN"
 
 #: da_87x.cpp:404 da_87x.cpp:413 da_87x.cpp:426 da_87x.cpp:436 da_ISA.cpp:511
-#: da_LP_8x.cpp:364 da_LP_8x.cpp:376
+#: da_LP_8x.cpp:385 da_LP_8x.cpp:397
 msgid "Configuration"
 msgstr "Konfiguration"
 
@@ -146,12 +146,12 @@ msgstr "Sichere Werte"
 msgid "Set safe values from current"
 msgstr "Wiederherstellung der sicheren Werte aus den laufenden"
 
-#: da_87x.cpp:431 da_ISA.cpp:540 da_LP_8x.cpp:381
+#: da_87x.cpp:431 da_ISA.cpp:540 da_LP_8x.cpp:402
 #, c-format
 msgid "DI %d reverse"
 msgstr "DI %d Wechselschaltung"
 
-#: da_87x.cpp:432 da_ISA.cpp:541 da_LP_8x.cpp:382
+#: da_87x.cpp:432 da_ISA.cpp:541 da_LP_8x.cpp:403
 #, c-format
 msgid "DO %d reverse"
 msgstr "DO %d Wechselschaltung"
@@ -209,50 +209,54 @@ msgstr "Kanal %d Ausgang"
 msgid "IO %d reverse"
 msgstr "IO %d Wechselschaltung"
 
-#: da_LP_8x.cpp:93
+#: da_LP_8x.cpp:96
 msgid "Serial number"
 msgstr "Seriennummer"
 
-#: da_LP_8x.cpp:94
+#: da_LP_8x.cpp:97
 msgid "SDK version"
 msgstr "SDK-Version"
 
-#: da_LP_8x.cpp:95
+#: da_LP_8x.cpp:98
 msgid "DIP switch"
 msgstr "DIP-Umschalter"
 
-#: da_LP_8x.cpp:108
+#: da_LP_8x.cpp:99
+msgid "Rotary switch"
+msgstr "Drehschalter"
+
+#: da_LP_8x.cpp:112
 #, c-format
 msgid "H/A %d"
 msgstr ""
 
-#: da_LP_8x.cpp:110
+#: da_LP_8x.cpp:114
 #, c-format
 msgid "L/A %d"
 msgstr ""
 
-#: da_LP_8x.cpp:118
+#: da_LP_8x.cpp:122
 #, c-format
 msgid "Output %d"
 msgstr "Ausgang %d"
 
-#: da_LP_8x.cpp:366
+#: da_LP_8x.cpp:387
 msgid "Process parameters"
 msgstr "Parameterbearbeitung"
 
-#: da_LP_8x.cpp:367
+#: da_LP_8x.cpp:388
 msgid "Fast data get period (s)"
 msgstr "Periode der schnellen Datenerfassun (s)"
 
-#: da_LP_8x.cpp:367
+#: da_LP_8x.cpp:388
 msgid "Use 0 for disable"
 msgstr "Mit 0 deaktivieren"
 
-#: da_LP_8x.cpp:368
+#: da_LP_8x.cpp:389
 msgid "Mode"
 msgstr "Modus"
 
-#: da_LP_8x.cpp:373
+#: da_LP_8x.cpp:394
 msgid ""
 "-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with "
 "125 ohms resistor)"
@@ -302,8 +306,8 @@ msgstr ""
 "COM 9;COM 10"
 
 #: ICP_module.cpp:109
-msgid "Use OpenSCADA transport"
-msgstr "Benutzen OpenSCADA Transport"
+msgid "Transport"
+msgstr "Transport"
 
 #: ICP_module.cpp:110
 msgid "Baudrate"
@@ -364,60 +368,61 @@ msgstr "Fehler der Öffnung aller LP-Slots."
 msgid "Open LP-slot 9 error."
 msgstr "Fehler der Öffnung des LP-Slots 9."
 
-#: ICP_module.cpp:224
+#: ICP_module.cpp:228
 #, c-format
 msgid "Open COM%d port error."
 msgstr "Fehler der Öffnung des COM%d Ports."
 
-#: ICP_module.cpp:350
+#: ICP_module.cpp:361
 #, c-format
 msgid "REQ -> '%s'"
 msgstr "Anfrage -> '%s'"
 
-#: ICP_module.cpp:375
+#: ICP_module.cpp:388
 msgid "13:Error respond: Not full."
 msgstr "13:Fehler reagieren: Nicht voll."
 
-#: ICP_module.cpp:378
+#: ICP_module.cpp:393
 msgid "21:Invalid module CRC."
 msgstr "21:Ungültige Modul CRC."
 
-#: ICP_module.cpp:380 ICP_module.cpp:402
+#: ICP_module.cpp:397 ICP_module.cpp:418
 #, c-format
 msgid "RESP -> '%s'"
 msgstr "Antwort -> '%s'"
 
-#: ICP_module.cpp:386 ICP_module.cpp:407
+#: ICP_module.cpp:403 ICP_module.cpp:423
+#, c-format
 msgid "ERR -> '%s': %s"
 msgstr "Fehler -> '%s': %s"
 
-#: ICP_module.cpp:405
+#: ICP_module.cpp:421
 #, c-format
 msgid "13:Send_Receive_Cmd() error: %d."
 msgstr "13:Send_Receive_Cmd() Fehler: %d."
 
-#: ICP_module.cpp:429
+#: ICP_module.cpp:445
 msgid "Watchdog timeout (s)"
 msgstr "Zeit des Watchdogs (s)"
 
-#: ICP_module.cpp:479
+#: ICP_module.cpp:495
 msgid "No a device selected."
 msgstr "Nr. ein Gerät ausgewählt."
 
-#: ICP_module.cpp:585
+#: ICP_module.cpp:602
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-#: ICP_module.cpp:586
+#: ICP_module.cpp:603
 msgid "2:Acquisition is stopped."
 msgstr "2:Erfassung ist angehalten."
 
-#: ICP_module.cpp:618
+#: ICP_module.cpp:635
 #, c-format
 msgid "Write value to attribute '%s' error: %s"
 msgstr "Fehler der Speicherung der Werte ins Attribut '%s': %s"
 
-#: ICP_module.cpp:658
+#: ICP_module.cpp:675
 msgid "<No select>"
 msgstr "<Nicht gewählt>"
 
@@ -432,3 +437,6 @@ msgstr "ISA DAQ Board"
 #: da_LP_8x.h:41
 msgid "LP-8000, I-8000 parallel bus"
 msgstr "LP-8000, I-8000 Parallel Bus"
+
+#~ msgid "Use OpenSCADA transport"
+#~ msgstr "Benutzen OpenSCADA Transport"

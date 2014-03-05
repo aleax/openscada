@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -328,7 +328,7 @@ class WdgTree: public QDockWidget
 	bool hasFocus( );
 
     signals:
-        void selectItem( const string &vca_it, bool force = false );
+	void selectItem( const string &vca_it, bool force = false );
 
     public slots:
 	void updateTree( const string &vca_it = "" );
@@ -366,7 +366,7 @@ class ProjTree: public QDockWidget
 	VisDevelop *owner( );
 
     signals:
-        void selectItem( const string &idwdg, bool force = false );
+	void selectItem( const string &idwdg, bool force = false );
 
     public slots:
 	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL );
@@ -413,7 +413,7 @@ class LineEditProp : public QWidget
 	//> Attributes
 	DType		m_tp;
 	QLineEdit	*ed_fld;
-        bool		toClose;
+	bool		toClose;
 };
 
 //*********************************************
@@ -512,8 +512,8 @@ class DevelWdgView: public WdgView
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 	void setVisScale( float val );
-        void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
-        void setFocus( bool focus );
+	void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
+	void setFocus( bool focus );
 
 	WdgView *newWdgItem( const string &iwid );
 	void load( const string& item, bool load = true, bool init = true, XMLNode *aBr = NULL );
@@ -522,12 +522,12 @@ class DevelWdgView: public WdgView
 
 	bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
-	//> Resource and cache operations
+	// Resource and cache operations
 	string resGet( const string &res );
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
 
-	//> Changes operations
+	// Changes operations
 	void chRecord( XMLNode ch );
 	void chUpdate( );
 	void chLoadCtx( XMLNode &ch, const string &forceAttrs = "", const string &fromAttr = "" );
@@ -560,6 +560,7 @@ class DevelWdgView: public WdgView
 	//Private methods
 	bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
 	void upMouseCursors( const QPoint &pnt );
+	void selAreaUpdate( QRectF iR = QRectF() );
 
 	//Private attributes
 	uint8_t	fMakeScale	:1;	//Make visual item scaling
