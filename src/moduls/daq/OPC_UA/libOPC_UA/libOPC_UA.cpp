@@ -2458,7 +2458,7 @@ nextReq:
 
 		    respEp.reserve(2000);
 		    oNodeId(respEp, NodeId(sessId,100));	//sessionId
-		    oNodeId(respEp, NodeId(sessId,100));	//authentication Token
+		    oNodeId(respEp, NodeId(sessId,101));	//authentication Token
 		    oR(respEp, wep->sessGet(sessId).tInact, 8);	//revisedSession Timeout, ms
 		    oS(respEp, servNonce);			//serverNonce
 		    oS(respEp, certPEM2DER(wep->cert()));	//serverCertificate
