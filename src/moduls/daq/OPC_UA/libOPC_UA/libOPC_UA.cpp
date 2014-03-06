@@ -714,12 +714,13 @@ void UA::oNodeId( string &buf, const NodeId &val )
     switch(val.type())
     {
 	case NodeId::Numeric:
-	    if(val.ns() == 0 && val.numbVal() <= 255)
+	    /*if(val.ns() == 0 && val.numbVal() <= 255)
 	    {
 		buf += (char)0x00;
 		buf += (char)val.numbVal();
 	    }
-	    else if(val.ns() <= 255 && val.numbVal() <= 65535)
+	    else*/
+	    if(val.ns() <= 255 && val.numbVal() <= 65535)
 	    {
 		buf += (char)0x01;
 		buf += (char)val.ns();
