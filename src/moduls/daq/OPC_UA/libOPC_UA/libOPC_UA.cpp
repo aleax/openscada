@@ -2457,8 +2457,8 @@ nextReq:
 		    reqTp = OpcUa_CreateSessionResponse;
 
 		    respEp.reserve(2000);
-		    oNodeId(respEp, NodeId(sessId,100));	//sessionId
-		    oNodeId(respEp, NodeId(sessId,101));	//authentication Token
+		    oNodeId(respEp, NodeId(sessId,1));	//sessionId
+		    oNodeId(respEp, NodeId(sessId,0));	//authentication Token
 		    oR(respEp, wep->sessGet(sessId).tInact, 8);	//revisedSession Timeout, ms
 		    oS(respEp, servNonce);			//serverNonce
 		    oS(respEp, certPEM2DER(wep->cert()));	//serverCertificate
@@ -3436,7 +3436,7 @@ void Server::EP::setEnable( bool vl )
 	 nodeReg(OpcUa_Server_ServerStatus,OpcUa_Server_ServerStatus_State,"State",NC_Variable,OpcUa_HasComponent,OpcUa_BaseDataVariableType)->
 	    setAttr("Value","0")->setAttr("DataType",int2str(OpcUa_Int32));
 	nodeReg(OpcUa_Server,OpcUa_Server_NamespaceArray,"NamespaceArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
-	    setAttr("ValueRank","1")->setAttr("Value","http://opcfundation.org/UA/\n"+serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
+	    setAttr("ValueRank","1")->setAttr("Value","http://opcfundation.org/UA/\n"+serv->applicationUri()+"\nOpenSCADA_DAQ")->setAttr("DataType",int2str(0x80|OpcUa_String));
 	nodeReg(OpcUa_Server,OpcUa_Server_ServerArray,"ServerArray",NC_Variable,OpcUa_HasProperty,OpcUa_PropertyType)->
 	    setAttr("ValueRank","1")->setAttr("Value",serv->applicationUri())->setAttr("DataType",int2str(0x80|OpcUa_String));
       nodeReg(OpcUa_RootFolder,OpcUa_TypesFolder,"Types",NC_Object,OpcUa_Organizes,OpcUa_FolderType);
