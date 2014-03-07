@@ -51,7 +51,7 @@ using namespace OPC;
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
-#define OpenSCADA_DAQ_NS 2
+#define NS_OpenSCADA_DAQ 2
 
 namespace OPC_UA
 {
@@ -153,7 +153,7 @@ class TProt: public TProtocol, public Server
 	TProt( string name );
 	~TProt( );
 
-	//> Generic variables
+	// Generic variables
 	string lang2CodeSYS( )		{ return Mess->lang2Code(); }
 	string applicationUri( );
 	string productUri( );
@@ -162,7 +162,7 @@ class TProt: public TProtocol, public Server
 	void modStart( );
 	void modStop( );
 
-	//> Server's functions
+	// Server's functions
 	void epList( vector<string> &ls )	{ chldList(mEndPnt,ls); }
 	bool epPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
 	void epAdd( const string &id, const string &db = "*.*" );

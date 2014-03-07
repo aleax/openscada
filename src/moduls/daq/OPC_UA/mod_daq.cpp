@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2009-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -244,7 +244,7 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
-    XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
+    XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 
     try
     {
@@ -437,9 +437,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	size_t stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
-	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
+	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 	for(int i_a = 1; i_a <= 22; i_a++)
-	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", TSYS::int2str(i_a));
+	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(i_a));
 	reqService(req);
 	if(!req.attr("err").empty())
 	{
@@ -485,7 +485,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		{
 		    nANm = _("DataType");
 		    XML_N reqTp("opc.tcp");
-		    reqTp.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER))->
+		    reqTp.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER))->
 			childAdd("node")->setAttr("nodeId", nAVl)->setAttr("attributeId", "3");
 		    reqService(reqTp);
 		    if(!reqTp.attr("err").empty()) mess_err(nodePath().c_str(), "%s", reqTp.attr("err").c_str());
@@ -535,8 +535,9 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XML_N req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
-			      setAttr("browseDirection",TSYS::int2str(BD_BOTH))->
-			      setAttr("resultMask",TSYS::int2str(/*0x3f*/RdRm_IsForward|RdRm_BrowseName));
+			      setAttr("referenceTypeId",i2s(OpcUa_HierarchicalReferences))->
+			      setAttr("browseDirection",i2s(BD_BOTH))->
+			      setAttr("resultMask",i2s(/*0x3f*/RdRm_IsForward|RdRm_BrowseName));
 	try{ reqService(req); } catch(TError) { opt->childAdd("el")->setText(_("Root folder (84)")); return; }
 	if(!req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize())
 	{
@@ -578,10 +579,7 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), p_e
 
 }
 
-TMdPrm::~TMdPrm( )
-{
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
 void TMdPrm::postEnable( int flag )
 {
@@ -635,12 +633,12 @@ string TMdPrm::attrPrc( )
     for(int off = 0; (snd=TSYS::strParse(cfg("ND_LS").getS(),0,"\n",&off)).size(); )
     {
 	//>> Request for node class request
-	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_NodeClass));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_BrowseName));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_DisplayName));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_Value));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_AccessLevel));
+	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_NodeClass));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_BrowseName));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_DisplayName));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_Value));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_AccessLevel));
 	owner().reqService(req);
 	if(!req.attr("err").empty())
 	{
@@ -665,8 +663,8 @@ string TMdPrm::attrPrc( )
 		string aid = TSYS::strEncode(req.childGet(1)->text(),TSYS::oscdID);
 		if(vlPresent(aid))
 		    for(int i_v = 1; true; i_v++)
-			if(!vlPresent(aid+TSYS::int2str(i_v)))
-			{ aid += TSYS::int2str(i_v); break; }
+			if(!vlPresent(aid+i2s(i_v)))
+			{ aid += i2s(i_v); break; }
 
 		//>>> Value type prepare
 		TFld::Type vtp = TFld::String;
@@ -693,7 +691,7 @@ string TMdPrm::attrPrc( )
 	}
 
 	//>> Browse request for get child nodes
-	/*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH));
+	/*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",i2s(TProt::BD_BOTH));
 	reqOPC(req);
 	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 	XMLNode *rn = req.childGet(0);*/
@@ -804,7 +802,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     XML_N req("opc.tcp");
     req.setAttr("id", "Write")->
 	childAdd("node")->setAttr("nodeId", TSYS::strLine(valo.fld().reserve(),0))->
-			  setAttr("attributeId", TSYS::int2str(AId_Value))->
+			  setAttr("attributeId", i2s(AId_Value))->
 			  setAttr("EncodingMask", TSYS::strLine(valo.fld().reserve(),1))->
 			  setText(vl.getS());
     owner().reqService(req);

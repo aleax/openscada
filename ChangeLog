@@ -1,3 +1,8 @@
+2014-03-07 Roman
+- DAQ.OPC_UA: OpcUa_Server_NamespaceArray append into OpenSCADA module is added. NS_OPC_UA(0) and NS_SERVER(1) is added.
+    Browse allow is added for zero ReferenceTypeId.
+
+
 2014-03-06 Roman
 - DAQ.OPC_UA: Some NameSpaces using ordered and sync to 2055 content. For OpenSCADA_DAQ_NS set index 2.
     For sessionId set NS to 1 and for authentication Token to 0.

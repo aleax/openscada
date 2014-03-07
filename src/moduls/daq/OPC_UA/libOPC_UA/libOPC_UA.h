@@ -42,7 +42,7 @@ using std::map;
 namespace OPC
 {
 
-//> Constants
+//Constants
 #define OpcUa_ProtocolVersion	0
 #define OpcUa_ReciveBufferSize	0x10000
 #define OpcUa_SendBufferSize	0x10000
@@ -51,7 +51,10 @@ namespace OPC
 
 #define OpcUa_NPosID		0xFFFFFFFF
 
-//> Built-in Data Types
+#define NS_OPC_UA		0
+#define NS_SERVER		1
+
+//Built-in Data Types
 #define OpcUa_Boolean		1
 #define OpcUa_SByte		2
 #define OpcUa_Byte		3
@@ -77,7 +80,7 @@ namespace OPC
 #define OpcUa_DataValue		23
 #define OpcUa_DiagnosticInfo	25
 
-//> Status codes
+//Status codes
 #define OpcUa_BadUnexpectedError	0x80010000
 #define OpcUa_BadCommunicationError	0x80050000
 #define OpcUa_BadEncodingError		0x80060000
@@ -117,7 +120,7 @@ namespace OPC
 #define OpcUa_BadResponseTooLarge	0x80B90000
 #define OpcUa_BadProtocolVersionUnsupported	0x80BE0000
 
-//> Requests types
+//Requests types
 #define OpcUa_ServiceFault			397
 #define OpcUa_FindServersRequest		422
 #define OpcUa_FindServersResponse		425
@@ -165,7 +168,7 @@ namespace OPC
 #define OpcUa_DeleteSubscriptionsRequest	847
 #define OpcUa_DeleteSubscriptionsResponse	850
 
-//> Object Identifiers
+//Object Identifiers
 #define OpcUa_RootFolder		84
 #define OpcUa_ObjectsFolder		85
 #define OpcUa_TypesFolder		86
@@ -182,7 +185,7 @@ namespace OPC
 #define OpcUa_DataChangeNotification	811
 #define OpcUa_Server			2253
 
-//> ObjectType Identifiers
+//ObjectType Identifiers
 #define OpcUa_BaseObjectType		58
 #define OpcUa_FolderType		61
 #define OpcUa_DataTypeSystemType	75
@@ -202,7 +205,7 @@ namespace OPC
 #define OpcUa_StateType			2307
 #define OpcUa_TransitionType		2310
 
-//> Variable Identifiers
+//Variable Identifiers
 #define OpcUa_BaseVariableType		62
 #define OpcUa_BaseDataVariableType	63
 #define OpcUa_PropertyType		68
@@ -212,7 +215,7 @@ namespace OPC
 #define OpcUa_Server_ServerStatus_State	2259
 #define OpcUa_Server_Auditing		2994
 
-//> ReferenceType Identifiers
+//ReferenceType Identifiers
 #define OpcUa_References		31
 #define OpcUa_NonHierarchicalReferences	32
 #define OpcUa_HierarchicalReferences	33
@@ -230,7 +233,7 @@ namespace OPC
 #define OpcUa_HasComponent		47
 #define OpcUa_HasModelParent		50
 
-//> DataType Identifiers
+//DataType Identifiers
 #define OpcUa_BaseDataType		24
 #define OpcUa_Number			26
 #define OpcUa_Integer			27
@@ -250,7 +253,7 @@ namespace OPC
 #define OpcUa_String			12
 #define OpcUa_ServerStatusDataType	862
 
-//> VariableType Identifiers
+//VariableType Identifiers
 #define OpcUa_ServerStatusType		2138
 
 enum SerializerType	{ ST_Binary };
@@ -258,7 +261,7 @@ enum SC_ReqTP		{ SC_ISSUE = 0, SC_RENEW = 1 };
 enum MessageSecurityMode{ MS_None = 1, MS_Sign, MS_SignAndEncrypt };
 enum NodeClasses	{ NC_Object = 1, NC_Variable = 2, NC_Method = 4, NC_ObjectType = 8, NC_VariableType = 16,
 			  NC_ReferenceType = 32, NC_DataType = 64, NC_View = 128 };
-enum BrowseDirection	{ BD_FORWARD, BD_INVERSE, BD_BOTH };
+enum BrowseDirection	{ BD_FORWARD = 0, BD_INVERSE, BD_BOTH };
 enum TimestampsToReturn	{ TS_SOURCE = 0, TS_SERVER, TS_BOTH, TS_NEITHER };
 enum Access		{ ACS_Read = 0x01, ACS_Write = 0x02, ACS_HistRead = 0x04, ACS_HistWrite = 0x08, ACS_SemChange = 0x10 };
 enum RefDscrResMask	{ RdRm_RefType = 0x01, RdRm_IsForward = 0x02, RdRm_NodeClass = 0x04, RdRm_BrowseName = 0x08,
@@ -445,7 +448,7 @@ class NodeId
 	void setNumbVal( uint32_t in );
 	void setStrVal( const string &istr, Type tp = String );
 
-	//> Static
+	// Static
 	static NodeId fromAddr( const string &strAddr );
 	string toAddr( ) const;
 
@@ -489,7 +492,7 @@ class UA
 	virtual string lang2CodeSYS( )	{ return "en"; }
 	virtual void debugMess( const string &mess ) { }
 
-	//> Protocol's data processing
+	// Protocol's data processing
 	//----------------------------------------------------
 	static string iErr( const string &buf, int &off );
 	static const char *iVal( const string &buf, int &off, char vSz );
@@ -663,9 +666,8 @@ class Server: public UA
 
 	    map<string, ContPoint> cntPnts;	//>> Continuation points
 
-	    //> Subscription
+	    // Subscription
 	    deque<string>	publishReqs;	//Publish requests queue
-
 	};
 
 	//* Subscription object by monitoreditems set
@@ -744,7 +746,7 @@ class Server: public UA
 		virtual string pvKey( ) = 0;
 		virtual double subscrProcPer( ) = 0;	//Generic minimum cycle period of publishes and the data processing
 
-		//> Limits
+		// Limits
 		virtual uint32_t limSubScr( )	{ return 10; }
 		virtual uint32_t limMonitItms( ){ return 1000; }
 
@@ -753,7 +755,7 @@ class Server: public UA
 		virtual void setEnable( bool vl );
 		void subScrCycle( unsigned cntr );	//Subscriptions processing cycle
 
-		//> Security policies
+		// Security policies
 		int secSize( )		{ return mSec.size(); }
 		string secPolicy( int isec );
 		MessageSecurityMode secMessageMode( int isec );
@@ -765,15 +767,15 @@ class Server: public UA
 		    const string &inPrtId = "", const XML_N &identTkn = XML_N() );
 		void sessClose( int sid );
 		Sess sessGet( int sid );
-		//>> Continuation points by Browse and BrowseNext
+		//  Continuation points by Browse and BrowseNext
 		Sess::ContPoint sessCpGet( int sid, const string &cpId );
 		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
-		//>> Subsciption
+		//  Subsciption
 		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = OpcUa_NPosID for new create
 		    double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0,
 		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
 		Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
-		//>> Monitored items
+		//  Monitored items
 		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = OpcUa_NPosID for new create
 		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
 		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
@@ -807,7 +809,7 @@ class Server: public UA
 	Server( );
 	~Server( );
 
-	//> Generic variables
+	// Generic variables
 	virtual string applicationUri( ) = 0;
 	virtual string productUri( ) = 0;
 	virtual string applicationName( ) = 0;
@@ -817,7 +819,7 @@ class Server: public UA
 	virtual bool inReq( string &request, const string &inPrtId, string *answ = NULL );
 	virtual int writeToClient( const string &threadId, const string &data ) = 0;
 
-	//> Channel manipulation functions
+	// Channel manipulation functions
 	int chnlSet( int cid, const string &iEp, int32_t lifeTm = 0,
 	    const string& iClCert = "", const string &iSecPolicy = "None", char iSecMessMode = 1 );
 	void chnlClose( int cid );
@@ -828,7 +830,7 @@ class Server: public UA
 
     protected:
 	//Methods
-	//> Request to EndPoints
+	// Request to EndPoints
 	virtual void epEnList( vector<string> &ls ) = 0;
 	virtual EP *epEnAt( const string &ep ) = 0;
 
