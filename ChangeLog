@@ -1,3 +1,7 @@
+2014-03-11 Roman
+- DAQ.Comedi: Several subdevices into equal types support is added, like for TTL and relay DIO.
+
+
 2014-03-07 Roman
 - DAQ.OPC_UA: OpcUa_Server_NamespaceArray append into OpenSCADA module is added. NS_OPC_UA(0) and NS_SERVER(1) is added.
     Browse allow is added for zero ReferenceTypeId.

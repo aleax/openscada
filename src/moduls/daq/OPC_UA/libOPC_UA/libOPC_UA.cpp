@@ -2858,7 +2858,7 @@ nextReq:
 		    oN(respEp, 0, 4);			//diagnosticInfos []
 		    break;
 		}
-		case OpcUa_TranslateBrowsePathsToNodeIdsRequest: //!!!! Error always
+		case OpcUa_TranslateBrowsePathsToNodeIdsRequest:
 		{
 		    //  Request
 							//> browsePaths []

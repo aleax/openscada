@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.Comedi file: module.h
 /***************************************************************************
- *   Copyright (C) 2012 by Roman Savochenko                                *
+ *   Copyright (C) 2012-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 	void getVals( const string &atr = "" );
 	string modPrm( const string &prm );
 
-        void setModPrm( const string &prm, const string &val );
+	void setModPrm( const string &prm, const string &val );
 
 	TMdContr &owner( );
 
@@ -75,7 +75,7 @@ class TMdPrm : public TParamContr
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	void vlGet( TVal &val );
-        void vlSet( TVal &val, const TVariant &pvl );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	//Attributes
@@ -100,8 +100,8 @@ class TMdContr: public TController
 
 	string getStatus( );
 
-	int64_t period( )       { return mPer; }
-        string  cron( )         { return mSched; }
+	int64_t	period( )	{ return mPer; }
+	string	cron( )		{ return mSched; }
 	int64_t	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -112,7 +112,7 @@ class TMdContr: public TController
 	//Methods
 	void start_( );
 	void stop_( );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Methods
@@ -120,10 +120,10 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res     en_res;                         //Resource for enable params
+	Res	en_res;				//Resource for enable params
 	int64_t	&mPrior;			//Process task priority
-	TCfg    &mSched;                        //Calc schedule
-	int64_t mPer;
+	TCfg	&mSched;			//Calc schedule
+	int64_t	mPer;
 
 	bool	prcSt,				//Process task active
 		call_st,			//Calc now stat
