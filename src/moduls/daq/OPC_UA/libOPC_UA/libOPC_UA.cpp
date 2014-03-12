@@ -2871,20 +2871,37 @@ nextReq:
 		    //  Pathes list process and request form
 		    for(unsigned i_p = 0; i_p < ip; i_p++)
 		    {
-			iNodeId(rb, off);		//startingNode
+			NodeId sN = iNodeId(rb, off);	//startingNode
+			map<string, XML_N*>::iterator ndX = wep->ndMap.find(sN.toAddr());
 							//>> relativePath
 			uint32_t irp = iNu(rb, off, 4);	//rpaths number
-			for(unsigned i_rp = 0; i_rp < irp; i_rp++)
-			{
-			    iNodeId(rb, off);		//referenceTypeId
-			    iNu(rb, off, 1);		//isInverse
-			    iNu(rb, off, 1);		//includeSubtypes
-			    iSqlf(rb, off);		//targetName
-			}
 
 			//   Path result
-			oNu(respEp, OpcUa_BadNoMatch, 4);	//statusCode, 0x806f0000 (BadNoMatch)
-			oNu(respEp, 0, 4);		//targets [], 0 !!!!
+			int stCodeOff = respEp.size(); oNu(respEp, OpcUa_BadNoMatch, 4);	//<< statusCode, 0x806f0000 (BadNoMatch)
+			int tNOff = respEp.size(); oNu(respEp, 0, 4);				//<< targets [], 0
+
+			unsigned o_rp = 0;
+			for(unsigned i_rp = 0; i_rp < irp; i_rp++)
+			{
+			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
+			    bool inv = iNu(rb, off, 1);		//isInverse
+			    bool incSubTp = iNu(rb, off, 1);	//includeSubtypes
+			    string tNm = iSqlf(rb, off);	//targetName
+
+			    if(ndX != wep->ndMap.end() && rTpId.numbVal() == OpcUa_HierarchicalReferences && !inv)
+				for(unsigned i_ch = 0; i_ch < ndX->second->childSize(); i_ch++)
+				    if(ndX->second->childGet(i_ch)->attr("name") == tNm)
+				    {
+					oNodeId(respEp, NodeId::fromAddr(ndX->second->childGet(i_ch)->attr("NodeId")));	//ExpandedNodeId
+					oNu(respEp, 0xFFFFFFFF, 4);	//Index
+					o_rp++;
+				    }
+			}
+			if(o_rp)
+			{
+			    oNu(respEp, 0, 4, stCodeOff);	//<< statusCode, 0x00000000
+			    oNu(respEp, o_rp, 4, tNOff);	//<< targets [], o_rp
+			}
 		    }
 		    oN(respEp, 0, 4);			//diagnosticInfos []
 		    break;

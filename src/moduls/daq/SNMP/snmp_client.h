@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp_client.h
 /***************************************************************************
- *   Copyright (C) 2006-2011 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -95,7 +95,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-        string  cron( )         { return cfg("SCHEDULE").getS(); }
+	string	cron( )		{ return cfg("SCHEDULE").getS(); }
 	int	prior( )	{ return m_prior; }
 	string	ver( )		{ return cfg("VER").getS(); }
 	int	pAttrLimit( )	{ return m_pattr_lim; }
@@ -105,13 +105,13 @@ class TMdContr: public TController
 	string	secAuthProto( );
 	string	secAuthPass( );
 	string	secPrivProto( );
-	string  secPrivPass( );
+	string	secPrivPass( );
 
 	void	setSecLev(const string &vl);
-	void    setSecAuthProto(const string &vl);
-	void    setSecAuthPass(const string &vl);
-	void    setSecPrivProto(const string &vl);
-	void    setSecPrivPass(const string &vl);
+	void	setSecAuthProto(const string &vl);
+	void	setSecAuthPass(const string &vl);
+	void	setSecPrivProto(const string &vl);
+	void	setSecPrivPass(const string &vl);
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -142,7 +142,7 @@ class TMdContr: public TController
 	int64_t	mPer;
 
 	bool	prc_st,		// Process task active
-		call_st,        // Calc now stat
+		call_st,	// Calc now stat
 		endrun_req,	// Request to stop of the Process task
 		prmEnErr;	// Error connection pass for enable parameters
 	vector< AutoHD<TMdPrm> >  p_hd;

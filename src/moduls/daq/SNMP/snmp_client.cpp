@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.SNMP file: snmp.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2011 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -131,7 +131,10 @@ TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
-TMdContr::~TMdContr( )	{ if(run_st) stop(); }
+TMdContr::~TMdContr( )
+{
+    if(run_st) stop();
+}
 
 string TMdContr::getStatus( )
 {
@@ -678,7 +681,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     {
 	TParamContr::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"rows","8",
-            "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
+	    "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
 		"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
 		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code addressing for object \"System\";\n"
 		"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias (object \"System\");\n"
@@ -697,11 +700,11 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     //Send to active reserve station
     if(owner().redntUse())
     {
-        if(valo.getS(NULL,true) == pvl.getS()) return;
-        XMLNode req("set");
-        req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
-        SYS->daq().at().rdStRequest(owner().workId(),req);
-        return;
+	if(valo.getS(NULL,true) == pvl.getS()) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
     }
 
     //Direct write

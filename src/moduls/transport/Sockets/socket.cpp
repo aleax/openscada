@@ -94,10 +94,7 @@ TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
     mSource	= name;
 }
 
-TTransSock::~TTransSock( )
-{
-
-}
+TTransSock::~TTransSock( )	{ }
 
 void TTransSock::postEnable( int flag )
 {
@@ -757,10 +754,15 @@ void TSocketOut::start( )
 
     if(run_st) return;
 
-    //> Status clear
+    //Reconnect try after 2*tmCon()
+    if((TSYS::curTime()-mLstReqTm) < 2000000ll*tmCon())
+	throw TError(nodePath().c_str(),_("Try next connect after '%f' seconds!"),(2*tmCon()-1e-6*(TSYS::curTime()-mLstReqTm)));
+    mLstReqTm = TSYS::curTime();
+
+    //Status clear
     trIn = trOut = 0;
 
-    //> Connect to remote host
+    //Connect to remote host
     string s_type = TSYS::strSepParse(addr(), 0, ':');
 
     if(s_type == S_NM_SOCK)	type = SOCK_FORCE;
@@ -794,13 +796,13 @@ void TSocketOut::start( )
 	    name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;
-	//> Get system port for "oscada" /etc/services
+	//Get system port for "oscada" /etc/services
 	struct servent *sptr = getservbyname(port.c_str(), (type == SOCK_TCP)?"tcp":"udp");
 	if(sptr != NULL)                       name_in.sin_port = sptr->s_port;
 	else if(htons(atol(port.c_str())) > 0) name_in.sin_port = htons(atol(port.c_str()));
 	else name_in.sin_port = 10001;
 
-	//> Create socket
+	//Create socket
 	if(type == SOCK_TCP)
 	{
 	    if((sock_fd=socket(PF_INET,SOCK_STREAM,0)) == -1)
@@ -813,7 +815,7 @@ void TSocketOut::start( )
 	    if((sock_fd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
 		throw TError(nodePath().c_str(), _("Error creation UDP socket: %s!"), strerror(errno));
 	}
-	//> Connect to socket
+	//Connect to socket
 	int flags = fcntl(sock_fd, F_GETFL, 0);
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
 	int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
@@ -842,7 +844,7 @@ void TSocketOut::start( )
 	name_un.sun_family = AF_UNIX;
 	strncpy(name_un.sun_path, path.c_str(), sizeof(name_un.sun_path));
 
-	//> Create socket
+	//Create socket
 	if((sock_fd=socket(PF_UNIX,SOCK_STREAM,0)) == -1)
 	    throw TError(nodePath().c_str(), _("Error creation UNIX socket: %s!"), strerror(errno));
 	if(connect(sock_fd,(sockaddr*)&name_un,sizeof(name_un)) == -1)

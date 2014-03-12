@@ -1,3 +1,10 @@
+2014-03-12 Roman
+- DAQ.ModBus: Remove connection try from controller's object start().
+- DAQ.OPC_UA: TranslateBrowsePathsToNodeIds is implement for hierachical part (OpcUa_HierarchicalReferences) request process.
+- Transport.Sockets: Connections frequence is limited to 2xConectTimeout, for hangs at connection timeouts decrease.
+- FIX:UI.Vision: Disable AcceptTouchEvents for primitive "Document", implement by WebKit, for fix Mouse events lock at some sensors.
+
+
 2014-03-11 Roman
 - DAQ.Comedi: Several subdevices into equal types support is added, like for TTL and relay DIO.
 

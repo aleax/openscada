@@ -32,7 +32,7 @@
 
 #include "mod_daq.h"
 
-OPC_UA::TTpContr *OPC_UA::mod;  //Pointer for direct access to DAQ module
+OPC_UA::TTpContr *OPC_UA::mod;	//Pointer for direct access to DAQ module
 
 using namespace OPC_UA;
 

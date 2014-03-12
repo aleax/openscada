@@ -3864,6 +3864,7 @@ void ShapeDocument::init( WdgView *w )
     QVBoxLayout *lay = new QVBoxLayout(w);
 #ifdef HAVE_WEBKIT
     shD->web = new QWebView(w);
+    shD->web->setAttribute(Qt::WA_AcceptTouchEvents, false);
 #else
     shD->web = new QTextBrowser(w);
 #endif

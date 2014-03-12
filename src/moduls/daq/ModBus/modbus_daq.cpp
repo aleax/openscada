@@ -188,31 +188,31 @@ void TMdContr::start_( )
 {
     if(prc_st) return;
 
-    //> Establish connection
-    AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
+    //Establish connection
+    /*AutoHD<TTransportOut> tr = SYS->transport().at().at(TSYS::strParse(addr(),0,".")).at().outAt(TSYS::strParse(addr(),1,"."));
     try { tr.at().start(); }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }*/
 
-    //> Schedule process
+    //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
-    //> Clear statistic
+    //Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
     tmDelay = -1;
 
-    //> Reenable parameters for data blocks structure update
-    //>> Asynchronous writings queue clear
-    ResAlloc resAsWr(asWr_res,true);
+    //Reenable parameters for data blocks structure update
+    // Asynchronous writings queue clear
+    ResAlloc resAsWr(asWr_res, true);
     asynchWrs.clear();
     resAsWr.release();
 
-    //>> Clear data blocks
+    // Clear data blocks
     acqBlks.clear();
     acqBlksIn.clear();
     acqBlksCoil.clear();
     acqBlksCoilIn.clear();
 
-    //>> Reenable parameters
+    // Reenable parameters
     try
     {
 	vector<string> pls;
@@ -224,21 +224,21 @@ void TMdContr::start_( )
 	isReload = false;
     } catch(TError) { isReload = false; throw; }
 
-    //> Start the gathering data task
+    //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
     if(tmDelay >= 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
 
-    //> Clear statistic
+    //Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
 
-    //> Clear process parameters list
+    //Clear process parameters list
     p_hd.clear();
 }
 
