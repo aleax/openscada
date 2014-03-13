@@ -379,9 +379,8 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat())	return;
-
-    TParamContr::enable();
+    bool isProc = false, isFullEn = !enableStat();
+    if(isFullEn) TParamContr::enable();
 
     vector<string> als;
 
@@ -390,7 +389,7 @@ void TMdPrm::enable( )
 	if(isPRefl())
 	{
 	    vector<string> list;
-	    *prm_refl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.', true);
+	    if(prm_refl->freeStat()) *prm_refl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.', true);
 	    if(!prm_refl->freeStat())
 	    {
 		prm_refl->at().vlList(list);
@@ -403,8 +402,9 @@ void TMdPrm::enable( )
 		    als.push_back(list[i_l]);
 		}
 	    }
+	    isProc = true;
 	}
-	else if(isStd())
+	else if(isStd() && !tmpl->val.func())
 	{
 	    bool to_make = false;
 	    unsigned fId = 0;
@@ -466,12 +466,13 @@ void TMdPrm::enable( )
 		int id_this = tmpl->val.ioId("this");
 		if(id_this >= 0) tmpl->val.setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	    }
+	    isProc = true;
 	}
     }
     catch(...){ disable(); throw; }
 
-    //> Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
+    //Check for delete DAQ parameter's attributes
+    for(int i_p = 0; isProc && i_p < (int)p_el.fldSize(); i_p++)
     {
         unsigned i_l;
         for(i_l = 0; i_l < als.size(); i_l++)
@@ -482,9 +483,8 @@ void TMdPrm::enable( )
             catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    if(owner().startStat()) calc(true, false, 0);
-
-    owner().prmEn(this, true);
+    if(isFullEn && owner().startStat()) calc(true, false, 0);
+    if(isFullEn) owner().prmEn(this, true);
 }
 
 void TMdPrm::disable( )
@@ -695,6 +695,8 @@ TMdPrm::SLnk &TMdPrm::lnk( int num )
 
 void TMdPrm::calc( bool first, bool last, double frq )
 {
+    if(!first && isPRefl() /*&& prm_refl->freeStat()*/) enable();
+
     if(!isStd() || !tmpl->val.func()) return;
     try
     {
