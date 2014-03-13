@@ -479,7 +479,7 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 
     //Get records from buffer
     unsigned i_buf = headBuf;
-    while(level >= 0 && (!arch.size() || arch==BUF_ARCH_NM) && time(NULL) < upTo)
+    while(level >= 0 && (!arch.size() || arch == BUF_ARCH_NM) && time(NULL) < upTo)
     {
 	if(mBuf[i_buf].time >= b_tm && mBuf[i_buf].time != 0 && mBuf[i_buf].time <= e_tm &&
 		abs(mBuf[i_buf].level) >= level && re.test(mBuf[i_buf].categ))

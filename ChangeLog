@@ -1,3 +1,9 @@
+2014-03-14 Roman
+- FIX:Transport.Sockets: Connections frequence limit fix for ConectTimeout into miliseconds.
+- FIX:DAQ.LogicLev: Reflection type is fixed and expanded for connection to target parameter update and attributes list sync
+    into calc period.
+
+
 2014-03-12 Roman
 - DAQ.ModBus: Remove connection try from controller's object start().
 - DAQ.OPC_UA: TranslateBrowsePathsToNodeIds is implement for hierachical part (OpcUa_HierarchicalReferences) request process.

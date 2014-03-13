@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -431,16 +431,16 @@ void TMdPrm::enable( )
 
 			TFld::Type tp = TFld::type(tmpl->val.ioType(i_io));
 			if((fId=p_el.fldId(tmpl->val.func()->io(i_io)->id(),true)) < p_el.fldSize())
-            		{
-                	    if(p_el.fldAt(fId).type() != tp)
-                    		try{ p_el.fldDel(fId); }
-                    		catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
-                	    else
-                	    {
-                    		p_el.fldAt(fId).setFlg(flg);
-                    		p_el.fldAt(fId).setDescr(tmpl->val.func()->io(i_io)->name().c_str());
-                	    }
-            		}
+			{
+			    if(p_el.fldAt(fId).type() != tp)
+				try{ p_el.fldDel(fId); }
+				catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+			    else
+			    {
+				p_el.fldAt(fId).setFlg(flg);
+				p_el.fldAt(fId).setDescr(tmpl->val.func()->io(i_io)->name().c_str());
+			    }
+			}
 
 			if(!vlPresent(tmpl->val.func()->io(i_io)->id()))
 			    p_el.fldAdd(new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg));
@@ -474,13 +474,13 @@ void TMdPrm::enable( )
     //Check for delete DAQ parameter's attributes
     for(int i_p = 0; isProc && i_p < (int)p_el.fldSize(); i_p++)
     {
-        unsigned i_l;
-        for(i_l = 0; i_l < als.size(); i_l++)
-            if(p_el.fldAt(i_p).name() == als[i_l])
-                break;
-        if(i_l >= als.size())
-            try{ p_el.fldDel(i_p); i_p--; }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(p_el.fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try{ p_el.fldDel(i_p); i_p--; }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     if(isFullEn && owner().startStat()) calc(true, false, 0);
@@ -695,7 +695,7 @@ TMdPrm::SLnk &TMdPrm::lnk( int num )
 
 void TMdPrm::calc( bool first, bool last, double frq )
 {
-    if(!first && isPRefl() /*&& prm_refl->freeStat()*/) enable();
+    if(isPRefl() && (!first || prm_refl->freeStat())) enable();
 
     if(!isStd() || !tmpl->val.func()) return;
     try
