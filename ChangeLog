@@ -1,4 +1,11 @@
 2014-03-14 Roman
+- !:DAQ.AMRDevs: Enable build by default. Some description and translation fix.
+- DAQ.OPC_UA: TranslateBrowsePathsToNodeIds is rewrote to use Browse service backend for hierarchical find path's items.
+- DAQ.System: Set attributes to EVAL is expanded for separated fields.
+- Transport.Sockets: Connections frequence limit disabled by problems for some usings.
+
+
+2014-03-13 Roman
 - FIX:Transport.Sockets: Connections frequence limit fix for ConectTimeout into miliseconds.
 - FIX:DAQ.LogicLev: Reflection type is fixed and expanded for connection to target parameter update and attributes list sync
     into calc period.

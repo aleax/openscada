@@ -755,9 +755,9 @@ void TSocketOut::start( )
     if(run_st) return;
 
     //Reconnect try after 2*tmCon()
-    if((TSYS::curTime()-mLstReqTm) < 2000ll*tmCon())
+    /*if((TSYS::curTime()-mLstReqTm) < 2000ll*tmCon())
 	throw TError(nodePath().c_str(),_("Try next connect after '%g' seconds!"),(2e-3*tmCon()-1e-6*(TSYS::curTime()-mLstReqTm)));
-    mLstReqTm = TSYS::curTime();
+    mLstReqTm = TSYS::curTime();*/
 
     //Status clear
     trIn = trOut = 0;

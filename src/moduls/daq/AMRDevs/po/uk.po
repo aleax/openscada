@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-02 10:15+0200\n"
+"POT-Creation-Date: 2014-03-13 20:00+0200\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -23,7 +23,7 @@ msgstr "13:Помилка відповіді: Не повна."
 msgid "13:Error respond: CRC check error."
 msgstr "13:Помилка відповіді: Помилка перевірки CRC."
 
-#: da_Ergomera.cpp:173 da_Kontar.cpp:278
+#: da_Ergomera.cpp:173 da_Kontar.cpp:288
 #, c-format
 msgid "14:Connection error - %s"
 msgstr "14:Помилка підключення - %s"
@@ -163,6 +163,7 @@ msgid "Parameter"
 msgstr "Параметр"
 
 #: da_Kontar.cpp:196
+#, c-format
 msgid "Master PLC ID Request: '%s'"
 msgstr "Запит ID МастерПЛК: '%s'"
 
@@ -171,7 +172,7 @@ msgstr "Запит ID МастерПЛК: '%s'"
 msgid "Connection from PLC Kontar %xh."
 msgstr "Підключення з ПЛК Контар %xh."
 
-#: da_Kontar.cpp:207
+#: da_Kontar.cpp:207 da_Kontar.cpp:265
 #, c-format
 msgid "Password sequence set: '%s'."
 msgstr "Вст. послідовн. пароля: '%s'."
@@ -186,10 +187,12 @@ msgid "No a propper connection from PLC."
 msgstr "Немає придатного підключення з ПЛК."
 
 #: da_Kontar.cpp:230
+#, c-format
 msgid "Request: '%s'"
 msgstr "Запит: '%s'"
 
 #: da_Kontar.cpp:237
+#, c-format
 msgid "Request (enc): '%s'"
 msgstr "Запит (код): '%s'"
 
@@ -198,48 +201,51 @@ msgstr "Запит (код): '%s'"
 msgid "13:Unapt MasterPLC ID: %xh != %xh"
 msgstr "13:Непридатний ID МастерПЛК: %xh != %xh"
 
-#: da_Kontar.cpp:259
+#: da_Kontar.cpp:268
 msgid "12:PLC: The password encripted by master key."
 msgstr "12:ПЛК: Пароль кодовано мастер ключем."
 
-#: da_Kontar.cpp:260
+#: da_Kontar.cpp:270
 msgid "12:PLC: Error."
 msgstr "12:ПЛК: Помилка."
 
-#: da_Kontar.cpp:261
+#: da_Kontar.cpp:271
 msgid "12:PLC: Unknown command."
 msgstr "12:ПЛК: Невідома команда."
 
-#: da_Kontar.cpp:262
+#: da_Kontar.cpp:272
 msgid "12:PLC: Wrong command format."
 msgstr "12:ПЛК: Помилковий формат команди."
 
-#: da_Kontar.cpp:263
+#: da_Kontar.cpp:273
 msgid "12:PLC: Error read from slave."
 msgstr "12:ПЛК: Помилка читання підлеглого."
 
-#: da_Kontar.cpp:264
+#: da_Kontar.cpp:274
 msgid "12:PLC: Network update in process."
 msgstr "12:ПЛК: Оновлення мережі в процесі."
 
-#: da_Kontar.cpp:267
+#: da_Kontar.cpp:277
+#, c-format
 msgid "Response (enc): '%s'"
 msgstr "Відповідь (код): '%s'"
 
-#: da_Kontar.cpp:274
+#: da_Kontar.cpp:284
+#, c-format
 msgid "Response: '%s'"
 msgstr "Відповідь: '%s'"
 
-#: da_Kontar.cpp:281
+#: da_Kontar.cpp:291
 #, c-format
 msgid "Error: '%s': '%s'"
 msgstr "Помилка: '%s': '%s'"
 
-#: da_Kontar.cpp:337
+#: da_Kontar.cpp:347
+#, c-format
 msgid "15:Response PDU size (%d from %d) error."
 msgstr "15:Помилка розміру PDU (%d з %d) відповіді."
 
-#: da_Kontar.cpp:505
+#: da_Kontar.cpp:530
 msgid "<No select>"
 msgstr "<Не обрано>"
 
@@ -252,10 +258,12 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: mod_amr.cpp:45
-msgid "Allow access to automatic meter reading devices. Supported devices: "
+msgid ""
+"Allow access to automatic meter reading devices. Supported devices: Kontar "
+"(http://www.mzta.ru)."
 msgstr ""
 "Надає доступ до пристроїв лічильників комерцевого обліку. Підтримуються "
-"пристрої: "
+"пристрої: Kontar (http://www.mzta.ru)."
 
 #: mod_amr.cpp:149
 msgid "Acquisition schedule"

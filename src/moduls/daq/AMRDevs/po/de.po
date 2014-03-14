@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-02 10:15+0200\n"
+"POT-Creation-Date: 2014-03-13 20:00+0200\n"
 "PO-Revision-Date: 2011-07-19 20:33+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -28,7 +28,7 @@ msgstr "13:Fehler der Antwort: Zu kurz."
 msgid "13:Error respond: CRC check error."
 msgstr "13:Fehler der Antwort :Der CRC Checkfehler."
 
-#: da_Ergomera.cpp:173 da_Kontar.cpp:278
+#: da_Ergomera.cpp:173 da_Kontar.cpp:288
 #, c-format
 msgid "14:Connection error - %s"
 msgstr "14:Fehler der Verbindung - %s"
@@ -181,7 +181,7 @@ msgstr "Anfrageversuche"
 msgid "Connection from PLC Kontar %xh."
 msgstr ""
 
-#: da_Kontar.cpp:207
+#: da_Kontar.cpp:207 da_Kontar.cpp:265
 #, c-format
 msgid "Password sequence set: '%s'."
 msgstr ""
@@ -210,51 +210,51 @@ msgstr "Anfrageversuche"
 msgid "13:Unapt MasterPLC ID: %xh != %xh"
 msgstr ""
 
-#: da_Kontar.cpp:259
+#: da_Kontar.cpp:268
 msgid "12:PLC: The password encripted by master key."
 msgstr ""
 
-#: da_Kontar.cpp:260
+#: da_Kontar.cpp:270
 msgid "12:PLC: Error."
 msgstr ""
 
-#: da_Kontar.cpp:261
+#: da_Kontar.cpp:271
 msgid "12:PLC: Unknown command."
 msgstr ""
 
-#: da_Kontar.cpp:262
+#: da_Kontar.cpp:272
 msgid "12:PLC: Wrong command format."
 msgstr ""
 
-#: da_Kontar.cpp:263
+#: da_Kontar.cpp:273
 msgid "12:PLC: Error read from slave."
 msgstr ""
 
-#: da_Kontar.cpp:264
+#: da_Kontar.cpp:274
 msgid "12:PLC: Network update in process."
 msgstr ""
 
-#: da_Kontar.cpp:267
+#: da_Kontar.cpp:277
 #, fuzzy, c-format
 msgid "Response (enc): '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:274
+#: da_Kontar.cpp:284
 #, fuzzy, c-format
 msgid "Response: '%s'"
 msgstr "Anfrageversuche"
 
-#: da_Kontar.cpp:281
+#: da_Kontar.cpp:291
 #, c-format
 msgid "Error: '%s': '%s'"
 msgstr ""
 
-#: da_Kontar.cpp:337
+#: da_Kontar.cpp:347
 #, fuzzy, c-format
 msgid "15:Response PDU size (%d from %d) error."
 msgstr "15:Fehler in der Grösse der PDU - Antwort."
 
-#: da_Kontar.cpp:505
+#: da_Kontar.cpp:530
 msgid "<No select>"
 msgstr ""
 
@@ -267,10 +267,12 @@ msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
 #: mod_amr.cpp:45
-msgid "Allow access to automatic meter reading devices. Supported devices: "
+msgid ""
+"Allow access to automatic meter reading devices. Supported devices: Kontar "
+"(http://www.mzta.ru)."
 msgstr ""
 "Ermöglicht den Zugang zu den Zählerwerken der kommerziellen Inventur. Es "
-"werden die Anlagen unterstützt: "
+"werden die Anlagen unterstützt: Kontar (http://www.mzta.ru)."
 
 #: mod_amr.cpp:149
 msgid "Acquisition schedule"

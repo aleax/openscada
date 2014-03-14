@@ -403,9 +403,19 @@ void TMdPrm::setEval( )
 
     vector<string> als;
     m_da->fldList(als);
-    for(unsigned i_a = 0; i_a < als.size(); i_a++)
-	if(vlPresent(als[i_a]))
-	    vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
+    if(als.size())
+    {
+	for(unsigned i_a = 0; i_a < als.size(); i_a++)
+	    if(vlPresent(als[i_a]))
+		vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
+    }
+    else
+    {
+	vlList(als);
+	for(unsigned i_a = 0; i_a < als.size(); i_a++)
+	    if(!(als[i_a] == "SHIFR" || als[i_a] == "OWNER" || als[i_a] == "NAME" || als[i_a] == "DESCR" || als[i_a] == "err"))
+		vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
+    }
 }
 
 void TMdPrm::vlElemAtt( TElem *ValEl )	{ TValue::vlElemAtt(ValEl); }

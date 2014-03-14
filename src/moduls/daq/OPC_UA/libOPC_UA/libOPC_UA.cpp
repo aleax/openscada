@@ -2872,9 +2872,43 @@ nextReq:
 		    for(unsigned i_p = 0; i_p < ip; i_p++)
 		    {
 			NodeId sN = iNodeId(rb, off);	//startingNode
-			map<string, XML_N*>::iterator ndX = wep->ndMap.find(sN.toAddr());
 							//>> relativePath
 			uint32_t irp = iNu(rb, off, 4);	//rpaths number
+
+			bool nOK = true;
+			XML_N req("data");
+			for(unsigned i_rp = 0; nOK && i_rp < irp; i_rp++)
+			{
+			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
+			    bool inv = iNu(rb, off, 1);		//isInverse
+			    bool incSubTp = iNu(rb, off, 1);	//includeSubtypes
+			    string tNm = iSqlf(rb, off);	//targetName
+
+			    //    Browse request for nodes
+			    req.clear()->setAttr("node", sN.toAddr())->
+					 setAttr("BrDir", uint2str(inv?BD_INVERSE:BD_FORWARD))->
+					 setAttr("RefTpId", rTpId.toAddr());
+			    int st = wep->reqData(OpcUa_BrowseRequest, req);
+			    unsigned i_ref;
+			    for(i_ref = 0; i_ref < req.childSize(); i_ref++)
+				if(req.childGet(i_ref)->attr("name") == tNm)
+				{
+				    sN = NodeId::fromAddr(req.childGet(i_ref)->attr("NodeId"));
+				    break;
+				}
+			    nOK = (i_ref < req.childSize());
+			}
+
+			//   Path result
+			oNu(respEp, (nOK?0:OpcUa_BadNoMatch), 4);	//<< statusCode, 0x806f0000 (BadNoMatch)
+			oNu(respEp, (nOK?1:0), 4);			//<< targets [], 0
+			if(nOK)
+			{
+			    oNodeId(respEp, sN);		//ExpandedNodeId
+			    oNu(respEp, 0xFFFFFFFF, 4);		//Index
+			}
+
+			/*map<string, XML_N*>::iterator ndX = wep->ndMap.find(sN.toAddr());
 
 			//   Path result
 			int stCodeOff = respEp.size(); oNu(respEp, OpcUa_BadNoMatch, 4);	//<< statusCode, 0x806f0000 (BadNoMatch)
@@ -2889,6 +2923,8 @@ nextReq:
 			    string tNm = iSqlf(rb, off);	//targetName
 
 			    if(ndX != wep->ndMap.end() && rTpId.numbVal() == OpcUa_HierarchicalReferences && !inv)
+			    {
+				
 				for(unsigned i_ch = 0; i_ch < ndX->second->childSize(); i_ch++)
 				    if(ndX->second->childGet(i_ch)->attr("name") == tNm)
 				    {
@@ -2896,12 +2932,13 @@ nextReq:
 					oNu(respEp, 0xFFFFFFFF, 4);	//Index
 					o_rp++;
 				    }
+			    }
 			}
 			if(o_rp)
 			{
 			    oNu(respEp, 0, 4, stCodeOff);	//<< statusCode, 0x00000000
 			    oNu(respEp, o_rp, 4, tNOff);	//<< targets [], o_rp
-			}
+			}*/
 		    }
 		    oN(respEp, 0, 4);			//diagnosticInfos []
 		    break;

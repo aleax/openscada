@@ -246,7 +246,7 @@ AX_MOD_DAQ_EN(ICP_DAS,[enable build module DAQ.ICP_DAS],enable,[],[
 AX_MOD_DAQ_EN(OPC_UA,[disable build module DAQ.OPC_UA],disable,[],
     [AX_LIB_OpenSSL()],
     [AC_CONFIG_FILES(src/moduls/daq/OPC_UA/libOPC_UA/Makefile)])
-AX_MOD_DAQ_EN(AMRDevs,[enable build module DAQ.AMRDevs],enable)
+AX_MOD_DAQ_EN(AMRDevs,[disable build module DAQ.AMRDevs],disable)
 AX_MOD_DAQ_EN(BFN,[enable build module DAQ.BFN],enable)
 AX_MOD_DAQ_EN(Comedi,[enable build module DAQ.Comedi],enable,[],[
     PKG_CHECK_MODULES([comedilib],[comedilib > 0.7.0],[],

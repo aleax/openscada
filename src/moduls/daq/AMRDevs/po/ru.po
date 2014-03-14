@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.1.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.AMRDevs 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-02 10:15+0200\n"
+"POT-Creation-Date: 2014-03-13 20:00+0200\n"
 "PO-Revision-Date: 2010-02-16 16:54+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -23,7 +23,7 @@ msgstr "13:Ошибка ответа: Не полный."
 msgid "13:Error respond: CRC check error."
 msgstr "13:Ошибка ответа: Ошибка проверки CRC."
 
-#: da_Ergomera.cpp:173 da_Kontar.cpp:278
+#: da_Ergomera.cpp:173 da_Kontar.cpp:288
 #, c-format
 msgid "14:Connection error - %s"
 msgstr "14:Ошибка соединения - %s"
@@ -148,7 +148,7 @@ msgstr "Серийный номер ПЛК"
 
 #: da_Kontar.cpp:43
 msgid "Set PLC clock on different for more (s)"
-msgstr "Уст. часы ПЛК при откланении более (с)"
+msgstr "Уст. часы ПЛК при отклонении более (с)"
 
 #: da_Kontar.cpp:44
 msgid "PLC clock's zone"
@@ -172,7 +172,7 @@ msgstr "Запрос ID Мастер ПЛК: '%s'"
 msgid "Connection from PLC Kontar %xh."
 msgstr "Подключение с ПЛК Kontar %xh."
 
-#: da_Kontar.cpp:207
+#: da_Kontar.cpp:207 da_Kontar.cpp:265
 #, c-format
 msgid "Password sequence set: '%s'."
 msgstr "Установка последовательности пароля: '%s'."
@@ -187,10 +187,12 @@ msgid "No a propper connection from PLC."
 msgstr "Нет подходящего подключения от ПЛК."
 
 #: da_Kontar.cpp:230
+#, c-format
 msgid "Request: '%s'"
 msgstr "Запрос: '%s'"
 
 #: da_Kontar.cpp:237
+#, c-format
 msgid "Request (enc): '%s'"
 msgstr "Запрос (код): '%s'"
 
@@ -199,48 +201,51 @@ msgstr "Запрос (код): '%s'"
 msgid "13:Unapt MasterPLC ID: %xh != %xh"
 msgstr "13:Неподходящий ID МастерПЛК: %xh != %xh"
 
-#: da_Kontar.cpp:259
+#: da_Kontar.cpp:268
 msgid "12:PLC: The password encripted by master key."
 msgstr "12:ПЛК: Пароль кодирован мастер ключём."
 
-#: da_Kontar.cpp:260
+#: da_Kontar.cpp:270
 msgid "12:PLC: Error."
 msgstr "12:ПЛК: Ошибка."
 
-#: da_Kontar.cpp:261
+#: da_Kontar.cpp:271
 msgid "12:PLC: Unknown command."
 msgstr "12:ПЛК: Неизвестная команда."
 
-#: da_Kontar.cpp:262
+#: da_Kontar.cpp:272
 msgid "12:PLC: Wrong command format."
 msgstr "12:ПЛК: Ошибка формата команды."
 
-#: da_Kontar.cpp:263
+#: da_Kontar.cpp:273
 msgid "12:PLC: Error read from slave."
 msgstr "12:ПЛК: Ошибка чтения из подчинённого."
 
-#: da_Kontar.cpp:264
+#: da_Kontar.cpp:274
 msgid "12:PLC: Network update in process."
 msgstr "12:ПЛК: Обновление сети в процессе."
 
-#: da_Kontar.cpp:267
+#: da_Kontar.cpp:277
+#, c-format
 msgid "Response (enc): '%s'"
 msgstr "Ответ (код): '%s'"
 
-#: da_Kontar.cpp:274
+#: da_Kontar.cpp:284
+#, c-format
 msgid "Response: '%s'"
 msgstr "Ответ: '%s'"
 
-#: da_Kontar.cpp:281
+#: da_Kontar.cpp:291
 #, c-format
 msgid "Error: '%s': '%s'"
 msgstr "Ошибка: '%s': '%s'"
 
-#: da_Kontar.cpp:337
+#: da_Kontar.cpp:347
+#, c-format
 msgid "15:Response PDU size (%d from %d) error."
 msgstr "15:Ошибка размера PDU (%d из %d) ответа."
 
-#: da_Kontar.cpp:505
+#: da_Kontar.cpp:530
 msgid "<No select>"
 msgstr "<Не выбрано>"
 
@@ -253,10 +258,12 @@ msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: mod_amr.cpp:45
-msgid "Allow access to automatic meter reading devices. Supported devices: "
+msgid ""
+"Allow access to automatic meter reading devices. Supported devices: Kontar "
+"(http://www.mzta.ru)."
 msgstr ""
 "Предоставляет доступ к устройствам счётчиков коммерческого учёта. "
-"Поддерживаются устройства: "
+"Поддерживаются устройства: Kontar (http://www.mzta.ru)."
 
 #: mod_amr.cpp:149
 msgid "Acquisition schedule"
