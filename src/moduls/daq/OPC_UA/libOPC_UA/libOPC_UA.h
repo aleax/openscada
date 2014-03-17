@@ -760,7 +760,7 @@ class Server: public UA
 		string secPolicy( int isec );
 		MessageSecurityMode secMessageMode( int isec );
 
-		//> Sessions
+		// Sessions
 		int sessCreate( const string &iName, double iTInact );
 		void sessServNonceSet( int sid, const string &servNonce );
 		virtual uint32_t sessActivate( int sid, uint32_t secCnl, bool check = false,
@@ -771,12 +771,12 @@ class Server: public UA
 		Sess::ContPoint sessCpGet( int sid, const string &cpId );
 		void sessCpSet( int sid, const string &cpId, const Sess::ContPoint &cp = Sess::ContPoint() );	//Empty "cp" remove "cpId"
 		//  Subsciption
-		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = OpcUa_NPosID for new create
+		uint32_t subscrSet( uint32_t ssId, SubScrSt st, bool en = false, int sess = -1,	// "sId" = 0 for new create
 		    double publInterv = 0, uint32_t cntrLifeTime = 0, uint32_t cntrKeepAlive = 0,
 		    uint32_t maxNotePerPubl = OpcUa_NPosID, int pr = -1 );
 		Subscr subscrGet( uint32_t ssId, bool noWorkData = true );
 		//  Monitored items
-		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = OpcUa_NPosID for new create
+		uint32_t mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md = MM_CUR,	// "mItId" = 0 for new create
 		    const NodeId &nd = NodeId(), uint32_t aid = OpcUa_NPosID, TimestampsToReturn tmToRet = TimestampsToReturn(-1),
 		    double smplItv = -2, uint32_t qSz = OpcUa_NPosID, int8_t dO = -1, uint32_t cH = OpcUa_NPosID );
 		Subscr::MonitItem mItGet( uint32_t ssId, uint32_t mItId );

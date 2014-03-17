@@ -2604,8 +2604,8 @@ nextReq:
 		    bool en = iNu(rb, off, 1);			//publishingEnabled
 		    uint8_t pr = iNu(rb, off, 1);		//priority
 
-		    uint32_t subScrId = wep->subscrSet(OpcUa_NPosID, SS_CREATING, en, sesTokId, pi, lt, ka, npp, pr);
-		    if(subScrId == OpcUa_NPosID) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadTooManySubscriptions; break; }
+		    uint32_t subScrId = wep->subscrSet(0, SS_CREATING, en, sesTokId, pi, lt, ka, npp, pr);
+		    if(!subScrId) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadTooManySubscriptions; break; }
 		    if(dbg) debugMess(strMess("EP: SubScription %d created.",subScrId));
 		    Subscr ss = wep->subscrGet(subScrId);
 
@@ -2727,8 +2727,8 @@ nextReq:
 			else
 			{
 			    //   Create new monitored item
-			    mIt = wep->mItSet(subScrId, OpcUa_NPosID, mM, nid, aid, tmStRet, sI, qSz, dO, cH);
-			    if(mIt == OpcUa_NPosID) st = OpcUa_BadSubscriptionIdInvalid;
+			    mIt = wep->mItSet(subScrId, 0, mM, nid, aid, tmStRet, sI, qSz, dO, cH);
+			    if(!mIt) st = OpcUa_BadSubscriptionIdInvalid;
 			    else if(mIt > wep->limMonitItms()) st = OpcUa_BadTooManyOperations;
 			    else
 			    {
@@ -3130,21 +3130,21 @@ nextReq:
 				oN(respAck, sa, 4);				//<results []
 				for(int i_a = 0; i_a < sa; i_a++)
 				{
-				    uint32_t prSS = iNu(rb, off, 4);		//> subscriptionId
+				    uint32_t prSSAck = iNu(rb, off, 4);		//> subscriptionId
 				    uint32_t seqN = iNu(rb, off, 4);		//> sequenceNumber
 				    uint32_t st = OpcUa_BadSequenceNumberUnknown;
-				    if(prSS < wep->mSubScr.size())
-					for(deque<string>::iterator iRQ = wep->mSubScr[prSS].retrQueue.begin();
-						iRQ != wep->mSubScr[prSS].retrQueue.end(); ++iRQ)
+				    if((--prSSAck) < wep->mSubScr.size())
+					for(deque<string>::iterator iRQ = wep->mSubScr[prSSAck].retrQueue.begin();
+						iRQ != wep->mSubScr[prSSAck].retrQueue.end(); ++iRQ)
 					{
 					    int rOff = 0;
-					    if(iNu(*iRQ,rOff,4) == seqN) { wep->mSubScr[prSS].retrQueue.erase(iRQ); st = 0; break; }
+					    if(iNu(*iRQ,rOff,4) == seqN) { wep->mSubScr[prSSAck].retrQueue.erase(iRQ); st = 0; break; }
 					}
 				    oNu(respAck, st, 4);			//< results
 				}
 
 				respEp.reserve(100);
-				oNu(respEp, prSS, 4);				//<subscriptionId
+				oNu(respEp, prSS+1, 4);				//<subscriptionId
 
 				if(ss.st == SS_LATE)
 				{
@@ -3248,7 +3248,7 @@ nextReq:
 		    if(wep->subscrGet(prSS).st == SS_CLOSED) { stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault; break; }
 
 		    pthread_mutex_lock(&wep->mtxData);
-		    Subscr &ss = wep->mSubScr[prSS];
+		    Subscr &ss = wep->mSubScr[prSS-1];
 		    deque<string>::iterator iRQ = ss.retrQueue.begin();
 		    for( ; iRQ != ss.retrQueue.end(); ++iRQ)
 		    {
@@ -3693,7 +3693,7 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 {
     pthread_mutex_lock(&mtxData);
 
-    if(ssId >= mSubScr.size())
+    if(ssId == 0 || ssId > mSubScr.size())
     {
 	uint32_t nSubScrPerSess = 0;
 	ssId = mSubScr.size();
@@ -3704,9 +3704,11 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 	    if(ssId >= mSubScr.size() && mSubScr[i_ss].st == SS_CLOSED) ssId = i_ss;
 	    if(sess >= 0 && mSubScr[i_ss].sess == sess) nSubScrPerSess++;
 	}
-	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return OpcUa_NPosID; }
+	if(nSubScrPerSess >= limSubScr()) { pthread_mutex_unlock(&mtxData); return 0; }
 	if(ssId >= mSubScr.size()) { ssId = mSubScr.size(); mSubScr.push_back(Subscr()); }
     }
+    else ssId--;
+
     Subscr &ss = mSubScr[ssId];
 
     //Set parameters
@@ -3721,7 +3723,7 @@ uint32_t Server::EP::subscrSet( uint32_t ssId, SubScrSt st, bool en, int sess, d
 
     pthread_mutex_unlock(&mtxData);
 
-    return ssId;
+    return ssId+1;
 }
 
 Server::Subscr Server::EP::subscrGet( uint32_t ssId, bool noWorkData )
@@ -3729,7 +3731,7 @@ Server::Subscr Server::EP::subscrGet( uint32_t ssId, bool noWorkData )
     pthread_mutex_lock(&mtxData);
 
     Subscr ss;
-    if(ssId < mSubScr.size()) ss = mSubScr[ssId].copy(noWorkData);
+    if((--ssId) < mSubScr.size()) ss = mSubScr[ssId].copy(noWorkData);
 
     pthread_mutex_unlock(&mtxData);
 
@@ -3741,11 +3743,11 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 {
     pthread_mutex_lock(&mtxData);
 
-    if(ssId >= mSubScr.size())	return OpcUa_NPosID;
+    if((--ssId) >= mSubScr.size()) { pthread_mutex_unlock(&mtxData); return 0; }
     else
     {
 	Subscr &ss = mSubScr[ssId];
-	if(mItId >= ss.mItems.size())
+	if((--mItId) >= ss.mItems.size())
 	{
 	    //Find for MonitItem on DISABLED state for reusing
 	    for(mItId = 0; mItId < ss.mItems.size(); mItId++)
@@ -3778,7 +3780,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 
     pthread_mutex_unlock(&mtxData);
 
-    return mItId;
+    return mItId+1;
 }
 
 Server::Subscr::MonitItem Server::EP::mItGet( uint32_t ssId, uint32_t mItId )
@@ -3786,7 +3788,7 @@ Server::Subscr::MonitItem Server::EP::mItGet( uint32_t ssId, uint32_t mItId )
     pthread_mutex_lock(&mtxData);
 
     Subscr::MonitItem mIt;
-    if(ssId < mSubScr.size() && mItId < mSubScr[ssId].mItems.size())	mIt = mSubScr[ssId].mItems[mItId];
+    if((--ssId) < mSubScr.size() && (--mItId) < mSubScr[ssId].mItems.size()) mIt = mSubScr[ssId].mItems[mItId];
 
     pthread_mutex_unlock(&mtxData);
 

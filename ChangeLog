@@ -1,4 +1,5 @@
 2014-03-17 Roman
+- DAQ.OPC_UA: SubscriptionId and MonitoredItemId grow start from '1', for exclube invalid value '0'.
 - SYS: AMRDevs module is added to openscada_mod.spec.
 - FIX:DAQ.JavaLikeCalc: External function bind fix for return process.
 - FIX:Transport.Sockets: Default symbol timeout of output transport is set from 0.01 to 0.1 for fix some unstable connection
