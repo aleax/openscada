@@ -92,6 +92,11 @@ namespace VCA
 	A_TextAlignment	= 29,
 	A_TextText	= 30,
 	A_TextNumbArg	= 40,
+	A_TextArs	= 50,
+	A_TextArsSz	= 10,
+	A_TextArsVal	= 0,
+	A_TextArsTp	= 1,
+	A_TextArsCfg	= 2,
 
 	// Primitive "Media" specific
 	A_MediaSrc	= 25,
@@ -195,6 +200,12 @@ namespace VCA
     enum FormEl_Views	{ F_LINE_ED = 0, F_TEXT_ED, F_CHECK_BOX, F_BUTTON, F_COMBO, F_LIST, F_SLIDER, F_SCROLL_BAR, F_TREE, F_TABLE };
     enum FormEl_LineViews { FL_TEXT = 0, FL_COMBO, FL_INTEGER, FL_REAL, FL_TIME, FL_DATE, FL_DATE_TM };
     enum FormEl_BtModes { FBT_STD = 0, FBT_CHECK, FBT_MENU, FBT_LOAD, FBT_SAVE };
+
+    //Text preset indexes
+    enum Text_ArsTp	{ FT_INT = 0, FT_REAL, FT_STR };
+    enum Text_Align	{ FT_TOP_LEFT = 0, FT_TOP_RIGHT, FT_TOP_CENTER, FT_TOP_JUST,
+			  FT_BT_LEFT, FT_BT_RIGHT, FT_BT_CENTER, FT_BT_JUST,
+			  FT_CNTR_LEFT, FT_CNTR_RIGHT, FT_CNTR, FT_CNTR_JUST };
 
     //Media preset indexes
     enum Media_Types	{ FM_IMG = 0, FM_ANIM, FM_FULL_VIDEO };

@@ -1,3 +1,12 @@
+2014-03-17 Roman
+- SYS: AMRDevs module is added to openscada_mod.spec.
+- FIX:DAQ.JavaLikeCalc: External function bind fix for return process.
+- FIX:Transport.Sockets: Default symbol timeout of output transport is set from 0.01 to 0.1 for fix some unstable connection
+    through VPN.
+- UI.{VCAEngine,Vision,WebVision}: The primitive "Text" is moved to indexes from types.h.
+- FIX:UI.Vision: New concept for selectable attribute's value obtain, for IDs set.
+
+
 2014-03-14 Roman
 - !:DAQ.AMRDevs: Enable build by default. Some description and translation fix.
 - DAQ.OPC_UA: TranslateBrowsePathsToNodeIds is rewrote to use Browse service backend for hierarchical find path's items.

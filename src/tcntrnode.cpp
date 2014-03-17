@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tcntrnode.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -42,7 +42,7 @@ pthread_mutex_t TCntrNode::connM = PTHREAD_MUTEX_INITIALIZER;
 
 //*************************************************
 //* Controll scenaries language section           *
-TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX), m_flg(0)
+TCntrNode::TCntrNode( TCntrNode *iprev ) : chGrp(NULL), mUse(0), mOi(USHRT_MAX), mFlg(0)
 {
     setNodeMode(Disable);
     prev.node = iprev;
@@ -77,7 +77,7 @@ void TCntrNode::nodeDelAll( )
 void TCntrNode::setNodeMode( char mode )
 {
     pthread_mutex_lock(&connM);
-    m_flg = (m_flg&(~0x03))|(mode&0x03);
+    mFlg = (mFlg&(~0x03))|(mode&0x03);
     pthread_mutex_unlock(&connM);
 }
 
@@ -451,8 +451,8 @@ void TCntrNode::chldAdd( int8_t igr, TCntrNode *node, int pos, bool noExp )
 void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool shDel )
 {
     if(tm < 0)	tm = DEF_TIMEOUT;
-    ResAlloc res(hd_res,false);
-    if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(),_("Group of childs %d error!"),igr);
+    ResAlloc res(hd_res, false);
+    if(!chGrp || igr >= (int)chGrp->size()) throw TError(nodePath().c_str(), _("Group of childs %d error!"), igr);
     if(!(nodeMode() == Enable || nodeMode() == Disable))
         throw TError(nodePath().c_str(),_("Node is begin processed now!"));
 
@@ -460,19 +460,18 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
     if(p == (*chGrp)[igr].elem.end())
 	throw TError(nodePath().c_str(),_("Child '%s' is not present!"), name.c_str());
 
-    if( p->second->nodeMode() == Enable )
-	p->second->nodeDis( tm, (flag<<8)|(shDel?NodeShiftDel:0) );
+    if(p->second->nodeMode() == Enable) p->second->nodeDis(tm, (flag<<8)|(shDel?NodeShiftDel:0));
 
-    if( !shDel )
+    if(!shDel)
     {
-	res.request( true );
+	res.request(true);
 	p = (*chGrp)[igr].elem.find(name.c_str());
-	if( p == (*chGrp)[igr].elem.end() ) return;
-	if( (*chGrp)[igr].ordered )
+	if(p == (*chGrp)[igr].elem.end()) return;
+	if((*chGrp)[igr].ordered)
 	{
 	    int pos = p->second->mOi;
-	    for( TMap::iterator p1 = (*chGrp)[igr].elem.begin(); p1 != (*chGrp)[igr].elem.end(); ++p1 )
-		if( p1->second->mOi > pos ) p1->second->mOi--;
+	    for(TMap::iterator p1 = (*chGrp)[igr].elem.begin(); p1 != (*chGrp)[igr].elem.end(); ++p1)
+		if(p1->second->mOi > pos) p1->second->mOi--;
 	}
 	delete p->second;
 	(*chGrp)[igr].elem.erase(p);
@@ -482,7 +481,7 @@ void TCntrNode::chldDel( int8_t igr, const string &name, long tm, int flag, bool
 void TCntrNode::setNodeFlg( char flg )
 {
     pthread_mutex_lock(&connM);
-    m_flg |= flg&(SelfModify|SelfModifyS|SelfSaveForceOnChild);
+    mFlg |= flg&(SelfModify|SelfModifyS|SelfSaveForceOnChild);
     pthread_mutex_unlock(&connM);
 }
 
@@ -546,7 +545,7 @@ int TCntrNode::isModify( int f )
     ResAlloc res(hd_res, false);
     int rflg = 0;
 
-    if(f&Self && m_flg&SelfModify) rflg |= Self;
+    if(f&Self && mFlg&SelfModify) rflg |= Self;
     if(f&Child)
 	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
 	{
@@ -562,14 +561,14 @@ int TCntrNode::isModify( int f )
 void TCntrNode::modif( bool save )
 {
     pthread_mutex_lock(&connM);
-    m_flg |= (save?(SelfModifyS|SelfModify):SelfModify);
+    mFlg |= (save?(SelfModifyS|SelfModify):SelfModify);
     pthread_mutex_unlock(&connM);
 }
 
 void TCntrNode::modifClr( bool save )
 {
     pthread_mutex_lock(&connM);
-    m_flg &= ~(save?SelfModifyS:SelfModify);
+    mFlg &= ~(save?SelfModifyS:SelfModify);
     pthread_mutex_unlock(&connM);
 }
 
@@ -593,12 +592,12 @@ void TCntrNode::modifGClr( )
 
 void TCntrNode::load( bool force )
 {
-    //> Self load
+    //Self load
     if((isModify(Self)&Self) || force)
 	try
 	{
 	    if(nodeMode() == TCntrNode::Disable) nodeEn(NodeRestore|NodeShiftDel);
-	    modifClr(true);	//Save flag clear
+	    modifClr(true);			//Save flag clear
 	    load_();
 	    modifClr(nodeFlg()&SelfModifyS);	//Save modify or clear
 	}
@@ -607,7 +606,8 @@ void TCntrNode::load( bool force )
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Loading node error."));
 	}
-    //> Childs load process
+
+    //Childs load process
     if((isModify(Child)&Child) || force)
     {
 	ResAlloc res(hd_res, false);
@@ -620,18 +620,17 @@ void TCntrNode::load( bool force )
 void TCntrNode::save( unsigned lev )
 {
     int mdfFlg = isModify(All);
-    //> Self save
+    //Self save
     try
     {
-	if(mdfFlg&Self || (mdfFlg&Child && m_flg&SelfSaveForceOnChild))	save_();
-	//>> Check for prev nodes flag SelfSaveForceOnChild
+	if(mdfFlg&Self || (mdfFlg&Child && mFlg&SelfSaveForceOnChild))	save_();
+	// Check for prev nodes flag SelfSaveForceOnChild
 	if(lev == 0)
 	{
 	    TCntrNode *nd = this;
 	    while(true)
 	    {
-		nd = nd->nodePrev(true);
-		if(!nd) break;
+		if(!(nd=nd->nodePrev(true))) break;
 		if(nd->nodeFlg()&SelfSaveForceOnChild)	nd->save_();
 	    }
 	}
@@ -641,7 +640,8 @@ void TCntrNode::save( unsigned lev )
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Saving node error."));
     }
-    //> Childs save process
+
+    //Childs save process
     if(mdfFlg&Child)
     {
 	ResAlloc res(hd_res, false);

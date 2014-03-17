@@ -2045,7 +2045,7 @@ string Server::mkError( uint32_t errId, const string &err )
 
 bool Server::inReq( string &rba, const string &inPrtId, string *answ )
 {
-    uint32_t mSz;
+    uint32_t mSz = 0;
     int off = 0;
     bool dbg = debug(), holdConn = true;
 
@@ -2888,7 +2888,7 @@ nextReq:
 			    req.clear()->setAttr("node", sN.toAddr())->
 					 setAttr("BrDir", uint2str(inv?BD_INVERSE:BD_FORWARD))->
 					 setAttr("RefTpId", rTpId.toAddr());
-			    int st = wep->reqData(OpcUa_BrowseRequest, req);
+			    wep->reqData(OpcUa_BrowseRequest, req);
 			    unsigned i_ref;
 			    for(i_ref = 0; i_ref < req.childSize(); i_ref++)
 				if(req.childGet(i_ref)->attr("name") == tNm)
@@ -2907,38 +2907,6 @@ nextReq:
 			    oNodeId(respEp, sN);		//ExpandedNodeId
 			    oNu(respEp, 0xFFFFFFFF, 4);		//Index
 			}
-
-			/*map<string, XML_N*>::iterator ndX = wep->ndMap.find(sN.toAddr());
-
-			//   Path result
-			int stCodeOff = respEp.size(); oNu(respEp, OpcUa_BadNoMatch, 4);	//<< statusCode, 0x806f0000 (BadNoMatch)
-			int tNOff = respEp.size(); oNu(respEp, 0, 4);				//<< targets [], 0
-
-			unsigned o_rp = 0;
-			for(unsigned i_rp = 0; i_rp < irp; i_rp++)
-			{
-			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
-			    bool inv = iNu(rb, off, 1);		//isInverse
-			    bool incSubTp = iNu(rb, off, 1);	//includeSubtypes
-			    string tNm = iSqlf(rb, off);	//targetName
-
-			    if(ndX != wep->ndMap.end() && rTpId.numbVal() == OpcUa_HierarchicalReferences && !inv)
-			    {
-				
-				for(unsigned i_ch = 0; i_ch < ndX->second->childSize(); i_ch++)
-				    if(ndX->second->childGet(i_ch)->attr("name") == tNm)
-				    {
-					oNodeId(respEp, NodeId::fromAddr(ndX->second->childGet(i_ch)->attr("NodeId")));	//ExpandedNodeId
-					oNu(respEp, 0xFFFFFFFF, 4);	//Index
-					o_rp++;
-				    }
-			    }
-			}
-			if(o_rp)
-			{
-			    oNu(respEp, 0, 4, stCodeOff);	//<< statusCode, 0x00000000
-			    oNu(respEp, o_rp, 4, tNOff);	//<< targets [], o_rp
-			}*/
 		    }
 		    oN(respEp, 0, 4);			//diagnosticInfos []
 		    break;

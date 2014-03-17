@@ -2891,10 +2891,10 @@ void ConfApp::tableSet( int row, int col )
 	    {
 		bool ind_ok = n_el->childGet(col)->attr("sel_id").size();
 		string s_nm;
-		for( int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->childGet(col)->attr("sel_list"),0,';',&ls_off)).empty(); c_el++ )
-		    if( s_nm == value )
+		for(int ls_off = 0, c_el = 0; !(s_nm=TSYS::strSepParse(n_el->childGet(col)->attr("sel_list"),0,';',&ls_off)).empty(); c_el++)
+		    if(s_nm == value)
 		    {
-			if( ind_ok ) value = TSYS::strSepParse(n_el->childGet(col)->attr("sel_id"),c_el,';');
+			if(ind_ok) value = TSYS::strSepParse(n_el->childGet(col)->attr("sel_id"),c_el,';');
 			find_ok = true;
 		    }
 	    }

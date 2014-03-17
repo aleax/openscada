@@ -627,38 +627,32 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
 //************************************************
 //* OrigText: Text element original widget       *
 //************************************************
-OrigText::OrigText( ) : PrWidget("Text")
-{
+OrigText::OrigText( ) : PrWidget("Text")	{ }
 
-}
+string OrigText::name( )	{ return _("Text fields"); }
 
-string OrigText::name( )
-{
-    return _("Text fields");
-}
-
-string OrigText::descr( )
-{
-    return _("Text fields widget of the finite visualization.");
-}
+string OrigText::descr( )	{ return _("Text fields widget of the finite visualization."); }
 
 void OrigText::postEnable( int flag )
 {
     LWidget::postEnable(flag);
 
-    if( flag&TCntrNode::NodeConnect )
+    if(flag&TCntrNode::NodeConnect)
     {
 	attrAdd(new TFld("backColor",_("Background:color"),TFld::String,Attr::Color,"","","","",i2s(A_BackColor).c_str()));
 	attrAdd(new TFld("backImg",_("Background:image"),TFld::String,Attr::Image,"","","","",i2s(A_BackImg).c_str()));
 	attrAdd(new TFld("bordWidth",_("Border:width"),TFld::Integer,TFld::NoFlag,"","0","","",i2s(A_BordWidth).c_str()));
 	attrAdd(new TFld("bordColor",_("Border:color"),TFld::String,Attr::Color,"","#000000","","",i2s(A_BordColor).c_str()));
-	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3","0;1;2;3;4;5;6;7;8",
-			    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
+	attrAdd(new TFld("bordStyle",_("Border:style"),TFld::Integer,TFld::Selected,"","3",
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d",FBRD_NONE,FBRD_DOT,FBRD_DASH,FBRD_SOL,FBRD_DBL,FBRD_GROOVE,FBRD_RIDGE,FBRD_INSET,FBRD_OUTSET).c_str(),
+	    _("None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"),i2s(A_BordStyle).c_str()));
 	attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_TextFont).c_str()));
 	attrAdd(new TFld("color",_("Color"),TFld::String,Attr::Color,"20","#000000","","",i2s(A_TextColor).c_str()));
 	attrAdd(new TFld("orient",_("Orientation angle"),TFld::Integer,TFld::NoFlag,"3","0","-360;360","",i2s(A_TextOrient).c_str()));
 	attrAdd(new TFld("wordWrap",_("Word wrap"),TFld::Boolean,TFld::NoFlag,"1","1","","",i2s(A_TextWordWrap).c_str()));
-	attrAdd(new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0","0;1;2;3;4;5;6;7;8;9;10;11",
+	attrAdd(new TFld("alignment",_("Alignment"),TFld::Integer,TFld::Selected,"1","0",
+	    TSYS::strMess("%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d;%d",FT_TOP_LEFT,FT_TOP_RIGHT,FT_TOP_CENTER,FT_TOP_JUST,
+		FT_BT_LEFT,FT_BT_RIGHT,FT_BT_CENTER,FT_BT_JUST,FT_CNTR_LEFT,FT_CNTR_RIGHT,FT_CNTR,FT_CNTR_JUST).c_str(),
 			    _("Top left;Top right;Top center;Top justify;"
 			    "Bottom left;Bottom right;Bottom center;Bottom justify;"
 			    "V center left;V center right;Center;V center justify"),i2s(A_TextAlignment).c_str()));
@@ -675,7 +669,7 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.id() == "numbArg")
 	{
 	    string fid("arg"), fnm(_("Argument ")), fidp, fnmp;
-	    //> Delete specific unnecessary attributes of parameters
+	    //Delete specific unnecessary attributes of parameters
 	    for(int i_p = 0; true; i_p++)
 	    {
 		fidp = fid+i2s(i_p);
@@ -687,31 +681,33 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel(fidp+"cfg");
 		}
 	    }
-	    //> Create ullage attributes of parameters
+	    //Create ullage attributes of parameters
 	    for(int i_p = 0; i_p < cfg.getI(); i_p++)
 	    {
 		fidp = fid+i2s(i_p);
 		fnmp = fnm+i2s(i_p);
 		if(cfg.owner()->attrPresent(fidp+"val")) continue;
 		cfg.owner()->attrAdd(new TFld((fidp+"tp").c_str(),(fnmp+_(":type")).c_str(),
-		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0","0;1;2",_("Integer;Real;String"),i2s(51+10*i_p).c_str()));
+		    TFld::Real,TFld::Selected|Attr::Mutable|Attr::Active,"","0",
+			TSYS::strMess("%d;%d;%d",FT_INT,FT_REAL,FT_STR).c_str(),_("Integer;Real;String"),
+			i2s(A_TextArs+A_TextArsTp+A_TextArsSz*i_p).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"val").c_str(),(fnmp+_(":value")).c_str(),
-		    TFld::Integer,Attr::Mutable,"","","","",i2s(50+10*i_p).c_str()));
+		    TFld::Integer,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsVal+A_TextArsSz*i_p).c_str()));
 		cfg.owner()->attrAdd(new TFld((fidp+"cfg").c_str(),(fnmp+_(":config")).c_str(),
-		    TFld::String,Attr::Mutable,"","","","",i2s(52+10*i_p).c_str()));
+		    TFld::String,Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsCfg+A_TextArsSz*i_p).c_str()));
 	    }
 	}
-	else if(aid >= 50 && (aid%10) == 1 && prev.getI() != cfg.getI())
+	else if(aid >= A_TextArs && (aid%A_TextArsSz) == A_TextArsTp && prev.getI() != cfg.getI())
 	{
-	    int narg = (aid/10)-5;
+	    int narg = (aid-A_TextArs)/A_TextArsSz;
 	    string fid = "arg"+i2s(narg)+"val";
 	    string fnm = _("Argument ")+i2s(narg)+_(":value");
 	    int apos = cfg.owner()->attrPos(fid);
 	    VCA::Attr::SelfAttrFlgs sflg =  cfg.owner()->attrAt(fid).at().flgSelf();
 	    cfg.owner()->attrDel(fid);
-	    cfg.owner()->attrAdd( new TFld(fid.c_str(),fnm.c_str(),
+	    cfg.owner()->attrAdd(new TFld(fid.c_str(),fnm.c_str(),
 			(cfg.getI()==1) ? TFld::Real : ((cfg.getI()==2) ? TFld::String : TFld::Integer),
-			Attr::Mutable,"","","","",i2s(50+10*narg).c_str()), apos );
+			Attr::Mutable,"","","","",i2s(A_TextArs+A_TextArsSz*narg).c_str()), apos);
 	    cfg.owner()->attrAt(fid).at().setFlgSelf(sflg);
 	}
     }
@@ -721,10 +717,11 @@ bool OrigText::attrChange( Attr &cfg, TVariant prev )
 bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 {
     if(!src) src = this;
-    //> Get page info
+
+    //Get page info
     if(opt->name() == "info")
     {
-	Widget::cntrCmdAttributes(opt,src);
+	Widget::cntrCmdAttributes(opt, src);
 	XMLNode *root, *el;
 	if((root=ctrMkNode("area",opt,-1,"/attr",_("Attributes"))))
 	{
@@ -734,30 +731,29 @@ bool OrigText::cntrCmdAttributes( XMLNode *opt, Widget *src )
 		int p = atoi(el->attr("p").c_str());
 		switch(p)
 		{
-		    case 20: case 23: case 26: el->setAttr("help",Widget::helpColor());	break;
-		    case 25: el->setAttr("help",Widget::helpFont());	break;
-		    case 21: el->setAttr("help",Widget::helpImg());	break;
-		    case 30: el->setAttr("help",_("Text value. Use \"%{n}\" for argument {n} (from 1) value insert.")); break;
+		    case A_BackColor: case A_BordColor: case A_TextColor: el->setAttr("help",Widget::helpColor());	break;
+		    case A_TextFont: el->setAttr("help",Widget::helpFont());	break;
+		    case A_BackImg:  el->setAttr("help",Widget::helpImg());	break;
+		    case A_TextText: el->setAttr("help",_("Text value. Use \"%{n}\" for argument {n} (from 1) value insert.")); break;
 		}
 	    }
 	    for(int i_arg = 0; i_arg < src->attrAt("numbArg").at().getI(); i_arg++)
 	    {
-		el = ctrId(root,"/arg"+i2s(i_arg)+"cfg",true);
-		if(!el) continue;
+		if(!(el=ctrId(root,"/arg"+i2s(i_arg)+"cfg",true))) continue;
 		switch(src->attrAt("arg"+i2s(i_arg)+"tp").at().getI())
 		{
-		    case 0: el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
-		    case 1: el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
-						 "Where \"form\" that 'g', 'e' or 'f'."));		break;
-		    case 2: el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
+		    case A_TextArsVal:	el->setAttr("help",_("Integer value configuration in form \"[valLen]\"."));	break;
+		    case A_TextArsTp:	el->setAttr("help",_("Real value configuration in form: \"[width];[form];[prec]\".\n"
+							     "Where \"form\" that 'g', 'e' or 'f'."));			break;
+		    case A_TextArsCfg:	el->setAttr("help",_("String value configuration in form \"[strLen]\"."));	break;
 		}
 	    }
 	}
 	return true;
     }
 
-    //> Process command to page
-    return Widget::cntrCmdAttributes(opt,src);
+    //Process command to page
+    return Widget::cntrCmdAttributes(opt, src);
 }
 
 //************************************************

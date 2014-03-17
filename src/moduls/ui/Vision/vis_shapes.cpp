@@ -1173,20 +1173,11 @@ void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 //************************************************
 //* Text element shape widget                    *
 //************************************************
-ShapeText::ShapeText( ) : WdgShape("Text")
-{
+ShapeText::ShapeText( ) : WdgShape("Text")	{ }
 
-}
+void ShapeText::init( WdgView *w )	{ w->shpData = new ShpDt(); }
 
-void ShapeText::init( WdgView *w )
-{
-    w->shpData = new ShpDt();
-}
-
-void ShapeText::destroy( WdgView *w )
-{
-    delete (ShpDt*)w->shpData;
-}
+void ShapeText::destroy( WdgView *w )	{ delete (ShpDt*)w->shpData; }
 
 bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 {
@@ -1241,11 +1232,11 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	case A_BordWidth: shD->border.setWidth(atoi(val.c_str())); up = true;	break;
-	case A_BordColor: shD->border.setColor(getColor(val)); up = true;		break;
-	case A_BordStyle: shD->bordStyle = atoi(val.c_str()); up = true;		break;
-	case A_TextFont: shD->font = val; up = true;					break;
-	case A_TextColor: shD->color = getColor(val);					break;
-	case A_TextOrient: shD->orient = atoi(val.c_str());				break;
+	case A_BordColor: shD->border.setColor(getColor(val)); up = true;	break;
+	case A_BordStyle: shD->bordStyle = atoi(val.c_str()); up = true;	break;
+	case A_TextFont: shD->font = val; up = true;				break;
+	case A_TextColor: shD->color = getColor(val);				break;
+	case A_TextOrient: shD->orient = atoi(val.c_str());			break;
 	case A_TextWordWrap:
 	    if(atoi(val.c_str())) shD->text_flg |= Qt::TextWordWrap; else shD->text_flg &= (~Qt::TextWordWrap);
 	    break;
@@ -1279,30 +1270,30 @@ bool ShapeText::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    break;
 	}
 	default:
-	    //> Individual arguments process
-	    if( uiPrmPos >= 50 )
+	    //Individual arguments process
+	    if(uiPrmPos >= A_TextArs)
 	    {
-		int argN = (uiPrmPos/10)-5;
-		if(argN >= (int)shD->args.size())	break;
-		if( (uiPrmPos%10) == 0 || (uiPrmPos%10) == 1 )
+		int argN = (uiPrmPos-A_TextArs)/A_TextArsSz;
+		if(argN >= (int)shD->args.size()) break;
+		if((uiPrmPos%A_TextArsSz) == A_TextArsVal || (uiPrmPos%A_TextArsSz) == A_TextArsTp)
 		{
 		    QVariant gval = shD->args[argN].val();
 		    int tp = (gval.type()==QVariant::Double) ? 1 : ((gval.type()==QVariant::String) ? 2 : 0);
-		    if( (uiPrmPos%10) == 0 )	gval = val.c_str();
-		    if( (uiPrmPos%10) == 1 )	tp = atoi(val.c_str());
-		    switch( tp )
+		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)	gval = val.c_str();
+		    if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	tp = atoi(val.c_str());
+		    switch(tp)
 		    {
-			case 0: shD->args[argN].setVal(gval.toInt());	break;
-			case 1: shD->args[argN].setVal(gval.toDouble());	break;
-			case 2: shD->args[argN].setVal(gval.toString());	break;
+			case FT_INT:  shD->args[argN].setVal(gval.toInt());	break;
+			case FT_REAL: shD->args[argN].setVal(gval.toDouble());	break;
+			case FT_STR:  shD->args[argN].setVal(gval.toString());	break;
 		    }
 		}
-		if( (uiPrmPos%10) == 2 ) shD->args[argN].setCfg(val.c_str());
+		if((uiPrmPos%A_TextArsSz) == A_TextArsCfg) shD->args[argN].setCfg(val.c_str());
 		reform = true;
 	    }else up = false;
     }
 
-    //> Text reformation
+    //Text reformation
     if(reform && !w->allAttrLoad())
     {
 	QString text = shD->text_tmpl.c_str();
@@ -1348,11 +1339,11 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 
 	    QRect dA = w->rect();	// Decoration draw area
 
-	    //> Draw decoration
+	    //Draw decoration
 	    if(shD->backGrnd.color().isValid())		pnt.fillRect(dA, shD->backGrnd.color());
 	    if(!shD->backGrnd.textureImage().isNull())	pnt.fillRect(dA, shD->backGrnd.textureImage());
 
-	    //> Draw border
+	    //Draw border
 	    if(shD->border.width())
 	    {
 		borderDraw(pnt, dA, shD->border, shD->bordStyle);
@@ -1360,18 +1351,18 @@ bool ShapeText::event( WdgView *w, QEvent *event )
 	    }
 	    dA.adjust(shD->geomMargin, shD->geomMargin, -shD->geomMargin, -shD->geomMargin);
 
-	    //> Text translation
+	    //Text translation
 	    pnt.translate(w->rect().width()/2, w->rect().height()/2);
 	    pnt.rotate(shD->orient);
 
-	    //> Calc whidth and hight draw rect at rotate
+	    //Calc whidth and hight draw rect at rotate
 	    double rad_angl  = fabs(M_PI*(double)shD->orient/180);
 	    double rect_rate = 1/(fabs(cos(rad_angl))+fabs(sin(rad_angl)));
 	    int wdth  = (int)(rect_rate*dA.size().width()+fabs(sin(rad_angl))*(dA.size().height()-dA.size().width()));
 	    int heigt = (int)(rect_rate*dA.size().height()+fabs(sin(rad_angl))*(dA.size().width()-dA.size().height()));
 	    dA = QRect(QPoint(-wdth/2,-heigt/2), QSize(wdth,heigt));
 
-	    //> Draw text
+	    //Draw text
 	    pnt.setPen(shD->color);
 	    pnt.setFont(getFont(shD->font,vmin(w->xScale(true),w->yScale(true))));
 	    pnt.drawText(dA, shD->text_flg, shD->text.c_str());

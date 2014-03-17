@@ -1106,27 +1106,33 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
     Reg *rez = NULL;
     deque<int> p_pos;
 
-    //> Check return IO position
+    //Check return IO position
     bool ret_ok = false;
-    for(r_pos = 0; !ret_ok && r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++)
-	ret_ok = (bool)(funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return);
-    //> Check IO and parameters count
+    for(r_pos = 0; r_pos < funcAt(f_id)->func().at().ioSize(); r_pos++)
+	if((ret_ok=(bool)(funcAt(f_id)->func().at().io(r_pos)->flg()&IO::Return)))
+	    break;
+
+    //Check IO and parameters count
     if(p_cnt > funcAt(f_id)->func().at().ioSize()-ret_ok)
-        throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
+	throw TError(nodePath().c_str(), _("More than %d(%d) parameters are specified for function '%s'"),
 	    (funcAt(f_id)->func().at().ioSize()-ret_ok), p_cnt, funcAt(f_id)->func().at().id().c_str());
-    //> Check the present return for fuction
+
+    //Check the present return for fuction
     if(!proc && !ret_ok)
 	throw TError(nodePath().c_str(), _("Function is requested '%s', but it doesn't have return of IO"), funcAt(f_id)->func().at().id().c_str());
-    //> Mvi all parameters
+
+    //Mvi all parameters
     for(int i_prm = 0; i_prm < p_cnt; i_prm++) f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
-    //> Get parameters. Add check parameters type !!!!
+
+    //Get parameters. Add check parameters type !!!!
     for(int i_prm = 0; i_prm < p_cnt; i_prm++)
     {
 	p_pos.push_front(f_prmst.front()->pos());
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }
-    //> Make result
+
+    //Make result
     if(!proc)
     {
 	rez = regAt(regNew());
@@ -1140,7 +1146,7 @@ Reg *Func::cdExtFnc( int f_id, int p_cnt, bool proc )
 	}
     }
 
-    //> Make code
+    //Make code
     uint16_t addr;
     prg += proc ? (uint8_t)Reg::CProc : (uint8_t)Reg::CFunc;
     prg += (uint8_t)f_id;
@@ -2597,16 +2603,16 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 		if(mess_lev() == TMess::Debug)
 		    mess_debug(nodePath().c_str(), "CODE: Call function/procedure %d = %s(%d).", ptr->rez, vfnc->func()->id().c_str(), ptr->n);
 #endif
-		//>>> Get return position
+		//  Get return position
 		int r_pos, i_p, p_p;
 		for(r_pos = 0; r_pos < vfnc->func()->ioSize(); r_pos++)
 		    if(vfnc->ioFlg(r_pos)&IO::Return) break;
-		//>>> Process parameters
+		//  Process parameters
 		for(i_p = p_p = 0; true; i_p++)
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
 		    if(p_p >= vfnc->func()->ioSize()) break;
-		    //>>>> Set default value
+		    //   Set default value
 		    if(i_p >= ptr->n)	{ vfnc->setS(p_p,vfnc->func()->io(p_p)->def()); continue; }
 		    switch(vfnc->ioType(p_p))
 		    {
@@ -2617,9 +2623,9 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			case IO::Object:	vfnc->setO(p_p,getValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))])); break;
 		    }
 		}
-		//>>> Make calc
+		//  Make calc
 		vfnc->calc(vfnc->user());
-		//>>> Process outputs
+		//  Process outputs
 		for(i_p = 0; i_p < ptr->n; i_p++)
 		{
 		    p_p = (i_p>=r_pos)?i_p+1:i_p;
@@ -2634,7 +2640,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 			    case IO::Object:	setValO(val,reg[TSYS::getUnalign16(cprg+sizeof(SCode)+i_p*sizeof(uint16_t))],vfnc->getO(p_p)); break;
 			}
 		}
-		//>>> Set return
+		//  Set return
 		if(ptr->cod == Reg::CFunc)
 		    switch(vfnc->ioType(r_pos))
 		    {

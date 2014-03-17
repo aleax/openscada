@@ -430,32 +430,6 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
 	if(messHead >= 0 && messHead == headBuf && ++messHead >= mBuf.size()) messHead = 0;
     }
 
-    //Check to no archivated messages
-    /*if(headBuf == headLstread)
-    {
-	if(!(bufErr&0x01))
-	{
-	    bufErr |= 0x01;
-	    res.release();
-	    mess_err(nodePath().c_str(), _("Buffer full. Messages lost!"));
-	    res.request(true);
-	}
-	if(++headLstread >= mBuf.size()) headLstread = 0;
-    }
-
-    //Check fill buffer speed.
-    else if((headBuf-headLstread) > messBufLen()/2)
-    {
-	if(!(bufErr&0x02))
-	{
-	    bufErr |= 0x02;
-	    res.release();
-	    mess_warning(nodePath().c_str(), _("Messages buffer filling is too fast!"));
-	    res.request(true);
-	}
-    }
-    else bufErr = 0;*/
-
     //Alarms processing. For level less 0 alarm is set
     map<string,TMess::SRec>::iterator p;
     if(level < 0) mAlarms[categ] = TMess::SRec(tm, utm, categ, (TMess::Type)abs(level), mess);
@@ -673,41 +647,6 @@ void *TArchiveS::ArhMessTask( void *param )
 	    res.lock();
 	}
 	res.unlock();
-
-	/*if(arh.headLstread != arh.headBuf)
-	    try
-	    {
-		ResAlloc res(arh.mRes, false);
-
-		// Get new messages
-		unsigned new_headLstread = arh.headBuf;
-		unsigned i_m = arh.headLstread;
-		vector<TMess::SRec> o_mess;
-		while(i_m != new_headLstread)
-		{
-		    o_mess.push_back(arh.mBuf[i_m]);
-		    if(++i_m >= arh.mBuf.size()) i_m = 0;
-		}
-		arh.headLstread = new_headLstread;
-
-		res.release();
-
-		// Put to archivators
-		vector<string> t_lst, o_lst;
-		arh.modList(t_lst);
-		for(unsigned i_t = 0; i_t < t_lst.size(); i_t++)
-		{
-		    arh.at(t_lst[i_t]).at().messList(o_lst);
-		    for(unsigned i_o = 0; i_o < o_lst.size(); i_o++)
-			if(arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().startStat())
-			    arh.at(t_lst[i_t]).at().messAt(o_lst[i_o]).at().put(o_mess);
-		}
-	    }
-	    catch(TError err)
-	    {
-		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
-		mess_err(arh.nodePath().c_str(),_("Message buffer read error."));
-	    }*/
 
 	if(isLast) break;
 

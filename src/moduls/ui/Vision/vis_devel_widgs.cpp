@@ -174,7 +174,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
     vector<int> idst;
     bool grpW = false;
     Item *it = mod_it.isValid() ? static_cast<Item*>(mod_it.internalPointer()) : rootItem;
-    if( it->type() != Item::Wdg )   return;
+    if(it->type() != Item::Wdg)	return;
     QModelIndex curmod = mod_it;
     string itId = it->id();
 
@@ -315,18 +315,34 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    if(gnd->attr("dest") == "select" || gnd->attr("dest") == "sel_ed")
 	    {
 		cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::Select);
-		QStringList selLs;
-		if(gnd->attr("select").empty()) selLs = QString(gnd->attr("sel_list").c_str()).split(";");
+		QStringList selLs, selIds;
+		if(gnd->attr("select").empty())
+		{
+		    selIds = QString(gnd->attr("sel_id").c_str()).split(";");
+		    selLs = QString(gnd->attr("sel_list").c_str()).split(";");
+		}
 		else
 		{
 		    cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::SelEd);
+
 		    XMLNode req1("get");
 		    req1.setAttr("path", itId+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 		    if(!mainWin()->cntrIfCmd(req1))
+		    {
+			bool ind_ok = atoi(gnd->attr("idm").c_str());
 			for(unsigned i_ch = 0; i_ch < req1.childSize(); i_ch++)
+			{
+			    if(!i_ch) ind_ok = req1.childGet(i_ch)->attr("id").size();
+			    if(ind_ok) selIds << req1.childGet(i_ch)->attr("id").c_str();
 			    selLs << req1.childGet(i_ch)->text().c_str();
+			}
+		    }
 		}
+		for(unsigned i_sId = 0; i_sId < selIds.size() && i_sId < selLs.size(); i_sId++)
+		    if(selIds[i_sId].toStdString() == sval)
+		    { cur_it->child(ga_id)->setData(selLs[i_sId]); break; }
 		cur_it->child(ga_id)->setDataEdit(selLs);
+		cur_it->child(ga_id)->setDataEdit1(selIds);
 	    }
 	}
 
@@ -499,15 +515,16 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
     return val;
 }
 
-bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int role )
+bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int role )
 {
+    QVariant value = ivl;
     if(!index.isValid()) return false;
 
-    //> Attribute
+    //Attribute
     Item *it = static_cast<Item*>(index.internalPointer());
     string nattr = it->id();
 
-    //> Attribute widget(s)
+    //Attribute widget(s)
     string nwdg = it->wdgs(), swdg;
     if(nwdg.empty())
     {
@@ -525,6 +542,11 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
     {
 	bool isGrp = TSYS::strSepParse(nwdg,1,';').size();
 	if(it->data() == value && !isGrp) return true;
+
+	//Check for list
+	for(unsigned i_it = 0; i_it < it->dataEdit().toStringList().size() && i_it < it->dataEdit1().toStringList().size(); i_it++)
+	    if(it->dataEdit().toStringList()[i_it] == value) { value = it->dataEdit1().toStringList()[i_it]; break; }
+
 	XMLNode chCtx("attr");
 
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
@@ -538,7 +560,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		chCtx.clear();
 		chCtx.setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val);
 		if(it->flag()&Item::Active) dw->chLoadCtx(chCtx, "", nattr);
-		//> Load previous value for group
+		//Load previous value for group
 		if(isGrp)
 		{
 		    reqPrev.setAttr("path",swdg+"/%2fattr%2f"+nattr);
@@ -548,10 +570,14 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
 	    if(!mainWin()->cntrIfCmd(req) && req.text() == val)
 	    {
-		//> Send change request to opened to edit widget
+		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
-		//> Local update
+		// List check
+		for(unsigned i_it = 0; i_it < it->dataEdit1().toStringList().size() && i_it < it->dataEdit().toStringList().size(); i_it++)
+		    if(it->dataEdit1().toStringList()[i_it] == value) { value = it->dataEdit().toStringList()[i_it]; break; }
+
+		//Local update
 		it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);

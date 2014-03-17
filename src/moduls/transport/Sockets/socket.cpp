@@ -695,7 +695,7 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), sock_fd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
-    setTimings("5:0.01");
+    setTimings("5:0.1");
 }
 
 TSocketOut::~TSocketOut( )	{ }

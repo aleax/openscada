@@ -5,7 +5,7 @@ Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
 Version: 0.9
-Release: r2052
+Release: r2073
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
 License: GPLv2
@@ -74,6 +74,7 @@ Das offene SCADA System. Typische Installation.
 %def_enable DiamondBoards
 %endif
 %def_enable Comedi
+%def_enable AMRDevs
 
 #=====  Archive modules =====
 %def_enable FSArch
@@ -736,6 +737,28 @@ The %{name}-DAQ.Comedi package - allow ISA, PCI, PCMCIA, USB DAQ boards collecti
 Das Paket %{name}-DAQ.Comedi - erlauben die Sammlung von ISA, PCI, PCMCIA, USB DAQ-Karten von Comedi (http://www.comedi.org).
 %endif
 
+%if_enabled AMRDevs
+%package DAQ.AMRDevs
+Summary: AMR devices.
+Summary(ru_RU.UTF8): Устройства АСКУ.
+Summary(uk_UA.UTF8): Пристрої АСКО.
+Summary(de_DE.UTF8): Die AMR-Devices.
+Group: Graphics
+Requires: %name-core = %version-%release
+%description DAQ.AMRDevs
+The %{name}-DAQ.AMRDevs package - allow access to automatic meter reading devices.
+Supported devices: Kontar (http://www.mzta.ru).
+%description DAQ.AMRDevs -l ru_RU.UTF8
+Пакет %{name}-DAQ.AMRDevs - предоставляет доступ к устройствам счётчиков коммерческого учёта.
+Поддерживаются устройства: Kontar (http://www.mzta.ru).
+%description DAQ.AMRDevs -l uk_UA.UTF8
+Пакет %{name}-DAQ.AMRDevs - надає доступ до пристроїв лічильників комерцевого обліку.
+Підтримуються пристрої: Kontar (http://www.mzta.ru).
+%description DAQ.AMRDevs -l de_DE.UTF8
+Das Paket %{name}-DAQ.AMRDevs - ermöglicht den Zugang zu den Zählerwerken der kommerziellen Inventur.
+Es werden die Anlagen unterstützt: Kontar (http://www.mzta.ru).
+%endif
+
 
 #=====  Archive modules =====
 %if_enabled FSArch
@@ -1111,6 +1134,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
     %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} %{subst_enable BFN} %{subst_enable Comedi} \
+    %{subst_enable AMRDevs} \
     %{subst_enable FSArch} %{subst_enable DBArch} \
     %{subst_enable Sockets} %{subst_enable SSL} %{subst_enable Serial} \
     %{subst_enable HTTP} %{subst_enable SelfSystem} %{subst_enable UserProtocol} \
@@ -1343,6 +1367,12 @@ ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 %files DAQ.Comedi
 %_libdir/openscada/daq_Comedi.so
 %_datadir/locale/*/LC_MESSAGES/oscd_Comedi.mo
+%endif
+
+%if_enabled AMRDevs
+%files DAQ.AMRDevs
+%_libdir/openscada/daq_AMRDevs.so
+%_datadir/locale/*/LC_MESSAGES/oscd_AMRDevs.mo
 %endif
 
 #=====  Archive modules =====
