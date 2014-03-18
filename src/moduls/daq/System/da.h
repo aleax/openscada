@@ -48,9 +48,11 @@ class DA: public TElem
 	virtual void init( TMdPrm *prm ) 	{ }
 	virtual void deInit( TMdPrm *prm )	{ }
 
+	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
 	virtual void cfgChange( TCfg &i_cfg )	{ }
 
 	virtual void getVal( TMdPrm *prm )	{ }
+	virtual void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl )	{ }
 
 	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
 };

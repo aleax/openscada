@@ -39,7 +39,7 @@ class UPS: public DA
 	{
 	    public:
 	    //Methods
-	    tval( ) { }
+	    tval( )	{ }
 
 	    TElem els;
 	};
@@ -54,19 +54,22 @@ class UPS: public DA
 	void init( TMdPrm *prm );
 	void deInit( TMdPrm *prm );
 
+	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
 	void cfgChange( TCfg &i_cfg );
 
 	void getVal( TMdPrm *prm );
+	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
 
 	void makeActiveDA( TMdContr *a_cntr );
 
     private:
 	//Methods
-	string reqUPS( const string &addr, const string &req );
+	string reqUPS( const string &addr, const string &req, const string &debCat = "" );
 	string upsList( const string &addr );
 
 	//Attributes
 	string	tTr, nTr;
+	pthread_mutex_t	reqRes;
 };
 
 } //End namespace

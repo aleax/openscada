@@ -57,17 +57,21 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void autoC( bool val )	{ m_auto = val; }
-	bool autoC( )		{ return m_auto; }
+	void autoC( bool val )	{ mAuto = val; }
+	bool autoC( )		{ return mAuto; }
 
-	//> Set perameter type
+	// Set perameter type
 	void setType( const string &da_id );
-	//> Get new value
+
+	// Get new value
 	void getVal( );
 	void setEval( );
 
 	void vlElemAtt( TElem *ValEl );
 	void vlElemDet( TElem *ValEl );
+
+	string addPrm( const string &prm, const string &def = "" );
+	void setAddPrm( const string &prm, const string &val );
 
 	TMdContr &owner( );
 
@@ -80,17 +84,19 @@ class TMdPrm : public TParamContr
 	void load_( );
 	void save_( );
 
-	bool cfgChange( TCfg &cfg );	//config change
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &cfg );		//config change
 
 	void vlGet( TVal &val );
+	void vlSet( TVal &val, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	void postEnable( int flag );
 
     private:
 	//Attributes
-	bool	m_auto;			//Autocreated
-	DA	*m_da;
+	bool	mAuto;			//Autocreated
+	DA	*mDA;
 };
 
 //*************************************************
@@ -172,7 +178,7 @@ class TTpContr: public TTipDAQ
 	TController *ContrAttach( const string &name, const string &daq_db );
 
 	//Attributes
-	vector<DA *> m_da;
+	vector<DA*>	mDA;
 };
 
 extern TTpContr *mod;

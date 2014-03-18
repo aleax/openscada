@@ -102,8 +102,8 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 TTpContr::~TTpContr( )
 {
     nodeDelAll();
-    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)	delete m_da[i_da];
-    m_da.clear();
+    for(unsigned i_da = 0; i_da < mDA.size(); i_da++)	delete mDA[i_da];
+    mDA.clear();
 }
 
 void TTpContr::load_( )
@@ -148,6 +148,7 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("TYPE",_("System part"),TFld::String,TFld::Selected|TCfg::NoVal,"10",el_def.c_str(),el_id.c_str(),el_name.c_str()));
     tpPrmAt(t_prm).fldAdd(new TFld("SUBT" ,"",TFld::String,TFld::Selected|TCfg::NoVal|TFld::SelfFld,"255"));
+    tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",_("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
 TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
@@ -158,16 +159,16 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 void TTpContr::daList( vector<string> &da )
 {
     da.clear();
-    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
-	da.push_back(m_da[i_da]->id());
+    for(unsigned i_da = 0; i_da < mDA.size(); i_da++)
+	da.push_back(mDA[i_da]->id());
 }
 
-void TTpContr::daReg( DA *da )	{ m_da.push_back(da); }
+void TTpContr::daReg( DA *da )	{ mDA.push_back(da); }
 
 DA *TTpContr::daGet( const string &da )
 {
-    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
-	if(m_da[i_da]->id() == da) return m_da[i_da];
+    for(unsigned i_da = 0; i_da < mDA.size(); i_da++)
+	if(mDA[i_da]->id() == da) return mDA[i_da];
 
     return NULL;
 }
@@ -211,7 +212,7 @@ string TMdContr::getStatus( )
 
 void TMdContr::devUpdate( )
 {
-    if(cfg("AUTO_FILL").getB())
+    if(enableStat() && cfg("AUTO_FILL").getB())
     {
 	vector<string> list;
 	mod->daList(list);
@@ -237,6 +238,7 @@ void TMdContr::load_( )
 
 void TMdContr::enable_( )
 {
+    en_st = true;
     devUpdate();
 }
 
@@ -326,7 +328,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //* TMdPrm                                        *
 //*************************************************
 TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) :
-    TParamContr(name,tp_prm), daData(NULL), m_auto(false), m_da(NULL)
+    TParamContr(name,tp_prm), daData(NULL), mAuto(false), mDA(NULL)
 {
 
 }
@@ -366,12 +368,12 @@ void TMdPrm::disable( )
 
 void TMdPrm::load_( )
 {
-    if(!m_auto)	TParamContr::load_();
+    if(!mAuto)	TParamContr::load_();
 }
 
 void TMdPrm::save_( )
 {
-    if(!m_auto) TParamContr::save_();
+    if(!mAuto)	TParamContr::save_();
 
     //> Save archives
     vector<string> a_ls;
@@ -392,17 +394,40 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
+void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+{
+    if(!enableStat() || !owner().startStat())	{ valo.setI(EVAL_INT, 0, true); return; }
+
+    //Send to active reserve station
+    if(owner().redntUse())
+    {
+	if(valo.getS(0,true) == pvl.getS()) return;
+	XMLNode req("set");
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(0,true));
+	SYS->daq().at().rdStRequest(owner().workId(),req);
+	return;
+    }
+
+    //Direct write
+    try { if(mDA) mDA->vlSet(this, valo, pvl); }
+    catch(TError err)
+    {
+	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),valo.name().c_str(),err.mess.c_str());
+	valo.setS( pvl.getS(), 0, true );
+    }
+}
+
 void TMdPrm::getVal( )
 {
-    if(m_da) m_da->getVal(this);
+    if(mDA) mDA->getVal(this);
 }
 
 void TMdPrm::setEval( )
 {
-    if(!m_da)	return;
+    if(!mDA)	return;
 
     vector<string> als;
-    m_da->fldList(als);
+    mDA->fldList(als);
     if(als.size())
     {
 	for(unsigned i_a = 0; i_a < als.size(); i_a++)
@@ -435,34 +460,93 @@ void TMdPrm::vlArchMake( TVal &val )
 
 void TMdPrm::setType( const string &da_id )
 {
-    if(m_da && da_id == m_da->id())	return;
+    if(mDA && da_id == mDA->id())	return;
 
     //> Free previous type
-    if(m_da)
+    if(mDA)
     {
-	m_da->deInit(this);
-	vlElemDet(m_da);
-	m_da = NULL;
+	mDA->deInit(this);
+	vlElemDet(mDA);
+	mDA = NULL;
     }
 
     //> Create new type
     try
     {
-	if(da_id.size() && (m_da=mod->daGet(da_id)))
+	if(da_id.size() && (mDA=mod->daGet(da_id)))
 	{
 	    daErr = "";
-	    vlElemAtt(m_da);
-	    m_da->init(this);
+	    vlElemAtt(mDA);
+	    mDA->init(this);
 	}
     }
     catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str() ); }
+}
+
+string TMdPrm::addPrm( const string &prm, const string &def )
+{
+    string rez;
+    XMLNode prmNd;
+    try
+    {
+	prmNd.load(cfg("ADD_PRMS").getS());
+	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
+	if(!sa.size())	return (rez=prmNd.attr(prm)).empty() ? def : rez;
+	//Internal node
+	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
+	    if(prmNd.childGet(i_n)->name() == sobj)
+		return (rez=prmNd.childGet(i_n)->attr(sa)).empty() ? def : rez;
+    } catch(...){ }
+
+    return def;
+}
+
+void TMdPrm::setAddPrm( const string &prm, const string &val )
+{
+    XMLNode prmNd("cfg");
+    try { prmNd.load(cfg("ADD_PRMS").getS()); } catch(...){ }
+
+    if(addPrm(prm) != val) modif();
+    string sobj = TSYS::strParse(prm, 0, ":"), sa = TSYS::strParse(prm, 1, ":");
+    if(!sa.size()) prmNd.setAttr(prm, val);
+
+    //Internal node
+    else
+    {
+	unsigned i_n;
+	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
+	    if(prmNd.childGet(i_n)->name() == sobj)
+	    { prmNd.childGet(i_n)->setAttr(sa,val); break; }
+	if(i_n >= prmNd.childSize())
+	    prmNd.childAdd(sobj)->setAttr(sa,val);
+    }
+
+    cfg("ADD_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
+    autoC(false);
 }
 
 bool TMdPrm::cfgChange( TCfg &i_cfg )
 {
     //> Change TYPE parameter
     if(i_cfg.name() == "TYPE") { setType(i_cfg.getS()); return true; }
-    if(m_da) m_da->cfgChange(i_cfg);
+    if(mDA) mDA->cfgChange(i_cfg);
     if(!autoC()) modif();
     return true;
+}
+
+void TMdPrm::cntrCmdProc( XMLNode *opt )
+{
+    //Get page info
+    if(opt->name() == "info")
+    {
+	TParamContr::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/ADD_PRMS");
+	if(mDA) mDA->cntrCmdProc(this, opt);
+	return;
+    }
+
+    //Process command to page
+    string a_path = opt->attr("path");
+    if(mDA && mDA->cntrCmdProc(this,opt)) ;
+    else TParamContr::cntrCmdProc(opt);
 }

@@ -1,3 +1,9 @@
+2014-03-18 Roman
+- DAQ.OPC_UA: MonitoredItemId queueSize manage fix by set from 1 to 1000.
+- !!!:DAQ.System: Expanded for addition properties into the parameter object support.
+    UPS subtype expanded for commands and writable values support.
+
+
 2014-03-17 Roman
 - DAQ.OPC_UA: SubscriptionId and MonitoredItemId grow start from '1', for exclube invalid value '0'.
 - SYS: AMRDevs module is added to openscada_mod.spec.

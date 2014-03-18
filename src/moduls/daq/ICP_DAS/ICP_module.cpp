@@ -652,7 +652,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     string rez;
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
@@ -666,7 +666,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(da) da->cntrCmdProc(this,opt);
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/modLst" && ctrChkNode(opt))
     {

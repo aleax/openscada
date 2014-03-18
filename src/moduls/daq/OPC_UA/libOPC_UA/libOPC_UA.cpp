@@ -3763,7 +3763,7 @@ uint32_t Server::EP::mItSet( uint32_t ssId, uint32_t mItId, MonitoringMode md, c
 	if(!nd.isNull())	mIt.nd = nd;
 	if(aid != OpcUa_NPosID)	mIt.aid = aid;
 	if(tmToRet != -1)	mIt.tmToRet = tmToRet;
-	if(qSz != OpcUa_NPosID)	mIt.qSz = qSz;
+	if(qSz != OpcUa_NPosID)	mIt.qSz = std::max(uint32_t(1), std::min(uint32_t(1000),qSz));	//!!!! Make upper limit configurable
 	if(dO >= 0)		mIt.dO = dO;
 	if(cH != OpcUa_NPosID)	mIt.cH = cH;
 
