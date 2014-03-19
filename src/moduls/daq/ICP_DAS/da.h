@@ -48,7 +48,7 @@ class DA
 	virtual void disable( TMdPrm *prm )			{ }
 
 	virtual void getVal( TMdPrm *prm )			{ }
-	virtual void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl )	{ }
+	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
 
 	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
 };

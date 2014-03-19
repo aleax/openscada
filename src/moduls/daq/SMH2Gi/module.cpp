@@ -730,24 +730,24 @@ void SHMParam::getVals( TParamContr *ip )
     if(ip->owner().messLev() == TMess::Debug) mess_debug_(ip->nodePath().c_str(), _("SHM Get vals: %s"), vals.c_str());
 }
 
-void SHMParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
+void SHMParam::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     TMdPrm *p = (TMdPrm *)ip;
 
-    if(!p->enableStat() || !p->owner().startStat())	val.setS(EVAL_STR, 0, true);
-    if(val.get().isEVal() || val.get() == pvl) return;
+    if(!p->enableStat() || !p->owner().startStat())	vo.setS(EVAL_STR, 0, true);
+    if(vl.isEVal() || vl == pvl) return;
     int rez = -2;
-    string tvar = val.fld().descr();
-    switch(atoi(val.fld().reserve().c_str()))
+    string tvar = vo.fld().descr();
+    switch(atoi(vo.fld().reserve().c_str()))
     {
-	case BOOL:	rez = p->owner().smv->setBool(tvar.c_str(),val.getB(0,true));	break;
-	case SHORT:	rez = p->owner().smv->setShort(tvar.c_str(),val.getI(0,true));	break;
-	case LONG:	rez = p->owner().smv->setLong(tvar.c_str(),val.getI(0,true));	break;
-	case FLOAT:	rez = p->owner().smv->setFloat(tvar.c_str(),val.getR(0,true));	break;
+	case BOOL:	rez = p->owner().smv->setBool(tvar.c_str(),vl.getB());	break;
+	case SHORT:	rez = p->owner().smv->setShort(tvar.c_str(),vl.getI());	break;
+	case LONG:	rez = p->owner().smv->setLong(tvar.c_str(),vl.getI());	break;
+	case FLOAT:	rez = p->owner().smv->setFloat(tvar.c_str(),vl.getR());	break;
     }
-    if(rez < 0)	mess_err(ip->nodePath().c_str(), _("SHM Set value '%s' to '%s' error."), tvar.c_str(), val.getS(0,true).c_str());
+    if(rez < 0)	mess_err(ip->nodePath().c_str(), _("SHM Set value '%s' to '%s' error."), tvar.c_str(), vl.getS().c_str());
     if(ip->owner().messLev() == TMess::Debug)
-	mess_debug_(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), tvar.c_str(), val.getS(0,true).c_str(), rez);
+	mess_debug_(ip->nodePath().c_str(), _("SHM Set val: %s='%s': %d"), tvar.c_str(), vl.getS().c_str(), rez);
 }
 
 bool SHMParam::cntrCmdProc( TParamContr *p, XMLNode *opt )
@@ -1125,7 +1125,7 @@ void MRCParam::getVals( TParamContr *ip )
     p->acq_err.setVal(rezReq);
 }
 
-void MRCParam::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
+void MRCParam::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
 
 }

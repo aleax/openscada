@@ -1,3 +1,9 @@
+2014-03-19 Roman
+- !!!!:SYS: API function "void vlSet();" expanded for same set value pass and prevent lost values.
+- UI.Vision: Prevent Widgets copy or cut from self to self.
+    Select area update is added for same selection change and the geometry change from the attributes inspector.
+
+
 2014-03-18 Roman
 - DAQ.OPC_UA: MonitoredItemId queueSize manage fix by set from 1 to 1000.
 - !!!:DAQ.System: Expanded for addition properties into the parameter object support.

@@ -102,9 +102,9 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
-	void vlGet( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
-	void vlArchMake( TVal &val );
+	void vlGet( TVal &vo );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	void vlArchMake( TVal &vo );
 
 	string errDSC( const string &func );
 

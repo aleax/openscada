@@ -1380,18 +1380,17 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	valo.setS(EVAL_STR, 0, true);
+    if(!enableStat() || !owner().startStat())	vo.setS(EVAL_STR, 0, true);
 
-    TVariant vl = valo.get(0,true);
     if(vl.isEVal() || vl == pvl) return;
 
     //Send to active reserve station
     if(owner().redntUse())
     {
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(vl.getS());
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -1399,16 +1398,16 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     //Direct write
     bool wrRez = false;
     // Standard type request
-    if(isStd())	wrRez = owner().setVal(vl, valo.fld().reserve(), acq_err, true);
+    if(isStd())	wrRez = owner().setVal(vl, vo.fld().reserve(), acq_err, true);
     // Logical type request
     else if(isLogic())
     {
-	int id_lnk = lCtx->lnkId(valo.name());
+	int id_lnk = lCtx->lnkId(vo.name());
 	if(id_lnk >= 0 && lCtx->lnk(id_lnk).real.empty()) id_lnk = -1;
-	if(id_lnk < 0) { lCtx->set(lCtx->ioId(valo.name()), vl); wrRez = true; }
+	if(id_lnk < 0) { lCtx->set(lCtx->ioId(vo.name()), vl); wrRez = true; }
 	else wrRez = owner().setVal(vl, lCtx->lnk(id_lnk).real, acq_err, true);
     }
-    if(!wrRez) valo.setS(EVAL_STR, 0, true);
+    if(!wrRez) vo.setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

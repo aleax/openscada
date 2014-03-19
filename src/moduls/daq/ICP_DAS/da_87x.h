@@ -72,7 +72,7 @@ class da_87x: public DA
 	void disable( TMdPrm *prm );
 
 	void getVal( TMdPrm *prm );
-	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
+	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	DevFeature getDev( TMdPrm *prm, const string &nm );
 

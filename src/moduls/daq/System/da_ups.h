@@ -58,7 +58,7 @@ class UPS: public DA
 	void cfgChange( TCfg &i_cfg );
 
 	void getVal( TMdPrm *prm );
-	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
+	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	void makeActiveDA( TMdContr *a_cntr );
 

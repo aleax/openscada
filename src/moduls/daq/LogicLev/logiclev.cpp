@@ -622,31 +622,31 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ val.setS(EVAL_STR, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
-	if(val.getS(0,true) == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
-    //> Direct write
+    //Direct write
     try
     {
-	if(isPRefl() && !prm_refl->freeStat()) prm_refl->at().vlAt(val.name()).at().set(val.get(0,true));
+	if(isPRefl() && !prm_refl->freeStat()) prm_refl->at().vlAt(vo.name()).at().set(vl);
 	else if(isStd() && tmpl->val.func())
 	{
-	    int id_lnk = lnkId(val.name());
+	    int id_lnk = lnkId(vo.name());
 	    if(id_lnk >= 0 && lnk(id_lnk).aprm.freeStat()) id_lnk = -1;
 	    ResAlloc cres(calcRes,true);
-	    if(id_lnk < 0) tmpl->val.set(tmpl->val.ioId(val.name()), val.get(0,true));
-	    else lnk(id_lnk).aprm.at().set(val.get(0,true));
+	    if(id_lnk < 0) tmpl->val.set(tmpl->val.ioId(vo.name()), vl);
+	    else lnk(id_lnk).aprm.at().set(vl);
 	}
     }catch(TError err) {  }
 }

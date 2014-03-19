@@ -693,16 +693,16 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     TParamContr::cntrCmdProc(opt);
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat()) { valo.setS(EVAL_STR, 0, true); return; }
+    if(!enableStat() || !owner().startStat()) { vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
     if(owner().redntUse())
     {
-	if(valo.getS(NULL,true) == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -715,9 +715,9 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     struct snmp_pdu *response = NULL;
 
     struct snmp_pdu *pdu = snmp_pdu_create(SNMP_MSG_SET);
-    owner().str2oid(valo.name(), oidn, oidn_len);
+    owner().str2oid(vo.name(), oidn, oidn_len);
 
-    switch(atoi(valo.fld().reserve().c_str()))
+    switch(atoi(vo.fld().reserve().c_str()))
     {
 	case ASN_INTEGER:	vtp = 'i';	break;
 	case ASN_GAUGE:		vtp = 'u';	break;
@@ -741,7 +741,7 @@ void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
     {
 	if(!(ss=snmp_sess_open(&owner().session))) return;
 
-	snmp_add_var(pdu, oidn, oidn_len, vtp, valo.getS().c_str());
+	snmp_add_var(pdu, oidn, oidn_len, vtp, vl.getS().c_str());
 	int status = snmp_sess_synch_response(ss, pdu, &response);
 	if(status == STAT_TIMEOUT)
 	    owner().acq_err.setVal(TSYS::strMess(_("10:Timeout: No Response from %s."),owner().session.peername).c_str());

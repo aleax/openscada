@@ -357,9 +357,9 @@ void TParamContr::vlGet( TVal &val )
     type().vlGet(this, val);
 }
 
-void TParamContr::vlSet( TVal &val, const TVariant &pvl )
+void TParamContr::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    type().vlSet(this, val, pvl);
+    type().vlSet(this, vo, vl, pvl);
 }
 
 void TParamContr::vlArchMake( TVal &val )

@@ -781,29 +781,28 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat())	valo.setS(EVAL_STR, 0, true);
+    if(!enableStat())	vo.setS(EVAL_STR, 0, true);
 
     //> Send to active reserve station
     if(owner().redntUse())
     {
-	if(valo.getS(NULL,true) == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
-    TVariant vl = valo.get(NULL, true);
     if(vl.isEVal() || vl == pvl) return;
 
     //> Direct write
     XML_N req("opc.tcp");
     req.setAttr("id", "Write")->
-	childAdd("node")->setAttr("nodeId", TSYS::strLine(valo.fld().reserve(),0))->
+	childAdd("node")->setAttr("nodeId", TSYS::strLine(vo.fld().reserve(),0))->
 			  setAttr("attributeId", i2s(AId_Value))->
-			  setAttr("EncodingMask", TSYS::strLine(valo.fld().reserve(),1))->
+			  setAttr("EncodingMask", TSYS::strLine(vo.fld().reserve(),1))->
 			  setText(vl.getS());
     owner().reqService(req);
     if(!req.attr("err").empty()) mess_err(nodePath().c_str(), "%s", req.attr("err").c_str());

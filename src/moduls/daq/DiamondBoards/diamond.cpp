@@ -356,18 +356,17 @@ void TMdPrm::vlGet( TVal &val )
     else if(!asynchRd) getVals(val.name());
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat()) val.setS(EVAL_STR, 0, true);
+    if(!enableStat()) vo.setS(EVAL_STR, 0, true);
 
-    TVariant vl = val.get(0, true);
     if(vl.isEVal() || vl == pvl) return;
 
     //> Send to active reserve station
     if(owner().redntUse())
     {
         XMLNode req("set");
-        req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", val.name())->setText(vl.getS());
+        req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id", vo.name())->setText(vl.getS());
         SYS->daq().at().rdStRequest(owner().workId(), req);
         return;
     }
@@ -376,10 +375,10 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     ResAlloc res(devRes, true);
     BYTE rez = DE_NONE;
     string errRez;
-    if(val.name().compare(0,2,"ao") == 0)
+    if(vo.name().compare(0,2,"ao") == 0)
     {
-	int acnl = atoi(val.name().c_str()+2);
-    	int ao_cfg = val.fld().reserve().size() ? strtol(val.fld().reserve().c_str(),NULL,0) : -1;
+	int acnl = atoi(vo.name().c_str()+2);
+    	int ao_cfg = vo.fld().reserve().size() ? strtol(vo.fld().reserve().c_str(),NULL,0) : -1;
 	if(ao_cfg > 0)
 	{
 	    DSCDASETTINGS dasettings;
@@ -393,16 +392,16 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	int res = (dev.AO>>8)&0xFF;
 	if(!res) res = 12;
 	if((rez=dscDAConvert(dscb,acnl,(int)(vmax(0,vmin(100,vl.getR()))*((1<<res)-1)/100))) != DE_NONE)
-	{ errRez = errDSC("dscDAConvert"); val.setR(EVAL_REAL, 0, true); }
+	{ errRez = errDSC("dscDAConvert"); vo.setR(EVAL_REAL, 0, true); }
     }
-    else if(val.name().compare(0,2,"do") == 0)
+    else if(vo.name().compare(0,2,"do") == 0)
     {
 	int i_ch = 0, i_p = 0;
-    	if(sscanf((val.name().c_str()+2),"%d_%d",&i_ch,&i_p) != 2) return;
+	if(sscanf((vo.name().c_str()+2),"%d_%d",&i_ch,&i_p) != 2) return;
 	bool setVl = vl.getB()^((dInOutRev[(dev.DI&0xFF)+i_ch]>>i_p)&1);
 	if(mTP == DSC_IR104)	rez = dscSetRelay(dscb, (i_ch*i_p)+1, setVl);
 	else rez = dscDIOOutputBit(dscb, i_ch, i_p, setVl);
-	if(rez != DE_NONE) { errRez = errDSC((mTP==DSC_IR104)?"dscSetRelay":"dscDIOOutputBit"); val.setB(EVAL_BOOL, 0, true); }
+	if(rez != DE_NONE) { errRez = errDSC((mTP==DSC_IR104)?"dscSetRelay":"dscDIOOutputBit"); vo.setB(EVAL_BOOL, 0, true); }
     }
 
     if(errRez.size())	{ acqErr.setVal(errRez); mess_err(nodePath().c_str(), "%s", errRez.c_str()); }
@@ -451,12 +450,12 @@ void TMdPrm::enable( )
 	//>> Try remove AI attribute for different type
 	unsigned cFldId = pEl.fldId(chnId, true);
 	if(cFldId < pEl.fldSize() && pEl.fldAt(cFldId).type() != chnTp)
-    	    try{ pEl.fldDel(cFldId); }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	    try{ pEl.fldDel(cFldId); }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 
-        pEl.fldAt(pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),chnTp,TFld::NoWrite|TVal::DirRead))).
-    	    setReserve(modPrm(TSYS::strMess("AI_TP%d",i_a),"0x00"));
-        als.push_back(chnId);
+	pEl.fldAt(pEl.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),chnTp,TFld::NoWrite|TVal::DirRead))).
+	    setReserve(modPrm(TSYS::strMess("AI_TP%d",i_a),"0x00"));
+	als.push_back(chnId);
     }
 
     //> AO processing

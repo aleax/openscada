@@ -960,23 +960,23 @@ void TMdPrm::vlGet( TVal &val )
     else if(val.name().compare(0,2,"CI") == 0) val.setR(CI[atoi(val.name().substr(2,val.name().size()-2).c_str())],0,true);
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ valo.setI(EVAL_INT, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
 
     //> Send to active reserve station
     if(owner().redntUse())
     {
-	if(valo.getS() == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
     //> Direct write
-    if(valo.name().compare(0,2,"AO") == 0) AO[atoi(valo.name().substr(2,valo.name().size()-2).c_str())]=valo.getR(NULL,true);
-    if(valo.name().compare(0,2,"DO") == 0) DO[atoi(valo.name().substr(2,valo.name().size()-2).c_str())]=valo.getB(NULL,true);
+    if(vo.name().compare(0,2,"AO") == 0) AO[atoi(vo.name().substr(2,vo.name().size()-2).c_str())] = vl.getR();
+    if(vo.name().compare(0,2,"DO") == 0) DO[atoi(vo.name().substr(2,vo.name().size()-2).c_str())] = vl.getB();
 }
 
 void TMdPrm::vlArchMake( TVal &val )

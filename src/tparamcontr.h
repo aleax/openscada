@@ -63,7 +63,7 @@ class TParamContr : public TConfig, public TValue
 	void setDescr( const string &idsc );
 	void setToEnable( bool vl )		{ cfg("EN").setB(vl); }
 
-	//> Included parameters
+	// Included parameters
 	void list( vector<string> &list );
 	bool present( const string &name );
 	void add( const string &name, unsigned type = 0 );
@@ -93,8 +93,8 @@ class TParamContr : public TConfig, public TValue
 
 	bool cfgChange( TCfg &cfg );
 
-	void vlGet( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
+	void vlGet( TVal &vo );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	virtual void setType( const string &tpId );

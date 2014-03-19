@@ -735,27 +735,27 @@ void TMdPrm::vlGet( TVal &val )
     if(val.name() == "err" && (!enableStat() || !owner().startStat())) TParamContr::vlGet(val);
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	valo.setI(EVAL_INT,0,true);
-    if(valo.getS() == EVAL_STR || valo.getS() == pvl.getS()) return;
+    if(!enableStat() || !owner().startStat())	vo.setI(EVAL_INT, 0, true);
+    if(vl.isEVal() || vl == pvl) return;
 
     XMLNode req("set");
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
-    //> Direct write
+    //Direct write
     string scntr;
     for(int c_off = 0; (scntr=TSYS::strSepParse(cntrAdr(),0,';',&c_off)).size(); )
 	try
 	{
 	    req.clear()->setAttr("path",scntr+id()+"/%2fserv%2fattr")->
-		childAdd("el")->setAttr("id",valo.name())->setText(valo.getS());
+		childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	    if(owner().cntrIfCmd(req))	throw TError(req.attr("mcat").c_str(),req.text().c_str());
 	}catch(TError err) { continue; }
 }

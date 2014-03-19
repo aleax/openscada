@@ -57,8 +57,8 @@ class TTipParam : public TElem
 
 	virtual bool cfgChange( TParamContr *prm, TCfg &cfg )	{ return true; }
 
-	virtual void vlGet( TParamContr *prm, TVal &val )	{ }
-	virtual void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl )	{ }
+	virtual void vlGet( TParamContr *prm, TVal &vo )	{ }
+	virtual void vlSet( TParamContr *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
         virtual void vlArchMake( TParamContr *prm, TVal &val )	{ }
 	virtual void getVals( TParamContr *prm )		{ }
 

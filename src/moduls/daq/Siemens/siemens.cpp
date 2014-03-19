@@ -1771,16 +1771,16 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ val.setS(EVAL_STR, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
-	if( val.getS(0,true) == pvl.getS() ) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -1788,14 +1788,13 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     //> Direct write
     try
     {
-	int id_lnk = lnkId(val.name());
+	int id_lnk = lnkId(vo.name());
 	if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
-	TVariant vl = val.get(0,true);
 	if(!(vl.isEVal() || vl == pvl))
 	{
-	    if(id_lnk < 0) set(ioId(val.name()), vl);
+	    if(id_lnk < 0) set(ioId(vo.name()), vl);
 	    else
-		switch(val.fld().type())
+		switch(vo.fld().type())
 		{
 		    case TFld::String:	owner().setValS(vl.getS(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Integer:	owner().setValI(vl.getI(), lnk(id_lnk).val, acq_err);	break;

@@ -259,35 +259,34 @@ void TMdPrm::vlGet( TVal &val )
     else if(!asynchRd) getVals(val.name());
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat()) val.setS(EVAL_STR, 0, true);
+    if(!enableStat()) vo.setS(EVAL_STR, 0, true);
 
-    TVariant vl = val.get(0,true);
     if(vl.isEVal() || vl == pvl) return;
 
     //Send to active reserve station
     if(owner().redntUse())
     {
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(vl.getS());
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
     //Direct write
     ResAlloc res(dev_res,true);
-    int i_sd = atoi(TSYS::strParse(val.fld().reserve(),0,".").c_str()),
-	i_rng= atoi(TSYS::strParse(val.fld().reserve(),1,".").c_str());
-    if(val.name().compare(0,2,"ao") == 0)
+    int i_sd = atoi(TSYS::strParse(vo.fld().reserve(),0,".").c_str()),
+	i_rng= atoi(TSYS::strParse(vo.fld().reserve(),1,".").c_str());
+    if(vo.name().compare(0,2,"ao") == 0)
     {
-	int rez = comedi_data_write(devH, i_sd, atoi(val.name().c_str()+2), i_rng, 0, vmax(0,vl.getI()));
-	if(rez == -1) val.setR(EVAL_REAL, 0, true);
+	int rez = comedi_data_write(devH, i_sd, atoi(vo.name().c_str()+2), i_rng, 0, vmax(0,vl.getI()));
+	if(rez == -1) vo.setR(EVAL_REAL, 0, true);
     }
-    else if(val.name().compare(0,2,"do") == 0)
+    else if(vo.name().compare(0,2,"do") == 0)
     {
-	int rez = comedi_dio_write(devH, i_sd, atoi(val.name().c_str()+2), vl.getB());
-	if(rez == -1) val.setB(EVAL_BOOL, 0, true);
+	int rez = comedi_dio_write(devH, i_sd, atoi(vo.name().c_str()+2), vl.getB());
+	if(rez == -1) vo.setB(EVAL_BOOL, 0, true);
     }
 }
 

@@ -358,7 +358,7 @@ void da_ISA::getVal( TMdPrm *p )
     }
 }
 
-void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
+void da_ISA::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     tval *ePrm = (tval*)p->extPrms;
     if(ePrm->devFd < 0) return;
@@ -366,9 +366,9 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     ResAlloc res(p->owner().pBusRes, true);
 
     //> AO processing
-    if(valo.name().compare(0,2,"ao") == 0 && ePrm->dev.AO)
+    if(vo.name().compare(0,2,"ao") == 0 && ePrm->dev.AO)
     {
-	int i_ch = atoi(valo.name().c_str()+2);
+	int i_ch = atoi(vo.name().c_str()+2);
 	ixisa_reg_t reg;
 
 	if(ePrm->dev.AO == 1)	reg.id = IXISA_AO;
@@ -383,15 +383,15 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 	    case 6:	reg.id = IXISA_AO6;	break;
 	    case 7:	reg.id = IXISA_AO7;	break;
 	}
-	reg.value = valo.getI();
+	reg.value = vl.getI();
 	ioctl(ePrm->devFd, IXISA_WRITE_REG, &reg);
     }
 
     //> DIO processing
-    if(valo.name().compare(0,1,"o") == 0 && ePrm->dev.DIO)
+    if(vo.name().compare(0,1,"o") == 0 && ePrm->dev.DIO)
     {
 	int i_ch = 0, i_p = 0;
-	if(sscanf(valo.name().c_str(),"o%d_%d",&i_ch,&i_p) != 2) return;
+	if(sscanf(vo.name().c_str(),"o%d_%d",&i_ch,&i_p) != 2) return;
 	i_p = i_p/8;
 	ixisa_reg_t data;
 	switch(i_p)
@@ -444,10 +444,10 @@ void da_ISA::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     }
 
     //> DO processing
-    if(valo.name().compare(0,1,"o") == 0 && ePrm->dev.DO)
+    if(vo.name().compare(0,1,"o") == 0 && ePrm->dev.DO)
     {
 	int i_ch = 0, i_p = 0;
-	if(sscanf(valo.name().c_str(),"o%d_%d",&i_ch,&i_p) != 2) return;
+	if(sscanf(vo.name().c_str(),"o%d_%d",&i_ch,&i_p) != 2) return;
 	ixisa_reg_t data;
 
 	switch(ePrm->dev.DI>>8)

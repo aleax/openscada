@@ -434,20 +434,19 @@ void Kontar::getVals( TParamContr *ip )
     }
 }
 
-void Kontar::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
+void Kontar::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     TMdPrm *p = (TMdPrm *)ip;
     tval *ePrm = (tval*)p->extPrms;
 
-    if(!p->enableStat() || !p->owner().startStat())	val.setS(EVAL_STR, 0, true);
+    if(!p->enableStat() || !p->owner().startStat())	vo.setS(EVAL_STR, 0, true);
 
-    TVariant vl = val.get(0, true);
     if(vl.isEVal() || vl == pvl) return;
 
     int off = 0;
-    string pTp = TSYS::strParse(val.fld().reserve(),0,":",&off);
-    int pTpSz = atoi(TSYS::strParse(val.fld().reserve(),0,":",&off).c_str());
-    int aoff = strtol(TSYS::strParse(val.fld().reserve(),0,":",&off).c_str(),NULL,0);
+    string pTp = TSYS::strParse(vo.fld().reserve(),0,":",&off);
+    int pTpSz = atoi(TSYS::strParse(vo.fld().reserve(),0,":",&off).c_str());
+    int aoff = strtol(TSYS::strParse(vo.fld().reserve(),0,":",&off).c_str(),NULL,0);
 
     //Value set
     string pdu;
@@ -459,14 +458,14 @@ void Kontar::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
     pdu += char(aoff);		//Address LSB
     pdu += char(0x00);		//Number of registers MSB
     pdu += char(pTpSz);		//Number of registers LSB
-    switch(val.fld().type())
+    switch(vo.fld().type())
     {
-	case TFld::Boolean:	{ pdu += char(val.getB(0,true)); break; }
-	case TFld::Integer:	{ int16_t tvl = TSYS::i16_BE(val.getI(0,true)); pdu.append((char*)&tvl,sizeof(tvl));	break; }
+	case TFld::Boolean:	{ pdu += char(vl.getB()); break; }
+	case TFld::Integer:	{ int16_t tvl = TSYS::i16_BE(vl.getI()); pdu.append((char*)&tvl,sizeof(tvl));	break; }
 	case TFld::Real:
 	{
 	    union { uint32_t i; float f; } wl;
-	    wl.f = val.getR(0,true);
+	    wl.f = vl.getR();
 	    wl.i = TSYS::i32_BE(wl.i);
 	    pdu.append((char*)&wl.i,sizeof(wl.i));
 	    break;
@@ -475,11 +474,9 @@ void Kontar::vlSet( TParamContr *ip, TVal &val, const TVariant &pvl )
 	{
 	    int16_t tvl = 0;
 	    if(strcasecmp(pTp.c_str(),"time") == 0)
-		tvl = (char)atoi(TSYS::strParse(val.getS(0,true),0,":").c_str()) +
-		      ((char)atoi(TSYS::strParse(val.getS(0,true),1,":").c_str())<<8);
+		tvl = (char)atoi(TSYS::strParse(vl.getS(),0,":").c_str()) + ((char)atoi(TSYS::strParse(vl.getS(),1,":").c_str())<<8);
 	    else if(strcasecmp(pTp.c_str(),"date") == 0)
-		tvl = (char)atoi(TSYS::strParse(val.getS(0,true),0,"-").c_str()) +
-		      ((char)atoi(TSYS::strParse(val.getS(0,true),1,"-").c_str())<<8);
+		tvl = (char)atoi(TSYS::strParse(vl.getS(),0,"-").c_str()) + ((char)atoi(TSYS::strParse(vl.getS(),1,"-").c_str())<<8);
 	    pdu.append((char*)&tvl, sizeof(tvl));
 	    break;
 	}

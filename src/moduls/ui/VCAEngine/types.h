@@ -28,6 +28,8 @@ namespace VCA
     enum AttrID
     {
 	// Generic
+	A_PG_NAME	= -4,
+	A_PERM		= -3,
 	A_COM_FOCUS	= -2,
 	A_COM_LOAD	= -1,
 	A_ROOT		= 1,

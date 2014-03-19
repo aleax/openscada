@@ -87,9 +87,9 @@ class TMdPrm : public TParamContr
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &cfg );		//config change
 
-	void vlGet( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
-	void vlArchMake( TVal &val );
+	void vlGet( TVal &vo );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	void vlArchMake( TVal &vo );
 
 	void postEnable( int flag );
 

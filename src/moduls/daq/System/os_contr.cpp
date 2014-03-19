@@ -394,26 +394,26 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ valo.setI(EVAL_INT, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
 
     //Send to active reserve station
     if(owner().redntUse())
     {
-	if(valo.getS(0,true) == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
     //Direct write
-    try { if(mDA) mDA->vlSet(this, valo, pvl); }
+    try { if(mDA) mDA->vlSet(this, vo, vl, pvl); }
     catch(TError err)
     {
-	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),valo.name().c_str(),err.mess.c_str());
-	valo.setS( pvl.getS(), 0, true );
+	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),vo.name().c_str(),err.mess.c_str());
+	vo.setS(pvl.getS(), 0, true);
     }
 }
 

@@ -114,7 +114,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	//>> Update attributes
 	wdgAttrUpdate( QModelIndex() );
     }
-    else if( wdg_ls.size() > 1 )
+    else if(wdg_ls.size() > 1)
     {
 	//> Set group widget
 	if( rootItem->type() != Item::WdgGrp )
@@ -143,7 +143,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	}
 
 	//> Check for add master widget
-	if( !masterWdg )
+	if(!masterWdg)
 	{
 	    beginInsertRows(QModelIndex(),0,0);
 	    rootItem->childInsert("<*>",0,Item::Wdg);
@@ -220,7 +220,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		}
 	    }
 	    //>> Enter to group
-	    else if( curit->child(idst[it_lev])->type( ) == Item::AttrGrp )
+	    else if(curit->child(idst[it_lev])->type( ) == Item::AttrGrp)
 	    {
 		curmod = index(idst[it_lev],0,curmod);
 		curit = static_cast<Item*>(curmod.internalPointer());
@@ -232,9 +232,9 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 
 	    //>> Up to level
 	    idst[it_lev]++;
-	    while( idst[it_lev] >= curit->childCount() )
+	    while(idst[it_lev] >= curit->childCount())
 	    {
-		if( it_lev == 0 ) break;
+		if(it_lev == 0) break;
 
 		int prev_tp    = curit->type();
 		int prev_chlds = curit->childCount();
@@ -356,7 +356,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
     } catch(...){ }
 }
 
-Qt::ItemFlags ModInspAttr::flags(const QModelIndex &index) const
+Qt::ItemFlags ModInspAttr::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flg = Qt::ItemIsEnabled;
 
@@ -2201,6 +2201,8 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
 
 	if(!(flgs&NoUpdate)) update();
     }
+
+    selAreaUpdate();
 }
 
 void DevelWdgView::setEdit( bool vl )
@@ -2722,6 +2724,7 @@ bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos 
 {
     bool rez = WdgView::attrSet(attr, val, uiPrmPos);
 
+    bool geomUp = true;
     switch(uiPrmPos)
     {
 	case A_GEOM_X: chGeomCtx.setAttr("_x", val);		break;
@@ -2731,7 +2734,10 @@ bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos 
 	case A_GEOM_Z: chGeomCtx.setAttr("_z", val);		break;
 	case A_GEOM_X_SC: chGeomCtx.setAttr("_xSc", val);	break;
 	case A_GEOM_Y_SC: chGeomCtx.setAttr("_ySc", val);	break;
+	default: geomUp = false;				break;
     }
+
+    if(geomUp && !allAttrLoad() && select()) levelWidget(0)->selAreaUpdate();
 
     return rez;
 }

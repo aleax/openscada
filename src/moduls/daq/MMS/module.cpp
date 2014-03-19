@@ -537,26 +537,25 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat())	val.setS(EVAL_STR, 0, true);
+    if(!enableStat())	vo.setS(EVAL_STR, 0, true);
 
     //> Send to active reserve station
     if(owner().redntUse())
     {
-        if(val.getS(NULL,true) == pvl.getS()) return;
+        if(vl == pvl) return;
         XMLNode req("set");
-        req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(NULL,true));
+        req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
         SYS->daq().at().rdStRequest(owner().workId(), req);
         return;
     }
 
-    TVariant vl = val.get(NULL, true);
     if(vl.isEVal() || vl == pvl) return;
 
     int off = 0;
-    string nId = TSYS::strLine(val.fld().reserve(), 0, &off);
-    int vTp = atoi(TSYS::strLine(val.fld().reserve(),0,&off).c_str());
+    string nId = TSYS::strLine(vo.fld().reserve(), 0, &off);
+    int vTp = atoi(TSYS::strLine(vo.fld().reserve(),0,&off).c_str());
 
     MmsError error;
     MmsValue *value = NULL;
@@ -576,7 +575,7 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
 	ResAlloc res(owner().nodeRes(), true);
 	if(MmsConnection_writeVariable(owner().con,&error,(char*)TSYS::pathLev(nId,0).c_str(),(char*)TSYS::pathLev(nId,1).c_str(),value) != MMS_OK)
 	{
-	    val.setS(EVAL_STR, 0, true);
+	    vo.setS(EVAL_STR, 0, true);
 	    if(owner().messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),_("Write to '%s' error: %d."),nId.c_str(),error);
 	}
 	res.release();
@@ -584,7 +583,7 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     }
     else
     {
-	val.setS(EVAL_STR, 0, true);
+	vo.setS(EVAL_STR, 0, true);
 	if(owner().messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),_("Write for type %d is not supported yet."),vTp);
     }
 }

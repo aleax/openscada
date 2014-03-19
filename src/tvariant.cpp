@@ -92,7 +92,7 @@ void TVariant::setType( Type tp, bool fix )
     }
 }
 
-bool TVariant::operator==( const TVariant &vr )
+bool TVariant::operator==( const TVariant &vr ) const
 {
     if(vr.type() == type())
 	switch(type())
@@ -108,7 +108,7 @@ bool TVariant::operator==( const TVariant &vr )
     return false;
 }
 
-bool TVariant::operator!=( const TVariant &vr )	{ return !operator==(vr); }
+bool TVariant::operator!=( const TVariant &vr ) const	{ return !operator==(vr); }
 
 TVariant &TVariant::operator=( const TVariant &vr )
 {

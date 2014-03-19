@@ -714,7 +714,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    nodeRes().resRelease();
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, pvl);
+	    if(fld().flg()&TVal::DirWrite && !sys)	owner().vlSet(*this, value, pvl);
 	    //> Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setS(value,time()); }
@@ -744,7 +744,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    int pvl = val.i; val.i = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
+	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //> Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setI(value,time()); }
@@ -774,7 +774,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    double pvl = val.r; val.r = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
+	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //> Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setR(value, time()); }
@@ -802,7 +802,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    char pvl = val.b; val.b = value;
 	    mTime = tm;
 	    if(!mTime) mTime = TSYS::curTime();
-	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
+	    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
 	    //> Set to archive
 	    if(!mArch.freeStat() && mArch.at().srcMode() == TVArchive::PassiveAttr)
 		try{ mArch.at().setB(value,time()); }
@@ -826,7 +826,7 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     nodeRes().resRelease();
     mTime = tm;
     if(!mTime) mTime = TSYS::curTime();
-    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, pvl);
+    if(fld().flg()&TVal::DirWrite && !sys) owner().vlSet(*this, value, pvl);
     //> Set to archive. Set object to archive did not support
 }
 

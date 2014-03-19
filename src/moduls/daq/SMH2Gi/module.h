@@ -51,7 +51,7 @@ class SHMParam : public TTipParam
         void disable( TParamContr *prm )	{ }
 
 	void getVals( TParamContr *prm );
-	void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl );
+	void vlSet( TParamContr *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	bool cntrCmdProc( TParamContr *prm, XMLNode *opt );
 };
@@ -115,7 +115,7 @@ class MRCParam : public TTipParam
         void disable( TParamContr *prm );
 
 	void getVals( TParamContr *prm );
-	void vlSet( TParamContr *prm, TVal &val, const TVariant &pvl );
+	void vlSet( TParamContr *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	bool cntrCmdProc( TParamContr *prm, XMLNode *opt );
 

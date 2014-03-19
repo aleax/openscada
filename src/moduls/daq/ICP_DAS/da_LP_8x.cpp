@@ -290,14 +290,14 @@ void da_LP_8x::getVal( TMdPrm *p )
     }
 }
 
-void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
+void da_LP_8x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     tval *ePrm = (tval*)p->extPrms;
 
     if(p->modTp.getS() == "I-8017")	//Individual I-8017 processing
     {
-	bool ha = (valo.name().substr(0,2) == "ha");
-	bool la = (valo.name().substr(0,2) == "la");
+	bool ha = (vo.name().substr(0,2) == "ha");
+	bool la = (vo.name().substr(0,2) == "la");
 	if(!(ha||la) || !ePrm->init) return;
 
 	//Create previous value
@@ -316,17 +316,17 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     else if(p->modTp.getS() == "I-8024")	//Individual I-8024 processing
     {
 	p->owner().pBusRes.resRequestW(1000);
-	I8024_VoltageOut(p->modSlot, atoi(valo.name().c_str()+2), valo.getR(0, true));
+	I8024_VoltageOut(p->modSlot, atoi(vo.name().c_str()+2), vl.getR());
 	p->owner().pBusRes.resRelease();
     }
     //Other typical modules processing
     // DO
-    else if(valo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
+    else if(vo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
     {
 	uint32_t val = ePrm->doVal;
 	int i_ch = 0, i_p = 0;
-	if(sscanf(valo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
-	if((int)valo.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))  val |= 1<<((i_ch*8)+i_p);
+	if(sscanf(vo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
+	if((int)vl.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))  val |= 1<<((i_ch*8)+i_p);
 	else val &= ~(1<<((i_ch*8)+i_p));
 	ePrm->doVal = val;
 	/*for(int i_ch = (ePrm->dev.DO&0xFF)-1; i_ch >= 0; i_ch--)
@@ -363,9 +363,9 @@ void da_LP_8x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 
     /*else if(p->modTp.getS() == "I-8042")
     {
-	bool vl = valo.getB(0,true);
+	bool vl = vl.getB();
 	if(vl == EVAL_BOOL || vl == pvl.getB()) return;
-	int chnl = atoi(valo.name().c_str()+1);
+	int chnl = atoi(vo.name().c_str()+1);
 
 	p->owner().pBusRes.resRequestW(1000);
 	DO_16(p->modSlot, ((vl^(p->dInOutRev[1]>>chnl))&1) ? (DO_16_RB(p->modSlot) | 0x01<<chnl) : (DO_16_RB(p->modSlot) & ~(0x01<<chnl)));

@@ -52,7 +52,7 @@ class DA: public TElem
 	virtual void cfgChange( TCfg &i_cfg )	{ }
 
 	virtual void getVal( TMdPrm *prm )	{ }
-	virtual void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl )	{ }
+	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
 
 	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
 };

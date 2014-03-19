@@ -79,7 +79,7 @@ class TMdPrm : public TParamContr
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	void vlArchMake( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	//Attributes
 	TElem	p_el;	//Work atribute elements

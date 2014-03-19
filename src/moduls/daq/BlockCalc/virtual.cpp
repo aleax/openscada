@@ -669,16 +669,16 @@ void Prm::disable()
     TParamContr::disable();
 }
 
-void Prm::vlSet( TVal &val, const TVariant &pvl )
+void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     if(!enableStat() || !owner().startStat())	return;
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
-	if( val.getS(0,true) == pvl.getS() ) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -686,13 +686,13 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
     //> Direct write
     try
     {
-	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
-	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
+	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(vo.fld().reserve(),0,'.'));
+	int io_id = blk.at().ioId(TSYS::strSepParse(vo.fld().reserve(),1,'.'));
 	if( io_id < 0 ) disable();
 	else
 	{
 	    ResAlloc sres(owner().calcRes,true);
-	    blk.at().set(io_id,val.get(0,true));
+	    blk.at().set(io_id, vl);
 	}
     }catch(TError err) { disable(); }
 }

@@ -253,20 +253,20 @@ void da_87x::getVal( TMdPrm *p )
     p->acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
 }
 
-void da_87x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
+void da_87x::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     string rez;
     tval *ePrm = (tval*)p->extPrms;
 
-    if(valo.get().isEVal() || valo.get() == pvl) return;
+    if(vl.isEVal() || vl == pvl) return;
 
     bool CRC = atoi(p->modPrm("CRC","0").c_str());
 
     /*
     if(p->modTp.getS() == "I-87019")
     {
-	bool ha = (valo.name().substr(0,2) == "ha");
-	bool la = (valo.name().substr(0,2) == "la");
+	bool ha = (vo.name().substr(0,2) == "ha");
+	bool la = (vo.name().substr(0,2) == "la");
 	if(!(ha||la)) return;
 
 	//> Create previous value
@@ -284,9 +284,9 @@ void da_87x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     }*/
 
     //> AO processing, #AAN(Data)
-    if(valo.name().compare(0,2,"ao") == 0 && ePrm->dev.AO)
+    if(vo.name().compare(0,2,"ao") == 0 && ePrm->dev.AO)
     {
-	string cmd = TSYS::strMess("#%02X%d%+07.3f",(int)((p->owner().bus()==0)?0:p->modAddr),atoi(valo.name().c_str()+2),valo.getR(0,true));
+	string cmd = TSYS::strMess("#%02X%d%+07.3f",(int)((p->owner().bus()==0)?0:p->modAddr),atoi(vo.name().c_str()+2),vl.getR());
 
 	repAO:
 	rez = p->owner().serReq(cmd, p->modSlot, CRC);
@@ -296,33 +296,33 @@ void da_87x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 	    p->owner().serReq(TSYS::strMess("~%02X1",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
 	    goto repAO;
 	}
-	valo.setR((rez.empty() || rez[0] != '>') ? EVAL_REAL : valo.getR(0,true), 0, true);
+	vo.setR((rez.empty() || rez[0] != '>') ? EVAL_REAL : vl.getR(), 0, true);
 	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):"");
     }
 
     //> DO processing
-    if(valo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
+    if(vo.name().compare(0,2,"do") == 0 && ePrm->dev.DO)
     {
-	uint32_t vl = ePrm->doVal;
+	uint32_t tvl = ePrm->doVal;
 	int i_ch = 0, i_p = 0;
-	if(sscanf(valo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
-	if((int)valo.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))	vl |= 1<<((i_ch*8)+i_p);
-	else vl &= ~(1<<((i_ch*8)+i_p));
+	if(sscanf(vo.name().c_str(),"do%d_%d",&i_ch,&i_p) != 2) return;
+	if((int)vl.getB()^((p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch]>>i_p)&1))	tvl |= 1<<((i_ch*8)+i_p);
+	else tvl &= ~(1<<((i_ch*8)+i_p));
 	/*for(int i_ch = (ePrm->dev.DO&0xFF)-1; i_ch >= 0; i_ch--)
 	{
 	    for(int i_o = 7; i_o >= 0; i_o--)
 	    {
-		vl = vl << 1;
-		if(p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_o)).at().getB(0, true)) vl |= 1;
+		tvl = tvl << 1;
+		if(p->vlAt(TSYS::strMess("do%d_%d",i_ch,i_o)).at().getB(0, true)) tvl |= 1;
 	    }
-	    vl ^= p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch];
+	    tvl ^= p->dInOutRev[(ePrm->dev.DI&0xFF)+i_ch];
 	}*/
 
 	string cmd;
 	if((ePrm->dev.DO>>8) == 0)
-	    cmd = TSYS::strMess(TSYS::strMess("@%%02X%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),vl);
+	    cmd = TSYS::strMess(TSYS::strMess("@%%02X%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),tvl);
 	else if((ePrm->dev.DO>>8) == 1)
-	    cmd = TSYS::strMess(TSYS::strMess("@%%02XDO%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),vl);
+	    cmd = TSYS::strMess(TSYS::strMess("@%%02XDO%%0%dX",(ePrm->dev.DO&0xFF)*2).c_str(),(int)((p->owner().bus()==0)?0:p->modAddr),tvl);
 
 	repDO:
 	rez = p->owner().serReq(cmd, p->modSlot, CRC);
@@ -333,8 +333,8 @@ void da_87x::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
 	    goto repDO;
 	}
 
-	valo.setB((rez.empty() || rez[0] != '>') ? EVAL_BOOL : vl, 0, true);
-	if(rez.size() || rez[0] == '>') ePrm->doVal = vl;
+	vo.setB((rez.empty() || rez[0] != '>') ? EVAL_BOOL : tvl, 0, true);
+	if(rez.size() || rez[0] == '>') ePrm->doVal = tvl;
 	p->acq_err.setVal(rez.empty()?_("10:Request to module error."):((rez[0]!='>')?_("11:Respond from module error."):""));
     }
 }

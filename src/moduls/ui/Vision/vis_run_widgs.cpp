@@ -28,6 +28,7 @@
 #include <QStatusBar>
 
 #include <tsys.h>
+#include "../VCAEngine/types.h"
 
 #include "tvision.h"
 #include "vis_shapes.h"
@@ -35,6 +36,7 @@
 #include "vis_run_widgs.h"
 
 using namespace VISION;
+using namespace VCA;
 
 //*************************************************
 //* Shape widget view runtime mode                *
@@ -202,43 +204,31 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
     switch(uiPrmPos)
     {
-	case -2:	//focus
+	case A_COM_FOCUS:
 	    if((bool)atoi(val.c_str()) == hasFocus())	break;
 	    if((bool)atoi(val.c_str()))	setFocus(Qt::OtherFocusReason);
 	    return true;
-	case -3:	//perm
+	case A_PERM:
 	    setPermCntr(atoi(val.c_str())&SEC_WR);
 	    setPermView(atoi(val.c_str())&SEC_RD);
 	    return true;
-	case -4:	//page name
-	    setWindowTitle(val.c_str());
-	    break;
-	case 3:		//pgOpenSrc
-	    setProperty("pgOpenSrc",val.c_str());
-	    return true;
-	case 4:		//pgGrp
-	    setProperty("pgGrp",val.c_str());
-	    return true;
-	case 5:		//en
-	    setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));
-	    return true;
-	case 6:		//active
-	    setProperty("active",(bool)atoi(val.c_str()));
-	    return true;
-	case 11:	//geomZ
+	case A_PG_NAME:	setWindowTitle(val.c_str());	break;
+	case A_PG_OPEN_SRC: setProperty("pgOpenSrc",val.c_str());	return true;
+	case A_PG_GRP: setProperty("pgGrp",val.c_str());		return true;
+	case A_EN: setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));	return true;
+	case A_ACTIVE: setProperty("active",(bool)atoi(val.c_str()));	return true;
+	case A_GEOM_Z:
 	    if(!allAttrLoad() && !dynamic_cast<RunPageView*>(this))
 	    {
 		RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget());
 		if(wdg) { wdg->orderUpdate(); wdg->QWidget::update(); }
 	    }
 	    return true;
-	case 16:	//tipStatus
+	case A_TIP_STATUS:
 	    if(val.size() && mainWin()->masterPg() == this)
 		mainWin()->statusBar()->showMessage(val.c_str(), 10000);
 	    return true;
-	case 17:	//contextMenu
-	    setProperty("contextMenu",val.c_str());
-	    return true;
+	case A_CTX_MENU: setProperty("contextMenu",val.c_str());	return true;
     }
 
     return rez;

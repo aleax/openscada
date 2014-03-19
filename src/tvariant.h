@@ -84,8 +84,8 @@ class TVariant
 
 	virtual ~TVariant( );
 
-	bool operator==( const TVariant &vr );
-	bool operator!=( const TVariant &vr );
+	bool operator==( const TVariant &vr ) const;
+	bool operator!=( const TVariant &vr ) const;
 	TVariant &operator=( const TVariant &vr );
 
 	bool isNull( ) const	{ return (type()==Null); }

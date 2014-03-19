@@ -46,7 +46,7 @@ class da_LP_8x: public DA
 	void disable( TMdPrm *prm );
 
 	void getVal( TMdPrm *prm );
-	void vlSet( TMdPrm *prm, TVal &valo, const TVariant &pvl );
+	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
 

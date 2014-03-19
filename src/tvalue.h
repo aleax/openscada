@@ -173,8 +173,8 @@ class TValue: public TCntrNode, public TValElem
 	TElem &vlElem( const string &name );
 
 	virtual TVal* vlNew( );
-	virtual void vlSet( TVal &val, const TVariant &pvl )		{ };
-	virtual void vlGet( TVal &val )		{ };
+	virtual void vlGet( TVal &vo )		{ };
+	virtual void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )		{ };
 	virtual void vlArchMake( TVal &val )	{ };
 
     private:

@@ -174,6 +174,7 @@ void UPS::getVal( TMdPrm *prm )
 			// Create
 			((tval*)prm->daData)->els.fldAdd(new TFld(aid.c_str(),descr.c_str(),TFld::Boolean,TVal::DirWrite,"","","","",vid.c_str()));
 		    }
+		    prm->vlAt(aid).at().setB(false, 0, true);
 		    als.push_back(aid);
 		}
 	}
@@ -202,9 +203,9 @@ void UPS::getVal( TMdPrm *prm )
     }
 }
 
-void UPS::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
+void UPS::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    string vId = valo.fld().reserve();
+    string vId = vo.fld().reserve();
     string addr = TSYS::strParse(p->cfg("SUBT").getS(),0," ");
     int aOff = 0;
     string UPS = TSYS::strParse(addr, 0, "@", &aOff);
@@ -220,14 +221,15 @@ void UPS::vlSet( TMdPrm *p, TVal &valo, const TVariant &pvl )
     if(OK)
     {
 	//Instant commands
-	if(valo.fld().type() == TFld::Boolean && valo.getB(0,true))
+	if(vo.fld().type() == TFld::Boolean)
 	{
-	    OKr = reqUPS(addr, "INSTCMD "+UPS+" "+vId+"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
-	    valo.setB(OKr ? false : EVAL_BOOL, 0, true);
+	    if(vl.getB())
+		OKr = reqUPS(addr, "INSTCMD "+UPS+" "+vId+"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
+		//vo.setB(OKr ? false : EVAL_BOOL, 0, true);
 	}
 	//RW variable set
 	else
-	    reqUPS(addr, "SET VAR "+UPS+" "+vId+" \""+valo.getS(0,true)+"\"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"");
+	    reqUPS(addr, "SET VAR "+UPS+" "+vId+" \""+vl.getS()+"\"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"");
     }
 
     OK = OK && reqUPS(addr, "LOGOUT\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;

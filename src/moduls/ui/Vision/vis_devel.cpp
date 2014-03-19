@@ -1397,18 +1397,18 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     for(int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf_w.substr(1),0,';',&w_off)).size(); )
     {
 	string s_elp, d_elp, s_el, d_el, t_el, t1_el;
-	//> Destination elements calc
+	//Destination elements calc
 	int n_del = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(work_wdg_w,0,true,&off)).empty(); n_del++)
 	{ if(n_del) d_elp += ("/"+d_el); d_el = t_el; }
-	//> Src elements calc
+	//Src elements calc
 	int n_sel = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(copy_buf_el,0,true,&off)).empty(); n_sel++)
 	{ if(n_sel) s_elp += ("/"+s_el); s_el = t_el; }
 
-	//> Copy visual item
+	//Copy visual item
 	XMLNode req("get");
-	//>> Project copy
+	// Project copy
 	if(s_el.substr(0,4) == "prj_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Project '%1' move.\n") : _("Project '%1' copy.\n"))+
@@ -1417,7 +1417,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    d_el = "prj_";
 	    t1_el = s_el.substr(4);
 	}
-	//>> Widget's library copy
+	// Widget's library copy
 	else if(s_el.substr(0,4) == "wlb_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Widget's library '%1' move.\n") : _("Widget's library '%1' copy.\n"))+
@@ -1426,7 +1426,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    d_el = "wlb_";
 	    t1_el = s_el.substr(4);
 	}
-	//>> Page copy
+	// Page copy
 	else if(s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_"))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move page '%1' to '%2'.\n") : _("Copy page '%1' to '%2'.\n"))+
@@ -1437,7 +1437,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    d_el = (d_el.substr(0,4)=="wlb_") ? "wdg_" : "pg_";
 	    t1_el = s_el.substr(3);
 	}
-	//>> Widget copy
+	// Widget copy
 	else if(s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" ||
 	    (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del == 2)))
 	{
@@ -1449,7 +1449,7 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    d_el = "wdg_";
 	    t1_el = s_el.substr(4);
 	}
-	//>> Direct widget to widget copy
+	// Direct widget to widget copy
 	else if(s_el.substr(0,4) == "wdg_" && d_el.substr(0,4) == "wdg_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
@@ -1458,15 +1458,15 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    t1_el = d_el.substr(4);
 	    d_el = "wdg_";
 	}
-	//>> Copy scheme error
+	// Copy scheme error
 	else
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Copy/move scheme from '%1' to '%2' is not supported.")).
 		arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()),TVision::Error,this);
 	    return;
 	}
-	//>> Prepare new widget identifier
-	//>>> Remove digits from end of new identifier
+	// Prepare new widget identifier
+	//  Remove digits from end of new identifier
 	if(wdst.empty())
 	{
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
@@ -1478,10 +1478,10 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    else i_w++;
 	    }
 	}
-	//>> Make request dialog
+	// Make request dialog
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
-	//>> Add Link flag for copy operation
+	// Add Link flag for copy operation
 	if(copy_buf_w[0] != '1' && d_el.substr(0,4) != "prj_" && d_el.substr(0,4) != "wlb_")
 	{
 	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 2, 0);
@@ -1493,16 +1493,23 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	    d_el += dlg.id().toStdString();
 	    string it_nm = wnm.empty() ? dlg.name().toStdString() : wnm;
 
-	    //>>> Make link
+	    //  Make link
 	    if(wInher && wInher->isChecked())
 	    {
 		QAction addAct(NULL);
 		addAct.setObjectName((s_elp+"/"+s_el).c_str());
 		visualItAdd(&addAct, QPointF(), dlg.id().toStdString(), it_nm, d_elp);
 	    }
-	    //>>> Make copy
+	    //  Make copy
 	    else
 	    {
+		if(d_elp == s_elp && d_el == s_el)
+		{
+		    mod->postMess(mod->nodePath().c_str(),QString(_("Try copy/move self to self for \"%1/%1\"!")).
+			arg(d_elp.c_str()).arg(d_el.c_str()),TVision::Error,this);
+		    return;
+		}
+
 		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
 		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		if(cntrIfCmd(req))
@@ -1530,22 +1537,22 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    del_els += copy_buf_el+";";
 
 		    // Send change request to opened for edit widget
-            	    if(!chNoWr)
-            	    {
-                	DevelWdgView *dw = work_space->findChild<DevelWdgView*>(d_elp.c_str());
-                	if(dw) dw->chRecord(*XMLNode("chldPaste").
-                		setAttr("src",s_elp+"/"+s_el)->setAttr("dst",d_elp+"/"+d_el)->setAttr("name",it_nm));
-            	    }
+		    if(!chNoWr)
+		    {
+			DevelWdgView *dw = work_space->findChild<DevelWdgView*>(d_elp.c_str());
+			if(dw) dw->chRecord(*XMLNode("chldPaste").
+				setAttr("src",s_elp+"/"+s_el)->setAttr("dst",d_elp+"/"+d_el)->setAttr("name",it_nm));
+		    }
 		}
 	    }
 	}
     }
     if(!last_del.empty())	copy_els.push_back(last_del);
 
-    //> Send events to created widgets
+    //Send events to created widgets
     for(unsigned i_e = 0; i_e < copy_els.size(); i_e++)
 	emit modifiedItem(copy_els[i_e]);
-    //> Remove source widget
+    //Remove source widget
     if(copy_buf_w[0] == '1') 	{ visualItDel(del_els); if(wsrc.empty()) copy_buf = "0"; }
 }
 
