@@ -93,7 +93,7 @@ void BDMod::load_( )	{ }
 //************************************************
 //* BDMySQL::MBD				 *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el)
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el), reqCnt(0), reqCntTm(0), trOpenTm(0)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -175,6 +175,9 @@ void MBD::disable( )
     MtxAlloc resource(connRes, true);
     if(!enableStat())	return;
 
+    //Last commit
+    if(reqCnt) transCommit();
+
     TBD::disable();
 
     mysql_close(&connect);
@@ -206,6 +209,9 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     if(!enableStat()) return;
 
     string req = Mess->codeConvOut(cd_pg.c_str(), ireq);
+
+    if(intoTrans && intoTrans != EVAL_BOOL) transOpen();
+    else if(!intoTrans && reqCnt) transCommit();
 
     MtxAlloc resource(connRes, true);
 
@@ -266,8 +272,34 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     }while(irez == 0);
 }
 
+void MBD::transOpen( )
+{
+    //Check for limit into one trinsaction
+    if(reqCnt > 1000) transCommit();
+
+    pthread_mutex_lock(&connRes);
+    bool begin = !reqCnt;
+    if(begin) trOpenTm = SYS->sysTm();
+    reqCnt++;
+    reqCntTm = SYS->sysTm();
+    pthread_mutex_unlock(&connRes);
+
+    if(begin) sqlReq("BEGIN;");
+}
+
+void MBD::transCommit( )
+{
+    pthread_mutex_lock(&connRes);
+    bool commit = reqCnt;
+    reqCnt = reqCntTm = 0;
+    pthread_mutex_unlock(&connRes);
+
+    if(commit) sqlReq("COMMIT;");
+}
+
 void MBD::transCloseCheck( )
 {
+    if(enableStat() && reqCnt && ((SYS->sysTm()-reqCntTm) > 60 || (SYS->sysTm()-trOpenTm) > 10*60)) transCommit();
     if(!enableStat() && toEnable()) enable();
 }
 
@@ -290,9 +322,15 @@ void MBD::cntrCmdProc( XMLNode *opt )
 	      "  tms - MySQL timeouts in form \"{connect},{read},{write}\" and in seconds.\n"
 	      "For local DB: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;utf8;5,2,2\".\n"
 	      "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."));
+	if(reqCnt)
+	    ctrMkNode("comm",opt,-1,"/prm/st/end_tr",_("Close opened transaction"),RWRWRW,"root",SDB_ID);
 	return;
     }
-    TBD::cntrCmdProc(opt);
+
+    //Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/st/end_tr" && ctrChkNode(opt,"set",RWRWRW,"root",SDB_ID,SEC_WR) && reqCnt) transCommit();
+    else TBD::cntrCmdProc(opt);
 }
 
 //************************************************
@@ -321,6 +359,7 @@ MTable::~MTable( )	{ }
 
 void MTable::postDisable( int flag )
 {
+    owner().transCommit();
     if(flag)
     {
 	try { owner().sqlReq("DROP TABLE `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+TSYS::strEncode(name(),TSYS::SQL)+"`"); }
@@ -422,7 +461,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     if(first_sel) return false;
     req += " FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` " +
 	((next)?req_where:"") + " LIMIT " + i2s(row) + ",1";
-    owner().sqlReq(req, &tbl);
+    owner().sqlReq(req, &tbl, false);
     if(tbl.size() < 2) return false;
     for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++)
     {
@@ -480,7 +519,7 @@ void MTable::fieldGet( TConfig &cfg )
     req += " FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` WHERE " + req_where;
 
     //Query
-    owner().sqlReq(req, &tbl);
+    owner().sqlReq(req, &tbl, false);
     if(tbl.size() < 2) throw TError(TSYS::DBRowNoPresent, nodePath().c_str(), _("Row is not present!"));
 
     //Processing of query
@@ -539,8 +578,8 @@ void MTable::fieldSet( TConfig &cfg )
     //Prepare query
     // Try for get already present field
     string req = "SELECT 1 FROM `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` " + req_where;
-    try{ owner().sqlReq(req, &tbl); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req); }
+    try{ owner().sqlReq(req, &tbl, true); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req, NULL, true); }
     if(tbl.size() < 2)
     {
 	// Add new record
@@ -582,8 +621,8 @@ void MTable::fieldSet( TConfig &cfg )
     }
 
     //Query
-    try{ owner().sqlReq(req); }
-    catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req); }
+    try{ owner().sqlReq(req, NULL, true); }
+    catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req, NULL, true); }
 }
 
 void MTable::fieldDel( TConfig &cfg )
@@ -610,7 +649,7 @@ void MTable::fieldDel( TConfig &cfg )
 	}
     }
 
-    owner().sqlReq(req);
+    owner().sqlReq(req, NULL, true);
 }
 
 void MTable::fieldFix( TConfig &cfg )
@@ -730,10 +769,10 @@ void MTable::fieldFix( TConfig &cfg )
 
     if(next)
     {
-	owner().sqlReq(req);
+	owner().sqlReq(req, NULL, false);
 	//Update structure information
 	req = "DESCRIBE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "`";
-	owner().sqlReq(req, &tblStrct);
+	owner().sqlReq(req, &tblStrct, false);
     }
 }
 

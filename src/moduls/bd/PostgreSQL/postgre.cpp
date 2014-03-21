@@ -665,7 +665,7 @@ void MTable::fieldSet( TConfig &cfg )
     //Prepare query
     // Try for get already present field
     string req = "SELECT 1 FROM \"" + TSYS::strEncode(name(),TSYS::SQL) + "\" " + req_where;
-    try{ owner().sqlReq(req,&tbl,true); }
+    try{ owner().sqlReq(req, &tbl, true); }
     catch(TError err)	{ fieldFix(cfg); owner().sqlReq(req, NULL, true); }
     if(tbl.size() < 2)
     {

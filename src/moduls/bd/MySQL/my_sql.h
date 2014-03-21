@@ -91,6 +91,8 @@ class MBD : public TBD
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
+	void transOpen( );
+	void transCommit( );
 	void transCloseCheck( );
 
     protected:
@@ -106,6 +108,8 @@ class MBD : public TBD
 	string	host, user, pass, bd, u_sock, cd_pg, names;
 	int	port;
 
+	int	reqCnt;
+	time_t	reqCntTm, trOpenTm;
 	MYSQL	connect;
 	pthread_mutex_t	connRes;
 };

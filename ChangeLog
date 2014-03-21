@@ -1,3 +1,8 @@
+2014-03-21 Roman
+- !:DB.MySQL: Transaction support and using is added, for performance rise on some DB storages.
+- FIX:DAQ.MMX: Crash at parameter's object open fix.
+
+
 2014-03-19 Roman
 - !!!!:SYS: API function "void vlSet();" expanded for same set value pass and prevent lost values.
 - UI.Vision: Prevent Widgets copy or cut from self to self.

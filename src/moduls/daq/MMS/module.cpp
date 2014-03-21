@@ -489,7 +489,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable"),RWRW__,"root",SDAQ_ID,3,"dest","select","select","/prm/cfg/SEL_VAR_lst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable"),RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
 	return;
     }
 
