@@ -275,17 +275,19 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     }
 
     //Direct write
-    ResAlloc res(dev_res,true);
-    int i_sd = atoi(TSYS::strParse(vo.fld().reserve(),0,".").c_str()),
-	i_rng= atoi(TSYS::strParse(vo.fld().reserve(),1,".").c_str());
+    ResAlloc res(dev_res, true);
+    int off = 0,
+	i_sd  = atoi(TSYS::strParse(vo.fld().reserve(),0,".",&off).c_str()),
+	i_chnl= atoi(TSYS::strParse(vo.fld().reserve(),0,".",&off).c_str()),
+	i_rng = atoi(TSYS::strParse(vo.fld().reserve(),0,".",&off).c_str());
     if(vo.name().compare(0,2,"ao") == 0)
     {
-	int rez = comedi_data_write(devH, i_sd, atoi(vo.name().c_str()+2), i_rng, 0, vmax(0,vl.getI()));
+	int rez = comedi_data_write(devH, i_sd, i_chnl, i_rng, 0, vmax(0,vl.getI()));
 	if(rez == -1) vo.setR(EVAL_REAL, 0, true);
     }
     else if(vo.name().compare(0,2,"do") == 0)
     {
-	int rez = comedi_dio_write(devH, i_sd, atoi(vo.name().c_str()+2), vl.getB());
+	int rez = comedi_dio_write(devH, i_sd, i_chnl, vl.getB());
 	if(rez == -1) vo.setB(EVAL_BOOL, 0, true);
     }
 }
@@ -319,7 +321,7 @@ void TMdPrm::enable()
 		    chnId = TSYS::strMess("ai%d",i_ai); chnNm = TSYS::strMess(_("Analog input %d"),i_ai);
 		    als.push_back(chnId);
 		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TFld::NoWrite|TVal::DirRead))).
-			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
+			setReserve(TSYS::strMess("%d.%d.%d",i_sd,i_n,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_AO:
@@ -328,7 +330,7 @@ void TMdPrm::enable()
 		    chnId = TSYS::strMess("ao%d",i_ao); chnNm = TSYS::strMess(_("Analog output %d"),i_ao);
 		    als.push_back(chnId);
 		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Real,TVal::DirWrite))).
-			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
+			setReserve(TSYS::strMess("%d.%d.%d",i_sd,i_n,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_DI:
@@ -337,7 +339,7 @@ void TMdPrm::enable()
 		    chnId = TSYS::strMess("di%d",i_di); chnNm = TSYS::strMess(_("Digital input %d"),i_di);
 		    als.push_back(chnId);
 		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TFld::NoWrite|TVal::DirRead))).
-			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
+			setReserve(TSYS::strMess("%d.%d.%d",i_sd,i_n,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_DO:
@@ -346,7 +348,7 @@ void TMdPrm::enable()
 		    chnId = TSYS::strMess("do%d",i_do); chnNm = TSYS::strMess(_("Digital output %d"),i_do);
 		    als.push_back(chnId);
 		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirWrite))).
-			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
+			setReserve(TSYS::strMess("%d.%d.%d",i_sd,i_n,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    case COMEDI_SUBD_DIO:
@@ -355,7 +357,7 @@ void TMdPrm::enable()
 		    chnId = TSYS::strMess("dio%d",i_dio); chnNm = TSYS::strMess(_("Digital input-output %d"),i_dio);
 		    als.push_back(chnId);
 		    p_el.fldAt(p_el.fldAdd(new TFld(chnId.c_str(),chnNm.c_str(),TFld::Boolean,TVal::DirRead|TVal::DirWrite))).
-			setReserve(TSYS::strMess("%d.%d",i_sd,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
+			setReserve(TSYS::strMess("%d.%d.%d",i_sd,i_n,atoi(modPrm(TSYS::strMess("rng.%d_%d",i_sd,i_n)).c_str())).c_str());
 		}
 		break;
 	    default: continue;
@@ -408,9 +410,10 @@ void TMdPrm::getVals( const string &atr )
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
     {
 	AutoHD<TVal> val = vlAt(als[i_a]);
-	int i_sd  = atoi(TSYS::strParse(val.at().fld().reserve(),0,".").c_str()),
-	    i_rng = atoi(TSYS::strParse(val.at().fld().reserve(),1,".").c_str()),
-	    i_chnl= atoi(als[i_a].c_str()+2);
+	int off = 0,
+	    i_sd  = atoi(TSYS::strParse(val.at().fld().reserve(),0,".",&off).c_str()),
+	    i_chnl= atoi(TSYS::strParse(val.at().fld().reserve(),0,".",&off).c_str()),
+	    i_rng = atoi(TSYS::strParse(val.at().fld().reserve(),0,".",&off).c_str());
 
 	if(als[i_a] == "info")
 	    val.at().setS(TSYS::strMess("%s (%s) 0x%06x",comedi_get_driver_name(devH),comedi_get_board_name(devH),comedi_get_version_code(devH)),0,true);
@@ -423,8 +426,8 @@ void TMdPrm::getVals( const string &atr )
 		TSYS::sysSleep((float)aiTm*1e-6);
 		comedi_data_read_delayed(devH, i_sd, i_chnl, i_rng, 1, &data, 0);
 	    }
-	    comedi_range *rng = comedi_get_range(devH,i_sd,i_chnl,i_rng);
-	    int maxVal = comedi_get_maxdata(devH,i_sd,i_chnl);
+	    comedi_range *rng = comedi_get_range(devH, i_sd, i_chnl, i_rng);
+	    int maxVal = comedi_get_maxdata(devH, i_sd, i_chnl);
 	    double dVal = vmax(rng->min,vmin(rng->max,rng->min+((double)data/(double)maxVal)*(rng->max-rng->min)));
 
 	    //if(i_chnl == 0) printf("TEST 01 %d = '%d'\n",i_chnl,data);

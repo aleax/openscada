@@ -1,3 +1,8 @@
+2014-03-22 Roman
+- FIX:DAQ.Comedi: Several subdevices into equal types support fix for channel pass through reserve().
+- FIX:DAQ.System: Description present detect change from "Unavailable" to "Description unavailable" tag.
+
+
 2014-03-21 Roman
 - !:DB.MySQL: Transaction support and using is added, for performance rise on some DB storages.
 - FIX:DAQ.MMX: Crash at parameter's object open fix.
