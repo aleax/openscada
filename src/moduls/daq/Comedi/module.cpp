@@ -433,7 +433,7 @@ void TMdPrm::getVals( const string &atr )
 	    //if(i_chnl == 0) printf("TEST 01 %d = '%d'\n",i_chnl,data);
 	    val.at().setR((rez == -1 || isnan(dVal)) ? EVAL_REAL : dVal, 0, true);
 	}
-	else if(als[i_a].compare(0,2,"di") == 0)
+	else if(als[i_a].compare(0,2,"di") == 0 || als[i_a].compare(0,2,"do") == 0)
 	{
 	    unsigned int bit = EVAL_BOOL;
 	    comedi_dio_read(devH, i_sd, i_chnl, &bit);
