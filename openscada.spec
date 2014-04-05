@@ -20,7 +20,7 @@ URL: http://oscada.org
 AutoReq: noshell
 %set_verify_elf_method no
 BuildRequires: glibc-devel gcc-c++ libpcre-devel libgd2-devel
-BuildRequires: libMySQL-devel libsqlite3-devel firebird-devel postgresql9.1-devel
+BuildRequires: libMySQL-devel libsqlite3-devel firebird-devel postgresql-devel
 BuildRequires: libsensors3-devel libnet-snmp-devel libportaudio2-devel libcomedi-devel libqt4-devel libfftw3-devel
 %else
 %define _initdir /etc/init.d

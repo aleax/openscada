@@ -173,7 +173,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 
     time_t st_exp = time(NULL);
 
-    while( (time(NULL)-st_exp) < tm )
+    while((time(NULL)-st_exp) < tm)
     {
 	//rl = messIO(NULL,0,buf,sizeof(buf),0,true);
 	fd_set rd_fd;
@@ -182,14 +182,14 @@ string TTr::expect( int fd, const string& expLst, int tm )
 	tv.tv_sec = tm-(time(NULL)-st_exp); tv.tv_usec = 0;
 	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
 	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
-	if( kz == 0 )	continue;
-	else if( kz < 0 ) throw TError(mod->nodePath().c_str(),_("Read from serial error."));
-	else if( FD_ISSET(fd,&rd_fd) )
+	if(kz == 0)	continue;
+	else if(kz < 0) throw TError(mod->nodePath().c_str(),_("Read from serial error."));
+	else if(FD_ISSET(fd,&rd_fd))
 	{
-	    rl = read(fd,buf,sizeof(buf));
+	    rl = read(fd, buf, sizeof(buf));
 	    rez.append(buf,rl);
-	    for( int off = 0; (stmp=TSYS::strParse(expLst,0,"\n",&off)).size(); )
-		if( rez.find(stmp) != string::npos )
+	    for(int off = 0; (stmp=TSYS::strParse(expLst,0,"\n",&off)).size(); )
+		if(rez.find(stmp) != string::npos)
 		{
 		    mess_debug(mod->nodePath().c_str(), _("Receive from modem %d: '%s'."), fd, stmp.c_str());
 		    return stmp;
@@ -585,7 +585,7 @@ void *TTrIn::Task( void *tr_in )
 	    if(mess_lev() == TMess::Debug)
 		mess_debug(tr->nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
 	    //>> Pure RS-485 flow control: Clear RTS for transfer allow
-    	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
+	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
 
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;

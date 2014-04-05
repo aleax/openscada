@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.MMS file: module.h
 /***************************************************************************
- *   Copyright (C) 2013 by Roman Savochenko                                *
+ *   Copyright (C) 2013-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -29,9 +29,8 @@
 #include <ttipdaq.h>
 #include <tparamcontr.h>
 
-extern "C" {
-#include "mms_client_connection.h"
-}
+#include "libMMS/libMMS.h"
+using namespace MMS;
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -63,7 +62,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void attrPrc( MmsVariableSpecification *iVal = NULL, vector<string> *iAls = NULL, const string &vid = "" );
+	void attrPrc( XML_N *iVal = NULL, vector<string> *iAls = NULL, const string &vid = "" );
 	void getVals( );
 	void setEval( );
 
@@ -88,15 +87,25 @@ class TMdPrm : public TParamContr
 //*************************************************
 //* ModMMS::TMdContr                              *
 //*************************************************
-class TMdContr: public TController
+class TMdContr: public TController, public Client
 {
     friend class TMdPrm;
     public:
+	//Data
+	struct StackTp
+	{
+	    StackTp( TArrayObj *iarr, XML_N *ivl, int iInPos ) : arr(iarr), vl(ivl), inPos(iInPos) { }
+
+	    TArrayObj *arr;
+	    XML_N *vl;
+	    int inPos;
+	};
+
 	//Methods
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
 	int64_t	period( )	{ return mPer; }
 	string  cron( )		{ return mSched; }
@@ -104,12 +113,17 @@ class TMdContr: public TController
 	double  syncPer( )	{ return mSync; }
 	string	addr( )		{ return mAddr; }
 
-	//AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
+
+	// MMS Client methods
+	void regVar( const string &vl );
+
+	void reqService( XML_N &io );
+	void protIO( XML_N &io );
+	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
+	void debugMess( const string &mess );
 
 	Res &nodeRes( )		{ return cntrRes; }
-
-	void connectServer( );
-        void disconnectServer( );
 
     protected:
 	//Methods
@@ -120,29 +134,34 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
+	bool cfgChange( TCfg &cfg );
+	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes, cntrRes;	// Resource for enable params and 
+	Res	enRes, reqRes, cntrRes;	// Resource for enable params, requests, controller DAQ API
 	TCfg	&mSched,	// Schedule
 		&mPrior,	// Process task priority
 		&mSync,		// Synchronization inter remote station: attributes list update.
-		&mAddr;		// MMS server address
+		&mAddr,		// MMS server address
+		&mVarsRdReq;	// Variables into single request
 	int64_t	mPer;
 
 	bool	prcSt,		// Process task active
- 		callSt;		// Calc now stat
+		callSt,		// Calc now stat
+		isReload;
 
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> > pHD;
 
 	double	tmGath;		// Gathering time
 	float	tmDelay;	//Delay time for next try connect
 
-	MmsConnection	con;
+	AutoHD<TTransportOut>	tr;
+	map<string, TVariant>	mVars;
 };
 
 //*************************************************

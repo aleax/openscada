@@ -382,7 +382,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));		break;
 		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
 		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
-		case 6: io(row)->setDef(opt->text()); setStart(false); break;
+		case 6:	io(row)->setDef(opt->text()); setStart(false); break;
 	    }
 	}
     }

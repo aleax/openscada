@@ -847,13 +847,13 @@ void Node::setEnable( bool vl )
 
     ResAlloc res(nRes, true);
 
-    //> Enable node
+    //Enable node
     if(vl && mode() == MD_DATA)
     {
-	//>> Data structure allocate
+	// Data structure allocate
 	if(!data) data = new SData;
 
-	//>> Compile function
+	// Compile function
 	try
 	{
 	    if(progLang().empty()) data->val.setFunc(this);
@@ -863,13 +863,13 @@ void Node::setEnable( bool vl )
 		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    }
 	}
-	catch( TError err )
+	catch(TError err)
 	{
 	    mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
 
-	//>> Links, registers and coins init
+	// Links, registers and coins init
 	for(int i_io = 0; i_io < ioSize(); i_io++)
 	{
 	    IO *io_ = io(i_io);
@@ -916,10 +916,10 @@ void Node::setEnable( bool vl )
 	    }
 	}
 
-	//>> Start task
+	// Start task
 	SYS->taskCreate(nodePath('.',true), 0, Task, this);
     }
-    //> Disable node
+    //Disable node
     if(!vl)
     {
 	//> Stop the calc data task
@@ -1265,14 +1265,14 @@ void *Node::Task( void *ind )
 	{
 	    int64_t t_cnt = TSYS::curTime();
 
-	    //> Setting special IO
+	    //Setting special IO
 	    if(ioFrq >= 0) nd.data->val.setR(ioFrq, (float)1/nd.period());
 	    if(ioStart >= 0) nd.data->val.setB(ioStart, isStart);
 	    if(ioStop >= 0) nd.data->val.setB(ioStop, isStop);
 
 	    try
 	    {
-		//> Get input links
+		//Get input links
 		map< int, AutoHD<TVal> >::iterator li;
 		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
 		{
@@ -1285,10 +1285,10 @@ void *Node::Task( void *ind )
 		    }
 		    switch(nd.data->val.ioType(li->first))
 		    {
-			case IO::String:	nd.data->val.setS(li->first, li->second.at().getS());	break;
-			case IO::Integer:	nd.data->val.setI(li->first, li->second.at().getI());	break;
-			case IO::Real:		nd.data->val.setR(li->first, li->second.at().getR());	break;
-			case IO::Boolean:	nd.data->val.setB(li->first, li->second.at().getB());	break;
+			case IO::String:  nd.data->val.setS(li->first, li->second.at().getS());	break;
+			case IO::Integer: nd.data->val.setI(li->first, li->second.at().getI());	break;
+			case IO::Real:	  nd.data->val.setR(li->first, li->second.at().getR());	break;
+			case IO::Boolean: nd.data->val.setB(li->first, li->second.at().getB());	break;
 			default: break;
 		    }
 		}
@@ -1296,7 +1296,7 @@ void *Node::Task( void *ind )
 		nd.data->val.setMdfChk(true);
 		nd.data->val.calc();
 
-		//> Put output links
+		//Put output links
 		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
 		    if(!li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) && nd.data->val.ioMdf(li->first))
 			switch(nd.data->val.ioType(li->first))
@@ -1314,7 +1314,7 @@ void *Node::Task( void *ind )
 		mess_err(nd.nodePath().c_str(), _("Calculate node's function error."));
 	    }
 
-	    //> Calc acquisition process time
+	    //Calc acquisition process time
 	    nd.tmProc = TSYS::curTime()-t_cnt;
 	}
 
@@ -1329,7 +1329,6 @@ void *Node::Task( void *ind )
 
     return NULL;
 }
-
 
 void Node::cntrCmdProc( XMLNode *opt )
 {
@@ -1350,7 +1349,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration")))
 	    {
 		TConfig::cntrCmdMake(opt, "/nd/cfg", 0, "root", SPRT_ID, RWRWR_);
-		//>> Append configuration properties
+		// Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
 		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
 		xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
@@ -1434,11 +1433,11 @@ void Node::cntrCmdProc( XMLNode *opt )
 
 	    for(int id = 0; id < ioSize(); id++)
 	    {
-		if(nId)		nId->childAdd("el")->setText(io(id)->id());
-		if(nNm)		nNm->childAdd("el")->setText(io(id)->name());
-		if(nType)	nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
-		if(nLnk)	nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
-		if(nVal)	nVal->childAdd("el")->setText( (data && data->val.func()) ? data->val.getS(id) : io(id)->def() );
+		if(nId)	 nId->childAdd("el")->setText(io(id)->id());
+		if(nNm)	 nNm->childAdd("el")->setText(io(id)->name());
+		if(nType)nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if(nLnk) nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
+		if(nVal) nVal->childAdd("el")->setText((data && data->val.func()) ? data->val.getS(id) : io(id)->def());
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
@@ -1476,7 +1475,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    string col = opt->attr("col");
-	    if(enableStat( ) && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat() && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    if(io(row)->flg()&Node::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if(col == "id")		io(row)->setId(opt->text());

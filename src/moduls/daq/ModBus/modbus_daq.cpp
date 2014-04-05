@@ -706,7 +706,7 @@ void *TMdContr::Task( void *icntr )
 	{
 	    if(cntr.tmDelay > 0)
 	    {
-		//> Get data from blocks to parameters or calc for logical type parameters
+		//Get data from blocks to parameters or calc for logical type parameters
 		cntr.en_res.resRequestR();
 		for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		    cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
@@ -726,7 +726,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.call_st = true;
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
-	    //> Write asynchronous writings queue
+	    //Write asynchronous writings queue
 	    ResAlloc resAsWr(cntr.asWr_res,true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
@@ -741,18 +741,18 @@ void *TMdContr::Task( void *icntr )
 
 	    ResAlloc res(cntr.req_res, false);
 
-	    //> Get coils
+	    //Get coils
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++)
 	    {
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksCoil[i_b].err.setVal(_("4:Server failure.")); continue; }
-		//>> Encode request PDU (Protocol Data Units)
+		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x01;					//Function, read multiple coils
 		pdu += (char)(cntr.acqBlksCoil[i_b].off>>8);		//Address MSB
 		pdu += (char)cntr.acqBlksCoil[i_b].off;			//Address LSB
 		pdu += (char)(cntr.acqBlksCoil[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoil[i_b].val.size();		//Number of coils LSB
-		//>> Request to remote server
+		// Request to remote server
 		cntr.acqBlksCoil[i_b].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlksCoil[i_b].err.getVal().empty())
 		{
@@ -772,18 +772,18 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0) continue;
-	    //> Get input's coils
+	    //Get input's coils
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoilIn.size(); i_b++)
 	    {
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksCoilIn[i_b].err.setVal(_("4:Server failure.")); continue; }
-		//>> Encode request PDU (Protocol Data Units)
+		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x02;					//Function, read multiple input's coils
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].off>>8);		//Address MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].off;		//Address LSB
 		pdu += (char)(cntr.acqBlksCoilIn[i_b].val.size()>>8);	//Number of coils MSB
 		pdu += (char)cntr.acqBlksCoilIn[i_b].val.size();	//Number of coils LSB
-		//>> Request to remote server
+		// Request to remote server
 		cntr.acqBlksCoilIn[i_b].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlksCoilIn[i_b].err.getVal().empty())
 		{
@@ -803,18 +803,18 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0) continue;
-	    //> Get registers
+	    //Get registers
 	    for(unsigned i_b = 0; i_b < cntr.acqBlks.size(); i_b++)
 	    {
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlks[i_b].err.setVal(_("4:Server failure.")); continue; }
-		//>> Encode request PDU (Protocol Data Units)
+		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x03;				//Function, read multiple registers
 		pdu += (char)((cntr.acqBlks[i_b].off/2)>>8);	//Address MSB
 		pdu += (char)(cntr.acqBlks[i_b].off/2);		//Address LSB
 		pdu += (char)((cntr.acqBlks[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlks[i_b].val.size()/2);	//Number of registers LSB
-		//>> Request to remote server
+		// Request to remote server
 		cntr.acqBlks[i_b].err.setVal(cntr.modBusReq(pdu));
 		if(cntr.acqBlks[i_b].err.getVal().empty())
 		{
@@ -833,18 +833,18 @@ void *TMdContr::Task( void *icntr )
 		}
 	    }
 	    if(cntr.tmDelay > 0)	continue;
-	    //> Get input registers
+	    //Get input registers
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksIn.size(); i_b++)
 	    {
 		if(cntr.endrun_req) break;
 		if(cntr.redntUse()) { cntr.acqBlksIn[i_b].err.setVal(_("4:Server failure.")); continue; }
-		//>> Encode request PDU (Protocol Data Units)
+		// Encode request PDU (Protocol Data Units)
 		pdu = (char)0x04;					//Function, read multiple input registers
 		pdu += (char)((cntr.acqBlksIn[i_b].off/2)>>8);		//Address MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].off/2);		//Address LSB
 		pdu += (char)((cntr.acqBlksIn[i_b].val.size()/2)>>8);	//Number of registers MSB
 		pdu += (char)(cntr.acqBlksIn[i_b].val.size()/2);	//Number of registers LSB
-		//>> Request to remote server
+		// Request to remote server
 		cntr.acqBlksIn[i_b].err.setVal( cntr.modBusReq(pdu));
 		if(cntr.acqBlksIn[i_b].err.getVal().empty())
 		{
@@ -864,13 +864,13 @@ void *TMdContr::Task( void *icntr )
 	    }
 	    res.release();
 
-	    //> Get data from blocks to parameters or calc for logical type parameters
+	    //Get data from blocks to parameters or calc for logical type parameters
 	    cntr.en_res.resRequestR();
 	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
 		cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    cntr.en_res.resRelease();
 
-	    //> Generic acquisition alarm generate
+	    //Generic acquisition alarm generate
 	    if(cntr.tmDelay <= 0)
 	    {
 		if(cntr.tmDelay == 0)
@@ -878,7 +878,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.tmDelay--;
 	    }
 
-	    //> Calc acquisition process time
+	    //Calc acquisition process time
 	    t_prev = t_cnt;
 	    cntr.call_st = false;
 

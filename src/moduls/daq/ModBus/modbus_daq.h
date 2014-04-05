@@ -149,11 +149,11 @@ class TMdContr: public TController
 	TMdContr(string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
-	int64_t period( )	{ return mPer; }
+	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
-	string  addr( )		{ return mAddr; }
+	string	addr( )		{ return mAddr; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -199,7 +199,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	Res     req_res, en_res, asWr_res;
+	Res	req_res, en_res, asWr_res;
 	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size

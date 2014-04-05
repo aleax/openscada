@@ -152,9 +152,7 @@ void TMdContr::reqService( XML_N &io )
     try { tr.at().start(); }
     catch(TError err) { io.setAttr("err", TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
 
-    //do 
     Client::reqService(io);
-    //while(strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument);
     if(io.attr("err").empty()) tmDelay--;
 }
 
@@ -185,7 +183,7 @@ void TMdContr::disable_( )
 void TMdContr::start_( )
 {
     //> Establish connection
-    try { tr.at().start(); } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+    //try { tr.at().start(); } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
@@ -209,7 +207,7 @@ void TMdContr::protIO( XML_N &io )
     if(messLev() == TMess::Debug) io.setAttr("debug", "1");
     try { Client::protIO(io); }
     catch(TError er)
-    { io.setAttr("err", TSYS::strMess("0x%x:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
+    { io.setAttr("err", TSYS::strMess("0x%x:%s:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
 }
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )

@@ -6499,6 +6499,7 @@ QPainterPath ShapeElFigure::createInundationPath( const QVector<int> &in_fig_num
 		    if(flag_break) break;
 		}
 	    }
+	    if(in_index < 0 || in_index >= shapeItems.size()) continue;
 	    const ShapeItem &inShIt = shapeItems[in_index];
 	    switch(flag)
 	    {

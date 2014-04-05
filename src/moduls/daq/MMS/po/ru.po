@@ -1,13 +1,13 @@
 # OpenSCADA.DAQ.MMS translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.MMS package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2013.
+# Roman Savochenko <rom_as@oscada.org>, 2013-2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA.DAQ.MMS 0.1.0\n"
+"Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-20 15:55+0300\n"
+"POT-Creation-Date: 2014-04-05 17:28+0300\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,82 +16,95 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
 #: module.cpp:38
-msgid "MMS(IEC-9506), IEC-61850"
-msgstr "MMS(IEC-9506), IEC-61850"
+msgid "MMS(IEC-9506)"
+msgstr "MMS(IEC-9506)"
 
 #: module.cpp:42
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
 #: module.cpp:43
-msgid "MMS(IEC-9506) and based IEC-61850 devices access, by libiec61850."
-msgstr "Доступ к устройствам MMS(IEC-9506) и основанным IEC-61850, посредством libiec61850."
+msgid "MMS(IEC-9506) client implementation."
+msgstr "Реализация клиента MMS(IEC-9506)"
 
-#: module.cpp:93
+#: module.cpp:90
 msgid "Parameteres table"
 msgstr "Таблица параметров"
 
-#: module.cpp:94
+#: module.cpp:91
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
 
-#: module.cpp:95
+#: module.cpp:92
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: module.cpp:96
+#: module.cpp:93
 msgid "Sync inter remote station period (s)"
 msgstr "Период синхронизации с удалённой станцией (сек)"
 
-#: module.cpp:97
+#: module.cpp:94
 msgid "Server address"
 msgstr "Адрес сервера"
 
-#: module.cpp:100
+#: module.cpp:95
+msgid "Variables into read request"
+msgstr "Переменных в запросе чтения"
+
+#: module.cpp:98
 msgid "Standard"
 msgstr "Стандарт"
 
-#: module.cpp:101
+#: module.cpp:99
 msgid "Variables list (next line separated)"
 msgstr "Перечень переменных (разделение след. строкой)"
 
-#: module.cpp:154
+#: module.cpp:168
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Ошибка подключения. Восстановление через %.6g с."
 
-#: module.cpp:159
+#: module.cpp:173
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
-#: module.cpp:160
+#: module.cpp:174
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Вызовы с периодом: %s. "
 
-#: module.cpp:161
+#: module.cpp:175
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#: module.cpp:162
+#: module.cpp:176
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Затрачено времени: %s. Запросов %.6g."
 
-#: module.cpp:217
-msgid "Connect to server failed!"
-msgstr "Ошибка подключения к серверу!"
+#: module.cpp:205
+msgid "Remote host error"
+msgstr "Ошибка удалёного хоста"
 
-#: module.cpp:313
+#: module.cpp:232
 #, c-format
-msgid "Value type read %d is not implemented."
-msgstr "Чтение значения типа %d не реализовано."
+msgid "MMS automatic created transport for '%s' controller."
+msgstr "Автоматически созданный MMS транспорт для контроллера '%s'."
 
-#: module.cpp:450
-msgid "Value type %d is not implemented for '%s'."
-msgstr "Значения типа %d не реализовано для '%s'."
+#: module.cpp:379
+msgid "Value type read '%s' is not implemented."
+msgstr "Чтение значения типа '%s' не реализовано."
 
-#: module.cpp:493
-msgid "Append variable"
-msgstr "Добавить переменную"
+#: module.cpp:558 module.cpp:606
+msgid "Value type %s is not implemented for '%s'."
+msgstr "Значения типа %s не реализовано для '%s'."
+
+#: module.cpp:649
+msgid "Variable append"
+msgstr "Добавление переменной"
+
+#: module.cpp:789
+#, c-format
+msgid "Write to '%s' error: %s."
+msgstr "Ошибка записи в '%s': %s."

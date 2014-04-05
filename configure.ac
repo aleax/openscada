@@ -261,7 +261,7 @@ AX_MOD_DAQ_EN(OneWire,[enable build module DAQ.OneWire],enable,incl,[
     AC_CHECK_LIB([owcapi],[OW_init],[],[AC_MSG_ERROR(OWCAPI library is not usable!)])
 ])
 AX_MOD_DAQ_EN(MMS,[enable build module DAQ.MMS],enable,[],[],
-    [AC_CONFIG_FILES(src/moduls/daq/MMS/libiec61850/Makefile)])
+    [AC_CONFIG_FILES(src/moduls/daq/MMS/libMMS/Makefile)])
 AX_MOD_DAQ_EN(EPICS,[enable build module DAQ.EPICS],enable,[],[],[])
 #> Archive modules
 AC_SUBST(ArchSub_mod)

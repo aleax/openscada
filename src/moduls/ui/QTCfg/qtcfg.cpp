@@ -677,7 +677,7 @@ void ConfApp::itCopy( )
 void ConfApp::itPaste( )
 {
     int off;
-    string s_el, s_elp, t_el, b_grp, copyEl, to_path;
+    string s_el, s_elp, t_el, b_grp, copyEl, to_path, chSel;
     QCheckBox *prcReq = NULL, *prcAlrPres = NULL;
     XMLNode parNode("info"), *rootW = root;
     bool prcReqMiss = false, prcAlrPresMiss = false;
@@ -690,7 +690,7 @@ void ConfApp::itPaste( )
 	rootW = root;
 	to_path = sel_path;
 
-	//> Src elements calc
+	//Src elements calc
 	int n_sel = 0;
 	for(off = 0; !(t_el=TSYS::pathLev(copyEl,0,true,&off)).empty(); n_sel++)
 	{ if(n_sel) s_elp += ("/"+s_el); s_el = t_el; }
@@ -717,7 +717,7 @@ void ConfApp::itPaste( )
 		if(s_el.substr(0,gbrId.size()) == gbrId) { brs[brs.size()-1] = brs[brs.size()-1]+"\n1"; b_grp = gbrId; }
 	    }
 
-	//> Make request dialog
+	//Make request dialog
 	ReqIdNameDlg dlg(this, actItAdd->icon(), "", _("Move or copy node"));
 	dlg.setTargets(brs);
 	dlg.setMess(QString(isCut?_("Move node '%1' to '%2'.\n"):_("Copy node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(to_path.c_str()));
@@ -737,7 +737,7 @@ void ConfApp::itPaste( )
 	if(atoi(TSYS::strSepParse(dlg.target(),0,'\n').c_str()) >= 0)
 	{
 	    dst_nm += "/" +TSYS::strSepParse(dlg.target(),2,'\n') + dlg.id().toStdString();
-	    //> Check for already present node
+	    // Check for already present node
 	    XMLNode req("get");
 	    req.setAttr("path",to_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
@@ -757,19 +757,24 @@ void ConfApp::itPaste( )
 		}
 	}
 
-	//> Copy visual item
+	//Copy visual item
 	XMLNode req("copy");
 	req.setAttr("path","/"+stat_nm+"/%2fobj")->setAttr("src",src_nm)->setAttr("dst",dst_nm);
 	if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
 
-	//> Remove source widget
-	if(isCut) itDel(copyEl);
+	//Remove source widget
+	if(isCut)
+	{
+	    itDel(copyEl);
+	    if(sel_path == copyEl) chSel = "/"+stat_nm+"/"+dst_nm;
+	}
     }
 
     if(isCut) copy_buf = "0";
 
     treeUpdate();
-    pageRefresh();
+    if(chSel.size()) selectPage(chSel);
+    else pageRefresh();
 }
 
 void ConfApp::editToolUpdate( )

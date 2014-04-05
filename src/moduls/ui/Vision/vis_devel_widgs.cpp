@@ -2202,7 +2202,7 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
 	if(!(flgs&NoUpdate)) update();
     }
 
-    selAreaUpdate();
+    if(wLevel() == 0) selAreaUpdate();
 }
 
 void DevelWdgView::setEdit( bool vl )
@@ -3032,6 +3032,7 @@ void DevelWdgView::incDecVisScale( )
 
 void DevelWdgView::selAreaUpdate( QRectF rsel )
 {
+    if(!pntView) return;
     if(rsel.isNull())
     {
 	DevelWdgView *chW = NULL;

@@ -214,7 +214,6 @@ void UPS::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
     MtxAlloc res(reqRes, true);
 
     bool OK = true, OKr = false;
-    char var[51] = "", vVal[256] = "";
     OK = OK && reqUPS(addr,"USERNAME "+p->addPrm("USER")+"\x0A",(p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
     OK = OK && reqUPS(addr,"PASSWORD "+p->addPrm("PASS")+"\x0A",(p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
 

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.MMS file: module.cpp
 /***************************************************************************
- *   Copyright (C) 2013 by Roman Savochenko                                *
+ *   Copyright (C) 2013-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -35,12 +35,12 @@
 //*************************************************
 //* Modul info!                                   *
 #define MOD_ID		"MMS"
-#define MOD_NAME	_("MMS(IEC-9506), IEC-61850")
+#define MOD_NAME	_("MMS(IEC-9506)")
 #define MOD_TYPE	SDAQ_ID
 #define VER_TYPE	SDAQ_VER
-#define MOD_VER		"0.1.0"
+#define MOD_VER		"0.5.0"
 #define AUTHORS		_("Roman Savochenko")
-#define DESCRIPTION	_("MMS(IEC-9506) and based IEC-61850 devices access, by libiec61850.")
+#define DESCRIPTION	_("MMS(IEC-9506) client implementation.")
 #define LICENSE		"GPL2"
 //*************************************************
 
@@ -80,10 +80,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr( )
-{
-
-}
+TTpContr::~TTpContr( )	{ }
 
 void TTpContr::postEnable( int flag )
 {
@@ -95,7 +92,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
-    fldAdd(new TFld("CON_TM",_("Connect timeout (ms)"),TFld::Integer,TFld::NoFlag,"4","1000","0;10000"));
+    fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","10;9999"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
@@ -107,23 +104,17 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
     return new TMdContr(name, daq_db, this);
 }
 
-void TTpContr::load_( )
-{
+void TTpContr::load_( )	{ }
 
-}
-
-void TTpContr::save_( )
-{
-
-}
+void TTpContr::save_( )	{ }
 
 void TTpContr::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
     if(opt->name() == "info")
     {
-        TTipDAQ::cntrCmdProc(opt);
-        return;
+	TTipDAQ::cntrCmdProc(opt);
+	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
@@ -134,10 +125,32 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
-    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")),
-    prcSt(false), callSt(false), tmGath(0), tmDelay(0), con(NULL)
+    mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
+    prcSt(false), callSt(false), isReload(false), tmGath(0), tmDelay(0)
 {
     cfg("PRM_BD").setS("MMSPrm_"+name_c);
+
+    //ParameterCBB
+    string prms;
+    setBS(prms, SupportOpts::str1);
+    setBS(prms, SupportOpts::str2);
+    setBS(prms, SupportOpts::vnam);
+    setBS(prms, SupportOpts::valt);
+    setBS(prms, SupportOpts::vadr);
+    setBS(prms, SupportOpts::tpy);
+    setBS(prms, SupportOpts::vlis);
+    setCallParameterCBB(prms);
+
+    //ServicesSupported
+    prms = "";
+    setBS(prms, SupportServs::status);
+    setBS(prms, SupportServs::getNameList);
+    setBS(prms, SupportServs::identify);
+    setBS(prms, SupportServs::read);
+    setBS(prms, SupportServs::write);
+    setBS(prms, SupportServs::getVariableAccessAttributes);
+    setBS(prms, SupportServs::getCapabilityList);
+    setCallServicesSupported(prms);
 }
 
 TMdContr::~TMdContr( )
@@ -158,12 +171,49 @@ string TMdContr::getStatus( )
 	else
 	{
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
 	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."),TSYS::time2str(tmGath).c_str(),-tmDelay);
 	}
     }
     return rez;
+}
+
+void TMdContr::regVar( const string &vl )
+{
+    ResAlloc res(reqRes, true);
+    if(mVars.find(vl) == mVars.end()) mVars[vl] = TVariant();
+}
+
+void TMdContr::reqService( XML_N &io )
+{
+    ResAlloc res(nodeRes(), true);
+    io.setAttr("err", "");
+
+    try { tr.at().start(); }
+    catch(TError err) { io.setAttr("err", TSYS::strMess("%s",err.mess.c_str())); return; }
+
+    Client::reqService(io);
+    if(io.attr("err").empty()) tmDelay--;
+}
+
+void TMdContr::protIO( XML_N &io )
+{
+    ResAlloc resN(tr.at().nodeRes(), true);
+    if(messLev() == TMess::Debug) io.setAttr("debug", "1");
+    try { Client::protIO(io); }
+    catch(TError er) { io.setAttr("err", TSYS::strMess("%s:%s", _("Remote host error"), er.mess.c_str())); }
+}
+
+int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
+{
+    //printf("TEST 00: req=%d: '%s'\n", len_ob, TSYS::strDecode(string(obuf,len_ob),TSYS::Bin).c_str());
+    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
+}
+
+void TMdContr::debugMess( const string &mess )
+{
+    mess_debug_(nodePath().c_str(), "%s", mess.c_str());
 }
 
 TParamContr *TMdContr::ParamAttach( const string &name, int type )
@@ -173,13 +223,20 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::enable_( )
 {
-    try { connectServer(); }
-    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    string trName = "Sockets.out_MMS"+id();
+    tr = SYS->transport().at().nodeAt(trName, 0, '.', 0, true);
+    if(tr.freeStat())
+    {
+	SYS->transport().at().at(TSYS::strParse(trName,0,".")).at().outAdd(TSYS::strParse(trName,1,".").substr(4));
+	tr = SYS->transport().at().nodeAt(trName, 0, '.');
+	tr.at().setDscr(TSYS::strMess(_("MMS automatic created transport for '%s' controller."),id().c_str()));
+    }
 }
 
 void TMdContr::disable_( )
 {
-    disconnectServer( );
+    tr.free();
+    mVars.clear();
 }
 
 void TMdContr::start_( )
@@ -187,6 +244,21 @@ void TMdContr::start_( )
     //> Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
     tmDelay = 0;
+
+    // Clear data blocks
+    mVars.clear();
+
+    // Reenable parameters
+    try
+    {
+	vector<string> pls;
+	list(pls);
+
+	isReload = true;
+	for(unsigned i_p = 0; i_p < pls.size(); i_p++)
+	    if(at(pls[i_p]).at().enableStat()) at(pls[i_p]).at().enable();
+	isReload = false;
+    } catch(TError) { isReload = false; throw; }
 
     //> Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
@@ -199,34 +271,8 @@ void TMdContr::stop_( )
 
     //> Set EVal
     ResAlloc res(enRes, false);
-    for(unsigned i_p = 0; i_p < p_hd.size(); i_p++)
-        p_hd[i_p].at().setEval();
-}
-
-void TMdContr::connectServer( )
-{
-    if(con) disconnectServer();
-
-    ResAlloc res(nodeRes(), true);
-    con = MmsConnection_create();
-    MmsConnection_setRequestTimeout(con, cfg("CON_TM").getI());
-    MmsError mmsError;
-    bool rez = MmsConnection_connect(con, &mmsError, (char*)TSYS::strParse(addr(),0,":").c_str(), atoi(TSYS::strParse(addr(),1,":").c_str()));
-    if(!rez)
-    {
-	MmsConnection_destroy(con);
-	con = NULL;
-	throw TError(nodePath().c_str(), _("Connect to server failed!"));
-    }
-}
-
-void TMdContr::disconnectServer( )
-{
-    if(!con)	return;
-
-    ResAlloc res(nodeRes(), true);
-    MmsConnection_destroy(con);
-    con = NULL;
+    for(unsigned i_p = 0; i_p < pHD.size(); i_p++)
+	pHD[i_p].at().setEval();
 }
 
 void TMdContr::prmEn( TMdPrm *prm, bool val )
@@ -234,16 +280,15 @@ void TMdContr::prmEn( TMdPrm *prm, bool val )
     unsigned i_prm;
 
     ResAlloc res(enRes, true);
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(&p_hd[i_prm].at() == prm) break;
+    for(i_prm = 0; i_prm < pHD.size(); i_prm++)
+	if(&pHD[i_prm].at() == prm) break;
 
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(prm);
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
+    if(val && i_prm >= pHD.size())	pHD.push_back(prm);
+    if(!val && i_prm < pHD.size())	pHD.erase(pHD.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
 {
-    MmsError	error;
     vector<string> als;
     string	nId;
     TMdContr &cntr = *(TMdContr *)icntr;
@@ -251,77 +296,128 @@ void *TMdContr::Task( void *icntr )
     bool firstCall = true;
     cntr.prcSt = true;
 
-    for(unsigned int it_cnt = cntr.p_hd.size(); !TSYS::taskEndRun(); it_cnt++)
+    for(unsigned int it_cnt = cntr.pHD.size(); !TSYS::taskEndRun(); it_cnt++)
     {
-
 	if(cntr.redntUse()) { TSYS::sysSleep(1); continue; }
 	if(cntr.tmDelay > 0){ TSYS::sysSleep(1); cntr.tmDelay = vmax(0,cntr.tmDelay-1); continue; }
-	try{ if(!cntr.con) cntr.connectServer(); }
-	catch(TError err) { cntr.tmDelay = cntr.syncPer(); continue; }
-	firstCall = (cntr.tmDelay == 0);
 
 	int64_t t_cnt = TSYS::curTime();
 
-	//> Update controller's data
+	//Prepare and read block variables
+	XML_N valCtr("MMS"), *value = NULL;
+	valCtr.setAttr("id","read");
+	ResAlloc res(cntr.reqRes, false);
+	for(map<string,TVariant>::iterator vi = cntr.mVars.begin(); true; ++vi)
+	{
+	    // Send request
+	    if(vi == cntr.mVars.end() || valCtr.childSize() >= cntr.mVarsRdReq.getI())
+	    {
+		if(!valCtr.childSize())	break;
+
+		cntr.reqService(valCtr);
+
+		//  Process result
+		for(int i_ch = 0; i_ch < valCtr.childSize(); i_ch++)
+		{
+		    value = valCtr.childGet(i_ch);
+		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
+		    if(!valCtr.attr("err").empty()) value = NULL;
+		    if(!value) { cntr.mVars[nId] = TVariant(); continue; }
+		    switch(atoi(value->attr("tp").c_str()))
+		    {
+			case VT_Bool: case VT_Int: case VT_UInt:
+			case VT_Float:
+			case VT_BitString: case VT_OctString: case VT_VisString:
+			    cntr.mVars[nId] = value->text();
+			    break;
+			case VT_Array: case VT_Struct:		//!!!! Need for test
+			{
+			    vector<StackTp> stack;
+			    TArrayObj *curArr = new TArrayObj();
+			    cntr.mVars[nId] = curArr;
+			    XML_N *curValue = value;
+			    for(int i_v = 0; true; )
+			    {
+				if(i_v >= curValue->childSize())
+				{
+				    if(stack.size())
+				    {
+					curArr = stack.back().arr;
+					curValue = stack.back().vl;
+					i_v = stack.back().inPos+1;
+					stack.pop_back();
+					continue;
+				    }
+				    else break;
+				}
+
+				XML_N *itValue = curValue->childGet(i_v);
+				switch(atoi(itValue->attr("tp").c_str()))
+				{
+				    case VT_Bool:  curArr->arSet(i_v, bool(atoi(itValue->text().c_str())));		break;
+				    case VT_Int: case VT_UInt:	curArr->arSet(i_v, atoll(itValue->text().c_str()));	break;
+				    case VT_Float: curArr->arSet(i_v, atof(itValue->text().c_str()));			break;
+				    case VT_BitString: case VT_OctString: case VT_VisString:
+					curArr->arSet(i_v, itValue->text());
+					break;
+				    case VT_Array: case VT_Struct:
+				    {
+					stack.push_back(StackTp(curArr,curValue,i_v));
+					curValue = itValue;
+					TArrayObj *itArr = new TArrayObj();
+					curArr->arSet(i_v, itArr);
+					curArr = itArr;
+					i_v = 0;
+					continue;
+				    }
+				}
+				i_v++;
+			    }
+			    break;
+			}
+			//case MMS_UTC_TIME: pVal.at().setI(MmsValue_toUnixTimestamp(value), 0, true);		break;
+			default: mess_err(cntr.nodePath().c_str(), _("Value type read '%s' is not implemented."), value->attr("tp").c_str());
+		    }
+		}
+
+		valCtr.childClear();
+		if(vi == cntr.mVars.end()) break;
+	    }
+
+	    value = valCtr.childAdd("it")->setAttr("itemId", TSYS::pathLev(vi->first,1));
+	    if(TSYS::pathLev(vi->first,0) != "*") value->setAttr("domainId", TSYS::pathLev(vi->first,0));
+	}
+	res.release();
+
+	//Update controller's data
 	cntr.enRes.resRequestR();
 	cntr.callSt = true;
 	unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
-	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse() && !TSYS::taskEndRun(); i_p++)
+	for(unsigned i_p = 0; i_p < cntr.pHD.size() && !cntr.redntUse() && !TSYS::taskEndRun(); i_p++)
 	    try
 	    {
-		cntr.p_hd[i_p].at().vlList(als);
-		if(firstCall || (div && (it_cnt%div) < cntr.p_hd.size())) cntr.p_hd[i_p].at().attrPrc();
-		for(unsigned i_a = 0; i_a < als.size(); i_a++)
-                {
-		    AutoHD<TVal> pVal = cntr.p_hd[i_p].at().vlAt(als[i_a]);
-		    nId = TSYS::strLine(pVal.at().fld().reserve(),0);
-                    if(nId.empty()) continue;
-		    MmsValue* value = NULL;
-		    if(cntr.con)
-		    {
-			ResAlloc res(cntr.nodeRes(), true);
-			value = MmsConnection_readVariable(cntr.con, &error, (char*)TSYS::pathLev(nId,0).c_str(), (char*)TSYS::pathLev(nId,1).c_str());
-			res.release();
-		    }
-		    if(!value)
-		    {
-			pVal.at().setR(EVAL_REAL,0,true);
-			if(error == MMS_ERROR_CONNECTION_LOST) cntr.disconnectServer();
-			continue;
-		    }
-		    switch(value->type)
-		    {
-			case MMS_BOOLEAN: pVal.at().setB(MmsValue_getBoolean(value), 0, true);			break;
-			case MMS_INTEGER: case MMS_UNSIGNED: pVal.at().setI(MmsValue_toInt64(value), 0, true);	break;
-			case MMS_FLOAT:	  pVal.at().setR(MmsValue_toDouble(value), 0, true);			break;
-			case MMS_BIT_STRING:
-			{
-			    string vl;
-			    for(int i_vl = 0; i_vl < value->value.bitString.size; i_vl++)
-				vl += ((value->value.bitString.buf[i_vl/8]>>(i_vl%8))&1) ? "1" : "0";
-			    pVal.at().setS(vl, 0, true);
-			    break;
-			}
-			case MMS_OCTET_STRING:
-			{
-			    string vl;
-			    for(unsigned i_vl = 0; i_vl < value->value.octetString.size; i_vl++)
-				vl += TSYS::strMess("%0.2x",value->value.octetString.buf[i_vl]);
-			    pVal.at().setS(vl, 0, true);
-			    break;
-			}
-			case MMS_VISIBLE_STRING: pVal.at().setS(value->value.visibleString, 0, true);		break;
-			//case MMS_STRING: break;
-			case MMS_UTC_TIME: pVal.at().setI(MmsValue_toUnixTimestamp(value), 0, true);		break;
-			default: mess_err(cntr.nodePath().c_str(), _("Value type read %d is not implemented."), value->type);
-		    }
+		cntr.pHD[i_p].at().vlList(als);
+		if(firstCall || (div && (it_cnt%div) < cntr.pHD.size()))
+		{
+		    printf("TEST 00: firstCall=%d; div=%d; it_cnt=%d\n",firstCall,div,it_cnt);
+		    cntr.pHD[i_p].at().attrPrc();
+		}
 
-		    MmsValue_delete(value);
-		    cntr.tmDelay--;
-                }
+		//Attributes update
+		res.request(false);
+		for(unsigned i_a = 0; i_a < als.size(); i_a++)
+		{
+		    AutoHD<TVal> pVal = cntr.pHD[i_p].at().vlAt(als[i_a]);
+		    nId = TSYS::strLine(pVal.at().fld().reserve(),0);
+		    if(nId.empty()) continue;
+		    //printf("TEST 01: '%s' = %s\n", nId.c_str(), cntr.mVars[nId].getS().c_str());
+		    pVal.at().set(cntr.mVars[nId], 0, true);
+		}
+		res.release();
 	    }
 	    catch(TError err)	{ mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
-	cntr.callSt = false;
+
+	cntr.callSt = firstCall = false;
 	cntr.enRes.resRelease();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
 
@@ -332,6 +428,18 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = false;
 
     return NULL;
+}
+
+bool TMdContr::cfgChange( TCfg &icfg )
+{
+    TController::cfgChange(icfg);
+
+    try
+    {
+	if(icfg.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+icfg.getS());
+    } catch(...) { }
+
+    return true;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
@@ -359,10 +467,7 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), p_e
 
 }
 
-TMdPrm::~TMdPrm( )
-{
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
 void TMdPrm::postEnable( int flag )
 {
@@ -374,7 +479,7 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat())	return;
+    if(enableStat() && !owner().isReload) return;
     TParamContr::enable();
 
     attrPrc();
@@ -403,69 +508,121 @@ void TMdPrm::save_( )
     TParamContr::save_();
 }
 
-void TMdPrm::attrPrc( MmsVariableSpecification *iVal, vector<string> *iAls, const string &vid )
+void TMdPrm::attrPrc( XML_N *iVal, vector<string> *iAls, const string &vid )
 {
-    if(!owner().con) return;
-
     vector<string> *als = iAls ? iAls : new vector<string>;
-    MmsError error;
 
+    bool wrMode;
     string varLs = varList(), var;
-    ResAlloc res(owner().nodeRes(), true);
-    for(int off = 0; iVal || (var=TSYS::strLine(varLs,0,&off)).size(); )
-    {
-	MmsVariableSpecification* value = iVal ? iVal :
-	    MmsConnection_getVariableAccessAttributes(owner().con, &error, (char*)TSYS::pathLev(var,0).c_str(), (char*)TSYS::pathLev(var,1).c_str());
-	if(!value) continue;
-        bool srchOK = false;
-        string vName = iVal ? vid+"$"+MmsVariableSpecification_getName(value) : var;
-        //>> Find for already presented attribute
-        for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
-            if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == vName) srchOK = true;
-	if(srchOK) als->push_back(vName);
-	else
+    if(tryBS(owner().parameterCBB(), (uint32_t)SupportServs::getVariableAccessAttributes))
+	for(int off = 0; iVal || (var=TSYS::strLine(varLs,0,&off)).size(); )
 	{
-	    string aid = TSYS::strEncode(TSYS::pathLev(vName,1), TSYS::oscdID);
+	    wrMode = (var.compare(0,2,"w:") == 0);
+	    if(wrMode) var.erase(0,2);
+	    XML_N *valCntr = NULL, *value = iVal;
+	    if(!value)
+	    {
+		valCntr = new XML_N("MMS");
+		value = valCntr->setAttr("id","getVariableAccessAttributes")->setAttr("itemId", TSYS::pathLev(var,1));
+		if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
+		owner().reqService(*valCntr);
+		if(!valCntr->attr("err").empty()) { delete valCntr; continue; }
+	    }
+
+	    bool srchOK = false;
+	    string vName = iVal ? vid+"$"+value->attr("id") : var;
+	    // Find for already presented attribute
+	    for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
+		if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == vName) srchOK = true;
+	    if(srchOK) { als->push_back(vName); owner().regVar(vName); }
+	    else
+	    {
+		string aid = TSYS::strEncode(TSYS::pathLev(vName,1), TSYS::oscdID);
+		if(vlPresent(aid))
+		    for(int i_v = 1; true; i_v++)
+			if(!vlPresent(aid+MMS::i2s(i_v)))
+			{ aid += MMS::i2s(i_v); break; }
+
+		int vtp = -1;
+		switch(atoi(value->attr("tp").c_str()))
+		{
+		    case VT_Bool:	vtp = TFld::Boolean;		break;
+		    case VT_Int: case VT_UInt: vtp = TFld::Integer;	break;
+		    case VT_Float:	vtp = TFld::Real;		break;
+		    case VT_BitString: case VT_VisString: case VT_OctString: vtp = TFld::String;	break;
+		    case VT_Struct:
+			for(int i_a = 0; i_a < value->childSize(); i_a++)
+			    attrPrc(value->childGet(i_a), als, vName);
+			break;
+		    case VT_Array: vtp = TFld::Object;		break;
+		    default: mess_err(nodePath().c_str(), _("Value type %s is not implemented for '%s'."), value->attr("tp").c_str(), vName.c_str());
+		}
+		if(vtp >= 0)
+		{
+		    p_el.fldAdd(new TFld(aid.c_str(),TSYS::pathLev(vName,1).c_str(),(TFld::Type)vtp,(wrMode?(int)TVal::DirWrite:(int)TFld::NoWrite),
+			"","","","",(vName+"\n"+value->attr("tp")).c_str()));
+		    als->push_back(vName);
+		    owner().regVar(vName);
+		}
+	    }
+
+	    if(!valCntr) break;
+	    delete valCntr;
+	}
+    else
+    {
+	XML_N valCntr("MMS"), *value = valCntr.setAttr("id","read")->childAdd("it");
+	for(int off = 0; (var=TSYS::strLine(varLs,0,&off)).size(); )
+	{
+	    wrMode = (var.compare(0,2,"w:") == 0);
+	    if(wrMode) var.erase(0,2);
+
+	    bool srchOK = false;
+	    // Find for already presented attribute
+	    for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
+		if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == var) srchOK = true;
+	    if(srchOK) { als->push_back(var); owner().regVar(var); continue; }
+
+	    string aid = TSYS::strEncode(TSYS::pathLev(var,1), TSYS::oscdID);
 	    if(vlPresent(aid))
 		for(int i_v = 1; true; i_v++)
-        	    if(!vlPresent(aid+i2s(i_v)))
-            	    { aid += i2s(i_v); break; }
+		    if(!vlPresent(aid+MMS::i2s(i_v)))
+		    { aid += MMS::i2s(i_v); break; }
 
-    	    int vtp = -1;
-	    switch(value->type)
+	    value->setAttr("itemId", TSYS::pathLev(var,1));
+	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
+	    owner().reqService(valCntr);
+	    if(!valCntr.attr("err").empty()) continue;
+
+	    int vtp = -1;
+	    switch(atoi(value->attr("tp").c_str()))
 	    {
-		case MMS_BOOLEAN: vtp = TFld::Boolean;				break;
-		case MMS_INTEGER: case MMS_UNSIGNED: vtp = TFld::Integer;	break;
-		case MMS_FLOAT:   vtp = TFld::Real;				break;
-		case MMS_BIT_STRING: case MMS_STRING: case MMS_OCTET_STRING: case MMS_VISIBLE_STRING:
-		    vtp = TFld::String;	break;
-		case MMS_UTC_TIME: vtp = TFld::Integer;				break;
-		case MMS_STRUCTURE:
-		    for(int i_a = 0; i_a < MmsVariableSpecification_getSize(value); i_a++)
-			attrPrc(MmsVariableSpecification_getChildSpecificationByIndex(value,i_a), als, vName);
-		    break;
-		//case MMS_ARRAY:
-		default: mess_err(nodePath().c_str(), _("Value type %d is not implemented for '%s'."), value->type, vName.c_str());
+		case VT_Bool:	vtp = TFld::Boolean;		break;
+		case VT_Int: case VT_UInt: vtp = TFld::Integer;	break;
+		case VT_Float:	vtp = TFld::Real;		break;
+		case VT_BitString: case VT_VisString: case VT_OctString: vtp = TFld::String;	break;
+		case VT_Struct:	vtp = TFld::Object;		break;
+		case VT_Array: vtp = TFld::Object;			break;
+		default: mess_err(nodePath().c_str(), _("Value type %s is not implemented for '%s'."), value->attr("tp").c_str(), var.c_str());
 	    }
 	    if(vtp >= 0)
 	    {
-		p_el.fldAdd(new TFld(aid.c_str(),TSYS::pathLev(vName,1).c_str(),(TFld::Type)vtp,TVal::DirWrite/*TFld::NoWrite*/,
-		    "","","","",(vName+"\n"+i2s(value->type)).c_str()));
-		als->push_back(vName);
+		p_el.fldAdd(new TFld(aid.c_str(),TSYS::pathLev(var,1).c_str(),(TFld::Type)vtp,(wrMode?(int)TVal::DirWrite:(int)TFld::NoWrite),
+		    "","","","",(var+"\n"+value->attr("tp")).c_str()));
+		als->push_back(var);
+		owner().regVar(var);
 	    }
 	}
-	if(iVal) break;
-	MmsVariableSpecification_destroy(value);
     }
 
-    //> Find for delete attribute
+    //Find for delete attribute
     for(unsigned i_a = 0, i_p; !iVal && i_a < p_el.fldSize(); )
     {
-        for(i_p = 0; i_p < als->size(); i_p++)
-            if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == (*als)[i_p]) break;
-        if(i_p >= als->size())
-            try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
-        i_a++;
+	for(i_p = 0; i_p < als->size(); i_p++)
+	    if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == (*als)[i_p]) break;
+	if(i_p >= als->size())
+	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
+	i_a++;
     }
 
     if(!iAls) delete als;
@@ -476,51 +633,67 @@ void TMdPrm::setEval( )
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
-        vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
+	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //> Service commands process
+    //Service commands process
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable"),RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable append"),RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     if(a_path == "/prm/cfg/SEL_VAR")
     {
-	if(ctrChkNode(opt,"get")) opt->setText(owner().con?_("Select for append"):_("No connection"));
+	if(ctrChkNode(opt,"get")) opt->setText(TBDS::genDBGet(nodePath()+"selVAR","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_RD))
 	{
-	    string vLs = varList();
-	    setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
+	    if(TSYS::pathLev(opt->text(),1).size())
+	    {
+		string vLs = varList(), vS;
+		for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size(); )
+		    if((vS.compare(0,2,"w:") == 0 && vS.compare(2,string::npos,opt->text()) == 0) || vS == opt->text())
+			break;
+		if(vS.empty()) setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
+	    }
+	    TBDS::genDBSet(nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
 	}
     }
-    else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt) && owner().con)
+    else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt))
     {
-	MmsError mmsError;
-	ResAlloc res(owner().nodeRes(), true);
-	LinkedList nameList = MmsConnection_getDomainNames(owner().con, &mmsError);
-	if(nameList)
+	string selVAR = TSYS::pathLev(TBDS::genDBGet(nodePath()+"selVAR","",opt->attr("user")),0);
+	if(selVAR.empty())	//Get domain list
 	{
-	    LinkedList eld = nameList;
-	    while((eld=LinkedList_getNext(eld)) != NULL)
+	    XML_N reqDom("MMS");
+	    reqDom.setAttr("id", "getNameList")->setAttr("objectClass", MMS::i2s(OCL_Domain));
+	    owner().reqService(reqDom);
+	    opt->childAdd("el")->setText("*");
+	    for(int i_d = 0; reqDom.attr("err").empty() && i_d < reqDom.childSize(); i_d++)
+		opt->childAdd("el")->setText(reqDom.childGet(i_d)->text());
+	}
+	else			//Get names list
+	{
+	    opt->childAdd("el")->setText("");
+	    XML_N reqVar("MMS");
+	    reqVar.setAttr("moreFollows","");
+	    string continueAfter;
+	    do
 	    {
-		LinkedList varList = MmsConnection_getDomainVariableNames(owner().con, &mmsError, (char*)eld->data);
-		if(!varList) continue;
-		LinkedList elv = varList;
-		while((elv=LinkedList_getNext(elv)) != NULL)
-		    opt->childAdd("el")->setText(string((char*)eld->data)+"/"+(char*)elv->data);
-		LinkedList_destroy(varList);
+		reqVar.clear()->setAttr("id","getNameList")->setAttr("objectClass", MMS::i2s(OCL_NmVar))->setAttr("continueAfter", continueAfter);
+		if(selVAR != "*") reqVar.setAttr("domainSpecific",selVAR);
+		owner().reqService(reqVar);
+		for(int i_v = 0; reqVar.attr("err").empty() && i_v < reqVar.childSize(); i_v++)
+		    opt->childAdd("el")->setText(selVAR+"/"+(continueAfter=reqVar.childGet(i_v)->text()));
 	    }
-	    LinkedList_destroy(nameList);
+	    while(atoi(reqVar.attr("moreFollows").c_str()));
 	}
     }
     else TParamContr::cntrCmdProc(opt);
@@ -541,14 +714,14 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     if(!enableStat())	vo.setS(EVAL_STR, 0, true);
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
-        if(vl == pvl) return;
-        XMLNode req("set");
-        req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
-        SYS->daq().at().rdStRequest(owner().workId(), req);
-        return;
+	if(vl == pvl) return;
+	XMLNode req("set");
+	req.setAttr("path", nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
+	SYS->daq().at().rdStRequest(owner().workId(), req);
+	return;
     }
 
     if(vl.isEVal() || vl == pvl) return;
@@ -557,33 +730,62 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     string nId = TSYS::strLine(vo.fld().reserve(), 0, &off);
     int vTp = atoi(TSYS::strLine(vo.fld().reserve(),0,&off).c_str());
 
-    MmsError error;
-    MmsValue *value = NULL;
+    XML_N valCtr("MMS");
+    XML_N *value = valCtr.setAttr("id", "write")->
+		    childAdd("it")->setAttr("itemId", TSYS::pathLev(nId,1))->setAttr("dataType", MMS::i2s(vTp));
+    if(TSYS::pathLev(nId,0) != "*") value->setAttr("domainId", TSYS::pathLev(nId,0));
     switch(vTp)
     {
-	case MMS_BOOLEAN: value = MmsValue_newBoolean(vl.getB());		break;
-	case MMS_INTEGER:
-	case MMS_UNSIGNED: value = MmsValue_newIntegerFromInt64(vl.getI());	break;
-	case MMS_FLOAT: value = MmsValue_newDouble(vl.getR());			break;
-	//case MMS_BIT_STRING:
-	//case MMS_OCTET_STRING:
-	case MMS_VISIBLE_STRING: value = MmsValue_newVisibleString((char*)vl.getS().c_str());	break;
-    }
-
-    if(value)
-    {
-	ResAlloc res(owner().nodeRes(), true);
-	if(MmsConnection_writeVariable(owner().con,&error,(char*)TSYS::pathLev(nId,0).c_str(),(char*)TSYS::pathLev(nId,1).c_str(),value) != MMS_OK)
+	case VT_Array: case VT_Struct:	//!!!! Need for test
 	{
-	    vo.setS(EVAL_STR, 0, true);
-	    if(owner().messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),_("Write to '%s' error: %d."),nId.c_str(),error);
+	    TArrayObj *curArr = NULL;
+	    if(vl.type() != TVariant::Object || !(curArr=dynamic_cast<TArrayObj*>(&vl.getO().at()))) break;
+	    vector<TMdContr::StackTp> stack;
+	    XML_N *curValue = value;
+	    for(int i_v = 0; true; )
+	    {
+		if(i_v >= curArr->arSize())
+		{
+		    if(stack.size())
+		    {
+			curArr = stack.back().arr;
+			curValue = stack.back().vl;
+			i_v = stack.back().inPos+1;
+			stack.pop_back();
+			continue;
+		    }
+		    else break;
+		}
+
+		XML_N *itValue = curValue->childAdd("it");
+		TVariant itArr = curArr->arGet(i_v);
+		switch(itArr.type())
+		{
+		    case TVariant::Boolean: itValue->setAttr("dataType",MMS::i2s(VT_Bool))->setText(itArr.getS());	break;
+		    case TVariant::Integer: itValue->setAttr("dataType",MMS::i2s(VT_Int))->setText(itArr.getS());	break;
+		    case TVariant::Real: itValue->setAttr("dataType",MMS::i2s(VT_Float))->setText(itArr.getS());	break;
+		    case TVariant::String: itValue->setAttr("dataType",MMS::i2s(VT_VisString))->setText(itArr.getS());	break;
+		    case TVariant::Object:
+			if(!dynamic_cast<TArrayObj*>(&itArr.getO().at())) itValue->parent()->childDel(itValue);
+			else
+			{
+			    stack.push_back(TMdContr::StackTp(curArr,curValue,i_v));
+			    curValue = itValue;
+			    curArr = (TArrayObj*)(&itArr.getO().at());
+			    i_v = 0;
+			    continue;
+			}
+		}
+		i_v++;
+	    }
+	    break;
 	}
-	res.release();
-	MmsValue_delete(value);
+	default: value->setText(vl.getS());
     }
-    else
+    owner().reqService(valCtr);
+    if(!valCtr.attr("err").empty())
     {
 	vo.setS(EVAL_STR, 0, true);
-	if(owner().messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),_("Write for type %d is not supported yet."),vTp);
+	if(owner().messLev() == TMess::Debug) mess_debug_(nodePath().c_str(),_("Write to '%s' error: %s."),nId.c_str(),value->attr("err").c_str());
     }
 }

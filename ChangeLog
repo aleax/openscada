@@ -1,3 +1,21 @@
+2014-04-05 Roman
+- SYS: ALTLinux RPM-spec depend to postgresql9.1-devel is changed postgresql-devel.
+- DB.LibsDB.vcaBase: "anShow" set to inactive mode by default. New element "TextLab" fo digital stats is added.
+- !!!!:DAQ.MMS: Self MMS implementation library is added and used for ABB 800, without Sessions implement for now.
+    libiec61850 removed.
+- DAQ.OPC_UA: Remove transport start at the controller's object start.
+- UI.QTCfg: Check and change current page at it rename.
+- FIX:UI.Vision: Crash at selAreaUpdate() is fixed. Index out of range next is fix into ElFigure.
+
+
+2014-04-03 Roman
+- FIX:DAQ.JavaLikeCalc: Insert object's item to Array into this creation by "new Array(0, 1, 2, ar[0])" is fixed.
+
+
+2014-04-02 Roman
+- DAQ.Comedi: Read DO value back is added.
+
+
 2014-03-22 Roman
 - FIX:DAQ.Comedi: Several subdevices into equal types support fix for channel pass through reserve().
 - FIX:DAQ.System: Description present detect change from "Unavailable" to "Description unavailable" tag.
