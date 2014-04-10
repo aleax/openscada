@@ -2881,7 +2881,7 @@ nextReq:
 			{
 			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
 			    bool inv = iNu(rb, off, 1);		//isInverse
-			    bool incSubTp = iNu(rb, off, 1);	//includeSubtypes
+			    iNu(rb, off, 1);			//includeSubtypes
 			    string tNm = iSqlf(rb, off);	//targetName
 
 			    //    Browse request for nodes

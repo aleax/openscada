@@ -163,7 +163,7 @@ class MMS
 	// Decoding process
 	//----------------------------------------------------
 	static const char *iVal( const string &buf, int &off, char vSz );
-	static uint32_t iN( const string &rb, int &off, char vSz );
+	static uint32_t iN( const string &rb, int &off, uint8_t vSz );
 	//  ASN.1 (MMS) process
 	static int ASN_i( const string &buf, int &off, int offLim = -1 );
 	static uint16_t ASN_iTAG( const string &buf, int off );
@@ -176,7 +176,7 @@ class MMS
 
 	// Encoding process
 	//----------------------------------------------------
-	static void oN( string &buf, uint32_t val, char sz, int off = -1 );
+	static void oN( string &buf, uint32_t val, uint8_t sz, int off = -1 );
 	//  ASN.1 (MMS) encoding
 	static void ASN_o( string &buf, uint16_t tag, uint32_t sz = 0 );
 	static int ASN_oC( string &buf, uint16_t tag, int off = -1 );

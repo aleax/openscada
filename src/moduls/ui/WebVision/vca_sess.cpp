@@ -6153,7 +6153,7 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     //> Get values data
     int64_t	bbeg, bend, bper, bbeg_prev = tTime;
     int		curPos, prevPos, maxPos;
-    double      curVal, prevVal;
+    double      curVal = EVAL_REAL, prevVal;
     string      svl, curValS;
     vector<SHg> buf;
     bool	toEnd = (tTimeGrnd >= valEnd());

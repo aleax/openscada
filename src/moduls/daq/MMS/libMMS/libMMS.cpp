@@ -177,7 +177,7 @@ const char *MMS::iVal( const string &rb, int &off, char vSz )
     return rb.data()+off-vSz;
 }
 
-uint32_t MMS::iN( const string &rb, int &off, char vSz )
+uint32_t MMS::iN( const string &rb, int &off, uint8_t vSz )
 {
     vSz = std::max(0, std::min((int)vSz,4));
     if((off+vSz) > (int)rb.size()) throw Error("Buffer size is lesser requested value.");
@@ -281,7 +281,7 @@ void MMS::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
     for(int offC = off, i_it = 0, err, vTp; (offC+sz) != off; i_it++)
     {
 	int offC1 = off, szC1 = ASN_i(buf, off, offC+sz);
-	while(i_it >= io.childSize()) io.childAdd("itC");
+	while(i_it >= (int)io.childSize()) io.childAdd("itC");
 	XML_N *chN = io.childGet(i_it);
 	//printf("TEST 30: AccsIt %x(%x)h: %d\n", off, offC1, i_it);
 	switch((vTp=ASN_iTAG(buf,offC1)&~(0x20)))
@@ -338,13 +338,13 @@ void MMS::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
     }
 }
 
-void MMS::oN( string &buf, uint32_t val, char sz, int off )
+void MMS::oN( string &buf, uint32_t val, uint8_t sz, int off )
 {
     union { uint32_t v; char c[4]; } dt;
     dt.v = i32_LE(val);
     if(sz < 0 || sz > 4) for(sz = 4; sz > 1 && dt.c[sz-1]; ) sz--;
     off = (off >= 0) ? std::min(off,(int)buf.size()) : buf.size();
-    if((off+sz) > buf.size()) buf.append(off+sz-buf.size(), char(0));
+    if((off+sz) > (int)buf.size()) buf.append(off+sz-buf.size(), char(0));
     while(sz) buf[off++] = dt.c[--sz];
 }
 
@@ -465,7 +465,6 @@ void MMS::ASN_oNmObj( string &buf, uint8_t tag, const string &vl, const string &
 
 void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 {
-    const char *errS;
     for(int offC = off, i_it = 0, vTp; (offC+sz) != off; i_it++)
     {
 	int offC1 = off, szC1 = ASN_i(buf, off, offC+sz);
@@ -515,10 +514,10 @@ void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 				if(ASN_iTAG(buf,offC3) == 0x30)					//   item
 				    for(offC3 = off; (offC3+szC3) != off; i_it++)
 				    {
-					while(i_it < io.childSize()) io.childAdd("stIt");
+					while(i_it < (int)io.childSize()) io.childAdd("stIt");
 					XML_N *chN = io.childGet(i_it);
 
-					int offC4 = off, szC4 = ASN_i(buf, off, offC3+szC3);
+					int szC4 = ASN_i(buf, off, offC3+szC3);
 					switch(ASN_iTAG(buf,offC3))
 					{
 					    case 0x80: chN->setAttr("id",ASN_iS(buf,off,szC4));	break;	//componentName
@@ -583,7 +582,7 @@ void Client::protIO( XML_N &io )
 
     try
     {
-	bool debug = (bool)atoi(io.attr("debug").c_str());
+	//bool debug = (bool)atoi(io.attr("debug").c_str());
 	if(io.name() != "MMS")	throw Error("Unknown target protocol '%s'.", io.name().c_str());
 
 						//>TPKT (RFC-1006)
@@ -689,7 +688,7 @@ void Client::protIO( XML_N &io )
 			    if(atoi(io.attr("withResult").c_str())) ASN_oN(rez, 0x80, 1);	//  specificationWithResult
 												//  variableSpecification
 			    int offTmp1 = rez.size();						//   listOfVariable
-			    for(int i_it = 0; i_it < io.childSize(); i_it++)
+			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++)
 			    {
 				XML_N *itN = io.childGet(i_it);
 				int offTmp2 = rez.size();					//    VariableSpecification
@@ -710,7 +709,7 @@ void Client::protIO( XML_N &io )
 			{
 			    int offTmp = rez.size();						// WriteService
 												//  listOfVariable
-			    for(int i_it = 0; i_it < io.childSize(); i_it++)
+			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++)
 			    {
 				XML_N *itN = io.childGet(i_it);
 				int offTmp1 = rez.size();					//   VariableSpecification
@@ -723,7 +722,7 @@ void Client::protIO( XML_N &io )
 			    }
 			    ASN_oC(rez, 0xA0, offTmp);						//  listOfVariable
 			    int offTmp1 = rez.size();						//  listOfData
-			    for(int i_it = 0, dTp = 0; i_it < io.childSize(); i_it++)
+			    for(unsigned i_it = 0, dTp = 0; i_it < io.childSize(); i_it++)
 			    {
 				XML_N *itN = io.childGet(i_it);
 				switch((dTp=atoi(itN->attr("dataType").c_str())))
@@ -735,7 +734,7 @@ void Client::protIO( XML_N &io )
 				    case VT_BitString:	//!!!! Need for test
 				    {
 					string srcS = itN->text(), rezBS;
-					for(int i_s = 0; i_s < srcS.size(); i_s++)
+					for(unsigned i_s = 0; i_s < srcS.size(); i_s++)
 					    if(srcS[i_s] == '1') setBS(rezBS, i_s);
 					    else if(srcS[i_s] != '0') break;
 					ASN_oBS(rez, dTp, rezBS, atoi(itN->attr("unUsBits").c_str()));
@@ -744,7 +743,7 @@ void Client::protIO( XML_N &io )
 				    case VT_OctString:	//!!!! Need for test
 				    {
 					string srcS = itN->text(), rezBS;
-					for(int i_s = 0; i_s < srcS.size(); i_s += 2)
+					for(unsigned i_s = 0; i_s < srcS.size(); i_s += 2)
 					    rezBS += (char)strtol(srcS.substr(i_s,2).c_str(),NULL,16);
 					ASN_oS(rez, dTp, rezBS);
 					break;
@@ -752,7 +751,7 @@ void Client::protIO( XML_N &io )
 				    case VT_VisString: ASN_oS(rez, dTp, itN->text());			break;
 				    case VT_Array: case VT_Struct:	//!!!! Test implement
 				    {
-					for(int i_c = 0, dTp1; i_c < itN->childSize(); i_c++)
+					for(unsigned i_c = 0, dTp1; i_c < itN->childSize(); i_c++)
 					{
 					    XML_N *icN = itN->childGet(i_c);
 					    switch((dTp1=atoi(icN->attr("dataType").c_str())))
@@ -826,7 +825,7 @@ void Client::protIO( XML_N &io )
 	    iN(tpkt, off, 1);					// Class
 	    while((off-begCOTP) < lenCOTP)			// Options
 	    {
-		uint8_t oCd = iN(tpkt, off, 1);			//  Code
+		iN(tpkt, off, 1);				//  Code
 		uint8_t oLen = iN(tpkt, off, 1);		//  Length
 		iVal(tpkt, off, oLen);
 	    }

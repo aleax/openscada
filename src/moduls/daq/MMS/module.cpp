@@ -319,7 +319,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.reqService(valCtr);
 
 		//  Process result
-		for(int i_ch = 0; i_ch < valCtr.childSize(); i_ch++)
+		for(unsigned i_ch = 0; i_ch < valCtr.childSize(); i_ch++)
 		{
 		    value = valCtr.childGet(i_ch);
 		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
@@ -338,7 +338,7 @@ void *TMdContr::Task( void *icntr )
 			    TArrayObj *curArr = new TArrayObj();
 			    cntr.mVars[nId] = curArr;
 			    XML_N *curValue = value;
-			    for(int i_v = 0; true; )
+			    for(unsigned i_v = 0; true; )
 			    {
 				if(i_v >= curValue->childSize())
 				{
@@ -356,9 +356,11 @@ void *TMdContr::Task( void *icntr )
 				XML_N *itValue = curValue->childGet(i_v);
 				switch(atoi(itValue->attr("tp").c_str()))
 				{
-				    case VT_Bool:  curArr->arSet(i_v, bool(atoi(itValue->text().c_str())));		break;
-				    case VT_Int: case VT_UInt:	curArr->arSet(i_v, atoll(itValue->text().c_str()));	break;
-				    case VT_Float: curArr->arSet(i_v, atof(itValue->text().c_str()));			break;
+				    case VT_Bool:  curArr->arSet(i_v, bool(atoi(itValue->text().c_str())));	break;
+				    case VT_Int: case VT_UInt:
+					curArr->arSet(i_v, (int64_t)atoll(itValue->text().c_str()));
+					break;
+				    case VT_Float: curArr->arSet(i_v, atof(itValue->text().c_str()));		break;
 				    case VT_BitString: case VT_OctString: case VT_VisString:
 					curArr->arSet(i_v, itValue->text());
 					break;
@@ -549,7 +551,7 @@ void TMdPrm::attrPrc( XML_N *iVal, vector<string> *iAls, const string &vid )
 		    case VT_Float:	vtp = TFld::Real;		break;
 		    case VT_BitString: case VT_VisString: case VT_OctString: vtp = TFld::String;	break;
 		    case VT_Struct:
-			for(int i_a = 0; i_a < value->childSize(); i_a++)
+			for(unsigned i_a = 0; i_a < value->childSize(); i_a++)
 			    attrPrc(value->childGet(i_a), als, vName);
 			break;
 		    case VT_Array: vtp = TFld::Object;		break;
@@ -674,7 +676,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    reqDom.setAttr("id", "getNameList")->setAttr("objectClass", MMS::i2s(OCL_Domain));
 	    owner().reqService(reqDom);
 	    opt->childAdd("el")->setText("*");
-	    for(int i_d = 0; reqDom.attr("err").empty() && i_d < reqDom.childSize(); i_d++)
+	    for(unsigned i_d = 0; reqDom.attr("err").empty() && i_d < reqDom.childSize(); i_d++)
 		opt->childAdd("el")->setText(reqDom.childGet(i_d)->text());
 
 	    //!!!! Test part
@@ -695,7 +697,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		reqVar.clear()->setAttr("id","getNameList")->setAttr("objectClass", MMS::i2s(OCL_NmVar))->setAttr("continueAfter", continueAfter);
 		if(selVAR != "*") reqVar.setAttr("domainSpecific",selVAR);
 		owner().reqService(reqVar);
-		for(int i_v = 0; reqVar.attr("err").empty() && i_v < reqVar.childSize(); i_v++)
+		for(unsigned i_v = 0; reqVar.attr("err").empty() && i_v < reqVar.childSize(); i_v++)
 		    opt->childAdd("el")->setText(selVAR+"/"+(continueAfter=reqVar.childGet(i_v)->text()));
 	    }
 	    while(atoi(reqVar.attr("moreFollows").c_str()));
@@ -747,7 +749,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	    if(vl.type() != TVariant::Object || !(curArr=dynamic_cast<TArrayObj*>(&vl.getO().at()))) break;
 	    vector<TMdContr::StackTp> stack;
 	    XML_N *curValue = value;
-	    for(int i_v = 0; true; )
+	    for(unsigned i_v = 0; true; )
 	    {
 		if(i_v >= curArr->arSize())
 		{
@@ -780,6 +782,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 			    i_v = 0;
 			    continue;
 			}
+		    default:	break;
 		}
 		i_v++;
 	    }

@@ -379,6 +379,7 @@ void Kontar::getVals( TParamContr *ip )
 		val.at().setS(vl, 0, true);
 		break;
 	    }
+	    default:	break;
 	}
     }
 
@@ -437,7 +438,7 @@ void Kontar::getVals( TParamContr *ip )
 void Kontar::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     TMdPrm *p = (TMdPrm *)ip;
-    tval *ePrm = (tval*)p->extPrms;
+    //tval *ePrm = (tval*)p->extPrms;
 
     if(!p->enableStat() || !p->owner().startStat())	vo.setS(EVAL_STR, 0, true);
 
@@ -480,6 +481,7 @@ void Kontar::vlSet( TParamContr *ip, TVal &vo, const TVariant &vl, const TVarian
 	    pdu.append((char*)&tvl, sizeof(tvl));
 	    break;
 	}
+	default: break;
     }
 
     //Request to remote server
@@ -557,7 +559,7 @@ bool Kontar::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 string Kontar::tval::RC5Encr( const string &src, const string &key )
 {
     int nPad = 2;
-    int blocks = ((src.size() + nPad*4 - 1) / (nPad*4)) * nPad;
+    unsigned blocks = ((src.size() + nPad*4 - 1) / (nPad*4)) * nPad;
 		//src.size()/4+((src.size()%4)?1:0);
 
     uint32_t cdata[blocks*2];
@@ -567,9 +569,9 @@ string Kontar::tval::RC5Encr( const string &src, const string &key )
     const uint32_t *keybuf = (const uint32_t *)key.data();
     int rounds = 10;
 
-    int	rc;
+    unsigned	rc;
     uint32_t *d = cdata;
-    for(int h = 0; h < blocks; h++)
+    for(unsigned h = 0; h < blocks; h++)
     {
 	d[0] += keybuf[0];
 	d[1] += keybuf[1];
@@ -663,7 +665,7 @@ string Kontar::tval::RC5Key( const string &ikey )
     uint32_t keybuf[22];
     int rounds = 10;
 
-    uint32_t *cp, pk[2], A, B;
+    uint32_t pk[2], A, B;
     uint8_t rc, xk_len, pk_len, i, num_steps;
     union K
     {

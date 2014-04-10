@@ -213,7 +213,7 @@ void UPS::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
 
     MtxAlloc res(reqRes, true);
 
-    bool OK = true, OKr = false;
+    bool OK = true;
     OK = OK && reqUPS(addr,"USERNAME "+p->addPrm("USER")+"\x0A",(p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
     OK = OK && reqUPS(addr,"PASSWORD "+p->addPrm("PASS")+"\x0A",(p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
 
@@ -222,9 +222,7 @@ void UPS::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
 	//Instant commands
 	if(vo.fld().type() == TFld::Boolean)
 	{
-	    if(vl.getB())
-		OKr = reqUPS(addr, "INSTCMD "+UPS+" "+vId+"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
-		//vo.setB(OKr ? false : EVAL_BOOL, 0, true);
+	    if(vl.getB()) reqUPS(addr, "INSTCMD "+UPS+" "+vId+"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"");
 	}
 	//RW variable set
 	else

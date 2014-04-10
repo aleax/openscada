@@ -338,7 +338,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 			}
 		    }
 		}
-		for(unsigned i_sId = 0; i_sId < selIds.size() && i_sId < selLs.size(); i_sId++)
+		for(int i_sId = 0; i_sId < selIds.size() && i_sId < selLs.size(); i_sId++)
 		    if(selIds[i_sId].toStdString() == sval)
 		    { cur_it->child(ga_id)->setData(selLs[i_sId]); break; }
 		cur_it->child(ga_id)->setDataEdit(selLs);
@@ -544,7 +544,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 	if(it->data() == value && !isGrp) return true;
 
 	//Check for list
-	for(unsigned i_it = 0; i_it < it->dataEdit().toStringList().size() && i_it < it->dataEdit1().toStringList().size(); i_it++)
+	for(int i_it = 0; i_it < it->dataEdit().toStringList().size() && i_it < it->dataEdit1().toStringList().size(); i_it++)
 	    if(it->dataEdit().toStringList()[i_it] == value) { value = it->dataEdit1().toStringList()[i_it]; break; }
 
 	XMLNode chCtx("attr");
@@ -574,7 +574,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		if(dw)	dw->chRecord(chCtx);
 
 		// List check
-		for(unsigned i_it = 0; i_it < it->dataEdit1().toStringList().size() && i_it < it->dataEdit().toStringList().size(); i_it++)
+		for(int i_it = 0; i_it < it->dataEdit1().toStringList().size() && i_it < it->dataEdit().toStringList().size(); i_it++)
 		    if(it->dataEdit1().toStringList()[i_it] == value) { value = it->dataEdit().toStringList()[i_it]; break; }
 
 		//Local update

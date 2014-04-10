@@ -269,7 +269,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TMdPrm                                        *
 //*************************************************
-TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), numBytes(0), mErr(dataM)
+TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), els("w_attr"), mErr(dataM), numBytes(0)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);

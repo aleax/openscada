@@ -1,9 +1,11 @@
 2014-04-10 Roman
-- SYS.{TController,TTipDAQ,
+- SYS.{TController,TTipDAQ): ID update after new child object create.
 - SYS: To user's API of object XMLNodeObj function "childGet( string name, int num = 0 )" is added.
+    Mostly warnings clean.
 - DAQ.BlockCalc: To blocks' output links optional writing by changes is added. Some code clean up.
 - FIX:DAQ.ICP_DAS: Watchdog value set for LP-8x81 is fixed.
 - FIX:DAQ.MMS: The correct transport address set at enable fix. COTP DestTSAP is set configurable from the controller object.
+    Build fix.
 - Transport.{SSL,Sockets}: Default value of KeepAliveTm set to 60 for prevent input connections hang. Some code clean up.
 - UI.VCAEngine: Some code clean up.
 

@@ -427,7 +427,7 @@ void TArchiveS::messPut( time_t tm, int utm, const string &categ, int8_t level, 
     for(unsigned i_m = 0; i_m < actMess.size(); i_m++)
     {
 	int &messHead = actMess[i_m].at().messHead;
-	if(messHead >= 0 && messHead == headBuf && ++messHead >= mBuf.size()) messHead = 0;
+	if(messHead >= 0 && messHead == (int)headBuf && ++messHead >= (int)mBuf.size()) messHead = 0;
     }
 
     //Alarms processing. For level less 0 alarm is set
@@ -568,7 +568,7 @@ void TArchiveS::setMessBufLen( unsigned len )
 	for(unsigned i_m = 0; i_m < actMess.size(); i_m++)
 	{
 	    int &messHead = actMess[i_m].at().messHead;
-	    if(messHead >= 0 && messHead >= mBuf.size()) messHead = mBuf.size()-1;
+	    if(messHead >= 0 && messHead >= (int)mBuf.size()) messHead = mBuf.size()-1;
 	}
 	//if(headLstread >= mBuf.size())	headLstread = mBuf.size()-1;
     }
@@ -619,8 +619,8 @@ void *TArchiveS::ArhMessTask( void *param )
 	{
 	    AutoHD<TMArchivator> mArh = arh.actMess[i_m];
 	    int &messHead = mArh.at().messHead;
-	    if(messHead < 0 && ((messHead=arh.headBuf+1) >= arh.mBuf.size() || !arh.mBuf[messHead].time)) messHead = 0;
-	    if(messHead == arh.headBuf)	continue;
+	    if(messHead < 0 && ((messHead=arh.headBuf+1) >= (int)arh.mBuf.size() || !arh.mBuf[messHead].time)) messHead = 0;
+	    if(messHead == (int)arh.headBuf)	continue;
 	    try
 	    {
 		// Get new messages
