@@ -1167,10 +1167,10 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 		//> Send change request to opened for edit widget
 		if(!chNoWr)
 		{
-            	    DevelWdgView *dw = work_space->findChild<DevelWdgView*>(own_wdg.c_str());
-            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path", new_wdg)->setAttr("id", w_id)->setAttr("name", w_nm)->
-            		setAttr("parent", par_nm)->setAttr("x",r2s(pnt.x()))->setAttr("y",r2s(pnt.y())));
-            	}
+		    DevelWdgView *dw = work_space->findChild<DevelWdgView*>(own_wdg.c_str());
+		    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path", new_wdg)->setAttr("id", w_id)->setAttr("name", w_nm)->
+			setAttr("parent", par_nm)->setAttr("x",r2s(pnt.x()))->setAttr("y",r2s(pnt.y())));
+		}
 		work_space->setActiveSubWindow(actSubW);	//For set focus to target subwindow and the new widget select
 	    }
 	    if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.BlockCalc file: block.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -73,6 +73,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	bool   toProcess( )	{ return m_to_prc; }
 	string prior( )		{ return cfg("PRIOR").getS(); }
 	string wFunc( )		{ return cfg("FUNC").getS(); }
+	bool outLnkWrChs( )	{ return mOutLnkWrChs; }
 
 	void setName( const string &name )	{ cfg("NAME").setS(name); }
 	void setDescr( const string &dscr )	{ cfg("DESCR").setS(dscr); }
@@ -82,6 +83,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void setToProcess( bool val )		{ m_to_prc = val; modif(); }
 	void setPrior( const string &vl )	{ cfg("PRIOR").setS(vl); }
 	void setWFunc( const string &vl )	{ cfg("FUNC").setS(vl); }
+	void setOutLnkWrChs( bool val )		{ mOutLnkWrChs = val; modif(); }
 
 	//> Link IO
 	LnkT link( unsigned id );
@@ -138,7 +140,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 			m_process;	//Processing block
 
 	TCfg		&m_id;		//Block id
-	char		&m_to_en, &m_to_prc;
+	char		&m_to_en, &m_to_prc,
+			&mOutLnkWrChs;	//Write to output links only at changes
 
 	Res		lnk_res;	//Link resource
 	int		err_cnt;

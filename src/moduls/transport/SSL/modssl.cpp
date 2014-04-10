@@ -90,7 +90,7 @@ TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
     mLicense	= LICENSE;
     mSource	= name;
 
-    //> CRYPTO reentrant init
+    //CRYPTO reentrant init
     mutex_buf = (pthread_mutex_t*)malloc(CRYPTO_num_locks() * sizeof(pthread_mutex_t));
     for(int i = 0; i < CRYPTO_num_locks( ); i++) pthread_mutex_init(&mutex_buf[i], NULL);
     CRYPTO_set_id_callback(id_function);
@@ -99,7 +99,7 @@ TTransSock::TTransSock( string name ) : TTipTransport(MOD_ID)
     CRYPTO_set_dynlock_lock_callback(dyn_lock_function);
     CRYPTO_set_dynlock_destroy_callback(dyn_destroy_function);
 
-    //> SSL init
+    //SSL init
     SSL_library_init();
     SSL_load_error_strings();
     RAND_load_file("/dev/urandom", 1024);
@@ -127,10 +127,7 @@ void TTransSock::postEnable( int flag )
     }
 }
 
-unsigned long TTransSock::id_function( )
-{
-    return (unsigned long)pthread_self();
-}
+unsigned long TTransSock::id_function( )	{ return (unsigned long)pthread_self(); }
 
 void TTransSock::locking_function( int mode, int n, const char * file, int line )
 {
@@ -165,21 +162,15 @@ void TTransSock::load_( )
 
 }
 
-TTransportIn *TTransSock::In( const string &name, const string &idb )
-{
-    return new TSocketIn(name, idb, &owner().inEl());
-}
+TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return new TSocketIn(name, idb, &owner().inEl()); }
 
-TTransportOut *TTransSock::Out( const string &name, const string &idb )
-{
-    return new TSocketOut(name, idb, &owner().outEl());
-}
+TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return new TSocketOut(name, idb, &owner().outEl()); }
 
 //************************************************
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), ctx(NULL), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(0), mTaskPrior(0), cl_free(true)
+    TTransportIn(name,idb,el), ctx(NULL), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), cl_free(true)
 {
     setAddr("localhost:10042");
 }
@@ -237,12 +228,12 @@ void TSocketIn::start( )
 {
     if(run_st) return;
 
-    //> Status clear
+    //Status clear
     stErr = "";
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
-    //> Wait connection main task start
+    //Wait connection main task start
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
 
     TTransportIn::start();
@@ -252,12 +243,12 @@ void TSocketIn::stop( )
 {
     if(!run_st)	return;
 
-    //> Status clear
+    //Status clear
     stErr = "";
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
-    //> Wait connection main task stop
+    //Wait connection main task stop
     SYS->taskDestroy(nodePath('.',true), &endrun);
 
     TTransportIn::stop();
@@ -272,17 +263,17 @@ void *TSocketIn::Task( void *sock_in )
     AutoHD<TProtocolIn> prot_in;
     string cfile;
 
-    //> Client's sockets pthreads attrs init
+    //Client's sockets pthreads attrs init
     pthread_attr_t pthr_attr;
     pthread_attr_init(&pthr_attr);
     pthread_attr_setdetachstate(&pthr_attr, PTHREAD_CREATE_DETACHED);
 
-    //> SSL context init
+    //SSL context init
     string ssl_host = TSYS::strSepParse(s.addr(), 0, ':');
     string ssl_port = TSYS::strSepParse(s.addr(), 1, ':');
     string ssl_method = TSYS::strSepParse(s.addr(), 2, ':');
 
-    //>> Set SSL method
+    // Set SSL method
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
     const SSL_METHOD *meth;
 #else
@@ -305,7 +296,7 @@ void *TSocketIn::Task( void *sock_in )
 	    throw TError(s.nodePath().c_str(),"SSL_CTX_new: %s",err);
 	}
 
-	//> Write certificate and private key to temorary file
+	//Write certificate and private key to temorary file
 	cfile = tmpnam(err);
 	int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	if(icfile < 0) throw TError(s.nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
@@ -313,25 +304,25 @@ void *TSocketIn::Task( void *sock_in )
 	close(icfile);
 	if(!fOK) throw TError(s.nodePath().c_str(), _("Error write to file '%s'."), cfile.c_str());
 
-	//>> Set private key password
+	// Set private key password
 	SSL_CTX_set_default_passwd_cb_userdata(s.ctx, (char*)s.pKeyPass().c_str());
-	//>> Load certificate
+	// Load certificate
 	if(SSL_CTX_use_certificate_chain_file(s.ctx,cfile.c_str()) != 1)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
 	    throw TError(s.nodePath().c_str(), "SSL_CTX_use_certificate_chain_file: %s", err);
 	}
-	//>> Load private key
+	// Load private key
 	if(SSL_CTX_use_PrivateKey_file(s.ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
 	    throw TError(s.nodePath().c_str(), "SSL_CTX_use_PrivateKey_file: %s", err);
 	}
 
-	//> Remove temporary certificate file
+	//Remove temporary certificate file
 	remove(cfile.c_str()); cfile = "";
 
-	//> Create BIO object
+	//Create BIO object
 	if((bio=BIO_new_ssl(s.ctx,0)) == NULL)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
@@ -347,7 +338,7 @@ void *TSocketIn::Task( void *sock_in )
 	BIO_set_accept_bios(abio, bio);
 	BIO_set_bind_mode(abio, BIO_BIND_REUSEADDR);
 
-	//> Sets up accept BIO
+	//Sets up accept BIO
 	if(BIO_do_accept(abio) <= 0)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
@@ -358,33 +349,33 @@ void *TSocketIn::Task( void *sock_in )
 	s.endrun	= false;
 	s.endrun_cl	= false;
 
-	//> Select mode
+	//Select mode
 	struct  timeval tv;
 	fd_set  rd_fd;
 	while(!s.endrun)
-        {
+	{
 	    tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
 	    FD_ZERO(&rd_fd); FD_SET(BIO_get_fd(abio,NULL), &rd_fd);
 
 	    int kz = select(BIO_get_fd(abio,NULL)+1,&rd_fd,NULL,NULL,&tv);
 	    if(kz < 0 && errno != EINTR)
-    	    {
-        	mess_err(s.nodePath().c_str(), _("Close input transport by error: %s"), strerror(errno));
-        	break;
-    	    }
+	    {
+		mess_err(s.nodePath().c_str(), _("Close input transport by error: %s"), strerror(errno));
+		break;
+	    }
 	    if(kz <= 0 || !FD_ISSET(BIO_get_fd(abio,NULL),&rd_fd)) continue;
 
 	    if(BIO_do_accept(abio) <= 0)
 	    {
-	        ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
-	        mess_err(s.nodePath().c_str(), "BIO_do_accept: %s", err);
-	        continue;
+		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
+		mess_err(s.nodePath().c_str(), "BIO_do_accept: %s", err);
+		continue;
 	    }
 
 	    BIO *cbio = BIO_pop(abio);
 
 	    if(s.maxFork() <= s.opConnCnt())	{ s.clsConnByLim++; /*BIO_reset(cbio);*/ close(BIO_get_fd(cbio,NULL)); BIO_free(cbio); }
-	    //> Make client's socket thread
+	    //Make client's socket thread
 	    else
 	    {
 		SSockIn *sin = new SSockIn(&s, cbio);
@@ -404,11 +395,11 @@ void *TSocketIn::Task( void *sock_in )
     }
     catch(TError err)	{ s.stErr = err.mess; mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    //> Client tasks stop command
+    //Client tasks stop command
     s.endrun_cl = true;
     TSYS::eventWait(s.cl_free, true, string(MOD_ID)+": "+s.id()+_(" client tasks is stopping...."));
 
-    //> Free context
+    //Free context
     if(abio)	BIO_reset(abio);
     if(bio)	BIO_free_all(bio);
     if(s.ctx)	{ SSL_CTX_free(s.ctx); s.ctx = NULL; }
@@ -458,11 +449,11 @@ void *TSocketIn::ClTask( void *s_inf )
     int sock_fd = BIO_get_fd(s.bio, NULL);
     BIO_get_ssl(s.bio, &ssl);
 
-    //> Select mode
+    //Select mode
     struct  timeval tv;
     fd_set  rd_fd;
-    int cnt = 0;		//> Requests counter
-    int tm = time(NULL);	//> Last connection time
+    int cnt = 0;		//Requests counter
+    int tm = time(NULL);	//Last connection time
 
     do
     {
@@ -478,7 +469,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	rez = BIO_read(s.bio, buf, sizeof(buf));
 	if(rez <= 0) break;		//Connection closed by client
 	if(mess_lev() == TMess::Debug)
-    	    mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
+	    mess_debug(s.s->nodePath().c_str(), _("The message is received with the size '%d'."), rez);
 	req.assign(buf, rez);
 	s.s->sock_res.resRequestW();
 	s.s->trIn += rez;
@@ -488,7 +479,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	if(answ.size())
 	{
 	    if(mess_lev() == TMess::Debug)
-        	mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
+		mess_debug(s.s->nodePath().c_str(), _("The message is replied with the size '%d'."), answ.size());
 	    do { rez = BIO_write(s.bio, answ.data(), answ.size()); }
 	    while(rez < 0 && SSL_get_error(ssl,rez) == SSL_ERROR_WANT_WRITE);
 	    s.s->sock_res.resRequestW();
@@ -508,7 +499,7 @@ void *TSocketIn::ClTask( void *s_inf )
     //BIO_reset(s.bio);
     BIO_free(s.bio);
 
-    //> Close protocol on broken connection
+    //Close protocol on broken connection
     if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
@@ -536,28 +527,28 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	if(prot_in.freeStat())
 	{
 	    proto = SYS->protocol().at().modAt(protocol());
-            n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
+	    n_pr = mod->modId()+"_"+id()+"_"+i2s(sock);
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, this, sender+"\n"+i2s(sock));
 	    prot_in = proto.at().at(n_pr);
 	}
 	if(prot_in.at().mess(request,answer)) return;
-        if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
-        n_pr = prot_in.at().name();
-        prot_in.free();
-        if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
+	if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	n_pr = prot_in.at().name();
+	prot_in.free();
+	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
     }
     catch(TError err)
     {
-        if(!prot_in.freeStat())
-        {
-            if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
-            n_pr = prot_in.at().name();
-        }
-        prot_in.free();
-        if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
+	if(!prot_in.freeStat())
+	{
+	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
+	    n_pr = prot_in.at().name();
+	}
+	prot_in.free();
+	if(!proto.freeStat() && proto.at().openStat(n_pr)) proto.at().close(n_pr);
 
-        mess_err(nodePath().c_str(), "%s", err.mess.c_str());
-        mess_err(nodePath().c_str(), _("Error request to protocol."));
+	mess_err(nodePath().c_str(), "%s", err.mess.c_str());
+	mess_err(nodePath().c_str(), _("Error request to protocol."));
     }
 }
 
@@ -604,7 +595,7 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 
 void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
@@ -627,7 +618,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/taskPrior",_("Priority"),RWRWR_,"root",STR_ID,1,"tp","dec");
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/certKey")
     {
@@ -735,15 +726,15 @@ void TSocketOut::start()
 
     if(run_st) return;
 
-    //> Status clear
+    //Status clear
     trIn = trOut = 0;
 
-    //> SSL context init
+    //SSL context init
     string ssl_host = TSYS::strSepParse(addr(), 0, ':');
     string ssl_port = TSYS::strSepParse(addr(), 1, ':');
     string ssl_method = TSYS::strSepParse(addr(), 2, ':');
 
-    //> Set SSL method
+    //Set SSL method
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
     const SSL_METHOD *meth;
 #else
@@ -759,57 +750,57 @@ void TSocketOut::start()
 
     try
     {
-	//> Connect to remote host try
+	//Connect to remote host try
 	struct sockaddr_in	name_in;
 	memset(&name_in, 0, sizeof(name_in));
-        name_in.sin_family = AF_INET;
+	name_in.sin_family = AF_INET;
 
-        if(ssl_host.size())
-        {
-            struct hostent *loc_host_nm = gethostbyname(ssl_host.c_str());
-            if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
-                throw TError(nodePath().c_str(), _("Socket name '%s' error!"), ssl_host.c_str());
-            name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
-        }
-        else name_in.sin_addr.s_addr = INADDR_ANY;
-        //>> Get system port for "oscada" /etc/services
-        struct servent *sptr = getservbyname(ssl_port.c_str(), "tcp");
-        if(sptr != NULL)			   name_in.sin_port = sptr->s_port;
-        else if(htons(atol(ssl_port.c_str())) > 0) name_in.sin_port = htons(atol(ssl_port.c_str()));
-        else name_in.sin_port = 10041;
+	if(ssl_host.size())
+	{
+	    struct hostent *loc_host_nm = gethostbyname(ssl_host.c_str());
+	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
+	    throw TError(nodePath().c_str(), _("Socket name '%s' error!"), ssl_host.c_str());
+	    name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+	}
+	else name_in.sin_addr.s_addr = INADDR_ANY;
+	// Get system port for "oscada" /etc/services
+	struct servent *sptr = getservbyname(ssl_port.c_str(), "tcp");
+	if(sptr != NULL)			   name_in.sin_port = sptr->s_port;
+	else if(htons(atol(ssl_port.c_str())) > 0) name_in.sin_port = htons(atol(ssl_port.c_str()));
+	else name_in.sin_port = 10041;
 
 	if((sock_fd = socket(PF_INET,SOCK_STREAM,0))== -1)
-            throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
-        int vl = 1;
-        setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	    throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
+	int vl = 1;
+	setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 
-	//> Connect to socket
-        int flags = fcntl(sock_fd, F_GETFL, 0);
-        fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
-        int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
-        if(res == -1 && errno == EINPROGRESS)
-        {
-            struct timeval tv;
-            socklen_t slen = sizeof(res);
-            fd_set fdset;
-            tv.tv_sec = mTmCon/1000; tv.tv_usec = 1000*(mTmCon%1000);
-            FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
-            if((res=select(sock_fd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
-            else res = -1;
-        }
-        if(res)	throw TError(nodePath().c_str(), _("Connect to Internet socket error: %s!"), strerror(errno));
+	//Connect to socket
+	int flags = fcntl(sock_fd, F_GETFL, 0);
+	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
+	int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
+	if(res == -1 && errno == EINPROGRESS)
+	{
+	    struct timeval tv;
+	    socklen_t slen = sizeof(res);
+	    fd_set fdset;
+	    tv.tv_sec = mTmCon/1000; tv.tv_usec = 1000*(mTmCon%1000);
+	    FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
+	    if((res=select(sock_fd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
+	    else res = -1;
+	}
+	if(res)	throw TError(nodePath().c_str(), _("Connect to Internet socket error: %s!"), strerror(errno));
 
-	//> SSL processing
+	//SSL processing
 	if((ctx=SSL_CTX_new(meth)) == NULL)
 	{
 	    ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
 	    throw TError(nodePath().c_str(), "SSL_CTX_new: %s", err);
 	}
 
-	//> Certificates, private key and it password loading
+	//Certificates, private key and it password loading
 	if(!TSYS::strNoSpace(certKey()).empty())
 	{
-	    //>> Write certificate and private key to temorary file
+	    // Write certificate and private key to temorary file
 	    cfile = tmpnam(err);
 	    int icfile = open(cfile.c_str(), O_EXCL|O_CREAT|O_WRONLY, 0600);
 	    if(icfile < 0) throw TError(nodePath().c_str(), _("Open temporary file '%s' error: '%s'"), cfile.c_str(), strerror(errno));
@@ -817,22 +808,22 @@ void TSocketOut::start()
 	    close(icfile);
 	    if(!fOK) throw TError(nodePath().c_str(), _("Error write to file '%s'."), cfile.c_str());
 
-	    //>> Set private key password
+	    // Set private key password
 	    SSL_CTX_set_default_passwd_cb_userdata(ctx, (char*)pKeyPass().c_str());
-	    //>> Load certificate
+	    // Load certificate
 	    if(SSL_CTX_use_certificate_chain_file(ctx,cfile.c_str()) != 1)
 	    {
 		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
 		throw TError(nodePath().c_str(), _("SSL_CTX_use_certificate_chain_file: %s"), err);
 	    }
-	    //>> Load private key
+	    // Load private key
 	    if(SSL_CTX_use_PrivateKey_file(ctx,cfile.c_str(),SSL_FILETYPE_PEM) != 1)
 	    {
 		ERR_error_string_n(ERR_peek_last_error(), err, sizeof(err));
 		throw TError(nodePath().c_str(), _("SSL_CTX_use_PrivateKey_file: %s"), err);
 	    }
 
-	    //>> Remove temporary certificate file
+	    // Remove temporary certificate file
 	    remove(cfile.c_str()); cfile = "";
 	}
 
@@ -867,7 +858,7 @@ void TSocketOut::start()
     }
     catch(TError err)
     {
-    	if(sock_fd >= 0) close(sock_fd);
+	if(sock_fd >= 0) close(sock_fd);
 	if(conn) { BIO_reset(conn); BIO_free(conn); }
 	if(ctx)	SSL_CTX_free(ctx);
 	if(!cfile.empty()) remove(cfile.c_str());
@@ -885,7 +876,7 @@ void TSocketOut::stop( )
 
     if(!run_st) return;
 
-    //> Status clear
+    //Status clear
     trIn = trOut = 0;
 
     //SSL deinit
@@ -913,12 +904,12 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
 repeate:
     if(reqTry++ >= 3)	throw TError(nodePath().c_str(), _("Connection error"));
-    //> Write request
+    //Write request
     if(obuf != NULL && len_ob > 0)
     {
-	//>> Input buffer clear
+	// Input buffer clear
 	while(BIO_read(conn,err,sizeof(err)) > 0) ;
-	//>> Write request
+	// Write request
 	do { ret = BIO_write(conn, obuf, len_ob); }
 	while(ret < 0 && SSL_get_error(ssl,ret) == SSL_ERROR_WANT_WRITE);
 	if(ret <= 0) { res.release(); stop(); start(); res.request(true); goto repeate; }
@@ -932,7 +923,7 @@ repeate:
     trOut += ret;
     if(mess_lev() == TMess::Debug && ret > 0) mess_debug(nodePath().c_str(), _("The message is sent with the size '%d'."), ret);
 
-    //> Read reply
+    //Read reply
     if(ibuf != NULL && len_ib > 0)
     {
 	ret = BIO_read(conn, ibuf, len_ib);
@@ -945,7 +936,7 @@ repeate:
 	}
 	else
 	{
-	    //> Wait data from socket
+	    //Wait data from socket
 	    int kz = 0;
 	    fd_set rd_fd;
 	    struct timeval tv;
@@ -974,7 +965,7 @@ repeate:
 
 void TSocketOut::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
@@ -993,7 +984,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "    next - maximum time for continue respond wait, in seconds."));
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/certKey")
     {

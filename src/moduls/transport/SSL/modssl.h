@@ -123,7 +123,7 @@ class TSocketIn: public TTransportIn
 	bool		cl_free;		// Clients stopped
 	vector<pthread_t>	cl_id;		// Client's pids
 
-	//> Status atributes
+	// Status atributes
 	string		stErr;			// Last error messages
 	uint64_t	trIn, trOut;		// Traffic in and out counter
 	int		connNumb, clsConnByLim;	// Close connections by limit
@@ -173,7 +173,7 @@ class TSocketOut: public TTransportOut
 	BIO		*conn;
 	SSL		*ssl;
 
-	//> Status atributes
+	// Status atributes
 	uint64_t	trIn, trOut;		// Traffic in and out counter
 	Res		wres;
 };

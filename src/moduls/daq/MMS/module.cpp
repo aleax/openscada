@@ -93,6 +93,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
     fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","10;9999"));
+    fldAdd(new TFld("COTP_DestTSAP",_("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
 
     //> Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"), true);
@@ -231,6 +232,7 @@ void TMdContr::enable_( )
 	tr = SYS->transport().at().nodeAt(trName, 0, '.');
 	tr.at().setDscr(TSYS::strMess(_("MMS automatic created transport for '%s' controller."),id().c_str()));
     }
+    tr.at().setAddr("TCP:"+addr());
 }
 
 void TMdContr::disable_( )
@@ -397,11 +399,7 @@ void *TMdContr::Task( void *icntr )
 	    try
 	    {
 		cntr.pHD[i_p].at().vlList(als);
-		if(firstCall || (div && (it_cnt%div) < cntr.pHD.size()))
-		{
-		    printf("TEST 00: firstCall=%d; div=%d; it_cnt=%d\n",firstCall,div,it_cnt);
-		    cntr.pHD[i_p].at().attrPrc();
-		}
+		if(firstCall || (div && (it_cnt%div) < cntr.pHD.size())) cntr.pHD[i_p].at().attrPrc();
 
 		//Attributes update
 		res.request(false);
@@ -678,6 +676,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText("*");
 	    for(int i_d = 0; reqDom.attr("err").empty() && i_d < reqDom.childSize(); i_d++)
 		opt->childAdd("el")->setText(reqDom.childGet(i_d)->text());
+
+	    //!!!! Test part
+	    /*XML_N valCtr("MMS");
+	    XML_N *value = valCtr.setAttr("id", "write")->childAdd("it")->setAttr("itemId", "JKS21CX300XL61")->setAttr("dataType", MMS::i2s(VT_Array));
+	    for(int i_it = 0; i_it < 36; i_it++)
+		value->childAdd("it")->setAttr("dataType", MMS::i2s(VT_Float))->setText(MMS::i2s(i_it));
+	    owner().reqService(valCtr);*/
 	}
 	else			//Get names list
 	{

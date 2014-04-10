@@ -116,6 +116,7 @@ class TMdContr: public TController, public Client
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
 	// MMS Client methods
+	uint16_t COTP_DestTSAP( ){ return cfg("COTP_DestTSAP").getI(); }
 	void regVar( const string &vl );
 
 	void reqService( XML_N &io );
@@ -143,21 +144,21 @@ class TMdContr: public TController, public Client
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes, reqRes, cntrRes;	// Resource for enable params, requests, controller DAQ API
-	TCfg	&mSched,	// Schedule
-		&mPrior,	// Process task priority
-		&mSync,		// Synchronization inter remote station: attributes list update.
-		&mAddr,		// MMS server address
-		&mVarsRdReq;	// Variables into single request
+	Res	enRes, reqRes, cntrRes;	//Resource for enable params, requests, controller DAQ API
+	TCfg	&mSched,	//Schedule
+		&mPrior,	//Process task priority
+		&mSync,		//Synchronization inter remote station: attributes list update.
+		&mAddr,		//MMS server address
+		&mVarsRdReq;	//Variables into single request
 	int64_t	mPer;
 
-	bool	prcSt,		// Process task active
-		callSt,		// Calc now stat
+	bool	prcSt,		//Process task active
+		callSt,		//Calc now stat
 		isReload;
 
 	vector< AutoHD<TMdPrm> > pHD;
 
-	double	tmGath;		// Gathering time
+	double	tmGath;		//Gathering time
 	float	tmDelay;	//Delay time for next try connect
 
 	AutoHD<TTransportOut>	tr;

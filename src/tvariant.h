@@ -288,6 +288,7 @@ class XMLNodeObj : public TVarObj
 
 	unsigned childSize( )	{ return mChilds.size(); }
 	AutoHD<XMLNodeObj> childGet( unsigned id );
+	AutoHD<XMLNodeObj> childGet( const string &name, unsigned num = 0 );
 	void childAdd( AutoHD<XMLNodeObj> nd );
 	void childIns( unsigned id, AutoHD<XMLNodeObj> nd );
 	void childDel( unsigned id );

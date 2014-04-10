@@ -109,7 +109,7 @@ void TTransSock::postEnable( int flag )
 
 void TTransSock::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
 }
 
@@ -127,7 +127,7 @@ TTransportOut *TTransSock::Out( const string &name, const string &idb )
 //* TSocketIn                                    *
 //************************************************
 TSocketIn::TSocketIn( string name, const string &idb, TElem *el ) :
-    TTransportIn(name,idb,el), mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(0), mTaskPrior(0), cl_free(true)
+    TTransportIn(name,idb,el), mMaxQueue(10), mMaxFork(10), mBufLen(5), mKeepAliveReqs(0), mKeepAliveTm(60), mTaskPrior(0), cl_free(true)
 {
     setAddr("TCP:localhost:10002:0");
 }
@@ -181,11 +181,11 @@ void TSocketIn::start( )
 {
     if(run_st) return;
 
-    //> Status clear
+    //Status clear
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
-    //> Socket init
+    //Socket init
     string s_type = TSYS::strSepParse(addr(),0,':');
 
     if(s_type == S_NM_TCP)
@@ -287,7 +287,7 @@ void TSocketIn::stop( )
 {
     if(!run_st) return;
 
-    //> Status clear
+    //Status clear
     trIn = trOut = 0;
     connNumb = clsConnByLim = 0;
 
@@ -460,10 +460,10 @@ void *TSocketIn::Task( void *sock_in )
     pthread_attr_destroy(&pthr_attr);
 
     if(sock->type == SOCK_UDP) delete []buf;
-    //> Client tasks stop command
+    //Client tasks stop command
     sock->endrun_cl = true;
     ResAlloc res(sock->sock_res,false);
-    //> Find already registry
+    //Find already registry
     for(unsigned i_id = 0; i_id < sock->cl_id.size(); i_id++)
         pthread_kill(sock->cl_id[i_id].cl_id, SIGALRM);
     res.release();
@@ -477,15 +477,15 @@ void *TSocketIn::Task( void *sock_in )
 void *TSocketIn::ClTask( void *s_inf )
 {
     SSockIn &s = *(SSockIn*)s_inf;
-    int cnt = 0;		//> Requests counter
-    int tm = time(NULL);	//> Last connection time
+    int cnt = 0;		//Requests counter
+    int tm = time(NULL);	//Last connection time
 
     if(mess_lev() == TMess::Debug)
 	mess_debug(s.s->nodePath().c_str(),_("Socket has been connected by '%s'!"),s.sender.c_str());
 
     s.s->clientReg(pthread_self(), s.cSock);
 
-    //> Client socket process
+    //Client socket process
     struct  timeval tv;
     fd_set  rw_fd;
     string  req, answ;
@@ -543,7 +543,7 @@ void *TSocketIn::ClTask( void *s_inf )
     }while(!s.s->endrun_cl && (!s.s->keepAliveTm() || (time(NULL)-tm) < s.s->keepAliveTm()) &&
 	    (!sessOk || ((s.s->mode || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))));
 
-    //> Close protocol on broken connection
+    //Close protocol on broken connection
     if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
@@ -599,7 +599,7 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 void TSocketIn::clientReg( pthread_t thrid, int i_sock )
 {
     ResAlloc res(sock_res, true);
-    //> Find already registry
+    //Find already registry
     for(unsigned i_id = 0; i_id < cl_id.size(); i_id++)
 	if(cl_id[i_id].cl_id == thrid) return;
     SSockCl scl = { thrid, i_sock };
@@ -623,7 +623,7 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 
 void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
@@ -653,7 +653,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "help",_("Close the connection after no requests at specified timeout.\nZero value for disable (not close ever)."));
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/qLn")
     {
@@ -869,10 +869,10 @@ void TSocketOut::stop( )
 
     if(!run_st) return;
 
-    //> Status clear
+    //Status clear
     trIn = trOut = 0;
 
-    //> Close connection
+    //Close connection
     if(sock_fd >= 0)
     {
 	shutdown(sock_fd, SHUT_RDWR);
@@ -902,16 +902,16 @@ int TSocketOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, in
 
 repeate:
     if(reqTry++ >= 2) { mLstReqTm = TSYS::curTime(); throw TError(nodePath().c_str(),_("Request error: %s"),err.c_str()); }
-    //> Write request
+    //Write request
     writeReq = false;
     if(obuf != NULL && len_ob > 0)
     {
 	if(!time) time = mTmCon;
 
-	//>> Input buffer clear
+	// Input buffer clear
 	char tbuf[100];
 	while(read(sock_fd,tbuf,sizeof(tbuf)) > 0) ;
-	//>> Write request
+	// Write request
 	if(mTmRep && (TSYS::curTime()-mLstReqTm) < (1000*mTmRep))
 	    TSYS::sysSleep(1e-6*((1e3*mTmRep)-(TSYS::curTime()-mLstReqTm)));
 	for(int wOff = 0; wOff != len_ob; wOff += kz)
@@ -941,7 +941,7 @@ repeate:
 
     trOut += kz;
 
-    //> Read reply
+    //Read reply
     int i_b = 0;
     if(ibuf != NULL && len_ib > 0)
     {
@@ -974,7 +974,7 @@ repeate:
 
 void TSocketOut::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
@@ -996,7 +996,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/TMS")
     {

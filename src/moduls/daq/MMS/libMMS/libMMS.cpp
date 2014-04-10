@@ -750,7 +750,22 @@ void Client::protIO( XML_N &io )
 					break;
 				    }
 				    case VT_VisString: ASN_oS(rez, dTp, itN->text());			break;
-				    //case VT_Array: case VT_Struct:	break;			!!!! Need for implement
+				    case VT_Array: case VT_Struct:	//!!!! Test implement
+				    {
+					for(int i_c = 0, dTp1; i_c < itN->childSize(); i_c++)
+					{
+					    XML_N *icN = itN->childGet(i_c);
+					    switch((dTp1=atoi(icN->attr("dataType").c_str())))
+					    {
+						case VT_Bool: ASN_oN(rez, dTp1, (bool)atoi(icN->text().c_str()));	break;
+						case VT_Int: ASN_oN(rez, dTp1, atoi(icN->text().c_str()));		break;
+						case VT_UInt: ASN_oN(rez, dTp1, (unsigned)atoi(icN->text().c_str()));break;
+						case VT_Float: ASN_oR(rez, dTp1, atof(icN->text().c_str()));		break;
+					    }
+					}
+					ASN_oC(rez, dTp, offTmp1);
+					break;
+				    }
 				    default: ASN_oS(rez, VT_VisString, itN->text());	break;
 				}
 			    }

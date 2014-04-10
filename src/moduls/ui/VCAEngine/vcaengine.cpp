@@ -859,7 +859,7 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    prjList(lst);
 	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
-	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
+	    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	    {
 		if(chkUserPerm)
 		{

@@ -129,6 +129,7 @@ void TipContr::postEnable( int flag )
     blk_el.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blk_el.fldAdd(new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blk_el.fldAdd(new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200"));
+    blk_el.fldAdd(new TFld("LNK_OUT_WR_CH",_("Write to output links only at changes"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //IO blok's db structure
     blkio_el.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
@@ -206,7 +207,7 @@ string Contr::getStatus( )
     {
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(SYS->taskUtilizTm(nodePath('.',true))).c_str());
     }
     return rez;
@@ -214,10 +215,10 @@ string Contr::getStatus( )
 
 void Contr::postDisable(int flag)
 {
-    if( run_st ) stop();
+    if(run_st) stop();
     try
     {
-	if( flag )
+	if(flag)
 	{
 	    //Delete parameter's tables
 	    string wbd = DB()+"."+cfg("BLOCK_SH").getS();
@@ -568,7 +569,7 @@ Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
 
 void Prm::enable()
 {
-    if( enableStat() )  return;
+    if(enableStat())	return;
     string ioLs = cfg("IO").getS();
 
     //> Check and delete no used fields
@@ -699,15 +700,15 @@ void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 
 void Prm::vlGet( TVal &val )
 {
-    if( val.name() == "err" )
+    if(val.name() == "err")
     {
-	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
-	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
+	if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
+	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
 	return;
     }
 
-    if( owner().redntUse( ) ) return;
+    if(owner().redntUse()) return;
 
     try
     {

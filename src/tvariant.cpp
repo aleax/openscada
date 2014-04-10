@@ -958,6 +958,18 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
     return rez;
 }
 
+AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
+{
+    oRes.resRequestR();
+    AutoHD<XMLNodeObj> rez;
+    for(int i_ch = 0, i_n = 0; i_ch < (int)mChilds.size(); i_ch++)
+	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && i_n++ == num)
+	    rez = mChilds[i_ch];
+    oRes.resRelease();
+    if(rez.freeStat()) throw TError("XMLNodeObj",_("Child %s:%d is not found!"),name.c_str(),num);
+    return rez;
+}
+
 string XMLNodeObj::getStrXML( const string &oid )
 {
     string nd("<XMLNodeObj:"+name());
@@ -1047,8 +1059,16 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //  id - child node position
     if(id == "childDel" && prms.size())	{ childDel(prms[0].getI()); return this; }
     // XMLNodeObj childGet(int id) - get node from position <id>
-    //  id - child node position
-    if(id == "childGet" && prms.size())	return AutoHD<TVarObj>(childGet(prms[0].getI()));
+    // XMLNodeObj childGet(string name, int num = 0) - get node by name <name> and number <num>
+    //  id - child node position;
+    //  name - node/tag name;
+    //  num - node/tag number <num>.
+    if(id == "childGet" && prms.size())
+    {
+	if(prms[0].type() == TVariant::String)
+	    return AutoHD<TVarObj>(childGet(prms[0].getS(), (prms.size()>1)?prms[1].getI():0));
+	return AutoHD<TVarObj>(childGet(prms[0].getI()));
+    }
     // XMLNodeObj parent() - get parent node
     if(id == "parent")	return !parent ? TVariant(false) : TVariant(parent);
     // string load(string str, bool file = false, bool full = false, string cp = "UTF-8") - load XML tree from XML-stream from string or file

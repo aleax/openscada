@@ -421,23 +421,22 @@ void Project::stlSet( int sid, const string &stl )
 void Project::stlPropList( vector<string> &ls )
 {
     ls.clear();
-    ResAlloc res( mStRes, false );
-    for( map< string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++ )
-	if( iStPrp->first != "<Styles>" )
+    ResAlloc res(mStRes, false);
+    for(map<string, vector<string> >::iterator iStPrp = mStProp.begin(); iStPrp != mStProp.end(); iStPrp++)
+	if(iStPrp->first != "<Styles>")
 	    ls.push_back(iStPrp->first);
 }
 
 string Project::stlPropGet( const string &pid, const string &def, int sid )
 {
-    ResAlloc res( mStRes, false );
-    if( sid < 0 ) sid = stlCurent();
-    if( pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>" ) return def;
+    ResAlloc res(mStRes, false);
+    if(sid < 0) sid = stlCurent();
+    if(pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>") return def;
 
-    map< string, vector<string> >::iterator iStPrp = mStProp.find(pid);
-    if( iStPrp != mStProp.end() ) return iStPrp->second[sid];
+    map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
+    if(iStPrp != mStProp.end()) return iStPrp->second[sid];
     vector<string> vl;
-    for( int i_v = 0; i_v < stlSize(); i_v++ )
-	vl.push_back(def);
+    for(int i_v = 0; i_v < stlSize(); i_v++) vl.push_back(def);
     res.request(true);
     mStProp[pid] = vl;
     modif();
@@ -447,11 +446,11 @@ string Project::stlPropGet( const string &pid, const string &def, int sid )
 
 bool Project::stlPropSet( const string &pid, const string &vl, int sid )
 {
-    ResAlloc res( mStRes, true );
-    if( sid < 0 ) sid = stlCurent();
-    if( pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>" ) return false;
-    map< string, vector<string> >::iterator iStPrp = mStProp.find(pid);
-    if( iStPrp == mStProp.end() ) return false;
+    ResAlloc res(mStRes, true);
+    if(sid < 0) sid = stlCurent();
+    if(pid.empty() || sid < 0 || sid >= stlSize() || pid == "<Styles>") return false;
+    map<string, vector<string> >::iterator iStPrp = mStProp.find(pid);
+    if(iStPrp == mStProp.end()) return false;
     iStPrp->second[sid] = vl;
     modif();
 
@@ -525,7 +524,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("comm",opt,-1,"/style/erase",_("Erase"),RWRWR_,"root",SUI_ID);
 	    }
 	}
-        return;
+	return;
     }
 
     //> Process command to page
@@ -542,11 +541,11 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/st/timestamp" && ctrChkNode(opt))
     {
-        vector<string> tls;
-        list(tls);
-        time_t maxTm = 0;
-        for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
-        opt->setText(i2s(maxTm));
+	vector<string> tls;
+	list(tls);
+	time_t maxTm = 0;
+	for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	opt->setText(i2s(maxTm));
     }
     else if(a_path == "/obj/cfg/owner")
     {
@@ -612,7 +611,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	{
 	    vector<string> lst;
 	    list(lst);
-	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
+	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
@@ -626,11 +625,11 @@ void Project::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/page/nmb" && ctrChkNode(opt))
     {
 	vector<string> c_list;
-        list(c_list);
-        unsigned e_c = 0;
-        for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
-            if(at(c_list[i_p]).at().enable()) e_c++;
-        opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
+	list(c_list);
+	unsigned e_c = 0;
+	for(unsigned i_p = 0; i_p < c_list.size(); i_p++)
+	    if(at(c_list[i_p]).at().enable()) e_c++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else if(a_path == "/obj/u_lst" && ctrChkNode(opt))
     {
@@ -1607,16 +1606,9 @@ AutoHD<Widget> PageWdg::wdgAt( const string &wdg, int lev, int off )
     return Widget::wdgAt(wdg, lev, off);
 }
 
-string PageWdg::path( )
-{
-    return ownerPage().path()+"/wdg_"+id();
-}
+string PageWdg::path( )	{ return ownerPage().path()+"/wdg_"+id(); }
 
-string PageWdg::ico( )
-{
-    if( !parent().freeStat() )  return parent().at().ico();
-    return "";
-}
+string PageWdg::ico( )	{ return parent().freeStat() ? "" : parent().at().ico(); }
 
 void PageWdg::setParentNm( const string &isw )
 {
@@ -1638,29 +1630,13 @@ void PageWdg::setEnable( bool val )
 		catch(...) { mess_err(nodePath().c_str(),_("Inheriting widget '%s' enable error."),id().c_str()); }
 }
 
-string PageWdg::calcId( )
-{
-    if( !parent().freeStat() )	return parent().at().calcId();
-    return "";
-}
+string PageWdg::calcId( )	{ return parent().freeStat() ? "" : parent().at().calcId(); }
 
-string PageWdg::calcLang( )
-{
-    if( !parent().freeStat() )    return parent().at().calcLang();
-    return "";
-}
+string PageWdg::calcLang( )	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
 
-string PageWdg::calcProg( )
-{
-    if( !parent().freeStat() )    return parent().at().calcProg();
-    return "";
-}
+string PageWdg::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-int PageWdg::calcPer( )
-{
-    if( !parent().freeStat() )	return parent().at().calcPer();
-    return 0;
-}
+int PageWdg::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 void PageWdg::load_( )
 {

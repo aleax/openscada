@@ -335,7 +335,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //> Watchdog timer process
-	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); EnableWDT((int)(1e3*vmax(1.5*cntr.period(),wTm))); res.release(); }
+	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); EnableWDT((int)(1e3*vmax(1.5e-9*cntr.period(),wTm))); res.release(); }
 
 	    cntr.prcSt = true;
 

@@ -1,3 +1,13 @@
+2014-04-10 Roman
+- SYS.{TController,TTipDAQ,
+- SYS: To user's API of object XMLNodeObj function "childGet( string name, int num = 0 )" is added.
+- DAQ.BlockCalc: To blocks' output links optional writing by changes is added. Some code clean up.
+- FIX:DAQ.ICP_DAS: Watchdog value set for LP-8x81 is fixed.
+- FIX:DAQ.MMS: The correct transport address set at enable fix. COTP DestTSAP is set configurable from the controller object.
+- Transport.{SSL,Sockets}: Default value of KeepAliveTm set to 60 for prevent input connections hang. Some code clean up.
+- UI.VCAEngine: Some code clean up.
+
+
 2014-04-05 Roman
 - SYS: ALTLinux RPM-spec depend to postgresql9.1-devel is changed postgresql-devel.
 - DB.LibsDB.vcaBase: "anShow" set to inactive mode by default. New element "TextLab" fo digital stats is added.
