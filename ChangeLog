@@ -1,4 +1,5 @@
 2014-04-10 Roman
+- Archive.DBArch: Field's "LEN" of messages table length set to "2" for allow negative (alarms).
 - SYS.{TController,TTipDAQ): ID update after new child object create.
 - SYS: To user's API of object XMLNodeObj function "childGet( string name, int num = 0 )" is added.
     Mostly warnings clean.
