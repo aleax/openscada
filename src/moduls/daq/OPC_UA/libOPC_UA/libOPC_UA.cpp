@@ -112,6 +112,34 @@ string strParse( const string &path, int level, const string &sep, int *off, boo
     return "";
 }
 
+string strLine( const string &str, int level, int *off )
+{
+    int an_dir = off ? *off : 0;
+    int t_lev = 0, edLnSmbSz = 1;
+    size_t t_dir;
+
+    if(an_dir >= (int)str.size()) return "";
+    while(true)
+    {
+	for(t_dir = an_dir; t_dir < str.size(); t_dir++)
+	    if(str[t_dir] == '\x0D' || str[t_dir] == '\x0A')
+	    { edLnSmbSz = (str[t_dir] == '\x0D' && ((t_dir+1) < str.size()) && str[t_dir+1] == '\x0A') ? 2 : 1; break; }
+	if(t_dir >= str.size())
+	{
+	    if(off) *off = str.size();
+	    return (t_lev==level) ? str.substr(an_dir) : "";
+	}
+	else if(t_lev == level)
+	{
+	    if(off) *off = t_dir+edLnSmbSz;
+	    return str.substr(an_dir,t_dir-an_dir);
+	}
+	an_dir = t_dir+edLnSmbSz;
+	t_lev++;
+    }
+    return "";
+}
+
 string strMess( const char *fmt, ... )
 {
     char str[10000];
@@ -650,16 +678,11 @@ void UA::iDataValue( const string &buf, int &off, XML_N &nd )
 	if(emv&0x40) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supported.");
 	//????
     }
-    if(em&0x02)	//Status
-	nd.setAttr("Status", strMess("0x%x",iNu(buf,off,4)));
-    if(em&0x04)	//SourceTimestamp
-	nd.setAttr("SourceTimestamp", ll2str(iTm(buf,off)));
-    if(em&0x10)	//SourcePicoseconds
-	nd.setAttr("SourcePicoseconds", uint2str(iNu(buf,off,2)));
-    if(em&0x08)	//ServerTimestamp
-	nd.setAttr("ServerTimestamp", ll2str(iTm(buf,off)));
-    if(em&0x20)	//ServerPicoseconds
-	nd.setAttr("ServerPicoseconds", uint2str(iNu(buf,off,2)));
+    if(em&0x02)	nd.setAttr("Status", strMess("0x%x",iNu(buf,off,4)));
+    if(em&0x04)	nd.setAttr("SourceTimestamp", ll2str(iTm(buf,off)));
+    if(em&0x10)	nd.setAttr("SourcePicoseconds", uint2str(iNu(buf,off,2)));
+    if(em&0x08)	nd.setAttr("ServerTimestamp", ll2str(iTm(buf,off)));
+    if(em&0x20)	nd.setAttr("ServerPicoseconds", uint2str(iNu(buf,off,2)));
 }
 
 void UA::oN( string &buf, int32_t val, char sz, int off )
@@ -762,9 +785,9 @@ void UA::oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId
     if(resMask&RdRm_TypeDef) oNodeId(buf, typeDef);		else oNodeId(buf, 0);
 }
 
-void UA::oDataValue( string &buf, uint8_t eMsk, const OPCVariant &vl, uint8_t vEMsk, int64_t srcTmStmp )
+void UA::oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk, int64_t srcTmStmp )
 {
-    eMsk = eMsk & (~0x30);	//Exclude picoseconds parts
+    eMsk = eMsk&(~0x30);	//Exclude picoseconds parts
     if(eMsk&0x02) eMsk = eMsk&(~0x01);
 
     oNu(buf, eMsk, 1);		//Encoding Mask
@@ -775,42 +798,42 @@ void UA::oDataValue( string &buf, uint8_t eMsk, const OPCVariant &vl, uint8_t vE
 	if(vEMsk&0x80)		//Array process
 	{
 	    arrL = 0;
-	    for(int off = 0; strParse(vl.getS(),0,"\n",&off).size(); ) arrL++;
+	    for(int off = 0; strParse(vl,0,"\n",&off).size(); ) arrL++;
 	    oNu(buf, arrL, 4);	//ArrayLength
 	}
 	for(int i_v = 0, off = 0; i_v < arrL; i_v++)
 	{
-	    OPCVariant setVl = (arrL==1) ? vl : strParse(vl.getS(),0,"\n",&off);
+	    string setVl = (arrL==1) ? vl : strParse(vl,0,"\n",&off);
 	    switch(vEMsk&0x3F)
 	    {
 		case OpcUa_Boolean:
-		case OpcUa_SByte:	oN(buf, setVl.getI(), 1);	break;
-		case OpcUa_Byte:	oNu(buf, setVl.getI(), 1);	break;
-		case OpcUa_Int16:	oN(buf, setVl.getI(), 2);	break;
-		case OpcUa_UInt16:	oNu(buf, setVl.getI(), 2);	break;
-		case OpcUa_Int32:	oN(buf, setVl.getI(), 4);	break;
-		case OpcUa_UInt32:	oNu(buf, strtoul(setVl.getS().c_str(),NULL,10), 4);	break;
-		case OpcUa_Int64:	{ int64_t vl = strtoll(setVl.getS().c_str(),NULL,10); buf.append((char*)&vl,8); break; }
-		case OpcUa_UInt64:	{ uint64_t vl = strtoull(setVl.getS().c_str(),NULL,10); buf.append((char*)&vl,8); break; }
-		case OpcUa_Float:	oR(buf, setVl.getR(), 4);	break;
-		case OpcUa_Double:	oR(buf, setVl.getR(), 8);	break;
+		case OpcUa_SByte:	oN(buf, atoi(setVl.c_str()), 1);	break;
+		case OpcUa_Byte:	oNu(buf, atoi(setVl.c_str()), 1);	break;
+		case OpcUa_Int16:	oN(buf, atoi(setVl.c_str()), 2);	break;
+		case OpcUa_UInt16:	oNu(buf, atoi(setVl.c_str()), 2);	break;
+		case OpcUa_Int32:	oN(buf, atoi(setVl.c_str()), 4);	break;
+		case OpcUa_UInt32:	oNu(buf, strtoul(setVl.c_str(),NULL,10), 4);	break;
+		case OpcUa_Int64:	oN(buf, strtoll(setVl.c_str(),NULL,10), 8);	break;
+		case OpcUa_UInt64:	oNu(buf, strtoull(setVl.c_str(),NULL,10), 8);	break;
+		case OpcUa_Float:	oR(buf, atof(setVl.c_str()), 4);	break;
+		case OpcUa_Double:	oR(buf, atof(setVl.c_str()), 8);	break;
 		case OpcUa_String:
-		case OpcUa_ByteString:	oS(buf, setVl.getS());		break;
-		case OpcUa_NodeId:	oNodeId(buf, NodeId::fromAddr(setVl.getS()));	break;
-		case OpcUa_StatusCode:	oNu(buf, strtoll(setVl.getS().c_str(),NULL,0), 4);	break;
-		case OpcUa_QualifiedName: oSqlf(buf, setVl.getS());	break;
-		case OpcUa_LocalizedText: oSl(buf, setVl.getS(), lang2CodeSYS());	break;
-		default: //oS(buf, setVl.getS());	break;
+		case OpcUa_ByteString:	oS(buf, setVl);				break;
+		case OpcUa_NodeId:	oNodeId(buf, NodeId::fromAddr(setVl));	break;
+		case OpcUa_StatusCode:	oNu(buf, strtoll(setVl.c_str(),NULL,0), 4);	break;
+		case OpcUa_QualifiedName: oSqlf(buf, setVl);			break;
+		case OpcUa_LocalizedText: oSl(buf, setVl, lang2CodeSYS());	break;
+		default: //oS(buf, setVl);	break;
 		    throw OPCError(OpcUa_BadDecodingError, "Data type '%d' isn't supported.", vEMsk&0x3F);
 	    }
 	}
 	//ArrayDimension
-	if(vEMsk & 0x40) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
+	if(vEMsk&0x40) throw OPCError(OpcUa_BadDecodingError, "ArrayDimensions field isn't supporteded.");
 	//????
     }
-    if(eMsk & 0x02) oN(buf, vl.getI(), 4);			//Status
-    if(eMsk & 0x04) oTm(buf, srcTmStmp ? srcTmStmp : curTime());//SourceTimestamp
-    if(eMsk & 0x08) oTm(buf, curTime());			//ServerTimestamp
+    if(eMsk&0x02) oN(buf, strtoul(vl.c_str(),NULL,10), 4);	//Status
+    if(eMsk&0x04) oTm(buf, srcTmStmp ? srcTmStmp : curTime());	//SourceTimestamp
+    if(eMsk&0x08) oTm(buf, curTime());				//ServerTimestamp
 }
 
 string UA::randBytes( int num )
@@ -1467,10 +1490,24 @@ void Client::protIO( XML_N &io )
 		    oNu(mReq, 1, 4);					//List number 1
 		    oS(mReq, "en");					//localeId
 									//> userIdentityToken
-		    oNodeId(mReq, 321);					//TypeId
-		    oNu(mReq, 1, 1);					//Encode
-		    oNu(mReq, 4+10, 4);					//Length
-		    oS(mReq, "anonPolicy");				//policyId: force to anonPolicy
+		    if(authData().empty())
+		    {
+			oNodeId(mReq, OpcUa_AnonymousIdentityToken);	//TypeId
+			oNu(mReq, 1, 1);				//Encode
+			oNu(mReq, 4+10, 4);				//Length
+			oS(mReq, "anonPolicy");				//policyId: force to anonPolicy
+		    }
+		    else
+		    {
+			oNodeId(mReq, OpcUa_UserNameIdentityToken);	//TypeId
+			oNu(mReq, 1, 1);				//Encode
+			int tkOff = mReq.size(); oNu(mReq, 0, 4);	//Length
+			oS(mReq, "UserNameIdentityToken");		//policyId: force to UserNameIdentityToken
+			oS(mReq, strLine(authData(),0));		//UserName
+			oS(mReq, strLine(authData(),1));		//Password
+			oS(mReq, "");					//EncryptionAlgorithm
+			oNu(mReq, mReq.size()-tkOff-4, 4, tkOff);	//Real length
+		    }
 									//> userTokenSignature
 		    oS(mReq, "");					//signature
 		    oS(mReq, "");					//algorithm
@@ -1984,6 +2021,7 @@ void Client::reqService( XML_N &io )
     protIO(io);
 
     if(strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument) sess.clearFull();
+    else if(io.attr("id") == "CloseSession") sess.clearSess();
 }
 
 //*************************************************
@@ -2557,7 +2595,7 @@ nextReq:
 			    break;
 			default: reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadUserAccessDenied;	break;
 		    }
-		    if((stCode=wep->sessActivate(sesTokId,secId,false,inPrtId,userIdent))) reqTp = OpcUa_ServiceFault;
+		    if(stCode || (stCode=wep->sessActivate(sesTokId,secId,false,inPrtId,userIdent))) reqTp = OpcUa_ServiceFault;
 		    if(reqTp != OpcUa_ActivateSessionRequest)	break;
 								//> userTokenSignature
 		    iS(rb, off);				//signature
@@ -3062,7 +3100,7 @@ nextReq:
 			req.setAttr("node", nid.toAddr())->setAttr("aid",uint2str(aid));
 			int rez = wep->reqData(reqTp, req);
 			if(!rez) oDataValue(respEp, eMsk, req.text(), atoi(req.attr("type").c_str()));
-			else oDataValue(respEp, 0x02, rez);
+			else oDataValue(respEp, 0x02, int2str(rez));
 		    }
 
 		    oS(respEp, "");				//diagnosticInfos []
@@ -3982,231 +4020,6 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
     }
 
     return OpcUa_BadNodeIdUnknown;
-}
-
-//*************************************************
-//* OPCVariant				      *
-//*************************************************
-OPCVariant::OPCVariant( ) : mType(Null), mModify(false), mFixedTp(false)
-{
-
-}
-
-OPCVariant::OPCVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setB(ivl);
-}
-
-OPCVariant::OPCVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setI(ivl);
-}
-
-OPCVariant::OPCVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setR(ivl);
-}
-
-OPCVariant::OPCVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setS(ivl);
-}
-
-OPCVariant::OPCVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setS(ivl);
-}
-
-OPCVariant::OPCVariant( const OPCVariant &var ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    operator=(var);
-}
-
-OPCVariant::~OPCVariant( )	{ setType(Null); }
-
-void OPCVariant::setType( Type tp, bool fix )
-{
-    mFixedTp = fix;
-    if(tp == type()) return;
-
-    //Free
-    switch(mType)
-    {
-	case String:
-	    if(mSize >= sizeof(val.sMini))	free(val.sPtr);
-	    mSize = 0;
-	    break;
-	default: break;
-    }
-
-    //Create
-    mType = tp;
-    switch(mType)
-    {
-	case String: mSize = 0; val.sMini[mSize] = 0; break;
-	default: break;
-    }
-}
-
-bool OPCVariant::operator==( const OPCVariant &vr )
-{
-    if(vr.type() == type())
-	switch(type())
-	{
-	    case Boolean: return (vr.getB()==getB());
-	    case Integer: return (vr.getI()==getI());
-	    case Real:	  return (vr.getR()==getR());
-	    case String:  return (vr.getS()==getS());
-	    default: break;
-	}
-
-    return false;
-}
-
-bool OPCVariant::operator!=( const OPCVariant &vr ) { return !operator==(vr); }
-
-OPCVariant &OPCVariant::operator=( const OPCVariant &vr )
-{
-    switch(vr.type())
-    {
-	case Null:
-	    if(!mFixedTp) setType(Null);
-	    else setS("");
-	    break;
-	case Boolean:	setB(vr.getB());	break;
-	case Integer:	setI(vr.getI());	break;
-	case Real:	setR(vr.getR());	break;
-	case String:	setS(vr.getS());	break;
-    }
-    return *this;
-}
-
-char OPCVariant::getB( ) const
-{
-    switch(type())
-    {
-	case String:	{ string tvl = getS(); return (bool)atoi(tvl.c_str()); }
-	case Integer:	{ int tvl = getI();    return (bool)tvl; }
-	case Real:	{ double tvl = getR(); return (bool)tvl; }
-	case Boolean:	return val.b;
-	default: break;
-    }
-    return false;
-}
-
-int OPCVariant::getI( ) const
-{
-    switch(type())
-    {
-	case String:	{ string tvl = getS(); return atoi(tvl.c_str()); }
-	case Real:	{ double tvl = getR(); return (int)tvl; }
-	case Boolean:	{ char tvl = getB();   return tvl; }
-	case Integer:	return val.i;
-	default: break;
-    }
-    return 0;
-}
-
-double OPCVariant::getR( ) const
-{
-    switch(type())
-    {
-	case String:	{ string tvl = getS(); return atof(tvl.c_str()); }
-	case Integer:	{ int tvl = getI();    return tvl; }
-	case Boolean:	{ char tvl = getB();   return tvl; }
-	case Real:	return val.r;
-	default: break;
-    }
-    return 0;
-}
-
-string OPCVariant::getS( ) const
-{
-    switch(type())
-    {
-	case Integer:	{ int tvl = getI();    return int2str(tvl); }
-	case Real:	{ double tvl = getR(); return real2str(tvl); }
-	case Boolean:	{ char tvl = getB();   return int2str(tvl); }
-	case String:
-	    if(mSize < sizeof(val.sMini)) return string(val.sMini,mSize);
-	    return string(val.sPtr,mSize);
-	default: break;
-    }
-    return "";
-}
-
-void OPCVariant::setB( char ivl )
-{
-    if(type() != Boolean && !mFixedTp) setType(Boolean);
-    switch(type())
-    {
-	case String:	setS(int2str(ivl));	break;
-	case Integer:	setI(ivl);		break;
-	case Real:	setR(ivl);		break;
-	case Boolean:	val.b = ivl;		break;
-	default: break;
-    }
-}
-
-void OPCVariant::setI( int ivl )
-{
-    if(type() != Integer && !mFixedTp) setType(Integer);
-    switch(type())
-    {
-	case String:	setS(int2str(ivl));	break;
-	case Integer:	val.i = ivl;		break;
-	case Real:	setR(ivl);		break;
-	case Boolean:	setB((bool)ivl);	break;
-	default: break;
-    }
-}
-
-void OPCVariant::setR( double ivl )
-{
-    if(type() != Real && !mFixedTp) setType(Real);
-    switch(type())
-    {
-	case String:	setS(real2str(ivl));	break;
-	case Integer:	setI((int)ivl);		break;
-	case Real:	val.r = ivl;		break;
-	case Boolean:	setB((bool)ivl);	break;
-	default: break;
-    }
-}
-
-void OPCVariant::setS( const string &ivl )
-{
-    if(type() != String && !mFixedTp) setType(String);
-    switch(type())
-    {
-	case String:
-	    if(ivl.size() > 130000000)	throw OPCError("Too big string length (> 130 MB)!");
-	    if(ivl.size() < sizeof(val.sMini))
-	    {
-		if(mSize >= sizeof(val.sMini)) free(val.sPtr);
-		memcpy(val.sMini, ivl.data(), ivl.size());
-		val.sMini[ivl.size()] = 0;
-	    }
-	    else
-	    {
-		if(mSize < sizeof(val.sMini)) val.sPtr = (char*)malloc(ivl.size()+1);
-		else if(ivl.size() != mSize)  val.sPtr = (char*)realloc(val.sPtr,ivl.size()+1);
-		if(!val.sPtr)
-		{
-		    mSize = 0;
-		    val.sMini[mSize] = 0;
-		    throw OPCError("Memory alloc for big string length (%d) error!", ivl.size());
-		}
-		memcpy(val.sPtr, ivl.data(), ivl.size());
-		val.sPtr[ivl.size()] = 0;
-	    }
-	    mSize = ivl.size();
-	    break;
-	case Integer:	setI(atoi(ivl.c_str()));	break;
-	case Real:	setR(atof(ivl.c_str()));	break;
-	case Boolean:	setB((bool)atoi(ivl.c_str()));	break;
-	default: break;
-    }
 }
 
 //*************************************************

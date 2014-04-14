@@ -52,27 +52,17 @@ TTpContr::TTpContr( string name ) : TTipDAQ(DAQ_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr()
-{
+TTpContr::~TTpContr( )	{ }
 
-}
+void TTpContr::load_( )	{ }
 
-void TTpContr::load_( )
-{
-    //> Load parameters from command line and/or config file
-
-}
-
-void TTpContr::save_( )
-{
-
-}
+void TTpContr::save_( )	{ }
 
 void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Controler's bd structure
+    //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
@@ -83,24 +73,24 @@ void TTpContr::postEnable( int flag )
 	TSYS::strMess("%d;%d;%d",MS_None,MS_Sign,MS_SignAndEncrypt).c_str(),_("None;Sign;Sign&Encrypt")));
     fldAdd(new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
+    fldAdd(new TFld("AuthUser",_("Auth: user"),TFld::String,TFld::NoFlag,"20"));
+    fldAdd(new TFld("AuthPass",_("Auth: password"),TFld::String,TFld::NoFlag,"20"));
     fldAdd(new TFld("AttrsLimit",_("Parameter attributes number limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
-    //> Parameter type bd structure
+    //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("ND_LS",_("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000",""));
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
 
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")),
-    mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")), mPAttrLim(cfg("AttrsLimit").getId()),
+    mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")), mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")),
+    mPAttrLim(cfg("AttrsLimit").getId()),
     prcSt(false), callSt(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
@@ -144,6 +134,11 @@ string TMdContr::getStatus( )
     return rez;
 }
 
+string TMdContr::authData( )
+{
+    return (mAuthUser.getS().size() && mAuthPass.getS().size()) ? mAuthUser.getS()+"\n"+mAuthPass.getS() : "";
+}
+
 void TMdContr::reqService( XML_N &io )
 {
     ResAlloc res(nodeRes(), true);
@@ -156,10 +151,7 @@ void TMdContr::reqService( XML_N &io )
     if(io.attr("err").empty()) tmDelay--;
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
 {
@@ -182,23 +174,25 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    //> Establish connection
+    //Establish connection
     //try { tr.at().start(); } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //> Schedule process
+    //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
     servSt = 0;
     tmDelay = 0;
 
-    //> Start the gathering data task
+    //Start the gathering data task
     if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
+
+    if(tmDelay > 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
 }
 
 void TMdContr::protIO( XML_N &io )
@@ -215,14 +209,11 @@ int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
     return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
 }
 
-void TMdContr::debugMess( const string &mess )
-{
-    mess_debug_(nodePath().c_str(), "%s", mess.c_str());
-}
+void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res, true);
+    ResAlloc res(enRes, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -255,7 +246,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.callSt = true;
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
 
-	    ResAlloc res(cntr.en_res, false);
+	    ResAlloc res(cntr.enRes, false);
 
 	    if(!req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()))
 	    {
@@ -305,10 +296,16 @@ void *TMdContr::Task( void *icntr )
 	    {
 		cntr.acq_err.setVal(req.attr("err"));
 		mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
+		if(cntr.tmDelay < 0) cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
+		    cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
 		cntr.tmDelay = cntr.syncPer();
 		continue;
 	    }
-	    else if(cntr.tmDelay == -1) cntr.acq_err.setVal("");
+	    else if(cntr.tmDelay == -1)
+	    {
+		cntr.acq_err.setVal("");
+		cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+	    }
 	    res.release();
 
 	    firstCall = false;
@@ -347,7 +344,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 	    XML_N req("opc.tcp");
 
-	    //> Send FindServers request for EndPoints list provide
+	    //Send FindServers request for EndPoints list provide
 	    req.setAttr("id", "FindServers");
 	    reqService(req);
 
@@ -358,7 +355,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 		    epLst[req.childGet(i_s)->childGet(i_d)->text()] = SecuritySetting();
 	    res.release();
 
-	    //> Send GetEndpoints request for EndPoints list provide
+	    //Send GetEndpoints request for EndPoints list provide
 	    req.clear()->setAttr("id", "GetEndpoints");
 	    reqService(req);
 
@@ -379,6 +376,12 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	else if(icfg.name() == "SecMessMode" &&
 		((icfg.getI() != MS_None && secPolicy() == "None") || (icfg.getI() == MS_None && secPolicy() != "None")))
 	    return false;
+	else if(icfg.name() == "AuthUser" || icfg.name() == "AuthPass")
+	{
+	    XML_N req("opc.tcp");
+	    req.clear()->setAttr("id", "CloseSession");
+	    reqService(req);
+	}
     } catch(...) { }
 
     return true;
@@ -399,6 +402,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecMessMode",mSecMessMode.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/Cert",mCert.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID,3,"tp","str","cols","90","rows","7");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey", mPvKey.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthUser", mAuthUser.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass", mAuthPass.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/AttrsLimit",cfg("AttrsLimit").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser")))
 	{

@@ -513,7 +513,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	del(opt->attr("id"),true);
     }
     else if(type().cntrCmdProc(this, opt)) /* Process OK */;
-    else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
     else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setText("");

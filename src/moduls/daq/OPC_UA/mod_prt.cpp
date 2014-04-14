@@ -102,7 +102,7 @@ Server::EP *TProt::epEnAt( const string &ep )
 
 bool TProt::inReq( string &request, const string &inPrtId, string *answ )
 {
-    ResAlloc res(en_res, false);
+    ResAlloc res(enRes, false);
     return Server::inReq(request, inPrtId, answ);
 }
 
@@ -128,7 +128,7 @@ void TProt::discoveryUrls( vector<string> &ls )
 
 void TProt::epEn( const string &id, bool val )
 {
-    ResAlloc res(en_res, true);
+    ResAlloc res(enRes, true);
 
     unsigned i_ep;
     for(i_ep = 0; i_ep < ep_hd.size(); i_ep++)

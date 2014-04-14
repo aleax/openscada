@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-05 17:28+0300\n"
+"POT-Creation-Date: 2014-04-12 17:40+0300\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -51,60 +51,91 @@ msgstr "Адреса серверу"
 msgid "Variables into read request"
 msgstr "Змінних у запиті читання"
 
-#: module.cpp:98
+#: module.cpp:96
+msgid "Destination TSAP"
+msgstr "TSAP призначення"
+
+#: module.cpp:99
 msgid "Standard"
 msgstr "Стандарт"
 
-#: module.cpp:99
+#: module.cpp:100
 msgid "Variables list (next line separated)"
 msgstr "Перелік змінних (поділено наступним рядком)"
 
-#: module.cpp:168
+#: module.cpp:170
+msgid "No activity data."
+msgstr "Немає активності даних."
+
+#: module.cpp:170
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Помилка з'єднання. Відновлення за %.6g с."
 
-#: module.cpp:173
+#: module.cpp:175
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
-#: module.cpp:174
+#: module.cpp:176
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
-#: module.cpp:175
+#: module.cpp:177
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
-#: module.cpp:176
+#: module.cpp:178
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Витрачено часу: %s. Запитів %.6g."
 
-#: module.cpp:205
+#: module.cpp:207
 msgid "Remote host error"
 msgstr "Помилка віддаленого хосту"
 
-#: module.cpp:232
+#: module.cpp:228
 #, c-format
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "Автоматично створений транспорт MMS для контролеру '%s'."
 
-#: module.cpp:379
+#: module.cpp:273 module.cpp:327 module.cpp:335
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: підключення до джерела даних: %s."
+
+#: module.cpp:273
+msgid "STOP"
+msgstr "ЗУПИНЕНО"
+
+#: module.cpp:335
+msgid "OK"
+msgstr "НОРМА"
+
+#: module.cpp:401
+#, c-format
 msgid "Value type read '%s' is not implemented."
 msgstr "Читання типу значення '%s' не реалізовано."
 
-#: module.cpp:558 module.cpp:606
+#: module.cpp:570 module.cpp:624
+#, c-format
 msgid "Value type %s is not implemented for '%s'."
 msgstr "Тип значення %s не реалізовано для '%s'."
 
-#: module.cpp:649
+#: module.cpp:666
 msgid "Variable append"
 msgstr "Додавання змінної"
 
-#: module.cpp:789
+#: module.cpp:736
+msgid "1:Parameter is disabled."
+msgstr "1:Параметр вимкнено."
+
+#: module.cpp:737
+msgid "2:Acquisition is stopped."
+msgstr "2:Збір зупинено."
+
+#: module.cpp:823
 #, c-format
 msgid "Write to '%s' error: %s."
 msgstr "Помилка запису до '%s': %s."

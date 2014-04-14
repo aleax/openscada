@@ -280,6 +280,7 @@ extern string uint2str( unsigned val );
 extern string ll2str( int64_t val );
 extern string real2str( double val, int prec = 15, char tp = 'g' );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
+static string strLine( const string &str, int level, int *off = NULL );
 extern string strMess( const char *fmt, ... );
 
 //*************************************************
@@ -348,76 +349,6 @@ class XML_N
 	vector<XML_N*>			mChildren;
 	vector<pair<string,string> >	mAttr;
 	XML_N	*mParent;
-};
-
-//*************************************************
-//* OPCVariant					  *
-//*************************************************
-class OPCVariant
-{
-    public:
-	//Data
-	enum Type
-	{
-	    Null	= 0,
-	    Boolean	= 1,
-	    Integer	= 2,
-	    Real	= 3,
-	    String	= 4,
-	};
-
-	//Methods
-	OPCVariant( );
-	OPCVariant( char ivl );
-	OPCVariant( int ivl );
-	OPCVariant( double ivl );
-	OPCVariant( const string &ivl );
-	OPCVariant( const char *var );
-	OPCVariant( const OPCVariant &var );
-
-	~OPCVariant( );
-
-	bool operator==( const OPCVariant &vr );
-	bool operator!=( const OPCVariant &vr );
-	OPCVariant &operator=( const OPCVariant &vr );
-
-	bool isNull( ) const	{ return (type()==Null); }
-	Type type( ) const	{ return (Type)mType; }
-	void setType( Type tp, bool fix = false );
-	bool isModify( )	{ return mModify; }
-	void setModify( bool vl = true )	{ mModify = vl; }
-
-	virtual char	getB( ) const;
-	virtual int	getI( ) const;
-	virtual double	getR( ) const;
-	virtual string	getS( ) const;
-
-	operator char( )	{ return getB(); }
-	operator int( )		{ return getI(); }
-	operator double( )	{ return getR(); }
-	operator string( )	{ return getS(); }
-
-	virtual void setB( char val );
-	virtual void setI( int val );
-	virtual void setR( double val );
-	virtual void setS( const string &val );
-
-    protected:
-	//Data
-	union
-	{
-	    char	b;
-	    int		i;
-	    double	r;
-	    char	*sPtr;
-	    char	sMini[8];
-	}val;
-
-	//Attributes
-	unsigned mSize		: 27;
-	unsigned mType		: 3;
-	unsigned mModify	: 1;
-	unsigned mFixedTp	: 1;
 };
 
 //*************************************************
@@ -516,7 +447,7 @@ class UA
 	static void oNodeId( string &buf, const NodeId &val );
 	static void oRef( string &buf, uint32_t resMask, const NodeId &nodeId, const NodeId &refTypeId,
 			bool isForward, const string &name, uint32_t nodeClass, const NodeId &typeDef );
-	void oDataValue( string &buf, uint8_t eMsk, const OPCVariant &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
+	void oDataValue( string &buf, uint8_t eMsk, const string &vl, uint8_t vEMsk = 0, int64_t srcTmStmp = 0 );
 
 	static string randBytes( int num );
 	static string certPEM2DER( const string &certPem );
@@ -573,7 +504,6 @@ class Client: public UA
 		string		secPolicy;
 		char		secMessMode;
 		string		clKey, servKey;
-
 	};
 
 	//Methods
@@ -587,6 +517,8 @@ class Client: public UA
 	virtual int	secMessMode( ) = 0;
 	virtual string	cert( ) = 0;
 	virtual string	pvKey( ) = 0;
+	virtual string	authData( ) = 0;	//Empty			- anonymous
+						//{User}\n{Password}	- by user and password
 
 	// External imlementations
 	virtual int	messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 ) = 0;

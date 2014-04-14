@@ -203,7 +203,7 @@ class TProt: public TProtocol, public Server
 	vector< AutoHD<OPCEndPoint> > ep_hd;
 
 	Res	nRes;
-	Res	en_res;				//Resource for enable endpoints
+	Res	enRes;				//Resource for enable endpoints
 };
 
 extern TProt *modPrt;

@@ -117,6 +117,7 @@ class TMdContr: public TController, public Client
 	int	secMessMode( )	{ return mSecMessMode; }
 	string	cert( )		{ return mCert; }
 	string	pvKey( )	{ return mPvKey; }
+	string	authData( );
 	int	pAttrLim( )	{ return mPAttrLim; }
 	string	epParse( string *uri = NULL );
 
@@ -154,7 +155,7 @@ class TMdContr: public TController, public Client
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;		//Resource for enable params
+	Res	enRes, cntrRes;	//Resource for enable params
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
 		&mSync,		//Synchronization inter remote station: attributes list update.
@@ -162,7 +163,8 @@ class TMdContr: public TController, public Client
 		&mSecPol,	//Security policy
 		&mSecMessMode,	//Security policy mode
 		&mCert,		//Client certificate
-		&mPvKey;	//Client certificate's private key
+		&mPvKey,	//Client certificate's private key
+		&mAuthUser, &mAuthPass;	//Auth user and password
 	int64_t	&mPAttrLim;	//Parameter attributes number limit
 	int64_t	mPer;
 
@@ -182,7 +184,6 @@ class TMdContr: public TController, public Client
 	float		tmDelay;	//Delay time for next try connect
 
 	uint32_t	servSt;
-	Res		cntrRes;
 };
 
 //*************************************************

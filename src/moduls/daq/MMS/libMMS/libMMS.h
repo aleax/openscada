@@ -66,11 +66,13 @@ enum MMS_ConfServ { Conf_Identify = 0x82, Conf_getNameList = 0xA1, Conf_Identify
 enum MMS_ObjClass { OCL_NmVar = 0x00, OCL_ScattAccess = 0x01, OCL_NmVarLs = 0x02, OCL_Domain = 0x09, OCL_ProgInvoc = 0x10 };
 enum MMS_VarTps	{ VT_Error = 0x80, VT_Array = 0x81, VT_Struct = 0x82, VT_Bool = 0x83, VT_BitString = 0x84, VT_Int = 0x85, VT_UInt = 0x86,
 		  VT_Float = 0x87, VT_OctString = 0x89, VT_VisString = 0x8A, VT_TimeOfDay = 0x8C, VT_BCD = 0x8D, VT_BoolArr = 0x8E };
+enum MMS_RejectReqPDU { RjReq_other = 0, RjReq_unrecognizedService, RjReq_unrecognizedModifier, RjReq_invalidInvokeID, RjReq_invalidArgument,
+			RjReq_invalidModifier, RjReq_maxServOutstandingSxceeded, RjReq_maxRecursionExceeded = 8, RjReq_valueOutOfRange };
 
 //* External functions                        */
 extern int64_t curTime( );
-extern string i2s( int val );
-extern string u2s( unsigned val );
+extern string int2s( int val );
+extern string uint2s( unsigned val );
 extern string ll2s( int64_t val );
 extern string r2s( double val, int prec = 15, char tp = 'g' );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
@@ -147,14 +149,14 @@ class XML_N
 };
 
 //*************************************************
-//* Protocol MMS				  *
+//* Protocol MMS Core				  *
 //*************************************************
-class MMS
+class Core
 {
     public:
 	//Methods
-	MMS( );
-	~MMS( );
+	Core( );
+	~Core( );
 
 	// Main variables
 	virtual void debugMess( const string &mess ) { }
@@ -190,7 +192,7 @@ class MMS
 //*************************************************
 //* Protocol MMS client part			  *
 //*************************************************
-class Client: public MMS
+class Client: public Core
 {
     public:
 	//Methods

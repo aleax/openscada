@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-05 17:28+0300\n"
+"POT-Creation-Date: 2014-04-12 17:40+0300\n"
 "PO-Revision-Date: 2013-10-20 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -52,60 +52,91 @@ msgstr "Server-Adresse"
 msgid "Variables into read request"
 msgstr "Variablen in Leseanforderung"
 
-#: module.cpp:98
+#: module.cpp:96
+msgid "Destination TSAP"
+msgstr "Destination TSAP"
+
+#: module.cpp:99
 msgid "Standard"
 msgstr "Standard"
 
-#: module.cpp:99
+#: module.cpp:100
 msgid "Variables list (next line separated)"
 msgstr "Variablen-Liste (nächste Zeile getrennt)"
 
-#: module.cpp:168
+#: module.cpp:170
+msgid "No activity data."
+msgstr "Keine Aktivitätsdaten."
+
+#: module.cpp:170
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-#: module.cpp:173
+#: module.cpp:175
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
-#: module.cpp:174
+#: module.cpp:176
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf mit einer Periode: %s. "
 
-#: module.cpp:175
+#: module.cpp:177
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#: module.cpp:176
+#: module.cpp:178
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Verbrauchte Zeit: %s. Anfragen %.6g."
 
-#: module.cpp:205
+#: module.cpp:207
 msgid "Remote host error"
 msgstr "Remote-Host-Fehler"
 
-#: module.cpp:232
+#: module.cpp:228
 #, c-format
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "MMS erstellt automatische Transport für '%s' Controller."
 
-#: module.cpp:379
+#: module.cpp:273 module.cpp:327 module.cpp:335
+#, c-format
+msgid "DAQ.%s: connect to data source: %s."
+msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
+
+#: module.cpp:273
+msgid "STOP"
+msgstr "STOP"
+
+#: module.cpp:335
+msgid "OK"
+msgstr "OK"
+
+#: module.cpp:401
+#, c-format
 msgid "Value type read '%s' is not implemented."
 msgstr "Werttyp lesen '%s' nicht implementiert ist."
 
-#: module.cpp:558 module.cpp:606
+#: module.cpp:570 module.cpp:624
+#, c-format
 msgid "Value type %s is not implemented for '%s'."
 msgstr "Werttyp %s ist nicht für '%s' implementiert."
 
-#: module.cpp:649
+#: module.cpp:666
 msgid "Variable append"
 msgstr "Variable anhängen"
 
-#: module.cpp:789
+#: module.cpp:736
+msgid "1:Parameter is disabled."
+msgstr "1:Parameter ist abgeschaltet."
+
+#: module.cpp:737
+msgid "2:Acquisition is stopped."
+msgstr "2:Anfrage ist angehalten."
+
+#: module.cpp:823
 #, c-format
 msgid "Write to '%s' error: %s."
 msgstr "Schreiben Sie '%s' Fehler: %s."

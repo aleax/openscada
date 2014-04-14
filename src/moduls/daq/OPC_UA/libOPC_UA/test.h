@@ -30,7 +30,7 @@ class TestClient: public Client
 {
     public:
 	// Transport connection implementation and main data init
-	TestClient( const string &ep );	//As the constructor's argument's used target server's EndPoint address
+	TestClient( const string &ep, const string &aData = "" ); //As the constructor's argument's used target server's EndPoint address
 	~TestClient( );
 
 	// OPC UA client's session name - the client programm name
@@ -41,6 +41,10 @@ class TestClient: public Client
 	string	secPolicy( )	{ return "None"; }
 	// Used messages mode for the secure channel, allowed: MS_None, MS_Sign, MS_SignAndEncrypt
 	int	secMessMode( )	{ return MS_None; }
+
+	//Auth data:	Empty - anonymous
+	//		{User}\n{Password} - by user and password
+	string authData( )	{ return mAuthData; }
 
 	// Client's selfsigned certificate and the private key
 	string	cert( )		{ return mCert; }
@@ -56,6 +60,7 @@ class TestClient: public Client
 	string	mEp,
 		mURI,		//Parsed from the EndPoint server URI
 		mAddr,		//Parsed from URI server's host address and TCP-port number
-		mSecPol, mCert, mPvKey;
+		mSecPol, mCert, mPvKey,
+		mAuthData;
 	int	sock_fd;
 };

@@ -32,13 +32,13 @@ int main( int argc, char *argv[], char *envp[] )
 {
     if(argc < 3)
     {
-	printf("OPC UA client test program need command line arguments: \"testOPC_UA {EndPoint} {NodeId}\"\n"
+	printf("OPC UA client test program need command line arguments: \"testOPC_UA {EndPoint} {NodeId} {user:pass}\"\n"
 	    "   Example: \"testOPC_UA opc.tcp://127.0.0.1:4841 84\"");
 	return 0;
     }
 
     // Create client connection object
-    TestClient clnt(argv[1]);
+    TestClient clnt(argv[1], (argc>3)?argv[3]:"");
 
     // Create requests object
     XML_N req("opc.tcp");
@@ -94,7 +94,7 @@ int main( int argc, char *argv[], char *envp[] )
 /************************************************
  * TestClient                                   *
  ************************************************/
-TestClient::TestClient( const string &iep ) : mEp(iep), sock_fd(-1)
+TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), sock_fd(-1)
 {
     //Parse EndPoint for TCP connection and other properties obtain
     if(mEp.compare(0,10,"opc.tcp://") == 0)
@@ -150,6 +150,9 @@ TestClient::TestClient( const string &iep ) : mEp(iep), sock_fd(-1)
 	if(sock_fd >= 0) close(sock_fd);
 	sock_fd = -1;
     }
+
+    //User and password set
+    if(aData.size()) mAuthData = aData.size() ? strParse(aData,0,":")+"\n"+strParse(aData,1,":") : "";
 }
 
 TestClient::~TestClient( )

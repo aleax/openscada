@@ -78,14 +78,14 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("REQ_TRY",_("Request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;9"));
     fldAdd(new TFld("MAX_BLKSZ",_("Maximum request block size (bytes)"),TFld::Integer,TFld::NoFlag,"3","200","2;250"));
 
-    //> Parameter type bd structure
-    //>> Standard parameter type by symple attributes list
+    //Parameter type bd structure
+    // Standard parameter type by symple attributes list
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"100000",""));
-    //>> Extended logical parameter type by DAQ parameter's template
+    // Extended logical parameter type by DAQ parameter's template
     t_prm = tpParmAdd("logic","PRM_BD_L",_("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
-    //>>> Parameter template IO DB structure
+    //  Parameter template IO DB structure
     el_prm_io.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_prm_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_prm_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
@@ -370,7 +370,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 	atp_sub.resize(vmax(2,atp_sub.size()), 0);
 	switch(atp_sub[0])
 	{
-	    case 'b':	return (char)((vl==EVAL_INT)?EVAL_BOOL:((vl>>atoi(atp_sub.c_str()+1))&1));
+	    case 'b':	return char((vl==EVAL_INT)?EVAL_BOOL:((vl>>atoi(atp_sub.c_str()+1))&1));
 	    case 'f':
 	    {
 		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
@@ -382,7 +382,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 	    case 'i':
 		switch(atp_sub[1])
 		{
-		    case '2':	return (int64_t)((vl==EVAL_INT)?EVAL_INT:(int16_t)vl);
+		    case '2':	return int64_t((vl==EVAL_INT)?EVAL_INT:(int16_t)vl);
 		    case '4':
 		    {
 			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
@@ -866,7 +866,7 @@ void *TMdContr::Task( void *icntr )
 
 	    //Get data from blocks to parameters or calc for logical type parameters
 	    cntr.en_res.resRequestR();
-	    for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
+	    for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++)
 		cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
 	    cntr.en_res.resRelease();
 

@@ -49,14 +49,14 @@ int64_t curTime( )
     return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
 }
 
-string i2s( int val )
+string int2s( int val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%d", val);
     return buf;
 }
 
-string u2s( unsigned val )
+string uint2s( unsigned val )
 {
     char buf[250];
     snprintf(buf, sizeof(buf), "%u", val);
@@ -166,18 +166,18 @@ uint64_t i64_LE( uint64_t in )
 //*************************************************
 //* MMS object					  *
 //*************************************************
-MMS::MMS( )	{ }
+Core::Core( )	{ }
 
-MMS::~MMS( )	{ }
+Core::~Core( )	{ }
 
-const char *MMS::iVal( const string &rb, int &off, char vSz )
+const char *Core::iVal( const string &rb, int &off, char vSz )
 {
     off += vSz;
     if(off > (int)rb.size()) throw Error("Buffer size is lesser requested value.");
     return rb.data()+off-vSz;
 }
 
-uint32_t MMS::iN( const string &rb, int &off, uint8_t vSz )
+uint32_t Core::iN( const string &rb, int &off, uint8_t vSz )
 {
     vSz = std::max(0, std::min((int)vSz,4));
     if((off+vSz) > (int)rb.size()) throw Error("Buffer size is lesser requested value.");
@@ -188,7 +188,7 @@ uint32_t MMS::iN( const string &rb, int &off, uint8_t vSz )
     return i32_LE(dt.v);
 }
 
-int MMS::ASN_i( const string &rb, int &off, int offLim )
+int Core::ASN_i( const string &rb, int &off, int offLim )
 {
     //printf("TEST 10: off=%d\n",off);
     if((off+2) > (int)rb.size())	throw Error("Buffer size is lesser to requested tag.");
@@ -213,7 +213,7 @@ int MMS::ASN_i( const string &rb, int &off, int offLim )
     return sz;
 }
 
-uint16_t MMS::ASN_iTAG( const string &rb, int off )
+uint16_t Core::ASN_iTAG( const string &rb, int off )
 {
     uint16_t rez = 0;
     if((off+2) > (int)rb.size())	throw Error("Buffer size is lesser to requested tag.");
@@ -223,7 +223,7 @@ uint16_t MMS::ASN_iTAG( const string &rb, int off )
     return i16_LE(rez);
 }
 
-uint32_t MMS::ASN_iN( const string &rb, int &off, int sz )
+uint32_t Core::ASN_iN( const string &rb, int &off, int sz )
 {
     if(sz < 0) sz = ASN_i(rb, off);
     if(sz > 4) throw Error("Size too big for integer.");
@@ -234,7 +234,7 @@ uint32_t MMS::ASN_iN( const string &rb, int &off, int sz )
     return i32_LE(dt.v);
 }
 
-double MMS::ASN_iR( const string &rb, int &off, int sz )
+double Core::ASN_iR( const string &rb, int &off, int sz )
 {
     if(sz < 0) sz = ASN_i(rb, off);
     if(sz < 5) throw Error("Size too little for real.");
@@ -259,14 +259,14 @@ double MMS::ASN_iR( const string &rb, int &off, int sz )
     throw Error("Discrepancy exponent to size.");
 }
 
-string MMS::ASN_iS( const string &rb, int &off, int sz )
+string Core::ASN_iS( const string &rb, int &off, int sz )
 {
     if(sz < 0) sz = ASN_i(rb, off);
     off += sz;
     return rb.substr(off-sz,sz);
 }
 
-string MMS::ASN_iBS( const string &rb, int &off, int sz, char *unUsBits )
+string Core::ASN_iBS( const string &rb, int &off, int sz, char *unUsBits )
 {
     if(sz < 0) sz = ASN_i(rb, off);
     if(unUsBits) *unUsBits = rb[off];
@@ -275,7 +275,7 @@ string MMS::ASN_iBS( const string &rb, int &off, int sz, char *unUsBits )
     return rb.substr(off-(sz-1),sz-1);
 }
 
-void MMS::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
+void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 {
     const char *errS;
     for(int offC = off, i_it = 0, err, vTp; (offC+sz) != off; i_it++)
@@ -302,21 +302,21 @@ void MMS::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		    case 10: errS = "object-non-existent";	break;
 		    default: errS = "unknown";			break;
 		}
-		chN->setAttr("err", i2s(err)+":"+errS);
+		chN->setAttr("err", int2s(err)+":"+errS);
 		break;
 	    case VT_Array: case VT_Struct:
-		chN->setAttr("tp",i2s(vTp));
+		chN->setAttr("tp",int2s(vTp));
 		//printf("TEST 32: EnterStruct %xh: %d(%xh): %s\n", off, i_it, vTp, chN->text().c_str());
 		ASN_iAccessResult(buf, off, szC1, *chN);
 		break;
-	    case VT_Bool: chN->setAttr("tp",i2s(vTp))->setText(i2s(ASN_iN(buf,off,szC1)));	break;
+	    case VT_Bool: chN->setAttr("tp",int2s(vTp))->setText(int2s(ASN_iN(buf,off,szC1)));	break;
 	    case VT_BitString:	//!!!! Need for test
 	    {
 		char unUsBits = 0;
 		string vl, value = ASN_iBS(buf, off, szC1, &unUsBits);
 		for(int i_vl = 0; i_vl < std::max(0,int(value.size()*8-std::max(0,int(unUsBits)))); i_vl++)
 		    vl += ((value[i_vl/8]>>(i_vl%8))&1) ? "1" : "0";
-		chN->setAttr("tp",i2s(vTp))->setText(vl);
+		chN->setAttr("tp",int2s(vTp))->setText(vl);
 		break;
 	    }
 	    case VT_OctString:	//!!!! Need for test
@@ -324,21 +324,21 @@ void MMS::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		string vl, value = ASN_iS(buf, off, szC1);
 		for(unsigned i_vl = 0; i_vl < value.size(); i_vl++)
 		    vl += strMess("%0.2x",value[i_vl]);
-		chN->setAttr("tp",i2s(vTp))->setText(vl);
+		chN->setAttr("tp",int2s(vTp))->setText(vl);
 		break;
 	    }
 	    case VT_VisString:
-		chN->setAttr("tp",i2s(vTp))->setText(ASN_iS(buf,off,szC1));			break;
-	    case VT_Int: chN->setAttr("tp",i2s(vTp))->setText(i2s((int)ASN_iN(buf,off,szC1)));	break;
-	    case VT_UInt: chN->setAttr("tp",i2s(vTp))->setText(u2s(ASN_iN(buf,off,szC1)));	break;
-	    case VT_Float: chN->setAttr("tp",i2s(vTp))->setText(r2s(ASN_iR(buf,off,szC1)));	break;
+		chN->setAttr("tp",int2s(vTp))->setText(ASN_iS(buf,off,szC1));			break;
+	    case VT_Int: chN->setAttr("tp",int2s(vTp))->setText(int2s((int)ASN_iN(buf,off,szC1)));	break;
+	    case VT_UInt: chN->setAttr("tp",int2s(vTp))->setText(uint2s(ASN_iN(buf,off,szC1)));	break;
+	    case VT_Float: chN->setAttr("tp",int2s(vTp))->setText(r2s(ASN_iR(buf,off,szC1)));	break;
 	    default: off += szC1;
 	}
 	//printf("TEST 31: AccsIt %xh: %d(%xh): %s\n", offC1, i_it, vTp, chN->text().c_str());
     }
 }
 
-void MMS::oN( string &buf, uint32_t val, uint8_t sz, int off )
+void Core::oN( string &buf, uint32_t val, uint8_t sz, int off )
 {
     union { uint32_t v; char c[4]; } dt;
     dt.v = i32_LE(val);
@@ -348,7 +348,7 @@ void MMS::oN( string &buf, uint32_t val, uint8_t sz, int off )
     while(sz) buf[off++] = dt.c[--sz];
 }
 
-void MMS::ASN_o( string &buf, uint16_t tag, uint32_t sz )
+void Core::ASN_o( string &buf, uint16_t tag, uint32_t sz )
 {
     //Size extend
     int extB = 4;
@@ -368,7 +368,7 @@ void MMS::ASN_o( string &buf, uint16_t tag, uint32_t sz )
     }
 }
 
-int MMS::ASN_oC( string &buf, uint16_t tag, int off )
+int Core::ASN_oC( string &buf, uint16_t tag, int off )
 {
     //Position
     int elOff = off = (off >= 0) ? std::min(off,(int)buf.size()) : buf.size();
@@ -399,7 +399,7 @@ int MMS::ASN_oC( string &buf, uint16_t tag, int off )
     return elOff;
 }
 
-void MMS::ASN_oN( string &buf, uint8_t tag, uint32_t val, uint8_t szMin )
+void Core::ASN_oN( string &buf, uint8_t tag, uint32_t val, uint8_t szMin )
 {
     union { uint32_t v; char c[4]; } dt;
     dt.v = i32_LE(val);
@@ -409,7 +409,7 @@ void MMS::ASN_oN( string &buf, uint8_t tag, uint32_t val, uint8_t szMin )
     while(sz) buf += dt.c[--sz];
 }
 
-void MMS::ASN_oR( string &buf, uint8_t tag, double val, char exp )
+void Core::ASN_oR( string &buf, uint8_t tag, double val, char exp )
 {
     int sz = 0;
     if(exp == 8)
@@ -435,20 +435,20 @@ void MMS::ASN_oR( string &buf, uint8_t tag, double val, char exp )
     else throw Error("Unsupported exponent size.");
 }
 
-void MMS::ASN_oS( string &buf, uint8_t tag, const string &vl )
+void Core::ASN_oS( string &buf, uint8_t tag, const string &vl )
 {
     ASN_o(buf, tag, vl.size());
     buf += vl;
 }
 
-void MMS::ASN_oBS( string &buf, uint8_t tag, const string &vl, char unUsBits )
+void Core::ASN_oBS( string &buf, uint8_t tag, const string &vl, char unUsBits )
 {
     ASN_o(buf, tag, vl.size()+1);
     buf += char(unUsBits);
     buf += vl;
 }
 
-void MMS::ASN_oNmObj( string &buf, uint8_t tag, const string &vl, const string &domain )
+void Core::ASN_oNmObj( string &buf, uint8_t tag, const string &vl, const string &domain )
 {
     int off = buf.size();
     if(!domain.size())	ASN_oS(buf, 0x80, vl);	// vmd-specific
@@ -463,7 +463,7 @@ void MMS::ASN_oNmObj( string &buf, uint8_t tag, const string &vl, const string &
     ASN_oC(buf, tag, off);			//ObjectName
 }
 
-void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
+void Core::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 {
     for(int offC = off, i_it = 0, vTp; (offC+sz) != off; i_it++)
     {
@@ -473,13 +473,13 @@ void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 	    case 0x80: io.setAttr("typeName", ASN_iS(buf,off,szC1));	break;
 	    case VT_Array:
 		off += szC1;
-		io.setAttr("tp", i2s(vTp));
+		io.setAttr("tp", int2s(vTp));
 		for(offC1 = off; (offC1+szC1) != off; )
 		{
 		    int offC2 = off, szC2 = ASN_i(buf, off, offC1+szC1);
 		    switch(ASN_iTAG(buf,offC2))
 		    {
-			case 0x80: io.setAttr("packed",i2s(ASN_iN(buf,off,szC2)));	break;	//  packed
+			case 0x80: io.setAttr("packed",int2s(ASN_iN(buf,off,szC2)));	break;	//  packed
 			case 0xA1:
 			    for(offC2 = off; (offC2+szC2) != off; )
 			    {
@@ -488,7 +488,7 @@ void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 				    for(offC3 = off; (offC3+szC3) != off; )
 				    {
 					int offC4 = off, szC4 = ASN_i(buf, off, offC3+szC3);
-					if(ASN_iTAG(buf,offC4) == 0x81) io.setAttr("numberOfElements",i2s(ASN_iN(buf,off,szC4)));
+					if(ASN_iTAG(buf,offC4) == 0x81) io.setAttr("numberOfElements",int2s(ASN_iN(buf,off,szC4)));
 					else off += szC4;
 				    }
 				else off += szC3;
@@ -500,13 +500,13 @@ void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 		}
 		break;
 	    case VT_Struct:
-		io.setAttr("tp",i2s(vTp));
+		io.setAttr("tp",int2s(vTp));
 		for(offC1 = off; (offC1+szC1) != off; )
 		{
 		    int offC2 = off, szC2 = ASN_i(buf, off, offC1+szC1);
 		    switch(ASN_iTAG(buf,offC2))
 		    {
-			case 0x80: io.setAttr("packed",i2s(ASN_iN(buf,off,szC2)));	break;	//  packed
+			case 0x80: io.setAttr("packed",int2s(ASN_iN(buf,off,szC2)));	break;	//  packed
 			case 0xA1:								//  components
 			    for(offC2 = off; (offC2+szC2) != off; )
 			    {
@@ -532,14 +532,14 @@ void MMS::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 		    }
 		}
 		break;
-	    case VT_UInt: io.setAttr("tp", i2s(vTp))->setAttr("sz", u2s(ASN_iN(buf,off,szC1)));	break;
+	    case VT_UInt: io.setAttr("tp", int2s(vTp))->setAttr("sz", uint2s(ASN_iN(buf,off,szC1)));	break;
 	    case VT_Int: case VT_VisString: case VT_OctString: case VT_BitString:
-		io.setAttr("tp", i2s(vTp))->setAttr("sz", i2s((int)ASN_iN(buf,off,szC1)));	break;
+		io.setAttr("tp", int2s(vTp))->setAttr("sz", int2s((int)ASN_iN(buf,off,szC1)));	break;
 	    case VT_Bool: case VT_Float:
-		io.setAttr("tp",i2s(vTp));
+		io.setAttr("tp",int2s(vTp));
 		off += szC1;
 		break;
-	    default: io.setAttr("tp",i2s(VT_VisString)); off += szC1;	break;
+	    default: io.setAttr("tp",int2s(VT_VisString)); off += szC1;	break;
 	}
     }
 }
@@ -880,12 +880,31 @@ void Client::protIO( XML_N &io )
 		    int offC = off, szC = ASN_i(tpkt, off);		// ConfirmedRespPDU
 		    if(ASN_iTAG(tpkt,offC) != MMS_ConfirmedResp)
 		    {
-			const char *chErr = "";
+			string chErr;
 			if(ASN_iTAG(tpkt,offC) == MMS_Reject)
 			{
-			    //!!!! Process reject respond
+			    int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC);
+			    switch(ASN_iTAG(tpkt,offC1))
+			    {
+				case 0x80: chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));	break;
+				case 0x81:
+				    chErr += "Reject reason: ";
+				    switch(ASN_iN(tpkt, off, szC1))
+				    {
+					case RjReq_unrecognizedService: chErr += strMess("unrecognized-service(%d). ");	break;
+					case RjReq_unrecognizedModifier: chErr += strMess("unrecognized-modifier(%d). ");	break;
+					case RjReq_invalidInvokeID: chErr += strMess("invalid-invokeID(%d). ");		break;
+					case RjReq_invalidArgument: chErr += strMess("invalid-argument(%d). ");		break;
+					case RjReq_invalidModifier: chErr += strMess("invalid-modifier(%d). ");		break;
+					case RjReq_maxServOutstandingSxceeded: chErr += strMess("max-serv-outstanding-exceeded(%d). ");	break;
+					case RjReq_maxRecursionExceeded: chErr += strMess("max-recursion-exceeded(%d). ");	break;
+					case RjReq_valueOutOfRange: chErr += strMess("value-out-of-range(%d). ");		break;
+					default: chErr += strMess("other(%d). ");	break;
+				    }
+				    break;
+			    }
 			}
-			throw Error("ConfirmedRequest error: %s", chErr);
+			throw Error("ConfirmedRequest error: %s", chErr.c_str());
 		    }
 		    for(offC = off; (offC+szC) != off; )
 		    {
@@ -932,7 +951,7 @@ void Client::protIO( XML_N &io )
 					default: off += szC2;	break;
 				    }
 				}
-				if(io.childSize()) io.setAttr("moreFollows", i2s(moreFollows));
+				if(io.childSize()) io.setAttr("moreFollows", int2s(moreFollows));
 				break;
 			    }
 			    case Conf_Read:
@@ -953,7 +972,7 @@ void Client::protIO( XML_N &io )
 				    int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
 				    switch(ASN_iTAG(tpkt,offC2))
 				    {
-					case 0x80: io.setAttr("mmsDeletable", i2s((bool)ASN_iN(tpkt,off,szC2))); break;	//  mmsDeletable
+					case 0x80: io.setAttr("mmsDeletable", int2s((bool)ASN_iN(tpkt,off,szC2))); break;	//  mmsDeletable
 					case 0xA2: ASN_iTypeSpec(tpkt, off, szC2, io); break;		//  typeSpecification
 					default: off += szC2;	break;
 				    }

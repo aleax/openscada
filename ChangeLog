@@ -1,3 +1,16 @@
+2014-04-14 Roman
+- !!:DAQ.MMS: Global namespace "MMS" using disabled.
+    Acquisition errors control and the errors display for parameters is added.
+    The data acquisition controller alarms generate is added at connection error.
+    Resources allocation is moved full to pthread_mutex_t.
+    No activity data, no any variables set, control is added.
+    The connection initial data reset is added for restore connection at errors and no responds.
+    Reject response process is added for confirmedRequest-PDU.
+- DAQ.ModBus: Some code clean up.
+- !!:DAQ.OPC_UA: User and password auth data set is added to client part and test program.
+    libOPC_UA clean up from OPCVariant object and it removed.
+
+
 2014-04-10 Roman
 - Archive.DBArch: Field's "LEN" of messages table length set to "2" for allow negative (alarms).
 - SYS.{TController,TTipDAQ): ID update after new child object create.

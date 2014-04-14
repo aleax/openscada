@@ -30,7 +30,6 @@
 #include <tparamcontr.h>
 
 #include "libMMS/libMMS.h"
-using namespace MMS;
 
 #undef _
 #define _(mess) mod->I18N(mess)
@@ -62,7 +61,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void attrPrc( XML_N *iVal = NULL, vector<string> *iAls = NULL, const string &vid = "" );
+	void attrPrc( MMS::XML_N *iVal = NULL, vector<string> *iAls = NULL, const string &vid = "" );
 	void getVals( );
 	void setEval( );
 
@@ -78,6 +77,7 @@ class TMdPrm : public TParamContr
 	void postEnable( int flag );
 	void cntrCmdProc( XMLNode *opt );
 	void vlArchMake( TVal &val );
+	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 
 	//Attributes
@@ -87,17 +87,17 @@ class TMdPrm : public TParamContr
 //*************************************************
 //* ModMMS::TMdContr                              *
 //*************************************************
-class TMdContr: public TController, public Client
+class TMdContr: public TController, public MMS::Client
 {
     friend class TMdPrm;
     public:
 	//Data
 	struct StackTp
 	{
-	    StackTp( TArrayObj *iarr, XML_N *ivl, int iInPos ) : arr(iarr), vl(ivl), inPos(iInPos) { }
+	    StackTp( TArrayObj *iarr, MMS::XML_N *ivl, int iInPos ) : arr(iarr), vl(ivl), inPos(iInPos) { }
 
 	    TArrayObj *arr;
-	    XML_N *vl;
+	    MMS::XML_N *vl;
 	    int inPos;
 	};
 
@@ -108,9 +108,9 @@ class TMdContr: public TController, public Client
 	string	getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-	string  cron( )		{ return mSched; }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
-	double  syncPer( )	{ return mSync; }
+	double	syncPer( )	{ return mSync; }
 	string	addr( )		{ return mAddr; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -119,12 +119,10 @@ class TMdContr: public TController, public Client
 	uint16_t COTP_DestTSAP( ){ return cfg("COTP_DestTSAP").getI(); }
 	void regVar( const string &vl );
 
-	void reqService( XML_N &io );
-	void protIO( XML_N &io );
+	void reqService( MMS::XML_N &io );
+	void protIO( MMS::XML_N &io );
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0 );
 	void debugMess( const string &mess );
-
-	Res &nodeRes( )		{ return cntrRes; }
 
     protected:
 	//Methods
@@ -144,7 +142,7 @@ class TMdContr: public TController, public Client
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes, reqRes, cntrRes;	//Resource for enable params, requests, controller DAQ API
+	pthread_mutex_t	enRes, cntrRes, dataRes;	//Resource for enable params, controller DAQ API and data
 	TCfg	&mSched,	//Schedule
 		&mPrior,	//Process task priority
 		&mSync,		//Synchronization inter remote station: attributes list update.
@@ -157,6 +155,8 @@ class TMdContr: public TController, public Client
 		isReload;
 
 	vector< AutoHD<TMdPrm> > pHD;
+
+	MtxString acq_err;
 
 	double	tmGath;		//Gathering time
 	float	tmDelay;	//Delay time for next try connect

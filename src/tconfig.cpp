@@ -167,10 +167,7 @@ void TConfig::setElem( TElem *Elements, bool first )
 	value.insert(std::pair<string,TCfg*>(m_elem->fldAt(i).name(),new TCfg(m_elem->fldAt(i),*this)));
 }
 
-TElem &TConfig::elem( )
-{
-    return *m_elem;
-}
+TElem &TConfig::elem( )	{ return *m_elem; }
 
 void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
 {
@@ -183,7 +180,7 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
 {
-    if(elem.size() > 4 && elem.substr(0,4) == "sel_" && TCntrNode::ctrChkNode(opt))
+    if(elem.compare(0,4,"sel_") == 0 && TCntrNode::ctrChkNode(opt))
     {
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
 	for(unsigned i_a = 0; i_a < n_e_fld.selNm().size(); i_a++)
