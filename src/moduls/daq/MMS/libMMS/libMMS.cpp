@@ -550,7 +550,49 @@ void Core::ASN_iTypeSpec( const string &buf, int &off, int sz, XML_N &io )
 Client::Client( ) : isInitiated(false), mInvokeID(1),
     m_callParameterCBB("\xFB\00",2), m_callServicesSupported("\xEE\x00\x18\x3F\x0F\xF6\x10\x03\x01\xF8\x90",11)
 {
+    //Reject errors
+    const char *nms1[] = { "RejectConfirmedReq", "other", "unrecognized-service", "unrecognized-modifier", "invalid-invokeID",
+			    "invalid-argument", "invalid-modifier", "max-serv-outstanding-exceeded", "", "max-recursion-exceeded",
+			    "value-out-of-range" };
+    RejectErrs[0x80] = vector<string>(nms1, nms1+11);
 
+    const char *nms2[] = { "RejectConfirmedResp", "other", "unrecognized-service", "invalid-invokeID", "invalid-result", "", "max-recursion-exceeded",
+			    "value-out-of-range" };
+    RejectErrs[0x81] = vector<string>(nms2, nms2+8);
+
+    const char *nms3[] = { "RejectConfirmedError", "other", "unrecognized-service", "invalid-invokeID", "invalid-serviceError", "value-out-of-range" };
+    RejectErrs[0x82] = vector<string>(nms3, nms3+6);
+
+    const char *nms4[] = { "RejectUnconfirmed", "other", "unrecognized-service", "invalid-argument", "max-recursion-exceeded", "value-out-of-range" };
+    RejectErrs[0x83] = vector<string>(nms4, nms4+6);
+
+    //RejectPduError, RejectCancelRequest, RejectCancelResponse, RejectCancelError, RejectConcludeRequest,RejectConcludeResponse, RejectConcludeError;
+
+    //Confirm errors
+    const char *nmsC1[] = { "vmd-state", "other", "vmd-state-conflict", "vmd-operational-problem", "domain-transfer-problem", "state-machine-id-invalid" };
+    ConfirmErrs[0x80] = vector<string>(nmsC1, nmsC1+6);
+
+    const char *nmsC2[] = { "application-reference", "other", "aplication-unreachable", "connection-lost", "application-reference-invalid",
+			    "context-unsupported" };
+    ConfirmErrs[0x81] = vector<string>(nmsC2, nmsC2+6);
+
+    const char *nmsC3[] = { "definition", "other", "object-undefined", "invalid-address", "type-unsupported", "type-inconsistent", "object-exists",
+			    "object-attribute-inconsistent" };
+    ConfirmErrs[0x82] = vector<string>(nmsC3, nmsC3+8);
+
+    const char *nmsC4[] = { "resource", "other", "memory-unavailable", "processor-resource-unavailable", "mass-storage-unavailable", 
+			    "capability-unavailable", "capability-unknown" };
+    ConfirmErrs[0x83] = vector<string>(nmsC4, nmsC4+7);
+
+    const char *nmsC5[] = { "service", "other", "primitives-out-of-sequence", "object-sate-conflict", "pdu-size", "continuation-invalid",
+			    "object-constraint-conflict" };
+    ConfirmErrs[0x84] = vector<string>(nmsC5, nmsC5+7);
+
+    const char *nmsC6[] = { "service-preempt", "other", "timeout", "deadlock", "cancel" };
+    ConfirmErrs[0x85] = vector<string>(nmsC6, nmsC6+5);
+
+    const char *nmsC7[] = { "time-resolution", "other", "unsupportable-time-resolution" };
+    ConfirmErrs[0x86] = vector<string>(nmsC7, nmsC7+3);
 }
 
 Client::~Client( )	{ }
@@ -881,28 +923,58 @@ void Client::protIO( XML_N &io )
 		    if(ASN_iTAG(tpkt,offC) != MMS_ConfirmedResp)
 		    {
 			string chErr;
-			if(ASN_iTAG(tpkt,offC) == MMS_Reject)
+			switch(ASN_iTAG(tpkt,offC))
 			{
-			    int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC);
-			    switch(ASN_iTAG(tpkt,offC1))
-			    {
-				case 0x80: chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));	break;
-				case 0x81:
-				    chErr += "Reject reason: ";
-				    switch(ASN_iN(tpkt, off, szC1))
+			    case MMS_Reject:
+				for(offC = off; (offC+szC) != off; )
+				{
+				    int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC), errTp, errCode;
+				    map<uint8_t, vector<string> >::iterator iErr;
+				    if((errTp=ASN_iTAG(tpkt,offC1)) == 0x80) chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));
+				    else if((iErr=RejectErrs.find(errTp)) != RejectErrs.end())
+					chErr += iErr->second[errCode] + " :" +
+					    (((errCode=ASN_iN(tpkt,off,szC1))+1 >= iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
+					    ". ";
+				    else off += szC1;
+				}
+				break;
+			    case MMS_ConfirmedErr:
+				for(offC = off; (offC+szC) != off; )
+				{
+				    int offC1 = off, szC1 = ASN_i(tpkt, off, offC+szC);
+				    switch(ASN_iTAG(tpkt,offC1))
 				    {
-					case RjReq_unrecognizedService: chErr += strMess("unrecognized-service(%d). ");	break;
-					case RjReq_unrecognizedModifier: chErr += strMess("unrecognized-modifier(%d). ");	break;
-					case RjReq_invalidInvokeID: chErr += strMess("invalid-invokeID(%d). ");		break;
-					case RjReq_invalidArgument: chErr += strMess("invalid-argument(%d). ");		break;
-					case RjReq_invalidModifier: chErr += strMess("invalid-modifier(%d). ");		break;
-					case RjReq_maxServOutstandingSxceeded: chErr += strMess("max-serv-outstanding-exceeded(%d). ");	break;
-					case RjReq_maxRecursionExceeded: chErr += strMess("max-recursion-exceeded(%d). ");	break;
-					case RjReq_valueOutOfRange: chErr += strMess("value-out-of-range(%d). ");		break;
-					default: chErr += strMess("other(%d). ");	break;
+					case 0x80: chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));	break;
+					case 0xA2:	//serviceError
+					{
+					    chErr += "Service error: ";
+					    for(offC1 = off; (offC1+szC1) != off; )
+					    {
+						int offC2 = off, szC2 = ASN_i(tpkt, off, offC1+szC1);
+						if(ASN_iTAG(tpkt,offC2) == 0xA0)		//errorClass
+						    for(offC2 = off; (offC2+szC2) != off; )
+						    {
+							int offC3 = off, szC3 = ASN_i(tpkt, off, offC2+szC2);
+							map<uint8_t, vector<string> >::iterator iErr;
+							int errTp = ASN_iTAG(tpkt, offC3), errCode;
+							if((iErr=ConfirmErrs.find(errTp)) != ConfirmErrs.end())
+							    chErr += iErr->second[errCode] + " :" +
+								(((errCode=ASN_iN(tpkt,off,szC3))+1 >= iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
+								". ";
+							else { chErr += "unknown"; off += szC3; }
+						    }
+						else off += szC2;	break;
+					    }
+					    break;
+					}
+					default: off += szC1;	break;
 				    }
-				    break;
-			    }
+				}
+				break;
+			    default:
+				chErr += "Unknown";
+				off += szC;
+				break;
 			}
 			throw Error("ConfirmedRequest error: %s", chErr.c_str());
 		    }

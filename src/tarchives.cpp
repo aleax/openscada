@@ -1089,7 +1089,7 @@ void TMArchivator::categ( vector<string> &list )
 	list.push_back(c_vl);
 }
 
-bool TMArchivator::chkMessOK( const string &icateg, TMess::Type ilvl )
+bool TMArchivator::chkMessOK( const string &icateg, int8_t ilvl )
 {
     vector<string> cat_ls;
 

@@ -92,7 +92,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("SYNCPER",_("Sync inter remote station period (s)"),TFld::Real,TFld::NoFlag,"6.2","60","0;1000"));
     fldAdd(new TFld("ADDR",_("Server address"),TFld::String,TFld::NoFlag,"50","localhost:102"));
-    fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","10;9999"));
+    fldAdd(new TFld("VARS_RD_REQ",_("Variables into read request"),TFld::Integer,TFld::NoFlag,"3","100","1;9999"));
     fldAdd(new TFld("COTP_DestTSAP",_("Destination TSAP"),TFld::Integer,TFld::NoFlag,"3","512","0;65535"));
 
     //Parameter type bd structure
@@ -410,7 +410,10 @@ void *TMdContr::Task( void *icntr )
 			    break;
 			}
 			//case MMS_UTC_TIME: pVal.at().setI(MmsValue_toUnixTimestamp(value), 0, true);		break;
-			default: mess_err(cntr.nodePath().c_str(), _("Value type read '%s' is not implemented."), value->attr("tp").c_str());
+			default:
+			    mess_err(cntr.nodePath().c_str(), _("Value '%s' type '%s' read is not implemented."),
+								nId.c_str(), value->attr("tp").c_str());
+			    break;
 		    }
 		}
 

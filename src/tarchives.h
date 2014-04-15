@@ -102,7 +102,7 @@ class TMArchivator : public TCntrNode, public TConfig
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
 	//> Check messages criteries
-	bool chkMessOK( const string &icateg, TMess::Type ilvl );
+	bool chkMessOK( const string &icateg, int8_t ilvl );
 
 	//Protected atributes
 	bool	run_st;

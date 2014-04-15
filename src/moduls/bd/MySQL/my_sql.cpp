@@ -814,7 +814,7 @@ string MTable::getVal( TCfg &cfg )
     {
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec) return UTCtoSQL(cfg.getI());
-	    else return cfg.getS();
+	    return cfg.getS();
 	default: return cfg.getS();
     }
     return "";

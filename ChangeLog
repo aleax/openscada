@@ -1,3 +1,9 @@
+2014-04-15 Roman
+- SYS.Mess,Archive.DBArch: The messages level type into structure TMess::SRec changed from Type to int8_t for fix negative level into DB.MySQL.
+- DAQ.MMS: Variables into read request minimum limit set to 1. MMS_Reject and MMS_ConfirmedErr codes process is added.
+- FIX:UI.Vision: Widgets into libraries doubling at global tree update is fixed.
+
+
 2014-04-14 Roman
 - !!:DAQ.MMS: Global namespace "MMS" using disabled.
     Acquisition errors control and the errors display for parameters is added.

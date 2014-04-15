@@ -1561,7 +1561,8 @@ void VisDevelop::editToolUpdate( )
     if(!actVisItCopy->property("wdgAddr").toString().isEmpty()) return;
     actVisItCut->setEnabled(!work_wdg.empty());
     actVisItCopy->setEnabled(!work_wdg.empty());
-    //> Src and destination elements calc
+
+    //Src and destination elements calc
     string s_elp, d_elp, s_el, d_el, t_el;
     int n_sel = 0;
     int n_del = 0;
@@ -1569,9 +1570,9 @@ void VisDevelop::editToolUpdate( )
     { s_elp += ("/"+s_el); s_el = t_el; }
     for(int off = 0; !(t_el=TSYS::pathLev(work_wdg,0,true,&off)).empty(); n_del++)
     { d_elp += ("/"+d_el); d_el = t_el; }
-    if((s_el.substr(0,4)=="prj_" || s_el.substr(0,4)=="wlb_") ||										//Project and library copy
-	    (s_el.substr(0,3)=="pg_" && (d_el.substr(0,4)=="prj_" || d_el.substr(0,3)=="pg_" || d_el.substr(0,4)=="wlb_")) ||			//Page copy
-	    (s_el.substr(0,4)=="wdg_" && (d_el.substr(0,3)=="pg_" || d_el.substr(0,4)=="wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4)=="wlb_" && n_del==2))))	//Widget copy
+    if((s_el.substr(0,4) == "prj_" || s_el.substr(0,4) == "wlb_") ||										//Project and library copy
+	    (s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_")) ||		//Page copy
+	    (s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del==2))))	//Widget copy
 	actVisItPaste->setEnabled(true);
     else actVisItPaste->setEnabled(false);
 }

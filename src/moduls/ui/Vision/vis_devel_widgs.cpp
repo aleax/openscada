@@ -1583,11 +1583,11 @@ void WdgTree::updateTree( const string &vca_it )
 		//   Get parent name
 		if(!root_allow && wdgN->attr("parent") == "root") root_allow = true;
 		//   Add action
-		if(upd_wdg.empty()) i_a = use_act.size();
-		else
-		    for(i_a = 0; i_a < use_act.size(); i_a++)
-			if(use_act[i_a]->objectName() == wipath.c_str())
-			    break;
+		/*if(upd_wdg.empty()) i_a = use_act.size();	//!!!! Cause menu grow after global update
+		else*/
+		for(i_a = 0; i_a < use_act.size(); i_a++)
+		    if(use_act[i_a]->objectName() == wipath.c_str())
+			break;
 		if(i_a < use_act.size())
 		{
 		    cur_act = use_act[i_a];

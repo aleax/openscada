@@ -81,13 +81,13 @@ class TMess
 	{
 	    public:
 		SRec( ) : time(0), categ(""), level(TMess::Debug), mess("") { }
-		SRec( time_t itm, int iutime, const string &icat, Type ilev, const string &imess ) :
+		SRec( time_t itm, int iutime, const string &icat, int8_t ilev, const string &imess ) :
 		    time(itm), utime(iutime), categ(icat), level(ilev), mess(imess) { }
 
 		time_t	time;
 		int	utime;
 		string	categ;
-		Type	level;
+		int8_t	level;
 		string	mess;
 	};
 
