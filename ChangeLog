@@ -1,3 +1,8 @@
+2014-04-17 Roman
+- UI.Vision: To view "Table" of primitive "FormEl" added manual and adaptive the collumns widths control by global attribute
+    colsWdthFit=1 and force collumn width set, into header row items, by attribute "width" (into pixels or percents).
+
+
 2014-04-15 Roman
 - SYS.Mess,Archive.DBArch: The messages level type into structure TMess::SRec changed from Type to int8_t for fix negative level into DB.MySQL.
 - DAQ.MMS: Variables into read request minimum limit set to 1. MMS_Reject and MMS_ConfirmedErr codes process is added.

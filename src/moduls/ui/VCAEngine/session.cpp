@@ -166,7 +166,7 @@ void Session::setStart( bool val )
 
     if(val)
     {
-	//> Enable session if it disabled
+	//Enable session if it disabled
 	if(!enable())	setEnable(true);
 
 	if(mess_lev() == TMess::Debug)	d_tm = TSYS::curTime();
@@ -188,7 +188,7 @@ void Session::setStart( bool val )
 	    d_tm = TSYS::curTime();
 	}
 
-	//> Process all pages is on
+	//Process all pages is on
 	list(pg_ls);
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(true);
@@ -199,7 +199,7 @@ void Session::setStart( bool val )
 	    d_tm = TSYS::curTime();
 	}
 
-	//> Start process task
+	//Start process task
 	if(!mStart) SYS->taskCreate(nodePath('.',true), 0, Session::Task, this);
 
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Start process task time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -208,10 +208,10 @@ void Session::setStart( bool val )
     {
 	mess_info(nodePath().c_str(),_("Stop session."));
 
-	//> Stop process task
+	//Stop process task
 	if(mStart) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-	//> Process all pages is off
+	//Process all pages is off
 	list(pg_ls);
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setProcess(false);
@@ -829,7 +829,8 @@ void SessPage::setEnable( bool val, bool force )
 
 void SessPage::setProcess( bool val, bool lastFirstCalc )
 {
-    //> Change process state for included pages
+    //Change process state for included pages
+    //!!!! Need for rewrite by process included to containers but not included to the subtree !!!!
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
@@ -837,7 +838,7 @@ void SessPage::setProcess( bool val, bool lastFirstCalc )
 
     if(!enable()) return;
 
-    //> Change self process state
+    //Change self process state
     if(val && !parent().at().parent().freeStat() && (attrAt("pgOpen").at().getB() || attrAt("pgNoOpenProc").at().getB()))
 	SessWdg::setProcess(true, lastFirstCalc);
     else if(!val) SessWdg::setProcess(false, lastFirstCalc);
@@ -884,12 +885,12 @@ AutoHD<Widget> SessPage::wdgAt( const string &wdg, int lev, int off )
 
 void SessPage::calc( bool first, bool last )
 {
-    //> Process self data
+    //Process self data
     if(process()) SessWdg::calc(first, last);
 
     if(mClosePgCom) { mClosePgCom = false; setProcess(false); return; }
 
-    //> Put calculate to include pages
+    //Put calculate to include pages
     vector<string> ls;
     pageList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
@@ -905,6 +906,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	{
 	    if(cfg.getB())
 	    {
+		mClosePgCom = false;
 		ownerSess()->openReg(path());	//Moved up for allow access and pages including from "f_start"
 		if(!process())	setProcess(true);
 	    }
@@ -989,7 +991,7 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 	}
     }
 
-    return SessWdg::attrChange( cfg, prev );
+    return SessWdg::attrChange(cfg, prev);
 }
 
 void SessPage::alarmSet( bool isSet )
@@ -1135,7 +1137,7 @@ void SessWdg::preDisable( int flag )
 {
     if(process()) setProcess(false);
 
-    Widget::preDisable( flag );
+    Widget::preDisable(flag);
 }
 
 void SessWdg::postEnable( int flag )

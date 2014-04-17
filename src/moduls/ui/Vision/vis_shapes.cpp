@@ -259,6 +259,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    shD->active = (bool)atoi(val.c_str());
 	    setActive(w, shD->active && runW->permCntr());
 	    break;
+	case A_GEOM_W: case A_GEOM_X_SC: rel_cfg = (shD->elType==F_TABLE);	break;
 	case A_GEOM_MARGIN:	w->layout()->setMargin(atoi(val.c_str()));	break;
 	case A_FormElType:
 	    if(shD->elType == atoi(val.c_str())) break;
@@ -539,7 +540,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		//Items
 		shD->addrWdg->blockSignals(true);
 		XMLNode tX("tbl");
-		bool hdrPresent = false;
+		bool hdrPresent = false, colsWdthFit = false;
 		int maxCols = 0, maxRows = 0;
 		string wVl, rClr;
 		try { tX.load(shD->items); } catch(...) { }
@@ -564,6 +565,12 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			    {
 				if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
 				tit->setText(tC?tC->text().c_str():"");
+				if(tC && (wVl=tC->attr("width")).size())
+				{
+				    int wdthCel = atoi(wVl.c_str());
+				    if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
+				    tit->setData(Qt::UserRole, wdthCel);
+				}
 			    }
 			    else	//Rows content process
 			    {
@@ -615,11 +622,40 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    }
 		    else wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
 		    wdg->setProperty("keyID", keyID);
+
+		    colsWdthFit = atoi(tX.attr("colsWdthFit").c_str());
 		}
 		wdg->horizontalHeader()->setVisible(hdrPresent);
 		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
 		if(maxCols > 1) wdg->resizeColumnsToContents();
-		if(maxRows) wdg->resizeRowsToContents();
+		if(colsWdthFit && maxRows)
+		{
+		    int averWdth = w->size().width()/maxCols;
+		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
+		    //Count width params
+		    for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
+		    {
+			fullColsWdth += wdg->columnWidth(i_c);
+			if(wdg->horizontalHeaderItem(i_c) && (tVl=wdg->horizontalHeaderItem(i_c)->data(Qt::UserRole).toInt()))
+			{
+			    niceForceColsWdth += tVl;
+			    wdg->setColumnWidth(i_c, tVl);
+			}
+			else if(wdg->columnWidth(i_c) <= averWdth)	niceForceColsWdth += wdg->columnWidth(i_c);
+			else busyCols++;
+		    }
+		    //Set busyCols
+		    if(fullColsWdth > w->size().width() && busyCols)
+		    {
+			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
+			printf("TEST 00: busyColsWdth=%d; busyCols=%d\n",busyColsWdth,busyCols);
+			for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
+			    if(wdg->columnWidth(i_c) > averWdth)
+				wdg->setColumnWidth(i_c, busyColsWdth);
+		    }
+		    wdg->resizeRowsToContents();
+		}
+		wdg->horizontalHeader()->setStretchLastSection(colsWdthFit);
 		shD->addrWdg->blockSignals(false);
 
 		setValue(w, shD->value, true);	//Value
