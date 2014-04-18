@@ -1,3 +1,12 @@
+2014-04-18 Roman
+- FIX:DB.LibsDB.OscadaLibs.db: base.anUnif template is fix for iMult and iAdd process.
+- !!:DB.LibsDB.vcaBase.db: Widgets Main.anShow, Main.anShow1, mnEls.Compressor, mnEls.Compressor_1, mnEls.El_Kran_Sh significant expand.
+- DAQ.System: Some error messages disable.
+- UI.VCAEngine: Using source widget in base role if previous opened page miss for open command process is added.
+    pgOpenSrc clear at the page's container close is added.
+- UI.Vision: To view "Table" of primitive "FormEl" selection items clear is added.
+
+
 2014-04-17 Roman
 - UI.Vision: To view "Table" of primitive "FormEl" added manual and adaptive the collumns widths control by global attribute
     colsWdthFit=1 and force collumn width set, into header row items, by attribute "width" (into pixels or percents).

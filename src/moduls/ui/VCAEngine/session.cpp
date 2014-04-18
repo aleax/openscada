@@ -272,36 +272,37 @@ AutoHD<SessPage> Session::at( const string &id )
 
 void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 {
-    //> Find of pattern adequancy for opened page
-    string oppg;		//Opened page according of pattern
+    //Find of pattern adequancy for opened page
+    string oppg, pBase;		//Opened page according of pattern
 
     vector<string> op_ls = openList();
     for(unsigned i_op = 0; i_op < op_ls.size(); i_op++)
     {
 	string cur_pt_el, cur_el;
 	for(int i_el = 0; (cur_pt_el=TSYS::pathLev(prm,i_el++)).size(); )
-	{
-	    cur_el = TSYS::pathLev(op_ls[i_op],i_el);
-	    if(cur_el.empty() || (cur_pt_el.substr(0,3) == "pg_" && cur_pt_el != cur_el)) break;
-	}
+	    if((cur_el=TSYS::pathLev(op_ls[i_op],i_el)).empty() || (cur_pt_el.compare(0,3,"pg_") == 0 && cur_pt_el != cur_el)) break;
 	if(cur_pt_el.empty()) { oppg = op_ls[i_op]; break; }
     }
-    //> Individual commands process
+
+    pBase = oppg;
+    if(pBase.empty() && src) pBase = src->path();
+
+    //Individual commands process
     try
     {
-	//>> Go to destination page
+	// Go to destination page
 	string cur_pt_el;
 	AutoHD<SessPage> cpg;
 	for(unsigned i_el = 0; (cur_pt_el=TSYS::pathLev(prm,i_el++)).size(); )
 	{
 	    string op_pg;
-	    if(cur_pt_el.substr(0,3) == "pg_") op_pg = cur_pt_el.substr(3);
+	    if(cur_pt_el.compare(0,3,"pg_") == 0) op_pg = cur_pt_el.substr(3);
 	    else if(cur_pt_el == "*" || (cur_pt_el == "$" && ( com == "next" || com == "prev")))
 	    {
 		vector<string> pls;
 		if(cpg.freeStat()) list(pls); else cpg.at().pageList(pls);
 		if(pls.empty())	return;
-		string cur_el = TSYS::pathLev(oppg,i_el);
+		string cur_el = TSYS::pathLev(pBase,i_el);
 		if(cur_el.empty())
 		{
 		    if(cur_pt_el == "$")	return;
@@ -1411,7 +1412,10 @@ void SessWdg::pgClose( )
     try
     {
 	if(!dynamic_cast<SessPage*>(this) && rootId() == "Box" && attrAt("pgGrp").at().getS() != "" && attrAt("pgOpenSrc").at().getS() != "")
+	{
 	    ((AutoHD<SessWdg>)mod->nodeAt(attrAt("pgOpenSrc").at().getS())).at().attrAt("pgOpen").at().setB(false);
+	    attrAt("pgOpenSrc").at().setS("");
+	}
     }catch(TError) { }
 
     vector<string> list;

@@ -648,7 +648,6 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    if(fullColsWdth > w->size().width() && busyCols)
 		    {
 			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
-			printf("TEST 00: busyColsWdth=%d; busyCols=%d\n",busyColsWdth,busyCols);
 			for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
 			    if(wdg->columnWidth(i_c) > averWdth)
 				wdg->setColumnWidth(i_c, busyColsWdth);
@@ -879,14 +878,10 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    if(foundIts.length()) selIt = foundIts.front();
 		    break;
 	    }
-	    if(selIt)
-	    {
-		shD->addrWdg->blockSignals(true);
-		wdg->setCurrentItem(selIt);
-		//selIt->setSelected(true);
-		shD->addrWdg->blockSignals(false);
-		wdg->scrollToItem(selIt);
-	    }
+	    shD->addrWdg->blockSignals(true);
+	    if(selIt) { wdg->setCurrentItem(selIt); wdg->scrollToItem(selIt); }
+	    else wdg->setCurrentItem(NULL);
+	    shD->addrWdg->blockSignals(false);
 	    break;
 	}
 	case F_SLIDER: case F_SCROLL_BAR:

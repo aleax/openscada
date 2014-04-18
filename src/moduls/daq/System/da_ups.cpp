@@ -179,7 +179,7 @@ void UPS::getVal( TMdPrm *prm )
 		}
 	}
     }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 
     if(als.size())
     {
