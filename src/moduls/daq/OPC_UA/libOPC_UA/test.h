@@ -33,14 +33,17 @@ class TestClient: public Client
 	TestClient( const string &ep, const string &aData = "" ); //As the constructor's argument's used target server's EndPoint address
 	~TestClient( );
 
+	void start( );
+	void stop( );
+
 	// OPC UA client's session name - the client programm name
 	string	sessionName( )	{ return "OpenSCADA OPC_UA library's test station."; }
 	// Used target server's EndPoint
 	string	endPoint( )	{ return mEp; }
 	// Used policy for the secure channel, allowed: None, Basic128Rsa15, Basic256
-	string	secPolicy( )	{ return "None"; }
+	string	secPolicy( )	{ return mSecPol; }
 	// Used messages mode for the secure channel, allowed: MS_None, MS_Sign, MS_SignAndEncrypt
-	int	secMessMode( )	{ return MS_None; }
+	int	secMessMode( )	{ return mSecMessMode; }
 
 	//Auth data:	Empty - anonymous
 	//		{User}\n{Password} - by user and password
@@ -62,5 +65,6 @@ class TestClient: public Client
 		mAddr,		//Parsed from URI server's host address and TCP-port number
 		mSecPol, mCert, mPvKey,
 		mAuthData;
+	int	mSecMessMode;
 	int	sock_fd;
 };

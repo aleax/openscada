@@ -371,7 +371,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
 	    _("PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};{db};{port}[;{connect_timeout}]\".\n"
 	      "Where:\n"
 	      "  host - Name of the host (PostgreSQL server) to connect to. If this begins with a slash ('/'),\n"
@@ -508,10 +508,11 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     {
 	vector<string> cf_el;
 	cfg.cfgList(cf_el);
-	for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+	for(unsigned i_c = 0; i_c < cf_el.size(); i_c++)
 	{
 	    TCfg &cf = cfg.cfg(cf_el[i_c]);
 	    if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+	    unsigned i_fld = 1;
 	    for( ; i_fld < tblStrct.size(); i_fld++)
 		if(cf.name() == tblStrct[i_fld][0]) break;
 	    if(i_fld >= tblStrct.size()) return false;

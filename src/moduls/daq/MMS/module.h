@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void attrPrc( MMS::XML_N *iVal = NULL, vector<string> *iAls = NULL, const string &vid = "" );
+	void attrPrc( );
 	void getVals( );
 	void setEval( );
 
@@ -117,7 +117,7 @@ class TMdContr: public TController, public MMS::Client
 
 	// MMS Client methods
 	uint16_t COTP_DestTSAP( ){ return cfg("COTP_DestTSAP").getI(); }
-	void regVar( const string &vl );
+	void regVar( const string &vl, const string &opts );
 
 	void reqService( MMS::XML_N &io );
 	void protIO( MMS::XML_N &io );
@@ -137,6 +137,18 @@ class TMdContr: public TController, public MMS::Client
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
     private:
+	//Data
+	class VarStr
+	{
+	    public:
+	    VarStr( ) : single(false), div(0)	{ }
+	    VarStr( const TVariant &iv, bool iSingle = false, char iDiv = 0 ) : val(iv), single(iSingle), div(iDiv)	{ }
+
+	    TVariant	val;
+	    unsigned	single	: 1;
+	    unsigned	div	: 7;
+	};
+
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
@@ -162,7 +174,7 @@ class TMdContr: public TController, public MMS::Client
 	float	tmDelay;	//Delay time for next try connect
 
 	AutoHD<TTransportOut>	tr;
-	map<string, TVariant>	mVars;
+	map<string, VarStr>	mVars;
 };
 
 //*************************************************

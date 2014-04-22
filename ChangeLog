@@ -1,3 +1,20 @@
+2014-04-22 Roman
+- FIX:DB.{LibsDB.vcaBase.db,AGLKS.{St.db,vca.db},Boiler.St.db}: Some previous expansions fix and the models adapted for its.
+- SYS: "/prm/cfg/addr" control elements renamed to "/prm/cfg/ADDR" for equal to configuration (fields names into the DB table).
+    Next will use TConfig::cntrCmdMake() for this, from subsystem "Transports".
+- SYS: Added new global simple functions into OSCADA namespace: tm2s(), s2i() and s2r().
+- SYS:TCntrNode: Base function _ctrMkNode() and specific for arguments set function ctrMkNode2() to original ctrChkNode() is added.
+- FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Keys miss into DB check is fixed for fieldSeek().
+- !!:DB.SQLite: Debug information for error requests is added. Main SQLite3 type "REAL" type handle is added for structure obtain.
+    Keys miss into DB check is added for fieldSet() and prevent temporary errors for INSERT.
+- !:DAQ.MMS: Expanded for allow custom options to configured variables set, like:
+    writable, single request, divider for execution period, force data type, force ID and Name.
+- DAQ.OPC_UA: Secure policy set is added to test program. Auth password hide int client part is added.
+    Inline nodes browser is added to client's parameter object for insert selected nodes to processing list.
+- UI.VCAEngine: Set links as active only after successful connection to it, for parameter's attributes.
+    Implement for some problems fix into dynamic linking.
+
+
 2014-04-18 Roman
 - FIX:DB.LibsDB.OscadaLibs.db: base.anUnif template is fix for iMult and iAdd process.
 - !!:DB.LibsDB.vcaBase.db: Widgets Main.anShow, Main.anShow1, mnEls.Compressor, mnEls.Compressor_1, mnEls.El_Kran_Sh significant expand.

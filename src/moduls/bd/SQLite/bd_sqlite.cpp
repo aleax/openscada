@@ -214,7 +214,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
     {
 	string err = _("Unknown error");
 	if(zErrMsg) { err = zErrMsg; sqlite3_free(zErrMsg); }
-	//mess_err(nodePath().c_str(),_("Request error: %s"),req.c_str());
+	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Request '%s' error: %s"), req.c_str(), err.c_str());
 	throw TError(100+rc, nodePath().c_str(), _("Getting table error: %s"), err.c_str());
     }
     if(tbl && ncol > 0)
@@ -271,8 +271,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,4,
-	    "tp","str","dest","sel_ed","select","/prm/cfg/dbFsList","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,3,
+	    "dest","sel_ed","select","/prm/cfg/dbFsList","help",
 		    _("SQLite DB address must be written as: [<FileDBPath>].\n"
 		      "Where:\n"
 		      "  FileDBPath - full path to DB file (./oscada/Main.db).\n"
@@ -342,7 +342,7 @@ void MTable::fieldStruct( TConfig &cfg )
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
 	else if(tblStrct[i_fld][2] == "INTEGER")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
-	else if(tblStrct[i_fld][2] == "DOUBLE")
+	else if(tblStrct[i_fld][2] == "REAL" || tblStrct[i_fld][2] == "DOUBLE")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
     }
 }
@@ -359,10 +359,11 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     {
 	vector<string> cf_el;
 	cfg.cfgList(cf_el);
-	for(unsigned i_c = 0, i_fld = 1; i_c < cf_el.size(); i_c++)
+	for(unsigned i_c = 0; i_c < cf_el.size(); i_c++)
 	{
 	    TCfg &cf = cfg.cfg(cf_el[i_c]);
 	    if(!(cf.fld().flg()&TCfg::Key) || !cf.getS().size()) continue;
+	    unsigned i_fld = 1;
 	    for( ; i_fld < tblStrct.size(); i_fld++)
 		if(cf.name() == tblStrct[i_fld][1]) break;
 	    if(i_fld >= tblStrct.size()) return false;
@@ -487,6 +488,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     string sid, sval;
     bool isVarTextTransl = (!Mess->lang2CodeBase().empty() && !cfg.noTransl() && Mess->lang2Code() != Mess->lang2CodeBase());
+
     //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
@@ -508,14 +510,22 @@ void MTable::fieldSet( TConfig &cfg )
     //Get present fields list
     string req_where = "WHERE ";
     // Add key list to queue
-    bool next = false;
+    bool next = false, noKeyFld = false;
     for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!(u_cfg.fld().flg()&TCfg::Key)) continue;
 	req_where += (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
 	next = true;
+
+	//Check for no key fields
+	if(noKeyFld) continue;
+	unsigned i_fld = 1;
+	for( ; i_fld < tblStrct.size(); i_fld++)
+	    if(u_cfg.name() == tblStrct[i_fld][1]) break;
+	if(i_fld >= tblStrct.size()) noKeyFld = true;
     }
+    if(noKeyFld) fieldFix(cfg);
 
     //Prepare query
     string req = "SELECT 1 FROM '" + mod->sqlReqCode(name()) + "' " + req_where + ";";
@@ -571,7 +581,8 @@ void MTable::fieldSet( TConfig &cfg )
     catch(TError err)
     {
 	if((err.cod-100) == SQLITE_READONLY)	return;
-	fieldFix(cfg); owner().sqlReq(req, NULL, true);
+	fieldFix(cfg);
+	owner().sqlReq(req, NULL, true);
     }
 }
 
@@ -673,7 +684,7 @@ void MTable::fieldFix( TConfig &cfg )
 	req = "CREATE TEMPORARY TABLE 'temp_" + mod->sqlReqCode(name()) + "'(" + all_flds + ");"
 	    "INSERT INTO 'temp_" + mod->sqlReqCode(name()) + "' SELECT " + all_flds + " FROM '" + mod->sqlReqCode(name()) + "';"
 	    "DROP TABLE '" + mod->sqlReqCode(name()) + "';";
-	owner().sqlReq(req, NULL, false);
+	owner().sqlReq(req, NULL, true);
     }
 
     //Create new table
@@ -718,15 +729,16 @@ void MTable::fieldFix( TConfig &cfg )
 	    next_key = true;
 	}
     }
+
     req += ", PRIMARY KEY (" + pr_keys + "));";
-    owner().sqlReq(req, NULL, false);
+    owner().sqlReq(req, NULL, true);
 
     //Copy data from temporary DB
     if(fix)
     {
 	req = "INSERT INTO '" + mod->sqlReqCode(name()) + "'(" + all_flds + ") SELECT " + all_flds +
 	    " FROM 'temp_" + mod->sqlReqCode(name()) + "';DROP TABLE 'temp_" + mod->sqlReqCode(name()) + "';";
-	owner().sqlReq(req, NULL, false);
+	owner().sqlReq(req, NULL, true);
     }
 
     //Update table structure

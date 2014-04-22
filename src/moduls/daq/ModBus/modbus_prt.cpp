@@ -404,7 +404,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	else if(rez.size() > 2) mess += rez.substr(0,rez.size()-2);
 
 	if(prtLen())
-	    pushPrtMess(TSYS::time2str(time(NULL),"")+" "+prt+": '"+sid+"' --> "+TSYS::int2str(node)+"("+tro.workId()+")\n"+mess+"\n");
+	    pushPrtMess(tm2s(time(NULL),"")+" "+prt+": '"+sid+"' --> "+i2s(node)+"("+tro.workId()+")\n"+mess+"\n");
 	if(debugCat.size()) mess_debug_(debugCat.c_str(), mess.c_str());
     }
 }
@@ -469,7 +469,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/rep/repLen")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(prtLen()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(prtLen()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setPrtLen(atoi(opt->text().c_str()));
     }
     else if(a_path == "/rep/rep" && ctrChkNode(opt))
@@ -586,8 +586,8 @@ retry:
 
     if(owner().prtLen( ) && prt.size() && answer.size())
     {
-	string mess = TSYS::time2str(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
-	    		"("+TSYS::strLine(srcAddr(),0)+") --> "+TSYS::int2str(node)+"\n";
+	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
+	    		"("+TSYS::strLine(srcAddr(),0)+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");
 	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin);
 	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);
@@ -942,7 +942,7 @@ string Node::getStatus( )
 	{
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
-		    TSYS::time2str(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil);
+		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
 		rez += TSYS::strMess(_("Requests %.4g."), cntReq);
@@ -1230,7 +1230,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 
 	    XMLNode req(cfg("TO_PRT").getS());
 	    req.setAttr("id", id())->
-		setAttr("node", (mode()==MD_GT_NET)?TSYS::int2str(inode):cfg("TO_ADDR").getS())->
+		setAttr("node", (mode()==MD_GT_NET)?i2s(inode):cfg("TO_ADDR").getS())->
 		setAttr("reqTry", "3")->
 		setText(pdu);
 	    tr.at().messProtIO(req, "ModBus");
@@ -1377,7 +1377,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),RWRWR_,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String).c_str(),
 		    "sel_list",_("Real;Integer;Boolean;String"));
 		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
@@ -1388,8 +1388,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    for(int i_io = 0; i_io < ioSize(); i_io++)
 		if(io(i_io)->flg()&IsLink)
-		    ctrMkNode("fld",opt,-1,("/lnk/el_"+TSYS::int2str(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root",SPRT_ID,
-			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+TSYS::int2str(i_io)).c_str());
+		    ctrMkNode("fld",opt,-1,("/lnk/el_"+i2s(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root",SPRT_ID,
+			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+i2s(i_io)).c_str());
 	return;
     }
     //> Process command to page
@@ -1435,7 +1435,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    {
 		if(nId)	 nId->childAdd("el")->setText(io(id)->id());
 		if(nNm)	 nNm->childAdd("el")->setText(io(id)->name());
-		if(nType)nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
+		if(nType)nType->childAdd("el")->setText(i2s(io(id)->type()));
 		if(nLnk) nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
 		if(nVal) nVal->childAdd("el")->setText((data && data->val.func()) ? data->val.getS(id) : io(id)->def());
 	    }

@@ -32,8 +32,9 @@ int main( int argc, char *argv[], char *envp[] )
 {
     if(argc < 3)
     {
-	printf("OPC UA client test program need command line arguments: \"testOPC_UA {EndPoint} {NodeId} {user:pass}\"\n"
-	    "   Example: \"testOPC_UA opc.tcp://127.0.0.1:4841 84\"");
+	printf("OPC UA client test program need command line arguments:\n"
+	    "  \"testOPC_UA opc.tcp://{Host}:{Port}/{SecurePolicy}/{MessSecMode} {NodeId} {user:pass}\"\n"
+	    "Example: \"testOPC_UA opc.tcp://127.0.0.1:4841/Basic128Rsa15/SignEnc 84 user:pass");
 	return 0;
     }
 
@@ -94,17 +95,46 @@ int main( int argc, char *argv[], char *envp[] )
 /************************************************
  * TestClient                                   *
  ************************************************/
-TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), sock_fd(-1)
+TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), mSecPol("None"), mSecMessMode(MS_None), sock_fd(-1)
 {
     //Parse EndPoint for TCP connection and other properties obtain
     if(mEp.compare(0,10,"opc.tcp://") == 0)
     {
-	size_t uriPos = mEp.find("/", 10);
+	size_t uriPos = mEp.find("/", 10), uriPos1;
 	mURI = (uriPos != string::npos) ? mEp.substr(uriPos) : "";
 
 	mAddr = mEp.substr(10, (uriPos==string::npos) ? uriPos : (uriPos-10));
 	size_t portPos = mAddr.find(":");
 	if(portPos == string::npos || !atoi(mAddr.substr(portPos+1).c_str())) mAddr = mAddr.substr(0,portPos)+":4840";
+
+	//URI parse
+	if(mURI.size())
+	{
+	    string secMessMd;
+
+	    uriPos = 1;
+	    if(uriPos >= mURI.size()) mSecPol = "None";
+	    else
+	    {
+		uriPos1 = mURI.find("/", uriPos);
+		mSecPol = (uriPos1 != string::npos) ? mURI.substr(uriPos,uriPos1-uriPos) : mURI.substr(uriPos);
+	    }
+
+	    uriPos = uriPos1+1;
+	    if(uriPos >= mURI.size()) secMessMd = "None";
+	    {
+		uriPos1 = mURI.find("/", uriPos);
+		secMessMd = (uriPos1 != string::npos) ? mURI.substr(uriPos,uriPos1-uriPos) : mURI.substr(uriPos);
+	    }
+
+	    if(mSecPol == "Basic128Rsa15" || mSecPol == "Basic256") mSecMessMode = MS_SignAndEncrypt;
+	    else { mSecPol = "None"; mSecMessMode = MS_None; }
+	    if(secMessMd == "SignEnc" && mSecPol != "None")	mSecMessMode = MS_SignAndEncrypt;
+	    else if(secMessMd == "Sign" && mSecPol != "None")	mSecMessMode = MS_Sign;
+
+	    printf("Set and uses secure policy '%s' and messages mode '%s'\n",
+		mSecPol.c_str(), (mSecMessMode==MS_Sign)?"Sign":((mSecMessMode==MS_SignAndEncrypt)?"SignEnc":"None"));
+	}
     }
 
     //Load client certificate and private key from file
@@ -124,6 +154,21 @@ TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), soc
 	close(hd);
     }
 
+    //User and password set
+    if(aData.size()) mAuthData = aData.size() ? strParse(aData,0,":")+"\n"+strParse(aData,1,":") : "";
+
+    start();
+}
+
+TestClient::~TestClient( )
+{
+    stop();
+}
+
+void TestClient::start( )
+{
+    if(sock_fd >= 0)	stop();
+
     //Open socket from EndPoint address
     struct sockaddr_in	name_in;
     memset(&name_in, 0, sizeof(name_in));
@@ -135,13 +180,13 @@ TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), soc
     int connRes = -1;
     if(loc_host_nm && loc_host_nm->h_length && name_in.sin_port > 0 && sock_fd >= 0)
     {
-        name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
+	name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
 
-        int vl = 1;
-        setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
+	int vl = 1;
+	setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 
 	// Real connect to socket
-        connRes = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
+	connRes = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
     }
 
     //Error connection
@@ -150,12 +195,9 @@ TestClient::TestClient( const string &iep, const string &aData ) : mEp(iep), soc
 	if(sock_fd >= 0) close(sock_fd);
 	sock_fd = -1;
     }
-
-    //User and password set
-    if(aData.size()) mAuthData = aData.size() ? strParse(aData,0,":")+"\n"+strParse(aData,1,":") : "";
 }
 
-TestClient::~TestClient( )
+void TestClient::stop( )
 {
     if(sock_fd >= 0) close(sock_fd);
     sock_fd = -1;
@@ -163,11 +205,22 @@ TestClient::~TestClient( )
 
 int TestClient::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
-    if(sock_fd < 0) return 0;
+    int reqTry = 0;
 
-    int kz = 0;
-    if(obuf != NULL && len_ob > 0) kz = write(sock_fd, obuf, len_ob);
-    if(ibuf != NULL && len_ib > 0) kz = read(sock_fd, ibuf, len_ib);
+    repeate:
+    if(sock_fd < 0 || (reqTry++) >= 2) return 0;
 
-    return kz;
+    int kzw = 0, kzr;
+    if(obuf != NULL && len_ob > 0) kzw = write(sock_fd, obuf, len_ob);
+    if(ibuf != NULL && len_ib > 0)
+    {
+	kzr = read(sock_fd, ibuf, len_ib);
+	if(kzr <= 0)
+	{
+	    start();
+	    goto repeate;
+	}
+    }
+
+    return std::max(0,kzr);
 }

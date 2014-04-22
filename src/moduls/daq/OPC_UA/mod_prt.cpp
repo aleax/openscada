@@ -329,7 +329,7 @@ void OPCEndPoint::load_( )
     ResAlloc res(nodeRes(), true);
     mSec.clear();
     for(int off = 0; (spi=TSYS::strParse(sp,0,"\n",&off)).size(); )
-	mSec.push_back(UA::SecuritySetting(TSYS::strParse(spi,0,":"),atoi(TSYS::strParse(spi,1,":").c_str())));
+	mSec.push_back(UA::SecuritySetting(TSYS::strParse(spi,0,":"),s2i(TSYS::strParse(spi,1,":"))));
 }
 
 void OPCEndPoint::save_( )
@@ -338,7 +338,7 @@ void OPCEndPoint::save_( )
     string sp;
     ResAlloc res(nodeRes(), false);
     for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
-	sp += mSec[i_p].policy + ":" + TSYS::int2str(mSec[i_p].messageMode)+"\n";
+	sp += mSec[i_p].policy + ":" + i2s(mSec[i_p].messageMode)+"\n";
     cfg("SecPolicies").setS(sp);
 
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
@@ -390,14 +390,14 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 	    //if(rez != OpcUa_BadBrowseNameInvalid) return rez;
 
 	    NodeId nid = NodeId::fromAddr(req.attr("node"));
-	    int rPn = atoi(req.attr("rPn").c_str());
+	    int rPn = s2i(req.attr("rPn"));
 
 	    //Check for DAQ subsystem data
 	    if(nid.ns() != NS_OpenSCADA_DAQ || TSYS::strParse(nid.strVal(),0,".") != SYS->daq().at().subId() ||
 		(rPn && (int)req.childSize() >= rPn)) return rez;
 	    NodeId rtId = NodeId::fromAddr(req.attr("RefTpId"));
-	    uint32_t bd = atoi(req.attr("BrDir").c_str());
-	    uint32_t nClass = atoi(req.attr("ClassMask").c_str());
+	    uint32_t bd = s2i(req.attr("BrDir"));
+	    uint32_t nClass = s2i(req.attr("ClassMask"));
 	    string lstNd = req.attr("LastNode"); req.setAttr("LastNode","");
 
 	    // Connect to DAQ node
@@ -414,7 +414,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		else if(dynamic_cast<TController*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQControllerObjectType",NS_OpenSCADA_DAQ).toAddr()];
 		else if(dynamic_cast<TParamContr*>(&cNd.at()))	ndTpDef = ndMap[NodeId("DAQParameterObjectType",NS_OpenSCADA_DAQ).toAddr()];
 		unsigned cnClass = 0;
-		if(ndTpDef && (!nClass || nClass&(cnClass=atoi(ndTpDef->attr("NodeClass").c_str()))))
+		if(ndTpDef && (!nClass || nClass&(cnClass=s2i(ndTpDef->attr("NodeClass")))))
 		    req.childAdd("ref")->setAttr("NodeId", ndTpDef->attr("NodeId"))->
 			setAttr("referenceTypeId", ndTpDef->attr("referenceTypeId"))->
 			setAttr("dir", "1")->setAttr("name", ndTpDef->attr("name"))->
@@ -542,7 +542,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 
 	    // OpenSCADA DAQ parameter's attribute
 	    if(nid.ns() != NS_OpenSCADA_DAQ)	return OpcUa_BadNodeIdUnknown;
-	    uint32_t aid = atoi(req.attr("aid").c_str());
+	    uint32_t aid = s2i(req.attr("aid"));
 
 	    // Connect to DAQ node
 	    int addrOff = 0;
@@ -570,7 +570,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 		{
 		    if((nVal=dynamic_cast<TVal*>(&cNd.at())))
 		    {
-			if(atoi(req.attr("dtPerGet").c_str()))
+			if(s2i(req.attr("dtPerGet")))
 			    req.setAttr("dtPer", (nVal->arch().freeStat()?"0":r2s(nVal->arch().at().period()*1e-6)));
 			//  Variable
 			switch(aid)
@@ -590,7 +590,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 				    case TFld::String:	req.setAttr("type", i2s(OpcUa_String))->setText(nVal->getS(&tm));	break;
 				    default: dtOK = false;
 				}
-				if(dtOK) { if(atoi(req.attr("dtTmGet").c_str())) req.setAttr("dtTm",ll2s(tm)); return 0; }
+				if(dtOK) { if(s2i(req.attr("dtTmGet"))) req.setAttr("dtTm",ll2s(tm)); return 0; }
 				break;
 			    }
 			    case AId_DataType:
@@ -650,7 +650,7 @@ uint32_t OPCEndPoint::reqData( int reqTp, XML_N &req )
 
 	    // OpenSCADA DAQ parameter's attribute
 	    if(nid.ns() != NS_OpenSCADA_DAQ)	return OpcUa_BadNodeIdUnknown;
-	    uint32_t aid = atoi(req.attr("aid").c_str());
+	    uint32_t aid = s2i(req.attr("aid"));
 
 	    // Connect to DAQ node
 	    int addrOff = 0;
@@ -706,7 +706,7 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/ep/st/en_st")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
     else if(a_path == "/ep/st/db")
     {
@@ -731,23 +731,23 @@ void OPCEndPoint::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_p = 0; i_p < mSec.size(); i_p++)
 	    {
 		if(n_pol) n_pol->childAdd("el")->setText(mSec[i_p].policy);
-		if(n_mm)  n_mm->childAdd("el")->setText(TSYS::int2str(mSec[i_p].messageMode));
+		if(n_mm)  n_mm->childAdd("el")->setText(i2s(mSec[i_p].messageMode));
 	    }
 	    return;
 	}
 	ResAlloc res(nodeRes(), true);
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ mSec.push_back(UA::SecuritySetting("None",MS_None)); modif(); return; }
-	int row = atoi(opt->attr("row").c_str());
+	int row = s2i(opt->attr("row"));
 	if(row < 0 || row >= (int)mSec.size())
 	    throw TError(nodePath().c_str(),_("No present selected row."));
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{ mSec.erase(mSec.begin()+row); modif(); return; }
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))
 	{
-	    int col = atoi(opt->attr("col").c_str());
+	    int col = s2i(opt->attr("col"));
 	    if(col == 0)	mSec[row].policy = opt->text();
-	    else if(col == 1)	mSec[row].messageMode = (MessageSecurityMode)atoi(opt->text().c_str());
+	    else if(col == 1)	mSec[row].messageMode = (MessageSecurityMode)s2i(opt->text());
 	    modif();
 	}
     }

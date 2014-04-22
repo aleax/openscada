@@ -108,12 +108,16 @@ class TCntrNode
 
 	// Static functions
 	//  Controll Field
-	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );	//get node for it full identifier
+	static XMLNode *ctrId( XMLNode *inf, const string &n_id, bool noex = false );		//get node for it full identifier
 	static XMLNode *ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
-	    int perm=0777, const char *user="root", const char *grp="root", int n_attr=0, ... );
+	    int perm = 0777, const char *user = "root", const char *grp = "root", int n_attr = 0, ... );
+	static XMLNode *ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
+	    int perm = 0777, const char *user = "root", const char *grp = "root", ... );	//End by zero pointer
+	static XMLNode *_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *req, const string &dscr,
+	    int perm = 0777, const char *user = "root", const char *grp = "root" );
 	static bool ctrRemoveNode( XMLNode *nd, const char *path );
-	static bool ctrChkNode( XMLNode *nd, const char *cmd="get", int perm=0444, const char *user="root",
-	    const char *grp="root", char mode=04, const char *warn = NULL );
+	static bool ctrChkNode( XMLNode *nd, const char *cmd = "get", int perm = 0444, const char *user = "root",
+	    const char *grp = "root", char mode = 04, const char *warn = NULL );
 
     protected:
 	//Methods

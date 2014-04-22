@@ -753,7 +753,7 @@ string TBD::name( )
 
 void TBD::enable( )
 {
-    if( enableStat() ) return;
+    if(enableStat()) return;
 
     mEn = true;
 }
@@ -856,7 +856,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SDB_ID,3,"tp","str","cols","100","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,4,
 		    "tp","str","dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
 		    "help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));
@@ -918,7 +918,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(dscr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDscr(opt->text());
     }
-    else if(a_path == "/prm/cfg/addr")
+    else if(a_path == "/prm/cfg/ADDR")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))	opt->setText(addr());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))	setAddr(opt->text());

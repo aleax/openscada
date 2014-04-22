@@ -720,14 +720,14 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     throw TError(nodePath().c_str(),_("Function '%s' error or not enough parameters."),iid.c_str());
 }
 
-XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
-    int perm, const char *user, const char *grp, int n_attr, ... )
+XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+    int perm, const char *user, const char *grp )
 {
     int woff = 0;
     string req = nd->attr("path");
     string reqt, reqt1;
 
-    //> Check displaing node
+    //Check displaing node
     int itbr = 0;
     for(int i_off = 0, i_off1 = 0; (reqt=TSYS::pathLev(req,0,true,&i_off)).size(); woff = i_off)
 	if(reqt != (reqt1=TSYS::pathLev(path,0,true,&i_off1)))
@@ -737,7 +737,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	    break;
 	}
 
-    //> Check permission
+    //Check permission
     char n_acs = SYS->security().at().access(nd->attr("user"), SEC_RD|SEC_WR|SEC_XT, user, grp, perm);
     if(!(n_acs&SEC_RD)) return NULL;
     if(itbr)	return nd;
@@ -750,7 +750,7 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
 	nd->setAttr("rez", "0");
     }
 
-    //> Go to element
+    //Go to element
     for( ;(reqt=TSYS::pathLev(path,0,true,&woff)).size(); reqt1 = reqt)
     {
 	XMLNode *obj1 = obj->childGet("id", reqt, true);
@@ -763,16 +763,45 @@ XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const cha
     obj->setName(n_nd)->setAttr("id", reqt1)->setAttr("acs", i2s(n_acs));
     if(dscr != EVAL_STR) obj->setAttr("dscr", dscr);
 
-    //> Get addon attributes
-    if(n_attr)
+    return obj;
+}
+
+XMLNode *TCntrNode::ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+    int perm, const char *user, const char *grp, int n_attr, ... )
+{
+    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, perm, user, grp);
+
+    //Get addon attributes
+    if(obj && n_attr)
     {
 	char *atr_id, *atr_vl;
 	va_list argptr;
 	va_start(argptr,n_attr);
 	for(int i_a = 0; i_a < n_attr; i_a++)
 	{
-	    atr_id = va_arg(argptr, char*);
-	    atr_vl = va_arg(argptr, char*);
+	    if(!(atr_id=va_arg(argptr,char*)) || !(atr_vl=va_arg(argptr, char*))) break;
+	    obj->setAttr(atr_id, atr_vl);
+	}
+	va_end(argptr);
+    }
+
+    return obj;
+}
+
+XMLNode *TCntrNode::ctrMkNode2( const char *n_nd, XMLNode *nd, int pos, const char *path, const string &dscr,
+    int perm, const char *user, const char *grp, ... )
+{
+    XMLNode *obj = _ctrMkNode(n_nd, nd, pos, path, dscr, perm, user, grp);
+
+    //Get addon attributes
+    if(obj)
+    {
+	char *atr_id, *atr_vl;
+	va_list argptr;
+	va_start(argptr, grp);
+	while(true)
+	{
+	    if(!(atr_id=va_arg(argptr,char*)) || !(atr_vl=va_arg(argptr,char*))) break;
 	    obj->setAttr(atr_id, atr_vl);
 	}
 	va_end(argptr);

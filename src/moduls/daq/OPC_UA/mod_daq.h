@@ -65,6 +65,9 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
+	string ndList( )			{ return cfg("ND_LS").getS(); }
+	void setNdList( const string &vl )	{ cfg("ND_LS").setS(vl); }
+
 	TElem &elem( )		{ return p_el; }
 
 	void enable( );

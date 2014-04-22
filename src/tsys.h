@@ -148,7 +148,7 @@ class TSYS : public TCntrNode
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
-	int 	savePeriod( )	{ return mSavePeriod; }
+	int	savePeriod( )	{ return mSavePeriod; }
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 
 	string	optDescr( );	//print comand line options
@@ -202,7 +202,7 @@ class TSYS : public TCntrNode
 	static double realRound( double val, int dig = 0, bool toint = false )
 	{
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
-	    if( toint ) return floor(rez+0.5);
+	    if(toint) return floor(rez+0.5);
 	    return rez;
 	}
 	static string time2str( time_t tm, const string &format );
@@ -386,6 +386,11 @@ inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2
 inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
 inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
+inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }
+inline string tm2s( double utm )				{ return TSYS::time2str(utm); }
+
+inline int s2i( const string &val )	{ return atoi(val.c_str()); }
+inline double s2r( const string &val )	{ return atof(val.c_str()); }
 
 extern TSYS *SYS;
 }

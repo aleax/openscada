@@ -900,7 +900,7 @@ void SessPage::calc( bool first, bool last )
 
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
 {
-    //> Page open process
+    //Page open process
     if(enable() && !prev.isNull())
     {
 	if(cfg.id() == "pgOpen")
@@ -926,23 +926,25 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 		try
 		{
 		    AutoHD<SessWdg> src = mod->nodeAt(cfg.getS());
-		    //> Set interwidget's links for new page
+
+		    //Set interwidget's links for new page
 		    bool emptyPresnt = false;
-		    string atr_id, prm_lnk;
+		    string atr_id, prm_lnk, sCfgVal;
 		    vector<string> cAtrLs;
 		    attrList(cAtrLs);
 		    for(unsigned i_al = 0; i_al < cAtrLs.size(); i_al++)
 		    {
 			AutoHD<Attr> attr = attrAt(cAtrLs[i_al]);
 			if(!(attr.at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
-			      TSYS::strSepParse(attr.at().cfgTempl(),0,'|') == "<page>")) continue;
-			atr_id = TSYS::strSepParse(attr.at().cfgTempl(),1,'|');
+			      TSYS::strParse(attr.at().cfgTempl(),0,"|") == "<page>")) continue;
+			atr_id = TSYS::strParse(attr.at().cfgTempl(),1,"|");
 			if(src.at().attrPresent(atr_id))
 			{
-			    if(src.at().attrAt(atr_id).at().cfgVal().compare(0,4,"prm:") == 0)
+			    if((sCfgVal=src.at().attrAt(atr_id).at().cfgVal()).compare(0,4,"prm:") == 0 &&
+				!SYS->daq().at().attrAt(sCfgVal.substr(4),0,true).freeStat())
 			    {
-				if(prm_lnk.empty()) prm_lnk = src.at().attrAt(atr_id).at().cfgVal().substr(4);
-				attr.at().setCfgVal(src.at().attrAt(atr_id).at().cfgVal());
+				if(prm_lnk.empty()) prm_lnk = sCfgVal.substr(4);
+				attr.at().setCfgVal(sCfgVal);
 			    }
 			    else attr.at().setCfgVal("wdg:"+cfg.getS()+"/a_"+atr_id);
 			}
@@ -953,7 +955,8 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			    emptyPresnt = true;
 			}
 		    }
-		    //> Find links into source if no link found
+
+		    //Find links into source if no link found
 		    if(prm_lnk.empty())
 		    {
 			vector<string> sAtrLs;
@@ -968,7 +971,8 @@ bool SessPage::attrChange( Attr &cfg, TVariant prev )
 			    }
 			}
 		    }
-		    //> Fill parameter's links for other attributes
+
+		    //Fill parameter's links for other attributes
 		    if(emptyPresnt && !prm_lnk.empty())
 		    {
 			size_t aPos = prm_lnk.rfind("/");

@@ -185,18 +185,23 @@ string TMdContr::getStatus( )
 	else
 	{
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."),TSYS::time2str(tmGath).c_str(),-tmDelay);
+	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(tmGath).c_str(),-tmDelay);
 	}
     }
     return rez;
 }
 
-void TMdContr::regVar( const string &vl )
+void TMdContr::regVar( const string &vl, const string &opts )
 {
     MtxAlloc res(enRes, true);
-    if(mVars.find(vl) == mVars.end()) mVars[vl] = TVariant();
+    if(mVars.find(vl) == mVars.end()) mVars[vl] = VarStr();
+
+    //Options process and set
+    size_t pos;
+    if(opts.find("s") != string::npos) mVars[vl].single = true;
+    if((pos=opts.find("/")) < opts.size()-2) mVars[vl].div = s2i(opts.substr(pos+1,2));
 }
 
 void TMdContr::reqService( MMS::XML_N &io )
@@ -256,7 +261,7 @@ void TMdContr::start_( )
     reset();	//MMS coneection state reset
 
     //Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
     tmDelay = 0;
 
     //Clear data blocks
@@ -324,10 +329,11 @@ void *TMdContr::Task( void *icntr )
 	valCtr.setAttr("id", "read");
 	MtxAlloc res(cntr.enRes, true);
 	bool isErr = valCtr.attr("err").size();
-	for(map<string,TVariant>::iterator vi = cntr.mVars.begin(); true; ++vi)
+	for(map<string,VarStr>::iterator vi = cntr.mVars.begin(); true; ++vi)
 	{
 	    // Send request
-	    if(vi == cntr.mVars.end() || valCtr.childSize() >= cntr.mVarsRdReq.getI())
+	    if(vi == cntr.mVars.end() || valCtr.childSize() >= cntr.mVarsRdReq.getI() ||
+		(valCtr.childSize() && (vi->second.single || s2i(valCtr.childGet(valCtr.childSize()-1)->attr("single")))))
 	    {
 		if(!valCtr.childSize())	break;
 		if(!isErr)
@@ -355,18 +361,18 @@ void *TMdContr::Task( void *icntr )
 		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
 		    if(isErr) value = NULL;
 		    if(!value) { cntr.mVars[nId] = TVariant(); continue; }
-		    switch(atoi(value->attr("tp").c_str()))
+		    switch(s2i(value->attr("tp")))
 		    {
 			case MMS::VT_Bool: case MMS::VT_Int: case MMS::VT_UInt:
 			case MMS::VT_Float:
 			case MMS::VT_BitString: case MMS::VT_OctString: case MMS::VT_VisString:
-			    cntr.mVars[nId] = value->text();
+			    cntr.mVars[nId].val = value->text();
 			    break;
 			case MMS::VT_Array: case MMS::VT_Struct:		//!!!! Need for test
 			{
 			    vector<StackTp> stack;
 			    TArrayObj *curArr = new TArrayObj();
-			    cntr.mVars[nId] = curArr;
+			    cntr.mVars[nId].val = curArr;
 			    MMS::XML_N *curValue = value;
 			    for(unsigned i_v = 0; true; )
 			    {
@@ -384,13 +390,13 @@ void *TMdContr::Task( void *icntr )
 				}
 
 				MMS::XML_N *itValue = curValue->childGet(i_v);
-				switch(atoi(itValue->attr("tp").c_str()))
+				switch(s2i(itValue->attr("tp")))
 				{
-				    case MMS::VT_Bool: curArr->arSet(i_v, bool(atoi(itValue->text().c_str())));	break;
+				    case MMS::VT_Bool: curArr->arSet(i_v, bool(s2i(itValue->text())));	break;
 				    case MMS::VT_Int: case MMS::VT_UInt:
 					curArr->arSet(i_v, (int64_t)atoll(itValue->text().c_str()));
 					break;
-				    case MMS::VT_Float: curArr->arSet(i_v, atof(itValue->text().c_str()));	break;
+				    case MMS::VT_Float: curArr->arSet(i_v, s2r(itValue->text()));	break;
 				    case MMS::VT_BitString: case MMS::VT_OctString: case MMS::VT_VisString:
 					curArr->arSet(i_v, itValue->text());
 					break;
@@ -421,8 +427,11 @@ void *TMdContr::Task( void *icntr )
 		if(vi == cntr.mVars.end()) break;
 	    }
 
-	    value = valCtr.childAdd("it")->setAttr("itemId", TSYS::pathLev(vi->first,1));
-	    if(TSYS::pathLev(vi->first,0) != "*") value->setAttr("domainId", TSYS::pathLev(vi->first,0));
+	    if(firstCall || !vi->second.div || !(it_cnt%vi->second.div))
+	    {
+		value = valCtr.childAdd("it")->setAttr("single", i2s(vi->second.single))->setAttr("itemId", TSYS::pathLev(vi->first,1));
+		if(TSYS::pathLev(vi->first,0) != "*") value->setAttr("domainId", TSYS::pathLev(vi->first,0));
+	    }
 	}
 
 	//Update controller's data
@@ -442,7 +451,7 @@ void *TMdContr::Task( void *icntr )
 		    nId = TSYS::strLine(pVal.at().fld().reserve(),0);
 		    if(nId.empty()) continue;
 		    //printf("TEST 01: '%s' = %s\n", nId.c_str(), cntr.mVars[nId].getS().c_str());
-		    pVal.at().set(cntr.mVars[nId], 0, true);
+		    pVal.at().set(cntr.mVars[nId].val, 0, true);
 		}
 		res.unlock();
 	    }
@@ -475,17 +484,17 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",mAddr.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     TController::cntrCmdProc(opt);
 }
@@ -533,100 +542,67 @@ void TMdPrm::load_( )	{ TParamContr::load_(); }
 
 void TMdPrm::save_( )	{ TParamContr::save_(); }
 
-void TMdPrm::attrPrc( MMS::XML_N *iVal, vector<string> *iAls, const string &vid )
+void TMdPrm::attrPrc( )
 {
-    vector<string> *als = iAls ? iAls : new vector<string>;
+    vector<string> als;
 
-    bool wrMode;
-    string varLs = varList(), var;
-    if(MMS::tryBS(owner().parameterCBB(), (uint32_t)MMS::SupportServs::getVariableAccessAttributes))
-	for(int off = 0; iVal || (var=TSYS::strLine(varLs,0,&off)).size(); )
-	{
-	    wrMode = (var.compare(0,2,"w:") == 0);
-	    if(wrMode) var.erase(0,2);
-	    MMS::XML_N *valCntr = NULL, *value = iVal;
-	    if(!value)
-	    {
-		valCntr = new MMS::XML_N("MMS");
-		value = valCntr->setAttr("id","getVariableAccessAttributes")->setAttr("itemId", TSYS::pathLev(var,1));
-		if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
-		owner().reqService(*valCntr);
-		if(!valCntr->attr("err").empty()) { delete valCntr; continue; }
-	    }
+    string varLs = varList(), itS, var, opts, typeS, aid, anm;
 
-	    bool srchOK = false;
-	    string vName = iVal ? vid+"$"+value->attr("id") : var;
-	    // Find for already presented attribute
-	    for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
-		if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == vName) srchOK = true;
-	    if(srchOK) { als->push_back(vName); owner().regVar(vName); }
-	    else
-	    {
-		string aid = TSYS::strEncode(TSYS::pathLev(vName,1), TSYS::oscdID);
-		if(vlPresent(aid))
-		    for(int i_v = 1; true; i_v++)
-			if(!vlPresent(aid+i2s(i_v)))
-			{ aid += i2s(i_v); break; }
-
-		int vtp = -1;
-		switch(atoi(value->attr("tp").c_str()))
-		{
-		    case MMS::VT_Bool:	vtp = TFld::Boolean;		break;
-		    case MMS::VT_Int: case MMS::VT_UInt: vtp = TFld::Integer;	break;
-		    case MMS::VT_Float:	vtp = TFld::Real;		break;
-		    case MMS::VT_BitString: case MMS::VT_VisString: case MMS::VT_OctString: vtp = TFld::String;	break;
-		    case MMS::VT_Struct:
-			for(unsigned i_a = 0; i_a < value->childSize(); i_a++)
-			    attrPrc(value->childGet(i_a), als, vName);
-			break;
-		    case MMS::VT_Array: vtp = TFld::Object;		break;
-		    default: mess_err(nodePath().c_str(), _("Value type %s is not implemented for '%s'."), value->attr("tp").c_str(), vName.c_str());
-		}
-		if(vtp >= 0)
-		{
-		    p_el.fldAdd(new TFld(aid.c_str(),TSYS::pathLev(vName,1).c_str(),(TFld::Type)vtp,(wrMode?(int)TVal::DirWrite:(int)TFld::NoWrite),
-			"","","","",(vName+"\n"+value->attr("tp")).c_str()));
-		    als->push_back(vName);
-		    owner().regVar(vName);
-		}
-	    }
-
-	    if(!valCntr) break;
-	    delete valCntr;
-	}
-    else
+    MMS::XML_N valCntr("MMS"), *value = valCntr.setAttr("id","read")->childAdd("it");
+    for(int off = 0; (itS=TSYS::strLine(varLs,0,&off)).size(); )
     {
-	MMS::XML_N valCntr("MMS"), *value = valCntr.setAttr("id","read")->childAdd("it");
-	for(int off = 0; (var=TSYS::strLine(varLs,0,&off)).size(); )
+	if(itS[0] == '#') continue;
+	int offIt = 0;
+	var = TSYS::strParse(itS,0,":",&offIt);
+
+	opts = TSYS::strParse(itS,0,":",&offIt);
+	unsigned flg = (opts.find("w") != string::npos) ? unsigned(TVal::DirWrite) : unsigned(TFld::NoWrite);
+
+	typeS = TSYS::strParse(itS,0,":",&offIt);
+
+	aid = TSYS::strParse(itS,0,":",&offIt);
+	aid = TSYS::strEncode((aid.empty()?TSYS::pathLev(var,1):aid), TSYS::oscdID);
+	if(vlPresent(aid))
+	    for(int i_v = 1; true; i_v++)
+		if(!vlPresent(aid+i2s(i_v)))
+		{ aid += i2s(i_v); break; }
+
+	anm = TSYS::strParse(itS,0,":",&offIt);
+	if(anm.empty()) anm = TSYS::pathLev(var,1);
+
+	// Find for already presented attribute
+	unsigned srchPos;
+	for(srchPos = 0; srchPos < p_el.fldSize(); srchPos++)
+	    if(TSYS::strLine(p_el.fldAt(srchPos).reserve(),0) == var) break;
+	if(srchPos < p_el.fldSize())
 	{
-	    wrMode = (var.compare(0,2,"w:") == 0);
-	    if(wrMode) var.erase(0,2);
-	    unsigned flg = wrMode ? unsigned(TVal::DirWrite) : unsigned(TFld::NoWrite);
+	    p_el.fldAt(srchPos).setFlg(flg);	//RW change update
+	    p_el.fldAt(srchPos).setDescr(anm);	//Name change update
+	    als.push_back(var);
+	    owner().regVar(var, opts);
+	    continue;
+	}
 
-	    unsigned srchPos;
-	    // Find for already presented attribute
-	    for(srchPos = 0; srchPos < p_el.fldSize(); srchPos++)
-		if(TSYS::strLine(p_el.fldAt(srchPos).reserve(),0) == var) break;
-	    if(srchPos < p_el.fldSize())
-	    {
-		p_el.fldAt(srchPos).setFlg(flg);	//RW change update
-		als->push_back(var); owner().regVar(var);
-		continue;
-	    }
+	// Get type from config
+	int vtp = -1, vMMStp = MMS::VT_Float;
+	if(typeS.size())
+	{
+	    if(typeS.find("bool") == 0)		{ vtp = TFld::Boolean; vMMStp = MMS::VT_Bool; }
+	    else if(typeS.find("real") == 0)	{ vtp = TFld::Real; vMMStp = MMS::VT_Float; }
+	    else if(typeS.find("int") == 0)	{ vtp = TFld::Integer; vMMStp = MMS::VT_Int; }
+	    else if(typeS.find("string") == 0)	{ vtp = TFld::String; vMMStp = MMS::VT_VisString; }
+	    else if(typeS.find("struct") == 0)	{ vtp = TFld::Object; vMMStp = MMS::VT_Struct; }
+	    else if(typeS.find("array") == 0)	{ vtp = TFld::Object; vMMStp = MMS::VT_Array; }
+	}
 
-	    string aid = TSYS::strEncode(TSYS::pathLev(var,1), TSYS::oscdID);
-	    if(vlPresent(aid))
-		for(int i_v = 1; true; i_v++)
-		    if(!vlPresent(aid+i2s(i_v)))
-		    { aid += i2s(i_v); break; }
-
+	// Request value for the type obtain
+	if(vtp < 0)
+	{
 	    value->setAttr("itemId", TSYS::pathLev(var,1));
 	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
 	    owner().reqService(valCntr);
 	    if(!valCntr.attr("err").empty()) continue;
-
-	    int vtp = -1;
-	    switch(atoi(value->attr("tp").c_str()))
+	    switch((vMMStp=s2i(value->attr("tp"))))
 	    {
 		case MMS::VT_Bool:	vtp = TFld::Boolean;		break;
 		case MMS::VT_Int: case MMS::VT_UInt: vtp = TFld::Integer;	break;
@@ -636,26 +612,26 @@ void TMdPrm::attrPrc( MMS::XML_N *iVal, vector<string> *iAls, const string &vid 
 		case MMS::VT_Array: vtp = TFld::Object;			break;
 		default: mess_err(nodePath().c_str(), _("Value type %s is not implemented for '%s'."), value->attr("tp").c_str(), var.c_str());
 	    }
-	    if(vtp >= 0)
-	    {
-		p_el.fldAdd(new TFld(aid.c_str(),TSYS::pathLev(var,1).c_str(),(TFld::Type)vtp,flg,"","","","",(var+"\n"+value->attr("tp")).c_str()));
-		als->push_back(var);
-		owner().regVar(var);
-	    }
+	}
+
+	// Create new attribute
+	if(vtp >= 0)
+	{
+	    p_el.fldAdd(new TFld(aid.c_str(),anm.c_str(),(TFld::Type)vtp,flg,"","","","",(var+"\n"+i2s(vMMStp)).c_str()));
+	    als.push_back(var);
+	    owner().regVar(var, opts);
 	}
     }
 
     //Find for delete attribute
-    for(unsigned i_a = 0, i_p; !iVal && i_a < p_el.fldSize(); )
+    for(unsigned i_a = 0, i_p; i_a < p_el.fldSize(); )
     {
-	for(i_p = 0; i_p < als->size(); i_p++)
-	    if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == (*als)[i_p]) break;
-	if(i_p >= als->size())
+	for(i_p = 0; i_p < als.size(); i_p++)
+	    if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == als[i_p]) break;
+	if(i_p >= als.size())
 	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
 	i_a++;
     }
-
-    if(!iAls) delete als;
 }
 
 void TMdPrm::setEval( )
@@ -676,12 +652,38 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/VAR_LS",EVAL_STR,owner().startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","help",
+	    _("Attributes configuration list. List must be written by lines in format: \"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+	      "Where:\n"
+	      "  {MMS_domain} - MMS domain or '*' for global.\n"
+	      "  {MMS_var} - MMS variable name into domain or global.\n"
+	      "  {opt} - Options:\n"
+	      "    w - writable;\n"
+	      "    s - single request;\n"
+	      "    /{NN} - call at cycle even to number {N} [2...99].\n"
+	      "  {tp} - force type:\n"
+	      "    bool - boolean;\n"
+	      "    real - real;\n"
+	      "    int - integer;\n"
+	      "    string - string;\n"
+	      "    struct - structure;\n"
+	      "    array - array;\n"
+	      "  {id} - force attribute ID.\n"
+	      "  {name} - force attribute name."),0);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable append"),RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
 	return;
     }
 
     //Process command to page
-    if(a_path == "/prm/cfg/SEL_VAR")
+    if(a_path == "/prm/cfg/VAR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+    {
+	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
+	opt->childAdd("rule")->setAttr("expr","^[^:]+($|:[^:]*($|:[^:]*($|:[^:]+($|:.+))))")->setAttr("color","green")->
+	    childAdd("rule")->setAttr("expr","^[^:]+($|:[^:]*($|:[^:]*))")->setAttr("color","darkorange")->
+		childAdd("rule")->setAttr("expr","^[^:]+($|:[^:]*)")->setAttr("color","red")->
+		    childAdd("rule")->setAttr("expr","^[^:]+")->setAttr("color","blue");
+    }
+    else if(a_path == "/prm/cfg/SEL_VAR")
     {
 	if(ctrChkNode(opt,"get")) opt->setText(TBDS::genDBGet(nodePath()+"selVAR","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_RD))
@@ -690,7 +692,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    {
 		string vLs = varList(), vS;
 		for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size(); )
-		    if((vS.compare(0,2,"w:") == 0 && vS.compare(2,string::npos,opt->text()) == 0) || vS == opt->text())
+		    if(TSYS::strParse(vS,0,":") == opt->text())
 			break;
 		if(vS.empty()) setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
 	    }
@@ -723,7 +725,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		for(unsigned i_v = 0; reqVar.attr("err").empty() && i_v < reqVar.childSize(); i_v++)
 		    opt->childAdd("el")->setText(selVAR+"/"+(continueAfter=reqVar.childGet(i_v)->text()));
 	    }
-	    while(atoi(reqVar.attr("moreFollows").c_str()));
+	    while(s2i(reqVar.attr("moreFollows")));
 	}
     }
     else TParamContr::cntrCmdProc(opt);
@@ -774,7 +776,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 
     int off = 0;
     string nId = TSYS::strLine(vo.fld().reserve(), 0, &off);
-    int vTp = atoi(TSYS::strLine(vo.fld().reserve(),0,&off).c_str());
+    int vTp = s2i(TSYS::strLine(vo.fld().reserve(),0,&off));
 
     MMS::XML_N valCtr("MMS");
     MMS::XML_N *value = valCtr.setAttr("id", "write")->
