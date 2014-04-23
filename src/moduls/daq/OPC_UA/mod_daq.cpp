@@ -741,7 +741,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string view;\n"
 		"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
 		"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and GUID view."));
-	ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/SEL_NDS_lst",0);
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/SEL_NDS_lst",NULL);
 	return;
     }
 

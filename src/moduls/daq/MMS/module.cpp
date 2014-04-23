@@ -669,7 +669,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	      "    struct - structure;\n"
 	      "    array - array;\n"
 	      "  {id} - force attribute ID.\n"
-	      "  {name} - force attribute name."),0);
+	      "  {name} - force attribute name."),NULL);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/SEL_VAR",_("Variable append"),RWRW__,"root",SDAQ_ID,2,"dest","select","select","/prm/cfg/SEL_VAR_lst");
 	return;
     }

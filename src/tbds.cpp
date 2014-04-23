@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tbds.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,19 +39,16 @@ TBDS::TBDS( ) : TSubSYS(SDB_ID,_("Data Bases"),true), mSYSStPref(true)
     fldAdd(new TFld("val","Value"  ,TFld::String,TCfg::TransltText,"1000"));
 
     //> Open data bases DB structure
-    el_db.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_db.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_db.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    el_db.fldAdd(new TFld("TYPE",_("DB type (module)"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     el_db.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_db.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"200"));
+    el_db.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"200"));
     el_db.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
     el_db.fldAdd(new TFld("CODEPAGE",_("Code page"),TFld::String,TFld::NoFlag,"20"));
     el_db.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","1"));
 }
 
-TBDS::~TBDS(  )
-{
-
-}
+TBDS::~TBDS( )	{ }
 
 string TBDS::realDBName( const string &bdn )
 {
@@ -167,15 +164,9 @@ void TBDS::close( const string &bdn, bool del )
     }
 }
 
-string TBDS::fullDBSYS()
-{
-    return SYS->workDB()+".SYS";
-}
+string TBDS::fullDBSYS( )	{ return SYS->workDB()+".SYS"; }
 
-string TBDS::fullDB()
-{
-    return SYS->workDB()+".DB";
-}
+string TBDS::fullDB( )		{ return SYS->workDB()+".DB"; }
 
 bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &cfg, bool forceCfg )
 {
@@ -853,14 +844,12 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",SDB_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/nm",cfg("NAME").fld().descr(),RWRWR_,"root",SDB_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SDB_ID,3,"tp","str","cols","100","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/codep",cfg("CODEPAGE").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,4,
-		    "tp","str","dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
-		    "help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."));
-		ctrMkNode("fld",opt,-1,"/prm/cfg/toen",cfg("EN").fld().descr(),RWRWR_,"root",SDB_ID,1,"tp","bool");
+		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",SDB_ID,RWRWR_);
+		ctrRemoveNode(opt,"/prm/cfg/TYPE");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID);
+		ctrMkNode2("fld",opt,-1,"/prm/cfg/CODEPAGE",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDB_ID,
+		    "dest","sel_ed","sel_list",(Mess->charset()+";UTF-8;KOI8-R;KOI8-U;CP1251;CP866").c_str(),
+		    "help",_("Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."),NULL);
 	    }
 	}
 	if(ctrMkNode("area",opt,1,"/tbls",_("Tables"),R_R___))
@@ -907,32 +896,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	SYS->load();
 	SYS->setSelDB("");
     }
-    else if(a_path == "/prm/cfg/id" && ctrChkNode(opt))		opt->setText(id());
-    else if(a_path == "/prm/cfg/nm")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setName(opt->text());
-    }
-    else if(a_path == "/prm/cfg/dscr")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(dscr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setDscr(opt->text());
-    }
-    else if(a_path == "/prm/cfg/ADDR")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))	opt->setText(addr());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))	setAddr(opt->text());
-    }
-    else if(a_path == "/prm/cfg/codep")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(codePage());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setCodePage(opt->text());
-    }
-    else if(a_path == "/prm/cfg/toen")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(toEnable()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	setToEnable( atoi(opt->text().c_str()) );
-    }
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDB_ID,RWRWR_);
     else if(a_path == "/br/tbl_" || a_path == "/tbls/otbl")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))

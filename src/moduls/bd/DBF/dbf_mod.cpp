@@ -175,7 +175,7 @@ void MBD::cntrCmdProc( XMLNode *opt )
     {
 	TBD::cntrCmdProc(opt);
 	ctrRemoveNode(opt, "/sql");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,2,"tp","str","help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
 	    _("For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 	      "For example: /opt/dbf ."));
 	return;

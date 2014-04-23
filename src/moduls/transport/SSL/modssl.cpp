@@ -599,13 +599,14 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
 	    _("SSL input transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"
 	    "    addr - address for SSL to be opened, '*' address opens for all interfaces;\n"
 	    "    port - network port (/etc/services);\n"
 	    "    mode - SSL mode and version (SSLv2, SSLv3, SSLv23 and TLSv1)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/certKey",_("Certificates and private key"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
 	    "tp","str","cols","90","rows","7","help",_("SSL PAM certificates chain and private key."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/pkey_pass",_("Private key password"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"tp","str");
@@ -969,6 +970,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1,"help",
 	    _("SSL output transport has address format:\n"
 	    "  [addr]:[port]:[mode] - where:\n"

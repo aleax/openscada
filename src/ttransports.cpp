@@ -35,19 +35,19 @@ using namespace OSCADA;
 TTransportS::TTransportS( ) : TSubSYS(STR_ID, "Transports", true)
 {
     //> Input transport BD structure
-    el_in.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_in.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_in.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    el_in.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     el_in.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_in.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500"));
+    el_in.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
     el_in.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
     el_in.fldAdd(new TFld("PROT",_("Transport protocol"),TFld::String,TFld::NoFlag,i2s(atoi(OBJ_ID_SZ)*3).c_str()));
     el_in.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
     //> Output transport BD structure
-    el_out.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
-    el_out.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_out.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
+    el_out.fldAdd(new TFld("MODULE",_("Transport type"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     el_out.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
-    el_out.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TCfg::TransltText,"500"));
+    el_out.fldAdd(new TFld("DESCRIPT",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"500"));
     el_out.fldAdd(new TFld("ADDR",_("Address"),TFld::String,TFld::NoFlag,"100"));
     el_out.fldAdd(new TFld("START",_("To start"),TFld::Boolean,TFld::NoFlag,"1"));
 
@@ -129,18 +129,18 @@ void TTransportS::load_( )
 	    }
 
 	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
+	if(!SYS->selDB().empty())
+	{
 	    vector<string> m_ls;
 	    modList(m_ls);
 	    for(unsigned i_m = 0; i_m < m_ls.size(); i_m++)
 	    {
 		at(m_ls[i_m]).at().inList(db_ls);
-        	for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-            	    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().inAt(db_ls[i_it]).at().DB()))
-                	at(m_ls[i_m]).at().inDel(db_ls[i_it]);
-            }
-        }
+		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().inAt(db_ls[i_it]).at().DB()))
+			at(m_ls[i_m]).at().inDel(db_ls[i_it]);
+	    }
+	}
     }
     catch(TError err)
     {
@@ -180,8 +180,8 @@ void TTransportS::load_( )
 		for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
 		    if(itReg.find(m_ls[i_m]+"."+db_ls[i_it]) == itReg.end() && SYS->chkSelDB(at(m_ls[i_m]).at().outAt(db_ls[i_it]).at().DB()))
 			at(m_ls[i_m]).at().outDel(db_ls[i_it]);
-            }
-        }
+	    }
+	}
     }
     catch(TError err)
     {
@@ -801,13 +801,9 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
-		//TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
-		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),RWRWR_,"root",STR_ID,3,"tp","str","cols","90","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),RWRWR_,"root",STR_ID,3,"tp","str","dest","select","select","/prm/cfg/p_mod");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","bool");
+		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
+		ctrRemoveNode(opt,"/prm/cfg/MODULE");
+		ctrMkNode2("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,RWRWR_,"root",STR_ID,"dest","select","select","/prm/cfg/p_mod",NULL);
 	    }
 	}
 	return;
@@ -824,33 +820,6 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDB(opt->text());
-    }
-
-    else if(a_path == "/prm/cfg/id" && ctrChkNode(opt))		opt->setText(id());
-    else if(a_path == "/prm/cfg/name")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setName(opt->text());
-    }
-    else if(a_path == "/prm/cfg/dscr")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(dscr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDscr(opt->text());
-    }
-    else if(a_path == "/prm/cfg/ADDR")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(addr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setAddr(opt->text());
-    }
-    else if(a_path == "/prm/cfg/prot")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(protocolFull());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setProtocolFull(opt->text());
-    }
-    else if(a_path == "/prm/cfg/start")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(toStart() ? "1" : "0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setToStart(atoi(opt->text().c_str()));
     }
     else if(a_path == "/prm/cfg/p_mod" && ctrChkNode(opt))
     {
@@ -872,7 +841,7 @@ void TTransportIn::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_a=0; i_a < list.size(); i_a++)
 	    opt->childAdd("el")->setText(c_path+list[i_a]);
     }
-    //else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else TCntrNode::cntrCmdProc(opt);
 }
 
@@ -1020,11 +989,8 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/prm/cfg",_("Configuration")))
 	    {
-		ctrMkNode("fld",opt,-1,"/prm/cfg/id",cfg("ID").fld().descr(),R_R_R_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/name",cfg("NAME").fld().descr(),RWRWR_,"root",STR_ID,2,"tp","str","len",OBJ_NM_SZ);
-		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCRIPT").fld().descr(),RWRWR_,"root",STR_ID,3,"tp","str","cols","90","rows","3");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/start",cfg("START").fld().descr(),RWRWR_,"root",STR_ID,1,"tp","bool");
+		TConfig::cntrCmdMake(opt,"/prm/cfg",0,"root",STR_ID,RWRWR_);
+		ctrRemoveNode(opt,"/prm/cfg/MODULE");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/req",_("Request"),RWRW__,"root",STR_ID))
@@ -1056,27 +1022,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDB(opt->text());
     }
-    else if(a_path == "/prm/cfg/id" && ctrChkNode(opt))		opt->setText(id());
-    else if(a_path == "/prm/cfg/name")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setName(opt->text());
-    }
-    else if(a_path == "/prm/cfg/dscr")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(dscr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setDscr(opt->text());
-    }
-    else if(a_path == "/prm/cfg/ADDR")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(addr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setAddr(opt->text());
-    }
-    else if(a_path == "/prm/cfg/start")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(toStart() ? "1" : "0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setToStart(atoi(opt->text().c_str()));
-    }
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",STR_ID,RWRWR_);
     else if(a_path == "/req/tm" && ctrChkNode(opt,"get",R_R___,"root",STR_ID,SEC_RD))
 	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqTm","0",opt->attr("user")));
     else if(a_path == "/req/mode")

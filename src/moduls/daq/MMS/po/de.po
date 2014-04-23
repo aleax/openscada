@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-12 17:40+0300\n"
+"POT-Creation-Date: 2014-04-23 10:51+0300\n"
 "PO-Revision-Date: 2013-10-20 00:33+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -64,79 +64,118 @@ msgstr "Standard"
 msgid "Variables list (next line separated)"
 msgstr "Variablen-Liste (nächste Zeile getrennt)"
 
-#: module.cpp:170
+#: module.cpp:182
 msgid "No activity data."
 msgstr "Keine Aktivitätsdaten."
 
-#: module.cpp:170
+#: module.cpp:182
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Anschaltungsfehler. Wiederherstellung in %.6g s."
 
-#: module.cpp:175
+#: module.cpp:187
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
-#: module.cpp:176
+#: module.cpp:188
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf mit einer Periode: %s. "
 
-#: module.cpp:177
+#: module.cpp:189
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
-#: module.cpp:178
+#: module.cpp:190
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Verbrauchte Zeit: %s. Anfragen %.6g."
 
-#: module.cpp:207
+#: module.cpp:225
 msgid "Remote host error"
 msgstr "Remote-Host-Fehler"
 
-#: module.cpp:228
+#: module.cpp:246
 #, c-format
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "MMS erstellt automatische Transport für '%s' Controller."
 
-#: module.cpp:273 module.cpp:327 module.cpp:335
+#: module.cpp:291 module.cpp:346 module.cpp:353
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: Verbindung zu Datenquelle: %s."
 
-#: module.cpp:273
+#: module.cpp:291
 msgid "STOP"
 msgstr "STOP"
 
-#: module.cpp:335
+#: module.cpp:353
 msgid "OK"
 msgstr "OK"
 
-#: module.cpp:401
-#, c-format
-msgid "Value type read '%s' is not implemented."
-msgstr "Werttyp lesen '%s' nicht implementiert ist."
+#: module.cpp:420
+msgid "Value '%s' type '%s' read is not implemented."
+msgstr "Wert '%s' Typ '%s' lesen nicht implementiert ist."
 
-#: module.cpp:570 module.cpp:624
+#: module.cpp:613
 #, c-format
 msgid "Value type %s is not implemented for '%s'."
 msgstr "Werttyp %s ist nicht für '%s' implementiert."
 
-#: module.cpp:666
+#: module.cpp:656
+msgid ""
+"Attributes configuration list. List must be written by lines in format: "
+"\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+"Where:\n"
+"  {MMS_domain} - MMS domain or '*' for global.\n"
+"  {MMS_var} - MMS variable name into domain or global.\n"
+"  {opt} - Options:\n"
+"    w - writable;\n"
+"    s - single request;\n"
+"    /{NN} - call at cycle even to number {N} [2...99].\n"
+"  {tp} - force type:\n"
+"    bool - boolean;\n"
+"    real - real;\n"
+"    int - integer;\n"
+"    string - string;\n"
+"    struct - structure;\n"
+"    array - array;\n"
+"  {id} - force attribute ID.\n"
+"  {name} - force attribute name."
+msgstr ""
+"Attribute Konfigurationsliste. Liste muss von Linien im Format geschrieben werden: "
+"\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+"Wo:\n"
+"  {MMS_domain} - MMS-Domäne oder '*' für globale.\n"
+"  {MMS_var} - MMS Variablenname in Domäne oder global.\n"
+"  {opt} - Optionen:\n"
+"    w - beschreibbar;\n"
+"    s - einzelne Anfrage;\n"
+"    /{NN} - rufen bei Zyklus sogar Nummer {N} [2...99].\n"
+"  {tp} - Kraft-Typ:\n"
+"    bool - boolean;\n"
+"    real - real;\n"
+"    int - ganze Zahl;\n"
+"    string - Leine;\n"
+"    struct - Struktur;\n"
+"    array - Feld;\n"
+"  {id} - Kraft-Attribut ID.\n"
+"  {name} - Kraft Attributnamen."
+
+#: module.cpp:673
 msgid "Variable append"
 msgstr "Variable anhängen"
 
-#: module.cpp:736
+#: module.cpp:751
 msgid "1:Parameter is disabled."
 msgstr "1:Parameter ist abgeschaltet."
 
-#: module.cpp:737
+#: module.cpp:752
 msgid "2:Acquisition is stopped."
 msgstr "2:Anfrage ist angehalten."
 
-#: module.cpp:823
+#: module.cpp:838
 #, c-format
 msgid "Write to '%s' error: %s."
 msgstr "Schreiben Sie '%s' Fehler: %s."

@@ -653,6 +653,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/devLS","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". Where:\n"
@@ -666,7 +667,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -1251,6 +1252,7 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,3,
 	    "dest","sel_ed","select","/prm/cfg/devLS","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". Where:\n"

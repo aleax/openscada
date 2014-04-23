@@ -2835,8 +2835,8 @@ void DevelWdgView::chUnDo( )
     else if(rlW && rule->name() == "chldPaste")	mainWin()->visualItDel(rule->attr("dst"),true);
 
     //For top items (like inspector) data update
-    setSelect(true,PrcChilds);
     if(rlW) load(rlW->id()); else load(id());
+    setSelect(true, PrcChilds);
 
     //Move cursor
     chTree->setAttr("cur", i2s(vmin((int)chTree->childSize(),cur+1)));

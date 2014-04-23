@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.MMS 0.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-12 17:40+0300\n"
+"POT-Creation-Date: 2014-04-23 10:51+0300\n"
 "PO-Revision-Date: 2013-10-20 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -63,79 +63,118 @@ msgstr "Стандарт"
 msgid "Variables list (next line separated)"
 msgstr "Перечень переменных (разделение след. строкой)"
 
-#: module.cpp:170
+#: module.cpp:182
 msgid "No activity data."
 msgstr "Нет активности данных."
 
-#: module.cpp:170
+#: module.cpp:182
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Ошибка подключения. Восстановление через %.6g с."
 
-#: module.cpp:175
+#: module.cpp:187
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
-#: module.cpp:176
+#: module.cpp:188
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Вызовы с периодом: %s. "
 
-#: module.cpp:177
+#: module.cpp:189
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#: module.cpp:178
+#: module.cpp:190
 #, c-format
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Затрачено времени: %s. Запросов %.6g."
 
-#: module.cpp:207
+#: module.cpp:225
 msgid "Remote host error"
 msgstr "Ошибка удалёного хоста"
 
-#: module.cpp:228
+#: module.cpp:246
 #, c-format
 msgid "MMS automatic created transport for '%s' controller."
 msgstr "Автоматически созданный MMS транспорт для контроллера '%s'."
 
-#: module.cpp:273 module.cpp:327 module.cpp:335
+#: module.cpp:291 module.cpp:346 module.cpp:353
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: подключение к источнику данных: %s."
 
-#: module.cpp:273
+#: module.cpp:291
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-#: module.cpp:335
+#: module.cpp:353
 msgid "OK"
 msgstr "НОРМА"
 
-#: module.cpp:401
-#, c-format
-msgid "Value type read '%s' is not implemented."
-msgstr "Чтение значения типа '%s' не реализовано."
+#: module.cpp:420
+msgid "Value '%s' type '%s' read is not implemented."
+msgstr "Чтение значения '%s' типа '%s' не реализовано."
 
-#: module.cpp:570 module.cpp:624
+#: module.cpp:613
 #, c-format
 msgid "Value type %s is not implemented for '%s'."
 msgstr "Значения типа %s не реализовано для '%s'."
 
-#: module.cpp:666
+#: module.cpp:656
+msgid ""
+"Attributes configuration list. List must be written by lines in format: "
+"\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+"Where:\n"
+"  {MMS_domain} - MMS domain or '*' for global.\n"
+"  {MMS_var} - MMS variable name into domain or global.\n"
+"  {opt} - Options:\n"
+"    w - writable;\n"
+"    s - single request;\n"
+"    /{NN} - call at cycle even to number {N} [2...99].\n"
+"  {tp} - force type:\n"
+"    bool - boolean;\n"
+"    real - real;\n"
+"    int - integer;\n"
+"    string - string;\n"
+"    struct - structure;\n"
+"    array - array;\n"
+"  {id} - force attribute ID.\n"
+"  {name} - force attribute name."
+msgstr ""
+"Список конфигурации атрибутов. Список должен записываться строками формата: "
+"\"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
+"Где:\n"
+"  {MMS_domain} - MMS домен или '*' для глобального.\n"
+"  {MMS_var} - MMS имя переменной в домене или глобально.\n"
+"  {opt} - Опции:\n"
+"    w - доступен для записи;\n"
+"    s - одиночный запрос;\n"
+"    /{NN} - вызов в цикле кратно номеру {N} [2...99].\n"
+"  {tp} - прямо указанный тип:\n"
+"    bool - логический;\n"
+"    real - реальный;\n"
+"    int - целый;\n"
+"    string - строка;\n"
+"    struct - структура;\n"
+"    array - масив;\n"
+"  {id} - прямо указанный идентификатор.\n"
+"  {name} - прямо указанное имя."
+
+#: module.cpp:673
 msgid "Variable append"
 msgstr "Добавление переменной"
 
-#: module.cpp:736
+#: module.cpp:751
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-#: module.cpp:737
+#: module.cpp:752
 msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
-#: module.cpp:823
+#: module.cpp:838
 #, c-format
 msgid "Write to '%s' error: %s."
 msgstr "Ошибка записи в '%s': %s."

@@ -1,3 +1,10 @@
+2014-04-23 Roman
+- DB.*,Transport.*: TBD, TTransportIn and TTransportOut moved to use TConfig::cntrCmdMake().
+- DB.LibsDB.{vcaBase.db,vcaTest.db}: Inter-widgets link example added to Test.FormElTests page.
+- FIX:DAQ.{MMS,OPC_UA}: ctrMkNode2 using fix. Translation update.
+- FIX:UI.Vision: Selection box update fix after UnDo position.
+
+
 2014-04-22 Roman
 - FIX:DB.{LibsDB.vcaBase.db,AGLKS.{St.db,vca.db},Boiler.St.db}: Some previous expansions fix and the models adapted for its.
 - SYS: "/prm/cfg/addr" control elements renamed to "/prm/cfg/ADDR" for equal to configuration (fields names into the DB table).

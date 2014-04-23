@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.OPC_UA 0.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-12 22:05+0300\n"
+"POT-Creation-Date: 2014-04-23 10:48+0300\n"
 "PO-Revision-Date: 2010-04-30 11:50+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -79,7 +79,8 @@ msgstr "Стандарт"
 msgid "Nodes list"
 msgstr "Список узлов"
 
-#: mod_daq.cpp:94 mod_daq.cpp:545 mod_daq.cpp:549 mod_daq.cpp:563
+#: mod_daq.cpp:94 mod_daq.cpp:546 mod_daq.cpp:550 mod_daq.cpp:564
+#: mod_daq.cpp:784 mod_daq.cpp:793 mod_daq.cpp:796 mod_daq.cpp:810
 msgid "Root folder (84)"
 msgstr "Корневая директория (84)"
 
@@ -107,185 +108,185 @@ msgstr "Следующий вызов по cron '%s'. "
 msgid "Spent time: %s. Requests %.6g."
 msgstr "Затрачено времени: %s. Запросов %.6g."
 
-#: mod_daq.cpp:165
+#: mod_daq.cpp:164
 #, c-format
 msgid "OPC UA automatic created transport for '%s' controller."
 msgstr "OPC UA автоматически созданный транспорт для контроллера '%s'."
 
-#: mod_daq.cpp:196 mod_daq.cpp:300 mod_daq.cpp:308
+#: mod_daq.cpp:195 mod_daq.cpp:299 mod_daq.cpp:307
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: подключение к источнику данных: %s."
 
-#: mod_daq.cpp:196
+#: mod_daq.cpp:195
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-#: mod_daq.cpp:205
+#: mod_daq.cpp:204
 msgid "Remote host error"
 msgstr "Ошибка удалённого хоста"
 
-#: mod_daq.cpp:308
+#: mod_daq.cpp:307
 msgid "OK"
 msgstr "НОРМА"
 
-#: mod_daq.cpp:409
+#: mod_daq.cpp:408
 msgid "Server nodes browser"
 msgstr "Обзор узлов сервера"
 
-#: mod_daq.cpp:411
+#: mod_daq.cpp:410
 msgid "Node"
 msgstr "Узел"
 
-#: mod_daq.cpp:412
+#: mod_daq.cpp:411
 msgid "Attributes"
 msgstr "Атрибуты"
 
-#: mod_daq.cpp:414
+#: mod_daq.cpp:413
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: mod_daq.cpp:415 mod_daq.cpp:487
+#: mod_daq.cpp:414 mod_daq.cpp:488
 msgid "Value"
 msgstr "Значение"
 
-#: mod_daq.cpp:458
+#: mod_daq.cpp:459
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: mod_daq.cpp:462
+#: mod_daq.cpp:463
 msgid "NodeId"
 msgstr "Ид.Узла"
 
-#: mod_daq.cpp:464
+#: mod_daq.cpp:465
 msgid "NodeClass"
 msgstr "КлассУзла"
 
-#: mod_daq.cpp:467
+#: mod_daq.cpp:468
 msgid "Object"
 msgstr "Объект"
 
-#: mod_daq.cpp:468
+#: mod_daq.cpp:469
 msgid "Variable"
 msgstr "Переменная"
 
-#: mod_daq.cpp:469
+#: mod_daq.cpp:470
 msgid "Method"
 msgstr "Метод"
 
-#: mod_daq.cpp:470
+#: mod_daq.cpp:471
 msgid "ObjectType"
 msgstr "ТипОбъекта"
 
-#: mod_daq.cpp:471
+#: mod_daq.cpp:472
 msgid "VariableType"
 msgstr "ТипПеременной"
 
-#: mod_daq.cpp:472
+#: mod_daq.cpp:473
 msgid "ReferenceType"
 msgstr "ТипСсылки"
 
-#: mod_daq.cpp:473 mod_daq.cpp:490
+#: mod_daq.cpp:474 mod_daq.cpp:491
 msgid "DataType"
 msgstr "ТипДанных"
 
-#: mod_daq.cpp:474
+#: mod_daq.cpp:475
 msgid "View"
 msgstr "Вид"
 
-#: mod_daq.cpp:477
+#: mod_daq.cpp:478
 msgid "BrowseName"
 msgstr "ИмяОбзора"
 
-#: mod_daq.cpp:478
+#: mod_daq.cpp:479
 msgid "DisplayName"
 msgstr "ИмяОтображения"
 
-#: mod_daq.cpp:479 mod_prt.cpp:58
+#: mod_daq.cpp:480 mod_prt.cpp:58
 msgid "Description"
 msgstr "Описание"
 
-#: mod_daq.cpp:480
+#: mod_daq.cpp:481
 msgid "WriteMask"
 msgstr "МаскаЗаписи"
 
-#: mod_daq.cpp:481
+#: mod_daq.cpp:482
 msgid "UserWriteMask"
 msgstr "МаскаЗаписиПольз"
 
-#: mod_daq.cpp:482
+#: mod_daq.cpp:483
 msgid "IsAbstract"
 msgstr "Абстрактный"
 
-#: mod_daq.cpp:483
+#: mod_daq.cpp:484
 msgid "Symmetric"
 msgstr "Симметричный"
 
-#: mod_daq.cpp:484
+#: mod_daq.cpp:485
 msgid "InverseName"
 msgstr "ИнверсноеИмя"
 
-#: mod_daq.cpp:485
+#: mod_daq.cpp:486
 msgid "ContainsNoLoops"
 msgstr "НеСодержитВитков"
 
-#: mod_daq.cpp:486
+#: mod_daq.cpp:487
 msgid "EventNotifier"
 msgstr "УведомлениеСобытий"
 
-#: mod_daq.cpp:499
+#: mod_daq.cpp:500
 msgid "ValueRank"
 msgstr "РангЗначения"
 
-#: mod_daq.cpp:500
+#: mod_daq.cpp:501
 msgid "ArrayDimensions"
 msgstr "РазмерностьМассива"
 
-#: mod_daq.cpp:503
+#: mod_daq.cpp:504
 msgid "AccessLevel"
 msgstr "УровеньДоступа"
 
-#: mod_daq.cpp:506 mod_daq.cpp:518
+#: mod_daq.cpp:507 mod_daq.cpp:519
 msgid "Readable, "
 msgstr "Чтение, "
 
-#: mod_daq.cpp:507 mod_daq.cpp:519
+#: mod_daq.cpp:508 mod_daq.cpp:520
 msgid "Writable, "
 msgstr "Запись, "
 
-#: mod_daq.cpp:508 mod_daq.cpp:520
+#: mod_daq.cpp:509 mod_daq.cpp:521
 msgid "History readable, "
 msgstr "Чтение архива, "
 
-#: mod_daq.cpp:509 mod_daq.cpp:521
+#: mod_daq.cpp:510 mod_daq.cpp:522
 msgid "History writable, "
 msgstr "Запись архива, "
 
-#: mod_daq.cpp:510
+#: mod_daq.cpp:511
 msgid "Semantic change, "
 msgstr "Семантичные изменения, "
 
-#: mod_daq.cpp:515
+#: mod_daq.cpp:516
 msgid "UserAccessLevel"
 msgstr "УровеньДоступаПользов"
 
-#: mod_daq.cpp:524
+#: mod_daq.cpp:525
 msgid "MinimumSamplingInterval"
 msgstr "МинимИнтервалОпроса"
 
-#: mod_daq.cpp:525
+#: mod_daq.cpp:526
 msgid "Historizing"
 msgstr "Архивирование"
 
-#: mod_daq.cpp:526
+#: mod_daq.cpp:527
 msgid "Executable"
 msgstr "Исполняемый"
 
-#: mod_daq.cpp:527
+#: mod_daq.cpp:528
 msgid "UserExecutable"
 msgstr "ИсполняемыйПользов"
 
-#: mod_daq.cpp:733
+#: mod_daq.cpp:734
 msgid ""
 "Variables and it containers (Objects) list. All variables will put into the "
 "parameter attributes list.\n"
@@ -315,15 +316,19 @@ msgstr ""
 "  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - узел в области имён 4 и в виде "
 "GUID."
 
-#: mod_daq.cpp:763
+#: mod_daq.cpp:744
+msgid "Node append"
+msgstr "Добавить узел"
+
+#: mod_daq.cpp:831
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-#: mod_daq.cpp:764
+#: mod_daq.cpp:832
 msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
-#: mod_daq.cpp:784
+#: mod_daq.cpp:852
 #, c-format
 msgid "0x%x: Attribute's errors %s"
 msgstr "0x%x: Ошибки атрибутов %s"

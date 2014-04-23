@@ -627,6 +627,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
 	    _("Socket's input transport has address format:\n"
 	    "  TCP:{addr}:{port}:{mode} - TCP socket:\n"
@@ -639,7 +640,7 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UNIX:{name}:{mode} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
-	ctrMkNode("fld",opt,-1,"/prm/cfg/prot",cfg("PROT").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID);
+	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/qLn",_("Queue length"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","dec",
 	    "help",_("Used for TCP and UNIX sockets."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/clMax",_("Clients maximum"),RWRWR_,"root",STR_ID,2,"tp","dec",
@@ -978,6 +979,7 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,1,"help",
 	    _("Socket's output transport has address format:\n"
 	    "  TCP:{addr}:{port} - TCP socket:\n"
