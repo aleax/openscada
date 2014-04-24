@@ -215,7 +215,7 @@ class Reg
 class RegW
 {
     public:
-	RegW( ) : mTp(Reg::Free)		{ }
+	RegW( ) : mTp(Reg::Free), mConst(false)	{ }
 	~RegW( )				{ setType(Reg::Free); }
 
 	void operator=( char ivar )		{ setType(Reg::Bool);	el.b = ivar; }
@@ -223,12 +223,14 @@ class RegW
 	void operator=( int64_t ivar )		{ setType(Reg::Int);	el.i = ivar; }
 	void operator=( double ivar )		{ setType(Reg::Real);	el.r = ivar; }
 	void operator=( const string &ivar )	{ setType(Reg::String);	*el.s = ivar;}
-	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);    *el.o = ivar;}
+	void operator=( AutoHD<TVarObj> ivar )	{ setType(Reg::Obj);	*el.o = ivar;}
 	void operator=( const TVariant &ivar );
 
 	Reg::Type type( ) const			{ return mTp; }
 	Reg::Type vType( Func *fnc );
+	bool vConst( )				{ return mConst; }
 	void setType( Reg::Type tp );
+	void setVConst( )			{ mConst = true; }
 
 	Reg::El &val( )				{ return el; }
 
@@ -238,6 +240,7 @@ class RegW
 	Reg::Type	mTp;
 	Reg::El		el;
 	vector<string>	mPrps;
+	bool		mConst;		//Constant, prevent write
 };
 
 //*************************************************

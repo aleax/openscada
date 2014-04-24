@@ -364,9 +364,9 @@ string TVarObj::getStrXML( const string &oid )
 	switch(ip->second.type())
 	{
 	    case TVariant::String:	nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+ip->second.getS()+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+ip->second.getS()+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+ip->second.getS()+"</bool>\n"; break;
+	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</int>\n"; break;
+	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</real>\n"; break;
+	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</bool>\n"; break;
 	    case TVariant::Object:	nd += ip->second.getO().at().getStrXML(ip->first); break;
 	    default: break;
 	}
@@ -483,9 +483,9 @@ string TArrayObj::getStrXML( const string &oid )
 	switch(mEls[ip].type())
 	{
 	    case TVariant::String:	nd += "<str>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int>"+mEls[ip].getS()+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real>"+mEls[ip].getS()+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool>"+mEls[ip].getS()+"</bool>\n"; break;
+	    case TVariant::Integer:	nd += "<int>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</int>\n"; break;
+	    case TVariant::Real:	nd += "<real>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</real>\n"; break;
+	    case TVariant::Boolean:	nd += "<bool>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</bool>\n"; break;
 	    case TVariant::Object:	nd += mEls[ip].getO().at().getStrXML(); break;
 	    default: break;
 	}
@@ -1227,10 +1227,7 @@ void TCntrNodeObj::propSet( const string &id, TVariant val )
     cnd.at().objPropSet(id,val);
 }
 
-string TCntrNodeObj::getStrXML(const string &oid)
-{
-    return "<TCntrNodeObj path=\""+cnd.at().nodePath()+"\"/>";
-}
+string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path=\""+cnd.at().nodePath()+"\"/>"; }
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {

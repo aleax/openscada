@@ -1,3 +1,12 @@
+2014-04-24 Roman
+- FIX:DB.LibsDB.vcaBase.db: All Digital signals represent shapes expand and set unified.
+- FIX:SYS.TVariant: User objects encode to XMLStr is fixed for EVAL represent by boolean, integer, real.
+- FIX:DAQ.JavaLikeCalc: Prevent write to generic constans, detected by "SYS.localtime(0,0,...);".
+- DAQ.MMS: Errors processing expand and used for connection miss detect and prevent requests repeate.
+    Single and divided variables set for request by phases.
+- UI.Vision: Prevent scroll to selected items at no it change.
+
+
 2014-04-23 Roman
 - DB.*,Transport.*: TBD, TTransportIn and TTransportOut moved to use TConfig::cntrCmdMake().
 - DB.LibsDB.{vcaBase.db,vcaTest.db}: Inter-widgets link example added to Test.FormElTests page.

@@ -269,10 +269,10 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 	    switch(tR->type())
 	    {
 		//Saved constants check
-		case Reg::Bool:	  if(tR->lock() && tR->name().empty()) reg[i_rg] = tR->val().b;	break;
-		case Reg::Int:	  if(tR->lock() && tR->name().empty()) reg[i_rg] = tR->val().i;	break;
-		case Reg::Real:	  if(tR->lock() && tR->name().empty()) reg[i_rg] = tR->val().r;	break;
-		case Reg::String: if(tR->lock() && tR->name().empty()) reg[i_rg] = *tR->val().s;break;
+		case Reg::Bool:	  if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().b; reg[i_rg].setVConst(); }	break;
+		case Reg::Int:	  if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().i; reg[i_rg].setVConst(); }	break;
+		case Reg::Real:	  if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().r; reg[i_rg].setVConst(); }	break;
+		case Reg::String: if(tR->lock() && tR->name().empty()) { reg[i_rg] = *tR->val().s;reg[i_rg].setVConst(); }	break;
 
 		case Reg::Var:	  reg[i_rg].setType(Reg::Var); reg[i_rg].val().io = tR->val().io;	break;
 		case Reg::PrmAttr:reg[i_rg].setType(Reg::PrmAttr); *reg[i_rg].val().pA = *tR->val().pA;	break;
@@ -439,7 +439,7 @@ int Func::ioGet( const string &nm )
 void Func::regClear( )
 {
     for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
-        delete mRegs[i_rg];
+	delete mRegs[i_rg];
     mRegs.clear();
 }
 
@@ -1689,6 +1689,7 @@ void Func::setVal( TValFunc *io, RegW &rg, const TVariant &val )
 		}
 		break;
 	    default:
+		if(rg.vConst())	break;
 		switch(val.type())
 		{
 		    case TVariant::Boolean:	rg = val.getB();	break;
@@ -1716,7 +1717,7 @@ void Func::setValS( TValFunc *io, RegW &rg, const string &val )
 	{
 	    case Reg::Var:	io->setS(rg.val().io, val);	break;
 	    case Reg::PrmAttr:	rg.val().pA->at().setS(val);	break;
-	    default: rg = val; break;
+	    default:		if(!rg.vConst()) rg = val;	break;
 	}
     else setVal(io, rg, val);
 }
@@ -1728,7 +1729,7 @@ void Func::setValI( TValFunc *io, RegW &rg, int64_t val )
 	{
 	    case Reg::Var:	io->setI(rg.val().io, val);	break;
 	    case Reg::PrmAttr:	rg.val().pA->at().setI(val);	break;
-	    default: rg = val; break;
+	    default:		if(!rg.vConst()) rg = val;	break;
 	}
     else setVal(io, rg, val);
 }
@@ -1740,7 +1741,7 @@ void Func::setValR( TValFunc *io, RegW &rg, double val )
 	{
 	    case Reg::Var:	io->setR(rg.val().io, val);	break;
 	    case Reg::PrmAttr:	rg.val().pA->at().setR(val);	break;
-	    default: rg = val; break;
+	    default:		if(!rg.vConst()) rg = val;	break;
 	}
     else setVal(io, rg, val);
 }
@@ -1752,7 +1753,7 @@ void Func::setValB( TValFunc *io, RegW &rg, char val )
 	{
 	    case Reg::Var:	io->setB(rg.val().io, val);	break;
 	    case Reg::PrmAttr:	rg.val().pA->at().setB(val);	break;
-	    default: rg = val; break;
+	    default:		if(!rg.vConst()) rg = val;	break;
 	}
     else setVal(io, rg, val);
 }
@@ -1764,7 +1765,7 @@ void Func::setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val )
 	{
 	    case Reg::Var:	io->setO(rg.val().io,val);	break;
 	    case Reg::PrmAttr:	break;
-	    default: rg = val; break;
+	    default:		if(!rg.vConst()) rg = val;	break;
 	}
     else setVal(io,rg,val);
 }

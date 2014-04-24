@@ -863,7 +863,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	{
 	    QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
 	    QList<QTableWidgetItem*> foundIts = wdg->findItems(val.c_str(), Qt::MatchExactly);
-	    QTableWidgetItem *selIt = NULL;
+	    QTableWidgetItem *selIt = NULL, *selItPrev = wdg->currentItem();
 	    switch(wdg->selectionBehavior())
 	    {
 		case QAbstractItemView::SelectRows:
@@ -879,7 +879,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    break;
 	    }
 	    shD->addrWdg->blockSignals(true);
-	    if(selIt) { wdg->setCurrentItem(selIt); wdg->scrollToItem(selIt); }
+	    if(selIt) { wdg->setCurrentItem(selIt); if(selIt != selItPrev) wdg->scrollToItem(selIt); }
 	    else wdg->setCurrentItem(NULL);
 	    shD->addrWdg->blockSignals(false);
 	    break;

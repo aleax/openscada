@@ -210,7 +210,7 @@ void TMdContr::reqService( MMS::XML_N &io )
     io.setAttr("err", "");
 
     try { tr.at().start(); }
-    catch(TError err) { io.setAttr("err", TSYS::strMess("%s",err.mess.c_str())); reset(); return; }
+    catch(TError err) { io.setAttr("err", TSYS::strMess("10:%s",err.mess.c_str())); reset(); return; }
 
     Client::reqService(io);
     if(io.attr("err").empty()) tmDelay--;
@@ -329,7 +329,8 @@ void *TMdContr::Task( void *icntr )
 	valCtr.setAttr("id", "read");
 	MtxAlloc res(cntr.enRes, true);
 	bool isErr = valCtr.attr("err").size();
-	for(map<string,VarStr>::iterator vi = cntr.mVars.begin(); true; ++vi)
+	unsigned viCnt = 0;
+	for(map<string,VarStr>::iterator vi = cntr.mVars.begin(); true; ++vi, ++viCnt)
 	{
 	    // Send request
 	    if(vi == cntr.mVars.end() || valCtr.childSize() >= cntr.mVarsRdReq.getI() ||
@@ -427,7 +428,7 @@ void *TMdContr::Task( void *icntr )
 		if(vi == cntr.mVars.end()) break;
 	    }
 
-	    if(firstCall || !vi->second.div || !(it_cnt%vi->second.div))
+	    if(firstCall || !vi->second.div || !((it_cnt+viCnt)%vi->second.div))
 	    {
 		value = valCtr.childAdd("it")->setAttr("single", i2s(vi->second.single))->setAttr("itemId", TSYS::pathLev(vi->first,1));
 		if(TSYS::pathLev(vi->first,0) != "*") value->setAttr("domainId", TSYS::pathLev(vi->first,0));
@@ -546,6 +547,7 @@ void TMdPrm::attrPrc( )
 {
     vector<string> als;
 
+    bool conErr = false;
     string varLs = varList(), itS, var, opts, typeS, aid, anm;
 
     MMS::XML_N valCntr("MMS"), *value = valCntr.setAttr("id","read")->childAdd("it");
@@ -598,10 +600,11 @@ void TMdPrm::attrPrc( )
 	// Request value for the type obtain
 	if(vtp < 0)
 	{
+	    if(conErr)	continue;
 	    value->setAttr("itemId", TSYS::pathLev(var,1));
 	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
 	    owner().reqService(valCntr);
-	    if(!valCntr.attr("err").empty()) continue;
+	    if((conErr=(s2i(valCntr.attr("err"))==10))) continue;
 	    switch((vMMStp=s2i(value->attr("tp"))))
 	    {
 		case MMS::VT_Bool:	vtp = TFld::Boolean;		break;
@@ -646,13 +649,13 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.compare(0,6,"/serv/") == 0) { TParamContr::cntrCmdProc(opt); return; }
 
     //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode2("fld",opt,-1,"/prm/cfg/VAR_LS",EVAL_STR,owner().startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","help",
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/VAR_LS",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","help",
 	    _("Attributes configuration list. List must be written by lines in format: \"{MMS_domain}/{MMS_var}[:{opt}[:{tp}[:{id}[:{name}]]]]\".\n"
 	      "Where:\n"
 	      "  {MMS_domain} - MMS domain or '*' for global.\n"
