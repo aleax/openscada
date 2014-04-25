@@ -1,4 +1,5 @@
 2014-04-25 Roman
+- SYS. Splash is updated for 0.9-work.
 - DB.AGLKS.St.db: KeepAlive timeout of input transport OPC_UA set to 60.
 - !!!!:FIX:Archive,Archive.*,Special.FLibSYS: Significant values archiving fixes:
     Prevent for set negative period values into buffer.
