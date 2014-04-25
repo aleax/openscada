@@ -272,6 +272,8 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     if(!buf.vOK(beg,end)) return false;
     beg = vmax(beg, buf.begin());
     end = vmin(end, buf.end());
+    beg = (beg/period())*period();
+    end = (end/period())*period();
 
     //Table struct init
     TConfig cfg((archive().valType()==TFld::Real) ? (&mod->vlRealEl()) :

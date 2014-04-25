@@ -55,7 +55,7 @@ TValBuf::TValBuf( ) : mValTp(TFld::Integer), mHgResTm(false), mHrdGrd(false), mE
 }
 
 TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres ) :
-    mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mEnd(0), mBeg(0), mPer(ipr), mSize(isz)
+    mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mEnd(0), mBeg(0), mPer(vmax(0,ipr)), mSize(isz)
 {
     buf.bl = NULL;
 
@@ -164,7 +164,12 @@ int TValBuf::realSize()
     return 0;
 }
 
-bool TValBuf::vOK( int64_t ibeg, int64_t iend )	{ return !(!begin() || !end() || iend < begin() || ibeg > end() || ibeg > iend); }
+bool TValBuf::vOK( int64_t ibeg, int64_t iend )
+{
+    if(!period()) return !(!begin() || !end() || iend < begin() || ibeg > end() || ibeg > iend);
+
+    return !(!begin() || !end() || iend/period() < begin()/period() || ibeg/period() > end()/period() || ibeg/period() > iend/period());
+}
 
 void TValBuf::setValType( TFld::Type vl )	{ makeBuf(vl, mSize, mPer, mHrdGrd, mHgResTm); }
 
@@ -1287,9 +1292,9 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     //> Put to archivators
     ResAlloc res(aRes, false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-		(!arch_el[i_a]->lastGet() || ibeg < arch_el[i_a]->lastGet()))
-	    arch_el[i_a]->setVals(buf,ibeg,vmin(iend,arch_el[i_a]->lastGet()));
+	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()))
+		//&& (!arch_el[i_a]->lastGet() || ibeg < arch_el[i_a]->lastGet()))	//!!!! Impossible write direct else
+	    arch_el[i_a]->setVals(buf, ibeg, iend/*vmin(iend,arch_el[i_a]->lastGet())*/);
 }
 
 void TVArchive::getActiveData( )
@@ -2801,18 +2806,19 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
     if(!beg || !end) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax(beg, ibuf.begin()); end = vmin(end, ibuf.end());
 
-    if(!beg || !end || beg > end) return;
+    if(!beg || !end || beg/a_per > end/a_per) return;
 
-    //>> Check for put to buffer
+    //Check for put to buffer
     if(&archive() != &ibuf && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size())
     { archive().TValBuf::setVals(ibuf,vmax(archive().end(),beg),end); return; }
-    //>> Put direct to archive
+
+    //Put direct to archive
     int64_t wPrevTm = 0, s_k, n_k;
     string wPrevVal;
 
     if(&archive() == &ibuf || end > archive().end()) { wPrevTm = prev_tm; wPrevVal = prev_val; }
 
-    //>> Combining
+    //Combining
     TVArchive::CombMode combM = archive().combMode();
     bool setOK = false;
     if(a_per > ibuf.period())
@@ -2904,7 +2910,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		case TFld::Real:
 		{
 		    double c_val = ibuf.getR(&c_tm, true);
-		    if(combM == TVArchive::LastVal) { obuf.setR(c_val,c_tm); c_tm += a_per; break; }
+		    if(combM == TVArchive::LastVal) { obuf.setR(c_val, c_tm); c_tm += a_per; break; }
 
 		    int vdif = c_tm/a_per - wPrevTm/a_per;
 		    if(!vdif)
@@ -2920,7 +2926,7 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 				    c_val = (v_o*s_k+c_val*n_k)/(s_k+n_k);
 				    break;
 				case TVArchive::MinVal:	c_val = vmin(c_val,v_o); break;
-				case TVArchive::MaxVal: c_val = vmax(c_val,v_o); break;
+				case TVArchive::MaxVal:	c_val = vmax(c_val,v_o); break;
 				default: break;
 			    }
 			wPrevVal.assign((char*)&c_val,sizeof(double));

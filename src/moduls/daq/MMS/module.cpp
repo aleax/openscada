@@ -128,7 +128,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mAddr(cfg("ADDR")), mVarsRdReq(cfg("VARS_RD_REQ")),
-    prcSt(false), callSt(false), isReload(false), acq_err(dataRes), tmGath(0), tmDelay(0)
+    prcSt(false), callSt(false), isReload(false), alSt(-1), acq_err(dataRes), tmGath(0), tmDelay(0)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -288,7 +288,8 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
 
-    if(tmDelay > 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alSt = -1;
 
     //Set EVal
     MtxAlloc res(enRes, true);
@@ -344,14 +345,22 @@ void *TMdContr::Task( void *icntr )
 		    {
 			cntr.acq_err.setVal(valCtr.attr("err"));
 			mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
-			if(cntr.tmDelay < 0) cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
-							    cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+			if(cntr.alSt <= 0)
+			{
+			    cntr.alSt = 1;
+			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
+						cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+			}
 			cntr.tmDelay = cntr.syncPer();
 		    }
-		    else if(cntr.tmDelay == -1)
+		    else
 		    {
 			cntr.acq_err.setVal("");
-			cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+			if(cntr.alSt != 0)
+			{
+			    cntr.alSt = 0;
+			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+			}
 		    }
 		}
 
@@ -360,7 +369,7 @@ void *TMdContr::Task( void *icntr )
 		{
 		    value = valCtr.childGet(i_ch);
 		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
-		    if(isErr) value = NULL;
+		    if(isErr || value->attr("err").size()) value = NULL;
 		    if(!value) { cntr.mVars[nId] = TVariant(); continue; }
 		    switch(s2i(value->attr("tp")))
 		    {
@@ -442,7 +451,21 @@ void *TMdContr::Task( void *icntr )
 	    try
 	    {
 		cntr.pHD[i_p].at().vlList(als);
-		if(firstCall || (div && (it_cnt%div) < cntr.pHD.size())) cntr.pHD[i_p].at().attrPrc();
+		if(firstCall || (div && (it_cnt%div) < cntr.pHD.size()))
+		{
+		    string aPrcErr = cntr.pHD[i_p].at().attrPrc();
+		    if(!cntr.mVars.size())
+		    {
+			cntr.acq_err.setVal(aPrcErr);
+			if(cntr.alSt <= 0)
+			{
+			    cntr.alSt = 1;
+			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
+				cntr.id().c_str(), (aPrcErr.size()?TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str():_("No data"))));
+			}
+			cntr.tmDelay = cntr.syncPer();
+		    }
+		}
 
 		//Attributes update
 		res.lock();
@@ -543,11 +566,11 @@ void TMdPrm::load_( )	{ TParamContr::load_(); }
 
 void TMdPrm::save_( )	{ TParamContr::save_(); }
 
-void TMdPrm::attrPrc( )
+string TMdPrm::attrPrc( )
 {
     vector<string> als;
 
-    bool conErr = false;
+    string conErr;
     string varLs = varList(), itS, var, opts, typeS, aid, anm;
 
     MMS::XML_N valCntr("MMS"), *value = valCntr.setAttr("id","read")->childAdd("it");
@@ -600,11 +623,11 @@ void TMdPrm::attrPrc( )
 	// Request value for the type obtain
 	if(vtp < 0)
 	{
-	    if(conErr)	continue;
+	    if(s2i(conErr) == 10)	continue;
 	    value->setAttr("itemId", TSYS::pathLev(var,1));
 	    if(TSYS::pathLev(var,0) != "*") value->setAttr("domainId", TSYS::pathLev(var,0));
 	    owner().reqService(valCntr);
-	    if((conErr=(s2i(valCntr.attr("err"))==10))) continue;
+	    if((conErr=valCntr.attr("err")).size() || value->attr("err").size()) continue;
 	    switch((vMMStp=s2i(value->attr("tp"))))
 	    {
 		case MMS::VT_Bool:	vtp = TFld::Boolean;		break;
@@ -613,7 +636,7 @@ void TMdPrm::attrPrc( )
 		case MMS::VT_BitString: case MMS::VT_VisString: case MMS::VT_OctString: vtp = TFld::String;	break;
 		case MMS::VT_Struct:	vtp = TFld::Object;		break;
 		case MMS::VT_Array: vtp = TFld::Object;			break;
-		default: mess_err(nodePath().c_str(), _("Value type %s is not implemented for '%s'."), value->attr("tp").c_str(), var.c_str());
+		default: mess_err(nodePath().c_str(), _("Value type '%s' is not implemented for '%s'."), value->attr("tp").c_str(), var.c_str());
 	    }
 	}
 
@@ -635,6 +658,8 @@ void TMdPrm::attrPrc( )
 	    try{ p_el.fldDel(i_a); continue; } catch(TError err) { }
 	i_a++;
     }
+
+    return conErr;
 }
 
 void TMdPrm::setEval( )

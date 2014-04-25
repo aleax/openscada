@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: varchfnc.h
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -39,10 +39,10 @@ class VArchObj : public TVarObj
 	VArchObj( );
 	~VArchObj( );
 
-	string objName( )       { return "arch"; }
+	string objName( )	{ return "arch"; }
 
 	bool open( const string &inm );
-	bool open( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres );
+	bool open( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres );
 	void close( );
 
 	bool isArch( )		{ return mIsArch && mArch; }

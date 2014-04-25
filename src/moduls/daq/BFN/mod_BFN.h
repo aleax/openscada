@@ -128,6 +128,7 @@ class TMdContr: public TController
 	bool	prc_st,		// Process task active
 		acq_st,		// Acquisition now
 		endrun_req;	// Request to stop of the Process task
+	int8_t	alSt;		// Alarm state
 
 	ResString	acq_err;
 

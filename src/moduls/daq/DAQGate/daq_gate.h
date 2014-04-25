@@ -144,7 +144,8 @@ class TMdContr: public TController
 	class StHd
 	{
 	    public:
-	    StHd( ) { cntr = 0; lstMess.clear(); }
+	    StHd( ) : cntr(0) { lstMess.clear(); }
+
 	    float cntr;
 	    map<string, time_t> lstMess;
 	};
@@ -165,8 +166,9 @@ class TMdContr: public TController
 		&mPrior;			//Process task priority
 
 	bool	prcSt,				//Process task active
-		call_st,        		//Calc now stat
+		call_st,			//Calc now stat
 		endrunReq;			//Request to stop of the Process task
+	int8_t	alSt;				//Alarm state
 	vector< pair<string,StHd> > mStatWork;	//Work stations and it status
 
 	double	mPer, tmGath;			//Gathering time

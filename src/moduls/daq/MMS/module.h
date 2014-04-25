@@ -61,7 +61,7 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void attrPrc( );
+	string attrPrc( );
 	void getVals( );
 	void setEval( );
 
@@ -165,6 +165,7 @@ class TMdContr: public TController, public MMS::Client
 	bool	prcSt,		//Process task active
 		callSt,		//Calc now stat
 		isReload;
+	int8_t	alSt;		//Alarm state
 
 	vector< AutoHD<TMdPrm> > pHD;
 

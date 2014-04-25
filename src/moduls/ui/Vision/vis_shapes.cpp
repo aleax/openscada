@@ -649,7 +649,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    {
 			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
 			for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
-			    if(wdg->columnWidth(i_c) > averWdth)
+			    if(wdg->columnWidth(i_c) > averWdth && wdg->columnWidth(i_c) > busyColsWdth)
 				wdg->setColumnWidth(i_c, busyColsWdth);
 		    }
 		    wdg->resizeRowsToContents();

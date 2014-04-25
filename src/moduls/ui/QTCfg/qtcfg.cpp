@@ -1143,7 +1143,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
-                tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
+		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 
 		widget->layout()->addWidget( new QLabel((t_s.attr("dscr")+":").c_str(),widget) );
 		widget->layout()->addWidget( tbl );
@@ -1206,7 +1206,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			{
 			    elms = QString(t_linf->attr("sel_list").c_str()).split(";");
 			    elmi = QString(t_linf->attr("sel_id").c_str()).split(";");
-		        }
+			}
 			else
 			{
 			    XMLNode x_lst("get");
@@ -1260,27 +1260,30 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 			else thd_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsSelectable|Qt::ItemIsEditable);
 		    }
 		}
-		if(adjCol && tbl->columnCount())
+		if((adjCol || adjRow) && tbl->columnCount())
 		{
 		    tbl->resizeColumnsToContents();
 
-		    //>>> Resize too long columns
-		    //int max_col_sz = vmax(800/tbl->columnCount(),50);
+		    int averWdth = tbl->size().width()/tbl->columnCount();
+		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0;
+		    //Count width params
 		    for(int i_c = 0; i_c < tbl->columnCount(); i_c++)
-			if(tbl->columnWidth(i_c) > 600)
-			    tbl->setColumnWidth(i_c,600/*vmin(max_col_sz,tbl->columnWidth(i_c))*/);
-		}
-		if(adjRow)
-		{
-		    tbl->resizeRowsToContents();
-		    int hgt = vmax(tbl->minimumHeight(),vmin(300,(20+20*tbl->rowCount())));
-                    tbl->setMinimumHeight(hgt); //tbl->setMaximumHeight(hgt);
+		    {
+			fullColsWdth += tbl->columnWidth(i_c);
+			if(tbl->columnWidth(i_c) <= averWdth)	niceForceColsWdth += tbl->columnWidth(i_c);
+			else busyCols++;
+		    }
+		    //Set busyCols
+		    if(fullColsWdth > tbl->size().width() && busyCols)
+		    {
+			int busyColsWdth = (tbl->size().width()-niceForceColsWdth)/busyCols;
+			for(int i_c = 0; i_c < tbl->columnCount(); i_c++)
+			    if(tbl->columnWidth(i_c) > averWdth && tbl->columnWidth(i_c) > busyColsWdth)
+				tbl->setColumnWidth(i_c, busyColsWdth);
+		    }
 
-		    //>>> Resize too long rows
-		    for(int i_r = 0; i_r < tbl->rowCount(); i_r++)
-			tbl->setRowHeight(i_r, vmin(tbl->height()/2,tbl->rowHeight(i_r)));
+		    tbl->resizeRowsToContents();
 		}
-		//tbl->resize(tbl->size().width()-1,tbl->size().height()-1);	//!!!! Hack for QT-bug into QTableWidget for first row update missing.
 
 		tbl_init = false;
 	    }

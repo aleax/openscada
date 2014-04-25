@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -123,10 +123,10 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
 //* TMdContr                                           *
 //******************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c,daq_db,cfgelem),
+    TController(name_c,daq_db,cfgelem),
     mSched(cfg("SCHEDULE")), mMessLev(cfg("GATH_MESS_LEV")), mSync(cfg("SYNCPER").getRd()), mRestDtTm(cfg("TM_REST_DT").getRd()), mPerOld(cfg("PERIOD").getId()),
     mRestTm(cfg("TM_REST").getId()), mPrior(cfg("PRIOR").getId()),
-    prcSt(false), call_st(false), endrunReq(false), mPer(1e9), tmGath(0)
+    prcSt(false), call_st(false), endrunReq(false), alSt(-1), mPer(1e9), tmGath(0)
 {
     cfg("PRM_BD").setS(MOD_ID"Prm_"+name_c);
 }
@@ -144,7 +144,7 @@ string TMdContr::getStatus( )
     {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
 	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
-        else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	val += TSYS::strMess(_("Spent time: %s. "),tm2s(tmGath).c_str());
 	bool isWork = false;
 	for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
@@ -230,7 +230,7 @@ void TMdContr::enable_( )
 		    at(prm_ls[i_p]).at().setCntrAdr(cntrpath);
 		    gPrmLs += prm_ls[i_p]+";";
 		}
-	    }catch(TError err){ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	    } catch(TError err){ /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 
     //> Removing remotely missed parameters in case all remote stations active status by actual list
     bool prmChkToDel = true;
@@ -253,6 +253,7 @@ void TMdContr::enable_( )
 void TMdContr::disable_( )
 {
     mStatWork.clear();
+    alSt = -1;
 }
 
 void TMdContr::start_( )
@@ -276,16 +277,12 @@ void TMdContr::stop_( )
 {
     if(!prcSt) return;
 
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrunReq);
 
-    //> Connection alarm clear
-    for(unsigned i_st = 0; i_st < mStatWork.size(); i_st++)
-    {
-	if(mStatWork[i_st].second.cntr < 0)	continue;
-	alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
-	break;
-    }
+    //Connection alarm clear
+    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alSt = -1;
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -308,7 +305,7 @@ void *TMdContr::Task( void *icntr )
 
     cntr.endrunReq = false;
     cntr.prcSt = true;
-    bool isFirst = true;
+    bool firstCall = true;
 
     for(unsigned int it_cnt = 0; !cntr.endrunReq; it_cnt++)
     {
@@ -325,7 +322,7 @@ void *TMdContr::Task( void *icntr )
 	    bool isAccess = false, needEnable = false;
 	    for(unsigned i_st = 0; i_st < cntr.mStatWork.size(); i_st++)
 	    {
-		if(isFirst)	cntr.mStatWork[i_st].second.cntr = 0;	//Reset counter for connection alarm state update
+		if(firstCall)	cntr.mStatWork[i_st].second.cntr = 0;	//Reset counter for connection alarm state update
 		if(cntr.mStatWork[i_st].second.cntr > 0)
 		    cntr.mStatWork[i_st].second.cntr = vmax(0,cntr.mStatWork[i_st].second.cntr-1e-6*(t_cnt-t_prev));
 		if(cntr.mStatWork[i_st].second.cntr <= 0)	isAccess = true;
@@ -347,7 +344,7 @@ void *TMdContr::Task( void *icntr )
 		string scntr;
 
 		//> Parameters list update
-		if(isFirst || needEnable || (!div && syncCnt <= 0) || (div && it_cnt > div && (it_cnt%div) == 0))
+		if(firstCall || needEnable || (!div && syncCnt <= 0) || (div && it_cnt > div && (it_cnt%div) == 0))
 		    try { res.release(); cntr.enable_(); res.request(false); }
 		    catch(TError err) { }
 
@@ -422,7 +419,7 @@ void *TMdContr::Task( void *icntr )
 		    if(!req.childSize()) continue;
 
 		    //> Same request
-		    if(cntr.cntrIfCmd(req)) { mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str()); continue; }
+		    if(cntr.cntrIfCmd(req)) { /*mess_err(req.attr("mcat").c_str(),"%s",req.text().c_str());*/ continue; }
 
 		    //> Result process
 		    for(unsigned i_r = 0; i_r < req.childSize(); ++i_r)
@@ -490,7 +487,7 @@ void *TMdContr::Task( void *icntr )
 		    prm.at().isEVAL = true;
 		}
 	    }
-	    isFirst = false;
+	    firstCall = false;
 	    //res.release( );
 	}catch(TError err)	{ mess_err(err.cat.c_str(),err.mess.c_str()); }
 
@@ -529,28 +526,38 @@ int TMdContr::cntrIfCmd( XMLNode &node )
 	    try
 	    {
 		int rez = SYS->transport().at().cntrIfCmd(node,MOD_ID+id());
+		if(alSt != 0)
+		{
+		    alSt = 0;
+		    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
+		}
 		//> Clear alarm for gone successful connect
-		if(startStat() && mStatWork[i_st].second.cntr == 0)
+		/*if(startStat() && mStatWork[i_st].second.cntr == 0)
 		{
 		    unsigned i_st1;
 		    for(i_st1 = 0; i_st1 < mStatWork.size(); i_st1++)
 			if(mStatWork[i_st1].second.cntr > 0) break;
-		    if(i_st1 >= mStatWork.size())
+		    if(i_st1 >= mStatWork.size() && alSt != 0)
 			alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."), id().c_str(), _("OK")), TMess::Info);
-		}
+		}*/
 		mStatWork[i_st].second.cntr -= 1;
 		return rez;
 	    }
 	    catch(TError err)
 	    {
-		if(call_st)
+		if(alSt <= 0)
 		{
-		    //> Set alarm for station
-		    if(mStatWork[i_st].second.cntr < 0)
+		    alSt = 1;
+		    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source '%s': %s."),
+			    id().c_str(), mStatWork[i_st].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
+		}
+		if(call_st) mStatWork[i_st].second.cntr = mRestTm;
+		/*{
+		    if(mStatWork[i_st].second.cntr < 0 || (firstCall && mStatWork[i_st].second.cntr == 0))
 			alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source '%s': %s."),
 			    id().c_str(), mStatWork[i_st].first.c_str(), TRegExp(":","g").replace(err.mess,"=").c_str()));
 		    mStatWork[i_st].second.cntr = mRestTm;
-		}
+		}*/
 		throw;
 	    }
 	}
@@ -651,7 +658,7 @@ void TMdPrm::load_( )
 	for(unsigned i_el = 0; i_el < attrsNd.childSize(); i_el++)
 	{
 	    XMLNode *aEl = attrsNd.childGet(i_el);
-    	    if(vlPresent(aEl->attr("id"))) continue;
+	    if(vlPresent(aEl->attr("id"))) continue;
 	    p_el.fldAdd(new TFld(aEl->attr("id").c_str(),aEl->attr("nm").c_str(),(TFld::Type)atoi(aEl->attr("tp").c_str()),
 		atoi(aEl->attr("flg").c_str()),"","",aEl->attr("vals").c_str(),aEl->attr("names").c_str()));
 	    //vlAt(aEl->attr("id")).at().setS(aEl->text());
@@ -717,13 +724,13 @@ void TMdPrm::sync( )
 	    //>> Check for remove attributes
 	    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
 	    {
-    		unsigned i_l;
-    		for(i_l = 0; i_l < als.size(); i_l++)
-        	    if(p_el.fldAt(i_p).name() == als[i_l])
-            		break;
-    		if(i_l >= als.size())
-        	    try{ p_el.fldDel(i_p); i_p--; modif(true); }
-        	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+		unsigned i_l;
+		for(i_l = 0; i_l < als.size(); i_l++)
+		    if(p_el.fldAt(i_p).name() == als[i_l])
+			break;
+		if(i_l >= als.size())
+		    try{ p_el.fldDel(i_p); i_p--; modif(true); }
+		    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	    }
 	    isSynced = true;
 	    return;

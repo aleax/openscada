@@ -174,6 +174,7 @@ class TMdContr: public TController, public Client
 	bool	prcSt,		//Process task active
 		callSt,		//Calc now stat
 		mPCfgCh;	//Parameter's configuration is changed
+	int8_t	alSt;		//Alarm state
 
 	AutoHD<TTransportOut>	tr;
 	vector< AutoHD<TMdPrm> > p_hd;

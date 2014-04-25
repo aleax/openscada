@@ -763,29 +763,31 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
 
 bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 {
-    //> Check border
+    //Check border
     if(!buf.vOK(beg,end)) return false;
-    beg = vmax(beg,buf.begin());
-    end = vmin(end,buf.end());
+    beg = vmax(beg, buf.begin());
+    end = vmin(end, buf.end());
     int64_t b_prev = 0;
     int64_t f_sz = (int64_t)(((ModVArch&)archivator()).fileTimeSize()*3600e6);
     int64_t v_per = (int64_t)(archivator().valPeriod()*1e6);
+    beg = (beg/v_per)*v_per;
+    end = (end/v_per)*v_per;
 
-    //> Put values to files
+    //Put values to files
     ResAlloc res(mRes, true);
-    for( unsigned i_a = 0; i_a < arh_f.size(); i_a++ )
-	if( !arh_f[i_a]->err() && beg <= end )
+    for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
+	if(!arh_f[i_a]->err() && beg <= end)
 	{
-	    //>> Create new file for old data
-	    if( beg < arh_f[i_a]->begin() )
+	    // Create new file for old data
+	    if(beg < arh_f[i_a]->begin())
 	    {
-		//>>> Calc file limits
+		//  Calc file limits
 		int64_t n_end, n_beg;	//New file end position
-		if( (arh_f[i_a]->begin()-beg) > f_sz ) n_end = beg+f_sz;
+		if((arh_f[i_a]->begin()-beg) > f_sz) n_end = beg+f_sz;
 		else n_end = arh_f[i_a]->begin()-v_per;
 		n_beg = vmax(b_prev,n_end-f_sz);
 
-		//>>> Create file name
+		//  Create file name
 		char c_buf[30];
 		time_t tm = n_beg/1000000;
 		struct tm tm_tm;
@@ -796,8 +798,8 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 		arh_f.insert(arh_f.begin()+i_a, new VFileArch(AName,n_beg,n_end,v_per,archive().valType(true),this));
 	    }
 
-	    //>> Insert values to archive
-	    if( beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin() )
+	    // Insert values to archive
+	    if(beg <= arh_f[i_a]->end() && end >= arh_f[i_a]->begin())
 	    {
 		int64_t n_end = (end > arh_f[i_a]->end())?arh_f[i_a]->end():end;
 		res.release();
@@ -818,7 +820,7 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
 	string AName = archivator().addr()+"/"+archive().id()+c_buf;
 
 	int64_t n_end = beg+f_sz;
-	arh_f.push_back( new VFileArch(AName,beg,n_end,v_per,archive().valType(true),this) );
+	arh_f.push_back(new VFileArch(AName,beg,n_end,v_per,archive().valType(true),this));
 	n_end = (end > n_end)?n_end:end;
 
 	res.release();

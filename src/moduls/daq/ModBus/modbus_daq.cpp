@@ -116,8 +116,8 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	mSched(cfg("SCHEDULE")), mPrt(cfg("PROT")), mAddr(cfg("ADDR")),
 	mMerge(cfg("FRAG_MERGE").getBd()), mMltWr(cfg("WR_MULTI").getBd()), mAsynchWr(cfg("WR_ASYNCH").getBd()),
 	reqTm(cfg("TM_REQ").getId()), restTm(cfg("TM_REST").getId()), connTry(cfg("REQ_TRY").getId()),
-	prc_st(false), call_st(false), endrun_req(false), isReload(false),
-	tmDelay(-1), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
+	prc_st(false), call_st(false), endrun_req(false), isReload(false), alSt(-1),
+	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
     cfg("PRM_BD_L").setS("ModBusPrmL_"+name_c);
@@ -198,7 +198,7 @@ void TMdContr::start_( )
 
     //Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
-    tmDelay = -1;
+    tmDelay = 0;
 
     //Reenable parameters for data blocks structure update
     // Asynchronous writings queue clear
@@ -233,7 +233,8 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-    if(tmDelay >= 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alSt = -1;
 
     //Clear statistic
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
@@ -873,8 +874,11 @@ void *TMdContr::Task( void *icntr )
 	    //Generic acquisition alarm generate
 	    if(cntr.tmDelay <= 0)
 	    {
-		if(cntr.tmDelay == 0)
+		if(cntr.alSt != 0)
+		{
+		    cntr.alSt = 0;
 		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		}
 		cntr.tmDelay--;
 	    }
 
@@ -899,7 +903,11 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::setCntrDelay( const string &err )
 {
-    if(tmDelay < 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),TRegExp(":","g").replace(err,"=").c_str()));
+    if(alSt <= 0)
+    {
+	alSt = 1;
+	alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),TRegExp(":","g").replace(err,"=").c_str()));
+    }
     tmDelay = restTm;
 }
 

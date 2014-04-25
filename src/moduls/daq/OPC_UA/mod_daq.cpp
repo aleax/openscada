@@ -91,7 +91,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")),
     mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")), mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")),
     mPAttrLim(cfg("AttrsLimit").getId()),
-    prcSt(false), callSt(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
+    prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -192,7 +192,8 @@ void TMdContr::stop_( )
     //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
 
-    if(tmDelay > 0) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alSt = -1;
 }
 
 void TMdContr::protIO( XML_N &io )
@@ -296,15 +297,23 @@ void *TMdContr::Task( void *icntr )
 	    {
 		cntr.acq_err.setVal(req.attr("err"));
 		mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
-		if(cntr.tmDelay < 0) cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
-		    cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+		if(cntr.alSt <= 0)
+		{
+		    cntr.alSt = 1;
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
+			cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+		}
 		cntr.tmDelay = cntr.syncPer();
 		continue;
 	    }
-	    else if(cntr.tmDelay == -1)
+	    else
 	    {
 		cntr.acq_err.setVal("");
-		cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		if(cntr.alSt != 0)
+		{
+		    cntr.alSt = 0;
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		}
 	    }
 	    res.release();
 

@@ -1,3 +1,15 @@
+2014-04-25 Roman
+- DB.AGLKS.St.db: KeepAlive timeout of input transport OPC_UA set to 60.
+- !!!!:FIX:Archive,Archive.*,Special.FLibSYS: Significant values archiving fixes:
+    Prevent for set negative period values into buffer.
+    TValBuf::vOK() expand for check aligned to the buffer period.
+    Disable pass for setVals by lastGet() for direct write allow.
+    setVals() is adapted for allow write unaligned border [beg:end] to period by round here.
+- !!!!:DAQ.{BFN,DAQGate,MMS,ModBus,OPC_UA}: Alarms for connection state to remote sources is made unified.
+- DAQ.MMS: Values read errors processing is added.
+- UI.QTCfg: rows and collumns of a table adjust mechanism set like from UI.Vision primitive FormEl view "Table".
+
+
 2014-04-24 Roman
 - FIX:DB.LibsDB.vcaBase.db: All Digital signals represent shapes expand and set unified.
 - FIX:SYS.TVariant: User objects encode to XMLStr is fixed for EVAL represent by boolean, integer, real.

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,15 +30,9 @@ using namespace FLibSYS;
 //*************************************************
 //* VArchObj - Value archive object               *
 //*************************************************
-VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)
-{
+VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)	{ }
 
-}
-
-VArchObj::~VArchObj( )
-{
-    close();
-}
+VArchObj::~VArchObj( )	{ close(); }
 
 bool VArchObj::open( const string &inm )
 {
@@ -59,7 +53,7 @@ bool VArchObj::open( const string &inm )
     return true;
 }
 
-bool VArchObj::open( TFld::Type vtp, int isz, int ipr, bool ihgrd, bool ihres )
+bool VArchObj::open( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres )
 {
     close();
 
@@ -89,15 +83,9 @@ TValBuf *VArchObj::buf( )
     return mBuf;
 }
 
-TVariant VArchObj::propGet( const string &id )
-{
-    throw TError("VArchObj", _("Properties no supported by the object."));
-}
+TVariant VArchObj::propGet( const string &id )	{ throw TError("VArchObj", _("Properties no supported by the object.")); }
 
-void VArchObj::propSet( const string &id, TVariant val )
-{
-    throw TError("VArchObj", _("Properties no supported by the object."));
-}
+void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchObj", _("Properties no supported by the object.")); }
 
 TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
@@ -201,7 +189,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    else vb = buf();
 	    if(!vb)     return false;
 	    src.at().arch().at().getVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-				   	      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
+					      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else if(isArch())
 	{
@@ -212,16 +200,16 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		vb = &tarch.at();
 	    }
 	    else vb = src.at().buf();
-	    if(!vb)     return false;
-	    arch().at().setVals( *vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
+	    if(!vb)	return false;
+	    arch().at().setVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
+				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else
 	{
 	    TValBuf* svb = src.at().buf();
 	    TValBuf* dvb = buf();
-	    if( !svb || !dvb ) return false;
-	    svb->getVals( *dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI() );
+	    if(!svb || !dvb) return false;
+	    svb->getVals(*dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI());
 	}
 	return true;
     }
