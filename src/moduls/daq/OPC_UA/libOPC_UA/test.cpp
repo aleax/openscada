@@ -56,7 +56,7 @@ int main( int argc, char *argv[], char *envp[] )
 	printf("Browse node '%s' list from %d items\n", argv[2], rn->childSize());
 	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
 	{
-	    if(atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
+	    //if(atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
 	    printf("  node%d: \"%s\"\n", i_n, (rn->childGet(i_n)->attr("browseName")+" ("+rn->childGet(i_n)->attr("nodeId")+")").c_str());
 	}
     }

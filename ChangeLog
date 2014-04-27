@@ -1,3 +1,9 @@
+2014-04-27 Roman
+- !!:DAQ.OPC_UA.LibOPC_UA: LibOPC_UA fix for secure policies for different client's and server's keys size.
+    Tested for OpenSCADA Client + OpenSCADA Server, OpenSCADA Client + IgnitionOPC_UA, UAExpert + OpenSCADA Server,
+    testOPC_UA + OpenSCADA Server, testOPC_UA + IgnitionOPC_UA.
+
+
 2014-04-25 Roman
 - SYS. Splash is updated for 0.9-work.
 - DB.AGLKS.St.db: KeepAlive timeout of input transport OPC_UA set to 60.

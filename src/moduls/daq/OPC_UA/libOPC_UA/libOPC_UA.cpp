@@ -1288,7 +1288,7 @@ void Client::protIO( XML_N &io )
 		oNu(rez, OpcUa_ProtocolVersion, 4);	//ClienUAocolVersion
 		oNu(rez, atoi(io.attr("ReqType").c_str()), 4);	//RequestType
 		oN(rez, atoi(io.attr("SecurityMode").c_str()), 4);	//SecurityMode
-		string clNonce = isSecNone ? string("\000") : randBytes(symKeySz);
+		string clNonce = isSecNone ? string("\000",1) : randBytes(symKeySz);
 		oS(rez, clNonce);			//ClientNonce
 		oN(rez, atoi(io.attr("SecLifeTm").c_str()), 4);	//RequestedLifetime
 		oNu(rez, rez.size(), 4, 4);		//> Real message size
@@ -1296,11 +1296,13 @@ void Client::protIO( XML_N &io )
 		if(!isSecNone)
 		{
 		    // Padding place
-		    int kSz = asymmetricKeyLength(io.attr("ClntCert"));
-		    int paddingSize = ((rez.size()-begEncBlck+1+kSz+(kSz-asymKeyPad)-1)/(kSz-asymKeyPad))*(kSz-asymKeyPad)-(rez.size()+kSz-begEncBlck);
-		    rez += string(paddingSize, (char)(paddingSize-1));
+		    int kSz = asymmetricKeyLength(io.attr("ServCert")),
+			signSz = asymmetricKeyLength(io.attr("ClntCert")),
+			encSz = (rez.size() - begEncBlck) + 1 + signSz,
+			paddingSize = (encSz/(kSz-asymKeyPad) + (encSz%(kSz-asymKeyPad)?1:0))*(kSz-asymKeyPad) - encSz;
+		    rez += string(paddingSize+1, char(paddingSize));
 		    // Real message size calc and place
-		    oNu(rez, begEncBlck + kSz*((rez.size()-begEncBlck+kSz)/(kSz-asymKeyPad)), 4, 4);
+		    oNu(rez, begEncBlck + kSz*((rez.size()-begEncBlck+signSz)/(kSz-asymKeyPad)), 4, 4);
 		    // Signature
 		    rez += asymmetricSign(rez, io.attr("PvKey"));
 		    // Encoding
@@ -2243,12 +2245,15 @@ nextReq:
 		string servNonce = randBytes(symKeySz);
 		oS(out, servNonce);				//nonce
 		// Padding place
-		int kSz = asymmetricKeyLength(wep->cert());
-		int paddingSize = ((out.size()-begEncBlck+1+kSz+(kSz-asymKeyPad)-1)/(kSz-asymKeyPad))*(kSz-asymKeyPad)-(out.size()+kSz-begEncBlck);
-		out += string(paddingSize, (char)(paddingSize-1));
+		int kSz = asymmetricKeyLength(clntCert),
+		    signSz = asymmetricKeyLength(wep->cert()),
+		    encSz = (out.size() - begEncBlck) + 1 + signSz,
+		    paddingSize = (encSz/(kSz-asymKeyPad) + (encSz%(kSz-asymKeyPad)?1:0))*(kSz-asymKeyPad) - encSz;
+
+		out += string(paddingSize+1, char(paddingSize));
 
 		// Real message size calc and place
-		oNu(out, begEncBlck + kSz*((out.size()-begEncBlck+kSz)/(kSz-asymKeyPad)), 4, 4);
+		oNu(out, begEncBlck + kSz*((out.size()-begEncBlck+signSz)/(kSz-asymKeyPad)), 4, 4);
 		// Signature
 		out += asymmetricSign(out, wep->pvKey());
 		// Encoding
@@ -3361,7 +3366,11 @@ nextReq:
 	}
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }
-    catch(OPCError er)	{ if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; } }
+    catch(OPCError er)
+    {
+	if(dbg) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
+	if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; }
+    }
 
     if(answ) answ->append(out);
     else writeToClient(inPrtId, out);
