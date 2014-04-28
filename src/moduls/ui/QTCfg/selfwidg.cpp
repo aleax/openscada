@@ -60,10 +60,7 @@ ImgView::ImgView( QWidget * parent, Qt::WindowFlags f, int ih_sz, int iv_sz ) :
 
 }
 
-ImgView::~ImgView( )
-{
-
-}
+ImgView::~ImgView( )	{ }
 
 bool ImgView::setImage( const string &imgdata )
 {

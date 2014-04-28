@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2004-20014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -101,7 +101,7 @@ class ConfApp: public QMainWindow
 	void editToolUpdate( );				//Edit tools visible update
 	void endRunChk( );				//End run flag check
 
-	//> QListView
+	// QListView
 	void selectItem( );				//Processing of select item signal
 	void viewChild( QTreeWidgetItem * i );		//Processing of view item signal
 	void onItem( QTreeWidgetItem * i );		//View item path
@@ -109,10 +109,10 @@ class ConfApp: public QMainWindow
 	void treeUpdate( );				//Update expanded content of tree
 	void treeSearch( );
 
-	//> QTabWidget
+	// QTabWidget
 	void tabSelect( int idx );			//Change current tab
 
-	//> Self widget's slots
+	// Self widget's slots
 	void checkBoxStChange( int stat );		//QCheckBox
 	void buttonClicked( );				//Button
 	void combBoxActivate( const QString& );		//QComboBox
@@ -127,21 +127,21 @@ class ConfApp: public QMainWindow
 
     private:
 	//Methods
-	//> Page display
+	// Page display
 	void selectPage( const string &path );
 	void pageDisplay( const string &path );
 
-	//> View ListItem with recursive processing of the ControllArea
+	// View ListItem with recursive processing of the ControllArea
 	void viewChildRecArea( QTreeWidgetItem *i, bool upTree = false );
 
-	//> Update structure and put service labels
+	// Update structure and put service labels
 	bool upStruct( XMLNode &w_nd, const XMLNode &n_nd );
 
-	//> Select ListItem with recursive processing of the ControllArea
+	// Select ListItem with recursive processing of the ControllArea
 	void selectChildRecArea( const XMLNode &node, const string &a_path, QWidget *widget = NULL );
 	void basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, bool wr, QHBoxLayout **l_hbox, int &l_pos, bool comm = false );
 
-	//> Controll system requests
+	// Controll system requests
 	void initHosts();
 	int cntrIfCmd( XMLNode &node );
 
@@ -175,7 +175,6 @@ class ConfApp: public QMainWindow
 
 	bool		tbl_init;
     };
-
 }
 
 #endif //QTCFG_H

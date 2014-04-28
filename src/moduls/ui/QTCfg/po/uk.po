@@ -1,14 +1,13 @@
 # OpenSCADA.UI.QTCfg translate to Ukrainian.
-# Copyright (C) 2004-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.UI.QTCfg package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2004-2010.
+# Roman Savochenko <rom_as@fromru.com>, 2004-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-28 17:34+0200\n"
+"POT-Creation-Date: 2014-04-28 12:54+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -21,445 +20,445 @@ msgstr ""
 msgid "OpenSCADA QTCfg: %s"
 msgstr ""
 
-#: qtcfg.cpp:106
+#: qtcfg.cpp:107
 msgid "Name"
 msgstr "Ім'я"
 
-#: qtcfg.cpp:106
+#: qtcfg.cpp:107
 msgid "Type"
 msgstr "Тип"
 
-#: qtcfg.cpp:106
+#: qtcfg.cpp:107
 msgid "Path"
-msgstr ""
+msgstr "Шлях"
 
-#: qtcfg.cpp:115
+#: qtcfg.cpp:116
 msgid "The main navigation tree of the configurator."
 msgstr "Основне дерево навігації конфігуратора."
 
-#: qtcfg.cpp:131
+#: qtcfg.cpp:132
 msgid "The main configurator frame."
 msgstr "Основне поле конфігуратора."
 
-#: qtcfg.cpp:154
+#: qtcfg.cpp:155
 msgid "Tabulated configuration pages."
 msgstr "Табульовані конфігураційні сторінки."
 
-#: qtcfg.cpp:169
+#: qtcfg.cpp:170
 msgid "&Close"
 msgstr "&Закрити"
 
-#: qtcfg.cpp:171
+#: qtcfg.cpp:172
 msgid "Close configurator window"
 msgstr "Закрити вікно конфігуратора"
 
-#: qtcfg.cpp:172
+#: qtcfg.cpp:173
 msgid "The button for closing OpenSCADA configurator window"
 msgstr "Кнопка для закриття вікна конфігуратора OpenSCADA."
 
-#: qtcfg.cpp:173
+#: qtcfg.cpp:174
 msgid "Press to close OpenSCADA configurator window"
 msgstr "Натиснути для закриття вікна конфігуратора OpenSCADA."
 
-#: qtcfg.cpp:177
+#: qtcfg.cpp:178
 msgid "&Quit"
 msgstr "&Вихід"
 
-#: qtcfg.cpp:179
+#: qtcfg.cpp:180
 msgid "Quit OpenSCADA"
 msgstr "Закрити OpenSCADA"
 
-#: qtcfg.cpp:180
+#: qtcfg.cpp:181
 msgid "The button for full quit from OpenSCADA"
 msgstr "Кнопка для повного виходу з OpenSCADA"
 
-#: qtcfg.cpp:181
+#: qtcfg.cpp:182
 msgid "Press for full quit from OpenSCADA"
 msgstr "Натиснути для повного виходу з OpenSCADA"
 
-#: qtcfg.cpp:185
+#: qtcfg.cpp:186
 msgid "&Up"
 msgstr "&Вверх"
 
-#: qtcfg.cpp:187
+#: qtcfg.cpp:188
 msgid "Up page"
 msgstr "На сторінку вверх"
 
-#: qtcfg.cpp:188
+#: qtcfg.cpp:189
 msgid "The button for going to level up"
 msgstr "Кнопка для переходу на рівень вгору"
 
-#: qtcfg.cpp:189
+#: qtcfg.cpp:190
 msgid "Press for going to level up"
 msgstr "Натиснути для переходу на рівень вгору"
 
-#: qtcfg.cpp:194
+#: qtcfg.cpp:195
 msgid "&Previous"
 msgstr "&Попередня"
 
-#: qtcfg.cpp:196
+#: qtcfg.cpp:197
 msgid "Previous page"
 msgstr "Попередня сторінка"
 
-#: qtcfg.cpp:197
+#: qtcfg.cpp:198
 msgid "The button for going to previous page"
 msgstr "Кнопка для переходу на попередню сторінку"
 
-#: qtcfg.cpp:198
+#: qtcfg.cpp:199
 msgid "Press for going to previous page"
 msgstr "Натиснути для переходу на попередню сторінку"
 
-#: qtcfg.cpp:203
+#: qtcfg.cpp:204
 msgid "&Next"
 msgstr "&Наступна"
 
-#: qtcfg.cpp:205
+#: qtcfg.cpp:206
 msgid "Next page"
 msgstr "Наступна сторінка"
 
-#: qtcfg.cpp:206
+#: qtcfg.cpp:207
 msgid "The button for going to next page"
 msgstr "Кнопка для переходу на наступну сторінку"
 
-#: qtcfg.cpp:207
+#: qtcfg.cpp:208
 msgid "Press for going to next page"
 msgstr "Натиснути для переходу на наступну сторінку"
 
-#: qtcfg.cpp:212
+#: qtcfg.cpp:213
 msgid "Load from DB"
 msgstr "Завантажити з БД"
 
-#: qtcfg.cpp:213
+#: qtcfg.cpp:214
 msgid "Load item data from DB"
 msgstr "Завантажити дані елементу з БД"
 
-#: qtcfg.cpp:214
+#: qtcfg.cpp:215
 msgid "The button for loading item data from DB"
 msgstr "Кнопка для завантаження даних елементу з БД"
 
-#: qtcfg.cpp:215
+#: qtcfg.cpp:216
 msgid "Press for loading item data from DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
-#: qtcfg.cpp:220
+#: qtcfg.cpp:221
 msgid "Save to DB"
 msgstr "Зберегти у БД"
 
-#: qtcfg.cpp:221
+#: qtcfg.cpp:222
 msgid "Save item data to DB"
 msgstr "Зберегти дані елементу у БД"
 
-#: qtcfg.cpp:222
+#: qtcfg.cpp:223
 msgid "The button for saving item data to DB"
 msgstr "Кнопка для збереження даних елементу у БД"
 
-#: qtcfg.cpp:223
+#: qtcfg.cpp:224
 msgid "Press for saving item data to DB."
 msgstr "Натиснути для збереження даних елементу у БД."
 
-#: qtcfg.cpp:229
+#: qtcfg.cpp:230
 msgid "&Add"
 msgstr "&Додати"
 
-#: qtcfg.cpp:230
+#: qtcfg.cpp:231
 msgid "Add item"
 msgstr "Додати елемент"
 
-#: qtcfg.cpp:231
+#: qtcfg.cpp:232
 msgid "The button for adding new item"
 msgstr "Кнопка для додання елементу"
 
-#: qtcfg.cpp:232
+#: qtcfg.cpp:233
 msgid "Press for adding new item."
 msgstr "Натиснути для додання елементу."
 
-#: qtcfg.cpp:237
+#: qtcfg.cpp:238
 msgid "&Delete"
 msgstr "&Видалити"
 
-#: qtcfg.cpp:238
+#: qtcfg.cpp:239
 msgid "Delete item"
 msgstr "Видалити елемент"
 
-#: qtcfg.cpp:239
+#: qtcfg.cpp:240
 msgid "The button for deleting item"
 msgstr "Кнопка для видалення елементу"
 
-#: qtcfg.cpp:240
+#: qtcfg.cpp:241
 msgid "Press for deleting item."
 msgstr "Натиснути для видалення елементу."
 
-#: qtcfg.cpp:246
+#: qtcfg.cpp:247
 msgid "Item cut"
 msgstr "Вирізати елемент"
 
-#: qtcfg.cpp:247
+#: qtcfg.cpp:248
 msgid "Cutting of the item"
 msgstr "Вирізання елементу"
 
-#: qtcfg.cpp:248
+#: qtcfg.cpp:249
 msgid "The button for cutting of the item"
 msgstr "Кнопка для вирізання елементу"
 
-#: qtcfg.cpp:249
+#: qtcfg.cpp:250
 msgid "Press to cut the item."
 msgstr "Натиснути для виконання вирізання елементу."
 
-#: qtcfg.cpp:255
+#: qtcfg.cpp:256
 msgid "Item copy"
 msgstr "Копіювати елемент"
 
-#: qtcfg.cpp:256
+#: qtcfg.cpp:257
 msgid "Copying of the item"
 msgstr "Копіювання елементу"
 
-#: qtcfg.cpp:257
+#: qtcfg.cpp:258
 msgid "The button for copying of the item"
 msgstr "Кнопка для копіювання елементу"
 
-#: qtcfg.cpp:258
+#: qtcfg.cpp:259
 msgid "Press to copy the item."
 msgstr "Натиснути для виконання копіювання елементу."
 
-#: qtcfg.cpp:264
+#: qtcfg.cpp:265
 msgid "Item paste"
 msgstr "Вставити елемент"
 
-#: qtcfg.cpp:265
+#: qtcfg.cpp:266
 msgid "Pasting of the item"
 msgstr "Вставлення елементу"
 
-#: qtcfg.cpp:266
+#: qtcfg.cpp:267
 msgid "The button for pasting of the item"
 msgstr "Кнопка для вставки елементу"
 
-#: qtcfg.cpp:267
+#: qtcfg.cpp:268
 msgid "Press to paste the item."
 msgstr "Натиснути для вставки елементу."
 
-#: qtcfg.cpp:273
+#: qtcfg.cpp:274
 msgid "&Refresh"
 msgstr "П&оновити"
 
-#: qtcfg.cpp:275
+#: qtcfg.cpp:276
 msgid "Refresh current page"
 msgstr "Поновити поточну сторінку"
 
-#: qtcfg.cpp:276
+#: qtcfg.cpp:277
 msgid "The button for refreshing of the content of the current page."
 msgstr "Кнопка для поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:277
+#: qtcfg.cpp:278
 msgid "Press for refreshing of the content of the current page."
 msgstr "Натиснути для поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:281
+#: qtcfg.cpp:282
 msgid "&Start"
 msgstr "За&пустити"
 
-#: qtcfg.cpp:283
+#: qtcfg.cpp:284
 msgid "Start cycled refresh"
 msgstr "Запустити періодичне поновлення"
 
-#: qtcfg.cpp:284
+#: qtcfg.cpp:285
 msgid ""
 "The button for starting of the cycled refresh of the content of the current "
 "page."
 msgstr "Кнопка для запуску періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:285
+#: qtcfg.cpp:286
 msgid "Press to start the cycled refresh of the content of the current page."
 msgstr ""
 "Натиснути для запуску періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:289
+#: qtcfg.cpp:290
 msgid "&Stop"
 msgstr "&Зупинити"
 
-#: qtcfg.cpp:291
+#: qtcfg.cpp:292
 msgid "Stop cycled refresh"
 msgstr "Зупинити періодичне поновлення"
 
-#: qtcfg.cpp:292
+#: qtcfg.cpp:293
 msgid ""
 "The button for stopping of the cycled refresh of the content of the current "
 "page."
 msgstr "Кнопка для зупинки періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:293
+#: qtcfg.cpp:294
 msgid "Press to stop the cycled refresh of the content of the current page."
 msgstr ""
 "Натиснути для зупинки періодичного поновлення вмісту поточної сторінки."
 
-#: qtcfg.cpp:298
+#: qtcfg.cpp:299
 msgid "&About"
 msgstr "&Про ..."
 
-#: qtcfg.cpp:300
+#: qtcfg.cpp:301
 msgid "Program and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-#: qtcfg.cpp:301
+#: qtcfg.cpp:302
 msgid "The button for display program and OpenSCADA information"
 msgstr "Кнопка для відображення інформації про програму та OpenSCADA"
 
-#: qtcfg.cpp:302
+#: qtcfg.cpp:303
 msgid "Press to display program and OpenSCADA information"
 msgstr "Натиснути для відображення інформації про програму та OpenSCADA"
 
-#: qtcfg.cpp:305
+#: qtcfg.cpp:306
 msgid "About &Qt"
 msgstr "Про &QT"
 
-#: qtcfg.cpp:306
+#: qtcfg.cpp:307
 msgid "Qt information"
 msgstr "Qt інформація"
 
-#: qtcfg.cpp:307
+#: qtcfg.cpp:308
 msgid "The button for getting the using Qt information"
 msgstr "Кнопка для отримання інформації про використання Qt"
 
-#: qtcfg.cpp:308
+#: qtcfg.cpp:309
 msgid "Press to get the using Qt information."
 msgstr "Натиснути для отримання інформації про використання Qt"
 
-#: qtcfg.cpp:312
+#: qtcfg.cpp:313
 msgid "What's &This"
 msgstr "Що &це"
 
-#: qtcfg.cpp:314
+#: qtcfg.cpp:315
 msgid "Question about GUI elements"
 msgstr "Питання про GUI елементи"
 
-#: qtcfg.cpp:315
+#: qtcfg.cpp:316
 msgid "The button for requesting the information about user interface elements"
 msgstr "Кнопка для запиту інформації про елементи інтерфейсу користувача"
 
-#: qtcfg.cpp:316
+#: qtcfg.cpp:317
 msgid "Press for requesting about user interface elements"
 msgstr "Натисніть для запиту інформації про елементи інтерфейсу користувача"
 
-#: qtcfg.cpp:321
+#: qtcfg.cpp:322
 msgid "&File"
 msgstr "&Файл"
 
-#: qtcfg.cpp:328
+#: qtcfg.cpp:329
 msgid "&Edit"
 msgstr "Редагування"
 
-#: qtcfg.cpp:336
+#: qtcfg.cpp:337
 msgid "&View"
 msgstr "&Вигляд"
 
-#: qtcfg.cpp:345
+#: qtcfg.cpp:346
 msgid "&Help"
 msgstr "&Допомога"
 
-#: qtcfg.cpp:353
+#: qtcfg.cpp:354
 msgid "OpenSCADA toolbar"
 msgstr "Панель інструментів OpenSCADA"
 
-#: qtcfg.cpp:378
+#: qtcfg.cpp:379
 msgid "This label displays current user."
 msgstr "Ця мітка відображає поточного користувача."
 
-#: qtcfg.cpp:379
+#: qtcfg.cpp:380
 msgid "Field for display of the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: qtcfg.cpp:380
+#: qtcfg.cpp:381
 msgid "Double click to change user."
 msgstr "Подвійно клацніть для зміни користувача."
 
-#: qtcfg.cpp:385
+#: qtcfg.cpp:386
 msgid "This label displays the local station modifying."
 msgstr "Ця мітка відображає факт внесення змін у локальну станцію."
 
-#: qtcfg.cpp:386
+#: qtcfg.cpp:387
 msgid "Field for display of the local station modifying."
 msgstr "Поле для відображення факту внесення змін у локальну станцію."
 
-#: qtcfg.cpp:391
+#: qtcfg.cpp:392
 msgid "This button for call status bar history."
 msgstr "Ця кнопка для виклику історії строки статусу."
 
-#: qtcfg.cpp:392
+#: qtcfg.cpp:393
 msgid "Button for call status bar history."
 msgstr "Кнопка для виклику історії строки статусу."
 
-#: qtcfg.cpp:398
+#: qtcfg.cpp:399
 msgid "Ready"
 msgstr "Готовий"
 
-#: qtcfg.cpp:444
+#: qtcfg.cpp:445
 msgid "Changes save"
 msgstr "Збереження змін"
 
-#: qtcfg.cpp:445
+#: qtcfg.cpp:446
 msgid "Some changing is made. Save changing to DB on exit?"
 msgstr "Деякі зміни було зроблено. Зберегти зміни у БД перед виходом?"
 
-#: qtcfg.cpp:575
+#: qtcfg.cpp:576
 msgid "No one editable container is present."
 msgstr "Жодного редагованого контейнеру не присутньо."
 
-#: qtcfg.cpp:577
+#: qtcfg.cpp:578
 msgid "Add item to node: '%1'."
 msgstr "Додання елементу у вузол: '%1'."
 
-#: qtcfg.cpp:577
+#: qtcfg.cpp:578
 msgid "Add node"
 msgstr "Додання елементу"
 
-#: qtcfg.cpp:589
+#: qtcfg.cpp:590
 msgid "Node '%1' is already present."
 msgstr "Вузол '%1' вже присутній."
 
-#: qtcfg.cpp:619
+#: qtcfg.cpp:620
 msgid "Are you sure of deleting nodes: '%1'?"
 msgstr "Ви дійсно бажаєте видалити елементи: '%1'?"
 
-#: qtcfg.cpp:619
+#: qtcfg.cpp:620
 msgid "Delete node"
 msgstr "Видалення елементу"
 
-#: qtcfg.cpp:699
+#: qtcfg.cpp:700
 msgid "Copy is impossible."
 msgstr "Копіювання неможливе."
 
-#: qtcfg.cpp:709
+#: qtcfg.cpp:710
 msgid "Selected"
 msgstr "Вибраний"
 
-#: qtcfg.cpp:721 qtcfg.cpp:748
+#: qtcfg.cpp:722 qtcfg.cpp:749
 msgid "Move or copy node"
 msgstr "Переміщення або копіювання вузлу"
 
-#: qtcfg.cpp:723
+#: qtcfg.cpp:724
 msgid "Move node '%1' to '%2'.\n"
 msgstr "Переміщення вузлу '%1' у '%2'.\n"
 
-#: qtcfg.cpp:723
+#: qtcfg.cpp:724
 msgid "Copy node '%1' to '%2'.\n"
 msgstr "Скопіювати вузол '%1' до '%2'.\n"
 
-#: qtcfg.cpp:727 qtcfg.cpp:751
+#: qtcfg.cpp:728 qtcfg.cpp:752
 msgid "Do not the question anymore."
 msgstr "Не запитувати більш."
 
-#: qtcfg.cpp:748
+#: qtcfg.cpp:749
 msgid "Node '%1' is already present. Continue?"
 msgstr "Вузол '%1' вже присутній. Продовжити?"
 
-#: qtcfg.cpp:868
+#: qtcfg.cpp:874
 msgid "Status bar messages list:"
 msgstr "Перелік повідомлень строки статусу:"
 
-#: qtcfg.cpp:868
+#: qtcfg.cpp:874
 msgid "Status messages"
 msgstr "Повідомлення статусу"
 
-#: qtcfg.cpp:887
+#: qtcfg.cpp:893
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -484,17 +483,17 @@ msgstr ""
 "Автор: %s\n"
 "Web сайт: %s"
 
-#: qtcfg.cpp:1593
+#: qtcfg.cpp:1595
 msgid "<EVAL>"
 msgstr ""
 
-#: qtcfg.cpp:1593
+#: qtcfg.cpp:1595
 msgid "On"
-msgstr ""
+msgstr "Вкл"
 
-#: qtcfg.cpp:1593
+#: qtcfg.cpp:1595
 msgid "Off"
-msgstr ""
+msgstr "Викл"
 
 #: qtcfg.cpp:2096
 msgid "Refresh items tree"
@@ -505,288 +504,297 @@ msgstr "Оновити елементи дерева"
 msgid "Expand/update branch '%s' time %f ms."
 msgstr "Час розширення/поновлення гілки '%s' %f мс."
 
-#: qtcfg.cpp:2311
+#: qtcfg.cpp:2289
+msgid "Send changes to selections"
+msgstr "Надсилання змін до обраних"
+
+#: qtcfg.cpp:2290
+#, c-format
+msgid "Send current change to other selected nodes \"%s\"?"
+msgstr "Надіслати поточну зміну до інших обраних вузлів \"%s\"?"
+
+#: qtcfg.cpp:2337
 msgid "Local station"
 msgstr "Локальна станція"
 
-#: qtcfg.cpp:2318
+#: qtcfg.cpp:2344
 msgid "Remote station"
 msgstr "Віддалена станція"
 
-#: qtcfg.cpp:2379
+#: qtcfg.cpp:2406
 #, c-format
 msgid "%s| Set '%s' to '%s'!"
 msgstr "%s| Встановлено '%s' у '%s'!"
 
-#: qtcfg.cpp:2407
+#: qtcfg.cpp:2434
 #, c-format
 msgid "%s| Go to link '%s'!"
 msgstr "%s| Перехід за посиланням '%s'!"
 
-#: qtcfg.cpp:2418
+#: qtcfg.cpp:2445
 #, c-format
 msgid "%s| Press '%s'!"
 msgstr "%s| Натиснуто '%s'!"
 
-#: qtcfg.cpp:2470
+#: qtcfg.cpp:2497
 msgid "Value no valid: "
 msgstr "Значення помилкове: "
 
-#: qtcfg.cpp:2481
+#: qtcfg.cpp:2508
 #, c-format
 msgid "%s| Change '%s' from '%s' to '%s'!"
 msgstr "%s| Змінено '%s' з '%s' у '%s'!"
 
-#: qtcfg.cpp:2509
+#: qtcfg.cpp:2536
 msgid "Go"
 msgstr "Перейти"
 
-#: qtcfg.cpp:2517
+#: qtcfg.cpp:2544
 msgid "Add"
 msgstr "Додати"
 
-#: qtcfg.cpp:2522
+#: qtcfg.cpp:2549
 msgid "Insert"
 msgstr "Вставити"
 
-#: qtcfg.cpp:2527
+#: qtcfg.cpp:2554
 msgid "Edit"
 msgstr "Редагувати"
 
-#: qtcfg.cpp:2533
+#: qtcfg.cpp:2560
 msgid "Delete"
 msgstr "Видалити"
 
-#: qtcfg.cpp:2539
+#: qtcfg.cpp:2566
 msgid "Up"
 msgstr "Вверх"
 
-#: qtcfg.cpp:2541
+#: qtcfg.cpp:2568
 msgid "Down"
 msgstr "Донизу"
 
-#: qtcfg.cpp:2578
+#: qtcfg.cpp:2605
 msgid "Item name set"
 msgstr "Встановлення назви елементу"
 
-#: qtcfg.cpp:2582
+#: qtcfg.cpp:2609
 msgid "Add new element."
 msgstr "Додання нового елементу."
 
-#: qtcfg.cpp:2583
+#: qtcfg.cpp:2610
 msgid "Insert new element."
 msgstr "Вставлення нового елементу."
 
-#: qtcfg.cpp:2586
+#: qtcfg.cpp:2613
 msgid "Rename element."
 msgstr "Перейменування елементу."
 
-#: qtcfg.cpp:2609
+#: qtcfg.cpp:2632
 #, c-format
 msgid "%s| Add '%s' element <%s:%s>!"
 msgstr "%s| Додано '%s' елемент <%s:%s>!"
 
-#: qtcfg.cpp:2617
+#: qtcfg.cpp:2640
 #, c-format
 msgid "%s| Insert '%s' element <%s:%s> to %d!"
 msgstr "%s| Вставлено '%s' елемент <%s:%s> до %d!"
 
-#: qtcfg.cpp:2625
+#: qtcfg.cpp:2648
 #, c-format
 msgid "%s| Set '%s' element %d to <%s:%s>!"
 msgstr "%s| Встановлено '%s' елемент %d у <%s:%s>!"
 
-#: qtcfg.cpp:2633
+#: qtcfg.cpp:2656
 #, c-format
 msgid "%s| Delete '%s' element <%s:%s>!"
 msgstr "%s| Видалення '%s' елементу <%s:%s>!"
 
-#: qtcfg.cpp:2640
+#: qtcfg.cpp:2663
 #, c-format
 msgid "%s| Move '%s' from %d to %d!"
 msgstr "%s| Пересування '%s' з %d до %d!"
 
-#: qtcfg.cpp:2682
+#: qtcfg.cpp:2706
 msgid "Add record"
 msgstr "Додати запис"
 
-#: qtcfg.cpp:2687
+#: qtcfg.cpp:2711
 msgid "Insert record"
 msgstr "Вставити запис"
 
-#: qtcfg.cpp:2692
+#: qtcfg.cpp:2716
 msgid "Delete record"
 msgstr "Видалити запис"
 
-#: qtcfg.cpp:2698
+#: qtcfg.cpp:2722
 msgid "Move Up"
 msgstr "Пересунути вгору"
 
-#: qtcfg.cpp:2700
+#: qtcfg.cpp:2724
 msgid "Move Down"
 msgstr "Пересунути донизу"
 
-#: qtcfg.cpp:2707
+#: qtcfg.cpp:2731
 msgid "Copy"
 msgstr "Копіювати"
 
-#: qtcfg.cpp:2745
+#: qtcfg.cpp:2769
 #, c-format
 msgid "%s| Add '%s' record."
 msgstr "%s| Додано '%s' запис."
 
-#: qtcfg.cpp:2752
+#: qtcfg.cpp:2776
 #, c-format
 msgid "%s| Insert '%s' record %d."
 msgstr "%s| Вставлення '%s' запису %d."
 
-#: qtcfg.cpp:2777
+#: qtcfg.cpp:2801
 #, c-format
 msgid "%s| Delete '%s' record '%s'."
 msgstr "%s| Видалення '%s' запису '%s'."
 
-#: qtcfg.cpp:2786
+#: qtcfg.cpp:2810
 #, c-format
 msgid "%s| Move '%s' record from %d to %d."
 msgstr "%s| Пересування '%s' запису з %d до %d."
 
-#: qtcfg.cpp:2812
+#: qtcfg.cpp:2836
 msgid "Save image"
 msgstr "Зберегти зображення"
 
-#: qtcfg.cpp:2817
+#: qtcfg.cpp:2841
 msgid "Load image"
 msgstr "Завантажити зображення"
 
-#: qtcfg.cpp:2827
+#: qtcfg.cpp:2851
 msgid "Save picture"
 msgstr "Збереження картинки"
 
-#: qtcfg.cpp:2828
+#: qtcfg.cpp:2852
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: qtcfg.cpp:2830
+#: qtcfg.cpp:2854
 #, c-format
 msgid "Save to file %s error\n"
 msgstr "Помилка збереження до файлу %s\n"
 
-#: qtcfg.cpp:2835
+#: qtcfg.cpp:2859
 msgid "Load picture"
 msgstr "Завантаження картинки"
 
-#: qtcfg.cpp:2835
+#: qtcfg.cpp:2859
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-#: qtcfg.cpp:2843
+#: qtcfg.cpp:2867
 #, c-format
 msgid "Open file %s error\n"
 msgstr "Помилка відкриття файлу %s\n"
 
-#: qtcfg.cpp:2851
+#: qtcfg.cpp:2875
 #, c-format
 msgid "Image file %s error\n"
 msgstr "Помилковий файл зображення %s\n"
 
-#: qtcfg.cpp:2856
+#: qtcfg.cpp:2880
 #, c-format
 msgid "%s| Upload picture '%s' to: %s."
 msgstr "%s| Завантаження картинки '%s' до: %s."
 
-#: qtcfg.cpp:2918
+#: qtcfg.cpp:2938
 #, c-format
 msgid "Value '%s' is not valid!"
 msgstr "Значення '%s' помилкове!"
 
-#: qtcfg.cpp:2950
+#: qtcfg.cpp:2970
 #, c-format
 msgid "%s| Set '%s' cell ('%s':%s) to: %s."
 msgstr "%s| Встановлено '%s' чарунку ('%s':%s) у: %s."
 
-#: qtcfg.cpp:2984
+#: qtcfg.cpp:3004
 #, c-format
 msgid "Selective element '%s' is not present!"
 msgstr "Вибірковий елемент '%s' відсутній!"
 
-#: qtcfg.cpp:3018
+#: qtcfg.cpp:3038
 #, c-format
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Змінено '%s' у: '%s'!"
 
-#: selfwidg.cpp:98
+#: selfwidg.cpp:95
 msgid "Picture is not set!"
 msgstr "Картинку не встановлено!"
 
-#: selfwidg.cpp:498
+#: selfwidg.cpp:495
 msgid "Find"
 msgstr "Пошук"
 
-#: selfwidg.cpp:503
+#: selfwidg.cpp:500
 msgid "Find next"
 msgstr "Пошук наступного"
 
-#: selfwidg.cpp:514
+#: selfwidg.cpp:511
 msgid "Apply"
 msgstr "Прийняти"
 
-#: selfwidg.cpp:518 selfwidg.cpp:765 selfwidg.cpp:898
+#: selfwidg.cpp:515 selfwidg.cpp:762 selfwidg.cpp:895
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: selfwidg.cpp:582
+#: selfwidg.cpp:579
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-#: selfwidg.cpp:631
+#: selfwidg.cpp:628
 msgid "Enter text string for search:"
 msgstr "Введіть строку тексту для пошуку:"
 
-#: selfwidg.cpp:631
+#: selfwidg.cpp:628
 msgid "String search"
 msgstr "Пошук строки"
 
-#: selfwidg.cpp:634
+#: selfwidg.cpp:631
 msgid "Backward"
 msgstr "Зворотній"
 
-#: selfwidg.cpp:637
+#: selfwidg.cpp:634
 msgid "Case sensitively"
 msgstr "Чутливий до регістру"
 
-#: selfwidg.cpp:640
+#: selfwidg.cpp:637
 msgid "Whole words"
 msgstr "Слово цілком"
 
-#: selfwidg.cpp:728
+#: selfwidg.cpp:725
 msgid "ID:"
 msgstr ""
 
-#: selfwidg.cpp:736
+#: selfwidg.cpp:733
 msgid "Name:"
 msgstr "Ім'я:"
 
-#: selfwidg.cpp:758 selfwidg.cpp:894
+#: selfwidg.cpp:755 selfwidg.cpp:891
 msgid "Ok"
 msgstr ""
 
-#: selfwidg.cpp:820
+#: selfwidg.cpp:817
 msgid "Item type:"
 msgstr "Тип елементу:"
 
-#: selfwidg.cpp:867
+#: selfwidg.cpp:864
 msgid "Select user"
 msgstr "Вибір користувача"
 
-#: selfwidg.cpp:875
+#: selfwidg.cpp:872
 msgid "User:"
 msgstr "Користувач:"
 
-#: selfwidg.cpp:878
+#: selfwidg.cpp:875
 msgid "Password:"
 msgstr "Пароль:"
 
-#: selfwidg.cpp:985 tuimod.cpp:167
+#: selfwidg.cpp:982 tuimod.cpp:167
 msgid "Auth is wrong!!!"
 msgstr "Помилка аутентифікації!!!"
 
