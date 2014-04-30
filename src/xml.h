@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: xml.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -44,6 +44,11 @@ class XMLNode
 {
     public:
 	//Data
+	enum LoadFlgs
+	{
+	    LD_Full		= 0x01,		//Load XML full
+	    LD_NoTxtSpcRemEnBeg	= 0x02,		//No remove spaces for begin and end tag's text, for not full mode
+	};
 	enum SaveView
 	{
 	    BrOpenPrev		= 0x01,		//Break before open tag
@@ -78,8 +83,8 @@ class XMLNode
 	string	attr( const string &name, bool caseSens = true ) const;
 	XMLNode* setAttr( const string &name, const string &val );
 
-	void	load( const string &vl, bool full = false, const string &cp = "UTF-8" );
-	string	save( unsigned flgs = 0, const string &cp = "UTF-8" );
+	void	load( const string &vl, unsigned flg = 0, const string &cp = "UTF-8" );
+	string	save( unsigned flg = 0, const string &cp = "UTF-8" );
 	XMLNode* clear( );
 
 	bool	childEmpty( ) const		{ return mChildren.empty(); }
@@ -116,12 +121,12 @@ class XMLNode
 	{
 	    public:
 		//Methods
-		LoadCtx( const string &ivl, bool full );
+		LoadCtx( const string &ivl, unsigned flg );
 
 		//Attributes
-		bool full;
-		string	vl, enc, aNm, aVl;
-	        map<string,string> ent;
+		unsigned flg;
+		string vl, enc, aNm, aVl;
+		map<string,string> ent;
 	};
 
 	//Methods

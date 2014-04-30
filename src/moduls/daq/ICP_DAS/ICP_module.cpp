@@ -197,15 +197,9 @@ string TMdContr::getStatus( )
     return val;
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
-void TMdContr::disable_( )
-{
-
-}
+void TMdContr::disable_( )	{ }
 
 void TMdContr::start_( )
 {
@@ -312,7 +306,7 @@ void *TMdContr::Task( void *icntr )
 
     cntr.endRunReq = false;
 
-    //> Init watchdog and get previous state
+    //Init watchdog and get previous state
     if(cntr.mBus == 0) wTm = atof(cntr.prmLP("wTm").c_str());
 
     try
@@ -324,28 +318,35 @@ void *TMdContr::Task( void *icntr )
 		cntr.call_st = true;
 		int64_t t_cnt = TSYS::curTime();
 
-		//> Update controller's data
-		ResAlloc res( cntr.en_res, false );
+		//Update controller's data
+		ResAlloc res(cntr.en_res, false);
 		for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++) cntr.p_hd[i_p].at().getVals();
 		res.release();
 
-		//> Calc acquisition process time
+		//Calc acquisition process time
 		cntr.tm_gath = TSYS::curTime()-t_cnt;
 		cntr.call_st = false;
 	    }
 
-	    //> Watchdog timer process
-	    if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); EnableWDT((int)(1e3*vmax(1.5e-9*cntr.period(),wTm))); res.release(); }
+	    //Watchdog timer process
+	    if(cntr.mBus == 0 && cntr.period() && wTm > 0)
+	    {
+		ResAlloc res(cntr.reqRes, true);
+		int wTmSet = 1e3*vmax(1.5e-9*cntr.period(), wTm);
+		EnableWDT(wTmSet);
+		if(cntr.messLev() == TMess::Debug) mess_debug_(cntr.nodePath().c_str(), _("Set watchdog to %d ms."), wTmSet);
+		res.release();
+	    }
 
 	    cntr.prcSt = true;
 
-	    //> Calc next work time and sleep
+	    //Calc next work time and sleep
 	    TSYS::taskSleep(cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
 	}
     }
     catch(TError err)	{ mess_err(err.cat.c_str(), err.mess.c_str()); }
 
-    //> Watchdog timer disable
+    //Watchdog timer disable
     if(cntr.mBus == 0 && wTm > 0) { ResAlloc res(cntr.reqRes, true); DisableWDT(); res.release(); }
 
     cntr.prcSt = false;
@@ -449,11 +450,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
     {
-        vector<string> sls;
-        opt->childAdd("el")->setText(TrIcpDasNm);
-        SYS->transport().at().outTrList(sls);
-        for(unsigned i_s = 0; i_s < sls.size(); i_s++)
-            opt->childAdd("el")->setText(sls[i_s]);
+	vector<string> sls;
+	opt->childAdd("el")->setText(TrIcpDasNm);
+	SYS->transport().at().outTrList(sls);
+	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
+	    opt->childAdd("el")->setText(sls[i_s]);
     }
     else if(mBus == 0 && a_path == "/LPcfg/wTm")
     {

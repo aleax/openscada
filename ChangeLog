@@ -1,3 +1,10 @@
+2014-04-30 Roman
+- SYS.XMLNode: Into function load() argument "full" replaced "flg" with flags:
+    0x01 - full mode; 0x02 - no remove 0x02 - no remove spaces for begin and end tag's text.
+- FIX:DAQ.ICP_DAS: WatchDog set debug messages added. I-87k DO modules for "Power on values" and "Safe values" take is fixed, for I-87041.
+- DAQ.SNMP: Some clean up.
+
+
 2014-04-28 Roman
 - UI.QTCfg: Group-selected fields set support is added. Some code clean up.
 

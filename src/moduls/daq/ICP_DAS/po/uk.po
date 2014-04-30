@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-05 11:19+0200\n"
+"POT-Creation-Date: 2014-04-30 17:32+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -353,69 +353,73 @@ msgstr "Наступний виклик за cron '%s'. "
 msgid "Spent time: %s. Serial requests %g, errors %g. "
 msgstr "Витрачено часу: %s. Послід. запитів %g, помилок %g. "
 
-#: ICP_module.cpp:217
+#: ICP_module.cpp:211
 msgid "Open All LP-slots error."
 msgstr "Помилка відкриття всіх LP-слотів."
 
-#: ICP_module.cpp:218
+#: ICP_module.cpp:212
 msgid "Open LP-slot 9 error."
 msgstr "Помилка відкриття LP-слоту 9."
 
-#: ICP_module.cpp:228
+#: ICP_module.cpp:222
 #, c-format
 msgid "Open COM%d port error."
 msgstr "Помилка відкриття COM%d порту."
 
-#: ICP_module.cpp:361
+#: ICP_module.cpp:337
+msgid "Set watchdog to %d ms."
+msgstr "Встановлення watchdog у %d мс."
+
+#: ICP_module.cpp:362
 #, c-format
 msgid "REQ -> '%s'"
 msgstr "Запит -> '%s'"
 
-#: ICP_module.cpp:388
+#: ICP_module.cpp:389
 msgid "13:Error respond: Not full."
 msgstr "13:Помилка відповіді: Не повна."
 
-#: ICP_module.cpp:393
+#: ICP_module.cpp:394
 msgid "21:Invalid module CRC."
 msgstr "21:Помилка контрольної суми."
 
-#: ICP_module.cpp:397 ICP_module.cpp:418
+#: ICP_module.cpp:398 ICP_module.cpp:419
 #, c-format
 msgid "RESP -> '%s'"
 msgstr "Відпов. -> '%s'"
 
-#: ICP_module.cpp:403 ICP_module.cpp:423
+#: ICP_module.cpp:404 ICP_module.cpp:424
 #, c-format
 msgid "ERR -> '%s': %s"
 msgstr "Помилка -> '%s': %s"
 
-#: ICP_module.cpp:421
+#: ICP_module.cpp:422
 #, c-format
 msgid "13:Send_Receive_Cmd() error: %d."
 msgstr "13:Send_Receive_Cmd() помилка: %d."
 
-#: ICP_module.cpp:445
+#: ICP_module.cpp:446
 msgid "Watchdog timeout (s)"
 msgstr "Час сторожового таймеру (с)"
 
-#: ICP_module.cpp:495
+#: ICP_module.cpp:496
 msgid "No a device selected."
 msgstr "Жодного пристрою не обрано."
 
-#: ICP_module.cpp:602
+#: ICP_module.cpp:603
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-#: ICP_module.cpp:603
+#: ICP_module.cpp:604
 msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."
 
-#: ICP_module.cpp:635
+#: ICP_module.cpp:636
 #, c-format
 msgid "Write value to attribute '%s' error: %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
-#: ICP_module.cpp:675
+#: ICP_module.cpp:677
 msgid "<No select>"
 msgstr "<Не обрано>"
 

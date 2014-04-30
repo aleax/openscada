@@ -381,7 +381,7 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
     XMLNode oTree;
     if(!nd)
     {
-	try { oTree.load(str, false, Mess->charset()); }
+	try { oTree.load(str, 0, Mess->charset()); }
 	catch(TError err) { return prev; }
 	nd = &oTree;
     }
@@ -1071,10 +1071,12 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     }
     // XMLNodeObj parent() - get parent node
     if(id == "parent")	return !parent ? TVariant(false) : TVariant(parent);
-    // string load(string str, bool file = false, bool full = false, string cp = "UTF-8") - load XML tree from XML-stream from string or file
+    // string load(string str, bool file = false, int flg = 0, string cp = "UTF-8") - load XML tree from XML-stream from string or file
     //  str - source stream string or file name, for <file> = true;
     //  file - load XML-tree from file (true) or stram (false);
-    //  full - node's text and comments load into separated nodes "<*>" and "<!>";
+    //  flg - node's load flags:
+    //    0x01 - text and comments load into separated nodes "<*>" and "<!>";
+    //    0x02 - no remove spaces for begin and end tag's text).
     //  cp - source codepage.
     if(id == "load" && prms.size())
     {
@@ -1099,18 +1101,18 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	    close(hd);
 	    if(!fOK) return TSYS::strMess(_("3:Load file '%s' error."), prms[0].getS().c_str());
 
-	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
+	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getI():0), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
 	    catch(TError err) { return "1:"+err.mess; }
 	}
 	//> Load from string
 	else
-	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getB():false), Mess->charset()); }
+	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getI():0), Mess->charset()); }
 	    catch(TError err) { return "1:"+err.mess; }
 	fromXMLNode(nd);
 	return string("0");
     }
-    // string save(int opt = 0, string path = "", string cp = "UTF-8") - save XML-tree to string or file stream
-    //  opt - save options:
+    // string save(int flg = 0, string path = "", string cp = "UTF-8") - save XML-tree to string or file stream
+    //  flg - save options:
     //   0x01 - interrupt the string before the opening tag;
     //   0x02 - interrupt the string after the opening tag;
     //   0x04 - interrupt the string after a closing tag;

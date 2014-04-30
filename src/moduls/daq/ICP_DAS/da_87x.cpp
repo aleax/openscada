@@ -577,7 +577,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    {
 		//>>> ~AA4P
 		rez = p->owner().serReq(TSYS::strMess("~%02X4P",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		if(rez.size() != 7 || rez[0] != '!') opt->setText(_("Error"));
+		if(rez.size() < 7 || rez[0] != '!') opt->setText(_("Error"));
 		else
 		{
 		    string cnt;
@@ -593,7 +593,7 @@ bool da_87x::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 	    {
 		//>>> ~AA4S
 		rez = p->owner().serReq(TSYS::strMess("~%02X4S",(int)((p->owner().bus()==0)?0:p->modAddr)), p->modSlot, CRC);
-		if(rez.size() != 7 || rez[0] != '!') opt->setText(_("Error"));
+		if(rez.size() < 7 || rez[0] != '!') opt->setText(_("Error"));
 		else
 		{
 		    string cnt;

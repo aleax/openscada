@@ -52,13 +52,13 @@ SNMP_DAQ::TTpContr *SNMP_DAQ::mod;  //Pointer for direct access to the module
 
 extern "C"
 {
-    TModule::SAt module(int n_mod)
+    TModule::SAt module( int n_mod )
     {
 	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
-    TModule *attach(const TModule::SAt &AtMod, const string &source)
+    TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
 	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new SNMP_DAQ::TTpContr(source);
 	return NULL;
@@ -94,7 +94,7 @@ void TTpContr::load_( )
 
 }
 
-void TTpContr::postEnable(int flag)
+void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
@@ -115,16 +115,13 @@ void TTpContr::postEnable(int flag)
     tpPrmAt(t_prm).fldAdd(new TFld("OID_LS",_("OID list (next line separated)"),TFld::String,TFld::FullText|TCfg::NoVal,"100000",""));
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
 
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
-TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) :
-    ::TController(name_c,daq_db,cfgelem),
+TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
+    TController(name_c,daq_db,cfgelem),
     m_prior(cfg("PRIOR").getId()), m_pattr_lim(cfg("PATTR_LIM").getId()), m_retr(cfg("RETR").getId()), m_tm(cfg("TM").getId()),
     prc_st(false), call_st(false), endrun_req(false), prmEnErr(false), tm_gath(0)
 {
@@ -263,10 +260,7 @@ void TMdContr::setSecPrivPass( const string &vl )
     cfg("V3").setS(secLev()+":"+secAuthProto()+":"+secAuthPass()+":"+secPrivProto()+":"+vl);
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name,&owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name,&owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )	{ prmEnErr = false; }
 
@@ -492,7 +486,7 @@ void TMdPrm::disable( )
 void TMdPrm::upVal( void *ss, bool onlyInit )
 {
     int		el_cnt = 0;
-    string      soid;
+    string	soid;
     char	tbuf[100];
     struct snmp_pdu *response;
     struct variable_list *var;
@@ -589,7 +583,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			    case ASN_IPADDRESS:
 			    {
 				u_char *ip = (u_char*)var->val.string;
-				attr.at().setS(TSYS::strMess("%d.%d.%d.%d",ip[0], ip[1], ip[2], ip[3]),0,true);
+				attr.at().setS(TSYS::strMess("%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]), 0, true);
 				break;
 			    }
 			    case ASN_OBJECT_ID:
