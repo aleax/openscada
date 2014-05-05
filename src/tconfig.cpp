@@ -141,7 +141,7 @@ void TConfig::setElem( TElem *Elements, bool first )
     if(m_elem)
     {
 	TCfgMap::iterator p;
-	while((p=value.begin())!=value.end())
+	while((p=value.begin()) != value.end())
 	{
 	    delete p->second;
 	    value.erase(p);

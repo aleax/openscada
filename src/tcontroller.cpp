@@ -268,7 +268,7 @@ void TController::disable( )
 
 void TController::LoadParmCfg( )
 {
-    map<string, bool>   itReg;
+    map<string, bool>	itReg;
 
     //> Search and create new parameters
     for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)

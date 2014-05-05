@@ -518,7 +518,7 @@ void MTable::fieldSet( TConfig &cfg )
 	req_where += (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"='" + mod->sqlReqCode(getVal(u_cfg)) + "' ";
 	next = true;
 
-	//Check for no key fields
+	// Check for no key fields
 	if(noKeyFld) continue;
 	unsigned i_fld = 1;
 	for( ; i_fld < tblStrct.size(); i_fld++)

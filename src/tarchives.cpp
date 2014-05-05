@@ -42,7 +42,7 @@ using namespace OSCADA;
 //************************************************
 TArchiveS::TArchiveS( ) :
     TSubSYS(SARH_ID,"Archives",true), elMess(""), elVal(""), elAval(""), bufErr(0), mMessPer(10), prcStMess(false),
-    headBuf(0)/*, headLstread(0)*/, mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false)
+    headBuf(0), mValPer(1000), mValPrior(10), prcStVal(false), endrunReqVal(false), toUpdate(false)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);

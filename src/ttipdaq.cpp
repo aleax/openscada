@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: ttipdaq.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -80,7 +80,7 @@ void TTipDAQ::postEnable( int flag )
 void TTipDAQ::modStart( )
 {
     vector<string> lst;
-    //> Start all controllers
+    //Start all controllers
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	if(at(lst[i_l]).at().toStart())
@@ -95,16 +95,13 @@ void TTipDAQ::modStart( )
 void TTipDAQ::modStop( )
 {
     vector<string> lst;
-    //> Stop all controllers
+    //Stop all controllers
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
-        at(lst[i_l]).at().stop( );
+	at(lst[i_l]).at().stop( );
 }
 
-void TTipDAQ::add( const string &name, const string &daq_db )
-{
-    chldAdd(m_cntr, ContrAttach(name,daq_db));
-}
+void TTipDAQ::add( const string &name, const string &daq_db )	{ chldAdd(m_cntr, ContrAttach(name,daq_db)); }
 
 TTipParam &TTipDAQ::tpPrmAt( unsigned id )
 {
@@ -152,7 +149,7 @@ string TTipDAQ::compileFunc( const string &lang, TFunction &fnc_cfg, const strin
 
 void TTipDAQ::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TModule::cntrCmdProc(opt);
@@ -162,7 +159,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","cntr_","idSz",OBJ_ID_SZ);
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/br/cntr_" || a_path == "/tctr/ctr")
     {
@@ -190,7 +187,7 @@ void TTipDAQ::cntrCmdProc( XMLNode *opt )
 TTipParam::TTipParam( const char *iid, const char *iname, const char *idb, bool i_isPrmCntr ) :
     name(iid), descr(iname), mDB(idb), isPrmCntr(i_isPrmCntr)
 {
-    //> Add typical structure fields
+    //Add typical structure fields
     fldAdd(new TFld("SHIFR",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     fldAdd(new TFld("OWNER",_("Owner"),TFld::String,TCfg::Key|TFld::NoWrite,"100"));
     fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));

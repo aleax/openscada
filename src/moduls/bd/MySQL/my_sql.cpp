@@ -567,14 +567,22 @@ void MTable::fieldSet( TConfig &cfg )
     //Get present fields list
     string req_where = "WHERE ";
     // Add key list to query
-    bool next = false;
+    bool next = false, noKeyFld = false;
     for(unsigned i_el = 0; i_el < cf_el.size(); i_el++)
     {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!(u_cfg.fld().flg()&TCfg::Key)) continue;
 	req_where += (next?"AND `":"`") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "`='" + TSYS::strEncode(getVal(u_cfg),TSYS::SQL) + "' ";
 	next = true;
+
+	// Check for no key fields
+	if(noKeyFld) continue;
+	unsigned i_fld = 1;
+	for( ; i_fld < tblStrct.size(); i_fld++)
+	    if(u_cfg.name() == tblStrct[i_fld][0]) break;
+	if(i_fld >= tblStrct.size()) noKeyFld = true;
     }
+    if(noKeyFld) fieldFix(cfg);
 
     //Prepare query
     // Try for get already present field

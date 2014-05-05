@@ -229,8 +229,8 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().open(wbd);
 	    SYS->db().at().close(wbd,true);
 	}
-    }catch(TError err)
-    { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
 }

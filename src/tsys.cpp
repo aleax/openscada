@@ -567,7 +567,7 @@ void TSYS::load_()
     //> Direct load subsystems and modules
     vector<string> lst;
     list(lst);
-    for(unsigned i_a=0; i_a < lst.size(); i_a++)
+    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().load(); }
 	catch(TError err)
 	{

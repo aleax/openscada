@@ -1,3 +1,11 @@
+2014-05-05 Roman
+- DB.LibsDB.OscadaLibs.db: DAQ template "anUnifSt" sync to "anUnif" and properties "iMult" "iAdd" process fix.
+- DB.{LibsDB.vcaBase.db,AGLKS.{St.db,vca.db}}: Mnemo elements "Compressor", "Compressor_1", "El_Kran_Sh", "El_Zadvizhka", "Zadvizhka"
+    expanded by attributes "digComs" and "digStts". Mnemo element "Level" fix for validate and EVAL.
+- DB.{SQLite,MySQL,PostgreSQL,FireBird}: Keys miss into DB check is added for fieldSet() and prevent temporary errors for INSERT.
+- FIX:Special.FLibSYS: Expand to int64_t fix.
+
+
 2014-04-30 Roman
 - SYS.XMLNode: Into function load() argument "full" replaced "flg" with flags:
     0x01 - full mode; 0x02 - no remove 0x02 - no remove spaces for begin and end tag's text.
@@ -51,7 +59,7 @@
 - SYS: Added new global simple functions into OSCADA namespace: tm2s(), s2i() and s2r().
 - SYS:TCntrNode: Base function _ctrMkNode() and specific for arguments set function ctrMkNode2() to original ctrChkNode() is added.
 - FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Keys miss into DB check is fixed for fieldSeek().
-- !!:DB.SQLite: Debug information for error requests is added. Main SQLite3 type "REAL" type handle is added for structure obtain.
+- !!:DB.SQLite: Debug information for error requests is added. Main SQLite3 type "REAL" handle is added for structure obtain.
     Keys miss into DB check is added for fieldSet() and prevent temporary errors for INSERT.
 - !:DAQ.MMS: Expanded for allow custom options to configured variables set, like:
     writable, single request, divider for execution period, force data type, force ID and Name.
@@ -96,7 +104,7 @@
 
 2014-04-10 Roman
 - Archive.DBArch: Field's "LEN" of messages table length set to "2" for allow negative (alarms).
-- SYS.{TController,TTipDAQ): ID update after new child object create.
+- DAQ.{TController,TTipDAQ}: ID update after new child object create.
 - SYS: To user's API of object XMLNodeObj function "childGet( string name, int num = 0 )" is added.
     Mostly warnings clean.
 - DAQ.BlockCalc: To blocks' output links optional writing by changes is added. Some code clean up.
@@ -136,7 +144,7 @@
 
 
 2014-03-19 Roman
-- !!!!:SYS: API function "void vlSet();" expanded for same set value pass and prevent lost values.
+- !!!!:DAQ: API function "void vlSet();" expanded for same set value pass and prevent lost values.
 - UI.Vision: Prevent Widgets copy or cut from self to self.
     Select area update is added for same selection change and the geometry change from the attributes inspector.
 

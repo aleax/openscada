@@ -1076,7 +1076,7 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //  file - load XML-tree from file (true) or stram (false);
     //  flg - node's load flags:
     //    0x01 - text and comments load into separated nodes "<*>" and "<!>";
-    //    0x02 - no remove spaces for begin and end tag's text).
+    //    0x02 - no remove spaces for begin and end tag's text.
     //  cp - source codepage.
     if(id == "load" && prms.size())
     {

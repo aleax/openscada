@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tdaqs.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -38,13 +38,13 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
 {
     mTmplib = grpAdd("tmplb_");
 
-    //> Templates lib db structure
+    //Templates lib db structure
     lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
     lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
 
-    //> Template DB structure
+    //Template DB structure
     el_tmpl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_tmpl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     el_tmpl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
@@ -52,7 +52,7 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     el_tmpl.fldAdd(new TFld("PROGRAM",_("Template program"),TFld::String,TCfg::TransltText,"1000000"));
     el_tmpl.fldAdd(new TFld("TIMESTAMP",_("Date of modification"),TFld::Integer,TFld::DateTimeDec));
 
-    //> Parameter template IO DB structure
+    //Parameter template IO DB structure
     el_tmpl_io.fldAdd(new TFld("TMPL_ID",_("Template ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_tmpl_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_tmpl_io.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
@@ -61,7 +61,7 @@ TDAQS::TDAQS( ) : TSubSYS(SDAQ_ID,_("Data acquisition"),true), el_err("Error"),
     el_tmpl_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"50"));
     el_tmpl_io.fldAdd(new TFld("POS",_("Real position"),TFld::Integer,TFld::NoFlag,"4"));
 
-    //> Error attributes
+    //Error attributes
     el_err.fldAdd(new TFld("err",_("Error"),TFld::String,TFld::NoWrite|TVal::DirRead));
 }
 
@@ -86,7 +86,7 @@ void TDAQS::rdStList( vector<string> &ls )
 {
     ResAlloc res(nodeRes(),true);
     ls.clear();
-    for( map<string,SStat>::iterator sti = mSt.begin(); sti != mSt.end(); sti++ )
+    for(map<string,SStat>::iterator sti = mSt.begin(); sti != mSt.end(); sti++)
 	ls.push_back(sti->first);
 }
 
@@ -147,21 +147,21 @@ void TDAQS::ctrListPrmAttr( XMLNode *opt, const string &l_prm, bool toPrm, char 
 
 void TDAQS::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     map<string, bool>   itReg;
-    //> Load templates libraries of parameter
+    //Load templates libraries of parameter
     try
     {
-	//>> Search and create new libraries
+	// Search and create new libraries
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 
-	//>> Search into DB
+	// Search into DB
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -172,21 +172,22 @@ void TDAQS::load_( )
 		itReg[l_id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
-            tmplLibList(db_ls);
-            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(db_ls[i_it]).at().DB()))
-                    tmplLibUnreg(db_ls[i_it]);
+	//  Check for remove items removed from DB
+	if(!SYS->selDB().empty())
+	{
+	    tmplLibList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(tmplLibAt(db_ls[i_it]).at().DB()))
+		    tmplLibUnreg(db_ls[i_it]);
         }
-    }catch( TError err )
+    }
+    catch(TError err)
     {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load template's libraries error."));
     }
 
-    //> Load parameters
+    //Load parameters
     try
     {
 	AutoHD<TTipDAQ> wmod;
@@ -200,7 +201,7 @@ void TDAQS::load_( )
 	    g_cfg.cfgViewAll(false);
 	    itReg.clear();
 
-	    //>> Search into DB and create new controllers
+	    // Search into DB and create new controllers
 	    SYS->db().at().dbList(db_ls,true);
 	    db_ls.push_back(DB_CFG);
 	    for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -218,36 +219,37 @@ void TDAQS::load_( )
 		    }
 		}
 
-	    //>>> Check for remove items removed from DB
+	    //  Check for remove items removed from DB
 	    wmod.at().list(db_ls);
 	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(db_ls[i_it]).at().DB()))
-                    wmod.at().del(db_ls[i_it]);
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(wmod.at().at(db_ls[i_it]).at().DB()))
+		    wmod.at().del(db_ls[i_it]);
 	}
-    }catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
-    //> Load parameters from config-file and SYS DB
+    //Load parameters from config-file and SYS DB
     setRdStLevel(atoi(TBDS::genDBGet(nodePath()+"RdStLevel",TSYS::int2str(rdStLevel())).c_str()));
     setRdTaskPer(atof(TBDS::genDBGet(nodePath()+"RdTaskPer",TSYS::real2str(rdTaskPer())).c_str()));
     setRdRestConnTm(atoi(TBDS::genDBGet(nodePath()+"RdRestConnTm",TSYS::int2str(rdRestConnTm())).c_str()));
     setRdRestDtTm(atof(TBDS::genDBGet(nodePath()+"RdRestDtTm",TSYS::real2str(rdRestDtTm())).c_str()));
     string stLs = TBDS::genDBGet(nodePath()+"RdStList"), stId;
     ResAlloc res(nodeRes(),true);
-    for( int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
-	if( mSt.find(stId) == mSt.end() ) mSt[stId] = SStat();
+    for(int off = 0; (stId=TSYS::strSepParse(stLs,0,';',&off)).size(); )
+	if(mSt.find(stId) == mSt.end()) mSt[stId] = SStat();
     res.release();
 }
 
 void TDAQS::save_( )
 {
-    //> Save parameters to SYS DB
+    //Save parameters to SYS DB
     TBDS::genDBSet(nodePath()+"RdStLevel",TSYS::int2str(rdStLevel()));
     TBDS::genDBSet(nodePath()+"RdTaskPer",TSYS::real2str(rdTaskPer()));
     TBDS::genDBSet(nodePath()+"RdRestConnTm",TSYS::int2str(rdRestConnTm()));
     TBDS::genDBSet(nodePath()+"RdRestDtTm",TSYS::real2str(rdRestDtTm()));
     ResAlloc res(nodeRes(),false);
     string stLs;
-    for( map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++ )
+    for(map<string,TDAQS::SStat>::iterator sit = mSt.begin(); sit != mSt.end(); sit++)
 	stLs += sit->first+";";
     TBDS::genDBSet(nodePath()+"RdStList",stLs);
     res.release();
@@ -269,7 +271,7 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 
 	try
 	{
-	    //> Prepare arguments structure
+	    //Prepare arguments structure
 	    TFunction argStr("<auto>");
 	    vector<string> als;
 	    args.at().propList(als);
@@ -279,55 +281,56 @@ TVariant TDAQS::objFuncCall( const string &iid, vector<TVariant> &prms, const st
 		IO::Type tp = IO::String;
 		switch(aVal.type())
 		{
-        	    case TVariant::Boolean:	tp = IO::Boolean;	break;
-        	    case TVariant::Integer:	tp = IO::Integer;	break;
+		    case TVariant::Boolean:	tp = IO::Boolean;	break;
+		    case TVariant::Integer:	tp = IO::Integer;	break;
 		    case TVariant::Real:	tp = IO::Real;		break;
-        	    case TVariant::String:	tp = IO::String;	break;
-        	    case TVariant::Object:	tp = IO::Object;	break;
+		    case TVariant::String:	tp = IO::String;	break;
+		    case TVariant::Object:	tp = IO::Object;	break;
 		    default:	break;
 		}
 		argStr.ioAdd(new IO(als[i_a].c_str(),als[i_a].c_str(),tp,IO::Default));
 	    }
 
-	    //> Get function id and compile.
+	    //Get function id and compile.
 	    string faddr = at(langMod).at().compileFunc(TSYS::strParse(prms[0].getS(),1,"."), argStr, prms[2].getS());
 	    AutoHD<TFunction> wFnc = SYS->nodeAt(faddr);
 	    TValFunc wCtx("UserFunc", &wFnc.at(), true, user);
 
-	    //> Load values
+	    //Load values
 	    for(unsigned i_a = 0; i_a < als.size(); i_a++)
 		switch((aVal=args.at().propGet(als[i_a])).type())
 		{
-        	    case TVariant::Boolean:	wCtx.setB(i_a, aVal.getB());	break;
-        	    case TVariant::Integer:	wCtx.setI(i_a, aVal.getI());	break;
+		    case TVariant::Boolean:	wCtx.setB(i_a, aVal.getB());	break;
+		    case TVariant::Integer:	wCtx.setI(i_a, aVal.getI());	break;
 		    case TVariant::Real:	wCtx.setR(i_a, aVal.getR());	break;
-        	    case TVariant::String:	wCtx.setS(i_a, aVal.getS());	break;
-        	    case TVariant::Object:	wCtx.setO(i_a, aVal.getO());	break;
+		    case TVariant::String:	wCtx.setS(i_a, aVal.getS());	break;
+		    case TVariant::Object:	wCtx.setO(i_a, aVal.getO());	break;
 		    default:	break;
 		}
 
-	    //> Call function
+	    //Call function
 	    wCtx.calc();
 
-	    //> Place call result and remove function object.
+	    //Place call result and remove function object.
 	    for(int i_a = 0; i_a < wCtx.ioSize(); i_a++)
 		switch(wCtx.ioType(i_a))
 		{
-        	    case IO::Boolean:	args.at().propSet(als[i_a], wCtx.getB(i_a));	break;
-        	    case IO::Integer:	args.at().propSet(als[i_a], wCtx.getI(i_a));	break;
+		    case IO::Boolean:	args.at().propSet(als[i_a], wCtx.getB(i_a));	break;
+		    case IO::Integer:	args.at().propSet(als[i_a], wCtx.getI(i_a));	break;
 		    case IO::Real:	args.at().propSet(als[i_a], wCtx.getR(i_a));	break;
-        	    case IO::String:	args.at().propSet(als[i_a], wCtx.getS(i_a));	break;
-        	    case IO::Object:	args.at().propSet(als[i_a], wCtx.getO(i_a));	break;
+		    case IO::String:	args.at().propSet(als[i_a], wCtx.getS(i_a));	break;
+		    case IO::Object:	args.at().propSet(als[i_a], wCtx.getO(i_a));	break;
 		    default:	break;
 		}
 
-	    //> Remove compiled function object
+	    //Remove compiled function object
 	    wCtx.setFunc(NULL);
 	    wFnc.free();
 	    SYS->nodeDel(faddr);
 
 	    return true;
-	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+	}
+	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
 	return false;
     }
@@ -346,7 +349,7 @@ void TDAQS::subStart(  )
 
     do
     {
-	//> Start template's libraries
+	//Start template's libraries
 	tmplLibList(tmpl_lst);
 	for(unsigned i_lb = 0; i_lb < tmpl_lst.size(); i_lb++)
 	    try { tmplLibAt(tmpl_lst[i_lb]).at().start(true); }
@@ -360,7 +363,7 @@ void TDAQS::subStart(  )
 		reply = true;
 	    }
 
-	//> Enable controllers
+	//Enable controllers
 	modList(m_l);
 	for(unsigned i_m = 0; i_m < m_l.size(); i_m++)
 	{
@@ -386,14 +389,14 @@ void TDAQS::subStart(  )
     }
     while(reply && try_cnt < 2);
 
-    //> Archive subsystem start
+    //Archive subsystem start
     if(!SYS->archive().at().subStartStat() || !SYS->stopSignal()) SYS->archive().at().subStart();
 
-    //> Redundant task start
+    //Redundant task start
     if(!prcStRd) SYS->taskCreate(nodePath('.',true)+".redundant", 5, TDAQS::RdTask, this, 5, NULL, &prcStRd);
 
-    //> Controllers start
-    TSubSYS::subStart( );
+    //Controllers start
+    TSubSYS::subStart();
 }
 
 void TDAQS::subStop( )
@@ -404,7 +407,7 @@ void TDAQS::subStop( )
 
     vector<string> m_l;
 
-    //> Stop
+    //Stop
     modList(m_l);
     for(unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
@@ -422,7 +425,7 @@ void TDAQS::subStop( )
 		}
 	}
     }
-    //> Disable
+    //Disable
     for(unsigned i_m = 0; i_m < m_l.size(); i_m++)
     {
 	vector<string> c_l;
@@ -440,7 +443,7 @@ void TDAQS::subStop( )
 	}
     }
 
-    //> Stop template's libraries
+    //Stop template's libraries
     tmplLibList(m_l);
     for(unsigned i_lb=0; i_lb < m_l.size(); i_lb++)
 	tmplLibAt(m_l[i_lb]).at().start(false);
@@ -520,7 +523,7 @@ string TDAQS::rdStRequest( const string &cntr, XMLNode &req, const string &prevS
 		if(sit->first == prevSt) prevPresent = true;
 		continue;
 	    }
-	    //> Real request
+	    //Real request
 	    req.setAttr("path", "/"+sit->first+lcPath);
 	    try
 	    {
@@ -560,14 +563,14 @@ void *TDAQS::RdTask( void *param )
     {
 	int64_t work_tm = SYS->curTime();
 
-	//> Update wait time for dead stations and process connections to stations
+	//Update wait time for dead stations and process connections to stations
 	ResAlloc res(daq.nodeRes(),false);
 	for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
 	{
-	    //>> Live stations and connect to new station process
+	    // Live stations and connect to new station process
 	    if(sit->second.isLive || (!sit->second.isLive && sit->second.cnt <= 0))
 	    {
-		//>> Send request for configuration to remote station
+		// Send request for configuration to remote station
 		req.clear()->setAttr("path","/"+sit->first+"/DAQ/%2fserv%2fredundant");
 		try
 		{
@@ -588,18 +591,18 @@ void *TDAQS::RdTask( void *param )
 		    continue;
 		}
 	    }
-	    //>> Reconnect counter process
+	    // Reconnect counter process
 	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= daq.rdTaskPer();
 	}
 	res.release();
 	daq.prcStRd = true;
 
-	//> Planing controllers' run and process requests to remote run controllers
+	//Planing controllers' run and process requests to remote run controllers
 	daq.rdActCntrList(cls);
 	for(unsigned i_c = 0; i_c < cls.size(); i_c++)
 	{
 	    cntr = daq.at(TSYS::strSepParse(cls[i_c],0,'.')).at().at(TSYS::strSepParse(cls[i_c],1,'.'));
-	    //>> Check contoller run plane
+	    // Check contoller run plane
 	    if(cntr.at().redntMode() == TController::Off) cntr.at().setRedntUse(false);
 	    else
 	    {
@@ -647,7 +650,7 @@ void *TDAQS::RdTask( void *param )
 		res.release();
 	    }
 
-	    //>> Process remote run controllers
+	    // Process remote run controllers
 	    if(cntr.at().startStat() && cntr.at().redntUse()) cntr.at().redntDataUpdate();
 
 	    cntr.free();
@@ -679,7 +682,7 @@ string TDAQS::optDescr( )
 void TDAQS::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
-    //> Service commands process
+    //Service commands process
     if(a_path == "/serv/redundant")	//Redundant service requests
     {
 	if(ctrChkNode(opt,"st",RWRWR_,"root",SDAQ_ID,SEC_RD))
@@ -697,7 +700,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	}
     }
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TSubSYS::cntrCmdProc(opt);
@@ -738,7 +741,7 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     if(a_path == "/br/tmplb_" || a_path == "/tpllibs/lb")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))

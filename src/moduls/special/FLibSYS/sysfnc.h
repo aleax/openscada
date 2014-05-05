@@ -452,11 +452,11 @@ class int2str : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    switch( val->getI(2) )
+	    switch(val->getI(2))
 	    {
-		case 8:	val->setS(0, i2s(val->getI(1),TSYS::Oct));	break;
-		case 10:val->setS(0, i2s(val->getI(1),TSYS::Dec));	break;
-		case 16:val->setS(0, i2s(val->getI(1),TSYS::Hex));	break;
+		case 8:	val->setS(0, ll2s(val->getI(1),TSYS::Oct));	break;
+		case 10:val->setS(0, ll2s(val->getI(1),TSYS::Dec));	break;
+		case 16:val->setS(0, ll2s(val->getI(1),TSYS::Hex));	break;
 		default: val->setS(0,"");
 	    }
 	}
