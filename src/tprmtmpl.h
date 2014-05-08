@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprmtmpl.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,7 @@ class TPrmTempl: public TFunction, public TConfig
 {
     public:
 	//Data
-	//> Addition flags for IO
+	// Addition flags for IO
 	enum IOTmplFlgs
 	{
 	    AttrRead	= 0x010,	//Attribute only for read
@@ -142,7 +142,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
 
 	void load_( );
 	void save_( );

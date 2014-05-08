@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tprmtmpl.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -54,7 +54,7 @@ TCntrNode &TPrmTempl::operator=( TCntrNode &node )
 
 void TPrmTempl::postEnable( int flag )
 {
-    //> Create default IOs
+    //Create default IOs
     if(flag&TCntrNode::NodeConnect)
     {
 	ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,TPrmTempl::LockAttr,"1000",false), 0);
@@ -71,7 +71,8 @@ void TPrmTempl::postDisable(int flag)
 	if(flag)
 	{
 	    SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this,true);
-	    //> Delete template's IO
+
+	    //Delete template's IO
 	    TConfig cfg(&owner().owner().tplIOE());
 	    cfg.cfg("TMPL_ID").setS(id(),true);
 	    SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
@@ -124,13 +125,13 @@ void TPrmTempl::setStart( bool vl )
     if(startStat() == vl) return;
     if(vl)
     {
-	//> Check for doubled attributes clear
+	//Check for doubled attributes clear
 	std::map<string,bool> ioIds;
 	for(int id = 0; id < ioSize(); )
 	    if(ioIds.find(io(id)->id()) != ioIds.end()) { ioDel(id); modif(); }
 	    else { ioIds[io(id)->id()] = true; id++; }
 
-	//> Compile new function
+	//Compile new function
 	if(prog().size())
 	    work_prog = SYS->daq().at().at(TSYS::strSepParse(progLang(),0,'.')).at().
 					compileFunc(TSYS::strSepParse(progLang(),1,'.'),*this,prog(),"",maxCalcTm());
@@ -145,7 +146,7 @@ AutoHD<TFunction> TPrmTempl::func()
     try { return SYS->nodeAt(work_prog); }
     catch(TError err)
     {
-	//> Template restart try
+	//Template restart try
 	setStart(false);
 	setStart(true);
 	return SYS->nodeAt(work_prog);
@@ -154,12 +155,12 @@ AutoHD<TFunction> TPrmTempl::func()
 
 void TPrmTempl::load_( )
 {
-    if( !SYS->chkSelDB(owner().DB()) ) return;
+    if(!SYS->chkSelDB(owner().DB())) return;
 
-    //> Self load
+    //Self load
     SYS->db().at().dataGet(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
 
-    //> Load IO
+    //Load IO
     vector<string> u_pos;
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id(),true);
@@ -167,15 +168,15 @@ void TPrmTempl::load_( )
     {
 	string sid = cfg.cfg("ID").getS();
 
-	//> Position storing
+	// Position storing
 	int pos = cfg.cfg("POS").getI();
 	while((int)u_pos.size() <= pos)	u_pos.push_back("");
 	u_pos[pos] = sid;
 
 	int iid = ioId(sid);
 	if(iid < 0)
-	    ioIns( new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),
-			cfg.cfg("VALUE").getS().c_str(),false), pos );
+	    ioIns(new IO(sid.c_str(),cfg.cfg("NAME").getS().c_str(),(IO::Type)cfg.cfg("TYPE").getI(),cfg.cfg("FLAGS").getI(),
+			cfg.cfg("VALUE").getS().c_str(),false), pos);
 	else
 	{
 	    io(iid)->setName(cfg.cfg("NAME").getS());
@@ -185,12 +186,12 @@ void TPrmTempl::load_( )
 	}
     }
 
-    //> Remove holes
+    //Remove holes
     for(unsigned i_p = 0; i_p < u_pos.size(); )
 	if(u_pos[i_p].empty()) u_pos.erase(u_pos.begin()+i_p);
 	else i_p++;
 
-    //> Position fixing
+    //Position fixing
     for(int i_p = 0; i_p < (int)u_pos.size(); i_p++)
     {
 	int iid = ioId(u_pos[i_p]);
@@ -202,30 +203,31 @@ void TPrmTempl::save_( )
 {
     string w_db = owner().fullDB();
     string w_cfgpath = owner().owner().nodePath()+owner().tbl();
-    //> Self save
+
+    //Self save
     mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(w_db,w_cfgpath,*this);
 
-    //> Save IO
+    //Save IO
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id(),true);
     for(int i_io = 0; i_io < ioSize(); i_io++)
     {
-	if( io(i_io)->flg()&TPrmTempl::LockAttr ) continue;
+	if(io(i_io)->flg()&TPrmTempl::LockAttr) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("FLAGS").setI(io(i_io)->flg());
-	cfg.cfg("VALUE").setNoTransl( !(io(i_io)->type()==IO::String || io(i_io)->flg()&TPrmTempl::CfgLink) );
+	cfg.cfg("VALUE").setNoTransl(!(io(i_io)->type()==IO::String || io(i_io)->flg()&TPrmTempl::CfgLink));
 	cfg.cfg("VALUE").setS(io(i_io)->def());
 	cfg.cfg("POS").setI(i_io);
 	SYS->db().at().dataSet(w_db+"_io",w_cfgpath+"_io",cfg);
     }
-    //> Clear IO
+    //Clear IO
     cfg.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(w_db+"_io",w_cfgpath+"_io",fld_cnt++,cfg); )
     {
-	string sio = cfg.cfg("ID").getS( );
+	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr)
 	{
 	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true);
@@ -236,7 +238,7 @@ void TPrmTempl::save_( )
 
 TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Configuration functions call
+    //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -245,7 +247,7 @@ TVariant TPrmTempl::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 
 void TPrmTempl::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -263,7 +265,7 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/name",_("Name"),RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/tmpl/cfg/descr",_("Description"),RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","4");
-		ctrMkNode("fld",opt,-1,"/tmpl/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
+		ctrMkNode("fld",opt,-1,"/tmpl/cfg/m_calc_tm",_("Maximum calculate time (sec)"),(startStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
@@ -291,16 +293,16 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     vector<string> list;
     string a_path = opt->attr("path");
     if(a_path == "/tmpl/st/st")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(startStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(s2i(opt->text()));
     }
-    else if(a_path == "/tmpl/st/use" && ctrChkNode(opt))	opt->setText(TSYS::int2str(startStat()?func().at().use():0));
-    else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(TSYS::int2str(timeStamp()));
+    else if(a_path == "/tmpl/st/use" && ctrChkNode(opt))	opt->setText(i2s(startStat()?func().at().use():0));
+    else if(a_path == "/tmpl/st/timestamp" && ctrChkNode(opt))	opt->setText(i2s(timeStamp()));
     else if(a_path == "/tmpl/cfg/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/tmpl/cfg/name")
     {
@@ -314,8 +316,8 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/tmpl/cfg/m_calc_tm")
     {
-        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))  opt->setText(TSYS::int2str(maxCalcTm()));
-        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))  setMaxCalcTm(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(maxCalcTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setMaxCalcTm(s2i(opt->text()));
     }
     else if(a_path == "/io/io")
     {
@@ -333,10 +335,10 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	    {
 		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
 		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(TSYS::int2str(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
-		if(n_mode)	n_mode->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(IO::Output|IO::Return)));
-		if(n_attr)	n_attr->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
-		if(n_accs)	n_accs->childAdd("el")->setText(TSYS::int2str(io(id)->flg()&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));
+		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
+		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
+		if(n_attr)	n_attr->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));
+		if(n_accs)	n_accs->childAdd("el")->setText(i2s(io(id)->flg()&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));
 		if(n_val)	n_val->childAdd("el")->setText(io(id)->def());
 	    }
 	}
@@ -349,25 +351,25 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"ins",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    int row = atoi(opt->attr("row").c_str());
-            IO *ioPrev = row ? io(row-1) : NULL;
-            if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)), row);
+	    int row = s2i(opt->attr("row"));
+	    IO *ioPrev = row ? io(row-1) : NULL;
+	    if(ioPrev) ioIns(new IO(TSYS::strLabEnum(ioPrev->id()).c_str(),TSYS::strLabEnum(ioPrev->name()).c_str(),ioPrev->type(),ioPrev->flg()&(~LockAttr)), row);
 	    else ioIns(new IO("new",_("New IO"),IO::Real,IO::Default), row);
 	    modif();
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    int row = atoi(opt->attr("row").c_str());
+	    int row = s2i(opt->attr("row"));
 	    if(io(row)->flg()&TPrmTempl::LockAttr)
 		throw TError(nodePath().c_str(),_("Deleting lock attribute in not allow."));
 	    ioDel(row);
 	    modif();
 	}
-	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ ioMove( atoi(opt->attr("row").c_str()), atoi(opt->attr("to").c_str()) ); modif(); }
+	if(ctrChkNode(opt,"move",RWRWR_,"root",SDAQ_ID,SEC_WR))	{ ioMove(s2i(opt->attr("row")), s2i(opt->attr("to"))); modif(); }
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    int row = atoi(opt->attr("row").c_str());
-	    int col = atoi(opt->attr("col").c_str());
+	    int row = s2i(opt->attr("row"));
+	    int col = s2i(opt->attr("col"));
 	    if(io(row)->flg()&TPrmTempl::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if((col == 0 || col == 1) && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    modif();
@@ -376,12 +378,12 @@ void TPrmTempl::cntrCmdProc( XMLNode *opt )
 		case 0:	io(row)->setId(opt->text());	break;
 		case 1:	io(row)->setName(opt->text());	break;
 		case 2:
-		    io(row)->setType((IO::Type)(atoi(opt->text().c_str())&0xFF));
-		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(atoi(opt->text().c_str())>>8))&IO::FullText));
+		    io(row)->setType((IO::Type)(s2i(opt->text())&0xFF));
+		    io(row)->setFlg(io(row)->flg()^((io(row)->flg()^(s2i(opt->text())>>8))&IO::FullText));
 		    break;
-		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(IO::Output|IO::Return)));		break;
-		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
-		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^atoi(opt->text().c_str()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
+		case 3:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(IO::Output|IO::Return)));		break;
+		case 4:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::AttrRead|TPrmTempl::AttrFull)));		break;
+		case 5:	io(row)->setFlg(io(row)->flg()^((io(row)->flg()^s2i(opt->text()))&(TPrmTempl::CfgPublConst|TPrmTempl::CfgLink)));	break;
 		case 6:	io(row)->setDef(opt->text()); setStart(false); break;
 	    }
 	}
@@ -456,11 +458,11 @@ TCntrNode &TPrmTmplLib::operator=( TCntrNode &node )
     TPrmTmplLib *src_n = dynamic_cast<TPrmTmplLib*>(&node);
     if(!src_n) return *this;
 
-    //> Configuration copy
+    //Configuration copy
     exclCopy(*src_n, "ID;DB;");
     work_lib_db = src_n->work_lib_db;
 
-    //> Templates copy
+    //Templates copy
     vector<string> ls;
     src_n->list(ls);
     for(unsigned i_p = 0; i_p < ls.size(); i_p++)
@@ -482,10 +484,10 @@ void TPrmTmplLib::postDisable(int flag)
 {
     if( flag )
     {
-	//> Delete libraries record
+	//Delete libraries record
 	SYS->db().at().dataDel(work_lib_db.getVal()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
 
-	//> Delete temlate librarie's DBs
+	//Delete temlate librarie's DBs
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
 
@@ -518,7 +520,7 @@ void TPrmTmplLib::load_( )
 
     SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 
-    //> Load templates
+    //Load templates
     map<string, bool>	itReg;
     TConfig c_el(&owner().tplE());
     c_el.cfgViewAll(false);
@@ -529,13 +531,13 @@ void TPrmTmplLib::load_( )
 	itReg[f_id] = true;
     }
 
-    //>>> Check for remove items removed from DB
+    //Check for remove items removed from DB
     if(!SYS->selDB().empty())
     {
 	vector<string> it_ls;
-        list(it_ls);
-        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-            if(itReg.find(it_ls[i_it]) == itReg.end())	del(it_ls[i_it]);
+	list(it_ls);
+	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+	    if(itReg.find(it_ls[i_it]) == itReg.end())	del(it_ls[i_it]);
     }
 }
 
@@ -560,7 +562,7 @@ void TPrmTmplLib::start( bool val )
 
     run_st = val;
 
-    if( isErr )	throw TError(nodePath().c_str(),_("Some templates start error."));
+    if(isErr)	throw TError(nodePath().c_str(),_("Some templates start error."));
 }
 
 void TPrmTmplLib::add( const string &id, const string &name )
@@ -570,7 +572,7 @@ void TPrmTmplLib::add( const string &id, const string &name )
 
 TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
-    //> Configuration functions call
+    //Configuration functions call
     TVariant cfRez = objFunc(iid, prms, user);
     if(!cfRez.isNull()) return cfRez;
 
@@ -579,7 +581,7 @@ TVariant TPrmTmplLib::objFuncCall( const string &iid, vector<TVariant> &prms, co
 
 void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -608,12 +610,13 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","tmpl_","idSz",OBJ_ID_SZ);
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/lib/st/st")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	start(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	start(s2i(opt->text()));
     }
     else if(a_path == "/lib/st/db")
     {
@@ -626,7 +629,7 @@ void TPrmTmplLib::cntrCmdProc( XMLNode *opt )
 	list(tls);
 	time_t maxTm = 0;
 	for(unsigned i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
-	opt->setText(TSYS::int2str(maxTm));
+	opt->setText(i2s(maxTm));
     }
     else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
     else if(a_path == "/lib/cfg/name")

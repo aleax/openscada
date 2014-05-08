@@ -1,3 +1,11 @@
+2014-05-08 Roman
+- DB:LibsDB.OscadaLibs.db: DAQ template "anUnifSt" and "anUnif" set for EVAL result at hardware border exceed.
+- DB:LibsDB.vcaBase.db: Widgets Main.{anShow,anShow1} expanded for allow negative precision.
+- Archive: Service "/mess/get" on request direct to alarms set negative level at results.
+- DAQ.Templates: "Maximum calculate time (sec)" field set active only for started DAQ templates. Some code clean up.
+- DAQ.DAQGate: Force all alarms request before the messages (level >= 0) is added.
+
+
 2014-05-05 Roman
 - DB.LibsDB.OscadaLibs.db: DAQ template "anUnifSt" sync to "anUnif" and properties "iMult" "iAdd" process fix.
 - DB.{LibsDB.vcaBase.db,AGLKS.{St.db,vca.db}}: Mnemo elements "Compressor", "Compressor_1", "El_Kran_Sh", "El_Zadvizhka", "Zadvizhka"
@@ -63,7 +71,7 @@
     Keys miss into DB check is added for fieldSet() and prevent temporary errors for INSERT.
 - !:DAQ.MMS: Expanded for allow custom options to configured variables set, like:
     writable, single request, divider for execution period, force data type, force ID and Name.
-- DAQ.OPC_UA: Secure policy set is added to test program. Auth password hide int client part is added.
+- DAQ.OPC_UA: Secure policy set is added to test program. Auth password hide into client part is added.
     Inline nodes browser is added to client's parameter object for insert selected nodes to processing list.
 - UI.VCAEngine: Set links as active only after successful connection to it, for parameter's attributes.
     Implement for some problems fix into dynamic linking.
@@ -356,7 +364,7 @@
 - Archive,UI.{Vision,WebVision}:
     Service "/serv/val" of OpenSCADA is adapted for return EVAL_STR as EVAL for all string representing data modes.
 - FIX:DAQ.JavaLikeCalc: Expanding to int64_t is fixed for integer's constants into octal and hex view.
-- DAQ.OPC_UA: Debug messages "MSG Req" and "MSG Req" are expanded and added added for "SubScription".
+- DAQ.OPC_UA: Debug messages "MSG Req" and "MSG Resp" are expanded and added added for "SubScription".
     SubScriptions limit for 10 is set for sessions independent.
     No error message but only service status set for some services.
 - Special.FLibSYS: IO::write() expanded for fourth argument set with repaete scalars counter and 8-bit's integer scalars process fix.
@@ -400,7 +408,7 @@
 - UI.{VCAEngine,Vision,WebVision}: The primitive "Diagram" is moved to indexes from types.h.
 - FIX:UI.Vision: ReadOnly for file dialogs set from RunTime user's fix.
 - !!:UI.Vision: To primitive "Diagram" set trace time to real data time is allowed, for now only data time lesser to display.
-    View "Table" of primitive "Diagram" some improved and for select actions process.
+    View "Table" of primitive "FormEl" some improved and for select actions process.
     RunTime scale debug messages is added.
 
 
@@ -409,7 +417,7 @@
 - FIX:Archive.FSArch: Check deleting Archives cycle is fixed.
 - DB.PostgreSQL: Code clean.
 - FIX:DAQ.OPC_UA: Try send publish response for no pesent into queue publish request is fixed.
-- !!!:UI.{Vision,WebVision}: View "Table" is added to primitive "FormEl".
+- !!!:UI.{Vision,VCAEngine}: View "Table" is added to primitive "FormEl".
 
 
 2014-01-15 Roman
