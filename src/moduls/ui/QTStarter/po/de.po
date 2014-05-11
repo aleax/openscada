@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-23 10:48+0300\n"
+"POT-Creation-Date: 2014-01-28 17:29+0200\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -17,177 +17,235 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: tuimod.cpp:45
 msgid "Qt GUI starter"
 msgstr "Qt GUI Starter"
 
+#: tuimod.cpp:49
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
+#: tuimod.cpp:50
 msgid "Allow Qt GUI starter. It is single for all Qt GUI modules!"
 msgstr "Qt GUI-Starter für die Qt GUI Module!"
 
+#: tuimod.cpp:102
 msgid "Could not read image data"
 msgstr "Konnte nicht gelesen werden Bilddaten"
 
+#: tuimod.cpp:103
 msgid "&Yes"
 msgstr "&Ja"
 
+#: tuimod.cpp:103
 msgid "&No"
 msgstr "&Nein"
 
+#: tuimod.cpp:103
 msgid "&Cancel"
 msgstr "&Abbrechen"
 
+#: tuimod.cpp:103
 msgid "&OK"
 msgstr ""
 
+#: tuimod.cpp:103
 msgid "Apply"
 msgstr "Übernehmen"
 
+#: tuimod.cpp:103
 msgid "Close"
 msgstr "Schließen"
 
+#: tuimod.cpp:103
 msgid "Back"
 msgstr "Zurück"
 
+#: tuimod.cpp:103
 msgid "Forward"
 msgstr "Vorwärts"
 
+#: tuimod.cpp:103
 msgid "Parent Directory"
 msgstr "Elternverzeichnis"
 
+#: tuimod.cpp:104
 msgid "Look in:"
 msgstr "Suchen in:"
 
+#: tuimod.cpp:104
 msgid "Computer"
 msgstr "Computer"
 
+#: tuimod.cpp:104
 msgid "File"
 msgstr "Datei"
 
+#: tuimod.cpp:104
 msgid "Folder"
 msgstr "Ordner"
 
+#: tuimod.cpp:104
 msgid "File &name:"
 msgstr "Datei&Name:"
 
+#: tuimod.cpp:104
 msgid "Open"
 msgstr "Öffnen"
 
+#: tuimod.cpp:104
 msgid "&Open"
 msgstr "&Öffnen"
 
+#: tuimod.cpp:104
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: tuimod.cpp:104
 msgid "Save"
 msgstr "Speichern"
 
+#: tuimod.cpp:104
 msgid "&Save"
 msgstr "Speichern"
 
+#: tuimod.cpp:104
 msgid "Save As"
 msgstr "Speichern als"
 
+#: tuimod.cpp:104
 msgid "Date Modified"
 msgstr "Änderungsdatum"
 
+#: tuimod.cpp:104
 msgid "All Files (*)"
 msgstr "Alle Dateien (*)"
 
+#: tuimod.cpp:105
 msgid "Create New Folder"
 msgstr "Neuen Ordner erstellen"
 
+#: tuimod.cpp:105
 msgid "List View"
 msgstr "Listen Ansicht"
 
+#: tuimod.cpp:105
 msgid "Detail View"
 msgstr "Detaillierte Ansicht"
 
+#: tuimod.cpp:105
 msgid "Files of type:"
 msgstr "Dateityp:"
 
+#: tuimod.cpp:105
 msgid "New Folder"
 msgstr "Neuer Ordner"
 
+#: tuimod.cpp:105
 msgid "&New Folder"
 msgstr "&Neuer Ordner"
 
+#: tuimod.cpp:105
 msgid "Show &hidden files"
 msgstr "&Versteckte Dateien anzeigen"
 
+#: tuimod.cpp:105
 msgid "&Delete"
 msgstr "&Löschen"
 
+#: tuimod.cpp:105
 msgid "&Rename"
 msgstr "Um&benennen"
 
+#: tuimod.cpp:105
 msgid "Remove"
 msgstr "Entfernen"
 
+#: tuimod.cpp:106
 msgid "&Undo"
 msgstr "&Rückgängig"
 
+#: tuimod.cpp:106
 msgid "&Redo"
 msgstr "&Wiederherstellen"
 
+#: tuimod.cpp:106
 msgid "Cu&t"
 msgstr "Aus&schneiden"
 
+#: tuimod.cpp:106
 msgid "&Copy"
 msgstr "&Kopieren"
 
+#: tuimod.cpp:106
 msgid "&Paste"
 msgstr "Ein&fügen"
 
+#: tuimod.cpp:106
 msgid "Delete"
 msgstr "Löschen"
 
+#: tuimod.cpp:106
 msgid "Select All"
 msgstr "Alles auswählen"
 
+#: tuimod.cpp:106
 msgid "Insert Unicode control character"
 msgstr "Hinzufügen von Unicode-Kontrollzeichen"
 
+#: tuimod.cpp:107
 msgid "Size"
 msgstr "Größe"
 
+#: tuimod.cpp:107
 msgid "Drive"
 msgstr "Disk"
 
+#: tuimod.cpp:107
 msgid "Go back"
 msgstr "Zurückgehen"
 
+#: tuimod.cpp:107
 msgid "Go forward"
 msgstr "Vorwärts"
 
+#: tuimod.cpp:107
 msgid "Go to the parent directory"
 msgstr "Elternverzeichnis"
 
+#: tuimod.cpp:107
 msgid "Create a New Folder"
 msgstr "Neuen Ordner erstellen"
 
+#: tuimod.cpp:107
 msgid "Change to list view mode"
 msgstr "Ändern Sie den Anzeigemodus Liste"
 
+#: tuimod.cpp:107
 msgid "Change to detail view mode"
 msgstr "Ändern Sie in detaillierten Modus"
 
+#: tuimod.cpp:108
 msgid "Destination file exists"
 msgstr "Das Ziel-Datei vorhanden ist"
 
+#: tuimod.cpp:109
 msgid "%1 bytes"
 msgstr "%1 Bytes"
 
+#: tuimod.cpp:109
 msgid "%1 KB"
 msgstr "%1 KB"
 
+#: tuimod.cpp:109
 msgid "%1 MB"
 msgstr "%1 MB"
 
+#: tuimod.cpp:110
 msgid "Are sure you want to delete '%1'?"
 msgstr "Wollen Sie wirklich '%1' löschen?"
 
+#: tuimod.cpp:110
 msgid ""
 "%1 already exists.\n"
 "Do you want to replace it?"
@@ -195,12 +253,17 @@ msgstr ""
 "%1 existiert.\n"
 "Wollen Sie es zu entfernen?"
 
+#: tuimod.cpp:110
 msgid "Recent Places"
 msgstr "Letzte Plätze"
 
+#: tuimod.cpp:111
 msgid "<h3>About Qt</h3><p>This program uses Qt version %1.</p>"
-msgstr "<h3>Über Qt</h3><p><p>Dieses Programm verwendet die Qt-Open Source Edition der Version %1.</p>"
+msgstr ""
+"<h3>Über Qt</h3><p><p>Dieses Programm verwendet die Qt-Open Source Edition "
+"der Version %1.</p>"
 
+#: tuimod.cpp:112
 msgid ""
 "<p>Qt is a C++ toolkit for cross-platform application development.</p><p>Qt "
 "provides single-source portability across MS&nbsp;Windows, Mac&nbsp;OS&nbsp;"
@@ -225,270 +288,359 @@ msgid ""
 "digia.com/\">qt.digia.com</a> for more information.</p>"
 msgstr ""
 
+#: tuimod.cpp:113
 msgid "Hu&e:"
 msgstr "Farbton:"
 
+#: tuimod.cpp:113
 msgid "&Sat:"
 msgstr "Sättigung:"
 
+#: tuimod.cpp:113
 msgid "&Val:"
 msgstr "Helligkeit:"
 
+#: tuimod.cpp:113
 msgid "&Red:"
 msgstr "Rot:"
 
+#: tuimod.cpp:113
 msgid "&Green:"
 msgstr "Grün:"
 
+#: tuimod.cpp:113
 msgid "Bl&ue:"
 msgstr "Blau:"
 
+#: tuimod.cpp:113
 msgid "A&lpha channel:"
 msgstr "Alpha Kanal:"
 
+#: tuimod.cpp:113
 msgid "&Basic colors"
 msgstr "Grundfarben"
 
+#: tuimod.cpp:113
 msgid "&Custom colors"
 msgstr "Sonderfarben"
 
+#: tuimod.cpp:113
 msgid "&Add to Custom Colors"
 msgstr "Sonderfarbe hinzufügen"
 
+#: tuimod.cpp:113
 msgid "Select color"
 msgstr "Farbe auswählen"
 
+#: tuimod.cpp:114
 msgid "&Restore"
 msgstr "&Reestablish"
 
+#: tuimod.cpp:114
 msgid "&Move"
 msgstr "&Bewegen"
 
+#: tuimod.cpp:114
 msgid "&Size"
 msgstr "&Größe"
 
+#: tuimod.cpp:114
 msgid "Mi&nimize"
 msgstr "Mi&nimieren"
 
+#: tuimod.cpp:114
 msgid "Ma&ximize"
 msgstr "Ma&ximieren"
 
+#: tuimod.cpp:114
 msgid "Stay on &Top"
 msgstr "Aufenthalt auf die &Oberseite"
 
+#: tuimod.cpp:114
 msgid "&Close"
 msgstr "&Schließen"
 
+#: tuimod.cpp:114
 msgid "Select Color"
 msgstr "Farbe auswählen"
 
+#: tuimod.cpp:115
 msgid "Form"
 msgstr "Form"
 
+#: tuimod.cpp:115
 msgid "Printer"
 msgstr "Drucker"
 
+#: tuimod.cpp:115
 msgid "&Name:"
 msgstr "&Name:"
 
+#: tuimod.cpp:115
 msgid "P&roperties"
 msgstr "Eigenschaften"
 
+#: tuimod.cpp:115
 msgid "Location:"
 msgstr "Ort:"
 
+#: tuimod.cpp:115
 msgid "Preview"
 msgstr "Vorschau"
 
+#: tuimod.cpp:115
 msgid "Type:"
 msgstr "Typ:"
 
+#: tuimod.cpp:115
 msgid "Output &file:"
 msgstr "Ausgabedatei:"
 
+#: tuimod.cpp:115
 msgid "Print range"
 msgstr "Druckbereich"
 
+#: tuimod.cpp:115
 msgid "Print all"
 msgstr "Alles drucken"
 
+#: tuimod.cpp:115
 msgid "Current Page"
 msgstr "Aktuelle Seite"
 
+#: tuimod.cpp:116
 msgid "Pages from"
 msgstr "Seiten von"
 
+#: tuimod.cpp:116
 msgid "to"
 msgstr "nach"
 
+#: tuimod.cpp:116
 msgid "Selection"
 msgstr "Auswahl"
 
+#: tuimod.cpp:116
 msgid "Output Settings"
 msgstr "Ausgabeeinstellungen"
 
+#: tuimod.cpp:116
 msgid "Copies:"
 msgstr "Kopien:"
 
+#: tuimod.cpp:116
 msgid "Collate"
 msgstr "Sortieren"
 
+#: tuimod.cpp:116
 msgid "Reverse"
 msgstr "Umkehren"
 
+#: tuimod.cpp:116
 msgid "Copies"
 msgstr "Kopien"
 
+#: tuimod.cpp:116
 msgid "Color Mode"
 msgstr "Farbmodus"
 
+#: tuimod.cpp:116
 msgid "Color"
 msgstr "Farbig"
 
+#: tuimod.cpp:116
 msgid "Grayscale"
 msgstr "Graustufen"
 
+#: tuimod.cpp:117
 msgid "Duplex Printing"
 msgstr "Doppelseitiger Druck"
 
+#: tuimod.cpp:117
 msgid "None"
 msgstr "Keine"
 
+#: tuimod.cpp:117
 msgid "Long side"
 msgstr "Lange Seite"
 
+#: tuimod.cpp:117
 msgid "Short side"
 msgstr "Kurze Seite"
 
+#: tuimod.cpp:117
 msgid "Options"
 msgstr "Optionen"
 
+#: tuimod.cpp:117
 msgid "&Options >>"
 msgstr "Optionen >>"
 
+#: tuimod.cpp:117
 msgid "&Options <<"
 msgstr "Optionen <<"
 
+#: tuimod.cpp:117
 msgid "&Print"
 msgstr "Drucken"
 
+#: tuimod.cpp:117
 msgid "Print"
 msgstr "Drucken"
 
+#: tuimod.cpp:117
 msgid "Print to File (PDF)"
 msgstr "Drucken in die Datei (PDF)"
 
+#: tuimod.cpp:117
 msgid "Print to File (Postscript)"
 msgstr "Drucken in die Datei (Postscript)"
 
+#: tuimod.cpp:118
 msgid "Local file"
 msgstr "Lokale Datei"
 
+#: tuimod.cpp:118
 msgid "Write %1 file"
 msgstr "Datei %1 speichern"
 
+#: tuimod.cpp:118
 msgid "Paper"
 msgstr "Papier"
 
+#: tuimod.cpp:118
 msgid "Page size:"
 msgstr "Seitengrösse:"
 
+#: tuimod.cpp:118
 msgid "Width:"
 msgstr "Breite:"
 
+#: tuimod.cpp:118
 msgid "Height:"
 msgstr "Höhe:"
 
+#: tuimod.cpp:118
 msgid "Paper source:"
 msgstr "Papierquelle:"
 
+#: tuimod.cpp:118
 msgid "Orientation"
 msgstr "Orientierung"
 
+#: tuimod.cpp:118
 msgid "Portrait"
 msgstr "Porträt"
 
+#: tuimod.cpp:118
 msgid "Landscape"
 msgstr "Landschaft"
 
+#: tuimod.cpp:118
 msgid "Reverse landscape"
 msgstr "Landschaft umkehren"
 
+#: tuimod.cpp:119
 msgid "Reverse portrait"
 msgstr "Porträt umkehren"
 
+#: tuimod.cpp:119
 msgid "Margins"
 msgstr "Ränder"
 
+#: tuimod.cpp:119
 msgid "top margin"
 msgstr "Rand von oben"
 
+#: tuimod.cpp:119
 msgid "left margin"
 msgstr "Rand von links"
 
+#: tuimod.cpp:119
 msgid "right margin"
 msgstr "Rand von rechts"
 
+#: tuimod.cpp:119
 msgid "bottom margin"
 msgstr "Rand von unten"
 
+#: tuimod.cpp:119
 msgid "Points (pt)"
 msgstr "Punkte (pt)"
 
+#: tuimod.cpp:119
 msgid "Inches (in)"
 msgstr "Zoll (in)"
 
+#: tuimod.cpp:120
 msgid "Executive"
 msgstr "Entsorgung"
 
+#: tuimod.cpp:120
 msgid "Folio"
 msgstr "Folio"
 
+#: tuimod.cpp:120
 msgid "Ledger"
 msgstr "Hauptbuch"
 
+#: tuimod.cpp:120
 msgid "Legal"
 msgstr "Legal"
 
+#: tuimod.cpp:120
 msgid "Letter"
 msgstr "Schreiben"
 
+#: tuimod.cpp:120
 msgid "Tabloid"
 msgstr "Boulevardblatt"
 
+#: tuimod.cpp:120
 msgid "US Common #10 Envelope"
 msgstr "Gemeinsame US #10 Umschlag"
 
+#: tuimod.cpp:120
 msgid "Custom"
 msgstr "Brauch"
 
+#: tuimod.cpp:121
 msgid "Millimeters (mm)"
 msgstr "Millimeter (mm)"
 
+#: tuimod.cpp:121
 msgid "Centimeters (cm)"
 msgstr "Zentimeter (cm)"
 
+#: tuimod.cpp:121
 msgid "Page"
 msgstr "Seite"
 
+#: tuimod.cpp:121
 msgid "Advanced"
 msgstr "Erweitert"
 
+#: tuimod.cpp:122
 msgid "Mon"
 msgstr "Mon"
 
+#: tuimod.cpp:177
 msgid "Load module."
 msgstr "Modul laden."
 
+#: tuimod.cpp:190
 msgid "Save module."
 msgstr "Modul speichern."
 
+#: tuimod.cpp:197
 msgid "Start module."
 msgstr "Modul starten."
 
+#: tuimod.cpp:204
 msgid "Stop module."
 msgstr "Modul anhalten."
 
+#: tuimod.cpp:214
 #, c-format
 msgid ""
 "======================= The module <%s:%s> options =======================\n"
@@ -544,21 +696,27 @@ msgstr ""
 "StartMod  <moduls>    Liste der Startmodulen (Trennzeichen - ';');\n"
 "\n"
 
+#: tuimod.cpp:361
 msgid "Module options"
 msgstr "Optionen des Moduls"
 
+#: tuimod.cpp:362
 msgid "Start Qt modules (sep - ';')"
 msgstr "Qt-Startmodule (trenn. - ';')"
 
+#: tuimod.cpp:363
 msgid "Options help"
 msgstr "Optionen Hilfe"
 
+#: tuimod.cpp:492
 msgid "OpenSCADA system Qt-starter"
 msgstr "Qt-Starter des Systems OpenSCADA"
 
+#: tuimod.cpp:528
 msgid "Exit from system"
 msgstr "System verlassen"
 
+#: tuimod.cpp:563
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Keine übersetzt Qt Nachricht: '%s'"

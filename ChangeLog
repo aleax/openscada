@@ -1,3 +1,168 @@
+2014-05-01 Roman 0.8.0.10
+- API:
+    !!!!:Changes:
+	Archive: Result to function TMArchivator::put() is added for accomplish writing control.
+	SYS.Mess,Archive.DBArch: The messages level type into structure TMess::SRec changed from Type to int8_t
+	    for fix negative level into DB.MySQL.
+	SYS.XMLNode: Into function load() argument "full" replaced "flg" with flags:
+	    0x01 - full mode; 0x02 - no remove spaces for begin and end tag's text.
+	Transport: External hosts configuration improved for allow modes "User", "System", "User and System" select into single table.
+	    Functions removed: sysHost(), setSysHost(). Functions change: extHostList(), extHostGet(), extHostSet(), extHostDel().
+	DAQ: API function "void vlSet();" expanded for same set value pass and prevent lost values.
+    Appends:
+	SYS: New resources allocation objects MtxAlloc and MtxString is added. To ResAlloc is added lock() and unlock().
+	    TCntrNode: Base function _ctrMkNode() and specific for arguments set function ctrMkNode2() to original ctrChkNode() is added.
+	    "TSYS::i{bits}_LE()", "TSYS::i{bits}_BE()", "floatBE{rev}()", "doubleBErev()" functions is added for endians processing.
+	    Added new global simple functions into OSCADA namespace: tm2s(), s2i() and s2r().
+	    TArrayObj: New direct access functions arGet() and arSet() is added, for fast access from internal.
+	    XMLNodeObj: New function "childGet( string name, int num = 0 )" is added.
+	Transport,Transport.*: To output transports virtual functions timings() and setTimings() is added.
+- DB.AGLKS.St.db: KeepAlive timeout of input transport OPC_UA set to 60, Client's and Server's certificate is generated for all demands resolve
+    and address set to 127.0.0.1.
+- SYS: *.core files process adapted.
+    openscada.spec is adapted for build on "redhat" based environments.
+    Checking for header phonon/VideoPlayer is added for allow automatic build with old Phonon configuration's headers path "Phonon/*".
+    ALTLinux RPM-spec depend to postgresql9.1-devel is changed postgresql-devel.
+    Variable DB_CFG is defined to "<cfg>" and used everywhere.
+    Check for EVAL into description on TCntrNode::ctrMkNode() is added, for present save.
+    !!!: TConfig,TValue,UI.{VCAEngine,Vision}: Editable listed configure fields and DAQ attributes by TFld::SelEdit support is added.
+    User's API functions gmtime(), timegm(), strftimegm(), strptimegm() for time into GMT(UTC) processing allow.
+    !!: The code clean up for mostly warnings for build by GCC-4.8 and some hiden bugs fixed.
+    FIX:TVariant: User objects encode to XMLStr is fixed for EVAL represent by boolean, integer, real.
+    FIX: Close opened config file is fixed.
+    DB,TVariant,DAQ.JavaLikeCalc,Special.FLibSYS: Direct access, into backend, to user space object TArrayObj is set.
+- DB:
+    FIX:DB.{SQLite,MySQL,PostgreSQL,FireBird}: Keys miss into DB check is fixed for fieldSeek() and fieldSet().
+    !!!!:DB.{SQLite,FireBird,PostgreSQL,MySQL}: Connection for network DB restore mechanism is changed
+	    to enabling for toEnable() and disabled DB into transactions check cycle.
+	Requests to DB the resources allocation is changed to use pthread_mutex_t.
+	Complex tests pass for lost connections restore and generic test of module Special.SystemTests.
+	MTable::fieldDel() is adapted to remove fields with keys real miss into the DB's table.
+    !:MySQL: Transaction support and using is added, for performance rise on some DB storages.
+    !!:SQLite: Main SQLite3 type "REAL" handle is added for structure obtain.
+- DAQ:
+    FIX: Modify flag set at using template edit try is fixed.
+    FIX: Disabled redundant mode work is fixed into TController::enable().
+    Templates: "Maximum calculate time (sec)" field set active only for started DAQ templates.
+    BlockCalc: To blocks' output links optional writing by changes is added.
+	Field "VAL" size for block's IO table increased from 20 to 10000 and "LNK" from 50 to 100.
+    FIX:DCON: Config field "ADDR" renamed to "Transport". Default requests try set to 1.
+    JavaLikeCalc: Direct access to object's properties set for some performance rise.
+	FIX: Insert object's item to Array into this creation by "new Array(0, 1, 2, ar[0])" is fixed.
+    FIX:LogicLev: Reflection type is fixed and expanded for connection to target parameter, update and attributes list sync into calc period.
+    ModBus: Remove connection try from controller's object start().
+    !!!!:OPC_UA.{*,LibOPC_UA}: LGPL COPYING file is added to the library.
+	FIX: libOPC_UA is fixed for client's service Write respond.
+	FIX: LifeTime for session processing into client's part is fixed and SC_RENEW support is added.
+	FIX: Close socket on server part at error and malformed packages. Possible crash on retract queue clean is fixed.
+	FIX: Try send publish response for no present into queue publish request is fixed.
+	FIX: Indexes for DeleteMonitoredItems service fix.
+	Debug messages "MSG Req" and "MSG Resp" are expanded and added added for "SubScription".
+	SubScriptions limit for 10 is set for sessions independent.
+	No error message but only service status set for some services.
+	FIX: Input protocol exception abort fix at short messages receive.
+	FIX: Unlock miss is fixed into function subscrSet().
+	FIX: OpcUa_Server_ServerArray variable process append. epEnAt() result process append for some crash prevent.
+	OpcUa_Server_NamespaceArray append into OpenSCADA module is added. NS_OPC_UA(0) and NS_SERVER(1) is added.
+	Browse allow is added for zero ReferenceTypeId.
+	Some NameSpaces using ordered and sync to 2055 content.
+	For OpenSCADA_DAQ_NS set index 2. For sessionId set NS to 1 and for authentication Token to 0.
+	Session lifetime process is added.
+	TranslateBrowsePathsToNodeIds is implement for hierarchical part (OpcUa_HierarchicalReferences) request process.
+	TranslateBrowsePathsToNodeIds is rewrote to use Browse service backend for hierarchical find path's items.
+	SubscriptionId and MonitoredItemId grow start from '1', for exclude invalid value '0'.
+	FIX: MonitoredItemId queueSize manage fix by set from 1 to 1000.
+	Remove transport start at the controller's object start.
+	User and password auth data set is added to client part and test program.
+	Secure policy set is added to test program. Auth password hide into client part is added.
+	libOPC_UA clean up from OPCVariant object and it removed.
+	Inline nodes browser is added to client's parameter object for insert selected nodes to processing list.
+	FIX: LibOPC_UA fix for secure policies for different client's and server's keys size.
+	    Tested for OpenSCADA Client + OpenSCADA Server, OpenSCADA Client + IgnitionOPC_UA, UAExpert + OpenSCADA Server,
+	    testOPC_UA + OpenSCADA Server, testOPC_UA + IgnitionOPC_UA.
+    FIX:System: New DA-type "UPS", by NUT-protocol is added.
+	Active DA check and creation is fixed for same origin parameters test, no the parameter identifiers.
+	Self atributes support allowed and used into DA-sources "Smart" and "UPS".
+	Set attributes to EVAL is expanded for separated fields.
+	Expanded for addition properties into the parameter object support.
+    TController,TTipDAQ: ID update after new child object create.
+    !!!!:BFN,DAQGate,ModBus,OPC_UA: Alarms for connection state to remote sources is made unified.
+- Archive:
+    !!!:TMArchivator: Reimplemented messages archivation for allow the messages into the buffer resend at
+	    the messages storage connection restore.
+	{start,stop}() functions implement into base class for active archivators of the messages list manage,
+	    run state manage and messages header reset.
+	"messHead" attribute of the archivator for point to the messages buffer, instead global "headLstread".
+	setActValArch() renamed to setActVal() and container "actUpSrc" renamed to "actVal".
+	setActMess() is added for register active messages archivators to container "actMess".
+	Resource allocators mRes and vRes moved to pthread_mutex_t.
+    !!!!:FIX:Archive.*,Special.FLibSYS: Significant values archiving fixes:
+	Prevent for set negative period values into buffer.
+	TValBuf::vOK() expand for check aligned to the buffer period.
+	Disable pass for setVals by lastGet() for direct write allow.
+	setVals() is adapted for allow write unaligned border [beg:end] to period by round here.
+    *,DBArch: To TVArchEl::setValsProc() added result for allow archive's buffer's part write control. Used for rewrite to network DB by DBArch.
+	Field's "LEN" of messages table length set to "2" for allow negative (alarms).
+	Allow start Values and Messages archivators for DB error, predict restore the connection.
+    *,UI.{Vision,WebVision}: Service "/serv/val" of OpenSCADA is adapted for return EVAL_STR as EVAL for all string representing data modes.
+    "/prm/cfg/addr" control elements renamed to "/prm/cfg/ADDR" for equal to configuration (fields names into the DB table).
+    FIX:FSArch: Some access control fix for prevent use packed files. fwrite() result for items is fixed.
+	Check deleting Archives cycle is fixed.
+	Closing messages file on write error is fixed.
+- Transport:
+    *: For input transport, using protocol() set only on create for some performance rise.
+	Disable write access to field "Protocol" at running input transport.
+    Sockets: Default timeouts for output transports are set to "5:0.1".
+    SSL: Permition to temporary certificate file restrict to 0600.
+    SSL,Sockets: KeepAlive parameters of input transport is made unifical and descriptions append.
+	Default value of KeepAliveTm set to 60 for prevent input connections hang.
+- UI:
+    QTCfg:
+	Start page change for set into localhost space and no warnings on the set on user change.
+	Check and change current page at it rename.
+	Rows and collumns of a table adjust mechanism set like from UI.Vision primitive FormEl view "Table".
+	Group-selected fields set support is added.
+    VCAEngine:
+	FIX: No Widget::attrSet() return -1 for wrong attribute set.
+	FIX: cntrCmdAttributes() return for primitive "FormEl" is fixed.
+	DB prefix "wlb_" is changed to "prj_" for projects' DB select.
+	Using source widget in base role if previous opened page miss for open command process is added.
+	    pgOpenSrc clear at the page's container close is added.
+	Set links as active only after successful connection to it, for parameter's attributes.
+	    Implement for some problems fix into dynamic linking.
+    Vision:
+	FIX: "Text" primitive update font size is fixed at it's scale change.
+	Scale on maximize and fullscreen is prevented for 1 > scale < 1.05.
+	FIX: ReadOnly for file dialogs set from RunTime user's fix.
+	QRectMask set pass only for edition border.
+	Cursor position into status display on "Ctrl" hold is added.
+	!!: To session object plain resources allocation dataM (pthread_mutexattr_t) is added and used for mOpen, mStProp.
+	FIX: Service <openlist path="/serv/pg"/> is fixed for errors at page's widgets miss and recreate session try.
+	mCalcRes moved to pthread_mutexattr_t.
+	Select-group areas control of Development mode is moved to function selAreaUpdate() and moved
+	    from Paint-event to particular places, mostly for fix dotted-box on selected moving for primitive
+	    "Document" based on WebKit.
+	Set transparent background palette for the pages included to container.
+	Prevent Widgets copy or cut from self to self.
+	FIX:ElFigure: Index out of range next fix.
+	FIX: Widgets into libraries doubling at global tree update is fixed.
+    FIX:WebVision: Posible crash into primitive ElFig fix.
+    !!:UI.{QTStarter,QTCfg,Vision}: Adapted for Qt5, exclude Phonon.
+    QTStarter,QTCfg: Next "QT" to "Qt" renaming.
+    VCAEngine,Vision,WebVision: The primitives "Text", "Protocol", "Document", "Diagram" are moved to indexes from types.h.
+    VCAEngine,Vision:
+	!!!!: New view "Table" of primitive "FormEl" is added.
+	!: Update "ID" value to validated and return it by control interface for allow next modifications make from UI.Vision.
+    Vision,WebVision: To primitive "Diagram" and "Protocol" set trace time to real data time is allowed.
+	FIX: Possible crash on view "Spectrum" of primitive "Diagram" build is fixed, for tTime lesser of tTimeGrnd.
+	FIX: Possible hang into primitive "Diagram" for parameters into logarithm and mostly individual scale,
+	    by prevent negative and zero values.
+- Special:
+    FLibSYS: Unified CRC() calculation function is added.
+    !:FIX:SystemTests: Tests execution rules from config file fix.
+- DB.*,Transport.*: TBD, TTransportIn and TTransportOut moved to use TConfig::cntrCmdMake().
+
+
 2013-12-21 Roman 0.8.0.9
 - SYS: "StartupNotify=false" line is added to *.desktop files.
     TCntrNode: The attribute "force" is added to node control interface's commands "load" and "save".
@@ -4898,7 +5063,7 @@ Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
 - FIX:/UI/VCAEngine: The focus attribute deleting on time disable widget's active mode, on RunTime is fixed.
 - FIX:/UI/Vision: Status section expanding is fixed for the container and item properties dialog.
 - FIX:/UI/Vision: Up order is fixed for new created widgets.
-- FIX:/UI/Vision: Background palete is fixed for primitive "Protocol".
+- FIX:/UI/Vision: Background palette is fixed for primitive "Protocol".
 - FIX:/UI/Vision: Focus mode is fixed for primitive "Protocol".
 - FIX:/UI/WebVision: Focus and active mode is fixed for primitive "Diagram".
 - !:/UI/WebVision: Focus and active mode support is added for primitive 'Protocol' and 'Document'.
@@ -6161,7 +6326,7 @@ Into OscadaLibs.db EVAL pass for templates "anUnif" and "anUnifSt" is added.
 - /UI/Vision: The short cut CTRL+S is added, to wigets saving from keyboard.
 - /UI/Vision: Links configuration is update.
 - FIX:/UI/Vision: Update links on error operation to it is fixed.
-- /UI/Vision: A palete widget's resizing from keyboard is added.
+- /UI/Vision: A palette widget's resizing from keyboard is added.
 - FIX:/UI/Vision: Some bugs into widgets resizing is fixed.
 
 

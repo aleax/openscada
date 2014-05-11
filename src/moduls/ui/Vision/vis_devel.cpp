@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -621,7 +621,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     for(int i_ch = 0; i_ch < children().size(); i_ch++)
     {
 	if(!qobject_cast<QToolBar*>(children()[i_ch])) continue;
-	int icSz = atoi(mod->uiPropGet((children()[i_ch]->objectName()+"_icSz").toAscii().data(),user()).c_str());
+	int icSz = atoi(mod->uiPropGet((children()[i_ch]->objectName()+"_icSz").toStdString(),user()).c_str());
 	if(icSz) ((QToolBar*)children()[i_ch])->setIconSize(QSize(icSz,icSz));
     }
 
@@ -673,17 +673,17 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
 
 string VisDevelop::user( )
 {
-    return mWUser->user().toAscii().data();
+    return mWUser->user().toStdString();
 }
 
 string VisDevelop::password( )
 {
-    return mWUser->pass().toAscii().data();
+    return mWUser->pass().toStdString();
 }
 
 string VisDevelop::VCAStation( )
 {
-    return mWUser->VCAStation().toAscii().data();
+    return mWUser->VCAStation().toStdString();
 }
 
 bool VisDevelop::wdgScale( )
@@ -698,12 +698,12 @@ void VisDevelop::setWdgScale( bool val )
 
 double VisDevelop::wdgVisScale( )
 {
-    return atof(mWVisScale->text().toAscii().data());
+    return atof(mWVisScale->text().toStdString().c_str());
 }
 
 void VisDevelop::setWdgVisScale(double val )
 {
-    mWVisScale->setText((TSYS::real2str(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
+    mWVisScale->setText((r2s(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
 }
 
 void VisDevelop::closeEvent( QCloseEvent* ce )
@@ -767,12 +767,12 @@ void VisDevelop::setToolIconSize( )
 {
     if(!sender()) return;
 
-    QToolBar *tb = qobject_cast<QToolBar*>((QToolBar*)TSYS::str2addr(sender()->property("toolAddr").toString().toAscii().data()));
-    int icSz = atoi(sender()->objectName().toAscii().data());
+    QToolBar *tb = qobject_cast<QToolBar*>((QToolBar*)TSYS::str2addr(sender()->property("toolAddr").toString().toStdString()));
+    int icSz = atoi(sender()->objectName().toStdString().c_str());
     if(tb)
     {
 	tb->setIconSize(QSize(icSz,icSz));
-	mod->uiPropSet((tb->objectName()+"_icSz").toAscii().data(),TSYS::int2str(icSz),user());
+	mod->uiPropSet((tb->objectName()+"_icSz").toStdString(), i2s(icSz), user());
     }
 }
 
@@ -998,23 +998,22 @@ void VisDevelop::itDBSave( )
 	if(mStModify->text() != "*") return;
 	own_wdg = "/";
     }
-    if( !own_wdg.empty() )
+    if(!own_wdg.empty())
     {
 	//> Request to confirm
-	InputDlg dlg(this,actDBSave->icon(),
+	InputDlg dlg(this, actDBSave->icon(),
 		(own_wdg == "/" ? QString(_("Are you sure of saving all modifications to DB?")) :
 		QString(_("Are you sure of saving visual items '%1' to DB?")).arg(QString(own_wdg.c_str()).replace(";","; "))),
-		_("Save visual item's data to DB"),false,false);
-	if( dlg.exec() == QDialog::Accepted )
+		_("Save visual item's data to DB"), false, false);
+	if(dlg.exec() == QDialog::Accepted)
 	{
 	    string cur_wdg;
-	    for( int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
+	    for(int i_off = 0; (cur_wdg=TSYS::strSepParse(own_wdg,0,';',&i_off)).size(); )
 	    {
 		//>> Send load request
 		XMLNode req("save");
-		req.setAttr("path",cur_wdg+"/%2fobj");
-		if( cntrIfCmd(req) )
-		    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+		req.setAttr("path", cur_wdg+"/%2fobj");
+		if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    }
 	}
     }
@@ -1023,7 +1022,7 @@ void VisDevelop::itDBSave( )
 
 void VisDevelop::prjRun( )
 {
-    string own_wdg = TSYS::strSepParse(work_wdg,0,';');
+    string own_wdg = TSYS::strSepParse(work_wdg, 0, ';');
 
     VisRun *sess = new VisRun(own_wdg, user(), password(), VCAStation());
     sess->show();
@@ -1033,50 +1032,40 @@ void VisDevelop::prjRun( )
 
 void VisDevelop::prjNew( )
 {
-    InputDlg dlg(this,actPrjNew->icon(),
-	    _("Enter new project's identifier and name."),_("New project"),true,true);
+    InputDlg dlg(this, actPrjNew->icon(), _("Enter new project's identifier and name."), _("New project"), true, true);
     dlg.setIdLen(30);
-    if( dlg.exec() == QDialog::Accepted )
+    if(dlg.exec() == QDialog::Accepted)
     {
 	XMLNode req("add");
-	req.setAttr("path","/%2fprm%2fcfg%2fprj")->
-	    setAttr("id",dlg.id().toAscii().data())->
-	    setText(dlg.name().toAscii().data());
-	if( cntrIfCmd(req) )
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	req.setAttr("path", "/%2fprm%2fcfg%2fprj")->setAttr("id", dlg.id().toStdString())->setText(dlg.name().toStdString());
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
+	    string nId = req.attr("id");
 	    //>> Set enable for item container
-	    req.clear()->setName("set")->
-			 setAttr("path",string("/prj_")+dlg.id().toAscii().data()+"/%2fobj%2fst%2fen")->
-			 setText("1");
+	    req.clear()->setName("set")->setAttr("path", "/prj_"+nId+"/%2fobj%2fst%2fen")->setText("1");
 	    cntrIfCmd(req);
-	    emit modifiedItem(string("prj_")+dlg.id().toAscii().data());
+	    emit modifiedItem("prj_"+nId);
 	}
     }
 }
 
 void VisDevelop::libNew( )
 {
-    InputDlg dlg(this,actPrjNew->icon(),
-	    _("Enter new widget's library identifier and name."),_("New widget's library"),true,true);
+    InputDlg dlg(this, actPrjNew->icon(), _("Enter new widget's library identifier and name."), _("New widget's library"), true, true);
     dlg.setIdLen(30);
-    if( dlg.exec() == QDialog::Accepted )
+    if(dlg.exec() == QDialog::Accepted)
     {
 	XMLNode req("add");
-	req.setAttr("path","/%2fprm%2fcfg%2fwlb")->
-	    setAttr("id",dlg.id().toAscii().data())->
-	    setText(dlg.name().toAscii().data());
-	if( cntrIfCmd(req) )
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id",dlg.id().toStdString())->setText(dlg.name().toStdString());
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
+	    string nId = req.attr("id");
 	    //>> Set enable for item container
-	    req.clear()->setName("set")->
-			 setAttr("path",string("/wlb_")+dlg.id().toAscii().data()+"/%2fobj%2fst%2fen")->
-			 setText("1");
+	    req.clear()->setName("set")->setAttr("path", "/wlb_"+nId+"/%2fobj%2fst%2fen")->setText("1");
 	    cntrIfCmd(req);
-	    emit modifiedItem(string("wlb_")+dlg.id().toAscii().data());
+	    emit modifiedItem("wlb_"+nId);
 	}
     }
 }
@@ -1086,7 +1075,7 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     XMLNode req("get");
     //QAction *cact = (QAction *)sender();
     string own_wdg = iOwn.empty() ? TSYS::strSepParse(work_wdg,0,';') : iOwn;
-    string par_nm = cact->objectName().toAscii().data();
+    string par_nm = cact->objectName().toStdString();
     QMdiSubWindow *actSubW = work_space->activeSubWindow();
 
     if(actSubW && !wdgTree->hasFocus() && !prjTree->hasFocus() && pnt.isNull() &&
@@ -1096,20 +1085,19 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
     //> Count level
     int p_el_cnt = 0;
     for(int i_off = 0; TSYS::pathLev(own_wdg,0,true,&i_off).size(); p_el_cnt++) ;
-    string sid1 = TSYS::pathLev(own_wdg,0);
+    string sid1 = TSYS::pathLev(own_wdg, 0);
 
     //> Make request id and name dialog
-    InputDlg dlg(this, cact->icon(),
-	    _("Enter new widget's/page's identifier and name."),_("Create widget/page"),true,true);
+    InputDlg dlg(this, cact->icon(), _("Enter new widget's/page's identifier and name."), _("Create widget/page"), true, true);
     dlg.setIdLen(30);
 
     if(p_el_cnt > 1 && iWid.empty())
     {
 	//>> New include item id generator
 	//>>> Present include widgets list request
-	if(sid1.substr(0,4) == "prj_" && pnt.isNull()) req.setAttr("path",own_wdg+"/%2fpage%2fpage");
-	else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg");
-	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	if(!sid1.compare(0,4,"prj_") && pnt.isNull()) req.setAttr("path", own_wdg+"/%2fpage%2fpage");
+	else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg");
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
 	    //>>> Get parent widget id
@@ -1117,75 +1105,75 @@ void VisDevelop::visualItAdd( QAction *cact, const QPointF &pnt, const string &i
 	    if(!par_nm.empty())	base_nm = TSYS::pathLev(par_nm,1,true).substr(4);
 	    unsigned i_c = 1, i_w = 0;
 	    while(i_w < req.childSize())
-		if(req.childGet(i_w)->attr("id") == base_nm+TSYS::int2str(i_c))	{ i_w = 0; i_c++; }
+		if(req.childGet(i_w)->attr("id") == base_nm+i2s(i_c))	{ i_w = 0; i_c++; }
 		else i_w++;
-	    dlg.setId((base_nm+TSYS::int2str(i_c)).c_str());
+	    dlg.setId((base_nm+i2s(i_c)).c_str());
 	}
     }
 
     //>> Execute dialog
     if(!iWid.empty() || dlg.exec() == QDialog::Accepted)
     {
-	string w_id = iWid.empty() ? dlg.id().toAscii().data() : iWid;
-	string w_nm = iWid.empty() ? dlg.name().toAscii().data() : iWnm;
+	string w_id = iWid.empty() ? dlg.id().toStdString() : iWid;
+	string w_nm = iWid.empty() ? dlg.name().toStdString() : iWnm;
 
 	//>> Check for widget's library
 	req.clear()->setName("add");
 	string new_wdg;
-	if(sid1.substr(0,4) == "wlb_")
+	if(!sid1.compare(0,4,"wlb_"))
 	{
-	    if(p_el_cnt == 1)
-		req.setAttr("path",own_wdg+"/%2fwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-	    else req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-	    new_wdg = own_wdg+"/wdg_"+w_id;
+	    if(p_el_cnt == 1) req.setAttr("path", own_wdg+"/%2fwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+	    else req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+	    new_wdg = own_wdg + "/wdg_";
 	}
-	else if(sid1.substr(0,4) == "prj_")
+	else if(!sid1.compare(0,4,"prj_"))
 	{
 	    if(pnt.isNull())
 	    {
-		req.setAttr("path",own_wdg+"/%2fpage%2fpage")->setAttr("id",w_id)->setText(w_nm);
-		new_wdg = own_wdg+"/pg_"+w_id;
+		req.setAttr("path", own_wdg+"/%2fpage%2fpage")->setAttr("id", w_id)->setText(w_nm);
+		new_wdg = own_wdg + "/pg_";
 	    }
 	    else
 	    {
-		req.setAttr("path",own_wdg+"/%2finclwdg%2fwdg")->setAttr("id",w_id)->setText(w_nm);
-		new_wdg = own_wdg+"/wdg_"+w_id;
+		req.setAttr("path", own_wdg+"/%2finclwdg%2fwdg")->setAttr("id", w_id)->setText(w_nm);
+		new_wdg = own_wdg + "/wdg_";
 	    }
 	}
 
 	//>> Create widget
 	int err = cntrIfCmd(req);
-	if(err) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else
 	{
+	    new_wdg += req.attr("id");
 	    //>>> Set some parameters
 	    req.clear()->setName("set");
 	    if(!par_nm.empty())
 	    {
 		//>>>> Set parent widget name and enable item
-		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
+		req.setAttr("path", new_wdg+"/%2fwdg%2fst%2fparent")->setText(par_nm);
 		err = cntrIfCmd(req);
-		req.setAttr("path",new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
+		req.setAttr("path", new_wdg+"/%2fwdg%2fst%2fen")->setText("1");
 		err = cntrIfCmd(req);
 	    }
 	    //>>>> Set geometry for include widget
 	    if(!err && !pnt.isNull())
 	    {
-		req.setAttr("path",new_wdg+"/%2fattr%2fgeomX")->setText(TSYS::real2str(pnt.x()));
+		req.setAttr("path", new_wdg+"/%2fattr%2fgeomX")->setText(r2s(pnt.x()));
 		err = cntrIfCmd(req);
-		req.setAttr("path",new_wdg+"/%2fattr%2fgeomY")->setText(TSYS::real2str(pnt.y()));
+		req.setAttr("path", new_wdg+"/%2fattr%2fgeomY")->setText(r2s(pnt.y()));
 		err = cntrIfCmd(req);
 
 		//> Send change request to opened for edit widget
 		if(!chNoWr)
 		{
             	    DevelWdgView *dw = work_space->findChild<DevelWdgView*>(own_wdg.c_str());
-            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path",new_wdg)->setAttr("id",w_id)->setAttr("name",w_nm)->
-            		setAttr("parent",par_nm)->setAttr("x",TSYS::real2str(pnt.x()))->setAttr("y",TSYS::real2str(pnt.y())));
+            	    if(dw) dw->chRecord(*XMLNode("chldAdd").setAttr("path", new_wdg)->setAttr("id", w_id)->setAttr("name", w_nm)->
+            		setAttr("parent", par_nm)->setAttr("x",r2s(pnt.x()))->setAttr("y",r2s(pnt.y())));
             	}
 		work_space->setActiveSubWindow(actSubW);	//For set focus to target subwindow and the new widget select
 	    }
-	    if(err) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	    if(err) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	    emit modifiedItem(new_wdg);
 	}
     }
@@ -1227,33 +1215,26 @@ void VisDevelop::visualItDel( const string &itms, bool chNoWr )
 	//Check for widget's library
 	if(sid1.empty())
 	{
-	    if(it_id.substr(0,4) == "wlb_")
-		req.setAttr("path","/%2fprm%2fcfg%2fwlb")->setAttr("id",it_id.substr(4));
-	    else if(it_id.substr(0,4) == "prj_")
-		req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
+	    if(!it_id.compare(0,4,"wlb_")) req.setAttr("path", "/%2fprm%2fcfg%2fwlb")->setAttr("id", it_id.substr(4));
+	    else if(!it_id.compare(0,4,"prj_")) req.setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("id",it_id.substr(4));
 	}
-	else if(sid1.substr(0,4) == "wlb_")
+	else if(!sid1.compare(0,4,"wlb_"))
 	{
-	    if(p_el_cnt <= 2)
-		req.setAttr("path",it_own+"/%2fwdg%2fwdg")->setAttr("id",it_id.substr(4));
-	    else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
+	    if(p_el_cnt <= 2) req.setAttr("path", it_own+"/%2fwdg%2fwdg")->setAttr("id", it_id.substr(4));
+	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
-	else if(sid1.substr(0,4) == "prj_")
+	else if(!sid1.compare(0,4,"prj_"))
 	{
-	    if(p_el_cnt <= 2)
-		req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
-	    else if(it_id.substr(0,3) == "pg_")
-		req.setAttr("path",it_own+"/%2fpage%2fpage")->setAttr("id",it_id.substr(3));
-	    else req.setAttr("path",it_own+"/%2finclwdg%2fwdg")->setAttr("id",it_id.substr(4));
+	    if(p_el_cnt <= 2) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
+	    else if(!it_id.compare(0,3,"pg_")) req.setAttr("path", it_own+"/%2fpage%2fpage")->setAttr("id", it_id.substr(3));
+	    else req.setAttr("path", it_own+"/%2finclwdg%2fwdg")->setAttr("id", it_id.substr(4));
 	}
 
 	//> Save removed widget context for change record
-	if(!chNoWr && (dw=work_space->findChild<DevelWdgView*>(del_wdg.c_str())))
-	    dw->chLoadCtx(chCtx, "parent;");
+	if(!chNoWr && (dw=work_space->findChild<DevelWdgView*>(del_wdg.c_str()))) dw->chLoadCtx(chCtx, "parent;");
 
 	//> Send remove context
-	if(cntrIfCmd(req))
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	if(cntrIfCmd(req))	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else if(p_el_cnt < 3)	emit modifiedItem(del_wdg);
 	else
 	{
@@ -1416,76 +1397,76 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
     for(int w_off = 0; (copy_buf_el=TSYS::strSepParse(copy_buf_w.substr(1),0,';',&w_off)).size(); )
     {
 	string s_elp, d_elp, s_el, d_el, t_el, t1_el;
-	//> Destination elements calc
+	//Destination elements calc
 	int n_del = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(work_wdg_w,0,true,&off)).empty(); n_del++)
 	{ if(n_del) d_elp += ("/"+d_el); d_el = t_el; }
-	//> Src elements calc
+	//Src elements calc
 	int n_sel = 0;
 	for(int off = 0; !(t_el=TSYS::pathLev(copy_buf_el,0,true,&off)).empty(); n_sel++)
 	{ if(n_sel) s_elp += ("/"+s_el); s_el = t_el; }
 
-	//> Copy visual item
+	//Copy visual item
 	XMLNode req("get");
-	//>> Project copy
+	// Project copy
 	if(s_el.substr(0,4) == "prj_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Project '%1' move.\n") : _("Project '%1' copy.\n"))+
-		_("Enter new project's identifier and name.")).arg(s_el.substr(4).c_str()).toAscii().data();
+		_("Enter new project's identifier and name.")).arg(s_el.substr(4).c_str()).toStdString();
 	    req.setAttr("path","/%2fprm%2fcfg%2fprj");
 	    d_el = "prj_";
 	    t1_el = s_el.substr(4);
 	}
-	//>> Widget's library copy
+	// Widget's library copy
 	else if(s_el.substr(0,4) == "wlb_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Widget's library '%1' move.\n") : _("Widget's library '%1' copy.\n"))+
-		_("Enter new widget's library identifier and name.")).arg(s_el.substr(4).c_str()).toAscii().data();
+		_("Enter new widget's library identifier and name.")).arg(s_el.substr(4).c_str()).toStdString();
 	    req.setAttr("path","/%2fprm%2fcfg%2fwlb");
 	    d_el = "wlb_";
 	    t1_el = s_el.substr(4);
 	}
-	//>> Page copy
+	// Page copy
 	else if(s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_"))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move page '%1' to '%2'.\n") : _("Copy page '%1' to '%2'.\n"))+
-		_("Enter new widget's/page's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+		_("Enter new widget's/page's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
 	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
 	    else req.setAttr("path",work_wdg_w+"/%2fpage%2fpage");
 	    d_elp += ("/"+d_el);
 	    d_el = (d_el.substr(0,4)=="wlb_") ? "wdg_" : "pg_";
 	    t1_el = s_el.substr(3);
 	}
-	//>> Widget copy
+	// Widget copy
 	else if(s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" ||
 	    (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del == 2)))
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
-		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
 	    if(d_el.substr(0,4)=="wlb_") req.setAttr("path",work_wdg_w+"/%2fwdg%2fwdg");
 	    else req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
 	    d_elp += ("/"+d_el);
 	    d_el = "wdg_";
 	    t1_el = s_el.substr(4);
 	}
-	//>> Direct widget to widget copy
+	// Direct widget to widget copy
 	else if(s_el.substr(0,4) == "wdg_" && d_el.substr(0,4) == "wdg_")
 	{
 	    t_el = (QString((copy_buf_w[0] == '1') ? _("Move widget '%1' to '%2'.\n") : _("Copy widget '%1' to '%2'.\n"))+
-		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toAscii().data();
+		_("Enter new widget's identifier and name.")).arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()).toStdString();
 	    req.setAttr("path",work_wdg_w+"/%2finclwdg%2fwdg");
 	    t1_el = d_el.substr(4);
 	    d_el = "wdg_";
 	}
-	//>> Copy scheme error
+	// Copy scheme error
 	else
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Copy/move scheme from '%1' to '%2' is not supported.")).
 		arg(copy_buf_el.c_str()).arg(work_wdg_w.c_str()),TVision::Error,this);
 	    return;
 	}
-	//>> Prepare new widget identifier
-	//>>> Remove digits from end of new identifier
+	// Prepare new widget identifier
+	//  Remove digits from end of new identifier
 	if(wdst.empty())
 	{
 	    if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
@@ -1497,10 +1478,10 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    else i_w++;
 	    }
 	}
-	//>> Make request dialog
+	// Make request dialog
 	dlg.setMess(t_el.c_str());
 	dlg.setId(t1_el.c_str());
-	//>> Add Link flag for copy operation
+	// Add Link flag for copy operation
 	if(copy_buf_w[0] != '1' && d_el.substr(0,4) != "prj_" && d_el.substr(0,4) != "wlb_")
 	{
 	    dlg.edLay()->addWidget(new QLabel(_("Inherit:"),&dlg), 2, 0);
@@ -1509,19 +1490,26 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 	}
 	if(!wsrc.empty() || dlg.exec() == QDialog::Accepted)
 	{
-	    d_el += dlg.id().toAscii().data();
-	    string it_nm = wnm.empty() ? dlg.name().toAscii().data() : wnm;
+	    d_el += dlg.id().toStdString();
+	    string it_nm = wnm.empty() ? dlg.name().toStdString() : wnm;
 
-	    //>>> Make link
+	    //  Make link
 	    if(wInher && wInher->isChecked())
 	    {
 		QAction addAct(NULL);
 		addAct.setObjectName((s_elp+"/"+s_el).c_str());
-		visualItAdd(&addAct, QPointF(), dlg.id().toAscii().data(), it_nm, d_elp);
+		visualItAdd(&addAct, QPointF(), dlg.id().toStdString(), it_nm, d_elp);
 	    }
-	    //>>> Make copy
+	    //  Make copy
 	    else
 	    {
+		if(d_elp == s_elp && d_el == s_el)
+		{
+		    mod->postMess(mod->nodePath().c_str(),QString(_("Try copy/move self to self for \"%1/%1\"!")).
+			arg(d_elp.c_str()).arg(d_el.c_str()),TVision::Error,this);
+		    return;
+		}
+
 		req.clear()->setName("set")->setAttr("path", "/%2fprm%2fcfg%2fcp%2fcp")->
 		    setAttr("src", s_elp+"/"+s_el)->setAttr("dst", d_elp+"/"+d_el);
 		if(cntrIfCmd(req))
@@ -1549,22 +1537,22 @@ void VisDevelop::visualItPaste( const string &wsrc, const string &wdst, const st
 		    del_els += copy_buf_el+";";
 
 		    // Send change request to opened for edit widget
-            	    if(!chNoWr)
-            	    {
-                	DevelWdgView *dw = work_space->findChild<DevelWdgView*>(d_elp.c_str());
-                	if(dw) dw->chRecord(*XMLNode("chldPaste").
-                		setAttr("src",s_elp+"/"+s_el)->setAttr("dst",d_elp+"/"+d_el)->setAttr("name",it_nm));
-            	    }
+		    if(!chNoWr)
+		    {
+			DevelWdgView *dw = work_space->findChild<DevelWdgView*>(d_elp.c_str());
+			if(dw) dw->chRecord(*XMLNode("chldPaste").
+				setAttr("src",s_elp+"/"+s_el)->setAttr("dst",d_elp+"/"+d_el)->setAttr("name",it_nm));
+		    }
 		}
 	    }
 	}
     }
     if(!last_del.empty())	copy_els.push_back(last_del);
 
-    //> Send events to created widgets
+    //Send events to created widgets
     for(unsigned i_e = 0; i_e < copy_els.size(); i_e++)
 	emit modifiedItem(copy_els[i_e]);
-    //> Remove source widget
+    //Remove source widget
     if(copy_buf_w[0] == '1') 	{ visualItDel(del_els); if(wsrc.empty()) copy_buf = "0"; }
 }
 
@@ -1573,7 +1561,8 @@ void VisDevelop::editToolUpdate( )
     if(!actVisItCopy->property("wdgAddr").toString().isEmpty()) return;
     actVisItCut->setEnabled(!work_wdg.empty());
     actVisItCopy->setEnabled(!work_wdg.empty());
-    //> Src and destination elements calc
+
+    //Src and destination elements calc
     string s_elp, d_elp, s_el, d_el, t_el;
     int n_sel = 0;
     int n_del = 0;
@@ -1581,9 +1570,9 @@ void VisDevelop::editToolUpdate( )
     { s_elp += ("/"+s_el); s_el = t_el; }
     for(int off = 0; !(t_el=TSYS::pathLev(work_wdg,0,true,&off)).empty(); n_del++)
     { d_elp += ("/"+d_el); d_el = t_el; }
-    if((s_el.substr(0,4)=="prj_" || s_el.substr(0,4)=="wlb_") ||										//Project and library copy
-	    (s_el.substr(0,3)=="pg_" && (d_el.substr(0,4)=="prj_" || d_el.substr(0,3)=="pg_" || d_el.substr(0,4)=="wlb_")) ||			//Page copy
-	    (s_el.substr(0,4)=="wdg_" && (d_el.substr(0,3)=="pg_" || d_el.substr(0,4)=="wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4)=="wlb_" && n_del==2))))	//Widget copy
+    if((s_el.substr(0,4) == "prj_" || s_el.substr(0,4) == "wlb_") ||										//Project and library copy
+	    (s_el.substr(0,3) == "pg_" && (d_el.substr(0,4) == "prj_" || d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_")) ||		//Page copy
+	    (s_el.substr(0,4) == "wdg_" && (d_el.substr(0,3) == "pg_" || d_el.substr(0,4) == "wlb_" || (TSYS::pathLev(d_elp,0).substr(0,4) == "wlb_" && n_del==2))))	//Widget copy
 	actVisItPaste->setEnabled(true);
     else actVisItPaste->setEnabled(false);
 }

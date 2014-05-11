@@ -286,7 +286,7 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    else atoi(opt->text().c_str())?enable():disable();
 	}
     }
-    else if(a_path.substr(0,8) == "/prm/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
+    else if(a_path.compare(0,8,"/prm/cfg") == 0) TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SDAQ_ID,RWRWR_);
     else if(a_path == "/prm/tmplList" && ctrChkNode(opt))
     {
 	opt->childAdd("el")->setText("");

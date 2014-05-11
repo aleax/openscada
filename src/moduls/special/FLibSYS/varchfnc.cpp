@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.FLibSYS file: varchfnc.cpp
 /***************************************************************************
- *   Copyright (C) 2009 by Roman Savochenko                                *
+ *   Copyright (C) 2009-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -30,15 +30,9 @@ using namespace FLibSYS;
 //*************************************************
 //* VArchObj - Value archive object               *
 //*************************************************
-VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)
-{
+VArchObj::VArchObj( ) : mIsArch(false), mBuf(NULL)	{ }
 
-}
-
-VArchObj::~VArchObj( )
-{
-    close();
-}
+VArchObj::~VArchObj( )	{ close(); }
 
 bool VArchObj::open( const string &inm )
 {
@@ -89,15 +83,9 @@ TValBuf *VArchObj::buf( )
     return mBuf;
 }
 
-TVariant VArchObj::propGet( const string &id )
-{
-    throw TError("VArchObj", _("Properties no supported by th object."));
-}
+TVariant VArchObj::propGet( const string &id )	{ throw TError("VArchObj", _("Properties no supported by the object.")); }
 
-void VArchObj::propSet( const string &id, TVariant val )
-{
-    throw TError("VArchObj", _("Properties no supported by the object."));
-}
+void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchObj", _("Properties no supported by the object.")); }
 
 TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
@@ -201,7 +189,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    else vb = buf();
 	    if(!vb)     return false;
 	    src.at().arch().at().getVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-				   	      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
+					      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else if(isArch())
 	{
@@ -212,16 +200,16 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		vb = &tarch.at();
 	    }
 	    else vb = src.at().buf();
-	    if(!vb)     return false;
-	    arch().at().setVals( *vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"" );
+	    if(!vb)	return false;
+	    arch().at().setVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
+				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else
 	{
 	    TValBuf* svb = src.at().buf();
 	    TValBuf* dvb = buf();
-	    if( !svb || !dvb ) return false;
-	    svb->getVals( *dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI() );
+	    if(!svb || !dvb) return false;
+	    svb->getVals(*dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI());
 	}
 	return true;
     }
@@ -262,8 +250,8 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    fftw_execute(p);
 	    fftw_destroy_plan(p);
 	    for(int i_v = 0; i_v < (fftN/2+1); i_v++)
-		if(!i_v) ao->propSet(TSYS::int2str(i_v),fftOut[i_v][0]/fftN);
-		else ao->propSet(TSYS::int2str(i_v),pow(pow(fftOut[i_v][0],2)+pow(fftOut[i_v][1],2),0.5)/(fftN/2));
+		if(!i_v) ao->arSet(i_v, fftOut[i_v][0]/fftN);
+		else ao->arSet(i_v, pow(pow(fftOut[i_v][0],2)+pow(fftOut[i_v][1],2),0.5)/(fftN/2));
 	    delete fftIn;
 	    delete fftOut;
 	}

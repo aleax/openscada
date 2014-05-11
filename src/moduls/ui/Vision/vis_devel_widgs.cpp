@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,9 +46,12 @@
 #include <QFontDialog>
 #include <QColorDialog>
 #include <QClipboard>
+#include <QDrag>
 #include <QBitmap>
+#include <QMimeData>
 
 #include <tsys.h>
+#include "../VCAEngine/types.h"
 
 #include "vis_devel.h"
 #include "tvision.h"
@@ -57,7 +60,7 @@
 #include "vis_devel_widgs.h"
 
 using namespace VISION;
-
+using namespace VCA;
 
 //****************************************
 //* Inspector of attributes model        *
@@ -111,7 +114,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	//>> Update attributes
 	wdgAttrUpdate( QModelIndex() );
     }
-    else if( wdg_ls.size() > 1 )
+    else if(wdg_ls.size() > 1)
     {
 	//> Set group widget
 	if( rootItem->type() != Item::WdgGrp )
@@ -140,7 +143,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	}
 
 	//> Check for add master widget
-	if( !masterWdg )
+	if(!masterWdg)
 	{
 	    beginInsertRows(QModelIndex(),0,0);
 	    rootItem->childInsert("<*>",0,Item::Wdg);
@@ -162,7 +165,14 @@ void ModInspAttr::setWdg( const string &iwdg )
 	}
     }
 
-    if( full_reset )	reset();
+    if(full_reset)
+    {
+#if QT_VERSION >= 0x040600
+	beginResetModel(); endResetModel();
+#else
+	reset();
+#endif
+    }
     else emit layoutChanged();
 }
 
@@ -171,7 +181,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
     vector<int> idst;
     bool grpW = false;
     Item *it = mod_it.isValid() ? static_cast<Item*>(mod_it.internalPointer()) : rootItem;
-    if( it->type() != Item::Wdg )   return;
+    if(it->type() != Item::Wdg)	return;
     QModelIndex curmod = mod_it;
     string itId = it->id();
 
@@ -217,7 +227,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		}
 	    }
 	    //>> Enter to group
-	    else if( curit->child(idst[it_lev])->type( ) == Item::AttrGrp )
+	    else if(curit->child(idst[it_lev])->type( ) == Item::AttrGrp)
 	    {
 		curmod = index(idst[it_lev],0,curmod);
 		curit = static_cast<Item*>(curmod.internalPointer());
@@ -229,9 +239,9 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 
 	    //>> Up to level
 	    idst[it_lev]++;
-	    while( idst[it_lev] >= curit->childCount() )
+	    while(idst[it_lev] >= curit->childCount())
 	    {
-		if( it_lev == 0 ) break;
+		if(it_lev == 0) break;
 
 		int prev_tp    = curit->type();
 		int prev_chlds = curit->childCount();
@@ -312,18 +322,34 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    if(gnd->attr("dest") == "select" || gnd->attr("dest") == "sel_ed")
 	    {
 		cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::Select);
-		QStringList selLs;
-		if(gnd->attr("select").empty()) selLs = QString(gnd->attr("sel_list").c_str()).split(";");
+		QStringList selLs, selIds;
+		if(gnd->attr("select").empty())
+		{
+		    selIds = QString(gnd->attr("sel_id").c_str()).split(";");
+		    selLs = QString(gnd->attr("sel_list").c_str()).split(";");
+		}
 		else
 		{
 		    cur_it->child(ga_id)->setFlag(cur_it->child(ga_id)->flag()|Item::SelEd);
+
 		    XMLNode req1("get");
 		    req1.setAttr("path", itId+"/"+TSYS::strEncode(gnd->attr("select"),TSYS::PathEl));
 		    if(!mainWin()->cntrIfCmd(req1))
+		    {
+			bool ind_ok = atoi(gnd->attr("idm").c_str());
 			for(unsigned i_ch = 0; i_ch < req1.childSize(); i_ch++)
+			{
+			    if(!i_ch) ind_ok = req1.childGet(i_ch)->attr("id").size();
+			    if(ind_ok) selIds << req1.childGet(i_ch)->attr("id").c_str();
 			    selLs << req1.childGet(i_ch)->text().c_str();
+			}
+		    }
 		}
+		for(int i_sId = 0; i_sId < selIds.size() && i_sId < selLs.size(); i_sId++)
+		    if(selIds[i_sId].toStdString() == sval)
+		    { cur_it->child(ga_id)->setData(selLs[i_sId]); break; }
 		cur_it->child(ga_id)->setDataEdit(selLs);
+		cur_it->child(ga_id)->setDataEdit1(selIds);
 	    }
 	}
 
@@ -337,14 +363,14 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
     } catch(...){ }
 }
 
-Qt::ItemFlags ModInspAttr::flags(const QModelIndex &index) const
+Qt::ItemFlags ModInspAttr::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flg = Qt::ItemIsEnabled;
 
-    if( index.isValid() )
+    if(index.isValid())
     {
 	flg |= Qt::ItemIsSelectable;
-	if( index.column() == 1 && static_cast<Item*>(index.internalPointer())->edited() )
+	if(index.column() == 1 && static_cast<Item*>(index.internalPointer())->edited())
 	    flg |= Qt::ItemIsEditable;
     }
 
@@ -355,10 +381,9 @@ QVariant ModInspAttr::headerData( int section, Qt::Orientation orientation, int 
 {
     QVariant val;
 
-    if( role == Qt::DisplayRole )
+    if(role == Qt::DisplayRole)
     {
-	if( orientation == Qt::Horizontal )
-	    val = (section==0)?_("Attribute"):_("Value");
+	if(orientation == Qt::Horizontal) val = (section==0) ? _("Attribute") : _("Value");
 	else val = section;
     }
     return val;
@@ -369,10 +394,10 @@ QModelIndex ModInspAttr::index( int row, int column, const QModelIndex &parent )
     QModelIndex idx;
     Item *it_index;
 
-    if( !parent.isValid() ) it_index = rootItem->child(row);
+    if(!parent.isValid()) it_index = rootItem->child(row);
     else it_index = static_cast<Item*>(parent.internalPointer())->child(row);
 
-    if( it_index )  idx = createIndex(row, column, it_index);
+    if(it_index) idx = createIndex(row, column, it_index);
 
     return idx;
 }
@@ -380,11 +405,11 @@ QModelIndex ModInspAttr::index( int row, int column, const QModelIndex &parent )
 QModelIndex ModInspAttr::parent( const QModelIndex &index ) const
 {
     QModelIndex idx;
-    if( index.isValid() )
+    if(index.isValid())
     {
 	Item *parentItem = static_cast<Item*>(index.internalPointer())->parent();
-	if( parentItem && parentItem != rootItem )
-	    idx = createIndex( parentItem->parent()->childGet(parentItem->id()), 0, parentItem );
+	if(parentItem && parentItem != rootItem)
+	    idx = createIndex(parentItem->parent()->childGet(parentItem->id()), 0, parentItem);
     }
 
     return idx;
@@ -392,7 +417,7 @@ QModelIndex ModInspAttr::parent( const QModelIndex &index ) const
 
 int ModInspAttr::rowCount( const QModelIndex &parent ) const
 {
-    if( !parent.isValid() ) return rootItem->childCount();
+    if(!parent.isValid()) return rootItem->childCount();
     return static_cast<Item*>(parent.internalPointer())->childCount();
 }
 
@@ -459,7 +484,8 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			QFont fnt;
 			char family[101]; strcpy(family,"Arial");
 			int size = 10, bold = 0, italic = 0, underline = 0, strike = 0;
-			sscanf(it->data().toString().toAscii().data(),"%100s %d %d %d %d %d",family,&size,&bold,&italic,&underline,&strike);
+			sscanf(it->data().toString().toStdString().c_str(), "%100s %d %d %d %d %d",
+			    family, &size, &bold, &italic, &underline, &strike);
 			fnt.setStrikeOut(strike);
 			fnt.setUnderline(underline);
 			fnt.setItalic(italic);
@@ -478,7 +504,7 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			if( tit && tit->type() == ModInspAttr::Item::Wdg )
 			{
 			    XMLNode req("get");
-			    req.setAttr("path",tit->id()+"/%2fwdg%2fres")->setAttr("id",it->data().toString().toAscii().data());
+			    req.setAttr("path",tit->id()+"/%2fwdg%2fres")->setAttr("id",it->data().toString().toStdString());
 			    req.setText(TSYS::strDecode(req.text(),TSYS::base64));
 			    QImage img;
 			    if( !const_cast<ModInspAttr*>(this)->mainWin()->cntrIfCmd(req) )
@@ -490,23 +516,22 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 			}
 		    }
 		    break;
-		case Qt::ToolTipRole:
-		    if(!it->help().empty()) val = it->help().c_str();
-		    break;
+		case Qt::ToolTipRole: if(!it->help().empty()) val = it->help().c_str();	break;
 	    }
     }
     return val;
 }
 
-bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int role )
+bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int role )
 {
+    QVariant value = ivl;
     if(!index.isValid()) return false;
 
-    //> Attribute
+    //Attribute
     Item *it = static_cast<Item*>(index.internalPointer());
     string nattr = it->id();
 
-    //> Attribute widget(s)
+    //Attribute widget(s)
     string nwdg = it->wdgs(), swdg;
     if(nwdg.empty())
     {
@@ -524,9 +549,14 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
     {
 	bool isGrp = TSYS::strSepParse(nwdg,1,';').size();
 	if(it->data() == value && !isGrp) return true;
+
+	//Check for list
+	for(int i_it = 0; i_it < it->dataEdit().toStringList().size() && i_it < it->dataEdit1().toStringList().size(); i_it++)
+	    if(it->dataEdit().toStringList()[i_it] == value) { value = it->dataEdit1().toStringList()[i_it]; break; }
+
 	XMLNode chCtx("attr");
 
-	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toAscii().data();
+	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
 	XMLNode req("set"), reqPrev("get");
 	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); )
 	{
@@ -537,7 +567,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 		chCtx.clear();
 		chCtx.setAttr("id",nattr)->setAttr("prev",it->data().toString().toStdString())->setText(val);
 		if(it->flag()&Item::Active) dw->chLoadCtx(chCtx, "", nattr);
-		//> Load previous value for group
+		//Load previous value for group
 		if(isGrp)
 		{
 		    reqPrev.setAttr("path",swdg+"/%2fattr%2f"+nattr);
@@ -547,10 +577,14 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &value, int 
 
 	    if(!mainWin()->cntrIfCmd(req) && req.text() == val)
 	    {
-		//> Send change request to opened to edit widget
+		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
-		//> Local update
+		// List check
+		for(int i_it = 0; i_it < it->dataEdit1().toStringList().size() && i_it < it->dataEdit().toStringList().size(); i_it++)
+		    if(it->dataEdit1().toStringList()[i_it] == value) { value = it->dataEdit().toStringList()[i_it]; break; }
+
+		//Local update
 		it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
@@ -570,15 +604,9 @@ ModInspAttr::Item::Item( const string &iid, Type tp, Item *parent ) :
 
 }
 
-ModInspAttr::Item::~Item()
-{
-    clean();
-}
+ModInspAttr::Item::~Item( )		{ clean(); }
 
-string ModInspAttr::Item::name( )
-{
-    return nameItem.size()?nameItem:id();
-}
+string ModInspAttr::Item::name( )	{ return nameItem.size()?nameItem:id(); }
 
 void ModInspAttr::Item::clean( )
 {
@@ -588,7 +616,7 @@ void ModInspAttr::Item::clean( )
 
 ModInspAttr::Item *ModInspAttr::Item::child(int row) const
 {
-    return childItems.value(row,NULL);
+    return childItems.value(row, NULL);
 }
 
 int ModInspAttr::Item::childGet( const string &iid ) const
@@ -600,10 +628,7 @@ int ModInspAttr::Item::childGet( const string &iid ) const
     return -1;
 }
 
-int ModInspAttr::Item::childCount() const
-{
-    return childItems.count();
-}
+int ModInspAttr::Item::childCount( ) const	{ return childItems.count(); }
 
 int ModInspAttr::Item::childInsert( const string &iid, int row, Type itp )
 {
@@ -633,10 +658,7 @@ QVariant ModInspAttr::Item::data( )
     else return dataItem;
 }
 
-QVariant ModInspAttr::Item::dataEdit( )
-{
-    return dataEditItem.isValid()?dataEditItem:dataItem;
-}
+QVariant ModInspAttr::Item::dataEdit( )	{ return dataEditItem.isValid()?dataEditItem:dataItem; }
 
 bool ModInspAttr::Item::setWdgs( const string &w, bool del )
 {
@@ -650,7 +672,7 @@ bool ModInspAttr::Item::setWdgs( const string &w, bool del )
 //****************************************
 //* Inspector of attributes widget       *
 //****************************************
-InspAttr::InspAttr( QWidget * parent, VisDevelop *mainWind ) : QTreeView(parent), modelData("",mainWind)
+InspAttr::InspAttr( QWidget * parent, VisDevelop *mainWind ) : QTreeView(parent), modelData("", mainWind)
 {
     //setEditTriggers(QAbstractItemView::AllEditTriggers);
     setAlternatingRowColors(true);
@@ -660,35 +682,29 @@ InspAttr::InspAttr( QWidget * parent, VisDevelop *mainWind ) : QTreeView(parent)
     setContextMenuPolicy(Qt::DefaultContextMenu);
 }
 
-InspAttr::~InspAttr( )
-{
-
-}
+InspAttr::~InspAttr( )	{ }
 
 bool InspAttr::hasFocus( )
 {
     return (QApplication::focusWidget() == this || state() == QAbstractItemView::EditingState);
 }
 
-void InspAttr::setWdg( const string &iwdg )
-{
-    modelData.setWdg(iwdg);
-}
+void InspAttr::setWdg( const string &iwdg )	{ modelData.setWdg(iwdg); }
 
 bool InspAttr::event( QEvent *event )
 {
     if(event->type() == QEvent::KeyPress &&
-	    static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space && currentIndex().isValid() )
+	    static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space && currentIndex().isValid())
     {
 	QModelIndex ed_id = modelData.index(currentIndex().row(),1,currentIndex().parent());
-	if( modelData.flags(ed_id)&Qt::ItemIsEditable )
+	if(modelData.flags(ed_id)&Qt::ItemIsEditable)
 	{
 	    emit setCurrentIndex(ed_id);
 	    emit edit(ed_id);
 	}
 	return true;
     }
-    return QTreeView::event( event );
+    return QTreeView::event(event);
 }
 
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
@@ -699,14 +715,14 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     ModInspAttr::Item *it = NULL;
 
     //Attribute
-    if( selectedIndexes().size() && selectedIndexes()[0].isValid() )
+    if(selectedIndexes().size() && selectedIndexes()[0].isValid())
     {
 	it = static_cast<ModInspAttr::Item*>(selectedIndexes()[0].internalPointer());
 	nattr = it->id();
 	//Attribute widget
 	ModInspAttr::Item *cit = it;
 	while(cit)
-	    if( cit->type() == ModInspAttr::Item::Wdg )
+	    if(cit->type() == ModInspAttr::Item::Wdg)
 	    {
 		nwdg = cit->id();
 		break;
@@ -717,7 +733,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     QMenu popup;
 
     //Add actions
-    if( it )
+    if(it)
     {
 	//> Copy action
 	QImage ico_t;
@@ -732,7 +748,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	}
 
 	//> Changes clear action
-	if( it->modify() )
+	if(it->modify())
 	{
 	    if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
 	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
@@ -741,12 +757,11 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	}
     }
 
-    if( !popup.isEmpty() )
+    if(!popup.isEmpty())
     {
 	QAction *rez = popup.exec(QCursor::pos());
-	if( actCopy && rez == actCopy )
-	    QApplication::clipboard()->setText(it->data().toString());
-	else if( actEdit && rez == actEdit )
+	if(actCopy && rez == actCopy) QApplication::clipboard()->setText(it->data().toString());
+	else if(actEdit && rez == actEdit)
 	{
 	    InputDlg dlg(this, actEdit->icon(),_("Full text of the attribute edit."),
 		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
@@ -780,7 +795,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())
 		model()->setData(selectedIndexes()[0], tEd->text(), Qt::EditRole);
 	}
-	else if( actClr && rez == actClr )
+	else if(actClr && rez == actClr)
 	{
 	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
 	    modelData.setWdg(modelData.curWdg());
@@ -797,7 +812,7 @@ InspAttr::ItemDelegate::ItemDelegate( QObject *parent ) : QItemDelegate(parent)
 
 }
 
-QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *InspAttr::ItemDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QWidget *w_del;
     if(!index.isValid()) return 0;
@@ -861,7 +876,7 @@ QWidget *InspAttr::ItemDelegate::createEditor(QWidget *parent, const QStyleOptio
     return w_del;
 }
 
-void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void InspAttr::ItemDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
 {
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
@@ -882,7 +897,7 @@ void InspAttr::ItemDelegate::setEditorData(QWidget *editor, const QModelIndex &i
     else QItemDelegate::setEditorData(editor, index);
 }
 
-void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void InspAttr::ItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
 {
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
@@ -901,24 +916,24 @@ void InspAttr::ItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
     else QItemDelegate::setModelData(editor, model, index);
 }
 
-QSize InspAttr::ItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
+QSize InspAttr::ItemDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
-    QSize w_sz = QItemDelegate::sizeHint(option,index);
+    QSize w_sz = QItemDelegate::sizeHint(option, index);
 
     QVariant value = index.data(Qt::EditRole);
     int flag = index.data(Qt::UserRole).toInt();
-    if( value.type()==QVariant::String && flag&ModInspAttr::Item::FullText )
+    if(value.type()==QVariant::String && flag&ModInspAttr::Item::FullText)
 	return QSize(w_sz.width(),vmin(150,vmax(50,w_sz.height())));
     return QSize(w_sz.width(),vmin(150,w_sz.height()));
 }
 
-bool InspAttr::ItemDelegate::eventFilter(QObject *object, QEvent *event)
+bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
 {
     if(dynamic_cast<QComboBox*>(object))
     {
 	QComboBox *comb = dynamic_cast<QComboBox*>(object);
 	if(event->type() == QEvent::KeyPress)
-	    switch (static_cast<QKeyEvent *>(event)->key())
+	    switch(static_cast<QKeyEvent *>(event)->key())
 	    {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
@@ -952,7 +967,7 @@ bool InspAttr::ItemDelegate::eventFilter(QObject *object, QEvent *event)
 		    return true;
 	    }
     }
-    return QItemDelegate::eventFilter(object,event);
+    return QItemDelegate::eventFilter(object, event);
 }
 
 //****************************************
@@ -963,25 +978,16 @@ InspAttrDock::InspAttrDock( VisDevelop *parent ) : QDockWidget(_("Attributes"),(
     setObjectName("InspAttrDock");
     setAllowedAreas(Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea);
 
-    ainsp_w = new InspAttr(this,owner());
+    ainsp_w = new InspAttr(this, owner());
     setWidget(ainsp_w);
     connect(ainsp_w, SIGNAL(modified(const string &)), this, SIGNAL(modified(const string &)));
 }
 
-InspAttrDock::~InspAttrDock( )
-{
+InspAttrDock::~InspAttrDock( )		{ }
 
-}
+VisDevelop *InspAttrDock::owner( )	{ return (VisDevelop*)parentWidget(); }
 
-VisDevelop *InspAttrDock::owner()
-{
-    return (VisDevelop*)parentWidget();
-}
-
-bool InspAttrDock::hasFocus( )
-{
-    return ainsp_w->hasFocus();
-}
+bool InspAttrDock::hasFocus( )		{ return ainsp_w->hasFocus(); }
 
 void InspAttrDock::setWdg( const string &iwdg )
 {
@@ -1003,32 +1009,25 @@ InspLnk::InspLnk( QWidget * parent, VisDevelop *mainWind ) : show_init(false), m
     connect(this,SIGNAL(itemChanged(QTreeWidgetItem*,int)), this, SLOT(changeLnk(QTreeWidgetItem*,int)));
 }
 
-InspLnk::~InspLnk( )
-{
+InspLnk::~InspLnk( )	{ }
 
-}
-
-string InspLnk::user( )
-{
-    return mainWin()->user();
-}
+string InspLnk::user( )	{ return mainWin()->user(); }
 
 bool InspLnk::event( QEvent *event )
 {
-    if( event->type() == QEvent::KeyPress &&
-	    static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space &&
-	    currentItem() && currentItem()->flags()&Qt::ItemIsEditable )
+    if(event->type() == QEvent::KeyPress && static_cast<QKeyEvent *>(event)->key() == Qt::Key_Space &&
+	currentItem() && currentItem()->flags()&Qt::ItemIsEditable)
     {
-	editItem(currentItem(),1);
+	editItem(currentItem(), 1);
 	return true;
     }
-    return QTreeWidget::event( event );
+    return QTreeWidget::event(event);
 }
 
 void InspLnk::contextMenuEvent( QContextMenuEvent *event )
 {
     QAction *actCopy = NULL;
-    if( !currentItem() ) return;
+    if(!currentItem()) return;
 
     QMenu popup;
 
@@ -1038,10 +1037,10 @@ void InspLnk::contextMenuEvent( QContextMenuEvent *event )
     actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
     popup.addAction(actCopy);
 
-    if( !popup.isEmpty() )
+    if(!popup.isEmpty())
     {
 	QAction *rez = popup.exec(QCursor::pos());
-	if( actCopy && rez == actCopy )
+	if(actCopy && rez == actCopy)
 	    QApplication::clipboard()->setText(currentItem()->data(1,Qt::DisplayRole).toString());
 
 	popup.clear();
@@ -1081,7 +1080,7 @@ void InspLnk::setWdg( const string &iwdg )
 	QTreeWidgetItem *wdg_it;
 	int i_it;
 	for(i_it = 0; i_it < topLevelItemCount(); i_it++)
-	    if(lnwdg == topLevelItem(i_it)->text(0).toAscii().data())
+	    if(lnwdg == topLevelItem(i_it)->text(0).toStdString())
 		break;
 	if(i_it < topLevelItemCount()) wdg_it = topLevelItem(i_it);
 	else
@@ -1094,7 +1093,7 @@ void InspLnk::setWdg( const string &iwdg )
 	{
 	    //>> Search group
 	    for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
-		if(lngrp == wdg_it->child(i_it)->text(0).toAscii().data())
+		if(lngrp == wdg_it->child(i_it)->text(0).toStdString())
 		    break;
 	    if(i_it < wdg_it->childCount()) wdg_it = wdg_it->child(i_it);
 	    else
@@ -1118,15 +1117,15 @@ void InspLnk::setWdg( const string &iwdg )
 	//>> Search parameter
 	QTreeWidgetItem *prm_it;
 	for(i_it = 0; i_it < wdg_it->childCount(); i_it++)
-	    if(lnatr == wdg_it->child(i_it)->text(0).toAscii().data())
+	    if(lnatr == wdg_it->child(i_it)->text(0).toStdString())
 		break;
 	if(i_it < wdg_it->childCount()) prm_it = wdg_it->child(i_it);
 	else
 	{
 	    prm_it = new QTreeWidgetItem(wdg_it);
 	    prm_it->setFlags(Qt::ItemIsEnabled|Qt::ItemIsEditable|Qt::ItemIsSelectable);
-    	    prm_it->setText(0,lnatr.c_str());
-    	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
+	    prm_it->setText(0,lnatr.c_str());
+	    prm_it->setData(0,Qt::UserRole,QString(lnid.substr(3).c_str()));
 	}
 
 	//>>> Get parameter's value
@@ -1142,9 +1141,9 @@ void InspLnk::setWdg( const string &iwdg )
 
 	    unsigned i_l;
 	    for(i_l = 0; i_l < rootel->childSize(); i_l++)
-		if(rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toAscii().data() &&
+		if(rootel->childGet(i_l)->attr("id") == ("el_"+wdg_it->data(0,Qt::UserRole).toString()).toStdString() &&
 			((wdg_g==wdg_it && rootel->childGet(i_l)->attr("elGrp").empty()) ||
-			(wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toAscii().data())))
+			(wdg_g!=wdg_it && rootel->childGet(i_l)->attr("elGrp") == wdg_g->text(0).toStdString())))
 			//((bool)rootel->childGet(i_l)->attr("elGrp").size()^(wdg_g==wdg_it)) )
 		    break;
 	    if(i_l >= rootel->childSize())
@@ -1179,14 +1178,14 @@ void InspLnk::setWdg( const string &iwdg )
 
 void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 {
-    if( col != 1 || show_init ) return;
+    if(col != 1 || show_init) return;
 
-    string attr_id = index->data(0,Qt::UserRole).toString().toAscii().data();
+    string attr_id = index->data(0,Qt::UserRole).toString().toStdString();
 
     XMLNode req("set");
     req.setAttr("path",it_wdg+"/%2flinks%2flnk%2f"+(index->childCount()?"pr_":"el_")+attr_id)->
-	setText(index->text(1).toAscii().data());
-    if( mainWin()->cntrIfCmd(req) )
+	setText(index->text(1).toStdString());
+    if(mainWin()->cntrIfCmd(req))
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,mainWin());
     setWdg(it_wdg);
 }
@@ -1196,24 +1195,18 @@ void InspLnk::changeLnk( QTreeWidgetItem *index, int col )
 //*******************************
 //* Links item delegate         *
 //*******************************
-LinkItemDelegate::LinkItemDelegate( InspLnk *parent ) : QItemDelegate(parent)
-{
+LinkItemDelegate::LinkItemDelegate( InspLnk *parent ) : QItemDelegate(parent)	{ }
 
-}
+InspLnk *LinkItemDelegate::owner( ) const	{ return (InspLnk*)parent(); }
 
-InspLnk *LinkItemDelegate::owner() const
-{
-    return (InspLnk*)parent();
-}
-
-QWidget *LinkItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *LinkItemDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QWidget *w_del;
     if(!index.isValid() || !index.parent().isValid() || index.column() == 0) return 0;
 
-    string wdg_it  = index.model()->index(0,0).data(Qt::UserRole).toString().toAscii().data();
+    string wdg_it  = index.model()->index(0,0).data(Qt::UserRole).toString().toStdString();
     QModelIndex id_it = index.model()->index(index.row(),0,index.parent());
-    string attr_id = id_it.data(Qt::UserRole).toString().toAscii().data();
+    string attr_id = id_it.data(Qt::UserRole).toString().toStdString();
 
     //> Get combobox values
     XMLNode req("get");
@@ -1243,23 +1236,23 @@ void LinkItemDelegate::selItem( int pos )
 //    emit closeEditor((QWidget*)sender());
 }
 
-void LinkItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+void LinkItemDelegate::setEditorData( QWidget *editor, const QModelIndex &index ) const
 {
-    if( dynamic_cast<QComboBox*>(editor) )
+    if(dynamic_cast<QComboBox*>(editor))
     {
 	QComboBox *comb = dynamic_cast<QComboBox*>(editor);
 	comb->blockSignals(true);
 	QString val = index.data(Qt::DisplayRole).toString();
-	if( comb->findText(val) < 0 )	comb->addItem(val);
+	if(comb->findText(val) < 0)	comb->addItem(val);
 	comb->setCurrentIndex(comb->findText(val));
 	comb->blockSignals(false);
     }
     else QItemDelegate::setEditorData(editor, index);
 }
 
-void LinkItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void LinkItemDelegate::setModelData( QWidget *editor, QAbstractItemModel *model, const QModelIndex &index ) const
 {
-    if( dynamic_cast<QComboBox*>(editor) )
+    if(dynamic_cast<QComboBox*>(editor))
 	model->setData(index,dynamic_cast<QComboBox*>(editor)->currentText(),Qt::EditRole);
     else QItemDelegate::setModelData(editor, model, index);
 }
@@ -1279,15 +1272,9 @@ InspLnkDock::InspLnkDock( VisDevelop * parent ) : QDockWidget(_("Links"),(QWidge
     connect(this,SIGNAL(visibilityChanged(bool)), this, SLOT(setVis(bool)));
 }
 
-InspLnkDock::~InspLnkDock( )
-{
+InspLnkDock::~InspLnkDock( )		{ }
 
-}
-
-VisDevelop *InspLnkDock::owner()
-{
-    return (VisDevelop*)parentWidget();
-}
+VisDevelop *InspLnkDock::owner( )	{ return (VisDevelop*)parentWidget(); }
 
 void InspLnkDock::setWdg( const string &iwdg )
 {
@@ -1312,7 +1299,7 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     //Create Tree Widget
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
-    //- Set collumn headers -
+    // Set collumn headers
     QStringList headerLabels;
     headerLabels << _("Name") << _("Type") << _("Id");
     treeW->setHeaderLabels(headerLabels);
@@ -1321,10 +1308,11 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     treeW->setColumnWidth(1,60);
     treeW->setColumnWidth(2,0);
     //treeW->header()->resizeSection(0,120);
-    //- Connect to signals -
-    connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
-    connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
-    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT( dblClick() ) );
+
+    // Connect to signals
+    connect(treeW, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
+    connect(treeW, SIGNAL(itemSelectionChanged()), this, SLOT(selectItem()));
+    connect(treeW, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(dblClick()));
 
     setWidget(treeW);
 
@@ -1332,57 +1320,48 @@ WdgTree::WdgTree( VisDevelop * parent ) : QDockWidget(_("Widgets"),(QWidget*)par
     treeW->viewport()->installEventFilter(this);
 }
 
-WdgTree::~WdgTree()
-{
+WdgTree::~WdgTree( )		{ }
 
-}
+VisDevelop *WdgTree::owner( )	{ return (VisDevelop*)parentWidget(); }
 
-VisDevelop *WdgTree::owner()
-{
-    return (VisDevelop*)parentWidget();
-}
-
-bool WdgTree::hasFocus( )
-{
-    return (QApplication::focusWidget() == treeW);
-}
+bool WdgTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 
 bool WdgTree::eventFilter( QObject *target, QEvent *event )
 {
-    if( event->type() == QEvent::FocusIn )			selectItem( );
-    if( event->type() == QEvent::FocusOut && !hasFocus() )	owner()->selectItem("");
-    if( event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton )
+    if(event->type() == QEvent::FocusIn)			selectItem( );
+    if(event->type() == QEvent::FocusOut && !hasFocus())	owner()->selectItem("");
+    if(event->type() == QEvent::MouseButtonPress && ((QMouseEvent*)event)->button() == Qt::LeftButton)
 	dragStartPos = ((QMouseEvent*)event)->pos();
-    if( event->type() == QEvent::MouseMove &&
+    if(event->type() == QEvent::MouseMove &&
 	    ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
-	    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance() )
+	    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance())
     {
-	QTreeWidgetItem *item = treeW->currentItem( );
-	if( item )
+	QTreeWidgetItem *item = treeW->currentItem();
+	if(item)
 	{
-	    //- Get current widget -
+	    //Get current widget
 	    int w_lev = 0;
 	    string work_wdg;
 	    QTreeWidgetItem *cur_el = item;
 	    while(cur_el)
 	    {
-	        work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
+	        work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
 	        cur_el=cur_el->parent();
 	        w_lev++;
 	    }
 	    //Prepare for drag and drop operation
-	    if( owner()->work_space->activeSubWindow() && w_lev == 2 )
+	    if(owner()->work_space->activeSubWindow() && w_lev == 2)
 	    {
-	        //> Prepare put data stream
+	        // Prepare put data stream
 	        QByteArray itemData;
 	        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
 	        dataStream << QString(work_wdg.c_str());
 
-	        //> Prepare mime data
+	        // Prepare mime data
 	        QMimeData *mimeData = new QMimeData;
 	        mimeData->setData("application/OpenSCADA-libwdg",itemData);
 
-	        //> Create drag object
+	        // Create drag object
 	        QDrag *drag = new QDrag(this);
 	        drag->setMimeData(mimeData);
 	        //drag->setDragCursor(item->icon(0).pixmap(64,64),Qt::MoveAction);
@@ -1413,7 +1392,7 @@ void WdgTree::selectItem( bool force )
     QTreeWidgetItem *cur_el = sel_ls.at(0);
     while(cur_el)
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/wdg_":"/wlb_")+cur_el->text(2).toStdString());
 	cur_el=cur_el->parent();
     }
 
@@ -1434,7 +1413,7 @@ void WdgTree::updateTree( const string &vca_it )
     string t_el, simg;
     QImage img;
 
-    //> Get elements number into VCA item
+    //Get elements number into VCA item
     int vca_lev = 0;
     for(int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); ) vca_lev++;
 
@@ -1451,7 +1430,7 @@ void WdgTree::updateTree( const string &vca_it )
     mess_debug("VCA DEBUG",_("Widgets' development tree '%s' request time %f ms."),vca_it.c_str(),1e-3*(TSYS::curTime()-t_cnt));
 #endif
 
-    //> Remove no present libraries
+    //Remove no present libraries
     for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
     {
 	nit = treeW->topLevelItem(i_top);
@@ -1464,10 +1443,10 @@ void WdgTree::updateTree( const string &vca_it )
 	i_top--;
     }
 
-    //> Delete library tool bars and menus
+    //Delete library tool bars and menus
     if(vca_lev != 3)
     {
-	//>> Delete toolbars
+	// Delete toolbars
 	for(i_t = 0; i_t < (int)owner()->lb_toolbar.size(); i_t++)
 	{
 	    if(!upd_lb.empty() && upd_lb != owner()->lb_toolbar[i_t]->objectName().toStdString()) continue;
@@ -1482,7 +1461,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    }
 	}
 
-	//>> Delete menus
+	// Delete menus
 	for(i_m = 0; i_m < (int)owner()->lb_menu.size(); i_m++)
 	{
 	    if(!upd_lb.empty() && upd_lb != owner()->lb_menu[i_m]->objectName().toStdString()) continue;
@@ -1498,7 +1477,7 @@ void WdgTree::updateTree( const string &vca_it )
 	}
     }
 
-    //> Add new libraries
+    //Add new libraries
     for(i_l = 0; i_l < req.childSize(); i_l++)
     {
 	XMLNode *wlbN = req.childGet(i_l);
@@ -1510,7 +1489,7 @@ void WdgTree::updateTree( const string &vca_it )
 		break;
 	nit = (i_top >= treeW->topLevelItemCount()) ? new QTreeWidgetItem(treeW) : treeW->topLevelItem(i_top);
 
-	//>> Update libraries data
+	// Update libraries data
 	img = QImage();
 	simg = TSYS::strDecode(wlbN->childGet("ico")->text(),TSYS::base64);
 	img.loadFromData((const uchar*)simg.c_str(),simg.size());
@@ -1519,7 +1498,7 @@ void WdgTree::updateTree( const string &vca_it )
 	nit->setText(1,_("Library"));
 	nit->setText(2,wlbId.c_str());
 
-	//>> Add toolbars and menus
+	// Add toolbars and menus
 	if(vca_lev != 3)
 	{
 	    is_create = root_allow = false;
@@ -1544,11 +1523,11 @@ void WdgTree::updateTree( const string &vca_it )
 		owner()->lb_menu[i_m]->setObjectName(wlbId.c_str());
 		owner()->mn_widg->addMenu(owner()->lb_menu[i_m]);
 	    }
-	    //>>> Update menu icon
+	    //  Update menu icon
 	    if(!img.isNull()) owner()->lb_menu[i_m]->setIcon(QPixmap::fromImage(img));
 	}
 
-	//>>> Remove no present widgets
+	//  Remove no present widgets
 	for(i_topwl = 0; i_topwl < nit->childCount(); i_topwl++)
 	{
 	    nit_w = nit->child(i_topwl);
@@ -1565,7 +1544,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    i_topwl--;
 	}
 
-	//>>> Delete widget's actions from toolbar and menu
+	//  Delete widget's actions from toolbar and menu
 	if(vca_lev != 3)
 	{
 	    QList<QAction*> use_act = owner()->lb_toolbar[i_t]->actions();
@@ -1579,7 +1558,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    }
 	}
 
-	//>>> Add new widgets
+	//  Add new widgets
 	for(i_w = 0; i_w < wlbN->childSize(); i_w++)
 	{
 	    XMLNode *wdgN = wlbN->childGet(i_w);
@@ -1595,7 +1574,7 @@ void WdgTree::updateTree( const string &vca_it )
 	    }
 	    nit_w = (i_topwl >= nit->childCount()) ? new QTreeWidgetItem(nit) : nit->child(i_topwl);
 
-	    //>>> Update widget's data
+	    //  Update widget's data
 	    img = QImage();
 	    simg = TSYS::strDecode(wdgN->childGet("ico")->text(),TSYS::base64);
 	    img.loadFromData((const uchar*)simg.c_str(),simg.size());
@@ -1604,20 +1583,20 @@ void WdgTree::updateTree( const string &vca_it )
 	    nit_w->setText(1,_("Widget"));
 	    nit_w->setText(2,wdgId.c_str());
 
-	    //>>> Add widget's actions to toolbar and menu
+	    //  Add widget's actions to toolbar and menu
 	    if(vca_lev != 3)
 	    {
 		QList<QAction*> use_act = owner()->lb_toolbar[i_t]->actions();
 		QAction *cur_act;
 		string wipath = "/wlb_"+wlbId+"/wdg_"+wdgId;
-		//>>>> Get parent name
+		//   Get parent name
 		if(!root_allow && wdgN->attr("parent") == "root") root_allow = true;
-		//>>>> Add action
-		if(upd_wdg.empty()) i_a = use_act.size();
-		else
-		    for(i_a = 0; i_a < use_act.size(); i_a++)
-			if(use_act[i_a]->objectName() == wipath.c_str())
-			    break;
+		//   Add action
+		/*if(upd_wdg.empty()) i_a = use_act.size();	//!!!! Cause menu grow after global update
+		else*/
+		for(i_a = 0; i_a < use_act.size(); i_a++)
+		    if(use_act[i_a]->objectName() == wipath.c_str())
+			break;
 		if(i_a < use_act.size())
 		{
 		    cur_act = use_act[i_a];
@@ -1625,7 +1604,7 @@ void WdgTree::updateTree( const string &vca_it )
 		}
 		else
 		{
-		    //>>>>> Create new action
+		    //    Create new action
 		    cur_act = new QAction(wdgN->text().c_str(),owner());
 		    cur_act->setObjectName(wipath.c_str());
 		    cur_act->setToolTip(QString(_("Add widget based at '%1'")).arg(wipath.c_str()));
@@ -1633,16 +1612,16 @@ void WdgTree::updateTree( const string &vca_it )
 		    cur_act->setStatusTip(QString(_("Press to add widget based at '%1'.")).arg(wipath.c_str()));
 		    cur_act->setEnabled(false);
 		    cur_act->setCheckable(true);
-		    //>>>>> Add action to toolbar and menu
+		    //    Add action to toolbar and menu
 		    owner()->actGrpWdgAdd->addAction(cur_act);
 		    owner()->lb_toolbar[i_t]->addAction(cur_act);
 		    owner()->lb_menu[i_m]->addAction(cur_act);
 		}
-		//>>>> Update action
+		//   Update action
 		if(!img.isNull()) cur_act->setIcon(QPixmap::fromImage(img));
 	    }
 
-	    //>>>> Remove no present widgets
+	    //  Remove no present widgets
 	    for(i_topcwl = 0; i_topcwl < nit_w->childCount(); i_topcwl++)
 	    {
 		nit_cw = nit_w->child(i_topcwl);
@@ -1658,7 +1637,7 @@ void WdgTree::updateTree( const string &vca_it )
 		delete nit_w->takeChild(i_topcwl);
 		i_topcwl--;
 	    }
-	    //>>>> Add new widgets
+	    //  Add new widgets
 	    for(i_cw = 0; i_cw < wdgN->childSize(); i_cw++)
 	    {
 		XMLNode *cwdgN = wdgN->childGet(i_cw);
@@ -1673,7 +1652,7 @@ void WdgTree::updateTree( const string &vca_it )
 			    break;
 		}
 		nit_cw = (i_topcwl >= nit_w->childCount()) ? new QTreeWidgetItem(nit_w) : nit_w->child(i_topcwl);
-		//>>> Update widget's data
+		//   Update widget's data
 		img = QImage();
 		simg = TSYS::strDecode(cwdgN->childGet("ico")->text(),TSYS::base64);
 		img.loadFromData((const uchar*)simg.c_str(),simg.size());
@@ -1718,7 +1697,8 @@ void WdgTree::ctrTreePopup( )
     popup.addAction(owner()->actDBLoad);
     popup.addAction(owner()->actDBSave);
     popup.addSeparator();
-    //> Reload action
+
+    //Reload action
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh libraries"),this);
@@ -1739,7 +1719,8 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
 
     treeW = new QTreeWidget(this);
     treeW->setContextMenuPolicy(Qt::CustomContextMenu);
-    //- Set collumn headers -
+
+    //Set collumn headers
     QStringList headerLabels;
     headerLabels << _("Name") << _("Type") << _("Id");
     treeW->setHeaderLabels(headerLabels);
@@ -1747,40 +1728,31 @@ ProjTree::ProjTree( VisDevelop * parent ) : QDockWidget(_("Projects"),(QWidget*)
     treeW->setColumnWidth(0,180);
     treeW->setColumnWidth(1,60);
     treeW->setColumnWidth(2,0);
-    //- Connect to signals -
-    connect( treeW, SIGNAL( customContextMenuRequested(const QPoint&) ), this, SLOT( ctrTreePopup() ) );
-    connect( treeW, SIGNAL( itemSelectionChanged() ), this, SLOT( selectItem() ) );
-    connect( treeW, SIGNAL( itemDoubleClicked( QTreeWidgetItem*, int ) ), this, SLOT(dblClick()) );
+
+    //Connect to signals
+    connect(treeW, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
+    connect(treeW, SIGNAL(itemSelectionChanged()), this, SLOT(selectItem()));
+    connect(treeW, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(dblClick()));
 
     setWidget(treeW);
 
     treeW->installEventFilter(this);
 }
 
-ProjTree::~ProjTree()
-{
+ProjTree::~ProjTree( )	{ }
 
-}
+VisDevelop *ProjTree::owner( )	{ return (VISION::VisDevelop*)parentWidget(); }
 
-VisDevelop *ProjTree::owner()
-{
-    return (VISION::VisDevelop*)parentWidget();
-}
-
-bool ProjTree::hasFocus( )
-{
-    return (QApplication::focusWidget() == treeW);
-}
+bool ProjTree::hasFocus( )	{ return (QApplication::focusWidget() == treeW); }
 
 bool ProjTree::eventFilter( QObject *target, QEvent *event )
 {
-    if( target == treeW )
+    if(target == treeW)
     {
-	if( event->type() == QEvent::FocusIn )	selectItem( );
-	if( event->type() == QEvent::FocusOut && !hasFocus( ) )
-	    owner()->selectItem("");
+	if(event->type() == QEvent::FocusIn)	selectItem();
+	if(event->type() == QEvent::FocusOut && !hasFocus()) owner()->selectItem("");
     }
-    return QDockWidget::eventFilter( target, event );
+    return QDockWidget::eventFilter(target, event);
 }
 
 void ProjTree::dblClick( )
@@ -1822,15 +1794,16 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	int64_t t_cnt = TSYS::curTime();
 #endif
 
-	//- Get elements number into VCA item -
+	//Get elements number into VCA item
 	int vca_lev = 0;
 	for( int off = 0; !(t_el=TSYS::pathLev(vca_it,0,true,&off)).empty(); )	vca_lev++;
 
 	if( (vca_lev && TSYS::pathLev(vca_it,0).substr(0,4) != "prj_") ||
 	    (vca_lev > 2 && TSYS::pathLev(vca_it,vca_lev-1).substr(0,4) == "wdg_") )	return;
 	string upd_prj = (vca_lev>=1) ? TSYS::pathLev(vca_it,0).substr(4) : "";
-	//- Process top level items and project's list -
-	//-- Get widget's libraries list --
+
+	//Process top level items and project's list
+	// Get widget's libraries list
 	XMLNode prj_req("get");
 	prj_req.setAttr("path","/%2fprm%2fcfg%2fprj");
 	if( owner()->cntrIfCmd(prj_req) )
@@ -1840,30 +1813,32 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 	}
 	for(unsigned i_ch = 0; i_ch < prj_req.childSize(); i_ch++)
 	    list_pr.push_back(prj_req.childGet(i_ch)->attr("id"));
-	//-- Remove no present project --
-	for( int i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
+
+	// Remove no present project
+	for(int i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
 	{
 	    unsigned i_l;
-	    for( i_l = 0; i_l < list_pr.size(); i_l++ )
-		if( list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
+	    for(i_l = 0; i_l < list_pr.size(); i_l++)
+		if(list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toStdString())
 		    break;
 	    if( i_l < list_pr.size() )	continue;
 	    delete treeW->takeTopLevelItem(i_top);
 	    i_top--;
 	}
-	//-- Add new projects --
+
+	// Add new projects
 	for(unsigned i_l = 0; i_l < list_pr.size(); i_l++)
 	{
 	    if( !upd_prj.empty() && upd_prj != list_pr[i_l] ) continue;
 	    int i_top;
-	    for( i_top = 0; i_top < treeW->topLevelItemCount(); i_top++ )
-		if( list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toAscii().data() )
+	    for(i_top = 0; i_top < treeW->topLevelItemCount(); i_top++)
+		if(list_pr[i_l] == treeW->topLevelItem(i_top)->text(2).toStdString())
 		    break;
 	    if( i_top >= treeW->topLevelItemCount() )
 		nit = new QTreeWidgetItem(treeW);
 	    else nit = treeW->topLevelItem(i_top);
 
-	    //-- Update projects data --
+	    // Update projects data
 	    req.clear()->setAttr("path","/prj_"+list_pr[i_l]+"/%2fico");
 	    if( !owner()->cntrIfCmd(req) )
 	    {
@@ -1882,22 +1857,24 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
 #endif
 	return;
     }
-    //- Process project's pages -
-    //-- Get page path
+
+    //Process project's pages
+    // Get page path
     nit = it;
     string work_wdg;
     QTreeWidgetItem *cur_el = nit;
     int vca_lev = 0;
     while( cur_el )
     {
-	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toAscii().data());
+	work_wdg.insert(0,string(cur_el->parent()?"/pg_":"/prj_")+cur_el->text(2).toStdString());
 	cur_el = cur_el->parent();
 	vca_lev++;
     }
     string upd_pg = TSYS::pathLev(vca_it,vca_lev-1);
     upd_pg = (upd_pg.size()>3) ? upd_pg.substr(3) : "";
-    //-- Update include pages --
-    //--- Get page's list ---
+
+    // Update include pages
+    //  Get page's list
     XMLNode pg_req("get");
     pg_req.setAttr("path",work_wdg+"/%2fpage%2fpage");
     if( owner()->cntrIfCmd(pg_req) )
@@ -1907,30 +1884,32 @@ void ProjTree::updateTree( const string &vca_it, QTreeWidgetItem *it )
     }
     for(unsigned i_ch = 0; i_ch < pg_req.childSize(); i_ch++)
 	list_pg.push_back(pg_req.childGet(i_ch)->attr("id"));
-    //--- Remove no present pages ---
-    for( int i_pit = 0; i_pit < nit->childCount(); i_pit++ )
+
+    //  Remove no present pages
+    for(int i_pit = 0; i_pit < nit->childCount(); i_pit++)
     {
 	unsigned i_p;
-	for( i_p = 0; i_p < list_pg.size(); i_p++ )
-	    if( list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data() )
+	for(i_p = 0; i_p < list_pg.size(); i_p++)
+	    if(list_pg[i_p] == nit->child(i_pit)->text(2).toStdString())
 		break;
 	if( i_p < list_pg.size() ) continue;
 	delete nit->takeChild(i_pit);
 	i_pit--;
     }
-    //--- Add new pages ---
+
+    //  Add new pages
     for(unsigned i_p = 0; i_p < list_pg.size(); i_p++)
     {
 	//if( !upd_pg.empty() && upd_pg != list_pg[i_p] ) continue;
 	int i_pit;
-	for( i_pit = 0; i_pit < nit->childCount(); i_pit++ )
-	    if( list_pg[i_p] == nit->child(i_pit)->text(2).toAscii().data() )
+	for(i_pit = 0; i_pit < nit->childCount(); i_pit++)
+	    if(list_pg[i_p] == nit->child(i_pit)->text(2).toStdString())
 		break;
 	if( i_pit >= it->childCount() )
 	    nit_pg = new QTreeWidgetItem(it);
 	else nit_pg = it->child(i_pit);
 
-	//--- Update page's data ---
+	//   Update page's data
 	req.clear()->setAttr("path",work_wdg+"/pg_"+list_pg[i_p]+"/%2fico");
 	if( !owner()->cntrIfCmd(req) )
 	{
@@ -1972,7 +1951,7 @@ void ProjTree::ctrTreePopup( )
     popup.addAction(owner()->actDBSave);
     popup.addSeparator();
 
-    //- Reload action -
+    //Reload action
     QImage ico_t;
     if(!ico_t.load(TUIS::icoPath("reload").c_str())) ico_t.load(":/images/reload.png");
     QAction *actRefresh = new QAction(QPixmap::fromImage(ico_t),_("Refresh projects"),this);
@@ -2006,55 +1985,46 @@ LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidge
     setFocusProxy(ed_fld);
 }
 
-QString LineEditProp::value( )
-{
-    return ed_fld->text();
-}
+QString LineEditProp::value( )	{ return ed_fld->text(); }
 
-void LineEditProp::setValue( const QString &val )
-{
-    ed_fld->setText(val);
-}
+void LineEditProp::setValue( const QString &val )	{ ed_fld->setText(val); }
 
 void LineEditProp::callDlg( )
 {
-    if( type() == LineEditProp::Font )
+    if(type() == LineEditProp::Font)
     {
-	FontDlg fnt_dlg(this,value().toAscii().data());
-	if( fnt_dlg.exec() )	setValue(fnt_dlg.font());
+	FontDlg fnt_dlg(this, value());
+	if(fnt_dlg.exec()) setValue(fnt_dlg.font());
 	setFocus();
     }
-    else if( type() == LineEditProp::Color )
+    else if(type() == LineEditProp::Color)
     {
-        QColor clr;
-        size_t found = value().toStdString().find("-");
-        if (found != string::npos)
-        {
-            clr = QColor( value().toStdString().substr(0,found).c_str() );
-            clr.setAlpha( atoi(value().toStdString().substr(found+1).c_str()) );
-        }
-        else clr = QColor(value());
+	QColor clr;
+	size_t found = value().toStdString().find("-");
+	if(found != string::npos)
+	{
+	    clr = QColor(value().toStdString().substr(0,found).c_str());
+	    clr.setAlpha(atoi(value().toStdString().substr(found+1).c_str()));
+	}
+	else clr = QColor(value());
 #if QT_VERSION >= 0x040500
-        QColorDialog clr_dlg(clr, this);
-        clr_dlg.setOption(QColorDialog::ShowAlphaChannel);
-        if(clr_dlg.exec() && clr_dlg.selectedColor().isValid())
-            setValue(clr_dlg.selectedColor().name() + "-" + QString::number(clr_dlg.selectedColor().alpha()));
+	QColorDialog clr_dlg(clr, this);
+	clr_dlg.setOption(QColorDialog::ShowAlphaChannel);
+	if(clr_dlg.exec() && clr_dlg.selectedColor().isValid())
+	    setValue(clr_dlg.selectedColor().name() + "-" + QString::number(clr_dlg.selectedColor().alpha()));
 #else
 	clr = QColorDialog::getColor(clr,this);
-        if(clr.isValid()) setValue(clr.name());
+	if(clr.isValid()) setValue(clr.name());
 #endif
-        setFocus();
+	setFocus();
     }
-    if( toClose ) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
+    if(toClose) QApplication::postEvent(this,new QKeyEvent(QEvent::KeyPress,Qt::Key_Return,Qt::NoModifier));
 }
 
 //*********************************************
 //* Status bar scale indicator                *
 //*********************************************
-WScaleStBar::WScaleStBar( QWidget *parent ) : QLabel(parent)
-{
-    setScale(false);
-}
+WScaleStBar::WScaleStBar( QWidget *parent ) : QLabel(parent)	{ setScale(false); }
 
 void WScaleStBar::setScale( bool val )
 {
@@ -2062,23 +2032,14 @@ void WScaleStBar::setScale( bool val )
     setText( (isScale)?_("Scale"):_("Resize") );
 }
 
-void WScaleStBar::mousePressEvent( QMouseEvent * event )
-{
-    setScale(!scale());
-}
+void WScaleStBar::mousePressEvent( QMouseEvent * event )	{ setScale(!scale()); }
 
 //*********************************************
 //* Status bar modify indicator               *
 //*********************************************
-WMdfStBar::WMdfStBar( QWidget *parent ) : QLabel(parent)
-{
+WMdfStBar::WMdfStBar( QWidget *parent ) : QLabel(parent)	{ }
 
-}
-
-void WMdfStBar::mousePressEvent( QMouseEvent * event )
-{
-    emit press();
-}
+void WMdfStBar::mousePressEvent( QMouseEvent * event )		{ emit press(); }
 
 //****************************************
 //* Shape widget view development mode   *
@@ -2114,14 +2075,14 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 
 DevelWdgView::~DevelWdgView( )
 {
-    //> Exit from edit
+    //Exit from edit
     if(editWdg)
     {
 	setEdit(false);
 	if(wLevel() != 0) levelWidget(0)->setEdit(false);
     }
 
-    //> Selection clear
+    //Selection clear
     if(select() && !mod->endRun())
     {
 	setSelect(false);
@@ -2130,22 +2091,16 @@ DevelWdgView::~DevelWdgView( )
 		((DevelWdgView*)children().at(i_c))->setSelect(false,PrcChilds);
     }
 
-    //> Child widgets remove before
+    //Child widgets remove before
     childsClear();
 
-    //> Changes tree remove
+    //Changes tree remove
     if(chTree)	delete chTree;
 }
 
-string DevelWdgView::user( )
-{
-    return mainWin()->user();
-}
+string DevelWdgView::user( )		{ return mainWin()->user(); }
 
-VisDevelop *DevelWdgView::mainWin( )
-{
-    return (VisDevelop *)WdgView::mainWin();
-}
+VisDevelop *DevelWdgView::mainWin( )	{ return (VisDevelop *)WdgView::mainWin(); }
 
 WdgView *DevelWdgView::newWdgItem( const string &iwid )
 {
@@ -2164,13 +2119,13 @@ void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr 
 	string tWdgNm = item.substr(0,epos);
 	string tAttrNm = item.substr(epos+3);
 	XMLNode req("get");
-        req.setAttr("path",tWdgNm+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",tAttrNm);
-        cntrIfCmd(req);
+	req.setAttr("path",tWdgNm+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",tAttrNm);
+	cntrIfCmd(req);
 	if(!atoi(req.childGet(0)->attr("act").c_str()))
 	{
-    	    WdgView *tWdg = (id()==tWdgNm) ? this : findChild<WdgView*>(tWdgNm.c_str());
-    	    int pAttr = atoi(req.childGet(0)->attr("p").c_str());
-    	    if(pAttr > 0 && tWdg) tWdg->attrSet("",req.childGet(0)->text(),pAttr);
+	    WdgView *tWdg = (id()==tWdgNm) ? this : findChild<WdgView*>(tWdgNm.c_str());
+	    int pAttr = atoi(req.childGet(0)->attr("p").c_str());
+	    if(pAttr > 0 && tWdg) tWdg->attrSet("",req.childGet(0)->text(),pAttr);
 	    return;
 	}
 	//> Full load for active attributes
@@ -2183,22 +2138,19 @@ void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr 
     if(pntView)	pntView->raise();
 }
 
-int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )
-{
-    return mainWin()->cntrIfCmd(node,glob);
-}
+int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )	{ return mainWin()->cntrIfCmd(node,glob); }
 
 void DevelWdgView::saveGeom( const string& item )
 {
     if(item.empty() || item == id())
     {
-	chGeomCtx.setAttr("x", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("y", TSYS::real2str(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
-	chGeomCtx.setAttr("w", TSYS::real2str(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("h", TSYS::real2str(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
-	chGeomCtx.setAttr("xSc", TSYS::real2str(TSYS::realRound(x_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("ySc", TSYS::real2str(TSYS::realRound(y_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("z", TSYS::int2str(parent()->children().indexOf(this)));
+	chGeomCtx.setAttr("x", r2s(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("y", r2s(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
+	chGeomCtx.setAttr("w", r2s(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("h", r2s(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
+	chGeomCtx.setAttr("xSc", r2s(TSYS::realRound(x_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("ySc", r2s(TSYS::realRound(y_scale,POS_PREC_DIG)));
+	chGeomCtx.setAttr("z", i2s(parent()->children().indexOf(this)));
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);
 	AttrValS attrs;
@@ -2211,7 +2163,7 @@ void DevelWdgView::saveGeom( const string& item )
 	attrs.push_back(std::make_pair("geomZ:11",chGeomCtx.attr("z")));
 	attrsSet(attrs);
 	setAllAttrLoad(false);
-	attrSet("","load",-1);	//> For reload
+	attrSet("","load",-1);	//For reload
     }
 
     if(item != id() && wLevel() == 0)
@@ -2219,7 +2171,7 @@ void DevelWdgView::saveGeom( const string& item )
 	    if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 		((DevelWdgView*)children().at(i_c))->saveGeom(item);
 
-    //> For top items (like inspector) data update
+    //For top items (like inspector) data update
     if(wLevel() == 0)	setSelect(true,PrcChilds);
 }
 
@@ -2230,7 +2182,7 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
     fWdgSelect = vl;
     if(!vl && edit() && !(flgs&OnlyFlag)) setEdit(false);
 
-    //> Level 0 process
+    //Level 0 process
     if(wLevel() != 0 && !edit()) return;
 
     if(vl && !(flgs&OnlyFlag))
@@ -2248,8 +2200,8 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
 	if(!(flgs&OnlyFlag))	emit selected("");
     }
 
-    //> Update actions access
-    //>> Enable view toolbar
+    //Update actions access
+    // Enable view toolbar
     if(!(flgs&OnlyFlag))
     {
 	if(!edit())
@@ -2258,13 +2210,15 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
 	    disconnect(mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)));
 	    if(vl) connect(mainWin()->wdgToolView, SIGNAL(actionTriggered(QAction*)), this, SLOT(wdgViewTool(QAction*)));
 
-	    //>> Update widget view tools
+	    //  Update widget view tools
 	    for(int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++)
 		mainWin()->wdgToolView->actions().at(i_a)->setEnabled(chld_cnt>0);
 	}
 
 	if(!(flgs&NoUpdate)) update();
     }
+
+    if(wLevel() == 0) selAreaUpdate();
 }
 
 void DevelWdgView::setEdit( bool vl )
@@ -2276,7 +2230,8 @@ void DevelWdgView::setEdit( bool vl )
 	if(editWdg) mess_err(id().c_str(),_("Warning! Edit widget already set."));
 	editWdg = this;
 	if(shape->isEditable()) shape->editEnter(this);
-	//> Raise top included editable widget
+
+	//Raise top included editable widget
 	if(wLevel() == 0)
 	    for(int i_c = 0; i_c < children().size(); i_c++)
 		if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
@@ -2287,7 +2242,8 @@ void DevelWdgView::setEdit( bool vl )
 		    pntView->raise();
 		    break;
 		}
-	//> Disable widget view tools
+
+	//Disable widget view tools
 	for(int i_a = 0; i_a < mainWin()->wdgToolView->actions().size(); i_a++)
 	    mainWin()->wdgToolView->actions().at(i_a)->setEnabled(false);
     }
@@ -2295,25 +2251,28 @@ void DevelWdgView::setEdit( bool vl )
     {
 	if(shape && shape->isEditable()) shape->editExit(this);
 	editWdg = NULL;
-	//> Update widgets order
+
+	//Update widgets order
 	if(wLevel() == 0) orderUpdate();
     }
+
+    if(wLevel() == 0) selAreaUpdate();
 }
 
 string DevelWdgView::selectChilds( int *cnt, vector<DevelWdgView*> *wdgs )
 {
     string sel_chlds;
 
-    if( cnt ) *cnt = 0;
-    for( int i_c = 0; i_c < children().size(); i_c++ )
+    if(cnt) *cnt = 0;
+    for(int i_c = 0; i_c < children().size(); i_c++)
     {
 	DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
-	if( !curw ) continue;
-	if( curw->select() )
+	if(!curw) continue;
+	if(curw->select())
 	{
-	    sel_chlds=sel_chlds+curw->id()+";";
-	    if( wdgs )	wdgs->push_back(curw);
-	    if( cnt )	(*cnt)++;
+	    sel_chlds = sel_chlds+curw->id()+";";
+	    if(wdgs)	wdgs->push_back(curw);
+	    if(cnt)	(*cnt)++;
 	}
     }
     return sel_chlds;
@@ -2321,10 +2280,8 @@ string DevelWdgView::selectChilds( int *cnt, vector<DevelWdgView*> *wdgs )
 
 bool DevelWdgView::grepAnchor( const QPointF &apnt, const QPoint &cpnt )
 {
-    if( (cpnt.x() > apnt.x()-4) && (cpnt.x() < apnt.x()+4) &&
-	    (cpnt.y() > apnt.y()-4) && (cpnt.y() < apnt.y()+4) )
-	return true;
-    else return false;
+    return ((cpnt.x() > apnt.x()-4) && (cpnt.x() < apnt.x()+4) &&
+	    (cpnt.y() > apnt.y()-4) && (cpnt.y() < apnt.y()+4));
 }
 
 void DevelWdgView::upMouseCursors( const QPoint &curp )
@@ -2348,13 +2305,13 @@ void DevelWdgView::upMouseCursors( const QPoint &curp )
 
     //>> Check child's anchor selection and widget's geometry
     QRectF selRect;
-    bool firs_nosel = true, noSelUp = false;
+    //bool firs_nosel = true, noSelUp = false;
     for(int i_c = children().size()-1; i_c >= 0; i_c--)
 	if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 	{
 	    if(((DevelWdgView*)children().at(i_c))->select())
-	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); firs_nosel = false; }
-	    else if(firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp))	noSelUp = true;
+	    { selRect = selRect.united(((DevelWdgView*)children().at(i_c))->geometryF()); /*firs_nosel = false;*/ }
+	    //else if(firs_nosel && ((DevelWdgView*)children().at(i_c))->geometryF().contains(curp))	noSelUp = true;
 	}
 
     //>> Select childs anchors
@@ -2381,7 +2338,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
     QStringList sact = act->objectName().split('_');
     if(sact.at(0) == "align")
     {
-	//> Get selected rect
+	//Get selected rect
 	QRectF selRect;
 	int sel_cnt = 0;
 	for(int i_c = 0; i_c < children().size(); i_c++)
@@ -2393,7 +2350,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	if(sel_cnt == 0) return;
 	if(sel_cnt == 1) selRect = selRect.united(QRectF(QPointF(0,0),sizeF()));
 
-	//> Update selected widgets position
+	//Update selected widgets position
 	for(int i_c = 0; i_c < children().size(); i_c++)
 	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
 	    {
@@ -2471,21 +2428,22 @@ void DevelWdgView::wdgPopup( )
     vector<DevelWdgView*> sel_wdgs;
     QMenu popup;
 
-    //> Cancel new widget inserting
+    //Cancel new widget inserting
     QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
-    if( act && act->isChecked() )
+    if(act && act->isChecked())
     {
 	act->setChecked(false);
 	setCursor(Qt::ArrowCursor);
 	return;
     }
 
-    //> Add actions
+    //Add actions
     if(edit())
     {
-	//>> Individual primitive menus
-	if( editWdg && editWdg->shape )	editWdg->shape->wdgPopup( editWdg, popup );
-	//>> Exit from widget edition
+	// Individual primitive menus
+	if(editWdg && editWdg->shape)	editWdg->shape->wdgPopup(editWdg, popup);
+
+	// Exit from widget edition
 	QAction *actExitEdit = new QAction(_("Exit from widget editing"),this);
 	actExitEdit->setStatusTip(_("Press to exit from widget editing."));
 	connect(actExitEdit, SIGNAL(triggered()), this, SLOT(editExit()));
@@ -2493,8 +2451,8 @@ void DevelWdgView::wdgPopup( )
     }
     else
     {
-	//>> Insert item actions
-	if( !selectChilds(&sel_cnt,&sel_wdgs).empty() )
+	// Insert item actions
+	if(!selectChilds(&sel_cnt,&sel_wdgs).empty())
 	{
 	    popup.addAction(mainWin()->actVisItDel);
 	    popup.addAction(mainWin()->actVisItClear);
@@ -2507,30 +2465,35 @@ void DevelWdgView::wdgPopup( )
 	    popup.addAction(mainWin()->actDBLoad);
 	    popup.addAction(mainWin()->actDBSave);
 	    popup.addSeparator();
-	    //>> Insert item actions
+
+	    //   Insert item actions
 	    popup.addMenu(mainWin()->mn_widg_fnc);
 	}
-	//>> Make edit enter action
+
+	// Make edit enter action
 	popup.addSeparator();
-	if( (sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()) )
+	if((sel_wdgs.size() == 1 && sel_wdgs[0]->shape && sel_wdgs[0]->shape->isEditable()) || (shape && shape->isEditable()))
 	{
 	    QAction *actEnterEdit = new QAction(_("Enter for the widget editing"),this);
 	    actEnterEdit->setStatusTip(_("Press to enter for the widget editing."));
 	    connect(actEnterEdit, SIGNAL(triggered()), this, SLOT(editEnter()));
 	    popup.addAction(actEnterEdit);
 	}
-	//>> Make widget icon
+
+	// Make widget icon
 	QAction *actMakeIco = new QAction(parentWidget()->windowIcon(),_("Make icon from the widget"),this);
 	actMakeIco->setStatusTip(_("Press to make icon from the widget."));
 	connect(actMakeIco, SIGNAL(triggered()), this, SLOT(makeIcon()));
 	popup.addAction(actMakeIco);
-	//>> Make widget image
+
+	// Make widget image
 	QAction *actMakeImg = new QAction(_("Make image from the widget"),this);
 	actMakeImg->setStatusTip(_("Press to make image from the widget."));
 	connect(actMakeImg, SIGNAL(triggered()), this, SLOT(makeImage()));
 	popup.addAction(actMakeImg);
 	popup.addSeparator();
-	//>> Unset, increase, decrease the visual scale of thge widget
+
+	// Unset, increase, decrease the visual scale of thge widget
 	QAction *actIncVisScale = new QAction(_("Zoom in (+10%)"),this);
 	actIncVisScale->setObjectName("inc");
 	actIncVisScale->setStatusTip(_("Press to increase the visual scale of the widget by 10%."));
@@ -2558,7 +2521,7 @@ void DevelWdgView::wdgPopup( )
 	popup.addAction(mainWin()->actDBSave);
     }
 
-    //> Execute of menu
+    //Execute of menu
     popup.exec(QCursor::pos());
     popup.clear();
 }
@@ -2575,7 +2538,7 @@ void DevelWdgView::makeIcon( )
     ico_new = ico_new.scaled(64,64,Qt::KeepAspectRatio,Qt::SmoothTransformation);
     if(mMdiWin)	mMdiWin->parentWidget()->setWindowIcon(ico_new);	//parentWidget is QMdiSubWindow
 
-    //> Send to VCA engine
+    //Send to VCA engine
     QByteArray ba;
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
@@ -2594,7 +2557,7 @@ void DevelWdgView::makeImage( )
 {
     QPixmap img = QPixmap::grabWidget(this);
 
-    //> Call save file dialog
+    //Call save file dialog
     QString fileName = mainWin()->getFileName(_("Save widget's image"), (TSYS::path2sepstr(id())+".png").c_str(),
 	_("Images (*.png *.xpm *.jpg)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty() && !img.save(fileName))
@@ -2642,7 +2605,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 	QRectF bsRct = pntView->geometryF();
 	float xSc = (float)dP.x()/(float)bsRct.width();
 	float ySc = (float)dP.y()/(float)bsRct.height();
-	//>> Update selected widgets geometry
+	//Update selected widgets geometry
 	for(int i_c = 0; i_c < children().size(); i_c++)
 	{
 	    DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
@@ -2721,7 +2684,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		    break;
 	    }
 	}
-	//>> Set status bar
+	//Set status bar
 	QRectF srect;
 	for(int i_c = 0; i_c < children().size(); i_c++)
 	    if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
@@ -2734,7 +2697,7 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
     }
     else
     {
-	//> Change widget geometry
+	//Change widget geometry
 	switch(cursor().shape())
 	{
 	    case Qt::SizeHorCursor:
@@ -2755,12 +2718,15 @@ void DevelWdgView::wdgsMoveResize( const QPointF &dP )
 		break;
 	    default:	break;
 	}
-	//>> Set status bar
+
+	//Set status bar
 	mainWin()->statusBar()->showMessage(
 	    QString(_("Page: '%1' --- xy(%2:%3) wh[%4:%5]"))
 		.arg(id().c_str()).arg(posF().x()/xScale(true)).arg(posF().y()/yScale(true))
 		.arg(sizeF().width()/xScale(true)).arg(sizeF().height()/yScale(true)), 10000 );
     }
+
+    selAreaUpdate();
 }
 
 DevelWdgView *DevelWdgView::levelWidget( int lev )
@@ -2774,16 +2740,20 @@ bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos 
 {
     bool rez = WdgView::attrSet(attr, val, uiPrmPos);
 
+    bool geomUp = true;
     switch(uiPrmPos)
     {
-        case 7:	chGeomCtx.setAttr("_x", val);	break;	//geomX
-        case 8: chGeomCtx.setAttr("_y", val);	break;	//geomY
-        case 9: chGeomCtx.setAttr("_w", val);	break;	//geomW
-        case 10:chGeomCtx.setAttr("_h", val);	break;	//geomH
-        case 11:chGeomCtx.setAttr("_z", val);	break;	//geomZ
-        case 13:chGeomCtx.setAttr("_xSc", val);	break;	//geomXsc
-        case 14:chGeomCtx.setAttr("_ySc", val);	break;	//geomYsc
+	case A_GEOM_X: chGeomCtx.setAttr("_x", val);		break;
+	case A_GEOM_Y: chGeomCtx.setAttr("_y", val);		break;
+	case A_GEOM_W: chGeomCtx.setAttr("_w", val);		break;
+	case A_GEOM_H: chGeomCtx.setAttr("_h", val);		break;
+	case A_GEOM_Z: chGeomCtx.setAttr("_z", val);		break;
+	case A_GEOM_X_SC: chGeomCtx.setAttr("_xSc", val);	break;
+	case A_GEOM_Y_SC: chGeomCtx.setAttr("_ySc", val);	break;
+	default: geomUp = false;				break;
     }
+
+    if(geomUp && !allAttrLoad() && select()) levelWidget(0)->selAreaUpdate();
 
     return rez;
 }
@@ -2817,9 +2787,9 @@ void DevelWdgView::chRecord( XMLNode ch )
     if(!chTree)	return;
     int cur = atoi(chTree->attr("cur").c_str());
     while(cur) chTree->childDel(--cur);
-    chTree->setAttr("cur",TSYS::int2str(cur));
+    chTree->setAttr("cur", i2s(cur));
 
-    //> Merge equal changes
+    //Merge equal changes
     if(chTree->childSize() && chTree->childGet(0)->name() == ch.name() && chTree->childGet(0)->attr("wdg") == ch.attr("wdg"))
     {
 	if(ch.name() == "geom")
@@ -2843,9 +2813,9 @@ void DevelWdgView::chUnDo( )
 {
     AttrValS	attrs;
     int cur = 0;
-    if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= chTree->childSize()) return;
+    if(!chTree || (cur=atoi(chTree->attr("cur").c_str())) >= (int)chTree->childSize()) return;
 
-    //> Get change on cursor and make it
+    //Get change on cursor and make it
     XMLNode *rule = chTree->childGet(cur);
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
     if(rlW && rule->name() == "geom")
@@ -2861,31 +2831,31 @@ void DevelWdgView::chUnDo( )
     }
     else if(rlW && rule->name() == "attr")
     {
-        for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-            attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->attr("prev")));
-        if(attrs.size()) rlW->attrsSet(attrs);
-        if(rule->attr("id").size())
-        {
-            rlW->attrSet(rule->attr("id"), rule->attr("prev"));
+	for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
+	    attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->attr("prev")));
+	if(attrs.size()) rlW->attrsSet(attrs);
+	if(rule->attr("id").size())
+	{
+	    rlW->attrSet(rule->attr("id"), rule->attr("prev"));
 	    chRestoreCtx(*rule);
-        }
+	}
     }
     else if(rlW && rule->name() == "chldAdd")	mainWin()->visualItDel(rule->attr("path"),true);
     else if(rule->name() == "chldDel")
     {
 	QAction addAct(NULL);
 	addAct.setObjectName(rule->attr("parent").c_str());
-        mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
-        chRestoreCtx(*rule);
+	mainWin()->visualItAdd(&addAct, QPointF(1,1), TSYS::pathLev(rule->attr("wdg"),2).substr(4), "", id(), true);
+	chRestoreCtx(*rule);
     }
     else if(rlW && rule->name() == "chldPaste")	mainWin()->visualItDel(rule->attr("dst"),true);
 
-    //> For top items (like inspector) data update
-    setSelect(true,PrcChilds);
+    //For top items (like inspector) data update
     if(rlW) load(rlW->id()); else load(id());
+    setSelect(true, PrcChilds);
 
-    //> Move cursor
-    chTree->setAttr("cur",TSYS::int2str(vmin(chTree->childSize(),cur+1)));
+    //Move cursor
+    chTree->setAttr("cur", i2s(vmin((int)chTree->childSize(),cur+1)));
     chUpdate();
 }
 
@@ -2895,7 +2865,7 @@ void DevelWdgView::chReDo( )
     int cur = 0;
     if(!chTree || !chTree->childSize() || !(cur=atoi(chTree->attr("cur").c_str()))) return;
 
-    //> Get change on cursor and make it
+    //Get change on cursor and make it
     XMLNode *rule = chTree->childGet(cur-1);
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
     if(rlW)
@@ -2912,36 +2882,36 @@ void DevelWdgView::chReDo( )
 	    rlW->attrsSet(attrs);
 	}
 	else if(rule->name() == "attr")
-        {
-            if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
-            for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
-                attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->text()));
-            if(attrs.size()) rlW->attrsSet(attrs);
-        }
+	{
+	    if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
+	    for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
+	        attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->text()));
+	    if(attrs.size()) rlW->attrsSet(attrs);
+	}
 	else if(rule->name() == "chldDel") mainWin()->visualItDel(rule->attr("wdg"),true);
 	else if(rule->name() == "chldAdd")
 	{
 	    QAction addAct(NULL);
 	    addAct.setObjectName(rule->attr("parent").c_str());
-            mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())),
-        	rule->attr("id"), rule->attr("name"), rlW->id(), true);
-        }
-        else if(rule->name() == "chldPaste")
-            mainWin()->visualItPaste("0"+rule->attr("src"), rule->attr("dst"), rule->attr("name"), true);
+	    mainWin()->visualItAdd(&addAct, QPointF(atoi(rule->attr("x").c_str()),atoi(rule->attr("y").c_str())),
+		rule->attr("id"), rule->attr("name"), rlW->id(), true);
+	}
+	else if(rule->name() == "chldPaste")
+	    mainWin()->visualItPaste("0"+rule->attr("src"), rule->attr("dst"), rule->attr("name"), true);
     }
 
-    //> For top items (like inspector) data update
+    //For top items (like inspector) data update
     setSelect(true,PrcChilds);
     if(rlW) load(rlW->id()); else load(id());
 
-    //> Move cursor
-    chTree->setAttr("cur",TSYS::int2str(vmax(0,cur-1)));
+    //Move cursor
+    chTree->setAttr("cur", i2s(vmax(0,cur-1)));
     chUpdate();
 }
 
 void DevelWdgView::chUpdate( )
 {
-    //> Connect to Un and Re Do actions
+    //Connect to Un and Re Do actions
     if(!chTree)	return;
     if(fFocus)
     {
@@ -2954,7 +2924,7 @@ void DevelWdgView::chUpdate( )
 
 	for(unsigned i_r = 0; i_r < chTree->childSize(); i_r++)
 	{
-	    //>> Limits process
+	    // Limits process
 	    if(cur > i_r && (cur-i_r) >= 11)
 	    {
 		if((cur-i_r) == 11) ellsRe += TSYS::strMess(_("\n... more items (%d)"),cur-10);
@@ -2985,12 +2955,12 @@ void DevelWdgView::chUpdate( )
     }
     else
     {
-	//>> UnDo disable
-        mainWin()->actVisItUnDo->setEnabled(false);
-        mainWin()->actVisItUnDo->setToolTip(mainWin()->actVisItUnDo->toolTip().split("\n")[0]);
-        //>> ReDo disable
-        mainWin()->actVisItReDo->setEnabled(false);
-        mainWin()->actVisItReDo->setToolTip(mainWin()->actVisItReDo->toolTip().split("\n")[0]);
+	// UnDo disable
+	mainWin()->actVisItUnDo->setEnabled(false);
+	mainWin()->actVisItUnDo->setToolTip(mainWin()->actVisItUnDo->toolTip().split("\n")[0]);
+	// ReDo disable
+	mainWin()->actVisItReDo->setEnabled(false);
+	mainWin()->actVisItReDo->setToolTip(mainWin()->actVisItReDo->toolTip().split("\n")[0]);
     }
 }
 
@@ -3001,15 +2971,15 @@ void DevelWdgView::chLoadCtx( XMLNode &chCtx, const string &forceAttrs, const st
     reqVls.setAttr("path",id());
     if(!mainWin()->cntrIfCmd(reqCtf))
     {
-        XMLNode *root = reqCtf.childGet(0), *chEl;
+	XMLNode *root = reqCtf.childGet(0), *chEl;
 
 	bool fromOK = fromAttr.empty();
-        for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
-        {
+	for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
+	{
 	    chEl = root->childGet(i_a);
-            if((forceAttrs.size() && forceAttrs.find(chEl->attr("id")+";") != string::npos) || (fromOK && atoi(chEl->attr("modif").c_str())))
-        	reqVls.childAdd("get")->setAttr("path","/%2fattr%2f"+chEl->attr("id"));
-    	    if(!fromOK && chEl->attr("id") == fromAttr) fromOK = true;
+	    if((forceAttrs.size() && forceAttrs.find(chEl->attr("id")+";") != string::npos) || (fromOK && atoi(chEl->attr("modif").c_str())))
+		reqVls.childAdd("get")->setAttr("path","/%2fattr%2f"+chEl->attr("id"));
+	    if(!fromOK && chEl->attr("id") == fromAttr) fromOK = true;
 	}
 	cntrIfCmd(reqVls);
 	for(unsigned i_a = 0; i_a < reqVls.childSize(); i_a++)
@@ -3028,8 +2998,8 @@ void DevelWdgView::chRestoreCtx( const XMLNode &ch )
     vector<string> als;
     ch.attrList(als);
     for(unsigned i_a = 0; i_a < als.size(); i_a++)
-        if(als[i_a][0] == '_')
-            reqVls.childAdd("set")->setAttr("path","/%2fattr%2f"+als[i_a].substr(1))->setText(ch.attr(als[i_a]));
+	if(als[i_a][0] == '_')
+	    reqVls.childAdd("set")->setAttr("path","/%2fattr%2f"+als[i_a].substr(1))->setText(ch.attr(als[i_a]));
     mainWin()->cntrIfCmd(reqVls);
 }
 
@@ -3057,7 +3027,7 @@ void DevelWdgView::setFocus( bool focus )
     if(fFocus == focus)	return;
     fFocus = focus;
 
-    //> Connect to UnDo ReDo actions
+    //Connect to UnDo ReDo actions
     if(chTree && fFocus)
     {
 	disconnect(mainWin()->actVisItUnDo, SIGNAL(triggered()), 0, 0);
@@ -3076,25 +3046,42 @@ void DevelWdgView::incDecVisScale( )
     else if(sender()->objectName() == "dec")	setVisScale(visScale()-0.1);
 }
 
+void DevelWdgView::selAreaUpdate( QRectF rsel )
+{
+    if(!pntView) return;
+    if(rsel.isNull())
+    {
+	DevelWdgView *chW = NULL;
+	for(int i_c = 0; i_c < children().size(); i_c++)
+	    if((chW=qobject_cast<DevelWdgView*>(children().at(i_c))) && chW->select())
+		rsel = rsel.united(chW->geometryF());
+    }
+
+    SizePntWdg::WView view = SizePntWdg::Hide;
+    if(fHoldSelRect)	view = SizePntWdg::SelectBorder;
+    else /*if(!fMoveHoldMove)*/ view = edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots;
+    pntView->setSelArea(rsel, view);
+}
+
 bool DevelWdgView::event( QEvent *event )
 {
-    //> Paint event process
+    //Paint event process
     if(event->type() == QEvent::Paint)
     {
 	QPainter pnt(this);
 	pnt.setWindow(rect());
 
-	//> Draw background for root widget
+	// Draw background for root widget
 	if(wLevel() == 0)
 	{
 	    if(!fMakeIco)
 	    {
-                pnt.setPen(QColor("black"));
+		pnt.setPen(QColor("black"));
 		pnt.setBrush(QBrush(QColor("white")));
 		pnt.drawRect(rect().adjusted(0,0,-1,-1));
 	    }
 	}
-	//> Draw widget border geometry
+	// Draw widget border geometry
 	else if(levelWidget(1)->select() && levelWidget(0)->fMoveHoldMove)
 	{
 	    if(!fHideChilds)
@@ -3119,36 +3106,28 @@ bool DevelWdgView::event( QEvent *event )
 		if(qobject_cast<QWidget*>(children().at(i_c)))
 		    ((QWidget*)children().at(i_c))->setEnabled(true);//show();
 	}
-	//> Check widget
-	if( !shape )
+	// Check widget
+	if(!shape)
 	{
-	    pnt.drawImage(rect(),QImage(":/images/attention.png"));
+	    pnt.drawImage(rect(), QImage(":/images/attention.png"));
 	    setToolTip(QString(_("Widget is not enabled or shape is not supported!")));
 	}
 
-	//> Update select widget data
-	if(wLevel() == 0 && !fHoldSelRect && root() == "Box")
-	{
-	    QRectF rsel;
-	    for(int i_c = 0; i_c < children().size(); i_c++)
-		if(qobject_cast<DevelWdgView*>(children().at(i_c)) &&
-			((DevelWdgView*)children().at(i_c))->select())
-		    rsel = rsel.united(((DevelWdgView*)children().at(i_c))->geometryF());
-	    pntView->setSelArea(rsel, fMoveHoldMove ? SizePntWdg::Hide : (edit() ? SizePntWdg::EditBorder : SizePntWdg::SizeDots));
-	}
+	// Update selected widget data
+	//if(wLevel() == 0 && !fHoldSelRect && root() == "Box")	selAreaUpdate();
 	pnt.end();
 	if(WdgView::event(event))	return true;
 	return QWidget::event(event);
     }
 
-    //> Other events process
-    if( wLevel() == 0 )
-	switch( event->type() )
+    //Other events process
+    if(wLevel() == 0)
+	switch(event->type())
 	{
 	    case QEvent::DragEnter:
 	    {
 		QDragEnterEvent *ev = static_cast<QDragEnterEvent*>(event);
-		if( ev->mimeData()->hasFormat("application/OpenSCADA-libwdg") )
+		if(ev->mimeData()->hasFormat("application/OpenSCADA-libwdg"))
 		{
 		    ev->acceptProposedAction();
 		    emit selected(id());
@@ -3166,7 +3145,7 @@ bool DevelWdgView::event( QEvent *event )
 
 		    QString lwdg;
 		    dataStream >> lwdg;
-		    //>> Search need action
+		    // Search need action
 		    QPoint curp = mapFromGlobal(cursor().pos());
 		    for(int i_a = 0; i_a < mainWin()->actGrpWdgAdd->actions().size(); i_a++)
 			if(mainWin()->actGrpWdgAdd->actions().at(i_a)->objectName() == lwdg)
@@ -3184,7 +3163,7 @@ bool DevelWdgView::event( QEvent *event )
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
-		//> New widget inserting
+		// New widget inserting
 		QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
 		if(act && act->isChecked() && (static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton)
 		{
@@ -3194,52 +3173,55 @@ bool DevelWdgView::event( QEvent *event )
 		    return true;
 		}
 
-		//> Select widget
+		// Select widget
 		if((static_cast<QMouseEvent*>(event))->buttons()&Qt::LeftButton)
 		{
 		    dragStartPos = ((QMouseEvent*)event)->pos();
 		    bool sh_hold = QApplication::keyboardModifiers()&Qt::ShiftModifier;
 		    if(cursor().shape() == Qt::ArrowCursor || sh_hold)
 		    {
-			//>> Scan childs
+			//  Scan childs
 			bool sel_modif = false;
 			bool chld_sel = false;
 			DevelWdgView *cwdg = NULL;
-			for( int i_c = children().size()-1; i_c >= 0; i_c-- )
+			for(int i_c = children().size()-1; i_c >= 0; i_c--)
 			{
 			    cwdg = qobject_cast<DevelWdgView*>(children().at(i_c));
-			    if( !cwdg ) continue;
-			    if( cwdg->geometryF().contains(curp) )
+			    if(!cwdg) continue;
+			    if(cwdg->geometryF().contains(curp))
 			    {
-				if( !cwdg->select() )	{ cwdg->setSelect(true,PrcChilds|OnlyFlag);  sel_modif = true; }
-				else if( sh_hold )	{ cwdg->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
-				if( cwdg->select() )	chld_sel = true;
+				if(!cwdg->select())	{ cwdg->setSelect(true,PrcChilds|OnlyFlag);  sel_modif = true; }
+				else if(sh_hold)	{ cwdg->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
+				if(cwdg->select())	chld_sel = true;
 				break;
 			    }
 			}
-			//>> Select clean for childs
-			if( !sh_hold )
-			    for( int i_c = 0; i_c < children().size(); i_c++ )
+			//  Select clean for childs
+			if(!sh_hold)
+			    for(int i_c = 0; i_c < children().size(); i_c++)
 			    {
 				DevelWdgView *curw = qobject_cast<DevelWdgView*>(children().at(i_c));
-				if( !curw || (chld_sel && (curw == cwdg)) )	continue;
-				if( curw->select() )	{ curw->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
+				if(!curw || (chld_sel && (curw == cwdg)))	continue;
+				if(curw->select())	{ curw->setSelect(false,PrcChilds|OnlyFlag); sel_modif = true; }
 			    }
-			if( sel_modif || !select() )	{ setSelect(true,PrcChilds|OnlyFlag); fSelChange = true; }
+			if(sel_modif || !select())	{ setSelect(true,PrcChilds|OnlyFlag); fSelChange = true; }
 			event->accept();
 
 			upMouseCursors(mapFromGlobal(cursor().pos()));
+			selAreaUpdate();
 
-			mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selectChilds().c_str()), 10000);
+			string selIts = selectChilds();
+			if(selIts.empty()) selIts = id();
+			mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selIts.c_str()), 10000);
 
-			//>> Hold select rect paint
+			//   Hold select rect paint
 			if(!chld_sel && root() == "Box")
 			{
 			    fHoldSelRect = true;
 			    holdPnt = curp;
 			}
 		    }
-		    if( cursor().shape() != Qt::ArrowCursor )
+		    if(cursor().shape() != Qt::ArrowCursor)
 		    {
 			fMoveHold = true;
 			holdPnt = curp;
@@ -3265,11 +3247,16 @@ bool DevelWdgView::event( QEvent *event )
 		    }
 		    setSelect(true, PrcChilds);
 		    fHoldSelRect = false;
-		    //pntView->setSelArea(QRectF());
+		    selAreaUpdate();
+
+		    string selIts = selectChilds();
+		    if(selIts.empty()) selIts = id();
+		    mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selIts.c_str()), 10000);
+
 		    return true;
 		}
 
-		//> Check for select next underly widget
+		// Check for select next underly widget
 		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && !fSelChange && !fMoveHoldMove)
 		{
 		    DevelWdgView *fsel = NULL, *nsel = NULL;
@@ -3281,7 +3268,7 @@ bool DevelWdgView::event( QEvent *event )
 			if(!fsel && curw->select()) fsel = curw;
 			else if(fsel && curw->geometryF().contains(curp)) { nsel = curw; break; }
 		    }
-		    //> Check for wait need to double click timeout for editable widgets
+		    // Check for wait need to double click timeout for editable widgets
 		    if(fsel && fsel->shape && fsel->shape->isEditable())
 			QTimer::singleShot(QApplication::doubleClickInterval(), this, SLOT(nextUnderlWdgWait()));
 		    else
@@ -3292,7 +3279,9 @@ bool DevelWdgView::event( QEvent *event )
 			setSelect(true, PrcChilds);
 		    }
 
-		    mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selectChilds().c_str()), 10000);
+		    string selIts = selectChilds();
+		    if(selIts.empty()) selIts = id();
+		    mainWin()->statusBar()->showMessage(QString(_("Selected elements: '%1'")).arg(selIts.c_str()), 10000);
 		}
 
 		if(fSelChange)
@@ -3300,6 +3289,8 @@ bool DevelWdgView::event( QEvent *event )
 		    setSelect(true,PrcChilds|NoUpdate);	// ???? For QT's included widget's update bug hack (Document,Protocol and other)
 		    fSelChange = false;
 		}
+
+		selAreaUpdate();
 
 		if(fMoveHold || cursor().shape() != Qt::ArrowCursor)
 		{
@@ -3365,8 +3356,8 @@ bool DevelWdgView::event( QEvent *event )
 		if(cursor().shape() != Qt::ArrowCursor)	setCursor(Qt::ArrowCursor);
 		if(QApplication::focusWidget() && (QApplication::focusWidget() == this || strncmp("QMenu",QApplication::focusWidget()->metaObject()->className(),5) == 0)) break;
 		if(!parentWidget()->hasFocus()) setFocus(false);
-                if(QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
-                    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
+		if(QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
+		    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
 		{
 		    if(editWdg)	editWdg->setSelect(false,PrcChilds);
 		    setSelect(false);
@@ -3378,27 +3369,22 @@ bool DevelWdgView::event( QEvent *event )
 
 		QPoint curp = mapFromGlobal(cursor().pos());
 
-		//> Select board draw
-		if(fHoldSelRect)
-		{
-		    pntView->setSelArea(QRect(holdPnt,curp).normalized(),SizePntWdg::SelectBorder);
-		    return true;
-		}
+		// Select board draw
+		if(fHoldSelRect) { selAreaUpdate(QRect(holdPnt,curp).normalized()); return true; }
 
-		//> New widget add cursor view
+		// New widget add cursor view
 		if(mainWin()->actGrpWdgAdd->checkedAction() &&
 		    mainWin()->actGrpWdgAdd->checkedAction()->isChecked())
 		{
-		    setCursor(QCursor(((VisDevelop *)main_win)->actGrpWdgAdd->checkedAction()->icon().pixmap(64,64),0,0));
+		    setCursor(QCursor(((VisDevelop*)main_win)->actGrpWdgAdd->checkedAction()->icon().pixmap(64,64),0,0));
 		    return true;
 		}
 
-		//> Update move cursors
+		// Update move cursors
 		upMouseCursors(curp);
 
-		//> Move widgets control
-		if(fMoveHold && cursor().shape() != Qt::ArrowCursor &&
-		    ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
+		// Move widgets control
+		if(fMoveHold && cursor().shape() != Qt::ArrowCursor && ((QMouseEvent*)event)->buttons()&Qt::LeftButton &&
 		    (((QMouseEvent*)event)->pos()-dragStartPos).manhattanLength() >= QApplication::startDragDistance())
 		{
 		    dragStartPos = QPoint(-100,-100);
@@ -3409,6 +3395,11 @@ bool DevelWdgView::event( QEvent *event )
 		    return true;
 		}
 		if(fMoveHold && !(((QMouseEvent*)event)->buttons()&Qt::LeftButton)) fMoveHold = false;
+
+		// Cursor position to status on Ctrl hold
+		if(QApplication::keyboardModifiers()&Qt::ControlModifier)
+		    mainWin()->statusBar()->showMessage(QString(_("Cursor --- xy(%1:%2)")).
+			arg(curp.x()/xScale(true)).arg(curp.y()/yScale(true)),10000);
 
 		break;
 	    }
@@ -3466,7 +3457,7 @@ bool DevelWdgView::event( QEvent *event )
 	    default:	break;
 	}
 
-    //> Self widget view
+    //Self widget view
     if(edit() && editWdg && wLevel() <= 1 && editWdg->shape->event(editWdg,event)) return true;
 
     if(WdgView::event(event)) return true;
@@ -3544,7 +3535,7 @@ void SizePntWdg::setSelArea( const QRectF &geom, WView iview )
 
 void SizePntWdg::apply( )
 {
-    if(mWSize.width() > 2 && mWSize.height() > 2 && !QRectF(mWPos,mWSize).toRect().contains(rect()))
+    if(mWSize.width() > 2 && mWSize.height() > 2)
     {
 	QRegion reg;
 	QRect   wrect, irect;
@@ -3560,6 +3551,7 @@ void SizePntWdg::apply( )
 				   irect.y()+(i_p/3)*((irect.height()-6)/2),6,6));
 		break;
 	    case EditBorder:
+		if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
 		wrect = parentWidget()->rect();
 		reg = QRegion(wrect).subtracted(QRegion(QRectF(mWPos,mWSize).toRect()));
 		break;
@@ -3571,7 +3563,7 @@ void SizePntWdg::apply( )
 	    default: break;
 	}
 	if(geometry() != wrect)	setGeometry(wrect);
-	setMask(reg);
+	if(!reg.isEmpty()) setMask(reg);
 	if(!isVisible()) show();
     }
     else hide();
@@ -3582,46 +3574,45 @@ bool SizePntWdg::event( QEvent *ev )
     switch(ev->type())
     {
 	case QEvent::Paint:
-	    if(rect().isValid())
-	    {
-		QPainter pnt(this);
-		pnt.setWindow(rect());
+	{
+	    if(!rect().isValid()) break;
 
-		switch(view)
-		{
-		    case SizeDots:
-			pnt.setPen(QColor("black"));
-			pnt.setBrush(QBrush(QColor("lightgreen")));
-			for(int i_p = 0; i_p < 9; i_p++)
-			{
-			    if(i_p == 4) continue;
-			    QRect anch(rect().x()+(i_p%3)*((rect().width()-6)/2),
-				rect().y()+(i_p/3)*((rect().height()-6)/2),5,5);
-			    pnt.drawRect(anch);
-			}
-			break;
-		    case EditBorder:
-			if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
-			pnt.fillRect(rect(),QColor(127,127,127,190));
-			pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
-			pnt.setPen(QColor("black"));
-			pnt.drawRect(QRectF(mWPos,mWSize).adjusted(-1,-1,0,0));
-			break;
-		    case SelectBorder:
+	    QPainter pnt(this);
+	    pnt.setWindow(rect());
+
+	    switch(view)
+	    {
+		case SizeDots:
+		    pnt.setPen(QColor("black"));
+		    pnt.setBrush(QBrush(QColor("lightgreen")));
+		    for(int i_p = 0; i_p < 9; i_p++)
 		    {
-			pnt.setPen("white");
-			pnt.drawRect(rect().adjusted(0,0,-1,-1));
-			QPen pen(QColor("black"));
-			pen.setStyle(Qt::DashDotLine);
-			pnt.setPen(pen);
-			pnt.drawRect(rect().adjusted(0,0,-1,-1));
-			break;
+			if(i_p == 4) continue;
+			QRect anch(rect().x()+(i_p%3)*((rect().width()-6)/2), rect().y()+(i_p/3)*((rect().height()-6)/2), 5, 5);
+			pnt.drawRect(anch);
 		    }
-		    default: break;
+		    break;
+		case EditBorder:
+		    if(QRectF(mWPos,mWSize).toRect().contains(rect())) break;
+		    pnt.fillRect(rect(),QColor(127,127,127,190));
+		    pnt.fillRect(QRectF(mWPos,mWSize).adjusted(-5,-5,5,5),QBrush(Qt::black,Qt::Dense4Pattern));
+		    pnt.setPen(QColor("black"));
+		    pnt.drawRect(QRectF(mWPos,mWSize).adjusted(-1,-1,0,0));
+		    break;
+		case SelectBorder:
+		{
+		    pnt.setPen("white");
+		    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+		    QPen pen(QColor("black"));
+		    pen.setStyle(Qt::DashDotLine);
+		    pnt.setPen(pen);
+		    pnt.drawRect(rect().adjusted(0,0,-1,-1));
+		    break;
 		}
-		return true;
+		default: break;
 	    }
-	    break;
+	    return true;
+	}
 	//case QEvent::MouseButtonPress:
 	//case QEvent::MouseButtonRelease:
 	//    return QApplication::sendEvent(parent(),ev);

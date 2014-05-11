@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -88,6 +88,7 @@ class ModInspAttr: public QAbstractTableModel
 		bool	modify( )	{ return mModify; }
 		QVariant data( );
 		QVariant dataEdit( );
+		QVariant dataEdit1( )	{ return dataEdit1Item; }
 		string	wdgs( )		{ return wdgsItem; }
 		string	help( )		{ return helpItem; }
 		string	snthHgl( )	{ return snthHglItem; }
@@ -97,6 +98,7 @@ class ModInspAttr: public QAbstractTableModel
 		void setFlag( int iflg )		{ flag_item = iflg; }
 		void setData( const QVariant &idt )	{ dataItem = idt; }
 		void setDataEdit( const QVariant &idt )	{ dataEditItem = idt; }
+		void setDataEdit1( const QVariant &idt ){ dataEdit1Item = idt; }
 		void setModify( bool vl )		{ mModify = vl; }
 		bool setWdgs( const string &w, bool del = false );
 		void setHelp( const string &vl )	{ helpItem = vl; }
@@ -115,7 +117,7 @@ class ModInspAttr: public QAbstractTableModel
 	    private:
 		string	idItem, nameItem, wdgsItem, helpItem, snthHglItem;
 		Type	typeItem;
-		QVariant	dataItem, dataEditItem;
+		QVariant dataItem, dataEditItem, dataEdit1Item;;
 		bool	edit_access;
 		bool	mModify;
 		int	flag_item;
@@ -328,7 +330,7 @@ class WdgTree: public QDockWidget
 	bool hasFocus( );
 
     signals:
-        void selectItem( const string &vca_it, bool force = false );
+	void selectItem( const string &vca_it, bool force = false );
 
     public slots:
 	void updateTree( const string &vca_it = "" );
@@ -366,7 +368,7 @@ class ProjTree: public QDockWidget
 	VisDevelop *owner( );
 
     signals:
-        void selectItem( const string &idwdg, bool force = false );
+	void selectItem( const string &idwdg, bool force = false );
 
     public slots:
 	void updateTree( const string &vca_it = "", QTreeWidgetItem *it = NULL );
@@ -413,7 +415,7 @@ class LineEditProp : public QWidget
 	//> Attributes
 	DType		m_tp;
 	QLineEdit	*ed_fld;
-        bool		toClose;
+	bool		toClose;
 };
 
 //*********************************************
@@ -512,8 +514,8 @@ class DevelWdgView: public WdgView
 	void setEdit( bool vl );
 	void wdgsMoveResize( const QPointF &dP );
 	void setVisScale( float val );
-        void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
-        void setFocus( bool focus );
+	void setPrevEdExitFoc( bool vl ) { fPrevEdExitFoc = vl; }
+	void setFocus( bool focus );
 
 	WdgView *newWdgItem( const string &iwid );
 	void load( const string& item, bool load = true, bool init = true, XMLNode *aBr = NULL );
@@ -522,12 +524,12 @@ class DevelWdgView: public WdgView
 
 	bool attrSet( const string &attr, const string &val, int uiPrmPos = 0 );
 
-	//> Resource and cache operations
+	// Resource and cache operations
 	string resGet( const string &res );
 	string cacheResGet( const string &res );
 	void cacheResSet( const string &res, const string &val );
 
-	//> Changes operations
+	// Changes operations
 	void chRecord( XMLNode ch );
 	void chUpdate( );
 	void chLoadCtx( XMLNode &ch, const string &forceAttrs = "", const string &fromAttr = "" );
@@ -560,6 +562,7 @@ class DevelWdgView: public WdgView
 	//Private methods
 	bool grepAnchor( const QPointF &apnt, const QPoint &cpnt );
 	void upMouseCursors( const QPoint &pnt );
+	void selAreaUpdate( QRectF iR = QRectF() );
 
 	//Private attributes
 	uint8_t	fMakeScale	:1;	//Make visual item scaling

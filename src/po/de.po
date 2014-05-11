@@ -1665,6 +1665,9 @@ msgstr ""
 msgid "Config-file '%s' error: %s"
 msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
+msgid "Config-file '%s' load error."
+msgstr "Konfigurationsdatei '%s' Fehler: %s"
+
 #, c-format
 msgid ""
 "Station '%s' is not present in the config-file. Use '%s' station "
@@ -2163,6 +2166,9 @@ msgstr "Nachkommen %d ist verboten."
 #, c-format
 msgid "2:Open file '%s' error: %s"
 msgstr "Fehler der Öffnung der Datei '%s' : %s"
+
+msgid "3:Load file '%s' error."
+msgstr "Fehler beim Anhahalten des Moduls '%s'."
 
 msgid "The object don't attached to node of OpenSCADA tree."
 msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."

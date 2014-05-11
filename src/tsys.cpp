@@ -1,7 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -56,7 +56,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile("/etc/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")), mIcoDir("./icons/"), mModDir("./"),
-    mWorkDB("<cfg>"), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mMultCPU(false)
+    mWorkDB(DB_CFG), mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mMultCPU(false)
 {
     finalKill = false;
     SYS = this;		//Init global access value
@@ -167,17 +167,17 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 
     for(int l_off = 0, nLev = 0; true; nLev++)
     {
-        s_el = TSYS::pathLev(path,0,true,&l_off);
-        if(s_el.empty()) return t_node;
-        bool ok = false;
-        for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
-            if(t_node->childGet(i_f)->attr("id") == s_el)
-            {
-                t_node = t_node->childGet(i_f);
-                ok = true;
-            }
-        if(!ok)
-        {
+	s_el = TSYS::pathLev(path, 0, true, &l_off);
+	if(s_el.empty()) return t_node;
+	bool ok = false;
+	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
+	    if(t_node->childGet(i_f)->attr("id") == s_el)
+	    {
+		t_node = t_node->childGet(i_f);
+		ok = true;
+	    }
+	if(!ok)
+	{
 	    if(!create)	return NULL;
 	    ndNm = "prm";
 	    switch(nLev)
@@ -261,27 +261,27 @@ string TSYS::time2str( double utm )
     double usec = utm - 1e6*(days*24*60*60 + hours*60*60 + mins*60);
 
     string rez;
-    if(days)		{ rez += TSYS::int2str(days)+_("day"); lev = vmax(lev,6); }
-    if(hours)		{ rez += (rez.size()?" ":"")+TSYS::int2str(hours)+_("hour"); lev = vmax(lev,5); }
-    if(mins && lev < 6)	{ rez += (rez.size()?" ":"")+TSYS::int2str(mins)+_("min"); lev = vmax(lev,4); }
-    if((1e-6*usec) > 0.5 && lev < 5)	{ rez += (rez.size()?" ":"")+TSYS::real2str(1e-6*usec,3)+_("s"); lev = vmax(lev,3); }
-    else if((1e-3*usec) > 0.5 && !lev)	{ rez += (rez.size()?" ":"")+TSYS::real2str(1e-3*usec,4)+_("ms"); lev = vmax(lev,2); }
-    else if(usec > 0.5 && !lev)		{ rez += (rez.size()?" ":"")+TSYS::real2str(usec,4)+_("us"); lev = vmax(lev,1); }
-    else if(!lev)	rez += (rez.size()?" ":"")+TSYS::real2str(1e3*usec,4)+_("ns");
+    if(days)		{ rez += i2s(days)+_("day"); lev = vmax(lev,6); }
+    if(hours)		{ rez += (rez.size()?" ":"")+i2s(hours)+_("hour"); lev = vmax(lev,5); }
+    if(mins && lev < 6)	{ rez += (rez.size()?" ":"")+i2s(mins)+_("min"); lev = vmax(lev,4); }
+    if((1e-6*usec) > 0.5 && lev < 5)	{ rez += (rez.size()?" ":"")+r2s(1e-6*usec,3)+_("s"); lev = vmax(lev,3); }
+    else if((1e-3*usec) > 0.5 && !lev)	{ rez += (rez.size()?" ":"")+r2s(1e-3*usec,4)+_("ms"); lev = vmax(lev,2); }
+    else if(usec > 0.5 && !lev)		{ rez += (rez.size()?" ":"")+r2s(usec,4)+_("us"); lev = vmax(lev,1); }
+    else if(!lev)	rez += (rez.size()?" ":"")+r2s(1e3*usec,4)+_("ns");
     return rez;
 }
 
 string TSYS::cpct2str( double cnt )
 {
-    if(cnt > 0.2*pow(2,80))	return TSYS::real2str(cnt/pow(2,80),3,'g')+_("YiB");
-    if(cnt > 0.2*pow(2,70))	return TSYS::real2str(cnt/pow(2,70),3,'g')+_("ZiB");
-    if(cnt > 0.2*pow(2,60))	return TSYS::real2str(cnt/pow(2,60),3,'g')+_("EiB");
-    if(cnt > 0.2*pow(2,50))	return TSYS::real2str(cnt/pow(2,50),3,'g')+_("PiB");
-    if(cnt > 0.2*pow(2,40))	return TSYS::real2str(cnt/pow(2,40),3,'g')+_("TiB");
-    if(cnt > 0.2*pow(2,30))	return TSYS::real2str(cnt/pow(2,30),3,'g')+_("GiB");
-    if(cnt > 0.2*pow(2,20))	return TSYS::real2str(cnt/pow(2,20),3,'g')+_("MiB");
-    if(cnt > 0.2*pow(2,10))	return TSYS::real2str(cnt/pow(2,10),3,'g')+_("KiB");
-    return TSYS::real2str(cnt,3,'g')+_("B");
+    if(cnt > 0.2*pow(2,80))	return r2s(cnt/pow(2,80),3,'g')+_("YiB");
+    if(cnt > 0.2*pow(2,70))	return r2s(cnt/pow(2,70),3,'g')+_("ZiB");
+    if(cnt > 0.2*pow(2,60))	return r2s(cnt/pow(2,60),3,'g')+_("EiB");
+    if(cnt > 0.2*pow(2,50))	return r2s(cnt/pow(2,50),3,'g')+_("PiB");
+    if(cnt > 0.2*pow(2,40))	return r2s(cnt/pow(2,40),3,'g')+_("TiB");
+    if(cnt > 0.2*pow(2,30))	return r2s(cnt/pow(2,30),3,'g')+_("GiB");
+    if(cnt > 0.2*pow(2,20))	return r2s(cnt/pow(2,20),3,'g')+_("MiB");
+    if(cnt > 0.2*pow(2,10))	return r2s(cnt/pow(2,10),3,'g')+_("KiB");
+    return r2s(cnt,3,'g')+_("B");
 }
 
 string TSYS::addr2str( void *addr )
@@ -337,10 +337,10 @@ string TSYS::strLabEnum( const string &base )
 
     //> Process number and increment
     if(numbXDig < numbDig && (base.size()-numbXDig) > 2 && strncasecmp(base.c_str()+numbXDig,"0x",2) == 0)
-	return base.substr(0, numbXDig) + "0x" + int2str(strtol(base.c_str()+numbXDig,NULL,16)+1, TSYS::Hex);
+	return base.substr(0, numbXDig) + "0x" + i2s(strtol(base.c_str()+numbXDig,NULL,16)+1, TSYS::Hex);
     if((base.size()-numbDig) > 1 && base[numbDig] == '0')
-	return base.substr(0, numbDig) + "0" + int2str(strtol(base.c_str()+numbDig,NULL,8)+1, TSYS::Oct);
-    return base.substr(0, numbDig) + int2str(strtol(base.c_str()+numbDig,NULL,0)+1);
+	return base.substr(0, numbDig) + "0" + i2s(strtol(base.c_str()+numbDig,NULL,8)+1, TSYS::Oct);
+    return base.substr(0, numbDig) + i2s(strtol(base.c_str()+numbDig,NULL,0)+1);
 }
 
 string TSYS::optDescr( )
@@ -443,18 +443,22 @@ bool TSYS::cfgFileLoad( )
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
     else
     {
+	bool fOK = true;
 	string s_buf;
-	int cf_sz = lseek(hd,0,SEEK_END);
+	int cf_sz = lseek(hd, 0, SEEK_END);
 	if(cf_sz > 0)
 	{
-	    lseek(hd,0,SEEK_SET);
-	    char *buf = (char *)malloc(cf_sz+1);
-	    read(hd,buf,cf_sz);
-	    buf[cf_sz] = 0;
-	    s_buf = buf;
+	    lseek(hd, 0, SEEK_SET);
+	    char *buf = (char*)malloc(cf_sz+1);
+	    if((fOK=(read(hd,buf,cf_sz) == cf_sz)))
+	    {
+		buf[cf_sz] = 0;
+		s_buf = buf;
+	    }
 	    free(buf);
 	}
 	close(hd);
+	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
 
 	try
 	{
@@ -489,16 +493,19 @@ bool TSYS::cfgFileLoad( )
 
 void TSYS::cfgFileSave( )
 {
-    ResAlloc res(nodeRes(),true);
+    ResAlloc res(nodeRes(), true);
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
-
-    string rezFile = rootN.save(XMLNode::XMLHeader);
-    int rez = write(hd, rezFile.data(), rezFile.size());
-    if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
-    rootModifCnt = 0;
-    rootFlTm = time(NULL);
+    else
+    {
+	string rezFile = rootN.save(XMLNode::XMLHeader);
+	int rez = write(hd, rezFile.data(), rezFile.size());
+	if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
+	rootModifCnt = 0;
+	rootFlTm = time(NULL);
+	close(hd);
+    }
 }
 
 void TSYS::cfgPrmLoad( )
@@ -522,22 +529,22 @@ void TSYS::load_()
     cfgPrmLoad();
     Mess->load();	//Messages load
 
-    if( first_load )
+    if(first_load)
     {
 	//> Create subsystems
-	add( new TBDS() );
-	add( new TSecurity() );
-	add( new TTransportS() );
-	add( new TProtocolS() );
-	add( new TDAQS() );
-	add( new TArchiveS() );
-	add( new TSpecialS() );
-	add( new TUIS() );
-	add( new TModSchedul() );
+	add(new TBDS());
+	add(new TSecurity());
+	add(new TTransportS());
+	add(new TProtocolS());
+	add(new TDAQS());
+	add(new TArchiveS());
+	add(new TSpecialS());
+	add(new TUIS());
+	add(new TModSchedul());
 
 	//> Load modules
 	modSchedul().at().load();
-	if( !modSchedul().at().loadLibS() )
+	if(!modSchedul().at().loadLibS())
 	{
 	    mess_err(nodePath().c_str(),_("No one module is loaded. Your configuration broken!"));
 	    stop();
@@ -545,7 +552,7 @@ void TSYS::load_()
 
 	//> First DB subsystem load
 	db().at().load();
-	if( !cmd_help ) modSchedul().at().modifG();	// For try reload from DB
+	if(!cmd_help) modSchedul().at().modifG();	// For try reload from DB
 
 	//> Second load for load from generic DB
 	Mess->load();
@@ -555,7 +562,7 @@ void TSYS::load_()
     //> Direct load subsystems and modules
     vector<string> lst;
     list(lst);
-    for( unsigned i_a=0; i_a < lst.size(); i_a++ )
+    for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().load(); }
 	catch(TError err)
 	{
@@ -563,7 +570,7 @@ void TSYS::load_()
 	    mess_err(nodePath().c_str(),_("Error load subsystem '%s'."),lst[i_a].c_str());
 	}
 
-    if( cmd_help ) stop();
+    if(cmd_help) stop();
     first_load = false;
 }
 
@@ -572,13 +579,13 @@ void TSYS::save_( )
     mess_info(nodePath().c_str(),_("Save!"));
 
     //> System parameters
-    TBDS::genDBSet(nodePath()+"StName",mName,"root",TBDS::UseTranslate);
-    TBDS::genDBSet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir",workDir(),"root",TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(nodePath()+"SaveAtExit",TSYS::int2str(saveAtExit()));
-    TBDS::genDBSet(nodePath()+"SavePeriod",TSYS::int2str(savePeriod()));
+    TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
+    TBDS::genDBSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
+    TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
+    TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
 
     Mess->save();	//Messages load
 }
@@ -632,7 +639,7 @@ int TSYS::start( )
     }
 
     mess_info(nodePath().c_str(),_("Stop!"));
-    if(saveAtExit() || savePeriod())	save();
+    if(saveAtExit() || savePeriod()) save();
     cfgFileSave();
     for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
@@ -670,7 +677,7 @@ void TSYS::sighandler( int signal )
 	    break;
 	case SIGFPE:
 	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
-            exit(1);
+	    exit(1);
 	    break;
 	case SIGCHLD:
 	{
@@ -705,7 +712,7 @@ void TSYS::clkCalc( )
 
     if(!mSysclc)
     {
-        char buf[255];
+	char buf[255];
 	FILE *fp = NULL;
 	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
 	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r")))
@@ -716,17 +723,17 @@ void TSYS::clkCalc( )
 	}
 
 	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
-        if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r")))
-        {
+	if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r")))
+	{
 	    float frq;
-            while(fgets(buf,sizeof(buf),fp) != NULL)
+	    while(fgets(buf,sizeof(buf),fp) != NULL)
 		if(sscanf(buf,"cpu MHz : %f\n",&frq) || sscanf(buf,"bogomips : %f\n",&frq) || sscanf(buf,"BogoMIPS : %f\n",&frq))
 		{
 		    mSysclc = (uint64_t)(frq*1e6);
 		    break;
 		}
-            fclose(fp);
-        }
+	    fclose(fp);
+	}
     }
 }
 
@@ -742,7 +749,7 @@ void TSYS::cfgFileScan( bool first, bool up )
     if(up && !first)
     {
 	modifG();
-	setSelDB("<cfg>");
+	setSelDB(DB_CFG);
 	load();
 	setSelDB("");
     }
@@ -875,14 +882,14 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
     while(true)
     {
 	t_dir = path.find("/",an_dir);
-	if( t_dir == string::npos )
+	if(t_dir == string::npos)
 	{
-	    if( off ) *off = path.size();
+	    if(off) *off = path.size();
 	    return (t_lev == level) ? ( decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
 	}
-	else if( t_lev == level )
+	else if(t_lev == level)
 	{
-	    if( off ) *off = t_dir;
+	    if(off) *off = t_dir;
 	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
 	}
 	an_dir = t_dir;
@@ -1051,7 +1058,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	    sout.reserve(in.size());
 	    for(int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
 		for(int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
-		    sout+=(char)strtol(evl.c_str(),NULL,16);
+		    sout += (char)strtol(evl.c_str(),NULL,16);
 	    break;
 	}
 	case TSYS::Reverse:
@@ -1075,13 +1082,13 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 			    if((i_sz+3) < (int)in.size() && isxdigit(in[i_sz+2]) && isxdigit(in[i_sz+3]))
 			    { sout += (char)strtol(in.substr(i_sz+2,2).c_str(),NULL,16); i_sz += 2; }
 			    else sout += in[i_sz+1];
-                    	    break;
-                	default:
-                    	    if((i_sz+3) < (int)in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
-                                                	    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
-                                                	    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
-                    	    { sout += (char)strtol(in.substr(i_sz+1,3).c_str(),NULL,8); i_sz += 2; }
-                    	    else sout += in[i_sz+1];
+			    break;
+			default:
+			    if((i_sz+3) < (int)in.size() && in[i_sz+1] >= '0' && in[i_sz+1] <= '7' &&
+							    in[i_sz+2] >= '0' && in[i_sz+2] <= '7' &&
+							    in[i_sz+3] >= '0' && in[i_sz+3] <= '7')
+			    { sout += (char)strtol(in.substr(i_sz+1,3).c_str(),NULL,8); i_sz += 2; }
+			    else sout += in[i_sz+1];
 		    }
 		    i_sz++;
 		}else sout += in[i_sz];
@@ -1161,13 +1168,13 @@ string TSYS::strCompr( const string &in, int lev )
 {
     z_stream strm;
 
-    if( in.empty() )	return "";
+    if(in.empty())	return "";
 
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
-    if( deflateInit(&strm,lev) != Z_OK ) return "";
+    if(deflateInit(&strm,lev) != Z_OK) return "";
 
     uLongf comprLen = deflateBound(&strm,in.size());
     char out[comprLen];
@@ -1197,13 +1204,13 @@ string TSYS::strUncompr( const string &in )
     unsigned char out[STR_BUF_LEN];
     string rez;
 
-    if( in.empty() )	return "";
+    if(in.empty())	return "";
 
     strm.zalloc = Z_NULL;
     strm.zfree = Z_NULL;
     strm.opaque = Z_NULL;
 
-    if( inflateInit(&strm) != Z_OK )	return "";
+    if(inflateInit(&strm) != Z_OK)	return "";
 
     strm.avail_in = in.size();
     strm.next_in = (Bytef*)in.data();
@@ -1211,15 +1218,15 @@ string TSYS::strUncompr( const string &in )
     {
 	strm.avail_out = sizeof(out);
 	strm.next_out = out;
-	ret=inflate(&strm,Z_NO_FLUSH);
-	if( ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR )
+	ret = inflate(&strm,Z_NO_FLUSH);
+	if(ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR)
 	    break;
 	rez.append((char*)out,sizeof(out)-strm.avail_out);
     } while( strm.avail_out == 0 );
 
     inflateEnd(&strm);
 
-    if( ret != Z_STREAM_END )	return "";
+    if(ret != Z_STREAM_END)	return "";
 
     return rez;
 }
@@ -1232,10 +1239,10 @@ float TSYS::floatLE(float in)
     {
 	float f;
 	struct
-        {
+	{
 	    unsigned int mantissa:23;
-    	    unsigned int exponent:8;
-    	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int negative:1;
 	} ieee;
     } ieee754_le;
 
@@ -1258,10 +1265,10 @@ float TSYS::floatLErev(float in)
     {
 	float f;
 	struct
-        {
+	{
 	    unsigned int mantissa:23;
-    	    unsigned int exponent:8;
-    	    unsigned int negative:1;
+	    unsigned int exponent:8;
+	    unsigned int negative:1;
 	} ieee;
     } ieee754_le;
 
@@ -1284,11 +1291,11 @@ double TSYS::doubleLE(double in)
     {
 	double d;
 	struct
-        {
-    	    unsigned int mantissa1:32;
+	{
+	    unsigned int mantissa1:32;
 	    unsigned int mantissa0:20;
-    	    unsigned int exponent:11;
-    	    unsigned int negative:1;
+	    unsigned int exponent:11;
+	    unsigned int negative:1;
 	} ieee;
     } ieee754_le;
 
@@ -1312,11 +1319,11 @@ double TSYS::doubleLErev(double in)
     {
 	double d;
 	struct
-        {
-    	    unsigned int mantissa1:32;
+	{
+	    unsigned int mantissa1:32;
 	    unsigned int mantissa0:20;
-    	    unsigned int exponent:11;
-    	    unsigned int negative:1;
+	    unsigned int exponent:11;
+	    unsigned int negative:1;
 	} ieee;
     } ieee754_le;
 
@@ -1763,22 +1770,23 @@ reload:
 
 TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
+    bool alt1 = false;
     // int message(string cat, int level, string mess) - formation of the system message <mess> with the category <cat>, level <level>
     //  cat - message category
     //  level - message level
     //  mess - message text
-    if(iid == "message" && prms.size() >= 3)	{ message( prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str() ); return 0; }
+    if(iid == "message" && prms.size() >= 3)	{ message(prms[0].getS().c_str(), (TMess::Type)prms[1].getI(), "%s", prms[2].getS().c_str()); return 0; }
     // int messDebug(string cat, string mess) - formation of the system message <mess> with the category <cat> and the appropriate level
     //  cat - message category
     //  mess - message text
-    if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messInfo" && prms.size() >= 2)	{ mess_info( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messNote" && prms.size() >= 2)	{ mess_note( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messWarning" && prms.size() >= 2){ mess_warning( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messErr" && prms.size() >= 2)	{ mess_err( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
-    if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg( prms[0].getS().c_str(), "%s", prms[1].getS().c_str() ); return 0; }
+    if(iid == "messDebug" && prms.size() >= 2)	{ mess_debug(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messInfo" && prms.size() >= 2)	{ mess_info(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messNote" && prms.size() >= 2)	{ mess_note(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messWarning" && prms.size() >= 2){ mess_warning(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messErr" && prms.size() >= 2)	{ mess_err(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messCrit" && prms.size() >= 2)	{ mess_crit(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messAlert" && prms.size() >= 2)	{ mess_alert(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
+    if(iid == "messEmerg" && prms.size() >= 2)	{ mess_emerg(prms[0].getS().c_str(), "%s", prms[1].getS().c_str()); return 0; }
     // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
@@ -1801,11 +1809,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     {
 	char buf[STR_BUF_LEN];
 	string rez;
-        int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	if(hd != -1)
+	int hd = open(prms[0].getS().c_str(),O_RDONLY);
+	if(hd >= 0)
 	{
-    	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
-    	    close(hd);
+	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
+	    close(hd);
 	}
 	return rez;
     }
@@ -1816,11 +1824,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
-        int hd = open(prms[0].getS().c_str(), wflags, 0664);
-	if(hd != -1)
+	int hd = open(prms[0].getS().c_str(), wflags, 0664);
+	if(hd >= 0)
 	{
-    	    wcnt = write(hd,val.data(),val.size());
-    	    close(hd);
+	    wcnt = write(hd,val.data(),val.size());
+	    close(hd);
 	}
 	return wcnt;
     }
@@ -1870,7 +1878,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	prms[0].setI(tm%1000000); prms[0].setModify();
 	return (int)(tm/1000000);
     }
-    // int localtime(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst) 
+    // int {localtime|gmtime}(int fullsec, int sec, int min, int hour, int mday, int month, int year, int wday, int yday, int isdst)
     //      - returns the full date based on the absolute time in seconds <fullsec> from the epoch 1.1.1970
     //  fullsec - source time ins seconds from the epoch 1.1.1970
     //  sec - seconds
@@ -1882,11 +1890,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if(iid == "localtime" && prms.size() >= 2)
+    if((iid == "localtime" || (alt1=(iid=="gmtime"))) && prms.size() >= 2)
     {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
-	localtime_r(&tm_t,&tm_tm);
+	if(alt1) gmtime_r(&tm_t, &tm_tm);
+	else localtime_r(&tm_t, &tm_tm);
 
 	prms[1].setI(tm_tm.tm_sec); prms[1].setModify();
 	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_min); prms[2].setModify(); }
@@ -1910,7 +1919,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if(iid == "mktime")
+    if(iid == "mktime" || (alt1=(iid=="timegm")))
     {
 	struct tm tm_tm;
 	tm_tm.tm_sec	= (prms.size()>=1) ? prms[0].getI() : 0;
@@ -1922,7 +1931,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	tm_tm.tm_wday	= (prms.size()>=7) ? prms[6].getI() : -1;
 	tm_tm.tm_yday	= (prms.size()>=8) ? prms[7].getI() : -1;
 	tm_tm.tm_isdst	= (prms.size()>=9) ? prms[8].getI() : -1;
-	time_t rez = mktime(&tm_tm);
+	time_t rez = alt1 ? timegm(&tm_tm) : mktime(&tm_tm);
 	if(prms.size() >= 1)	{ prms[0].setI(tm_tm.tm_sec);	prms[0].setModify(); }
 	if(prms.size() >= 2)	{ prms[1].setI(tm_tm.tm_min);	prms[1].setModify(); }
 	if(prms.size() >= 3)	{ prms[2].setI(tm_tm.tm_hour);	prms[2].setModify(); }
@@ -1935,28 +1944,30 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 
 	return (int)rez;
     }
-    // string strftime(int sec, string form = "%Y-%m-%d %H:%M:%S") - converts an absolute time <sec> to the string of the desired format <form>
+    // string {strftime|strftimegm}(int sec, string form = "%Y-%m-%d %H:%M:%S")
+    //      - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
     //  form - result string format
-    if(iid == "strftime" && !prms.empty())
+    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty())
     {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
-	localtime_r(&tm_t,&tm_tm);
+	if(alt1) gmtime_r(&tm_t, &tm_tm);
+	else localtime_r(&tm_t, &tm_tm);
 	char buf[1000];
 	int rez = strftime(buf, sizeof(buf), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &tm_tm);
 	return (rez>0) ? string(buf,rez) : "";
     }
-    // int strptime(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
+    // int {strptime|strptimegm}(string str, string form = "%Y-%m-%d %H:%M:%S") - returns the time in seconds from the epoch of 1/1/1970,
     //      based on the string record of time <str>, in accordance with the specified template <form>
     //  str - source time in string
     //  form - string's time template in format POSIX-function "strptime"
-    if(iid == "strptime" && !prms.empty())
+    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty())
     {
 	struct tm stm;
 	stm.tm_isdst = -1;
 	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
-	return (int)mktime(&stm);
+	return (int)(alt1 ? timegm(&stm) : mktime(&stm));
     }
     // int cron(string cronreq, int base = 0) - returns the time, planned in the format of the standard Cron <cronreq>,
     //      beginning from basic time <base> or from the current, if the basic is not specified
@@ -1994,15 +2005,15 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
     string fsBase, tEl;
     for(int off = 0; (tEl=TSYS::pathLev(fsBaseIn,0,false,&off)).size(); pathLev++)
     {
-        fsBase += ((pathLev || fromRoot)?"/":"")+tEl;
-        nd->childAdd("el")->setText(fsBase);
+	fsBase += ((pathLev || fromRoot)?"/":"")+tEl;
+	nd->childAdd("el")->setText(fsBase);
     }
     if(fromRoot && pathLev == 0) fsBase = "/";
     //> Previous items set
     if(!fromRoot)
     {
-        if(pathLev == 0) nd->childAdd("el")->setText("..");
-        else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
+	if(pathLev == 0) nd->childAdd("el")->setText("..");
+	else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
     }
     //> From work directory check
     string fsBaseCor = fsBase;
@@ -2012,30 +2023,30 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
     DIR *IdDir = opendir(fsBaseCor.c_str());
     if(IdDir != NULL)
     {
-        dirent sDir, *sDirRez = NULL;
-        while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
-        {
-            if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
-            if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
-                    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
-                    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
-                fits.push_back(sDirRez->d_name);
-            else if(sDirRez->d_type == DT_REG && fileExt.size())
-            {
-                tEl = sDirRez->d_name;
-                size_t extPos = tEl.rfind(".");
-                tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
-                if(fileExt == "*" || (tEl.size() && fileExt.find(tEl+";") != string::npos)) fits.push_back(sDirRez->d_name);
-            }
-        }
-        closedir(IdDir);
+	dirent sDir, *sDirRez = NULL;
+	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
+	{
+	    if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
+	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
+		    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
+		    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
+		fits.push_back(sDirRez->d_name);
+	    else if(sDirRez->d_type == DT_REG && fileExt.size())
+	    {
+		tEl = sDirRez->d_name;
+		size_t extPos = tEl.rfind(".");
+		tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
+		if(fileExt == "*" || (tEl.size() && fileExt.find(tEl+";") != string::npos)) fits.push_back(sDirRez->d_name);
+	    }
+	}
+	closedir(IdDir);
     }
     sort(its.begin(),its.end());
     for(unsigned i_it = 0; i_it < its.size(); i_it++)
-        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+its[i_it]);
     sort(fits.begin(),fits.end());
     for(unsigned i_it = 0; i_it < fits.size(); i_it++)
-        nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
+	nd->childAdd("el")->setText(fsBase+(pathLev?"/":"")+fits[i_it]);
 }
 
 void TSYS::cntrCmdProc( XMLNode *opt )
@@ -2141,7 +2152,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(opt->text());
     }
-    else if(a_path == "/gen/frq" && ctrChkNode(opt))	opt->setText(TSYS::real2str((float)sysClk()/1000000.,6));
+    else if(a_path == "/gen/frq" && ctrChkNode(opt))	opt->setText(r2s((float)sysClk()/1000000.,6));
     else if(a_path == "/gen/clk_res" && ctrChkNode(opt))
     {
 	struct timespec tmval;
@@ -2161,12 +2172,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/saveExit")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(int2str(saveAtExit()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(saveAtExit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(atoi(opt->text().c_str()));
     }
     else if(a_path == "/gen/savePeriod")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(int2str(savePeriod()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(savePeriod()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(atoi(opt->text().c_str()));
     }
     else if(a_path == "/gen/workdir")
@@ -2206,7 +2217,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/mess/lev")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(TSYS::int2str(Mess->messLevel()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->messLevel()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(atoi(opt->text().c_str()));
     }
     else if(a_path == "/gen/mess/log_sysl")
@@ -2252,8 +2263,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++)
 	    {
 		if(n_path)	n_path->childAdd("el")->setText(it->first);
-		if(n_thr)	n_thr->childAdd("el")->setText(TSYS::uint2str(it->second.thr));
-		if(n_tid)	n_tid->childAdd("el")->setText(TSYS::int2str(it->second.tid));
+		if(n_thr)	n_thr->childAdd("el")->setText(u2s(it->second.thr));
+		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
 		if(n_stat)
 		{
 		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0;
@@ -2275,7 +2286,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 #endif
 		    n_plc->childAdd("el")->setText(plcVl);
 		}
-		if(n_prior)	n_prior->childAdd("el")->setText(TSYS::int2str(it->second.prior));
+		if(n_prior)	n_prior->childAdd("el")->setText(i2s(it->second.prior));
 		if(n_cpuSet)	n_cpuSet->childAdd("el")->setText(it->second.cpuSet);
 	    }
 	}
@@ -2311,7 +2322,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
 	{
 	    if(n_id)	n_id->childAdd("el")->setText(icnt->first);
-	    if(n_vl)	n_vl->childAdd("el")->setText(TSYS::real2str(icnt->second));
+	    if(n_vl)	n_vl->childAdd("el")->setText(r2s(icnt->second));
 	}
     }
     else if(a_path == "/hlp/g_help" && ctrChkNode(opt,"get",R_R___,"root","root",SEC_RD)) opt->setText(optDescr());

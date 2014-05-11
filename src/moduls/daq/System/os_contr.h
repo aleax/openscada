@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: os_contr.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -57,37 +57,46 @@ class TMdPrm : public TParamContr
 	void enable( );
 	void disable( );
 
-	void autoC( bool val )	{ m_auto = val; }
-	bool autoC( )		{ return m_auto; }
+	void autoC( bool val )	{ mAuto = val; }
+	bool autoC( )		{ return mAuto; }
 
-	//> Set perameter type
+	// Set perameter type
 	void setType( const string &da_id );
-	//> Get new value
+
+	// Get new value
 	void getVal( );
 	void setEval( );
+
+	void vlElemAtt( TElem *ValEl );
+	void vlElemDet( TElem *ValEl );
+
+	string addPrm( const string &prm, const string &def = "" );
+	void setAddPrm( const string &prm, const string &val );
 
 	TMdContr &owner( );
 
 	//Attributes
 	ResString daErr;		//DA error
-	void	*daData;       		//DA personal data
+	void	*daData;		//DA personal data
 
     protected:
 	//Methods
 	void load_( );
 	void save_( );
 
-	bool cfgChange( TCfg &cfg );	//config change
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	bool cfgChange( TCfg &cfg );		//config change
 
-	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
+	void vlGet( TVal &vo );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	void vlArchMake( TVal &vo );
 
 	void postEnable( int flag );
 
     private:
 	//Attributes
-	bool	m_auto;			//Autocreated
-	DA	*m_da;
+	bool	mAuto;			//Autocreated
+	DA	*mDA;
 };
 
 //*************************************************
@@ -98,7 +107,7 @@ class TMdContr: public TController
     friend class TMdPrm;
     public:
 	//Methods
-	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
+	TMdContr( string name_c, const string &daq_db, TElem *cfgelem );
 	~TMdContr( );
 
 	string getStatus( );
@@ -169,7 +178,7 @@ class TTpContr: public TTipDAQ
 	TController *ContrAttach( const string &name, const string &daq_db );
 
 	//Attributes
-	vector<DA *> m_da;
+	vector<DA*>	mDA;
 };
 
 extern TTpContr *mod;

@@ -580,74 +580,72 @@ bool TMdPrm::cfgChange( TCfg &i_cfg )
     return true;
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if( !owner().startStat() || !enableStat() )	return;
+    if(!owner().startStat() || !enableStat())	return;
 
-    //> Send to active reserve station
-    if( owner().redntUse( ) )
+    //Send to active reserve station
+    if(owner().redntUse())
     {
-	if( val.getS(0,true) == pvl.getS() ) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
-    //> Direct write
+    //Direct write
     switch(type())
     {
 	case AO:
 	{
 	    int code = 0;
-	    switch( atoi(val.fld().reserve().c_str()) )
+	    switch(atoi(vo.fld().reserve().c_str()))
 	    {
-		case 1:	code = (int)(4095.*val.getR(0,true)/100.);	break;
-		case 2:	code = (int)(4095.*val.getR(0,true)/10.);	break;
+		case 1:	code = (int)(4095.*vl.getR()/100.);	break;
+		case 2:	code = (int)(4095.*vl.getR()/10.);	break;
 	    }
 
-	    //- Direct writing -
-	    if( owner().dataEmul() )	break;
-	    owner().ao_res.resRequestW( );
-	    if( dscDAConvert(owner().dscb,cnl(),code) != DE_NONE )
+	    // Direct writing
+	    if(owner().dataEmul())	break;
+	    owner().ao_res.resRequestW();
+	    if(dscDAConvert(owner().dscb,cnl(),code) != DE_NONE)
 	    {
 		ERRPARAMS errorParams;
 		dscGetLastError(&errorParams);
-		mess_err(nodePath().c_str(),_("dscDAConvert error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+		mess_err(nodePath().c_str(), _("dscDAConvert error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring);
 	    }
-	    owner().ao_res.resRelease( );
+	    owner().ao_res.resRelease();
 	    break;
 	}
 	case DO:
 	{
-	    //- Direct writing -
-	    if( owner().dataEmul() )	break;
-	    owner().dio_res.resRequestW( );
-	    if( dscDIOOutputBit(owner().dscb, m_dio_port>>4, m_dio_port&0x0f, val.getB(0,true)) != DE_NONE )
+	    // Direct writing
+	    if(owner().dataEmul())	break;
+	    owner().dio_res.resRequestW();
+	    if(dscDIOOutputBit(owner().dscb,m_dio_port>>4,m_dio_port&0x0f,vl.getB()) != DE_NONE)
 	    {
 		ERRPARAMS errorParams;
 		dscGetLastError(&errorParams);
-		mess_err(nodePath().c_str(),_("dscDIOOutputBit error: %s %s"),dscGetErrorString(errorParams.ErrCode),errorParams.errstring );
+		mess_err(nodePath().c_str(), _("dscDIOOutputBit error: %s %s"), dscGetErrorString(errorParams.ErrCode), errorParams.errstring);
 	    }
-	    owner().dio_res.resRelease( );
+	    owner().dio_res.resRelease();
 	}
 	default: break;
     }
 }
 
-void TMdPrm::vlGet( TVal &val )
+void TMdPrm::vlGet( TVal &vo )
 {
-    int aid = atoi(val.fld().reserve().c_str());
+    int aid = atoi(vo.fld().reserve().c_str());
     if(aid == 0)
     {
-	if(!owner().startStat())
-	    val.setS(_("2:Controller is stopped"),0,true);
-	else if(!enableStat())
-	    val.setS(_("1:Parameter is disabled"),0,true);
-	else val.setS("0",0,true);
+	if(!owner().startStat())vo.setS(_("2:Controller is stopped"),0,true);
+	else if(!enableStat())	vo.setS(_("1:Parameter is disabled"),0,true);
+	else vo.setS("0",0,true);
 	return;
     }
-    if(!owner().startStat() || !enableStat())	{ val.setS(EVAL_STR,0,true); return; }
+    if(!owner().startStat() || !enableStat())	{ vo.setS(EVAL_STR,0,true); return; }
 
     if(owner().redntUse()) return;
 
@@ -685,9 +683,9 @@ void TMdPrm::vlGet( TVal &val )
 	    }
 	    switch( aid )
 	    {
-		case 1: val.setR(enableStat()?(100.*((double)gval/32768.)):EVAL_REAL,0,true); break;
-		case 2: val.setR(enableStat()?(10.*((double)gval/32768.)):EVAL_REAL,0,true);  break;
-		case 3: val.setI(enableStat()?gval:EVAL_INT,0,true);  break;
+		case 1: vo.setR(enableStat()?(100.*((double)gval/32768.)):EVAL_REAL,0,true); break;
+		case 2: vo.setR(enableStat()?(10.*((double)gval/32768.)):EVAL_REAL,0,true);  break;
+		case 3: vo.setI(enableStat()?gval:EVAL_INT,0,true);  break;
 	    }
 	    break;
 	}
@@ -712,20 +710,20 @@ void TMdPrm::vlGet( TVal &val )
 		    owner().dio_res.resRelease( );
 		}
 	    }
-	    val.setB(gval,0,true);
+	    vo.setB(gval,0,true);
 	    break;
 	}
 	default: break;
     }
 }
 
-void TMdPrm::vlArchMake( TVal &val )
+void TMdPrm::vlArchMake( TVal &vo )
 {
-    TParamContr::vlArchMake(val);
+    TParamContr::vlArchMake(vo);
 
-    if(val.arch().freeStat()) return;
-    val.arch().at().setSrcMode(owner().ADIIntMode() ? TVArchive::PassiveAttr : TVArchive::ActiveAttr);
-    val.arch().at().setPeriod(owner().ADIIntMode() ? 1000000/owner().cfg("ADCONVRATE").getI() : SYS->archive().at().valPeriod()*1000);
-    val.arch().at().setHardGrid(true);
-    val.arch().at().setHighResTm(true);
+    if(vo.arch().freeStat()) return;
+    vo.arch().at().setSrcMode(owner().ADIIntMode() ? TVArchive::PassiveAttr : TVArchive::ActiveAttr);
+    vo.arch().at().setPeriod(owner().ADIIntMode() ? 1000000/owner().cfg("ADCONVRATE").getI() : SYS->archive().at().valPeriod()*1000);
+    vo.arch().at().setHardGrid(true);
+    vo.arch().at().setHighResTm(true);
 }

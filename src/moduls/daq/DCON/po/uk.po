@@ -40,8 +40,8 @@ msgstr "Планування опитування"
 msgid "Gather task priority"
 msgstr "Рівень пріоритету задачі збору даних"
 
-msgid "Serial transport"
-msgstr "Послідовний транспорт"
+msgid "Transport"
+msgstr "Транспорт"
 
 msgid "Request tries"
 msgstr "Спроб запиту"

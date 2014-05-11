@@ -90,7 +90,7 @@ class Reg
 	    EndFull,	//[E]: Full end from program.
 	    MviB,	//[CRRB]: Load Boolean <B> to register <R>.
 	    MviI,	//[CRR____]: Load Integer <____> to register <R>.
-	    MviR,	//[CRR______]: Load Real <______> to register <R>.
+	    MviR,	//[CRR________]: Load Real <________> to register <R>.
 	    MviS,	//[CRRn_____]: Load String len <n> to register <R>.
 	    MviObject,	//[CRR]: Load object.
 	    MviArray,	//[CRRnrr....]: Load array from registers list.
@@ -230,11 +230,7 @@ class RegW
 
 	Reg::El &val( )				{ return el; }
 
-	//> Object's properties
-	bool propEmpty( )			{ return mPrps.empty(); }
-	int propSize( )				{ return mPrps.size(); }
-	string propGet( int id );
-	void propAdd( const string &vl );
+	vector<string> &props( )		{ return mPrps; }
 
     private:
 	Reg::Type	mTp;

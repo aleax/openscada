@@ -65,6 +65,9 @@ msgstr "UDP Socket ist nicht verbunden mit '%s'!"
 msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX ist nicht verbunden mit '%s'!"
 
+msgid "Socket write message '%d'."
+msgstr "Buchse Nachricht schreiben '%d'."
+ 
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Close-Eingang Transport durch Fehler: %s!"
@@ -95,20 +98,9 @@ msgstr "Socket hat die Nachricht bekommen '%d' aus '%s'."
 msgid "Socket replied message '%d' to '%s'."
 msgstr "Socket hat mit der Nachricht geantwortet '%d' auf '%s'."
 
-msgid "Write: reply for zero bytes."
-msgstr "Schreiben: Antwort für Null-Bytes."
-
-#, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Schreiben: Fehler '%s (%d)'!"
-
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Vom Socket abgebunden '%s'!"
-
-#, c-format
-msgid "The protocol '%s' is not present."
-msgstr "Das Protokoll '%s' ist nicht vorhanden."
 
 msgid "Error request to protocol."
 msgstr "Fehler der Anfrage ans Protokoll."
@@ -156,14 +148,28 @@ msgstr "Kunden Maximum"
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
-msgid "Keep alive connections"
-msgstr "Keep Alive-Verbindungen"
+msgid "Priority"
+msgstr "Priorität"
+ 
+msgid "Keep alive requests"
+msgstr "Keep alive Anfragen"
+ 
+msgid ""
+"Close the connection after specified requests.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Schließen Sie die Verbindung nach bestimmten Anfragen.\n"
+"Null-Wert für disable (nicht immer schließen)."
 
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive Timeout (s)"
 
-msgid "Priority"
-msgstr "Priorität"
+msgid ""
+"Close the connection after no requests at specified timeout.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
+"Null-Wert für disable (nicht immer schließen)."
 
 #, c-format
 msgid "Traffic in %s, out %s."

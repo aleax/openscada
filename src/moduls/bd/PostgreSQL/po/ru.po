@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 17:04+0300\n"
+"POT-Creation-Date: 2014-02-24 12:26+0200\n"
 "PO-Revision-Date: 2010-07-30 09:10+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,39 +16,50 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: postgre.cpp:33
 msgid "DB PostgreSQL"
 msgstr "БД PostgreSQL"
 
+#: postgre.cpp:37
 msgid "Maxim Lysenko"
 msgstr "Максим Лысенко"
 
+#: postgre.cpp:38
 msgid "BD module. Provides support of the BD PostgreSQL."
 msgstr "Модуль БД. Предоставляет поддержку БД PostgreSQL."
 
+#: postgre.cpp:123 postgre.cpp:177 postgre.cpp:184
 msgid "Fatal error - unable to allocate connection."
 msgstr "Фатальная ошибка - невозможно установить соединение."
 
+#: postgre.cpp:125 postgre.cpp:128 postgre.cpp:180 postgre.cpp:186
+#: postgre.cpp:315 postgre.cpp:325
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Ошибка подключения к БД: %s"
 
+#: postgre.cpp:135 postgre.cpp:332
 #, c-format
 msgid "Query to DB error: %s. %s"
 msgstr "Ошибка запроса к БД: %s. %s"
 
+#: postgre.cpp:242
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Ошибка открытия таблицы '%s'. БД отключена."
 
+#: postgre.cpp:262
 msgid "Start transaction error!"
 msgstr "Ошибка запуска транзакции!"
 
+#: postgre.cpp:285
 msgid "Stop transaction error!"
 msgstr "Ошибка останова транзакции!"
 
+#: postgre.cpp:376
 msgid ""
-"PostgreSQL DB address must be written as: [<host>;<hostaddr>;<user>;<pass>;"
-"<db>;<port>;<connect_timeout>].\n"
+"PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};"
+"{db};{port}[;{connect_timeout}]\".\n"
 "Where:\n"
 "  host - Name of the host (PostgreSQL server) to connect to. If this begins "
 "with a slash ('/'),\n"
@@ -65,8 +76,8 @@ msgid ""
 "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
 "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
 msgstr ""
-"Адрес БД PostgreSQL записывается в виде: [<host>;<hostaddr>;<user>;<pass>;"
-"<db>;<port>;<connect_timeout>].\n"
+"Адрес БД PostgreSQL записывается в виде: \"{host};{hostaddr};{user};{pass};"
+"{db};{port}[;{connect_timeout}]\".\n"
 "Где:\n"
 "  host - имя хоста PostgreSQL сервера. Если начинается с слеша ('/'), то\n"
 "         указывается UNIX-сокет вместо TCP,\n"
@@ -80,11 +91,15 @@ msgstr ""
 "Для локальной БД: [;;roman;123456;OpenSCADA;5432;10].\n"
 "Для удалённой БД: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
 
+#: postgre.cpp:471
 msgid "Table is not present!"
 msgstr "Таблица отсутствует!"
 
+#: postgre.cpp:476 postgre.cpp:504 postgre.cpp:575 postgre.cpp:632
+#: postgre.cpp:717 postgre.cpp:745
 msgid "Table is empty!"
 msgstr "Таблица пуста!"
 
+#: postgre.cpp:612
 msgid "Row is not present!"
 msgstr "Запись отсутствует!"

@@ -63,13 +63,13 @@ class WinControl: public QObject
 	//Methods
 	WinControl( );
 
-	bool callQTModule( const string &nm );
+	bool callQtModule( const string &nm );
 	void startDialog( );
 
     private slots:
 	//Methods
 	void checkForEnd( );
-	void callQTModule( );
+	void callQtModule( );
 	void lastWinClose( );
 
     private:
@@ -128,7 +128,7 @@ class TUIMod: public TUI
 	bool	demon_mode, end_run, start_com;
 	string	start_mod;
 
-	//> Command line options binding to QT
+	//> Command line options binding to Qt
 	int	qtArgC, qtArgEnd;		//Arguments counter and end position
 	char   	*qtArgV[10];			//Argument's values
 	char	qtArgBuf[1000];			//Arguments' strings buffer

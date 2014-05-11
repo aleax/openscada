@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.MySQL file: my_sql.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -60,7 +60,7 @@ class MTable : public TTable
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt = 1 );
 
@@ -85,7 +85,7 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( string iid, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void disable( );
@@ -93,21 +93,27 @@ class MBD : public TBD
 	void allowList( vector<string> &list );
 	void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL );
 
+	void transOpen( );
+	void transCommit( );
+	void transCloseCheck( );
+
     protected:
 	//Protected methods
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-	string host, user, pass, bd, u_sock, cd_pg, names;
-	int    port;
+	string	host, user, pass, bd, u_sock, cd_pg, names;
+	int	port;
 
-	MYSQL  connect;
-	Res    conn_res;
+	int	reqCnt;
+	time_t	reqCntTm, trOpenTm;
+	MYSQL	connect;
+	pthread_mutex_t	connRes;
 };
 
 //************************************************
@@ -118,7 +124,7 @@ class BDMod: public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod();
+	~BDMod( );
 
     protected:
 	//Protected methods

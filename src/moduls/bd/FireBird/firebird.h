@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.FireBird file: firebird.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -48,7 +48,7 @@ class MTable : public TTable
 	MTable( string name, MBD *bd, bool create );
 	~MTable( );
 
-	//> Field's operations
+	// Field's operations
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg );
 	void fieldGet( TConfig &cfg );
@@ -79,7 +79,7 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( const string &iid, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void disable( );
@@ -104,12 +104,12 @@ class MBD : public TBD
 	string getErr( ISC_STATUS_ARRAY status );
 
 	//Private attributes
-	string		user, pass, fdb, cd_pg;
+	string		user, pass, conTm, fdb, cd_pg;
 	isc_db_handle	hdb;
 	isc_tr_handle	htrans;
 	int		reqCnt;
 	time_t		reqCntTm, trOpenTm;
-	Res		conn_res;
+	pthread_mutex_t	connRes;
 };
 
 //*************************************************
@@ -120,7 +120,7 @@ class BDMod: public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod();
+	~BDMod( );
 
 	static string sqlReqCode( const string &req, char symb = '\'' );
 

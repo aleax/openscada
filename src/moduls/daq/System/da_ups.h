@@ -1,8 +1,8 @@
 
-//OpenSCADA system module DAQ.System file: da.h
+//OpenSCADA system module DAQ.System file: da_ups.h
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2014 by Roman Savochenko                                *
+ *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -19,44 +19,59 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef DA_H
-#define DA_H
+#ifndef DA_UPS_H
+#define DA_UPS_H
 
-#include <tcontroller.h>
-
-using namespace OSCADA;
+#include "da.h"
 
 namespace SystemCntr
 {
 
 //*************************************************
-//* DA                                            *
+//* NUT                                           *
 //*************************************************
-class TMdPrm;
-class TMdContr;
-
-class DA: public TElem
+class UPS: public DA
 {
     public:
+	//Data
+	//* tval - The parameter specific values object
+	class tval
+	{
+	    public:
+	    //Methods
+	    tval( )	{ }
+
+	    TElem els;
+	};
+
 	//Methods
-	DA( ) : TElem("da_el")	{ }
-	virtual ~DA( )		{ }
+	UPS( );
+	~UPS( );
 
-	virtual string id( ) = 0;
-	virtual string name( ) = 0;
+	string id( )	{ return "ups"; }
+	string name( )	{ return _("UPS (NUT)"); }
 
-	virtual void init( TMdPrm *prm ) 	{ }
-	virtual void deInit( TMdPrm *prm )	{ }
+	void init( TMdPrm *prm );
+	void deInit( TMdPrm *prm );
 
-	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
-	virtual void cfgChange( TCfg &i_cfg )	{ }
+	bool cntrCmdProc( TMdPrm *prm, XMLNode *opt );
+	void cfgChange( TCfg &i_cfg );
 
-	virtual void getVal( TMdPrm *prm )	{ }
-	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }
+	void getVal( TMdPrm *prm );
+	void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl );
 
-	virtual void makeActiveDA( TMdContr *a_cntr )	{ }
+	void makeActiveDA( TMdContr *a_cntr );
+
+    private:
+	//Methods
+	string reqUPS( const string &addr, const string &req, const string &debCat = "" );
+	string upsList( const string &addr );
+
+	//Attributes
+	string	tTr, nTr;
+	pthread_mutex_t	reqRes;
 };
 
 } //End namespace
 
-#endif //DA_H
+#endif //DA_UPS_H

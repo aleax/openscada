@@ -76,7 +76,7 @@ class dbReqSQL : public TFunction
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("addr",_("DB address"),IO::String,IO::Default));
 	    ioAdd(new IO("req",_("SQL request"),IO::String,IO::Default));
-	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,TSYS::int2str(EVAL_BOOL).c_str()));
+	    ioAdd(new IO("trans",_("Transaction"),IO::Boolean,IO::Default,i2s(EVAL_BOOL).c_str()));
 	}
 
 	string name( )	{ return _("DB: SQL request"); }
@@ -94,9 +94,8 @@ class dbReqSQL : public TFunction
 		for(unsigned i_r = 0; i_r < rtbl.size(); i_r++)
 		{
 		    TArrayObj *row = new TArrayObj();
-		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++)
-			row->propSet(TSYS::int2str(i_c),rtbl[i_r][i_c]);
-		    rez->propSet(TSYS::int2str(i_r),AutoHD<TVarObj>(row));
+		    for(unsigned i_c = 0; i_c < rtbl[i_r].size(); i_c++) row->arSet(i_c, rtbl[i_r][i_c]);
+		    rez->arSet(i_r, AutoHD<TVarObj>(row));
 		}
 	    }
 	    catch(...){ }
@@ -140,7 +139,7 @@ class messGet : public TFunction
 		am->propSet("categ", recs[i_m].categ);
 		am->propSet("level", recs[i_m].level);
 		am->propSet("mess", recs[i_m].mess);
-		rez->propSet(TSYS::int2str(i_m), AutoHD<TVarObj>(am));
+		rez->arSet(i_m, AutoHD<TVarObj>(am));
 	    }
 	    val->setO(0,rez);
 	}
@@ -431,7 +430,7 @@ class real2str : public TFunction
 
 	void calc( TValFunc *val )
 	{
-	    val->setS(0,TSYS::real2str(val->getR(1),val->getI(2),val->getS(3).size()?val->getS(3)[0]:'f') );
+	    val->setS(0, r2s(val->getR(1),val->getI(2),val->getS(3).size()?val->getS(3)[0]:'f'));
 	}
 };
 
@@ -455,9 +454,9 @@ class int2str : public TFunction
 	{
 	    switch( val->getI(2) )
 	    {
-		case 8:	val->setS(0,TSYS::int2str(val->getI(1),TSYS::Oct));	break;
-		case 10:val->setS(0,TSYS::int2str(val->getI(1),TSYS::Dec));	break;
-		case 16:val->setS(0,TSYS::int2str(val->getI(1),TSYS::Hex));	break;
+		case 8:	val->setS(0, i2s(val->getI(1),TSYS::Oct));	break;
+		case 10:val->setS(0, i2s(val->getI(1),TSYS::Dec));	break;
+		case 16:val->setS(0, i2s(val->getI(1),TSYS::Hex));	break;
 		default: val->setS(0,"");
 	    }
 	}
@@ -546,6 +545,40 @@ class floatMergeWord : public TFunction
 	    union { uint32_t i; float f; } wl;
 	    wl.i = ((val->getI(2)&0xffff)<<16) | (val->getI(1)&0xffff);
 	    val->setR(0,wl.f);
+	}
+};
+
+//*************************************************
+//* Merge float from words                        *
+//*************************************************
+class CRC : public TFunction
+{
+    public:
+	CRC( ) : TFunction("CRC", SSPC_ID)
+	{
+	    ioAdd(new IO("rez",_("Result"),IO::Integer,IO::Return));
+	    ioAdd(new IO("data",_("Data"),IO::String,IO::Default));
+	    ioAdd(new IO("poly",_("Polynomial (reversion)"),IO::Integer,IO::Default,"40961"));	//0xA001
+	    ioAdd(new IO("width",_("Width"),IO::Integer,IO::Default,"16"));
+	    ioAdd(new IO("init",_("Initial"),IO::Integer,IO::Default,"-1"));	//0xFFFFFFFFFFFFFFFF
+	}
+
+	string name( )	{ return _("Cyclic Redundancy Code (CRC)"); }
+	string descr( )	{ return _("Unified Cyclic Redundancy Code implement for 8-64 bits width."); }
+
+	void calc( TValFunc *val )
+	{
+	    int wdth = vmin(64, vmax(1,val->getI(3)));
+	    uint64_t mask = 0xFFFFFFFFFFFFFFFFll >> (64-wdth);
+	    uint64_t CRC = val->getI(4) & mask;
+	    uint64_t pat = val->getI(2) & mask;
+	    string data = val->getS(1);
+	    for(unsigned i = 0; i < data.size(); i++)
+	    {
+		CRC ^= (uint8_t)data[i];
+		for(char j = 0; j < 8; j++) CRC = (CRC&1) ? (CRC>>1)^pat : (CRC>>1);
+	    }
+	    val->setI(0, (int64_t)CRC);
 	}
 };
 

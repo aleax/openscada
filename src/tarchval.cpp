@@ -55,7 +55,7 @@ TValBuf::TValBuf( ) : mValTp(TFld::Integer), mHgResTm(false), mHrdGrd(false), mE
 }
 
 TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres ) :
-    mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mEnd(0), mBeg(0), mPer(ipr), mSize(isz)
+    mValTp(vtp), mHgResTm(ihres), mHrdGrd(ihgrd), mEnd(0), mBeg(0), mPer(vmax(0,ipr)), mSize(isz)
 {
     buf.bl = NULL;
 
@@ -139,12 +139,11 @@ int TValBuf::realSize()
 
 bool TValBuf::vOK( int64_t ibeg, int64_t iend )
 {
-    if( !begin() || !end() || iend < begin() || ibeg > end() || ibeg > iend )
-	return false;
-    return true;
+    if(!period()) return !(!begin() || !end() || iend < begin() || ibeg > end() || ibeg > iend);
+    return !(!begin() || !end() || iend/period() < begin()/period() || ibeg/period() > end()/period() || ibeg/period() > iend/period());
 }
 
-void TValBuf::setValType( TFld::Type vl )	{ makeBuf(vl, mSize, mPer, mHrdGrd, mHgResTm ); }
+void TValBuf::setValType( TFld::Type vl )	{ makeBuf(vl, mSize, mPer, mHrdGrd, mHgResTm); }
 
 void TValBuf::setHardGrid( bool vl )		{ makeBuf( mValTp, mSize, mPer, vl, mHgResTm ); }
 
@@ -350,6 +349,7 @@ void TValBuf::set( const TVariant &value, int64_t tm )
 	case TVariant::Integer:	setI(value.getI(), tm);	break;
 	case TVariant::Real:	setR(value.getR(), tm);	break;
 	case TVariant::String:	setS(value.getS(), tm);	break;
+	default: break;
     }
 }
 
@@ -1028,7 +1028,7 @@ int64_t TVArchive::begin( const string &arch )
     }
     if(!rez) rez = cTm;	//> Empty buffer
 
-    ResAlloc res(aRes,false);
+    ResAlloc res(aRes, false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && arch_el[i_a]->begin() < rez)
 	{
@@ -1041,7 +1041,7 @@ int64_t TVArchive::begin( const string &arch )
 int64_t TVArchive::period( const string &arch )
 {
     if(arch.empty() || arch == BUF_ARCH_NM) return TValBuf::period();
-    ResAlloc res(aRes,false);
+    ResAlloc res(aRes, false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
 	if(arch == arch_el[i_a]->archivator().workId())
 	    return (int64_t)(1e6*arch_el[i_a]->archivator().valPeriod());
@@ -1137,7 +1137,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
     //> Disable all links
     if(!pattr_src.freeStat() && (!runSt || vl == Passive || vl != srcMode() || src != srcData()))
     {
-	owner().setActValArch(id(), false);
+	owner().setActVal(this, false);
 	srcPAttr().at().setArch(AutoHD<TVArchive>());
 	pattr_src.free();
     }
@@ -1162,7 +1162,7 @@ void TVArchive::setSrcMode( SrcMode ivl, const string &isrc, bool noex )
 	    else
 	    {
 		pattr_src.at().setArch(AutoHD<TVArchive>(this));
-		owner().setActValArch(id(), true);
+		owner().setActVal(this, true);
 	    }
 	}
     }
@@ -1255,9 +1255,9 @@ void TVArchive::setVals( TValBuf &buf, int64_t ibeg, int64_t iend, const string 
     //> Put to archivators
     ResAlloc res(aRes,false);
     for(unsigned i_a = 0; i_a < arch_el.size(); i_a++)
-	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
-		(!arch_el[i_a]->lastGet() || ibeg < arch_el[i_a]->lastGet()))
-	    arch_el[i_a]->setVals(buf,ibeg,vmin(iend,arch_el[i_a]->lastGet()));
+	if((arch.empty() || arch == arch_el[i_a]->archivator().workId()))
+		//&& (!arch_el[i_a]->lastGet() || ibeg < arch_el[i_a]->lastGet()))	//!!!! Impossible write direct else
+	    arch_el[i_a]->setVals(buf, ibeg, iend/*vmin(iend,arch_el[i_a]->lastGet())*/);
 }
 
 void TVArchive::getActiveData()
@@ -1785,11 +1785,11 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    bool	local	= atoi(opt->attr("local").c_str());
 
 	    //>> Process one value request
-	    if(!tm)	tm = TSYS::curTime();
+	    if(!tm) 	tm = TSYS::curTime();
 	    if(!tm_grnd)
 	    {
 		opt->setText(getVal(&tm,false,arch,local).getS());
-		opt->setAttr("tm",TSYS::ll2str(tm));
+		opt->setAttr("tm", ll2s(tm));
 		return;
 	    }
 	    if(tm < tm_grnd)	throw TError(nodePath().c_str(),_("Range error"));
@@ -1802,8 +1802,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    //>>> Get values buffer
 	    if((arch.empty() || arch == BUF_ARCH_NM) && vOK(tm_grnd,tm))
 	    {
-		TValBuf::getVals(buf,tm_grnd,tm);
-		opt->setAttr("arch",BUF_ARCH_NM);
+		TValBuf::getVals(buf, tm_grnd, tm);
+		opt->setAttr("arch", BUF_ARCH_NM);
 	    }
 	    else
 	    {
@@ -1811,7 +1811,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		//>>> Find more usable archivator
 		int i_asel = -1;
 		for(int i_a = ((int)arch_el.size()-1); i_a >= 0; i_a--)
-		    if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) && tm_grnd <= arch_el[i_a]->end() && tm >= arch_el[i_a]->begin())
+		    if((arch.empty() || arch == arch_el[i_a]->archivator().workId()) &&
+			tm_grnd <= arch_el[i_a]->end() && tm >= arch_el[i_a]->begin())
 		    {
 			i_asel = i_a;
 			if(!arch.empty()) break;
@@ -1822,7 +1823,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    buf.setPeriod(vmax((int64_t)(1e6*arch_el[i_asel]->archivator().valPeriod()),period));
 		    arch_el[i_asel]->getVals(buf, vmax(tm_grnd,arch_el[i_asel]->begin()), tm, local);	//vmax for allow access to next level archive
 													//into single request, like from 1m to 10m
-		    opt->setAttr("arch",arch_el[i_asel]->archivator().workId());
+		    opt->setAttr("arch", arch_el[i_asel]->archivator().workId());
 		}
 		res.release();
 	    }
@@ -1843,24 +1844,24 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    char tval_pr = EVAL_BOOL, tval_pr1 = EVAL_BOOL;
 		    while(ibeg <= iend)
 		    {
-			char tval = buf.getB(&ibeg,true);
+			char tval = buf.getB(&ibeg, true);
 			vpos_cur = (ibeg-buf.begin())/period;
-			if( vpos_cur > vpos_end )
+			if(vpos_cur > vpos_end)
 			    bool1: switch(mode)
 			    {
-				case 0: text+=TSYS::int2str(tval_pr)+"\n";	break;
+				case 0: text += ((tval_pr==EVAL_BOOL) ? EVAL_STR : i2s(tval_pr)) + "\n"; break;
 				case 1:
-				    if( !vpos_end || tval_pr != tval_pr1 )
-					text+=TSYS::int2str(vpos_end)+" "+TSYS::int2str(tval_pr)+"\n";
-				    tval_pr1 = tval_pr;	
+				    if(!vpos_end || tval_pr != tval_pr1)
+					text += i2s(vpos_end) + " " + ((tval_pr==EVAL_BOOL) ? EVAL_STR : i2s(tval_pr)) + "\n";
+				    tval_pr1 = tval_pr;
 				    break;
-				case 2: text+=tval_pr;	break;
+				case 2: text += tval_pr;	break;
 			    }
 			tval_pr = tval;
 			vpos_end = vpos_cur;
 			ibeg++;
-			if( isEnd )	break;
-			if( ibeg > iend )	{ isEnd = true;	goto bool1; }	//Flush last value
+			if(isEnd)	break;
+			if(ibeg > iend)	{ isEnd = true;	goto bool1; }	//Flush last value
 		    }
 		    break;
 		}
@@ -1870,12 +1871,12 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		    int tval_pr = EVAL_INT, tval_pr1 = EVAL_INT;
 		    while(ibeg <= iend)
 		    {
-			int tval = buf.getI(&ibeg,true);
+			int tval = buf.getI(&ibeg, true);
 			vpos_cur = (ibeg-buf.begin())/period;
-			if( vpos_cur <= vpos_end )
+			if(vpos_cur <= vpos_end)
 			{
-			    if( tval == EVAL_INT ) tval = tval_pr;
-			    if( tval != EVAL_INT && tval_pr != EVAL_INT )
+			    if(tval == EVAL_INT) tval = tval_pr;
+			    if(tval != EVAL_INT && tval_pr != EVAL_INT)
 			    {
 				int s_k = ibeg-period*(ibeg/period);
 				int n_k = buf.period();
@@ -1884,22 +1885,22 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			}
 			else int1: switch(mode)
 			{
-			    case 0: text+=TSYS::int2str(tval_pr)+"\n";	break;
-			    case 1: 
-				if( !(vpos_end && ( tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
-					100.*(double)abs(tval_pr1-tval_pr)/(double)vmax(abs(tval_pr1),abs(tval_pr)) <= round_perc))) )
+			    case 0: text += ((tval_pr==EVAL_INT) ? EVAL_STR : i2s(tval_pr)) + "\n"; break;
+			    case 1:
+				if(!(vpos_end && (tval_pr == tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
+					100.*(double)abs(tval_pr1-tval_pr)/(double)vmax(abs(tval_pr1),abs(tval_pr)) <= round_perc))))
 				{
-				    text+=TSYS::int2str(vpos_end)+" "+TSYS::int2str(tval_pr)+"\n";
+				    text += i2s(vpos_end) + " " + ((tval_pr==EVAL_INT) ? EVAL_STR : i2s(tval_pr)) + "\n";
 				    tval_pr1 = tval_pr;
 				}
 				break;
-			    case 2: text+=string((char*)&tval_pr,sizeof(int)); break;
+			    case 2: text += string((char*)&tval_pr, sizeof(int)); break;
 			}
 			tval_pr = tval;
 			vpos_end = vpos_cur;
 			ibeg++;
-			if( isEnd )	break;
-			if( ibeg > iend )	{ isEnd = true;	goto int1; }	//Flush last value
+			if(isEnd)	break;
+			if(ibeg > iend)	{ isEnd = true;	goto int1; }	//Flush last value
 		    }
 		    break;
 		}
@@ -1907,16 +1908,16 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		{
 		    float round_perc = atof(opt->attr("round_perc").c_str());
 		    int   real_prec  = atoi(opt->attr("real_prec").c_str());
-		    if( !real_prec ) real_prec = 10;
+		    if(!real_prec) real_prec = 10;
 		    double tval_pr = EVAL_REAL, tval_pr1 = EVAL_REAL;
-		    while( ibeg <= iend )
+		    while(ibeg <= iend)
 		    {
-			double tval = buf.getR(&ibeg,true);
+			double tval = buf.getR(&ibeg, true);
 			vpos_cur = (ibeg-buf.begin())/period;
-			if( vpos_cur <= vpos_end )
+			if(vpos_cur <= vpos_end)
 			{
-			    if( tval == EVAL_REAL ) tval = tval_pr;
-			    if( tval != EVAL_REAL && tval_pr != EVAL_REAL )
+			    if(tval == EVAL_REAL) tval = tval_pr;
+			    if(tval != EVAL_REAL && tval_pr != EVAL_REAL)
 			    {
 				int s_k = ibeg-period*(ibeg/period);
 				int n_k = buf.period();
@@ -1925,39 +1926,39 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			}
 			else real1: switch(mode)
 			{
-			    case 0: text+=TSYS::real2str(tval_pr,real_prec)+"\n";	break;
+			    case 0: text += ((tval_pr==EVAL_REAL) ? EVAL_STR : r2s(tval_pr,real_prec)) + "\n";	break;
 			    case 1:
-				if( !(vpos_end && ( tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
-					100.*fabs(tval_pr1-tval_pr)/vmax(fabs(tval_pr1),fabs(tval_pr)) <= round_perc))) )
+				if(!(vpos_end && (tval_pr == tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
+					100.*fabs(tval_pr1-tval_pr)/vmax(fabs(tval_pr1),fabs(tval_pr)) <= round_perc))))
 				{
-				    text+=TSYS::int2str(vpos_end)+" "+TSYS::real2str(tval_pr,real_prec)+"\n";
+				    text += i2s(vpos_end) + " " + ((tval_pr==EVAL_REAL) ? EVAL_STR : r2s(tval_pr,real_prec)) + "\n";
 				    tval_pr1 = tval_pr;
 				}
 				break;
-			    case 2: text+=string((char*)&tval_pr,sizeof(double));	break;
+			    case 2: text += string((char*)&tval_pr, sizeof(double));	break;
 			}
 			tval_pr = tval;
 			vpos_end = vpos_cur;
 			ibeg++;
-			if( isEnd )	break;
-			if( ibeg > iend )	{ isEnd = true;	goto real1; }	//Flush last value
+			if(isEnd)	break;
+			if(ibeg > iend)	{ isEnd = true;	goto real1; }	//Flush last value
 		    }
 		    break;
 		}
 		case TFld::String:
 		{
 		    string tval_pr = EVAL_STR, tval_pr1;
-		    while( ibeg <= iend )
+		    while(ibeg <= iend)
 		    {
-			string tval = buf.getS(&ibeg,true);
+			string tval = buf.getS(&ibeg, true);
 			vpos_cur = (ibeg-buf.begin())/period;
-			if( vpos_cur > vpos_end )
+			if(vpos_cur > vpos_end)
 			    str1: switch(mode)
 			    {
-				case 0: text+=TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";	break;
+				case 0: text += TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";	break;
 				case 1:
-				    if( !vpos_end || tval_pr != tval_pr1 ) 
-					text+=TSYS::int2str(vpos_end)+" "+TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n";
+				    if(!vpos_end || tval_pr != tval_pr1)
+					text += i2s(vpos_end) + " " + TSYS::strEncode(tval_pr,TSYS::Custom,"\n") + "\n";
 				    tval_pr1 = tval_pr;
 				    break;
 				case 2: throw TError(nodePath().c_str(),_("Binary mode no support for string data"));
@@ -1965,8 +1966,8 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			tval_pr = tval;
 			vpos_end = vpos_cur;
 			ibeg++;
-			if( isEnd )	break;
-			if( ibeg > iend )	{ isEnd = true;	goto str1; }	//Flush last value
+			if(isEnd)	break;
+			if(ibeg > iend)	{ isEnd = true;	goto str1; }	//Flush last value
 		    }
 		    break;
 		}
@@ -2161,7 +2162,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 		{
 		    TVArchEl *a_el = NULL;
 		    //Find attached
-		    ResAlloc res(aRes,false);
+		    ResAlloc res(aRes, false);
 		    for(unsigned i_l = 0; i_l < arch_el.size(); i_l++)
 			if(arch_el[i_l]->archivator().owner().modId() == t_arch_ls[i_ta] && arch_el[i_l]->archivator().id() == arch_ls[i_a])
 			    a_el = arch_el[i_l];
@@ -2541,7 +2542,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/prm/cfg/dscr",cfg("DESCR").fld().descr(),RWRWR_,"root",SARH_ID,3,"tp","str","cols","50","rows","3");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/vper",mVPer.fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","real");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/aper",mAPer.fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","dec");
-		ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start",_("To start"),RWRWR_,"root",SARH_ID,1,"tp","bool");
 	    }
 	}
@@ -2579,7 +2580,7 @@ void TVArchivator::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(dscr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setDscr(opt->text());
     }
-    else if(a_path == "/prm/cfg/addr")
+    else if(a_path == "/prm/cfg/ADDR")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(addr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setAddr(opt->text());
@@ -2730,15 +2731,14 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 			int prevPos = 0, curPos;
 			string prevVal = EVAL_STR, curVal;
 
-			for( int v_off = 0; true; )
+			for(int v_off = 0, var_off = 0; true; )
 			{
 			    string svl = TSYS::strSepParse(req.text(),0,'\n',&v_off);
-			    if( svl.size() )
+			    if(svl.size())
 			    {
-				size_t sepPos = svl.find(" ");
-				if(sepPos == string::npos) break;
-				curPos = atoi(svl.substr(0,sepPos).c_str());
-				curVal = svl.substr(sepPos+1);
+				var_off = 0;
+				curPos = atoi(TSYS::strParse(svl,0," ",&var_off,true).c_str());
+				curVal = TSYS::strParse(svl, 0, " ", &var_off, true);
 			    }
 			    else curPos = ((bend-bbeg)/bper)+1;
 			    switch(val_tp)
@@ -2746,22 +2746,22 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 				case TFld::Boolean:
 				{
 				    char vl = atoi(prevVal.c_str());
-				    if( vl == EVAL_BOOL ) { evalOk = true; prevPos = curPos; }
-				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setB(vl,bbeg+prevPos*bper); }
+				    if(prevVal == EVAL_STR || vl == EVAL_BOOL) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setB(vl, bbeg+prevPos*bper); }
 				    break;
 				}
 				case TFld::Integer:
 				{
 				    int vl = atoi(prevVal.c_str());
-				    if( vl == EVAL_INT ) { evalOk = true; prevPos = curPos; }
-				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setI(vl,bbeg+prevPos*bper); }
+				    if(prevVal == EVAL_STR || vl == EVAL_INT) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setI(vl, bbeg+prevPos*bper); }
 				    break;
 				}
 				case TFld::Real:
 				{
 				    double vl = atof(prevVal.c_str());
-				    if( vl == EVAL_REAL ) { evalOk = true; prevPos = curPos; }
-				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setR(vl,bbeg+prevPos*bper); }
+				    if(prevVal == EVAL_STR || vl == EVAL_REAL) { evalOk = true; prevPos = curPos; }
+				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setR(vl, bbeg+prevPos*bper); }
 				    break;
 				}
 				case TFld::String:
@@ -2794,19 +2794,20 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
     if( !beg || !end ) { beg = ibuf.begin(); end = ibuf.end(); }
     beg = vmax(beg,ibuf.begin()); end = vmin(end,ibuf.end());
 
-    if( !beg || !end || beg > end ) return;
+    if(!beg || !end || beg/a_per > end/a_per) return;
 
-    //>> Check for put to buffer
+    //Check for put to buffer
     if( &archive() != &ibuf && mLastGet && end > mLastGet && ((end-mLastGet)/archive().period()) < archive().size() )
     { archive().TValBuf::setVals(ibuf,vmax(archive().end(),beg),end); return; }
-    //>> Put direct to archive
+
+    //Put direct to archive
     int64_t wPrevTm = 0;
     string wPrevVal;
 
     if( &archive() == &ibuf || end > archive().end() ) { wPrevTm = prev_tm; wPrevVal = prev_val; }
 
-    //>> Averaging
-    if( a_per > ibuf.period() )
+    bool setOK = false;
+    if(a_per > ibuf.period())
     {
 	TValBuf obuf(ibuf.valType(), 0, a_per, true, true);
 	for( int64_t c_tm = beg; c_tm <= end;)
@@ -2855,13 +2856,13 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		}
 		case TFld::Real:
 		{
-		    double c_val = ibuf.getR(&c_tm,true);
+		    double c_val = ibuf.getR(&c_tm, true);
 		    int vdif = c_tm/a_per - wPrevTm/a_per;
-		    if( !vdif )
+		    if(!vdif)
 		    {
 			double v_o = *(double*)wPrevVal.c_str();
-			if( c_val == EVAL_REAL ) c_val = v_o;
-			if( c_val != EVAL_REAL && v_o != EVAL_REAL )
+			if(c_val == EVAL_REAL) c_val = v_o;
+			if(c_val != EVAL_REAL && v_o != EVAL_REAL)
 			{
 			    int64_t s_k = c_tm-a_per*(c_tm/a_per);
 			    int64_t n_k = ibuf.period();
@@ -2870,8 +2871,8 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 			wPrevVal.assign((char*)&c_val,sizeof(double));
 			wPrevTm = c_tm;
 		    }
-		    if( vdif == 1 || c_tm+1 > end ) obuf.setR(*(double*)wPrevVal.c_str(),wPrevTm);
-		    if( vdif )
+		    if(vdif == 1 || c_tm+1 > end) obuf.setR(*(double*)wPrevVal.c_str(),wPrevTm);
+		    if(vdif)
 		    {
 			wPrevVal.assign((char*)&c_val,sizeof(double));
 			wPrevTm = c_tm;
@@ -2882,10 +2883,13 @@ void TVArchEl::setVals( TValBuf &ibuf, int64_t beg, int64_t end )
 		default: break;
 	    }
 	}
-	setValsProc( obuf, obuf.begin(), end );
+	setOK = setValsProc(obuf, obuf.begin(), end);
     }
-    else setValsProc( ibuf, beg, end );
+    else setOK = setValsProc(ibuf, beg, end);
 
-    if( end > mLastGet ) mLastGet = end+1;
-    if( &archive() == &ibuf || end > archive().end() ) { prev_tm = wPrevTm; prev_val = wPrevVal; }
+    if(setOK)
+    {
+	if(end > mLastGet) mLastGet = end+1;
+	if(&archive() == &ibuf || end > archive().end()) { prev_tm = wPrevTm; prev_val = wPrevVal; }
+    }
 }

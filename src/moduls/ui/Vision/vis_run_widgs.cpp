@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run_widgs.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -28,6 +28,7 @@
 #include <QStatusBar>
 
 #include <tsys.h>
+#include "../VCAEngine/types.h"
 
 #include "tvision.h"
 #include "vis_shapes.h"
@@ -35,6 +36,7 @@
 #include "vis_run_widgs.h"
 
 using namespace VISION;
+using namespace VCA;
 
 //*************************************************
 //* Shape widget view runtime mode                *
@@ -73,12 +75,12 @@ VisRun *RunWdgView::mainWin( )
 
 string RunWdgView::pgGrp( )
 {
-    return property("pgGrp").toString().toAscii().data();
+    return property("pgGrp").toString().toStdString();
 }
 
 string RunWdgView::pgOpenSrc( )
 {
-    return property("pgOpenSrc").toString().toAscii().data();
+    return property("pgOpenSrc").toString().toStdString();
 }
 
 void RunWdgView::setPgOpenSrc( const string &vl )
@@ -104,7 +106,7 @@ void RunWdgView::update( bool full, XMLNode *aBr, bool FullTree )
     {
 	aBr = new XMLNode("get");
 	aBr->setAttr("path",id()+"/%2fserv%2fattrBr")->
-	    setAttr("tm",TSYS::uint2str(full?0:mainWin()->reqTm()))->setAttr("FullTree",FullTree?"1":"0");
+	    setAttr("tm",u2s(full?0:mainWin()->reqTm()))->setAttr("FullTree",FullTree?"1":"0");
 	cntrIfCmd(*aBr);
 	reqBrCr = true;
     }
@@ -202,43 +204,31 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 
     switch(uiPrmPos)
     {
-	case -2:	//focus
+	case A_COM_FOCUS:
 	    if((bool)atoi(val.c_str()) == hasFocus())	break;
 	    if((bool)atoi(val.c_str()))	setFocus(Qt::OtherFocusReason);
 	    return true;
-	case -3:	//perm
+	case A_PERM:
 	    setPermCntr(atoi(val.c_str())&SEC_WR);
 	    setPermView(atoi(val.c_str())&SEC_RD);
 	    return true;
-	case -4:        //page name
-            setWindowTitle(val.c_str());
-            break;
-	case 3:		//pgOpenSrc
-	    setProperty("pgOpenSrc",val.c_str());
-	    return true;
-	case 4:		//pgGrp
-	    setProperty("pgGrp",val.c_str());
-	    return true;
-	case 5:         //en
-            setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));
-            return true;
-	case 6:		//active
-	    setProperty("active",(bool)atoi(val.c_str()));
-	    return true;
-	case 11:	//geomZ
+	case A_PG_NAME:	setWindowTitle(val.c_str());	break;
+	case A_PG_OPEN_SRC: setProperty("pgOpenSrc",val.c_str());	return true;
+	case A_PG_GRP: setProperty("pgGrp",val.c_str());		return true;
+	case A_EN: setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));	return true;
+	case A_ACTIVE: setProperty("active",(bool)atoi(val.c_str()));	return true;
+	case A_GEOM_Z:
 	    if(!allAttrLoad() && !dynamic_cast<RunPageView*>(this))
 	    {
 		RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget());
 		if(wdg) { wdg->orderUpdate(); wdg->QWidget::update(); }
 	    }
 	    return true;
-	case 16:	//tipStatus
+	case A_TIP_STATUS:
 	    if(val.size() && mainWin()->masterPg() == this)
 		mainWin()->statusBar()->showMessage(val.c_str(), 10000);
 	    return true;
-	case 17:	//contextMenu
-	    setProperty("contextMenu",val.c_str());
-	    return true;
+	case A_CTX_MENU: setProperty("contextMenu",val.c_str());	return true;
     }
 
     return rez;
@@ -256,11 +246,12 @@ string RunWdgView::resGet( const string &res )
 
 bool RunWdgView::isVisible( QPoint pos )
 {
-    //> Clear background and draw transparent
+    //Clear background and draw transparent
     QPalette plt = palette();
     plt.setBrush(QPalette::Window,QColor(0,0,0,0));
     setPalette(plt);
-    //> Grab widget and check it for no zero
+
+    //Grab widget and check it for no zero
     return QPixmap::grabWidget(this).toImage().pixel(pos);
 }
 
@@ -300,7 +291,7 @@ bool RunWdgView::event( QEvent *event )
 		QAction *actTmp;
 		QMenu popup;
 		string sln;
-		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toAscii().data(),0,'\n',&off)).size(); )
+		for(int off = 0; (sln=TSYS::strSepParse(property("contextMenu").toString().toStdString(),0,'\n',&off)).size(); )
 		{
 		    actTmp = new QAction(TSYS::strSepParse(sln,0,':').c_str(),this);
 		    actTmp->setWhatsThis(TSYS::strSepParse(sln,1,':').c_str());
@@ -443,7 +434,7 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::Key_BracketRight: mod_ev += "BracketRight"; break;
 		case Qt::Key_QuoteLeft:	mod_ev += "QuoteLeft";	break;
 		default:
-		    mod_ev += "#"+TSYS::int2str(((QKeyEvent*)event)->key(),TSYS::Hex);
+		    mod_ev += "#"+i2s(((QKeyEvent*)event)->key(),TSYS::Hex);
 		    break;
 	    }
 	    evs += (evs.size()?"\n":"")+mod_ev;
@@ -536,13 +527,13 @@ RunPageView::~RunPageView( )
 
 float RunPageView::xScale( bool full )
 {
-    if( full ) return mainWin()->xScale()*WdgView::xScale();
+    if(full) return mainWin()->xScale()*WdgView::xScale();
     return WdgView::xScale();
 }
 
 float RunPageView::yScale( bool full )
 {
-    if( full ) return mainWin()->yScale()*WdgView::yScale();
+    if(full) return mainWin()->yScale()*WdgView::yScale();
     return WdgView::yScale();
 }
 
@@ -572,7 +563,7 @@ RunPageView *RunPageView::findOpenPage( const string &ipg )
 	if(rwdg->property("isVisible").toBool() && rwdg->root() == "Box")
 	{
 	    if(rwdg->pgOpenSrc() == ipg && !rwdg->property("inclPg").toString().isEmpty())
-		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toAscii().data());
+		return (RunPageView*)TSYS::str2addr(rwdg->property("inclPg").toString().toStdString());
 	    if(((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget)
 	    {
 		pg = ((ShapeBox::ShpDt*)rwdg->shpData)->inclWidget->findOpenPage(ipg);
@@ -670,34 +661,35 @@ VisRun *SndPlay::mainWin( )	{ return (VisRun *)parent(); }
 
 void SndPlay::run( )
 {
-    if( mPlayData.empty() )	return;
+    if(mPlayData.empty()) return;
 
     size_t comPos = 0;
-    string com = mod->playCom( );
+    string com = mod->playCom();
     string srcFile = "/var/tmp/oscadaPlayTmp_"+mainWin()->workSess( );
 
     //> Put source file name to command
     bool srcToPipe = false;
-    if( (comPos=com.find("%f")) != string::npos )
-	com.replace( comPos, 2, srcFile.c_str() );
+    if((comPos=com.find("%f")) != string::npos)	com.replace(comPos, 2, srcFile.c_str());
     else srcToPipe = true;
 
     //> Write play data to file
-    if( !srcToPipe )
+    if(!srcToPipe)
     {
-	FILE *fp = fopen( srcFile.c_str(), "w" );
-	if( !fp )	{ mPlayData.clear(); return; }
-	fwrite( mPlayData.data(), 1, mPlayData.size(), fp );
+	FILE *fp = fopen(srcFile.c_str(), "w");
+	if(!fp)	{ mPlayData.clear(); return; }
+	if(fwrite(mPlayData.data(),1,mPlayData.size(),fp) != mPlayData.size())
+	    mess_err(mod->nodePath().c_str(), _("Error write to: %s"), srcFile.c_str());
 	fclose(fp);
     }
 
     //> Call play command
-    FILE *fp = popen( com.c_str(), "w" );
-    if( !fp )		{ mPlayData.clear(); return; }
+    FILE *fp = popen(com.c_str(), "w");
+    if(!fp) { mPlayData.clear(); return; }
     //> Write data to pipe
-    if( srcToPipe )	fwrite( mPlayData.data(), mPlayData.size(), 1, fp );
+    if(srcToPipe && fwrite(mPlayData.data(),mPlayData.size(),1,fp) != mPlayData.size())
+	mess_err(mod->nodePath().c_str(), _("Error write to: %s"), srcFile.c_str());
     pclose(fp);
-    if( !srcToPipe )	remove( srcFile.c_str() );
+    if(!srcToPipe) remove(srcFile.c_str());
 
     mPlayData.clear();
 };
@@ -715,8 +707,8 @@ VisRun *StylesStBar::mainWin( )	{ return (VisRun *)window(); }
 void StylesStBar::setStyle( int istl, const string &nm )
 {
     mStyle = istl;
-    if( mStyle < 0 ) setText( _("No style") );
-    else if( !nm.empty() ) setText( nm.c_str() );
+    if(mStyle < 0) setText(_("No style"));
+    else if(!nm.empty()) setText(nm.c_str());
     else
     {
 	XMLNode req("get");
@@ -735,14 +727,14 @@ bool StylesStBar::styleSel( )
     req.setAttr("path","/ses_"+mainWin()->workSess()+"/%2fobj%2fcfg%2fstLst");
     mainWin()->cntrIfCmd(req);
 
-    if( req.childSize() <= 1 ) return false;
+    if(req.childSize() <= 1) return false;
 
-    InputDlg dlg( this, mainWin()->windowIcon(),_("Select your style from list."),_("Style select"),false,false);
+    InputDlg dlg(this, mainWin()->windowIcon(), _("Select your style from list."), _("Style select"), false, false);
     QLabel *lab = new QLabel(_("Style:"),&dlg);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred) );
-    dlg.edLay()->addWidget( lab, 0, 0 );
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred));
+    dlg.edLay()->addWidget(lab, 0, 0);
     QComboBox *stls = new QComboBox(&dlg);
-    dlg.edLay()->addWidget( stls, 0, 1 );
+    dlg.edLay()->addWidget(stls, 0, 1);
     for(unsigned i_s = 0; i_s < req.childSize(); i_s++)
     {
 	stls->addItem(req.childGet(i_s)->text().c_str(),atoi(req.childGet(i_s)->attr("id").c_str()));
@@ -750,10 +742,10 @@ bool StylesStBar::styleSel( )
 	    stls->setCurrentIndex(i_s);
     }
     dlg.resize(300,120);
-    if( dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0 )
+    if(dlg.exec() == QDialog::Accepted && stls->currentIndex() >= 0)
     {
-	setStyle( stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toAscii().data() );
-	emit styleChanged( );
+	setStyle(stls->itemData(stls->currentIndex()).toInt(), stls->itemText(stls->currentIndex()).toStdString());
+	emit styleChanged();
 	return true;
     }
 
@@ -762,6 +754,6 @@ bool StylesStBar::styleSel( )
 
 bool StylesStBar::event( QEvent *event )
 {
-    if( event->type() == QEvent::MouseButtonDblClick )	styleSel();
-    return QLabel::event( event );
+    if(event->type() == QEvent::MouseButtonDblClick)	styleSel();
+    return QLabel::event(event);
 }

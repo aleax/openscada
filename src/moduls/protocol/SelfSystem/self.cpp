@@ -86,7 +86,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mCo
 TProt::~TProt( )
 {
     ResAlloc res(ses_res,true);
-    while( auth_lst.size() )	auth_lst.erase(auth_lst.begin());
+    while(auth_lst.size()) auth_lst.erase(auth_lst.begin());
     res.release();
 }
 
@@ -194,7 +194,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //> Request
 	    //>> Compress data
 	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
-	    if( reqCompr )	data = TSYS::strCompr(data,comprLev());
+	    if(reqCompr) data = TSYS::strCompr(data,comprLev());
 
 	    if(isDir)	req = "REQDIR "+user+" "+pass+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
 	    else	req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;

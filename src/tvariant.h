@@ -64,6 +64,7 @@ class TVariant
 
 	//Methods
 	TVariant( );
+	TVariant( bool ivl );
 	TVariant( char ivl );
 	TVariant( int ivl );
 	TVariant( double ivl );
@@ -73,10 +74,10 @@ class TVariant
 	TVariant( TVarObj *ivl );
 	TVariant( const TVariant &var );
 
-	~TVariant( );
+	virtual ~TVariant( );
 
-	bool operator==( const TVariant &vr );
-	bool operator!=( const TVariant &vr );
+	bool operator==( const TVariant &vr ) const;
+	bool operator!=( const TVariant &vr ) const;
 	TVariant &operator=( const TVariant &vr );
 
 	bool isNull( ) const	{ return (type()==Null); }
@@ -198,6 +199,10 @@ class TArrayObj : public TVarObj
 
 	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
+	size_t arSize( )	{ return mEls.size(); }
+	TVariant arGet( int id );
+	void arSet( int id, TVariant val );
+
     private:
 	//Attributes
 	vector<TVariant> mEls;
@@ -274,6 +279,7 @@ class XMLNodeObj : public TVarObj
 
 	unsigned childSize( )	{ return mChilds.size(); }
 	AutoHD<XMLNodeObj> childGet( unsigned id );
+	AutoHD<XMLNodeObj> childGet( const string &name, unsigned num = 0 );
 	void childAdd( AutoHD<XMLNodeObj> nd );
 	void childIns( unsigned id, AutoHD<XMLNodeObj> nd );
 	void childDel( unsigned id );

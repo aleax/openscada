@@ -32,7 +32,7 @@ msgstr "Funktion"
 msgid "Functions"
 msgstr "Funktionen"
 
-msgid "Properties no supported by object."
+msgid "Properties no supported by the object."
 msgstr "Eigenschaften werden vom Objekt nicht unterstützt."
 
 #, c-format

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Special.SystemTests file: test_kernel.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -62,14 +62,13 @@ extern "C"
 {
     TModule::SAt module( int n_mod )
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new KernelTest::TTest( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new KernelTest::TTest(source);
 	return NULL;
     }
 }
@@ -96,14 +95,14 @@ TTest::TTest( string name ) : TSpecial(MOD_ID)
 
 TTest::~TTest()
 {
-    if( run_st ) modStop();
+    if(run_st) modStop();
 }
 
 void TTest::postEnable( int flag )
 {
-    TModule::postEnable( flag );
+    TModule::postEnable(flag);
 
-    if( flag&TCntrNode::NodeRestore )	return;
+    if(flag&TCntrNode::NodeRestore) return;
 
     //> Reg static tests
     testReg(new TestPrm());
@@ -132,17 +131,17 @@ void TTest::mess( const string &testNm, const char *fmt,  ... )
     char mess[STR_BUF_LEN];
     va_list argptr;
 
-    va_start(argptr,fmt);
-    vsnprintf(mess,sizeof(mess),fmt,argptr);
+    va_start(argptr, fmt);
+    vsnprintf(mess, sizeof(mess), fmt, argptr);
     va_end(argptr);
 
-    mess_info((cat()+testNm).c_str(),"%s",mess);
+    mess_info((cat()+testNm).c_str(), "%s", mess);
 }
 
 string TTest::modInfo( const string &name )
 {
-    if( name == "SubType" ) return(SUB_TYPE);
-    else return( TModule::modInfo( name) );
+    if(name == "SubType") return SUB_TYPE;
+    else return TModule::modInfo(name);
 }
 
 void TTest::modInfo( vector<string> &list )
@@ -205,36 +204,35 @@ void *TTest::Task( void *CfgM )
 {
     int count = 0, i_cnt = 0;
 
-    TTest *tst = (TTest *)CfgM;
+    TTest *tst = (TTest*)CfgM;
     tst->run_st = true;
     tst->endrun = false;
 
     //Task counter
-    while( !tst->endrun )
+    while(!tst->endrun)
     {
 	//1 sec
-	if( ++i_cnt > 1000/STD_WAIT_DELAY )  // 1 sec
+	if(++i_cnt > 1000/STD_WAIT_DELAY)  // 1 sec
 	{
 	    i_cnt = 0;
-	    if( ++count == 1000000 ) count = 0;
+	    if(++count == 1000000) count = 0;
 
 	    //Get All fields
-	    ResAlloc res(SYS->nodeRes(),false);
-	    XMLNode *mn, *t_n = NULL;
-	    mn = TCntrNode::ctrId(&SYS->cfgRoot(),tst->nodePath(),true);
-	    for( int nd_cnt = 0; mn && (t_n=mn->childGet("prm",nd_cnt++,true)); )
-		if( tst->testPresent(t_n->attr("id")) && t_n->attr("on") == "1" &&
-		    atoi(t_n->attr("per").c_str()) && !( count % atoi(t_n->attr("per").c_str()) ) )
+	    ResAlloc res(SYS->nodeRes(), false);
+	    XMLNode *mn = SYS->cfgNode(tst->nodePath(0,false)), *t_n = NULL;
+	    for(int nd_cnt = 0; mn && (t_n=mn->childGet("prm",nd_cnt++,true)); )
+		if(tst->testPresent(t_n->attr("id")) && t_n->attr("on") == "1" &&
+		    atoi(t_n->attr("per").c_str()) && !(count%atoi(t_n->attr("per").c_str())))
 		{
 		    AutoHD<TFunction> fnc = tst->testAt(t_n->attr("id"));
-		    TValFunc fc( "stdcalc", &fnc.at() );
-		    for( int i_prm = 0; i_prm < fc.ioSize( ); i_prm++ )
+		    TValFunc fc("stdcalc", &fnc.at());
+		    for(int i_prm = 0; i_prm < fc.ioSize( ); i_prm++)
 		    {
-			if( fc.ioFlg(i_prm) & (IO::Output|IO::Return) )	continue;
-			fc.setS(i_prm,t_n->attr(fc.func()->io(i_prm)->id()));
+			if(fc.ioFlg(i_prm) & (IO::Output|IO::Return))	continue;
+			fc.setS(i_prm, t_n->attr(fc.func()->io(i_prm)->id()));
 		    }
 		    try{ fc.calc("root"); }
-		    catch( TError err ) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+		    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 		}
 	}
 	TSYS::sysSleep(STD_WAIT_DELAY*1e-3);
@@ -247,14 +245,14 @@ void *TTest::Task( void *CfgM )
 void TTest::prXMLNode( const string &testNm, XMLNode *node, int level )
 {
     vector<string> list;
-    mess(testNm,_("%s{%d \"%s\", text \"%s\", childs - %d."),
-	string(level,' ').c_str(), level, node->name().c_str(),node->text().c_str(),node->childSize());
+    mess(testNm, _("%s{%d \"%s\", text \"%s\", childs - %d."),
+	string(level,' ').c_str(), level, node->name().c_str(), node->text().c_str(), node->childSize());
     node->attrList(list);
     for(unsigned i_att = 0; i_att < list.size(); i_att++)
-	mess(testNm,_("        Attr \"%s\" = \"%s\"."),list[i_att].c_str(),node->attr(list[i_att]).c_str());
+	mess(testNm, _("        Attr \"%s\" = \"%s\"."), list[i_att].c_str(), node->attr(list[i_att]).c_str());
     for(unsigned i_ch = 0; i_ch < node->childSize(); i_ch++)
 	prXMLNode(testNm, node->childGet(i_ch), level+1);
-    mess(testNm,"%s}%d \"%s\"", string(level,' ').c_str(), level, node->name().c_str());
+    mess(testNm, "%s}%d \"%s\"", string(level,' ').c_str(), level, node->name().c_str());
 }
 
 TVariant TTest::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )

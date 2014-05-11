@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.System file: da_smart.h
 /***************************************************************************
- *   Copyright (C) 2005-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -33,6 +33,17 @@ namespace SystemCntr
 class HddSmart: public DA
 {
     public:
+	//Data
+	//* tval - The parameter specific values object
+	class tval
+	{
+	    public:
+	    //Methods
+	    tval( ) { }
+
+	    TElem els;
+	};
+
 	//Methods
 	HddSmart( );
 	~HddSmart( );
@@ -41,6 +52,7 @@ class HddSmart: public DA
 	string name( )	{ return "HDD Smart"; }
 
 	void init( TMdPrm *prm );
+	void deInit( TMdPrm *prm );
 	void getVal( TMdPrm *prm );
 
 	void makeActiveDA( TMdContr *a_cntr );

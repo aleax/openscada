@@ -273,7 +273,7 @@ void TipContr::load_( )
 
 	//>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int lib_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+libTable(),nodePath()+"lib",lib_cnt++,c_el); )
 	    {
@@ -406,9 +406,9 @@ string Contr::getStatus( )
     if(startStat() && !redntUse())
     {
         if(call_st)	val += TSYS::strMess(_("Call now. "));
-	if(period())	val += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-	else val += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	val += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_calc).c_str());
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s."),tm2s(tm_calc).c_str());
     }
 
     return val;
@@ -843,16 +843,16 @@ void Prm::disable()
 
 Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner(); }
 
-void Prm::vlSet( TVal &val, const TVariant &pvl )
+void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     if(!enableStat())	return;
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
-	if(val.getS(0,true) == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -860,9 +860,9 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
     //> Direct write
     try
     {
-	int io_id = ((Contr &)owner()).ioId(val.fld().reserve());
+	int io_id = ((Contr &)owner()).ioId(vo.fld().reserve());
 	if(io_id < 0) disable();
-	else ((Contr &)owner()).set(io_id,val.get(0,true));
+	else ((Contr&)owner()).set(io_id, vl);
     }catch(TError err) { disable(); }
 }
 

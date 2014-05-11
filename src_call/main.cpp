@@ -42,8 +42,8 @@ int main( int argc, char *argv[], char *envp[] )
 	//> Generic command line parameters check
 	string argCom, argVl;
 	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-    	    if(argCom == "demon")
-    	    {
+	    if(argCom == "demon")
+	    {
 		printf("Start into demon mode!\n");
 		int pid = fork();
 		if(pid == -1)
@@ -55,9 +55,9 @@ int main( int argc, char *argv[], char *envp[] )
 
 		//>> Prepare demon environment
 		setsid();
-    	    }
-    	    else if(argCom == "CoreDumpAllow")
-    	    {
+	    }
+	    else if(argCom == "CoreDumpAllow")
+	    {
 		//>> Set the Dumpable state to be enabled
 		prctl(PR_SET_DUMPABLE, 1, 0, 0, 0);
 		//>> Set the core dump limitation to be unlimited
@@ -65,7 +65,7 @@ int main( int argc, char *argv[], char *envp[] )
 		rlim.rlim_cur = RLIM_INFINITY;
 		rlim.rlim_max = RLIM_INFINITY;
 		setrlimit(RLIMIT_CORE, &rlim);
-    	    }
+	    }
 
 	//> Load system
 	SYS->load();

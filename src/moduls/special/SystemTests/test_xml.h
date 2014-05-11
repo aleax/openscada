@@ -22,6 +22,8 @@
 #ifndef TEST_XML_H
 #define TEST_XML_H
 
+#include <errno.h>
+
 #include <tfunction.h>
 
 namespace KernelTest
@@ -44,18 +46,19 @@ class TestXML : public TFunction
 
 	void calc( TValFunc *val )
 	{
+	    int hd = -1;
 	    try
 	    {
 		mod->mess(id(),_("Test: Start"));
-
-		int hd = open(val->getS(1).c_str(),O_RDONLY);
-		if( hd < 0 ) throw TError(nodePath().c_str(),_("Open file '%s' error."),val->getS(1).c_str());
-		int cf_sz = lseek(hd,0,SEEK_END);
-		lseek(hd,0,SEEK_SET);
-		char *buf = (char *)malloc(cf_sz);
-		read(hd,buf,cf_sz);
-		close(hd);
-		string s_buf(buf,cf_sz);
+		if((hd=open(val->getS(1).c_str(),O_RDONLY)) < 0)
+		    throw TError(nodePath().c_str(),_("Open file '%s' error."),val->getS(1).c_str());
+		int cf_sz = lseek(hd, 0, SEEK_END);
+		lseek(hd, 0, SEEK_SET);
+		char *buf = (char*)malloc(cf_sz);
+		ssize_t rRez = read(hd, buf, cf_sz);
+		if(rRez < 0) throw TError(nodePath().c_str(), _("Read file '%s' error: %s."),val->getS(1).c_str(),strerror(errno));
+		else if(rRez != cf_sz) throw TError(nodePath().c_str(), _("Read file '%s' only %d from %d."), val->getS(1).c_str(), rRez, cf_sz);
+		string s_buf(buf, cf_sz);
 		free(buf);
 		XMLNode node;
 		int64_t st_cnt = TSYS::curTime();
@@ -65,11 +68,12 @@ class TestXML : public TFunction
 		mod->mess(id(),_("Test: Passed: %f ms."),1e-3*(end_cnt-st_cnt));
 		val->setS(0,_("Passed"));
 	    }
-	    catch( TError err )
+	    catch(TError err)
 	    {
-		mod->mess(id(),_("Test: Failed: %s"),err.mess.c_str());
-		val->setS(0,TSYS::strMess(_("Failed: %s"),err.mess.c_str()));
+		mod->mess(id(), _("Test: Failed: %s"), err.mess.c_str());
+		val->setS(0, TSYS::strMess(_("Failed: %s"), err.mess.c_str()));
 	    }
+	    if(hd >= 0) close(hd);
 	}
 };
 

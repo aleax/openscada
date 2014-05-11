@@ -36,55 +36,27 @@ using namespace OSCADA;
 //*************************************************
 //* TVariant                                      *
 //*************************************************
-TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)
-{
+TVariant::TVariant( ) : mType(Null), mModify(false), mFixedTp(false)		{ }
 
-}
+TVariant::TVariant( bool ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setB(ivl); }
 
-TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setB(ivl);
-}
+TVariant::TVariant( char ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setB(ivl); }
 
-TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setI(ivl);
-}
+TVariant::TVariant( int ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setI(ivl); }
 
-TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setR(ivl);
-}
+TVariant::TVariant( double ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setR(ivl); }
 
-TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setS(ivl);
-}
+TVariant::TVariant( const string &ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setS(ivl); }
 
-TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setS(ivl);
-}
+TVariant::TVariant( const char *ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setS(ivl); }
 
-TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setO(ivl);
-}
+TVariant::TVariant( AutoHD<TVarObj> ivl ) : mType(Null), mModify(false), mFixedTp(false){ setO(ivl); }
 
-TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    setO(AutoHD<TVarObj>(ivl));
-}
+TVariant::TVariant( TVarObj *ivl ) : mType(Null), mModify(false), mFixedTp(false)	{ setO(AutoHD<TVarObj>(ivl)); }
 
-TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false)
-{
-    operator=(var);
-}
+TVariant::TVariant( const TVariant &var ) : mType(Null), mModify(false), mFixedTp(false){ operator=(var); }
 
-TVariant::~TVariant( )
-{
-    setType(Null);
-}
+TVariant::~TVariant( )	{ setType(Null); }
 
 void TVariant::setType( Type tp, bool fix )
 {
@@ -118,7 +90,7 @@ void TVariant::setType( Type tp, bool fix )
     }
 }
 
-bool TVariant::operator==( const TVariant &vr )
+bool TVariant::operator==( const TVariant &vr ) const
 {
     if(vr.type() == type())
 	switch(type())
@@ -134,7 +106,7 @@ bool TVariant::operator==( const TVariant &vr )
     return false;
 }
 
-bool TVariant::operator!=( const TVariant &vr )	{ return !operator==(vr); }
+bool TVariant::operator!=( const TVariant &vr ) const	{ return !operator==(vr); }
 
 TVariant &TVariant::operator=( const TVariant &vr )
 {
@@ -394,9 +366,9 @@ string TVarObj::getStrXML( const string &oid )
 	switch(ip->second.type())
 	{
 	    case TVariant::String:	nd += "<str p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+ip->second.getS()+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+ip->second.getS()+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+ip->second.getS()+"</bool>\n"; break;
+	    case TVariant::Integer:	nd += "<int p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</int>\n"; break;
+	    case TVariant::Real:	nd += "<real p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</real>\n"; break;
+	    case TVariant::Boolean:	nd += "<bool p='"+ip->first+"'>"+TSYS::strEncode(ip->second.getS(),TSYS::Html)+"</bool>\n"; break;
 	    case TVariant::Object:	nd += ip->second.getO().at().getStrXML(ip->first); break;
 	    default: break;
 	}
@@ -411,7 +383,7 @@ AutoHD<TVarObj> TVarObj::parseStrXML( const string &str, XMLNode *nd, AutoHD<TVa
     XMLNode oTree;
     if(!nd)
     {
-	try { oTree.load(str, false, Mess->charset()); }
+	try { oTree.load(str, 0, Mess->charset()); }
 	catch(TError err) { return prev; }
 	nd = &oTree;
     }
@@ -495,32 +467,13 @@ AutoHD<TVarObj> TEValObj::parseStrXML( XMLNode *nd )
 TVariant TArrayObj::propGet( const string &id )
 {
     if(id == "length") return (int)mEls.size();
-    if(id.size() && isdigit(id[0]))
-    {
-	int vid = atoi(id.c_str());
-	oRes.resRequestR();
-	if(vid >= 0 && vid < (int)mEls.size())
-	{
-	    TVariant rez = mEls[vid];
-	    oRes.resRelease();
-	    return rez;
-	}
-	oRes.resRelease();
-    }
+    if(id.size() && isdigit(id[0]))	return arGet(atoi(id.c_str()));
     return TVarObj::propGet(id);
 }
 
 void TArrayObj::propSet( const string &id, TVariant val )
 {
-    if(id.size() && isdigit(id[0]))
-    {
-	int vid = atoi(id.c_str());
-	if(vid < 0) throw TError("ArrayObj",_("Negative id is not allow for array."));
-	oRes.resRequestW();
-	while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
-	mEls[vid] = val;
-	oRes.resRelease();
-    }
+    if(id.size() && isdigit(id[0]))	arSet(atoi(id.c_str()), val);
     else TVarObj::propSet(id,val);
 }
 
@@ -536,9 +489,9 @@ string TArrayObj::getStrXML( const string &oid )
 	switch(mEls[ip].type())
 	{
 	    case TVariant::String:	nd += "<str>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</str>\n"; break;
-	    case TVariant::Integer:	nd += "<int>"+mEls[ip].getS()+"</int>\n"; break;
-	    case TVariant::Real:	nd += "<real>"+mEls[ip].getS()+"</real>\n"; break;
-	    case TVariant::Boolean:	nd += "<bool>"+mEls[ip].getS()+"</bool>\n"; break;
+	    case TVariant::Integer:	nd += "<int>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</int>\n"; break;
+	    case TVariant::Real:	nd += "<real>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</real>\n"; break;
+	    case TVariant::Boolean:	nd += "<bool>"+TSYS::strEncode(mEls[ip].getS(),TSYS::Html)+"</bool>\n"; break;
 	    case TVariant::Object:	nd += mEls[ip].getO().at().getStrXML(); break;
 	    default: break;
 	}
@@ -576,7 +529,7 @@ AutoHD<TVarObj> TArrayObj::parseStrXML( XMLNode *nd )
 	if(!vl.isNull())
 	{
 	    if(p.size()) rez->mProps[p] = vl;
-    	    else rez->mEls.push_back(vl);
+	    else rez->mEls.push_back(vl);
 	}
     }
     return rez;
@@ -600,8 +553,8 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     if( id == "concat" && prms.size() && prms[0].type() == TVariant::Object && !AutoHD<TArrayObj>(prms[0].getO()).freeStat() )
     {
 	oRes.resRequestW();
-	for(int i_p = 0; i_p < prms[0].getO().at().propGet("length").getI(); i_p++)
-	    mEls.push_back(prms[0].getO().at().propGet(TSYS::int2str(i_p)));
+	TArrayObj *sArr = (TArrayObj*)&prms[0].getO().at();
+	for(unsigned i_p = 0; i_p < sArr->mEls.size(); i_p++) mEls.push_back(sArr->mEls[i_p]);
 	oRes.resRelease();
 	return this;
     }
@@ -617,7 +570,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     // ElTp pop( ) - pop variable from array
     if( id == "pop" )
     {
-	if(mEls.empty()) throw TError("ArrayObj",_("Array is empty."));
+	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
 	oRes.resRequestW();
 	TVariant val = mEls.back();
 	mEls.pop_back();
@@ -635,7 +588,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     // ElTp shift( ) - shift array's items upward
     if( id == "shift" )
     {
-	if(mEls.empty()) throw TError("ArrayObj",_("Array is empty."));
+	if(mEls.empty()) return TVariant(); //throw TError("ArrayObj",_("Array is empty."));
 	oRes.resRequestW();
 	TVariant val = mEls.front();
 	mEls.erase(mEls.begin());
@@ -666,7 +619,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	end = vmin(end,(int)mEls.size());
 	TArrayObj *rez = new TArrayObj();
 	for(int i_p = beg; i_p < end; i_p++)
-	    rez->propSet(TSYS::int2str(i_p-beg), mEls[i_p]);
+	    rez->arSet(i_p-beg, mEls[i_p]);
 	oRes.resRelease();
 	return rez;
     }
@@ -683,7 +636,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	TArrayObj *rez = new TArrayObj();
 	for(int i_c = 0; i_c < cnt && beg < (int)mEls.size(); i_c++)
 	{
-	    rez->propSet(TSYS::int2str(i_c), mEls[beg]);
+	    rez->arSet(i_c, mEls[beg]);
 	    mEls.erase(mEls.begin()+beg);
 	}
 	//> Insert elements
@@ -702,6 +655,24 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
     }
 
     return TVarObj::funcCall(id, prms);
+}
+
+TVariant TArrayObj::arGet( int vid )
+{
+    TVariant rez;
+    oRes.resRequestR();
+    if(vid >= 0 && vid < (int)mEls.size()) rez = mEls[vid];
+    oRes.resRelease();
+    return rez;
+}
+
+void TArrayObj::arSet( int vid, TVariant val )
+{
+    if(vid < 0) return;//throw TError("ArrayObj",_("Negative id is not allow for array."));
+    oRes.resRequestW();
+    while(vid >= (int)mEls.size()) mEls.push_back(TVariant());
+    mEls[vid] = val;
+    oRes.resRelease();
 }
 
 bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
@@ -761,12 +732,12 @@ TArrayObj *TRegExp::match( const string &vl, bool all )
 
     if(all && global)
 	for(int curPos = 0, i_n = 0; pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz) > 0; curPos = capv[1], i_n++)
-	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[0],capv[1]-capv[0]));
+	    rez->arSet(i_n, string(vl.data()+capv[0],capv[1]-capv[0]));
     else
     {
 	int n = pcre_exec((pcre*)regex, NULL, vl.data(), vl.size(), (global?lastIndex:0), 0, capv, vSz);
 	for(int i_n = 0; i_n < n; i_n++)
-	    rez->propSet(TSYS::int2str(i_n), string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
+	    rez->arSet(i_n, string(vl.data()+capv[i_n*2],capv[i_n*2+1]-capv[i_n*2]));
 	if(global) lastIndex = (n>0) ? capv[1] : 0;
 	if(n > 0) { rez->propSet("index",capv[0]); rez->propSet("input",vl); }
     }
@@ -792,11 +763,11 @@ TArrayObj *TRegExp::split( const string &vl, int limit )
     int curPos = 0, i_n = 0;
     for(int se = 0; (se=pcre_exec((pcre*)regex,NULL,vl.data(),vl.size(),curPos,0,capv,vSz)) > 0 && (!limit || i_n < limit); curPos = capv[1])
     {
-	rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,capv[0]-curPos));
+	rez->arSet(i_n++, string(vl.data()+curPos,capv[0]-curPos));
 	for(int i_se = 1; i_se < se && (!limit || i_n < limit); i_se++)
-	    rez->propSet(TSYS::int2str(i_n++), string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
+	    rez->arSet(i_n++, string(vl.data()+capv[i_se*2],capv[i_se*2+1]-capv[i_se*2]));
     }
-    if(curPos <= (int)vl.size() && (!limit || i_n < limit)) rez->propSet(TSYS::int2str(i_n++), string(vl.data()+curPos,vl.size()-curPos));
+    if(curPos <= (int)vl.size() && (!limit || i_n < limit)) rez->arSet(i_n++, string(vl.data()+curPos,vl.size()-curPos));
     return rez;
 }
 
@@ -993,6 +964,18 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet( unsigned id )
     return rez;
 }
 
+AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
+{
+    oRes.resRequestR();
+    AutoHD<XMLNodeObj> rez;
+    for(int i_ch = 0, i_n = 0; i_ch < (int)mChilds.size(); i_ch++)
+	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && i_n++ == num)
+	    rez = mChilds[i_ch];
+    oRes.resRelease();
+    if(rez.freeStat()) throw TError("XMLNodeObj",_("Child %s:%d is not found!"),name.c_str(),num);
+    return rez;
+}
+
 string XMLNodeObj::getStrXML( const string &oid )
 {
     string nd("<XMLNodeObj:"+name());
@@ -1082,14 +1065,24 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
     //  id - child node position
     if(id == "childDel" && prms.size())	{ childDel(prms[0].getI()); return this; }
     // XMLNodeObj childGet(int id) - get node from position <id>
-    //  id - child node position
-    if(id == "childGet" && prms.size())	return AutoHD<TVarObj>(childGet(prms[0].getI()));
+    // XMLNodeObj childGet(string name, int num = 0) - get node by name <name> and number <num>
+    //  id - child node position;
+    //  name - node/tag name;
+    //  num - node/tag number <num>.
+    if(id == "childGet" && prms.size())
+    {
+	if(prms[0].type() == TVariant::String)
+	    return AutoHD<TVarObj>(childGet(prms[0].getS(), (prms.size()>1)?prms[1].getI():0));
+	return AutoHD<TVarObj>(childGet(prms[0].getI()));
+    }
     // XMLNodeObj parent() - get parent node
     if(id == "parent")	return !parent ? TVariant(false) : TVariant(parent);
-    // string load(string str, bool file = false, bool full = false, string cp = "UTF-8") - load XML tree from XML-stream from string or file
+    // string load(string str, bool file = false, int flg = 0, string cp = "UTF-8") - load XML tree from XML-stream from string or file
     //  str - source stream string or file name, for <file> = true;
     //  file - load XML-tree from file (true) or stram (false);
-    //  full - node's text and comments load into separated nodes "<*>" and "<!>";
+    //  flg - node's load flags:
+    //    0x01 - text and comments load into separated nodes "<*>" and "<!>";
+    //    0x02 - no remove spaces for begin and end tag's text).
     //  cp - source codepage.
     if(id == "load" && prms.size())
     {
@@ -1098,32 +1091,34 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	if(prms.size() >= 2 && prms[1].getB())
 	{
 	    string s_buf;
-	    int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"),prms[0].getS().c_str(),strerror(errno));
-	    int cf_sz = lseek(hd,0,SEEK_END);
+	    int hd = open(prms[0].getS().c_str(), O_RDONLY);
+	    if(hd < 0) return TSYS::strMess(_("2:Open file '%s' error: %s"), prms[0].getS().c_str(), strerror(errno));
+	    bool fOK = true;
+	    int cf_sz = lseek(hd, 0, SEEK_END);
 	    if(cf_sz > 0)
 	    {
-		lseek(hd,0,SEEK_SET);
+		lseek(hd, 0, SEEK_SET);
 		char *buf = (char *)malloc(cf_sz+1);
-		read(hd,buf,cf_sz);
+		fOK = (read(hd,buf,cf_sz) == cf_sz);
 		buf[cf_sz] = 0;
 		s_buf = buf;
 		free(buf);
 	    }
 	    close(hd);
+	    if(!fOK) return TSYS::strMess(_("3:Load file '%s' error."), prms[0].getS().c_str());
 
-	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getB():false), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
+	    try{ nd.load(s_buf, ((prms.size()>=3)?prms[2].getI():0), ((prms.size()>=4)?prms[3].getS():Mess->charset())); }
 	    catch(TError err) { return "1:"+err.mess; }
 	}
 	//> Load from string
 	else
-	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getB():false), Mess->charset()); }
+	    try{ nd.load(prms[0].getS(), ((prms.size()>=3)?prms[2].getI():0), Mess->charset()); }
 	    catch(TError err) { return "1:"+err.mess; }
 	fromXMLNode(nd);
 	return string("0");
     }
-    // string save(int opt = 0, string path = "", string cp = "UTF-8") - save XML-tree to string or file stream
-    //  opt - save options:
+    // string save(int flg = 0, string path = "", string cp = "UTF-8") - save XML-tree to string or file stream
+    //  flg - save options:
     //   0x01 - interrupt the string before the opening tag;
     //   0x02 - interrupt the string after the opening tag;
     //   0x04 - interrupt the string after a closing tag;
@@ -1138,11 +1133,13 @@ TVariant XMLNodeObj::funcCall(const string &id, vector<TVariant> &prms)
 	toXMLNode(nd);
 	string s_buf = nd.save(((prms.size()>=1)?prms[0].getI():0), (prms.size()>=3)?prms[2].getS():Mess->charset());
 	//> Save to file
-	if( prms.size() >= 2 )
+	if(prms.size() >= 2)
 	{
-	    int hd = open( prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664 );
-	    if( hd < 0 ) return string("");
-	    write(hd,s_buf.data(),s_buf.size());
+	    int hd = open(prms[1].getS().c_str(), O_RDWR|O_CREAT|O_TRUNC, 0664);
+	    if(hd < 0)	return "";
+	    bool fOK = (write(hd,s_buf.data(),s_buf.size()) == (int)s_buf.size());
+	    close(hd);
+	    if(!fOK)	return "";
 	}
 	return s_buf;
     }
@@ -1238,10 +1235,7 @@ void TCntrNodeObj::propSet( const string &id, TVariant val )
     cnd.at().objPropSet(id,val);
 }
 
-string TCntrNodeObj::getStrXML(const string &oid)
-{
-    return "<TCntrNodeObj path=\""+cnd.at().nodePath()+"\"/>";
-}
+string TCntrNodeObj::getStrXML( const string &oid )	{ return "<TCntrNodeObj path=\""+cnd.at().nodePath()+"\"/>"; }
 
 TVariant TCntrNodeObj::funcCall( const string &id, vector<TVariant> &prms )
 {

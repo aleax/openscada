@@ -1037,6 +1037,7 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	{
 	    string sid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    wdgAdd(sid.c_str(),opt->text(),"");
+	    opt->setAttr("id", sid);
 	    //> GeomZ set to include widgets number
 	    if(wdgPresent(sid))
 	    {
@@ -1136,19 +1137,16 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
     {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
-	{
-	    if(attr.at().fld().flg()&TFld::Selected)	opt->setText(attr.at().getSEL());
-	    else opt->setText(attr.at().getS());
-	}
+	    opt->setText(attr.at().getS());
 	else if(ctrChkNode(opt,"set",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_WR))
 	{
-	    if(attr.at().fld().flg()&TFld::Selected)	{ attr.at().setSEL(opt->text()); opt->setText(attr.at().getSEL()); }
-	    else { attr.at().setS(opt->text()); opt->setText(attr.at().getS()); }
+	    attr.at().setS(opt->text());
+	    opt->setText(attr.at().getS());
 	}
 	else if(attr.at().id() == "contextMenu" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
-	    opt->childAdd("rule")->setAttr("expr",":.*$")->setAttr("color","darkorange");
-	    opt->childAdd("rule")->setAttr("expr","^.*:")->setAttr("color","darkgreen");
+	    opt->childAdd("rule")->setAttr("expr", ":.*$")->setAttr("color", "darkorange");
+	    opt->childAdd("rule")->setAttr("expr", "^.*:")->setAttr("color", "darkgreen");
 	}
 	else if(attr.at().id() == "evProc" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
 	{
@@ -1165,13 +1163,13 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	{
 	    vector<string> ls;
 	    src->resourceList(ls);
-	    for(int i_t = 0; i_t < ls.size(); i_t++)
+	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
                 opt->childAdd("el")->setText("res:"+ls[i_t]);
 	}
 	else if(a_val.compare(0,5,"file:") == 0)
 	{
 	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;");
-	    for(int i_t = 0; i_t < opt->childSize(); i_t++)
+	    for(unsigned i_t = 0; i_t < opt->childSize(); i_t++)
                 opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}
 	opt->childIns(0,"el")->setText("res:");
@@ -1326,7 +1324,6 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	{
-	    bool noonly_no_set = true;
 	    string no_set;
 	    string cfg_val = TSYS::strParse(opt->text(), 0, " ");
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
@@ -1347,19 +1344,11 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    if(!prm.freeStat() || !dstwdg.freeStat())
 		    {
 			if((!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
-			    (!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
-			{
+				(!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
 			    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val+((obj_tp == "wdg:")?"/a_":"/")+p_attr);
-			    noonly_no_set = false;
-			}
 			else no_set += p_attr+",";
 		    }
 		}
-	    /*if(!prm.freeStat() || !dstwdg.freeStat())
-	    {
-		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Destination has no any necessary attribute!"));
-		else if(no_set.size())	throw TError(nodePath().c_str(),_("Destination has no attributes: %s !"),no_set.c_str());
-	    }*/
 	}
     }
     else if((a_path.compare(0,14,"/links/lnk/pl_") == 0 || a_path.compare(0,14,"/links/lnk/ls_") == 0) && ctrChkNode(opt))
@@ -1793,6 +1782,7 @@ void Attr::setFld( TFld *fld, bool inher )
 		m_val.o_val = new AutoHD<TVarObj>(new TVarObj);
 		break;
 	    }
+	    default: break;
 	}
 
     if(mFld)
@@ -1839,6 +1829,7 @@ TVariant Attr::get( bool sys )
 	case TFld::Boolean:	return getB(sys);
 	case TFld::String:	return getS(sys);
 	case TFld::Object:	return getO(sys);
+	default: break;
     }
     return EVAL_STR;
 }
@@ -1850,7 +1841,7 @@ string Attr::getS( bool sys )
     switch(fld().type())
     {
 	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? i2s(tvl) : EVAL_STR; }
-	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? TSYS::real2str(tvl) : EVAL_STR; }
+	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? r2s(tvl) : EVAL_STR; }
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
 	case TFld::Object:	{ AutoHD<TVarObj> tvl = getO(sys); return (tvl.at().objName() != "EVAL") ? tvl.at().getStrXML() : EVAL_STR; }
 	case TFld::String:
@@ -1860,6 +1851,7 @@ string Attr::getS( bool sys )
 	    pthread_mutex_unlock(&owner()->mtxAttr());
 	    return tvl;
 	}
+	default: break;
     }
     return EVAL_STR;
 }
@@ -1944,6 +1936,7 @@ void Attr::set( const TVariant &val, bool strongPrev, bool sys )
 	case TFld::Boolean:	setB(val.getB(), strongPrev, sys);	break;
 	case TFld::String:	setS(val.getS(), strongPrev, sys);	break;
 	case TFld::Object:	setO(val.getO(), strongPrev, sys);	break;
+	default: break;
     }
 }
 
@@ -2014,9 +2007,9 @@ void Attr::setR( double val, bool strongPrev, bool sys )
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())
     {
-	case TFld::String:	setS((val!=EVAL_REAL) ? TSYS::real2str(val) : EVAL_STR, strongPrev, sys);	break;
-	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys);			break;
-	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
+	case TFld::String:	setS((val!=EVAL_REAL) ? r2s(val) : EVAL_STR, strongPrev, sys);	break;
+	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys);	break;
+	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);break;
 	case TFld::Real:
 	{
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1])
@@ -2073,6 +2066,7 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 	case TFld::Integer: case TFld::Real: case TFld::Boolean:
 				setB(true, strongPrev, sys);		break;
 	case TFld::Object:
+	{
 	    if((!strongPrev && *m_val.o_val == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
 	    pthread_mutex_lock(&owner()->mtxAttr());
@@ -2092,7 +2086,9 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 		return;
 	    }
 	    break;
-        }
+	}
+	default: break;
+    }
 }
 
 string Attr::cfgTempl( )

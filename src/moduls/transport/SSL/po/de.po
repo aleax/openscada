@@ -47,6 +47,9 @@ msgstr ""
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Fehler der Eröffnung der zeitweiligen Datei '%s': '%s'"
 
+msgid "Error write to file '%s'."
+msgstr "Fehler Schreiben in '%s' einreichen."
+
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Close-Eingang Transport durch Fehler: %s"
@@ -106,11 +109,25 @@ msgstr "Kunden Maximum"
 msgid "Input buffer (kbyte)"
 msgstr "Eingangsbuffer (kbyte)"
 
-msgid "Keep alive connections"
-msgstr "Keep Alive-Verbindungen"
+msgid "Keep alive requests"
+msgstr "Keep alive Anfragen"
+
+msgid ""
+"Close the connection after specified requests.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Schließen Sie die Verbindung nach bestimmten Anfragen.\n"
+"Null-Wert für disable (nicht immer schließen)."
 
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive Wartezeit (s)"
+
+msgid ""
+"Close the connection after no requests at specified timeout.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Schließen Sie die Verbindung nach keine Anfragen zu bestimmten Timeout.\n"
+"Null-Wert für disable (nicht immer schließen)."
 
 msgid "Priority"
 msgstr "Priorität"
@@ -118,6 +135,17 @@ msgstr "Priorität"
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Eingangstraffik %s, Ausgangs %s."
+
+msgid "Socket name '%s' error!"
+msgstr "Buchse Namen '%s' Fehler!"
+ 
+#, c-format
+msgid "Error creation TCP socket: %s!"
+msgstr "Fehler Schaffung TCP-Socket: %s!"
+ 
+#, c-format
+msgid "Connect to Internet socket error: %s!"
+msgstr "Verbindung zum Internet-Socket-Fehler: %s!"
 
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"
