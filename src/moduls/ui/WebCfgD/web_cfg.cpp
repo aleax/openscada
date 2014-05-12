@@ -535,11 +535,7 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD))
-    {
-	SYS->transport().at().setSysHost(false);
-	opt->setText("/Transport");
-    }
+    if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
     else TUI::cntrCmdProc(opt);
 }
 

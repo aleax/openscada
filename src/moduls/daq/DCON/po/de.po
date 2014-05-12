@@ -43,8 +43,8 @@ msgstr "Planung der Befragung"
 msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
 
-msgid "Serial transport"
-msgstr "Serielle Übertragung"
+msgid "Transport"
+msgstr "Übertragung"
 
 msgid "Request tries"
 msgstr "Fordern Sie versucht"

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.VCAEngine file: session.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -46,7 +46,7 @@ class Session : public TCntrNode
 	~Session( );
 
 	string	ico( );
-	string  id( )		{ return mId.c_str(); }		//Identifier
+	string	id( )		{ return mId.c_str(); }		//Identifier
 	string	projNm( )	{ return mPrjnm; }		//Project's name
 	string	user( )		{ return mUser; }		//Open session user
 	string	owner( )	{ return mOwner; }		//Source project owner
@@ -82,11 +82,11 @@ class Session : public TCntrNode
 	void add( const string &id, const string &parent = "" );
 	void del( const string &id, bool full = false )	{ chldDel(mPage,id,-1,full); }
 
-	vector<string> &openList( )		{ return mOpen; }
+	vector<string> openList( );
 	void openReg( const string &id );
 	void openUnreg( const string &id );
 
-	Res &eventRes( )			{ return mEvRes; }
+	pthread_mutex_t	&dataMtx( )		{ return dataM; }
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
@@ -139,10 +139,12 @@ class Session : public TCntrNode
 	static void *Task( void *contr );
 
 	//Attributes
+	pthread_mutex_t	dataM,
+			mCalcRes;		//Calc resource
 	int	mPage;
 	const string mId;
 	string	mPrjnm, mOwner, mGrp;
-	ResString mUser;
+	MtxString mUser;
 	int	mPer, mPermit;
 	bool	mEnable, mStart, endrun_req;	//Enabled, Started and endrun stats
 	bool	mBackgrnd;			//Backgrounded execution of a session
@@ -153,8 +155,6 @@ class Session : public TCntrNode
 	float		rez_calc;
 	time_t		mReqTm;
 	AutoHD<Project>	mParent;
-	Res		mCalcRes;		//Calc resource
-	Res		mEvRes;			//Event access resource
 
 	vector<string>	mOpen;
 
@@ -163,7 +163,6 @@ class Session : public TCntrNode
 	int		mAlrmSndPlay;		//Now played sound alarm
 
 	//> Styles
-	Res		mStRes;
 	int		mStyleIdW;
 	map<string,string>	mStProp;	//Styles' properties
 };
@@ -179,14 +178,14 @@ class SessWdg : public Widget, public TValFunc
 	~SessWdg( );
 
 	//> Main parameters
-	string path( );
-	string ownerFullId( bool contr = false );
-	string type( )		{ return "SessWidget"; }
-	string ico( );
-	string calcLang( );
-	string calcProg( );
-	int    calcPer( );
-	bool   process( )	{ return mProc; }		//Process stat
+	string	path( );
+	string	ownerFullId( bool contr = false );
+	string	type( )		{ return "SessWidget"; }
+	string	ico( );
+	string	calcLang( );
+	string	calcProg( );
+	int	calcPer( );
+	bool	process( )	{ return mProc; }		//Process stat
 
 	void setEnable( bool val );
 	virtual void setProcess( bool val, bool lastFirstCalc = true );
@@ -210,6 +209,7 @@ class SessWdg : public Widget, public TValFunc
 
 	//> Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
+	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
 	SessWdg  *ownerSessWdg( bool base = false );
 	SessPage *ownerPage( );
@@ -236,14 +236,14 @@ class SessWdg : public Widget, public TValFunc
 	//Attributes
 	unsigned	mProc		: 1;
 	unsigned	inLnkGet	: 1;
-	unsigned 	mToEn		: 1;
+	unsigned	mToEn		: 1;
 
     private:
 	//Attributes
 	string		mWorkProg;
 	unsigned int	mMdfClc;
 	unsigned int	&mCalcClk;
-	Res		mCalcRes;
+	pthread_mutex_t	mCalcRes;
 
 	vector<string>	mWdgChldAct,	//Active childs widget's list
 			mAttrLnkLs;	//Linked attributes list
@@ -262,7 +262,7 @@ class SessPage : public SessWdg
 	~SessPage( );
 
 	string path( );
-	string type( )          { return "SessPage"; }
+	string type( )		{ return "SessPage"; }
 
 	void setEnable( bool val, bool force = false );
 	void setProcess( bool val, bool lastFirstCalc = true );

@@ -202,8 +202,8 @@ void MBD::cntrCmdProc( XMLNode *opt )
     if( opt->name() == "info" )
     {
 	TBD::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),enableStat()?R_R___:RWRW__,"root",SDB_ID,2,
-	    "tp","str","help",_("!!! Type here the help information about the db address of your module"));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,
+	    "help",_("!!! Type here the help information about the db address of your module"));
 	return;
     }
     TBD::cntrCmdProc(opt);

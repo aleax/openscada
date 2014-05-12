@@ -173,7 +173,7 @@ string TTr::expect( int fd, const string& expLst, int tm )
 
     time_t st_exp = time(NULL);
 
-    while( (time(NULL)-st_exp) < tm )
+    while((time(NULL)-st_exp) < tm)
     {
 	//rl = messIO(NULL,0,buf,sizeof(buf),0,true);
 	fd_set rd_fd;
@@ -182,14 +182,14 @@ string TTr::expect( int fd, const string& expLst, int tm )
 	tv.tv_sec = tm-(time(NULL)-st_exp); tv.tv_usec = 0;
 	FD_ZERO(&rd_fd); FD_SET(fd,&rd_fd);
 	kz = select(fd+1,&rd_fd,NULL,NULL,&tv);
-	if( kz == 0 )	continue;
-	else if( kz < 0 ) throw TError(mod->nodePath().c_str(),_("Read from serial error."));
-	else if( FD_ISSET(fd,&rd_fd) )
+	if(kz == 0)	continue;
+	else if(kz < 0) throw TError(mod->nodePath().c_str(),_("Read from serial error."));
+	else if(FD_ISSET(fd,&rd_fd))
 	{
-	    rl = read(fd,buf,sizeof(buf));
+	    rl = read(fd, buf, sizeof(buf));
 	    rez.append(buf,rl);
-	    for( int off = 0; (stmp=TSYS::strParse(expLst,0,"\n",&off)).size(); )
-		if( rez.find(stmp) != string::npos )
+	    for(int off = 0; (stmp=TSYS::strParse(expLst,0,"\n",&off)).size(); )
+		if(rez.find(stmp) != string::npos)
 		{
 		    mess_debug(mod->nodePath().c_str(), _("Receive from modem %d: '%s'."), fd, stmp.c_str());
 		    return stmp;
@@ -216,10 +216,7 @@ TTrIn::TTrIn( string name, const string &idb, TElem *el ) :
     setTimings("6:320");
 }
 
-TTrIn::~TTrIn()
-{
-    try{ stop(); }catch(...){ }
-}
+TTrIn::~TTrIn( )	{ }
 
 void TTrIn::load_( )
 {
@@ -437,9 +434,9 @@ void TTrIn::connect( )
     }
 }
 
-void TTrIn::start()
+void TTrIn::start( )
 {
-    if( run_st ) return;
+    if(run_st) return;
 
     //> Status clear
     trIn = trOut = 0;
@@ -449,11 +446,13 @@ void TTrIn::start()
 
     //> Start listen task
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
+
+    TTransportIn::start();
 }
 
-void TTrIn::stop()
+void TTrIn::stop( )
 {
-    if( !run_st ) return;
+    if(!run_st) return;
 
     if(mMdmMode && mMdmDataMode) mod->devUnLock(mDevPort);
 
@@ -467,6 +466,8 @@ void TTrIn::stop()
 
     if(fd >= 0) close(fd);
     fd = -1;
+
+    TTransportIn::stop();
 }
 
 void *TTrIn::Task( void *tr_in )
@@ -586,7 +587,7 @@ void *TTrIn::Task( void *tr_in )
 	    mess_debug(nodePath().c_str(), _("Serial replied message '%d'."), answ.size());
 #endif
 	    //>> Pure RS-485 flow control: Clear RTS for transfer allow
-    	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
+	    if(tr->mRTSfc) { sec &= ~TIOCM_RTS; ioctl(tr->fd, TIOCMSET, &sec); }
 
 	    ssize_t wL = 1;
 	    unsigned wOff = 0;
@@ -635,11 +636,12 @@ void *TTrIn::Task( void *tr_in )
     }
 
     //> Close protocol
-    if( !prot_in.freeStat() )
+    if(!prot_in.freeStat())
     {
 	string n_pr = prot_in.at().name();
+	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	prot_in.free();
-	SYS->protocol().at().at(tr->protocol()).at().close(n_pr);
+	proto.at().close(n_pr);
     }
 
     tr->run_st = false;
@@ -653,8 +655,9 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportIn::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",STR_ID,4,
-	    "tp","str","dest","sel_ed","select","/prm/cfg/devLS","help",
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,3,
+	    "dest","sel_ed","select","/prm/cfg/devLS","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:mdm]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -666,6 +669,7 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
 	    "      'rts' - use RTS signal for transfer(false) and check for echo, for pure RS-485;\n"
 	    "      'RS485' - use RS-485 mode, by TIOCSRS485.\n"
 	    "    mdm - modem mode, listen for 'RING'."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/PROT",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID);
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),startStat()?R_R_R_:RWRWR_,"root",STR_ID,2,"tp","str","help",
 	    _("Connection timings in format: \"symbol:frm\". Where:\n"
 	    "    symbol - one symbol maximum time, used for frame end detection, in ms;\n"
@@ -693,8 +697,8 @@ void TTrIn::cntrCmdProc( XMLNode *opt )
     {
 	int off = 0;
 	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
-	string suf = (off < addr().size()) ? addr().substr(off) : "";
-	for(int i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
+	string suf = (off < (int)addr().size()) ? addr().substr(off) : "";
+	for(unsigned i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
 	    if(opt->childGet(i_t)->text().size())
 		opt->childGet(i_t)->setText(opt->childGet(i_t)->text()+":"+suf);
     }
@@ -769,10 +773,7 @@ TTrOut::TTrOut(string name, const string &idb, TElem *el) :
     setTimings("640:6");
 }
 
-TTrOut::~TTrOut()
-{
-    if( startStat() )	stop();
-}
+TTrOut::~TTrOut( )	{ }
 
 void TTrOut::load_( )
 {
@@ -828,9 +829,9 @@ void TTrOut::save_( )
 
 string TTrOut::getStatus( )
 {
-    string rez = TTransportOut::getStatus( );
+    string rez = TTransportOut::getStatus();
 
-    if( startStat() )
+    if(startStat())
 	rez += TSYS::strMess(_("Traffic in %s, out %s. "),TSYS::cpct2str(trIn).c_str(),TSYS::cpct2str(trOut).c_str());
 
     return rez;
@@ -1040,9 +1041,11 @@ void TTrOut::start( )
 
     mKeepAliveLstTm = TSYS::curTime();
     run_st = true;
+
+    TTransportOut::start();
 }
 
-void TTrOut::stop()
+void TTrOut::stop( )
 {
     ResAlloc res(nodeRes(), true);
     if(!run_st) return;
@@ -1067,14 +1070,16 @@ void TTrOut::stop()
 
     run_st = false;
     mMdmMode = false;
+
+    TTransportOut::stop();
 }
 
 void TTrOut::check( )
 {
     bool reRs = false;
     bool toStop = (mMdmMode && mMdmDataMode && (reRs=nodeRes().resTryW()) && (TSYS::curTime()-mLstReqTm)/1000000 > mdmLifeTime());
-    if( reRs ) nodeRes().resRelease();
-    if( toStop ) stop();
+    if(reRs) nodeRes().resRelease();
+    if(toStop) stop();
 }
 
 int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int time, bool noRes )
@@ -1118,12 +1123,12 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    if(kz <= 0)
 	    {
 		if(errno == EAGAIN)
-                {
+		{
 		    tv.tv_sec = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000);
-                    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
-                    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
-                    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
-                }
+		    FD_ZERO(&rw_fd); FD_SET(fd, &rw_fd);
+		    kz = select(fd+1, NULL, &rw_fd, NULL, &tv);
+		    if(kz > 0 && FD_ISSET(fd,&rw_fd)) { kz = 0; continue; }
+		}
 		mLstReqTm = TSYS::curTime();
 		stop();
 		throw TError(nodePath().c_str(),_("Writing request error."));
@@ -1138,7 +1143,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	    mLstReqTm = TSYS::curTime();
 	    for(int r_off = 0; r_off < len_ob; )
 	    {
-		kz = read(fd,echoBuf,vmin(len_ob-r_off,sizeof(echoBuf)));
+		kz = read(fd, echoBuf, vmin(len_ob-r_off,(int)sizeof(echoBuf)));
 		if(kz == 0 || (kz == -1 && errno == EAGAIN))
 		{
 		    if((TSYS::curTime()-mLstReqTm) > wCharTm*len_ob*1e3) throw TError(nodePath().c_str(),_("Timeouted!"));
@@ -1179,8 +1184,9 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTransportOut::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",STR_ID,4,
-	    "tp","str","dest","sel_ed","select","/prm/cfg/devLS","help",
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",STR_ID,3,
+	    "dest","sel_ed","select","/prm/cfg/devLS","help",
 	    _("Serial transport has address format: \"dev:speed:format[:fc[:modTel]]\". Where:\n"
 	    "    dev - serial device address (/dev/ttyS0);\n"
 	    "    speed - device speed (300, 600, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200,\n"
@@ -1224,8 +1230,8 @@ void TTrOut::cntrCmdProc( XMLNode *opt )
     {
 	int off = 0;
 	TSYS::ctrListFS(opt, TSYS::strParse(addr(),0,":",&off), "<chrdev>;");
-	string suf = (off < addr().size()) ? addr().substr(off) : "";
-	for(int i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
+	string suf = (off < (int)addr().size()) ? addr().substr(off) : "";
+	for(unsigned i_t = 0; suf.size() && i_t < opt->childSize(); i_t++)
 	    if(opt->childGet(i_t)->text().size())
 		opt->childGet(i_t)->setText(opt->childGet(i_t)->text()+":"+suf);
     }

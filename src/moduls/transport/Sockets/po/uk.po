@@ -64,6 +64,9 @@ msgstr "UDP сокет не під'єднався до '%s'!"
 msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX сокет не під'єднався до '%s'!"
 
+msgid "Socket write message '%d'."
+msgstr "Сокет записав повідомлення '%d'."
+ 
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закриття вхідного транспорту за помилкою: %s!"
@@ -104,10 +107,6 @@ msgstr "Запис: помилка '%s (%d)'!"
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Від сокету від'єднався '%s'!"
-
-#, c-format
-msgid "The protocol '%s' is not present."
-msgstr "Протокол '%s' відсутній."
 
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
@@ -153,14 +152,30 @@ msgstr "Максимум клієнтів"
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
-msgid "Keep alive connections"
-msgstr "Keep alive з'єднань"
+msgid "Priority"
+msgstr "Пріоритет"
+ 
+#: socket.cpp:643
+msgid "Keep alive requests"
+msgstr "Keep alive запитів"
+ 
+#: socket.cpp:644
+msgid ""
+"Close the connection after specified requests.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закриття підключення після визначеної кількості запитів.\n"
+"Нульове значення для відключення (не закривається ніколи)."
 
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive час очікування (с)"
 
-msgid "Priority"
-msgstr "Пріоритет"
+msgid ""
+"Close the connection after no requests at specified timeout.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закриття підключення після відсутності запитів протягом визначеного часу.\n"
+"Нульове значення для відключення (не закривається ніколи)."
 
 #, c-format
 msgid "Traffic in %s, out %s."

@@ -43,8 +43,8 @@ msgstr "Планирование опроса"
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-msgid "Serial transport"
-msgstr "Последовательный транспорт"
+msgid "Transport"
+msgstr "Транспорт"
 
 msgid "Request tries"
 msgstr "Попыток запроса"
@@ -151,7 +151,7 @@ msgid "REQ -> '%s'"
 msgstr "Запрос -> '%s'"
 
 msgid "13:Error respond: Not full."
-msgstr "13:Ошибка ответа: Не полный."
+msgstr "13:Ошибка ответа: Неполный."
 
 msgid "20:Respond length error."
 msgstr "20:Ошибка в длине пакета модуля."

@@ -47,6 +47,9 @@ msgstr ""
 msgid "Open temporary file '%s' error: '%s'"
 msgstr "Помилка відкриття тимчасового файлу '%s': '%s'"
 
+msgid "Error write to file '%s'."
+msgstr "Помилка запису до файлу '%s'."
+
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закрито вхідний транспорт за помилкою: %s"
@@ -106,11 +109,25 @@ msgstr "Максимум клієнтів"
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
-msgid "Keep alive connections"
-msgstr "Keep alive з'єднань"
+msgid "Keep alive requests"
+msgstr "Keep alive запитів"
+
+msgid ""
+"Close the connection after specified requests.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закриття підключення після визначеної кількості запитів.\n"
+"Нульове значення для відключення (не закривається ніколи)."
 
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive час очікування (с)"
+
+msgid ""
+"Close the connection after no requests at specified timeout.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закриття підключення після відсутності запитів протягом визначеного часу.\n"
+"Нульове значення для відключення (не закривається ніколи)."
 
 msgid "Priority"
 msgstr "Пріоритет"
@@ -118,6 +135,17 @@ msgstr "Пріоритет"
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафік вхідний %s, вихідний %s."
+
+msgid "Socket name '%s' error!"
+msgstr "Помилка ім'я '%s' сокету!"
+ 
+#, c-format
+msgid "Error creation TCP socket: %s!"
+msgstr "Помилка створення TCP сокету: %s!"
+ 
+#, c-format
+msgid "Connect to Internet socket error: %s!"
+msgstr "Помилка підключення до Internet сокету: %s!"
 
 #, c-format
 msgid "SSL_CTX_use_certificate_chain_file: %s"

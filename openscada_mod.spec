@@ -3,8 +3,8 @@ Summary: Open SCADA system.
 Summary(ru_RU.UTF8): Открытая SCADA система.
 Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
-Name: openscada
-Version: 0.8.0.9
+Name: openscada_LTS
+Version: 0.8.0.10
 Release: 1
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
@@ -18,8 +18,9 @@ URL: http://oscada.org
 #= Individual distributives seting =
 %if %_vendor == "alt"
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc-c++ libgd2-devel libpcre-devel libMySQL-devel libsqlite3-devel libsensors3-devel
-BuildRequires: libnet-snmp-devel libqt4-devel firebird-devel postgresql9.1-devel libportaudio2-devel libfftw3-devel
+BuildRequires: glibc-devel gcc-c++ libpcre-devel libgd2-devel
+BuildRequires: libMySQL-devel libsqlite3-devel firebird-devel postgresql-devel
+BuildRequires: libsensors3-devel libnet-snmp-devel libportaudio2-devel libqt4-devel libfftw3-devel
 %else
 %define _initdir /etc/init.d
 %define _desktopdir %_datadir/applications
@@ -1467,6 +1468,9 @@ sed -i 's|/usr/lib|%_libdir|' %buildroot/%_sysconfdir/oscada*.xml
 
 
 %changelog
+* Fri May 09 2014 Roman Savochenko <rom_as@oscada.org>
+- Build 0.8.0.10 update to production release.
+
 * Mon Dec 09 2013 Roman Savochenko <rom_as@oscada.org>
 - Build 0.8.0.9 update to production release.
 

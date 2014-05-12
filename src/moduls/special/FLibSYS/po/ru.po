@@ -33,7 +33,7 @@ msgstr "Функция"
 msgid "Functions"
 msgstr "Функции"
 
-msgid "Properties no supported by object."
+msgid "Properties no supported by the object."
 msgstr "Свойства не поддерживаются объектом."
 
 #, c-format
@@ -248,6 +248,24 @@ msgstr "Float: Объединение из слов"
 
 msgid "Merge float (4 byte) from words (2 byte)."
 msgstr "Объединение float (4 байтов) из слов (2 байта)."
+
+msgid "Data"
+msgstr "Данные"
+ 
+msgid "Polynomial (reversion)"
+msgstr "Полином (реверсивный)"
+ 
+msgid "Width"
+msgstr "Ширина"
+ 
+msgid "Initial"
+msgstr "Нач.значение"
+ 
+msgid "Cyclic Redundancy Code (CRC)"
+msgstr "Циклический Избыточный Код (CRC)"
+ 
+msgid "Unified Cyclic Redundancy Code implement for 8-64 bits width."
+msgstr "Реализация Циклического Избыточного Кода для длин 8-64 бит."
 
 msgid "Date and time string"
 msgstr "Строка даты и времени"

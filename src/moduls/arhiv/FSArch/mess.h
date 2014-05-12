@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.FSArch file: mess.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -112,7 +112,7 @@ class ModMArch: public TMArchivator
 
 	time_t begin();
 	time_t end();
-	void put( vector<TMess::SRec> &mess );
+	bool put( vector<TMess::SRec> &mess );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const string &category = "", char level = 0, time_t upTo = 0 );
 	void start();
 	void stop();

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.OPC_UA file: mod_daq.cpp
 /***************************************************************************
- *   Copyright (C) 2009-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2009-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -32,7 +32,7 @@
 
 #include "mod_daq.h"
 
-OPC_UA::TTpContr *OPC_UA::mod;  //Pointer for direct access to DAQ module
+OPC_UA::TTpContr *OPC_UA::mod;	//Pointer for direct access to DAQ module
 
 using namespace OPC_UA;
 
@@ -52,27 +52,17 @@ TTpContr::TTpContr( string name ) : TTipDAQ(DAQ_ID)
     mSource	= name;
 }
 
-TTpContr::~TTpContr()
-{
+TTpContr::~TTpContr( )	{ }
 
-}
+void TTpContr::load_( )	{ }
 
-void TTpContr::load_( )
-{
-    //> Load parameters from command line and/or config file
-
-}
-
-void TTpContr::save_( )
-{
-
-}
+void TTpContr::save_( )	{ }
 
 void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Controler's bd structure
+    //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
@@ -83,25 +73,25 @@ void TTpContr::postEnable( int flag )
 	TSYS::strMess("%d;%d;%d",MS_None,MS_Sign,MS_SignAndEncrypt).c_str(),_("None;Sign;Sign&Encrypt")));
     fldAdd(new TFld("Cert",_("Certificate (PEM)"),TFld::String,TFld::FullText,"10000"));
     fldAdd(new TFld("PvKey",_("Private key (PEM)"),TFld::String,TFld::FullText,"10000"));
+    fldAdd(new TFld("AuthUser",_("Auth: user"),TFld::String,TFld::NoFlag,"20"));
+    fldAdd(new TFld("AuthPass",_("Auth: password"),TFld::String,TFld::NoFlag,"20"));
     fldAdd(new TFld("AttrsLimit",_("Parameter attributes number limit"),TFld::Integer,TFld::NoFlag,"3","100","10;10000"));
 
-    //> Parameter type bd structure
+    //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("ND_LS",_("Nodes list"),TFld::String,TFld::FullText|TCfg::NoVal,"1000",""));
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
 
 //*************************************************
 //* TMdContr                                      *
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TController(name_c,daq_db,cfgelem),
     mSched(cfg("SCHEDULE")), mPrior(cfg("PRIOR")), mSync(cfg("SYNCPER")), mEndP(cfg("EndPoint")), mSecPol(cfg("SecPolicy")),
-    mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")), mPAttrLim(cfg("AttrsLimit").getId()),
-    prcSt(false), callSt(false), mPCfgCh(false), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
+    mSecMessMode(cfg("SecMessMode")), mCert(cfg("Cert")), mPvKey(cfg("PvKey")), mAuthUser(cfg("AuthUser")), mAuthPass(cfg("AuthPass")),
+    mPAttrLim(cfg("AttrsLimit").getId()),
+    prcSt(false), callSt(false), mPCfgCh(false), alSt(-1), mBrwsVar(_("Root folder (84)")), tm_gath(0), tmDelay(0), servSt(0)
 {
     cfg("PRM_BD").setS("OPC_UA_Prm_"+name_c);
 }
@@ -118,7 +108,7 @@ string TMdContr::epParse( string *uri )
     if(uri) *uri = (uriPos != string::npos) ? endPoint().substr(uriPos) : "";
 
     string addr = endPoint().substr(10, (uriPos==string::npos) ? uriPos : (uriPos-10));
-    return atoi(TSYS::strParse(addr,1,":").c_str()) ? addr : TSYS::strParse(addr,0,":")+":4840";
+    return s2i(TSYS::strParse(addr,1,":")) ? addr : TSYS::strParse(addr,0,":")+":4840";
 }
 
 string TMdContr::getStatus( )
@@ -135,13 +125,18 @@ string TMdContr::getStatus( )
 	else
 	{
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), TSYS::time2str(1e-3*period()).c_str());
-	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), TSYS::time2str(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), TSYS::time2str(tm_gath).c_str(),-tmDelay);
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()), "%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(tm_gath).c_str(),-tmDelay);
 	    if(servSt) rez.replace(0, 1, TSYS::strMess("0x%x",servSt));
 	}
     }
     return rez;
+}
+
+string TMdContr::authData( )
+{
+    return (mAuthUser.getS().size() && mAuthPass.getS().size()) ? mAuthUser.getS()+"\n"+mAuthPass.getS() : "";
 }
 
 void TMdContr::reqService( XML_N &io )
@@ -152,16 +147,11 @@ void TMdContr::reqService( XML_N &io )
     try { tr.at().start(); }
     catch(TError err) { io.setAttr("err", TSYS::strMess("0x%x:%s",OpcUa_BadCommunicationError,err.mess.c_str())); return; }
 
-    //do 
     Client::reqService(io);
-    //while(strtoul(io.attr("err").c_str(),NULL,0) == OpcUa_BadInvalidArgument);
     if(io.attr("err").empty()) tmDelay--;
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
 {
@@ -184,22 +174,25 @@ void TMdContr::disable_( )
 
 void TMdContr::start_( )
 {
-    //> Establish connection
-    try { tr.at().start(); } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+    //Establish connection
+    //try { tr.at().start(); } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 
-    //> Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    //Schedule process
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     tmDelay = 0;
 
-    //> Start the gathering data task
+    //Start the gathering data task
     if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true));
+
+    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alSt = -1;
 }
 
 void TMdContr::protIO( XML_N &io )
@@ -207,7 +200,7 @@ void TMdContr::protIO( XML_N &io )
     ResAlloc resN(tr.at().nodeRes(), true);
     try { Client::protIO(io); }
     catch(TError er)
-    { io.setAttr("err", TSYS::strMess("0x%x:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
+    { io.setAttr("err", TSYS::strMess("0x%x:%s:%s", OpcUa_BadInvalidArgument, _("Remote host error"), er.mess.c_str())); }
 }
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
@@ -222,7 +215,7 @@ void TMdContr::debugMess( const string &mess )
 
 void TMdContr::prmEn( const string &id, bool val )
 {
-    ResAlloc res(en_res, true);
+    ResAlloc res(enRes, true);
 
     unsigned i_prm;
     for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
@@ -242,7 +235,7 @@ void *TMdContr::Task( void *icntr )
     cntr.prcSt = true;
     bool firstCall = true;
 
-    XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
+    XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 
     try
     {
@@ -255,7 +248,7 @@ void *TMdContr::Task( void *icntr )
 	    cntr.callSt = true;
 	    unsigned int div = cntr.period() ? (unsigned int)(cntr.syncPer()/(1e-9*cntr.period())) : 0;
 
-	    ResAlloc res(cntr.en_res, false);
+	    ResAlloc res(cntr.enRes, false);
 
 	    if(!req.childSize() || cntr.mPCfgCh || (div && (it_cnt%div) < cntr.p_hd.size()))
 	    {
@@ -304,10 +297,24 @@ void *TMdContr::Task( void *icntr )
 	    if(isErr)
 	    {
 		cntr.acq_err.setVal(req.attr("err"));
+		if(cntr.alSt <= 0)
+		{
+		    cntr.alSt = 1;
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
+			cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
+		}
 		cntr.tmDelay = cntr.syncPer();
 		continue;
 	    }
-	    else if(cntr.tmDelay == -1) cntr.acq_err.setVal("");
+	    else
+	    {
+		cntr.acq_err.setVal("");
+		if(cntr.alSt != 0)
+		{
+		    cntr.alSt = 0;
+		    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+		}
+	    }
 	    res.release();
 
 	    firstCall = false;
@@ -346,7 +353,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 	    XML_N req("opc.tcp");
 
-	    //> Send FindServers request for EndPoints list provide
+	    //Send FindServers request for EndPoints list provide
 	    req.setAttr("id", "FindServers");
 	    reqService(req);
 
@@ -357,7 +364,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 		    epLst[req.childGet(i_s)->childGet(i_d)->text()] = SecuritySetting();
 	    res.release();
 
-	    //> Send GetEndpoints request for EndPoints list provide
+	    //Send GetEndpoints request for EndPoints list provide
 	    req.clear()->setAttr("id", "GetEndpoints");
 	    reqService(req);
 
@@ -367,7 +374,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 		XML_N *xep = req.childGet(i_ch);
 		string ep = xep->attr("endpointUrl");
 		if(epLst.find(ep) != epLst.end()) ep += "/"+TSYS::strParse(xep->attr("securityPolicyUri"),1,"#")+"/"+xep->attr("securityMode");
-		epLst[ep] = SecuritySetting(TSYS::strParse(xep->attr("securityPolicyUri"),1,"#"), atoi(xep->attr("securityMode").c_str()));
+		epLst[ep] = SecuritySetting(TSYS::strParse(xep->attr("securityPolicyUri"),1,"#"), s2i(xep->attr("securityMode")));
 	    }
 	}
 	else if(icfg.name() == "SecPolicy")
@@ -378,6 +385,12 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	else if(icfg.name() == "SecMessMode" &&
 		((icfg.getI() != MS_None && secPolicy() == "None") || (icfg.getI() == MS_None && secPolicy() != "None")))
 	    return false;
+	else if(icfg.name() == "AuthUser" || icfg.name() == "AuthPass")
+	{
+	    XML_N req("opc.tcp");
+	    req.clear()->setAttr("id", "CloseSession");
+	    reqService(req);
+	}
     } catch(...) { }
 
     return true;
@@ -385,7 +398,7 @@ bool TMdContr::cfgChange( TCfg &icfg )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TController::cntrCmdProc(opt);
@@ -398,6 +411,8 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SecMessMode",mSecMessMode.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/Cert",mCert.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID,3,"tp","str","cols","90","rows","7");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PvKey", mPvKey.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthUser", mAuthUser.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass", mAuthPass.fld().descr(),startStat()?R_R___:RWRW__,"root",SDAQ_ID);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/AttrsLimit",cfg("AttrsLimit").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	if(enableStat() && ctrMkNode("area",opt,-1,"/ndBrws",_("Server nodes browser")))
 	{
@@ -410,9 +425,11 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/elLst" && ctrChkNode(opt))
+    if(a_path == "/cntr/cfg/AuthPass" && ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))
+	opt->setText(string(mAuthPass.getS().size(),'*'));
+    else if(a_path == "/cntr/cfg/elLst" && ctrChkNode(opt))
     {
 	ResAlloc res(nodeRes(), false);
 	for(map<string, SecuritySetting>::iterator iEp = epLst.begin(); iEp != epLst.end(); iEp++)
@@ -428,19 +445,19 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_attr	= ctrMkNode("list",opt,-1,"/ndBrws/attrs/0","",R_R_R_);
 	XMLNode *n_val	= ctrMkNode("list",opt,-1,"/ndBrws/attrs/1","",R_R_R_);
 
-	//>> Prepare request for all typical
+	// Prepare request for all typical
 	string cNodeId = "84";
 	size_t stC = mBrwsVar.rfind(")");
 	size_t stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 
-	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
+	XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
 	for(int i_a = 1; i_a <= 22; i_a++)
-	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", TSYS::int2str(i_a));
+	    req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(i_a));
 	reqService(req);
 	if(!req.attr("err").empty()) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 
-	//>> Get result
+	// Get result
 	for(unsigned i_a = 0; i_a < req.childSize(); i_a++)
 	{
 	    if(strtol(req.childGet(i_a)->attr("Status").c_str(),NULL,0)) continue;
@@ -451,7 +468,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		case AId_NodeId: nANm = _("NodeId");	break;
 		case AId_NodeClass:
 		    nANm = _("NodeClass");
-		    switch(atoi(nAVl.c_str()))
+		    switch(s2i(nAVl))
 		    {
 			case NC_Object:		nAVl = _("Object");	break;
 			case NC_Variable:	nAVl = _("Variable");	break;
@@ -478,7 +495,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		{
 		    nANm = _("DataType");
 		    XML_N reqTp("opc.tcp");
-		    reqTp.setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER))->
+		    reqTp.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER))->
 			childAdd("node")->setAttr("nodeId", nAVl)->setAttr("attributeId", "3");
 		    reqService(reqTp);
 		    if(reqTp.attr("err").empty() && reqTp.childSize()) nAVl = reqTp.childGet(0)->text();
@@ -489,7 +506,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		case AId_AccessLevel:
 		{
 		    nANm = _("AccessLevel");
-		    char cRW = atoi(nAVl.c_str());
+		    char cRW = s2i(nAVl);
 		    nAVl = "";
 		    if(cRW&ACS_Read)		nAVl += _("Readable, ");
 		    if(cRW&ACS_Write)		nAVl += _("Writable, ");
@@ -501,7 +518,7 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 		case AId_UserAccessLevel:
 		{
 		    nANm = _("UserAccessLevel");
-		    char cRW = atoi(nAVl.c_str());
+		    char cRW = s2i(nAVl);
 		    nAVl = "";
 		    if(cRW&ACS_Read)		nAVl += _("Readable, ");
 		    if(cRW&ACS_Write)		nAVl += _("Writable, ");
@@ -520,37 +537,38 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
     }
     else if(enableStat() && a_path == "/ndBrws/ndLst" && ctrChkNode(opt))
     {
-	//>> Get current node references by call browse
+	// Get current node references by call browse
 	string cNodeId = "84";
 	size_t stC = mBrwsVar.rfind(")");
 	size_t stP = mBrwsVar.rfind("(",stC);
 	if(stP != string::npos && stC != string::npos) cNodeId = TSYS::strDecode(mBrwsVar.substr(stP+1,stC-stP-1));
 	XML_N req("opc.tcp"); req.setAttr("id","Browse");
 	req.childAdd("node")->setAttr("nodeId",cNodeId)->
-			      setAttr("browseDirection",TSYS::int2str(BD_BOTH))->
-			      setAttr("resultMask",TSYS::int2str(/*0x3f*/RdRm_IsForward|RdRm_BrowseName));
+			      setAttr("referenceTypeId",i2s(OpcUa_HierarchicalReferences))->
+			      setAttr("browseDirection",i2s(BD_BOTH))->
+			      setAttr("resultMask",i2s(/*0x3f*/RdRm_IsForward|RdRm_BrowseName));
 	try{ reqService(req); } catch(TError) { opt->childAdd("el")->setText(_("Root folder (84)")); return; }
 	if(!req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize())
 	{ opt->childAdd("el")->setText(_("Root folder (84)")); return; }
 	XML_N *rn = req.childGet(0);
 
-	//>> Process inverse references
+	// Process inverse references
 	bool invRefPr = false;
 	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
 	{
-	    if(atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
+	    if(s2i(rn->childGet(i_n)->attr("isForward"))) continue;
 	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
 		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
 	    invRefPr = true;
 	}
 	if(!invRefPr && mBrwsVar != _("Root folder (84)")) opt->childAdd("el")->setText(_("Root folder (84)"));
 
-	//>> Append self address
+	// Append self address
 	opt->childAdd("el")->setText(mBrwsVar);
-	//>> Process forward references
+	// Process forward references
 	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
 	{
-	    if(!atoi(rn->childGet(i_n)->attr("isForward").c_str())) continue;
+	    if(!s2i(rn->childGet(i_n)->attr("isForward"))) continue;
 	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
 		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
 	}
@@ -566,10 +584,7 @@ TMdPrm::TMdPrm( string name, TTipParam *tp_prm ) : TParamContr(name,tp_prm), p_e
 
 }
 
-TMdPrm::~TMdPrm( )
-{
-    nodeDelAll();
-}
+TMdPrm::~TMdPrm( )	{ nodeDelAll(); }
 
 void TMdPrm::postEnable( int flag )
 {
@@ -618,60 +633,58 @@ string TMdPrm::attrPrc( )
     XML_N req("opc.tcp");
     vector<string> als;
 
-    //> Nodes list process and parameter's attributes creation
+    //Nodes list process and parameter's attributes creation
     string snd;
-    for(int off = 0; (snd=TSYS::strParse(cfg("ND_LS").getS(),0,"\n",&off)).size(); )
+    for(int off = 0; (snd=TSYS::strParse(ndList(),0,"\n",&off)).size(); )
     {
-	//>> Request for node class request
-	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", TSYS::int2str(TS_NEITHER));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_NodeClass));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_BrowseName));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_DisplayName));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_Value));
-	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", TSYS::int2str(AId_AccessLevel));
+	// Request for node class request
+	req.clear()->setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_NodeClass));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_BrowseName));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_DisplayName));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_Value));
+	req.childAdd("node")->setAttr("nodeId", snd)->setAttr("attributeId", i2s(AId_AccessLevel));
 	owner().reqService(req);
 	if(!req.attr("err").empty()) return req.attr("err");
 	if(strtol(req.childGet(0)->attr("Status").c_str(),NULL,0))	continue;
 
-	//>> Variable node's attribute creation
-	if(atoi(req.childGet(0)->text().c_str()) == NC_Variable && atoi(req.childGet(4)->text().c_str())&ACS_Read)
+	// Variable node's attribute creation
+	if(s2i(req.childGet(0)->text()) == NC_Variable && s2i(req.childGet(4)->text())&ACS_Read)
 	{
 	    als.push_back(snd);
 	    srchOK = false;
-	    //>> Find for already presented attribute
+	    // Find for already presented attribute
 	    for(unsigned i_a = 0; i_a < p_el.fldSize() && !srchOK; i_a++)
 		if(TSYS::strLine(p_el.fldAt(i_a).reserve(),0) == snd) srchOK = true;
 
-	    //>> Create new attribute
+	    // Create new attribute
 	    if(!srchOK)
 	    {
-		//>>> Prepare attribute id
+		//  Prepare attribute id
 		string aid = TSYS::strEncode(req.childGet(1)->text(),TSYS::oscdID);
 		if(vlPresent(aid))
 		    for(int i_v = 1; true; i_v++)
-			if(!vlPresent(aid+TSYS::int2str(i_v)))
-			{ aid += TSYS::int2str(i_v); break; }
+			if(!vlPresent(aid+i2s(i_v)))
+			{ aid += i2s(i_v); break; }
 
-		//>>> Value type prepare
+		//  Value type prepare
 		TFld::Type vtp = TFld::String;
-		switch(atoi(req.childGet(3)->attr("EncodingMask").c_str()) & 0x3F)
+		switch(s2i(req.childGet(3)->attr("EncodingMask")) & 0x3F)
 		{
-		    case OpcUa_Boolean:
-			vtp = TFld::Boolean;	break;
-		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16: case OpcUa_Int32: case OpcUa_UInt32:
-			vtp = TFld::Integer;	break;
-		    case OpcUa_Int64: case OpcUa_UInt64: case OpcUa_Float: case OpcUa_Double:
-			vtp = TFld::Real;	break;
+		    case OpcUa_Boolean:								vtp = TFld::Boolean;	break;
+		    case OpcUa_SByte: case OpcUa_Byte: case OpcUa_Int16: case OpcUa_UInt16:
+		    case OpcUa_Int32: case OpcUa_UInt32:					vtp = TFld::Integer;	break;
+		    case OpcUa_Int64: case OpcUa_UInt64: case OpcUa_Float: case OpcUa_Double:	vtp = TFld::Real;	break;
 		}
 
-		//>> Browse name
+		// Browse name
 		string aNm = req.childGet(2)->text();
 		size_t nmPos = aNm.find(":");
 		if(nmPos!=string::npos) aNm.erase(0,nmPos+1);
 
-		//>>> Flags prepare
+		//  Flags prepare
 		unsigned vflg = TVal::DirWrite;
-		if(!(atoi(req.childGet(4)->text().c_str())&ACS_Write))	vflg |= TFld::NoWrite;
+		if(!(s2i(req.childGet(4)->text())&ACS_Write))	vflg |= TFld::NoWrite;
 
 		p_el.fldAdd(new TFld(aid.c_str(),aNm.c_str(),vtp,vflg,"",
 		    "","","",(snd+"\n"+req.childGet(3)->attr("EncodingMask")).c_str()));
@@ -679,13 +692,13 @@ string TMdPrm::attrPrc( )
 	}
 
 	//>> Browse request for get child nodes
-	/*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",TSYS::int2str(TProt::BD_BOTH));
+	/*req.setAttr("id","Browse")->childAdd("node")->setAttr("nodeId",cNodeId)->setAttr("browseDirection",i2s(TProt::BD_BOTH));
 	reqOPC(req);
 	if( !req.attr("err").empty() || !req.childSize() ) throw TError(nodePath().c_str(),"%s",req.attr("err").c_str());
 	XMLNode *rn = req.childGet(0);*/
     }
 
-    //> Find for delete attribute
+    //Find for delete attribute
     for(unsigned i_a = 0, i_p; i_a < p_el.fldSize(); )
     {
 	for(i_p = 0; i_p < als.size(); i_p++)
@@ -705,15 +718,15 @@ void TMdPrm::save_( )
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //> Service commands process
+    //Service commands process
     string a_path = opt->attr("path");
     if(a_path.substr(0,6) == "/serv/")  { TParamContr::cntrCmdProc(opt); return; }
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",cfg("ND_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ND_LS",EVAL_STR,RWRWR_,"root",SDAQ_ID,3,"rows","8","SnthHgl","1",
 	    "help",_("Variables and it containers (Objects) list. All variables will put into the parameter attributes list.\n"
 		"Variables wrote by separated lines into format: [ns:id].\n"
 		"Where:\n"
@@ -724,16 +737,83 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"  3:\"BasicDevices2\" - basic devices node in the names scope 3 and string view;\n"
 		"  4:\"61626364\" - node in the names scope 4 and byte string view;\n"
 		"  4:{40d95ab0-50d6-46d3-bffd-f55639b853d4} - node in the names scope 4 and GUID view."));
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/SEL_NDS",_("Node append"),RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/SEL_NDS_lst",NULL);
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     if(a_path == "/prm/cfg/ND_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
     {
 	opt->childAdd("rule")->setAttr("expr","\"(\\\\\"|[^\"])*\"")->setAttr("color","darkgreen");
 	opt->childAdd("rule")->setAttr("expr","\\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\\}")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\b(0[xX][0-9a-fA-F]*|[0-9]*)\\b")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
+    }
+    else if(a_path == "/prm/cfg/SEL_NDS")
+    {
+	if(ctrChkNode(opt,"get")) opt->setText(TBDS::genDBGet(nodePath()+"selND","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_RD))
+	{
+	    //Read for type check
+	    string cNodeId;
+	    size_t stC = opt->text().rfind(")"), stP = opt->text().rfind("(", stC);
+	    if(stP != string::npos && stC != string::npos)
+	    {
+		cNodeId = TSYS::strDecode(opt->text().substr(stP+1,stC-stP-1));
+		XML_N req("opc.tcp"); req.setAttr("id", "Read")->setAttr("timestampsToReturn", i2s(TS_NEITHER));
+		req.childAdd("node")->setAttr("nodeId", cNodeId)->setAttr("attributeId", i2s(AId_NodeClass));
+		try { owner().reqService(req); } catch(TError) { }
+		if(req.attr("err").empty() && req.childSize() && s2i(req.childGet(0)->text()) == NC_Variable)
+		{
+		    string nLs = ndList(), nS;
+		    for(int off = 0; (nS=TSYS::strLine(nLs,0,&off)).size(); )
+			if(nS == cNodeId)
+			    break;
+		    if(nS.empty()) setNdList(nLs+((nLs.size() && nLs[nLs.size()-1] != '\n')?"\n":"")+cNodeId);
+		}
+	    }
+	    TBDS::genDBSet(nodePath()+"selND", opt->text(), opt->attr("user"));
+	}
+    }
+    else if(a_path == "/prm/cfg/SEL_NDS_lst" && ctrChkNode(opt))
+    {
+	string selNd = TBDS::genDBGet(nodePath()+"selND",_("Root folder (84)"), opt->attr("user"));
+	size_t stC = selNd.rfind(")"), stP = selNd.rfind("(", stC);
+	string cNodeId = (stP != string::npos && stC != string::npos) ? TSYS::strDecode(selNd.substr(stP+1,stC-stP-1)) : "84";
+
+	XML_N req("opc.tcp"); req.setAttr("id","Browse");
+	req.childAdd("node")->setAttr("nodeId", cNodeId)->
+			      setAttr("referenceTypeId", i2s(OpcUa_HierarchicalReferences))->
+			      setAttr("browseDirection", i2s(BD_BOTH))->
+			      setAttr("resultMask", i2s(RdRm_IsForward|RdRm_BrowseName));
+	try{ owner().reqService(req); } catch(TError) { opt->childAdd("el")->setText(_("Root folder (84)")); return; }
+	if(!req.attr("err").empty() || !req.childSize() || !req.childGet(0)->childSize())
+	{
+	    opt->childAdd("el")->setText(_("Root folder (84)"));
+	    return;
+	}
+	XML_N *rn = req.childGet(0);
+
+	// Process inverse references
+	bool invRefPr = false;
+	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
+	{
+	    if(s2i(rn->childGet(i_n)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
+		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	    invRefPr = true;
+	}
+	if(!invRefPr && cNodeId != "84") opt->childAdd("el")->setText(_("Root folder (84)"));
+
+	// Append self address
+	opt->childAdd("el")->setText(selNd);
+	// Process forward references
+	for(unsigned i_n = 0; i_n < rn->childSize(); i_n++)
+	{
+	    if(!s2i(rn->childGet(i_n)->attr("isForward"))) continue;
+	    opt->childAdd("el")->setText(rn->childGet(i_n)->attr("browseName")+
+		" ("+TSYS::strEncode(rn->childGet(i_n)->attr("nodeId"),TSYS::Custom,"()")+")");
+	}
     }
     else TParamContr::cntrCmdProc(opt);
 }
@@ -753,7 +833,7 @@ void TMdPrm::vlGet( TVal &val )
     if(!owner().acq_err.getVal().empty()) val.setS(owner().acq_err.getVal(),0,true);
     else
     {
-	//> Check remote attributes for error status
+	//Check remote attributes for error status
 	uint32_t firstErr = 0;
 	vector<uint32_t> astls;
 	ResAlloc res(nodeRes(), true);
@@ -769,29 +849,28 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &valo, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat())	valo.setS(EVAL_STR, 0, true);
+    if(!enableStat())	vo.setS(EVAL_STR, 0, true);
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
-	if( valo.getS(NULL,true) == pvl.getS() ) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",valo.name())->setText(valo.getS(NULL,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
-    TVariant vl = valo.get(NULL, true);
     if(vl.isEVal() || vl == pvl) return;
 
-    //> Direct write
+    //Direct write
     XML_N req("opc.tcp");
     req.setAttr("id", "Write")->
-	childAdd("node")->setAttr("nodeId", TSYS::strLine(valo.fld().reserve(),0))->
-			  setAttr("attributeId", TSYS::int2str(AId_Value))->
-			  setAttr("EncodingMask", TSYS::strLine(valo.fld().reserve(),1))->
+	childAdd("node")->setAttr("nodeId", TSYS::strLine(vo.fld().reserve(),0))->
+			  setAttr("attributeId", i2s(AId_Value))->
+			  setAttr("EncodingMask", TSYS::strLine(vo.fld().reserve(),1))->
 			  setText(vl.getS());
     owner().reqService(req);
 }

@@ -1,8 +1,8 @@
 
 //OpenSCADA system module BD.PostgreSQL file: postgre.h
 /***************************************************************************
- *   Copyright (C) 2010 by Maxim Lysenko                                   *
- *   mlisenko@oscada.org                                                   *
+ *   Copyright (C) 2010 by Maxim Lysenko, mlisenko@oscada.org              *
+ *                 2013-2014 by Roman Savochenko, rom_as@oscada.org        *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -58,7 +58,7 @@ class MTable : public TTable
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 	void fieldPrmSet( TCfg &cfg, const string &last, string &req );
 	void getStructDB( string name, vector< vector<string> > &tblStrct );
@@ -84,7 +84,7 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( string iid, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void disable( );
@@ -102,15 +102,15 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
 
 	//Private attributes
-        string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
+	string host, hostaddr, user, pass, db, port, connect_timeout, cd_pg, conninfo;
 	PGconn	*connection;
 	int	reqCnt;
 	time_t	reqCntTm, trOpenTm;
-	Res	conn_res;
+	pthread_mutex_t	connRes;
 };
 
 //************************************************
@@ -121,7 +121,7 @@ class BDMod: public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod();
+	~BDMod( );
 
     private:
 	//Private methods

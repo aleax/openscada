@@ -51,6 +51,8 @@ using namespace OPC;
 #define PRT_LICENSE	"GPL2"
 //*************************************************
 
+#define NS_OpenSCADA_DAQ 2
+
 namespace OPC_UA
 {
 
@@ -110,7 +112,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
 
-	int reqData( int reqTp, XML_N &req );
+	uint32_t reqData( int reqTp, XML_N &req );
 
 	TProt &owner( );
 
@@ -149,7 +151,7 @@ class TProt: public TProtocol, public Server
 	TProt( string name );
 	~TProt( );
 
-	//> Generic variables
+	// Generic variables
 	string lang2CodeSYS( )		{ return Mess->lang2Code(); }
 	string applicationUri( );
 	string productUri( );
@@ -158,7 +160,7 @@ class TProt: public TProtocol, public Server
 	void modStart( );
 	void modStop( );
 
-	//> Server's functions
+	// Server's functions
 	void epList( vector<string> &ls )	{ chldList(mEndPnt,ls); }
 	bool epPresent( const string &id )	{ return chldPresent(mEndPnt,id); }
 	void epAdd( const string &id, const string &db = "*.*" );
@@ -199,7 +201,7 @@ class TProt: public TProtocol, public Server
 	vector< AutoHD<OPCEndPoint> > ep_hd;
 
 	Res	nRes;
-	Res	en_res;				//Resource for enable endpoints
+	Res	enRes;				//Resource for enable endpoints
 };
 
 extern TProt *modPrt;

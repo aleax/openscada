@@ -64,6 +64,16 @@ msgstr "UDP сокет не подключился к '%s'!"
 msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX сокет не подключился к '%s'!"
 
+msgid "Socket write message '%d'."
+msgstr "Сокет записал сообщение '%d'."
+ 
+msgid "Write: reply for zero bytes."
+msgstr "Запись: ответ ноль байт."
+ 
+#, c-format
+msgid "Write: error '%s (%d)'!"
+msgstr "Запись: ошибка '%s (%d)'!"
+
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закрытие входного транспорта по ошибке: %s!"
@@ -94,20 +104,9 @@ msgstr "Сокет получил сообщение '%d' из '%s'."
 msgid "Socket replied message '%d' to '%s'."
 msgstr "Сокет ответил сообщением '%d' на '%s'."
 
-msgid "Write: reply for zero bytes."
-msgstr "Запись: ответ ноль байт."
-
-#, c-format
-msgid "Write: error '%s (%d)'!"
-msgstr "Запись: ошибка '%s (%d)'!"
-
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "От сокета отключился '%s'!"
-
-#, c-format
-msgid "The protocol '%s' is not present."
-msgstr "Протокол '%s' отсутствует."
 
 msgid "Error request to protocol."
 msgstr "Ошибка запроса к протоколу."
@@ -154,14 +153,28 @@ msgstr "Максимум клиентов"
 msgid "Input buffer (kbyte)"
 msgstr "Входной буфер (кбайт)"
 
-msgid "Keep alive connections"
-msgstr "Keep alive соединений"
+msgid "Priority"
+msgstr "Приоритет"
+ 
+msgid "Keep alive requests"
+msgstr "Keep alive запросов"
+ 
+msgid ""
+"Close the connection after specified requests.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закрытие подключения после указанного количества запросов.\n"
+"Нулевое значение для отключения (не закрывается никогда)."
 
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive время ожидания (с)"
 
-msgid "Priority"
-msgstr "Приоритет"
+msgid ""
+"Close the connection after no requests at specified timeout.\n"
+"Zero value for disable (not close ever)."
+msgstr ""
+"Закрытие подключения после отсутствия запросов в течении указанного времени.\n"
+"Нулевое значение для отключения (не закрывается никогда)."
 
 #, c-format
 msgid "Traffic in %s, out %s."

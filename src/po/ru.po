@@ -1649,6 +1649,9 @@ msgstr ""
 msgid "Config-file '%s' error: %s"
 msgstr "Ошибка конфигурационного файла '%s': %s"
 
+msgid "Config-file '%s' load error."
+msgstr "Ошибка загрузки конфигурационного файла '%s'."
+
 #, c-format
 msgid ""
 "Station '%s' is not present in the config-file. Use '%s' station "
@@ -1998,6 +2001,9 @@ msgstr "Системные внешние хосты"
 msgid "External hosts poll"
 msgstr "Перечень внешних хостов"
 
+msgid "User;System;User and System"
+msgstr "Пользов.;Системн.;Пользов. и Системн."
+
 msgid "New external host"
 msgstr "Новый внешний хост"
 
@@ -2146,6 +2152,9 @@ msgstr "Потомок '%d' не доступен."
 #, c-format
 msgid "2:Open file '%s' error: %s"
 msgstr "2:Ошибка открытия файла '%s': %s"
+
+msgid "3:Load file '%s' error."
+msgstr "3:Ошибка загрузки файла '%s'."
 
 msgid "The object don't attached to node of OpenSCADA tree."
 msgstr "Объект не подключен к узлу дерева OpenSCADA."

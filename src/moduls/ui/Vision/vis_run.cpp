@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -43,7 +43,6 @@
 #include <QDialogButtonBox>
 #include <QPainter>
 #include <QToolBar>
-#include <QPrinter>
 #include <QPrintDialog>
 #include <QDateTime>
 #include <QTextStream>
@@ -59,7 +58,7 @@ using namespace VISION;
 
 VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, QWidget *parent ) :
     QMainWindow(parent), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
-    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1.0), y_scale(1.0), mAlrmSt(0xFFFFFF),
+    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF),
     isConErr(false)
 {
     QImage ico_t;
@@ -291,7 +290,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     resize(600, 400);
 
     //> Init session
-    initSess(prj_it,crSessForce);
+    initSess(prj_it, crSessForce);
 
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
@@ -299,7 +298,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     alarmSet(0);
 }
 
-VisRun::~VisRun()
+VisRun::~VisRun( )
 {
     winClose = true;
 
@@ -327,11 +326,11 @@ VisRun::~VisRun()
     if(fileDlg)	delete fileDlg;
 }
 
-string VisRun::user( )		{ return mWUser->user().toAscii().data(); }
+string VisRun::user( )		{ return mWUser->user().toStdString(); }
 
-string VisRun::password( )	{ return mWUser->pass().toAscii().data(); }
+string VisRun::password( )	{ return mWUser->pass().toStdString(); }
 
-string VisRun::VCAStation( )	{ return mWUser->VCAStation().toAscii().data(); }
+string VisRun::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
 
 int VisRun::style( )		{ return mStlBar->style(); }
 
@@ -355,16 +354,16 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 	conErr->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 	conErr->setAutoFillBackground(true);
 	QPalette plt(conErr->palette());
-        QBrush brsh = plt.brush(QPalette::Background);
-        brsh.setColor(Qt::red);
-        brsh.setStyle(Qt::SolidPattern);
-        plt.setBrush(QPalette::Background,brsh);
-        conErr->setPalette(plt);
-        //> Calc size and position
+	QBrush brsh = plt.brush(QPalette::Background);
+	brsh.setColor(Qt::red);
+	brsh.setStyle(Qt::SolidPattern);
+	plt.setBrush(QPalette::Background, brsh);
+	conErr->setPalette(plt);
+	//> Calc size and position
 	conErr->resize(300,100);
 	conErr->move((master_pg->size().width()-conErr->size().width())/2,(master_pg->size().height()-conErr->size().height())/2);
-        conErr->show();
-        isConErr = true;
+	conErr->show();
+	isConErr = true;
     }
     //> Remove error message about connection error
     else if(rez != 10 && isConErr && (conErr=master_pg->findChild<QLabel*>("==ConnError==")))
@@ -375,7 +374,7 @@ int VisRun::cntrIfCmd( XMLNode &node, bool glob )
     return rez;
 }
 
-QString VisRun::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
+QString VisRun::getFileName( const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode )
 {
     if(!fileDlg) fileDlg = new QFileDialog(this);
     fileDlg->setFileMode(QFileDialog::AnyFile);
@@ -384,7 +383,7 @@ QString VisRun::getFileName(const QString &caption, const QString &dir, const QS
     fileDlg->setNameFilter(filter);
     if(dir.size()) fileDlg->selectFile(dir);
 #if QT_VERSION >= 0x040500
-    if(menuBar()->isVisible())	fileDlg->setOptions(QFileDialog::ReadOnly);
+    fileDlg->setReadOnly(!menuBar()->isVisible());
 #endif
     if(fileDlg->exec() && !fileDlg->selectedFiles().empty()) return fileDlg->selectedFiles()[0];
 
@@ -417,10 +416,12 @@ void VisRun::resizeEvent( QResizeEvent *ev )
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
-	    //> Proportional scale
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
-	}else x_scale = y_scale = 1.0;
+	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
+	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
+	}else x_scale = y_scale = 1;
 	if(x_scale_old != x_scale || y_scale_old != y_scale)	fullUpdatePgs();
+	mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
     }
     mWTime->setVisible(windowState()==Qt::WindowFullScreen);
 }
@@ -461,7 +462,7 @@ void VisRun::printPg( const string &ipg )
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
 	if(sdlg.exec() != QDialog::Accepted)	return;
-	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	pg = spg->itemData(spg->currentIndex()).toString().toStdString();
     }
 
     //> Find need page
@@ -534,7 +535,7 @@ void VisRun::printDiag( const string &idg )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
-	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -622,7 +623,7 @@ void VisRun::printDoc( const string &idoc )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if( sdlg.exec() != QDialog::Accepted )	return;
-	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    doc = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -654,7 +655,7 @@ void VisRun::exportPg( const string &ipg )
 	//> Make select page dialog
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoPath("export").c_str())) ico_t.load(":/images/export.png");
-	InputDlg sdlg( this, QPixmap::fromImage(ico_t), _("Select page for export."), _("Page export."), false, false );
+	InputDlg sdlg(this, QPixmap::fromImage(ico_t), _("Select page for export."), _("Page export."), false, false);
 	sdlg.edLay()->addWidget( new QLabel(_("Pages:"),&sdlg), 2, 0 );
 	QComboBox *spg = new QComboBox(&sdlg);
 	sdlg.edLay()->addWidget( spg, 2, 1 );
@@ -662,7 +663,7 @@ void VisRun::exportPg( const string &ipg )
 	    if((rpg=findOpenPage(pgList[i_p])))
 		spg->addItem((rpg->name()+" ("+pgList[i_p]+")").c_str(),pgList[i_p].c_str());
 	if(sdlg.exec() != QDialog::Accepted)	return;
-	pg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	pg = spg->itemData(spg->currentIndex()).toString().toStdString();
     }
 
     //> Find need page
@@ -704,7 +705,7 @@ void VisRun::exportDiag( const string &idg )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
-	    dg = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    dg = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -719,7 +720,7 @@ void VisRun::exportDiag( const string &idg )
 	if(fileName.indexOf(QRegExp("\\.csv$")) != -1)
 	{
 	    //>>> Open destination file
-	    int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	    int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	    if(fd < 0)
 	    {
 		mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
@@ -749,14 +750,14 @@ void VisRun::exportDiag( const string &idg )
 		for(unsigned i_v = 0; i_v < baseVls.size() && baseVls[i_v].tm <= eTmVl; i_v++)
 		{
 		    if(baseVls[i_v].tm < bTmVl) continue;
-		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+TSYS::int2str(baseVls[i_v].tm%1000000);
+		    CSVr += TSYS::time2str(baseVls[i_v].tm/1000000,"\"%d/%m/%Y %H:%M:%S\"")+";"+i2s(baseVls[i_v].tm%1000000);
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
 		    {
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
-    			if(cPrm.val().size() && cPrm.color().isValid())
-    			{
+			if(cPrm.val().size() && cPrm.color().isValid())
+			{
 			    vPos = cPrm.val(baseVls[i_v].tm);
-			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toAscii().data():"");
+			    CSVr = CSVr + ";"+((vPos < (int)cPrm.val().size())?QLocale().toString(cPrm.val()[vPos].val).toStdString():"");
 			}
 		    }
 		    CSVr += "\x0D\x0A";
@@ -796,8 +797,9 @@ void VisRun::exportDiag( const string &idg )
 #endif
 	    }
 	    //>>> Save to file
-	    ::write(fd,CSVr.data(),CSVr.size());
+	    bool fOK = (write(fd,CSVr.data(),CSVr.size()) == (int)CSVr.size());
 	    ::close(fd);
+	    if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error write to: %1.")).arg(fileName), TVision::Error, this);
 	}
 	//>> Export to image
 	else if(!img.save(fileName))
@@ -834,7 +836,7 @@ void VisRun::exportDoc( const string &idoc )
 		if((rwdg=findOpenWidget(lst[i_l])))
 		    spg->addItem((rwdg->name()+" ("+lst[i_l]+")").c_str(),lst[i_l].c_str());
 	    if(sdlg.exec() != QDialog::Accepted) return;
-	    doc = spg->itemData(spg->currentIndex()).toString().toAscii().data();
+	    doc = spg->itemData(spg->currentIndex()).toString().toStdString();
 	}
     }
 
@@ -843,7 +845,7 @@ void VisRun::exportDoc( const string &idoc )
 	_("XHTML (*.html);;CSV file (*.csv)"), QFileDialog::AcceptSave);
     if(!fileName.isEmpty())
     {
-	int fd = ::open(fileName.toAscii().data(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
+	int fd = open(fileName.toStdString().c_str(), O_WRONLY|O_CREAT|O_TRUNC, 0644);
 	if(fd < 0)
 	{
 	    mod->postMess(mod->nodePath().c_str(),QString(_("Save to file '%1' is error.")).arg(fileName),TVision::Error,this);
@@ -916,9 +918,11 @@ void VisRun::exportDoc( const string &idoc )
 	//>> Export to XHTML
 	else rez = ((ShapeDocument::ShpDt*)rwdg->shpData)->toHtml();
 
+	bool fOK = true;
 	if(rez.empty())	mod->postMess(mod->nodePath().c_str(),QString(_("No data for export.")),TVision::Error,this);
-	else ::write(fd,rez.data(),rez.size());
+	else fOK = (write(fd,rez.data(),rez.size()) == (int)rez.size());
 	::close(fd);
+	if(!fOK) mod->postMess(mod->nodePath().c_str(), QString(_("Error write to: %1.")).arg(fileName), TVision::Error, this);
     }
 }
 
@@ -936,9 +940,9 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     //> Try second connect to session for permission check
     XMLNode req("connect");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("sess",workSess());
-    if( cntrIfCmd(req) )
+    if(cntrIfCmd(req))
     {
-	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	mWUser->setUser(oldUser);
 	mWUser->setPass(oldPass);
 	return;
@@ -951,14 +955,16 @@ void VisRun::userChanged( const QString &oldUser, const QString &oldPass )
     bool oldMenuVis = menuBar()->isVisible();
     menuBar()->setVisible(SYS->security().at().access(user(),SEC_WR,"root","root",RWRWR_));
     QApplication::processEvents();
-    if( master_pg )
+    if(master_pg)
     {
-	if( oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen) )
+	if(oldMenuVis != menuBar()->isVisible() && (windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen))
 	{
 	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
 	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
-	    //> Proportional scale
-	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale,y_scale);
+	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
+	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
+	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
+	    mess_debug(mod->nodePath().c_str(), _("Root page scale [%f:%f]."), x_scale, y_scale);
 	}
 	fullUpdatePgs();
     }
@@ -968,7 +974,7 @@ void VisRun::styleChanged( )
 {
     //> Get current style
     XMLNode req("set");
-    req.setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle")->setText(TSYS::int2str(style()));
+    req.setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle")->setText(i2s(style()));
     if( cntrIfCmd(req) )
     {
 	mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
@@ -1011,12 +1017,12 @@ void VisRun::alarmAct( QAction *alrm )
 
     XMLNode req("quittance");
     req.setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm")->
-	setAttr("tmpl",TSYS::uint2str(quittance))->
+	setAttr("tmpl",u2s(quittance))->
 	setAttr("wdg",qwdg);
     cntrIfCmd(req);
 
     //> Send event to master page
-    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toAscii().data());
+    if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toStdString());
 }
 
 void VisRun::initSess( const string &prj_it, bool crSessForce )
@@ -1047,7 +1053,7 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	ls_wdg->setCurrentRow(0);
 
 	if(conreq.exec() == QDialog::Accepted && ls_wdg->currentItem())
-	    work_sess = (ls_wdg->currentRow() > 0) ? ls_wdg->currentItem()->text().toAscii().data() : "";
+	    work_sess = (ls_wdg->currentRow() > 0) ? ls_wdg->currentItem()->text().toStdString() : "";
 	else { close(); return; }
 
     }
@@ -1172,10 +1178,10 @@ void VisRun::callPage( const string& pg_it, bool updWdg )
     string pgSrc = wAttrGet(pg_it,"pgOpenSrc");
 
     //> Check for master page replace
-    if( !master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp )
+    if(!master_pg || pgGrp == "main" || master_pg->pgGrp() == pgGrp)
     {
 	//>> Send close command
-	if( master_pg )
+	if(master_pg)
 	{
 	    XMLNode req("close"); req.setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",master_pg->id());
 	    cntrIfCmd(req);
@@ -1283,11 +1289,11 @@ void VisRun::alarmSet( unsigned alarm )
 
     //> Alarm types init
     //>> Set momo sound alarm
-    if( isMaster && (ch_tp>>16)&TVision::Alarm )
+    if(isMaster && (ch_tp>>16)&TVision::Alarm)
     {
 	const char *spkEvDev = "/dev/input/by-path/platform-pcspkr-event-spkr";
 	int hd = open(spkEvDev,O_WRONLY);
-	if( hd < 0 )	mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
+	if(hd < 0) mess_warning(mod->nodePath().c_str(),_("Error open: %s"),spkEvDev);
 	else
 	{
 	    input_event ev;
@@ -1295,17 +1301,17 @@ void VisRun::alarmSet( unsigned alarm )
 	    ev.type = EV_SND;
 	    ev.code = SND_TONE;
 	    ev.value = ((alarm>>16)&TVision::Alarm) ? 1000 : 0;
-	    write(hd,&ev,sizeof(ev));
+	    bool fOK = (write(hd,&ev,sizeof(ev)) == sizeof(ev));
 	    ::close(hd);
+	    if(!fOK) mess_warning(mod->nodePath().c_str(), _("Error write to: %s"), spkEvDev);
 	}
     }
     //>> Set speach or sound alarm
-    if( isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty() )
-	alrmPlay->start( );
+    if(isMaster && (alarm>>16)&TVision::Sound && !alrmPlay->isRunning() && !alrmPlay->playData().empty()) alrmPlay->start();
 
     //> Alarm action indicators update
     //>> Alarm level icon update
-    if( ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet )
+    if(ch_tp&0xFF || (alarm>>16)&(TVision::Light|TVision::Alarm|TVision::Sound) || !alrLevSet)
     {
 	int alarmLev = alarm&0xFF;
 	actAlrmLev->setToolTip(QString(_("Alarm level: %1")).arg(alarmLev));
@@ -1377,7 +1383,7 @@ void VisRun::updatePage( )
 
     //> Pages update
     XMLNode req("openlist");
-    req.setAttr("tm",TSYS::uint2str(reqtm))->
+    req.setAttr("tm",u2s(reqtm))->
 	setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
 
     if(!(rez=cntrIfCmd(req)))
@@ -1391,7 +1397,7 @@ void VisRun::updatePage( )
 		    break;
 	    if(i_ch < req.childSize() || !(master_pg && (pg=master_pg->findOpenPage(pgList[i_p])))) continue;
 	    if(!pg->property("cntPg").toString().isEmpty())
-		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toAscii().data()))->setPgOpenSrc("");
+		((RunWdgView*)TSYS::str2addr(pg->property("cntPg").toString().toStdString()))->setPgOpenSrc("");
 	    else
 	    {
 		if(pg != master_pg)	pg->deleteLater();
@@ -1416,7 +1422,7 @@ void VisRun::updatePage( )
     {
 	mess_warning(mod->nodePath().c_str(),_("Session creation restore for '%s'."),prj_it.c_str());
 	updateTimer->stop();
-	initSess(prj_it,crSessForce);
+	initSess(prj_it, crSessForce);
 	return;
     }
 
@@ -1429,29 +1435,29 @@ void VisRun::updatePage( )
 	unsigned wAlrmSt = alarmSt( );
 	req.clear()->
 	    setName("get")->
-	    setAttr("mode","stat")->
-	    setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm");
-	if( !cntrIfCmd(req) ) wAlrmSt = atoi(req.attr("alarmSt").c_str());
+	    setAttr("mode", "stat")->
+	    setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm");
+	if(!cntrIfCmd(req)) wAlrmSt = atoi(req.attr("alarmSt").c_str());
 
 	//>> Get sound resources for play
-	if( alarmTp(TVision::Sound,true) && !alrmPlay->isRunning() )
+	if(alarmTp(TVision::Sound,true) && !alrmPlay->isRunning())
 	{
 	    req.clear()->
 		setName("get")->
-		setAttr("mode","sound")->
-		setAttr("path","/ses_"+work_sess+"/%2fserv%2falarm")->
-		setAttr("tm",TSYS::uint2str(alrmPlay->time()))->
-		setAttr("wdg",alrmPlay->widget());
-	    if( !cntrIfCmd(req) )
+		setAttr("mode", "sound")->
+		setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm")->
+		setAttr("tm", u2s(alrmPlay->time()))->
+		setAttr("wdg", alrmPlay->widget());
+	    if(!cntrIfCmd(req))
 	    {
-		alrmPlay->setTime( strtoul(req.attr("tm").c_str(),NULL,10) );
-		alrmPlay->setWidget( req.attr("wdg") );
-		alrmPlay->setData( TSYS::strDecode(req.text(),TSYS::base64) );
+		alrmPlay->setTime(strtoul(req.attr("tm").c_str(),NULL,10));
+		alrmPlay->setWidget(req.attr("wdg"));
+		alrmPlay->setData(TSYS::strDecode(req.text(),TSYS::base64));
 	    }
 	}
 
 	//>> Set alarm
-	alarmSet( wAlrmSt );
+	alarmSet(wAlrmSt);
     }
 
     //> Old pages from cache for close checking

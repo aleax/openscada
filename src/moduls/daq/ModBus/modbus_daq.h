@@ -89,9 +89,9 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	void postDisable( int flag );
-	void vlGet( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
-	void vlArchMake( TVal &val );
+	void vlGet( TVal &vo );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	void vlArchMake( TVal &vo );
 
         //Attributes
 	TElem		p_el;		//Work atribute elements
@@ -149,11 +149,11 @@ class TMdContr: public TController
 	TMdContr(string name_c, const string &daq_db, TElem *cfgelem);
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
-	int64_t period( )	{ return mPer; }
+	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
-	string  addr( )		{ return mAddr; }
+	string	addr( )		{ return mAddr; }
 	int	prior( )	{ return mPrior; }
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
@@ -199,7 +199,7 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	Res     req_res, en_res, asWr_res;
+	Res	req_res, en_res, asWr_res;
 	int	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
@@ -215,9 +215,10 @@ class TMdContr: public TController
 	int64_t	mPer;
 
 	bool	prc_st,				//Process task active
-		call_st,        		//Calc now stat
+		call_st,			//Calc now stat
 		endrun_req,			//Request to stop of the Process task
 		isReload;
+	int8_t	alSt;				//Alarm state
 	vector<SDataRec>	acqBlks;	//Acquisition data blocks for registers
 	vector<SDataRec>	acqBlksIn;	//Acquisition data blocks for input registers
 	vector<SDataRec>	acqBlksCoil;	//Acquisition data blocks for coils

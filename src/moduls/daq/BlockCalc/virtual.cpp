@@ -129,13 +129,14 @@ void TipContr::postEnable( int flag )
     blk_el.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blk_el.fldAdd(new TFld("PROC",_("To process"),TFld::Boolean,TFld::NoFlag,"1","0"));
     blk_el.fldAdd(new TFld("PRIOR",_("Prior block"),TFld::String,TFld::NoFlag,"200"));
+    blk_el.fldAdd(new TFld("LNK_OUT_WR_CH",_("Write to output links only at changes"),TFld::Boolean,TFld::NoFlag,"1","0"));
 
     //IO blok's db structure
     blkio_el.fldAdd(new TFld("BLK_ID",_("Block's ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     blkio_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     blkio_el.fldAdd(new TFld("TLNK",_("Link's type"),TFld::Integer,TFld::NoFlag,"2"));
-    blkio_el.fldAdd(new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"50"));
-    blkio_el.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"20"));
+    blkio_el.fldAdd(new TFld("LNK",_("Link"),TFld::String,TFld::NoFlag,"100"));
+    blkio_el.fldAdd(new TFld("VAL",_("Link's value"),TFld::String,TFld::NoFlag,"10000"));
 }
 
 void TipContr::preDisable(int flag)
@@ -205,19 +206,19 @@ string Contr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
+	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "), tm2s(tm_calc).c_str());
     }
     return rez;
 }
 
 void Contr::postDisable(int flag)
 {
-    if( run_st ) stop();
+    if(run_st) stop();
     try
     {
-	if( flag )
+	if(flag)
 	{
 	    //Delete parameter's tables
 	    string wbd = DB()+"."+cfg("BLOCK_SH").getS();
@@ -228,8 +229,8 @@ void Contr::postDisable(int flag)
 	    SYS->db().at().open(wbd);
 	    SYS->db().at().close(wbd,true);
 	}
-    }catch(TError err)
-    { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
 }
@@ -370,7 +371,7 @@ void *Contr::Task( void *icontr )
 
     bool is_start = true;
     bool is_stop  = false;
-    int64_t t_cnt, t_prev = TSYS::curTime();
+    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     while(true)
     {
@@ -569,7 +570,7 @@ Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
 
 void Prm::enable()
 {
-    if( enableStat() )  return;
+    if(enableStat())	return;
     string ioLs = cfg("IO").getS();
 
     //> Check and delete no used fields
@@ -670,16 +671,16 @@ void Prm::disable()
     TParamContr::disable();
 }
 
-void Prm::vlSet( TVal &val, const TVariant &pvl )
+void Prm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     if(!enableStat() || !owner().startStat())	return;
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
-	if( val.getS(0,true) == pvl.getS() ) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -687,28 +688,28 @@ void Prm::vlSet( TVal &val, const TVariant &pvl )
     //> Direct write
     try
     {
-	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(val.fld().reserve(),0,'.'));
-	int io_id = blk.at().ioId(TSYS::strSepParse(val.fld().reserve(),1,'.'));
+	AutoHD<Block> blk = ((Contr &)owner()).blkAt(TSYS::strSepParse(vo.fld().reserve(),0,'.'));
+	int io_id = blk.at().ioId(TSYS::strSepParse(vo.fld().reserve(),1,'.'));
 	if( io_id < 0 ) disable();
 	else
 	{
 	    ResAlloc sres(owner().calcRes,true);
-	    blk.at().set(io_id,val.get(0,true));
+	    blk.at().set(io_id, vl);
 	}
     }catch(TError err) { disable(); }
 }
 
 void Prm::vlGet( TVal &val )
 {
-    if( val.name() == "err" )
+    if(val.name() == "err")
     {
-	if( !enableStat() ) val.setS(_("1:Parameter is disabled."),0,true);
-	else if( !owner().startStat( ) ) val.setS(_("2:Controller is stopped."),0,true);
+	if(!enableStat()) val.setS(_("1:Parameter is disabled."),0,true);
+	else if(!owner().startStat()) val.setS(_("2:Controller is stopped."),0,true);
 	else val.setS("0",0,true);
 	return;
     }
 
-    if( owner().redntUse( ) ) return;
+    if(owner().redntUse()) return;
 
     try
     {

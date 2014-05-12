@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.LogicLev file: logiclev.cpp
 /***************************************************************************
- *   Copyright (C) 2006-2013 by Roman Savochenko                           *
+ *   Copyright (C) 2006-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -168,9 +168,9 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
-	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(tm_calc).c_str());
     }
     return rez;
 }
@@ -226,7 +226,7 @@ void *TMdContr::Task( void *icntr )
 
     bool is_start = true;
     bool is_stop  = false;
-    int64_t t_cnt, t_prev = TSYS::curTime();
+    int64_t t_cnt = 0, t_prev = TSYS::curTime();
 
     while(true)
     {
@@ -382,9 +382,8 @@ TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
 
 void TMdPrm::enable( )
 {
-    if(enableStat())	return;
-
-    TParamContr::enable();
+    bool isProc = false, isFullEn = !enableStat();
+    if(isFullEn) TParamContr::enable();
 
     vector<string> als;
 
@@ -393,7 +392,7 @@ void TMdPrm::enable( )
 	if(isPRefl())
 	{
 	    vector<string> list;
-	    *prm_refl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.', true);
+	    if(prm_refl->freeStat()) *prm_refl = SYS->daq().at().prmAt(cfg("PSRC").getS(), '.', true);
 	    if(!prm_refl->freeStat())
 	    {
 		prm_refl->at().vlList(list);
@@ -406,8 +405,9 @@ void TMdPrm::enable( )
 		    als.push_back(list[i_l]);
 		}
 	    }
+	    isProc = true;
 	}
-	else if(isStd())
+	else if(isStd() && !tmpl->val.func())
 	{
 	    bool to_make = false;
 	    unsigned fId = 0;
@@ -434,16 +434,16 @@ void TMdPrm::enable( )
 
 			TFld::Type tp = TFld::type(tmpl->val.ioType(i_io));
 			if((fId=p_el.fldId(tmpl->val.func()->io(i_io)->id(),true)) < p_el.fldSize())
-            		{
-                	    if(p_el.fldAt(fId).type() != tp)
-                    		try{ p_el.fldDel(fId); }
-                    		catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
-                	    else
-                	    {
-                    		p_el.fldAt(fId).setFlg(flg);
-                    		p_el.fldAt(fId).setDescr(tmpl->val.func()->io(i_io)->name().c_str());
-                	    }
-            		}
+			{
+			    if(p_el.fldAt(fId).type() != tp)
+				try{ p_el.fldDel(fId); }
+				catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+			    else
+			    {
+				p_el.fldAt(fId).setFlg(flg);
+				p_el.fldAt(fId).setDescr(tmpl->val.func()->io(i_io)->name().c_str());
+			    }
+			}
 
 			if(!vlPresent(tmpl->val.func()->io(i_io)->id()))
 			    p_el.fldAdd(new TFld(tmpl->val.func()->io(i_io)->id().c_str(),tmpl->val.func()->io(i_io)->name().c_str(),tp,flg));
@@ -469,25 +469,25 @@ void TMdPrm::enable( )
 		int id_this = tmpl->val.ioId("this");
 		if(id_this >= 0) tmpl->val.setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 	    }
+	    isProc = true;
 	}
     }
     catch(...){ disable(); throw; }
 
-    //> Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
+    //Check for delete DAQ parameter's attributes
+    for(int i_p = 0; isProc && i_p < (int)p_el.fldSize(); i_p++)
     {
-        unsigned i_l;
-        for(i_l = 0; i_l < als.size(); i_l++)
-            if(p_el.fldAt(i_p).name() == als[i_l])
-                break;
-        if(i_l >= als.size())
-            try{ p_el.fldDel(i_p); i_p--; }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(p_el.fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try{ p_el.fldDel(i_p); i_p--; }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    if(owner().startStat()) calc(true, false, 0);
-
-    owner().prmEn(this, true);
+    if(isFullEn && owner().startStat()) calc(true, false, 0);
+    if(isFullEn) owner().prmEn(this, true);
 }
 
 void TMdPrm::disable( )
@@ -527,7 +527,6 @@ void TMdPrm::loadIO( bool force )
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id());
 	string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
-
 	for(int i_io = 0; i_io < tmpl->val.ioSize(); i_io++)
 	{
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
@@ -556,7 +555,6 @@ void TMdPrm::saveIO()
 	TConfig cfg(&mod->prmIOE());
 	cfg.cfg("PRM_ID").setS(id());
 	string io_bd = owner().DB()+"."+owner().cfg(type().db).getS()+"_io";
-
 	for(int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++)
 	{
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
@@ -574,7 +572,6 @@ void TMdPrm::initTmplLnks( bool checkNoLink )
     if(!isStd() || !tmpl->val.func()) return;
     //> Init links
     chk_lnk_need = false;
-    int off;
     string nmod, ncntr, nprm, nattr;
 
     for(int i_l = 0; i_l < lnkSize(); i_l++)
@@ -626,31 +623,31 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ val.setS(EVAL_STR, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
-    //> Send to active reserve station
+    //Send to active reserve station
     if(owner().redntUse())
     {
-	if(val.getS(0,true) == pvl.getS()) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
 
-    //> Direct write
+    //Direct write
     try
     {
-	if(isPRefl() && !prm_refl->freeStat()) prm_refl->at().vlAt(val.name()).at().set(val.get(0,true));
+	if(isPRefl() && !prm_refl->freeStat()) prm_refl->at().vlAt(vo.name()).at().set(vl);
 	else if(isStd() && tmpl->val.func())
 	{
-	    int id_lnk = lnkId(val.name());
+	    int id_lnk = lnkId(vo.name());
 	    if(id_lnk >= 0 && lnk(id_lnk).aprm.freeStat()) id_lnk = -1;
 	    ResAlloc cres(calcRes,true);
-	    if(id_lnk < 0) tmpl->val.set(tmpl->val.ioId(val.name()), val.get(0,true));
-	    else lnk(id_lnk).aprm.at().set(val.get(0,true));
+	    if(id_lnk < 0) tmpl->val.set(tmpl->val.ioId(vo.name()), vl);
+	    else lnk(id_lnk).aprm.at().set(vl);
 	}
     }catch(TError err) {  }
 }
@@ -699,6 +696,8 @@ TMdPrm::SLnk &TMdPrm::lnk( int num )
 
 void TMdPrm::calc( bool first, bool last, double frq )
 {
+    if(isPRefl() && (!first || prm_refl->freeStat())) enable();
+
     if(!isStd() || !tmpl->val.func()) return;
     try
     {
@@ -875,7 +874,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{
-	    bool noonly_no_set = true;
 	    string no_set;
 	    string p_nm = TSYS::strSepParse(tmpl->val.func()->io(lnk(lnkId(atoi(a_path.substr(12).c_str()))).io_id)->def(),0,'|');
 	    string p_vl = TSYS::strParse(opt->text(), 0, " ");
@@ -893,16 +891,10 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			{
 			    lnk(i_l).prm_attr= p_vl+"."+p_attr;
 			    modif();
-			    noonly_no_set = false;
 			}
 			else no_set += p_attr+",";
 		    }
 		}
-	    /*if(!prm.freeStat())
-	    {
-		if(noonly_no_set)	throw TError(nodePath().c_str(),_("Parameter has no one attribute!"));
-		else if(no_set.size())	throw TError(nodePath().c_str(),_("Parameter has not attributes: %s !"),no_set.c_str());
-	    }*/
 	    initTmplLnks();
 	}
     }

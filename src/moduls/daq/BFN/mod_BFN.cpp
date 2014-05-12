@@ -313,7 +313,7 @@ void TTpContr::cntrCmdProc( XMLNode *opt )
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
 	mPrior(cfg("PRIOR").getId()), mSync(cfg("SYNCPER").getRd()),
-	prc_st(false), acq_st(false), endrun_req(false), tm_gath(0)
+	prc_st(false), acq_st(false), endrun_req(false), alSt(-1), tm_gath(0)
 {
     //cfg("PRM_BD").setS("TmplPrm_"+name_c);
 }
@@ -337,10 +337,10 @@ string TMdContr::getStatus( )
 	//> Display processing
         if(acq_st) rez += TSYS::strMess(_("Call now. "));
         //> Display schedule
-	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-        else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	if(period()) rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
+        else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
     	//> Display spent time
-    	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),TSYS::time2str(tm_gath).c_str());
+    	if(acq_err.getVal().empty()) rez += TSYS::strMess(_("Spent time: %s."),tm2s(tm_gath).c_str());
     }
 
     return rez;
@@ -437,7 +437,8 @@ void TMdContr::stop_( )
     //> Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-    if(acq_err.getVal().size()) alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),id().c_str(),_("STOP")),TMess::Info);
+    alSt = -1;
 
     //> Clear errors and set EVal
     ResAlloc res(en_res,false);
@@ -650,10 +651,16 @@ void *TMdContr::Task(void *icntr)
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); tErr = err.mess; }
 
 	//> Generic alarm generate
-	if(tErr.size() && !cntr.acq_err.getVal().size())
+	if(tErr.size() && cntr.alSt <= 0)
+	{
+	    cntr.alSt = 1;
 	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),TRegExp(":","g").replace(tErr,"=").c_str()));
-	else if(!tErr.size() && cntr.acq_err.getVal().size())
+	}
+	else if(!tErr.size() && cntr.alSt != 0)
+	{
+	    cntr.alSt = 0;
 	    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
+	}
 	cntr.acq_err.setVal(tErr);
 
 	cntr.tm_gath = TSYS::curTime()-t_cnt;

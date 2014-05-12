@@ -268,9 +268,6 @@ class VCAText : public VCAObj
 class VCADiagram : public VCAObj
 {
     public:
-	//Data
-	enum Scale { SC_GRID = 0x01, SC_MARKERS = 0x02, SC_LOG = 0x04 };
-
 	//Methods
 	VCADiagram( const string &iid );
 
@@ -283,8 +280,8 @@ class VCADiagram : public VCAObj
 	void makeSpectrumPicture( SSess &ses );
 
 	//Attributes
-	int	width,height,		//Widget geometry
-		tArX,tArY,tArW,tArH;	//Trend area geometry
+	int	width, height,		//Widget geometry
+		tArX, tArY, tArW, tArH;	//Trend area geometry
 	short	active		:1;	//Active diagram
 	short	type		:3;	//Diagram type
 	short	bordWidth	:8;	//Border width

@@ -38,6 +38,7 @@
 #define STD_WAIT_TM	10	// Standard timeouts length (s), and interface wait for long
 #define STD_INTERF_TM	5	// Interface wait for long (s)
 #define BUF_ARCH_NM	"<buffer>"
+#define DB_CFG		"<cfg>"
 
 #include <unistd.h>
 #include <stdint.h>
@@ -147,7 +148,7 @@ class TSYS : public TCntrNode
 	void	setSelDB( const string &vl )	{ mSelDB = vl; }
 	bool	saveAtExit( )	{ return mSaveAtExit; }
 	void	setSaveAtExit( bool vl )	{ mSaveAtExit = vl; modif(); }
-	int 	savePeriod( )	{ return mSavePeriod; }
+	int	savePeriod( )	{ return mSavePeriod; }
 	void	setSavePeriod( int vl )		{ mSavePeriod = vmax(0,vl); modif(); }
 
 	string	optDescr( );	//print comand line options
@@ -199,7 +200,7 @@ class TSYS : public TCntrNode
 	static double realRound( double val, int dig = 0, bool toint = false )
 	{
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
-	    if( toint ) return floor(rez+0.5);
+	    if(toint) return floor(rez+0.5);
 	    return rez;
 	}
 	static string time2str( time_t tm, const string &format );
@@ -265,10 +266,20 @@ class TSYS : public TCntrNode
 	}
 
 	//> Endian convert
+	static uint16_t i16_LE( uint16_t in );
+	static uint32_t i32_LE( uint32_t in );
+	static uint64_t i64_LE( uint64_t in );
+	static uint16_t i16_BE( uint16_t in );
+	static uint32_t i32_BE( uint32_t in );
+	static uint64_t i64_BE( uint64_t in );
 	static float floatLE( float in );
 	static float floatLErev( float in );
 	static double doubleLE( double in );
 	static double doubleLErev( double in );
+	static float floatBE( float in );
+	static float floatBErev( float in );
+	static double doubleBE( double in );
+	static double doubleBErev( double in );
 
 	//> Reentrant commandline processing
 	string getCmdOpt( int &curPos, string *argVal = NULL );
@@ -368,6 +379,11 @@ inline string i2s( int val, TSYS::IntView view = TSYS::Dec )	{ return TSYS::int2
 inline string u2s( unsigned val, TSYS::IntView view = TSYS::Dec ){ return TSYS::uint2str(val, view); }
 inline string ll2s( int64_t val, TSYS::IntView view = TSYS::Dec ){ return TSYS::ll2str(val, view); }
 inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::real2str(val, prec, tp); }
+inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }
+inline string tm2s( double utm )				{ return TSYS::time2str(utm); }
+
+inline int s2i( const string &val )	{ return atoi(val.c_str()); }
+inline double s2r( const string &val )	{ return atof(val.c_str()); }
 
 extern TSYS *SYS;
 }

@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Archive.DBArch file: val.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -58,7 +58,7 @@ class ModVArchEl: public TVArchEl
 	//Methods
 	TVariant getValProc( int64_t *tm, bool up_ord );
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
-	void setValsProc( TValBuf &buf, int64_t beg, int64_t end );
+	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
     private:
 	//Attributes

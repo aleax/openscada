@@ -116,8 +116,8 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TVArchivator::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/addr",cfg("ADDR").fld().descr(),RWRWR_,"root",SARH_ID,4,
-	    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,RWRWR_,"root",SARH_ID,3,
+	    "dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
 	return;
     }

@@ -95,8 +95,8 @@ class TMdPrm : public TParamContr
 	//Methods
 	void postEnable( int flag );
 	TVal* vlNew( );
-	void vlGet( TVal &val );
-	void vlSet( TVal &val, const TVariant &pvl );
+	void vlGet( TVal &vo );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
 	void vlArchMake( TVal &val );
 
 	//Attributes
@@ -114,7 +114,7 @@ class TMdContr: public TController
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
 	~TMdContr( );
 
-	string getStatus( );
+	string	getStatus( );
 
 	double	period( )	{ return mPer; }
 	string	cron( )		{ return mSched; }
@@ -153,8 +153,9 @@ class TMdContr: public TController
 		&mPrior;			//Process task priority
 
 	bool	prcSt,				//Process task active
-		call_st,        		//Calc now stat
+		call_st,			//Calc now stat
 		endrunReq;			//Request to stop of the Process task
+	int8_t	alSt;				//Alarm state
 	vector< pair<string,float> > mStatWork;	//Work stations and it status
 
 	double	mPer, tmGath;			//Gathering time

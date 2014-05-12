@@ -517,16 +517,16 @@ string TMdContr::getStatus( )
     if(startStat() && !redntUse())
     {
 	if(atoi(errCon.getVal().c_str()))
-        {
-            rez += TSYS::strParse(errCon.getVal(),1,":");
-            rez.replace(0,1,TSYS::strParse(errCon,0,":"));
-        }
-        else
-        {
+	{
+	    rez += TSYS::strParse(errCon.getVal(),1,":");
+	    rez.replace(0,1,TSYS::strParse(errCon,0,":"));
+	}
+	else
+	{
 	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
-	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),TSYS::time2str(1e-3*period()).c_str());
-    	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),TSYS::time2str(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s. "),TSYS::time2str(tm_calc).c_str());
+	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
+	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	    rez += TSYS::strMess(_("Spent time: %s. "),tm2s(tm_calc).c_str());
 	}
     }
     return rez;
@@ -993,16 +993,16 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    ADSread->len = buffer.size();
 
 	    //> Request
-            int resp_len;
-            try { resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
-            catch(TError err) { errCon = _("10:Connection error."); throw; }
-            int full_len = resp_len;
-            if(full_len < (int)sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
+	    int resp_len;
+	    try { resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
+	    catch(TError err) { errCon = _("10:Connection error."); throw; }
+	    int full_len = resp_len;
+	    if(full_len < (int)sizeof(AMS_TCP_HEAD))  throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
-            unsigned resp_sz = AmsHD->len;
+	    unsigned resp_sz = AmsHD->len;
 
 	    //> Wait tail
-	    while(full_len < (resp_sz+sizeof(AMS_TCP_HEAD)))
+	    while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD)))
 	    {
 		resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len, 0, true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("13:Not full respond"));
@@ -1018,7 +1018,7 @@ void TMdContr::getDB( unsigned n_db, long offset, string &buffer )
 	    if(AmsHD->errCod) throw TError(nodePath().c_str(),_("13:Error server respond: %d"),AmsHD->errCod);
 	    if(full_len < (resp_len+=sizeof(ADS_ReadResp)))	throw TError(nodePath().c_str(),_("13:Error server '%s' respond"),"Read");
 	    if(ADSreadResp->res) throw TError(nodePath().c_str(),_("13:Error server '%s' respond: %d"),"Read",ADSreadResp->res);
-	    if(ADSreadResp->len != buffer.size() || full_len < (resp_len+ADSreadResp->len))
+	    if(ADSreadResp->len != buffer.size() || full_len < (int)(resp_len+ADSreadResp->len))
 		throw TError(nodePath().c_str(),_("13:Error server '%s' respond"),"Read");
 	    buffer.assign(res+resp_len,buffer.size());
 
@@ -1173,15 +1173,15 @@ void TMdContr::putDB( unsigned n_db, long offset, const string &buffer )
 	    memcpy(ADSreq+1,buffer.data(),buffer.size());
 
 	    //> Request
-            int resp_len;
-            try{ resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
-            catch(TError err) { errCon = _("10:Connection error."); throw; }
-            int full_len = resp_len;
-            if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(nodePath().c_str(),_("13:Error server respond"));
+	    int resp_len;
+	    try{ resp_len = tr.at().messIO(buf, AmsTcpHD->len+sizeof(AMS_TCP_HEAD), res, sizeof(res), 0, true); }
+	    catch(TError err) { errCon = _("10:Connection error."); throw; }
+	    int full_len = resp_len;
+	    if(full_len < (int)sizeof(AMS_TCP_HEAD)) throw TError(nodePath().c_str(),_("13:Error server respond"));
 	    AmsTcpHD = (AMS_TCP_HEAD *)res;
-            unsigned resp_sz = AmsHD->len;
+	    unsigned resp_sz = AmsHD->len;
 	    //> Wait tail
-	    while(full_len < (resp_sz+sizeof(AMS_TCP_HEAD)))
+	    while(full_len < (int)(resp_sz+sizeof(AMS_TCP_HEAD)))
 	    {
 		resp_len = tr.at().messIO(NULL, 0, res+full_len, sizeof(res)-full_len, 0, true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("13:Not full respond"));
@@ -1772,16 +1772,16 @@ void TMdPrm::vlGet( TVal &val )
     }
 }
 
-void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
+void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
-    if(!enableStat() || !owner().startStat())	{ val.setS(EVAL_STR, 0, true); return; }
+    if(!enableStat() || !owner().startStat())	{ vo.setS(EVAL_STR, 0, true); return; }
 
     //> Send to active reserve station
-    if( owner().redntUse( ) )
+    if(owner().redntUse())
     {
-	if( val.getS(0,true) == pvl.getS() ) return;
+	if(vl == pvl) return;
 	XMLNode req("set");
-	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",val.name())->setText(val.getS(0,true));
+	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
@@ -1789,14 +1789,13 @@ void TMdPrm::vlSet( TVal &val, const TVariant &pvl )
     //> Direct write
     try
     {
-	int id_lnk = lnkId(val.name());
+	int id_lnk = lnkId(vo.name());
 	if(id_lnk >= 0 && lnk(id_lnk).val.db < 0) id_lnk = -1;
-	TVariant vl = val.get(0,true);
 	if(!(vl.isEVal() || vl == pvl))
 	{
-	    if(id_lnk < 0) set(ioId(val.name()), vl);
+	    if(id_lnk < 0) set(ioId(vo.name()), vl);
 	    else
-		switch(val.fld().type())
+		switch(vo.fld().type())
 		{
 		    case TFld::String:	owner().setValS(vl.getS(), lnk(id_lnk).val, acq_err);	break;
 		    case TFld::Integer:	owner().setValI(vl.getI(), lnk(id_lnk).val, acq_err);	break;

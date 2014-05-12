@@ -66,9 +66,9 @@ class TMdPrm : public TParamContr
     protected:
 	//Methods
 	bool cfgChange( TCfg &cfg );
-	void vlSet( TVal &val, const TVariant &pvl );
-	void vlGet( TVal &val );
-	void vlArchMake( TVal &val );
+	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );
+	void vlGet( TVal &vo );
+	void vlArchMake( TVal &vo );
 
 	void postEnable( int flag );
 

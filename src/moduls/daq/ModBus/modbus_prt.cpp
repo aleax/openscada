@@ -104,7 +104,7 @@ void TProt::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt=0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_node",nodePath()+modId()+"_node",fld_cnt++,g_cfg); )
 	    {
@@ -402,7 +402,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	else if(rez.size() > 2) mess += rez.substr(0,rez.size()-2);
 
 	if(prtLen())
-	    pushPrtMess(TSYS::time2str(time(NULL),"")+" "+prt+": '"+sid+"' --> "+TSYS::int2str(node)+"("+tro.workId()+")\n"+mess+"\n");
+	    pushPrtMess(tm2s(time(NULL),"")+" "+prt+": '"+sid+"' --> "+i2s(node)+"("+tro.workId()+")\n"+mess+"\n");
     }
 }
 
@@ -466,7 +466,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/rep/repLen")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(prtLen()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(prtLen()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setPrtLen(atoi(opt->text().c_str()));
     }
     else if(a_path == "/rep/rep" && ctrChkNode(opt))
@@ -583,7 +583,7 @@ retry:
 
     if(owner().prtLen( ) && prt.size() && answer.size())
     {
-	string mess = TSYS::time2str(time(NULL),"")+" "+prt+": "+srcTr()+"("+sender+") --> "+TSYS::int2str(node)+"\n";
+	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr()+"("+sender+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");
 	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin);
 	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);
@@ -843,13 +843,13 @@ void Node::setEnable( bool vl )
 
     ResAlloc res(nRes, true);
 
-    //> Enable node
+    //Enable node
     if(vl && mode() == MD_DATA)
     {
-	//>> Data structure allocate
+	// Data structure allocate
 	if(!data) data = new SData;
 
-	//>> Compile function
+	// Compile function
 	try
 	{
 	    if(progLang().empty()) data->val.setFunc(this);
@@ -859,13 +859,13 @@ void Node::setEnable( bool vl )
 		data->val.setFunc(&((AutoHD<TFunction>)SYS->nodeAt(mWorkProg)).at());
 	    }
 	}
-	catch( TError err )
+	catch(TError err)
 	{
 	    mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
 
-	//>> Links, registers and coins init
+	// Links, registers and coins init
 	for(int i_io = 0; i_io < ioSize(); i_io++)
 	{
 	    IO *io_ = io(i_io);
@@ -912,10 +912,10 @@ void Node::setEnable( bool vl )
 	    }
 	}
 
-	//>> Start task
+	// Start task
 	SYS->taskCreate(nodePath('.',true), 0, Task, this);
     }
-    //> Disable node
+    //Disable node
     if(!vl)
     {
 	//> Stop the calc data task
@@ -938,7 +938,7 @@ string Node::getStatus( )
 	{
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
-		    TSYS::time2str(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil);
+		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
 		rez += TSYS::strMess(_("Requests %.4g."), cntReq);
@@ -1101,7 +1101,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			case 's':
 			{
 			    string valIO = data->val.getS(ir->second.id);
-			    valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
+			    valIO.resize(vmax((int)valIO.size(),(ir->second.pos+1)*2), 0);
 			    valIO.replace(ir->second.pos*2,2,(char*)&val,2);
 			    data->val.setS(ir->second.id, valIO);
 			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setS(valIO);
@@ -1184,9 +1184,9 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			    case 's':
 			    {
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
-                                string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
-                                valIO.resize(vmax(valIO.size(),(ir->second.pos+1)*2), 0);
-                        	valIO.replace(ir->second.pos*2,2,(char*)&val,2);
+				string valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getS() : data->val.getS(ir->second.id);
+				valIO.resize(vmax((int)valIO.size(),(ir->second.pos+1)*2), 0);
+				valIO.replace(ir->second.pos*2,2,(char*)&val,2);
 				grpVals[ir->second.id] = valIO;
 				break;
 			    }
@@ -1226,7 +1226,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 
 	    XMLNode req(cfg("TO_PRT").getS());
 	    req.setAttr("id", id())->
-		setAttr("node", (mode()==MD_GT_NET)?TSYS::int2str(inode):cfg("TO_ADDR").getS())->
+		setAttr("node", (mode()==MD_GT_NET)?i2s(inode):cfg("TO_ADDR").getS())->
 		setAttr("reqTry", "3")->
 		setText(pdu);
 	    tr.at().messProtIO(req, "ModBus");
@@ -1261,14 +1261,14 @@ void *Node::Task( void *ind )
 	{
 	    int64_t t_cnt = TSYS::curTime();
 
-	    //> Setting special IO
+	    //Setting special IO
 	    if(ioFrq >= 0) nd.data->val.setR(ioFrq, (float)1/nd.period());
 	    if(ioStart >= 0) nd.data->val.setB(ioStart, isStart);
 	    if(ioStop >= 0) nd.data->val.setB(ioStop, isStop);
 
 	    try
 	    {
-		//> Get input links
+		//Get input links
 		map< int, AutoHD<TVal> >::iterator li;
 		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
 		{
@@ -1281,10 +1281,10 @@ void *Node::Task( void *ind )
 		    }
 		    switch(nd.data->val.ioType(li->first))
 		    {
-			case IO::String:	nd.data->val.setS(li->first, li->second.at().getS());	break;
-			case IO::Integer:	nd.data->val.setI(li->first, li->second.at().getI());	break;
-			case IO::Real:		nd.data->val.setR(li->first, li->second.at().getR());	break;
-			case IO::Boolean:	nd.data->val.setB(li->first, li->second.at().getB());	break;
+			case IO::String:  nd.data->val.setS(li->first, li->second.at().getS());	break;
+			case IO::Integer: nd.data->val.setI(li->first, li->second.at().getI());	break;
+			case IO::Real:	  nd.data->val.setR(li->first, li->second.at().getR());	break;
+			case IO::Boolean: nd.data->val.setB(li->first, li->second.at().getB());	break;
 			default: break;
 		    }
 		}
@@ -1292,7 +1292,7 @@ void *Node::Task( void *ind )
 		nd.data->val.setMdfChk(true);
 		nd.data->val.calc();
 
-		//> Put output links
+		//Put output links
 		for(li = nd.data->lnk.begin(); li != nd.data->lnk.end(); li++)
 		    if(!li->second.freeStat() && !(li->second.at().fld().flg()&TFld::NoWrite) && nd.data->val.ioMdf(li->first))
 			switch(nd.data->val.ioType(li->first))
@@ -1310,7 +1310,7 @@ void *Node::Task( void *ind )
 		mess_err(nd.nodePath().c_str(), _("Calculate node's function error."));
 	    }
 
-	    //> Calc acquisition process time
+	    //Calc acquisition process time
 	    nd.tmProc = TSYS::curTime()-t_cnt;
 	}
 
@@ -1325,7 +1325,6 @@ void *Node::Task( void *ind )
 
     return NULL;
 }
-
 
 void Node::cntrCmdProc( XMLNode *opt )
 {
@@ -1345,8 +1344,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	    }
 	    if(ctrMkNode("area",opt,-1,"/nd/cfg",_("Configuration")))
 	    {
-		TConfig::cntrCmdMake(opt,"/nd/cfg",0,"root",SPRT_ID,RWRWR_);
-		//>> Append configuration properties
+		TConfig::cntrCmdMake(opt, "/nd/cfg", 0, "root", SPRT_ID, RWRWR_);
+		// Append configuration properties
 		XMLNode *xt = ctrId(opt->childGet(0),"/nd/cfg/InTR",true);
 		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
 		xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
@@ -1374,7 +1373,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/tp",_("Type"),RWRWR_,"root",SPRT_ID,5,"tp","dec","idm","1","dest","select",
-		    "sel_id",(TSYS::int2str(IO::Real)+";"+TSYS::int2str(IO::Integer)+";"+TSYS::int2str(IO::Boolean)+";"+TSYS::int2str(IO::String)).c_str(),
+		    "sel_id",TSYS::strMess("%d;%d;%d;%d",IO::Real,IO::Integer,IO::Boolean,IO::String).c_str(),
 		    "sel_list",_("Real;Integer;Boolean;String"));
 		ctrMkNode("list",opt,-1,"/dt/io/lnk",_("Link"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
@@ -1385,8 +1384,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    for(int i_io = 0; i_io < ioSize(); i_io++)
 		if(io(i_io)->flg()&IsLink)
-		    ctrMkNode("fld",opt,-1,("/lnk/el_"+TSYS::int2str(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root",SPRT_ID,
-			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+TSYS::int2str(i_io)).c_str());
+		    ctrMkNode("fld",opt,-1,("/lnk/el_"+i2s(i_io)).c_str(),io(i_io)->name(),enableStat()?R_R_R_:RWRWR_,"root",SPRT_ID,
+			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+i2s(i_io)).c_str());
 	return;
     }
     //> Process command to page
@@ -1430,11 +1429,11 @@ void Node::cntrCmdProc( XMLNode *opt )
 
 	    for(int id = 0; id < ioSize(); id++)
 	    {
-		if(nId)		nId->childAdd("el")->setText(io(id)->id());
-		if(nNm)		nNm->childAdd("el")->setText(io(id)->name());
-		if(nType)	nType->childAdd("el")->setText(TSYS::int2str(io(id)->type()));
-		if(nLnk)	nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
-		if(nVal)	nVal->childAdd("el")->setText( (data && data->val.func()) ? data->val.getS(id) : io(id)->def() );
+		if(nId)	 nId->childAdd("el")->setText(io(id)->id());
+		if(nNm)	 nNm->childAdd("el")->setText(io(id)->name());
+		if(nType)nType->childAdd("el")->setText(i2s(io(id)->type()));
+		if(nLnk) nLnk->childAdd("el")->setText((io(id)->flg()&Node::IsLink)?"1":"0");
+		if(nVal) nVal->childAdd("el")->setText((data && data->val.func()) ? data->val.getS(id) : io(id)->def());
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
@@ -1472,7 +1471,7 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    int row = atoi(opt->attr("row").c_str());
 	    string col = opt->attr("col");
-	    if(enableStat( ) && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
+	    if(enableStat() && col != "vl") throw TError(nodePath().c_str(),_("Disable node for this operation"));
 	    if(io(row)->flg()&Node::LockAttr)	throw TError(nodePath().c_str(),_("Changing locked attribute is not allowed."));
 	    if((col == "id" || col == "nm") && !opt->text().size())	throw TError(nodePath().c_str(),_("Empty value is not valid."));
 	    if(col == "id")		io(row)->setId(opt->text());

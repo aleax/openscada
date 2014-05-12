@@ -22,12 +22,14 @@ wait $pPid
 echo "Program rezult: $?"
 
 # Core dump file "core" into work directory process
-if [ -f ../share/openscada/core -a -n "$(which gdb)" ]; then
+if [ -n "$(which gdb 2> /dev/null)" ]; then
     pCmd="$(pwd)/openscada"
     cd ../share/openscada/
-    echo "Core dump process for back trace purchase to file crash_$(date +%F_%H:%M).txt"
-    gdb $pCmd --core core --batch --quiet -ex "thread apply all bt full" -ex "quit" > crash_$(date +%F_%H:%M).txt
-    rm -f core
+    for fit in `ls core* 2> /dev/null`; do
+	echo "Core dump process for back trace purchase to file AGLKS_${fit}_$(date +%F_%H.%M).crash"
+	gdb $pCmd --core ${fit} --batch --quiet -ex "thread apply all bt full" -ex "quit" > AGLKS_${fit}_$(date +%F_%H.%M).crash
+	rm -f ${fit}
+    done
 fi
 
 # Remove lock file

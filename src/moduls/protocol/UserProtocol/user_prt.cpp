@@ -123,7 +123,7 @@ void TProt::load_( )
 
 	//>>> Search into DB
 	SYS->db().at().dbList(db_ls,true);
-	db_ls.push_back("<cfg>");
+	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(unsigned fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_uPrt",nodePath()+modId()+"_uPrt",fld_cnt++,g_cfg); )
 	    {
@@ -267,10 +267,10 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	}
 
 	//> Load inputs
-	funcV.setB(0,false);
-	funcV.setS(1,funcV.getS(1)+reqst);
-	funcV.setS(2,"");
-	funcV.setS(3,sender);
+	funcV.setB(0, false);
+	funcV.setS(1, funcV.getS(1)+reqst);
+	funcV.setS(2, "");
+	funcV.setS(3, sender);
 	//> Call processing
 	funcV.calc( );
 	//> Get outputs
@@ -298,7 +298,7 @@ UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
 
 UserPrt::~UserPrt( )
 {
-    try{ setEnable(false); } catch(...) { }
+    try { setEnable(false); } catch(...) { }
 }
 
 TCntrNode &UserPrt::operator=( TCntrNode &node )

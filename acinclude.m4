@@ -1333,41 +1333,52 @@ AC_DEFUN([AX_LIB_FFTW3],
 #
 # SYNOPSIS
 #
-#   AX_LIB_QT4()
+#   AX_LIB_Qt()
 #
 # DESCRIPTION
 #
-#   This macro provides tests of availability QT4 library.
+#   This macro provides tests of availability Qt4 or Qt5 library.
 #
 #   This macro calls:
 #
 #     PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0])
-#     AC_SUBST(QT4_MOC)
-#     AC_SUBST(QT4_RCC)
+#     PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0]
+#     PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0]
+#     AC_SUBST(Qt_MOC)
+#     AC_SUBST(Qt_RCC)
 #
 #   And sets:
 #
-#     QT4use=true
+#     Qt_use=true
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011-2014 Roman Savochenko <rom_as@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
-AC_DEFUN([AX_LIB_QT4],
+AC_DEFUN([AX_LIB_Qt],
 [
-    if test "x${QT4use}" = "x"; then
-	PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0],[],[AC_MSG_ERROR(QT4 library QtGui not found! Install QT4 library development package.)])
-	AC_SUBST(QT4_MOC)
-	AC_SUBST(QT4_RCC)
-	QT4_MOC="$(pkg-config --variable=moc_location QtGui)"
-	QT4_RCC="$(pkg-config --variable=rcc_location QtGui)";
-	if test "x${QT4_MOC}" = "x"; then QT4_MOC="$(pkg-config --variable=prefix QtGui)/bin/moc"; fi
-	if test "x${QT4_RCC}" = "x"; then QT4_RCC="$(pkg-config --variable=prefix QtGui)/bin/rcc"; fi
-	QT4use=true
+    if test "x${Qt_use}" = "x"; then
+	QtGui=QtGui
+	PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0],[],
+	[
+	    PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0],[],[AC_MSG_ERROR(QT4 or Qt5 library QtGui not found! Install Qt4 or Qt5 library development package.)])
+	    PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0],[],[AC_MSG_ERROR(Qt5 library Qt5PrintSupport not found! Install Qt5 library development package.)])
+	    QtGui_CFLAGS="$Qt5Widgets_CFLAGS $Qt5PrintSupport_CFLAGS"
+	    QtGui_LIBS="$Qt5Widgets_LIBS $Qt5PrintSupport_LIBS"
+	    QtGui=Qt5Widgets
+	    Qt5_use=true
+	])
+	AC_SUBST(Qt_MOC)
+	AC_SUBST(Qt_RCC)
+	Qt_MOC="$(pkg-config --variable=moc_location ${QtGui})"
+	Qt_RCC="$(pkg-config --variable=rcc_location ${QtGui})";
+	if test "x${Qt_MOC}" = "x"; then Qt_MOC="$(pkg-config --variable=prefix ${QtGui})/bin/moc"; fi
+	if test "x${Qt_RCC}" = "x"; then Qt_RCC="$(pkg-config --variable=prefix ${QtGui})/bin/rcc"; fi
+	Qt_use=true
     fi
 ])
 
