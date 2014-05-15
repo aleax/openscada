@@ -3383,7 +3383,7 @@ int64_t ShapeDiagram::ShpDt::arhEnd( int64_t def )
 {
     int64_t rez = 0;
     for(vector<TrendObj>::iterator iP = prms.begin(); iP != prms.end(); ++iP)
-	rez = vmax(rez, iP->arh_end);
+	rez = vmax(rez, iP->arhEnd());
 
     return rez ? rez : def;
 }

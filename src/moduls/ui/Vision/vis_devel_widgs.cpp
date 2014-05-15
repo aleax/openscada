@@ -165,7 +165,14 @@ void ModInspAttr::setWdg( const string &iwdg )
 	}
     }
 
-    if(full_reset) { beginResetModel(); endResetModel(); }
+    if(full_reset)
+    {
+#if QT_VERSION >= 0x040600
+	beginResetModel(); endResetModel();
+#else
+	reset();
+#endif
+    }
     else emit layoutChanged();
 }
 

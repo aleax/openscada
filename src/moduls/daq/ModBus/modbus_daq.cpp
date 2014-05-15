@@ -1043,7 +1043,7 @@ void TMdPrm::enable( )
 
     vector<string> als;
 
-    //> Parse ModBus attributes and convert to string list for standard type parameter
+    //Parse ModBus attributes and convert to string list for standard type parameter
     if(isStd())
     {
 	string ai, sel, atp, atp_m, atp_sub, aid, anm, awr;
@@ -1077,28 +1077,29 @@ void TMdPrm::enable( )
 	    int el_id = p_el.fldId(aid);
 
 	    unsigned flg = (awr=="rw") ? TVal::DirWrite|TVal::DirRead :
-			   ((awr=="w") ? TVal::DirWrite : TFld::NoWrite|TVal::DirRead);
-	    if(atp.size() >= 2 && atp[1] == 'I')	flg = (flg & (~TVal::DirWrite)) | TFld::NoWrite;
+			   ((awr=="w") ? TVal::DirWrite :
+					 TFld::NoWrite|TVal::DirRead);
+	    if(atp.size() >= 2 && atp[1] == 'I') flg = (flg & (~TVal::DirWrite)) | TFld::NoWrite;
 	    p_el.fldAt(el_id).setFlg(flg);
 	    p_el.fldAt(el_id).setDescr(anm);
 
-	    if(flg&TVal::DirRead)
+	    if(flg&(TVal::DirRead|TVal::DirWrite))
 	    {
 		int reg = strtol(ai.c_str(), NULL, 0);
-		owner().regVal(reg, atp_m);
+		if(flg&TVal::DirRead) owner().regVal(reg, atp_m);
 		if(atp[0] == 'R')
 		{
 		    if(atp_sub == "i4" || atp_sub == "f")
 		    {
 			int reg2 = TSYS::strParse(ai,1,",").empty() ? (reg+1) : strtol(TSYS::strParse(ai,1,",").c_str(),NULL,0);
-			owner().regVal(reg2, atp_m);
+			if(flg&TVal::DirRead) owner().regVal(reg2, atp_m);
 			ai = TSYS::strMess("%d,%d", reg, reg2);
 		    }
 		    else if(atp_sub == "s")
 		    {
 			int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 			if(rN == 0) rN = 10;
-			for(int i_r = reg; i_r < (reg+rN); i_r++) owner().regVal(i_r, atp_m);
+			if(flg&TVal::DirRead) for(int i_r = reg; i_r < (reg+rN); i_r++) owner().regVal(i_r, atp_m);
 			ai = TSYS::strMess("%d,%d", reg, rN);
 		    }
 		}
@@ -1108,7 +1109,7 @@ void TMdPrm::enable( )
 	    als.push_back(aid);
 	}
     }
-    //> Template's function connect for logical type parameter
+    //Template's function connect for logical type parameter
     else if(isLogic() && lCtx)
 	try
 	{
@@ -1313,6 +1314,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	{
 	    pVal = vlAt(ls[i_el]);
+	    if(!(pVal.at().fld().flg()&TVal::DirRead)) continue;
 	    pVal.at().set(owner().getVal(pVal.at().fld().reserve(),w_err),0,true);
 	}
     }

@@ -52,6 +52,7 @@ class TMdPrm : public TParamContr
 	~TMdPrm( );
 
 	string OIDList( )	{ return cfg("OID_LS").getS(); }
+	void setOIDList( const string &vl )	{ cfg("OID_LS").setS(vl); }
 	vector<string> &lsOID( ){ return ls_oid; }
 	TElem &elem( )		{ return p_el; }
 
@@ -96,9 +97,9 @@ class TMdContr: public TController
 
 	int64_t	period( )	{ return mPer; }
 	string	cron( )		{ return cfg("SCHEDULE").getS(); }
-	int	prior( )	{ return m_prior; }
+	int	prior( )	{ return mPrior; }
 	string	ver( )		{ return cfg("VER").getS(); }
-	int	pAttrLimit( )	{ return m_pattr_lim; }
+	int	pAttrLimit( )	{ return mPattrLim; }
 	struct snmp_session *getSess( );
 
 	string	secLev( );
@@ -117,7 +118,7 @@ class TMdContr: public TController
 
     protected:
 	//Methods
-	void prmEn( const string &id, bool val );
+	void prmEn( TMdPrm *prm, bool val );
 	void enable_( );
 	void start_( );
 	void stop_( );
@@ -129,26 +130,26 @@ class TMdContr: public TController
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 
-	string oid2str( oid *ioid, size_t isz );
-	void str2oid( const string &str, oid *ioid, size_t &isz );
+	string oid2str( oid *ioid, size_t isz, const string &sep = "_" );
+	void str2oid( const string &str, oid *ioid, size_t &isz, const string &sep = "_" );
 
 	//Attributes
-	Res	en_res;		// Resource for enable params
-	int64_t	&m_prior,	// Process task priority
-		&m_pattr_lim,	// Parameter's attributes limit
-		&m_retr,	// Request retries
-		&m_tm;		// Request timeout
-	string	w_addr, w_comm;
+	pthread_mutex_t	enRes, dataRes;	//Resource for enable params and controller DAQ API
+	int64_t	&mPrior,	// Process task priority
+		&mPattrLim,	// Parameter's attributes limit
+		&mRetr,		// Request retries
+		&mTm;		// Request timeout
+	string	wAddr, wComm;
 	int64_t	mPer;
 
-	bool	prc_st,		// Process task active
-		call_st,	// Calc now stat
-		endrun_req,	// Request to stop of the Process task
+	bool	prcSt,		// Process task active
+		callSt,		// Calc now stat
+		endrunReq,	// Request to stop of the Process task
 		prmEnErr;	// Error connection pass for enable parameters
-	vector< AutoHD<TMdPrm> >  p_hd;
+	vector< AutoHD<TMdPrm> >  pHd;
 
-	double	tm_gath;	// Gathering time
-	ResString acq_err;
+	double	tmGath;		// Gathering time
+	MtxString acqErr;
 
 	struct snmp_session session;
 };

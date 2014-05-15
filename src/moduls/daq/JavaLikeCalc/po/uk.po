@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 16:19+0300\n"
+"POT-Creation-Date: 2014-05-13 08:44+0300\n"
 "PO-Revision-Date: 2007-10-28 10:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -16,168 +16,187 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: freefunc.cpp:523 func_analise.ypp:134 func_analise.ypp:142
+#: func_analise.ypp:150 func_analise.ypp:158 func_analise.ypp:166
+#: func_analise.ypp:175 func_analise.ypp:193 func_analise.ypp:210
+#: func_analise.ypp:220 func_analise.ypp:230 func_analise.ypp:240
 #, c-format
 msgid "Variable '%s' is used but undefined"
 msgstr "Змінна '%s' не визначена але використана"
 
-msgid "Error constant after constant"
-msgstr "Помилка константи після константи"
-
-#, c-format
-msgid "%s, pos: (%d,%d)-(%d,%d)."
-msgstr "%s, позиція: (%d,%d)-(%d,%d)."
-
-msgid "Unexpected end program, expect end string symbol '\"', "
-msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
-
-msgid "The next line symbol failed into string, "
-msgstr "Символ переведення лінії не дозволено у рядку, "
-
-msgid "Using namespace is error or empty, "
-msgstr "Помилка площини найменувань або вона порожня, "
-
-msgid "Build in function has too much parameters, "
-msgstr "Вбудована функція має дуже багато параметрів, "
-
-msgid "Function error, "
-msgstr "Помилка функції, "
-
-msgid "Symbol error, "
-msgstr "Помилка символу, "
-
-msgid "Object's properties too long, "
-msgstr "Властивості об'єкту дуже довгі, "
-
+#: freefunc.cpp:590
 msgid "Array have more 255 items."
 msgstr "Масив має більш 255 елементів."
 
+#: freefunc.cpp:620
 msgid "RegExp require one or two parameters."
 msgstr "RegExp вимагає одного або двох параметрів."
 
+#: freefunc.cpp:856 freefunc.cpp:960
 #, c-format
 msgid "Don't support operation code %d."
 msgstr "Код виконання %d не підтримується."
 
+#: freefunc.cpp:1115
 #, c-format
 msgid "More than %d(%d) parameters are specified for function '%s'"
 msgstr "Вказано більш %d(%d) параметрів для функції '%s'"
 
+#: freefunc.cpp:1120
 #, c-format
 msgid "Function is requested '%s', but it doesn't have return of IO"
 msgstr "Викликано функцію '%s', але вона не має IO-повернення"
 
+#: freefunc.cpp:1161
 msgid "No object variable for function"
 msgstr "Не об'єктна змінна для функції"
 
+#: freefunc.cpp:1162
 msgid "Object's function have more 255 parameters."
 msgstr "Функція об'єкту містить більш 255 параметрів."
 
+#: freefunc.cpp:1657
 msgid "Get object from no object's register"
 msgstr "Отримання об'єкту з не об'єктного регістру"
 
+#: freefunc.cpp:1779
 msgid "Function execution terminated by error"
 msgstr "Виконання функції перервано помилкою"
 
+#: freefunc.cpp:1791
 #, c-format
 msgid "Timeouted function calculation %d > %d+%d"
 msgstr "Перевищено час обчислення функції %d > %d+%d"
 
+#: freefunc.cpp:1986 freefunc.cpp:1998
 msgid "Not supported type for operation 'Add'."
 msgstr "Тип, який не підтримується операцією 'Add'."
 
+#: freefunc.cpp:2664
 msgid "Call object's function for no object or function name is empty."
 msgstr "Виклик об'єктної функції без об'єкту або ім'я функції порожнє."
 
+#: freefunc.cpp:2703
 #, c-format
 msgid "Operation %c(%xh) error. Function '%s' is stopped."
 msgstr "Помилка операції %c(%xh). Функція '%s' зупинена."
 
+#: freefunc.cpp:2714
 msgid "Function: "
 msgstr "Функція: "
 
+#: freefunc.cpp:2716 freelib.cpp:184 virtual.cpp:128
 msgid "Date of modification"
 msgstr "Дата модифікації"
 
+#: freefunc.cpp:2717 freefunc.cpp:2727 freelib.cpp:190 virtual.cpp:117
+#: virtual.cpp:124 virtual.cpp:133 virtual.cpp:654
 msgid "Name"
 msgstr "Ім'я"
 
+#: freefunc.cpp:2718 freelib.cpp:191 virtual.cpp:118 virtual.cpp:125
 msgid "Description"
 msgstr "Опис"
 
+#: freefunc.cpp:2720 virtual.cpp:126
 msgid "Maximum calculate time (sec)"
 msgstr "Максимальний час обрахунку (сек)"
 
+#: freefunc.cpp:2722 freefunc.cpp:2737 virtual.cpp:663
 msgid "Program"
 msgstr "Програма"
 
+#: freefunc.cpp:2724
 msgid "IO"
 msgstr ""
 
+#: freefunc.cpp:2726 freelib.cpp:189 virtual.cpp:653
 msgid "Id"
 msgstr ""
 
+#: freefunc.cpp:2728 virtual.cpp:134 virtual.cpp:655
 msgid "Type"
 msgstr "Тип"
 
+#: freefunc.cpp:2730 virtual.cpp:657
 msgid "Real;Integer;Boolean;String;Text;Object"
 msgstr "Реальний;Цілий;Логічний;Рядок;Текст;Об'єкт"
 
+#: freefunc.cpp:2731 virtual.cpp:135
 msgid "Mode"
 msgstr "Режим"
 
+#: freefunc.cpp:2733
 msgid "Input;Output;Return"
 msgstr "Вхід;Вихід;Повернення"
 
+#: freefunc.cpp:2734 virtual.cpp:137
 msgid "Hide"
 msgstr "Прихов."
 
+#: freefunc.cpp:2735
 msgid "Default"
 msgstr "Замовч."
 
+#: freefunc.cpp:2772 freefunc.cpp:2773
 msgid "New IO"
 msgstr "Нове IO"
 
+#: freefunc.cpp:2781 virtual.cpp:730
 msgid "Empty value is not valid."
 msgstr "Порожнє значення не припустиме."
 
+#: freelib.cpp:171
 msgid "Function's library: "
 msgstr "Бібліотека функцій: "
 
+#: freelib.cpp:173
 msgid "Function"
 msgstr "Функція"
 
+#: freelib.cpp:174 virtual.cpp:338
 msgid "Library"
 msgstr "Бібліотека"
 
+#: freelib.cpp:176
 msgid "State"
 msgstr "Стан"
 
+#: freelib.cpp:178
 msgid "Accessing"
 msgstr "Доступно"
 
+#: freelib.cpp:181
 msgid "Library DB"
 msgstr "БД бібліотеки"
 
+#: freelib.cpp:183
 msgid ""
 "DB address in format [<DB module>.<DB name>.<Table name>].\n"
 "For use main work DB set '*.*'."
 msgstr ""
 
+#: freelib.cpp:187
 msgid "Configuration"
 msgstr "Конфігурація"
 
+#: freelib.cpp:193 virtual.cpp:120
 msgid "Program's text translation"
 msgstr "Переклад тексту програми"
 
+#: freelib.cpp:196 freelib.cpp:197
 msgid "Functions"
 msgstr "Функції"
 
+#: virtual.cpp:36
 msgid "Java-like based calculator"
 msgstr "Обчислювач на мові схожій на Java"
 
+#: virtual.cpp:41
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
+#: virtual.cpp:42
 msgid ""
 "Allow java-like based calculator and function's libraries engine. User can "
 "create and modify function and libraries."
@@ -185,141 +204,188 @@ msgstr ""
 "Надає базований на мові схожій на Java обчислювач та рушій бібліотек "
 "функцій. Користувач може створювати та модифікувати функції та бібліотеки."
 
+#: virtual.cpp:101
 msgid "Parameters table"
 msgstr "Таблиця параметрів"
 
+#: virtual.cpp:102
 msgid "Controller's function"
 msgstr "Функція контролера"
 
+#: virtual.cpp:103
 msgid "Calculation schedule"
 msgstr "Планування обчислення"
 
+#: virtual.cpp:104
 msgid "Calculation task priority"
 msgstr "Пріоритет задачі обчислення"
 
+#: virtual.cpp:105
 msgid "Iteration number in single calculation"
 msgstr "Кількість ітерацій у одному обчисленні"
 
+#: virtual.cpp:108
 msgid "IO ID"
 msgstr ""
 
+#: virtual.cpp:109
 msgid "IO value"
 msgstr "Значення IO"
 
+#: virtual.cpp:112
 msgid "Standard"
 msgstr "Стандартний"
 
+#: virtual.cpp:113
 msgid "Data fields"
 msgstr "Поля даних"
 
+#: virtual.cpp:116 virtual.cpp:123 virtual.cpp:132
 msgid "ID"
 msgstr ""
 
+#: virtual.cpp:119
 msgid "Data base"
 msgstr "База даних"
 
+#: virtual.cpp:127
 msgid "Formula"
 msgstr "Формула"
 
+#: virtual.cpp:131
 msgid "Function ID"
 msgstr "ID функції"
 
+#: virtual.cpp:136
 msgid "Default value"
 msgstr "Знач. по замовч."
 
+#: virtual.cpp:138
 msgid "Position"
 msgstr "Позиція"
 
+#: virtual.cpp:208
 #, c-format
 msgid "Compilation with the help of the program language %s is not supported."
 msgstr "Компіляція на мові програмування %s не підтримується."
 
+#: virtual.cpp:251
 #, c-format
 msgid "Compile error: %s"
 msgstr "Помилка компіляції: %s"
 
+#: virtual.cpp:296
 msgid "Load function's libraries error."
 msgstr "Помилка завантаження бібліотеки функцій."
 
+#: virtual.cpp:340
+msgid "Safe timeout (sec)"
+msgstr "Таймаут безпеки (сек)"
+
+#: virtual.cpp:341
 msgid "Functions' Libraries"
 msgstr "Бібліотеки функцій"
 
+#: virtual.cpp:342
 msgid "Libraries"
 msgstr "Бібліотеки"
 
+#: virtual.cpp:421
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
+#: virtual.cpp:422
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
+#: virtual.cpp:423
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
+#: virtual.cpp:424
 #, c-format
 msgid "Spent time: %s."
 msgstr "Витрачено часу: %s."
 
+#: virtual.cpp:434
 #, c-format
 msgid ""
 "Functions library '%s' is not present. Please, create functions library!"
 msgstr ""
 "Бібліотека функції '%s' відсутня. Будь ласка, створіть бібліотеку функцій!"
 
+#: virtual.cpp:437
 #, c-format
 msgid "Create new function '%s'."
 msgstr "Створення нової функції '%s'."
 
+#: virtual.cpp:445
 msgid "Load function and its IO error."
 msgstr "Помилка завантаження функції та її IO."
 
+#: virtual.cpp:468
 msgid "Function calculate frequency (Hz)"
 msgstr "Частота обчислення функції (Гц)"
 
+#: virtual.cpp:469
 msgid "Function start flag"
 msgstr "Прапорець запуску функції"
 
+#: virtual.cpp:470
 msgid "Function stop flag"
 msgstr "Прапорець зупинки функції"
 
+#: virtual.cpp:471
 msgid "This controller object link"
 msgstr "Зв'язок на об'єкт цього контролера."
 
+#: virtual.cpp:577
 msgid "Calculation controller's function error."
 msgstr "Помилка обчислення функції контролеру."
 
+#: virtual.cpp:625
 msgid "No started or no present function."
 msgstr "Функція відсутня або не запущена."
 
+#: virtual.cpp:649
 msgid "Calculation"
 msgstr "Обчислення"
 
+#: virtual.cpp:651
 msgid "Data"
 msgstr "Дані"
 
+#: virtual.cpp:658
 msgid "Attribute mode"
 msgstr "Режим атрибуту"
 
+#: virtual.cpp:660
 msgid "Read only;Read and Write;Read and Write"
 msgstr "Тільки читання;Читання та запис;Читання та запис"
 
+#: virtual.cpp:661
 msgid "Value"
 msgstr "Значення"
 
+#: virtual.cpp:719
 msgid "Deleting lock attribute in not allow."
 msgstr "Видалення заблокованого атрибуту не дозволене."
 
+#: virtual.cpp:732
 msgid "Changing locked attribute is not allowed."
 msgstr "Зміна заблокованого атрибуту не дозволена."
 
+#: virtual.cpp:886
 msgid "2:Controller is stopped"
 msgstr "2:Контролер зупинено!"
 
+#: virtual.cpp:887
 msgid "1:Parameter is disabled"
 msgstr "1:Параметр вимкнено"
 
+#: virtual.cpp:918
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<io>:<aid>:<anm>]\n"
@@ -338,3 +404,40 @@ msgstr ""
 "  anm - ім'я створюваного атрибута.\n"
 "Якщо 'aid' або 'anm' не встановлено тоді вони будуть згенеровані з обраного "
 "IO функції."
+
+#: func_analise.ypp:184
+msgid "Error constant after constant"
+msgstr "Помилка константи після константи"
+
+#: func_analise.ypp:297
+#, c-format
+msgid "%s, pos: (%d,%d)-(%d,%d)."
+msgstr "%s, позиція: (%d,%d)-(%d,%d)."
+
+#: func_analise.ypp:446
+msgid "Unexpected end program, expect end string symbol '\"', "
+msgstr "Неочікуване завершення програми, очікувався символ кінця строки '\"', "
+
+#: func_analise.ypp:451
+msgid "The next line symbol failed into string, "
+msgstr "Символ переведення лінії не дозволено у рядку, "
+
+#: func_analise.ypp:494
+msgid "Using namespace is error or empty, "
+msgstr "Помилка площини найменувань або вона порожня, "
+
+#: func_analise.ypp:548
+msgid "Build in function has too much parameters, "
+msgstr "Вбудована функція має дуже багато параметрів, "
+
+#: func_analise.ypp:572
+msgid "Function error, "
+msgstr "Помилка функції, "
+
+#: func_analise.ypp:609
+msgid "Symbol error, "
+msgstr "Помилка символу, "
+
+#: func_analise.ypp:632
+msgid "Object's properties too long, "
+msgstr "Властивості об'єкту дуже довгі, "

@@ -116,10 +116,7 @@ void TTpContr::postEnable( int flag )
     tpParmAdd(new MRCParam());
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
 
 void TTpContr::setMRCDirDevs( const string &vl )
 {
@@ -175,13 +172,13 @@ void TTpContr::perSYSCall( unsigned int cnt )
 
 void TTpContr::load_( )
 {
-    //> Load parameters from config-file
+    //Load parameters from config-file
     setMRCDirDevs(TBDS::genDBGet(nodePath()+"MRCDirDevs",MRCDirDevs()));
 }
 
 void TTpContr::save_( )
 {
-    //> Save parameters to config-file
+    //Save parameters to config-file
     TBDS::genDBSet(nodePath()+"MRCDirDevs",MRCDirDevs());
 }
 

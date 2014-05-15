@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-20 12:01+0200\n"
+"POT-Creation-Date: 2014-05-15 11:37+0300\n"
 "PO-Revision-Date: 2009-08-18 09:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -21,75 +21,98 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: snmp_client.cpp:48
 msgid "SNMP client"
 msgstr "SNMP Client"
 
+#: snmp_client.cpp:52
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
+#: snmp_client.cpp:53
 msgid "Allow realization of SNMP client service."
 msgstr "Anbindung eines Clients für das SNMP-Protokoll."
 
+#: snmp_client.cpp:108
 msgid "Parameteres table"
 msgstr "Tabelle der Parameter"
 
+#: snmp_client.cpp:109
 msgid "Acquisition schedule"
 msgstr "Planung der Befragung"
 
+#: snmp_client.cpp:110
 msgid "Gather task priority"
 msgstr "Priorität der Datenerfassung"
 
+#: snmp_client.cpp:111
 msgid "Remote host address"
 msgstr "Adresse des entfernten Hosts"
 
+#: snmp_client.cpp:112
 msgid "Retries"
 msgstr "Versuche"
 
+#: snmp_client.cpp:113
 msgid "Timeout (sec)"
 msgstr "Zeitsperre (sec)"
 
+#: snmp_client.cpp:114
 msgid "SNMP version"
 msgstr "SNMP Version"
 
+#: snmp_client.cpp:115
 msgid "Server community/user"
 msgstr "Server-Community/User"
 
+#: snmp_client.cpp:116
 msgid "V3 parameters"
 msgstr "V3 Parameter"
 
+#: snmp_client.cpp:117
 msgid "Parameter's attributes limit"
 msgstr "Grenze Parameter Attribute"
 
+#: snmp_client.cpp:120
 msgid "Standard"
 msgstr "Standard"
 
+#: snmp_client.cpp:121
 msgid "OID list (next line separated)"
 msgstr "OID-Liste (Trennung in neuer Zeile)"
 
+#: snmp_client.cpp:160
 msgid "Call now. "
 msgstr "Rufen Sie jetzt an. "
 
+#: snmp_client.cpp:161
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Aufruf mit einer Periode:  %s. "
 
+#: snmp_client.cpp:162
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Call nächsten durch cron '%s'. "
 
+#: snmp_client.cpp:163
 #, c-format
 msgid "Spent time: %s."
 msgstr "Verbrauchte Zeit: %s."
 
+#: snmp_client.cpp:215
 msgid "Error generating Ku from authentication pass phrase."
 msgstr "Fehler beim Generieren von Ku-Authentifizierung Passphrase."
 
+#: snmp_client.cpp:237
 msgid "Error generating Ku from privacy pass phrase."
 msgstr "Fehler beim Generieren von Ku Privatsphäre Passphrase."
 
+#: snmp_client.cpp:320
 msgid "Error SNMP session open."
 msgstr "Fehler beim Öffnen der SNMP-Sitzung."
 
+#: snmp_client.cpp:379
 msgid ""
 "SNMP agent host in IP address or domain host name.\n"
 "Also you can set port like \"localhost:161\""
@@ -97,29 +120,37 @@ msgstr ""
 "SNMP-Agent-Host im IP-Adresse oder Domain Host-Namen.\n"
 "Auch Sie können Port wie \"localhost:161\""
 
+#: snmp_client.cpp:383
 msgid "Community group or user."
 msgstr "Gemeinschaft Gruppe oder des Benutzers."
 
+#: snmp_client.cpp:388
 msgid "Security level"
 msgstr "Sicherheitsstufe"
 
+#: snmp_client.cpp:389
 msgid "No auth/No privacy;Auth/No privacy;Auth/Privacy"
 msgstr "Keine auth/Nein Datenschutz;Auth/Nein Datenschutz;Auth/Datenschutz"
 
+#: snmp_client.cpp:392
 msgid "Auth"
 msgstr "Auth"
 
+#: snmp_client.cpp:402
 msgid "Privacy"
 msgstr "Datenschutz"
 
+#: snmp_client.cpp:637
 #, c-format
 msgid "ASN type '%d' do not handled."
 msgstr "ASN-Typ '%d' nicht behandelt."
 
+#: snmp_client.cpp:651 snmp_client.cpp:807
 #, c-format
 msgid "10:Timeout: No Response from %s."
 msgstr "10:Timeout: Keine Antwort von %s."
 
+#: snmp_client.cpp:702
 msgid ""
 "SNMP OID list, include directories for get all subitems. OID can write in "
 "the methods:\n"
@@ -131,11 +162,25 @@ msgid ""
 "  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for "
 "\"system.sysDescr.0\"."
 msgstr ""
-"SNMP OID-Liste enthalten Verzeichnisse für alle Unterpunkte erhalten. OID kann in den Methoden zu schreiben:\n"
-"   \".1.3.6.1.2.1.1\" - direkte Adressierung Code für das Objekt \"System\";\n"
-"   \".iso.org.dod.internet.mgmt.mib-2.system\" - Das vollständige Symbol direkte Adressierung Code für das Objekt \"System\";\n"
-"   \"system.sysDescr.0\" - einfache, nicht vollständigen Pfad von der Wurzel alias Adressierung (Objekt \"System\");\n"
-"   \"SNMPv2-MIB::sysDescr.0\" - Adressierung von MIB Basis von Modul-Name für \"system.sysDescr.0\"."
+"SNMP OID-Liste enthalten Verzeichnisse für alle Unterpunkte erhalten. OID "
+"kann in den Methoden zu schreiben:\n"
+"   \".1.3.6.1.2.1.1\" - direkte Adressierung Code für das Objekt \"System"
+"\";\n"
+"   \".iso.org.dod.internet.mgmt.mib-2.system\" - Das vollständige Symbol "
+"direkte Adressierung Code für das Objekt \"System\";\n"
+"   \"system.sysDescr.0\" - einfache, nicht vollständigen Pfad von der Wurzel "
+"alias Adressierung (Objekt \"System\");\n"
+"   \"SNMPv2-MIB::sysDescr.0\" - Adressierung von MIB Basis von Modul-Name "
+"für \"system.sysDescr.0\"."
 
+#: snmp_client.cpp:709
+msgid "MIB Tree"
+msgstr "MIB-Baum"
+
+#: snmp_client.cpp:710
+msgid "OID append"
+msgstr "OID anfügen"
+
+#: snmp_client.cpp:809
 msgid "11:No authorized name."
 msgstr "11:No Name zugelassen."

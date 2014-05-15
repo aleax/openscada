@@ -1342,9 +1342,10 @@ AC_DEFUN([AX_LIB_FFTW3],
 #   This macro calls:
 #
 #     PKG_CHECK_MODULES([QtGui],[QtGui > 4.3.0])
-#     PKG_CHECK_MODULES([Qt5Gui],[Qt5Gui > 5.1.0])
+#     PKG_CHECK_MODULES([Qt5Widgets],[Qt5Widgets > 5.1.0]
+#     PKG_CHECK_MODULES([Qt5PrintSupport],[Qt5PrintSupport > 5.1.0]
 #     AC_SUBST(Qt_MOC)
-#     AC_SUBST(QT4_RCC)
+#     AC_SUBST(Qt_RCC)
 #
 #   And sets:
 #
@@ -1352,7 +1353,7 @@ AC_DEFUN([AX_LIB_FFTW3],
 #
 # LICENSE
 #
-#   Copyright (c) 2011 Roman Savochenko <rom_as@oscada.org>
+#   Copyright (c) 2011-2014 Roman Savochenko <rom_as@oscada.org>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice

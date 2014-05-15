@@ -345,6 +345,9 @@ class ShapeDiagram : public WdgShape
 		int64_t	valEnd( );
 		int	val( int64_t tm );
 		deque<SHg> &val( )	{ return vals; }
+		int64_t arhPer( )	{ return arh_per; }
+		int64_t arhBeg( )	{ return arh_beg; }
+		int64_t arhEnd( )	{ return arh_end; }
 
 		void setAddr( const string &vl );
 		void setBordL( double vl )	{ mBordLow = vl; }

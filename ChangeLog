@@ -1,7 +1,18 @@
+2014-05-15 Roman
+- DB.LibsDB.OscadaLibs.db: Manual input template base.manInUnif expand for local constants store.
+- SYS: Build with GCC 3.4 and Qt-4.5 is resored.
+    ChangeLog some some fix.
+- DAQ.JavaLikeCalc: Append default safe timeout set into the module tab.
+- FIX:DAQ.ModBus: Write to complex type like "_f", "_i4" for write-only mode is fixed.
+- DAQ.OPC_UA: Commenting nodes into the list support is added, by symbol '#'.
+- DAQ.SNMP: Mostly expand for OIDs browser implement, MIB Tree using for access mode and enums obtain.
+    Including parameters enable.
+
+
 2014-05-08 Roman
 - DB:LibsDB.OscadaLibs.db: DAQ template "anUnifSt" and "anUnif" set for EVAL result at hardware border exceed.
 - DB:LibsDB.vcaBase.db: Widgets Main.{anShow,anShow1} expanded for allow negative precision.
-- Archive: Service "/mess/get" on request direct to alarms set negative level at results.
+- Archive: Service "/serv/mess" on request direct to alarms set negative level at results.
 - DAQ.Templates: "Maximum calculate time (sec)" field set active only for started DAQ templates. Some code clean up.
 - DAQ.DAQGate: Force all alarms request before the messages (level >= 0) is added.
 
@@ -16,7 +27,7 @@
 
 2014-04-30 Roman
 - SYS.XMLNode: Into function load() argument "full" replaced "flg" with flags:
-    0x01 - full mode; 0x02 - no remove 0x02 - no remove spaces for begin and end tag's text.
+    0x01 - full mode; 0x02 - no remove spaces for begin and end tag's text.
 - FIX:DAQ.ICP_DAS: WatchDog set debug messages added. I-87k DO modules for "Power on values" and "Safe values" take is fixed, for I-87041.
 - DAQ.SNMP: Some clean up.
 
@@ -164,7 +175,7 @@
 
 
 2014-03-17 Roman
-- DAQ.OPC_UA: SubscriptionId and MonitoredItemId grow start from '1', for exclube invalid value '0'.
+- DAQ.OPC_UA: SubscriptionId and MonitoredItemId grow start from '1', for exclude invalid value '0'.
 - SYS: AMRDevs module is added to openscada_mod.spec.
 - FIX:DAQ.JavaLikeCalc: External function bind fix for return process.
 - FIX:Transport.Sockets: Default symbol timeout of output transport is set from 0.01 to 0.1 for fix some unstable connection
@@ -182,13 +193,13 @@
 
 2014-03-13 Roman
 - FIX:Transport.Sockets: Connections frequence limit fix for ConectTimeout into miliseconds.
-- FIX:DAQ.LogicLev: Reflection type is fixed and expanded for connection to target parameter update and attributes list sync
+- FIX:DAQ.LogicLev: Reflection type is fixed and expanded for connection to target parameter, update and attributes list sync
     into calc period.
 
 
 2014-03-12 Roman
 - DAQ.ModBus: Remove connection try from controller's object start().
-- DAQ.OPC_UA: TranslateBrowsePathsToNodeIds is implement for hierachical part (OpcUa_HierarchicalReferences) request process.
+- DAQ.OPC_UA: TranslateBrowsePathsToNodeIds is implement for hierarchical part (OpcUa_HierarchicalReferences) request process.
 - Transport.Sockets: Connections frequence is limited to 2xConectTimeout, for hangs at connection timeouts decrease.
 - FIX:UI.Vision: Disable AcceptTouchEvents for primitive "Document", implement by WebKit, for fix Mouse events lock at some sensors.
 
@@ -215,7 +226,7 @@
 - UI.Vision: Select-group areas control of Development mode is moved to function selAreaUpdate() and moved
 	from Paint-event to particular places, mostly for fix dotted-box on selected moving for primitive
 	"Document" based on WebKit.
-    Set transparent background palete for the pages included to container.
+    Set transparent background palette for the pages included to container.
     Some code clean up.
 
 
@@ -298,7 +309,7 @@
 
 
 2014-02-18 Roman
-- FIX:DAQ.OPC_UA: Input protocol exception abort fix at short messages recieve.
+- FIX:DAQ.OPC_UA: Input protocol exception abort fix at short messages receive.
 
 
 2014-02-14 Roman
@@ -370,7 +381,7 @@
 - Special.FLibSYS: IO::write() expanded for fourth argument set with repaete scalars counter and 8-bit's integer scalars process fix.
     Unified CRC() calculation function is added.
 - UI.{QTStarter,QTCfg}: Next "QT" to "Qt" renaming.
-- FIX:UI.Vision: Set master-page palete to main window is fixed, for start with empty master-page.
+- FIX:UI.Vision: Set master-page palette to main window is fixed, for start with empty master-page.
 
 
 2014-01-24 Roman
@@ -416,7 +427,7 @@
 - FIX:SYS: Debug cats processing is rewrote for clean.
 - FIX:Archive.FSArch: Check deleting Archives cycle is fixed.
 - DB.PostgreSQL: Code clean.
-- FIX:DAQ.OPC_UA: Try send publish response for no pesent into queue publish request is fixed.
+- FIX:DAQ.OPC_UA: Try send publish response for no present into queue publish request is fixed.
 - !!!:UI.{Vision,VCAEngine}: View "Table" is added to primitive "FormEl".
 
 
@@ -5920,7 +5931,7 @@
 - FIX:/UI/VCAEngine: The focus attribute deleting on time disable widget's active mode, on RunTime is fixed.
 - FIX:/UI/Vision: Status section expanding is fixed for the container and item properties dialog.
 - FIX:/UI/Vision: Up order is fixed for new created widgets.
-- FIX:/UI/Vision: Background palete is fixed for primitive "Protocol".
+- FIX:/UI/Vision: Background palette is fixed for primitive "Protocol".
 - FIX:/UI/Vision: Focus mode is fixed for primitive "Protocol".
 - FIX:/UI/WebVision: Focus and active mode is fixed for primitive "Diagram".
 - !:/UI/WebVision: Focus and active mode support is added for primitive 'Protocol' and 'Document'.
@@ -7183,7 +7194,7 @@
 - /UI/Vision: The short cut CTRL+S is added, to wigets saving from keyboard.
 - /UI/Vision: Links configuration is update.
 - FIX:/UI/Vision: Update links on error operation to it is fixed.
-- /UI/Vision: A palete widget's resizing from keyboard is added.
+- /UI/Vision: A palette widget's resizing from keyboard is added.
 - FIX:/UI/Vision: Some bugs into widgets resizing is fixed.
 
 

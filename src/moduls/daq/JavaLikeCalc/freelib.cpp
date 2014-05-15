@@ -76,9 +76,9 @@ void Lib::preDisable( int flag )
 
 void Lib::postDisable( int flag )
 {
-    if( flag && DB().size() )
+    if(flag && DB().size())
     {
-	//> Delete libraries record
+	//Delete libraries record
 	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this,true);
 
 	//> Delete function's files
@@ -151,15 +151,9 @@ void Lib::setStart( bool val )
     run_st = val;
 }
 
-void Lib::add( const string &id, const string &name )
-{
-    chldAdd(mFnc,new Func(id,name));
-}
+void Lib::add( const string &id, const string &name )	{ chldAdd(mFnc,new Func(id,name)); }
 
-void Lib::del( const string &id )
-{
-    chldDel(mFnc,id);
-}
+void Lib::del( const string &id )			{ chldDel(mFnc,id); }
 
 TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {

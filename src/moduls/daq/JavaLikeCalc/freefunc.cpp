@@ -39,10 +39,11 @@ Func *JavaLikeCalc::p_fnc;
 //*************************************************
 Func::Func( const string &iid, const string &name ) :
     TConfig(&mod->elFnc()), TFunction(iid,SDAQ_ID),
-    max_calc_tm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parse_res(mod->parseRes())
+    mMaxCalcTm(cfg("MAXCALCTM").getId()), mTimeStamp(cfg("TIMESTAMP").getId()), parse_res(mod->parseRes())
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
+    mMaxCalcTm = mod->safeTm();
 }
 
 Func::~Func( )
@@ -65,10 +66,7 @@ void Func::postDisable( int flag )
     }
 }
 
-Lib &Func::owner( )
-{
-    return *((Lib*)nodePrev());
-}
+Lib &Func::owner( )	{ return *((Lib*)nodePrev()); }
 
 string Func::name( )
 {
@@ -84,7 +82,7 @@ TCntrNode &Func::operator=( TCntrNode &node )
     *(TConfig *)this = *(TConfig*)src_n;
     *(TFunction *)this = *(TFunction*)src_n;
 
-    //> Set to DB
+    //Set to DB
     cfg("ID").setS(mId);
 
     if(src_n->startStat() && !startStat()) setStart(true);
@@ -97,7 +95,7 @@ Func &Func::operator=(Func &func)
     *(TConfig *)this = (TConfig&)func;
     *(TFunction *)this = (TFunction&)func;
 
-    //> Set to DB
+    //Set to DB
     cfg("ID").setS(mId);
 
     return *this;
@@ -117,7 +115,7 @@ void Func::setDescr( const string &dscr )
 
 void Func::setMaxCalcTm( int vl )
 {
-    max_calc_tm = vl;
+    mMaxCalcTm = vl;
     if(!owner().DB().empty()) modif();
 }
 
@@ -147,7 +145,7 @@ void Func::loadIO( )
     {
 	string sid = cfg.cfg("ID").getS();
 
-	//> Position storing
+	//Position storing
 	int pos = cfg.cfg("POS").getI();
 
 	while(pos >= (int)u_pos.size())	u_pos.push_back("");
@@ -155,7 +153,7 @@ void Func::loadIO( )
 
 	if(ioId(sid) < 0) ioIns(new IO(sid.c_str(),"",IO::Real,IO::Default), pos);
 
-	//> Set values
+	//Set values
 	int id = ioId(sid);
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
@@ -163,13 +161,13 @@ void Func::loadIO( )
 	io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
-    //> Remove holes
+    //Remove holes
     for(unsigned i_p = 0; i_p < u_pos.size(); )
     {
 	if(u_pos[i_p].empty()) { u_pos.erase(u_pos.begin()+i_p); continue; }
 	i_p++;
     }
-    //> Position fixing
+    //Position fixing
     for(int i_p = 0; i_p < (int)u_pos.size(); i_p++)
     {
 	int iid = ioId(u_pos[i_p]);
@@ -185,7 +183,7 @@ void Func::save_( )
     mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
-    //> Save io config
+    //Save io config
     saveIO();
 }
 
@@ -196,7 +194,7 @@ void Func::saveIO( )
     string io_bd = owner().fullDB()+"_io";
     string io_cfgpath = mod->nodePath()+owner().tbl()+"_io/";
 
-    //> Save allow IO
+    //Save allow IO
     cfg.cfg("F_ID").setS(id(), true);
     for(int i_io = 0; i_io < ioSize(); i_io++)
     {
@@ -212,7 +210,7 @@ void Func::saveIO( )
 	SYS->db().at().dataSet(io_bd,io_cfgpath,cfg);
     }
 
-    //> Clear IO
+    //Clear IO
     cfg.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(io_bd,io_cfgpath,fld_cnt++,cfg); )
 	if(ioId(cfg.cfg("ID").getS()) < 0)
@@ -224,11 +222,11 @@ void Func::saveIO( )
 
 void Func::del( )
 {
-    if(!owner().DB().size())  return;
+    if(!owner().DB().size()) return;
 
     SYS->db().at().dataDel(owner().fullDB(), mod->nodePath()+owner().tbl(), *this, true);
 
-    //> Delete io from DB
+    //Delete io from DB
     delIO();
 }
 
@@ -262,13 +260,13 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
     {
 	vfnc->exCtx = new RegW[mRegs.size()];
 	RegW *reg = (RegW*)vfnc->exCtx;
-	//> Init list of registers
+	//Init list of registers
 	for(unsigned i_rg = 0; i_rg < mRegs.size(); i_rg++)
 	{
 	    Reg *tR = mRegs[i_rg];
 	    switch(tR->type())
 	    {
-		//Saved constants check
+		// Saved constants check
 		case Reg::Bool:	  if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().b; reg[i_rg].setVConst(); }	break;
 		case Reg::Int:	  if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().i; reg[i_rg].setVConst(); }	break;
 		case Reg::Real:	  if(tR->lock() && tR->name().empty()) { reg[i_rg] = tR->val().r; reg[i_rg].setVConst(); }	break;
@@ -285,13 +283,13 @@ void Func::workRegControl( TValFunc *vfnc, bool toFree )
 void Func::setStart( bool val )
 {
     if(val == run_st) return;
-    //> Start calc
+    //Start calc
     if(val)
     {
 	progCompile( );
 	run_st = true;
     }
-    //> Stop calc
+    //Stop calc
     else
     {
 	ResAlloc res(fRes(), true);
@@ -332,7 +330,7 @@ void Func::progCompile( )
     ResAlloc res(parse_res, true);
     ResAlloc res1(fRes(), true);
 
-    //> Context clear for usings
+    //Context clear for usings
     for(unsigned i = 0; i < used.size(); i++) used[i]->ctxClear();
 
     p_fnc  = this;	//Parse func
@@ -357,7 +355,7 @@ void Func::progCompile( )
     sprg.clear();
     regTmpClean();
 
-    //> Work registers update for calc contexts
+    //Work registers update for calc contexts
     for(unsigned i = 0; i < used.size(); i++) workRegControl(used[i]);
 }
 
@@ -365,7 +363,7 @@ int Func::funcGet( const string &path )
 {
     string ns, f_path;
 
-    //> Check to correct function's path
+    //Check to correct function's path
     try
     {
 	if(dynamic_cast<TFunction*>(&SYS->nodeAt(path,0,'.').at()))
@@ -381,7 +379,7 @@ int Func::funcGet( const string &path )
 	f_path = SYS->nodeAt(ns+"."+path,0,'.').at().nodePath();
     }
 
-    //> Search for already registered function
+    //Search for already registered function
     for(int i_fnc = 0; i_fnc < (int)mFncs.size(); i_fnc++)
 	if(f_path == mFncs[i_fnc]->func().at().nodePath())
 	    return i_fnc;
@@ -399,7 +397,7 @@ void Func::funcClear( )
 
 int Func::regNew( bool sep )
 {
-    //> Get new register
+    //Get new register
     unsigned i_rg = mRegs.size();
     if(!sep)
 	for(i_rg = 0; i_rg < mRegs.size(); i_rg++)
@@ -412,7 +410,7 @@ int Func::regNew( bool sep )
 
 int Func::regGet( const string &nm )
 {
-    //> Check allow registers
+    //Check allow registers
     for(int i_rg = 0; i_rg < (int)mRegs.size(); i_rg++)
 	if(mRegs[i_rg]->name() == nm)
 	    return i_rg;
@@ -575,11 +573,11 @@ Reg *Func::cdMvi( Reg *op, bool no_code )
 
 Reg *Func::cdMviObject( )
 {
-    //> Make result
+    //Make result
     Reg *rez = regAt(regNew());
     rez->setType(Reg::Obj);
 
-    //> Make code
+    //Make code
     uint16_t addr;
     prg += (uint8_t)Reg::MviObject;
     addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
@@ -592,21 +590,21 @@ Reg *Func::cdMviArray( int p_cnt )
     if(p_cnt > 255) throw TError(nodePath().c_str(),_("Array have more 255 items."));
     deque<int> p_pos;
 
-    //> Mvi all parameters
+    //Mvi all parameters
     for(int i_prm = 0; i_prm < p_cnt; i_prm++)
 	f_prmst[i_prm] = cdMvi(f_prmst[i_prm]);
-    //> Get parameters.
+    //Get parameters.
     for(int i_prm = 0; i_prm < p_cnt; i_prm++)
     {
 	p_pos.push_front(f_prmst.front()->pos());
 	f_prmst.front()->free();
 	f_prmst.pop_front();
     }
-    //> Make result
+    //Make result
     Reg *rez = regAt(regNew());
     rez->setType(Reg::Obj);
 
-    //> Make code
+    //Make code
     uint16_t addr;
     prg += (uint8_t)Reg::MviArray;
     addr = rez->pos(); prg.append((char*)&addr,sizeof(uint16_t));
@@ -641,11 +639,11 @@ Reg *Func::cdMviRegExp( int p_cnt )
     rg_expr->free();
     rg_arg->free();
 
-    //> Make result
+    //Make result
     Reg *rez = regAt(regNew());
     rez->setType(Reg::Obj);
 
-    //> Make code
+    //Make code
     uint16_t addr;
     prg += (uint8_t)Reg::MviRegExp;
     addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
@@ -715,7 +713,7 @@ void Func::cdAssign( Reg *rez, Reg *op )
     addr = rez->pos(); prg.append((char*)&addr, sizeof(uint16_t));
     addr = op->pos();  prg.append((char*)&addr, sizeof(uint16_t));
 
-    op->free();		//> Free temp operands
+    op->free();		//Free temp operands
 }
 
 Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
@@ -732,14 +730,14 @@ Reg *Func::cdMove( Reg *rez, Reg *op, bool force )
     addr = rez_n->pos(); prg.append((char*)&addr, sizeof(uint16_t));
     addr = op->pos();    prg.append((char*)&addr, sizeof(uint16_t));
 
-    op->free();	//> Free temp operands
+    op->free();		//Free temp operands
 
     return rez_n;
 }
 
 Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 {
-    //> Check allow the buildin calc and calc
+    //Check allow the buildin calc and calc
     if(op1->pos() < 0 && op2->pos() < 0)
     {
 	switch(cod)
@@ -819,8 +817,8 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 	return op1;
     }
 
-    //> Make operation cod
-    //>> Prepare operands
+    //Make operation cod
+    // Prepare operands
     op1 = cdMvi(op1);
     Reg::Type op1_tp = op1->vType(this);
     Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
@@ -828,13 +826,13 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
     if(op1_tp != Reg::Dynamic) op2 = cdTypeConv(op2, op1_tp);
     else if(op2->pos() < 0) op2 = cdMvi(op2);
     int op2_pos = op2->pos();
-    //>> Prepare rezult
+    // Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(rez_tp);
     //!!!! Free operands after alloc rezult for prevent operations from self by some problems with object
     op1->free();
     op2->free();
-    //>> Add code
+    // Add code
     switch(cod)
     {
 	case Reg::Add:		prg += (uint8_t)Reg::Add;	break;
@@ -868,21 +866,21 @@ Reg *Func::cdBinaryOp( Reg::Code cod, Reg *op1, Reg *op2 )
 
 Reg *Func::cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end )
 {
-    //> Mvi cond-op1 register (insert to program)
+    //Mvi cond-op1 register (insert to program)
     string cd_tmp = prg.substr(p_cmd);
     prg.erase(p_cmd);
     op1 = cdMvi(op1);
     p_end += prg.size()-p_cmd;
     p_cmd = prg.size();
     prg += cd_tmp;
-    //> Mvi op2 register (insert to program)
+    //Mvi op2 register (insert to program)
     cd_tmp = prg.substr(p_end-1);   //-1 pass end command
     prg.erase(p_end-1);
     op2 = cdMvi(op2);
     p_end = prg.size()+1;
     prg += cd_tmp;
 
-    //> Make operation code
+    //Make operation code
     p_end -= p_cmd;
     Reg::Type op1_tp = op1->vType(this);
     Reg::Type rez_tp = op1->objEl() ? Reg::Dynamic : op1_tp;
@@ -891,11 +889,11 @@ Reg *Func::cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end )
     op1->free();
     op2->free();
 
-    //>> Prepare rezult
+    // Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(rez_tp);
 
-    //> [CRRrrRRnn]
+    //[CRRrrRRnn]
     int a_sz = sizeof(uint16_t);
     uint16_t addr = rez->pos();	prg.replace(p_cmd+1, sizeof(uint16_t), (char*)&addr, sizeof(uint16_t));
     prg.replace(p_cmd+3, sizeof(uint16_t), (char*)&op1_pos, sizeof(uint16_t));
@@ -907,7 +905,7 @@ Reg *Func::cdCondBinaryOp( int p_cmd, Reg *op1, Reg *op2, int p_end )
 
 Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 {
-    //> Check allow the buildin calc and calc
+    //Check allow the buildin calc and calc
     if(op->pos() < 0)
     {
 	switch(op->vType(this))
@@ -944,16 +942,16 @@ Reg *Func::cdUnaryOp( Reg::Code cod, Reg *op )
 	return op;
     }
 
-    //> Make operation cod
-    //>> Prepare operand
+    //Make operation cod
+    // Prepare operand
     op = cdMvi(op);
     Reg::Type op_tp = op->vType(this);
     int op_pos = op->pos();
     op->free();
-    //>> Prepare rezult
+    // Prepare rezult
     Reg *rez = regAt(regNew());
     rez->setType(op_tp);
-    //>> Add code
+    // Add code
     switch(cod)
     {
 	case Reg::Not:		prg += (uint8_t)Reg::Not;	break;
@@ -974,7 +972,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
     int a_sz = sizeof(uint16_t);
     string cd_tmp;
 
-    //> Mvi cond register (insert to program)
+    //Mvi cond register (insert to program)
     cd_tmp = prg.substr(p_cmd);
     prg.erase(p_cmd);
     cond = cdMvi(cond);
@@ -986,7 +984,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 
     if(thn != NULL && els != NULL)
     {
-	//> Add Move command to "then" end (insert to program)
+	//Add Move command to "then" end (insert to program)
 	cd_tmp = prg.substr(p_else-1);	//-1 pass end command
 	prg.erase(p_else-1);
 	thn = cdMvi(thn);
@@ -994,7 +992,7 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 	p_end += prg.size()-p_else+1;
 	p_else = prg.size()+1;
 	prg += cd_tmp;
-	//> Add Move command to "else" end (insert to program)
+	//Add Move command to "else" end (insert to program)
 	cd_tmp = prg.substr(p_end-1);   //-1 pass end command
 	prg.erase(p_end-1);
 	els = cdMvi(els);
@@ -1003,11 +1001,11 @@ Reg *Func::cdCond( Reg *cond, int p_cmd, int p_else, int p_end, Reg *thn, Reg *e
 	prg += cd_tmp;
     }
 
-    //> Make apropos adress
+    //Make apropos adress
     p_else -= p_cmd;
     p_end  -= p_cmd;
 
-    //> [CRR00nn]
+    //[CRR00nn]
     prg.replace(p_cmd+1, sizeof(uint16_t), (char*)&p_cond, sizeof(uint16_t));
     prg.replace(p_cmd+3, a_sz, ((char *)&p_else), a_sz);
     prg.replace(p_cmd+3+a_sz, a_sz, ((char *)&p_end), a_sz);
@@ -1788,9 +1786,9 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
     while(!(dt.flg&0x01))
     {
 	//> Calc time control mechanism
-	if(SYS->sysTm() > (dt.start_tm+max_calc_tm))
+	if(SYS->sysTm() > (dt.start_tm+mMaxCalcTm))
 	{
-	    mess_err(nodePath().c_str(), _("Timeouted function calculation %d > %d+%d"), SYS->sysTm(), dt.start_tm, max_calc_tm);
+	    mess_err(nodePath().c_str(), _("Timeouted function calculation %d > %d+%d"), SYS->sysTm(), dt.start_tm, mMaxCalcTm);
 	    dt.flg |= 0x09;
 	    return;
 	}
@@ -2719,7 +2717,8 @@ void Func::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 	ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),owner().DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
 	    "tp","str","cols","100","rows","5");
-	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
+	ctrMkNode("fld",opt,-1,"/func/cfg/m_calc_tm",_("Maximum calculate time (sec)"),RWRWR_,"root",SDAQ_ID,3,
+	    "tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,-1,"/io",_("Program")))
 	{
 	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),RWRWR_,"root",SDAQ_ID,1,"s_com","add,del,ins,move"))
@@ -2754,20 +2753,20 @@ void Func::cntrCmdProc( XMLNode *opt )
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
-	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","",RWRWR_);
-	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","",RWRWR_);
-	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/io/io/2","",RWRWR_);
-	    XMLNode *n_mode	= ctrMkNode("list",opt,-1,"/io/io/3","",RWRWR_);
-	    XMLNode *n_hide	= ctrMkNode("list",opt,-1,"/io/io/4","",RWRWR_);
-	    XMLNode *n_def	= ctrMkNode("list",opt,-1,"/io/io/5","",RWRWR_);
+	    XMLNode *nId	= ctrMkNode("list",opt,-1,"/io/io/0","",RWRWR_);
+	    XMLNode *nNm	= ctrMkNode("list",opt,-1,"/io/io/1","",RWRWR_);
+	    XMLNode *nType	= ctrMkNode("list",opt,-1,"/io/io/2","",RWRWR_);
+	    XMLNode *nMode	= ctrMkNode("list",opt,-1,"/io/io/3","",RWRWR_);
+	    XMLNode *nHide	= ctrMkNode("list",opt,-1,"/io/io/4","",RWRWR_);
+	    XMLNode *nDef	= ctrMkNode("list",opt,-1,"/io/io/5","",RWRWR_);
 	    for(int id = 0; id < ioSize(); id++)
 	    {
-		if(n_id)	n_id->childAdd("el")->setText(io(id)->id());
-		if(n_nm)	n_nm->childAdd("el")->setText(io(id)->name());
-		if(n_type)	n_type->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
-		if(n_mode)	n_mode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
-		if(n_hide)	n_hide->childAdd("el")->setText(io(id)->hide()?"1":"0");
-		if(n_def)	n_def->childAdd("el")->setText(io(id)->def());
+		if(nId)   nId->childAdd("el")->setText(io(id)->id());
+		if(nNm)   nNm->childAdd("el")->setText(io(id)->name());
+		if(nType) nType->childAdd("el")->setText(i2s(io(id)->type()|((io(id)->flg()&IO::FullText)<<8)));
+		if(nMode) nMode->childAdd("el")->setText(i2s(io(id)->flg()&(IO::Output|IO::Return)));
+		if(nHide) nHide->childAdd("el")->setText(io(id)->hide()?"1":"0");
+		if(nDef)  nDef->childAdd("el")->setText(io(id)->def());
 	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	ioAdd(new IO("new",_("New IO"),IO::Real,IO::Default));
