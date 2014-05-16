@@ -1,3 +1,10 @@
+2014-05-16 Roman
+- FIX: TFunction: Expand to int64_t fix.
+- SYS: Added new global simple function s2ll() into OSCADA namespace.
+- !!:ModBus: Complex types expand by "i8" - int64, "u2" - uint16, "u4" - uint32, "d" - Double.
+    To protocol part classic form for registers added and complex types expand by "i8" - Int64, "d" - Double.
+
+
 2014-05-15 Roman
 - DB.LibsDB.OscadaLibs.db: Manual input template base.manInUnif expand for local constants store.
 - SYS: Build with GCC 3.4 and Qt-4.5 is resored.

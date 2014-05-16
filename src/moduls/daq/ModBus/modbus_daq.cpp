@@ -93,7 +93,7 @@ void TTpContr::postEnable( int flag )
 
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
 }
 
@@ -102,10 +102,7 @@ void TTpContr::save_( )
 
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name,daq_db,this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name,daq_db,this); }
 
 //******************************************************
 //* TMdContr                                           *
@@ -136,7 +133,7 @@ void TMdContr::postDisable( int flag )
     {
 	if(flag)
 	{
-	    //> Delete logical parameter's io table
+	    //Delete logical parameter's io table
 	    string tbl = DB()+"."+cfg("PRM_BD_L").getS()+"_io";
 	    SYS->db().at().open(tbl);
 	    SYS->db().at().close(tbl,true);
@@ -170,14 +167,11 @@ string TMdContr::getStatus( )
     return val;
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::disable_( )
 {
-    //> Clear acquisition data block
+    //Clear acquisition data block
     acqBlks.clear();
     acqBlksIn.clear();
     acqBlksCoil.clear();
@@ -277,7 +271,7 @@ void TMdContr::regVal( int reg, const string &dt )
 
     ResAlloc res(req_res, true);
 
-    //> Register to acquisition block
+    //Register to acquisition block
     if(dt == "R" || dt == "RI")
     {
 	vector< SDataRec > &workCnt = (dt == "RI") ? acqBlksIn : acqBlks;
@@ -298,7 +292,7 @@ void TMdContr::regVal( int reg, const string &dt )
 		if((mMerge || reg*2 <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg*2+2-workCnt[i_b].off) < blkMaxSz)
 		{
 		    workCnt[i_b].val.append((reg*2+2)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
-		    //>> Check for allow mergin to next block
+		    // Check for allow mergin to next block
 		    if(!mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+(int)workCnt[i_b].val.size()) >= workCnt[i_b+1].off)
 		    {
 			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+(int)workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
@@ -311,7 +305,7 @@ void TMdContr::regVal( int reg, const string &dt )
 	}
 	if(i_b >= workCnt.size()) workCnt.insert(workCnt.begin()+i_b,SDataRec(reg*2,2));
     }
-    //> Coils
+    //Coils
     else if(dt == "C" || dt == "CI")
     {
 	vector< SDataRec > &workCnt = (dt == "CI") ? acqBlksCoilIn : acqBlksCoil;
@@ -332,7 +326,7 @@ void TMdContr::regVal( int reg, const string &dt )
 		if((mMerge || reg <= (workCnt[i_b].off+(int)workCnt[i_b].val.size())) && (reg+1-workCnt[i_b].off) < blkMaxSz*8)
 		{
 		    workCnt[i_b].val.append((reg+1)-(workCnt[i_b].off+workCnt[i_b].val.size()),0);
-		    //>> Check for allow mergin to next block
+		    // Check for allow mergin to next block
 		    if(!mMerge && i_b+1 < workCnt.size() && (workCnt[i_b].off+(int)workCnt[i_b].val.size()) >= workCnt[i_b+1].off)
 		    {
 			workCnt[i_b].val.append(workCnt[i_b+1].val,workCnt[i_b].off+workCnt[i_b].val.size()-workCnt[i_b+1].off,string::npos);
@@ -372,15 +366,25 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 	switch(atp_sub[0])
 	{
 	    case 'b':	return char((vl==EVAL_INT)?EVAL_BOOL:((vl>>atoi(atp_sub.c_str()+1))&1));
-	    case 'f':
+	    case 'f':	//Float (4)
 	    {
 		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
 		if(vl == EVAL_INT || vl2 == EVAL_INT) return EVAL_REAL;
-		union { uint32_t i; float f; } wl;
-		wl.i = ((vl2&0xffff)<<16) | (vl&0xffff);
+		union { uint16_t r[2]; float f; } wl;
+		wl.r[0] = vl; wl.r[1] = vl2;
 		return wl.f;
 	    }
-	    case 'i':
+	    case 'd':	//Double (8)
+	    {
+		int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
+		int64_t vl3 = getValR(strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0), w_err, isInputs);
+		int64_t vl4 = getValR(strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0), w_err, isInputs);
+		if(vl == EVAL_INT || vl2 == EVAL_INT || vl3 == EVAL_INT || vl4 == EVAL_INT) return EVAL_REAL;
+		union { uint16_t r[4]; double d; } wl;
+		wl.r[0] = vl; wl.r[1] = vl2; wl.r[2] = vl3; wl.r[3] = vl4;
+		return wl.d;
+	    }
+	    case 'i':	//Integer
 		switch(atp_sub[1])
 		{
 		    case '2':	return int64_t((vl==EVAL_INT)?EVAL_INT:(int16_t)vl);
@@ -388,7 +392,33 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 		    {
 			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
 			if(vl == EVAL_INT || vl2 == EVAL_INT) return (int64_t)EVAL_INT;
-			return (int64_t)(((vl2&0xffff)<<16)|(vl&0xffff));
+			union { uint16_t r[2]; int32_t i; } wl;
+			wl.r[0] = vl; wl.r[1] = vl2;
+			return wl.i;
+		    }
+		    case '8':
+		    {
+			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
+			int64_t vl3 = getValR(strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0), w_err, isInputs);
+			int64_t vl4 = getValR(strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0), w_err, isInputs);
+			if(vl == EVAL_INT || vl2 == EVAL_INT || vl3 == EVAL_INT || vl4 == EVAL_INT) return (int64_t)EVAL_INT;
+			union { uint16_t r[4]; int64_t i; } wl;
+			wl.r[0] = vl; wl.r[1] = vl2; wl.r[2] = vl3; wl.r[3] = vl4;
+			return wl.i;
+		    }
+		}
+		break;
+	    case 'u':	//Unsigned integer
+		switch(atp_sub[1])
+		{
+		    case '2':	return int64_t((vl==EVAL_INT)?EVAL_INT:vl);
+		    case '4':
+		    {
+			int64_t vl2 = getValR(strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0), w_err, isInputs);
+			if(vl == EVAL_INT || vl2 == EVAL_INT) return (int64_t)EVAL_INT;
+			union { uint16_t r[2]; uint32_t i; } wl;
+			wl.r[0] = vl; wl.r[1] = vl2;
+			return (int64_t)wl.i;
 		    }
 		}
 		break;
@@ -414,7 +444,7 @@ int64_t TMdContr::getValR( int addr, ResString &err, bool in )
 {
     int64_t rez = EVAL_INT;
     ResAlloc res(req_res, false);
-    vector< SDataRec >	&workCnt = in ? acqBlksIn : acqBlks;
+    vector<SDataRec>	&workCnt = in ? acqBlksIn : acqBlks;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
@@ -432,7 +462,7 @@ char TMdContr::getValC( int addr, ResString &err, bool in )
 {
     char rez = EVAL_BOOL;
     ResAlloc res(req_res, false);
-    vector< SDataRec >	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
+    vector<SDataRec>	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if(addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
 	{
@@ -478,24 +508,50 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	    }
 	    case 'f':
 	    {
-		union { uint32_t i; float f; } wl;
+		union { uint16_t r[2]; float f; } wl;
 		wl.f = val.getR();
 		map<int,int> regs;
-		regs[aid] = wl.i&0xFFFF;
-		regs[strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0)] = (wl.i>>16)&0xFFFF;
+		regs[aid] = wl.r[0];
+		regs[strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0)] = wl.r[1];
+		wrRez = setValRs(regs, w_err);
+		break;
+	    }
+	    case 'd':
+	    {
+		union { uint16_t r[4]; double d; } wl;
+		wl.d = val.getR();
+		map<int, int> regs;
+		regs[aid] = wl.r[0];
+		regs[strtol(TSYS::strParse(aids,1,",").c_str(),NULL,0)] = wl.r[1];
+		regs[strtol(TSYS::strParse(aids,2,",").c_str(),NULL,0)] = wl.r[2];
+		regs[strtol(TSYS::strParse(aids,3,",").c_str(),NULL,0)] = wl.r[3];
 		wrRez = setValRs(regs, w_err);
 		break;
 	    }
 	    case 'i':
+	    case 'u':
 		switch(atp_sub[1])
 		{
 		    case '2':	wrRez = setValR(val.getI(), aid, w_err);	break;
 		    case '4':
 		    {
-			int64_t vl = val.getI();
+			union { uint16_t r[2]; uint32_t i; } wl;
+			wl.i = val.getI();
 			map<int,int> regs;
-			regs[aid] = vl&0xFFFF;
-			regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = (vl>>16)&0xFFFF;
+			regs[aid] = wl.r[0];
+			regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = wl.r[1];
+			wrRez = setValRs(regs, w_err);
+			break;
+		    }
+		    case '8':
+		    {
+			union { uint16_t r[4]; uint64_t i; } wl;
+			wl.i = val.getI();
+			map<int,int> regs;
+			regs[aid] = wl.r[0];
+			regs[strtol(TSYS::strSepParse(aids,1,',').c_str(),NULL,0)] = wl.r[1];
+			regs[strtol(TSYS::strSepParse(aids,2,',').c_str(),NULL,0)] = wl.r[2];
+			regs[strtol(TSYS::strSepParse(aids,3,',').c_str(),NULL,0)] = wl.r[3];
 			wrRez = setValRs(regs, w_err);
 			break;
 		    }
@@ -520,7 +576,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 
 bool TMdContr::setValR( int val, int addr, ResString &err )
 {
-    //> Encode request PDU (Protocol Data Units)
+    //Encode request PDU (Protocol Data Units)
     string pdu, terr;
     if(!mMltWr)
     {
@@ -541,14 +597,16 @@ bool TMdContr::setValR( int val, int addr, ResString &err )
 	pdu += (char)(val>>8);		//Data MSB
 	pdu += (char)val;		//Data LSB
     }
-    //> Request to remote server
+
+    //Request to remote server
     if((terr=modBusReq(pdu)).empty())	numWReg++;
     else
     {
 	if(err.getVal().empty()) err.setVal(terr);
 	return false;
     }
-    //> Set to acquisition block
+
+    //Set to acquisition block
     ResAlloc res(req_res, false);
     for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	if((addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
@@ -565,7 +623,7 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
     int start = 0, prev = 0;
     string pdu, terr;
 
-    //> Write by single register
+    //Write by single register
     if(!mMltWr)
     {
 	for(map<int,int>::const_iterator i_r = regs.begin(); i_r != regs.end(); i_r++)
@@ -573,17 +631,17 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 	return true;
     }
 
-    //> Write by multiply registers
+    //Write by multiply registers
     for(map<int,int>::const_iterator i_r = regs.begin(); true; i_r++)
     {
 	if(i_r == regs.end() || (pdu.length() && (((i_r->first-prev) > 1) || (prev-start) > 122)))
 	{
 	    if(pdu.empty()) break;
-	    //> Finish and send request
+	    // Finish and send request
 	    pdu[3] = (char)0x00;		//Quantity MSB
 	    pdu[4] = (char)(prev-start+1);	//Quantity LSB
 	    pdu[5] = (char)((prev-start+1)*2);	//Byte Count
-	    //> Request to remote server
+	    // Request to remote server
 	    if((terr=modBusReq(pdu)).empty())	numWReg += (prev-start+1);
 	    else
 	    {
@@ -595,7 +653,7 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 	    if(i_r == regs.end()) break;
 	}
 
-	//> Start request prepare
+	//Start request prepare
 	if(pdu.empty())
 	{
 	    pdu = (char)0x10;			//Function, preset multiple registers
@@ -610,7 +668,7 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 	pdu += (char)i_r->second;		//Data LSB
 	prev = i_r->first;
 
-	//> Set to acquisition block
+	//Set to acquisition block
 	ResAlloc res(req_res, false);
 	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if((i_r->first*2) >= acqBlks[i_b].off && (i_r->first*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
@@ -625,7 +683,7 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 
 bool TMdContr::setValC( char val, int addr, ResString &err )
 {
-    //> Encode request PDU (Protocol Data Units)
+    //Encode request PDU (Protocol Data Units)
     string pdu, terr;
     if(!mMltWr)
     {
@@ -645,14 +703,14 @@ bool TMdContr::setValC( char val, int addr, ResString &err )
 	pdu += (char)0x01;		//Byte Count
 	pdu += (char)(val?0x01:0x00);	//Data MSB
     }
-    //> Request to remote server
+    //Request to remote server
     if((terr=modBusReq(pdu)).empty())	numWCoil++;
     else
     {
 	if(err.getVal().empty()) err.setVal(terr);
 	return false;
     }
-    //> Set to acquisition block
+    //Set to acquisition block
     ResAlloc res(req_res, false);
     for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)
 	if(addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+(int)acqBlksCoil[i_b].val.size()))
@@ -1011,7 +1069,7 @@ TCntrNode &TMdPrm::operator=( TCntrNode &node )
     TMdPrm *src_n = dynamic_cast<TMdPrm*>(&node);
     if(!src_n || !src_n->enableStat() || !enableStat() || !isLogic() || !lCtx) return *this;
 
-    //> IO values copy
+    //IO values copy
     for(int i_io = 0; i_io < src_n->lCtx->ioSize(); i_io++)
 	if(src_n->lCtx->ioFlg(i_io)&TPrmTempl::CfgLink)
 	    lCtx->lnk(lCtx->lnkId(i_io)).addr = src_n->lCtx->lnk(src_n->lCtx->lnkId(i_io)).addr;
@@ -1066,7 +1124,7 @@ void TMdPrm::enable( )
 
 	    TFld::Type tp = TFld::Integer;
 	    if(atp[0] == 'C' || (atp_sub.size() && atp_sub[0] == 'b')) tp = TFld::Boolean;
-	    else if(atp_sub == "f") tp = TFld::Real;
+	    else if(atp_sub == "f" || atp_sub == "d") tp = TFld::Real;
 	    else if(atp_sub == "s") tp = TFld::String;
 
 	    if(!p_el.fldPresent(aid) || p_el.fldAt(p_el.fldId(aid)).type() != tp)
@@ -1089,11 +1147,19 @@ void TMdPrm::enable( )
 		if(flg&TVal::DirRead) owner().regVal(reg, atp_m);
 		if(atp[0] == 'R')
 		{
-		    if(atp_sub == "i4" || atp_sub == "f")
+		    if(atp_sub == "i4" || atp_sub == "u4" || atp_sub == "f")
 		    {
 			int reg2 = TSYS::strParse(ai,1,",").empty() ? (reg+1) : strtol(TSYS::strParse(ai,1,",").c_str(),NULL,0);
 			if(flg&TVal::DirRead) owner().regVal(reg2, atp_m);
 			ai = TSYS::strMess("%d,%d", reg, reg2);
+		    }
+		    else if(atp_sub == "i8" || atp_sub == "d")
+		    {
+			int reg2 = TSYS::strParse(ai,1,",").empty() ? (reg+1) : strtol(TSYS::strParse(ai,1,",").c_str(),NULL,0);
+			int reg3 = TSYS::strParse(ai,2,",").empty() ? (reg2+1) : strtol(TSYS::strParse(ai,2,",").c_str(),NULL,0);
+			int reg4 = TSYS::strParse(ai,3,",").empty() ? (reg3+1) : strtol(TSYS::strParse(ai,3,",").c_str(),NULL,0);
+			if(flg&TVal::DirRead) { owner().regVal(reg2, atp_m); owner().regVal(reg3, atp_m); owner().regVal(reg4, atp_m); }
+			ai = TSYS::strMess("%d,%d,%d,%d", reg, reg2, reg3, reg4);
 		    }
 		    else if(atp_sub == "s")
 		    {
@@ -1122,7 +1188,7 @@ void TMdPrm::enable( )
 						      at(TSYS::strSepParse(m_tmpl,1,'.')).at().func().at());
 		to_make = true;
 	    }
-	    //>> Init attrubutes
+	    // Init attrubutes
 	    for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++)
 	    {
 		if((lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) && lCtx->lnkId(i_io) < 0) lCtx->plnk.push_back(TLogCtx::SLnk(i_io));
@@ -1152,13 +1218,13 @@ void TMdPrm::enable( )
 		if(to_make && (lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)) lCtx->setS(i_io,"0");
 	    }
 
-	    //>> Load IO at enabling
+	    // Load IO at enabling
 	    if(to_make) loadIO(true);
 
-	    //>> Init links
+	    // Init links
 	    initLnks();
 
-	    //>> Init system attributes identifiers
+	    // Init system attributes identifiers
 	    lCtx->id_freq  = lCtx->ioId("f_frq");
 	    lCtx->id_start = lCtx->ioId("f_start");
 	    lCtx->id_stop  = lCtx->ioId("f_stop");
@@ -1169,12 +1235,12 @@ void TMdPrm::enable( )
 	    int id_this    = lCtx->ioId("this");
 	    if(id_this >= 0) lCtx->setO(id_this, new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
-	    //>> First call
+	    // First call
 	    if(owner().startStat()) upVal(true, false, 0);
 
 	}catch(TError err) { disable(); throw; }
 
-    //> Check for delete DAQ parameter's attributes
+    //Check for delete DAQ parameter's attributes
     for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
     {
 	unsigned i_l;
@@ -1198,13 +1264,13 @@ void TMdPrm::disable( )
 
     TParamContr::disable();
 
-    //> Set EVAL to parameter attributes
+    //Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 
-    //> Template's function disconnect
+    //Template's function disconnect
     if(lCtx)
     {
 	lCtx->setFunc(NULL);
@@ -1224,7 +1290,7 @@ void TMdPrm::loadIO( bool force )
     if(!enableStat() || !isLogic() || !lCtx) return;
     if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
-    //> Load IO and init links
+    //Load IO and init links
     TConfig cfg(&mod->prmIOE());
     cfg.cfg("PRM_ID").setS(id());
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
@@ -1247,7 +1313,7 @@ void TMdPrm::save_( )
 
 void TMdPrm::saveIO()
 {
-    //> Save IO and init links
+    //Save IO and init links
     if(!enableStat() || !isLogic() || !lCtx) return;
 
     TConfig cfg(&mod->prmIOE());
@@ -1269,7 +1335,7 @@ void TMdPrm::initLnks( )
     string atp, atp_m, atp_sub, ai, mode;
     int reg, off;
 
-    //> Init links
+    //Init links
     for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
     {
 	lCtx->lnk(i_l).real.clear();
@@ -1284,17 +1350,25 @@ void TMdPrm::initLnks( )
 	if(mode != "w")	owner().regVal(reg, atp_m);
 	if(atp[0] == 'R')
 	{
-	    if(atp_sub == "i4" || atp_sub == "f")
+	    if(atp_sub == "i4" || atp_sub == "u4" || atp_sub == "f")
 	    {
 		int reg2 = TSYS::strParse(ai,1,",").empty() ? (reg+1) : strtol(TSYS::strParse(ai,1,",").c_str(),NULL,0);
-		owner().regVal(reg2, atp_m);
+		if(mode != "w") owner().regVal(reg2, atp_m);
 		ai = TSYS::strMess("%d,%d", reg, reg2);
+	    }
+	    else if(atp_sub == "i8" || atp_sub == "d")
+	    {
+		int reg2 = TSYS::strParse(ai,1,",").empty() ? (reg+1) : strtol(TSYS::strParse(ai,1,",").c_str(),NULL,0);
+		int reg3 = TSYS::strParse(ai,2,",").empty() ? (reg2+1) : strtol(TSYS::strParse(ai,2,",").c_str(),NULL,0);
+		int reg4 = TSYS::strParse(ai,3,",").empty() ? (reg3+1) : strtol(TSYS::strParse(ai,3,",").c_str(),NULL,0);
+		if(mode != "w") { owner().regVal(reg2, atp_m); owner().regVal(reg3, atp_m); owner().regVal(reg4, atp_m); }
+		ai = TSYS::strMess("%d,%d,%d,%d", reg, reg2, reg3, reg4);
 	    }
 	    else if(atp_sub == "s")
 	    {
 		int rN = vmax(0,vmin(100,strtol(TSYS::strParse(ai,1,",").c_str(), NULL, 0)));
 		if(rN == 0) rN = 10;
-		for(int i_r = reg; i_r < reg+rN; i_r++) owner().regVal(i_r, atp_m);
+		if(mode != "w") for(int i_r = reg; i_r < reg+rN; i_r++) owner().regVal(i_r, atp_m);
 		ai = TSYS::strMess("%d,%d", reg, rN);
 	    }
 	}
@@ -1321,7 +1395,7 @@ void TMdPrm::upVal( bool first, bool last, double frq )
     else if(isLogic())
 	try
 	{
-	    //> Set fixed system attributes
+	    //Set fixed system attributes
 	    if(lCtx->id_freq >= 0)	lCtx->setR(lCtx->id_freq, frq);
 	    if(lCtx->id_start >= 0)	lCtx->setB(lCtx->id_start, first);
 	    if(lCtx->id_stop >= 0)	lCtx->setB(lCtx->id_stop, last);
@@ -1329,27 +1403,27 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 	    if(lCtx->id_nm >= 0)	lCtx->setS(lCtx->id_nm, name());
 	    if(lCtx->id_dscr >= 0)	lCtx->setS(lCtx->id_dscr, descr());
 
-	    //> Get input links
+	    //Get input links
 	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
 		if(TSYS::strParse(lCtx->lnk(i_l).real,2,":") != "w")	//No read try for only writible
 		    lCtx->set(lCtx->lnk(i_l).io_id, owner().getVal(lCtx->lnk(i_l).real,w_err));
 
-	    //> Calc template
+	    //Calc template
 	    lCtx->setMdfChk(true);
 	    lCtx->calc();
 	    modif();
 
-	    //> Put output links
+	    //Put output links
 	    for(int i_l = 0; i_l < lCtx->lnkSize(); i_l++)
 		if(lCtx->ioMdf(lCtx->lnk(i_l).io_id))
 		    if(!owner().setVal(lCtx->get(lCtx->lnk(i_l).io_id), lCtx->lnk(i_l).real, w_err))
 			lCtx->setS(lCtx->lnk(i_l).io_id, EVAL_STR);
 
-	    //> Put fixed system attributes
+	    //Put fixed system attributes
 	    if(lCtx->id_nm >= 0)  setName(lCtx->getS(lCtx->id_nm));
 	    if(lCtx->id_dscr >= 0)setDescr(lCtx->getS(lCtx->id_dscr));
 
-	    //> Attribute's values update
+	    //Attribute's values update
 	    elem().fldList(ls);
 	    for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	    {
@@ -1359,13 +1433,14 @@ void TMdPrm::upVal( bool first, bool last, double frq )
 		if(id_lnk < 0) pVal.at().set(lCtx->get(lCtx->ioId(ls[i_el])), 0, true);
 		else pVal.at().set(owner().getVal(lCtx->lnk(id_lnk).real,acq_err), 0, true);
 	    }
-	}catch(TError err)
+	}
+	catch(TError err)
 	{
 	    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_warning(nodePath().c_str(),_("Error calculate template."));
 	}
 
-    //> Alarm set
+    //Alarm set
     acq_err.setVal(w_err.getVal());
 }
 
@@ -1435,7 +1510,7 @@ void TMdPrm::vlArchMake( TVal &val )
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TParamContr::cntrCmdProc(opt);
@@ -1445,7 +1520,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"help",_("Attributes configuration list. List must be written by lines in format: \"{dt}:{numb}:{rw}:{id}:{name}\".\n"
 		    "Where:\n"
 		    "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
-		    "       R and RI can be expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5, s-String;\n"
+		    "       R and RI can be expanded by suffixes:\n"
+		    "         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
 		    "       Start from symbol '#' for comment line;\n"
 		    "  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
 		    "  rw - read/write mode (r-read; w-write; rw-readwrite);\n"
@@ -1455,7 +1531,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		    "  \"R:0x300:rw:var:Variable\" - register access;\n"
 		    "  \"C:100:rw:var1:Variable 1\" - coin access;\n"
 		    "  \"R_f:200:r:float:Float\" - get float from registers 200 and 201;\n"
-		    "  \"R_i4:300,400:r:int32:Int32\" - get int32 from registers 300 and 400;\n"
+		    "  \"R_i4:400,300:r:int32:Int32\" - get int32 from registers 400 and 300;\n"
 		    "  \"R_b10:25:r:rBit:Reg bit\" - get bit 10 from register 25;\n"
 		    "  \"R_s:15,20:r:str:Reg blk\" - get string, registers block, from register 15 and size 20."));
 	if(isLogic())
@@ -1467,20 +1543,21 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		for(int i_io = 0; i_io < lCtx->ioSize(); i_io++)
 		{
 		    if(!(lCtx->func()->io(i_io)->flg()&(TPrmTempl::CfgLink|TPrmTempl::CfgPublConst))) continue;
-		    //>> Check select param
+		    // Check select param
 		    if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 			ctrMkNode("fld",opt,-1,(string("/cfg/prm/el_")+i2s(i_io)).c_str(),lCtx->func()->io(i_io)->name(),RWRWR_,"root",SDAQ_ID,2,"tp","str",
 			    "help",_("ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
 				"Where:\n"
 				"  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input register[4], CI-input coil[2]);\n"
-				"       R and RI can be expanded by suffixes: i2-Int16, i4-Int32, f-Float, b5-Bit5, s-String;\n"
+				"       R and RI can be expanded by suffixes:\n"
+				"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
 				"  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
 				"  rw - read/write mode (r-read; w-write; rw-readwrite).\n"
 				"Examples:\n"
 				"  \"R:0x300:rw\" - register access;\n"
 				"  \"C:100:rw\" - coin access;\n"
 				"  \"R_f:200:r\" - get float from registers 200 and 201;\n"
-				"  \"R_i4:300,400:r\" - get int32 from registers 300 and 400;\n"
+				"  \"R_i4:400,300:r\" - get int32 from registers 400 and 300;\n"
 				"  \"R_b10:25:r\" - get bit 10 from register 25;\n"
 				"  \"R_s:15,20:r\" - get string, registers block, from register 15 and size 20."));
 		    else
@@ -1506,14 +1583,14 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(isStd() && a_path == "/prm/cfg/ATTR_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
     {
 	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr",":(r|w|rw):")->setAttr("color","red");
 	opt->childAdd("rule")->setAttr("expr",":(0[xX][0-9a-fA-F]*|[0-9]*),?(0[xX][0-9a-fA-F]*|[0-9]*)")->setAttr("color","blue");
-	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[ibfs]\\d*)")->setAttr("color","darkorange");
+	opt->childAdd("rule")->setAttr("expr","^(C|CI|R|RI|RI?_[iubfds]\\d*)")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");
     }
     else if(isLogic() && a_path == "/prm/cfg/TMPL" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))

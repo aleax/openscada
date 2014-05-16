@@ -37,7 +37,7 @@ using namespace ModBus;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
+TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
 {
     modPrt	= this;
 
@@ -51,7 +51,7 @@ TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
 
     mNode = grpAdd("n_");
 
-    //> Node DB structure
+    //Node DB structure
     mNodeEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     mNodeEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mNodeEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
@@ -61,15 +61,15 @@ TProt::TProt(string name) : TProtocol(PRT_ID), mPrtLen(0)
     mNodeEl.fldAdd(new TFld("PRT",_("Protocol"),TFld::String,TFld::Selected,"5","*","RTU;ASCII;TCP;*",_("RTU;ASCII;TCP/IP;All")));
     mNodeEl.fldAdd(new TFld("MODE",_("Mode"),TFld::Integer,TFld::Selected,"1","0",
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
-    //>> For "Data" mode
+    // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",_("Calculate data period (s)"),TFld::Real,0,"5.3","1","0.001;99"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TCfg::TransltText,"1000000"));
-    //>> For "Gateway" mode
+    // For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,OBJ_ID_SZ));
     mNodeEl.fldAdd(new TFld("TO_PRT",_("To protocol"),TFld::String,TFld::Selected,"5","RTU","RTU;ASCII;TCP",_("RTU;ASCII;TCP/IP")));
     mNodeEl.fldAdd(new TFld("TO_ADDR",_("To address"),TFld::Integer,0,"3","1","1;247"));
 
-    //> Node data IO DB structure
+    //Node data IO DB structure
     mNodeIOEl.fldAdd(new TFld("NODE_ID",_("Node ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     mNodeIOEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     mNodeIOEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
@@ -84,17 +84,14 @@ TProt::~TProt( )
     nodeDelAll();
 }
 
-void TProt::nAdd(const string &iid, const string &db)
-{
-    chldAdd(mNode, new Node(iid,db,&nodeEl()));
-}
+void TProt::nAdd( const string &iid, const string &db )	{ chldAdd(mNode, new Node(iid,db,&nodeEl())); }
 
 void TProt::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
-    //> Load DB
-    //>> Search and create new nodes
+    //Load DB
+    // Search and create new nodes
     try
     {
 	TConfig g_cfg(&nodeEl());
@@ -102,7 +99,7 @@ void TProt::load_( )
 	vector<string> db_ls;
 	map<string, bool> itReg;
 
-	//>>> Search into DB
+	//  Search into DB
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -113,7 +110,7 @@ void TProt::load_( )
 		itReg[id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
+	//  Check for remove items removed from DB
 	if(!SYS->selDB().empty())
 	{
 	    nList(db_ls);
@@ -278,7 +275,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(!tro.startStat()) tro.start();
 	if(prt == "TCP")		// Modbus/TCP protocol process
 	{
-	    //> Encode MBAP (Modbus Application Protocol)
+	    //Encode MBAP (Modbus Application Protocol)
 	    int tid = rand();
 	    mbap.reserve(pdu.size()+7);
 	    mbap.append((char *)&tid,2);	//Transaction ID
@@ -288,7 +285,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += (char)node;			//Unit identifier
 	    mbap += pdu;
 
-	    //> Send request
+	    //Send request
 	    int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 	    rez.assign(buf,resp_len);
 	    if(rez.size() < 7)	err = _("13:Error server respond");
@@ -296,7 +293,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    {
 		unsigned resp_sz = (unsigned short)(rez[4]<<8) | (unsigned char)rez[5];
 
-		//> Wait tail
+		//Wait tail
 		while(rez.size() < (resp_sz+6))
 		{
 		    resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), reqTm, true);
@@ -315,12 +312,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += (crc>>8);
 	    mbap += crc;
 
-	    //> Send request
+	    //Send request
 	    for(int i_tr = 0; i_tr < reqTry; i_tr++)
 	    {
 		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 		rez.assign(buf, resp_len);
-		//> Wait tail
+		//Wait tail
 		while(resp_len)
 		{
 		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
@@ -343,12 +340,12 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += LRC(mbap);
 	    mbap = ":"+DataToASCII(mbap)+"\x0D\x0A";
 
-	    //> Send request
+	    //Send request
 	    for(int i_tr = 0; i_tr < reqTry; i_tr++)
 	    {
 		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 		rez.assign(buf, resp_len);
-		//> Wait tail
+		//Wait tail
 		while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A"))
 		{
 		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
@@ -367,7 +364,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	}
 	else err = TSYS::strMess(_("Protocol '%s' error."),prt.c_str());
 
-	//> Check respond pdu
+	//Check respond pdu
 	if(err.empty())
 	{
 	    if(pdu.size() < 2) err = _("13:Error respond");
@@ -390,7 +387,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     io.setText(err.empty()?pdu:"");
     if(!err.empty()) io.setAttr("err",err);
 
-    //> Prepare log
+    //Prepare log
     if(prtLen() || debugCat.size())
     {
 	string mess = _("REQ -> ");
@@ -431,7 +428,7 @@ void TProt::pushPrtMess( const string &vl )
 
 void TProt::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
@@ -449,7 +446,7 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/br/n_" || a_path == "/node/node")
     {
@@ -499,14 +496,14 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
 bool TProtIn::mess( const string &ireqst, string &answer )
 {
-    //> Check for protocol type
+    //Check for protocol type
     unsigned char node = 0;
     string prt, pdu;
     string reqst = ireqst;
     bool isBuf = false;
 
 retry:
-    //>> ASCII check
+    // ASCII check
     if(reqst.size() > 3 && reqst[0] == ':' && reqst.substr(reqst.size()-2,2) == "\x0D\x0A")
     {
 	prt = "ASCII";
@@ -515,7 +512,7 @@ retry:
 	node = req[0];
 	pdu = req.substr(1, req.size()-2);
     }
-    //>> RTU check
+    // RTU check
     else if(reqst.size() > 3 && reqst.size() <= 256 &&
 	modPrt->CRC16(reqst.substr(0,reqst.size()-2)) == (uint16_t)((reqst[reqst.size()-2]<<8)+(uint8_t)reqst[reqst.size()-1]))
     {
@@ -523,7 +520,7 @@ retry:
 	node = reqst[0];
 	pdu = reqst.substr(1, reqst.size()-3);
     }
-    //>> TCP check
+    // TCP check
     else if(reqst.size() > 7 && reqst.size() <= 260 &&
 	reqst.size() == (unsigned)((unsigned short)(reqst[4]<<8)|(unsigned char)reqst[5])+6)
     {
@@ -555,7 +552,7 @@ retry:
     answer = "";
     if(prt == "TCP")
     {
-	//> Encode MBAP (Modbus Application Protocol)
+	//Encode MBAP (Modbus Application Protocol)
 	answer.reserve(pdu.size()+7);
 	answer += reqst[0];			//Transaction ID MSB
 	answer += reqst[1];			//Transaction ID LSB
@@ -587,7 +584,7 @@ retry:
     if(owner().prtLen( ) && prt.size() && answer.size())
     {
 	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
-	    		"("+TSYS::strLine(srcAddr(),0)+") --> "+i2s(node)+"\n";
+			"("+TSYS::strLine(srcAddr(),0)+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");
 	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin);
 	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);
@@ -619,7 +616,7 @@ Node::Node( const string &iid, const string &idb, TElem *el ) :
 Node::~Node( )
 {
     try{ setEnable(false); } catch(...) { }
-    if( data ) { delete data; data = NULL; }
+    if(data) { delete data; data = NULL; }
 }
 
 TCntrNode &Node::operator=( TCntrNode &node )
@@ -629,7 +626,7 @@ TCntrNode &Node::operator=( TCntrNode &node )
 
     if(enableStat())	setEnable(false);
 
-    //> Copy parameters
+    //Copy parameters
     exclCopy(*src_n, "ID;");
     *(TFunction*)this = *(TFunction*)src_n;
     setDB(src_n->DB());
@@ -640,7 +637,7 @@ TCntrNode &Node::operator=( TCntrNode &node )
 
 void Node::postEnable( int flag )
 {
-    //> Create default IOs
+    //Create default IOs
     if(flag&TCntrNode::NodeConnect)
     {
 	ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Node::LockAttr,"1000",false), 0);
@@ -712,11 +709,11 @@ bool Node::cfgChange( TCfg &ce )
     if(ce.name() == "MODE")
     {
 	setEnable(false);
-	//> Hide all specific
+	//Hide all specific
 	cfg("ADDR").setView(false); cfg("DT_PER").setView(false); cfg("DT_PROG").setView(false);
 	cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
 
-	//> Show selected
+	//Show selected
 	switch( ce.getI() )
 	{
 	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
@@ -764,7 +761,7 @@ void Node::load_( )
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
     cfg("MODE").setI(cfg("MODE").getI());
 
-    //> Load IO
+    //Load IO
     vector<string> u_pos;
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
@@ -772,7 +769,7 @@ void Node::load_( )
     {
 	string sid = cfg.cfg("ID").getS();
 
-	//> Position storing
+	//Position storing
 	int pos = cfg.cfg("POS").getI();
 	while((int)u_pos.size() <= pos) u_pos.push_back("");
 	u_pos[pos] = sid;
@@ -791,12 +788,12 @@ void Node::load_( )
 	else io(iid)->setDef(cfg.cfg("VALUE").getS());
     }
 
-    //> Remove holes
+    //Remove holes
     for(unsigned i_p = 0; i_p < u_pos.size(); )
 	if(u_pos[i_p].empty()) u_pos.erase(u_pos.begin()+i_p);
 	else i_p++;
 
-    //> Position fixing
+    //Position fixing
     for(int i_p = 0; i_p < (int)u_pos.size(); i_p++)
     {
 	int iid = ioId(u_pos[i_p]);
@@ -810,7 +807,7 @@ void Node::save_( )
 {
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 
-    //> Save IO
+    //Save IO
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
     for(int i_io = 0; i_io < ioSize(); i_io++)
@@ -826,7 +823,7 @@ void Node::save_( )
 	else cfg.cfg("VALUE").setS(io(i_io)->def());
 	SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
     }
-    //> Clear IO
+    //Clear IO
     cfg.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fld_cnt++,cfg); )
     {
@@ -875,7 +872,61 @@ void Node::setEnable( bool vl )
 	    IO *io_ = io(i_io);
 	    string ioId = io_->id();
 	    if(io_->flg()&Node::IsLink)	data->lnk[i_io] = SYS->daq().at().attrAt(io_->rez(), '.', true);
-	    if((tolower(ioId[0]) == 'c' || tolower(ioId[0]) == 'r') /*&& ioId.size() > 1 && isdigit(ioId[1])*/)
+	    //  Unified mode
+	    if(TSYS::strParse(ioId,1,":").size() && (ioId[0] == 'C' || ioId[0] == 'R'))
+	    {
+		int off = 0;
+		string  atp = TSYS::strParse(ioId, 0, ":", &off),
+			ai  = TSYS::strParse(ioId, 0, ":", &off),
+			mode= TSYS::strParse(ioId, 0, ":", &off),
+			atp_sub = TSYS::strParse(atp, 1, "_"),
+			sTmp;
+		int reg = strtol(ai.c_str(), NULL, 0);
+
+		if(ioId[0] == 'R')
+		{
+		    regCR(reg, SIO(i_io,atp_sub[0],0), ioId[0]);
+		    if(mode == "w") regCR(reg, SIO(i_io,atp_sub[0],0), ioId[0], true);
+		    if(atp_sub == "i4" || atp_sub == "f")
+		    {
+			int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0);
+			regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0]);
+			if(mode == "w") regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0], true);
+		    }
+		    else if(atp_sub == "i8" || atp_sub == "d")
+		    {
+			int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0),
+			    reg3 = (sTmp=TSYS::strParse(ai,2,",")).empty() ? (reg2+1) : strtol(sTmp.c_str(),NULL,0),
+			    reg4 = (sTmp=TSYS::strParse(ai,3,",")).empty() ? (reg3+1) : strtol(sTmp.c_str(),NULL,0);
+			regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0]);
+			regCR(reg3, SIO(i_io,atp_sub[0],2), ioId[0]);
+			regCR(reg4, SIO(i_io,atp_sub[0],3), ioId[0]);
+			if(mode == "w")
+			{
+			    regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0], true);
+			    regCR(reg3, SIO(i_io,atp_sub[0],2), ioId[0], true);
+			    regCR(reg4, SIO(i_io,atp_sub[0],3), ioId[0], true);
+			}
+		    }
+		    else if(atp_sub == "s")
+		    {
+			int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
+			if(!N) N = 10;	//Default length 10 registers and maximum 100
+			for(int i_r = N; i_r < (reg+N); i_r++)
+			{
+			    regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), ioId[0]);
+			    if(mode == "w") regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), ioId[0], true);
+			}
+		    }
+		}
+		if(ioId[0] == 'C')
+		{
+		    regCR(reg, i_io, ioId[0]);
+		    if(mode == "w") regCR(reg, i_io, ioId[0], true);
+		}
+	    }
+	    //  Specific mode
+	    else if(tolower(ioId[0]) == 'c' || tolower(ioId[0]) == 'r')
 	    {
 		bool wr = (tolower(ioId[ioId.size()-1])=='w');
 		if(ioId.compare(0,3,"R_i") == 0 || ioId.compare(0,3,"R_f") == 0)
@@ -886,6 +937,23 @@ void Node::setEnable( bool vl )
 		    char sTp = (ioId.compare(0,3,"R_i") == 0) ? 'i' : 'f';
 		    regCR(tca1, SIO(i_io,sTp,0), 'R'); regCR(tca2, SIO(i_io,sTp,1), 'R');
 		    if(wr) { regCR(tca1, SIO(i_io,sTp,0), 'R', true); regCR(tca2, SIO(i_io,sTp,1), 'R', true); }
+		}
+		if(ioId.compare(0,3,"R_d") == 0)
+		{
+		    int tca1 = strtol(ioId.c_str()+3, NULL, 0);
+		    size_t secReg = ioId.find(",",3);
+		    int tca2 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca1+1;
+		    if(secReg != string::npos) secReg = ioId.find(",",secReg+1);
+		    int tca3 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca2+1;
+		    if(secReg != string::npos) secReg = ioId.find(",",secReg+1);
+		    int tca4 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca3+1;
+		    regCR(tca1, SIO(i_io,'d',0), 'R'); regCR(tca2, SIO(i_io,'d',1), 'R');
+		    regCR(tca3, SIO(i_io,'d',2), 'R'); regCR(tca4, SIO(i_io,'d',3), 'R');
+		    if(wr)
+		    {
+			regCR(tca1, SIO(i_io,'d',0), 'R', true); regCR(tca2, SIO(i_io,'d',1), 'R', true);
+			regCR(tca3, SIO(i_io,'d',2), 'R', true); regCR(tca4, SIO(i_io,'d',3), 'R', true);
+		    }
 		}
 		else if(ioId.compare(0,3,"R_s") == 0)
 		{
@@ -922,10 +990,10 @@ void Node::setEnable( bool vl )
     //Disable node
     if(!vl)
     {
-	//> Stop the calc data task
+	// Stop the calc data task
 	if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunRun);
 
-	//> Data structure delete
+	// Data structure delete
 	if(data) { delete data; data = NULL; }
     }
 
@@ -957,7 +1025,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 {
     ResAlloc res(nRes, false);
 
-    //> Check for allow request
+    //Check for allow request
     if(!enableStat() || pdu.empty() ||
 	!((inTransport() == "*" && mode() != MD_GT_NET) || inTransport() == itr) ||
 	!(addr() == inode || mode() == MD_GT_NET) ||
@@ -965,7 +1033,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 
     cntReq++;
 
-    //> Data mode requests process
+    //Data mode requests process
     if(mode() == MD_DATA)
 	switch(pdu[0])
 	{
@@ -1016,20 +1084,29 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			{
 			    case 'i':
 			    {
-				int valIO;
+				union { uint16_t r[4]; int64_t i; } wl;
 				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
-				if(grpValIt != grpVals.end())	valIO = grpValIt->second.getI();
-				else { valIO = data->val.getI(itr->second.id); grpVals[itr->second.id] = valIO; }
-				val = (valIO >> (itr->second.pos*16))&0xFFFF;
+				if(grpValIt != grpVals.end())	wl.i = grpValIt->second.getI();
+				else { wl.i = data->val.getI(itr->second.id); grpVals[itr->second.id] = wl.i; }
+				val = wl.r[itr->second.pos];
 				break;
 			    }
 			    case 'f':
 			    {
-				union { uint32_t i; float f; } wl;
+				union { uint16_t r[2]; float f; } wl;
 				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
 				if(grpValIt != grpVals.end())	wl.f = grpValIt->second.getR();
 				else { wl.f = data->val.getR(itr->second.id); grpVals[itr->second.id] = wl.f; }
-				val = (wl.i >> (itr->second.pos*16))&0xFFFF;
+				val = wl.r[itr->second.pos];
+				break;
+			    }
+			    case 'd':
+			    {
+				union { uint16_t r[4]; double d; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	wl.d = grpValIt->second.getR();
+				else { wl.d = data->val.getR(itr->second.id); grpVals[itr->second.id] = wl.d; }
+				val = wl.r[itr->second.pos];
 				break;
 			    }
 			    case 's':
@@ -1087,19 +1164,29 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		    {
 			case 'i':
 			{
-			    int valIO = data->val.getI(ir->second.id);
-			    valIO = (valIO&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
-			    data->val.setI(ir->second.id, valIO);
-			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setI(valIO);
+			    union { uint16_t r[4]; int64_t i; } wl;
+			    wl.i = data->val.getI(ir->second.id);
+			    wl.r[ir->second.pos] = val;
+			    data->val.setI(ir->second.id, wl.i);
+			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setI(wl.i);
 			    break;
 			}
 			case 'f':
 			{
-			    union { uint32_t i; float f; } wl;
+			    union { uint16_t r[2]; float f; } wl;
 			    wl.f = data->val.getR(ir->second.id);
-			    wl.i = (wl.i&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
+			    wl.r[ir->second.pos] = val;
 			    data->val.setR(ir->second.id, wl.f);
 			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setR(wl.f);
+			    break;
+			}
+			case 'd':
+			{
+			    union { uint16_t r[4]; double d; } wl;
+			    wl.d = data->val.getR(ir->second.id);
+			    wl.r[ir->second.pos] = val;
+			    data->val.setR(ir->second.id, wl.d);
+			    if((il=data->lnk.find(ir->second.id)) != data->lnk.end() && !il->second.freeStat())	il->second.at().setR(wl.d);
 			    break;
 			}
 			case 's':
@@ -1170,19 +1257,29 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 			{
 			    case 'i':
 			    {
+				union { uint16_t r[4]; int64_t i; } wl;
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
-				int valIO = (grpValIt != grpVals.end()) ? grpValIt->second.getI() : data->val.getI(ir->second.id);
-				valIO = (valIO&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
-				grpVals[ir->second.id] = valIO;
+				wl.i = (grpValIt != grpVals.end()) ? grpValIt->second.getI() : data->val.getI(ir->second.id);
+				wl.r[ir->second.pos] = val;
+				grpVals[ir->second.id] = wl.i;
 				break;
 			    }
 			    case 'f':
 			    {
-				union { uint32_t i; float f; } wl;
+				union { uint16_t r[2]; float f; } wl;
 				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
 				wl.f = (grpValIt != grpVals.end()) ? grpValIt->second.getR() : data->val.getR(ir->second.id);
-				wl.i = (wl.i&(0xFFFF<<((1-ir->second.pos)*16))) | ((val&0xFFFF) << (ir->second.pos*16));
+				wl.r[ir->second.pos] = val;
 				grpVals[ir->second.id] = wl.f;
+				break;
+			    }
+			    case 'd':
+			    {
+				union { uint16_t r[4]; double d; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(ir->second.id);
+				wl.d = (grpValIt != grpVals.end()) ? grpValIt->second.getR() : data->val.getR(ir->second.id);
+				wl.r[ir->second.pos] = val;
+				grpVals[ir->second.id] = wl.d;
 				break;
 			    }
 			    case 's':
@@ -1202,7 +1299,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		    }
 		    data->wReg++;
 		}
-		//> Real write cached values
+		// Real write cached values
 		for(map<int,TVariant>::iterator i_g = grpVals.begin(); i_g != grpVals.end(); ++i_g)
 		{
 		    data->val.set(i_g->first, i_g->second);
@@ -1219,7 +1316,7 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		pdu += 0x1;
 		return true;
 	}
-    //> Gateway mode requests process
+    //Gateway mode requests process
     else if(mode() == MD_GT_ND || mode() == MD_GT_NET)
     {
 	try
@@ -1332,7 +1429,7 @@ void *Node::Task( void *ind )
 
 void Node::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TCntrNode::cntrCmdProc(opt);
@@ -1362,17 +1459,22 @@ void Node::cntrCmdProc( XMLNode *opt )
 	{
 	    if(ctrMkNode("table",opt,-1,"/dt/io",_("IO"),RWRWR_,"root",SPRT_ID,3,"s_com","add,del,ins,move","rows","15",
 		"help",_("For \"Id\" field provide specific ModBus data form:\n"
-		         "  \"R{N}[w]\" - register, can expanded by suffixes: \"i\"-Int32, \"f\"-Float, \"s\"-String;\n"
-		         "  \"C{N}[w]\" - coil.\n"
-		         "Where:\n"
-		         "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
-		         "  w   - optional symbol for writing allow indicate.\n"
+			 "  \"R{N}[w]\" - specific register form, can expanded by suffixes:\n"
+			 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
+			 "  \"R:{N}:[w]\" - classic register form, can expanded by suffixes:\n"
+			 "                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
+			 "  \"C{N}[w]\" or \"C:{N}:[w]\" - coil.\n"
+			 "Where:\n"
+			 "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
+			 "  w   - optional symbol for writing allow indicate.\n"
 			 "Examples:\n"
 			 "  \"R0x300w\" - register access;\n"
 			 "  \"C100w\" - coin access, allow for write;\n"
 			 "  \"R_f200\" - get float from registers 200 and 201;\n"
-			 "  \"R_i300,400\" - get int32 from registers 300 and 400;\n"
-			 "  \"R_s15,20\" - get string, registers block, from register 15 and size 20.")))
+			 "  \"R_i400,300\" - get int32 from registers 300 and 400;\n"
+			 "  \"R_s15,20\" - get string, registers block, from register 15 and size 20;\n"
+			 "  \"R_i8:0x10:w\" - get and set int64 into registers [0x10-0x13];\n"
+			 "  \"R_d:0x20,0x30\" - get double float point (8 byte) from registers [0x20,0x30-0x32].")))
 	    {
 		ctrMkNode("list",opt,-1,"/dt/io/id",_("Id"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/dt/io/nm",_("Name"),RWRWR_,"root",SPRT_ID,1,"tp","str");
@@ -1392,7 +1494,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 			3,"tp","str","dest","sel_ed","select",("/lnk/ls_"+i2s(i_io)).c_str());
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/nd/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
     else if(a_path == "/nd/st/en_st")

@@ -111,80 +111,80 @@ LineEdit::LineEdit( QWidget *parent, LType tp, bool prev_dis ) :
     QWidget(parent), m_tp((LineEdit::LType)-1), mPrev(!prev_dis), ed_fld(NULL), bt_fld(NULL)
 {
     QHBoxLayout *box = new QHBoxLayout(this);
-    box->setMargin( 0 );
-    box->setSpacing( 0 );
+    box->setMargin(0);
+    box->setSpacing(0);
 
-    setType( tp );
+    setType(tp);
 }
 
 void LineEdit::viewApplyBt( bool view )
 {
-    if( view == (bool)bt_fld ) return;
+    if(view == (bool)bt_fld) return;
 
-    if( view && !bt_fld )
+    if(view && !bt_fld)
     {
 	bt_fld = new QPushButton(this);
-	bt_fld->setIcon( QIcon(":/images/ok.png") );
-	bt_fld->setIconSize( QSize(12,12) );
-	bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
+	bt_fld->setIcon(QIcon(":/images/ok.png"));
+	bt_fld->setIconSize(QSize(12,12));
+	bt_fld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
 	//bt_fld->setMaximumWidth( 15 );
-	connect( bt_fld, SIGNAL( clicked() ), this, SLOT( applySlot() ) );
-	layout()->addWidget( bt_fld );
+	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
+	layout()->addWidget(bt_fld);
     }
-    if( !view && bt_fld ) { bt_fld->deleteLater(); bt_fld = NULL; }
+    if(!view && bt_fld) { bt_fld->deleteLater(); bt_fld = NULL; }
 }
 
 bool LineEdit::isEdited( )	{ return bt_fld; }
 
 void LineEdit::setType( LType tp )
 {
-    if( tp == m_tp ) return;
+    if(tp == m_tp) return;
 
-    //> Delete previous
-    if( tp >= 0 && ed_fld ) delete ed_fld;
+    //Delete previous
+    if(tp >= 0 && ed_fld) delete ed_fld;
 
-    //> Create new widget
-    switch( tp )
+    //Create new widget
+    switch(tp)
     {
 	case Text:
 	    ed_fld = new QLineEdit(this);
-	    connect( (QLineEdit*)ed_fld, SIGNAL( textEdited(const QString&) ), SLOT( changed() ) );
+	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
 	    break;
 	case Integer:
 	    ed_fld = new QSpinBox(this);
-	    connect( (QSpinBox*)ed_fld, SIGNAL( valueChanged(int) ), SLOT( changed() ) );
+	    connect((QSpinBox*)ed_fld, SIGNAL(valueChanged(int)), SLOT(changed()));
 	    break;
 	case Real:
 	    ed_fld = new QDoubleSpinBox(this);
-	    connect( (QDoubleSpinBox*)ed_fld, SIGNAL( valueChanged(double) ), SLOT( changed() ) );
+	    connect((QDoubleSpinBox*)ed_fld, SIGNAL(valueChanged(double)), SLOT(changed()));
 	    break;
 	case Time:
 	    ed_fld = new QTimeEdit(this);
-	    connect( (QTimeEdit*)ed_fld, SIGNAL( timeChanged(const QTime&) ), SLOT( changed() ) );
+	    connect((QTimeEdit*)ed_fld, SIGNAL(timeChanged(const QTime&)), SLOT(changed()));
 	    break;
 	case Date:
 	    ed_fld = new QDateEdit(this);
 	    ((QDateEdit*)ed_fld)->setCalendarPopup(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
 	    ((QDateEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-	    connect( (QDateEdit*)ed_fld, SIGNAL( dateChanged(const QDate&) ), SLOT( changed() ) );
+	    connect((QDateEdit*)ed_fld, SIGNAL(dateChanged(const QDate&)), SLOT(changed()));
 	    break;
 	case DateTime:
 	    ed_fld = new QDateTimeEdit(this);
 	    ((QDateTimeEdit*)ed_fld)->setCalendarPopup(true);
 	    ((QDateTimeEdit*)ed_fld)->calendarWidget()->setGridVisible(true);
 	    ((QDateTimeEdit*)ed_fld)->calendarWidget()->setFirstDayOfWeek(Qt::Monday);
-	    connect( (QDateTimeEdit*)ed_fld, SIGNAL( dateTimeChanged(const QDateTime&) ), SLOT( changed() ) );
+	    connect((QDateTimeEdit*)ed_fld, SIGNAL(dateTimeChanged(const QDateTime&)), SLOT(changed()));
 	    break;
 	case Combo:
 	    ed_fld = new QComboBox(this);
 	    ((QComboBox*)ed_fld)->setEditable(true);
-	    connect( (QComboBox*)ed_fld, SIGNAL( editTextChanged(const QString&) ), SLOT( changed() ) );
-	    connect( (QComboBox*)ed_fld, SIGNAL( activated(int) ), this, SLOT( applySlot() ) );
+	    connect((QComboBox*)ed_fld, SIGNAL(editTextChanged(const QString&)), SLOT(changed()));
+	    connect((QComboBox*)ed_fld, SIGNAL(activated(int)), this, SLOT(applySlot()));
 	    break;
     }
-    ((QBoxLayout*)layout())->insertWidget(0,ed_fld);
-    setFocusProxy( ed_fld );
+    ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
+    setFocusProxy(ed_fld);
 
     m_tp = tp;
 }
@@ -236,7 +236,7 @@ void LineEdit::setValue(const QString &txt)
     if(bt_fld) viewApplyBt(false);
 }
 
-void LineEdit::setCfg(const QString &cfg)
+void LineEdit::setCfg( const QString &cfg )
 {
     switch(type())
     {
@@ -245,7 +245,7 @@ void LineEdit::setCfg(const QString &cfg)
 	{
 	    int		minv = 0, maxv = 100, sstep = 1;
 	    string	pref, suff;
-	    if( !cfg.isEmpty() )
+	    if(!cfg.isEmpty())
 	    {
 		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
 		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());

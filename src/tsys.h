@@ -389,8 +389,9 @@ inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::rea
 inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }
 inline string tm2s( double utm )				{ return TSYS::time2str(utm); }
 
-inline int s2i( const string &val )	{ return atoi(val.c_str()); }
-inline double s2r( const string &val )	{ return atof(val.c_str()); }
+inline int s2i( const string &val )		{ return atoi(val.c_str()); }
+inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
+inline double s2r( const string &val )		{ return atof(val.c_str()); }
 
 extern TSYS *SYS;
 }
