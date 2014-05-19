@@ -487,8 +487,8 @@ void TArchiveS::messGet( time_t b_tm, time_t e_tm, vector<TMess::SRec> & recs,
 	sort(mb.begin(),mb.end());
 	for(unsigned i_b = 0; i_b < mb.size(); i_b++)
 	{
-	    if(mb[i_b].second->level > 0) mb[i_b].second->level *= -1;
 	    recs.push_back(*mb[i_b].second);
+	    if(recs.back().level > 0) recs.back().level *= -1;
 	}
     }
 }
