@@ -848,7 +848,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/st/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/prm/st/nm" && ctrChkNode(opt))	opt->setText(name());
-    else if(a_path.substr(0,8) == "/prm/cfg")
+    else if(a_path.compare(0,4,"/prm") == 0)  //No "/prm/cfg" for process some global lists
     {
 	//Request to remote host
 	string scntr;
@@ -856,7 +856,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	    try
 	    {
 		opt->setAttr("path",scntr+id()+"/"+TSYS::strEncode(a_path,TSYS::PathEl));
-		if(owner().cntrIfCmd(*opt)) throw TError(opt->attr("mcat").c_str(),opt->text().c_str());
+		if(owner().cntrIfCmd(*opt)) TValue::cntrCmdProc(opt);
+		    //throw TError(opt->attr("mcat").c_str(),opt->text().c_str());
 	    }catch(TError err) { continue; }
 	opt->setAttr("path",a_path);
     }

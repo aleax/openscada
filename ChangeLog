@@ -1,5 +1,7 @@
 2014-05-19 Roman
-- Archive: Service "/serv/mess" on request direct to alarms set negative level fix for prevent storage data modify.
+- DAQ.DAQGate: Allow for pass "/prm/*" variables for some global lists process.
+- FIX:UI.{Vision,WebVision}: Use absolute level after service "/serv/mess" into primitive "Protocol".
+- FIX:Archive: Service "/serv/mess" on request direct to alarms set negative level fix for prevent storage data modify.
 
 
 2014-05-16 Roman

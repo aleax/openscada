@@ -3659,7 +3659,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), atoi(rcd->attr("utime").c_str()),
-		rcd->attr("cat"), (TMess::Type)atoi(rcd->attr("lev").c_str()), rcd->text());
+		rcd->attr("cat"), (TMess::Type)abs(s2i(rcd->attr("lev"))), rcd->text());
 
 	    // Check for dublicates
 	    isDbl = false;
@@ -3680,7 +3680,7 @@ void ShapeProtocol::loadData( WdgView *w, bool full )
 	{
 	    XMLNode *rcd = req.childGet(i_req);
 	    TMess::SRec mess(strtoul(rcd->attr("time").c_str(),0,10), atoi(rcd->attr("utime").c_str()),
-		rcd->attr("cat"), (TMess::Type)atoi(rcd->attr("lev").c_str()), rcd->text());
+		rcd->attr("cat"), (TMess::Type)abs(s2i(rcd->attr("lev"))), rcd->text());
 
 	    // Check for dublicates
 	    isDbl = false;
