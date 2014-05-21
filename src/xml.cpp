@@ -73,7 +73,7 @@ XMLNode* XMLNode::childAdd( const string &name )
     return n;
 }
 
-void XMLNode::childDel( const int id )
+void XMLNode::childDel( int id )
 {
     if(id < 0) id = (int)childSize()+id;
     if(id < 0 || id >= childSize()) throw TError("XMLNode",_("Child %d is not present."),id);

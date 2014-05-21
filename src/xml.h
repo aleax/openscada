@@ -93,7 +93,7 @@ class XMLNode
 	XMLNode* childAdd( const string &name = "" );
 	int	childIns( int id, XMLNode *nd );
 	XMLNode* childIns( int id, const string &name = "" );
-	void	childDel( const int id );
+	void	childDel( int id );
 	void	childDel( XMLNode *nd );
 	void	childClear( const string &name = "" );
 	XMLNode* childGet( const int, bool noex = false ) const;
