@@ -1,3 +1,12 @@
+2014-05-21 Roman
+- SYS.XMLNode: Function childIns() and childDel() position argument's type set to signed (integer) for allow
+    insert and delete by count from end (negative value).
+- SYS.TCntrNode: To ctrMkNode() append using 'pos' argument lesser -1 for count from end.
+- !!!:DAQ.DAQGate: Expanded for allow the paramter's identifiers independent namespace and the assign to remote parameter's ID.
+    Expand for bind hierarchic parameters, next will append the hierarchic parameters tree build.
+    Inline brousing by external hosts appended.
+
+
 2014-05-19 Roman
 - DAQ.DAQGate: Allow for pass "/prm/*" variables for some global lists process.
 - FIX:UI.{Vision,WebVision}: Use absolute level after service "/serv/mess" into primitive "Protocol".

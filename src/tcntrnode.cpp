@@ -758,7 +758,8 @@ XMLNode *TCntrNode::_ctrMkNode( const char *n_nd, XMLNode *nd, int pos, const ch
 	//int wofft = woff;
 	if(TSYS::pathLev(path,0,true,&woff).size())
 	    throw TError("ContrItfc", _("Some tags on path '%s' are missed!"), req.c_str());
-	obj = obj->childIns(pos);
+	if(pos == -1)	obj = obj->childAdd();
+	else obj = obj->childIns((pos<0)?pos+1:pos);
     }
     obj->setName(n_nd)->setAttr("id", reqt1)->setAttr("acs", i2s(n_acs));
     if(dscr != EVAL_STR) obj->setAttr("dscr", dscr);

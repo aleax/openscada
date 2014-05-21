@@ -91,9 +91,9 @@ class XMLNode
 	unsigned childSize( ) const		{ return mChildren.size(); }
 	void	childAdd( XMLNode *nd );
 	XMLNode* childAdd( const string &name = "" );
-	int	childIns( unsigned id, XMLNode *nd );
-	XMLNode* childIns( unsigned id, const string &name = "" );
-	void	childDel( const unsigned id );
+	int	childIns( int id, XMLNode *nd );
+	XMLNode* childIns( int id, const string &name = "" );
+	void	childDel( const int id );
 	void	childDel( XMLNode *nd );
 	void	childClear( const string &name = "" );
 	XMLNode* childGet( const int, bool noex = false ) const;

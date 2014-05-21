@@ -713,8 +713,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/prm/cfg/SEL_VAR")
     {
-	if(ctrChkNode(opt,"get")) opt->setText(TBDS::genDBGet(nodePath()+"selVAR","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_RD))
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
 	{
 	    if(TSYS::pathLev(opt->text(),1).size())
 	    {
@@ -724,12 +724,12 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 			break;
 		if(vS.empty()) setVarList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+opt->text());
 	    }
-	    TBDS::genDBSet(nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
+	    TBDS::genDBSet(owner().nodePath()+"selVAR",TSYS::pathLev(opt->text(),0),opt->attr("user"));
 	}
     }
     else if(a_path == "/prm/cfg/SEL_VAR_lst" && ctrChkNode(opt))
     {
-	string selVAR = TSYS::pathLev(TBDS::genDBGet(nodePath()+"selVAR","",opt->attr("user")),0);
+	string selVAR = TSYS::pathLev(TBDS::genDBGet(owner().nodePath()+"selVAR","",opt->attr("user")),0);
 	if(selVAR.empty())	//Get domain list
 	{
 	    MMS::XML_N reqDom("MMS");

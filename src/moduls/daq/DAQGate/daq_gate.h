@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2012 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -69,9 +69,11 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	string cntrAdr( )	{ return mCntrAdr; }
+	string stats( )		{ return mStats; }
+	string prmAddr( )	{ return mPrmAddr; }
 
-	void setCntrAdr( const string &vl );
+	void setStats( const string &vl );
+	void setPrmAddr( const string &vl )	{ mPrmAddr = vl; }
 
 	void enable( );
 	void disable( );
@@ -101,7 +103,8 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;				//Work atribute elements
-	string	mCntrAdr;			//Parameter's remote controller address'
+	string	mStats;				//Allowed stations list'
+	TCfg	&mPrmAddr;			//Interstation parameter's address
 };
 
 //******************************************************
@@ -123,6 +126,7 @@ class TMdContr: public TController
 	double	restDtTm( )	{ return mRestDtTm; }
 
 	string	catsPat( );
+	//string	prm2path( );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
