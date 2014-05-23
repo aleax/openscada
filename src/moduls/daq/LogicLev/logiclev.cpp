@@ -116,7 +116,7 @@ void TTpContr::postEnable( int flag )
     int t_prm = tpParmAdd("std", "PRM_BD", _("Logical"), true);
     tpPrmAt(t_prm).fldAdd(new TFld("PRM",_("Parameter template"),TFld::String,TCfg::NoVal,"100",""));
     //>>> Logical level parameter IO BD structure
-    el_prm_io.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_prm_io.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
     el_prm_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_prm_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TCfg::TransltText,"200"));
 
@@ -355,7 +355,7 @@ void TMdPrm::postDisable( int flag )
 	{
 	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(id(), true);
+	    cfg.cfg("PRM_ID").setS(ownerPath(true), true);
 	    SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
 	}
     }
@@ -522,7 +522,7 @@ void TMdPrm::loadIO( bool force )
 	if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
 	TConfig cfg(&mod->prmIOE());
-	cfg.cfg("PRM_ID").setS(id());
+	cfg.cfg("PRM_ID").setS(ownerPath(true));
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
 	for(int i_io = 0; i_io < tmpl->val.ioSize(); i_io++)
@@ -551,7 +551,7 @@ void TMdPrm::saveIO()
     if(isStd() && tmpl->val.func())
     {
 	TConfig cfg(&mod->prmIOE());
-	cfg.cfg("PRM_ID").setS(id());
+	cfg.cfg("PRM_ID").setS(ownerPath(true));
 	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
 	for(int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++)

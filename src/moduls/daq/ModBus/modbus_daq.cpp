@@ -80,13 +80,13 @@ void TTpContr::postEnable( int flag )
 
     //Parameter type bd structure
     // Standard parameter type by symple attributes list
-    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
+    int t_prm = tpParmAdd("std","PRM_BD",_("Standard"),true);
     tpPrmAt(t_prm).fldAdd(new TFld("ATTR_LS",_("Attributes list"),TFld::String,TFld::FullText|TCfg::NoVal|TCfg::TransltText,"100000",""));
     // Extended logical parameter type by DAQ parameter's template
     t_prm = tpParmAdd("logic","PRM_BD_L",_("Logical"));
     tpPrmAt(t_prm).fldAdd(new TFld("TMPL",_("Parameter template"),TFld::String,TCfg::NoVal,"50",""));
     //  Parameter template IO DB structure
-    el_prm_io.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
+    el_prm_io.fldAdd(new TFld("PRM_ID",_("Parameter ID"),TFld::String,TCfg::Key,i2s(atoi(OBJ_ID_SZ)*6).c_str()));
     el_prm_io.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     el_prm_io.fldAdd(new TFld("VALUE",_("Value"),TFld::String,TFld::NoFlag,"200"));
 }
@@ -116,6 +116,13 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 	prc_st(false), call_st(false), endrun_req(false), isReload(false), alSt(-1),
 	tmDelay(0), numRReg(0), numRRegIn(0), numRCoil(0), numRCoilIn(0), numWReg(0), numWCoil(0), numErrCon(0), numErrResp(0)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&enRes, &attrM);
+    pthread_mutex_init(&dataRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     cfg("PRM_BD").setS("ModBusPrm_"+name_c);
     cfg("PRM_BD_L").setS("ModBusPrmL_"+name_c);
     mPrt = "TCP";
@@ -124,6 +131,9 @@ TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
 TMdContr::~TMdContr( )
 {
     if(run_st) stop();
+
+    pthread_mutex_destroy(&enRes);
+    pthread_mutex_destroy(&dataRes);
 }
 
 void TMdContr::postDisable( int flag )
@@ -196,9 +206,9 @@ void TMdContr::start_( )
 
     //Reenable parameters for data blocks structure update
     // Asynchronous writings queue clear
-    ResAlloc resAsWr(asWr_res, true);
+    MtxAlloc resAsWr(dataRes, true);
     asynchWrs.clear();
-    resAsWr.release();
+    resAsWr.unlock();
 
     // Clear data blocks
     acqBlks.clear();
@@ -234,7 +244,7 @@ void TMdContr::stop_( )
     numRReg = numRRegIn = numRCoil = numRCoilIn = numWReg = numWCoil = numErrCon = numErrResp = 0;
 
     //Clear process parameters list
-    p_hd.clear();
+    pHd.clear();
 }
 
 bool TMdContr::cfgChange( TCfg &icfg )
@@ -253,23 +263,23 @@ bool TMdContr::cfgChange( TCfg &icfg )
     return true;
 }
 
-void TMdContr::prmEn( const string &id, bool val )
+void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    ResAlloc res(en_res,true);
-
     unsigned i_prm;
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(p_hd[i_prm].at().id() == id) break;
 
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(at(id));
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
+    MtxAlloc res(enRes, true);
+    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if(&pHd[i_prm].at() == prm) break;
+
+    if(val && i_prm >= pHd.size())	pHd.push_back(prm);
+    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
 }
 
 void TMdContr::regVal( int reg, const string &dt )
 {
     if(reg < 0)	return;
 
-    ResAlloc res(req_res, true);
+    ResAlloc res(reqRes, true);
 
     //Register to acquisition block
     if(dt == "R" || dt == "RI")
@@ -443,7 +453,7 @@ TVariant TMdContr::getVal( const string &addr, ResString &w_err )
 int64_t TMdContr::getValR( int addr, ResString &err, bool in )
 {
     int64_t rez = EVAL_INT;
-    ResAlloc res(req_res, false);
+    ResAlloc res(reqRes, false);
     vector<SDataRec>	&workCnt = in ? acqBlksIn : acqBlks;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if((addr*2) >= workCnt[i_b].off && (addr*2+2) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
@@ -461,7 +471,7 @@ int64_t TMdContr::getValR( int addr, ResString &err, bool in )
 char TMdContr::getValC( int addr, ResString &err, bool in )
 {
     char rez = EVAL_BOOL;
-    ResAlloc res(req_res, false);
+    ResAlloc res(reqRes, false);
     vector<SDataRec>	&workCnt = in ? acqBlksCoilIn : acqBlksCoil;
     for(unsigned i_b = 0; i_b < workCnt.size(); i_b++)
 	if(addr >= workCnt[i_b].off && (addr+1) <= (workCnt[i_b].off+(int)workCnt[i_b].val.size()))
@@ -482,7 +492,7 @@ bool TMdContr::setVal( const TVariant &val, const string &addr, ResString &w_err
 	return false;
     }
 
-    if(chkAssync && mAsynchWr) { ResAlloc resAsWr(asWr_res, true); asynchWrs[addr] = val.getS(); return true; }
+    if(chkAssync && mAsynchWr) { MtxAlloc resAsWr(dataRes, true); asynchWrs[addr] = val.getS(); return true; }
 
     int off = 0;
     string tp = TSYS::strParse(addr, 0, ":", &off);
@@ -607,7 +617,7 @@ bool TMdContr::setValR( int val, int addr, ResString &err )
     }
 
     //Set to acquisition block
-    ResAlloc res(req_res, false);
+    ResAlloc res(reqRes, false);
     for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	if((addr*2) >= acqBlks[i_b].off && (addr*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	{
@@ -669,7 +679,7 @@ bool TMdContr::setValRs( const map<int,int> &regs, ResString &err )
 	prev = i_r->first;
 
 	//Set to acquisition block
-	ResAlloc res(req_res, false);
+	ResAlloc res(reqRes, false);
 	for(unsigned i_b = 0; i_b < acqBlks.size(); i_b++)
 	    if((i_r->first*2) >= acqBlks[i_b].off && (i_r->first*2+2) <= (acqBlks[i_b].off+(int)acqBlks[i_b].val.size()))
 	    {
@@ -711,7 +721,7 @@ bool TMdContr::setValC( char val, int addr, ResString &err )
 	return false;
     }
     //Set to acquisition block
-    ResAlloc res(req_res, false);
+    ResAlloc res(reqRes, false);
     for(unsigned i_b = 0; i_b < acqBlksCoil.size(); i_b++)
 	if(addr >= acqBlksCoil[i_b].off && (addr+1) <= (acqBlksCoil[i_b].off+(int)acqBlksCoil[i_b].val.size()))
 	{
@@ -766,10 +776,10 @@ void *TMdContr::Task( void *icntr )
 	    if(cntr.tmDelay > 0)
 	    {
 		//Get data from blocks to parameters or calc for logical type parameters
-		cntr.en_res.resRequestR();
-		for(unsigned i_p=0; i_p < cntr.p_hd.size(); i_p++)
-		    cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
-		cntr.en_res.resRelease();
+		MtxAlloc prmRes(cntr.enRes, true);
+		for(unsigned i_p=0; i_p < cntr.pHd.size(); i_p++)
+		    cntr.pHd[i_p].at().upVal(is_start, is_stop, cntr.period()?1:-1);
+		prmRes.unlock();
 
 		cntr.tmDelay = vmax(0,cntr.tmDelay-1);
 
@@ -786,19 +796,19 @@ void *TMdContr::Task( void *icntr )
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 
 	    //Write asynchronous writings queue
-	    ResAlloc resAsWr(cntr.asWr_res,true);
+	    MtxAlloc resAsWr(cntr.dataRes,true);
 	    map<string,string> aWrs = cntr.asynchWrs;
 	    cntr.asynchWrs.clear();
-	    resAsWr.release();
+	    resAsWr.unlock();
 	    ResString asWrErr;
 	    for(map<string,string>::iterator iw = aWrs.begin(); iw != aWrs.end(); ++iw)
 	    {
 		if(asWrErr.size() && cntr.asynchWrs.find(iw->first) == cntr.asynchWrs.end()) cntr.asynchWrs[iw->first] = iw->second;
-		if(!asWrErr.size() && !cntr.setVal(iw->second, iw->first, asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.request(true); }
+		if(!asWrErr.size() && !cntr.setVal(iw->second, iw->first, asWrErr)) { cntr.setCntrDelay(asWrErr); resAsWr.lock(); }
 	    }
-	    resAsWr.release();
+	    resAsWr.unlock();
 
-	    ResAlloc res(cntr.req_res, false);
+	    ResAlloc res(cntr.reqRes, false);
 
 	    //Get coils
 	    for(unsigned i_b = 0; i_b < cntr.acqBlksCoil.size(); i_b++)
@@ -924,10 +934,10 @@ void *TMdContr::Task( void *icntr )
 	    res.release();
 
 	    //Get data from blocks to parameters or calc for logical type parameters
-	    cntr.en_res.resRequestR();
-	    for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++)
-		cntr.p_hd[i_p].at().upVal(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
-	    cntr.en_res.resRelease();
+	    MtxAlloc prmRes(cntr.enRes, true);
+	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
+		cntr.pHd[i_p].at().upVal(is_start, is_stop, cntr.period()?(1e9/(float)cntr.period()):(-1e-6*(t_cnt-t_prev)));
+	    prmRes.unlock();
 
 	    //Generic acquisition alarm generate
 	    if(cntr.tmDelay <= 0)
@@ -1055,7 +1065,7 @@ void TMdPrm::postDisable(int flag)
 	{
 	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(id(),true);
+	    cfg.cfg("PRM_ID").setS(ownerPath(true), true);
 	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
 	}
     }
@@ -1252,14 +1262,14 @@ void TMdPrm::enable( )
 	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
-    owner().prmEn(id(), true);   //Put to process
+    owner().prmEn(this, true);	//Put to process
 }
 
 void TMdPrm::disable( )
 {
     if(!enableStat())  return;
 
-    owner().prmEn(id(), false);  //Remove from process
+    owner().prmEn(this, false);	//Remove from process
     if(lCtx && owner().startStat()) upVal(false, true, 0);
 
     TParamContr::disable();
@@ -1292,7 +1302,7 @@ void TMdPrm::loadIO( bool force )
 
     //Load IO and init links
     TConfig cfg(&mod->prmIOE());
-    cfg.cfg("PRM_ID").setS(id());
+    cfg.cfg("PRM_ID").setS(ownerPath(true));
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
     for(int i_io = 0; i_io < lCtx->ioSize(); i_io++)
@@ -1317,7 +1327,7 @@ void TMdPrm::saveIO()
     if(!enableStat() || !isLogic() || !lCtx) return;
 
     TConfig cfg(&mod->prmIOE());
-    cfg.cfg("PRM_ID").setS(id());
+    cfg.cfg("PRM_ID").setS(ownerPath(true));
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
     for(int i_io = 0; i_io < lCtx->func()->ioSize(); i_io++)
     {

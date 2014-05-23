@@ -502,7 +502,13 @@ void TParamContr::cntrCmdProc( XMLNode *opt )
 	    vector<string> c_list;
 	    list(c_list);
 	    for(unsigned i_a = 0; i_a < c_list.size(); i_a++)
-	        opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+	    {
+	        XMLNode *cN = opt->childAdd("el")->setAttr("id",c_list[i_a])->setText(at(c_list[i_a]).at().name());
+		if(!s2i(opt->attr("recurs"))) continue;
+		cN->setName(opt->name())->setAttr("path",TSYS::strEncode(opt->attr("path"),TSYS::PathEl))->setAttr("recurs","1");
+		at(c_list[i_a]).at().cntrCmd(cN);
+		cN->setName("el")->setAttr("path","")->setAttr("rez","")->setAttr("recurs","")->setText("");
+	    }
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))
 	{

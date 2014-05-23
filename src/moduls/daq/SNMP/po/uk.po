@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-15 11:37+0300\n"
+"POT-Creation-Date: 2014-05-22 21:09+0300\n"
 "PO-Revision-Date: 2007-10-29 11:14+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -140,7 +140,7 @@ msgstr "Приватність"
 msgid "ASN type '%d' do not handled."
 msgstr "ASN тип '%d' не підтримується."
 
-#: snmp_client.cpp:651 snmp_client.cpp:807
+#: snmp_client.cpp:651 snmp_client.cpp:809
 #, c-format
 msgid "10:Timeout: No Response from %s."
 msgstr "10:Перевищено час очікування відповіді від %s."
@@ -167,14 +167,14 @@ msgstr ""
 "  \"SNMPv2-MIB::sysDescr.0\" - адресація з MIB бази від назви модуля для "
 "\"system.sysDescr.0\"."
 
-#: snmp_client.cpp:709
+#: snmp_client.cpp:708
 msgid "MIB Tree"
 msgstr "MIB Дерево"
 
-#: snmp_client.cpp:710
-msgid "OID append"
-msgstr "Додати OID"
+#: snmp_client.cpp:720 snmp_client.cpp:744
+msgid "<<Append current>>"
+msgstr "<<Додати поточний>>"
 
-#: snmp_client.cpp:809
+#: snmp_client.cpp:811
 msgid "11:No authorized name."
 msgstr "11:Неавторизована назва."

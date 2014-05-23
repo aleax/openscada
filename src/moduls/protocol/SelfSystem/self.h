@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -63,12 +63,11 @@ class TProt: public TProtocol
 	{
 	    public:
 		//Methods
-		SAuth(time_t itm, string inm, int ises) :
-		    t_auth(itm), name(inm), id_ses(ises) { }
+		SAuth(time_t itm, string inm, int ises) : t_auth(itm), name(inm), id_ses(ises) { }
 		//Attributes
-		time_t t_auth;
-		string name;
-		int    id_ses;
+		time_t	t_auth;
+		string	name;
+		int	id_ses;
 	};
 
 	//Methods
@@ -99,7 +98,7 @@ class TProt: public TProtocol
 	TProtocolIn *in_open( const string &name );
 
 	//Attributes
-	Res		ses_res;
+	pthread_mutex_t	sesRes;
 	vector<SAuth>	auth_lst;
 	int		m_t_auth, mComprLev, mComprBrd;
 };

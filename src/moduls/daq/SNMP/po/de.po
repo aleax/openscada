@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.SNMP 0.6.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-15 11:37+0300\n"
+"POT-Creation-Date: 2014-05-22 21:09+0300\n"
 "PO-Revision-Date: 2009-08-18 09:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -145,7 +145,7 @@ msgstr "Datenschutz"
 msgid "ASN type '%d' do not handled."
 msgstr "ASN-Typ '%d' nicht behandelt."
 
-#: snmp_client.cpp:651 snmp_client.cpp:807
+#: snmp_client.cpp:651 snmp_client.cpp:809
 #, c-format
 msgid "10:Timeout: No Response from %s."
 msgstr "10:Timeout: Keine Antwort von %s."
@@ -173,14 +173,14 @@ msgstr ""
 "   \"SNMPv2-MIB::sysDescr.0\" - Adressierung von MIB Basis von Modul-Name "
 "für \"system.sysDescr.0\"."
 
-#: snmp_client.cpp:709
+#: snmp_client.cpp:708
 msgid "MIB Tree"
 msgstr "MIB-Baum"
 
-#: snmp_client.cpp:710
-msgid "OID append"
-msgstr "OID anfügen"
+#: snmp_client.cpp:720 snmp_client.cpp:744
+msgid "<<Append current>>"
+msgstr "<<Anhängen aktuellen>>"
 
-#: snmp_client.cpp:809
+#: snmp_client.cpp:811
 msgid "11:No authorized name."
 msgstr "11:No Name zugelassen."

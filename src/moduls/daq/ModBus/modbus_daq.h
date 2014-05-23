@@ -176,7 +176,7 @@ class TMdContr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	bool cfgChange( TCfg &cfg );
-	void prmEn( const string &id, bool val );
+	void prmEn( TMdPrm *prm, bool val );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -199,7 +199,8 @@ class TMdContr: public TController
 	void setCntrDelay( const string &err );
 
 	//Attributes
-	Res	req_res, en_res, asWr_res;
+	pthread_mutex_t	enRes, dataRes;
+	Res	reqRes;
 	int64_t	&mPrior,			//Process task priority
 		&mNode,				//Node
 		&blkMaxSz;			//Maximum request block size
@@ -227,7 +228,7 @@ class TMdContr: public TController
 
 	float	tmDelay;			//Delay time for next try connect
 
-	vector< AutoHD<TMdPrm> > p_hd;
+	vector< AutoHD<TMdPrm> > pHd;
 
 	float numRReg, numRRegIn, numRCoil, numRCoilIn, numWReg, numWCoil, numErrCon, numErrResp;
 };

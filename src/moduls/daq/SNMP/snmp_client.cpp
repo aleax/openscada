@@ -705,10 +705,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 		"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias (object \"System\");\n"
 		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for \"system.sysDescr.0\"."),NULL);
 	if(get_tree_head())
-	{
 	    ctrMkNode2("fld",opt,-1,"/prm/cfg/MIB",_("MIB Tree"),enableStat()?0:RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/MIB_lst",NULL);
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/SetOID",_("OID append"),enableStat()?0:RWRW__,"root",SDAQ_ID);
-	}
 	return;
     }
 
@@ -718,7 +715,22 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/MIB")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user")));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) TBDS::genDBSet(nodePath()+"selOID", opt->text(), opt->attr("user"));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
+	{
+	    if(opt->text() == _("<<Append current>>"))
+	    {
+		oid oidn[MAX_OID_LEN];
+		size_t oidn_len = MAX_OID_LEN;
+		string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user"));
+		if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len))
+		{
+		    string vLs = OIDList(), vS;
+		    for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size() && vS != baseIt; ) ;
+		    if(vS.empty()) setOIDList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+baseIt);
+		}
+	    }
+	    else TBDS::genDBSet(nodePath()+"selOID", opt->text(), opt->attr("user"));
+	}
     }
     else if(a_path == "/prm/cfg/MIB_lst" && ctrChkNode(opt))
     {
@@ -729,6 +741,8 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len)) subTr = get_tree(oidn, oidn_len, subTr);
 	else baseIt = ".iso";
 
+	opt->childAdd("el")->setText(_("<<Append current>>"));
+
 	//Previous
 	for(int off = 1; (baseIt_=TSYS::strParse(baseIt,0,".",&off)).size(); )
 	    opt->childAdd("el")->setText((baseIt_s+="."+baseIt_));
@@ -736,18 +750,6 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 	//Childs
 	for(struct tree *chtree = subTr->child_list; chtree; chtree = chtree->next_peer)
 	    opt->childAdd("el")->setText(baseIt+"."+chtree->label);
-    }
-    else if(a_path == "/prm/cfg/SetOID" && ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))
-    {
-	oid oidn[MAX_OID_LEN];
-	size_t oidn_len = MAX_OID_LEN;
-	string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user"));
-	if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len))
-	{
-	    string vLs = OIDList(), vS;
-	    for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size() && vS != baseIt; ) ;
-	    if(vS.empty()) setOIDList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+baseIt);
-	}
     }
     else TParamContr::cntrCmdProc(opt);
 }

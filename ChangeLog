@@ -1,3 +1,21 @@
+2014-05-23 Roman
+- DB.LibsDB.OscadaLibs: Alarm level for no connection into base.{anUnif,anUnifSt,manInUnif} return from -1 to -5.
+- DB.ModelsDB.AGLKS.vca: To the root page added current alarms table by primitive "Protocol".
+- DB.ModelsDB.AGLKS.St: To controller's object of parameter ModBus.testTCP.test added included parameter "test1"
+	with complex data acquisition examples.
+    The controllers ModBus.testTCP, OPC_UA.test and DAQGate.test set started at OpenSCADA start.
+    To DAQGate.test added hierarchic controller ModBus.testTCP.test for testing.
+- DAQ: Control interface's request for parameters list expanded by argument "recurs" for all hierarchic parameters list obtain.
+    Root object TDAQS expanded by control interface's request "/serv/PrmAttr" for remote browsing allow the DAQ parameters tree.
+- !!!!:DAQ.DAQGate: Significant expanding for hierarchic source DAQ parameters proccess.
+    Remote parameters tree inline browsing is added.
+- FIX:DAQ.LogicLev: IO values storing is fixed for included parameters, for collision into eponymous ID prevent.
+- DAQ.ModBus: Including parameters self to self is enabled, for standard type.
+    Resources allocators enRes and dataRes moved to pthread_mutex_t direct.
+- DAQ.SNMP: Inline browsing by MIB made simplified.
+- Protocol.SelfSystem: Code significant clean up.
+
+
 2014-05-21 Roman
 - SYS.XMLNode: Function childIns() and childDel() position argument's type set to signed (integer) for allow
     insert and delete by count from end (negative value).

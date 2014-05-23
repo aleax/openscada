@@ -699,6 +699,8 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	    return;
 	}
     }
+    else if(a_path == "/serv/PrmAttr" && ctrChkNode(opt,"list",RWRWR_,"root",SDAQ_ID,SEC_RD))	//Parameter and/or attributes list-browse
+	ctrListPrmAttr(opt, opt->attr("base"), s2i(opt->attr("toPrm")), opt->attr("sep")[0], opt->attr("pref"));
 
     //Get page info
     if(opt->name() == "info")
