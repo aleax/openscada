@@ -46,8 +46,7 @@ class TProtIn: public TProtocolIn
 
     private:
 	//Attributes
-	bool m_nofull;
-	string req_buf;
+	string reqBuf;
 };
 
 //*************************************************
@@ -63,28 +62,29 @@ class TProt: public TProtocol
 	{
 	    public:
 		//Methods
-		SAuth(time_t itm, string inm, int ises) : t_auth(itm), name(inm), id_ses(ises) { }
+		SAuth( ) : tAuth(0) { }
+		SAuth( time_t itm, const string &inm, const string &isrc = "" ) : tAuth(itm), name(inm), src(isrc) { }
+
 		//Attributes
-		time_t	t_auth;
-		string	name;
-		int	id_ses;
+		time_t	tAuth;
+		string	name, src;
 	};
 
 	//Methods
 	TProt( string name );
-	~TProt();
+	~TProt( );
 
-	int authTime( )			{ return m_t_auth; }
+	int authTime( )			{ return mTAuth; }
 	int comprLev( )			{ return mComprLev; }
 	int comprBrd( )			{ return mComprBrd; }
 
-	void setAuthTime( int vl )	{ m_t_auth = vmax(1,vl); modif(); }
+	void setAuthTime( int vl )	{ mTAuth = vmax(1,vl); modif(); }
 	void setComprLev( int vl )	{ mComprLev = vmax(-1,vmin(9,vl)); modif(); }
 	void setComprBrd( int vl )	{ mComprBrd = vmax(10,vl); modif(); }
 
-	int sesOpen( const char *user, const char *pass );
-	void sesClose( int id_ses );
-	SAuth sesGet( int id_ses );
+	int sesOpen( const string &user, const string &pass, const string &src = "" );
+	void sesClose( int idSes );
+	SAuth sesGet( int idSes );
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
@@ -99,8 +99,8 @@ class TProt: public TProtocol
 
 	//Attributes
 	pthread_mutex_t	sesRes;
-	vector<SAuth>	auth_lst;
-	int		m_t_auth, mComprLev, mComprBrd;
+	map<int, SAuth>	auths;
+	int		mTAuth, mComprLev, mComprBrd;
 };
 
 extern TProt *mod;

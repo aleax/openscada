@@ -1,3 +1,8 @@
+2014-05-24 Roman
+- !!:Protocol.SelfSystem: The protocol implement improved for check and wait the header entirety.
+    SES_OPEN limited by 10 for one source and user. Sessions moved to std::map for some access acceleration.
+
+
 2014-05-23 Roman
 - DB.LibsDB.OscadaLibs: Alarm level for no connection into base.{anUnif,anUnifSt,manInUnif} return from -1 to -5.
 - DB.ModelsDB.AGLKS.vca: To the root page added current alarms table by primitive "Protocol".

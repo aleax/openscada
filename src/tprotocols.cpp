@@ -69,7 +69,6 @@ void TProtocolS::cntrCmdProc( XMLNode *opt )
     else TSubSYS::cntrCmdProc(opt);
 }
 
-
 //************************************************
 //* TProtocol                                    *
 //************************************************

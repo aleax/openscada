@@ -69,7 +69,7 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mComprBrd(80)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -90,55 +90,64 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mCo
 
 TProt::~TProt( )
 {
-    MtxAlloc res(sesRes, true);
-    while(auth_lst.size()) auth_lst.erase(auth_lst.begin());
-    res.unlock();
-
     pthread_mutex_destroy(&sesRes);
 }
 
-int TProt::sesOpen( const char *user,const char *pass )
+int TProt::sesOpen( const string &user, const string &pass, const string &src )
 {
     if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass))
 	return -1;
 
-    //Check sesion and close old sesion
     MtxAlloc res(sesRes, true);
-    for(unsigned i_s = 0; i_s < auth_lst.size(); )
-	if(time(NULL) > (auth_lst[i_s].t_auth+10*authTime()))
-	    auth_lst.erase(auth_lst.begin() + i_s);
-	else i_s++;
+
+    //Check sesions for close old and reuse more other
+    unsigned i_oCnt = 0;
+    map<int, SAuth>::iterator aOldI = auths.end();
+    for(map<int, SAuth>::iterator aI = auths.begin(); aI != auths.end(); )
+	if(time(NULL) > (aI->second.tAuth+authTime()*60)) auths.erase(aI++);	//Long unused
+	else
+	{
+	    if(aI->second.name == user && aI->second.src == src)	//More openned
+	    {
+		if(aOldI == auths.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
+		++i_oCnt;
+	    }
+	    ++aI;
+	}
+    if(i_oCnt > 10 && aOldI != auths.end()) auths.erase(aOldI);
+
+    //New session ID generation
+    int idSes = rand();
+    while(auths.find(idSes) != auths.end()) idSes = rand();
 
     //Make new sesion
-    int id_ses = rand();
-    auth_lst.push_back(TProt::SAuth(time(NULL),user,id_ses));
+    auths[idSes] = TProt::SAuth(time(NULL), user, src);
 
-    return id_ses;
+    return idSes;
 }
 
-void TProt::sesClose( int id_ses )
+void TProt::sesClose( int idSes )
 {
     MtxAlloc res(sesRes, true);
-    for(unsigned i_s = 0; i_s < auth_lst.size(); )
-	if(time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) || auth_lst[i_s].id_ses == id_ses)
-	    auth_lst.erase(auth_lst.begin() + i_s);
-	else i_s++;
+    auths.erase(idSes);
 }
 
-TProt::SAuth TProt::sesGet( int id_ses )
+TProt::SAuth TProt::sesGet( int idSes )
 {
     MtxAlloc res(sesRes, true);
-    time_t cur_tm = time(NULL);
-    for(unsigned i_s = 0; i_s < auth_lst.size(); )
-	if(cur_tm > (auth_lst[i_s].t_auth+10*authTime())) auth_lst.erase(auth_lst.begin() + i_s);
-	else if(auth_lst[i_s].id_ses == id_ses)
+    map<int, SAuth>::iterator aI = auths.find(idSes);
+    if(aI != auths.end())
+    {
+	time_t cur_tm = time(NULL);
+	if(cur_tm > (aI->second.tAuth+authTime()*60)) auths.erase(aI);
+	else
 	{
-	    auth_lst[i_s].t_auth = cur_tm;
-	    return auth_lst[i_s];
+	    aI->second.tAuth = cur_tm;
+	    return aI->second;
 	}
-	else i_s++;
+    }
 
-    return TProt::SAuth(0,"",0);
+    return TProt::SAuth();
 }
 
 void TProt::load_( )
@@ -168,7 +177,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     ResAlloc res(tro.nodeRes(), true);
 
-    bool   isDir = s2i(io.attr("rqDir")); io.attrDel("rqDir");
+    bool isDir = s2i(io.attr("rqDir")); io.attrDel("rqDir");
     string user = io.attr("rqUser"); io.attrDel("rqUser");
     string pass = io.attr("rqPass"); io.attrDel("rqPass");
     string data = io.save();
@@ -181,16 +190,23 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    //Session open
 	    if(!isDir && tro.prm1() < 0)
 	    {
-		req = "SES_OPEN " + user + " " + pass + "\n";
+		req = "SES_OPEN " + user + " " + pass + "\x0A";
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
 		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,0,true);
-		buf[resp_len] = 0; head_end = off = 0;
+		resp.assign(buf,resp_len);
+
+		// Wait tail
+		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
+		{
+		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
+		    resp.append(buf, resp_len);
+		}
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN response: %d"), resp_len);
 
-		header = TSYS::strLine(buf,0,&head_end);
+		off = 0;
 		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
 		{
 		    rez = s2i(TSYS::strParse(header,0," ",&off));
@@ -205,20 +221,27 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
 	    if(reqCompr) data = TSYS::strCompr(data,comprLev());
 
-	    if(isDir)	req = "REQDIR " + user + " " + pass + " " + i2s(data.size()*(reqCompr?-1:1)) + "\n" + data;
-	    else	req = "REQ " + i2s(tro.prm1()) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\n" + data;
-	    buf[0] = 0;
+	    if(isDir)	req = "REQDIR " + user + " " + pass + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
+	    else	req = "REQ " + i2s(tro.prm1()) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
 	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
 	    resp.assign(buf,resp_len);
 
+	    // Wait tail
+	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
+	    {
+		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
+		resp.append(buf, resp_len);
+	    }
+
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response first %d"), resp.size());
 
 	    // Get head
-	    head_end = off = 0;
-	    header = TSYS::strLine(resp,0,&head_end);
+	    head_end = header.size()+1;
+	    off = 0;
+	    //header = TSYS::strLine(resp,0,&head_end);
 	    if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
 		throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
 	    rez = s2i(TSYS::strParse(header,0," ",&off));
@@ -295,12 +318,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn( name ), m_nofull(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name)
 {
 
 }
 
-TProtIn::~TProtIn()
+TProtIn::~TProtIn( )
 {
 
 }
@@ -312,66 +335,60 @@ bool TProtIn::mess( const string &request, string &answer )
     int req_sz = 0;
     char user[256] = "", pass[256] = "";
 
-    //Continue for full request
-    if(m_nofull)
-    {
-	req_buf = req_buf + request;
-	m_nofull = false;
-    }
-    else req_buf = request;  //Save request to buffer
+    reqBuf += request;
 
-    string req = req_buf.substr(0,req_buf.find("\n"));
+    //Check for completeness header
+    string req = TSYS::strLine(reqBuf, 0);
+    if(req.size() >= reqBuf.size() || reqBuf[req.size()] != '\x0A') return true;
 
     if(req.compare(0,8,"SES_OPEN") == 0)
     {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
-	ses_id = mod->sesOpen(user, pass);
-	if(ses_id < 0)	answer = "REZ 1 Auth error. User or password error.\n";
-	else answer = "REZ 0 " + i2s(ses_id) + "\n";
+	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
+	    answer = "REZ 1 Auth error. User or password error.\x0A";
+	else answer = "REZ 0 " + i2s(ses_id) + "\x0A";
     }
     else if(req.compare(0,9,"SES_CLOSE") == 0)
     {
-	sscanf(req.c_str(),"SES_CLOSE %d", &ses_id);
+	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
 	mod->sesClose(ses_id);
-	answer = "REZ 0\n";
+	answer = "REZ 0\x0A";
     }
     else if(req.compare(0,3,"REQ") == 0)
     {
 	if(mess_lev() == TMess::Debug)
 	{
 	    d_tm = TSYS::curTime();
-	    mess_debug(nodePath().c_str(), _("Get request: '%s': %d"), req.c_str(), req_buf.size());
+	    mess_debug(nodePath().c_str(), _("Get request: '%s': %d"), req.c_str(), reqBuf.size());
 	}
 
-	TProt::SAuth auth(0, "", 0);
+	TProt::SAuth auth;
 	if(sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2) auth = mod->sesGet(ses_id);
 	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3)
 	{
 	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass))
-	    { auth.t_auth = 1; auth.name = user; }
+	    { auth.tAuth = 1; auth.name = user; }
 	}
-	else { answer = "REZ 3 Command format error.\n"; return false; }
+	else { answer = "REZ 3 Command format error.\x0A"; reqBuf.clear(); return false; }
 
-	if(!auth.t_auth) { answer = "REZ 1 Auth error. Session no valid.\n"; return false; }
+	if(!auth.tAuth) { answer = "REZ 1 Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
 
 	try
 	{
-	    if(req_buf.size() < (req.size()+strlen("\n")+abs(req_sz))) { m_nofull = true; return true; }
+	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
 
 	    //Decompress request
-	    if(req_sz < 0)
-		req_buf.replace(req.size()+strlen("\n"),abs(req_sz),
-		    TSYS::strUncompr(req_buf.substr(req.size()+strlen("\n"))));
+	    if(req_sz < 0) reqBuf.replace(req.size()+1, abs(req_sz), TSYS::strUncompr(reqBuf.substr(req.size()+1)));
 
 	    //Process request
 	    XMLNode req_node;
-	    req_node.load(req_buf.substr(req.size()+strlen("\n")));
+	    req_node.load(reqBuf.substr(req.size()+1));
 	    req_node.setAttr("user", auth.name);
 
 	    if(mess_lev() == TMess::Debug)
 	    {
 		mess_debug(nodePath().c_str(), _("Unpack and load request: '%s': %d, time: %f ms."),
-		    req.c_str(), req_buf.size(), 1e-3*(TSYS::curTime()-d_tm));
+		    req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 
@@ -393,11 +410,13 @@ bool TProtIn::mess( const string &request, string &answer )
 		mess_debug(nodePath().c_str(), _("Save respond to stream and pack: '%s': %d, time: %f ms."),
 		    req.c_str(), resp.size(), 1e-3*(TSYS::curTime()-d_tm));
 
-	    answer = "REZ 0 " + i2s(resp.size()*(respCompr?-1:1)) + "\n" + resp;
+	    answer = "REZ 0 " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
 	}
-	catch(TError err) { answer = "REZ 2 " + err.cat + ":" + err.mess + "\n"; }
+	catch(TError err) { answer = "REZ 2 " + err.cat + ":" + err.mess + "\x0A"; }
     }
-    else answer = "REZ 3 Command format error.\n";
+    else answer = "REZ 3 Command format error.\x0A";
+
+    reqBuf.clear();
 
     return false;
 }
