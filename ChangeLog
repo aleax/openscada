@@ -1,3 +1,8 @@
+2014-05-29 Roman
+- TValue: Value type info fix for selectable.
+- UI.QTCfg: Check and warning about no apply changes at the page change is added.
+
+
 2014-05-24 Roman
 - !!:Protocol.SelfSystem: The protocol implement improved for check and wait the header entirety.
     SES_OPEN limited by 10 for one source and user. Sessions moved to std::map for some access acceleration.

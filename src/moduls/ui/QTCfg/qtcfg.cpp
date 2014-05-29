@@ -430,7 +430,7 @@ void ConfApp::quitSt( )
 
 bool ConfApp::exitModifChk( )
 {
-    //> Check for no saved local station
+    //Check for no saved local station
     XMLNode req("modify");
     req.setAttr("path","/"+SYS->id()+"/%2fobj");
     if(!cntrIfCmd(req) && atoi(req.text().c_str()))
@@ -443,7 +443,7 @@ bool ConfApp::exitModifChk( )
 	if(!saveExit)
 	{
 	    int ret = QMessageBox::information(this,_("Changes save"),
-		_("Some changing is made. Save changing to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
+		_("Some changes made.\nSave the changes to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret)
 	    {
 		case QMessageBox::Yes:
@@ -514,7 +514,7 @@ void ConfApp::treeSearch( )
     else if(fromCur) { sl->setModified(true); treeSearch(); }
 }
 
-void ConfApp::pageUp()
+void ConfApp::pageUp( )
 {
     size_t i_l = string::npos;
     while(true)
@@ -528,20 +528,20 @@ void ConfApp::pageUp()
     selectPage(sel_path.substr(0,i_l));
 }
 
-void ConfApp::pagePrev()
+void ConfApp::pagePrev( )
 {
-    if( !prev.size() ) return;
-    next.insert(next.begin(),sel_path);
+    if(!prev.size()) return;
+    next.insert(next.begin(), sel_path);
     string path = prev[0];
     prev.erase(prev.begin());
 
-    try{ pageDisplay( path ); } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
+    try{ pageDisplay(path); } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
 void ConfApp::pageNext()
 {
-    if( !next.size() ) return;
-    prev.insert(prev.begin(),sel_path);
+    if(!next.size()) return;
+    prev.insert(prev.begin(), sel_path);
     string path = next[0];
     next.erase(next.begin());
 
@@ -1139,8 +1139,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
 		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 
-		widget->layout()->addWidget( new QLabel((t_s.attr("dscr")+":").c_str(),widget) );
-		widget->layout()->addWidget( tbl );
+		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
+		widget->layout()->addWidget(tbl);
 
 		//t_s.attr("addr_lab",TSYS::addr2str(lab));
 		t_s.setAttr("addr_tbl",TSYS::addr2str(tbl));
@@ -1277,6 +1277,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		    }
 
 		    tbl->resizeRowsToContents();
+		    for(int i_rw = 0; i_rw < tbl->rowCount(); i_rw++)
+			tbl->setRowHeight(i_rw, vmin(tbl->rowHeight(i_rw), tbl->size().height()/1.3));
 		}
 
 		tbl_init = false;
@@ -1926,6 +1928,20 @@ void ConfApp::pageDisplay( const string &path )
 	// Stop refresh
 	pageCyclRefrStop();
 
+	//Check for no apply editable widgets
+	if(noApplyWdgs.size())
+	{
+	    if(QMessageBox::information(this,_("Changes apply"),_("Some changes you don't apply!\nApply now or lost the?"),
+		QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
+	    {
+		map<string, QWidget* > prcW = noApplyWdgs;
+		for(map<string, QWidget* >::iterator iW = prcW.begin(); iW != prcW.end(); ++iW)
+		    applyButton(iW->second);
+	    }
+	    noApplyWdgs.clear();
+	}
+
+	// Request new page tree
 	XMLNode n_node("info");
 	n_node.setAttr("path",path);
 	if(cntrIfCmd(n_node)) { throw TError(atoi(n_node.attr("rez").c_str()),n_node.attr("mcat").c_str(),"%s",n_node.text().c_str()); }
@@ -2107,10 +2123,9 @@ void ConfApp::ctrTreePopup( )
 
 void ConfApp::tabSelect( int idx )
 {
-    try
-    {
+    try {
 	pageCyclRefrStop();
-	pageDisplay( sel_path );
+	pageDisplay(sel_path);
     }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
@@ -3011,36 +3026,37 @@ void ConfApp::listBoxGo( QListWidgetItem* item )
 
 void ConfApp::editChange( const QString& txt )
 {
-    QWidget *wed = (QWidget *)sender();
+    QWidget *wed = (QWidget*)sender();
 
-    try
-    {
+    try {
 	string path = wed->objectName().toStdString();
+	noApplyWdgs[path] = wed;
+
 	//Check block element
 	if(path[0] == 'b') path.erase(0,1);
-	SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl) )->setText(txt.toStdString());
+	SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl))->setText(txt.toStdString());
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::applyButton( )
+void ConfApp::applyButton( QWidget *src )
 {
-    QWidget *bwidg = (QWidget *)sender();
+    QWidget *bwidg = src ? src : (QWidget*)sender();
 
     string path = bwidg->objectName().toStdString();
+    noApplyWdgs.erase(path);
 
-    try
-    {
-	XMLNode *el = SYS->ctrId(root,TSYS::strDecode(path,TSYS::PathEl));
+    try {
+	XMLNode *el = SYS->ctrId(root, TSYS::strDecode(path,TSYS::PathEl));
 	string sval = el->text();
-	if( el->attr("tp") == "hex" )		sval = i2s(QString(sval.c_str()).toUInt(0,16));
-	else if( el->attr("tp") == "oct" )	sval = i2s(QString(sval.c_str()).toUInt(0,8));
+	if(el->attr("tp") == "hex")		sval = i2s(QString(sval.c_str()).toUInt(0,16));
+	else if(el->attr("tp") == "oct")	sval = i2s(QString(sval.c_str()).toUInt(0,8));
 
 	mess_info(mod->nodePath().c_str(),_("%s| Change '%s' to: '%s'!"),
 		w_user->user().toStdString().c_str(), (sel_path+"/"+path).c_str(), sval.c_str());
 
 	XMLNode n_el("set");
 	n_el.setAttr("path",sel_path+"/"+path)->setText(sval);
-	if( cntrIfCmd(n_el) ) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
+	if(cntrIfCmd(n_el)) { mod->postMess(n_el.attr("mcat"),n_el.text(),TUIMod::Error,this); return; }
     }catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
     //Redraw
@@ -3049,6 +3065,11 @@ void ConfApp::applyButton( )
 
 void ConfApp::cancelButton( )
 {
+    QWidget *bwidg = (QWidget *)sender();
+
+    string path = bwidg->objectName().toStdString();
+    noApplyWdgs.erase(path);
+
     //Redraw
     pageRefresh(true);
 }

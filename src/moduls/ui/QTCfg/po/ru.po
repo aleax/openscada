@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-28 12:54+0300\n"
+"POT-Creation-Date: 2014-05-28 21:22+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -399,8 +399,10 @@ msgid "Changes save"
 msgstr "Сохранение изменений"
 
 #: qtcfg.cpp:446
-msgid "Some changing is made. Save changing to DB on exit?"
-msgstr "Были сделаны некоторые изменения. Сохранить изменения в БД при выходе?"
+msgid ""
+"Some changes made.\n"
+"Save the changes to DB on exit?"
+msgstr "Были сделаны некоторые изменения.\nСохранить изменения в БД при выходе?"
 
 #: qtcfg.cpp:576
 msgid "No one editable container is present."
@@ -487,241 +489,253 @@ msgstr ""
 "Автор: %s\n"
 "Web сайт: %s"
 
-#: qtcfg.cpp:1595
+#: qtcfg.cpp:1597
 msgid "<EVAL>"
 msgstr ""
 
-#: qtcfg.cpp:1595
+#: qtcfg.cpp:1597
 msgid "On"
 msgstr "Вкл"
 
-#: qtcfg.cpp:1595
+#: qtcfg.cpp:1597
 msgid "Off"
 msgstr "Выкл"
 
-#: qtcfg.cpp:2096
+#: qtcfg.cpp:1934
+msgid "Changes apply"
+msgstr "Принятие изменений"
+
+#: qtcfg.cpp:1934
+msgid ""
+"Some changes you don't apply!\n"
+"Apply now or lost the?"
+msgstr ""
+"Некоторые изменения не приняты!\n"
+"Принять сейчас или потерять?"
+
+#: qtcfg.cpp:2112
 msgid "Refresh items tree"
 msgstr "Обновить элементы дерева"
 
-#: qtcfg.cpp:2240
+#: qtcfg.cpp:2255
 #, c-format
 msgid "Expand/update branch '%s' time %f ms."
 msgstr "Время расширения/обновления ветви '%s' %f мс."
 
-#: qtcfg.cpp:2289
+#: qtcfg.cpp:2304
 msgid "Send changes to selections"
 msgstr "Отправка изменений выбранным"
 
-#: qtcfg.cpp:2290
+#: qtcfg.cpp:2305
 #, c-format
 msgid "Send current change to other selected nodes \"%s\"?"
 msgstr "Отправить текущее изменение другим выбранным узлам \"%s\"?"
 
-#: qtcfg.cpp:2337
+#: qtcfg.cpp:2352
 msgid "Local station"
 msgstr "Локальная станция"
 
-#: qtcfg.cpp:2344
+#: qtcfg.cpp:2359
 msgid "Remote station"
 msgstr "Удалённая станция"
 
-#: qtcfg.cpp:2406
+#: qtcfg.cpp:2421
 #, c-format
 msgid "%s| Set '%s' to '%s'!"
 msgstr "%s| Установлен '%s' в '%s'!"
 
-#: qtcfg.cpp:2434
+#: qtcfg.cpp:2449
 #, c-format
 msgid "%s| Go to link '%s'!"
 msgstr "%s| Переход по ссылке '%s'!"
 
-#: qtcfg.cpp:2445
+#: qtcfg.cpp:2460
 #, c-format
 msgid "%s| Press '%s'!"
 msgstr "%s| Нажат '%s'!"
 
-#: qtcfg.cpp:2497
+#: qtcfg.cpp:2512
 msgid "Value no valid: "
 msgstr "Значение ошибочно: "
 
-#: qtcfg.cpp:2508
+#: qtcfg.cpp:2523
 #, c-format
 msgid "%s| Change '%s' from '%s' to '%s'!"
 msgstr "%s| Изменён '%s' из '%s' в '%s'!"
 
-#: qtcfg.cpp:2536
+#: qtcfg.cpp:2551
 msgid "Go"
 msgstr "Перейти"
 
-#: qtcfg.cpp:2544
+#: qtcfg.cpp:2559
 msgid "Add"
 msgstr "Добавить"
 
-#: qtcfg.cpp:2549
+#: qtcfg.cpp:2564
 msgid "Insert"
 msgstr "Вставить"
 
-#: qtcfg.cpp:2554
+#: qtcfg.cpp:2569
 msgid "Edit"
 msgstr "Редактировать"
 
-#: qtcfg.cpp:2560
+#: qtcfg.cpp:2575
 msgid "Delete"
 msgstr "Удалить"
 
-#: qtcfg.cpp:2566
+#: qtcfg.cpp:2581
 msgid "Up"
 msgstr "Вверх"
 
-#: qtcfg.cpp:2568
+#: qtcfg.cpp:2583
 msgid "Down"
 msgstr "Вниз"
 
-#: qtcfg.cpp:2605
+#: qtcfg.cpp:2620
 msgid "Item name set"
 msgstr "Установка имени элемента"
 
-#: qtcfg.cpp:2609
+#: qtcfg.cpp:2624
 msgid "Add new element."
 msgstr "Добавление нового элемента."
 
-#: qtcfg.cpp:2610
+#: qtcfg.cpp:2625
 msgid "Insert new element."
 msgstr "Вставка нового элемента."
 
-#: qtcfg.cpp:2613
+#: qtcfg.cpp:2628
 msgid "Rename element."
 msgstr "Переименование элемента."
 
-#: qtcfg.cpp:2632
+#: qtcfg.cpp:2647
 #, c-format
 msgid "%s| Add '%s' element <%s:%s>!"
 msgstr "%s| Добавлен '%s' элемент <%s:%s>!"
 
-#: qtcfg.cpp:2640
+#: qtcfg.cpp:2655
 #, c-format
 msgid "%s| Insert '%s' element <%s:%s> to %d!"
 msgstr "%s| Вставлен '%s' элемент <%s:%s> в %d!"
 
-#: qtcfg.cpp:2648
+#: qtcfg.cpp:2663
 #, c-format
 msgid "%s| Set '%s' element %d to <%s:%s>!"
 msgstr "%s| Установлен '%s' элемент %d в <%s:%s>!"
 
-#: qtcfg.cpp:2656
+#: qtcfg.cpp:2671
 #, c-format
 msgid "%s| Delete '%s' element <%s:%s>!"
 msgstr "%s| Удалён '%s' элемент <%s:%s>!"
 
-#: qtcfg.cpp:2663
+#: qtcfg.cpp:2678
 #, c-format
 msgid "%s| Move '%s' from %d to %d!"
 msgstr "%s| Перемещён '%s' из %d в %d!"
 
-#: qtcfg.cpp:2706
+#: qtcfg.cpp:2721
 msgid "Add record"
 msgstr "Добавить запись"
 
-#: qtcfg.cpp:2711
+#: qtcfg.cpp:2726
 msgid "Insert record"
 msgstr "Вставить запись"
 
-#: qtcfg.cpp:2716
+#: qtcfg.cpp:2731
 msgid "Delete record"
 msgstr "Удалить запись"
 
-#: qtcfg.cpp:2722
+#: qtcfg.cpp:2737
 msgid "Move Up"
 msgstr "Передвинуть вверх"
 
-#: qtcfg.cpp:2724
+#: qtcfg.cpp:2739
 msgid "Move Down"
 msgstr "Передвинуть вниз"
 
-#: qtcfg.cpp:2731
+#: qtcfg.cpp:2746
 msgid "Copy"
 msgstr "Копировать"
 
-#: qtcfg.cpp:2769
+#: qtcfg.cpp:2784
 #, c-format
 msgid "%s| Add '%s' record."
 msgstr "%s| Добавлена '%s' запись."
 
-#: qtcfg.cpp:2776
+#: qtcfg.cpp:2791
 #, c-format
 msgid "%s| Insert '%s' record %d."
 msgstr "%s| Вставлена '%s' запись %d."
 
-#: qtcfg.cpp:2801
+#: qtcfg.cpp:2816
 #, c-format
 msgid "%s| Delete '%s' record '%s'."
 msgstr "%s| Удаление '%s' записи '%s'."
 
-#: qtcfg.cpp:2810
+#: qtcfg.cpp:2825
 #, c-format
 msgid "%s| Move '%s' record from %d to %d."
 msgstr "%s| Перемещение '%s' записи из %d в %d."
 
-#: qtcfg.cpp:2836
+#: qtcfg.cpp:2851
 msgid "Save image"
 msgstr "Сохранить изображение"
 
-#: qtcfg.cpp:2841
+#: qtcfg.cpp:2856
 msgid "Load image"
 msgstr "Загрузить изображение"
 
-#: qtcfg.cpp:2851
+#: qtcfg.cpp:2866
 msgid "Save picture"
 msgstr "Сохранение картинки"
 
-#: qtcfg.cpp:2852
+#: qtcfg.cpp:2867
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Изображения (*.png *.xpm *.jpg)"
 
-#: qtcfg.cpp:2854
+#: qtcfg.cpp:2869
 #, c-format
 msgid "Save to file %s error\n"
 msgstr "Ошибка сохранения в файл %s\n"
 
-#: qtcfg.cpp:2859
+#: qtcfg.cpp:2874
 msgid "Load picture"
 msgstr "Загрузка картинки"
 
-#: qtcfg.cpp:2859
+#: qtcfg.cpp:2874
 msgid "Images (*.png *.jpg)"
 msgstr "Изображения (*.png *.jpg)"
 
-#: qtcfg.cpp:2867
+#: qtcfg.cpp:2882
 #, c-format
 msgid "Open file %s error\n"
 msgstr "Ошибка открытия файла %s\n"
 
-#: qtcfg.cpp:2875
+#: qtcfg.cpp:2890
 #, c-format
 msgid "Image file %s error\n"
 msgstr "Ошибка файла изображения %s\n"
 
-#: qtcfg.cpp:2880
+#: qtcfg.cpp:2895
 #, c-format
 msgid "%s| Upload picture '%s' to: %s."
 msgstr "%s| Выгрузка картинки '%s' в: %s."
 
-#: qtcfg.cpp:2938
+#: qtcfg.cpp:2953
 #, c-format
 msgid "Value '%s' is not valid!"
 msgstr "Значение '%s' ошибочно!"
 
-#: qtcfg.cpp:2970
+#: qtcfg.cpp:2985
 #, c-format
 msgid "%s| Set '%s' cell ('%s':%s) to: %s."
 msgstr "%s| Установка '%s' ячейки ('%s':%s) в: %s."
 
-#: qtcfg.cpp:3004
+#: qtcfg.cpp:3019
 #, c-format
 msgid "Selective element '%s' is not present!"
 msgstr "Выборочный элемент '%s' отсутствует!"
 
-#: qtcfg.cpp:3038
+#: qtcfg.cpp:3054
 #, c-format
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Изменено '%s' в: '%s'!"
@@ -730,75 +744,75 @@ msgstr "%s| Изменено '%s' в: '%s'!"
 msgid "Picture is not set!"
 msgstr "Картинка не установлена!"
 
-#: selfwidg.cpp:495
+#: selfwidg.cpp:497
 msgid "Find"
 msgstr "Поиск"
 
-#: selfwidg.cpp:500
+#: selfwidg.cpp:502
 msgid "Find next"
 msgstr "Поиск следующего"
 
-#: selfwidg.cpp:511
+#: selfwidg.cpp:512
 msgid "Apply"
 msgstr "Принять"
 
-#: selfwidg.cpp:515 selfwidg.cpp:762 selfwidg.cpp:895
+#: selfwidg.cpp:516 selfwidg.cpp:752 selfwidg.cpp:885
 msgid "Cancel"
 msgstr "Отмена"
 
-#: selfwidg.cpp:579
+#: selfwidg.cpp:570
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-#: selfwidg.cpp:628
+#: selfwidg.cpp:618
 msgid "Enter text string for search:"
 msgstr "Введите текстовую строку для поиска:"
 
-#: selfwidg.cpp:628
+#: selfwidg.cpp:618
 msgid "String search"
 msgstr "Поиск строки"
 
-#: selfwidg.cpp:631
+#: selfwidg.cpp:621
 msgid "Backward"
 msgstr "Обратно"
 
-#: selfwidg.cpp:634
+#: selfwidg.cpp:624
 msgid "Case sensitively"
 msgstr "Чувствительный к регистру"
 
-#: selfwidg.cpp:637
+#: selfwidg.cpp:627
 msgid "Whole words"
 msgstr "Слово целиком"
 
-#: selfwidg.cpp:725
+#: selfwidg.cpp:715
 msgid "ID:"
 msgstr ""
 
-#: selfwidg.cpp:733
+#: selfwidg.cpp:723
 msgid "Name:"
 msgstr "Имя:"
 
-#: selfwidg.cpp:755 selfwidg.cpp:891
+#: selfwidg.cpp:745 selfwidg.cpp:881
 msgid "Ok"
 msgstr ""
 
-#: selfwidg.cpp:817
+#: selfwidg.cpp:807
 msgid "Item type:"
 msgstr "Тип элемента:"
 
-#: selfwidg.cpp:864
+#: selfwidg.cpp:854
 msgid "Select user"
 msgstr "Выбор пользователя"
 
-#: selfwidg.cpp:872
+#: selfwidg.cpp:862
 msgid "User:"
 msgstr "Пользователь:"
 
-#: selfwidg.cpp:875
+#: selfwidg.cpp:865
 msgid "Password:"
 msgstr "Пароль:"
 
-#: selfwidg.cpp:982 tuimod.cpp:167
+#: selfwidg.cpp:972 tuimod.cpp:167
 msgid "Auth is wrong!!!"
 msgstr "Ошибка аутентификации!!!"
 

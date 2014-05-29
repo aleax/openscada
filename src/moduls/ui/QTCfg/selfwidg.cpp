@@ -192,7 +192,7 @@ void LineEdit::setType( LType tp )
 void LineEdit::changed( )
 {
     //> Enable apply
-    if( mPrev && !bt_fld )	viewApplyBt(true);
+    if(mPrev && !bt_fld) viewApplyBt(true);
 
     emit valChanged(value());
 }
@@ -238,6 +238,7 @@ void LineEdit::setValue(const QString &txt)
 
 void LineEdit::setCfg( const QString &cfg )
 {
+    if(ed_fld) ed_fld->blockSignals(true);
     switch(type())
     {
 	case Text:	((QLineEdit*)ed_fld)->setInputMask(cfg);	break;
@@ -293,7 +294,8 @@ void LineEdit::setCfg( const QString &cfg )
 	    break;
 	}
     }
-    if( bt_fld ) viewApplyBt(false);
+    if(bt_fld) viewApplyBt(false);
+    if(ed_fld) ed_fld->blockSignals(false);
 }
 
 QString LineEdit::value()
@@ -315,7 +317,7 @@ void LineEdit::applySlot( )
 {
     viewApplyBt(false);
 
-    if( m_val == value() ) return;
+    if(m_val == value()) return;
     m_val = value();
 
     emit valChanged(value());
@@ -324,15 +326,15 @@ void LineEdit::applySlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if( e->type() == QEvent::KeyRelease && bt_fld )
+    if(e->type() == QEvent::KeyRelease && bt_fld)
     {
-	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )
+	QKeyEvent *keyEvent = (QKeyEvent*)e;
+	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
 	{
-	    bt_fld->animateClick( );
+	    bt_fld->animateClick();
 	    return true;
 	}
-	else if(keyEvent->key() == Qt::Key_Escape )
+	else if(keyEvent->key() == Qt::Key_Escape)
 	{
 	    emit cancel();
 	    setValue(m_val);
@@ -503,10 +505,9 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 
-    if( !prev_dis )
+    if(!prev_dis)
     {
-	but_box = new QDialogButtonBox( QDialogButtonBox::Apply|
-					QDialogButtonBox::Cancel, Qt::Horizontal, this );
+	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel, Qt::Horizontal, this);
 	QImage ico_t;
 	but_box->button(QDialogButtonBox::Apply)->setText(_("Apply"));
 	if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -521,23 +522,13 @@ TextEdit::TextEdit( QWidget *parent, const char *name, bool prev_dis ) :
     }
 }
 
-bool TextEdit::isChanged( )
-{
-    if(but_box && but_box->isVisible()) return true;
-    return false;
-}
+bool TextEdit::isChanged( )	{ return (but_box && but_box->isVisible()); }
 
-QString TextEdit::text()
-{
-    return ed_fld->toPlainText();
-}
+QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
 
-bool TextEdit::hasFocus( ) const
-{
-    return ed_fld->hasFocus( );
-}
+bool TextEdit::hasFocus( ) const{ return ed_fld->hasFocus(); }
 
-void TextEdit::setText(const QString &text)
+void TextEdit::setText( const QString &text )
 {
     isInit = true;
     if(text != ed_fld->toPlainText()) ed_fld->setPlainText(text);
@@ -546,7 +537,7 @@ void TextEdit::setText(const QString &text)
     changed();
 }
 
-void TextEdit::setSnthHgl(XMLNode nd)
+void TextEdit::setSnthHgl( XMLNode nd )
 {
     int scrollPos = ed_fld->verticalScrollBar()->value();
     if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
@@ -554,11 +545,11 @@ void TextEdit::setSnthHgl(XMLNode nd)
     ed_fld->verticalScrollBar()->setValue(scrollPos);
 }
 
-void TextEdit::changed()
+void TextEdit::changed( )
 {
     if(isInit) return;
     if(but_box) but_box->setVisible(ed_fld->document()->isModified());
-    emit textChanged(text());
+    if(ed_fld->document()->isModified()) emit textChanged(text());
 }
 
 void TextEdit::btApply( )
@@ -583,20 +574,19 @@ bool TextEdit::event( QEvent *e )
 {
     if(but_box && e->type() == QEvent::KeyRelease)
     {
-	QKeyEvent *keyEvent = (QKeyEvent *)e;
+	QKeyEvent *keyEvent = (QKeyEvent*)e;
 	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier)
 	{
-	    but_box->button(QDialogButtonBox::Apply)->animateClick( );
+	    but_box->button(QDialogButtonBox::Apply)->animateClick();
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape)
 	{
-	    but_box->button(QDialogButtonBox::Cancel)->animateClick( );
+	    but_box->button(QDialogButtonBox::Cancel)->animateClick();
 	    return true;
 	}
     }
-    else if(e->type() == QEvent::MouseButtonPress)
-	holdPnt = mapFromGlobal(cursor().pos());
+    else if(e->type() == QEvent::MouseButtonPress) holdPnt = mapFromGlobal(cursor().pos());
     else if(e->type() == QEvent::MouseMove)
     {
 	QPoint curp = mapFromGlobal(cursor().pos());
@@ -623,35 +613,35 @@ void TextEdit::find( )
     bool isFind = false;
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',0,0).toInt();
     QString fstr = actFind->objectName().section(':',1);
-    if( sender() == actFind )
+    if(sender() == actFind)
     {
 	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
 	QLineEdit *le = new QLineEdit(fstr,&dlg);
 	dlg.ed_lay->addWidget(le, 0, 0);
 	QCheckBox *bw = new QCheckBox(_("Backward"),&dlg);
-	if( fopt & QTextDocument::FindBackward ) bw->setCheckState(Qt::Checked);
+	if(fopt & QTextDocument::FindBackward) bw->setCheckState(Qt::Checked);
 	dlg.ed_lay->addWidget(bw, 1, 0);
 	QCheckBox *cs = new QCheckBox(_("Case sensitively"),&dlg);
-	if( fopt & QTextDocument::FindCaseSensitively ) cs->setCheckState(Qt::Checked);
+	if(fopt & QTextDocument::FindCaseSensitively) cs->setCheckState(Qt::Checked);
 	dlg.ed_lay->addWidget(cs, 2, 0);
 	QCheckBox *ww = new QCheckBox(_("Whole words"),&dlg);
-	if( fopt & QTextDocument::FindWholeWords ) ww->setCheckState(Qt::Checked);
+	if(fopt & QTextDocument::FindWholeWords) ww->setCheckState(Qt::Checked);
 	dlg.ed_lay->addWidget(ww, 3, 0);
 	le->setFocus(Qt::OtherFocusReason);
 	dlg.resize(400,210);
-	if( dlg.exec() == QDialog::Accepted && !le->text().isEmpty() )
+	if(dlg.exec() == QDialog::Accepted && !le->text().isEmpty())
 	{
 	    fopt = (QTextDocument::FindFlag)0;
-	    if( bw->checkState()==Qt::Checked ) fopt |= QTextDocument::FindBackward;
-	    if( cs->checkState()==Qt::Checked ) fopt |= QTextDocument::FindCaseSensitively;
-	    if( ww->checkState()==Qt::Checked ) fopt |= QTextDocument::FindWholeWords;
+	    if(bw->checkState() == Qt::Checked) fopt |= QTextDocument::FindBackward;
+	    if(cs->checkState() == Qt::Checked) fopt |= QTextDocument::FindCaseSensitively;
+	    if(ww->checkState() == Qt::Checked) fopt |= QTextDocument::FindWholeWords;
 	    fstr = le->text();
 	    isFind = true;
 	}
     }
-    else if( sender() == actFindNext && !fstr.isEmpty() ) isFind = true;
+    else if(sender() == actFindNext && !fstr.isEmpty()) isFind = true;
 
-    if( isFind )
+    if(isFind)
     {
 	ed_fld->find(fstr,(QTextDocument::FindFlag)fopt);
 	actFind->setObjectName(QString::number(fopt)+":"+fstr);

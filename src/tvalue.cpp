@@ -270,7 +270,7 @@ void TValue::cntrCmdProc( XMLNode *opt )
 			case TFld::Object:	sType = _("Object");	break;
 			default: break;
 		    }
-		    if(vl.at().fld().flg()&TFld::Selected) sType = _("-select");
+		    if(vl.at().fld().flg()&TFld::Selected) sType += _("-select");
 		    n_e->setAttr("help",
 			TSYS::strMess(_("Parameter's attribute\n"
 			    "  ID: '%s'\n"
