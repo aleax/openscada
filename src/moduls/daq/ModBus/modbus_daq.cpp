@@ -1055,21 +1055,16 @@ void TMdPrm::postEnable( int flag )
     if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
-void TMdPrm::postDisable(int flag)
+void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    try
-    {
-	if(flag && isLogic())
-	{
-	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
-	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(ownerPath(true), true);
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
-	}
+    if(flag && isLogic()) {
+	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+	TConfig cfg(&mod->prmIOE());
+	cfg.cfg("PRM_ID").setS(ownerPath(true), true);
+	SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
     }
-    catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TCntrNode &TMdPrm::operator=( TCntrNode &node )
@@ -1308,7 +1303,7 @@ void TMdPrm::loadIO( bool force )
     for(int i_io = 0; i_io < lCtx->ioSize(); i_io++)
     {
 	cfg.cfg("ID").setS(lCtx->func()->io(i_io)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg)) continue;
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
 	if(lCtx->func()->io(i_io)->flg()&TPrmTempl::CfgLink) lCtx->lnk(lCtx->lnkId(i_io)).addr = cfg.cfg("VALUE").getS();
 	else lCtx->setS(i_io,cfg.cfg("VALUE").getS());
     }
@@ -1321,7 +1316,7 @@ void TMdPrm::save_( )
     saveIO();
 }
 
-void TMdPrm::saveIO()
+void TMdPrm::saveIO( )
 {
     //Save IO and init links
     if(!enableStat() || !isLogic() || !lCtx) return;

@@ -48,7 +48,7 @@ class MTable : public TTable
 	MTable( string name, MBD *bd, bool create );
 	~MTable(  );
 
-	//> Field's operations
+	// Field's operations
 	void fieldStruct( TConfig &cfg );
 	bool fieldSeek( int row, TConfig &cfg );
 	void fieldGet( TConfig &cfg );
@@ -107,7 +107,6 @@ class MBD : public TBD
 	pthread_mutex_t	connRes;
 	int	trans_reqs;
 };
-
 
 //*************************************************
 //* BDSQLite::BDMod				  *

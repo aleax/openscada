@@ -163,25 +163,21 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
     string s_el, ndNm;
 
     XMLNode *t_node = &rootN;
-    if(t_node->name() != "OpenSCADA")
-    {
+    if(t_node->name() != "OpenSCADA") {
 	if(!create) return NULL;
 	t_node->setName("OpenSCADA");
     }
 
-    for(int l_off = 0, nLev = 0; true; nLev++)
-    {
+    for(int l_off = 0, nLev = 0; true; nLev++) {
 	s_el = TSYS::pathLev(path, 0, true, &l_off);
 	if(s_el.empty()) return t_node;
 	bool ok = false;
 	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
-	    if(t_node->childGet(i_f)->attr("id") == s_el)
-	    {
+	    if(t_node->childGet(i_f)->attr("id") == s_el) {
 		t_node = t_node->childGet(i_f);
 		ok = true;
 	    }
-	if(!ok)
-	{
+	if(!ok) {
 	    if(!create)	return NULL;
 	    ndNm = "prm";
 	    switch(nLev)
@@ -195,6 +191,17 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
         }
     }
     return t_node;
+}
+
+void TSYS::modifCfg( bool chkPossibleWR )
+{
+    if(chkPossibleWR)
+    {
+	//Check config file for readonly
+	if(access(mConfFile.c_str(),F_OK|W_OK) != 0)
+	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), mConfFile.c_str());
+    }
+    else rootModifCnt++;
 }
 
 string TSYS::int2str( int val, TSYS::IntView view )
@@ -320,11 +327,25 @@ string TSYS::strMess( const char *fmt, ... )
     char str[STR_BUF_LEN];
     va_list argptr;
 
-    va_start(argptr,fmt);
-    vsnprintf(str,sizeof(str),fmt,argptr);
+    va_start(argptr, fmt);
+    vsnprintf(str, sizeof(str), fmt, argptr);
     va_end(argptr);
 
     return str;
+}
+
+string TSYS::strMess( unsigned len, const char *fmt, ... )
+{
+    if(len <= 0) return "";
+
+    char str[len];
+    va_list argptr;
+
+    va_start(argptr, fmt);
+    int lenRez = vsnprintf(str, sizeof(str), fmt, argptr);
+    va_end(argptr);
+
+    return (lenRez < len) ? string(str) : string(str)+"...";
 }
 
 string TSYS::strLabEnum( const string &base )
@@ -2200,7 +2221,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
 {
     int pathLev = 0;
-    //> Source path check and normalize
+
+    //Source path check and normalize
     bool fromRoot = (fsBaseIn.size() && fsBaseIn[0] == '/');
     nd->childAdd("el")->setText("/");
     if(TSYS::pathLev(fsBaseIn,0) != ".") nd->childAdd("el")->setText(".");
@@ -2211,16 +2233,19 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	nd->childAdd("el")->setText(fsBase);
     }
     if(fromRoot && pathLev == 0) fsBase = "/";
-    //> Previous items set
+
+    //Previous items set
     if(!fromRoot)
     {
 	if(pathLev == 0) nd->childAdd("el")->setText("..");
 	else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
     }
-    //> From work directory check
+
+    //From work directory check
     string fsBaseCor = fsBase;
     if(!fsBaseCor.size() || (fsBaseCor[0] != '/' && fsBaseCor[0] != '.')) fsBaseCor = "./"+fsBaseCor;
-    //> Child items process
+
+    //Child items process
     vector<string> its, fits;
     DIR *IdDir = opendir(fsBaseCor.c_str());
     if(IdDir != NULL)

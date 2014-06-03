@@ -80,49 +80,45 @@ void Session::setEnable( bool val )
 
     vector<string> pg_ls;
 
-    if(val)
-    {
+    if(val) {
 	mess_info(nodePath().c_str(),_("Enable session."));
-	try
-	{
+	try {
 	    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
-	    //> Connect to project
+	    //Connect to project
 	    mParent = mod->prjAt(mPrjnm);
 
-	    //> Get data from project
+	    //Get data from project
 	    mOwner	= parent().at().owner( );
 	    mGrp	= parent().at().grp( );
 	    mPermit	= parent().at().permit( );
 	    setPeriod( parent().at().period( ) );
 
-	    //> Load previous style
+	    //Load previous style
 	    TConfig c_el(&mod->elPrjSes());
 	    c_el.cfg("IDW").setS("<Style>");
 	    c_el.cfg("ID").setS(user());
-	    if( SYS->db().at().dataGet(parent().at().DB()+"."+parent().at().tbl()+"_ses",mod->nodePath()+parent().at().tbl()+"_ses",c_el) )
+	    if(SYS->db().at().dataGet(parent().at().DB()+"."+parent().at().tbl()+"_ses",mod->nodePath()+parent().at().tbl()+"_ses",c_el,false,true))
 		stlCurentSet(c_el.cfg("IO_VAL").getI());
-	    else stlCurentSet( parent().at().stlCurent( ) );
+	    else stlCurentSet(parent().at().stlCurent());
 
-	    if(mess_lev() == TMess::Debug)
-	    {
+	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Load previous style time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 
-	    //> Create root pages
+	    //Create root pages
 	    parent().at().list(pg_ls);
 	    for(unsigned i_p = 0; i_p < pg_ls.size(); i_p++)
 		if(!present(pg_ls[i_p]))
 		    add(pg_ls[i_p],parent().at().at(pg_ls[i_p]).at().path());
 
-	    if(mess_lev() == TMess::Debug)
-	    {
+	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Create root pages time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }
 
-	    //> Pages enable
+	    //Pages enable
 	    list(pg_ls);
 	    for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 		try{ at(pg_ls[i_ls]).at().setEnable(true); }
@@ -134,22 +130,21 @@ void Session::setEnable( bool val )
 	}
 	catch(...){ mParent.free(); }
     }
-    else
-    {
+    else {
 	if(start()) setStart(false);
 
 	mess_info(nodePath().c_str(),_("Disable session."));
 
-	//> Pages disable
+	//Pages disable
 	list(pg_ls);
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    at(pg_ls[i_ls]).at().setEnable(false);
 
-	//> Delete pages
+	//Delete pages
 	for(unsigned i_ls = 0; i_ls < pg_ls.size(); i_ls++)
 	    del(pg_ls[i_ls]);
 
-	//> Disconnect from project
+	//Disconnect from project
 	mParent.free();
     }
 
@@ -456,7 +451,8 @@ void Session::stlCurentSet( int sid )
     if(start())
     {
 	MtxAlloc res(dataM, true);
-	//> Load Styles from project
+
+	//Load Styles from project
 	mStProp.clear();
 
 	if(sid >= 0 && sid < parent().at().stlSize())
@@ -469,14 +465,14 @@ void Session::stlCurentSet( int sid )
 	else mStyleIdW = -1;
     }
 
-    //> Write to DB
+    //Write to DB
     if(enable())
     {
 	TConfig c_el(&mod->elPrjSes());
 	c_el.cfg("IDW").setS("<Style>");
 	c_el.cfg("ID").setS(user());
 	c_el.cfg("IO_VAL").setI(mStyleIdW);
-	SYS->db().at().dataSet(parent().at().DB()+"."+parent().at().tbl()+"_ses",mod->nodePath()+parent().at().tbl()+"_ses",c_el);
+	SYS->db().at().dataSet(parent().at().DB()+"."+parent().at().tbl()+"_ses", mod->nodePath()+parent().at().tbl()+"_ses", c_el, false, true);
     }
 }
 
@@ -1344,8 +1340,7 @@ string SessWdg::resourceGet( const string &id, string *mime )
     TSYS::pathLev(path(), 0, true, &off);
     c_el.cfg("IDW").setS(path().substr(off));
     c_el.cfg("ID").setS("media://"+id);
-    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
-    {
+    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) {
 	off = 0;
 	mimeData = c_el.cfg("IO_VAL").getS(); c_el.cfg("IO_VAL").setS("");
 	mimeType = TSYS::strLine(mimeData, 0, &off);
@@ -1372,11 +1367,10 @@ void SessWdg::resourceSet( const string &id, const string &data, const string &m
     c_el.cfg("ID").setS("media://"+id);
 
     if(data.empty())	//Clear the media into the session table
-        SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el);
-    else		//Set the media into the session table
-    {
+        SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, false, false, true);
+    else {		//Set the media into the session table
 	c_el.cfg("IO_VAL").setS(mime+"\n"+TSYS::strEncode(data,TSYS::base64));
-	SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, c_el);
+	SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, c_el, false, true);
     }
 }
 

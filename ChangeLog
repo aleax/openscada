@@ -1,3 +1,32 @@
+2014-06-03 Roman
+- !!!!:SYS: Access to storage problems notify is added.
+    Complex tests for problems notify for storages: SQLite, MySQL, PostgreSQL, FireBird, DBF, Cfg.
+	The tests results: http://wiki.oscada.org/Works/Tests/DB.
+    To functions TCntrNode::load() and TCntrNode::save() argument "string *errs = NULL" is added for place
+	all loading and saving errors into the objects.
+    To global node's services "<load path="obj"/>" and "<save path="obj"/>" added errors obtain and notifications.
+    Zero initial error object "TError( ) : cod(0)" is added.
+    Enum TSYS::Errors (mostly DB Errors) is removed as deprecated.
+    TSYS::modifCfg() expanded for WR access check.
+    Function TSYS::strMess() variant is added for length control and wrap by set "...".
+    OpenSCADA core library version set to 3.1.0.
+- !!!!:FIX:DB: Expanded functions TBDS::dataGet(), TBDS::dataSet() and TBDS::dataDel() by argument "noEx = false"
+	and exceptions generate at access to storage errors.
+    Prevent exceptions at the DB object disable, mostly after connection wrong for the network DB.
+- !:DB.DBF: Periodic (10 seconds) sync changes from memory to file is added. Inline DB folder selection for DB object is added.
+    RO access and errors is added. Some code clean up.
+- !:FIX:DB.FireBird: Connection timeout disabled by not real used and wrong into the DB.
+    Internal API data clean up is added at wrong connection.
+    fieldSet() and fieldDel() mostly rewrote for typical.
+- !:DB.MySQL: Adapted for work into RO mode. CR_CONNECTION_ERROR process at connection lost is added.
+     fieldDel() mostly rewrote for RO process.
+- !:FIX:DB:PostgreSQL: Transaction processing rewrote for typical.
+    Connection lost processing move to after the request.
+    Adapted for work into RO mode.
+    fieldDel() mostly rewrote for RO process.
+- !:DB.SQLite: Adapted for work into RO mode. Adapted for work into RO mode.
+
+
 2014-05-29 Roman
 - TValue: Value type info fix for selectable.
 - UI.QTCfg: Check and warning about no apply changes at the page change is added.

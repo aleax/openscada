@@ -1044,11 +1044,7 @@ void TMArchivator::preDisable( int flag )
 
 void TMArchivator::postDisable( int flag )
 {
-    try
-    {
-	if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
-    }
-    catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
 }
 
 TTipArchivator &TMArchivator::owner( )	{ return *(TTipArchivator*)nodePrev(); }
@@ -1065,7 +1061,7 @@ string TMArchivator::tbl( )	{ return string(owner().owner().subId())+"_mess_proc
 
 void TMArchivator::load_( )
 {
-    if(!SYS->chkSelDB(DB()))	return;
+    if(!SYS->chkSelDB(DB()))	throw TError();
     SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
 }
 

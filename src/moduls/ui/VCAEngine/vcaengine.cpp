@@ -571,13 +571,13 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     c_el.cfg("IDC").setS(idc);
     string tstr;
 
-    for( int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); )
+    for(int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); )
     {
-	if( !w.attrPresent(tstr) ) continue;
+	if(!w.attrPresent(tstr)) continue;
 	AutoHD<Attr> attr = w.attrAt(tstr);
 
-	if( (ldGen && !(attr.at().flgGlob()&Attr::Generic)) ||
-		(!ldGen && (attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser))) )
+	if((ldGen && !(attr.at().flgGlob()&Attr::Generic)) ||
+		(!ldGen && (attr.at().flgGlob()&Attr::Generic || (!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser))))
 	    continue;
 
 	c_el.cfg("ID").setS(tstr);
@@ -587,7 +587,7 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))/* &&
 		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))*/));	//!!!! Commented by no the flags present on first start
 										//on global attributes creation from the primitive.
-	if( !SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el) ) continue;
+	if(!SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el,false,true)) continue;
 
 	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
@@ -635,14 +635,13 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
     c_el.cfg("IDC").setS(idc,true);
     TConfig c_elu(&mod->elWdgUIO()); c_elu.cfg("IDW").setS(idw,true);
     c_elu.cfg("IDC").setS(idc,true);
-    for(unsigned i_a = 0; i_a < als.size(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
 	AutoHD<Attr> attr = w.attrAt(als[i_a]);
 	if(!attr.at().modif()) continue;
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) m_attrs += als[i_a]+";";
 	if(ldGen != (bool)(attr.at().flgGlob()&Attr::Generic)) continue;
 
-	//> Main attributes store
+	//Main attributes store
 	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser))
 	{
 	    c_el.cfg("ID").setS( als[i_a] );
@@ -655,11 +654,10 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el);
+	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el,false,true);
 	}
-	//> User attributes store
-	else if(!ldGen)
-	{
+	//User attributes store
+	else if(!ldGen) {
 	    c_elu.cfg("ID").setS( als[i_a] );
 	    c_elu.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
@@ -674,31 +672,30 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
 	    c_elu.cfg("CFG_VAL").setS(attr.at().cfgVal());
-	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu);
+	    SYS->db().at().dataSet(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,false,true);
 	}
     }
 
-    if(!ldGen)
-    {
-	//> Clear no present IO for main io table
+    if(!ldGen) {
+	//Clear no present IO for main io table
 	c_el.cfgViewAll(false);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_io",nodePath()+tbl+"_io",fld_cnt++,c_el); )
 	{
 	    string sid = c_el.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
-	    SYS->db().at().dataDel(fullDB+"_io",nodePath()+tbl+"_io",c_el,true);
+	    SYS->db().at().dataDel(fullDB+"_io", nodePath()+tbl+"_io", c_el, true, false, true);
 	    fld_cnt--;
 	}
 
-	//> Clear no present IO for user io table
+	//Clear no present IO for user io table
 	c_elu.cfgViewAll(false);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB+"_uio",nodePath()+tbl+"_uio",fld_cnt++,c_elu); )
 	{
 	    string sid = c_elu.cfg("ID").getS();
 	    if(w.attrPresent(sid) || (idc.empty() && !TSYS::pathLev(sid,1).empty())) continue;
 
-	    SYS->db().at().dataDel(fullDB+"_uio",nodePath()+tbl+"_uio",c_elu,true);
+	    SYS->db().at().dataDel(fullDB+"_uio", nodePath()+tbl+"_uio", c_elu, true, false, true);
 	    fld_cnt--;
 	}
     }

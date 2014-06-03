@@ -125,7 +125,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     //Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg))
+    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true))
     {
 	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(), NULL, 10);
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(), NULL, 10);
@@ -193,7 +193,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 	    {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg))
+		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
 		{
 		    if(archive().valType() == TFld::Integer)	buf.setI(cfg.cfg("VAL").getI(), c_tm);
 		    else buf.setB(cfg.cfg("VAL").getI(), c_tm);
@@ -209,7 +209,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 	    {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg))
+		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
 		    buf.setR(cfg.cfg("VAL").getR(), c_tm);
 		else buf.setR(EVAL_REAL, c_tm);
 	    }
@@ -222,7 +222,7 @@ void ModVArchEl::getValsProc( TValBuf &buf, int64_t ibegIn, int64_t iendIn )
 	    {
 		cfg.cfg("TM").setI(c_tm/1000000);
 		cfg.cfg("TMU").setI(c_tm%1000000);
-		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg))
+		if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cfg,false,true))
 		    buf.setS(cfg.cfg("VAL").getS(), c_tm);
 		else buf.setS(EVAL_STR, c_tm);
 	    }
@@ -250,7 +250,7 @@ TVariant ModVArchEl::getValProc( int64_t *tm, bool up_ord )
     }
     cf.cfg("TM").setI(itm/1000000);
     cf.cfg("TMU").setI(itm%1000000);
-    if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf))
+    if(SYS->db().at().dataGet(archivator().addr()+"."+archTbl(),"",cf,false,true))
     {
 	if(tm) *tm = itm;
 	switch(archive().valType())
@@ -324,5 +324,6 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     cfg.cfg("BEGIN").setS(ll2s(mBeg), true);
     cfg.cfg("END").setS(ll2s(mEnd), true);
     cfg.cfg("PRM1").setS(ll2s(mPer), true);
-    return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg);
+
+    return SYS->db().at().dataSet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true);
 }

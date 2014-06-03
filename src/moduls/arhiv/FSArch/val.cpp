@@ -119,17 +119,15 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
     char buf[21]; buf[20] = 0;
     bool unpck = false;
     string a_fnm = anm;
-    if(mod->filePack(anm))
-    {
+    if(mod->filePack(anm)) {
 	bool infoOK = false;
-	//>> Get archive info from info file
+
+	//Get archive info from info file
 	int hd = open((anm+".info").c_str(), O_RDONLY);
-	if(hd >= 0)
-	{
+	if(hd >= 0) {
 	    char ibuf[80];
 	    int rsz = read(hd,ibuf,sizeof(ibuf));
-	    if(rsz > 0 && rsz < (int)sizeof(ibuf))
-	    {
+	    if(rsz > 0 && rsz < (int)sizeof(ibuf)) {
 		ibuf[rsz] = 0;
 		int64_t tBeg, tEnd, tPer;
 		int tVTp;
@@ -146,12 +144,11 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    close(hd);
 	}
 
-	//> Get file info from DB
-	if(!infoOK)
-	{
+	//Get file info from DB
+	if(!infoOK) {
 	    TConfig c_el(&mod->packFE());
 	    c_el.cfg("FILE").setS(anm);
-	    if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el))
+	    if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el,false,true))
 	    {
 		if(abeg)	*abeg = strtoll(c_el.cfg("BEGIN").getS().c_str(),NULL,16);
 		if(aend)	*aend = strtoll(c_el.cfg("END").getS().c_str(),NULL,16);
@@ -164,36 +161,33 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 
 	if(infoOK) return true;
 
-	try
-	{
+	try {
 	    mess_info(nodePath().c_str(), _("Unpack '%s' for information get."),anm.c_str());
 	    a_fnm = mod->unPackArch(anm,false);
 	}
 	catch(TError){ return false; }
 	unpck = true;
     }
-    //> Get params from file
+    //Get params from file
     int hd = open(a_fnm.c_str(), O_RDONLY);
     if(hd <= 0)	return false;
-    //>> Read Header
+    // Read Header
     VFileArch::FHead head;
     int r_len = read(hd, &head, sizeof(VFileArch::FHead));
     close(hd);
     if(r_len < (int)sizeof(VFileArch::FHead) || VFileArch::afl_id != head.f_tp || head.term != 0x55) return false;
-    //>> Check to archive present
+    // Check to archive present
     if(archive)	{ strncpy(buf,head.archive,20); *archive = buf; }
     if(abeg)	*abeg = head.beg;
     if(aend)	*aend = head.end;
     if(aper)	*aper = head.period;
     if(vtp)	*vtp  = (TFld::Type)(head.vtp|(head.vtpExt<<4));
 
-    if(unpck)
-    {
+    if(unpck) {
 	remove(a_fnm.c_str());
 
-	if(!packInfoFiles())
-	{
-	    //>> Write info to DB
+	if(!packInfoFiles()) {
+	    // Write info to DB
 	    TConfig c_el(&mod->packFE());
 	    c_el.cfg("FILE").setS(anm);
 	    c_el.cfg("BEGIN").setS(ll2s(head.beg,TSYS::Hex));
@@ -202,11 +196,11 @@ bool ModVArch::filePrmGet( const string &anm, string *archive, TFld::Type *vtp, 
 	    c_el.cfg("PRM1").setS(buf);
 	    c_el.cfg("PRM2").setS(ll2s(head.period,TSYS::Hex));
 	    c_el.cfg("PRM3").setS(i2s(head.vtp|(head.vtpExt<<4)));
-	    SYS->db().at().dataSet(mod->filesDB(), mod->nodePath()+"Pack/", c_el);
+	    SYS->db().at().dataSet(mod->filesDB(), mod->nodePath()+"Pack/", c_el, false, true);
 	}
 	else if((hd=open((anm+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0)
 	{
-	    //>> Write info to info file
+	    // Write info to info file
 	    string si = TSYS::strMess("%llx %llx %s %llx %d", head.beg, head.end, buf, head.period, head.vtp|(head.vtpExt<<4));
 	    bool fOK = (write(hd,si.data(),si.size()) == (int)si.size());
 	    close(hd);
@@ -1168,13 +1162,12 @@ void VFileArch::check( )
 	mName = mod->packArch(name());
 	mPack = true;
 
-	//>> Get file size
+	// Get file size
 	int hd = open(mName.c_str(), O_RDONLY);
 	if(hd > 0) { mSize = lseek(hd, 0, SEEK_END); close(hd);	}
 
-	if(!owner().archivator().packInfoFiles())
-	{
-	    //>> Write info to DB
+	if(!owner().archivator().packInfoFiles()) {
+	    // Write info to DB
 	    TConfig c_el(&mod->packFE());
 	    c_el.cfg("FILE").setS(mName);
 	    c_el.cfg("BEGIN").setS(ll2s(begin(),TSYS::Hex));
@@ -1182,7 +1175,7 @@ void VFileArch::check( )
 	    c_el.cfg("PRM1").setS(owner().archive().id());
 	    c_el.cfg("PRM2").setS(ll2s(period(),TSYS::Hex));
 	    c_el.cfg("PRM3").setS(i2s(type()));
-	    SYS->db().at().dataSet(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
+	    SYS->db().at().dataSet(mod->filesDB(), mod->nodePath()+"Pack/",c_el, false, true);
 	}
 	else if((hd=open((mName+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0)
 	{
@@ -1202,8 +1195,7 @@ int64_t VFileArch::endData( )
     ResAlloc res(mRes, false);
     if(mErr) throw TError(owner().archivator().nodePath().c_str(),_("Archive file error!"));
 
-    if(mPack)
-    {
+    if(mPack) {
 	res.request(true);
 	try{ mName = mod->unPackArch(mName); } catch(TError){ mErr = true; throw; }
 	mPack = false;

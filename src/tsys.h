@@ -81,20 +81,6 @@ class TSYS : public TCntrNode
 	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
 	enum IntView	{ Dec, Oct, Hex };
-	enum Errors
-	{
-	    //> DB errors code
-	    DBInit = 1,		//init DB error
-	    DBConn,		//connect to DB is error
-	    DBInernal,		//internal error
-	    DBRequest,		//request to DB is error
-	    DBOpen,		//open DB is error
-	    DBOpenTable,	//open table error
-	    DBClose,		//close DB or table error
-	    DBTableEmpty,	//table is empty
-	    DBRowNoPresent,	//no present of requested row
-	    DBReadOnly		//read only db
-	};
 
 	//Public methods
 	TSYS( int argi, char ** argb, char **env );
@@ -139,7 +125,7 @@ class TSYS : public TCntrNode
 	string	cfgFile( )	{ return mConfFile; }
 	XMLNode	&cfgRoot( )	{ return rootN; }
 	XMLNode	*cfgNode( const string &path, bool create = false );
-	void	modifCfg( )	{ rootModifCnt++; }
+	void	modifCfg( bool chkPossibleWR = false );
 
 	string	workDB( )	{ return mWorkDB; }
 	string	selDB( )	{ return mSelDB; }
@@ -224,6 +210,7 @@ class TSYS : public TCntrNode
 	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
 	static string strDecode( const string &in, Code tp = Custom );
 	static string strMess( const char *fmt, ... );
+	static string strMess( unsigned len, const char *fmt, ... );
 	static string strLabEnum( const string &base );
 
 	static string strCompr( const string &in, int lev = -1 );

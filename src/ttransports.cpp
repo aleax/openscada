@@ -215,11 +215,10 @@ void TTransportS::load_( )
 
 void TTransportS::save_( )
 {
-    //> Save external transports
+    //Save external transports
     ResAlloc res(extHostRes, false);
     TConfig c_el(&el_ext);
-    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++)
-    {
+    for(unsigned i_h = 0; i_h < extHostLs.size(); i_h++) {
 	c_el.cfg("OP_USER").setS(extHostLs[i_h].user_open);
 	c_el.cfg("ID").setS(extHostLs[i_h].id);
 	c_el.cfg("NAME").setS(extHostLs[i_h].name);
@@ -229,12 +228,12 @@ void TTransportS::save_( )
 	c_el.cfg("PASS").setS(extHostLs[i_h].pass);
 	SYS->db().at().dataSet(extHostsDB(),nodePath()+"ExtTansp",c_el);
     }
-    //> Clear external transports
+    //Clear external transports
     c_el.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(extHostsDB(),nodePath()+"ExtTansp",fld_cnt++,c_el,true); )
 	if(!extHostGet(c_el.cfg("OP_USER").getS(),c_el.cfg("ID").getS()).id.size())
 	{
-	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp",c_el,true,true);
+	    SYS->db().at().dataDel(extHostsDB(),nodePath()+"ExtTansp",c_el,true,true,true);
 	    fld_cnt--;
 	}
 }
@@ -646,11 +645,7 @@ void TTransportIn::preEnable(int flag)
 
 void TTransportIn::postDisable(int flag)
 {
-    try
-    {
-        if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
 }
 
 TCntrNode &TTransportIn::operator=( TCntrNode &node )
@@ -683,7 +678,7 @@ string TTransportIn::getStatus( )	{ return startStat() ? _("Started. ") : _("Sto
 
 void TTransportIn::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 
@@ -886,11 +881,7 @@ string TTransportOut::tbl( )		{ return owner().owner().subId()+"_out"; }
 
 void TTransportOut::postDisable( int flag )
 {
-    try
-    {
-	if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
 }
 
 bool TTransportOut::cfgChange( TCfg &cfg )
@@ -907,7 +898,7 @@ string TTransportOut::getStatus( )
 
 void TTransportOut::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     SYS->db().at().dataGet(fullDB(), SYS->transport().at().nodePath()+tbl(), *this);
 }
 

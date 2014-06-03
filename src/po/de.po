@@ -7,9 +7,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenSCADA 0.8.1\n"
+"Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-18 19:49+0200\n"
+"POT-Creation-Date: 2014-06-02 22:23+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -20,132 +20,132 @@ msgstr ""
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: resalloc.cpp:38
+#: resalloc.cpp:37
 msgid "Error open semaphore!"
 msgstr "Fehler beim Öffnen des Semaphors!"
 
-#: resalloc.cpp:64 resalloc.cpp:75 resalloc.cpp:96 resalloc.cpp:104
+#: resalloc.cpp:63 resalloc.cpp:74 resalloc.cpp:95 resalloc.cpp:103
 msgid "Resource is try deadlock a thread!"
 msgstr "Die Ressource versucht den toten Block in den Strom einzusetzen"
 
-#: resalloc.cpp:65 resalloc.cpp:97
+#: resalloc.cpp:64 resalloc.cpp:96
 msgid "Resource is timeouted!"
 msgstr "Wartezeit der Ressource ist aus"
 
-#: tarchives.cpp:50 tarchives.cpp:60 tarchives.cpp:70 tbds.cpp:42 tdaqs.cpp:42
-#: tdaqs.cpp:48 tdaqs.cpp:57 tdaqs.cpp:714 tsys.cpp:2266 ttipdaq.cpp:42
-#: ttipdaq.cpp:193 ttransports.cpp:38 ttransports.cpp:47 ttransports.cpp:56
+#: tarchives.cpp:57 tarchives.cpp:67 tarchives.cpp:77 tbds.cpp:42 tdaqs.cpp:42
+#: tdaqs.cpp:48 tdaqs.cpp:57 tdaqs.cpp:719 tsys.cpp:2294 ttipdaq.cpp:42
+#: ttipdaq.cpp:191 ttransports.cpp:38 ttransports.cpp:47 ttransports.cpp:56
 msgid "ID"
 msgstr ""
 
-#: tarchives.cpp:51 tarchives.cpp:61
+#: tarchives.cpp:58 tarchives.cpp:68
 msgid "Module(plugin) name"
 msgstr "Name des Moduls (plugin)"
 
-#: tarchives.cpp:52 tarchives.cpp:62 tarchives.cpp:71 tbds.cpp:44
-#: tbds.cpp:1096 tdaqs.cpp:43 tdaqs.cpp:49 tdaqs.cpp:58 tdaqs.cpp:715
-#: tdaqs.cpp:725 tfunction.cpp:255 tfunction.cpp:263 tprmtmpl.cpp:264
-#: tprmtmpl.cpp:274 tprmtmpl.cpp:602 tsecurity.cpp:40 tsecurity.cpp:46
-#: ttipdaq.cpp:43 ttipdaq.cpp:195 ttransports.cpp:40 ttransports.cpp:49
-#: ttransports.cpp:57 ttransports.cpp:475
+#: tarchives.cpp:59 tarchives.cpp:69 tarchives.cpp:78 tbds.cpp:44 tbds.cpp:985
+#: tdaqs.cpp:43 tdaqs.cpp:49 tdaqs.cpp:58 tdaqs.cpp:720 tdaqs.cpp:730
+#: tfunction.cpp:253 tfunction.cpp:261 tprmtmpl.cpp:260 tprmtmpl.cpp:270
+#: tprmtmpl.cpp:597 tsecurity.cpp:40 tsecurity.cpp:47 ttipdaq.cpp:43
+#: ttipdaq.cpp:193 ttransports.cpp:40 ttransports.cpp:49 ttransports.cpp:57
+#: ttransports.cpp:473
 msgid "Name"
 msgstr "Name"
 
-#: tarchives.cpp:53 tarchives.cpp:63 tarchives.cpp:72 tbds.cpp:45 tdaqs.cpp:44
-#: tdaqs.cpp:50 tfunction.cpp:256 tprmtmpl.cpp:265 tprmtmpl.cpp:603
-#: tsecurity.cpp:42 tsecurity.cpp:48 ttipdaq.cpp:44 ttipdaq.cpp:196
+#: tarchives.cpp:60 tarchives.cpp:70 tarchives.cpp:79 tbds.cpp:45 tdaqs.cpp:44
+#: tdaqs.cpp:50 tfunction.cpp:254 tprmtmpl.cpp:261 tprmtmpl.cpp:598
+#: tsecurity.cpp:42 tsecurity.cpp:49 ttipdaq.cpp:44 ttipdaq.cpp:194
 #: ttransports.cpp:41 ttransports.cpp:50
 msgid "Description"
 msgstr "Beschreibung"
 
-#: tarchives.cpp:54 tarchives.cpp:64 tarchives.cpp:73
+#: tarchives.cpp:61 tarchives.cpp:71 tarchives.cpp:80
 msgid "Start archive"
 msgstr "Start des Archivs"
 
-#: tarchives.cpp:55
+#: tarchives.cpp:62
 msgid "Messages categories"
 msgstr "Nachrichtenkategorien"
 
-#: tarchives.cpp:56 ttipdaq.cpp:47
+#: tarchives.cpp:63 ttipdaq.cpp:47
 msgid "Messages level"
 msgstr "Nachrichtenstufe"
 
-#: tarchives.cpp:57 tarchives.cpp:65 tbds.cpp:46 ttransports.cpp:42
-#: ttransports.cpp:51 ttransports.cpp:478
+#: tarchives.cpp:64 tarchives.cpp:72 tbds.cpp:46 ttransports.cpp:42
+#: ttransports.cpp:51 ttransports.cpp:476
 msgid "Address"
 msgstr "Adresse"
 
-#: tarchives.cpp:66
+#: tarchives.cpp:73
 msgid "Value period (sec)"
 msgstr "Wiederholung des Werts (sek)"
 
-#: tarchives.cpp:67
+#: tarchives.cpp:74
 msgid "Period archiving (sec)"
 msgstr "Zeitintervall für die Archivierung (Sek)"
 
-#: tarchives.cpp:74
+#: tarchives.cpp:81
 msgid "Source mode"
 msgstr "Quellenmodus"
 
-#: tarchives.cpp:76
+#: tarchives.cpp:83
 msgid "Passive;Passive param. attribute;Active param. attribute"
 msgstr "Passiv;Passives Parameterattribut;Aktives Parameterattribut"
 
-#: tarchives.cpp:77
+#: tarchives.cpp:84
 msgid "Source"
 msgstr "Quelle"
 
-#: tarchives.cpp:78
+#: tarchives.cpp:85
 msgid "Data combining mode"
 msgstr "Modus der Assoziation Daten"
 
-#: tarchives.cpp:80
+#: tarchives.cpp:87
 msgid "Moving average;Single;Minimum;Maximum"
 msgstr "Gleitender Durchschnitt;Einer;Minimum;Maximum"
 
-#: tarchives.cpp:81 tdaqs.cpp:59
+#: tarchives.cpp:88 tdaqs.cpp:59
 msgid "Value type"
 msgstr "Datentyp der Werte"
 
-#: tarchives.cpp:83
+#: tarchives.cpp:90
 msgid "Boolean;Integer;Real;String;Int16;Int32;Int64;Real(Float);Real(Double)"
 msgstr ""
-"Logisch;Ganzzahl;Reelle Zahl;Linie;Ganzzahl16;Ganzzahl32;Ganzzahl64;"
-"Reelle(Float);Reelle(Double)"
+"Logisch;Ganzzahl;Reelle Zahl;Linie;Ganzzahl16;Ganzzahl32;Ganzzahl64;Reelle"
+"(Float);Reelle(Double)"
 
-#: tarchives.cpp:84
+#: tarchives.cpp:91
 msgid "Buffer period (sec)"
 msgstr "Zeitintervall für Speicherung (Sek)"
 
-#: tarchives.cpp:85
+#: tarchives.cpp:92
 msgid "Buffer size (items)"
 msgstr "Speichergrösse (Einheiten)"
 
-#: tarchives.cpp:86
+#: tarchives.cpp:93
 msgid "Buffer in hard time grid"
 msgstr "Raster der Pufferzeit"
 
-#: tarchives.cpp:87
+#: tarchives.cpp:94
 msgid "Buffer in high time resolution"
 msgstr "Auflösung Pufferzeit"
 
-#: tarchives.cpp:88
+#: tarchives.cpp:95
 msgid "Process into archivators"
 msgstr "Bearbeitung mit Archivaren"
 
-#: tarchives.cpp:159
+#: tarchives.cpp:169
 msgid "Message archivators load error."
 msgstr "Fehler beim Laden des Nachrichtarchivars."
 
-#: tarchives.cpp:200
+#: tarchives.cpp:210
 msgid "Value archivators load error."
 msgstr "Fehler beim Laden des Wertearchivars."
 
-#: tarchives.cpp:236
+#: tarchives.cpp:246
 msgid "Value archives load error."
 msgstr "Fehler beim Laden des Wertearchivs."
 
-#: tarchives.cpp:261
+#: tarchives.cpp:271
 #, c-format
 msgid ""
 "======================== Subsystem \"Archives\" options ===================\n"
@@ -170,91 +170,83 @@ msgstr ""
 "MaxReqVals    <items>       Maximale Anzahl der Werte.\n"
 "\n"
 
-#: tarchives.cpp:276
+#: tarchives.cpp:286
 msgid "Start/update subsystem."
 msgstr "Subsystems starten/aktualisierung."
 
-#: tarchives.cpp:297
+#: tarchives.cpp:307
 #, c-format
 msgid "Message archivator '%s' start error."
 msgstr "Fehler beim Starten des Nachrichtarchivars '%s'."
 
-#: tarchives.cpp:310
+#: tarchives.cpp:320
 #, c-format
 msgid "Value archivator '%s' start error."
 msgstr "Fehler beim Starten des Wertearchivars '%s'."
 
-#: tarchives.cpp:325
+#: tarchives.cpp:335
 #, c-format
 msgid "Value archive '%s' start error."
 msgstr "Fehler beim Starten des Wertearchivs '%s'."
 
-#: tarchives.cpp:340 tdaqs.cpp:401 ttransports.cpp:287 tuis.cpp:70
+#: tarchives.cpp:350 tdaqs.cpp:404 ttransports.cpp:283 tuis.cpp:70
 msgid "Stop subsystem."
 msgstr "Subsystem anhalten."
 
-#: tarchives.cpp:365
+#: tarchives.cpp:375
 #, c-format
 msgid "Value archivator '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivars '%s'."
 
-#: tarchives.cpp:378
+#: tarchives.cpp:388
 #, c-format
 msgid "Message archivator '%s' stop error."
 msgstr "Fehler beim Anhalten des Nachrichtarchivars '%s'."
 
-#: tarchives.cpp:393
+#: tarchives.cpp:403
 #, c-format
 msgid "Value archive '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 
-#: tarchives.cpp:422
-msgid "Buffer full. Messages lost!"
-msgstr "Der Speicher ist voll, Datenverlust!"
+#: tarchives.cpp:649
+msgid "Message buffer process error."
+msgstr "Meldepuffer Prozessfehler."
 
-#: tarchives.cpp:434
-msgid "Messages buffer filling is too fast!"
-msgstr "Nachrichtenspeicher wird zu schnell gefüllt!"
-
-#: tarchives.cpp:640
-msgid "Message buffer read error."
-msgstr "Fehler beim Lesen des Nachrichtenspeichers."
-
-#: tarchives.cpp:768
+#: tarchives.cpp:780
 msgid "Value archive"
 msgstr "Wertearchiv"
 
-#: tarchives.cpp:769
+#: tarchives.cpp:781
 msgid "Messages archive"
 msgstr "Nachrichtarchiv"
 
-#: tarchives.cpp:771
+#: tarchives.cpp:783
 msgid "Messages buffer size"
 msgstr "Größe des Nachrichtenspeichers"
 
-#: tarchives.cpp:773
+#: tarchives.cpp:785
 msgid "Archiving period (s)"
 msgstr "Archivierungsperiode (Sek.)"
 
-#: tarchives.cpp:774
+#: tarchives.cpp:786
 msgid "View messages"
 msgstr "Ansicht der Nachrichten"
 
-#: tarchives.cpp:776 tarchives.cpp:791 tarchives.cpp:1152 tarchives.cpp:1164
-#: tarchval.cpp:2075 tarchval.cpp:2085 tcontroller.cpp:520 tcontroller.cpp:529
-#: tmodschedul.cpp:433 ttransports.cpp:951
+#: tarchives.cpp:788 tarchives.cpp:803 tarchives.cpp:1158 tarchives.cpp:1170
+#: tarchval.cpp:2077 tarchval.cpp:2087 tcontroller.cpp:508 tcontroller.cpp:517
+#: tmodschedul.cpp:433 ttransports.cpp:989
 msgid "Time"
 msgstr "Zeit"
 
-#: tarchives.cpp:777 tarchives.cpp:1153 tarchval.cpp:2077 tcontroller.cpp:521
+#: tarchives.cpp:789 tarchives.cpp:1159 tarchval.cpp:2079 tcontroller.cpp:509
 msgid "Size (s)"
 msgstr "Größe (s)"
 
-#: tarchives.cpp:778 tarchives.cpp:1154
+#: tarchives.cpp:790 tarchives.cpp:1160
 msgid "Category pattern"
 msgstr "Kategoriemuster"
 
-#: tarchives.cpp:779 tarchives.cpp:1155
+#: tarchives.cpp:791 tarchives.cpp:1161
 msgid ""
 "Messages category template or regular expression.\n"
 "Use template symbols for group selection:\n"
@@ -268,11 +260,11 @@ msgstr ""
 "  '?' - ein beliebiges Symbol.\n"
 "Regulärer Ausdruck in Symbolen umschlossen '/' (/mod_(System|LogicLev)/)."
 
-#: tarchives.cpp:782 tarchives.cpp:1158 tarchives.cpp:1167 tcontroller.cpp:522
+#: tarchives.cpp:794 tarchives.cpp:1164 tarchives.cpp:1173 tcontroller.cpp:510
 msgid "Level"
 msgstr "Stufe"
 
-#: tarchives.cpp:784
+#: tarchives.cpp:796
 msgid ""
 "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
 "Alert (6);Emergency (7);Information (1), ALARMS;Notice (2), ALARMS;Warning "
@@ -284,16 +276,16 @@ msgstr ""
 "(3), ALARM;Fehler (4), ALARM;Kritisch (5), ALARM;Wach (6), ALARM;Notfall "
 "(7), ALARM"
 
-#: tarchives.cpp:786 tarchives.cpp:1142 tarchives.cpp:1161
+#: tarchives.cpp:798 tarchives.cpp:1148 tarchives.cpp:1167
 msgid "Get messages for level more and equal it."
 msgstr "Empfang von Nachrichten für gleiche und höhere Stufe."
 
-#: tarchives.cpp:787 tarchives.cpp:1123 tarchval.cpp:2065 tarchval.cpp:2078
-#: tarchval.cpp:2540
+#: tarchives.cpp:799 tarchives.cpp:1129 tarchval.cpp:2067 tarchval.cpp:2080
+#: tarchval.cpp:2538
 msgid "Archivator"
 msgstr "Archivar"
 
-#: tarchives.cpp:788
+#: tarchives.cpp:800
 msgid ""
 "Messages archivator.\n"
 "No set archivator for process by buffer and all archivators.\n"
@@ -304,55 +296,55 @@ msgstr ""
 "von allen Archivatoren.\n"
 "Installieren Sie '<buffer>' für die Bearbeitung der Anfrage vom Puffer."
 
-#: tarchives.cpp:789 tarchives.cpp:1150 tarchives.cpp:1162 tcontroller.cpp:527
-#: tsys.cpp:2291
+#: tarchives.cpp:801 tarchives.cpp:1156 tarchives.cpp:1168 tcontroller.cpp:515
+#: tsys.cpp:2319
 msgid "Messages"
 msgstr "Nachrichten"
 
-#: tarchives.cpp:792 tarchives.cpp:1165 tarchval.cpp:2086 tcontroller.cpp:530
+#: tarchives.cpp:804 tarchives.cpp:1171 tarchval.cpp:2088 tcontroller.cpp:518
 msgid "mcsec"
 msgstr "mks"
 
-#: tarchives.cpp:793 tarchives.cpp:1166 tcontroller.cpp:531 tsys.cpp:2330
+#: tarchives.cpp:805 tarchives.cpp:1172 tcontroller.cpp:519 tsys.cpp:2358
 msgid "Category"
 msgstr "Kategorie"
 
-#: tarchives.cpp:794 tcontroller.cpp:532 tdaqs.cpp:717
+#: tarchives.cpp:806 tcontroller.cpp:520 tdaqs.cpp:722
 msgid "Lev."
 msgstr "St."
 
-#: tarchives.cpp:795 tarchives.cpp:1168 tcontroller.cpp:533
+#: tarchives.cpp:807 tarchives.cpp:1174 tcontroller.cpp:521
 msgid "Message"
 msgstr "Nachricht"
 
-#: tarchives.cpp:799 tarchives.cpp:804
+#: tarchives.cpp:811 tarchives.cpp:816
 msgid "Value archives"
 msgstr "Wertearchive"
 
-#: tarchives.cpp:801
+#: tarchives.cpp:813
 msgid "Get data period (ms)"
 msgstr "Zeitintervall für Datenempfang (ms)"
 
-#: tarchives.cpp:802
+#: tarchives.cpp:814
 msgid "Get data task priority level"
 msgstr "Prioritätsstufe Datenempfanges"
 
-#: tarchives.cpp:803 tcontroller.cpp:514 tparamcontr.cpp:460
+#: tarchives.cpp:815 tcontroller.cpp:502 tparamcontr.cpp:463
 msgid "Number"
 msgstr "Anzahl"
 
-#: tarchives.cpp:806 tbds.cpp:607 tdaqs.cpp:737 tmodschedul.cpp:438
-#: tprotocols.cpp:63 tsecurity.cpp:256 tspecials.cpp:58 tsys.cpp:2336
-#: ttransports.cpp:485 tuis.cpp:106
+#: tarchives.cpp:818 tbds.cpp:561 tdaqs.cpp:742 tmodschedul.cpp:438
+#: tprotocols.cpp:63 tsecurity.cpp:251 tspecials.cpp:58 tsys.cpp:2364
+#: ttransports.cpp:483 tuis.cpp:106
 msgid "Options help"
 msgstr "Optionen Hilfe"
 
-#: tarchives.cpp:906 tcontroller.cpp:549 tparamcontr.cpp:489
+#: tarchives.cpp:918 tcontroller.cpp:537 tparamcontr.cpp:492
 #, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Insgesamt: %d; Eingeschaltet: %d"
 
-#: tarchives.cpp:963 tarchval.cpp:2061 tarchval.cpp:2063
+#: tarchives.cpp:963 tarchval.cpp:2063 tarchval.cpp:2065
 msgid "Archivators"
 msgstr "Archivar"
 
@@ -372,41 +364,41 @@ msgstr "Nachrichtarchivare"
 msgid "Value archivators"
 msgstr "Wertearchivare"
 
-#: tarchives.cpp:1122
+#: tarchives.cpp:1128
 msgid "Message archivator: "
 msgstr "Nachtrichtarchivar: "
 
-#: tarchives.cpp:1125 tarchval.cpp:2033 tarchval.cpp:2542 tbds.cpp:847
-#: tcontroller.cpp:491 tfunction.cpp:247 tparamcontr.cpp:437 tprmtmpl.cpp:255
-#: tprmtmpl.cpp:591 tspecials.cpp:82 ttransports.cpp:717 ttransports.cpp:933
+#: tarchives.cpp:1131 tarchval.cpp:2035 tarchval.cpp:2540 tbds.cpp:781
+#: tcontroller.cpp:479 tfunction.cpp:245 tparamcontr.cpp:440 tprmtmpl.cpp:251
+#: tprmtmpl.cpp:586 tspecials.cpp:82 ttransports.cpp:790 ttransports.cpp:974
 #: tuis.cpp:130
 msgid "State"
 msgstr "Zustand"
 
-#: tarchives.cpp:1127 tarchval.cpp:2035 tarchval.cpp:2544 tspecials.cpp:83
-#: ttransports.cpp:720 ttransports.cpp:936 tuis.cpp:131
+#: tarchives.cpp:1133 tarchval.cpp:2037 tarchval.cpp:2542 tspecials.cpp:83
+#: ttransports.cpp:793 ttransports.cpp:977 tuis.cpp:131
 msgid "Running"
 msgstr "Aktiv"
 
-#: tarchives.cpp:1128 tarchval.cpp:2546
+#: tarchives.cpp:1134 tarchval.cpp:2544
 msgid "Archivator DB"
 msgstr "Archivar Datenbank"
 
-#: tarchives.cpp:1130 tarchval.cpp:2070
+#: tarchives.cpp:1136 tarchval.cpp:2072
 msgid "End"
 msgstr "Ende"
 
-#: tarchives.cpp:1131 tarchval.cpp:2069
+#: tarchives.cpp:1137 tarchval.cpp:2071
 msgid "Begin"
 msgstr "Beginn"
 
-#: tarchives.cpp:1133 tarchval.cpp:2041 tarchval.cpp:2549 tbds.cpp:854
-#: tbds.cpp:1095 tcontroller.cpp:499 tfunction.cpp:252 tparamcontr.cpp:446
-#: tprmtmpl.cpp:261 tprmtmpl.cpp:599 ttransports.cpp:724 ttransports.cpp:940
+#: tarchives.cpp:1139 tarchval.cpp:2043 tarchval.cpp:2547 tbds.cpp:787
+#: tbds.cpp:984 tcontroller.cpp:487 tfunction.cpp:250 tparamcontr.cpp:449
+#: tprmtmpl.cpp:257 tprmtmpl.cpp:594 ttransports.cpp:797 ttransports.cpp:981
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: tarchives.cpp:1141 tarchives.cpp:1160 tcontroller.cpp:524 tsys.cpp:2295
+#: tarchives.cpp:1147 tarchives.cpp:1166 tcontroller.cpp:512 tsys.cpp:2323
 msgid ""
 "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
 "Alert (6);Emergency (7)"
@@ -414,7 +406,7 @@ msgstr ""
 "Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
 "(5);Wach (6);Notfall (7)"
 
-#: tarchives.cpp:1144
+#: tarchives.cpp:1150
 msgid ""
 "Messages category template or regular expression to processing by "
 "archivator, separated by symbol ';'.\n"
@@ -430,118 +422,118 @@ msgstr ""
 "  '?' - jeweiliges Symbol.\n"
 "Regulärer Ausdruck in Symbolen umschlossen '/' (/mod_(System|LogicLev)/)."
 
-#: tarchives.cpp:1147 tarchval.cpp:2046 tarchval.cpp:2557 ttipdaq.cpp:46
+#: tarchives.cpp:1153 tarchval.cpp:2048 tarchval.cpp:2555 ttipdaq.cpp:46
 #: ttransports.cpp:44 ttransports.cpp:52
 msgid "To start"
 msgstr "Starten"
 
-#: tarchval.cpp:503
+#: tarchval.cpp:508
 msgid "Value is not present."
 msgstr "Der Wert ist nicht vorhanden."
 
-#: tarchval.cpp:663
+#: tarchval.cpp:668
 #, c-format
 msgid "Grid mode doesn't support inserting too old values %lld (%lld-%lld)."
 msgstr ""
 "Gittermodus unterstützt nicht das Einfügen sehr alter Werte %lld (%lld-%lld)."
 
-#: tarchval.cpp:699
+#: tarchval.cpp:704
 msgid "Grid mode doesn't support inserting old values."
 msgstr "Gittermodus unterstützt nicht das Einfügen alter Werte."
 
-#: tarchval.cpp:873 tarchval.cpp:912
+#: tarchval.cpp:878 tarchval.cpp:917
 msgid "Set too old value to buffer."
 msgstr "Einfügen von sehr alten Werten in den Speicher."
 
-#: tarchval.cpp:1182 tarchval.cpp:1206
+#: tarchval.cpp:1183 tarchval.cpp:1207
 #, c-format
 msgid "Connect to source '%s' error."
 msgstr "Fehler beim Verbinden mit der Quelle '%s'."
 
-#: tarchval.cpp:1191 tarchval.cpp:1215
+#: tarchval.cpp:1192 tarchval.cpp:1216
 #, c-format
 msgid "The archive '%s' was already connected to target parameter '%s'."
 msgstr "Archiv '%s' ist bereits auf die Zielparameter '%s' verbunden."
 
-#: tarchval.cpp:1340
+#: tarchval.cpp:1341
 #, c-format
 msgid "Archivator '%s' error or it is not started."
 msgstr "Archivar '%s' Fehler oder Archivar ist nicht gestartet."
 
-#: tarchval.cpp:1440
+#: tarchval.cpp:1441
 #, c-format
 msgid "gdImageStringFT for font '%s' error: %s."
 msgstr "Der Fehler gdImageStringFT für die Schrift '%s': %s."
 
-#: tarchval.cpp:1584
+#: tarchval.cpp:1585
 #, c-format
 msgid "%ds"
 msgstr "%dс"
 
-#: tarchval.cpp:1588
+#: tarchval.cpp:1589
 #, c-format
 msgid "%gs"
 msgstr "%gc"
 
-#: tarchval.cpp:1589
+#: tarchval.cpp:1590
 #, c-format
 msgid "%gms"
 msgstr "%gмс"
 
-#: tarchval.cpp:1827
+#: tarchval.cpp:1828
 msgid "Range error"
 msgstr "Fehler des Bereichs"
 
-#: tarchval.cpp:1872
+#: tarchval.cpp:1874
 #, c-format
 msgid "No support data mode '%d'"
 msgstr "Dateimodus '%d' wird nicht unterstützt"
 
-#: tarchval.cpp:1997
+#: tarchval.cpp:1999
 msgid "Binary mode no support for string data"
 msgstr "Binärer Modus für Textdaten wird nicht unterstützt"
 
-#: tarchval.cpp:2030
+#: tarchval.cpp:2032
 msgid "Value archive: "
 msgstr "Wertearchiv: "
 
-#: tarchval.cpp:2031 tarchval.cpp:2563
+#: tarchval.cpp:2033 tarchval.cpp:2561
 msgid "Archive"
 msgstr "Archiv"
 
-#: tarchval.cpp:2036
+#: tarchval.cpp:2038
 msgid "Buffer end"
 msgstr "Buffersende"
 
-#: tarchval.cpp:2037
+#: tarchval.cpp:2039
 msgid "Buffer begin"
 msgstr "Buffersbeginn"
 
-#: tarchval.cpp:2038
+#: tarchval.cpp:2040
 msgid "Archive DB"
 msgstr "Archiv Datenbank"
 
-#: tarchval.cpp:2066
+#: tarchval.cpp:2068
 msgid "Start"
 msgstr "Starten"
 
-#: tarchval.cpp:2067 tsys.cpp:2331
+#: tarchval.cpp:2069 tsys.cpp:2359
 msgid "Process"
 msgstr "Bearbeitung"
 
-#: tarchval.cpp:2068 tarchval.cpp:2564
+#: tarchval.cpp:2070 tarchval.cpp:2562
 msgid "Period (s)"
 msgstr "Intervall (sek)"
 
-#: tarchval.cpp:2073
+#: tarchval.cpp:2075
 msgid "Values"
 msgstr "Werte"
 
-#: tarchval.cpp:2076
+#: tarchval.cpp:2078
 msgid "Microseconds"
 msgstr "Mikrosekunden"
 
-#: tarchval.cpp:2079
+#: tarchval.cpp:2081
 msgid ""
 "Values archivator.\n"
 "No set archivator for process by buffer and all archivators.\n"
@@ -552,59 +544,59 @@ msgstr ""
 "und von allen Archivers.\n"
 "Installieren Sie '<buffer>' für die Bearbeitung der Anfrage vom Puffer."
 
-#: tarchval.cpp:2080
+#: tarchval.cpp:2082
 msgid "Show trend"
 msgstr "Trend zeigen"
 
-#: tarchval.cpp:2083
+#: tarchval.cpp:2085
 msgid "Values table"
 msgstr "Tabelle der Werte"
 
-#: tarchval.cpp:2087 tdaqs.cpp:61 tprmtmpl.cpp:286 tsys.cpp:2326
+#: tarchval.cpp:2089 tdaqs.cpp:61 tprmtmpl.cpp:282 tsys.cpp:2354
 msgid "Value"
 msgstr "Wert"
 
-#: tarchval.cpp:2092
+#: tarchval.cpp:2094
 msgid "Picture size"
 msgstr "Größe des Bildes"
 
-#: tarchval.cpp:2092
+#: tarchval.cpp:2094
 msgid "Picture width in pixels."
 msgstr "Bildbreite in Pixeln."
 
-#: tarchval.cpp:2093
+#: tarchval.cpp:2095
 msgid "Picture height in pixels."
 msgstr "Bildhöhe in Pixeln."
 
-#: tarchval.cpp:2094
+#: tarchval.cpp:2096
 msgid "Value scale"
 msgstr "Bereich der Werte"
 
-#: tarchval.cpp:2094
+#: tarchval.cpp:2096
 msgid "Picture minimum value."
 msgstr "Der minimale Wert des Bildes."
 
-#: tarchval.cpp:2095
+#: tarchval.cpp:2097
 msgid "Picture maximum value."
 msgstr "Der maximale Wert des Bildes."
 
-#: tarchval.cpp:2096
+#: tarchval.cpp:2098
 msgid "Values trend"
 msgstr "Verlauf der Werte"
 
-#: tarchval.cpp:2539
+#: tarchval.cpp:2537
 msgid "Value archivator: "
 msgstr "Wertearchivar: "
 
-#: tarchval.cpp:2545
+#: tarchval.cpp:2543
 msgid "Archiving time"
 msgstr "Archivierungszeit"
 
-#: tarchval.cpp:2560 tarchval.cpp:2561
+#: tarchval.cpp:2558 tarchval.cpp:2559
 msgid "Archives"
 msgstr "Aufzeichnungen"
 
-#: tarchval.cpp:2565
+#: tarchval.cpp:2563
 msgid "Buffer size"
 msgstr "Speichergrösse"
 
@@ -624,16 +616,24 @@ msgstr "Typ der Datenbank (Modul)"
 msgid "Code page"
 msgstr "Unicode Zeichensatz"
 
-#: tbds.cpp:48 ttipdaq.cpp:45 ttipdaq.cpp:197
+#: tbds.cpp:48 ttipdaq.cpp:45 ttipdaq.cpp:195
 msgid "To enable"
 msgstr "Aktivieren"
 
-#: tbds.cpp:166
+#: tbds.cpp:152
 #, c-format
 msgid "Close DB '%s' error!"
 msgstr "Fehler beim Schliessen der Datenbank '%s'!"
 
-#: tbds.cpp:549
+#: tbds.cpp:279
+msgid "Requested row no present."
+msgstr "Angeforderte Zeile nicht vorhanden."
+
+#: tbds.cpp:360
+msgid "Write row to DB or config file error."
+msgstr "Schreiben Reihe zum DB-oder Konfigurationsfehler."
+
+#: tbds.cpp:508
 #, c-format
 msgid ""
 "========================= Subsystem \"DB\" options ========================\n"
@@ -649,68 +649,68 @@ msgstr ""
 "Tabelle benutzen.\n"
 "\n"
 
-#: tbds.cpp:597
+#: tbds.cpp:552
 msgid "Search and open new DB error."
 msgstr "Fehler beim Suchen und Öffnen einer neuen Datenbank."
 
-#: tbds.cpp:643 tbds.cpp:644 tbds.cpp:648
+#: tbds.cpp:597 tbds.cpp:598 tbds.cpp:601
 msgid "DB"
 msgstr "Datenbank"
 
-#: tbds.cpp:646
+#: tbds.cpp:599
 msgid "Full DB delete"
 msgstr "Endgültiges Löschen der Datenbank"
 
-#: tbds.cpp:647
+#: tbds.cpp:600
 msgid "Select for full deletion DB on DB close. Else DB will be simply closed."
 msgstr ""
 "Auswahl für das endgültige Löschen der Datenbank beim Schliessen, "
 "andernfalls wird die Datenbank einfach geschlossen."
 
-#: tbds.cpp:842
+#: tbds.cpp:777
 msgid "Data base: "
 msgstr "Datenbank: "
 
-#: tbds.cpp:844
+#: tbds.cpp:779
 msgid "Opened table"
 msgstr "Geöffnete Tabelle"
 
-#: tbds.cpp:845 tdaqs.cpp:45
+#: tbds.cpp:780 tdaqs.cpp:45
 msgid "Data base"
 msgstr "Datenbank"
 
-#: tbds.cpp:849 tcontroller.cpp:494 tfunction.cpp:271 tmodschedul.cpp:435
-#: tparamcontr.cpp:444
+#: tbds.cpp:782 tcontroller.cpp:482 tfunction.cpp:269 tmodschedul.cpp:435
+#: tparamcontr.cpp:447
 msgid "Enable"
 msgstr "Einschalten"
 
-#: tbds.cpp:850
+#: tbds.cpp:783
 msgid "Accessible tables"
 msgstr "Verfügbare Tabellen"
 
-#: tbds.cpp:851
+#: tbds.cpp:784
 msgid "Tables which are in the DB, tables which are not opened at that moment."
 msgstr "Tabellen sind in der Datenbank aber nicht geöffnet."
 
-#: tbds.cpp:852
+#: tbds.cpp:785
 msgid "Load system from this DB"
 msgstr "System aus der Datenbank laden"
 
-#: tbds.cpp:862
+#: tbds.cpp:793
 msgid "Codepage of data into DB. For example: UTF-8, KOI8-R, KOI8-U ... ."
 msgstr ""
 "Unicode Zeichensatz in der Datenbank, zum Beispiel: UTF-8, KOI8-R, KOI8-"
 "U ... ."
 
-#: tbds.cpp:866
+#: tbds.cpp:796
 msgid "Tables"
 msgstr "Tabellen"
 
-#: tbds.cpp:867
+#: tbds.cpp:797
 msgid "Opened tables"
 msgstr "Geöffnete Tabellen"
 
-#: tbds.cpp:869
+#: tbds.cpp:799
 msgid ""
 "Opened table list.\n"
 "Adding and deleting tables operations are really open and close tables "
@@ -720,184 +720,194 @@ msgstr ""
 "Hinzufügen und Löschen von Tabellen entspricht Öffnen und Schliessen von "
 "Tabellen."
 
-#: tbds.cpp:870
+#: tbds.cpp:800
 msgid "SQL"
 msgstr ""
 
-#: tbds.cpp:872 ttransports.cpp:949 ttransports.cpp:960
+#: tbds.cpp:801 ttransports.cpp:987 ttransports.cpp:998
 msgid "Request"
 msgstr "Anfrage"
 
-#: tbds.cpp:873
+#: tbds.cpp:802
 msgid "Transaction"
 msgstr "Eingangsübertragung"
 
-#: tbds.cpp:874
+#: tbds.cpp:803
 msgid "Out;Into;No matter"
 msgstr "Außerhalb;Innerhalb;Ganz gleich"
 
-#: tbds.cpp:875 ttransports.cpp:959
+#: tbds.cpp:804 ttransports.cpp:997
 msgid "Send"
 msgstr "Absenden"
 
-#: tbds.cpp:876
+#: tbds.cpp:805
 msgid "Result"
 msgstr "Ergebnis"
 
-#: tbds.cpp:1092
+#: tbds.cpp:982
 msgid "Table: "
 msgstr "Tabelle: "
 
-#: tbds.cpp:1093
+#: tbds.cpp:983
 msgid "Table"
 msgstr "Tabelle"
 
-#: tbds.cpp:1097
+#: tbds.cpp:986
 msgid "Table offset"
 msgstr "Offset-Tabelle"
 
-#: tbds.cpp:1099
+#: tbds.cpp:988
 msgid "Data"
 msgstr "Daten"
 
-#: tcntrnode.cpp:106
+#: tcntrnode.cpp:101
 #, c-format
 msgid "Field id = %s(%s) no present!"
 msgstr "Feld id = %s(%s) ist nicht vorhanden!"
 
-#: tcntrnode.cpp:142
+#: tcntrnode.cpp:132
 #, c-format
 msgid "%s:%s:> Control element '%s' error!"
 msgstr "%s:%s:> Fehler des Kontrollelements '%s'!"
 
-#: tcntrnode.cpp:161 tcntrnode.cpp:182
+#: tcntrnode.cpp:150 tcntrnode.cpp:171
 msgid "Node already in process!"
 msgstr "Knoten wird bearbeitet!"
 
-#: tcntrnode.cpp:201
+#: tcntrnode.cpp:188
 #, c-format
 msgid "Waiting for freeing by %d users!"
 msgstr "Warten auf Freigabe von %d Benutzern!"
 
-#: tcntrnode.cpp:206
+#: tcntrnode.cpp:192
 #, c-format
 msgid "Timeouted of wait. Object is used by %d users. Free object first!"
 msgstr ""
 "Zeitüberschreitung ist aufgetreten. Objekt wird von %d Benutzern verwendet."
 "Zuerst Objekt freigeben!"
 
-#: tcntrnode.cpp:207
+#: tcntrnode.cpp:193
 msgid "Blocking node error. Inform developers please!"
 msgstr "Fehler beim Blockierung des Knotens. Informieren Sie die Entwickler!"
 
-#: tcntrnode.cpp:217
+#: tcntrnode.cpp:205
 msgid "Node disable error. Restore node enabling."
 msgstr ""
 "Fehler beim Abschaltens des Knotens. Wiederherstellung des Einschaltens des "
 "Knotens."
 
-#: tcntrnode.cpp:248
+#: tcntrnode.cpp:233
 msgid "Node is disabled!"
 msgstr "Der Knoten ist abgeschaltet!"
 
-#: tcntrnode.cpp:257
+#: tcntrnode.cpp:242
 #, c-format
 msgid "Node '%s' no present!"
 msgstr "Der Knoten '%s' ist nicht vorhanden!"
 
-#: tcntrnode.cpp:283
+#: tcntrnode.cpp:269
 #, c-format
 msgid "Copy from '%s' to '%s' is impossible"
 msgstr "Kopieren von '%s' nach '%s' ist nicht zulässig."
 
-#: tcntrnode.cpp:293
+#: tcntrnode.cpp:279
 msgid "Destination node doesn't have branches."
 msgstr "Der Zielknoten hat keine Verzweigung."
 
-#: tcntrnode.cpp:301 tcntrnode.cpp:306
+#: tcntrnode.cpp:287 tcntrnode.cpp:292
 msgid "Destination node doesn't have necessary branche."
 msgstr "Der Zielknoten hat keine erforderliche Verzweigung."
 
-#: tcntrnode.cpp:363
+#: tcntrnode.cpp:347
 #, c-format
 msgid "Branch group '%d' error."
 msgstr "Fehler der Branchengruppe '%d'."
 
-#: tcntrnode.cpp:375 tcntrnode.cpp:406 tcntrnode.cpp:419 tcntrnode.cpp:455
-#: tcntrnode.cpp:534
+#: tcntrnode.cpp:358 tcntrnode.cpp:385 tcntrnode.cpp:398 tcntrnode.cpp:433
+#: tcntrnode.cpp:505
 #, c-format
 msgid "Group of childs %d error!"
 msgstr "Gruppe der Kinder %d Fehler!"
 
-#: tcntrnode.cpp:421
+#: tcntrnode.cpp:400
 msgid "Node is not enabled!"
 msgstr "Knoten ist nicht eingeschaltet!"
 
-#: tcntrnode.cpp:425
+#: tcntrnode.cpp:404
 msgid "Add child id is empty!"
 msgstr "Der hinzugefügte Kindbezeichner ist leer!"
 
-#: tcntrnode.cpp:431
+#: tcntrnode.cpp:410
 #, c-format
 msgid "Node '%s' is already present."
 msgstr "Der Knoten '%s' ist schon vorhanden."
 
-#: tcntrnode.cpp:457
+#: tcntrnode.cpp:435
 msgid "Node is begin processed now!"
 msgstr "Knoten wird jetzt bearbeitet!"
 
-#: tcntrnode.cpp:461
+#: tcntrnode.cpp:439
 #, c-format
 msgid "Child '%s' is not present!"
 msgstr "Kindknoten '%s' fehlt!"
 
-#: tcntrnode.cpp:528
+#: tcntrnode.cpp:499
 msgid "Node is the root or is not connected!"
 msgstr "Knoten ist 'root' oder nicht verbunden!"
 
-#: tcntrnode.cpp:539
+#: tcntrnode.cpp:510
 #, c-format
 msgid "Element '%s' is not present or disabled!"
 msgstr "Element '%s' ist nicht vorhanden oder abgeschaltet!"
 
-#: tcntrnode.cpp:608
-msgid "Loading node error."
-msgstr "Fehler beim Laden des Knotens."
-
-#: tcntrnode.cpp:643
-msgid "Saving node error."
-msgstr "Fehler beim Speichern des Knotens."
-
-#: tcntrnode.cpp:660
+#: tcntrnode.cpp:629
 msgid "Too more users for node!!!"
 msgstr "Zu viele Benutzer für Knoten!!!"
 
-#: tcntrnode.cpp:722 tvariant.cpp:419
+#: tcntrnode.cpp:687 tvariant.cpp:419
 #, c-format
 msgid "Function '%s' error or not enough parameters."
 msgstr "Fehler in der Funktion '%s' oder nicht genug Parameter."
 
-#: tcntrnode.cpp:762
+#: tcntrnode.cpp:724
 #, c-format
 msgid "Some tags on path '%s' are missed!"
 msgstr "Einige Namen im Pfad '%s' sind falsch!"
 
-#: tcntrnode.cpp:815
+#: tcntrnode.cpp:803
 #, c-format
 msgid "Error access to element '%s'!"
 msgstr "Fehler beim Zugriff auf das Element '%s'!"
 
-#: tcntrnode.cpp:817
+#: tcntrnode.cpp:805
 #, c-format
 msgid "Element '%s' warning! %s"
 msgstr "Element '%s' Warnung! %s"
 
-#: tcntrnode.cpp:825
+#: tcntrnode.cpp:814
 #, c-format
 msgid "Node: %s"
 msgstr "Knoten: %s"
 
-#: tcntrnode.cpp:879
+#: tcntrnode.cpp:825
+#, c-format
+msgid ""
+"Load error:\n"
+"%s"
+msgstr ""
+"Lastfehler:\n"
+"%s"
+
+#: tcntrnode.cpp:833
+#, c-format
+msgid ""
+"Save error:\n"
+"%s"
+msgstr ""
+"Fehler speichern\n"
+"%s"
+
+#: tcntrnode.cpp:873
 msgid "[TableName]"
 msgstr "[Tabellenname]"
 
@@ -906,35 +916,35 @@ msgstr "[Tabellenname]"
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' ist nicht vorhanden!"
 
-#: tconfig.cpp:263
+#: tconfig.cpp:254
 msgid "Element type is not string!"
 msgstr "Elemententyp ist nicht Text!"
 
-#: tconfig.cpp:269
+#: tconfig.cpp:260
 msgid "Element type is not real!"
 msgstr "Elemententyp ist nicht Reelle Zahl!"
 
-#: tconfig.cpp:275
+#: tconfig.cpp:266
 msgid "Element type is not int!"
 msgstr "Elemententyp ist nicht Ganzzahl!"
 
-#: tconfig.cpp:281
+#: tconfig.cpp:272
 msgid "Element type is not Boolean!"
 msgstr "Elemententyp ist nicht Logisch!"
 
-#: tconfig.cpp:287 tconfig.cpp:405
+#: tconfig.cpp:278 tconfig.cpp:396
 msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
-#: tcontroller.cpp:132 ttransports.cpp:679 ttransports.cpp:855
+#: tcontroller.cpp:126 ttransports.cpp:677 ttransports.cpp:896
 msgid "Started. "
 msgstr "Gestartet. "
 
-#: tcontroller.cpp:135
+#: tcontroller.cpp:129
 msgid "Getting data from remote station: "
 msgstr "Datenempfang von der entfernten Station"
 
-#: tcontroller.cpp:145
+#: tcontroller.cpp:139
 msgid ""
 "Your redundancy configuration wrong and controller often enable-disable "
 "redundancy!"
@@ -942,99 +952,99 @@ msgstr ""
 "Ihre Redundanzkonfiguration falsch und Steuerung oft enable-deaktivieren "
 "Redundanz!"
 
-#: tcontroller.cpp:150
+#: tcontroller.cpp:144
 msgid "Enabled. "
 msgstr "Eingeschaltet"
 
-#: tcontroller.cpp:151
+#: tcontroller.cpp:145
 msgid "Disabled. "
 msgstr "Abgeschaltet"
 
-#: tcontroller.cpp:160
+#: tcontroller.cpp:154
 msgid "Load controller's configurations!"
 msgstr "Konfiguration des Kontrollers laden!"
 
-#: tcontroller.cpp:175
+#: tcontroller.cpp:169
 msgid "Save controller's configurations!"
 msgstr "Speichern der Kontrollerkonfiguration!"
 
-#: tcontroller.cpp:187
+#: tcontroller.cpp:181
 msgid "Start controller!"
 msgstr "Controller starten!"
 
-#: tcontroller.cpp:202
+#: tcontroller.cpp:196
 msgid "Stop controller!"
 msgstr "Controller anhalten!"
 
-#: tcontroller.cpp:214
+#: tcontroller.cpp:208
 msgid "Enable controller!"
 msgstr "Controller einschalten!"
 
-#: tcontroller.cpp:232 tparamcontr.cpp:317
+#: tcontroller.cpp:226 tparamcontr.cpp:317
 #, c-format
 msgid "Enable parameter '%s' error."
 msgstr "Fehler beim Einschalten des Parameters '%s'."
 
-#: tcontroller.cpp:239 tparamcontr.cpp:323
+#: tcontroller.cpp:233 tparamcontr.cpp:323
 msgid "Some parameters enable error."
 msgstr "Fehler beim Starten einiger Parameter."
 
-#: tcontroller.cpp:248
+#: tcontroller.cpp:242
 msgid "Disable controller!"
 msgstr "Controller abschalten!"
 
-#: tcontroller.cpp:259 tparamcontr.cpp:337
+#: tcontroller.cpp:253 tparamcontr.cpp:337
 #, c-format
 msgid "Disable parameter '%s' error."
 msgstr "Fehler beim Abschalten des Parameters '%s'."
 
-#: tcontroller.cpp:296 tparamcontr.cpp:198
+#: tcontroller.cpp:290 tparamcontr.cpp:200
 #, c-format
 msgid "Add parameter '%s' error."
 msgstr "Fehler beim Hinzufügen des Parameters '%s'."
 
-#: tcontroller.cpp:302 tparamcontr.cpp:205
+#: tcontroller.cpp:296 tparamcontr.cpp:207
 msgid "Search and create new parameters error."
 msgstr "Fehler bei der Suche und Erstellung neuer Parameter."
 
-#: tcontroller.cpp:487
+#: tcontroller.cpp:475
 msgid "Controller: "
 msgstr "Controller: "
 
-#: tcontroller.cpp:489 tdaqs.cpp:724 ttipdaq.cpp:159
+#: tcontroller.cpp:477 tdaqs.cpp:729 ttipdaq.cpp:156
 msgid "Controller"
 msgstr "Controller"
 
-#: tcontroller.cpp:493 tdaqs.cpp:707 tsys.cpp:2313 ttransports.cpp:719
-#: ttransports.cpp:935
+#: tcontroller.cpp:481 tdaqs.cpp:712 tsys.cpp:2341 ttransports.cpp:792
+#: ttransports.cpp:976
 msgid "Status"
 msgstr "Status"
 
-#: tcontroller.cpp:495 tdaqs.cpp:719
+#: tcontroller.cpp:483 tdaqs.cpp:724
 msgid "Run"
 msgstr "Aktiv"
 
-#: tcontroller.cpp:496
+#: tcontroller.cpp:484
 msgid "Controller DB"
 msgstr "Datenbank des Controllers"
 
-#: tcontroller.cpp:509 tparamcontr.cpp:435 tparamcontr.cpp:457
+#: tcontroller.cpp:497 tparamcontr.cpp:438 tparamcontr.cpp:460
 msgid "Parameter"
 msgstr "Parameter"
 
-#: tcontroller.cpp:510 tcontroller.cpp:515 tparamcontr.cpp:461
+#: tcontroller.cpp:498 tcontroller.cpp:503 tparamcontr.cpp:464
 msgid "Parameters"
 msgstr "Optionen"
 
-#: tcontroller.cpp:513
+#: tcontroller.cpp:501
 msgid "To add parameters"
 msgstr "Optionen hinzufügen"
 
-#: tcontroller.cpp:518
+#: tcontroller.cpp:506
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
-#: tcontroller.cpp:525
+#: tcontroller.cpp:513
 msgid ""
 "Get messages for level more and equal it.\n"
 "Also affect to specific-diagnostic messages generation by data source."
@@ -1046,7 +1056,7 @@ msgstr ""
 msgid "Data acquisition"
 msgstr "Datenerfassung"
 
-#: tdaqs.cpp:51 tprmtmpl.cpp:266
+#: tdaqs.cpp:51 tprmtmpl.cpp:262
 msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
 
@@ -1054,7 +1064,7 @@ msgstr "Maximale Zeit der Berechnung (sek)"
 msgid "Template program"
 msgstr "Vorlagenprogramm"
 
-#: tdaqs.cpp:53 tprmtmpl.cpp:259 tprmtmpl.cpp:597
+#: tdaqs.cpp:53 tprmtmpl.cpp:255 tprmtmpl.cpp:592
 msgid "Date of modification"
 msgstr "Änderungsdatum"
 
@@ -1078,55 +1088,55 @@ msgstr "Fehler"
 msgid "=== Attributes ==="
 msgstr "=== Attribute ==="
 
-#: tdaqs.cpp:186
+#: tdaqs.cpp:187
 msgid "Load template's libraries error."
 msgstr "Fehler beim Laden der Vorlagenbibliotheken."
 
-#: tdaqs.cpp:217
+#: tdaqs.cpp:218
 #, c-format
 msgid "Add controller '%s' error."
 msgstr "Fehler beim Hinzufügen eines Controllers '%s'."
 
-#: tdaqs.cpp:340 ttransports.cpp:247 tuis.cpp:63
+#: tdaqs.cpp:343 ttransports.cpp:243 tuis.cpp:63
 msgid "Start subsystem."
 msgstr "Subsystems starten."
 
-#: tdaqs.cpp:358
+#: tdaqs.cpp:361
 #, c-format
 msgid "Start template library '%s' error."
 msgstr "Fehler beim Starten der Vorlagenbibliothek '%s'."
 
-#: tdaqs.cpp:379
+#: tdaqs.cpp:382
 #, c-format
 msgid "Enable controller '%s' error."
 msgstr "Fehler beim Einschalten des Controllers '%s'."
 
-#: tdaqs.cpp:421
+#: tdaqs.cpp:424
 #, c-format
 msgid "Stop controller '%s' error."
 msgstr "Fehler beim Anhalten des Controllers '%s'."
 
-#: tdaqs.cpp:438
+#: tdaqs.cpp:441
 #, c-format
 msgid "Disable controller '%s' error."
 msgstr "Fehler beim Abschalten des Controllers '%s'."
 
-#: tdaqs.cpp:465
+#: tdaqs.cpp:468
 #, c-format
 msgid "No DAQ node present '%s'."
 msgstr "Kein DAQ Knoten vorhanden '%s'."
 
-#: tdaqs.cpp:480
+#: tdaqs.cpp:483
 #, c-format
 msgid "Pointed node is not parameter '%s'."
 msgstr "Spitz Knoten nicht Parameter '%s'."
 
-#: tdaqs.cpp:492
+#: tdaqs.cpp:495
 #, c-format
 msgid "Pointed node is not attribute '%s'."
 msgstr "Spitz Knoten nicht Attribut '%s'."
 
-#: tdaqs.cpp:669
+#: tdaqs.cpp:672
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
@@ -1156,92 +1166,92 @@ msgstr ""
 "';' (st1;st2).\n"
 "\n"
 
-#: tdaqs.cpp:704
+#: tdaqs.cpp:709
 msgid "Template library"
 msgstr "Vorlagenbibliothek"
 
-#: tdaqs.cpp:705
+#: tdaqs.cpp:710
 msgid "Redundancy"
 msgstr "Redundanz"
 
-#: tdaqs.cpp:708
+#: tdaqs.cpp:713
 msgid "Station level"
 msgstr "Stationsstufe"
 
-#: tdaqs.cpp:709
+#: tdaqs.cpp:714
 msgid "Redundant task period (s)"
 msgstr "Zeit der Reservierungsaufgabe"
 
-#: tdaqs.cpp:710
+#: tdaqs.cpp:715
 msgid "Restore connection timeout (s)"
 msgstr "Interval der Wiederherstellungzeit der Verbindung"
 
-#: tdaqs.cpp:711
+#: tdaqs.cpp:716
 msgid "Restore data depth time (hour)"
 msgstr "Tiefe der Wiederherstellungzeit der Daten (Stunden)"
 
-#: tdaqs.cpp:712
+#: tdaqs.cpp:717
 msgid "Stations"
 msgstr "Stationen"
 
-#: tdaqs.cpp:716
+#: tdaqs.cpp:721
 msgid "Live"
 msgstr "Lebendig"
 
-#: tdaqs.cpp:718
+#: tdaqs.cpp:723
 msgid "Cntr."
 msgstr "Zähl."
 
-#: tdaqs.cpp:721
+#: tdaqs.cpp:726
 msgid "Go to remote stations list configuration"
 msgstr "Konfiguration der entfernten Stationen"
 
-#: tdaqs.cpp:722 ttipdaq.cpp:160 ttipdaq.cpp:161
+#: tdaqs.cpp:727 ttipdaq.cpp:157 ttipdaq.cpp:158
 msgid "Controllers"
 msgstr "Controller"
 
-#: tdaqs.cpp:726
+#: tdaqs.cpp:731
 msgid "Run."
 msgstr "Akt."
 
-#: tdaqs.cpp:727
+#: tdaqs.cpp:732
 msgid "Redund."
 msgstr "Überfl."
 
-#: tdaqs.cpp:729 ttipdaq.cpp:75
+#: tdaqs.cpp:734 ttipdaq.cpp:75
 msgid "Off;Asymmetric"
 msgstr "Off;Asymmetrisch"
 
-#: tdaqs.cpp:730
+#: tdaqs.cpp:735
 msgid "Pref. run"
 msgstr "Prior. Stufe"
 
-#: tdaqs.cpp:731
+#: tdaqs.cpp:736
 msgid "Remote"
 msgstr "Gelöscht"
 
-#: tdaqs.cpp:734 tdaqs.cpp:735
+#: tdaqs.cpp:739 tdaqs.cpp:740
 msgid "Template libraries"
 msgstr "Vorlagenbibliotheken"
 
-#: tdaqs.cpp:757
+#: tdaqs.cpp:762
 #, c-format
 msgid "Spent time: %s."
 msgstr "Verbrauchte Zeit: %s."
 
-#: tdaqs.cpp:806
+#: tdaqs.cpp:811
 msgid "<newStat>"
 msgstr "<neueStation>"
 
-#: tdaqs.cpp:865
+#: tdaqs.cpp:870
 msgid "<High level>"
 msgstr "<Hohes Niveau>"
 
-#: tdaqs.cpp:866
+#: tdaqs.cpp:871
 msgid "<Low level>"
 msgstr "<Niedriges Niveau>"
 
-#: tdaqs.cpp:867
+#: tdaqs.cpp:872
 msgid "<Optimal>"
 msgstr "<Optimal>"
 
@@ -1258,41 +1268,41 @@ msgstr "Elementencontainer ist schon eingeschaltet!"
 msgid "Element '%s' is not present!"
 msgstr "Element '%s' ist nicht vorhanden!"
 
-#: telem.cpp:341
+#: telem.cpp:340
 msgid "Field is not String."
 msgstr "Feld ist kein Text."
 
-#: telem.cpp:348
+#: telem.cpp:346
 msgid "Field is not Integer."
 msgstr "Feld ist keine Ganzzahl."
 
-#: telem.cpp:355
+#: telem.cpp:352
 msgid "Field is not Real."
 msgstr "Feld ist keine reelle Zahl."
 
-#: telem.cpp:362
+#: telem.cpp:358
 msgid "Field is not Boolean."
 msgstr "Feld ist nicht Logisch."
 
-#: telem.cpp:368
+#: telem.cpp:364
 msgid "Field is not select type!"
 msgstr "Feld ist nicht ausgewählter Typ!"
 
-#: telem.cpp:440 telem.cpp:455 telem.cpp:470 telem.cpp:485
+#: telem.cpp:418 telem.cpp:433 telem.cpp:448 telem.cpp:463
 msgid "Empty"
 msgstr "Leer"
 
-#: telem.cpp:447
+#: telem.cpp:425
 #, c-format
 msgid "Select error! Val: '%s'."
 msgstr "Auswahlfehler! Wert: '%s'."
 
-#: telem.cpp:462 telem.cpp:492
+#: telem.cpp:440 telem.cpp:470
 #, c-format
 msgid "Select error! Val: '%d'."
 msgstr "Auswahlfehler! Wert: '%d'."
 
-#: telem.cpp:477
+#: telem.cpp:455
 #, c-format
 msgid "Select error! Val: '%f'."
 msgstr "Auswahlfehler! Wert: '%f'."
@@ -1302,150 +1312,150 @@ msgstr "Auswahlfehler! Wert: '%f'."
 msgid "Function is used by: %s"
 msgstr "Funktion wird verwendet: %s"
 
-#: tfunction.cpp:91
+#: tfunction.cpp:88
 #, c-format
 msgid "Index %d is broken!"
 msgstr "Index %d ist beschädigt!"
 
-#: tfunction.cpp:131
+#: tfunction.cpp:129
 #, c-format
 msgid "Delete IO '%d' error."
 msgstr "Fehler beim Löschen von IO '%d'."
 
-#: tfunction.cpp:141
+#: tfunction.cpp:139
 #, c-format
 msgid "Move IO from %d to %d error."
 msgstr "Fehler beim Verschieben von IO von %d nach %d."
 
-#: tfunction.cpp:165
+#: tfunction.cpp:163
 #, c-format
 msgid "Change is not permitted while function is used: %s"
 msgstr "Änderung nicht möglich solange die Funktion verwendet wird: %s"
 
-#: tfunction.cpp:185
+#: tfunction.cpp:183
 #, c-format
 msgid "Value '%s' is already attached!"
 msgstr "Wert '%s' ist schon eingeschaltet!"
 
-#: tfunction.cpp:244
+#: tfunction.cpp:242
 msgid "Function: "
 msgstr "Funktion: "
 
-#: tfunction.cpp:245
+#: tfunction.cpp:243
 msgid "Function"
 msgstr "Funktion"
 
-#: tfunction.cpp:249 tprmtmpl.cpp:257 tprmtmpl.cpp:593
+#: tfunction.cpp:247 tprmtmpl.cpp:253 tprmtmpl.cpp:588
 msgid "Accessing"
 msgstr "Zugriff"
 
-#: tfunction.cpp:250 tprmtmpl.cpp:258
+#: tfunction.cpp:248 tprmtmpl.cpp:254
 msgid "Used"
 msgstr "Verwendet"
 
-#: tfunction.cpp:254 tfunction.cpp:262 tprmtmpl.cpp:263 tprmtmpl.cpp:273
-#: tprmtmpl.cpp:601 ttransports.cpp:474
+#: tfunction.cpp:252 tfunction.cpp:260 tprmtmpl.cpp:259 tprmtmpl.cpp:269
+#: tprmtmpl.cpp:596 ttransports.cpp:472
 msgid "Id"
 msgstr ""
 
-#: tfunction.cpp:259 tfunction.cpp:260 tfunction.cpp:275 tprmtmpl.cpp:269
-#: tprmtmpl.cpp:271
+#: tfunction.cpp:257 tfunction.cpp:258 tfunction.cpp:273 tprmtmpl.cpp:265
+#: tprmtmpl.cpp:267
 msgid "IO"
 msgstr ""
 
-#: tfunction.cpp:264 tparamcontr.cpp:440 tparamcontr.cpp:442 tprmtmpl.cpp:275
+#: tfunction.cpp:262 tparamcontr.cpp:443 tparamcontr.cpp:445 tprmtmpl.cpp:271
 msgid "Type"
 msgstr "Typ"
 
-#: tfunction.cpp:265 tprmtmpl.cpp:278 ttransports.cpp:481 ttransports.cpp:952
+#: tfunction.cpp:263 tprmtmpl.cpp:274 ttransports.cpp:479 ttransports.cpp:990
 msgid "Mode"
 msgstr "Modus"
 
-#: tfunction.cpp:266
+#: tfunction.cpp:264
 msgid "Hide"
 msgstr "Unsichtbar"
 
-#: tfunction.cpp:267 ../data/openscada_start.in:24
+#: tfunction.cpp:265 ../data/openscada_start.in:24
 msgid "Default"
 msgstr "Standard"
 
-#: tfunction.cpp:269 tfunction.cpp:298
+#: tfunction.cpp:267 tfunction.cpp:296
 msgid "Execute"
 msgstr "Ausführen"
 
-#: tfunction.cpp:296
+#: tfunction.cpp:294
 msgid "Number runs"
 msgstr "Startenzahl"
 
-#: tfunction.cpp:297
+#: tfunction.cpp:295
 msgid "Spent time"
 msgstr "Verbrauchte Zeit"
 
-#: tfunction.cpp:333 tvalue.cpp:271
+#: tfunction.cpp:331 tvalue.cpp:266
 msgid "String"
 msgstr "Text"
 
-#: tfunction.cpp:334 tvalue.cpp:272
+#: tfunction.cpp:332 tvalue.cpp:267
 msgid "Integer"
 msgstr "Ganzzahl"
 
-#: tfunction.cpp:335 tvalue.cpp:273
+#: tfunction.cpp:333 tvalue.cpp:268
 msgid "Real"
 msgstr "Reele Zahl"
 
-#: tfunction.cpp:336
+#: tfunction.cpp:334
 msgid "Bool"
 msgstr "Logisch"
 
-#: tfunction.cpp:337 tvalue.cpp:275
+#: tfunction.cpp:335 tvalue.cpp:270
 msgid "Object"
 msgstr "Objekt"
 
-#: tfunction.cpp:343
+#: tfunction.cpp:341
 msgid "Return"
 msgstr "Rückgabe"
 
-#: tfunction.cpp:344 ttransports.cpp:588
+#: tfunction.cpp:342 ttransports.cpp:586
 msgid "Output"
 msgstr "Ausgang"
 
-#: tfunction.cpp:345 ttransports.cpp:586
+#: tfunction.cpp:343 ttransports.cpp:584
 msgid "Input"
 msgstr "Eingang"
 
-#: tfunction.cpp:545
+#: tfunction.cpp:543
 #, c-format
 msgid "IO '%s' is not present!"
 msgstr "IO '%s' ist nicht vorhanden!"
 
-#: tfunction.cpp:551 tfunction.cpp:557
+#: tfunction.cpp:549 tfunction.cpp:555
 msgid "Function is not attached!"
 msgstr "Funktion ist nicht aktiviert!"
 
-#: tfunction.cpp:563 tfunction.cpp:577 tfunction.cpp:598 tfunction.cpp:612
-#: tfunction.cpp:626 tfunction.cpp:640 tfunction.cpp:650 tfunction.cpp:663
-#: tfunction.cpp:681 tfunction.cpp:696 tfunction.cpp:712 tfunction.cpp:727
+#: tfunction.cpp:561 tfunction.cpp:575 tfunction.cpp:596 tfunction.cpp:610
+#: tfunction.cpp:624 tfunction.cpp:638 tfunction.cpp:648 tfunction.cpp:661
+#: tfunction.cpp:679 tfunction.cpp:694 tfunction.cpp:710 tfunction.cpp:725
 #: tfunction.h:180 tfunction.h:191 tfunction.h:196
 #, c-format
 msgid "%s: Id or IO %d error!"
 msgstr "%s: Fehler des Bezeichners oder IO %d!"
 
-#: tfunction.cpp:641
+#: tfunction.cpp:639
 #, c-format
 msgid "Get object from not object's IO %d error!"
 msgstr "Fehler beim Empfang des Objekts vom anderen IO %d !"
 
-#: tmess.cpp:242
+#: tmess.cpp:240
 #, c-format
 msgid "Error 'iconv' open: %s"
 msgstr "Fehler beim Öffnen 'iconv': %s"
 
-#: tmess.cpp:256
+#: tmess.cpp:254
 #, c-format
 msgid "Error input sequence convert: %s"
 msgstr "Fehler beim Konvertieren der Eingangssequenz: %s"
 
-#: tmess.cpp:326
+#: tmess.cpp:324
 msgid ""
 "DB address in format [<DB module>.<DB name>].\n"
 "For use main work DB set '*.*'."
@@ -1453,7 +1463,7 @@ msgstr ""
 "Datenbank Parameter im Format [<DB-Modul>.<DB-Name>].\n"
 "Für die Hauptdatenbank '*.*' verwenden."
 
-#: tmess.cpp:332
+#: tmess.cpp:330
 msgid ""
 "Schedule is wrote in seconds periodic form or in standard CRON form.\n"
 "Seconds form is one real number (1.5, 1e-3).\n"
@@ -1498,7 +1508,7 @@ msgstr ""
 "  \"*/2 * * * *\" - für Minuten: 0,2,4,..., 56,58;\n"
 "  \"* 2-4 * * *\" - für alle Minuten in Stunden von 2 bis 4 (einschließlich)."
 
-#: tmess.cpp:361
+#: tmess.cpp:359
 msgid ""
 "Task priority level (-1...99), where:\n"
 "  -1     - lowest priority batch policy;\n"
@@ -1584,7 +1594,7 @@ msgstr "Fehler beim Einschaltung des Moduls '%s'!"
 msgid "Can't detach library '%s'."
 msgstr "Bibliothek '%s' ausschalten ist nicht möglich."
 
-#: tmodschedul.cpp:418 tsys.cpp:2262 ttransports.cpp:471
+#: tmodschedul.cpp:418 tsys.cpp:2290 ttransports.cpp:469
 msgid "Subsystem"
 msgstr "Subsystem"
 
@@ -1633,7 +1643,7 @@ msgstr "Module jetzt prüfen."
 msgid "Shared libs(modules)"
 msgstr "Pfad zu den gemeinsamen Bibliotheken (Modulen)"
 
-#: tmodschedul.cpp:432 tsys.cpp:2310
+#: tmodschedul.cpp:432 tsys.cpp:2338
 msgid "Path"
 msgstr "Pfad"
 
@@ -1662,7 +1672,7 @@ msgstr "Funktion '%s' ist nicht vorhanden im Modul!"
 msgid "Module: "
 msgstr "Modul: "
 
-#: tmodule.cpp:146 tsubsys.cpp:154 tsys.cpp:2335
+#: tmodule.cpp:146 tsubsys.cpp:154 tsys.cpp:2363
 msgid "Help"
 msgstr "Hilfe"
 
@@ -1678,19 +1688,19 @@ msgstr "1:Parameter ist deaktiviert."
 msgid "2:Controller is stopped."
 msgstr "2:Controller ist angehalten!"
 
-#: tparamcontr.cpp:433
+#: tparamcontr.cpp:436
 msgid "Parameter: "
 msgstr "Parameter: "
 
-#: tparamcontr.cpp:441
+#: tparamcontr.cpp:444
 msgid "Change type lead to data lost for specific configurations."
 msgstr "Ändern Art führen zu Daten für bestimmte Konfigurationen verloren."
 
-#: tparamcontr.cpp:458
+#: tparamcontr.cpp:461
 msgid "Inclusion"
 msgstr "Einbeziehung"
 
-#: tparamcontr.cpp:478
+#: tparamcontr.cpp:481
 msgid "Controller is not started!"
 msgstr "Controller ist nicht gestartet!"
 
@@ -1710,88 +1720,88 @@ msgstr "Die Flagge fürs Stoppen der Funktion"
 msgid "Function error"
 msgstr "Fehler in der Funktion"
 
-#: tprmtmpl.cpp:143
+#: tprmtmpl.cpp:139
 msgid "Template is disabled."
 msgstr "Vorlage ist abgeschaltet."
 
-#: tprmtmpl.cpp:252
+#: tprmtmpl.cpp:248
 msgid "Parameter template: "
 msgstr "Parametervorlage: "
 
-#: tprmtmpl.cpp:253 tprmtmpl.cpp:588
+#: tprmtmpl.cpp:249 tprmtmpl.cpp:583
 msgid "Template"
 msgstr "Vorlage"
 
-#: tprmtmpl.cpp:277
+#: tprmtmpl.cpp:273
 msgid "Real;Integer;Boolean;String;Text;Object"
 msgstr "Reelle Zahl;Ganzzahl;Logisch;Linie;Text;Objekt"
 
-#: tprmtmpl.cpp:279
+#: tprmtmpl.cpp:275
 msgid "Input;Output"
 msgstr "Eingang;Ausgang"
 
-#: tprmtmpl.cpp:280 tvalue.cpp:298
+#: tprmtmpl.cpp:276 tvalue.cpp:293
 msgid "Attribute"
 msgstr "Attribut"
 
-#: tprmtmpl.cpp:282
+#: tprmtmpl.cpp:278
 msgid "No attribute;Read only;Full access"
 msgstr "Nicht Attribut;Nur Lesen;Voller Zugang"
 
-#: tprmtmpl.cpp:283
+#: tprmtmpl.cpp:279
 msgid "Configure"
 msgstr "Konfiguration"
 
-#: tprmtmpl.cpp:285
+#: tprmtmpl.cpp:281
 msgid "Constant;Public constant;Link"
 msgstr "Konstante;Konstante frei verfügbar;Verbindung"
 
-#: tprmtmpl.cpp:288
+#: tprmtmpl.cpp:284
 msgid "Program language"
 msgstr "Programmsprache"
 
-#: tprmtmpl.cpp:289 tsys.cpp:2268
+#: tprmtmpl.cpp:285 tsys.cpp:2296
 msgid "Program"
 msgstr "Programm"
 
-#: tprmtmpl.cpp:347 tprmtmpl.cpp:355
+#: tprmtmpl.cpp:343 tprmtmpl.cpp:351
 msgid "New IO"
 msgstr "Neu IO"
 
-#: tprmtmpl.cpp:362
+#: tprmtmpl.cpp:358
 msgid "Deleting lock attribute in not allow."
 msgstr "Löschen des blockierten Attributs ist nicht zulässig."
 
-#: tprmtmpl.cpp:371
+#: tprmtmpl.cpp:367
 msgid "Changing locked attribute is not allowed."
 msgstr "Änderung des blockierten Attributs ist nicht zulässig."
 
-#: tprmtmpl.cpp:372
+#: tprmtmpl.cpp:368
 msgid "Empty value is not valid."
 msgstr "Leerer Wert ist nicht zulässig."
 
-#: tprmtmpl.cpp:557
+#: tprmtmpl.cpp:552
 #, c-format
 msgid "Template '%s' start is error."
 msgstr "Fehler beim Starten der Vorlage '%s'."
 
-#: tprmtmpl.cpp:563
+#: tprmtmpl.cpp:558
 msgid "Some templates start error."
 msgstr "Fehler beim Starten einiger Vorlagen."
 
-#: tprmtmpl.cpp:586
+#: tprmtmpl.cpp:581
 msgid "Parameter templates library: "
 msgstr "Bibliothek der Parametervorlagen: "
 
-#: tprmtmpl.cpp:589
+#: tprmtmpl.cpp:584
 msgid "Library"
 msgstr "Bibliothek"
 
-#: tprmtmpl.cpp:594
+#: tprmtmpl.cpp:589
 msgid "Library BD"
 msgstr "Datenbank der Bibliothek"
 
-#: tprmtmpl.cpp:596
+#: tprmtmpl.cpp:591
 msgid ""
 "DB address in format [<DB module>.<DB name>.<Table name>].\n"
 "For use main work DB set '*.*'."
@@ -1799,11 +1809,11 @@ msgstr ""
 "Datenbankadresse im Format [<DB module>.<DB name>.<Table name>].\n"
 "Für die Hauptdatenbank '*.*' verwenden."
 
-#: tprmtmpl.cpp:606
+#: tprmtmpl.cpp:601
 msgid "Parameter templates"
 msgstr "Parametervorlagen"
 
-#: tprmtmpl.cpp:607
+#: tprmtmpl.cpp:602
 msgid "Templates"
 msgstr "Vorlagen"
 
@@ -1824,11 +1834,11 @@ msgstr ""
 msgid "Security"
 msgstr "Sicherheit"
 
-#: tsecurity.cpp:41 tsecurity.cpp:47
+#: tsecurity.cpp:41 tsecurity.cpp:48
 msgid "Full name"
 msgstr "Voller Name"
 
-#: tsecurity.cpp:43 ttransports.cpp:480
+#: tsecurity.cpp:43 ttransports.cpp:478
 msgid "Password"
 msgstr "Kennwort"
 
@@ -1836,43 +1846,43 @@ msgstr "Kennwort"
 msgid "User picture"
 msgstr "Bild des Benutzers"
 
-#: tsecurity.cpp:49 tsecurity.cpp:253
+#: tsecurity.cpp:50 tsecurity.cpp:248
 msgid "Users"
 msgstr "Benutzer"
 
-#: tsecurity.cpp:59
+#: tsecurity.cpp:60
 msgid "Administrator (superuser)!!!"
 msgstr "Administrator (Supernutzer)!!!"
 
-#: tsecurity.cpp:64
+#: tsecurity.cpp:65
 msgid "Simple user."
 msgstr "Normaler Benutzer."
 
-#: tsecurity.cpp:69
+#: tsecurity.cpp:70
 msgid "Administrators group."
 msgstr "Gruppe von Administratoren."
 
-#: tsecurity.cpp:74
+#: tsecurity.cpp:75
 msgid "Users group."
 msgstr "Gruppe von Benutzern."
 
-#: tsecurity.cpp:106
+#: tsecurity.cpp:107
 msgid "Removal of system user is inadmissible."
 msgstr "Löschen des Systembenutzers ist nicht zulässig."
 
-#: tsecurity.cpp:117
+#: tsecurity.cpp:118
 msgid "Removal of system group is inadmissible."
 msgstr "Löschen der Systemgruppe ist nicht zulässig."
 
-#: tsecurity.cpp:181
+#: tsecurity.cpp:179
 msgid "Search and create new users error."
 msgstr "Fehler beim Suchen und Erstellen neuer Benutzer."
 
-#: tsecurity.cpp:214
+#: tsecurity.cpp:210
 msgid "Search and create new user's groups error."
 msgstr "Fehler beim Suchen und Erstellen neuer Benutzergruppen."
 
-#: tsecurity.cpp:222
+#: tsecurity.cpp:218
 #, c-format
 msgid ""
 "======================= Subsystem \"Security\" options ====================\n"
@@ -1881,39 +1891,39 @@ msgstr ""
 "================== Optionen des Subsystems \"Sicherheit\" =================\n"
 "\n"
 
-#: tsecurity.cpp:249 tsecurity.cpp:381 ttransports.cpp:479
+#: tsecurity.cpp:245 tsecurity.cpp:370 ttransports.cpp:477
 msgid "User"
 msgstr "Benutzer"
 
-#: tsecurity.cpp:250 tsecurity.cpp:392 tsecurity.cpp:546
+#: tsecurity.cpp:246 tsecurity.cpp:381 tsecurity.cpp:530
 msgid "Group"
 msgstr "Gruppe"
 
-#: tsecurity.cpp:251
+#: tsecurity.cpp:247
 msgid "Users and groups"
 msgstr "Benutzer und Gruppen"
 
-#: tsecurity.cpp:254 tsecurity.cpp:390
+#: tsecurity.cpp:249 tsecurity.cpp:379
 msgid "Groups"
 msgstr "Gruppen"
 
-#: tsecurity.cpp:379
+#: tsecurity.cpp:368
 msgid "User "
 msgstr "Benutzer: "
 
-#: tsecurity.cpp:387
+#: tsecurity.cpp:376
 msgid "User DB"
 msgstr "Datenbank des Benutzers"
 
-#: tsecurity.cpp:393
+#: tsecurity.cpp:382
 msgid "Include"
 msgstr "Eingeschlossen"
 
-#: tsecurity.cpp:545
+#: tsecurity.cpp:529
 msgid "Group "
 msgstr "Gruppe "
 
-#: tsecurity.cpp:550
+#: tsecurity.cpp:534
 msgid "User group DB"
 msgstr "Datenbank der Benutzergruppe"
 
@@ -1979,71 +1989,75 @@ msgstr ""
 "Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich ist "
 "die laufende Directory schon korrekt installiert in '%s'."
 
-#: tsys.cpp:268
+#: tsys.cpp:202
+msgid "Read only access to file '%s'."
+msgstr "Nur Lesezugriff auf Datei '%s'."
+
+#: tsys.cpp:275
 msgid "day"
 msgstr "Tag"
 
-#: tsys.cpp:269
+#: tsys.cpp:276
 msgid "hour"
 msgstr "Zeit"
 
-#: tsys.cpp:270
+#: tsys.cpp:277
 msgid "min"
 msgstr ""
 
-#: tsys.cpp:271
+#: tsys.cpp:278
 msgid "s"
 msgstr ""
 
-#: tsys.cpp:272
+#: tsys.cpp:279
 msgid "ms"
 msgstr ""
 
-#: tsys.cpp:273
+#: tsys.cpp:280
 msgid "us"
 msgstr ""
 
-#: tsys.cpp:274
+#: tsys.cpp:281
 msgid "ns"
 msgstr ""
 
-#: tsys.cpp:280
+#: tsys.cpp:287
 msgid "YiB"
 msgstr ""
 
-#: tsys.cpp:281
+#: tsys.cpp:288
 msgid "ZiB"
 msgstr ""
 
-#: tsys.cpp:282
+#: tsys.cpp:289
 msgid "EiB"
 msgstr ""
 
-#: tsys.cpp:283
+#: tsys.cpp:290
 msgid "PiB"
 msgstr ""
 
-#: tsys.cpp:284
+#: tsys.cpp:291
 msgid "TiB"
 msgstr ""
 
-#: tsys.cpp:285
+#: tsys.cpp:292
 msgid "GiB"
 msgstr ""
 
-#: tsys.cpp:286
+#: tsys.cpp:293
 msgid "MiB"
 msgstr ""
 
-#: tsys.cpp:287
+#: tsys.cpp:294
 msgid "KiB"
 msgstr ""
 
-#: tsys.cpp:288
+#: tsys.cpp:295
 msgid "B"
 msgstr ""
 
-#: tsys.cpp:355
+#: tsys.cpp:376
 #, c-format
 msgid ""
 "***************************************************************************\n"
@@ -2124,17 +2138,16 @@ msgstr ""
 "SaveAtExit <true>      System beim Beenden Speichern.\n"
 "SavePeriod <sec>       Zeitintervall für Systemspeicherung.\n"
 
-#: tsys.cpp:448 tsys.cpp:504
+#: tsys.cpp:469 tsys.cpp:525
 #, c-format
 msgid "Config-file '%s' error: %s"
 msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
-#: tsys.cpp:466
-#, fuzzy, c-format
+#: tsys.cpp:487
 msgid "Config-file '%s' load error."
-msgstr "Konfigurationsdatei '%s' Fehler: %s"
+msgstr "Config-Datei '%s' Ladefehler."
 
-#: tsys.cpp:484
+#: tsys.cpp:505
 #, c-format
 msgid ""
 "Station '%s' is not present in the config-file. Use '%s' station "
@@ -2143,100 +2156,100 @@ msgstr ""
 "Station '%s' fehlt in der Konfigurationsdatei. Konfiguration der Station "
 "'%s' wird verwendet!"
 
-#: tsys.cpp:490
+#: tsys.cpp:511
 #, c-format
 msgid "Configuration '%s' error!"
 msgstr "Konfigurationsfehler '%s'!"
 
-#: tsys.cpp:493
+#: tsys.cpp:514
 #, c-format
 msgid "Load config-file error: %s"
 msgstr "Fehler beim Laden der Konfigurationsdatei: %s"
 
-#: tsys.cpp:508
+#: tsys.cpp:530
 #, c-format
 msgid "Configuration '%s' write error. %s"
 msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
-#: tsys.cpp:530
+#: tsys.cpp:554
 msgid "Load!"
 msgstr "Laden!"
 
-#: tsys.cpp:551
+#: tsys.cpp:575
 msgid "No one module is loaded. Your configuration broken!"
 msgstr "Kein Modul ist geladen. Ihre Konfiguration ist kaput"
 
-#: tsys.cpp:572
+#: tsys.cpp:596
 #, c-format
 msgid "Error load subsystem '%s'."
 msgstr "Fehler beim Laden des Subsysems '%s'."
 
-#: tsys.cpp:581
+#: tsys.cpp:605
 msgid "Save!"
 msgstr "Speicherung!"
 
-#: tsys.cpp:604
+#: tsys.cpp:628
 msgid "Start!"
 msgstr "Starten!"
 
-#: tsys.cpp:610
+#: tsys.cpp:634
 #, c-format
 msgid "Error start subsystem '%s'."
 msgstr "Fehler beim Starten des Subsystems '%s'."
 
-#: tsys.cpp:615
+#: tsys.cpp:639
 msgid "Final starting!"
 msgstr "Starten ist beendet"
 
-#: tsys.cpp:647
+#: tsys.cpp:671
 msgid "Stop!"
 msgstr "Anhalten!"
 
-#: tsys.cpp:655
+#: tsys.cpp:679
 #, c-format
 msgid "Error stop subsystem '%s'."
 msgstr "Fehler beim Anhalten des Subsystems '%s'."
 
-#: tsys.cpp:684
+#: tsys.cpp:708
 msgid "The Terminate signal is received. Server is being stopped!"
 msgstr "Signal zum Beenden wird empfangen. Server wird angehalten!"
 
-#: tsys.cpp:688
+#: tsys.cpp:712
 msgid "Floating point exception is caught!"
 msgstr "Fehler bei Fliesskommaoperation abgefangen!"
 
-#: tsys.cpp:696
+#: tsys.cpp:720
 #, c-format
 msgid "Free child process %d!"
 msgstr "Beenden des Kindprozesses %d!"
 
-#: tsys.cpp:703
+#: tsys.cpp:727
 msgid "Segmentation fault signal!"
 msgstr "Fehler Speichersegmentierung!"
 
-#: tsys.cpp:706
+#: tsys.cpp:730
 msgid "OpenSCADA is aborted!"
 msgstr "OpenSCADA ist abgebrochen!"
 
-#: tsys.cpp:712
+#: tsys.cpp:736
 #, c-format
 msgid "Unknown signal %d!"
 msgstr "Unbekanntes Signal %d!"
 
-#: tsys.cpp:785 tsys.cpp:1655
+#: tsys.cpp:809 tsys.cpp:1679
 msgid "Timeouted !!!"
 msgstr "Zeitüberschreitung !!!"
 
-#: tsys.cpp:792 tsys.cpp:1662
+#: tsys.cpp:816 tsys.cpp:1686
 msgid "Wait event..."
 msgstr "Warte auf Ereignis..."
 
-#: tsys.cpp:1563
+#: tsys.cpp:1587
 #, c-format
 msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
-#: tsys.cpp:1602
+#: tsys.cpp:1626
 #, c-format
 msgid ""
 "No permission for create real-time policy for '%s'. Default thread is "
@@ -2245,96 +2258,96 @@ msgstr ""
 "Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist "
 "geschaffen default!"
 
-#: tsys.cpp:1611
+#: tsys.cpp:1635
 #, c-format
 msgid "Task creation error %d."
 msgstr "Fehler des Schaffens der Aufgabe %d!"
 
-#: tsys.cpp:1618
+#: tsys.cpp:1642
 #, c-format
 msgid "Task '%s' start timeouted!"
 msgstr "Task-Start '%s' timeouted!"
 
-#: tsys.cpp:1656
+#: tsys.cpp:1680
 #, c-format
 msgid "Task '%s' is not stopped!"
 msgstr "Aufgabe '%s' ist nicht gestoppt!"
 
-#: tsys.cpp:1744
+#: tsys.cpp:1768
 #, c-format
 msgid "Task %u unexpected terminated by exception."
 msgstr "Task %u unerwartet beendet durch Ausnahme."
 
-#: tsys.cpp:2044
+#: tsys.cpp:2068
 msgid "1:Request is not object!"
 msgstr "1:Die Anfrage ist kein Objekt!"
 
-#: tsys.cpp:2259
+#: tsys.cpp:2287
 #, c-format
 msgid "%s station: \"%s\""
 msgstr "%s Station: \"%s\""
 
-#: tsys.cpp:2264
+#: tsys.cpp:2292
 msgid "Station"
 msgstr "Station"
 
-#: tsys.cpp:2267
+#: tsys.cpp:2295
 msgid "Station name"
 msgstr "Stationsnamen"
 
-#: tsys.cpp:2269
+#: tsys.cpp:2297
 msgid "Version"
 msgstr "Version"
 
-#: tsys.cpp:2270
+#: tsys.cpp:2298
 msgid "Host name"
 msgstr "Rechnername"
 
-#: tsys.cpp:2271
+#: tsys.cpp:2299
 msgid "System user"
 msgstr "Systembenutzer"
 
-#: tsys.cpp:2272
+#: tsys.cpp:2300
 msgid "Operation system"
 msgstr "Betriebssystem"
 
-#: tsys.cpp:2273
+#: tsys.cpp:2301
 msgid "Frequency (MHZ)"
 msgstr "Systemtakt (MHz)"
 
-#: tsys.cpp:2274
+#: tsys.cpp:2302
 msgid "Real-time clock resolution"
 msgstr "Auflösung Echtzeituhr"
 
-#: tsys.cpp:2275
+#: tsys.cpp:2303
 msgid "Internal charset"
 msgstr "Interne Kodierung"
 
-#: tsys.cpp:2276
+#: tsys.cpp:2304
 msgid "Config-file"
 msgstr "Konfigurationsdatei"
 
-#: tsys.cpp:2277
+#: tsys.cpp:2305
 msgid "Work directory"
 msgstr "Arbeitsverzeichnis"
 
-#: tsys.cpp:2278
+#: tsys.cpp:2306
 msgid "Icons directory"
 msgstr "Symbolverzeichnis"
 
-#: tsys.cpp:2279
+#: tsys.cpp:2307
 msgid "Separate directory paths with icons by symbol ';'."
 msgstr "Separate Verzeichnispfade mit Ikonen Symbol ';'."
 
-#: tsys.cpp:2280
+#: tsys.cpp:2308
 msgid "Modules directory"
 msgstr "Modulverzeichnis"
 
-#: tsys.cpp:2281
+#: tsys.cpp:2309
 msgid "Work DB"
 msgstr "Arbeitsdatenbank"
 
-#: tsys.cpp:2282
+#: tsys.cpp:2310
 msgid ""
 "Work DB address in format [<DB module>.<DB name>].\n"
 "Change it field if you want save or reload all system from other DB."
@@ -2343,19 +2356,19 @@ msgstr ""
 "Ändern Sie dieses Feld falls Sie eine andere Datenbank laden oder speichern "
 "wollen."
 
-#: tsys.cpp:2283
+#: tsys.cpp:2311
 msgid "Save system at exit"
 msgstr "System beim Beenden speichern"
 
-#: tsys.cpp:2284
+#: tsys.cpp:2312
 msgid "Select for automatic system saving to DB on exit."
 msgstr "Auswahl für das automatische Speichern in die Datenbank beim Beenden."
 
-#: tsys.cpp:2285
+#: tsys.cpp:2313
 msgid "Save system period"
 msgstr "Zeit für Sicherungsintervall des Systems"
 
-#: tsys.cpp:2286
+#: tsys.cpp:2314
 msgid ""
 "Use no zero period (seconds) for periodic saving of changed systems parts to "
 "DB."
@@ -2363,54 +2376,54 @@ msgstr ""
 "Keine Nullperiode (Sekunden) für periodische Speicherung der geänderten "
 "Systemteile in die Datenbank verwenden."
 
-#: tsys.cpp:2287
+#: tsys.cpp:2315
 msgid "Language"
 msgstr "Sprache"
 
-#: tsys.cpp:2288
+#: tsys.cpp:2316
 msgid "Text variable's base language"
 msgstr "Basissprache für die Variablentexte"
 
-#: tsys.cpp:2290
+#: tsys.cpp:2318
 msgid ""
 "Multilingual for variable texts support enabling by base language selection."
 msgstr ""
 "Schließt die multisprachliche Unterstützung für die Textvariable durch die "
 "Wahl der Grundsprache."
 
-#: tsys.cpp:2293
+#: tsys.cpp:2321
 msgid "Least level"
 msgstr "Niedrigste Nachrichtenstufe"
 
-#: tsys.cpp:2296
+#: tsys.cpp:2324
 msgid "Least messages level which process by the system."
 msgstr "Die niedrigste Nachrichtenstufe, welche vom System bearbeitet wird."
 
-#: tsys.cpp:2297
+#: tsys.cpp:2325
 msgid "To syslog"
 msgstr "Systemlog (syslog)"
 
-#: tsys.cpp:2298
+#: tsys.cpp:2326
 msgid "To stdout"
 msgstr "Standardausgang (stdout)"
 
-#: tsys.cpp:2299
+#: tsys.cpp:2327
 msgid "To stderr"
 msgstr "Standardfehlerausgang (stderr)"
 
-#: tsys.cpp:2300
+#: tsys.cpp:2328
 msgid "To archive"
 msgstr "Zum Archiv"
 
-#: tsys.cpp:2303 tsys.cpp:2304
+#: tsys.cpp:2331 tsys.cpp:2332
 msgid "Subsystems"
 msgstr "Subsysteme"
 
-#: tsys.cpp:2305 tsys.cpp:2306
+#: tsys.cpp:2333 tsys.cpp:2334
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: tsys.cpp:2307
+#: tsys.cpp:2335
 msgid ""
 "For CPU set use processors numbers string separated by symbol ':'.\n"
 "CPU numbers started from 0."
@@ -2419,73 +2432,73 @@ msgstr ""
 "mit dem Symbol ':'.\n"
 "Prozessorsnummer beginnen mit 0."
 
-#: tsys.cpp:2311
+#: tsys.cpp:2339
 msgid "Thread"
 msgstr "Der Strom"
 
-#: tsys.cpp:2312
+#: tsys.cpp:2340
 msgid "TID"
 msgstr ""
 
-#: tsys.cpp:2314
+#: tsys.cpp:2342
 msgid "Policy"
 msgstr "Politik"
 
-#: tsys.cpp:2315
+#: tsys.cpp:2343
 msgid "Prior."
 msgstr "Priorität"
 
-#: tsys.cpp:2318
+#: tsys.cpp:2346
 msgid "CPU set"
 msgstr "CPU Installation"
 
-#: tsys.cpp:2321
+#: tsys.cpp:2349
 msgid "Debug"
 msgstr "Debuggen"
 
-#: tsys.cpp:2323
+#: tsys.cpp:2351
 msgid "Counters"
 msgstr "Zähler"
 
-#: tsys.cpp:2328
+#: tsys.cpp:2356
 msgid "Debug categories"
 msgstr "Kategorien Debugging"
 
-#: tsys.cpp:2333
+#: tsys.cpp:2361
 msgid "See to messages"
 msgstr "Ansicht der Nachrichten"
 
-#: tsys.cpp:2482
+#: tsys.cpp:2510
 msgid "Finished. "
 msgstr "Finished. "
 
-#: tsys.cpp:2484
+#: tsys.cpp:2512
 #, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."
 msgstr "Letzter: %s. Laden: %3.1f%% (%s von %s). Lag: %s. Verlust Zyklen: %g."
 
-#: tsys.cpp:2491
+#: tsys.cpp:2519
 msgid "Standard"
 msgstr "Standard"
 
-#: tsys.cpp:2492
+#: tsys.cpp:2520
 msgid "Round-robin"
 msgstr "Round-robin"
 
-#: tsys.cpp:2494
+#: tsys.cpp:2522
 msgid "Style \"batch\""
 msgstr "Stil \"batch\""
 
-#: tsys.cpp:2507
+#: tsys.cpp:2535
 #, c-format
 msgid "No present task '%s'."
 msgstr "Die Aufgabe ist nicht vorhanden '%s'."
 
-#: tsys.cpp:2520
+#: tsys.cpp:2548
 msgid "Set no allowed processors."
 msgstr "Unzugängliche Prozesse sind installiert"
 
-#: tsys.cpp:2521
+#: tsys.cpp:2549
 msgid "CPU set for thread error."
 msgstr "Fehler bei der Installation von Prozessoren für den Strom."
 
@@ -2502,26 +2515,26 @@ msgstr "Prioritätsstufe"
 msgid "Start controller '%s' error."
 msgstr "Fehler beim Starten des Controllers '%s'."
 
-#: ttipdaq.cpp:112
+#: ttipdaq.cpp:109
 msgid "Id of parameter type error!"
 msgstr "Fehler Typ des Parameterbezeichners!"
 
-#: ttipdaq.cpp:140
+#: ttipdaq.cpp:137
 #, c-format
 msgid "Parameter type '%s' is not present."
 msgstr "Parametertyp '%s' ist nicht vorhanden."
 
-#: ttipdaq.cpp:145
+#: ttipdaq.cpp:142
 #, c-format
 msgid "Error attach new controller %s."
 msgstr "Fehler beim Anbinden des neuen Controllers %s."
 
-#: ttipdaq.cpp:150
+#: ttipdaq.cpp:147
 msgid ""
 "Module doesn't support the function for compilation programming languages."
 msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
 
-#: ttipdaq.cpp:194
+#: ttipdaq.cpp:192
 msgid "Owner"
 msgstr ""
 
@@ -2537,8 +2550,8 @@ msgstr "Übertragungsprotokoll"
 msgid "Open user"
 msgstr "Der offene Benutzer"
 
-#: ttransports.cpp:58 ttransports.cpp:476 ttransports.cpp:715
-#: ttransports.cpp:931
+#: ttransports.cpp:58 ttransports.cpp:474 ttransports.cpp:788
+#: ttransports.cpp:972
 msgid "Transport"
 msgstr "Übertragung"
 
@@ -2554,35 +2567,35 @@ msgstr "Benutzer der Anfrage"
 msgid "Request password"
 msgstr "Kennwort der Anfrage"
 
-#: ttransports.cpp:151 ttransports.cpp:192
+#: ttransports.cpp:148 ttransports.cpp:189
 msgid "Search and create new input transports error."
 msgstr "Fehler bei der Suche und Erstellung neuer Eingangsübertragungen."
 
-#: ttransports.cpp:215
+#: ttransports.cpp:212
 msgid "Search and load external hosts DB error."
 msgstr "Fehler bei der Suche und Laden der externen Datenbank."
 
-#: ttransports.cpp:264
+#: ttransports.cpp:260
 #, c-format
 msgid "Start input transport '%s' error."
 msgstr "Fehler beim Starten der Eingangsübertragung '%s'."
 
-#: ttransports.cpp:277
+#: ttransports.cpp:273
 #, c-format
 msgid "Start output transport '%s' error."
 msgstr "Fehler beim Starten der Ausgangsübertragung '%s'."
 
-#: ttransports.cpp:304
+#: ttransports.cpp:301
 #, c-format
 msgid "Stop input transport '%s' error."
 msgstr "Fehler beim Anhalten der Eingangsübertragung '%s'."
 
-#: ttransports.cpp:316
+#: ttransports.cpp:313
 #, c-format
 msgid "Stop output transport '%s' error."
 msgstr "Fehler beim Anhalten der Ausgangsübertragung '%s'."
 
-#: ttransports.cpp:327
+#: ttransports.cpp:324
 #, c-format
 msgid ""
 "======================= Subsystem \"Transports\" options ==================\n"
@@ -2591,64 +2604,70 @@ msgstr ""
 "================== Optionen des Subsystems \"Übertragung\" ================\n"
 "\n"
 
-#: ttransports.cpp:425
-msgid "Remote host error!"
-msgstr "Fehler des entfernten Systems!"
+#: ttransports.cpp:423
+#, c-format
+msgid "Remote host '%s' error!"
+msgstr "Fehler des entfernten Systems '%s'!"
 
-#: ttransports.cpp:472
+#: ttransports.cpp:470
 msgid "External hosts poll"
 msgstr "Liste der entfernten Systeme"
 
-#: ttransports.cpp:483
+#: ttransports.cpp:481
 msgid "User;System;User and System"
 msgstr ""
 
-#: ttransports.cpp:526
+#: ttransports.cpp:524
 msgid "New external host"
 msgstr "Neuer externe Host"
 
-#: ttransports.cpp:582
+#: ttransports.cpp:580
 msgid "Input transport"
 msgstr "Eingangsübertragung"
 
-#: ttransports.cpp:583
+#: ttransports.cpp:581
 msgid "Output transport"
 msgstr "Ausgangsübertragung"
 
-#: ttransports.cpp:584
+#: ttransports.cpp:582
 msgid "Transports"
 msgstr "Übertragungen"
 
-#: ttransports.cpp:679 ttransports.cpp:855
+#: ttransports.cpp:677 ttransports.cpp:896
 msgid "Stoped. "
 msgstr "Angehalten. "
 
-#: ttransports.cpp:714
+#: ttransports.cpp:700 ttransports.cpp:737 ttransports.cpp:758
+#, c-format
+msgid "Delete node error: %s"
+msgstr "Löschen Knotenfehler: %s"
+
+#: ttransports.cpp:787
 msgid "Input transport: "
 msgstr "Eingangsübertragung: "
 
-#: ttransports.cpp:721 ttransports.cpp:937
+#: ttransports.cpp:794 ttransports.cpp:978
 msgid "Transport DB"
 msgstr "Datenbank der Übertragung"
 
-#: ttransports.cpp:878
+#: ttransports.cpp:919
 #, c-format
 msgid "Transport protocol '%s' no present"
 msgstr "Übertragungsprotokoll ist '%s' nicht vorhanden"
 
-#: ttransports.cpp:930
+#: ttransports.cpp:971
 msgid "Output transport: "
 msgstr "Ausgangsübertragung:"
 
-#: ttransports.cpp:953
+#: ttransports.cpp:991
 msgid "Binary;Text(LF);Text(CR);Text(CR/LF)"
 msgstr "Binär;Text(LF);Text(CR);Text(CR/LF)"
 
-#: ttransports.cpp:954
+#: ttransports.cpp:992
 msgid "Wait timeout"
 msgstr "Timeout erwarten"
 
-#: ttransports.cpp:955
+#: ttransports.cpp:993
 msgid ""
 "Sign for expect by timeout when a response is received.\n"
 "Many systems in response to various protocols (HTTP) are send the response "
@@ -2664,7 +2683,7 @@ msgstr ""
 "Bei der Installation dieser Flaggewird das Erwarten aller Antwortstückchen, "
 "bis zum Datenfehlen während Transport-Timeout erfüllt."
 
-#: ttransports.cpp:961
+#: ttransports.cpp:999
 msgid "Answer"
 msgstr "Antwort"
 
@@ -2685,28 +2704,28 @@ msgstr ""
 msgid "User interface"
 msgstr "Benutzerschnittstelle"
 
-#: tvalue.cpp:257
+#: tvalue.cpp:252
 #, c-format
 msgid "Parameter: %s"
 msgstr "Parameter: %s"
 
-#: tvalue.cpp:258
+#: tvalue.cpp:253
 msgid "Attributes"
 msgstr "Attribute"
 
-#: tvalue.cpp:268
+#: tvalue.cpp:263
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: tvalue.cpp:274
+#: tvalue.cpp:269
 msgid "Boolean"
 msgstr "Logisch"
 
-#: tvalue.cpp:278
+#: tvalue.cpp:273
 msgid "-select"
 msgstr "-Wahl"
 
-#: tvalue.cpp:280
+#: tvalue.cpp:275
 #, c-format
 msgid ""
 "Parameter's attribute\n"
@@ -2719,7 +2738,7 @@ msgstr ""
 "  Name: '%s'\n"
 "  Typ: '%s'"
 
-#: tvalue.cpp:286
+#: tvalue.cpp:281
 msgid ""
 "\n"
 "  Values: "
@@ -2727,7 +2746,7 @@ msgstr ""
 "\n"
 "  Werte: "
 
-#: tvalue.cpp:288
+#: tvalue.cpp:283
 msgid ""
 "\n"
 "  Selected names: "
@@ -2735,24 +2754,24 @@ msgstr ""
 "\n"
 "  Namen zu verwalten: "
 
-#: tvalue.cpp:292 tvalue.cpp:295 tvalue.cpp:299
+#: tvalue.cpp:287 tvalue.cpp:290 tvalue.cpp:294
 msgid "Archiving"
 msgstr "Archivierung"
 
-#: tvalue.cpp:529 tvalue.cpp:703
+#: tvalue.cpp:509 tvalue.cpp:671
 msgid "Not select type!"
 msgstr "Typ ist nicht ausgewählt!"
 
-#: tvalue.cpp:744 tvalue.cpp:778 tvalue.cpp:811 tvalue.cpp:844 tvalue.cpp:865
+#: tvalue.cpp:709 tvalue.cpp:740 tvalue.cpp:770 tvalue.cpp:800 tvalue.cpp:821
 msgid "Write access is denied!"
 msgstr "Schreibzugriff verboten!"
 
-#: tvalue.cpp:756 tvalue.cpp:789 tvalue.cpp:822 tvalue.cpp:853
+#: tvalue.cpp:721 tvalue.cpp:751 tvalue.cpp:781 tvalue.cpp:809
 #, c-format
 msgid "Write value to archive error: %s"
 msgstr "Fehler beim Schreiben des Wertes ins Archiv: %s"
 
-#: tvalue.cpp:980
+#: tvalue.cpp:936
 msgid "Attribute doesn't have archive"
 msgstr "Attribut hat kein Archiv"
 
@@ -2780,90 +2799,90 @@ msgstr "Fehler beim Löschen des Nachkommens IO %d."
 msgid "Child '%d' is not allow."
 msgstr "Nachkommen %d ist verboten."
 
-#: tvariant.cpp:1067
-#, c-format
-msgid "2:Open file '%s' error: %s"
-msgstr "Fehler der Öffnung der Datei '%s' : %s"
-
-#: tvariant.cpp:1080
-#, fuzzy, c-format
-msgid "3:Load file '%s' error."
-msgstr "Fehler beim Anhahalten des Moduls '%s'."
-
-#: tvariant.cpp:1217
-msgid "The object don't attached to node of OpenSCADA tree."
-msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."
-
-#: xml.cpp:78 xml.cpp:124
-#, c-format
-msgid "Child %d is not present."
-msgstr "Kind %d ist nicht vorhanden."
-
-#: xml.cpp:134
+#: tvariant.cpp:969 xml.cpp:136
 #, c-format
 msgid "Child %s:%d is not found!"
 msgstr "Kind %s:%d wurde nicht gefunden!"
 
-#: xml.cpp:143
+#: tvariant.cpp:1089
+#, c-format
+msgid "2:Open file '%s' error: %s"
+msgstr "Fehler der Öffnung der Datei '%s' : %s"
+
+#: tvariant.cpp:1102
+#, c-format
+msgid "3:Load file '%s' error."
+msgstr "3:Datei laden '%s' Fehler."
+
+#: tvariant.cpp:1236
+msgid "The object don't attached to node of OpenSCADA tree."
+msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."
+
+#: xml.cpp:79 xml.cpp:126
+#, c-format
+msgid "Child %d is not present."
+msgstr "Kind %d ist nicht vorhanden."
+
+#: xml.cpp:145
 #, c-format
 msgid "Child with attribut %s=%s is not present."
 msgstr "Kind mit dem Attribut %s=%s ist nicht vorhanden."
 
-#: xml.cpp:363 xml.cpp:408 xml.cpp:454 xml.cpp:487 xml.cpp:506
+#: xml.cpp:362 xml.cpp:407 xml.cpp:457 xml.cpp:490 xml.cpp:509
 #, c-format
 msgid "Unexpected end. Pos: %d"
 msgstr "Unerwartetes Ende. Pos: %d"
 
-#: xml.cpp:373
+#: xml.cpp:372
 #, c-format
 msgid "No comment block end. Pos: %d"
 msgstr "Kein Kommentar Blockende. Pos: %d"
 
-#: xml.cpp:386
+#: xml.cpp:385
 #, c-format
 msgid "Unfinished '!DOCTYPE' block. Pos: %d"
 msgstr "Unvollendete '! DOCTYPE' zu blockieren. Pos: %d"
 
-#: xml.cpp:390
+#: xml.cpp:389
 #, c-format
 msgid "Unfinished '!DOCTYPE [ ]' container. Pos: %d"
 msgstr "Unvollendete '! DOCTYPE []' Container. Pos: %d"
 
-#: xml.cpp:396 xml.cpp:401 xml.cpp:445
+#: xml.cpp:395 xml.cpp:400 xml.cpp:448
 #, c-format
 msgid "Unexpected or error end tag. Pos: %d"
 msgstr "Unerwarteter oder Fehler End-Tag. Pos: %d"
 
-#: xml.cpp:404
+#: xml.cpp:403
 #, c-format
 msgid "Unfinished start comment or unknown block. Pos: %d"
 msgstr "Unfertig starten Kommentar oder unbekannte blockieren. Pos: %d"
 
-#: xml.cpp:465
+#: xml.cpp:468
 #, c-format
 msgid "Start tag error. Pos: %d"
 msgstr "Start-Tag-Fehler. Pos: %d"
 
-#: xml.cpp:494 xml.cpp:500
+#: xml.cpp:497 xml.cpp:503
 #, c-format
 msgid "Unfinished attribute. Pos: %d"
 msgstr "Unfertig Attribut. Pos: %d"
 
-#: xml.cpp:532 xml.cpp:540 xml.cpp:559
+#: xml.cpp:535 xml.cpp:543 xml.cpp:562
 #, c-format
 msgid "Entity error. Pos: %d"
 msgstr "Entity Fehler. Pos: %d"
 
-#: xml.cpp:565
+#: xml.cpp:568
 #, c-format
 msgid "Unknown entity '%s'. Pos: %d"
 msgstr "Unbekannte Entität '%s'. Pos: %d"
 
-#: tarchives.h:157
+#: tarchives.h:160
 msgid "Message archive no support!"
 msgstr "Nachrichtarchiv wird nicht unterstützt!"
 
-#: tarchives.h:159
+#: tarchives.h:162
 msgid "Value archive no support!"
 msgstr "Wertearchiv wird nicht unterstützt!"
 
@@ -2891,11 +2910,11 @@ msgstr "Offenes System der Datenüberwachung und Datenerfassung"
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: ttransports.h:221
+#: ttransports.h:229
 msgid "Input transport no support!"
 msgstr "Eingangsübertragung wird nicht unterstützt!"
 
-#: ttransports.h:223
+#: ttransports.h:231
 msgid "Output transport no support!"
 msgstr "Ausgangsübertragung wird nicht unterstüzt!"
 
@@ -2934,6 +2953,18 @@ msgstr "Nein ein Projekt einstellen!"
 #: ../data/openscada_start.in:67
 msgid "Set the project name to:"
 msgstr "Stellen Sie den Namen des Projekts an:"
+
+#~ msgid "Buffer full. Messages lost!"
+#~ msgstr "Der Speicher ist voll, Datenverlust!"
+
+#~ msgid "Messages buffer filling is too fast!"
+#~ msgstr "Nachrichtenspeicher wird zu schnell gefüllt!"
+
+#~ msgid "Loading node error."
+#~ msgstr "Fehler beim Laden des Knotens."
+
+#~ msgid "Saving node error."
+#~ msgstr "Fehler beim Speichern des Knotens."
 
 #~ msgid "System's external hosts"
 #~ msgstr "Entfernte Systeme"

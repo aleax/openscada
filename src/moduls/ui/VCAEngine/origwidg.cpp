@@ -1311,7 +1311,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
     int off = 0;
 
-    //> Document's number change process
+    //Document's number change process
     if(cfg.id() == "n" && cfg.getI() != prev.getI())
     {
 	if(!cfg.getI())
@@ -1354,7 +1354,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     string db  = sw->ownerSess()->parent().at().DB();
     string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
 
-    //> Make document after time set
+    //Make document after time set
     if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI())))
     {
 	if(!cfg.getI() && prev.getI()) cfg.setI(prev.getI(),false,true);
@@ -1366,24 +1366,24 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    sw->attrAt("process").at().setB(true);
 	}catch(TError err) { }
     }
-    //> Load document's from project's DB
+    //Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI())
     {
 	TConfig c_el(&mod->elPrjSes());
 	TSYS::pathLev(sw->path(),0,true,&off);
 	c_el.cfg("IDW").setS(sw->path().substr(off));
-	//>> Archive position load
+	// Archive position load
 	c_el.cfg("ID").setS("aCur");
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true))
 	    cfg.owner()->attrAt("aCur").at().setI(c_el.cfg("IO_VAL").getI(),false,true);
-	//>> Current archive socuments load
+	// Current archive socuments load
 	c_el.cfg("ID").setS("doc"+i2s(cfg.owner()->attrAt("aCur").at().getI()));
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el))
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true))
 	    cfg.owner()->attrAt("aDoc").at().setS(c_el.cfg("IO_VAL").getS(),false,true);
-	//>> Set current document
+	// Set current document
 	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
 	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("aDoc").at().getS(),false,true);
-	//>> Parse current document and restore last document's time
+	// Parse current document and restore last document's time
 	string cdoc = cfg.owner()->attrAt("doc").at().getS();
 	if(!cdoc.empty())
 	{
@@ -1393,7 +1393,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	}
 	sizeUpdate(sw);
     }
-    //> Move archive cursor
+    //Move archive cursor
     else if(cfg.id() == "aCur" && cfg.getI() != prev.getI())
     {
 	int n = cfg.owner()->attrAt("n").at().getI();
@@ -1405,20 +1405,19 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    if(prev.getI() == cfg.owner()->attrAt("vCur").at().getI())
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
-	    //>> Save cursor to document to project's DB
-	    if(prev.getI() < n && prev.getI() >= 0)
-	    {
+	    // Save cursor to document to project's DB
+	    if(prev.getI() < n && prev.getI() >= 0) {
 		TConfig c_el(&mod->elPrjSes());
 		TSYS::pathLev(sw->path(),0,true,&off);
 		c_el.cfg("IDW").setS(sw->path().substr(off));
 		c_el.cfg("ID").setS(cfg.id());
 		c_el.cfg("IO_VAL").setI(cfg.getI());
-		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true);
 	    }
 	}
 	sizeUpdate(sw);
     }
-    //> Document save
+    //Document save
     else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS())
     {
 	TConfig c_el(&mod->elPrjSes());
@@ -1426,9 +1425,9 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	c_el.cfg("IDW").setS(sw->path().substr(off));
 	c_el.cfg("ID").setS("doc"+i2s(cfg.owner()->attrAt("aCur").at().getI()));
 	c_el.cfg("IO_VAL").setS(cfg.getS());
-	SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+	SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, c_el, false, true);
     }
-    //> Move archive view cursor
+    //Move archive view cursor
     else if(cfg.id() == "vCur" && cfg.getI() != prev.getI())
     {
 	TConfig c_el(&mod->elPrjSes());
@@ -1442,21 +1441,21 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.getI() < 0)
 	{
 	    int docN = prev.getI();
-	    //>> Search next document
+	    // Search next document
 	    if(cfg.getI() == -1)
 		while(docN != aCur)
 		{
 		    c_el.cfg("ID").setS("doc"+i2s(docN));
-		    if(docN != prev.getI() && SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) break;
+		    if(docN != prev.getI() && SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) break;
 		    if(++docN >= n) docN = 0;
 		}
-	    //>> Search previous document
+	    // Search previous document
 	    else
 	    {
 		if(--docN < 0) docN = n-1;
 		if(docN == aCur) docN = prev.getI();
 		c_el.cfg("ID").setS("doc"+i2s(docN));
-		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) docN = prev.getI();
+		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) docN = prev.getI();
 	    }
 	    if(docN != cfg.getI())	cfg.setI(docN,false,true);
 	}
@@ -1465,7 +1464,7 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	{
 	    c_el.cfg("ID").setS("doc"+i2s(cfg.getI()));
 	    c_el.cfg("IO_VAL").setView(true);
-	    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el);
+	    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true);
 	    cfg.owner()->attrAt("doc").at().setS(c_el.cfg("IO_VAL").getS());
 	}
     }
@@ -1560,11 +1559,10 @@ void OrigDocument::sizeUpdate( SessWdg *sw )
 	c_el.cfg("IDW").setS(sw->path().substr(off));
 	c_el.cfg("ID").setS("doc"+i2s(aCur+1));
 	c_el.cfg("IO_VAL").setView(false);
-	if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) rSz = aCur+1;
-	else
-	{
+	if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) rSz = aCur+1;
+	else {
 	    c_el.cfg("ID").setS("doc"+i2s(n-1));
-	    if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) rSz = aCur+1;
+	    if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) rSz = aCur+1;
 	}
     }
     sw->attrAt("aSize").at().setI(rSz);
@@ -1593,7 +1591,7 @@ TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms,
 	TSYS::pathLev(sw->path(),0,true,&off);
 	c_el.cfg("IDW").setS(sw->path().substr(off));
 	c_el.cfg("ID").setS("doc"+i2s(aCur));
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el)) return c_el.cfg("IO_VAL").getS();
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) return c_el.cfg("IO_VAL").getS();
 
 	return "";
     }

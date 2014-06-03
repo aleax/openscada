@@ -47,21 +47,17 @@ ModMArch::~ModMArch( )
 void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable(flag);
-    try
-    {
-	if(flag)
-	{
-	    //Remove info record
-	    TConfig cfg(&mod->archEl());
-	    cfg.cfg("TBL").setS(archTbl(),true);
-	    SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
 
-	    //Remove archive's DB table
-	    SYS->db().at().open( addr()+"."+archTbl() );
-	    SYS->db().at().close( addr()+"."+archTbl(), true );
-	}
+    if(flag) {
+	//Remove info record
+	TConfig cfg(&mod->archEl());
+	cfg.cfg("TBL").setS(archTbl(),true);
+	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
+
+	//Remove archive's DB table
+	SYS->db().at().open(addr()+"."+archTbl());
+	SYS->db().at().close(addr()+"."+archTbl(), true);
     }
-    catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void ModMArch::load_( )
@@ -83,7 +79,7 @@ void ModMArch::load_( )
     //Load message archive parameters
     TConfig wcfg(&mod->archEl());
     wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg))
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true))
     {
 	mBeg = atoi(wcfg.cfg("BEGIN").getS().c_str());
 	mEnd = atoi(wcfg.cfg("END").getS().c_str());
@@ -168,7 +164,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
     cfg.cfg("TBL").setS(archTbl(),true);
     cfg.cfg("BEGIN").setS(TSYS::int2str(mBeg),true);
     cfg.cfg("END").setS(TSYS::int2str(mEnd),true);
-    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg);
+    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg,false,true);
 
     tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 

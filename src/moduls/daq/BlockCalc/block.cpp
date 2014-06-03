@@ -70,22 +70,17 @@ void Block::preDisable( int flag )
 
 void Block::postDisable( int flag )
 {
-    try
-    {
-	if(flag)
-	{
-	    //Delete block from BD
-	    string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
-	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this,true);
+    if(flag) {
+	//Delete block from BD
+	string tbl = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
+	SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this,true);
 
-	    //Delete block's IO from BD
-	    TConfig cfg(&owner().owner().blockIOE());
-	    tbl = tbl+"_io";
-	    cfg.cfg("BLK_ID").setS(id(), true);		//Delete all block id records
-	    SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io",cfg);
-	}
+	//Delete block's IO from BD
+	TConfig cfg(&owner().owner().blockIOE());
+	tbl = tbl+"_io";
+	cfg.cfg("BLK_ID").setS(id(), true);		//Delete all block id records
+	SYS->db().at().dataDel(tbl,mod->nodePath()+owner().cfg("BLOCK_SH").getS()+"_io",cfg);
     }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 Contr &Block::owner( )	{ return *(Contr*)nodePrev(); }
@@ -98,7 +93,7 @@ string Block::name( )
 
 void Block::load_( )
 {
-    if(!SYS->chkSelDB(owner().DB())) return;
+    if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     string bd = owner().DB()+"."+owner().cfg("BLOCK_SH").getS();
     SYS->db().at().dataGet(bd,mod->nodePath()+owner().cfg("BLOCK_SH").getS(),*this);
@@ -135,16 +130,14 @@ void Block::loadIO( const string &blk_db, const string &blk_id, bool force )
 	bd_tbl	= TSYS::strSepParse(bd,2,'.');
     }
 
-    for(int i_ln = 0; i_ln < ioSize(); i_ln++)
-    {
-	if(i_ln >= (int)m_lnk.size())
-	{
+    for(int i_ln = 0; i_ln < ioSize(); i_ln++) {
+	if(i_ln >= (int)m_lnk.size()) {
 	    m_lnk.push_back(SLnk());
 	    m_lnk[i_ln].tp = FREE;
 	}
 
 	cfg.cfg("ID").setS(func()->io(i_ln)->id());
-	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg)) continue;
+	if(!SYS->db().at().dataGet(bd,mod->nodePath()+bd_tbl,cfg,false,true)) continue;
 	//Value
 	setS(i_ln,cfg.cfg("VAL").getS());
 	//Configuration of link
@@ -162,8 +155,7 @@ void Block::saveIO( )
     string bd = owner().DB()+"."+bd_tbl;
 
     for(unsigned i_ln = 0; i_ln < m_lnk.size(); i_ln++)
-	try
-	{
+	try {
 	    cfg.cfg("ID").setS(func()->io(i_ln)->id());
 	    cfg.cfg("TLNK").setI(m_lnk[i_ln].tp);				//Type link
 	    cfg.cfg("LNK").setS((m_lnk[i_ln].tp == FREE)?"":m_lnk[i_ln].lnk);	//Link
@@ -171,8 +163,7 @@ void Block::saveIO( )
 
 	    SYS->db().at().dataSet(bd,mod->nodePath()+bd_tbl,cfg);
 	}
-	catch(TError err)
-	{
+	catch(TError err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Block link '%s' save error."),func()->io(i_ln)->id().c_str());
 	}

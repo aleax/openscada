@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-21 16:39+0200\n"
+"POT-Creation-Date: 2014-06-02 22:42+0300\n"
 "PO-Revision-Date: 2007-10-23 12:39+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -16,34 +16,43 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
+#: bd_sqlite.cpp:34
 msgid "DB SQLite"
 msgstr "БД SQLite"
 
+#: bd_sqlite.cpp:38
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
+#: bd_sqlite.cpp:39
 msgid "BD module. Provides support of the BD SQLite."
 msgstr "Модуль БД. Предоставляет поддержку БД SQLite."
 
+#: bd_sqlite.cpp:139
 #, c-format
 msgid "Delete bd error: %s"
 msgstr "Ошибка удаления БД: %s"
 
+#: bd_sqlite.cpp:152
 #, c-format
 msgid "Open DB file error: %s"
 msgstr "Ошибка открытия файла БД: %s"
 
+#: bd_sqlite.cpp:185
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Ошибка открытия таблицы '%s'. БД отключена."
 
+#: bd_sqlite.cpp:210
 msgid "Unknown error"
 msgstr "Неизвестная ошибка"
 
+#: bd_sqlite.cpp:212 bd_sqlite.cpp:213
 #, c-format
-msgid "Getting table error: %s"
-msgstr "Ошибка запроса таблицы: %s"
+msgid "Request \"%s\" error: %s"
+msgstr "Ошибка запроса \"%s\": %s"
 
+#: bd_sqlite.cpp:268
 msgid ""
 "SQLite DB address must be written as: [<FileDBPath>].\n"
 "Where:\n"
@@ -61,14 +70,15 @@ msgstr ""
 "               Используйте \":memory:\" для создания временной базы данных в "
 "памяти."
 
+#: bd_sqlite.cpp:274
 msgid "Close opened transaction"
 msgstr "Закрыть открытую транзакцию"
 
+#: bd_sqlite.cpp:320 bd_sqlite.cpp:342 bd_sqlite.cpp:410
 msgid "Table is empty."
 msgstr "Таблица пуста."
 
-msgid "Row is not present."
-msgstr "Запись отсутствует."
-
-msgid "Deletion is not permitted. Data base is read only."
-msgstr "Удаление не допустимо. БД только для чтения."
+#: bd_sqlite.cpp:445
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr "Запись \"%s\" отсутствует."

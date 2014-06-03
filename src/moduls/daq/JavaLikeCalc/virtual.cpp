@@ -516,7 +516,7 @@ void Contr::save_( )
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0)
 	    {
-		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true);
+		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true, false, true);
 		fld_cnt--;
 	    }
     }

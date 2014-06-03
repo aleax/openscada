@@ -73,7 +73,7 @@ ModInspAttr::ModInspAttr( const string &iwdg, VisDevelop *mainWind ) : main_win(
 
 ModInspAttr::~ModInspAttr( )
 {
-    //> Delete root item
+    //Delete root item
     beginRemoveRows(QModelIndex(),0,rootItem->childCount());
     delete rootItem;
     endRemoveRows();
@@ -93,31 +93,31 @@ void ModInspAttr::setWdg( const string &iwdg )
     bool isChange = (cur_wdg != iwdg);
     cur_wdg = iwdg;
 
-    //> Get widgets list
-    for( int v_off = 0; (sval=TSYS::strSepParse(iwdg,0,';',&v_off)).size(); ) wdg_ls.push_back(sval);
+    //Get widgets list
+    for(int v_off = 0; (sval=TSYS::strSepParse(iwdg,0,';',&v_off)).size(); ) wdg_ls.push_back(sval);
 
-    if( wdg_ls.size() == 0 )
+    if(wdg_ls.size() == 0)
     {
 	delete rootItem;
 	rootItem = new Item("",Item::Wdg);
 	full_reset = true;
     }
-    else if( wdg_ls.size() == 1 )
+    else if(wdg_ls.size() == 1)
     {
-	//> Set one widget. Check for change root item
-	if( rootItem->type() != Item::Wdg || rootItem->id() != wdg_ls[0] )
+	//Set one widget. Check for change root item
+	if(rootItem->type() != Item::Wdg || rootItem->id() != wdg_ls[0])
 	{
 	    delete rootItem;
 	    rootItem = new Item(wdg_ls[0],Item::Wdg);
 	    full_reset = true;
 	}
-	//>> Update attributes
-	wdgAttrUpdate( QModelIndex() );
+	// Update attributes
+	wdgAttrUpdate(QModelIndex());
     }
     else if(wdg_ls.size() > 1)
     {
-	//> Set group widget
-	if( rootItem->type() != Item::WdgGrp )
+	//Set group widget
+	if(rootItem->type() != Item::WdgGrp)
 	{
 	    beginRemoveRows(QModelIndex(),0,rootItem->childCount());
 	    delete rootItem;
@@ -125,15 +125,15 @@ void ModInspAttr::setWdg( const string &iwdg )
 	    endRemoveRows();
 	}
 
-	//> Check for delete widgets from group
+	//Check for delete widgets from group
 	bool masterWdg = !isChange && (rootItem->childCount() && rootItem->child(0)->id() == "<*>");
-	for( int i_it = (masterWdg?1:0); i_it < rootItem->childCount(); i_it++ )
+	for(int i_it = (masterWdg?1:0); i_it < rootItem->childCount(); i_it++)
 	{
 	    unsigned i_w;
 	    for(i_w = 0; i_w < wdg_ls.size(); i_w++)
-		if( rootItem->child(i_it)->id() == wdg_ls[i_w] )
+		if(rootItem->child(i_it)->id() == wdg_ls[i_w])
 		    break;
-	    if( i_w >= wdg_ls.size() )
+	    if(i_w >= wdg_ls.size())
 	    {
 		beginRemoveRows(QModelIndex(),i_it,i_it);
 		rootItem->childDel(i_it);
@@ -142,7 +142,7 @@ void ModInspAttr::setWdg( const string &iwdg )
 	    }
 	}
 
-	//> Check for add master widget
+	//Check for add master widget
 	if(!masterWdg)
 	{
 	    beginInsertRows(QModelIndex(),0,0);
@@ -151,11 +151,11 @@ void ModInspAttr::setWdg( const string &iwdg )
 	    endInsertRows();
 	}
 
-	//> Add new items and update attributes
+	//Add new items and update attributes
 	for(unsigned i_w = 0; i_w < wdg_ls.size(); i_w++)
 	{
 	    int row = rootItem->childGet(wdg_ls[i_w]);
-	    if( row < 0 )
+	    if(row < 0)
 	    {
 		beginInsertRows(QModelIndex(),i_w+1,i_w+1);
 		row = rootItem->childInsert(wdg_ls[i_w],i_w+1,Item::Wdg);
@@ -190,7 +190,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	XMLNode info_req("info");
 	XMLNode req("get");
 
-	//> Set/update widget name
+	//Set/update widget name
 	req.setAttr("path",itId+"/"+TSYS::strEncode("/wdg/cfg/name",TSYS::PathEl));
 	if(!mainWin()->cntrIfCmd(req))	it->setName(req.text().c_str());
 
@@ -199,26 +199,26 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	XMLNode *root = info_req.childGet(0);
 
 	repIt:
-	//> Delete items of a no present attributes
+	//Delete items of a no present attributes
 	idst.clear();
 	idst.push_back(0);
 	int it_lev = 0;
 	Item *curit = it;
 
-	//>> Get next item
+	// Get next item
 	while(idst[it_lev] < curit->childCount())
 	{
-	    //>> Process next attribute
+	    // Process next attribute
 	    if(curit->child(idst[it_lev])->type( ) == Item::Attr)
 	    {
 		string it_id = curit->child(idst[it_lev])->id();
-		//>>> Find into present attributes list
+		//  Find into present attributes list
 		unsigned i_a;
 		for(i_a = 0; i_a < root->childSize(); i_a++)
 		    if(root->childGet(i_a)->attr("id") == it_id)
 			break;
-		//>>> Remove no present item
-		if( i_a >= root->childSize() && (!grpW || !curit->child(idst[it_lev])->setWdgs(itId,true)) )
+		//  Remove no present item
+		if(i_a >= root->childSize() && (!grpW || !curit->child(idst[it_lev])->setWdgs(itId,true)))
 		{
 		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
 		    curit->childDel(idst[it_lev]);
@@ -226,7 +226,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		    idst[it_lev]--;
 		}
 	    }
-	    //>> Enter to group
+	    // Enter to group
 	    else if(curit->child(idst[it_lev])->type( ) == Item::AttrGrp)
 	    {
 		curmod = index(idst[it_lev],0,curmod);
@@ -237,7 +237,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		continue;
 	    }
 
-	    //>> Up to level
+	    // Up to level
 	    idst[it_lev]++;
 	    while(idst[it_lev] >= curit->childCount())
 	    {
@@ -251,17 +251,17 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 		idst.pop_back();
 		it_lev--;
 
-		if( prev_tp == Item::AttrGrp && !prev_chlds )
+		if(prev_tp == Item::AttrGrp && !prev_chlds)
 		{
 		    beginRemoveRows(curmod,idst[it_lev],idst[it_lev]);
 		    curit->childDel(idst[it_lev]);
 		    endRemoveRows();
 		}else idst[it_lev]++;
 	    }
-	    if( idst[it_lev] >= curit->childCount() && it_lev == 0 )	break;
+	    if(idst[it_lev] >= curit->childCount() && it_lev == 0)	break;
 	}
 
-	//> Add items for present attributes
+	//Add items for present attributes
 	for(unsigned i_a = 0; i_a < root->childSize(); i_a++)
 	{
 	    XMLNode *gnd = root->childGet(i_a);
@@ -270,7 +270,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    string a_id = gnd->attr("id");
 	    string a_nm = gnd->attr("dscr");
 	    Item *cur_it = it;
-	    //>> Parse attributes group
+	    // Parse attributes group
 	    if(TSYS::strSepParse(a_nm,1,':').size())
 		for(int i_l = 0; true; i_l++)
 		{
@@ -288,7 +288,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 			break;
 		    }
 	    }
-	    //>> Check attribute item
+	    // Check attribute item
 	    int ga_id = cur_it->childGet(a_id);
 	    if(grpW && ga_id >= 0) { cur_it->child(ga_id)->setWdgs(itId); continue; }
 	    if(ga_id < 0) ga_id = cur_it->childInsert(a_id, -1, Item::Attr);
@@ -298,7 +298,7 @@ void ModInspAttr::wdgAttrUpdate( const QModelIndex &mod_it, const QModelIndex &g
 	    cur_it->child(ga_id)->setModify(grpW ? false : atoi(gnd->attr("modif").c_str()));
 	    cur_it->child(ga_id)->setHelp(gnd->attr("help"));
 	    if(grpW) cur_it->child(ga_id)->setWdgs(itId);
-	    //>> Get Value
+	    // Get Value
 	    string sval;
 	    req.clear()->setName("CntrReqs")->setAttr("path",itId);
 	    req.childAdd("get")->setAttr("path","/%2fattr%2f"+a_id);
@@ -761,13 +761,11 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     {
 	QAction *rez = popup.exec(QCursor::pos());
 	if(actCopy && rez == actCopy) QApplication::clipboard()->setText(it->data().toString());
-	else if(actEdit && rez == actEdit)
-	{
+	else if(actEdit && rez == actEdit) {
 	    InputDlg dlg(this, actEdit->icon(),_("Full text of the attribute edit."),
 		QString(_("Attribute '%1' edit for widget '%2'.")).arg(it->name().c_str()).arg(nwdg.c_str()),false,false);
 
-	    if(it->help().size())
-	    {
+	    if(it->help().size()) {
 		QTextEdit *helpView = new QTextEdit(&dlg);
 		helpView->setReadOnly(true);
 		helpView->setMaximumHeight(100);
@@ -784,8 +782,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    sp.setVerticalStretch(3);
 	    tEd->setSizePolicy(sp);
 	    tEd->setText(it->data().toString());
-	    if(!it->snthHgl().empty())
-	    {
+	    if(!it->snthHgl().empty()) {
 		XMLNode rules;
 		rules.load(it->snthHgl());
 		tEd->setSnthHgl(rules);
@@ -795,8 +792,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    if(dlg.exec() == QDialog::Accepted && it->data().toString() != tEd->text())
 		model()->setData(selectedIndexes()[0], tEd->text(), Qt::EditRole);
 	}
-	else if(actClr && rez == actClr)
-	{
+	else if(actClr && rez == actClr) {
 	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
 	    modelData.setWdg(modelData.curWdg());
 	}
@@ -2043,8 +2039,7 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 {
     setObjectName(iwid.c_str());
     setMouseTracking(true);
-    if(wLevel() == 0)
-    {
+    if(wLevel() == 0) {
 	pntView = new SizePntWdg(this);
 	pntView->setSelArea(QRectF());
 	pntView->hide();
@@ -2057,9 +2052,8 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 
 	chTree = new XMLNode("ChangesTree");
     }
-    //> Select only created widgets by user
-    else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload)
-    { setSelect(true,PrcChilds); z_coord = 100000; }
+    //Select only created widgets by user
+    else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload) { setSelect(true,PrcChilds); z_coord = 100000; }
 
     if(mMdiWin) mMdiWin->installEventFilter(this);
 }
@@ -2067,15 +2061,13 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 DevelWdgView::~DevelWdgView( )
 {
     //Exit from edit
-    if(editWdg)
-    {
+    if(editWdg) {
 	setEdit(false);
 	if(wLevel() != 0) levelWidget(0)->setEdit(false);
     }
 
     //Selection clear
-    if(select() && !mod->endRun())
-    {
+    if(select() && !mod->endRun()) {
 	setSelect(false);
 	for(int i_c = 0; i_c < children().size(); i_c++)
 	    if(qobject_cast<DevelWdgView*>(children().at(i_c)))
@@ -2103,7 +2095,7 @@ WdgView *DevelWdgView::newWdgItem( const string &iwid )
 
 void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr )
 {
-    //> Check for single attribute update
+    //Check for single attribute update
     size_t epos = item.rfind("/");
     if(epos != string::npos && item.compare(epos,3,"/a_") == 0)
     {
@@ -2116,13 +2108,13 @@ void DevelWdgView::load( const string& item, bool load, bool init, XMLNode *aBr 
 	{
 	    WdgView *tWdg = (id()==tWdgNm) ? this : findChild<WdgView*>(tWdgNm.c_str());
 	    int pAttr = atoi(req.childGet(0)->attr("p").c_str());
-	    if(pAttr > 0 && tWdg) tWdg->attrSet("",req.childGet(0)->text(),pAttr);
+	    if(pAttr > 0 && tWdg) tWdg->attrSet("", req.childGet(0)->text(), pAttr);
 	    return;
 	}
-	//> Full load for active attributes
+	//Full load for active attributes
 	else WdgView::load(tWdgNm, load, init, aBr);
     }
-    //> Full load process
+    //Full load process
     else WdgView::load(item, load, init, aBr);
 
     if(editWdg)	editWdg->raise();
@@ -2734,6 +2726,7 @@ bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos 
     bool geomUp = true;
     switch(uiPrmPos)
     {
+	case A_COM_LOAD:					break;
 	case A_GEOM_X: chGeomCtx.setAttr("_x", val);		break;
 	case A_GEOM_Y: chGeomCtx.setAttr("_y", val);		break;
 	case A_GEOM_W: chGeomCtx.setAttr("_w", val);		break;

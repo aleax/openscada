@@ -93,39 +93,21 @@ BDMod::~BDMod( )
 
 }
 
-TBD *BDMod::openBD( const string &iid )
-{
-    return new MBD(iid, &owner().openDB_E());
-}
-
-void BDMod::load_( )
-{
-    //> Load parameters from command line
-
-    //> Load parameters from config-file
-}
+TBD *BDMod::openBD( const string &iid )	{ return new MBD(iid, &owner().openDB_E()); }
 
 //************************************************
 //* BDDBF::MBD                                   *
 //************************************************
-MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el)
-{
+MBD::MBD( string iid, TElem *cf_el ) : TBD(iid, cf_el)	{ }
 
-}
-
-MBD::~MBD( )
-{
-
-}
+MBD::~MBD( )	{ }
 
 void MBD::postDisable( int flag )
 {
     TBD::postDisable(flag);
 
     if(flag && owner().fullDeleteDB())
-    {
 	if(rmdir(addr().c_str()) != 0) mess_warning(nodePath().c_str(), _("Delete DB error!"));
-    }
 }
 
 void MBD::enable( )
@@ -134,14 +116,16 @@ void MBD::enable( )
 
     char *rez = getcwd(buf, sizeof(buf));
     if(chdir(addr().c_str()) != 0 && mkdir(addr().c_str(),S_IRWXU|S_IRGRP|S_IROTH) != 0)
-	throw TError(TSYS::DBInit,nodePath().c_str(),_("Error create DB directory '%s'!"),addr().c_str());
-    if(rez && chdir(buf)) throw TError(TSYS::DBInit,nodePath().c_str(),_("Restore previous directory as current error."));
+	throw TError(nodePath().c_str(), _("Error create DB directory '%s'!"),addr().c_str());
+    if(rez && chdir(buf)) throw TError(nodePath().c_str(), _("Restore previous directory as current error."));
 
     TBD::enable();
 }
 
 void MBD::allowList( vector<string> &list )
 {
+    if(!enableStat()) return;
+
     string nfile;
     list.clear();
 
@@ -161,63 +145,76 @@ void MBD::allowList( vector<string> &list )
     closedir(IdDir);
 }
 
+void MBD::transCloseCheck( )
+{
+    if(enableStat())
+    {
+	vector<string> t_list;
+	list(t_list);
+	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
+	{
+	    AutoHD<MTable> t = at(t_list[i_l]);
+	    if(t.at().mModify && (SYS->sysTm()-t.at().mModify) > 10) t.at().save();
+	}
+    }
+}
+
 TTable *MBD::openTable( const string &nm, bool create )
 {
-    if(!enableStat())
-	throw TError(TSYS::DBOpenTable,nodePath().c_str(),_("Error open table '%s'. DB is disabled."),nm.c_str());
+    if(!enableStat()) throw TError(nodePath().c_str(), _("Error open table '%s'. DB is disabled."), nm.c_str());
     return new MTable(nm,this,create);
 }
 
 void MBD::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TBD::cntrCmdProc(opt);
 	ctrRemoveNode(opt, "/sql");
-	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,1,"help",
+	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,enableStat()?R_R___:RWRW__,"root",SDB_ID,3,
+	    "dest","sel_ed","select","/prm/cfg/dbFsList","help",
 	    _("For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 	      "For example: /opt/dbf ."));
 	return;
     }
-    TBD::cntrCmdProc(opt);
+    //Process command to page
+    string a_path = opt->attr("path");
+    if(a_path == "/prm/cfg/dbFsList" && ctrChkNode(opt)) TSYS::ctrListFS(opt, addr());
+    else TBD::cntrCmdProc(opt);
 }
 
 //************************************************
 //* BDDBF::MTable                                *
 //************************************************
-MTable::MTable( const string &inm, MBD *iown, bool create ) : TTable(inm), m_modify(false)
+MTable::MTable( const string &inm, MBD *iown, bool create ) : TTable(inm), mModify(0)
 {
     string tbl_nm = name();
     setNodePrev(iown);
 
-    //> Set file extend
+    //Set file extend
     if(!(tbl_nm.size() > 4 && tbl_nm.substr(tbl_nm.size()-4,4) == ".dbf")) tbl_nm += ".dbf";
 
     codepage = owner().codePage().size() ? owner().codePage() : Mess->charset();
     n_table = owner().addr()+'/'+tbl_nm;
 
-    basa = new TBasaDBF( );
+    basa = new TBasaDBF();
     if(basa->LoadFile((char *)n_table.c_str()) == -1 && !create)
     {
 	delete basa;
-	throw TError(TSYS::DBOpenTable, nodePath().c_str(), _("Open table error!"));
+	throw TError(nodePath().c_str(), _("Open table error!"));
     }
 }
 
-MTable::~MTable( )
-{
-    delete basa;
-}
+MTable::~MTable( )	{ delete basa; }
 
 void MTable::postDisable( int flag )
 {
-    if(m_modify) save();
+    if(mModify) save();
 
-    if(flag)
-    {
+    if(flag) {
 	string n_tbl = name();
-	//> Set file extend
+
+	//Set file extend
 	if(!(n_tbl.size() > 4 && n_tbl.substr(n_tbl.size()-4,4) == ".dbf")) n_tbl += ".dbf";
 
 	if(remove((owner().addr()+"/"+n_tbl).c_str()) < 0)
@@ -231,32 +228,30 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
 {
     int i_clm;
 
-    ResAlloc res(m_res, false);
+    ResAlloc res(mRes, false);
 
-    i_ln = findKeyLine(cfg, i_ln, true);
-    if(i_ln < 0) return false;
+    if((i_ln=findKeyLine(cfg,i_ln,true)) < 0) return false;
 
-    //> Get config fields list
+    //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //> Seek and get data
+    //Seek and get data
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//>> Find collumn
+	// Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
 	if(fld_rec == NULL) continue;
 
-	//>> Get table volume
+	// Get table volume
 	string val;
-	if(basa->GetFieldIt(i_ln,i_clm,val) < 0)
-	    throw TError(TSYS::DBInernal,nodePath().c_str(),_("Cell error!"));
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
 
-	//>> Write value
+	// Write value
 	setVal(e_cfg, val);
     }
 
@@ -267,33 +262,31 @@ void MTable::fieldGet( TConfig &cfg )
 {
     int i_ln, i_clm;
 
-    //> Alloc resource
-    ResAlloc res(m_res, false);
+    //Alloc resource
+    ResAlloc res(mRes, false);
 
-    //> Get key line
-    i_ln = findKeyLine(cfg);
-    if(i_ln < 0) throw TError(TSYS::DBRowNoPresent, nodePath().c_str(), _("Field is not present!"));
+    //Get key line
+    if((i_ln=findKeyLine(cfg)) < 0) throw TError(nodePath().c_str(), _("Field is not present!"));
 
-    //> Get config fields list
+    //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //> Write data to cfg
+    //Write data to cfg
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
     {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//>> Find collumn
+	// Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
 	if(fld_rec == NULL) continue;
 
-	//>> Get table volume
+	// Get table volume
 	string val;
-	if(basa->GetFieldIt(i_ln,i_clm,val) < 0)
-	    throw TError(TSYS::DBInernal, nodePath().c_str(), _("Cell error!"));
-	//>> Write value
+	if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	// Write value
 	setVal(e_cfg, val);
     }
 }
@@ -302,34 +295,34 @@ void MTable::fieldSet( TConfig &cfg )
 {
     int i_ln, i_clm;
 
-    //> Alloc resource
-    ResAlloc res(m_res, true);
+    //Alloc resource
+    ResAlloc res(mRes, true);
 
-    //> Get config fields list
+    //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    //> Check and fix structure of table
-    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
-    {
+    //Check for write access
+    if(!(access(n_table.c_str(),F_OK|W_OK) == 0 || (access(n_table.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
+	throw TError(nodePath().c_str(), _("Read only access to file '%s'."), n_table.c_str());
+
+    //Check and fix structure of table
+    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//>> Find collumn
+	// Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
-	if(fld_rec == NULL)
-	{
-	    //>> Create new collumn
+	if(fld_rec == NULL) {
+	    // Create new collumn
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
-	    if(basa->addField(i_cf,&n_rec) < 0)
-		throw TError(TSYS::DBInernal,nodePath().c_str(),_("Column error!"));
+	    if(basa->addField(i_cf,&n_rec) < 0) throw TError(nodePath().c_str(), _("Column error!"));
 	}
-	else
-	{
-	    //>> Check collumn parameters
+	else {
+	    // Check collumn parameters
 	    switch(e_cfg.fld().type())
 	    {
 		case TFld::String:
@@ -351,57 +344,54 @@ void MTable::fieldSet( TConfig &cfg )
 	    db_str_rec n_rec;
 
 	    fieldPrmSet(e_cfg, n_rec);
-	    if(basa->setField(i_clm,&n_rec) < 0) throw TError(TSYS::DBInernal, nodePath().c_str(), _("Column error!"));
+	    if(basa->setField(i_clm,&n_rec) < 0) throw TError(nodePath().c_str(), _("Column error!"));
 	}
     }
-    //> Del no used collumn
+    //Del no used collumn
     db_str_rec *fld_rec;
-    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
-    {
+    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++) {
 	unsigned i_cf;
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
-	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0)
-	    throw TError(TSYS::DBClose,nodePath().c_str(),_("Delete field error!"));
+	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0) throw TError(nodePath().c_str(), _("Delete field error!"));
     }
-    //> Get key line
+    //Get key line
     i_ln = findKeyLine(cfg);
     if(i_ln < 0) i_ln = basa->CreateItems(-1);
-    //> Write data to bd
-    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
-    {
+
+    //Write data to bd
+    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
-	//>> Find collumn
+	// Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
 	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
 	if(fld_rec == NULL) continue;
 
-	//>> Set table volume
-	if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0)
-	    throw TError(TSYS::DBInernal, nodePath().c_str(), _("Cell error!"));
+	// Set table volume
+	if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
     }
 
-    m_modify = true;
+    mModify = SYS->sysTm();
 }
 
 void MTable::fieldDel( TConfig &cfg )
 {
-    //> Alloc resource
-    ResAlloc res(m_res, true);
+    //Alloc resource
+    ResAlloc res(mRes, true);
 
-    //> Get key line
+    //Get key line
     bool i_ok = false;
     int i_ln;
-    while((i_ln = findKeyLine(cfg,0,true)) >= 0)
-    {
-	if(basa->DeleteItems(i_ln,1) < 0) throw TError(TSYS::DBInernal, nodePath().c_str(), _("Line error!"));
+    while((i_ln = findKeyLine(cfg,0,true)) >= 0) {
+	if(!i_ok && !(access(n_table.c_str(),F_OK|W_OK) == 0 || (access(n_table.c_str(),F_OK) != 0 && mModify && access(owner().addr().c_str(),W_OK) == 0)))
+	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), n_table.c_str());
+	if(basa->DeleteItems(i_ln,1) < 0) throw TError(nodePath().c_str(), _("Line error!"));
 
 	i_ok = true;
-	m_modify = true;
+	mModify = SYS->sysTm();
     }
-    if(!i_ok) throw TError(TSYS::DBInernal, nodePath().c_str(), _("Field is not present!"));
 }
 
 int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
@@ -410,40 +400,36 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
 
     mLstUse = time(NULL);
 
-    //> Get config fields list
+    //Get config fields list
     vector<string> cf_el;
     cfg.cfgList(cf_el);
-    //> Left only keys into list
+
+    //Left only keys into list
     for(unsigned i_cf = 0; i_cf < cf_el.size(); )
 	if(cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key) i_cf++;
 	else cf_el.erase(cf_el.begin()+i_cf);
 
-    //> Find want field
-    for(i_ln = 0; i_ln < basa->GetCountItems(); i_ln++)
-    {
+    //Find want field
+    for(i_ln = 0; i_ln < basa->GetCountItems(); i_ln++) {
 	int cnt_key = 0;
-	for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
-	{
+	for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	    if(useKey && !cfg.cfg(cf_el[i_cf]).keyUse()) { cnt_key++; continue; }
-	    //string key = cfg.cfg(cf_el[i_cf]).name();
-	    //> Check key
-	    //>> Find collumn
+
+	    //Check key
+	    // Find collumn
 	    db_str_rec *fld_rec;
 	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
 		if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
-	    if(fld_rec == NULL)
-		throw TError(TSYS::DBInernal, nodePath().c_str(), _("Key column '%s' is not present!"), cf_el[i_cf].c_str());
-	    //>> Get table volume
+	    if(fld_rec == NULL) throw TError(nodePath().c_str(), _("Key column '%s' is not present!"), cf_el[i_cf].c_str());
+	    // Get table volume
 	    string val;
-	    if(basa->GetFieldIt(i_ln,i_clm,val ) < 0)
-		throw TError(TSYS::DBInernal, nodePath().c_str(), _("Cell error!"));
-	    //>> Remove spaces from end
+	    if(basa->GetFieldIt(i_ln,i_clm,val ) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	    // Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;
 	    if(i != (int)val.size()) val.resize(i);
-	    //>> Compare value
-	    if(val != getVal(cfg.cfg(cf_el[i_cf])))
-	    {
+	    // Compare value
+	    if(val != getVal(cfg.cfg(cf_el[i_cf]))) {
 		cnt_key = 0;
 		break;
 	    }
@@ -489,9 +475,9 @@ void MTable::fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec )
 
 void MTable::save( )
 {
-    ResAlloc res(m_res, true);
+    ResAlloc res(mRes, true);
     basa->SaveFile((char *)n_table.c_str());
-    m_modify = false;
+    mModify = 0;
 }
 
 string MTable::getVal( TCfg &cfg, db_str_rec *fld_rec )
@@ -520,14 +506,14 @@ void MTable::setVal( TCfg &cfg, const string &val )
     {
 	case TFld::String:
 	{
-	    //> Remove spaces from end
+	    //Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;
 	    cfg.setS(Mess->codeConvIn(codepage.c_str(),val.substr(0,i)));
 	    break;
 	}
-	case TFld::Integer:	cfg.setI(atoi(val.c_str()));	break;
-	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
+	case TFld::Integer:	cfg.setI(s2i(val));	break;
+	case TFld::Real:	cfg.setR(s2r(val));	break;
 	case TFld::Boolean:	cfg.setB(val.c_str()[0]=='T');	break;
 	default: break;
     }

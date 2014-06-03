@@ -204,8 +204,7 @@ void ModMArch::checkArchivator( bool now )
 	dirent scan_dirent, *scan_rez = NULL;
 
 	DIR *IdDir = opendir(addr().c_str());
-	if(IdDir == NULL)
-	{
+	if(IdDir == NULL) {
 	    if(mkdir(addr().c_str(),0777))
 		throw TError(nodePath().c_str(),_("Can not create directory '%s'."),addr().c_str());
 	    IdDir = opendir(addr().c_str());
@@ -227,15 +226,13 @@ void ModMArch::checkArchivator( bool now )
 	    unsigned i_arh;
 	    res.request(false);
 	    for(i_arh = 0; i_arh < arh_s.size(); i_arh++)
-		if(arh_s[i_arh]->name() == NameArhFile)
-		{
+		if(arh_s[i_arh]->name() == NameArhFile) {
 		    arh_s[i_arh]->scan = true;
 		    res.release();
 		    break;
 		}
 	    // Registre new archive file
-	    if(i_arh >= arh_s.size())
-	    {
+	    if(i_arh >= arh_s.size()) {
 		res.release();
 
 		MFileArch *f_arh = new MFileArch(this);
@@ -245,8 +242,7 @@ void ModMArch::checkArchivator( bool now )
 		res.request(true);
 		//  Oldest and broken archives to down
 		if(f_arh->err()) arh_s.push_back(f_arh);
-		else
-		{
+		else {
 		    for(i_arh = 0; i_arh < arh_s.size(); i_arh++)
 			if(arh_s[i_arh]->err() || f_arh->begin() >= arh_s[i_arh]->begin())
 			{
@@ -264,8 +260,7 @@ void ModMArch::checkArchivator( bool now )
 	//Check deleting Archives
 	res.request(true);
 	for(unsigned i_arh = 0; i_arh < arh_s.size(); )
-	    if(!arh_s[i_arh]->scan)
-	    {
+	    if(!arh_s[i_arh]->scan) {
 		delete arh_s[i_arh];
 		arh_s.erase(arh_s.begin() + i_arh);
 	    }
@@ -273,13 +268,11 @@ void ModMArch::checkArchivator( bool now )
 	res.release();
 
 	//Check file count and delete odd files
-	if(mNumbFiles && !mod->noArchLimit)
-	{
+	if(mNumbFiles && !mod->noArchLimit) {
 	    int f_cnt = 0;	//Work files number
 	    for(unsigned i_arh = 0; i_arh < arh_s.size(); i_arh++)
 		if(!arh_s[i_arh]->err()) f_cnt++;
-	    if(f_cnt > mNumbFiles)
-	    {
+	    if(f_cnt > mNumbFiles) {
 		// Delete oldest files
 		for(int i_arh = arh_s.size()-1; i_arh >= 0; i_arh--)
 		    if(f_cnt <= mNumbFiles)	break;
@@ -501,7 +494,7 @@ void MFileArch::attach( const string &iname, bool full )
 	    {
 		TConfig c_el(&mod->packFE());
 		c_el.cfg("FILE").setS(name());
-		if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el))
+		if(SYS->db().at().dataGet(mod->filesDB(),mod->nodePath()+"Pack/",c_el,false,true))
 		{
 		    mBeg = strtol(c_el.cfg("BEGIN").getS().c_str(),NULL,16);
 		    mEnd = strtol(c_el.cfg("END").getS().c_str(),NULL,16);
@@ -928,8 +921,7 @@ void MFileArch::check( bool free )
 	int hd = open(name().c_str(), O_RDONLY);
 	if(hd > 0) { mSize = lseek(hd, 0, SEEK_END); close(hd); }
 
-	if(!owner().packInfoFiles())
-	{
+	if(!owner().packInfoFiles()) {
 	    // Write info to DB
 	    TConfig c_el(&mod->packFE());
 	    c_el.cfg("FILE").setS(name());
@@ -937,7 +929,7 @@ void MFileArch::check( bool free )
 	    c_el.cfg("END").setS(ll2s(end(),TSYS::Hex));
 	    c_el.cfg("PRM1").setS(charset());
 	    c_el.cfg("PRM2").setS(i2s(xmlM()));
-	    SYS->db().at().dataSet(mod->filesDB(),mod->nodePath()+"Pack/",c_el);
+	    SYS->db().at().dataSet(mod->filesDB(), mod->nodePath()+"Pack/", c_el, false, true);
 	}
 	else if((hd=open((name()+".info").c_str(),O_WRONLY|O_CREAT|O_TRUNC,0666)) > 0)
 	{

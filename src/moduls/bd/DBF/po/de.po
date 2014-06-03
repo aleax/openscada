@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 2.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 12:15+0300\n"
+"POT-Creation-Date: 2014-06-02 22:33+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Klaus Fetscher <k.fetscher@fetron.de>\n"
 "Language-Team: de <>\n"
@@ -21,29 +21,37 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: dbf_mod.cpp:39
 msgid "DB DBF"
 msgstr "DB DBF"
 
+#: dbf_mod.cpp:43
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko "
 
+#: dbf_mod.cpp:44
 msgid "BD module. Provides support of the *.dbf files, version 3.0."
 msgstr "Modul unterstützt die *.dbf Datenbank Version 3.0."
 
+#: dbf_mod.cpp:110
 msgid "Delete DB error!"
 msgstr "Fehler beim Löschen der Datenbank!"
 
+#: dbf_mod.cpp:119
 #, c-format
 msgid "Error create DB directory '%s'!"
 msgstr "Fehler beim Erstellen des Datenbank-Verzeichnisses '%s'!"
 
+#: dbf_mod.cpp:120
 msgid "Restore previous directory as current error."
 msgstr "Wiederherstellung des vorherigen Verzeichnisses ist nicht erlaubt."
 
+#: dbf_mod.cpp:164
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s', die Datenbank ist abgeschaltet."
 
+#: dbf_mod.cpp:176
 msgid ""
 "For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
@@ -52,24 +60,36 @@ msgstr ""
 "beinhaltet.\n"
 "Zum Beispiel: /opt/dbf ."
 
+#: dbf_mod.cpp:204
 msgid "Open table error!"
 msgstr "Fehler beim Öffnen der Tabelle!"
 
+#: dbf_mod.cpp:252 dbf_mod.cpp:288 dbf_mod.cpp:373 dbf_mod.cpp:426
 msgid "Cell error!"
 msgstr "Fehler in der Zelle!"
 
+#: dbf_mod.cpp:269
 msgid "Field is not present!"
 msgstr "Das Feld ist nicht vorhanden!"
 
+#: dbf_mod.cpp:307 dbf_mod.cpp:389
+#, c-format
+msgid "Read only access to file '%s'."
+msgstr "Nur Lesezugriff auf Datei '%s'."
+
+#: dbf_mod.cpp:322 dbf_mod.cpp:347
 msgid "Column error!"
 msgstr "Fehler in der Spalte!"
 
+#: dbf_mod.cpp:356
 msgid "Delete field error!"
 msgstr "Fehler beim Löschen des Feldes!"
 
+#: dbf_mod.cpp:390
 msgid "Line error!"
 msgstr "Fehler in der Zeile!"
 
+#: dbf_mod.cpp:423
 #, c-format
 msgid "Key column '%s' is not present!"
 msgstr "Die Schlüsselzeile '%s' ist nicht vorhanden!"

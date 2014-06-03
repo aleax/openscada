@@ -182,9 +182,9 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
 
-    TController::load_( );
+    TController::load_();
 
     //> Check for get old period method value
     if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
@@ -349,17 +349,12 @@ void TMdPrm::postDisable( int flag )
 {
     TParamContr::postDisable(flag);
 
-    try
-    {
-	if(flag)
-	{
-	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
-	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(ownerPath(true), true);
-	    SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
-	}
+    if(flag) {
+	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+	TConfig cfg(&mod->prmIOE());
+	cfg.cfg("PRM_ID").setS(ownerPath(true), true);
+	SYS->db().at().dataDel(io_bd, owner().owner().nodePath()+type().DB(&owner())+"_io", cfg);
     }
-    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void TMdPrm::setType( const string &tpId )
@@ -528,7 +523,7 @@ void TMdPrm::loadIO( bool force )
 	for(int i_io = 0; i_io < tmpl->val.ioSize(); i_io++)
 	{
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
-	    if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg))
+	    if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true))
 		continue;
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 		lnk(lnkId(i_io)).prm_attr = cfg.cfg("VALUE").getS();

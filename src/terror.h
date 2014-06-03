@@ -36,6 +36,7 @@ class TError
 {
     public:
 	//Methods
+	TError( ) : cod(0)	{ }
 	TError( const char *cat, const char *fmt, ... );
 	TError( int cod, const char *cat, const char *fmt, ... );
 

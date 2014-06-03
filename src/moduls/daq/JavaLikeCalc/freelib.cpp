@@ -106,11 +106,11 @@ void Lib::setFullDB( const string &idb )
 
 void Lib::load_( )
 {
-    if(DB().empty() || (!SYS->chkSelDB(DB())))	return;
+    if(DB().empty() || (!SYS->chkSelDB(DB())))	throw TError();
 
     SYS->db().at().dataGet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 
-    //> Load functions
+    //Load functions
     map<string, bool>   itReg;
     TConfig c_el(&mod->elFnc());
     c_el.cfgViewAll(false);
@@ -122,20 +122,19 @@ void Lib::load_( )
 	itReg[f_id] = true;
     }
 
-    //>>> Check for remove items removed from DB
-    if(!SYS->selDB().empty())
-    {
+    // Check for remove items removed from DB
+    if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
-        list(it_ls);
-        for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
-            if(itReg.find(it_ls[i_it]) == itReg.end())
-        	del(it_ls[i_it]);
+	list(it_ls);
+	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
+	    if(itReg.find(it_ls[i_it]) == itReg.end())
+		del(it_ls[i_it]);
     }
 }
 
 void Lib::save_( )
 {
-    if( DB().empty() )    return;
+    if(DB().empty())	return;
 
     SYS->db().at().dataSet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
 }

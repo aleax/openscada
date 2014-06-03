@@ -278,11 +278,7 @@ TCntrNode &OPCEndPoint::operator=( TCntrNode &node )
 
 void OPCEndPoint::postDisable( int flag )
 {
-    try
-    {
-	if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
-    }
-    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
 }
 
 TProt &OPCEndPoint::owner( )	{ return *(TProt*)nodePrev(); }
@@ -319,7 +315,7 @@ void *OPCEndPoint::Task( void *iep )
 
 void OPCEndPoint::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
 

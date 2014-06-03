@@ -316,11 +316,7 @@ TCntrNode &UserPrt::operator=( TCntrNode &node )
 
 void UserPrt::postDisable( int flag )
 {
-    try
-    {
-	if( flag ) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
 TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }
@@ -389,7 +385,7 @@ void UserPrt::setOutProg( const string &iprg )
 
 void UserPrt::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }

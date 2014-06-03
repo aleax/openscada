@@ -89,25 +89,19 @@ void TController::preDisable(int flag)
     if(enableStat())	disable( );
 }
 
-void TController::postDisable(int flag)
+void TController::postDisable( int flag )
 {
-    try
-    {
-	if( flag )
-	{
-	    //Delete DB record
-	    SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this,true);
+    if(flag) {
+	//Delete DB record
+	SYS->db().at().dataDel(fullDB(),owner().nodePath()+"DAQ",*this,true);
 
-	    //Delete parameter's tables
-	    for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++)
-	    {
-		string tbl = DB()+"."+owner().tpPrmAt(i_tp).DB(this);
-		SYS->db().at().open(tbl);
-		SYS->db().at().close(tbl,true);
-	    }
+	//Delete parameter's tables
+	for(unsigned i_tp = 0; i_tp < owner().tpPrmSize(); i_tp++) {
+	    string tbl = DB()+"."+owner().tpPrmAt(i_tp).DB(this);
+	    SYS->db().at().open(tbl);
+	    SYS->db().at().close(tbl,true);
 	}
     }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TTipDAQ &TController::owner( )	{ return *(TTipDAQ*)nodePrev(); }
@@ -155,7 +149,7 @@ string TController::getStatus( )
 
 void TController::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
 
     mess_info(nodePath().c_str(),_("Load controller's configurations!"));
 

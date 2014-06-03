@@ -791,37 +791,23 @@ bool VisDevelop::exitModifChk( )
 {
     XMLNode req("modify");
     req.setAttr("path","/%2fobj");
-    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
-    {
+    if(!cntrIfCmd(req) && atoi(req.text().c_str())) {
 	bool saveExit = false;
 	req.clear()->setName("get")->setAttr("path","/%2fgen%2fsaveExit");
-	if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
+	if(!cntrIfCmd(req,true)) saveExit |= atoi(req.text().c_str());
 	req.setAttr("path","/%2fgen%2fsavePeriod");
-	if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
-	if( !saveExit )
-	{
-	    int ret = QMessageBox::information(this,_("Visual items save"),
-		_("Some visual items are changed. Save changings to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
-	    switch( ret )
+	if(!cntrIfCmd(req,true)) saveExit |= atoi(req.text().c_str());
+	if(!saveExit)
+	    switch(QMessageBox::information(this,_("Visual items save"),_("Some visual items changed.\nSave the changes to DB on exit?"),
+		QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes))
 	    {
 		case QMessageBox::Yes:
 		    req.clear()->setName("save")->setAttr("path","/%2fobj");
 		    cntrIfCmd(req);
 		    return true;
-		case QMessageBox::No:
-		    return true;
-		case QMessageBox::Cancel:
-		    return false;
+		case QMessageBox::No:		return true;
+		case QMessageBox::Cancel:	return false;
 	    }
-	    /*InputDlg dlg(this,actDBSave->icon(),
-		    _("Some visual items is changed. Save changing to DB on exit?"),
-		    _("Visual items save"),false,false);
-	    if( dlg.exec() == QDialog::Accepted )
-	    {
-		req.clear()->setName("save")->setAttr("path","/%2fobj");
-		cntrIfCmd(req);
-	    }*/
-	}
     }
 
     return true;
@@ -1279,22 +1265,22 @@ void VisDevelop::visualItProp( )
 void VisDevelop::visualItEdit( )
 {
     string ed_wdg;
-    for( int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
+    for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
     {
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
+
 	//Check to already opened widget window
 	QList<QMdiSubWindow *> ws_wdg = work_space->subWindowList();
 	int i_w;
-	for( i_w = 0; i_w < ws_wdg.size(); i_w++ )
-	    if( ws_wdg.at(i_w)->windowTitle() == w_title )
-	    {
+	for(i_w = 0; i_w < ws_wdg.size(); i_w++)
+	    if(ws_wdg.at(i_w)->windowTitle() == w_title) {
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("Widget's '%1' editing window is already opened.")).
 			    arg(ed_wdg.c_str()), TVision::Info, this );
 		work_space->setActiveSubWindow(ws_wdg.at(i_w));
 		break;
 	    }
-	if( i_w < ws_wdg.size() ) continue;
+	if(i_w < ws_wdg.size()) continue;
 
 	QScrollArea *scrl = new QScrollArea;
 #if QT_VERSION >= 0x040400
@@ -1306,23 +1292,23 @@ void VisDevelop::visualItEdit( )
 	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
-	//> Make and place view widget
+
+	//Make and place view widget
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this,0,scrl);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
 	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
-	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
+	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string&)));
 
 	scrl->setWidget(vw);
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addSubWindow(scrl);
 	scrl->show();
 
-	//> Set window icon
+	//Set window icon
 	XMLNode req("get");
 	req.setAttr("path",ed_wdg+"/%2fico");
-	if(!cntrIfCmd(req))
-	{
+	if(!cntrIfCmd(req)) {
 	    QImage ico_t;
 	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
 	    if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
@@ -1336,8 +1322,7 @@ void VisDevelop::visualItClear( const string &el_wa )
     string clrW;
     string work_wdg_loc, work_attr;
 
-    if(el_wa.empty())
-    {
+    if(el_wa.empty()) {
 	work_wdg_loc = work_wdg;
 
 	InputDlg dlg(this,actVisItClear->icon(),
@@ -1346,24 +1331,22 @@ void VisDevelop::visualItClear( const string &el_wa )
 		_("Visual items' changes clear"),false,false);
 	if(dlg.exec() != QDialog::Accepted)	return;
     }
-    else
-    {
+    else {
 	string work_tmp;
-	for( int off = 0; (work_tmp=TSYS::pathLev(el_wa,0,true,&off)).size(); )
+	for(int off = 0; (work_tmp=TSYS::pathLev(el_wa,0,true,&off)).size(); )
 	{
-	    if( work_attr.size() ) work_wdg_loc += "/"+work_attr;
+	    if(work_attr.size()) work_wdg_loc += "/"+work_attr;
 	    work_attr = work_tmp;
 	}
-	if( work_attr.size() > 2 && work_attr.substr(0,2) == "a_" ) work_attr = work_attr.substr(2);
+	if(work_attr.size() > 2 && work_attr.substr(0,2) == "a_") work_attr = work_attr.substr(2);
 	else { work_wdg_loc += "/"+work_attr; work_attr = ""; }
     }
 
-    for( int w_off = 0; (clrW=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); )
+    for(int w_off = 0; (clrW=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); )
     {
 	XMLNode req("set");
-	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fclear")->setAttr("attr",work_attr);;
-	if( cntrIfCmd(req) )
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fclear")->setAttr("attr",work_attr);
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else emit modifiedItem(clrW);
     }
 }

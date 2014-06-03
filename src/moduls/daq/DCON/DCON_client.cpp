@@ -191,7 +191,7 @@ TParamContr *TMdContr::ParamAttach( const string &name, int type )
 
 void TMdContr::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
 
     TController::load_( );
 

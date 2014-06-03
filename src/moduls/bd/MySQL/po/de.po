@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.MySQL 1.7.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-24 12:34+0200\n"
+"POT-Creation-Date: 2014-06-02 22:37+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -32,50 +32,51 @@ msgstr "Roman Savotschenko"
 msgid "BD module. Provides support of the BD MySQL."
 msgstr "Modul unterstützt die MySQL Datenbank."
 
-#: my_sql.cpp:120 my_sql.cpp:151
+#: my_sql.cpp:119 my_sql.cpp:149
 msgid "Error initializing client."
 msgstr "Fehler beim Initialisieren des Clients."
 
-#: my_sql.cpp:123 my_sql.cpp:165
+#: my_sql.cpp:122 my_sql.cpp:163
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Fehler: %s beim Verbinden mit der Datenbank"
 
-#: my_sql.cpp:127
+#: my_sql.cpp:125
 #, c-format
 msgid "Query to DB error: %s"
 msgstr "Fehler bei der Abfrage an Datenbank: %s"
 
-#: my_sql.cpp:196
+#: my_sql.cpp:197
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
-#: my_sql.cpp:221
+#: my_sql.cpp:226
+#, c-format
 msgid "Connect to DB error %d: %s"
 msgstr "Fehler beim Verbinden mit der Datenbank %d: %s"
 
-#: my_sql.cpp:232
+#: my_sql.cpp:235
 #, c-format
 msgid "Query '%s' is error."
 msgstr "Fehler bei der Abfrage '%s'."
 
-#: my_sql.cpp:233
+#: my_sql.cpp:236
 #, c-format
 msgid "Query to DB error %d: %s"
 msgstr "Fehler %d bei der Abfrage an Datenbank: %s"
 
-#: my_sql.cpp:240
+#: my_sql.cpp:242
 #, c-format
 msgid "Store result error: %s"
 msgstr "Fehler beim Speichern des Ergebnisses: %s"
 
-#: my_sql.cpp:265
+#: my_sql.cpp:264
 #, c-format
 msgid "Could not execute statement: %s"
 msgstr "Aussage konnte nicht ausgeführt: %s"
 
-#: my_sql.cpp:281
+#: my_sql.cpp:305
 msgid ""
 "MySQL DB address must be written as: \"{host};{user};{pass};{db};{port}[;"
 "{u_sock}[;{names}[;{tms}]]]\".\n"
@@ -93,8 +94,8 @@ msgid ""
 "utf8;5,2,2\".\n"
 "For remote DB: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
 msgstr ""
-"Die Adresse der Datenbank MySQL wird geschrieben als: \"{host};{user};{pass};{db};{port}[;"
-"{u_sock}[;{names}[;{tms}]]]\".\n"
+"Die Adresse der Datenbank MySQL wird geschrieben als: \"{host};{user};{pass};"
+"{db};{port}[;{u_sock}[;{names}[;{tms}]]]\".\n"
 "Wo:\n"
 "  host - Hostname des MySQL-Servers;\n"
 "  user - Name des Datenbankbenutzers;\n"
@@ -104,16 +105,20 @@ msgstr ""
 "  u_sock - Name des UNIX-Sockets, für lokalen Zugriff an Datenbank (/var/lib/"
 "mysql/mysql.sock).\n"
 "  names - MySQL SET NAMES charset;\n"
-"  tms - MySQL-Timeouts in Form \"{connect},{read},{write}\" und in Sekunden.\n"
+"  tms - MySQL-Timeouts in Form \"{connect},{read},{write}\" und in "
+"Sekunden.\n"
 "Für lokale Datenbank: \";roman;123456;OpenSCADA;;/var/lib/mysql/mysql.sock;"
 "utf8;5,2,2\".\n"
 "Für entfernte Datenbank: \"server.nm.org;roman;123456;OpenSCADA;3306\"."
 
-#: my_sql.cpp:335 my_sql.cpp:372 my_sql.cpp:446 my_sql.cpp:504 my_sql.cpp:591
-#: my_sql.cpp:620
+#: my_sql.cpp:318
+msgid "Close opened transaction"
+msgstr "Geöffnete Transaktion schlissen"
+
+#: my_sql.cpp:364 my_sql.cpp:401 my_sql.cpp:471 my_sql.cpp:525 my_sql.cpp:653
 msgid "Table is empty!"
 msgstr "Tabelle ist leer!"
 
-#: my_sql.cpp:484
-msgid "Row is not present!"
-msgstr "Datensatz ist nicht vorhanden!"
+#: my_sql.cpp:506
+msgid "Row \"%s\" is not present."
+msgstr "Datensatz \"%s\" ist nicht vorhanden!"

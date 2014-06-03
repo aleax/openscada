@@ -56,17 +56,13 @@ ModMArch::~ModMArch( )
 void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable( flag );
-    try
-    {
-	if( flag )
-	{
-	    //> Remove info record
-	    TConfig cfg(&mod->archEl());
-	    cfg.cfg("TBL").setS(archTbl(),true);
-	    SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
-	}
+
+    if(flag) {
+	//Remove info record
+	TConfig cfg(&mod->archEl());
+	cfg.cfg("TBL").setS(archTbl(),true);
+	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
     }
-    catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 //!!! Inherited (virtual) load object's node methods. Place here for object's data loading
@@ -80,7 +76,7 @@ void ModMArch::load_( )
     //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg))
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",cfg,false,true))
     {
 	mBeg = atoi(cfg.cfg("BEGIN").getS().c_str());
 	mEnd = atoi(cfg.cfg("END").getS().c_str());

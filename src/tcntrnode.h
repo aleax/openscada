@@ -169,8 +169,8 @@ class TCntrNode
 	void modifG( );					//Set group modify
 	void modifClr( bool save = false );		//Clear modify
 	void modifGClr( );				//Modify group clear
-	void load( bool force = false );		//Load node, if modified
-	void save( unsigned lev = 0 );			//Save node, if modified
+	void load( bool force = false, string *errs = NULL );	//Load node, if modified
+	void save( unsigned lev = 0, string *errs = NULL );	//Save node, if modified
 
 	// Connections counter
 	virtual void AHDConnect( );

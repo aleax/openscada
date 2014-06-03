@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-21 16:39+0200\n"
+"POT-Creation-Date: 2014-06-02 22:42+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -21,34 +21,43 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#: bd_sqlite.cpp:34
 msgid "DB SQLite"
 msgstr "Datenbank SQLite"
 
+#: bd_sqlite.cpp:38
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
+#: bd_sqlite.cpp:39
 msgid "BD module. Provides support of the BD SQLite."
 msgstr "Modul unterstützt die SQLite Datenbank."
 
+#: bd_sqlite.cpp:139
 #, c-format
 msgid "Delete bd error: %s"
 msgstr "Fehler beim Löschen der Datenbank: %s"
 
+#: bd_sqlite.cpp:152
 #, c-format
 msgid "Open DB file error: %s"
 msgstr "Fehler beim Öffnen der Datenbank: %s"
 
+#: bd_sqlite.cpp:185
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
+#: bd_sqlite.cpp:210
 msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
+#: bd_sqlite.cpp:212 bd_sqlite.cpp:213
 #, c-format
-msgid "Getting table error: %s"
-msgstr "Fehler bei der Abfrage der Tabelle: %s"
+msgid "Request \"%s\" error: %s"
+msgstr "Request \"%s\" Fehler: %s"
 
+#: bd_sqlite.cpp:268
 msgid ""
 "SQLite DB address must be written as: [<FileDBPath>].\n"
 "Where:\n"
@@ -66,14 +75,15 @@ msgstr ""
 "               Verwenden Sie \":memory:\" für eine private, temporäre In-"
 "Memory-Datenbank zu erstellen."
 
+#: bd_sqlite.cpp:274
 msgid "Close opened transaction"
 msgstr "Geöffnete Transaktion schlissen"
 
+#: bd_sqlite.cpp:320 bd_sqlite.cpp:342 bd_sqlite.cpp:410
 msgid "Table is empty."
 msgstr "Tabelle ist leer."
 
-msgid "Row is not present."
-msgstr "Datensatz ist nicht vorhanden."
-
-msgid "Deletion is not permitted. Data base is read only."
-msgstr "Das Löschen ist nicht erlaubt. Die Datenbank kann nur gelesen werden."
+#: bd_sqlite.cpp:445
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr "Datensatz \"%s\" ist nicht vorhanden."

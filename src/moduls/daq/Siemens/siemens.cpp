@@ -136,15 +136,14 @@ void TTpContr::postEnable( int flag )
 
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
-    //> Load CIF devices configuration
+    //Load CIF devices configuration
     TConfig cfg(&CIFDevE());
     string bd_tbl = modId()+"_CIFdevs";
-    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++)
-    {
+    for(int i_b = 0; i_b < MAX_DEV_BOARDS; i_b++) {
 	cfg.cfg("ID").setI(i_b);
-	if(SYS->db().at().dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg))
+	if(SYS->db().at().dataGet(SYS->workDB()+"."+bd_tbl,mod->nodePath()+bd_tbl,cfg,false,true))
 	{
 	    cif_devs[i_b].pbaddr = cfg.cfg("ADDR").getI();
 	    cif_devs[i_b].pbspeed = cfg.cfg("SPEED").getI();
@@ -1568,16 +1567,13 @@ void TMdPrm::postDisable(int flag)
 {
     TParamContr::postDisable(flag);
 
-    try
+    if(flag)
     {
-	if(flag)
-	{
-	    string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
-	    TConfig cfg(&mod->prmIOE());
-	    cfg.cfg("PRM_ID").setS(id(),true);
-	    SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
-	}
-    }catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+	string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
+	TConfig cfg(&mod->prmIOE());
+	cfg.cfg("PRM_ID").setS(id(),true);
+	SYS->db().at().dataDel(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg);
+    }
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -1690,7 +1686,7 @@ void TMdPrm::load_( )
 
 void TMdPrm::loadIO( bool force )
 {
-    //> Load IO and init links
+    //Load IO and init links
     if(!enableStat())	return;
     if(owner().startStat() && !force) { modif(true); return; }	//Load/reload IO context only allow for stoped controlers for prevent throws
 
@@ -1698,10 +1694,9 @@ void TMdPrm::loadIO( bool force )
     cfg.cfg("PRM_ID").setS(id());
     string io_bd = owner().DB()+"."+type().DB(&owner())+"_io";
 
-    for(int i_io = 0; i_io < ioSize(); i_io++)
-    {
+    for(int i_io = 0; i_io < ioSize(); i_io++) {
 	cfg.cfg("ID").setS(func()->io(i_io)->id());
-	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg)) continue;
+	if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true)) continue;
 	if(func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 	    lnk(lnkId(i_io)).db_addr = cfg.cfg("VALUE").getS();
 	else setS(i_io,cfg.cfg("VALUE").getS());

@@ -476,11 +476,7 @@ TCntrNode &UserPg::operator=( TCntrNode &node )
 
 void UserPg::postDisable( int flag )
 {
-    try
-    {
-	if( flag ) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
 TWEB &UserPg::owner( )		{ return *(TWEB*)nodePrev(); }
@@ -520,7 +516,7 @@ void UserPg::setProg( const string &iprg )
 
 void UserPg::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }

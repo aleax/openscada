@@ -993,11 +993,7 @@ void TVArchive::preDisable( int flag )
 
 void TVArchive::postDisable( int flag )
 {
-    try
-    {
-	if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
-    }
-    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
 bool TVArchive::cfgChange( TCfg &cfg )
@@ -1124,7 +1120,7 @@ void TVArchive::setUpBuf( )
 
 void TVArchive::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     SYS->db().at().dataGet(fullDB(), owner().nodePath()+tbl(), *this);
     setUpBuf();
 }
@@ -2391,11 +2387,7 @@ void TVArchivator::preDisable( int flag )	{ if(startStat()) stop(flag); }
 
 void TVArchivator::postDisable( int flag )
 {
-    try
-    {
-	if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
-    }
-    catch(TError err) { mess_warning(err.cat.c_str(), "%s", err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(), SYS->archive().at().nodePath()+tbl(), *this, true);
 }
 
 string TVArchivator::workId( )	{ return owner().modId()+"."+id(); }
@@ -2471,7 +2463,7 @@ TTipArchivator &TVArchivator::owner( )			{ return *(TTipArchivator *)nodePrev();
 
 void TVArchivator::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     SYS->db().at().dataGet(fullDB(), SYS->archive().at().nodePath()+tbl(), *this);
 }
 

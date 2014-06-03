@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.PostgreSQL 0.9.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-24 12:26+0200\n"
+"POT-Creation-Date: 2014-06-02 22:40+0300\n"
 "PO-Revision-Date: 2010-08-03 19:12+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -31,35 +31,39 @@ msgstr "Maxim Lysenko"
 msgid "BD module. Provides support of the BD PostgreSQL."
 msgstr "BD-Modul unterstützt die PostgreSQL Datenbank."
 
-#: postgre.cpp:123 postgre.cpp:177 postgre.cpp:184
+#: postgre.cpp:121 postgre.cpp:172 postgre.cpp:178
 msgid "Fatal error - unable to allocate connection."
 msgstr "Fataler Fehler - es ist unmöglich die Verbindung herzustellen"
 
-#: postgre.cpp:125 postgre.cpp:128 postgre.cpp:180 postgre.cpp:186
-#: postgre.cpp:315 postgre.cpp:325
+#: postgre.cpp:123 postgre.cpp:126 postgre.cpp:174 postgre.cpp:180
+#: postgre.cpp:327
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Fehler des Anschlusses an die DB: %s"
 
-#: postgre.cpp:135 postgre.cpp:332
+#: postgre.cpp:133 postgre.cpp:339
 #, c-format
 msgid "Query to DB error: %s. %s"
 msgstr "Fehler der Anfrage an die Datenbank: %s. %s"
 
-#: postgre.cpp:242
+#: postgre.cpp:235
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler der Öffnung der Tabelle '%s'. Datenbank ist abgeschaltet."
 
-#: postgre.cpp:262
+#: postgre.cpp:264
 msgid "Start transaction error!"
 msgstr "Start Transaktion Fehler!"
 
-#: postgre.cpp:285
+#: postgre.cpp:295
 msgid "Stop transaction error!"
 msgstr "Stopp Transaktion Fehler!"
 
-#: postgre.cpp:376
+#: postgre.cpp:337
+msgid "Connect to DB error: %s. %s"
+msgstr "Fehler des Anschlusses an die DB: %s. %s"
+
+#: postgre.cpp:378
 msgid ""
 "PostgreSQL DB address must be written as: \"{host};{hostaddr};{user};{pass};"
 "{db};{port}[;{connect_timeout}]\".\n"
@@ -79,8 +83,8 @@ msgid ""
 "For local DB: [;;roman;123456;OpenSCADA;5432;10].\n"
 "For remote DB: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
 msgstr ""
-"Die Adresse der Datenbank MySQL wird geschrieben als: \"{host};{hostaddr};{user};{pass};"
-"{db};{port}[;{connect_timeout}]\".\n"
+"Die Adresse der Datenbank MySQL wird geschrieben als: \"{host};{hostaddr};"
+"{user};{pass};{db};{port}[;{connect_timeout}]\".\n"
 "Wo:\n"
 "  host - Hostname des PostgreSQL-Servers. Falls sie mit dem Slash beginnt "
 "('/'), wird \n"
@@ -95,15 +99,15 @@ msgstr ""
 "Für lokale Datenbank: [;;roman;123456;OpenSCADA;5432;10].\n"
 "Für entfernte Datenbank: [server.nm.org;;roman;123456;OpenSCADA;5432;10]."
 
-#: postgre.cpp:471
+#: postgre.cpp:470
 msgid "Table is not present!"
 msgstr "Die Tabelle ist nicht vorhanden!"
 
-#: postgre.cpp:476 postgre.cpp:504 postgre.cpp:575 postgre.cpp:632
-#: postgre.cpp:717 postgre.cpp:745
+#: postgre.cpp:475 postgre.cpp:502 postgre.cpp:568 postgre.cpp:621
+#: postgre.cpp:737
 msgid "Table is empty!"
 msgstr "Tabelle ist leer!"
 
-#: postgre.cpp:612
-msgid "Row is not present!"
-msgstr "Die Zeile ist nicht vorhanden!"
+#: postgre.cpp:602
+msgid "Row \"%s\" is not present."
+msgstr "Die Zeile \"%s\" ist nicht vorhanden."

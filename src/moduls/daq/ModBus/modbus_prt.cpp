@@ -648,17 +648,12 @@ void Node::postEnable( int flag )
 
 void Node::postDisable( int flag )
 {
-    try
-    {
-	if(flag)
-	{
-	    SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
-	    TConfig cfg(&owner().nodeIOEl());
-	    cfg.cfg("NODE_ID").setS(id(), true);
-	    SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
-	}
+    if(flag) {
+	SYS->db().at().dataDel(fullDB(), owner().nodePath()+tbl(), *this, true);
+	TConfig cfg(&owner().nodeIOEl());
+	cfg.cfg("NODE_ID").setS(id(), true);
+	SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
     }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TProt &Node::owner( )		{ return *(TProt*)nodePrev(); }
@@ -756,7 +751,7 @@ void Node::load_( )
 {
     bool en_prev = enableStat();
 
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(), *this);
     cfg("MODE").setI(cfg("MODE").getI());
@@ -810,8 +805,7 @@ void Node::save_( )
     //Save IO
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
-    for(int i_io = 0; i_io < ioSize(); i_io++)
-    {
+    for(int i_io = 0; i_io < ioSize(); i_io++) {
 	if(io(i_io)->flg()&Node::LockAttr) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
@@ -823,6 +817,7 @@ void Node::save_( )
 	else cfg.cfg("VALUE").setS(io(i_io)->def());
 	SYS->db().at().dataSet(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg);
     }
+
     //Clear IO
     cfg.cfgViewAll(false);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",fld_cnt++,cfg); )
@@ -830,7 +825,7 @@ void Node::save_( )
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&Node::LockAttr)
 	{
-	    SYS->db().at().dataDel(fullDB()+"_io",owner().nodePath()+tbl()+"_io",cfg,true);
+	    SYS->db().at().dataDel(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg, true, false, true);
 	    fld_cnt--;
 	}
     }

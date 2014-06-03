@@ -66,19 +66,14 @@ void TPrmTempl::postEnable( int flag )
 
 void TPrmTempl::postDisable(int flag)
 {
-    try
-    {
-	if(flag)
-	{
-	    SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this,true);
+    if(flag) {
+	SYS->db().at().dataDel(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this,true);
 
-	    //Delete template's IO
-	    TConfig cfg(&owner().owner().tplIOE());
-	    cfg.cfg("TMPL_ID").setS(id(),true);
-	    SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
-	}
+	//Delete template's IO
+	TConfig cfg(&owner().owner().tplIOE());
+	cfg.cfg("TMPL_ID").setS(id(),true);
+	SYS->db().at().dataDel(owner().fullDB()+"_io",owner().owner().nodePath()+owner().tbl()+"_io/",cfg);
     }
-    catch(TError err) { mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 TPrmTmplLib &TPrmTempl::owner( )	{ return *(TPrmTmplLib*)nodePrev(); }
@@ -155,7 +150,7 @@ AutoHD<TFunction> TPrmTempl::func()
 
 void TPrmTempl::load_( )
 {
-    if(!SYS->chkSelDB(owner().DB())) return;
+    if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     //Self load
     SYS->db().at().dataGet(owner().fullDB(),owner().owner().nodePath()+owner().tbl(),*this);
@@ -211,8 +206,7 @@ void TPrmTempl::save_( )
     //Save IO
     TConfig cfg(&owner().owner().tplIOE());
     cfg.cfg("TMPL_ID").setS(id(),true);
-    for(int i_io = 0; i_io < ioSize(); i_io++)
-    {
+    for(int i_io = 0; i_io < ioSize(); i_io++) {
 	if(io(i_io)->flg()&TPrmTempl::LockAttr) continue;
 	cfg.cfg("ID").setS(io(i_io)->id());
 	cfg.cfg("NAME").setS(io(i_io)->name());
@@ -230,7 +224,7 @@ void TPrmTempl::save_( )
 	string sio = cfg.cfg("ID").getS();
 	if(ioId(sio) < 0 || io(ioId(sio))->flg()&TPrmTempl::LockAttr)
 	{
-	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true);
+	    SYS->db().at().dataDel(w_db+"_io",w_cfgpath+"_io",cfg,true,false,true);
 	    fld_cnt--;
 	}
     }
@@ -482,17 +476,16 @@ void TPrmTmplLib::preDisable(int flag)
 
 void TPrmTmplLib::postDisable(int flag)
 {
-    if( flag )
-    {
+    if(flag) {
 	//Delete libraries record
 	SYS->db().at().dataDel(work_lib_db.getVal()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
 
 	//Delete temlate librarie's DBs
 	SYS->db().at().open(fullDB());
-	SYS->db().at().close(fullDB(),true);
+	SYS->db().at().close(fullDB(), true);
 
 	SYS->db().at().open(fullDB()+"_io");
-	SYS->db().at().close(fullDB()+"_io",true);
+	SYS->db().at().close(fullDB()+"_io", true);
     }
 }
 
@@ -516,7 +509,7 @@ void TPrmTmplLib::setFullDB( const string &vl )
 
 void TPrmTmplLib::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
 
     SYS->db().at().dataGet(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this);
 
