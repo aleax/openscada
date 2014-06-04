@@ -1,3 +1,9 @@
+2014-06-04 Roman
+- DAQ.DAQGate: Reusing mirrored parameters with empty the remoted parameter's address (old version cache) is added.
+- FIX:DAQ.MMS: Attributes ID preparing some expanded. Hide selection variables field at enabled state.
+    Readed and writed varibles error clean up for allow next requests.
+
+
 2014-06-03 Roman
 - !!!!:SYS: Access to storage problems notify is added.
     Complex tests for problems notify for storages: SQLite, MySQL, PostgreSQL, FireBird, DBF, Cfg.

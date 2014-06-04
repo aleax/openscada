@@ -732,7 +732,7 @@ void Client::protIO( XML_N &io )
 			    int offTmp1 = rez.size();						//   listOfVariable
 			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++)
 			    {
-				XML_N *itN = io.childGet(i_it);
+				XML_N *itN = io.childGet(i_it)->setAttr("err","");
 				int offTmp2 = rez.size();					//    VariableSpecification
 				ASN_oNmObj(rez, 0xA0, itN->attr("itemId"), itN->attr("domainId"));//     name
 				//ASN_oAddr(rez, 0xA1, offTmp);					//     address
@@ -753,7 +753,7 @@ void Client::protIO( XML_N &io )
 												//  listOfVariable
 			    for(unsigned i_it = 0; i_it < io.childSize(); i_it++)
 			    {
-				XML_N *itN = io.childGet(i_it);
+				XML_N *itN = io.childGet(i_it)->setAttr("err","");
 				int offTmp1 = rez.size();					//   VariableSpecification
 				ASN_oNmObj(rez, 0xA0, itN->attr("itemId"), itN->attr("domainId"));//     name
 				//ASN_oAddr(rez, 0xA1, offTmp);					//    address
@@ -933,7 +933,7 @@ void Client::protIO( XML_N &io )
 				    if((errTp=ASN_iTAG(tpkt,offC1)) == 0x80) chErr += strMess("Invoke: %d. ",ASN_iN(tpkt,off,szC1));
 				    else if((iErr=RejectErrs.find(errTp)) != RejectErrs.end())
 					chErr += iErr->second[errCode] + " :" +
-					    (((errCode=ASN_iN(tpkt,off,szC1))+1 >= iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
+					    (((errCode=ASN_iN(tpkt,off,szC1))+1 >= (int)iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
 					    ". ";
 				    else off += szC1;
 				}
@@ -959,7 +959,7 @@ void Client::protIO( XML_N &io )
 							int errTp = ASN_iTAG(tpkt, offC3), errCode;
 							if((iErr=ConfirmErrs.find(errTp)) != ConfirmErrs.end())
 							    chErr += iErr->second[errCode] + " :" +
-								(((errCode=ASN_iN(tpkt,off,szC3))+1 >= iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
+								(((errCode=ASN_iN(tpkt,off,szC3))+1 >= (int)iErr->second.size()) ? "unknown" : iErr->second[errCode+1]) +
 								". ";
 							else { chErr += "unknown"; off += szC3; }
 						    }

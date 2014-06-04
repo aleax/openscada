@@ -242,8 +242,8 @@ void TMdContr::enable_( )
 		    while(i_p1 < prmLs1.size() && at(prmLs1[i_p1]).at().prmAddr() != prmLs[i_p]) i_p1++;
 		    if(i_p1 >= prmLs1.size())
 		    {
-			while(present(prmId)) prmId = TSYS::strLabEnum(prmId);
-			add(prmId, owner().tpPrmToId("std"));
+			while(present(prmId) && at(prmId).at().prmAddr().size()) prmId = TSYS::strLabEnum(prmId);
+			if(!present(prmId)) add(prmId, owner().tpPrmToId("std"));
 			curP = at(prmId);
 			curP.at().setName(req.childGet(1)->text());
 			curP.at().setPrmAddr(prmLs[i_p]);
