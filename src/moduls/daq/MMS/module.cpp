@@ -369,7 +369,7 @@ void *TMdContr::Task( void *icntr )
 		    value = valCtr.childGet(i_ch);
 		    nId = (value->attr("domainId").size()?value->attr("domainId"):"*")+"/"+value->attr("itemId");
 		    if(isErr || value->attr("err").size()) value = NULL;
-		    if(!value) { cntr.mVars[nId] = TVariant(); continue; }
+		    if(!value) { cntr.mVars[nId] = TVariant(EVAL_REAL); continue; }
 		    switch(s2i(value->attr("tp")))
 		    {
 			case MMS::VT_Bool: case MMS::VT_Int: case MMS::VT_UInt:

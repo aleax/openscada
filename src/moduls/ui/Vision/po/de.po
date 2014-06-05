@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 15:01+0300\n"
+"POT-Creation-Date: 2014-06-05 16:34+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1012,7 +1012,8 @@ msgstr "Speicherung der Elemente"
 msgid ""
 "Some visual items changed.\n"
 "Save the changes to DB on exit?"
-msgstr "Einige visuelle Elemente verändert.\n"
+msgstr ""
+"Einige visuelle Elemente verändert.\n"
 "Speichern Sie die Änderungen DB an der Ausfahrt?"
 
 #: vis_devel.cpp:829 vis_run.cpp:936
@@ -1164,243 +1165,255 @@ msgstr "Vererben:"
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Versuchen Sie kopieren / verschieben Selbstselbst für \"%1/%1\"!"
 
-#: vis_devel_dlgs.cpp:57
+#: vis_devel_dlgs.cpp:58
 msgid "Widget's library properties"
 msgstr "Eigenschaften der Widgetsbibliothek"
 
-#: vis_devel_dlgs.cpp:70
+#: vis_devel_dlgs.cpp:71
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
 
-#: vis_devel_dlgs.cpp:81 vis_devel_dlgs.cpp:863
+#: vis_devel_dlgs.cpp:82 vis_devel_dlgs.cpp:849
 msgid "State"
 msgstr "Zustand"
 
-#: vis_devel_dlgs.cpp:88 vis_devel_dlgs.cpp:869
+#: vis_devel_dlgs.cpp:89 vis_devel_dlgs.cpp:855
 msgid "Item's icon. Click for download other."
 msgstr "Item-Symbol.Klicken Sie zum Download von anderen."
 
-#: vis_devel_dlgs.cpp:95 vis_devel_dlgs.cpp:876
+#: vis_devel_dlgs.cpp:96 vis_devel_dlgs.cpp:862
 msgid "Enabled:"
 msgstr "Eingeschaltet:"
 
-#: vis_devel_dlgs.cpp:103
+#: vis_devel_dlgs.cpp:104
 msgid "Container DB:"
 msgstr "Datenbank des Containers:"
 
-#: vis_devel_dlgs.cpp:112 vis_devel_dlgs.cpp:902
+#: vis_devel_dlgs.cpp:113 vis_devel_dlgs.cpp:888
 msgid "Date of modification:"
 msgstr "Änderungsdatum:"
 
-#: vis_devel_dlgs.cpp:124 vis_devel_dlgs.cpp:914 vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:125 vis_devel_dlgs.cpp:900 vis_devel_dlgs.cpp:1004
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: vis_devel_dlgs.cpp:129 vis_devel_dlgs.cpp:919
+#: vis_devel_dlgs.cpp:130 vis_devel_dlgs.cpp:905
 msgid "Id:"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:136 vis_devel_dlgs.cpp:254 vis_devel_dlgs.cpp:940
+#: vis_devel_dlgs.cpp:137 vis_devel_dlgs.cpp:255 vis_devel_dlgs.cpp:926
 #: vis_widgs.cpp:97
 msgid "Name:"
 msgstr "Name:"
 
-#: vis_devel_dlgs.cpp:142 vis_devel_dlgs.cpp:946
+#: vis_devel_dlgs.cpp:143 vis_devel_dlgs.cpp:932
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: vis_devel_dlgs.cpp:148 vis_devel_dlgs.cpp:952
+#: vis_devel_dlgs.cpp:149 vis_devel_dlgs.cpp:938
 msgid "Owner, group:"
 msgstr "Besitzer, Gruppe:"
 
-#: vis_devel_dlgs.cpp:159 vis_devel_dlgs.cpp:963
+#: vis_devel_dlgs.cpp:160 vis_devel_dlgs.cpp:949
 msgid "Access:"
 msgstr "Zugang:"
 
-#: vis_devel_dlgs.cpp:176
+#: vis_devel_dlgs.cpp:177
 msgid "Calculate period (ms):"
 msgstr "Rechenzeit (ms):"
 
-#: vis_devel_dlgs.cpp:184
+#: vis_devel_dlgs.cpp:185
 msgid "Run window mode:"
 msgstr "Ausführungsfenster Modus:"
 
-#: vis_devel_dlgs.cpp:191
+#: vis_devel_dlgs.cpp:192
 msgid "Keep aspect ratio on scale:"
 msgstr "Seitenverhältnis beibehalten auf der Skala"
 
-#: vis_devel_dlgs.cpp:204
+#: vis_devel_dlgs.cpp:205
 msgid "Mime data"
 msgstr "Mime Angaben"
 
-#: vis_devel_dlgs.cpp:215 vis_devel_dlgs.cpp:265 vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:216 vis_devel_dlgs.cpp:266 vis_devel_dlgs.cpp:1004
 #: vis_devel_widgs.cpp:1300 vis_devel_widgs.cpp:1718
 msgid "Id"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:215
+#: vis_devel_dlgs.cpp:216
 msgid "Mime type"
 msgstr "Mime Typ"
 
-#: vis_devel_dlgs.cpp:215
+#: vis_devel_dlgs.cpp:216
 msgid "Data size"
 msgstr "Datengrösse"
 
-#: vis_devel_dlgs.cpp:219
+#: vis_devel_dlgs.cpp:220
 msgid "Add record"
 msgstr "Datensatz hinzufügen"
 
-#: vis_devel_dlgs.cpp:222 vis_devel_dlgs.cpp:269
+#: vis_devel_dlgs.cpp:223 vis_devel_dlgs.cpp:270
 msgid "Delete record"
 msgstr "Datensatz löschen"
 
-#: vis_devel_dlgs.cpp:225 vis_devel_dlgs.cpp:728
+#: vis_devel_dlgs.cpp:226 vis_devel_dlgs.cpp:714
 msgid "Load data"
 msgstr "Daten laden"
 
-#: vis_devel_dlgs.cpp:228
+#: vis_devel_dlgs.cpp:229
 msgid "Unload data"
 msgstr "Daten leeren"
 
-#: vis_devel_dlgs.cpp:234
+#: vis_devel_dlgs.cpp:235
 msgid "Styles"
 msgstr "Styl"
 
-#: vis_devel_dlgs.cpp:241 vis_run_widgs.cpp:733 vis_widgs.cpp:286
+#: vis_devel_dlgs.cpp:242 vis_run_widgs.cpp:733 vis_widgs.cpp:286
 msgid "Style:"
 msgstr "Stil:"
 
-#: vis_devel_dlgs.cpp:249
+#: vis_devel_dlgs.cpp:250
 msgid "Erase style"
 msgstr "Erase Stil"
 
-#: vis_devel_dlgs.cpp:265 vis_devel_widgs.cpp:386 vis_devel_widgs.cpp:1003
+#: vis_devel_dlgs.cpp:266 vis_devel_widgs.cpp:386 vis_devel_widgs.cpp:1003
 msgid "Value"
 msgstr "Wert"
 
-#: vis_devel_dlgs.cpp:277
+#: vis_devel_dlgs.cpp:278
 msgid "Close"
 msgstr "Schliessen"
 
-#: vis_devel_dlgs.cpp:316
+#: vis_devel_dlgs.cpp:311
 msgid "Get node '%1' information error."
 msgstr "Fehler bei der Knoteninformation '%1'."
 
-#: vis_devel_dlgs.cpp:360
+#: vis_devel_dlgs.cpp:350
 msgid "No set"
 msgstr "Kein Satz"
 
-#: vis_devel_dlgs.cpp:617 vis_devel_dlgs.cpp:1483
+#: vis_devel_dlgs.cpp:591 vis_devel_dlgs.cpp:1469
 msgid "Load icon picture"
 msgstr "Iconbild laden"
 
-#: vis_devel_dlgs.cpp:617 vis_devel_dlgs.cpp:1483
+#: vis_devel_dlgs.cpp:591 vis_devel_dlgs.cpp:1469
 msgid "Images (*.png *.jpg)"
 msgstr "Bilder (*.png *.jpg)"
 
-#: vis_devel_dlgs.cpp:621 vis_devel_dlgs.cpp:1489
+#: vis_devel_dlgs.cpp:594 vis_devel_dlgs.cpp:1475
 msgid "Load icon image '%1' error."
 msgstr "Fehler beim Laden des Iconbildes '%1'."
 
-#: vis_devel_dlgs.cpp:715 vis_devel_dlgs.cpp:757 vis_devel_dlgs.cpp:804
+#: vis_devel_dlgs.cpp:667 vis_devel_dlgs.cpp:1562
+msgid "Changes apply"
+msgstr "Änderungen gelten"
+
+#: vis_devel_dlgs.cpp:667 vis_devel_dlgs.cpp:1562
+msgid ""
+"Some changes you don't apply!\n"
+"Apply now or lost the?"
+msgstr ""
+"Einige Änderungen nicht gelten!\n"
+"Bewerben Sie sich jetzt oder verloren das?"
+
+#: vis_devel_dlgs.cpp:701 vis_devel_dlgs.cpp:743 vis_devel_dlgs.cpp:790
 msgid "No one row is selected."
 msgstr "Keine Zeile ist ausgewählt."
 
-#: vis_devel_dlgs.cpp:728 vis_devel_dlgs.cpp:761
+#: vis_devel_dlgs.cpp:714 vis_devel_dlgs.cpp:747
 msgid "All files (*.*)"
 msgstr "Alle Dateien (*.*)"
 
-#: vis_devel_dlgs.cpp:733 vis_devel_dlgs.cpp:767 vis_shapes.cpp:1031
+#: vis_devel_dlgs.cpp:719 vis_devel_dlgs.cpp:753 vis_shapes.cpp:1031
 #: vis_shapes.cpp:1057
 msgid "Open file '%1' is fail: %2"
 msgstr "Fehler beim Öffnen der Datei '%1': %2"
 
-#: vis_devel_dlgs.cpp:738 vis_shapes.cpp:1062
+#: vis_devel_dlgs.cpp:724 vis_shapes.cpp:1062
 msgid "Loadable file '%1' is too large."
 msgstr "Ladbarer Datei '%1' ist zu groß."
 
-#: vis_devel_dlgs.cpp:760
+#: vis_devel_dlgs.cpp:746
 msgid "Save data"
 msgstr "Daten speichern"
 
-#: vis_devel_dlgs.cpp:782 vis_shapes.cpp:1036
+#: vis_devel_dlgs.cpp:768 vis_shapes.cpp:1036
 msgid "Write data to file '%1' is fail: %2"
 msgstr "Fehler beim Schreiben der Daten in die Datei '%1': %2"
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:826
 msgid "Widget properties"
 msgstr "Widgets Eigenschaften"
 
-#: vis_devel_dlgs.cpp:852 vis_devel_widgs.cpp:1577
+#: vis_devel_dlgs.cpp:838 vis_devel_widgs.cpp:1577
 msgid "Widget"
 msgstr "Widget"
 
-#: vis_devel_dlgs.cpp:884
+#: vis_devel_dlgs.cpp:870
 msgid "Parent widget:"
 msgstr "Elternwidget:"
 
-#: vis_devel_dlgs.cpp:894
+#: vis_devel_dlgs.cpp:880
 msgid "Page type:"
 msgstr "Seitentyp:"
 
-#: vis_devel_dlgs.cpp:926
+#: vis_devel_dlgs.cpp:912
 msgid "Root:"
 msgstr "Root:"
 
-#: vis_devel_dlgs.cpp:933
+#: vis_devel_dlgs.cpp:919
 msgid "Path:"
 msgstr "Pfad:"
 
-#: vis_devel_dlgs.cpp:983 vis_devel_widgs.cpp:972
+#: vis_devel_dlgs.cpp:969 vis_devel_widgs.cpp:972
 msgid "Attributes"
 msgstr "Attribute"
 
-#: vis_devel_dlgs.cpp:998
+#: vis_devel_dlgs.cpp:984
 msgid "Widget process"
 msgstr "Widgetsbearbeitung"
 
-#: vis_devel_dlgs.cpp:1018 vis_devel_widgs.cpp:1003 vis_devel_widgs.cpp:1300
+#: vis_devel_dlgs.cpp:1004 vis_devel_widgs.cpp:1003 vis_devel_widgs.cpp:1300
 #: vis_devel_widgs.cpp:1718
 msgid "Name"
 msgstr "Name"
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Data type"
 msgstr "Datentyp"
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Proc."
 msgstr "Bearbeit."
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Configuration template"
 msgstr "Konfigurationvorlage"
 
-#: vis_devel_dlgs.cpp:1022
+#: vis_devel_dlgs.cpp:1008
 msgid "Add attribute"
 msgstr "Attribut hinzufügen"
 
-#: vis_devel_dlgs.cpp:1025
+#: vis_devel_dlgs.cpp:1011
 msgid "Delete attribute"
 msgstr "Attribut löschen"
 
-#: vis_devel_dlgs.cpp:1038
+#: vis_devel_dlgs.cpp:1024
 msgid "Procedure language:"
 msgstr "Verfahrenssprache:"
 
-#: vis_devel_dlgs.cpp:1046
+#: vis_devel_dlgs.cpp:1032
 msgid "Procedure calculate (ms):"
 msgstr "Rechenzeit der Funktion (ms):"
 
-#: vis_devel_dlgs.cpp:1059 vis_devel_widgs.cpp:1260
+#: vis_devel_dlgs.cpp:1045 vis_devel_widgs.cpp:1260
 msgid "Links"
 msgstr "Links"
 
-#: vis_devel_dlgs.cpp:1107 vis_devel_dlgs.cpp:1322
+#: vis_devel_dlgs.cpp:1093 vis_devel_dlgs.cpp:1308
 msgid "Getting node '%1' information error."
 msgstr "Fehler bei der Knoteninformation '%1'."
 
@@ -2688,41 +2701,41 @@ msgstr "Suche"
 msgid "Find next"
 msgstr "Weitersuchen"
 
-#: vis_widgs.cpp:936 vis_widgs.cpp:957
+#: vis_widgs.cpp:934 vis_widgs.cpp:955
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"
 
-#: vis_widgs.cpp:981
+#: vis_widgs.cpp:979
 msgid "Enter text string for search:"
 msgstr "Geben Sie den Text-String für Suche:"
 
-#: vis_widgs.cpp:981
+#: vis_widgs.cpp:979
 msgid "String search"
 msgstr "String-Suche"
 
-#: vis_widgs.cpp:984
+#: vis_widgs.cpp:982
 msgid "Backward"
 msgstr "Rückwärts"
 
-#: vis_widgs.cpp:987
+#: vis_widgs.cpp:985
 msgid "Case sensitively"
 msgstr "Case sensibel"
 
-#: vis_widgs.cpp:990
+#: vis_widgs.cpp:988
 msgid "Whole words"
 msgstr "Ganze Wörter"
 
-#: vis_widgs.cpp:1206
+#: vis_widgs.cpp:1204
 #, c-format
 msgid "Request to VCA engine '%s' time %f ms."
 msgstr "Zeit der Anfrage an die VCA Maschine '%s' %f msek."
 
-#: vis_widgs.cpp:1268
+#: vis_widgs.cpp:1266
 #, c-format
 msgid "Load '%s' time %f ms."
 msgstr "Zeit für Laden '%s' %f msek."
 
-#: vis_widgs.cpp:1283
+#: vis_widgs.cpp:1281
 #, c-format
 msgid "Init '%s' time %f ms."
 msgstr "Zeit der Initialisation '%s' %f ms."

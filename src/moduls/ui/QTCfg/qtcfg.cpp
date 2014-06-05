@@ -822,8 +822,7 @@ void ConfApp::userSel()
 
 void ConfApp::pageRefresh( bool tm )
 {
-    if(tm)
-    {
+    if(tm) {
 	if(!actStartUpd->isEnabled())	return;
 
 	autoUpdTimer->setSingleShot(true);
@@ -832,8 +831,7 @@ void ConfApp::pageRefresh( bool tm )
 	return;
     }
 
-    try
-    {
+    try {
 	//Tree part update
 	if(CtrTree->currentItem())
 	    viewChildRecArea(CtrTree->currentItem()->parent() ? CtrTree->currentItem()->parent(): CtrTree->currentItem(), true);
@@ -889,13 +887,13 @@ void ConfApp::about( )
 {
     char buf[STR_BUF_LEN];
 
-    snprintf(buf,sizeof(buf),_(
+    snprintf(buf, sizeof(buf), _(
 	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
 	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
 	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
-	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE );
+	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE);
 
-    QMessageBox::about(this,windowTitle(),buf);
+    QMessageBox::about(this, windowTitle(), buf);
 }
 
 void ConfApp::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
@@ -928,8 +926,7 @@ void ConfApp::selectItem( )
 
 void ConfApp::selectPage( const string &path )
 {
-    try
-    {
+    try {
 	//Prev and next
 	if(sel_path.size())		prev.insert(prev.begin(),sel_path);
 	if((int)prev.size() >= que_sz)	prev.pop_back();
@@ -938,8 +935,7 @@ void ConfApp::selectPage( const string &path )
 	//Display page
 	pageDisplay(path);
     }
-    catch(TError err)
-    {
+    catch(TError err) {
 	mod->postMess(err.cat,err.mess,TUIMod::Error,this);
 	if(err.cod == 10) initHosts();
     }

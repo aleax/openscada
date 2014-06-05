@@ -1,13 +1,13 @@
 # OpenSCADA.UI.Vision translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.UI.Vision package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2013.
+# Roman Savochenko <rom_as@fromru.com>, 2005-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 15:01+0300\n"
+"POT-Creation-Date: 2014-06-05 16:34+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1006,7 +1006,9 @@ msgstr "Збереження візуальних елементів"
 msgid ""
 "Some visual items changed.\n"
 "Save the changes to DB on exit?"
-msgstr "Деякі візуальні елементи було змінено.\nЗберегти зміни у БД при виході?"
+msgstr ""
+"Деякі візуальні елементи було змінено.\n"
+"Зберегти зміни у БД при виході?"
 
 #: vis_devel.cpp:829 vis_run.cpp:936
 msgid ""
@@ -1156,243 +1158,253 @@ msgstr "Наслідувати:"
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Спроба копіювання/пересунення себе у себе для \"%1/%1\"!"
 
-#: vis_devel_dlgs.cpp:57
+#: vis_devel_dlgs.cpp:58
 msgid "Widget's library properties"
 msgstr "Властивості бібліотеки віджетів"
 
-#: vis_devel_dlgs.cpp:70
+#: vis_devel_dlgs.cpp:71
 msgid "Widgets library"
 msgstr "Бібліотека віджетів"
 
-#: vis_devel_dlgs.cpp:81 vis_devel_dlgs.cpp:863
+#: vis_devel_dlgs.cpp:82 vis_devel_dlgs.cpp:849
 msgid "State"
 msgstr "Стан"
 
-#: vis_devel_dlgs.cpp:88 vis_devel_dlgs.cpp:869
+#: vis_devel_dlgs.cpp:89 vis_devel_dlgs.cpp:855
 msgid "Item's icon. Click for download other."
 msgstr "Іконка елементу. Натисніть для завантаження іншої."
 
-#: vis_devel_dlgs.cpp:95 vis_devel_dlgs.cpp:876
+#: vis_devel_dlgs.cpp:96 vis_devel_dlgs.cpp:862
 msgid "Enabled:"
 msgstr "Ввімкнено:"
 
-#: vis_devel_dlgs.cpp:103
+#: vis_devel_dlgs.cpp:104
 msgid "Container DB:"
 msgstr "БД контейнера:"
 
-#: vis_devel_dlgs.cpp:112 vis_devel_dlgs.cpp:902
+#: vis_devel_dlgs.cpp:113 vis_devel_dlgs.cpp:888
 msgid "Date of modification:"
 msgstr "Дата модифікації:"
 
-#: vis_devel_dlgs.cpp:124 vis_devel_dlgs.cpp:914 vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:125 vis_devel_dlgs.cpp:900 vis_devel_dlgs.cpp:1004
 msgid "Configuration"
 msgstr "Конфігурація"
 
-#: vis_devel_dlgs.cpp:129 vis_devel_dlgs.cpp:919
+#: vis_devel_dlgs.cpp:130 vis_devel_dlgs.cpp:905
 msgid "Id:"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:136 vis_devel_dlgs.cpp:254 vis_devel_dlgs.cpp:940
+#: vis_devel_dlgs.cpp:137 vis_devel_dlgs.cpp:255 vis_devel_dlgs.cpp:926
 #: vis_widgs.cpp:97
 msgid "Name:"
 msgstr "Ім'я:"
 
-#: vis_devel_dlgs.cpp:142 vis_devel_dlgs.cpp:946
+#: vis_devel_dlgs.cpp:143 vis_devel_dlgs.cpp:932
 msgid "Description:"
 msgstr "Опис:"
 
-#: vis_devel_dlgs.cpp:148 vis_devel_dlgs.cpp:952
+#: vis_devel_dlgs.cpp:149 vis_devel_dlgs.cpp:938
 msgid "Owner, group:"
 msgstr "Власник, група:"
 
-#: vis_devel_dlgs.cpp:159 vis_devel_dlgs.cpp:963
+#: vis_devel_dlgs.cpp:160 vis_devel_dlgs.cpp:949
 msgid "Access:"
 msgstr "Доступ:"
 
-#: vis_devel_dlgs.cpp:176
+#: vis_devel_dlgs.cpp:177
 msgid "Calculate period (ms):"
 msgstr "Період обчислення (мс):"
 
-#: vis_devel_dlgs.cpp:184
+#: vis_devel_dlgs.cpp:185
 msgid "Run window mode:"
 msgstr "Режим вікна виконання:"
 
-#: vis_devel_dlgs.cpp:191
+#: vis_devel_dlgs.cpp:192
 msgid "Keep aspect ratio on scale:"
 msgstr "Зберігати пропорцію під час масштабування"
 
-#: vis_devel_dlgs.cpp:204
+#: vis_devel_dlgs.cpp:205
 msgid "Mime data"
 msgstr "Mime дані"
 
-#: vis_devel_dlgs.cpp:215 vis_devel_dlgs.cpp:265 vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:216 vis_devel_dlgs.cpp:266 vis_devel_dlgs.cpp:1004
 #: vis_devel_widgs.cpp:1300 vis_devel_widgs.cpp:1718
 msgid "Id"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:215
+#: vis_devel_dlgs.cpp:216
 msgid "Mime type"
 msgstr "Mime тип"
 
-#: vis_devel_dlgs.cpp:215
+#: vis_devel_dlgs.cpp:216
 msgid "Data size"
 msgstr "Розмір даних"
 
-#: vis_devel_dlgs.cpp:219
+#: vis_devel_dlgs.cpp:220
 msgid "Add record"
 msgstr "Додати запис"
 
-#: vis_devel_dlgs.cpp:222 vis_devel_dlgs.cpp:269
+#: vis_devel_dlgs.cpp:223 vis_devel_dlgs.cpp:270
 msgid "Delete record"
 msgstr "Видалити запис"
 
-#: vis_devel_dlgs.cpp:225 vis_devel_dlgs.cpp:728
+#: vis_devel_dlgs.cpp:226 vis_devel_dlgs.cpp:714
 msgid "Load data"
 msgstr "Завантажити дані"
 
-#: vis_devel_dlgs.cpp:228
+#: vis_devel_dlgs.cpp:229
 msgid "Unload data"
 msgstr "Вивантажити дані"
 
-#: vis_devel_dlgs.cpp:234
+#: vis_devel_dlgs.cpp:235
 msgid "Styles"
 msgstr "Стилі"
 
-#: vis_devel_dlgs.cpp:241 vis_run_widgs.cpp:733 vis_widgs.cpp:286
+#: vis_devel_dlgs.cpp:242 vis_run_widgs.cpp:733 vis_widgs.cpp:286
 msgid "Style:"
 msgstr "Стиль:"
 
-#: vis_devel_dlgs.cpp:249
+#: vis_devel_dlgs.cpp:250
 msgid "Erase style"
 msgstr "Видалити стиль"
 
-#: vis_devel_dlgs.cpp:265 vis_devel_widgs.cpp:386 vis_devel_widgs.cpp:1003
+#: vis_devel_dlgs.cpp:266 vis_devel_widgs.cpp:386 vis_devel_widgs.cpp:1003
 msgid "Value"
 msgstr "Значення"
 
-#: vis_devel_dlgs.cpp:277
+#: vis_devel_dlgs.cpp:278
 msgid "Close"
 msgstr "Закрити"
 
-#: vis_devel_dlgs.cpp:316
+#: vis_devel_dlgs.cpp:311
 msgid "Get node '%1' information error."
 msgstr "Помилка запиту інформації вузла '%1'."
 
-#: vis_devel_dlgs.cpp:360
+#: vis_devel_dlgs.cpp:350
 msgid "No set"
 msgstr "Не встановлено"
 
-#: vis_devel_dlgs.cpp:617 vis_devel_dlgs.cpp:1483
+#: vis_devel_dlgs.cpp:591 vis_devel_dlgs.cpp:1469
 msgid "Load icon picture"
 msgstr "Завантажити зображення іконки"
 
-#: vis_devel_dlgs.cpp:617 vis_devel_dlgs.cpp:1483
+#: vis_devel_dlgs.cpp:591 vis_devel_dlgs.cpp:1469
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-#: vis_devel_dlgs.cpp:621 vis_devel_dlgs.cpp:1489
+#: vis_devel_dlgs.cpp:594 vis_devel_dlgs.cpp:1475
 msgid "Load icon image '%1' error."
 msgstr "Помилка завантаження зображення іконки '%1'."
 
-#: vis_devel_dlgs.cpp:715 vis_devel_dlgs.cpp:757 vis_devel_dlgs.cpp:804
+#: vis_devel_dlgs.cpp:667 vis_devel_dlgs.cpp:1562
+msgid "Changes apply"
+msgstr "Збереження змін"
+
+#: vis_devel_dlgs.cpp:667 vis_devel_dlgs.cpp:1562
+msgid ""
+"Some changes you don't apply!\n"
+"Apply now or lost the?"
+msgstr "Деякі зміни було зроблено.\nЗберегти зміни у БД перед виходом?"
+
+#: vis_devel_dlgs.cpp:701 vis_devel_dlgs.cpp:743 vis_devel_dlgs.cpp:790
 msgid "No one row is selected."
 msgstr "Жодної строки не вибрано."
 
-#: vis_devel_dlgs.cpp:728 vis_devel_dlgs.cpp:761
+#: vis_devel_dlgs.cpp:714 vis_devel_dlgs.cpp:747
 msgid "All files (*.*)"
 msgstr "Всі файли (*.*)"
 
-#: vis_devel_dlgs.cpp:733 vis_devel_dlgs.cpp:767 vis_shapes.cpp:1031
+#: vis_devel_dlgs.cpp:719 vis_devel_dlgs.cpp:753 vis_shapes.cpp:1031
 #: vis_shapes.cpp:1057
 msgid "Open file '%1' is fail: %2"
 msgstr "Помилка відкриття файлу '%1': %2"
 
-#: vis_devel_dlgs.cpp:738 vis_shapes.cpp:1062
+#: vis_devel_dlgs.cpp:724 vis_shapes.cpp:1062
 msgid "Loadable file '%1' is too large."
 msgstr "Завантажуваний файл '%1' дуже великий."
 
-#: vis_devel_dlgs.cpp:760
+#: vis_devel_dlgs.cpp:746
 msgid "Save data"
 msgstr "Збереження даних"
 
-#: vis_devel_dlgs.cpp:782 vis_shapes.cpp:1036
+#: vis_devel_dlgs.cpp:768 vis_shapes.cpp:1036
 msgid "Write data to file '%1' is fail: %2"
 msgstr "Помилка запису до файлу '%1': %2"
 
-#: vis_devel_dlgs.cpp:840
+#: vis_devel_dlgs.cpp:826
 msgid "Widget properties"
 msgstr "Властивості віджету"
 
-#: vis_devel_dlgs.cpp:852 vis_devel_widgs.cpp:1577
+#: vis_devel_dlgs.cpp:838 vis_devel_widgs.cpp:1577
 msgid "Widget"
 msgstr "Віджет"
 
-#: vis_devel_dlgs.cpp:884
+#: vis_devel_dlgs.cpp:870
 msgid "Parent widget:"
 msgstr "Батьківський віджет:"
 
-#: vis_devel_dlgs.cpp:894
+#: vis_devel_dlgs.cpp:880
 msgid "Page type:"
 msgstr "Тип сторінки:"
 
-#: vis_devel_dlgs.cpp:926
+#: vis_devel_dlgs.cpp:912
 msgid "Root:"
 msgstr "Корінь:"
 
-#: vis_devel_dlgs.cpp:933
+#: vis_devel_dlgs.cpp:919
 msgid "Path:"
 msgstr "Шлях:"
 
-#: vis_devel_dlgs.cpp:983 vis_devel_widgs.cpp:972
+#: vis_devel_dlgs.cpp:969 vis_devel_widgs.cpp:972
 msgid "Attributes"
 msgstr "Атрибути"
 
-#: vis_devel_dlgs.cpp:998
+#: vis_devel_dlgs.cpp:984
 msgid "Widget process"
 msgstr "Обробка віджету"
 
-#: vis_devel_dlgs.cpp:1018 vis_devel_widgs.cpp:1003 vis_devel_widgs.cpp:1300
+#: vis_devel_dlgs.cpp:1004 vis_devel_widgs.cpp:1003 vis_devel_widgs.cpp:1300
 #: vis_devel_widgs.cpp:1718
 msgid "Name"
 msgstr "Ім'я"
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Data type"
 msgstr "Тип даних"
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Work area"
 msgstr "Робоча ділянка"
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Proc."
 msgstr "Оброб."
 
-#: vis_devel_dlgs.cpp:1018
+#: vis_devel_dlgs.cpp:1004
 msgid "Configuration template"
 msgstr "Конфігураційний шаблон"
 
-#: vis_devel_dlgs.cpp:1022
+#: vis_devel_dlgs.cpp:1008
 msgid "Add attribute"
 msgstr "Додати атрибут"
 
-#: vis_devel_dlgs.cpp:1025
+#: vis_devel_dlgs.cpp:1011
 msgid "Delete attribute"
 msgstr "Видалити атрибут"
 
-#: vis_devel_dlgs.cpp:1038
+#: vis_devel_dlgs.cpp:1024
 msgid "Procedure language:"
 msgstr "Мова процедури:"
 
-#: vis_devel_dlgs.cpp:1046
+#: vis_devel_dlgs.cpp:1032
 msgid "Procedure calculate (ms):"
 msgstr "Обчислення процедури (мс):"
 
-#: vis_devel_dlgs.cpp:1059 vis_devel_widgs.cpp:1260
+#: vis_devel_dlgs.cpp:1045 vis_devel_widgs.cpp:1260
 msgid "Links"
 msgstr "Зв'язки"
 
-#: vis_devel_dlgs.cpp:1107 vis_devel_dlgs.cpp:1322
+#: vis_devel_dlgs.cpp:1093 vis_devel_dlgs.cpp:1308
 msgid "Getting node '%1' information error."
 msgstr "Помилка запиту інформації вузла '%1'."
 
@@ -2676,41 +2688,41 @@ msgstr "Пошук"
 msgid "Find next"
 msgstr "Пошук наступного"
 
-#: vis_widgs.cpp:936 vis_widgs.cpp:957
+#: vis_widgs.cpp:934 vis_widgs.cpp:955
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-#: vis_widgs.cpp:981
+#: vis_widgs.cpp:979
 msgid "Enter text string for search:"
 msgstr "Введіть строку тексту для пошуку:"
 
-#: vis_widgs.cpp:981
+#: vis_widgs.cpp:979
 msgid "String search"
 msgstr "Рядок пошуку"
 
-#: vis_widgs.cpp:984
+#: vis_widgs.cpp:982
 msgid "Backward"
 msgstr "Зворотній"
 
-#: vis_widgs.cpp:987
+#: vis_widgs.cpp:985
 msgid "Case sensitively"
 msgstr "Чутливий до регістру"
 
-#: vis_widgs.cpp:990
+#: vis_widgs.cpp:988
 msgid "Whole words"
 msgstr "Слово цілком"
 
-#: vis_widgs.cpp:1206
+#: vis_widgs.cpp:1204
 #, c-format
 msgid "Request to VCA engine '%s' time %f ms."
 msgstr "Час запиту до рушія СВК '%s' %f мс."
 
-#: vis_widgs.cpp:1268
+#: vis_widgs.cpp:1266
 #, c-format
 msgid "Load '%s' time %f ms."
 msgstr "Час завантаження '%s' %f мс."
 
-#: vis_widgs.cpp:1283
+#: vis_widgs.cpp:1281
 #, c-format
 msgid "Init '%s' time %f ms."
 msgstr "Час ініціалізації '%s' %f мс."

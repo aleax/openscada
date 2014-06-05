@@ -6,6 +6,17 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = openscada.pc
 
 if ResourcesAllow
+data/LibsDB/*.db data/ModelsDB/AGLKS/*.db data/ModelsDB/Boiler/*.db:
+	@for db in `find $$(dirname $@) -name \*.sql`; do \
+	    tDb=`dirname $$db`/`basename $$db .sql`.db ; \
+	    if test ! -f $$tDb; then sqlite3 -init $$db $$tDb .exit ||: ; fi; \
+	done
+
+clean-local:
+	rm -f data/LibsDB/*.db ; \
+	rm -f data/ModelsDB/AGLKS/*.db ; \
+	rm -f data/ModelsDB/Boiler/*.db ;
+
 bin_SCRIPTS = data/openscada_start
 sysconf_DATA = data/oscada.xml data/oscada_start.xml data/ModelsDB/AGLKS/oscada_AGLKS.xml data/ModelsDB/Boiler/oscada_Boiler.xml
 

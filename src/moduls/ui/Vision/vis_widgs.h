@@ -253,6 +253,7 @@ namespace VISION
 	public:
 	    TextEdit( QWidget *parent, bool prev_dis = false );
 
+	    bool isEdited( );
 	    QString text( );
 
 	    void setText( const QString & );

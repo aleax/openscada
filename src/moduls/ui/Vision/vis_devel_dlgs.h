@@ -1,7 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_dlgs.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@diyaorg.dp.ua                                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -76,7 +76,7 @@ class LibProjProp: public QDialog
     private slots:
 	//Private slots
 	void selectIco( );
-	void isModify( );
+	void isModify( QObject *snd = NULL );
 
 	void addMimeData( );
 	void delMimeData( );
@@ -154,7 +154,7 @@ class VisItProp : public QDialog
 	//Private slots
 	void selectIco( );
 	void selectParent( );
-	void isModify( );
+	void isModify( QObject *snd = NULL );
 
 	void addAttr( );
 	void delAttr( );

@@ -1,3 +1,10 @@
+2014-06-05 Roman
+- !!!:SYS:*.db: All SQLite DB files moved to SQL text format (*.sql) for best version control into subversion.
+- FIX:DAQ.MMS: EVAL set for boolean is fixed.
+- UI.Vision: Check and warning about no apply changes into item's configure dialogs is added.
+    Some code clean up.
+
+
 2014-06-04 Roman
 - DAQ.DAQGate: Reusing mirrored parameters with empty the remoted parameter's address (old version cache) is added.
 - FIX:DAQ.MMS: Attributes ID preparing some expanded. Hide selection variables field at enabled state.

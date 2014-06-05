@@ -189,8 +189,8 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     ed_lay->addWidget( users, 0, 1 );
     ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
     passwd = new QLineEdit(this);
-    passwd->setEchoMode( QLineEdit::Password );
-    ed_lay->addWidget( passwd, 1, 1 );
+    passwd->setEchoMode(QLineEdit::Password);
+    ed_lay->addWidget(passwd, 1, 1);
     dlg_lay->addItem(ed_lay);
 
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
@@ -705,7 +705,7 @@ SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
 
 }
 
-void SyntxHighl::setSnthHgl(XMLNode nd)
+void SyntxHighl::setSnthHgl( XMLNode nd )
 {
     rules = nd;
 
@@ -715,7 +715,7 @@ void SyntxHighl::setSnthHgl(XMLNode nd)
     rehighlight();
 }
 
-void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
+void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 {
     XMLNode *rl;
     vector<int> rul_pos(irl->childSize(),-1);
@@ -831,7 +831,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->addWidget(ed_fld);
 
     QImage ico_t;
-    if( !ico_t.load(TUIS::icoGet("find",NULL,true).c_str()) ) ico_t.load(":/images/find.png");
+    if(!ico_t.load(TUIS::icoGet("find",NULL,true).c_str())) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
     actFind->setShortcutContext(Qt::WidgetShortcut);
@@ -843,8 +843,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 
-    if( !prev_dis )
-    {
+    if(!prev_dis) {
 	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QImage ico_t;
 	but_box->button(QDialogButtonBox::Apply)->setText("");
@@ -862,7 +861,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 	box->addWidget(but_box);
     }
 
-    //> Check for window with status present
+    //Check for window with status present
     QWidget *w = parentWidget();
     while(w && w->parentWidget() && (!dynamic_cast<QMainWindow *>(w) || !((QMainWindow*)w)->statusBar())) w = w->parentWidget();
     stWin = dynamic_cast<QMainWindow *>(w);
@@ -871,12 +870,11 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
 
-QString TextEdit::text()
-{
-    return ed_fld->toPlainText();
-}
+bool TextEdit::isEdited( )	{ return (but_box && but_box->isVisible()); }
 
-void TextEdit::setText(const QString &itext)
+QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
+
+void TextEdit::setText( const QString &itext )
 {
     isInit = true;
     if(itext != text()) ed_fld->setPlainText(itext);
@@ -890,13 +888,13 @@ void TextEdit::setText(const QString &itext)
     m_text = itext;
 }
 
-void TextEdit::setSnthHgl(XMLNode nd)
+void TextEdit::setSnthHgl( XMLNode nd )
 {
     if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
     snt_hgl->setSnthHgl(nd);
 }
 
-void TextEdit::changed()
+void TextEdit::changed( )
 {
     if(isInit) return;
     if(but_box && !but_box->isEnabled() && text() != m_text)
@@ -912,7 +910,7 @@ void TextEdit::changed()
 
 void TextEdit::applySlot( )
 {
-    if( but_box && but_box->isEnabled() )
+    if(but_box && but_box->isEnabled())
     {
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
