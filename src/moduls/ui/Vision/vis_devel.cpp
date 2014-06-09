@@ -830,7 +830,7 @@ bool VisDevelop::exitModifChk( )
 		    return true;
 		case QMessageBox::No:		return true;
 		case QMessageBox::Cancel:	return false;
-		default:
+		default: break;
 	    }
     }
 
