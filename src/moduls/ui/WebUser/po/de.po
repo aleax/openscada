@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the OpenSCADA.UI.WebUser package module.
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2010.
-# Roman Savochenko <rom_as@fromru.com>, 2010,2013.
+# Roman Savochenko <rom_as@oscada.org>, 2010,2013.
 #
 msgid ""
 msgstr ""

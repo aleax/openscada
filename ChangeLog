@@ -1,3 +1,13 @@
+2014-06-09 Roman
+- DB.LibsDB.OscadaLibs: Pass input direct processing to analog inputs templates is added.
+- !!:SYS: Created doc access mechanism from GUI.
+    OpenSCADA's and related project's documents place to "share/openscada/docs" and to the project "docs".
+    EMails rom_as@fromru.com, rom_as@diyaorg.dp.ua and rom_as@oscada.org.ua everywhere replaced by rom_as@oscada.org.
+- UI: TUIS::docGet() function is added for documents place allocate.
+- UI.QTStarter: Help menu items "&About", "About &Qt", "QtStarter manual", "OpenSCADA manual", "What's &This".
+- UI.{QTCfg,Vision}: Help menu items "{Module} manual" and "OpenSCADA manual".
+
+
 2014-06-05 Roman
 - !!!:SYS:*.db: All SQLite DB files moved to SQL text format (*.sql) for best version control into subversion.
 - FIX:DAQ.MMS: EVAL set for boolean is fixed.

@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tuis.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -67,8 +66,9 @@ class TUIS : public TSubSYS
 
 	AutoHD<TUI> at( const string &name )	{ return modAt(name); }
 
-	//> All system UI functions
+	// All system UI functions
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
+	static string docGet( const string &inm, string *tp = NULL, bool retPath = true );
 
     protected:
 	void load_( );

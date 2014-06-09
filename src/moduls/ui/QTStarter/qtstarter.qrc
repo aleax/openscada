@@ -3,5 +3,8 @@
     <file>images/exit.png</file>
     <file>images/oscada_qt.png</file>
     <file>images/splash.png</file>
+    <file>images/help.png</file>
+    <file>images/contexthelp.png</file>
+    <file>images/manual.png</file>
 </qresource>
 </RCC>

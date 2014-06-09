@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.h
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -129,7 +128,8 @@ class VisRun : public QMainWindow
 
 	void about( );					//About at program
 	void aboutQt( );				//About at QT library
-	//void enterWhatsThis( );				//What is GUI components
+	void enterManual( );				//Manuals call
+	void enterWhatsThis( );				//What is GUI components
 	void updatePage( );				//Update page data
 	void endRunChk( );				//End run flag check
 

@@ -1,7 +1,7 @@
 # OpenSCADA.DAQ.ModBus translate to Russian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.ModBus package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2007-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2007-2014.
 #
 msgid ""
 msgstr ""
@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-16 17:13+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"

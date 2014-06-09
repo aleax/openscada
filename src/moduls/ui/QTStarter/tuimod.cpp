@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2013 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -34,6 +33,8 @@
 #include <QTimer>
 #include <QSplashScreen>
 #include <QLocale>
+#include <QMessageBox>
+#include <QWhatsThis>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -61,7 +62,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -71,8 +72,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new QTStarter::TUIMod( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new QTStarter::TUIMod(source);
 	return NULL;
     }
 }
@@ -95,7 +95,7 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
     mLicense	= LICENSE;
     mSource	= name;
 
-    //> Qt massages not for compile but for indexing by gettext
+    //Qt massages not for compile but for indexing by gettext
 #if 0
     char mess[][100] =
     {
@@ -124,42 +124,39 @@ TUIMod::TUIMod( string name ) : TUI(MOD_ID),
 #endif
 }
 
-TUIMod::~TUIMod()
+TUIMod::~TUIMod( )
 {
-    if( run_st ) modStop();
+    if(run_st) modStop();
 }
 
 void TUIMod::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if(flag&TCntrNode::NodeConnect)
-    {
-	//> Set Qt environments
+    if(flag&TCntrNode::NodeConnect) {
+	//Set Qt environments
 	qtArgC = qtArgEnd = 0;
 	if(SYS->argc) toQtArg(SYS->argv[0]);
 #if QT_VERSION < 0x050000
 	QTextCodec::setCodecForCStrings(QTextCodec::codecForLocale());	//codepage for Qt across QString recode!
 #endif
 
-	//> Check command line for options no help and no daemon
+	//Check command line for options no help and no daemon
 	bool isHelp = false;
 	string argCom, argVl;
 	for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
 	    if(argCom == "h" || argCom == "help") isHelp = true;
 	    else if(argCom == "demon") demon_mode = true;
-		    //>Qt bind options (debug)
+		    // Qt bind options (debug)
 	    else if(argCom == "sync" || argCom == "widgetcount" ||
-		    //>Qt bind options
+		    // Qt bind options
 		    argCom == "qws" || argCom == "style" || argCom == "stylesheet" || argCom == "session" ||
 		    argCom == "reverse" || argCom == "graphicssystem" || argCom == "display" || argCom == "geometry")
 		toQtArg(argCom.c_str(), argVl.c_str());
 
-	//> Start main Qt thread if no help and no daemon
-	if(!(run_st || demon_mode || isHelp))
-	{
+	//Start main Qt thread if no help and no daemon
+	if(!(run_st || demon_mode || isHelp)) {
 	    end_run = false;
-
 	    SYS->taskCreate(nodePath('.',true), 0, Task, this);
 	}
     }
@@ -176,12 +173,12 @@ void TUIMod::load_( )
 {
     mess_debug(nodePath().c_str(),_("Load module."));
 
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
         if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    //> Load parameters from config-file
+    //Load parameters from config-file
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
 }
 
@@ -237,15 +234,15 @@ void TUIMod::toQtArg( const char *nm, const char *arg )
 {
     string plStr = nm;
     if(qtArgC) plStr.insert(0,"-");
-    //> Name process
+
+    //Name process
     if(qtArgC >= (int)(sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
     strcpy(qtArgBuf+qtArgEnd, plStr.c_str());
     qtArgV[qtArgC++] = qtArgBuf+qtArgEnd;
     qtArgEnd += plStr.size()+1;
 
-    //> Argument process
-    if(arg)
-    {
+    //Argument process
+    if(arg) {
 	plStr = arg;
 	if(qtArgC >= (int)(sizeof(qtArgV)/sizeof(char*)) || (qtArgEnd+plStr.size()+1) > sizeof(qtArgBuf)) return;
 	strcpy(qtArgBuf+qtArgEnd, plStr.c_str());
@@ -261,20 +258,20 @@ void *TUIMod::Task( void * )
     time_t st_time = time(NULL);
     vector<TMess::SRec> recs;
 
-    //> Init locale setLocale
+    //Init locale setLocale
     QLocale::setDefault(QLocale(Mess->lang().c_str()));
 
-    //> Qt application object init
+    //Qt application object init
     QApplication *QtApp = new QApplication(mod->qtArgC, (char**)&mod->qtArgV);
     QtApp->setApplicationName(PACKAGE_STRING);
     QtApp->setQuitOnLastWindowClosed(false);
     mod->run_st = true;
 
-    //> Create I18N translator
+    //Create I18N translator
     I18NTranslator translator;
     QtApp->installTranslator(&translator);
 
-    //> Start splash create
+    //Start splash create
     if(!ico_t.load(TUIS::icoGet(SYS->id()+"_splash",NULL,true).c_str())) ico_t.load(":/images/splash.png");
     QSplashScreen *splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
@@ -282,8 +279,7 @@ void *TUIMod::Task( void * )
     wFnt.setPixelSize(10);
     splash->setFont(wFnt);
 
-    while(!mod->startCom() && !mod->endRun())
-    {
+    while(!mod->startCom() && !mod->endRun()) {
 	SYS->archive().at().messGet(st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM);
 	QString mess;
 	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
@@ -294,7 +290,7 @@ void *TUIMod::Task( void * )
 	TSYS::sysSleep(0.5);
     }
 
-    //> Start external modules
+    //Start external modules
     WinControl *winCntr = new WinControl( );
 
     int op_wnd = 0;
@@ -303,7 +299,7 @@ void *TUIMod::Task( void * )
 	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
 		mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
 	{
-	    //>> Search module into start list
+	    // Search module into start list
 	    int i_off = 0;
 	    string s_el;
 	    while((s_el=TSYS::strSepParse(mod->start_mod,0,';',&i_off)).size())
@@ -314,7 +310,7 @@ void *TUIMod::Task( void * )
 
     delete splash;
 
-    //> Start call dialog
+    //Start call dialog
     if(QApplication::topLevelWidgets().isEmpty()) winCntr->startDialog( );
 
     QObject::connect(QtApp, SIGNAL(lastWindowClosed()), winCntr, SLOT(lastWinClose()));
@@ -322,15 +318,14 @@ void *TUIMod::Task( void * )
     QtApp->exec();
     delete winCntr;
 
-    //> Stop splash create
+    //Stop splash create
     if(!ico_t.load(TUIS::icoGet(SYS->id()+"_splash_exit",NULL,true).c_str())) ico_t.load(":/images/splash.png");
     splash = new QSplashScreen(QPixmap::fromImage(ico_t));
     splash->show();
     splash->setFont(wFnt);
 
     st_time = time(NULL);
-    while(!mod->endRun())
-    {
+    while(!mod->endRun()) {
 	SYS->archive().at().messGet( st_time, time(NULL), recs, "", TMess::Debug, BUF_ARCH_NM );
 	QString mess;
 	for(int i_m = recs.size()-1; i_m >= 0 && i_m > ((int)recs.size()-10); i_m--)
@@ -342,7 +337,7 @@ void *TUIMod::Task( void * )
     }
     delete splash;
 
-    //> Qt application object free
+    //Qt application object free
     delete QtApp;
 
     mod->run_st = false;
@@ -352,9 +347,8 @@ void *TUIMod::Task( void * )
 
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
@@ -362,15 +356,13 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/st_mod")
-    {
+    if(a_path == "/prm/cfg/st_mod") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startMod());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartMod(opt->text());
     }
-    else if(a_path == "/prm/cfg/lsQtMod" && ctrChkNode(opt))
-    {
+    else if(a_path == "/prm/cfg/lsQtMod" && ctrChkNode(opt)) {
 	vector<string> list;
 	mod->owner().modList(list);
 	for(unsigned i_l = 0; i_l < list.size(); i_l++)
@@ -406,8 +398,7 @@ void WinControl::callQtModule( )
 {
     QObject *obj = (QObject *)sender();
     if(obj->objectName() == "*exit*")	SYS->stop();
-    else
-    {
+    else {
 	try{ callQtModule(obj->objectName().toStdString()); }
 	catch(TError err) {  }
     }
@@ -416,7 +407,7 @@ void WinControl::callQtModule( )
 void WinControl::lastWinClose( )
 {
     if(!mod->startCom() || mod->endRun() || SYS->stopSignal())	qApp->quit();
-    else startDialog( );
+    else startDialog();
 }
 
 bool WinControl::callQtModule( const string &nm )
@@ -429,11 +420,10 @@ bool WinControl::callQtModule( const string &nm )
     QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
     if(!new_wnd) return false;
 
-    //> Make Qt starter toolbar
+    //Make Qt starter toolbar
     QToolBar *toolBar = NULL;
     QMenu *menu = NULL;
-    if(!new_wnd->property("QTStarterToolDis").toBool())
-    {
+    if(!new_wnd->property("QTStarterToolDis").toBool()) {
 	toolBar = new QToolBar("QTStarter",new_wnd);
 	toolBar->setObjectName("QTStarterTool");
 	new_wnd->addToolBar(Qt::TopToolBarArea,toolBar);
@@ -450,7 +440,7 @@ bool WinControl::callQtModule( const string &nm )
 	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
 
 	QIcon icon;
-	if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
+	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();"))
 	{
 	    QIcon(TModule::*iconGet)();
 	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
@@ -464,8 +454,8 @@ bool WinControl::callQtModule( const string &nm )
 	act_1->setWhatsThis(qt_mod.at().modInfo("Description").c_str());
 	QObject::connect(act_1, SIGNAL(triggered()), this, SLOT(callQtModule()));
 
-	if( toolBar ) toolBar->addAction(act_1);
-	if( menu ) menu->addAction(act_1);
+	if(toolBar) toolBar->addAction(act_1);
+	if(menu) menu->addAction(act_1);
     }
 
     new_wnd->show();
@@ -484,25 +474,74 @@ void WinControl::startDialog( )
 //*************************************************
 StartDialog::StartDialog( WinControl *wcntr )
 {
-    vector<string> list;
-
-    setAttribute(Qt::WA_DeleteOnClose,true);
+    setAttribute(Qt::WA_DeleteOnClose, true);
     setWindowTitle(_("OpenSCADA system Qt-starter"));
     setWindowIcon(QIcon(":/images/oscada_qt.png"));
 
+    //Menu prepare
+    QImage ico_t;
+
+    // About "System info"
+    if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
+    QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
+    actAbout->setToolTip(_("Program and OpenSCADA information"));
+    actAbout->setWhatsThis(_("The button for display program and OpenSCADA information"));
+    actAbout->setStatusTip(_("Press to display program and OpenSCADA information"));
+    connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
+    // About Qt
+    QAction *actQtAbout = new QAction(_("About &Qt"),this);
+    actQtAbout->setToolTip(_("Qt information"));
+    actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
+    actQtAbout->setStatusTip(_("Press to get the using Qt information."));
+    connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
+    // QTStarter manual
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
+    actManual->setProperty("local", "Modules/UI.QTStarter");
+    actManual->setProperty("net", "http://wiki.oscada.org/Doc/QTStarter");
+    actManual->setShortcut(Qt::Key_F1);
+    actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
+    actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
+    connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
+    // OpenSCADA manual index
+    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
+    actManualSYS->setProperty("local", "index");
+    actManualSYS->setProperty("net", "http://wiki.oscada.org/Doc");
+    actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
+    actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
+    connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
+    // What is
+    if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
+    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setToolTip(_("Question about GUI elements"));
+    actWhatIs->setWhatsThis(_("The button for requesting the information about user interface elements"));
+    actWhatIs->setStatusTip(_("Press for requesting about user interface elements"));
+    connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
+
+    // Create menu "help"
+    QMenu *help = menuBar()->addMenu(_("&Help"));
+    help->addAction(actAbout);
+    help->addAction(actQtAbout);
+    help->addAction(actManual);
+    help->addAction(actManualSYS);
+    help->addSeparator();
+    help->addAction(actWhatIs);
+
+    //Qt modules list prepare
     setCentralWidget(new QWidget(this));
     QVBoxLayout *wnd_lay = new QVBoxLayout(centralWidget());
     wnd_lay->setMargin(6);
     wnd_lay->setSpacing(4);
 
+    vector<string> list;
     mod->owner().modList(list);
-    for( unsigned i_l = 0; i_l < list.size(); i_l++ )
-	if( mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
-	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();") )
+    for(unsigned i_l = 0; i_l < list.size(); i_l++)
+	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
+	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
     {
 	QIcon icon;
-	if( mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();") )
-	{
+	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();")) {
 	    QIcon (TModule::*iconGet)();
 	    mod->owner().modAt(list[i_l]).at().modFunc("QIcon icon();",(void (TModule::**)()) &iconGet);
 	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
@@ -513,12 +552,12 @@ StartDialog::StartDialog( WinControl *wcntr )
 	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),centralWidget());
 	butt->setObjectName(list[i_l].c_str());
 	QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
-	wnd_lay->addWidget( butt, 0, 0 );
+	wnd_lay->addWidget(butt, 0, 0);
     }
 
-    wnd_lay->addItem( new QSpacerItem( 20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    wnd_lay->addItem(new QSpacerItem(20,10,QSizePolicy::Minimum,QSizePolicy::Expanding));
 
-    QFrame *gFrame = new QFrame( centralWidget() );
+    QFrame *gFrame = new QFrame(centralWidget());
     gFrame->setFrameShape(QFrame::HLine);
     gFrame->setFrameShadow(QFrame::Raised);
     wnd_lay->addWidget(gFrame,0,0);
@@ -526,7 +565,7 @@ StartDialog::StartDialog( WinControl *wcntr )
     QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), centralWidget());
     butt->setObjectName("*exit*");
     QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
-    wnd_lay->addWidget( butt, 0, 0 );
+    wnd_lay->addWidget(butt,0,0);
 }
 
 void StartDialog::closeEvent( QCloseEvent *ce )
@@ -540,6 +579,33 @@ void StartDialog::closeEvent( QCloseEvent *ce )
     ce->accept();
 }
 
+void StartDialog::about( )
+{
+    char buf[STR_BUF_LEN];
+
+    snprintf(buf, sizeof(buf), _(
+	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
+	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
+	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(),
+	mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
+	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE);
+
+    QMessageBox::about(this, windowTitle(), buf);
+}
+
+void StartDialog::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
+
+void StartDialog::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
+
+void StartDialog::enterManual( )
+{
+    string findLocDoc = TUIS::docGet(sender()->property("local").toString().toStdString());
+    if(findLocDoc.size()) system(("xdg-open "+findLocDoc).c_str());
+    else system(("xdg-open "+sender()->property("net").toString().toStdString()).c_str());	//???? Add for locale check and the page and connection
+    //else QMessageBox::information(this, _("Manual"),
+    //    QString(_("No the manual '%1' found into '%2'!")).arg(sender()->objectName()).arg(SYS->docDir().c_str()));
+}
+
 //*************************************************
 //* I18NTranslator                                *
 //*************************************************
@@ -548,17 +614,15 @@ I18NTranslator::I18NTranslator( ) : QTranslator(0)
 
 }
 
-bool I18NTranslator::isEmpty( ) const
-{
-    return false;
-}
+bool I18NTranslator::isEmpty( ) const	{ return false; }
 
 QString I18NTranslator::translate( const char *context, const char *sourceText, const char *comment ) const
 {
     if(!sourceText) return "";
+    QString trRes = _(sourceText);
 
-    if(mess_lev() == TMess::Debug && string(sourceText) == _(sourceText))
+    if(mess_lev() == TMess::Debug && trRes == sourceText)
 	mess_debug(mod->nodePath().c_str(),_("No translated Qt message: '%s'"),sourceText);
 
-    return _(sourceText);
+    return trRes;
 }

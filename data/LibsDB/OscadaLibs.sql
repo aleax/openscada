@@ -5877,9 +5877,11 @@ else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 if(!tErr) {
 	vCalibr = iMult*(inout+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -5936,9 +5938,11 @@ else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 if(!tErr) {
 	vCalibr = iMult*(inout+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -5995,9 +5999,11 @@ else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 if(!tErr) {
 	vCalibr = iMult*(inout+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6023,7 +6029,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
 	f_err = tErr;
-}',1400855298);
+}',1402043101);
 INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового сигнала.',10,'JavaLikeCalc.JavaScript
 if(f_start) {
 	f_err = "0";
@@ -6077,9 +6083,11 @@ else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 if(!tErr) {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6158,9 +6166,11 @@ else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 if(!tErr) {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6239,9 +6249,11 @@ else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 if(!tErr) {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6267,7 +6279,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
 	f_err = tErr;
-}',1400855238);
+}',1402043014);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,'JavaLikeCalc.JavaScript
 set=false;
 if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
@@ -6516,9 +6528,11 @@ if(tErr) {
 else {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6602,9 +6616,11 @@ if(tErr) {
 else {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6688,9 +6704,11 @@ if(tErr) {
 else {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
 	if(var.isEVal())	var = vCalibr;
 	varDt = vCalibr - var;
 	var += varDt/max(1,Tf*f_frq);
@@ -6717,7 +6735,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
 	f_err = tErr;
-}',1400855273);
+}',1402043046);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 

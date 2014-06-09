@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tsys.h
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -115,11 +114,13 @@ class TSYS : public TCntrNode
 	AutoHD<TSecurity>	security( )	{ return at("Security"); }
 
 	string	workDir( );
-	string	icoDir( )	{ return mIcoDir; }
 	string	modDir( )	{ return mModDir; }
+	string	icoDir( )	{ return mIcoDir; }
+	string	docDir( )	{ return mDocDir; }
 	void	setWorkDir( const string &wdir, bool init = false );
-	void	setIcoDir( const string &idir, bool init = false );
 	void	setModDir( const string &mdir, bool init = false );
+	void	setIcoDir( const string &idir, bool init = false );
+	void	setDocDir( const string &idir, bool init = false );
 
 	//> Config-file functions
 	string	cfgFile( )	{ return mConfFile; }
@@ -145,8 +146,7 @@ class TSYS : public TCntrNode
 	bool	multCPU( )	{ return mMultCPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
 	void	clkCalc( );
-	uint64_t shrtCnt( )
-	{
+	uint64_t shrtCnt( ) {
 #if defined (__i386__) || defined (__x86_64__)
 	    unsigned int cntl, cnth;
 	    asm volatile("rdtsc; movl %%eax,%0; movl %%edx,%1;":"=r"(cntl),"=r"(cnth)::"%eax","%edx");
@@ -185,8 +185,7 @@ class TSYS : public TCntrNode
 	static string uint2str( unsigned val, IntView view = Dec );
 	static string ll2str( int64_t val, IntView view = Dec );
 	static string real2str( double val, int prec = 15, char tp = 'g' );
-	static double realRound( double val, int dig = 0, bool toint = false )
-	{
+	static double realRound( double val, int dig = 0, bool toint = false ) {
 	    double rez = floor(val*pow(10,dig)+0.5)/pow(10,dig);
 	    if(toint) return floor(rez+0.5);
 	    return rez;
@@ -217,38 +216,32 @@ class TSYS : public TCntrNode
 	static string strUncompr( const string &in );
 
 	//> Unaligned read from memory for some ARM and other
-	static inline uint16_t getUnalign16( const void *p )
-	{
+	static inline uint16_t getUnalign16( const void *p ) {
 	    struct su16 { uint16_t x; } __attribute__((packed));
 	    const struct su16 *ptr = (const struct su16 *)p;
 	    return ptr->x;
 	}
-	static inline uint32_t getUnalign32( const void *p )
-	{
+	static inline uint32_t getUnalign32( const void *p ) {
 	    struct su32 { uint32_t x; } __attribute__((packed));
 	    const struct su32 *ptr = (const struct su32 *)p;
 	    return ptr->x;
 	}
-	static inline uint64_t getUnalign64( const void *p )
-	{
+	static inline uint64_t getUnalign64( const void *p ) {
 	    struct su64 { uint64_t x; } __attribute__((packed));
 	    const struct su64 *ptr = (const struct su64 *)p;
 	    return ptr->x;
 	}
-	static inline int getUnalignInt( const void *p )
-	{
+	static inline int getUnalignInt( const void *p ) {
 	    struct suInt { int x; } __attribute__((packed));
 	    const struct suInt *ptr = (const struct suInt *)p;
 	    return ptr->x;
 	}
-	static inline float getUnalignFloat( const void *p )
-	{
+	static inline float getUnalignFloat( const void *p ) {
 	    struct sFloat64 { float x; } __attribute__((packed));
 	    const struct sFloat64 *ptr = (const struct sFloat64 *)p;
 	    return ptr->x;
 	}
-	static inline double getUnalignDbl( const void *p )
-	{
+	static inline double getUnalignDbl( const void *p ) {
 	    struct sDbl { double x; } __attribute__((packed));
 	    const struct sDbl *ptr = (const struct sDbl *)p;
 	    return ptr->x;
@@ -291,7 +284,7 @@ class TSYS : public TCntrNode
 
     private:
 	//Data
-	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08 };
+	enum MdfSYSFlds	{ MDF_WorkDir = 0x01, MDF_IcoDir = 0x02, MDF_ModDir = 0x04, MDF_LANG = 0x08, MDF_DocDir = 0x10 };
 
 	class STask
 	{
@@ -339,8 +332,9 @@ class TSYS : public TCntrNode
 	 	mConfFile,	// Config-file name
 		mId,		// Station id
 		mName,		// Station name
+		mModDir,	// Modules directory
 		mIcoDir,	// Icons directory
-		mModDir;	// Modules directory
+		mDocDir;	// Icons directory
 
 	string	mWorkDB, mSelDB;// Work and selected DB
 	bool	mSaveAtExit;	// Save at exit

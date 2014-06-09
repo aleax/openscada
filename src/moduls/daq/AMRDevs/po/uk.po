@@ -1,7 +1,7 @@
 # OpenSCADA.DAQ.AMRDevs translate to Ukrainian.
 # This file is distributed under the same license as the OpenSCADA.DAQ.AMRDevs package module.
 #
-# Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>, 2010-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2010-2014.
 #
 msgid ""
 msgstr ""

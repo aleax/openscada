@@ -2,7 +2,7 @@
 # Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2005-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2010.
 #
 msgid ""
 msgstr ""
@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-06-23 20:12+0300\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"

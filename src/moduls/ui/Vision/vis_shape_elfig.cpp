@@ -1,9 +1,9 @@
 
 //OpenSCADA system module UI.VISION file: vis_shape_elfig.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2008 by Yashina Kseniya (ksu@oscada.org)
- *		   2007-2012 by Lysenko Maxim (mlisenko@oscada.org)
- *		   2012-2014 by Roman Savochenko (rom_as@oscada.org, rom_as@fromru.com)
+ *   Copyright (C) 2007-2008 by Yashina Kseniya <ksu@oscada.org>
+ *		   2007-2012 by Lysenko Maxim <mlisenko@oscada.org>
+ *		   2012-2014 by Roman Savochenko <rom_as@oscada.org>
  *
  *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by

@@ -1,8 +1,7 @@
 
 //OPC_UA implementation test: test.cpp
 /******************************************************************************
- *   Copyright (C) 2013 by Roman Savochenko                                   *
- *   rom_as@oscada.org, rom_as@fromru.com                                     *
+ *   Copyright (C) 2013-2014 by Roman Savochenko, <rom_as@oscada.org>         *
  *                                                                            *
  *   This library is free software; you can redistribute it and/or modify     *
  *   it under the terms of the GNU Lesser General Public License as           *

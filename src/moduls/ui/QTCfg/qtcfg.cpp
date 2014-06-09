@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.cpp
 /***************************************************************************
- *   Copyright (C) 2004-2014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -297,7 +296,6 @@ ConfApp::ConfApp( string open_user ) :
     // About "System info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
-    actAbout->setShortcut(Qt::Key_F1);
     actAbout->setToolTip(_("Program and OpenSCADA information"));
     actAbout->setWhatsThis(_("The button for display program and OpenSCADA information"));
     actAbout->setStatusTip(_("Press to display program and OpenSCADA information"));
@@ -308,6 +306,22 @@ ConfApp::ConfApp( string open_user ) :
     actQtAbout->setWhatsThis(_("The button for getting the using Qt information"));
     actQtAbout->setStatusTip(_("Press to get the using Qt information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
+    // QTCfg manual
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
+    actManual->setProperty("local", "Modules/UI.QTCfg");
+    actManual->setProperty("net", "http://wiki.oscada.org/Doc/QTCfg");
+    actManual->setShortcut(Qt::Key_F1);
+    actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
+    actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
+    connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
+    // OpenSCADA manual index
+    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
+    actManualSYS->setProperty("local", "index");
+    actManualSYS->setProperty("net", "http://wiki.oscada.org/Doc");
+    actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
+    actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
+    connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
     // What is
     if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
     QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
@@ -346,7 +360,9 @@ ConfApp::ConfApp( string open_user ) :
     QMenu *help = menuBar()->addMenu(_("&Help"));
     help->addAction(actAbout);
     help->addAction(actQtAbout);
-    help->addSeparator( );
+    help->addAction(actManual);
+    help->addAction(actManualSYS);
+    help->addSeparator();
     help->addAction(actWhatIs);
 
     //Create tool bars
@@ -538,7 +554,7 @@ void ConfApp::pagePrev( )
     try{ pageDisplay(path); } catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 }
 
-void ConfApp::pageNext()
+void ConfApp::pageNext( )
 {
     if(!next.size()) return;
     prev.insert(prev.begin(), sel_path);
@@ -890,7 +906,8 @@ void ConfApp::about( )
     snprintf(buf, sizeof(buf), _(
 	"%s v%s.\n%s\nAuthor: %s\nLicense: %s\n\n"
 	"%s v%s.\n%s\nLicense: %s\nAuthor: %s\nWeb site: %s"),
-	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(), mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
+	mod->modInfo("Name").c_str(), mod->modInfo("Version").c_str(), mod->modInfo("Description").c_str(),
+	mod->modInfo("Author").c_str(), mod->modInfo("License").c_str(),
 	PACKAGE_NAME, VERSION, _(PACKAGE_DESCR), PACKAGE_LICENSE, _(PACKAGE_AUTHOR), PACKAGE_SITE);
 
     QMessageBox::about(this, windowTitle(), buf);
@@ -899,6 +916,15 @@ void ConfApp::about( )
 void ConfApp::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
 
 void ConfApp::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
+
+void ConfApp::enterManual( )
+{
+    string findLocDoc = TUIS::docGet(sender()->property("local").toString().toStdString());
+    if(findLocDoc.size()) system(("xdg-open "+findLocDoc).c_str());
+    else system(("xdg-open "+sender()->property("net").toString().toStdString()).c_str());	//???? Add for locale check and the page and connection allow
+    //else QMessageBox::information(this, _("Manual"),
+    //	    QString(_("No the manual '%1' found into '%2'!")).arg(sender()->objectName()).arg(SYS->docDir().c_str()));
+}
 
 void ConfApp::closeEvent( QCloseEvent* ce )
 {

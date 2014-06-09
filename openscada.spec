@@ -10,7 +10,7 @@ Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
 License: GPLv2
 Group: Applications/Engineering
-Packager: Roman Savochenko <rom_as@oscada.org, rom_as@fromru.com>
+Packager: Roman Savochenko <rom_as@oscada.org>
 URL: http://oscada.org
 
 %define srcname openscada-%version
@@ -19,7 +19,7 @@ URL: http://oscada.org
 %if %_vendor == "alt"
 AutoReq: noshell
 %set_verify_elf_method no
-BuildRequires: glibc-devel gcc-c++ libpcre-devel libgd2-devel
+BuildRequires: glibc-devel gcc-c++ libpcre-devel libgd2-devel sqlite3
 BuildRequires: libMySQL-devel libsqlite3-devel firebird-devel postgresql-devel
 BuildRequires: libsensors3-devel libnet-snmp-devel libportaudio2-devel libcomedi-devel libqt4-devel libfftw3-devel
 %else
@@ -236,6 +236,10 @@ install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
 ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 
+ln -s `relative %_defaultdocdir/%name-docEN-%version %_datadir/openscada/docs/en` %buildroot/%_datadir/openscada/docs/en
+ln -s `relative %_defaultdocdir/%name-docRU-%version %_datadir/openscada/docs/ru` %buildroot/%_datadir/openscada/docs/ru
+ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk` %buildroot/%_datadir/openscada/docs/uk
+
 %clean
 #rm -rf %buildroot %buildroot/%name-%version
 
@@ -264,14 +268,17 @@ ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 %files docEN
 %defattr(-,root,root)
 %doc doc/en/*
+%_datadir/openscada/docs/en
 
 %files docRU
 %defattr(-,root,root)
 %doc doc/ru/*
+%_datadir/openscada/docs/ru
 
 %files docUK
 %defattr(-,root,root)
 %doc doc/uk/*
+%_datadir/openscada/docs/uk
 
 %files devel
 %defattr(-,root,root)
@@ -338,49 +345,49 @@ ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 * Mon Oct 12 2009 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.4 release.
 
-* Mon Jun 08 2009 Roman Savochenko <rom_as@oscada.org.ua>
+* Mon Jun 08 2009 Roman Savochenko <rom_as@oscada.org>
 - Build 0.6.3.3 release.
 
-* Mon May 25 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Mon May 25 2009 Roman Savochenko <rom_as@oscada.org>
 - Merge demo DB from different languages to one multilanguage (Russian,English and Ukrainian) DB.
 
-* Wed Mar 18 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Wed Mar 18 2009 Roman Savochenko <rom_as@oscada.org>
 - OpenSCADA update 0.6.3.2 release build.
 
-* Mon Feb 2 2009 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Mon Feb 2 2009 Roman Savochenko <rom_as@oscada.org>
 - OpenSCADA update 0.6.3.1 release build.
 
-* Mon Dec 22 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Mon Dec 22 2008 Roman Savochenko <rom_as@oscada.org>
 - Documentation pack is unified and separated to project info files and documentation.
 - Dynamic librarie's links packing into main package and development is fixed.
 
-* Thu Oct 02 2008 Roman Savochenko <rom_as@fromru.com>
+* Thu Oct 02 2008 Roman Savochenko <rom_as@oscada.org>
 - Package name simple changing allow is added.
 
-* Thu Sep 18 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Thu Sep 18 2008 Roman Savochenko <rom_as@oscada.org>
 - Update spec to build for ALTLinux Sisyphus.
 
-* Wed Mar 26 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Wed Mar 26 2008 Roman Savochenko <rom_as@oscada.org>
 - Rebuilded for support x86_64 several distributives and some build system bugs is fixed.
 
-* Sun Mar 23 2008 Roman Savochenko <rom_as@diyaorg.dp.ua>
+* Sun Mar 23 2008 Roman Savochenko <rom_as@oscada.org>
 - menu files included
 
-* Fri Sep 02 2005 Roman Savochenko <rom_as@fromru.com>
+* Fri Sep 02 2005 Roman Savochenko <rom_as@oscada.org>
 - replace testdate whith demo package
 - rename xinetd script from openscada to oscadad
 - add xinetd script to generic package
 
-* Wed Mar 16 2005 Roman Savochenko <rom_as@fromru.com>
+* Wed Mar 16 2005 Roman Savochenko <rom_as@oscada.org>
 - add Athena board specific build
 
-* Wed Nov 03 2004 Roman Savochenko <rom_as@fromru.com>
+* Wed Nov 03 2004 Roman Savochenko <rom_as@oscada.org>
 - move the message arhives data to /var/spool/%{name}/ARHIVE/MESS
 
-* Tue Apr 06 2004 Roman Savochenko <rom_as@fromru.com>
+* Tue Apr 06 2004 Roman Savochenko <rom_as@oscada.org>
 - make 3 packages: OpenScada, OpenScada-devel, OpenScada-testdata
 - add languages: ru, uk
 - make packages from 'make -dist' package;
 
-* Wed Oct 15 2003 Roman Savochenko <rom_as@fromru.com>
+* Wed Oct 15 2003 Roman Savochenko <rom_as@oscada.org>
 - Starting

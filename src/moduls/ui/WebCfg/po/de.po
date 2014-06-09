@@ -3,7 +3,7 @@
 #
 # Irina Popkova <IrischkaPopkova@yandex.ru>, 2009.
 # Klaus Fetscher <k.fetscher@fetron.de>, 2009.
-# Roman Savochenko <rom_as@fromru.com>, 2013.
+# Roman Savochenko <rom_as@oscada.org>, 2013.
 #
 msgid ""
 msgstr ""

@@ -2,7 +2,7 @@
 # Copyright (C) 2012 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.Comedi package module.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2012.
+# Roman Savochenko <rom_as@oscada.org>, 2012.
 #
 msgid ""
 msgstr ""
@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-08-04 22:40+0300\n"
 "PO-Revision-Date: 2012-07-27 22:21+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.WebVision file: web_vision.h
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

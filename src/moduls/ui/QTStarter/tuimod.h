@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTStarter file: tuimod.h
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2005-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -82,13 +81,21 @@ class WinControl: public QObject
 //*************************************************
 class StartDialog: public QMainWindow
 {
+    Q_OBJECT
     public:
 	//Methods
 	StartDialog( WinControl *wcntr );
 
     protected:
-        //Methods
-        void closeEvent( QCloseEvent* );
+	//Methods
+	void closeEvent( QCloseEvent* );
+
+    private slots:
+	//Methods
+	void about( );
+	void aboutQt( );
+	void enterWhatsThis( );
+	void enterManual( );
 };
 
 //*************************************************
@@ -128,9 +135,9 @@ class TUIMod: public TUI
 	bool	demon_mode, end_run, start_com;
 	string	start_mod;
 
-	//> Command line options binding to Qt
+	// Command line options binding to Qt
 	int	qtArgC, qtArgEnd;		//Arguments counter and end position
-	char   	*qtArgV[10];			//Argument's values
+	char	*qtArgV[10];			//Argument's values
 	char	qtArgBuf[1000];			//Arguments' strings buffer
 };
 

@@ -1,8 +1,7 @@
 
 //OpenSCADA system file: tsys.cpp
 /***************************************************************************
- *   Copyright (C) 2003-2014 by Roman Savochenko                           *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2003-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -57,7 +56,7 @@ pthread_key_t TSYS::sTaskKey;
 
 TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char **)argb), envp((const char **)env),
     mUser("root"), mConfFile(sysconfdir_full"/oscada.xml"), mId("EmptySt"), mName(_("Empty Station")),
-    mIcoDir("icons;"oscd_datadir_full"/icons"), mModDir(oscd_moddir_full), mWorkDB(DB_CFG),
+    mModDir(oscd_moddir_full), mWorkDB(DB_CFG), mIcoDir("icons;"oscd_datadir_full"/icons"), mDocDir("docs;"oscd_datadir_full"/docs"),
     mSaveAtExit(false), mSavePeriod(0), rootModifCnt(0), sysModifFlgs(0), mStopSignal(-1), mMultCPU(false), mSysTm(time(NULL))
 {
     finalKill = false;
@@ -149,6 +148,13 @@ void TSYS::setIcoDir( const string &idir, bool init )
     mIcoDir = idir;
     if(init) sysModifFlgs &= ~MDF_IcoDir;
     else { sysModifFlgs |= MDF_IcoDir; modif(); }
+}
+
+void TSYS::setDocDir( const string &idir, bool init )
+{
+    mDocDir = idir;
+    if(init) sysModifFlgs &= ~MDF_DocDir;
+    else { sysModifFlgs |= MDF_DocDir; modif(); }
 }
 
 void TSYS::setModDir( const string &mdir, bool init )
@@ -395,8 +401,9 @@ string TSYS::optDescr( )
 	"StName     <nm>	Station name.\n"
 	"WorkDB     <Type.Name> Work DB (type and name).\n"
 	"Workdir    <path>	Work directory.\n"
-	"IcoDir     <path>	Icons directory.\n"
 	"ModDir     <path>	Modules directory.\n"
+	"IcoDir     <path>	Icons directory.\n"
+	"DocDir     <path>	Documents directory.\n"
 	"MessLev    <level>     Messages <level> (0-7).\n"
 	"SelDebCats <list>	Debug categories list (separated by ';').\n"
 	"LogTarget  <direction> Direct messages to:\n"
@@ -540,8 +547,9 @@ void TSYS::cfgPrmLoad( )
     mName = TBDS::genDBGet(nodePath()+"StName",name(),"root",TBDS::UseTranslate);
     mWorkDB = TBDS::genDBGet(nodePath()+"WorkDB",workDB(),"root",TBDS::OnlyCfg);
     setWorkDir(TBDS::genDBGet(nodePath()+"Workdir","","root",TBDS::OnlyCfg).c_str(), true);
-    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
     setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
+    setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
+    setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
     setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
     setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
 }
@@ -608,8 +616,9 @@ void TSYS::save_( )
     TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
     TBDS::genDBSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
-    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_ModDir)	TBDS::genDBSet(nodePath()+"ModDir", modDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_IcoDir)	TBDS::genDBSet(nodePath()+"IcoDir", icoDir(), "root", TBDS::OnlyCfg);
+    if(sysModifFlgs&MDF_DocDir)	TBDS::genDBSet(nodePath()+"DocDir", docDir(), "root", TBDS::OnlyCfg);
     TBDS::genDBSet(nodePath()+"SaveAtExit", i2s(saveAtExit()));
     TBDS::genDBSet(nodePath()+"SavePeriod", i2s(savePeriod()));
 
@@ -2303,9 +2312,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/in_charset",_("Internal charset"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/config",_("Config-file"),R_R___,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/workdir",_("Work directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/workDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
 	    ctrMkNode("fld",opt,-1,"/gen/icodir",_("Icons directory"),RWRW__,"root","root",4,"tp","str","dest","sel_ed","select","/gen/icoDirList",
 		"help",_("Separate directory paths with icons by symbol ';'."));
-	    ctrMkNode("fld",opt,-1,"/gen/moddir",_("Modules directory"),RWRW__,"root","root",3,"tp","str","dest","sel_ed","select","/gen/modDirList");
+	    ctrMkNode("fld",opt,-1,"/gen/docdir",_("Documents directory"),RWRW__,"root","root",4,"tp","str","dest","sel_ed","select","/gen/docDirList",
+		"help",_("Separate directory paths with documents by symbol ';'."));
 	    ctrMkNode("fld",opt,-1,"/gen/wrk_db",_("Work DB"),RWRWR_,"root","root",4,"tp","str","dest","select","select","/db/list",
 		"help",_("Work DB address in format [<DB module>.<DB name>].\nChange it field if you want save or reload all system from other DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/saveExit",_("Save system at exit"),RWRWR_,"root","root",2,"tp","bool",
@@ -2422,18 +2433,24 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
     }
     else if(a_path == "/gen/workDirList" && ctrChkNode(opt))	ctrListFS(opt, workDir());
-    else if(a_path == "/gen/icodir")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
-	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
-    }
-    else if(a_path == "/gen/icoDirList" && ctrChkNode(opt))	ctrListFS(opt, TSYS::strParse(icoDir(),0,";"));
     else if(a_path == "/gen/moddir")
     {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(modDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setModDir(opt->text().c_str());
     }
     else if(a_path == "/gen/modDirList" && ctrChkNode(opt))	ctrListFS(opt, modDir());
+    else if(a_path == "/gen/icodir")
+    {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
+    }
+    else if(a_path == "/gen/icoDirList" && ctrChkNode(opt))	ctrListFS(opt, TSYS::strParse(icoDir(),0,";"));
+    else if(a_path == "/gen/docdir")
+    {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(docDir());
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setDocDir(opt->text().c_str());
+    }
+    else if(a_path == "/gen/docDirList" && ctrChkNode(opt))	ctrListFS(opt, TSYS::strParse(docDir(),0,";"));
     else if(a_path == "/gen/lang")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.AMRDevs file: da_Kontar.h
 /***************************************************************************
- *   Copyright (C) 2014 by Roman Savochenko                                *
- *   rom_as@oscada.org, rom_as@fromru.com                                  *
+ *   Copyright (C) 2014 by Roman Savochenko, <rom_as@oscada.org>           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

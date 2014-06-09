@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_run.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -155,7 +154,6 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //  About "System info"
     if(!ico_t.load(TUIS::icoGet("help",NULL,true).c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
-    actAbout->setShortcut(Qt::Key_F1);
     actAbout->setToolTip(_("Program and OpenSCADA information"));
     actAbout->setWhatsThis(_("The button for display the program and OpenSCADA information"));
     actAbout->setStatusTip(_("Press for display the program and OpenSCADA information."));
@@ -166,13 +164,30 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
+    //  Vision manual
+    if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
+    QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
+    actManual->setProperty("local", "Modules/UI.Vision");
+    actManual->setProperty("net", "http://wiki.oscada.org/Doc/Vision");
+    actManual->setShortcut(Qt::Key_F1);			//Move and use for the project manual
+    actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
+    actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
+    connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
+    //  OpenSCADA manual index
+    QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
+    actManualSYS->setProperty("local", "index");
+    actManualSYS->setProperty("net", "http://wiki.oscada.org/Doc");
+    actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
+    actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
+    connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  What is
-    //if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
-    //QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
-    //actWhatIs->setToolTip(_("The button for requestion about GUI elements"));
-    //actWhatIs->setWhatsThis(_("Get request about user interface elements"));
-    //actWhatIs->setStatusTip(_("Press for requesting about user interface elements."));
-    //connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
+    if(!ico_t.load(TUIS::icoGet("contexthelp",NULL,true).c_str())) ico_t.load(":/images/contexthelp.png");
+    QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
+    actWhatIs->setShortcut(Qt::SHIFT+Qt::Key_F1);
+    actWhatIs->setToolTip(_("The button for question about GUI elements"));
+    actWhatIs->setWhatsThis(_("Get respond about user interface elements"));
+    actWhatIs->setStatusTip(_("Press to respond about user interface elements."));
+    connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
     // Alarms actions
     //  Alarm level display button and full alarms quittance
@@ -224,8 +239,10 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     mn_help = menuBar()->addMenu(_("&Help"));
     mn_help->addAction(actAbout);
     mn_help->addAction(actQtAbout);
+    mn_help->addAction(actManual);
+    mn_help->addAction(actManualSYS);
     mn_help->addSeparator();
-    //mn_help->addAction(actWhatIs);
+    mn_help->addAction(actWhatIs);
 
     //Init tool bars
     // Alarms tools bar
@@ -987,21 +1004,20 @@ void VisRun::styleChanged( )
     fullUpdatePgs();
 }
 
-void VisRun::aboutQt()
-{
-    QMessageBox::aboutQt( this, mod->modInfo("Name").c_str() );
-}
+void VisRun::aboutQt( )	{ QMessageBox::aboutQt(this, mod->modInfo("Name").c_str()); }
 
-void VisRun::fullScreen( bool vl )
-{
-    if(vl) setWindowState(Qt::WindowFullScreen);
-    else setWindowState(Qt::WindowNoState);
-}
+void VisRun::fullScreen( bool vl )	{ setWindowState(vl?Qt::WindowFullScreen:Qt::WindowNoState); }
 
-/*void VisRun::enterWhatsThis()
+void VisRun::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
+
+void VisRun::enterManual( )
 {
-    QWhatsThis::enterWhatsThisMode();
-}*/
+    string findLocDoc = TUIS::docGet(sender()->property("local").toString().toStdString());
+    if(findLocDoc.size()) system(("xdg-open "+findLocDoc).c_str());
+    else system(("xdg-open "+sender()->property("net").toString().toStdString()).c_str());	//???? Add for locale check and the page and connection
+    //else QMessageBox::information(this, _("Manual"),
+    //<>    QString(_("No the manual '%1' found into '%2'!")).arg(sender()->objectName()).arg(SYS->docDir().c_str()));
+}
 
 void VisRun::alarmAct( QAction *alrm )
 {

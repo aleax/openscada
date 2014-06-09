@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.Vision file: vis_devel_widgs.h
 /***************************************************************************
- *   Copyright (C) 2006-2014 by Roman Savochenko                           *
- *   rom_as@diyaorg.dp.ua                                                  *
+ *   Copyright (C) 2006-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *

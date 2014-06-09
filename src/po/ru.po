@@ -1,15 +1,15 @@
 # OpenSCADA core translate to Russian.
 # This file is distributed under the same license as the OpenSCADA package.
 #
-# Roman Savochenko <rom_as@fromru.com>, 2003-2014.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 22:23+0300\n"
+"POT-Creation-Date: 2014-06-09 19:23+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
-"Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
+"Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgid "Resource is timeouted!"
 msgstr "Время ожидания ресурса исчерпано!"
 
 #: tarchives.cpp:57 tarchives.cpp:67 tarchives.cpp:77 tbds.cpp:42 tdaqs.cpp:42
-#: tdaqs.cpp:48 tdaqs.cpp:57 tdaqs.cpp:719 tsys.cpp:2294 ttipdaq.cpp:42
+#: tdaqs.cpp:48 tdaqs.cpp:57 tdaqs.cpp:719 tsys.cpp:2304 ttipdaq.cpp:42
 #: ttipdaq.cpp:191 ttransports.cpp:38 ttransports.cpp:47 ttransports.cpp:56
 msgid "ID"
 msgstr ""
@@ -290,7 +290,7 @@ msgstr ""
 "Установите '<buffer>' для обработки запроса буфером."
 
 #: tarchives.cpp:801 tarchives.cpp:1156 tarchives.cpp:1168 tcontroller.cpp:515
-#: tsys.cpp:2319
+#: tsys.cpp:2331
 msgid "Messages"
 msgstr "Сообщения"
 
@@ -298,7 +298,7 @@ msgstr "Сообщения"
 msgid "mcsec"
 msgstr "мкс"
 
-#: tarchives.cpp:805 tarchives.cpp:1172 tcontroller.cpp:519 tsys.cpp:2358
+#: tarchives.cpp:805 tarchives.cpp:1172 tcontroller.cpp:519 tsys.cpp:2370
 msgid "Category"
 msgstr "Категория"
 
@@ -327,8 +327,8 @@ msgid "Number"
 msgstr "Количество"
 
 #: tarchives.cpp:818 tbds.cpp:561 tdaqs.cpp:742 tmodschedul.cpp:438
-#: tprotocols.cpp:63 tsecurity.cpp:251 tspecials.cpp:58 tsys.cpp:2364
-#: ttransports.cpp:483 tuis.cpp:106
+#: tprotocols.cpp:63 tsecurity.cpp:251 tspecials.cpp:58 tsys.cpp:2376
+#: ttransports.cpp:483 tuis.cpp:132
 msgid "Options help"
 msgstr "Помощь по опциям"
 
@@ -364,12 +364,12 @@ msgstr "Архиватор сообщений: "
 #: tarchives.cpp:1131 tarchval.cpp:2035 tarchval.cpp:2540 tbds.cpp:781
 #: tcontroller.cpp:479 tfunction.cpp:245 tparamcontr.cpp:440 tprmtmpl.cpp:251
 #: tprmtmpl.cpp:586 tspecials.cpp:82 ttransports.cpp:790 ttransports.cpp:974
-#: tuis.cpp:130
+#: tuis.cpp:155
 msgid "State"
 msgstr "Состояние"
 
 #: tarchives.cpp:1133 tarchval.cpp:2037 tarchval.cpp:2542 tspecials.cpp:83
-#: ttransports.cpp:793 ttransports.cpp:977 tuis.cpp:131
+#: ttransports.cpp:793 ttransports.cpp:977 tuis.cpp:156
 msgid "Running"
 msgstr "Выполняется"
 
@@ -391,7 +391,7 @@ msgstr "Начало"
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: tarchives.cpp:1147 tarchives.cpp:1166 tcontroller.cpp:512 tsys.cpp:2323
+#: tarchives.cpp:1147 tarchives.cpp:1166 tcontroller.cpp:512 tsys.cpp:2335
 msgid ""
 "Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
 "Alert (6);Emergency (7)"
@@ -512,7 +512,7 @@ msgstr "БД архива"
 msgid "Start"
 msgstr "Запущен"
 
-#: tarchval.cpp:2069 tsys.cpp:2359
+#: tarchval.cpp:2069 tsys.cpp:2371
 msgid "Process"
 msgstr "Обработка"
 
@@ -546,7 +546,7 @@ msgstr "Показать график"
 msgid "Values table"
 msgstr "Таблица значений"
 
-#: tarchval.cpp:2089 tdaqs.cpp:61 tprmtmpl.cpp:282 tsys.cpp:2354
+#: tarchval.cpp:2089 tdaqs.cpp:61 tprmtmpl.cpp:282 tsys.cpp:2366
 msgid "Value"
 msgstr "Значение"
 
@@ -1003,7 +1003,7 @@ msgstr "Контроллер: "
 msgid "Controller"
 msgstr "Контроллер"
 
-#: tcontroller.cpp:481 tdaqs.cpp:712 tsys.cpp:2341 ttransports.cpp:792
+#: tcontroller.cpp:481 tdaqs.cpp:712 tsys.cpp:2353 ttransports.cpp:792
 #: ttransports.cpp:976
 msgid "Status"
 msgstr "Статус"
@@ -1580,7 +1580,7 @@ msgstr "Ошибка подключения модуля '%s'!"
 msgid "Can't detach library '%s'."
 msgstr "Невозможно отключить библиотеку '%s'."
 
-#: tmodschedul.cpp:418 tsys.cpp:2290 ttransports.cpp:469
+#: tmodschedul.cpp:418 tsys.cpp:2300 ttransports.cpp:469
 msgid "Subsystem"
 msgstr "Подсистема"
 
@@ -1628,7 +1628,7 @@ msgstr "Проверить модули сейчас."
 msgid "Shared libs(modules)"
 msgstr "Разделяемые библиотеки (модули)"
 
-#: tmodschedul.cpp:432 tsys.cpp:2338
+#: tmodschedul.cpp:432 tsys.cpp:2350
 msgid "Path"
 msgstr "Путь"
 
@@ -1657,7 +1657,7 @@ msgstr "Функция '%s' отсутствует в модуле!"
 msgid "Module: "
 msgstr "Модуль: "
 
-#: tmodule.cpp:146 tsubsys.cpp:154 tsys.cpp:2363
+#: tmodule.cpp:146 tsubsys.cpp:154 tsys.cpp:2375
 msgid "Help"
 msgstr "Помощь"
 
@@ -1745,7 +1745,7 @@ msgstr "Константа;Публичная константа;Связь"
 msgid "Program language"
 msgstr "Язык программы"
 
-#: tprmtmpl.cpp:285 tsys.cpp:2296
+#: tprmtmpl.cpp:285 tsys.cpp:2306
 msgid "Program"
 msgstr "Программа"
 
@@ -1972,76 +1972,76 @@ msgstr ""
 "Ошибка изменения рабочей директории в '%s': %s. Возможно текущая директория "
 "уже корректно установлена в '%s'."
 
-#: tsys.cpp:202
+#: tsys.cpp:209
+#, c-format
 msgid "Read only access to file '%s'."
 msgstr "Доступ только на чтение к файлу '%s'."
 
-#: tsys.cpp:275
+#: tsys.cpp:282
 msgid "day"
 msgstr "день"
 
-#: tsys.cpp:276
+#: tsys.cpp:283
 msgid "hour"
 msgstr "час"
 
-#: tsys.cpp:277
+#: tsys.cpp:284
 msgid "min"
 msgstr "мин"
 
-#: tsys.cpp:278
+#: tsys.cpp:285
 msgid "s"
 msgstr "с"
 
-#: tsys.cpp:279
+#: tsys.cpp:286
 msgid "ms"
 msgstr "мс"
 
-#: tsys.cpp:280
+#: tsys.cpp:287
 msgid "us"
 msgstr "мкс"
 
-#: tsys.cpp:281
+#: tsys.cpp:288
 msgid "ns"
 msgstr "нс"
 
-#: tsys.cpp:287
+#: tsys.cpp:294
 msgid "YiB"
 msgstr "ЙиБ"
 
-#: tsys.cpp:288
+#: tsys.cpp:295
 msgid "ZiB"
 msgstr "ЗиБ"
 
-#: tsys.cpp:289
+#: tsys.cpp:296
 msgid "EiB"
 msgstr "ЭиБ"
 
-#: tsys.cpp:290
+#: tsys.cpp:297
 msgid "PiB"
 msgstr "ПиБ"
 
-#: tsys.cpp:291
+#: tsys.cpp:298
 msgid "TiB"
 msgstr "ТиБ"
 
-#: tsys.cpp:292
+#: tsys.cpp:299
 msgid "GiB"
 msgstr "ГиБ"
 
-#: tsys.cpp:293
+#: tsys.cpp:300
 msgid "MiB"
 msgstr "МиБ"
 
-#: tsys.cpp:294
+#: tsys.cpp:301
 msgid "KiB"
 msgstr "КиБ"
 
-#: tsys.cpp:295
+#: tsys.cpp:302
 msgid "B"
 msgstr "Б"
 
-#: tsys.cpp:376
-#, c-format
+#: tsys.cpp:383
 msgid ""
 "***************************************************************************\n"
 "********** %s v%s (%s-%s). *********\n"
@@ -2066,8 +2066,9 @@ msgid ""
 "StName     <nm>\tStation name.\n"
 "WorkDB     <Type.Name> Work DB (type and name).\n"
 "Workdir    <path>\tWork directory.\n"
-"IcoDir     <path>\tIcons directory.\n"
 "ModDir     <path>\tModules directory.\n"
+"IcoDir     <path>\tIcons directory.\n"
+"DocDir     <path>\tDocuments directory.\n"
 "MessLev    <level>     Messages <level> (0-7).\n"
 "SelDebCats <list>\tDebug categories list (separated by ';').\n"
 "LogTarget  <direction> Direct messages to:\n"
@@ -2107,8 +2108,9 @@ msgstr ""
 "StName     <имя>\tИмя станции.\n"
 "WorkDB     <Тип.Имя>   Рабочая БД (тип и имя).\n"
 "Workdir    <path>      Рабочая директория.\n"
-"IcoDir     <path>      Директория с иконками.\n"
 "ModDir     <path>      Директория модулей.\n"
+"IcoDir     <path>      Директория с иконками.\n"
+"DocDir     <path>\tДиректория с документами.\n"
 "MessLev    <уровень>   Обрабатываемый <уровень> сообщений (0-7).\n"
 "SelDebCats <список>\tСписок категорий отладки (разделены ';').\n"
 "LogTarget  <направл.>  Направление сообщений в:\n"
@@ -2124,17 +2126,17 @@ msgstr ""
 "SavePeriod <сек>\tПериод сохранения системы.\n"
 "\n"
 
-#: tsys.cpp:469 tsys.cpp:525
+#: tsys.cpp:477 tsys.cpp:533
 #, c-format
 msgid "Config-file '%s' error: %s"
 msgstr "Ошибка конфигурационного файла '%s': %s"
 
-#: tsys.cpp:487
+#: tsys.cpp:495
 #, c-format
 msgid "Config-file '%s' load error."
 msgstr "Ошибка загрузки конфигурационного файла '%s'."
 
-#: tsys.cpp:505
+#: tsys.cpp:513
 #, c-format
 msgid ""
 "Station '%s' is not present in the config-file. Use '%s' station "
@@ -2143,100 +2145,100 @@ msgstr ""
 "Станция '%s' отсутствует в конфигурационном файле. Использована конфигурация "
 "станции '%s'!"
 
-#: tsys.cpp:511
+#: tsys.cpp:519
 #, c-format
 msgid "Configuration '%s' error!"
 msgstr "Ошибка конфигурации '%s'!"
 
-#: tsys.cpp:514
+#: tsys.cpp:522
 #, c-format
 msgid "Load config-file error: %s"
 msgstr "Ошибка загрузки конфигурационного файла: %s"
 
-#: tsys.cpp:530
+#: tsys.cpp:538
 #, c-format
 msgid "Configuration '%s' write error. %s"
 msgstr "Ошибка конфигурационного файла '%s': %s"
 
-#: tsys.cpp:554
+#: tsys.cpp:563
 msgid "Load!"
 msgstr "Загрузка!"
 
-#: tsys.cpp:575
+#: tsys.cpp:584
 msgid "No one module is loaded. Your configuration broken!"
 msgstr "Ни одного модуля не загружено. Ваша конфигурация сломана!"
 
-#: tsys.cpp:596
+#: tsys.cpp:605
 #, c-format
 msgid "Error load subsystem '%s'."
 msgstr "Ошибка загрузки подсистемы '%s'."
 
-#: tsys.cpp:605
+#: tsys.cpp:614
 msgid "Save!"
 msgstr "Сохранение!"
 
-#: tsys.cpp:628
+#: tsys.cpp:638
 msgid "Start!"
 msgstr "Запуск!"
 
-#: tsys.cpp:634
+#: tsys.cpp:644
 #, c-format
 msgid "Error start subsystem '%s'."
 msgstr "Ошибка запуска подсистемы '%s'."
 
-#: tsys.cpp:639
+#: tsys.cpp:649
 msgid "Final starting!"
 msgstr "Запуск завершён!"
 
-#: tsys.cpp:671
+#: tsys.cpp:681
 msgid "Stop!"
 msgstr "Останов!"
 
-#: tsys.cpp:679
+#: tsys.cpp:689
 #, c-format
 msgid "Error stop subsystem '%s'."
 msgstr "Ошибка останова подсистемы '%s'."
 
-#: tsys.cpp:708
+#: tsys.cpp:718
 msgid "The Terminate signal is received. Server is being stopped!"
 msgstr "Получен сигнал прерывания. Сервер останавливается!"
 
-#: tsys.cpp:712
+#: tsys.cpp:722
 msgid "Floating point exception is caught!"
 msgstr "Исключение операции с плавающей точкой!"
 
-#: tsys.cpp:720
+#: tsys.cpp:730
 #, c-format
 msgid "Free child process %d!"
 msgstr "Закрытие дочернего процесса %d!"
 
-#: tsys.cpp:727
+#: tsys.cpp:737
 msgid "Segmentation fault signal!"
 msgstr "Сигнал нарушения сегментации памяти!"
 
-#: tsys.cpp:730
+#: tsys.cpp:740
 msgid "OpenSCADA is aborted!"
 msgstr "OpenSCADA прервана!"
 
-#: tsys.cpp:736
+#: tsys.cpp:746
 #, c-format
 msgid "Unknown signal %d!"
 msgstr "Неизвестный сигнал %d!"
 
-#: tsys.cpp:809 tsys.cpp:1679
+#: tsys.cpp:819 tsys.cpp:1689
 msgid "Timeouted !!!"
 msgstr "Превышение времени ожидания !!!"
 
-#: tsys.cpp:816 tsys.cpp:1686
+#: tsys.cpp:826 tsys.cpp:1696
 msgid "Wait event..."
 msgstr "Ожидание события..."
 
-#: tsys.cpp:1587
+#: tsys.cpp:1597
 #, c-format
 msgid "Task '%s' is already present!"
 msgstr "Задача '%s' уже присутствует!"
 
-#: tsys.cpp:1626
+#: tsys.cpp:1636
 #, c-format
 msgid ""
 "No permission for create real-time policy for '%s'. Default thread is "
@@ -2245,96 +2247,104 @@ msgstr ""
 "Нет доступа для создания политики реального времени для '%s'. Создан поток "
 "по умолчанию!"
 
-#: tsys.cpp:1635
+#: tsys.cpp:1645
 #, c-format
 msgid "Task creation error %d."
 msgstr "Ошибка создания задачи %d."
 
-#: tsys.cpp:1642
+#: tsys.cpp:1652
 #, c-format
 msgid "Task '%s' start timeouted!"
 msgstr "Задача '%s' не запущена!"
 
-#: tsys.cpp:1680
+#: tsys.cpp:1690
 #, c-format
 msgid "Task '%s' is not stopped!"
 msgstr "Задача '%s' не остановлена!"
 
-#: tsys.cpp:1768
+#: tsys.cpp:1778
 #, c-format
 msgid "Task %u unexpected terminated by exception."
 msgstr "Задача %u неожиданно прервана исключением."
 
-#: tsys.cpp:2068
+#: tsys.cpp:2078
 msgid "1:Request is not object!"
 msgstr "1:Запрос не объект!"
 
-#: tsys.cpp:2287
+#: tsys.cpp:2297
 #, c-format
 msgid "%s station: \"%s\""
 msgstr "%s станция: \"%s\""
 
-#: tsys.cpp:2292
+#: tsys.cpp:2302
 msgid "Station"
 msgstr "Станция"
 
-#: tsys.cpp:2295
+#: tsys.cpp:2305
 msgid "Station name"
 msgstr "Имя станции"
 
-#: tsys.cpp:2297
+#: tsys.cpp:2307
 msgid "Version"
 msgstr "Версия"
 
-#: tsys.cpp:2298
+#: tsys.cpp:2308
 msgid "Host name"
 msgstr "Имя хоста"
 
-#: tsys.cpp:2299
+#: tsys.cpp:2309
 msgid "System user"
 msgstr "Системный пользователь"
 
-#: tsys.cpp:2300
+#: tsys.cpp:2310
 msgid "Operation system"
 msgstr "Операционная система"
 
-#: tsys.cpp:2301
+#: tsys.cpp:2311
 msgid "Frequency (MHZ)"
 msgstr "Частота (МГц)"
 
-#: tsys.cpp:2302
+#: tsys.cpp:2312
 msgid "Real-time clock resolution"
 msgstr "Разрешение часов реального времени"
 
-#: tsys.cpp:2303
+#: tsys.cpp:2313
 msgid "Internal charset"
 msgstr "Внутренняя кодировка"
 
-#: tsys.cpp:2304
+#: tsys.cpp:2314
 msgid "Config-file"
 msgstr "Конфигурационный файл"
 
-#: tsys.cpp:2305
+#: tsys.cpp:2315
 msgid "Work directory"
 msgstr "Рабочая директория"
 
-#: tsys.cpp:2306
-msgid "Icons directory"
-msgstr "Директория иконок"
-
-#: tsys.cpp:2307
-msgid "Separate directory paths with icons by symbol ';'."
-msgstr "Отделять пути директорий с иконками символом ';'."
-
-#: tsys.cpp:2308
+#: tsys.cpp:2316
 msgid "Modules directory"
 msgstr "Директория модулей"
 
-#: tsys.cpp:2309
+#: tsys.cpp:2317
+msgid "Icons directory"
+msgstr "Директория иконок"
+
+#: tsys.cpp:2318
+msgid "Separate directory paths with icons by symbol ';'."
+msgstr "Отделять пути директорий с иконками символом ';'."
+
+#: tsys.cpp:2319
+msgid "Documents directory"
+msgstr "Директория документов"
+
+#: tsys.cpp:2320
+msgid "Separate directory paths with documents by symbol ';'."
+msgstr "Отделять пути директорий с документами символом ';'."
+
+#: tsys.cpp:2321
 msgid "Work DB"
 msgstr "Рабочая БД"
 
-#: tsys.cpp:2310
+#: tsys.cpp:2322
 msgid ""
 "Work DB address in format [<DB module>.<DB name>].\n"
 "Change it field if you want save or reload all system from other DB."
@@ -2343,19 +2353,19 @@ msgstr ""
 "Измените это поле если желаете сохранить или перегрузить всю систему из "
 "другой БД."
 
-#: tsys.cpp:2311
+#: tsys.cpp:2323
 msgid "Save system at exit"
 msgstr "Сохранить систему при выходе"
 
-#: tsys.cpp:2312
+#: tsys.cpp:2324
 msgid "Select for automatic system saving to DB on exit."
 msgstr "Выбрать для автоматического сохранения в БД при выходе."
 
-#: tsys.cpp:2313
+#: tsys.cpp:2325
 msgid "Save system period"
 msgstr "Период сохранения системы"
 
-#: tsys.cpp:2314
+#: tsys.cpp:2326
 msgid ""
 "Use no zero period (seconds) for periodic saving of changed systems parts to "
 "DB."
@@ -2363,54 +2373,54 @@ msgstr ""
 "Использовать ненулевой период (секунды) для периодического сохранения "
 "изменённых частей системы в БД."
 
-#: tsys.cpp:2315
+#: tsys.cpp:2327
 msgid "Language"
 msgstr "Язык"
 
-#: tsys.cpp:2316
+#: tsys.cpp:2328
 msgid "Text variable's base language"
 msgstr "Базовый язык текстовых переменных"
 
-#: tsys.cpp:2318
+#: tsys.cpp:2330
 msgid ""
 "Multilingual for variable texts support enabling by base language selection."
 msgstr ""
 "Включает многоязыковую поддержку для текстовых переменных путём выбора "
 "базового языка."
 
-#: tsys.cpp:2321
+#: tsys.cpp:2333
 msgid "Least level"
 msgstr "Наименьший уровень"
 
-#: tsys.cpp:2324
+#: tsys.cpp:2336
 msgid "Least messages level which process by the system."
 msgstr "Наименьший уровень сообщений, который обрабатывается системой."
 
-#: tsys.cpp:2325
+#: tsys.cpp:2337
 msgid "To syslog"
 msgstr "В системный логер(syslog)"
 
-#: tsys.cpp:2326
+#: tsys.cpp:2338
 msgid "To stdout"
 msgstr "На стандартный выход(stdout)"
 
-#: tsys.cpp:2327
+#: tsys.cpp:2339
 msgid "To stderr"
 msgstr "На стандартный выход ошибок(stderr)"
 
-#: tsys.cpp:2328
+#: tsys.cpp:2340
 msgid "To archive"
 msgstr "В архив"
 
-#: tsys.cpp:2331 tsys.cpp:2332
+#: tsys.cpp:2343 tsys.cpp:2344
 msgid "Subsystems"
 msgstr "Подсистемы"
 
-#: tsys.cpp:2333 tsys.cpp:2334
+#: tsys.cpp:2345 tsys.cpp:2346
 msgid "Tasks"
 msgstr "Задачи"
 
-#: tsys.cpp:2335
+#: tsys.cpp:2347
 msgid ""
 "For CPU set use processors numbers string separated by symbol ':'.\n"
 "CPU numbers started from 0."
@@ -2419,74 +2429,74 @@ msgstr ""
 "':'.\n"
 "Номера процессоров начинаются с 0."
 
-#: tsys.cpp:2339
+#: tsys.cpp:2351
 msgid "Thread"
 msgstr "Поток"
 
-#: tsys.cpp:2340
+#: tsys.cpp:2352
 msgid "TID"
 msgstr ""
 
-#: tsys.cpp:2342
+#: tsys.cpp:2354
 msgid "Policy"
 msgstr "Политика"
 
-#: tsys.cpp:2343
+#: tsys.cpp:2355
 msgid "Prior."
 msgstr "Приор."
 
-#: tsys.cpp:2346
+#: tsys.cpp:2358
 msgid "CPU set"
 msgstr "Уст. CPU"
 
-#: tsys.cpp:2349
+#: tsys.cpp:2361
 msgid "Debug"
 msgstr "Отладка"
 
-#: tsys.cpp:2351
+#: tsys.cpp:2363
 msgid "Counters"
 msgstr "Счётчики"
 
-#: tsys.cpp:2356
+#: tsys.cpp:2368
 msgid "Debug categories"
 msgstr "Категории отладки"
 
-#: tsys.cpp:2361
+#: tsys.cpp:2373
 msgid "See to messages"
 msgstr "Просмотр сообщений"
 
-#: tsys.cpp:2510
+#: tsys.cpp:2528
 msgid "Finished. "
 msgstr "Закончен. "
 
-#: tsys.cpp:2512
+#: tsys.cpp:2530
 #, c-format
 msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."
 msgstr ""
 "Посл.: %s. Нагрузка %3.1f%% (%s из %s). Отстав.: %s. Потеря циклов: %g."
 
-#: tsys.cpp:2519
+#: tsys.cpp:2537
 msgid "Standard"
 msgstr "Стандарт"
 
-#: tsys.cpp:2520
+#: tsys.cpp:2538
 msgid "Round-robin"
 msgstr ""
 
-#: tsys.cpp:2522
+#: tsys.cpp:2540
 msgid "Style \"batch\""
 msgstr "Стиль \"batch\""
 
-#: tsys.cpp:2535
+#: tsys.cpp:2553
 #, c-format
 msgid "No present task '%s'."
 msgstr "Отсутствует задача '%s'."
 
-#: tsys.cpp:2548
+#: tsys.cpp:2566
 msgid "Set no allowed processors."
 msgstr "Установлены недопустимые процессоры."
 
-#: tsys.cpp:2549
+#: tsys.cpp:2567
 msgid "CPU set for thread error."
 msgstr "Ошибка установки процессоров для потока."
 
@@ -2687,7 +2697,7 @@ msgstr ""
 "============= Опции подсистемы \"Пользовательские интерфейсы\" ============\n"
 "\n"
 
-#: tuis.cpp:129
+#: tuis.cpp:154
 msgid "User interface"
 msgstr "Пользовательский интерфейс"
 

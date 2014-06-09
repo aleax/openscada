@@ -24,5 +24,6 @@
     <file>images/editpaste.png</file>
     <file>images/combar.png</file>
     <file>images/find.png</file>
+    <file>images/manual.png</file>
 </qresource>
 </RCC>

@@ -1,8 +1,7 @@
 
 //OpenSCADA system module UI.QTCfg file: qtcfg.h
 /***************************************************************************
- *   Copyright (C) 2004-20014 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2004-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -96,6 +95,7 @@ class ConfApp: public QMainWindow
 
 	void about( );
 	void aboutQt( );
+	void enterManual( );
 	void enterWhatsThis( );
 
 	void editToolUpdate( );				//Edit tools visible update
