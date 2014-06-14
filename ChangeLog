@@ -1,3 +1,27 @@
+2014-06-14 Roman
+- DB.LibsDB.vcaBase: To widget Main.anShow "No data" name display is added for EVAL.
+- DOC: {en,ru}/Modules/DB.* document files renamed to {en,ru}/Modules/BD.* for sync to the subsystem name
+    and allow access from the configurators.
+- SYS: Link to the system manual (AboutOpenSCADA) is added, for call from configurators. The tab "Help" is removed.
+- DAQ: Link to the subsystem document is added, for call from configurators.
+- Module/*: Link to the module document is added, for call from configurators. Tab "Help" renamed to "Module".
+- Transport.*: To output transport's function "start()" argument time is added, which no zero value controls connection timeout.
+- Transport.Sockets: Default timeouts of output transport set return to "5:1".
+- Protocol.SelfSystem: Argument "conTm" to output protocol's part is added.
+- TUIS: Function docGet() expanded by options GetContent (0), GetFilePath (1) and GetExecCommand (2).
+- DAQ.DAQGate: Adapted for quick start at no remote host achives.
+- Protocol.HTTP: Output protocol expanded by option "onlyHeader" for fast online documents check.
+- UI.{QTStarter,QTCfg,Vision}: The documents call made unified and online documents check/open implement finish.
+- UI.QTStarter: Logo to page is added. ToolTips and WhatsThis is added.
+- UI.QTCfg: Selected pages manual call is added, for now: root, DAQ, modules.
+    Use ToolTip for short (up to 150) helps and WhatsThis for other.
+    Set mouse cursor to Qt::WaitCursor at any requests to OpenSCADA control interface.
+- UI.VCAEngine: geomZ for widgets allows to negative.
+- UI.Vision: geomZ manage changed to changing only for single widget and rip from real work position.
+    Mostly for prevent group widget's geomZ change and collisions to no changed widgets position.
+    Need for observing to possible new problems into geomZ!
+
+
 2014-06-09 Roman
 - DB.LibsDB.OscadaLibs: Pass input direct processing to analog inputs templates is added.
 - !!:SYS: Created doc access mechanism from GUI.

@@ -52,14 +52,14 @@ class TProtIn: public TProtocolIn
 
     private:
 	//Methods
-	string getIndex(const string &user, const string &sender);
-	string getAuth(const string& url = "/", const string &mess = "");
-	void getCnt(const vector<string> &vars, const string &content, map<string,string> &cnt);
+	string getIndex( const string &user, const string &sender );
+	string getAuth( const string& url = "/", const string &mess = "" );
+	void getCnt( const vector<string> &vars, const string &content, map<string,string> &cnt );
 
-	string httpHead(const string &rcode, int cln, const string &addattr = "", bool defCtx = true);
-	string pgHead(const string &head_els = "");
+	string httpHead( const string &rcode, int cln, const string &addattr = "", bool defCtx = true );
+	string pgHead( const string &head_els = "" );
 	string pgTail( );
-	string pgTmpl(const string &cnt, const string &head_els = "");
+	string pgTmpl( const string &cnt, const string &head_els = "" );
 
 	//Attributes
 	bool m_nofull;

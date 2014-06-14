@@ -439,18 +439,17 @@ int TTransportS::cntrIfCmd( XMLNode &node, const string &senderPref, const strin
     if(station.empty()) station = SYS->id();
     else node.setAttr("path",path.substr(path_off));
 
-    if(station == SYS->id())
-    {
+    if(station == SYS->id()) {
 	node.setAttr("user",(user.empty()?"root":user));
 	SYS->cntrCmd(&node);
 	node.setAttr("path",path);
 	return atoi(node.attr("rez").c_str());
     }
 
-    //> Connect to transport
+    //Connect to transport
     TTransportS::ExtHost host = extHostGet((user.empty()?"*":user),station);
     AutoHD<TTransportOut> tr = extHost(host,senderPref);
-    if(!tr.at().startStat()) tr.at().start();
+    if(!tr.at().startStat()) tr.at().start(s2i(node.attr("conTm")));
 
     node.setAttr("rqDir","0")->setAttr("rqUser",host.user)->setAttr("rqPass",host.pass);
     tr.at().messProtIO(node,"SelfSystem");
@@ -928,12 +927,12 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     {
 	string rez;
 	char buf[STR_BUF_LEN];
-	try
-	{
+	try {
 	    if(!startStat()) start();
 	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
 	    rez.assign(buf,resp_len);
-	}catch(TError) { return ""; }
+	}
+	catch(TError) { return ""; }
 
 	return rez;
     }

@@ -156,7 +156,7 @@ class TTrOut: public TTransportOut
 	void	setMdmExit( const string &vl )		{ mMdmExit = vl; modif(); }
 	void	setMdmHangUpResp( const string &vl )	{ mMdmHangUpResp = vl; modif(); }
 
-	void start( );
+	void start( int time = 0 );
 	void stop( );
 
 	void check( );

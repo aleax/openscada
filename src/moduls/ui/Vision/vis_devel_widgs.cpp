@@ -2124,15 +2124,14 @@ int DevelWdgView::cntrIfCmd( XMLNode &node, bool glob )	{ return mainWin()->cntr
 
 void DevelWdgView::saveGeom( const string& item )
 {
-    if(item.empty() || item == id())
-    {
+    if(item.empty() || item == id()) {
 	chGeomCtx.setAttr("x", r2s(TSYS::realRound((wLevel()>0) ? posF().x()/((WdgView*)parentWidget())->xScale(true) : posF().x(),POS_PREC_DIG)));
 	chGeomCtx.setAttr("y", r2s(TSYS::realRound((wLevel()>0) ? posF().y()/((WdgView*)parentWidget())->yScale(true) : posF().y(),POS_PREC_DIG)));
 	chGeomCtx.setAttr("w", r2s(TSYS::realRound(sizeF().width()/xScale(true),POS_PREC_DIG)));
 	chGeomCtx.setAttr("h", r2s(TSYS::realRound(sizeF().height()/yScale(true),POS_PREC_DIG)));
 	chGeomCtx.setAttr("xSc", r2s(TSYS::realRound(x_scale,POS_PREC_DIG)));
 	chGeomCtx.setAttr("ySc", r2s(TSYS::realRound(y_scale,POS_PREC_DIG)));
-	chGeomCtx.setAttr("z", i2s(parent()->children().indexOf(this)));
+	chGeomCtx.setAttr("z", i2s(z()) /*i2s(parent()->children().indexOf(this))*/);
 	chRecord(chGeomCtx);
 	setAllAttrLoad(true);
 	AttrValS attrs;
@@ -2369,14 +2368,17 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		    else if(is_rise && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
 			cwdg->stackUnder(ewdg); ewdg->stackUnder(cwdg);
-			saveGeom(cwdg->id()); saveGeom(ewdg->id());
+			cwdg->setZ(ewdg->z()+1);
+			saveGeom(cwdg->id());
+			//saveGeom(ewdg->id());
 			is_move = true;
 		    }
 		}
-		if(is_up && cwdg && ewdg && cwdg != ewdg)
-		{
+		if(is_up && cwdg && ewdg && cwdg != ewdg) {
 		    cwdg->stackUnder(ewdg); ewdg->stackUnder(cwdg);
-		    saveGeom(cwdg->id()); saveGeom(ewdg->id());
+		    cwdg->setZ(ewdg->z()+1);
+		    saveGeom(cwdg->id());
+		    //saveGeom(ewdg->id());
 		}
 	    }
 
@@ -2394,12 +2396,19 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		    else if(is_lower && !is_move && cwdg && !ewdg->select() && ewdg->geometryF().intersects(cwdg->geometryF()))
 		    {
 			cwdg->stackUnder(ewdg);
+			cwdg->setZ(ewdg->z()-1);
+			saveGeom(cwdg->id());
 			is_move = true;
 		    }
 		}
-		if(is_down && cwdg && ewdg && cwdg != ewdg) cwdg->stackUnder(ewdg);
+		if(is_down && cwdg && ewdg && cwdg != ewdg)
+		{
+		    cwdg->stackUnder(ewdg);
+		    cwdg->setZ(ewdg->z()-1);
+		    saveGeom(cwdg->id());
+		}
 	    }
-	    saveGeom("");
+	    //saveGeom("");
 	}
     }
 }
@@ -2851,10 +2860,8 @@ void DevelWdgView::chReDo( )
     //Get change on cursor and make it
     XMLNode *rule = chTree->childGet(cur-1);
     DevelWdgView *rlW = (rule->attr("wdg").empty()) ? this : this->findChild<DevelWdgView*>(rule->attr("wdg").c_str());
-    if(rlW)
-    {
-	if(rule->name() == "geom")
-	{
+    if(rlW) {
+	if(rule->name() == "geom") {
 	    attrs.push_back(std::make_pair("geomX",rule->attr("x")));
 	    attrs.push_back(std::make_pair("geomY",rule->attr("y")));
 	    attrs.push_back(std::make_pair("geomW",rule->attr("w")));
@@ -2864,8 +2871,7 @@ void DevelWdgView::chReDo( )
 	    attrs.push_back(std::make_pair("geomZ",rule->attr("z")));
 	    rlW->attrsSet(attrs);
 	}
-	else if(rule->name() == "attr")
-	{
+	else if(rule->name() == "attr") {
 	    if(rule->attr("id").size()) rlW->attrSet(rule->attr("id"), rule->text());
 	    for(unsigned i_ch = 0; i_ch < rule->childSize(); i_ch++)
 	        attrs.push_back(std::make_pair(rule->childGet(i_ch)->attr("id"),rule->childGet(i_ch)->text()));

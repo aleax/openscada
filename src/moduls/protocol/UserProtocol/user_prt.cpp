@@ -93,7 +93,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
 }
 
-TProt::~TProt()
+TProt::~TProt( )
 {
     nodeDelAll();
 }
@@ -101,7 +101,7 @@ TProt::~TProt()
 void TProt::itemListIn( vector<string> &ls, const string &curIt )
 {
     ls.clear();
-    if( TSYS::strParse(curIt,1,".").empty() )	uPrtList(ls);
+    if(TSYS::strParse(curIt,1,".").empty())	uPrtList(ls);
 }
 
 void TProt::uPrtAdd( const string &iid, const string &db )

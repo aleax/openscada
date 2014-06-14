@@ -202,8 +202,7 @@ void TController::stop( )
 
 void TController::enable( )
 {
-    if(!en_st)
-    {
+    if(!en_st) {
 	mess_info(nodePath().c_str(),_("Enable controller!"));
 
 	//Enable for children
@@ -219,8 +218,7 @@ void TController::enable( )
     for(unsigned i_prm = 0; i_prm < prm_list.size(); i_prm++)
 	if(at(prm_list[i_prm]).at().toEnable())
 	    try{ at(prm_list[i_prm]).at().enable(); }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_warning(nodePath().c_str(),_("Enable parameter '%s' error."),prm_list[i_prm].c_str());
 		enErr = true;

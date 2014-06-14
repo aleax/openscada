@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-09 19:33+0300\n"
+"POT-Creation-Date: 2014-06-14 19:58+0300\n"
 "PO-Revision-Date: 2007-10-29 22:03+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -739,43 +739,75 @@ msgstr "Кнопка для получения информации о Qt"
 msgid "Press to get the using Qt information."
 msgstr "Нажать для получения информации о Qt."
 
-#: tuimod.cpp:500 tuimod.cpp:508
+#: tuimod.cpp:500 tuimod.cpp:507
 msgid "%1 manual"
 msgstr "%1 руководство"
 
-#: tuimod.cpp:504 tuimod.cpp:511
+#: tuimod.cpp:503 tuimod.cpp:509
 msgid "The button for getting the using %1 manual"
 msgstr "Кнопка для получения руководства %1"
 
-#: tuimod.cpp:505 tuimod.cpp:512
+#: tuimod.cpp:504 tuimod.cpp:510
 msgid "Press to get the using %1 manual."
 msgstr "Нажать для получения руководства %1."
 
-#: tuimod.cpp:516
+#: tuimod.cpp:514
 msgid "What's &This"
 msgstr "Что &это"
 
-#: tuimod.cpp:518
+#: tuimod.cpp:516
 msgid "Question about GUI elements"
 msgstr "Вопрос про GUI элементы"
 
-#: tuimod.cpp:519
+#: tuimod.cpp:517
 msgid "The button for requesting the information about user interface elements"
-msgstr "Кнопка для запроса информации про элементы пользовательского интерфейса"
+msgstr ""
+"Кнопка для запроса информации про элементы пользовательского интерфейса"
 
-#: tuimod.cpp:520
+#: tuimod.cpp:518
 msgid "Press for requesting about user interface elements"
-msgstr "Нажать для запроса информации про элементы пользовательского интерфейса"
+msgstr ""
+"Нажать для запроса информации про элементы пользовательского интерфейса"
 
-#: tuimod.cpp:524
+#: tuimod.cpp:522
 msgid "&Help"
 msgstr "&Помощь"
 
-#: tuimod.cpp:566
+#: tuimod.cpp:557
+msgid "Call the Qt-based UI module '%1'"
+msgstr "Вызов основанного на Qt UI модуля '%1'"
+
+#: tuimod.cpp:558
+msgid ""
+"Module: %1\n"
+"Name: %2\n"
+"Source: %3\n"
+"Version: %4\n"
+"Author: %5\n"
+"Description: %6\n"
+"License: %7"
+msgstr ""
+"Модуль: %1\n"
+"Имя: %2\n"
+"Источник: %3\n"
+"Версия: %4\n"
+"Автор: %5\n"
+"Описание: %6\n"
+"Лицензия: %7"
+
+#: tuimod.cpp:582
 msgid "Exit from system"
 msgstr "Выйти из программы"
 
-#: tuimod.cpp:588
+#: tuimod.cpp:584
+msgid "Exit from the program"
+msgstr "Выход из программы"
+
+#: tuimod.cpp:585
+msgid "The button for exit from the program"
+msgstr "Кнопка для выхода из программы"
+
+#: tuimod.cpp:606
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -800,7 +832,15 @@ msgstr ""
 "Автор: %s\n"
 "Web сайт: %s"
 
-#: tuimod.cpp:626
+#: tuimod.cpp:623
+msgid "Manual"
+msgstr "Руководство"
+
+#: tuimod.cpp:624
+msgid "No the manual '%1' found offline or online!"
+msgstr "Не найдено руководства '%1' локально и в сети!"
+
+#: tuimod.cpp:643
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Непереведенное Qt сообщение: '%s'"

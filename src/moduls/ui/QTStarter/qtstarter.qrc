@@ -6,5 +6,6 @@
     <file>images/help.png</file>
     <file>images/contexthelp.png</file>
     <file>images/manual.png</file>
+    <file>images/logo.png</file>
 </qresource>
 </RCC>

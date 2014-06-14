@@ -160,7 +160,8 @@ class ConfApp: public QMainWindow
 			*actStartUpd, *actStopUpd,
 			*actDBLoad, *actDBSave,
 			*actItAdd, *actItDel,
-			*actItCut, *actItCopy, *actItPaste;
+			*actItCut, *actItCopy, *actItPaste,
+			*actManualPage;
 
 	XMLNode		pg_info, genReqs;
 	XMLNode 	*root;

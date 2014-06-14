@@ -107,23 +107,20 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     //  Vision manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
-    actManual->setProperty("local", "Modules/UI.Vision");
-    actManual->setProperty("net", "http://wiki.oscada.org/Doc/Vision");
+    actManual->setProperty("doc", "Modules/UI.Vision|Vision");
     actManual->setShortcut(Qt::Key_F1);
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  VCAEngine manual
     QAction *actManualVCA = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg("VCAEngine"),this);
-    actManualVCA->setProperty("local", "Modules/UI.VCAEngine");
-    actManualVCA->setProperty("net", "http://wiki.oscada.org/Doc/VCAEngine");
+    actManualVCA->setProperty("doc", "Modules/UI.VCAEngine|VCAEngine");
     actManualVCA->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg("VCAEngine"));
     actManualVCA->setStatusTip(QString(_("Press to get the using %1 manual.")).arg("VCAEngine"));
     connect(actManualVCA, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  OpenSCADA manual index
     QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
-    actManualSYS->setProperty("local", "index");
-    actManualSYS->setProperty("net", "http://wiki.oscada.org/Doc");
+    actManualSYS->setProperty("doc", "index|/");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
@@ -656,7 +653,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     statusBar()->showMessage(_("Ready"), 2000);
 }
 
-VisDevelop::~VisDevelop()
+VisDevelop::~VisDevelop( )
 {
     winClose = true;
 
@@ -676,10 +673,7 @@ VisDevelop::~VisDevelop()
     mod->unregWin(this);
 }
 
-int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
-{
-    return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
-}
+int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )	{ return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob); }
 
 QString VisDevelop::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
 {
@@ -694,37 +688,19 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
     return "";
 }
 
-string VisDevelop::user( )
-{
-    return mWUser->user().toStdString();
-}
+string VisDevelop::user( )	{ return mWUser->user().toStdString(); }
 
-string VisDevelop::password( )
-{
-    return mWUser->pass().toStdString();
-}
+string VisDevelop::password( )	{ return mWUser->pass().toStdString(); }
 
-string VisDevelop::VCAStation( )
-{
-    return mWUser->VCAStation().toStdString();
-}
+string VisDevelop::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
 
-bool VisDevelop::wdgScale( )
-{
-    return w_scale->scale();
-}
+bool VisDevelop::wdgScale( )		{ return w_scale->scale(); }
 
-void VisDevelop::setWdgScale( bool val )
-{
-    w_scale->setScale(val);
-}
+void VisDevelop::setWdgScale( bool val ){ w_scale->setScale(val); }
 
-double VisDevelop::wdgVisScale( )
-{
-    return atof(mWVisScale->text().toStdString().c_str());
-}
+double VisDevelop::wdgVisScale( )	{ return atof(mWVisScale->text().toStdString().c_str()); }
 
-void VisDevelop::setWdgVisScale(double val )
+void VisDevelop::setWdgVisScale( double val )
 {
     mWVisScale->setText((r2s(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
 }
@@ -749,7 +725,7 @@ QMenu *VisDevelop::createPopupMenu( )
     QMenu *mn = QMainWindow::createPopupMenu( );
     if(!mn) return mn;
 
-    //> Check for widget under cursor
+    //Check for widget under cursor
     QWidget *ucw = childAt(mapFromGlobal(QCursor::pos()));
     if(qobject_cast<QToolBar*>(ucw) && !mn->children().isEmpty())
     {
@@ -766,19 +742,19 @@ QMenu *VisDevelop::createPopupMenu( )
 
 	act = new QAction(_("Medium (22x22)"),iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("22"); 
+	act->setObjectName("22");
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Big (32x32)"),iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("32"); 
+	act->setObjectName("32");
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Huge (48x48)"),iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("32"); 
+	act->setObjectName("32");
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
     }
@@ -799,10 +775,7 @@ void VisDevelop::setToolIconSize( )
     }
 }
 
-void VisDevelop::setActiveSubWindow(QWidget *w)
-{
-    work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w));
-}
+void VisDevelop::setActiveSubWindow( QWidget *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
 
 void VisDevelop::fullScreen( bool vl )
 {
@@ -917,11 +890,10 @@ void VisDevelop::applyWorkWdg( )
 
 void VisDevelop::enterManual( )
 {
-    string findLocDoc = TUIS::docGet(sender()->property("local").toString().toStdString());
-    if(findLocDoc.size()) system(("xdg-open "+findLocDoc).c_str());
-    else system(("xdg-open "+sender()->property("net").toString().toStdString()).c_str());	//???? Add for locale check and the page and connection
-    //else QMessageBox::information(this, _("Manual"),
-    //<>    QString(_("No the manual '%1' found into '%2'!")).arg(sender()->objectName()).arg(SYS->docDir().c_str()));
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString(), NULL, TUIS::GetExecCommand);
+    if(findDoc.size())	system(findDoc.c_str());
+    else QMessageBox::information(this, _("Manual"),
+	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));
 }
 
 void VisDevelop::modifyToolUpdate( const string &wdgs )

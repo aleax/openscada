@@ -174,7 +174,7 @@ class TSocketOut: public TTransportOut
 	void setTimings( const string &vl );
 	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 
-	void start( );
+	void start( int time = 0 );
 	void stop( );
 
 	int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false );

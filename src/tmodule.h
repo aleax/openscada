@@ -53,9 +53,8 @@ class TModule : public TCntrNode
 		SAt( const string &iid, const string &itype = "", int itver = 0 ) :
 		    id(iid), type(itype), t_ver(itver)	{ }
 
-		bool operator==( const TModule::SAt &amst ) const
-		{
-		    if( amst.id == id && amst.type == type && amst.t_ver == t_ver ) return true;
+		bool operator==( const TModule::SAt &amst ) const {
+		    if(amst.id == id && amst.type == type && amst.t_ver == t_ver) return true;
 		    return false;
 		}
 

@@ -217,8 +217,7 @@ bool RunWdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case A_EN: setProperty("isVisible", atoi(val.c_str()) && (permView() || dynamic_cast<RunPageView*>(this)));	return true;
 	case A_ACTIVE: setProperty("active",(bool)atoi(val.c_str()));	return true;
 	case A_GEOM_Z:
-	    if(!allAttrLoad() && !dynamic_cast<RunPageView*>(this))
-	    {
+	    if(!allAttrLoad() && !dynamic_cast<RunPageView*>(this)) {
 		RunWdgView *wdg = qobject_cast<RunWdgView*>(parentWidget());
 		if(wdg) { wdg->orderUpdate(); wdg->QWidget::update(); }
 	    }

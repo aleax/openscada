@@ -35,6 +35,7 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QWhatsThis>
+#include <QLabel>
 
 #include <tsys.h>
 #include <tmess.h>
@@ -176,7 +177,7 @@ void TUIMod::load_( )
     //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file
     start_mod = TBDS::genDBGet(nodePath()+"StartMod",start_mod);
@@ -414,10 +415,10 @@ bool WinControl::callQtModule( const string &nm )
 {
     vector<string> list;
 
-    AutoHD<TModule> qt_mod = mod->owner().modAt(nm);
+    AutoHD<TModule> QtMod = mod->owner().modAt(nm);
     QMainWindow *(TModule::*openWindow)( );
-    qt_mod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
-    QMainWindow *new_wnd = ((&qt_mod.at())->*openWindow)( );
+    QtMod.at().modFunc("QMainWindow *openWindow();",(void (TModule::**)()) &openWindow);
+    QMainWindow *new_wnd = ((&QtMod.at())->*openWindow)( );
     if(!new_wnd) return false;
 
     //Make Qt starter toolbar
@@ -437,7 +438,7 @@ bool WinControl::callQtModule( const string &nm )
 	if(mod->owner().modAt(list[i_l]).at().modInfo("SubType") == "Qt" &&
 	    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
     {
-	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
+	AutoHD<TModule> QtMod = mod->owner().modAt(list[i_l]);
 
 	QIcon icon;
 	if(mod->owner().modAt(list[i_l]).at().modFuncPresent("QIcon icon();"))
@@ -447,11 +448,11 @@ bool WinControl::callQtModule( const string &nm )
 	    icon = ((&mod->owner().modAt(list[i_l]).at())->*iconGet)( );
 	}
 	else icon = QIcon(":/images/oscada_qt.png");
-	QAction *act_1 = new QAction(icon,qt_mod.at().modName().c_str(),new_wnd);
+	QAction *act_1 = new QAction(icon,QtMod.at().modName().c_str(),new_wnd);
 	act_1->setObjectName(list[i_l].c_str());
 	//act_1->setShortcut(Qt::CTRL+Qt::SHIFT+Qt::Key_1);
-	act_1->setToolTip(qt_mod.at().modName().c_str());
-	act_1->setWhatsThis(qt_mod.at().modInfo("Description").c_str());
+	act_1->setToolTip(QtMod.at().modName().c_str());
+	act_1->setWhatsThis(QtMod.at().modInfo("Description").c_str());
 	QObject::connect(act_1, SIGNAL(triggered()), this, SLOT(callQtModule()));
 
 	if(toolBar) toolBar->addAction(act_1);
@@ -497,16 +498,14 @@ StartDialog::StartDialog( WinControl *wcntr )
     // QTStarter manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
-    actManual->setProperty("local", "Modules/UI.QTStarter");
-    actManual->setProperty("net", "http://wiki.oscada.org/Doc/QTStarter");
+    actManual->setProperty("doc", "Modules/UI.QTStarter|QTStarter");
     actManual->setShortcut(Qt::Key_F1);
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     // OpenSCADA manual index
     QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
-    actManualSYS->setProperty("local", "index");
-    actManualSYS->setProperty("net", "http://wiki.oscada.org/Doc");
+    actManualSYS->setProperty("doc", "index|/");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
@@ -534,6 +533,10 @@ StartDialog::StartDialog( WinControl *wcntr )
     wnd_lay->setMargin(6);
     wnd_lay->setSpacing(4);
 
+    QLabel *logo = new QLabel(this);
+    logo->setPixmap(QPixmap(":/images/logo.png"));
+    wnd_lay->addWidget(logo,0,0);
+
     vector<string> list;
     mod->owner().modList(list);
     for(unsigned i_l = 0; i_l < list.size(); i_l++)
@@ -548,9 +551,23 @@ StartDialog::StartDialog( WinControl *wcntr )
 	}
 	else icon = QIcon(":/images/oscada_qt.png");
 
-	AutoHD<TModule> qt_mod = mod->owner().modAt(list[i_l]);
-	QPushButton *butt = new QPushButton(icon,qt_mod.at().modName().c_str(),centralWidget());
+	AutoHD<TModule> QtMod = mod->owner().modAt(list[i_l]);
+	QPushButton *butt = new QPushButton(icon,QtMod.at().modName().c_str(),centralWidget());
 	butt->setObjectName(list[i_l].c_str());
+	butt->setToolTip(QString(_("Call the Qt-based UI module '%1'")).arg(list[i_l].c_str()));
+	butt->setWhatsThis(QString(_("Module: %1\n"
+		"Name: %2\n"
+		"Source: %3\n"
+		"Version: %4\n"
+		"Author: %5\n"
+		"Description: %6\n"
+		"License: %7")).arg(QtMod.at().modInfo("Module").c_str())
+			      .arg(QtMod.at().modInfo("Name").c_str())
+			      .arg(QtMod.at().modInfo("Source").c_str())
+			      .arg(QtMod.at().modInfo("Version").c_str())
+			      .arg(QtMod.at().modInfo("Author").c_str())
+			      .arg(QtMod.at().modInfo("Description").c_str())
+			      .arg(QtMod.at().modInfo("License").c_str()));
 	QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
 	wnd_lay->addWidget(butt, 0, 0);
     }
@@ -564,6 +581,8 @@ StartDialog::StartDialog( WinControl *wcntr )
 
     QPushButton *butt = new QPushButton(QIcon(":/images/exit.png"),_("Exit from system"), centralWidget());
     butt->setObjectName("*exit*");
+    butt->setToolTip(_("Exit from the program"));
+    butt->setWhatsThis(_("The button for exit from the program"));
     QObject::connect(butt, SIGNAL(clicked(bool)), wcntr, SLOT(callQtModule()));
     wnd_lay->addWidget(butt,0,0);
 }
@@ -599,11 +618,10 @@ void StartDialog::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void StartDialog::enterManual( )
 {
-    string findLocDoc = TUIS::docGet(sender()->property("local").toString().toStdString());
-    if(findLocDoc.size()) system(("xdg-open "+findLocDoc).c_str());
-    else system(("xdg-open "+sender()->property("net").toString().toStdString()).c_str());	//???? Add for locale check and the page and connection
-    //else QMessageBox::information(this, _("Manual"),
-    //    QString(_("No the manual '%1' found into '%2'!")).arg(sender()->objectName()).arg(SYS->docDir().c_str()));
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString(), NULL, TUIS::GetExecCommand);
+    if(findDoc.size())	system(findDoc.c_str());
+    else QMessageBox::information(this, _("Manual"),
+	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));
 }
 
 //*************************************************

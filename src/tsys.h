@@ -90,7 +90,7 @@ class TSYS : public TCntrNode
 
 	int	stopSignal( )	{ return mStopSignal; }
 
-	//> Programs options
+	// Program options
 	string	id( )		{ return mId.c_str(); }
 	string	name( )		{ return mName; }
 	void setName( const string &vl )	{ mName = vl; modif(); }
@@ -122,7 +122,7 @@ class TSYS : public TCntrNode
 	void	setIcoDir( const string &idir, bool init = false );
 	void	setDocDir( const string &idir, bool init = false );
 
-	//> Config-file functions
+	// Config-file functions
 	string	cfgFile( )	{ return mConfFile; }
 	XMLNode	&cfgRoot( )	{ return rootN; }
 	XMLNode	*cfgNode( const string &path, bool create = false );
@@ -142,7 +142,7 @@ class TSYS : public TCntrNode
 
 	static void sighandler( int signal );
 
-	//> Short time dimensions
+	// Short time dimensions
 	bool	multCPU( )	{ return mMultCPU; }
 	uint64_t sysClk( )	{ return mSysclc; }
 	void	clkCalc( );
@@ -160,27 +160,27 @@ class TSYS : public TCntrNode
 	time_t	sysTm( ) volatile	{ return mSysTm; }	//> System time fast access, from updated cell
 	static int64_t curTime( );	//> Current system time (usec)
 
-	//> Tasks control
+	// Tasks control
 	void taskCreate( const string &path, int priority, void *(*start_routine)(void *), void *arg, int wtm = 5, pthread_attr_t *pAttr = NULL, bool *startSt = NULL );
 	void taskDestroy( const string &path, bool *endrunCntr = NULL, int wtm = 5, bool noSignal = false );
 	double taskUtilizTm( const string &path );
 	static bool taskEndRun( );	// Check for the task endrun by signal SIGUSR1
 
-	//> Sleep task for period grid <per> on ns or to cron time.
+	// Sleep task for period grid <per> on ns or to cron time.
 	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
 	static void taskSleep( int64_t per, time_t cron = 0, int64_t *lag = NULL );
 	static time_t cron( const string &vl, time_t base = 0 );
 
-	//> Wait event with timeout support
+	// Wait event with timeout support
 	static bool eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_t time = 0 );
 
-	//> System counters
+	// System counters
 	bool	cntrEmpty( );
 	double	cntrGet( const string &id );
 	void	cntrSet( const string &id, double vl );
 	void	cntrIter( const string &id, double vl );
 
-	//> Convert value to string
+	// Convert value to string
 	static string int2str( int val, IntView view = Dec );
 	static string uint2str( unsigned val, IntView view = Dec );
 	static string ll2str( int64_t val, IntView view = Dec );
@@ -194,11 +194,11 @@ class TSYS : public TCntrNode
 	static string time2str( double utm );
 	static string cpct2str( double cnt );
 
-	//> Adress convertors
+	// Adress convertors
 	static string addr2str( void *addr );
 	static void *str2addr( const string &str );
 
-	//> Path and string parse
+	// Path and string parse
 	static string strNoSpace( const string &val );
 	static string strSepParse( const string &str, int level, char sep, int *off = NULL );
 	static string strParse( const string &str, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
@@ -215,7 +215,7 @@ class TSYS : public TCntrNode
 	static string strCompr( const string &in, int lev = -1 );
 	static string strUncompr( const string &in );
 
-	//> Unaligned read from memory for some ARM and other
+	// Unaligned read from memory for some ARM and other
 	static inline uint16_t getUnalign16( const void *p ) {
 	    struct su16 { uint16_t x; } __attribute__((packed));
 	    const struct su16 *ptr = (const struct su16 *)p;
@@ -247,7 +247,7 @@ class TSYS : public TCntrNode
 	    return ptr->x;
 	}
 
-	//> Endian convert
+	// Endian convert
 	static uint16_t i16_LE( uint16_t in );
 	static uint32_t i32_LE( uint32_t in );
 	static uint64_t i64_LE( uint64_t in );
@@ -263,10 +263,10 @@ class TSYS : public TCntrNode
 	static double doubleBE( double in );
 	static double doubleBErev( double in );
 
-	//> Reentrant commandline processing
+	// Reentrant commandline processing
 	string getCmdOpt( int &curPos, string *argVal = NULL );
 
-	//>> System control interface functions
+	//  System control interface functions
 	static void ctrListFS( XMLNode *nd, const string &fsBase, const string &fileExt = "" );	//Inline file system browsing
 
 	//Public attributes

@@ -150,7 +150,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
-	virtual void start( )			{ };
+	virtual void start( int time = 0 )	{ };
 	virtual void stop( )			{ };
 
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false )

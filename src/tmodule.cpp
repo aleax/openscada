@@ -51,7 +51,7 @@ TModule::TModule( const string &id ) : mId(id)
     bindtextdomain(lc_id.c_str(), localedir_full);
 #endif
 
-    //> Dynamic string translation hook
+    //Dynamic string translation hook
 #if 0
     char mess[][100] = { _("Author"), _("License") };
 #endif
@@ -61,19 +61,15 @@ TModule::TModule( const string &id ) : mId(id)
 
 TModule::~TModule( )
 {
-    //> Clean export function list
-    for(unsigned i = 0; i < m_efunc.size(); i++)
-        delete m_efunc[i];
+    //Clean export function list
+    for(unsigned i = 0; i < m_efunc.size(); i++) delete m_efunc[i];
 
     if(mess_lev() == TMess::Debug) SYS->cntrIter("ModulsCntr",-1);
 }
 
 string TModule::objName( )	{ return TCntrNode::objName()+":TModule"; }
 
-string TModule::modName()
-{
-    return mName;
-}
+string TModule::modName( )	{ return mName; }
 
 void TModule::postEnable( int flag )
 {
@@ -96,6 +92,7 @@ bool TModule::modFuncPresent( const string &prot )
     for(unsigned i = 0; i < m_efunc.size(); i++)
 	if(m_efunc[i]->prot == prot)
 	    return true;
+
     return false;
 }
 
@@ -135,33 +132,31 @@ string TModule::modInfo( const string &name )
 
 void TModule::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),R_R_R_);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Module: ")+modId(),R_R_R_,"root","root",1,
+	    "doc",("Modules/"+owner().subId()+"."+modId()+"|"+modId()).c_str());
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	if(TUIS::icoGet(owner().subId()+"."+modId(),NULL,true).size()) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
-	if(ctrMkNode("area",opt,-1,"/help",_("Help")))
-	    if(ctrMkNode("area",opt,-1,"/help/m_inf",_("Module information")))
-	    {
+	if(ctrMkNode("area",opt,-1,"/module",_("Module")))
+	    if(ctrMkNode("area",opt,-1,"/module/m_inf",_("Module information"))) {
 		vector<string> list;
 		modInfo(list);
 		for(unsigned i_l = 0; i_l < list.size(); i_l++)
-		    ctrMkNode("fld",opt,-1,(string("/help/m_inf/")+list[i_l]).c_str(),_(list[i_l].c_str()),R_R_R_,"root","root",1,"tp","str");
+		    ctrMkNode("fld",opt,-1,(string("/module/m_inf/")+list[i_l]).c_str(),_(list[i_l].c_str()),R_R_R_,"root","root",1,"tp","str");
 	    }
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/ico" && ctrChkNode(opt))
-    {
+    if(a_path == "/ico" && ctrChkNode(opt)) {
 	string itp;
 	opt->setText(TSYS::strEncode(TUIS::icoGet(owner().subId()+"."+modId(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
-    else if(a_path.substr(0,11) == "/help/m_inf" && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
+    else if(a_path.compare(0,13,"/module/m_inf") == 0 && ctrChkNode(opt)) opt->setText(modInfo(TSYS::pathLev(a_path,2)));
     else TCntrNode::cntrCmdProc(opt);
 }
 

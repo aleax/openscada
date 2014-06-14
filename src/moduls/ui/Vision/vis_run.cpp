@@ -167,16 +167,14 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //  Vision manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(mod->modId().c_str()),this);
-    actManual->setProperty("local", "Modules/UI.Vision");
-    actManual->setProperty("net", "http://wiki.oscada.org/Doc/Vision");
+    actManual->setProperty("doc", "Modules/UI.Vision|Vision");
     actManual->setShortcut(Qt::Key_F1);			//Move and use for the project manual
     actManual->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(mod->modId().c_str()));
     actManual->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(mod->modId().c_str()));
     connect(actManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  OpenSCADA manual index
     QAction *actManualSYS = new QAction(QPixmap::fromImage(ico_t),QString(_("%1 manual")).arg(PACKAGE_STRING),this);
-    actManualSYS->setProperty("local", "index");
-    actManualSYS->setProperty("net", "http://wiki.oscada.org/Doc");
+    actManualSYS->setProperty("doc", "index|/");
     actManualSYS->setWhatsThis(QString(_("The button for getting the using %1 manual")).arg(PACKAGE_STRING));
     actManualSYS->setStatusTip(QString(_("Press to get the using %1 manual.")).arg(PACKAGE_STRING));
     connect(actManualSYS, SIGNAL(triggered()), this, SLOT(enterManual()));
@@ -1012,11 +1010,10 @@ void VisRun::enterWhatsThis( )	{ QWhatsThis::enterWhatsThisMode(); }
 
 void VisRun::enterManual( )
 {
-    string findLocDoc = TUIS::docGet(sender()->property("local").toString().toStdString());
-    if(findLocDoc.size()) system(("xdg-open "+findLocDoc).c_str());
-    else system(("xdg-open "+sender()->property("net").toString().toStdString()).c_str());	//???? Add for locale check and the page and connection
-    //else QMessageBox::information(this, _("Manual"),
-    //<>    QString(_("No the manual '%1' found into '%2'!")).arg(sender()->objectName()).arg(SYS->docDir().c_str()));
+    string findDoc = TUIS::docGet(sender()->property("doc").toString().toStdString(), NULL, TUIS::GetExecCommand);
+    if(findDoc.size())	system(findDoc.c_str());
+    else QMessageBox::information(this, _("Manual"),
+	QString(_("No the manual '%1' found offline or online!")).arg(sender()->property("doc").toString()));
 }
 
 void VisRun::alarmAct( QAction *alrm )

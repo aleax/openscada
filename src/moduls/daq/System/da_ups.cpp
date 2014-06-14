@@ -70,8 +70,7 @@ void UPS::deInit( TMdPrm *prm )
 
 void UPS::cfgChange( TCfg &i_cfg )
 {
-    if(i_cfg.name() == "SUBT")
-    {
+    if(i_cfg.name() == "SUBT") {
 	string dls = upsList(i_cfg.getS());
 	i_cfg.fld().setValues(dls);
 	i_cfg.fld().setSelNames(dls);
@@ -83,8 +82,7 @@ string UPS::upsList( const string &addr )
     string rez, host, val, c_el;
     char name[51] = "", dscr[256] = "";
 
-    try
-    {
+    try {
 	MtxAlloc res(reqRes, true);
 	if((host=TSYS::strParse(TSYS::strParse(addr,0," "),1,"@")).empty()) host = TSYS::strParse(addr,0," ");
 	val = reqUPS(host, "LIST UPS\x0A", (mess_lev()==TMess::Debug)?mod->nodePath():"");
@@ -103,14 +101,12 @@ string UPS::upsList( const string &addr )
 void UPS::getVal( TMdPrm *prm )
 {
     vector<string> als;
-    try
-    {
+    try {
 	string c_el, addr = TSYS::strParse(prm->cfg("SUBT").getS(),0," ");
 	int aOff = 0;
 	string UPS = TSYS::strParse(addr, 0, "@", &aOff);
 	char var[51] = "", vVal[256] = "";
-	if(aOff < (int)addr.size())
-	{
+	if(aOff < (int)addr.size()) {
 	    MtxAlloc res(reqRes, true);
 
 	    //Vars list and values obtain
@@ -118,14 +114,12 @@ void UPS::getVal( TMdPrm *prm )
 	    for(int off = 0, lstSec = false; (c_el=TSYS::strLine(val,0,&off)).size(); )
 		if(c_el == "BEGIN LIST VAR "+UPS) lstSec = true;
 		else if(c_el == "END LIST VAR "+UPS)	break;
-		else if(lstSec)
-		{
+		else if(lstSec) {
 		    if(sscanf(c_el.c_str(),"VAR %*s %50s \"%255[^\"]s\"",var,vVal) != 2) continue;
 		    string vid = var;
 		    string aid = TSYS::strEncode(vid,TSYS::oscdID);
 		    string aVal = vVal;
-		    if(!prm->vlPresent(aid))
-		    {
+		    if(!prm->vlPresent(aid)) {
 			// Description request
 			string descr = reqUPS(addr, "GET DESC "+UPS+" "+var+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
 			if(sscanf(descr.c_str(),"DESC %*s %*s \"%255[^\"]s\"",vVal) == 1 && strcmp(vVal,"Description unavailable")) descr = vVal;
@@ -136,8 +130,7 @@ void UPS::getVal( TMdPrm *prm )
 			size_t fPos = 0;
 			unsigned flg = (stp.rfind("RW") != string::npos) ? (unsigned)TVal::DirWrite : (unsigned)TFld::NoWrite;
 			if((fPos=stp.rfind("STRING:")) != string::npos) vLen = atoi(stp.c_str()+fPos+7);
-			if(stp.rfind("ENUM") != string::npos)
-			{
+			if(stp.rfind("ENUM") != string::npos) {
 			    string enS = reqUPS(addr, "LIST ENUM "+UPS+" "+var+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
 			    string enSel;
 			    for(int offEn = 0, lstSecEn = false; (enSel=TSYS::strLine(enS,0,&offEn)).size(); )
@@ -159,13 +152,11 @@ void UPS::getVal( TMdPrm *prm )
 	    for(int off = 0, lstSec = false; (c_el=TSYS::strLine(val,0,&off)).size(); )
 		if(c_el == "BEGIN LIST CMD "+UPS) lstSec = true;
 		else if(c_el == "END LIST CMD "+UPS)	break;
-		else if(lstSec)
-		{
+		else if(lstSec) {
 		    if(sscanf(c_el.c_str(),"CMD %*s %50s",var) != 1) continue;
 		    string vid = var;
 		    string aid = TSYS::strEncode(vid,TSYS::oscdID);
-		    if(!prm->vlPresent(aid))
-		    {
+		    if(!prm->vlPresent(aid)) {
 			// Description request
 			string descr = reqUPS(addr, "GET CMDDESC "+UPS+" "+vid+"\x0A", (prm->owner().messLev()==TMess::Debug)?prm->nodePath():"");
 			if(sscanf(descr.c_str(),"CMDDESC %*s %*s \"%255[^\"]s\"",vVal) == 1 && strcmp(vVal,"Description unavailable")) descr = vVal;
@@ -180,12 +171,10 @@ void UPS::getVal( TMdPrm *prm )
     }
     catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 
-    if(als.size())
-    {
+    if(als.size()) {
 	prm->daErr = "";
 	//Check for delete DAQ parameter's attributes
-	for(int i_p = 0; i_p < (int)fldSize(); i_p++)
-	{
+	for(int i_p = 0; i_p < (int)fldSize(); i_p++) {
 	    unsigned i_l;
 	    for(i_l = 0; i_l < als.size(); i_l++)
 		if(fldAt(i_p).name() == als[i_l])
@@ -195,10 +184,9 @@ void UPS::getVal( TMdPrm *prm )
 		catch(TError err) { mess_warning(err.cat.c_str(),err.mess.c_str()); }
 	}
     }
-    else if(!prm->daErr.getVal().size())
-    {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+    else if(!prm->daErr.getVal().size()) {
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -216,11 +204,9 @@ void UPS::vlSet( TMdPrm *p, TVal &vo, const TVariant &vl, const TVariant &pvl )
     OK = OK && reqUPS(addr,"USERNAME "+p->addPrm("USER")+"\x0A",(p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
     OK = OK && reqUPS(addr,"PASSWORD "+p->addPrm("PASS")+"\x0A",(p->owner().messLev()==TMess::Debug)?p->nodePath():"").compare(0,2,"OK") == 0;
 
-    if(OK)
-    {
+    if(OK) {
 	//Instant commands
-	if(vo.fld().type() == TFld::Boolean)
-	{
+	if(vo.fld().type() == TFld::Boolean) {
 	    if(vl.getB()) reqUPS(addr, "INSTCMD "+UPS+" "+vId+"\x0A", (p->owner().messLev()==TMess::Debug)?p->nodePath():"");
 	}
 	//RW variable set
@@ -240,8 +226,7 @@ string UPS::reqUPS( const string &addr, const string &req, const string &debCat 
 
     //Check connect and start
     AutoHD<TTransportOut> tr;
-    if(!SYS->transport().at().at(tTr).at().outPresent(nTr))
-    {
+    if(!SYS->transport().at().at(tTr).at().outPresent(nTr)) {
 	SYS->transport().at().at(tTr).at().outAdd(nTr);
 	tr = SYS->transport().at().at(tTr).at().outAt(nTr);
 	tr.at().setName(_("UPS"));
@@ -260,8 +245,7 @@ string UPS::reqUPS( const string &addr, const string &req, const string &debCat 
     val.assign(buf, resp_len);
 
     //Wait tail
-    while(resp_len)
-    {
+    while(resp_len) {
 	try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
 	val.append(buf, resp_len);
     }
@@ -273,8 +257,7 @@ string UPS::reqUPS( const string &addr, const string &req, const string &debCat 
 
 bool UPS::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 {
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	p->ctrMkNode("fld",opt,-1,"/prm/cfg/user",_("User"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	p->ctrMkNode("fld",opt,-1,"/prm/cfg/pass",_("Password"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	return true;
@@ -282,13 +265,11 @@ bool UPS::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/user")
-    {
+    if(a_path == "/prm/cfg/user") {
 	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(p->addPrm("USER"));
 	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	p->setAddPrm("USER", opt->text());
     }
-    else if(a_path == "/prm/cfg/pass")
-    {
+    else if(a_path == "/prm/cfg/pass") {
 	if(p->ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(p->addPrm("PASS").size(),'*'));
 	if(p->ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	p->setAddPrm("PASS", opt->text());
     }
@@ -300,18 +281,15 @@ bool UPS::cntrCmdProc( TMdPrm *p, XMLNode *opt )
 void UPS::makeActiveDA( TMdContr *aCntr )
 {
     string list = upsList("localhost:3493"), uEl;
-    try
-    {
+    try {
 	//UPS list process
-	for(int off = 0; (uEl=TSYS::strParse(list,0,";",&off)).size(); )
-	{
+	for(int off = 0; (uEl=TSYS::strParse(list,0,";",&off)).size(); ) {
 	    vector<string> pLs;
 	    // Find propper parameter's object
 	    aCntr->list(pLs);
 
 	    unsigned i_p;
-	    for(i_p = 0; i_p < pLs.size(); i_p++)
-	    {
+	    for(i_p = 0; i_p < pLs.size(); i_p++) {
 		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
 		if(p.at().cfg("TYPE").getS() == id() && TSYS::strParse(p.at().cfg("SUBT"),0," ") == TSYS::strParse(uEl,0," "))
 		    break;

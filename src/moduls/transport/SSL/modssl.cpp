@@ -714,7 +714,7 @@ void TSocketOut::save_( )
     TTransportOut::save_();
 }
 
-void TSocketOut::start()
+void TSocketOut::start( int tmCon )
 {
     int sock_fd = -1;
     conn = NULL;
@@ -733,6 +733,7 @@ void TSocketOut::start()
     string ssl_host = TSYS::strSepParse(addr(), 0, ':');
     string ssl_port = TSYS::strSepParse(addr(), 1, ':');
     string ssl_method = TSYS::strSepParse(addr(), 2, ':');
+    if(!tmCon) tmCon = mTmCon;
 
     //Set SSL method
 #if OPENSSL_VERSION_NUMBER >= 0x10000000L
@@ -748,15 +749,13 @@ void TSocketOut::start()
     if(ssl_method == "SSLv3")	meth = SSLv3_client_method();
     if(ssl_method == "TLSv1")	meth = TLSv1_client_method();
 
-    try
-    {
+    try {
 	//Connect to remote host try
 	struct sockaddr_in	name_in;
 	memset(&name_in, 0, sizeof(name_in));
 	name_in.sin_family = AF_INET;
 
-	if(ssl_host.size())
-	{
+	if(ssl_host.size()) {
 	    struct hostent *loc_host_nm = gethostbyname(ssl_host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
 	    throw TError(nodePath().c_str(), _("Socket name '%s' error!"), ssl_host.c_str());
@@ -778,12 +777,11 @@ void TSocketOut::start()
 	int flags = fcntl(sock_fd, F_GETFL, 0);
 	fcntl(sock_fd, F_SETFL, flags|O_NONBLOCK);
 	int res = connect(sock_fd, (sockaddr*)&name_in, sizeof(name_in));
-	if(res == -1 && errno == EINPROGRESS)
-	{
+	if(res == -1 && errno == EINPROGRESS) {
 	    struct timeval tv;
 	    socklen_t slen = sizeof(res);
 	    fd_set fdset;
-	    tv.tv_sec = mTmCon/1000; tv.tv_usec = 1000*(mTmCon%1000);
+	    tv.tv_sec = tmCon/1000; tv.tv_usec = 1000*(tmCon%1000);
 	    FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
 	    if((res=select(sock_fd+1,NULL,&fdset,NULL,&tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
 	    else res = -1;

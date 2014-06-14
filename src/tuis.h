@@ -58,6 +58,10 @@ class TUI : public TModule
 class TUIS : public TSubSYS
 {
     public:
+	//Data
+	enum GetOpts { GetContent = 0, GetFilePath = 1, GetExecCommand = 2 };
+
+	//Methods
 	TUIS( );
 
 	int subVer( )		{ return SUI_VER; }
@@ -68,7 +72,7 @@ class TUIS : public TSubSYS
 
 	// All system UI functions
 	static string icoGet( const string &inm, string *tp = NULL, bool retPath = false );
-	static string docGet( const string &inm, string *tp = NULL, bool retPath = true );
+	static string docGet( const string &inm, string *tp = NULL, unsigned opt = GetFilePath );
 
     protected:
 	void load_( );

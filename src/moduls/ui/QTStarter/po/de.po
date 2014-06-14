@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTStarter 1.6.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-09 19:33+0300\n"
+"POT-Creation-Date: 2014-06-14 19:58+0300\n"
 "PO-Revision-Date: 2011-07-19 20:56+0400\n"
 "Last-Translator: Irina Popkova <IrischkaPopkova@yandex.ru>\n"
 "Language-Team: German <de@li.org>\n"
@@ -744,43 +744,73 @@ msgstr "Schaltfläche für Informationen über Qt"
 msgid "Press to get the using Qt information."
 msgstr "Betätigen um Informationen über Qt zu erhalten."
 
-#: tuimod.cpp:500 tuimod.cpp:508
+#: tuimod.cpp:500 tuimod.cpp:507
 msgid "%1 manual"
 msgstr "%1 Handbuch"
 
-#: tuimod.cpp:504 tuimod.cpp:511
+#: tuimod.cpp:503 tuimod.cpp:509
 msgid "The button for getting the using %1 manual"
 msgstr "Schaltfläche für %1 Handbuch"
 
-#: tuimod.cpp:505 tuimod.cpp:512
+#: tuimod.cpp:504 tuimod.cpp:510
 msgid "Press to get the using %1 manual."
 msgstr "Betätigen um %1 Handbuch."
 
-#: tuimod.cpp:516
+#: tuimod.cpp:514
 msgid "What's &This"
 msgstr "Was ist &das"
 
-#: tuimod.cpp:518
+#: tuimod.cpp:516
 msgid "Question about GUI elements"
 msgstr "Hilfe über die Elemente der Benutzerschnittstelle"
 
-#: tuimod.cpp:519
+#: tuimod.cpp:517
 msgid "The button for requesting the information about user interface elements"
 msgstr "Schaltfläche für Informationen über die Benutzerschnittstelle"
 
-#: tuimod.cpp:520
+#: tuimod.cpp:518
 msgid "Press for requesting about user interface elements"
 msgstr "Betätigen um Informationen über die Benutzerschnittstelle zu erhalten"
 
-#: tuimod.cpp:524
+#: tuimod.cpp:522
 msgid "&Help"
 msgstr "&Hilfe"
 
-#: tuimod.cpp:566
+#: tuimod.cpp:557
+msgid "Call the Qt-based UI module '%1'"
+msgstr "Rufen Sie die Qt-basierte UI-Modul '%1'"
+
+#: tuimod.cpp:558
+msgid ""
+"Module: %1\n"
+"Name: %2\n"
+"Source: %3\n"
+"Version: %4\n"
+"Author: %5\n"
+"Description: %6\n"
+"License: %7"
+msgstr ""
+"Modul: %1\n"
+"Name: %2\n"
+"Quelle: %3\n"
+"Version: %4\n"
+"Autor: %5\n"
+"Beschreibung: %6\n"
+"Lizenz: %7"
+
+#: tuimod.cpp:582
 msgid "Exit from system"
 msgstr "System verlassen"
 
-#: tuimod.cpp:588
+#: tuimod.cpp:584
+msgid "Exit from the program"
+msgstr "Ausfahrt aus dem Programm"
+
+#: tuimod.cpp:585
+msgid "The button for exit from the program"
+msgstr "Die Schaltfläche für die Ausreise aus dem Programm"
+
+#: tuimod.cpp:606
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -805,7 +835,15 @@ msgstr ""
 "Autor: %s\n"
 "Web Seite: %s"
 
-#: tuimod.cpp:626
+#: tuimod.cpp:623
+msgid "Manual"
+msgstr "Handbuch"
+
+#: tuimod.cpp:624
+msgid "No the manual '%1' found offline or online!"
+msgstr "Nein das Handbuch "%1" gefunden, offline oder online!"
+
+#: tuimod.cpp:643
 #, c-format
 msgid "No translated Qt message: '%s'"
 msgstr "Keine übersetzt Qt Nachricht: '%s'"

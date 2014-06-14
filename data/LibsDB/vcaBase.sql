@@ -2253,7 +2253,7 @@ INSERT INTO "wlb_Main_io" VALUES('anShow','geomY','15',32,'','','val','','','','
 INSERT INTO "wlb_Main_io" VALUES('anShow','geomW','98',32,'','','val','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','geomH','25',32,'','','val','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','geomMargin','1',32,'','','val','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('anShow','text','Pi_lp',40,'','','name','Pi_нт','','Нет данных','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow','text','No data',40,'','','name','Немає даних','','Нет данных','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','geomH','15',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','geomMargin','1',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('anShow','font','Arial 12 1 0 0 0',32,'','','name','','','','','','');
@@ -18477,39 +18477,35 @@ else
   trnd1_prm7addr = el8_prmAddr; trnd1_prm7bordL = el8_min; trnd1_prm7bordU = el8_max; trnd1_prm7color = el8_bordColor;
 }','',200,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;','');
 INSERT INTO "wlb_Main" VALUES('anShow','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
-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
-TkSuQmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-name_text = pName;
+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','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
+name_text = pName.isEVal()?"No data":pName;
 val_arg0val = pVal;
 val_font = "Arial 24 1 0 0 0"; 
 if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
@@ -18564,7 +18560,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 //Check the regulator mode
 if(pModeC == true) mode_text = "C";
 else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M");','JavaLikeCalc.JavaScript
-name_text = pName;
+name_text = pName.isEVal()?"Нет данных":pName;
 val_arg0val = pVal;
 val_font = "Arial 24 1 0 0 0"; 
 if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
@@ -18620,7 +18616,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 //Check the regulator mode
 if(pModeC == true) mode_text = "К";
 else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "А" : "Р");','JavaLikeCalc.JavaScript
-name_text = pName;
+name_text = pName.isEVal()?"Немає даних":pName;
 val_arg0val = pVal;
 val_font = "Arial 24 1 0 0 0";
 if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
@@ -18675,7 +18671,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 
 //Check the regulator mode
 if(pModeC == true) mode_text = "C";
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M");',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1399468672);
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M");',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1402475873);
 INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f

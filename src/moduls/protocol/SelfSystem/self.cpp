@@ -176,24 +176,22 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     ResAlloc res(tro.nodeRes(), true);
 
-    bool isDir = s2i(io.attr("rqDir")); io.attrDel("rqDir");
-    string user = io.attr("rqUser"); io.attrDel("rqUser");
-    string pass = io.attr("rqPass"); io.attrDel("rqPass");
+    bool isDir = s2i(io.attr("rqDir"));	io.attrDel("rqDir");
+    int conTm = s2i(io.attr("conTm"));	io.attrDel("conTm");
+    string user = io.attr("rqUser");	io.attrDel("rqUser");
+    string pass = io.attr("rqPass");	io.attrDel("rqPass");
     string data = io.save();
     io.clear();
 
-    try
-    {
-	while(true)
-	{
+    try {
+	while(true) {
 	    //Session open
-	    if(!isDir && tro.prm1() < 0)
-	    {
+	    if(!isDir && tro.prm1() < 0) {
 		req = "SES_OPEN " + user + " " + pass + "\x0A";
 
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
 
-		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,0,true);
+		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,conTm,true);
 		resp.assign(buf,resp_len);
 
 		// Wait tail
@@ -225,7 +223,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 	    if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
 
-	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
+	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),conTm,true);
 	    resp.assign(buf,resp_len);
 
 	    // Wait tail

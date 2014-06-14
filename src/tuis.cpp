@@ -94,30 +94,65 @@ string TUIS::icoGet( const string &inm, string *tp, bool retPath )
     return rez;
 }
 
-string TUIS::docGet( const string &inm, string *tp, bool retPath )
+string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 {
     unsigned i_tr = 0, i_t = 0;
-    int hd = -1;
-    string rez, pathi;
-    char types[][5] = {"pdf", "html", "odt"};
+    string rez, pathi, nm = TSYS::strParse(inm, 0, "|");
     vector<string> transl;
+
+    //Find the offline document into filesystem
+    int hd = -1;
+    char types[][5] = {"pdf", "html", "odt"};
     transl.push_back(""); transl.push_back(Mess->lang2Code()); transl.push_back("en");
 
     for(int off = 0; hd == -1 && (pathi=TSYS::strParse(SYS->docDir(),0,";",&off)).size(); )
-	for(i_tr = 0; i_tr < transl.size(); ++i_tr)
-	{
+	for(i_tr = 0; i_tr < transl.size(); ++i_tr) {
 	    for(i_t = 0; i_t < sizeof(types)/5; ++i_t)
-		if((hd=open((pathi+"/"+transl[i_tr]+"/"+inm+"."+types[i_t]).c_str(),O_RDONLY)) != -1) break;
+		if((hd=open((pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t]).c_str(),O_RDONLY)) != -1) break;
 	    if(hd != -1) break;
 	}
     if(hd != -1) {
 	if(tp) *tp = types[i_t];
-	if(retPath) rez = pathi+"/"+transl[i_tr]+"/"+inm+"."+types[i_t];
+	if(opt == GetFilePath) rez = pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t];
+	else if(opt == GetExecCommand) rez = "xdg-open "+pathi+"/"+transl[i_tr]+"/"+nm+"."+types[i_t];
 	else {
 	    char buf[STR_BUF_LEN];
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	}
 	close(hd);
+    }
+
+    //Find the online document into network
+    if(rez.empty() && (nm=TSYS::strParse(inm,1,"|")).size()) {
+	const char  *docHost = "wiki.oscada.org", *docURI = "/Doc",
+		    *tTr = "Sockets", *nTr = "docCheck";
+	transl.clear(); transl.push_back((Mess->lang2Code()=="ru")?"":Mess->lang2Code()); transl.push_back("en");
+
+	try {
+	    //Check connect and start
+	    AutoHD<TTransportOut> tr;
+	    if(!SYS->transport().at().at(tTr).at().outPresent(nTr)) {
+		SYS->transport().at().at(tTr).at().outAdd(nTr);
+		tr = SYS->transport().at().at(tTr).at().outAt(nTr);
+		tr.at().setName(_("Doc check"));
+	    }
+	    else tr = SYS->transport().at().at(tTr).at().outAt(nTr);
+
+	    XMLNode req("GET");
+	    for(i_tr = 0; i_tr < transl.size(); ++i_tr) {
+		req.setAttr("URI", (transl[i_tr].size()?"/HomePage"+transl[i_tr]:"/")+docURI+"/"+nm+"?tm="+i2s(SYS->sysTm()))->
+		    setAttr("Host", string(docHost)+":80")->
+		    setAttr("onlyHeader", (opt!=GetContent)?"1":"0");
+		tr.at().messProtIO(req, "HTTP");
+		printf("TEST 00: '%s': %d\n", req.attr("RezCod").c_str(), i_tr);
+		if(s2i(req.attr("RezCod")) == 200) {
+		    if(opt == GetFilePath) rez = string("http://")+docHost+TSYS::strParse(req.attr("URI"),0,"?");
+		    else if(opt == GetExecCommand) rez = string("xdg-open ")+"http://"+docHost+TSYS::strParse(req.attr("URI"),0,"?");
+		    else rez = req.text();
+		    break;
+		}
+	    }
+	} catch(TError) { }
     }
 
     return rez;

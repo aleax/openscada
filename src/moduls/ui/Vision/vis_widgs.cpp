@@ -1287,8 +1287,7 @@ void WdgView::orderUpdate( )
 
     vector< pair<int,QObject*> > arr;
     arr.reserve(children().size());
-    for(int i_c = 0; i_c < ols.size(); i_c++)
-    {
+    for(int i_c = 0; i_c < ols.size(); i_c++) {
 	WdgView *cw = qobject_cast<WdgView*>(ols[i_c]);
 	if(cw) arr.push_back(pair<int,QObject*>(cw->z(),cw));
 	else arr.push_back(pair<int,QObject*>(100000,ols[i_c]));
@@ -1302,19 +1301,10 @@ void WdgView::orderUpdate( )
 
 bool WdgView::event( QEvent *event )
 {
-    //> Paint event process
-    if(event->type() == QEvent::Paint)
-    {
-	//> Self widget view
-	if(shape) return shape->event(this, event);
-	return true;
-    }
+    //Paint event process
+    if(event->type() == QEvent::Paint) return shape ? shape->event(this, event) : true;
 
     return false; //QWidget::event(event);
 }
 
-bool WdgView::eventFilter( QObject *object, QEvent *event )
-{
-    if(shape)	return shape->eventFilter(this,object,event);
-    return false;
-}
+bool WdgView::eventFilter( QObject *object, QEvent *event )	{ return shape ? shape->eventFilter(this,object,event) : false; }
