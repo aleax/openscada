@@ -1,3 +1,8 @@
+2014-06-17 Roman
+- SYS: Build sequence changed to Included modules, Core, Shared object modules for allow next Shared object modules
+    link to core library, mostly for build adapting to MS Windows DLL.
+
+
 2014-06-14 Roman
 - DB.LibsDB.vcaBase: To widget Main.anShow "No data" name display is added for EVAL.
 - DOC: {en,ru}/Modules/DB.* document files renamed to {en,ru}/Modules/BD.* for sync to the subsystem name

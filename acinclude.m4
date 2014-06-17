@@ -1457,8 +1457,9 @@ AC_DEFUN([AX_MOD_DB_EN],
 	    DBSub_mod="${DBSub_mod}$1 "
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/bd/$1/bd_$1.la "
-    		ModsIncl="${ModsIncl}bd_$1 "
-	    fi
+		ModsIncl="${ModsIncl}bd_$1 "
+		BldInclMods="${BldInclMods}moduls/bd/$1 "
+	    else BldMods="${BldMods}moduls/bd/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])
@@ -1484,7 +1485,8 @@ AC_DEFUN([AX_MOD_DAQ_EN],
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/daq/$1/daq_$1.la "
 		ModsIncl="${ModsIncl}daq_$1 "
-	    fi
+		BldInclMods="${BldInclMods}moduls/daq/$1 "
+	    else BldMods="${BldMods}moduls/daq/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])
@@ -1510,7 +1512,8 @@ AC_DEFUN([AX_MOD_Archive_EN],
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/arhiv/$1/arh_$1.la "
 		ModsIncl="${ModsIncl}arh_$1 "
-	    fi
+		BldInclMods="${BldInclMods}moduls/arhiv/$1 "
+	    else BldMods="${BldMods}moduls/arhiv/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])
@@ -1536,7 +1539,8 @@ AC_DEFUN([AX_MOD_Transport_EN],
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/transport/$1/tr_$1.la "
 		ModsIncl="${ModsIncl}tr_$1 "
-	    fi
+		BldInclMods="${BldInclMods}moduls/transport/$1 "
+	    else BldMods="${BldMods}moduls/transport/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])
@@ -1562,7 +1566,8 @@ AC_DEFUN([AX_MOD_TrProt_EN],
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/protocol/$1/prot_$1.la "
 		ModsIncl="${ModsIncl}prot_$1 "
-	    fi
+		BldInclMods="${BldInclMods}moduls/protocol/$1 "
+	    else BldMods="${BldMods}moduls/protocol/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])
@@ -1588,7 +1593,8 @@ AC_DEFUN([AX_MOD_UI_EN],
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/ui/$1/ui_$1.la "
 		ModsIncl="${ModsIncl}ui_$1 "
-	    fi
+		BldInclMods="${BldInclMods}moduls/ui/$1 "
+	    else BldMods="${BldMods}moduls/ui/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])
@@ -1614,7 +1620,8 @@ AC_DEFUN([AX_MOD_Special_EN],
 	    if test $enable_$1 = incl; then
 		LIB_CORE="${LIB_CORE} moduls/special/$1/spec_$1.la "
 		ModsIncl="${ModsIncl}spec_$1 "
-	    fi
+		BldInclMods="${BldInclMods}moduls/special/$1 "
+	    else BldMods="${BldMods}moduls/special/$1 "; fi
 	    AS_IF([test $enable_$1 != dist],[$5])
 	    $6
 	])

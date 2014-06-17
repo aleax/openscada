@@ -34,6 +34,7 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
+AM_PROG_LIBTOOL
 
 if test "$ac_cv_prog_cc_g" = "no" -o "$ac_cv_prog_cxx_g" = "no"; then
     AC_MSG_ERROR([No C or C++ compiler present. Install GCC and G++.]);
@@ -118,11 +119,7 @@ AX_DEFINE_DIR([localedir_full],[localedir],[I18N locales location for configurat
 AX_DEFINE_DIR([oscd_datadir_full],[oscd_datadir_full],[OpenSCADA data location for configurations])
 AX_DEFINE_DIR([oscd_moddir_full],[oscd_moddir_full],[OpenSCADA modules location for configurations])
 
-AC_CONFIG_FILES(Makefile openscada.pc
-    src/Makefile src_call/Makefile src/moduls/Makefile
-    src/moduls/arhiv/Makefile src/moduls/bd/Makefile src/moduls/protocol/Makefile
-    src/moduls/special/Makefile src/moduls/daq/Makefile src/moduls/transport/Makefile
-    src/moduls/ui/Makefile)
+AC_CONFIG_FILES(Makefile openscada.pc src/Makefile src_call/Makefile)
 
 if test -d data; then
     AC_CONFIG_FILES(data/openscada.desktop data/openscada_start data/oscada.xml
@@ -175,9 +172,18 @@ AC_CHECK_HEADERS([pcre.h],[],
 AC_CHECK_LIB([pcre],[pcre_compile],[AC_MSG_NOTICE([PCRE: Pass global library using])],
     [AC_MSG_ERROR(PCRE library not found. Install or check PCRE package!)])
 
+AC_SUBST(BldMods)
+AC_SUBST(BldInclMods)
+AC_SUBST(DBSub_mod)
+AC_SUBST(DAQSub_mod)
+AC_SUBST(ArchSub_mod)
+AC_SUBST(TranspSub_mod)
+AC_SUBST(ProtSub_mod)
+AC_SUBST(UISub_mod)
+AC_SUBST(SpecSub_mod)
+
 AC_MSG_RESULT(========== Build modules check =============)
 #> DB modules
-AC_SUBST(DBSub_mod)
 AX_MOD_DB_EN(DBF,[disable or enable[=incl] build module DB.DBF],disable,incl)
 AX_MOD_DB_EN(MySQL,[disable or enable[=incl] build module DB.MySQL],disable,incl,[
     AX_LIB_MYSQL
@@ -197,7 +203,6 @@ AX_MOD_DB_EN(PostgreSQL,[disable or enable[=incl] build module DB.PostgreSQL],di
     if test "$found_postgresql" != "yes"; then AC_MSG_ERROR(DB.PostgreSQL: PostgreSQL development resources not found. Install or check PostgreSQL development package!); fi
 ])
 #> DAQ modules
-AC_SUBST(DAQSub_mod)
 AX_MOD_DAQ_EN(System,[disable or enable[=incl] build module DAQ.System],disable,incl,[
     AX_LIB_SENSORS()
 ])
@@ -264,11 +269,9 @@ AX_MOD_DAQ_EN(MMS,[enable build module DAQ.MMS],enable,[],[],
     [AC_CONFIG_FILES(src/moduls/daq/MMS/libMMS/Makefile)])
 AX_MOD_DAQ_EN(EPICS,[enable build module DAQ.EPICS],enable,[],[],[])
 #> Archive modules
-AC_SUBST(ArchSub_mod)
 AX_MOD_Archive_EN(FSArch,[disable or enable[=incl] build module Archive.FSArch],disable,incl)
 AX_MOD_Archive_EN(DBArch,[disable or enable[=incl] build module Archive.DBArch],disable,incl)
 #> Transport modules
-AC_SUBST(TranspSub_mod)
 AX_MOD_Transport_EN(Sockets,[disable or enable[=incl] build module Transport.Sockets],disable,incl,[
     AC_CHECK_HEADERS([sys/un.h sys/socket.h sys/select.h arpa/inet.h netinet/in.h netdb.h],[],
 	[AC_MSG_ERROR(Transport.Sockets: Some GLibC network headers not found. Install or check GLibC developing package!)])
@@ -278,12 +281,10 @@ AX_MOD_Transport_EN(SSL,[disable or enable[=incl] build module Transport.SSL],di
 ])
 AX_MOD_Transport_EN(Serial,[disable or enable[=incl] build module Transport.Serial],disable,incl)
 #> Transport protocol modules
-AC_SUBST(ProtSub_mod)
 AX_MOD_TrProt_EN(HTTP,[disable or enable[=incl] build module Protocol.HTTP],disable,incl)
 AX_MOD_TrProt_EN(SelfSystem,[disable or enable[=incl] build module Protocol.SelfSystem],disable,incl)
 AX_MOD_TrProt_EN(UserProtocol,[disable or enable[=incl] build module Protocol.UserProtocol],disable,incl)
 #> UI modules
-AC_SUBST(UISub_mod)
 AX_MOD_UI_EN(VCAEngine,[disable or enable[=incl] build module UI.VCAEngine],disable,incl)
 AX_MOD_UI_EN(Vision,[disable or enable[=incl] build module UI.Vision],disable,incl,[
     AX_LIB_FFTW3()
@@ -334,7 +335,6 @@ AX_MOD_UI_EN(WebVision,[disable or enable[=incl] build module UI.WebVision],disa
 ])
 AX_MOD_UI_EN(WebUser,[disable or enable[=incl] build module UI.WebUser],disable,incl)
 #> Special modules
-AC_SUBST(SpecSub_mod)
 AX_MOD_Special_EN(SystemTests,[disable build module Special.SystemTests],disable)
 AX_MOD_Special_EN(FLibComplex1,[disable or enable[=incl] build module Special.FLibComplex1],disable,incl)
 AX_MOD_Special_EN(FLibMath,[disable or enable[=incl] build module Special.FLibMath],disable,incl)
