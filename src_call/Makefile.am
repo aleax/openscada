@@ -1,3 +1,3 @@
 bin_PROGRAMS = openscada
 openscada_SOURCES = main.cpp
-openscada_LDFLAGS = $(EXTRA_LDFLAGS) -L../core/ -loscada
+openscada_LDFLAGS = $(EXTRA_LDFLAGS) -L../src/ -loscada
