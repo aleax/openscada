@@ -16,4 +16,4 @@ bd_SQLite_la_LDFLAGS = -module -avoid-version -no-undefined $(sqlite3_LIBS)
 bd_SQLite_la_SOURCES = bd_sqlite.cpp
 
 I18N_mod = $(oscd_modulpref)SQLite
-include $(top_builddir)/I18N.mk
+include ../../../../I18N.mk
