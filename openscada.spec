@@ -230,15 +230,15 @@ autoreconf -ivf
 %install
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
-
+install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,docs,LibsDB,AGLKS,Boiler}
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
 
 ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
 ln -s openscada_start %buildroot/%_bindir/openscada_Boiler
 
-ln -s `relative %_defaultdocdir/%name-docEN-%version %_datadir/openscada/docs/en` %buildroot/%_datadir/openscada/docs/en
-ln -s `relative %_defaultdocdir/%name-docRU-%version %_datadir/openscada/docs/ru` %buildroot/%_datadir/openscada/docs/ru
-ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk` %buildroot/%_datadir/openscada/docs/uk
+ln -s %_defaultdocdir/%name-docEN-%version %buildroot/%_datadir/openscada/docs/en
+ln -s %_defaultdocdir/%name-docRU-%version %buildroot/%_datadir/openscada/docs/ru
+ln -s %_defaultdocdir/%name-docUK-%version %buildroot/%_datadir/openscada/docs/uk
 
 %clean
 #rm -rf %buildroot %buildroot/%name-%version

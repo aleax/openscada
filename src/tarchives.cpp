@@ -759,7 +759,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/v_arch/nmb",_("Number"),R_R_R_,"root",SARH_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/v_arch/archs",_("Value archives"),RWRWR_,"root",SARH_ID,5,"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","va_","idSz","20");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SARH_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
 
@@ -859,7 +858,6 @@ void TArchiveS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SARH_ID,SEC_WR))	chldDel(mAval,opt->attr("id"),-1,1);
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SARH_ID))	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }
 

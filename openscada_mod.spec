@@ -1149,9 +1149,6 @@ rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,docs,LibsDB,AGLKS,Boiler}
 #install -m 755 -d %buildroot/%_datadir/openscada/ARCHIVES/{MESS,VAL}
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
-#echo "OpenSCADA data dir" > %buildroot/%_datadir/openscada/DATA/.info
-#echo "OpenSCADA messages archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/MESS/.info
-#echo "OpenSCADA values archive dir" > %buildroot/%_datadir/openscada/ARCHIVES/VAL/.info
 
 ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
 ln -s openscada_start %buildroot/%_bindir/openscada_Boiler

@@ -365,7 +365,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
 		    _("Command line for call sounds play.\n"
 		    "Use %f for source file name inserting. If source file is not used play sample is sent to pipe."));
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
 
@@ -408,7 +407,6 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setVCAStation(opt->text());
     }
     else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
     else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt))
     {
 	vector<string> ls;

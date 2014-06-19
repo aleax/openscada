@@ -147,14 +147,12 @@ void TTr::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TTipTransport::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",STR_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",STR_ID))	opt->setText(optDescr());
-    else TTipTransport::cntrCmdProc(opt);
+    TTipTransport::cntrCmdProc(opt);
 }
 
 //************************************************

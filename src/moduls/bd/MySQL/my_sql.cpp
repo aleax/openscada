@@ -607,8 +607,7 @@ void MTable::fieldSet( TConfig &cfg )
 
     //Query
     try { owner().sqlReq(req, NULL, true); }
-    catch(TError err)
-    {
+    catch(TError err) {
 	fieldFix(cfg);
 	owner().sqlReq(req, NULL, true);
     }

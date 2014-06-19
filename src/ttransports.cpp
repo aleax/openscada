@@ -478,13 +478,11 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		"sel_id",TSYS::strMess("%d;%d;%d",ExtHost::User,ExtHost::System,ExtHost::UserSystem).c_str(),
 		"sel_list",_("User;System;User and System"));
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",STR_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",STR_ID))	opt->setText(optDescr());
-    else if(a_path == "/sub/transps" && ctrChkNode(opt))
+    if(a_path == "/sub/transps" && ctrChkNode(opt))
     {
 	vector<string>  list;
 	modList(list);

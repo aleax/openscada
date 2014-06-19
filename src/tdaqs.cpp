@@ -738,7 +738,6 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,1,"/tpllibs",_("Template libraries")))
 	    ctrMkNode("list",opt,-1,"/tpllibs/lb",_("Template libraries"),RWRWR_,"root",SDAQ_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","tmplb_","idSz",OBJ_ID_SZ);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SDAQ_ID,3,"tp","str","cols","90","rows","10");
 	return;
     }
 
@@ -874,6 +873,5 @@ void TDAQS::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setAttr("id",sls[i_s])->setText(SYS->transport().at().extHostGet("*",sls[i_s]).name);
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SDAQ_ID))	opt->setText(optDescr());
     else TSubSYS::cntrCmdProc(opt);
 }

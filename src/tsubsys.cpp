@@ -150,7 +150,6 @@ void TSubSYS::cntrCmdProc( XMLNode *opt )
 	    if(ctrMkNode("area",opt,-1,"/mod",_("Modules"),R_R_R_,"root","root"))
 		ctrMkNode("list",opt,-1,"/mod/br",_("Modules"),R_R_R_,"root","root",3,"tp","br","idm","1","br_pref","mod_");
 	}
-	ctrMkNode("area",opt,-1,"/help",_("Help"));
 	return;
     }
     //Process command to page

@@ -247,15 +247,12 @@ void TSecurity::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/usgr/users",_("Users"),RWRWR_,"root",SSEC_ID,4,"tp","br","s_com","add,del","br_pref","usr_","idSz",OBJ_ID_SZ);
 	    ctrMkNode("list",opt,-1,"/usgr/grps",_("Groups"),RWRWR_,"root",SSEC_ID,4,"tp","br","s_com","add,del","br_pref","grp_","idSz",OBJ_ID_SZ);
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SSEC_ID,3,"tp","str","cols","90","rows","10");
-
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SSEC_ID))	opt->setText(optDescr());
-    else if(a_path == "/br/usr_" || a_path == "/usgr/users")
+    if(a_path == "/br/usr_" || a_path == "/usgr/users")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSEC_ID,SEC_RD)) {
 	    vector<string> list;

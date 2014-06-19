@@ -530,7 +530,7 @@ msgstr "Handbuch"
 
 #: qtcfg.cpp:935
 msgid "No the manual '%1' found offline or online!"
-msgstr "Nein das Handbuch "%1" gefunden, offline oder online!"
+msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
 
 #: qtcfg.cpp:1629
 msgid "<EVAL>"

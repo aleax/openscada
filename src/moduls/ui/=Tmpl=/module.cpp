@@ -190,7 +190,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_tm",_("Trend start time (sec)"),RWRWR_,"root",SUI_ID,1,"tp","time");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/trnd_len",_("Trend length (sec)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -236,7 +235,6 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(trndLen()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setTrndLen(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID)	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

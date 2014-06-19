@@ -338,7 +338,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/prm/alog/user",_("User"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","select","select","/prm/usr_ls");
 	    }
 	}
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Module help"),R_R_R_,"root",SPRT_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -386,7 +385,6 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID))	opt->setText(optDescr());
     else TProtocol::cntrCmdProc(opt);
 }
 

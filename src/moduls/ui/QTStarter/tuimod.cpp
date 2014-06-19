@@ -353,7 +353,6 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/st_mod",_("Start Qt modules (sep - ';')"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/prm/cfg/lsQtMod");
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SUI_ID,3,"tp","str","cols","90","rows","5");
 	return;
     }
 
@@ -371,7 +370,6 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 		    mod->owner().modAt(list[i_l]).at().modFuncPresent("QMainWindow *openWindow();"))
 		opt->childAdd("el")->setText(list[i_l]);
     }
-    else if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SUI_ID))	opt->setText(optDescr());
     else TUI::cntrCmdProc(opt);
 }
 

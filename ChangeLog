@@ -1,3 +1,8 @@
+2014-06-19 Roman
+- SYS: Remove using "relative" into openscada.spec by the miss into some Linux distributions, like CentOS.
+    "/help/*" conrol interface's pages removed everywhere.
+
+
 2014-06-17 Roman
 - SYS: Build sequence changed to Included modules, Core, Shared object modules for allow next Shared object modules
     link to core library, mostly for build adapting to MS Windows DLL.

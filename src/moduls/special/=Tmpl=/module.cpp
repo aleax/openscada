@@ -160,7 +160,6 @@ void Lib::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info")
     {
 	TSpecial::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/help/g_help",_("Options help"),R_R___,"root",SSPC_ID,3,"tp","str","cols","90","rows","5");
 	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),R_R_R_,"root",SSPC_ID,1,"idm","1");
 	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),R_R_R_,"root",SSPC_ID,3,"tp","br","idm","1","br_pref","fnc_");
 	return;
@@ -175,6 +174,5 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
     }
-    if(a_path == "/help/g_help" && ctrChkNode(opt,"get",R_R___,"root",SSPC_ID))	opt->setText(optDescr());
-    else TSpecial::cntrCmdProc(opt);
+    TSpecial::cntrCmdProc(opt);
 }
