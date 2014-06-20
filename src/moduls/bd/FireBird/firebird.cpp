@@ -226,8 +226,7 @@ void MBD::transOpen( )
 
     MtxAlloc res(connRes, true);
     if(!htrans) {
-	if(isc_start_transaction(status,&htrans,1,&hdb,0,NULL))
-	{
+	if(isc_start_transaction(status,&htrans,1,&hdb,0,NULL)) {
 	    mess_warning(nodePath().c_str(), _("Start transaction error: %s"), getErr(status).c_str());
 	    return;
 	    //throw TError(nodePath().c_str(), _("Start transaction error: %s"), getErr(status).c_str());
@@ -498,16 +497,28 @@ void MTable::fieldStruct( TConfig &cfg )
 	if(cfg.cfgPresent(sid)) continue;
 
 	int flg = (tblStrct[i_fld][3]=="PRIMARY KEY") ? (int)TCfg::Key : (int)TFld::NoFlag;
-	if(tblStrct[i_fld][1] == "37")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,tblStrct[i_fld][2].c_str()));
-	else if(tblStrct[i_fld][1] == "261")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"1048576"));
-	else if(tblStrct[i_fld][1] == "8")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
-	else if(tblStrct[i_fld][1] == "27")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
-	else if(tblStrct[i_fld][1] == "7")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Boolean,flg));
+	switch(s2i(tblStrct[i_fld][1]))
+	{
+	    case blr_varying:
+	    case blr_varying2:
+		cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,tblStrct[i_fld][2].c_str()));
+		break;
+	    case blr_text:
+	    case blr_text2:
+	    case blr_blob:
+		cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"1048576"));
+		break;
+	    case blr_short:
+	    case blr_long:
+	    case blr_int64:
+		cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
+		break;
+	    case blr_float:
+	    case blr_double:
+	    case blr_d_float:
+		cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
+		break;
+	}
     }
 }
 
@@ -760,17 +771,18 @@ void MTable::fieldFix( TConfig &cfg )
 	    {
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 		bool isEqual = false;
+		int rwTp = s2i(tblStrct[i_fld][1]);
 		switch(u_cfg.fld().type())
 		{
 		    case TFld::String:
-			if(tblStrct[i_fld][1] == "37" && (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) &&
+			if(rwTp == blr_varying && (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) &&
 				u_cfg.fld().len() == s2i(tblStrct[i_fld][2]))
 			    isEqual = true;
-			else if(tblStrct[i_fld][1] == "261" && u_cfg.fld().len() > 255)	isEqual = true;
+			else if(rwTp == blr_blob && u_cfg.fld().len() > 255)	isEqual = true;
 			break;
-		    case TFld::Integer:	if(tblStrct[i_fld][1] == "8")	isEqual = true;	break;
-		    case TFld::Real:	if(tblStrct[i_fld][1] == "27")	isEqual = true;	break;
-		    case TFld::Boolean:	if(tblStrct[i_fld][1] == "7")	isEqual = true;	break;
+		    case TFld::Integer:	if(rwTp == blr_int64)	isEqual = true;	break;
+		    case TFld::Real:	if(rwTp == blr_double)	isEqual = true;	break;
+		    case TFld::Boolean:	if(rwTp == blr_short)	isEqual = true;	break;
 		    default: break;
 		}
 		if(isEqual) break;
@@ -805,7 +817,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    f_tp = "VARCHAR(" + i2s(vmax(10,vmin(255,u_cfg.fld().len()))) + ") DEFAULT '" + u_cfg.fld().def() + "' NOT NULL ";
 		else f_tp = "BLOB SUB_TYPE TEXT DEFAULT '" + u_cfg.fld().def() + "' NOT NULL ";
 		break;
-	    case TFld::Integer:	f_tp = "INTEGER DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' NOT NULL ";		break;
+	    case TFld::Integer:	f_tp = "INT64 DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' NOT NULL ";			break;
 	    case TFld::Real:	f_tp = "DOUBLE PRECISION DEFAULT '" + r2s(s2r(u_cfg.fld().def())) + "' NOT NULL ";	break;
 	    case TFld::Boolean:	f_tp = "SMALLINT DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' NOT NULL ";		break;
 	    default: break;

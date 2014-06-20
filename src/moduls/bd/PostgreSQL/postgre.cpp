@@ -476,21 +476,18 @@ void MTable::fieldStruct( TConfig &cfg )
     mLstUse = SYS->sysTm();
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	int pr1;
-	string sid = tblStrct[i_fld][0];
+	string	sid = tblStrct[i_fld][0], rowTp = tblStrct[i_fld][1];
 	if(cfg.cfgPresent(sid)) continue;
 	int flg = (tblStrct[i_fld][2]=="PRI") ? (int)TCfg::Key : (int)TFld::NoFlag;
-	if((tblStrct[i_fld][1] == "text") || (tblStrct[i_fld][1] == "character varying"))
+	if(rowTp == "text" || rowTp == "character varying")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,"16777215"));
-	else if(sscanf(tblStrct[i_fld][1].c_str(),"character(%d)",&pr1) ||
-		sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1))
+	else if(sscanf(rowTp.c_str(),"character(%d)",&pr1) || sscanf(rowTp.c_str(),"character varying(%d)",&pr1))
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::String,flg,i2s(pr1).c_str()));
-	else if((tblStrct[i_fld][1] == "integer") || (tblStrct[i_fld][1] == "bigint"))
+	else if(rowTp == "smallint" || rowTp == "integer" || rowTp == "bigint")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg));
-	else if(tblStrct[i_fld][1] == "double precision")
+	else if(rowTp == "real" || rowTp == "double precision")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Real,flg));
-	else if(tblStrct[i_fld][1] == "smallint")
-	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Boolean,flg));
-	else if(tblStrct[i_fld][1] == "timestamp with time zone")
+	else if(rowTp == "timestamp with time zone")
 	    cfg.elem().fldAdd(new TFld(sid.c_str(),sid.c_str(),TFld::Integer,flg|TFld::DateTimeDec,"10"));
     }
 }
@@ -753,27 +750,23 @@ void MTable::fieldFix( TConfig &cfg )
 	    {
 		TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 		bool isEqual = false;
+		string rwTp = tblStrct[i_fld][1];
 		switch(u_cfg.fld().type())
 		{
-		    case TFld::String:
-		    {
+		    case TFld::String: {
 			int pr1 = -1;
-			if((tblStrct[i_fld][1] == "text") || (tblStrct[i_fld][1] == "character varying"))
-			    isEqual = true;
-			else if((sscanf(tblStrct[i_fld][1].c_str(),"character(%d)",&pr1) ||
-				 sscanf(tblStrct[i_fld][1].c_str(),"character varying(%d)",&pr1)) &&
-				 (u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0)
+			if(rwTp == "text" || rwTp == "character varying") isEqual = true;
+			else if((sscanf(rwTp.c_str(),"character(%d)",&pr1) || sscanf(rwTp.c_str(),"character varying(%d)",&pr1)) &&
+				(u_cfg.fld().len() <= 255 || u_cfg.fld().flg()&TCfg::Key) && pr1 > 0)
 			    isEqual = true;
 			break;
 		    }
 		    case TFld::Integer:
-			if(u_cfg.fld().flg()&TFld::DateTimeDec && (tblStrct[i_fld][1] == "timestamp with time zone"))
-			    isEqual = true;
-			else if((tblStrct[i_fld][1] == "integer") || (tblStrct[i_fld][1] == "bigint"))
-			    isEqual = true;
+			if(u_cfg.fld().flg()&TFld::DateTimeDec && rwTp == "timestamp with time zone") isEqual = true;
+			else if(rwTp == "bigint") isEqual = true;
 			break;
-		    case TFld::Real:	if(tblStrct[i_fld][1] == "double precision") isEqual = true;	break;
-		    case TFld::Boolean:	if(tblStrct[i_fld][1] == "smallint") isEqual = true;		break;
+		    case TFld::Real:	if(rwTp == "double precision") isEqual = true;	break;
+		    case TFld::Boolean:	if(rwTp == "smallint") isEqual = true;		break;
 		    default: break;
 		}
 		if(isEqual) break;
@@ -811,7 +804,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    case TFld::Integer:
 		if(u_cfg.fld().flg()&TFld::DateTimeDec)
 		    f_tp = "TIMESTAMP WITH TIME ZONE DEFAULT '" + UTCtoSQL(s2i(u_cfg.fld().def())) + "' ";
-		else f_tp = "INTEGER DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' ";
+		else f_tp = "BIGINT DEFAULT '" + i2s(s2i(u_cfg.fld().def())) + "' ";
 		break;
 	    case TFld::Real:
 		f_tp = "DOUBLE PRECISION DEFAULT '" + r2s(s2r(u_cfg.fld().def())) + "' ";

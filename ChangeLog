@@ -1,3 +1,11 @@
+2014-06-20 Roman
+- DB.FireBird: Using integer type expand to INT64. Managed types expand to:
+    blr_varying, blr_varying2, blr_text, blr_text2, blr_blob, blr_short, blr_long, blr_int64, blr_float, blr_double and blr_d_float.
+- DB.MySQL: Using integer type expand to "bigint".
+- DB.PostgreSQL: Using integer type expand to "bigint". Managed types expand to:
+    text. character varyin, character(%d), character varying(%d), smallint, integer, bigint, real, double precision, timestamp with time zone.
+
+
 2014-06-19 Roman
 - SYS: Remove using "relative" into openscada.spec by the miss into some Linux distributions, like CentOS.
     "/help/*" conrol interface's pages removed everywhere.

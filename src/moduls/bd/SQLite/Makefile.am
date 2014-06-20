@@ -12,7 +12,7 @@ endif
 
 bd_SQLite_la_CXXFLAGS += $(sqlite3_CFLAGS)
 bd_SQLite_la_LDFLAGS = -module -avoid-version -no-undefined $(sqlite3_LIBS)
-#bd_SQLite_la_LDFLAGS = -module -avoid-version $(sqlite3_LIBS) -L$(top_builddir)/src -loscada
+#bd_SQLite_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la $(sqlite3_LIBS)
 bd_SQLite_la_SOURCES = bd_sqlite.cpp
 
 I18N_mod = $(oscd_modulpref)SQLite

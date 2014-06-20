@@ -663,6 +663,7 @@ void MTable::fieldFix( TConfig &cfg )
     int keyCnt = 0;
     for(unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
+
 	// Check primary key
 	if(u_cfg.fld().flg()&TCfg::Key) {
 	    pr_keys += (next_key?",`":"`") + TSYS::strEncode(u_cfg.name(),TSYS::SQL) + "`";
@@ -672,16 +673,10 @@ void MTable::fieldFix( TConfig &cfg )
 
 	for(i_fld = 1; i_fld < tblStrct.size(); i_fld++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][0]) break;
-	/*{
-	    int fsz = cf_el[i_cf].size();
-	    int tsz = fsz - tblStrct[i_fld][0].size();
-	    if( (tsz == 0 && cf_el[i_cf] == tblStrct[i_fld][0]) || (tsz == 3 && cf_el[i_cf] == tblStrct[i_fld][0].substr(0,fsz-3) && tblStrct[i_fld][0][fsz] == '#' ) )
-		break;
-	}*/
+
 	// Change field
 	string f_tp;
-	if(i_fld < tblStrct.size())
-	{
+	if(i_fld < tblStrct.size()) {
 	    switch(u_cfg.fld().type())
 	    {
 		case TFld::String:
@@ -692,7 +687,7 @@ void MTable::fieldFix( TConfig &cfg )
 		    break;
 		case TFld::Integer:
 		    if(u_cfg.fld().flg()&TFld::DateTimeDec) f_tp = "datetime";
-		    else if(!u_cfg.fld().len()) f_tp = "int";
+		    else if(!u_cfg.fld().len()) f_tp = "bigint";
 		    else f_tp = "int(" + i2s(vmax(1,u_cfg.fld().len())) + ")";
 		    break;
 		case TFld::Real:
