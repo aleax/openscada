@@ -673,7 +673,14 @@ VisDevelop::~VisDevelop( )
     mod->unregWin(this);
 }
 
-int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )	{ return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob); }
+int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    QApplication::restoreOverrideCursor();
+
+    return rez;
+}
 
 QString VisDevelop::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
 {

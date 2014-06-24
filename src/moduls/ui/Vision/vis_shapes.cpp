@@ -90,8 +90,7 @@ bool WdgShape::event( WdgView *view, QEvent *event )
     switch(event->type())
     {
 	case QEvent::Paint:
-	    if(qobject_cast<DevelWdgView*>(view))
-	    {
+	    if(qobject_cast<DevelWdgView*>(view)) {
 		QPainter pnt( view );
 		pnt.setWindow(view->rect());
 		pnt.drawImage(view->rect(),QImage(":/images/attention.png"));
@@ -101,6 +100,7 @@ bool WdgShape::event( WdgView *view, QEvent *event )
 	    return true;
 	default: break;
     }
+
     return false;
 }
 
@@ -127,8 +127,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 	    break;
 	case FBRD_DBL:
 	    bpen.setStyle(Qt::SolidLine);
-	    if(bordWidth/3)
-	    {
+	    if(bordWidth/3) {
 		int brdLnSpc = bordWidth-2*(bordWidth/3);
 		bordWidth/=3;
 		bpen.setWidth(bordWidth);
@@ -137,8 +136,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
 		pnt.drawRect(dA.adjusted(bordWidth+brdLnSpc+bordWidth/2,bordWidth+brdLnSpc+bordWidth/2,
 			-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2,-bordWidth-brdLnSpc-bordWidth/2-bordWidth%2));
 	    }
-	    else
-	    {
+	    else {
 	        pnt.setPen(bpen);
 	        pnt.drawRect(dA.adjusted(bordWidth/2,bordWidth/2,-bordWidth/2-bordWidth%2,-bordWidth/2-bordWidth%2));
 	    }
@@ -178,10 +176,7 @@ void WdgShape::borderDraw( QPainter &pnt, QRect dA, QPen bpen, int bordStyle )
     }
 }
 
-bool WdgShape::attrSet( WdgView *view, int uiPrmPos, const string &val )
-{
-    return false;
-}
+bool WdgShape::attrSet( WdgView *view, int uiPrmPos, const string &val )	{ return false; }
 
 QFont WdgShape::getFont( const string &val, float fsc, bool pixSize )
 {
@@ -206,8 +201,7 @@ QColor WdgShape::getColor( const string &val )
     QColor res_color;
     size_t fPs = val.find("-");
     if(fPs == string::npos) res_color = QColor(val.c_str());
-    else
-    {
+    else {
 	res_color = QColor(val.substr(0,fPs).c_str());
 	res_color.setAlpha(atoi(val.substr(fPs+1).c_str()));
     }
@@ -307,8 +301,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	case A_FormElFont: shD->font = getFont(val); rel_cfg = true;	break;
 	case A_FormElMixP4: shD->colorText = val; rel_cfg = true;	break;
     }
-    if(rel_cfg && !w->allAttrLoad())
-    {
+    if(rel_cfg && !w->allAttrLoad()) {
 	bool mk_new = false;
 	Qt::Alignment wAlign = 0;
 	QFont elFnt = shD->font;
@@ -319,14 +312,13 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_LINE_ED:
 	    {
 		LineEdit *wdg = (LineEdit*)shD->addrWdg;
-		if(!wdg || !qobject_cast<LineEdit*>(wdg))
-		{
+		if(!wdg || !qobject_cast<LineEdit*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new LineEdit(w, LineEdit::Text, !shD->mode);
 		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(lineAccept()));
 		    mk_new = true;
 		}
-		//> View
+		//View
 		LineEdit::LType tp = LineEdit::Text;
 		switch(shD->view)
 		{
@@ -347,8 +339,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_TEXT_ED:
 	    {
 		TextEdit *wdg = (TextEdit*)shD->addrWdg;
-		if(!wdg || !qobject_cast<TextEdit*>(wdg))
-		{
+		if(!wdg || !qobject_cast<TextEdit*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new TextEdit(w, !shD->mode);
 		    if(runW) connect(wdg, SIGNAL(apply()), this, SLOT(textAccept()));
@@ -362,8 +353,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_CHECK_BOX:
 	    {
 		QCheckBox *wdg = (QCheckBox*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QCheckBox*>(wdg))
-		{
+		if(!wdg || !qobject_cast<QCheckBox*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QCheckBox("test", w);
 		    if(runW) connect(wdg, SIGNAL(stateChanged(int)), this, SLOT(checkChange(int)));
@@ -377,8 +367,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_BUTTON:
 	    {
 		QPushButton *wdg = (QPushButton*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QPushButton*>(wdg))
-		{
+		if(!wdg || !qobject_cast<QPushButton*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QPushButton("test", w);
 #if QT_VERSION < 0x050000
@@ -387,8 +376,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->setStyle(new QCommonStyle());
 #endif
 		    wdg->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
-		    if(runW)
-		    {
+		    if(runW) {
 			connect(wdg, SIGNAL(pressed()), this, SLOT(buttonPressed()));
 			connect(wdg, SIGNAL(released()), this, SLOT(buttonReleased()));
 			connect(wdg, SIGNAL(toggled(bool)), this, SLOT(buttonToggled(bool)));
@@ -396,7 +384,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    mk_new = true;
 		}
 		wdg->setText(shD->name.c_str());	//Name
-		//> Img
+		//Img
 		QImage img;
 		string backimg = w->resGet(shD->img);
 		if(!backimg.empty() && img.loadFromData((const uchar*)backimg.c_str(),backimg.size()))
@@ -405,7 +393,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->setIconSize(QSize(ic_sz,ic_sz));
 		    wdg->setIcon(QPixmap::fromImage(img));
 		} else wdg->setIcon(QPixmap());
-		//> Color
+		//Color
 		QPalette plt;
 		QColor clr = getColor(shD->color);
 		if(clr.isValid())	plt.setColor(QPalette::Button, clr);
@@ -419,16 +407,15 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_COMBO:
 	    {
 		QComboBox *wdg = (QComboBox*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QComboBox*>(wdg))
-		{
+		if(!wdg || !qobject_cast<QComboBox*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QComboBox(w);
 		    if(runW) connect(wdg, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(comboChange(const QString&)));
 		    mk_new = true;
 		}
-		//> Font
+		//Font
 		wdg->setFont(elFnt);
-		//> Items
+		//Items
 		wdg->clear();
 		wdg->addItems(QString(shD->items.c_str()).split("\n"));
 		setValue(w, shD->value, true);	//Value
@@ -437,14 +424,13 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_LIST:
 	    {
 		QListWidget *wdg = (QListWidget*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QListWidget*>(wdg))
-		{
+		if(!wdg || !qobject_cast<QListWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QListWidget(w);
 		    if(runW) connect(wdg, SIGNAL(currentRowChanged(int)), this, SLOT(listChange(int)));
 		    mk_new = true;
 		}
-		//> Items
+		//Items
 		wdg->clear();
 		wdg->addItems(QString(shD->items.c_str()).split("\n"));
 
@@ -455,8 +441,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_TREE:
 	    {
 		QTreeWidget *wdg = (QTreeWidget*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QTreeWidget*>(wdg))
-		{
+		if(!wdg || !qobject_cast<QTreeWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QTreeWidget(w);
 		    wdg->setAlternatingRowColors(true);
@@ -468,7 +453,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(treeChange()));
 		    mk_new = true;
 		}
-		//> Items
+		//Items
 		wdg->clear();
 		string ipath, item;
 		QTreeWidgetItem *cur_it = NULL, *t_it = NULL;
@@ -478,13 +463,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		for(int off = 0; (ipath=TSYS::strLine(shD->items,0,&off)).size(); )
 		{
 		    for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
-			if(lev == 0)
-			{
+			if(lev == 0) {
 			    cur_it = NULL;
 			    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
 				if(wdg->topLevelItem(i_r)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(i_r);
-			    if(!cur_it)
-			    {
+			    if(!cur_it) {
 				cur_it = new QTreeWidgetItem(0);
 				cur_it->setText(0, item.c_str());
 				cur_it->setFlags(cur_it->flags()&(~Qt::ItemIsSelectable));
@@ -492,13 +475,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				wdg->addTopLevelItem(cur_it);
 			    }
 			}
-			else
-			{
+			else {
 			    t_it = NULL;
 			    for(int i_r = 0; !t_it && i_r < cur_it->childCount(); i_r++)
 				if(cur_it->child(i_r)->text(0) == item.c_str())	t_it = cur_it->child(i_r);
-			    if(!t_it)
-			    {
+			    if(!t_it) {
 				t_it = new QTreeWidgetItem(cur_it);
 				t_it->setText(0, item.c_str());
 				t_it->setFlags(cur_it->flags()&(~Qt::ItemIsSelectable));
@@ -506,8 +487,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			    }
 			    cur_it = t_it;
 			}
-		    if(cur_it)
-		    {
+		    if(cur_it) {
 			cur_it->setFlags(cur_it->flags()|Qt::ItemIsSelectable);
 			cur_it->setData(0, Qt::FontRole, elFnt);
 			cur_it->setData(0, Qt::UserRole, ipath.c_str());
@@ -522,8 +502,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    case F_TABLE:
 	    {
 		QTableWidget *wdg = (QTableWidget*)shD->addrWdg;
-		if(!wdg || !qobject_cast<QTableWidget*>(wdg))
-		{
+		if(!wdg || !qobject_cast<QTableWidget*>(wdg)) {
 		    if(wdg) wdg->deleteLater();
 		    shD->addrWdg = wdg = new QTableWidget(w);
 		    wdg->setAlternatingRowColors(true);
@@ -544,8 +523,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		string wVl, rClr;
 		try { tX.load(shD->items); } catch(...) { }
 		if(tX.name() != "tbl") wdg->clear();
-		else
-		{
+		else {
 		    // Items
 		    for(unsigned i_r = 0, i_rR = 0, i_ch = 0; i_ch < tX.childSize() || (int)i_r < wdg->rowCount(); i_ch++)
 		    {
@@ -560,19 +538,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			{
 			    XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
 			    if(tC && (int)i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
-			    if(isH)	//Header process
-			    {
+			    if(isH) {	//Header process
 				if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
 				tit->setText(tC?tC->text().c_str():"");
-				if(tC && (wVl=tC->attr("width")).size())
-				{
+				if(tC && (wVl=tC->attr("width")).size()) {
 				    int wdthCel = atoi(wVl.c_str());
 				    if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
 				    tit->setData(Qt::UserRole, wdthCel);
 				}
 			    }
-			    else	//Rows content process
-			    {
+			    else {	//Rows content process
 				if(!(tit=wdg->item(i_r,i_c))) wdg->setItem(i_r, i_c, (tit=new QTableWidgetItem()));
 				// Value
 				QVariant v;
@@ -599,8 +574,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, (int)i_cR); }
 			    i_c++;
 			}
-			if(!isH)
-			{
+			if(!isH) {
 			    if(tR)	{ ++i_rR; maxRows = vmax(maxRows, (int)i_rR); }
 			    i_r++;
 			}
@@ -609,13 +583,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 		    // Generic properties set
 		    int keyID = atoi(tX.attr("keyID").c_str());
-		    if((wVl=tX.attr("sel")) == "row")
-		    {
+		    if((wVl=tX.attr("sel")) == "row") {
 			wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
 			keyID = vmin(keyID, maxCols-1);
 		    }
-		    else if(wVl == "col")
-		    {
+		    else if(wVl == "col") {
 			wdg->setSelectionBehavior(QAbstractItemView::SelectColumns);
 			keyID = vmin(keyID, maxRows-1);
 		    }
@@ -627,13 +599,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		wdg->horizontalHeader()->setVisible(hdrPresent);
 		wdg->setColumnCount(maxCols); wdg->setRowCount(maxRows);
 		if(maxCols > 1) wdg->resizeColumnsToContents();
-		if(colsWdthFit && maxRows)
-		{
+		if(colsWdthFit && maxRows) {
 		    int averWdth = w->size().width()/maxCols;
 		    int fullColsWdth = 0, niceForceColsWdth = 0, busyCols = 0, tVl;
 		    //Count width params
-		    for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
-		    {
+		    for(int i_c = 0; i_c < wdg->columnCount(); i_c++) {
 			fullColsWdth += wdg->columnWidth(i_c);
 			if(wdg->horizontalHeaderItem(i_c) && (tVl=wdg->horizontalHeaderItem(i_c)->data(Qt::UserRole).toInt()))
 			{
@@ -644,8 +614,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			else busyCols++;
 		    }
 		    //Set busyCols
-		    if(fullColsWdth > w->size().width() && busyCols)
-		    {
+		    if(fullColsWdth > w->size().width() && busyCols) {
 			int busyColsWdth = (w->size().width()-niceForceColsWdth)/busyCols;
 			for(int i_c = 0; i_c < wdg->columnCount(); i_c++)
 			    if(wdg->columnWidth(i_c) > averWdth && wdg->columnWidth(i_c) > busyColsWdth)
@@ -673,13 +642,11 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		}
 		int cfgOff = 0;
 		if(shD->elType == F_SLIDER)	((QSlider*)wdg)->setTickPosition(QSlider::TicksBothSides);
-		if(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str()))
-		{
+		if(atoi(TSYS::strSepParse(shD->cfg,0,':',&cfgOff).c_str())) {
 		    wdg->setOrientation(Qt::Vertical);
 		    wAlign = Qt::AlignHCenter;
 		}
-		else
-		{
+		else {
 		    wdg->setOrientation(Qt::Horizontal);
 		    wAlign = Qt::AlignVCenter;
 		}
@@ -694,15 +661,14 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 	    }
 	}
 	shD->setType = true;
-	if(mk_new)
-	{
-	    //>> Install event's filter and disable focus
+	if(mk_new) {
+	    // Install event's filter and disable focus
 	    eventFilterSet(w, shD->addrWdg, true);
 	    w->setFocusProxy(shD->addrWdg);
 	    if(devW) setFocus(w, shD->addrWdg, false, devW);
 	    if(runW) setActive(w, shD->active && runW->permCntr());
 	    shD->addrWdg->setVisible(shD->en);
-	    //>> Fix widget
+	    // Fix widget
 	    ((QVBoxLayout*)w->layout())->addWidget(shD->addrWdg);
 	}
 	if(wAlign) ((QVBoxLayout*)w->layout())->setAlignment(shD->addrWdg, wAlign);
@@ -721,6 +687,7 @@ void ShapeFormEl::setActive( WdgView *w, bool val )
     {
 	case F_LINE_ED:	((LineEdit*)shD->addrWdg)->setReadOnly(!val);			break;
 	case F_TEXT_ED:	((TextEdit*)shD->addrWdg)->workWdg()->setReadOnly(!val);	break;
+	case F_TABLE:	break;
 	default: shD->addrWdg->setEnabled(val);
     }
     setFocus(w, shD->addrWdg, val);
@@ -753,8 +720,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		{
 		    unsigned delay = 0, interv = 0;
 		    sscanf(shD->value.c_str(), "%u-%u", &delay, &interv);
-		    if(delay && interv)
-		    {
+		    if(delay && interv) {
 			wdg->setAutoRepeat(true);
 			wdg->setAutoRepeatDelay(delay);
 			wdg->setAutoRepeatInterval(interv);
@@ -771,18 +737,16 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    QMenu *menu = new QMenu(wdg), *menuNext;
 		    wdg->setMenu(menu);
 		    while(wdg->actions().size()) wdg->removeAction(wdg->actions()[0]);
-		    //> Fill menu
+		    //Fill menu
 		    string ipath, item;
-		    for(int off = 0; (ipath=TSYS::strLine(shD->value,0,&off)).size(); )
-		    {
+		    for(int off = 0; (ipath=TSYS::strLine(shD->value,0,&off)).size(); ) {
 			string treeItPath = "";
 			menu = menuNext = wdg->menu();
 			for(int off1 = 0, lev = 0; (item=TSYS::pathLev(ipath,0,true,&off1)).size(); lev++)
 			{
 			    treeItPath += "/"+item;
 			    if(menuNext) menu = menuNext;
-			    else
-			    {
+			    else {
 				menu = new QMenu(menu);
 				cur_act->setMenu(menu);
 				connect(menu->menuAction(), SIGNAL(triggered()), this, SLOT(buttonMenuTrig()));
@@ -791,8 +755,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 			    cur_act = NULL;
 			    for(int i_a = 0; i_a < menu->actions().size(); i_a++)
 				if(menu->actions()[i_a]->text() == item.c_str()) cur_act = menu->actions()[i_a];
-			    if(!cur_act)
-			    {
+			    if(!cur_act) {
 				cur_act = new QAction(item.c_str(), wdg);
 				connect(cur_act, SIGNAL(triggered()), this, SLOT(buttonMenuTrig()));
 				cur_act->setData(treeItPath.c_str());
@@ -819,8 +782,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	{
 	    QListWidget *wdg = (QListWidget*)shD->addrWdg;
 	    QList<QListWidgetItem *> its = wdg->findItems(val.c_str(), Qt::MatchExactly);
-	    if(its.size())
-	    {
+	    if(its.size()) {
 		wdg->setCurrentItem(its[0]);
 		wdg->scrollToItem(its[0]);
 	    }
@@ -833,27 +795,24 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 	    QTreeWidgetItem *cur_it = NULL;
 	    string item;
 	    for(int off = 0, lev = 0; (item=TSYS::pathLev(val,0,true,&off)).size(); lev++)
-		if(lev == 0)
-		{
+		if(lev == 0) {
 		    for(int i_r = 0; !cur_it && i_r < wdg->topLevelItemCount(); i_r++)
 			if(wdg->topLevelItem(i_r)->text(0) == item.c_str()) cur_it = wdg->topLevelItem(i_r);
 		    if(!cur_it)	break;
 		}
-		else
-		{
+		else {
 		    bool findOK = false;
 		    for(int i_r = 0; !findOK && i_r < cur_it->childCount(); i_r++)
 			if(cur_it->child(i_r)->text(0) == item.c_str())	{ cur_it = cur_it->child(i_r); findOK = true; }
 		    if(!findOK)	{ cur_it = NULL; break; }
 		}
 	    while(wdg->selectedItems().size())	wdg->selectedItems()[0]->setSelected(false);
-	    if(cur_it)
-	    {
+	    if(cur_it) {
 		shD->addrWdg->blockSignals(true);
 		cur_it->setSelected(true);
 		shD->addrWdg->blockSignals(false);
 		wdg->scrollToItem(cur_it);
-		//> Expand all parents for visible selected
+		//Expand all parents for visible selected
 		//for(int i_l = 0; cur_it; i_l++) { if(i_l > 0) cur_it->setExpanded(true); cur_it = cur_it->parent(); }
 	    }
 	    break;
@@ -893,8 +852,7 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 
 bool ShapeFormEl::event( WdgView *w, QEvent *event )
 {
-    if(event->type() == QEvent::Hide && qobject_cast<RunWdgView*>(w))
-    {
+    if(event->type() == QEvent::Hide && qobject_cast<RunWdgView*>(w)) {
 	ShpDt *shD = (ShpDt*)w->shpData;
 	switch(shD->elType)
 	{
@@ -912,8 +870,7 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    if(qobject_cast<DevelWdgView*>(w))
-    {
+    if(qobject_cast<DevelWdgView*>(w)) {
 	switch(event->type())
 	{
 	    case QEvent::Enter:
@@ -928,8 +885,7 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 	    default:	break;
 	}
     }
-    else
-    {
+    else {
 	AttrValS attrs;
 	switch(event->type())
 	{
@@ -1004,8 +960,7 @@ void ShapeFormEl::buttonReleased( )
 	case FBT_STD: w->attrSet("event","ws_BtRelease");	break;
 	case FBT_SAVE:
 	{
-	    if(!shD->wordWrap)	//The event from timer
-	    {
+	    if(!shD->wordWrap) {	//The event from timer
 		w->attrSet("event","ws_BtRelease");
 		break;
 	    }
@@ -1021,11 +976,9 @@ void ShapeFormEl::buttonReleased( )
 	    if(fTmpl.empty())	break;
 	    if(fTitle.empty())	fTitle = _("Save file");
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptSave);
-	    if(fn.size())
-	    {
+	    if(fn.size()) {
 		QFile file(fn);
-		if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate))
-		{
+		if(!file.open(QIODevice::WriteOnly|QIODevice::Truncate)) {
 		    mod->postMess(mod->nodePath().c_str(),
 			QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		    break;
@@ -1051,13 +1004,11 @@ void ShapeFormEl::buttonReleased( )
 	    QString fn = w->mainWin()->getFileName(fTitle.c_str(), fDefFile.c_str(), fTmpl.c_str(), QFileDialog::AcceptOpen);
 	    if(!fn.size()) break;
 	    QFile file(fn);
-	    if(!file.open(QFile::ReadOnly))
-	    {
+	    if(!file.open(QFile::ReadOnly)) {
 		mod->postMess(mod->nodePath().c_str(), QString(_("Open file '%1' is fail: %2")).arg(fn).arg(file.errorString()), TVision::Error);
 		break;
 	    }
-	    if(file.size() >= USER_FILE_LIMIT)
-	    {
+	    if(file.size() >= USER_FILE_LIMIT) {
 		mod->postMess(mod->nodePath().c_str(), QString(_("Loadable file '%1' is too large.")).arg(fn), TVision::Error);
 		break;
 	    }
@@ -1128,9 +1079,9 @@ void ShapeFormEl::treeChange( )
 void ShapeFormEl::tableChange( )
 {
     QTableWidget *el = (QTableWidget*)sender();
-    WdgView	 *w  = (WdgView*)el->parentWidget();
+    RunWdgView   *w  = (RunWdgView*)el->parentWidget();
 
-    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
+    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
 
     AttrValS attrs;
     string value = el->selectedItems()[0]->text().toStdString();
@@ -1169,7 +1120,7 @@ void ShapeFormEl::eventFilterSet( WdgView *view, QWidget *wdg, bool en )
     if(en) wdg->installEventFilter(view);
     else   wdg->removeEventFilter(view);
 
-    //> Process childs
+    //Process childs
     for(int i_c = 0; i_c < wdg->children().size(); i_c++)
 	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    eventFilterSet(view,(QWidget*)wdg->children().at(i_c),en);
@@ -1179,22 +1130,19 @@ void ShapeFormEl::setFocus(WdgView *view, QWidget *wdg, bool en, bool devel )
 {
     int isFocus = wdg->windowIconText().toInt();
 
-    //> Set up current widget
-    if(en)
-    {
+    //Set up current widget
+    if(en) {
 	if(isFocus && !devel)	wdg->setFocusPolicy((Qt::FocusPolicy)isFocus);
     }
-    else
-    {
-	if(wdg->focusPolicy() != Qt::NoFocus)
-	{
+    else {
+	if(wdg->focusPolicy() != Qt::NoFocus) {
 	    wdg->setWindowIconText(QString::number((int)wdg->focusPolicy()));
 	    wdg->setFocusPolicy(Qt::NoFocus);
 	}
 	if(devel) wdg->setMouseTracking(true);
     }
 
-    //> Process childs
+    //Process childs
     for(int i_c = 0; i_c < wdg->children().size(); i_c++)
 	if(qobject_cast<QWidget*>(wdg->children().at(i_c)))
 	    setFocus(view,(QWidget*)wdg->children().at(i_c),en,devel);

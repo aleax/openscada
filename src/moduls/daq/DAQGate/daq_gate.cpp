@@ -146,8 +146,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus();
 
-    if(startStat() && !redntUse())
-    {
+    if(startStat() && !redntUse()) {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
 	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());

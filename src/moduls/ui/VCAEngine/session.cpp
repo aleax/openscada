@@ -421,13 +421,11 @@ void *Session::Task( void *icontr )
     ses.mStart    = true;
 
     ses.list(pls);
-    while(!ses.endrun_req)
-    {
+    while(!ses.endrun_req) {
 	//> Calc session pages and all other items at recursion
 	for(unsigned i_l = 0; i_l < pls.size(); i_l++)
 	    try { ses.at(pls[i_l]).at().calc(false,false); }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(ses.nodePath().c_str(),_("Session '%s' calculate error."),pls[i_l].c_str());
 	    }
@@ -896,18 +894,14 @@ void SessPage::calc( bool first, bool last )
 bool SessPage::attrChange( Attr &cfg, TVariant prev )
 {
     //Page open process
-    if(enable() && !prev.isNull())
-    {
-	if(cfg.id() == "pgOpen")
-	{
-	    if(cfg.getB())
-	    {
+    if(enable() && !prev.isNull()) {
+	if(cfg.id() == "pgOpen") {
+	    if(cfg.getB()) {
 		mClosePgCom = false;
 		ownerSess()->openReg(path());	//Moved up for allow access and pages including from "f_start"
 		if(!process())	setProcess(true);
 	    }
-	    else
-	    {
+	    else {
 		ownerSess()->openUnreg(path());
 		if(process() && !attrAt("pgNoOpenProc").at().getB())	mClosePgCom = true;
 		if(!attrAt("pgOpenSrc").at().getS().empty()) attrAt("pgOpenSrc").at().setS("");
@@ -1543,11 +1537,10 @@ void SessWdg::calc( bool first, bool last )
 
 //    if( !(ownerSess()->calcClk()%vmax(1,10000/ownerSess()->period())) ) prcElListUpdate( );
 
-    //> Calculate include widgets
+    //Calculate include widgets
     MtxAlloc resDt(ownerSess()->dataMtx(), true);
     for(unsigned i_l = 0; i_l < mWdgChldAct.size(); i_l++)
-	try
-	{
+	try {
 	    AutoHD<SessWdg> wdg = wdgAt(mWdgChldAct[i_l]);
 	    resDt.unlock();
 	    wdg.at().calc(first, last);
@@ -1556,33 +1549,29 @@ void SessWdg::calc( bool first, bool last )
 	catch(TError err) { }
     resDt.unlock();
 
-    try
-    {
+    try {
 	int pgOpenPrc = -1;
 
-	//> Load events to process
+	//Load events to process
 	if(!((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last)
 	{
 	    string wevent = eventGet(true);
-	    //> Process input links and constants
+	    //Process input links and constants
 	    AutoHD<Attr> attr;
 	    AutoHD<TVal> vl;
 	    inLnkGet = true;
-	    for(unsigned i_a = 0; i_a < mAttrLnkLs.size(); i_a++)
-	    {
+	    for(unsigned i_a = 0; i_a < mAttrLnkLs.size(); i_a++) {
 		attr = attrAt(mAttrLnkLs[i_a]);
 		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(attr.at().cfgVal());
 		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty())
 		{
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
-		    else if(obj_tp == "prm:")
-		    {
+		    else if(obj_tp == "prm:") {
 			vl = SYS->daq().at().attrAt(attr.at().cfgVal().substr(obj_tp.size()),0,true);
 			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
 
-			if(attr.at().flgGlob()&Attr::Address)
-			{
+			if(attr.at().flgGlob()&Attr::Address) {
 			    string nP = vl.at().nodePath(0,true);
 			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
 			}
@@ -1599,18 +1588,16 @@ void SessWdg::calc( bool first, bool last )
 	    }
 	    inLnkGet = false;
 
-	    if(TValFunc::func())
-	    {
-		//> Load events to calc procedure
+	    if(TValFunc::func()) {
+		//Load events to calc procedure
 		int evId = ioId("event");
 		if(evId >= 0)	setS(evId, wevent);
 
-		//>> Load data to calc area
+		// Load data to calc area
 		setR(0, 1000.0/(ownerSess()->period()*vmax(calcPer()/ownerSess()->period(),1)));
 		setB(1, first);
 		setB(2, last);
-		for(int i_io = 4; i_io < ioSize( ); i_io++)
-		{
+		for(int i_io = 4; i_io < ioSize( ); i_io++) {
 		    if(func()->io(i_io)->rez().empty()) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(), 1);
@@ -1618,13 +1605,12 @@ void SessWdg::calc( bool first, bool last )
 		    set(i_io,attr.at().get());
 		}
 
-		//>> Calc
+		// Calc
 		setMdfChk(true);
 		TValFunc::calc();
 
-		//>> Save data from calc area
-		for(int i_io = 4; i_io < ioSize( ); i_io++)
-		{
+		// Save data from calc area
+		for(int i_io = 4; i_io < ioSize( ); i_io++) {
 		    if(func()->io(i_io)->rez().empty() || !ioMdf(i_io)) continue;
 		    sw_attr = TSYS::pathLev(func()->io(i_io)->rez(), 0);
 		    s_attr  = TSYS::pathLev(func()->io(i_io)->rez(), 1);
@@ -1633,24 +1619,23 @@ void SessWdg::calc( bool first, bool last )
 		    if(s_attr == "pgOpen" && attr.at().getB() != getB(i_io)) { pgOpenPrc = i_io; continue; }
 		    attr.at().set(get(i_io));
 		}
-		//>> Save events from calc procedure
+		// Save events from calc procedure
 		if(evId >= 0) wevent = getS(evId);
 	    }
 
 	    res.unlock();
 
-	    //> Close page process by pgOpen changing
+	    //Close page process by pgOpen changing
 	    if(pgOpenPrc >= 0) attrAt("pgOpen").at().setB(getB(pgOpenPrc));
 
-	    //>> Process widget's events
-	    if(!wevent.empty())
-	    {
+	    // Process widget's events
+	    if(!wevent.empty()) {
 		int t_off;
 		bool isPg = dynamic_cast<SessPage*>(this);
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
 		for(int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
 		{
-		    //>> Check for process events
+		    // Check for process events
 		    t_off = 0;
 		    sev_ev   = TSYS::strSepParse(sev, 0, ':', &t_off);
 		    sev_path = TSYS::strSepParse(sev, 0, ':', &t_off);
@@ -1671,25 +1656,21 @@ void SessWdg::calc( bool first, bool last )
 			    evProc = true;
 			}
 		    }
-		    if(!evProc)
-		    {
+		    if(!evProc) {
 			if(!isPg) sevup += sev_ev + ":/" + id() + sev_path + "\n";
 			else sevup += sev_ev + ":" + (TSYS::pathLev(sev_path,0).compare(0,4,"ses_")?path():"") + sev_path + "\n";
 		    }
 		}
-		//>> Put left events to parent widget
+		// Put left events to parent widget
 		SessWdg *owner = ownerSessWdg(true);
-		if(owner && !sevup.empty())
-		{
+		if(owner && !sevup.empty()) {
 		    if(!isPg) owner->eventAdd(sevup);
-		    //>> Up event to the upper page
-		    else
-		    {
+		    // Up event to the upper page
+		    else {
 			vector<string> lst = ownerSess()->openList();
 			string prev;
 			for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-			    if(lst[i_f] == path())
-			    {
+			    if(lst[i_f] == path()) {
 				if(prev.size()) ((AutoHD<SessPage>)mod->nodeAt(prev)).at().eventAdd(sevup);
 				break;
 			    }
@@ -1698,12 +1679,11 @@ void SessWdg::calc( bool first, bool last )
 		}
 	    }
 
-	    //> Generic calc
+	    //Generic calc
 	    Widget::calc(this);
 	}
     }
-    catch(TError err)
-    {
+    catch(TError err) {
 	res.unlock();
 	mess_err(err.cat.c_str(), err.mess.c_str());
 	mess_err(nodePath().c_str(), _("Widget calculation error. Process is disabled."));

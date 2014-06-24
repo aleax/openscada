@@ -180,16 +180,17 @@ assign: assign ',' assign
 expr:	CONST	{ $$ = $1; }
 	| expr CONST
 	    {
-		if($1->type() != Reg::String || $2->type() != Reg::String) throw TError(p_fnc->nodePath().c_str(),_("Error constant after constant"));
+		if($1->type() != Reg::String || $2->type() != Reg::String)
+		    throw TError(p_fnc->nodePath().c_str(),_("Error constant after constant"));
 		$1->val().s->append(*($2->val().s));
 		$2->free();
 		$$ = $1;
 	    }
 	| var
 	    {
-		try
-		{
-		    if($1->type() == Reg::Free) throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
+		try {
+		    if($1->type() == Reg::Free)
+			throw TError(p_fnc->nodePath().c_str(), _("Variable '%s' is used but undefined"), $1->name().c_str());
 		    $$ = $1;
 		} catch(TError err){ sfErr(err.mess,&@1); YYABORT; }
 	    }

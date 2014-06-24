@@ -37,13 +37,11 @@ bool VArchObj::open( const string &inm )
 {
     close();
 
-    try
-    {
+    try {
 	AutoHD<TVArchive> ta;
-	if(dynamic_cast<TVal*>(&SYS->nodeAt(inm,0,'.').at()))
-	    ta = dynamic_cast<TVal&>(SYS->nodeAt(inm,0,'.').at()).arch();
-	else if(dynamic_cast<TVArchive*>(&SYS->nodeAt(inm,0,'.').at()))
-	    ta = SYS->nodeAt(inm,0,'.');
+	AutoHD<TCntrNode> nd = SYS->nodeAt(inm,0,'.');
+	if(dynamic_cast<TVal*>(&nd.at()))		ta = dynamic_cast<TVal&>(nd.at()).arch();
+	else if(dynamic_cast<TVArchive*>(&nd.at()))	ta = nd;
 	if(ta.freeStat()) return false;
 	mArch = new AutoHD<TVArchive>(ta);
 	mIsArch = true;
@@ -89,49 +87,41 @@ void VArchObj::propSet( const string &id, TVariant val ) { throw TError("VArchOb
 TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 {
     if(id == "isNull") return (char)(!isArch() && !buf());
-    if(id == "begin")
-    {
+    if(id == "begin") {
 	int64_t vtm;
 	if(isArch())	vtm = arch().at().begin((prms.size()>=2) ? prms[1].getS() : "");
-	else
-	{
+	else {
 	    if(!buf()) return (int64_t)EVAL_INT;
 	    vtm = buf()->begin();
 	}
 	if(prms.size() >= 1) { prms[0].setI(vtm%1000000); prms[0].setModify(); }
 	return (int)(vtm/1000000);
     }
-    if(id == "end")
-    {
+    if(id == "end") {
 	int64_t vtm;
 	if(isArch())	vtm = arch().at().end( (prms.size()>=2) ? prms[1].getS() : "" );
-	else
-	{
+	else {
 	    if(!buf()) return (int64_t)EVAL_INT;
 	    vtm = buf()->end();
 	}
 	if(prms.size() >= 1) { prms[0].setI(vtm%1000000); prms[0].setModify(); }
 	return (int)(vtm/1000000);
     }
-    if(id == "period")
-    {
+    if(id == "period") {
 	int64_t vper;
 	if(isArch())	vper = arch().at().period((prms.size()>=2) ? prms[1].getS() : "");
-	else
-	{
+	else {
 	    if(!buf()) return (int64_t)EVAL_INT;
 	    vper = buf()->period();
 	}
 	if(prms.size() >= 1) { prms[0].setI(vper%1000000); prms[0].setModify(); }
 	return (int)(vper/1000000);
     }
-    if(id == "get" && prms.size() >= 2)
-    {
+    if(id == "get" && prms.size() >= 2) {
 	TVariant vl;
 	int64_t vtm = (int64_t)prms[0].getI()*1000000 + prms[1].getI();
 	if(isArch()) vl = arch().at().getVal(&vtm, (prms.size()>=3)?prms[2].getB():false, (prms.size()>=4)?prms[3].getS():"");
-	else
-	{
+	else {
 	    if(!buf()) return EVAL_REAL;
 	    switch(buf()->valType())
 	    {
@@ -146,8 +136,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	prms[1].setI(vtm%1000000); prms[1].setModify();
 	return vl;
     }
-    if(id == "set" && prms.size() >= 3)
-    {
+    if(id == "set" && prms.size() >= 3) {
 	if(isArch())
 	    switch(arch().at().valType())
 	    {
@@ -157,8 +146,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 		case TFld::String:	arch().at().setS(prms[0].getS(),(int64_t)prms[1].getI()*1000000+prms[2].getI());	break;
 		default: break;
 	    }
-	else
-	{
+	else {
 	    if(!buf()) return false;
 	    switch(buf()->valType())
 	    {
@@ -171,17 +159,14 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	}
 	return true;
     }
-    if(id == "copy" && prms.size() >= 5)
-    {
+    if(id == "copy" && prms.size() >= 5) {
 	AutoHD<VArchObj> src = prms[0].getO();
 	if(src.freeStat()) return false;
 
 	AutoHD<TVArchive> tarch;
-	if(src.at().isArch())
-	{
+	if(src.at().isArch()) {
 	    TValBuf* vb = NULL;
-	    if(isArch())
-	    {
+	    if(isArch()) {
 		tarch = arch();
 		vb = &tarch.at();
 	    }
@@ -190,11 +175,9 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    src.at().arch().at().getVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
 					      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
-	else if(isArch())
-	{
+	else if(isArch()) {
 	    TValBuf* vb = NULL;
-	    if(src.at().isArch())
-	    {
+	    if(src.at().isArch()) {
 		tarch = src.at().arch();
 		vb = &tarch.at();
 	    }
@@ -203,8 +186,7 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    arch().at().setVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
 				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
-	else
-	{
+	else {
 	    TValBuf* svb = src.at().buf();
 	    TValBuf* dvb = buf();
 	    if(!svb || !dvb) return false;

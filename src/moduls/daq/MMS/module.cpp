@@ -111,8 +111,7 @@ void TTpContr::save_( )	{ }
 void TTpContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TTipDAQ::cntrCmdProc(opt);
 	return;
     }
@@ -174,21 +173,19 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
-    if(startStat() && !redntUse())
-    {
-	if(tmDelay >= 0)
-	{
+    if(startStat() && !redntUse()) {
+	if(tmDelay >= 0) {
 	    rez += (tmDelay == 0) ? TSYS::strMess(_("No activity data.")) : TSYS::strMess(_("Connection error. Restoring in %.6g s."), tmDelay);
 	    rez.replace(0, 1, "10");
 	}
-	else
-	{
+	else {
 	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	    if(period()) rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
 	    else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	    rez += TSYS::strMess(_("Spent time: %s. Requests %.6g."), tm2s(tmGath).c_str(),-tmDelay);
 	}
     }
+
     return rez;
 }
 
@@ -208,7 +205,7 @@ void TMdContr::reqService( MMS::XML_N &io )
     MtxAlloc res(cntrRes, true);
     io.setAttr("err", "");
 
-    try { tr.at().start(); }
+    try { tr.at().start(enableStat()?0:1000); }
     catch(TError err) { io.setAttr("err", TSYS::strMess("10:%s",err.mess.c_str())); reset(); return; }
 
     Client::reqService(io);
@@ -226,7 +223,7 @@ void TMdContr::protIO( MMS::XML_N &io )
 
 int TMdContr::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib )
 {
-    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, 0, true);
+    return tr.at().messIO(obuf, len_ob, ibuf, len_ib, enableStat()?0:1000, true);
 }
 
 void TMdContr::debugMess( const string &mess )	{ mess_debug_(nodePath().c_str(), "%s", mess.c_str()); }
@@ -237,8 +234,7 @@ void TMdContr::enable_( )
 {
     string trName = "Sockets.out_MMS"+id();
     tr = SYS->transport().at().nodeAt(trName, 0, '.', 0, true);
-    if(tr.freeStat())
-    {
+    if(tr.freeStat()) {
 	SYS->transport().at().at(TSYS::strParse(trName,0,".")).at().outAdd(TSYS::strParse(trName,1,".").substr(4));
 	tr = SYS->transport().at().nodeAt(trName, 0, '.');
 	tr.at().setDscr(TSYS::strMess(_("MMS automatic created transport for '%s' controller."),id().c_str()));
@@ -266,8 +262,7 @@ void TMdContr::start_( )
     mVars.clear();
 
     //Reenable parameters
-    try
-    {
+    try {
 	vector<string> pls;
 	list(pls);
 
@@ -336,26 +331,21 @@ void *TMdContr::Task( void *icntr )
 		(valCtr.childSize() && (vi->second.single || s2i(valCtr.childGet(valCtr.childSize()-1)->attr("single")))))
 	    {
 		if(!valCtr.childSize())	break;
-		if(!isErr)
-		{
+		if(!isErr) {
 		    cntr.reqService(valCtr);
-		    if((isErr=valCtr.attr("err").size()))
-		    {
+		    if((isErr=valCtr.attr("err").size())) {
 			cntr.acq_err.setVal(valCtr.attr("err"));
 			mess_err(cntr.nodePath().c_str(), "%s", cntr.acq_err.getVal().c_str());
-			if(cntr.alSt <= 0)
-			{
+			if(cntr.alSt <= 0) {
 			    cntr.alSt = 1;
 			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),
 						cntr.id().c_str(),TRegExp(":","g").replace(cntr.acq_err.getVal(),"=").c_str()));
 			}
 			cntr.tmDelay = cntr.syncPer();
 		    }
-		    else
-		    {
+		    else {
 			cntr.acq_err.setVal("");
-			if(cntr.alSt != 0)
-			{
+			if(cntr.alSt != 0) {
 			    cntr.alSt = 0;
 			    cntr.alarmSet(TSYS::strMess(_("DAQ.%s: connect to data source: %s."),cntr.id().c_str(),_("OK")),TMess::Info);
 			}
@@ -382,12 +372,9 @@ void *TMdContr::Task( void *icntr )
 			    TArrayObj *curArr = new TArrayObj();
 			    cntr.mVars[nId].val = curArr;
 			    MMS::XML_N *curValue = value;
-			    for(unsigned i_v = 0; true; )
-			    {
-				if(i_v >= curValue->childSize())
-				{
-				    if(stack.size())
-				    {
+			    for(unsigned i_v = 0; true; ) {
+				if(i_v >= curValue->childSize()) {
+				    if(stack.size()) {
 					curArr = stack.back().arr;
 					curValue = stack.back().vl;
 					i_v = stack.back().inPos+1;

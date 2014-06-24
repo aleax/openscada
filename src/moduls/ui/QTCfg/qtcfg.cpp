@@ -459,15 +459,13 @@ bool ConfApp::exitModifChk( )
     //Check for no saved local station
     XMLNode req("modify");
     req.setAttr("path","/"+SYS->id()+"/%2fobj");
-    if(!cntrIfCmd(req) && s2i(req.text()))
-    {
+    if(!cntrIfCmd(req) && s2i(req.text())) {
 	bool saveExit = false;
 	req.clear()->setName("get")->setAttr("path","/"+SYS->id()+"/%2fgen%2fsaveExit");
 	if(!cntrIfCmd(req))	saveExit |= s2i(req.text());
 	req.setAttr("path","/"+SYS->id()+"/%2fgen%2fsavePeriod");
 	if(!cntrIfCmd(req))	saveExit |= s2i(req.text());
-	if(!saveExit)
-	{
+	if(!saveExit) {
 	    int ret = QMessageBox::information(this,_("Changes save"),
 		_("Some changes made.\nSave the changes to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
 	    switch(ret)
@@ -726,8 +724,7 @@ void ConfApp::itPaste( )
 	{ mod->postMess(mod->nodePath().c_str(), _("Copy is impossible."), TUIMod::Error, this); return; }
 
 	vector<string> brs;
-	if(copyEl == to_path)	//For copy into the branch and no select direct the parent node
-	{
+	if(copyEl == to_path) {	//For copy into the branch and no select direct the parent node
 	    to_path = s_elp;
 	    parNode.setAttr("path",to_path);
 	    if(cntrIfCmd(parNode)) continue;
@@ -749,8 +746,7 @@ void ConfApp::itPaste( )
 	dlg.setTargets(brs);
 	dlg.setMess(QString(isCut?_("Move node '%1' to '%2'.\n"):_("Copy node '%1' to '%2'.\n")).arg(copyEl.c_str()).arg(to_path.c_str()));
 	dlg.setId(s_el.substr(b_grp.size()).c_str());
-	if(isMult)
-	{
+	if(isMult) {
 	    prcReq = new QCheckBox(_("Do not the question anymore."), &dlg);
 	    dlg.ed_lay->addWidget(prcReq, 5, 0, 1, 2);
 	}
@@ -790,8 +786,7 @@ void ConfApp::itPaste( )
 	if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TUIMod::Error,this); return; }
 
 	//Remove source widget
-	if(isCut)
-	{
+	if(isCut) {
 	    itDel(copyEl);
 	    if(sel_path == copyEl) chSel = "/"+stat_nm+"/"+dst_nm;
 	}
@@ -2288,8 +2283,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     }
 
     //Direct request
-    QCursor saveCursor = cursor();
-    setCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString());
 
@@ -2303,21 +2297,25 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		for(int i_el = 0; i_el < sel_ls.size(); i_el++)
 		    if(sel_ls.at(i_el)->text(2).toStdString() != reqPath)
 			selNds += sel_ls.at(i_el)->text(2).toStdString()+"\n";
-		if(selNds.size() && QMessageBox::question(this,_("Send changes to selections"),
-			TSYS::strMess(_("Send current change to other selected nodes \"%s\"?"),selNds.c_str()).c_str(),
-			QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply) == QMessageBox::Apply)
-		    for(int off = 0; (reqPath=TSYS::strLine(selNds,0,&off)).size(); )
+		if(selNds.size()) {
+		    QApplication::restoreOverrideCursor();
+		    int questRes = QMessageBox::question(this,_("Send changes to selections"),
+			    TSYS::strMess(_("Send current change to other selected nodes \"%s\"?"),selNds.c_str()).c_str(),
+			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
+		    QApplication::setOverrideCursor(Qt::WaitCursor);
+		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); )
 		    {
 			node.setAttr("path", reqPath+"/"+reqPathEl);
-			SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString());
+			SYS->transport().at().cntrIfCmd(node, "UIQtCfg", w_user->user().toStdString());
 		    }
+		}
 	    }
 	}
-	setCursor(saveCursor);
+	QApplication::restoreOverrideCursor();
 	return rez;
     }
     catch(TError err) {
-	setCursor(saveCursor);
+	QApplication::restoreOverrideCursor();
 	node.childClear();
 	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
     }
@@ -2343,8 +2341,7 @@ void ConfApp::initHosts( )
 
     //Add/update hosts
     bool emptyTree = !CtrTree->topLevelItemCount();
-    for(unsigned i_st = 0; i_st < stls.size(); i_st++)
-    {
+    for(unsigned i_st = 0; i_st < stls.size(); i_st++) {
 	int errCon = 0;
 
 	QTreeWidgetItem *nit = NULL;
@@ -2353,14 +2350,12 @@ void ConfApp::initHosts( )
 		if(stls[i_st] == TSYS::pathLev(CtrTree->topLevelItem(i_top)->text(2).toStdString(),0))
 		{ nit = CtrTree->topLevelItem(i_top); break; }
 	if(!nit) nit = new QTreeWidgetItem(CtrTree);
-	if(stls[i_st] == SYS->id())
-	{
+	if(stls[i_st] == SYS->id()) {
 	    nit->setText(0,SYS->name().c_str());
 	    nit->setText(1,_("Local station"));
 	    nit->setText(2,("/"+SYS->id()).c_str());
 	}
-	else
-	{
+	else {
 	    TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toStdString(),stls[i_st]);
 	    nit->setText(0,host.name.c_str());
 	    nit->setText(1,_("Remote station"));
@@ -2373,8 +2368,7 @@ void ConfApp::initHosts( )
 	QImage img; string simg;
 	XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
 	errCon = cntrIfCmd(reqIco);
-	if(!errCon)
-	{
+	if(!errCon) {
 	    simg = TSYS::strDecode(reqIco.text(),TSYS::base64);
 	    if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 		nit->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
@@ -2388,8 +2382,7 @@ void ConfApp::initHosts( )
 	    it_grp.push_back(("1\n"+brReq.childGet(0)->childGet(i_br)->attr("id")+"\n"+brReq.childGet(0)->childGet(i_br)->attr("dscr")).c_str());
 	nit->setData(2,Qt::UserRole,it_grp);
 
-	if(errCon == 10)
-	{
+	if(errCon == 10) {
 	    simg = TUIS::icoGet("disconnect");
 	    if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 		nit->setIcon(0,QPixmap::fromImage(img).scaled(16,16,Qt::KeepAspectRatio,Qt::SmoothTransformation));
@@ -2407,19 +2400,16 @@ void ConfApp::checkBoxStChange( int stat )
     QCheckBox *box = (QCheckBox *)sender();
 
     if(stat == Qt::PartiallyChecked) return;
-    try
-    {
+    try {
 	string path = box->objectName().toStdString();
 	string val = (stat==Qt::Checked)?"1":"0";
 
 	//Check block element
-	if(path[0] == 'b')
-	{
+	if(path[0] == 'b') {
 	    SYS->ctrId(root,TSYS::strDecode(path.substr(1),TSYS::PathEl) )->setText(val);
 	    return;
 	}
-	else
-	{
+	else {
 	    XMLNode req("get");
 	    req.setAttr("path",sel_path+"/"+path);
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
@@ -2443,13 +2433,11 @@ void ConfApp::buttonClicked( )
 
     XMLNode req();
 
-    try
-    {
+    try {
 	XMLNode *n_el = SYS->ctrId(root, TSYS::strDecode(button->objectName().toStdString(),TSYS::PathEl));
 
 	//Check link
-	if(n_el->attr("tp") == "lnk")
-	{
+	if(n_el->attr("tp") == "lnk") {
 	    XMLNode req("get"); req.setAttr("path",sel_path+"/"+button->objectName().toStdString());
 	    if(cntrIfCmd(req)) { mod->postMess(req.attr("mcat"),req.text(),TUIMod::Error,this); return; }
 	    string url = "/"+TSYS::pathLev(sel_path,0)+req.text();
@@ -2457,8 +2445,7 @@ void ConfApp::buttonClicked( )
 	    selectPage( url );
 	    return;
 	}
-	else
-	{
+	else {
 	    XMLNode req("set"); req.setAttr("path", sel_path+"/"+button->objectName().toStdString());
 	    //Copy parameters
 	    for(unsigned i_ch = 0; i_ch < n_el->childSize(); i_ch++)

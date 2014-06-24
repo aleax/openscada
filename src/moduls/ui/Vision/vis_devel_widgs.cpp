@@ -2317,8 +2317,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
     DevelWdgView *cwdg = NULL, *ewdg = NULL;
     if(edit())    return;
     QStringList sact = act->objectName().split('_');
-    if(sact.at(0) == "align")
-    {
+    if(sact.at(0) == "align") {
 	//Get selected rect
 	QRectF selRect;
 	int sel_cnt = 0;
@@ -2333,8 +2332,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 
 	//Update selected widgets position
 	for(int i_c = 0; i_c < children().size(); i_c++)
-	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select())
-	    {
+	    if((cwdg=qobject_cast<DevelWdgView*>(children().at(i_c))) && cwdg->select()) {
 		QPointF toPnt = cwdg->posF();
 		if(sact.at(1) == "left")	toPnt = QPointF(selRect.x(),cwdg->posF().y());
 		else if(sact.at(1) == "right")	toPnt = QPointF(selRect.x()+selRect.width()-cwdg->sizeF().width(),cwdg->posF().y());
@@ -2346,8 +2344,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	    }
 	//saveGeom("");
     }
-    else if(sact.at(0) == "level")
-    {
+    else if(sact.at(0) == "level") {
 	bool is_rise = (sact.at(1) == "rise");
 	bool is_up   = (sact.at(1) == "up");
 	bool is_lower= (sact.at(1) == "lower");
@@ -2356,12 +2353,10 @@ void DevelWdgView::wdgViewTool( QAction *act )
 	string sel_w;
 
 	if(is_rise || is_up)
-	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
-	    {
+	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); ) {
 		bool is_move = false;
 		cwdg = ewdg = NULL;
-		for(int i_c = 0; i_c < children().size(); i_c++)
-		{
+		for(int i_c = 0; i_c < children().size(); i_c++) {
 		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
 		    if(ewdg->id() == sel_w.c_str()) cwdg = ewdg;
@@ -2382,14 +2377,12 @@ void DevelWdgView::wdgViewTool( QAction *act )
 		}
 	    }
 
-	if(is_lower || is_down)
-	{
+	if(is_lower || is_down) {
 	    for(int w_off = 0; (sel_w=TSYS::strSepParse(sel_ws,0,';',&w_off)).size(); )
 	    {
 		bool is_move = false;
 		cwdg = ewdg = NULL;
-		for(int i_c = children().size()-1; i_c >= 0; i_c--)
-		{
+		for(int i_c = children().size()-1; i_c >= 0; i_c--) {
 		    if(!qobject_cast<DevelWdgView*>(children().at(i_c)))   continue;
 		    ewdg = qobject_cast<DevelWdgView*>(children().at(i_c));
 		    if(ewdg->id() == sel_w.c_str())   cwdg = ewdg;
@@ -2401,8 +2394,7 @@ void DevelWdgView::wdgViewTool( QAction *act )
 			is_move = true;
 		    }
 		}
-		if(is_down && cwdg && ewdg && cwdg != ewdg)
-		{
+		if(is_down && cwdg && ewdg && cwdg != ewdg) {
 		    cwdg->stackUnder(ewdg);
 		    cwdg->setZ(ewdg->z()-1);
 		    saveGeom(cwdg->id());
@@ -2421,8 +2413,7 @@ void DevelWdgView::wdgPopup( )
 
     //Cancel new widget inserting
     QAction *act = mainWin()->actGrpWdgAdd->checkedAction();
-    if(act && act->isChecked())
-    {
+    if(act && act->isChecked()) {
 	act->setChecked(false);
 	setCursor(Qt::ArrowCursor);
 	return;
@@ -2739,7 +2730,12 @@ bool DevelWdgView::attrSet( const string &attr, const string &val, int uiPrmPos 
 	case A_GEOM_Y: chGeomCtx.setAttr("_y", val);		break;
 	case A_GEOM_W: chGeomCtx.setAttr("_w", val);		break;
 	case A_GEOM_H: chGeomCtx.setAttr("_h", val);		break;
-	case A_GEOM_Z: chGeomCtx.setAttr("_z", val);		break;
+	case A_GEOM_Z: chGeomCtx.setAttr("_z", val);
+	    if(wLevel() > 0 && !allAttrLoad()) {
+		levelWidget(wLevel()-1)->orderUpdate();
+		QWidget::update();
+	    }
+	    break;
 	case A_GEOM_X_SC: chGeomCtx.setAttr("_xSc", val);	break;
 	case A_GEOM_Y_SC: chGeomCtx.setAttr("_ySc", val);	break;
 	default: geomUp = false;				break;

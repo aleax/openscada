@@ -1,3 +1,10 @@
+2014-06-24 Roman
+- DAQ.MMS: Fast start at unallowed PLC is made.
+- Special.FLibSYS: Connection to archives by vArch is made optimal.
+- UI.{QTCfg,Vision}: For wait cursor uses QApplication::setOverrideCursor(Qt::WaitCursor);
+- FIX:UI.Vision: Widgets order update fix after manual "geomZ" set into development mode.
+
+
 2014-06-20 Roman
 - DB.FireBird: Using integer type expand to INT64. Managed types expand to:
     blr_varying, blr_varying2, blr_text, blr_text2, blr_blob, blr_short, blr_long, blr_int64, blr_float, blr_double and blr_d_float.
