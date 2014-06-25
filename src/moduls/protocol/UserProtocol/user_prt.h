@@ -140,7 +140,7 @@ class TProt: public TProtocol
 
 	void itemListIn( vector<string> &ls, const string &curIt = "" );
 
-	//> User protocol's functions
+	// User protocol's functions
 	void uPrtList( vector<string> &ls )	{ chldList(mPrtU,ls); }
 	bool uPrtPresent( const string &id )	{ return chldPresent(mPrtU,id); }
 	void uPrtAdd( const string &id, const string &db = "*.*" );

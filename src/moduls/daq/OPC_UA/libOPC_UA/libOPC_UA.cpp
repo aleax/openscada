@@ -2093,15 +2093,13 @@ nextReq:
     string rb, out;
     off = 4;
 
-    try
-    {
+    try {
 	mSz = iNu(rba, off, 4);
 	if(rba.size() < 8 || rba.size() < mSz) return false;
 	rb = rba.substr(0, mSz);
 
 	//Check for hello message type
-	if(rb.compare(0,4,"HELF") == 0)
-	{
+	if(rb.compare(0,4,"HELF") == 0) {
 	    if(rb.size() > 4096) throw OPCError(OpcUa_BadTcpMessageTooLarge, "", "");
 
 	    if(dbg) debugMess("HELLO Req");
@@ -3365,10 +3363,10 @@ nextReq:
 	}
 	else throw OPCError(OpcUa_BadNotSupported, "", "");
     }
-    catch(OPCError er)
-    {
+    catch(OPCError er) {
 	if(dbg) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
 	if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; }
+	mSz = rba.size();	//For prevent broken requests hang
     }
 
     if(answ) answ->append(out);

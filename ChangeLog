@@ -1,3 +1,7 @@
+2014-06-25 Roman
+- DAQ.OPC_UA: Broken input packages hang is fixed.
+
+
 2014-06-24 Roman
 - DAQ.MMS: Fast start at unallowed PLC is made.
 - Special.FLibSYS: Connection to archives by vArch is made optimal.

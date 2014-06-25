@@ -176,18 +176,17 @@ TController *TipContr::ContrAttach( const string &name, const string &daq_db )	{
 
 bool TipContr::compileFuncLangs( vector<string> *ls )
 {
-    if(ls)
-    {
+    if(ls) {
 	ls->clear();
 	ls->push_back("JavaScript");
     }
+
     return true;
 }
 
 void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 {
-    if(lang == "JavaScript")
-    {
+    if(lang == "JavaScript") {
 	shgl.setAttr("font","Courier");
 	shgl.childAdd("rule")->setAttr("expr","(\"\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
 	     childAdd("rule")->setAttr("expr","\\\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})")->setAttr("color","green")->setAttr("font_weight","1");
@@ -221,19 +220,16 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 
     //Try hot config fields change for work function
     if(func.at().use() && func.at().startStat())
-	try
-	{
+	try {
 	    ((TFunction&)func.at()).operator=(fnc_cfg);
 	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
 	}
-	catch(TError err)
-	{
+	catch(TError err) {
 	    func.at().setStart(true);
 	    throw;
 	}
     //Standard compile
-    try
-    {
+    try {
 	if(func.at().startStat()) func.at().setStart(false);
 	func.at().setProg(prog_text.c_str());
 	func.at().setUsings(usings);
@@ -261,8 +257,7 @@ void TipContr::load_( )
     setSafeTm(s2i(TBDS::genDBGet(nodePath()+"SafeTm",i2s(safeTm()))));
 
     //Load function's libraries
-    try
-    {
+    try {
 	// Search and create new libraries
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
@@ -281,16 +276,14 @@ void TipContr::load_( )
 	    }
 
 	//  Check for remove items removed from DB
-	if(!SYS->selDB().empty())
-	{
+	if(!SYS->selDB().empty()) {
 	    lbList(db_ls);
 	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
 		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
 		    lbUnreg(db_ls[i_it]);
 	}
     }
-    catch(TError err)
-    {
+    catch(TError err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
