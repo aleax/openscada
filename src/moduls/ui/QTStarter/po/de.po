@@ -841,7 +841,7 @@ msgstr "Handbuch"
 
 #: tuimod.cpp:624
 msgid "No the manual '%1' found offline or online!"
-msgstr "Nein das Handbuch "%1" gefunden, offline oder online!"
+msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
 
 #: tuimod.cpp:643
 #, c-format

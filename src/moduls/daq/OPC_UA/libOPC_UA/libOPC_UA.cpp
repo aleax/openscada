@@ -2094,13 +2094,14 @@ nextReq:
     off = 4;
 
     try {
+	if(rba.size() < 8) return false;
 	mSz = iNu(rba, off, 4);
-	if(rba.size() < 8 || rba.size() < mSz) return false;
-	rb = rba.substr(0, mSz);
+	rb = rba.substr(0, std::min(mSz,rba.size()));
 
 	//Check for hello message type
 	if(rb.compare(0,4,"HELF") == 0) {
 	    if(rb.size() > 4096) throw OPCError(OpcUa_BadTcpMessageTooLarge, "", "");
+	    if(rb.size() < mSz) return false;
 
 	    if(dbg) debugMess("HELLO Req");
 
@@ -2130,8 +2131,8 @@ nextReq:
 	    if(dbg) debugMess("HELLO Resp");
 	}
 	//Check for Open SecureChannel message type
-	else if(rb.compare(0,4,"OPNF") == 0)
-	{
+	else if(rb.compare(0,4,"OPNF") == 0) {
+	    if(rb.size() < mSz) return false;
 	    if(dbg) debugMess("OPN Req");
 
 	    off = 8;
@@ -2150,8 +2151,7 @@ nextReq:
 	    epEnList(epLs);
 	    int i_epOk = -1;
 	    EP *wep = NULL;
-	    for(int i_ep = 0; i_epOk < 0 && i_ep < (int)epLs.size(); i_ep++)
-	    {
+	    for(int i_ep = 0; i_epOk < 0 && i_ep < (int)epLs.size(); i_ep++) {
 		if(!(wep=epEnAt(epLs[i_ep])))	continue;
 		for(int i_s = 0; i_epOk < 0 && i_s < wep->secSize(); i_s++)
 		    if(wep->secPolicy(i_s) == secPlc)
@@ -2161,8 +2161,7 @@ nextReq:
 
 	    string clntCert = certDER2PEM(iS(rb,off));		//>SenderCertificate
 	    string serverCertThmbp = iS(rb, off);		//>ReceiverCertificateThumbrint
-	    if(!isSecNone)
-	    {
+	    if(!isSecNone) {
 		if(serverCertThmbp != certThumbprint(wep->cert()))//>ServerCertificateThumbprint
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Server certificate thumbprint error.");
 		// Decode message block
@@ -2190,8 +2189,7 @@ nextReq:
 	    string clNonce = iS(rb, off);			//>  ClientNonce
 	    int32_t reqLifeTm = iN(rb, off, 4);			//>  RequestedLifetime
 
-	    if(!isSecNone)
-	    {
+	    if(!isSecNone) {
 		off += iNu(rb,off,1);				//Pass padding
 		if(!asymmetricVerify(rb.substr(0,off),rb.substr(off),clntCert))	//Check Signature
 		    throw OPCError(OpcUa_BadTcpMessageTypeInvalid, "Signature error");
@@ -2236,8 +2234,7 @@ nextReq:
 	    oTm(out, chnlGet(chnlId).tCreate);			//CreatedAt
 	    oN(out, chnlGet(chnlId).tLife, 4);			//RevisedLifeTime (600000, minimum)
 
-	    if(!isSecNone)
-	    {
+	    if(!isSecNone) {
 		// Generate nonce
 		string servNonce = randBytes(symKeySz);
 		oS(out, servNonce);				//nonce
@@ -2258,8 +2255,7 @@ nextReq:
 		// Set channel secure properties
 		chnlSecSet(chnlId, deriveKey(servNonce,clNonce,symKeySz*3), deriveKey(clNonce,servNonce,symKeySz*3));
 	    }
-	    else
-	    {
+	    else {
 		oS(out, "\001");				//nonce
 		oNu(out, out.size(), 4, 4);			//Real message size
 	    }
@@ -2267,8 +2263,8 @@ nextReq:
 	    if(dbg) debugMess("OPN Resp");
 	}
 	//Check for Close SecureChannel message type
-	else if(rb.compare(0,4,"CLOF") == 0)
-	{
+	else if(rb.compare(0,4,"CLOF") == 0) {
+	    if(rb.size() < mSz) return false;
 	    if(dbg) debugMess("CLO Req");
 
 	    off = 8;
@@ -2310,8 +2306,8 @@ nextReq:
 	    return false;	//Close socket
 	}
 	//Check for SecureChannel message type
-	else if(rb.compare(0,4,"MSGF") == 0)
-	{
+	else if(rb.compare(0,4,"MSGF") == 0) {
+	    if(rb.size() < mSz) return false;
 	    off = 8;
 	    uint32_t stCode = 0;
 	    uint32_t secId = iNu(rb, off, 4);			//Secure channel identifier
@@ -2495,8 +2491,7 @@ nextReq:
 		    vector<string> epLs;
 		    epEnList(epLs);
 		    unsigned epCnt = 0;
-		    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++)
-		    {
+		    for(unsigned i_ep = 0; i_ep < epLs.size(); i_ep++) {
 			EP *ep = epEnAt(epLs[i_ep]);
 			if(!ep) continue;
 								//>>> EndpointDescription
@@ -2545,13 +2540,11 @@ nextReq:
 
 		    oS(respEp, "");				//serverSoftware Certificates []
 								//> serverSignature
-		    if(scHd.secPolicy == "None")
-		    {
+		    if(scHd.secPolicy == "None") {
 			oS(respEp, "");				//algorithm
 			oS(respEp, "");				//signature
 		    }
-		    else
-		    {
+		    else {
 			oS(respEp, "http://www.w3.org/2000/09/xmldsig#rsa-sha1");	//algorithm
 			oS(respEp, asymmetricSign(clCert+clNonce,wep->pvKey()));	//signature
 		    }
@@ -2565,8 +2558,7 @@ nextReq:
 								//>clientSignature
 		    string alg = iS(rb, off);			//> algorithm
 		    string sign = iS(rb, off);			//> signature
-		    if(scHd.secPolicy != "None")
-		    {
+		    if(scHd.secPolicy != "None") {
 			if(!asymmetricVerify(certPEM2DER(wep->cert())+wep->sessGet(sesTokId).servNonce, sign, scHd.clCert))
 			    throw OPCError(OpcUa_BadApplicationSignatureInvalid, "Application signature error");
 		    }
@@ -2618,8 +2610,7 @@ nextReq:
 		    //  Request
 		    bool subScrDel = iNu(rb, off, 1);		//deleteSubscriptions
 		    wep->sessClose(sesTokId);
-		    if(subScrDel)
-		    {
+		    if(subScrDel) {
 			pthread_mutex_lock(&wep->mtxData);
 			for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
 			    if(wep->mSubScr[i_ss].st != SS_CLOSED && wep->mSubScr[i_ss].sess == (int)sesTokId)
@@ -2712,8 +2703,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++)
-		    {
+		    for(uint32_t i_s = 0; i_s < sn; i_s++) {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
 			oNu(respEp, ((ss.st==SS_CLOSED)?OpcUa_BadSubscriptionIdInvalid:0), 4);	//statusCode
@@ -2737,8 +2727,7 @@ nextReq:
 		    oNu(respEp, ni, 4);				//<results []
 
 		    //  Nodes list process and request form
-		    for(uint32_t i_m = 0; i_m < ni; i_m++)
-		    {
+		    for(uint32_t i_m = 0; i_m < ni; i_m++) {
 								//> itemToMonitor
 			NodeId nid = iNodeId(rb, off);		//>  nodeId
 			uint32_t aid = iNu(rb, off, 4);		//>  attributeId
@@ -2751,8 +2740,7 @@ nextReq:
 			double sI = iR(rb, off, 8);		//>  samplingInterval
 			NodeId fid = iNodeId(rb, off);		//>  filter
 			iNu(rb, off, 1);			//>   EncodingMask
-			if(fid.numbVal() != 0)
-			{
+			if(fid.numbVal() != 0) {
 			    uint32_t eSz = iNu(rb, off, 4);	//>   ExtObj
 			    iVal(rb, off, eSz);			//>    No filters support - simple pass
 			}
@@ -2764,19 +2752,16 @@ nextReq:
 			uint32_t mIt = 0;
 
 			if(fid.numbVal() != 0)	st = OpcUa_BadFilterNotAllowed;
-			else
-			{
+			else {
 			    //   Create new monitored item
 			    mIt = wep->mItSet(subScrId, 0, mM, nid, aid, tmStRet, sI, qSz, dO, cH);
 			    if(!mIt) st = OpcUa_BadSubscriptionIdInvalid;
 			    else if(mIt > wep->limMonitItms()) st = OpcUa_BadTooManyOperations;
-			    else
-			    {
+			    else {
 				Subscr::MonitItem mItO = wep->mItGet(subScrId, mIt);
 				if(mItO.nd.isNull()) st = OpcUa_BadNodeIdInvalid;
 				else if(mItO.aid == Aid_Error) st = OpcUa_BadAttributeIdInvalid;
-				else
-				{
+				else {
 				    sI = mItO.smplItv;
 				    qSz = mItO.qSz;
 				}
@@ -2806,16 +2791,14 @@ nextReq:
 		    reqTp = OpcUa_ModifyMonitoredItemsResponse;
 		    oNu(respEp, ni, 4);				//<results []
 		    //  Nodes list process and request form
-		    for(uint32_t i_m = 0; i_m < ni; i_m++)
-		    {
+		    for(uint32_t i_m = 0; i_m < ni; i_m++) {
 			uint32_t mIt = iNu(rb, off, 4);		//> monitoredItemId
 								//> requestedParameters
 			uint32_t cH = iNu(rb, off, 4);		//>  clientHandle
 			double sI = iR(rb, off, 8);		//>  samplingInterval
 			NodeId fid = iNodeId(rb, off);		//>  filter
 			iNu(rb, off, 1);			//>   EncodingMask
-			if(fid.numbVal() != 0)
-			{
+			if(fid.numbVal() != 0) {
 			    uint32_t eSz = iNu(rb, off, 4);	//>   ExtObj
 			    iVal(rb, off, eSz);			//>    No filters support - simple pass
 			}
@@ -2827,8 +2810,7 @@ nextReq:
 			if(fid.numbVal() != 0)	st = OpcUa_BadFilterNotAllowed;
 			//   Modify monitored item
 			else if(wep->mItGet(subScrId,mIt).md == MM_DISABLED) st = OpcUa_BadMonitoredItemIdInvalid;
-			else
-			{
+			else {
 			    wep->mItSet(subScrId, mIt, MM_CUR, NodeId(), OpcUa_NPosID, tmStRet, sI, qSz, dO, cH);
 			    Subscr::MonitItem mItO = wep->mItGet(subScrId, mIt);
 			    sI = mItO.smplItv;
@@ -2852,8 +2834,7 @@ nextReq:
 		    uint32_t subScrId = iNu(rb, off, 4);		//>subscriptionId
 		    MonitoringMode mM = MM_DISABLED;
 		    if(wep->subscrGet(subScrId).st == SS_CLOSED) { reqTp = OpcUa_ServiceFault; stCode = OpcUa_BadSubscriptionIdInvalid; break; }
-		    if(reqTp == OpcUa_SetMonitoringModeRequest)
-		    {
+		    if(reqTp == OpcUa_SetMonitoringModeRequest) {
 			mM = (MonitoringMode)iNu(rb, off, 4);		//>monitoringMode
 			reqTp = OpcUa_SetMonitoringModeResponse;
 		    }
@@ -2863,8 +2844,7 @@ nextReq:
 		    //  Respond
 		    oNu(respEp, ni, 4);					//<results []
 		    //  Nodes list process and request form
-		    for(uint32_t i_m = 0; i_m < ni; i_m++)
-		    {
+		    for(uint32_t i_m = 0; i_m < ni; i_m++) {
 			uint32_t mIt = iNu(rb, off, 4);			//> monitoredItemId
 
 			//   Node result
@@ -2888,8 +2868,7 @@ nextReq:
 		    respEp.reserve(20);
 		    oNu(respEp, sn, 4);				//results []
 
-		    for(uint32_t i_s = 0; i_s < sn; i_s++)
-		    {
+		    for(uint32_t i_s = 0; i_s < sn; i_s++) {
 			uint32_t subScrId = iNu(rb, off, 4);	//subscriptionId
 			Subscr ss = wep->subscrGet(subScrId);
 			if(ss.st != SS_CLOSED) wep->subscrSet(subScrId, SS_CUR, en);
@@ -2909,16 +2888,14 @@ nextReq:
 		    oNu(respEp, ip, 4);			//results []
 
 		    //  Pathes list process and request form
-		    for(unsigned i_p = 0; i_p < ip; i_p++)
-		    {
+		    for(unsigned i_p = 0; i_p < ip; i_p++) {
 			NodeId sN = iNodeId(rb, off);	//startingNode
 							//>> relativePath
 			uint32_t irp = iNu(rb, off, 4);	//rpaths number
 
 			bool nOK = true;
 			XML_N req("data");
-			for(unsigned i_rp = 0; nOK && i_rp < irp; i_rp++)
-			{
+			for(unsigned i_rp = 0; nOK && i_rp < irp; i_rp++) {
 			    NodeId rTpId = iNodeId(rb, off);	//referenceTypeId
 			    bool inv = iNu(rb, off, 1);		//isInverse
 			    iNu(rb, off, 1);			//includeSubtypes
@@ -2931,8 +2908,7 @@ nextReq:
 			    wep->reqData(OpcUa_BrowseRequest, req);
 			    unsigned i_ref;
 			    for(i_ref = 0; i_ref < req.childSize(); i_ref++)
-				if(req.childGet(i_ref)->attr("name") == tNm)
-				{
+				if(req.childGet(i_ref)->attr("name") == tNm) {
 				    sN = NodeId::fromAddr(req.childGet(i_ref)->attr("NodeId"));
 				    break;
 				}
@@ -2942,8 +2918,7 @@ nextReq:
 			//   Path result
 			oNu(respEp, (nOK?0:OpcUa_BadNoMatch), 4);	//<< statusCode, 0x806f0000 (BadNoMatch)
 			oNu(respEp, (nOK?1:0), 4);			//<< targets [], 0
-			if(nOK)
-			{
+			if(nOK) {
 			    oNodeId(respEp, sN);		//ExpandedNodeId
 			    oNu(respEp, 0xFFFFFFFF, 4);		//Index
 			}
@@ -2969,8 +2944,7 @@ nextReq:
 		    oNu(respEp, nc, 4);			//Nodes
 
 		    //   Nodes list processing
-		    for(uint32_t i_c = 0; i_c < nc; i_c++)
-		    {
+		    for(uint32_t i_c = 0; i_c < nc; i_c++) {
 			NodeId nid = iNodeId(rb, off);		//nodeId
 			uint32_t bd = iNu(rb, off, 4);		//browseDirection
 			NodeId rtId = iNodeId(rb, off);		//referenceTypeId
@@ -3026,8 +3000,7 @@ nextReq:
 		    oNu(respEp, nCp, 4);		//continuationPoints
 
 		    //   Continuation points list processing
-		    for(uint32_t i_cp = 0; i_cp < nCp; i_cp++)
-		    {
+		    for(uint32_t i_cp = 0; i_cp < nCp; i_cp++) {
 			string cp = iS(rb, off);	//continuationPoint
 
 			uint32_t stCode = 0, refNumb = 0;
@@ -3036,8 +3009,7 @@ nextReq:
 			int refNumbOff = respEp.size();	oNu(respEp, refNumb, 4);//References [] = 0
 			Sess::ContPoint cPo = wep->sessCpGet(sesTokId, cp);
 
-			if(!cPo.empty())
-			{
+			if(!cPo.empty()) {
 			    req.clear()->setAttr("node", cPo.brNode)->setAttr("LastNode", cPo.lstNode)->
 					setAttr("BrDir", uint2str(cPo.brDir))->setAttr("RefTpId", cPo.refTypeId)->
 					setAttr("ClassMask", uint2str(cPo.nClassMask))->setAttr("rPn", uint2str(cPo.refPerN));
@@ -3092,8 +3064,7 @@ nextReq:
 		    //  Respond
 		    oNu(respEp, nc, 4);				//Numbers
 		    //   Nodes list processing
-		    for(uint32_t i_c = 0; i_c < nc; i_c++)
-		    {
+		    for(uint32_t i_c = 0; i_c < nc; i_c++) {
 			NodeId nid = iNodeId(rb, off);		//nodeId
 			uint32_t aid = iNu(rb, off, 4);		//attributeId
 			iS(rb, off);				//indexRange
@@ -3120,8 +3091,7 @@ nextReq:
 
 		    //  Respond
 		    oNu(respEp, nc, 4);			//Numbers
-		    for(unsigned i_n = 0; i_n < nc; i_n++)
-		    {
+		    for(unsigned i_n = 0; i_n < nc; i_n++) {
 			NodeId nid = iNodeId(rb, off);	//nodeId
 			uint32_t aid = iNu(rb, off, 4);	//attributeId (Value)
 			iS(rb, off);			//indexRange
@@ -3146,30 +3116,26 @@ nextReq:
 
 		    //  The publish request queue and/or process
 		    Sess *s = wep->sessGet_(sesTokId);
-		    if(s)
-		    {
+		    if(s) {
 			unsigned i_p = 0;
 			bool findOK = false;
 			for( ; i_p < s->publishReqs.size(); ++i_p)
 			    if((findOK=(rba.compare(0,mSz,s->publishReqs[i_p])==0))) break;
 			if(i_p >= s->publishReqs.size()) s->publishReqs.push_back(rba.substr(0,mSz));
-			if(findOK || s->publishReqs.size() == 1)
-			{
+			if(findOK || s->publishReqs.size() == 1) {
 			    unsigned prSS = wep->mSubScr.size();
 			    for(unsigned i_ss = 0; i_ss < wep->mSubScr.size(); ++i_ss)
 				if((wep->mSubScr[i_ss].st == SS_LATE || wep->mSubScr[i_ss].st == SS_KEEPALIVE) &&
 					(prSS == wep->mSubScr.size() || wep->mSubScr[i_ss].pr > wep->mSubScr[prSS].pr))
 				    prSS = i_ss;
-			    if(prSS < wep->mSubScr.size())
-			    {
+			    if(prSS < wep->mSubScr.size()) {
 				Subscr &ss = wep->mSubScr[prSS];
 
 				//   Request
 				string respAck;
 				int32_t sa = iN(rb, off, 4);			//>subscription Acknowledgements []
 				oN(respAck, sa, 4);				//<results []
-				for(int i_a = 0; i_a < sa; i_a++)
-				{
+				for(int i_a = 0; i_a < sa; i_a++) {
 				    uint32_t prSSAck = iNu(rb, off, 4);		//> subscriptionId
 				    uint32_t seqN = iNu(rb, off, 4);		//> sequenceNumber
 				    uint32_t st = OpcUa_BadSequenceNumberUnknown;
@@ -3186,8 +3152,7 @@ nextReq:
 				respEp.reserve(100);
 				oNu(respEp, prSS+1, 4);				//<subscriptionId
 
-				if(ss.st == SS_LATE)
-				{
+				if(ss.st == SS_LATE) {
 				    ss.setState(SS_NORMAL);
 
 				    int aSeqOff = respEp.size(), aSeqN = 1;
@@ -3237,8 +3202,7 @@ nextReq:
 					    case TS_BOTH:   eMsk |= 0x0C;	break;
 					    default:				break;
 					}
-					while(mIt.vQueue.size())
-					{
+					while(mIt.vQueue.size()) {
 					    if(ss.maxNotPerPubl && i_mIt >= ss.maxNotPerPubl) { maxNotPerPublLim = true; break; }
 					    oNu(respEp, mIt.cH, 4);		//<   clientHandle
 					    oDataValue(respEp, eMsk, mIt.vQueue.front().vl, mIt.vTp, mIt.vQueue.front().tm);	//<   value
@@ -3254,8 +3218,7 @@ nextReq:
 				    ss.retrQueue.push_back(respEp.substr(ntfMsgOff));	//Queue to retranslation
 				    ss.seqN++;
 				}
-				else if(ss.st == SS_KEEPALIVE)
-				{
+				else if(ss.st == SS_KEEPALIVE) {
 				    ss.setState(SS_NORMAL);
 				    oN(respEp, 0, 4);			//<availableSequence Numbers []
 				    oNu(respEp, 0, 1);			//moreNotifications, FALSE
@@ -3290,13 +3253,11 @@ nextReq:
 		    pthread_mutex_lock(&wep->mtxData);
 		    Subscr &ss = wep->mSubScr[prSS-1];
 		    deque<string>::iterator iRQ = ss.retrQueue.begin();
-		    for( ; iRQ != ss.retrQueue.end(); ++iRQ)
-		    {
+		    for( ; iRQ != ss.retrQueue.end(); ++iRQ) {
 			int rOff = 0;
 			if(iNu(*iRQ,rOff,4) == seqN)	break;
 		    }
-		    if(iRQ == ss.retrQueue.end())
-		    {
+		    if(iRQ == ss.retrQueue.end()) {
 			stCode = OpcUa_BadSubscriptionIdInvalid; reqTp = OpcUa_ServiceFault;
 			pthread_mutex_unlock(&wep->mtxData);
 			break;
@@ -3341,8 +3302,7 @@ nextReq:
 	    if(scHd.secMessMode == MS_Sign || scHd.secMessMode == MS_SignAndEncrypt)
 	    {
 		//Padding place
-		if(scHd.secMessMode == MS_SignAndEncrypt)
-		{
+		if(scHd.secMessMode == MS_SignAndEncrypt) {
 		    int kSz = scHd.clKey.size()/3;
 		    int paddingSize = ((out.size()-begEncBlck+1+20+kSz-1)/kSz)*kSz-(out.size()-begEncBlck+20);
 		    out += string(paddingSize, (char)(paddingSize-1));
@@ -3366,7 +3326,7 @@ nextReq:
     catch(OPCError er) {
 	if(dbg) debugMess(strMess("MSG Error: %xh:%s",er.cod,er.mess.c_str()));
 	if(er.cod) { out = mkError(er.cod, er.mess); holdConn = false; }
-	mSz = rba.size();	//For prevent broken requests hang
+	mSz = rba.size();	//Drop request for prevent broken requests hang
     }
 
     if(answ) answ->append(out);

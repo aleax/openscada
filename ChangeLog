@@ -1,3 +1,12 @@
+2014-06-27 Roman
+- DB.LibsDB.{OscadaLibs,vcaBase}.db: Expanded to group properties processing by the parameters templates DevLib.UPS, base.SNMP
+    and the representing widget Main.objProps. The new widget uses view "Table" of primitive "FormEl" which unavailable for UI.WebVision now!
+- !!:DB.LibsDB.vcaBase.db: New extended DAQ parameter's pasport widget is created for allow: the attributes modify, trends and data table build.
+    The new widget uses view "Table" of primitive "FormEl" which unavailable for UI.WebVision now!
+- Transport: Meassured request's result after termination by an exception is added to "Sent" tab of output transport.
+- DAQ.OPC_UA: Input packages' size and header control is expanded for broken packages process and early drop.
+
+
 2014-06-25 Roman
 - DAQ.OPC_UA: Broken input packages hang is fixed.
 

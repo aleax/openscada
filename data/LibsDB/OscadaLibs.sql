@@ -1479,19 +1479,19 @@ INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg>
 ');
 INSERT INTO "prescr_val" VALUES('comsCntr','LogicLev.prescription');
 INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
-<TVarObj p=''Таймер''>
-<str p=''arg1''>Час (с)</str>
-<str p=''descr''>Типовий таймер. Утримує виконання до завершення часу.</str>
-<str p=''prmID''>timer</str>
-</TVarObj>
-<TVarObj p=''Фоновий таймер''>
-<str p=''arg1''>Час (с)</str>
-<str p=''descr''>Фоновий таймер. Оновлюється паралельно з поточною командою.</str>
+<TVarObj p=''Background timer''>
+<str p=''arg1''>Time (s)</str>
+<str p=''descr''>Background timer. Updating parallel with current command.</str>
 <str p=''prmID''>backTimer</str>
+</TVarObj>
+<TVarObj p=''Timer''>
+<str p=''arg1''>Time (s)</str>
+<str p=''descr''>Typical timer. Hold run up to time elapse.</str>
+<str p=''prmID''>timer</str>
 </TVarObj>
 </TVarObj>
 ');
-INSERT INTO "prescr_val" VALUES('clcCnt','10086974');
+INSERT INTO "prescr_val" VALUES('clcCnt','10148351');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнювання значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -2122,6 +2122,12 @@ INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeM','ВОК: dimension',0,16
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t1_1','t1 (Tв1)',2,16,'',13,'','','t1 (Tв1)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t2_1','t2 (Tв1)',2,16,'',14,'','','t2 (Tв1)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','dt_1','dt (Tв1)',2,16,'',15,'','','dt (Tв1)','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'','','Source object''s address','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','items','All items',4,33,'',1,'','','All items','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','The object',4,0,'',2,'','','The object','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',3,'','','Code','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',4,'','','Name','');
+INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',5,'','','Description','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -2548,6 +2554,13 @@ INSERT INTO "tmplib_base_io" VALUES('manInUnif','this','Object',4,1,'',21,'Об'
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','SHIFR','Code',0,0,'',22,'Шифр','','Шифр','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','NAME','Name',0,0,'',23,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','DESCR','Description',0,0,'',24,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','srcAddr','Source object''s address',0,64,'',0,'Source object''s address','','','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','manTables','Manual tables',0,64,'',1,'Manual tables','','','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','items','All items',4,33,'',2,'All items','','','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','this','The object',4,0,'',3,'The object','','','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','SHIFR','Code',0,0,'',4,'Code','','','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','NAME','Name',0,0,'',5,'Name','','','');
+INSERT INTO "tmplib_base_io" VALUES('SNMP','DESCR','Description',0,0,'',6,'Description','','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Prescriptions','Рецепт','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -4597,6 +4610,112 @@ if(t_err.length)
 	t1_1 = t2_1 = dt_1 = EVAL_REAL;
 }
 else f_err = errAttrs.length ? "11:Quality errors: "+errAttrs : "0";','','');
+INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','','','',10,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = "No connection to source object"; alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = "Source error: "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aId = nLst[i_n].slice(2);
+		aNd = srcPrm[nLst[i_n]];
+		if(items[aId].isEVal()) {
+			items[aId] = itW = new Object();
+			itW.descr = aNd.descr();
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		items[aId].val = aNd.get();
+	}
+
+	//Alarms process and mark
+	varS = "ups_status";
+	if(tP=srcPrm[varS]) {
+		if(tP.get() == "OB")	{ items[varS].alarm = 1; tErr += "Status \"On battery\"; "; }
+		else if(tP.get() == "LB")	{ items[varS].alarm = 2; tErr += "Status \"Low battery\"; "; }
+		else if(tP.get() == "SD")	{ items[varS].alarm = 2; tErr += "Status \"Shutdown load\"; "; }
+		else if(tP.get().indexOf("ALARM") != -1)	{ items[varS].alarm = 2; tErr += "Status \"ALARM\"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_packs";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += "None good battery present; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_charge";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toReal() < 20) { items[varS].alarm = 1; tErr += "Battery charge low; "; }
+		else if(tP.get().toReal() < 5) { items[varS].alarm = 2; tErr += "Battery charge critical; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_packs_bad";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toInt())	{ items[varS].alarm = 1; tErr += "Bad "+tP.get().toInt()+" batteries present"; }
+		else items[varS].alarm = 0;
+	}
+	varS = "input_voltage";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toReal() < 210) { items[varS].alarm = 1; tErr += "Input voltage low; "; }
+		else if(tP.get().toReal() > 250) { items[varS].alarm = 1; tErr += "Input voltage high; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "input_frequency";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toReal() < 40) { items[varS].alarm = 2; tErr += "Input frequency too low; "; }
+		else if(tP.get().toReal() > 60) { items[varS].alarm = 2; tErr += "Input frequency too high; "; }
+		else if(tP.get().toReal() < 45) { items[varS].alarm = 1; tErr += "Input frequency low; "; }
+		else if(tP.get().toReal() > 55) { items[varS].alarm = 1; tErr += "Input frequency high; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "ups_load";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toReal() > 100)			{ items[varS].alarm = 2; tErr += "UPS overloaded; "; }
+		else if(tP.get().toReal() > 80)	{ items[varS].alarm = 1; tErr += "UPS load high; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "ups_temperature";
+	if(tP=srcPrm[varS]) {
+		if(tP.get().toReal() > 70) { items[varS].alarm = 2; tErr += "UPS overheated; "; }
+		else if(tP.get().toReal() > 50) { items[varS].alarm = 1; tErr += "Temperature high; "; }
+		else items[varS].alarm = 0;
+	}
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+f_err = tErr;','','',1403717899);
 CREATE TABLE 'flb_web' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_web" VALUES('alarms','Alarms','',10,'//> Load rules
 var alarmsTree = SYS.XMLNode("ALARMS");
@@ -6875,6 +6994,91 @@ else
 if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
 else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
 f_err = tErr;','');
+INSERT INTO "tmplib_base" VALUES('SNMP','','','','','','',10,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = "No connection to source object"; alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = "Source error: "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	lstTable = "";
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aNd = srcPrm[nLst[i_n]];
+		aId = nLst[i_n].slice(2);
+		aIdPrc = aNd.descr();
+		if(!aIdPrc.parse(1,"::").length) continue;
+		if(aIdPrc.slice(-13) == "TotalNumber.0")	{ lstTable = aIdPrc.slice(0,-13); continue; }
+
+		//Manual tables check
+		if(!lstTable.length || lstTable != aIdPrc.slice(0,lstTable.length))
+			for(off = 0; (iMnT=manTables.parse(0,";",off)).length; )
+				if(iMnT == aIdPrc.slice(0,iMnT.length)) { lstTable = iMnT; break; }
+		
+		if(lstTable.length && lstTable == aIdPrc.slice(0,lstTable.length))
+			aIdPrc = lstTable.parse(1,"::")+(prt1=aIdPrc.slice(lstTable.length)).parse(1,".")+prt1.parse(0,".");
+		else aIdPrc = aIdPrc.parse(1,"::").parse(0,".");
+
+		if(items[aIdPrc].isEVal()) {
+			items[aIdPrc] = itW = new Object();
+			itW.descr = aIdPrc;//aNd.descr();
+			itW.id = aId;
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		cVl = aNd.get();
+		// Selectable value specifying
+		if(aNd.flg()&0x01)
+			for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+				if(cVl == selId && cVl != aNd.selNames().parse(pos,";")) {		
+					cVl = aNd.selNames().parse(pos,";")+"("+cVl+")";
+					break;
+				}
+		items[aIdPrc].val = cVl;
+	}
+
+	//Alarms process and mark
+	/*varS = "battery_packs";
+	if(tP=srcPrm[varS])
+	{
+		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += "None good battery present; "; }
+		else items[varS].alarm = 0;
+	}*/
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+f_err = tErr;','','',1403717921);
 CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовой таймер. Удерживает выполнение до завершения времени.','Типовий таймер. Утримує виконання до завершення часу.',1,'PrescrTempl.timer');
 INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Фоновый таймер','Фоновий таймер','Background timer. Updating parallel with current command.','Фоновый таймер. Обновляется параллельно с текущей командой.','Фоновий таймер. Оновлюється паралельно з поточною командою.',1,'PrescrTempl.backTimer');
