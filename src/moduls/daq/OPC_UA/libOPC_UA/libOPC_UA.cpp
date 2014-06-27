@@ -2096,7 +2096,7 @@ nextReq:
     try {
 	if(rba.size() < 8) return false;
 	mSz = iNu(rba, off, 4);
-	rb = rba.substr(0, std::min(mSz,rba.size()));
+	rb = rba.substr(0, std::min(mSz,(uint32_t)rba.size()));
 
 	//Check for hello message type
 	if(rb.compare(0,4,"HELF") == 0) {
