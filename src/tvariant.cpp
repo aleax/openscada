@@ -639,8 +639,7 @@ TVariant TArrayObj::funcCall( const string &id, vector<TVariant> &prms )
 	return rez;
     }
     // Array sort( ) - lexicographic items sorting
-    if( id == "sort" )
-    {
+    if(id == "sort") {
 	oRes.resRequestW();
 	sort(mEls.begin(),mEls.end(),compareLess);
 	oRes.resRelease();
@@ -668,10 +667,7 @@ void TArrayObj::arSet( int vid, TVariant val )
     oRes.resRelease();
 }
 
-bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )
-{
-    return v1.getS() < v2.getS();
-}
+bool TArrayObj::compareLess( const TVariant &v1, const TVariant &v2 )	{ return v1.getS() < v2.getS(); }
 
 //***********************************************************
 //* TRegExp                                                 *

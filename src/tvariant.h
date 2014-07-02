@@ -58,8 +58,7 @@ class TVariant
 {
     public:
 	//Data
-	enum Type
-	{
+	enum Type {
 	    Null	= 0,
 	    Boolean	= 1,
 	    Integer	= 2,

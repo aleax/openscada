@@ -153,7 +153,7 @@ class TTipArchivator: public TModule
 
     protected:
 	//Protected methods
-	void cntrCmdProc( XMLNode *opt );	//Control interface command process
+	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
 	virtual TMArchivator *AMess( const string &id, const string &db )
 	{ throw TError(nodePath().c_str(),_("Message archive no support!")); }

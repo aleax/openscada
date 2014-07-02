@@ -172,8 +172,8 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    }
 	    else vb = buf();
 	    if(!vb)     return false;
-	    src.at().arch().at().getVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-					      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
+	    src.at().arch().at().getVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
+					      prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else if(isArch()) {
 	    TValBuf* vb = NULL;
@@ -183,14 +183,15 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    }
 	    else vb = src.at().buf();
 	    if(!vb)	return false;
-	    arch().at().setVals(*vb, (int64_t)prms[1].getI()*1000000+prms[2].getI(),
-				      (int64_t)prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
+	    printf("TEST 10: %lld\n", prms[1].getI());
+	    arch().at().setVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
+				     prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}
 	else {
 	    TValBuf* svb = src.at().buf();
 	    TValBuf* dvb = buf();
 	    if(!svb || !dvb) return false;
-	    svb->getVals(*dvb, (int64_t)prms[1].getI()*1000000+prms[2].getI(), (int64_t)prms[3].getI()*1000000+prms[4].getI());
+	    svb->getVals(*dvb, prms[1].getI()*1000000+prms[2].getI(), prms[3].getI()*1000000+prms[4].getI());
 	}
 	return true;
     }

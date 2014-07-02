@@ -39,7 +39,7 @@ ModVArch::ModVArch( const string &iid, const string &idb, TElem *cf_el ) :
     TVArchivator(iid,idb,cf_el), chkANow(false),
     time_size(800), mNumbFiles(100), mMaxCapacity(0), round_proc(0.01), mChkTm(60), mPackTm(10), mPackInfoFiles(false), mLstCheck(0)
 {
-
+    setSelPrior(1000);
 }
 
 ModVArch::~ModVArch( )
@@ -769,16 +769,14 @@ bool ModVArchEl::setValsProc( TValBuf &buf, int64_t beg, int64_t end )
     //Put values to files
     ResAlloc res(mRes, true);
     for(unsigned i_a = 0; i_a < arh_f.size(); i_a++)
-	if(!arh_f[i_a]->err() && beg <= end)
-	{
+	if(!arh_f[i_a]->err() && beg <= end) {
 	    // Create new file for old data
-	    if(beg < arh_f[i_a]->begin())
-	    {
+	    if(beg < arh_f[i_a]->begin()) {
 		//  Calc file limits
 		int64_t n_end, n_beg;	//New file end position
 		if((arh_f[i_a]->begin()-beg) > f_sz) n_end = beg+f_sz;
 		else n_end = arh_f[i_a]->begin()-v_per;
-		n_beg = vmax(b_prev,n_end-f_sz);
+		n_beg = vmax(b_prev, n_end-f_sz);
 
 		//  Create file name
 		char c_buf[30];

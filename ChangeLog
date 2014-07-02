@@ -1,3 +1,19 @@
+2014-07-02 Roman
+- !!!!:Archives: Selection priority to the value archivator object is added for provide order control and disable at all
+	into sources selection mode "All". Used for function getVal(), getVals() and archive service "/serv/val".
+    Archive.DBArch: Disconnecting archivers to DB detect is added and instead uses next priority archiver.
+    Archive.{DBArch,FSArch}: Default priority set to 1 for DBArch and 1000 for FSArch.
+    Set archiver period expanded for allow set zero value and disable the values buffer processing for only direct write there.
+    Adapted for writing unaligned to the period values and buffers.
+    FIX: Lost archive's connection to archiver after the archiver restart is fixed.
+- DB: Decreased wait for free tables timeout to 1 second on the DB stop, for lost connection to network DB cases fast.
+- DB.LibsDB.vcaBase.db: New extended DAQ parameter's pasport widget (cntrPaspExt) expanded for alarm and warning borders at trend display
+    and placed to all projects.
+- DB.ModelsDB.AGLKS.St.db: Some clean up.
+- FIX:Archive.DBArch: Reread meta data for value archives is force set after wrong that read at start with unaccessible network DB.
+- DAQ.MMS: Decreased start time on inaccessible data source at flag "isReload" set
+
+
 2014-06-27 Roman
 - DB.LibsDB.{OscadaLibs,vcaBase}.db: Expanded to group properties processing by the parameters templates DevLib.UPS, base.SNMP
     and the representing widget Main.objProps. The new widget uses view "Table" of primitive "FormEl" which unavailable for UI.WebVision now!

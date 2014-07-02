@@ -392,8 +392,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 		    for(unsigned i_el = 0; i_el < cels.size(); i_el++)
 			cfg.cfg(cels[i_el]).setKeyUse(false);
 	    }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		dbErr = err;
 		//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 	    }
@@ -414,8 +413,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
 	    cfg.cfgList(cf_el);
 	    for(i_el = 0; i_el < cf_el.size(); i_el++)
 	        if(cfg.cfg(cf_el[i_el]).fld().flg()&TCfg::Key && cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el])) break;
-	    if(i_el == cf_el.size())
-	    {
+	    if(i_el == cf_el.size()) {
 		SYS->modifCfg(true);
 		nd->childDel(i_fld);
 		SYS->modifCfg();
@@ -538,7 +536,8 @@ void TBDS::load_( )
 	if(SYS->chkSelDB(fullDB())) {
 	    TConfig c_el(&el_db);
 	    c_el.cfgViewAll(false);
-	    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el,true); ) {
+	    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),nodePath()+"DB/",fld_cnt++,c_el,true); )
+	    {
 		id = c_el.cfg("ID").getS();
 		type = c_el.cfg("TYPE").getS();
 		if((type+"."+id) != SYS->workDB() && modPresent(type) && !at(type).at().openStat(id))
@@ -699,7 +698,7 @@ void TBD::disable( )
 	vector<string> t_list;
 	list(t_list);
 	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
-	    close(t_list[i_l]);
+	    close(t_list[i_l], false, 1);
     }
     catch(...) { }	//Pass remove for locked
 
@@ -727,8 +726,7 @@ TVariant TBD::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 {
     // Array SQLReq(string req, bool tr = EVAL_BOOL) - formation of the SQL-request to the DB.
     //  req - SQL-request text
-    if(iid == "SQLReq" && prms.size() >= 1)
-    {
+    if(iid == "SQLReq" && prms.size() >= 1) {
 	TArrayObj *rez = new TArrayObj();
 	try {
 	    vector< vector<string> > rtbl;
@@ -892,8 +890,7 @@ TBD &TTable::owner( )	{ return *(TBD*)nodePrev(); }
 TVariant TTable::objFuncCall( const string &iid, vector<TVariant> &prms, const string &user )
 {
     // XMLNodeObj fieldStruct() - field structure get.
-    if(iid == "fieldStruct")
-    {
+    if(iid == "fieldStruct") {
         XMLNodeObj *rez = new XMLNodeObj("field");
 	TConfig cfg;
 	vector<string> elst;

@@ -59,9 +59,12 @@ class ModVArchEl: public TVArchEl
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
 	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
+	bool readMeta( );
+
     private:
 	//Attributes
 	int64_t mBeg, mEnd, mPer;
+	bool	needMeta;
 };
 
 //************************************************
