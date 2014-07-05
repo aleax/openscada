@@ -379,11 +379,11 @@ int TMdContr::recordCallback( const void *iBuf, void *oBuf, unsigned long frames
     return cntr.endrunReq;
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if(startStat() && (icfg.name() == "CARD" || icfg.name() == "SMPL_RATE" || icfg.name() == "SMPL_TYPE")) stop();
+    if(startStat() && (co.name() == "CARD" || co.name() == "SMPL_RATE" || co.name() == "SMPL_TYPE")) stop();
 
     return true;
 }

@@ -148,7 +148,7 @@ class TMdContr: public TController, public Client
 	void start_( );
 	void stop_( );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
     private:

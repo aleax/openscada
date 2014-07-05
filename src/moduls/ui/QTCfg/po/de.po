@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 20:09+0300\n"
+"POT-Creation-Date: 2014-07-04 16:40+0300\n"
 "PO-Revision-Date: 2009-08-20 11:41+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -352,7 +352,8 @@ msgstr "Ausgewählte Seiten-Handbuch"
 
 #: qtcfg.cpp:327
 msgid "The button for getting the using selected page manual."
-msgstr "Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
+msgstr ""
+"Die Schaltfläche für das Erhalten der ausgewählten Seite mit Anleitung."
 
 #: qtcfg.cpp:328
 msgid "Press to get the using selected page manual."
@@ -427,11 +428,11 @@ msgstr "Schaltfläche für den Aufruf der Geschichte der Zeile des Statuts"
 msgid "Ready"
 msgstr "Fertig"
 
-#: qtcfg.cpp:471
+#: qtcfg.cpp:469
 msgid "Changes save"
 msgstr "Speichern der Änderungen"
 
-#: qtcfg.cpp:472
+#: qtcfg.cpp:470
 msgid ""
 "Some changes made.\n"
 "Save the changes to DB on exit?"
@@ -439,67 +440,67 @@ msgstr ""
 "Einige Änderungen vorgenommen.\n"
 "Speichern Sie die Änderungen an der Ausfahrt DB?"
 
-#: qtcfg.cpp:602
+#: qtcfg.cpp:600
 msgid "No one editable container is present."
 msgstr "Kein veränderbarer Container ist vorhanden."
 
-#: qtcfg.cpp:604
+#: qtcfg.cpp:602
 msgid "Add item to node: '%1'."
 msgstr "Element hinzufügen in den Knoten: '%1'."
 
-#: qtcfg.cpp:604
+#: qtcfg.cpp:602
 msgid "Add node"
 msgstr "Knoten hinzufügen"
 
-#: qtcfg.cpp:616
+#: qtcfg.cpp:614
 msgid "Node '%1' is already present."
 msgstr "Der Knoten '%1' ist schon vorhanden."
 
-#: qtcfg.cpp:646
+#: qtcfg.cpp:644
 msgid "Are you sure of deleting nodes: '%1'?"
 msgstr "Wollen Sie wirklich den Knoten: '%1' löschen?"
 
-#: qtcfg.cpp:646
+#: qtcfg.cpp:644
 msgid "Delete node"
 msgstr "Knoten löschen"
 
-#: qtcfg.cpp:726
+#: qtcfg.cpp:724
 msgid "Copy is impossible."
 msgstr "Kopieren ist nicht möglich."
 
-#: qtcfg.cpp:736
+#: qtcfg.cpp:733
 msgid "Selected"
 msgstr "Gewählt"
 
-#: qtcfg.cpp:748 qtcfg.cpp:775
+#: qtcfg.cpp:745 qtcfg.cpp:771
 msgid "Move or copy node"
 msgstr "Verschieben oder Kopieren des Knotens"
 
-#: qtcfg.cpp:750
+#: qtcfg.cpp:747
 msgid "Move node '%1' to '%2'.\n"
 msgstr "Verschieben des Knotens '%1' nach '%2'.\n"
 
-#: qtcfg.cpp:750
+#: qtcfg.cpp:747
 msgid "Copy node '%1' to '%2'.\n"
 msgstr "Kopieren des Knotens '%1' nach '%2'.\n"
 
-#: qtcfg.cpp:754 qtcfg.cpp:778
+#: qtcfg.cpp:750 qtcfg.cpp:774
 msgid "Do not the question anymore."
 msgstr "Mehr nicht fragen."
 
-#: qtcfg.cpp:775
+#: qtcfg.cpp:771
 msgid "Node '%1' is already present. Continue?"
 msgstr "Der Knoten '%1' ist schon vorhanden. Weiter?"
 
-#: qtcfg.cpp:898
+#: qtcfg.cpp:893
 msgid "Status bar messages list:"
 msgstr "Statusleiste Nachrichten-Liste:"
 
-#: qtcfg.cpp:898
+#: qtcfg.cpp:893
 msgid "Status messages"
 msgstr "Statusmeldungen"
 
-#: qtcfg.cpp:917
+#: qtcfg.cpp:912
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -524,31 +525,31 @@ msgstr ""
 "Autor: %s\n"
 "Web Seite: %s"
 
-#: qtcfg.cpp:934
+#: qtcfg.cpp:929
 msgid "Manual"
 msgstr "Handbuch"
 
-#: qtcfg.cpp:935
+#: qtcfg.cpp:930
 msgid "No the manual '%1' found offline or online!"
 msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
 
-#: qtcfg.cpp:1629
+#: qtcfg.cpp:1624
 msgid "<EVAL>"
 msgstr ""
 
-#: qtcfg.cpp:1630
+#: qtcfg.cpp:1625
 msgid "On"
 msgstr ""
 
-#: qtcfg.cpp:1630
+#: qtcfg.cpp:1625
 msgid "Off"
 msgstr ""
 
-#: qtcfg.cpp:1939
+#: qtcfg.cpp:1934
 msgid "Changes apply"
 msgstr "Änderungen gelten"
 
-#: qtcfg.cpp:1939
+#: qtcfg.cpp:1934
 msgid ""
 "Some changes you don't apply!\n"
 "Apply now or lost the?"
@@ -556,229 +557,228 @@ msgstr ""
 "Einige Änderungen nicht gelten!\n"
 "Bewerben Sie sich jetzt oder verloren das?"
 
-#: qtcfg.cpp:2119
+#: qtcfg.cpp:2114
 msgid "Refresh items tree"
 msgstr "Elementenbaum aktualisieren"
 
-#: qtcfg.cpp:2262
+#: qtcfg.cpp:2257
 #, c-format
 msgid "Expand/update branch '%s' time %f ms."
 msgstr "Zeit der Erweiterung/Aktualisierung des Zweiges '%s' %f msek."
 
-#: qtcfg.cpp:2306
+#: qtcfg.cpp:2302
 msgid "Send changes to selections"
 msgstr "Senden Sie Änderungen an Selektionen"
 
-#: qtcfg.cpp:2307
-#, c-format
-msgid "Send current change to other selected nodes \"%s\"?"
-msgstr "Senden Stromänderung zu anderen ausgewählten Knoten \"%s\"?"
+#: qtcfg.cpp:2303
+msgid "Send current command '%s' to other selected nodes \"%s\"?"
+msgstr "Senden aktuellen Befehl '%s' zu anderen ausgewählten Knoten \"%s\"?"
 
-#: qtcfg.cpp:2359
+#: qtcfg.cpp:2355
 msgid "Local station"
 msgstr "Lokaler Bedienrechner"
 
-#: qtcfg.cpp:2366
+#: qtcfg.cpp:2361
 msgid "Remote station"
 msgstr "Entfernter Bedienrechner"
 
-#: qtcfg.cpp:2428
+#: qtcfg.cpp:2418
 #, c-format
 msgid "%s| Set '%s' to '%s'!"
 msgstr "%s| Installieren '%s' in '%s'!"
 
-#: qtcfg.cpp:2456
+#: qtcfg.cpp:2444
 #, c-format
 msgid "%s| Go to link '%s'!"
 msgstr "%s| Geh zum Link '%s'!"
 
-#: qtcfg.cpp:2467
+#: qtcfg.cpp:2454
 #, c-format
 msgid "%s| Press '%s'!"
 msgstr "%s| Betätigen '%s'!"
 
-#: qtcfg.cpp:2519
+#: qtcfg.cpp:2506
 msgid "Value no valid: "
 msgstr "Der Wert ist ungültig: "
 
-#: qtcfg.cpp:2530
+#: qtcfg.cpp:2517
 #, c-format
 msgid "%s| Change '%s' from '%s' to '%s'!"
 msgstr "%s| Ändern '%s' aus '%s' in '%s'!"
 
-#: qtcfg.cpp:2558
+#: qtcfg.cpp:2545
 msgid "Go"
 msgstr "Ändern"
 
-#: qtcfg.cpp:2566
+#: qtcfg.cpp:2553
 msgid "Add"
 msgstr "Hinzufügen"
 
-#: qtcfg.cpp:2571
+#: qtcfg.cpp:2558
 msgid "Insert"
 msgstr "Einfügen"
 
-#: qtcfg.cpp:2576
+#: qtcfg.cpp:2563
 msgid "Edit"
 msgstr "Ändern"
 
-#: qtcfg.cpp:2582
+#: qtcfg.cpp:2569
 msgid "Delete"
 msgstr "Löschen"
 
-#: qtcfg.cpp:2588
+#: qtcfg.cpp:2575
 msgid "Up"
 msgstr "Nach oben"
 
-#: qtcfg.cpp:2590
+#: qtcfg.cpp:2577
 msgid "Down"
 msgstr "Nach unten"
 
-#: qtcfg.cpp:2627
+#: qtcfg.cpp:2614
 msgid "Item name set"
 msgstr "Installieren des Elementsnamen"
 
-#: qtcfg.cpp:2631
+#: qtcfg.cpp:2618
 msgid "Add new element."
 msgstr "Ein neues Element hinzufügen s."
 
-#: qtcfg.cpp:2632
+#: qtcfg.cpp:2619
 msgid "Insert new element."
 msgstr "Ein neues Element einfügen."
 
-#: qtcfg.cpp:2635
+#: qtcfg.cpp:2622
 msgid "Rename element."
 msgstr "Umbenennen des Elements."
 
-#: qtcfg.cpp:2654
+#: qtcfg.cpp:2641
 #, c-format
 msgid "%s| Add '%s' element <%s:%s>!"
 msgstr "%s| Hinzufügen '%s' Element <%s:%s>!"
 
-#: qtcfg.cpp:2662
+#: qtcfg.cpp:2649
 #, c-format
 msgid "%s| Insert '%s' element <%s:%s> to %d!"
 msgstr "%s| Einfügen '%s' des Elements <%s:%s> in %d!"
 
-#: qtcfg.cpp:2670
+#: qtcfg.cpp:2657
 #, c-format
 msgid "%s| Set '%s' element %d to <%s:%s>!"
 msgstr "%s| Installieren '%s' des Element %d in <%s:%s>!"
 
-#: qtcfg.cpp:2678
+#: qtcfg.cpp:2665
 #, c-format
 msgid "%s| Delete '%s' element <%s:%s>!"
 msgstr "%s| Löschen '%s' des Elements <%s:%s>!"
 
-#: qtcfg.cpp:2685
+#: qtcfg.cpp:2672
 #, c-format
 msgid "%s| Move '%s' from %d to %d!"
 msgstr "%s| Verschieben '%s' von %d nach %d!"
 
-#: qtcfg.cpp:2728
+#: qtcfg.cpp:2715
 msgid "Add record"
 msgstr "Datensatz hinzufügen"
 
-#: qtcfg.cpp:2733
+#: qtcfg.cpp:2720
 msgid "Insert record"
 msgstr "Datensatz einfügen"
 
-#: qtcfg.cpp:2738
+#: qtcfg.cpp:2725
 msgid "Delete record"
 msgstr "Datensatz löschen"
 
-#: qtcfg.cpp:2744
+#: qtcfg.cpp:2731
 msgid "Move Up"
 msgstr "Nach oben verschieben"
 
-#: qtcfg.cpp:2746
+#: qtcfg.cpp:2733
 msgid "Move Down"
 msgstr "Nach unten verschieben"
 
-#: qtcfg.cpp:2753
+#: qtcfg.cpp:2740
 msgid "Copy"
 msgstr "Kopieren"
 
-#: qtcfg.cpp:2791
+#: qtcfg.cpp:2778
 #, c-format
 msgid "%s| Add '%s' record."
 msgstr "%s| Hinzufügen '%s' Datensatz."
 
-#: qtcfg.cpp:2798
+#: qtcfg.cpp:2785
 #, c-format
 msgid "%s| Insert '%s' record %d."
 msgstr "%s| Einfügen '%s' des Datensatzes %d."
 
-#: qtcfg.cpp:2823
+#: qtcfg.cpp:2810
 #, c-format
 msgid "%s| Delete '%s' record '%s'."
 msgstr "%s| Löschen '%s' des Datensatzes '%s'."
 
-#: qtcfg.cpp:2832
+#: qtcfg.cpp:2819
 #, c-format
 msgid "%s| Move '%s' record from %d to %d."
 msgstr "%s| Verschieben '%s' des Datensatzes aus %d in %d."
 
-#: qtcfg.cpp:2858
+#: qtcfg.cpp:2845
 msgid "Save image"
 msgstr "Abbildung speichern"
 
-#: qtcfg.cpp:2863
+#: qtcfg.cpp:2850
 msgid "Load image"
 msgstr "Abbildung laden"
 
-#: qtcfg.cpp:2873
+#: qtcfg.cpp:2860
 msgid "Save picture"
 msgstr "Das Bild speichern"
 
-#: qtcfg.cpp:2874
+#: qtcfg.cpp:2861
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Abbildungen (*.png *.xpm *.jpg)"
 
-#: qtcfg.cpp:2876
+#: qtcfg.cpp:2863
 #, c-format
 msgid "Save to file %s error\n"
 msgstr "Fehler beim Speichern in die Datei %s\n"
 
-#: qtcfg.cpp:2881
+#: qtcfg.cpp:2868
 msgid "Load picture"
 msgstr "Bild laden"
 
-#: qtcfg.cpp:2881
+#: qtcfg.cpp:2868
 msgid "Images (*.png *.jpg)"
 msgstr "Abbildungen (*.png *.jpg)"
 
-#: qtcfg.cpp:2889
+#: qtcfg.cpp:2876
 #, c-format
 msgid "Open file %s error\n"
 msgstr "Fehler beim Öffnen der Datei %s\n"
 
-#: qtcfg.cpp:2897
+#: qtcfg.cpp:2884
 #, c-format
 msgid "Image file %s error\n"
 msgstr "Fehler in der Bilddatei %s\n"
 
-#: qtcfg.cpp:2902
+#: qtcfg.cpp:2889
 #, c-format
 msgid "%s| Upload picture '%s' to: %s."
 msgstr "%s| Speichern des Bildes '%s' nach %s."
 
-#: qtcfg.cpp:2960
+#: qtcfg.cpp:2947
 #, c-format
 msgid "Value '%s' is not valid!"
 msgstr "Wert '%s' ist ungültig"
 
-#: qtcfg.cpp:2992
+#: qtcfg.cpp:2979
 #, c-format
 msgid "%s| Set '%s' cell ('%s':%s) to: %s."
 msgstr "%s| Installieren '%s' der Zelle ('%s':%s) in %s."
 
-#: qtcfg.cpp:3026
+#: qtcfg.cpp:3013
 #, c-format
 msgid "Selective element '%s' is not present!"
 msgstr "Ausgewähltes Element '%s' fehlt!"
 
-#: qtcfg.cpp:3061
+#: qtcfg.cpp:3048
 #, c-format
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Ändern '%s' in: '%s'!"
@@ -919,10 +919,6 @@ msgstr "Benutzer für die Systemeinstellungen"
 msgid "Go to remote stations list configuration"
 msgstr "Konfiguration der entfernten Stationen"
 
-#: tuimod.cpp:223
-msgid "Options help"
-msgstr "Optionen Hilfe"
-
 #: selfwidg.h:218
 msgid "QTCfg dialog"
 msgstr "QTCfg Dialog"
@@ -930,3 +926,6 @@ msgstr "QTCfg Dialog"
 #: selfwidg.h:250
 msgid "Node id and/or name select"
 msgstr "Auswahl des Bezeichners und/oder des Namens"
+
+#~ msgid "Options help"
+#~ msgstr "Optionen Hilfe"

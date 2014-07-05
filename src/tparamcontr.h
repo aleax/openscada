@@ -90,7 +90,7 @@ class TParamContr : public TConfig, public TValue
 	void preDisable( int flag );
 	void postDisable( int flag );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void vlGet( TVal &vo );
 	void vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl );

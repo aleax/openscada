@@ -958,7 +958,7 @@ AutoHD<XMLNodeObj> XMLNodeObj::childGet( const string &name, unsigned num )
     oRes.resRequestR();
     AutoHD<XMLNodeObj> rez;
     for(int i_ch = 0, i_n = 0; i_ch < (int)mChilds.size(); i_ch++)
-	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && i_n++ == num)
+	if(strcasecmp(mChilds[i_ch].at().name().c_str(),name.c_str()) == 0 && (i_n++) == (int)num)
 	    rez = mChilds[i_ch];
     oRes.resRelease();
     if(rez.freeStat()) throw TError("XMLNodeObj",_("Child %s:%d is not found!"),name.c_str(),num);

@@ -1,3 +1,11 @@
+2014-07-05 Roman
+- Archive: TArchive, TMArchivator and TMArchivator moved to use TConfig::cntrCmdMake().
+- FIX:Transport: TTransportOut, TTransportIn fix for sets values check and process.
+- !!:SYS: TConfig::cfgChange() expanded by previous configuration value argument "pc".
+    Library version set to 3:2:0.
+- UI.QTCfg: Selected group nodes commands "load" and "save" support is added.
+
+
 2014-07-02 Roman
 - !!!!:Archives: Selection priority to the value archivator object is added for provide order control and disable at all
 	into sources selection mode "All". Used for function getVal(), getVals() and archive service "/serv/val".

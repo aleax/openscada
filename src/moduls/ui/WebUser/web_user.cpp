@@ -526,12 +526,7 @@ void UserPg::save_( )
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-bool UserPg::cfgChange( TCfg &cfg )
-{
-    modif( );
-
-    return true;
-}
+bool UserPg::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 void UserPg::setEnable( bool vl )
 {

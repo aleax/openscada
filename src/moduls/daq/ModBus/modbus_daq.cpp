@@ -246,18 +246,17 @@ void TMdContr::stop_( )
     pHd.clear();
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if(icfg.fld().name() == "SCHEDULE" && startStat())
+    if(co.fld().name() == "SCHEDULE" && startStat())
 	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
-    else if(icfg.fld().name() == "PROT")
-    {
-	cfg("REQ_TRY").setView(icfg.getS()!="TCP");
+    else if(co.fld().name() == "PROT") {
+	cfg("REQ_TRY").setView(co.getS()!="TCP");
 	if(startStat()) stop();
     }
-    else if(icfg.fld().name() == "FRAG_MERGE" && enableStat()) disable();
+    else if(co.fld().name() == "FRAG_MERGE" && enableStat()) disable();
 
     return true;
 }

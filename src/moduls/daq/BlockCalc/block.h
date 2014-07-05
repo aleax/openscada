@@ -107,7 +107,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
     private:
 	//Data

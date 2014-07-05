@@ -661,12 +661,6 @@ void TSocketOut::setTimings( const string &vl )
     modif();
 }
 
-void TSocketOut::setAddr( const string &addr )
-{
-    TTransportOut::setAddr(addr);
-    if(startStat()) stop();
-}
-
 string TSocketOut::getStatus( )
 {
     string rez = TTransportOut::getStatus();

@@ -113,7 +113,7 @@ class TMdContr: public TController
 	static int recordCallback( const void *iBuf, void *oBuf, unsigned long framesPerBuffer,
 		const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void *userData );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );		//Control interface command process
 
     private:

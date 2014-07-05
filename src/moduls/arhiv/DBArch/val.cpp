@@ -47,8 +47,6 @@ ModVArch::~ModVArch( )
     try{ stop(); }catch(...){ }
 }
 
-void ModVArch::setValPeriod( double iper )	{ TVArchivator::setValPeriod(iper); }
-
 void ModVArch::load_( )
 {
     TVArchivator::load_();
@@ -101,6 +99,7 @@ void ModVArch::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	return;
     }
 
@@ -120,22 +119,6 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     TVArchEl(iachive, iarchivator), mBeg(0), mEnd(0), mPer(0), needMeta(false)
 {
     needMeta = !readMeta();
-
-    //Load message archive parameters
-    /*TConfig cfg(&mod->archEl());
-    cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true)) {
-	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(), NULL, 10);
-	mEnd = strtoll(cfg.cfg("END").getS().c_str(), NULL, 10);
-	mPer = strtoll(cfg.cfg("PRM1").getS().c_str(), NULL, 10);
-	// Check for delete archivator table
-	if(mEnd <= (TSYS::curTime()-(int64_t)(archivator().maxSize()*3600e6))) {
-	    SYS->db().at().open(archivator().addr()+"."+archTbl());
-	    SYS->db().at().close(archivator().addr()+"."+archTbl(), true);
-	    mBeg = mEnd = mPer = 0;
-	}
-    }
-    if(!mPer) mPer = (int64_t)(archivator().valPeriod()*1e6);*/
 }
 
 ModVArchEl::~ModVArchEl( )	{ }

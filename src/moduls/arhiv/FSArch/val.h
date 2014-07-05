@@ -187,8 +187,6 @@ class ModVArch: public TVArchivator
 
 	double curCapacity();
 
-	void setValPeriod( double iper );
-
 	double	fileTimeSize()	{ return time_size; }
 	unsigned numbFiles()	{ return mNumbFiles; }
 	double	maxCapacity()	{ return mMaxCapacity; }
@@ -224,6 +222,7 @@ class ModVArch: public TVArchivator
 	//Methods
 	void load_( );
 	void save_( );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods

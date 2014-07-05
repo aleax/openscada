@@ -599,6 +599,14 @@ void TTransportIn::postDisable(int flag)
     if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
 }
 
+bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "ADDR") stop();	//By the address change and reconnect need ordinary
+    modif();
+
+    return true;
+}
+
 TCntrNode &TTransportIn::operator=( TCntrNode &node )
 {
     TTransportIn *src_n = dynamic_cast<TTransportIn*>(&node);
@@ -820,10 +828,11 @@ void TTransportOut::postDisable( int flag )
     if(flag) SYS->db().at().dataDel(fullDB(),SYS->transport().at().nodePath()+tbl(),*this,true);
 }
 
-bool TTransportOut::cfgChange( TCfg &cfg )
+bool TTransportOut::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(cfg.name() == "ADDR") stop();	//By the address change and reconnect need ordinary
+    if(co.name() == "ADDR") stop();	//By the address change and reconnect need ordinary
     modif();
+
     return true;
 }
 

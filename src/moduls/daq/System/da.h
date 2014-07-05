@@ -48,7 +48,7 @@ class DA: public TElem
 	virtual void deInit( TMdPrm *prm )	{ }
 
 	virtual bool cntrCmdProc( TMdPrm *prm, XMLNode *opt )	{ return false; }
-	virtual void cfgChange( TCfg &i_cfg )	{ }
+	virtual void cfgChange( TCfg &co, const TVariant &pc )	{ }
 
 	virtual void getVal( TMdPrm *prm )	{ }
 	virtual void vlSet( TMdPrm *prm, TVal &vo, const TVariant &vl, const TVariant &pvl )	{ }

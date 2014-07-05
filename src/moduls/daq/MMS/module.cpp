@@ -466,12 +466,12 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
     try {
-	if(icfg.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+icfg.getS());
+	if(co.name() == "ADDR" && enableStat()) tr.at().setAddr("TCP:"+co.getS());
     } catch(...) { }
 
     return true;

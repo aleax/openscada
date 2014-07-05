@@ -45,15 +45,13 @@ class TCfg : public TVariant
 {
     public:
 	//Data
-	enum AttrFlg
-	{
+	enum AttrFlg {
 	    TransltText = 0x100,	//String value type: Use translation variable texts mechanism
 	    NoVal	= 0x200,	//No value mirrored
 	    Key		= 0x400,	//Primary key
 	    Hide	= 0x800		//Attribute hide
 	};
-	enum ReqFlg
-	{
+	enum ReqFlg {
 	    ForceUse	= 0x01,		//Force use flag
 	};
 
@@ -153,7 +151,7 @@ class TConfig: public TValElem
 
     protected:
 	//Methods
-	virtual bool cfgChange( TCfg &cfg )	{ return true; }
+	virtual bool cfgChange( TCfg &co, const TVariant &pc )	{ return true; }
 
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id );

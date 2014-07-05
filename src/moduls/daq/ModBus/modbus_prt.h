@@ -164,7 +164,7 @@ class Node : public TFunction, public TConfig
 
 	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void regCR( int id, const SIO &val, char tp, bool wr = false );
 
 	static void *Task( void *icntr );

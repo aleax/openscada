@@ -46,7 +46,6 @@ class TTrIn: public TTransportIn
 
 	string timings( )			{ return mTimings; }
 
-	void setAddr( const string &addr );
 	void setTimings( const string &vl );
 
 	//> Modem functions
@@ -79,6 +78,7 @@ class TTrIn: public TTransportIn
 	//Methods
 	void load_( );
 	void save_( );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
     private:
 	//Methods
@@ -120,7 +120,6 @@ class TTrOut: public TTransportOut
 
 	string timings( )			{ return mTimings; }
 
-	void setAddr( const string &addr );
 	void setTimings( const string &vl );
 
 	//> Modem functions
@@ -167,6 +166,7 @@ class TTrOut: public TTransportOut
 	//Methods
 	void load_( );
 	void save_( );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 

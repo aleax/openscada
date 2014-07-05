@@ -294,7 +294,7 @@ string OPCEndPoint::cert( )	{ return cfg("ServCert").getS(); }
 
 string OPCEndPoint::pvKey( )	{ return cfg("ServPvKey").getS(); }
 
-bool OPCEndPoint::cfgChange( TCfg &ce )	{ modif(); return true; }
+bool OPCEndPoint::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 void *OPCEndPoint::Task( void *iep )
 {

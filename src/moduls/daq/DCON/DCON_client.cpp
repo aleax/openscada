@@ -229,11 +229,7 @@ void TMdContr::stop_( )
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
-{
-    TController::cfgChange(icfg);
-    return true;
-}
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )	{ TController::cfgChange(co, pc); return true; }
 
 void TMdContr::prmEn( const string &id, bool val )
 {
@@ -990,12 +986,12 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-bool TMdPrm::cfgChange( TCfg &icfg )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TParamContr::cfgChange(icfg);
+    TParamContr::cfgChange(co, pc);
 
-    if(enableStat() && (icfg.fld().name() == "AI_METHOD" || icfg.fld().name() == "AO_METHOD" || 
-	    icfg.fld().name() == "DI_METHOD" || icfg.fld().name() == "DO_METHOD" || icfg.fld().name() == "CI_METHOD"))
+    if(enableStat() && (co.fld().name() == "AI_METHOD" || co.fld().name() == "AO_METHOD" ||
+	    co.fld().name() == "DI_METHOD" || co.fld().name() == "DO_METHOD" || co.fld().name() == "CI_METHOD"))
 	disable();
 
     return true;

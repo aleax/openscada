@@ -603,15 +603,14 @@ void TMdContr::stop_( )
     disconnectRemotePLC( );
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if(icfg.fld().name() == "TYPE")
-    {
-	cfg("CIF_DEV").setView(icfg.getI() == CIF_PB);
-	cfg("SLOT").setView(icfg.getI() == CIF_PB || icfg.getI() == ISO_TCP || icfg.getI() == TMdContr::ISO_TCP243);
-	cfg("ADDR_TR").setView(icfg.getI() == ADS);
+    if(co.fld().name() == "TYPE") {
+	cfg("CIF_DEV").setView(co.getI() == CIF_PB);
+	cfg("SLOT").setView(co.getI() == CIF_PB || co.getI() == ISO_TCP || co.getI() == TMdContr::ISO_TCP243);
+	cfg("ADDR_TR").setView(co.getI() == ADS);
 	if(startStat())	stop();
     }
 

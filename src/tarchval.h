@@ -245,7 +245,7 @@ class TVArchive : public TCntrNode, public TValBuf, public TConfig
 	//Protected methods
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void load_( );
 	void save_( );
@@ -314,8 +314,8 @@ class TVArchivator : public TCntrNode, public TConfig
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
 	void setAddr( const string &vl )	{ cfg("ADDR").setS(vl); }
-	virtual void setValPeriod( double per );
-	virtual void setArchPeriod( int per );
+	void setValPeriod( double per )		{ mVPer = per; }
+	void setArchPeriod( int per )		{ mAPer = per; }
 	void setSelPrior( int vl )		{ mSelPrior = std::max(0,std::min(1000,vl)); modif(); }
 	void setToStart( bool vl )		{ mStart = vl; modif(); }
 
@@ -344,7 +344,7 @@ class TVArchivator : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	void load_( );
 	void save_( );

@@ -132,7 +132,7 @@ namespace VISION
 	    void showEvent( QShowEvent * event );
 
 	private slots:
-	    void cfgChange();
+	    void cfgChange( );
 
 	private:
 	    QFontComboBox	*fntSel;

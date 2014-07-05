@@ -286,10 +286,10 @@ void TParamContr::save_( )
 	    vlAt(a_ls[i_a]).at().arch().at().save();
 }
 
-bool TParamContr::cfgChange( TCfg &cfg )
+bool TParamContr::cfgChange( TCfg &co, const TVariant &pc )
 {
     modif();
-    return type().cfgChange(this, cfg);
+    return type().cfgChange(this, co);
 }
 
 TParamContr &TParamContr::operator=( TParamContr & PrmCntr )

@@ -698,17 +698,16 @@ void Node::setProg( const string &iprg )
     modif();
 }
 
-bool Node::cfgChange( TCfg &ce )
+bool Node::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(ce.name() == "MODE")
-    {
+    if(co.name() == "MODE") {
 	setEnable(false);
 	//Hide all specific
 	cfg("ADDR").setView(false); cfg("DT_PER").setView(false); cfg("DT_PROG").setView(false);
 	cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
 
 	//Show selected
-	switch( ce.getI() )
+	switch(co.getI())
 	{
 	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
 	    case 1:	cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;

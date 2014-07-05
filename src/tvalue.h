@@ -44,8 +44,7 @@ class TVal: public TCntrNode
 {
     public:
 	//Data
-	enum AttrFlg
-	{
+	enum AttrFlg {
 	    DirRead  = 0x100,
 	    DirWrite = 0x200
 	};
@@ -112,8 +111,7 @@ class TVal: public TCntrNode
 	const char *nodeName( );
 
 	//Attributes
-	union
-	{
+	union {
 	    string	*s;		//String value
 	    double	r;		//Real value
 	    int64_t	i;		//Integer value
@@ -125,8 +123,7 @@ class TVal: public TCntrNode
 	unsigned char	mReqFlg	: 1;		//Request to attribute flag
 	unsigned char	mResB1	: 1;		//Reserve Boolean
 	unsigned char	mResB2	: 1;		//Reserve Boolean
-	union
-	{
+	union {
 	    TFld *fld;
 	    TCfg *cfg;
 	} src;

@@ -68,12 +68,12 @@ void UPS::deInit( TMdPrm *prm )
     prm->daData = NULL;
 }
 
-void UPS::cfgChange( TCfg &i_cfg )
+void UPS::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(i_cfg.name() == "SUBT") {
-	string dls = upsList(i_cfg.getS());
-	i_cfg.fld().setValues(dls);
-	i_cfg.fld().setSelNames(dls);
+    if(co.name() == "SUBT") {
+	string dls = upsList(co.getS());
+	co.fld().setValues(dls);
+	co.fld().setSelNames(dls);
     }
 }
 

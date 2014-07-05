@@ -80,7 +80,6 @@ class ModVArch: public TVArchivator
 	double maxSize( )		{ return mMaxSize; }
 
 	void setMaxSize( double vl )	{ mMaxSize = vl; modif(); }
-	void setValPeriod( double iper );
 
 	void start( );
 	void stop( );

@@ -88,7 +88,7 @@ class WidgetLib : public TCntrNode, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
 
@@ -155,7 +155,7 @@ class LWidget : public Widget, public TConfig
     protected:
 	//Methods
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	//> Storing
@@ -212,7 +212,7 @@ class CWidget : public Widget, public TConfig
 	void postEnable( int flag );
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 	//> Storing
 	void load_( );

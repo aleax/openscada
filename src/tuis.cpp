@@ -144,7 +144,6 @@ string TUIS::docGet( const string &inm, string *tp, unsigned opt )
 		    setAttr("Host", string(docHost)+":80")->
 		    setAttr("onlyHeader", (opt!=GetContent)?"1":"0");
 		tr.at().messProtIO(req, "HTTP");
-		printf("TEST 00: '%s': %d\n", req.attr("RezCod").c_str(), i_tr);
 		if(s2i(req.attr("RezCod")) == 200) {
 		    if(opt == GetFilePath) rez = string("http://")+docHost+TSYS::strParse(req.attr("URI"),0,"?");
 		    else if(opt == GetExecCommand) rez = string("xdg-open ")+"http://"+docHost+TSYS::strParse(req.attr("URI"),0,"?");

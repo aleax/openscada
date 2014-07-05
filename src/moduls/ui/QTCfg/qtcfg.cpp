@@ -607,7 +607,7 @@ void ConfApp::itAdd( )
     XMLNode req("get");
     req.setAttr("path",sel_path+"/%2fbr%2f"+TSYS::strSepParse(dlg.target( ),2,'\n'));
     if(!cntrIfCmd(req))
-        for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
+	for(unsigned i_lel = 0; i_lel < req.childSize(); i_lel++)
 	    if((req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->attr("id") == dlg.id().toStdString()) ||
 	       (!req.childGet(i_lel)->attr("id").size() && req.childGet(i_lel)->text() == dlg.id().toStdString()))
 	    {
@@ -2288,7 +2288,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 	int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString());
 
 	// Multiple requests to selected nodes into the tree ????
-	if(node.name() == "set" && CtrTree->selectedItems().size() >= 2) {
+	if((node.name() == "set" || node.name() == "load" || node.name() == "save") && CtrTree->selectedItems().size() >= 2) {
 	    string reqPath = node.attr("path"), reqPathEl, selNds;
 	    size_t reqElPos = reqPath.rfind("/");
 	    if(reqElPos != string::npos) {
@@ -2300,7 +2300,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		if(selNds.size()) {
 		    QApplication::restoreOverrideCursor();
 		    int questRes = QMessageBox::question(this,_("Send changes to selections"),
-			    TSYS::strMess(_("Send current change to other selected nodes \"%s\"?"),selNds.c_str()).c_str(),
+			    TSYS::strMess(_("Send current command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
 			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
 		    QApplication::setOverrideCursor(Qt::WaitCursor);
 		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); )

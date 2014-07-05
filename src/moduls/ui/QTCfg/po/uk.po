@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.QTCfg 2.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-14 20:09+0300\n"
+"POT-Creation-Date: 2014-07-04 16:40+0300\n"
 "PO-Revision-Date: 2007-10-29 19:12+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -418,11 +418,11 @@ msgstr "Кнопка для виклику історії строки стат�
 msgid "Ready"
 msgstr "Готовий"
 
-#: qtcfg.cpp:471
+#: qtcfg.cpp:469
 msgid "Changes save"
 msgstr "Збереження змін"
 
-#: qtcfg.cpp:472
+#: qtcfg.cpp:470
 msgid ""
 "Some changes made.\n"
 "Save the changes to DB on exit?"
@@ -430,67 +430,67 @@ msgstr ""
 "Деякі зміни було зроблено.\n"
 "Зберегти зміни у БД перед виходом?"
 
-#: qtcfg.cpp:602
+#: qtcfg.cpp:600
 msgid "No one editable container is present."
 msgstr "Жодного редагованого контейнеру не присутньо."
 
-#: qtcfg.cpp:604
+#: qtcfg.cpp:602
 msgid "Add item to node: '%1'."
 msgstr "Додання елементу у вузол: '%1'."
 
-#: qtcfg.cpp:604
+#: qtcfg.cpp:602
 msgid "Add node"
 msgstr "Додання елементу"
 
-#: qtcfg.cpp:616
+#: qtcfg.cpp:614
 msgid "Node '%1' is already present."
 msgstr "Вузол '%1' вже присутній."
 
-#: qtcfg.cpp:646
+#: qtcfg.cpp:644
 msgid "Are you sure of deleting nodes: '%1'?"
 msgstr "Ви дійсно бажаєте видалити елементи: '%1'?"
 
-#: qtcfg.cpp:646
+#: qtcfg.cpp:644
 msgid "Delete node"
 msgstr "Видалення елементу"
 
-#: qtcfg.cpp:726
+#: qtcfg.cpp:724
 msgid "Copy is impossible."
 msgstr "Копіювання неможливе."
 
-#: qtcfg.cpp:736
+#: qtcfg.cpp:733
 msgid "Selected"
 msgstr "Вибраний"
 
-#: qtcfg.cpp:748 qtcfg.cpp:775
+#: qtcfg.cpp:745 qtcfg.cpp:771
 msgid "Move or copy node"
 msgstr "Переміщення або копіювання вузлу"
 
-#: qtcfg.cpp:750
+#: qtcfg.cpp:747
 msgid "Move node '%1' to '%2'.\n"
 msgstr "Переміщення вузлу '%1' у '%2'.\n"
 
-#: qtcfg.cpp:750
+#: qtcfg.cpp:747
 msgid "Copy node '%1' to '%2'.\n"
 msgstr "Скопіювати вузол '%1' до '%2'.\n"
 
-#: qtcfg.cpp:754 qtcfg.cpp:778
+#: qtcfg.cpp:750 qtcfg.cpp:774
 msgid "Do not the question anymore."
 msgstr "Не запитувати більш."
 
-#: qtcfg.cpp:775
+#: qtcfg.cpp:771
 msgid "Node '%1' is already present. Continue?"
 msgstr "Вузол '%1' вже присутній. Продовжити?"
 
-#: qtcfg.cpp:898
+#: qtcfg.cpp:893
 msgid "Status bar messages list:"
 msgstr "Перелік повідомлень строки статусу:"
 
-#: qtcfg.cpp:898
+#: qtcfg.cpp:893
 msgid "Status messages"
 msgstr "Повідомлення статусу"
 
-#: qtcfg.cpp:917
+#: qtcfg.cpp:912
 #, c-format
 msgid ""
 "%s v%s.\n"
@@ -515,31 +515,31 @@ msgstr ""
 "Автор: %s\n"
 "Web сайт: %s"
 
-#: qtcfg.cpp:934
+#: qtcfg.cpp:929
 msgid "Manual"
 msgstr "Підручник"
 
-#: qtcfg.cpp:935
+#: qtcfg.cpp:930
 msgid "No the manual '%1' found offline or online!"
 msgstr "Не знайдено підручника '%1' локально та у мережі!"
 
-#: qtcfg.cpp:1629
+#: qtcfg.cpp:1624
 msgid "<EVAL>"
 msgstr ""
 
-#: qtcfg.cpp:1630
+#: qtcfg.cpp:1625
 msgid "On"
 msgstr "Вкл"
 
-#: qtcfg.cpp:1630
+#: qtcfg.cpp:1625
 msgid "Off"
 msgstr "Викл"
 
-#: qtcfg.cpp:1939
+#: qtcfg.cpp:1934
 msgid "Changes apply"
 msgstr "Прийняття змін"
 
-#: qtcfg.cpp:1939
+#: qtcfg.cpp:1934
 msgid ""
 "Some changes you don't apply!\n"
 "Apply now or lost the?"
@@ -547,229 +547,228 @@ msgstr ""
 "Деякі зміни не прийнято!\n"
 "Прийняти зараз або втратити?"
 
-#: qtcfg.cpp:2119
+#: qtcfg.cpp:2114
 msgid "Refresh items tree"
 msgstr "Оновити елементи дерева"
 
-#: qtcfg.cpp:2262
+#: qtcfg.cpp:2257
 #, c-format
 msgid "Expand/update branch '%s' time %f ms."
 msgstr "Час розширення/поновлення гілки '%s' %f мс."
 
-#: qtcfg.cpp:2306
+#: qtcfg.cpp:2302
 msgid "Send changes to selections"
 msgstr "Надсилання змін до обраних"
 
-#: qtcfg.cpp:2307
-#, c-format
-msgid "Send current change to other selected nodes \"%s\"?"
-msgstr "Надіслати поточну зміну до інших обраних вузлів \"%s\"?"
+#: qtcfg.cpp:2303
+msgid "Send current command '%s' to other selected nodes \"%s\"?"
+msgstr "Надіслати поточну команду '%s' до інших обраних вузлів \"%s\"?"
 
-#: qtcfg.cpp:2359
+#: qtcfg.cpp:2355
 msgid "Local station"
 msgstr "Локальна станція"
 
-#: qtcfg.cpp:2366
+#: qtcfg.cpp:2361
 msgid "Remote station"
 msgstr "Віддалена станція"
 
-#: qtcfg.cpp:2428
+#: qtcfg.cpp:2418
 #, c-format
 msgid "%s| Set '%s' to '%s'!"
 msgstr "%s| Встановлено '%s' у '%s'!"
 
-#: qtcfg.cpp:2456
+#: qtcfg.cpp:2444
 #, c-format
 msgid "%s| Go to link '%s'!"
 msgstr "%s| Перехід за посиланням '%s'!"
 
-#: qtcfg.cpp:2467
+#: qtcfg.cpp:2454
 #, c-format
 msgid "%s| Press '%s'!"
 msgstr "%s| Натиснуто '%s'!"
 
-#: qtcfg.cpp:2519
+#: qtcfg.cpp:2506
 msgid "Value no valid: "
 msgstr "Значення помилкове: "
 
-#: qtcfg.cpp:2530
+#: qtcfg.cpp:2517
 #, c-format
 msgid "%s| Change '%s' from '%s' to '%s'!"
 msgstr "%s| Змінено '%s' з '%s' у '%s'!"
 
-#: qtcfg.cpp:2558
+#: qtcfg.cpp:2545
 msgid "Go"
 msgstr "Перейти"
 
-#: qtcfg.cpp:2566
+#: qtcfg.cpp:2553
 msgid "Add"
 msgstr "Додати"
 
-#: qtcfg.cpp:2571
+#: qtcfg.cpp:2558
 msgid "Insert"
 msgstr "Вставити"
 
-#: qtcfg.cpp:2576
+#: qtcfg.cpp:2563
 msgid "Edit"
 msgstr "Редагувати"
 
-#: qtcfg.cpp:2582
+#: qtcfg.cpp:2569
 msgid "Delete"
 msgstr "Видалити"
 
-#: qtcfg.cpp:2588
+#: qtcfg.cpp:2575
 msgid "Up"
 msgstr "Вверх"
 
-#: qtcfg.cpp:2590
+#: qtcfg.cpp:2577
 msgid "Down"
 msgstr "Донизу"
 
-#: qtcfg.cpp:2627
+#: qtcfg.cpp:2614
 msgid "Item name set"
 msgstr "Встановлення назви елементу"
 
-#: qtcfg.cpp:2631
+#: qtcfg.cpp:2618
 msgid "Add new element."
 msgstr "Додання нового елементу."
 
-#: qtcfg.cpp:2632
+#: qtcfg.cpp:2619
 msgid "Insert new element."
 msgstr "Вставлення нового елементу."
 
-#: qtcfg.cpp:2635
+#: qtcfg.cpp:2622
 msgid "Rename element."
 msgstr "Перейменування елементу."
 
-#: qtcfg.cpp:2654
+#: qtcfg.cpp:2641
 #, c-format
 msgid "%s| Add '%s' element <%s:%s>!"
 msgstr "%s| Додано '%s' елемент <%s:%s>!"
 
-#: qtcfg.cpp:2662
+#: qtcfg.cpp:2649
 #, c-format
 msgid "%s| Insert '%s' element <%s:%s> to %d!"
 msgstr "%s| Вставлено '%s' елемент <%s:%s> до %d!"
 
-#: qtcfg.cpp:2670
+#: qtcfg.cpp:2657
 #, c-format
 msgid "%s| Set '%s' element %d to <%s:%s>!"
 msgstr "%s| Встановлено '%s' елемент %d у <%s:%s>!"
 
-#: qtcfg.cpp:2678
+#: qtcfg.cpp:2665
 #, c-format
 msgid "%s| Delete '%s' element <%s:%s>!"
 msgstr "%s| Видалення '%s' елементу <%s:%s>!"
 
-#: qtcfg.cpp:2685
+#: qtcfg.cpp:2672
 #, c-format
 msgid "%s| Move '%s' from %d to %d!"
 msgstr "%s| Пересування '%s' з %d до %d!"
 
-#: qtcfg.cpp:2728
+#: qtcfg.cpp:2715
 msgid "Add record"
 msgstr "Додати запис"
 
-#: qtcfg.cpp:2733
+#: qtcfg.cpp:2720
 msgid "Insert record"
 msgstr "Вставити запис"
 
-#: qtcfg.cpp:2738
+#: qtcfg.cpp:2725
 msgid "Delete record"
 msgstr "Видалити запис"
 
-#: qtcfg.cpp:2744
+#: qtcfg.cpp:2731
 msgid "Move Up"
 msgstr "Пересунути вгору"
 
-#: qtcfg.cpp:2746
+#: qtcfg.cpp:2733
 msgid "Move Down"
 msgstr "Пересунути донизу"
 
-#: qtcfg.cpp:2753
+#: qtcfg.cpp:2740
 msgid "Copy"
 msgstr "Копіювати"
 
-#: qtcfg.cpp:2791
+#: qtcfg.cpp:2778
 #, c-format
 msgid "%s| Add '%s' record."
 msgstr "%s| Додано '%s' запис."
 
-#: qtcfg.cpp:2798
+#: qtcfg.cpp:2785
 #, c-format
 msgid "%s| Insert '%s' record %d."
 msgstr "%s| Вставлення '%s' запису %d."
 
-#: qtcfg.cpp:2823
+#: qtcfg.cpp:2810
 #, c-format
 msgid "%s| Delete '%s' record '%s'."
 msgstr "%s| Видалення '%s' запису '%s'."
 
-#: qtcfg.cpp:2832
+#: qtcfg.cpp:2819
 #, c-format
 msgid "%s| Move '%s' record from %d to %d."
 msgstr "%s| Пересування '%s' запису з %d до %d."
 
-#: qtcfg.cpp:2858
+#: qtcfg.cpp:2845
 msgid "Save image"
 msgstr "Зберегти зображення"
 
-#: qtcfg.cpp:2863
+#: qtcfg.cpp:2850
 msgid "Load image"
 msgstr "Завантажити зображення"
 
-#: qtcfg.cpp:2873
+#: qtcfg.cpp:2860
 msgid "Save picture"
 msgstr "Збереження картинки"
 
-#: qtcfg.cpp:2874
+#: qtcfg.cpp:2861
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: qtcfg.cpp:2876
+#: qtcfg.cpp:2863
 #, c-format
 msgid "Save to file %s error\n"
 msgstr "Помилка збереження до файлу %s\n"
 
-#: qtcfg.cpp:2881
+#: qtcfg.cpp:2868
 msgid "Load picture"
 msgstr "Завантаження картинки"
 
-#: qtcfg.cpp:2881
+#: qtcfg.cpp:2868
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-#: qtcfg.cpp:2889
+#: qtcfg.cpp:2876
 #, c-format
 msgid "Open file %s error\n"
 msgstr "Помилка відкриття файлу %s\n"
 
-#: qtcfg.cpp:2897
+#: qtcfg.cpp:2884
 #, c-format
 msgid "Image file %s error\n"
 msgstr "Помилковий файл зображення %s\n"
 
-#: qtcfg.cpp:2902
+#: qtcfg.cpp:2889
 #, c-format
 msgid "%s| Upload picture '%s' to: %s."
 msgstr "%s| Завантаження картинки '%s' до: %s."
 
-#: qtcfg.cpp:2960
+#: qtcfg.cpp:2947
 #, c-format
 msgid "Value '%s' is not valid!"
 msgstr "Значення '%s' помилкове!"
 
-#: qtcfg.cpp:2992
+#: qtcfg.cpp:2979
 #, c-format
 msgid "%s| Set '%s' cell ('%s':%s) to: %s."
 msgstr "%s| Встановлено '%s' чарунку ('%s':%s) у: %s."
 
-#: qtcfg.cpp:3026
+#: qtcfg.cpp:3013
 #, c-format
 msgid "Selective element '%s' is not present!"
 msgstr "Вибірковий елемент '%s' відсутній!"
 
-#: qtcfg.cpp:3061
+#: qtcfg.cpp:3048
 #, c-format
 msgid "%s| Change '%s' to: '%s'!"
 msgstr "%s| Змінено '%s' у: '%s'!"
@@ -909,10 +908,6 @@ msgstr "Початковий користувач конфігуратору"
 msgid "Go to remote stations list configuration"
 msgstr "Перейти до конфігурації переліку віддалених станцій"
 
-#: tuimod.cpp:223
-msgid "Options help"
-msgstr "Допомога по опціям"
-
 #: selfwidg.h:218
 msgid "QTCfg dialog"
 msgstr "QTCfg діалог"
@@ -920,3 +915,6 @@ msgstr "QTCfg діалог"
 #: selfwidg.h:250
 msgid "Node id and/or name select"
 msgstr "Вибір ідентифікатора та/або ім'я вузлу"
+
+#~ msgid "Options help"
+#~ msgstr "Допомога по опціям"

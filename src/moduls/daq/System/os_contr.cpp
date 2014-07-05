@@ -524,11 +524,11 @@ void TMdPrm::setAddPrm( const string &prm, const string &val )
     autoC(false);
 }
 
-bool TMdPrm::cfgChange( TCfg &i_cfg )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
     //> Change TYPE parameter
-    if(i_cfg.name() == "TYPE") { setType(i_cfg.getS()); return true; }
-    if(mDA) mDA->cfgChange(i_cfg);
+    if(co.name() == "TYPE") { setType(co.getS()); return true; }
+    if(mDA) mDA->cfgChange(co, pc);
     if(!autoC()) modif();
     return true;
 }

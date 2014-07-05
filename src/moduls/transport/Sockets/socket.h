@@ -170,7 +170,6 @@ class TSocketOut: public TTransportOut
 	string timings( )		{ return mTimings; }
 	int tmCon( )			{ return mTmCon; }
 
-	void setAddr( const string &addr );
 	void setTimings( const string &vl );
 	void setTmCon( int vl )		{ mTmCon = vmax(1,vmin(60000,vl)); }
 

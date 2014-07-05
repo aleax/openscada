@@ -84,7 +84,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	void postEnable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )     { modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
@@ -141,7 +141,7 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 
 	void preDisable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
 	void load_( );
 	void save_( );

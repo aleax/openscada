@@ -252,11 +252,11 @@ void TMdContr::stop_( )
     if(mBus == 0) { pBusRes.resRequestW(); Close_Slot(9); Close_SlotAll(); pBusRes.resRelease(); }
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    if((icfg.name() == "BUS" || icfg.name() == "BAUD") && startStat()) stop();
+    if((co.name() == "BUS" || co.name() == "BAUD") && startStat()) stop();
 
     return true;
 }
@@ -582,13 +582,13 @@ void TMdPrm::setModPrm( const string &prm, const string &val )
     cfg("MOD_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 }
 
-bool TMdPrm::cfgChange( TCfg &icfg )
+bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TParamContr::cfgChange(icfg);
+    TParamContr::cfgChange(co, pc);
 
-    if((icfg.name() == "MOD_TP" || icfg.name() == "MOD_ADDR" || icfg.name() == "MOD_SLOT") && enableStat()) disable();
+    if((co.name() == "MOD_TP" || co.name() == "MOD_ADDR" || co.name() == "MOD_SLOT") && enableStat()) disable();
 
-    if(icfg.name() == "MOD_TP")	da = mod->daGet(this);
+    if(co.name() == "MOD_TP")	da = mod->daGet(this);
 
     return true;
 }

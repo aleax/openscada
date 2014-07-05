@@ -185,7 +185,7 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void prmEn( const string &id, bool val );		//Enable parameter to process list
 	void regVal( SValData ival, IO::Type itp, bool wr );	//Register value for acquisition
 	//> Values process

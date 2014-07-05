@@ -330,18 +330,16 @@ void *TMdContr::Task( void *icntr )
     return NULL;
 }
 
-bool TMdContr::cfgChange( TCfg &icfg )
+bool TMdContr::cfgChange( TCfg &co, const TVariant &pc )
 {
-    TController::cfgChange(icfg);
+    TController::cfgChange(co, pc);
 
-    try
-    {
-	if(icfg.name() == "EndPoint" && enableStat())
-	{
+    try {
+	if(co.name() == "EndPoint" && enableStat()) {
 	    tr.at().setAddr("TCP:"+epParse());
 	    ResAlloc res(nodeRes(), false);
 	    SecuritySetting ss("", -1);
-	    if(epLst.find(icfg.getS()) != epLst.end()) ss = epLst[icfg.getS()];
+	    if(epLst.find(co.getS()) != epLst.end()) ss = epLst[co.getS()];
 	    res.release();
 
 	    if(ss.policy.size() && mSecPol.fld().values().find(ss.policy) != string::npos)
@@ -368,24 +366,21 @@ bool TMdContr::cfgChange( TCfg &icfg )
 	    reqService(req);
 
 	    res.request(true);
-	    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-	    {
+	    for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		XML_N *xep = req.childGet(i_ch);
 		string ep = xep->attr("endpointUrl");
 		if(epLst.find(ep) != epLst.end()) ep += "/"+TSYS::strParse(xep->attr("securityPolicyUri"),1,"#")+"/"+xep->attr("securityMode");
 		epLst[ep] = SecuritySetting(TSYS::strParse(xep->attr("securityPolicyUri"),1,"#"), s2i(xep->attr("securityMode")));
 	    }
 	}
-	else if(icfg.name() == "SecPolicy")
-	{
-	    if(icfg.getS() == "None" && secMessMode() != MS_None)	setSecMessMode(MS_None);
-	    if(icfg.getS() != "None" && secMessMode() == MS_None)	setSecMessMode(MS_Sign);
+	else if(co.name() == "SecPolicy") {
+	    if(co.getS() == "None" && secMessMode() != MS_None)	setSecMessMode(MS_None);
+	    if(co.getS() != "None" && secMessMode() == MS_None)	setSecMessMode(MS_Sign);
 	}
-	else if(icfg.name() == "SecMessMode" &&
-		((icfg.getI() != MS_None && secPolicy() == "None") || (icfg.getI() == MS_None && secPolicy() != "None")))
+	else if(co.name() == "SecMessMode" &&
+		((co.getI() != MS_None && secPolicy() == "None") || (co.getI() == MS_None && secPolicy() != "None")))
 	    return false;
-	else if(icfg.name() == "AuthUser" || icfg.name() == "AuthPass")
-	{
+	else if(co.name() == "AuthUser" || co.name() == "AuthPass") {
 	    XML_N req("opc.tcp");
 	    req.clear()->setAttr("id", "CloseSession");
 	    reqService(req);

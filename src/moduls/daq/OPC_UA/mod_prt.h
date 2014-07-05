@@ -127,7 +127,7 @@ class OPCEndPoint: public TCntrNode, public TConfig, public Server::EP
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co, const TVariant &pc );
 
 	static void *Task( void *ep );
 
