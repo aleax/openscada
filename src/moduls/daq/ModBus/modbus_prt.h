@@ -78,17 +78,15 @@ class Node : public TFunction, public TConfig
 {
     public:
 	//> Addition flags for IO
-	enum IONodeFlgs
-	{
+	enum IONodeFlgs {
 	    IsLink	= 0x10,	//Link to subsystem's "DAQ" data
 	    LockAttr	= 0x20	//Lock attribute
 	};
-	//> Node modes
-	enum NodeModes
-	{
-	    MD_DATA = 0,	//Data
-	    MD_GT_ND = 1,	//Gate node
-	    MD_GT_NET = 2	//Gate network
+	// Node modes
+	enum NodeModes {
+	    MD_DATA	= 0,	//Data
+	    MD_GT_ND	= 1,	//Gate node
+	    MD_GT_NET	= 2	//Gate network
 	};
 
 	//Methods
@@ -149,12 +147,12 @@ class Node : public TFunction, public TConfig
 	class SData
 	{
 	    public:
-		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0), rBit(0), rIReg(0)	{ }
+		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0), rCoilI(0), rRegI(0)	{ }
 
 		TValFunc	val;
 		map<int,AutoHD<TVal> > lnk;
-		map<int,SIO> regR, regW, coilR, coilW, bitR, regIR;
-		float rReg, wReg, rCoil, wCoil, rBit, rIReg;
+		map<int,SIO> regR, regW, coilR, coilW, coilI, regI;
+		float rReg, wReg, rCoil, wCoil, rCoilI, rRegI;
 	};
 
 	//Methods
@@ -164,7 +162,7 @@ class Node : public TFunction, public TConfig
 
 	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &cfg, const TVariant &pc );
 	void regCR( int id, const SIO &val, const string &tp, bool wr = false );
 
 	static void *Task( void *icntr );
@@ -188,6 +186,18 @@ class Node : public TFunction, public TConfig
 class TProt: public TProtocol
 {
     public:
+	//Data
+	enum ModBusFunc	{
+	    FC_MULT_COILS	= 0x01,
+	    FC_MULT_COILS_IN	= 0x02,
+	    FC_MULT_REGS	= 0x03,
+	    FC_MULT_REGS_IN	= 0x04,
+	    FC_SING_COILS_WR	= 0x05,
+	    FC_SING_REGS_WR	= 0x06,
+	    FC_MULT_COILS_WR	= 0x0F,
+	    FC_MULT_REGS_WR	= 0x10
+	};
+
 	//Methods
 	TProt( string name );
 	~TProt( );
@@ -195,7 +205,7 @@ class TProt: public TProtocol
 	void modStart( );
 	void modStop( );
 
-	//> Node's functions
+	// Node's functions
 	void nList( vector<string> &ls )	{ chldList(mNode,ls); }
 	bool nPresent( const string &id )	{ return chldPresent(mNode,id); }
 	void nAdd( const string &id, const string &db = "*.*" );
@@ -204,13 +214,13 @@ class TProt: public TProtocol
 
 	void outMess( XMLNode &io, TTransportOut &tro );
 
-	//> Special modbus protocol's functions
+	// Special modbus protocol's functions
 	uint16_t CRC16( const string &mbap );
 	uint8_t	LRC( const string &mbap );
 	string	DataToASCII( const string &in );
 	string	ASCIIToData( const string &in );
 
-	//> Protocol
+	// Protocol
 	int prtLen( )		{ return mPrtLen; }
 	void setPrtLen( int vl );
 	void pushPrtMess( const string &vl );
@@ -227,11 +237,11 @@ class TProt: public TProtocol
 
     private:
 	//Attribute
-	//> Protocol
+	// Protocol
 	int	mPrtLen;
 	deque<string>	mPrt;
 
-	//> Special modbus protocol's attributes
+	// Special modbus protocol's attributes
 	static uint8_t CRCHi[];
 	static uint8_t CRCLo[];
 

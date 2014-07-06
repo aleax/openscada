@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.ModBus 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-16 17:13+0300\n"
+"POT-Creation-Date: 2014-07-06 21:18+0300\n"
 "PO-Revision-Date: 2007-10-29 10:21+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,118 +15,118 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: modbus_daq.cpp:66
+#: modbus_daq.cpp:65
 msgid "Parameters table"
 msgstr "Таблица параметров"
 
-#: modbus_daq.cpp:67
+#: modbus_daq.cpp:66
 msgid "Logical parameters table"
 msgstr "Таблица логических параметров"
 
-#: modbus_daq.cpp:68
+#: modbus_daq.cpp:67
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
 
-#: modbus_daq.cpp:69
+#: modbus_daq.cpp:68
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: modbus_daq.cpp:70
+#: modbus_daq.cpp:69
 msgid "Modbus protocol"
 msgstr "Modbus протокол"
 
-#: modbus_daq.cpp:70
+#: modbus_daq.cpp:69
 msgid "TCP/IP;RTU;ASCII"
 msgstr ""
 
-#: modbus_daq.cpp:71
+#: modbus_daq.cpp:70
 msgid "Transport address"
 msgstr "Адрес транспорта"
 
-#: modbus_daq.cpp:72
+#: modbus_daq.cpp:71
 msgid "Destination node"
 msgstr "Узел назначения"
 
-#: modbus_daq.cpp:73
+#: modbus_daq.cpp:72
 msgid "Data fragments merge"
 msgstr "Объединять фрагменты данных"
 
-#: modbus_daq.cpp:74
+#: modbus_daq.cpp:73
 msgid "Use multi-items write functions (15,16)"
 msgstr "Использовать функции записи нескольких элементов (15,16)"
 
-#: modbus_daq.cpp:75
+#: modbus_daq.cpp:74
 msgid "Asynchronous write"
 msgstr "Асинхронная запись"
 
-#: modbus_daq.cpp:76
+#: modbus_daq.cpp:75
 msgid "Connection timeout (ms)"
 msgstr "Время ожидания соединения (мс)"
 
-#: modbus_daq.cpp:77
+#: modbus_daq.cpp:76
 msgid "Restore timeout (s)"
 msgstr "Время восстановления (с)"
 
-#: modbus_daq.cpp:78
+#: modbus_daq.cpp:77
 msgid "Request tries"
 msgstr "Попыток запроса"
 
-#: modbus_daq.cpp:79
+#: modbus_daq.cpp:78
 msgid "Maximum request block size (bytes)"
 msgstr "Максимальный размер блока запроса (байты)"
 
-#: modbus_daq.cpp:83
+#: modbus_daq.cpp:82
 msgid "Standard"
 msgstr "Стандарт"
 
-#: modbus_daq.cpp:84
+#: modbus_daq.cpp:83
 msgid "Attributes list"
 msgstr "Перечень атрибутов"
 
-#: modbus_daq.cpp:86
+#: modbus_daq.cpp:85
 msgid "Logical"
 msgstr "Логический"
 
-#: modbus_daq.cpp:87
+#: modbus_daq.cpp:86
 msgid "Parameter template"
 msgstr "Шаблон параметра"
 
-#: modbus_daq.cpp:89
+#: modbus_daq.cpp:88
 msgid "Parameter ID"
 msgstr "ID параметра"
 
-#: modbus_daq.cpp:90 modbus_prt.cpp:55 modbus_prt.cpp:74
+#: modbus_daq.cpp:89 modbus_prt.cpp:54 modbus_prt.cpp:73
 msgid "ID"
 msgstr ""
 
-#: modbus_daq.cpp:91 modbus_prt.cpp:78 modbus_prt.cpp:1485
+#: modbus_daq.cpp:90 modbus_prt.cpp:77 modbus_prt.cpp:1340
 msgid "Value"
 msgstr "Значение"
 
-#: modbus_daq.cpp:151
+#: modbus_daq.cpp:160
 msgid "Task terminated! "
 msgstr "Задача прервана! "
 
-#: modbus_daq.cpp:154
+#: modbus_daq.cpp:163
 #, c-format
 msgid "Connection error. Restoring in %.6g s."
 msgstr "Ошибка соединения. Восстановления через %.6g с."
 
-#: modbus_daq.cpp:159
+#: modbus_daq.cpp:168
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
-#: modbus_daq.cpp:160
+#: modbus_daq.cpp:169
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Вызовы с периодом: %s. "
 
-#: modbus_daq.cpp:161
+#: modbus_daq.cpp:170
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#: modbus_daq.cpp:162
+#: modbus_daq.cpp:171
 #, c-format
 msgid ""
 "Spent time: %s. Read %g(%g) registers, %g(%g) coils. Write %g registers, %g "
@@ -135,33 +135,33 @@ msgstr ""
 "Затрачено времени: %s. Прочитано %g(%g) регистров, %g(%g) битов. Записано %g "
 "регистров, %g битов. Ошибок соединения %g, запроса %g."
 
-#: modbus_daq.cpp:230 modbus_daq.cpp:938 modbus_daq.cpp:967
+#: modbus_daq.cpp:239 modbus_daq.cpp:946 modbus_daq.cpp:975
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: подключение к источнику данных: %s."
 
-#: modbus_daq.cpp:230
+#: modbus_daq.cpp:239
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-#: modbus_daq.cpp:348 modbus_daq.cpp:481
+#: modbus_daq.cpp:356 modbus_daq.cpp:489
 msgid "10:Connection error or no response."
 msgstr "10:Ошибка соединения или нет ответа."
 
-#: modbus_daq.cpp:807 modbus_daq.cpp:838 modbus_daq.cpp:869 modbus_daq.cpp:899
-#: modbus_prt.cpp:377
+#: modbus_daq.cpp:815 modbus_daq.cpp:846 modbus_daq.cpp:877 modbus_daq.cpp:907
+#: modbus_prt.cpp:357
 msgid "4:Server failure."
 msgstr "4:Ошибка сервера."
 
-#: modbus_daq.cpp:819 modbus_daq.cpp:850 modbus_daq.cpp:881 modbus_daq.cpp:911
+#: modbus_daq.cpp:827 modbus_daq.cpp:858 modbus_daq.cpp:889 modbus_daq.cpp:919
 msgid "15:Response PDU size error."
 msgstr "15:Ошибка размера PDU ответа."
 
-#: modbus_daq.cpp:938
+#: modbus_daq.cpp:946
 msgid "OK"
 msgstr "НОРМА"
 
-#: modbus_daq.cpp:1001
+#: modbus_daq.cpp:1009
 msgid ""
 "Merge not adjacent fragments of registers to single block for request.\n"
 "Attention! Some devices don't support accompany request wrong registers into "
@@ -171,7 +171,7 @@ msgstr ""
 "Внимание! Некоторые устройства не поддерживают сопутствующего запроса "
 "ошибочных регистров в одном блоке."
 
-#: modbus_daq.cpp:1004
+#: modbus_daq.cpp:1012
 msgid ""
 "Individual connection timeout for device requested by the task.\n"
 "For zero value used generic connection timeout from used output transport."
@@ -180,23 +180,23 @@ msgstr ""
 "Для нулевого значения используется общее время ожидания подключения из "
 "использованного выходного транспорта."
 
-#: modbus_daq.cpp:1024
+#: modbus_daq.cpp:1032
 msgid "11:Value not gathered."
 msgstr "11:Значения не опрошены."
 
-#: modbus_daq.cpp:1440
+#: modbus_daq.cpp:1443
 msgid "Error calculate template."
 msgstr "Ошибка вычисления шаблона."
 
-#: modbus_daq.cpp:1453
+#: modbus_daq.cpp:1456
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-#: modbus_daq.cpp:1454
+#: modbus_daq.cpp:1457
 msgid "2:Acquisition is stopped."
 msgstr "2:Опрос остановлен."
 
-#: modbus_daq.cpp:1520
+#: modbus_daq.cpp:1523
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "\"{dt}:{numb}:{rw}:{id}:{name}\".\n"
@@ -220,13 +220,17 @@ msgid ""
 "  \"R_s:15,20:r:str:Reg blk\" - get string, registers block, from register "
 "15 and size 20."
 msgstr ""
-"Список конфигурации атрибутов. Список формируется строками в формате: \"{dt}:{numb}:{rw}:{id}:{name}\".\n"
+"Список конфигурации атрибутов. Список формируется строками в формате: \"{dt}:"
+"{numb}:{rw}:{id}:{name}\".\n"
 "Где:\n"
-"  dt - ModBus тип данных (R-регистр[3,6(16)], C-бит[1,5(15)], RI-регистр входа[4], CI-бит входа[2]);\n"
+"  dt - ModBus тип данных (R-регистр[3,6(16)], C-бит[1,5(15)], RI-регистр "
+"входа[4], CI-бит входа[2]);\n"
 "       R и RI могут быть расширены суффиксами:\n"
-"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-Строка;\n"
+"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-"
+"Double, b5-Bit5, s-Строка;\n"
 "       Начните с символа '#' для комментирования строки;\n"
-"  numb - адрес ModBus устройства (десят., шестн., или восьмеричн.) [0...65535];\n"
+"  numb - адрес ModBus устройства (десят., шестн., или восьмеричн.) "
+"[0...65535];\n"
 "  rw - режим чтения/записи (r-чтение; w-запись, rw-запись и чтение);\n"
 "  id - идентификатор создаваемого атрибута;\n"
 "  name - имя создаваемого атрибута.\n"
@@ -236,24 +240,26 @@ msgstr ""
 "  \"R_f:200:r:float:Float\" - получить вещественное из регистров 200 и 201;\n"
 "  \"R_i4:400,300:r:int32:Int32\" - получить int32 из регистров 400 и 300;\n"
 "  \"R_b10:25:r:rBit:Reg bit\" - получить бит 10 из регистра 25;\n"
-"  \"R_s:15,20:r:str:Reg blk\" - получить строку, блок регистров, из регистра 15 и размером 20."
+"  \"R_s:15,20:r:str:Reg blk\" - получить строку, блок регистров, из регистра "
+"15 и размером 20."
 
-#: modbus_daq.cpp:1540
+#: modbus_daq.cpp:1543
 msgid "Template configuration"
 msgstr "Конфигурация шаблона"
 
-#: modbus_daq.cpp:1542
+#: modbus_daq.cpp:1545
 msgid "Parameters"
 msgstr "Параметры"
 
-#: modbus_daq.cpp:1549
+#: modbus_daq.cpp:1552
 msgid ""
 "ModBus address in format: \"{dt}:{numb}:{rw}\".\n"
 "Where:\n"
 "  dt - ModBus data type (R-register[3,6(16)], C-coil[1,5(15)], RI-input "
 "register[4], CI-input coil[2]);\n"
 "       R and RI can be expanded by suffixes:\n"
-"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-String;\n"
+"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-"
+"Double, b5-Bit5, s-String;\n"
 "  numb - ModBus device's data address (dec, hex or octal) [0...65535];\n"
 "  rw - read/write mode (r-read; w-write; rw-readwrite).\n"
 "Examples:\n"
@@ -267,10 +273,13 @@ msgid ""
 msgstr ""
 "ModBus адрес в формате: \"{dt}:{numb}:{rw}\".\n"
 "Где:\n"
-"  dt - ModBus тип данных (R-регистр[3,6(16)], C-бит[1,5(15)], RI-регистр входа[4], CI-бит входа[2]);\n"
+"  dt - ModBus тип данных (R-регистр[3,6(16)], C-бит[1,5(15)], RI-регистр "
+"входа[4], CI-бит входа[2]);\n"
 "       R и RI могут быть расширены суффиксами:\n"
-"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-Double, b5-Bit5, s-Строка;\n"
-"  numb - адрес данных ModBus устройства (десят., шестн., или восьмеричн.) [0...65535];\n"
+"         i2-Int16, i4-Int32, i8-Int64, u2-UInt16, u4-UInt32, f-Float, d-"
+"Double, b5-Bit5, s-Строка;\n"
+"  numb - адрес данных ModBus устройства (десят., шестн., или восьмеричн.) "
+"[0...65535];\n"
 "  rw - режим чтения/записи (r-чтение; w-запись, rw-запись и чтение);\n"
 "Примеры:\n"
 "  \"R:0x300:rw\" - доступ к регистру;\n"
@@ -278,302 +287,308 @@ msgstr ""
 "  \"R_f:200:r\" - получить вещественное из регистров 200 и 201;\n"
 "  \"R_i4:400,300:r\" - получить int32 из регистров 400 и 300;\n"
 "  \"R_b10:25:r\" - получить бит 10 из регистра 25;\n"
-"  \"R_s:15,20:r\" - получить строку, блок регистров, из регистра 15 и размером 20."
+"  \"R_s:15,20:r\" - получить строку, блок регистров, из регистра 15 и "
+"размером 20."
 
-#: modbus_daq.cpp:1651
+#: modbus_daq.cpp:1654
 msgid "Parameter id error."
 msgstr "Ошибка id параметра."
 
-#: modbus_prt.cpp:56 modbus_prt.cpp:75 modbus_prt.cpp:1480
+#: modbus_prt.cpp:55 modbus_prt.cpp:74 modbus_prt.cpp:1335
 msgid "Name"
 msgstr "Имя"
 
-#: modbus_prt.cpp:57
+#: modbus_prt.cpp:56
 msgid "Description"
 msgstr "Описание"
 
-#: modbus_prt.cpp:58
+#: modbus_prt.cpp:57
 msgid "To enable"
 msgstr "Включать"
 
-#: modbus_prt.cpp:59
+#: modbus_prt.cpp:58
 msgid "Address"
 msgstr "Адрес"
 
-#: modbus_prt.cpp:60
+#: modbus_prt.cpp:59
 msgid "Input transport"
 msgstr "Входящий транспорт"
 
-#: modbus_prt.cpp:61
+#: modbus_prt.cpp:60
 msgid "Protocol"
 msgstr "Протокол"
 
-#: modbus_prt.cpp:61
+#: modbus_prt.cpp:60
 msgid "RTU;ASCII;TCP/IP;All"
 msgstr "RTU;ASCII;TCP/IP;Все"
 
-#: modbus_prt.cpp:62
+#: modbus_prt.cpp:61
 msgid "Mode"
 msgstr "Режим"
 
-#: modbus_prt.cpp:63
+#: modbus_prt.cpp:62
 msgid "Data;Gateway node;Gateway net"
 msgstr "Данные;Шлюз узла;Шлюз сети"
 
-#: modbus_prt.cpp:65
+#: modbus_prt.cpp:64
 msgid "Calculate data period (s)"
 msgstr "Период обсчёта данных (с)"
 
-#: modbus_prt.cpp:66 modbus_prt.cpp:1488
+#: modbus_prt.cpp:65 modbus_prt.cpp:1343
 msgid "Program"
 msgstr "Программа"
 
-#: modbus_prt.cpp:68
+#: modbus_prt.cpp:67
 msgid "To transport"
 msgstr "В транспорт"
 
-#: modbus_prt.cpp:69
+#: modbus_prt.cpp:68
 msgid "To protocol"
 msgstr "В протокол"
 
-#: modbus_prt.cpp:69
+#: modbus_prt.cpp:68
 msgid "RTU;ASCII;TCP/IP"
 msgstr ""
 
-#: modbus_prt.cpp:70
+#: modbus_prt.cpp:69
 msgid "To address"
 msgstr "По адресу"
 
-#: modbus_prt.cpp:73
+#: modbus_prt.cpp:72
 msgid "Node ID"
 msgstr "Ид. узла"
 
-#: modbus_prt.cpp:76
+#: modbus_prt.cpp:75
 msgid "Value type"
 msgstr "Тип значений"
 
-#: modbus_prt.cpp:77
+#: modbus_prt.cpp:76
 msgid "Flags"
 msgstr "Флаги"
 
-#: modbus_prt.cpp:79
+#: modbus_prt.cpp:78
 msgid "Real position"
 msgstr "Реальное положение"
 
-#: modbus_prt.cpp:125
+#: modbus_prt.cpp:121
 msgid "Search and create new node error."
 msgstr "Ошибка поиска и создания нового узла."
 
-#: modbus_prt.cpp:291
+#: modbus_prt.cpp:279
 msgid "13:Error server respond"
 msgstr "13:Ошибка в ответе сервера"
 
-#: modbus_prt.cpp:300
+#: modbus_prt.cpp:286
 msgid "Not full respond"
 msgstr "Неполный ответ"
 
-#: modbus_prt.cpp:327
+#: modbus_prt.cpp:310
 msgid "13:Error respond: Too short."
 msgstr "13:Ошибка ответа: Очень короткий."
 
-#: modbus_prt.cpp:329
+#: modbus_prt.cpp:312
 msgid "13:Error respond: CRC check error."
 msgstr "13:Ошибка ответа: Ошибка проверки CRC."
 
-#: modbus_prt.cpp:356
+#: modbus_prt.cpp:337
 msgid "13:Error respond: Error format."
 msgstr "13:Ошибка ответа: Ошибка формата."
 
-#: modbus_prt.cpp:359
+#: modbus_prt.cpp:340
 msgid "13:Error respond: LRC check error."
 msgstr "13:Ошибка ответа: Ошибка проверки LRC."
 
-#: modbus_prt.cpp:365
+#: modbus_prt.cpp:346
 #, c-format
 msgid "Protocol '%s' error."
 msgstr "Ошибка протокола '%s'."
 
-#: modbus_prt.cpp:370
+#: modbus_prt.cpp:350
 msgid "13:Error respond"
 msgstr "13:Ошибка ответа"
 
-#: modbus_prt.cpp:374
+#: modbus_prt.cpp:354
 #, c-format
 msgid "1:%02X:Function is not supported."
 msgstr "1:%02X:Функция не поддерживается."
 
-#: modbus_prt.cpp:375
+#: modbus_prt.cpp:355
 msgid "2:Requested address not allow or request area too long."
 msgstr "2:Запрошенный адрес недопустим или область запроса очень большая."
 
-#: modbus_prt.cpp:376
+#: modbus_prt.cpp:356
 msgid "3:Illegal data value into request."
 msgstr "3:Нелегальное значение данных в запросе."
 
-#: modbus_prt.cpp:378
+#: modbus_prt.cpp:358
 msgid "5:Request requires too long time for execute."
 msgstr "5:Запрос требует очень много времени для исполнения."
 
-#: modbus_prt.cpp:379
+#: modbus_prt.cpp:359
 msgid "6:Server is busy."
 msgstr "6:Сервер занят."
 
-#: modbus_prt.cpp:380
+#: modbus_prt.cpp:360
 msgid "7:Program function is error. By request functions 13 or 14."
 msgstr "7:Ошибка функции программы. Запрошено функцией 13 или 14."
 
-#: modbus_prt.cpp:381
+#: modbus_prt.cpp:361
 msgid "10:Gateway problem."
 msgstr "10:Проблема со шлюзом."
 
-#: modbus_prt.cpp:382
+#: modbus_prt.cpp:362
 #, c-format
 msgid "12:%02X:Unknown error."
 msgstr "12:%02X:Неизвестная ошибка."
 
-#: modbus_prt.cpp:385
+#: modbus_prt.cpp:365
 msgid "14:Device error: "
 msgstr "14:Ошибка устройства: "
 
-#: modbus_prt.cpp:393 modbus_prt.cpp:588
+#: modbus_prt.cpp:372 modbus_prt.cpp:554
 msgid "REQ -> "
 msgstr "Запрос -> "
 
-#: modbus_prt.cpp:398 modbus_prt.cpp:593
+#: modbus_prt.cpp:377 modbus_prt.cpp:559
 msgid "RESP -> "
 msgstr "Ответ -> "
 
-#: modbus_prt.cpp:399
+#: modbus_prt.cpp:378
 msgid "ERR -> "
 msgstr "Ошибка -> "
 
-#: modbus_prt.cpp:435 modbus_prt.cpp:1437
+#: modbus_prt.cpp:413 modbus_prt.cpp:1296
 msgid "Node"
 msgstr "Узел"
 
-#: modbus_prt.cpp:436 modbus_prt.cpp:437
+#: modbus_prt.cpp:414 modbus_prt.cpp:415
 msgid "Nodes"
 msgstr "Узлы"
 
-#: modbus_prt.cpp:439 modbus_prt.cpp:444
+#: modbus_prt.cpp:417 modbus_prt.cpp:421
 msgid "Report"
 msgstr "Отчёт"
 
-#: modbus_prt.cpp:441
+#: modbus_prt.cpp:418
 msgid "Report length"
 msgstr "Размер отчёта"
 
-#: modbus_prt.cpp:442
+#: modbus_prt.cpp:419
 msgid "Zero use for report disabling"
 msgstr "Ноль используется для отключения отчёта."
 
-#: modbus_prt.cpp:643
+#: modbus_prt.cpp:608
 msgid "Function calculate frequency (Hz)"
 msgstr "Частота вычисления функции (Гц)"
 
-#: modbus_prt.cpp:644
+#: modbus_prt.cpp:609
 msgid "Function start flag"
 msgstr "Флаг запуска функции"
 
-#: modbus_prt.cpp:645
+#: modbus_prt.cpp:610
 msgid "Function stop flag"
 msgstr "Флаг остановки функции"
 
-#: modbus_prt.cpp:739
+#: modbus_prt.cpp:696
 #, c-format
 msgid ""
-"Coil '%d' already registered for IO '%d'. IO '%d' will be disabled for "
-"process coil '%d'!"
+"Coil(%s) %d already registered for IO%d. IO%d will be disabled for process "
+"coil %d!"
 msgstr ""
-"Бит(coil) '%d' уже зарегистрирован для IO '%d'. IO '%d' будет исключён из "
-"обработки бита(coil) '%d'!"
+"Бит(%s) %d уже зарегистрирован для IO%d. IO%d будет исключён из обработки "
+"бита %d!"
 
-#: modbus_prt.cpp:747
+#: modbus_prt.cpp:703
 #, c-format
 msgid ""
-"Register '%d' already registered for IO '%d'. IO '%d' will be disabled for "
-"process register '%d'!"
+"Register(%s) %d already registered for IO%d. IO%d will be disabled for "
+"process register %d!"
 msgstr ""
-"Регистр '%d' уже зарегистрирован для IO '%d'. IO '%d' будет исключён из "
-"обработки регистра '%d'!"
+"Регистр(%s) %d уже зарегистрирован для IO%d. IO%d будет исключён из "
+"обработки регистра %d!"
 
-#: modbus_prt.cpp:751
+#: modbus_prt.cpp:706
 #, c-format
-msgid "ModBUS data type '%c' error!"
-msgstr "Ошибка типа данных '%c' ModBus!"
+msgid "ModBUS data type '%s' error!"
+msgstr "Ошибка типа данных '%s' ModBus!"
 
-#: modbus_prt.cpp:865
+#: modbus_prt.cpp:812
 #, c-format
 msgid "Compile function by language '%s' error: %s"
 msgstr "Ошибка компиляции функции для языка '%s': %s"
 
-#: modbus_prt.cpp:1005
+#: modbus_prt.cpp:899
 msgid "Disabled. "
 msgstr "Отключен. "
 
-#: modbus_prt.cpp:1008
+#: modbus_prt.cpp:901
 msgid "Enabled. "
 msgstr "Включен. "
 
-#: modbus_prt.cpp:1012
+#: modbus_prt.cpp:905
 #, c-format
 msgid ""
-"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed "
-"registers %.4g, coils %.4g."
+"Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register "
+"inputs %.4g, coil inputs %.4g.\n"
+"Writed registers %.4g, coils %.4g."
 msgstr ""
-"Затрачено времени: %s. Запросов %.4g. Прочитано %.4g регистров, %.4g битов. "
+"Затрачено времени: %s. Запросов %.4g. Прочитано %.4g регистров, %.4g битов, "
+"%.4g регистров входов,%.4g битов входов.\n"
 "Записано %.4g регистров, %.4g битов."
 
-#: modbus_prt.cpp:1016
+#: modbus_prt.cpp:910
 #, c-format
 msgid "Requests %.4g."
 msgstr "Запросов %.4g."
 
-#: modbus_prt.cpp:1411
+#: modbus_prt.cpp:1271
 msgid "Calculate node's function error."
 msgstr "Ошибка вычисления функции узла."
 
-#: modbus_prt.cpp:1436
+#: modbus_prt.cpp:1295
 msgid "Node: "
 msgstr "Узел: "
 
-#: modbus_prt.cpp:1439
+#: modbus_prt.cpp:1297
 msgid "State"
 msgstr "Состояние"
 
-#: modbus_prt.cpp:1441
+#: modbus_prt.cpp:1298
 msgid "Status"
 msgstr "Статус"
 
-#: modbus_prt.cpp:1442
+#: modbus_prt.cpp:1299
 msgid "Enable"
 msgstr "Включен"
 
-#: modbus_prt.cpp:1443
+#: modbus_prt.cpp:1300
 msgid "DB"
 msgstr "БД"
 
-#: modbus_prt.cpp:1446
+#: modbus_prt.cpp:1303
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: modbus_prt.cpp:1458
+#: modbus_prt.cpp:1314
 msgid "Data"
 msgstr "Данные"
 
-#: modbus_prt.cpp:1460
+#: modbus_prt.cpp:1315
 msgid "IO"
 msgstr ""
 
-#: modbus_prt.cpp:1461
+#: modbus_prt.cpp:1316
 msgid ""
 "For \"Id\" field provide specific ModBus data form:\n"
-"  \"R{N}[w]\" - specific register form, can expanded by suffixes:\n"
+"  \"R{N}[w]\", \"RI{N}[w]\" - specific register (and input) form, can "
+"expanded by suffixes:\n"
 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-String;\n"
-"  \"R:{N}:[w]\" - classic register form, can expanded by suffixes:\n"
+"  \"R:{N}:[w]\", \"RI:{N}:[w]\" - classic register (and input) form, can "
+"expanded by suffixes:\n"
 "                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-"
 "String;\n"
-"  \"C{N}[w]\" or \"C:{N}:[w]\" - coil.\n"
+"  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}:[w]\", \"CI:{N}:[w]\" - coil (and "
+"input).\n"
 "Where:\n"
 "  {N} - ModBus device's data address (dec, hex or octal) [0...65535];\n"
 "  w   - optional symbol for writing allow indicate.\n"
@@ -588,77 +603,82 @@ msgid ""
 "[0x20,0x30-0x32]."
 msgstr ""
 "Для поля \"Id\" предоставляется специфическая форма записи ModBus данных:\n"
-"  \"R{N}[w]\" - специфичная форма регистра, может быть расширен суффиксами:\n"
+"  \"R{N}[w]\", \"RI{N}[w]\" - специфичная форма регистра (и входы), может быть расширен суффиксами:\n"
 "                \"i\"-Int32, \"f\"-Float, \"d\"-Double, \"s\"-Строка;\n"
-"  \"R:{N}:[w]\" - классическая форма регистра, может быть расширен суффиксами:\n"
-"                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-Строка;\n"
-"  \"C{N}[w]\" или \"C:{N}:[w]\" - бит.\n"
+"  \"R:{N}:[w]\", \"RI:{N}:[w]\" - классическая форма регистра (и входы), может быть расширен "
+"суффиксами:\n"
+"                \"i4\"-Int32, \"i8\"-Int64, \"f\"-Float, \"d\"-Double, \"s\"-"
+"Строка;\n"
+"  \"C{N}[w]\", \"CI{N}[w]\", \"C:{N}:[w]\", \"CI:{N}:[w]\" - бит (и входы).\n"
 "Где:\n"
-"  {N} - адрес данных ModBus устройства (десят., шестн., или восьмеричн.) [0...65535];\n"
+"  {N} - адрес данных ModBus устройства (десят., шестн., или восьмеричн.) "
+"[0...65535];\n"
 "  w   - опциональный символ для индикации возможности записи.\n"
 "Примеры:\n"
 "  \"R0x300w\" - доступ к регистру;\n"
 "  \"C100w\" - доступ к биту, доступен для записи;\n"
 "  \"R_f200\" - получить вещественное из регистров 200 и 201;\n"
 "  \"R_i400,300\" - получить int32 из регистров 400 и 300;\n"
-"  \"R_s15,20\" - получить строку, блок регистров, из регистра 15 и размером 20;\n"
+"  \"R_s15,20\" - получить строку, блок регистров, из регистра 15 и размером "
+"20;\n"
 "  \"R_i8:0x10:w\" - получить и установить int64 в регистры [0x10-0x13];\n"
-"  \"R_d:0x20,0x30\" - получить вещественное двойной точности (8 byte) из регистров [0x20,0x30-0x32]."
+"  \"R_d:0x20,0x30\" - получить вещественное двойной точности (8 byte) из "
+"регистров [0x20,0x30-0x32]."
 
-#: modbus_prt.cpp:1479
+#: modbus_prt.cpp:1334
 msgid "Id"
 msgstr ""
 
-#: modbus_prt.cpp:1481
+#: modbus_prt.cpp:1336
 msgid "Type"
 msgstr "Тип"
 
-#: modbus_prt.cpp:1483
+#: modbus_prt.cpp:1338
 msgid "Real;Integer;Boolean;String"
 msgstr "Вещ.;Целый;Логич.;Строка"
 
-#: modbus_prt.cpp:1484
+#: modbus_prt.cpp:1339
 msgid "Link"
 msgstr "Связь"
 
-#: modbus_prt.cpp:1487
+#: modbus_prt.cpp:1342
 msgid "Program language"
 msgstr "Язык программы."
 
-#: modbus_prt.cpp:1490
+#: modbus_prt.cpp:1345
 msgid "Links"
 msgstr "Связи"
 
-#: modbus_prt.cpp:1548 modbus_prt.cpp:1556 modbus_prt.cpp:1565
-#: modbus_prt.cpp:1574 modbus_prt.cpp:1581
+#: modbus_prt.cpp:1395 modbus_prt.cpp:1402 modbus_prt.cpp:1410
+#: modbus_prt.cpp:1418 modbus_prt.cpp:1424
 msgid "Disable node for this operation"
 msgstr "Отключите узел для этой операции"
 
-#: modbus_prt.cpp:1551 modbus_prt.cpp:1560
+#: modbus_prt.cpp:1398 modbus_prt.cpp:1406
 msgid "New IO"
 msgstr "Новый IO"
 
-#: modbus_prt.cpp:1568
+#: modbus_prt.cpp:1413
 msgid "Deleting lock attribute is not allowed."
 msgstr "Удаление заблокированного атрибута недопустимо."
 
-#: modbus_prt.cpp:1582
+#: modbus_prt.cpp:1425
 msgid "Changing locked attribute is not allowed."
 msgstr "Изменение заблокированного атрибута недопустимо."
 
-#: modbus_prt.cpp:1583
+#: modbus_prt.cpp:1426
 msgid "Empty value is not valid."
 msgstr "Пустое значение недопустимо."
 
-#: modbus_daq.h:44 modbus_prt.h:42
+#: modbus_daq.h:43 modbus_prt.h:41
 msgid "ModBUS"
 msgstr ""
 
-#: modbus_daq.h:48 modbus_prt.h:46
+#: modbus_daq.h:47 modbus_prt.h:45
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: modbus_daq.h:49
+#: modbus_daq.h:48
 msgid ""
 "Allow realization of ModBus client service. Supported Modbus/TCP, Modbus/RTU "
 "and Modbus/ASCII protocols."
@@ -666,7 +686,7 @@ msgstr ""
 "Предоставляет реализацию клиентского сервиса протокола ModBus. "
 "Поддерживаются Modbus/TCP, Modbus/RTU и Modbus/ASCII протоколы."
 
-#: modbus_prt.h:47
+#: modbus_prt.h:46
 msgid ""
 "Allow realization of ModBus protocols. Supported Modbus/TCP, Modbus/RTU and "
 "Modbus/ASCII protocols."

@@ -1,3 +1,7 @@
+2014-07-05 Roman
+- Protocol.ModBus: Functions 0x2 (CI) and 0x4 (RI) implement is rewrited and clean up.
+
+
 2014-07-05 fido_max
 - Protocol.ModBus: Functions 0x2 (CI) and 0x4 (RI) support is added.
 
