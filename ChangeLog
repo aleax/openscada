@@ -1,3 +1,7 @@
+2014-07-05 fido_max
+- Protocol.ModBus: Functions 0x2 (CI) and 0x4 (RI) support is added.
+
+
 2014-07-05 Roman
 - Archive: TArchive, TMArchivator and TMArchivator moved to use TConfig::cntrCmdMake().
 - FIX:Transport: TTransportOut, TTransportIn fix for sets values check and process.

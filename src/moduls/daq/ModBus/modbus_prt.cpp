@@ -698,16 +698,17 @@ void Node::setProg( const string &iprg )
     modif();
 }
 
-bool Node::cfgChange( TCfg &co, const TVariant &pc )
+bool Node::cfgChange( TCfg &ce )
 {
-    if(co.name() == "MODE") {
+    if(ce.name() == "MODE")
+    {
 	setEnable(false);
 	//Hide all specific
 	cfg("ADDR").setView(false); cfg("DT_PER").setView(false); cfg("DT_PROG").setView(false);
 	cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
 
 	//Show selected
-	switch(co.getI())
+	switch( ce.getI() )
 	{
 	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
 	    case 1:	cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
@@ -719,30 +720,39 @@ bool Node::cfgChange( TCfg &co, const TVariant &pc )
     return true;
 }
 
-void Node::regCR( int id, const SIO &val, char tp, bool wr )
+void Node::regCR( int id, const SIO &val, const string &tp, bool wr )
 {
     map<int,SIO>::iterator it;
-
-    switch(tp)
-    {
-	case 'C':
+	if (tp == "C")
 	{
 	    map<int,SIO> &blk = wr ? data->coilW : data->coilR;
 	    if((it=blk.find(id)) == blk.end()) blk[id] = val;
 	    else mess_warning(nodePath().c_str(), _("Coil '%d' already registered for IO '%d'. IO '%d' will be disabled for process coil '%d'!"),
 						    id, it->second.id, val.id, id);
-	    break;
-	}
-	case 'R':
+	} else
+	if (tp == "CI")
+	{
+	    map<int,SIO> &blk = data->bitR;
+	    if((it=blk.find(id)) == blk.end()) blk[id] = val;
+	    else mess_warning(nodePath().c_str(), _("Discrete input '%d' already registered for IO '%d'. IO '%d' will be disabled for process discrete input '%d'!"),
+						    id, it->second.id, val.id, id);
+	} else
+	if (tp == "R")
 	{
 	    map<int,SIO> &blk = wr ? data->regW : data->regR;
 	    if((it=blk.find(id)) == blk.end())	blk[id] = val;
 	    else mess_warning(nodePath().c_str(), _("Register '%d' already registered for IO '%d'. IO '%d' will be disabled for process register '%d'!"),
 						    id, it->second.id, val.id, id);
-	    break;
-	}
-	default: throw TError(nodePath().c_str(), _("ModBUS data type '%c' error!"), tp);
-    }
+	} else
+	if (tp == "RI")
+	{
+	    map<int,SIO> &blk = data->regIR;
+	    if((it=blk.find(id)) == blk.end())	blk[id] = val;
+	    else mess_warning(nodePath().c_str(), _("Input register '%d' already registered for IO '%d'. IO '%d' will be disabled for process input register '%d'!"),
+						    id, it->second.id, val.id, id);
+	} else
+		throw TError(nodePath().c_str(), _("ModBUS data type '%s' error!"), tp.c_str());
+
 }
 
 void Node::load_( )
@@ -858,7 +868,6 @@ void Node::setEnable( bool vl )
 	    mess_err(nodePath().c_str(),_("Compile function by language '%s' error: %s"),progLang().c_str(),err.mess.c_str());
 	    throw;
 	}
-
 	// Links, registers and coins init
 	for(int i_io = 0; i_io < ioSize(); i_io++)
 	{
@@ -870,35 +879,35 @@ void Node::setEnable( bool vl )
 	    {
 		int off = 0;
 		string  atp = TSYS::strParse(ioId, 0, ":", &off),
+				atp_m = TSYS::strSepParse(atp,0,'_'),
 			ai  = TSYS::strParse(ioId, 0, ":", &off),
 			mode= TSYS::strParse(ioId, 0, ":", &off),
 			atp_sub = TSYS::strParse(atp, 1, "_"),
 			sTmp;
 		int reg = strtol(ai.c_str(), NULL, 0);
-
-		if(ioId[0] == 'R')
+		if(atp_m == "R")
 		{
-		    regCR(reg, SIO(i_io,atp_sub[0],0), ioId[0]);
-		    if(mode == "w") regCR(reg, SIO(i_io,atp_sub[0],0), ioId[0], true);
+		    regCR(reg, SIO(i_io,atp_sub[0],0), "R");
+		    if(mode == "w") regCR(reg, SIO(i_io,atp_sub[0],0), "R", true);
 		    if(atp_sub == "i4" || atp_sub == "f")
 		    {
 			int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0);
-			regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0]);
-			if(mode == "w") regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0], true);
+			regCR(reg2, SIO(i_io,atp_sub[0],1), "R");
+			if(mode == "w") regCR(reg2, SIO(i_io,atp_sub[0],1), "R", true);
 		    }
 		    else if(atp_sub == "i8" || atp_sub == "d")
 		    {
 			int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0),
 			    reg3 = (sTmp=TSYS::strParse(ai,2,",")).empty() ? (reg2+1) : strtol(sTmp.c_str(),NULL,0),
 			    reg4 = (sTmp=TSYS::strParse(ai,3,",")).empty() ? (reg3+1) : strtol(sTmp.c_str(),NULL,0);
-			regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0]);
-			regCR(reg3, SIO(i_io,atp_sub[0],2), ioId[0]);
-			regCR(reg4, SIO(i_io,atp_sub[0],3), ioId[0]);
+			regCR(reg2, SIO(i_io,atp_sub[0],1), "R");
+			regCR(reg3, SIO(i_io,atp_sub[0],2), "R");
+			regCR(reg4, SIO(i_io,atp_sub[0],3), "R");
 			if(mode == "w")
 			{
-			    regCR(reg2, SIO(i_io,atp_sub[0],1), ioId[0], true);
-			    regCR(reg3, SIO(i_io,atp_sub[0],2), ioId[0], true);
-			    regCR(reg4, SIO(i_io,atp_sub[0],3), ioId[0], true);
+			    regCR(reg2, SIO(i_io,atp_sub[0],1), "R", true);
+			    regCR(reg3, SIO(i_io,atp_sub[0],2), "R", true);
+			    regCR(reg4, SIO(i_io,atp_sub[0],3), "R", true);
 			}
 		    }
 		    else if(atp_sub == "s")
@@ -907,15 +916,46 @@ void Node::setEnable( bool vl )
 			if(!N) N = 10;	//Default length 10 registers and maximum 100
 			for(int i_r = N; i_r < (reg+N); i_r++)
 			{
-			    regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), ioId[0]);
-			    if(mode == "w") regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), ioId[0], true);
+			    regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), "R");
+			    if(mode == "w") regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), "R", true);
 			}
 		    }
 		}
-		if(ioId[0] == 'C')
+		if(atp_m == "RI")
 		{
-		    regCR(reg, i_io, ioId[0]);
-		    if(mode == "w") regCR(reg, i_io, ioId[0], true);
+		    regCR(reg, SIO(i_io,atp_sub[0],0), "RI");
+		    if(atp_sub == "i4" || atp_sub == "f")
+		    {
+			int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0);
+			regCR(reg2, SIO(i_io,atp_sub[0],1), "RI");
+		    }
+		    else if(atp_sub == "i8" || atp_sub == "d")
+		    {
+			int reg2 = (sTmp=TSYS::strParse(ai,1,",")).empty() ? (reg+1) : strtol(sTmp.c_str(),NULL,0),
+			    reg3 = (sTmp=TSYS::strParse(ai,2,",")).empty() ? (reg2+1) : strtol(sTmp.c_str(),NULL,0),
+			    reg4 = (sTmp=TSYS::strParse(ai,3,",")).empty() ? (reg3+1) : strtol(sTmp.c_str(),NULL,0);
+			regCR(reg2, SIO(i_io,atp_sub[0],1), "RI");
+			regCR(reg3, SIO(i_io,atp_sub[0],2), "RI");
+			regCR(reg4, SIO(i_io,atp_sub[0],3), "RI");
+		    }
+		    else if(atp_sub == "s")
+		    {
+			int N = (sTmp=TSYS::strParse(ai,1,",")).empty() ? 0 : vmin(100,strtol(sTmp.c_str(),NULL,0));
+			if(!N) N = 10;	//Default length 10 registers and maximum 100
+			for(int i_r = N; i_r < (reg+N); i_r++)
+			{
+			    regCR(i_r, SIO(i_io,atp_sub[0],i_r-reg), "RI");
+			}
+		    }
+		}
+		if(atp_m == "C")
+		{
+		    regCR(reg, i_io, "C");
+		    if(mode == "w") regCR(reg, i_io, "C", true);
+		}
+		if(atp_m == "CI")
+		{
+		    regCR(reg, i_io, "CI");
 		}
 	    }
 	    //  Specific mode
@@ -928,8 +968,8 @@ void Node::setEnable( bool vl )
 		    size_t secReg = ioId.find(",",3);
 		    int tca2 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca1+1;
 		    char sTp = (ioId.compare(0,3,"R_i") == 0) ? 'i' : 'f';
-		    regCR(tca1, SIO(i_io,sTp,0), 'R'); regCR(tca2, SIO(i_io,sTp,1), 'R');
-		    if(wr) { regCR(tca1, SIO(i_io,sTp,0), 'R', true); regCR(tca2, SIO(i_io,sTp,1), 'R', true); }
+		    regCR(tca1, SIO(i_io,sTp,0), "R"); regCR(tca2, SIO(i_io,sTp,1), "R");
+		    if(wr) { regCR(tca1, SIO(i_io,sTp,0), "R", true); regCR(tca2, SIO(i_io,sTp,1), "R", true); }
 		}
 		if(ioId.compare(0,3,"R_d") == 0)
 		{
@@ -940,12 +980,12 @@ void Node::setEnable( bool vl )
 		    int tca3 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca2+1;
 		    if(secReg != string::npos) secReg = ioId.find(",",secReg+1);
 		    int tca4 = (secReg != string::npos) ? strtol(ioId.c_str()+secReg+1, NULL, 0) : tca3+1;
-		    regCR(tca1, SIO(i_io,'d',0), 'R'); regCR(tca2, SIO(i_io,'d',1), 'R');
-		    regCR(tca3, SIO(i_io,'d',2), 'R'); regCR(tca4, SIO(i_io,'d',3), 'R');
+		    regCR(tca1, SIO(i_io,'d',0), "R"); regCR(tca2, SIO(i_io,'d',1), "R");
+		    regCR(tca3, SIO(i_io,'d',2), "R"); regCR(tca4, SIO(i_io,'d',3), "R");
 		    if(wr)
 		    {
-			regCR(tca1, SIO(i_io,'d',0), 'R', true); regCR(tca2, SIO(i_io,'d',1), 'R', true);
-			regCR(tca3, SIO(i_io,'d',2), 'R', true); regCR(tca4, SIO(i_io,'d',3), 'R', true);
+			regCR(tca1, SIO(i_io,'d',0), "R", true); regCR(tca2, SIO(i_io,'d',1), "R", true);
+			regCR(tca3, SIO(i_io,'d',2), "R", true); regCR(tca4, SIO(i_io,'d',3), "R", true);
 		    }
 		}
 		else if(ioId.compare(0,3,"R_s") == 0)
@@ -956,22 +996,22 @@ void Node::setEnable( bool vl )
 		    if(!tcaN) tcaN = 10;	//Default length 10 registers and maximum 100
 		    for(int i_r = tca; i_r < (tca+tcaN); i_r++)
 		    {
-			regCR(i_r, SIO(i_io,'s',i_r-tca), 'R');
-			if(wr) regCR(i_r, SIO(i_io,'s',i_r-tca), 'R', true);
+			regCR(i_r, SIO(i_io,'s',i_r-tca), "R");
+			if(wr) regCR(i_r, SIO(i_io,'s',i_r-tca), "R", true);
 		    }
 		}
 		else if(ioId.size() > 1 && isdigit(ioId[1]))
 		{
 		    int tca = strtol(ioId.data()+1, NULL, 0);
-		    if(tolower(ioId[0]) == 'c')
+		    if(tolower(ioId[0]) == 'C')
 		    {
-			regCR(tca, i_io, 'C');
-			if(wr) regCR(tca, i_io, 'C', true);
+			regCR(tca, i_io, "C");
+			if(wr) regCR(tca, i_io, "C", true);
 		    }
 		    else
 		    {
-			regCR(tca, i_io, 'R');
-			if(wr) regCR(tca, i_io, 'R', true);
+			regCR(tca, i_io, "R");
+			if(wr) regCR(tca, i_io, "R", true);
 		    }
 		}
 	    }
@@ -1002,8 +1042,8 @@ string Node::getStatus( )
 	switch(mode())
 	{
 	    case MD_DATA:
-		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g. Writed registers %.4g, coils %.4g."),
-		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->wReg, data->wCoil);
+		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, discrete inputs %.4g, input registers %.4g. Writed registers %.4g, coils %.4g."),
+		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rBit, data->rIReg, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
 		rez += TSYS::strMess(_("Requests %.4g."), cntReq);
@@ -1053,6 +1093,33 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		if(!isData)	{ pdu.assign(1, pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rCoil += c_sz;
+
+		return true;
+	    }
+
+	    case 0x02://Read discrete inputs
+	    {
+		int c_sz = 0;
+		if(pdu.size() == 5) c_sz = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
+		if(c_sz < 1 || c_sz > 2000) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int c_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
+		pdu.assign(1, pdu[0]);
+		pdu += (char)(c_sz/8+((c_sz%8)?1:0));
+		pdu += string(pdu[1], (char)0);
+
+		bool isData = false;
+		map<int,SIO>::iterator itc;
+		for(int i_c = c_addr; i_c < (c_addr+c_sz); i_c++)
+		{
+		    if((itc=data->bitR.find(i_c)) != data->bitR.end())
+		    {
+			if(data->val.getB(itc->second.id)) pdu[2+(i_c-c_addr)/8] |= (1<<((i_c-c_addr)%8));
+			isData = true;
+		    }
+		}
+		if(!isData)	{ pdu.assign(1, pdu[0]|0x80); pdu += 0x2; return true; }
+
+		data->rBit += c_sz;
 
 		return true;
 	    }
@@ -1121,6 +1188,74 @@ bool Node::req( const string &itr, const string &iprt, unsigned char inode, stri
 		if(!isData)	{ pdu.assign(1, pdu[0]|0x80); pdu += 0x2; return true; }
 
 		data->rReg += r_sz;
+
+		return true;
+	    }
+	    case 0x04:	//Read input registers
+	    {
+		int r_sz = 0;
+		if(pdu.size() == 5) r_sz = (unsigned short)(pdu[3]<<8) | (unsigned char)pdu[4];
+		if(r_sz < 1 || r_sz > 125) { pdu.assign(1, pdu[0]|0x80); pdu += 0x3; return true; }
+		int r_addr = (unsigned short)(pdu[1]<<8) | (unsigned char)pdu[2];
+		pdu.assign(1, pdu[0]);
+		pdu += (char)(r_sz*2);
+
+		bool isData = false;
+		map<int,TVariant> grpVals;
+		map<int,SIO>::iterator itr;
+		for(int i_r = r_addr; i_r < (r_addr+r_sz); i_r++)
+		{
+		    unsigned short val = 0;
+		    if((itr=data->regIR.find(i_r)) != data->regIR.end())
+		    {
+			switch(itr->second.sTp)
+			{
+			    case 'i':
+			    {
+				union { uint16_t r[4]; int64_t i; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	wl.i = grpValIt->second.getI();
+				else { wl.i = data->val.getI(itr->second.id); grpVals[itr->second.id] = wl.i; }
+				val = wl.r[itr->second.pos];
+				break;
+			    }
+			    case 'f':
+			    {
+				union { uint16_t r[2]; float f; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	wl.f = grpValIt->second.getR();
+				else { wl.f = data->val.getR(itr->second.id); grpVals[itr->second.id] = wl.f; }
+				val = wl.r[itr->second.pos];
+				break;
+			    }
+			    case 'd':
+			    {
+				union { uint16_t r[4]; double d; } wl;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	wl.d = grpValIt->second.getR();
+				else { wl.d = data->val.getR(itr->second.id); grpVals[itr->second.id] = wl.d; }
+				val = wl.r[itr->second.pos];
+				break;
+			    }
+			    case 's':
+			    {
+				string valIO;
+				map<int,TVariant>::iterator grpValIt = grpVals.find(itr->second.id);
+				if(grpValIt != grpVals.end())	valIO = grpValIt->second.getS();
+				else { valIO = data->val.getS(itr->second.id); grpVals[itr->second.id] = valIO; }
+				valIO.resize((itr->second.pos+1)*2, 0);
+				val = TSYS::getUnalign16(valIO.data()+itr->second.pos*2);
+				break;
+			    }
+			    default:	val = data->val.getI(itr->second.id);	break;
+			}
+			isData = true;
+		    }
+		    pdu += TSYS::strEncode(string((char*)&val,2), TSYS::Reverse);
+		}
+		if(!isData)	{ pdu.assign(1, pdu[0]|0x80); pdu += 0x2; return true; }
+
+		data->rIReg += r_sz;
 
 		return true;
 	    }

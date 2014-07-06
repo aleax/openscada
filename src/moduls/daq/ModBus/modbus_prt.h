@@ -149,12 +149,12 @@ class Node : public TFunction, public TConfig
 	class SData
 	{
 	    public:
-		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0)	{ }
+		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0), rBit(0), rIReg(0)	{ }
 
 		TValFunc	val;
 		map<int,AutoHD<TVal> > lnk;
-		map<int,SIO> regR, regW, coilR, coilW;
-		float rReg, wReg, rCoil, wCoil;
+		map<int,SIO> regR, regW, coilR, coilW, bitR, regIR;
+		float rReg, wReg, rCoil, wCoil, rBit, rIReg;
 	};
 
 	//Methods
@@ -164,8 +164,8 @@ class Node : public TFunction, public TConfig
 
 	void postEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &co, const TVariant &pc );
-	void regCR( int id, const SIO &val, char tp, bool wr = false );
+	bool cfgChange( TCfg &cfg );
+	void regCR( int id, const SIO &val, const string &tp, bool wr = false );
 
 	static void *Task( void *icntr );
 
