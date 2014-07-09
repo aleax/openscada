@@ -17,6 +17,7 @@
     <file>images/it_prop.png</file>
     <file>images/it_edit.png</file>
     <file>images/it_clear.png</file>
+    <file>images/it_ChDown.png</file>
     <file>images/load.png</file>
     <file>images/save.png</file>
     <file>images/reload.png</file>
@@ -50,5 +51,6 @@
     <file>images/find.png</file>
     <file>images/disable.png</file>
     <file>images/manual.png</file>
+    <file>images/down.png</file>
 </qresource>
 </RCC>

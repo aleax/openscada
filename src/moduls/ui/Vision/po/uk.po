@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-09 20:15+0300\n"
+"POT-Creation-Date: 2014-07-08 20:25+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Роман Савоченко, Лисенко Максим, Яшина �
 msgid "Visual operation user interface."
 msgstr "Робочий інтерфейс користувача."
 
-#: tvision.cpp:115 tvision.cpp:121 vis_devel.cpp:856 vis_run.cpp:956
+#: tvision.cpp:115 tvision.cpp:121 vis_devel.cpp:845 vis_run.cpp:953
 msgid "Developers"
 msgstr "Розробники"
 
@@ -77,7 +77,7 @@ msgstr "Збереження модуля."
 msgid "Error connection to remote station!"
 msgstr "Помилка підключення до віддаленої станції!"
 
-#: tvision.cpp:256 vis_widgs.cpp:413
+#: tvision.cpp:256 vis_widgs.cpp:412
 msgid "Auth wrong!!!"
 msgstr "Помилка аутентифікації!!!"
 
@@ -167,217 +167,213 @@ msgstr ""
 "Використовуйте %f для вставлення імені файлу джерела. Якщо файл джерела не "
 "вказано то дані направляються до каналу."
 
-#: tvision.cpp:368
-msgid "Options help"
-msgstr "Допомога по опціям"
-
-#: vis_devel.cpp:60
+#: vis_devel.cpp:59
 #, c-format
 msgid "OpenSCADA Vision developing: %s"
 msgstr "OpenSCADA Vision-розробка: %s"
 
-#: vis_devel.cpp:72 vis_run.cpp:147
+#: vis_devel.cpp:71 vis_run.cpp:146
 msgid "Full screen"
 msgstr "Весь екран"
 
-#: vis_devel.cpp:74 vis_run.cpp:149
+#: vis_devel.cpp:73 vis_run.cpp:148
 msgid "Full screen toggle"
 msgstr "Перемикач режиму \"На весь екран\""
 
-#: vis_devel.cpp:75 vis_run.cpp:150
+#: vis_devel.cpp:74 vis_run.cpp:149
 msgid "The button for full screen toggle"
 msgstr "Кнопка для перемикання режиму \"На весь екран\""
 
-#: vis_devel.cpp:76 vis_run.cpp:151
+#: vis_devel.cpp:75 vis_run.cpp:150
 msgid "Press for toggle full screen."
 msgstr "Натиснути для перемикання режиму \"На весь екран\"."
 
-#: vis_devel.cpp:81 vis_run.cpp:131
+#: vis_devel.cpp:80 vis_run.cpp:130
 msgid "&Close"
 msgstr "&Закрити"
 
-#: vis_devel.cpp:83 vis_run.cpp:133
+#: vis_devel.cpp:82 vis_run.cpp:132
 msgid "Close Vision window"
 msgstr "Закриття вікна Vision"
 
-#: vis_devel.cpp:84
+#: vis_devel.cpp:83
 msgid "The button for closing Vision developing window"
 msgstr "Кнопка для закриття вікна розробки Vision"
 
-#: vis_devel.cpp:85
+#: vis_devel.cpp:84
 msgid "Press to close the current Vision developing window."
 msgstr "Натиснути для закриття вікна розробки Vision."
 
-#: vis_devel.cpp:89 vis_run.cpp:139
+#: vis_devel.cpp:88 vis_run.cpp:138
 msgid "&Quit"
 msgstr "&Вихід"
 
-#: vis_devel.cpp:91 vis_run.cpp:141
+#: vis_devel.cpp:90 vis_run.cpp:140
 msgid "Quit from OpenSCADA"
 msgstr "Вихід з OpenSCADA"
 
-#: vis_devel.cpp:92 vis_run.cpp:142
+#: vis_devel.cpp:91 vis_run.cpp:141
 msgid "The button for full quit from OpenSCADA"
 msgstr "Кнопка для повного виходу з OpenSCADA"
 
-#: vis_devel.cpp:93 vis_run.cpp:143
+#: vis_devel.cpp:92 vis_run.cpp:142
 msgid "Press for full quit from OpenSCADA system."
 msgstr "Натиснути для повного виходу з OpenSCADA."
 
-#: vis_devel.cpp:97 vis_run.cpp:157
+#: vis_devel.cpp:96 vis_run.cpp:156
 msgid "&About"
 msgstr "&Про"
 
-#: vis_devel.cpp:98 vis_run.cpp:158
+#: vis_devel.cpp:97 vis_run.cpp:157
 msgid "Program and OpenSCADA information"
 msgstr "Інформація про програму та OpenSCADA"
 
-#: vis_devel.cpp:99 vis_run.cpp:159
+#: vis_devel.cpp:98 vis_run.cpp:158
 msgid "The button for display the program and OpenSCADA information"
 msgstr "Кнопка для отримання інформації про програму та OpenSCADA"
 
-#: vis_devel.cpp:100
+#: vis_devel.cpp:99
 msgid "Press to display the program and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
 
-#: vis_devel.cpp:103 vis_run.cpp:163
+#: vis_devel.cpp:102 vis_run.cpp:162
 msgid "About &Qt"
 msgstr "Про &Qt"
 
-#: vis_devel.cpp:104 vis_run.cpp:164
+#: vis_devel.cpp:103 vis_run.cpp:163
 msgid "Qt information"
 msgstr "Інформація про Qt"
 
-#: vis_devel.cpp:105 vis_run.cpp:165
+#: vis_devel.cpp:104 vis_run.cpp:164
 msgid "The button for getting the using QT information"
 msgstr "Кнопка для отримання інформації про QT"
 
-#: vis_devel.cpp:106 vis_run.cpp:166
+#: vis_devel.cpp:105 vis_run.cpp:165
 msgid "Press to get the using QT information."
 msgstr "Натиснути для отримання інформації про QT."
 
-#: vis_devel.cpp:110 vis_devel.cpp:118 vis_devel.cpp:125 vis_run.cpp:170
-#: vis_run.cpp:178
+#: vis_devel.cpp:109 vis_devel.cpp:116 vis_devel.cpp:122 vis_run.cpp:169
+#: vis_run.cpp:176
 msgid "%1 manual"
 msgstr "%1 підручник"
 
-#: vis_devel.cpp:114 vis_devel.cpp:121 vis_devel.cpp:128 vis_run.cpp:174
-#: vis_run.cpp:181
+#: vis_devel.cpp:112 vis_devel.cpp:118 vis_devel.cpp:124 vis_run.cpp:172
+#: vis_run.cpp:178
 msgid "The button for getting the using %1 manual"
 msgstr "Кнопка для отримання підручника %1"
 
-#: vis_devel.cpp:115 vis_devel.cpp:122 vis_devel.cpp:129 vis_run.cpp:175
-#: vis_run.cpp:182
+#: vis_devel.cpp:113 vis_devel.cpp:119 vis_devel.cpp:125 vis_run.cpp:173
+#: vis_run.cpp:179
 msgid "Press to get the using %1 manual."
 msgstr "Натиснути для отримання підручника %1."
 
-#: vis_devel.cpp:133 vis_run.cpp:186
+#: vis_devel.cpp:129 vis_run.cpp:183
 msgid "What's &This"
 msgstr "Що &це"
 
-#: vis_devel.cpp:135 vis_run.cpp:188
+#: vis_devel.cpp:131 vis_run.cpp:185
 msgid "The button for question about GUI elements"
 msgstr "Кнопка для запиту інформації про GUI елементи"
 
-#: vis_devel.cpp:136 vis_run.cpp:189
+#: vis_devel.cpp:132 vis_run.cpp:186
 msgid "Get respond about user interface elements"
 msgstr "Запит інформації про GUI елементи"
 
-#: vis_devel.cpp:137 vis_run.cpp:190
+#: vis_devel.cpp:133 vis_run.cpp:187
 msgid "Press to respond about user interface elements."
 msgstr "Натиснути для запиту інформації про GUI елементи."
 
-#: vis_devel.cpp:143
+#: vis_devel.cpp:139
 msgid "Load from DB"
 msgstr "Завантажити з БД"
 
-#: vis_devel.cpp:144
+#: vis_devel.cpp:140
 msgid "Load item data from DB"
 msgstr "Завантажити дані елементу з БД"
 
-#: vis_devel.cpp:145
+#: vis_devel.cpp:141
 msgid "The button for loading item data from DB"
 msgstr "Кнопка для завантаження даних елементу з БД"
 
-#: vis_devel.cpp:146
+#: vis_devel.cpp:142
 msgid "Press to load item data from DB."
 msgstr "Натиснути для завантаження даних елементу з БД."
 
-#: vis_devel.cpp:151
+#: vis_devel.cpp:147
 msgid "Save to DB"
 msgstr "Зберегти у БД"
 
-#: vis_devel.cpp:152
+#: vis_devel.cpp:148
 msgid "Save item data to DB"
 msgstr "Зберегти дані елементу у БД"
 
-#: vis_devel.cpp:153
+#: vis_devel.cpp:149
 msgid "The button for saving item data to DB"
 msgstr "Кнопка для збереження даних елементу у БД"
 
-#: vis_devel.cpp:154
+#: vis_devel.cpp:150
 msgid "Press to save item data to DB."
 msgstr "Натиснути для збереження даних елементу у БД."
 
-#: vis_devel.cpp:160
+#: vis_devel.cpp:156
 msgid "Run project execution"
 msgstr "Запуск виконання проекту"
 
-#: vis_devel.cpp:161
+#: vis_devel.cpp:157
 msgid "Run project execution for selected item"
 msgstr "Запуск виконання проекту, для вибраного елемента"
 
-#: vis_devel.cpp:162
+#: vis_devel.cpp:158
 msgid "The button for running project execution for selected item"
 msgstr "Кнопка для запуску виконання проекту, для вибраного елемента"
 
-#: vis_devel.cpp:163
+#: vis_devel.cpp:159
 msgid "Press to run project execution for selected item."
 msgstr "Натиснути для запуску виконання проекту, для вибраного елемента."
 
-#: vis_devel.cpp:168 vis_devel.cpp:1055
+#: vis_devel.cpp:164 vis_devel.cpp:1044
 msgid "New project"
 msgstr "Новий проект"
 
-#: vis_devel.cpp:169
+#: vis_devel.cpp:165
 msgid "New project create"
 msgstr "Створення нового проекту"
 
-#: vis_devel.cpp:170
+#: vis_devel.cpp:166
 msgid "The button for creation of the new project"
 msgstr "Кнопка для створення нового проекту"
 
-#: vis_devel.cpp:171
+#: vis_devel.cpp:167
 msgid "Press to create the new project."
 msgstr "Натиснути для створення нового проекту."
 
-#: vis_devel.cpp:175
+#: vis_devel.cpp:171
 msgid "New library"
 msgstr "Нова бібліотека"
 
-#: vis_devel.cpp:176
+#: vis_devel.cpp:172
 msgid "New widgets library creation"
 msgstr "Створення нової бібліотеки"
 
-#: vis_devel.cpp:177
+#: vis_devel.cpp:173
 msgid "The button for creation of the new widgets library"
 msgstr "Кнопка для створення нової бібліотеки"
 
-#: vis_devel.cpp:178
+#: vis_devel.cpp:174
 msgid "Press to create the new widgets library."
 msgstr "Натиснути для створення нової бібліотеки."
 
-#: vis_devel.cpp:182
+#: vis_devel.cpp:178
 msgid "Add visual item"
 msgstr "Додати візуальний елемент"
 
-#: vis_devel.cpp:183
+#: vis_devel.cpp:179
 msgid "Add visual item into library, container widget, project or page"
 msgstr ""
 "Додавання візуальних елементів до бібліотеки, контейнерного віджету, проекту "
 "або сторінки"
 
-#: vis_devel.cpp:184
+#: vis_devel.cpp:180
 msgid ""
 "The button for addition of the visual item into library, container widget, "
 "project or page"
@@ -385,24 +381,24 @@ msgstr ""
 "Кнопка для додавання візуальних елементів до бібліотеки, контейнерного "
 "віджету, проекту або сторінки"
 
-#: vis_devel.cpp:185
+#: vis_devel.cpp:181
 msgid ""
 "Press to add visual item into library, container widget, project or page."
 msgstr ""
 "Натиснути для додавання візуальних елементів до бібліотеки, контейнерного "
 "віджету, проекту або сторінки."
 
-#: vis_devel.cpp:191
+#: vis_devel.cpp:187
 msgid "Delete visual item"
 msgstr "Видалити візуальний елемент"
 
-#: vis_devel.cpp:192
+#: vis_devel.cpp:188
 msgid "Delete visual item from library, container widget, project or page"
 msgstr ""
 "Видалення візуального елементу з бібліотеки, контейнерного віджета, проекту "
 "або сторінки"
 
-#: vis_devel.cpp:193
+#: vis_devel.cpp:189
 msgid ""
 "The button for deleting visual item from library, container widget, project "
 "or page"
@@ -410,614 +406,630 @@ msgstr ""
 "Кнопка для видалення візуального елементу з бібліотеки, контейнерного "
 "віджета, проекту або сторінки"
 
-#: vis_devel.cpp:194
+#: vis_devel.cpp:190
 msgid ""
 "Press to delete visual item from library, container widget, project or page."
 msgstr ""
 "Натиснути для видалення візуального елементу з бібліотеки, контейнерного "
 "віджета, проекту або сторінки."
 
-#: vis_devel.cpp:200
+#: vis_devel.cpp:196
 msgid "Visual item properties"
 msgstr "Властивості візуального елементу"
 
-#: vis_devel.cpp:201
+#: vis_devel.cpp:197
 msgid "Get visual item properties"
 msgstr "Отримання властивостей візуального елементу"
 
-#: vis_devel.cpp:202
+#: vis_devel.cpp:198
 msgid "The button for getting the visual item properties"
 msgstr "Кнопка для отримання властивостей візуального елементу"
 
-#: vis_devel.cpp:203
+#: vis_devel.cpp:199
 msgid "Press to get the visual item properties."
 msgstr "Натиснути для отримання властивостей візуального елементу."
 
-#: vis_devel.cpp:209
+#: vis_devel.cpp:205
 msgid "Visual item edit"
 msgstr "Редагувати візуальний елемент"
 
-#: vis_devel.cpp:210
+#: vis_devel.cpp:206
 msgid "Goes visual item edit"
 msgstr "Перехід до редагування візуального елементу"
 
-#: vis_devel.cpp:211
+#: vis_devel.cpp:207
 msgid "The button for going to visual item edition"
 msgstr "Кнопка для переходу до редагування візуального елементу"
 
-#: vis_devel.cpp:212
+#: vis_devel.cpp:208
 msgid "Press to go to visual item edition."
 msgstr "Натиснути для переходу до редагування візуального елементу."
 
-#: vis_devel.cpp:218
+#: vis_devel.cpp:214
 msgid "Visual item changes clear"
 msgstr "Очистити зміни візуального елементу"
 
-#: vis_devel.cpp:219
+#: vis_devel.cpp:215
 msgid "Goes visual item changes clear"
 msgstr "Перехід до очищення змін візуального елементу"
 
-#: vis_devel.cpp:220
+#: vis_devel.cpp:216
 msgid "The button for going to visual item changes clear"
 msgstr "Кнопка для переходу до очищення змін візуального елементу"
 
-#: vis_devel.cpp:221
+#: vis_devel.cpp:217
 msgid "Press to go to visual item changes clear."
 msgstr "Натиснути для переходу до очищення змін візуального елементу."
 
-#: vis_devel.cpp:226
+#: vis_devel.cpp:222
+msgid "Visual item changes put down"
+msgstr "Опустити зміни візуального елементу"
+
+#: vis_devel.cpp:223
+msgid "Goes visual item changes put down to the parent"
+msgstr "Перехід до опущення змін візуального елементу до предку"
+
+#: vis_devel.cpp:224
+msgid "The button for going to visual item changes put down to the parent"
+msgstr "Кнопка для переходу до опущення змін візуального елементу до предку"
+
+#: vis_devel.cpp:225
+msgid "Press to go to visual item changes put down to the parent."
+msgstr "Натиснути для переходу до опущення змін візуального елементу до предку."
+
+#: vis_devel.cpp:230
 msgid "Visual item changes UnDo"
 msgstr "Відмінити зміни візуального елементу"
 
-#: vis_devel.cpp:228
+#: vis_devel.cpp:232
 msgid "Make visual item changes UnDo:"
 msgstr "Виконання відміни змін візуального елементу:"
 
-#: vis_devel.cpp:229
+#: vis_devel.cpp:233
 msgid "The button for making visual item changes UnDo"
 msgstr "Кнопка для виконання відміни змін візуального елементу"
 
-#: vis_devel.cpp:230
+#: vis_devel.cpp:234
 msgid "Press to make visual item changes UnDo."
 msgstr "Натиснути для виконання відміни змін візуального елементу."
 
-#: vis_devel.cpp:235
+#: vis_devel.cpp:239
 msgid "Visual item changes ReDo"
 msgstr "Повторити зміни візуального елементу"
 
-#: vis_devel.cpp:237
+#: vis_devel.cpp:241
 msgid "Make visual item changes ReDo:"
 msgstr "Виконати повтор змін візуального елементу:"
 
-#: vis_devel.cpp:238
+#: vis_devel.cpp:242
 msgid "The button for making visual item changes ReDo"
 msgstr "Кнопка для виконання повтору змін візуального елементу"
 
-#: vis_devel.cpp:239
+#: vis_devel.cpp:243
 msgid "Press to make visual item changes ReDo."
 msgstr "Натиснути для виконання повтору змін візуального елементу."
 
-#: vis_devel.cpp:244
+#: vis_devel.cpp:248
 msgid "Visual item cut"
 msgstr "Вирізати візуальний елемент"
 
-#: vis_devel.cpp:246
+#: vis_devel.cpp:250
 msgid "Make visual item cut"
 msgstr "Виконати вирізання візуального елементу"
 
-#: vis_devel.cpp:247
+#: vis_devel.cpp:251
 msgid "The button for making visual item cut"
 msgstr "Кнопка для виконання вирізання візуального елементу"
 
-#: vis_devel.cpp:248
+#: vis_devel.cpp:252
 msgid "Press to make visual item cut."
 msgstr "Натиснути для виконання вирізання візуального елементу."
 
-#: vis_devel.cpp:254
+#: vis_devel.cpp:258
 msgid "Visual item copy"
 msgstr "Копіювати візуальний елемент"
 
-#: vis_devel.cpp:256
+#: vis_devel.cpp:260
 msgid "Make visual item copy"
 msgstr "Виконання копіювання візуального елементу"
 
-#: vis_devel.cpp:257
+#: vis_devel.cpp:261
 msgid "The button for making visual item copy"
 msgstr "Кнопка для виконання копіювання візуального елементу"
 
-#: vis_devel.cpp:258
+#: vis_devel.cpp:262
 msgid "Press to make visual item copy."
 msgstr "Натиснути для виконання копіювання візуального елементу."
 
-#: vis_devel.cpp:264
+#: vis_devel.cpp:268
 msgid "Visual item paste"
 msgstr "Вставити візуальний елемент"
 
-#: vis_devel.cpp:266
+#: vis_devel.cpp:270
 msgid "Make visual item paste"
 msgstr "Виконати вставку візуального елементу"
 
-#: vis_devel.cpp:267
+#: vis_devel.cpp:271
 msgid "The button for making visual item paste"
 msgstr "Кнопка для виконання вставки візуального елементу"
 
-#: vis_devel.cpp:268
+#: vis_devel.cpp:272
 msgid "Press to make visual item paste."
 msgstr "Натиснути для виконання вставки візуального елементу."
 
-#: vis_devel.cpp:276
+#: vis_devel.cpp:280
 msgid "Up widget"
 msgstr "Підняти віджет"
 
-#: vis_devel.cpp:278
+#: vis_devel.cpp:282
 msgid "Raise selected widget to the top"
 msgstr "Підняти вибраний віджет догори"
 
-#: vis_devel.cpp:279
+#: vis_devel.cpp:283
 msgid "The button for raising the selected widget to the top"
 msgstr "Кнопка для підняття вибраного віджету догори"
 
-#: vis_devel.cpp:280
+#: vis_devel.cpp:284
 msgid "Press to raise the selected widget to the top."
 msgstr "Натиснути для підняття вибраного віджету догори."
 
-#: vis_devel.cpp:284
+#: vis_devel.cpp:288
 msgid "Down widget"
 msgstr "Опустити віджет"
 
-#: vis_devel.cpp:286
+#: vis_devel.cpp:290
 msgid "Down selected widget to the bottom"
 msgstr "Опустити вибраний віджет донизу"
 
-#: vis_devel.cpp:287
+#: vis_devel.cpp:291
 msgid "The button for downing the selected widget to the bottom"
 msgstr "Кнопка для опускання вибраного віджету донизу"
 
-#: vis_devel.cpp:288
+#: vis_devel.cpp:292
 msgid "Press to down the selected widget to the bottom."
 msgstr "Натиснути для опускання вибраного віджету донизу."
 
-#: vis_devel.cpp:292
+#: vis_devel.cpp:296
 msgid "Rise widget"
 msgstr "Віджет догори"
 
-#: vis_devel.cpp:294
+#: vis_devel.cpp:298
 msgid "Raise selected widget"
 msgstr "Підняття вибраного віджета"
 
-#: vis_devel.cpp:295
+#: vis_devel.cpp:299
 msgid "The button for raising the selected widget"
 msgstr "Кнопка для підняття вибраного віджета"
 
-#: vis_devel.cpp:296
+#: vis_devel.cpp:300
 msgid "Press to raise the selected widget."
 msgstr "Натиснути для підняття вибраного віджета."
 
-#: vis_devel.cpp:300
+#: vis_devel.cpp:304
 msgid "Lower widget"
 msgstr "Віджет донизу"
 
-#: vis_devel.cpp:302
+#: vis_devel.cpp:306
 msgid "Down selected widget"
 msgstr "Опускання вибраного віджета"
 
-#: vis_devel.cpp:303
+#: vis_devel.cpp:307
 msgid "The button for downing the selected widget"
 msgstr "Кнопка для опускання вибраного віджета"
 
-#: vis_devel.cpp:304
+#: vis_devel.cpp:308
 msgid "Press to down the selected widget."
 msgstr "Натиснути для опускання вибраного віджета."
 
-#: vis_devel.cpp:310
+#: vis_devel.cpp:314
 msgid "Align to left"
 msgstr "Вирівняти ліворуч"
 
-#: vis_devel.cpp:312
+#: vis_devel.cpp:316
 msgid "Align selected widgets to the left"
 msgstr "Вирівнювання вибраних віджетів зліва"
 
-#: vis_devel.cpp:313
+#: vis_devel.cpp:317
 msgid "The button for alignment of selected widgets to the left"
 msgstr "Кнопка для вирівнювання вибраних віджетів зліва"
 
-#: vis_devel.cpp:314
+#: vis_devel.cpp:318
 msgid "Press to align selected widgets to the left."
 msgstr "Натиснути для вирівнювання вибраних віджетів зліва."
 
-#: vis_devel.cpp:318
+#: vis_devel.cpp:322
 msgid "Align to vertical center"
 msgstr "Вирівняти у центрі вертикально"
 
-#: vis_devel.cpp:320
+#: vis_devel.cpp:324
 msgid "Align selected widgets to the vertical center"
 msgstr "Вирівнювання вибраних віджетів у центрі вертикально"
 
-#: vis_devel.cpp:321
+#: vis_devel.cpp:325
 msgid "The button for alignment of selected widgets to the vertical center"
 msgstr "Кнопка для вирівнювання вибраних віджетів у центрі вертикально"
 
-#: vis_devel.cpp:322
+#: vis_devel.cpp:326
 msgid "Press to align selected widgets to the vertical center."
 msgstr "Натиснути для вирівнювання вибраних віджетів у центрі вертикально."
 
-#: vis_devel.cpp:326
+#: vis_devel.cpp:330
 msgid "Align to right"
 msgstr "Вирівняти праворуч"
 
-#: vis_devel.cpp:328
+#: vis_devel.cpp:332
 msgid "Align selected widgets to the right"
 msgstr "Вирівнювання вибраних віджетів праворуч"
 
-#: vis_devel.cpp:329
+#: vis_devel.cpp:333
 msgid "The button for alignment of selected widgets to the right"
 msgstr "Кнопка для вирівнювання вибраних віджетів праворуч"
 
-#: vis_devel.cpp:330
+#: vis_devel.cpp:334
 msgid "Press to align selected widgets to the right."
 msgstr "Натиснути для вирівнювання вибраних віджетів праворуч."
 
-#: vis_devel.cpp:334
+#: vis_devel.cpp:338
 msgid "Align to top"
 msgstr "Вирівняти догори"
 
-#: vis_devel.cpp:336
+#: vis_devel.cpp:340
 msgid "Align selected widgets to the top"
 msgstr "Вирівнювання вибраних віджетів догори"
 
-#: vis_devel.cpp:337
+#: vis_devel.cpp:341
 msgid "The button for alignment of selected widgets to the top"
 msgstr "Кнопка для вирівнювання вибраних віджетів догори"
 
-#: vis_devel.cpp:338
+#: vis_devel.cpp:342
 msgid "Press to align selected widgets to the top."
 msgstr "Натиснути для вирівнювання вибраних віджетів догори."
 
-#: vis_devel.cpp:342
+#: vis_devel.cpp:346
 msgid "Align to horizontal center"
 msgstr "Вирівняти у центрі горизонтально"
 
-#: vis_devel.cpp:344
+#: vis_devel.cpp:348
 msgid "Align selected widgets to the horizontal center"
 msgstr "Вирівнювання вибраних віджетів у центрі горизонтально"
 
-#: vis_devel.cpp:345
+#: vis_devel.cpp:349
 msgid "The button for alignment selected widgets to the horizontal center"
 msgstr "Кнопка для вирівнювання вибраних віджетів у центрі горизонтально"
 
-#: vis_devel.cpp:346
+#: vis_devel.cpp:350
 msgid "Press to align selected widgets to the horizontal center."
 msgstr "Натиснути для вирівнювання вибраних віджетів у центрі горизонтально."
 
-#: vis_devel.cpp:350
+#: vis_devel.cpp:354
 msgid "Align to bottom"
 msgstr "Вирівняти додолу"
 
-#: vis_devel.cpp:352
+#: vis_devel.cpp:356
 msgid "Align selected widgets to the bottom"
 msgstr "Вирівнювання вибраних віджетів додолу"
 
-#: vis_devel.cpp:353
+#: vis_devel.cpp:357
 msgid "The button for alignment selected widgets to the bottom"
 msgstr "Кнопка для вирівнювання вибраних віджетів додолу"
 
-#: vis_devel.cpp:354
+#: vis_devel.cpp:358
 msgid "Press to align selected widgets to the bottom."
 msgstr "Натиснути для вирівнювання вибраних віджетів додолу."
 
-#: vis_devel.cpp:360
+#: vis_devel.cpp:364
 msgid "Cursor"
 msgstr "Курсор"
 
-#: vis_devel.cpp:364
+#: vis_devel.cpp:368
 msgid "Unset cursor"
 msgstr "Повернення курсору"
 
-#: vis_devel.cpp:365
+#: vis_devel.cpp:369
 msgid "The button for unset cursor"
 msgstr "Кнопка для повернення курсору"
 
-#: vis_devel.cpp:366
+#: vis_devel.cpp:370
 msgid "Press to unset cursor"
 msgstr "Кнопка для повернення курсору"
 
-#: vis_devel.cpp:370
+#: vis_devel.cpp:374
 msgid "Add line"
 msgstr "Додати лінію"
 
-#: vis_devel.cpp:373
+#: vis_devel.cpp:377
 msgid "Add line to elementary figure"
 msgstr "Додання лінії до елементарної фігури"
 
-#: vis_devel.cpp:374
+#: vis_devel.cpp:378
 msgid "The button for adding line to elementary figure"
 msgstr "Кнопка для додання лінії до елементарної фігури"
 
-#: vis_devel.cpp:375
+#: vis_devel.cpp:379
 msgid "Press to add line to elementary figure."
 msgstr "Натиснути для додання лінії до елементарної фігури."
 
-#: vis_devel.cpp:379
+#: vis_devel.cpp:383
 msgid "Add arc"
 msgstr "Додати дугу"
 
-#: vis_devel.cpp:382
+#: vis_devel.cpp:386
 msgid "Add arc to elementary figure"
 msgstr "Додання дуги до елементарної фігури"
 
-#: vis_devel.cpp:383
+#: vis_devel.cpp:387
 msgid "The button for adding arc to elementary figure"
 msgstr "Кнопка для додання дуги до елементарної фігури"
 
-#: vis_devel.cpp:384
+#: vis_devel.cpp:388
 msgid "Press to add arc to elementary figure."
 msgstr "Натиснути для додання дуги до елементарної фігури."
 
-#: vis_devel.cpp:388
+#: vis_devel.cpp:392
 msgid "Add Besier curve"
 msgstr "Додати криву Безьє"
 
-#: vis_devel.cpp:391
+#: vis_devel.cpp:395
 msgid "Add Besier curve to elementary figure"
 msgstr "Додання кривої Безьє до елементарної фігури"
 
-#: vis_devel.cpp:392
+#: vis_devel.cpp:396
 msgid "The button for adding Besier curve to elementary figure"
 msgstr "Кнопка для додання кривої Безьє до елементарної фігури"
 
-#: vis_devel.cpp:393
+#: vis_devel.cpp:397
 msgid "Press to add Besier curve to elementary figure."
 msgstr "Натиснути для додання кривої Безьє до елементарної фігури."
 
-#: vis_devel.cpp:397
+#: vis_devel.cpp:401
 msgid "Connections"
 msgstr "Під'єднатися"
 
-#: vis_devel.cpp:401
+#: vis_devel.cpp:405
 msgid "Enable connections"
 msgstr "Включення прив'язок"
 
-#: vis_devel.cpp:402
+#: vis_devel.cpp:406
 msgid "The button for enabling connections"
 msgstr "Кнопка для включення прив'язок"
 
-#: vis_devel.cpp:403
+#: vis_devel.cpp:407
 msgid "Press to enable connections"
 msgstr "Включення прив'язок"
 
-#: vis_devel.cpp:408
+#: vis_devel.cpp:412
 msgid "Cl&ose"
 msgstr "&Закрити"
 
-#: vis_devel.cpp:409
+#: vis_devel.cpp:413
 msgid "Close active window"
 msgstr "Закриття активного вікна"
 
-#: vis_devel.cpp:410
+#: vis_devel.cpp:414
 msgid "The button for the active window closing"
 msgstr "Кнопка для закриття активного вікна"
 
-#: vis_devel.cpp:411
+#: vis_devel.cpp:415
 msgid "Press to close active window."
 msgstr "Натиснути для закриття активного вікна."
 
-#: vis_devel.cpp:414
+#: vis_devel.cpp:418
 msgid "Close &All"
 msgstr "Закрити &все"
 
-#: vis_devel.cpp:415
+#: vis_devel.cpp:419
 msgid "Close all windows"
 msgstr "Закриття всіх вікон"
 
-#: vis_devel.cpp:416
+#: vis_devel.cpp:420
 msgid "The button for all windows closing"
 msgstr "Кнопка для закриття всіх вікон"
 
-#: vis_devel.cpp:417
+#: vis_devel.cpp:421
 msgid "Press to close all windows."
 msgstr "Натиснути для закриття всіх вікон."
 
-#: vis_devel.cpp:420
+#: vis_devel.cpp:424
 msgid "&Tile"
 msgstr "&Укласти"
 
-#: vis_devel.cpp:421
+#: vis_devel.cpp:425
 msgid "Tile all windows"
 msgstr "Укладення всіх вікон"
 
-#: vis_devel.cpp:422
+#: vis_devel.cpp:426
 msgid "The button for all windows tiling"
 msgstr "Кнопка для укладення всіх вікон"
 
-#: vis_devel.cpp:423
+#: vis_devel.cpp:427
 msgid "Press to tile all windows."
 msgstr "Натиснути для укладення всіх вікон."
 
-#: vis_devel.cpp:426
+#: vis_devel.cpp:430
 msgid "&Cascade"
 msgstr "&Каскадувати"
 
-#: vis_devel.cpp:427
+#: vis_devel.cpp:431
 msgid "Cascade all windows"
 msgstr "Каскадування всіх вікон"
 
-#: vis_devel.cpp:428
+#: vis_devel.cpp:432
 msgid "The button for all windows cascading"
 msgstr "Кнопка для каскадування всіх вікон"
 
-#: vis_devel.cpp:429
+#: vis_devel.cpp:433
 msgid "Press to cascade all windows."
 msgstr "Натиснути для каскадування всіх вікон."
 
-#: vis_devel.cpp:432
+#: vis_devel.cpp:436
 msgid "Ne&xt"
 msgstr "&Наступний"
 
-#: vis_devel.cpp:433
+#: vis_devel.cpp:437
 msgid "Activate next window"
 msgstr "Активувати наступне вікно"
 
-#: vis_devel.cpp:434
+#: vis_devel.cpp:438
 msgid "The button for next window activation"
 msgstr "Кнопка для активування наступного вікна"
 
-#: vis_devel.cpp:435
+#: vis_devel.cpp:439
 msgid "Press to activate next window."
 msgstr "Натиснути для активування наступного вікна."
 
-#: vis_devel.cpp:438
+#: vis_devel.cpp:442
 msgid "Pre&vious"
 msgstr "&Минулий"
 
-#: vis_devel.cpp:439
+#: vis_devel.cpp:443
 msgid "Activate previous window"
 msgstr "Активувати минуле вікно"
 
-#: vis_devel.cpp:440
+#: vis_devel.cpp:444
 msgid "The button for previous window activation"
 msgstr "Кнопка для активування минулого вікна"
 
-#: vis_devel.cpp:441
+#: vis_devel.cpp:445
 msgid "Press to activate previous window."
 msgstr "Натиснути для активування минулого вікна."
 
-#: vis_devel.cpp:452 vis_run.cpp:227
+#: vis_devel.cpp:456 vis_run.cpp:224
 msgid "&File"
 msgstr "&Файл"
 
-#: vis_devel.cpp:458
+#: vis_devel.cpp:462
 msgid "&Edit"
 msgstr "&Редагування"
 
-#: vis_devel.cpp:465
+#: vis_devel.cpp:469
 msgid "&Project"
 msgstr "&Проект"
 
-#: vis_devel.cpp:474
+#: vis_devel.cpp:479
 msgid "&Widget"
 msgstr "&Віджет"
 
-#: vis_devel.cpp:482 vis_devel.cpp:500 vis_run.cpp:238
+#: vis_devel.cpp:488 vis_devel.cpp:506 vis_run.cpp:235
 msgid "&View"
 msgstr "В&ид"
 
-#: vis_devel.cpp:496
+#: vis_devel.cpp:502
 msgid "&Window"
 msgstr "Вікн&о"
 
-#: vis_devel.cpp:503 vis_run.cpp:240
+#: vis_devel.cpp:509 vis_run.cpp:237
 msgid "&Help"
 msgstr "&Допомога"
 
-#: vis_devel.cpp:514
+#: vis_devel.cpp:520
 msgid "Visual items toolbar"
 msgstr "Панель візуальних елементів"
 
-#: vis_devel.cpp:539
+#: vis_devel.cpp:545
 msgid "Widgets view functions"
 msgstr "Функції видимості віджетів"
 
-#: vis_devel.cpp:556
+#: vis_devel.cpp:562
 msgid "Elementars figure tools"
 msgstr "Панель елементарних фігур"
 
-#: vis_devel.cpp:569 vis_run.cpp:268
+#: vis_devel.cpp:575 vis_run.cpp:265
 msgid "This label displays current user."
 msgstr "Це маркування показує поточного користувача."
 
-#: vis_devel.cpp:570
+#: vis_devel.cpp:576
 msgid "Field for display the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: vis_devel.cpp:571 vis_run.cpp:270
+#: vis_devel.cpp:577 vis_run.cpp:267
 msgid "Double click to change user."
 msgstr "Подвійно клацнути для зміни користувача."
 
-#: vis_devel.cpp:574
+#: vis_devel.cpp:580
 msgid "This label displays the using VCA engine station."
 msgstr "Це маркування показує використану станцію рушія СВК"
 
-#: vis_devel.cpp:575
+#: vis_devel.cpp:581
 msgid "Field for display of the using VCA engine station."
 msgstr "Поле для відображення використаної станції рушія СВК"
 
-#: vis_devel.cpp:578
+#: vis_devel.cpp:584
 msgid "This label displays widgets' scaling mode."
 msgstr "Це маркування показує поточний режим масштабування."
 
-#: vis_devel.cpp:579
+#: vis_devel.cpp:585
 msgid "Field for display widgets' scaling mode."
 msgstr "Поле для відображення поточного режиму масштабування."
 
-#: vis_devel.cpp:580
+#: vis_devel.cpp:586
 msgid "Click to change widgets' scaling mode."
 msgstr "Натиснути для зміни режиму масштабування віджетів."
 
-#: vis_devel.cpp:584
+#: vis_devel.cpp:590
 msgid "This label displays modifying."
 msgstr "Це маркування показує факт внесення змін."
 
-#: vis_devel.cpp:585
+#: vis_devel.cpp:591
 msgid "Field for display modifying."
 msgstr "Поле для відображення факту внесення змін."
 
-#: vis_devel.cpp:586
+#: vis_devel.cpp:592
 msgid "Click to save all modifyings."
 msgstr "Натиснути для збереження всіх змін."
 
-#: vis_devel.cpp:589
+#: vis_devel.cpp:595
 msgid "This label displays current widget's scale."
 msgstr "Це маркування показує поточний режим масштабування."
 
-#: vis_devel.cpp:590
+#: vis_devel.cpp:596
 msgid "Field for display the scale of the current widget."
 msgstr "Поле для відображення поточного користувача."
 
-#: vis_devel.cpp:597
+#: vis_devel.cpp:603
 msgid "Dock window for projects management."
 msgstr "Плаваюче вікно для керування проектами"
 
-#: vis_devel.cpp:601
+#: vis_devel.cpp:607
 msgid "Dock window for widgets and their libraries management."
 msgstr "Плаваюче вікно для керування віджетами та їх бібліотеками."
 
-#: vis_devel.cpp:612
+#: vis_devel.cpp:618
 msgid "Dock window for widget's attributes inspection."
 msgstr "Плаваюче вікно для інспектора атрибутів віджета."
 
-#: vis_devel.cpp:614
+#: vis_devel.cpp:620
 msgid "Dock window for widget's links inspection."
 msgstr "Плаваюче вікно для інспектора посилань віджета."
 
-#: vis_devel.cpp:657 vis_run.cpp:314
+#: vis_devel.cpp:663 vis_run.cpp:311
 msgid "Ready"
 msgstr "Готовий"
 
-#: vis_devel.cpp:758
+#: vis_devel.cpp:750
 msgid "Icons size"
 msgstr "Розмір іконок"
 
-#: vis_devel.cpp:762
+#: vis_devel.cpp:754
 msgid "Small (16x16)"
 msgstr "Малі (16x16)"
 
-#: vis_devel.cpp:768
+#: vis_devel.cpp:760
 msgid "Medium (22x22)"
 msgstr "Середні (22x22)"
 
-#: vis_devel.cpp:774
+#: vis_devel.cpp:766
 msgid "Big (32x32)"
 msgstr "Великі (32x32)"
 
-#: vis_devel.cpp:780
+#: vis_devel.cpp:772
 msgid "Huge (48x48)"
 msgstr "Дуже великі (48x48)"
 
-#: vis_devel.cpp:825
+#: vis_devel.cpp:814
 msgid "Visual items save"
 msgstr "Збереження візуальних елементів"
 
-#: vis_devel.cpp:825
+#: vis_devel.cpp:814
 msgid ""
 "Some visual items changed.\n"
 "Save the changes to DB on exit?"
@@ -1025,7 +1037,7 @@ msgstr ""
 "Деякі візуальні елементи було змінено.\n"
 "Зберегти зміни у БД при виході?"
 
-#: vis_devel.cpp:854 vis_run.cpp:954
+#: vis_devel.cpp:843 vis_run.cpp:951
 msgid ""
 "%1 v%2.\n"
 "%3\n"
@@ -1051,63 +1063,71 @@ msgstr ""
 "Автор: %11\n"
 "Web сайт: %12"
 
-#: vis_devel.cpp:995
+#: vis_devel.cpp:913 vis_run.cpp:1015
+msgid "Manual"
+msgstr "Підручник"
+
+#: vis_devel.cpp:914 vis_run.cpp:1016
+msgid "No the manual '%1' found offline or online!"
+msgstr "Не знайдено підручника '%1' локально та віддалено!"
+
+#: vis_devel.cpp:984
 msgid "Are you sure of loading visual items '%1' from DB?"
 msgstr "Ви дійсно бажаєте завантажити візуальні елементи '%1' з БД?"
 
-#: vis_devel.cpp:996
+#: vis_devel.cpp:985
 msgid "Load visual item's data from DB"
 msgstr "Завантаження даних візуального елементу з БД"
 
-#: vis_devel.cpp:1025
+#: vis_devel.cpp:1014
 msgid "Are you sure of saving all modifications to DB?"
 msgstr "Ви дійсно бажаєте зберегти всі зміни у БД?"
 
-#: vis_devel.cpp:1026
+#: vis_devel.cpp:1015
 msgid "Are you sure of saving visual items '%1' to DB?"
 msgstr "Ви дійсно бажаєте зберегти візуальні елементи '%1' у БД?"
 
-#: vis_devel.cpp:1027
+#: vis_devel.cpp:1016
 msgid "Save visual item's data to DB"
 msgstr "Збереження даних візуальних елементів у БД"
 
-#: vis_devel.cpp:1055 vis_devel.cpp:1432
+#: vis_devel.cpp:1044 vis_devel.cpp:1450
 msgid "Enter new project's identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нового проекта."
 
-#: vis_devel.cpp:1075 vis_devel.cpp:1441
+#: vis_devel.cpp:1064 vis_devel.cpp:1459
 msgid "Enter new widget's library identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нової бібліотеки віджетів."
 
-#: vis_devel.cpp:1075
+#: vis_devel.cpp:1064
 msgid "New widget's library"
 msgstr "Нова бібліотека віджетів"
 
-#: vis_devel.cpp:1111 vis_devel.cpp:1450
+#: vis_devel.cpp:1100 vis_devel.cpp:1468
 msgid "Enter new widget's/page's identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нового віджета/сторінки."
 
-#: vis_devel.cpp:1111
+#: vis_devel.cpp:1100
 msgid "Create widget/page"
 msgstr "Створити віджет/сторінку"
 
-#: vis_devel.cpp:1214
+#: vis_devel.cpp:1203
 msgid "Are you sure of deleting visual items: '%1'?"
 msgstr "Ви дійсно бажаєте видалити візуальні елементи '%1'?"
 
-#: vis_devel.cpp:1215
+#: vis_devel.cpp:1204
 msgid "Delete visual items"
 msgstr "Видалення візуальних елементів"
 
-#: vis_devel.cpp:1304
+#: vis_devel.cpp:1293
 msgid "Widget: %1"
 msgstr "Віджет: %1"
 
-#: vis_devel.cpp:1312
+#: vis_devel.cpp:1301
 msgid "Widget's '%1' editing window is already opened."
 msgstr "Вікно редагування віджету '%1' вже відкрито."
 
-#: vis_devel.cpp:1363
+#: vis_devel.cpp:1352
 msgid ""
 "Are you sure of clear all changes for visual items: '%1'?\n"
 "All changes will be lost and variables are returning to default values or "
@@ -1117,205 +1137,213 @@ msgstr ""
 "Всі зміни буде втрачено та значення повернуться до попереднього стану або "
 "будуть успадковані!"
 
-#: vis_devel.cpp:1365
+#: vis_devel.cpp:1354 vis_devel.cpp:1386
 msgid "Visual items' changes clear"
 msgstr "Очищення змін візуальних елементів"
 
-#: vis_devel.cpp:1412
+#: vis_devel.cpp:1384
+msgid ""
+"Are you sure for put down to parent all changes for visual items: '%1'?\n"
+"All other inherited from the parent visual items will use the changes!"
+msgstr ""
+"Ви дійсно бажаєте опустити предку всі зміни візуальних елементів: '%1'?\n"
+"Всі інші візуальні елементи, нашадки від даного предку, будуть використовувати ці зміни!"
+
+#: vis_devel.cpp:1430
 msgid "Visual items move or copy"
 msgstr "Копіювання або переміщення візуальних елементів"
 
-#: vis_devel.cpp:1431
+#: vis_devel.cpp:1449
 msgid "Project '%1' move.\n"
 msgstr "Переміщення проекту '%1'.\n"
 
-#: vis_devel.cpp:1431
+#: vis_devel.cpp:1449
 msgid "Project '%1' copy.\n"
 msgstr "Копіювання проекту '%1'.\n"
 
-#: vis_devel.cpp:1440
+#: vis_devel.cpp:1458
 msgid "Widget's library '%1' move.\n"
 msgstr "Переміщення бібліотеки віджетів '%1'.\n"
 
-#: vis_devel.cpp:1440
+#: vis_devel.cpp:1458
 msgid "Widget's library '%1' copy.\n"
 msgstr "Копіювання бібліотеки віджетів '%1'.\n"
 
-#: vis_devel.cpp:1449
+#: vis_devel.cpp:1467
 msgid "Move page '%1' to '%2'.\n"
 msgstr "Переміщення сторінки '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1449
+#: vis_devel.cpp:1467
 msgid "Copy page '%1' to '%2'.\n"
 msgstr "Копіювання сторінки '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1461 vis_devel.cpp:1472
+#: vis_devel.cpp:1479 vis_devel.cpp:1490
 msgid "Move widget '%1' to '%2'.\n"
 msgstr "Переміщення віджету '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1461 vis_devel.cpp:1472
+#: vis_devel.cpp:1479 vis_devel.cpp:1490
 msgid "Copy widget '%1' to '%2'.\n"
 msgstr "Копіювання віджету '%1' до '%2'.\n"
 
-#: vis_devel.cpp:1462 vis_devel.cpp:1473
+#: vis_devel.cpp:1480 vis_devel.cpp:1491
 msgid "Enter new widget's identifier and name."
 msgstr "Введіть ідентифікатор та ім'я нового віджета."
 
-#: vis_devel.cpp:1481
+#: vis_devel.cpp:1499
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
 msgstr "Схема копіювання/переміщення з '%1' до '%2' не підтримується."
 
-#: vis_devel.cpp:1504
+#: vis_devel.cpp:1522
 msgid "Inherit:"
 msgstr "Наслідувати:"
 
-#: vis_devel.cpp:1525
+#: vis_devel.cpp:1543
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Спроба копіювання/пересунення себе у себе для \"%1/%1\"!"
 
-#: vis_devel_dlgs.cpp:58
+#: vis_devel_dlgs.cpp:57
 msgid "Widget's library properties"
 msgstr "Властивості бібліотеки віджетів"
 
-#: vis_devel_dlgs.cpp:71
+#: vis_devel_dlgs.cpp:70
 msgid "Widgets library"
 msgstr "Бібліотека віджетів"
 
-#: vis_devel_dlgs.cpp:82 vis_devel_dlgs.cpp:838
+#: vis_devel_dlgs.cpp:81 vis_devel_dlgs.cpp:837
 msgid "State"
 msgstr "Стан"
 
-#: vis_devel_dlgs.cpp:89 vis_devel_dlgs.cpp:844
+#: vis_devel_dlgs.cpp:88 vis_devel_dlgs.cpp:843
 msgid "Item's icon. Click for download other."
 msgstr "Іконка елементу. Натисніть для завантаження іншої."
 
-#: vis_devel_dlgs.cpp:96 vis_devel_dlgs.cpp:851
+#: vis_devel_dlgs.cpp:95 vis_devel_dlgs.cpp:850
 msgid "Enabled:"
 msgstr "Ввімкнено:"
 
-#: vis_devel_dlgs.cpp:104
+#: vis_devel_dlgs.cpp:103
 msgid "Container DB:"
 msgstr "БД контейнера:"
 
-#: vis_devel_dlgs.cpp:113 vis_devel_dlgs.cpp:877
+#: vis_devel_dlgs.cpp:112 vis_devel_dlgs.cpp:876
 msgid "Date of modification:"
 msgstr "Дата модифікації:"
 
-#: vis_devel_dlgs.cpp:125 vis_devel_dlgs.cpp:889 vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:124 vis_devel_dlgs.cpp:888 vis_devel_dlgs.cpp:992
 msgid "Configuration"
 msgstr "Конфігурація"
 
-#: vis_devel_dlgs.cpp:130 vis_devel_dlgs.cpp:894
+#: vis_devel_dlgs.cpp:129 vis_devel_dlgs.cpp:893
 msgid "Id:"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:137 vis_devel_dlgs.cpp:255 vis_devel_dlgs.cpp:915
-#: vis_widgs.cpp:97
+#: vis_devel_dlgs.cpp:136 vis_devel_dlgs.cpp:254 vis_devel_dlgs.cpp:914
+#: vis_widgs.cpp:96
 msgid "Name:"
 msgstr "Ім'я:"
 
-#: vis_devel_dlgs.cpp:143 vis_devel_dlgs.cpp:921
+#: vis_devel_dlgs.cpp:142 vis_devel_dlgs.cpp:920
 msgid "Description:"
 msgstr "Опис:"
 
-#: vis_devel_dlgs.cpp:149 vis_devel_dlgs.cpp:927
+#: vis_devel_dlgs.cpp:148 vis_devel_dlgs.cpp:926
 msgid "Owner, group:"
 msgstr "Власник, група:"
 
-#: vis_devel_dlgs.cpp:160 vis_devel_dlgs.cpp:938
+#: vis_devel_dlgs.cpp:159 vis_devel_dlgs.cpp:937
 msgid "Access:"
 msgstr "Доступ:"
 
-#: vis_devel_dlgs.cpp:177
+#: vis_devel_dlgs.cpp:176
 msgid "Calculate period (ms):"
 msgstr "Період обчислення (мс):"
 
-#: vis_devel_dlgs.cpp:185
+#: vis_devel_dlgs.cpp:184
 msgid "Run window mode:"
 msgstr "Режим вікна виконання:"
 
-#: vis_devel_dlgs.cpp:192
+#: vis_devel_dlgs.cpp:191
 msgid "Keep aspect ratio on scale:"
 msgstr "Зберігати пропорцію під час масштабування"
 
-#: vis_devel_dlgs.cpp:205
+#: vis_devel_dlgs.cpp:204
 msgid "Mime data"
 msgstr "Mime дані"
 
-#: vis_devel_dlgs.cpp:216 vis_devel_dlgs.cpp:266 vis_devel_dlgs.cpp:993
-#: vis_devel_widgs.cpp:1300 vis_devel_widgs.cpp:1718
+#: vis_devel_dlgs.cpp:215 vis_devel_dlgs.cpp:265 vis_devel_dlgs.cpp:992
+#: vis_devel_widgs.cpp:1301 vis_devel_widgs.cpp:1720
 msgid "Id"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:216
+#: vis_devel_dlgs.cpp:215
 msgid "Mime type"
 msgstr "Mime тип"
 
-#: vis_devel_dlgs.cpp:216
+#: vis_devel_dlgs.cpp:215
 msgid "Data size"
 msgstr "Розмір даних"
 
-#: vis_devel_dlgs.cpp:220
+#: vis_devel_dlgs.cpp:219
 msgid "Add record"
 msgstr "Додати запис"
 
-#: vis_devel_dlgs.cpp:223 vis_devel_dlgs.cpp:270
+#: vis_devel_dlgs.cpp:222 vis_devel_dlgs.cpp:269
 msgid "Delete record"
 msgstr "Видалити запис"
 
-#: vis_devel_dlgs.cpp:226 vis_devel_dlgs.cpp:709
+#: vis_devel_dlgs.cpp:225 vis_devel_dlgs.cpp:708
 msgid "Load data"
 msgstr "Завантажити дані"
 
-#: vis_devel_dlgs.cpp:229
+#: vis_devel_dlgs.cpp:228
 msgid "Unload data"
 msgstr "Вивантажити дані"
 
-#: vis_devel_dlgs.cpp:235
+#: vis_devel_dlgs.cpp:234
 msgid "Styles"
 msgstr "Стилі"
 
-#: vis_devel_dlgs.cpp:242 vis_run_widgs.cpp:733 vis_widgs.cpp:286
+#: vis_devel_dlgs.cpp:241 vis_run_widgs.cpp:731 vis_widgs.cpp:285
 msgid "Style:"
 msgstr "Стиль:"
 
-#: vis_devel_dlgs.cpp:250
+#: vis_devel_dlgs.cpp:249
 msgid "Erase style"
 msgstr "Видалити стиль"
 
-#: vis_devel_dlgs.cpp:266 vis_devel_widgs.cpp:386 vis_devel_widgs.cpp:1003
+#: vis_devel_dlgs.cpp:265 vis_devel_widgs.cpp:385 vis_devel_widgs.cpp:1004
 msgid "Value"
 msgstr "Значення"
 
-#: vis_devel_dlgs.cpp:278
+#: vis_devel_dlgs.cpp:277
 msgid "Close"
 msgstr "Закрити"
 
-#: vis_devel_dlgs.cpp:311
+#: vis_devel_dlgs.cpp:310
 msgid "Get node '%1' information error."
 msgstr "Помилка запиту інформації вузла '%1'."
 
-#: vis_devel_dlgs.cpp:350
+#: vis_devel_dlgs.cpp:349
 msgid "No set"
 msgstr "Не встановлено"
 
-#: vis_devel_dlgs.cpp:588 vis_devel_dlgs.cpp:1431
+#: vis_devel_dlgs.cpp:587 vis_devel_dlgs.cpp:1430
 msgid "Load icon picture"
 msgstr "Завантажити зображення іконки"
 
-#: vis_devel_dlgs.cpp:588 vis_devel_dlgs.cpp:1431
+#: vis_devel_dlgs.cpp:587 vis_devel_dlgs.cpp:1430
 msgid "Images (*.png *.jpg)"
 msgstr "Зображення (*.png *.jpg)"
 
-#: vis_devel_dlgs.cpp:591 vis_devel_dlgs.cpp:1435
+#: vis_devel_dlgs.cpp:590 vis_devel_dlgs.cpp:1434
 msgid "Load icon image '%1' error."
 msgstr "Помилка завантаження зображення іконки '%1'."
 
-#: vis_devel_dlgs.cpp:663 vis_devel_dlgs.cpp:1516
+#: vis_devel_dlgs.cpp:662 vis_devel_dlgs.cpp:1515
 msgid "Changes apply"
 msgstr "Збереження змін"
 
-#: vis_devel_dlgs.cpp:663 vis_devel_dlgs.cpp:1516
+#: vis_devel_dlgs.cpp:662 vis_devel_dlgs.cpp:1515
 msgid ""
 "Some changes you don't apply!\n"
 "Apply now or lost the?"
@@ -1323,317 +1351,325 @@ msgstr ""
 "Деякі зміни було зроблено.\n"
 "Зберегти зміни у БД перед виходом?"
 
-#: vis_devel_dlgs.cpp:697 vis_devel_dlgs.cpp:737 vis_devel_dlgs.cpp:781
+#: vis_devel_dlgs.cpp:696 vis_devel_dlgs.cpp:736 vis_devel_dlgs.cpp:780
 msgid "No one row is selected."
 msgstr "Жодної строки не вибрано."
 
-#: vis_devel_dlgs.cpp:709 vis_devel_dlgs.cpp:741
+#: vis_devel_dlgs.cpp:708 vis_devel_dlgs.cpp:740
 msgid "All files (*.*)"
 msgstr "Всі файли (*.*)"
 
-#: vis_devel_dlgs.cpp:713 vis_devel_dlgs.cpp:746 vis_shapes.cpp:1031
-#: vis_shapes.cpp:1057
+#: vis_devel_dlgs.cpp:712 vis_devel_dlgs.cpp:745 vis_shapes.cpp:983
+#: vis_shapes.cpp:1008
 msgid "Open file '%1' is fail: %2"
 msgstr "Помилка відкриття файлу '%1': %2"
 
-#: vis_devel_dlgs.cpp:717 vis_shapes.cpp:1062
+#: vis_devel_dlgs.cpp:716 vis_shapes.cpp:1012
 msgid "Loadable file '%1' is too large."
 msgstr "Завантажуваний файл '%1' дуже великий."
 
-#: vis_devel_dlgs.cpp:740
+#: vis_devel_dlgs.cpp:739
 msgid "Save data"
 msgstr "Збереження даних"
 
-#: vis_devel_dlgs.cpp:760 vis_shapes.cpp:1036
+#: vis_devel_dlgs.cpp:759 vis_shapes.cpp:988
 msgid "Write data to file '%1' is fail: %2"
 msgstr "Помилка запису до файлу '%1': %2"
 
-#: vis_devel_dlgs.cpp:815
+#: vis_devel_dlgs.cpp:814
 msgid "Widget properties"
 msgstr "Властивості віджету"
 
-#: vis_devel_dlgs.cpp:827 vis_devel_widgs.cpp:1577
+#: vis_devel_dlgs.cpp:826 vis_devel_widgs.cpp:1578
 msgid "Widget"
 msgstr "Віджет"
 
-#: vis_devel_dlgs.cpp:859
+#: vis_devel_dlgs.cpp:858
 msgid "Parent widget:"
 msgstr "Батьківський віджет:"
 
-#: vis_devel_dlgs.cpp:869
+#: vis_devel_dlgs.cpp:868
 msgid "Page type:"
 msgstr "Тип сторінки:"
 
-#: vis_devel_dlgs.cpp:901
+#: vis_devel_dlgs.cpp:900
 msgid "Root:"
 msgstr "Корінь:"
 
-#: vis_devel_dlgs.cpp:908
+#: vis_devel_dlgs.cpp:907
 msgid "Path:"
 msgstr "Шлях:"
 
-#: vis_devel_dlgs.cpp:958 vis_devel_widgs.cpp:972
+#: vis_devel_dlgs.cpp:957 vis_devel_widgs.cpp:973
 msgid "Attributes"
 msgstr "Атрибути"
 
-#: vis_devel_dlgs.cpp:973
+#: vis_devel_dlgs.cpp:972
 msgid "Widget process"
 msgstr "Обробка віджету"
 
-#: vis_devel_dlgs.cpp:993 vis_devel_widgs.cpp:1003 vis_devel_widgs.cpp:1300
-#: vis_devel_widgs.cpp:1718
+#: vis_devel_dlgs.cpp:992 vis_devel_widgs.cpp:1004 vis_devel_widgs.cpp:1301
+#: vis_devel_widgs.cpp:1720
 msgid "Name"
 msgstr "Ім'я"
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Data type"
 msgstr "Тип даних"
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Work area"
 msgstr "Робоча ділянка"
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Proc."
 msgstr "Оброб."
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Configuration template"
 msgstr "Конфігураційний шаблон"
 
-#: vis_devel_dlgs.cpp:997
+#: vis_devel_dlgs.cpp:996
 msgid "Add attribute"
 msgstr "Додати атрибут"
 
-#: vis_devel_dlgs.cpp:1000
+#: vis_devel_dlgs.cpp:999
 msgid "Delete attribute"
 msgstr "Видалити атрибут"
 
-#: vis_devel_dlgs.cpp:1013
+#: vis_devel_dlgs.cpp:1012
 msgid "Procedure language:"
 msgstr "Мова процедури:"
 
-#: vis_devel_dlgs.cpp:1021
+#: vis_devel_dlgs.cpp:1020
 msgid "Procedure calculate (ms):"
 msgstr "Обчислення процедури (мс):"
 
-#: vis_devel_dlgs.cpp:1034 vis_devel_widgs.cpp:1260
+#: vis_devel_dlgs.cpp:1033 vis_devel_widgs.cpp:1261
 msgid "Links"
 msgstr "Зв'язки"
 
-#: vis_devel_dlgs.cpp:1078 vis_devel_dlgs.cpp:1277
+#: vis_devel_dlgs.cpp:1077 vis_devel_dlgs.cpp:1276
 msgid "Getting node '%1' information error."
 msgstr "Помилка запиту інформації вузла '%1'."
 
-#: vis_devel_dlgs.cpp:1548
+#: vis_devel_dlgs.cpp:1547
 msgid "Valid widget is not selected"
 msgstr "Не вибрано коректного віджету"
 
-#: vis_devel_dlgs.cpp:1567 vis_devel_dlgs.cpp:1589
+#: vis_devel_dlgs.cpp:1566 vis_devel_dlgs.cpp:1588
 msgid "Valid attribute is not selected"
 msgstr "Не вибрано коректного атрибуту"
 
-#: vis_devel_widgs.cpp:150
+#: vis_devel_widgs.cpp:149
 msgid "<Group>"
 msgstr "<Група>"
 
-#: vis_devel_widgs.cpp:386
+#: vis_devel_widgs.cpp:385
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: vis_devel_widgs.cpp:741 vis_devel_widgs.cpp:1033
+#: vis_devel_widgs.cpp:738 vis_devel_widgs.cpp:1034
 msgid "Copy"
 msgstr "Копіювати"
 
-#: vis_devel_widgs.cpp:746
+#: vis_devel_widgs.cpp:742
 msgid "Edit"
 msgstr "Редагувати"
 
-#: vis_devel_widgs.cpp:754
+#: vis_devel_widgs.cpp:749
 msgid "Clear changes"
 msgstr "Очистити зміни"
 
-#: vis_devel_widgs.cpp:755
+#: vis_devel_widgs.cpp:750
 msgid "Press to clear attribute's changes."
 msgstr "Натиснути для очищення змін атрибуту."
 
-#: vis_devel_widgs.cpp:765
+#: vis_devel_widgs.cpp:753
+msgid "Changes put down to the parent"
+msgstr "Опущення змін до предку"
+
+#: vis_devel_widgs.cpp:754
+msgid "Press to put down attribute's changes to the parent."
+msgstr "Натиснути для опущення змін атрибуту до предку."
+
+#: vis_devel_widgs.cpp:763
 msgid "Full text of the attribute edit."
 msgstr "Повнотекстове редагування атрибуту."
 
-#: vis_devel_widgs.cpp:766
+#: vis_devel_widgs.cpp:764
 msgid "Attribute '%1' edit for widget '%2'."
 msgstr "Редагування атрибуту '%1' для віджета '%2'."
 
-#: vis_devel_widgs.cpp:773
+#: vis_devel_widgs.cpp:771
 msgid "Short help for text syntax description."
 msgstr "Коротка допомога для опису синтаксису текста."
 
-#: vis_devel_widgs.cpp:1290
+#: vis_devel_widgs.cpp:1291
 msgid "Widgets"
 msgstr "Віджети"
 
-#: vis_devel_widgs.cpp:1300 vis_devel_widgs.cpp:1718
+#: vis_devel_widgs.cpp:1301 vis_devel_widgs.cpp:1720
 msgid "Type"
 msgstr "Тип"
 
-#: vis_devel_widgs.cpp:1425
+#: vis_devel_widgs.cpp:1426
 #, c-format
 msgid "Widgets' development tree '%s' request time %f ms."
 msgstr "Час запиту дерева розробки віджетів '%s': %f мс."
 
-#: vis_devel_widgs.cpp:1492
+#: vis_devel_widgs.cpp:1493
 msgid "Library"
 msgstr "Бібліотека"
 
-#: vis_devel_widgs.cpp:1504 vis_devel_widgs.cpp:1516
+#: vis_devel_widgs.cpp:1505 vis_devel_widgs.cpp:1517
 msgid "Library: %1"
 msgstr "Бібліотека: %1"
 
-#: vis_devel_widgs.cpp:1604
+#: vis_devel_widgs.cpp:1605
 msgid "Add widget based at '%1'"
 msgstr "Додання віджету базованого на '%1'"
 
-#: vis_devel_widgs.cpp:1605
+#: vis_devel_widgs.cpp:1606
 msgid "The button for addition widget based at '%1'"
 msgstr "Кнопка для додання віджету базованого на '%1'"
 
-#: vis_devel_widgs.cpp:1606
+#: vis_devel_widgs.cpp:1607
 msgid "Press to add widget based at '%1'."
 msgstr "Натиснути для додання віджету базованого на '%1'"
 
-#: vis_devel_widgs.cpp:1655
+#: vis_devel_widgs.cpp:1656
 msgid "Container's widget"
 msgstr "Віджет контейнера"
 
-#: vis_devel_widgs.cpp:1667
+#: vis_devel_widgs.cpp:1668
 #, c-format
 msgid "Widgets' development tree '%s' load time %f ms."
 msgstr "Час завантаження дерева розробки віджетів '%s': %f мс."
 
-#: vis_devel_widgs.cpp:1697
+#: vis_devel_widgs.cpp:1699
 msgid "Refresh libraries"
 msgstr "Оновити бібліотеки"
 
-#: vis_devel_widgs.cpp:1698
+#: vis_devel_widgs.cpp:1700
 msgid "Press to refresh present libraries."
 msgstr "Натиснути для оновлення наявних бібліотек."
 
-#: vis_devel_widgs.cpp:1708
+#: vis_devel_widgs.cpp:1710
 msgid "Projects"
 msgstr "Проекти"
 
-#: vis_devel_widgs.cpp:1840
+#: vis_devel_widgs.cpp:1842
 msgid "Project"
 msgstr "Проект"
 
-#: vis_devel_widgs.cpp:1846
+#: vis_devel_widgs.cpp:1848
 #, c-format
 msgid "Project's development tree '%s' load time %f ms."
 msgstr "Час завантаження дерева розробки проектів '%s': %f мс."
 
-#: vis_devel_widgs.cpp:1908 vis_run.cpp:85 vis_run.cpp:111
+#: vis_devel_widgs.cpp:1910 vis_run.cpp:84 vis_run.cpp:110
 msgid "Page"
 msgstr "Сторінка"
 
-#: vis_devel_widgs.cpp:1944
+#: vis_devel_widgs.cpp:1947
 msgid "Refresh projects"
 msgstr "Оновити проекти"
 
-#: vis_devel_widgs.cpp:1945
+#: vis_devel_widgs.cpp:1948
 msgid "Press to refresh present projects."
 msgstr "Натиснути для оновлення наявних проектів."
 
-#: vis_devel_widgs.cpp:2019
+#: vis_devel_widgs.cpp:2022
 msgid "Scale"
 msgstr "Масштаб"
 
-#: vis_devel_widgs.cpp:2019
+#: vis_devel_widgs.cpp:2022
 msgid "Resize"
 msgstr "Зміна розміру"
 
-#: vis_devel_widgs.cpp:2213
+#: vis_devel_widgs.cpp:2215
 msgid "Warning! Edit widget already set."
 msgstr "Увага! Віджет вже встановлено у редагування."
 
-#: vis_devel_widgs.cpp:2430
+#: vis_devel_widgs.cpp:2433
 msgid "Exit from widget editing"
 msgstr "Вихід з редагування віджету"
 
-#: vis_devel_widgs.cpp:2431
+#: vis_devel_widgs.cpp:2434
 msgid "Press to exit from widget editing."
 msgstr "Натиснути для виходу з редагування віджету."
 
-#: vis_devel_widgs.cpp:2460
+#: vis_devel_widgs.cpp:2463
 msgid "Enter for the widget editing"
 msgstr "Вхід до редагування віджету"
 
-#: vis_devel_widgs.cpp:2461
+#: vis_devel_widgs.cpp:2464
 msgid "Press to enter for the widget editing."
 msgstr "Натиснути для входу до редагування віджету."
 
-#: vis_devel_widgs.cpp:2467
+#: vis_devel_widgs.cpp:2470
 msgid "Make icon from the widget"
 msgstr "Створити іконку з віджета"
 
-#: vis_devel_widgs.cpp:2468
+#: vis_devel_widgs.cpp:2471
 msgid "Press to make icon from the widget."
 msgstr "Натиснути для створення іконки з віджета."
 
-#: vis_devel_widgs.cpp:2473
+#: vis_devel_widgs.cpp:2476
 msgid "Make image from the widget"
 msgstr "Створити зображення з віджету"
 
-#: vis_devel_widgs.cpp:2474
+#: vis_devel_widgs.cpp:2477
 msgid "Press to make image from the widget."
 msgstr "Натиснути для створення зображення з віджету."
 
-#: vis_devel_widgs.cpp:2480
+#: vis_devel_widgs.cpp:2483
 msgid "Zoom in (+10%)"
 msgstr "Збільшити (+10%)"
 
-#: vis_devel_widgs.cpp:2482
+#: vis_devel_widgs.cpp:2485
 msgid "Press to increase the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб збільшити візуальний масштаб віджету на 10%."
 
-#: vis_devel_widgs.cpp:2485
+#: vis_devel_widgs.cpp:2488
 msgid "Zoom out (-10%)"
 msgstr "Зменшити (-10%)"
 
-#: vis_devel_widgs.cpp:2487
+#: vis_devel_widgs.cpp:2490
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Натисніть, щоб зменшити візуальний масштаб віджету на 10%."
 
-#: vis_devel_widgs.cpp:2490
+#: vis_devel_widgs.cpp:2493
 msgid "Reset zoom (100%)"
 msgstr "Скинути масштаб (100%)"
 
-#: vis_devel_widgs.cpp:2492
+#: vis_devel_widgs.cpp:2495
 msgid "Press to set the visual scale of the widget to 100%."
 msgstr "Натисніть, щоб встановитии візуальний масштаб віджету у 100%."
 
-#: vis_devel_widgs.cpp:2544
+#: vis_devel_widgs.cpp:2547
 msgid "Save widget's image"
 msgstr "Збереження зображення віджету"
 
-#: vis_devel_widgs.cpp:2545 vis_run.cpp:697
+#: vis_devel_widgs.cpp:2548 vis_run.cpp:694
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Зображення (*.png *.xpm *.jpg)"
 
-#: vis_devel_widgs.cpp:2547 vis_run.cpp:698 vis_run.cpp:748 vis_run.cpp:828
-#: vis_run.cpp:873
+#: vis_devel_widgs.cpp:2550 vis_run.cpp:695 vis_run.cpp:745 vis_run.cpp:825
+#: vis_run.cpp:870
 msgid "Save to file '%1' is error."
 msgstr "Помилка збереження у файл '%1'."
 
-#: vis_devel_widgs.cpp:2677
+#: vis_devel_widgs.cpp:2680
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
 msgstr "Вибрані елементи --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2707
+#: vis_devel_widgs.cpp:2710
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Сторінка: '%1' --- xy(%2:%3) шв[%4:%5]"
 
-#: vis_devel_widgs.cpp:2914 vis_devel_widgs.cpp:2919
+#: vis_devel_widgs.cpp:2919 vis_devel_widgs.cpp:2924
 #, c-format
 msgid ""
 "\n"
@@ -1642,335 +1678,335 @@ msgstr ""
 "\n"
 "... більше пунктів (%d)"
 
-#: vis_devel_widgs.cpp:2926
+#: vis_devel_widgs.cpp:2931
 msgid "geometry"
 msgstr "геометрія"
 
-#: vis_devel_widgs.cpp:2928
+#: vis_devel_widgs.cpp:2933
 #, c-format
 msgid "attribute '%s'"
 msgstr "атрибут '%s'"
 
-#: vis_devel_widgs.cpp:2930
+#: vis_devel_widgs.cpp:2935
 #, c-format
 msgid "new widget '%s' from '%s'"
 msgstr "новий віджет '%s' від '%s'"
 
-#: vis_devel_widgs.cpp:2931
+#: vis_devel_widgs.cpp:2936
 msgid "remove widget"
 msgstr "видалення віджету"
 
-#: vis_devel_widgs.cpp:2933
+#: vis_devel_widgs.cpp:2938
 #, c-format
 msgid "copy past widget '%s' from '%s'"
 msgstr "копіювання-вставка віджету '%s' з '%s'"
 
-#: vis_devel_widgs.cpp:2934
+#: vis_devel_widgs.cpp:2939
 msgid "unknown"
 msgstr "невідомо"
 
-#: vis_devel_widgs.cpp:3097
+#: vis_devel_widgs.cpp:3102
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Віджет вимкнено або образ віджету не підтримується!"
 
-#: vis_devel_widgs.cpp:3199 vis_devel_widgs.cpp:3238 vis_devel_widgs.cpp:3268
+#: vis_devel_widgs.cpp:3204 vis_devel_widgs.cpp:3243 vis_devel_widgs.cpp:3273
 msgid "Selected elements: '%1'"
 msgstr "Обрано елементи: '%1'"
 
-#: vis_devel_widgs.cpp:3385
+#: vis_devel_widgs.cpp:3390
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Курсор --- xy(%1:%2)"
 
-#: vis_run.cpp:69
+#: vis_run.cpp:68
 msgid "Vision runtime"
 msgstr "Vision-виконання"
 
-#: vis_run.cpp:78
+#: vis_run.cpp:77
 msgid "&Print"
 msgstr "&Друк"
 
-#: vis_run.cpp:81
+#: vis_run.cpp:80
 msgid "Print the master page"
 msgstr "Друк головної сторінки"
 
-#: vis_run.cpp:82
+#: vis_run.cpp:81
 msgid "The button for printing of the master page by default"
 msgstr "Кнопка для друку головної сторінки, по замовченню"
 
-#: vis_run.cpp:83
+#: vis_run.cpp:82
 msgid "Press for printing of the master page by default."
 msgstr "Натиснути для друку головної сторінки, по замовченню."
 
-#: vis_run.cpp:86
+#: vis_run.cpp:85
 msgid "Print the selected page"
 msgstr "Друк вибраної сторінки"
 
-#: vis_run.cpp:87
+#: vis_run.cpp:86
 msgid "The button for printing of the selected page"
 msgstr "Кнопка для друку вибраної сторінки"
 
-#: vis_run.cpp:88
+#: vis_run.cpp:87
 msgid "Press for printing of the selected page."
 msgstr "Натиснути для друку вибраної сторінки."
 
-#: vis_run.cpp:91 vis_run.cpp:117
+#: vis_run.cpp:90 vis_run.cpp:116
 msgid "Diagram"
 msgstr "Діаграма"
 
-#: vis_run.cpp:92
+#: vis_run.cpp:91
 msgid "Print the selected diagram"
 msgstr "Друк вибраної діаграми"
 
-#: vis_run.cpp:93
+#: vis_run.cpp:92
 msgid "The button for printing of the selected diagram"
 msgstr "Кнопка для друку вибраної діаграми"
 
-#: vis_run.cpp:94
+#: vis_run.cpp:93
 msgid "Press for printing of the selected diagram."
 msgstr "Натиснути для друку вибраної діаграми."
 
-#: vis_run.cpp:97 vis_run.cpp:123
+#: vis_run.cpp:96 vis_run.cpp:122
 msgid "Document"
 msgstr "Документ"
 
-#: vis_run.cpp:98
+#: vis_run.cpp:97
 msgid "Print the selected document"
 msgstr "Друк вибраного документу"
 
-#: vis_run.cpp:99
+#: vis_run.cpp:98
 msgid "The button for printing of the selected document"
 msgstr "Кнопка для друку вибраного документу"
 
-#: vis_run.cpp:100
+#: vis_run.cpp:99
 msgid "Press for printing of the selected document."
 msgstr "Натиснути для друку вибраного документу."
 
-#: vis_run.cpp:105
+#: vis_run.cpp:104
 msgid "&Export"
 msgstr "&Експорт"
 
-#: vis_run.cpp:107
+#: vis_run.cpp:106
 msgid "Export the master page"
 msgstr "Експорт головної сторінки"
 
-#: vis_run.cpp:108
+#: vis_run.cpp:107
 msgid "The button for exporting of the master page by default"
 msgstr "Кнопка для експорт головної сторінки"
 
-#: vis_run.cpp:109
+#: vis_run.cpp:108
 msgid "Press for exporting of the master page by default."
 msgstr "Натиснути для експорту головної сторінки."
 
-#: vis_run.cpp:112
+#: vis_run.cpp:111
 msgid "Export the selected page"
 msgstr "Експорт вибраної сторінки"
 
-#: vis_run.cpp:113
+#: vis_run.cpp:112
 msgid "The button for exporting of the selected page"
 msgstr "Кнопка для експорту вибраної сторінки"
 
-#: vis_run.cpp:114
+#: vis_run.cpp:113
 msgid "Press for exporting of the selected page."
 msgstr "Натиснути для експорту вибраної сторінки."
 
-#: vis_run.cpp:118
+#: vis_run.cpp:117
 msgid "Export the selected diagram"
 msgstr "Експорт вибраної діаграми"
 
-#: vis_run.cpp:119
+#: vis_run.cpp:118
 msgid "The button for exporting of the selected diagram"
 msgstr "Кнопка для експорту вибраної діаграми"
 
-#: vis_run.cpp:120
+#: vis_run.cpp:119
 msgid "Press for exporting of the selected diagram."
 msgstr "Натиснути для експорту вибраної діаграми."
 
-#: vis_run.cpp:124
+#: vis_run.cpp:123
 msgid "Export the selected document"
 msgstr "Експорт вибраного документу"
 
-#: vis_run.cpp:125
+#: vis_run.cpp:124
 msgid "The button for exporting of the selected document"
 msgstr "Кнопка для експорту вибраного документу"
 
-#: vis_run.cpp:126
+#: vis_run.cpp:125
 msgid "Press for exporting of the selected document."
 msgstr "Натиснути для експорту вибраного документу."
 
-#: vis_run.cpp:134
+#: vis_run.cpp:133
 msgid "The button for closing Vision runtime window"
 msgstr "Кнопка для закриття вікна виконання Vision"
 
-#: vis_run.cpp:135
+#: vis_run.cpp:134
 msgid "Press to close of the current Vision runtime window."
 msgstr "Натиснути для закриття поточного вікна виконання Vision."
 
-#: vis_run.cpp:160
+#: vis_run.cpp:159
 msgid "Press for display the program and OpenSCADA information."
 msgstr "Натиснути для отримання інформації про програму та OpenSCADA."
 
-#: vis_run.cpp:196 vis_run.cpp:198
+#: vis_run.cpp:193 vis_run.cpp:195
 msgid "Alarm level"
 msgstr "Рівень порушення"
 
-#: vis_run.cpp:199
+#: vis_run.cpp:196
 msgid "The button for all alarms quittance"
 msgstr "Кнопка для квітації всіх порушень"
 
-#: vis_run.cpp:200
+#: vis_run.cpp:197
 msgid "Press for all alarms quittance."
 msgstr "Натиснути для квітації всіх порушень."
 
-#: vis_run.cpp:203 vis_run.cpp:205
+#: vis_run.cpp:200 vis_run.cpp:202
 msgid "Blink alarm"
 msgstr "Квітація миготіння"
 
-#: vis_run.cpp:206
+#: vis_run.cpp:203
 msgid "The button for all blink alarms quittance"
 msgstr "Кнопка для квітації всіх порушень миготінням"
 
-#: vis_run.cpp:207
+#: vis_run.cpp:204
 msgid "Press for all blink alarms quittance."
 msgstr "Натиснути для квітації всіх порушень миготінням."
 
-#: vis_run.cpp:211
+#: vis_run.cpp:208
 msgid "Speaker alarm"
 msgstr "Квітація гудком"
 
-#: vis_run.cpp:213
+#: vis_run.cpp:210
 msgid "PC speaker alarm"
 msgstr "Квітація гудком"
 
-#: vis_run.cpp:214
+#: vis_run.cpp:211
 msgid "The button for all PC speaker alarms quittance"
 msgstr "Кнопка для квітації всіх порушень гудком"
 
-#: vis_run.cpp:215
+#: vis_run.cpp:212
 msgid "Press for all PC speaker alarms quittance."
 msgstr "Натиснути для квітації всіх порушень гудком."
 
-#: vis_run.cpp:219
+#: vis_run.cpp:216
 msgid "Sound/speech alarm"
 msgstr "Квітація звука/мови"
 
-#: vis_run.cpp:221
+#: vis_run.cpp:218
 msgid "Sound or speech alarm"
 msgstr "Квітація звука/мови"
 
-#: vis_run.cpp:222
+#: vis_run.cpp:219
 msgid "The button for all sound or speech alarms quittance"
 msgstr "Кнопка для квітації всіх порушень звуком або мовою"
 
-#: vis_run.cpp:223
+#: vis_run.cpp:220
 msgid "Press for all sound or speech alarms quittance."
 msgstr "Натиснути для квітації всіх порушень звуком або мовою."
 
-#: vis_run.cpp:233
+#: vis_run.cpp:230
 msgid "&Alarm"
 msgstr "Порушення"
 
-#: vis_run.cpp:250
+#: vis_run.cpp:247
 msgid "Alarms (status)"
 msgstr "Порушення (статус)"
 
-#: vis_run.cpp:265
+#: vis_run.cpp:262
 msgid "This label displays current system's time."
 msgstr "Це маркування показує поточний системний час."
 
-#: vis_run.cpp:269
+#: vis_run.cpp:266
 msgid "Field for display of the current user."
 msgstr "Поле для відображення поточного користувача."
 
-#: vis_run.cpp:274
+#: vis_run.cpp:271
 msgid "This label displays used VCA engine station."
 msgstr "Це маркування показує використану станцію рущія СВК"
 
-#: vis_run.cpp:275
+#: vis_run.cpp:272
 msgid "Field for display of the used VCA engine station."
 msgstr "Поле для відображення використаної станції рущія СВК"
 
-#: vis_run.cpp:279
+#: vis_run.cpp:276
 msgid "This label displays used interface style."
 msgstr "Це маркування показує використаний стиль інтерфейсу."
 
-#: vis_run.cpp:280
+#: vis_run.cpp:277
 msgid "Field for display the used interface style."
 msgstr "Поле для відображення використаного стилю інтерфейсу."
 
-#: vis_run.cpp:281
+#: vis_run.cpp:278
 msgid "Double click for style change."
 msgstr "Подвійно клацнути для зміни стилю."
 
-#: vis_run.cpp:366
+#: vis_run.cpp:363
 msgid "Connection to visualization server '%1' error: %2"
 msgstr "Помилка підключення до сервера візуалізації '%1': %2"
 
-#: vis_run.cpp:442 vis_run.cpp:989
+#: vis_run.cpp:439 vis_run.cpp:986
 #, c-format
 msgid "Root page scale [%f:%f]."
 msgstr "Масштаб кореневої сторінки [%f:%f]."
 
-#: vis_run.cpp:467
+#: vis_run.cpp:464
 msgid "Print page"
 msgstr "Друк сторінки"
 
-#: vis_run.cpp:467
+#: vis_run.cpp:464
 msgid "No one page for print is present!"
 msgstr "Немає жодної сторінки для друку!"
 
-#: vis_run.cpp:475
+#: vis_run.cpp:472
 msgid "Select page for print."
 msgstr "Вибір сторінки для друку."
 
-#: vis_run.cpp:475
+#: vis_run.cpp:472
 msgid "Page print."
 msgstr "Друк сторінки."
 
-#: vis_run.cpp:476 vis_run.cpp:681
+#: vis_run.cpp:473 vis_run.cpp:678
 msgid "Pages:"
 msgstr "Сторінки: "
 
-#: vis_run.cpp:494
+#: vis_run.cpp:491
 msgid "Print page: \"%1\" (%2)"
 msgstr "Друк сторінки: \"%1\" (%2)"
 
-#: vis_run.cpp:516
+#: vis_run.cpp:513
 msgid "OpenSCADA project: \"%1\""
 msgstr "Проект OpenSCADA: \"%1\""
 
-#: vis_run.cpp:517
+#: vis_run.cpp:514
 msgid "User: \"%1\""
 msgstr "Користувач: \"%1\""
 
-#: vis_run.cpp:532 vis_run.cpp:541
+#: vis_run.cpp:529 vis_run.cpp:538
 msgid "Print diagram"
 msgstr "Друк діаграми"
 
-#: vis_run.cpp:532 vis_run.cpp:620 vis_run.cpp:706 vis_run.cpp:837
+#: vis_run.cpp:529 vis_run.cpp:617 vis_run.cpp:703 vis_run.cpp:834
 msgid "No one page is present!"
 msgstr "Немає жодної сторінки!"
 
-#: vis_run.cpp:541 vis_run.cpp:715
+#: vis_run.cpp:538 vis_run.cpp:712
 msgid "No one diagram is present!"
 msgstr "Немає жодної діаграми!"
 
-#: vis_run.cpp:548
+#: vis_run.cpp:545
 msgid "Select diagram for print."
 msgstr "Вибір діаграми для друку."
 
-#: vis_run.cpp:548
+#: vis_run.cpp:545
 msgid "Diagram print."
 msgstr "Друк діаграми."
 
-#: vis_run.cpp:549 vis_run.cpp:723
+#: vis_run.cpp:546 vis_run.cpp:720
 msgid "Diagrams:"
 msgstr "Діаграми:"
 
-#: vis_run.cpp:565
+#: vis_run.cpp:562
 msgid "Print diagram: \"%1\" (%2)"
 msgstr "Друк діаграми: \"%1\" (%2)"
 
-#: vis_run.cpp:592
+#: vis_run.cpp:589
 msgid ""
 "OpenSCADA project: \"%1\"\n"
 "%2 (%3)"
@@ -1978,7 +2014,7 @@ msgstr ""
 "Проект OpenSCADA: \"%1\"\n"
 "%2 (%3)"
 
-#: vis_run.cpp:593
+#: vis_run.cpp:590
 msgid ""
 "User: \"%1\"\n"
 "%2"
@@ -1986,117 +2022,117 @@ msgstr ""
 "Користувач: \"%1\"\n"
 "%2"
 
-#: vis_run.cpp:620 vis_run.cpp:629
+#: vis_run.cpp:617 vis_run.cpp:626
 msgid "Print document"
 msgstr "Друк документа"
 
-#: vis_run.cpp:629 vis_run.cpp:846
+#: vis_run.cpp:626 vis_run.cpp:843
 msgid "No one document is present!"
 msgstr "Немає жодного документа!"
 
-#: vis_run.cpp:636
+#: vis_run.cpp:633
 msgid "Select document for print."
 msgstr "Вибір документа для друку."
 
-#: vis_run.cpp:636
+#: vis_run.cpp:633
 msgid "Document print."
 msgstr "Друк документа."
 
-#: vis_run.cpp:637 vis_run.cpp:854
+#: vis_run.cpp:634 vis_run.cpp:851
 msgid "Document:"
 msgstr "Документ:"
 
-#: vis_run.cpp:653
+#: vis_run.cpp:650
 msgid "Print document: \"%1\" (%2)"
 msgstr "Друк документа: \"%1\" (%2)"
 
-#: vis_run.cpp:672
+#: vis_run.cpp:669
 msgid "Export page"
 msgstr "Експорт сторінки"
 
-#: vis_run.cpp:672
+#: vis_run.cpp:669
 msgid "No one page for export is present!"
 msgstr "Немає жодної сторінки для експорту!"
 
-#: vis_run.cpp:680
+#: vis_run.cpp:677
 msgid "Select page for export."
 msgstr "Вибір сторінки для експорту."
 
-#: vis_run.cpp:680
+#: vis_run.cpp:677
 msgid "Page export."
 msgstr "Експорт сторінки."
 
-#: vis_run.cpp:697
+#: vis_run.cpp:694
 msgid "Save page's image"
 msgstr "Збереження зображення сторінки"
 
-#: vis_run.cpp:706 vis_run.cpp:715
+#: vis_run.cpp:703 vis_run.cpp:712
 msgid "Export diagram"
 msgstr "Експорт діаграми"
 
-#: vis_run.cpp:722
+#: vis_run.cpp:719
 msgid "Select diagram for export."
 msgstr "Вибір діаграми для експорту."
 
-#: vis_run.cpp:722
+#: vis_run.cpp:719
 msgid "Diagram export."
 msgstr "Експорт діаграми."
 
-#: vis_run.cpp:737
+#: vis_run.cpp:734
 msgid "Save diagram"
 msgstr "Збереження діаграми"
 
-#: vis_run.cpp:737
+#: vis_run.cpp:734
 #, c-format
 msgid "Trend %1.png"
 msgstr "Тренд %1.png"
 
-#: vis_run.cpp:738
+#: vis_run.cpp:735
 msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
 msgstr "Зображення (*.png *.xpm *.jpg);;CSV файл (*.csv)"
 
-#: vis_run.cpp:759
+#: vis_run.cpp:756
 msgid "\"Date and time\";\"us\""
 msgstr "\"Дата та час\";\"мкс\""
 
-#: vis_run.cpp:793
+#: vis_run.cpp:790
 msgid "\"Frequency (Hz)\""
 msgstr "\"Частота (Гц)\""
 
-#: vis_run.cpp:824 vis_run.cpp:947
+#: vis_run.cpp:821 vis_run.cpp:944
 msgid "Error write to: %1."
 msgstr "Помилка запису до: %1."
 
-#: vis_run.cpp:837 vis_run.cpp:846
+#: vis_run.cpp:834 vis_run.cpp:843
 msgid "Export document"
 msgstr "Експорт документа"
 
-#: vis_run.cpp:853
+#: vis_run.cpp:850
 msgid "Select document for export."
 msgstr "Вибір документа для експорту."
 
-#: vis_run.cpp:853
+#: vis_run.cpp:850
 msgid "Document export."
 msgstr "Експорт документа."
 
-#: vis_run.cpp:866
+#: vis_run.cpp:863
 msgid "Save document"
 msgstr "Збереження документа"
 
-#: vis_run.cpp:866
+#: vis_run.cpp:863
 #, c-format
 msgid "Document %1.html"
 msgstr "Документ %1.html"
 
-#: vis_run.cpp:867
+#: vis_run.cpp:864
 msgid "XHTML (*.html);;CSV file (*.csv)"
 msgstr "XHTML (*.html);;CSV файл (*.csv)"
 
-#: vis_run.cpp:944
+#: vis_run.cpp:941
 msgid "No data for export."
 msgstr "Немає даних для експорту."
 
-#: vis_run.cpp:1066
+#: vis_run.cpp:1062
 msgid ""
 "Several sessions are already opened on the project \"%1\".\n"
 "You can create new or connect to present session. Please, select needed or "
@@ -2106,43 +2142,43 @@ msgstr ""
 "Ви можете створити новий сеанс або під'єднатися до існуючого. Будь ласка, "
 "оберіть потрібне або натисніть \"Скасувати\"."
 
-#: vis_run.cpp:1068
+#: vis_run.cpp:1064
 msgid "Select session for connection or new creation"
 msgstr "Вибір сеансу для підключення або створення нового"
 
-#: vis_run.cpp:1071
+#: vis_run.cpp:1067
 msgid "<Create new session>"
 msgstr "<Створити новий сеанс>"
 
-#: vis_run.cpp:1098
+#: vis_run.cpp:1094
 msgid "Running project: %1"
 msgstr "Виконання проекту: %1"
 
-#: vis_run.cpp:1317
+#: vis_run.cpp:1313
 #, c-format
 msgid "Error open: %s"
 msgstr "Помилка відкриття: %s"
 
-#: vis_run.cpp:1327 vis_run_widgs.cpp:681 vis_run_widgs.cpp:690
+#: vis_run.cpp:1323 vis_run_widgs.cpp:679 vis_run_widgs.cpp:688
 #, c-format
 msgid "Error write to: %s"
 msgstr "Помилка запису до: %s"
 
-#: vis_run.cpp:1338
+#: vis_run.cpp:1334
 msgid "Alarm level: %1"
 msgstr "Рівень порушення: %1"
 
-#: vis_run.cpp:1443
+#: vis_run.cpp:1439
 #, c-format
 msgid "Session creation restore for '%s'."
 msgstr "Відновлення створення сеансу для '%s'."
 
-#: vis_run.cpp:1497
+#: vis_run.cpp:1493
 #, c-format
 msgid "Session '%s' update time %f ms."
 msgstr "Час оновлення сеансу '%s' %f мс."
 
-#: vis_run_widgs.cpp:284
+#: vis_run_widgs.cpp:282
 msgid ""
 "Page: '%1'.\n"
 "View access is not permitted."
@@ -2150,15 +2186,15 @@ msgstr ""
 "Сторінка: '%1'.\n"
 "Відсутній доступ для перегляду."
 
-#: vis_run_widgs.cpp:710
+#: vis_run_widgs.cpp:708
 msgid "No style"
 msgstr "Немає стилю"
 
-#: vis_run_widgs.cpp:732
+#: vis_run_widgs.cpp:730
 msgid "Select your style from list."
 msgstr "Оберіть Ваш стиль з переліку."
 
-#: vis_run_widgs.cpp:732
+#: vis_run_widgs.cpp:730
 msgid "Style select"
 msgstr "Вибір стилю"
 
@@ -2559,191 +2595,194 @@ msgstr "Координати точки(x,y): (%1, %2)"
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Координати(x,y): (%1, %2)"
 
-#: vis_shapes.cpp:100
+#: vis_shapes.cpp:98
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Образ віджету '%1' ще не реалізовано!"
 
-#: vis_shapes.cpp:1023
+#: vis_shapes.cpp:977
 msgid "Save file"
 msgstr "Збереження файлу."
 
-#: vis_shapes.cpp:1051
+#: vis_shapes.cpp:1003
 msgid "Load file"
 msgstr "Завантаження файлу."
 
-#: vis_shapes.cpp:1724
+#: vis_shapes.cpp:1671
 msgid "Write file '%1' is fail."
 msgstr "Помилка запису до файлу '%1'."
 
-#: vis_shapes.cpp:2304
+#: vis_shapes.cpp:2251
 msgid "kHz"
 msgstr "кГц"
 
-#: vis_shapes.cpp:2304
+#: vis_shapes.cpp:2251
 msgid "Hz"
 msgstr "Гц"
 
-#: vis_shapes.cpp:2753
+#: vis_shapes.cpp:2700
 #, c-format
 msgid "%ds"
 msgstr "%dс"
 
-#: vis_shapes.cpp:2757
+#: vis_shapes.cpp:2704
 #, c-format
 msgid "%gs"
 msgstr "%gс"
 
-#: vis_shapes.cpp:2758
+#: vis_shapes.cpp:2705
 #, c-format
 msgid "%gms"
 msgstr "%gмс"
 
-#: vis_shapes.cpp:2902
+#: vis_shapes.cpp:2849
 #, c-format
 msgid "Trend build: %f ms."
 msgstr "Час формування тренду: %f мс."
 
-#: vis_shapes.cpp:2979
+#: vis_shapes.cpp:2926
 #, c-format
 msgid "Trend draw: %f ms."
 msgstr "Час відображення тренду: %f мс."
 
-#: vis_shapes.cpp:3578
+#: vis_shapes.cpp:3525
 msgid "Date and time"
 msgstr "Дата та час"
 
-#: vis_shapes.cpp:3579
+#: vis_shapes.cpp:3526
 msgid "mcsec"
 msgstr "мкс"
 
-#: vis_shapes.cpp:3580
+#: vis_shapes.cpp:3527
 msgid "Level"
 msgstr "Рівень"
 
-#: vis_shapes.cpp:3581
+#: vis_shapes.cpp:3528
 msgid "Category"
 msgstr "Категорія"
 
-#: vis_shapes.cpp:3582
+#: vis_shapes.cpp:3529
 msgid "Message"
 msgstr "Повідомлення"
 
-#: vis_shapes.cpp:4052
+#: vis_shapes.cpp:3999
 #, c-format
 msgid "Document parsing error: %s"
 msgstr "Помилка розбору документу: %s"
 
-#: vis_shapes.cpp:4227
+#: vis_shapes.cpp:4174
 msgid "Loading page: '%1'."
 msgstr "Завантаження сторінки: '%1'."
 
-#: vis_widgs.cpp:91
+#: vis_widgs.cpp:90
 msgid "ID:"
 msgstr ""
 
-#: vis_widgs.cpp:115 vis_widgs.cpp:206 vis_widgs.cpp:321
+#: vis_widgs.cpp:114 vis_widgs.cpp:205 vis_widgs.cpp:320
 msgid "Ok"
 msgstr "Прийняти"
 
-#: vis_widgs.cpp:119 vis_widgs.cpp:210 vis_widgs.cpp:325
+#: vis_widgs.cpp:118 vis_widgs.cpp:209 vis_widgs.cpp:324
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: vis_widgs.cpp:178
+#: vis_widgs.cpp:177
 msgid "Select user"
 msgstr "Вибір користувача"
 
-#: vis_widgs.cpp:186
+#: vis_widgs.cpp:185
 msgid "User:"
 msgstr "Користувач:"
 
-#: vis_widgs.cpp:190
+#: vis_widgs.cpp:189
 msgid "Password:"
 msgstr "Пароль:"
 
-#: vis_widgs.cpp:264
+#: vis_widgs.cpp:263
 msgid "Font select"
 msgstr "Вибір шрифту"
 
-#: vis_widgs.cpp:270
+#: vis_widgs.cpp:269
 msgid "Font:"
 msgstr "Шрифт:"
 
-#: vis_widgs.cpp:279
+#: vis_widgs.cpp:278
 msgid "Size:"
 msgstr "Розмір:"
 
-#: vis_widgs.cpp:289
+#: vis_widgs.cpp:288
 msgid "Bold"
 msgstr "Підсилений"
 
-#: vis_widgs.cpp:291
+#: vis_widgs.cpp:290
 msgid "Italic"
 msgstr "Нахилений"
 
-#: vis_widgs.cpp:293
+#: vis_widgs.cpp:292
 msgid "Strikeout"
 msgstr "Перекреслений"
 
-#: vis_widgs.cpp:295
+#: vis_widgs.cpp:294
 msgid "Underline"
 msgstr "Підкреслений"
 
-#: vis_widgs.cpp:301
+#: vis_widgs.cpp:300
 msgid "Sample:"
 msgstr "Зразок:"
 
-#: vis_widgs.cpp:304
+#: vis_widgs.cpp:303
 msgid "AaBbCcDdEeFf"
 msgstr "АаБбВвГгДдЕе"
 
-#: vis_widgs.cpp:835
+#: vis_widgs.cpp:834
 msgid "Find"
 msgstr "Пошук"
 
-#: vis_widgs.cpp:840
+#: vis_widgs.cpp:839
 msgid "Find next"
 msgstr "Пошук наступного"
 
-#: vis_widgs.cpp:934 vis_widgs.cpp:955
+#: vis_widgs.cpp:933 vis_widgs.cpp:954
 msgid "Cursor = (%1:%2)"
 msgstr "Курсор = (%1:%2)"
 
-#: vis_widgs.cpp:979
+#: vis_widgs.cpp:978
 msgid "Enter text string for search:"
 msgstr "Введіть строку тексту для пошуку:"
 
-#: vis_widgs.cpp:979
+#: vis_widgs.cpp:978
 msgid "String search"
 msgstr "Рядок пошуку"
 
-#: vis_widgs.cpp:982
+#: vis_widgs.cpp:981
 msgid "Backward"
 msgstr "Зворотній"
 
-#: vis_widgs.cpp:985
+#: vis_widgs.cpp:984
 msgid "Case sensitively"
 msgstr "Чутливий до регістру"
 
-#: vis_widgs.cpp:988
+#: vis_widgs.cpp:987
 msgid "Whole words"
 msgstr "Слово цілком"
 
-#: vis_widgs.cpp:1204
+#: vis_widgs.cpp:1199
 #, c-format
 msgid "Request to VCA engine '%s' time %f ms."
 msgstr "Час запиту до рушія СВК '%s' %f мс."
 
-#: vis_widgs.cpp:1266
+#: vis_widgs.cpp:1260
 #, c-format
 msgid "Load '%s' time %f ms."
 msgstr "Час завантаження '%s' %f мс."
 
-#: vis_widgs.cpp:1281
+#: vis_widgs.cpp:1275
 #, c-format
 msgid "Init '%s' time %f ms."
 msgstr "Час ініціалізації '%s' %f мс."
 
-#: vis_widgs.h:67
+#: vis_widgs.h:66
 msgid "Vision dialog"
 msgstr "Vision діалог"
+
+#~ msgid "Options help"
+#~ msgstr "Допомога по опціям"

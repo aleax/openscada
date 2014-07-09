@@ -106,6 +106,7 @@ class VisDevelop : public QMainWindow
 	void visualItProp( );	//Visual item (widget, library, project or page) properties
 	void visualItEdit( );	//Visual item graphical edit
 	void visualItClear( const string &el_wa = "" );		//Visual item changes clear
+	void visualItDownParent( const string &el_wa = "" );		//Visual item changes down to parent
 	void visualItCut( );	//Visual item cut
 	void visualItCopy( );	//Visual item copy
 	void visualItPaste( const string &wsrc = "", const string &wdst = "",
@@ -125,6 +126,7 @@ class VisDevelop : public QMainWindow
 		*actVisItProp,		//Visual item (library, widget, project or page) properties
 		*actVisItEdit,		//Graphical edit of visual item (widget or page)
 		*actVisItClear,		//Clear of visual item changes (widget or page)
+		*actVisItChDown,	//Put down of visual item changes to the arent (widget or page)
 		*actVisItCut,		//Cut visual item
 		*actVisItCopy,		//Copy visual item
 		*actVisItPaste,		//Paste visual item

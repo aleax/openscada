@@ -799,6 +799,7 @@ void Node::setEnable( bool vl )
     if(vl && mode() == MD_DATA) {
 	// Data structure allocate
 	if(!data) data = new SData;
+	else data->rReg = data->wReg = data->rCoil = data->wCoil = data->rCoilI = data->rRegI = 0;
 
 	// Compile function
 	try {

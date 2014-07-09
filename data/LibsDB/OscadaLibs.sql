@@ -78,192 +78,6 @@ License: GPL','flb_doc','Звітна документація','Бібліот�
 INSERT INTO "UserFuncLibs" VALUES('regEl','Regulation elements','Regulation elements library','flb_regEl','Елементи регулювання','Бібліотека функцій регулювання.','Элементы регулирования','',0);
 INSERT INTO "UserFuncLibs" VALUES('Controller','Controllers','Programms of controllers based on JavaLikeCalc.','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.','Контроллеры','Программы контроллеров основанных на JavaLikeCalc.',1);
 INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing functions library for XHTMP-template user''s Web-interface','flb_web','','','','',0);
-CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "UserProtocol_uPrt" VALUES('SMS','','',1,'','JavaLikeCalc.JavaScript
-// Process SEND SMS message
-// <name> - "send"
-// pin - SIM card PIN-cod
-// tel - recipient telephone number
-// <text> - message
-if(io.name()=="send")
-{
-	//> Prepare PDU
-	var pdu = "001100";	//SMS center number (default) + SMS-Submit
-	//> Telephone number encode
-	var tel = io.attr("tel");
-	if(!tel.length || tel[0] != "+") { io.setAttr("err","100:Telephone number error."); return; }
-	tel = tel.slice(1);
-	pdu += tel.length.toString(16,2)+"91";	//Telephone length and type
-	while(tel.length < 12) tel += "F";
-	for(i=0; i < 6; i++) pdu += tel[i*2+1]+tel[i*2];
-	//> Message encode
-	var text = SYS.strCodeConv(io.text(),"","UCS2");
-	if((text.length/2) > 70) { io.setAttr("err","101:Long length ("+(text.length/2)+") of the message."); return; }
-	pdu += "0018C1"+(text.length).toString(16,2);
-	for(i=0; i < text.length/2; i++) pdu += text.charCodeAt(i*2+1).toString(16,2)+text.charCodeAt(i*2).toString(16,2);
-	//SYS.messDebug("TEST SMS","PDU :"+pdu);
-	//> Send request
-	if(!io.attr("pin").isEVal())
-	{
-		var rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
-		if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:Error set PIN-code."); return; }
-	}
-	//>> Switch to PDU SMS mode
-	var rez = tr.messIO("AT+CMGF=0\r");
-	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:Error set PDU mode."); return; }
-	//>> Send PDU message
-	var rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
-	if(rez.search(">") < 0)	{ io.setAttr("err","10:Error sent SMS."); return; }
-	var rez = tr.messIO(pdu+"\x1A");
-	for(var i_tr = 0; i_tr < 5 && rez.search("OK\r") < 0; i_tr++) rez += tr.messIO("");
-	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:Error sent SMS PDU"); return; }
-	io.setAttr("err","0");
-	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
-}');
-INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','Cotrol Unit SCU750','Transport level protocol realization for EDWARDS TURBOMOLECULAR PUMPS.',1,'JavaLikeCalc.JavaScript
-','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1">{req}</mess> - message tag
-//  addr - remote station address (<0 - single; >=0 - multy port)
-
-if(io.text().length > 255*255) { io.setAttr("err","1:Message''s length more 255*255"); return; }
-addr = io.attr("addr").toInt();
-k=ceil(io.text().length/255);  //transmission blocks
-for(i_k = 1; i_k <= k; i_k++)
-{
-	request = "\x02"+k.toString(16,3)+io.text().slice((i_k-1)*255,(i_k-1)*255+min(255,io.text().length-(i_k-1)*255))+((k>1&&i_k<k)?"\x17":"\x03");
-	//> Calc LRC
-	LRC = 0xFF;
-	for(i = 0; i < request.length; i++) LRC = LRC^request.charCodeAt(i);
-	request += SYS.strFromCharCode(LRC);
-
-	//> Multy port
-	if(addr>=0) request = "@"+addr.toString(16,2)+request;
-	//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
-
-	//Send request
-	resp = tr.messIO(request);
-	while(resp.length)
-	{
-		tresp = tr.messIO("");
-		if(!tresp.length) break;
-  		resp += tresp;
-	}
-	if(!resp.length) { io.setAttr("err","2:No respond"); return; }
-	//SYS.messDebug("PRT","Ack: "+Special.FLibSYS.strDec4Bin(resp));
-	if(resp.charCodeAt(0) != 6) { io.setAttr("err","3:No acknowledgment"); return; }
-	//> Pass included acknowledgement
-	resp = resp.slice((addr>=0)?3:1);
-
-	//> Read data blocks
-	io.setText("");
-	for(i_k = 1; true; i_k++)
-	{
-		//Send application acknowledgement and wait data
-		if(!resp.length)
-		{
-			request = "\x06";
-			if(addr>=0) request += addr.toString(16,2);
-			resp = tr.messIO(request);
-			while(resp.length)
-			{
-				tresp = tr.messIO("");
-				if(!tresp.length) break;
-  				resp += tresp;
-			}
-			if(!resp.length) { io.setAttr("err","4:No data block get"); return; }
-		}
-		if(resp.length < ((addr>=0)?10:7) || resp.charCodeAt(0) != 0x40) { io.setAttr("err","5:Data block short or error"); return; }
-
-		//SYS.messDebug("PRT","BLK "+i_k+": "+Special.FLibSYS.strDec4Bin(resp));
-
-		if(addr>=0) resp = resp.slice(3);
-		LRC = 0xFF;
-		for(i = 0; i < (resp.length-1); i++) LRC = LRC^resp.charCodeAt(i);
-		if(LRC != resp.charCodeAt(resp.length-1)) { io.setAttr("err","6:LRC error."); return; }
-		if(i_k != resp.slice(1,4).toInt(16)) { io.setAttr("err","7:Block sequence."); return; }
-		io.setText(io.text()+resp.slice(4,resp.length-2));
-		if(resp.charCodeAt(resp.length-2) == 0x03) break;
-		if(resp.charCodeAt(resp.length-2) == 0x17) { resp = ""; continue; }
-		io.setAttr("err","8:Unknown block end.");
-		return;
-	}
-}');
-INSERT INTO "UserProtocol_uPrt" VALUES('TMH','TMP-xx03','Power supply for turbomolecular pumps, model EI-R04M.',1,'JavaLikeCalc.JavaScript
-','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1">{req}</mess> - message tag
-//  addr - remote station address (1...32)
-
-io.setAttr("err","");
-addr = io.attr("addr").toInt();
-if(addr < 1 || addr > 32) { io.setAttr("err","1:Device address out of range 1...32"); return; }
-request = "MJ"+addr.toString(10,2)+io.text();
-//> Calc CRC
-CRC = 0;
-for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
-request += (CRC&0xFF).toString(16,2)+"\r";
-//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length && resp[resp.length-1] != "\r")
-{
-	tresp = tr.messIO("");
-	if(!tresp.length) break;
-  	resp += tresp;
-}
-if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,2) != "MJ" || resp.slice(2,4).toInt() != addr)
-{ io.setAttr("err","2:No or error respond"); return; }
-//SYS.messDebug("PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
-CRC = 0;
-for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
-if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:CRC error."); return; }
-io.setText(resp.slice(4,resp.length-3));');
-INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.',1,'','JavaLikeCalc.JavaScript
-//Request form:
-//<mess addr="1">{req}</mess> - message tag
-//  addr - remote station address (0...254)
-
-io.setAttr("err","");
-addr = io.attr("addr").toInt();
-if(addr < 0 || addr > 254) { io.setAttr("err","1:Device address out of range 0...254"); return; }
-request = SYS.strFromCharCode(addr)+io.text();
-//> Calc KS
-KS = 0xFFFF;
-for(i = 0; i < request.length; i++)
-{
-	KS = KS ^ request.charCodeAt(i);
-	for(j = 0; j < 8; j++)
-		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
-}
-request = SYS.strFromCharCode(0xFF,0xFF)+request+SYS.strFromCharCode(KS,KS>>8);
-//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
-
-//Send request
-resp = tr.messIO(request);
-while(resp.length)
-{
-	tresp = tr.messIO("");
-	if(!tresp.length) break;
-  	resp += tresp;
-}
-if(resp.length < 4 || resp.charCodeAt(0) != addr)	{ io.setAttr("err","2:No or error respond"); return; }
-//SYS.messDebug("PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
-
-//> Calc KS
-KS = 0xFFFF;
-for(i = 0; i < (resp.length-2); i++)
-{
-	KS = KS ^ resp.charCodeAt(i);
-	for(j = 0; j < 8; j++)
-		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
-}
-if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
-{ io.setAttr("err","6:KS error."); return; }
-if(resp.charCodeAt(1)&0x80)
-{ io.setAttr("err","7:"+resp.charCodeAt(2)+":Request error."); return; }
-io.setText(resp.slice(1,-2));');
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.',10,'using Special.FLibSYS;
 srcTime = time;
@@ -2106,28 +1920,77 @@ INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in5','Input 5',2,16,'',8,'','','
 INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in6','Input 6',2,16,'',9,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in7','Input 7',2,16,'',10,'','','','');
 INSERT INTO "tmplib_DevLib_io" VALUES('TM510x','in8','Input 8',2,16,'',11,'','','','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transport.Serial.out_VKT7',0,'','','Transport','Transport.Serial.out_VKT7');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','firmVer','Firmware version',2,16,'',1,'','','Firmware version','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','abonId','Abonent ID',0,16,'',2,'','','Abonent ID','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','netNum','Network number',1,16,'',3,'','','Network number','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','modelImpl','Model implementaton',1,16,'',4,'','','Model implementaton','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','tTypeM','t: dimension',0,16,'',5,'','','t: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','GTypeM','G: dimension',0,16,'',6,'','','G: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','VTypeM','V: dimension',0,16,'',7,'','','V: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','MTypeM','M: dimension',0,16,'',8,'','','M: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','PTypeM','P: dimension',0,16,'',9,'','','P: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QoTypeM','Qo: dimension',0,16,'',10,'','','Qo: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeHIM','ВНР: dimension',0,16,'',11,'','','ВНР: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeM','ВОК: dimension',0,16,'',12,'','','ВОК: dimension','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t1_1','t1 (Tв1)',2,16,'',13,'','','t1 (Tв1)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t2_1','t2 (Tв1)',2,16,'',14,'','','t2 (Tв1)','');
-INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','dt_1','dt (Tв1)',2,16,'',15,'','','dt (Tв1)','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','srcAddr','Source object''s address',0,64,'',0,'','','Source object''s address','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','items','All items',4,33,'',1,'','','All items','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','this','The object',4,0,'',2,'','','The object','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','SHIFR','Code',0,0,'',3,'','','Code','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','NAME','Name',0,0,'',4,'','','Name','');
 INSERT INTO "tmplib_DevLib_io" VALUES('UPS','DESCR','Description',0,0,'',5,'','','Description','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','imit','Imitation drift % (0-disable)',2,64,'0',0,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','trAddr','Transport',0,64,'Transport.Serial.out_VKT7',1,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhH','Archiver: hours',0,64,'',2,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhD','Archiver: days',0,64,'',3,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','arhRes','Archiver: results-month',0,64,'',4,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','maxDayDepth','Archiver: maximum readed depth for no hours archiver, days',1,64,'366',5,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastResTm','Last result months read time (s)',1,33,'0',6,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftResTm','Left result months for read from archive',1,17,'',7,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastDTm','Last days read time (s)',1,33,'0',8,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftDTm','Left days for read from archive',1,17,'',9,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','lastHTm','Last hours read time (s)',1,33,'',10,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','leftHTm','Left hours for read from archive',1,17,'',11,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','diffTm','Difference time (server-counter), hours',1,16,'',12,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','firmVer','Firmware version',2,16,'',13,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','abonId','Abonent ID',0,16,'',14,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','repDay','Report day',1,16,'',15,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','netNum','Network number',1,16,'',16,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','modelImpl','Model implementaton',1,16,'',17,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','tTypeM','t: dimension',0,16,'',18,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','GTypeM','G: dimension',0,16,'',19,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','VTypeM','V: dimension',0,16,'',20,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','MTypeM','M: dimension',0,16,'',21,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','PTypeM','P: dimension',0,16,'',22,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QoTypeM','Qo: dimension',0,16,'',23,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeHIM','ВНР: dimension',0,16,'',24,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','QntTypeM','ВОК: dimension',0,16,'',25,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t1_1','t1 (Tв1)',2,32,'',26,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t2_1','t2 (Tв1)',2,32,'',27,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t3_1','t3 (Tв1)',2,32,'',28,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V1_1','V1 (Tв1)',2,32,'',29,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V2_1','V2 (Tв1)',2,32,'',30,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V3_1','V3 (Tв1)',2,32,'',31,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M1_1','M1 (Tв1)',2,32,'',32,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M2_1','M2 (Tв1)',2,32,'',33,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M3_1','M3 (Tв1)',2,32,'',34,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P1_1','P1 (Tв1)',2,32,'',35,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P2_1','P2 (Tв1)',2,32,'',36,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Mg_1','Mg (Tв1)',2,32,'',37,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qo_1','Qo (Tв1)',2,32,'',38,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qg_1','Qg (Tв1)',2,32,'',39,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','dt_1','dt (Tв1)',2,32,'',40,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BNR_1','ВНР (Tв1)',2,32,'',41,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BOC_1','ВОС (Tв1)',2,32,'',42,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G1_1','G1 (Tв1)',2,32,'',43,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G2_1','G2 (Tв1)',2,32,'',44,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t1_2','t1 (Tв2)',2,32,'',45,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t2_2','t2 (Tв2)',2,32,'',46,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','t3_2','t3 (Tв2)',2,32,'',47,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V1_2','V1 (Tв2)',2,32,'',48,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V2_2','V2 (Tв2)',2,32,'',49,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','V3_2','V3 (Tв2)',2,32,'',50,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M1_2','M1 (Tв2)',2,32,'',51,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M2_2','M2 (Tв2)',2,32,'',52,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','M3_2','M3 (Tв2)',2,32,'',53,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P1_2','P1 (Tв2)',2,32,'',54,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','P2_2','P2 (Tв2)',2,32,'',55,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Mg_2','Mg (Tв2)',2,32,'',56,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qo_2','Qo (Tв2)',2,32,'',57,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','Qg_2','Qg (Tв2)',2,32,'',58,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','dt_2','dt (Tв2)',2,32,'',59,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BNR_2','ВНР (Tв2)',2,32,'',60,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','BOC_2','ВОС (Tв2)',2,32,'',61,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G1_2','G1 (Tв2)',2,32,'',62,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','G2_2','G2 (Tв2)',2,32,'',63,'','','','');
+INSERT INTO "tmplib_DevLib_io" VALUES('VKT7','this','This parameter object',4,0,'',64,'','','','');
 CREATE TABLE 'tmplib_PrescrTempl_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','run','Command: run',3,32,'0',4,'Команда: исполнение','','Команда: виконання','');
 INSERT INTO "tmplib_PrescrTempl_io" VALUES('timer','pause','Command: pause',3,32,'0',5,'Команда: пауза','','Команда: пауза','');
@@ -4247,369 +4110,6 @@ else
 }
 
 f_err = t_err;','','','');
-INSERT INTO "tmplib_DevLib" VALUES('VKT7','','VKT-7','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','',10,'JavaLikeCalc.JavaScript
-t_err = "";
-//> Set transport and RTS
-if(f_start){ tr = SYS.nodeAt(trAddr,"."); tr.TS(true); valsPrec = false; valsSz = false; }
-if(!tr)	t_err = "1:Transport ''"+trAddr+"'' error.";
-
-req = SYS.XMLNode("mess").setAttr("ProtIt","VKT7").setAttr("addr",0);
-
-//> Session start
-if(!t_err.length)
-{
-	req.setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0xCC, 0x80, 0x00, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//> Request for service information
-if(!t_err.length && (f_start || firmVer.isEVal()))
-{
-	req.setText(SYS.strFromCharCode(0x03, 0x3f, 0xf9, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		rez = req.text();
-		firmVer = (rez.charCodeAt(2)>>4)+(rez.charCodeAt(2)&0x0F)/10;
-		abonId = rez.slice(7,7+8);
-		netNum = rez.charCodeAt(15);
-		modelImpl = rez.charCodeAt(17);
-	}
-}
-
-//> Request for dimensions and precisions
-if(!t_err.length && (f_start || !valsPrec))
-{
-	req.setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0x60,
-		0x2C, 0x00, 0x00, 0x40, 0x07, 0x00,	//tTypeM
-		0x2D, 0x00, 0x00, 0x40, 0x07, 0x00,	//GTypeM
-		0x2E, 0x00, 0x00, 0x40, 0x07, 0x00,	//VTypeM
-		0x2F, 0x00, 0x00, 0x40, 0x07, 0x00,	//MTypeM
-		0x30, 0x00, 0x00, 0x40, 0x07, 0x00,	//PTypeM
-		0x35, 0x00, 0x00, 0x40, 0x07, 0x00,	//QoTypeM
-		0x37, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeHIM
-		0x38, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeM
-		0x39, 0x00, 0x00, 0x40, 0x01, 0x00,	//tTypeFractDiNum
-		0x3B, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum1
-		0x3C, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum1
-		0x3D, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum1
-		0x3E, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum1
-		0x42, 0x00, 0x00, 0x40, 0x01, 0x00,	//QoTypeFractDigNum1
-		0x46, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum2
-		0x45, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum2
-		0x4C, 0x00, 0x00, 0x40, 0x01, 0x00));	//QoTypeFractDigNum2
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		req.setText(SYS.strFromCharCode(0x03, 0x3F, 0xFE, 0x00, 0x00));
-		tr.messIO(req,"UserProtocol");
-		t_err = req.attr("err");
-		if(!t_err.length)
-		{
-			rez = req.text();	off = 2;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			tTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			GTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			VTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			MTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			PTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QoTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QntTypeHIM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QntTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			valsPrec = new Object();
-			valsPrec["tTypeFractDiNum"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["VTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["MTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["PTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["dtTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["QoTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["MTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["VTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["QoTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-		}
-	}
-}
-
-//> Request for values present list and size.
-if(!t_err.length && (f_start || !valsSz || !valsSz.length))
-{
-	req.setText(SYS.strFromCharCode(0x03, 0x3f, 0xfc, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		rez = req.text();
-		valsSz = new Array();
-		for(off = 2; off < rez.length; off += 6)
-			valsSz[rez.charCodeAt(off)] = rez.charCodeAt(off+4);
-	}
-}
-
-//> Readed items list write
-if(!t_err.length)
-{
-	data = "";
-	itId = 0;		//t1(Тв1)
-	if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	itId = 1;		//t2(Тв1)
-	if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	itId = 14;	//dt(Тв1)
-	if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	if(!data.length)	{ t1_1 = t2_1 = dt_1 = EVAL_REAL; f_err = "10:Data list for request empty."; return; }
-	req.setText(SYS.strFromCharCode(0x10, 0x3f, 0xff, 0x00, 0x00, data.length)+data);
-	//SYS.messInfo("TMPL","SetDataList: "+Special.FLibSYS.strDec4Bin(req.text()));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//> Request for curent values (4)
-if(!t_err.length)
-{
-	req.setText(SYS.strFromCharCode(0x10, 0x3f, 0xfd, 0x00, 0x00, 0x02, 0x04, 0x00));	
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//> Request for data read
-if(!t_err.length)
-{
-	req.setText(SYS.strFromCharCode(0x03, 0x3F, 0xFE, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		rez = req.text(); off = 2; errAttrs = "";
-		vSz = 0;	//Observing: If init without it by "vSz = valsSz[itId];" then next operaion "off += vSz+2;" is wrong!!
-		itId = 0;	vSz = valsSz[itId];	//t1(Тв1)
-		//SYS.messInfo("TMPL","off0="+off+"; vSz="+vSz+"; typeof(2)="+typeof(2));
-		if(!vSz.isEVal())
-		{
-			for(pVal = 0, i_b = 0; i_b < vSz; i_b++)	pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-			if(rez.charCodeAt(off+vSz)==0xC0)	t1_1 = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
-			else { t1_1 = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-			off += vSz+2;
-		}
-		itId = 1;	vSz = valsSz[itId];	//t2(Тв1)
-		//SYS.messInfo("TMPL","off1="+off+"; vSz="+vSz);
-		if(!vSz.isEVal())
-		{
-			for(pVal = 0, i_b = 0; i_b < vSz; i_b++)	pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-			if(rez.charCodeAt(off+vSz)==0xC0)	t2_1 = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
-			else { t2_1 = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-			off += vSz+2;
-		}
-		itId = 14;	vSz = valsSz[itId];	//dt(Тв1)
-		//SYS.messInfo("TMPL","off2="+off+"; vSz="+vSz);
-		if(!vSz.isEVal())
-		{
-			for(pVal = 0, i_b = 0; i_b < vSz; i_b++)	pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-			if(pVal&0x8000)	pVal -= 0x10000;
-			if(rez.charCodeAt(off+vSz)==0xC0)	dt_1 = pVal/pow(10,valsPrec["dtTypeFractDigNum1"]);
-			else { dt_1 = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-			off += vSz+2;
-		}
-	}
-}
-
-SYS.messInfo("TMPL","ServResp: "+Special.FLibSYS.strDec4Bin(rez));
-
-if(t_err.length)
-{
-	f_err = t_err;
-	t1_1 = t2_1 = dt_1 = EVAL_REAL;
-}
-else f_err = errAttrs.length ? "11:Quality errors: "+errAttrs : "0";','JavaLikeCalc.JavaScript
-t_err = "";
-//> Set transport and RTS
-if(f_start){ tr = SYS.nodeAt(trAddr,"."); tr.TS(true); valsPrec = false; valsSz = false; }
-if(!tr)	t_err = "1:Transport ''"+trAddr+"'' error.";
-
-req = SYS.XMLNode("mess").setAttr("ProtIt","VKT7").setAttr("addr",0);
-
-//> Session start
-if(!t_err.length)
-{
-	req.setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0xCC, 0x80, 0x00, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//> Request for service information
-if(!t_err.length && (f_start || firmVer.isEVal()))
-{
-	req.setText(SYS.strFromCharCode(0x03, 0x3f, 0xf9, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		rez = req.text();
-		firmVer = (rez.charCodeAt(2)>>4)+(rez.charCodeAt(2)&0x0F)/10;
-		abonId = rez.slice(7,7+8);
-		netNum = rez.charCodeAt(15);
-		modelImpl = rez.charCodeAt(17);
-	}
-}
-
-//> Request for dimensions and precisions
-if(!t_err.length && (f_start || !valsPrec))
-{
-	req.setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0x60,
-		0x2C, 0x00, 0x00, 0x40, 0x07, 0x00,	//tTypeM
-		0x2D, 0x00, 0x00, 0x40, 0x07, 0x00,	//GTypeM
-		0x2E, 0x00, 0x00, 0x40, 0x07, 0x00,	//VTypeM
-		0x2F, 0x00, 0x00, 0x40, 0x07, 0x00,	//MTypeM
-		0x30, 0x00, 0x00, 0x40, 0x07, 0x00,	//PTypeM
-		0x35, 0x00, 0x00, 0x40, 0x07, 0x00,	//QoTypeM
-		0x37, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeHIM
-		0x38, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeM
-		0x39, 0x00, 0x00, 0x40, 0x01, 0x00,	//tTypeFractDiNum
-		0x3B, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum1
-		0x3C, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum1
-		0x3D, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum1
-		0x3E, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum1
-		0x42, 0x00, 0x00, 0x40, 0x01, 0x00,	//QoTypeFractDigNum1
-		0x46, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum2
-		0x45, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum2
-		0x4C, 0x00, 0x00, 0x40, 0x01, 0x00));	//QoTypeFractDigNum2
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		req.setText(SYS.strFromCharCode(0x03, 0x3F, 0xFE, 0x00, 0x00));
-		tr.messIO(req,"UserProtocol");
-		t_err = req.attr("err");
-		if(!t_err.length)
-		{
-			rez = req.text();	off = 2;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			tTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			GTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			VTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			MTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			PTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QoTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QntTypeHIM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QntTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			valsPrec = new Object();
-			valsPrec["tTypeFractDiNum"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["VTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["MTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["PTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["dtTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["QoTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["MTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["VTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["QoTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-		}
-	}
-}
-
-//> Request for values present list and size.
-if(!t_err.length && (f_start || !valsSz || !valsSz.length))
-{
-	req.setText(SYS.strFromCharCode(0x03, 0x3f, 0xfc, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		rez = req.text();
-		valsSz = new Array();
-		for(off = 2; off < rez.length; off += 6)
-			valsSz[rez.charCodeAt(off)] = rez.charCodeAt(off+4);
-	}
-}
-
-//> Readed items list write
-if(!t_err.length)
-{
-	data = "";
-	itId = 0;		//t1(Тв1)
-	if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	itId = 1;		//t2(Тв1)
-	if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	itId = 14;	//dt(Тв1)
-	if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	if(!data.length)	{ t1_1 = t2_1 = dt_1 = EVAL_REAL; f_err = "10:Data list for request empty."; return; }
-	req.setText(SYS.strFromCharCode(0x10, 0x3f, 0xff, 0x00, 0x00, data.length)+data);
-	//SYS.messInfo("TMPL","SetDataList: "+Special.FLibSYS.strDec4Bin(req.text()));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//> Request for curent values (4)
-if(!t_err.length)
-{
-	req.setText(SYS.strFromCharCode(0x10, 0x3f, 0xfd, 0x00, 0x00, 0x02, 0x04, 0x00));	
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//> Request for data read
-if(!t_err.length)
-{
-	req.setText(SYS.strFromCharCode(0x03, 0x3F, 0xFE, 0x00, 0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length)
-	{
-		rez = req.text(); off = 2; errAttrs = "";
-		vSz = 0;	//Observing: If init without it by "vSz = valsSz[itId];" then next operaion "off += vSz+2;" is wrong!!
-		itId = 0;	vSz = valsSz[itId];	//t1(Тв1)
-		//SYS.messInfo("TMPL","off0="+off+"; vSz="+vSz+"; typeof(2)="+typeof(2));
-		if(!vSz.isEVal())
-		{
-			for(pVal = 0, i_b = 0; i_b < vSz; i_b++)	pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-			if(rez.charCodeAt(off+vSz)==0xC0)	t1_1 = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
-			else { t1_1 = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-			off += vSz+2;
-		}
-		itId = 1;	vSz = valsSz[itId];	//t2(Тв1)
-		//SYS.messInfo("TMPL","off1="+off+"; vSz="+vSz);
-		if(!vSz.isEVal())
-		{
-			for(pVal = 0, i_b = 0; i_b < vSz; i_b++)	pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-			if(rez.charCodeAt(off+vSz)==0xC0)	t2_1 = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
-			else { t2_1 = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-			off += vSz+2;
-		}
-		itId = 14;	vSz = valsSz[itId];	//dt(Тв1)
-		//SYS.messInfo("TMPL","off2="+off+"; vSz="+vSz);
-		if(!vSz.isEVal())
-		{
-			for(pVal = 0, i_b = 0; i_b < vSz; i_b++)	pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-			if(pVal&0x8000)	pVal -= 0x10000;
-			if(rez.charCodeAt(off+vSz)==0xC0)	dt_1 = pVal/pow(10,valsPrec["dtTypeFractDigNum1"]);
-			else { dt_1 = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-			off += vSz+2;
-		}
-	}
-}
-
-SYS.messInfo("TMPL","ServResp: "+Special.FLibSYS.strDec4Bin(rez));
-
-if(t_err.length)
-{
-	f_err = t_err;
-	t1_1 = t2_1 = dt_1 = EVAL_REAL;
-}
-else f_err = errAttrs.length ? "11:Quality errors: "+errAttrs : "0";','','');
 INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','','','',10,'JavaLikeCalc.JavaScript
 if(f_start)	{ srcPrm = false; items = new Object(); }
 
@@ -4716,6 +4216,361 @@ if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 else if(f_err.toInt() && !tErr.toInt())
 	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
 f_err = tErr;','','',1403717899);
+INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','','',60,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+if(f_start) {
+	//Variables list prepare
+	varsLs = new Object();
+	//Тв1
+	varsLs["t1_1"] = 0; varsLs["t2_1"] = 1; varsLs["t3_1"] = 2;		//t
+	varsLs["V1_1"] = 3; varsLs["V2_1"] = 4;	varsLs["V3_1"] = 5;		//V
+	varsLs["M1_1"] = 6;	varsLs["M2_1"] = 7;	varsLs["M3_1"] = 8;		//M
+	varsLs["P1_1"] = 9;	varsLs["P2_1"] = 10;	//P
+	varsLs["Mg_1"] = 11;	//Mg
+	varsLs["Qo_1"] = 12;	//Qo
+	varsLs["Qg_1"] = 13;	//Qg
+	varsLs["dt_1"] = 14;	//dt
+	varsLs["BNR_1"] = 17; varsLs["BOC_1"] = 18;//BNR and BOC
+	varsLs["G1_1"] = 19; varsLs["G2_1"] = 20;	//G
+	//Тв2
+	varsLs["t1_2"] = 22; varsLs["t2_2"] = 23; varsLs["t3_2"] = 24;	//t
+	varsLs["V1_2"] = 25; varsLs["V2_2"] = 26; varsLs["V3_2"] = 27;	//V
+	varsLs["M1_2"] = 28; varsLs["M2_2"] = 29; varsLs["M3_2"] = 30;	//M
+	varsLs["P1_2"] = 31; varsLs["P2_2"] = 32;	//P
+	varsLs["Mg_2"] = 33;	//Mg
+	varsLs["Qo_2"] = 34;	//Qo
+	varsLs["Qg_2"] = 35;	//Qg
+	varsLs["dt_2"] = 36;	//dt
+	varsLs["BNR_2"] = 39; varsLs["BOC_2"] = 40;//BNR and BOC
+	varsLs["G1_2"] = 41; varsLs["G2_2"] = 42;	//G
+
+	//Buffers create
+	bfH = vArhBuf(4/*Real*/, 10, 3600*1000000, true, false);
+	bfD = vArhBuf(4/*Real*/, 10, 24*3600*1000000, true, false);
+	bfM = vArhBuf(4/*Real*/, 10, 24*3600*1000000, true, false);
+}
+
+t_err = "";
+//Imitation for values
+if(imit > 0.1) {
+	//SYS.messDebug("/VKT7/TMPL","imit="+t1_1+"; dt="+(imit*(rand(t1_1)-t1_1/2)/100));
+	for(var cA in varsLs)
+		if(cA.slice(0,2) == "dt") arguments[cA] = arguments["t1_"+cA.slice(3)]-arguments["t2_"+cA.slice(3)];
+		else arguments[cA] += imit*(rand(arguments[cA])-arguments[cA]/2)/100;
+	f_err = "0";
+	return;
+}
+
+if(f_stop) {
+	f_err = "";
+	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
+	return;
+}
+
+//Set transport and RTS
+if(f_start){ tr = SYS.nodeAt(trAddr,"."); tr.TS(true); valsPrec = false; valsSz = false; }
+if(!tr)	t_err = "1:Transport ''"+trAddr+"'' error.";
+
+req = SYS.XMLNode("mess").setAttr("ProtIt","VKT7").setAttr("addr",0);
+
+//Session start
+if(!t_err.length) {
+	SYS.messDebug("/VKT7/TMPL","Start session.");
+	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3F,0xFF,0x00,0x00,0xCC,0x80,0x00,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+}
+
+//Request for service information
+if(!t_err.length && (f_start || firmVer.isEVal())) {
+	SYS.messDebug("/VKT7/TMPL","Reques for service info.");
+	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3f,0xf9,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		rez = req.text();
+		firmVer = (rez.charCodeAt(2)>>4)+(rez.charCodeAt(2)&0x0F)/10;
+		abonId = rez.slice(7,7+8);
+		netNum = rez.charCodeAt(15);
+		repDay = rez.charCodeAt(16);
+		modelImpl = rez.charCodeAt(17);
+	}
+}
+
+//Request for counter time and hour archive begin
+if(!t_err.length && (f_start || !lastHTm || !lastDTm || !lastResTm)) {
+	SYS.messDebug("/VKT7/TMPL","Reques for counter time and hour archive begin.");
+	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3f,0xf6,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		rez = req.text();
+		lastHTm = max(lastHTm, SYS.mktime(0,0,rez.charCodeAt(5),rez.charCodeAt(2),rez.charCodeAt(3)-1,2000+rez.charCodeAt(4)));
+		diffTm = floor((SYS.time()-SYS.mktime(0,0,rez.charCodeAt(9),rez.charCodeAt(6),rez.charCodeAt(7)-1,2000+rez.charCodeAt(8)))/3600);
+		leftHTm = (SYS.time()-lastHTm)/3600 - diffTm;
+	}
+	lastDTm = max(lastDTm, SYS.time()-maxDayDepth*24*3600);
+	leftDTm = (SYS.time()-lastDTm)/(24*3600);
+	lastResTm = max(lastResTm, SYS.time()-maxDayDepth*24*3600);
+	leftResTm = (SYS.time()-lastResTm)/(31*24*3600);
+}
+
+//Request for dimensions and precisions
+if(!t_err.length && (f_start || !valsPrec))
+{
+	SYS.messDebug("/VKT7/TMPL","Reques for dimensions and precisions.");
+	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0x72,
+		0x2C, 0x00, 0x00, 0x40, 0x07, 0x00,	//tTypeM
+		0x2D, 0x00, 0x00, 0x40, 0x07, 0x00,	//GTypeM
+		0x2E, 0x00, 0x00, 0x40, 0x07, 0x00,	//VTypeM
+		0x2F, 0x00, 0x00, 0x40, 0x07, 0x00,	//MTypeM
+		0x30, 0x00, 0x00, 0x40, 0x07, 0x00,	//PTypeM
+		0x35, 0x00, 0x00, 0x40, 0x07, 0x00,	//QoTypeM
+		0x37, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeHIM
+		0x38, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeM
+		0x39, 0x00, 0x00, 0x40, 0x01, 0x00,	//tTypeFractDiNum
+		0x3B, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum1
+		0x3C, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum1
+		0x3D, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum1
+		0x3E, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum1
+		0x42, 0x00, 0x00, 0x40, 0x01, 0x00,	//QoTypeFractDigNum1
+		0x45, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum2
+		0x46, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum2
+		0x47, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum2
+		0x48, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum2
+		0x4C, 0x00, 0x00, 0x40, 0x01, 0x00));	//QoTypeFractDigNum2
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3F,0xFE,0x00,0x00));
+		tr.messIO(req,"UserProtocol");
+		t_err = req.attr("err");
+		if(!t_err.length) {
+			rez = req.text();	off = 2;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			tTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			GTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			VTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			MTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			PTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			QoTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			QntTypeHIM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			QntTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			valsPrec = new Object();
+			valsPrec["tTypeFractDiNum"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["VTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["MTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["PTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["dtTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["QoTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["VTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["MTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["PTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["dtTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["QoTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+		}
+	}
+}
+
+//Request for values present list and size.
+if(!t_err.length && (f_start || !valsSz || !valsSz.length))
+{
+	SYS.messDebug("/VKT7/TMPL","Request for values present list and size.");
+	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3f,0xfc,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		rez = req.text();
+		valsSz = new Array();
+		for(off = 2; off < rez.length; off += 6)
+			valsSz[rez.charCodeAt(off)] = rez.charCodeAt(off+4);
+	}
+}
+
+//Readed items list write
+if(!t_err.length) {
+	SYS.messDebug("/VKT7/TMPL","Readed items list write.");
+	data = "";
+	for(var cA in varsLs) {
+		itId = varsLs[cA];
+		if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
+	}
+
+	if(!data.length) {
+		for(var cA in varsLs) arguments[cA] = EVAL_REAL;
+		f_err = "10:Data list for request empty.";
+		return;
+	}
+	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xff,0x00,0x00,data.length)+data);
+	//SYS.messDebug("/VKT7/TMPL","SetDataList: "+Special.FLibSYS.strDec4Bin(req.text()));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+}
+
+//Read 0-current value(4), 1-hour archive(0) and 2-result month archive(3)
+errAttrs = "";
+for(i_dt = 0; !t_err.length && i_dt < 4; i_dt++) {
+	tpReq = 4;																						//current
+	if(i_dt == 1)			{ tpReq = 0; if(!arhH.length) continue; }		//hour archive
+	else if(i_dt == 2)	{ tpReq = 1; if(!arhD.length) continue; }		//day archive
+	else if(i_dt == 3)	{ tpReq = 3; if(!arhRes.length) continue; }	//result archive
+
+	//Request for curent values (4).
+	if(tpReq == 4 && !t_err.length) {
+		SYS.messDebug("/VKT7/TMPL","Request for curent values.");
+		req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,0x04,0x00));
+		tr.messIO(req,"UserProtocol");
+		t_err = req.attr("err");
+	}
+
+	//Request for archive values hour
+	if(tpReq == 0) {
+		if(!t_err.length) {
+			if((SYS.time()-lastHTm-diffTm*3600)/3600 < 2) continue;	//No more ready hours present
+			SYS.messDebug("/VKT7/TMPL","Request for hour archive values.");
+			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+		}
+
+		// Set for hour archive value data
+		if(!t_err.length) {
+			SYS.messDebug("/VKT7/TMPL","Request for set archive data.");
+			stHour = stDay = stMonth = stYear = 0;
+			SYS.localtime(lastHTm, 0, 0, stHour, stDay, stMonth, stYear);
+			stHour++;
+			rdTime = SYS.mktime(0, 0, stHour, stDay, stMonth, stYear);
+
+			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,stDay,stMonth+1,stYear-2000,stHour));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+			if(t_err.parse(1,":").toInt() == 3) { lastHTm = rdTime; leftHTm = (SYS.time()-lastHTm)/3600 - diffTm; t_err = ""; continue; }
+		}
+	}
+
+	//Request for archive values day
+	if(tpReq == 1) {
+		if(!t_err.length) {
+			if((SYS.time()-lastDTm-diffTm*3600)/(24*3600) < 1) continue;	//No more ready days present
+			SYS.messDebug("/VKT7/TMPL","Request for day archive values.");
+			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+		}
+
+		// Set for day archive value data
+		if(!t_err.length) {
+			SYS.messDebug("/VKT7/TMPL","Request for set archive data.");
+			stDay = stMonth = stYear = 0;
+			SYS.gmtime(lastDTm, 0, 0, 0, stDay, stMonth, stYear);
+			stDay++;
+			rdDTime = SYS.timegm(0, 0, 0, stDay, stMonth, stYear);
+
+			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,stDay,stMonth+1,stYear-2000,stHour));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+			if(t_err.parse(1,":").toInt() == 3) { lastDTm = rdDTime; leftDTm = (SYS.time()-lastDTm)/(24*3600) - diffTm; t_err = ""; continue; }
+		}
+	}
+
+	//Request for results month archive
+	if(tpReq == 3) {
+		if(!t_err.length) {
+			if((SYS.time()-lastResTm-diffTm*3600)/(24*3600) < 31) continue;	//No more ready month present
+			SYS.messDebug("/VKT7/TMPL","Request for results month archive values.");
+			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+		}
+		// Set for month results archive value data
+		if(!t_err.length) {
+			SYS.messDebug("/VKT7/TMPL","Request for set archive data.");
+			stMonth = stYear = 0;
+			SYS.gmtime(lastResTm, 0, 0, 0, 0, stMonth, stYear);
+			stMonth++;
+			rdResTime = SYS.timegm(0, 0, 0, repDay, stMonth, stYear);
+
+			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,repDay,stMonth+1,stYear-2000,0));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+			if(t_err.parse(1,":").toInt() == 3) { lastResTm = rdResTime; leftResTm = (SYS.time()-lastResTm)/(31*24*3600); t_err = ""; continue; }
+		}
+	}
+
+	//Request for data read
+	if(!t_err.length) {
+		SYS.messDebug("/VKT7/TMPL","Request for data read.");
+		req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3F,0xFE,0x00,0x00));
+		tr.messIO(req,"UserProtocol");
+		t_err = req.attr("err");
+		if(!t_err.length) {
+			rez = req.text(); off = 2; vSz = 0;
+			for(var cA in varsLs) {
+				itId = varsLs[cA]; vSz = valsSz[itId];
+				if(vSz.isEVal()) {
+					if(tpReq == 4) arguments[cA] = EVAL_REAL;
+					continue;
+				}
+				//SYS.messDebug("/VKT7/TMPL","off: "+off+"; itId: "+itId+"; vSz: "+vSz);
+				if(rez.charCodeAt(off+vSz) == 0xC0) {
+					for(pVal = 0, i_b = 0; i_b < vSz; i_b++) pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
+					//Float type values
+					if(cA[0] == "G") pVal = floatMergeWord(pVal&0xFFFF, (pVal>>16)&0xFFFF);
+					//Integer type values, negative process
+					else if(pVal&(0x80<<(8*(vSz-1))))	pVal -= (1<<(8*vSz));
+					// Type specific
+					if(cA[0] == "t")						tmpVl = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
+					else if(cA[0] == "V")				tmpVl = pVal/pow(10,valsPrec["VTypeFractDigNum"+cA[3]]);
+					else if(cA[0] == "M")				tmpVl = pVal/pow(10,valsPrec["MTypeFractDigNum"+cA[3]]);
+					else if(cA[0] == "P")				tmpVl = pVal/pow(10,valsPrec["PTypeFractDigNum"+cA[3]]);
+					else if(cA[0] == "Q")				tmpVl = pVal/pow(10,valsPrec["QoTypeFractDigNum"+cA[3]]);
+					else if(cA.slice(0,2) == "dt")tmpVl = pVal/pow(10,valsPrec["dtTypeFractDigNum"+cA[3]]);
+					else tmpVl = pVal;
+
+					// Write current or archive
+					if(tpReq == 4) {
+						arguments[cA] = tmpVl;
+						SYS.messDebug("/VKT7/TMPL","Set current "+cA+": "+tmpVl);
+					}
+					else if(!(aObj=vArh(this.nodePath(".")+"."+cA)).isNull()) {
+						if(tpReq == 0) {
+							bfH.set(tmpVl, rdTime, 0); aObj.copy(bfH, rdTime, 0, rdTime, 0, arhH);
+							SYS.messDebug("/VKT7/TMPL","Write to hour archive for time: "+rdTime+"; "+cA+": "+tmpVl);
+						}
+						if(tpReq == 1) {
+							bfD.set(tmpVl, rdDTime, 0); aObj.copy(bfD, rdDTime, 0, rdDTime, 0, arhD);
+							SYS.messDebug("/VKT7/TMPL","Write to day archive for time: "+rdDTime+"; "+cA+": "+tmpVl);
+						}
+						else if(tpReq == 3) {
+							bfM.set(tmpVl, rdResTime, 0); aObj.copy(bfM, rdResTime, 0, rdResTime, 0, arhRes);
+							SYS.messDebug("/VKT7/TMPL","Write to result month archive for time: "+rdResTime+"; "+cA+": "+tmpVl);
+						}
+					}
+				}
+				else if(tpReq == 4) { arguments[cA] = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
+				off += vSz+2;
+			}
+			if(tpReq == 0) { lastHTm = rdTime; leftHTm = (SYS.time()-lastHTm)/3600 - diffTm; }
+			else if(tpReq == 1) { lastDTm = rdDTime; leftDTm = (SYS.time()-lastDTm)/(24*3600) - diffTm; }
+			else if(tpReq == 3) { lastResTm = rdResTime; leftResTm = (SYS.time()-lastResTm)/(31*24*3600); }
+		}
+	}
+}
+
+if(t_err.length) {
+	SYS.messDebug("/VKT7/TMPL","Error response: "+t_err);
+	f_err = t_err;
+	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
+}
+else f_err = errAttrs.length ? "11:Quality errors: "+errAttrs : "0";','','',1404847065);
 CREATE TABLE 'flb_web' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_web" VALUES('alarms','Alarms','',10,'//> Load rules
 var alarmsTree = SYS.XMLNode("ALARMS");
@@ -7084,4 +6939,190 @@ INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Таймер','�
 INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Фоновый таймер','Фоновий таймер','Background timer. Updating parallel with current command.','Фоновый таймер. Обновляется параллельно с текущей командой.','Фоновий таймер. Оновлюється паралельно з поточною командою.',1,'PrescrTempl.backTimer');
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_LogicLev" VALUES('prescription','Prescription commands','Команды рецепта','Команди рецепту','','','',1,0,3,0,'<high>','LogLevPrm_prescription','LogLevPrmRefl_prescription',0,'0.2',0);
+CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "UserProtocol_uPrt" VALUES('SMS','','','','',1,'','','JavaLikeCalc.JavaScript
+// Process SEND SMS message
+// <name> - "send"
+// pin - SIM card PIN-cod
+// tel - recipient telephone number
+// <text> - message
+if(io.name()=="send")
+{
+	//> Prepare PDU
+	var pdu = "001100";	//SMS center number (default) + SMS-Submit
+	//> Telephone number encode
+	var tel = io.attr("tel");
+	if(!tel.length || tel[0] != "+") { io.setAttr("err","100:Telephone number error."); return; }
+	tel = tel.slice(1);
+	pdu += tel.length.toString(16,2)+"91";	//Telephone length and type
+	while(tel.length < 12) tel += "F";
+	for(i=0; i < 6; i++) pdu += tel[i*2+1]+tel[i*2];
+	//> Message encode
+	var text = SYS.strCodeConv(io.text(),"","UCS2");
+	if((text.length/2) > 70) { io.setAttr("err","101:Long length ("+(text.length/2)+") of the message."); return; }
+	pdu += "0018C1"+(text.length).toString(16,2);
+	for(i=0; i < text.length/2; i++) pdu += text.charCodeAt(i*2+1).toString(16,2)+text.charCodeAt(i*2).toString(16,2);
+	//SYS.messDebug("TEST SMS","PDU :"+pdu);
+	//> Send request
+	if(!io.attr("pin").isEVal())
+	{
+		var rez = tr.messIO("AT+CPIN="+io.attr("pin")+"\r");
+		if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:Error set PIN-code."); return; }
+	}
+	//>> Switch to PDU SMS mode
+	var rez = tr.messIO("AT+CMGF=0\r");
+	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:Error set PDU mode."); return; }
+	//>> Send PDU message
+	var rez = tr.messIO("AT+CMGS="+(pdu.length/2-1)+"\r");
+	if(rez.search(">") < 0)	{ io.setAttr("err","10:Error sent SMS."); return; }
+	var rez = tr.messIO(pdu+"\x1A");
+	for(var i_tr = 0; i_tr < 5 && rez.search("OK\r") < 0; i_tr++) rez += tr.messIO("");
+	if(rez.search("OK\r") < 0)	{ io.setAttr("err","10:Error sent SMS PDU"); return; }
+	io.setAttr("err","0");
+	//SYS.messDebug("TEST SMS","PDU REZ :"+rez);
+}','');
+INSERT INTO "UserProtocol_uPrt" VALUES('SCU750','Cotrol Unit SCU750','','Transport level protocol realization for EDWARDS TURBOMOLECULAR PUMPS.','',1,'JavaLikeCalc.JavaScript
+','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1">{req}</mess> - message tag
+//  addr - remote station address (<0 - single; >=0 - multy port)
+
+if(io.text().length > 255*255) { io.setAttr("err","1:Message''s length more 255*255"); return; }
+addr = io.attr("addr").toInt();
+k=ceil(io.text().length/255);  //transmission blocks
+for(i_k = 1; i_k <= k; i_k++)
+{
+	request = "\x02"+k.toString(16,3)+io.text().slice((i_k-1)*255,(i_k-1)*255+min(255,io.text().length-(i_k-1)*255))+((k>1&&i_k<k)?"\x17":"\x03");
+	//> Calc LRC
+	LRC = 0xFF;
+	for(i = 0; i < request.length; i++) LRC = LRC^request.charCodeAt(i);
+	request += SYS.strFromCharCode(LRC);
+
+	//> Multy port
+	if(addr>=0) request = "@"+addr.toString(16,2)+request;
+	//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
+
+	//Send request
+	resp = tr.messIO(request);
+	while(resp.length)
+	{
+		tresp = tr.messIO("");
+		if(!tresp.length) break;
+  		resp += tresp;
+	}
+	if(!resp.length) { io.setAttr("err","2:No respond"); return; }
+	//SYS.messDebug("PRT","Ack: "+Special.FLibSYS.strDec4Bin(resp));
+	if(resp.charCodeAt(0) != 6) { io.setAttr("err","3:No acknowledgment"); return; }
+	//> Pass included acknowledgement
+	resp = resp.slice((addr>=0)?3:1);
+
+	//> Read data blocks
+	io.setText("");
+	for(i_k = 1; true; i_k++)
+	{
+		//Send application acknowledgement and wait data
+		if(!resp.length)
+		{
+			request = "\x06";
+			if(addr>=0) request += addr.toString(16,2);
+			resp = tr.messIO(request);
+			while(resp.length)
+			{
+				tresp = tr.messIO("");
+				if(!tresp.length) break;
+  				resp += tresp;
+			}
+			if(!resp.length) { io.setAttr("err","4:No data block get"); return; }
+		}
+		if(resp.length < ((addr>=0)?10:7) || resp.charCodeAt(0) != 0x40) { io.setAttr("err","5:Data block short or error"); return; }
+
+		//SYS.messDebug("PRT","BLK "+i_k+": "+Special.FLibSYS.strDec4Bin(resp));
+
+		if(addr>=0) resp = resp.slice(3);
+		LRC = 0xFF;
+		for(i = 0; i < (resp.length-1); i++) LRC = LRC^resp.charCodeAt(i);
+		if(LRC != resp.charCodeAt(resp.length-1)) { io.setAttr("err","6:LRC error."); return; }
+		if(i_k != resp.slice(1,4).toInt(16)) { io.setAttr("err","7:Block sequence."); return; }
+		io.setText(io.text()+resp.slice(4,resp.length-2));
+		if(resp.charCodeAt(resp.length-2) == 0x03) break;
+		if(resp.charCodeAt(resp.length-2) == 0x17) { resp = ""; continue; }
+		io.setAttr("err","8:Unknown block end.");
+		return;
+	}
+}','');
+INSERT INTO "UserProtocol_uPrt" VALUES('TMH','TMP-xx03','','Power supply for turbomolecular pumps, model EI-R04M.','',1,'JavaLikeCalc.JavaScript
+','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1">{req}</mess> - message tag
+//  addr - remote station address (1...32)
+
+io.setAttr("err","");
+addr = io.attr("addr").toInt();
+if(addr < 1 || addr > 32) { io.setAttr("err","1:Device address out of range 1...32"); return; }
+request = "MJ"+addr.toString(10,2)+io.text();
+//> Calc CRC
+CRC = 0;
+for(i = 0; i < request.length; i++) CRC += request.charCodeAt(i);
+request += (CRC&0xFF).toString(16,2)+"\r";
+//SYS.messDebug("PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length && resp[resp.length-1] != "\r")
+{
+	tresp = tr.messIO("");
+	if(!tresp.length) break;
+  	resp += tresp;
+}
+if(resp.length < 6 || resp[resp.length-1] != "\r" || resp.slice(0,2) != "MJ" || resp.slice(2,4).toInt() != addr)
+{ io.setAttr("err","2:No or error respond"); return; }
+//SYS.messDebug("PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
+CRC = 0;
+for(i = 0; i < (resp.length-3); i++) CRC += resp.charCodeAt(i);
+if((CRC&0xFF) != resp.slice(resp.length-3,resp.length-1).toInt(16)) { io.setAttr("err","6:CRC error."); return; }
+io.setText(resp.slice(4,resp.length-3));','');
+INSERT INTO "UserProtocol_uPrt" VALUES('VKT7','VKT-7','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','',1,'','','JavaLikeCalc.JavaScript
+//Request form:
+//<mess addr="1">{req}</mess> - message tag
+//  addr - remote station address (0...254)
+
+io.setAttr("err","");
+addr = io.attr("addr").toInt();
+if(addr < 0 || addr > 254) { io.setAttr("err","1:Device address out of range 0...254"); return; }
+request = SYS.strFromCharCode(addr)+io.text();
+//> Calc KS
+KS = 0xFFFF;
+for(i = 0; i < request.length; i++)
+{
+	KS = KS ^ request.charCodeAt(i);
+	for(j = 0; j < 8; j++)
+		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
+}
+request = SYS.strFromCharCode(0xFF,0xFF)+request+SYS.strFromCharCode(KS,KS>>8);
+SYS.messDebug("/VKT7/PRT","Request: "+Special.FLibSYS.strDec4Bin(request));
+
+//Send request
+resp = tr.messIO(request);
+while(resp.length)
+{
+	tresp = tr.messIO("");
+	if(!tresp.length) break;
+  	resp += tresp;
+}
+if(resp.length < 4 || resp.charCodeAt(0) != addr)	{ io.setAttr("err","2:No or error respond"); return; }
+SYS.messDebug("/VKT7/PRT","Respond: "+Special.FLibSYS.strDec4Bin(resp));
+
+//> Calc KS
+KS = 0xFFFF;
+for(i = 0; i < (resp.length-2); i++)
+{
+	KS = KS ^ resp.charCodeAt(i);
+	for(j = 0; j < 8; j++)
+		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
+}
+if(KS != ((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)))
+{ io.setAttr("err","6:KS error "+KS.toString(16,4)+"=="+((resp.charCodeAt(resp.length-1)<<8)|resp.charCodeAt(resp.length-2)).toString(16,4)); return; }
+if(resp.charCodeAt(1)&0x80)
+{ io.setAttr("err","7:"+resp.charCodeAt(2)+":Request error."); return; }
+io.setText(resp.slice(1,-2));','');
 COMMIT;

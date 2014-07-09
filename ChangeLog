@@ -1,3 +1,12 @@
+2014-07-09 Roman
+- DB.LibsDB.OscadaLibs.db: Heat counter VKT-7 implement significant expanded.
+- !!:UI.{VCAEngine,Vision}: Changes into visual items put down to the parent function is added.
+- UI.VCAEngine: The VCA project's session info some expanded.
+- FIX:UI.Vision: Background's role (Window) for included pages (scroll area) set to the included pages container.
+    Mostly for Slider hide.
+- Protocol.ModBus: Requests counters clean up at ModBus Node enable is added.
+
+
 2014-07-05 Roman
 - Protocol.ModBus: Functions 0x2 (CI) and 0x4 (RI) implement is rewrited and clean up.
 

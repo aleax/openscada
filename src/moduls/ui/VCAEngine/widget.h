@@ -45,9 +45,8 @@ class Attr
 
     public:
 	//Data
-	//> Attribute flags
-	enum GlobalAttrFlgs
-	{
+	// Attribute flags
+	enum GlobalAttrFlgs {
 	    Active	= 0x00100,	//Active attribute for primitives process
 
 	    Image	= 0x00200,	//Store image link to DB or to file
@@ -62,9 +61,8 @@ class Attr
 	    DirRead	= 0x20000	//Direct read attribute, through widget
 	};
 
-	//> Link types
-	enum SelfAttrFlgs
-	{
+	// Link types
+	enum SelfAttrFlgs {
 	    CfgConst	= 0x01,		//Constant
 	    CfgLnkIn	= 0x02,		//Input link
 	    CfgLnkOut	= 0x04,		//Output link
@@ -103,7 +101,7 @@ class Attr
 	char   getB( bool sys = false );
 	AutoHD<TVarObj> getO( bool sys = false );
 
-	//> Set value
+	// Set value
 	void setSEL( const string &val, bool strongPrev = false, bool sys = false );
 	void set( const TVariant &val, bool strongPrev = false, bool sys = false );
 	void setS( const string &val, bool strongPrev = false, bool sys = false );
@@ -122,16 +120,15 @@ class Attr
 
     private:
 	//Data
-	//> Storing
-	union
-	{
+	// Storing
+	union {
 	    string	*s_val;		//String
 	    double	r_val;		//Real
 	    int64_t	i_val;		//Integer
 	    char	b_val;		//Boolean
 	    AutoHD<TVarObj>	*o_val;	//Object
 	}m_val;
-	//> Attributes
+	// Attributes
 	TFld		*mFld;		//Base field
 	unsigned	m_modif;	//Modify counter
 	unsigned short	self_flg;	//Self attributes flags
@@ -186,16 +183,17 @@ class Widget : public TCntrNode
 	virtual void setCalcPer( int vl )		{ };
 	void setStlLock( bool vl )	{ mStlLock = vl; }
 
-	//> Storing
+	// Storing
 	virtual void loadIO( )		{ }			//Load widget's IO
 	virtual void saveIO( )		{ }			//Save widget's IO
-	virtual void wClear( );					//Widget's changing clear
+	virtual void wClear( );					//Widget's changes clear
+	virtual void wChDown( const string &ia = "" );		//Widget's changes put down
 
-	//> Enable stat
+	// Enable stat
 	bool enable( );
 	virtual void setEnable( bool val );
 
-	//> Inheritance methods
+	// Inheritance methods
 	virtual string parentNm( )	{ return mParentNm; }	//Parent widget name
 	virtual string rootId( );				//Root widget id
 	AutoHD<Widget> parent( );				//Parent widget
@@ -207,7 +205,7 @@ class Widget : public TCntrNode
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
-	//> Widget's attributes
+	// Widget's attributes
 	void attrList( vector<string> &list );
 	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
 	void attrDel( const string &attr, bool allInher = false );
@@ -215,18 +213,18 @@ class Widget : public TCntrNode
 	int  attrPos( const string &iattr );
 	virtual AutoHD<Attr> attrAt( const string &attr, int lev = -1 );
 
-	//> Include widgets
+	// Include widgets
 	void wdgList( vector<string> &list, bool fromLnk = false );
 	bool wdgPresent( const string &wdg );
 	virtual void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	void wdgDel( const string &wid, bool full = false )	{ chldDel(inclWdg, wid, -1, full); }
 	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
-	//> Data access
+	// Data access
 	virtual void resourceList( vector<string> &ls )				{ }
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
-	//> Context helps
+	// Context helps
 	static string helpImg( );
 	static string helpColor( );
 	static string helpFont( );
@@ -256,7 +254,7 @@ class Widget : public TCntrNode
 	virtual pthread_mutex_t	&mtxAttr( )	{ return mtxAttrM; }
 
 	//Attributes
-	//> Generic data
+	// Generic data
 	const string	mId;			//Widget identifier
 
 	unsigned char	inclWdg		:3;

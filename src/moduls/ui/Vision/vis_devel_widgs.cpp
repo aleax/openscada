@@ -709,8 +709,8 @@ bool InspAttr::event( QEvent *event )
 void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 {
     string nattr, nwdg;
-    QAction *actClr, *actCopy, *actEdit;
-    actClr = actCopy = actEdit = NULL;
+    QAction *actClr, *actChDown, *actCopy, *actEdit;
+    actClr = actChDown = actCopy = actEdit = NULL;
     ModInspAttr::Item *it = NULL;
 
     //Attribute
@@ -721,8 +721,7 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	//Attribute widget
 	ModInspAttr::Item *cit = it;
 	while(cit)
-	    if(cit->type() == ModInspAttr::Item::Wdg)
-	    {
+	    if(cit->type() == ModInspAttr::Item::Wdg) {
 		nwdg = cit->id();
 		break;
 	    }
@@ -732,32 +731,32 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
     QMenu popup;
 
     //Add actions
-    if(it)
-    {
-	//> Copy action
+    if(it) {
+	// Copy action
 	QImage ico_t;
 	if(!ico_t.load(TUIS::icoGet("editcopy",NULL,true).c_str())) ico_t.load(":/images/editcopy.png");
 	actCopy = new QAction(QPixmap::fromImage(ico_t),_("Copy"),this);
 	popup.addAction(actCopy);
-	if(it->flag()&ModInspAttr::Item::FullText)
-	{
+	if(it->flag()&ModInspAttr::Item::FullText) {
 	    if(!ico_t.load(TUIS::icoGet("edit",NULL,true).c_str())) ico_t.load(":/images/edit.png");
 	    actEdit = new QAction(QPixmap::fromImage(ico_t),_("Edit"),this);
 	    popup.addAction(actEdit);
 	}
 
 	//> Changes clear action
-	if(it->modify())
-	{
+	if(it->modify()) {
 	    if(!ico_t.load(TUIS::icoGet("reload",NULL,true).c_str())) ico_t.load(":/images/reload.png");
 	    actClr = new QAction(QPixmap::fromImage(ico_t),_("Clear changes"),this);
 	    actClr->setStatusTip(_("Press to clear attribute's changes."));
 	    popup.addAction(actClr);
+	    if(!ico_t.load(TUIS::icoGet("down",NULL,true).c_str())) ico_t.load(":/images/down.png");
+	    actChDown = new QAction(QPixmap::fromImage(ico_t),_("Changes put down to the parent"),this);
+	    actChDown->setStatusTip(_("Press to put down attribute's changes to the parent."));
+	    popup.addAction(actChDown);
 	}
     }
 
-    if(!popup.isEmpty())
-    {
+    if(!popup.isEmpty()) {
 	QAction *rez = popup.exec(QCursor::pos());
 	if(actCopy && rez == actCopy) QApplication::clipboard()->setText(it->data().toString());
 	else if(actEdit && rez == actEdit) {
@@ -795,7 +794,10 @@ void InspAttr::contextMenuEvent( QContextMenuEvent *event )
 	    modelData.mainWin()->visualItClear(nwdg+"/a_"+nattr);
 	    modelData.setWdg(modelData.curWdg());
 	}
-
+	else if(actChDown && rez == actChDown) {
+	    modelData.mainWin()->visualItDownParent(nwdg+"/a_"+nattr);
+	    modelData.setWdg(modelData.curWdg());
+	}
 	popup.clear();
     }
 }
@@ -1675,6 +1677,7 @@ void WdgTree::ctrTreePopup( )
     popup.addAction(owner()->actVisItAdd);
     popup.addAction(owner()->actVisItDel);
     popup.addAction(owner()->actVisItClear);
+    popup.addAction(owner()->actVisItChDown);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
     popup.addSeparator();
@@ -1922,6 +1925,7 @@ void ProjTree::ctrTreePopup( )
     popup.addAction(owner()->actVisItAdd);
     popup.addAction(owner()->actVisItDel);
     popup.addAction(owner()->actVisItClear);
+    popup.addAction(owner()->actVisItChDown);
     popup.addAction(owner()->actVisItProp);
     popup.addAction(owner()->actVisItEdit);
     popup.addSeparator();
@@ -2438,8 +2442,8 @@ void DevelWdgView::wdgPopup( )
 	{
 	    popup.addAction(mainWin()->actVisItDel);
 	    popup.addAction(mainWin()->actVisItClear);
-	    if( sel_cnt == 1 )
-	    {
+	    popup.addAction(mainWin()->actVisItChDown);
+	    if(sel_cnt == 1) {
 		popup.addAction(mainWin()->actVisItProp);
 		popup.addAction(mainWin()->actVisItEdit);
 	    }

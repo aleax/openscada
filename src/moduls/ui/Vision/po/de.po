@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-09 20:15+0300\n"
+"POT-Creation-Date: 2014-07-08 20:25+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -34,7 +34,7 @@ msgstr "Roman Savotschenko, Maxim Lysjenko, Ksenija Jaschina"
 msgid "Visual operation user interface."
 msgstr "Benutzerschnittstelle"
 
-#: tvision.cpp:115 tvision.cpp:121 vis_devel.cpp:856 vis_run.cpp:956
+#: tvision.cpp:115 tvision.cpp:121 vis_devel.cpp:845 vis_run.cpp:953
 msgid "Developers"
 msgstr "Entwickler"
 
@@ -80,7 +80,7 @@ msgstr "Speicherung des Moduls."
 msgid "Error connection to remote station!"
 msgstr "Fehler beim Verbinden an die enfernte Station!"
 
-#: tvision.cpp:256 vis_widgs.cpp:413
+#: tvision.cpp:256 vis_widgs.cpp:412
 msgid "Auth wrong!!!"
 msgstr "Authentifizierungsfehler!!!"
 
@@ -169,217 +169,213 @@ msgstr ""
 "Verwenden Sie %f für Dateinamen. Falls Dateiname nicht verwendet wird, "
 "werden die Dateien in den Kanal gesendet."
 
-#: tvision.cpp:368
-msgid "Options help"
-msgstr "Optionen Hilfe"
-
-#: vis_devel.cpp:60
+#: vis_devel.cpp:59
 #, c-format
 msgid "OpenSCADA Vision developing: %s"
 msgstr "OpenSCADA Vision-Entwicklung: %s"
 
-#: vis_devel.cpp:72 vis_run.cpp:147
+#: vis_devel.cpp:71 vis_run.cpp:146
 msgid "Full screen"
 msgstr "Vollbild"
 
-#: vis_devel.cpp:74 vis_run.cpp:149
+#: vis_devel.cpp:73 vis_run.cpp:148
 msgid "Full screen toggle"
 msgstr "Umschalten Vollbild"
 
-#: vis_devel.cpp:75 vis_run.cpp:150
+#: vis_devel.cpp:74 vis_run.cpp:149
 msgid "The button for full screen toggle"
 msgstr "Schaltfläche zum Umschalten des Vollbilds"
 
-#: vis_devel.cpp:76 vis_run.cpp:151
+#: vis_devel.cpp:75 vis_run.cpp:150
 msgid "Press for toggle full screen."
 msgstr "Betätigen zum Umschalten des Vollbilds."
 
-#: vis_devel.cpp:81 vis_run.cpp:131
+#: vis_devel.cpp:80 vis_run.cpp:130
 msgid "&Close"
 msgstr "&Schliessen"
 
-#: vis_devel.cpp:83 vis_run.cpp:133
+#: vis_devel.cpp:82 vis_run.cpp:132
 msgid "Close Vision window"
 msgstr "Schliessen des Fensters Vision"
 
-#: vis_devel.cpp:84
+#: vis_devel.cpp:83
 msgid "The button for closing Vision developing window"
 msgstr "Schaltfläche zum Schliessen des Entwicklungsfensters Vision"
 
-#: vis_devel.cpp:85
+#: vis_devel.cpp:84
 msgid "Press to close the current Vision developing window."
 msgstr "Betätigen zum Schliessen des Entwicklungsfensters Vision"
 
-#: vis_devel.cpp:89 vis_run.cpp:139
+#: vis_devel.cpp:88 vis_run.cpp:138
 msgid "&Quit"
 msgstr "&Beenden"
 
-#: vis_devel.cpp:91 vis_run.cpp:141
+#: vis_devel.cpp:90 vis_run.cpp:140
 msgid "Quit from OpenSCADA"
 msgstr "Beenden von OpenSCADA"
 
-#: vis_devel.cpp:92 vis_run.cpp:142
+#: vis_devel.cpp:91 vis_run.cpp:141
 msgid "The button for full quit from OpenSCADA"
 msgstr "Schaltfläche für das Beenden von OpenSCADA"
 
-#: vis_devel.cpp:93 vis_run.cpp:143
+#: vis_devel.cpp:92 vis_run.cpp:142
 msgid "Press for full quit from OpenSCADA system."
 msgstr "Betätigen um OpenSCADA zu beenden"
 
-#: vis_devel.cpp:97 vis_run.cpp:157
+#: vis_devel.cpp:96 vis_run.cpp:156
 msgid "&About"
 msgstr "&Über"
 
-#: vis_devel.cpp:98 vis_run.cpp:158
+#: vis_devel.cpp:97 vis_run.cpp:157
 msgid "Program and OpenSCADA information"
 msgstr "OpenSCADA-Information"
 
-#: vis_devel.cpp:99 vis_run.cpp:159
+#: vis_devel.cpp:98 vis_run.cpp:158
 msgid "The button for display the program and OpenSCADA information"
 msgstr "Schaltfläche Informationen über OpenSCADA-"
 
-#: vis_devel.cpp:100
+#: vis_devel.cpp:99
 msgid "Press to display the program and OpenSCADA information."
 msgstr "Betätigen um Informationen über OpenSCADA zu erhalten."
 
-#: vis_devel.cpp:103 vis_run.cpp:163
+#: vis_devel.cpp:102 vis_run.cpp:162
 msgid "About &Qt"
 msgstr "Über &Qt"
 
-#: vis_devel.cpp:104 vis_run.cpp:164
+#: vis_devel.cpp:103 vis_run.cpp:163
 msgid "Qt information"
 msgstr "Qt-Information"
 
-#: vis_devel.cpp:105 vis_run.cpp:165
+#: vis_devel.cpp:104 vis_run.cpp:164
 msgid "The button for getting the using QT information"
 msgstr "Schaltfläche für Informationen über QT"
 
-#: vis_devel.cpp:106 vis_run.cpp:166
+#: vis_devel.cpp:105 vis_run.cpp:165
 msgid "Press to get the using QT information."
 msgstr "Betätigen um Informationen über QT zu erhalten."
 
-#: vis_devel.cpp:110 vis_devel.cpp:118 vis_devel.cpp:125 vis_run.cpp:170
-#: vis_run.cpp:178
+#: vis_devel.cpp:109 vis_devel.cpp:116 vis_devel.cpp:122 vis_run.cpp:169
+#: vis_run.cpp:176
 msgid "%1 manual"
 msgstr "%1 Handbuch"
 
-#: vis_devel.cpp:114 vis_devel.cpp:121 vis_devel.cpp:128 vis_run.cpp:174
-#: vis_run.cpp:181
+#: vis_devel.cpp:112 vis_devel.cpp:118 vis_devel.cpp:124 vis_run.cpp:172
+#: vis_run.cpp:178
 msgid "The button for getting the using %1 manual"
 msgstr "Schaltfläche für %1 Handbuch"
 
-#: vis_devel.cpp:115 vis_devel.cpp:122 vis_devel.cpp:129 vis_run.cpp:175
-#: vis_run.cpp:182
+#: vis_devel.cpp:113 vis_devel.cpp:119 vis_devel.cpp:125 vis_run.cpp:173
+#: vis_run.cpp:179
 msgid "Press to get the using %1 manual."
 msgstr "Betätigen um %1 Handbuch."
 
-#: vis_devel.cpp:133 vis_run.cpp:186
+#: vis_devel.cpp:129 vis_run.cpp:183
 msgid "What's &This"
 msgstr "Was ist &das"
 
-#: vis_devel.cpp:135 vis_run.cpp:188
+#: vis_devel.cpp:131 vis_run.cpp:185
 msgid "The button for question about GUI elements"
 msgstr "Schaltfläche für Informationen über die Benutzerschnittstelle"
 
-#: vis_devel.cpp:136 vis_run.cpp:189
+#: vis_devel.cpp:132 vis_run.cpp:186
 msgid "Get respond about user interface elements"
 msgstr "Hilfe über die Elemente der Benutzerschnittstelle"
 
-#: vis_devel.cpp:137 vis_run.cpp:190
+#: vis_devel.cpp:133 vis_run.cpp:187
 msgid "Press to respond about user interface elements."
 msgstr "Betätigen um Informationen über die Benutzerschnittstelle zu erhalten"
 
-#: vis_devel.cpp:143
+#: vis_devel.cpp:139
 msgid "Load from DB"
 msgstr "Datenbank laden"
 
-#: vis_devel.cpp:144
+#: vis_devel.cpp:140
 msgid "Load item data from DB"
 msgstr "Elemente aus der Datenbank laden"
 
-#: vis_devel.cpp:145
+#: vis_devel.cpp:141
 msgid "The button for loading item data from DB"
 msgstr "Schaltfläche für das Laden der Elemente aus der Datenbank"
 
-#: vis_devel.cpp:146
+#: vis_devel.cpp:142
 msgid "Press to load item data from DB."
 msgstr "Betätigen um die Elemente aus der Datenbank zu laden."
 
-#: vis_devel.cpp:151
+#: vis_devel.cpp:147
 msgid "Save to DB"
 msgstr "Datenbank speichern"
 
-#: vis_devel.cpp:152
+#: vis_devel.cpp:148
 msgid "Save item data to DB"
 msgstr "Elemente in die Datenbank speichern"
 
-#: vis_devel.cpp:153
+#: vis_devel.cpp:149
 msgid "The button for saving item data to DB"
 msgstr "Schaltfläche für das Speichern der Elemente in die Datenbank"
 
-#: vis_devel.cpp:154
+#: vis_devel.cpp:150
 msgid "Press to save item data to DB."
 msgstr "Betätigen um die Elemente in die Datenbank zu speichern."
 
-#: vis_devel.cpp:160
+#: vis_devel.cpp:156
 msgid "Run project execution"
 msgstr "Projekt starten"
 
-#: vis_devel.cpp:161
+#: vis_devel.cpp:157
 msgid "Run project execution for selected item"
 msgstr "Starten des Projekts, für das ausgewählte Element"
 
-#: vis_devel.cpp:162
+#: vis_devel.cpp:158
 msgid "The button for running project execution for selected item"
 msgstr "Schaltfläche zum Starten des Projekts, für das ausgewählte Element"
 
-#: vis_devel.cpp:163
+#: vis_devel.cpp:159
 msgid "Press to run project execution for selected item."
 msgstr "Betätigen zum Starten des Projekts, für das ausgewählte Element"
 
-#: vis_devel.cpp:168 vis_devel.cpp:1055
+#: vis_devel.cpp:164 vis_devel.cpp:1044
 msgid "New project"
 msgstr "Neues Projekt"
 
-#: vis_devel.cpp:169
+#: vis_devel.cpp:165
 msgid "New project create"
 msgstr "Neues Projekt erstellen"
 
-#: vis_devel.cpp:170
+#: vis_devel.cpp:166
 msgid "The button for creation of the new project"
 msgstr "Schaltfläche zum Erstellen des neuen Projekts"
 
-#: vis_devel.cpp:171
+#: vis_devel.cpp:167
 msgid "Press to create the new project."
 msgstr "Betätigen, um ein neues Projekt zu erstellen."
 
-#: vis_devel.cpp:175
+#: vis_devel.cpp:171
 msgid "New library"
 msgstr "Neue Bibliothek"
 
-#: vis_devel.cpp:176
+#: vis_devel.cpp:172
 msgid "New widgets library creation"
 msgstr "Erstellen der Widgetsbibliothek"
 
-#: vis_devel.cpp:177
+#: vis_devel.cpp:173
 msgid "The button for creation of the new widgets library"
 msgstr "Schaltfläche zum Erstellen der neuen Bibliothek"
 
-#: vis_devel.cpp:178
+#: vis_devel.cpp:174
 msgid "Press to create the new widgets library."
 msgstr "Betätigen um die neue Bibliothek zu erstellen."
 
-#: vis_devel.cpp:182
+#: vis_devel.cpp:178
 msgid "Add visual item"
 msgstr "Element hinzufügen"
 
-#: vis_devel.cpp:183
+#: vis_devel.cpp:179
 msgid "Add visual item into library, container widget, project or page"
 msgstr ""
 "Hinzufügen des Elements in die Bibliothek, den Widgetscontainer, das Projekt "
 "oder die Seite"
 
-#: vis_devel.cpp:184
+#: vis_devel.cpp:180
 msgid ""
 "The button for addition of the visual item into library, container widget, "
 "project or page"
@@ -387,24 +383,24 @@ msgstr ""
 "Schaltfläche zum Hinzufügen des Elements in die Bibliothek, den "
 "Widgetscontainer, das Projekt oder die Seite"
 
-#: vis_devel.cpp:185
+#: vis_devel.cpp:181
 msgid ""
 "Press to add visual item into library, container widget, project or page."
 msgstr ""
 "Betätigen zum Hinzufügen des Elements in die Bibliothek, den "
 "Widgetscontainer,das Projekt oder die Seite ."
 
-#: vis_devel.cpp:191
+#: vis_devel.cpp:187
 msgid "Delete visual item"
 msgstr "Element löschen"
 
-#: vis_devel.cpp:192
+#: vis_devel.cpp:188
 msgid "Delete visual item from library, container widget, project or page"
 msgstr ""
 "Löschen des Elements aus der Bibliothek, dem Widgetscontainer, dem Projekt "
 "oder der Seite"
 
-#: vis_devel.cpp:193
+#: vis_devel.cpp:189
 msgid ""
 "The button for deleting visual item from library, container widget, project "
 "or page"
@@ -412,618 +408,634 @@ msgstr ""
 "Schaltfläche zum Löschen des Elements aus der Bibliothek, dem "
 "Widgetscontainer, dem Projekt oder der Seite"
 
-#: vis_devel.cpp:194
+#: vis_devel.cpp:190
 msgid ""
 "Press to delete visual item from library, container widget, project or page."
 msgstr ""
 "Betätigen zum Löschen des Elements aus der Bibliothek, dem Widgetscontainer, "
 "dem Projekt oder der Seite."
 
-#: vis_devel.cpp:200
+#: vis_devel.cpp:196
 msgid "Visual item properties"
 msgstr "Eigenschaften des Elements"
 
-#: vis_devel.cpp:201
+#: vis_devel.cpp:197
 msgid "Get visual item properties"
 msgstr "Laden der Eigenschaften des Elements"
 
-#: vis_devel.cpp:202
+#: vis_devel.cpp:198
 msgid "The button for getting the visual item properties"
 msgstr "Schaltfläche für die Eigenschaften des Elements"
 
-#: vis_devel.cpp:203
+#: vis_devel.cpp:199
 msgid "Press to get the visual item properties."
 msgstr "Betätigen für die Eigenschaften des Elements."
 
-#: vis_devel.cpp:209
+#: vis_devel.cpp:205
 msgid "Visual item edit"
 msgstr "Element bearbeiten"
 
-#: vis_devel.cpp:210
+#: vis_devel.cpp:206
 msgid "Goes visual item edit"
 msgstr "Zum Bearbeiten des Elementes"
 
-#: vis_devel.cpp:211
+#: vis_devel.cpp:207
 msgid "The button for going to visual item edition"
 msgstr "Schaltfläche zum Bearbeiten des Elements"
 
-#: vis_devel.cpp:212
+#: vis_devel.cpp:208
 msgid "Press to go to visual item edition."
 msgstr "Betätigen um Element zu bearbeiten."
 
-#: vis_devel.cpp:218
+#: vis_devel.cpp:214
 msgid "Visual item changes clear"
 msgstr "Änderungen zurücksetzen"
 
-#: vis_devel.cpp:219
+#: vis_devel.cpp:215
 msgid "Goes visual item changes clear"
 msgstr "Zum Zurücksetzen der Änderungen"
 
-#: vis_devel.cpp:220
+#: vis_devel.cpp:216
 msgid "The button for going to visual item changes clear"
 msgstr "Schaltfläche zum Zurücksetzen der Änderungen"
 
-#: vis_devel.cpp:221
+#: vis_devel.cpp:217
 msgid "Press to go to visual item changes clear."
 msgstr "Betätigen zum Zurücksetzen der Änderungen."
 
-#: vis_devel.cpp:226
+#: vis_devel.cpp:222
+msgid "Visual item changes put down"
+msgstr "Visuelle Element geändert legte"
+
+#: vis_devel.cpp:223
+msgid "Goes visual item changes put down to the parent"
+msgstr "Geht visuelle Element geändert legte auf das Mutter"
+
+#: vis_devel.cpp:224
+msgid "The button for going to visual item changes put down to the parent"
+msgstr "Die Schaltfläche für den Gang zum visuellen Element geändert legte auf das Mutter"
+
+#: vis_devel.cpp:225
+msgid "Press to go to visual item changes put down to the parent."
+msgstr "Drücken Sie, um visuelle Änderungen gehen Artikel legte auf das Mutter."
+
+#: vis_devel.cpp:230
 msgid "Visual item changes UnDo"
 msgstr "Visuelle Element Änderungen rückgängig"
 
-#: vis_devel.cpp:228
+#: vis_devel.cpp:232
 msgid "Make visual item changes UnDo:"
 msgstr "Machen Sie visuelle Element Änderungen rückgängig:"
 
-#: vis_devel.cpp:229
+#: vis_devel.cpp:233
 msgid "The button for making visual item changes UnDo"
 msgstr "Schaltfläche zum machen Sie visuelle Element Änderungen rückgängig"
 
-#: vis_devel.cpp:230
+#: vis_devel.cpp:234
 msgid "Press to make visual item changes UnDo."
 msgstr "Betätigen zum machen Sie visuelle Element Änderungen rückgängig."
 
-#: vis_devel.cpp:235
+#: vis_devel.cpp:239
 msgid "Visual item changes ReDo"
 msgstr "Visuelle Element ändert wiederholen Sie"
 
-#: vis_devel.cpp:237
+#: vis_devel.cpp:241
 msgid "Make visual item changes ReDo:"
 msgstr "Machen Sie visuelle Element ändert wiederholen Sie:"
 
-#: vis_devel.cpp:238
+#: vis_devel.cpp:242
 msgid "The button for making visual item changes ReDo"
 msgstr "Schaltfläche zum machen Sie visuelle Element ändert wiederholen Sie"
 
-#: vis_devel.cpp:239
+#: vis_devel.cpp:243
 msgid "Press to make visual item changes ReDo."
 msgstr "Betätigen zum machen Sie visuelle Element ändert wiederholen Sie."
 
-#: vis_devel.cpp:244
+#: vis_devel.cpp:248
 msgid "Visual item cut"
 msgstr "Element ausschneiden"
 
-#: vis_devel.cpp:246
+#: vis_devel.cpp:250
 msgid "Make visual item cut"
 msgstr "Ausschneiden des Elements"
 
-#: vis_devel.cpp:247
+#: vis_devel.cpp:251
 msgid "The button for making visual item cut"
 msgstr "Schaltfläche zum Ausschneiden des Elements"
 
-#: vis_devel.cpp:248
+#: vis_devel.cpp:252
 msgid "Press to make visual item cut."
 msgstr "Betätigen zum Ausschneiden des Elements."
 
-#: vis_devel.cpp:254
+#: vis_devel.cpp:258
 msgid "Visual item copy"
 msgstr "Element kopieren"
 
-#: vis_devel.cpp:256
+#: vis_devel.cpp:260
 msgid "Make visual item copy"
 msgstr "Kopieren des Elements"
 
-#: vis_devel.cpp:257
+#: vis_devel.cpp:261
 msgid "The button for making visual item copy"
 msgstr "Schaltfläche zum Kopieren des Elements"
 
-#: vis_devel.cpp:258
+#: vis_devel.cpp:262
 msgid "Press to make visual item copy."
 msgstr "Betätigen zum Kopieren des Elements."
 
-#: vis_devel.cpp:264
+#: vis_devel.cpp:268
 msgid "Visual item paste"
 msgstr "Element einfügen"
 
-#: vis_devel.cpp:266
+#: vis_devel.cpp:270
 msgid "Make visual item paste"
 msgstr "Einfügen des Elements"
 
-#: vis_devel.cpp:267
+#: vis_devel.cpp:271
 msgid "The button for making visual item paste"
 msgstr "Schaltfläche zum Einfügen des Elements"
 
-#: vis_devel.cpp:268
+#: vis_devel.cpp:272
 msgid "Press to make visual item paste."
 msgstr "Betätigen zum Einfügen des Elements."
 
-#: vis_devel.cpp:276
+#: vis_devel.cpp:280
 msgid "Up widget"
 msgstr "Widget an den Anfang verschieben"
 
-#: vis_devel.cpp:278
+#: vis_devel.cpp:282
 msgid "Raise selected widget to the top"
 msgstr "Verschieben ausgewählten Widget an den Anfang"
 
-#: vis_devel.cpp:279
+#: vis_devel.cpp:283
 msgid "The button for raising the selected widget to the top"
 msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets an den Anfang"
 
-#: vis_devel.cpp:280
+#: vis_devel.cpp:284
 msgid "Press to raise the selected widget to the top."
 msgstr "Betätigen zum Verschieben des ausgewählten Widgets an den Anfang."
 
-#: vis_devel.cpp:284
+#: vis_devel.cpp:288
 msgid "Down widget"
 msgstr "Widget ans Ende verschieben"
 
-#: vis_devel.cpp:286
+#: vis_devel.cpp:290
 msgid "Down selected widget to the bottom"
 msgstr "Verschieben ausgewählten Widget ans Ende"
 
-#: vis_devel.cpp:287
+#: vis_devel.cpp:291
 msgid "The button for downing the selected widget to the bottom"
 msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets ans Ende"
 
-#: vis_devel.cpp:288
+#: vis_devel.cpp:292
 msgid "Press to down the selected widget to the bottom."
 msgstr "Betätigen zum Verschieben des ausgewählten Widgets ans Ende."
 
-#: vis_devel.cpp:292
+#: vis_devel.cpp:296
 msgid "Rise widget"
 msgstr "Widget nach oben"
 
-#: vis_devel.cpp:294
+#: vis_devel.cpp:298
 msgid "Raise selected widget"
 msgstr "Verschieben den ausgewählten Widget nach oben"
 
-#: vis_devel.cpp:295
+#: vis_devel.cpp:299
 msgid "The button for raising the selected widget"
 msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets nach oben"
 
-#: vis_devel.cpp:296
+#: vis_devel.cpp:300
 msgid "Press to raise the selected widget."
 msgstr "Betätigen zum Verschieben des ausgewählten Widgets nach oben."
 
-#: vis_devel.cpp:300
+#: vis_devel.cpp:304
 msgid "Lower widget"
 msgstr "Widget nach unten"
 
-#: vis_devel.cpp:302
+#: vis_devel.cpp:306
 msgid "Down selected widget"
 msgstr "Verschieben ausgewählten Widget nach unten"
 
-#: vis_devel.cpp:303
+#: vis_devel.cpp:307
 msgid "The button for downing the selected widget"
 msgstr "Schaltfläche zum Verschieben des ausgewählten Widgets nach unten"
 
-#: vis_devel.cpp:304
+#: vis_devel.cpp:308
 msgid "Press to down the selected widget."
 msgstr "Betätigen zum Verschieben des ausgewählten Widgets nach unten."
 
-#: vis_devel.cpp:310
+#: vis_devel.cpp:314
 msgid "Align to left"
 msgstr "Links ausrichten"
 
-#: vis_devel.cpp:312
+#: vis_devel.cpp:316
 msgid "Align selected widgets to the left"
 msgstr "Ausrichten der ausgewählten Widgets links"
 
-#: vis_devel.cpp:313
+#: vis_devel.cpp:317
 msgid "The button for alignment of selected widgets to the left"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets links"
 
-#: vis_devel.cpp:314
+#: vis_devel.cpp:318
 msgid "Press to align selected widgets to the left."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets links."
 
-#: vis_devel.cpp:318
+#: vis_devel.cpp:322
 msgid "Align to vertical center"
 msgstr "Zur senkrechten Mitte ausrichten"
 
-#: vis_devel.cpp:320
+#: vis_devel.cpp:324
 msgid "Align selected widgets to the vertical center"
 msgstr "Ausrichten der ausgewählten Widgets zur senkrechten Mitte"
 
-#: vis_devel.cpp:321
+#: vis_devel.cpp:325
 msgid "The button for alignment of selected widgets to the vertical center"
 msgstr ""
 "Schaltfläche für Ausrichtung der ausgewählten Widgets zur senkrechten Mitte"
 
-#: vis_devel.cpp:322
+#: vis_devel.cpp:326
 msgid "Press to align selected widgets to the vertical center."
 msgstr ""
 "Betätigen für Ausrichtung der ausgewählten Widgets zur senkrechten Mitte."
 
-#: vis_devel.cpp:326
+#: vis_devel.cpp:330
 msgid "Align to right"
 msgstr "Rechts ausrichten"
 
-#: vis_devel.cpp:328
+#: vis_devel.cpp:332
 msgid "Align selected widgets to the right"
 msgstr "Ausrichten der ausgewählten Widgets rechts"
 
-#: vis_devel.cpp:329
+#: vis_devel.cpp:333
 msgid "The button for alignment of selected widgets to the right"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets rechts"
 
-#: vis_devel.cpp:330
+#: vis_devel.cpp:334
 msgid "Press to align selected widgets to the right."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets rechts."
 
-#: vis_devel.cpp:334
+#: vis_devel.cpp:338
 msgid "Align to top"
 msgstr "Oben ausrichten"
 
-#: vis_devel.cpp:336
+#: vis_devel.cpp:340
 msgid "Align selected widgets to the top"
 msgstr "Ausrichten der ausgewählten Widgets oben"
 
-#: vis_devel.cpp:337
+#: vis_devel.cpp:341
 msgid "The button for alignment of selected widgets to the top"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets oben"
 
-#: vis_devel.cpp:338
+#: vis_devel.cpp:342
 msgid "Press to align selected widgets to the top."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets oben."
 
-#: vis_devel.cpp:342
+#: vis_devel.cpp:346
 msgid "Align to horizontal center"
 msgstr "Zur waagerechten Mitte ausrichten"
 
-#: vis_devel.cpp:344
+#: vis_devel.cpp:348
 msgid "Align selected widgets to the horizontal center"
 msgstr "Ausrichten der ausgewählten Widgets zur waagerechten Mitte"
 
-#: vis_devel.cpp:345
+#: vis_devel.cpp:349
 msgid "The button for alignment selected widgets to the horizontal center"
 msgstr ""
 "Schaltfläche fur Ausrichtung der ausgewählten Widgets zur waagerechten Mitte"
 
-#: vis_devel.cpp:346
+#: vis_devel.cpp:350
 msgid "Press to align selected widgets to the horizontal center."
 msgstr ""
 "Betätigen fur Ausrichtung der ausgewählten Widgets zur waagerechten Mitte."
 
-#: vis_devel.cpp:350
+#: vis_devel.cpp:354
 msgid "Align to bottom"
 msgstr "Unten ausrichten"
 
-#: vis_devel.cpp:352
+#: vis_devel.cpp:356
 msgid "Align selected widgets to the bottom"
 msgstr "Ausrichten der ausgewählten Widgets unten"
 
-#: vis_devel.cpp:353
+#: vis_devel.cpp:357
 msgid "The button for alignment selected widgets to the bottom"
 msgstr "Schaltfläche für Ausrichtung der ausgewählten Widgets unten"
 
-#: vis_devel.cpp:354
+#: vis_devel.cpp:358
 msgid "Press to align selected widgets to the bottom."
 msgstr "Betätigen für Ausrichtung der ausgewählten Widgets unten."
 
-#: vis_devel.cpp:360
+#: vis_devel.cpp:364
 msgid "Cursor"
 msgstr "Cursor"
 
-#: vis_devel.cpp:364
+#: vis_devel.cpp:368
 msgid "Unset cursor"
 msgstr "Rückstellung des Cursors"
 
-#: vis_devel.cpp:365
+#: vis_devel.cpp:369
 msgid "The button for unset cursor"
 msgstr "Schaltfläche zum Rückstellen des Cursormodus"
 
-#: vis_devel.cpp:366
+#: vis_devel.cpp:370
 msgid "Press to unset cursor"
 msgstr "Betätigen zum Rückstellen des Cursormodus"
 
-#: vis_devel.cpp:370
+#: vis_devel.cpp:374
 msgid "Add line"
 msgstr "Eine Linie hinzufügen"
 
-#: vis_devel.cpp:373
+#: vis_devel.cpp:377
 msgid "Add line to elementary figure"
 msgstr "Hinzufügen einer Linie zur elementaren Figur"
 
-#: vis_devel.cpp:374
+#: vis_devel.cpp:378
 msgid "The button for adding line to elementary figure"
 msgstr "Schaltfläche zum Hinzufügen einer Linie zur elementaren Figur"
 
-#: vis_devel.cpp:375
+#: vis_devel.cpp:379
 msgid "Press to add line to elementary figure."
 msgstr "Betätigen zum Hinzufügen einer Linie zur elementaren Figur."
 
-#: vis_devel.cpp:379
+#: vis_devel.cpp:383
 msgid "Add arc"
 msgstr "Einen Bogen hinzufügen"
 
-#: vis_devel.cpp:382
+#: vis_devel.cpp:386
 msgid "Add arc to elementary figure"
 msgstr "Einen Bogen zur elementaren Figur hinzufügen"
 
-#: vis_devel.cpp:383
+#: vis_devel.cpp:387
 msgid "The button for adding arc to elementary figure"
 msgstr "Schaltfläche zum Hinzufügen eines Bogens zur elementaren Figur"
 
-#: vis_devel.cpp:384
+#: vis_devel.cpp:388
 msgid "Press to add arc to elementary figure."
 msgstr "Betätigen zum Hinzufügen eines Bogens zur elementaren Figur."
 
-#: vis_devel.cpp:388
+#: vis_devel.cpp:392
 msgid "Add Besier curve"
 msgstr "Den Besie-Bogen hinzufügen"
 
-#: vis_devel.cpp:391
+#: vis_devel.cpp:395
 msgid "Add Besier curve to elementary figure"
 msgstr "Hinzufügen des Besie-Bogens zur elementaren Figur"
 
-#: vis_devel.cpp:392
+#: vis_devel.cpp:396
 msgid "The button for adding Besier curve to elementary figure"
 msgstr "Schaltfläche zum Hinzufügen des Besie-Bogens zur elementaren Figur"
 
-#: vis_devel.cpp:393
+#: vis_devel.cpp:397
 msgid "Press to add Besier curve to elementary figure."
 msgstr "Betätigen zum Hinzufügen des Besie-Bogens zur elementaren Figur."
 
-#: vis_devel.cpp:397
+#: vis_devel.cpp:401
 msgid "Connections"
 msgstr "Verbindungen"
 
-#: vis_devel.cpp:401
+#: vis_devel.cpp:405
 msgid "Enable connections"
 msgstr "Verbindungen einschalten"
 
-#: vis_devel.cpp:402
+#: vis_devel.cpp:406
 msgid "The button for enabling connections"
 msgstr "Schaltfläche zum Einschalten der Verbindungen"
 
-#: vis_devel.cpp:403
+#: vis_devel.cpp:407
 msgid "Press to enable connections"
 msgstr "Betätigen zum Einschalten der Verbindungen"
 
-#: vis_devel.cpp:408
+#: vis_devel.cpp:412
 msgid "Cl&ose"
 msgstr "&Schließen"
 
-#: vis_devel.cpp:409
+#: vis_devel.cpp:413
 msgid "Close active window"
 msgstr "Schließen des aktiven Fensters"
 
-#: vis_devel.cpp:410
+#: vis_devel.cpp:414
 msgid "The button for the active window closing"
 msgstr "Schaltfläche zum Schließen des aktiven Fensters"
 
-#: vis_devel.cpp:411
+#: vis_devel.cpp:415
 msgid "Press to close active window."
 msgstr "Betätigen zum Schließen des aktiven Fensters."
 
-#: vis_devel.cpp:414
+#: vis_devel.cpp:418
 msgid "Close &All"
 msgstr "Schließen &alle"
 
-#: vis_devel.cpp:415
+#: vis_devel.cpp:419
 msgid "Close all windows"
 msgstr "Alle Fenster schließen"
 
-#: vis_devel.cpp:416
+#: vis_devel.cpp:420
 msgid "The button for all windows closing"
 msgstr "Schaltfläche zum Schließen aller Fenster"
 
-#: vis_devel.cpp:417
+#: vis_devel.cpp:421
 msgid "Press to close all windows."
 msgstr "Betätigen zum Schließen aller Fenster."
 
-#: vis_devel.cpp:420
+#: vis_devel.cpp:424
 msgid "&Tile"
 msgstr "&Aufschichten"
 
-#: vis_devel.cpp:421
+#: vis_devel.cpp:425
 msgid "Tile all windows"
 msgstr "Alle Fenster aufschichten"
 
-#: vis_devel.cpp:422
+#: vis_devel.cpp:426
 msgid "The button for all windows tiling"
 msgstr "Schaltfläche zum Aufschichten aller Fenster"
 
-#: vis_devel.cpp:423
+#: vis_devel.cpp:427
 msgid "Press to tile all windows."
 msgstr "Betätigen zum Aufschichten aller Fenster."
 
-#: vis_devel.cpp:426
+#: vis_devel.cpp:430
 msgid "&Cascade"
 msgstr "&Staffeln"
 
-#: vis_devel.cpp:427
+#: vis_devel.cpp:431
 msgid "Cascade all windows"
 msgstr "Staffeln aller Fenster"
 
-#: vis_devel.cpp:428
+#: vis_devel.cpp:432
 msgid "The button for all windows cascading"
 msgstr "Schaltfläche zum Staffeln aller Fenster"
 
-#: vis_devel.cpp:429
+#: vis_devel.cpp:433
 msgid "Press to cascade all windows."
 msgstr "Betätigen zum Staffeln aller Fenster."
 
-#: vis_devel.cpp:432
+#: vis_devel.cpp:436
 msgid "Ne&xt"
 msgstr "&Nächstes"
 
-#: vis_devel.cpp:433
+#: vis_devel.cpp:437
 msgid "Activate next window"
 msgstr "Nächstes Fenster aktivieren"
 
-#: vis_devel.cpp:434
+#: vis_devel.cpp:438
 msgid "The button for next window activation"
 msgstr "Schaltfläche zum Aktivieren des nächsten Fensters"
 
-#: vis_devel.cpp:435
+#: vis_devel.cpp:439
 msgid "Press to activate next window."
 msgstr "Betätigen zum Aktivieren des nächsten Fensters."
 
-#: vis_devel.cpp:438
+#: vis_devel.cpp:442
 msgid "Pre&vious"
 msgstr "&Vorheriges"
 
-#: vis_devel.cpp:439
+#: vis_devel.cpp:443
 msgid "Activate previous window"
 msgstr "Vorheriges Fenster aktivieren"
 
-#: vis_devel.cpp:440
+#: vis_devel.cpp:444
 msgid "The button for previous window activation"
 msgstr "Schaltfläche zum Aktivieren des vorherigen Fensters"
 
-#: vis_devel.cpp:441
+#: vis_devel.cpp:445
 msgid "Press to activate previous window."
 msgstr "Betätigen zum Aktivieren des vorherigen Fensters."
 
-#: vis_devel.cpp:452 vis_run.cpp:227
+#: vis_devel.cpp:456 vis_run.cpp:224
 msgid "&File"
 msgstr "&Datei"
 
-#: vis_devel.cpp:458
+#: vis_devel.cpp:462
 msgid "&Edit"
 msgstr "&Bearbeiten"
 
-#: vis_devel.cpp:465
+#: vis_devel.cpp:469
 msgid "&Project"
 msgstr "&Projekt"
 
-#: vis_devel.cpp:474
+#: vis_devel.cpp:479
 msgid "&Widget"
 msgstr "&Widget"
 
-#: vis_devel.cpp:482 vis_devel.cpp:500 vis_run.cpp:238
+#: vis_devel.cpp:488 vis_devel.cpp:506 vis_run.cpp:235
 msgid "&View"
 msgstr "An&sicht"
 
-#: vis_devel.cpp:496
+#: vis_devel.cpp:502
 msgid "&Window"
 msgstr "&Fenster"
 
-#: vis_devel.cpp:503 vis_run.cpp:240
+#: vis_devel.cpp:509 vis_run.cpp:237
 msgid "&Help"
 msgstr "&Hilfe"
 
-#: vis_devel.cpp:514
+#: vis_devel.cpp:520
 msgid "Visual items toolbar"
 msgstr "Toolbar der Elemente"
 
-#: vis_devel.cpp:539
+#: vis_devel.cpp:545
 msgid "Widgets view functions"
 msgstr "Widgetsansichtfunktionen"
 
-#: vis_devel.cpp:556
+#: vis_devel.cpp:562
 msgid "Elementars figure tools"
 msgstr "Werkzeuge der elementaren Figuren"
 
-#: vis_devel.cpp:569 vis_run.cpp:268
+#: vis_devel.cpp:575 vis_run.cpp:265
 msgid "This label displays current user."
 msgstr "Dieses Feld zeigt den aktuellen Benutzer."
 
-#: vis_devel.cpp:570
+#: vis_devel.cpp:576
 msgid "Field for display the current user."
 msgstr "Feld für Anzeige des aktuellen Benutzers."
 
-#: vis_devel.cpp:571 vis_run.cpp:270
+#: vis_devel.cpp:577 vis_run.cpp:267
 msgid "Double click to change user."
 msgstr "Zweimal klicken um den Benutzers zu wechseln."
 
-#: vis_devel.cpp:574
+#: vis_devel.cpp:580
 msgid "This label displays the using VCA engine station."
 msgstr "Dieses Feld zeigt die Station der VCA Maschine."
 
-#: vis_devel.cpp:575
+#: vis_devel.cpp:581
 msgid "Field for display of the using VCA engine station."
 msgstr "Feld für Anzeige der Station der VCA Maschine."
 
-#: vis_devel.cpp:578
+#: vis_devel.cpp:584
 msgid "This label displays widgets' scaling mode."
 msgstr "Dieses Zeichen zeigt Maßstab des Widgets."
 
-#: vis_devel.cpp:579
+#: vis_devel.cpp:585
 msgid "Field for display widgets' scaling mode."
 msgstr "Feld für Anzeige des Maßstab des Widgets . "
 
-#: vis_devel.cpp:580
+#: vis_devel.cpp:586
 msgid "Click to change widgets' scaling mode."
 msgstr "Betätigen um Maßstab des Widgets zu ändern."
 
-#: vis_devel.cpp:584
+#: vis_devel.cpp:590
 msgid "This label displays modifying."
 msgstr "Dieses Feld zeigt die Änderung."
 
-#: vis_devel.cpp:585
+#: vis_devel.cpp:591
 msgid "Field for display modifying."
 msgstr "Feld für Anzeige der Änderungen."
 
-#: vis_devel.cpp:586
+#: vis_devel.cpp:592
 msgid "Click to save all modifyings."
 msgstr "Klicken, um alle Änderungen speichern."
 
-#: vis_devel.cpp:589
+#: vis_devel.cpp:595
 msgid "This label displays current widget's scale."
 msgstr "Dieses Zeichen zeigt den Bereich des aktuellen Widgets an."
 
-#: vis_devel.cpp:590
+#: vis_devel.cpp:596
 msgid "Field for display the scale of the current widget."
 msgstr "Feld für Anzeige des Bereichs des aktuellen Widgets."
 
-#: vis_devel.cpp:597
+#: vis_devel.cpp:603
 msgid "Dock window for projects management."
 msgstr "Fenster für Steuerung von Projekten."
 
-#: vis_devel.cpp:601
+#: vis_devel.cpp:607
 msgid "Dock window for widgets and their libraries management."
 msgstr "Fenster für Steuerung von Widgets und Bibliotheken."
 
-#: vis_devel.cpp:612
+#: vis_devel.cpp:618
 msgid "Dock window for widget's attributes inspection."
 msgstr "Fenster für Untersuchung der Widgetsattribute."
 
-#: vis_devel.cpp:614
+#: vis_devel.cpp:620
 msgid "Dock window for widget's links inspection."
 msgstr "Fenster für Untersuchung der Widgetslinks."
 
-#: vis_devel.cpp:657 vis_run.cpp:314
+#: vis_devel.cpp:663 vis_run.cpp:311
 msgid "Ready"
 msgstr "Fertig"
 
-#: vis_devel.cpp:758
+#: vis_devel.cpp:750
 msgid "Icons size"
 msgstr "Icons Größe"
 
-#: vis_devel.cpp:762
+#: vis_devel.cpp:754
 msgid "Small (16x16)"
 msgstr "Klein (16x16)"
 
-#: vis_devel.cpp:768
+#: vis_devel.cpp:760
 msgid "Medium (22x22)"
 msgstr "Mittel (22x22)"
 
-#: vis_devel.cpp:774
+#: vis_devel.cpp:766
 msgid "Big (32x32)"
 msgstr "Big (32x32)"
 
-#: vis_devel.cpp:780
+#: vis_devel.cpp:772
 msgid "Huge (48x48)"
 msgstr "Zu groß (48x48)"
 
-#: vis_devel.cpp:825
+#: vis_devel.cpp:814
 msgid "Visual items save"
 msgstr "Speicherung der Elemente"
 
-#: vis_devel.cpp:825
+#: vis_devel.cpp:814
 msgid ""
 "Some visual items changed.\n"
 "Save the changes to DB on exit?"
@@ -1031,7 +1043,7 @@ msgstr ""
 "Einige visuelle Elemente verändert.\n"
 "Speichern Sie die Änderungen DB an der Ausfahrt?"
 
-#: vis_devel.cpp:854 vis_run.cpp:954
+#: vis_devel.cpp:843 vis_run.cpp:951
 msgid ""
 "%1 v%2.\n"
 "%3\n"
@@ -1057,63 +1069,71 @@ msgstr ""
 "Autor: %11\n"
 "Web Seite: %12"
 
-#: vis_devel.cpp:995
+#: vis_devel.cpp:913 vis_run.cpp:1015
+msgid "Manual"
+msgstr "Handbuch"
+
+#: vis_devel.cpp:914 vis_run.cpp:1016
+msgid "No the manual '%1' found offline or online!"
+msgstr "Nein das Handbuch '%1' gefunden, offline oder online!"
+
+#: vis_devel.cpp:984
 msgid "Are you sure of loading visual items '%1' from DB?"
 msgstr "Wollen Sie wirklich die Elemente '%1' aus der Datenbank laden?"
 
-#: vis_devel.cpp:996
+#: vis_devel.cpp:985
 msgid "Load visual item's data from DB"
 msgstr "Element aus der Datenbank laden"
 
-#: vis_devel.cpp:1025
+#: vis_devel.cpp:1014
 msgid "Are you sure of saving all modifications to DB?"
 msgstr "Sind Sie sicher, alle zu retten Änderungen der DB?"
 
-#: vis_devel.cpp:1026
+#: vis_devel.cpp:1015
 msgid "Are you sure of saving visual items '%1' to DB?"
 msgstr "Wollen Sie wirklich die Elemente '%1' in die Datenbank speichern?"
 
-#: vis_devel.cpp:1027
+#: vis_devel.cpp:1016
 msgid "Save visual item's data to DB"
 msgstr "Speichern des Elements in die Datenbank"
 
-#: vis_devel.cpp:1055 vis_devel.cpp:1432
+#: vis_devel.cpp:1044 vis_devel.cpp:1450
 msgid "Enter new project's identifier and name."
 msgstr "Bezeichnung und Namen des neuen Projekts eingeben."
 
-#: vis_devel.cpp:1075 vis_devel.cpp:1441
+#: vis_devel.cpp:1064 vis_devel.cpp:1459
 msgid "Enter new widget's library identifier and name."
 msgstr "Bezeichnung und Namen des neuen Widgetsbibliothek eingeben."
 
-#: vis_devel.cpp:1075
+#: vis_devel.cpp:1064
 msgid "New widget's library"
 msgstr "Neue Widgetsbibliothek"
 
-#: vis_devel.cpp:1111 vis_devel.cpp:1450
+#: vis_devel.cpp:1100 vis_devel.cpp:1468
 msgid "Enter new widget's/page's identifier and name."
 msgstr "Bezeichnung und Namen des neuen Widgets/der neuen Seite eingeben."
 
-#: vis_devel.cpp:1111
+#: vis_devel.cpp:1100
 msgid "Create widget/page"
 msgstr "Widget/Seite erstellen"
 
-#: vis_devel.cpp:1214
+#: vis_devel.cpp:1203
 msgid "Are you sure of deleting visual items: '%1'?"
 msgstr "Wollen Sie wirklich die Elemente '%1' löschen?"
 
-#: vis_devel.cpp:1215
+#: vis_devel.cpp:1204
 msgid "Delete visual items"
 msgstr "Löschen der Elemente"
 
-#: vis_devel.cpp:1304
+#: vis_devel.cpp:1293
 msgid "Widget: %1"
 msgstr "Widget: %1"
 
-#: vis_devel.cpp:1312
+#: vis_devel.cpp:1301
 msgid "Widget's '%1' editing window is already opened."
 msgstr "Fenster für die Widgetbearbeitung '%1' ist schon geöffnet."
 
-#: vis_devel.cpp:1363
+#: vis_devel.cpp:1352
 msgid ""
 "Are you sure of clear all changes for visual items: '%1'?\n"
 "All changes will be lost and variables are returning to default values or "
@@ -1123,206 +1143,214 @@ msgstr ""
 "Alle Änderungen gehen verloren und die Variablen erhalten Standardwerte oder "
 "vererbte Werte!"
 
-#: vis_devel.cpp:1365
+#: vis_devel.cpp:1354 vis_devel.cpp:1386
 msgid "Visual items' changes clear"
 msgstr "Zurücksetzen der Änderungen"
 
-#: vis_devel.cpp:1412
+#: vis_devel.cpp:1384
+msgid ""
+"Are you sure for put down to parent all changes for visual items: '%1'?\n"
+"All other inherited from the parent visual items will use the changes!"
+msgstr ""
+"Sind Sie sicher, dass für bis zu Mutter alle Änderungen für visuelle Elemente setzen: '%1'?\n"
+"Alle anderen von den Mutter geerbt visuelle Elemente werden die Änderungen zu verwenden!"
+
+#: vis_devel.cpp:1430
 msgid "Visual items move or copy"
 msgstr "Kopieren oder Verschieben der Elementen"
 
-#: vis_devel.cpp:1431
+#: vis_devel.cpp:1449
 msgid "Project '%1' move.\n"
 msgstr "Verschieben von Projekt '%1'.\n"
 
-#: vis_devel.cpp:1431
+#: vis_devel.cpp:1449
 msgid "Project '%1' copy.\n"
 msgstr "Kopieren von Projekt '%1'.\n"
 
-#: vis_devel.cpp:1440
+#: vis_devel.cpp:1458
 msgid "Widget's library '%1' move.\n"
 msgstr "Verschieben der Widgetsbibliothek '%1'.\n"
 
-#: vis_devel.cpp:1440
+#: vis_devel.cpp:1458
 msgid "Widget's library '%1' copy.\n"
 msgstr "Kopieren der Widgetsbibliohek '%1'.\n"
 
-#: vis_devel.cpp:1449
+#: vis_devel.cpp:1467
 msgid "Move page '%1' to '%2'.\n"
 msgstr "Verschieben der Seite '%1' nach '%2'.\n"
 
-#: vis_devel.cpp:1449
+#: vis_devel.cpp:1467
 msgid "Copy page '%1' to '%2'.\n"
 msgstr "Kopieren der Seite '%1' nach '%2'.\n"
 
-#: vis_devel.cpp:1461 vis_devel.cpp:1472
+#: vis_devel.cpp:1479 vis_devel.cpp:1490
 msgid "Move widget '%1' to '%2'.\n"
 msgstr "Verschieben des Widgets '%1' nach '%2'.\n"
 
-#: vis_devel.cpp:1461 vis_devel.cpp:1472
+#: vis_devel.cpp:1479 vis_devel.cpp:1490
 msgid "Copy widget '%1' to '%2'.\n"
 msgstr "Kopieren des Widgets '%1' nach '%2'.\n"
 
-#: vis_devel.cpp:1462 vis_devel.cpp:1473
+#: vis_devel.cpp:1480 vis_devel.cpp:1491
 msgid "Enter new widget's identifier and name."
 msgstr "Bezeichnung und Namen des neuen Widgets eingeben."
 
-#: vis_devel.cpp:1481
+#: vis_devel.cpp:1499
 msgid "Copy/move scheme from '%1' to '%2' is not supported."
 msgstr ""
 "Kopieren / Verschieben des Schemas von '%1' nach '%2' wird nicht unterstützt."
 
-#: vis_devel.cpp:1504
+#: vis_devel.cpp:1522
 msgid "Inherit:"
 msgstr "Vererben:"
 
-#: vis_devel.cpp:1525
+#: vis_devel.cpp:1543
 msgid "Try copy/move self to self for \"%1/%1\"!"
 msgstr "Versuchen Sie kopieren / verschieben Selbstselbst für \"%1/%1\"!"
 
-#: vis_devel_dlgs.cpp:58
+#: vis_devel_dlgs.cpp:57
 msgid "Widget's library properties"
 msgstr "Eigenschaften der Widgetsbibliothek"
 
-#: vis_devel_dlgs.cpp:71
+#: vis_devel_dlgs.cpp:70
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
 
-#: vis_devel_dlgs.cpp:82 vis_devel_dlgs.cpp:838
+#: vis_devel_dlgs.cpp:81 vis_devel_dlgs.cpp:837
 msgid "State"
 msgstr "Zustand"
 
-#: vis_devel_dlgs.cpp:89 vis_devel_dlgs.cpp:844
+#: vis_devel_dlgs.cpp:88 vis_devel_dlgs.cpp:843
 msgid "Item's icon. Click for download other."
 msgstr "Item-Symbol.Klicken Sie zum Download von anderen."
 
-#: vis_devel_dlgs.cpp:96 vis_devel_dlgs.cpp:851
+#: vis_devel_dlgs.cpp:95 vis_devel_dlgs.cpp:850
 msgid "Enabled:"
 msgstr "Eingeschaltet:"
 
-#: vis_devel_dlgs.cpp:104
+#: vis_devel_dlgs.cpp:103
 msgid "Container DB:"
 msgstr "Datenbank des Containers:"
 
-#: vis_devel_dlgs.cpp:113 vis_devel_dlgs.cpp:877
+#: vis_devel_dlgs.cpp:112 vis_devel_dlgs.cpp:876
 msgid "Date of modification:"
 msgstr "Änderungsdatum:"
 
-#: vis_devel_dlgs.cpp:125 vis_devel_dlgs.cpp:889 vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:124 vis_devel_dlgs.cpp:888 vis_devel_dlgs.cpp:992
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: vis_devel_dlgs.cpp:130 vis_devel_dlgs.cpp:894
+#: vis_devel_dlgs.cpp:129 vis_devel_dlgs.cpp:893
 msgid "Id:"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:137 vis_devel_dlgs.cpp:255 vis_devel_dlgs.cpp:915
-#: vis_widgs.cpp:97
+#: vis_devel_dlgs.cpp:136 vis_devel_dlgs.cpp:254 vis_devel_dlgs.cpp:914
+#: vis_widgs.cpp:96
 msgid "Name:"
 msgstr "Name:"
 
-#: vis_devel_dlgs.cpp:143 vis_devel_dlgs.cpp:921
+#: vis_devel_dlgs.cpp:142 vis_devel_dlgs.cpp:920
 msgid "Description:"
 msgstr "Beschreibung:"
 
-#: vis_devel_dlgs.cpp:149 vis_devel_dlgs.cpp:927
+#: vis_devel_dlgs.cpp:148 vis_devel_dlgs.cpp:926
 msgid "Owner, group:"
 msgstr "Besitzer, Gruppe:"
 
-#: vis_devel_dlgs.cpp:160 vis_devel_dlgs.cpp:938
+#: vis_devel_dlgs.cpp:159 vis_devel_dlgs.cpp:937
 msgid "Access:"
 msgstr "Zugang:"
 
-#: vis_devel_dlgs.cpp:177
+#: vis_devel_dlgs.cpp:176
 msgid "Calculate period (ms):"
 msgstr "Rechenzeit (ms):"
 
-#: vis_devel_dlgs.cpp:185
+#: vis_devel_dlgs.cpp:184
 msgid "Run window mode:"
 msgstr "Ausführungsfenster Modus:"
 
-#: vis_devel_dlgs.cpp:192
+#: vis_devel_dlgs.cpp:191
 msgid "Keep aspect ratio on scale:"
 msgstr "Seitenverhältnis beibehalten auf der Skala"
 
-#: vis_devel_dlgs.cpp:205
+#: vis_devel_dlgs.cpp:204
 msgid "Mime data"
 msgstr "Mime Angaben"
 
-#: vis_devel_dlgs.cpp:216 vis_devel_dlgs.cpp:266 vis_devel_dlgs.cpp:993
-#: vis_devel_widgs.cpp:1300 vis_devel_widgs.cpp:1718
+#: vis_devel_dlgs.cpp:215 vis_devel_dlgs.cpp:265 vis_devel_dlgs.cpp:992
+#: vis_devel_widgs.cpp:1301 vis_devel_widgs.cpp:1720
 msgid "Id"
 msgstr ""
 
-#: vis_devel_dlgs.cpp:216
+#: vis_devel_dlgs.cpp:215
 msgid "Mime type"
 msgstr "Mime Typ"
 
-#: vis_devel_dlgs.cpp:216
+#: vis_devel_dlgs.cpp:215
 msgid "Data size"
 msgstr "Datengrösse"
 
-#: vis_devel_dlgs.cpp:220
+#: vis_devel_dlgs.cpp:219
 msgid "Add record"
 msgstr "Datensatz hinzufügen"
 
-#: vis_devel_dlgs.cpp:223 vis_devel_dlgs.cpp:270
+#: vis_devel_dlgs.cpp:222 vis_devel_dlgs.cpp:269
 msgid "Delete record"
 msgstr "Datensatz löschen"
 
-#: vis_devel_dlgs.cpp:226 vis_devel_dlgs.cpp:709
+#: vis_devel_dlgs.cpp:225 vis_devel_dlgs.cpp:708
 msgid "Load data"
 msgstr "Daten laden"
 
-#: vis_devel_dlgs.cpp:229
+#: vis_devel_dlgs.cpp:228
 msgid "Unload data"
 msgstr "Daten leeren"
 
-#: vis_devel_dlgs.cpp:235
+#: vis_devel_dlgs.cpp:234
 msgid "Styles"
 msgstr "Styl"
 
-#: vis_devel_dlgs.cpp:242 vis_run_widgs.cpp:733 vis_widgs.cpp:286
+#: vis_devel_dlgs.cpp:241 vis_run_widgs.cpp:731 vis_widgs.cpp:285
 msgid "Style:"
 msgstr "Stil:"
 
-#: vis_devel_dlgs.cpp:250
+#: vis_devel_dlgs.cpp:249
 msgid "Erase style"
 msgstr "Erase Stil"
 
-#: vis_devel_dlgs.cpp:266 vis_devel_widgs.cpp:386 vis_devel_widgs.cpp:1003
+#: vis_devel_dlgs.cpp:265 vis_devel_widgs.cpp:385 vis_devel_widgs.cpp:1004
 msgid "Value"
 msgstr "Wert"
 
-#: vis_devel_dlgs.cpp:278
+#: vis_devel_dlgs.cpp:277
 msgid "Close"
 msgstr "Schliessen"
 
-#: vis_devel_dlgs.cpp:311
+#: vis_devel_dlgs.cpp:310
 msgid "Get node '%1' information error."
 msgstr "Fehler bei der Knoteninformation '%1'."
 
-#: vis_devel_dlgs.cpp:350
+#: vis_devel_dlgs.cpp:349
 msgid "No set"
 msgstr "Kein Satz"
 
-#: vis_devel_dlgs.cpp:588 vis_devel_dlgs.cpp:1431
+#: vis_devel_dlgs.cpp:587 vis_devel_dlgs.cpp:1430
 msgid "Load icon picture"
 msgstr "Iconbild laden"
 
-#: vis_devel_dlgs.cpp:588 vis_devel_dlgs.cpp:1431
+#: vis_devel_dlgs.cpp:587 vis_devel_dlgs.cpp:1430
 msgid "Images (*.png *.jpg)"
 msgstr "Bilder (*.png *.jpg)"
 
-#: vis_devel_dlgs.cpp:591 vis_devel_dlgs.cpp:1435
+#: vis_devel_dlgs.cpp:590 vis_devel_dlgs.cpp:1434
 msgid "Load icon image '%1' error."
 msgstr "Fehler beim Laden des Iconbildes '%1'."
 
-#: vis_devel_dlgs.cpp:663 vis_devel_dlgs.cpp:1516
+#: vis_devel_dlgs.cpp:662 vis_devel_dlgs.cpp:1515
 msgid "Changes apply"
 msgstr "Änderungen gelten"
 
-#: vis_devel_dlgs.cpp:663 vis_devel_dlgs.cpp:1516
+#: vis_devel_dlgs.cpp:662 vis_devel_dlgs.cpp:1515
 msgid ""
 "Some changes you don't apply!\n"
 "Apply now or lost the?"
@@ -1330,317 +1358,325 @@ msgstr ""
 "Einige Änderungen nicht gelten!\n"
 "Bewerben Sie sich jetzt oder verloren das?"
 
-#: vis_devel_dlgs.cpp:697 vis_devel_dlgs.cpp:737 vis_devel_dlgs.cpp:781
+#: vis_devel_dlgs.cpp:696 vis_devel_dlgs.cpp:736 vis_devel_dlgs.cpp:780
 msgid "No one row is selected."
 msgstr "Keine Zeile ist ausgewählt."
 
-#: vis_devel_dlgs.cpp:709 vis_devel_dlgs.cpp:741
+#: vis_devel_dlgs.cpp:708 vis_devel_dlgs.cpp:740
 msgid "All files (*.*)"
 msgstr "Alle Dateien (*.*)"
 
-#: vis_devel_dlgs.cpp:713 vis_devel_dlgs.cpp:746 vis_shapes.cpp:1031
-#: vis_shapes.cpp:1057
+#: vis_devel_dlgs.cpp:712 vis_devel_dlgs.cpp:745 vis_shapes.cpp:983
+#: vis_shapes.cpp:1008
 msgid "Open file '%1' is fail: %2"
 msgstr "Fehler beim Öffnen der Datei '%1': %2"
 
-#: vis_devel_dlgs.cpp:717 vis_shapes.cpp:1062
+#: vis_devel_dlgs.cpp:716 vis_shapes.cpp:1012
 msgid "Loadable file '%1' is too large."
 msgstr "Ladbarer Datei '%1' ist zu groß."
 
-#: vis_devel_dlgs.cpp:740
+#: vis_devel_dlgs.cpp:739
 msgid "Save data"
 msgstr "Daten speichern"
 
-#: vis_devel_dlgs.cpp:760 vis_shapes.cpp:1036
+#: vis_devel_dlgs.cpp:759 vis_shapes.cpp:988
 msgid "Write data to file '%1' is fail: %2"
 msgstr "Fehler beim Schreiben der Daten in die Datei '%1': %2"
 
-#: vis_devel_dlgs.cpp:815
+#: vis_devel_dlgs.cpp:814
 msgid "Widget properties"
 msgstr "Widgets Eigenschaften"
 
-#: vis_devel_dlgs.cpp:827 vis_devel_widgs.cpp:1577
+#: vis_devel_dlgs.cpp:826 vis_devel_widgs.cpp:1578
 msgid "Widget"
 msgstr "Widget"
 
-#: vis_devel_dlgs.cpp:859
+#: vis_devel_dlgs.cpp:858
 msgid "Parent widget:"
 msgstr "Elternwidget:"
 
-#: vis_devel_dlgs.cpp:869
+#: vis_devel_dlgs.cpp:868
 msgid "Page type:"
 msgstr "Seitentyp:"
 
-#: vis_devel_dlgs.cpp:901
+#: vis_devel_dlgs.cpp:900
 msgid "Root:"
 msgstr "Root:"
 
-#: vis_devel_dlgs.cpp:908
+#: vis_devel_dlgs.cpp:907
 msgid "Path:"
 msgstr "Pfad:"
 
-#: vis_devel_dlgs.cpp:958 vis_devel_widgs.cpp:972
+#: vis_devel_dlgs.cpp:957 vis_devel_widgs.cpp:973
 msgid "Attributes"
 msgstr "Attribute"
 
-#: vis_devel_dlgs.cpp:973
+#: vis_devel_dlgs.cpp:972
 msgid "Widget process"
 msgstr "Widgetsbearbeitung"
 
-#: vis_devel_dlgs.cpp:993 vis_devel_widgs.cpp:1003 vis_devel_widgs.cpp:1300
-#: vis_devel_widgs.cpp:1718
+#: vis_devel_dlgs.cpp:992 vis_devel_widgs.cpp:1004 vis_devel_widgs.cpp:1301
+#: vis_devel_widgs.cpp:1720
 msgid "Name"
 msgstr "Name"
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Data type"
 msgstr "Datentyp"
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Proc."
 msgstr "Bearbeit."
 
-#: vis_devel_dlgs.cpp:993
+#: vis_devel_dlgs.cpp:992
 msgid "Configuration template"
 msgstr "Konfigurationvorlage"
 
-#: vis_devel_dlgs.cpp:997
+#: vis_devel_dlgs.cpp:996
 msgid "Add attribute"
 msgstr "Attribut hinzufügen"
 
-#: vis_devel_dlgs.cpp:1000
+#: vis_devel_dlgs.cpp:999
 msgid "Delete attribute"
 msgstr "Attribut löschen"
 
-#: vis_devel_dlgs.cpp:1013
+#: vis_devel_dlgs.cpp:1012
 msgid "Procedure language:"
 msgstr "Verfahrenssprache:"
 
-#: vis_devel_dlgs.cpp:1021
+#: vis_devel_dlgs.cpp:1020
 msgid "Procedure calculate (ms):"
 msgstr "Rechenzeit der Funktion (ms):"
 
-#: vis_devel_dlgs.cpp:1034 vis_devel_widgs.cpp:1260
+#: vis_devel_dlgs.cpp:1033 vis_devel_widgs.cpp:1261
 msgid "Links"
 msgstr "Links"
 
-#: vis_devel_dlgs.cpp:1078 vis_devel_dlgs.cpp:1277
+#: vis_devel_dlgs.cpp:1077 vis_devel_dlgs.cpp:1276
 msgid "Getting node '%1' information error."
 msgstr "Fehler bei der Knoteninformation '%1'."
 
-#: vis_devel_dlgs.cpp:1548
+#: vis_devel_dlgs.cpp:1547
 msgid "Valid widget is not selected"
 msgstr "Kein gültiges Widget ist ausgewählt"
 
-#: vis_devel_dlgs.cpp:1567 vis_devel_dlgs.cpp:1589
+#: vis_devel_dlgs.cpp:1566 vis_devel_dlgs.cpp:1588
 msgid "Valid attribute is not selected"
 msgstr "Kein gültiges Attribut ist ausgewählt"
 
-#: vis_devel_widgs.cpp:150
+#: vis_devel_widgs.cpp:149
 msgid "<Group>"
 msgstr "<Gruppe>"
 
-#: vis_devel_widgs.cpp:386
+#: vis_devel_widgs.cpp:385
 msgid "Attribute"
 msgstr "Attribut"
 
-#: vis_devel_widgs.cpp:741 vis_devel_widgs.cpp:1033
+#: vis_devel_widgs.cpp:738 vis_devel_widgs.cpp:1034
 msgid "Copy"
 msgstr "Kopieren"
 
-#: vis_devel_widgs.cpp:746
+#: vis_devel_widgs.cpp:742
 msgid "Edit"
 msgstr "Bearbeiten"
 
-#: vis_devel_widgs.cpp:754
+#: vis_devel_widgs.cpp:749
 msgid "Clear changes"
 msgstr "Klare Veränderungen"
 
-#: vis_devel_widgs.cpp:755
+#: vis_devel_widgs.cpp:750
 msgid "Press to clear attribute's changes."
 msgstr "Betätigen zum Zurücksetzen Änderungen des Attributs."
 
-#: vis_devel_widgs.cpp:765
+#: vis_devel_widgs.cpp:753
+msgid "Changes put down to the parent"
+msgstr "Änderungen legte auf das Mutter"
+
+#: vis_devel_widgs.cpp:754
+msgid "Press to put down attribute's changes to the parent."
+msgstr "Hier klicken um Änderungen Attribut auf das Mutter legte."
+
+#: vis_devel_widgs.cpp:763
 msgid "Full text of the attribute edit."
 msgstr "Full-Text-Bearbeitung Attribut."
 
-#: vis_devel_widgs.cpp:766
+#: vis_devel_widgs.cpp:764
 msgid "Attribute '%1' edit for widget '%2'."
 msgstr "Attribut '%1' für die eigene WebSite '%2' zu editieren."
 
-#: vis_devel_widgs.cpp:773
+#: vis_devel_widgs.cpp:771
 msgid "Short help for text syntax description."
 msgstr "Kurze Hilfe für die Syntax des Textes."
 
-#: vis_devel_widgs.cpp:1290
+#: vis_devel_widgs.cpp:1291
 msgid "Widgets"
 msgstr "Widget"
 
-#: vis_devel_widgs.cpp:1300 vis_devel_widgs.cpp:1718
+#: vis_devel_widgs.cpp:1301 vis_devel_widgs.cpp:1720
 msgid "Type"
 msgstr "Typ"
 
-#: vis_devel_widgs.cpp:1425
+#: vis_devel_widgs.cpp:1426
 #, c-format
 msgid "Widgets' development tree '%s' request time %f ms."
 msgstr "Widget Entwicklung Baum '%s' Anfrage Zeitpunkt %f ms."
 
-#: vis_devel_widgs.cpp:1492
+#: vis_devel_widgs.cpp:1493
 msgid "Library"
 msgstr "Bibliothek"
 
-#: vis_devel_widgs.cpp:1504 vis_devel_widgs.cpp:1516
+#: vis_devel_widgs.cpp:1505 vis_devel_widgs.cpp:1517
 msgid "Library: %1"
 msgstr "Bibliothek: %1"
 
-#: vis_devel_widgs.cpp:1604
+#: vis_devel_widgs.cpp:1605
 msgid "Add widget based at '%1'"
 msgstr "Hinzufügen des Widgets basierend auf '%1'"
 
-#: vis_devel_widgs.cpp:1605
+#: vis_devel_widgs.cpp:1606
 msgid "The button for addition widget based at '%1'"
 msgstr "Schaltfläche zum Hinzufügen des Widgets basierend auf '%1'"
 
-#: vis_devel_widgs.cpp:1606
+#: vis_devel_widgs.cpp:1607
 msgid "Press to add widget based at '%1'."
 msgstr "Betätigen um das Widgets basierend auf '%1' hinzuzufügen"
 
-#: vis_devel_widgs.cpp:1655
+#: vis_devel_widgs.cpp:1656
 msgid "Container's widget"
 msgstr "Widgetscontainer"
 
-#: vis_devel_widgs.cpp:1667
+#: vis_devel_widgs.cpp:1668
 #, c-format
 msgid "Widgets' development tree '%s' load time %f ms."
 msgstr "Widget Entwicklung Baum '%s' Ladezeit %f ms."
 
-#: vis_devel_widgs.cpp:1697
+#: vis_devel_widgs.cpp:1699
 msgid "Refresh libraries"
 msgstr "Bibliotheken aktualisieren"
 
-#: vis_devel_widgs.cpp:1698
+#: vis_devel_widgs.cpp:1700
 msgid "Press to refresh present libraries."
 msgstr "Betätigen um die vorhandenen Bibliotheken zu aktualisiern."
 
-#: vis_devel_widgs.cpp:1708
+#: vis_devel_widgs.cpp:1710
 msgid "Projects"
 msgstr "Projekte"
 
-#: vis_devel_widgs.cpp:1840
+#: vis_devel_widgs.cpp:1842
 msgid "Project"
 msgstr "Projekt"
 
-#: vis_devel_widgs.cpp:1846
+#: vis_devel_widgs.cpp:1848
 #, c-format
 msgid "Project's development tree '%s' load time %f ms."
 msgstr "Projektentwicklung Baum '%s' Ladezeit %f ms."
 
-#: vis_devel_widgs.cpp:1908 vis_run.cpp:85 vis_run.cpp:111
+#: vis_devel_widgs.cpp:1910 vis_run.cpp:84 vis_run.cpp:110
 msgid "Page"
 msgstr "Seite"
 
-#: vis_devel_widgs.cpp:1944
+#: vis_devel_widgs.cpp:1947
 msgid "Refresh projects"
 msgstr "Projekte aktualisieren"
 
-#: vis_devel_widgs.cpp:1945
+#: vis_devel_widgs.cpp:1948
 msgid "Press to refresh present projects."
 msgstr "Betätigen um die vorhandenen Projekte zu aktualisieren."
 
-#: vis_devel_widgs.cpp:2019
+#: vis_devel_widgs.cpp:2022
 msgid "Scale"
 msgstr "Maßstab"
 
-#: vis_devel_widgs.cpp:2019
+#: vis_devel_widgs.cpp:2022
 msgid "Resize"
 msgstr "Größe ändern"
 
-#: vis_devel_widgs.cpp:2213
+#: vis_devel_widgs.cpp:2215
 msgid "Warning! Edit widget already set."
 msgstr "Achtung! Edit Widget bereits eingestellt."
 
-#: vis_devel_widgs.cpp:2430
+#: vis_devel_widgs.cpp:2433
 msgid "Exit from widget editing"
 msgstr "Beenden der Widgetbearbeitung"
 
-#: vis_devel_widgs.cpp:2431
+#: vis_devel_widgs.cpp:2434
 msgid "Press to exit from widget editing."
 msgstr "Betätigen zum Beenden der Widgetbearbeitung."
 
-#: vis_devel_widgs.cpp:2460
+#: vis_devel_widgs.cpp:2463
 msgid "Enter for the widget editing"
 msgstr "Starten der Widgetbearbeitung"
 
-#: vis_devel_widgs.cpp:2461
+#: vis_devel_widgs.cpp:2464
 msgid "Press to enter for the widget editing."
 msgstr "Betätigen zum Starten der Widgetbearbeitung."
 
-#: vis_devel_widgs.cpp:2467
+#: vis_devel_widgs.cpp:2470
 msgid "Make icon from the widget"
 msgstr "Das Icon aus dem Widget erstellen"
 
-#: vis_devel_widgs.cpp:2468
+#: vis_devel_widgs.cpp:2471
 msgid "Press to make icon from the widget."
 msgstr "Betätigen zum Erstellen des Icons aus dem Widget."
 
-#: vis_devel_widgs.cpp:2473
+#: vis_devel_widgs.cpp:2476
 msgid "Make image from the widget"
 msgstr "Das Bild aus dem Widget erstellen"
 
-#: vis_devel_widgs.cpp:2474
+#: vis_devel_widgs.cpp:2477
 msgid "Press to make image from the widget."
 msgstr "Betätigen zum Erstellen des Bildes aus dem Widget."
 
-#: vis_devel_widgs.cpp:2480
+#: vis_devel_widgs.cpp:2483
 msgid "Zoom in (+10%)"
 msgstr "Vergrössern (+10%)"
 
-#: vis_devel_widgs.cpp:2482
+#: vis_devel_widgs.cpp:2485
 msgid "Press to increase the visual scale of the widget by 10%."
 msgstr "Betätigen um Massstab um 10% zu vergrössern."
 
-#: vis_devel_widgs.cpp:2485
+#: vis_devel_widgs.cpp:2488
 msgid "Zoom out (-10%)"
 msgstr "Verkleinern (-10%)"
 
-#: vis_devel_widgs.cpp:2487
+#: vis_devel_widgs.cpp:2490
 msgid "Press to decrease the visual scale of the widget by 10%."
 msgstr "Betätigen um Massstab um 10% zu verkleinern."
 
-#: vis_devel_widgs.cpp:2490
+#: vis_devel_widgs.cpp:2493
 msgid "Reset zoom (100%)"
 msgstr "Reset Maßstab (100%)"
 
-#: vis_devel_widgs.cpp:2492
+#: vis_devel_widgs.cpp:2495
 msgid "Press to set the visual scale of the widget to 100%."
 msgstr "Betätigen um Maßstab auf 100% einzustellen."
 
-#: vis_devel_widgs.cpp:2544
+#: vis_devel_widgs.cpp:2547
 msgid "Save widget's image"
 msgstr "Speicherung des Widgetbildes"
 
-#: vis_devel_widgs.cpp:2545 vis_run.cpp:697
+#: vis_devel_widgs.cpp:2548 vis_run.cpp:694
 msgid "Images (*.png *.xpm *.jpg)"
 msgstr "Bilder (*.png *.xpm *.jpg)"
 
-#: vis_devel_widgs.cpp:2547 vis_run.cpp:698 vis_run.cpp:748 vis_run.cpp:828
-#: vis_run.cpp:873
+#: vis_devel_widgs.cpp:2550 vis_run.cpp:695 vis_run.cpp:745 vis_run.cpp:825
+#: vis_run.cpp:870
 msgid "Save to file '%1' is error."
 msgstr "Fehler beim Speichern in die Datei '%1'."
 
-#: vis_devel_widgs.cpp:2677
+#: vis_devel_widgs.cpp:2680
 msgid "Selected elements --- xy(%2:%3) wh[%4:%5]"
 msgstr "Ausgewählt sind die Elemente --- xy(%2:%3) wh[%4:%5]"
 
-#: vis_devel_widgs.cpp:2707
+#: vis_devel_widgs.cpp:2710
 msgid "Page: '%1' --- xy(%2:%3) wh[%4:%5]"
 msgstr "Seite: '%1' --- xy(%2:%3) wh[%4:%5]"
 
-#: vis_devel_widgs.cpp:2914 vis_devel_widgs.cpp:2919
+#: vis_devel_widgs.cpp:2919 vis_devel_widgs.cpp:2924
 #, c-format
 msgid ""
 "\n"
@@ -1649,335 +1685,335 @@ msgstr ""
 "\n"
 "... mehr Elemente (%d)"
 
-#: vis_devel_widgs.cpp:2926
+#: vis_devel_widgs.cpp:2931
 msgid "geometry"
 msgstr "Geometrie"
 
-#: vis_devel_widgs.cpp:2928
+#: vis_devel_widgs.cpp:2933
 #, c-format
 msgid "attribute '%s'"
 msgstr "Attribute '%s'"
 
-#: vis_devel_widgs.cpp:2930
+#: vis_devel_widgs.cpp:2935
 #, c-format
 msgid "new widget '%s' from '%s'"
 msgstr "neues Widget '%s' von '%s'"
 
-#: vis_devel_widgs.cpp:2931
+#: vis_devel_widgs.cpp:2936
 msgid "remove widget"
 msgstr "entfernen Widget"
 
-#: vis_devel_widgs.cpp:2933
+#: vis_devel_widgs.cpp:2938
 #, c-format
 msgid "copy past widget '%s' from '%s'"
 msgstr "Kopie vergangenen Widget '%s' von '%s'"
 
-#: vis_devel_widgs.cpp:2934
+#: vis_devel_widgs.cpp:2939
 msgid "unknown"
 msgstr "unbekannt"
 
-#: vis_devel_widgs.cpp:3097
+#: vis_devel_widgs.cpp:3102
 msgid "Widget is not enabled or shape is not supported!"
 msgstr "Widget ist nicht eingeschaltet oder Widgetform wird nicht unterstützt!"
 
-#: vis_devel_widgs.cpp:3199 vis_devel_widgs.cpp:3238 vis_devel_widgs.cpp:3268
+#: vis_devel_widgs.cpp:3204 vis_devel_widgs.cpp:3243 vis_devel_widgs.cpp:3273
 msgid "Selected elements: '%1'"
 msgstr "Ausgewählt sind die Elemente: '%1'"
 
-#: vis_devel_widgs.cpp:3385
+#: vis_devel_widgs.cpp:3390
 msgid "Cursor --- xy(%1:%2)"
 msgstr "Cursor --- xy(%1:%2)"
 
-#: vis_run.cpp:69
+#: vis_run.cpp:68
 msgid "Vision runtime"
 msgstr "Vision-Ausführungszeit"
 
-#: vis_run.cpp:78
+#: vis_run.cpp:77
 msgid "&Print"
 msgstr "&Drucken"
 
-#: vis_run.cpp:81
+#: vis_run.cpp:80
 msgid "Print the master page"
 msgstr "Hauptseite drucken"
 
-#: vis_run.cpp:82
+#: vis_run.cpp:81
 msgid "The button for printing of the master page by default"
 msgstr "Schaltfläche zum Drucken der Hauptseite standard"
 
-#: vis_run.cpp:83
+#: vis_run.cpp:82
 msgid "Press for printing of the master page by default."
 msgstr "Betätigen zum Drucken der Hauptseite standard."
 
-#: vis_run.cpp:86
+#: vis_run.cpp:85
 msgid "Print the selected page"
 msgstr "Ausgewählte Seite drucken"
 
-#: vis_run.cpp:87
+#: vis_run.cpp:86
 msgid "The button for printing of the selected page"
 msgstr "Schaltfläche zum Drucken der ausgewählten Seite"
 
-#: vis_run.cpp:88
+#: vis_run.cpp:87
 msgid "Press for printing of the selected page."
 msgstr "Betätigen zum Drucken der ausgewählten Seite."
 
-#: vis_run.cpp:91 vis_run.cpp:117
+#: vis_run.cpp:90 vis_run.cpp:116
 msgid "Diagram"
 msgstr "Diagramm"
 
-#: vis_run.cpp:92
+#: vis_run.cpp:91
 msgid "Print the selected diagram"
 msgstr "Drucken des ausgewählten Diagramms"
 
-#: vis_run.cpp:93
+#: vis_run.cpp:92
 msgid "The button for printing of the selected diagram"
 msgstr "Schaltfläche zum Drucken des ausgewählten Diagramms"
 
-#: vis_run.cpp:94
+#: vis_run.cpp:93
 msgid "Press for printing of the selected diagram."
 msgstr "Betätigen zum Drucken des ausgewählten Diagramms."
 
-#: vis_run.cpp:97 vis_run.cpp:123
+#: vis_run.cpp:96 vis_run.cpp:122
 msgid "Document"
 msgstr "Dokument"
 
-#: vis_run.cpp:98
+#: vis_run.cpp:97
 msgid "Print the selected document"
 msgstr "Drucken des ausgewählten Dokuments"
 
-#: vis_run.cpp:99
+#: vis_run.cpp:98
 msgid "The button for printing of the selected document"
 msgstr "Schaltfläche zum Drucken des ausgewählten Dokuments"
 
-#: vis_run.cpp:100
+#: vis_run.cpp:99
 msgid "Press for printing of the selected document."
 msgstr "Betätigen zum Drucken des ausgewählten Dokuments."
 
-#: vis_run.cpp:105
+#: vis_run.cpp:104
 msgid "&Export"
 msgstr "&Export"
 
-#: vis_run.cpp:107
+#: vis_run.cpp:106
 msgid "Export the master page"
 msgstr "Export der Hauptseite"
 
-#: vis_run.cpp:108
+#: vis_run.cpp:107
 msgid "The button for exporting of the master page by default"
 msgstr "Schaltfläche für den Export der Hauptseite, standard"
 
-#: vis_run.cpp:109
+#: vis_run.cpp:108
 msgid "Press for exporting of the master page by default."
 msgstr "Betätigen für den Export der Hauptseite, standard."
 
-#: vis_run.cpp:112
+#: vis_run.cpp:111
 msgid "Export the selected page"
 msgstr "Export der ausgewählten Seite"
 
-#: vis_run.cpp:113
+#: vis_run.cpp:112
 msgid "The button for exporting of the selected page"
 msgstr "Schaltfläche für den Export der ausgewählten Seite"
 
-#: vis_run.cpp:114
+#: vis_run.cpp:113
 msgid "Press for exporting of the selected page."
 msgstr "Betätigen für den Export der ausgewählten Seite."
 
-#: vis_run.cpp:118
+#: vis_run.cpp:117
 msgid "Export the selected diagram"
 msgstr "Export des ausgewählten Diagrammes"
 
-#: vis_run.cpp:119
+#: vis_run.cpp:118
 msgid "The button for exporting of the selected diagram"
 msgstr "Schaltfläche für den Export des ausgewählten Diagrammes"
 
-#: vis_run.cpp:120
+#: vis_run.cpp:119
 msgid "Press for exporting of the selected diagram."
 msgstr "Betätigen für den Export des ausgewählten Diagrammes."
 
-#: vis_run.cpp:124
+#: vis_run.cpp:123
 msgid "Export the selected document"
 msgstr "Export des ausgewählten Dokuments"
 
-#: vis_run.cpp:125
+#: vis_run.cpp:124
 msgid "The button for exporting of the selected document"
 msgstr "Schaltfläche für den Export des ausgewählten Dokuments"
 
-#: vis_run.cpp:126
+#: vis_run.cpp:125
 msgid "Press for exporting of the selected document."
 msgstr "Betätigen für den Export des ausgewählten Dokuments."
 
-#: vis_run.cpp:134
+#: vis_run.cpp:133
 msgid "The button for closing Vision runtime window"
 msgstr "Schaltfläche zum Schliessen des Ausführungsfenster Vision"
 
-#: vis_run.cpp:135
+#: vis_run.cpp:134
 msgid "Press to close of the current Vision runtime window."
 msgstr "Betätigen zum Schliessen des Ausführungsfensters Vision."
 
-#: vis_run.cpp:160
+#: vis_run.cpp:159
 msgid "Press for display the program and OpenSCADA information."
 msgstr "Betätigen für Informationen über das Programm und OpenSCADA."
 
-#: vis_run.cpp:196 vis_run.cpp:198
+#: vis_run.cpp:193 vis_run.cpp:195
 msgid "Alarm level"
 msgstr "Störungsstufe"
 
-#: vis_run.cpp:199
+#: vis_run.cpp:196
 msgid "The button for all alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller Störungen"
 
-#: vis_run.cpp:200
+#: vis_run.cpp:197
 msgid "Press for all alarms quittance."
 msgstr "Betätigen für die Quittierung aller Störungen."
 
-#: vis_run.cpp:203 vis_run.cpp:205
+#: vis_run.cpp:200 vis_run.cpp:202
 msgid "Blink alarm"
 msgstr "Blinzalarme"
 
-#: vis_run.cpp:206
+#: vis_run.cpp:203
 msgid "The button for all blink alarms quittance"
 msgstr "Schaltfläche für Quittierung alle Alarme blinken"
 
-#: vis_run.cpp:207
+#: vis_run.cpp:204
 msgid "Press for all blink alarms quittance."
 msgstr "Betätigen für die Quittierung alle Alarme blinken."
 
-#: vis_run.cpp:211
+#: vis_run.cpp:208
 msgid "Speaker alarm"
 msgstr "Lautsprecheralarm"
 
-#: vis_run.cpp:213
+#: vis_run.cpp:210
 msgid "PC speaker alarm"
 msgstr "PC Lautsprecheralarm"
 
-#: vis_run.cpp:214
+#: vis_run.cpp:211
 msgid "The button for all PC speaker alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller Lautsprecheralarme"
 
-#: vis_run.cpp:215
+#: vis_run.cpp:212
 msgid "Press for all PC speaker alarms quittance."
 msgstr "Betätigen für die Quittierung aller Lautsprecheralarme."
 
-#: vis_run.cpp:219
+#: vis_run.cpp:216
 msgid "Sound/speech alarm"
 msgstr "Signal/Redealarm"
 
-#: vis_run.cpp:221
+#: vis_run.cpp:218
 msgid "Sound or speech alarm"
 msgstr "Signal- oder Redealarm"
 
-#: vis_run.cpp:222
+#: vis_run.cpp:219
 msgid "The button for all sound or speech alarms quittance"
 msgstr "Schaltfläche für die Quittierung aller akustischen Alarme"
 
-#: vis_run.cpp:223
+#: vis_run.cpp:220
 msgid "Press for all sound or speech alarms quittance."
 msgstr "Betätigen für Quittierung aller akustischen Alarme."
 
-#: vis_run.cpp:233
+#: vis_run.cpp:230
 msgid "&Alarm"
 msgstr "Stö&rung"
 
-#: vis_run.cpp:250
+#: vis_run.cpp:247
 msgid "Alarms (status)"
 msgstr "Störung (Status)"
 
-#: vis_run.cpp:265
+#: vis_run.cpp:262
 msgid "This label displays current system's time."
 msgstr "Dieses Zeichen zeigt die aktuelle Systemzeit."
 
-#: vis_run.cpp:269
+#: vis_run.cpp:266
 msgid "Field for display of the current user."
 msgstr "Feld für Anzeige des aktuellen Beutzers."
 
-#: vis_run.cpp:274
+#: vis_run.cpp:271
 msgid "This label displays used VCA engine station."
 msgstr "Dieses Zeichen zeigt die Station der VCA Maschine."
 
-#: vis_run.cpp:275
+#: vis_run.cpp:272
 msgid "Field for display of the used VCA engine station."
 msgstr "Feld für Anzeige der Station der VCA Maschine."
 
-#: vis_run.cpp:279
+#: vis_run.cpp:276
 msgid "This label displays used interface style."
 msgstr "Dieses Zeichen zeigt verwendete Schnittstelle Stil."
 
-#: vis_run.cpp:280
+#: vis_run.cpp:277
 msgid "Field for display the used interface style."
 msgstr "Feld für Anzeige verwendete Schnittstelle Stil."
 
-#: vis_run.cpp:281
+#: vis_run.cpp:278
 msgid "Double click for style change."
 msgstr "Zweimal klicken für Stil zu ändern."
 
-#: vis_run.cpp:366
+#: vis_run.cpp:363
 msgid "Connection to visualization server '%1' error: %2"
 msgstr "Der Anschluss an Visualisierungs-Server '%1' Fehler: %2"
 
-#: vis_run.cpp:442 vis_run.cpp:989
+#: vis_run.cpp:439 vis_run.cpp:986
 #, c-format
 msgid "Root page scale [%f:%f]."
 msgstr ""
 
-#: vis_run.cpp:467
+#: vis_run.cpp:464
 msgid "Print page"
 msgstr "Seite drucken"
 
-#: vis_run.cpp:467
+#: vis_run.cpp:464
 msgid "No one page for print is present!"
 msgstr "Keine Seite zum Drucken ist vorhanden!"
 
-#: vis_run.cpp:475
+#: vis_run.cpp:472
 msgid "Select page for print."
 msgstr "Seite zum Drucken auswählen."
 
-#: vis_run.cpp:475
+#: vis_run.cpp:472
 msgid "Page print."
 msgstr "Seite drucken."
 
-#: vis_run.cpp:476 vis_run.cpp:681
+#: vis_run.cpp:473 vis_run.cpp:678
 msgid "Pages:"
 msgstr "Seiten:"
 
-#: vis_run.cpp:494
+#: vis_run.cpp:491
 msgid "Print page: \"%1\" (%2)"
 msgstr "Drucken von Seiten \"%1\" (%2)"
 
-#: vis_run.cpp:516
+#: vis_run.cpp:513
 msgid "OpenSCADA project: \"%1\""
 msgstr "Projekt OpenSCADA: \"%1\""
 
-#: vis_run.cpp:517
+#: vis_run.cpp:514
 msgid "User: \"%1\""
 msgstr "Benutzer: \"%1\""
 
-#: vis_run.cpp:532 vis_run.cpp:541
+#: vis_run.cpp:529 vis_run.cpp:538
 msgid "Print diagram"
 msgstr "Diagramm drucken"
 
-#: vis_run.cpp:532 vis_run.cpp:620 vis_run.cpp:706 vis_run.cpp:837
+#: vis_run.cpp:529 vis_run.cpp:617 vis_run.cpp:703 vis_run.cpp:834
 msgid "No one page is present!"
 msgstr "Keine Seite ist vorhanden."
 
-#: vis_run.cpp:541 vis_run.cpp:715
+#: vis_run.cpp:538 vis_run.cpp:712
 msgid "No one diagram is present!"
 msgstr "Kein Diagramm ist vorhanden!"
 
-#: vis_run.cpp:548
+#: vis_run.cpp:545
 msgid "Select diagram for print."
 msgstr "Diagramm zum Drucken auswählen."
 
-#: vis_run.cpp:548
+#: vis_run.cpp:545
 msgid "Diagram print."
 msgstr "Diagramm drucken."
 
-#: vis_run.cpp:549 vis_run.cpp:723
+#: vis_run.cpp:546 vis_run.cpp:720
 msgid "Diagrams:"
 msgstr "Diagramme:"
 
-#: vis_run.cpp:565
+#: vis_run.cpp:562
 msgid "Print diagram: \"%1\" (%2)"
 msgstr "Diagramme drucken: \"%1\" (%2)"
 
-#: vis_run.cpp:592
+#: vis_run.cpp:589
 msgid ""
 "OpenSCADA project: \"%1\"\n"
 "%2 (%3)"
@@ -1985,7 +2021,7 @@ msgstr ""
 "Projekt OpenSCADA: \"%1\"\n"
 "%2 (%3)"
 
-#: vis_run.cpp:593
+#: vis_run.cpp:590
 msgid ""
 "User: \"%1\"\n"
 "%2"
@@ -1993,117 +2029,117 @@ msgstr ""
 "Benutzer: \"%1\"\n"
 "%2"
 
-#: vis_run.cpp:620 vis_run.cpp:629
+#: vis_run.cpp:617 vis_run.cpp:626
 msgid "Print document"
 msgstr "Dokument drucken"
 
-#: vis_run.cpp:629 vis_run.cpp:846
+#: vis_run.cpp:626 vis_run.cpp:843
 msgid "No one document is present!"
 msgstr "Kein Dokument ist vorhanden!"
 
-#: vis_run.cpp:636
+#: vis_run.cpp:633
 msgid "Select document for print."
 msgstr "Dokument zum Drucken auswählen."
 
-#: vis_run.cpp:636
+#: vis_run.cpp:633
 msgid "Document print."
 msgstr "Dokument drucken."
 
-#: vis_run.cpp:637 vis_run.cpp:854
+#: vis_run.cpp:634 vis_run.cpp:851
 msgid "Document:"
 msgstr "Dokument:"
 
-#: vis_run.cpp:653
+#: vis_run.cpp:650
 msgid "Print document: \"%1\" (%2)"
 msgstr "Dokument drucken: \"%1\" (%2)"
 
-#: vis_run.cpp:672
+#: vis_run.cpp:669
 msgid "Export page"
 msgstr "Export der Seite"
 
-#: vis_run.cpp:672
+#: vis_run.cpp:669
 msgid "No one page for export is present!"
 msgstr "Keine Seite für den Export ist vorhanden!"
 
-#: vis_run.cpp:680
+#: vis_run.cpp:677
 msgid "Select page for export."
 msgstr "Seite für den Export auswählen."
 
-#: vis_run.cpp:680
+#: vis_run.cpp:677
 msgid "Page export."
 msgstr "Export der Seite."
 
-#: vis_run.cpp:697
+#: vis_run.cpp:694
 msgid "Save page's image"
 msgstr "Speicherung des Bildes der Seite"
 
-#: vis_run.cpp:706 vis_run.cpp:715
+#: vis_run.cpp:703 vis_run.cpp:712
 msgid "Export diagram"
 msgstr "Export-Chart"
 
-#: vis_run.cpp:722
+#: vis_run.cpp:719
 msgid "Select diagram for export."
 msgstr "Chart für den Export auswählen."
 
-#: vis_run.cpp:722
+#: vis_run.cpp:719
 msgid "Diagram export."
 msgstr "Export-Chart."
 
-#: vis_run.cpp:737
+#: vis_run.cpp:734
 msgid "Save diagram"
 msgstr "Chart speichern"
 
-#: vis_run.cpp:737
+#: vis_run.cpp:734
 #, c-format
 msgid "Trend %1.png"
 msgstr "Trend %1.png"
 
-#: vis_run.cpp:738
+#: vis_run.cpp:735
 msgid "Images (*.png *.xpm *.jpg);;CSV file (*.csv)"
 msgstr "Bilder (*.png *.xpm *.jpg);;CSV-Datei (*.csv)"
 
-#: vis_run.cpp:759
+#: vis_run.cpp:756
 msgid "\"Date and time\";\"us\""
 msgstr "\"Datum und Uhrzeit\";\"us\""
 
-#: vis_run.cpp:793
+#: vis_run.cpp:790
 msgid "\"Frequency (Hz)\""
 msgstr "\"Frequenz (Hz)\""
 
-#: vis_run.cpp:824 vis_run.cpp:947
+#: vis_run.cpp:821 vis_run.cpp:944
 msgid "Error write to: %1."
 msgstr "Fehler schreiben Sie an: %1."
 
-#: vis_run.cpp:837 vis_run.cpp:846
+#: vis_run.cpp:834 vis_run.cpp:843
 msgid "Export document"
 msgstr "Export des Dokuments"
 
-#: vis_run.cpp:853
+#: vis_run.cpp:850
 msgid "Select document for export."
 msgstr "Dokument für den Export auswählen."
 
-#: vis_run.cpp:853
+#: vis_run.cpp:850
 msgid "Document export."
 msgstr "Export des Dokumentes."
 
-#: vis_run.cpp:866
+#: vis_run.cpp:863
 msgid "Save document"
 msgstr "Speicherung des Dokumentes"
 
-#: vis_run.cpp:866
+#: vis_run.cpp:863
 #, c-format
 msgid "Document %1.html"
 msgstr "Dokument %1.html"
 
-#: vis_run.cpp:867
+#: vis_run.cpp:864
 msgid "XHTML (*.html);;CSV file (*.csv)"
 msgstr "XHTML (*.html);;CSV File (*.csv)"
 
-#: vis_run.cpp:944
+#: vis_run.cpp:941
 msgid "No data for export."
 msgstr "Keine Daten für Export."
 
-#: vis_run.cpp:1066
+#: vis_run.cpp:1062
 msgid ""
 "Several sessions are already opened on the project \"%1\".\n"
 "You can create new or connect to present session. Please, select needed or "
@@ -2114,43 +2150,43 @@ msgstr ""
 "Sitzung verbinden. Bitte wählen Sie die richtige oder klicken Sie \"Abbrechen"
 "\"."
 
-#: vis_run.cpp:1068
+#: vis_run.cpp:1064
 msgid "Select session for connection or new creation"
 msgstr "Sitzung für die Verbindung auswählen oder eine neue"
 
-#: vis_run.cpp:1071
+#: vis_run.cpp:1067
 msgid "<Create new session>"
 msgstr "<Erstellen Sie eine neue Sitzung>"
 
-#: vis_run.cpp:1098
+#: vis_run.cpp:1094
 msgid "Running project: %1"
 msgstr "Ausführen Projekt: %1"
 
-#: vis_run.cpp:1317
+#: vis_run.cpp:1313
 #, c-format
 msgid "Error open: %s"
 msgstr "Fehler beim Öffnen: %s"
 
-#: vis_run.cpp:1327 vis_run_widgs.cpp:681 vis_run_widgs.cpp:690
+#: vis_run.cpp:1323 vis_run_widgs.cpp:679 vis_run_widgs.cpp:688
 #, c-format
 msgid "Error write to: %s"
 msgstr "Fehler schreiben Sie an: %s"
 
-#: vis_run.cpp:1338
+#: vis_run.cpp:1334
 msgid "Alarm level: %1"
 msgstr "Stufe der Störung: %1"
 
-#: vis_run.cpp:1443
+#: vis_run.cpp:1439
 #, c-format
 msgid "Session creation restore for '%s'."
 msgstr "Wiederaufbau der Schaffung der Session für '%s'."
 
-#: vis_run.cpp:1497
+#: vis_run.cpp:1493
 #, c-format
 msgid "Session '%s' update time %f ms."
 msgstr "Sitzung '%s' Aktualisierungszeit %f ms."
 
-#: vis_run_widgs.cpp:284
+#: vis_run_widgs.cpp:282
 msgid ""
 "Page: '%1'.\n"
 "View access is not permitted."
@@ -2158,15 +2194,15 @@ msgstr ""
 "Seite: '%1'.\n"
 "Ansicht Zugriff ist nicht erlaubt."
 
-#: vis_run_widgs.cpp:710
+#: vis_run_widgs.cpp:708
 msgid "No style"
 msgstr "Kein Stil"
 
-#: vis_run_widgs.cpp:732
+#: vis_run_widgs.cpp:730
 msgid "Select your style from list."
 msgstr "Wählen Sie Ihren Stil aus der Liste."
 
-#: vis_run_widgs.cpp:732
+#: vis_run_widgs.cpp:730
 msgid "Style select"
 msgstr "Stil wählen"
 
@@ -2570,191 +2606,194 @@ msgstr "Punkt koordinaten(x,y): (%1, %2)"
 msgid "Coordinates(x,y): (%1, %2)"
 msgstr "Koordinaten(x,y): (%1, %2)"
 
-#: vis_shapes.cpp:100
+#: vis_shapes.cpp:98
 msgid "Widget's shape '%1' is not implemented yet!"
 msgstr "Widgetsgestalt '%1' ist nicht verfügbar!"
 
-#: vis_shapes.cpp:1023
+#: vis_shapes.cpp:977
 msgid "Save file"
 msgstr "Datei speichern"
 
-#: vis_shapes.cpp:1051
+#: vis_shapes.cpp:1003
 msgid "Load file"
 msgstr "Datei laden"
 
-#: vis_shapes.cpp:1724
+#: vis_shapes.cpp:1671
 msgid "Write file '%1' is fail."
 msgstr "Fehler beim Schreiben in die Datei '%1'."
 
-#: vis_shapes.cpp:2304
+#: vis_shapes.cpp:2251
 msgid "kHz"
 msgstr "kHz"
 
-#: vis_shapes.cpp:2304
+#: vis_shapes.cpp:2251
 msgid "Hz"
 msgstr "Hz"
 
-#: vis_shapes.cpp:2753
+#: vis_shapes.cpp:2700
 #, c-format
 msgid "%ds"
 msgstr "%ds"
 
-#: vis_shapes.cpp:2757
+#: vis_shapes.cpp:2704
 #, c-format
 msgid "%gs"
 msgstr "%gs"
 
-#: vis_shapes.cpp:2758
+#: vis_shapes.cpp:2705
 #, c-format
 msgid "%gms"
 msgstr "%gms"
 
-#: vis_shapes.cpp:2902
+#: vis_shapes.cpp:2849
 #, c-format
 msgid "Trend build: %f ms."
 msgstr "Trend zu bauen: %f ms."
 
-#: vis_shapes.cpp:2979
+#: vis_shapes.cpp:2926
 #, c-format
 msgid "Trend draw: %f ms."
 msgstr "Trend zu ziehen: %f ms."
 
-#: vis_shapes.cpp:3578
+#: vis_shapes.cpp:3525
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"
 
-#: vis_shapes.cpp:3579
+#: vis_shapes.cpp:3526
 msgid "mcsec"
 msgstr "msek"
 
-#: vis_shapes.cpp:3580
+#: vis_shapes.cpp:3527
 msgid "Level"
 msgstr "Stufe"
 
-#: vis_shapes.cpp:3581
+#: vis_shapes.cpp:3528
 msgid "Category"
 msgstr "Kategorie"
 
-#: vis_shapes.cpp:3582
+#: vis_shapes.cpp:3529
 msgid "Message"
 msgstr "Nachricht"
 
-#: vis_shapes.cpp:4052
+#: vis_shapes.cpp:3999
 #, c-format
 msgid "Document parsing error: %s"
 msgstr "Fehler der Dokumentanalyse: %s"
 
-#: vis_shapes.cpp:4227
+#: vis_shapes.cpp:4174
 msgid "Loading page: '%1'."
 msgstr "Lade Seite: '%1'."
 
-#: vis_widgs.cpp:91
+#: vis_widgs.cpp:90
 msgid "ID:"
 msgstr "ID:"
 
-#: vis_widgs.cpp:115 vis_widgs.cpp:206 vis_widgs.cpp:321
+#: vis_widgs.cpp:114 vis_widgs.cpp:205 vis_widgs.cpp:320
 msgid "Ok"
 msgstr "Annehmen"
 
-#: vis_widgs.cpp:119 vis_widgs.cpp:210 vis_widgs.cpp:325
+#: vis_widgs.cpp:118 vis_widgs.cpp:209 vis_widgs.cpp:324
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: vis_widgs.cpp:178
+#: vis_widgs.cpp:177
 msgid "Select user"
 msgstr "Benutzer auswählen"
 
-#: vis_widgs.cpp:186
+#: vis_widgs.cpp:185
 msgid "User:"
 msgstr "Benutzer:"
 
-#: vis_widgs.cpp:190
+#: vis_widgs.cpp:189
 msgid "Password:"
 msgstr "Kennwort:"
 
-#: vis_widgs.cpp:264
+#: vis_widgs.cpp:263
 msgid "Font select"
 msgstr "Schrift auswählen"
 
-#: vis_widgs.cpp:270
+#: vis_widgs.cpp:269
 msgid "Font:"
 msgstr "Schrift:"
 
-#: vis_widgs.cpp:279
+#: vis_widgs.cpp:278
 msgid "Size:"
 msgstr "Grösse:"
 
-#: vis_widgs.cpp:289
+#: vis_widgs.cpp:288
 msgid "Bold"
 msgstr "Fett"
 
-#: vis_widgs.cpp:291
+#: vis_widgs.cpp:290
 msgid "Italic"
 msgstr "Kursiv"
 
-#: vis_widgs.cpp:293
+#: vis_widgs.cpp:292
 msgid "Strikeout"
 msgstr "Durchgestrichen"
 
-#: vis_widgs.cpp:295
+#: vis_widgs.cpp:294
 msgid "Underline"
 msgstr "Unterstrichen"
 
-#: vis_widgs.cpp:301
+#: vis_widgs.cpp:300
 msgid "Sample:"
 msgstr "Muster:"
 
-#: vis_widgs.cpp:304
+#: vis_widgs.cpp:303
 msgid "AaBbCcDdEeFf"
 msgstr "AaBbCcDdEeFf"
 
-#: vis_widgs.cpp:835
+#: vis_widgs.cpp:834
 msgid "Find"
 msgstr "Suche"
 
-#: vis_widgs.cpp:840
+#: vis_widgs.cpp:839
 msgid "Find next"
 msgstr "Weitersuchen"
 
-#: vis_widgs.cpp:934 vis_widgs.cpp:955
+#: vis_widgs.cpp:933 vis_widgs.cpp:954
 msgid "Cursor = (%1:%2)"
 msgstr "Cursor = (%1:%2)"
 
-#: vis_widgs.cpp:979
+#: vis_widgs.cpp:978
 msgid "Enter text string for search:"
 msgstr "Geben Sie den Text-String für Suche:"
 
-#: vis_widgs.cpp:979
+#: vis_widgs.cpp:978
 msgid "String search"
 msgstr "String-Suche"
 
-#: vis_widgs.cpp:982
+#: vis_widgs.cpp:981
 msgid "Backward"
 msgstr "Rückwärts"
 
-#: vis_widgs.cpp:985
+#: vis_widgs.cpp:984
 msgid "Case sensitively"
 msgstr "Case sensibel"
 
-#: vis_widgs.cpp:988
+#: vis_widgs.cpp:987
 msgid "Whole words"
 msgstr "Ganze Wörter"
 
-#: vis_widgs.cpp:1204
+#: vis_widgs.cpp:1199
 #, c-format
 msgid "Request to VCA engine '%s' time %f ms."
 msgstr "Zeit der Anfrage an die VCA Maschine '%s' %f msek."
 
-#: vis_widgs.cpp:1266
+#: vis_widgs.cpp:1260
 #, c-format
 msgid "Load '%s' time %f ms."
 msgstr "Zeit für Laden '%s' %f msek."
 
-#: vis_widgs.cpp:1281
+#: vis_widgs.cpp:1275
 #, c-format
 msgid "Init '%s' time %f ms."
 msgstr "Zeit der Initialisation '%s' %f ms."
 
-#: vis_widgs.h:67
+#: vis_widgs.h:66
 msgid "Vision dialog"
 msgstr "Vision-Dialog"
+
+#~ msgid "Options help"
+#~ msgstr "Optionen Hilfe"

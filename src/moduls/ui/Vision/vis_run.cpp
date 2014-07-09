@@ -597,7 +597,7 @@ void VisRun::printDiag( const string &idg )
 	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
 	    //>>> Trend name request
 	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
-    	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
+	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
 
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
@@ -755,8 +755,8 @@ void VisRun::exportDiag( const string &idg )
 		//>>> Prepare header
 		CSVr += _("\"Date and time\";\"us\"");
 		for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
-    		    if(dgDt->prms[i_p].val().size() && dgDt->prms[i_p].color().isValid())
-    		    {
+		    if(dgDt->prms[i_p].val().size() && dgDt->prms[i_p].color().isValid())
+		    {
 			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].addr())+"\"";
 			if(firstPrm < 0) firstPrm = i_p;
 		    }
@@ -802,11 +802,11 @@ void VisRun::exportDiag( const string &idg )
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
 		    {
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
-    			if(cPrm.fftN && cPrm.color().isValid())
-    			{
-        		    int vpos = (int)((i_frq*cPrm.fftN)/(fftBeg*fftN));
-        		    double val = EVAL_REAL;
-        		    if(vpos >= 1 && vpos < (cPrm.fftN/2+1))
+			if(cPrm.fftN && cPrm.color().isValid())
+			{
+			    int vpos = (int)((i_frq*cPrm.fftN)/(fftBeg*fftN));
+			    double val = EVAL_REAL;
+			    if(vpos >= 1 && vpos < (cPrm.fftN/2+1))
 				val = cPrm.fftOut[0][0]/cPrm.fftN + pow(pow(cPrm.fftOut[vpos][0],2)+pow(cPrm.fftOut[vpos][1],2),0.5)/(cPrm.fftN/2+1);
 			    CSVr += ";"+QLocale().toString(val).toStdString();
 			}

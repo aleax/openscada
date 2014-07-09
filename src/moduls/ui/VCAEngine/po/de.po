@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-16 17:37+0200\n"
+"POT-Creation-Date: 2014-07-07 21:59+0300\n"
 "PO-Revision-Date: 2013-10-21 20:56+0400\n"
 "Last-Translator: irina\n"
 "Language-Team: German <kde-russian@lists.kde.ru>\n"
@@ -19,54 +19,54 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: libwidg.cpp:160
+#: libwidg.cpp:159
 msgid "Load widget library."
 msgstr "Widgetsbibliothek laden."
 
-#: libwidg.cpp:194
+#: libwidg.cpp:193
 msgid "Save widget library."
 msgstr "Widgetsbibliothek speichern."
 
-#: libwidg.cpp:218
+#: libwidg.cpp:215
 msgid "Enable widgets library."
 msgstr "Widgetsbibliothek einschalten."
 
-#: libwidg.cpp:218
+#: libwidg.cpp:215
 msgid "Disable widgets library."
 msgstr "Widgetsbibliothek abschalten."
 
-#: libwidg.cpp:229
+#: libwidg.cpp:226
 #, c-format
 msgid "Enable/disable widget '%s' error %s."
 msgstr "Fehler beim Ein-/Abschaltens des Widgets '%s': %s."
 
-#: libwidg.cpp:340
+#: libwidg.cpp:336
 msgid "Widgets library: "
 msgstr "Widgetsbibliothek: "
 
-#: libwidg.cpp:343 project.cpp:1318 session.cpp:626 widget.cpp:858
-#: widget.cpp:893 widget.cpp:1501
+#: libwidg.cpp:339 project.cpp:1305 session.cpp:606 widget.cpp:857
+#: widget.cpp:892 widget.cpp:1488
 msgid "Widget"
 msgstr "Widget"
 
-#: libwidg.cpp:344
+#: libwidg.cpp:340
 msgid "Library"
 msgstr "Bibliothek"
 
-#: libwidg.cpp:346 project.cpp:473 session.cpp:596 widget.cpp:860
+#: libwidg.cpp:342 project.cpp:463 session.cpp:572 widget.cpp:859
 msgid "State"
 msgstr "Zustand"
 
-#: libwidg.cpp:348 project.cpp:475 session.cpp:598 widget.cpp:153
-#: widget.cpp:862
+#: libwidg.cpp:344 project.cpp:465 session.cpp:573 widget.cpp:152
+#: widget.cpp:861
 msgid "Enable"
 msgstr "Einschalten"
 
-#: libwidg.cpp:349
+#: libwidg.cpp:345
 msgid "Library DB"
 msgstr "Datenbank der Bibliothek"
 
-#: libwidg.cpp:351 project.cpp:478
+#: libwidg.cpp:347 project.cpp:468
 msgid ""
 "DB address in format [<DB module>.<DB name>.<Table name>].\n"
 "For use main work DB set '*.*'."
@@ -74,60 +74,60 @@ msgstr ""
 "Datenbank Parameter im Format [<DB-Modul>.<DB-Name>.<Name der Tabelle>].\n"
 "Für die Hauptdatenbank '*.*' verwenden."
 
-#: libwidg.cpp:352 libwidg.cpp:836 project.cpp:479 project.cpp:1323
-#: vcaengine.cpp:137 vcaengine.cpp:187
+#: libwidg.cpp:348 libwidg.cpp:829 project.cpp:469 project.cpp:1310
+#: vcaengine.cpp:132 vcaengine.cpp:182
 msgid "Date of modification"
 msgstr "Änderungsdatum"
 
-#: libwidg.cpp:354 origwidg.cpp:409 origwidg.cpp:440 project.cpp:481
-#: project.cpp:1318 session.cpp:614 vcaengine.cpp:828 widget.cpp:867
-#: widget.cpp:1511
+#: libwidg.cpp:350 origwidg.cpp:380 origwidg.cpp:411 project.cpp:471
+#: project.cpp:1305 session.cpp:594 vcaengine.cpp:778 widget.cpp:866
+#: widget.cpp:1498
 msgid "Configuration"
 msgstr "Konfig"
 
-#: libwidg.cpp:356 libwidg.cpp:367 project.cpp:483 project.cpp:510
-#: project.cpp:522 widget.cpp:143 widget.cpp:869 widget.cpp:1506
+#: libwidg.cpp:352 libwidg.cpp:363 project.cpp:473 project.cpp:500
+#: project.cpp:512 widget.cpp:142 widget.cpp:868 widget.cpp:1493
 msgid "Id"
 msgstr "Id"
 
-#: libwidg.cpp:357 project.cpp:484 project.cpp:519 vcaengine.cpp:120
-#: vcaengine.cpp:158 vcaengine.cpp:167 widget.cpp:151 widget.cpp:873
-#: widget.cpp:1507
+#: libwidg.cpp:353 project.cpp:474 project.cpp:509 vcaengine.cpp:115
+#: vcaengine.cpp:153 vcaengine.cpp:162 widget.cpp:150 widget.cpp:872
+#: widget.cpp:1494
 msgid "Name"
 msgstr "Name"
 
-#: libwidg.cpp:358 project.cpp:485 vcaengine.cpp:121 vcaengine.cpp:168
-#: widget.cpp:152 widget.cpp:874
+#: libwidg.cpp:354 project.cpp:475 vcaengine.cpp:116 vcaengine.cpp:163
+#: widget.cpp:151 widget.cpp:873
 msgid "Description"
 msgstr "Beschreibung"
 
-#: libwidg.cpp:359 project.cpp:486 vcaengine.cpp:123 vcaengine.cpp:132
-#: vcaengine.cpp:170 vcaengine.cpp:181 widget.cpp:875
+#: libwidg.cpp:355 project.cpp:476 vcaengine.cpp:118 vcaengine.cpp:127
+#: vcaengine.cpp:165 vcaengine.cpp:176 widget.cpp:874
 msgid "Icon"
 msgstr "Icon"
 
-#: libwidg.cpp:362 libwidg.cpp:363 widget.cpp:890
+#: libwidg.cpp:358 libwidg.cpp:359 widget.cpp:889
 msgid "Widgets"
 msgstr "Widgets"
 
-#: libwidg.cpp:364 libwidg.cpp:365 project.cpp:507 project.cpp:508
-#: vcaengine.cpp:128
+#: libwidg.cpp:360 libwidg.cpp:361 project.cpp:497 project.cpp:498
+#: vcaengine.cpp:123
 msgid "Mime data"
 msgstr "Mime Daten"
 
-#: libwidg.cpp:368 project.cpp:511 vcaengine.cpp:127
+#: libwidg.cpp:364 project.cpp:501 vcaengine.cpp:122
 msgid "Mime type"
 msgstr "Mime Typ"
 
-#: libwidg.cpp:369 project.cpp:512
+#: libwidg.cpp:365 project.cpp:502
 msgid "Data"
 msgstr "Daten"
 
-#: libwidg.cpp:765 project.cpp:1199 session.cpp:1354 widget.cpp:682
+#: libwidg.cpp:759 project.cpp:1187 session.cpp:1283 widget.cpp:681
 msgid "Widget is not container!"
 msgstr "Widget ist kein Container!"
 
-#: libwidg.cpp:779 project.cpp:1213
+#: libwidg.cpp:772 project.cpp:1200
 #, c-format
 msgid ""
 "You try to create widget with name '%s' of the widget that was the early "
@@ -136,88 +136,88 @@ msgstr ""
 "Sie versuchen, das Widget mit dem Namen '%s' des Widgets, das früher aus dem "
 "Basencontainer geerbt und gelöscht war, zu schaffen!"
 
-#: libwidg.cpp:840
+#: libwidg.cpp:833
 msgid "Library widget: "
 msgstr "Bibliothekenwidget: "
 
-#: libwidg.cpp:940 project.cpp:1638
+#: libwidg.cpp:931 project.cpp:1616
 #, c-format
 msgid "Inheriting widget '%s' enable error."
 msgstr "Fehler beim Einschalten des vererbenden Widgets '%s'."
 
-#: libwidg.cpp:1066
+#: libwidg.cpp:1055
 msgid "Link to widget: "
 msgstr "Link zu Widget: "
 
-#: origwidg.cpp:40
+#: origwidg.cpp:39
 msgid "Deleting the base primitive-widget error."
 msgstr "Fehler beim Löschens des Grundprimitivwidgets."
 
-#: origwidg.cpp:81
+#: origwidg.cpp:78
 msgid "Base widget: "
 msgstr "Grundwidget: "
 
-#: origwidg.cpp:82 project.cpp:1321 widget.cpp:145 widget.cpp:863
+#: origwidg.cpp:79 project.cpp:1308 widget.cpp:144 widget.cpp:862
 msgid "Parent"
 msgstr "Eltern"
 
-#: origwidg.cpp:128
+#: origwidg.cpp:118
 msgid "Elementary figures"
 msgstr "Elementarfiguren"
 
-#: origwidg.cpp:133
+#: origwidg.cpp:120
 msgid "Elementary figures widget of the finite visualization."
 msgstr "Widget für die Elementarfigur der Visualisierung."
 
-#: origwidg.cpp:142
+#: origwidg.cpp:127
 msgid "Line:width"
 msgstr "Linie:Stärke"
 
-#: origwidg.cpp:143
+#: origwidg.cpp:128
 msgid "Line:color"
 msgstr "Linie:Farbe"
 
-#: origwidg.cpp:144
+#: origwidg.cpp:129
 msgid "Line:style"
 msgstr "Linie:Stil"
 
-#: origwidg.cpp:145 origwidg.cpp:295
+#: origwidg.cpp:130 origwidg.cpp:277
 msgid "Solid;Dashed;Dotted"
 msgstr "Durchgehend;Gestrichelt;Gepunktet"
 
-#: origwidg.cpp:146 origwidg.cpp:651 origwidg.cpp:787 origwidg.cpp:962
-#: origwidg.cpp:1974
+#: origwidg.cpp:131 origwidg.cpp:613 origwidg.cpp:736 origwidg.cpp:894
+#: origwidg.cpp:1826
 msgid "Border:width"
 msgstr "Rand:Breite"
 
-#: origwidg.cpp:147 origwidg.cpp:652 origwidg.cpp:788 origwidg.cpp:963
-#: origwidg.cpp:1975
+#: origwidg.cpp:132 origwidg.cpp:614 origwidg.cpp:737 origwidg.cpp:895
+#: origwidg.cpp:1827
 msgid "Border:color"
 msgstr "Rand:Farbe"
 
-#: origwidg.cpp:148
+#: origwidg.cpp:133
 msgid "Fill:color"
 msgstr "Ausfüllen:Farbe"
 
-#: origwidg.cpp:149
+#: origwidg.cpp:134
 msgid "Fill:image"
 msgstr "Ausfüllen:Bild"
 
-#: origwidg.cpp:150 origwidg.cpp:657
+#: origwidg.cpp:135 origwidg.cpp:620
 msgid "Orientation angle"
 msgstr "Drehwinkel"
 
-#: origwidg.cpp:151
+#: origwidg.cpp:136
 msgid "Elements list"
 msgstr "Liste von Elementen"
 
-#: origwidg.cpp:163 origwidg.cpp:493 origwidg.cpp:727 origwidg.cpp:886
-#: origwidg.cpp:1105 origwidg.cpp:1239 origwidg.cpp:1507 origwidg.cpp:1990
-#: session.cpp:1967 widget.cpp:1081 widget.cpp:1504
+#: origwidg.cpp:148 origwidg.cpp:464 origwidg.cpp:689 origwidg.cpp:830
+#: origwidg.cpp:1033 origwidg.cpp:1157 origwidg.cpp:1390 origwidg.cpp:1842
+#: session.cpp:1867 widget.cpp:1080 widget.cpp:1491
 msgid "Attributes"
 msgstr "Attribute"
 
-#: origwidg.cpp:173
+#: origwidg.cpp:157
 #, c-format
 msgid ""
 "The list of elements can contain:\n"
@@ -281,39 +281,39 @@ msgstr ""
 "  fill:(25|50):(25|50):c2:i2\n"
 "  fill:(50|25):(90.5|25):(90|50):(50|50):#d3d3d3:h_31"
 
-#: origwidg.cpp:270 origwidg.cpp:272
+#: origwidg.cpp:252 origwidg.cpp:254
 msgid "Point "
 msgstr "Punkt "
 
-#: origwidg.cpp:278
+#: origwidg.cpp:260
 msgid "Width "
 msgstr "Breite "
 
-#: origwidg.cpp:283
+#: origwidg.cpp:265
 msgid "Color "
 msgstr "Farbe"
 
-#: origwidg.cpp:288
+#: origwidg.cpp:270
 msgid "Image "
 msgstr "Bild"
 
-#: origwidg.cpp:293
+#: origwidg.cpp:275
 msgid "Style "
 msgstr "Stil"
 
-#: origwidg.cpp:336
+#: origwidg.cpp:313
 msgid "Form elements"
 msgstr "Formenelemente"
 
-#: origwidg.cpp:341
+#: origwidg.cpp:315
 msgid "Form elements widget of the finite visualization."
 msgstr "Widget für die Formenelemente der Visualisierung."
 
-#: origwidg.cpp:350
+#: origwidg.cpp:322
 msgid "Element type"
 msgstr "Typ des Elements"
 
-#: origwidg.cpp:352
+#: origwidg.cpp:324
 msgid ""
 "Line edit;Text edit;Check box;Button;Combo box;List;Tree;Table;Slider;Scroll "
 "Bar"
@@ -321,71 +321,71 @@ msgstr ""
 "Zeilenbearbeitung;Textbearbeitung;Check Box;Schaltfläche;Combo Box;Liste;"
 "Baum;Tabelle;Schieber;Schieberegler"
 
-#: origwidg.cpp:405 origwidg.cpp:414 origwidg.cpp:420 origwidg.cpp:434
-#: origwidg.cpp:439 origwidg.cpp:454 project.cpp:523 vcaFuncs.h:170
-#: vcaFuncs.h:220
+#: origwidg.cpp:376 origwidg.cpp:385 origwidg.cpp:391 origwidg.cpp:405
+#: origwidg.cpp:410 origwidg.cpp:425 project.cpp:513 vcaFuncs.h:156
+#: vcaFuncs.h:202
 msgid "Value"
 msgstr "Wert"
 
-#: origwidg.cpp:406
+#: origwidg.cpp:377
 msgid "View"
 msgstr "Ansicht"
 
-#: origwidg.cpp:408
+#: origwidg.cpp:379
 msgid "Text;Combo;Integer;Real;Time;Date;Date and time"
 msgstr "Text;Combo;Ganzzahl;Reelle Zahl;Uhrzeit;Datum;Datum und Uhrzeit"
 
-#: origwidg.cpp:410 origwidg.cpp:416
+#: origwidg.cpp:381 origwidg.cpp:387
 msgid "Confirm"
 msgstr "Bestätigen"
 
-#: origwidg.cpp:411 origwidg.cpp:417 origwidg.cpp:421 origwidg.cpp:431
-#: origwidg.cpp:436 origwidg.cpp:655 origwidg.cpp:1176 origwidg.cpp:1320
-#: widget.cpp:1733
+#: origwidg.cpp:382 origwidg.cpp:388 origwidg.cpp:392 origwidg.cpp:402
+#: origwidg.cpp:407 origwidg.cpp:618 origwidg.cpp:1095 origwidg.cpp:1225
+#: widget.cpp:1720
 msgid "Font"
 msgstr "Schrift"
 
-#: origwidg.cpp:415 origwidg.cpp:658
+#: origwidg.cpp:386 origwidg.cpp:621
 msgid "Word wrap"
 msgstr "Zeichenumbruch"
 
-#: origwidg.cpp:424 origwidg.cpp:465
+#: origwidg.cpp:395 origwidg.cpp:436
 msgid "Repeat"
 msgstr "Wiederholen"
 
-#: origwidg.cpp:425 widget.cpp:1732
+#: origwidg.cpp:396 widget.cpp:1719
 msgid "Image"
 msgstr "Bild"
 
-#: origwidg.cpp:426
+#: origwidg.cpp:397
 msgid "Color:button"
 msgstr "Farbe:Taster"
 
-#: origwidg.cpp:427
+#: origwidg.cpp:398
 msgid "Color:text"
 msgstr "Farbe:Text"
 
-#: origwidg.cpp:428
+#: origwidg.cpp:399
 msgid "Mode"
 msgstr "Modus"
 
-#: origwidg.cpp:430
+#: origwidg.cpp:401
 msgid "Standard;Checkable;Menu;Load;Save"
 msgstr "Standard;Checkable;Menü;Laden;Speichern"
 
-#: origwidg.cpp:435 origwidg.cpp:467
+#: origwidg.cpp:406 origwidg.cpp:438
 msgid "Items"
 msgstr "Elemente"
 
-#: origwidg.cpp:466
+#: origwidg.cpp:437
 msgid "Check"
 msgstr "Prüfung"
 
-#: origwidg.cpp:469
+#: origwidg.cpp:440
 msgid "File content"
 msgstr "Datei-Inhalt"
 
-#: origwidg.cpp:502
+#: origwidg.cpp:473
 msgid ""
 "Enter text line by template with the char items:\n"
 "  'A' - ASCII alphabetic character required. A-Z, a-z.\n"
@@ -431,11 +431,11 @@ msgstr ""
 "  '\\' - Verwenden Sie die Sonderzeichen oben aufgeführten sie als "
 "Trennzeichen verwenden zu entkommen."
 
-#: origwidg.cpp:524
+#: origwidg.cpp:495
 msgid "List of values the editable combobox by lines."
 msgstr "Liste der Werte der bearbeitbaren ComboBox durch Linien."
 
-#: origwidg.cpp:527
+#: origwidg.cpp:498
 msgid ""
 "Integer value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:"
 "[Suffix]\"."
@@ -443,7 +443,7 @@ msgstr ""
 "Integer-Wert-Konfiguration in Form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:"
 "[Suffix]\"."
 
-#: origwidg.cpp:530
+#: origwidg.cpp:501
 msgid ""
 "Real value configuration in form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:"
 "[Suffix]:[SignsAfterDot]\"."
@@ -451,7 +451,7 @@ msgstr ""
 "Realer-Wert-Konfiguration in Form: \"[Min]:[Max]:[ChangeStep]:[Prefix]:"
 "[Suffix]:[SignsAfterDot]\"."
 
-#: origwidg.cpp:533
+#: origwidg.cpp:504
 msgid ""
 "Enter date and/or time by template with the items:\n"
 "  \"d\" - number of the day (1-31);\n"
@@ -491,7 +491,7 @@ msgstr ""
 "  \"ss\" - Sekunden (00-59);\n"
 "  \"AP,ap\" - auf AM/PM-Anzeige oder am/pm."
 
-#: origwidg.cpp:563
+#: origwidg.cpp:534
 msgid ""
 "The button operation mode:\n"
 "  \"Standard\" - normal button which allow events repeat on it hold (the "
@@ -526,7 +526,7 @@ msgstr ""
 "          Datei zum Speichern, nach der Wahl wird der Inhalt des Attributes "
 "\"Bedeutung\" in die File gespeichert, und \"Bedeutung\" wird gelöscht"
 
-#: origwidg.cpp:576
+#: origwidg.cpp:547
 msgid ""
 "Repeating parameters of events on holding \"{delay}-{interval}\", time in "
 "milliseconds."
@@ -534,15 +534,15 @@ msgstr ""
 "Parameter vom Vorgangswiederholen beim Halten \"{delay}-{interval}\", Zeit "
 "in Millisekunden"
 
-#: origwidg.cpp:577
+#: origwidg.cpp:548
 msgid "Toggle value."
 msgstr "Wert des Umschalters"
 
-#: origwidg.cpp:578
+#: origwidg.cpp:549
 msgid "Addresses of menu elements list like \"/grp1/grp2/item1\"."
 msgstr "Die Liste von Elementenadressen-Menu gleich \"/grp1/grp2/item1\"."
 
-#: origwidg.cpp:579
+#: origwidg.cpp:550
 msgid ""
 "Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and loaded "
 "file content.\n"
@@ -551,7 +551,7 @@ msgstr ""
 "Beschreibungszeile \"{FilesTemplate}|{Header}|{FileByDefault}\" und Inhalt "
 "der geladeten Datei.\\ Dateischablone gleich \"Bilder\" "
 
-#: origwidg.cpp:581
+#: origwidg.cpp:552
 msgid ""
 "Description line \"{FilesTemplate}|{Header}|{FileByDefault}\" and saved file "
 "content.\n"
@@ -560,16 +560,16 @@ msgstr ""
 "Beschreibungszeile \"{FilesTemplate}|{Header}|{FileByDefault}\" und Inhalt "
 "der gespeicherten Datei.\\ Dateischablone gleich \"Bilder\" "
 
-#: origwidg.cpp:587
+#: origwidg.cpp:558
 msgid "List of hierarchical items in path \"/{DIR}/{DIR}/{ITEM}\" by lines."
 msgstr ""
 "Liste von hierarchischen Elementen gleich \"/{DIR}/{DIR}/{ITEM}\" in Zeilen."
 
-#: origwidg.cpp:587
+#: origwidg.cpp:558
 msgid "List of items-values by lines."
 msgstr "Liste der Werke-Werte durch Linien."
 
-#: origwidg.cpp:592
+#: origwidg.cpp:563
 msgid ""
 "Configuration of the slider in the format: \"[VertOrient]:[Min]:[Max]:"
 "[SinglStep]:[PageStep]\".\n"
@@ -591,51 +591,51 @@ msgstr ""
 "  \"SinglStep\" - von der Größe eines einzigen Schritt;\n"
 "  \"PageStep\" - die Größe der Seite Schritt."
 
-#: origwidg.cpp:602
+#: origwidg.cpp:573
 msgid ""
 "XML tag \"tbl\" for the table fill:\n"
 "<tbl>\n"
 "<h><s>Col1</s><s>Col2</s></h>\n"
 "<r><s>Col1ValS</s><i>Col2ValI</i></r>\n"
-"</table>"
+"</tbl>"
 msgstr ""
 
-#: origwidg.cpp:635
+#: origwidg.cpp:602
 msgid "Text fields"
 msgstr "Textfelder"
 
-#: origwidg.cpp:640
+#: origwidg.cpp:604
 msgid "Text fields widget of the finite visualization."
 msgstr "Widget für die Textfelder der Visualisierung."
 
-#: origwidg.cpp:649 origwidg.cpp:785 origwidg.cpp:960 origwidg.cpp:1174
-#: origwidg.cpp:1972
+#: origwidg.cpp:611 origwidg.cpp:734 origwidg.cpp:892 origwidg.cpp:1093
+#: origwidg.cpp:1824
 msgid "Background:color"
 msgstr "Hintergrund:Farbe"
 
-#: origwidg.cpp:650 origwidg.cpp:786 origwidg.cpp:961 origwidg.cpp:1175
-#: origwidg.cpp:1973
+#: origwidg.cpp:612 origwidg.cpp:735 origwidg.cpp:893 origwidg.cpp:1094
+#: origwidg.cpp:1825
 msgid "Background:image"
 msgstr "Hintergrund:Bild"
 
-#: origwidg.cpp:653 origwidg.cpp:789 origwidg.cpp:964 origwidg.cpp:1976
+#: origwidg.cpp:615 origwidg.cpp:738 origwidg.cpp:896 origwidg.cpp:1828
 msgid "Border:style"
 msgstr "Rand:Stil"
 
-#: origwidg.cpp:654 origwidg.cpp:791 origwidg.cpp:965 origwidg.cpp:1978
+#: origwidg.cpp:617 origwidg.cpp:740 origwidg.cpp:898 origwidg.cpp:1830
 msgid "None;Dotted;Dashed;Solid;Double;Groove;Ridge;Inset;Outset"
 msgstr ""
 "Keine;Gepunktet;Gestrichelt;Durchgehend;Doppelt;Rille;Grat;Einsatz;Anfang"
 
-#: origwidg.cpp:656 widget.cpp:1731
+#: origwidg.cpp:619 widget.cpp:1718
 msgid "Color"
 msgstr "Farbe"
 
-#: origwidg.cpp:659
+#: origwidg.cpp:622
 msgid "Alignment"
 msgstr "Ausrichtung "
 
-#: origwidg.cpp:660
+#: origwidg.cpp:625
 msgid ""
 "Top left;Top right;Top center;Top justify;Bottom left;Bottom right;Bottom "
 "center;Bottom justify;V center left;V center right;Center;V center justify"
@@ -643,45 +643,45 @@ msgstr ""
 "Oben links;Oben rechts;Oben Mitte;Oben bündig;Unten links;Unten rechts;Unten "
 "Mitte;Unten bündig;Mitte links;Mitte rechts;Mitte;Mitte bündig"
 
-#: origwidg.cpp:663 widget.cpp:1730
+#: origwidg.cpp:628 widget.cpp:1717
 msgid "Text"
 msgstr "Text"
 
-#: origwidg.cpp:664
+#: origwidg.cpp:629
 msgid "Arguments number"
 msgstr "Anzahl der Argumente"
 
-#: origwidg.cpp:675 origwidg.cpp:706
+#: origwidg.cpp:638 origwidg.cpp:668
 msgid "Argument "
 msgstr "Argument "
 
-#: origwidg.cpp:694
+#: origwidg.cpp:654
 msgid ":type"
 msgstr ":Typ"
 
-#: origwidg.cpp:695
+#: origwidg.cpp:656
 msgid "Integer;Real;String"
 msgstr "Ganzzahl;Reele Zahl;Text"
 
-#: origwidg.cpp:696 origwidg.cpp:706 origwidg.cpp:1087
+#: origwidg.cpp:658 origwidg.cpp:668 origwidg.cpp:1015
 msgid ":value"
 msgstr ":Wert"
 
-#: origwidg.cpp:698
+#: origwidg.cpp:660
 msgid ":config"
 msgstr ":Konfiguration"
 
-#: origwidg.cpp:738
+#: origwidg.cpp:698
 msgid "Text value. Use \"%{n}\" for argument {n} (from 1) value insert."
 msgstr ""
 "Der Wert des Textes. Verwenden Sie \"%{n}\" die Werte der Argumente {n} (aus "
 "1) zu halten."
 
-#: origwidg.cpp:747
+#: origwidg.cpp:706
 msgid "Integer value configuration in form \"[valLen]\"."
 msgstr "Integer-Wert-Konfiguration in Form \"[valLen]\"."
 
-#: origwidg.cpp:748
+#: origwidg.cpp:707
 msgid ""
 "Real value configuration in form: \"[width];[form];[prec]\".\n"
 "Where \"form\" that 'g', 'e' or 'f'."
@@ -689,88 +689,88 @@ msgstr ""
 "Realer Wert Konfiguration in Form: \"[width];[form];[prec]\".\n"
 "Wo \"Form\", die 'g', 'e' oder 'f'."
 
-#: origwidg.cpp:750
+#: origwidg.cpp:709
 msgid "String value configuration in form \"[strLen]\"."
 msgstr "String-Wert-Konfiguration in Form \"[strLen]\"."
 
-#: origwidg.cpp:771
+#: origwidg.cpp:725
 msgid "Media"
 msgstr "Media"
 
-#: origwidg.cpp:776
+#: origwidg.cpp:727
 msgid "Media widget of the finite visualization."
 msgstr "Widget für die Media der Visualisierung."
 
-#: origwidg.cpp:792
+#: origwidg.cpp:741
 msgid "Source"
 msgstr "Quelle"
 
-#: origwidg.cpp:793 origwidg.cpp:967 session.cpp:630 widget.cpp:870
-#: widget.cpp:1508
+#: origwidg.cpp:742 origwidg.cpp:900 session.cpp:610 widget.cpp:869
+#: widget.cpp:1495
 msgid "Type"
 msgstr "Typ"
 
-#: origwidg.cpp:794
+#: origwidg.cpp:743
 msgid "Image;Animation;Full video"
 msgstr "Bild;Animation;Full Video"
 
-#: origwidg.cpp:795
+#: origwidg.cpp:744
 msgid "Map areas"
 msgstr "Kartenbereiche"
 
-#: origwidg.cpp:829 origwidg.cpp:832
+#: origwidg.cpp:776 origwidg.cpp:779
 msgid "Fit to widget size"
 msgstr "Anpassen an Widgetgrössse"
 
-#: origwidg.cpp:833
+#: origwidg.cpp:780
 msgid "Play speed"
 msgstr "Geschwindigkeit der Wiedergabe"
 
-#: origwidg.cpp:836
+#: origwidg.cpp:783
 msgid "Play"
 msgstr "Abspielen"
 
-#: origwidg.cpp:837
+#: origwidg.cpp:784
 msgid "Roll play"
 msgstr "Roll spielen"
 
-#: origwidg.cpp:838
+#: origwidg.cpp:785
 msgid "Pause"
 msgstr "Pause"
 
-#: origwidg.cpp:839
+#: origwidg.cpp:786
 msgid "Size"
 msgstr "Größe"
 
-#: origwidg.cpp:840
+#: origwidg.cpp:787
 msgid "Seek"
 msgstr "Suchen"
 
-#: origwidg.cpp:841
+#: origwidg.cpp:788
 msgid "Volume"
 msgstr "Volumen"
 
-#: origwidg.cpp:847
+#: origwidg.cpp:793
 msgid "Area "
 msgstr "Bereich "
 
-#: origwidg.cpp:866
+#: origwidg.cpp:809
 msgid ":shape"
 msgstr ":Gestalt"
 
-#: origwidg.cpp:867
+#: origwidg.cpp:810
 msgid "Rect;Poly;Circle"
 msgstr "Quadrat;Poly;Kreis"
 
-#: origwidg.cpp:868
+#: origwidg.cpp:811
 msgid ":coordinates"
 msgstr ":Koordinaten"
 
-#: origwidg.cpp:870
+#: origwidg.cpp:813
 msgid ":title"
 msgstr ":Titel"
 
-#: origwidg.cpp:897
+#: origwidg.cpp:839
 msgid ""
 "Media source name in form \"[src:]name\", where:\n"
 "  \"src\" - source:\n"
@@ -801,7 +801,7 @@ msgstr ""
 "  \"stream:http://localhost.localhost:5050\" - Video-und Audio-Stream Play-"
 "URL aus."
 
-#: origwidg.cpp:910
+#: origwidg.cpp:852
 msgid ""
 "Media type variant:\n"
 "  \"Image\" - raster or vector(can not support) image, like: PNG, JPEG, "
@@ -817,79 +817,79 @@ msgstr ""
 "  \"Full Video\" - volle Video, Audio oder Strom, wie: OGG, OGM, AVI, MKV, "
 "MPG, MP3, MP4."
 
-#: origwidg.cpp:923
+#: origwidg.cpp:865
 msgid "Rectangle area in form \"x1,y1,x2,y2\"."
 msgstr "Rechteck Bereich in Form \"x1,y1,x2,y2\"."
 
-#: origwidg.cpp:924
+#: origwidg.cpp:866
 msgid "Polygon area in form \"x1,y1,x2,y2,xN,yN\"."
 msgstr "Polygon-Bereich in Form \"x1,y1,x2,y2,xN,yN\"."
 
-#: origwidg.cpp:925
+#: origwidg.cpp:867
 msgid "Circle area in form \"x,y,r\"."
 msgstr "Kreisfläche in Form \"x,y,r\"."
 
-#: origwidg.cpp:946
+#: origwidg.cpp:883
 msgid "Diagram"
 msgstr "Diagramm"
 
-#: origwidg.cpp:951
+#: origwidg.cpp:885
 msgid "Diagram widget of the finite visualization."
 msgstr "Widget für das Diagramm der Visualisierung."
 
-#: origwidg.cpp:966 origwidg.cpp:1180
+#: origwidg.cpp:899 origwidg.cpp:1099
 msgid "Tracing period (s)"
 msgstr "Trackingszeit (s)"
 
-#: origwidg.cpp:967
+#: origwidg.cpp:901
 msgid "Trend;Spectrum"
 msgstr "Plan;Spektrum"
 
-#: origwidg.cpp:985 origwidg.cpp:1027
+#: origwidg.cpp:916 origwidg.cpp:958
 msgid "Cursor:sek"
 msgstr "Cursor:sek"
 
-#: origwidg.cpp:986 origwidg.cpp:1028
+#: origwidg.cpp:917 origwidg.cpp:959
 msgid "Cursor:usek"
 msgstr "Cursor:Mikrosek"
 
-#: origwidg.cpp:987 origwidg.cpp:1029
+#: origwidg.cpp:918 origwidg.cpp:960
 msgid "Cursor:color"
 msgstr "Cursor:Farbe"
 
-#: origwidg.cpp:1020
+#: origwidg.cpp:950
 msgid "Scale:horizontal grid size, sek"
 msgstr "Skala:Horiz. Gitterlinien Größe, sec"
 
-#: origwidg.cpp:1022
+#: origwidg.cpp:953
 msgid "Time:sek"
 msgstr "Zeit:Sek"
 
-#: origwidg.cpp:1023
+#: origwidg.cpp:954
 msgid "Time:usek"
 msgstr "Zeit:Mikrosek"
 
-#: origwidg.cpp:1024 origwidg.cpp:1179
+#: origwidg.cpp:955 origwidg.cpp:1098
 msgid "Size, sek"
 msgstr "Größe, Sek"
 
-#: origwidg.cpp:1031
+#: origwidg.cpp:962
 msgid "Scale:color"
 msgstr "Skala:Farbe"
 
-#: origwidg.cpp:1032
+#: origwidg.cpp:963
 msgid "Scale:horizontal"
 msgstr "Skala:waagerecht"
 
-#: origwidg.cpp:1033
+#: origwidg.cpp:965
 msgid "No draw;Grid;Markers;Grid and markers"
 msgstr "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung"
 
-#: origwidg.cpp:1034
+#: origwidg.cpp:966
 msgid "Scale:vertical"
 msgstr "Skala:senkrecht"
 
-#: origwidg.cpp:1035
+#: origwidg.cpp:968
 msgid ""
 "No draw;Grid;Markers;Grid and markers;Grid (log);Markers (log);Grid and "
 "markers (log)"
@@ -897,77 +897,77 @@ msgstr ""
 "Zeichnen nicht;Gitter;Markierung;Gitter und Markierung;Gitter (log);"
 "Markierung (log);Gitter und Markierung (log)"
 
-#: origwidg.cpp:1036
+#: origwidg.cpp:969
 msgid "Scale:vertical scale (%)"
 msgstr "Skala:senkrechter Maßstab (%)"
 
-#: origwidg.cpp:1037
+#: origwidg.cpp:970
 msgid "Scale:vertical scale offset (%)"
 msgstr "Skala:senkrecht. Maßstab verschieben (%)"
 
-#: origwidg.cpp:1038
+#: origwidg.cpp:971
 msgid "Scale:Markers:color"
 msgstr "Skala:Markierung:Farbe"
 
-#: origwidg.cpp:1039
+#: origwidg.cpp:972
 msgid "Scale:Markers:font"
 msgstr "Skala:Markierung:Schrift"
 
-#: origwidg.cpp:1040
+#: origwidg.cpp:973
 msgid "Value archivator"
 msgstr "Wertearchivar"
 
-#: origwidg.cpp:1041
+#: origwidg.cpp:974
 msgid "Values for pixel"
 msgstr "Werte pro Pixel"
 
-#: origwidg.cpp:1042
+#: origwidg.cpp:975
 msgid "Parameters number"
 msgstr "Anzahl der Parameter"
 
-#: origwidg.cpp:1048
+#: origwidg.cpp:980
 msgid "Parameter "
 msgstr "Parameter "
 
-#: origwidg.cpp:1073
+#: origwidg.cpp:1002
 msgid ":address"
 msgstr ":Adresse"
 
-#: origwidg.cpp:1075
+#: origwidg.cpp:1004
 msgid ":view border:lower"
 msgstr ":Sicht Grenze:untere"
 
-#: origwidg.cpp:1077
+#: origwidg.cpp:1006
 msgid ":view border:upper"
 msgstr ":Sicht Grenze:obere"
 
-#: origwidg.cpp:1081 origwidg.cpp:1223
+#: origwidg.cpp:1008 origwidg.cpp:1140
 msgid ":color"
 msgstr ":Farbe"
 
-#: origwidg.cpp:1083
+#: origwidg.cpp:1010
 msgid ":width"
 msgstr ":Stärke"
 
-#: origwidg.cpp:1085
+#: origwidg.cpp:1012
 msgid ":scale"
 msgstr ":Skale"
 
-#: origwidg.cpp:1086
+#: origwidg.cpp:1013
 msgid "Global;Markers;Grid and markers;Markers (log);Grid and markers (log)"
 msgstr ""
 "Globally;Markierung;Gitter und Markierung;Markierung (log);Gitter und "
 "Markierung (log)"
 
-#: origwidg.cpp:1089
+#: origwidg.cpp:1017
 msgid ":properties"
 msgstr ":Eigenschaften"
 
-#: origwidg.cpp:1116
+#: origwidg.cpp:1044
 msgid "Value archivator in form \"ArchMod.ArchivatorId\"."
 msgstr "Wert archivator in Form \"ArchMod.ArchivatorId\"."
 
-#: origwidg.cpp:1117
+#: origwidg.cpp:1046
 msgid ""
 "The number of values per pixel. Increase to enhance the accuracy of export "
 "at large time intervals."
@@ -975,7 +975,7 @@ msgstr ""
 "Die Anzahl der Werte pro Pixel. Zoom, um die Genauigkeit der Ausführen in "
 "die großen Zeitabständen zu erhöhen."
 
-#: origwidg.cpp:1124
+#: origwidg.cpp:1053
 msgid ""
 "Full address to DAQ attribute of a parameter or to an archive.\n"
 "Also support direct data set by prefixes:\n"
@@ -1011,7 +1011,7 @@ msgstr ""
 "10:00:00\";\n"
 "  \"line:3.14159265\" - eine horizontale Linie auf dem Wert \"3.14159265\"."
 
-#: origwidg.cpp:1138
+#: origwidg.cpp:1067
 msgid ""
 "Real archive properties in form \"BegArh:EndArh:DataPeriod\", where:\n"
 "  \"BegArh\", \"EndArh\", \"DataPeriod\" - begin, end and period archive's "
@@ -1024,39 +1024,39 @@ msgstr ""
 "Daten-Archiv in Sekunden,\n"
 "                  in der realen Darstellung von bis zu Mikrosekunden (1e-6)."
 
-#: origwidg.cpp:1160
+#: origwidg.cpp:1084
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: origwidg.cpp:1165
+#: origwidg.cpp:1086
 msgid "Protocol widget of the finite visualization."
 msgstr "Widget für das Protokoll der Visualisierung."
 
-#: origwidg.cpp:1177
+#: origwidg.cpp:1096
 msgid "Header visible"
 msgstr "Titel sichtbar"
 
-#: origwidg.cpp:1178
+#: origwidg.cpp:1097
 msgid "Time, sek"
 msgstr "Zeit, Sek"
 
-#: origwidg.cpp:1181
+#: origwidg.cpp:1100
 msgid "Archivator"
 msgstr "Archivar"
 
-#: origwidg.cpp:1182 origwidg.cpp:1318 project.cpp:1353
+#: origwidg.cpp:1101 origwidg.cpp:1223 project.cpp:1340
 msgid "Template"
 msgstr "Vorlage"
 
-#: origwidg.cpp:1183 session.cpp:627
+#: origwidg.cpp:1102 session.cpp:607
 msgid "Level"
 msgstr "Level"
 
-#: origwidg.cpp:1184
+#: origwidg.cpp:1103
 msgid "View order"
 msgstr "Ordnung der Widerspiegelung"
 
-#: origwidg.cpp:1185
+#: origwidg.cpp:1105
 msgid ""
 "On time;On level;On category;On messages;On time (reverse);On level "
 "(reverse);On category (reverse);On messages (reverse)"
@@ -1065,43 +1065,43 @@ msgstr ""
 "Zeit;Nach dem Niveau;Nach der Kategorie (reziprok);Nach der Kategorie "
 "(reziprok);Nach der Nachricht(reziprok)"
 
-#: origwidg.cpp:1186
+#: origwidg.cpp:1106
 msgid "View columns"
 msgstr "Spalten zeigen"
 
-#: origwidg.cpp:1187
+#: origwidg.cpp:1107
 msgid "Item properties"
 msgstr "Eigenschaften des Elements"
 
-#: origwidg.cpp:1197
+#: origwidg.cpp:1115
 msgid "Item "
 msgstr "Element "
 
-#: origwidg.cpp:1217
+#: origwidg.cpp:1134
 msgid ":level"
 msgstr ":Level"
 
-#: origwidg.cpp:1219
+#: origwidg.cpp:1136
 msgid ":template"
 msgstr ":Vorlage"
 
-#: origwidg.cpp:1221
+#: origwidg.cpp:1138
 msgid ":font"
 msgstr ":Schrift"
 
-#: origwidg.cpp:1250
+#: origwidg.cpp:1166
 msgid "Messages archivator in form \"ArchMod.ArchivatorId\"."
 msgstr "Nachrichten archivator in Form \"ArchMod.ArchivatorId\"."
 
-#: origwidg.cpp:1251
+#: origwidg.cpp:1167
 msgid "Set value to < 0 for get current alarms."
 msgstr "Einstellen der Werte < 0 für sich aktuelle Meldungen."
 
-#: origwidg.cpp:1252
+#: origwidg.cpp:1168
 msgid "Set value to '0' for get all alarms, for \"lev\" < 0."
 msgstr "Set Wert auf '0' für alle Alarme erhalten, zu \"lev\" < 0 ist."
 
-#: origwidg.cpp:1254 origwidg.cpp:1275
+#: origwidg.cpp:1170 origwidg.cpp:1190
 msgid ""
 "Category template or regular expression \"/{re}/\". For template reserved "
 "special symbols:\n"
@@ -1115,7 +1115,7 @@ msgstr ""
 "  '?' - einem Symbol;\n"
 "  '\\' - Einsatz für spezielle Abschirmung simbols."
 
-#: origwidg.cpp:1260
+#: origwidg.cpp:1176
 msgid ""
 "Visible and order columns list separated by symbol ';'. Supported columns:\n"
 "  \"pos\" - row number;\n"
@@ -1134,55 +1134,55 @@ msgstr ""
 "  \"cat\" - Kategorie der Meldung;\n"
 "  \"mess\" - den Nachrichtentext ein."
 
-#: origwidg.cpp:1303 origwidg.cpp:1319
+#: origwidg.cpp:1213 origwidg.cpp:1224
 msgid "Document"
 msgstr "Dokument"
 
-#: origwidg.cpp:1308
+#: origwidg.cpp:1215
 msgid "Document widget of the finite visualization."
 msgstr "Widget für das Dokument der Visualisierung."
 
-#: origwidg.cpp:1317
+#: origwidg.cpp:1222
 msgid "CSS"
 msgstr "CSS"
 
-#: origwidg.cpp:1321
+#: origwidg.cpp:1226
 msgid "Time:begin"
 msgstr "Zeit:Beginn"
 
-#: origwidg.cpp:1322
+#: origwidg.cpp:1227
 msgid "Time:current"
 msgstr "Zeit:laufend"
 
-#: origwidg.cpp:1323 session.cpp:1945 widget.cpp:1499 widget.cpp:1510
+#: origwidg.cpp:1228 session.cpp:1847 widget.cpp:1486 widget.cpp:1497
 msgid "Process"
 msgstr "Bearbeitung"
 
-#: origwidg.cpp:1324
+#: origwidg.cpp:1229
 msgid "Archive size"
 msgstr "Archivgrösse"
 
-#: origwidg.cpp:1351
+#: origwidg.cpp:1249
 msgid "Archive:cursor:view"
 msgstr "Archiv:Cursor:Aussehen"
 
-#: origwidg.cpp:1357
+#: origwidg.cpp:1254
 msgid "Archive:cursor:current"
 msgstr "Archiv:Cursor:Strom"
 
-#: origwidg.cpp:1363
+#: origwidg.cpp:1259
 msgid "Archive:current document"
 msgstr "Archiv:Strom Dokument"
 
-#: origwidg.cpp:1368
+#: origwidg.cpp:1263
 msgid "Archive:size"
 msgstr "ArchivGröße"
 
-#: origwidg.cpp:1515
+#: origwidg.cpp:1397
 msgid "CSS rules in rows like \"body { background-color:#818181; }\""
 msgstr "CSS-Regeln in Reihen wie \"body { background-color:#818181; }\""
 
-#: origwidg.cpp:1518
+#: origwidg.cpp:1400
 msgid ""
 "Document's template in XHTML. Start from tag \"body\" and include procedures "
 "parts:\n"
@@ -1196,11 +1196,11 @@ msgstr ""
 "<h1>Value<?dp return wCod+1.314;?></h1>\n"
 "</body>"
 
-#: origwidg.cpp:1522
+#: origwidg.cpp:1404
 msgid "Final document in XHTML. Start from tag \"body\"."
 msgstr "Final-Dokument in XHTML. Start von Tag \"body\"."
 
-#: origwidg.cpp:1524
+#: origwidg.cpp:1407
 msgid ""
 "Write the time for document generation from that point or zero for "
 "regeneration."
@@ -1208,69 +1208,69 @@ msgstr ""
 "Schreiben Sie Zeit für Dokumentenerstellung von diesem Punkt aus oder Null "
 "für die Regeneration."
 
-#: origwidg.cpp:1528
+#: origwidg.cpp:1412
 msgid "Current archive document in XHTML. Start from tag \"body\"."
 msgstr "Aktuelle Dokumentenarchiv in XHTML. Es beginnt mit dem Tag \"Körper\"."
 
-#: origwidg.cpp:1643
+#: origwidg.cpp:1521
 #, c-format
 msgid "Document parsing error: %s."
 msgstr "Fehler bei der Analyse der Dokumente: %s."
 
-#: origwidg.cpp:1657 vcaFuncs.h:107
+#: origwidg.cpp:1534 vcaFuncs.h:99
 msgid "Result"
 msgstr "Ergebnis"
 
-#: origwidg.cpp:1658
+#: origwidg.cpp:1535
 msgid "Document time"
 msgstr "Zeit des Dokuments"
 
-#: origwidg.cpp:1659
+#: origwidg.cpp:1536
 msgid "Document begin time"
 msgstr "Startzeit des Dokuments"
 
-#: origwidg.cpp:1660
+#: origwidg.cpp:1537
 msgid "Last time"
 msgstr "Das letzte Mal"
 
-#: origwidg.cpp:1661
+#: origwidg.cpp:1538
 msgid "Repeat time (s)"
 msgstr "Wiederholungszeit (Sek.)"
 
-#: origwidg.cpp:1662
+#: origwidg.cpp:1539
 msgid "Repeat time (us)"
 msgstr "Wiederholungszeit (Mksek.)"
 
-#: origwidg.cpp:1663
+#: origwidg.cpp:1540
 msgid "Repeat period"
 msgstr "Wiederholungsperiode"
 
-#: origwidg.cpp:1664
+#: origwidg.cpp:1541
 msgid "Message time"
 msgstr "Zeit der Nachricht"
 
-#: origwidg.cpp:1665
+#: origwidg.cpp:1542
 msgid "Message time (mcs)"
 msgstr "Zeit der Nachricht (Mks)"
 
-#: origwidg.cpp:1666
+#: origwidg.cpp:1543
 msgid "Message level"
 msgstr "Stufe der Nachricht"
 
-#: origwidg.cpp:1667
+#: origwidg.cpp:1544
 msgid "Message category"
 msgstr "Kategorie der Nachricht"
 
-#: origwidg.cpp:1668
+#: origwidg.cpp:1545
 msgid "Message value"
 msgstr "Wert der Nachricht"
 
-#: origwidg.cpp:1692
+#: origwidg.cpp:1568
 #, c-format
 msgid "Compile function for document is error: %s"
 msgstr "Fehler in der Funktionskompilation für das Dokument: %s"
 
-#: origwidg.cpp:1698
+#: origwidg.cpp:1574
 #, c-format
 msgid ""
 "<BODY>\n"
@@ -1295,244 +1295,244 @@ msgstr ""
 "  </P>\n"
 "</BODY>"
 
-#: origwidg.cpp:1755
+#: origwidg.cpp:1628
 #, c-format
 msgid "Instruction procedure '%s' error: %s"
 msgstr "Fehler in der Befehlsausführung '%s': %s"
 
-#: origwidg.cpp:1756
+#: origwidg.cpp:1629
 #, c-format
 msgid "Error code: %s"
 msgstr "Fehlercode : %s"
 
-#: origwidg.cpp:1789 origwidg.cpp:1800 origwidg.cpp:1823
+#: origwidg.cpp:1660 origwidg.cpp:1669 origwidg.cpp:1695
 #, c-format
 msgid "Data block %d: %0.2f%% loaded."
 msgstr "Datenbaustein %d: %0.2f%% beladen."
 
-#: origwidg.cpp:1845 origwidg.cpp:1856 origwidg.cpp:1879
+#: origwidg.cpp:1716 origwidg.cpp:1726 origwidg.cpp:1748
 #, c-format
 msgid "Messages block %d: %0.2f%% loaded."
 msgstr "Meldeblock %d: %0.2f%% beladen."
 
-#: origwidg.cpp:1938
+#: origwidg.cpp:1804
 msgid "Built-in function"
 msgstr "Installierte Funktion"
 
-#: origwidg.cpp:1943
+#: origwidg.cpp:1806
 msgid "Built-in function widget."
 msgstr "Widget für die installierte Funktion"
 
-#: origwidg.cpp:1956
+#: origwidg.cpp:1813
 msgid "Elements box"
 msgstr "Elementengruppe"
 
-#: origwidg.cpp:1961
+#: origwidg.cpp:1815
 msgid "Elements box widget of the finite visualization."
 msgstr "Widget für die Elementengruppe der Visualisierung."
 
-#: origwidg.cpp:1970 project.cpp:880
+#: origwidg.cpp:1822 project.cpp:870
 msgid "Page:open source"
 msgstr "Seite:Quelle Eröffnen"
 
-#: origwidg.cpp:1971 project.cpp:879
+#: origwidg.cpp:1823 project.cpp:869
 msgid "Page:group"
 msgstr "Seite:Gruppe"
 
-#: project.cpp:171
+#: project.cpp:169
 msgid "Load project."
 msgstr "Projekt laden."
 
-#: project.cpp:268
+#: project.cpp:261
 msgid "Enable project."
 msgstr "Projekt einschalten."
 
-#: project.cpp:268
+#: project.cpp:261
 msgid "Disable project."
 msgstr "Projekt abschalten."
 
-#: project.cpp:467
+#: project.cpp:457
 msgid "Project: "
 msgstr "Projekt: "
 
-#: project.cpp:470 project.cpp:1333 session.cpp:593 session.cpp:1066
+#: project.cpp:460 project.cpp:1320 session.cpp:570 session.cpp:1018
 msgid "Page"
 msgstr "Seite"
 
-#: project.cpp:471 session.cpp:609 vcaengine.cpp:824 vcaengine.cpp:830
-#: vcaengine.cpp:839
+#: project.cpp:461 session.cpp:584 vcaengine.cpp:774 vcaengine.cpp:779
+#: vcaengine.cpp:789
 msgid "Project"
 msgstr "Projekt"
 
-#: project.cpp:476
+#: project.cpp:466
 msgid "Project DB"
 msgstr "Datenbank des Projekts"
 
-#: project.cpp:487 widget.cpp:876
+#: project.cpp:477 widget.cpp:875
 msgid "Owner and group"
 msgstr "Besitzer und Gruppe"
 
-#: project.cpp:489 session.cpp:603 widget.cpp:147 widget.cpp:878
+#: project.cpp:479 session.cpp:578 widget.cpp:146 widget.cpp:877
 msgid "Access"
 msgstr "Berechtigung"
 
-#: project.cpp:490 project.cpp:492 project.cpp:494 session.cpp:604
-#: session.cpp:606 session.cpp:608 widget.cpp:879 widget.cpp:881
-#: widget.cpp:883
+#: project.cpp:480 project.cpp:482 project.cpp:484 session.cpp:579
+#: session.cpp:581 session.cpp:583 widget.cpp:878 widget.cpp:880
+#: widget.cpp:882
 msgid "No access;View;View and control"
 msgstr "Kein Zugriff;Ansicht;Ansicht und Bedienung"
 
-#: project.cpp:495
+#: project.cpp:485
 msgid "Calculate period"
 msgstr "Rechenzeit"
 
-#: project.cpp:496
+#: project.cpp:486
 msgid "Project's session calculate period on milliseconds."
 msgstr "Rechenzeit der Projektsitzung in Millisek."
 
-#: project.cpp:497
+#: project.cpp:487
 msgid "Run window"
 msgstr "Fenster des Ausführung"
 
-#: project.cpp:498
+#: project.cpp:488
 msgid "Original size;Maximize;Full screen"
 msgstr "Originalgrösse;Maximieren;Vollbild"
 
-#: project.cpp:499
+#: project.cpp:489
 msgid "Keep aspect ratio on scale"
 msgstr "Seitenverhältnis beibehalten auf der Skala"
 
-#: project.cpp:502 project.cpp:505 project.cpp:1327 project.cpp:1330
-#: session.cpp:621 session.cpp:622 session.cpp:1063 session.cpp:1064
-#: vcaFuncs.h:70
+#: project.cpp:492 project.cpp:495 project.cpp:1314 project.cpp:1317
+#: session.cpp:601 session.cpp:602 session.cpp:1015 session.cpp:1016
+#: vcaFuncs.h:65
 msgid "Pages"
 msgstr "Seiten"
 
-#: project.cpp:504 project.cpp:1329 widget.cpp:889
+#: project.cpp:494 project.cpp:1316 widget.cpp:888
 msgid "Number"
 msgstr "Anzahl"
 
-#: project.cpp:514
+#: project.cpp:504
 msgid "Styles"
 msgstr "Stile"
 
-#: project.cpp:516 session.cpp:617
+#: project.cpp:506 session.cpp:596
 msgid "Style"
 msgstr "Stil"
 
-#: project.cpp:520
+#: project.cpp:510
 msgid "Properties"
 msgstr "Beschaffenheiten"
 
-#: project.cpp:525
+#: project.cpp:515
 msgid "Erase"
 msgstr "Löschen"
 
-#: project.cpp:633 project.cpp:1380 widget.cpp:1065
+#: project.cpp:623 project.cpp:1367 widget.cpp:1064
 #, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Alle: %d; Aktiviert: %d"
 
-#: project.cpp:725 project.cpp:726
+#: project.cpp:715 project.cpp:716
 msgid "New style"
 msgstr "Neuer Stil"
 
-#: project.cpp:734 session.cpp:685
+#: project.cpp:724 session.cpp:660
 msgid "No style"
 msgstr "Kein Stil"
 
-#: project.cpp:737
+#: project.cpp:727
 msgid "Create new style"
 msgstr "Neuen Stil schaffen"
 
-#: project.cpp:877 project.cpp:1163
+#: project.cpp:867 project.cpp:1151
 msgid "Page:open state"
 msgstr "Seite:Zustand beim Öffnen"
 
-#: project.cpp:878 project.cpp:1164
+#: project.cpp:868 project.cpp:1152
 msgid "Page:process no opened"
 msgstr "Seite:Prozess nicht geöffnet"
 
-#: project.cpp:1158
+#: project.cpp:1146
 msgid "For page can use only Box-based widgets!"
 msgstr "Für Seiten kann nur das Box-basierte Widget benutzt werden!"
 
-#: project.cpp:1249 project.cpp:1260
+#: project.cpp:1236 project.cpp:1247
 msgid "Page is not container or template!"
 msgstr "Seite ist kein Container oder Vorlage!"
 
-#: project.cpp:1317
+#: project.cpp:1304
 msgid "Project page: "
 msgstr "Seite des Projekts: "
 
-#: project.cpp:1322
+#: project.cpp:1309
 msgid "Page type"
 msgstr "Typ der Seite"
 
-#: project.cpp:1350
+#: project.cpp:1337
 msgid "Standard"
 msgstr "Standard"
 
-#: project.cpp:1351
+#: project.cpp:1338
 msgid "Container"
 msgstr "Container"
 
-#: project.cpp:1352
+#: project.cpp:1339
 msgid "Logical container"
 msgstr "Logischer Container"
 
-#: project.cpp:1354
+#: project.cpp:1341
 msgid "Container and template"
 msgstr "Container und Vorlage"
 
-#: project.cpp:1427 project.cpp:1436 widget.cpp:1384 widget.cpp:1393
+#: project.cpp:1414 project.cpp:1423 widget.cpp:1371 widget.cpp:1380
 msgid "Variable is not link"
 msgstr "Die Variable ist kein Lnk"
 
-#: project.cpp:1446 widget.cpp:1403
+#: project.cpp:1433 widget.cpp:1390
 msgid "val:Constant value"
 msgstr "val:Konstante"
 
-#: project.cpp:1481 project.cpp:1494
+#: project.cpp:1468 project.cpp:1481
 msgid "=== Pages ==="
 msgstr "=== Seite ==="
 
-#: project.cpp:1499 widget.cpp:1439
+#: project.cpp:1486 widget.cpp:1426
 msgid "=== Widgets ==="
 msgstr "=== Widgets ==="
 
-#: project.cpp:1505 widget.cpp:1445
+#: project.cpp:1492 widget.cpp:1432
 msgid "=== Attributes ==="
 msgstr "=== Attribute ==="
 
-#: project.cpp:1770
+#: project.cpp:1731
 msgid "Widget link: "
 msgstr "Widget Link: "
 
-#: session.cpp:76
+#: session.cpp:83
 msgid "Enable session."
 msgstr "Einschalten der Session."
 
-#: session.cpp:100
+#: session.cpp:105
 #, c-format
 msgid "Load previous style time: %f ms."
 msgstr "Download-Zeit voriges Modell: %f ms."
 
-#: session.cpp:112
+#: session.cpp:116
 #, c-format
 msgid "Create root pages time: %f ms."
 msgstr "Zeit, um die Root-Seite erstellen: %f ms."
 
-#: session.cpp:122
+#: session.cpp:126
 #, c-format
 msgid "Enable root pages time: %f ms."
 msgstr "Feierabend der Wurzel Seiten: %f ms."
 
-#: session.cpp:132
+#: session.cpp:135
 msgid "Disable session."
 msgstr "Abschalten der Session."
 
-#: session.cpp:165
+#: session.cpp:167
 msgid "Start session."
 msgstr "Start der Session."
 
@@ -1541,323 +1541,331 @@ msgstr "Start der Session."
 msgid "Load styles from project time: %f ms."
 msgstr "Download-Zeit Blatt des Projekts: %f ms."
 
-#: session.cpp:189
+#: session.cpp:188
 #, c-format
 msgid "Process on for all root pages time: %f ms."
 msgstr "Schließzeit in der Behandlung für alle Root-Seiten: %f ms."
 
-#: session.cpp:196
+#: session.cpp:195
 #, c-format
 msgid "Start process task time: %f ms."
 msgstr "Task-Start Zeit der Verarbeitung: %f ms."
 
-#: session.cpp:200
+#: session.cpp:198
 msgid "Stop session."
 msgstr "Session stoppen."
 
-#: session.cpp:417
+#: session.cpp:404
 #, c-format
 msgid "Session '%s' calculate error."
 msgstr "Fehler der Berechnung der Sitzung '%s'."
 
-#: session.cpp:590
+#: session.cpp:567
 msgid "Session: "
 msgstr "Sitzung: "
 
-#: session.cpp:594 vcaengine.cpp:826
+#: session.cpp:571 vcaengine.cpp:776
 msgid "Session"
 msgstr "Sitzung"
 
-#: session.cpp:599
+#: session.cpp:574
 msgid "Start"
 msgstr "Gestartet"
 
-#: session.cpp:600 vcaengine.cpp:171 vcaengine.cpp:840 vcaFuncs.h:40
+#: session.cpp:575 vcaengine.cpp:166 vcaengine.cpp:790 vcaFuncs.h:38
 msgid "User"
 msgstr "Benutzer"
 
-#: session.cpp:601 vcaengine.cpp:179 widget.cpp:146
+#: session.cpp:576 vcaengine.cpp:174 widget.cpp:145
 msgid "Owner"
 msgstr "Besitzer"
 
-#: session.cpp:602 vcaengine.cpp:172
+#: session.cpp:577 vcaengine.cpp:167
 msgid "Group"
 msgstr "Gruppe"
 
-#: session.cpp:610
+#: session.cpp:586
 msgid "Background execution mode"
 msgstr "Hintergrundmodus der Ausführung"
 
-#: session.cpp:611
-msgid "Connections counter"
-msgstr "Verbindungzähler"
-
-#: session.cpp:612
+#: session.cpp:588
 msgid "Calculate session time"
 msgstr "Rechenzeit der Sitzung"
 
-#: session.cpp:616
+#: session.cpp:589
+msgid "Connections counter"
+msgstr "Verbindungzähler"
+
+#: session.cpp:590
+msgid "Last request"
+msgstr "Letzte Anfrage"
+
+#: session.cpp:591
+msgid "Left to force close (s)"
+msgstr "Links nach Nähe zu zwingen (s)"
+
+#: session.cpp:595
 msgid "Period (ms)"
 msgstr "Periode (msek)"
 
-#: session.cpp:618
+#: session.cpp:598
 msgid "Opened pages"
 msgstr "Offene Seiten"
 
-#: session.cpp:623
+#: session.cpp:603
 msgid "Alarms"
 msgstr "Störungen"
 
-#: session.cpp:624
+#: session.cpp:604
 msgid "Alarms list"
 msgstr "Liste von Störungen"
 
-#: session.cpp:628
+#: session.cpp:608
 msgid "Category"
 msgstr "Kategorie"
 
-#: session.cpp:629
+#: session.cpp:609
 msgid "Messages"
 msgstr "Nachrichten"
 
-#: session.cpp:631
+#: session.cpp:611
 msgid "Quittance"
 msgstr "Quittung"
 
-#: session.cpp:632
+#: session.cpp:612
 msgid "Type argument"
 msgstr "Argument des Typs"
 
-#: session.cpp:1058
+#: session.cpp:1010
 msgid "Session page: "
 msgstr "Sitzungsseite: "
 
-#: session.cpp:1060
+#: session.cpp:1012
 msgid "Open"
 msgstr "Offen"
 
-#: session.cpp:1242
+#: session.cpp:1189
 #, c-format
 msgid "Compile function '%s' by language '%s' for widget error: %s"
 msgstr ""
 "Fehler in der Funktionskompilation '%s' in der Sprache '%s' für Widget: %s"
 
-#: session.cpp:1667
+#: session.cpp:1598
 msgid "Widget calculation error. Process is disabled."
 msgstr "Fehler der Berechnung des Widgets. Bearbeitung ist abgeschaltet."
 
-#: vcaengine.cpp:35
+#: vcaengine.cpp:34
 msgid "Visual control area engine"
 msgstr "Visualisierungssteuerung"
 
-#: vcaengine.cpp:40
+#: vcaengine.cpp:39
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko"
 
-#: vcaengine.cpp:41
+#: vcaengine.cpp:40
 msgid "Generic visual control area engine."
 msgstr "Allgemeine Visualisierungssteuerung."
 
-#: vcaengine.cpp:119 vcaengine.cpp:126 vcaengine.cpp:131 vcaengine.cpp:141
-#: vcaengine.cpp:147 vcaengine.cpp:156 vcaengine.cpp:166 vcaengine.cpp:180
-#: vcaengine.cpp:191 vcaengine.cpp:195 vcaengine.cpp:838
+#: vcaengine.cpp:114 vcaengine.cpp:121 vcaengine.cpp:126 vcaengine.cpp:136
+#: vcaengine.cpp:142 vcaengine.cpp:151 vcaengine.cpp:161 vcaengine.cpp:175
+#: vcaengine.cpp:186 vcaengine.cpp:190 vcaengine.cpp:788
 msgid "ID"
 msgstr "ID"
 
-#: vcaengine.cpp:122 vcaengine.cpp:169
+#: vcaengine.cpp:117 vcaengine.cpp:164
 msgid "Data base"
 msgstr "Datenbank"
 
-#: vcaengine.cpp:133 vcaengine.cpp:142 vcaengine.cpp:182
+#: vcaengine.cpp:128 vcaengine.cpp:137 vcaengine.cpp:177
 msgid "Parent widget"
 msgstr "Elternwidget"
 
-#: vcaengine.cpp:134 vcaengine.cpp:183
+#: vcaengine.cpp:129 vcaengine.cpp:178
 msgid "Procedure text and language"
 msgstr "Text und Sprache des Programms"
 
-#: vcaengine.cpp:135 vcaengine.cpp:184
+#: vcaengine.cpp:130 vcaengine.cpp:179
 msgid "Procedure calculate period"
 msgstr "Zeitraum der Berechnungsverfahren"
 
-#: vcaengine.cpp:136 vcaengine.cpp:143 vcaengine.cpp:186
+#: vcaengine.cpp:131 vcaengine.cpp:138 vcaengine.cpp:181
 msgid "Changed attributes"
 msgstr "Geänderte Attribute"
 
-#: vcaengine.cpp:140
+#: vcaengine.cpp:135
 msgid "IDW"
 msgstr "IDW"
 
-#: vcaengine.cpp:146 vcaengine.cpp:155 vcaengine.cpp:190
+#: vcaengine.cpp:141 vcaengine.cpp:150 vcaengine.cpp:185
 msgid "Widget ID"
 msgstr "ID des Widgets"
 
-#: vcaengine.cpp:148 vcaengine.cpp:157
+#: vcaengine.cpp:143 vcaengine.cpp:152
 msgid "Child ID"
 msgstr "Tochter-ID"
 
-#: vcaengine.cpp:149 vcaengine.cpp:160 vcaengine.cpp:192
+#: vcaengine.cpp:144 vcaengine.cpp:155 vcaengine.cpp:187
 msgid "Attribute value"
 msgstr "Wert des Attributs"
 
-#: vcaengine.cpp:150 vcaengine.cpp:161
+#: vcaengine.cpp:145 vcaengine.cpp:156
 msgid "Attribute self flags"
 msgstr "Eigene Schalter des Attributs"
 
-#: vcaengine.cpp:151 vcaengine.cpp:162 widget.cpp:1512
+#: vcaengine.cpp:146 vcaengine.cpp:157 widget.cpp:1499
 msgid "Configuration template"
 msgstr "Konfigurationsvorlage"
 
-#: vcaengine.cpp:152 vcaengine.cpp:163
+#: vcaengine.cpp:147 vcaengine.cpp:158
 msgid "Configuration value"
 msgstr "Konfigurationswert"
 
-#: vcaengine.cpp:159
+#: vcaengine.cpp:154
 msgid "Attribute generic flags and type"
 msgstr "Basisschalter und Typ des Attributs"
 
-#: vcaengine.cpp:173
+#: vcaengine.cpp:168
 msgid "Permission"
 msgstr "Erlaubnis"
 
-#: vcaengine.cpp:174 widget.cpp:1517
+#: vcaengine.cpp:169 widget.cpp:1504
 msgid "Calculate period (ms)"
 msgstr "Rechenzeit (msek)"
 
-#: vcaengine.cpp:175
+#: vcaengine.cpp:170
 msgid "Work style"
 msgstr "Arbeitsstil"
 
-#: vcaengine.cpp:176 vcaengine.cpp:185
+#: vcaengine.cpp:171 vcaengine.cpp:180
 msgid "Flags"
 msgstr "Schalter"
 
-#: vcaengine.cpp:196
+#: vcaengine.cpp:191
 msgid "Value 0"
 msgstr "Wert 0"
 
-#: vcaengine.cpp:197
+#: vcaengine.cpp:192
 msgid "Value 1"
 msgstr "Wert 1"
 
-#: vcaengine.cpp:198
+#: vcaengine.cpp:193
 msgid "Value 2"
 msgstr "Wert 2"
 
-#: vcaengine.cpp:199
+#: vcaengine.cpp:194
 msgid "Value 3"
 msgstr "Wert 3"
 
-#: vcaengine.cpp:200
+#: vcaengine.cpp:195
 msgid "Value 4"
 msgstr "Wert 4"
 
-#: vcaengine.cpp:201
+#: vcaengine.cpp:196
 msgid "Value 5"
 msgstr "Wert 5"
 
-#: vcaengine.cpp:202
+#: vcaengine.cpp:197
 msgid "Value 6"
 msgstr "Wert 6"
 
-#: vcaengine.cpp:203
+#: vcaengine.cpp:198
 msgid "Value 7"
 msgstr "Wert 7"
 
-#: vcaengine.cpp:204
+#: vcaengine.cpp:199
 msgid "Value 8"
 msgstr "Wert 8"
 
-#: vcaengine.cpp:205
+#: vcaengine.cpp:200
 msgid "Value 9"
 msgstr "Wert 9"
 
-#: vcaengine.cpp:208
+#: vcaengine.cpp:203
 msgid "Original widgets"
 msgstr "Original Widgets"
 
-#: vcaengine.cpp:261
+#: vcaengine.cpp:257
 msgid "Load module."
 msgstr "Modul laden"
 
-#: vcaengine.cpp:310
+#: vcaengine.cpp:302
 #, c-format
 msgid "Load library '%s' time: %f ms."
 msgstr "Zeit Laden der Bibliothek '%s': %f msek."
 
-#: vcaengine.cpp:317
+#: vcaengine.cpp:309
 msgid "Load widgets libraries error."
 msgstr "Fehler beim Laden der Widgetsbibliothek."
 
-#: vcaengine.cpp:362
+#: vcaengine.cpp:349
 #, c-format
 msgid "Load project '%s' time: %f ms."
 msgstr "Zeit Laden des Projekts '%s': %f msek."
 
-#: vcaengine.cpp:369
+#: vcaengine.cpp:356
 msgid "Load projects error."
 msgstr "Fehler beim Laden der Projekte."
 
-#: vcaengine.cpp:380
+#: vcaengine.cpp:365
 #, c-format
 msgid "Enable library '%s' time: %f ms."
 msgstr "Zeit des Einschaltens der Bibliothek '%s': %f msek."
 
-#: vcaengine.cpp:393
+#: vcaengine.cpp:376
 #, c-format
 msgid "Enable project '%s' time: %f ms."
 msgstr "Zeit des Einschaltens des Projekts '%s': %f msek."
 
-#: vcaengine.cpp:432
+#: vcaengine.cpp:411
 msgid "Save module."
 msgstr "Modul speichern."
 
-#: vcaengine.cpp:450
+#: vcaengine.cpp:429
 msgid "Start module."
 msgstr "Modul starten."
 
-#: vcaengine.cpp:464
+#: vcaengine.cpp:443
 msgid "Stop module."
 msgstr "Modul anhalten."
 
-#: vcaengine.cpp:748
+#: vcaengine.cpp:706
 #, c-format
 msgid "Connection to session is not permitted for '%s'."
 msgstr "Verbindung an die Sitzung ist nicht zulässig für '%s'."
 
-#: vcaengine.cpp:763
+#: vcaengine.cpp:719
 msgid "Connect/create session arguments error."
 msgstr "Fehler in den Parametern beim Verbinden/Erstellen der Sitzung."
 
-#: vcaengine.cpp:825
+#: vcaengine.cpp:775
 msgid "Widgets library"
 msgstr "Widgetsbibliothek"
 
-#: vcaengine.cpp:827
+#: vcaengine.cpp:777
 msgid "Functions"
 msgstr "Funktionen"
 
-#: vcaengine.cpp:831
+#: vcaengine.cpp:781
 msgid "Widgets libraries"
 msgstr "Widgetsbibliotheken"
 
-#: vcaengine.cpp:833 vcaengine.cpp:835
+#: vcaengine.cpp:784 vcaengine.cpp:785
 msgid "Sessions"
 msgstr "Sitzungen"
 
-#: vcaengine.cpp:836
+#: vcaengine.cpp:786
 msgid "Auto create and start"
 msgstr "Automatische Schaffen und Start"
 
-#: vcaengine.cpp:843
+#: vcaengine.cpp:793
 msgid "Speech text synthesis"
 msgstr "Sprachsteuerung"
 
-#: vcaengine.cpp:845
+#: vcaengine.cpp:794
 msgid "Command"
 msgstr "Kommando"
 
-#: vcaengine.cpp:846
+#: vcaengine.cpp:795
 msgid ""
 "Command line for call of speech synthesis from the text engine.\n"
 "Use next words for replace:\n"
@@ -1876,124 +1884,124 @@ msgstr ""
 "Falls Dateiname verwendet wird und %t nicht verwendet wird,  wird der "
 "Synthese-Text in den Kanal gesendet."
 
-#: vcaengine.cpp:852
+#: vcaengine.cpp:801
 msgid "Text code"
 msgstr "Kodierung des Textes"
 
-#: vcaengine.cpp:852
+#: vcaengine.cpp:802
 msgid "Engine text codepage for text encode into it."
 msgstr "Unicode Zeichensatz für die Kodierung der Maschine."
 
-#: widget.cpp:59
+#: widget.cpp:58
 #, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Das Attribut '%s' wird nicht freigegeben. Zwangsräumung!"
 
-#: widget.cpp:144 widget.cpp:872
+#: widget.cpp:143 widget.cpp:871
 msgid "Path"
 msgstr "Pfad"
 
-#: widget.cpp:149
+#: widget.cpp:148
 msgid ""
 "No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
 msgstr ""
 "Kein Zugang;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
 
-#: widget.cpp:150 widget.cpp:871
+#: widget.cpp:149 widget.cpp:870
 msgid "Root"
 msgstr "Ursprung"
 
-#: widget.cpp:154
+#: widget.cpp:153
 msgid "Active"
 msgstr "Aktiv"
 
-#: widget.cpp:155
+#: widget.cpp:154
 msgid "Geometry:x"
 msgstr "Geometrie:x"
 
-#: widget.cpp:156
+#: widget.cpp:155
 msgid "Geometry:y"
 msgstr "Geometrie:y"
 
-#: widget.cpp:157
+#: widget.cpp:156
 msgid "Geometry:width"
 msgstr "Geometrie:Breite"
 
-#: widget.cpp:158
+#: widget.cpp:157
 msgid "Geometry:height"
 msgstr "Geometrie:Höhe"
 
-#: widget.cpp:159
+#: widget.cpp:158
 msgid "Geometry:x scale"
 msgstr "Geometrie:x Maßstab"
 
-#: widget.cpp:160
+#: widget.cpp:159
 msgid "Geometry:y scale"
 msgstr "Geometrie:y Maßstab"
 
-#: widget.cpp:161
+#: widget.cpp:160
 msgid "Geometry:z"
 msgstr "Geometrie:z"
 
-#: widget.cpp:162
+#: widget.cpp:161
 msgid "Geometry:margin"
 msgstr "Geometrie:Rand"
 
-#: widget.cpp:163
+#: widget.cpp:162
 msgid "Tip:tool"
 msgstr "Hilfe:Prompt"
 
-#: widget.cpp:164
+#: widget.cpp:163
 msgid "Tip:status"
 msgstr "Hilfe:Zustand"
 
-#: widget.cpp:165
+#: widget.cpp:164
 msgid "Context menu"
 msgstr "Kontextmenu"
 
-#: widget.cpp:166
+#: widget.cpp:165
 msgid "Events process"
 msgstr "Bearbeitung der Ereignisse"
 
-#: widget.cpp:282
+#: widget.cpp:281
 msgid "Empty parent or parent identical self!"
 msgstr "Eltern leer oder Eltern gleich sich selber!"
 
-#: widget.cpp:289
+#: widget.cpp:288
 msgid "Parent identical to owner for link!"
 msgstr "Der Elternteil ist identisch mit dem Besitzer für den Anschluss!"
 
-#: widget.cpp:303
+#: widget.cpp:302
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Fehler der Einschaltung des Widgets: %s"
 
-#: widget.cpp:333
+#: widget.cpp:332
 #, c-format
 msgid "Inheriting widget '%s' disable error."
 msgstr "Fehler beim Abschalten des vererbenden Widgets '%s'."
 
-#: widget.cpp:356
+#: widget.cpp:355
 #, c-format
 msgid "Child widget '%s' enable/disable error."
 msgstr "Fehler beim Einschalten/Abschalten des Kindwidgets '%s'."
 
-#: widget.cpp:553
+#: widget.cpp:552
 #, c-format
 msgid "Adding a new attribute '%s' number more to %d!"
 msgstr "Hinzufügen eines neuen Attribut '%s' überschreitet die Anzahl der %d!"
 
-#: widget.cpp:584 widget.cpp:616
+#: widget.cpp:583 widget.cpp:615
 #, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' fehlt!"
 
-#: widget.cpp:586
+#: widget.cpp:585
 #, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Entfernt Attribut '%s' wird nicht veröffentlicht!"
 
-#: widget.cpp:716
+#: widget.cpp:715
 msgid ""
 "Image name in form \"[src:]name\", where:\n"
 "  \"src\" - image source:\n"
@@ -2017,7 +2025,7 @@ msgstr ""
 "  \"file:/var/tmp/backLogo.png\" - von der lokalen Datei-Pfad \"/var/tmp/"
 "backLogo.png\"."
 
-#: widget.cpp:729
+#: widget.cpp:728
 msgid ""
 "Color name form \"color[-alpha]\", where:\n"
 "  \"color\" - standard color name or digital view of three hexadecimal "
@@ -2037,7 +2045,7 @@ msgstr ""
 "  \"#FF0000\" - die durchgezogene rote Farbe in digitaler Form;\n"
 "  \"red-127\" - durchscheinend rot."
 
-#: widget.cpp:740
+#: widget.cpp:739
 msgid ""
 "Font name form \"{family} {size} {bold} {italic} {underline} {strike}\", "
 "where:\n"
@@ -2063,35 +2071,35 @@ msgstr ""
 "Beispiele:\n"
 "  \"Arial 10 1 0 0 0\" - Arial Schrift größe 10 Pixel und verstärkt."
 
-#: widget.cpp:857
+#: widget.cpp:856
 msgid "Widget: "
 msgstr "Widget: "
 
-#: widget.cpp:865
+#: widget.cpp:864
 msgid "Go to parent"
 msgstr "Zum Eltern"
 
-#: widget.cpp:884
+#: widget.cpp:883
 msgid "Clear widget's changing"
 msgstr "Zurücksetzen Änderungen"
 
-#: widget.cpp:887
+#: widget.cpp:886
 msgid "Include widgets"
 msgstr "Eingebundene Widgets"
 
-#: widget.cpp:1094
+#: widget.cpp:1093
 msgid "Path to the widget."
 msgstr "Pfad zum Widget."
 
-#: widget.cpp:1095
+#: widget.cpp:1094
 msgid "Path to parent widget."
 msgstr "Pfad zum übergeordneten Widget."
 
-#: widget.cpp:1096
+#: widget.cpp:1095
 msgid "The widget owner and group in form \"[owner]:[group]\"."
 msgstr "Das Widget Eigentümer und die Gruppe in Form \"[owner]:[group]\"."
 
-#: widget.cpp:1098
+#: widget.cpp:1097
 msgid ""
 "Permission to the widget in form \"[user][group][other]\".\n"
 "Where \"user\", \"group\" and \"other\" is:\n"
@@ -2105,7 +2113,7 @@ msgstr ""
 "  \"R_\" - nur lesen;\n"
 "  \"RW\" - lesen und schreiben."
 
-#: widget.cpp:1105
+#: widget.cpp:1104
 msgid ""
 "Direct events processing for pages manipulation in form:\n"
 "      \"[event]:[evSrc]:[com]:[prm]\". Where:\n"
@@ -2139,11 +2147,11 @@ msgstr ""
 "  ws_BtPress:/go_mn:open:/pg_so/*/mn/*\n"
 "  ws_BtPress:/go_graph:open:/pg_so/*/ggraph"
 
-#: widget.cpp:1123
+#: widget.cpp:1122
 msgid "Primitive identifier in the widget ground."
 msgstr "Primitive Kennung in das Widget Boden."
 
-#: widget.cpp:1127
+#: widget.cpp:1126
 msgid ""
 "Context menu in form strings list: \"[ItName]:[Signal]\".\n"
 "Where:\n"
@@ -2155,159 +2163,159 @@ msgstr ""
 "  \"ItName\" - Elementnamen;\n"
 "  \"Signal\" - Signal Namen und Ergebnis Signal Name ist \"usr_[Signal]\"."
 
-#: widget.cpp:1199 widget.cpp:1202
+#: widget.cpp:1195 widget.cpp:1198
 msgid "Links"
 msgstr "Links"
 
-#: widget.cpp:1201
+#: widget.cpp:1197
 msgid "Attributes show"
 msgstr "Attribute anzeigen"
 
-#: widget.cpp:1305
+#: widget.cpp:1301
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
-#: widget.cpp:1509
+#: widget.cpp:1496
 msgid "Work area"
 msgstr "Arbeitsbereich"
 
-#: widget.cpp:1514
+#: widget.cpp:1501
 msgid "Calculate"
 msgstr "Berechnen"
 
-#: widget.cpp:1516
+#: widget.cpp:1503
 msgid "Program language"
 msgstr "Programmsprache"
 
-#: widget.cpp:1518
+#: widget.cpp:1505
 msgid "Program"
 msgstr "Programm"
 
-#: widget.cpp:1581
+#: widget.cpp:1568
 msgid "New attribute"
 msgstr "Neues Attribut"
 
-#: widget.cpp:1590
+#: widget.cpp:1577
 msgid "Deleting the enclosed widget's elements error."
 msgstr "Fehler beim Löschen von Widgetelementen"
 
-#: widget.cpp:1594
+#: widget.cpp:1581
 msgid "Deleting the not user element error."
 msgstr "Fehler beim Löschen des nicht benutzerdefinierten Elements."
 
-#: widget.cpp:1615 widget.cpp:1644
+#: widget.cpp:1602 widget.cpp:1631
 msgid "Changing of not user attribute is no permitted"
 msgstr "Ändern der nicht benutzerdefinierten Attribute ist nicht zulässig "
 
-#: widget.cpp:1624
+#: widget.cpp:1611
 #, c-format
 msgid "New attribute's ID '%s' already present."
 msgstr "Neuer Bezeichner des Attributs '%s' ist vorhanden."
 
-#: widget.cpp:1722
+#: widget.cpp:1709
 msgid "Boolean"
 msgstr "Logisch"
 
-#: widget.cpp:1723
+#: widget.cpp:1710
 msgid "Integer"
 msgstr "Ganzzahl"
 
-#: widget.cpp:1724
+#: widget.cpp:1711
 msgid "Real"
 msgstr "Reelle Zahl"
 
-#: widget.cpp:1725
+#: widget.cpp:1712
 msgid "String"
 msgstr "Text"
 
-#: widget.cpp:1726
+#: widget.cpp:1713
 msgid "Object"
 msgstr "Objekt"
 
-#: widget.cpp:1727
+#: widget.cpp:1714
 msgid "Select integer"
 msgstr "Ganzzahl auswählen"
 
-#: widget.cpp:1728
+#: widget.cpp:1715
 msgid "Select real"
 msgstr "Reelle Zahl auswählen"
 
-#: widget.cpp:1729
+#: widget.cpp:1716
 msgid "Select string"
 msgstr "Text auswählen"
 
-#: widget.cpp:1734
+#: widget.cpp:1721
 msgid "DateTime"
 msgstr "DatumZeit"
 
-#: widget.cpp:1735 vcaFuncs.h:41 vcaFuncs.h:69 vcaFuncs.h:108 vcaFuncs.h:135
-#: vcaFuncs.h:171 vcaFuncs.h:219
+#: widget.cpp:1722 vcaFuncs.h:39 vcaFuncs.h:64 vcaFuncs.h:100 vcaFuncs.h:124
+#: vcaFuncs.h:157 vcaFuncs.h:201
 msgid "Address"
 msgstr "Adresse"
 
-#: widget.cpp:1739
+#: widget.cpp:1726
 msgid "Not"
 msgstr "Nicht"
 
-#: widget.cpp:1740
+#: widget.cpp:1727
 msgid "Constant"
 msgstr "Konstante"
 
-#: widget.cpp:1741
+#: widget.cpp:1728
 msgid "Input link"
 msgstr "Eingangslink"
 
-#: widget.cpp:1742
+#: widget.cpp:1729
 msgid "Output link"
 msgstr "Ausgangslink"
 
-#: widget.cpp:1743
+#: widget.cpp:1730
 msgid "Full link"
 msgstr "Voller Link"
 
-#: widget.cpp:1744
+#: widget.cpp:1731
 msgid "From style"
 msgstr "Aus dem Stil"
 
-#: widget.cpp:1830 widget.cpp:1937
+#: widget.cpp:1817 widget.cpp:1924
 msgid "Element type is not selected!"
 msgstr "Elemententyp ist nicht ausgewählt!"
 
-#: widget.cpp:2187
+#: widget.cpp:2174
 #, c-format
 msgid "Connections to attribute '%s' more to %d!"
 msgstr "Verbindungen an das Attribut '%s' mehr als %d!"
 
-#: widget.cpp:2195
+#: widget.cpp:2182
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"
 msgstr "Entfernen vom Attribut '%s' mehr Verbindungen!"
 
-#: origwidg.h:45
+#: origwidg.h:44
 msgid "Root primitive"
 msgstr "Ursprungsprimitiv"
 
-#: origwidg.h:46
+#: origwidg.h:45
 msgid "Abstract root primitive"
 msgstr "Abstraktes Ursprungsprimitiv"
 
-#: vcaFuncs.h:45
+#: vcaFuncs.h:43
 msgid "Session user"
 msgstr "Sitzungsbenutzer"
 
-#: vcaFuncs.h:46
+#: vcaFuncs.h:44
 msgid "Return session user by session's widget path."
 msgstr "Gibt Sitzungsbenutzer über Sitzungs Widget Pfad zurück."
 
-#: vcaFuncs.h:68 vcaFuncs.h:134
+#: vcaFuncs.h:63 vcaFuncs.h:123
 msgid "List"
 msgstr "Liste"
 
-#: vcaFuncs.h:74
+#: vcaFuncs.h:69
 msgid "Widgets list"
 msgstr "Liste der Widgets"
 
-#: vcaFuncs.h:75
+#: vcaFuncs.h:70
 msgid ""
 "Return widgets list into widget container or child list. If set <pg> then "
 "return pages list for projects and sessions."
@@ -2316,23 +2324,23 @@ msgstr ""
 "Wenn <pg> aktiv ist, wird die Seitenliste von Projekten und Sitzungen "
 "zurückgeliefert."
 
-#: vcaFuncs.h:112
+#: vcaFuncs.h:104
 msgid "Node present"
 msgstr "Knoten vorhanden"
 
-#: vcaFuncs.h:113
+#: vcaFuncs.h:105
 msgid "Checking for node, include widgets, attributes and other present."
 msgstr "Prüfung des Knotens, Widgets, Attribute und anderes."
 
-#: vcaFuncs.h:136
+#: vcaFuncs.h:125
 msgid "Without user's"
 msgstr "Ohne Benutzers-"
 
-#: vcaFuncs.h:140
+#: vcaFuncs.h:129
 msgid "Attributes list"
 msgstr "Attributenliste"
 
-#: vcaFuncs.h:141
+#: vcaFuncs.h:130
 msgid ""
 "Return attributes list for widget. If set <noUser> then return only not "
 "user's attributes."
@@ -2340,22 +2348,22 @@ msgstr ""
 "Gibt die Attributenliste des Widgets zurück. Wenn <noUser> aktiviert ist, "
 "werden nur nicht-benutzerdefinierte Attribute zurückgeliefert."
 
-#: vcaFuncs.h:172 vcaFuncs.h:221
+#: vcaFuncs.h:158 vcaFuncs.h:203
 msgid "Attribute"
 msgstr "Attribut"
 
-#: vcaFuncs.h:176
+#: vcaFuncs.h:162
 msgid "Attribute get"
 msgstr "Attribut laden"
 
-#: vcaFuncs.h:177
+#: vcaFuncs.h:163
 msgid "Getting widget's attribute value."
 msgstr "Laden den Wert des Widgetsattributs."
 
-#: vcaFuncs.h:225
+#: vcaFuncs.h:207
 msgid "Attribute set"
 msgstr "Attribut speichern"
 
-#: vcaFuncs.h:226
+#: vcaFuncs.h:208
 msgid "Setup widget's attribute to value."
 msgstr "Speichern den Wert des Widgetsattributs."
