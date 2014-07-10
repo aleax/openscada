@@ -1,3 +1,7 @@
+2014-07-10 Roman
+- UI.Vision: For included to container's pages set attribute Qt::WA_WindowPropagation for allow true transparent by palette propagation.
+
+
 2014-07-09 Roman
 - DB.LibsDB.OscadaLibs.db: Heat counter VKT-7 implement significant expanded.
 - !!:UI.{VCAEngine,Vision}: Changes into visual items put down to the parent function is added.

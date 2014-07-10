@@ -4009,10 +4009,10 @@ bool ShapeBox::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			shD->inclWidget->setMinimumSize(w->size());
 			//shD->inclWidget->load("");
 
-			//  Set palette to transparent background
-			QPalette plt = shD->inclWidget->palette();
-			plt.setBrush(QPalette::Window, w->palette().brush(QPalette::Window)/*shD->backGrnd /*QColor(0,0,0,0)*/);
-			shD->inclWidget->setPalette(plt);
+			shD->inclWidget->setAttribute(Qt::WA_WindowPropagation, true);
+			//QPalette plt = shD->inclWidget->palette();
+			//plt.setBrush(QPalette::Window, w->palette().brush(QPalette::Window)/*shD->backGrnd /*QColor(0,0,0,0)*/);
+			//shD->inclWidget->setPalette(plt);*/
 		    }
 		    w->setProperty("inclPg", TSYS::addr2str(shD->inclWidget).c_str());
 		}
