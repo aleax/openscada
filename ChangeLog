@@ -1,3 +1,13 @@
+2014-07-12 Roman
+- SYS: Primitive of functions strEncode() and strDecode() set unified.
+    User API functions strEncode() and strDecode() is added.
+- DB.SQLite: Binary string write to DB support is added by "#'XXXXXX'" form.
+- FIX:DAQ.JavaLikeCalc: "Error constant after constant" error fix by append position.
+- DAQ.SNMP: Some hints is used for ASN_OCTET_STR represent.
+- UI.QTCfg: Added and used function getPrintVal() for check and encode straight binaries.
+- UI.Vision: Included widgets order updating function expand for prevent system widget's reorder and allow after sort by ID for equal Z.
+
+
 2014-07-10 Roman
 - UI.Vision: For included to container's pages set attribute Qt::WA_WindowPropagation for allow true transparent by palette propagation.
 

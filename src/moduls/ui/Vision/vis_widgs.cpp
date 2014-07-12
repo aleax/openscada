@@ -1282,16 +1282,42 @@ void WdgView::orderUpdate( )
 
     vector< pair<int,QObject*> > arr;
     arr.reserve(children().size());
-    for(int i_c = 0; i_c < ols.size(); i_c++) {
-	WdgView *cw = qobject_cast<WdgView*>(ols[i_c]);
-	if(cw) arr.push_back(pair<int,QObject*>(cw->z(),cw));
-	else arr.push_back(pair<int,QObject*>(100000,ols[i_c]));
+    int needForSort = 0;
+    int sysLev = 1000001;
+    for(int iC = 0; iC < ols.size(); iC++) {
+	WdgView *cw = qobject_cast<WdgView*>(ols[iC]);
+	if(cw) needForSort++;
+	arr.push_back(pair<int,QObject*>((cw?cw->z():sysLev),ols[iC]));
     }
-    make_heap(arr.begin(),arr.end());
-    sort_heap(arr.begin(),arr.end());
-    if(ols.size() == (int)arr.size())
-	for(int i_c = 0; i_c < ols.size(); i_c++)
-	    if(i_c < (int)arr.size()) ols[i_c] = arr[i_c].second;
+    if(!needForSort) return;
+
+    /*make_heap(arr.begin(),arr.end());
+    sort_heap(arr.begin(),arr.end());*/
+    sort(arr.begin(),arr.end());
+    if(ols.size() && ols.size() == (int)arr.size()) {
+	bool endIt = false;
+	vector< pair<string,QObject*> > arrAftSrt;
+	for(int iC = 0, iZ = 0, zPrev = arr[iZ].first; iC < ols.size(); ) {
+	    ols[iC] = arr[iC].second;
+	    ++iC;
+
+	    // After sort
+	    if((endIt=(iC>=ols.size())) || arr[iC].first != zPrev) {
+		if((iC-iZ) >= 2 && zPrev != sysLev) {	//Resort
+		    arrAftSrt.clear();
+		    for(int iC1 = iZ; iC1 < iC; ++iC1)
+			arrAftSrt.push_back(pair<string,QObject*>(((WdgView*)ols[iC1])->id(), ols[iC1]));
+		    sort(arrAftSrt.begin(), arrAftSrt.end());
+		    for(int iC1 = iZ, iA = 0; iC1 < iC; ++iC1, ++iA)
+			ols[iC1] = arrAftSrt[iA].second;
+		}
+		if(!endIt) {
+		    iZ = iC;
+		    zPrev = arr[iC].first;
+		}
+	    }
+	}
+    }
 }
 
 bool WdgView::event( QEvent *event )

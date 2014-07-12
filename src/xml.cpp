@@ -83,8 +83,7 @@ void XMLNode::childDel( int id )
 void XMLNode::childDel( XMLNode *nd )
 {
     for(unsigned i_ch = 0; i_ch < mChildren.size(); i_ch++)
-	if(mChildren[i_ch] == nd)
-	{
+	if(mChildren[i_ch] == nd) {
 	    delete mChildren[i_ch];
 	    mChildren.erase(mChildren.begin()+i_ch);
 	    break;
@@ -180,8 +179,7 @@ XMLNode* XMLNode::setText( const string &s, bool childs )
 
     int i_ch = -1;
     for(int i_f = 0; i_f < (int)childSize(); i_f++)
-	if(childGet(i_f)->name() == "<*>")
-	{
+	if(childGet(i_f)->name() == "<*>") {
 	    if(i_ch < 0) childGet(i_f)->mText = s;
 	    else childDel(i_f--);
 	    i_ch = i_f;
@@ -211,8 +209,7 @@ void XMLNode::attrClear( )	{ mAttr.clear(); }
 
 string XMLNode::attr( const string &name, bool caseSens ) const
 {
-    if(caseSens)
-    {
+    if(caseSens) {
 	for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
 	    if(mAttr[i_a].first == name) return mAttr[i_a].second;
     }
@@ -225,8 +222,7 @@ string XMLNode::attr( const string &name, bool caseSens ) const
 XMLNode* XMLNode::setAttr( const string &name, const string &val )
 {
     for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-	if(mAttr[i_a].first == name)
-	{
+	if(mAttr[i_a].first == name) {
 	    mAttr[i_a].second = val;
 	    return this;
 	}
@@ -272,8 +268,7 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
     if(flg&XMLNode::MissTagEnc) xml.append(name());
     else encode(name(), xml);
 
-    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < mAttr.size(); i_a++) {
 	if(mAttr[i_a].second.empty()) continue;
 	xml.append(" ");
 	if(flg&XMLNode::MissAttrEnc) xml.append(mAttr[i_a].first);
@@ -284,12 +279,10 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
     }
 
     if(childEmpty() && mText.empty()) xml.append((flg&(XMLNode::BrOpenPast|XMLNode::BrClosePast)) ? " />\n" : " />");
-    else
-    {
+    else {
 	xml.append((flg&XMLNode::BrOpenPast) ? ">\n" : ">");
 	//Save text
-	if(!mText.empty())
-	{
+	if(!mText.empty()) {
 	    encode(Mess->codeConvOut(cp,mText), xml, true);
 	    xml.append(flg&XMLNode::BrTextPast ? "\n" : "");
 	}
@@ -306,8 +299,7 @@ void XMLNode::saveNode( unsigned flg, string &xml, const string &cp )
 void XMLNode::encode( const string &s, string &rez, bool text ) const
 {
     const char *replStr = NULL;
-    for(unsigned i_sz = 0, f_pos = 0; true; )
-    {
+    for(unsigned i_sz = 0, f_pos = 0; true; ) {
 	switch(s[i_sz])
 	{
 	    case '>':	replStr = "&gt;";	break;
@@ -318,15 +310,13 @@ void XMLNode::encode( const string &s, string &rez, bool text ) const
 	    case '\n':	if(!text) replStr = "&#010;"; break;
 	}
 	i_sz++;
-	if(replStr)
-	{
+	if(replStr) {
 	    if((i_sz-1) > f_pos) rez.append(s,f_pos,i_sz-f_pos-1);
 	    rez.append(replStr);
 	    replStr = NULL;
 	    f_pos = i_sz;
 	}
-	if(i_sz >= s.size())
-	{
+	if(i_sz >= s.size()) {
 	    if(i_sz > f_pos) rez.append(s,f_pos,i_sz-f_pos);
 	    break;
 	}
@@ -349,11 +339,9 @@ unsigned XMLNode::loadNode( LoadCtx &ctx, unsigned pos )
 
 nextTag:
     //Find for a tag start symbol
-    for( ; pos < ctx.vl.size() && ctx.vl[pos] != '<'; pos++)
-    {
+    for( ; pos < ctx.vl.size() && ctx.vl[pos] != '<'; pos++) {
 	if(initTag) continue;
-	if(ctx.flg&LD_Full || mText.size() || !isspace(ctx.vl[pos]))
-	{
+	if(ctx.flg&LD_Full || mText.size() || !isspace(ctx.vl[pos])) {
 	    if(!mText.size())	mText.reserve(100);
 	    if(ctx.vl[pos] != '&') mText += ctx.vl[pos]; else parseEntity(ctx, pos, mText);
 	}
@@ -365,20 +353,17 @@ nextTag:
     {
 	case '!':	// Comment - special part
 	    //Comment block
-	    if(ctx.vl.compare(pos,4,"<!--") == 0)
-	    {
+	    if(ctx.vl.compare(pos,4,"<!--") == 0) {
 		size_t comBlkEnd = ctx.vl.find("-->",cpos+4);
 		if(comBlkEnd == string::npos) throw TError("XMLNode",_("No comment block end. Pos: %d"),pos);
-		if(ctx.flg&LD_Full)
-		{
+		if(ctx.flg&LD_Full) {
 		    if(mText.size()) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
 		    childAdd("<!>")->mText = Mess->codeConvIn(ctx.enc,ctx.vl.substr(cpos+4,comBlkEnd-(cpos+4)));
 		}
 		pos = comBlkEnd+3;
 	    }
 	    //Special "DOCTYPE" block
-	    else if(ctx.vl.compare(pos,10,"<!DOCTYPE ") == 0)
-	    {
+	    else if(ctx.vl.compare(pos,10,"<!DOCTYPE ") == 0) {
 		// Find subblock
 		for(cpos += 10; ctx.vl[cpos] != '['; cpos++)
 		    if(cpos >= ctx.vl.size()) throw TError("XMLNode",_("Unfinished '!DOCTYPE' block. Pos: %d"),pos);
@@ -386,8 +371,7 @@ nextTag:
 		// Process entities container
 		for(cpos += 1; ctx.vl[cpos] != ']'; cpos++)
 		    if(cpos >= ctx.vl.size()) throw TError("XMLNode",_("Unfinished '!DOCTYPE [ ]' container. Pos: %d"),pos);
-		    else if(ctx.vl.compare(cpos,9,"<!ENTITY ") == 0)
-		    {
+		    else if(ctx.vl.compare(cpos,9,"<!ENTITY ") == 0) {
 			for(cpos += 9; parseAttr(ctx,cpos,0); )
 			    if(ctx.aVl.size()) ctx.ent.insert(pair<string,string>(ctx.aNm,ctx.aVl));
 			while(isspace(ctx.vl[cpos])) cpos++;
@@ -408,8 +392,7 @@ nextTag:
 	    // Get tag name
 	    cpos = bpos;
 	    while(cpos < tpos && !isspace(ctx.vl[cpos])) cpos++;
-	    if(cpos < tpos)
-	    {
+	    if(cpos < tpos) {
 		string nm(ctx.vl,bpos,cpos-bpos);
 		// Pass spaces
 		while(isspace(ctx.vl[cpos])) cpos++;
@@ -423,18 +406,14 @@ nextTag:
 	    pos = tpos+2;
 	    goto nextTag;
 	case '/':	//End tag
-	    if(ctx.vl.compare(cpos+2,mName.size(),mName) == 0)
-	    {
+	    if(ctx.vl.compare(cpos+2,mName.size(),mName) == 0) {
 		cpos += 2+mName.size();
 		while(isspace(ctx.vl[cpos])) cpos++;
-		if(ctx.vl[cpos] == '>')
-		{
+		if(ctx.vl[cpos] == '>') {
 		    if(mText.size() && ctx.flg&LD_Full) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
-		    if(mText.size())
-		    {
+		    if(mText.size()) {
 			if(ctx.flg&LD_NoTxtSpcRemEnBeg) mText = Mess->codeConvIn(ctx.enc, mText);
-			else
-			{
+			else {
 			    //Remove spaces from end of text
 			    int i_ch = mText.size()-1;
 			    while(i_ch >= 0 && isspace(mText[i_ch])) i_ch--;
@@ -448,8 +427,7 @@ nextTag:
     }
     //Process for standard XML node
     // It is me node
-    if(initTag)
-    {
+    if(initTag) {
 	bpos = cpos+1;
 	//  Get tag name
 	for(cpos = bpos; !isspace(ctx.vl[cpos]) && ctx.vl[cpos] != '>' && ctx.vl[cpos] != '/'; cpos++)
@@ -467,8 +445,7 @@ nextTag:
 	throw TError("XMLNode",_("Start tag error. Pos: %d"),cpos);
     }
     // New XML node create
-    else
-    {
+    else {
 	if(mText.size() && ctx.flg&LD_Full) { childAdd("<*>")->mText = Mess->codeConvIn(ctx.enc,mText); mText.clear(); }
 	pos = childAdd()->loadNode(ctx,pos-1);
 	goto nextTag;
@@ -491,8 +468,7 @@ bool XMLNode::parseAttr( LoadCtx &ctx, unsigned &pos, char sep )
     //Get symbol '='
     // Pass spaces
     while(isspace(ctx.vl[pos])) pos++;
-    if(sep)
-    {
+    if(sep) {
 	if(ctx.vl[pos] != sep) throw TError("XMLNode",_("Unfinished attribute. Pos: %d"),bpos);
 	pos++;
     }
@@ -503,8 +479,7 @@ bool XMLNode::parseAttr( LoadCtx &ctx, unsigned &pos, char sep )
     char brc = ctx.vl[pos];
     //Get value
     ctx.aVl.clear();
-    for(pos++; ctx.vl[pos] != brc; pos++)
-    {
+    for(pos++; ctx.vl[pos] != brc; pos++) {
 	if(pos >= ctx.vl.size()) throw TError("XMLNode",_("Unexpected end. Pos: %d"),pos);
 	if(!ctx.aVl.size())	ctx.aVl.reserve(20);
 	if(ctx.vl[pos] != '&')	ctx.aVl += ctx.vl[pos]; else parseEntity(ctx, pos, ctx.aVl);
@@ -523,19 +498,16 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
     else if(ctx.vl.compare(rpos,6,"&apos;") == 0){ rpos += 5; rez += '\''; }
     else if(ctx.vl.compare(rpos,6,"&quot;") == 0){ rpos += 5; rez += '"'; }
     //Check for code entities
-    else if((rpos+3) < ctx.vl.size() && ctx.vl[rpos+1] == '#')
-    {
+    else if((rpos+3) < ctx.vl.size() && ctx.vl[rpos+1] == '#') {
 	uint32_t eVal = 0;
-	if(ctx.vl[rpos+2] == 'X' || ctx.vl[rpos+2] == 'x')
-	{
+	if(ctx.vl[rpos+2] == 'X' || ctx.vl[rpos+2] == 'x') {
 	    rpos += 3;
 	    unsigned nBeg = rpos;
 	    while(isxdigit(ctx.vl[rpos])) rpos++;
 	    if(ctx.vl[rpos] != ';') throw TError("XMLNode",_("Entity error. Pos: %d"),nBeg-3);
 	    eVal = strtoul(ctx.vl.data()+nBeg, NULL, 16);
 	}
-	else
-	{
+	else {
 	    rpos += 2;
 	    unsigned nBeg = rpos;
 	    while(isdigit(ctx.vl[rpos])) rpos++;
@@ -545,24 +517,21 @@ void XMLNode::parseEntity( LoadCtx &ctx, unsigned &rpos, string &rez )
 	//Value process
 	if(eVal < 0x80)	rez += (char)eVal;
 	else if(Mess->isUTF8())
-	    for(int i_ch = 5, i_st = -1; i_ch >= 0; i_ch--)
-	    {
+	    for(int i_ch = 5, i_st = -1; i_ch >= 0; i_ch--) {
 		if(i_st < i_ch && (eVal>>(i_ch*6))) i_st = i_ch;
 		if(i_ch == i_st) rez += (char)(0xC0|(eVal>>(i_ch*6)));
 		else if(i_ch < i_st) rez += (char)(0x80|(0x3F&(eVal>>(i_ch*6))));
 	    }
     }
     //Check for loaded entities
-    else
-    {
+    else {
 	rpos += 1;
 	unsigned nBeg = rpos;
 	for( ; ctx.vl[rpos] != ';'; rpos++)
 	    if(rpos >= ctx.vl.size()) throw TError("XMLNode",_("Entity error. Pos: %d"),nBeg-1);
 	map<string,string>::iterator ient = ctx.ent.size() ? ctx.ent.find(ctx.vl.substr(nBeg,rpos-nBeg)) : ctx.ent.end();
 	if(ient != ctx.ent.end()) rez += ient->second;
-	else
-	{
+	else {
 	    rez += '?';
 	    mess_warning("XMLNode", _("Unknown entity '%s'. Pos: %d"), ctx.vl.substr(nBeg,rpos-nBeg).c_str(), rpos);
 	}

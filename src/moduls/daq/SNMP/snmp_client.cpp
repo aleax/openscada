@@ -313,8 +313,7 @@ void *TMdContr::Task( void *icntr )
     cntr.endrunReq = false;
     cntr.prcSt = true;
 
-    while(!cntr.endrunReq)
-    {
+    while(!cntr.endrunReq) {
 	cntr.callSt = true;
 	int64_t t_cnt = TSYS::curTime();
 
@@ -491,8 +490,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 
     vector<string> als;
 
-    for(unsigned ioid = 0; ioid < lsOID().size(); ioid++)
-    {
+    for(unsigned ioid = 0; ioid < lsOID().size(); ioid++) {
 	oid_root_len = oid_next_len = lsOID()[ioid].size()/sizeof(oid);
 	memmove(oid_root,lsOID()[ioid].data(),oid_root_len*sizeof(oid));
 	memmove(oid_next,oid_root,oid_root_len*sizeof(oid));
@@ -503,7 +501,6 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 	    struct snmp_pdu *pdu = snmp_pdu_create(isScalar ? SNMP_MSG_GET : SNMP_MSG_GETNEXT);
 	    snmp_add_null_var(pdu, oid_next, oid_next_len);
 	    int status = snmp_sess_synch_response(ss, pdu, &response);
-	    //printf("TEST 01: status=%d; type=%d;\n", status, response->variables->type);
 	    if(status == STAT_SUCCESS && response && response->errstat == SNMP_ERR_NOERROR)
 		for(var = response->variables; var; var = var->next_variable) {
 		    if((var->name_length < oid_root_len) || (memcmp(oid_root,var->name,oid_root_len*sizeof(oid)) != 0))
@@ -526,7 +523,6 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			if(subtree) {
 			    if(!(subtree->access == MIB_ACCESS_READWRITE || subtree->access == MIB_ACCESS_WRITEONLY))
 				flg |= TFld::NoWrite;
-			    //printf("TEST 00: '%s': access=%d; status=%d; type=%d\n", tbuf, subtree->access, subtree->status, subtree->type);
 			    if(subtree->enums) {
 				flg |= TFld::Selected;
 				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next)
@@ -561,7 +557,8 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			    case SNMP_NOSUCHINSTANCE:	running = false;	break;
 			}
 			if(tp >= 0)
-			    elem().fldAdd(new TFld(soid.c_str(),tbuf,tp,flg,"","",selIds.c_str(),selLabs.c_str(),i2s(var->type).c_str()));
+			    elem().fldAdd(new TFld(soid.c_str(),tbuf,tp,flg,"","",
+				selIds.c_str(),selLabs.c_str(),(i2s(var->type)+"\n"+(subtree->hint?subtree->hint:"")).c_str()));
 		    }
 		    // Set value
 		    if(!onlyInit) {
@@ -576,9 +573,17 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			    case ASN_TIMETICKS:
 			    case ASN_UINTEGER: attr.at().setR(*(unsigned long*)var->val.integer, 0, true);	break;
 			    case ASN_OCTET_STR:
-			    case ASN_OPAQUE: attr.at().setS(string((char*)var->val.string,var->val_len), 0, true);	break;
-			    case ASN_IPADDRESS:
-			    {
+			    case ASN_OPAQUE: {
+				string hint = TSYS::strLine(attr.at().fld().reserve(),1);
+				size_t fndPos;
+				if((fndPos=hint.find("x")) != string::npos)
+				    hint = TSYS::strDecode(string((char*)var->val.string,var->val_len), TSYS::Bin,
+					((fndPos+1)<hint.size())?hint.substr(fndPos+1,1):"");
+				else hint = string((char*)var->val.string,var->val_len);
+				attr.at().setS(hint, 0, true);
+				break;
+			    }
+			    case ASN_IPADDRESS: {
 				u_char *ip = (u_char*)var->val.string;
 				attr.at().setS(TSYS::strMess("%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]), 0, true);
 				break;

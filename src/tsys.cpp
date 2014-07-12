@@ -915,7 +915,7 @@ string TSYS::sepstr2path( const string &str, char sep )
     return rez;
 }
 
-string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
+string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 {
     int i_sz;
     string sout;
@@ -925,23 +925,23 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	case TSYS::PathEl:
 	    sout = in;
 	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch( sout[i_sz] )
+		switch(sout[i_sz])
 		{
 		    case '/': sout.replace(i_sz,1,"%2f"); i_sz += 2; break;
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
 		}
 	    break;
-	case TSYS::HttpURL:
+	case TSYS::HttpURL: {
+	    char buf[4];
 	    sout = in;
 	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch( sout[i_sz] )
+		switch(sout[i_sz])
 		{
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
 		    case ' ': sout.replace(i_sz,1,"%20"); i_sz += 2; break;
 		    case '\t': sout.replace(i_sz,1,"%09"); i_sz += 2; break;
 		    default:
 			if(sout[i_sz]&0x80) {
-			    char buf[4];
 			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[i_sz]);
 			    sout.replace(i_sz,1,buf);
 			    i_sz += 2;
@@ -949,6 +949,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 			}
 		}
 	    break;
+	}
 	case TSYS::Html:
 	    sout.reserve(in.size()+10);
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
@@ -983,26 +984,25 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    default:	sout += in[i_sz];
 		}
 	    break;
-	case TSYS::Custom:
+	case TSYS::Custom: {
 	    sout.reserve(in.size()+10);
+	    char buf[4];
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++) {
 		unsigned i_smb;
-		for(i_smb = 0; i_smb < symb.size(); i_smb++)
-		    if(in[i_sz] == symb[i_smb]) {
-			char buf[4];
+		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
+		    if(in[i_sz] == opt1[i_smb]) {
 			sprintf(buf,"%%%02X",(unsigned char)in[i_sz]);
 			sout += buf;
 			break;
 		    }
-		if(i_smb >= symb.size()) sout += in[i_sz];
+		if(i_smb >= opt1.size()) sout += in[i_sz];
 	    }
 	    break;
-	case TSYS::base64:
-	{
+	}
+	case TSYS::base64: {
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	    for(i_sz = 0; i_sz < (int)in.size(); i_sz += 3)
-	    {
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz += 3) {
 		if(i_sz && !(i_sz%57))	sout.push_back('\n');
 		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
 		if((i_sz+1) >= (int)in.size()) {
@@ -1040,16 +1040,16 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    case ':': case ';': case '"': case '\'': case '<':
 		    case '>': case '?': case '.': case ',':
 			sout+="_";	break;
-		    default:	sout+=in[i_sz];
+		    default:	sout += in[i_sz];
 		}
 	    break;
-	case TSYS::Bin:
-	{
+	case TSYS::Bin: {
 	    string svl, evl;
-	    sout.reserve(in.size());
-	    for(int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
-		for(int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
-		    sout += (char)strtol(evl.c_str(),NULL,16);
+	    sout.reserve(in.size()/2);
+	    for(unsigned iCh = 0; iCh < (int)in.size(); ++iCh)
+		if(isxdigit(in[iCh])) {
+		    sout += (char)strtol(in.substr(iCh,2).c_str(),NULL,16); iCh++;
+		}
 	    break;
 	}
 	case TSYS::Reverse:
@@ -1088,7 +1088,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
     return sout;
 }
 
-unsigned char TSYS::getBase64Code(unsigned char asymb) 
+unsigned char TSYS::getBase64Code( unsigned char asymb )
 {
     switch(asymb)
     {
@@ -1101,7 +1101,7 @@ unsigned char TSYS::getBase64Code(unsigned char asymb)
     return 0;
 }
 
-string TSYS::strDecode( const string &in, TSYS::Code tp )
+string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 {
     unsigned i_sz;
     string sout;
@@ -1140,11 +1140,15 @@ string TSYS::strDecode( const string &in, TSYS::Code tp )
 		i_sz += 4;
 	    }
 	    break;
-	case TSYS::Bin:
-	    sout.reserve(in.size());
-	    for(i_sz = 0; i_sz < in.size(); i_sz++)
-		sout += TSYS::strMess(((i_sz+1)%16)?"%0.2x ":"%0.2x\n",(unsigned char)in[i_sz]);
+	case TSYS::Bin: {
+	    sout.reserve(in.size()*2);
+	    char buf[3+opt1.size()];
+	    for(i_sz = 0; i_sz < in.size(); i_sz++) {
+		sprintf(buf, "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
+		sout += buf;
+	    }
 	    break;
+	}
 	default: sout = in;	break;
     }
 
@@ -1946,8 +1950,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
-    if(iid == "system" && prms.size() >= 1)
-    {
+    if(iid == "system" && prms.size() >= 1) {
 	if(prms.size() >= 2 && prms[1].getB()) return system(prms[0].getS().c_str());
 	FILE *fp = popen(prms[0].getS().c_str(),"r");
 	if(!fp) return string("");
@@ -1961,8 +1964,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return rez;
     }
     // string fileRead( string file ) - Return <file> content by string.
-    if(iid == "fileRead" && prms.size() >= 1)
-    {
+    if(iid == "fileRead" && prms.size() >= 1) {
 	char buf[STR_BUF_LEN];
 	string rez;
 	int hd = open(prms[0].getS().c_str(),O_RDONLY);
@@ -1974,8 +1976,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
     //	  Return wrote bytes count.
-    if(iid == "fileWrite" && prms.size() >= 2)
-    {
+    if(iid == "fileWrite" && prms.size() >= 2) {
 	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
@@ -1992,8 +1993,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the system via XML
     //  req - request's XML node
     //  stat - remote OpenSCADA-station for request
-    if(iid == "cntrReq" && prms.size() >= 1)
-    {
+    if(iid == "cntrReq" && prms.size() >= 1) {
 	XMLNode req;
 	AutoHD<XMLNodeObj> xnd = prms[0].getO();
 	if(xnd.freeStat()) return string(_("1:Request is not object!"));
@@ -2014,8 +2014,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds
     //  ntm - wait time part in nanoseconds
-    if(iid == "sleep" && prms.size() >= 1)
-    {
+    if(iid == "sleep" && prms.size() >= 1) {
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
 	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
@@ -2023,8 +2022,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
-    if(iid == "time")
-    {
+    if(iid == "time") {
 	if(prms.empty()) return (int64_t)time(NULL);
 	int64_t tm = curTime();
 	prms[0].setI(tm%1000000); prms[0].setModify();
@@ -2042,8 +2040,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if((iid == "localtime" || (alt1=(iid=="gmtime"))) && prms.size() >= 2)
-    {
+    if((iid == "localtime" || (alt1=(iid=="gmtime"))) && prms.size() >= 2) {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
 	if(alt1) gmtime_r(&tm_t, &tm_tm);
@@ -2071,8 +2068,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if(iid == "mktime" || (alt1=(iid=="timegm")))
-    {
+    if(iid == "mktime" || (alt1=(iid=="timegm"))) {
 	struct tm tm_tm;
 	tm_tm.tm_sec	= (prms.size()>=1) ? prms[0].getI() : 0;
 	tm_tm.tm_min	= (prms.size()>=2) ? prms[1].getI() : 0;
@@ -2100,8 +2096,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //      - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
     //  form - result string format
-    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty())
-    {
+    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty()) {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
 	if(alt1) gmtime_r(&tm_t, &tm_tm);
@@ -2114,8 +2109,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //      based on the string record of time <str>, in accordance with the specified template <form>
     //  str - source time in string
     //  form - string's time template in format POSIX-function "strptime"
-    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty())
-    {
+    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty()) {
 	struct tm stm;
 	stm.tm_isdst = -1;
 	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
@@ -2129,8 +2123,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return (int64_t)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
-    if(iid == "strFromCharCode")
-    {
+    if(iid == "strFromCharCode") {
 	string rez;
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++)
 	    rez += (unsigned char)prms[i_p].getI();
@@ -2143,6 +2136,44 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "strCodeConv" && prms.size() >= 3)
 	return Mess->codeConv((prms[1].getS().size() ? prms[1].getS() : Mess->charset()),
 			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
+    // string strEncode( string src, string tp = "Bin", string opt1 = "" ) - String encode from <src> by <tp> and options <opt1>.
+    //  src - source;
+    //  tp  - encode type: "PathEl", "HttpURL", "HTML", "JavaScript", "SQL", "Custom", "Base64", "FormatPrint",
+    //			   "OscdID", "Bin", "Reverse", "ShieldSimb"
+    //  opt1 - option 1, symbols for "Custom"
+    if(iid == "strEncode" && prms.size() >= 1) {
+	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
+	Code tp = (Code)0;
+	if(stp == "PathEl")		tp = PathEl;
+	else if(stp == "HttpURL")	tp = HttpURL;
+	else if(stp == "HTML")		tp = Html;
+	else if(stp == "JavaScript")	tp = JavaSc;
+	else if(stp == "SQL")		tp = SQL;
+	else if(stp == "Custom")	tp = Custom;
+	else if(stp == "Base64")	tp = base64;
+	else if(stp == "FormatPrint")	tp = FormatPrint;
+	else if(stp == "OscdID")	tp = oscdID;
+	else if(stp == "Bin")		tp = Bin;
+	else if(stp == "Reverse")	tp = Reverse;
+	else if(stp == "ShieldSimb")	tp = ShieldSimb;
+	else return "";
+	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
+    }
+    // string strDecode( string src, string tp = "Bin", string opt1 = "" ) - String decode from <src> by <tp> and options <opt1>.
+    //  src - source;
+    //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin"
+    //  opt1 - option 1, separator for "Bin"
+    if(iid == "strDecode" && prms.size() >= 2) {
+	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
+	Code tp = (Code)0;
+	if(stp == "PathEl")		tp = PathEl;
+	else if(stp == "HttpURL")	tp = HttpURL;
+	else if(stp == "Custom")	tp = Custom;
+	else if(stp == "Base64")	tp = base64;
+	else if(stp == "Bin")		tp = Bin;
+	else return "";
+	return strDecode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
+    }
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }

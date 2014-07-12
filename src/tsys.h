@@ -206,8 +206,8 @@ class TSYS : public TCntrNode
 	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
-	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
-	static string strDecode( const string &in, Code tp = Custom );
+	static string strEncode( const string &in, Code tp, const string &opt1 = "" );
+	static string strDecode( const string &in, Code tp = Custom, const string &opt1 = "" );
 	static string strMess( const char *fmt, ... );
 	static string strMess( unsigned len, const char *fmt, ... );
 	static string strLabEnum( const string &base );

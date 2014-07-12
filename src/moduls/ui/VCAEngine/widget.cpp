@@ -39,7 +39,7 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
 {
     inclWdg = grpAdd("wdg_");
 
-    //> Attributes mutex create
+    //Attributes mutex create
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
     pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
@@ -47,13 +47,12 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
     pthread_mutexattr_destroy(&attrM);
 }
 
-Widget::~Widget()
+Widget::~Widget( )
 {
-    //> Remove attributes
+    //Remove attributes
     pthread_mutex_lock(&mtxAttr());
     map<string,Attr*>::iterator p;
-    while((p = mAttrs.begin()) != mAttrs.end())
-    {
+    while((p = mAttrs.begin()) != mAttrs.end()) {
 	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
 	if(p->second->mConn) mess_err(nodePath().c_str(),_("Attribute '%s' was not free. Force delete!"),p->first.c_str());
 	delete p->second;
@@ -61,7 +60,7 @@ Widget::~Widget()
     }
     pthread_mutex_unlock(&mtxAttr());
 
-    //> Attributes mutex destroy
+    //Attributes mutex destroy
     pthread_mutex_destroy(&mtxAttrM);
 }
 
@@ -72,7 +71,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 
     if(!src_n->enable()) return *this;
 
-    //> Parent link copy
+    //Parent link copy
     if(src_n->parentNm() != path() && parentNm().empty())
     {
 	if(parentNm() != src_n->parentNm() && enable()) setEnable(false);
@@ -80,7 +79,7 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     }
     if(!enable()) setEnable(true);
 
-    //> Copy generic configuration
+    //Copy generic configuration
     if(src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name())	setName(src_n->name());
     if(src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr())	setDescr(src_n->descr());
     if(src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico())	setIco(src_n->ico());
@@ -91,15 +90,13 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     if(src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg())	setCalcProg(src_n->calcProg());
     if(src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer())	setCalcPer(src_n->calcPer());
 
-    //> Copy attributes
+    //Copy attributes
     vector<string> els;
     src_n->attrList( els );
     AutoHD<Attr> attr, pattr;
-    for(unsigned i_a = 0; i_a < els.size(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < els.size(); i_a++) {
 	pattr = src_n->attrAt(els[i_a]);
-	if(!attrPresent(els[i_a]))
-	{
+	if(!attrPresent(els[i_a])) {
 	    bool isInher = pattr.at().flgSelf()&Attr::IsInher;
 	    attrAdd(isInher ? &src_n->attrAt(els[i_a]).at().fld() : new TFld(src_n->attrAt(els[i_a]).at().fld()), -1, isInher);
 	    attrAt(els[i_a]).at().setModif(1);

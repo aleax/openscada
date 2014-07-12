@@ -145,6 +145,8 @@ class ConfApp: public QMainWindow
 	void initHosts();
 	int cntrIfCmd( XMLNode &node );
 
+	string getPrintVal( const string &vl );
+
 	//Attributes
 	QTimer		*endRunTimer, *autoUpdTimer;
 

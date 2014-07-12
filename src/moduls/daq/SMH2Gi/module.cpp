@@ -334,7 +334,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	for(int i_tr = 0; i_tr < connTry; i_tr++)
 	{
 	    if(messLev() == TMess::Debug)
-		mess_debug_(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
+		mess_debug_(nodePath().c_str(), _("ModBUS REQ -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 	    int resp_len = tro.at().messIO(mbap.data(), mbap.size(), (broadCast?NULL:buf), sizeof(buf), 0, true);
 	    if(broadCast) { err = ""; break; }
 	    rez.assign(buf, resp_len);
@@ -349,7 +349,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 	    if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
 	    { err = _("13:Error respond: CRC check error."); continue; }
 	    if(messLev() == TMess::Debug)
-		mess_debug_(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin).c_str());
+		mess_debug_(nodePath().c_str(), _("ModBUS RESP -> '%s': %s"), tro.at().id().c_str(), TSYS::strDecode(rez,TSYS::Bin," ").c_str());
 	    pdu = rez.substr(0, rez.size()-2);
 	    err = "";
 	    break;
@@ -359,7 +359,7 @@ string TMdContr::modBusReq( string &pdu, bool MC, bool broadCast )
 
     if(messLev() >= TMess::Error && err.size()) mess_err(nodePath().c_str(), "%s", err.c_str());
     if(messLev() == TMess::Debug && err.size())
-	mess_debug_(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin).c_str(), err.c_str());
+	mess_debug_(nodePath().c_str(), _("ModBUS ERR -> %s: %s"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str(), err.c_str());
 
     return err;
 }
@@ -410,7 +410,7 @@ void *TMdContr::Task( void *icntr )
 	    pdu += (char)cntr.MRWrFrm.size();		//Byte Count
 	    pdu += cntr.MRWrFrm;
 
-	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 	    cntr.modBusReq(pdu, false, true);
 	}
 
@@ -848,10 +848,10 @@ void MRCParam::enable( TParamContr *ip )
 	pdu += (char)((bSz/2)>>8);	//Registers quantity MSB
 	pdu += (char)(bSz/2);		//Registers quantity LSB
 
-	//printf("TEST 10: Request parameters: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	//printf("TEST 10: Request parameters: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ".c_str());
 
 	rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	//printf("TEST 10: Respond for request parameters: '%s' (%d)\n",TSYS::strDecode(pdu,TSYS::Bin).c_str(),sizeof(Inquired_t));
+	//printf("TEST 10: Respond for request parameters: '%s' (%d)\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str(),sizeof(Inquired_t));
 	if(rezReq.size() || pdu.size() < (3+sizeof(Inquired_t)))
 	    throw TError(p->nodePath().c_str(),_("Parameters request error: %s."),rezReq.c_str());
 	pdu.erase(0,3);
@@ -899,11 +899,11 @@ void MRCParam::sendTune( TParamContr *ip )
     pdu += (char)tune.size();		//Byte Count
     pdu += tune;
 
-    //printf("TEST 10: Send tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+    //printf("TEST 10: Send tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 
     rezReq = p->owner().modBusReq(pdu, (modSlot<0));
     if(rezReq.size()) throw TError(p->nodePath().c_str(),_("Send tune request error: %s."),rezReq.c_str());
-    //printf("TEST 10: Respond for tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+    //printf("TEST 10: Respond for tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 }
 
 void MRCParam::disable( TParamContr *ip )
@@ -933,7 +933,7 @@ void MRCParam::getVals( TParamContr *ip )
 	pduReq += (char)0x00;		//Registers quantity MSB
 	pduReq += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
 
-	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
 	if(rezReq.size() || pduReq.size() < 35)
 	{
@@ -942,7 +942,7 @@ void MRCParam::getVals( TParamContr *ip )
 	}
 	//else if(pduReq[0]&0x80)	rezReq = _("21:Error respond.");
 
-	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	pduReq.erase(0,3);
 	//> Swap registers
 	for(int i_p = 0; i_p < (int)pduReq.size()-1; i_p += 2)
@@ -1021,7 +1021,7 @@ void MRCParam::getVals( TParamContr *ip )
 	    pdu += (char)(data.size()/2);	//Registers quantity LSB
 	    pdu += (char)data.size();	//Byte Count
 	    pdu += data;
-	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin).c_str());
+	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
 	}
 
@@ -1043,9 +1043,9 @@ void MRCParam::getVals( TParamContr *ip )
 	pduReq += (char)(ePrm->SN>>8);		//SN[1]
 	pduReq += (char)((reStrSize/2)>>8);	//Registers quantity MSB
 	pduReq += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
-	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
-	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin).c_str());
+	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	if(rezReq.size() || (int)pduReq.size() < (3+reStrSize))
 	{
 	    pduReq.resize(3+reStrSize);

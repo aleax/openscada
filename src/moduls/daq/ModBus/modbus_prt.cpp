@@ -370,13 +370,13 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
     //Prepare log
     if(prtLen() || debugCat.size()) {
 	string mess = _("REQ -> ");
-	if(prt != "ASCII") mess += TSYS::strDecode(mbap,TSYS::Bin);
+	if(prt != "ASCII") mess += TSYS::strDecode(mbap, TSYS::Bin, " ");
 	else if(mbap.size() > 2) mess += mbap.substr(0,mbap.size()-2);
 	mess += "\n";
 
 	if(err.empty()) mess += _("RESP -> ");
 	else mess += _("ERR -> ") + err + " -> ";
-	if(prt != "ASCII") mess += TSYS::strDecode(rez,TSYS::Bin);
+	if(prt != "ASCII") mess += TSYS::strDecode(rez, TSYS::Bin, " ");
 	else if(rez.size() > 2) mess += rez.substr(0,rez.size()-2);
 
 	if(prtLen())
@@ -552,12 +552,12 @@ retry:
 	string mess = tm2s(time(NULL),"")+" "+prt+": "+srcTr().at().workId()+
 			"("+TSYS::strLine(srcAddr(),0)+") --> "+i2s(node)+"\n";
 	mess += _("REQ -> ");
-	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin);
+	if(prt != "ASCII")	mess += TSYS::strDecode(reqst, TSYS::Bin, " ");
 	else if(reqst.size() > 2) mess += reqst.substr(0, reqst.size()-2);
 	mess += "\n";
 
 	mess +=_("RESP -> ");
-	if(prt != "ASCII")	mess += TSYS::strDecode(answer, TSYS::Bin);
+	if(prt != "ASCII")	mess += TSYS::strDecode(answer, TSYS::Bin, " ");
 	else if(answer.size() > 2) mess += answer.substr(0, answer.size()-2);
 
 	owner().pushPrtMess(mess+"\n");

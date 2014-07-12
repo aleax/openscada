@@ -192,7 +192,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 			mbap = char(0);
 
 			if(p->owner().messLev() == TMess::Debug)
-			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Request: '%s'"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Request: '%s'"),TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
 			if((resp_len=trsO[i_t].at().messIO(mbap.data(),mbap.size(),buf,sizeof(buf))) >= 4)
 			{
@@ -203,12 +203,12 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 				ePrm->pass = ePrm->RC5Decr(string(buf+5,8), ePrm->RC5Key(TSYS::strEncode(p->cfg("PASS").getS(),TSYS::Bin)));
 				ePrm->key = ePrm->RC5Key(ePrm->pass);
 				if(p->owner().messLev() == TMess::Debug)
-				    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin).c_str());
+				    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin," ").c_str());
 			    }
 			}
 
 			if(p->owner().messLev() == TMess::Debug)
-			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin).c_str());
+			    mess_debug_(p->nodePath().c_str(), _("Master PLC ID Response: '%s'"),TSYS::strDecode(string(buf,resp_len),TSYS::Bin," ").c_str());
 		    }
 		    catch(...) { }
 		if(trsO[i_t].at().prm1() == cntrMN) { trO = trsO[i_t]; ePrm->prevTr = trO.at().id(); }
@@ -226,14 +226,14 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 	mbap += pdu;
 
 	if(p->owner().messLev() == TMess::Debug)
-	    mess_debug_(p->nodePath().c_str(), _("Request: '%s'"), TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	    mess_debug_(p->nodePath().c_str(), _("Request: '%s'"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
 	mbap = ePrm->RC5Encr(mbap, ePrm->key);
 
 	ResAlloc resN(trO.at().nodeRes(), true);
 	//Send request
 	if(p->owner().messLev() == TMess::Debug)
-	    mess_debug_(p->nodePath().c_str(), _("Request (enc): '%s'"), TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	    mess_debug_(p->nodePath().c_str(), _("Request (enc): '%s'"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
 	int resp_len = trO.at().messIO(mbap.data(), mbap.size(), buf, sizeof(buf), 0, true);
 
@@ -261,7 +261,7 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 			ePrm->pass = ePrm->RC5Decr(mbap.substr(5,8), ePrm->RC5Key(TSYS::strEncode(p->cfg("PASS").getS(),TSYS::Bin)));
 			ePrm->key = ePrm->RC5Key(ePrm->pass);
 			if(p->owner().messLev() == TMess::Debug)
-			    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin).c_str());
+			    mess_debug_(p->nodePath().c_str(), _("Password sequence set: '%s'."), TSYS::strDecode(ePrm->pass,TSYS::Bin," ").c_str());
 			return req(p, pdu, true);
 		    }
 		    else err = TSYS::strMess(_("12:PLC: The password encripted by master key."));
@@ -273,21 +273,21 @@ string Kontar::req( TMdPrm *p, string &pdu, bool passUpdate )
 		case 0xE6:	err = TSYS::strMess(_("12:PLC: Network update in process."));	break;
 		case 0xD0:	//The data encripted the access password
 		    if(p->owner().messLev() == TMess::Debug)
-			mess_debug_(p->nodePath().c_str(), _("Response (enc): '%s'"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+			mess_debug_(p->nodePath().c_str(), _("Response (enc): '%s'"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 		    mbap.replace(5, string::npos, ePrm->RC5Decr(mbap.substr(5),ePrm->key));
 		    break;
 	    }
 	    if(err.empty())
 	    {
 		if(p->owner().messLev() == TMess::Debug)
-		    mess_debug_(p->nodePath().c_str(), _("Response: '%s'"),TSYS::strDecode(mbap,TSYS::Bin).c_str());
+		    mess_debug_(p->nodePath().c_str(), _("Response: '%s'"), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 		pdu = mbap.substr(5);
 	    }
 	}
     }catch(TError er) { err = TSYS::strMess(_("14:Connection error - %s"),er.mess.c_str()); }
 
     if(!err.empty() && p->owner().messLev() == TMess::Debug)
-	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'"),err.c_str(), TSYS::strDecode(mbap,TSYS::Bin).c_str());
+	mess_debug_(p->nodePath().c_str(), _("Error: '%s': '%s'"),err.c_str(), TSYS::strDecode(mbap,TSYS::Bin," ").c_str());
 
     return err;
 }

@@ -121,12 +121,12 @@ void TUIMod::load_( )
 {
     mess_debug(nodePath().c_str(),_("Load module."));
 
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
         if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    //> Load parameters from config-file and DB
+    //Load parameters from config-file and DB
     setStartPath(TBDS::genDBGet(nodePath()+"StartPath",startPath()));
     setStartUser(TBDS::genDBGet(nodePath()+"StartUser",startUser()));
 }
