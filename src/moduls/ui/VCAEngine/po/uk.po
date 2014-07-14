@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.VCAEngine 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-07 21:59+0300\n"
+"POT-Creation-Date: 2014-07-13 12:54+0300\n"
 "PO-Revision-Date: 2007-10-30 10:48+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -40,8 +40,8 @@ msgstr "Помилка ввімкнення/вимкнення віджету '%
 msgid "Widgets library: "
 msgstr "Бібліотека віджетів: "
 
-#: libwidg.cpp:339 project.cpp:1305 session.cpp:606 widget.cpp:857
-#: widget.cpp:892 widget.cpp:1488
+#: libwidg.cpp:339 project.cpp:1305 session.cpp:606 widget.cpp:896
+#: widget.cpp:932 widget.cpp:1505
 msgid "Widget"
 msgstr "Віджет"
 
@@ -49,12 +49,12 @@ msgstr "Віджет"
 msgid "Library"
 msgstr "Бібліотека"
 
-#: libwidg.cpp:342 project.cpp:463 session.cpp:572 widget.cpp:859
+#: libwidg.cpp:342 project.cpp:463 session.cpp:572 widget.cpp:898
 msgid "State"
 msgstr "Стан"
 
-#: libwidg.cpp:344 project.cpp:465 session.cpp:573 widget.cpp:152
-#: widget.cpp:861
+#: libwidg.cpp:344 project.cpp:465 session.cpp:573 widget.cpp:147
+#: widget.cpp:900
 msgid "Enable"
 msgstr "Включений"
 
@@ -76,33 +76,33 @@ msgid "Date of modification"
 msgstr "Дата модифікації"
 
 #: libwidg.cpp:350 origwidg.cpp:380 origwidg.cpp:411 project.cpp:471
-#: project.cpp:1305 session.cpp:594 vcaengine.cpp:778 widget.cpp:866
-#: widget.cpp:1498
+#: project.cpp:1305 session.cpp:594 vcaengine.cpp:778 widget.cpp:905
+#: widget.cpp:1515
 msgid "Configuration"
 msgstr "Конфігурація"
 
 #: libwidg.cpp:352 libwidg.cpp:363 project.cpp:473 project.cpp:500
-#: project.cpp:512 widget.cpp:142 widget.cpp:868 widget.cpp:1493
+#: project.cpp:512 widget.cpp:137 widget.cpp:907 widget.cpp:1510
 msgid "Id"
 msgstr ""
 
 #: libwidg.cpp:353 project.cpp:474 project.cpp:509 vcaengine.cpp:115
-#: vcaengine.cpp:153 vcaengine.cpp:162 widget.cpp:150 widget.cpp:872
-#: widget.cpp:1494
+#: vcaengine.cpp:153 vcaengine.cpp:162 widget.cpp:145 widget.cpp:911
+#: widget.cpp:1511
 msgid "Name"
 msgstr "Ім'я"
 
 #: libwidg.cpp:354 project.cpp:475 vcaengine.cpp:116 vcaengine.cpp:163
-#: widget.cpp:151 widget.cpp:873
+#: widget.cpp:146 widget.cpp:912
 msgid "Description"
 msgstr "Опис"
 
 #: libwidg.cpp:355 project.cpp:476 vcaengine.cpp:118 vcaengine.cpp:127
-#: vcaengine.cpp:165 vcaengine.cpp:176 widget.cpp:874
+#: vcaengine.cpp:165 vcaengine.cpp:176 widget.cpp:913
 msgid "Icon"
 msgstr "Іконка"
 
-#: libwidg.cpp:358 libwidg.cpp:359 widget.cpp:889
+#: libwidg.cpp:358 libwidg.cpp:359 widget.cpp:929
 msgid "Widgets"
 msgstr "Віджет"
 
@@ -119,7 +119,7 @@ msgstr "Mime тип"
 msgid "Data"
 msgstr "Дані"
 
-#: libwidg.cpp:759 project.cpp:1187 session.cpp:1283 widget.cpp:681
+#: libwidg.cpp:759 project.cpp:1187 session.cpp:1283 widget.cpp:721
 msgid "Widget is not container!"
 msgstr "Віджет не контейнер!"
 
@@ -153,7 +153,7 @@ msgstr "Помилка видалення базового віджету-при
 msgid "Base widget: "
 msgstr "Базовий віджет: "
 
-#: origwidg.cpp:79 project.cpp:1308 widget.cpp:144 widget.cpp:862
+#: origwidg.cpp:79 project.cpp:1308 widget.cpp:139 widget.cpp:901
 msgid "Parent"
 msgstr "Батько"
 
@@ -209,7 +209,7 @@ msgstr "Перелік елементів"
 
 #: origwidg.cpp:148 origwidg.cpp:464 origwidg.cpp:689 origwidg.cpp:830
 #: origwidg.cpp:1033 origwidg.cpp:1157 origwidg.cpp:1390 origwidg.cpp:1842
-#: session.cpp:1867 widget.cpp:1080 widget.cpp:1491
+#: session.cpp:1867 widget.cpp:1097 widget.cpp:1508
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -339,7 +339,7 @@ msgstr "Підтверджувати"
 
 #: origwidg.cpp:382 origwidg.cpp:388 origwidg.cpp:392 origwidg.cpp:402
 #: origwidg.cpp:407 origwidg.cpp:618 origwidg.cpp:1095 origwidg.cpp:1225
-#: widget.cpp:1720
+#: widget.cpp:1737
 msgid "Font"
 msgstr "Шрифт"
 
@@ -351,7 +351,7 @@ msgstr "Перенесення слів"
 msgid "Repeat"
 msgstr "Повтор"
 
-#: origwidg.cpp:396 widget.cpp:1719
+#: origwidg.cpp:396 widget.cpp:1736
 msgid "Image"
 msgstr "Зображення"
 
@@ -631,7 +631,7 @@ msgstr ""
 "Немає;Крапкова;Пунктирна;Суцільна;Подвійна;Канавка;Кромка;Утиснено;"
 "Виступаючий"
 
-#: origwidg.cpp:619 widget.cpp:1718
+#: origwidg.cpp:619 widget.cpp:1735
 msgid "Color"
 msgstr "Колір"
 
@@ -648,7 +648,7 @@ msgstr ""
 "ліворуч;Знизу праворуч;Знизу у центрі;Знизу по ширині;У центрі ліворуч;У "
 "центрі праворуч;У центрі;У центрі по ширині"
 
-#: origwidg.cpp:628 widget.cpp:1717
+#: origwidg.cpp:628 widget.cpp:1734
 msgid "Text"
 msgstr "Текст"
 
@@ -710,8 +710,8 @@ msgstr "Медія віджет кінцевої візуалізації."
 msgid "Source"
 msgstr "Джерело"
 
-#: origwidg.cpp:742 origwidg.cpp:900 session.cpp:610 widget.cpp:869
-#: widget.cpp:1495
+#: origwidg.cpp:742 origwidg.cpp:900 session.cpp:610 widget.cpp:908
+#: widget.cpp:1512
 msgid "Type"
 msgstr "Тип"
 
@@ -1158,7 +1158,7 @@ msgstr "Час:початок"
 msgid "Time:current"
 msgstr "Час:поточний"
 
-#: origwidg.cpp:1228 session.cpp:1847 widget.cpp:1486 widget.cpp:1497
+#: origwidg.cpp:1228 session.cpp:1847 widget.cpp:1503 widget.cpp:1514
 msgid "Process"
 msgstr "Обробка"
 
@@ -1371,17 +1371,17 @@ msgstr "Проект"
 msgid "Project DB"
 msgstr "БД проекту"
 
-#: project.cpp:477 widget.cpp:875
+#: project.cpp:477 widget.cpp:914
 msgid "Owner and group"
 msgstr "Власник та група"
 
-#: project.cpp:479 session.cpp:578 widget.cpp:146 widget.cpp:877
+#: project.cpp:479 session.cpp:578 widget.cpp:141 widget.cpp:916
 msgid "Access"
 msgstr "Доступ"
 
 #: project.cpp:480 project.cpp:482 project.cpp:484 session.cpp:579
-#: session.cpp:581 session.cpp:583 widget.cpp:878 widget.cpp:880
-#: widget.cpp:882
+#: session.cpp:581 session.cpp:583 widget.cpp:917 widget.cpp:919
+#: widget.cpp:921
 msgid "No access;View;View and control"
 msgstr "Немає доступу;Огляд;Огляд та керування"
 
@@ -1411,7 +1411,7 @@ msgstr "Зберігати пропорцію під час масштабува
 msgid "Pages"
 msgstr "Сторінка"
 
-#: project.cpp:494 project.cpp:1316 widget.cpp:888
+#: project.cpp:494 project.cpp:1316 widget.cpp:928
 msgid "Number"
 msgstr "Кількість"
 
@@ -1431,7 +1431,7 @@ msgstr "Властивості"
 msgid "Erase"
 msgstr "Видалити"
 
-#: project.cpp:623 project.cpp:1367 widget.cpp:1064
+#: project.cpp:623 project.cpp:1367 widget.cpp:1081
 #, c-format
 msgid "All: %d; Enabled: %d"
 msgstr "Взагалі: %d; Включено: %d"
@@ -1488,11 +1488,11 @@ msgstr "Логічний контейнер"
 msgid "Container and template"
 msgstr "Контейнер та шаблон"
 
-#: project.cpp:1414 project.cpp:1423 widget.cpp:1371 widget.cpp:1380
+#: project.cpp:1414 project.cpp:1423 widget.cpp:1388 widget.cpp:1397
 msgid "Variable is not link"
 msgstr "Змінна не є зв'язком"
 
-#: project.cpp:1433 widget.cpp:1390
+#: project.cpp:1433 widget.cpp:1407
 msgid "val:Constant value"
 msgstr "val:Стала"
 
@@ -1500,11 +1500,11 @@ msgstr "val:Стала"
 msgid "=== Pages ==="
 msgstr "=== Сторінки ==="
 
-#: project.cpp:1486 widget.cpp:1426
+#: project.cpp:1486 widget.cpp:1443
 msgid "=== Widgets ==="
 msgstr "=== Віджети ==="
 
-#: project.cpp:1492 widget.cpp:1432
+#: project.cpp:1492 widget.cpp:1449
 msgid "=== Attributes ==="
 msgstr "=== Атрибути ==="
 
@@ -1579,7 +1579,7 @@ msgstr "Запущено"
 msgid "User"
 msgstr "Користувач"
 
-#: session.cpp:576 vcaengine.cpp:174 widget.cpp:145
+#: session.cpp:576 vcaengine.cpp:174 widget.cpp:140
 msgid "Owner"
 msgstr "Власник"
 
@@ -1714,7 +1714,7 @@ msgstr "Значення атрибуту"
 msgid "Attribute self flags"
 msgstr "Власні прапорці атрибуту"
 
-#: vcaengine.cpp:146 vcaengine.cpp:157 widget.cpp:1499
+#: vcaengine.cpp:146 vcaengine.cpp:157 widget.cpp:1516
 msgid "Configuration template"
 msgstr "Конфігураційний шаблон"
 
@@ -1730,7 +1730,7 @@ msgstr "Основні прапорці та тип атрибуту"
 msgid "Permission"
 msgstr "Права доступу"
 
-#: vcaengine.cpp:169 widget.cpp:1504
+#: vcaengine.cpp:169 widget.cpp:1521
 msgid "Calculate period (ms)"
 msgstr "Період обчислення (мс)"
 
@@ -1893,116 +1893,116 @@ msgstr "Кодування тексту"
 msgid "Engine text codepage for text encode into it."
 msgstr "Кодування тексту рушія для перекодування у неї."
 
-#: widget.cpp:58
+#: widget.cpp:57
 #, c-format
 msgid "Attribute '%s' was not free. Force delete!"
 msgstr "Атрибут '%s' не звільнено. Примусове видалення!"
 
-#: widget.cpp:143 widget.cpp:871
+#: widget.cpp:138 widget.cpp:910
 msgid "Path"
 msgstr "Шлях"
 
-#: widget.cpp:148
+#: widget.cpp:143
 msgid ""
 "No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
 msgstr ""
 "Немає доступу;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW"
 
-#: widget.cpp:149 widget.cpp:870
+#: widget.cpp:144 widget.cpp:909
 msgid "Root"
 msgstr "Корінь"
 
-#: widget.cpp:153
+#: widget.cpp:148
 msgid "Active"
 msgstr "Активний"
 
-#: widget.cpp:154
+#: widget.cpp:149
 msgid "Geometry:x"
 msgstr "Геометрія:x"
 
-#: widget.cpp:155
+#: widget.cpp:150
 msgid "Geometry:y"
 msgstr "Геометрія:y"
 
-#: widget.cpp:156
+#: widget.cpp:151
 msgid "Geometry:width"
 msgstr "Геометрія:ширина"
 
-#: widget.cpp:157
+#: widget.cpp:152
 msgid "Geometry:height"
 msgstr "Геометрія:висота"
 
-#: widget.cpp:158
+#: widget.cpp:153
 msgid "Geometry:x scale"
 msgstr "Геометрія:x масштаб"
 
-#: widget.cpp:159
+#: widget.cpp:154
 msgid "Geometry:y scale"
 msgstr "Геометрія:y масштаб"
 
-#: widget.cpp:160
+#: widget.cpp:155
 msgid "Geometry:z"
 msgstr "Геометрія:z"
 
-#: widget.cpp:161
+#: widget.cpp:156
 msgid "Geometry:margin"
 msgstr "Геометрія:відступ"
 
-#: widget.cpp:162
+#: widget.cpp:157
 msgid "Tip:tool"
 msgstr "Допомога:підказка"
 
-#: widget.cpp:163
+#: widget.cpp:158
 msgid "Tip:status"
 msgstr "Допомога:стан"
 
-#: widget.cpp:164
+#: widget.cpp:159
 msgid "Context menu"
 msgstr "Контекстне меню"
 
-#: widget.cpp:165
+#: widget.cpp:160
 msgid "Events process"
 msgstr "Обробка явищ"
 
-#: widget.cpp:281
+#: widget.cpp:276
 msgid "Empty parent or parent identical self!"
 msgstr "Батьківський елемент порожній або дорівнює собі!"
 
-#: widget.cpp:288
+#: widget.cpp:283
 msgid "Parent identical to owner for link!"
 msgstr "Батько ідентичний до власника для посилання!"
 
-#: widget.cpp:302
+#: widget.cpp:297
 #, c-format
 msgid "Widget enable error: %s"
 msgstr "Помилка включення віджета: %s"
 
-#: widget.cpp:332
+#: widget.cpp:327
 #, c-format
 msgid "Inheriting widget '%s' disable error."
 msgstr "Помилка вимкнення наслідуючого віджета '%s'."
 
-#: widget.cpp:355
+#: widget.cpp:350
 #, c-format
 msgid "Child widget '%s' enable/disable error."
 msgstr "Помилка включення/вимкнення дочірнього віджета '%s'."
 
-#: widget.cpp:552
+#: widget.cpp:595
 #, c-format
 msgid "Adding a new attribute '%s' number more to %d!"
 msgstr "Додання нового атрибуту '%s' превищує кількість %d!"
 
-#: widget.cpp:583 widget.cpp:615
+#: widget.cpp:626 widget.cpp:658
 #, c-format
 msgid "Attribute '%s' is not present!"
 msgstr "Атрибут '%s' відсутній!"
 
-#: widget.cpp:585
+#: widget.cpp:628
 #, c-format
 msgid "Deleted attribute '%s' was not free!"
 msgstr "Видаляємий атрибут '%s' не було звільнено!"
 
-#: widget.cpp:715
+#: widget.cpp:754
 msgid ""
 "Image name in form \"[src:]name\", where:\n"
 "  \"src\" - image source:\n"
@@ -2027,7 +2027,7 @@ msgstr ""
 "  \"file:/var/tmp/backLogo.png\" - з локального файлу за шляхом \"/var/tmp/"
 "backLogo.png\"."
 
-#: widget.cpp:728
+#: widget.cpp:767
 msgid ""
 "Color name form \"color[-alpha]\", where:\n"
 "  \"color\" - standard color name or digital view of three hexadecimal "
@@ -2047,7 +2047,7 @@ msgstr ""
 "  \"#FF0000\" - суцільний червоний колір у цифровому вигляді;\n"
 "  \"red-127\" - напівпрозорий червоний колір."
 
-#: widget.cpp:739
+#: widget.cpp:778
 msgid ""
 "Font name form \"{family} {size} {bold} {italic} {underline} {strike}\", "
 "where:\n"
@@ -2073,35 +2073,39 @@ msgstr ""
 "Приклади:\n"
 "  \"Arial 10 1 0 0 0\" - Arial шрифт розміром 10 пікселів та підсилений."
 
-#: widget.cpp:856
+#: widget.cpp:895
 msgid "Widget: "
 msgstr "Віджет: "
 
-#: widget.cpp:864
+#: widget.cpp:903
 msgid "Go to parent"
 msgstr "Перейти до батька"
 
-#: widget.cpp:883
-msgid "Clear widget's changing"
+#: widget.cpp:922
+msgid "Clear the widget changes"
 msgstr "Очищення змін віджету"
 
-#: widget.cpp:886
+#: widget.cpp:923
+msgid "Put down to the parent for the widget changes"
+msgstr "Опустити зміни віджету до його предку"
+
+#: widget.cpp:926
 msgid "Include widgets"
 msgstr "Вкладенні віджети"
 
-#: widget.cpp:1093
+#: widget.cpp:1110
 msgid "Path to the widget."
 msgstr "Шлях до цього віджету."
 
-#: widget.cpp:1094
+#: widget.cpp:1111
 msgid "Path to parent widget."
 msgstr "Шлях до батьківського віджету."
 
-#: widget.cpp:1095
+#: widget.cpp:1112
 msgid "The widget owner and group in form \"[owner]:[group]\"."
 msgstr "Володар та група віджету у формі \"[володар]:[група]\"."
 
-#: widget.cpp:1097
+#: widget.cpp:1114
 msgid ""
 "Permission to the widget in form \"[user][group][other]\".\n"
 "Where \"user\", \"group\" and \"other\" is:\n"
@@ -2115,7 +2119,7 @@ msgstr ""
 "  \"R_\" - тільки для читання;\n"
 "  \"RW\" - читання та запис."
 
-#: widget.cpp:1104
+#: widget.cpp:1121
 msgid ""
 "Direct events processing for pages manipulation in form:\n"
 "      \"[event]:[evSrc]:[com]:[prm]\". Where:\n"
@@ -2149,11 +2153,11 @@ msgstr ""
 "  ws_BtPress:/go_mn:open:/pg_so/*/mn/*\n"
 "  ws_BtPress:/go_graph:open:/pg_so/*/ggraph"
 
-#: widget.cpp:1122
+#: widget.cpp:1139
 msgid "Primitive identifier in the widget ground."
 msgstr "Ідентифікатор примітиву у основі віджету."
 
-#: widget.cpp:1126
+#: widget.cpp:1143
 msgid ""
 "Context menu in form strings list: \"[ItName]:[Signal]\".\n"
 "Where:\n"
@@ -2165,130 +2169,130 @@ msgstr ""
 "  \"ItName\" - ім'я елементу;\n"
 "  \"Signal\" - ім'я сигналу, результуюче ім'я сигналу \"usr_[Signal]\"."
 
-#: widget.cpp:1195 widget.cpp:1198
+#: widget.cpp:1212 widget.cpp:1215
 msgid "Links"
 msgstr "Зв'язки"
 
-#: widget.cpp:1197
+#: widget.cpp:1214
 msgid "Attributes show"
 msgstr "Показувати атрибути"
 
-#: widget.cpp:1301
+#: widget.cpp:1318
 msgid "Custom"
 msgstr "Розділено"
 
-#: widget.cpp:1496
+#: widget.cpp:1513
 msgid "Work area"
 msgstr "Робоче середовище"
 
-#: widget.cpp:1501
+#: widget.cpp:1518
 msgid "Calculate"
 msgstr "Обчислення"
 
-#: widget.cpp:1503
+#: widget.cpp:1520
 msgid "Program language"
 msgstr "Мова програми"
 
-#: widget.cpp:1505
+#: widget.cpp:1522
 msgid "Program"
 msgstr "Програма"
 
-#: widget.cpp:1568
+#: widget.cpp:1585
 msgid "New attribute"
 msgstr "Новий атрибут"
 
-#: widget.cpp:1577
+#: widget.cpp:1594
 msgid "Deleting the enclosed widget's elements error."
 msgstr "Помилка. Видалення елементів вкладених віджетів."
 
-#: widget.cpp:1581
+#: widget.cpp:1598
 msgid "Deleting the not user element error."
 msgstr "Помилка. Видалення елементу не користувача."
 
-#: widget.cpp:1602 widget.cpp:1631
+#: widget.cpp:1619 widget.cpp:1648
 msgid "Changing of not user attribute is no permitted"
 msgstr "Модифікація атрибутів не користувача не дозволена"
 
-#: widget.cpp:1611
+#: widget.cpp:1628
 #, c-format
 msgid "New attribute's ID '%s' already present."
 msgstr "Новий ідентифікатор атрибуту '%s' вже присутній."
 
-#: widget.cpp:1709
+#: widget.cpp:1726
 msgid "Boolean"
 msgstr "Логічний"
 
-#: widget.cpp:1710
+#: widget.cpp:1727
 msgid "Integer"
 msgstr "Цілий"
 
-#: widget.cpp:1711
+#: widget.cpp:1728
 msgid "Real"
 msgstr "Реальний"
 
-#: widget.cpp:1712
+#: widget.cpp:1729
 msgid "String"
 msgstr "Строка"
 
-#: widget.cpp:1713
+#: widget.cpp:1730
 msgid "Object"
 msgstr "Об'єкт"
 
-#: widget.cpp:1714
+#: widget.cpp:1731
 msgid "Select integer"
 msgstr "Вибір цілих"
 
-#: widget.cpp:1715
+#: widget.cpp:1732
 msgid "Select real"
 msgstr "Вибір реальних"
 
-#: widget.cpp:1716
+#: widget.cpp:1733
 msgid "Select string"
 msgstr "Вибір строк"
 
-#: widget.cpp:1721
+#: widget.cpp:1738
 msgid "DateTime"
 msgstr "ДатаЧас"
 
-#: widget.cpp:1722 vcaFuncs.h:39 vcaFuncs.h:64 vcaFuncs.h:100 vcaFuncs.h:124
+#: widget.cpp:1739 vcaFuncs.h:39 vcaFuncs.h:64 vcaFuncs.h:100 vcaFuncs.h:124
 #: vcaFuncs.h:157 vcaFuncs.h:201
 msgid "Address"
 msgstr "Адреса"
 
-#: widget.cpp:1726
+#: widget.cpp:1743
 msgid "Not"
 msgstr "Немає"
 
-#: widget.cpp:1727
+#: widget.cpp:1744
 msgid "Constant"
 msgstr "Стала"
 
-#: widget.cpp:1728
+#: widget.cpp:1745
 msgid "Input link"
 msgstr "Вхідний зв'язок"
 
-#: widget.cpp:1729
+#: widget.cpp:1746
 msgid "Output link"
 msgstr "Вихідний зв'язок"
 
-#: widget.cpp:1730
+#: widget.cpp:1747
 msgid "Full link"
 msgstr "Повний зв'язок"
 
-#: widget.cpp:1731
+#: widget.cpp:1748
 msgid "From style"
 msgstr "Зі стиля"
 
-#: widget.cpp:1817 widget.cpp:1924
+#: widget.cpp:1834 widget.cpp:1941
 msgid "Element type is not selected!"
 msgstr "Елемент не вибіркового типу!"
 
-#: widget.cpp:2174
+#: widget.cpp:2191
 #, c-format
 msgid "Connections to attribute '%s' more to %d!"
 msgstr "Підключень до атрибуту '%s' більш за %d!"
 
-#: widget.cpp:2182
+#: widget.cpp:2199
 #, c-format
 msgid "Disconnection from attribute '%s' more to connections!"
 msgstr "Відключень від атрибуту '%s' більш за підключень!"

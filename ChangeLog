@@ -1,3 +1,11 @@
+2014-07-14 Roman
+!!:SYS: Prevent Back-linking mechanism working into modules by its direct link with OpenSCADA core.
+    Mostly for further DLL build and symbols missing early, at build stage, detect.
+    "make install" stage errors at that fixed into libtool 2.4!
+- SYS: Removed unneeded now Makefile.am files from "src/moduls" and "src/moduls/{SUB}" folders.
+- FIX:Archive: "Start archive" back renamed to "To start".
+
+
 2014-07-12 Roman
 - SYS: Primitive of functions strEncode() and strDecode() set unified.
     User API functions strEncode() and strDecode() is added.

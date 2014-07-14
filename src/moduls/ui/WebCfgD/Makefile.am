@@ -4,12 +4,13 @@ if WebCfgDIncl
 noinst_LTLIBRARIES = ui_WebCfgD.la
 ui_WebCfgD_la_CXXFLAGS = -DMOD_INCL -fpic
 ui_WebCfgD_la_LIBTOOLFLAGS = --tag=disable-shared
+ui_WebCfgD_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = ui_WebCfgD.la
 ui_WebCfgD_la_LIBTOOLFLAGS = --tag=disable-static
+ui_WebCfgD_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
-ui_WebCfgD_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_WebCfgD_la_SOURCES = web_cfg.cpp VCAjs.cpp VCAhtml.cpp
 ui_WebCfgD_la_LIBADD = $(LIB_GD)
 

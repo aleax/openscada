@@ -4,14 +4,15 @@ if QTStarterIncl
 noinst_LTLIBRARIES = ui_QTStarter.la
 ui_QTStarter_la_CXXFLAGS = -DMOD_INCL -fpic
 ui_QTStarter_la_LIBTOOLFLAGS = --tag=disable-shared
+ui_QTStarter_la_LDFLAGS = -module
 else
 oscd_modul_LTLIBRARIES = ui_QTStarter.la
 ui_QTStarter_la_CXXFLAGS =
 ui_QTStarter_la_LIBTOOLFLAGS = --tag=disable-static
+ui_QTStarter_la_LDFLAGS = -module -avoid-version $(top_builddir)/src/liboscada.la
 endif
 
 ui_QTStarter_la_CXXFLAGS += $(QtGui_CFLAGS)
-ui_QTStarter_la_LDFLAGS = -module -avoid-version -no-undefined
 ui_QTStarter_la_SOURCES = tuimod.cpp moc_tuimod.cpp qrc_qtstarter.cpp
 ui_QTStarter_la_DIST = tuimod.cpp qtstarter.qrc
 ui_QTStarter_la_LIBADD = $(QtGui_LIBS)
