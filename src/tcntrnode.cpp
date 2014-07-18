@@ -241,6 +241,7 @@ AutoHD<TCntrNode> TCntrNode::nodeAt( const string &path, int lev, char sep, int 
 	throw TError(nodePath().c_str(),_("Node '%s' no present!"),s_br.c_str());
     }
     catch(TError err) { if(!noex) throw; }
+
     return NULL;
 }
 
@@ -645,8 +646,7 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
     // TArrayObj nodeList(string grp = "", string path = "") - child nodes list
     //  grp - nodes group
     //  path - path to source node
-    if(iid == "nodeList")
-    {
+    if(iid == "nodeList") {
 	try {
 	    AutoHD<TCntrNode> nd = (prms.size() >= 2) ? nodeAt(prms[1].getS()) : AutoHD<TCntrNode>(this);
 	    TArrayObj *rez = new TArrayObj();
@@ -658,21 +658,15 @@ TVariant TCntrNode::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	catch(TError)	{ }
 	return false;
     }
-    // TCntrNodeObj nodeAt(string path, string sep="") - attach to node
+    // TCntrNodeObj nodeAt(string path, string sep = "") - attach to node
     //  path - path to node
     //  sep - the symbol separator for separated string path
-    if(iid == "nodeAt" && prms.size() >= 1)
-    {
-	try {
-	    AutoHD<TCntrNode> nd = nodeAt(prms[0].getS(),0,(prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0);
-	    return new TCntrNodeObj(nd,user);
-	}
-	catch(TError)	{ }
-	return false;
+    if(iid == "nodeAt" && prms.size() >= 1) {
+	AutoHD<TCntrNode> nd = nodeAt(prms[0].getS(), 0, (prms.size()>=2 && prms[1].getS().size())?prms[1].getS()[0]:0, 0, true);
+	return nd.freeStat() ? TVariant(false) : TVariant(new TCntrNodeObj(nd,user));
     }
     // TCntrNodeObj nodePrev() - get previous node
-    if(iid == "nodePrev")
-    {
+    if(iid == "nodePrev") {
 	TCntrNode *prev = nodePrev(true);
 	if(prev) return new TCntrNodeObj(AutoHD<TCntrNode>(prev), user);
 	return false;

@@ -1,3 +1,19 @@
+2014-07-18 Roman
+- !!:DB.LibsDB.vcaBase.db: New templated frame "Main.grpGraph10" based on "Main.grpGraph" is added for 10 trends placing.
+    New colors are added to "Main.grpGraph" for selection "darkcyan", "lightyellow".
+    "Main.graphSelPrm" adapted for included self to self parameters selection and event "usr_set" for storage to the session allow.
+    "Main.ElViewGraph" adapted for allow save to the session table of selected parameters and its restore at new the session start.
+    "Main.cntrPaspExt" expanded for notification borders "aMax", "aMin", "wMax", "wMin" only valid display.
+	Trands number limited by colors to 10.
+- DB.Model.AGLKS.vca.db: Extended pasport "Main.cntrPaspExt" placed to model's project "AGLKS".
+- SYS: User API function TCntrNodeObj::nodeAt() some simplified and made optimal.
+- !!:UI.VCAEngine: Attributes' modify set after new the create into enabled session is added for guaranty the value read by the session visualiser.
+    User API session area functions attr() and attrSet() expanded by argument "bool fromSess" and "bool toSess" respectively for set
+    the attributes to the session table.
+    FIX:Widget's attributes expand to int64_t next fix.
+- FIX:UI.Vision: Unproper events process at config set to element LineEdit, mostly for this view "Combo", are prevented by signals block.
+
+
 2014-07-14 Roman
 !!:SYS: Prevent Back-linking mechanism working into modules by its direct link with OpenSCADA core.
     Mostly for further DLL build and symbols missing early, at build stage, detect.

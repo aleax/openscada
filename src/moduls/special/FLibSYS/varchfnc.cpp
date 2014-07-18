@@ -183,7 +183,6 @@ TVariant VArchObj::funcCall( const string &id, vector<TVariant> &prms )
 	    }
 	    else vb = src.at().buf();
 	    if(!vb)	return false;
-	    printf("TEST 10: %lld\n", prms[1].getI());
 	    arch().at().setVals(*vb, prms[1].getI()*1000000+prms[2].getI(),
 				     prms[3].getI()*1000000+prms[4].getI(), (prms.size()>=6)?prms[5].getS():"");
 	}

@@ -216,6 +216,8 @@ class SessWdg : public Widget, public TValFunc
 
 	void inheritAttr( const string &attr = "" );
 
+	void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false );
+
     protected:
 	//Methods
 	void postEnable( int flag );

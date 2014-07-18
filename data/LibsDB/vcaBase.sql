@@ -1862,6 +1862,20 @@ INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','sel_data','/wlb_originals/wdg_
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','sel_trends','/wlb_originals/wdg_FormEl','name;en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','sel_view','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;color;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('cntrPaspExt','trendsList','/wlb_originals/wdg_FormEl','en;active;geomX;geomY;geomW;geomH;geomZ;elType;value;items;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','ElFigure1','/wlb_originals/wdg_ElFigure','name;geomX;geomY;geomW;geomH;geomZ;elLst;p1y;p2x;p2y;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','arh','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;value;cfg;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el1','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el10','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el2','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el3','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el4','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el5','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el6','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el7','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el8','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el9','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
+INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -3781,7 +3795,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1345188175',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1405434652',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -5593,9 +5607,11 @@ orange
 blue
 lightgreen
 cyan
+darkcyan
 tomato
 magenta
-yellow',32,'','','color','','','#ae77c3
+yellow
+lightyellow',32,'','','color','','','#ae77c3
 orange
 blue
 lightgreen
@@ -5981,6 +5997,136 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','en','0',32,'','','trendsList',''
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 9',0,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','trendsList','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','Pages template: "Graphics group 10"',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','600',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','evProc','ws_FocusIn:/trnd1:open:/pg_control/pg_grph_panel',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','backColor','#5A5A5A',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','bordWidth','1',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','bordColor','black',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','4',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','28',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','584',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','12',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','10',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','elLst','line:1:2::::
+',32,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','p1y','2',0,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','p2x','580',0,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','p2y','2',0,'','','ElFigure1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','2',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','581',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1157',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','20',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','2',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','tipTool','',40,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','active','0',40,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','elType','7',32,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','value','0',8,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','cfg','0:1322937960:1331887778:1:10',8,'','','arh','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','3',32,'','','el1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','#ae77c3',33,'','#ae77c3','el1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','1038',32,'','','el10','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el10','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el10','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','13',32,'','','el10','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','darkcyan',33,'','darkcyan','el10','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','118',32,'','','el2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','1',32,'','','el2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','orange',33,'','orange','el2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','233',32,'','','el3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','2',32,'','','el3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','blue',33,'','blue','el3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','348',32,'','','el4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','4',32,'','','el4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','lightgreen',33,'','lightgreen','el4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','463',32,'','','el5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','6',32,'','','el5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','cyan',33,'','cyan','el5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','578',32,'','','el6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','5',32,'','','el6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','tomato',33,'','tomato','el6','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','693',32,'','','el7','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el7','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el7','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','7',32,'','','el7','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','magenta',33,'','magenta','el7','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','808',32,'','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','3',32,'','','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','yellow',33,'','yellow','el8','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','923',32,'','','el9','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','40',32,'','','el9','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomXsc','1.04',32,'','','el9','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','12',32,'','','el9','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','lightyellow',33,'','lightyellow','el9','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','4',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','4',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1152',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','23',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','9',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','font','Arial 20',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','color','snow',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','alignment','8',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','text','Graphics group: %1',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','numbArg','1',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','arg0tp','2',0,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','arg0val','',8,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','perm','438',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Тренд1',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomX','4',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomY','104',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1152',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','477',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomZ','9',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','active','1',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','trcPer','1',40,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','tSek','0',40,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','tSize','600',40,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclColor','#3d3d3d',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclHor','3',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclVer','3',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','sclMarkFont','Arial 14',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','parNum','10',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curSek','1405522265',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','curUSek','0',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm1color','darkgoldenrod',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm1val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm2color','blue',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm2val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm3color','lawngreen',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm3val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm4color','lightcyan',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm4val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm5color','salmon',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm5val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm6color','magenta',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm6val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm7color','yellow',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm7val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm8color','lightyellow',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm8val','<EVAL>',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm9color','darkcyan',0,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','prm9val','<EVAL>',0,'','','trnd1','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -8410,7 +8556,7 @@ INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','ed','Dimension',131077,'<EVAL>|
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','enMode','View regulator mode',131072,'<EVAL>||',8,'','','','Відображати режим регулятору','','','Отображать режим регулятора','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','max','Maximum',131076,'<EVAL>||',10,'Parameter|max','','','Максимум','','Parameter|max','Максимум','','Parameter|max','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','min','Minimum',131076,'<EVAL>||',10,'Parameter|min','','','Минимум','','Parameter|min','Минимум','','Parameter|min','','');
-INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','prec','Precision',131073,'<EVAL>||',10,'Parameter|prec','','','Точність','','Parameter|prec','Точность','','Parameter|prec','','');
+INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','prec','Precision',131073,'1||',10,'Parameter|prec','','','Точність','','Parameter|prec','Точность','','Parameter|prec','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','varEl','Value',131076,'<EVAL>||',8,'','','','Значення','','','Значение','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMax','Border up warning',131076,'<EVAL>||',10,'Parameter|wMax','','','Границя верхня попереджувальна','','Parameter|wMax','Граница верхняя предупредительная','','Parameter|wMax','','');
 INSERT INTO "wlb_Main_uio" VALUES('ElViewGraph','wMin','Border down warning',131076,'<EVAL>||',10,'Parameter|wMin','','','Границя нижня попереджувальна','','Parameter|wMin','Граница нижняя предупредительная','','Parameter|wMin','','');
@@ -8482,6 +8628,8 @@ INSERT INTO "wlb_Main_uio" VALUES('objProps','objItems','Object:items',131078,'<
 ||',10,'Object|items','','','Object:items','','Object|items','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('objProps','objName','Object:name',131077,'||',10,'Object|NAME','','','Object:name','||','Object|NAME','','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','prevTab','Previous tab',131077,'view||',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','allowSelLst','Allow for select parameters',131205,'||',8,'','','','','','','','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','grpName','Group name',131077,'||',9,'','','','','','','','','','','');
 CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc','JavaLikeCalc.JavaScript
 using Special.FLibSYS;
@@ -17666,7 +17814,7 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2))
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;','');
+else { arh_active = false; arh_tipTool = ""; }','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1405435575);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAaCAYAAAAHfFpPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABJJJREFUWIXlmU1vG0UYx38znp19qeOXxE2cNJQmqdQGekPAl4Ar6g31
 I/ReiQtSv0K/AeoNcaWoElSIcuGARICivqRuyTp27NjOxt7ZneWQNjQ0idzYSVvxkyyvVuv//veZ
@@ -17690,41 +17838,34 @@ NA68No4H45kBx06W4SjFD1t3uMvPfCo/IfcwJc0UjqsYRH0uLF9ECkFiDI5S5Po9Jr/6kvXPvuDx
 0xqDQYJ0cuRdl3q7w6Xli2TWvh0BSJKUbrfDeXOeSVNmLqhiKoZ6fR2bCLSr2ertLMKptXS7HVSj
 Qfejz8me1BHVGRwHtO+RpCmFfJ5ut0OSJIi34Y8Ra+3QG6OO47y06XEQ7XabfwAcxvNTAf+MkQAA
 AABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start)
-{
+if(f_start) {
 	apply_active = false;
 	name_active = val_min_active = val_max_active = dim_active = false;
 	prm_items = prm_value = name_value = dim_value = "";
 	val_min_value = val_max_value = 0;
-	//> Connect to linked widget 
-	if(pgOpenSrc.length) lWdg=this.wdgAt(pgOpenSrc,true);
-	if(lWdg)
-	{
-		//> Get allowed graphic''s sources for selection
+	//Connect to linked widget 
+	if(pgOpenSrc.length) lWdg = this.wdgAt(pgOpenSrc, true);
+	if(lWdg) {
+		//Get allowed graphic''s sources for selection
 		tmplLst = "";
 		if(lWdg.attrPresent("allowSelLst")) tmplLst = lWdg.attr("allowSelLst");
 		else if(lWdg.ownerWdg(true).attrPresent("allowSelLst")) tmplLst = lWdg.ownerWdg(true).attr("allowSelLst");
 		for(off = 0; (pIt=tmplLst.parse(0,"\n",off)).length; )
-			//>> Archives list template process
-			if(pIt == "<varhs>")
-			{
+			// Archives list template process
+			if(pIt == "<varhs>") {
 				aLs = SYS.Archive.nodeList("va_");
-				for(i_a = 0; i_a < aLs.length; i_a++)
-				{
+				for(i_a = 0; i_a < aLs.length; i_a++) {
 					itNm = SYS.Archive[aLs[i_a]].cfg("NAME");
 					if(!itNm.length) itNm = SYS.Archive[aLs[i_a]].cfg("Source");
 					prm_items += "Archive ''"+itNm+"'' (/Archive/"+aLs[i_a]+")\n";
 				}
 			}
-			//>> Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
-			else if(pIt.search("/(sub_|)Archive") >= 0)
-			{
-				itObj = SYS.nodeAt(pIt.parse(0,":"));
-				if(!itObj) continue;
+			// Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
+			else if(pIt.search("/(sub_|)Archive") >= 0) {
+				if(!(itObj=SYS.nodeAt(pIt.parse(0,":")))) continue;
 				prm_items += "Archive ''"+pIt.parse(1,":")+"'' ("+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
 			}
-			else
-			{
+			else {
 				pathAbs = pIt.search("/(sub_|)DAQ") >= 0;
 				itObj = pathAbs ? SYS.nodeAt(pIt.parse(0,":")) : SYS.DAQ.nodeAt(pIt.parse(0,":"));
 				if(!itObj) continue;
@@ -17732,48 +17873,41 @@ if(f_start)
 				if(!itNm.length && typeof(itObj).search("TCntrNode:TValue[:$]") == 0) itNm = itObj.NAME.get();
 				prm_items += "DAQ ''"+itNm+(pathAbs?"'' (":"'' (/DAQ")+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
 			}
-			//> Current value process
+		//Current value process
 		itAddr = lWdg.link("addr").match("(prm|arh):([^ ]+) \\(\\+\\)");
-		if(itAddr.length == 3)
-		{
-			//> Get Name
+		if(itAddr.length == 3) {
+			//Get Name
 			if(lWdg.link("name").search("prm:[^ ]+ \\(\\+\\)") >= 0) name_value = lWdg.attr("name");
 			else if((itTmp=lWdg.link("name").match("val:(.+$)")).length == 2) name_value = itTmp[1];
 			else name_value = "Empty";
-			//> Get Min and Max
+			//Get Min and Max
 			if(lWdg.link("min").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_min_value = lWdg.attr("min");
 			else if((itTmp=lWdg.link("min").match("val:(.+$)")).length == 2) val_min_value = itTmp[1];
 			if(lWdg.link("max").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_max_value = lWdg.attr("max");
 			else if((itTmp=lWdg.link("max").match("val:(.+$)")).length == 2) val_max_value = itTmp[1];
-			//> Dimension
+			//Dimension
 			if(lWdg.link("ed").search("prm:[^ ]+ \\(\\+\\)") >= 0) dim_value = lWdg.attr("ed");
 			else if((itTmp=lWdg.link("ed").match("val:(.+$)")).length == 2) dim_value = itTmp[1];
-			//> Current prm name
+			//Current prm name
 			if(itAddr[1] == "prm")	prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(itAddr[2].replace(new RegExp("/var$"),"")+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
 			else if(itAddr[1] == "arh") prm_value = "Archive ''"+name_value+"'' (/Archive/va_"+(itAddr[2]+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
 			if(prm_value.length) name_active = val_min_active = val_max_active = dim_active = true;
 		}
 
-		//> Load current properties
+		//Load current properties
 		color_value = lWdg.link("color");
 	}
 }
 
 colorBox_backColor = color_value;
 
-//> Events for commands process
-off=0;
-ev_cur = ev_rez = "";
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	if(ev_cur == "ws_CombChange:/prm")	//Parametr selected
-	{
-		//> Set properties
-		itTmp=prm_value.match(".+''(.*)'' \\((.+?)\\)");
-		if(itTmp.length == 3)
-		{
+//Events for commands process
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "ws_CombChange:/prm") {	//Parametr selected
+		//Set properties
+		itTmp = prm_value.match(".+''(.*)'' \\((.+?)\\)");
+		if(itTmp.length == 3) {
 			if(itTmp[1].length)	name_value = itTmp[1];
 			off1 = 0;
 			itVal = itTmp[2].parse(0,":",off1);	//Path
@@ -17792,18 +17926,15 @@ while(true)
 		}
 		apply_active = name_active = val_min_active = val_max_active = dim_active = true;
 	}
-	else if(ev_cur.search("ws_LnAccept:") == 0)	apply_active = true;
-	else if(ev_cur == "ws_BtPress:/apply")
-	{
+	else if(evCur.search("ws_LnAccept:") == 0)	apply_active = true;
+	else if(evCur == "ws_BtPress:/apply") {
 		//Link addr set
-		itTmp=prm_value.match(".+\\((.+?)[:\\)]");
+		itTmp = prm_value.match(".+\\((.+?)[:\\)]");
 		if(itTmp.length != 2) lWdg.linkSet("addr","");
-		else
-		{
+		else {
 			off1 = 0;
 			firstEl = itTmp[1].parsePath(0,off1);
-			if(firstEl == "Archive")
-			{
+			if(firstEl == "Archive") {
 				lWdg.linkSet("addr","",true);	//Clear all othet values
 				lWdg.linkSet("addr","arh:"+itTmp[1].slice(off1+4));
 				lWdg.linkSet("name","val:"+name_value);
@@ -17811,62 +17942,55 @@ while(true)
 				lWdg.linkSet("max","val:"+val_max_value);
 				lWdg.linkSet("ed","val:"+dim_value);
 			}
-			else if(firstEl == "DAQ")
-			{
+			else if(firstEl == "DAQ") {
 				itObj = SYS.nodeAt(itTmp[1]);
 				isPrm = (typeof(itObj).search("TCntrNode:TValue[:$]") == 0);
-				lWdg.linkSet("addr","",true);	//Clear all othet values
-				lWdg.linkSet("addr","prm:"+itTmp[1].slice(off1),isPrm);
-				if(!isPrm || name_value != itObj.NAME.get())	lWdg.linkSet("name", "val:"+name_value);
+				lWdg.linkSet("addr", "", true);	//Clear all othet values
+				lWdg.linkSet("addr", "prm:"+itTmp[1].slice(off1).replace("/prm_","/"), isPrm);
+				if(!isPrm || name_value != itObj.NAME.get())		lWdg.linkSet("name", "val:"+name_value);
 				if(!isPrm || val_min_value != itObj.min.get())	lWdg.linkSet("min","val:"+val_min_value);
 				if(!isPrm || val_max_value != itObj.max.get())	lWdg.linkSet("max","val:"+val_max_value);
-				if(!isPrm || dim_value != itObj.ed.get())		lWdg.linkSet("ed","val:"+dim_value);
+				if(!isPrm || dim_value != itObj.ed.get())			lWdg.linkSet("ed","val:"+dim_value);
 			}
 		}
-		lWdg.linkSet("color",color_value);
+		lWdg.linkSet("color", color_value);
+		lWdg.attrSet("event", "usr_set");
 
-		this.attrSet("pgOpen",false);
+		this.attrSet("pgOpen", false);
 	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else evRez += evCur+"\n";
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
 }
-event = ev_rez;','JavaLikeCalc.JavaScript
-if(f_start)
-{
+event = evRez;','JavaLikeCalc.JavaScript
+if(f_start) {
 	apply_active = false;
 	name_active = val_min_active = val_max_active = dim_active = false;
 	prm_items = prm_value = name_value = dim_value = "";
 	val_min_value = val_max_value = 0;
-	//> Connect to linked widget 
-	if(pgOpenSrc.length) lWdg=this.wdgAt(pgOpenSrc,true);
-	if(lWdg)
-	{
-		//> Get allowed graphic''s sources for selection
+	//Connect to linked widget 
+	if(pgOpenSrc.length) lWdg = this.wdgAt(pgOpenSrc, true);
+	if(lWdg) {
+		//Get allowed graphic''s sources for selection
 		tmplLst = "";
 		if(lWdg.attrPresent("allowSelLst")) tmplLst = lWdg.attr("allowSelLst");
 		else if(lWdg.ownerWdg(true).attrPresent("allowSelLst")) tmplLst = lWdg.ownerWdg(true).attr("allowSelLst");
 		for(off = 0; (pIt=tmplLst.parse(0,"\n",off)).length; )
-			//>> Archives list template process
-			if(pIt == "<varhs>")
-			{
+			// Archives list template process
+			if(pIt == "<varhs>") {
 				aLs = SYS.Archive.nodeList("va_");
-				for(i_a = 0; i_a < aLs.length; i_a++)
-				{
+				for(i_a = 0; i_a < aLs.length; i_a++) {
 					itNm = SYS.Archive[aLs[i_a]].cfg("NAME");
 					if(!itNm.length) itNm = SYS.Archive[aLs[i_a]].cfg("Source");
 					prm_items += "Архив ''"+itNm+"'' (/Archive/"+aLs[i_a]+")\n";
 				}
 			}
-			//>> Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
-			else if(pIt.search("/(sub_|)Archive") >= 0)
-			{
-				itObj = SYS.nodeAt(pIt.parse(0,":"));
-				if(!itObj) continue;
+			// Direct items list process by form "{path}:{name}:{min}:{max}:{dim}"
+			else if(pIt.search("/(sub_|)Archive") >= 0) {
+				if(!(itObj=SYS.nodeAt(pIt.parse(0,":")))) continue;
 				prm_items += "Архив ''"+pIt.parse(1,":")+"'' ("+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
 			}
-			else
-			{
+			else {
 				pathAbs = pIt.search("/(sub_|)DAQ") >= 0;
 				itObj = pathAbs ? SYS.nodeAt(pIt.parse(0,":")) : SYS.DAQ.nodeAt(pIt.parse(0,":"));
 				if(!itObj) continue;
@@ -17874,48 +17998,41 @@ if(f_start)
 				if(!itNm.length && typeof(itObj).search("TCntrNode:TValue[:$]") == 0) itNm = itObj.NAME.get();
 				prm_items += "DAQ ''"+itNm+(pathAbs?"'' (":"'' (/DAQ")+(pIt.parse(0,":")+":"+pIt.parse(2,":")+":"+pIt.parse(3,":")+":"+pIt.parse(4,":")).replace(new RegExp(":*$"),"")+")\n";
 			}
-			//> Current value process
+		//Current value process
 		itAddr = lWdg.link("addr").match("(prm|arh):([^ ]+) \\(\\+\\)");
-		if(itAddr.length == 3)
-		{
-			//> Get Name
+		if(itAddr.length == 3) {
+			//Get Name
 			if(lWdg.link("name").search("prm:[^ ]+ \\(\\+\\)") >= 0) name_value = lWdg.attr("name");
 			else if((itTmp=lWdg.link("name").match("val:(.+$)")).length == 2) name_value = itTmp[1];
 			else name_value = "Пусто";
-			//> Get Min and Max
+			//Get Min and Max
 			if(lWdg.link("min").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_min_value = lWdg.attr("min");
 			else if((itTmp=lWdg.link("min").match("val:(.+$)")).length == 2) val_min_value = itTmp[1];
 			if(lWdg.link("max").search("prm:[^ ]+ \\(\\+\\)") >= 0) val_max_value = lWdg.attr("max");
 			else if((itTmp=lWdg.link("max").match("val:(.+$)")).length == 2) val_max_value = itTmp[1];
-			//> Dimension
+			//Dimension
 			if(lWdg.link("ed").search("prm:[^ ]+ \\(\\+\\)") >= 0) dim_value = lWdg.attr("ed");
 			else if((itTmp=lWdg.link("ed").match("val:(.+$)")).length == 2) dim_value = itTmp[1];
-			//> Current prm name
+			//Current prm name
 			if(itAddr[1] == "prm")	prm_value = "DAQ ''"+name_value+"'' (/DAQ"+(itAddr[2].replace(new RegExp("/var$"),"")+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
 			else if(itAddr[1] == "arh") prm_value = "Архив ''"+name_value+"'' (/Archive/va_"+(itAddr[2]+":"+val_min_value+":"+val_max_value+":"+dim_value).replace(new RegExp(":*$"),"")+")";
 			if(prm_value.length) name_active = val_min_active = val_max_active = dim_active = true;
 		}
 
-		//> Load current properties
+		//Load current properties
 		color_value = lWdg.link("color");
 	}
 }
 
 colorBox_backColor = color_value;
 
-//> Events for commands process
-off=0;
-ev_cur = ev_rez = "";
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	if(ev_cur == "ws_CombChange:/prm")	//Parametr selected
-	{
-		//> Set properties
-		itTmp=prm_value.match(".+''(.*)'' \\((.+?)\\)");
-		if(itTmp.length == 3)
-		{
+//Events for commands process
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "ws_CombChange:/prm") {	//Parametr selected
+		//Set properties
+		itTmp = prm_value.match(".+''(.*)'' \\((.+?)\\)");
+		if(itTmp.length == 3) {
 			if(itTmp[1].length)	name_value = itTmp[1];
 			off1 = 0;
 			itVal = itTmp[2].parse(0,":",off1);	//Path
@@ -17934,18 +18051,15 @@ while(true)
 		}
 		apply_active = name_active = val_min_active = val_max_active = dim_active = true;
 	}
-	else if(ev_cur.search("ws_LnAccept:") == 0)	apply_active = true;
-	else if(ev_cur == "ws_BtPress:/apply")
-	{
+	else if(evCur.search("ws_LnAccept:") == 0)	apply_active = true;
+	else if(evCur == "ws_BtPress:/apply") {
 		//Link addr set
-		itTmp=prm_value.match(".+\\((.+?)[:\\)]");
+		itTmp = prm_value.match(".+\\((.+?)[:\\)]");
 		if(itTmp.length != 2) lWdg.linkSet("addr","");
-		else
-		{
+		else {
 			off1 = 0;
 			firstEl = itTmp[1].parsePath(0,off1);
-			if(firstEl == "Archive")
-			{
+			if(firstEl == "Archive") {
 				lWdg.linkSet("addr","",true);	//Clear all othet values
 				lWdg.linkSet("addr","arh:"+itTmp[1].slice(off1+4));
 				lWdg.linkSet("name","val:"+name_value);
@@ -17953,27 +18067,27 @@ while(true)
 				lWdg.linkSet("max","val:"+val_max_value);
 				lWdg.linkSet("ed","val:"+dim_value);
 			}
-			else if(firstEl == "DAQ")
-			{
+			else if(firstEl == "DAQ") {
 				itObj = SYS.nodeAt(itTmp[1]);
 				isPrm = (typeof(itObj).search("TCntrNode:TValue[:$]") == 0);
-				lWdg.linkSet("addr","",true);	//Clear all othet values
-				lWdg.linkSet("addr","prm:"+itTmp[1].slice(off1),isPrm);
-				if(!isPrm || name_value != itObj.NAME.get())	lWdg.linkSet("name", "val:"+name_value);
+				lWdg.linkSet("addr", "", true);	//Clear all othet values
+				lWdg.linkSet("addr", "prm:"+itTmp[1].slice(off1).replace("/prm_","/"), isPrm);
+				if(!isPrm || name_value != itObj.NAME.get())		lWdg.linkSet("name", "val:"+name_value);
 				if(!isPrm || val_min_value != itObj.min.get())	lWdg.linkSet("min","val:"+val_min_value);
 				if(!isPrm || val_max_value != itObj.max.get())	lWdg.linkSet("max","val:"+val_max_value);
-				if(!isPrm || dim_value != itObj.ed.get())		lWdg.linkSet("ed","val:"+dim_value);
+				if(!isPrm || dim_value != itObj.ed.get())			lWdg.linkSet("ed","val:"+dim_value);
 			}
 		}
-		lWdg.linkSet("color",color_value);
+		lWdg.linkSet("color", color_value);
+		lWdg.attrSet("event", "usr_set");
 
-		this.attrSet("pgOpen",false);
+		this.attrSet("pgOpen", false);
 	}
-	else if(ev_cur == "ws_BtPress:/cancel")	this.attrSet("pgOpen",false);
-	else ev_rez += (ev_cur+"\n");
-	//SYS.messDebug("Prescription edit control","Event: "+ev_cur);
+	else if(evCur == "ws_BtPress:/cancel")	this.attrSet("pgOpen", false);
+	else evRez += evCur+"\n";
+	//SYS.messDebug("Prescription edit control","Event: "+evCur);
 }
-event = ev_rez;','',500,'name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;','');
+event = evRez;','',500,'name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;',1405591024);
 INSERT INTO "wlb_Main" VALUES('RootPgSo','iVBORw0KGgoAAAANSUhEUgAAAEAAAAApCAIAAAAK8LgbAAAACXBIWXMAAAx1AAAMdQEteJR1AAAC
 aklEQVRYhe2WTU8TQRiA35nZbne7pdsWaGlrAVtEtBfxaGL8ZVz8DSZcjH+EkzEejHIhMWgQkK8G
 ast0l/2e2V0PTZqlxOBt2GSf45P3ME/mI4N2dj7peoVSms/nAUCW5UJBOzs7brcfA8BgcFUq6Yqi
@@ -18871,7 +18985,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 
 //Check the regulator mode
 if(pModeC == true) mode_text = "C";
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M");',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1404219069);
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M");',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1405589910);
 INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -20052,14 +20166,22 @@ sJ0sEW+VlwzxQ4i72UKWNLhFCyPcA/lwgzZvqv8TX+IB7QwwxCucY4zfOUAzg+WnhjNcZYgz/EUf
 g9zjPpcY5iYjPMsjxrlTawNTJe9DIz9xPihewyi3y+f3lQcTXAwjV2bqf3Gmwcos7Cw0wdcl6TcL
 ahaPfxv4jM4lkDFffuNo+UhDLpfr6flnk5Olsc6iqiFbsiEjl8v9DfGUjCNvsohjAAAAAElFTkSu
 QmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
+if(f_start) { en = !name.isEVal(); loadFromSess = false; }
 
-if(f_start) en = (name != EVAL_STR);
-if(en && name.isEVal()) name = "<No selected>";
+if(en && name.isEVal()) {
+	name = "<No selected>";
+	//Load stored session''s assignments
+	if(!loadFromSess) {
+		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+			if((wA=this.attr(lnA,true)).length) this.linkSet(lnA, wA);
+		//if((cVal=this.attr("color",true)).length) this.color = cVal;
+		loadFromSess = true;
+	}
+}
 lb_sfr_text = name;
 if(varEl.isEVal()) lb_val_arg0val = "-";
-else if (!digStts.isEVal() && digStts.length)  lb_val_arg0val = (varEl^digRevers) ? strParse(strParse(digStts,0,";"),0,"-") : strParse(strParse(digStts,1,";"),0,"-");
-else lb_val_arg0val = (prec.isEVal() || prec == 0) ? varEl.toPrecision(9) :  varEl.toFixed(prec);
+else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
+else lb_val_arg0val = (prec.isEVal() || prec == 0) ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
 lb_val_color = lb_sfr_color = lb_ed_color = "limegreen";
 if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
 else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "red";
@@ -20067,17 +20189,16 @@ else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || var
 
 lb_ed_text = ed.isEVal() ? "" : ed;
 
-//> Blink focused or linked with ElCadr
-if(vcaAttrGet(strParsePath(path,0)+"/pg_control/pg_ElCadr/a_pgOpen") == true && vcaAttrGet(strParsePath(path,0)+"/pg_control/pg_ElCadr/a_prmShifr") == name)
+//Blink focused or linked with ElCadr
+if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == name)
 {
-  bordColor = bordColor == "white" ? "black" : "white";
+  bordColor = (bordColor == "white") ? "black" : "white";
   bordWidth =  2;
 }
 else { bordWidth =  1; bordColor = "black"; }
 
-//> Check the regulator mode
-if(!enMode.isEVal() && enMode) 
-{ 
+//Check the regulator mode
+if(!enMode.isEVal() && enMode) { 
   mode_en = true; 
   if(!pModeC.isEVal() && pModeC) mode_text = "C";
   else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M"); 
@@ -20085,19 +20206,19 @@ if(!enMode.isEVal() && enMode)
 else mode_en = false;
 
 //Events process
-ev_cur = ev_rez = "";
-off=0;
-while( true )
-{
-  ev_cur = event.parse(0,"\n",off);
-  if( ev_cur == "" ) break;
-  //messPut("Trend en",0,"Event: "+ev_cur);
-  if(ev_cur == "key_mouseDblClick" || ev_cur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
-  else ev_rez += (ev_cur+"\n");
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//messPut("Trend en",0,"Event: "+evCur);
+	if(evCur == "key_mouseDblClick" || evCur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
+	//Store session''s assignments
+	else if(evCur == "usr_set")
+		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+			this.attrSet(lnA, this.link(lnA),true);
+	else evRez += evCur+"\n";
 }
-event=ev_rez;
+event = evRez;
 
-if( bordStyle==1 ) color="-";
+if(bordStyle == 1) color = "-";
 trClr_lineClr = color;
 
 tipTool = "";
@@ -20105,19 +20226,26 @@ if(!name.isEVal())	tipTool += "Name: "+name+"\n";
 if(!min.isEVal() && !max.isEVal() && max > min) tipTool += "Scale: "+min+" ... "+max+"\n";
 if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += "Alarm border: "+aMin+" ... "+aMax+"\n";
 if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += "Warning border: "+wMin+" ... "+wMax+"\n";
-if(!dscr.isEVal())
-{
+if(!dscr.isEVal()) {
 	tipTool += "Description: "+dscr+"\n";
 	tipStatus = dscr;
 }','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
+if(f_start) { en = !name.isEVal(); loadFromSess = false; }
 
-if(f_start) en = (name != EVAL_STR);
-if(en && name.isEVal()) name = "<Не выбран>";
+if(en && name.isEVal()) {
+	name = "<Не выбран>";
+	//Load stored session''s assignments
+	if(!loadFromSess) {
+		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+			if((wA=this.attr(lnA,true)).length) this.linkSet(lnA, wA);
+		//if((cVal=this.attr("color",true)).length) this.color = cVal;
+		loadFromSess = true;
+}
+}
 lb_sfr_text = name;
 if(varEl.isEVal()) lb_val_arg0val = "-";
-else if (!digStts.isEVal() && digStts.length)  lb_val_arg0val = (varEl^digRevers) ? strParse(strParse(digStts,0,";"),0,"-") : strParse(strParse(digStts,1,";"),0,"-");
-else lb_val_arg0val = (prec.isEVal() || prec == 0) ? varEl.toPrecision(9) :  varEl.toFixed(prec);
+else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
+else lb_val_arg0val = (prec.isEVal() || prec == 0) ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
 lb_val_color = lb_sfr_color = lb_ed_color = "limegreen";
 if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
 else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "red";
@@ -20125,37 +20253,36 @@ else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || var
 
 lb_ed_text = ed.isEVal() ? "" : ed;
 
-//> Blink focused or linked with ElCadr
-if(vcaAttrGet(strParsePath(path,0)+"/pg_control/pg_ElCadr/a_pgOpen") == true && vcaAttrGet(strParsePath(path,0)+"/pg_control/pg_ElCadr/a_prmShifr") == name)
+//Blink focused or linked with ElCadr
+if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == name)
 {
-  bordColor = bordColor == "white" ? "black" : "white";
+  bordColor = (bordColor == "white") ? "black" : "white";
   bordWidth =  2;
 }
 else { bordWidth =  1; bordColor = "black"; }
 
-//> Check the regulator mode
-if(!enMode.isEVal() && enMode) 
-{ 
+//Check the regulator mode
+if(!enMode.isEVal() && enMode) { 
   mode_en = true; 
-  if(!pModeC.isEVal() && pModeC) mode_text = "К";
-  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "А" : "Р"); 
+  if(!pModeC.isEVal() && pModeC) mode_text = "C";
+  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M"); 
 }
 else mode_en = false;
 
 //Events process
-ev_cur = ev_rez = "";
-off=0;
-while( true )
-{
-  ev_cur = event.parse(0,"\n",off);
-  if( ev_cur == "" ) break;
-  //messPut("Trend en",0,"Event: "+ev_cur);
-  if(ev_cur == "key_mouseDblClick" || ev_cur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
-  else ev_rez += (ev_cur+"\n");
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	//messPut("Trend en",0,"Event: "+evCur);
+	if(evCur == "key_mouseDblClick" || evCur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
+	//Store session''s assignments
+	else if(evCur == "usr_set")
+		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
+			this.attrSet(lnA, this.link(lnA),true);
+	else evRez += evCur+"\n";
 }
-event=ev_rez;
+event = evRez;
 
-if( bordStyle==1 ) color="-";
+if(bordStyle == 1) color = "-";
 trClr_lineClr = color;
 
 tipTool = "";
@@ -20163,11 +20290,10 @@ if(!name.isEVal())	tipTool += "Имя: "+name+"\n";
 if(!min.isEVal() && !max.isEVal() && max > min) tipTool += "Шкала: "+min+" ... "+max+"\n";
 if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += "Аварийная граница: "+aMin+" ... "+aMax+"\n";
 if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += "Предупр. граница: "+wMin+" ... "+wMax+"\n";
-if(!dscr.isEVal())
-{
+if(!dscr.isEVal()) {
 	tipTool += "Описание: "+dscr+"\n";
 	tipStatus = dscr;
-}','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;','');
+}','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1405591024);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -22207,17 +22333,23 @@ if(f_start) {
 
 	//Standard parameters
 	stdPrms = "var;sp;out;auto;aMin;aMax;wMin;wMax;com;close;stop;st_open;st_close;";
-	pColors = new Array("darkmagenta", "orange", "blue", "lightgreen", "cyan", "tomato", "magenta", "wheat");
+	pColors = new Array("darkmagenta", "orange", "blue", "lightgreen", "cyan", "tomato", "magenta", "wheat", "lightellow", "darkcyan");
 
 	//Trends prepare
-	trN = 0, trNClr = 0; trDigN = 0;
+	trN = 0, trNMax = 10, trNClr = 0; trDigN = 0;
 	trendsList_items = "<tbl sel=''row'' colsWdthFit=''1''><h><s width=''1px''>ID</s><s width=''50%''>Name</s><s>Minimum</s><s>Maximum</s></h>";
 	trendsList_value = "";
 	trObj = this.wdgAt("trends");
-	for(off = 0; (sP=stdPrms.parse(0,";",off)).length; ) {
-		if(!(aObj=pObj.nodeAt("a_"+sP)))	continue;
+	trObj.attrSet("parNum", trNMax);
+	// Clear previous trends
+	for(iTr = 0; iTr < trNMax; iTr++) trObj.attrSet("prm"+iTr+"addr", "");
+	for(off = 0; (sP=stdPrms.parse(0,";",off)).length && trN < trNMax; ) {
+		if(!(aObj=pObj.nodeAt("a_"+sP)) ||
+			(sP == "aMin" && ((tV=aObj.get()) >= pObj.nodeAt("a_aMax").get() || tV <= pObj.nodeAt("a_min").get())) ||
+			(sP == "aMax" && ((tV=aObj.get()) <= pObj.nodeAt("a_aMin").get() || tV >= pObj.nodeAt("a_max").get())) ||
+			(sP == "wMin" && ((tV=aObj.get()) >= pObj.nodeAt("a_wMax").get() || tV <= pObj.nodeAt("a_min").get())) ||
+			(sP == "wMax" && ((tV=aObj.get()) <= pObj.nodeAt("a_wMin").get() || tV >= pObj.nodeAt("a_max").get())))	continue;
 		isBool = (typeof(aObj.get())=="boolean");
-		trObj.attrSet("parNum", trN+1);
 		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
 		trObj.attrSet("prm"+trN+"color", (trClr=pColors[trNClr])+(isBool?"-127":""));
 		trObj.attrSet("prm"+trN+"width", 1);
@@ -22235,11 +22367,10 @@ if(f_start) {
 											"<s>"+trObj.attr("prm"+trN+"bordU")+"</s></r>";
 		trN++; trNClr++;
 	}
-	for(iA = 0; iA < aLst.length; iA++) {
+	for(iA = 0; iA < aLst.length && trN < trNMax; iA++) {
 		aId = aLst[iA].slice(2);
 		if(stdPrms.indexOf(aId+";") != -1 || !(aObj=pObj.nodeAt(aLst[iA])) || !aObj.arch()) continue;
 		isBool = (typeof(aObj.get())=="boolean");
-		trObj.attrSet("parNum", trN+1);
 		trObj.attrSet("prm"+trN+"addr", pAddr+"/a_"+sP);
 		trObj.attrSet("prm"+trN+"color", pColors[trNClr]+(isBool?"-127":""));
 		trObj.attrSet("prm"+trN+"width", 1);
@@ -22342,7 +22473,7 @@ if(selTab != prevTab) {
 		else if(wId.indexOf(prevTab) != -1) wObj.attrSet("en",false);
 	}
 	prevTab = selTab;
-}','','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1404218802);
+}','','',1000,'name;geomW;geomH;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1405590081);
 INSERT INTO "wlb_Main" VALUES('objProps','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAwCAIAAAAuKetIAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAHH0lEQVRoge2Z229cRx3HP+ecOWfPnr2vN157HbuOc3OalNIoDWoroFwk
 FFUgLlIREv8DEq9IvCAhkKIgxAtPfUBIiNc88sBFICqoqpSQOIkdm5A0cb1e733Pfc7wsF7b5EqR
@@ -22431,6 +22562,102 @@ for(off = 0; true; )
 	else ev_rez += sval+"\n";
 }
 event = ev_rez;','','',1000,'perm;name;geomW;geomH;pgOpenSrc;pgGrp;backColor;bordWidth;bordColor;',1403511779);
+INSERT INTO "wlb_Main" VALUES('grpGraph10','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
+xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
+krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
+z6LVarFotQp6vXbbm83n0nGEEEGvt16vXSkBEQEKrV3X/fLly3q9/tkPfE+w828XRx8/1qnj42MA
+sNYi4l3Dv+KttQBwL4+IlFLGWJ03xpQJ34iHeMdxmFSOF4/RYuZnmZ9Vn3XtZH+PM2ImUXeWtir+
+7Kwv5TDP3TD8KMRtTkxggmEABOJPsU51SSqlLp4/l4zlUg4/fKB5XvJRFP3edRSgg/Cn5tUmURS9
+jl4zw5ZyebJ3UvFaz168UITYKHJOT/v1g+G7d+/yPAcLxBCaUbSoPFXu5fs+RSNZwYhGgEXmVrwx
+rCgcrTmilXJZ8UiROIQ61ChTrAulFAAIIQxjheOoVsuJY54kpRgAKFgJEKA5t1TfbEIsAQA3dwfr
+wVlwVm1OiAWAdjvrdLLJpAsAnHMGAGABAAw1SBFq2SZotSVpwSQDbW4zaC0hpCiTT0hR8UjQamsy
+g4hGmVs9IaQoKCJHJMWtngBowBxsBGh/rA2DJif5Sq42asYYVIquVk7FMBIRMRUWLRoEgHgYgwIA
+6PPZyI041QiQG3I8DwEUAEyn4XI5IkTnuStEPBicKgUAwIec9zkiIsU8ytN5WpbQ9MkTIYTmHADc
+xaIzm2mAPM8PirUFQAAO8LelqSUAUKji2V/PEp4QS9zcPRmclDkkJDk8nCcJl7JAtJ8+DW54gm/f
+vr24uJjP5+WBhBDlZ/fCrYLd2gkhhJCilrS6wPO8MAyZlK61djKZlKyUMk3TyrABtwp2ayeEMMbq
+R6oLgiBgjLGvXydHR0fGXJestbZa34VbBbu1I6Ix5iFB+RvNgqDv+/5qdX1dOOf1lG3ArYLd2iml
+lNLyQe8KOOeUUoYIxph64jaSvgG3CnZov1tCdUGSJEopdnV1FcexlLJkXdetqzfgVsFu7WUG6j24
+LnBdVwhB9vf3B4MBNDbYbDaL47jBJZRlmbW2wSXU6/XKsaShwdbr9XK5bHAJcc455w0uoW6322q1
+oLHBLi8vZ7NZg0tISul5XtWuG1dCrNVqUUq1vn4JLIqiWt+FWwW7tZdf60OCcs3Oz88Xi0WDp9Ew
+/KXf/1a90DRvGjVGJ0nS4Es8n8+VUg3uA2EYNnsajeO42X3AWssYa3AJdTqdTqcDjQ22WCym02mD
+S0gI4bpug0eJchXHcclqreudbwNuFezWDjfN+F5BuWZxHH///r1qb1rrei/cgFsFu7VTSgHgIcH1
+ATzP830/iqKSFULUh6cNuFWwW3tZQg/ZhRCMMSaEuLq6qosadomXy2XVBKCBl5j4/g9NYCPjG3Cr
+YLf2u9N4XZBlWVEURAgRBEF6E0+fPkXECo7H48FgUEEhhOd5Fcyy7ODgQClVMWEYlv+Al7G3t1ff
+3Pf90WhUQWPM4eFhlmUV8+jRI8dx6rt1u90Kep43Ho/TNGWMPX78uN1uD4dDfPny18+fT6E50W63
+R6MRAPR6vW63y968+ePVq99+9lP9x3Bd9x9FY7XqUFOtUwAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
+if(f_start) {
+	//Parameter selection enable
+	if(allowSelLst.length)
+		for(i_el = 0; i_el < 10; i_el++) {
+			cEl = this["el"+(i_el+1)];
+			cEl.attrSet("en",1);
+			if(cEl.attr("contextMenu").search(":select$") < 0)
+				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+"Select:select\n");
+		}
+}
+
+curTm = SYS.time();
+if(!trnd1_tSek) trnd1_tSek = curTm;
+selSingle = 0;
+selAll = false;
+
+//Events process
+evRez = "";
+for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
+	if(evCur == "key_presComma:/trnd1")		trnd1_tSek -= trnd1_tSize/2;
+	else if(evCur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
+	else if(evCur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
+	else if(evCur.search("usr_single:/el") == 0)	selSingle = evCur.slice(14).toInt();
+	else if(evCur.search("usr_all:/el") == 0)		selAll = true;
+	else evRez += evCur+"\n";
+	//SYS.messDebug("Trend","Event: "+evCur);
+}
+event = evRez;
+
+//Trend time control
+//if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
+if(trnd1_tSek < curTm) trnd1_trcPer = 0;
+else { trnd1_trcPer = 1; trnd1_tSek = 0; }
+
+//Generic
+name_arg0val = grpName;
+
+//Trends
+arh_beg = 1e30;
+arh_end = 0;
+for(i_el = 0; i_el < 10; i_el++) {
+	cEl = this["el"+(i_el+1)];
+	if(selAll)	cEl.attrSet("bordStyle",3);
+	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
+	cTr = this["trnd1"];
+	cTrPrm = "prm"+i_el;
+	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
+	else {
+		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
+		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
+		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
+		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
+		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
+		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
+		//Enable/disable of the mode''s indication in the regulators ???
+		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
+		//Archive depth calculate
+		if(cEl.attr("bordStyle") == 3) {
+			arh_tmp = cTr.attr(cTrPrm+"prop");
+			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
+			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
+		}
+	}
+}
+//Set archive scroll
+if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
+	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
+	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
+	arh_tipTool = "Archive space: ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
+	arh_active = true;
+	if(selSingle) trnd1_tSek = arh_end;
+}
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1405522269);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1398168970);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','

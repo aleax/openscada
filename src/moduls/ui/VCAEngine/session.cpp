@@ -557,7 +557,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	    } else if(!((aSt>>16) & Engine::Sound)) mAlrmSndPlay = -1;
 	}
 	else if(ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
-	    alarmQuittance(opt->attr("wdg"),~atoi(opt->attr("tmpl").c_str()));
+	    alarmQuittance(opt->attr("wdg"),~s2i(opt->attr("tmpl")));
 	return;
     }
 
@@ -618,11 +618,11 @@ void Session::cntrCmdProc( XMLNode *opt )
     if(a_path == "/ico" && ctrChkNode(opt))	opt->setText(ico());
     else if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(enable()));
-	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setEnable(s2i(opt->text()));
     }
     else if(a_path == "/obj/st/start") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(start()));
-	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setStart(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setStart(s2i(opt->text()));
     }
     else if(a_path == "/obj/st/user" && ctrChkNode(opt))	opt->setText(user());
     else if(a_path == "/obj/st/owner" && ctrChkNode(opt))	opt->setText(owner());
@@ -650,11 +650,11 @@ void Session::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/per") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(period()));
-	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setPeriod(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	setPeriod(s2i(opt->text()));
     }
     else if(a_path == "/obj/cfg/style") {
 	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))	opt->setText(i2s(stlCurent()));
-	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	stlCurentSet(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	stlCurentSet(s2i(opt->text()));
     }
     else if(a_path == "/obj/cfg/stLst" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id","-1")->setText(_("No style"));
@@ -702,10 +702,10 @@ void Session::cntrCmdProc( XMLNode *opt )
 Session::Alarm::Alarm( const string &ipath, const string &alrm, unsigned iclc ) : path(ipath), clc(iclc)
 {
     int a_off = 0;
-    lev   = atoi( TSYS::strSepParse(alrm,0,'|',&a_off).c_str() );
+    lev   = s2i(TSYS::strSepParse(alrm,0,'|',&a_off));
     cat   = TSYS::strSepParse(alrm,0,'|',&a_off);
     mess  = TSYS::strSepParse(alrm,0,'|',&a_off);
-    qtp   = tp = atoi( TSYS::strSepParse(alrm,0,'|',&a_off).c_str() );
+    qtp   = tp = s2i(TSYS::strSepParse(alrm,0,'|',&a_off));
     tpArg = TSYS::strSepParse(alrm,0,'|',&a_off);
 }
 
@@ -928,8 +928,8 @@ void SessPage::alarmSet( bool isSet )
 {
     int aStCur  = attrAt("alarmSt").at().getI( );
     string aCur = attrAt("alarm").at().getS( );
-    int alev = atoi(TSYS::strSepParse(aCur,0,'|').c_str()) & 0xFF;
-    int atp  = atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
+    int alev = s2i(TSYS::strSepParse(aCur,0,'|')) & 0xFF;
+    int atp  = s2i(TSYS::strSepParse(aCur,3,'|')) & 0xFF;
     int aqtp = isSet ? atp : (aStCur>>16) & 0xFF & atp;
 
     vector<string> lst;
@@ -1027,7 +1027,7 @@ bool SessPage::cntrCmdGeneric( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEC_RD))
 	    opt->setText(i2s(attrAt("pgOpen").at().getB()));
 	if(ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR))
-	    attrAt("pgOpen").at().setB(atoi(opt->text().c_str()));
+	    attrAt("pgOpen").at().setB(s2i(opt->text()));
     }
     else if((a_path == "/br/pg_" || a_path == "/page/page") && ctrChkNode(opt))
     {
@@ -1291,12 +1291,16 @@ void SessWdg::inheritAttr( const string &aid )
     MtxAlloc res(mCalcRes, true);
     Widget::inheritAttr(aid);
 
-    if(enable() && !aid.empty() && ownerSess()->start() && attrPresent(aid))
-    {
+    if(enable() && !aid.empty() && ownerSess()->start() && attrPresent(aid)) {
 	AutoHD<Attr> attr = attrAt(aid);
 	if(!(attr.at().flgGlob()&Attr::IsUser))
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()|Attr::SessAttrInh));
     }
+}
+
+void SessWdg::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf )
+{
+    Widget::attrAdd(attr, pos, inher, forceMdf || enable());
 }
 
 AutoHD<Widget> SessWdg::wdgAt( const string &wdg, int lev, int off )
@@ -1349,8 +1353,8 @@ void SessWdg::alarmSet( bool isSet )
 {
     int aStCur  = attrAt("alarmSt").at().getI( );
     string aCur = attrAt("alarm").at().getS( );
-    int alev = atoi(TSYS::strSepParse(aCur,0,'|').c_str()) & 0xFF;
-    int atp  = atoi(TSYS::strSepParse(aCur,3,'|').c_str()) & 0xFF;
+    int alev = s2i(TSYS::strSepParse(aCur,0,'|')) & 0xFF;
+    int atp  = s2i(TSYS::strSepParse(aCur,3,'|')) & 0xFF;
     int aqtp = isSet ? atp : (aStCur>>16) & 0xFF;
 
     vector<string> lst;
@@ -1426,7 +1430,7 @@ void SessWdg::getUpdtWdg( const string &ipath, unsigned int tm, vector<string> &
 
 unsigned int SessWdg::modifVal( Attr &cfg )
 {
-    if(atoi(cfg.fld().reserve().c_str())) mMdfClc = mCalcClk;
+    if(s2i(cfg.fld().reserve())) mMdfClc = mCalcClk;
 
     return mCalcClk;
 }
@@ -1682,15 +1686,44 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     // bool attrPresent(string attr) - check for attribute <attr> present.
     //  attr - checked attribute
     if(iid == "attrPresent" && prms.size())	return attrPresent(prms[0].getS());
-    // ElTp attr(string attr) - get attribute <attr> value.
-    //  attr - readed attribute
+    // ElTp attr(string attr, bool fromSess = false) - get attribute <attr> value or from the session table <fromSess>.
+    //  attr - readed attribute;
+    //  fromSess - read attribute from session table.
     if(iid == "attr" && prms.size()) {
-	if(!attrPresent(prms[0].getS())) return string("");
-	return attrAt(prms[0].getS()).at().get();
+	// Load from the session table
+	if(prms.size() > 1 && prms[1].getB()) {
+	    int off = 0;
+	    TConfig cEl(&mod->elPrjSes());
+	    TSYS::pathLev(path(), 0, true, &off);
+	    cEl.cfg("IDW").setS(path().substr(off));
+	    cEl.cfg("ID").setS("attr://"+prms[0].getS());
+	    string db  = ownerSess()->parent().at().DB();
+	    string tbl = ownerSess()->parent().at().tbl()+"_ses";
+	    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true)) return cEl.cfg("IO_VAL").getS();
+	}
+	// From widget's attribute
+	else if(attrPresent(prms[0].getS()))	return attrAt(prms[0].getS()).at().get();
+	return string("");
     }
-    // TCntrNodeObj attrSet(string attr, ElTp vl)
+    // TCntrNodeObj attrSet(string attr, ElTp vl, bool toSess = false) - set attribute <attr> to value <vl> or to the session table <toSess>.
+    //  attr - writed attribute;
+    //  vl - value;
+    //  toSess - write to session table.
     if(iid == "attrSet" && prms.size() >= 2) {
-	if(attrPresent(prms[0].getS())) attrAt(prms[0].getS()).at().set(prms[1]);
+	// Save to the session table
+	if(prms.size() > 2 && prms[2].getB()) {
+	    int off = 0;
+	    TConfig cEl(&mod->elPrjSes());
+	    TSYS::pathLev(path(), 0, true, &off);
+	    cEl.cfg("IDW").setS(path().substr(off));
+	    cEl.cfg("ID").setS("attr://"+prms[0].getS());
+	    cEl.cfg("IO_VAL").setS(prms[1].getS());
+	    string db  = ownerSess()->parent().at().DB();
+	    string tbl = ownerSess()->parent().at().tbl()+"_ses";
+	    SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl, false, true);
+	}
+	else if(attrPresent(prms[0].getS())) attrAt(prms[0].getS()).at().set(prms[1]);
+
 	return new TCntrNodeObj(this, user);
     }
     // string link(string attr, bool prm = false) - get link for attribute or attribute block (prm)
@@ -1773,7 +1806,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		attrList(als);
 		for(unsigned i_l = 0; i_l < als.size(); i_l++) {
 		    attr = attrAt(als[i_l]);
-		    if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()))
+		    if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && s2i(attr.at().fld().reserve()))
 			opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
 					     setText(attr.at().getS());
@@ -1793,7 +1826,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))//Get attributes all updated elements' of the branch
     {
 	unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
-	bool     fullTree = atoi(opt->attr("FullTree").c_str());
+	bool     fullTree = s2i(opt->attr("FullTree"));
 	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
 
 	//Self attributes put
@@ -1807,7 +1840,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    attrList(als);
 	    for(unsigned i_l = 0; i_l < als.size(); i_l++) {
 		attr = attrAt(als[i_l]);
-		if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && atoi(attr.at().fld().reserve().c_str()))
+		if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && s2i(attr.at().fld().reserve()))
 		    opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
 				     setText(attr.at().getS());
@@ -1852,7 +1885,7 @@ bool SessWdg::cntrCmdGeneric( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/wdg/st/proc") {
 	if(ctrChkNode(opt,"get",RWRWR_,owner().c_str(),grp().c_str(),SEC_RD)) opt->setText(i2s(process()));
-	if(ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR)) setProcess(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,owner().c_str(),grp().c_str(),SEC_WR)) setProcess(s2i(opt->text()));
     }
     else return Widget::cntrCmdGeneric(opt);
 

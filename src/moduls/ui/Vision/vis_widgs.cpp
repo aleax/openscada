@@ -436,8 +436,7 @@ void LineEdit::viewApplyBt( bool view )
 {
     if(view == (bool)bt_fld) return;
 
-    if(view && !bt_fld)
-    {
+    if(view && !bt_fld) {
 	bt_fld = new QPushButton(this);
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->setIconSize(QSize(12,12));
@@ -446,8 +445,7 @@ void LineEdit::viewApplyBt( bool view )
 	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
 	layout()->addWidget(bt_fld);
     }
-    if(!view && bt_fld)
-    {
+    if(!view && bt_fld) {
 	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
 	mIsEdited = false;
@@ -520,8 +518,7 @@ void LineEdit::setType( LType tp )
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
-    if(applyReserve && needReserver)
-    {
+    if(applyReserve && needReserver) {
 	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
 	((QBoxLayout*)layout())->setAlignment(ed_fld, Qt::AlignLeft);
     }
@@ -532,7 +529,7 @@ void LineEdit::setType( LType tp )
 
 void LineEdit::changed( )
 {
-    //> Enable apply
+    //Enable apply
     if(mPrev && !bt_fld) viewApplyBt(true);
     bt_tm->start(mPrev ? 5000 : 500);
     mIsEdited = true;
@@ -546,11 +543,9 @@ void LineEdit::setValue( const QString &txt )
     switch(type())
     {
 	case Text:
-	    if(txt != value())
-	    {
-		((QLineEdit*)ed_fld)->setText(txt);
-		((QLineEdit*)ed_fld)->setCursorPosition(0);
-	    }
+	    if(txt == value())	break;
+	    ((QLineEdit*)ed_fld)->setText(txt);
+	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
 	    break;
 	case Integer:
 	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
@@ -579,15 +574,16 @@ void LineEdit::setValue( const QString &txt )
 
 void LineEdit::setCfg(const QString &cfg)
 {
+    if(ed_fld) ed_fld->blockSignals(true);
     switch(type())
     {
-	case Text:	((QLineEdit*)ed_fld)->setInputMask(cfg);	break;
-	case Integer:
-	{
+	case Text:
+	    ((QLineEdit*)ed_fld)->setInputMask(cfg);
+	    break;
+	case Integer: {
 	    int		minv = 0, maxv = 100, sstep = 1;
 	    string	pref, suff;
-	    if( !cfg.isEmpty() )
-	    {
+	    if(!cfg.isEmpty()) {
 		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
 		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
 		sstep = atoi(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
@@ -600,13 +596,11 @@ void LineEdit::setCfg(const QString &cfg)
 	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());
 	    break;
 	}
-	case Real:
-	{
+	case Real: {
 	    double minv = 0, maxv = 100, sstep = 1;
 	    string pref, suff;
 	    int    dec = 2;
-	    if( !cfg.isEmpty() )
-	    {
+	    if(!cfg.isEmpty()) {
 		minv  = atof(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
 		maxv  = atof(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
 		sstep = atof(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
@@ -624,20 +618,19 @@ void LineEdit::setCfg(const QString &cfg)
 	case Time: case Date: case DateTime:
 	    ((QDateTimeEdit*)ed_fld)->setDisplayFormat(cfg);
 	    break;
-	case Combo:
-	{
+	case Combo: {
 	    QString ctext = ((QComboBox*)ed_fld)->currentText();
 	    ((QComboBox*)ed_fld)->clear();
 	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
-	    if( !ctext.isEmpty() )
-	    {
-		if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
+	    if(!ctext.isEmpty()) {
+		if(((QComboBox*)ed_fld)->findText(ctext) < 0) ((QComboBox*)ed_fld)->addItem(ctext);
 		((QComboBox*)ed_fld)->setEditText(ctext);
 	    }
 	    break;
 	}
     }
-    if( bt_fld ) viewApplyBt(false);
+    if(bt_fld) viewApplyBt(false);
+    if(ed_fld) ed_fld->blockSignals(false);
 }
 
 QString LineEdit::value()
@@ -659,7 +652,7 @@ void LineEdit::applySlot( )
 {
     viewApplyBt(false);
 
-    if( m_val == value() ) return;
+    if(m_val == value()) return;
     m_val = value();
 
     emit apply();
@@ -668,8 +661,7 @@ void LineEdit::applySlot( )
 void LineEdit::cancelSlot( )
 {
     mIsEdited = false;
-    if(mPrev)
-    {
+    if(mPrev) {
 	setValue(m_val);
 	emit cancel();
     }
@@ -678,21 +670,19 @@ void LineEdit::cancelSlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if( e->type() == QEvent::KeyRelease && bt_fld )
-    {
+    if(e->type() == QEvent::KeyRelease && bt_fld) {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )
-	{
-	    bt_fld->animateClick( );
+	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+	    bt_fld->animateClick();
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
-    else if( e->type() == QEvent::Resize && applyReserve && needReserver )
-    {
+    else if(e->type() == QEvent::Resize && applyReserve && needReserver) {
 	ed_fld->setMaximumWidth(width()-12);
 	ed_fld->setMinimumWidth(width()-12);
     }
+
     return QWidget::event(e);
 }
 

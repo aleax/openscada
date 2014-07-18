@@ -75,7 +75,7 @@ class Attr
 
 	//Methods
 	//> Main
-	Attr(TFld *fld, bool inher);
+	Attr( TFld *fld, bool inher );
 	~Attr( );
 
 	const string &id( );
@@ -83,12 +83,12 @@ class Attr
 	TFld::Type type( );
 	int flgGlob( );		//Global attribite's flags
 	SelfAttrFlgs flgSelf( )	{ return (SelfAttrFlgs)self_flg; }
-	unsigned modif( )	{ return m_modif; }
+	unsigned modif( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
 
 	void setFlgSelf( SelfAttrFlgs flg );
-	void setModif( unsigned set )	{ m_modif = set; }
+	void setModif( unsigned set )	{ mModif = set; }
 	void setCfgTempl( const string &vl );
 	void setCfgVal( const string &vl );
 
@@ -111,7 +111,7 @@ class Attr
 	void setO( AutoHD<TVarObj> val, bool strongPrev = false, bool sys = false );
 
 	TFld &fld( )			{ return *mFld; }
-	void setFld(TFld *fld, bool inher);
+	void setFld( TFld *fld, bool inher );
 
 	void AHDConnect( );
 	bool AHDDisConnect( );
@@ -122,18 +122,18 @@ class Attr
 	//Data
 	// Storing
 	union {
-	    string	*s_val;		//String
-	    double	r_val;		//Real
-	    int64_t	i_val;		//Integer
-	    char	b_val;		//Boolean
-	    AutoHD<TVarObj>	*o_val;	//Object
-	}m_val;
+	    string	*s;		//String
+	    double	r;		//Real
+	    int64_t	i;		//Integer
+	    char	b;		//Boolean
+	    AutoHD<TVarObj>	*o;	//Object
+	}mVal;
 	// Attributes
 	TFld		*mFld;		//Base field
-	unsigned	m_modif;	//Modify counter
+	unsigned	mModif;		//Modify counter
 	unsigned short	self_flg;	//Self attributes flags
-	unsigned short	mOi	 :ATTR_OI_DEPTH;	//Order index, up to 256 attributes
-	unsigned short	mConn    :ATTR_CON_DEPTH;	//Connections counter
+	unsigned short	mOi	:ATTR_OI_DEPTH;		//Order index, up to 256 attributes
+	unsigned short	mConn	:ATTR_CON_DEPTH;	//Connections counter
 
 	string	cfg;			//Configuration template and value
 
@@ -200,14 +200,14 @@ class Widget : public TCntrNode
 	AutoHD<Widget> parentNoLink( );				//Parent no link widget
 	void heritReg( Widget *wdg );				//Register heritator
 	void heritUnreg( Widget *wdg );				//Unregister heritator
-	vector< AutoHD<Widget> > &herit( )		{ return m_herit; }
+	vector< AutoHD<Widget> > &herit( ) { return m_herit; }
 	virtual void setParentNm( const string &isw );
 	virtual void inheritAttr( const string &attr = "" );	//Inherit parent attributes
 	void inheritIncl( const string &wdg = "" );		//Inherit parent include widgets
 
 	// Widget's attributes
 	void attrList( vector<string> &list );
-	void attrAdd( TFld *attr, int pos = -1, bool inher = false );
+	virtual void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false );
 	void attrDel( const string &attr, bool allInher = false );
 	virtual bool attrPresent( const string &attr );
 	int  attrPos( const string &iattr );
