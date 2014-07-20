@@ -59,17 +59,17 @@ class WidgetLib : public TCntrNode, public TConfig
 
 	void setFullDB( const string &it );
 
-	//> Enable stat
+	// Enable stat
 	bool enable( )		{ return mEnable; }
 	void setEnable( bool val );
 
-        //> Mime data access
+        // Mime data access
 	void mimeDataList( vector<string> &list, const string &idb = "" );
 	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" );
 	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
 	void mimeDataDel( const string &id, const string &idb = "" );
 
-	//> Widgets
+	// Widgets
 	void list( vector<string> &ls ) 	{ chldList(m_wdg,ls); }
 	bool present( const string &id )	{ return chldPresent(m_wdg,id); }
 	AutoHD<LWidget> at( const string &id );
@@ -93,14 +93,14 @@ class WidgetLib : public TCntrNode, public TConfig
 	AutoHD<TCntrNode> chldAt( int8_t igr, const string &name, const string &user = "" );
 
 	//Attributes
-	int     m_wdg;
+	int	m_wdg;
 
     private:
 	//Attributes
 	TCfg	&mId;
 	string work_lib_db, mOldDB;
 	bool	mEnable;
-	bool    passAutoEn;
+	bool	passAutoEn;
 };
 
 //************************************************
@@ -111,7 +111,7 @@ class CWidget;
 class LWidget : public Widget, public TConfig
 {
     public:
-    //Methods
+	//Methods
 	LWidget( const string &id, const string &isrcwdg = "" );
 	~LWidget( );
 
@@ -134,15 +134,15 @@ class LWidget : public Widget, public TConfig
 	void setParentNm( const string &isw );
 	void setEnableByNeed( );
 
-	//> Include widgets
+	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	AutoHD<CWidget> wdgAt( const string &wdg );
 
-        //> Storing
+	// Storing
 	void loadIO( );
 	void saveIO( );
 
-	//> Data access
+	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
@@ -150,26 +150,26 @@ class LWidget : public Widget, public TConfig
 
 	WidgetLib &ownerLib( );
 
-	bool	enableByNeed;   //Load and enable by need
+	bool	enableByNeed;	//Load and enable by need
 
     protected:
 	//Methods
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//> Storing
+	// Storing
 	void load_( );
 	void save_( );
 	void wClear( );
 
-	unsigned int modifVal( Attr &cfg )      { modif(); return 0; }
+	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
 
     private:
 	//Attributes
 	int64_t	&m_proc_per,	//Widget period
 		&mTimeStamp;
-	string	mParentNmPrev;  //Previous parent name after successful enable
+	string	mParentNmPrev;	//Previous parent name after successful enable
 };
 
 //************************************************
@@ -182,24 +182,24 @@ class CWidget : public Widget, public TConfig
 	CWidget( const string &id, const string &isrcwdg = "" );
 	~CWidget( );
 
-	//> Main parameters
-	string path( );
-	string ico( );
-	string type( )		{ return "LibLink"; }
-	string calcId( );
-	string calcLang( );
-	string calcProg( );
-	int    calcPer( );
-	string parentNm( )	{ return cfg("PARENT").getS(); }
+	// Main parameters
+	string	path( );
+	string	ico( );
+	string	type( )		{ return "LibLink"; }
+	string	calcId( );
+	string	calcLang( );
+	string	calcProg( );
+	int	calcPer( );
+	string	parentNm( )	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val );
 	void setParentNm( const string &isw );
 
-	//> Storing
+	// Storing
 	void loadIO( );
 	void saveIO( );
 
-	//> Data access
+	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
@@ -214,7 +214,7 @@ class CWidget : public Widget, public TConfig
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-	//> Storing
+	// Storing
 	void load_( );
 	void save_( );
 	void wClear( );

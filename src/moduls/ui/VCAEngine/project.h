@@ -38,8 +38,7 @@ class Project : public TCntrNode, public TConfig
 {
     public:
 	//Data
-	enum Flag
-	{
+	enum Flag {
 	    Maximize		= 0x01,	//Maximize master window and resize content
 	    FullScreen		= 0x02,	//Full screen project run
 	    KeepAspectRatio	= 0x04,	//Keep master page aspect ratio on scale
@@ -50,7 +49,7 @@ class Project : public TCntrNode, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	string  id( )		{ return mId; }			//Identifier
+	string	id( )		{ return mId; }			//Identifier
 	string	name( );					//Name
 	string	descr( )	{ return cfg("DESCR").getS(); }	//Description
 	string	ico( )		{ return cfg("ICO").getS(); }	//Icon
@@ -76,12 +75,12 @@ class Project : public TCntrNode, public TConfig
 	void setTbl( const string &it )		{ cfg("DB_TBL").setS(it); }
 	void setFullDB( const string &it );
 
-	//> Enable stat
-	bool enable( )			{ return mEnable; }
+	// Enable stat
+	bool enable( )		{ return mEnable; }
 	void setEnable( bool val );
 	void setEnableByNeed( );
 
-	//> Pages
+	// Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
 	bool present( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<Page> at( const string &id );
@@ -89,13 +88,13 @@ class Project : public TCntrNode, public TConfig
 	void add( Page *iwdg );
 	void del( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
-	//> Mime data access
+	// Mime data access
 	void mimeDataList( vector<string> &list, const string &idb = "" );
 	bool mimeDataGet( const string &id, string &mimeType, string *mimeData = NULL, const string &idb = "" );
 	void mimeDataSet( const string &id, const string &mimeType, const string &mimeData, const string &idb = "" );
 	void mimeDataDel( const string &id, const string &idb = "" );
 
-	//> Styles
+	// Styles
 	void stlList( vector<string> &ls );
 	int stlSize( );
 	int64_t stlCurent( )			{ return mStyleIdW; }
@@ -136,7 +135,7 @@ class Project : public TCntrNode, public TConfig
 		&mStyleIdW;	//Work style
 	bool	mEnable;	//Enable state
 
-	//> Styles
+	// Styles
 	Res	mStRes;
 	map< string, vector<string> >	mStProp;	//Styles' properties
 };
@@ -150,8 +149,7 @@ class Page : public Widget, public TConfig
 {
     public:
 	//Data
-	enum Flag
-	{
+	enum Flag {
 	    Container	= 0x01,	//Page is container included pages
 	    Template	= 0x02,	//Page is template for included pages
 	    Empty	= 0x04	//No page, use for logical containers
@@ -183,17 +181,17 @@ class Page : public Widget, public TConfig
 	void setParentNm( const string &isw );
 	void setPrjFlags( int val );
 
-	//> Storing
+	// Storing
 	void loadIO( );
 	void saveIO( );
 
 	void setEnable( bool val );
 
-	//> Include widgets
+	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &path, bool force = false );
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
-	//> Pages
+	// Pages
 	void pageList( vector<string> &ls )	{ chldList(mPage,ls); }
 	bool pagePresent( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<Page> pageAt( const string &id );
@@ -201,7 +199,7 @@ class Page : public Widget, public TConfig
 	void pageAdd( Page *iwdg );
 	void pageDel( const string &id, bool full = false )	{ chldDel( mPage, id, -1, full ); }
 
-	//> Data access
+	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
@@ -215,7 +213,7 @@ class Page : public Widget, public TConfig
 	void postEnable( int flag );
 	void postDisable( int flag );
 
-	//> Storing
+	// Storing
 	void load_( );
 	void save_( );
 	void wClear( );
@@ -248,24 +246,24 @@ class PageWdg : public Widget, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	//> Main parameters
-	string path( );
-	string ico( );
-	string type( )		{ return "ProjLink"; }
-	string calcId( );
-	string calcLang( );
-	string calcProg( );
-	int    calcPer( );
-	string parentNm( )	{ return cfg("PARENT").getS(); }
+	// Main parameters
+	string	path( );
+	string	ico( );
+	string	type( )		{ return "ProjLink"; }
+	string	calcId( );
+	string	calcLang( );
+	string	calcProg( );
+	int	calcPer( );
+	string	parentNm( )	{ return cfg("PARENT").getS(); }
 
 	void setEnable( bool val );
 	void setParentNm( const string &isw );
 
-	//> Storing
+	// Storing
 	void loadIO( );
 	void saveIO( );
 
-	//> Data access
+	// Data access
 	void resourceList( vector<string> &ls );
 	string resourceGet( const string &id, string *mime = NULL );
 
@@ -282,7 +280,7 @@ class PageWdg : public Widget, public TConfig
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
 
-	//> Storing
+	// Storing
 	void load_( );
 	void save_( );
 	void wClear( );

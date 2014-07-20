@@ -1,3 +1,8 @@
+2014-07-20 Roman
+- FIX:Archive: Place to archive fix next for int64_t.
+- !!:FIX:UI.VCAEngine: Change parent trace for project and widget's library fix.
+
+
 2014-07-18 Roman
 - !!:DB.LibsDB.vcaBase.db: New templated frame "Main.grpGraph10" based on "Main.grpGraph" is added for 10 trends placing.
     New colors are added to "Main.grpGraph" for selection "darkcyan", "lightyellow".
@@ -11,6 +16,7 @@
     User API session area functions attr() and attrSet() expanded by argument "bool fromSess" and "bool toSess" respectively for set
     the attributes to the session table.
     FIX:Widget's attributes expand to int64_t next fix.
+    FIX:Change parent trace for project and widget's library fix.
 - FIX:UI.Vision: Unproper events process at config set to element LineEdit, mostly for this view "Combo", are prevented by signals block.
 
 

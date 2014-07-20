@@ -2721,7 +2721,7 @@ msgstr ""
 
 #: tuis.cpp:137
 msgid "Doc check"
-msgstr ""
+msgstr "Doc-Check"
 
 #: tuis.cpp:185
 msgid "User interface"

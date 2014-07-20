@@ -2487,7 +2487,7 @@ void TVArchEl::getVals( TValBuf &buf, int64_t ibeg, int64_t iend, bool onlyLocal
 				}
 				case TFld::Integer:
 				{
-				    int64_t vl = s2i(prevVal);
+				    int64_t vl = s2ll(prevVal);
 				    if(prevVal == EVAL_STR || vl == EVAL_INT) { evalOk = true; prevPos = curPos; }
 				    else { noEvalOk = true; for( ; prevPos < curPos; prevPos++ ) buf.setI(vl, bbeg+prevPos*bper); }
 				    break;

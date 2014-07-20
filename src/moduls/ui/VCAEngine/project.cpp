@@ -371,6 +371,7 @@ int Project::stlSize( )
     ResAlloc res(mStRes, false);
     map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
     if(iStPrp != mStProp.end()) return iStPrp->second.size();
+
     return 0;
 }
 
@@ -385,6 +386,7 @@ string Project::stlGet( int sid )
     ResAlloc res(mStRes, false);
     map< string, vector<string> >::iterator iStPrp = mStProp.find("<Styles>");
     if(iStPrp == mStProp.end() || sid < 0 || sid >= (int)iStPrp->second.size()) return "";
+
     return iStPrp->second[sid];
 }
 
@@ -1016,8 +1018,7 @@ void Page::loadIO( )
     }
 
     // Check for remove items removed from DB
-    if(!SYS->selDB().empty())
-    {
+    if(!SYS->selDB().empty()) {
 	vector<string> it_ls;
 	wdgList(it_ls);
 	for(unsigned i_it = 0; i_it < it_ls.size(); i_it++)
@@ -1359,8 +1360,7 @@ bool Page::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 			opt->childAdd("el")->setText(c_path);
 		    }
 		    if(!c_lv)  opt->childAdd("el")->setText(c_path+"/prj_"+ownerProj()->id());
-		    else if(c_lv == 1 && isAbs)
-		    {
+		    else if(c_lv == 1 && isAbs) {
 			ownerProj()->list(ls);
 			if(ls.size()) opt->childAdd("el")->setText(_("=== Pages ==="));
 			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
