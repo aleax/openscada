@@ -768,7 +768,7 @@ void MTable::fieldPrmSet( TCfg &cfg, const string &last, string &req, int keyCnt
 	case TFld::Integer:
 	    if(cfg.fld().flg()&TFld::DateTimeDec)
 		req += "datetime NOT NULL DEFAULT '" + UTCtoSQL(s2i(cfg.fld().def())) + "' ";
-	    else if(!cfg.fld().len()) req += "int NOT NULL DEFAULT '" + i2s(s2i(cfg.fld().def())) + "' ";
+	    else if(!cfg.fld().len()) req += "bigint NOT NULL DEFAULT '" + i2s(s2i(cfg.fld().def())) + "' ";
 	    else req += "int(" + i2s(vmax(1,cfg.fld().len())) + ") NOT NULL DEFAULT '" + i2s(s2i(cfg.fld().def())) + "' ";
 	    break;
 	case TFld::Real:

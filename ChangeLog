@@ -1,3 +1,9 @@
+2014-07-22 Roman
+- SYS: messid location place to *.po files disable, mostly for prevent SVN merge problems, again.
+- DB.MySQL: "bigint" type using everywhere for integers fix.
+- TFunction, TValue, UI.VCAEngine.Attr: Set TEValObj() to object type attribute by EVAL scalar set is added.
+
+
 2014-07-20 Roman
 - FIX:Archive: Place to archive fix next for int64_t.
 - !!:FIX:UI.VCAEngine: Change parent trace for project and widget's library fix.
@@ -194,7 +200,7 @@
     Connection lost processing move to after the request.
     Adapted for work into RO mode.
     fieldDel() mostly rewrote for RO process.
-- !:DB.SQLite: Adapted for work into RO mode. Adapted for work into RO mode.
+- !:DB.SQLite: Adapted for work into RO mode.
 
 
 2014-05-29 Roman
@@ -231,7 +237,7 @@
 - SYS.TCntrNode: To ctrMkNode() append using 'pos' argument lesser -1 for count from end.
 - !!!:DAQ.DAQGate: Expanded for allow the paramter's identifiers independent namespace and the assign to remote parameter's ID.
     Expand for bind hierarchic parameters, next will append the hierarchic parameters tree build.
-    Inline brousing by external hosts appended.
+    Inline browsing by external hosts appended.
 
 
 2014-05-19 Roman

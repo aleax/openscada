@@ -66,7 +66,7 @@ class TVal: public TCntrNode
 	int64_t time( )	{ return mTime; }
 	bool	dataActive( );
 
-	//> Read current value (direct)
+	// Read current value (direct)
 	string	getSEL( int64_t *tm = NULL, bool sys = false );
 	TVariant get( int64_t *tm = NULL, bool sys = false );
 	string	getS( int64_t *tm = NULL, bool sys = false );
@@ -75,7 +75,7 @@ class TVal: public TCntrNode
 	char	getB( int64_t *tm = NULL, bool sys = false );
 	AutoHD<TVarObj> getO( int64_t *tm = NULL, bool sys = false );
 
-	//> Set current value
+	// Set current value
 	void setSEL( const string &value, int64_t tm = 0, bool sys = false );
 	void set( const TVariant &value, int64_t tm = 0, bool sys = false );
 	void setS( const string &value, int64_t tm = 0, bool sys = false );
@@ -148,7 +148,7 @@ class TValue: public TCntrNode, public TValElem
 
 	virtual string DAQPath( );
 
-	//> Atributes
+	// Atributes
 	void vlList( vector<string> &list )	{ chldList(m_vl, list); }
 	bool vlPresent( const string &name )	{ return chldPresent(m_vl, name); }
 	AutoHD<TVal> vlAt( const string &name )	{ return chldAt(m_vl, name); }
@@ -158,11 +158,11 @@ class TValue: public TCntrNode, public TValElem
 	void chldAdd( int8_t igr, TCntrNode *node, int pos = -1, bool noExp = false );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//> Manipulation for configuration element
+	// Manipulation for configuration element
 	TConfig *vlCfg( )			{ return mCfg; }
 	void setVlCfg( TConfig *cfg );		//Set configs. NULL - clear configurations.
 
-	//> Manipulation for elements of value
+	// Manipulation for elements of value
 	bool vlElemPresent( TElem *ValEl );
 	void vlElemAtt( TElem *ValEl );
 	void vlElemDet( TElem *ValEl );
@@ -175,7 +175,7 @@ class TValue: public TCntrNode, public TValElem
 
     private:
 	//Methods
-	//> TElem commands
+	// TElem commands
 	void detElem( TElem *el );
 	void addFld( TElem *el, unsigned id_val);
 	void delFld( TElem *el, unsigned id_val);

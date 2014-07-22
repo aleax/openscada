@@ -683,7 +683,7 @@ void TMdPrm::calc( bool first, bool last, double frq )
 		if(!vl.isEVal()) lnk(i_l).aprm.at().set(vl);
 	    }
 
-	//> Put fixed system attributes
+	//Put fixed system attributes
 	if(id_nm >= 0)	setName(tmpl->val.getS(id_nm));
 	if(id_dscr >= 0)setDescr(tmpl->val.getS(id_dscr));
     }

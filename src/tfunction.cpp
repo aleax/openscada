@@ -36,8 +36,7 @@ TFunction::TFunction( const string &iid, const char *igrp ) : mId(iid), run_st(f
 
 TFunction::~TFunction( )
 {
-    for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
-	delete mIO[i_io];
+    for(unsigned i_io = 0; i_io < mIO.size(); i_io++) delete mIO[i_io];
 }
 
 TFunction &TFunction::operator=( TFunction &func )
@@ -48,8 +47,7 @@ TFunction &TFunction::operator=( TFunction &func )
 	if(func.ioId(io(i_io)->id()) < 0) ioDel(i_io);
 	else i_io++;
     // Update present and create new IO
-    for(int i_io = 0; i_io < func.ioSize(); i_io++)
-    {
+    for(int i_io = 0; i_io < func.ioSize(); i_io++) {
 	int dst_io = ioId(func.io(i_io)->id());
 	if(dst_io < 0)
 	    dst_io = ioIns( new IO( func.io(i_io)->id().c_str(), func.io(i_io)->name().c_str(), func.io(i_io)->type(), func.io(i_io)->flg(),
@@ -66,8 +64,7 @@ TFunction &TFunction::operator=( TFunction &func )
 void TFunction::preDisable( int flag )
 {
     if(mTVal) { delete mTVal; mTVal = NULL; }
-    if(used.size())
-    {
+    if(used.size()) {
 	string mess;
 	for(unsigned i = 0; i < used.size(); i++)
 	    mess += used[i]->vfName()+", ";
@@ -148,8 +145,7 @@ void TFunction::preIOCfgChange()
 {
     //Previous stop
     be_start = startStat();
-    if(be_start)
-    {
+    if(be_start) {
 	setStart(false);
 	if(mTVal) { delete mTVal; mTVal = NULL; }
     }
@@ -161,8 +157,7 @@ void TFunction::preIOCfgChange()
     if(blk_lst.size())
 	throw TError(nodePath().c_str(),_("Change is not permitted while function is used: %s"),blk_lst.c_str());
 
-    for(unsigned i = 0; i < used.size(); i++)
-	used[i]->preIOCfgChange();
+    for(unsigned i = 0; i < used.size(); i++) used[i]->preIOCfgChange();
 }
 
 void TFunction::postIOCfgChange()
@@ -170,8 +165,7 @@ void TFunction::postIOCfgChange()
     //Start for restore
     if(be_start) setStart(true);
 
-    for(unsigned i=0; i < used.size(); i++)
-	used[i]->postIOCfgChange();
+    for(unsigned i=0; i < used.size(); i++) used[i]->postIOCfgChange();
 }
 
 void TFunction::valAtt( TValFunc *vfnc )
@@ -195,8 +189,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 {
     // ElTp call(ElTp prm1, ...) - the function call
     //  prm{N} - {N} parameter to the function.
-    if(iid == "call")
-    {
+    if(iid == "call") {
 	if(!startStat()) return TVariant();
 	TValFunc vfnc("JavaLikeObjFuncCalc",this);
 
@@ -205,8 +198,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	for(r_pos = 0; r_pos < vfnc.func()->ioSize(); r_pos++)
 	    if(vfnc.ioFlg(r_pos)&IO::Return) break;
 	//  Process parameters
-	for(i_p = p_p = 0; true; i_p++)
-	{
+	for(i_p = p_p = 0; true; i_p++) {
 	    p_p = (i_p>=r_pos) ? i_p+1 : i_p;
 	    if(p_p >= vfnc.func()->ioSize()) break;
 	    //   Set default value
@@ -216,8 +208,7 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 	//  Make calc
 	vfnc.calc(user);
 	//  Process outputs
-	for(i_p = 0; i_p < (int)prms.size(); i_p++)
-	{
+	for(i_p = 0; i_p < (int)prms.size(); i_p++) {
 	    p_p = (i_p>=r_pos) ? i_p+1 : i_p;
 	    if(p_p >= vfnc.func()->ioSize()) break;
 	    if(!(vfnc.ioFlg(p_p)&IO::Output))   continue;
@@ -235,27 +226,22 @@ TVariant TFunction::objFuncCall( const string &iid, vector<TVariant> &prms, cons
 void TFunction::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function: ")+name(),R_R_R_,"root",grp);
-	if(ctrMkNode("area",opt,-1,"/func",_("Function")))
-	{
-	    if(ctrMkNode("area",opt,-1,"/func/st",_("State")))
-	    {
+	if(ctrMkNode("area",opt,-1,"/func",_("Function"))) {
+	    if(ctrMkNode("area",opt,-1,"/func/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/func/st/st",_("Accessing"),RWRWR_,"root",grp,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/func/st/use",_("Used"),R_R_R_,"root",grp,1,"tp","dec");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration")))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/func/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/func/cfg/id",_("Id"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/func/cfg/name",_("Name"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/func/cfg/descr",_("Description"),R_R_R_,"root",grp,3,"tp","str","cols","90","rows","5");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/io",_("IO")))
-	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/io/io",_("IO"),R_R_R_,"root",grp)) {
 		ctrMkNode("list",opt,-1,"/io/io/0",_("Id"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/1",_("Name"),R_R_R_,"root",grp,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/io/io/2",_("Type"),R_R_R_,"root",grp,1,"tp","str");
@@ -263,24 +249,20 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),R_R_R_,"root",grp,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),R_R_R_,"root",grp,1,"tp","str");
 	    }
-	if(ctrMkNode("area",opt,-1,"/exec",_("Execute"),RWRW__,"root",grp))
-	{
+	if(ctrMkNode("area",opt,-1,"/exec",_("Execute"),RWRW__,"root",grp)) {
 	    ctrMkNode("fld",opt,-1,"/exec/en",_("Enable"),RWRW__,"root",grp,1,"tp","bool");
 	    // Add test form
-	    if(mTVal)
-	    {
+	    if(mTVal) {
 		if(ctrMkNode("area",opt,-1,"/exec/io",_("IO")))
-		    for(int i_io = 0; i_io < ioSize(); i_io++)
-		    {
+		    for(int i_io = 0; i_io < ioSize(); i_io++) {
 			if(mIO[i_io]->hide()) continue;
 			XMLNode *nd = ctrMkNode("fld",opt,-1,("/exec/io/"+io(i_io)->id()).c_str(),io(i_io)->name(),RWRW__,"root",grp);
-			if(nd)
-			{
+			if(nd) {
 			    switch(io(i_io)->type())
 			    {
 				case IO::String:
 				    nd->setAttr("tp","str");
-				    if( io(i_io)->flg( )&IO::FullText ) nd->setAttr("cols","100")->setAttr("rows","4");
+				    if(io(i_io)->flg()&IO::FullText) nd->setAttr("cols","100")->setAttr("rows","4");
 				    break;
 				case IO::Integer:	nd->setAttr("tp","dec");	break;
 				case IO::Real:		nd->setAttr("tp","real");	break;
@@ -300,8 +282,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/func/st/st")
-    {
+    if(a_path == "/func/st/st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",grp,SEC_RD))	opt->setText(run_st?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",grp,SEC_WR))	setStart(s2i(opt->text()));
     }
@@ -309,8 +290,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/func/cfg/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/func/cfg/name" && ctrChkNode(opt))	opt->setText(name());
     else if(a_path == "/func/cfg/descr" && ctrChkNode(opt))	opt->setText(descr());
-    else if(a_path == "/io/io" && ctrChkNode(opt,"get",R_R_R_,"root",grp,SEC_RD))
-    {
+    else if(a_path == "/io/io" && ctrChkNode(opt,"get",R_R_R_,"root",grp,SEC_RD)) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/io/io/0","");
 	XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/io/io/1","");
 	XMLNode *n_type	= ctrMkNode("list",opt,-1,"/io/io/2","");
@@ -318,13 +298,11 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	XMLNode *n_hide	= ctrMkNode("list",opt,-1,"/io/io/4","");
 	XMLNode *n_def	= ctrMkNode("list",opt,-1,"/io/io/5","");
 	//XMLNode *n_vect	= ctrId(opt,"6");
-	for(int i_io = 0; i_io < ioSize(); i_io++)
-	{
+	for(int i_io = 0; i_io < ioSize(); i_io++) {
 	    string tmp_str;
 	    if(n_id)	n_id->childAdd("el")->setText(io(i_io)->id());
 	    if(n_nm)	n_nm->childAdd("el")->setText(io(i_io)->name());
-	    if(n_type)
-	    {
+	    if(n_type) {
 		switch(io(i_io)->type())
 		{
 		    case IO::String:	tmp_str = _("String");	break;
@@ -335,8 +313,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		}
 		n_type->childAdd("el")->setText(tmp_str);
 	    }
-	    if(n_mode)
-	    {
+	    if(n_mode) {
 		if(io(i_io)->flg()&IO::Return)		tmp_str = _("Return");
 		else if(io(i_io)->flg()&IO::Output)	tmp_str = _("Output");
 		else					tmp_str = _("Input");
@@ -346,29 +323,24 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 	    if(n_def)	n_def->childAdd("el")->setText(io(i_io)->def());
 	}
     }
-    else if(a_path == "/exec/en")
-    {
+    else if(a_path == "/exec/en") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(mTVal?"1":"0");
-	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
-	{
+	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
 	    bool to_en_exec = s2i(opt->text());
 	    if(to_en_exec && !mTVal)	mTVal = new TValFunc(id()+"_exec",this);
 	    if(!to_en_exec && mTVal)	{ delete mTVal; mTVal = NULL; }
 	}
     }
-    else if(a_path == "/exec/n_clc" && mTVal)
-    {
+    else if(a_path == "/exec/n_clc" && mTVal) {
 	if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))	TBDS::genDBSet(nodePath()+"ntCalc",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/exec/tm" && mTVal && ctrChkNode(opt,"get",R_R___,"root",grp,SEC_RD))
 	opt->setText(TSYS::time2str(SYS->cntrGet(nodePath('.'))));
-    else if(a_path.substr(0,8) == "/exec/io" && mTVal)
-    {
+    else if(a_path.substr(0,8) == "/exec/io" && mTVal) {
 	string io_id = TSYS::pathLev(a_path,2);
 	for(unsigned i_io = 0; i_io < mIO.size(); i_io++)
-	    if(io_id == io(i_io)->id())
-	    {
+	    if(io_id == io(i_io)->id()) {
 		if(ctrChkNode(opt,"get",RWRW__,"root",grp,SEC_RD))
 		    opt->setText( (mTVal->ioType(i_io)==IO::Real) ? r2s(mTVal->getR(i_io),6) : mTVal->getS(i_io) );
 		if(ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
@@ -376,8 +348,7 @@ void TFunction::cntrCmdProc( XMLNode *opt )
 		break;
 	    }
     }
-    else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR))
-    {
+    else if(a_path == "/exec/calc" && mTVal && ctrChkNode(opt,"set",RWRW__,"root",grp,SEC_WR)) {
 	int n_tcalc = s2i(TBDS::genDBGet(nodePath()+"ntCalc","10",opt->attr("user")));
 	string wuser = opt->attr("user");
 	time_t tm_lim = SYS->sysTm()+STD_WAIT_TM;
@@ -425,10 +396,7 @@ void IO::setId( const string &val )
     owner->postIOCfgChange();
 }
 
-void IO::setName( const string &val )
-{
-    mName = val;
-}
+void IO::setName( const string &val )	{ mName = val; }
 
 void IO::setType( Type val )
 {
@@ -488,16 +456,13 @@ TValFunc::~TValFunc( )
 void TValFunc::setFunc( TFunction *ifunc, bool att_det )
 {
     if(mFunc)	funcDisConnect(att_det);
-    if(ifunc)
-    {
+    if(ifunc) {
 	mFunc = ifunc;
-	if(att_det)
-	{
+	if(att_det) {
 	    mFunc->AHDConnect();
 	    mFunc->valAtt(this);
 	}
-	for(int i_vl = 0; i_vl < mFunc->ioSize(); i_vl++)
-	{
+	for(int i_vl = 0; i_vl < mFunc->ioSize(); i_vl++) {
 	    SVl val;
 	    val.tp = mFunc->io(i_vl)->type();
 	    val.mdf = false;
@@ -518,8 +483,7 @@ void TValFunc::funcDisConnect( bool det )
 {
     ctxClear();
 
-    if(mFunc)
-    {
+    if(mFunc) {
 	for(unsigned i_vl = 0; i_vl < mVal.size(); i_vl++)
 	    switch( mVal[i_vl].tp )
 	    {
@@ -528,8 +492,7 @@ void TValFunc::funcDisConnect( bool det )
 	    }
 
 	mVal.clear();
-	if(det)
-	{
+	if(det) {
 	    mFunc->valDet(this);
 	    mFunc->AHDDisConnect();
 	    mFunc = NULL;
@@ -578,8 +541,7 @@ string TValFunc::getS( unsigned id )
 	case IO::Real:	  { double tvl = getR(id); return (tvl!=EVAL_REAL) ? r2s(tvl) : EVAL_STR; }
 	case IO::Boolean: { char tvl = getB(id);   return (tvl!=EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
 	case IO::Object:  return getO(id).at().getStrXML();
-	case IO::String:
-	{
+	case IO::String: {
 	    pthread_mutex_lock(&mRes);
 	    string tvl(mVal[id].val.s->data(), mVal[id].val.s->size());
 	    pthread_mutex_unlock(&mRes);
@@ -663,7 +625,9 @@ void TValFunc::setS( unsigned id, const string &val )
 	case IO::Integer:	setI(id, (val!=EVAL_STR) ? s2ll(val) : EVAL_INT);	break;
 	case IO::Real:		setR(id, (val!=EVAL_STR) ? s2r(val) : EVAL_REAL);	break;
 	case IO::Boolean:	setB(id, (val!=EVAL_STR) ? (bool)s2i(val) : EVAL_BOOL);	break;
-	case IO::Object:	setO(id, TVarObj::parseStrXML(val, NULL, *mVal[id].val.o));	break;
+	case IO::Object:
+	    setO(id, (val!=EVAL_STR) ? TVarObj::parseStrXML(val,NULL,*mVal[id].val.o) : new TEValObj());
+	    break;
 	case IO::String:
 	    pthread_mutex_lock(&mRes);
 	    if(mdfChk() && val != *mVal[id].val.s) mVal[id].mdf = true;
@@ -681,6 +645,7 @@ void TValFunc::setI( unsigned id, int64_t val )
 	case IO::String:	setS(id, (val!=EVAL_INT) ? ll2s(val) : EVAL_STR);	break;
 	case IO::Real:		setR(id, (val!=EVAL_INT) ? val : EVAL_REAL);		break;
 	case IO::Boolean:	setB(id, (val!=EVAL_INT) ? (bool)val : EVAL_BOOL);	break;
+	case IO::Object:	if(val == EVAL_INT) setO(id, new TEValObj());		break;
 	case IO::Integer:
 	    if(mdfChk() && val != mVal[id].val.i) mVal[id].mdf = true;
 	    mVal[id].val.i = val;
@@ -696,6 +661,7 @@ void TValFunc::setR( unsigned id, double val )
 	case IO::String:	setS(id, (val!=EVAL_REAL) ? r2s(val) : EVAL_STR);	break;
 	case IO::Integer:	setI(id, (val!=EVAL_REAL) ? (int64_t)val : EVAL_INT);	break;
 	case IO::Boolean:	setB(id, (val!=EVAL_REAL) ? (bool)val : EVAL_BOOL);	break;
+	case IO::Object:	if(val == EVAL_REAL) setO(id, new TEValObj());		break;
 	case IO::Real:
 	    if(isnan(val)) val = 0;	//Check for 'Not a Number'
 	    if(mdfChk() && val != mVal[id].val.r) mVal[id].mdf = true;
@@ -712,6 +678,7 @@ void TValFunc::setB( unsigned id, char val )
 	case IO::String:	setS(id, (val!=EVAL_BOOL) ? i2s((bool)val) : EVAL_STR);	break;
 	case IO::Integer:	setI(id, (val!=EVAL_BOOL) ? (bool)val : EVAL_INT);	break;
 	case IO::Real:		setR(id, (val!=EVAL_BOOL) ? (bool)val : EVAL_REAL);	break;
+	case IO::Object:	if(val == EVAL_BOOL) setO(id, new TEValObj());		break;
 	case IO::Boolean:
 	    if(mdfChk() && val != mVal[id].val.b) mVal[id].mdf = true;
 	    mVal[id].val.b = val;
@@ -766,8 +733,7 @@ void TValFunc::ctxSet( int key, TValFunc *val )
 {
     map<int,TValFunc* >::iterator vc = vctx.find(key);
     if(vc == vctx.end()) vctx[key] = val;
-    else
-    {
+    else {
 	if(vc->second) delete vc->second;
 	vc->second = val;
     }
@@ -788,11 +754,11 @@ TVariant TFuncArgsObj::propGet( const string &id )
 {
     int apos = -1;
 
-    if(!vf.func()) return EVAL_REAL;
+    if(!vf.func())	return EVAL_REAL;
     if(id == "length")	return vf.ioSize();
     if(id.size() && isdigit(id[0])) apos = s2i(id);
     if(apos < 0 || apos >= vf.ioSize()) apos = vf.ioId(id);
-    if(apos != -1) return vf.get(apos);
+    if(apos != -1)	return vf.get(apos);
     return EVAL_REAL;
 }
 

@@ -45,8 +45,7 @@ class IO
     public:
 	//Data
 	enum Type { String, Integer, Real, Boolean, Object };
-	enum IOFlgs
-	{
+	enum IOFlgs {
 	    Default = 0x00,	//Default mode (Input IO)
 	    Output  = 0x01,
 	    Return  = 0x02,
@@ -110,7 +109,7 @@ class TFunction : public TCntrNode
 	Res &fRes( )			{ return f_res; }
 
 	void setId( const string &vl );
-	virtual void setStart( bool val )  { run_st = val; }
+	virtual void setStart( bool val ) { run_st = val; }
 
 	//> IO
 	void ioList( vector<string> &list );
@@ -174,29 +173,25 @@ class TValFunc
 	void ioList( vector<string> &list );
 	int  ioId( const string &id );
 	int  ioSize( );
-	IO::Type ioType( unsigned id )
-	{
+	IO::Type ioType( unsigned id ) {
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error!"),"ioType()", id);
 	    return mFunc->io(id)->type();
 	}
-	unsigned ioFlg( unsigned id )
-	{
+	unsigned ioFlg( unsigned id ) {
 	    if(!mFunc) throw TError("ValFunc", _("%s: No function set!"),"ioFlg()", id);
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error for function '%s'!"), "ioFlg()", id, mFunc->nodePath().c_str());
 	    return mFunc->io(id)->flg();
 	}
-	bool ioHide( unsigned id )
-	{
+	bool ioHide( unsigned id ) {
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error!"), "ioHide()", id);
 	    return mFunc->io(id)->hide();
 	}
-	bool ioMdf( unsigned id )
-	{
+	bool ioMdf( unsigned id ) {
 	    if(id >= mVal.size()) throw TError("ValFunc", _("%s: Id or IO %d error!"), "ioMdf()", id);
 	    return mVal[id].mdf;
 	}
 
-	//> get IO value
+	// Get IO value
 	TVariant get( unsigned id );
 	string	getS( unsigned id );
 	int64_t	getI( unsigned id );
@@ -204,7 +199,7 @@ class TValFunc
 	char	getB( unsigned id );
 	AutoHD<TVarObj>	getO( unsigned id );
 
-	//> set IO value
+	// Set IO value
 	void set( unsigned id, const TVariant &val );
 	void setS( unsigned id, const string &val );
 	void setI( unsigned id, int64_t val );
@@ -212,17 +207,17 @@ class TValFunc
 	void setB( unsigned id, char val );
 	void setO( unsigned id, AutoHD<TVarObj> val );
 
-	//> Calc function
+	// Calc function
 	virtual void calc( const string &user = "" );
 
-	//> Attached function
+	// Attached function
 	TFunction *func( )		{ return mFunc; }
 	void setFunc( TFunction *func, bool att_det = true );
 
 	virtual void preIOCfgChange( );
 	virtual void postIOCfgChange( );
 
-	//> Context operations
+	// Context operations
 	TValFunc *ctxGet( int key );
 	void ctxSet( int key, TValFunc *val );
 	void ctxClear( );
@@ -236,8 +231,7 @@ class TValFunc
 	{
 	    unsigned short	tp	: 4;
 	    unsigned short	mdf	: 1;
-	    union
-	    {
+	    union {
 		string	*s;
 		double	r;
 		int64_t	i;
@@ -272,10 +266,10 @@ class TValFunc
 class TFuncArgsObj : public TVarObj
 {
     public:
-        //Methods
-        TFuncArgsObj( TValFunc &ivf ) : vf(ivf)    { }
+	//Methods
+	TFuncArgsObj( TValFunc &ivf ) : vf(ivf)    { }
 
-        string objName( )       { return "FuncArgs"; }
+	string objName( )       { return "FuncArgs"; }
 
 	TVariant propGet( const string &id );
 	void propSet( const string &id, TVariant val );
