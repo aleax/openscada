@@ -81,20 +81,6 @@ class TSYS : public TCntrNode
 	//Data
 	enum Code	{ PathEl, HttpURL, Html, JavaSc, SQL, Custom, base64, FormatPrint, oscdID, Bin, Reverse, ShieldSimb };
 	enum IntView	{ Dec, Oct, Hex };
-	enum Errors
-	{
-	    //> DB errors code
-	    DBInit = 1,		//init DB error
-	    DBConn,		//connect to DB is error
-	    DBInernal,		//internal error
-	    DBRequest,		//request to DB is error
-	    DBOpen,		//open DB is error
-	    DBOpenTable,	//open table error
-	    DBClose,		//close DB or table error
-	    DBTableEmpty,	//table is empty
-	    DBRowNoPresent,	//no present of requested row
-	    DBReadOnly		//read only db
-	};
 
 	//Public methods
 	TSYS( int argi, char ** argb, char **env );
@@ -139,7 +125,7 @@ class TSYS : public TCntrNode
 	string cfgFile( )	{ return mConfFile; }
 	XMLNode &cfgRoot( )	{ return rootN; }
 	XMLNode *cfgNode( const string &path, bool create = false );
-	void	modifCfg( )	{ rootModifCnt++; }
+	void	modifCfg( bool chkPossibleWR = false );
 
 	string	workDB( )	{ return mWorkDB; }
 	string	selDB( )	{ return mSelDB; }
@@ -219,9 +205,10 @@ class TSYS : public TCntrNode
 	static string pathLev( const string &path, int level, bool decode = true, int *off = NULL );
 	static string path2sepstr( const string &path, char sep = '.' );
 	static string sepstr2path( const string &str, char sep = '.' );
-	static string strEncode( const string &in, Code tp, const string &symb = " \t\n");
-	static string strDecode( const string &in, Code tp = Custom );
+	static string strEncode( const string &in, Code tp, const string &opt1 = "" );
+	static string strDecode( const string &in, Code tp = Custom, const string &opt1 = "" );
 	static string strMess( const char *fmt, ... );
+	static string strMess( unsigned len, const char *fmt, ... );
 	static string strLabEnum( const string &base );
 
 	static string strCompr( const string &in, int lev = -1 );
@@ -382,8 +369,9 @@ inline string r2s( double val, int prec = 15, char tp = 'g' )	{ return TSYS::rea
 inline string tm2s( time_t tm, const string &format )		{ return TSYS::time2str(tm, format); }
 inline string tm2s( double utm )				{ return TSYS::time2str(utm); }
 
-inline int s2i( const string &val )	{ return atoi(val.c_str()); }
-inline double s2r( const string &val )	{ return atof(val.c_str()); }
+inline int s2i( const string &val )		{ return atoi(val.c_str()); }
+inline long long s2ll( const string &val )	{ return atoll(val.c_str()); }
+inline double s2r( const string &val )		{ return atof(val.c_str()); }
 
 extern TSYS *SYS;
 }

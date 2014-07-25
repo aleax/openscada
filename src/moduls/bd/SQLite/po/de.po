@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.SQLite 1.6.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-02-21 16:39+0200\n"
+"POT-Creation-Date: 2014-07-21 18:09+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -46,8 +46,8 @@ msgid "Unknown error"
 msgstr "Unbekannter Fehler"
 
 #, c-format
-msgid "Getting table error: %s"
-msgstr "Fehler bei der Abfrage der Tabelle: %s"
+msgid "Request \"%s\" error: %s"
+msgstr "Request \"%s\" Fehler: %s"
 
 msgid ""
 "SQLite DB address must be written as: [<FileDBPath>].\n"
@@ -72,8 +72,6 @@ msgstr "Geöffnete Transaktion schlissen"
 msgid "Table is empty."
 msgstr "Tabelle ist leer."
 
-msgid "Row is not present."
-msgstr "Datensatz ist nicht vorhanden."
-
-msgid "Deletion is not permitted. Data base is read only."
-msgstr "Das Löschen ist nicht erlaubt. Die Datenbank kann nur gelesen werden."
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr "Datensatz \"%s\" ist nicht vorhanden."

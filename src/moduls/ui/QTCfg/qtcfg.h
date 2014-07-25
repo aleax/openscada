@@ -121,7 +121,7 @@ class ConfApp: public QMainWindow
 	void tablePopup( const QPoint &pos );		//QTable popup menu
 	void tableSet( int row, int col );		//QTable set
 	void editChange( const QString& );		//Change Edit (LineEdit and TextEdit)
-	void applyButton( );				//Apply button
+	void applyButton( QWidget *src = NULL );	//Apply button
 	void cancelButton( );				//Cancel button
 	void imgPopup( const QPoint &pos );		//Image popup
 
@@ -144,6 +144,8 @@ class ConfApp: public QMainWindow
 	// Controll system requests
 	void initHosts();
 	int cntrIfCmd( XMLNode &node );
+
+	string getPrintVal( const string &vl );
 
 	//Attributes
 	QTimer		*endRunTimer, *autoUpdTimer;
@@ -172,6 +174,8 @@ class ConfApp: public QMainWindow
 	vector<string>	next;
 
 	vector<string>	stMess;
+
+	map<string, QWidget* >	noApplyWdgs;
 
 	bool		tbl_init;
     };

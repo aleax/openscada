@@ -28,6 +28,12 @@
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_VERSION
+
 #include <terror.h>
 #include <tsys.h>
 #include <tmess.h>
@@ -122,31 +128,40 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 TMdContr::TMdContr(string name_c, const string &daq_db, TElem *cfgelem) :
     TController(name_c,daq_db,cfgelem),
-    m_prior(cfg("PRIOR").getId()), m_pattr_lim(cfg("PATTR_LIM").getId()), m_retr(cfg("RETR").getId()), m_tm(cfg("TM").getId()),
-    prc_st(false), call_st(false), endrun_req(false), prmEnErr(false), tm_gath(0)
+    mPrior(cfg("PRIOR").getId()), mPattrLim(cfg("PATTR_LIM").getId()), mRetr(cfg("RETR").getId()), mTm(cfg("TM").getId()),
+    prcSt(false), callSt(false), endrunReq(false), prmEnErr(false), tmGath(0), acqErr(dataRes)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&enRes, &attrM);
+    pthread_mutex_init(&dataRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     cfg("PRM_BD").setS("SNMPPrm_"+name_c);
 }
 
 TMdContr::~TMdContr( )
 {
     if(run_st) stop();
+
+    pthread_mutex_destroy(&enRes);
+    pthread_mutex_destroy(&dataRes);
 }
 
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
-    if(startStat() && !redntUse())
-    {
-	if(!acq_err.getVal().empty())	rez = acq_err.getVal();
-	else
-	{
-	    if(call_st)	rez += TSYS::strMess(_("Call now. "));
+    if(startStat() && !redntUse()) {
+	if(!acqErr.getVal().empty())	rez = acqErr.getVal();
+	else {
+	    if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	    if(period())rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
 	    else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(tm_gath).c_str());
+	    rez += TSYS::strMess(_("Spent time: %s."),tm2s(tmGath).c_str());
 	}
     }
+
     return rez;
 }
 
@@ -159,35 +174,30 @@ struct snmp_session *TMdContr::getSess( )
     else if(ver() == "2c")	session.version = SNMP_VERSION_2c;
     else if(ver() == "2u")	session.version = SNMP_VERSION_2u;
     else if(ver() == "3")	session.version = SNMP_VERSION_3;
-    w_addr = TSYS::strParse(cfg("ADDR").getS(), 0, ":");
-    session.peername = (char *)w_addr.c_str();
-    session.retries = m_retr;
-    session.timeout = m_tm*1000000;
-    if(session.version != SNMP_VERSION_3)
-    {
-	w_comm = cfg("COMM").getS();
-	session.community = (u_char*)w_comm.c_str();
-	session.community_len = w_comm.size();
+    wAddr = TSYS::strParse(cfg("ADDR").getS(), 0, ":");
+    session.peername = (char *)wAddr.c_str();
+    session.retries = mRetr;
+    session.timeout = mTm*1000000;
+    if(session.version != SNMP_VERSION_3) {
+	wComm = cfg("COMM").getS();
+	session.community = (u_char*)wComm.c_str();
+	session.community_len = wComm.size();
     }
-    else
-    {
-	w_comm = cfg("COMM").getS();
-	session.securityName = (char*)w_comm.c_str();
+    else {
+	wComm = cfg("COMM").getS();
+	session.securityName = (char*)wComm.c_str();
 	session.securityNameLen = strlen(session.securityName);
 
 	session.securityLevel = SNMP_SEC_LEVEL_NOAUTH;
 	if(secLev() == "authNoPriv")	session.securityLevel = SNMP_SEC_LEVEL_AUTHNOPRIV;
 	else if(secLev() == "authPriv")	session.securityLevel = SNMP_SEC_LEVEL_AUTHPRIV;
 
-	if(session.securityLevel != SNMP_SEC_LEVEL_NOAUTH)
-	{
-	    if(secAuthProto() == "SHA")
-	    {
+	if(session.securityLevel != SNMP_SEC_LEVEL_NOAUTH) {
+	    if(secAuthProto() == "SHA") {
 		session.securityAuthProto = usmHMACSHA1AuthProtocol;
 		session.securityAuthProtoLen = sizeof(usmHMACSHA1AuthProtocol)/sizeof(oid);
 	    }
-	    else
-	    {
+	    else {
 		session.securityAuthProto = usmHMACMD5AuthProtocol;
 		session.securityAuthProtoLen = sizeof(usmHMACMD5AuthProtocol)/sizeof(oid);
 	    }
@@ -199,11 +209,9 @@ struct snmp_session *TMdContr::getSess( )
 		throw TError(nodePath().c_str(),_("Error generating Ku from authentication pass phrase."));
 	}
 
-	if(session.securityLevel == SNMP_SEC_LEVEL_AUTHPRIV)
-	{
+	if(session.securityLevel == SNMP_SEC_LEVEL_AUTHPRIV) {
 #ifdef USM_PRIV_PROTO_AES_LEN
-	    if(secPrivProto() == "AES")
-	    {
+	    if(secPrivProto() == "AES") {
 		session.securityPrivProto = usmAESPrivProtocol;
 		session.securityPrivProtoLen = sizeof(usmAESPrivProtocol)/sizeof(oid);
 	    }
@@ -267,30 +275,30 @@ void TMdContr::enable_( )	{ prmEnErr = false; }
 void TMdContr::start_( )
 {
     //Schedule process
-    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    mPer = TSYS::strSepParse(cron(), 1, ' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
     getSess();
 
     //Start the gathering data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), m_prior, TMdContr::Task, this);
+    if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
 
-void TMdContr::prmEn(const string &id, bool val)
+void TMdContr::prmEn( TMdPrm *prm, bool val )
 {
-    ResAlloc res(en_res, true);
-
     unsigned i_prm;
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(p_hd[i_prm].at().id() == id) break;
 
-    if(val && i_prm >= p_hd.size()) p_hd.push_back(at(id));
-    if(!val && i_prm < p_hd.size()) p_hd.erase(p_hd.begin()+i_prm);
+    MtxAlloc res(enRes, true);
+    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if(&pHd[i_prm].at() == prm) break;
+
+    if(val && i_prm >= pHd.size()) pHd.push_back(prm);
+    if(!val && i_prm < pHd.size()) pHd.erase(pHd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
@@ -303,58 +311,57 @@ void *TMdContr::Task( void *icntr )
     void *ss =  snmp_sess_open(cntr.getSess());
     if(!ss) { mess_err(mod->nodePath().c_str(), "%s", _("Error SNMP session open.")); return NULL; }
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endrunReq = false;
+    cntr.prcSt = true;
 
-    while(!cntr.endrun_req)
-    {
-	cntr.call_st = true;
+    while(!cntr.endrunReq) {
+	cntr.callSt = true;
 	int64_t t_cnt = TSYS::curTime();
 
 	// Update controller's data
 	daqerr.clear();
-	cntr.en_res.resRequestR();
-	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse(); i_p++)
-	    try { cntr.p_hd[i_p].at().upVal(ss); }
+	MtxAlloc res(cntr.enRes, true);
+	for(unsigned i_p = 0; i_p < cntr.pHd.size() && !cntr.redntUse(); i_p++)
+	    try { cntr.pHd[i_p].at().upVal(ss); }
 	    catch(TError err) { daqerr = err.mess; }
-	cntr.en_res.resRelease();
-	cntr.tm_gath = TSYS::curTime()-t_cnt;
-	cntr.call_st = false;
+	res.unlock();
+	cntr.tmGath = TSYS::curTime()-t_cnt;
+	cntr.callSt = false;
 
-	cntr.acq_err.setVal(daqerr);
+	cntr.acqErr.setVal(daqerr);
 
 	TSYS::taskSleep(cntr.period(), cntr.period()?0:TSYS::cron(cntr.cron()));
     }
 
     snmp_sess_close(ss);
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }
 
-string TMdContr::oid2str( oid *ioid, size_t isz )
+string TMdContr::oid2str( oid *ioid, size_t isz, const string &sep )
 {
     string rez;
     for(unsigned i_el = 0; i_el < isz; i_el++)
-	rez += "_"+TSYS::int2str(ioid[i_el]);
+	rez += sep+i2s(ioid[i_el]);
+
     return rez;
 }
 
-void TMdContr::str2oid( const string &str, oid *ioid, size_t &isz )
+void TMdContr::str2oid( const string &str, oid *ioid, size_t &isz, const string &sep )
 {
     string sb;
     unsigned n = 0;
-    for(int off = 0; ((sb=TSYS::strParse(str,0,"_",&off)).size() || off < (int)str.size()) && n < isz; )
-	if(sb.size()) ioid[n++] = atoi(sb.c_str());
+    for(int off = 0; ((sb=TSYS::strParse(str,0,sep,&off)).size() || off < (int)str.size()) && n < isz; )
+	if(sb.size()) ioid[n++] = s2i(sb);
     isz = n;
 }
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",cfg("SCHEDULE").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,4,
 	    "tp","str","dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
@@ -367,17 +374,14 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	    "help",_("Community group or user."));
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/PATTR_LIM",cfg("PATTR_LIM").fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID);
 	ctrRemoveNode(opt,"/cntr/cfg/V3");
-	if(ver() == "3")
-	{
+	if(ver() == "3") {
 	    ctrMkNode("fld",opt,-1,"/cntr/cfg/SecLev",_("Security level"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,5,"tp","str","idm","1","dest","select",
 		"sel_id","noAurhNoPriv;authNoPriv;authPriv","sel_list",_("No auth/No privacy;Auth/No privacy;Auth/Privacy"));
-	    if(secLev() != "noAurhNoPriv")
-	    {
+	    if(secLev() != "noAurhNoPriv") {
 		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthProto",_("Auth"),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","dest","select","sel_list","MD5;SHA");
 		ctrMkNode("fld",opt,-1,"/cntr/cfg/AuthPass","",startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    if(secLev() == "authPriv")
-	    {
+	    if(secLev() == "authPriv") {
 #ifdef USM_PRIV_PROTO_AES_LEN
 		const char *prtLs = "DES;AES";
 #else
@@ -392,28 +396,23 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/SecLev")
-    {
+    if(a_path == "/cntr/cfg/SecLev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(secLev());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecLev(opt->text());
     }
-    else if(a_path == "/cntr/cfg/AuthProto")
-    {
+    else if(a_path == "/cntr/cfg/AuthProto") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(secAuthProto());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecAuthProto(opt->text());
     }
-    else if(a_path == "/cntr/cfg/AuthPass")
-    {
+    else if(a_path == "/cntr/cfg/AuthPass") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(secAuthPass().size(),'*'));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecAuthPass(opt->text());
     }
-    else if(a_path == "/cntr/cfg/PrivProto")
-    {
+    else if(a_path == "/cntr/cfg/PrivProto") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(secPrivProto());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecPrivProto(opt->text());
     }
-    else if(a_path == "/cntr/cfg/PrivPass")
-    {
+    else if(a_path == "/cntr/cfg/PrivPass") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(string(secPrivPass().size(),'*'));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSecPrivPass(opt->text());
     }
@@ -446,20 +445,17 @@ void TMdPrm::enable( )
 
     TParamContr::enable();
 
-    owner().prmEn(id(), true);
+    owner().prmEn(this, true);
 
     parseOIDList(OIDList());
 
     //Init attributes call
     // Start SNMP-net session
-    if(owner().enableStat() || !owner().prmEnErr)
-    {
+    if(owner().enableStat() || !owner().prmEnErr) {
 	void *ss =  snmp_sess_open(owner().getSess());
-	if(ss)
-	{
+	if(ss) {
 	    try { upVal(ss,true); }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		owner().prmEnErr = true;
 		mess_err(nodePath().c_str(),"%s",err.mess.c_str());
 	    }
@@ -472,7 +468,7 @@ void TMdPrm::disable( )
 {
     if(!enableStat())  return;
 
-    owner().prmEn(id(), false);
+    owner().prmEn(this, false);
 
     TParamContr::disable();
 
@@ -495,22 +491,19 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 
     vector<string> als;
 
-    for(unsigned ioid = 0; ioid < lsOID().size(); ioid++)
-    {
+    for(unsigned ioid = 0; ioid < lsOID().size(); ioid++) {
 	oid_root_len = oid_next_len = lsOID()[ioid].size()/sizeof(oid);
 	memmove(oid_root,lsOID()[ioid].data(),oid_root_len*sizeof(oid));
 	memmove(oid_next,oid_root,oid_root_len*sizeof(oid));
 
 	bool isScalar = oid_root_len && (oid_root[oid_root_len-1] == 0);
 	bool running = true;
-	while(running && (el_cnt++) < owner().pAttrLimit())
-	{
+	while(running && (el_cnt++) < owner().pAttrLimit()) {
 	    struct snmp_pdu *pdu = snmp_pdu_create(isScalar ? SNMP_MSG_GET : SNMP_MSG_GETNEXT);
 	    snmp_add_null_var(pdu, oid_next, oid_next_len);
 	    int status = snmp_sess_synch_response(ss, pdu, &response);
 	    if(status == STAT_SUCCESS && response && response->errstat == SNMP_ERR_NOERROR)
-		for(var = response->variables; var; var = var->next_variable)
-		{
+		for(var = response->variables; var; var = var->next_variable) {
 		    if((var->name_length < oid_root_len) || (memcmp(oid_root,var->name,oid_root_len*sizeof(oid)) != 0))
 		    {
 			running = false;
@@ -519,27 +512,38 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 		    // Get or create element
 		    soid = owner().oid2str(var->name,var->name_length);
 		    als.push_back(soid);
-		    if(!elem().fldPresent(soid))
-		    {
+		    if(!elem().fldPresent(soid)) {
+			TFld::Type tp = (TFld::Type)-1;
+			unsigned flg = TVal::DirWrite;
+			string selIds, selLabs;
+
 			snprint_objid(tbuf,sizeof(tbuf),var->name,var->name_length);
+
+			struct tree *subtree = get_tree_head();
+			if(subtree) subtree = get_tree(var->name, var->name_length, subtree);
+			if(subtree) {
+			    if(!(subtree->access == MIB_ACCESS_READWRITE || subtree->access == MIB_ACCESS_WRITEONLY))
+				flg |= TFld::NoWrite;
+			    if(subtree->enums) {
+				flg |= TFld::Selected;
+				for(struct enum_list *enums = subtree->enums; enums; enums = enums->next)
+				{
+				    selIds += i2s(enums->value)+";";
+				    selLabs += string(enums->label)+";";
+				}
+			    }
+			}
+
 			switch(var->type)
 			{
-			    case ASN_BOOLEAN:
-				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Boolean,TFld::NoWrite));
-				break;
-			    case ASN_INTEGER:
-				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Integer,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
-				break;
+			    case ASN_BOOLEAN:		tp = TFld::Boolean;	break;
+			    case ASN_INTEGER:		tp = TFld::Integer;	break;
 			    case ASN_OPAQUE_FLOAT:
-			    case ASN_OPAQUE_DOUBLE:
-				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
-				break;
+			    case ASN_OPAQUE_DOUBLE:	tp = TFld::Real;	break;
 			    case ASN_GAUGE:
 			    case ASN_COUNTER:
 			    case ASN_TIMETICKS:
-			    case ASN_UINTEGER:
-				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::Real,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
-				break;
+			    case ASN_UINTEGER:		tp = TFld::Real;	break;
 			    case ASN_OCTET_STR:
 			    case ASN_OPAQUE:
 			    case ASN_IPADDRESS:
@@ -548,47 +552,46 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			    case ASN_OPAQUE_COUNTER64:
 			    case ASN_OPAQUE_U64:
 			    case ASN_OPAQUE_I64:
-			    case ASN_BIT_STR:
-				elem().fldAdd(new TFld(soid.c_str(),tbuf,TFld::String,TVal::DirWrite,"","","","",TSYS::int2str(var->type).c_str()));
-				break;
+			    case ASN_BIT_STR:		tp = TFld::String;	break;
 			    case SNMP_ENDOFMIBVIEW:
 			    case SNMP_NOSUCHOBJECT:
-			    case SNMP_NOSUCHINSTANCE:
-				running = false;
-				break;
+			    case SNMP_NOSUCHINSTANCE:	running = false;	break;
 			}
+			if(tp >= 0)
+			    elem().fldAdd(new TFld(soid.c_str(),tbuf,tp,flg,"","",
+				selIds.c_str(),selLabs.c_str(),(i2s(var->type)+"\n"+(subtree->hint?subtree->hint:"")).c_str()));
 		    }
 		    // Set value
-		    if(!onlyInit)
-		    {
+		    if(!onlyInit) {
 			AutoHD<TVal> attr = vlAt(soid);
+			
 			switch(var->type)
 			{
-			    case ASN_BOOLEAN:
-				attr.at().setB((bool)*var->val.integer,0,true);
-				break;
-			    case ASN_INTEGER:
-				attr.at().setI(*var->val.integer,0,true);
-				break;
+			    case ASN_BOOLEAN: attr.at().setB((bool)*var->val.integer, 0, true);	break;
+			    case ASN_INTEGER: attr.at().setI(*var->val.integer, 0, true);	break;
 			    case ASN_GAUGE:
 			    case ASN_COUNTER:
 			    case ASN_TIMETICKS:
-			    case ASN_UINTEGER:
-				attr.at().setR(*(unsigned long*)var->val.integer,0,true);
-				break;
+			    case ASN_UINTEGER: attr.at().setR(*(unsigned long*)var->val.integer, 0, true);	break;
 			    case ASN_OCTET_STR:
-			    case ASN_OPAQUE:
-				attr.at().setS(string((char*)var->val.string,var->val_len),0,true);
+			    case ASN_OPAQUE: {
+				string hint = TSYS::strLine(attr.at().fld().reserve(),1);
+				size_t fndPos;
+				if((fndPos=hint.find("x")) != string::npos)
+				    hint = TSYS::strDecode(string((char*)var->val.string,var->val_len), TSYS::Bin,
+					((fndPos+1)<hint.size())?hint.substr(fndPos+1,1):"");
+				else hint = string((char*)var->val.string,var->val_len);
+				attr.at().setS(hint, 0, true);
 				break;
-			    case ASN_IPADDRESS:
-			    {
+			    }
+			    case ASN_IPADDRESS: {
 				u_char *ip = (u_char*)var->val.string;
 				attr.at().setS(TSYS::strMess("%d.%d.%d.%d",ip[0],ip[1],ip[2],ip[3]), 0, true);
 				break;
 			    }
 			    case ASN_OBJECT_ID:
 				snprint_objid(tbuf, sizeof(tbuf), (oid*)(var->val.objid), var->val_len/sizeof(oid));
-				attr.at().setS(tbuf,0,true);
+				attr.at().setS(tbuf, 0, true);
 				break;
 			    case ASN_COUNTER64:
 			    case ASN_OPAQUE_COUNTER64:
@@ -618,8 +621,7 @@ void TMdPrm::upVal( void *ss, bool onlyInit )
 			}
 		    }
 		    if(isScalar) { running = false; break; }
-		    if(running)
-		    {
+		    if(running) {
 			memmove((char*)oid_next, (char*)var->name, var->name_length*sizeof(oid));
 			oid_next_len = var->name_length;
 		    }
@@ -658,6 +660,7 @@ void TMdPrm::parseOIDList(const string &ioid)
     string sel;
     for(int ioff = 0; (sel=TSYS::strSepParse(OIDList(),0,'\n',&ioff)).size(); )
     {
+	if(sel[0] == '#') continue;
 	tmpoid_len = MAX_OID_LEN;
 	if(snmp_parse_oid(sel.c_str(),tmpoid,&tmpoid_len))
 	    ls_oid.push_back(string((char*)tmpoid,tmpoid_len*sizeof(oid)));
@@ -671,20 +674,59 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
 
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),RWRWR_,"root",SDAQ_ID,2,"rows","8",
+	ctrMkNode2("fld",opt,-1,"/prm/cfg/OID_LS",cfg("OID_LS").fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,"SnthHgl","1","rows","8",
 	    "help",_("SNMP OID list, include directories for get all subitems. OID can write in the methods:\n"
 		"  \".1.3.6.1.2.1.1\" - direct code addressing for object \"System\";\n"
 		"  \".iso.org.dod.internet.mgmt.mib-2.system\" - full symbol to direct code addressing for object \"System\";\n"
 		"  \"system.sysDescr.0\" - simple, not full path, addressing from root alias (object \"System\");\n"
-		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for \"system.sysDescr.0\"."));
+		"  \"SNMPv2-MIB::sysDescr.0\" - addressing from MIB base by module name for \"system.sysDescr.0\"."),NULL);
+	if(get_tree_head())
+	    ctrMkNode2("fld",opt,-1,"/prm/cfg/MIB",_("MIB Tree"),enableStat()?0:RWRW__,"root",SDAQ_ID,"dest","select","select","/prm/cfg/MIB_lst",NULL);
 	return;
     }
 
     //Process command to page
-    TParamContr::cntrCmdProc(opt);
+    if(a_path == "/prm/cfg/OID_LS" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD))
+	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
+    else if(a_path == "/prm/cfg/MIB") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD)) opt->setText(TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR)) {
+	    if(opt->text() == _("<<Append current>>")) {
+		oid oidn[MAX_OID_LEN];
+		size_t oidn_len = MAX_OID_LEN;
+		string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user"));
+		if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len))
+		{
+		    string vLs = OIDList(), vS;
+		    for(int off = 0; (vS=TSYS::strLine(vLs,0,&off)).size() && vS != baseIt; ) ;
+		    if(vS.empty()) setOIDList(vLs+((vLs.size() && vLs[vLs.size()-1] != '\n')?"\n":"")+baseIt);
+		}
+	    }
+	    else TBDS::genDBSet(nodePath()+"selOID", opt->text(), opt->attr("user"));
+	}
+    }
+    else if(a_path == "/prm/cfg/MIB_lst" && ctrChkNode(opt))
+    {
+	oid oidn[MAX_OID_LEN];
+	size_t oidn_len = MAX_OID_LEN;
+	string baseIt = TBDS::genDBGet(nodePath()+"selOID","",opt->attr("user")), baseIt_, baseIt_s;
+	struct tree *subTr = get_tree_head();
+	if(snmp_parse_oid(baseIt.c_str(),oidn,&oidn_len)) subTr = get_tree(oidn, oidn_len, subTr);
+	else baseIt = ".iso";
+
+	opt->childAdd("el")->setText(_("<<Append current>>"));
+
+	//Previous
+	for(int off = 1; (baseIt_=TSYS::strParse(baseIt,0,".",&off)).size(); )
+	    opt->childAdd("el")->setText((baseIt_s+="."+baseIt_));
+
+	//Childs
+	for(struct tree *chtree = subTr->child_list; chtree; chtree = chtree->next_peer)
+	    opt->childAdd("el")->setText(baseIt+"."+chtree->label);
+    }
+    else TParamContr::cntrCmdProc(opt);
 }
 
 void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
@@ -692,8 +734,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat()) { vo.setS(EVAL_STR, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse())
-    {
+    if(owner().redntUse()) {
 	if(vl == pvl) return;
 	XMLNode req("set");
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
@@ -711,7 +752,8 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     struct snmp_pdu *pdu = snmp_pdu_create(SNMP_MSG_SET);
     owner().str2oid(vo.name(), oidn, oidn_len);
 
-    switch(atoi(vo.fld().reserve().c_str()))
+    TVariant wVl = vl;
+    switch(s2i(vo.fld().reserve()))
     {
 	case ASN_INTEGER:	vtp = 'i';	break;
 	case ASN_GAUGE:		vtp = 'u';	break;
@@ -731,16 +773,15 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	case ASN_OPAQUE_DOUBLE:	break;
 	default:		break;
     }
-    if(vtp)
-    {
+    if(vtp) {
 	if(!(ss=snmp_sess_open(&owner().session))) return;
 
 	snmp_add_var(pdu, oidn, oidn_len, vtp, vl.getS().c_str());
 	int status = snmp_sess_synch_response(ss, pdu, &response);
 	if(status == STAT_TIMEOUT)
-	    owner().acq_err.setVal(TSYS::strMess(_("10:Timeout: No Response from %s."),owner().session.peername).c_str());
+	    owner().acqErr.setVal(TSYS::strMess(_("10:Timeout: No Response from %s."),owner().session.peername).c_str());
 	else if(response && response->errstat == SNMP_ERR_NOSUCHNAME)
-	    owner().acq_err.setVal(TSYS::strMess(_("11:No authorized name.")));
+	    owner().acqErr.setVal(TSYS::strMess(_("11:No authorized name.")));
 	if(response) snmp_free_pdu(response);
 	snmp_sess_close(ss);
     }

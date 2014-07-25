@@ -100,8 +100,7 @@ void TTransSock::postEnable( int flag )
 {
     TModule::postEnable(flag);
 
-    if(flag&TCntrNode::NodeConnect)
-    {
+    if(flag&TCntrNode::NodeConnect) {
 	owner().inEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
 	owner().outEl().fldAdd(new TFld("A_PRMS",_("Addition parameters"),TFld::String,TFld::FullText,"10000"));
     }
@@ -113,15 +112,9 @@ void TTransSock::load_( )
 
 }
 
-TTransportIn *TTransSock::In( const string &name, const string &idb )
-{
-    return new TSocketIn(name, idb, &owner().inEl());
-}
+TTransportIn *TTransSock::In( const string &name, const string &idb )	{ return new TSocketIn(name, idb, &owner().inEl()); }
 
-TTransportOut *TTransSock::Out( const string &name, const string &idb )
-{
-    return new TSocketOut(name, idb, &owner().outEl());
-}
+TTransportOut *TTransSock::Out( const string &name, const string &idb )	{ return new TSocketOut(name, idb, &owner().outEl()); }
 
 //************************************************
 //* TSocketIn                                    *
@@ -149,8 +142,7 @@ void TSocketIn::load_( )
 {
     TTransportIn::load_();
 
-    try
-    {
+    try {
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
@@ -188,30 +180,26 @@ void TSocketIn::start( )
     //Socket init
     string s_type = TSYS::strSepParse(addr(),0,':');
 
-    if(s_type == S_NM_TCP)
-    {
+    if(s_type == S_NM_TCP) {
 	if((sock_fd=socket(PF_INET,SOCK_STREAM,0)) == -1)
 	    throw TError(nodePath().c_str(),_("Error create '%s' socket!"),s_type.c_str());
 	int vl = 1;
 	setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 	type = SOCK_TCP;
     }
-    else if(s_type == S_NM_UDP)
-    {
+    else if(s_type == S_NM_UDP) {
 	if((sock_fd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
 	type = SOCK_UDP;
     }
-    else if(s_type == S_NM_UNIX)
-    {
+    else if(s_type == S_NM_UNIX) {
 	if((sock_fd = socket(PF_UNIX,SOCK_STREAM,0)) == -1)
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
 	type = SOCK_UNIX;
     }
     else throw TError(nodePath().c_str(), _("Socket type '%s' error!"), s_type.c_str());
 
-    if(type == SOCK_TCP || type == SOCK_UDP)
-    {
+    if(type == SOCK_TCP || type == SOCK_UDP) {
 	struct sockaddr_in  name_in;
 	struct hostent *loc_host_nm;
 	memset(&name_in, 0, sizeof(name_in));
@@ -219,16 +207,14 @@ void TSocketIn::start( )
 
 	host	= TSYS::strSepParse(addr(), 1, ':');
 	port	= TSYS::strSepParse(addr(), 2, ':');
-	if(host.size())
-	{
+	if(host.size()) {
 	    loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
 		throw TError(nodePath().c_str(), _("Socket name '%s' error!"), host.c_str());
 	    name_in.sin_addr.s_addr = *((int*)(loc_host_nm->h_addr_list[0]));
 	}
 	else name_in.sin_addr.s_addr = INADDR_ANY;
-	if(type == SOCK_TCP)
-	{
+	if(type == SOCK_TCP) {
 	    mode = atoi(TSYS::strSepParse(addr(),3,':').c_str());
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(),"tcp");
@@ -244,8 +230,7 @@ void TSocketIn::start( )
 	    }
 	    listen(sock_fd, maxQueue());
 	}
-	else if(type == SOCK_UDP)
-	{
+	else if(type == SOCK_UDP) {
 	    //Get system port for "oscada" /etc/services
 	    struct servent *sptr = getservbyname(port.c_str(), "udp");
 	    if(sptr != NULL)                       name_in.sin_port = sptr->s_port;
@@ -260,8 +245,7 @@ void TSocketIn::start( )
 	    }
 	}
     }
-    else if( type == SOCK_UNIX )
-    {
+    else if(type == SOCK_UNIX) {
 	path	= TSYS::strSepParse(addr(), 1, ':');
 	mode	= atoi( TSYS::strSepParse(addr(),2,':').c_str() );
 	if( !path.size() ) path = "/tmp/oscada";
@@ -318,14 +302,12 @@ void *TSocketIn::Task( void *sock_in )
 
     if(sock->type == SOCK_UDP) buf = new char[sock->bufLen()*1024 + 1];
 
-    while(!sock->endrun)
-    {
+    while(!sock->endrun) {
 	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
 	FD_ZERO(&rd_fd); FD_SET(sock->sock_fd,&rd_fd);
 
 	int kz = select(sock->sock_fd+1, &rd_fd, NULL, NULL, &tv);
-	if(kz < 0 && errno != EINTR)
-	{
+	if(kz < 0 && errno != EINTR) {
 	    mess_err(sock->nodePath().c_str(), _("Close input transport by error: %s"), strerror(errno));
 	    break;
 	}
@@ -333,58 +315,47 @@ void *TSocketIn::Task( void *sock_in )
 
 	struct sockaddr_in name_cl;
 	socklen_t          name_cl_len = sizeof(name_cl);
-	if(sock->type == SOCK_TCP)
-	{
+	if(sock->type == SOCK_TCP) {
 	    int sock_fd_CL = accept(sock->sock_fd, (sockaddr *)&name_cl, &name_cl_len);
-	    if(sock_fd_CL != -1)
-	    {
-		if(sock->maxFork() <= (int)sock->cl_id.size())
-		{
+	    if(sock_fd_CL != -1) {
+		if(sock->maxFork() <= (int)sock->cl_id.size()) {
 		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
 		}
 		SSockIn *sin = new SSockIn(sock, sock_fd_CL, inet_ntoa(name_cl.sin_addr));
-		try
-		{
+		try {
 		    SYS->taskCreate(sock->nodePath('.',true)+"."+i2s(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
 		}
-		catch(TError err)
-		{
+		catch(TError err) {
 		    delete sin;
 		    mess_err(err.cat.c_str(), err.mess.c_str());
 		    mess_err(sock->nodePath().c_str(), _("Error creation of the thread!"));
 		}
 	    }
 	}
-	else if(sock->type == SOCK_UNIX)
-	{
+	else if(sock->type == SOCK_UNIX) {
 	    int sock_fd_CL = accept(sock->sock_fd, NULL, NULL);
-	    if(sock_fd_CL != -1)
-	    {
-		if(sock->maxFork() <= (int)sock->cl_id.size())
-		{
+	    if(sock_fd_CL != -1) {
+		if(sock->maxFork() <= (int)sock->cl_id.size()) {
 		    sock->clsConnByLim++;
 		    close(sock_fd_CL);
 		    continue;
 		}
 		SSockIn *sin = new SSockIn(sock, sock_fd_CL, "");
-		try
-		{
+		try {
 		    SYS->taskCreate(sock->nodePath('.',true)+"."+i2s(sock_fd_CL), sock->taskPrior(), ClTask, sin, 5, &pthr_attr);
 		    sock->connNumb++;
 		}
-		catch(TError err)
-		{
+		catch(TError err) {
 		    delete sin;
 		    mess_err(err.cat.c_str(), err.mess.c_str());
 		    mess_err(sock->nodePath().c_str(), _("Error creation of the thread!"));
 		}
 	    }
 	}
-	else if( sock->type == SOCK_UDP )
-	{
+	else if(sock->type == SOCK_UDP) {
 	    string req, answ;
 
 	    ssize_t r_len = recvfrom(sock->sock_fd, buf, sock->bufLen()*1000, 0,(sockaddr *)&name_cl, &name_cl_len);
@@ -444,8 +415,7 @@ void *TSocketIn::ClTask( void *s_inf )
     AutoHD<TProtocolIn> prot_in;
     bool sessOk = false;
 
-    do
-    {
+    do {
 	tv.tv_sec  = 0; tv.tv_usec = STD_WAIT_DELAY*1000;
 	FD_ZERO(&rw_fd); FD_SET(s.cSock,&rw_fd);
 	int kz = select(s.cSock+1, &rw_fd, NULL, NULL, &tv);
@@ -462,8 +432,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	req.assign(buf,r_len);
 
 	s.s->messPut(s.cSock, req, answ, s.sender, prot_in);
-	if(answ.size())
-	{
+	if(answ.size()) {
 #if OSC_DEBUG >= 5
 	    mess_debug(s.s->nodePath().c_str(),_("Socket replied message '%d' to '%s'."), answ.size(), s.sender.c_str());
 #endif
@@ -472,10 +441,8 @@ void *TSocketIn::ClTask( void *s_inf )
 	    {
 		wL = write(s.cSock, answ.data()+wOff, answ.size()-wOff);
 		if(wL == 0) { mess_err(s.s->nodePath().c_str(), _("Write: reply for zero bytes.")); break; }
-		else if(wL < 0)
-		{
-		    if(errno == EAGAIN)
-		    {
+		else if(wL < 0) {
+		    if(errno == EAGAIN) {
 			tv.tv_sec = 1; tv.tv_usec = 0;		//!!!! Where the time get?
 			FD_ZERO(&rw_fd); FD_SET(s.cSock, &rw_fd);
 			kz = select(s.cSock+1, NULL, &rw_fd, NULL, &tv);
@@ -497,8 +464,7 @@ void *TSocketIn::ClTask( void *s_inf )
 	    (!sessOk || ((s.s->mode || !prot_in.freeStat()) && (!s.s->keepAliveReqs() || cnt < s.s->keepAliveReqs()))));
 
     //Close protocol on broken connection
-    if(!prot_in.freeStat())
-    {
+    if(!prot_in.freeStat()) {
 	string n_pr = prot_in.at().name();
 	AutoHD<TProtocol> proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	prot_in.free();
@@ -520,10 +486,8 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 {
     AutoHD<TProtocol> proto;
     string n_pr;
-    try
-    {
-	if(prot_in.freeStat())
-	{
+    try {
+	if(prot_in.freeStat()) {
 	    proto = SYS->protocol().at().modAt(protocol());
 	    n_pr = id() + i2s(sock);
 	    if(!proto.at().openStat(n_pr)) proto.at().open(n_pr, workId());
@@ -535,10 +499,8 @@ void TSocketIn::messPut( int sock, string &request, string &answer, string sende
 	prot_in.free();
 	if(proto.at().openStat(n_pr)) proto.at().close(n_pr);
     }
-    catch(TError err)
-    {
-	if(!prot_in.freeStat())
-	{
+    catch(TError err) {
+	if(!prot_in.freeStat()) {
 	    if(proto.freeStat()) proto = AutoHD<TProtocol>(&prot_in.at().owner());
 	    n_pr = prot_in.at().name();
 	}
@@ -565,8 +527,7 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 {
     ResAlloc res(sock_res, true);
     for(unsigned i_id = 0; i_id < cl_id.size(); i_id++)
-	if(cl_id[i_id].cl_id == thrid)
-	{
+	if(cl_id[i_id].cl_id == thrid) {
 	    shutdown(cl_id[i_id].cl_sock, SHUT_RDWR);
 	    close(cl_id[i_id].cl_sock);
 	    cl_id.erase(cl_id.begin() + i_id);
@@ -578,8 +539,7 @@ void TSocketIn::clientUnreg( pthread_t thrid )
 void TSocketIn::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TTransportIn::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",STR_ID,1,"help",
@@ -610,33 +570,27 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
     }
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/qLn")
-    {
+    if(a_path == "/prm/cfg/qLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxQueue()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxQueue(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/prm/cfg/clMax")
-    {
+    else if(a_path == "/prm/cfg/clMax") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(maxFork()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setMaxFork(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/prm/cfg/bfLn")
-    {
+    else if(a_path == "/prm/cfg/bfLn") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(bufLen()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setBufLen(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/prm/cfg/keepAliveReqs")
-    {
+    else if(a_path == "/prm/cfg/keepAliveReqs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveReqs()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveReqs(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/prm/cfg/keepAliveTm")
-    {
+    else if(a_path == "/prm/cfg/keepAliveTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(keepAliveTm()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setKeepAliveTm(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/prm/cfg/taskPrior")
-    {
+    else if(a_path == "/prm/cfg/taskPrior") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",STR_ID,SEC_RD))	opt->setText(i2s(taskPrior()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",STR_ID,SEC_WR))	setTaskPrior(atoi(opt->text().c_str()));
     }
@@ -650,7 +604,7 @@ TSocketOut::TSocketOut(string name, const string &idb, TElem *el) :
     TTransportOut(name,idb,el), sock_fd(-1), mLstReqTm(0)
 {
     setAddr("TCP:localhost:10002");
-    setTimings("5:0.1");
+    setTimings("5:1");
 }
 
 TSocketOut::~TSocketOut( )	{ }
@@ -663,12 +617,6 @@ void TSocketOut::setTimings( const string &vl )
     mTimings = mTmRep ? TSYS::strMess("%g:%g:%g",(1e-3*mTmCon),(1e-3*mTmNext),(1e-3*mTmRep)) :
 			TSYS::strMess("%g:%g",(1e-3*mTmCon),(1e-3*mTmNext));
     modif();
-}
-
-void TSocketOut::setAddr( const string &addr )
-{
-    TTransportOut::setAddr(addr);
-    if(startStat()) stop();
 }
 
 string TSocketOut::getStatus( )
@@ -703,7 +651,7 @@ void TSocketOut::save_( )
     TTransportOut::save_();
 }
 
-void TSocketOut::start( )
+void TSocketOut::start( int itmCon )
 {
     ResAlloc res(wres, true);
 
@@ -716,6 +664,7 @@ void TSocketOut::start( )
 
     //Status clear
     trIn = trOut = 0;
+    if(!itmCon) itmCon = tmCon();
 
     //Connect to remote host
     string s_type = TSYS::strSepParse(addr(), 0, ':');
@@ -732,8 +681,7 @@ void TSocketOut::start( )
 
 	string host = TSYS::strSepParse(addr(), 1, ':');
 	string port = TSYS::strSepParse(addr(), 2, ':');
-	if(host.size())
-	{
+	if(host.size()) {
 	    struct hostent *loc_host_nm = gethostbyname(host.c_str());
 	    if(loc_host_nm == NULL || loc_host_nm->h_length == 0)
 		throw TError(nodePath().c_str(),_("Socket name '%s' error!"),host.c_str());
@@ -747,15 +695,13 @@ void TSocketOut::start( )
 	else name_in.sin_port = 10001;
 
 	//Create socket
-	if(type == SOCK_TCP)
-	{
+	if(type == SOCK_TCP) {
 	    if((sock_fd=socket(PF_INET,SOCK_STREAM,0)) == -1)
 		throw TError(nodePath().c_str(), _("Error creation TCP socket: %s!"), strerror(errno));
 	    int vl = 1;
 	    setsockopt(sock_fd, SOL_SOCKET, SO_REUSEADDR, &vl, sizeof(int));
 	}
-	else if(type == SOCK_UDP)
-	{
+	else if(type == SOCK_UDP) {
 	    if((sock_fd=socket(PF_INET,SOCK_DGRAM,0)) == -1)
 		throw TError(nodePath().c_str(), _("Error creation UDP socket: %s!"), strerror(errno));
 	}
@@ -768,7 +714,7 @@ void TSocketOut::start( )
 	    struct timeval tv;
 	    socklen_t slen = sizeof(res);
 	    fd_set fdset;
-	    tv.tv_sec = tmCon()/1000; tv.tv_usec = 1000*(tmCon()%1000);
+	    tv.tv_sec = itmCon/1000; tv.tv_usec = 1000*(itmCon%1000);
 	    FD_ZERO(&fdset); FD_SET(sock_fd, &fdset);
 	    if((res=select(sock_fd+1, NULL, &fdset, NULL, &tv)) > 0 && !getsockopt(sock_fd,SOL_SOCKET,SO_ERROR,&res,&slen) && !res) res = 0;
 	    else res = -1;

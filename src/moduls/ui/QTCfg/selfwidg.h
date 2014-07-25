@@ -132,8 +132,8 @@ class TextEdit : public QWidget
 	bool hasFocus( ) const;
 	bool isChanged( );
 
-	void setText(const QString &);
-	void setSnthHgl(XMLNode nd);
+	void setText( const QString& );
+	void setSnthHgl( XMLNode nd );
 
 	QTextEdit *edit( )	{ return ed_fld; }
 
@@ -141,7 +141,7 @@ class TextEdit : public QWidget
 	//Signals
 	void apply( );
 	void cancel( );
-	void textChanged(const QString&);
+	void textChanged( const QString& );
 
     protected:
 	bool event( QEvent *e );
@@ -231,7 +231,7 @@ class InputDlg : public QDialog
 	QGridLayout	*ed_lay;
 
     protected:
-        void showEvent( QShowEvent * event );
+	void showEvent( QShowEvent * event );
 
     protected:
 	//Attributes

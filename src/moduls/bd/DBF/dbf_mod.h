@@ -1,7 +1,7 @@
 
 //OpenSCADA system module BD.DBF file: dbf_mod.h
 /***************************************************************************
- *   Copyright (C) 2003-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2003-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -57,11 +57,14 @@ struct Shd
 class MBD;
 class MTable : public TTable
 {
+    friend class MBD;
+
     public:
 	//Public methods
 	MTable(const string &name, MBD *iown, bool create );
 	~MTable(  );
 
+	// Field's operations
 	bool fieldSeek( int row, TConfig &cfg );
 	void fieldGet( TConfig &cfg );
 	void fieldSet( TConfig &cfg );
@@ -84,8 +87,8 @@ class MTable : public TTable
 	string codepage;
 	TBasaDBF *basa;
 
-	Res    m_res;
-	bool   m_modify;
+	Res	mRes;
+	time_t	mModify;
 };
  
 //************************************************
@@ -97,10 +100,11 @@ class MBD : public TBD
     public:
 	//Public methods
 	MBD( string name, TElem *cf_el );
-	~MBD(  );
+	~MBD( );
 
 	void enable( );
 	void allowList( vector<string> &list );
+	void transCloseCheck( );
 
     protected:
 	//Protected methods
@@ -120,11 +124,7 @@ class BDMod : public TTipBD
     public:
 	//Public methods
 	BDMod( string name );
-	~BDMod(  );
-
-    protected:
-	//Protected methods
-	void load_( );
+	~BDMod( );
 
     private:
 	//Private methods

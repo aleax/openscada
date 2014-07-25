@@ -1676,7 +1676,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			{
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
-						    parseInt(rcd.getAttribute('lev')), rcd.getAttribute('cat'), nodeText(rcd));
+						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
 
 			    //>> Check for dublicates
 			    var isDbl = false;
@@ -1697,7 +1697,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			{
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
-						    parseInt(rcd.getAttribute('lev')), rcd.getAttribute('cat'), nodeText(rcd));
+						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
 
 			    //>> Check for dublicates
 			    var isDbl = false;

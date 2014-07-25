@@ -47,21 +47,17 @@ ModMArch::~ModMArch( )
 void ModMArch::postDisable( int flag )
 {
     TMArchivator::postDisable(flag);
-    try
-    {
-	if(flag)
-	{
-	    //Remove info record
-	    TConfig cfg(&mod->archEl());
-	    cfg.cfg("TBL").setS(archTbl(),true);
-	    SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
 
-	    //Remove archive's DB table
-	    SYS->db().at().open( addr()+"."+archTbl() );
-	    SYS->db().at().close( addr()+"."+archTbl(), true );
-	}
+    if(flag) {
+	//Remove info record
+	TConfig cfg(&mod->archEl());
+	cfg.cfg("TBL").setS(archTbl(),true);
+	SYS->db().at().dataDel(addr()+"."+mod->mainTbl(),"",cfg);
+
+	//Remove archive's DB table
+	SYS->db().at().open(addr()+"."+archTbl());
+	SYS->db().at().close(addr()+"."+archTbl(), true);
     }
-    catch(TError err)	{ mess_warning(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
 void ModMArch::load_( )
@@ -71,25 +67,22 @@ void ModMArch::load_( )
     //Init address to DB
     if(addr().empty()) setAddr("*.*");
 
-    try
-    {
+    try {
 	XMLNode prmNd;
 	string  vl;
 	prmNd.load(cfg("A_PRMS").getS());
 	vl = prmNd.attr("Size");
-	if(!vl.empty()) setMaxSize(atof(vl.c_str()));
+	if(!vl.empty()) setMaxSize(s2r(vl));
     } catch(...){ }
 
     //Load message archive parameters
     TConfig wcfg(&mod->archEl());
     wcfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg))
-    {
-	mBeg = atoi(wcfg.cfg("BEGIN").getS().c_str());
-	mEnd = atoi(wcfg.cfg("END").getS().c_str());
+    if(SYS->db().at().dataGet(addr()+"."+mod->mainTbl(),"",wcfg,false,true)) {
+	mBeg = s2i(wcfg.cfg("BEGIN").getS());
+	mEnd = s2i(wcfg.cfg("END").getS());
 	// Check for delete archivator table
-	if(mEnd <= (time(NULL)-(time_t)(maxSize()*3600)))
-	{
+	if(mEnd <= (time(NULL)-(time_t)(maxSize()*3600))) {
 	    SYS->db().at().open(addr()+"."+archTbl());
 	    SYS->db().at().close(addr()+"."+archTbl(), true);
 	    mBeg = mEnd = 0;
@@ -100,7 +93,7 @@ void ModMArch::load_( )
 void ModMArch::save_( )
 {
     XMLNode prmNd("prms");
-    prmNd.setAttr("Size",TSYS::real2str(maxSize()));
+    prmNd.setAttr("Size",r2s(maxSize()));
     cfg("A_PRMS").setS(prmNd.save(XMLNode::BrAllPast));
 
     TMArchivator::save_();
@@ -132,8 +125,7 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
 
     TConfig cfg(&mod->messEl());
     int64_t t_cnt = TSYS::curTime();
-    for(unsigned i_m = 0; i_m < mess.size(); i_m++)
-    {
+    for(unsigned i_m = 0; i_m < mess.size(); i_m++) {
 	if(!chkMessOK(mess[i_m].categ,mess[i_m].level)) continue;
 
 	//Put record to DB
@@ -149,11 +141,9 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
     }
 
     //Archive size limit process
-    if((mEnd-mBeg) > (time_t)(maxSize()*3600))
-    {
+    if((mEnd-mBeg) > (time_t)(maxSize()*3600)) {
 	time_t n_end = mEnd-(time_t)(maxSize()*3600);
-	for(time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++)
-	{
+	for(time_t t_c = vmax(mBeg,n_end-3600); t_c < n_end; t_c++) {
 	    cfg.cfg("TM").setI(t_c,true);
 	    tbl.at().fieldDel(cfg);
 	}
@@ -166,9 +156,9 @@ bool ModMArch::put( vector<TMess::SRec> &mess )
     cfg.setElem(&mod->archEl());
     cfg.cfgViewAll(false);
     cfg.cfg("TBL").setS(archTbl(),true);
-    cfg.cfg("BEGIN").setS(TSYS::int2str(mBeg),true);
-    cfg.cfg("END").setS(TSYS::int2str(mEnd),true);
-    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg);
+    cfg.cfg("BEGIN").setS(i2s(mBeg),true);
+    cfg.cfg("END").setS(i2s(mEnd),true);
+    bool rez = SYS->db().at().dataSet(addr()+"."+mod->mainTbl(),"",cfg,false,true);
 
     tm_calc = 1e-3*(TSYS::curTime()-t_cnt);
 
@@ -188,25 +178,21 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
     TRegExp re(category, "p");
 
     //Get values from DB
-    for(time_t t_c = b_tm; t_c <= e_tm; t_c++)
-    {
+    for(time_t t_c = b_tm; t_c <= e_tm; t_c++) {
 	cfg.cfg("TM").setI(t_c,true);
 	for(int e_c = 0; SYS->db().at().dataSeek(addr()+"."+archTbl(),"",e_c++,cfg); )
 	{
 	    TMess::SRec rc(t_c, cfg.cfg("TMU").getI(), cfg.cfg("CATEG").getS(), (TMess::Type)cfg.cfg("LEV").getI(), cfg.cfg("MESS").getS());
-	    if(abs(rc.level) >= level && re.test(rc.categ))
-	    {
+	    if(abs(rc.level) >= level && re.test(rc.categ)) {
 		bool equal = false;
 		int i_p = mess.size();
-		for(int i_m = mess.size()-1; i_m >= 0; i_m--)
-		{
+		for(int i_m = mess.size()-1; i_m >= 0; i_m--) {
 		    if(FTM(mess[i_m]) > FTM(rc)) i_p = i_m;
 		    else if(FTM(mess[i_m]) == FTM(rc) && rc.level == mess[i_m].level && rc.mess == mess[i_m].mess)
 		    { equal = true; break; }
 		    else if(FTM(mess[i_m]) < FTM(rc)) break;
 		}
-		if(!equal)
-		{
+		if(!equal) {
 		    mess.insert(mess.begin()+i_p, rc);
 		    if(time(NULL) >= upTo) return;
 		}
@@ -218,23 +204,22 @@ void ModMArch::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &mess, const s
 void ModMArch::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TMArchivator::cntrCmdProc(opt);
 	ctrMkNode("fld",opt,-1,"/prm/st/tarch",_("Archiving time (msek)"),R_R_R_,"root",SARH_ID,1,"tp","real");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/ADDR",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SARH_ID,3,
 	    "dest","select","select","/db/list","help",TMess::labDB());
 	ctrMkNode("fld",opt,-1,"/prm/cfg/sz",_("Archive size (hours)"),RWRWR_,"root",SARH_ID,1,"tp","real");
+	ctrRemoveNode(opt,"/prm/cfg/A_PRMS");
 	return;
     }
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(TSYS::real2str(tm_calc,6));
-    else if(a_path == "/prm/cfg/sz")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(TSYS::real2str(maxSize()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(atof(opt->text().c_str()));
+    if(a_path == "/prm/st/tarch" && ctrChkNode(opt))	opt->setText(r2s(tm_calc,6));
+    else if(a_path == "/prm/cfg/sz") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SARH_ID,SEC_RD))	opt->setText(r2s(maxSize()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SARH_ID,SEC_WR))	setMaxSize(s2r(opt->text()));
     }
     else TMArchivator::cntrCmdProc(opt);
 }

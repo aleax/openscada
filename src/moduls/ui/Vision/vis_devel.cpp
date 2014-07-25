@@ -199,7 +199,15 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     actVisItClear->setStatusTip(_("Press to go to visual item changes clear."));
     actVisItClear->setEnabled(false);
     connect(actVisItClear, SIGNAL(triggered()), this, SLOT(visualItClear()));
-    //>>> UnDo visual item changes
+    //  Visual item changes put down
+    if(!ico_t.load(TUIS::icoPath("vision_it_ChDown").c_str())) ico_t.load(":/images/it_ChDown.png");
+    actVisItChDown = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes put down"),this);
+    actVisItChDown->setToolTip(_("Goes visual item changes put down to the parent"));
+    actVisItChDown->setWhatsThis(_("The button for going to visual item changes put down to the parent"));
+    actVisItChDown->setStatusTip(_("Press to go to visual item changes put down to the parent."));
+    actVisItChDown->setEnabled(false);
+    connect(actVisItChDown, SIGNAL(triggered()), this, SLOT(visualItDownParent()));
+    //  UnDo visual item changes
     if(!ico_t.load(TUIS::icoPath("undo").c_str())) ico_t.load(":/images/undo.png");
     actVisItUnDo = new QAction(QPixmap::fromImage(ico_t),_("Visual item changes UnDo"),this);
     actVisItUnDo->setObjectName("undo");
@@ -448,6 +456,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_proj->addAction(actVisItAdd);
     mn_proj->addAction(actVisItDel);
     mn_proj->addAction(actVisItClear);
+    mn_proj->addAction(actVisItChDown);
     mn_proj->addAction(actVisItProp);
     mn_proj->addAction(actVisItEdit);
     mn_widg = menuBar()->addMenu(_("&Widget"));
@@ -455,6 +464,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     mn_widg->addAction(actVisItAdd);
     mn_widg->addAction(actVisItDel);
     mn_widg->addAction(actVisItClear);
+    mn_widg->addAction(actVisItChDown);
     mn_widg->addAction(actVisItProp);
     mn_widg->addAction(actVisItEdit);
     mn_widg->addSeparator();
@@ -633,7 +643,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     statusBar()->showMessage(_("Ready"), 2000);
 }
 
-VisDevelop::~VisDevelop()
+VisDevelop::~VisDevelop( )
 {
     winClose = true;
 
@@ -655,7 +665,11 @@ VisDevelop::~VisDevelop()
 
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
-    return mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
+    QApplication::restoreOverrideCursor();
+
+    return rez;
 }
 
 QString VisDevelop::getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode)
@@ -671,37 +685,19 @@ QString VisDevelop::getFileName(const QString &caption, const QString &dir, cons
     return "";
 }
 
-string VisDevelop::user( )
-{
-    return mWUser->user().toStdString();
-}
+string VisDevelop::user( )	{ return mWUser->user().toStdString(); }
 
-string VisDevelop::password( )
-{
-    return mWUser->pass().toStdString();
-}
+string VisDevelop::password( )	{ return mWUser->pass().toStdString(); }
 
-string VisDevelop::VCAStation( )
-{
-    return mWUser->VCAStation().toStdString();
-}
+string VisDevelop::VCAStation( )	{ return mWUser->VCAStation().toStdString(); }
 
-bool VisDevelop::wdgScale( )
-{
-    return w_scale->scale();
-}
+bool VisDevelop::wdgScale( )		{ return w_scale->scale(); }
 
-void VisDevelop::setWdgScale( bool val )
-{
-    w_scale->setScale(val);
-}
+void VisDevelop::setWdgScale( bool val ){ w_scale->setScale(val); }
 
-double VisDevelop::wdgVisScale( )
-{
-    return atof(mWVisScale->text().toStdString().c_str());
-}
+double VisDevelop::wdgVisScale( )	{ return atof(mWVisScale->text().toStdString().c_str()); }
 
-void VisDevelop::setWdgVisScale(double val )
+void VisDevelop::setWdgVisScale( double val )
 {
     mWVisScale->setText((r2s(TSYS::realRound(val*100,POS_PREC_DIG,true))+"%").c_str());
 }
@@ -726,7 +722,7 @@ QMenu *VisDevelop::createPopupMenu( )
     QMenu *mn = QMainWindow::createPopupMenu( );
     if(!mn) return mn;
 
-    //> Check for widget under cursor
+    //Check for widget under cursor
     QWidget *ucw = childAt(mapFromGlobal(QCursor::pos()));
     if(qobject_cast<QToolBar*>(ucw) && !mn->children().isEmpty())
     {
@@ -743,19 +739,19 @@ QMenu *VisDevelop::createPopupMenu( )
 
 	act = new QAction(_("Medium (22x22)"),iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("22"); 
+	act->setObjectName("22");
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Big (32x32)"),iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("32"); 
+	act->setObjectName("32");
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
 
 	act = new QAction(_("Huge (48x48)"),iSz);
 	connect(act, SIGNAL(triggered()), this, SLOT(setToolIconSize()));
-	act->setObjectName("32"); 
+	act->setObjectName("32");
 	act->setProperty("toolAddr",TSYS::addr2str(ucw).c_str());
 	iSz->addAction( act );
     }
@@ -776,10 +772,7 @@ void VisDevelop::setToolIconSize( )
     }
 }
 
-void VisDevelop::setActiveSubWindow(QWidget *w)
-{
-    work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w));
-}
+void VisDevelop::setActiveSubWindow( QWidget *w )	{ work_space->setActiveSubWindow(dynamic_cast<QMdiSubWindow *>(w)); }
 
 void VisDevelop::fullScreen( bool vl )
 {
@@ -791,37 +784,24 @@ bool VisDevelop::exitModifChk( )
 {
     XMLNode req("modify");
     req.setAttr("path","/%2fobj");
-    if( !cntrIfCmd(req) && atoi(req.text().c_str()) )
-    {
+    if(!cntrIfCmd(req) && atoi(req.text().c_str())) {
 	bool saveExit = false;
 	req.clear()->setName("get")->setAttr("path","/%2fgen%2fsaveExit");
-	if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
+	if(!cntrIfCmd(req,true)) saveExit |= atoi(req.text().c_str());
 	req.setAttr("path","/%2fgen%2fsavePeriod");
-	if( !cntrIfCmd(req,true) )   saveExit |= atoi(req.text().c_str());
-	if( !saveExit )
-	{
-	    int ret = QMessageBox::information(this,_("Visual items save"),
-		_("Some visual items are changed. Save changings to DB on exit?"),QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes);
-	    switch( ret )
+	if(!cntrIfCmd(req,true)) saveExit |= atoi(req.text().c_str());
+	if(!saveExit)
+	    switch(QMessageBox::information(this,_("Visual items save"),_("Some visual items changed.\nSave the changes to DB on exit?"),
+		QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel,QMessageBox::Yes))
 	    {
 		case QMessageBox::Yes:
 		    req.clear()->setName("save")->setAttr("path","/%2fobj");
 		    cntrIfCmd(req);
 		    return true;
-		case QMessageBox::No:
-		    return true;
-		case QMessageBox::Cancel:
-		    return false;
+		case QMessageBox::No:		return true;
+		case QMessageBox::Cancel:	return false;
+		default: break;
 	    }
-	    /*InputDlg dlg(this,actDBSave->icon(),
-		    _("Some visual items is changed. Save changing to DB on exit?"),
-		    _("Visual items save"),false,false);
-	    if( dlg.exec() == QDialog::Accepted )
-	    {
-		req.clear()->setName("save")->setAttr("path","/%2fobj");
-		cntrIfCmd(req);
-	    }*/
-	}
     }
 
     return true;
@@ -900,6 +880,7 @@ void VisDevelop::applyWorkWdg( )
     actVisItProp->setEnabled(isProj || isLib);
     actVisItEdit->setEnabled((isProj || isLib) && sel2.size());
     actVisItClear->setEnabled((isProj || isLib) && sel2.size());
+    actVisItChDown->setEnabled((isProj || isLib) && sel2.size());
 
     //> Edit actions update
     editToolUpdate( );
@@ -1279,22 +1260,22 @@ void VisDevelop::visualItProp( )
 void VisDevelop::visualItEdit( )
 {
     string ed_wdg;
-    for( int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
+    for(int w_off = 0; (ed_wdg=TSYS::strSepParse(work_wdg,0,';',&w_off)).size(); )
     {
 	QString w_title(QString(_("Widget: %1")).arg(ed_wdg.c_str()));
+
 	//Check to already opened widget window
 	QList<QMdiSubWindow *> ws_wdg = work_space->subWindowList();
 	int i_w;
-	for( i_w = 0; i_w < ws_wdg.size(); i_w++ )
-	    if( ws_wdg.at(i_w)->windowTitle() == w_title )
-	    {
+	for(i_w = 0; i_w < ws_wdg.size(); i_w++)
+	    if(ws_wdg.at(i_w)->windowTitle() == w_title) {
 		mod->postMess(mod->nodePath().c_str(),
 		    QString(_("Widget's '%1' editing window is already opened.")).
 			    arg(ed_wdg.c_str()), TVision::Info, this );
 		work_space->setActiveSubWindow(ws_wdg.at(i_w));
 		break;
 	    }
-	if( i_w < ws_wdg.size() ) continue;
+	if(i_w < ws_wdg.size()) continue;
 
 	QScrollArea *scrl = new QScrollArea;
 #if QT_VERSION >= 0x040400
@@ -1306,23 +1287,23 @@ void VisDevelop::visualItEdit( )
 	//scrl->setBackgroundRole(QPalette::Dark);
 	scrl->setAttribute(Qt::WA_DeleteOnClose);
 	scrl->setWindowTitle(w_title);
-	//> Make and place view widget
+
+	//Make and place view widget
 	DevelWdgView *vw = new DevelWdgView(ed_wdg,0,this,0,scrl);
 	vw->load("");
 	connect(vw, SIGNAL(selected(const string&)), this, SLOT(selectItem(const string&)));
 	connect(vw, SIGNAL(apply(const string&)), this, SIGNAL(modifiedItem(const string&)));
-	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string &)));
+	connect(this, SIGNAL(modifiedItem(const string&)), vw, SLOT(load(const string&)));
 
 	scrl->setWidget(vw);
 	scrl->resize(vmax(300,vmin(950,vw->size().width()+10)),vmax(200,vmin(650,vw->size().height()+10)));
 	work_space->addSubWindow(scrl);
 	scrl->show();
 
-	//> Set window icon
+	//Set window icon
 	XMLNode req("get");
 	req.setAttr("path",ed_wdg+"/%2fico");
-	if(!cntrIfCmd(req))
-	{
+	if(!cntrIfCmd(req)) {
 	    QImage ico_t;
 	    string simg = TSYS::strDecode(req.text(),TSYS::base64);
 	    if(ico_t.loadFromData((const uchar*)simg.c_str(),simg.size()))
@@ -1331,40 +1312,66 @@ void VisDevelop::visualItEdit( )
     }
 }
 
-void VisDevelop::visualItClear( const string &el_wa )
+void VisDevelop::visualItClear( const string &elWa )
 {
     string clrW;
-    string work_wdg_loc, work_attr;
+    string workWdgLoc, workAttr;
 
-    if(el_wa.empty())
-    {
-	work_wdg_loc = work_wdg;
+    if(elWa.empty()) {
+	workWdgLoc = work_wdg;
 
 	InputDlg dlg(this,actVisItClear->icon(),
 		QString(_("Are you sure of clear all changes for visual items: '%1'?\n"
-			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(QString(work_wdg_loc.c_str()).replace(";","; ")),
+			  "All changes will be lost and variables are returning to default values or will be inherited!")).arg(QString(workWdgLoc.c_str()).replace(";","; ")),
 		_("Visual items' changes clear"),false,false);
 	if(dlg.exec() != QDialog::Accepted)	return;
     }
-    else
-    {
+    else {
 	string work_tmp;
-	for( int off = 0; (work_tmp=TSYS::pathLev(el_wa,0,true,&off)).size(); )
-	{
-	    if( work_attr.size() ) work_wdg_loc += "/"+work_attr;
-	    work_attr = work_tmp;
+	for(int off = 0; (work_tmp=TSYS::pathLev(elWa,0,true,&off)).size(); ) {
+	    if(workAttr.size()) workWdgLoc += "/"+workAttr;
+	    workAttr = work_tmp;
 	}
-	if( work_attr.size() > 2 && work_attr.substr(0,2) == "a_" ) work_attr = work_attr.substr(2);
-	else { work_wdg_loc += "/"+work_attr; work_attr = ""; }
+	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
+	else { workWdgLoc += "/"+workAttr; workAttr = ""; }
     }
 
-    for( int w_off = 0; (clrW=TSYS::strSepParse(work_wdg_loc,0,';',&w_off)).size(); )
-    {
+    for(int w_off = 0; (clrW=TSYS::strSepParse(workWdgLoc,0,';',&w_off)).size(); ) {
 	XMLNode req("set");
-	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fclear")->setAttr("attr",work_attr);;
-	if( cntrIfCmd(req) )
-	    mod->postMess(req.attr("mcat").c_str(),req.text().c_str(),TVision::Error,this);
+	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fclear")->setAttr("attr",workAttr);
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
 	else emit modifiedItem(clrW);
+    }
+}
+
+void VisDevelop::visualItDownParent( const string &elWa )
+{
+    string clrW;
+    string workWdgLoc, workAttr;
+
+    if(elWa.empty()) {
+	workWdgLoc = work_wdg;
+
+	InputDlg dlg(this,actVisItChDown->icon(),
+		QString(_("Are you sure for put down to parent all changes for visual items: '%1'?\n"
+			  "All other inherited from the parent visual items will use the changes!")).arg(QString(workWdgLoc.c_str()).replace(";","; ")),
+		_("Visual items' changes clear"),false,false);
+	if(dlg.exec() != QDialog::Accepted)	return;
+    }
+    else {
+	string work_tmp;
+	for(int off = 0; (work_tmp=TSYS::pathLev(elWa,0,true,&off)).size(); ) {
+	    if(workAttr.size()) workWdgLoc += "/"+workAttr;
+	    workAttr = work_tmp;
+	}
+	if(workAttr.size() > 2 && workAttr.substr(0,2) == "a_") workAttr = workAttr.substr(2);
+	else { workWdgLoc += "/"+workAttr; workAttr = ""; }
+    }
+
+    for(int w_off = 0; (clrW=TSYS::strSepParse(workWdgLoc,0,';',&w_off)).size(); ) {
+	XMLNode req("set");
+	req.setAttr("path",clrW+"/%2fwdg%2fcfg%2fchDown")->setAttr("attr", workAttr);
+	if(cntrIfCmd(req)) mod->postMess(req.attr("mcat").c_str(), req.text().c_str(), TVision::Error, this);
     }
 }
 

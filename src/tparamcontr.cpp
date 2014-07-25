@@ -132,20 +132,15 @@ void TParamContr::preDisable(int flag)
 
 void TParamContr::postDisable(int flag)
 {
-    if(flag)
-    {
-	//> Delete parameter from DB
-	try
-	{
-	    SYS->db().at().dataDel(owner().DB()+"."+owner().cfg(type().db).getS(),
-				   owner().owner().nodePath()+owner().cfg(type().db).getS(),*this,true);
-	}catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) {
+	//Delete the parameter from DB
+	SYS->db().at().dataDel(owner().DB()+"."+owner().cfg(type().db).getS(), owner().owner().nodePath()+owner().cfg(type().db).getS(), *this, true);
     }
 }
 
 void TParamContr::load_( )
 {
-    if(!SYS->chkSelDB(owner().DB())) return;
+    if(!SYS->chkSelDB(owner().DB())) throw TError();
 
     cfgViewAll(true);
     SYS->db().at().dataGet(owner().DB()+"."+owner().cfg(type().db).getS(),

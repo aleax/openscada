@@ -528,11 +528,11 @@ void MTable::setVal( TCfg &cfg, const string &val )
     {
 	case TFld::String:	cfg.setS(val);	break;
 	case TFld::Integer:
-	    if( cfg.fld().flg()&TFld::DateTimeDec )	cfg.setI(SQLtoUTC(val));
-	    else cfg.setI(atoi(val.c_str()));
+	    if(cfg.fld().flg()&TFld::DateTimeDec)	cfg.setI(SQLtoUTC(val));
+	    else cfg.setI(s2i(val));
 	    break;
-	case TFld::Real:	cfg.setR(atof(val.c_str()));	break;
-	case TFld::Boolean:	cfg.setB(atoi(val.c_str()));	break;
+	case TFld::Real:	cfg.setR(s2r(val));	break;
+	case TFld::Boolean:	cfg.setB(s2i(val));	break;
     }
 }
 

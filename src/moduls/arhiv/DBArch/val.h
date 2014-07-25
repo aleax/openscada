@@ -60,9 +60,12 @@ class ModVArchEl: public TVArchEl
 	void getValsProc( TValBuf &buf, int64_t beg, int64_t end );
 	bool setValsProc( TValBuf &buf, int64_t beg, int64_t end );
 
+	bool readMeta( );
+
     private:
 	//Attributes
 	int64_t mBeg, mEnd, mPer;
+	bool	needMeta;
 };
 
 //************************************************
@@ -78,7 +81,6 @@ class ModVArch: public TVArchivator
 	double maxSize( )		{ return mMaxSize; }
 
 	void setMaxSize( double vl )	{ mMaxSize = vl; modif(); }
-	void setValPeriod( double iper );
 
 	void start( );
 	void stop( );

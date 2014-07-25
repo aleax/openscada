@@ -1,8 +1,7 @@
 
 //OpenSCADA system module DAQ.DAQGate file: daq_gate.h
 /***************************************************************************
- *   Copyright (C) 2007-2012 by Roman Savochenko                           *
- *   rom_as@fromru.com                                                     *
+ *   Copyright (C) 2007-2014 by Roman Savochenko, <rom_as@oscada.org>      *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -69,9 +68,13 @@ class TMdPrm : public TParamContr
 	TMdPrm( string name, TTipParam *tp_prm );
 	~TMdPrm( );
 
-	string cntrAdr( )	{ return mCntrAdr; }
+	string stats( )		{ return mStats; }
+	string prmAddr( )	{ return mPrmAddr; }
 
-	void setCntrAdr( const string &vl );
+	void setStats( const string &vl );
+	void setPrmAddr( const string &vl )	{ mPrmAddr = vl; }
+
+	//AutoHD<TMdPrm> at( const string &nm )	{ return TParamContr::at(nm); }
 
 	void enable( );
 	void disable( );
@@ -101,7 +104,8 @@ class TMdPrm : public TParamContr
 
 	//Attributes
 	TElem	p_el;				//Work atribute elements
-	string	mCntrAdr;			//Parameter's remote controller address'
+	string	mStats;				//Allowed stations list'
+	TCfg	&mPrmAddr;			//Interstation parameter's address
 };
 
 //******************************************************
@@ -109,6 +113,7 @@ class TMdPrm : public TParamContr
 //******************************************************
 class TMdContr: public TController
 {
+    friend class TMdPrm;
     public:
 	//Methods
 	TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem );
@@ -121,6 +126,8 @@ class TMdContr: public TController
 	int	prior( )	{ return mPrior; }
 	double	syncPer( )	{ return mSync; }
 	double	restDtTm( )	{ return mRestDtTm; }
+
+	//string	catsPat( );
 
 	AutoHD<TMdPrm> at( const string &nm )	{ return TController::at(nm); }
 
@@ -135,16 +142,37 @@ class TMdContr: public TController
 	void start_( );
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co );
+	void prmEn( TMdPrm *prm, bool val );
 
     private:
+	//Data
+	class StHd
+	{
+	    public:
+	    StHd( ) : cntr(0) { lstMess.clear(); }
+
+	    float cntr;
+	    map<string, time_t> lstMess;
+	};
+	class SPrmsStack
+	{
+	    public:
+	    SPrmsStack( XMLNode	*ind, int ipos, const AutoHD<TMdPrm> &iprm ) : nd(ind), pos(ipos), prm(iprm) { }
+
+	    XMLNode		*nd;
+	    int			pos;
+	    AutoHD<TMdPrm>	prm;
+	};
+
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	enRes;				//Resource for enable params and request to remote OpenSCADA station
+	pthread_mutex_t	enRes;			//Resource for enable params and request to remote OpenSCADA station
 	TCfg	&mSched;			//Calc schedule
+		//&mMessLev;			//Messages level for gather
 	double	&mSync,				//Synchronization inter remote OpenSCADA station:
 						//configuration update, attributes list update, local and remote archives sync.
 		&mRestDtTm;			//Restore data maximum length time (hour)
@@ -156,7 +184,9 @@ class TMdContr: public TController
 		call_st,			//Calc now stat
 		endrunReq;			//Request to stop of the Process task
 	int8_t	alSt;				//Alarm state
-	vector< pair<string,float> > mStatWork;	//Work stations and it status
+	vector< pair<string,StHd> > mStatWork;	//Work stations and it status
+
+	vector< AutoHD<TMdPrm> > pHd;
 
 	double	mPer, tmGath;			//Gathering time
 };

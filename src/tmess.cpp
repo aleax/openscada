@@ -67,7 +67,7 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
 	mConvCode = false;
 }
 
-TMess::~TMess(  )
+TMess::~TMess( )
 {
     closelog();
 }
@@ -99,8 +99,7 @@ void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
     int64_t ctm = TSYS::curTime();
     string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
 
-    if(mLogDir & DIR_SYSLOG)
-    {
+    if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
 	switch(abs(level))
 	{
@@ -160,7 +159,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     if(!mConvCode || fromCH == toCH) return mess;
 
 #ifdef HAVE_ICONV_H
-    //> Make convert to blocks 1000 bytes
+    //Make convert to blocks 1000 bytes
     string buf;
     buf.reserve(mess.size());
     char   *ibuf, outbuf[1000], *obuf;
@@ -168,8 +167,7 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     iconv_t hd;
 
     hd = iconv_open(toCH.c_str(), fromCH.c_str());
-    if(hd == (iconv_t)(-1))
-    {
+    if(hd == (iconv_t)(-1)) {
 	mess_crit("IConv",_("Error 'iconv' open: %s"),strerror(errno));
 	return mess;
     }
@@ -177,13 +175,11 @@ string TMess::codeConv( const string &fromCH, const string &toCH, const string &
     ibuf = (char *)mess.data();
     ilen = mess.size();
 
-    while(ilen)
-    {
+    while(ilen) {
 	obuf = outbuf;
 	olen = sizeof(outbuf)-1;
 	size_t rez = iconv(hd, &ibuf, &ilen, &obuf, &olen);
-	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF))
-	{
+	if(rez == (size_t)(-1) && (errno == EINVAL || errno == EBADF)) {
 	    mess_crit("IConv", _("Error input sequence convert: %s"), strerror(errno));
 	    buf = mess;
 	    break;
@@ -224,18 +220,17 @@ void TMess::setLang2CodeBase( const string &vl )
 
 void TMess::load( )
 {
-    //> Load params from command line
+    //Load params from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	return;
-	else if(argCom == "MessLev")
-	{
+	if(argCom == "h" || argCom == "help")	return;
+	else if(argCom == "MessLev") {
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);
 	}
 	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
 
-    //> Load params config-file
+    //Load params config-file
     setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));
     setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg).c_str()));
     setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
@@ -259,36 +254,33 @@ const char *TMess::labDB( )
 const char *TMess::labSecCRON( )
 {
     return _("Schedule is wrote in seconds periodic form or in standard CRON form.\n"
-             "Seconds form is one real number (1.5, 1e-3).\n"
-             "Cron it is standard form \"* * * * *\".\n"
-             "  Where items by order:\n"
-             "    - minutes (0-59);\n"
-             "    - hours (0-23);\n"
-             "    - days (1-31);\n"
-             "    - month (1-12);\n"
-             "    - week day (0[Sunday]-6).\n"
-             "  Where an item variants:\n"
-             "    - \"*\" - any value;\n"
-             "    - \"1,2,3\" - allowed values;\n"
-             "    - \"1-5\" - raw range of allowed values;\n"
-             "    - \"*/2\" - range divider for allowed values.\n"
-             "Examples:\n"
-             "  \"1e-3\" - periodic call by one millisecond;\n"
-             "  \"* * * * *\" - each minute;\n"
-             "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
-             "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
-             "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include).");
+	     "Seconds form is one real number (1.5, 1e-3).\n"
+	     "Cron it is standard form \"* * * * *\".\n"
+	     "  Where items by order:\n"
+	     "    - minutes (0-59);\n"
+	     "    - hours (0-23);\n"
+	     "    - days (1-31);\n"
+	     "    - month (1-12);\n"
+	     "    - week day (0[Sunday]-6).\n"
+	     "  Where an item variants:\n"
+	     "    - \"*\" - any value;\n"
+	     "    - \"1,2,3\" - allowed values;\n"
+	     "    - \"1-5\" - raw range of allowed values;\n"
+	     "    - \"*/2\" - range divider for allowed values.\n"
+	     "Examples:\n"
+	     "  \"1e-3\" - periodic call by one millisecond;\n"
+	     "  \"* * * * *\" - each minute;\n"
+	     "  \"10 23 * * *\" - only 23 hour and 10 minute for any day and month;\n"
+	     "  \"*/2 * * * *\" - for minutes: 0,2,4,...,56,58;\n"
+	     "  \"* 2-4 * * *\" - for any minutes in hours from 2 to 4(include).");
 }
 
-const char *TMess::labSecCRONsel( )
-{
-    return "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *";
-}
+const char *TMess::labSecCRONsel( )	{ return "1;1e-3;* * * * *;10 * * * *;10-20 2 */2 * *"; }
 
 const char *TMess::labTaskPrior( )
 {
     return _("Task priority level (-1...99), where:\n"
-             "  -1     - lowest priority batch policy;\n"
-             "  0      - standard userspace priority;\n"
-             "  1...99 - realtime priority level (round-robin), often allowed only for \"root\".");
+	     "  -1     - lowest priority batch policy;\n"
+	     "  0      - standard userspace priority;\n"
+	     "  1...99 - realtime priority level (round-robin), often allowed only for \"root\".");
 }

@@ -66,7 +66,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
-	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
 	void setProtocolFull( const string &prt )	{ cfg("PROT").setS(prt); }
 	void setToStart( bool val )			{ mStart = val; modif(); }
 
@@ -83,7 +83,7 @@ class TTransportIn : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg )	{ modif(); return true; }
+	bool cfgChange( TCfg &co );
 
 	void load_( );
 	void save_( );
@@ -133,7 +133,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void setName( const string &inm )		{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )		{ cfg("DESCRIPT").setS(idscr); }
-	virtual void setAddr( const string &addr )	{ cfg("ADDR").setS(addr); }
+	void setAddr( const string &addr )		{ cfg("ADDR").setS(addr); }
 	virtual void setTimings( const string &vl )	{ }
 	void setPrm1( int vl )				{ mPrm1 = vl; }
 	void setPrm2( int vl )				{ mPrm2 = vl; }
@@ -141,7 +141,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void setDB( const string &vl )			{ mDB = vl; modifG(); }
 
-	virtual void start( )			{ };
+	virtual void start( int time = 0 )	{ };
 	virtual void stop( )			{ };
 
 	virtual int messIO( const char *obuf, int len_ob, char *ibuf = NULL, int len_ib = 0, int time = 0, bool noRes = false )
@@ -159,7 +159,7 @@ class TTransportOut : public TCntrNode, public TConfig
 
 	void preEnable( int flag );
 	void postDisable( int flag );		//Delete all DB if flag 1
-	bool cfgChange( TCfg &cfg );
+	bool cfgChange( TCfg &co );
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );
 

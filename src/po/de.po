@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-24 19:13+0300\n"
+"POT-Creation-Date: 2014-07-22 10:11+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -41,14 +41,21 @@ msgstr "Name"
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "Start archive"
-msgstr "Start des Archivs"
+msgid "To start"
+msgstr "Starten"
 
 msgid "Messages categories"
 msgstr "Nachrichtenkategorien"
 
 msgid "Messages level"
 msgstr "Nachrichtenstufe"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7)"
+msgstr ""
+"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
+"(5);Wach (6);Notfall (7)"
 
 msgid "Address"
 msgstr "Adresse"
@@ -59,14 +66,20 @@ msgstr "Wiederholung des Werts (sek)"
 msgid "Period archiving (sec)"
 msgstr "Zeitintervall für die Archivierung (Sek)"
 
-msgid "Source mode"
-msgstr "Quellenmodus"
+msgid "Selection priority"
+msgstr "Auswahl Priorität"
 
 msgid "Source"
 msgstr "Quelle"
 
+msgid "Passive;Passive param. attribute;Active param. attribute"
+msgstr "Passiv;Passives Parameterattribut;Aktives Parameterattribut"
+
 msgid "Value type"
 msgstr "Datentyp der Werte"
+
+msgid "Boolean;Integer;Real;String"
+msgstr "Logisch;Ganzzahl;Reelle Zahl;Linie"
 
 msgid "Buffer period (sec)"
 msgstr "Zeitintervall für Speicherung (Sek)"
@@ -146,14 +159,8 @@ msgstr "Fehler beim Anhalten des Nachrichtarchivars '%s'."
 msgid "Value archive '%s' stop error."
 msgstr "Fehler beim Anhalten des Wertearchivs '%s'."
 
-msgid "Buffer full. Messages lost!"
-msgstr "Der Speicher ist voll, Datenverlust!"
-
-msgid "Messages buffer filling is too fast!"
-msgstr "Nachrichtenspeicher wird zu schnell gefüllt!"
-
-msgid "Message buffer read error."
-msgstr "Fehler beim Lesen des Nachrichtenspeichers."
+msgid "Message buffer process error."
+msgstr "Meldepuffer Prozessfehler."
 
 msgid "Value archive"
 msgstr "Wertearchiv"
@@ -293,13 +300,6 @@ msgid "Configuration"
 msgstr "Konfiguration"
 
 msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
-msgstr ""
-"Debuggen (0);Information (1);Bemerkung (2);Warnung (3);Fehler (4);Kritisch "
-"(5);Wach (6);Notfall (7)"
-
-msgid ""
 "Messages category template or regular expression to processing by "
 "archivator, separated by symbol ';'.\n"
 "Use template symbols for group selection:\n"
@@ -313,9 +313,6 @@ msgstr ""
 "  '*' - jeweilige Subzeile;\n"
 "  '?' - jeweiliges Symbol.\n"
 "Regulärer Ausdruck in Symbolen umschlossen '/' (/mod_(System|LogicLev)/)."
-
-msgid "To start"
-msgstr "Starten"
 
 msgid "Value is not present."
 msgstr "Der Wert ist nicht vorhanden."
@@ -466,6 +463,20 @@ msgstr "Wertearchivar: "
 msgid "Archiving time"
 msgstr "Archivierungszeit"
 
+msgid ""
+"Set zero period for disable using the archiver for buffer processing, only "
+"for direct write."
+msgstr ""
+"Nullpunktperiode für Behinderte mit dem Archivierungs für Puffer-"
+"Verarbeitung, nur für den direkten Schreib."
+
+msgid ""
+"Selection the archiver priority for \"All\" sources using mode. Set to zero "
+"for full the selection disable."
+msgstr ""
+"Auswahl der Archivierungs Priorität für \"Alle\" mit Quellen-Modus. Auf Null "
+"einstellen für Voll der Auswahl deaktivieren."
+
 msgid "Archives"
 msgstr "Aufzeichnungen"
 
@@ -490,6 +501,12 @@ msgstr "Aktivieren"
 #, c-format
 msgid "Close DB '%s' error!"
 msgstr "Fehler beim Schliessen der Datenbank '%s'!"
+
+msgid "Requested row no present."
+msgstr "Angeforderte Zeile nicht vorhanden."
+
+msgid "Write row to DB or config file error."
+msgstr "Schreiben Reihe zum DB-oder Konfigurationsfehler."
 
 #, c-format
 msgid ""
@@ -669,12 +686,6 @@ msgstr "Knoten ist 'root' oder nicht verbunden!"
 msgid "Element '%s' is not present or disabled!"
 msgstr "Element '%s' ist nicht vorhanden oder abgeschaltet!"
 
-msgid "Loading node error."
-msgstr "Fehler beim Laden des Knotens."
-
-msgid "Saving node error."
-msgstr "Fehler beim Speichern des Knotens."
-
 msgid "Too more users for node!!!"
 msgstr "Zu viele Benutzer für Knoten!!!"
 
@@ -697,6 +708,22 @@ msgstr "Element '%s' Warnung! %s"
 #, c-format
 msgid "Node: %s"
 msgstr "Knoten: %s"
+
+#, c-format
+msgid ""
+"Load error:\n"
+"%s"
+msgstr ""
+"Lastfehler:\n"
+"%s"
+
+#, c-format
+msgid ""
+"Save error:\n"
+"%s"
+msgstr ""
+"Fehler speichern\n"
+"%s"
 
 msgid "[TableName]"
 msgstr "[Tabellenname]"
@@ -820,7 +847,6 @@ msgstr "Reale Stelle"
 msgid "Error"
 msgstr "Fehler"
 
-#: tdaqs.cpp:141
 msgid "=== Attributes ==="
 msgstr "=== Attribute ==="
 
@@ -851,23 +877,17 @@ msgid "Disable controller '%s' error."
 msgstr "Fehler beim Abschalten des Controllers '%s'."
 
 #, c-format
-msgid "No parameter present '%s'."
-msgstr "Es gibt keine Option '%s'."
-
-#: tdaqs.cpp:470
-#, fuzzy, c-format
-msgid "Pointed node is not parameter '%s'."
-msgstr "Fehler beim Hinzufügen des Parameters '%s'."
+msgid "No DAQ node present '%s'."
+msgstr "Kein DAQ Knoten vorhanden '%s'."
 
 #, c-format
-msgid "No attribute present '%s'."
-msgstr "Es ist kein Attribut '%s'."
+msgid "Pointed node is not parameter '%s'."
+msgstr "Spitz Knoten nicht Parameter '%s'."
 
 #, c-format
 msgid "Pointed node is not attribute '%s'."
 msgstr ""
 
-#: tdaqs.cpp:673
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
@@ -1535,6 +1555,10 @@ msgstr ""
 "Fehler der Veränderung der Arbeitsdirectory in '%s': %s. Wahrscheinlich ist "
 "die laufende Directory schon korrekt installiert in '%s'."
 
+#, c-format
+msgid "Read only access to file '%s'."
+msgstr "Nur Lesezugriff auf Datei '%s'."
+
 msgid "day"
 msgstr "Tag"
 
@@ -1665,8 +1689,9 @@ msgstr ""
 msgid "Config-file '%s' error: %s"
 msgstr "Konfigurationsdatei '%s' Fehler: %s"
 
+#, c-format
 msgid "Config-file '%s' load error."
-msgstr "Konfigurationsdatei '%s' Fehler: %s"
+msgstr "Config-Datei '%s' Ladefehler."
 
 #, c-format
 msgid ""
@@ -1748,12 +1773,13 @@ msgstr "Warte auf Ereignis..."
 msgid "Task '%s' is already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
+#, c-format
 msgid ""
 "No permission for create real-time policy for '%s'. Default thread is "
 "created!"
 msgstr ""
-"Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist geschaffen "
-"default!"
+"Kein Zugang für das Schaffen der Realzeitpolitik für '%s'. Der Strom ist "
+"geschaffen default!"
 
 #, c-format
 msgid "Task creation error %d."
@@ -1910,8 +1936,8 @@ msgid "Finished. "
 msgstr "Finished. "
 
 #, c-format
-msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"
-msgstr "Letzter: %s. Laden: %3.1f%% (%s von %s). Lag: %s"
+msgid "Last: %s. Consume: %3.1f%% (%s from %s). Lag: %s."
+msgstr "Letzter: %s. Konsumieren: %3.1f%% (%s von %s). Lag: %s."
 
 msgid "Standard"
 msgstr "Standard"
@@ -2008,14 +2034,15 @@ msgstr ""
 "================== Optionen des Subsystems \"Übertragung\" ================\n"
 "\n"
 
-msgid "Remote host error!"
-msgstr "Fehler des entfernten Systems!"
-
-msgid "System's external hosts"
-msgstr "Entfernte Systeme"
+#, c-format
+msgid "Remote host '%s' error!"
+msgstr "Fehler des entfernten Systems '%s'!"
 
 msgid "External hosts poll"
 msgstr "Liste der entfernten Systeme"
+
+msgid "User;System;User and System"
+msgstr ""
 
 msgid "New external host"
 msgstr "Neuer externe Host"
@@ -2149,12 +2176,6 @@ msgstr "Fehler Zuweisung von Speicher für eine Reihe von Großformat (%d)!"
 msgid "Double disconnection try: %d."
 msgstr "Ein Versuch, verdoppeln sich aus: %d."
 
-msgid "Negative id is not allow for array."
-msgstr "Negativer Index ist verboten für das Massiv-"
-
-msgid "Array is empty."
-msgstr "Massiv ist leer."
-
 #, c-format
 msgid "Deletion child '%d' error."
 msgstr "Fehler beim Löschen des Nachkommens IO %d."
@@ -2164,11 +2185,16 @@ msgid "Child '%d' is not allow."
 msgstr "Nachkommen %d ist verboten."
 
 #, c-format
+msgid "Child %s:%d is not found!"
+msgstr "Kind %s:%d wurde nicht gefunden!"
+
+#, c-format
 msgid "2:Open file '%s' error: %s"
 msgstr "Fehler der Öffnung der Datei '%s' : %s"
 
+#, c-format
 msgid "3:Load file '%s' error."
-msgstr "Fehler beim Anhahalten des Moduls '%s'."
+msgstr "3:Datei laden '%s' Fehler."
 
 msgid "The object don't attached to node of OpenSCADA tree."
 msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."
@@ -2176,10 +2202,6 @@ msgstr "Das Objekt ist an den OpenSCADA-Baumknoten nicht angeschaltet."
 #, c-format
 msgid "Child %d is not present."
 msgstr "Kind %d ist nicht vorhanden."
-
-#, c-format
-msgid "Child %s:%d is not found!"
-msgstr "Kind %s:%d wurde nicht gefunden!"
 
 #, c-format
 msgid "Child with attribut %s=%s is not present."
