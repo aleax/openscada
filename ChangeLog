@@ -1,3 +1,9 @@
+2014-07-25 Roman
+- FIX:UI.Vision: Force set Cap policy to Qt::FlatCap for primitive Diagram's paint, mostly for workaround visible defects here on Qt5.
+    Ticks lost for Slider view and related views deffects of primitive FormEl at press to the elements' container widget
+	by prevent that's QEvent::MouseButtonPress and QEvent::MouseButtonRelease events global process.
+
+
 2014-07-22 Roman
 - SYS: messid location place to *.po files disable, mostly for prevent SVN merge problems, again.
 - DB.MySQL: "bigint" type using everywhere for integers fix.

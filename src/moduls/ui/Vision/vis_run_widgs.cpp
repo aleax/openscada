@@ -450,8 +450,7 @@ bool RunWdgView::event( QEvent *event )
 		case Qt::MidButton:	mod_ev += "Midle";	break;
 		default: break;
 	    }
-	    if(isVisible(mapFromGlobal(cursor().pos())))
-	    {
+	    if(isVisible(mapFromGlobal(cursor().pos()))) {
 		if(event->type() == QEvent::MouseButtonPress && !hasFocus()) setFocus(Qt::MouseFocusReason);
 		attrSet("event", mod_ev);
 		return true;

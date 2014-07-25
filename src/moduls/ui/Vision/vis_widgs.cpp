@@ -56,9 +56,9 @@ using namespace VCA;
 //* Id and name input dialog                      *
 //*************************************************
 InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, const QString &ndlg, bool with_id, bool with_nm ) :
-	QDialog(parent), m_id(NULL), m_name(NULL)
+	QDialog(parent), mId(NULL), mName(NULL)
 {
-    setMaximumSize(800,600);
+    setMaximumSize(800, 600);
     setWindowTitle(ndlg);
     setWindowIcon(icon);
     //setSizeGripEnabled(true);
@@ -72,44 +72,42 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     intr_lay->setSpacing(6);
 
     QLabel *icon_lab = new QLabel(this);
-    icon_lab->setSizePolicy( QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum) );
+    icon_lab->setSizePolicy(QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
     icon_lab->setPixmap(icon.pixmap(48));
     intr_lay->addWidget(icon_lab);
 
-    inp_lab = new QLabel(mess,this);
-    //inp_lab->setAlignment(Qt::AlignHCenter);
-    inp_lab->setWordWrap(true);
-    intr_lay->addWidget(inp_lab);
+    inpLab = new QLabel(mess, this);
+    //inpLab->setAlignment(Qt::AlignHCenter);
+    inpLab->setWordWrap(true);
+    intr_lay->addWidget(inpLab);
     dlg_lay->addItem(intr_lay);
 
-    ed_lay = new QGridLayout;
-    ed_lay->setSpacing(6);
+    mEdLay = new QGridLayout;
+    mEdLay->setSpacing(6);
     //Id and name fields
-    if( with_id )
-    {
-	ed_lay->addWidget(new QLabel(_("ID:"),this), 0, 0);
-	m_id = new QLineEdit(this);
-	ed_lay->addWidget(m_id, 0, 1);
+    if(with_id) {
+	mEdLay->addWidget(new QLabel(_("ID:"),this), 0, 0);
+	mId = new QLineEdit(this);
+	mEdLay->addWidget(mId, 0, 1);
     }
-    if( with_nm )
-    {
-	ed_lay->addWidget(new QLabel(_("Name:"),this), 1, 0);
-	m_name = new QLineEdit(this);
-	ed_lay->addWidget(m_name, 1, 1);
+    if(with_nm) {
+	mEdLay->addWidget(new QLabel(_("Name:"),this), 1, 0);
+	mName = new QLineEdit(this);
+	mEdLay->addWidget(mName, 1, 1);
     }
 
-    ed_lay->addItem(new QSpacerItem(10, 0, QSizePolicy::Minimum, QSizePolicy::Expanding),100,0,1,-1);
+    mEdLay->addItem(new QSpacerItem(10,0,QSizePolicy::Minimum,QSizePolicy::Expanding), 100, 0, 1, -1);
 
-    dlg_lay->addItem(ed_lay);
+    dlg_lay->addItem(mEdLay);
 
     //Qk and Cancel buttons
     QFrame *sep = new QFrame(this);
-    sep->setFrameShape( QFrame::HLine );
-    sep->setFrameShadow( QFrame::Raised );
-    dlg_lay->addWidget( sep );
+    sep->setFrameShape(QFrame::HLine);
+    sep->setFrameShadow(QFrame::Raised);
+    dlg_lay->addWidget(sep);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox( QDialogButtonBox::Ok|
-						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+						     QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -124,41 +122,27 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     resize(400,120+(40*with_nm)+(40*with_id));
 }
 
-QString InputDlg::id()
-{
-    if( m_id )	return m_id->text();
-    return "";
-}
+QString InputDlg::id( )		{ return mId ? mId->text() : ""; }
 
-QString InputDlg::name()
-{
-    if( m_name )return m_name->text();
-    return "";
-}
+QString InputDlg::name( )	{ return mName ? mName->text() : ""; }
 
-QString InputDlg::mess( )
-{
-    return inp_lab->text();
-}
+QString InputDlg::mess( )	{ return inpLab->text(); }
 
 void InputDlg::setId(const QString &val)
 {
-    if( m_id )	m_id->setText(val);
+    if(mId) mId->setText(val);
 }
 
 void InputDlg::setName(const QString &val)
 {
-    if( m_name )m_name->setText(val);
+    if(mName) mName->setText(val);
 }
 
-void InputDlg::setMess( const QString &val )
-{
-    inp_lab->setText( val );
-}
+void InputDlg::setMess( const QString &val )	{ inpLab->setText(val); }
 
 void InputDlg::setIdLen( int len )
 {
-    if( m_id )	m_id->setMaxLength(len);
+    if(mId) mId->setMaxLength(len);
 }
 
 void InputDlg::showEvent( QShowEvent * event )
@@ -180,24 +164,24 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     dlg_lay->setMargin(10);
     dlg_lay->setSpacing(6);
 
-    QGridLayout *ed_lay = new QGridLayout;
-    ed_lay->setSpacing(6);
-    ed_lay->addWidget( new QLabel(_("User:"),this), 0, 0 );
+    QGridLayout *edLay = new QGridLayout;
+    edLay->setSpacing(6);
+    edLay->addWidget(new QLabel(_("User:"),this), 0, 0);
     users = new QComboBox(this);
     users->setEditable(true);
-    ed_lay->addWidget( users, 0, 1 );
-    ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
+    edLay->addWidget(users, 0, 1);
+    edLay->addWidget(new QLabel(_("Password:"),this), 1, 0);
     passwd = new QLineEdit(this);
     passwd->setEchoMode(QLineEdit::Password);
-    ed_lay->addWidget(passwd, 1, 1);
-    dlg_lay->addItem(ed_lay);
+    edLay->addWidget(passwd, 1, 1);
+    dlg_lay->addItem(edLay);
 
-    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+    dlg_lay->addItem(new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding));
 
     QFrame *sep = new QFrame(this);
-    sep->setFrameShape( QFrame::HLine );
-    sep->setFrameShadow( QFrame::Raised );
-    dlg_lay->addWidget( sep );
+    sep->setFrameShape(QFrame::HLine);
+    sep->setFrameShadow(QFrame::Raised);
+    dlg_lay->addWidget(sep);
 
     QDialogButtonBox *but_box = new QDialogButtonBox( QDialogButtonBox::Ok|
 						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
@@ -224,21 +208,14 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     users->setEditText(iuser);
 }
 
-QString DlgUser::user()
-{
-    return users->currentText();
-}
+QString DlgUser::user( )	{ return users->currentText(); }
 
-QString DlgUser::password()
-{
-    return passwd->text();
-}
+QString DlgUser::password( )	{ return passwd->text(); }
 
 void DlgUser::finish( int result )
 {
-    if( result )
-    {
-	//> Check user auth
+    if(result) {
+	//Check user auth
 	XMLNode req("get");
 	req.setAttr("path",string("/Security/")+user().toStdString()+"/%2fauth")->setAttr("password",password().toStdString());
 	if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true) && atoi(req.text().c_str()))
@@ -267,7 +244,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     dlg_lay->setSpacing(6);
 
     QLabel *lab = new QLabel(_("Font:"),this);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
     dlg_lay->addWidget(lab,0,0,1,2);
     fntSel = new QFontComboBox(this);
     connect(fntSel, SIGNAL(currentFontChanged(const QFont&)), this, SLOT(cfgChange()));
@@ -276,7 +253,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     QVBoxLayout *sz_lay = new QVBoxLayout;
     sz_lay->setSpacing(6);
     lab = new QLabel(_("Size:"),this);
-    lab->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed) );
+    lab->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
     sz_lay->addWidget(lab);
     spBox = new QSpinBox(this);
     spBox->setValue(10);
@@ -301,21 +278,21 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     grpLay = new QVBoxLayout;
     grpLay->setMargin(5);
     sampleText = new QLineEdit(_("AaBbCcDdEeFf"),this);
-    sampleText->setSizePolicy( QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred) );
+    sampleText->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred));
     sampleText->setAlignment(Qt::AlignCenter);
     grpLay->addWidget(sampleText);
     grpBox->setLayout(grpLay);
     dlg_lay->addWidget(grpBox,2,1);
 
-    dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ), 3, 0, 1, 2 );
+    dlg_lay->addItem(new QSpacerItem(20,0,QSizePolicy::Minimum,QSizePolicy::Expanding), 3, 0, 1, 2);
 
     QFrame *sep = new QFrame(this);
-    sep->setFrameShape( QFrame::HLine );
-    sep->setFrameShadow( QFrame::Raised );
-    dlg_lay->addWidget( sep, 4, 0, 1, 2 );
+    sep->setFrameShape(QFrame::HLine);
+    sep->setFrameShadow(QFrame::Raised);
+    dlg_lay->addWidget(sep, 4, 0, 1, 2);
 
-    QDialogButtonBox *but_box = new QDialogButtonBox( QDialogButtonBox::Ok|
-						      QDialogButtonBox::Cancel, Qt::Horizontal, this );
+    QDialogButtonBox *but_box = new QDialogButtonBox(QDialogButtonBox::Ok|
+						     QDialogButtonBox::Cancel, Qt::Horizontal, this);
     QImage ico_t;
     but_box->button(QDialogButtonBox::Ok)->setText(_("Ok"));
     if(!ico_t.load(TUIS::icoGet("button_ok",NULL,true).c_str())) ico_t.load(":/images/button_ok.png");
@@ -353,7 +330,7 @@ void FontDlg::setFont( const QString &fnt )
     chUnder->setCheckState(underline?Qt::Checked:Qt::Unchecked);
 }
 
-void FontDlg::cfgChange()
+void FontDlg::cfgChange( )
 {
     QFont fnt;
     fnt.setFamily(fntSel->currentFont().family());
@@ -391,7 +368,7 @@ void UserStBar::setUser( const QString &val )
 
 bool UserStBar::event( QEvent *event )
 {
-    if( event->type() == QEvent::MouseButtonDblClick )	userSel();
+    if(event->type() == QEvent::MouseButtonDblClick)	userSel();
     return QLabel::event( event );
 }
 
@@ -399,17 +376,15 @@ bool UserStBar::userSel()
 {
     DlgUser d_usr(user(),pass(),VCAStation(),parentWidget());
     int rez = d_usr.exec();
-    if( rez == DlgUser::SelOK && d_usr.user() != user() )
-    {
-	QString old_user = user(),
-		old_pass = pass();
-	setUser( d_usr.user() );
-	setPass( d_usr.password() );
-	emit userChanged( old_user, old_pass );
+    if(rez == DlgUser::SelOK && d_usr.user() != user()) {
+	QString old_user = user(), old_pass = pass();
+	setUser(d_usr.user());
+	setPass(d_usr.password());
+	emit userChanged(old_user, old_pass);
 	return true;
     }
-    else if( rez == DlgUser::SelErr )
-	mod->postMess(mod->nodePath().c_str(),_("Auth wrong!!!"),TVision::Warning,this);
+    else if(rez == DlgUser::SelErr)
+	mod->postMess(mod->nodePath().c_str(), _("Auth wrong!!!"), TVision::Warning, this);
 
     return false;
 }
@@ -471,10 +446,10 @@ void LineEdit::setType( LType tp )
     needReserver = false;
     if(tp == m_tp) return;
 
-    //> Delete previous
+    //Delete previous
     if(tp >= 0 && ed_fld) delete ed_fld;
 
-    //> Create new widget
+    //Create new widget
     switch(tp)
     {
 	case Text:
@@ -633,7 +608,7 @@ void LineEdit::setCfg(const QString &cfg)
     if(ed_fld) ed_fld->blockSignals(false);
 }
 
-QString LineEdit::value()
+QString LineEdit::value( )
 {
     switch(type())
     {
@@ -698,7 +673,7 @@ void SyntxHighl::setSnthHgl( XMLNode nd )
 {
     rules = nd;
 
-    //> Set current font settings
+    //Set current font settings
     document()->setDefaultFont(WdgShape::getFont(rules.attr("font"), 1, false));
 
     rehighlight();
@@ -714,12 +689,11 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 
     if(lev > 3) return;
 
-    //> Init previous block continue
+    //Init previous block continue
     int curBlk = (currentBlockState()>>(lev*8))&0xFF;
 
-    //> Stream process by rules
-    for(int i_t = 0; i_t < text.length(); )
-    {
+    //Stream process by rules
+    for(int i_t = 0; i_t < text.length(); ) {
 	if(curBlk && !i_t) { minRule = curBlk-1; minPos = 0; }
 	else minRule = -1;
 
@@ -727,9 +701,9 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	{
 	    if(!(minPos < i_t || rul_pos[i_ch] < i_t || rul_pos[i_ch] < minPos)) continue;
 	    if(rul_pos[i_ch] >= i_t && rul_pos[i_ch] < minPos)	{ minPos = rul_pos[i_ch]; minRule = i_ch; continue; }
-	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos) { minRule = i_ch; break; }
+	    if(rul_pos[i_ch] == i_t && rul_pos[i_ch] == minPos)	{ minRule = i_ch; break; }
 
-	    //> Call rule
+	    //Call rule
 	    rl = irl->childGet(i_ch);
 	    if(rl->name() == "rule")    expr.setPattern(rl->attr("expr").c_str());
 	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
@@ -742,27 +716,24 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	}
 	if(minRule < 0) break;
 
-	//> Process minimal rule
+	//Process minimal rule
 	rl = irl->childGet(minRule);
 	kForm.setForeground(QColor(rl->attr("color").c_str()));
 	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
 	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
 
-	if(rl->name() == "rule")
-	{
+	if(rl->name() == "rule") {
 	    expr.setPattern(rl->attr("expr").c_str());
 	    expr.setMinimal(atoi(rl->attr("min").c_str()));
 	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
-	    //> Call include rules
+	    //Call include rules
 	    if(rl->childSize()) rule(rl, text.mid(rul_pos[minRule],expr.matchedLength()), rul_pos[minRule]+off, lev+1);
 	    i_t = rul_pos[minRule]+expr.matchedLength();
 	}
-	else if(rl->name() == "blk")
-	{
+	else if(rl->name() == "blk") {
 	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
-	    else
-	    {
+	    else {
 		expr.setPattern(rl->attr("beg").c_str());
 		expr.setMinimal(atoi(rl->attr("min").c_str()));
 		if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
@@ -771,19 +742,17 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	    QRegExp eExpr(rl->attr("end").c_str());
 	    eExpr.setMinimal(atoi(rl->attr("min").c_str()));
 	    endIndex = eExpr.indexIn(text, startBlk);
-	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
-	    {
+	    if(endIndex == -1 || eExpr.matchedLength() <= 0) {
 		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
 		sizeBlk = text.length()-startBlk;
 		i_t = text.length();
 	    }
-	    else
-	    {
+	    else {
 		setFormat(rul_pos[minRule]+off, (endIndex-rul_pos[minRule]+eExpr.matchedLength()), kForm);
 		sizeBlk = endIndex-startBlk;
 		i_t = endIndex + eExpr.matchedLength();
 	    }
-	    //> Call include rules
+	    //Call include rules
 	    if(rl->childSize()) rule(rl, text.mid(startBlk,sizeBlk), startBlk+off, lev+1);
 	    if(endIndex == -1 || eExpr.matchedLength() <= 0)
 		setCurrentBlockState(((minRule+1)<<(lev*8))|currentBlockState());
@@ -813,7 +782,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     ed_fld->setTabStopWidth(20);
     ed_fld->setAcceptRichText(false);
     ed_fld->setLineWrapMode(QTextEdit::NoWrap);
-    setFocusProxy( ed_fld );
+    setFocusProxy(ed_fld);
     connect(ed_fld, SIGNAL(textChanged()), this, SLOT(changed()) );
     connect(ed_fld, SIGNAL(cursorPositionChanged()), this, SLOT(curPosChange()) );
     connect(ed_fld, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(ctrTreePopup()));
@@ -867,8 +836,7 @@ void TextEdit::setText( const QString &itext )
 {
     isInit = true;
     if(itext != text()) ed_fld->setPlainText(itext);
-    if(but_box && but_box->isEnabled())
-    {
+    if(but_box && but_box->isEnabled()) {
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
     }
@@ -886,8 +854,7 @@ void TextEdit::setSnthHgl( XMLNode nd )
 void TextEdit::changed( )
 {
     if(isInit) return;
-    if(but_box && !but_box->isEnabled() && text() != m_text)
-    {
+    if(but_box && !but_box->isEnabled() && text() != m_text) {
 	but_box->setVisible(true);
 	but_box->setEnabled(true);
     }
@@ -899,8 +866,7 @@ void TextEdit::changed( )
 
 void TextEdit::applySlot( )
 {
-    if(but_box && but_box->isEnabled())
-    {
+    if(but_box && but_box->isEnabled()) {
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
     }
@@ -925,23 +891,21 @@ void TextEdit::curPosChange( )
 
 bool TextEdit::event( QEvent * e )
 {
-    if( but_box && e->type() == QEvent::KeyRelease )
-    {
+    if(but_box && e->type() == QEvent::KeyRelease) {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if( (keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier )
+	if((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) && QApplication::keyboardModifiers()&Qt::ControlModifier)
 	{
 	    but_box->button(QDialogButtonBox::Apply)->animateClick( );
 	    return true;
 	}
-	else if( keyEvent->key() == Qt::Key_Escape )
-	{
+	else if(keyEvent->key() == Qt::Key_Escape) {
 	    but_box->button(QDialogButtonBox::Cancel)->animateClick( );
 	    return true;
 	}
     }
-    if( e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty() )
-    {
-	QToolTip::showText( ((QHelpEvent *)e)->globalPos(), QString(_("Cursor = (%1:%2)")).arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1) );
+    if(e->type() == QEvent::ToolTip && hasFocus() && toolTip().isEmpty()) {
+	QToolTip::showText(((QHelpEvent *)e)->globalPos(),QString(_("Cursor = (%1:%2)")).
+	    arg(ed_fld->textCursor().blockNumber()+1).arg(ed_fld->textCursor().columnNumber()+1));
 	return true;
     }
 
@@ -963,36 +927,33 @@ void TextEdit::find( )
     bool isFind = false;
     int fopt = (QTextDocument::FindFlag)actFind->objectName().section(':',false,false).toInt();
     QString fstr = actFind->objectName().section(':',1);
-    if( sender() == actFind )
-    {
+    if(sender() == actFind) {
 	InputDlg dlg(this,actFind->icon(),QString(_("Enter text string for search:")),_("String search"),0,0);
 	QLineEdit *le = new QLineEdit(fstr,&dlg);
 	dlg.edLay()->addWidget(le, 0, 0);
 	QCheckBox *bw = new QCheckBox(_("Backward"),&dlg);
-	if( fopt & QTextDocument::FindBackward ) bw->setCheckState(Qt::Checked);
+	if(fopt & QTextDocument::FindBackward) bw->setCheckState(Qt::Checked);
 	dlg.edLay()->addWidget(bw, 1, 0);
 	QCheckBox *cs = new QCheckBox(_("Case sensitively"),&dlg);
-	if( fopt & QTextDocument::FindCaseSensitively ) cs->setCheckState(Qt::Checked);
+	if(fopt & QTextDocument::FindCaseSensitively) cs->setCheckState(Qt::Checked);
 	dlg.edLay()->addWidget(cs, 2, 0);
 	QCheckBox *ww = new QCheckBox(_("Whole words"),&dlg);
-	if( fopt & QTextDocument::FindWholeWords ) ww->setCheckState(Qt::Checked);
+	if(fopt & QTextDocument::FindWholeWords) ww->setCheckState(Qt::Checked);
 	dlg.edLay()->addWidget(ww, 3, 0);
 	le->setFocus(Qt::OtherFocusReason);
 	dlg.resize(400,210);
-	if( dlg.exec() == QDialog::Accepted && !le->text().isEmpty() )
-	{
+	if(dlg.exec() == QDialog::Accepted && !le->text().isEmpty()) {
 	    fopt = (QTextDocument::FindFlag)0;
-	    if( bw->checkState()==Qt::Checked ) fopt |= QTextDocument::FindBackward;
-	    if( cs->checkState()==Qt::Checked ) fopt |= QTextDocument::FindCaseSensitively;
-	    if( ww->checkState()==Qt::Checked ) fopt |= QTextDocument::FindWholeWords;
+	    if(bw->checkState()==Qt::Checked) fopt |= QTextDocument::FindBackward;
+	    if(cs->checkState()==Qt::Checked) fopt |= QTextDocument::FindCaseSensitively;
+	    if(ww->checkState()==Qt::Checked) fopt |= QTextDocument::FindWholeWords;
 	    fstr = le->text();
 	    isFind = true;
 	}
     }
-    else if( sender() == actFindNext && !fstr.isEmpty() ) isFind = true;
+    else if(sender() == actFindNext && !fstr.isEmpty()) isFind = true;
 
-    if( isFind )
-    {
+    if(isFind) {
 	ed_fld->find(fstr,(QTextDocument::FindFlag)fopt);
 	actFind->setObjectName(QString::number(fopt)+":"+fstr);
     }
@@ -1037,10 +998,9 @@ WdgView::~WdgView( )
 
 void WdgView::childsClear( )
 {
-    //> Child widgets remove before
+    //Child widgets remove before
     QObjectList chLst = children();
-    for(int i_c = 0; i_c < chLst.size(); i_c++)
-    {
+    for(int i_c = 0; i_c < chLst.size(); i_c++) {
 	WdgView *cw = qobject_cast<WdgView*>(chLst[i_c]);
 	if(cw)	delete cw;
     }
@@ -1058,11 +1018,7 @@ float WdgView::yScale( bool full )
     return y_scale;
 }
 
-string WdgView::root( )
-{
-    if(shape) return shape->id();
-    return "";
-}
+string WdgView::root( )	{ return shape ? shape->id() : ""; }
 
 void WdgView::moveF( const QPointF &pos )
 {
@@ -1078,10 +1034,7 @@ void WdgView::resizeF( const QSizeF &isz )
     resize(QSize((int)TSYS::realRound(mWSize.width()), (int)TSYS::realRound(mWSize.height())));
 }
 
-WdgView *WdgView::newWdgItem( const string &iwid )
-{
-    return new WdgView(iwid,wLevel()+1,mainWin(),this);
-}
+WdgView *WdgView::newWdgItem( const string &iwid )	{ return new WdgView(iwid,wLevel()+1,mainWin(),this); }
 
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
@@ -1148,8 +1101,7 @@ void WdgView::attrsSet( AttrValS &attrs )
     XMLNode req("set");
     req.setAttr("path", id()+"/%2fserv%2fattr");
     string attrId, attrPos;
-    for(AttrValS::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++)
-    {
+    for(AttrValS::iterator i_a = attrs.begin(); i_a != attrs.end(); i_a++) {
 	int off = 0;
 	attrId = TSYS::strParse(i_a->first, 0, ":", &off);
 	attrPos = TSYS::strParse(i_a->first, 0, ":", &off);
@@ -1209,8 +1161,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	}
 
 	// Create new child widget
-	for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++)
-	{
+	for(int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++) {
 	    if(aBr->childGet(i_l)->name() != "w") continue;
 	    for(i_c = 0; i_c < children().size(); i_c++)
 		if(qobject_cast<WdgView*>(children().at(i_c)) &&
@@ -1230,30 +1181,26 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
 	if(reqBrCr) delete aBr;
     }
-    //> Going to children init
+    //Going to children init
     else
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	{
+	for(int i_c = 0; i_c < children().size(); i_c++) {
 	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
 	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
 		wdg->load((item==id())?"":item,false,(wLevel()>0)?isInit:false);
 	}
 
-    //> Init loaded data
+    //Init loaded data
     if(isInit && (item.empty() || item == id()) && wLevel() > 0) attrSet("", "load", -1);
 
-    //> Post load init for root widget
-    if(wLevel() == 0)
-    {
-	if(mess_lev() == TMess::Debug)
-	{
+    //Post load init for root widget
+    if(wLevel() == 0) {
+	if(mess_lev() == TMess::Debug) {
 	    mess_debug(mod->nodePath().c_str(), _("Load '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));
 	    d_cnt = TSYS::curTime();
 	}
 
 	attrSet("", "load", -1);
-	for(int i_c = 0; i_c < children().size(); i_c++)
-	{
+	for(int i_c = 0; i_c < children().size(); i_c++) {
 	    WdgView *wdg = qobject_cast<WdgView*>(children().at(i_c));
 	    if(wdg && (item.empty() || item == id() || wdg->id() == item.substr(0,wdg->id().size())))
 		wdg->load((item==id())?"":item,false,true);
