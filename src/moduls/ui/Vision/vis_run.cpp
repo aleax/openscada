@@ -63,17 +63,17 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
 {
     QImage ico_t;
 
-    setAttribute(Qt::WA_DeleteOnClose,true);
-    mod->regWin( this );
+    setAttribute(Qt::WA_DeleteOnClose, true);
+    mod->regWin(this);
 
     setWindowTitle(_("Vision runtime"));
     setWindowIcon(mod->icon());
 
-    setProperty("QTStarterToolDis",true);
+    setProperty("QTStarterToolDis", true);
 
-    //> Create actions
-    //>> Generic actions
-    //>>> Print
+    //Create actions
+    // Generic actions
+    //  Print
     if(!ico_t.load(TUIS::icoPath("print").c_str())) ico_t.load(":/images/print.png");
     QMenu *menuPrint = new QMenu(_("&Print"), this);
     menuPrint->setIcon(QPixmap::fromImage(ico_t));
@@ -100,7 +100,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actPrintDoc->setStatusTip(_("Press for printing of the selected document."));
     connect(actPrintDoc, SIGNAL(triggered()), this, SLOT(printDoc()));
     menuPrint->addAction(actPrintDoc);
-    //>>> Export
+    //  Export
     if(!ico_t.load(TUIS::icoPath("export").c_str())) ico_t.load(":/images/export.png");
     QMenu *menuExport = new QMenu(_("&Export"), this);
     menuExport->setIcon(QPixmap::fromImage(ico_t));
@@ -126,7 +126,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actExpDoc->setStatusTip(_("Press for exporting of the selected document."));
     connect(actExpDoc, SIGNAL(triggered()), this, SLOT(exportDoc()));
     menuExport->addAction(actExpDoc);
-    //>>> Close
+    //  Close
     if(!ico_t.load(TUIS::icoPath("close").c_str())) ico_t.load(":/images/close.png");
     QAction *actClose = new QAction(QPixmap::fromImage(ico_t),_("&Close"),this);
     actClose->setShortcut(Qt::CTRL+Qt::Key_W);
@@ -134,7 +134,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actClose->setWhatsThis(_("The button for closing Vision runtime window"));
     actClose->setStatusTip(_("Press to close of the current Vision runtime window."));
     connect(actClose, SIGNAL(triggered()), this, SLOT(close()));
-    //>>> Quit
+    //  Quit
     if(!ico_t.load(TUIS::icoPath("exit").c_str())) ico_t.load(":/images/exit.png");
     QAction *actQuit = new QAction(QPixmap::fromImage(ico_t),_("&Quit"),this);
     actQuit->setShortcut(Qt::CTRL+Qt::Key_Q);
@@ -142,8 +142,8 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actQuit->setWhatsThis(_("The button for full quit from OpenSCADA"));
     actQuit->setStatusTip(_("Press for full quit from OpenSCADA system."));
     connect(actQuit, SIGNAL(triggered()), this, SLOT(quitSt()));
-    //>> View actions
-    //>>> Fullscreen
+    // View actions
+    //  Fullscreen
     actFullScr = new QAction(_("Full screen"),this);
     actFullScr->setCheckable(true);
     actFullScr->setToolTip(_("Full screen toggle"));
@@ -151,8 +151,8 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actFullScr->setStatusTip(_("Press for toggle full screen."));
     connect(actFullScr, SIGNAL(toggled(bool)), this, SLOT(fullScreen(bool)));
 
-    //>> Help actions
-    //>>> About "System info"
+    // Help actions
+    //  About "System info"
     if(!ico_t.load(TUIS::icoPath("help").c_str())) ico_t.load(":/images/help.png");
     QAction *actAbout = new QAction(QPixmap::fromImage(ico_t),_("&About"),this);
     actAbout->setShortcut(Qt::Key_F1);
@@ -160,13 +160,13 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actAbout->setWhatsThis(_("The button for display the program and OpenSCADA information"));
     actAbout->setStatusTip(_("Press for display the program and OpenSCADA information."));
     connect(actAbout, SIGNAL(triggered()), this, SLOT(about()));
-    //>>> About Qt
+    //  About Qt
     QAction *actQtAbout = new QAction(_("About &Qt"),this);
     actQtAbout->setToolTip(_("Qt information"));
     actQtAbout->setWhatsThis(_("The button for getting the using QT information"));
     actQtAbout->setStatusTip(_("Press to get the using QT information."));
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
-    //>>> What is
+    //  What is
     //if(!ico_t.load(TUIS::icoPath("contexthelp").c_str())) ico_t.load(":/images/contexthelp.png");
     //QAction *actWhatIs = new QAction(QPixmap::fromImage(ico_t),_("What's &This"),this);
     //actWhatIs->setToolTip(_("The button for requestion about GUI elements"));
@@ -174,15 +174,15 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //actWhatIs->setStatusTip(_("Press for requesting about user interface elements."));
     //connect(actWhatIs, SIGNAL(triggered()), this, SLOT(enterWhatsThis()));
 
-    //>> Alarms actions
-    //>>> Alarm level display button and full alarms quittance
+    // Alarms actions
+    //  Alarm level display button and full alarms quittance
     if(!ico_t.load(TUIS::icoPath("alarmLev").c_str())) ico_t.load(":/images/alarmLev.png");
     actAlrmLev = new QAction( QPixmap::fromImage(ico_t), _("Alarm level"), this );
     actAlrmLev->setObjectName("alarmLev");
     actAlrmLev->setToolTip(_("Alarm level"));
     actAlrmLev->setWhatsThis(_("The button for all alarms quittance"));
     actAlrmLev->setStatusTip(_("Press for all alarms quittance."));
-    //>>> Alarm by Light
+    //  Alarm by Light
     if(!ico_t.load(TUIS::icoPath("alarmLight").c_str())) ico_t.load(":/images/alarmLight.png");
     actAlrmLight = new QAction( QPixmap::fromImage(ico_t), _("Blink alarm"), this );
     actAlrmLight->setObjectName("alarmLight");
@@ -190,7 +190,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actAlrmLight->setWhatsThis(_("The button for all blink alarms quittance"));
     actAlrmLight->setStatusTip(_("Press for all blink alarms quittance."));
     actAlrmLight->setVisible(false);
-    //>>> Alarm by mono sound (PC speaker)
+    //  Alarm by mono sound (PC speaker)
     if(!ico_t.load(TUIS::icoPath("alarmAlarm").c_str())) ico_t.load(":/images/alarmAlarm.png");
     actAlrmAlarm = new QAction( QPixmap::fromImage(ico_t), _("Speaker alarm"), this );
     actAlrmAlarm->setObjectName("alarmAlarm");
@@ -198,7 +198,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actAlrmAlarm->setWhatsThis(_("The button for all PC speaker alarms quittance"));
     actAlrmAlarm->setStatusTip(_("Press for all PC speaker alarms quittance."));
     actAlrmAlarm->setVisible(false);
-    //>>> Alarm by sound or synthesis of speech
+    //  Alarm by sound or synthesis of speech
     if(!ico_t.load(TUIS::icoPath("alarmSound").c_str())) ico_t.load(":/images/alarmSound.png");
     actAlrmSound = new QAction( QPixmap::fromImage(ico_t), _("Sound/speech alarm"), this );
     actAlrmSound->setObjectName("alarmSound");
@@ -207,7 +207,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     actAlrmSound->setStatusTip(_("Press for all sound or speech alarms quittance."));
     actAlrmSound->setVisible(false);
 
-    //> Create menu
+    //Create menu
     mn_file = menuBar()->addMenu(_("&File"));
     mn_file->addAction(menuPrint->menuAction());
     mn_file->addAction(menuExport->menuAction());
@@ -227,8 +227,8 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     mn_help->addSeparator();
     //mn_help->addAction(actWhatIs);
 
-    //> Init tool bars
-    //>> Alarms tools bar
+    //Init tool bars
+    // Alarms tools bar
     toolBarStatus = new QToolBar(_("Alarms (status)"),this);
     connect( toolBarStatus, SIGNAL(actionTriggered(QAction*)), this, SLOT(alarmAct(QAction*)) );
     toolBarStatus->setIconSize(QSize(16,16));
@@ -240,7 +240,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     toolBarStatus->addAction(actAlrmAlarm);
     toolBarStatus->addAction(actAlrmSound);
 
-    //> Init status bar
+    //Init status bar
     mWTime = new QLabel( this );
     mWTime->setVisible(false);
     mWTime->setAlignment(Qt::AlignCenter);
@@ -266,19 +266,19 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     statusBar()->insertPermanentWidget(0,toolBarStatus);
     statusBar()->setVisible(mod->runPrjsSt());
 
-    //> Init scroller
+    //Init scroller
     QScrollArea *scrl = new QScrollArea;
     scrl->setFocusPolicy(Qt::NoFocus);
     scrl->setAlignment(Qt::AlignCenter);
     setCentralWidget(scrl);
 
-    //> Create timers
-    //>> End run timer
+    //Create timers
+    // End run timer
     endRunTimer   = new QTimer( this );
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
-    //>> Update timer
+    // Update timer
     updateTimer = new QTimer( this );
     updateTimer->setSingleShot(false);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updatePage()));
@@ -289,7 +289,7 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
 
     resize(600, 400);
 
-    //> Init session
+    //Init session
     initSess(prj_it, crSessForce);
 
     //mWStat->setText(host.st_nm.c_str());
@@ -582,7 +582,7 @@ void VisRun::printDiag( const string &idg )
 	    if(sD->prms[i_e].val().empty() || !sD->prms[i_e].color().isValid()) continue;
 	    //>>> Trend name request
 	    reqName.setAttr("path",sD->prms[i_e].addr()+"/%2fserv%2fval");
-    	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
+	    if(cntrIfCmd(reqName,true) || reqName.text().empty())	reqName.setText(sD->prms[i_e].addr());
 
 	    painter.fillRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5),QBrush(sD->prms[i_e].color()));
 	    painter.drawRect(QRect(pnt.x()+2,pnt.y()+2,fntSize-5,fntSize-5));
@@ -736,8 +736,8 @@ void VisRun::exportDiag( const string &idg )
 		//>>> Prepare header
 		CSVr += _("\"Date and time\";\"us\"");
 		for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
-    		    if(dgDt->prms[i_p].val().size() && dgDt->prms[i_p].color().isValid())
-    		    {
+		    if(dgDt->prms[i_p].val().size() && dgDt->prms[i_p].color().isValid())
+		    {
 			CSVr += ";\""+TSYS::path2sepstr(dgDt->prms[i_p].addr())+"\"";
 			if(firstPrm < 0) firstPrm = i_p;
 		    }
@@ -783,11 +783,11 @@ void VisRun::exportDiag( const string &idg )
 		    for(unsigned i_p = 0; i_p < dgDt->prms.size(); i_p++)
 		    {
 			ShapeDiagram::TrendObj &cPrm = dgDt->prms[i_p];
-    			if(cPrm.fftN && cPrm.color().isValid())
-    			{
-        		    int vpos = (int)((i_frq*cPrm.fftN)/(fftBeg*fftN));
-        		    double val = EVAL_REAL;
-        		    if(vpos >= 1 && vpos < (cPrm.fftN/2+1))
+			if(cPrm.fftN && cPrm.color().isValid())
+			{
+			    int vpos = (int)((i_frq*cPrm.fftN)/(fftBeg*fftN));
+			    double val = EVAL_REAL;
+			    if(vpos >= 1 && vpos < (cPrm.fftN/2+1))
 				val = cPrm.fftOut[0][0]/cPrm.fftN + pow(pow(cPrm.fftOut[vpos][0],2)+pow(cPrm.fftOut[vpos][1],2),0.5)/(cPrm.fftN/2+1);
 			    CSVr += ";"+QLocale().toString(val).toStdString();
 			}

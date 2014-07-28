@@ -40,7 +40,7 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
 {
     inclWdg = grpAdd("wdg_");
 
-    //> Attributes mutex create
+    //Attributes mutex create
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
     pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
@@ -48,13 +48,12 @@ Widget::Widget( const string &id, const string &isrcwdg ) :
     pthread_mutexattr_destroy(&attrM);
 }
 
-Widget::~Widget()
+Widget::~Widget( )
 {
-    //> Remove attributes
+    //Remove attributes
     pthread_mutex_lock(&mtxAttr());
     map<string,Attr*>::iterator p;
-    while((p = mAttrs.begin()) != mAttrs.end())
-    {
+    while((p = mAttrs.begin()) != mAttrs.end()) {
 	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
 	if(p->second->mConn) mess_err(nodePath().c_str(),_("Attribute '%s' was not free. Force delete!"),p->first.c_str());
 	delete p->second;
@@ -62,7 +61,7 @@ Widget::~Widget()
     }
     pthread_mutex_unlock(&mtxAttr());
 
-    //> Attributes mutex destroy
+    //Attributes mutex destroy
     pthread_mutex_destroy(&mtxAttrM);
 }
 
@@ -73,15 +72,14 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 
     if(!src_n->enable()) return *this;
 
-    //> Parent link copy
-    if(src_n->parentNm() != path() && parentNm().empty())
-    {
+    //Parent link copy
+    if(src_n->parentNm() != path() && parentNm().empty()) {
 	if(parentNm() != src_n->parentNm() && enable()) setEnable(false);
 	setParentNm(src_n->parentNm());
     }
     if(!enable()) setEnable(true);
 
-    //> Copy generic configuration
+    //Copy generic configuration
     if(src_n->parent().freeStat() || src_n->name() != src_n->parent().at().name())	setName(src_n->name());
     if(src_n->parent().freeStat() || src_n->descr() != src_n->parent().at().descr())	setDescr(src_n->descr());
     if(src_n->parent().freeStat() || src_n->ico() != src_n->parent().at().ico())	setIco(src_n->ico());
@@ -92,15 +90,13 @@ TCntrNode &Widget::operator=( TCntrNode &node )
     if(src_n->parent().freeStat() || src_n->calcProg() != src_n->parent().at().calcProg())	setCalcProg(src_n->calcProg());
     if(src_n->parent().freeStat() || src_n->calcPer() != src_n->parent().at().calcPer())	setCalcPer(src_n->calcPer());
 
-    //> Copy attributes
+    //Copy attributes
     vector<string> els;
     src_n->attrList( els );
     AutoHD<Attr> attr, pattr;
-    for(unsigned i_a = 0; i_a < els.size(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < els.size(); i_a++) {
 	pattr = src_n->attrAt(els[i_a]);
-	if(!attrPresent(els[i_a]))
-	{
+	if(!attrPresent(els[i_a])) {
 	    bool isInher = pattr.at().flgSelf()&Attr::IsInher;
 	    attrAdd(isInher ? &src_n->attrAt(els[i_a]).at().fld() : new TFld(src_n->attrAt(els[i_a]).at().fld()), -1, isInher);
 	    attrAt(els[i_a]).at().setModif(1);
@@ -120,12 +116,10 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	attr.at().setCfgVal(pattr.at().cfgVal());
     }
 
-    //> Include widgets copy
-    if(!isLink() && src_n->isContainer())
-    {
+    //Include widgets copy
+    if(!isLink() && src_n->isContainer()) {
 	src_n->wdgList(els);
-	for(unsigned i_w = 0; i_w < els.size(); i_w++)
-	{
+	for(unsigned i_w = 0; i_w < els.size(); i_w++) {
 	    if(!wdgPresent(els[i_w]))	wdgAdd(els[i_w],"","");
 	    (TCntrNode&)wdgAt(els[i_w]).at() = (TCntrNode&)src_n->wdgAt(els[i_w]).at();
 	}
@@ -137,9 +131,8 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 void Widget::postEnable( int flag )
 {
     if(flag&TCntrNode::NodeRestore) setEnable(true);
-    if(flag&TCntrNode::NodeConnect && !BACrtHoldOvr)
-    {
-	//> Add main attributes
+    if(flag&TCntrNode::NodeConnect && !BACrtHoldOvr) {
+	//Add main attributes
 	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
 	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
 	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
@@ -158,7 +151,7 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("geomH",_("Geometry:height"),TFld::Real,Attr::Generic,"","100","0;10000","",i2s(A_GEOM_H).c_str()));
 	attrAdd(new TFld("geomXsc",_("Geometry:x scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_X_SC).c_str()));
 	attrAdd(new TFld("geomYsc",_("Geometry:y scale"),TFld::Real,Attr::Generic,"","1","0.1;100","",i2s(A_GEOM_Y_SC).c_str()));
-	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","0;1000000","",i2s(A_GEOM_Z).c_str()));
+	attrAdd(new TFld("geomZ",_("Geometry:z"),TFld::Integer,Attr::Generic,"","0","-1000000;1000000","",i2s(A_GEOM_Z).c_str()));
 	attrAdd(new TFld("geomMargin",_("Geometry:margin"),TFld::Integer,Attr::Generic,"","0","0;1000","",i2s(A_GEOM_MARGIN).c_str()));
 	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
 	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
@@ -169,18 +162,14 @@ void Widget::postEnable( int flag )
 
 void Widget::preDisable( int flag )
 {
-    //> Delete heritors widgets
+    //Delete heritors widgets
     while(herit().size()) mod->nodeDel(herit()[0].at().path(), 0, 0x10);
 
-    //> Disable widget
+    //Disable widget
     if(enable()) setEnable(false);
 }
 
-string Widget::rootId( )
-{
-    if(!parent().freeStat())  return parent().at().rootId();
-    return "";
-}
+string Widget::rootId( )	{ return parent().freeStat() ? "" : parent().at().rootId(); }
 
 string Widget::name( )
 {
@@ -188,64 +177,35 @@ string Widget::name( )
     return wnm.size() ? wnm : mId;
 }
 
-void Widget::setName( const string &inm )
-{
-    attrAt("name").at().setS(inm);
-}
+void Widget::setName( const string &inm )	{ attrAt("name").at().setS(inm); }
 
-string Widget::descr( )
-{
-    return attrAt("dscr").at().getS();
-}
+string Widget::descr( )		{ return attrAt("dscr").at().getS(); }
 
-void Widget::setDescr( const string &idscr )
-{
-    attrAt("dscr").at().setS(idscr);
-}
+void Widget::setDescr( const string &idscr )	{ attrAt("dscr").at().setS(idscr); }
 
-string Widget::owner( )
-{
-    return TSYS::strParse(attrAt("owner").at().getS(),0,":");
-}
+string Widget::owner( )		{ return TSYS::strParse(attrAt("owner").at().getS(),0,":"); }
 
 void Widget::setOwner( const string &iown )
 {
     attrAt("owner").at().setS(iown+":"+grp());
-    //> Group update
+    //Group update
     if(SYS->security().at().grpAt("UI").at().user(iown)) setGrp("UI");
-    else
-    {
+    else {
 	vector<string> gls;
 	SYS->security().at().usrGrpList(owner(),gls);
 	setGrp(gls.size()?gls[0]:Widget::grp());
     }
 }
 
-string Widget::grp( )
-{
-    return TSYS::strParse(attrAt("owner").at().getS(),1,":");
-}
+string Widget::grp( )		{ return TSYS::strParse(attrAt("owner").at().getS(),1,":"); }
 
-void Widget::setGrp( const string &igrp )
-{
-    attrAt("owner").at().setS(owner()+":"+igrp);
-}
+void Widget::setGrp( const string &igrp )	{ attrAt("owner").at().setS(owner()+":"+igrp); }
 
-short Widget::permit( )
-{
-    return attrAt("perm").at().getI();
-}
+short Widget::permit( )		{ return attrAt("perm").at().getI(); }
 
-void Widget::setPermit( short iperm )
-{
-    attrAt("perm").at().setI(iperm);
-}
+void Widget::setPermit( short iperm )		{ attrAt("perm").at().setI(iperm); }
 
-bool Widget::isContainer( )
-{
-    if(!parent().freeStat()) return parent().at().isContainer();
-    return false;
-}
+bool Widget::isContainer( )	{ return parent().freeStat() ? false : parent().at().isContainer(); }
 
 string Widget::path( )
 {
@@ -263,21 +223,15 @@ string Widget::calcId( )
     return mId;
 }
 
-bool Widget::enable( )
-{
-    return mEnable;
-}
+bool Widget::enable( )		{ return mEnable; }
 
 void Widget::setEnable( bool val )
 {
     if(enable() == val) return;
 
-    if(val)
-    {
-	if(parentNm() != "root")
-	{
-	    try
-	    {
+    if(val) {
+	if(parentNm() != "root") {
+	    try {
 		if(TSYS::strNoSpace(parentNm()).empty() || parentNm() == path())
 		    throw TError(nodePath().c_str(),_("Empty parent or parent identical self!"));
 		if(parentNm() == "..") mParent = AutoHD<TCntrNode>(nodePrev());
@@ -289,17 +243,17 @@ void Widget::setEnable( bool val )
 		    throw TError(nodePath().c_str(),_("Parent identical to owner for link!"));
 		}
 
-		//> Check for enable parent widget and enable if not
+		//Check for enable parent widget and enable if not
 		if(!parent().at().enable()) parent().at().setEnable(true);
 
-		//> Inherit
+		//Inherit
 		inheritAttr();
 		inheritIncl();
 
-		//> Register of heritater
+		//Register of heritater
 		parent().at().heritReg(this);
-	    }catch(TError err)
-	    {
+	    }
+	    catch(TError err) {
 		mess_err(nodePath().c_str(),_("Widget enable error: %s"),err.mess.c_str());
 		mParent.free();
 		if(BACrtHoldOvr) { BACrtHoldOvr = false; postEnable(TCntrNode::NodeConnect); }
@@ -310,46 +264,42 @@ void Widget::setEnable( bool val )
 	mEnable = true;
 	BACrtHoldOvr = false;
 
-	//> Load self values from DB
+	//Load self values from DB
 	loadIO( );
     }
-    if(!val)
-    {
-	//> Free no base attributes and restore base
+    if(!val) {
+	//Free no base attributes and restore base
 	vector<string> ls;
 	attrList(ls);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    if(!(attrAt(ls[i_l]).at().flgGlob()&Attr::Generic)) attrDel(ls[i_l], true);
 
-	//> Disable heritors widgets
+	//Disable heritors widgets
 	for(unsigned i_h = 0; i_h < herit().size(); )
 	    if(herit()[i_h].at().enable())
 		try { herit()[i_h].at().setEnable(false); }
-		catch(TError err)
-		{
+		catch(TError err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Inheriting widget '%s' disable error."),herit()[i_h].at().id().c_str());
 		    i_h++;
 		}
 	    else i_h++;
 
-	if(!mParent.freeStat())
-	{
-	    //> Unregister heritater
+	if(!mParent.freeStat()) {
+	    //Unregister heritater
 	    parent().at().heritUnreg(this);
-	    //> Disconnect parent widget
+	    //Disconnect parent widget
 	    mParent.free();
 	}
     }
 
-    //> Enable/disable process widgets from container
+    //Enable/disable process widgets from container
     vector<string> ls;
     wdgList(ls);
     for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	if(val != wdgAt(ls[i_l]).at().enable())
 	    try { wdgAt(ls[i_l]).at().setEnable(val); }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Child widget '%s' enable/disable error."),ls[i_l].c_str());
 	    }
@@ -363,20 +313,13 @@ void Widget::setParentNm( const string &isw )
     mParentNm = isw;
 }
 
-AutoHD<Widget> Widget::parent( )
-{
-    return mParent;
-}
+AutoHD<Widget> Widget::parent( )	{ return mParent; }
 
-AutoHD<Widget> Widget::parentNoLink( )
-{
-    if(parent().at().isLink()) return parent().at().parentNoLink();
-    return parent();
-}
+AutoHD<Widget> Widget::parentNoLink( )	{ return parent().at().isLink() ? parent().at().parentNoLink() : parent(); }
 
 void Widget::heritReg( Widget *wdg )
 {
-    //> Search already herited widget
+    //Search already herited widget
     for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
 	if(&m_herit[i_h].at() == wdg)	return;
     m_herit.push_back(AutoHD<Widget>(wdg));
@@ -384,10 +327,9 @@ void Widget::heritReg( Widget *wdg )
 
 void Widget::heritUnreg( Widget *wdg )
 {
-    //> Search herited widget
+    //Search herited widget
     for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
-	if(&m_herit[i_h].at() == wdg)
-	{
+	if(&m_herit[i_h].at() == wdg) {
 	    m_herit.erase(m_herit.begin()+i_h);
 	    return;
 	}
@@ -397,34 +339,30 @@ void Widget::inheritAttr( const string &iattr )
 {
     bool loadDef = parent().freeStat();
 
-    //> Create no present attributes
+    //Create no present attributes
     vector<string>  ls;
     if(iattr.empty())	(loadDef ? attrList(ls) : parent().at().attrList(ls));
-    else
-    {
+    else {
 	if(!loadDef && parent().at().attrPresent(iattr)) ls.push_back(iattr);
-	else if(attrPresent(iattr))	{ loadDef = true; ls.push_back(iattr); }
+	else if(attrPresent(iattr)) { loadDef = true; ls.push_back(iattr); }
 	else return;
     }
 
     setStlLock(true);
     if(!loadDef) parent().at().setStlLock(true);
 
-    //> Configuration inherit
+    //Configuration inherit
     AutoHD<Attr> attr, pattr;
-    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-    {
+    for(unsigned i_l = 0; i_l < ls.size(); i_l++) {
 	pattr.free();
-	if(!attrPresent(ls[i_l]))
-	{
+	if(!attrPresent(ls[i_l])) {
 	    if(loadDef) continue;
 	    pattr = parent().at().attrAt(ls[i_l]);
 	    if(pattr.at().flgGlob()&Attr::Mutable) continue;
 	    attrAdd(&pattr.at().fld(), -1, true);
 	}
 	attr = attrAt(ls[i_l]);
-	if(loadDef)
-	{
+	if(loadDef) {
 	    attr.at().setS(attr.at().fld().def(), attr.at().flgGlob()&Attr::Active);
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)0);
 	    attr.at().setCfgTempl("");
@@ -445,7 +383,7 @@ void Widget::inheritAttr( const string &iattr )
 		case TFld::String:	attr.at().setS(pattr.at().getS(), attr.at().flgGlob()&Attr::Active);	break;
 		default: break;
 	    }
-	//>> No inherit calc flag for links
+	// No inherit calc flag for links
 	if(isLink() && !parent().at().isLink())
 	    attr.at().setFlgSelf((Attr::SelfAttrFlgs)(attr.at().flgSelf()&(~Attr::ProcAttr)));
 	attr.at().setCfgTempl(pattr.at().cfgTempl());
@@ -460,14 +398,12 @@ void Widget::inheritAttr( const string &iattr )
 void Widget::inheritIncl( const string &iwdg )
 {
     AutoHD<Widget> parw = parent();
-    while(!parw.freeStat() && parw.at().isLink())
-	parw = parw.at().parent();
+    while(!parw.freeStat() && parw.at().isLink()) parw = parw.at().parent();
     if(parw.freeStat()) return;
 
-    //> Create no present include widgets for no link and container widgets
+    //Create no present include widgets for no link and container widgets
     vector<string>  ls;
-    if(!iwdg.empty() && parw.at().wdgPresent(iwdg))
-	ls.push_back(iwdg);
+    if(!iwdg.empty() && parw.at().wdgPresent(iwdg)) ls.push_back(iwdg);
     else parw.at().wdgList(ls);
     for(unsigned i_w = 0; i_w < ls.size(); i_w++)
 	if(!wdgPresent(ls[i_w]))
@@ -477,37 +413,33 @@ void Widget::inheritIncl( const string &iwdg )
 
 void Widget::wClear( )
 {
-    //> Generic clear
+    //Generic clear
     setIco("");
 
-    //> Inherit modify attributes
+    //Inherit modified attributes
     vector<string> ls;
     attrList(ls);
-    for(unsigned i_a = 0; i_a < ls.size(); i_a++)
-    {
+    for(unsigned i_a = 0; i_a < ls.size(); i_a++) {
 	if(!attrPresent(ls[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(ls[i_a]);
-	if(attr.at().modif())
-	{
+	if(attr.at().modif()) {
 	    attr.at().setModif(0);
 	    inheritAttr(ls[i_a]);
 	}
     }
-    //> Check for included widgets
-    if(isContainer() && !isLink())
-    {
+    //Check for included widgets
+    if(isContainer() && !isLink()) {
 	AutoHD<Widget> parw = parent();
 	while(!parw.freeStat() && parw.at().isLink())
 	    parw = parw.at().parent();
-	if(!parw.freeStat())
-	{
-	    //> Check for widget's deletion
+	if(!parw.freeStat()) {
+	    //Check for widget's deletion
 	    wdgList(ls);
 	    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
 		if(!parw.at().wdgPresent(ls[i_w]))
 		    wdgDel(ls[i_w],true);
 
-	    //> No present widget's add and clear call
+	    //No present widget's add and clear call
 	    parw.at().wdgList(ls);
 	    for(unsigned i_w = 0; i_w < ls.size(); i_w++)
 		if(!wdgPresent(ls[i_w]))
@@ -516,6 +448,58 @@ void Widget::wClear( )
 		else wdgAt(ls[i_w]).at().wClear();
 	}
     }
+    modif();
+}
+
+void Widget::wChDown( const string &ia )
+{
+    AutoHD<Widget> parw = parent();
+    if(parw.freeStat()) return;
+
+    //Generic clear
+    if(ia.empty() && ico() != parw.at().ico()) { parw.at().setIco(ico()); setIco(""); }
+
+    //Put down modified attributes
+    vector<string> ls;
+    if(ia.empty()) attrList(ls); else ls.push_back(ia);
+    AutoHD<Attr> attr;
+    for(unsigned i_a = 0; i_a < ls.size(); i_a++) {
+	if(!attrPresent(ls[i_a]) || !(attr=attrAt(ls[i_a])).at().modif()) continue;
+	//!!!! Check for type and generic flags changes
+	if(!parw.at().attrPresent(ls[i_a])) {
+	    if(!(attr.at().flgGlob()&Attr::IsUser)) continue;
+	    parw.at().attrAdd(new TFld(ls[i_a].c_str(),"",attr.at().type(),attr.at().fld().flg()));
+	}
+	AutoHD<Attr> attrP = parw.at().attrAt(ls[i_a]);
+	attrP.at().set(attr.at().get());
+	attrP.at().setFlgSelf(attr.at().flgSelf());
+	attrP.at().setCfgVal(attr.at().cfgVal());
+	attrP.at().setCfgTempl(attr.at().cfgTempl());
+	attr.at().setModif(0);
+	inheritAttr(ls[i_a]);
+    }
+
+    //Check for included widgets
+    if(ia.empty() && isContainer() && !isLink()) {
+	//Check for widget's deletion
+	wdgList(ls);
+	for(unsigned i_w = 0; i_w < ls.size(); i_w++) {
+	    if(!parw.at().wdgPresent(ls[i_w]))
+		try {
+		    parw.at().wdgAdd(ls[i_w],"","");
+		    (TCntrNode&)parw.at().wdgAt(ls[i_w]).at() = (TCntrNode&)wdgAt(ls[i_w]).at();
+		}
+		catch(TError err){ mess_err(err.cat.c_str(),err.mess.c_str()); }
+	    else wdgAt(ls[i_w]).at().wChDown();
+	}
+
+	//No present widget's add and clear call
+	parw.at().wdgList(ls);
+	for(unsigned i_w = 0; i_w < ls.size(); i_w++)
+	    if(!wdgPresent(ls[i_w]))
+		parw.at().wdgDel(ls[i_w],true);
+    }
+
     modif();
 }
 
@@ -532,33 +516,32 @@ void Widget::attrList( vector<string> &list )
     pthread_mutex_unlock(&mtxAttr());
 }
 
-void Widget::attrAdd(TFld *attr, int pos, bool inher)
+void Widget::attrAdd( TFld *attr, int pos, bool inher, bool forceMdf )
 {
     string anm = attr->name();
 
-    if(attrPresent(anm) || TSYS::strNoSpace(anm).empty())
-    {
+    if(attrPresent(anm) || TSYS::strNoSpace(anm).empty()) {
 	if(!inher) delete attr;
 	return;
     }
-    try
-    {
+    try {
 	pthread_mutex_lock(&mtxAttr());
-	if(mAttrs.size() >= ((1<<ATTR_OI_DEPTH)-1))
-	{
+	if(mAttrs.size() >= ((1<<ATTR_OI_DEPTH)-1)) {
 	    if(!inher) delete attr;
 	    pthread_mutex_unlock(&mtxAttr());
 	    mess_err(nodePath().c_str(),_("Adding a new attribute '%s' number more to %d!"),anm.c_str(),(1<<ATTR_OI_DEPTH)-1);
 	    return;
 	}
 	map<string, Attr* >::iterator p;
-	Attr *a = new Attr(attr,inher);
+	Attr *a = new Attr(attr, inher);
 	a->mOwner = this;
 	pos = (pos < 0 || pos > (int)mAttrs.size()) ? (int)mAttrs.size() : pos;
 	a->mOi = pos;
 	for(p = mAttrs.begin(); p != mAttrs.end(); p++)
 	    if(p->second->mOi >= pos) p->second->mOi++;
 	mAttrs.insert(std::pair<string,Attr*>(a->id(),a));
+	//Set modif for new attribute reload allow
+	if(forceMdf) a->setModif(modifVal(*a));
     }
     catch(...){ }
     pthread_mutex_unlock(&mtxAttr());
@@ -568,20 +551,19 @@ void Widget::attrDel( const string &attr, bool allInher  )
 {
     if(!attrPresent(attr)) return;
 
-    //> Delete from inheritant wigets
+    //Delete from inheritant wigets
     if(!(attrAt(attr).at().flgGlob()&Attr::Mutable) || allInher)
 	for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
 	    if(m_herit[i_h].at().enable())
 		m_herit[i_h].at().attrDel(attr);
 
-    //> Self delete
-    try
-    {
+    //Self delete
+    try {
 	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
-	if(p == mAttrs.end())	throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
+	if(p == mAttrs.end())	throw TError(nodePath().c_str(), _("Attribute '%s' is not present!"), attr.c_str());
 	for(int i_c = 0; i_c < 100 && p->second->mConn; i_c++)	TSYS::sysSleep(0.01);
-        if(p->second->mConn) throw TError(nodePath().c_str(),_("Deleted attribute '%s' was not free!"),attr.c_str());
+	if(p->second->mConn) throw TError(nodePath().c_str(), _("Deleted attribute '%s' was not free!"), attr.c_str());
 
 	int pos = p->second->mOi;
 	for(map<string, Attr* >::iterator p1 = mAttrs.begin(); p1 != mAttrs.end(); ++p1)
@@ -593,7 +575,7 @@ void Widget::attrDel( const string &attr, bool allInher  )
     pthread_mutex_unlock(&mtxAttr());
 }
 
-bool Widget::attrPresent(const string &attr)
+bool Widget::attrPresent( const string &attr )
 {
     pthread_mutex_lock(&mtxAttr());
     bool rez = (mAttrs.find(attr) != mAttrs.end());
@@ -601,23 +583,21 @@ bool Widget::attrPresent(const string &attr)
     return rez;
 }
 
-AutoHD<Attr> Widget::attrAt(const string &attr, int lev)
+AutoHD<Attr> Widget::attrAt( const string &attr, int lev )
 {
-    //> Local atribute request
-    if(lev < 0 )
-    {
+    //Local atribute request
+    if(lev < 0) {
 	pthread_mutex_lock(&mtxAttr());
 	map<string, Attr* >::iterator p = mAttrs.find(attr);
-	if(p == mAttrs.end())
-	{
+	if(p == mAttrs.end()) {
 	    pthread_mutex_unlock(&mtxAttr());
 	    throw TError(nodePath().c_str(),_("Attribute '%s' is not present!"), attr.c_str());
-        }
-        AutoHD<Attr> rez(p->second);
-        pthread_mutex_unlock(&mtxAttr());
-        return rez;
+	}
+	AutoHD<Attr> rez(p->second);
+	pthread_mutex_unlock(&mtxAttr());
+	return rez;
     }
-    //> Process by full path
+    //Process by full path
     AutoHD<Attr> an;
     size_t waSep = attr.rfind("/");
     if(waSep == string::npos) return attrPresent(attr) ? attrAt(attr) : an;
@@ -628,10 +608,7 @@ AutoHD<Attr> Widget::attrAt(const string &attr, int lev)
     return wn.at().attrAt(anm);
 }
 
-int  Widget::attrPos(const string &inm)
-{
-    return attrAt(inm).at().mOi;
-}
+int Widget::attrPos( const string &inm )	{ return attrAt(inm).at().mOi; }
 
 void Widget::calc( Widget *base )
 {
@@ -647,11 +624,11 @@ TVariant Widget::objFuncCall_w( const string &id, vector<TVariant> &prms, const 
 
 bool Widget::attrChange( Attr &cfg, TVariant prev )
 {
-    //> Process Active attribute's mode
+    //Process Active attribute's mode
     if(cfg.flgGlob()&Attr::Active && !prev.isNull() && !parent().freeStat())	parent().at().attrChange(cfg,prev);
     if(cfg.owner() != this) return false;
 
-    //> Update heritors attributes
+    //Update heritors attributes
     for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
 	if(m_herit[i_h].at().enable())
 	    m_herit[i_h].at().inheritAttr(cfg.id());
@@ -665,10 +642,7 @@ void Widget::wdgList( vector<string> &list, bool fromLnk )
     else chldList(inclWdg, list);
 }
 
-bool Widget::wdgPresent( const string &wdg )
-{
-    return chldPresent( inclWdg, wdg );
-}
+bool Widget::wdgPresent( const string &wdg )	{ return chldPresent(inclWdg, wdg); }
 
 void Widget::wdgAdd( const string &wid, const string &name, const string &path, bool force )
 {
@@ -678,7 +652,7 @@ void Widget::wdgAdd( const string &wid, const string &name, const string &path, 
     chldAdd(inclWdg, new Widget(wid,path));
     wdgAt(wid).at().setName(name);
 
-    //> Call heritors include widgets update
+    //Call heritors include widgets update
     for(unsigned i_h = 0; i_h < m_herit.size(); i_h++)
 	if(m_herit[i_h].at().enable())
 	    m_herit[i_h].at().inheritIncl(wid);
@@ -692,15 +666,14 @@ AutoHD<Widget> Widget::wdgAt( const string &wdg, int lev, int off )
     string iw = TSYS::pathLev(wdg,lev,true,&off);
     if(iw.compare(0,4,"wdg_") == 0) iw = iw.substr(4);
     if(iw.empty())	rez = AutoHD<Widget>(this);
-    else if(iw == "..")
-    {
+    else if(iw == "..") {
 	if(dynamic_cast<Widget*>(nodePrev())) rez = ((Widget*)nodePrev())->wdgAt(wdg, 0, off);
     }
-    else if(isLink())
-    {
+    else if(isLink()) {
 	if(parent().at().wdgPresent(iw)) rez = parent().at().wdgAt(iw).at().wdgAt(wdg, 0, off);
     }
     else if(wdgPresent(iw)) rez = wdgAt(iw).at().wdgAt(wdg, 0, off);
+
     return rez;
 }
 
@@ -743,8 +716,7 @@ string Widget::helpFont( )
 
 TVariant Widget::vlGet( Attr &a )
 {
-    if(a.owner() == this)
-    {
+    if(a.owner() == this) {
 	if(a.id() == "id")		return TVariant(id());
 	else if(a.id() == "path")	return TVariant(path());
 	else if(a.id() == "root")	return TVariant(rootId());
@@ -758,38 +730,31 @@ TVariant Widget::vlGet( Attr &a )
 
 TVariant Widget::stlReq( Attr &a, const TVariant &vl, bool wr )
 {
-    if( !stlLock() && dynamic_cast<Widget*>(nodePrev()) )
-	return ((Widget*)nodePrev())->stlReq( a, vl, wr );
-    return vl;
+    return (!stlLock() && dynamic_cast<Widget*>(nodePrev())) ? ((Widget*)nodePrev())->stlReq(a, vl, wr) : vl;
 }
 
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string tNm;
     string a_path = opt->attr("path");
-    //> Service commands process
-    if(a_path == "/serv/attr")	//Attribute's access
-    {
-	if(ctrChkNode(opt,"get",RWRWRW,"root",SUI_ID,SEC_RD))		//Get values
-	{
+    //Service commands process
+    if(a_path == "/serv/attr") {	//Attribute's access
+	if(ctrChkNode(opt,"get",RWRWRW,"root",SUI_ID,SEC_RD)) {		//Get values
 	    AutoHD<Attr> attr;
-	    if(!opt->childSize())
-	    {
+	    if(!opt->childSize()) {
 		vector<string> ls;
 		attrList(ls);
-		for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-		{
+		for(unsigned i_l = 0; i_l < ls.size(); i_l++) {
 		    attr = attrAt(ls[i_l]);
-		    if(attr.at().flgGlob()&Attr::IsUser)	continue;
+		    if(attr.at().flgGlob()&Attr::IsUser) continue;
 		    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
-				         setAttr("p",attr.at().fld().reserve())->
-				         setText(attr.at().getS());
+					 setAttr("p",attr.at().fld().reserve())->
+					 setText(attr.at().getS());
 		}
 	    }
 	    else
 		for(unsigned i_l = 0; i_l < opt->childSize(); i_l++)
-		    if(attrPresent(tNm=opt->childGet(i_l)->attr("id")))
-		    {
+		    if(attrPresent(tNm=opt->childGet(i_l)->attr("id"))) {
 			attr = attrAt(tNm);
 			opt->childGet(i_l)->setAttr("p",attr.at().fld().reserve())->
 					    setAttr("act",(attr.at().flgGlob()&Attr::Active)?"1":"0")->
@@ -798,36 +763,32 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 	}
 	else if(ctrChkNode(opt,"set",RWRWRW,"root",SUI_ID,SEC_WR))	//Set values
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++)
-	        try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
-	        catch(TError) { }
+		try{ attrAt(opt->childGet(i_ch)->attr("id")).at().setS(opt->childGet(i_ch)->text()); }
+		catch(TError) { }
     }
     else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID,SEC_RD))	//Get attributes all updated elements' of the branch
     {
-	//>> Self attributes put
+	// Self attributes put
 	vector<string> ls;
 	attrList(ls);
 	AutoHD<Attr> attr;
-	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-	{
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++) {
 	    attr = attrAt(ls[i_l]);
-	    if(attr.at().flgGlob()&Attr::IsUser)	continue;
+	    if(attr.at().flgGlob()&Attr::IsUser) continue;
 	    opt->childAdd("el")->setAttr("id",ls[i_l].c_str())->
 			     setAttr("p",attr.at().fld().reserve())->
 			     setText(attr.at().getS());
 	}
-	//>> Child widgets process
-	if(enable())
-	{
+	// Child widgets process
+	if(enable()) {
 	    AutoHD<Widget> iwdg;
 	    vector<string>	lst;
-	    if(isLink())
-	    {
+	    if(isLink()) {
 		parentNoLink().at().wdgList(lst);
 		opt->setAttr("lnkPath",parentNoLink().at().path());
 	    }
 	    else wdgList(lst);
-	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-	    {
+	    for(unsigned i_f=0; i_f < lst.size(); i_f++) {
 		if(!isLink()) iwdg = wdgAt(lst[i_f]);
 		else iwdg = parentNoLink().at().wdgAt(lst[i_f]);
 		XMLNode *wn = opt->childAdd("get")->setAttr("path",a_path);
@@ -843,22 +804,18 @@ bool Widget::cntrCmdServ( XMLNode *opt )
 
 bool Widget::cntrCmdGeneric( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Widget: ")+id(),RWRWR_,"root",SUI_ID);
-	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")))
-	{
-	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State")))
-	    {
+	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget"))) {
+	    if(ctrMkNode("area",opt,-1,"/wdg/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/wdg/st/en",_("Enable"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/wdg/w_lst");
 		if(!parent().freeStat())
 		    ctrMkNode("comm",opt,-1,"/wdg/st/goparent",_("Go to parent"),RWRWR_,"root",SUI_ID,1,"tp","lnk");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration")))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/type",_("Type"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/root",_("Root"),R_R_R_,"root",SUI_ID,1,"tp","str");
@@ -874,11 +831,11 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
 		ctrMkNode("fld",opt,-1,"/wdg/cfg/o_a","",RWRWR_,"root",SUI_ID,4,"tp","dec","dest","select",
 		    "sel_id","0;4;6","sel_list",_("No access;View;View and control"));
-		ctrMkNode("comm",opt,-1,"/wdg/cfg/clear",_("Clear widget's changing"),RWRWR_,"root",SUI_ID);
+		ctrMkNode("comm",opt,-1,"/wdg/cfg/clear",_("Clear the widget changes"),RWRWR_,"root",SUI_ID);
+		ctrMkNode("comm",opt,-1,"/wdg/cfg/chDown",_("Put down to the parent for the widget changes"),RWRWR_,"root",SUI_ID);
 	    }
 	}
-	if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets")))
-	{
+	if(isContainer() && (!isLink()) && ctrMkNode("area",opt,-1,"/inclwdg",_("Include widgets"))) {
 	    ctrMkNode("fld",opt,-1,"/inclwdg/nmb",_("Number"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("list",opt,-1,"/inclwdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	}
@@ -888,53 +845,44 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	return true;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/wdg/res" && ctrChkNode(opt))	//Service command for resources request
-    {
+    if(a_path == "/wdg/res" && ctrChkNode(opt)) {	//Service command for resources request
 	string mime;
 	opt->setText(resourceGet(opt->attr("id"),&mime));
 	opt->setAttr("mime",mime);
     }
-    else if(a_path == "/wdg/st/en")
-    {
+    else if(a_path == "/wdg/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
     }
-    else if(a_path == "/wdg/st/parent")
-    {
+    else if(a_path == "/wdg/st/parent") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(parentNm());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setParentNm(opt->text());
     }
     else if(a_path == "/wdg/st/goparent" && ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD) && !parent().freeStat())
 	opt->setText(parent().at().nodePath(0,true));
-    else if(a_path == "/wdg/cfg/owner")
-    {
+    else if(a_path == "/wdg/cfg/owner") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(owner());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setOwner(opt->text());
     }
-    else if(a_path == "/wdg/cfg/grp")
-    {
+    else if(a_path == "/wdg/cfg/grp") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(grp());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setGrp(opt->text());
     }
-    else if(a_path == "/wdg/cfg/u_a" || a_path == "/wdg/cfg/g_a" || a_path == "/wdg/cfg/o_a")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	{
+    else if(a_path == "/wdg/cfg/u_a" || a_path == "/wdg/cfg/g_a" || a_path == "/wdg/cfg/o_a") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    if(a_path == "/wdg/cfg/u_a")	opt->setText(i2s((permit()>>6)&0x7));
 	    if(a_path == "/wdg/cfg/g_a")	opt->setText(i2s((permit()>>3)&0x7));
 	    if(a_path == "/wdg/cfg/o_a")	opt->setText(i2s(permit()&0x7));
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	{
-	    if(a_path == "/wdg/cfg/u_a")	setPermit((permit()&(~(0x07<<6)))|(atoi(opt->text().c_str())<<6));
-	    if(a_path == "/wdg/cfg/g_a")	setPermit((permit()&(~(0x07<<3)))|(atoi(opt->text().c_str())<<3));
-	    if(a_path == "/wdg/cfg/o_a")	setPermit((permit()&(~0x07))|atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    if(a_path == "/wdg/cfg/u_a")	setPermit((permit()&(~(0x07<<6)))|(s2i(opt->text())<<6));
+	    if(a_path == "/wdg/cfg/g_a")	setPermit((permit()&(~(0x07<<3)))|(s2i(opt->text())<<3));
+	    if(a_path == "/wdg/cfg/o_a")	setPermit((permit()&(~0x07))|s2i(opt->text()));
 	}
     }
-    else if(a_path == "/wdg/cfg/ico" || a_path == "/ico")
-    {
+    else if(a_path == "/wdg/cfg/ico" || a_path == "/ico") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(ico());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setIco(opt->text());
     }
@@ -942,56 +890,48 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
     else if(a_path == "/wdg/cfg/type" && ctrChkNode(opt))	opt->setText(type());
     else if(a_path == "/wdg/cfg/root" && ctrChkNode(opt))	opt->setText(rootId());
     else if(a_path == "/wdg/cfg/path" && ctrChkNode(opt))
-	opt->setText((isLink()&&atoi(opt->attr("resLink").c_str())) ? parentNoLink().at().path() : path());
-    else if(a_path == "/wdg/cfg/name")
-    {
+	opt->setText((isLink()&&s2i(opt->attr("resLink"))) ? parentNoLink().at().path() : path());
+    else if(a_path == "/wdg/cfg/name") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(opt->text());
     }
-    else if(a_path == "/wdg/cfg/descr")
-    {
+    else if(a_path == "/wdg/cfg/descr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(opt->text());
     }
-    else if(a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID))
-    {
+    else if(a_path == "/wdg/cfg/clear" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) {
 	if(opt->attr("attr").empty()) wClear();
-	else if(attrAt(opt->attr("attr")).at().modif())
-	{
+	else if(attrAt(opt->attr("attr")).at().modif()) {
 	    attrAt(opt->attr("attr")).at().setModif(0);
 	    inheritAttr(opt->attr("attr"));
 	    modif();
 	}
     }
-    else if(a_path == "/wdg/u_lst" && ctrChkNode(opt))
-    {
+    else if(a_path == "/wdg/cfg/chDown" && ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID)) wChDown(opt->attr("attr"));
+    else if(a_path == "/wdg/u_lst" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
-    else if(a_path == "/wdg/g_lst" && ctrChkNode(opt))
-    {
+    else if(a_path == "/wdg/g_lst" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrGrpList(owner(), ls );
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(ls[i_l]);
     }
-    else if(a_path == "/wdg/w_lst" && ctrChkNode(opt))
-    {
+    else if(a_path == "/wdg/w_lst" && ctrChkNode(opt)) {
 	int c_lv = 0;
 	string c_path = "", c_el;
 	string lnk = parentNm();
 
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++)
-	{
+	for(int c_off = 0; (c_el=TSYS::pathLev(lnk,0,true,&c_off)).size(); c_lv++) {
 	    c_path += "/"+c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
 	vector<string>	ls, tls;
-	try
-	{
+	try {
 	    switch(c_lv)
 	    {
 		case 0:
@@ -1015,17 +955,14 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		opt->childAdd("el")->setText(c_path+"/"+ls[i_l]);
 	}catch(TError err) { }
     }
-    else if(a_path == "/br/wdg_" || a_path == "/inclwdg/wdg")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	{
-	    bool chkUserPerm = atoi(opt->attr("chkUserPerm").c_str());
+    else if(a_path == "/br/wdg_" || a_path == "/inclwdg/wdg") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
+	    bool chkUserPerm = s2i(opt->attr("chkUserPerm"));
 	    if(!chkUserPerm || SYS->security().at().access(opt->attr("user"),SEC_RD,owner(),grp(),permit()))
 	    {
 		vector<string>  lst;
 		wdgList(lst);
-		for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		{
+		for(unsigned i_f=0; i_f < lst.size(); i_f++) {
 		    AutoHD<Widget> iwdg = wdgAt(lst[i_f]);
 		    if(chkUserPerm && !SYS->security().at().access(opt->attr("user"),SEC_RD,iwdg.at().owner(),iwdg.at().grp(),iwdg.at().permit()))
 			continue;
@@ -1033,14 +970,12 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 		}
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string sid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    wdgAdd(sid.c_str(),opt->text(),"");
 	    opt->setAttr("id", sid);
-	    //> GeomZ set to include widgets number
-	    if(wdgPresent(sid))
-	    {
+	    //GeomZ set to include widgets number
+	    if(wdgPresent(sid)) {
 		vector<string> c_list;
 		wdgList(c_list);
 		wdgAt(sid).at().attrAt("geomZ").at().setI(c_list.size()-1);
@@ -1048,14 +983,13 @@ bool Widget::cntrCmdGeneric( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))	wdgDel(opt->attr("id").c_str(),true);
     }
-    else if(a_path == "/inclwdg/nmb" && ctrChkNode(opt))
-    {
+    else if(a_path == "/inclwdg/nmb" && ctrChkNode(opt)) {
 	vector<string> c_list;
 	wdgList(c_list);
-        unsigned e_c = 0;
-        for(unsigned i_w = 0; i_w < c_list.size(); i_w++)
-            if(wdgAt(c_list[i_w]).at().enable()) e_c++;
-        opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
+	unsigned e_c = 0;
+	for(unsigned i_w = 0; i_w < c_list.size(); i_w++)
+	    if(wdgAt(c_list[i_w]).at().enable()) e_c++;
+	opt->setText(TSYS::strMess(_("All: %d; Enabled: %d"),c_list.size(),e_c));
     }
     else return false;
 
@@ -1068,20 +1002,16 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
     if(!parent().freeStat()) return parent().at().cntrCmdAttributes(opt, src);
 
-    //> Get page info
-    if(opt->name() == "info")
-    {
-	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes")))
-	{
-	    //>> Properties form create
+    //Get page info
+    if(opt->name() == "info") {
+	if(ctrMkNode("area",opt,-1,"/attr",_("Attributes"))) {
+	    // Properties form create
 	    vector<string> list_a;
 	    src->attrList(list_a);
-	    for(unsigned i_el = 0; i_el < list_a.size(); i_el++)
-	    {
+	    for(unsigned i_el = 0; i_el < list_a.size(); i_el++) {
 		AutoHD<Attr> attr = src->attrAt(list_a[i_el]);
 		XMLNode *el = attr.at().fld().cntrCmdMake(opt,"/attr",-1,"root",SUI_ID,RWRWR_);
-		if(el)
-		{
+		if(el) {
 		    el->setAttr("len","")->setAttr("wdgFlg",i2s(attr.at().flgGlob()))->
 			setAttr("modif",u2s(attr.at().modif()))->setAttr("p",attr.at().fld().reserve());
 		    if(list_a[i_el] == "path")		el->setAttr("help",_("Path to the widget."));
@@ -1110,7 +1040,7 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 					     "  ws_BtPress:/next:next:/pg_so/*/*/$\n"
 					     "  ws_BtPress:/go_mn:open:/pg_so/*/mn/*\n"
 					     "  ws_BtPress:/go_graph:open:/pg_so/*/ggraph"));
-		    else switch(atoi(attr.at().fld().reserve().c_str()))
+		    else switch(s2i(attr.at().fld().reserve()))
 		    {
 			case A_ROOT:
 			    el->setAttr("help",_("Primitive identifier in the widget ground."));
@@ -1131,10 +1061,9 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	return true;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path.compare(0,6,"/attr/") == 0)
-    {
+    if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = src->attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",(attr.at().fld().flg()&TFld::NoWrite)?R_R_R_:RWRWR_,"root",SUI_ID,SEC_RD))
 	    opt->setText(attr.at().getS());
@@ -1156,21 +1085,18 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 	    opt->childAdd("rule")->setAttr("expr","^[^:]*:")->setAttr("color","darkorange");
 	}
     }
-    else if(a_path.compare(0,13,"/attrImg/sel_") == 0 && ctrChkNode(opt))
-    {
+    else if(a_path.compare(0,13,"/attrImg/sel_") == 0 && ctrChkNode(opt)) {
 	string a_val = src->attrAt(a_path.substr(13)).at().getS();
-	if(a_val == "res:")
-	{
+	if(a_val == "res:") {
 	    vector<string> ls;
 	    src->resourceList(ls);
 	    for(unsigned i_t = 0; i_t < ls.size(); i_t++)
-                opt->childAdd("el")->setText("res:"+ls[i_t]);
+		opt->childAdd("el")->setText("res:"+ls[i_t]);
 	}
-	else if(a_val.compare(0,5,"file:") == 0)
-	{
+	else if(a_val.compare(0,5,"file:") == 0) {
 	    TSYS::ctrListFS(opt, a_val.substr(5), "png;jpeg;jpg;gif;pcx;mng;svg;");
 	    for(unsigned i_t = 0; i_t < opt->childSize(); i_t++)
-                opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
+		opt->childGet(i_t)->setText("file:"+opt->childGet(i_t)->text());
 	}
 	opt->childIns(0,"el")->setText("res:");
 	opt->childIns(1,"el")->setText("file:");
@@ -1183,68 +1109,58 @@ bool Widget::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
 bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
-	if(ctrMkNode("area",opt,-1,"/links",_("Links")))
-	{
+    //Get page info
+    if(opt->name() == "info") {
+	if(ctrMkNode("area",opt,-1,"/links",_("Links"))) {
 	    ctrMkNode("fld",opt,-1,"/links/showAttr",_("Attributes show"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links")))
-	    {
-		bool shwAttr =	atoi(opt->attr("showAttr").c_str()) ||
-				atoi(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")).c_str());
+	    if(ctrMkNode("area",opt,-1,"/links/lnk",_("Links"))) {
+		bool shwAttr =	s2i(opt->attr("showAttr")) ||
+				s2i(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
 		vector<string> incllist, alist, list;
 		wdgList(incllist);
-		for(int i_w = -1; i_w < (int)incllist.size(); i_w++)
-		{
+		for(int i_w = -1; i_w < (int)incllist.size(); i_w++) {
 		    AutoHD<Widget> wdg;
 		    if(i_w < 0) wdg = AutoHD<Widget>(this);
 		    else wdg = wdgAt(incllist[i_w]);
 		    wdg.at().attrList(alist);
-		    for(unsigned i_a = 0; i_a < alist.size(); i_a++)
-		    {
+		    for(unsigned i_a = 0; i_a < alist.size(); i_a++) {
 			string grpprm;
 			string idprm = alist[i_a];
 			string nprm  = wdg.at().attrAt(alist[i_a]).at().id();
-			if(i_w >= 0)
-			{
+			if(i_w >= 0) {
 			    idprm.insert(0,incllist[i_w]+".");
 			    nprm.insert(0,wdg.at().id()+".");
 			}
 
 			if(!(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst)) ||
 			    (!shwAttr && wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst)) continue;
-			//>> Get attributes
+			// Get attributes
 			bool shwTmpl = wdg.at().attrAt(alist[i_a]).at().cfgTempl().size();
 			if(shwTmpl)	grpprm = TSYS::strSepParse(wdg.at().attrAt(alist[i_a]).at().cfgTempl(),0,'|');
 
-			//>> Check select param
-			if(shwTmpl && !shwAttr)
-			{
+			// Check select param
+			if(shwTmpl && !shwAttr) {
 			    nprm = grpprm;
 			    if(i_w >= 0) nprm.insert(0,wdg.at().id()+".");
 
-			    //>> Check already to present parameters
+			    // Check already to present parameters
 			    bool f_ok = false;
 			    for(unsigned i_l = 0; i_l < list.size() && !f_ok; i_l++)
 				if(list[i_l] == nprm) f_ok = true;
-			    if(!f_ok)
-			    {
+			    if(!f_ok) {
 				ctrMkNode("fld",opt,-1,(string("/links/lnk/pr_")+idprm).c_str(),nprm,(lnk_ro?R_R_R_:RWRWR_),"root",SUI_ID,
 				    3,"tp","str","dest","sel_ed","select",(string("/links/lnk/pl_")+idprm).c_str());
 				list.push_back(nprm);
 			    }
 			}
-			else
-			{
+			else {
 			    XMLNode *nel = NULL;
 			    if(wdg.at().attrAt(alist[i_a]).at().flgSelf()&Attr::CfgConst)
 				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),nprm,(lnk_ro?R_R_R_:RWRWR_),"root",SUI_ID,2,"tp","str","elGrp",grpprm.c_str());
 			    else
 				nel = ctrMkNode("fld",opt,-1,(string("/links/lnk/el_")+idprm).c_str(),
 				    nprm,(lnk_ro?R_R_R_:RWRWR_),"root",SUI_ID,4,"tp","str","dest","sel_ed","select",(string("/links/lnk/ls_")+idprm).c_str(),"elGrp",grpprm.c_str());
-			    if(nel && atoi(opt->attr("inclValue").c_str()))
-			    {
+			    if(nel && s2i(opt->attr("inclValue"))) {
 				nel->setText(wdg.at().attrAt(alist[i_a]).at().cfgVal());
 				if(wdg.at().attrAt(alist[i_a]).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 				    ((nel->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(nel->text().substr(4),0,true).freeStat()) ||
@@ -1260,17 +1176,15 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	return true;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/links/showAttr")
-    {
+    if(a_path == "/links/showAttr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
 	    opt->setText(TBDS::genDBGet(mod->nodePath()+"showAttr","0",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"showAttr",opt->text(),opt->attr("user"));
     }
-    else if(a_path.compare(0,14,"/links/lnk/pr_") == 0)
-    {
+    else if(a_path.compare(0,14,"/links/lnk/pr_") == 0) {
 	vector<string> a_ls;
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
@@ -1278,9 +1192,8 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	if(nattr.size())	srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 	string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
-	//> Search first not config field if default field is config.
-	if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)
-	{
+	// Search first not config field if default field is config.
+	if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst) {
 	    srcwdg.at().attrList(a_ls);
 	    for(unsigned i_a = 0; i_a < a_ls.size(); i_a++)
 		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
@@ -1288,15 +1201,13 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		{ nattr = a_ls[i_a]; break; }
 	}
 
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	{
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    string cfg_val = srcwdg.at().attrAt(nattr).at().cfgVal();
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
 	    string rez     = _("Custom");
 
 	    bool custom = false, lnkOK = false;
-	    if(obj_tp == "prm:" || obj_tp == "wdg:")
-	    {
+	    if(obj_tp == "prm:" || obj_tp == "wdg:") {
 		if((obj_tp == "prm:" && !SYS->daq().at().attrAt(cfg_val.substr(4),0,true).freeStat()) ||
 		    (obj_tp == "wdg:" && !srcwdg.at().attrAt(cfg_val.substr(4),0).freeStat()))
 		    { cfg_val.resize(cfg_val.rfind("/")); lnkOK = true; }
@@ -1314,16 +1225,14 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		    rez += sel+", ";
 		}
 	    if(cfg_val.empty())	rez = "";
-	    else if(!custom)
-	    {
+	    else if(!custom) {
 		rez = cfg_val;
 		if(lnkOK) rez += " (+)";
 	    }
 
 	    opt->setText(rez);
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string no_set;
 	    string cfg_val = TSYS::strParse(opt->text(), 0, " ");
 	    string obj_tp  = TSYS::strSepParse(cfg_val,0,':')+":";
@@ -1341,8 +1250,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		{
 		    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val);
 		    string p_attr = TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),1,'|');
-		    if(!prm.freeStat() || !dstwdg.freeStat())
-		    {
+		    if(!prm.freeStat() || !dstwdg.freeStat()) {
 			if((!prm.freeStat() && prm.at().vlPresent(p_attr)) ||
 				(!dstwdg.freeStat() && dstwdg.at().attrPresent(p_attr)))
 			    srcwdg.at().attrAt(a_ls[i_a]).at().setCfgVal(cfg_val+((obj_tp == "wdg:")?"/a_":"/")+p_attr);
@@ -1360,23 +1268,22 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	else nattr = nwdg;
 
 	bool is_pl = (a_path.substr(0,14) == "/links/lnk/pl_");
-	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut)))
-	{
+	if(!(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))) {
 	    if(!is_pl) throw TError(nodePath().c_str(),_("Variable is not link"));
 	    vector<string> a_ls;
 	    string p_nm = TSYS::strSepParse(srcwdg.at().attrAt(nattr).at().cfgTempl(),0,'|');
 	    srcwdg.at().attrList(a_ls);
 	    unsigned i_a;
 	    for(i_a = 0; i_a < a_ls.size(); i_a++)
-	        if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
-	    	    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
-	        { nattr = a_ls[i_a]; break; }
+		if(p_nm == TSYS::strSepParse(srcwdg.at().attrAt(a_ls[i_a]).at().cfgTempl(),0,'|') &&
+		    !(srcwdg.at().attrAt(a_ls[i_a]).at().flgSelf()&Attr::CfgConst))
+		{ nattr = a_ls[i_a]; break; }
 	    if(i_a >= a_ls.size()) throw TError(nodePath().c_str(),_("Variable is not link"));
 	}
 
 	string m_prm = srcwdg.at().attrAt(nattr).at().cfgVal();
 
-	//>> Link interface process
+	// Link interface process
 	int c_lv = 0;
 	string obj_tp = TSYS::strSepParse(m_prm,0,':')+":";
 	if(obj_tp.empty() || !(obj_tp == "val:" || obj_tp == "prm:" || obj_tp == "wdg:" || obj_tp == "arh:"))
@@ -1387,67 +1294,57 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 	    if(!is_pl && srcwdg.at().attrAt(nattr).at().flgGlob()&Attr::Address)
 		opt->childAdd("el")->setText("arh:");
 	}
-	//>> Link elements process
-	else
-	{
+	// Link elements process
+	else {
 	    int c_off = obj_tp.size();
 	    vector<string> ls;
 	    string c_path = obj_tp, c_el;
 	    opt->childAdd("el")->setText("");
 
-	    try
-    	    {
-		if(obj_tp == "prm:")
-		{
+	    try {
+		if(obj_tp == "prm:") {
 		    m_prm = m_prm.substr(4);
 		    if(is_pl && !SYS->daq().at().attrAt(m_prm,0,true).freeStat()) m_prm = m_prm.substr(0,m_prm.rfind("/"));
 		    SYS->daq().at().ctrListPrmAttr(opt, m_prm, is_pl, 0, "prm:");
 		}
-		else if(obj_tp == "wdg:")
-		{
+		else if(obj_tp == "wdg:") {
 		    opt->childAdd("el")->setText(c_path);
-		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++)
-		    {
+		    for( ;(c_el=TSYS::pathLev(m_prm,0,true,&c_off)).size(); c_lv++) {
 			c_path += (c_lv?"/":"")+c_el;
 			opt->childAdd("el")->setText(c_path);
 		    }
 
 		    AutoHD<Widget> wnd = srcwdg.at().wdgAt(c_path.substr(4),0);
-		    if(!wnd.freeStat())
-		    {
+		    if(!wnd.freeStat()) {
 			if(dynamic_cast<Widget*>(wnd.at().nodePrev())) opt->childAdd("el")->setText(c_path+(c_lv?"/..":".."));
 			wnd.at().wdgList(ls, true);
 			if(ls.size()) opt->childAdd("el")->setText(_("=== Widgets ==="));
 			for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-                    	    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[i_l]);
-			if(!is_pl)
-			{
+			    opt->childAdd("el")->setText(c_path+(c_lv?"/wdg_":"wdg_")+ls[i_l]);
+			if(!is_pl) {
 			    wnd.at().attrList(ls);
 			    if(ls.size()) opt->childAdd("el")->setText(_("=== Attributes ==="));
 			    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-                    		opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
-                    	}
+				opt->childAdd("el")->setText(c_path+(c_lv?"/a_":"a_")+ls[i_l]);
+			}
 		    }
 		}
-		else if(m_prm == "arh:")
-		{
+		else if(m_prm == "arh:") {
 		    SYS->archive().at().valList(ls);
 		    for(unsigned i_l = 0; i_l < ls.size(); i_l++)
-                	opt->childAdd("el")->setText(c_path+ls[i_l]);
+			opt->childAdd("el")->setText(c_path+ls[i_l]);
 		}
-    	    }catch(TError err) { }
+	    }catch(TError err) { }
 	}
     }
-    else if(a_path.compare(0,14,"/links/lnk/el_") == 0)
-    {
+    else if(a_path.compare(0,14,"/links/lnk/el_") == 0) {
 	AutoHD<Widget> srcwdg(this);
 	string nwdg = TSYS::strSepParse(a_path.substr(14),0,'.');
 	string nattr = TSYS::strSepParse(a_path.substr(14),1,'.');
 	if(nattr.size())	srcwdg = wdgAt(nwdg);
 	else nattr = nwdg;
 
-	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD))
-	{
+	if(ctrChkNode(opt,"get",RWRWR_,"root","UI",SEC_RD)) {
 	    opt->setText(srcwdg.at().attrAt(nattr).at().cfgVal());
 	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut) &&
 		    ((opt->text().compare(0,4,"prm:") == 0 && !SYS->daq().at().attrAt(opt->text().substr(4),0,true).freeStat()) ||
@@ -1455,8 +1352,7 @@ bool Widget::cntrCmdLinks( XMLNode *opt, bool lnk_ro )
 		     (opt->text().compare(0,4,"arh:") == 0 && SYS->archive().at().valPresent(opt->text().substr(4)))))
 		opt->setText(opt->text() + " (+)");
 	}
-	else if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR))
-	{
+	else if(ctrChkNode(opt,"set",RWRWR_,"root","UI",SEC_WR)) {
 	    srcwdg.at().attrAt(nattr).at().setCfgVal(opt->text());
 	    if(srcwdg.at().attrAt(nattr).at().flgSelf()&Attr::CfgConst)	srcwdg.at().attrAt(nattr).at().setS(opt->text());
 	    else if(srcwdg.at().attrAt(nattr).at().flgSelf()&(Attr::CfgLnkIn|Attr::CfgLnkOut))
@@ -1474,11 +1370,9 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 
     if(isLink()) return false;
 
-    //> Get page info
-    if(opt->name() == "info")
-    {
-	if(ctrMkNode("area",opt,-1,"/proc",_("Process")))
-	{
+    //Get page info
+    if(opt->name() == "info") {
+	if(ctrMkNode("area",opt,-1,"/proc",_("Process"))) {
 	    ctrMkNode("fld",opt,-1,"/proc/wdg",_("Widget"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/proc/w_lst");
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if(!wdgPresent(wattr))	wattr = ".";
@@ -1492,8 +1386,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/proc/attr/cfg",_("Configuration"),RWRWR_,"root",SUI_ID,4,"tp","dec","idm","1","dest","select","select","/proc/lnk_ls");
 		ctrMkNode("list",opt,-1,"/proc/attr/cfgtmpl",_("Configuration template"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate")))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/proc/calc",_("Calculate"))) {
 		ctrMkNode("fld",opt,-1,"/proc/calc/progLng",_("Program language"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","sel_ed","select","/proc/calc/plangLs");
 		ctrMkNode("fld",opt,-1,"/proc/calc/per",_("Calculate period (ms)"),RWRWR_,"root",SUI_ID,1,"tp","dec");
 		ctrMkNode("fld",opt,-1,"/proc/calc/prog",_("Program"),RWRWR_,"root",SUI_ID,3,"tp","str","rows","10","SnthHgl","1");
@@ -1502,12 +1395,10 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	return true;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/proc/wdg")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	{
+    if(a_path == "/proc/wdg") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	    if(wattr != "." && !wdgPresent(wattr))	wattr = ".";
 	    opt->setText(wattr);
@@ -1515,23 +1406,20 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
 	    TBDS::genDBSet(mod->nodePath()+"wdgAttr",opt->text(),opt->attr("user"));
     }
-    else if(a_path == "/proc/w_lst" && ctrChkNode(opt))
-    {
+    else if(a_path == "/proc/w_lst" && ctrChkNode(opt)) {
 	vector<string> lst;
 	wdgList(lst);
 	opt->childAdd("el")->setText(".");
 	for(unsigned i_f=0; i_f < lst.size(); i_f++)
 	    opt->childAdd("el")->setText(lst[i_f]);
     }
-    else if(a_path == "/proc/attr")
-    {
+    else if(a_path == "/proc/attr") {
 	wattr = opt->attr("wdg");
 	if(wattr.empty())
 	    wattr = TBDS::genDBGet(mod->nodePath()+"wdgAttr",".",opt->attr("user"));
 	if(wattr != "." && !wdgPresent(wattr))	wattr = ".";
 
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))
-	{
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/proc/attr/id","");
 	    XMLNode *n_name	= ctrMkNode("list",opt,-1,"/proc/attr/name","");
 	    XMLNode *n_type	= ctrMkNode("list",opt,-1,"/proc/attr/type","");
@@ -1543,8 +1431,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    vector<string> lst;
 	    wdg.at().attrList(lst);
-	    for(unsigned i_el = 0; i_el < lst.size(); i_el++)
-	    {
+	    for(unsigned i_el = 0; i_el < lst.size(); i_el++) {
 		if(n_id)	n_id->childAdd("el")->setText(lst[i_el]);
 		if(n_name)	n_name->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().name());
 		if(n_type)	n_type->childAdd("el")->setText(i2s(wdg.at().attrAt(lst[i_el]).at().fld().type()+
@@ -1556,34 +1443,30 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		if(n_cfgtmpl)	n_cfgtmpl->childAdd("el")->setText(wdg.at().attrAt(lst[i_el]).at().cfgTempl());
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 	    wdg.at().attrAdd( new TFld("newAttr",_("New attribute"),TFld::String,Attr::IsUser) );
 	    //wdg.at().attrAt("newAttr").at().setS(EVAL_STR);
 	    wdg.at().attrAt("newAttr").at().setModif(1);
 	    wdg.at().modif();
 	}
-	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"del",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
-	    if( !wdg.at().attrPresent(opt->attr("key_id")) )
+	    if(!wdg.at().attrPresent(opt->attr("key_id")))
 		throw TError(nodePath().c_str(),_("Deleting the enclosed widget's elements error."));
-	    if( !(wdg.at().attrAt(opt->attr("key_id")).at().flgSelf()&Attr::IsInher) &&
-		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser )
+	    if(!(wdg.at().attrAt(opt->attr("key_id")).at().flgSelf()&Attr::IsInher) &&
+		    wdg.at().attrAt(opt->attr("key_id")).at().fld().flg()&Attr::IsUser)
 		wdg.at().attrDel(opt->attr("key_id"));
 	    else throw TError(nodePath().c_str(),_("Deleting the not user element error."));
 	    wdg.at().modif();
 	}
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))
-	{
-	    //>> Request data
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR)) {
+	    // Request data
 	    string idattr = opt->attr("key_id");
 	    string idcol  = opt->attr("col");
 	    AutoHD<Widget> wdg = (wattr==".")?AutoHD<Widget>(this):wdgAt(wattr);
 
-	    if(idcol == "id" || idcol == "type")
-	    {
+	    if(idcol == "id" || idcol == "type") {
 		string		tid	= idattr;
 		string		tnm	= wdg.at().attrAt(idattr).at().name();
 		TFld::Type	ttp	= wdg.at().attrAt(idattr).at().fld().type();
@@ -1599,15 +1482,13 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		string tmpl	= wdg.at().attrAt(idattr).at().cfgTempl();
 		string cfgval	= wdg.at().attrAt(idattr).at().cfgVal();
 
-		if(idcol == "id")
-		{
+		if(idcol == "id") {
 		    tid = opt->text();
 		    if(wdg.at().attrPresent(tid)) throw TError(nodePath().c_str(),_("New attribute's ID '%s' already present."),tid.c_str());
 		}
-		else if(idcol == "type")
-		{
-		    ttp = (TFld::Type)(atoi(opt->text().c_str())&0x0f);
-		    tflg = tflg^((tflg^((atoi(opt->text().c_str())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
+		else if(idcol == "type") {
+		    ttp = (TFld::Type)(s2i(opt->text())&0x0f);
+		    tflg = tflg^((tflg^((s2i(opt->text())>>4)|Attr::IsUser))&(TFld::FullText|TFld::Selected|Attr::Color|Attr::Image|Attr::Font|Attr::Address));
 		}
 		wdg.at().attrDel(idattr);
 		wdg.at().attrAdd(new TFld(tid.c_str(),tnm.c_str(),ttp,tflg,"","",tvals.c_str(),tsels.c_str()));
@@ -1617,29 +1498,24 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 		wdg.at().attrAt(tid).at().setCfgTempl(tmpl);
 		wdg.at().attrAt(tid).at().setModif(1);
 	    }
-	    else
-	    {
-		if(idcol == "name")
-		{
+	    else {
+		if(idcol == "name") {
 		    if(!(!(wdg.at().attrAt(idattr).at().flgSelf()&Attr::IsInher) && wdg.at().attrAt(idattr).at().fld().flg()&Attr::IsUser))
 			throw TError(nodePath().c_str(),_("Changing of not user attribute is no permitted"));
 		    wdg.at().attrAt(idattr).at().fld().setDescr(opt->text());
 		}
-		else if(idcol == "wa")
-		{
+		else if(idcol == "wa") {
 		    wdg.at().attrAt(idattr).at().fld().setValues(TSYS::strSepParse(opt->text(),0,'|'));
 		    wdg.at().attrAt(idattr).at().fld().setSelNames(TSYS::strSepParse(opt->text(),1,'|'));
 		}
-		else if(idcol == "proc")
-		{
+		else if(idcol == "proc") {
 		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
-		    Attr::SelfAttrFlgs stflg = atoi(opt->text().c_str())?Attr::ProcAttr:(Attr::SelfAttrFlgs)0;
+		    Attr::SelfAttrFlgs stflg = s2i(opt->text())?Attr::ProcAttr:(Attr::SelfAttrFlgs)0;
 		    wdg.at().attrAt(idattr).at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&Attr::ProcAttr)) );
 		}
-		else if(idcol == "cfg")
-		{
+		else if(idcol == "cfg") {
 		    Attr::SelfAttrFlgs sflg =  wdg.at().attrAt(idattr).at().flgSelf();
-		    Attr::SelfAttrFlgs stflg = (Attr::SelfAttrFlgs)atoi(opt->text().c_str());
+		    Attr::SelfAttrFlgs stflg = (Attr::SelfAttrFlgs)s2i(opt->text());
 		    if((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))
 			wdg.at().attrAt(idattr).at().setFlgSelf( (Attr::SelfAttrFlgs)(sflg^((sflg^stflg)&(Attr::CfgLnkIn|Attr::CfgLnkOut|Attr::CfgConst|Attr::FromStyle))) );
 		}
@@ -1648,40 +1524,34 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	    wdg.at().modif();
 	}
     }
-    else if(a_path == "/proc/calc/progLng")
-    {
+    else if(a_path == "/proc/calc/progLng") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(calcLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcLang(opt->text());
     }
-    else if(a_path == "/proc/calc/per")
-    {
+    else if(a_path == "/proc/calc/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(calcPer()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcPer(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcPer(s2i(opt->text()));
     }
-    else if(a_path == "/proc/calc/prog")
-    {
+    else if(a_path == "/proc/calc/prog") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(calcProg());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setCalcProg(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SUI_ID,SEC_RD))
-	    try
-	    {
+	    try {
 		SYS->daq().at().at(TSYS::strParse(calcLang(),0,".")).at().
 				compileFuncSynthHighl(TSYS::strParse(calcLang(),1,"."),*opt);
 	    } catch(...){ }
     }
-    else if(a_path == "/proc/calc/plangLs" && ctrChkNode(opt))
-    {
+    else if(a_path == "/proc/calc/plangLs" && ctrChkNode(opt)) {
 	string tplng = calcLang();
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
-	{
+	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
-	if(c_lv) c_path+=".";
-	vector<string>  ls;
+	if(c_lv) c_path += ".";
+	vector<string> ls;
 	switch(c_lv)
 	{
 	    case 0:
@@ -1698,8 +1568,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
-    else if(a_path == "/proc/tp_ls" && ctrChkNode(opt))
-    {
+    else if(a_path == "/proc/tp_ls" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Boolean))->setText(_("Boolean"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer))->setText(_("Integer"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Real))->setText(_("Real"));
@@ -1715,8 +1584,7 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 	opt->childAdd("el")->setAttr("id",i2s(TFld::Integer+(Attr::DateTime<<4)))->setText(_("DateTime"));
 	opt->childAdd("el")->setAttr("id",i2s(TFld::String+(Attr::Address<<4)))->setText(_("Address"));
     }
-    else if(a_path == "/proc/lnk_ls" && ctrChkNode(opt))
-    {
+    else if(a_path == "/proc/lnk_ls" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setAttr("id",i2s(0))->setText(_("Not"));
 	opt->childAdd("el")->setAttr("id",i2s(Attr::CfgConst))->setText(_("Constant"));
 	opt->childAdd("el")->setAttr("id",i2s(Attr::CfgLnkIn))->setText(_("Input link"));
@@ -1732,12 +1600,12 @@ bool Widget::cntrCmdProcess( XMLNode *opt )
 //************************************************
 //* Attr: Widget attribute                       *
 //************************************************
-Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), m_modif(0), self_flg((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
+Attr::Attr( TFld *ifld, bool inher ) : mFld(NULL), mModif(0), self_flg((SelfAttrFlgs)0), mConn(0), mOwner(NULL)
 {
     setFld(ifld, inher);
 }
 
-Attr::~Attr(  )
+Attr::~Attr( )
 {
     setFld(NULL, false);
 }
@@ -1745,48 +1613,43 @@ Attr::~Attr(  )
 void Attr::setFld( TFld *fld, bool inher )
 {
     if(owner()) pthread_mutex_lock(&owner()->mtxAttr());
-    //> Free for previous type
+    //Free for previous type
     if(mFld && (!fld || fld->type() != mFld->type()))
 	switch(mFld->type())
 	{
 	    case TFld::String:
-		if(m_val.s_val) delete m_val.s_val;
+		if(mVal.s) delete mVal.s;
 		break;
 	    case TFld::Object:
-		if(m_val.o_val) delete m_val.o_val;
-                break;
-            default: break;
+		if(mVal.o) delete mVal.o;
+		break;
+	    default: break;
 	}
 
-    //> Alloc for new type
+    //Alloc for new type
     if(fld && (!mFld || fld->type() != mFld->type()))
 	switch(fld->type())
 	{
 	    case TFld::String:
-	    {
-		m_val.s_val = NULL;
+		mVal.s = NULL;
 		if(fld->flg()&Attr::DirRead) break;
-		m_val.s_val = new string();
-		*m_val.s_val = fld->def();
+		mVal.s = new string();
+		*mVal.s = fld->def();
 		break;
-	    }
 	    case TFld::Integer:
-		m_val.i_val = strtol(fld->def().c_str(),NULL,(fld->flg()&TFld::HexDec)?16:((fld->flg()&TFld::OctDec)?8:10));
+		mVal.i = strtol(fld->def().c_str(),NULL,(fld->flg()&TFld::HexDec)?16:((fld->flg()&TFld::OctDec)?8:10));
 		break;
-	    case TFld::Real:	m_val.r_val = atof(fld->def().c_str());	break;
-	    case TFld::Boolean:	m_val.b_val = atoi(fld->def().c_str());	break;
+	    case TFld::Real:	mVal.r = s2r(fld->def());	break;
+	    case TFld::Boolean:	mVal.b = s2i(fld->def());	break;
 	    case TFld::Object:
-	    {
-		m_val.o_val = NULL;
+		mVal.o = NULL;
 		if(fld->flg()&Attr::DirRead) break;
-		m_val.o_val = new AutoHD<TVarObj>(new TVarObj);
+		mVal.o = new AutoHD<TVarObj>(new TVarObj);
 		break;
-	    }
 	    default: break;
 	}
 
-    if(mFld)
-    {
+    if(mFld) {
 	mFld->setLen(mFld->len()-1);
 	if(!mFld->len()) delete mFld;
 	mFld = NULL;
@@ -1844,15 +1707,15 @@ string Attr::getS( bool sys )
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? r2s(tvl) : EVAL_STR; }
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? i2s((bool)tvl) : EVAL_STR; }
 	case TFld::Object:	{ AutoHD<TVarObj> tvl = getO(sys); return (tvl.at().objName() != "EVAL") ? tvl.at().getStrXML() : EVAL_STR; }
-	case TFld::String:
-	{
+	case TFld::String: {
 	    pthread_mutex_lock(&owner()->mtxAttr());
-	    string tvl = *m_val.s_val;
+	    string tvl = *mVal.s;
 	    pthread_mutex_unlock(&owner()->mtxAttr());
 	    return tvl;
 	}
 	default: break;
     }
+
     return EVAL_STR;
 }
 
@@ -1862,12 +1725,13 @@ int Attr::getI( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getI(true),false).getI();
     switch(fld().type())
     {
-	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? atoi(tvl.c_str()) : EVAL_INT; }
+	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? s2i(tvl) : EVAL_INT; }
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? (int)tvl : EVAL_INT; }
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? (bool)tvl : EVAL_INT; }
-	case TFld::Integer:	return m_val.i_val;
+	case TFld::Integer:	return mVal.i;
 	default: break;
     }
+
     return EVAL_INT;
 }
 
@@ -1877,27 +1741,29 @@ double Attr::getR( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getR(true),false).getR();
     switch(fld().type())
     {
-	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? atof(tvl.c_str()) : EVAL_REAL; }
+	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? s2r(tvl) : EVAL_REAL; }
 	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? tvl : EVAL_REAL; }
 	case TFld::Boolean:	{ char tvl = getB(sys); return (tvl != EVAL_BOOL) ? (bool)tvl : EVAL_REAL; }
-	case TFld::Real:	return m_val.r_val;
+	case TFld::Real:	return mVal.r;
 	default: break;
     }
+
     return EVAL_REAL;
 }
 
 char Attr::getB( bool sys )
 {
-    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getB();
+    if(flgGlob()&Attr::DirRead) return owner()->vlGet(*this).getB();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getB(true),false).getB();
     switch(fld().type())
     {
-	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? (bool)atoi(tvl.c_str()) : EVAL_BOOL; }
+	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? (bool)s2i(tvl) : EVAL_BOOL; }
 	case TFld::Integer:	{ int tvl = getI(sys); return (tvl != EVAL_INT) ? (bool)tvl : EVAL_BOOL; }
 	case TFld::Real:	{ double tvl = getR(sys); return (tvl != EVAL_REAL) ? (bool)tvl : EVAL_BOOL; }
-	case TFld::Boolean:	return m_val.b_val;
+	case TFld::Boolean:	return mVal.b;
 	default: break;
     }
+
     return EVAL_BOOL;
 }
 
@@ -1907,8 +1773,9 @@ AutoHD<TVarObj> Attr::getO( bool sys )
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
     if(fld().type() != TFld::Object) return new TEValObj;
     pthread_mutex_lock(&owner()->mtxAttr());
-    AutoHD<TVarObj> tvl = *m_val.o_val;
+    AutoHD<TVarObj> tvl = *mVal.o;
     pthread_mutex_unlock(&owner()->mtxAttr());
+
     return tvl;
 }
 
@@ -1945,28 +1812,27 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
     if(flgGlob()&Attr::DirRead) return;
     switch(fld().type())
     {
-	case TFld::Integer:	setI((val!=EVAL_STR) ? atoi(val.c_str()) : EVAL_INT, strongPrev, sys);	break;
-	case TFld::Real:	setR((val!=EVAL_STR) ? atof(val.c_str()) : EVAL_REAL, strongPrev, sys);	break;
-	case TFld::Boolean:	setB((val!=EVAL_STR) ? (bool)atoi(val.c_str()) : EVAL_BOOL, strongPrev, sys);	break;
-	case TFld::Object:	setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val, NULL, getO()) : AutoHD<TVarObj>(new TEValObj)); break;
-	case TFld::String:
-	{
-	    if((!strongPrev && *m_val.s_val == val) ||
+	case TFld::Integer:	setI((val!=EVAL_STR) ? s2i(val) : EVAL_INT, strongPrev, sys);	break;
+	case TFld::Real:	setR((val!=EVAL_STR) ? s2r(val) : EVAL_REAL, strongPrev, sys);	break;
+	case TFld::Boolean:	setB((val!=EVAL_STR) ? (bool)s2i(val) : EVAL_BOOL, strongPrev, sys);	break;
+	case TFld::Object:
+	    setO((val!=EVAL_STR) ? TVarObj::parseStrXML(val, NULL, getO()) : AutoHD<TVarObj>(new TEValObj), strongPrev, sys);
+	    break;
+	case TFld::String: {
+	    if((!strongPrev && *mVal.s == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
 	    pthread_mutex_lock(&owner()->mtxAttr());
-	    string t_str = *m_val.s_val;
-	    *m_val.s_val = val;
+	    string t_str = *mVal.s;
+	    *mVal.s = val;
 	    pthread_mutex_unlock(&owner()->mtxAttr());
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_str)))
-	    {
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_str))) {
 		pthread_mutex_lock(&owner()->mtxAttr());
-		*m_val.s_val = t_str;
+		*mVal.s = t_str;
 		pthread_mutex_unlock(&owner()->mtxAttr());
 	    }
-	    else
-	    {
+	    else {
 		unsigned imdf = owner()->modifVal(*this);
-		m_modif = imdf ? imdf : m_modif+1;
+		mModif = imdf ? imdf : mModif+1;
 	    }
 	    break;
 	}
@@ -1982,19 +1848,18 @@ void Attr::setI( int val, bool strongPrev, bool sys )
 	case TFld::String:	setS((val!=EVAL_INT) ? i2s(val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Real:	setR((val!=EVAL_INT) ? val : EVAL_REAL, strongPrev, sys);		break;
 	case TFld::Boolean:	setB((val!=EVAL_INT) ? (bool)val : EVAL_BOOL, strongPrev, sys);		break;
-	case TFld::Integer:
-	{
+	case TFld::Object:	if(val == EVAL_INT) setO(new TEValObj(), strongPrev, sys);	break;
+	case TFld::Integer: {
 	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[0] < fld().selValI()[1])
 		val = vmin(fld().selValI()[1],vmax(fld().selValI()[0],val));
-	    if((!strongPrev && m_val.i_val == val) ||
+	    if((!strongPrev && mVal.i == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
-	    int t_val = m_val.i_val;
-	    m_val.i_val = val;
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	m_val.i_val = t_val;
-	    else
-	    {
+	    int t_val = mVal.i;
+	    mVal.i = val;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.i = t_val;
+	    else {
 		unsigned imdf = owner()->modifVal(*this);
-		m_modif = imdf ? imdf : m_modif+1;
+		mModif = imdf ? imdf : mModif+1;
 	    }
 	    break;
 	}
@@ -2010,19 +1875,18 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 	case TFld::String:	setS((val!=EVAL_REAL) ? r2s(val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int)val : EVAL_INT, strongPrev, sys);	break;
 	case TFld::Boolean:	setB((val!=EVAL_REAL) ? (bool)val : EVAL_BOOL, strongPrev, sys);break;
-	case TFld::Real:
-	{
+	case TFld::Object:	if(val == EVAL_REAL) setO(new TEValObj(), strongPrev, sys);	break;
+	case TFld::Real: {
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[0] < fld().selValR()[1])
 		val = vmin(fld().selValR()[1],vmax(fld().selValR()[0],val));
-	    if((!strongPrev && m_val.r_val == val) ||
+	    if((!strongPrev && mVal.r == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))		break;
-	    double t_val = m_val.r_val;
-	    m_val.r_val = val;
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	m_val.r_val = t_val;
-	    else
-	    {
+	    double t_val = mVal.r;
+	    mVal.r = val;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))	mVal.r = t_val;
+	    else {
 		unsigned imdf = owner()->modifVal(*this);
-		m_modif = imdf ? imdf : m_modif+1;
+		mModif = imdf ? imdf : mModif+1;
 	    }
 	    break;
 	}
@@ -2038,18 +1902,16 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 	case TFld::String:	setS((val!=EVAL_BOOL) ? i2s((bool)val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Integer:	setI((val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys);		break;
 	case TFld::Real:	setR((val!=EVAL_BOOL) ? (bool)val : EVAL_REAL, strongPrev, sys);	break;
-	case TFld::Boolean:
-	{
-	    if((!strongPrev && m_val.b_val == val) ||
+	case TFld::Object:	if(val == EVAL_BOOL) setO(new TEValObj(), strongPrev, sys);		break;
+	case TFld::Boolean: {
+	    if((!strongPrev && mVal.b == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull()))	break;
-	    bool t_val = m_val.b_val;
-	    m_val.b_val = val;
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_val)))
-		m_val.b_val = t_val;
-	    else
-	    {
+	    bool t_val = mVal.b;
+	    mVal.b = val;
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_val))) mVal.b = t_val;
+	    else {
 		unsigned imdf = owner()->modifVal(*this);
-		m_modif = imdf ? imdf : m_modif+1;
+		mModif = imdf ? imdf : mModif+1;
 	    }
 	    break;
 	}
@@ -2065,24 +1927,21 @@ void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 	case TFld::String:	setS(val.at().getStrXML(), strongPrev, sys);break;
 	case TFld::Integer: case TFld::Real: case TFld::Boolean:
 				setB(true, strongPrev, sys);		break;
-	case TFld::Object:
-	{
-	    if((!strongPrev && *m_val.o_val == val) ||
+	case TFld::Object: {
+	    if((!strongPrev && *mVal.o == val) ||
 		(flgSelf()&Attr::FromStyle && !sys && owner()->stlReq(*this,val,true).isNull())) break;
 	    pthread_mutex_lock(&owner()->mtxAttr());
-	    AutoHD<TVarObj> t_obj = *m_val.o_val;
-	    *m_val.o_val = val;
+	    AutoHD<TVarObj> t_obj = *mVal.o;
+	    *mVal.o = val;
 	    pthread_mutex_unlock(&owner()->mtxAttr());
-	    if(!sys && !owner()->attrChange(*this,TVariant(t_obj)))
-	    {
+	    if(!sys && !owner()->attrChange(*this,TVariant(t_obj))) {
 		pthread_mutex_lock(&owner()->mtxAttr());
-		*m_val.o_val = t_obj;
+		*mVal.o = t_obj;
 		pthread_mutex_unlock(&owner()->mtxAttr());
 	    }
-	    else
-	    {
+	    else {
 		unsigned imdf = owner()->modifVal(*this);
-		m_modif = imdf ? imdf : m_modif+1;
+		mModif = imdf ? imdf : mModif+1;
 		return;
 	    }
 	    break;
@@ -2115,16 +1974,14 @@ void Attr::setCfgTempl( const string &vl )
     pthread_mutex_lock(&owner()->mtxAttr());
     cfg = vl+"\n"+cfgVal();
     pthread_mutex_unlock(&owner()->mtxAttr());
-    if(!owner()->attrChange(*this,TVariant()))
-    {
+    if(!owner()->attrChange(*this,TVariant())) {
 	pthread_mutex_lock(&owner()->mtxAttr());
 	cfg = t_tmpl+"\n"+cfgVal();
 	pthread_mutex_unlock(&owner()->mtxAttr());
     }
-    else
-    {
+    else {
 	unsigned imdf = owner()->modifVal(*this);
-	m_modif = imdf ? imdf : m_modif+1;
+	mModif = imdf ? imdf : mModif+1;
     }
 }
 
@@ -2135,16 +1992,14 @@ void Attr::setCfgVal( const string &vl )
     pthread_mutex_lock(&owner()->mtxAttr());
     cfg = cfgTempl()+"\n"+vl;
     pthread_mutex_unlock(&owner()->mtxAttr());
-    if(!owner()->attrChange(*this,TVariant()))
-    {
+    if(!owner()->attrChange(*this,TVariant())) {
 	pthread_mutex_lock(&owner()->mtxAttr());
 	cfg = cfgTempl()+"\n"+t_val;
 	pthread_mutex_unlock(&owner()->mtxAttr());
     }
-    else
-    {
+    else {
 	unsigned imdf = owner()->modifVal(*this);
-	m_modif = imdf ? imdf : m_modif+1;
+	mModif = imdf ? imdf : mModif+1;
     }
 }
 
@@ -2154,10 +2009,9 @@ void Attr::setFlgSelf( SelfAttrFlgs flg )
     SelfAttrFlgs t_flg = (SelfAttrFlgs)self_flg;
     self_flg = (flg & ~Attr::IsInher) | (t_flg&Attr::IsInher);
     if(!owner()->attrChange(*this,TVariant()))	self_flg = t_flg;
-    else
-    {
+    else {
 	unsigned imdf = owner()->modifVal(*this);
-	m_modif = imdf ? imdf : m_modif+1;
+	mModif = imdf ? imdf : mModif+1;
     }
 }
 

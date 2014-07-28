@@ -189,8 +189,8 @@ DlgUser::DlgUser( const QString &iuser, const QString &ipass, const QString &iVC
     ed_lay->addWidget( users, 0, 1 );
     ed_lay->addWidget( new QLabel(_("Password:"),this), 1, 0 );
     passwd = new QLineEdit(this);
-    passwd->setEchoMode( QLineEdit::Password );
-    ed_lay->addWidget( passwd, 1, 1 );
+    passwd->setEchoMode(QLineEdit::Password);
+    ed_lay->addWidget(passwd, 1, 1);
     dlg_lay->addItem(ed_lay);
 
     dlg_lay->addItem( new QSpacerItem( 20, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
@@ -437,8 +437,7 @@ void LineEdit::viewApplyBt( bool view )
 {
     if(view == (bool)bt_fld) return;
 
-    if(view && !bt_fld)
-    {
+    if(view && !bt_fld) {
 	bt_fld = new QPushButton(this);
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->setIconSize(QSize(12,12));
@@ -447,8 +446,7 @@ void LineEdit::viewApplyBt( bool view )
 	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
 	layout()->addWidget(bt_fld);
     }
-    if(!view && bt_fld)
-    {
+    if(!view && bt_fld) {
 	bt_tm->stop(); //bt_tm->deleteLater(); bt_tm = NULL;
 	bt_fld->deleteLater(); bt_fld = NULL;
 	mIsEdited = false;
@@ -521,8 +519,7 @@ void LineEdit::setType( LType tp )
 	    break;
     }
     ((QBoxLayout*)layout())->insertWidget(0, ed_fld);
-    if(applyReserve && needReserver)
-    {
+    if(applyReserve && needReserver) {
 	ed_fld->setMaximumWidth(width()-12); ed_fld->setMinimumWidth(width()-12);
 	((QBoxLayout*)layout())->setAlignment(ed_fld, Qt::AlignLeft);
     }
@@ -533,7 +530,7 @@ void LineEdit::setType( LType tp )
 
 void LineEdit::changed( )
 {
-    //> Enable apply
+    //Enable apply
     if(mPrev && !bt_fld) viewApplyBt(true);
     bt_tm->start(mPrev ? 5000 : 500);
     mIsEdited = true;
@@ -547,11 +544,9 @@ void LineEdit::setValue( const QString &txt )
     switch(type())
     {
 	case Text:
-	    if(txt != value())
-	    {
-		((QLineEdit*)ed_fld)->setText(txt);
-		((QLineEdit*)ed_fld)->setCursorPosition(0);
-	    }
+	    if(txt == value())	break;
+	    ((QLineEdit*)ed_fld)->setText(txt);
+	    ((QLineEdit*)ed_fld)->setCursorPosition(0);
 	    break;
 	case Integer:
 	    ((QSpinBox*)ed_fld)->setValue(txt.toInt());
@@ -580,15 +575,16 @@ void LineEdit::setValue( const QString &txt )
 
 void LineEdit::setCfg(const QString &cfg)
 {
+    if(ed_fld) ed_fld->blockSignals(true);
     switch(type())
     {
-	case Text:	((QLineEdit*)ed_fld)->setInputMask(cfg);	break;
-	case Integer:
-	{
+	case Text:
+	    ((QLineEdit*)ed_fld)->setInputMask(cfg);
+	    break;
+	case Integer: {
 	    int		minv = 0, maxv = 100, sstep = 1;
 	    string	pref, suff;
-	    if( !cfg.isEmpty() )
-	    {
+	    if(!cfg.isEmpty()) {
 		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
 		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
 		sstep = atoi(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
@@ -601,13 +597,11 @@ void LineEdit::setCfg(const QString &cfg)
 	    ((QSpinBox*)ed_fld)->setSuffix(suff.c_str());
 	    break;
 	}
-	case Real:
-	{
+	case Real: {
 	    double minv = 0, maxv = 100, sstep = 1;
 	    string pref, suff;
 	    int    dec = 2;
-	    if( !cfg.isEmpty() )
-	    {
+	    if(!cfg.isEmpty()) {
 		minv  = atof(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
 		maxv  = atof(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
 		sstep = atof(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
@@ -625,20 +619,19 @@ void LineEdit::setCfg(const QString &cfg)
 	case Time: case Date: case DateTime:
 	    ((QDateTimeEdit*)ed_fld)->setDisplayFormat(cfg);
 	    break;
-	case Combo:
-	{
+	case Combo: {
 	    QString ctext = ((QComboBox*)ed_fld)->currentText();
 	    ((QComboBox*)ed_fld)->clear();
 	    ((QComboBox*)ed_fld)->addItems(cfg.split("\n"));
-	    if( !ctext.isEmpty() )
-	    {
-		if( ((QComboBox*)ed_fld)->findText(ctext) < 0 ) ((QComboBox*)ed_fld)->addItem(ctext);
+	    if(!ctext.isEmpty()) {
+		if(((QComboBox*)ed_fld)->findText(ctext) < 0) ((QComboBox*)ed_fld)->addItem(ctext);
 		((QComboBox*)ed_fld)->setEditText(ctext);
 	    }
 	    break;
 	}
     }
-    if( bt_fld ) viewApplyBt(false);
+    if(bt_fld) viewApplyBt(false);
+    if(ed_fld) ed_fld->blockSignals(false);
 }
 
 QString LineEdit::value()
@@ -660,7 +653,7 @@ void LineEdit::applySlot( )
 {
     viewApplyBt(false);
 
-    if( m_val == value() ) return;
+    if(m_val == value()) return;
     m_val = value();
 
     emit apply();
@@ -669,8 +662,7 @@ void LineEdit::applySlot( )
 void LineEdit::cancelSlot( )
 {
     mIsEdited = false;
-    if(mPrev)
-    {
+    if(mPrev) {
 	setValue(m_val);
 	emit cancel();
     }
@@ -679,21 +671,19 @@ void LineEdit::cancelSlot( )
 
 bool LineEdit::event( QEvent * e )
 {
-    if( e->type() == QEvent::KeyRelease && bt_fld )
-    {
+    if(e->type() == QEvent::KeyRelease && bt_fld) {
 	QKeyEvent *keyEvent = (QKeyEvent *)e;
-	if( keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return )
-	{
-	    bt_fld->animateClick( );
+	if(keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return) {
+	    bt_fld->animateClick();
 	    return true;
 	}
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
-    else if( e->type() == QEvent::Resize && applyReserve && needReserver )
-    {
+    else if(e->type() == QEvent::Resize && applyReserve && needReserver) {
 	ed_fld->setMaximumWidth(width()-12);
 	ed_fld->setMinimumWidth(width()-12);
     }
+
     return QWidget::event(e);
 }
 
@@ -705,13 +695,13 @@ SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
 
 }
 
-void SyntxHighl::setSnthHgl(XMLNode nd)
+void SyntxHighl::setSnthHgl( XMLNode nd )
 {
     rules = nd;
     rehighlight();
 }
 
-void SyntxHighl::rule(XMLNode *irl, const QString &text, int off, char lev)
+void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 {
     XMLNode *rl;
     vector<int> rul_pos(irl->childSize(),-1);
@@ -827,7 +817,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     box->addWidget(ed_fld);
 
     QImage ico_t;
-    if( !ico_t.load(TUIS::icoPath("find").c_str()) ) ico_t.load(":/images/find.png");
+    if(!ico_t.load(TUIS::icoPath("find").c_str())) ico_t.load(":/images/find.png");
     actFind = new QAction(QPixmap::fromImage(ico_t), _("Find"), ed_fld);
     actFind->setShortcut(Qt::CTRL+Qt::Key_F);
     actFind->setShortcutContext(Qt::WidgetShortcut);
@@ -839,8 +829,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     connect(actFindNext, SIGNAL(triggered()), this, SLOT(find()));
     ed_fld->addAction(actFindNext);
 
-    if( !prev_dis )
-    {
+    if(!prev_dis) {
 	but_box = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel,Qt::Horizontal,this);
 	QImage ico_t;
 	but_box->button(QDialogButtonBox::Apply)->setText("");
@@ -858,7 +847,7 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
 	box->addWidget(but_box);
     }
 
-    //> Check for window with status present
+    //Check for window with status present
     QWidget *w = parentWidget();
     while(w && w->parentWidget() && (!dynamic_cast<QMainWindow *>(w) || !((QMainWindow*)w)->statusBar())) w = w->parentWidget();
     stWin = dynamic_cast<QMainWindow *>(w);
@@ -867,12 +856,11 @@ TextEdit::TextEdit( QWidget *parent, bool prev_dis ) :
     connect(bt_tm, SIGNAL(timeout()), this, SLOT(applySlot()));
 }
 
-QString TextEdit::text()
-{
-    return ed_fld->toPlainText();
-}
+bool TextEdit::isEdited( )	{ return (but_box && but_box->isVisible()); }
 
-void TextEdit::setText(const QString &itext)
+QString TextEdit::text( )	{ return ed_fld->toPlainText(); }
+
+void TextEdit::setText( const QString &itext )
 {
     isInit = true;
     if(itext != text()) ed_fld->setPlainText(itext);
@@ -886,13 +874,13 @@ void TextEdit::setText(const QString &itext)
     m_text = itext;
 }
 
-void TextEdit::setSnthHgl(XMLNode nd)
+void TextEdit::setSnthHgl( XMLNode nd )
 {
     if(!snt_hgl) snt_hgl = new SyntxHighl(ed_fld->document());
     snt_hgl->setSnthHgl(nd);
 }
 
-void TextEdit::changed()
+void TextEdit::changed( )
 {
     if(isInit) return;
     if(but_box && !but_box->isEnabled() && text() != m_text)
@@ -908,7 +896,7 @@ void TextEdit::changed()
 
 void TextEdit::applySlot( )
 {
-    if( but_box && but_box->isEnabled() )
+    if(but_box && but_box->isEnabled())
     {
 	but_box->setVisible(false);
 	but_box->setEnabled(false);
@@ -1094,9 +1082,8 @@ WdgView *WdgView::newWdgItem( const string &iwid )
 
 bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 {
-    //> Send value to model
-    if(!attr.empty())
-    {
+    //Send value to model
+    if(!attr.empty()) {
 	XMLNode req("set");
 	req.setAttr("path",id()+"/%2fserv%2fattr");
 	req.childAdd("el")->setAttr("id",attr)->setText(val);
@@ -1126,7 +1113,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    break;
 	case A_GEOM_W: mWSize = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()); up = true;	break;
 	case A_GEOM_H: mWSize = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())); up = true;	break;
-	case A_GEOM_Z: if(wLevel() > 0) z_coord = atoi(val.c_str());					break;
+	case A_GEOM_Z: if(wLevel() > 0) z_coord = atoi(val.c_str());	break;
 	case A_GEOM_X_SC:
 	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
 	    x_scale = atof(val.c_str());
@@ -1140,13 +1127,12 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	case A_TIP_TOOL: setToolTip(val.c_str());	break;
 	case A_TIP_STATUS: setStatusTip(val.c_str());	break;
     }
-    if(up && !allAttrLoad())
-    {
+    if(up && !allAttrLoad()) {
 	if(wLevel() > 0) moveF(posF());
 	resizeF(sizeF());
 	for(int i_c = 0; upChlds && i_c < children().size(); i_c++)
 	    if(qobject_cast<WdgView*>(children().at(i_c)))
-	        ((WdgView*)children().at(i_c))->load("");
+		((WdgView*)children().at(i_c))->load("");
     }
 
     if(shape)	return shape->attrSet(this,uiPrmPos,val);
@@ -1190,12 +1176,10 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
     isReload = shape;
 
-    //> Load from data model -
-    if( isLoad )
-    {
+    //Load from data model
+    if(isLoad) {
         bool reqBrCr = false;
-	if( !aBr )
-	{
+	if(!aBr) {
 	    aBr = new XMLNode("get");
 	    aBr->setAttr("path",id()+"/%2fserv%2fattrBr");
 	    cntrIfCmd(*aBr);
@@ -1212,11 +1196,10 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 		    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
 	setAllAttrLoad( false );
 
-	//>> Delete child widgets
+	// Delete child widgets
 	string b_nm = aBr->attr("lnkPath");
 	if( b_nm.empty() ) b_nm = id();
-	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++)
-	{
+	for(int i_c = 0, i_l = 0; i_c < children().size(); i_c++) {
 	    if(!qobject_cast<WdgView*>(children().at(i_c))) continue;
 	    for(i_l = 0; i_l < (int)aBr->childSize(); i_l++)
 		if(aBr->childGet(i_l)->name() == "w" &&
@@ -1225,7 +1208,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    if(i_l >= (int)aBr->childSize()) children().at(i_c)->deleteLater();
 	}
 
-	//>> Create new child widget
+	// Create new child widget
 	for( int i_l = 0, i_c = 0; i_l < (int)aBr->childSize(); i_l++ )
 	{
 	    if( aBr->childGet(i_l)->name() != "w" ) continue;
@@ -1242,7 +1225,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	    nwdg->load((item==id())?"":item,true,(wLevel()>0)?isInit:false,aBr->childGet(i_l));
 	}
 
-	//>> Children widgets order update
+	// Children widgets order update
 	orderUpdate( );
 
 	if( reqBrCr ) delete aBr;
@@ -1289,34 +1272,50 @@ void WdgView::orderUpdate( )
 
     vector< pair<int,QObject*> > arr;
     arr.reserve(children().size());
-    for(int i_c = 0; i_c < ols.size(); i_c++)
-    {
-	WdgView *cw = qobject_cast<WdgView*>(ols[i_c]);
-	if(cw) arr.push_back(pair<int,QObject*>(cw->z(),cw));
-	else arr.push_back(pair<int,QObject*>(100000,ols[i_c]));
+    int needForSort = 0;
+    int sysLev = 1000001;
+    for(int iC = 0; iC < ols.size(); iC++) {
+	WdgView *cw = qobject_cast<WdgView*>(ols[iC]);
+	if(cw) needForSort++;
+	arr.push_back(pair<int,QObject*>((cw?cw->z():sysLev),ols[iC]));
     }
-    make_heap(arr.begin(),arr.end());
-    sort_heap(arr.begin(),arr.end());
-    if(ols.size() == (int)arr.size())
-	for(int i_c = 0; i_c < ols.size(); i_c++)
-	    if(i_c < (int)arr.size()) ols[i_c] = arr[i_c].second;
+    if(!needForSort) return;
+
+    /*make_heap(arr.begin(),arr.end());
+    sort_heap(arr.begin(),arr.end());*/
+    sort(arr.begin(),arr.end());
+    if(ols.size() && ols.size() == (int)arr.size()) {
+	bool endIt = false;
+	vector< pair<string,QObject*> > arrAftSrt;
+	for(int iC = 0, iZ = 0, zPrev = arr[iZ].first; iC < ols.size(); ) {
+	    ols[iC] = arr[iC].second;
+	    ++iC;
+
+	    // After sort
+	    if((endIt=(iC>=ols.size())) || arr[iC].first != zPrev) {
+		if((iC-iZ) >= 2 && zPrev != sysLev) {	//Resort
+		    arrAftSrt.clear();
+		    for(int iC1 = iZ; iC1 < iC; ++iC1)
+			arrAftSrt.push_back(pair<string,QObject*>(((WdgView*)ols[iC1])->id(), ols[iC1]));
+		    sort(arrAftSrt.begin(), arrAftSrt.end());
+		    for(int iC1 = iZ, iA = 0; iC1 < iC; ++iC1, ++iA)
+			ols[iC1] = arrAftSrt[iA].second;
+		}
+		if(!endIt) {
+		    iZ = iC;
+		    zPrev = arr[iC].first;
+		}
+	    }
+	}
+    }
 }
 
 bool WdgView::event( QEvent *event )
 {
-    //> Paint event process
-    if(event->type() == QEvent::Paint)
-    {
-	//> Self widget view
-	if(shape) return shape->event(this, event);
-	return true;
-    }
+    //Paint event process
+    if(event->type() == QEvent::Paint) return shape ? shape->event(this, event) : true;
 
     return false; //QWidget::event(event);
 }
 
-bool WdgView::eventFilter( QObject *object, QEvent *event )
-{
-    if(shape)	return shape->eventFilter(this,object,event);
-    return false;
-}
+bool WdgView::eventFilter( QObject *object, QEvent *event )	{ return shape ? shape->eventFilter(this,object,event) : false; }

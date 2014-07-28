@@ -1,3 +1,114 @@
+2014-07-13 Roman 0.8.11
+- API:
+    !!!!:Changes:
+	SYS: Enum TSYS::Errors (mostly DB Errors) is removed as deprecated.
+	    TSYS::modifCfg() expanded for WR access check.
+	    Primitive of functions strEncode() and strDecode() set unified.
+	    XMLNode: Function childIns() and childDel() position argument's type set to signed (integer) for allow
+		insert and delete by count from end (negative value).
+	TCntrNode: To functions TCntrNode::load() and TCntrNode::save() argument "string *errs = NULL" is added for place
+	    all loading and saving errors into the objects.
+	DB: Expanded functions TBDS::dataGet(), TBDS::dataSet() and TBDS::dataDel() by argument "noEx = false"
+	    and exceptions generate at access to storage errors.
+	Transport: setAddr() set no virtual, instead global cfgChange() used.
+	    To output transport's function "start()" argument time is added, which no zero value controls connection timeout.
+	DAQ: TTipDAQ::compileFunc() argument "maxCalcTm" set to 0, for sign to use default-configurable for the module.
+	Archive: TArchive, TMArchivator and TMArchivator moved to use TConfig::cntrCmdMake().
+	    setValPeriod() and setArchPeriod() set no virtual, instead global cfgChange() used.
+    Appends:
+	SYS: Zero initial error object "TError() : cod(0)" is added.
+	    Added new global simple function s2ll() into OSCADA namespace.
+	    Function TSYS::strMess() variant is added for length control and wrap by set "...".
+	Archive: Selection priority to the value archivator object is added for provide order control and disable at all
+	    into sources selection mode "All". Used for function getVal(), getVals() and archive service "/serv/val".
+	    Function selPrior() and setSelPrior() added.
+- DB.AGLKS.St.db: ModBus.testTCP, DAQGate.test and OPC_UA.test set for start by default.
+    Messages archivators "FSArch.NetRequsts" and "FSArch.StatErrors" fix.
+    {DAQ,Protocol}.ModBus: Test values expand, took from 0.9.
+- SYS: User API functions strEncode() and strDecode() is added.
+    !!!!: Access to storage problems notify is added.
+	Complex tests for problems notify for storages: SQLite, MySQL, PostgreSQL, FireBird, DBF, Cfg.
+	The tests results: http://wiki.oscada.org/Works/Tests/DB.
+	To global node's services "<load path="obj"/>" and "<save path="obj"/>" added errors obtain and notifications.
+    TCntrNode: To ctrMkNode() append using 'pos' argument lesser -1 for count from end.
+    FIX:TFunction, TValue, UI.VCAEngine.Attr: Set TEValObj() to object type attribute by EVAL scalar set is added.
+- DB: Decreased wait for free tables timeout to 1 second on the DB stop, for lost connection to network DB cases fast.
+	Prevent exceptions at the DB object disable, mostly after connection wrong for the network DB.
+    !:DBF: Periodic (10 seconds) sync changes from memory to file is added.
+	Inline DB folder selection for DB object is added.
+	RO access and errors is added. Some code clean up.
+    !:SQLite: Binary string write to DB support is added by "#'XXXXXX'" form.
+	Adapted for work into RO mode.
+    !:FireBird: Managed types expand to: blr_varying, blr_varying2, blr_text, blr_text2, blr_blob, blr_short, blr_long, blr_int64,
+	    blr_float, blr_double and blr_d_float.
+	FIX: Connection timeout disabled by not real used and wrong into the DB.
+	FIX: Internal API data clean up is added at wrong connection.
+	fieldSet() and fieldDel() mostly rewrote for typical.
+    !:MySQL: Adapted for work into RO mode.
+	CR_CONNECTION_ERROR process at connection lost is added.
+	fieldDel() mostly rewrote for RO process.
+    !:PostgreSQL: Managed types expand to: text. character varyin, character(%d), character varying(%d), smallint, integer, bigint, real,
+				double precision, timestamp with time zone.
+	FIX: Connection lost processing move to after the request.
+	Transaction processing rewrote for typical.
+	Adapted for work into RO mode, fieldDel() mostly rewrote for RO process.
+- DAQ:
+    FIX:TValue: Value type info fix for selectable.
+    FIX:JavaLikeCalc: "Error constant after constant" error fix by append position.
+	Append default safe timeout set into the module tab.
+    Root object TDAQS expanded by control interface's request "/serv/PrmAttr" for remote browsing allow the DAQ parameters tree.
+    !!:FIX:ModBus: Write to complex type like "_f", "_i4" for write-only mode is fixed.
+	Complex types expand by "u2" - uint16, "d" - Double.
+    !!:SNMP: Mostly expand for OIDs browser implement, MIB Tree using for access mode and enums obtain.
+    !!:OPC_UA: Inline browser by OPC UA nodes tree to the parameter object configuration is added.
+	FIX: Input packages' size and header control is expanded for broken packages process and early drop.
+	Commenting nodes into the list support is added, by symbol '#'.
+    !!:DAQGate: Inline browsing by external hosts and remote parameters tree is added.
+	Expanded for allow the paramter's identifiers independent namespace and the assign to remote parameter's ID.
+	Allow for pass "/prm/*" variables for some global lists process.
+	Expand for bind hierarchic parameters (from OpenSCADA 0.9).
+	Adapted for quick start at no remote host achives.
+- Archive:
+    FIX: Lost archive's connection to archiver after the archiver restart is fixed.
+    FIX: Service "/serv/mess" on request direct to alarms set negative level fix for prevent storage data modify.
+    Set archiver period expanded for allow set zero value and disable the values buffer processing for only direct write there.
+    Adapted for writing unaligned to the period values and buffers.
+    FIX:DBArch: Reread meta data for value archives is force set after wrong that read at start with unaccessible network DB.
+	Disconnecting archivers to DB detect is added and instead uses next priority archiver.
+    {DBArch,FSArch}: Default priority set to 1 for DBArch and 1000 for FSArch.
+- Transport: Meassured request's result after termination by an exception is added to "Sent" tab of output transport.
+    FIX: TTransportOut, TTransportIn fix for sets values check and process.
+    Sockets: Default timeouts of output transport set return to "5:1".
+- Protocol:
+    !!:ModBus: Functions 0x2 (CI) and 0x4 (RI) support is added.
+	Classic form for registers added and complex types expand by "d" - Double.
+    !!:SelfSystem: The protocol implement improved for check and wait the header entirety.
+	Argument "conTm" to output protocol's part is added.
+	SES_OPEN limited by 10 for one source and user. Sessions moved to std::map for some access acceleration.
+    HTTP: Output protocol expanded by option "onlyHeader" for fast online documents check.
+- UI:
+    !!:QTCfg: Check and warning about no apply changes at the page change is added.
+	Added and used function getPrintVal() for check and encode straight binaries.
+	Selected group nodes commands "load" and "save" support is added.
+    !!:VCAEngine: User API session area functions attr() and attrSet() expanded by argument "bool fromSess" and "bool toSess"
+	    respectively for set the attributes to the session table.
+	!!:FIX: Change parent trace for project and widget's library fix.
+	VCAEngine: geomZ for widgets allows to negative.
+	Attributes' modify set after new the create into enabled session is added for guaranty the value read by the session visualiser.
+	The VCA project's session info some expanded.
+    Vision: Included widgets order updating function expand for prevent system widget's reorder and allow after sort by ID for equal Z.
+	FIX: Unproper events process at config set to element LineEdit, mostly for this view "Combo", are prevented by signals block.
+	FIX: For included to container's pages set attribute Qt::WA_WindowPropagation for allow true transparent by palette propagation.
+	    Mostly for Slider hide.
+	FIX: Widgets order update fix after manual "geomZ" set into development mode.
+	geomZ manage changed to changing only for single widget and rip from real work position.
+	    Mostly for prevent group widget's geomZ change and collisions to no changed widgets position.
+    {QTCfg,Vision}: For wait cursor uses QApplication::setOverrideCursor(Qt::WaitCursor).
+    !!:{VCAEngine,Vision}: Changes into visual items put down to the parent function is added.
+	!!:Check and warning about no apply changes into item's configure dialogs is added.
+    FIX:{Vision,WebVision}: Use absolute level after service "/serv/mess" into primitive "Protocol".
+
+
 2014-05-01 Roman 0.8.0.10
 - API:
     !!!!:Changes:
@@ -17,8 +128,6 @@
 	    TArrayObj: New direct access functions arGet() and arSet() is added, for fast access from internal.
 	    XMLNodeObj: New function "childGet( string name, int num = 0 )" is added.
 	Transport,Transport.*: To output transports virtual functions timings() and setTimings() is added.
-- DB.AGLKS.St.db: KeepAlive timeout of input transport OPC_UA set to 60, Client's and Server's certificate is generated for all demands resolve
-    and address set to 127.0.0.1.
 - SYS: *.core files process adapted.
     openscada.spec is adapted for build on "redhat" based environments.
     Checking for header phonon/VideoPlayer is added for allow automatic build with old Phonon configuration's headers path "Phonon/*".

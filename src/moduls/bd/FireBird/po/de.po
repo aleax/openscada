@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.FireBird 0.9.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-24 10:50+0200\n"
+"POT-Creation-Date: 2014-07-21 18:07+0300\n"
 "PO-Revision-Date: 2009-08-17 11:32+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: de <>\n"
@@ -20,84 +20,67 @@ msgstr ""
 "X-Generator: Lokalize 0.3\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: firebird.cpp:32
 msgid "DB FireBird"
 msgstr "Datenbank FireBird"
 
-#: firebird.cpp:36
 msgid "Roman Savochenko"
 msgstr "Roman Savotschenko "
 
-#: firebird.cpp:37
 msgid "DB module. Provides support of the DB FireBird."
 msgstr "Modul unterstützt die FireBird Datenbank."
 
-#: firebird.cpp:135
 #, c-format
 msgid "Drop DB '%s' error: %s"
 msgstr "Datenbank '%s', Fehler: %s beim Abschalten"
 
-#: firebird.cpp:167
 #, c-format
 msgid "Create DB '%s' error: %s"
 msgstr "Datenbank '%s', Fehler %s bei der Erstellung"
 
-#: firebird.cpp:205
 #, c-format
 msgid "Error open table '%s'. DB is disabled."
 msgstr "Fehler beim Öffnen der Tabelle '%s'. Datenbank ist abgeschaltet."
 
-#: firebird.cpp:234
 #, c-format
 msgid "Start transaction error: %s"
 msgstr "Fehler: %s beim Start der Transaktion"
 
-#: firebird.cpp:252 firebird.cpp:411
 #, c-format
 msgid "DSQL close transaction error: %s"
 msgstr "Fehler beim Schliessen der Transaktion: %s"
 
-#: firebird.cpp:290
 #, c-format
 msgid "Allocate statement error: (%d)%s"
 msgstr "Fehler bei der Allokierung: (%d)%s"
 
-#: firebird.cpp:292
 #, c-format
 msgid "Start transaction error: (%d)%s"
 msgstr "Fehler beim Start der Transaktion: (%d)%s"
 
-#: firebird.cpp:295
 #, c-format
 msgid "DSQL prepare error: (%d)%s"
 msgstr "Fehler bei der Vorbereitung DSQL: (%d)%s"
 
-#: firebird.cpp:297
 #, c-format
 msgid "DSQL describe error: (%d)%s"
 msgstr "Fehler bei der Beschreibung DSQL: (%d)%s"
 
-#: firebird.cpp:306
 #, c-format
 msgid "Connect to DB error: %s"
 msgstr "Fehler Verbindung zum DB: %s"
 
-#: firebird.cpp:308
 #, c-format
 msgid "Request error: %s"
 msgstr "Anfrage-Fehler: %s"
 
-#: firebird.cpp:341
 #, c-format
 msgid "DSQL execute error: %s"
 msgstr "Fehler bei der Ausführung DSQL: %s"
 
-#: firebird.cpp:406
 #, c-format
 msgid "DSQL free statement error: %s"
 msgstr "Fehler bei der Freigabe DSQL: %s"
 
-#: firebird.cpp:441
 msgid ""
 "FireBird address to DB must be written as: \"{file};{user};{pass}[;"
 "{conTm}]\".\n"
@@ -115,15 +98,13 @@ msgstr ""
 "  pass - Kennwort des Datenbankbenutzers;\n"
 "  conTm- Verbindungs-Timeout (s)."
 
-#: firebird.cpp:470
 #, c-format
 msgid "Table '%s' is not present."
 msgstr "Tabelle '%s' ist nicht vorhanden."
 
-#: firebird.cpp:514 firebird.cpp:540 firebird.cpp:610 firebird.cpp:751
 msgid "Table is empty."
 msgstr "Tabelle ist leer."
 
-#: firebird.cpp:646
-msgid "Row is not present."
-msgstr "Datensatz ist nicht vorhanden."
+#, c-format
+msgid "Row \"%s\" is not present."
+msgstr "Datensatz \"%s\" ist nicht vorhanden."

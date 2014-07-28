@@ -172,6 +172,9 @@ class TipContr : public TTipDAQ
 	void modStart( );
 	void modStop( );
 
+	int safeTm( )		{ return mSafeTm; }
+	void setSafeTm( int vl ){ mSafeTm = vl; modif(); }
+
 	string libTable( )	{ return "UserFuncLibs"; }
 
 	TElem &elVal( )		{ return val_el; }
@@ -195,12 +198,13 @@ class TipContr : public TTipDAQ
 
 	bool compileFuncLangs( vector<string> *ls = NULL );
 	void compileFuncSynthHighl( const string &lang, XMLNode &shgl );
-	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "", int maxCalcTm = 10 );
+	string compileFunc( const string &lang, TFunction &fnc_cfg, const string &prog_text, const string &usings = "", int maxCalcTm = 0 );
 
     protected:
 	//Methods
 	void postEnable( int flag );
 	void load_( );
+	void save_( );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	bool redntAllow( )	{ return true; }
@@ -209,7 +213,8 @@ class TipContr : public TTipDAQ
 
     private:
 	//Attributes
-	int		mLib;		//Function libraries
+	int		mLib,		//Function libraries
+			mSafeTm;	//Safe timeout
 	TElem		val_el, lb_el, fnc_el, fncio_el;
 
 	//> General parse data

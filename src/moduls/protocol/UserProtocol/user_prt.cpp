@@ -50,7 +50,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -60,8 +60,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new UserProtocol::TProt( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new UserProtocol::TProt(source);
 	return NULL;
     }
 }
@@ -85,7 +84,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
 
     mPrtU = grpAdd("up_");
 
-    //> User protocol DB structure
+    // User protocol DB structure
     mUPrtEl.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key|TFld::NoWrite,OBJ_ID_SZ));
     mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
@@ -94,7 +93,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
 }
 
-TProt::~TProt()
+TProt::~TProt( )
 {
     nodeDelAll();
 }
@@ -102,7 +101,7 @@ TProt::~TProt()
 void TProt::itemListIn( vector<string> &ls, const string &curIt )
 {
     ls.clear();
-    if( TSYS::strParse(curIt,1,".").empty() )	uPrtList(ls);
+    if(TSYS::strParse(curIt,1,".").empty())	uPrtList(ls);
 }
 
 void TProt::uPrtAdd( const string &iid, const string &db )
@@ -112,16 +111,15 @@ void TProt::uPrtAdd( const string &iid, const string &db )
 
 void TProt::load_( )
 {
-    //> Load DB
-    //>> Search and create new user protocols
-    try
-    {
+    //Load DB
+    // Search and create new user protocols
+    try {
 	TConfig g_cfg(&uPrtEl());
 	g_cfg.cfgViewAll(false);
 	vector<string> db_ls;
 	map<string, bool> itReg;
 
-	//>>> Search into DB
+	//  Search into DB
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -132,16 +130,15 @@ void TProt::load_( )
 		itReg[id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
-            uPrtList(db_ls);
-            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(db_ls[i_it]).at().DB()))
-                    uPrtDel(db_ls[i_it]);
-        }
-    }catch(TError err)
-    {
+	//  Check for remove items removed from DB
+	if(!SYS->selDB().empty()) {
+	    uPrtList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(uPrtAt(db_ls[i_it]).at().DB()))
+		    uPrtDel(db_ls[i_it]);
+	}
+    }
+    catch(TError err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Search and create new user protocol error."));
     }
@@ -169,16 +166,13 @@ void TProt::modStop( )
 	uPrtAt(ls[i_n]).at().setEnable(false);
 }
 
-TProtocolIn *TProt::in_open( const string &name )
-{
-    return new TProtIn(name);
-}
+TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
     TValFunc funcV;
 
-    //> Get user protocol for using
+    //Get user protocol for using
     string pIt = io.attr("ProtIt");
     if(!uPrtPresent(pIt)) return;
     AutoHD<UserPrt> up = uPrtAt(pIt);
@@ -186,14 +180,14 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     ResAlloc res( tro.nodeRes(), true );
 
-    //> Load inputs
+    //Load inputs
     AutoHD<XMLNodeObj> xnd(new XMLNodeObj());
     funcV.setO(0,xnd);
     xnd.at().fromXMLNode(io);
     funcV.setO(1,new TCntrNodeObj(AutoHD<TCntrNode>(&tro),"root"));
-    //> Call processing
+    //Call processing
     funcV.calc( );
-    //> Get outputs
+    //Get outputs
     xnd.at().toXMLNode(io);
 
     up.at().cntOutReq++;
@@ -201,9 +195,8 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
 void TProt::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if( opt->name() == "info" )
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/up_",_("User protocol"),RWRWR_,"root",SPRT_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
 	if(ctrMkNode("area",opt,0,"/up",_("User protocols")))
@@ -212,25 +205,21 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/br/up_" || a_path == "/up/up")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))
-	{
+    if(a_path == "/br/up_" || a_path == "/up/up") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD)) {
 	    vector<string> lst;
 	    uPrtList(lst);
 	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
 		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(uPrtAt(lst[i_f]).at().name());
 	}
-	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR))
-	{
+	if(ctrChkNode(opt,"add",RWRWR_,"root",SPRT_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
 	    uPrtAdd(vid); uPrtAt(vid).at().setName(opt->text());
 	}
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SPRT_ID,SEC_WR))	chldDel(mPrtU,opt->attr("id"),-1,1);
     }
-
     else TProtocol::cntrCmdProc(opt);
 }
 
@@ -242,7 +231,7 @@ TProtIn::TProtIn( string name ) : TProtocolIn(name)
 
 }
 
-TProtIn::~TProtIn()
+TProtIn::~TProtIn( )
 {
 
 }
@@ -251,11 +240,9 @@ TProt &TProtIn::owner( )	{ return *(TProt*)nodePrev(); }
 
 bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 {
-    try
-    {
-	//> Find user protocol for using
-	if(!funcV.func())
-	{
+    try {
+	//Find user protocol for using
+	if(!funcV.func()) {
 	    AutoHD<TTransportIn> tri = SYS->transport().at().at(TSYS::strParse(srcTr(),0,".")).at().
 							     inAt(TSYS::strParse(srcTr(),1,"."));
 	    string selNode = TSYS::strParse(tri.at().protocolFull(),1,".");
@@ -266,14 +253,14 @@ bool TProtIn::mess( const string &reqst, string &answer, const string &sender )
 	    funcV.setO(4,new TCntrNodeObj(AutoHD<TCntrNode>(&tri.at()),"root"));
 	}
 
-	//> Load inputs
+	//Load inputs
 	funcV.setB(0, false);
 	funcV.setS(1, funcV.getS(1)+reqst);
 	funcV.setS(2, "");
 	funcV.setS(3, sender);
-	//> Call processing
+	//Call processing
 	funcV.calc( );
-	//> Get outputs
+	//Get outputs
 	bool rez = funcV.getB(0);
 	if(!rez) funcV.setS(1,"");
 	answer = funcV.getS(2);
@@ -306,9 +293,9 @@ TCntrNode &UserPrt::operator=( TCntrNode &node )
     UserPrt *src_n = dynamic_cast<UserPrt*>(&node);
     if(!src_n) return *this;
 
-    if( enableStat( ) )	setEnable(false);
+    if(enableStat())	setEnable(false);
 
-    //> Copy parameters
+    //Copy parameters
     exclCopy(*src_n, "ID;");
     setDB(src_n->DB());
 
@@ -317,11 +304,7 @@ TCntrNode &UserPrt::operator=( TCntrNode &node )
 
 void UserPrt::postDisable( int flag )
 {
-    try
-    {
-	if( flag ) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
-    }catch(TError err)
-    { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    if(flag) SYS->db().at().dataDel(fullDB(),owner().nodePath()+tbl(),*this,true);
 }
 
 TProt &UserPrt::owner( )	{ return *(TProt*)nodePrev(); }
@@ -337,27 +320,27 @@ string UserPrt::tbl( )		{ return owner().modId()+"_uPrt"; }
 string UserPrt::inProgLang( )
 {
     string mProg = cfg("InPROG").getS();
-    return mProg.substr(0,mProg.find("\n"));
+    return mProg.substr(0, mProg.find("\n"));
 }
 
 string UserPrt::inProg( )
 {
     string mProg = cfg("InPROG").getS();
     size_t lngEnd = mProg.find("\n");
-    return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
+    return mProg.substr((lngEnd==string::npos)?0:lngEnd+1);
 }
 
 void UserPrt::setInProgLang( const string &ilng )
 {
-    cfg("InPROG").setS( ilng+"\n"+inProg() );
-    if( enableStat() ) setEnable(false);
+    cfg("InPROG").setS(ilng+"\n"+inProg());
+    if(enableStat()) setEnable(false);
     modif();
 }
 
 void UserPrt::setInProg( const string &iprg )
 {
-    cfg("InPROG").setS( inProgLang()+"\n"+iprg );
-    if( enableStat() ) setEnable(false);
+    cfg("InPROG").setS(inProgLang()+"\n"+iprg);
+    if(enableStat()) setEnable(false);
     modif();
 }
 
@@ -371,26 +354,26 @@ string UserPrt::outProg( )
 {
     string mProg = cfg("OutPROG").getS();
     size_t lngEnd = mProg.find("\n");
-    return mProg.substr( (lngEnd==string::npos)?0:lngEnd+1 );
+    return mProg.substr((lngEnd==string::npos)?0:lngEnd+1);
 }
 
 void UserPrt::setOutProgLang( const string &ilng )
 {
-    cfg("OutPROG").setS( ilng+"\n"+outProg() );
-    if( enableStat() ) setEnable(false);
+    cfg("OutPROG").setS(ilng+"\n"+outProg());
+    if(enableStat()) setEnable(false);
     modif();
 }
 
 void UserPrt::setOutProg( const string &iprg )
 {
-    cfg("OutPROG").setS( outProgLang()+"\n"+iprg );
-    if( enableStat() ) setEnable(false);
+    cfg("OutPROG").setS(outProgLang()+"\n"+iprg);
+    if(enableStat()) setEnable(false);
     modif();
 }
 
 void UserPrt::load_( )
 {
-    if( !SYS->chkSelDB(DB()) ) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+tbl(),*this);
 }
@@ -413,11 +396,9 @@ void UserPrt::setEnable( bool vl )
 
     cntInReq = cntOutReq = 0;
 
-    if(vl)
-    {
-	//> Prepare and compile input transport function
-	if(!inProg().empty())
-	{
+    if(vl) {
+	//Prepare and compile input transport function
+	if(!inProg().empty()) {
 	    TFunction funcIO("uprt_"+id()+"_in");
 	    funcIO.ioIns(new IO("rez",_("Result"),IO::Boolean,IO::Return), 0);
 	    funcIO.ioIns(new IO("request",_("Request"),IO::String,IO::Default), 1);
@@ -428,9 +409,8 @@ void UserPrt::setEnable( bool vl )
 	    mWorkInProg = SYS->daq().at().at(TSYS::strSepParse(inProgLang(),0,'.')).at().
 		compileFunc(TSYS::strSepParse(inProgLang(),1,'.'),funcIO,inProg());
 	} else mWorkInProg = "";
-	//> Prepare and compile input transport function
-	if(!outProg().empty())
-	{
+	//Prepare and compile input transport function
+	if(!outProg().empty()) {
 	    TFunction funcIO("uprt_"+id()+"_out");
 	    funcIO.ioIns(new IO("io",_("IO"),IO::Object,IO::Default), 0);
 	    funcIO.ioIns(new IO("tr",_("Transport"),IO::Object,IO::Default), 1);
@@ -446,8 +426,7 @@ void UserPrt::setEnable( bool vl )
 string UserPrt::getStatus( )
 {
     string rez = _("Disabled. ");
-    if(enableStat())
-    {
+    if(enableStat()) {
 	rez = _("Enabled. ");
 	rez += TSYS::strMess( _("Requests input %.4g, output %.4g."), cntInReq, cntOutReq );
     }
@@ -457,28 +436,23 @@ string UserPrt::getStatus( )
 
 void UserPrt::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("User protocol: ")+name());
-	if(ctrMkNode("area",opt,-1,"/up",_("User protocol")))
-	{
-	    if(ctrMkNode("area",opt,-1,"/up/st",_("State")))
-	    {
+	if(ctrMkNode("area",opt,-1,"/up",_("User protocol"))) {
+	    if(ctrMkNode("area",opt,-1,"/up/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/up/st/status",_("Status"),R_R_R_,"root",SPRT_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/up/st/en_st",_("Enable"),RWRWR_,"root",SPRT_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/up/st/db",_("DB"),RWRWR_,"root",SPRT_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
-	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration")))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/up/cfg",_("Configuration"))) {
 		TConfig::cntrCmdMake(opt,"/up/cfg",0,"root",SPRT_ID,RWRWR_);
 		ctrRemoveNode(opt,"/up/cfg/InPROG");
 		ctrRemoveNode(opt,"/up/cfg/OutPROG");
 	    }
-	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/in",_("Input"),RWRW__,"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/in/PROGLang",_("Input program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangIls");
 		ctrMkNode("fld",opt,-1,"/in/PROG",_("Input program"),RWRW__,"root",SPRT_ID,4,"tp","str","rows","10","SnthHgl","1",
 		    "help",_("Next attributes has defined for input requests processing:\n"
@@ -488,8 +462,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 			    "   'sender' - request sender;\n"
 			    "   'tr' - sender transport."));
 	    }
-	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/out",_("Output"),RWRW__,"root",SPRT_ID)) {
 		ctrMkNode("fld",opt,-1,"/out/PROGLang",_("Output program language"),RWRW__,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/up/cfg/plangOls");
 		ctrMkNode("fld",opt,-1,"/out/PROG",_("Output program"),RWRW__,"root",SPRT_ID,4,"tp","str","rows","10","SnthHgl","1",
 		    "help",_("Next attributes has defined for output requests processing:\n"
@@ -499,16 +472,14 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	}
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/up/st/status" && ctrChkNode(opt))	opt->setText(getStatus());
-    else if(a_path == "/up/st/en_st")
-    {
+    else if(a_path == "/up/st/en_st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/up/st/db")
-    {
+    else if(a_path == "/up/st/db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setDB(opt->text());
     }
@@ -523,7 +494,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
-	if(c_lv) c_path+=".";
+	if(c_lv) c_path += ".";
 	vector<string>  ls;
 	switch(c_lv)
 	{
@@ -542,37 +513,31 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setText(c_path+ls[i_l]);
     }
     else if(a_path.substr(0,7) == "/up/cfg") TConfig::cntrCmdProc(opt,TSYS::pathLev(a_path,2),"root",SPRT_ID,RWRWR_);
-    else if(a_path == "/in/PROGLang")
-    {
+    else if(a_path == "/in/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProgLang());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProgLang(opt->text());
     }
-    else if(a_path == "/in/PROG")
-    {
+    else if(a_path == "/in/PROG") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(inProg());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setInProg(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
-            try
-            {
-                SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
-                                compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
-            } catch(...){ }
+	    try {
+		SYS->daq().at().at(TSYS::strParse(inProgLang(),0,".")).at().
+				    compileFuncSynthHighl(TSYS::strParse(inProgLang(),1,"."),*opt);
+	    } catch(...){ }
     }
-    else if(a_path == "/out/PROGLang")
-    {
+    else if(a_path == "/out/PROGLang") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProgLang());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setOutProgLang(opt->text());
     }
-    else if(a_path == "/out/PROG")
-    {
+    else if(a_path == "/out/PROG") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SPRT_ID,SEC_RD))	opt->setText(outProg());
 	if(ctrChkNode(opt,"set",RWRW__,"root",SPRT_ID,SEC_WR))	setOutProg(opt->text());
 	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SPRT_ID,SEC_RD))
-            try
-            {
-                SYS->daq().at().at(TSYS::strParse(outProgLang(),0,".")).at().
-                                compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
-            } catch(...){ }
+	    try {
+		SYS->daq().at().at(TSYS::strParse(outProgLang(),0,".")).at().
+				    compileFuncSynthHighl(TSYS::strParse(outProgLang(),1,"."),*opt);
+	    } catch(...){ }
     }
     else TCntrNode::cntrCmdProc(opt);
 }

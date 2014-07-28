@@ -1,7 +1,7 @@
 
 //OpenSCADA system module DAQ.JavaLikeCalc file: virtual.cpp
 /***************************************************************************
- *   Copyright (C) 2005-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2005-2014 by Roman Savochenko                           *
  *   rom_as@fromru.com                                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -53,7 +53,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -63,8 +63,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new JavaLikeCalc::TipContr( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))	return new JavaLikeCalc::TipContr(source);
 	return NULL;
     }
 }
@@ -74,7 +73,7 @@ using namespace JavaLikeCalc;
 //*************************************************
 //* TipContr                                      *
 //*************************************************
-TipContr::TipContr( string src ) : TTipDAQ(MOD_ID)
+TipContr::TipContr( string src ) : TTipDAQ(MOD_ID), mSafeTm(10)
 {
     mod		= this;
 
@@ -89,7 +88,7 @@ TipContr::TipContr( string src ) : TTipDAQ(MOD_ID)
     mLib = grpAdd("lib_");
 }
 
-TipContr::~TipContr()
+TipContr::~TipContr( )
 {
     nodeDelAll();
 }
@@ -98,36 +97,36 @@ void TipContr::postEnable( int flag )
 {
     TTipDAQ::postEnable( flag );
 
-    //> Controller db structure
+    //Controller db structure
     fldAdd(new TFld("PRM_BD",_("Parameters table"),TFld::String,TFld::NoFlag,"60","system"));
     fldAdd(new TFld("FUNC",_("Controller's function"),TFld::String,TFld::NoFlag,"40"));
     fldAdd(new TFld("SCHEDULE",_("Calculation schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Calculation task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("ITER",_("Iteration number in single calculation"),TFld::Integer,TFld::NoFlag,"2","1","1;99"));
 
-    //> Controller value db structure
+    //Controller value db structure
     val_el.fldAdd(new TFld("ID",_("IO ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     val_el.fldAdd(new TFld("VAL",_("IO value"),TFld::String,TFld::NoFlag,"10000"));
 
-    //> Add parameter types
+    //Add parameter types
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("FLD",_("Data fields"),TFld::String,TFld::FullText|TCfg::NoVal,"300"));
 
-    //> Lib's db structure
+    //Lib's db structure
     lb_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     lb_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     lb_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300"));
     lb_el.fldAdd(new TFld("DB",_("Data base"),TFld::String,TFld::NoFlag,"30"));
     lb_el.fldAdd(new TFld("PROG_TR",_("Program's text translation"),TFld::Boolean,TFld::NoFlag,"1","1"));
 
-    //> Function's structure
+    //Function's structure
     fnc_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     fnc_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     fnc_el.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TCfg::TransltText,"300"));
     fnc_el.fldAdd(new TFld("MAXCALCTM",_("Maximum calculate time (sec)"),TFld::Integer,TFld::NoFlag,"4","10","0;3600"));
     fnc_el.fldAdd(new TFld("FORMULA",_("Formula"),TFld::String,TCfg::TransltText,"1000000"));
 
-    //> Function's IO structure
+    //Function's IO structure
     fncio_el.fldAdd(new TFld("F_ID",_("Function ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     fncio_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     fncio_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
@@ -137,7 +136,7 @@ void TipContr::postEnable( int flag )
     fncio_el.fldAdd(new TFld("HIDE",_("Hide"),TFld::Boolean,TFld::NoFlag,"1"));
     fncio_el.fldAdd(new TFld("POS",_("Position"),TFld::Integer,TFld::NoFlag,"3"));
 
-    //> Init named constant table
+    //Init named constant table
     double rvl;
     rvl = 3.14159265358l; mConst.push_back(NConst(TFld::Real,"pi",string((char*)&rvl,sizeof(rvl))));
     rvl = 2.71828182845l; mConst.push_back(NConst(TFld::Real,"e",string((char*)&rvl,sizeof(rvl))));
@@ -148,7 +147,7 @@ void TipContr::postEnable( int flag )
 
     mConst.push_back(NConst(TFld::String,"EVAL_STR",EVAL_STR));
 
-    //> Init buildin functions list
+    //Init buildin functions list
     mBFunc.push_back(BFunc("sin",Reg::FSin,1));
     mBFunc.push_back(BFunc("cos",Reg::FCos,1));
     mBFunc.push_back(BFunc("tan",Reg::FTan,1));
@@ -173,25 +172,21 @@ void TipContr::postEnable( int flag )
     mBFunc.push_back(BFunc("typeof",Reg::FTypeOf,1));
 }
 
-TController *TipContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new Contr(name,daq_db,this);
-}
+TController *TipContr::ContrAttach( const string &name, const string &daq_db )	{ return new Contr(name,daq_db,this); }
 
 bool TipContr::compileFuncLangs( vector<string> *ls )
 {
-    if( ls )
-    {
+    if(ls) {
 	ls->clear();
 	ls->push_back("JavaScript");
     }
+
     return true;
 }
 
 void TipContr::compileFuncSynthHighl( const string &lang, XMLNode &shgl )
 {
-    if(lang == "JavaScript")
-    {
+    if(lang == "JavaScript") {
 	shgl.childAdd("rule")->setAttr("expr","(\"\"|\".*[^\\\\](|\\\\{2}|\\\\{4}|\\\\{6}|\\\\{8})\")")->setAttr("min","1")->setAttr("color","darkgreen")->
 	     childAdd("rule")->setAttr("expr","\\\\([xX][a-zA-Z0-9]{2}|[0-7]{3}|.{1})")->setAttr("color","green")->setAttr("font_weight","1");
 	shgl.childAdd("blk")->setAttr("beg","/\\*")->setAttr("end","\\*/")->setAttr("color","gray")->setAttr("font_italic","1");
@@ -210,33 +205,30 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
     if(lang != "JavaScript") throw TError(nodePath().c_str(),_("Compilation with the help of the program language %s is not supported."),lang.c_str());
     if(!lbPresent("sys_compile")) lbReg(new Lib("sys_compile","",""));
 
-    //> Function id generation for "<auto>" or call nodePath() for it
+    //Function id generation for "<auto>" or call nodePath() for it
     string funcId = fnc_cfg.id();
     if(funcId == "<auto>")
 	for(int aId = 1; lbAt("sys_compile").at().present(funcId); aId++)
 	    funcId = TSYS::strMess("Auto_%d",aId);
     else funcId = fnc_cfg.nodePath('_',true);
 
-    //> Connect or use allowed compiled function object
+    //Connect or use allowed compiled function object
     if(!lbAt("sys_compile").at().present(funcId)) lbAt("sys_compile").at().add(funcId.c_str(),"");
     AutoHD<Func> func = lbAt("sys_compile").at().at(funcId);
-    func.at().setMaxCalcTm(maxCalcTm);
+    if(maxCalcTm > 0) func.at().setMaxCalcTm(maxCalcTm);
 
-    //> Try hot config fields change for work function
+    //Try hot config fields change for work function
     if(func.at().use() && func.at().startStat())
-	try
-	{
-    	    ((TFunction&)func.at()).operator=(fnc_cfg);
+	try {
+	    ((TFunction&)func.at()).operator=(fnc_cfg);
 	    if(prog_text == func.at().prog()) return func.at().nodePath(0,true);
 	}
-	catch(TError err)
-	{
+	catch(TError err) {
 	    func.at().setStart(true);
 	    throw;
 	}
-    //> Standard compile
-    try
-    {
+    //Standard compile
+    try {
 	if(func.at().startStat()) func.at().setStart(false);
 	func.at().setProg(prog_text.c_str());
 	func.at().setUsings(usings);
@@ -258,20 +250,20 @@ string TipContr::compileFunc( const string &lang, TFunction &fnc_cfg, const stri
 
 void TipContr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
-    //> Load parameters
+    //Load parameters
+    setSafeTm(s2i(TBDS::genDBGet(nodePath()+"SafeTm",i2s(safeTm()))));
 
-    //> Load function's libraries
-    try
-    {
-	//>> Search and create new libraries
+    //Load function's libraries
+    try {
+	// Search and create new libraries
 	TConfig c_el(&elLib());
 	c_el.cfgViewAll(false);
 	vector<string> db_ls;
 	map<string, bool> itReg;
 
-	//>> Search into DB
+	// Search into DB
 	SYS->db().at().dbList(db_ls,true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
@@ -282,26 +274,31 @@ void TipContr::load_( )
 		itReg[l_id] = true;
 	    }
 
-	//>>> Check for remove items removed from DB
-        if(!SYS->selDB().empty())
-        {
-            lbList(db_ls);
-            for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
-                if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
-                    lbUnreg(db_ls[i_it]);
-        }
-    }catch(TError err)
-    {
+	//  Check for remove items removed from DB
+	if(!SYS->selDB().empty()) {
+	    lbList(db_ls);
+	    for(unsigned i_it = 0; i_it < db_ls.size(); i_it++)
+		if(itReg.find(db_ls[i_it]) == itReg.end() && SYS->chkSelDB(lbAt(db_ls[i_it]).at().DB()))
+		    lbUnreg(db_ls[i_it]);
+	}
+    }
+    catch(TError err) {
 	mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	mess_err(nodePath().c_str(),_("Load function's libraries error.")); 
     }
+}
+
+void TipContr::save_( )
+{
+    //Save parameters
+    TBDS::genDBSet(nodePath()+"SafeTm",i2s(safeTm()));
 }
 
 void TipContr::modStart( )
 {
     vector<string> lst;
 
-    //> Start functions
+    //Start functions
     lbList(lst);
     for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
 	lbAt(lst[i_lb]).at().setStart(true);
@@ -311,34 +308,41 @@ void TipContr::modStart( )
 
 void TipContr::modStop( )
 {
-    //> Stop and disable all JavaLike-controllers
+    //Stop and disable all JavaLike-controllers
     vector<string> lst;
     list(lst);
-    for(unsigned i_l=0; i_l<lst.size(); i_l++)
+    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().disable( );
 
-    //> Stop functions
+    //Stop functions
     lbList(lst);
-    for(unsigned i_lb=0; i_lb < lst.size(); i_lb++ )
+    for(unsigned i_lb = 0; i_lb < lst.size(); i_lb++)
 	lbAt(lst[i_lb]).at().setStart(false);
 }
 
 void TipContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TTipDAQ::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/lib_",_("Library"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
+	if(ctrMkNode("area",opt,0,"/prm",MOD_ID))
+	    ctrMkNode("fld",opt,-1,"/prm/safeTm",_("Safe timeout (sec)"),RWRWR_,"root",SDAQ_ID,3,"tp","dec","min","0","max","3600");
 	if(ctrMkNode("area",opt,1,"/libs",_("Functions' Libraries")))
 	    ctrMkNode("list",opt,-1,"/libs/lb",_("Libraries"),RWRWR_,"root",SDAQ_ID,5,
 		"tp","br","idm",OBJ_NM_SZ,"s_com","add,del","br_pref","lib_","idSz",OBJ_ID_SZ);
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/br/lib_" || a_path == "/libs/lb")
+    if(a_path == "/prm/safeTm")
+    {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(safeTm()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setSafeTm(s2i(opt->text()));
+    }
+    else if(a_path == "/br/lib_" || a_path == "/libs/lb")
     {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
 	{
@@ -377,7 +381,7 @@ Contr::Contr(string name_c, const string &daq_db, ::TElem *cfgelem) :
     cfg("PRM_BD").setS("JavaLikePrm_"+name_c);
 }
 
-Contr::~Contr()
+Contr::~Contr( )
 {
 
 }
@@ -386,15 +390,15 @@ void Contr::postDisable(int flag)
 {
     try
     {
-	if( flag )
+	if(flag)
 	{
-	    //> Delete IO value's table
+	    //Delete IO value's table
 	    string db = DB()+"."+TController::id()+"_val";
 	    SYS->db().at().open(db);
 	    SYS->db().at().close(db,true);
 	}
-    }catch(TError err)
-    { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
+    }
+    catch(TError err) { mess_err(nodePath().c_str(),"%s",err.mess.c_str()); }
 
     TController::postDisable(flag);
 }
@@ -451,13 +455,13 @@ void Contr::loadFunc( bool onlyVl )
     {
 	if(!onlyVl) ((Func *)func())->load();
 
-	//> Creating special IO
-	if(func()->ioId("f_frq") < 0) func()->ioIns( new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
-	if(func()->ioId("f_start") < 0) func()->ioIns( new IO("f_start",_("Function start flag"),IO::Boolean,Func::SysAttr,"0",false),1);
-	if(func()->ioId("f_stop") < 0) func()->ioIns( new IO("f_stop",_("Function stop flag"),IO::Boolean,Func::SysAttr,"0",false),2);
-	if(func()->ioId("this") < 0) func()->ioIns( new IO("this",_("This controller object link"),IO::Object,Func::SysAttr,"0",false),3);
+	//Creating special IO
+	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);
+	if(func()->ioId("f_start") < 0)	func()->ioIns(new IO("f_start",_("Function start flag"),IO::Boolean,Func::SysAttr,"0",false),1);
+	if(func()->ioId("f_stop") < 0)	func()->ioIns(new IO("f_stop",_("Function stop flag"),IO::Boolean,Func::SysAttr,"0",false),2);
+	if(func()->ioId("this") < 0)	func()->ioIns(new IO("this",_("This controller object link"),IO::Object,Func::SysAttr,"0",false),3);
 
-	//> Load values
+	//Load values
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = id()+"_val";
 	string bd = DB()+"."+bd_tbl;
@@ -473,37 +477,37 @@ void Contr::loadFunc( bool onlyVl )
 
 void Contr::postIOCfgChange( )
 {
-    TValFunc::postIOCfgChange( );
+    TValFunc::postIOCfgChange();
 
-    loadFunc( true );
+    loadFunc(true);
 }
 
 void Contr::save_( )
 {
     TController::save_();
 
-    if( func() != NULL )
+    if(func() != NULL)
     {
-	((Func *)func())->save();
+	((Func*)func())->save();
 
-	//> Save values
+	//Save values
 	TConfig cfg(&mod->elVal());
 	string bd_tbl = id()+"_val";
 	string val_bd = DB()+"."+bd_tbl;
-	for( int iio = 0; iio < ioSize(); iio++ )
+	for(int iio = 0; iio < ioSize(); iio++)
 	{
-	    if( func()->io(iio)->flg()&Func::SysAttr ) continue;
+	    if(func()->io(iio)->flg()&Func::SysAttr) continue;
 	    cfg.cfg("ID").setS(func()->io(iio)->id());
 	    cfg.cfg("VAL").setS(getS(iio));
 	    SYS->db().at().dataSet(val_bd,mod->nodePath()+bd_tbl,cfg);
 	}
 
-	//> Clear VAL
+	//Clear VAL
 	cfg.cfgViewAll(false);
 	for(int fld_cnt = 0; SYS->db().at().dataSeek(val_bd,mod->nodePath()+bd_tbl,fld_cnt++,cfg); )
 	    if(ioId(cfg.cfg("ID").getS()) < 0)
 	    {
-		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true);
+		SYS->db().at().dataDel(val_bd, mod->nodePath()+bd_tbl, cfg, true, false, true);
 		fld_cnt--;
 	    }
     }
@@ -514,23 +518,23 @@ void Contr::start_( )
     call_st = false;
     ((Func *)func())->setStart(true);
 
-    //> Link to special atributes
+    //Link to special atributes
     id_freq	= ioId("f_frq");
     id_start	= ioId("f_start");
     id_stop     = ioId("f_stop");
     int id_this = ioId("this");
     if(id_this >= 0) setO(id_this,new TCntrNodeObj(AutoHD<TCntrNode>(this),"root"));
 
-    //> Schedule process
+    //Schedule process
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
 
-    //> Start the request data task
+    //Start the request data task
     SYS->taskCreate(nodePath('.',true), mPrior, Contr::Task, this);
 }
 
 void Contr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endrun_req);
 }
 

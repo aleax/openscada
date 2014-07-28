@@ -1,7 +1,7 @@
 
 //OpenSCADA system module Protocol.SelfSystem file: self.cpp
 /***************************************************************************
- *   Copyright (C) 2007-2010 by Roman Savochenko                           *
+ *   Copyright (C) 2007-2014 by Roman Savochenko                           *
  *   rom_as@oscada.org, rom_as@fromru.com                                  *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -49,7 +49,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -59,8 +59,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new SelfPr::TProt( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new SelfPr::TProt(source);
 	return NULL;
     }
 }
@@ -70,8 +69,14 @@ using namespace SelfPr;
 //*************************************************
 //* TProt                                         *
 //*************************************************
-TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mComprBrd(80)
+TProt::TProt( string name ) : TProtocol(MOD_ID), mTAuth(60), mComprLev(0), mComprBrd(80)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&sesRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     mod		= this;
 
     mName	= MOD_NAME;
@@ -85,76 +90,84 @@ TProt::TProt( string name ) : TProtocol(MOD_ID), m_t_auth(60), mComprLev(0), mCo
 
 TProt::~TProt( )
 {
-    ResAlloc res(ses_res,true);
-    while(auth_lst.size()) auth_lst.erase(auth_lst.begin());
-    res.release();
+    pthread_mutex_destroy(&sesRes);
 }
 
-int TProt::sesOpen( const char *user,const char *pass )
+int TProt::sesOpen( const string &user, const string &pass, const string &src )
 {
     if(!SYS->security().at().usrPresent(user) || !SYS->security().at().usrAt(user).at().auth(pass))
 	return -1;
 
-    //> Check sesion and close old sesion
-    ResAlloc res(ses_res,true);
-    for(unsigned i_s = 0; i_s < auth_lst.size(); )
-	if(time(NULL) > (auth_lst[i_s].t_auth+10*authTime()))
-	    auth_lst.erase(auth_lst.begin() + i_s);
-	else i_s++;
+    MtxAlloc res(sesRes, true);
 
-    //> Make new sesion
-    int id_ses = rand();
-    auth_lst.push_back( TProt::SAuth(time(NULL), user, id_ses) );
-
-    return id_ses;
-}
-
-void TProt::sesClose( int id_ses )
-{
-    ResAlloc res( ses_res, true );
-    for(unsigned i_s = 0; i_s < auth_lst.size(); )
-	if(time(NULL) > (auth_lst[i_s].t_auth+10*authTime()) || auth_lst[i_s].id_ses == id_ses)
-	    auth_lst.erase(auth_lst.begin() + i_s);
-	else i_s++;
-}
-
-TProt::SAuth TProt::sesGet(int id_ses)
-{
-    ResAlloc res(ses_res,true);
-    time_t cur_tm = time(NULL);
-    for(unsigned i_s = 0; i_s < auth_lst.size(); )
-	if(cur_tm > (auth_lst[i_s].t_auth+10*authTime())) auth_lst.erase(auth_lst.begin() + i_s);
-	else if(auth_lst[i_s].id_ses == id_ses)
+    //Check sesions for close old and reuse more other
+    unsigned i_oCnt = 0;
+    map<int, SAuth>::iterator aOldI = auths.end();
+    for(map<int, SAuth>::iterator aI = auths.begin(); aI != auths.end(); )
+	if(time(NULL) > (aI->second.tAuth+authTime()*60)) auths.erase(aI++);	//Long unused
+	else
 	{
-	    auth_lst[i_s].t_auth = cur_tm;
-	    return auth_lst[i_s];
+	    if(aI->second.name == user && aI->second.src == src)	//More openned
+	    {
+		if(aOldI == auths.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
+		++i_oCnt;
+	    }
+	    ++aI;
 	}
-	else i_s++;
+    if(i_oCnt > 10 && aOldI != auths.end()) auths.erase(aOldI);
 
-    return TProt::SAuth(0,"",0);
+    //New session ID generation
+    int idSes = rand();
+    while(auths.find(idSes) != auths.end()) idSes = rand();
+
+    //Make new sesion
+    auths[idSes] = TProt::SAuth(time(NULL), user, src);
+
+    return idSes;
+}
+
+void TProt::sesClose( int idSes )
+{
+    MtxAlloc res(sesRes, true);
+    auths.erase(idSes);
+}
+
+TProt::SAuth TProt::sesGet( int idSes )
+{
+    MtxAlloc res(sesRes, true);
+    map<int, SAuth>::iterator aI = auths.find(idSes);
+    if(aI != auths.end())
+    {
+	time_t cur_tm = time(NULL);
+	if(cur_tm > (aI->second.tAuth+authTime()*60)) auths.erase(aI);
+	else
+	{
+	    aI->second.tAuth = cur_tm;
+	    return aI->second;
+	}
+    }
+
+    return TProt::SAuth();
 }
 
 void TProt::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
-    //> Load parameters from config-file
-    setAuthTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(authTime())).c_str()));
-    setComprLev(atoi(TBDS::genDBGet(nodePath()+"ComprLev",TSYS::int2str(comprLev())).c_str()));
-    setComprBrd(atoi(TBDS::genDBGet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd())).c_str()));
+    //Load parameters from config-file
+    setAuthTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(authTime()))));
+    setComprLev(s2i(TBDS::genDBGet(nodePath()+"ComprLev",i2s(comprLev()))));
+    setComprBrd(s2i(TBDS::genDBGet(nodePath()+"ComprBrd",i2s(comprBrd()))));
 }
 
 void TProt::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(authTime()));
-    TBDS::genDBSet(nodePath()+"ComprLev",TSYS::int2str(comprLev()));
-    TBDS::genDBSet(nodePath()+"ComprBrd",TSYS::int2str(comprBrd()));
+    TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(authTime()));
+    TBDS::genDBSet(nodePath()+"ComprLev",i2s(comprLev()));
+    TBDS::genDBSet(nodePath()+"ComprBrd",i2s(comprBrd()));
 }
 
-TProtocolIn *TProt::in_open( const string &name )
-{
-    return new TProtIn(name);
-}
+TProtocolIn *TProt::in_open( const string &name )	{ return new TProtIn(name); }
 
 void TProt::outMess( XMLNode &io, TTransportOut &tro )
 {
@@ -164,56 +177,78 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 
     ResAlloc res(tro.nodeRes(), true);
 
-    bool   isDir = atoi(io.attr("rqDir").c_str()); io.attrDel("rqDir");
-    string user = io.attr("rqUser"); io.attrDel("rqUser");
-    string pass = io.attr("rqPass"); io.attrDel("rqPass");
+    bool isDir = s2i(io.attr("rqDir"));	io.attrDel("rqDir");
+    int conTm = s2i(io.attr("conTm"));	io.attrDel("conTm");
+    string user = io.attr("rqUser");	io.attrDel("rqUser");
+    string pass = io.attr("rqPass");	io.attrDel("rqPass");
     string data = io.save();
     io.clear();
 
-    try
-    {
-	while(true)
-	{
-	    //> Session open
-            if(!isDir && tro.prm1() < 0)
-            {
-                req = "SES_OPEN "+user+" "+pass+"\n";
-                resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,0,true);
-                buf[resp_len] = 0;
-                head_end = off = 0;
-                header = TSYS::strLine(buf,0,&head_end);
-                if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
-                {
-                    rez = atoi(TSYS::strParse(header,0," ",&off).c_str());
-                    if(rez > 0 || off >= (int)header.size())
-                	throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
-                    tro.setPrm1(atoi(header.substr(off).c_str()));
-                } else throw TError(nodePath().c_str(),_("Station '%s' error: Respond format error!"),tro.id().c_str());
-            }
+    try {
+	while(true) {
+	    //Session open
+	    if(!isDir && tro.prm1() < 0) {
+		req = "SES_OPEN " + user + " " + pass + "\x0A";
 
-	    //> Request
-	    //>> Compress data
+		//if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN request: %d"), req.size());
+
+		resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf)-1,conTm,true);
+		resp.assign(buf,resp_len);
+
+		// Wait tail
+		while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
+		{
+		    if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
+		    resp.append(buf, resp_len);
+		}
+
+		//if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("SES_OPEN response: %d"), resp_len);
+
+		off = 0;
+		if(header.size() >= 5 && TSYS::strParse(header,0," ",&off) == "REZ")
+		{
+		    rez = s2i(TSYS::strParse(header,0," ",&off));
+		    if(rez > 0 || off >= (int)header.size())
+			throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),header.substr(off).c_str());
+		    tro.setPrm1(s2i(header.substr(off)));
+		} else throw TError(nodePath().c_str(),_("Station '%s' error: Respond format error!"),tro.id().c_str());
+	    }
+
+	    //Request
+	    // Compress data
 	    bool reqCompr = (comprLev() && (int)data.size() > comprBrd());
 	    if(reqCompr) data = TSYS::strCompr(data,comprLev());
 
-	    if(isDir)	req = "REQDIR "+user+" "+pass+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
-	    else	req = "REQ "+TSYS::int2str(tro.prm1())+" "+TSYS::int2str(data.size()*(reqCompr?-1:1))+"\n"+data;
-	    buf[0] = 0;
-	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),0,true);
+	    if(isDir)	req = "REQDIR " + user + " " + pass + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
+	    else	req = "REQ " + i2s(tro.prm1()) + " " + i2s(data.size()*(reqCompr?-1:1)) + "\x0A" + data;
+
+	    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ send: %d"), req.size());
+
+	    resp_len = tro.messIO(req.c_str(),req.size(),buf,sizeof(buf),conTm,true);
 	    resp.assign(buf,resp_len);
 
-	    //>> Get head
-            head_end = off = 0;
-            header = TSYS::strLine(resp,0,&head_end);
-            if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
-                throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
-            rez = atoi(TSYS::strParse(header,0," ",&off).c_str());
-            if(rez == 1) { tro.setPrm1(-1); if(isDir) break; else continue; }
-            if(rez > 0 || off >= (int)header.size())
-                throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),buf+off);
-            int resp_size = atoi(header.substr(off).c_str());
+	    // Wait tail
+	    while((header=TSYS::strLine(resp.c_str(),0)).size() >= resp.size() || resp[header.size()] != '\x0A')
+	    {
+		if(!(resp_len=tro.messIO(NULL,0,buf,sizeof(buf),0,true))) throw TError(nodePath().c_str(),_("Not full respond."));
+		resp.append(buf, resp_len);
+	    }
 
-	    //>> Wait tail
+	    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response first %d"), resp.size());
+
+	    // Get head
+	    head_end = header.size()+1;
+	    off = 0;
+	    //header = TSYS::strLine(resp,0,&head_end);
+	    if(header.size() < 5 || TSYS::strParse(header,0," ",&off) != "REZ")
+		throw TError(nodePath().c_str(),_("Station respond '%s' error!"),tro.id().c_str());
+	    rez = s2i(TSYS::strParse(header,0," ",&off));
+	    if(rez == 1) { tro.setPrm1(-1); if(isDir) break; else continue; }
+	    if(rez > 0 || off >= (int)header.size())
+		throw TError(nodePath().c_str(),_("Station '%s' error: %s!"),tro.id().c_str(),buf+off);
+	    int resp_size = s2i(header.substr(off));
+
+	    // Wait tail
 	    while((int)resp.size() < abs(resp_size)+head_end)
 	    {
 		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
@@ -221,18 +256,25 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		resp.append(buf,resp_len);
 	    }
 
+	    //if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("REQ response full %d"), resp.size());
+
 	    if(resp_size < 0) io.load(TSYS::strUncompr(resp.substr(head_end)));
 	    else io.load(resp.substr(head_end));
 
 	    return;
 	}
     }
-    catch(TError err) { tro.stop(); throw; }
+    catch(TError err)
+    {
+	//if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Request error: %s"), err.mess.c_str());
+	tro.stop();
+	throw;
+    }
 }
 
 void TProt::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
+    //Get page info
     if(opt->name() == "info")
     {
 	TProtocol::cntrCmdProc(opt);
@@ -251,22 +293,22 @@ void TProt::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/lf_tm")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(authTime()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/compr")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(comprLev()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprLev(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(comprLev()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprLev(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/comprBrd")
     {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(TSYS::int2str(comprBrd()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprBrd(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(comprBrd()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprBrd(s2i(opt->text()));
     }
     else TProtocol::cntrCmdProc(opt);
 }
@@ -274,12 +316,12 @@ void TProt::cntrCmdProc( XMLNode *opt )
 //*************************************************
 //* TProtIn                                       *
 //*************************************************
-TProtIn::TProtIn( string name ) : TProtocolIn( name ), m_nofull(false)
+TProtIn::TProtIn( string name ) : TProtocolIn(name)
 {
 
 }
 
-TProtIn::~TProtIn()
+TProtIn::~TProtIn( )
 {
 
 }
@@ -290,63 +332,58 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
     int req_sz = 0;
     char user[256] = "", pass[256] = "";
 
-    //> Continue for full request
-    if( m_nofull )
-    {
-	req_buf = req_buf+request;
-	m_nofull = false;
-    }
-    else req_buf=request;  //Save request to buffer
+    reqBuf += request;
 
-    string req = req_buf.substr(0,req_buf.find("\n"));
+    //Check for completeness header
+    string req = TSYS::strLine(reqBuf, 0);
+    if(req.size() >= reqBuf.size() || reqBuf[req.size()] != '\x0A') return true;
 
-    if( req.substr(0,8) == "SES_OPEN" )
+    if(req.compare(0,8,"SES_OPEN") == 0)
     {
-	sscanf(req.c_str(),"SES_OPEN %255s %255s",user,pass);
-	ses_id = mod->sesOpen(user, pass);
-	if(ses_id < 0)	answer = "REZ 1 Auth error. User or password error.\n";
-	else answer = "REZ 0 "+TSYS::int2str(ses_id)+"\n";
+	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
+	if((ses_id=mod->sesOpen(user,pass,sender)) < 0)
+	    answer = "REZ 1 Auth error. User or password error.\x0A";
+	else answer = "REZ 0 " + i2s(ses_id) + "\x0A";
     }
-    else if( req.substr(0,9) == "SES_CLOSE" )
+    else if(req.compare(0,9,"SES_CLOSE") == 0)
     {
-	sscanf(req.c_str(),"SES_CLOSE %d",&ses_id);
+	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
 	mod->sesClose(ses_id);
-	answer = "REZ 0\n";
+	answer = "REZ 0\x0A";
     }
-    else if( req.substr(0,3) == "REQ" )
+    else if(req.compare(0,3,"REQ") == 0)
     {
 #if OSC_DEBUG >= 3
 	int64_t w_tm = TSYS::curTime();
 	mess_debug(nodePath().c_str(),_("Get request: '%s': %d"),req.c_str(),req_buf.size());
 #endif
 
-	TProt::SAuth auth(0,"",0);
-	if( sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2 )	auth = mod->sesGet(ses_id);
-	else if( sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3 )
+	TProt::SAuth auth;
+	if(sscanf(req.c_str(),"REQ %d %d",&ses_id,&req_sz) == 2) auth = mod->sesGet(ses_id);
+	else if(sscanf(req.c_str(),"REQDIR %255s %255s %d",user,pass,&req_sz) == 3)
 	{
-	    if( SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass) )
-	    { auth.t_auth = 1; auth.name = user; }
+	    if(SYS->security().at().usrPresent(user) && SYS->security().at().usrAt(user).at().auth(pass))
+	    { auth.tAuth = 1; auth.name = user; }
 	}
-	else { answer = "REZ 3 Command format error.\n"; return false; }
+	else { answer = "REZ 3 Command format error.\x0A"; reqBuf.clear(); return false; }
 
-	if( !auth.t_auth ) { answer = "REZ 1 Auth error. Session no valid.\n"; return false; }
+	if(!auth.tAuth) { answer = "REZ 1 Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
 
 	try
 	{
-	    if( req_buf.size() < req.size()+strlen("\n")+abs(req_sz) ) { m_nofull = true; return true; }
+	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
 
-	    //> Decompress request
-	    if( req_sz < 0 )
-		req_buf.replace(req.size()+strlen("\n"),abs(req_sz),
-		    TSYS::strUncompr(req_buf.substr(req.size()+strlen("\n"))));
+	    //Decompress request
+	    if(req_sz < 0) reqBuf.replace(req.size()+1, abs(req_sz), TSYS::strUncompr(reqBuf.substr(req.size()+1)));
 
-	    //> Process request
+	    //Process request
 	    XMLNode req_node;
-	    req_node.load(req_buf.substr(req.size()+strlen("\n")));
-	    req_node.setAttr("user",auth.name);
+	    req_node.load(reqBuf.substr(req.size()+1));
+	    req_node.setAttr("user", auth.name);
 
 #if OSC_DEBUG >= 3
-	    mess_debug(nodePath().c_str(),_("Unpack and load request: '%s': %d, time: %f ms."),req.c_str(),req_buf.size(),1e-3*(TSYS::curTime()-w_tm));
+	    mess_debug(nodePath().c_str(),_("Unpack and load request: '%s': %d, time: %f ms."),
+		req.c_str(),req_buf.size(),1e-3*(TSYS::curTime()-w_tm));
 	    w_tm = TSYS::curTime();
 #endif
 
@@ -359,22 +396,21 @@ bool TProtIn::mess( const string &request, string &answer, const string &sender 
 
 	    string resp = req_node.save(XMLNode::MissTagEnc|XMLNode::MissAttrEnc)+"\n";
 
-	    //> Compress respond
+	    //Compress respond
 	    bool respCompr = (((TProt&)owner()).comprLev() && (int)resp.size() > ((TProt&)owner()).comprBrd());
-	    if( respCompr ) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
+	    if(respCompr) resp = TSYS::strCompr(resp,((TProt&)owner()).comprLev());
 
 #if OSC_DEBUG >= 3
 	    mess_debug(nodePath().c_str(),_("Save respond to stream and pack: '%s': %d, time: %f ms."),req.c_str(),resp.size(),1e-3*(TSYS::curTime()-w_tm));
 #endif
 
-	    answer="REZ 0 "+TSYS::int2str(resp.size()*(respCompr?-1:1))+"\n"+resp;
+	    answer = "REZ 0 " + i2s(resp.size()*(respCompr?-1:1)) + "\x0A" + resp;
 	}
-	catch(TError err)
-	{
-	    answer="REZ 2 "+err.cat+":"+err.mess+"\n";
-	}
+	catch(TError err) { answer = "REZ 2 " + err.cat + ":" + err.mess + "\x0A"; }
     }
-    else answer = "REZ 3 Command format error.\n";
+    else answer = "REZ 3 Command format error.\x0A";
+
+    reqBuf.clear();
 
     return false;
 }

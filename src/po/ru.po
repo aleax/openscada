@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-24 19:13+0300\n"
+"POT-Creation-Date: 2014-07-22 10:11+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -36,14 +36,21 @@ msgstr "Имя"
 msgid "Description"
 msgstr "Описание"
 
-msgid "Start archive"
-msgstr "Начало архива"
+msgid "To start"
+msgstr "Запускать"
 
 msgid "Messages categories"
 msgstr "Категории сообщений"
 
 msgid "Messages level"
 msgstr "Уровень сообщений"
+
+msgid ""
+"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
+"Alert (6);Emergency (7)"
+msgstr ""
+"Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
+"Критически (5);Тревога (6);Авария (7)"
 
 msgid "Address"
 msgstr "Адрес"
@@ -54,14 +61,20 @@ msgstr "Периодичность значений (сек)"
 msgid "Period archiving (sec)"
 msgstr "Период архивирования (сек)"
 
-msgid "Source mode"
-msgstr "Режим источника"
+msgid "Selection priority"
+msgstr "Приоритет выбора"
 
 msgid "Source"
 msgstr "Источник"
 
+msgid "Passive;Passive param. attribute;Active param. attribute"
+msgstr "Пассивный;Пассивный атрибут параметра;Активный атрибут параметра"
+
 msgid "Value type"
 msgstr "Тип значений"
+
+msgid "Boolean;Integer;Real;String"
+msgstr "Логический;Целый;Вещественный;Строка"
 
 msgid "Buffer period (sec)"
 msgstr "Период буфера (сек)"
@@ -139,14 +152,8 @@ msgstr "Ошибка останова архиватора сообщений '%
 msgid "Value archive '%s' stop error."
 msgstr "Ошибка останова архива значений '%s'."
 
-msgid "Buffer full. Messages lost!"
-msgstr "Буфер полон. Потеря сообщений!"
-
-msgid "Messages buffer filling is too fast!"
-msgstr "Буфер сообщений заполняется слишком быстро!"
-
-msgid "Message buffer read error."
-msgstr "Ошибка чтения буфера сообщений."
+msgid "Message buffer process error."
+msgstr "Ошибка обработки буфера сообщений."
 
 msgid "Value archive"
 msgstr "Архив значений"
@@ -286,13 +293,6 @@ msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
-msgstr ""
-"Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
-"Критически (5);Тревога (6);Авария (7)"
-
-msgid ""
 "Messages category template or regular expression to processing by "
 "archivator, separated by symbol ';'.\n"
 "Use template symbols for group selection:\n"
@@ -307,9 +307,6 @@ msgstr ""
 "  '?' - любой символ.\n"
 "Регулярные выражения заключаются между символами '/' (/mod_(System|"
 "LogicLev)/)."
-
-msgid "To start"
-msgstr "Запускать"
 
 msgid "Value is not present."
 msgstr "Значение отсутствует."
@@ -460,6 +457,20 @@ msgstr "Архиватор значений: "
 msgid "Archiving time"
 msgstr "Время архивирования"
 
+msgid ""
+"Set zero period for disable using the archiver for buffer processing, only "
+"for direct write."
+msgstr ""
+"Установить нулевой период для отключения использования архиватора в "
+"обработке буфера, только прямая запись."
+
+msgid ""
+"Selection the archiver priority for \"All\" sources using mode. Set to zero "
+"for full the selection disable."
+msgstr ""
+"Приоритет выбора архиватора для режима использования источника \"Все\". "
+"Установить в нуль для полного исключения из выбора."
+
 msgid "Archives"
 msgstr "Архивы"
 
@@ -484,6 +495,12 @@ msgstr "Включать"
 #, c-format
 msgid "Close DB '%s' error!"
 msgstr "Ошибка закрытия БД '%s'!"
+
+msgid "Requested row no present."
+msgstr "Запрошенная запись отсутствует."
+
+msgid "Write row to DB or config file error."
+msgstr "Ошибка записи в БД или конфигурационный файл."
 
 #, c-format
 msgid ""
@@ -657,12 +674,6 @@ msgstr "Узел корневой или не подключен!"
 msgid "Element '%s' is not present or disabled!"
 msgstr "Элемент '%s' отсутствует или отключен!"
 
-msgid "Loading node error."
-msgstr "Ошибка загрузки узла."
-
-msgid "Saving node error."
-msgstr "Ошибка сохранения узла."
-
 msgid "Too more users for node!!!"
 msgstr "Очень много пользователей у узла!!!"
 
@@ -685,6 +696,22 @@ msgstr "Предупреждение по элементу '%s'! %s"
 #, c-format
 msgid "Node: %s"
 msgstr "Узел: %s"
+
+#, c-format
+msgid ""
+"Load error:\n"
+"%s"
+msgstr ""
+"Ошибка загрузки:\n"
+"%s"
+
+#, c-format
+msgid ""
+"Save error:\n"
+"%s"
+msgstr ""
+"Ошибка сохранения:\n"
+"%s"
 
 msgid "[TableName]"
 msgstr "[ИмяТаблицы]"
@@ -808,7 +835,6 @@ msgstr "Реальное положение"
 msgid "Error"
 msgstr "Ошибка"
 
-#: tdaqs.cpp:141
 msgid "=== Attributes ==="
 msgstr "=== Атрибуты ==="
 
@@ -839,22 +865,17 @@ msgid "Disable controller '%s' error."
 msgstr "Ошибка отключения контроллера '%s'."
 
 #, c-format
-msgid "No parameter present '%s'."
-msgstr "Отсутствует параметр '%s'."
-
-#: tdaqs.cpp:470
-msgid "Pointed node is not parameter '%s'."
-msgstr "Указанный узел не параметр '%s'."
+msgid "No DAQ node present '%s'."
+msgstr "Отсутствует DAQ узел '%s'."
 
 #, c-format
-msgid "No attribute present '%s'."
-msgstr "Отсутствует атрибут '%s'."
+msgid "Pointed node is not parameter '%s'."
+msgstr "Указанный узел не параметр '%s'."
 
 #, c-format
 msgid "Pointed node is not attribute '%s'."
 msgstr "Указанный узел не атрибут '%s'."
 
-#: tdaqs.cpp:673
 #, c-format
 msgid ""
 "=================== Subsystem \"Data acquisition\" options ================\n"
@@ -1516,6 +1537,10 @@ msgstr ""
 "Ошибка изменения рабочей директории в '%s': %s. Возможно текущая директория "
 "уже корректно установлена в '%s'."
 
+#, c-format
+msgid "Read only access to file '%s'."
+msgstr "Доступ только на чтение к файлу '%s'."
+
 msgid "day"
 msgstr "день"
 
@@ -1649,6 +1674,7 @@ msgstr ""
 msgid "Config-file '%s' error: %s"
 msgstr "Ошибка конфигурационного файла '%s': %s"
 
+#, c-format
 msgid "Config-file '%s' load error."
 msgstr "Ошибка загрузки конфигурационного файла '%s'."
 
@@ -1732,12 +1758,13 @@ msgstr "Ожидание события..."
 msgid "Task '%s' is already present!"
 msgstr "Задача '%s' уже присутствует!"
 
+#, c-format
 msgid ""
 "No permission for create real-time policy for '%s'. Default thread is "
 "created!"
 msgstr ""
-"Нет доступа для создания политики реального времени для '%s'. Создан поток по "
-"умолчанию!"
+"Нет доступа для создания политики реального времени для '%s'. Создан поток "
+"по умолчанию!"
 
 #, c-format
 msgid "Task creation error %d."
@@ -1894,8 +1921,8 @@ msgid "Finished. "
 msgstr "Закончен. "
 
 #, c-format
-msgid "Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"
-msgstr "Последний: %s. Нагрузка %3.1f%% (%s из %s). Отстав.: %s"
+msgid "Last: %s. Consume: %3.1f%% (%s from %s). Lag: %s."
+msgstr "Посл.: %s. Использ. %3.1f%% (%s из %s). Отстав.: %s."
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -1992,11 +2019,9 @@ msgstr ""
 "====================== Опции подсистемы \"Транспорты\" ====================\n"
 "\n"
 
-msgid "Remote host error!"
-msgstr "Ошибка удалённого хоста!"
-
-msgid "System's external hosts"
-msgstr "Системные внешние хосты"
+#, c-format
+msgid "Remote host '%s' error!"
+msgstr "Ошибка удалённого хоста '%s'!"
 
 msgid "External hosts poll"
 msgstr "Перечень внешних хостов"
@@ -2135,12 +2160,6 @@ msgstr "Ошибка выделения памяти для строки бол�
 msgid "Double disconnection try: %d."
 msgstr "Попытка двойного отключения: %d."
 
-msgid "Negative id is not allow for array."
-msgstr "Отрицательные индексы не допустимы для массива."
-
-msgid "Array is empty."
-msgstr "Массив пуст."
-
 #, c-format
 msgid "Deletion child '%d' error."
 msgstr "Ошибка удаления потомка '%d'."
@@ -2150,9 +2169,14 @@ msgid "Child '%d' is not allow."
 msgstr "Потомок '%d' не доступен."
 
 #, c-format
+msgid "Child %s:%d is not found!"
+msgstr "Потомок %s:%d не обнаружен!"
+
+#, c-format
 msgid "2:Open file '%s' error: %s"
 msgstr "2:Ошибка открытия файла '%s': %s"
 
+#, c-format
 msgid "3:Load file '%s' error."
 msgstr "3:Ошибка загрузки файла '%s'."
 
@@ -2162,10 +2186,6 @@ msgstr "Объект не подключен к узлу дерева OpenSCADA.
 #, c-format
 msgid "Child %d is not present."
 msgstr "Потомок %d отсутствует."
-
-#, c-format
-msgid "Child %s:%d is not found!"
-msgstr "Потомок %s:%d не обнаружен!"
 
 #, c-format
 msgid "Child with attribut %s=%s is not present."

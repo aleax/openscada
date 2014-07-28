@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-29 16:39+0300\n"
+"POT-Creation-Date: 2014-07-21 18:10+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <uk@li.org>\n"
@@ -45,14 +45,6 @@ msgstr "Час відновлення (с)"
 msgid "Restore data depth time (hour)"
 msgstr "Глибина часу відновлення даних (годин)"
 
-msgid "Gather messages level"
-msgstr "Рівень запитуваних повідомлень"
-
-msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
-msgstr ""
-
 msgid "Sync inter remote station period (s)"
 msgstr "Період синхронізації з віддаленою станцією (с)"
 
@@ -64,6 +56,9 @@ msgstr "Перелік віддалених контролерів та пара
 
 msgid "Standard"
 msgstr "Стандарт"
+
+msgid "Remote parameter address"
+msgstr "Адреса віддаленого параметру"
 
 msgid "Attributes configuration cache"
 msgstr "Кеш конфігурації атрибутів"
@@ -90,14 +85,6 @@ msgstr "Помилка станції '%s', відновлення через %.
 #, c-format
 msgid "Requests to station '%s': %.6g."
 msgstr "Запитів до станції '%s': %.6g."
-
-#, c-format
-msgid ""
-"Deletion parameter '%s' is error but it no present on configuration or "
-"remote station."
-msgstr ""
-"Помилка видалення параметру '%s', однак він відсутній у конфігурації або на "
-"віддаленій станції."
 
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
@@ -127,6 +114,12 @@ msgstr ""
 "Перелік ідентифікаторів віддалених OpenSCADA станцій використаних у цьому "
 "контролері."
 
+msgid "Append station"
+msgstr "Додання станції"
+
+msgid "Go to remote stations list configuration"
+msgstr "Перехід до конфігурації переліку віддалених станцій"
+
 msgid ""
 "Remote OpenSCADA full controller's or separated controller's parameters "
 "list. Address example:\n"
@@ -138,11 +131,11 @@ msgstr ""
 "  System.AutoDA - для контролерів;\n"
 "  System.AutoDA.UpTimeStation - для параметрів контролерів."
 
-msgid "Go to remote stations list configuration"
-msgstr "Перехід до конфігурації переліку віддалених станцій"
+msgid "Parameters tree"
+msgstr "Дерево параметрів"
 
-msgid "Parameter: "
-msgstr "Параметр: "
+msgid "<<Append current>>"
+msgstr "<<Додати поточний>>"
 
 msgid "Parameter"
 msgstr "Параметр"

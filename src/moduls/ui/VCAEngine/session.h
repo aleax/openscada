@@ -29,6 +29,8 @@
 
 #include "widget.h"
 
+#define DIS_SES_TM 30*60
+
 namespace VCA
 {
 
@@ -75,7 +77,7 @@ class Session : public TCntrNode
 
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
-	//> Pages
+	// Pages
 	void list( vector<string> &ls ) 	{ chldList(mPage,ls); }
 	bool present( const string &id )	{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> at( const string &id );
@@ -90,12 +92,12 @@ class Session : public TCntrNode
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
-	//> Alarms process
+	// Alarms process
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
 	void alarmQuittance( const string &wpath, uint8_t quit_tmpl );	//Alarm quittance send
 
-	//> Style
+	// Style
 	string stlPropGet( const string &pid, const string &def = "" );
 	bool stlPropSet( const string &pid, const string &vl );
 
@@ -162,7 +164,7 @@ class Session : public TCntrNode
 	vector<Alarm>	mAlrm;			//Alarms queue
 	int		mAlrmSndPlay;		//Now played sound alarm
 
-	//> Styles
+	// Styles
 	int		mStyleIdW;
 	map<string,string>	mStProp;	//Styles' properties
 };
@@ -177,7 +179,7 @@ class SessWdg : public Widget, public TValFunc
 	SessWdg( const string &id, const string &parent, Session *sess );
 	~SessWdg( );
 
-	//> Main parameters
+	// Main parameters
 	string	path( );
 	string	ownerFullId( bool contr = false );
 	string	type( )		{ return "SessWidget"; }
@@ -194,20 +196,20 @@ class SessWdg : public Widget, public TValFunc
 	virtual void calc( bool first, bool last );
 	void getUpdtWdg( const string &path, unsigned int tm, vector<string> &els );
 
-	//> Include widgets
+	// Include widgets
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on inherit
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 	void pgClose( );
 
-	//> Events process
+	// Events process
 	void eventAdd( const string &ev );
 	string eventGet( bool clear = false );
 
-	//> Alarms process
+	// Alarms process
 	virtual void alarmSet( bool isSet = false );
 	virtual void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 
-	//> Access to mime resource
+	// Access to mime resource
 	string resourceGet( const string &id, string *mime = NULL );
 	void resourceSet( const string &id, const string &data, const string &mime = "" );
 
@@ -216,6 +218,8 @@ class SessWdg : public Widget, public TValFunc
 	Session  *ownerSess( )	{ return mSess; }
 
 	void inheritAttr( const string &attr = "" );
+
+	void attrAdd( TFld *attr, int pos = -1, bool inher = false, bool forceMdf = false );
 
     protected:
 	//Methods
@@ -234,9 +238,9 @@ class SessWdg : public Widget, public TValFunc
 	bool modifChk( unsigned int tm, unsigned int iMdfClc );
 
 	//Attributes
-	unsigned	mProc		: 1;
-	unsigned	inLnkGet	: 1;
-	unsigned	mToEn		: 1;
+	unsigned	mProc	: 1;
+	unsigned	inLnkGet: 1;
+	unsigned	mToEn	: 1;
 
     private:
 	//Attributes
@@ -271,7 +275,7 @@ class SessPage : public SessWdg
 
 	AutoHD<Page> parent( );
 
-	//> Pages
+	// Pages
 	void pageList( vector<string> &ls )			{ chldList(mPage,ls); }
 	bool pagePresent( const string &id )			{ return chldPresent(mPage,id); }
 	AutoHD<SessPage> pageAt( const string &id );
@@ -280,7 +284,7 @@ class SessPage : public SessWdg
 
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
-	//> Alarms process
+	// Alarms process
 	void alarmSet( bool isSet = false );
 	void alarmQuittance( uint8_t quit_tmpl, bool isSet = false );
 

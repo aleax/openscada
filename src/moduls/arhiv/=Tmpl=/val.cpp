@@ -142,7 +142,7 @@ ModVArchEl::ModVArchEl( TVArchive &iachive, TVArchivator &iarchivator ) :
     //> Load message archive parameters
     TConfig cfg(&mod->archEl());
     cfg.cfg("TBL").setS(archTbl());
-    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg))
+    if(SYS->db().at().dataGet(archivator().addr()+"."+mod->mainTbl(),"",cfg,false,true))
     {
 	mBeg = strtoll(cfg.cfg("BEGIN").getS().c_str(),NULL,10);
 	mEnd = strtoll(cfg.cfg("END").getS().c_str(),NULL,10);

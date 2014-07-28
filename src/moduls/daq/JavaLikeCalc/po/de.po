@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.JavaLikeCalc 1.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-23 16:19+0300\n"
+"POT-Creation-Date: 2014-07-21 18:15+0300\n"
 "PO-Revision-Date: 2010-10-09 23:16+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -116,8 +116,8 @@ msgstr ""
 msgid "Type"
 msgstr "Typ"
 
-msgid "Real;Integer;Boolean;String;Object"
-msgstr "Reellezahl;Ganzzahl;Logisch;Text;Objekt"
+msgid "Real;Integer;Boolean;String;Text;Object"
+msgstr "Reellezahl;Ganzzahl;Logisch;Saite;Text;Objekt"
 
 msgid "Mode"
 msgstr "Mode"
@@ -238,6 +238,9 @@ msgstr "Fehler bei der Kompilation: %s"
 msgid "Load function's libraries error."
 msgstr "Fehler beim Laden der Funktionsbibliothek."
 
+msgid "Safe timeout (sec)"
+msgstr "Sicher Timeout (sec)"
+
 msgid "Functions' Libraries"
 msgstr "Funktionsbibliothek"
 
@@ -296,9 +299,6 @@ msgstr "Berechnungen"
 
 msgid "Data"
 msgstr "Daten"
-
-msgid "String;Integer;Real;Boolean;Object"
-msgstr "Text;Ganzzahl;Reellezahl;Logisch;Objekt"
 
 msgid "Value"
 msgstr "Wert"

@@ -1,9 +1,9 @@
 
 AC_PREREQ([2.50])
 
-AC_INIT([OpenSCADA],[0.8.0.10],[rom_as@oscada.org, rom_as@fromru.com])
+AC_INIT([OpenSCADA],[0.8.11],[rom_as@oscada.org, rom_as@fromru.com])
 AC_PREFIX_DEFAULT([/usr])
-oscd_LIBREVISION="2:0:0"
+oscd_LIBREVISION="2:1:0"
 oscd_modulpref="oscd_"
 
 AC_CANONICAL_TARGET

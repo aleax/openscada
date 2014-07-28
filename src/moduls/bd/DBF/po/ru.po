@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DB.DBF 2.0.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-04 12:15+0300\n"
+"POT-Creation-Date: 2014-07-21 18:06+0300\n"
 "PO-Revision-Date: 2007-10-23 11:43+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@fromru.com>\n"
 "Language-Team: <ru@li.org>\n"
@@ -55,6 +55,10 @@ msgstr "Ошибка ячейки!"
 
 msgid "Field is not present!"
 msgstr "Поле отсутствует!"
+
+#, c-format
+msgid "Read only access to file '%s'."
+msgstr "Доступ только на чтение к файлу '%s'."
 
 msgid "Column error!"
 msgstr "Ошибка колонки!"

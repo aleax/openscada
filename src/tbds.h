@@ -129,7 +129,7 @@ class TBD : public TCntrNode, public TConfig
 	void list( vector<string> &list )	{ chldList(mTbl,list); }
 	bool openStat( const string &table )	{ return chldPresent(mTbl,table); }
 	void open( const string &table, bool create );
-	void close( const string &table, bool del = false )	{ chldDel(mTbl,table,-1,del); }
+	void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl,table,tm,del); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(mTbl,name); }
 
 	//> SQL request interface
@@ -243,9 +243,9 @@ class TBDS : public TSubSYS, public TElem
 
 	//> Get Data from DB or config file. If <tbl> cleaned then load from config-file
 	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false );
-	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false );
-	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false );
-	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false );
+	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
+	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
+	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false
 
 	//> Generic DB table
 	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char rFlg = 0 );

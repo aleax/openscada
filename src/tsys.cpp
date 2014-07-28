@@ -68,18 +68,18 @@ TSYS::TSYS( int argi, char ** argb, char **env ) : argc(argi), argv((const char 
 
     if(getenv("USER")) mUser = getenv("USER");
 
-    //> Init system clock
+    //Init system clock
     clkCalc();
 
 #if __GLIBC_PREREQ(2,4)
-    //> Multi CPU allow check
+    //Multi CPU allow check
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     CPU_SET(1,&cpuset);
     mMultCPU = !pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
 #endif
 
-    //> Set signal handlers
+    //Set signal handlers
     signal(SIGINT,sighandler);
     signal(SIGTERM,sighandler);
     //signal(SIGCHLD,sighandler);
@@ -116,7 +116,7 @@ TSYS::~TSYS( )
 	cntrsStr += TSYS::strMess("%s: %g\n",icnt->first.c_str(),icnt->second);
     printf(_("System counters on exit: %s"),cntrsStr.c_str());
 #endif
-} 
+}
 
 string TSYS::host( )
 {
@@ -159,25 +159,21 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
     string s_el, ndNm;
 
     XMLNode *t_node = &rootN;
-    if(t_node->name() != "OpenSCADA")
-    {
+    if(t_node->name() != "OpenSCADA") {
 	if(!create) return NULL;
 	t_node->setName("OpenSCADA");
     }
 
-    for(int l_off = 0, nLev = 0; true; nLev++)
-    {
+    for(int l_off = 0, nLev = 0; true; nLev++) {
 	s_el = TSYS::pathLev(path, 0, true, &l_off);
 	if(s_el.empty()) return t_node;
 	bool ok = false;
 	for(unsigned i_f = 0; !ok && i_f < t_node->childSize(); i_f++)
-	    if(t_node->childGet(i_f)->attr("id") == s_el)
-	    {
+	    if(t_node->childGet(i_f)->attr("id") == s_el) {
 		t_node = t_node->childGet(i_f);
 		ok = true;
 	    }
-	if(!ok)
-	{
+	if(!ok) {
 	    if(!create)	return NULL;
 	    ndNm = "prm";
 	    switch(nLev)
@@ -191,6 +187,16 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
         }
     }
     return t_node;
+}
+
+void TSYS::modifCfg( bool chkPossibleWR )
+{
+    if(chkPossibleWR) {
+	//Check config file for readonly
+	if(access(mConfFile.c_str(),F_OK|W_OK) != 0)
+	    throw TError(nodePath().c_str(), _("Read only access to file '%s'."), mConfFile.c_str());
+    }
+    else rootModifCnt++;
 }
 
 string TSYS::int2str( int val, TSYS::IntView view )
@@ -292,10 +298,7 @@ string TSYS::addr2str( void *addr )
     return buf;
 }
 
-void *TSYS::str2addr( const string &str )
-{
-    return (void *)strtoul(str.c_str(),NULL,16);
-}
+void *TSYS::str2addr( const string &str )	{ return (void *)strtoul(str.c_str(),NULL,16); }
 
 string TSYS::strNoSpace( const string &val )
 {
@@ -316,26 +319,39 @@ string TSYS::strMess( const char *fmt, ... )
     char str[STR_BUF_LEN];
     va_list argptr;
 
-    va_start(argptr,fmt);
-    vsnprintf(str,sizeof(str),fmt,argptr);
+    va_start(argptr, fmt);
+    vsnprintf(str, sizeof(str), fmt, argptr);
     va_end(argptr);
 
     return str;
 }
 
+string TSYS::strMess( unsigned len, const char *fmt, ... )
+{
+    if(len <= 0) return "";
+
+    char str[len];
+    va_list argptr;
+
+    va_start(argptr, fmt);
+    int lenRez = vsnprintf(str, sizeof(str), fmt, argptr);
+    va_end(argptr);
+
+    return (lenRez < len) ? string(str) : string(str)+"...";
+}
+
 string TSYS::strLabEnum( const string &base )
 {
-    //> Get number from end
+    //Get number from end
     unsigned numbDig = base.size(), numbXDig = base.size();
     bool noDig = false;
-    for(int i_c = base.size()-1; i_c >= 0; i_c--)
-    {
+    for(int i_c = base.size()-1; i_c >= 0; i_c--) {
 	if(!noDig && isdigit(base[i_c])) numbDig = i_c; else noDig = true;
 	if(!(isxdigit(base[i_c]) || (i_c && strncasecmp(base.c_str()+i_c-1,"0x",2) == 0))) break;
 	else if(!isxdigit(base[i_c])) { numbXDig = i_c-1; break; }
     }
 
-    //> Process number and increment
+    //Process number and increment
     if(numbXDig < numbDig && (base.size()-numbXDig) > 2 && strncasecmp(base.c_str()+numbXDig,"0x",2) == 0)
 	return base.substr(0, numbXDig) + "0x" + i2s(strtol(base.c_str()+numbXDig,NULL,16)+1, TSYS::Hex);
     if((base.size()-numbDig) > 1 && base[numbDig] == '0')
@@ -391,26 +407,22 @@ string TSYS::getCmdOpt( int &curPos, string *argVal )
     int argI = curPos&0xFF;
     int argIsh = (curPos>>8)&0xFF;
     if(argI >= argc) return "";
-    for(int argLen = 0; argI < argc; argI++, argIsh=0)
-    {
+    for(int argLen = 0; argI < argc; argI++, argIsh = 0) {
 	argLen = strlen(argv[argI]);
 	if(argLen < 2 || argv[argI][0] != '-') continue;
-	//> Check for long: "--var", "--var=val" or "--var val"
-	if(argv[argI][1] == '-')
-	{
+	//Check for long: "--var", "--var=val" or "--var val"
+	if(argv[argI][1] == '-') {
 	    curPos = argI+1;
 	    string rez = string(argv[argI]+2);
-	    if((fPos=rez.find("=")) != string::npos)
-	    {
+	    if((fPos=rez.find("=")) != string::npos) {
 		if(argVal) *argVal = rez.substr(fPos+1);
 		return rez.substr(0,fPos);
 	    }
 	    if(argVal) *argVal = ((argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
 	    return rez;
 	}
-	//> Check for short: "-v", "-v val", "-abcv" or "-abcv val"
-	else
-	{
+	//Check for short: "-v", "-v val", "-abcv" or "-abcv val"
+	else {
 	    if((argIsh+1) >= argLen) continue;
 	    curPos = argI+((argIsh+1)<<8);
 	    if(argVal) *argVal = ((argIsh+2) == argLen && (argI+1) < argc && argv[argI+1][0] != '-') ? argv[argI+1] : "";
@@ -428,8 +440,7 @@ bool TSYS::cfgFileLoad( )
     //================ Load parameters from commandline =========================
     string argCom, argVl;
     for(int argPos = 0; (argCom=getCmdOpt(argPos,&argVl)).size(); )
-	if(argCom == "h" || argCom == "help")
-	{
+	if(argCom == "h" || argCom == "help") {
 	    fprintf(stdout,"%s",optDescr().c_str());
 	    Mess->setMessLevel(7);
 	    cmd_help = true;
@@ -441,17 +452,14 @@ bool TSYS::cfgFileLoad( )
     //Load config-file
     int hd = open(mConfFile.c_str(),O_RDONLY);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
-    else
-    {
+    else {
 	bool fOK = true;
 	string s_buf;
 	int cf_sz = lseek(hd, 0, SEEK_END);
-	if(cf_sz > 0)
-	{
+	if(cf_sz > 0) {
 	    lseek(hd, 0, SEEK_SET);
 	    char *buf = (char*)malloc(cf_sz+1);
-	    if((fOK=(read(hd,buf,cf_sz) == cf_sz)))
-	    {
+	    if((fOK=(read(hd,buf,cf_sz) == cf_sz))) {
 		buf[cf_sz] = 0;
 		s_buf = buf;
 	    }
@@ -460,28 +468,25 @@ bool TSYS::cfgFileLoad( )
 	close(hd);
 	if(!fOK) mess_err(nodePath().c_str(), _("Config-file '%s' load error."),mConfFile.c_str());
 
-	try
-	{
+	try {
 	    ResAlloc res(nodeRes(),true);
 	    rootN.load(s_buf,true);
-	    if(rootN.name() == "OpenSCADA")
-	    {
+	    if(rootN.name() == "OpenSCADA") {
 		XMLNode *stat_n = NULL;
 		for(int i_st = rootN.childSize()-1; i_st >= 0; i_st--)
-		    if(rootN.childGet(i_st)->name() == "station")
-		    {
+		    if(rootN.childGet(i_st)->name() == "station") {
 			stat_n = rootN.childGet(i_st);
 			if(stat_n->attr("id") == mId) break;
 		    }
-		if(stat_n && stat_n->attr("id") != mId)
-		{
+		if(stat_n && stat_n->attr("id") != mId) {
 		    if(mId != "EmptySt")
 			mess_warning(nodePath().c_str(),_("Station '%s' is not present in the config-file. Use '%s' station configuration!"),
 			    mId.c_str(), stat_n->attr("id").c_str());
 		    mId	= stat_n->attr("id");
 		}
 		if(!stat_n)	rootN.clear();
-	    } else rootN.clear();
+	    }
+	    else rootN.clear();
 	    if(!rootN.childSize()) mess_err(nodePath().c_str(),_("Configuration '%s' error!"),mConfFile.c_str());
 	    rootModifCnt = 0;
 	}
@@ -497,8 +502,7 @@ void TSYS::cfgFileSave( )
     if(!rootModifCnt) return;
     int hd = open(mConfFile.c_str(), O_CREAT|O_TRUNC|O_WRONLY, 0664);
     if(hd < 0) mess_err(nodePath().c_str(),_("Config-file '%s' error: %s"),mConfFile.c_str(),strerror(errno));
-    else
-    {
+    else {
 	string rezFile = rootN.save(XMLNode::XMLHeader);
 	int rez = write(hd, rezFile.data(), rezFile.size());
 	if(rez != (int)rezFile.size()) mess_err(nodePath().c_str(),_("Configuration '%s' write error. %s"),mConfFile.c_str(),((rez<0)?strerror(errno):""));
@@ -520,7 +524,7 @@ void TSYS::cfgPrmLoad( )
     setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
 }
 
-void TSYS::load_()
+void TSYS::load_( )
 {
     static bool first_load = true;
 
@@ -529,9 +533,8 @@ void TSYS::load_()
     cfgPrmLoad();
     Mess->load();	//Messages load
 
-    if(first_load)
-    {
-	//> Create subsystems
+    if(first_load) {
+	//Create subsystems
 	add(new TBDS());
 	add(new TSecurity());
 	add(new TTransportS());
@@ -542,30 +545,28 @@ void TSYS::load_()
 	add(new TUIS());
 	add(new TModSchedul());
 
-	//> Load modules
+	//Load modules
 	modSchedul().at().load();
-	if(!modSchedul().at().loadLibS())
-	{
+	if(!modSchedul().at().loadLibS()) {
 	    mess_err(nodePath().c_str(),_("No one module is loaded. Your configuration broken!"));
 	    stop();
 	}
 
-	//> First DB subsystem load
+	//First DB subsystem load
 	db().at().load();
 	if(!cmd_help) modSchedul().at().modifG();	// For try reload from DB
 
-	//> Second load for load from generic DB
+	//Second load for load from generic DB
 	Mess->load();
 	cfgPrmLoad();
     }
 
-    //> Direct load subsystems and modules
+    //Direct load subsystems and modules
     vector<string> lst;
     list(lst);
     for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().load(); }
-	catch(TError err)
-	{
+	catch(TError err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error load subsystem '%s'."),lst[i_a].c_str());
 	}
@@ -578,7 +579,7 @@ void TSYS::save_( )
 {
     mess_info(nodePath().c_str(),_("Save!"));
 
-    //> System parameters
+    //System parameters
     TBDS::genDBSet(nodePath()+"StName", mName, "root", TBDS::UseTranslate);
     TBDS::genDBSet(nodePath()+"WorkDB", workDB(), "root", TBDS::OnlyCfg);
     if(sysModifFlgs&MDF_WorkDir)TBDS::genDBSet(nodePath()+"Workdir", workDir(), "root", TBDS::OnlyCfg);
@@ -598,8 +599,7 @@ int TSYS::start( )
     mess_info(nodePath().c_str(),_("Start!"));
     for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	try { at(lst[i_a]).at().subStart(); }
-	catch(TError err)
-	{
+	catch(TError err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error start subsystem '%s'."),lst[i_a].c_str());
 	}
@@ -610,25 +610,24 @@ int TSYS::start( )
 
     unsigned int i_cnt = 1;
     mStopSignal = 0;
-    while(!mStopSignal)
-    {
-	//> CPU frequency calc
+    while(!mStopSignal) {
+	//CPU frequency calc (ten seconds)
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	clkCalc( );
 
-	//> Config-file change periodic check
+	//Config-file change periodic check (ten seconds)
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileScan( );
 
-	//> Periodic shared libraries checking
+	//Periodic shared libraries checking
 	if(modSchedul( ).at().chkPer() && !(i_cnt%(modSchedul( ).at().chkPer()*1000/STD_WAIT_DELAY)))
 	    modSchedul( ).at().libLoad(modDir(),true);
 
-	//> Periodic changes saving to DB
+	//Periodic changes saving to DB
 	if(savePeriod() && !(i_cnt%(savePeriod()*1000/STD_WAIT_DELAY))) save();
 
-	//> Config-file save need check
+	//Config-file save need check
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))	cfgFileSave();
 
-	//> Call subsystems at 10s
+	//Call subsystems at 10s
 	if(!(i_cnt%(10*1000/STD_WAIT_DELAY)))
 	    for(unsigned i_a=0; i_a < lst.size(); i_a++)
 		try { at(lst[i_a]).at().perSYSCall(i_cnt/(1000/STD_WAIT_DELAY)); }
@@ -643,8 +642,7 @@ int TSYS::start( )
     cfgFileSave();
     for(int i_a = lst.size()-1; i_a >= 0; i_a--)
 	try { at(lst[i_a]).at().subStop(); }
-	catch(TError err)
-	{
+	catch(TError err) {
 	    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 	    mess_err(nodePath().c_str(),_("Error stop subsystem '%s'."),lst[i_a].c_str());
 	}
@@ -652,10 +650,7 @@ int TSYS::start( )
     return mStopSignal;
 }
 
-void TSYS::stop( )
-{
-    mStopSignal = SIGUSR1;
-}
+void TSYS::stop( )	{ mStopSignal = SIGUSR1; }
 
 bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
 {
@@ -710,8 +705,7 @@ void TSYS::clkCalc( )
     sysSleep(0.1);
     mSysclc = 10*(shrtCnt()-st_pnt);
 
-    if(!mSysclc)
-    {
+    if(!mSysclc) {
 	char buf[255];
 	FILE *fp = NULL;
 	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
@@ -723,8 +717,7 @@ void TSYS::clkCalc( )
 	}
 
 	//Try read file cat /proc/cpuinfo for CPU frequency or BogoMIPS get
-	if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r")))
-	{
+	if(!mSysclc && (fp=fopen("/proc/cpuinfo", "r"))) {
 	    float frq;
 	    while(fgets(buf,sizeof(buf),fp) != NULL)
 		if(sscanf(buf,"cpu MHz : %f\n",&frq) || sscanf(buf,"bogomips : %f\n",&frq) || sscanf(buf,"BogoMIPS : %f\n",&frq))
@@ -746,8 +739,7 @@ void TSYS::cfgFileScan( bool first, bool up )
     rootCfgFl = cfgFile();
     rootFlTm = f_stat.st_mtime;
 
-    if(up && !first)
-    {
+    if(up && !first) {
 	modifG();
 	setSelDB(DB_CFG);
 	load();
@@ -758,7 +750,7 @@ void TSYS::cfgFileScan( bool first, bool up )
 int64_t TSYS::curTime( )
 {
     timeval cur_tm;
-    gettimeofday(&cur_tm,NULL);
+    gettimeofday(&cur_tm, NULL);
     return (int64_t)cur_tm.tv_sec*1000000 + cur_tm.tv_usec;
 }
 
@@ -767,18 +759,15 @@ bool TSYS::eventWait( bool &m_mess_r_stat, bool exempl, const string &loc, time_
     time_t t_tm, s_tm;
 
     t_tm = s_tm = time(NULL);
-    while( m_mess_r_stat != exempl )
-    {
+    while(m_mess_r_stat != exempl) {
 	time_t c_tm = time(NULL);
 	//Check timeout
-	if( tm && ( c_tm > s_tm+tm) )
-	{
+	if(tm && (c_tm > s_tm+tm)) {
 	    mess_crit(loc.c_str(),_("Timeouted !!!"));
 	    return true;
 	}
 	//Make messages
-	if( c_tm > t_tm+1 )  //1sec
-	{
+	if(c_tm > t_tm+1) {	//1sec
 	    t_tm = c_tm;
 	    mess_info(loc.c_str(),_("Wait event..."));
 	}
@@ -794,18 +783,15 @@ string TSYS::strSepParse( const string &path, int level, char sep, int *off )
     size_t t_dir;
 
     if(an_dir >= (int)path.size()) return "";
-    while(true)
-    {
+    while(true) {
 	t_dir = path.find(sep,an_dir);
-	if( t_dir == string::npos )
-	{
-	    if( off ) *off = path.size();
-	    return (t_lev == level) ? path.substr(an_dir) : "";
+	if(t_dir == string::npos) {
+	    if(off) *off = path.size();
+	    return (t_lev==level) ? path.substr(an_dir) : "";
 	}
-	else if( t_lev == level )
-	{
-	    if( off ) *off = t_dir+1;
-	    return path.substr(an_dir,t_dir-an_dir);
+	else if(t_lev == level) {
+	    if(off) *off = t_dir+1;
+	    return path.substr(an_dir, t_dir-an_dir);
 	}
 	an_dir = t_dir+1;
 	t_lev++;
@@ -820,20 +806,17 @@ string TSYS::strParse( const string &path, int level, const string &sep, int *of
     size_t t_dir;
 
     if(an_dir >= (int)path.size() || sep.empty()) return "";
-    while(true)
-    {
+    while(true) {
 	t_dir = path.find(sep,an_dir);
-	if( t_dir == string::npos )
-	{
-	    if( off ) *off = path.size();
-	    return (t_lev == level) ? path.substr(an_dir) : "";
+	if(t_dir == string::npos) {
+	    if(off) *off = path.size();
+	    return (t_lev==level) ? path.substr(an_dir) : "";
 	}
-	else if( t_lev == level )
-	{
-	    if( off ) *off = t_dir+sep.size();
+	else if(t_lev == level) {
+	    if(off) *off = t_dir+sep.size();
 	    return path.substr(an_dir,t_dir-an_dir);
 	}
-	if( mergeSepSymb && sep.size() == 1 )
+	if(mergeSepSymb && sep.size() == 1)
 	    for(an_dir = t_dir; an_dir < (int)path.size() && path[an_dir] == sep[0]; ) an_dir++;
 	else an_dir = t_dir+sep.size();
 	t_lev++;
@@ -848,18 +831,15 @@ string TSYS::strLine( const string &str, int level, int *off )
     size_t t_dir;
 
     if(an_dir >= (int)str.size()) return "";
-    while(true)
-    {
+    while(true) {
 	for(t_dir = an_dir; t_dir < str.size(); t_dir++)
 	    if(str[t_dir] == '\x0D' || str[t_dir] == '\x0A')
 	    { edLnSmbSz = (str[t_dir] == '\x0D' && ((t_dir+1) < str.size()) && str[t_dir+1] == '\x0A') ? 2 : 1; break; }
-	if(t_dir >= str.size())
-	{
+	if(t_dir >= str.size()) {
 	    if(off) *off = str.size();
 	    return (t_lev==level) ? str.substr(an_dir) : "";
 	}
-	else if(t_lev == level)
-	{
+	else if(t_lev == level) {
 	    if(off) *off = t_dir+edLnSmbSz;
 	    return str.substr(an_dir,t_dir-an_dir);
 	}
@@ -875,20 +855,18 @@ string TSYS::pathLev( const string &path, int level, bool decode, int *off )
     int t_lev = 0;
     size_t t_dir;
 
-    //> First separators pass
+    //First separators pass
     while(an_dir < (int)path.size() && path[an_dir]=='/') an_dir++;
     if(an_dir >= (int)path.size()) return "";
-    //> Path level process
-    while(true)
-    {
+
+    //Path level process
+    while(true) {
 	t_dir = path.find("/",an_dir);
-	if(t_dir == string::npos)
-	{
+	if(t_dir == string::npos) {
 	    if(off) *off = path.size();
 	    return (t_lev == level) ? ( decode ? TSYS::strDecode(path.substr(an_dir),TSYS::PathEl) : path.substr(an_dir) ) : "";
 	}
-	else if(t_lev == level)
-	{
+	else if(t_lev == level) {
 	    if(off) *off = t_dir;
 	    return decode ? TSYS::strDecode(path.substr(an_dir,t_dir-an_dir),TSYS::PathEl) : path.substr(an_dir,t_dir-an_dir);
 	}
@@ -917,7 +895,7 @@ string TSYS::sepstr2path( const string &str, char sep )
     return rez;
 }
 
-string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
+string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 {
     int i_sz;
     string sout;
@@ -926,105 +904,98 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
     {
 	case TSYS::PathEl:
 	    sout = in;
-	    for( i_sz = 0; i_sz < (int)sout.size(); i_sz++ )
-		switch( sout[i_sz] )
+	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
+		switch(sout[i_sz])
 		{
-		    case '/': sout.replace(i_sz,1,"%2f"); i_sz+=2; break;
-		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
+		    case '/': sout.replace(i_sz,1,"%2f"); i_sz += 2; break;
+		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
 		}
 	    break;
-	case TSYS::HttpURL:
+	case TSYS::HttpURL: {
+	    char buf[4];
 	    sout = in;
-	    for( i_sz = 0; i_sz < (int)sout.size(); i_sz++ )
-		switch( sout[i_sz] )
+	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
+		switch(sout[i_sz])
 		{
-		    case '%': sout.replace(i_sz,1,"%25"); i_sz+=2; break;
-		    case ' ': sout.replace(i_sz,1,"%20"); i_sz+=2; break;
-		    case '\t': sout.replace(i_sz,1,"%09"); i_sz+=2; break;
+		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
+		    case ' ': sout.replace(i_sz,1,"%20"); i_sz += 2; break;
+		    case '\t': sout.replace(i_sz,1,"%09"); i_sz += 2; break;
 		    default:
-			if( sout[i_sz]&0x80 )
-			{
-			    char buf[4];
+			if(sout[i_sz]&0x80) {
 			    snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)sout[i_sz]);
 			    sout.replace(i_sz,1,buf);
-			    i_sz+=2;
+			    i_sz += 2;
 			    break;
 			}
 		}
 	    break;
+	}
 	case TSYS::Html:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-		switch( in[i_sz] )
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
+		switch(in[i_sz])
 		{
-		    case '>':	sout+="&gt;";	break;
-		    case '<':	sout+="&lt;";	break;
-		    case '"':	sout+="&quot;";	break;
-		    case '&':	sout+="&amp;";	break;
-		    case '\'':	sout+="&apos;";	break;
-		    default:	sout+=in[i_sz];
+		    case '>':	sout += "&gt;";		break;
+		    case '<':	sout += "&lt;";		break;
+		    case '"':	sout += "&quot;";	break;
+		    case '&':	sout += "&amp;";	break;
+		    case '\'':	sout += "&apos;";	break;
+		    default:	sout += in[i_sz];
 		}
 	    break;
 	case TSYS::JavaSc:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-		switch( in[i_sz] )
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
+		switch(in[i_sz])
 		{
-		    case '\n':	sout+="\\n";	break;
-		    default:	sout+=in[i_sz];
+		    case '\n':	sout += "\\n";	break;
+		    default:	sout += in[i_sz];
 		}
 	    break;
 	case TSYS::SQL:
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-		switch( in[i_sz] )
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
+		switch(in[i_sz])
 		{
-		    case '\'':	sout+="\\'";	break;
-		    case '\"':	sout+="\\\"";	break;
-		    case '`':	sout+="\\`";	break;
-		    case '\\':	sout+="\\\\";	break;
-		    default:	sout+=in[i_sz];
+		    case '\'':	sout += "\\'";	break;
+		    case '\"':	sout += "\\\"";	break;
+		    case '`':	sout += "\\`";	break;
+		    case '\\':	sout += "\\\\";	break;
+		    default:	sout += in[i_sz];
 		}
 	    break;
-	case TSYS::Custom:
+	case TSYS::Custom: {
 	    sout.reserve(in.size()+10);
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz++ )
-	    {
+	    char buf[4];
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++) {
 		unsigned i_smb;
-		for(i_smb = 0; i_smb < symb.size(); i_smb++)
-		    if(in[i_sz] == symb[i_smb])
-		    {
-			char buf[4];
+		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
+		    if(in[i_sz] == opt1[i_smb]) {
 			sprintf(buf,"%%%02X",(unsigned char)in[i_sz]);
 			sout += buf;
 			break;
 		    }
-		if(i_smb >= symb.size()) sout += in[i_sz];
+		if(i_smb >= opt1.size()) sout += in[i_sz];
 	    }
 	    break;
-	case TSYS::base64:
-	{
+	}
+	case TSYS::base64: {
 	    sout.reserve(in.size()+in.size()/4+in.size()/57+10);
 	    const char *base64alph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	    for( i_sz = 0; i_sz < (int)in.size(); i_sz+=3 )
-	    {
+	    for(i_sz = 0; i_sz < (int)in.size(); i_sz += 3) {
 		if(i_sz && !(i_sz%57))	sout.push_back('\n');
 		sout.push_back(base64alph[(unsigned char)in[i_sz]>>2]);
-		if((i_sz+1) >= (int)in.size())
-		{
+		if((i_sz+1) >= (int)in.size()) {
 		    sout.push_back(base64alph[((unsigned char)in[i_sz]&0x03)<<4]);
 		    sout += "==";
 		}
-		else
-		{
+		else {
 		    sout.push_back(base64alph[(((unsigned char)in[i_sz]&0x03)<<4)|((unsigned char)in[i_sz+1]>>4)]);
-		    if((i_sz+2) >= (int)in.size())
-		    {
+		    if((i_sz+2) >= (int)in.size()) {
 			sout.push_back(base64alph[((unsigned char)in[i_sz+1]&0x0F)<<2]);
 			sout.push_back('=');
 		    }
-		    else
-		    {
+		    else {
 			sout.push_back(base64alph[(((unsigned char)in[i_sz+1]&0x0F)<<2)|((unsigned char)in[i_sz+2]>>6)]);
 			sout.push_back(base64alph[(unsigned char)in[i_sz+2]&0x3F]);
 		    }
@@ -1049,16 +1020,16 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 		    case ':': case ';': case '"': case '\'': case '<':
 		    case '>': case '?': case '.': case ',':
 			sout+="_";	break;
-		    default:	sout+=in[i_sz];
+		    default:	sout += in[i_sz];
 		}
 	    break;
-	case TSYS::Bin:
-	{
+	case TSYS::Bin: {
 	    string svl, evl;
-	    sout.reserve(in.size());
-	    for(int off = 0; (svl=TSYS::strSepParse(in,0,'\n',&off)).size(); )
-		for(int offE = 0; (evl=TSYS::strSepParse(svl,0,' ',&offE)).size(); )
-		    sout += (char)strtol(evl.c_str(),NULL,16);
+	    sout.reserve(in.size()/2);
+	    for(unsigned iCh = 0; iCh < (int)in.size(); ++iCh)
+		if(isxdigit(in[iCh])) {
+		    sout += (char)strtol(in.substr(iCh,2).c_str(),NULL,16); iCh++;
+		}
 	    break;
 	}
 	case TSYS::Reverse:
@@ -1067,8 +1038,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 	case TSYS::ShieldSimb:
 	    sout.reserve(in.size());
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		if(in[i_sz] == '\\' && i_sz < ((int)in.size()-1))
-		{
+		if(in[i_sz] == '\\' && i_sz < ((int)in.size()-1)) {
 		    switch(in[i_sz+1])
 		    {
 			case 'a':	sout += '\a';	break;
@@ -1091,26 +1061,27 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &symb )
 			    else sout += in[i_sz+1];
 		    }
 		    i_sz++;
-		}else sout += in[i_sz];
+		}
+		else sout += in[i_sz];
 	    break;
     }
     return sout;
 }
 
-unsigned char TSYS::getBase64Code(unsigned char asymb) 
+unsigned char TSYS::getBase64Code( unsigned char asymb )
 {
     switch(asymb)
     {
-	case 'A' ... 'Z':	return asymb-(unsigned char)'A';
-	case 'a' ... 'z':	return 26+asymb-(unsigned char)'a';
-	case '0' ... '9':	return 52+asymb-(unsigned char)'0';
-	case '+':		return 62;
-	case '/':		return 63;
+	case 'A'...'Z':	return asymb-(unsigned char)'A';
+	case 'a'...'z':	return 26+asymb-(unsigned char)'a';
+	case '0'...'9':	return 52+asymb-(unsigned char)'0';
+	case '+':	return 62;
+	case '/':	return 63;
     }
     return 0;
 }
 
-string TSYS::strDecode( const string &in, TSYS::Code tp )
+string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 {
     unsigned i_sz;
     string sout;
@@ -1123,8 +1094,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp )
 		switch(in[i_sz])
 		{
 		    case '%':
-			if(i_sz+2 < in.size())
-			{
+			if(i_sz+2 < in.size()) {
 			    sout += (char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
 			    i_sz += 2;
 			}else sout += in[i_sz];
@@ -1134,30 +1104,31 @@ string TSYS::strDecode( const string &in, TSYS::Code tp )
 	    break;
 	case TSYS::base64:
 	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < in.size(); )
-	    {
-		if(in[i_sz] == '\n')	i_sz+=sizeof('\n');
+	    for(i_sz = 0; i_sz < in.size(); ) {
+		if(in[i_sz] == '\n')	i_sz += sizeof('\n');
 		if((i_sz+3) < in.size())
-		    if( in[i_sz+1] != '=' )
-		    {
+		    if(in[i_sz+1] != '=') {
 			char w_code1 = TSYS::getBase64Code(in[i_sz+1]);
 			sout.push_back((TSYS::getBase64Code(in[i_sz])<<2)|(w_code1>>4));
-			if( in[i_sz+2] != '=' )
-			{
+			if(in[i_sz+2] != '=') {
 			    char w_code2 = TSYS::getBase64Code(in[i_sz+2]);
 			    sout.push_back((w_code1<<4)|(w_code2>>2));
-			    if( in[i_sz+3] != '=' )
+			    if(in[i_sz+3] != '=')
 				sout.push_back((w_code2<<6)|TSYS::getBase64Code(in[i_sz+3]));
 			}
 		    }
-		i_sz+=4;
+		i_sz += 4;
 	    }
 	    break;
-	case TSYS::Bin:
-	    sout.reserve(in.size());
-	    for( i_sz = 0; i_sz < in.size(); i_sz++ )
-		sout += TSYS::strMess(((i_sz+1)%16)?"%0.2x ":"%0.2x\n",(unsigned char)in[i_sz]);
+	case TSYS::Bin: {
+	    sout.reserve(in.size()*2);
+	    char buf[3+opt1.size()];
+	    for(i_sz = 0; i_sz < in.size(); i_sz++) {
+		sprintf(buf, "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
+		sout += buf;
+	    }
 	    break;
+	}
 	default: sout = in;	break;
     }
 
@@ -1184,8 +1155,7 @@ string TSYS::strCompr( const string &in, int lev )
     strm.next_out = (Bytef*)out;
     strm.avail_out = comprLen;
 
-    if( deflate(&strm, Z_FINISH) != Z_STREAM_END )
-    {
+    if(deflate(&strm, Z_FINISH) != Z_STREAM_END) {
 	deflateEnd(&strm);
 	return "";
     }
@@ -1214,15 +1184,14 @@ string TSYS::strUncompr( const string &in )
 
     strm.avail_in = in.size();
     strm.next_in = (Bytef*)in.data();
-    do
-    {
+    do {
 	strm.avail_out = sizeof(out);
 	strm.next_out = out;
 	ret = inflate(&strm,Z_NO_FLUSH);
 	if(ret == Z_STREAM_ERROR || ret == Z_NEED_DICT || ret == Z_DATA_ERROR || ret == Z_MEM_ERROR)
 	    break;
 	rez.append((char*)out,sizeof(out)-strm.avail_out);
-    } while( strm.avail_out == 0 );
+    } while(strm.avail_out == 0);
 
     inflateEnd(&strm);
 
@@ -1380,15 +1349,15 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     ResAlloc res(taskRes, true);
     for(time_t c_tm = time(NULL); (ti=mTasks.find(path)) != mTasks.end(); )
     {
-        //> Remove created and finished but not destroyed task
-        if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached))
-        {
-            pthread_join(ti->second.thr, NULL);
-            mTasks.erase(ti);
-            continue;
-        }
-        res.release();
-        //> Error by this active task present
+	//Remove created and finished but not destroyed task
+	if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached))
+	{
+	    pthread_join(ti->second.thr, NULL);
+	    mTasks.erase(ti);
+	    continue;
+	}
+	res.release();
+	//Error by this active task present
 	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
 	sysSleep(0.01);
 	res.request(true);
@@ -1403,8 +1372,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     res.release();
 
     if(pAttr) pthr_attr = pAttr;
-    else
-    {
+    else {
 	pthr_attr = &locPAttr;
 	pthread_attr_init(pthr_attr);
     }
@@ -1421,13 +1389,11 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
     pthread_attr_setschedparam(pthr_attr,&prior);
 
-    try
-    {
+    try {
 	pthread_attr_getdetachstate(pthr_attr,&detachStat);
 	if(detachStat == PTHREAD_CREATE_DETACHED) htsk.flgs |= STask::Detached;
 	int rez = pthread_create(&procPthr, pthr_attr, taskWrap, &htsk);
-	if(rez == EPERM)
-	{
+	if(rez == EPERM) {
 	    mess_warning(nodePath().c_str(), _("No permission for create real-time policy for '%s'. Default thread is created!"), path.c_str());
 	    policy = SCHED_OTHER;
 	    pthread_attr_setschedpolicy(pthr_attr, policy);
@@ -1439,17 +1405,16 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 
 	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
 
-	//> Wait for thread structure initialization finish for not detachable tasks
+	//Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
-	//> Wait for start status
+	//Wait for start status
 	for(time_t c_tm = time(NULL); !(htsk.flgs&STask::Detached) && startSt && !(*startSt); )
 	{
 	    if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' start timeouted!"),path.c_str());
 	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
     }
-    catch(TError)
-    {
+    catch(TError) {
 	res.request(true);
 	mTasks.erase(path);
 	res.release();
@@ -1466,7 +1431,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 
     if(endrunCntr) *endrunCntr = true;
 
-    //> Wait for task stop and SIGALRM send repeat
+    //Wait for task stop and SIGALRM send repeat
     time_t t_tm, s_tm;
     t_tm = s_tm = time(NULL);
     bool first = true;
@@ -1479,23 +1444,20 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
 
 	time_t c_tm = time(NULL);
 	//Check timeout
-        if(wtm && (c_tm > (s_tm+wtm)))
-        {
-            mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
+	if(wtm && (c_tm > (s_tm+wtm))) {
+	    mess_crit((nodePath()+path+": stop").c_str(),_("Timeouted !!!"));
 	    throw TError(nodePath().c_str(),_("Task '%s' is not stopped!"),path.c_str());
         }
 	//Make messages
-	if(c_tm > t_tm+1)  //1sec
-        {
-            t_tm = c_tm;
-            mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
-        }
-        sysSleep(STD_WAIT_DELAY*1e-3);
-        first = false;
-        res.request(true);
+	if(c_tm > t_tm+1) {  //1sec
+	    t_tm = c_tm;
+	    mess_info((nodePath()+path+": stop").c_str(),_("Wait event..."));
+	}
+	sysSleep(STD_WAIT_DELAY*1e-3);
+	first = false;
+	res.request(true);
     }
-    if(it != mTasks.end())
-    {
+    if(it != mTasks.end()) {
         if(!(it->second.flgs&STask::Detached)) pthread_join(it->second.thr, NULL);
         mTasks.erase(it);
     }
@@ -1509,15 +1471,15 @@ bool TSYS::taskEndRun( )
 
 void *TSYS::taskWrap( void *stas )
 {
-    //> Get temporary task structure
+    //Get temporary task structure
     STask *tsk = (STask *)stas;
     pthread_setspecific(TSYS::sTaskKey, tsk);
 
-    //> Store call parameters
+    //Store call parameters
     void *(*wTask) (void *) = tsk->task;
     void *wTaskArg = tsk->taskArg;
 
-    //> Get current policy and priority
+    //Get current policy and priority
     int policy;
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
@@ -1525,9 +1487,8 @@ void *TSYS::taskWrap( void *stas )
     //tsk->prior = param.sched_priority;
 
 #if __GLIBC_PREREQ(2,4)
-    //> Load and init CPU set
-    if(SYS->multCPU() && !(tsk->flgs & STask::Detached))
-    {
+    //Load and init CPU set
+    if(SYS->multCPU() && !(tsk->flgs & STask::Detached)) {
 	tsk->cpuSet = TBDS::genDBGet(SYS->nodePath()+"CpuSet:"+tsk->path);
 	cpu_set_t cpuset;
 	CPU_ZERO(&cpuset);
@@ -1540,30 +1501,29 @@ void *TSYS::taskWrap( void *stas )
     else if(SYS->multCPU() && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
 #endif
 
-    //> Final set for init finish indicate
+    //Final set for init finish indicate
     tsk->tid = syscall(SYS_gettid);
-    //>> Set nice level without realtime if it no permitted
+    // Set nice level without realtime if it no permitted
     if(tsk->policy != SCHED_RR && tsk->prior > 0 && setpriority(PRIO_PROCESS,tsk->tid,-tsk->prior/5) != 0) tsk->prior = 0;
     tsk->thr = pthread_self();		//Task creation finish
 
-    //> Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
+    //Signal SIGUSR1 BLOCK for internal checking to endrun by taskEndRun()
     sigset_t mask;
     sigemptyset(&mask);
     sigaddset(&mask, SIGUSR1);
     pthread_sigmask(SIG_BLOCK, &mask, NULL);
 
-    //> Call work task
+    //Call work task
     void *rez = NULL;
     try { rez = wTask(wTaskArg); }
-    catch(TError err)
-    {
+    catch(TError err) {
 	mess_err(err.cat.c_str(),err.mess.c_str());
 	mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by exception."),tsk->thr);
     }
     //???? The code cause: FATAL: exception not rethrown
     //catch(...)	{ mess_err(SYS->nodePath().c_str(),_("Task %u unexpected terminated by unknown exception."),tsk->thr); }
 
-    //> Mark for task finish
+    //Mark for task finish
     tsk->flgs |= STask::FinishTask;
 
     //> Remove task object for detached
@@ -1585,8 +1545,7 @@ void TSYS::taskSleep( int64_t per, time_t cron )
     struct timespec sp_tm;
     STask *stsk = (STask*)pthread_getspecific(sTaskKey);
 
-    if(!cron)
-    {
+    if(!cron) {
 	/*if(!per) per = 1000000000;
 	int64_t cur_tm = 1000*curTime();
 	int64_t pnt_tm = (cur_tm/per + 1)*per;
@@ -1609,27 +1568,23 @@ void TSYS::taskSleep( int64_t per, time_t cron )
 	clock_gettime(CLOCK_REALTIME,&sp_tm);
 	int64_t cur_tm = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
 	int64_t pnt_tm = (cur_tm/per + 1)*per;
-	do
-	{
+	do {
 	    sp_tm.tv_sec = pnt_tm/1000000000; sp_tm.tv_nsec = pnt_tm%1000000000;
 	    if(clock_nanosleep(CLOCK_REALTIME,TIMER_ABSTIME,&sp_tm,NULL))	return;
 	    clock_gettime(CLOCK_REALTIME,&sp_tm);
 	}while(((int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec) < pnt_tm);
 
-	if(stsk)
-	{
+	if(stsk) {
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = cur_tm;
 	    stsk->tm_per = (int64_t)sp_tm.tv_sec*1000000000+sp_tm.tv_nsec;
 	    stsk->tm_pnt = pnt_tm;
 	}
     }
-    else
-    {
+    else {
 	time_t end_tm = time(NULL);
 	while(time(NULL) < cron && sysSleep(10) == 0) ;
-	if(stsk)
-	{
+	if(stsk) {
 	    stsk->tm_beg = stsk->tm_per;
 	    stsk->tm_end = 1000000000ll*end_tm;
 	    stsk->tm_per = 1000000000ll*time(NULL);
@@ -1651,7 +1606,7 @@ time_t TSYS::cron( const string &vl, time_t base )
 reload:
     bool isReload = false;
 
-    //> Minutes check
+    //Minutes check
     cronEl = TSYS::strSepParse(vl,0,' ');
     vm = 200;
     for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
@@ -1660,8 +1615,7 @@ reload:
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=59; }
 	if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_min>=vbeg)?60:0));
-	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(59,vend)))
-	{
+	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(59,vend))) {
 	    if(ttm.tm_min < vbeg) vm = vmin(vm,vbeg);
 	    else if((vstep>1 && ttm.tm_min >= (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_min >= vend))
 		vm = vmin(vm,vbeg+60);
@@ -1673,7 +1627,7 @@ reload:
     ttm.tm_min = vm;
     mktime(&ttm);
 
-    //> Hours check
+    //Hours check
     cronEl = TSYS::strSepParse(vl,1,' ');
     vm = 200;
     for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
@@ -1682,8 +1636,7 @@ reload:
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=23; }
 	if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_hour>vbeg)?24:0));
-	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(23,vend)))
-	{
+	else if((vbeg=vmax(0,vbeg)) < (vend=vmin(23,vend))) {
 	    if(ttm.tm_hour < vbeg) vm = vmin(vm,vbeg);
 	    else if((vstep>1 && ttm.tm_hour > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_hour > vend))
 		vm = vmin(vm,vbeg+24);
@@ -1697,7 +1650,7 @@ reload:
     mktime(&ttm);
     if(isReload)	{ ttm.tm_min = -1; goto reload; }
 
-    //> Day check
+    //Day check
     cronEl = TSYS::strSepParse(vl,2,' ');
     string cronElw = TSYS::strSepParse(vl,4,' ');
     vm = 200;
@@ -1708,8 +1661,7 @@ reload:
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=31; }
 	    if(vend < 0) vm = vmin(vm,vbeg+((ttm.tm_mday>vbeg)?31:0));
-	    else if((vbeg=vmax(1,vbeg)) < (vend=vmin(31,vend)))
-	    {
+	    else if((vbeg=vmax(1,vbeg)) < (vend=vmin(31,vend))) {
 		if(ttm.tm_mday < vbeg) vm = vmin(vm,vbeg);
 		else if((vstep>1 && ttm.tm_mday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_mday > vend))
 		    vm = vmin(vm,vbeg+31);
@@ -1725,8 +1677,7 @@ reload:
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=6; }
 	    if(vend < 0) vm = vmin(vm, ttm.tm_mday - ttm.tm_wday + vbeg+((ttm.tm_wday>vbeg)?7:0));
-	    else if((vbeg=vmax(0,vbeg)) < (vend=vmin(6,vend)))
-	    {
+	    else if((vbeg=vmax(0,vbeg)) < (vend=vmin(6,vend))) {
 		if(ttm.tm_wday < vbeg) vm = vmin(vm, ttm.tm_mday - ttm.tm_wday + vbeg);
 		else if((vstep>1 && ttm.tm_wday > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && ttm.tm_wday > vend))
 		    vm = vmin(vm, ttm.tm_mday - ttm.tm_wday + vbeg+7);
@@ -1741,7 +1692,7 @@ reload:
     mktime(&ttm);
     if(isReload)	{ ttm.tm_min = -1; ttm.tm_hour = 0; goto reload; }
 
-    //> Month check
+    //Month check
     cronEl = TSYS::strSepParse(vl,3,' ');
     vm = 200;
     for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
@@ -1750,8 +1701,7 @@ reload:
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=12; }
 	if(vend < 0) vm = vmin(vm,vbeg+(((ttm.tm_mon+1)>vbeg)?12:0));
-	else if((vbeg=vmax(1,vbeg)) < (vend=vmin(12,vend)))
-	{
+	else if((vbeg=vmax(1,vbeg)) < (vend=vmin(12,vend))) {
 	    if((ttm.tm_mon+1) < vbeg) vm = vmin(vm,vbeg);
 	    else if((vstep>1 && (ttm.tm_mon+1) > (vbeg+((vend-vbeg)/vstep)*vstep)) || (vstep <= 0 && (ttm.tm_mon+1) > vend))
 		vm = vmin(vm,vbeg+12);
@@ -1790,8 +1740,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string system(string cmd, bool noPipe = false) - calls the console commands <cmd> of OS returning the result by the channel
     //  cmd - command text
     //  noPipe - pipe result disable for background call
-    if(iid == "system" && prms.size() >= 1)
-    {
+    if(iid == "system" && prms.size() >= 1) {
 	if(prms.size() >= 2 && prms[1].getB()) return system(prms[0].getS().c_str());
 	FILE *fp = popen(prms[0].getS().c_str(),"r");
 	if(!fp) return string("");
@@ -1805,13 +1754,11 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return rez;
     }
     // string fileRead( string file ) - Return <file> content by string.
-    if(iid == "fileRead" && prms.size() >= 1)
-    {
+    if(iid == "fileRead" && prms.size() >= 1) {
 	char buf[STR_BUF_LEN];
 	string rez;
 	int hd = open(prms[0].getS().c_str(),O_RDONLY);
-	if(hd >= 0)
-	{
+	if(hd >= 0) {
 	    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) rez.append(buf,len);
 	    close(hd);
 	}
@@ -1819,14 +1766,12 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // int fileWrite( string file, string str, bool append = false ) - Write <str> to <file>, remove presented or <append>.
     //	  Return wrote bytes count.
-    if(iid == "fileWrite" && prms.size() >= 2)
-    {
+    if(iid == "fileWrite" && prms.size() >= 2) {
 	int wcnt = 0, wflags = O_WRONLY|O_CREAT|O_TRUNC;
 	string val = prms[1].getS();
 	if(prms.size() >= 3 && prms[2].getB()) wflags = O_WRONLY|O_CREAT|O_APPEND;
 	int hd = open(prms[0].getS().c_str(), wflags, 0664);
-	if(hd >= 0)
-	{
+	if(hd >= 0) {
 	    wcnt = write(hd,val.data(),val.size());
 	    close(hd);
 	}
@@ -1838,20 +1783,17 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // string cntrReq(XMLNodeObj req, string stat = "") - request of the control interface to the system via XML
     //  req - request's XML node
     //  stat - remote OpenSCADA-station for request
-    if(iid == "cntrReq" && prms.size() >= 1)
-    {
+    if(iid == "cntrReq" && prms.size() >= 1) {
 	XMLNode req;
 	AutoHD<XMLNodeObj> xnd = prms[0].getO();
 	if(xnd.freeStat()) return string(_("1:Request is not object!"));
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
-	if(prms.size() < 2 || prms[1].getS().empty())
-	{
+	if(prms.size() < 2 || prms[1].getS().empty()) {
 	    req.setAttr("user",user);
 	    cntrCmd(&req);
 	}
-	else
-	{
+	else {
 	    req.setAttr("path","/"+prms[1].getS()+path);
 	    transport().at().cntrIfCmd(req,"cntrReq");
 	    req.setAttr("path",path);
@@ -1862,8 +1804,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     // int sleep(int tm, int ntm = 0) - call for task sleep to <tm> seconds and <ntm> nanoseconds.
     //  tm - wait time in seconds
     //  ntm - wait time part in nanoseconds
-    if(iid == "sleep" && prms.size() >= 1)
-    {
+    if(iid == "sleep" && prms.size() >= 1) {
 	struct timespec sp_tm;
 	sp_tm.tv_sec = prms[0].getI();
 	sp_tm.tv_nsec = (prms.size() >= 2) ? prms[1].getI() : 0;
@@ -1871,8 +1812,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     }
     // int time(int usec) - returns the absolute time in seconds from the epoch of 1/1/1970 and in microseconds, if <usec> is specified
     //  usec - microseconds of time
-    if(iid == "time")
-    {
+    if(iid == "time") {
 	if(prms.empty()) return (int)time(NULL);
 	int64_t tm = curTime();
 	prms[0].setI(tm%1000000); prms[0].setModify();
@@ -1890,8 +1830,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if((iid == "localtime" || (alt1=(iid=="gmtime"))) && prms.size() >= 2)
-    {
+    if((iid == "localtime" || (alt1=(iid=="gmtime"))) && prms.size() >= 2) {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
 	if(alt1) gmtime_r(&tm_t, &tm_tm);
@@ -1919,8 +1858,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //  wday - days in the week
     //  yday - days in the year
     //  isdst - sign of summer time
-    if(iid == "mktime" || (alt1=(iid=="timegm")))
-    {
+    if(iid == "mktime" || (alt1=(iid=="timegm"))) {
 	struct tm tm_tm;
 	tm_tm.tm_sec	= (prms.size()>=1) ? prms[0].getI() : 0;
 	tm_tm.tm_min	= (prms.size()>=2) ? prms[1].getI() : 0;
@@ -1948,8 +1886,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //      - converts an absolute time <sec> to the string of the desired format <form>
     //  sec - time ins seconds from the epoch 1.1.1970
     //  form - result string format
-    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty())
-    {
+    if((iid == "strftime" || (alt1=(iid=="strftimegm"))) && !prms.empty()) {
 	time_t tm_t = prms[0].getI();
 	struct tm tm_tm;
 	if(alt1) gmtime_r(&tm_t, &tm_tm);
@@ -1962,8 +1899,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     //      based on the string record of time <str>, in accordance with the specified template <form>
     //  str - source time in string
     //  form - string's time template in format POSIX-function "strptime"
-    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty())
-    {
+    if((iid == "strptime" || (alt1=(iid=="strptimegm"))) && !prms.empty()) {
 	struct tm stm;
 	stm.tm_isdst = -1;
 	strptime(prms[0].getS().c_str(), (prms.size()>=2) ? prms[1].getS().c_str() : "%Y-%m-%d %H:%M:%S", &stm);
@@ -1977,8 +1913,7 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 	return (int)cron(prms[0].getS(), (prms.size()>=2) ? prms[1].getI() : 0);
     // string strFromCharCode(int char1, int char2, int char3, ...) - string creation from symbol's codes
     //  char1, char2. char3 - symbol's codes
-    if(iid == "strFromCharCode")
-    {
+    if(iid == "strFromCharCode") {
 	string rez;
 	for(unsigned i_p = 0; i_p < prms.size(); i_p++)
 	    rez += (unsigned char)prms[i_p].getI();
@@ -1991,6 +1926,44 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
     if(iid == "strCodeConv" && prms.size() >= 3)
 	return Mess->codeConv((prms[1].getS().size() ? prms[1].getS() : Mess->charset()),
 			(prms[2].getS().size() ? prms[2].getS() : Mess->charset()), prms[0].getS());
+    // string strEncode( string src, string tp = "Bin", string opt1 = "" ) - String encode from <src> by <tp> and options <opt1>.
+    //  src - source;
+    //  tp  - encode type: "PathEl", "HttpURL", "HTML", "JavaScript", "SQL", "Custom", "Base64", "FormatPrint",
+    //			   "OscdID", "Bin", "Reverse", "ShieldSimb"
+    //  opt1 - option 1, symbols for "Custom"
+    if(iid == "strEncode" && prms.size() >= 1) {
+	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
+	Code tp = (Code)0;
+	if(stp == "PathEl")		tp = PathEl;
+	else if(stp == "HttpURL")	tp = HttpURL;
+	else if(stp == "HTML")		tp = Html;
+	else if(stp == "JavaScript")	tp = JavaSc;
+	else if(stp == "SQL")		tp = SQL;
+	else if(stp == "Custom")	tp = Custom;
+	else if(stp == "Base64")	tp = base64;
+	else if(stp == "FormatPrint")	tp = FormatPrint;
+	else if(stp == "OscdID")	tp = oscdID;
+	else if(stp == "Bin")		tp = Bin;
+	else if(stp == "Reverse")	tp = Reverse;
+	else if(stp == "ShieldSimb")	tp = ShieldSimb;
+	else return "";
+	return strEncode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
+    }
+    // string strDecode( string src, string tp = "Bin", string opt1 = "" ) - String decode from <src> by <tp> and options <opt1>.
+    //  src - source;
+    //  tp  - encode type: "PathEl", "HttpURL", "Custom", "Base64", "Bin"
+    //  opt1 - option 1, separator for "Bin"
+    if(iid == "strDecode" && prms.size() >= 2) {
+	string stp = (prms.size()>1) ? prms[1].getS() : "Bin";
+	Code tp = (Code)0;
+	if(stp == "PathEl")		tp = PathEl;
+	else if(stp == "HttpURL")	tp = HttpURL;
+	else if(stp == "Custom")	tp = Custom;
+	else if(stp == "Base64")	tp = base64;
+	else if(stp == "Bin")		tp = Bin;
+	else return "";
+	return strDecode(prms[0].getS(), tp, (prms.size()>2) ? prms[2].getS() : "");
+    }
 
     return TCntrNode::objFuncCall(iid,prms,user);
 }
@@ -1998,7 +1971,8 @@ TVariant TSYS::objFuncCall( const string &iid, vector<TVariant> &prms, const str
 void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt )
 {
     int pathLev = 0;
-    //> Source path check and normalize
+
+    //Source path check and normalize
     bool fromRoot = (fsBaseIn.size() && fsBaseIn[0] == '/');
     nd->childAdd("el")->setText("/");
     if(TSYS::pathLev(fsBaseIn,0) != ".") nd->childAdd("el")->setText(".");
@@ -2009,30 +1983,29 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 	nd->childAdd("el")->setText(fsBase);
     }
     if(fromRoot && pathLev == 0) fsBase = "/";
-    //> Previous items set
-    if(!fromRoot)
-    {
+
+    //Previous items set
+    if(!fromRoot) {
 	if(pathLev == 0) nd->childAdd("el")->setText("..");
 	else if(TSYS::pathLev(fsBase,pathLev-1) == "..") nd->childAdd("el")->setText(fsBase+"/..");
     }
-    //> From work directory check
+
+    //From work directory check
     string fsBaseCor = fsBase;
     if(!fsBaseCor.size() || (fsBaseCor[0] != '/' && fsBaseCor[0] != '.')) fsBaseCor = "./"+fsBaseCor;
-    //> Child items process
+
+    //Child items process
     vector<string> its, fits;
     DIR *IdDir = opendir(fsBaseCor.c_str());
-    if(IdDir != NULL)
-    {
+    if(IdDir != NULL) {
 	dirent sDir, *sDirRez = NULL;
-	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez)
-	{
+	while(readdir_r(IdDir,&sDir,&sDirRez) == 0 && sDirRez) {
 	    if(strcmp(sDirRez->d_name,"..") == 0 || strcmp(sDirRez->d_name,".") == 0) continue;
 	    if(sDirRez->d_type == DT_DIR || sDirRez->d_type == DT_LNK ||
 		    ((sDirRez->d_type == DT_CHR || sDirRez->d_type == DT_BLK) && fileExt.find(tEl+"<dev>;") != string::npos) ||
 		    (sDirRez->d_type == DT_CHR && fileExt.find(tEl+"<chrdev>;") != string::npos))
 		fits.push_back(sDirRez->d_name);
-	    else if(sDirRez->d_type == DT_REG && fileExt.size())
-	    {
+	    else if(sDirRez->d_type == DT_REG && fileExt.size()) {
 		tEl = sDirRez->d_name;
 		size_t extPos = tEl.rfind(".");
 		tEl = (extPos != string::npos) ? tEl.substr(extPos+1) : "";
@@ -2054,16 +2027,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     char buf[STR_BUF_LEN];
 
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
 	if(TUIS::icoPresent(id())) ctrMkNode("img",opt,-1,"/ico","",R_R_R_);
-	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_))
-	{
+	if(ctrMkNode("area",opt,-1,"/gen",_("Station"),R_R_R_)) {
 	    ctrMkNode("fld",opt,-1,"/gen/id",_("ID"),R_R_R_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/stat",_("Station name"),RWRWR_,"root","root",1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/gen/prog",_("Program"),R_R_R_,"root","root",1,"tp","str");
@@ -2088,8 +2059,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
 		"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
 		"help",_("Multilingual for variable texts support enabling by base language selection."));
-	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
 		    "sel_list",_("Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);Alert (6);Emergency (7)"),
@@ -2131,15 +2101,13 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/ico" && ctrChkNode(opt))
-    {
+    if(a_path == "/ico" && ctrChkNode(opt)) {
 	string itp;
 	opt->setText(TSYS::strEncode(TUIS::icoGet(id(),&itp),TSYS::base64));
 	opt->setAttr("tp",itp);
     }
     else if(a_path == "/gen/host" && ctrChkNode(opt))	opt->setText(host());
-    else if(a_path == "/gen/sys" && ctrChkNode(opt))
-    {
+    else if(a_path == "/gen/sys" && ctrChkNode(opt)) {
 	utsname ubuf; uname(&ubuf);
 	opt->setText(string(ubuf.sysname)+"-"+ubuf.release);
     }
@@ -2147,47 +2115,39 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/prog" && ctrChkNode(opt))	opt->setText(PACKAGE_NAME);
     else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
-    else if(a_path == "/gen/stat")
-    {
+    else if(a_path == "/gen/stat") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(opt->text());
     }
     else if(a_path == "/gen/frq" && ctrChkNode(opt))	opt->setText(r2s((float)sysClk()/1000000.,6));
-    else if(a_path == "/gen/clk_res" && ctrChkNode(opt))
-    {
+    else if(a_path == "/gen/clk_res" && ctrChkNode(opt)) {
 	struct timespec tmval;
 	clock_getres(CLOCK_REALTIME,&tmval);
 	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
-    else if(a_path == "/gen/config")
-    {
+    else if(a_path == "/gen/config") {
 	if(ctrChkNode(opt))	opt->setText(mConfFile);
 	if(ctrChkNode(opt,"scan",RWRWR_,"root","root",SEC_WR))	cfgFileScan(false, true);
     }
-    else if(a_path == "/gen/wrk_db" )
-    {
+    else if(a_path == "/gen/wrk_db") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(workDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setWorkDB(opt->text());
     }
-    else if(a_path == "/gen/saveExit")
-    {
+    else if(a_path == "/gen/saveExit") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(saveAtExit()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/gen/savePeriod")
-    {
+    else if(a_path == "/gen/savePeriod") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(savePeriod()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/gen/workdir")
-    {
+    else if(a_path == "/gen/workdir") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setWorkDir(opt->text().c_str());
     }
     else if(a_path == "/gen/workDirList" && ctrChkNode(opt))	ctrListFS(opt, workDir());
-    else if(a_path == "/gen/icodir")
-    {
+    else if(a_path == "/gen/icodir") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(icoDir());
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setIcoDir(opt->text().c_str());
     }
@@ -2198,45 +2158,37 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	setModDir(opt->text().c_str());
     }
     else if(a_path == "/gen/modDirList" && ctrChkNode(opt))     ctrListFS(opt, modDir());
-    else if(a_path == "/gen/lang")
-    {
+    else if(a_path == "/gen/lang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang(opt->text());
     }
-    else if(a_path == "/gen/baseLang")
-    {
+    else if(a_path == "/gen/baseLang") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang2CodeBase(opt->text());
     }
-    else if(a_path == "/gen/baseLangLs" && ctrChkNode(opt))
-    {
+    else if(a_path == "/gen/baseLangLs" && ctrChkNode(opt)) {
 	opt->childAdd("el")->setText(Mess->lang2Code());
 	if(!Mess->lang2CodeBase().empty() && Mess->lang2CodeBase() != Mess->lang2Code())
 	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
 	opt->childAdd("el")->setText("");
     }
-    else if(a_path == "/gen/mess/lev")
-    {
+    else if(a_path == "/gen/mess/lev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->messLevel()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(atoi(opt->text().c_str()));
     }
-    else if(a_path == "/gen/mess/log_sysl")
-    {
+    else if(a_path == "/gen/mess/log_sysl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x01)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
     }
-    else if(a_path == "/gen/mess/log_stdo")
-    {
+    else if(a_path == "/gen/mess/log_stdo") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x02)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
     }
-    else if(a_path == "/gen/mess/log_stde")
-    {
+    else if(a_path == "/gen/mess/log_stde") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x04)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
     }
-    else if(a_path == "/gen/mess/log_arch")
-    {
+    else if(a_path == "/gen/mess/log_arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x08)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
     }
@@ -2247,10 +2199,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	for(unsigned i_a=0; i_a < lst.size(); i_a++)
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
     }
-    else if(a_path == "/tasks/tasks")
-    {
-	if(ctrChkNode(opt,"get",RWRW__,"root","root"))
-	{
+    else if(a_path == "/tasks/tasks") {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root")) {
 	    XMLNode *n_path	= ctrMkNode("list",opt,-1,"/tasks/tasks/path","",R_R___,"root","root");
 	    XMLNode *n_thr	= ctrMkNode("list",opt,-1,"/tasks/tasks/thrd","",R_R___,"root","root");
 	    XMLNode *n_tid	= ctrMkNode("list",opt,-1,"/tasks/tasks/tid","",R_R___,"root","root");
@@ -2265,20 +2215,18 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_path)	n_path->childAdd("el")->setText(it->first);
 		if(n_thr)	n_thr->childAdd("el")->setText(u2s(it->second.thr));
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
-		if(n_stat)
-		{
+		if(n_stat) {
 		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0;
 		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
 		    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt; }
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Load: %3.1f%% (%s from %s). Lag: %s"),
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f%% (%s from %s). Lag: %s."),
 			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
 			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_pnt)).c_str()));
 		}
-		if(n_plc)
-		{
+		if(n_plc) {
 		    string plcVl = _("Standard");
 		    if(it->second.policy == SCHED_RR) plcVl = _("Round-robin");
 #if __GLIBC_PREREQ(2,4)

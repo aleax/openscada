@@ -239,7 +239,7 @@ TipContr &Contr::owner( )	{ return (TipContr&)TController::owner( ); }
 
 void Contr::load_( )
 {
-    if(!SYS->chkSelDB(DB())) return;
+    if(!SYS->chkSelDB(DB())) throw TError();
 
     TController::load_( );
 

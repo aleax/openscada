@@ -35,10 +35,9 @@ TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mNoTransl(false)
 
 TConfig::~TConfig( )
 {
-    //> Deinit value
+    //Deinit value
     TCfgMap::iterator p;
-    while((p=value.begin()) != value.end())
-    {
+    while((p=value.begin()) != value.end()) {
 	delete p->second;
 	value.erase(p);
     }
@@ -57,8 +56,7 @@ TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
     vector<string> list_el;
 
     cfgList(list_el);
-    for(unsigned i_el = 0; i_el < list_el.size(); i_el++)
-    {
+    for(unsigned i_el = 0; i_el < list_el.size(); i_el++) {
 	if(!config.cfgPresent(list_el[i_el]) || passCpLs.find(list_el[i_el]+";") != string::npos) continue;
 	TCfg &s_cfg = config.cfg(list_el[i_el]);
 	TCfg &d_cfg = cfg(list_el[i_el]);
@@ -71,6 +69,7 @@ TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
 	    default: break;
 	}
     }
+
     return *this;
 }
 
@@ -96,6 +95,7 @@ TCfg &TConfig::cfg( const string &n_val )
 {
     TCfgMap::iterator p = value.find(n_val);
     if(p == value.end()) throw TError("TConfig",_("Attribute '%s' is not present!"),n_val.c_str());
+
     return *p->second;
 }
 
@@ -117,6 +117,7 @@ bool TConfig::cfgPresent( const string &n_val )
 {
     TCfgMap::iterator p = value.find(n_val);
     if(p == value.end()) return false;
+
     return true;
 }
 
@@ -137,12 +138,10 @@ void TConfig::setElem( TElem *Elements, bool first )
 {
     if(m_elem == Elements && !first) return;
 
-    //> Clear previos setting
-    if(m_elem)
-    {
+    //Clear previos setting
+    if(m_elem) {
 	TCfgMap::iterator p;
-	while((p=value.begin()) != value.end())
-	{
+	while((p=value.begin()) != value.end()) {
 	    delete p->second;
 	    value.erase(p);
 	}
@@ -150,14 +149,12 @@ void TConfig::setElem( TElem *Elements, bool first )
 	if(single) delete m_elem;
     }
 
-    //> Set new setting
-    if(!Elements)
-    {
+    //Set new setting
+    if(!Elements) {
 	m_elem = new TElem("single");
 	single = true;
     }
-    else
-    {
+    else {
 	m_elem = Elements;
 	single = false;
     }
@@ -198,8 +195,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 {
     // ElTp cfg(string nm) - config variable 'nm' get.
     //  nm - config variable name.
-    if(iid == "cfg" && prms.size() >= 1)
-    {
+    if(iid == "cfg" && prms.size() >= 1) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf) return EVAL_REAL;
 	return *cf;
@@ -207,8 +203,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
     // ElTp cfgSet(string nm, ElTp val) - set config variable 'nm' to 'val'.
     //  nm - config variable name;
     //  val - variable value.
-    if(iid == "cfgSet" && prms.size() >= 2)
-    {
+    if(iid == "cfgSet" && prms.size() >= 2) {
 	TCfg *cf = at(prms[0].getS(), true);
 	if(!cf || (cf->fld().flg()&TFld::NoWrite)) return false;
 	*(TVariant*)cf = prms[1];
@@ -223,9 +218,8 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 //*************************************************
 TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mOwner(owner)
 {
-    //> Chek for self field for dinamic elements
-    if(fld.flg()&TFld::SelfFld)
-    {
+    //Chek for self field for dinamic elements
+    if(fld.flg()&TFld::SelfFld) {
 	mFld = new TFld();
 	*mFld = fld;
     }
@@ -302,25 +296,21 @@ void TCfg::setS( const string &val )
 	case TVariant::Integer:	setI(atoi(val.c_str()));	break;
 	case TVariant::Real:	setR(atof(val.c_str()));	break;
 	case TVariant::Boolean:	setB((bool)atoi(val.c_str()));	break;
-	case TVariant::String:
-	{
+	case TVariant::String: {
 	    pthread_mutex_lock(&mOwner.mRes);
-	    string t_str = TVariant::getS();
+	    string tVal = TVariant::getS();
 	    TVariant::setS(val);
 	    pthread_mutex_unlock(&mOwner.mRes);
-	    try
-	    {
-		if(!mOwner.cfgChange(*this))
-		{
+	    try {
+		if(!mOwner.cfgChange(*this)) {
 		    pthread_mutex_lock(&mOwner.mRes);
-		    TVariant::setS(t_str);
+		    TVariant::setS(tVal);
 		    pthread_mutex_unlock(&mOwner.mRes);
 		}
 	    }
-	    catch(TError err)
-	    {
+	    catch(TError err) {
 		pthread_mutex_lock(&mOwner.mRes);
-		TVariant::setS(t_str);
+		TVariant::setS(tVal);
 		pthread_mutex_unlock(&mOwner.mRes);
 		throw;
 	    }
@@ -337,14 +327,13 @@ void TCfg::setR( double val )
 	case TVariant::String:	setS(r2s(val));	break;
 	case TVariant::Integer:	setI((int)val);	break;
 	case TVariant::Boolean:	setB((bool)val);break;
-	case TVariant::Real:
-	{
+	case TVariant::Real: {
 	    if(!(mFld->flg()&TFld::Selected) && mFld->selValR()[0] < mFld->selValR()[1])
 		val = vmin(mFld->selValR()[1],vmax(mFld->selValR()[0],val));
-	    double t_val = TVariant::getR();
+	    double tVal = TVariant::getR();
 	    TVariant::setR(val);
-	    try{ if(!mOwner.cfgChange(*this)) TVariant::setR(t_val); }
-	    catch(TError err) { TVariant::setR(t_val); throw; }
+	    try{ if(!mOwner.cfgChange(*this)) TVariant::setR(tVal); }
+	    catch(TError err) { TVariant::setR(tVal); throw; }
 	    break;
 	}
 	default: break;
@@ -358,14 +347,13 @@ void TCfg::setI( int val )
 	case TVariant::String:	setS(i2s(val));	break;
 	case TVariant::Real:	setR(val);	break;
 	case TVariant::Boolean:	setB((bool)val);break;
-	case TVariant::Integer:
-	{
+	case TVariant::Integer: {
 	    if(!(mFld->flg()&TFld::Selected) && mFld->selValI()[0] < mFld->selValI()[1])
 		val = vmin(mFld->selValI()[1],vmax(mFld->selValI()[0],val));
-	    int t_val = TVariant::getI();
+	    int tVal = TVariant::getI();
 	    TVariant::setI(val);
-	    try{ if(!mOwner.cfgChange(*this)) TVariant::setI(t_val); }
-	    catch(TError err) { TVariant::setI(t_val); throw; }
+	    try{ if(!mOwner.cfgChange(*this)) TVariant::setI(tVal); }
+	    catch(TError err) { TVariant::setI(tVal); throw; }
 	    break;
 	}
 	default: break;
@@ -379,12 +367,11 @@ void TCfg::setB( char val )
 	case TVariant::String:	setS(i2s(val));	break;
 	case TVariant::Integer:	setI(val);	break;
 	case TVariant::Real:	setR(val);	break;
-	case TVariant::Boolean:
-	{
-	    bool t_val = TVariant::getB();
+	case TVariant::Boolean: {
+	    bool tVal = TVariant::getB();
 	    TVariant::setB(val);
-	    try{ if(!mOwner.cfgChange(*this)) TVariant::setB(t_val); }
-	    catch(TError err) { TVariant::setB(t_val); throw; }
+	    try{ if(!mOwner.cfgChange(*this)) TVariant::setB(tVal); }
+	    catch(TError err) { TVariant::setB(tVal); throw; }
 	    break;
 	}
 	default: break;
