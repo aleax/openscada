@@ -75,7 +75,7 @@ using namespace QTCFG;
 //* ConfApp                                       *
 //*************************************************
 ConfApp::ConfApp( string open_user ) :
-    pg_info("info"), genReqs("CntrReqs"), root(&pg_info), copy_buf("0"), que_sz(20), tbl_init(false)
+    pg_info("info"), genReqs("CntrReqs"), root(&pg_info), copy_buf("0"), que_sz(20), tbl_init(false), mWaitCursorSet(false)
 {
     //Main window settings
     setAttribute(Qt::WA_DeleteOnClose, true);
@@ -432,6 +432,11 @@ ConfApp::ConfApp( string open_user ) :
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
+    // Wait cursor clean up timer
+    waitCursorClear = new QTimer(this);
+    waitCursorClear->setSingleShot(true);
+    waitCursorClear->setInterval(50);
+    connect(waitCursorClear, SIGNAL(timeout()), SLOT(waitCursorSet()));
 
     menuBar()->setVisible(true);
 
@@ -490,6 +495,20 @@ bool ConfApp::exitModifChk( )
 	}
     }
     return true;
+}
+
+void ConfApp::waitCursorSet( int val )
+{
+    //Set
+    if(val == 1) {
+	if(!mWaitCursorSet) QApplication::setOverrideCursor(Qt::WaitCursor);
+	mWaitCursorSet = true;
+	waitCursorClear->stop();
+    }
+    //Clear cursor command
+    else if(val == 0 && mWaitCursorSet) waitCursorClear->start();
+    //Real clear after the timer shot
+    else if(val == -1 && mWaitCursorSet) { QApplication::restoreOverrideCursor(); mWaitCursorSet = false; }
 }
 
 void ConfApp::endRunChk( )
@@ -2190,7 +2209,7 @@ int ConfApp::cntrIfCmd( XMLNode &node )
     }
 
     //Direct request
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    waitCursorSet(1); //QApplication::setOverrideCursor(Qt::WaitCursor);
     try {
 	int rez = SYS->transport().at().cntrIfCmd(node,"UIQtCfg",w_user->user().toStdString());
 
@@ -2205,11 +2224,11 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		    if(sel_ls.at(i_el)->text(2).toStdString() != reqPath)
 			selNds += sel_ls.at(i_el)->text(2).toStdString()+"\n";
 		if(selNds.size()) {
-		    QApplication::restoreOverrideCursor();
+		    waitCursorSet(0);		//QApplication::restoreOverrideCursor();
 		    int questRes = QMessageBox::question(this,_("Send changes to selections"),
 			    TSYS::strMess(_("Send current command '%s' to other selected nodes \"%s\"?"),node.name().c_str(),selNds.c_str()).c_str(),
 			    QMessageBox::Apply|QMessageBox::Cancel,QMessageBox::Apply);
-		    QApplication::setOverrideCursor(Qt::WaitCursor);
+		    waitCursorSet(1);		//QApplication::setOverrideCursor(Qt::WaitCursor);
 		    for(int off = 0; questRes == QMessageBox::Apply && (reqPath=TSYS::strLine(selNds,0,&off)).size(); )
 		    {
 			node.setAttr("path", reqPath+"/"+reqPathEl);
@@ -2218,11 +2237,11 @@ int ConfApp::cntrIfCmd( XMLNode &node )
 		}
 	    }
 	}
-	QApplication::restoreOverrideCursor();
+	waitCursorSet(0);	//QApplication::restoreOverrideCursor();
 	return rez;
     }
     catch(TError err) {
-	QApplication::restoreOverrideCursor();
+	waitCursorSet(0);	//QApplication::restoreOverrideCursor();
 	node.childClear();
 	node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess);
     }

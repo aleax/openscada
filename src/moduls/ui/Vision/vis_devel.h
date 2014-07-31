@@ -86,6 +86,7 @@ class VisDevelop : public QMainWindow
 	void editToolUpdate( );						//Edit tools visible update
 	void modifyToolUpdate( const string& );
 	bool exitModifChk( );
+	void waitCursorSet( int val = -1 );	//Set global wait cursor (-1 - real clear from timer, 0 - clear after timer shot, 1 - set)
 
 	void quitSt( );		//Full quit OpenSCADA
 
@@ -205,13 +206,13 @@ class VisDevelop : public QMainWindow
     private:
 	//Private attributes
 	//> Main components
-	bool		winClose;
+	bool		winClose, mWaitCursorSet;
 	UserStBar	*mWUser;	//User status widget
 	QLabel		*mWStat;	//VCA engine station
 	QLabel		*mWVisScale;	//Current widget visual scaling
 	WMdfStBar	*mStModify;	//VCA station modified
 	WScaleStBar	*w_scale;	//Scale trigger
-	QTimer		*endRunTimer, *work_wdgTimer;
+	QTimer		*endRunTimer, *work_wdgTimer, *waitCursorClear;
 	string		work_wdg, work_wdg_new,	//Work widget
 			copy_buf;	//Copy buffer
 	QSignalMapper	*wMapper;	//Internal window mapper

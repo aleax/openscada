@@ -47,7 +47,7 @@
 using namespace VISION;
 
 VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const string &VCAstat ) :
-    fileDlg(NULL), winClose(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
+    fileDlg(NULL), winClose(false), mWaitCursorSet(false), copy_buf("0"), prjLibPropDlg(NULL), visItPropDlg(NULL)
 {
     setAttribute(Qt::WA_DeleteOnClose, true);
 
@@ -627,15 +627,20 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
 
     //Create timers
     // Main widget's work timer
-    work_wdgTimer = new QTimer( this );
+    work_wdgTimer = new QTimer(this);
     work_wdgTimer->setSingleShot(true);
     work_wdgTimer->setInterval(200);
     connect(work_wdgTimer, SIGNAL(timeout()), this, SLOT(applyWorkWdg()));
     // End run timer
-    endRunTimer   = new QTimer( this );
+    endRunTimer   = new QTimer(this);
     endRunTimer->setSingleShot(false);
     connect(endRunTimer, SIGNAL(timeout()), this, SLOT(endRunChk()));
     endRunTimer->start(STD_WAIT_DELAY);
+    // Wait cursor clean up timer
+    waitCursorClear = new QTimer(this);
+    waitCursorClear->setSingleShot(true);
+    waitCursorClear->setInterval(50);
+    connect(waitCursorClear, SIGNAL(timeout()), SLOT(waitCursorSet()));
 
     //resize( 1000, 800 );
     setWindowState(Qt::WindowMaximized);
@@ -685,9 +690,9 @@ VisDevelop::~VisDevelop( )
 
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    waitCursorSet(1);	//QApplication::setOverrideCursor(Qt::WaitCursor);
     int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
-    QApplication::restoreOverrideCursor();
+    waitCursorSet(0);	//QApplication::restoreOverrideCursor();
 
     return rez;
 }
@@ -825,6 +830,20 @@ bool VisDevelop::exitModifChk( )
     }
 
     return true;
+}
+
+void VisDevelop::waitCursorSet( int val )
+{
+    //Set
+    if(val == 1) {
+	if(!mWaitCursorSet) QApplication::setOverrideCursor(Qt::WaitCursor);
+	mWaitCursorSet = true;
+	waitCursorClear->stop();
+    }
+    //Clear cursor command
+    else if(val == 0 && mWaitCursorSet) waitCursorClear->start();
+    //Real clear after the timer shot
+    else if(val == -1 && mWaitCursorSet) { QApplication::restoreOverrideCursor(); mWaitCursorSet = false; }
 }
 
 void VisDevelop::endRunChk( )

@@ -1,3 +1,12 @@
+2014-07-31 Roman
+- !:DAQ.DAQGate: Remote source's messages acquisition disabling is added, for request time control.
+    FIX: Processed parameters list clean up moved from stop to disable stage.
+    Pass empty parameter into separated atributes request mode is added, for traffic and overall request time decrease.
+    Some requests profiled: Into common priority request's and respond's reaction is 3-8ms, into RealTime priority (10) it is 50-100us.
+- UI.{QTCfg,Vision}: Wait cursor set moved to already set and restore only after timeout 50 ms, for blink prevent and some DE load by that.
+- UI.Vision: The project manual call, also from status panel, is added by offline document name "{ProjName}.{pdf|html|odt}.
+
+
 2014-07-25 Roman
 - FIX:UI.Vision: Force set Cap policy to Qt::FlatCap for primitive Diagram's paint, mostly for workaround visible defects here on Qt5.
     Ticks lost for Slider view and related views deffects of primitive FormEl at press to the elements' container widget

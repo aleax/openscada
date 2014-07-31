@@ -104,8 +104,7 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
     map<int, SAuth>::iterator aOldI = auths.end();
     for(map<int, SAuth>::iterator aI = auths.begin(); aI != auths.end(); )
 	if(time(NULL) > (aI->second.tAuth+authTime()*60)) auths.erase(aI++);	//Long unused
-	else
-	{
+	else {
 	    if(aI->second.name == user && aI->second.src == src)	//More openned
 	    {
 		if(aOldI == auths.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
@@ -135,12 +134,10 @@ TProt::SAuth TProt::sesGet( int idSes )
 {
     MtxAlloc res(sesRes, true);
     map<int, SAuth>::iterator aI = auths.find(idSes);
-    if(aI != auths.end())
-    {
+    if(aI != auths.end()) {
 	time_t cur_tm = time(NULL);
 	if(cur_tm > (aI->second.tAuth+authTime()*60)) auths.erase(aI);
-	else
-	{
+	else {
 	    aI->second.tAuth = cur_tm;
 	    return aI->second;
 	}
@@ -248,8 +245,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    int resp_size = s2i(header.substr(off));
 
 	    // Wait tail
-	    while((int)resp.size() < abs(resp_size)+head_end)
-	    {
+	    while((int)resp.size() < abs(resp_size)+head_end) {
 		resp_len = tro.messIO(NULL,0,buf,sizeof(buf),0,true);
 		if(!resp_len) throw TError(nodePath().c_str(),_("Not full respond."));
 		resp.append(buf,resp_len);
@@ -263,8 +259,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    return;
 	}
     }
-    catch(TError err)
-    {
+    catch(TError err) {
 	if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("Request error: %s"), err.mess.c_str());
 	tro.stop();
 	throw;
@@ -274,12 +269,10 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 void TProt::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TProtocol::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm",_("Parameters")))
-	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	    {
+	    if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/lf_tm",_("Life time of auth session(min)"),RWRWR_,"root",SPRT_ID,2,"tp","dec","min","1");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/compr",_("Compression level"),RWRWR_,"root",SPRT_ID,4,"tp","dec","min","-1","max","9",
 		    "help",_("ZLib compression level:\n"
@@ -294,18 +287,15 @@ void TProt::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/lf_tm")
-    {
+    if(a_path == "/prm/cfg/lf_tm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(authTime()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setAuthTime(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/compr")
-    {
+    else if(a_path == "/prm/cfg/compr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(comprLev()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprLev(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/comprBrd")
-    {
+    else if(a_path == "/prm/cfg/comprBrd") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(comprBrd()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setComprBrd(s2i(opt->text()));
     }
@@ -334,29 +324,28 @@ bool TProtIn::mess( const string &request, string &answer )
 
     reqBuf += request;
 
+    if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
+
     //Check for completeness header
     string req = TSYS::strLine(reqBuf, 0);
     if(req.size() >= reqBuf.size() || reqBuf[req.size()] != '\x0A') return true;
 
-    if(req.compare(0,8,"SES_OPEN") == 0)
-    {
+    if(req.compare(0,8,"SES_OPEN") == 0) {
 	sscanf(req.c_str(), "SES_OPEN %255s %255s", user, pass);
 	if((ses_id=mod->sesOpen(user,pass,TSYS::strLine(srcAddr(),0))) < 0)
 	    answer = "REZ 1 Auth error. User or password error.\x0A";
 	else answer = "REZ 0 " + i2s(ses_id) + "\x0A";
     }
-    else if(req.compare(0,9,"SES_CLOSE") == 0)
-    {
+    else if(req.compare(0,9,"SES_CLOSE") == 0) {
 	sscanf(req.c_str(), "SES_CLOSE %d", &ses_id);
 	mod->sesClose(ses_id);
 	answer = "REZ 0\x0A";
     }
-    else if(req.compare(0,3,"REQ") == 0)
-    {
-	if(mess_lev() == TMess::Debug)
-	{
+    else if(req.compare(0,3,"REQ") == 0) {
+	if(mess_lev() == TMess::Debug) {
+	    mess_debug(nodePath().c_str(), _("Get request: '%s': %d, time: %f ms."),
+		req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 	    d_tm = TSYS::curTime();
-	    mess_debug(nodePath().c_str(), _("Get request: '%s': %d"), req.c_str(), reqBuf.size());
 	}
 
 	TProt::SAuth auth;
@@ -370,8 +359,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	if(!auth.tAuth) { answer = "REZ 1 Auth error. Session no valid.\x0A"; reqBuf.clear(); return false; }
 
-	try
-	{
+	try {
 	    if(reqBuf.size() < (req.size()+1+abs(req_sz))) return true;
 
 	    //Decompress request
@@ -382,8 +370,7 @@ bool TProtIn::mess( const string &request, string &answer )
 	    req_node.load(reqBuf.substr(req.size()+1));
 	    req_node.setAttr("user", auth.name);
 
-	    if(mess_lev() == TMess::Debug)
-	    {
+	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Unpack and load request: '%s': %d, time: %f ms."),
 		    req.c_str(), reqBuf.size(), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
@@ -391,8 +378,7 @@ bool TProtIn::mess( const string &request, string &answer )
 
 	    SYS->cntrCmd(&req_node);
 
-	    if(mess_lev() == TMess::Debug)
-	    {
+	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Process request: '%s', time: %f ms."), req.c_str(), 1e-3*(TSYS::curTime()-d_tm));
 		d_tm = TSYS::curTime();
 	    }

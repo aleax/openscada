@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.DAQGate 0.9.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-22 21:12+0300\n"
+"POT-Creation-Date: 2014-07-30 07:57+0300\n"
 "PO-Revision-Date: 2007-10-29 12:40+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,15 +15,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: daq_gate.cpp:32
 msgid "Data sources gate"
 msgstr "Шлюз источников данных"
 
-#: daq_gate.cpp:36
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: daq_gate.cpp:37
 msgid ""
 "Allow to make gate data sources of remote OpenSCADA station to local "
 "OpenSCADA station."
@@ -31,94 +28,75 @@ msgstr ""
 "Позволяет выполнять шлюзование источников данных удалённых OpenSCADA станций "
 "в локальные."
 
-#: daq_gate.cpp:97
 msgid "Parameters cache table"
 msgstr "Таблица кеша параметров"
 
-#: daq_gate.cpp:98
 msgid "Gather data period (s)"
 msgstr "Период сбора данных (с)"
 
-#: daq_gate.cpp:99
 msgid "Acquisition schedule"
 msgstr "Планирование опроса"
 
-#: daq_gate.cpp:100
 msgid "Gather task priority"
 msgstr "Уровень приоритета задачи сбора данных"
 
-#: daq_gate.cpp:101
 msgid "Restore timeout (s)"
 msgstr "Интервал восстановления (с)"
 
-#: daq_gate.cpp:102
 msgid "Restore data depth time (hour)"
 msgstr "Глубина времени восстановления данных (часов)"
 
-#: daq_gate.cpp:103
 msgid "Gather messages level"
 msgstr "Уровень запрашиваемых сообщений"
 
-#: daq_gate.cpp:104
 msgid ""
-"Debug (0);Information (1);Notice (2);Warning (3);Error (4);Critical (5);"
-"Alert (6);Emergency (7)"
+"==Disable==;Debug (0);Information (1);Notice (2);Warning (3);Error (4);"
+"Critical (5);Alert (6);Emergency (7)"
 msgstr ""
+"==Отключить==;Отладка (0);Информация (1);Замечание (2);Предупреждение (3);Ошибка (4);"
+"Критически (5);Тревога (6);Авария (7)"
 
-#: daq_gate.cpp:105
 msgid "Sync inter remote station period (s)"
 msgstr "Периодичность синхронизации с удалённой станцией (с)"
 
-#: daq_gate.cpp:106
 msgid "Remote stations list"
 msgstr "Список удалённых станций"
 
-#: daq_gate.cpp:107
 msgid "Remote cotrollers and parameters list"
 msgstr "Список удалённых контроллеров и параметров"
 
-#: daq_gate.cpp:110
 msgid "Standard"
 msgstr "Стандарт"
 
-#: daq_gate.cpp:111
 msgid "Remote parameter address"
 msgstr "Адрес удалённого параметра"
 
-#: daq_gate.cpp:112
 msgid "Attributes configuration cache"
 msgstr "Кеш конфигурации атрибутов"
 
-#: daq_gate.cpp:152
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
-#: daq_gate.cpp:153
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Вызовы с периодом: %s. "
 
-#: daq_gate.cpp:154
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#: daq_gate.cpp:155
 #, c-format
 msgid "Spent time: %s. "
 msgstr "Затрачено времени: %s. "
 
-#: daq_gate.cpp:159
 #, c-format
 msgid "Station '%s' error, restoring in %.3g s."
 msgstr "Ошибка станции '%s', восстановление через %.6g с."
 
-#: daq_gate.cpp:162
 #, c-format
 msgid "Requests to station '%s': %.6g."
 msgstr "Запросов к станции '%s': %.6g."
 
-#: daq_gate.cpp:280 daq_gate.cpp:345
 #, c-format
 msgid ""
 "Deletion parameter '%s' is error but it no present on configuration or "
@@ -127,51 +105,40 @@ msgstr ""
 "Ошибка удаления параметра '%s', однако он отсутствует в конфигурации или на "
 "удалённой станции."
 
-#: daq_gate.cpp:381 daq_gate.cpp:647
 #, c-format
 msgid "DAQ.%s: connect to data source: %s."
 msgstr "DAQ.%s: подключение к источнику данных: %s."
 
-#: daq_gate.cpp:381
 msgid "STOP"
 msgstr "ОСТАНОВЛЕН"
 
-#: daq_gate.cpp:600
 msgid "10:Data not allow."
 msgstr "10:Данные не доступны."
 
-#: daq_gate.cpp:647
 msgid "OK"
 msgstr "НОРМА"
 
-#: daq_gate.cpp:657
 #, c-format
 msgid "DAQ.%s: connect to data source '%s': %s."
 msgstr "DAQ.%s: подключение к источнику данных '%s': %s."
 
-#: daq_gate.cpp:678
 msgid "Zero for disable archive access."
 msgstr "Ноль для отключения доступа к архивам."
 
-#: daq_gate.cpp:679
 msgid "Zero for disable periodic sync."
 msgstr "Ноль для отключения периодической синхронизации."
 
-#: daq_gate.cpp:681
 msgid "Remote OpenSCADA stations' identifiers list used into it controller."
 msgstr ""
 "Список идентификаторов удалённых OpenSCADA станций, используемых в этом "
 "контроллере."
 
-#: daq_gate.cpp:682
 msgid "Append station"
 msgstr "Добавление станции"
 
-#: daq_gate.cpp:684
 msgid "Go to remote stations list configuration"
 msgstr "Переход к конфигурации перечня удалённых станций"
 
-#: daq_gate.cpp:687
 msgid ""
 "Remote OpenSCADA full controller's or separated controller's parameters "
 "list. Address example:\n"
@@ -183,46 +150,35 @@ msgstr ""
 "  System.AutoDA - для контроллера;\n"
 "  System.AutoDA.UpTimeStation - для параметра контроллера."
 
-#: daq_gate.cpp:690
 msgid "Parameters tree"
 msgstr "Дерево параметров"
 
-#: daq_gate.cpp:720 daq_gate.cpp:742
 msgid "<<Append current>>"
 msgstr "<<Добавить текущий>>"
 
-#: daq_gate.cpp:958
 msgid "Parameter"
 msgstr "Параметр"
 
-#: daq_gate.cpp:960
 msgid "State"
 msgstr "Состояние"
 
-#: daq_gate.cpp:962
 msgid "Type"
 msgstr "Тип"
 
-#: daq_gate.cpp:964
 msgid "Enable"
 msgstr "Включен"
 
-#: daq_gate.cpp:965
 msgid "Id"
 msgstr ""
 
-#: daq_gate.cpp:966
 msgid "Name"
 msgstr "Имя"
 
-#: daq_gate.cpp:968
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: daq_gate.cpp:984
 msgid "Remote station configuration"
 msgstr "Конфигурация удалённой станции"
 
-#: daq_gate.cpp:997
 msgid "Controller is not started!"
 msgstr "Контроллер не запущен!"
