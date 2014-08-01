@@ -91,6 +91,9 @@ class Session : public TCntrNode
 
 	void uiComm( const string &com, const string &prm, SessWdg *src = NULL );
 
+	string sessAttr( const string &idw, const string &id, bool onlyAllow = false );
+	void sessAttrSet( const string &idw, const string &id, const string &val );
+
 	// Alarms process
 	void alarmSet( const string &wpath, const string &alrm );	//Alarm set
 	int  alarmStat( );						//Alarm status
@@ -197,6 +200,9 @@ class SessWdg : public Widget, public TValFunc
 	void wdgAdd( const string &wid, const string &name, const string &parent, bool force = false );	//Implicit widget's creating on inherit
 	AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 	void pgClose( );
+
+	string sessAttr( const string &id, bool onlyAllow = false );
+	void sessAttrSet( const string &id, const string &val );
 
 	// Events process
 	void eventAdd( const string &ev );

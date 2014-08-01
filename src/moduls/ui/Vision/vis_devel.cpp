@@ -672,20 +672,21 @@ VisDevelop::~VisDevelop( )
 {
     winClose = true;
 
-    //> Save main window state
+    //Save main window state
     QByteArray st = saveState();
     mod->uiPropSet("devWinState",TSYS::strEncode(string(st.data(),st.size()),TSYS::base64),user());
 
-    //> Timers stop
+    //Timers stop
     endRunTimer->stop();
     work_wdgTimer->stop();
 
-    //> Other data clean
+    //Other data clean
     if(prjLibPropDlg)	delete prjLibPropDlg;
     if(visItPropDlg)	delete visItPropDlg;
     if(fileDlg)		delete fileDlg;
 
     mod->unregWin(this);
+    waitCursorSet(-1);
 }
 
 int VisDevelop::cntrIfCmd( XMLNode &node, bool glob )

@@ -55,9 +55,9 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, QWidget *parent ) :
-    QMainWindow(parent), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
-    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF),
+VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
+    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
+    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF),
     isConErr(false)
 {
     QImage ico_t;
@@ -321,6 +321,16 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
 
+    //Restore main window position
+    if(mod->winPosCntrSave() && masterPg()) {
+	string xPos, yPos;
+	if((xPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomX",true)).size() &&
+		(yPos=wAttrGet(masterPg()->id(),i2s(screen())+"geomY",true)).size())
+	    move(s2i(xPos), s2i(yPos));
+	else if(abs(masterPg()->posF().x()) || abs(masterPg()->posF().y()))
+	    move(masterPg()->posF().x(), masterPg()->posF().y());
+    }
+
     alarmSet(0);
 }
 
@@ -418,7 +428,14 @@ QString VisRun::getFileName( const QString &caption, const QString &dir, const Q
 
 void VisRun::closeEvent( QCloseEvent* ce )
 {
-    if(mod->exitLstRunPrjCls() && master_pg) {	//Exit on close last run project
+    //Save main window position
+    if(mod->winPosCntrSave() && masterPg()) {
+	wAttrSet(masterPg()->id(), i2s(screen())+"geomX", i2s(pos().x()), true);
+	wAttrSet(masterPg()->id(), i2s(screen())+"geomY", i2s(pos().y()), true);
+    }
+
+    //Exit on close last run project
+    if(mod->exitLstRunPrjCls() && masterPg()) {
 	unsigned winCnt = 0;
 	for(int i_w = 0; i_w < QApplication::topLevelWidgets().size(); i_w++)
 	    if(qobject_cast<QMainWindow*>(QApplication::topLevelWidgets()[i_w]) && QApplication::topLevelWidgets()[i_w]->isVisible())
@@ -433,13 +450,13 @@ void VisRun::closeEvent( QCloseEvent* ce )
 
 void VisRun::resizeEvent( QResizeEvent *ev )
 {
-    if(ev && ev->oldSize().isValid() && master_pg) {
+    if(ev && ev->oldSize().isValid() && masterPg()) {
 	float x_scale_old = x_scale;
 	float y_scale_old = y_scale;
 	if(windowState() == Qt::WindowMaximized || windowState() == Qt::WindowFullScreen)
 	{
-	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)master_pg->size().width();
-	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)master_pg->size().height();
+	    x_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().width()/(float)masterPg()->size().width();
+	    y_scale *= (float)((QScrollArea*)centralWidget())->maximumViewportSize().height()/(float)masterPg()->size().height();
 	    if(x_scale > 1 && x_scale < 1.05) x_scale = 1;
 	    if(y_scale > 1 && y_scale < 1.05) y_scale = 1;
 	    if(keepAspectRatio) x_scale = y_scale = vmin(x_scale, y_scale);
@@ -1232,16 +1249,20 @@ RunWdgView *VisRun::findOpenWidget( const string &wdg )
     return rpg->findOpenWidget(wdg);
 }
 
-string VisRun::wAttrGet( const string &path, const string &attr )
+string VisRun::wAttrGet( const string &path, const string &attr, bool sess )
 {
-    XMLNode req("get"); req.setAttr("path",path+"/%2fattr%2f"+attr);
+    XMLNode req("get");
+    if(sess) req.setAttr("path",path+"/%2fserv%2fattrSess%2f"+attr);
+    else req.setAttr("path",path+"/%2fattr%2f"+attr);
     return cntrIfCmd(req) ? "" : req.text();
 }
 
-bool VisRun::wAttrSet( const string &path, const string &attr, const string &val )
+bool VisRun::wAttrSet( const string &path, const string &attr, const string &val, bool sess )
 {
-    XMLNode req("set"); req.setAttr("path",path+"/%2fserv%2fattr");
-    req.childAdd("el")->setAttr("id",attr)->setText(val);
+    XMLNode req("set");
+    if(sess) req.setAttr("path",path+"/%2fserv%2fattrSess%2f"+attr)->setText(val);
+    else req.setAttr("path",path+"/%2fserv%2fattr")->
+	    childAdd("el")->setAttr("id",attr)->setText(val);
     return !cntrIfCmd(req);
 }
 

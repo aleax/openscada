@@ -88,7 +88,7 @@ namespace VISION
 	Q_OBJECT
 
 	public:
-	    //> Public methods
+	    //Public methods
 	    RunPageView( const string &iwid, VisRun *mainWind, QWidget* parent = 0, Qt::WindowFlags f = 0 );
 	    ~RunPageView( );
 
@@ -103,15 +103,15 @@ namespace VISION
 
 	    RunPageView *parent( );
 
-	    //> Public attributes
+	    //Public attributes
 	    float wx_scale, wy_scale;
 
 	protected:
-	    //> Protected methods
+	    //Protected methods
 	    void closeEvent ( QCloseEvent *event );
 
 	private:
-	    //> Private attributes
+	    //Private attributes
 	    unsigned	reqtm;		//Request values time
     };
 
@@ -121,7 +121,7 @@ namespace VISION
     class SndPlay: public QThread
     {
 	public:
-	    //> Public methods
+	    //Public methods
 	    SndPlay( QObject * parent = 0 );
 
 	    unsigned time( )	{ return mTm; }
@@ -135,11 +135,11 @@ namespace VISION
 	    VisRun *mainWin( );
 
 	protected:
-	    //> Protected methods
+	    //Protected methods
 	    void run( );
 
 	private:
-	    //> Private attributes
+	    //Private attributes
 	    unsigned	mTm;		//Request last sound time
 	    string	mWdg;		//Play widget
 	    string	mPlayData;	//Play data

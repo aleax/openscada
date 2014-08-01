@@ -94,12 +94,9 @@ void Session::setEnable( bool val )
 	    setPeriod(parent().at().period());
 
 	    //Load previous style
-	    TConfig c_el(&mod->elPrjSes());
-	    c_el.cfg("IDW").setS("<Style>");
-	    c_el.cfg("ID").setS(user());
-	    if(SYS->db().at().dataGet(parent().at().DB()+"."+parent().at().tbl()+"_ses",mod->nodePath()+parent().at().tbl()+"_ses",c_el,false,true))
-		stlCurentSet(c_el.cfg("IO_VAL").getI());
-	    else stlCurentSet(parent().at().stlCurent());
+	    string stVl = sessAttr("<Style>", user());
+	    if(stVl.empty()) stVl = i2s(parent().at().stlCurent());
+	    stlCurentSet(s2i(stVl));
 
 	    if(mess_lev() == TMess::Debug) {
 		mess_debug(nodePath().c_str(), _("Load previous style time: %f ms."), 1e-3*(TSYS::curTime()-d_tm));
@@ -322,6 +319,28 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
     }catch(...){ }
 }
 
+string Session::sessAttr( const string &idw, const string &id, bool onlyAllow )
+{
+    TConfig cEl(&mod->elPrjSes());
+    cEl.cfg("IDW").setS(idw);
+    cEl.cfg("ID").setS(id);
+    cEl.cfg("IO_VAL").setView(!onlyAllow);
+    string db  = parent().at().DB();
+    string tbl = parent().at().tbl()+"_ses";
+    return (SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true)) ? (onlyAllow?"1":cEl.cfg("IO_VAL").getS()) : "";
+}
+
+void Session::sessAttrSet( const string &idw, const string &id, const string &val )
+{
+    TConfig cEl(&mod->elPrjSes());
+    cEl.cfg("IDW").setS(idw);
+    cEl.cfg("ID").setS(id);
+    cEl.cfg("IO_VAL").setS(val);
+    string db  = parent().at().DB();
+    string tbl = parent().at().tbl()+"_ses";
+    SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl, false, true);
+}
+
 void Session::alarmSet( const string &wpath, const string &alrm )
 {
     if(wpath.empty()) return;
@@ -435,13 +454,7 @@ void Session::stlCurentSet( int sid )
     }
 
     //Write to DB
-    if(enable()) {
-	TConfig c_el(&mod->elPrjSes());
-	c_el.cfg("IDW").setS("<Style>");
-	c_el.cfg("ID").setS(user());
-	c_el.cfg("IO_VAL").setI(mStyleIdW);
-	SYS->db().at().dataSet(parent().at().DB()+"."+parent().at().tbl()+"_ses", mod->nodePath()+parent().at().tbl()+"_ses", c_el, false, true);
-    }
+    if(enable()) sessAttrSet("<Style>", user(), i2s(mStyleIdW));
 }
 
 string Session::stlPropGet( const string &pid, const string &def )
@@ -1233,20 +1246,10 @@ int SessWdg::calcPer( )		{ return (!parent().freeStat()) ? parent().at().calcPer
 
 string SessWdg::resourceGet( const string &id, string *mime )
 {
-    string mimeType, mimeData;
-
-    //Try load from the session table
-    int off = 0;
-    string db  = ownerSess()->parent().at().DB();
-    string tbl = ownerSess()->parent().at().tbl()+"_ses";
-
-    TConfig c_el(&mod->elPrjSes());
-    TSYS::pathLev(path(), 0, true, &off);
-    c_el.cfg("IDW").setS(path().substr(off));
-    c_el.cfg("ID").setS("media://"+id);
-    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) {
-	off = 0;
-	mimeData = c_el.cfg("IO_VAL").getS(); c_el.cfg("IO_VAL").setS("");
+    string  mimeType,
+	    mimeData = sessAttr("media://"+id);		//Try load from the session attribute
+    if(mimeData.size()) {
+	int off = 0;
 	mimeType = TSYS::strLine(mimeData, 0, &off);
 	if(mime) *mime = mimeType;
 	return TSYS::strDecode(mimeData.substr(off), TSYS::base64);
@@ -1261,21 +1264,7 @@ string SessWdg::resourceGet( const string &id, string *mime )
 
 void SessWdg::resourceSet( const string &id, const string &data, const string &mime )
 {
-    int off = 0;
-    string db  = ownerSess()->parent().at().DB();
-    string tbl = ownerSess()->parent().at().tbl()+"_ses";
-
-    TConfig c_el(&mod->elPrjSes());
-    TSYS::pathLev(path(), 0, true, &off);
-    c_el.cfg("IDW").setS(path().substr(off));
-    c_el.cfg("ID").setS("media://"+id);
-
-    if(data.empty())	//Clear the media into the session table
-        SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, false, false, true);
-    else {		//Set the media into the session table
-	c_el.cfg("IO_VAL").setS(mime+"\n"+TSYS::strEncode(data,TSYS::base64));
-	SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, c_el, false, true);
-    }
+    sessAttrSet("media://"+id, data.empty() ? "" : mime+"\n"+TSYS::strEncode(data,TSYS::base64));
 }
 
 void SessWdg::wdgAdd( const string &iid, const string &name, const string &iparent, bool force )
@@ -1327,6 +1316,20 @@ void SessWdg::pgClose( )
     wdgList(list);
     for(unsigned i_w = 0; i_w < list.size(); i_w++)
 	((AutoHD<SessWdg>)wdgAt(list[i_w])).at().pgClose();
+}
+
+string SessWdg::sessAttr( const string &id, bool onlyAllow )
+{
+    int off = 0;
+    TSYS::pathLev(path(), 0, true, &off);
+    return ownerSess()->sessAttr(path().substr(off), id, onlyAllow);
+}
+
+void SessWdg::sessAttrSet( const string &id, const string &val )
+{
+    int off = 0;
+    TSYS::pathLev(path(), 0, true, &off);
+    ownerSess()->sessAttrSet(path().substr(off), id, val);
 }
 
 void SessWdg::eventAdd( const string &ev )
@@ -1690,18 +1693,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  attr - readed attribute;
     //  fromSess - read attribute from session table.
     if(iid == "attr" && prms.size()) {
-	// Load from the session table
-	if(prms.size() > 1 && prms[1].getB()) {
-	    int off = 0;
-	    TConfig cEl(&mod->elPrjSes());
-	    TSYS::pathLev(path(), 0, true, &off);
-	    cEl.cfg("IDW").setS(path().substr(off));
-	    cEl.cfg("ID").setS("attr://"+prms[0].getS());
-	    string db  = ownerSess()->parent().at().DB();
-	    string tbl = ownerSess()->parent().at().tbl()+"_ses";
-	    if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,cEl,false,true)) return cEl.cfg("IO_VAL").getS();
-	}
-	// From widget's attribute
+	if(prms.size() > 1 && prms[1].getB()) return sessAttr(prms[0].getS());
 	else if(attrPresent(prms[0].getS()))	return attrAt(prms[0].getS()).at().get();
 	return string("");
     }
@@ -1710,18 +1702,7 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
     //  vl - value;
     //  toSess - write to session table.
     if(iid == "attrSet" && prms.size() >= 2) {
-	// Save to the session table
-	if(prms.size() > 2 && prms[2].getB()) {
-	    int off = 0;
-	    TConfig cEl(&mod->elPrjSes());
-	    TSYS::pathLev(path(), 0, true, &off);
-	    cEl.cfg("IDW").setS(path().substr(off));
-	    cEl.cfg("ID").setS("attr://"+prms[0].getS());
-	    cEl.cfg("IO_VAL").setS(prms[1].getS());
-	    string db  = ownerSess()->parent().at().DB();
-	    string tbl = ownerSess()->parent().at().tbl()+"_ses";
-	    SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, cEl, false, true);
-	}
+	if(prms.size() > 2 && prms[2].getB()) sessAttrSet(prms[0].getS(), prms[1].getS());
 	else if(attrPresent(prms[0].getS())) attrAt(prms[0].getS()).at().set(prms[1]);
 
 	return new TCntrNodeObj(this, user);
@@ -1817,9 +1798,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	{
 	    if(ownerSess()->user() != opt->attr("user")) ownerSess()->setUser(opt->attr("user"));
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++) {
-		string aid = opt->childGet(i_ch)->attr("id");
-		if(aid == "event") eventAdd(opt->childGet(i_ch)->text()+"\n");
-		else attrAt(aid).at().setS(opt->childGet(i_ch)->text());
+		XMLNode *aN = opt->childGet(i_ch);
+		string aid = aN->attr("id");
+		if(aid == "event") eventAdd(aN->text()+"\n");
+		else attrAt(aid).at().setS(aN->text());
 	    }
 	}
     }
@@ -1867,6 +1849,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
     }
+    else if(a_path.compare(0,15,"/serv/attrSess/") == 0) {	//Session attribute's value operations
+	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))	opt->setText(sessAttr(TSYS::pathLev(a_path,2)));
+	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	sessAttrSet(TSYS::pathLev(a_path,2), opt->text());
+    }
     else return Widget::cntrCmdServ(opt);
 
     return true;
@@ -1911,7 +1897,7 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/attr/") {
+    if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
 	    opt->setText(attr.at().getS());

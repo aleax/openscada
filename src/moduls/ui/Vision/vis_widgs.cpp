@@ -218,7 +218,7 @@ void DlgUser::finish( int result )
 	//Check user auth
 	XMLNode req("get");
 	req.setAttr("path",string("/Security/")+user().toStdString()+"/%2fauth")->setAttr("password",password().toStdString());
-	if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true) && atoi(req.text().c_str()))
+	if(!mod->cntrIfCmd(req,user().toStdString(),password().toStdString(),VCAstat.toStdString(),true) && s2i(req.text()))
 	    setResult(SelOK);
 	else setResult(SelErr);
     }
@@ -559,9 +559,9 @@ void LineEdit::setCfg(const QString &cfg)
 	    int		minv = 0, maxv = 100, sstep = 1;
 	    string	pref, suff;
 	    if(!cfg.isEmpty()) {
-		minv  = atoi(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
-		maxv  = atoi(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
-		sstep = atoi(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+		minv  = s2i(TSYS::strSepParse(cfg.toStdString(),0,':'));
+		maxv  = s2i(TSYS::strSepParse(cfg.toStdString(),1,':'));
+		sstep = s2i(TSYS::strSepParse(cfg.toStdString(),2,':'));
 		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
 	    }
@@ -576,12 +576,12 @@ void LineEdit::setCfg(const QString &cfg)
 	    string pref, suff;
 	    int    dec = 2;
 	    if(!cfg.isEmpty()) {
-		minv  = atof(TSYS::strSepParse(cfg.toStdString(),0,':').c_str());
-		maxv  = atof(TSYS::strSepParse(cfg.toStdString(),1,':').c_str());
-		sstep = atof(TSYS::strSepParse(cfg.toStdString(),2,':').c_str());
+		minv  = s2r(TSYS::strSepParse(cfg.toStdString(),0,':'));
+		maxv  = s2r(TSYS::strSepParse(cfg.toStdString(),1,':'));
+		sstep = s2r(TSYS::strSepParse(cfg.toStdString(),2,':'));
 		pref  = TSYS::strSepParse(cfg.toStdString(),3,':');
 		suff  = TSYS::strSepParse(cfg.toStdString(),4,':');
-		dec   = atoi(TSYS::strSepParse(cfg.toStdString(),5,':').c_str());
+		dec   = s2i(TSYS::strSepParse(cfg.toStdString(),5,':'));
 	    }
 	    ((QDoubleSpinBox*)ed_fld)->setRange(minv,maxv);
 	    ((QDoubleSpinBox*)ed_fld)->setSingleStep(sstep);
@@ -708,7 +708,7 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	    if(rl->name() == "rule")    expr.setPattern(rl->attr("expr").c_str());
 	    else if(rl->name() == "blk")expr.setPattern(rl->attr("beg").c_str());
 	    else continue;
-	    expr.setMinimal(atoi(rl->attr("min").c_str()));
+	    expr.setMinimal(s2i(rl->attr("min")));
 	    rul_pos[i_ch] = expr.indexIn(text,i_t);
 	    if(expr.matchedLength() <= 0) continue;
 	    if(rul_pos[i_ch] < 0) rul_pos[i_ch] = text.length();
@@ -719,12 +719,12 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	//Process minimal rule
 	rl = irl->childGet(minRule);
 	kForm.setForeground(QColor(rl->attr("color").c_str()));
-	kForm.setFontWeight(atoi(rl->attr("font_weight").c_str()) ? QFont::Bold : QFont::Normal);
-	kForm.setFontItalic(atoi(rl->attr("font_italic").c_str()));
+	kForm.setFontWeight(s2i(rl->attr("font_weight")) ? QFont::Bold : QFont::Normal);
+	kForm.setFontItalic(s2i(rl->attr("font_italic")));
 
 	if(rl->name() == "rule") {
 	    expr.setPattern(rl->attr("expr").c_str());
-	    expr.setMinimal(atoi(rl->attr("min").c_str()));
+	    expr.setMinimal(s2i(rl->attr("min")));
 	    if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 	    setFormat(rul_pos[minRule]+off, expr.matchedLength(), kForm);
 	    //Call include rules
@@ -735,12 +735,12 @@ void SyntxHighl::rule( XMLNode *irl, const QString &text, int off, char lev )
 	    if(curBlk) rul_pos[minRule] = curBlk = startBlk = 0;
 	    else {
 		expr.setPattern(rl->attr("beg").c_str());
-		expr.setMinimal(atoi(rl->attr("min").c_str()));
+		expr.setMinimal(s2i(rl->attr("min")));
 		if(expr.indexIn(text,i_t) != rul_pos[minRule]) break;
 		startBlk = rul_pos[minRule]+expr.matchedLength();
 	    }
 	    QRegExp eExpr(rl->attr("end").c_str());
-	    eExpr.setMinimal(atoi(rl->attr("min").c_str()));
+	    eExpr.setMinimal(s2i(rl->attr("min")));
 	    endIndex = eExpr.indexIn(text, startBlk);
 	    if(endIndex == -1 || eExpr.matchedLength() <= 0) {
 		setFormat(rul_pos[minRule]+off, (text.length()-rul_pos[minRule]), kForm);
@@ -1058,26 +1058,28 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
 	    if(shape) shape->init(this);
 	    break;
 	case A_GEOM_X:
-	    if(wLevel() == 0)	break;
-	    mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*atof(val.c_str()),posF().y());
+	    //if(wLevel() == 0)	break;
+	    if(wLevel() == 0) mWPos = QPointF(s2r(val),posF().y());
+	    else mWPos = QPointF(((WdgView*)parentWidget())->xScale(true)*s2r(val),posF().y());
 	    up = true;
 	    break;
 	case A_GEOM_Y:
-	    if(wLevel() == 0)	break;
-	    mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*atof(val.c_str()));
+	    //if(wLevel() == 0)	break;
+	    if(wLevel() == 0) mWPos = QPointF(posF().x(),s2r(val));
+	    else mWPos = QPointF(posF().x(),((WdgView*)parentWidget())->yScale(true)*s2r(val));
 	    up = true;
 	    break;
-	case A_GEOM_W: mWSize = QSizeF(xScale(true)*atof(val.c_str()),sizeF().height()); up = true;	break;
-	case A_GEOM_H: mWSize = QSizeF(sizeF().width(),yScale(true)*atof(val.c_str())); up = true;	break;
-	case A_GEOM_Z: if(wLevel() > 0) z_coord = atoi(val.c_str());	break;
+	case A_GEOM_W: mWSize = QSizeF(xScale(true)*s2r(val),sizeF().height()); up = true;	break;
+	case A_GEOM_H: mWSize = QSizeF(sizeF().width(),yScale(true)*s2r(val)); up = true;	break;
+	case A_GEOM_Z: if(wLevel() > 0) z_coord = s2i(val);	break;
 	case A_GEOM_X_SC:
-	    mWSize = QSizeF((atof(val.c_str())/x_scale)*sizeF().width(),sizeF().height());
-	    x_scale = atof(val.c_str());
+	    mWSize = QSizeF((s2r(val)/x_scale)*sizeF().width(),sizeF().height());
+	    x_scale = s2r(val);
 	    up = upChlds = true;
 	    break;
 	case A_GEOM_Y_SC:
-	    mWSize = QSizeF(sizeF().width(),(atof(val.c_str())/y_scale)*sizeF().height());
-	    y_scale = atof(val.c_str());
+	    mWSize = QSizeF(sizeF().width(),(s2r(val)/y_scale)*sizeF().height());
+	    y_scale = s2r(val);
 	    up = upChlds = true;
 	    break;
 	case A_TIP_TOOL: setToolTip(val.c_str());	break;
@@ -1106,7 +1108,7 @@ void WdgView::attrsSet( AttrValS &attrs )
 	attrId = TSYS::strParse(i_a->first, 0, ":", &off);
 	attrPos = TSYS::strParse(i_a->first, 0, ":", &off);
 	if(!attrId.empty())	req.childAdd("el")->setAttr("id",attrId)->setText(i_a->second);
-	if(!attrPos.empty())	attrSet("", i_a->second, atoi(attrPos.c_str()));
+	if(!attrPos.empty())	attrSet("", i_a->second, s2i(attrPos));
     }
     if(req.childSize())	cntrIfCmd(req);
 }
@@ -1145,7 +1147,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 	if(item.empty() || item == id())
 	    for(unsigned i_el = 0; i_el < aBr->childSize(); i_el++)
 		if(aBr->childGet(i_el)->name() == "el")
-		    attrSet("",aBr->childGet(i_el)->text(),atoi(aBr->childGet(i_el)->attr("p").c_str()));
+		    attrSet("",aBr->childGet(i_el)->text(),s2i(aBr->childGet(i_el)->attr("p")));
 	setAllAttrLoad(false);
 
 	// Delete child widgets

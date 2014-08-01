@@ -452,6 +452,7 @@ ConfApp::~ConfApp( )
     autoUpdTimer->stop();
 
     mod->unregWin(this);
+    waitCursorSet(-1);
 }
 
 void ConfApp::quitSt( )

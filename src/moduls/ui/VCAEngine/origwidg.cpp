@@ -1269,9 +1269,6 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     SessWdg *sw = dynamic_cast<SessWdg*>(cfg.owner());
     if(!sw) return Widget::attrChange(cfg,prev);
 
-    string db  = sw->ownerSess()->parent().at().DB();
-    string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
     //Make document after time set
     if(cfg.id() == "time" && (cfg.getI() != prev.getI() || (!cfg.getI() && prev.getI())))
     {
@@ -1285,17 +1282,12 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
     }
     //Load document's from project's DB
     else if(cfg.id() == "n" && cfg.getI() != prev.getI()) {
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
+	string tVl;
 	// Archive position load
-	c_el.cfg("ID").setS("aCur");
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true))
-	    cfg.owner()->attrAt("aCur").at().setI(c_el.cfg("IO_VAL").getI(),false,true);
+	if((tVl=sw->sessAttr("aCur")).size()) cfg.owner()->attrAt("aCur").at().setS(tVl, false, true);
 	// Current archive socuments load
-	c_el.cfg("ID").setS("doc"+i2s(cfg.owner()->attrAt("aCur").at().getI()));
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true))
-	    cfg.owner()->attrAt("aDoc").at().setS(c_el.cfg("IO_VAL").getS(),false,true);
+	if((tVl=sw->sessAttr("doc"+cfg.owner()->attrAt("aCur").at().getS())).size())
+	    cfg.owner()->attrAt("aDoc").at().setS(tVl, false, true);
 	// Set current document
 	cfg.owner()->attrAt("vCur").at().setI(cfg.owner()->attrAt("aCur").at().getI(),false,true);
 	cfg.owner()->attrAt("doc").at().setS(cfg.owner()->attrAt("aDoc").at().getS(),false,true);
@@ -1319,33 +1311,15 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 		cfg.owner()->attrAt("vCur").at().setI(cfg.getI());
 
 	    // Save cursor to document to project's DB
-	    if(prev.getI() < n && prev.getI() >= 0) {
-		TConfig c_el(&mod->elPrjSes());
-		TSYS::pathLev(sw->path(),0,true,&off);
-		c_el.cfg("IDW").setS(sw->path().substr(off));
-		c_el.cfg("ID").setS(cfg.id());
-		c_el.cfg("IO_VAL").setI(cfg.getI());
-		SYS->db().at().dataSet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true);
-	    }
+	    if(prev.getI() < n && prev.getI() >= 0) sw->sessAttrSet(cfg.id(), cfg.getS());
 	}
 	sizeUpdate(sw);
     }
     //Document save
-    else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS()) {
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS("doc"+i2s(cfg.owner()->attrAt("aCur").at().getI()));
-	c_el.cfg("IO_VAL").setS(cfg.getS());
-	SYS->db().at().dataSet(db+"."+tbl, mod->nodePath()+tbl, c_el, false, true);
-    }
+    else if(cfg.id() == "aDoc" && cfg.getS() != prev.getS())
+	sw->sessAttrSet("doc"+cfg.owner()->attrAt("aCur").at().getS(), cfg.getS());
     //Move archive view cursor
     else if(cfg.id() == "vCur" && cfg.getI() != prev.getI()) {
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("IO_VAL").setView(false);
-
 	int aCur = cfg.owner()->attrAt("aCur").at().getI();
 	int n = cfg.owner()->attrAt("n").at().getI();
 
@@ -1354,26 +1328,19 @@ bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 	    // Search next document
 	    if(cfg.getI() == -1)
 		while(docN != aCur) {
-		    c_el.cfg("ID").setS("doc"+i2s(docN));
-		    if(docN != prev.getI() && SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) break;
+		    if(docN != prev.getI() && sw->sessAttr("doc"+i2s(docN),true).size()) break;
 		    if(++docN >= n) docN = 0;
 		}
 	    // Search previous document
 	    else {
 		if(--docN < 0) docN = n-1;
 		if(docN == aCur) docN = prev.getI();
-		c_el.cfg("ID").setS("doc"+i2s(docN));
-		if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) docN = prev.getI();
+		if(!sw->sessAttr("doc"+i2s(docN),true).size()) docN = prev.getI();
 	    }
 	    if(docN != cfg.getI())	cfg.setI(docN,false,true);
 	}
 	else if(cfg.getI() >= n)	cfg.setI(cfg.owner()->attrAt("aCur").at().getI(), false, true);
-	if(cfg.getI() != prev.getI()) {
-	    c_el.cfg("ID").setS("doc"+i2s(cfg.getI()));
-	    c_el.cfg("IO_VAL").setView(true);
-	    SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true);
-	    cfg.owner()->attrAt("doc").at().setS(c_el.cfg("IO_VAL").getS());
-	}
+	if(cfg.getI() != prev.getI())	cfg.owner()->attrAt("doc").at().setS(sw->sessAttr("doc"+cfg.getS()));
     }
 
     return Widget::attrChange(cfg,prev);
@@ -1450,25 +1417,10 @@ bool OrigDocument::cntrCmdAttributes( XMLNode *opt, Widget *src )
 
 void OrigDocument::sizeUpdate( SessWdg *sw )
 {
-    string db  = sw->ownerSess()->parent().at().DB();
-    string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
     int aCur = sw->attrAt("aCur").at().getI();
     int n = sw->attrAt("n").at().getI();
     int rSz = n;
-    if(aCur < n) {
-	int off = 0;
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS("doc"+i2s(aCur+1));
-	c_el.cfg("IO_VAL").setView(false);
-	if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) rSz = aCur+1;
-	else {
-	    c_el.cfg("ID").setS("doc"+i2s(n-1));
-	    if(!SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) rSz = aCur+1;
-	}
-    }
+    if(aCur < n && (!sw->sessAttr("doc"+i2s(aCur+1),true).size() || !sw->sessAttr("doc"+i2s(n-1),true).size())) rSz = aCur+1;
     sw->attrAt("aSize").at().setI(rSz);
 }
 
@@ -1486,17 +1438,7 @@ TVariant OrigDocument::objFuncCall_w( const string &iid, vector<TVariant> &prms,
 	aCur -= nDoc;
 	if(aCur < 0) aCur += aSize;
 
-	string db  = sw->ownerSess()->parent().at().DB();
-	string tbl = sw->ownerSess()->parent().at().tbl()+"_ses";
-
-	int off = 0;
-	TConfig c_el(&mod->elPrjSes());
-	TSYS::pathLev(sw->path(),0,true,&off);
-	c_el.cfg("IDW").setS(sw->path().substr(off));
-	c_el.cfg("ID").setS("doc"+i2s(aCur));
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true)) return c_el.cfg("IO_VAL").getS();
-
-	return "";
+	return sw->sessAttr("doc"+i2s(aCur));
     }
 
     return TVariant();

@@ -1,3 +1,14 @@
+2014-08-01 Roman
+- FIX:Special.FLibSYS: strDec4Bin() function fix and expand by separator argument into default value " ", for compatibility restore.
+- FIX:UI.{QTCfg,Vision}: Global wait cursor restore fix at the window close.
+- !!!:UI.VCAEngine: Access to project's session time table unified by append the session attributes access functions sessAttr(), sessAttrSet().
+    The functions used to: primitive "Document", session's Style, edited resources by user's API functions "mime()" and "mimeSet()",
+	"fromSess" and "toSess" user's API functions "attr()" and "attrSet()".
+    Service "/serv/attrSess/" is added for access to session's attributes.
+- !!!:UI.Vision: Run time window's position control and save is added by option "winPosCntrSave" enable and using new service "/serv/attrSess/".
+    Screen number expanded for not only assign to different physical display and for independent position control and save.
+
+
 2014-07-31 Roman
 - !:DAQ.DAQGate: Remote source's messages acquisition disabling is added, for request time control.
     FIX: Processed parameters list clean up moved from stop to disable stage.
