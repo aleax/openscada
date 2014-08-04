@@ -173,6 +173,7 @@ class VisRun : public QMainWindow
 	StylesStBar	*mStlBar;		//Style status widget
 	QLabel		*mWStat;		//VCA engine station
 	QLabel		*mWTime;		//Run-time time display for fullscreen
+	QLabel		*conErr;		//Connection error label
 	bool		crSessForce;		//Force session creation flag
 	bool		keepAspectRatio;	//Keep aspect ratio on scale
 	string 		prj_it, work_sess, src_prj;//Work session and source project
@@ -189,8 +190,7 @@ class VisRun : public QMainWindow
 	// Alarm attributes
 	unsigned	mAlrmSt;		//Alarm status
 	SndPlay		*alrmPlay;		//Alarm play widget
-	bool		alrLevSet,		//Use for no quittance lamp blinking
-			isConErr;		//Connection error flag
+	bool		alrLevSet;		//Use for no quittance lamp blinking
 
 	vector<string>	pgList;			//Pages list
 

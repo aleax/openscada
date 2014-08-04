@@ -56,9 +56,9 @@
 using namespace VISION;
 
 VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
-    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), crSessForce(icrSessForce), keepAspectRatio(false),
-    prj_it(iprj_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1), expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF),
-    isConErr(false)
+    QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), conErr(NULL),
+    crSessForce(icrSessForce), keepAspectRatio(false), prj_it(iprj_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
+    expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF)
 {
     QImage ico_t;
 
@@ -374,39 +374,42 @@ void VisRun::setStyle( int istl )	{ mStlBar->setStyle(istl); }
 
 int VisRun::cntrIfCmd( XMLNode &node, bool glob )
 {
-    QLabel *conErr;
+    if(conErr && (time(NULL)-conErr->property("tm").toInt()) < mod->restoreTime()) {
+	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()-(time(NULL)-conErr->property("tm").toInt())));
+	return 10;
+    }
 
     int rez = mod->cntrIfCmd(node,user(),password(),VCAStation(),glob);
     //Display error message about connection error
-    if(rez == 10 && master_pg && !isConErr && !master_pg->findChild<QLabel*>("==ConnError=="))
-    {
-	//Create error message
-	conErr = new QLabel(QString(_("Connection to visualization server '%1' error: %2")).
-				arg(VCAStation().c_str()).arg(node.text().c_str()),master_pg);
-	conErr->setObjectName("==ConnError==");
-	conErr->setAlignment(Qt::AlignCenter);
-	conErr->setWordWrap(true);
-	//Prepare message's style
-	conErr->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
-	conErr->setAutoFillBackground(true);
-	QPalette plt(conErr->palette());
-	QBrush brsh = plt.brush(QPalette::Background);
-	brsh.setColor(Qt::red);
-	brsh.setStyle(Qt::SolidPattern);
-	plt.setBrush(QPalette::Background, brsh);
-	conErr->setPalette(plt);
-	//Calc size and position
-	conErr->resize(300,100);
-	conErr->move((master_pg->size().width()-conErr->size().width())/2,(master_pg->size().height()-conErr->size().height())/2);
-	conErr->show();
-	isConErr = true;
+    if(rez == 10 && masterPg()) {
+	if(!conErr) {
+	    //Create error message
+	    conErr = new QLabel(masterPg());
+	    conErr->setAlignment(Qt::AlignCenter);
+	    conErr->setWordWrap(true);
+	    //Prepare message's style
+	    conErr->setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
+	    conErr->setAutoFillBackground(true);
+	    QPalette plt(conErr->palette());
+	    QBrush brsh = plt.brush(QPalette::Background);
+	    brsh.setColor(Qt::red);
+	    brsh.setStyle(Qt::SolidPattern);
+	    plt.setBrush(QPalette::Background, brsh);
+	    conErr->setPalette(plt);
+	    //Calc size and position
+	    conErr->resize(300,100);
+	    conErr->move((masterPg()->size().width()-conErr->size().width())/2,(masterPg()->size().height()-conErr->size().height())/2);
+	    conErr->show();
+	}
+	conErr->setProperty("tm", (long long)time(NULL));
+	conErr->setProperty("labTmpl",
+	    QString(_("Connection to visualization server '%1' error: %2.\nWill restore try after %3s!"))
+		.arg(VCAStation().c_str()).arg(node.text().c_str()).arg("%1"));
+	conErr->setText(conErr->property("labTmpl").toString().arg(mod->restoreTime()));
     }
     //Remove error message about connection error
-    else if(rez != 10 && isConErr && (conErr=master_pg->findChild<QLabel*>("==ConnError==")))
-    {
-	conErr->deleteLater();
-	isConErr = false;
-    }
+    else if(rez != 10 && conErr) { conErr->deleteLater(); conErr = NULL; }
+
     return rez;
 }
 
@@ -479,7 +482,7 @@ void VisRun::quitSt( )
 
 void VisRun::print( )
 {
-    if(master_pg) printPg(master_pg->id());
+    if(masterPg()) printPg(masterPg()->id());
 }
 
 void VisRun::printPg( const string &ipg )

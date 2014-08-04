@@ -84,7 +84,7 @@ using namespace VISION;
 //* QTCFG::TVision                                *
 //*************************************************
 TVision::TVision( string name ) : TUI(MOD_ID), mStatusEn(true), mWinPosCntrSave(true), mExitLstRunPrjCls(true), end_run(false),
-    mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
+    mRestTime(60), mCachePgLife(1), vca_station("."), mPlayCom("play -q %f"), mScrnCnt(0)
 {
     mod		= this;
 
@@ -137,6 +137,7 @@ string TVision::optDescr( )
 	"ExitLstRunPrjCls {0;1}Exit on last run project close (default = 1).\n"
 	"CachePgLife <hours>   Cached pages lifetime.\n"
 	"VCAstation  <id>      VCA station id ('.' - local).\n"
+	"RestoreTime <seconds> Restore connection time.\n"
 	"PlayCom     <cmd>     Audio alarms' files play command.\n\n"),
 	MOD_TYPE,MOD_ID,nodePath().c_str());
 
@@ -157,10 +158,11 @@ void TVision::load_( )
     setUserPass(TBDS::genDBGet(nodePath()+"UserPass",""));
     setRunPrjs(TBDS::genDBGet(nodePath()+"RunPrjs",""));
     setRunPrjsSt(s2i(TBDS::genDBGet(nodePath()+"RunPrjsSt","1")));
-    setWinPosCntrSave(s2i(TBDS::genDBGet(nodePath()+"WinPosCntrSave","1")));
-    setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls","1")));
+    setWinPosCntrSave(s2i(TBDS::genDBGet(nodePath()+"WinPosCntrSave",i2s(winPosCntrSave()))));
+    setExitLstRunPrjCls(s2i(TBDS::genDBGet(nodePath()+"ExitLstRunPrjCls",i2s(exitLstRunPrjCls()))));
     setCachePgLife(s2r(TBDS::genDBGet(nodePath()+"CachePgLife",r2s(cachePgLife()))));
     setVCAStation(TBDS::genDBGet(nodePath()+"VCAstation","."));
+    setRestoreTime(s2i(TBDS::genDBGet(nodePath()+"RestoreTime",i2s(restoreTime()))));
     setPlayCom(TBDS::genDBGet(nodePath()+"PlayCom",playCom()));
 }
 
@@ -177,6 +179,7 @@ void TVision::save_( )
     TBDS::genDBSet(nodePath()+"ExitLstRunPrjCls", i2s(exitLstRunPrjCls()));
     TBDS::genDBSet(nodePath()+"CachePgLife", r2s(cachePgLife()));
     TBDS::genDBSet(nodePath()+"VCAstation", VCAStation());
+    TBDS::genDBSet(nodePath()+"RestoreTime",i2s(restoreTime()));
     TBDS::genDBSet(nodePath()+"PlayCom", playCom());
 }
 
@@ -187,7 +190,7 @@ void TVision::postEnable( int flag )
 
 string TVision::uiPropGet( const string &prop, const string &user )
 {
-    ResAlloc res(nodeRes(),false);
+    ResAlloc res(nodeRes(), false);
 
     XMLNode prmNd;
     try {
@@ -346,6 +349,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    else {
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/prm/cfg/u_pass",_("User password"),RWRWR_,"root",SUI_ID,1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/prm/cfg/restTm",_("Restore connection timeout, s"),RWRWR_,"root",SUI_ID,3,"tp","dec","min","1","max","1000");
 	    }
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),RWRWR_,"root",SUI_ID,2,"tp","real",
 		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
@@ -373,6 +377,10 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/u_pass") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText("*******");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setUserPass(opt->text());
+    }
+    else if(a_path == "/prm/cfg/restTm") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(restoreTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRestoreTime(s2i(opt->text()));
     }
     else if(a_path == "/prm/cfg/cachePgLife") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(r2s(cachePgLife()));

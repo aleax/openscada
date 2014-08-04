@@ -1,3 +1,7 @@
+2014-08-04 Roman
+- UI.Vision: Restore connection time control is added for remote connection to visualisation server hang prevent and display update.
+
+
 2014-08-01 Roman
 - FIX:Special.FLibSYS: strDec4Bin() function fix and expand by separator argument into default value " ", for compatibility restore.
 - FIX:UI.{QTCfg,Vision}: Global wait cursor restore fix at the window close.

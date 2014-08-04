@@ -65,6 +65,7 @@ class TVision : public TUI
 	bool winPosCntrSave( )			{ return mWinPosCntrSave; }
 	bool exitLstRunPrjCls( )		{ return mExitLstRunPrjCls; }
 	string VCAStation( )			{ return vca_station; }
+	int restoreTime( )			{ return mRestTime; }
 	string playCom( )			{ return mPlayCom; }
 	float cachePgLife( )			{ return mCachePgLife; }
 	string uiPropGet( const string &prop, const string &user = "root" );
@@ -76,6 +77,7 @@ class TVision : public TUI
 	bool setWinPosCntrSave( bool en )	{ mWinPosCntrSave = en; modif(); }
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
+	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }
 	void setPlayCom( const string &com )	{ mPlayCom = com; modif(); }
 	void setCachePgLife( float vl )		{ mCachePgLife = vmax(0,vmin(1000,vl)); modif(); }
 	void uiPropSet( const string &prop, const string &vl, const string &user = "root" );
@@ -124,6 +126,7 @@ class TVision : public TUI
 			mWinPosCntrSave,	//Windows position control and save
 			mExitLstRunPrjCls,	//Exit program on last run project close
 			end_run;		//End run command. Close all windows
+	int		mRestTime;		//Restore connection time, seconds
 	float		mCachePgLife;		//Cached pages lifetime
 
 	string		vca_station;		//VCA station id ('.' - for local station)
