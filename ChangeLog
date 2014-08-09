@@ -1,3 +1,7 @@
+2014-08-09 Roman
+- FIX: Write to config file fix by path merge from Work version correction.
+
+
 2014-07-13 Roman 0.8.11
 - API:
     !!!!:Changes:

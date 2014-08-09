@@ -309,7 +309,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 
 	SYS->modifCfg(true);
 
-	if((nd=SYS->cfgNode(SYS->id()+"/"+path,true))) {
+	if((nd=SYS->cfgNode(path,true))) {
 	    cfg.cfgList(cf_el);
 	    if(nd->name() != "tbl")	nd->setName("tbl");
 	    // Search present field
