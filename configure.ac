@@ -131,7 +131,7 @@ AC_ARG_ENABLE(CrossCompile,AC_HELP_STRING([--enable-CrossCompile], [enable cross
 [ if test $host = $build; then enable_CrossCompile=no; else enable_CrossCompile=yes; fi])
 AC_ARG_ENABLE(CoreLibStatic,AC_HELP_STRING([--enable-CoreLibStatic], [enable OpenSCADA core lib no shared, only static.]),
 [ liboscada_la_LIBTOOLFLAGS="--tag=disable-shared"; AC_SUBST(liboscada_la_LIBTOOLFLAGS) ],[ enable_CoreLibStatic=no; ])
-AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--disable-LibGD], [disable using library LibGD in core]),[ ],[ enable_LibGD=yes; ])
+AC_ARG_ENABLE(LibGD,AC_HELP_STRING([--enable-LibGD], [enable using library LibGD into core]),[ ],[ enable_LibGD=no; ])
 AC_ARG_ENABLE(AllModuls,AC_HELP_STRING([--enable-AllModuls], [all modules enable(yes)/including(incl)/for dist(dist)/disable(no) for next separated selection]),
 [ ],[ enable_AllModuls=individual; ])
 

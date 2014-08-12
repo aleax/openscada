@@ -150,7 +150,9 @@ class TVarObj
 
 	virtual void propList( vector<string> &ls );
 	virtual TVariant propGet( const string &id );
+	TVariant propGet( const string &ids, char sep );		//Get hierarchical by separator or path for <sep>=0
 	virtual void propSet( const string &id, TVariant val );
+	void propSet( const string &ids, char sep, TVariant val );	//Set hierarchical by separator or path for <sep>=0
 
 	virtual string getStrXML( const string &oid = "" );
 	static AutoHD<TVarObj> parseStrXML( const string &str, XMLNode *nd = NULL, AutoHD<TVarObj> prev = NULL );

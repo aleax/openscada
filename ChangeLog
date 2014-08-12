@@ -1,3 +1,9 @@
+2014-08-12 Roman
+- SYS: Using "LibGD" into OpenSCADA core disabled by default and instead used "SVG" mostly.
+    To user space object base "TVarObj" expanded functions propGet() and "propSet()" is added for hierarchical access by path.
+- UI.VCAEngine: Access to DAQ properties of Object's type by path into links like "/DAQ/{Cntr}/{Prm}/{Attr}#/{oAttr1}/{oAttr2}" is added.
+
+
 2014-08-04 Roman
 - UI.Vision: Restore connection time control is added for remote connection to visualisation server hang prevent and display update.
 

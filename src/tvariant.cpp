@@ -345,11 +345,35 @@ TVariant TVarObj::propGet( const string &id )
     return rez;
 }
 
+TVariant TVarObj::propGet( const string &ids, char sep )
+{
+    TVariant obj = this;
+    string tid;
+    if(sep) for(int off = 0; (tid=TSYS::strSepParse(ids,0,sep,&off)).size() && obj.type() == TVariant::Object; )
+	obj = obj.getO().at().propGet(tid);
+    else for(int off = 0; (tid=TSYS::pathLev(ids,0,true,&off)).size() && obj.type() == TVariant::Object; )
+	obj = obj.getO().at().propGet(tid);
+
+    return tid.size() ? TVariant(EVAL_BOOL) : obj;
+}
+
 void TVarObj::propSet( const string &id, TVariant val )
 {
     oRes.resRequestW();
     mProps[id] = val;
     oRes.resRelease();
+}
+
+void TVarObj::propSet( const string &ids, char sep, TVariant val )
+{
+    TVariant obj = this;
+    string tid;
+    int off = 0;
+    if(sep) while(obj.type() == TVariant::Object && (tid=TSYS::strSepParse(ids,0,sep,&off)).size() && off < ids.size())
+	obj = obj.getO().at().propGet(tid);
+    else while(obj.type() == TVariant::Object && (tid=TSYS::pathLev(ids,0,true,&off)).size() && off < ids.size())
+	obj = obj.getO().at().propGet(tid);
+    if(tid.size() && off >= ids.size())	obj.getO().at().propSet(tid, val);
 }
 
 string TVarObj::getStrXML( const string &oid )

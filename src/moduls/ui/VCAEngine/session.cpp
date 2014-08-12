@@ -1484,14 +1484,25 @@ void SessWdg::calc( bool first, bool last )
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if(obj_tp == "prm:") {
-			vl = SYS->daq().at().attrAt(attr.at().cfgVal().substr(obj_tp.size()),0,true);
+			int detOff = obj_tp.size();	//Links subdetail process
+			vl = SYS->daq().at().attrAt(TSYS::strParse(attr.at().cfgVal(),0,"#",&detOff),0,true);
+			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
+			if(attr.at().flgGlob()&Attr::Address) {
+			    string nP = vl.at().nodePath(0,true);
+			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
+			}
+			else if(vl.at().fld().type() == TFld::Object && detOff < attr.at().cfgVal().size())
+			    attr.at().set(vl.at().getO().at().propGet(attr.at().cfgVal().substr(detOff),0));
+			else attr.at().set(vl.at().get());
+
+			/*vl = SYS->daq().at().attrAt(attr.at().cfgVal().substr(obj_tp.size()),0,true);
 			if(vl.freeStat()) { attr.at().setS(EVAL_STR); continue; }
 
 			if(attr.at().flgGlob()&Attr::Address) {
 			    string nP = vl.at().nodePath(0,true);
 			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
 			}
-			else attr.at().set(vl.at().get());
+			else attr.at().set(vl.at().get());*/
 		    }
 		    else if(obj_tp == "wdg:")
 			try { attr.at().set(attrAt(attr.at().cfgVal().substr(obj_tp.size()),0).at().get()); }
@@ -1630,7 +1641,18 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 	if(cfg.flgSelf()&Attr::SessAttrInh) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
 	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':') + ":";
 	try {
-	    if(obj_tp == "prm:")	SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().set(cfg.get());
+	    if(obj_tp == "prm:") {
+		int detOff = obj_tp.size();	//Links subdetail process
+		AutoHD<TVal> vl = SYS->daq().at().attrAt(TSYS::strParse(cfg.cfgVal(),0,"#",&detOff));
+		if(vl.at().fld().type() == TFld::Object && detOff < cfg.cfgVal().size())
+		{
+		    vl.at().getO().at().propSet(cfg.cfgVal().substr(detOff),0,cfg.get());
+		    vl.at().setO(vl.at().getO());	//For modify object sign
+		}
+		else vl.at().set(cfg.get());
+
+		//SYS->daq().at().attrAt(cfg.cfgVal().substr(obj_tp.size()),0,true).at().set(cfg.get());
+	    }
 	    else if(obj_tp == "wdg:")	attrAt(cfg.cfgVal().substr(obj_tp.size()),0).at().set(cfg.get());
 	}catch(...)	{ }
     }
