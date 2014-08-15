@@ -424,7 +424,7 @@ void Engine::save_( )
     TBDS::genDBSet(nodePath()+"AutoSess",aSess.save());
 }
 
-void Engine::modStart()
+void Engine::modStart( )
 {
     mess_info(nodePath().c_str(),_("Start module."));
 
@@ -438,7 +438,7 @@ void Engine::modStart()
     run_st = true;
 }
 
-void Engine::modStop()
+void Engine::modStop( )
 {
     mess_info(nodePath().c_str(),_("Stop module."));
 

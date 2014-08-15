@@ -95,12 +95,12 @@ class TVision : public TUI
 
 	QIcon icon( );
 
-	//> Put message
+	// Put message
 	void postMess( const QString &cat, const QString &mess, MessLev type = Info, QWidget *parent = NULL );
 
 	static QWidget *getFocusedWdg( QWidget *wcntr );
 
-	//> Request to OpenSCADA control interface
+	// Request to OpenSCADA control interface
 	int cntrIfCmd( XMLNode &node, const string &user, const string &password, const string &VCAStat, bool glob = false );
 
 	//Attributes

@@ -1566,6 +1566,9 @@ void SessWdg::calc( bool first, bool last )
 		    t_off = 0;
 		    sev_ev   = TSYS::strSepParse(sev, 0, ':', &t_off);
 		    sev_path = TSYS::strSepParse(sev, 0, ':', &t_off);
+
+		    if(sev_path.empty() && eventProc(sev_ev))	continue;	//Try local events process by the root widget
+
 		    sprc_lst = attrAt("evProc").at().getS();
 		    bool evProc = false;
 		    for(int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
@@ -1943,9 +1946,9 @@ void SessWdg::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	cntrCmdGeneric(opt);
 	cntrCmdAttributes(opt);
-	if(!parent( ).freeStat()) cntrCmdLinks(opt,true);
+	if(!parent().freeStat()) cntrCmdLinks(opt,true);
 	return;
     }
-    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || (parent( ).freeStat() ? false : cntrCmdLinks(opt))))
+    if(!(cntrCmdGeneric(opt) || cntrCmdAttributes(opt) || (parent().freeStat() ? false : cntrCmdLinks(opt))))
 	TCntrNode::cntrCmdProc(opt);
 }

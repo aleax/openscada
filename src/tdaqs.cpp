@@ -562,6 +562,9 @@ void *TDAQS::RdTask( void *param )
     {
 	int64_t work_tm = SYS->curTime();
 
+	daq.prcStRd = true;		//!!!! Moved here for prevent long connection wait and next crash.
+					//Possible the will create problem with first sync
+
 	//Update wait time for dead stations and process connections to stations
 	ResAlloc res(daq.nodeRes(),false);
 	for(sit = daq.mSt.begin(); sit != daq.mSt.end(); sit++)
@@ -594,7 +597,7 @@ void *TDAQS::RdTask( void *param )
 	    if(!sit->second.isLive && sit->second.cnt > 0) sit->second.cnt -= daq.rdTaskPer();
 	}
 	res.release();
-	daq.prcStRd = true;
+	//daq.prcStRd = true;
 
 	//Planing controllers' run and process requests to remote run controllers
 	daq.rdActCntrList(cls);

@@ -358,7 +358,9 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    cfg.owner()->attrDel("mode");
 		    cfg.owner()->attrDel("font");
 		    break;
-		case F_COMBO: case F_LIST: case F_TREE: case F_TABLE:
+		case F_TABLE:
+		    cfg.owner()->attrDel("set");
+		case F_COMBO: case F_LIST: case F_TREE:
 		    cfg.owner()->attrDel("value");
 		    cfg.owner()->attrDel("items");
 		    cfg.owner()->attrDel("font");
@@ -401,8 +403,10 @@ bool OrigFormEl::attrChange( Attr &cfg, TVariant prev )
 		    _("Standard;Checkable;Menu;Load;Save"),i2s(A_FormElMixP3).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
-	    case F_COMBO: case F_LIST: case F_TREE: case F_TABLE:
-		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"200","","","",i2s(A_FormElValue).c_str()));
+	    case F_TABLE:
+		cfg.owner()->attrAdd(new TFld("set",_("Set value"),TFld::String,Attr::Mutable,"255","","","",i2s(A_FormElMixP2).c_str()));
+	    case F_COMBO: case F_LIST: case F_TREE:
+		cfg.owner()->attrAdd(new TFld("value",_("Value"),TFld::String,Attr::Mutable,"255","","","",i2s(A_FormElValue).c_str()));
 		cfg.owner()->attrAdd(new TFld("items",_("Items"),TFld::String,TFld::FullText|Attr::Mutable,"","","","",i2s(A_FormElMixP1).c_str()));
 		cfg.owner()->attrAdd(new TFld("font",_("Font"),TFld::String,Attr::Font,"50","Arial 11","","",i2s(A_FormElFont).c_str()));
 		break;
@@ -592,6 +596,38 @@ bool OrigFormEl::cntrCmdAttributes( XMLNode *opt, Widget *src )
     else return Widget::cntrCmdAttributes(opt, src);
 
     return true;
+}
+
+bool OrigFormEl::eventProc( const string &ev, Widget *src )
+{
+    int elTp = 0;
+    switch((elTp=src->attrAt("elType").at().getI()))
+    {
+	case F_TABLE: {
+	    if(ev.compare(0,13,"ws_TableEdit_") != 0)	break;
+	    bool setOK = false;
+	    int col = s2i(TSYS::strParse(ev,2,"_"));
+	    int row = s2i(TSYS::strParse(ev,3,"_"));
+	    XMLNode items("tbl");
+	    items.load(src->attrAt("items").at().getS(), XMLNode::LD_Full);
+	    for(int i_chR = 0, i_r = 0; i_chR < items.childSize() && !setOK; i_chR++)
+	    {
+		XMLNode *chRN = items.childGet(i_chR);
+		if(chRN->name() != "r") continue;
+		for(int i_chC = 0, i_c = 0; i_chC < chRN->childSize() && !setOK; i_chC++) {
+		    XMLNode *chCN = chRN->childGet(i_chC);
+		    if(!(chCN->name() == "s" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
+		    if(i_c == col && i_r == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
+		    i_c++;
+		}
+		i_r++;
+	    }
+	    if(setOK) src->attrAt("items").at().setS(items.save());
+	    break;
+	}
+    }
+
+    return false;
 }
 
 //************************************************

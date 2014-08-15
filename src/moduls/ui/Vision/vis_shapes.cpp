@@ -497,7 +497,10 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    wdg->setSelectionMode(QAbstractItemView::SingleSelection);
 		    wdg->setSelectionBehavior(QAbstractItemView::SelectItems);
 		    wdg->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
-		    if(runW) connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(tableChange()));
+		    if(runW) {
+			connect(wdg, SIGNAL(itemSelectionChanged()), this, SLOT(tableSelectChange()));
+			connect(wdg, SIGNAL(cellChanged(int,int)), this, SLOT(tableChange(int,int)));
+		    }
 		    mk_new = true;
 		}
 
@@ -517,7 +520,7 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 		    {
 			XMLNode *tR = (i_ch < tX.childSize()) ? tX.childGet(i_ch) : NULL;
 			bool isH = false;
-			QTableWidgetItem *tit = NULL;
+			QTableWidgetItem *hit = NULL, *tit = NULL;
 			if(tR && !((isH=(tR->name()=="h")) || tR->name() == "r")) continue;
 			if(!isH && (int)i_r >= wdg->rowCount()) wdg->setRowCount(i_r+1);
 			if(!isH && tR) rClr = tR->attr("color");
@@ -526,13 +529,16 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 			{
 			    XMLNode *tC = (tR && i_ch1 < tR->childSize()) ? tR->childGet(i_ch1) : NULL;
 			    if(tC && (int)i_c >= wdg->columnCount()) wdg->setColumnCount(i_c+1);
+			    if(!(hit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (hit=new QTableWidgetItem()));
 			    if(isH) {	//Header process
-				if(!(tit=wdg->horizontalHeaderItem(i_c))) wdg->setHorizontalHeaderItem(i_c, (tit=new QTableWidgetItem()));
-				tit->setText(tC?tC->text().c_str():"");
-				if(tC && (wVl=tC->attr("width")).size()) {
-				    int wdthCel = s2i(wVl);
-				    if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
-				    tit->setData(Qt::UserRole, wdthCel);
+				hit->setText(tC?tC->text().c_str():"");
+				if(tC) {
+				    if((wVl=tC->attr("width")).size()) {
+					int wdthCel = s2i(wVl);
+					if(wVl.find("%") == wVl.size()-1) wdthCel = w->size().width()*wdthCel/100;
+					hit->setData(Qt::UserRole, wdthCel);
+				    }
+				    if(s2i(tC->attr("edit"))) hit->setData(Qt::UserRole+1, true);
 				}
 			    }
 			    else {	//Rows content process
@@ -558,6 +564,9 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 				if(tC && (wVl=w->resGet(tC->attr("img"))).size() && img.loadFromData((const uchar*)wVl.data(),wVl.size()))
 				    tit->setData(Qt::DecorationRole, QPixmap::fromImage(img));
 				else tit->setData(Qt::DecorationRole, QVariant());
+				// Modify set
+				if(hit->data(Qt::UserRole+1).toBool() || (tC && s2i(tC->attr("edit"))))
+				    tit->setFlags(tit->flags()|Qt::ItemIsEditable);
 			    }
 			    if(tC)	{ ++i_cR; maxCols = vmax(maxCols, (int)i_cR); }
 			    i_c++;
@@ -571,7 +580,8 @@ bool ShapeFormEl::attrSet( WdgView *w, int uiPrmPos, const string &val )
 
 		    // Generic properties set
 		    int keyID = s2i(tX.attr("keyID"));
-		    if((wVl=tX.attr("sel")) == "row") {
+		    wdg->setProperty("sel", (wVl=tX.attr("sel")).c_str());
+		    if(wVl == "row") {
 			wdg->setSelectionBehavior(QAbstractItemView::SelectRows);
 			keyID = vmin(keyID, maxCols-1);
 		    }
@@ -813,9 +823,11 @@ void ShapeFormEl::setValue( WdgView *w, const string &val, bool force )
 		    for(QList<QTableWidgetItem*>::iterator iIt = foundIts.begin(); !selIt && iIt != foundIts.end(); ++iIt)
 			if((*iIt)->row() == wdg->property("keyID").toInt()) selIt = *iIt;
 		    break;
-		default:
-		    if(foundIts.length()) selIt = foundIts.front();
+		default: {
+		    if(wdg->property("sel").toString() == "cell") selIt = foundIts.length() ? foundIts.front() : NULL;
+		    else selIt = wdg->item(s2i(TSYS::strParse(val,0,":")), s2i(TSYS::strParse(val,1,":")));
 		    break;
+		}
 	    }
 	    shD->addrWdg->blockSignals(true);
 	    if(selIt) { wdg->setCurrentItem(selIt); if(selIt != selItPrev) wdg->scrollToItem(selIt); }
@@ -860,7 +872,7 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 
 bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 {
-    if(qobject_cast<DevelWdgView*>(w)) {
+    if(qobject_cast<DevelWdgView*>(w))
 	switch(event->type())
 	{
 	    case QEvent::Enter:
@@ -874,7 +886,6 @@ bool ShapeFormEl::eventFilter( WdgView *w, QObject *object, QEvent *event )
 		return true;
 	    default:	break;
 	}
-    }
     else {
 	AttrValS attrs;
 	switch(event->type())
@@ -1058,13 +1069,15 @@ void ShapeFormEl::treeChange( )
 
     if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size()) return;
 
+
+
     AttrValS attrs;
     attrs.push_back(std::make_pair("value",el->selectedItems()[0]->data(0,Qt::UserRole).toString().toStdString()));
     attrs.push_back(std::make_pair("event","ws_TreeChange"));
     w->attrsSet(attrs);
 }
 
-void ShapeFormEl::tableChange( )
+void ShapeFormEl::tableSelectChange( )
 {
     QTableWidget *el = (QTableWidget*)sender();
     RunWdgView   *w  = (RunWdgView*)el->parentWidget();
@@ -1083,12 +1096,32 @@ void ShapeFormEl::tableChange( )
 	    value = el->selectedItems()[0]->tableWidget()->item(el->property("keyID").toInt(),
 							el->selectedItems()[0]->column())->text().toStdString();
 	    break;
-	default: break;
+	default:
+	    if(el->property("sel").toString() != "cell")
+		value = i2s(el->selectedItems()[0]->row())+":"+i2s(el->selectedItems()[0]->column());
+	    break;
     }
 
     //Events prepare
     attrs.push_back(std::make_pair("value",value));
     attrs.push_back(std::make_pair("event","ws_TableChangeSel"));
+    w->attrsSet(attrs);
+}
+
+void ShapeFormEl::tableChange( int row, int col )
+{
+    QTableWidget *el = (QTableWidget*)sender();
+    RunWdgView   *w  = (RunWdgView*)el->parentWidget();
+
+    if(((ShpDt*)w->shpData)->evLock || !el->selectedItems().size() || !(((ShpDt*)w->shpData)->active && w->permCntr())) return;
+
+    QVariant val = el->item(row,col)->data(Qt::DisplayRole);
+    if(val.type() == QVariant::Bool) val = val.toInt();
+
+    //Events prepare
+    AttrValS attrs;
+    attrs.push_back(std::make_pair("set",val.toString().toStdString()));
+    attrs.push_back(std::make_pair("event",TSYS::strMess("ws_TableEdit_%d_%d",col,row)));
     w->attrsSet(attrs);
 }
 
@@ -1960,7 +1993,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
     ShpDt *shD = (ShpDt*)w->shpData;
 
     //Prepare picture
-    shD->pictObj = QImage(w->rect().size(),QImage::Format_ARGB32_Premultiplied);
+    shD->pictObj = QImage(w->rect().size(), QImage::Format_ARGB32_Premultiplied);
     shD->pictObj.fill(0);
 
     QPainter pnt(&shD->pictObj);
@@ -2738,7 +2771,7 @@ void ShapeDiagram::tracing( )
     if(!w->isEnabled()) return;
 
     int64_t trcPer = (int64_t)shD->trcPer*1000000;
-    if(shD->tTimeCurent)shD->tTime = (int64_t)time(NULL)*1000000;
+    if(shD->tTimeCurent)shD->tTime = shD->arhEnd((int64_t)time(NULL)*1000000);
     else if(shD->tTime)	shD->tTime += trcPer;
     loadData(w);
     makePicture(w);

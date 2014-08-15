@@ -886,7 +886,7 @@ void VisRun::exportDoc( const string &idoc )
 		    curNode = curNode->childGet(treeStk.back());
 		    treeStk.push_back(0);
 		    //  Check for marked table and process it
-		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && atoi(curNode->attr("export").c_str()))
+		    if(strcasecmp(curNode->name().c_str(),"table") == 0 && s2i(curNode->attr("export")))
 		    {
 			map<int,int>	rowSpn;
 			XMLNode *tblN = NULL, *tblRow;
@@ -910,12 +910,12 @@ void VisRun::exportDoc( const string &idoc )
 					    strcasecmp(tblRow->childGet(i_c)->name().c_str(),"td") == 0))
 					continue;
 				    while(rowSpn[i_cl] > 1) { rez += ";"; rowSpn[i_cl]--; i_cl++; }
-				    rowSpn[i_cl] = atoi(tblRow->childGet(i_c)->attr("rowspan",false).c_str());
+				    rowSpn[i_cl] = s2i(tblRow->childGet(i_c)->attr("rowspan",false));
 				    val = tblRow->childGet(i_c)->text(true,true);
 				    for(size_t i_sz = 0; (i_sz=val.find("\"",i_sz)) != string::npos; i_sz += 2) val.replace(i_sz,1,2,'"');
 				    rez += "\""+TSYS::strNoSpace(val)+"\";";
 				    //   Colspan process
-				    int colSpan = atoi(tblRow->childGet(i_c)->attr("colspan",false).c_str());
+				    int colSpan = s2i(tblRow->childGet(i_c)->attr("colspan",false));
 				    for(int i_cs = 1; i_cs < colSpan; i_cs++) rez += ";";
 				    i_cl++;
 				}
@@ -1096,12 +1096,12 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 
     //Get update period
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
-    if(!cntrIfCmd(req)) mPeriod = atoi(req.text().c_str());
+    if(!cntrIfCmd(req)) mPeriod = s2i(req.text());
 
     //Get current style
     req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
     if(!cntrIfCmd(req)) {
-	setStyle(atoi(req.text().c_str()));
+	setStyle(s2i(req.text()));
 	//Check for styles present
 	if(style() < 0) {
 	    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
@@ -1112,9 +1112,9 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
     //Get project's flags
     req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
     if(!cntrIfCmd(req)) {
-	if(atoi(req.text().c_str())&0x01)	setWindowState(Qt::WindowMaximized);
-	else if(atoi(req.text().c_str())&0x02)	actFullScr->setChecked(true);
-	keepAspectRatio = atoi(req.text().c_str())&0x04;
+	if(s2i(req.text())&0x01)	setWindowState(Qt::WindowMaximized);
+	else if(s2i(req.text())&0x02)	actFullScr->setChecked(true);
+	keepAspectRatio = s2i(req.text())&0x04;
     }
 
     //Get open pages list
@@ -1399,7 +1399,7 @@ void VisRun::updatePage( )
 	pgList.clear();
 	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 	    pgList.push_back(req.childGet(i_ch)->text());
-	    callPage(req.childGet(i_ch)->text(),atoi(req.childGet(i_ch)->attr("updWdg").c_str()));
+	    callPage(req.childGet(i_ch)->text(),s2i(req.childGet(i_ch)->attr("updWdg")));
 	}
     }
     // Restore closed session of used project.
@@ -1420,7 +1420,7 @@ void VisRun::updatePage( )
 	    setName("get")->
 	    setAttr("mode", "stat")->
 	    setAttr("path", "/ses_"+work_sess+"/%2fserv%2falarm");
-	if(!cntrIfCmd(req)) wAlrmSt = atoi(req.attr("alarmSt").c_str());
+	if(!cntrIfCmd(req)) wAlrmSt = s2i(req.attr("alarmSt"));
 
 	// Get sound resources for play
 	if(alarmTp(TVision::Sound,true) && !alrmPlay->isRunning()) {

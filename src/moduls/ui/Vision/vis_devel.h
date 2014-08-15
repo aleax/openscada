@@ -70,11 +70,11 @@ class VisDevelop : public QMainWindow
 
 	void setVCAStation( const string& st );
 	void setWdgScale( bool val );
-	void setWdgVisScale(double val );
+	void setWdgVisScale( double val );
 
 	int cntrIfCmd( XMLNode &node, bool glob = false );
 
-	QString getFileName(const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen);
+	QString getFileName( const QString &caption, const QString &dir, const QString &filter, QFileDialog::AcceptMode mode = QFileDialog::AcceptOpen );
 
     signals:
 	//Public signals
@@ -93,7 +93,7 @@ class VisDevelop : public QMainWindow
 	void about( );		//About at program
 	void aboutQt( );	//About at QT library
 	void enterWhatsThis( );	//What is GUI components
-	void updateMenuWindow();//Generate menu "Windows"
+	void updateMenuWindow( );//Generate menu "Windows"
 
 	void itDBLoad( );	//Load item data from DB
 	void itDBSave( );	//Save item data to DB
@@ -115,8 +115,8 @@ class VisDevelop : public QMainWindow
 
     public:
 	//Public attributes
-	//> Actions
-	//>> VCA actions of items
+	// Actions
+	//  VCA actions of items
 	QAction *actDBLoad,		//Load item from DB
 		*actDBSave,		//Save item to DB
 		*actPrjRun,		//Run project execution from selected project item
@@ -133,7 +133,7 @@ class VisDevelop : public QMainWindow
 		*actVisItPaste,		//Paste visual item
 		*actVisItUnDo,		//UnDo visual item changes
 		*actVisItReDo,		//ReDo visual item changes
-	//>> Widget's ordering actions
+	//  Widget's ordering actions
 		*actFullScr,		//Full screen action
 		*actLevUp,		//Up widget level
 		*actLevDown,		//Down widget level
@@ -145,13 +145,13 @@ class VisDevelop : public QMainWindow
 		*actAlignTop,		//Align top
 		*actAlignHCenter,	//Align horizontal center
 		*actAlignBottom,	//Align bottom
-	//>> Elementar figure actions
+	//  Elementar figure actions
 		*actElFigLine,		//Create line
 		*actElFigArc,		//Create arc
 		*actElFigBesie,		//Create Besie curve
 		*actElFigCheckAct,	//Enable holds
 		*actElFigCursorAct,	//Unset cursor
-	//>> Window manipulation actions
+	//  Window manipulation actions
 		*actWinClose,		//Close window
 		*actWinCloseAll,	//Close all windows
 		*actWinTile,		//Tile windows
@@ -160,22 +160,22 @@ class VisDevelop : public QMainWindow
 		*actWinPrevious;	//Select previous window
 	QActionGroup	*actGrpWdgAdd;	//Add widgets action group
 
-	//> Toolbars
+	// Toolbars
         QToolBar *visItToolBar;         //Main visual items toolbar
 	QToolBar *wdgToolView;		//Widget's view functions
 	QToolBar *elFigTool;		//Elementar figure base widget tools
 	vector<QToolBar*> lb_toolbar;	//Library toolbars
 
-	//> Dock widgets
+	// Dock widgets
 	WdgTree		*wdgTree;	//Widgets tree
 	ProjTree	*prjTree;	//Progects tree
 	InspAttrDock	*attrInsp;	//Docked attributes inspector
 	InspLnkDock	*lnkInsp;	//Docked links inspector
 
-	//> Work space
+	// Work space
 	QMdiArea	*work_space;	//MDI widgets workspace
 
-	//> Menu root items
+	// Menu root items
 	QMenu	*mn_file,		//Menu "File"
 		*mn_edit,		//Menu "Edit"
 		*mn_proj,		//Menu "Project"
@@ -205,7 +205,7 @@ class VisDevelop : public QMainWindow
 
     private:
 	//Private attributes
-	//> Main components
+	// Main components
 	bool		winClose, mWaitCursorSet;
 	UserStBar	*mWUser;	//User status widget
 	QLabel		*mWStat;	//VCA engine station
@@ -217,7 +217,7 @@ class VisDevelop : public QMainWindow
 			copy_buf;	//Copy buffer
 	QSignalMapper	*wMapper;	//Internal window mapper
 
-	//> Main dialogs
+	// Main dialogs
 	LibProjProp	*prjLibPropDlg;	//Widget's library and project properties dialog
 	VisItProp	*visItPropDlg;	//Visual item properties properties dialog
 };

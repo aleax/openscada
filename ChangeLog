@@ -1,3 +1,17 @@
+2014-08-15 Roman
+- SYS: data/oscada_gentoo.init appended for Gentoo by "IrmIngeneer".
+    Force using "snprintf" instead "sprintf" into encoding functions.
+    !!:FIX:Task and the record force created for errors like the timeout start. Some crashes prevent.
+- !!:FIX:DAQ: Flag "prcStRd" early set into redundant task is added for prevent wrong the task starting at the connection to remote station miss
+    and crash at stop. But possible the will create problem with first sync!
+- DB.LibsDB.vcaBase.db: "Main.cntrPaspExt" some fixed and expanded for trend's scale modify.
+- !!:UI.{VCAEngine,Vision}: Cells edition to view "Table" of primitive "FormEl" support is added.
+- !:FIX:UI.Vision: Set focus proxy from the edited widget container to the widget into development mode for allow the single focus source and
+	included widgets selection lost at some cases.
+    Fix actual cursor set and the parameters value into the cursor position for significant time difference between the session server host and
+	the session visualiser host.
+
+
 2014-08-12 Roman
 - SYS: Using "LibGD" into OpenSCADA core disabled by default and instead used "SVG" mostly.
     To user space object base "TVarObj" expanded functions propGet() and "propSet()" is added for hierarchical access by path.

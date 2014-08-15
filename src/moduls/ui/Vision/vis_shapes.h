@@ -134,15 +134,16 @@ class ShapeFormEl : public WdgShape
 	// Edit text events
 	void textAccept( );
 	// Check box events
-	void checkChange(int);
+	void checkChange( int );
 	// Combo box and list events
-	void comboChange(const QString&);
+	void comboChange( const QString& );
 	// List events
-	void listChange(int);
+	void listChange( int );
 	// Tree events
 	void treeChange( );
 	// Table events
-	void tableChange( );
+	void tableSelectChange( );
+	void tableChange( int, int );
 	// Button's events
 	void buttonPressed( );
 	void buttonReleased( );

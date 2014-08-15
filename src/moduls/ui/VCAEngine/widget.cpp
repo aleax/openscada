@@ -739,6 +739,11 @@ TVariant Widget::stlReq( Attr &a, const TVariant &vl, bool wr )
     return (!stlLock() && dynamic_cast<Widget*>(nodePrev())) ? ((Widget*)nodePrev())->stlReq(a, vl, wr) : vl;
 }
 
+bool Widget::eventProc( const string &ev, Widget *src )
+{
+    return parent().freeStat() ? false : parent().at().eventProc(ev, src?src:this);
+}
+
 bool Widget::cntrCmdServ( XMLNode *opt )
 {
     string tNm;

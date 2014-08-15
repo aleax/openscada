@@ -96,6 +96,7 @@ class OrigFormEl : public PrWidget
 	void postEnable( int flag );
 	bool attrChange( Attr &cfg, TVariant prev );
 	bool cntrCmdAttributes( XMLNode *opt, Widget *src = NULL );
+	bool eventProc( const string &ev, Widget *src = NULL );
 };
 
 //************************************************

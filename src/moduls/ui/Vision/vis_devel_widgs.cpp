@@ -1849,7 +1849,7 @@ LineEditProp::LineEditProp( QWidget *parent, DType tp, bool m_toClose ) : QWidge
     bt_fld->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed) );
     bt_fld->setMaximumWidth(15);
     box->addWidget(bt_fld);
-    connect( bt_fld, SIGNAL( pressed() ), this, SLOT( callDlg() ) );
+    connect(bt_fld, SIGNAL(pressed()), this, SLOT(callDlg()));
 
     setFocusProxy(ed_fld);
 }
@@ -1892,11 +1892,7 @@ void LineEditProp::callDlg( )
 //*********************************************
 WScaleStBar::WScaleStBar( QWidget *parent ) : QLabel(parent)	{ setScale(false); }
 
-void WScaleStBar::setScale( bool val )
-{
-    isScale = val;
-    setText( (isScale)?_("Scale"):_("Resize") );
-}
+void WScaleStBar::setScale( bool val )				{ setText((isScale=val)?_("Scale"):_("Resize")); }
 
 void WScaleStBar::mousePressEvent( QMouseEvent * event )	{ setScale(!scale()); }
 
@@ -1932,9 +1928,12 @@ DevelWdgView::DevelWdgView( const string &iwid, int ilevel, VisDevelop *mainWind
 	chTree = new XMLNode("ChangesTree");
     }
     //Select only created widgets by user
-    else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload) { setSelect(true,PrcChilds); z_coord = 100000; }
+    else if(wLevel() == 1 && ((WdgView*)parentWidget())->isReload) setSelect(true, PrcChilds);
 
-    if(mMdiWin) mMdiWin->installEventFilter(this);
+    if(mMdiWin) {
+	mMdiWin->setFocusProxy(this);
+	mMdiWin->installEventFilter(this);
+    }
 }
 
 DevelWdgView::~DevelWdgView( )
@@ -2046,15 +2045,14 @@ void DevelWdgView::setSelect( bool vl, char flgs )// bool childs, bool onlyFlag,
 
     if(vl && !(flgs&OnlyFlag)) {
 	string sel_chlds = selectChilds(&chld_cnt);
-	if(sel_chlds.size())	emit selected(sel_chlds);
-	else			emit selected(id());
+	emit selected(sel_chlds.size() ? sel_chlds : id());
     }
     if(!vl) {
 	if(flgs&PrcChilds)
 	    for(int i_c = 0; i_c < children().size(); i_c++)
 		if(qobject_cast<DevelWdgView*>(children().at(i_c)))
 		    qobject_cast<DevelWdgView*>(children().at(i_c))->setSelect(false,flgs|OnlyFlag);
-	if(!(flgs&OnlyFlag))	emit selected("");
+	if(!(flgs&OnlyFlag)) emit selected("");
     }
 
     //Update actions access
@@ -3121,7 +3119,7 @@ bool DevelWdgView::event( QEvent *event )
 	    case QEvent::FocusIn:
 		setFocus(true);
 		if(edit()) break;
-		setSelect(true,PrcChilds);
+		setSelect(true, PrcChilds);
 		mainWin()->setWdgScale(false);
 		mainWin()->setWdgVisScale(mVisScale);
 		return true;
@@ -3132,7 +3130,7 @@ bool DevelWdgView::event( QEvent *event )
 		if(QApplication::focusWidget() != this && !mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() &&
 		    !fPrevEdExitFoc && (!editWdg || !editWdg->fPrevEdExitFoc) && !parentWidget()->hasFocus())
 		{
-		    if(editWdg)	editWdg->setSelect(false,PrcChilds);
+		    if(editWdg)	editWdg->setSelect(false, PrcChilds);
 		    setSelect(false);
 		}
 		return true;
@@ -3238,16 +3236,6 @@ bool DevelWdgView::eventFilter( QObject *object, QEvent *event )
     if(object == mMdiWin) {
 	switch(event->type())
 	{
-	    case QEvent::FocusIn:
-		editExit();
-		setFocus(true);
-		setSelect(true);
-		break;
-	    case QEvent::FocusOut:
-		if(!this->hasFocus()) setFocus(false);
-		if(!mainWin()->attrInsp->hasFocus() && !mainWin()->lnkInsp->hasFocus() && !mMdiWin->widget()->hasFocus())
-		{ setSelect(false); editExit(); }
-		break;
 	    case QEvent::MouseButtonRelease:
 		editExit();
 		setSelect(false,PrcChilds);

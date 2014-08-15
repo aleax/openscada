@@ -991,7 +991,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 		unsigned i_smb;
 		for(i_smb = 0; i_smb < opt1.size(); i_smb++)
 		    if(in[i_sz] == opt1[i_smb]) {
-			sprintf(buf,"%%%02X",(unsigned char)in[i_sz]);
+			snprintf(buf,sizeof(buf),"%%%02X",(unsigned char)in[i_sz]);
 			sout += buf;
 			break;
 		    }
@@ -1144,7 +1144,7 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size()*2);
 	    char buf[3+opt1.size()];
 	    for(i_sz = 0; i_sz < in.size(); i_sz++) {
-		sprintf(buf, "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
+		snprintf(buf, sizeof(buf), "%s%02X", (i_sz&&opt1.size())?(((i_sz)%16)?opt1.c_str():"\n"):"", (unsigned char)in[i_sz]);
 		sout += buf;
 	    }
 	    break;
@@ -1537,7 +1537,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	res.release();
 	//Error by this active task present
-	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' is already present!"),path.c_str());
+	if(time(NULL) >= (c_tm+wtm)) throw TError(nodePath().c_str(),_("Task '%s' already present!"),path.c_str());
 	sysSleep(0.01);
 	res.request(true);
     }
@@ -1582,7 +1582,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	}
 	if(!pAttr) pthread_attr_destroy(pthr_attr);
 
-	if(rez) throw TError(nodePath().c_str(), _("Task creation error %d."), rez);
+	if(rez) throw TError(1, nodePath().c_str(), _("Task creation error %d."), rez);
 
 	//Wait for thread structure initialization finish for not detachable tasks
 	while(!(htsk.flgs&STask::Detached) && !htsk.thr) TSYS::sysSleep(1e-3); //sched_yield(); !!! don't use for hard realtime systems with high priority
@@ -1593,10 +1593,12 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
 	    sysSleep(STD_WAIT_DELAY*1e-3);
 	}
     }
-    catch(TError) {
-	res.request(true);
-	mTasks.erase(path);
-	res.release();
+    catch(TError err) {
+	if(err.cod) {		//Remoe info for pthread_create() but left for other by possible start later
+	    res.request(true);
+	    mTasks.erase(path);
+	    res.release();
+	}
 	throw;
     }
 }
