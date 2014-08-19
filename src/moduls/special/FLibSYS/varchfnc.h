@@ -55,8 +55,7 @@ class VArchObj : public TVarObj
     private:
 	//Attributes
 	bool mIsArch;
-	union
-	{
+	union {
 	    AutoHD<TVArchive> *mArch;
 	    TValBuf *mBuf;
 	};
@@ -68,17 +67,15 @@ class VArchObj : public TVarObj
 class vArh : public TFunction
 {
     public:
-	vArh( ) : TFunction("vArh",SSPC_ID)
-	{
+	vArh( ) : TFunction("vArh",SSPC_ID) {
 	    ioAdd(new IO("res",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("name",_("Name"),IO::String,IO::Default));
 	}
 
-	string name( )  { return _("Val: Archive"); }
-	string descr( ) { return _("Get value archive object."); }
+	string name( )	{ return _("Val: Archive"); }
+	string descr( )	{ return _("Get value archive object."); }
 
-	void calc( TValFunc *val )
-	{
+	void calc( TValFunc *val ) {
 	    VArchObj *obj = new VArchObj();
 	    obj->open(val->getS(1));
 	    val->setO(0,obj);
@@ -91,8 +88,7 @@ class vArh : public TFunction
 class vArhBuf : public TFunction
 {
     public:
-	vArhBuf( ) : TFunction("vArhBuf", SSPC_ID)
-	{
+	vArhBuf( ) : TFunction("vArhBuf", SSPC_ID) {
 	    ioAdd(new IO("res",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("tp",_("Type"),IO::Integer,IO::Default,"1"));
 	    ioAdd(new IO("sz",_("Size"),IO::Integer,IO::Default,"100"));
@@ -101,11 +97,10 @@ class vArhBuf : public TFunction
 	    ioAdd(new IO("hres",_("High resolution"),IO::Boolean,IO::Default,"0"));
 	}
 
-	string name( )  { return _("Val: Archive buffer"); }
-	string descr( ) { return _("Get value buffer object for temporary values storing."); }
+	string name( )	{ return _("Val: Archive buffer"); }
+	string descr( )	{ return _("Get value buffer object for temporary values storing."); }
 
-	void calc( TValFunc *val )
-	{
+	void calc( TValFunc *val ) {
 	    VArchObj *obj = new VArchObj();
 	    obj->open((TFld::Type)val->getI(1),val->getI(2),val->getI(3),val->getB(4),val->getB(5));
 	    val->setO(0,obj);

@@ -39,7 +39,7 @@ TSecurity::TSecurity( ) : TSubSYS(SSEC_ID,_("Security"),false)
     user_el.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::Key,OBJ_ID_SZ));
     user_el.fldAdd(new TFld("DESCR",_("Full name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     user_el.fldAdd(new TFld("LONGDESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"1000"));
-    user_el.fldAdd(new TFld("PASS",_("Password"),TFld::String,0,"20"));
+    user_el.fldAdd(new TFld("PASS",_("Password"),TFld::String,0,"100"));
     user_el.fldAdd(new TFld("PICTURE",_("User picture"),TFld::String,0,"100000"));
 
     //Group BD structure
@@ -304,14 +304,17 @@ void TUser::setPass( const string &n_pass )
 {
     crypt_data data;
     data.initialized = 0;
-    cfg("PASS").setS(crypt_r(n_pass.c_str(),name().c_str(),&data));
+    string salt = "$1$"+name();		//Use MD5
+    cfg("PASS").setS(crypt_r(n_pass.c_str(),salt.c_str(),&data));
 }
 
 bool TUser::auth( const string &ipass )
 {
     crypt_data data;
     data.initialized = 0;
-    return (cfg("PASS").getS() == crypt_r(ipass.c_str(),name().c_str(),&data));
+    string pass = cfg("PASS").getS();
+    string salt = (pass.compare(0,3,"$1$") == 0) ? "$1$"+name() : name();	//Check for MD5 or old method
+    return (pass == crypt_r(ipass.c_str(),salt.c_str(),&data));
 }
 
 void TUser::postDisable( int flag )

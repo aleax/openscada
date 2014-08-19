@@ -53,8 +53,7 @@ void IOObj::close( )
 
 TVariant IOObj::propGet( const string &id )
 {
-    if(id == "length")
-    {
+    if(id == "length") {
 	if(!fhd) return (int64_t)str.size();
 	pos = ftell(fhd);
 	fseek(fhd, 0, SEEK_END);
@@ -62,7 +61,7 @@ TVariant IOObj::propGet( const string &id )
 	fseek(fhd, pos, SEEK_SET);
 	return end;
     }
-    if(id == "pos") return fhd ? (int64_t)ftell(fhd) : (int64_t)str.size();
+    if(id == "pos")		return fhd ? (int64_t)ftell(fhd) : (int64_t)str.size();
     if(id == "string")		return str;
     if(id == "mFormat")		return mFormat;
     if(id == "stringEncode")	return strEnc;
@@ -72,8 +71,7 @@ TVariant IOObj::propGet( const string &id )
 
 void IOObj::propSet( const string &id, TVariant val )
 {
-    if(id == "pos")
-    {
+    if(id == "pos") {
 	if(fhd)	fseek(fhd, pos, SEEK_CUR);
 	else pos = vmin((int)str.size(),vmax(0,val.getI()));
     }
@@ -92,8 +90,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
     //  perm - file permition access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)
     //  machineFmt - machine format (native(n), ieee-be(b), ieee-le(l))
     //  enc - encoding for chars
-    if(id == "open" && prms.size() >= 1)
-    {
+    if(id == "open" && prms.size() >= 1) {
 	open(prms[0].getS(), ((prms.size() >= 2)?prms[1].getS():""),
 	    ((prms.size() >= 3)?prms[2].getS():"n"), ((prms.size() >= 4)?prms[3].getS():""));
 	return true;
@@ -105,23 +102,19 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
     //	valType - value type (char,int,float,real*4,...)
     //	cnt - values by data type counter; for no strings and multiply counter used Array as result (-1 up to end);
     //	mFormatEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
-    if(id == "read")
-    {
+    if(id == "read") {
 	TpDescr &tpD = getTp((prms.size()>=1) ? prms[0].getS() : "char");
 	long cnt = (prms.size()>=2) ? prms[1].getI() : -1;
 	if(!cnt) return false;
 
 	//Char stream
-	if(tpD.szBt == 1)
-	{
+	if(tpD.szBt == 1) {
 	    string rez, inCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
-	    if(!fhd)
-	    {
+	    if(!fhd) {
 		rez = str.substr(pos,vmax(0,vmin(str.size()-pos,(cnt<0)?str.size():cnt)));
 		pos = vmax(str.size(), pos+cnt);
 	    }
-	    else
-	    {
+	    else {
 		char buf[STR_BUF_LEN];
 		if(cnt < 0) cnt = USER_FILE_LIMIT;
 		for(int r_cnt = 0; (r_cnt=fread(buf,1,vmin(sizeof(buf),cnt-rez.size()),fhd)); )
@@ -131,22 +124,19 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    return rez;
 	}
 	//Integer
-	else if(!tpD.real)
-	{
+	else if(!tpD.real) {
 	    TArrayObj *ao = NULL;
 	    int64_t rez = 0;
 	    string mach = (prms.size()>=3) ? prms[2].getS() : mFormat;
 	    if(mach.empty()) mach = "n";
 	    // From string stream
-	    if(!fhd)
-	    {
+	    if(!fhd) {
 		if(cnt != 1) ao = new TArrayObj();
 		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && pos <= (str.size()-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {
-			case 2:
-			{
+			case 2: {
 			    uint16_t v = TSYS::getUnalign16(str.data()+pos);
 			    switch(mach[0])
 			    {
@@ -156,8 +146,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    rez = tpD.sign ? (int16_t)v : v;
 			    break;
 			}
-			case 4:
-			{
+			case 4: {
 			    uint32_t v = TSYS::getUnalign32(str.data()+pos);
 			    switch(mach[0])
 			    {
@@ -167,8 +156,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    rez = tpD.sign ? (int32_t)v : v;
 			    break;
 			}
-			case 8:
-			{
+			case 8: {
 			    uint64_t v = TSYS::getUnalign64(str.data()+pos);
 			    switch(mach[0])
 			    {
@@ -189,13 +177,12 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    char buf[STR_BUF_LEN];
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
-	    for(long r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
-		for(unsigned i_cnt = 0, pos = 0; pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
+	    for(long r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)) > 0; r_full += r_cnt)
+		for(unsigned pos = 0; pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {
-			case 2:
-			{
+			case 2: {
 			    uint16_t v = *(uint16_t*)(buf+pos);
 			    switch(mach[0])
 			    {
@@ -205,8 +192,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    rez = tpD.sign ? (int16_t)v : v;
 			    break;
 			}
-			case 4:
-			{
+			case 4: {
 			    uint32_t v = *(uint32_t*)(buf+pos);
 			    switch(mach[0])
 			    {
@@ -216,8 +202,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    rez = tpD.sign ? (int32_t)v : v;
 			    break;
 			}
-			case 8:
-			{
+			case 8: {
 			    uint64_t v = *(uint64_t*)(buf+pos);
 			    switch(mach[0])
 			    {
@@ -235,22 +220,19 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    return (int64_t)EVAL_INT;
 	}
 	//Real
-	else
-	{
+	else {
 	    TArrayObj *ao = NULL;
 	    double rez = 0;
 	    string mach = (prms.size()>=3) ? prms[2].getS() : mFormat;
 	    if(mach.empty()) mach = "n";
 	    // From string stream
-	    if(!fhd)
-	    {
+	    if(!fhd) {
 		if(cnt != 1) ao = new TArrayObj();
 		for(long i_cnt = 0; (cnt < 0 || i_cnt < cnt) && pos <= (str.size()-tpD.szBt); pos += tpD.szBt, i_cnt++)
 		{
 		    switch(tpD.szBt)
 		    {
-			case 4:
-			{
+			case 4: {
 			    float v = TSYS::getUnalignFloat(str.data()+pos);
 			    switch(mach[0])
 			    {
@@ -260,8 +242,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    rez = v;
 			    break;
 			}
-			case 8:
-			{
+			case 8: {
 			    rez = TSYS::getUnalignDbl(str.data()+pos);
 			    switch(mach[0])
 			    {
@@ -281,13 +262,12 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    char buf[STR_BUF_LEN];
 	    if(cnt != 1) ao = new TArrayObj();
 	    if(cnt < 0) cnt = USER_FILE_LIMIT/tpD.szBt;
-	    for(int r_cnt = 0, r_full = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
-		for(unsigned i_cnt = 0, pos = 0; (int)pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++)
-		{
+	    for(int r_cnt = 0, r_full = 0, i_cnt = 0; (r_cnt=fread(buf,1,vmin((long)sizeof(buf),cnt*tpD.szBt-r_full),fhd)); r_full += r_cnt)
+	    {
+		for(unsigned pos = 0; (int)pos <= (r_cnt-tpD.szBt); pos += tpD.szBt, i_cnt++) {
 		    switch(tpD.szBt)
 		    {
-			case 4:
-			{
+			case 4: {
 			    float v = *(float*)(buf+pos);
 			    switch(mach[0])
 			    {
@@ -297,8 +277,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			    rez = v;
 			    break;
 			}
-			case 8:
-			{
+			case 8: {
 			    rez = *(double*)(buf+pos);
 			    switch(mach[0])
 			    {
@@ -311,6 +290,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    if(!ao) return rez;
 		    ao->arSet(i_cnt, rez);
 		}
+	    }
 	    if(ao) return ao;
 	    return EVAL_REAL;
 	}
@@ -324,8 +304,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
     //	valType - value type (char,int,float,real*4,...)
     //	mFormatEnc - machine format (native(n), ieee-be(b), ieee-le(l)) or encodeIn for string
     //	cnt - integer and real types write multiple count
-    if((id == "write" || (sec1=(id=="wr"))) && prms.size() >= 1)
-    {
+    if((id == "write" || (sec1=(id=="wr"))) && prms.size() >= 1) {
 	TVariant &vals = prms[0];
 	TpDescr tpD;
 	if(prms.size() >= 2) tpD = getTp(prms[1].getS());
@@ -333,12 +312,10 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	//!!!! Check for real data type
 
 	//Char stream
-	if(tpD.szBt == 1 && vals.type() == TVariant::String)
-	{
+	if(tpD.szBt == 1 && vals.type() == TVariant::String) {
 	    string outCd = (prms.size()>=3) ? prms[2].getS() : strEnc;
 	    string sval = Mess->codeConvOut(outCd, prms[0].getS());
-	    if(!fhd)
-	    {
+	    if(!fhd) {
 		if(pos >= str.size()) str.append(sval);
 		else str.replace(pos, vmax(0,vmin(str.size()-pos,sval.size())), sval);
 		pos += sval.size();
@@ -354,8 +331,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	int cntr = (prms.size() < 4) ? 1 : prms[3].getI();
 	TArrayObj *ai = NULL;
 	if(vals.type() == TVariant::Object && !AutoHD<TArrayObj>(vals.getO()).freeStat()) ai = (TArrayObj*)&vals.getO().at();
-	else
-	{
+	else {
 	    ai = new TArrayObj();
 	    for(int i_c = 0; i_c < cntr; i_c++) ai->arSet(i_c, vals);
 	    isSingle = true;
@@ -364,29 +340,23 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	if(mach.empty()) mach = "n";
 
 	//Integer
-	if(!tpD.real)
-	{
+	if(!tpD.real) {
 	    // To string stream
-	    if(!fhd)
-	    {
+	    if(!fhd) {
 		switch(tpD.szBt)
 		{
-		    case 1:
-		    {
+		    case 1: {
 			uint8_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
 			    v = ai->arGet(i_a).getI();
 			    if(pos >= str.size()) str.append((char*)&v,sizeof(v));
 			    else str.replace(pos, vmax(0,vmin(str.size()-pos,sizeof(v))), (char*)&v,sizeof(v));
 			}
 			break;
 		    }
-		    case 2:
-		    {
+		    case 2: {
 			uint16_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -398,11 +368,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			break;
 		    }
-		    case 4:
-		    {
+		    case 4: {
 			uint32_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -414,11 +382,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			break;
 		    }
-		    case 8:
-		    {
+		    case 8: {
 			uint64_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -436,21 +402,17 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	    else // To file
 		switch(tpD.szBt)
 		{
-		    case 1:
-		    {
+		    case 1: {
 			uint8_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
 			    v = ai->arGet(i_a).getI();
 			    rez += (int64_t)fwrite((char*)&v, 1, sizeof(v), fhd);
 			}
 			break;
 		    }
-		    case 2:
-		    {
+		    case 2: {
 			uint16_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -461,11 +423,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			break;
 		    }
-		    case 4:
-		    {
+		    case 4: {
 			uint32_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -476,11 +436,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 			}
 			break;
 		    }
-		    case 8:
-		    {
+		    case 8: {
 			uint64_t v = 0;
-			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
-			{
+			for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
 			    v = ai->arGet(i_a).getI();
 			    switch(mach[0])
 			    {
@@ -498,15 +456,12 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	}
 	//Real
 	// To string stream
-	if(!fhd)
-	{
+	if(!fhd) {
 	    switch(tpD.szBt)
 	    {
-		case 4:
-		{
+		case 4: {
 		    float v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
-		    {
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
 			v = ai->arGet(i_a).getR();
 			switch(mach[0])
 			{
@@ -518,11 +473,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    break;
 		}
-		case 8:
-		{
+		case 8: {
 		    double v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v))
-		    {
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++, pos += sizeof(v)) {
 			v = ai->arGet(i_a).getR();
 			switch(mach[0])
 			{
@@ -540,11 +493,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 	else // To file
 	    switch(tpD.szBt)
 	    {
-		case 4:
-		{
+		case 4: {
 		    float v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
-		    {
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
 			v = ai->arGet(i_a).getR();
 			switch(mach[0])
 			{
@@ -555,11 +506,9 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 		    }
 		    break;
 		}
-		case 8:
-		{
+		case 8: {
 		    double v = 0;
-		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++)
-		    {
+		    for(unsigned i_a = 0; i_a < ai->arSize(); i_a++) {
 			v = ai->arGet(i_a).getR();
 			switch(mach[0])
 			{
@@ -582,8 +531,7 @@ TVariant IOObj::funcCall( const string &id, vector<TVariant> &prms )
 IOObj::TpDescr &IOObj::getTp( const string &dtT )
 {
     //Init data types
-    if(dTPs.empty())
-    {
+    if(dTPs.empty()) {
 	dTPs["uchar"] = dTPs["uint8"] = dTPs["unsigned char"] = TpDescr(1);
 	dTPs["uint16"] = dTPs["ushort"] = TpDescr(2);
 	dTPs["uint32"] = dTPs["uint"] = dTPs["ulong"] = TpDescr(4);

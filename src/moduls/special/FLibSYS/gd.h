@@ -35,18 +35,18 @@ namespace FLibSYS
 class GDObj : public TVarObj
 {
     public:
-        //Methods
-        GDObj( const string &inm, bool file = false );
-        ~GDObj( );
+	//Methods
+	GDObj( const string &inm, bool file = false );
+	~GDObj( );
 
-        string objName( )       { return "GD"; }
+	string objName( )	{ return "GD"; }
 
-        bool load( const string &inm, bool file = false );
-        string save( const string &inm, bool file = false );
+	bool load( const string &inm, bool file = false );
+	string save( const string &inm, bool file = false );
 
-        TVariant propGet( const string &id );
-        void propSet( const string &id, TVariant val );
-        TVariant funcCall( const string &id, vector<TVariant> &prms );
+	TVariant propGet( const string &id );
+	void propSet( const string &id, TVariant val );
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
     private:
 	//Attributes
@@ -58,8 +58,7 @@ class GDObj : public TVarObj
 class GD : public TFunction
 {
     public:
-	GD( ) : TFunction("GD", SSPC_ID)
-	{
+	GD( ) : TFunction("GD", SSPC_ID) {
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("name",_("Name"),IO::String,IO::Default));
 	    ioAdd(new IO("file",_("From file"),IO::Boolean,IO::Default,"0"));

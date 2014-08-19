@@ -887,8 +887,7 @@ bool InspAttr::ItemDelegate::eventFilter( QObject *object, QEvent *event )
 	    {
 		case Qt::Key_Enter:
 		case Qt::Key_Return:
-		    if( QApplication::keyboardModifiers()&Qt::ControlModifier )
-		    {
+		    if(QApplication::keyboardModifiers()&Qt::ControlModifier) {
 			emit commitData(ted);
 			emit closeEditor(ted, QAbstractItemDelegate::SubmitModelCache);
 			return true;

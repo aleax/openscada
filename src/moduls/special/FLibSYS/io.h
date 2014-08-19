@@ -42,18 +42,18 @@ namespace FLibSYS
 class IOObj : public TVarObj
 {
     public:
-        //Methods
-        IOObj( const string &nm, const string &perm = "", const string &mFormat = "", const string &ienc = "" );
-        ~IOObj( );
+	//Methods
+	IOObj( const string &nm, const string &perm = "", const string &mFormat = "", const string &ienc = "" );
+	~IOObj( );
 
-        string objName( )       { return "IO"; }
+	string objName( )	{ return "IO"; }
 
-        void open( const string &inm, const string &perm = "", const string &mFormat = "", const string &ienc = "" );
-        void close( );
+	void open( const string &inm, const string &perm = "", const string &mFormat = "", const string &ienc = "" );
+	void close( );
 
-        TVariant propGet( const string &id );
-        void propSet( const string &id, TVariant val );
-        TVariant funcCall( const string &id, vector<TVariant> &prms );
+	TVariant propGet( const string &id );
+	void propSet( const string &id, TVariant val );
+	TVariant funcCall( const string &id, vector<TVariant> &prms );
 
     private:
 	//Data
@@ -85,8 +85,7 @@ class IOObj : public TVarObj
 class IOCall : public TFunction
 {
     public:
-	IOCall( ) : TFunction("IO", SSPC_ID)
-	{
+	IOCall( ) : TFunction("IO", SSPC_ID) {
 	    ioAdd(new IO("rez",_("Result"),IO::Object,IO::Return));
 	    ioAdd(new IO("name",_("File name or data (for string stream)"),IO::String,IO::Default));
 	    ioAdd(new IO("accs",_("File access (''-string stream;'r[+]'-read;'w[+]'-write from zero;'a[+]'-append;...)"),IO::String,IO::Default));

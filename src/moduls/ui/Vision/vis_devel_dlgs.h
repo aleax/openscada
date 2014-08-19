@@ -119,6 +119,11 @@ class LibProjProp: public QDialog
 	QPushButton	*buttStlTableDel,
 			*buttStlDel;
 
+	LineEdit	*messTime,	//Messages time
+			*messSize;	//Messages size
+	QTableWidget	*messTable;	//Messages table
+	QPushButton	*rldPushBt;
+
 	QDialogButtonBox *butbox;	//Buttons
 
 	bool		show_init, is_modif, ico_modif;

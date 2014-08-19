@@ -105,6 +105,8 @@ class Project : public TCntrNode, public TConfig
 	string stlPropGet( const string &pid, const string &def = "", int sid = -1 );
 	bool stlPropSet( const string &pid, const string &vl, int sid = -1 );
 
+	string catsPat( );	//Individual the page's sessions' messages' categories pattern
+
 	//Attributes
 	bool	enableByNeed;	//Load and enable by need
 

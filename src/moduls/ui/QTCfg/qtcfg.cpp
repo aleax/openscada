@@ -838,7 +838,7 @@ void ConfApp::treeUpdate( )
 	    viewChildRecArea(CtrTree->topLevelItem(i_t),true);
 }
 
-void ConfApp::userSel()
+void ConfApp::userSel( )
 {
     pg_info.setAttr("path","");
 

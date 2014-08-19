@@ -1,3 +1,13 @@
+2014-08-19 Roman
+- FIX:Security: Password size expand to more 8 symbols by switch to crypt MD5. Backward compatibility saved for stored passwords.
+    Detected by Vasilij Grigoriev.
+- FIX:DAQ.JavaLikeCalc: toString() function for numbers fix for int64_t process.
+- FIX:Special.FLibSYS.IO: Load function for integer and real types fix to groups by multiple buffers (10000 bytes).
+- UI.{VCAEngine,Vision}: "Diagnostics" tab appended to project's page for sessions of the project errors and other debug simplify.
+- FIX:UI.Vision: Caps of trend's lines of primitive "Diagram" view "Trends" some fix for Qt4 and Qt5.
+    LineEdit widget some fix for apply real button size obtain and prevent the window size float.
+
+
 2014-08-15 Roman
 - SYS: data/oscada_gentoo.init appended for Gentoo by "IrmIngeneer".
     Force using "snprintf" instead "sprintf" into encoding functions.

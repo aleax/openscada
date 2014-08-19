@@ -400,7 +400,7 @@ class LineEditProp : public QWidget
 	//Methods
 	LineEditProp( QWidget *parent, DType tp = Font, bool m_toClose = true );
 
-	DType type( )       { return m_tp; }
+	DType type( )	{ return m_tp; }
 	QString value( );
 
 	void setType( DType tp )	{ m_tp = tp; }

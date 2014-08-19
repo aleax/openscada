@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-01 20:51+0300\n"
+"POT-Creation-Date: 2014-08-19 19:35+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1023,6 +1023,33 @@ msgstr "Видалити стиль"
 
 msgid "Value"
 msgstr "Значення"
+
+msgid "Diagnostics"
+msgstr "Діагностика"
+
+msgid "Time:"
+msgstr "Час:"
+
+msgid "Refresh"
+msgstr "Оновити"
+
+msgid "Size:"
+msgstr "Розмір:"
+
+msgid "Time"
+msgstr "Час"
+
+msgid "mcsec"
+msgstr "мкс"
+
+msgid "Category"
+msgstr "Категорія"
+
+msgid "Lev."
+msgstr "Рів."
+
+msgid "Message"
+msgstr "Повідомлення"
 
 msgid "Close"
 msgstr "Закрити"
@@ -2057,17 +2084,8 @@ msgstr "Час відображення тренду: %f мс."
 msgid "Date and time"
 msgstr "Дата та час"
 
-msgid "mcsec"
-msgstr "мкс"
-
 msgid "Level"
 msgstr "Рівень"
-
-msgid "Category"
-msgstr "Категорія"
-
-msgid "Message"
-msgstr "Повідомлення"
 
 #, c-format
 msgid "Document parsing error: %s"
@@ -2099,9 +2117,6 @@ msgstr "Вибір шрифту"
 
 msgid "Font:"
 msgstr "Шрифт:"
-
-msgid "Size:"
-msgstr "Розмір:"
 
 msgid "Bold"
 msgstr "Підсилений"

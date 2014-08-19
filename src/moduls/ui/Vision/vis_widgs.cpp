@@ -547,7 +547,7 @@ void LineEdit::setValue( const QString &txt )
     if(bt_fld) viewApplyBt(false);
 }
 
-void LineEdit::setCfg(const QString &cfg)
+void LineEdit::setCfg( const QString &cfg )
 {
     if(ed_fld) ed_fld->blockSignals(true);
     switch(type())
@@ -574,7 +574,7 @@ void LineEdit::setCfg(const QString &cfg)
 	case Real: {
 	    double minv = 0, maxv = 100, sstep = 1;
 	    string pref, suff;
-	    int    dec = 2;
+	    int dec = 2;
 	    if(!cfg.isEmpty()) {
 		minv  = s2r(TSYS::strSepParse(cfg.toStdString(),0,':'));
 		maxv  = s2r(TSYS::strSepParse(cfg.toStdString(),1,':'));
@@ -654,8 +654,9 @@ bool LineEdit::event( QEvent * e )
 	else if(keyEvent->key() == Qt::Key_Escape )	{ cancelSlot(); return true; }
     }
     else if(e->type() == QEvent::Resize && applyReserve && needReserver) {
-	ed_fld->setMaximumWidth(width()-12);
-	ed_fld->setMinimumWidth(width()-12);
+	int btW = bt_fld ? bt_fld->width() : 12;
+	ed_fld->setMaximumWidth(width()-btW);
+	ed_fld->setMinimumWidth(width()-btW);
     }
 
     return QWidget::event(e);

@@ -381,7 +381,7 @@ retry:
 	    }
 
 	    yylval.reg = p_fnc->regTmpNew();
-	    *yylval.reg = atof(prog.substr(st_pos,pos-st_pos).c_str());
+	    *yylval.reg = s2r(prog.substr(st_pos,pos-st_pos));
 	    return CONST;
 	}
 	else return 0;

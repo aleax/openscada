@@ -48,8 +48,7 @@ class UFunc
 {
     public:
 	//Methods
-	UFunc( const string &path ) : mPath(path)
-	{
+	UFunc( const string &path ) : mPath(path) {
 	    if(dynamic_cast<TFunction *>(&SYS->nodeAt(path,0,'.').at())) mFunc = SYS->nodeAt(path,0,'.');
 	}
 	const string &path( )		{ return mPath; }
@@ -70,8 +69,7 @@ class Reg
 {
     public:
 	//Data
-	enum Type
-	{
+	enum Type {
 	    Free,	//Free
 	    Bool,	//Boolean
 	    Int,	//Integer
@@ -83,8 +81,7 @@ class Reg
 	    PrmAttr	//Parameter attribute
 	};
 
-	enum Code	//Byte codes
-	{
+	enum Code {	//Byte codes
 	    End,	//[E]: End program.
 	    EndFull,	//[E]: Full end from program.
 	    MviB,	//[CRRB]: Load Boolean <B> to register <R>.
@@ -155,8 +152,7 @@ class Reg
 	    CFuncObj	//[CRRnRR____]: Object's function
 	};
 
-	union El
-	{
+	union El {
 	    char		b;	//Boolean for constant and local variable
 	    int64_t		i;	//Integer for constant and local variable
 	    double		r;	//Real for constant and local variable
@@ -253,9 +249,8 @@ class Func : public TConfig, public TFunction
     friend int yyparse();
     friend void yyerror(const char*);
     public:
-	//> Addition flags for IO
-	enum IOSpecFlgs
-	{
+	// Addition flags for IO
+	enum IOSpecFlgs {
 	    SysAttr	= 0x10	//Lock attribute
 	};
 
@@ -289,26 +284,26 @@ class Func : public TConfig, public TFunction
 	void valAtt( TValFunc *vfnc );
         void valDet( TValFunc *vfnc );
 
-	//> Functins` list functions
+	// Functins`list functions
 	int funcGet( const string &path );
 	UFunc *funcAt( int id )	{ return mFncs.at(id); }
 	void funcClear( );
 
-	//> Registers` list functions
+	// Registers`list functions
 	int regNew( bool sep = false );
 	int regGet( const string &nm );
 	int ioGet( const string &nm );
 	Reg *regAt( int id )	{ return (id>=0) ? mRegs.at(id) : NULL; }
 	void regClear( );
 
-	//> Temporary registers` list functions
+	// Temporary registers`list functions
 	Reg *regTmpNew( );
 	void regTmpClean( );
 
-	//> Parse function
+	// Parse function
 	void progCompile( );
 
-	//> Code functions
+	// Code functions
 	Reg *cdTypeConv( Reg *opi, Reg::Type tp, bool no_code = false );
 	Reg *cdMvi( Reg *op, bool no_code = false );
 	Reg *cdMviObject( );
@@ -327,11 +322,11 @@ class Func : public TConfig, public TFunction
 	Reg *cdObjFnc( Reg *obj, int p_cnt );
 	Reg *cdProp( Reg *obj, const string &sprp, Reg *dprp = NULL );
 
-	//> Properties and functions for base object's process
+	// Properties and functions for base object's process
 	TVariant oPropGet( TVariant vl, const string &prop );
 	TVariant oFuncCall( TVariant &vl, const string &prop, vector<TVariant> &parms );
 
-	//> Variable access
+	// Variable access
 	TVariant getVal( TValFunc *io, RegW &rg, bool fObj = false );
 	string	getValS( TValFunc *io, RegW &rg );
 	int64_t	getValI( TValFunc *io, RegW &rg );
@@ -346,7 +341,7 @@ class Func : public TConfig, public TFunction
 	void setValB( TValFunc *io, RegW &rg, char val );
 	void setValO( TValFunc *io, RegW &rg, AutoHD<TVarObj> val );
 
-	//> IO operations
+	// IO operations
 	void ioAdd( IO *io );
 	void ioIns( IO *io, int pos );
 	void ioDel( int pos );
@@ -356,8 +351,7 @@ class Func : public TConfig, public TFunction
 
     protected:
 	//Data
-	struct ExecData
-	{
+	struct ExecData {
 	    time_t	start_tm;	//Start time
 	    unsigned char flg;		//0x01 - recursive exit stat;
 					//0x02 - break operator flag;
@@ -369,7 +363,7 @@ class Func : public TConfig, public TFunction
 	void postEnable( int flag );
 	void postDisable( int flag );
 	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
 	void save_( );
@@ -387,7 +381,7 @@ class Func : public TConfig, public TFunction
 	int64_t	&mMaxCalcTm,
 		&mTimeStamp;
 
-	//> Parser's data
+	// Parser's data
 	string		sprg, prg;	//Build prog
 	unsigned	la_pos;		//LA position
 	string		p_err;		//Parse error

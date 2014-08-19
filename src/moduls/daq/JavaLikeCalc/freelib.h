@@ -75,7 +75,7 @@ class Lib : public TCntrNode, public TConfig
 
     protected:
 	const char *nodeName( )	{ return mId.getSd(); }
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );
 	void save_( );

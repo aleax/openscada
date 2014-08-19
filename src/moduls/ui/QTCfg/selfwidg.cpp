@@ -120,13 +120,12 @@ void LineEdit::viewApplyBt( bool view )
 {
     if(view == (bool)bt_fld) return;
 
-    if(view && !bt_fld)
-    {
+    if(view && !bt_fld) {
 	bt_fld = new QPushButton(this);
 	bt_fld->setIcon(QIcon(":/images/ok.png"));
 	bt_fld->setIconSize(QSize(12,12));
 	bt_fld->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,QSizePolicy::Fixed));
-	//bt_fld->setMaximumWidth( 15 );
+	//bt_fld->setMaximumWidth(15);
 	connect(bt_fld, SIGNAL(clicked()), this, SLOT(applySlot()));
 	layout()->addWidget(bt_fld);
     }
@@ -297,7 +296,7 @@ void LineEdit::setCfg( const QString &cfg )
     if(ed_fld) ed_fld->blockSignals(false);
 }
 
-QString LineEdit::value()
+QString LineEdit::value( )
 {
     switch(type())
     {
@@ -902,7 +901,7 @@ DlgUser::DlgUser( QWidget *parent ) : QDialog(parent)
     }
 }
 
-QString DlgUser::user()
+QString DlgUser::user( )
 {
     return users->currentText();
 }
@@ -940,10 +939,7 @@ UserStBar::UserStBar( const QString &iuser, QWidget * parent ) : QLabel(parent)
     setUser(iuser);
 }
 
-QString UserStBar::user( )
-{
-    return user_txt;
-}
+QString UserStBar::user( )	{ return user_txt; }
 
 void UserStBar::setUser( const QString &val )
 {
@@ -953,21 +949,21 @@ void UserStBar::setUser( const QString &val )
 
 bool UserStBar::event( QEvent *event )
 {
-    if( event->type() == QEvent::MouseButtonDblClick )  userSel();
-    return QLabel::event( event );
+    if(event->type() == QEvent::MouseButtonDblClick) userSel();
+    return QLabel::event(event);
 }
 
 bool UserStBar::userSel( )
 {
     DlgUser d_usr(parentWidget());
     int rez = d_usr.exec();
-    if( rez == DlgUser::SelOK && d_usr.user() != user() )
+    if(rez == DlgUser::SelOK && d_usr.user() != user())
     {
-	setUser( d_usr.user() );
+	setUser(d_usr.user());
 	emit userChanged();
 	return true;
     }
-    else if( rez == DlgUser::SelErr )
+    else if(rez == DlgUser::SelErr)
         mod->postMess(mod->nodePath().c_str(),_("Auth is wrong!!!"),TUIMod::Warning,this);
 
     return false;

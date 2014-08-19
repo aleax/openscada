@@ -161,6 +161,7 @@ void Lib::modStart( )
     list(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	at(lst[i_l]).at().setStart(true);
+
     run_st = true;
 }
 
@@ -178,25 +179,23 @@ TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 {
     // ElTp {funcID}(ElTp prm1, ...) - the function {funcID} call
     //  prm{N} - {N} parameter to the function.
-    if(present(iid))    return at(iid).at().objFuncCall("call", prms, user);
+    if(present(iid))	return at(iid).at().objFuncCall("call", prms, user);
 
     return TCntrNode::objFuncCall(iid, prms, user);
 }
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TSpecial::cntrCmdProc(opt);
 	ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),R_R_R_,"root",SSPC_ID,1,"idm","1");
 	ctrMkNode("list",opt,-1,"/prm/func",_("Functions"),R_R_R_,"root",SSPC_ID,3,"tp","br","idm","1","br_pref","fnc_");
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if((a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt))
-    {
+    if((a_path == "/br/fnc_" || a_path == "/prm/func") && ctrChkNode(opt)) {
 	vector<string> lst;
 	list(lst);
 	for(unsigned i_f=0; i_f < lst.size(); i_f++)

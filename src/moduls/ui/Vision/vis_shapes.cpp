@@ -2244,8 +2244,11 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
+#if QT_VERSION < 0x050000
+	if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+#else
 	trpen.setCapStyle(Qt::FlatCap);
-	//if(trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+#endif
 	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 
@@ -2668,8 +2671,11 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 	QPen trpen(cP.color());
 	trpen.setStyle(Qt::SolidLine);
 	trpen.setWidth(vmax(1,vmin(10,(int)TSYS::realRound(cP.width()*vmin(w->xScale(true),w->yScale(true))))));
+#if QT_VERSION < 0x050000
+	if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+#else
 	trpen.setCapStyle(Qt::FlatCap);
-	//if(cP.valTp() != 0 && trpen.width() > 1) trpen.setCapStyle(Qt::RoundCap);
+#endif
 	pnt.setRenderHint(QPainter::Antialiasing, (trpen.width()>=2));
 	pnt.setPen(trpen);
 

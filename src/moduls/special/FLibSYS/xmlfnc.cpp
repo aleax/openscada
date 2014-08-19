@@ -27,20 +27,17 @@ using namespace FLibSYS;
 //*************************************************
 void xmlCntrReq::calc( TValFunc *val )
 {
-    try
-    {
+    try {
 	XMLNode req;
 	AutoHD<XMLNodeObj> xnd = val->getO(1);
 	if(xnd.freeStat()) { val->setS(0,_("1:Request is not object!")); return; }
 	xnd.at().toXMLNode(req);
 	string path = req.attr("path");
-	if(val->getS(2).empty())
-	{
+	if(val->getS(2).empty()) {
 	    req.setAttr("user", val->user());
 	    SYS->cntrCmd(&req);
 	}
-	else
-	{
+	else {
 	    req.setAttr("path", "/"+val->getS(2)+path);
 	    SYS->transport().at().cntrIfCmd(req, "xmlCntrReq");
 	    req.setAttr("path", path);

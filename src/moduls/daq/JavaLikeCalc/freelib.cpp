@@ -51,15 +51,14 @@ TCntrNode &Lib::operator=( TCntrNode &node )
     Lib *src_n = dynamic_cast<Lib*>(&node);
     if(!src_n) return *this;
 
-    //> Configuration copy
+    //Configuration copy
     exclCopy(*src_n, "ID;");
     work_lib_db = src_n->work_lib_db;
 
-    //> Functions copy
+    //Functions copy
     vector<string> ls;
     src_n->list(ls);
-    for(unsigned i_p = 0; i_p < ls.size(); i_p++)
-    {
+    for(unsigned i_p = 0; i_p < ls.size(); i_p++) {
 	if(!present(ls[i_p])) add(ls[i_p].c_str());
 	(TCntrNode&)at(ls[i_p]).at() = (TCntrNode&)src_n->at(ls[i_p]).at();
     }
@@ -75,12 +74,11 @@ void Lib::preDisable( int flag )
 
 void Lib::postDisable( int flag )
 {
-    if(flag && DB().size())
-    {
+    if(flag && DB().size()) {
 	//Delete libraries record
 	SYS->db().at().dataDel(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this,true);
 
-	//> Delete function's files
+	//Delete function's files
 	SYS->db().at().open(fullDB());
 	SYS->db().at().close(fullDB(),true);
 
@@ -162,28 +160,23 @@ TVariant Lib::objFuncCall( const string &iid, vector<TVariant> &prms, const stri
 
 void Lib::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Function's library: ")+id(),RWRWR_,"root",SDAQ_ID);
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/fnc_",_("Function"),RWRWR_,"root",SDAQ_ID,2,"idm",OBJ_NM_SZ,"idSz",OBJ_ID_SZ);
-	if(ctrMkNode("area",opt,-1,"/lib",_("Library")))
-	{
-	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State")))
-	    {
+	if(ctrMkNode("area",opt,-1,"/lib",_("Library"))) {
+	    if(ctrMkNode("area",opt,-1,"/lib/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/lib/st/st",_("Accessing"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		if(DB().size())
-		{
+		if(DB().size()) {
 		    ctrMkNode("fld",opt,-1,"/lib/st/db",_("Library DB"),RWRWR_,"root",SDAQ_ID,4,
 			"tp","str","dest","sel_ed","select",("/db/tblList:flb_"+id()).c_str(),
 			"help",_("DB address in format [<DB module>.<DB name>.<Table name>].\nFor use main work DB set '*.*'."));
 		    ctrMkNode("fld",opt,-1,"/lib/st/timestamp",_("Date of modification"),R_R_R_,"root",SDAQ_ID,1,"tp","time");
 		}
 	    }
-	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration")))
-	    {
+	    if(ctrMkNode("area",opt,-1,"/lib/cfg",_("Configuration"))) {
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
@@ -197,46 +190,38 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/lib/st/st")
-    {
+    if(a_path == "/lib/st/st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(startStat() ? "1" : "0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setStart(s2i(opt->text()));
     }
-    else if(a_path == "/lib/st/db" && DB().size())
-    {
+    else if(a_path == "/lib/st/db" && DB().size()) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(fullDB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setFullDB(opt->text());
     }
-    else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt))
-    {
-        vector<string> tls;
-        list(tls);
-        time_t maxTm = 0;
-        for(size_t i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
-        opt->setText(TSYS::int2str(maxTm));
+    else if(a_path == "/lib/st/timestamp" && ctrChkNode(opt)) {
+	vector<string> tls;
+	list(tls);
+	time_t maxTm = 0;
+	for(size_t i_t = 0; i_t < tls.size(); i_t++) maxTm = vmax(maxTm, at(tls[i_t]).at().timeStamp());
+	opt->setText(i2s(maxTm));
     }
     else if(a_path == "/lib/cfg/id" && ctrChkNode(opt))		opt->setText(id());
-    else if(a_path == "/lib/cfg/name")
-    {
+    else if(a_path == "/lib/cfg/name") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(name());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setName(opt->text());
     }
-    else if(a_path == "/lib/cfg/descr")
-    {
+    else if(a_path == "/lib/cfg/descr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
     }
-    else if(a_path == "/lib/cfg/progTr")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(TSYS::int2str(progTr()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProgTr(atoi(opt->text().c_str()));
+    else if(a_path == "/lib/cfg/progTr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(progTr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProgTr(s2i(opt->text()));
     }
-    else if(a_path == "/br/fnc_" || a_path == "/func/func")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))
-	{
+    else if(a_path == "/br/fnc_" || a_path == "/func/func") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for( unsigned i_f=0; i_f < lst.size(); i_f++ )
@@ -245,8 +230,7 @@ void Lib::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SDAQ_ID,SEC_WR))	add(TSYS::strEncode(opt->attr("id"),TSYS::oscdID).c_str(),opt->text().c_str());
 	if(ctrChkNode(opt,"del",RWRWR_,"root",SDAQ_ID,SEC_WR))	chldDel(mFnc,opt->attr("id"),-1,1);
     }
-    else if(a_path == "/func/ls_lib" && ctrChkNode(opt))
-    {
+    else if(a_path == "/func/ls_lib" && ctrChkNode(opt)) {
 	vector<string> lst;
 	opt->childAdd("el")->setAttr("id","")->setText("");
 	mod->lbList(lst);

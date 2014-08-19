@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-01 20:51+0300\n"
+"POT-Creation-Date: 2014-08-19 19:35+0300\n"
 "PO-Revision-Date: 2011-07-19 21:48+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1032,6 +1032,33 @@ msgstr "Erase Stil"
 
 msgid "Value"
 msgstr "Wert"
+
+msgid "Diagnostics"
+msgstr "Diagnostik"
+
+msgid "Time:"
+msgstr "Zeit:"
+
+msgid "Refresh"
+msgstr "Erfrischen"
+
+msgid "Size:"
+msgstr "Grösse:"
+
+msgid "Time"
+msgstr "Zeit"
+
+msgid "mcsec"
+msgstr "msek"
+
+msgid "Category"
+msgstr "Kategorie"
+
+msgid "Lev."
+msgstr "Ebene"
+
+msgid "Message"
+msgstr "Nachricht"
 
 msgid "Close"
 msgstr "Schliessen"
@@ -2070,17 +2097,8 @@ msgstr "Trend zu ziehen: %f ms."
 msgid "Date and time"
 msgstr "Datum und Uhrzeit"
 
-msgid "mcsec"
-msgstr "msek"
-
 msgid "Level"
 msgstr "Stufe"
-
-msgid "Category"
-msgstr "Kategorie"
-
-msgid "Message"
-msgstr "Nachricht"
 
 #, c-format
 msgid "Document parsing error: %s"
@@ -2112,9 +2130,6 @@ msgstr "Schrift auswählen"
 
 msgid "Font:"
 msgstr "Schrift:"
-
-msgid "Size:"
-msgstr "Grösse:"
 
 msgid "Bold"
 msgstr "Fett"
