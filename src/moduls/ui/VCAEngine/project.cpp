@@ -438,7 +438,7 @@ bool Project::stlPropSet( const string &pid, const string &vl, int sid )
     return true;
 }
 
-string Project::catsPat( )	{ return mod->nodePath()+"ses_"+id()+"\\d*"; }
+string Project::catsPat( )	{ return /* "("+mod->nodePath()+*/"/ses_"+id()+"\\d*"; }
 
 void Project::cntrCmdProc( XMLNode *opt )
 {

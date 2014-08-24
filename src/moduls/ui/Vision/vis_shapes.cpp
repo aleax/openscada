@@ -2771,18 +2771,19 @@ void ShapeDiagram::makeTrendsPicture( WdgView *w )
 
 void ShapeDiagram::tracing( )
 {
-    WdgView *w = (WdgView *)((QTimer*)sender())->parent();
+    WdgView *w = (WdgView*)((QTimer*)sender())->parent();
     ShpDt *shD = (ShpDt*)w->shpData;
 
     if(!w->isEnabled()) return;
 
     int64_t trcPer = (int64_t)shD->trcPer*1000000;
-    if(shD->tTimeCurent)shD->tTime = shD->arhEnd((int64_t)time(NULL)*1000000);
+    if(shD->tTimeCurent)shD->tTime = (int64_t)time(NULL)*1000000;
     else if(shD->tTime)	shD->tTime += trcPer;
     loadData(w);
     makePicture(w);
 
     //Trace cursors value
+    if(shD->tTimeCurent) shD->tTime = shD->arhEnd(shD->tTime);	//Force for cursor limit to real data
     if(shD->type == 0 && shD->active && (shD->holdCur || shD->curTime <= (shD->tPict-(int64_t)(1e6*shD->tSize))))
 	setCursor(w, shD->tTime);
     w->update();

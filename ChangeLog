@@ -1,3 +1,9 @@
+2014-08-24 Roman
+- UI.VCAEngine: "Diagnostics" tab messages pattern expand for internal VCA path allow.
+- FIX:UI.Vision: Next fix actual cursor set and the parameters value into the cursor position for significant time difference
+    for arrears the cursor position to one period.
+
+
 2014-08-19 Roman
 - FIX:Security: Password size expand to more 8 symbols by switch to crypt MD5. Backward compatibility saved for stored passwords.
     Detected by Vasilij Grigoriev.
