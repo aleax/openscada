@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.UI.Vision 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-19 19:35+0300\n"
+"POT-Creation-Date: 2014-08-25 20:19+0300\n"
 "PO-Revision-Date: 2007-11-06 20:42+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -114,13 +114,15 @@ msgid "Run projects list"
 msgstr "Перечень запускаемых проектов"
 
 msgid ""
-"Automatic started project's list separated by symbol ';'.\n"
-"For opening a project's window to need display (1) use project's name "
-"format: 'PrjName-1'."
+"Automatic started projects separated by symbol ';'.\n"
+"For opening a project's window to need display (1) use the project name "
+"format: 'PrjName-1'.\n"
+"For connect to background or other openned session use \"ses_{SesID}\"."
 msgstr ""
-"Перечень автоматически запускаемых проектов, разделённый символом ';'.\n"
+"Автоматически запускаемые проекты, разделённые символом ';'.\n"
 "Для открытия окна проекта на нужном дисплее (1) используйте имя проекта в "
-"формате: 'PrjName-1'."
+"формате: 'PrjName-1'.\n"
+"Для подключения к фоновому или другому открытому сеансу использовать \"ses_{SesID}\"."
 
 msgid "Run projects status display"
 msgstr "Отображение статуса запускаемых проектов"
@@ -1451,15 +1453,6 @@ msgstr "Нажать для закрытия текущего окна испо�
 msgid "Press for display the program and OpenSCADA information."
 msgstr "Нажать для получения информации о программе и OpenSCADA."
 
-msgid "Project '%1' manual"
-msgstr "Руководство проекта '%1'"
-
-msgid "The button for getting the using project '%1' manual"
-msgstr "Кнопка для получения руководства проекта '%1'"
-
-msgid "Press to get the using project '%1' manual."
-msgstr "Нажать для получения руководства проекта '%1'."
-
 msgid "'%1' manual"
 msgstr "'%1' руководство"
 
@@ -1537,6 +1530,15 @@ msgstr "Поле для отображения используемого сти
 
 msgid "Double click for style change."
 msgstr "Дважды кликнуть для смены стиля."
+
+msgid "Project '%1' manual"
+msgstr "Руководство проекта '%1'"
+
+msgid "The button for getting the using project '%1' manual"
+msgstr "Кнопка для получения руководства проекта '%1'"
+
+msgid "Press to get the using project '%1' manual."
+msgstr "Нажать для получения руководства проекта '%1'."
 
 msgid ""
 "Connection to visualization server '%1' error: %2.\n"

@@ -257,8 +257,8 @@ void Engine::load_( )
     mess_info(nodePath().c_str(),_("Load module."));
 
     //Load parameters from config-file and DB
-    setSynthCom( TBDS::genDBGet(nodePath()+"SynthCom",synthCom()) );
-    setSynthCode( TBDS::genDBGet(nodePath()+"SynthCode",synthCode()) );
+    setSynthCom(TBDS::genDBGet(nodePath()+"SynthCom",synthCom()));
+    setSynthCode(TBDS::genDBGet(nodePath()+"SynthCode",synthCode()));
 
     if(mess_lev() == TMess::Debug) d_tm = TSYS::curTime();
 
@@ -386,10 +386,10 @@ void Engine::load_( )
     try {
 	aSess.load(TBDS::genDBGet(nodePath()+"AutoSess"));
 	for(unsigned i_n = 0; i_n < aSess.childSize(); i_n++) {
-	    string sId	= aSess.childGet(i_n)->attr("id");
-	    string sPrj	= aSess.childGet(i_n)->attr("prj");
-	    string sUser= aSess.childGet(i_n)->attr("user");
-	    mSessAuto[sId] = sPrj+":"+sUser;
+	    string sId	= aSess.childGet(i_n)->attr("id"),
+		   sPrj	= aSess.childGet(i_n)->attr("prj"),
+		   sUser= aSess.childGet(i_n)->attr("user");
+	    mSessAuto[sId] = sPrj + ":" + sUser;
 
 	    try {
 		if(!sesPresent(sId) && prjAt(sPrj).at().enable()) {
@@ -411,8 +411,8 @@ void Engine::save_( )
     mess_info(nodePath().c_str(),_("Save module."));
 
     //Save parameters to DB
-    TBDS::genDBSet( nodePath()+"SynthCom", synthCom() );
-    TBDS::genDBSet( nodePath()+"SynthCode", synthCode() );
+    TBDS::genDBSet(nodePath()+"SynthCom", synthCom());
+    TBDS::genDBSet(nodePath()+"SynthCode", synthCode());
 
     //Auto-sessions save
     ResAlloc res(nodeRes(),false);
@@ -429,6 +429,22 @@ void Engine::modStart( )
     mess_info(nodePath().c_str(),_("Start module."));
 
     vector<string> ls;
+
+    //Auto-sessions enable
+    ResAlloc res(nodeRes(),true);
+    for(map<string,string>::iterator si = mSessAuto.begin(); si != mSessAuto.end(); ++si)
+	try {
+	    string sId = si->first,
+		   sPrj = TSYS::strParse(si->second,0,":"),
+		   sUser = TSYS::strParse(si->second,1,":");
+	    if(!sesPresent(sId) && prjAt(sPrj).at().enable()) {
+		    sesAdd(sId, sPrj);
+		    sesAt(sId).at().setUser(sUser);
+		    sesAt(sId).at().setBackgrnd(true);
+		    sesAt(sId).at().setEnable(true);
+		}
+	    }catch(...){ }
+    res.release();
 
     //Start sessions
     sesList(ls);
@@ -458,10 +474,7 @@ void Engine::wlbAdd( const string &iid, const string &inm, const string &idb )
     chldAdd(idWlb, new WidgetLib(iid,inm,idb));
 }
 
-AutoHD<WidgetLib> Engine::wlbAt( const string &id )
-{
-    return chldAt(idWlb,id);
-}
+AutoHD<WidgetLib> Engine::wlbAt( const string &id )	{ return chldAt(idWlb,id); }
 
 void Engine::prjAdd( const string &iid, const string &inm, const string &idb )
 {
@@ -705,7 +718,10 @@ void Engine::cntrCmdProc( XMLNode *opt )
 	    if(!SYS->security().at().access(opt->attr("user"),SEC_RD,wprj.at().owner(),wprj.at().grp(),wprj.at().permit()))
 		throw TError(nodePath().c_str(),_("Connection to session is not permitted for '%s'."),opt->attr("user").c_str());
 	    // Connect to present session
-	    if(!sess.empty())	sesAt(sess).at().connect();
+	    if(!sess.empty()) {
+		sesAt(sess).at().connect();
+		opt->setAttr("prj",sesAt(sess).at().projNm());
+	    }
 	    // Create session
 	    else if(!prj.empty()) {
 		//  Prepare session name

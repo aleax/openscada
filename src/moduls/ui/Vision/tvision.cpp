@@ -268,20 +268,27 @@ QMainWindow *TVision::openWindow( )
     unsigned screen;
     VisRun *fsess = NULL;
     for(int p_off = 0; (sprj=TSYS::strSepParse(runPrjs(),0,';',&p_off)).size(); ) {
+	// Screen number take
 	screen = 0;
 	size_t iSep = sprj.find("-");
 	if(iSep != string::npos) screen = s2i(sprj.substr(iSep+1));
 	sprj = sprj.substr(0,iSep);
 
+	// Check and extract for "sess_" or "proj_" prefixes
+	bool isSess = false;
+	if(sprj.compare(0,4,"ses_") == 0) { isSess = true; sprj.erase(0,4); }
+	else if(sprj.compare(0,4,"prj_") == 0) sprj.erase(0,4);
+
 	//QDesktopWidget().screen(1)
 	// Find for already opened run window
 	unsigned i_w;
 	for(i_w = 0; i_w < mn_winds.size(); i_w++)
-	    if(qobject_cast<VisRun*>(mn_winds[i_w]) && ((VisRun*)mn_winds[i_w])->srcProject() == sprj &&
+	    if(qobject_cast<VisRun*>(mn_winds[i_w]) &&
+		    ((isSess && ((VisRun*)mn_winds[i_w])->workSess() == sprj) || (!isSess && ((VisRun*)mn_winds[i_w])->srcProject() == sprj)) &&
 		    ((VisRun*)mn_winds[i_w])->screen() == screen)
 		break;
 	if(i_w < mn_winds.size()) continue;
-	VisRun *sess = new VisRun("/prj_"+sprj, user_open, user_pass, VCAStation(), true, screen);
+	VisRun *sess = new VisRun((isSess?"/ses_":"/prj_")+sprj, user_open, user_pass, VCAStation(), true, screen);
 	sess->show();
 	sess->raise();
 	sess->activateWindow();
@@ -354,7 +361,9 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),RWRWR_,"root",SUI_ID,2,"tp","real",
 		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,2,"tp","str",
-		"help",_("Automatic started project's list separated by symbol ';'.\nFor opening a project's window to need display (1) use project's name format: 'PrjName-1'."));
+		"help",_("Automatic started projects separated by symbol ';'.\n"
+			 "For opening a project's window to need display (1) use the project name format: 'PrjName-1'.\n"
+			 "For connect to background or other openned session use \"ses_{SesID}\"."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj_st",_("Run projects status display"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/winPos_cntr_save",_("Windows position control and save"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");

@@ -3998,13 +3998,13 @@ void VCAElFigure::getReq( SSess &ses )
     ResAlloc res(mRes, true);
     //> Prepare picture
     map<string, string>::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     prmEl = ses.prm.find("geomX");
-    geomX = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 0;
+    geomX = (prmEl!=ses.prm.end()) ? s2r(prmEl->second) : 0;
     prmEl = ses.prm.find("geomY");
-    geomY = (prmEl!=ses.prm.end()) ? atof(prmEl->second.c_str()) : 0;
+    geomY = (prmEl!=ses.prm.end()) ? s2r(prmEl->second) : 0;
 
     scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
@@ -4036,13 +4036,13 @@ void VCAElFigure::postReq( SSess &ses )
     if( prmEl != ses.prm.end() && prmEl->second == "point");
     {
 	prmEl = ses.prm.find("xSc");
-	double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+	double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
 	prmEl = ses.prm.find("ySc");
-	double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+	double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
 	prmEl = ses.prm.find("x");
-	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
+	int x_coord = (prmEl!=ses.prm.end()) ? s2i(prmEl->second) : -1;
 	prmEl = ses.prm.find("y");
-	int y_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : -1;
+	int y_coord = (prmEl!=ses.prm.end()) ? s2i(prmEl->second) : -1;
 	prmEl = ses.prm.find("key");
 	string key = (prmEl!=ses.prm.end()) ? prmEl->second : "";
 	if( x_coord < 0 || y_coord < 0 ) return;
@@ -4053,7 +4053,7 @@ void VCAElFigure::postReq( SSess &ses )
 	    XMLNode req("set");
 	    req.setAttr("path",ses.url+"/%2fserv%2fattr");
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+key);
-	    req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+TSYS::int2str(clickFillNum)+key);
+	    req.childAdd("el")->setAttr("id","event")->setText("ws_Fig"+i2s(clickFillNum)+key);
 	    req.childAdd("el")->setAttr("id","event")->setText("ws_FocusIn");
 	    req.childAdd("el")->setAttr("id","focus")->setText("1");
 	    mod->cntrIfCmd(req,ses.user);
@@ -4072,24 +4072,24 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 	req_el = node.childGet(i_a);
 	if(req_el->name() != "el") continue;
 
-	int uiPrmPos = atoi(req_el->attr("p").c_str());
+	int uiPrmPos = s2i(req_el->attr("p"));
 	switch(uiPrmPos)
 	{
-	    case A_ACTIVE: active = (bool)atoi(req_el->text().c_str());	break;
-	    case A_GEOM_W: width = atof(req_el->text().c_str());	break;
-	    case A_GEOM_H: height = atof(req_el->text().c_str());	break;
-	    case A_GEOM_MARGIN: geomMargin = atoi(req_el->text().c_str());	break;
+	    case A_ACTIVE: active = (bool)s2i(req_el->text());	break;
+	    case A_GEOM_W: width = s2r(req_el->text());		break;
+	    case A_GEOM_H: height = s2r(req_el->text());	break;
+	    case A_GEOM_MARGIN: geomMargin = s2i(req_el->text()); break;
 	    case A_GEOM_X_SC: rel_list = true;	break;
 	    case A_GEOM_Y_SC: rel_list = true;	break;
-	    case A_ElFigLineW: lineWdth = (int)TSYS::realRound(atof(req_el->text().c_str())); rel_list = true;	break;
+	    case A_ElFigLineW: lineWdth = (int)TSYS::realRound(s2r(req_el->text())); rel_list = true;	break;
 	    case A_ElFigLineClr:
 		lineClr = mod->colorParse(req_el->text());
 		if(lineClr == -1) lineClr = (127<<24)+(0<<16)+(0<<8)+0;
 		if(lineClr == 0) lineClr = (0<<24)+(250<<16)+(0<<8)+0;
 		rel_list = true;
 		break;
-	    case A_ElFigLineStl: lineStyle = atoi(req_el->text().c_str()); rel_list = true;	break;
-	    case A_ElFigBordW: bordWdth = (int)TSYS::realRound(atof(req_el->text().c_str())); rel_list = true;	break;
+	    case A_ElFigLineStl: lineStyle = s2i(req_el->text()); rel_list = true;	break;
+	    case A_ElFigBordW: bordWdth = (int)TSYS::realRound(s2r(req_el->text())); rel_list = true;	break;
 	    case A_ElFigBordClr:
 		bordClr = mod->colorParse(req_el->text());
 		if(bordClr == -1) bordClr = 0x7F000000;
@@ -4102,9 +4102,9 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		if(fillClr == 0)  fillClr = 0x00FA0000;
 		rel_list = true;
 		break;
-	    case A_ElFigFillImg: imgDef = req_el->text(); rel_list = true;		break;
-	    case A_ElFigOrient: orient = atof(req_el->text().c_str()); rel_list = true;	break;
-	    case A_ElFigElLst: elLst = req_el->text(); rel_list = true;			break;
+	    case A_ElFigFillImg: imgDef = req_el->text(); rel_list = true;	break;
+	    case A_ElFigOrient: orient = s2r(req_el->text()); rel_list = true;	break;
+	    case A_ElFigElLst: elLst = req_el->text(); rel_list = true;		break;
 	    default:
 		if(uiPrmPos >= A_ElFigIts)
 		{
@@ -4113,9 +4113,9 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 		    Point pnt_ = pnts[pnt];
 		    switch(patr)
 		    {
-			case A_ElFigItPntX: pnt_.x = atof(req_el->text().c_str()); pnts[pnt] = pnt_; rel_list = true;	break;
-			case A_ElFigItPntY: pnt_.y = atof(req_el->text().c_str()); pnts[pnt] = pnt_; rel_list = true;	break;
-			case A_ElFigItW: widths[pnt] = (int)TSYS::realRound(atof(req_el->text().c_str())); rel_list = true;	break;
+			case A_ElFigItPntX: pnt_.x = s2r(req_el->text()); pnts[pnt] = pnt_; rel_list = true;	break;
+			case A_ElFigItPntY: pnt_.y = s2r(req_el->text()); pnts[pnt] = pnt_; rel_list = true;	break;
+			case A_ElFigItW: widths[pnt] = (int)TSYS::realRound(s2r(req_el->text())); rel_list = true;	break;
 			case A_ElFigItClr:
 			    colors[pnt] = mod->colorParse(req_el->text());
 			    if(colors[pnt] == -1) colors[pnt] = 0x7F000000;
@@ -4123,7 +4123,7 @@ void VCAElFigure::setAttrs( XMLNode &node, const string &user )
 			    rel_list = true;
 			    break;
 			case A_ElFigItImg: images[pnt] = req_el->text(); rel_list = true;		break;
-			case A_ElFigItStl: styles[pnt] = atoi(req_el->text().c_str()); rel_list = true;	break;
+			case A_ElFigItStl: styles[pnt] = s2i(req_el->text()); rel_list = true;	break;
 		    }
 		}
 	}
@@ -4503,9 +4503,9 @@ void VCAText::getReq( SSess &ses )
 
     //Prepare picture
     map< string, string >::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1;
+    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1;
+    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1;
     scaleHeight = (int)TSYS::realRound(height*ySc, POS_PREC_DIG, true);
     scaleWidth = (int)TSYS::realRound(width*xSc, POS_PREC_DIG, true);
     int txtFontSize = 0;
@@ -4753,11 +4753,11 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
     {
 	req_el = node.childGet(i_a);
 	if(req_el->name() != "el") continue;
-	unsigned uiPrmPos = atoi(req_el->attr("p").c_str());
+	unsigned uiPrmPos = s2i(req_el->attr("p"));
 	switch(uiPrmPos)
 	{
-	    case A_GEOM_W: width = atof(req_el->text().c_str());	break;
-	    case A_GEOM_H: height = atof(req_el->text().c_str());	break;
+	    case A_GEOM_W: width = s2r(req_el->text());	break;
+	    case A_GEOM_H: height = s2r(req_el->text());break;
 	    case A_TextFont:
 	    {
 		char family[101]; strcpy(family,"Arial");
@@ -4777,13 +4777,13 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 	    }
 	    case A_TextColor: textColor =  mod->colorParse(req_el->text());	break;
 	    case A_TextOrient:
-		orient = atof(req_el->text().c_str());
+		orient = s2r(req_el->text());
 		if(orient < 0) orient = 360 + orient;
 		break;
-	    case A_TextWordWrap: wordWrap = atoi(req_el->text().c_str());	break;
+	    case A_TextWordWrap: wordWrap = s2i(req_el->text());	break;
 	    case A_TextAlignment:
 	    {
-		int txtAlign = atoi(req_el->text().c_str());
+		int txtAlign = s2i(req_el->text());
 		switch(txtAlign&0x3)
 		{
 		    case 0: alignHor = 1; break;
@@ -4809,7 +4809,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 	    }
 	    case A_TextNumbArg:
 	    {
-		unsigned numbArg = atoi(req_el->text().c_str());
+		unsigned numbArg = s2i(req_el->text());
 		while(args.size() < numbArg)	args.push_back(ArgObj());
 		while(args.size() > numbArg)	args.pop_back();
 		reform = true;
@@ -4822,7 +4822,7 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 		    unsigned argN = (uiPrmPos-A_TextArs)/A_TextArsSz;
 		    if(argN >= args.size())	break;
 		    if((uiPrmPos%A_TextArsSz) == A_TextArsVal)		args[argN].setVal(req_el->text());
-		    else if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	args[argN].setType(atoi(req_el->text().c_str()));
+		    else if((uiPrmPos%A_TextArsSz) == A_TextArsTp)	args[argN].setType(s2i(req_el->text()));
 		    else if((uiPrmPos%A_TextArsSz) == A_TextArsCfg)	args[argN].setCfg(req_el->text().c_str());
 		    reform = true;
 		}
@@ -4842,17 +4842,17 @@ void VCAText::setAttrs( XMLNode &node, const string &user )
 		case FT_REAL:
 		{
 		    string atp = TSYS::strSepParse(args[i_a].cfg(),1,';');
-		    argVal = TSYS::real2str(atof(args[i_a].val().c_str()),
-			    atoi(TSYS::strSepParse(args[i_a].cfg(),2,';').c_str()), (atp.size()?atp[0]:'f'));
+		    argVal = r2s(s2r(args[i_a].val()),
+			    s2i(TSYS::strSepParse(args[i_a].cfg(),2,';')), (atp.size()?atp[0]:'f'));
 		    break;
 		}
 	    }
-	    int argSize = atoi(TSYS::strSepParse(args[i_a].cfg(),0,';').c_str());
+	    int argSize = s2i(TSYS::strSepParse(args[i_a].cfg(),0,';'));
 	    argSize = vmax(-1000,vmin(1000,argSize));
 	    string argPad = "";
 	    for(int j = argVal.length(); j < VCAElFigure::ABS(argSize); j++) argPad += ' ';
 	    if(argSize > 0) argVal = argPad+argVal; else argVal += argPad;
-	    string rep = "%"+TSYS::int2str(i_a+1);
+	    string rep = "%"+i2s(i_a+1);
 	    size_t fnd = txt.find(rep);
 	    if(fnd != string::npos)
 		do
@@ -4931,9 +4931,9 @@ void VCADiagram::makeTrendsPicture( SSess &ses )
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
-    float xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+    float xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     prmEl = ses.prm.find("ySc");
-    float ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+    float ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     int imW = (int)TSYS::realRound((float)width*xSc,POS_PREC_DIG,true);
     int imH = (int)TSYS::realRound((float)height*ySc,POS_PREC_DIG,true);
 
@@ -5442,9 +5442,9 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 
     //> Get scale
     map<string,string>::iterator prmEl = ses.prm.find("xSc");
-    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+    double xSc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     prmEl = ses.prm.find("ySc");
-    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,atof(prmEl->second.c_str()))) : 1.0;
+    double ySc = (prmEl!=ses.prm.end()) ? vmin(100,vmax(0.1,s2r(prmEl->second))) : 1.0;
     int imW = (int)TSYS::realRound((double)width*xSc,POS_PREC_DIG,true);
     int imH = (int)TSYS::realRound((double)height*ySc,POS_PREC_DIG,true);
 
@@ -5770,7 +5770,7 @@ void VCADiagram::makeSpectrumPicture( SSess &ses )
 		double val = cP.fftOut[0][0]/cP.fftN + pow(pow(cP.fftOut[curPos][0],2)+pow(cP.fftOut[curPos][1],2),0.5)/(cP.fftN/2+1);
 		XMLNode req("set");
 		req.setAttr("path",path()+"/%2fserv%2fattr")->
-		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(TSYS::real2str(val,6));
+		    childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_t))->setText(r2s(val,6));
 		mod->cntrIfCmd(req,ses.user);
 	    }
 	}
@@ -5799,7 +5799,7 @@ void VCADiagram::postReq( SSess &ses )
     if(prmEl != ses.prm.end() && prmEl->second == "point");
     {
 	prmEl = ses.prm.find("x");
-	int x_coord = (prmEl!=ses.prm.end()) ? atoi(prmEl->second.c_str()) : 0;
+	int x_coord = (prmEl!=ses.prm.end()) ? s2i(prmEl->second) : 0;
 	if(x_coord >= tArX && x_coord <= (tArX+tArW))
 	    switch(type)
 	    {
@@ -5827,48 +5827,48 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
     {
 	req_el = node.childGet(i_a);
 	if(req_el->name() != "el") continue;
-	int uiPrmPos = atoi(req_el->attr("p").c_str());
+	int uiPrmPos = s2i(req_el->attr("p"));
 	switch(uiPrmPos)
 	{
-	    case A_ACTIVE: active = (bool)atoi(req_el->text().c_str());		break;
-	    case A_GEOM_W: width = (int)(atof(req_el->text().c_str())+0.5);	break;
-	    case A_GEOM_H: height = (int)(atof(req_el->text().c_str())+0.5);	break;
-	    case A_GEOM_MARGIN: geomMargin = atoi(req_el->text().c_str());	break;
-	    case A_BordWidth: bordWidth = atoi(req_el->text().c_str());		break;
-	    case A_DiagramTrcPer: trcPer = atoi(req_el->text().c_str());	break;
-	    case A_DiagramType: type = atoi(req_el->text().c_str()); reld_tr_dt = 2;	break;
+	    case A_ACTIVE: active = (bool)s2i(req_el->text());		break;
+	    case A_GEOM_W: width = (int)(s2r(req_el->text())+0.5);	break;
+	    case A_GEOM_H: height = (int)(s2r(req_el->text())+0.5);	break;
+	    case A_GEOM_MARGIN: geomMargin = s2i(req_el->text());	break;
+	    case A_BordWidth: bordWidth = s2i(req_el->text());		break;
+	    case A_DiagramTrcPer: trcPer = s2i(req_el->text());	break;
+	    case A_DiagramType: type = s2i(req_el->text()); reld_tr_dt = 2;	break;
 	    case A_DiagramTSek:
 		tTimeCurent = false;
-		if(atoll(req_el->text().c_str()) == 0)
+		if(s2ll(req_el->text()) == 0)
 		{
 		    tTime = (int64_t)time(NULL)*1000000;
 		    tTimeCurent = true;
-		} else tTime = atoll(req_el->text().c_str())*1000000 + tTime%1000000;
+		} else tTime = s2ll(req_el->text())*1000000 + tTime%1000000;
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
 	    case A_DiagramTUSek:
-		tTime = 1000000ll*(tTime/1000000)+atoll(req_el->text().c_str());
+		tTime = 1000000ll*(tTime/1000000)+s2ll(req_el->text());
 		lstTrc = time(NULL);
 		reld_tr_dt = 1;
 		break;
-	    case A_DiagramTSize: tSize = vmax(1e-3,atof(req_el->text().c_str())); reld_tr_dt = 2;	break;
+	    case A_DiagramTSize: tSize = vmax(1e-3,s2r(req_el->text())); reld_tr_dt = 2;	break;
 	    case A_DiagramCurSek:
-		if((curTime/1000000) == atoi(req_el->text().c_str())) break;
-		curTime = atoll(req_el->text().c_str())*1000000 + curTime%1000000;
+		if((curTime/1000000) == s2i(req_el->text())) break;
+		curTime = s2ll(req_el->text())*1000000 + curTime%1000000;
 		holdCur = (curTime>=tTime);
 		setCursor(curTime, user);
 		break;
 	    case A_DiagramCurUSek:
-		if((curTime%1000000) == atoi(req_el->text().c_str())) break;
-		curTime = 1000000ll*(curTime/1000000)+atoll(req_el->text().c_str());
+		if((curTime%1000000) == s2i(req_el->text())) break;
+		curTime = 1000000ll*(curTime/1000000)+s2ll(req_el->text());
 		holdCur = (curTime>=tTime);
 		setCursor(curTime, user);
 		break;
 	    case A_DiagramCurColor: curColor = mod->colorParse(req_el->text());		break;
 	    case A_DiagramSclColor: sclColor = mod->colorParse(req_el->text());		break;
-	    case A_DiagramSclHor: sclHor = atoi(req_el->text().c_str());		break;
-	    case A_DiagramSclVer: sclVer = atoi(req_el->text().c_str());		break;
+	    case A_DiagramSclHor: sclHor = s2i(req_el->text());		break;
+	    case A_DiagramSclVer: sclVer = s2i(req_el->text());		break;
 	    case A_DiagramSclMarkColor: sclMarkColor = mod->colorParse(req_el->text());	break;
 	    case A_DiagramSclMarkFont:
 	    {
@@ -5890,15 +5890,15 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 	    case A_DiagramValArch: valArch = req_el->text(); reld_tr_dt = 2;		break;
 	    case A_DiagramParNum:
 	    {
-		unsigned parNum = atoi(req_el->text().c_str());
+		unsigned parNum = s2i(req_el->text());
 		if(parNum == trnds.size())	break;
 		while(trnds.size() > parNum)	trnds.pop_back();
 		while(parNum > trnds.size())	trnds.push_back(TrendObj(this));
 		break;
 	    }
-	    case A_DiagramSclVerScl: sclVerScl = atof(req_el->text().c_str());		break;
-	    case A_DiagramSclVerSclOff: sclVerSclOff = atof(req_el->text().c_str());	break;
-	    case A_DiagramSclHorPer: sclHorPer = vmax(0,atof(req_el->text().c_str()))*1e6;	break;
+	    case A_DiagramSclVerScl: sclVerScl = s2r(req_el->text());		break;
+	    case A_DiagramSclVerSclOff: sclVerSclOff = s2r(req_el->text());	break;
+	    case A_DiagramSclHorPer: sclHorPer = vmax(0,s2r(req_el->text()))*1e6;	break;
 	    default:
 		//> Individual trend's attributes process
 		if(uiPrmPos >= A_DiagramTrs)
@@ -5907,15 +5907,15 @@ void VCADiagram::setAttrs( XMLNode &node, const string &user )
 		    if(trndN >= trnds.size())	break;
 		    switch(uiPrmPos%A_DiagramTrsSz)
 		    {
-			case A_DiagramTrAddr: trnds[trndN].setAddr(req_el->text());			break;
-			case A_DiagramTrBordL: trnds[trndN].setBordL(atof(req_el->text().c_str()));	break;
-			case A_DiagramTrBordU: trnds[trndN].setBordU(atof(req_el->text().c_str()));	break;
+			case A_DiagramTrAddr: trnds[trndN].setAddr(req_el->text());		break;
+			case A_DiagramTrBordL: trnds[trndN].setBordL(s2r(req_el->text()));	break;
+			case A_DiagramTrBordU: trnds[trndN].setBordU(s2r(req_el->text()));	break;
 			case A_DiagramTrClr: trnds[trndN].setColor(mod->colorParse(req_el->text()));	break;
 			case A_DiagramTrVal:
-			    trnds[trndN].setCurVal((req_el->text()==EVAL_STR) ? EVAL_REAL : atof(req_el->text().c_str()));
+			    trnds[trndN].setCurVal((req_el->text()==EVAL_STR) ? EVAL_REAL : s2r(req_el->text()));
 			    break;
-			case A_DiagramTrScl: trnds[trndN].setScale(atoi(req_el->text().c_str()));	break;
-			case A_DiagramTrWdth: trnds[trndN].setWidth(atoi(req_el->text().c_str()));	break;
+			case A_DiagramTrScl: trnds[trndN].setScale(s2i(req_el->text()));	break;
+			case A_DiagramTrWdth: trnds[trndN].setWidth(s2i(req_el->text()));	break;
 		    }
 		}
 	}
@@ -5948,8 +5948,8 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 
 	XMLNode req("set");
 	req.setAttr("path", path()+"/%2fserv%2fattr");
-	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(curTime/1000000));
-	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(curTime%1000000));
+	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(curTime/1000000));
+	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(curTime%1000000));
 
 	//> Update trend's current values
 	for(unsigned i_p = 0; i_p < trnds.size(); i_p++)
@@ -5963,7 +5963,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 		val = trnds[i_p].val()[vpos].val;
 	    }
 	    if( val != trnds[i_p].curVal() )
-		req.childAdd("el")->setAttr("id","prm"+TSYS::int2str(i_p)+"val")->setText(TSYS::real2str(val,6));
+		req.childAdd("el")->setAttr("id","prm"+i2s(i_p)+"val")->setText(r2s(val,6));
 	}
 	mod->cntrIfCmd(req,user);
     }
@@ -5973,8 +5973,8 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 
 	XMLNode req("set");
 	req.setAttr("path", path()+"/%2fserv%2fattr");
-	req.childAdd("el")->setAttr("id","curSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))/1000000));
-	req.childAdd("el")->setAttr("id","curUSek")->setText(TSYS::int2str(((int64_t)(1e6/curFrq))%1000000));
+	req.childAdd("el")->setAttr("id","curSek")->setText(i2s(((int64_t)(1e6/curFrq))/1000000));
+	req.childAdd("el")->setAttr("id","curUSek")->setText(i2s(((int64_t)(1e6/curFrq))%1000000));
 
 #if HAVE_FFTW3_H
 	//> Update trend's current values
@@ -5987,7 +5987,7 @@ void VCADiagram::setCursor( int64_t itm, const string& user )
 	    if( vpos >= 1 && vpos < (trnds[i_p].fftN/2+1) )
 		val = trnds[i_p].fftOut[0][0]/trnds[i_p].fftN +
 		    pow(pow(trnds[i_p].fftOut[vpos][0],2)+pow(trnds[i_p].fftOut[vpos][1],2),0.5)/(trnds[i_p].fftN/2+1);
-	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(TSYS::real2str(val,6));
+	    req.childAdd("el")->setAttr("id",TSYS::strMess("prm%dval",i_p))->setText(r2s(val,6));
 	}
 #endif
 	mod->cntrIfCmd(req,user);
@@ -6073,14 +6073,14 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	{
 	    XMLNode req("info");
 	    req.setAttr("arch",arch)->setAttr("path",addr()+"/%2fserv%2fval");
-	    if(mod->cntrIfCmd(req,user,false) || (val_tp=atoi(req.attr("vtp").c_str())) == TFld::String || val_tp == TFld::Object)
+	    if(mod->cntrIfCmd(req,user,false) || (val_tp=s2i(req.attr("vtp"))) == TFld::String || val_tp == TFld::Object)
 	    { arh_per = arh_beg = arh_end = 0; return; }
 	    else
 	    {
-		val_tp  = atoi(req.attr("vtp").c_str());
-		arh_beg = atoll(req.attr("beg").c_str());
-		arh_end = atoll(req.attr("end").c_str());
-		arh_per = atoll(req.attr("per").c_str());
+		val_tp  = s2i(req.attr("vtp"));
+		arh_beg = s2ll(req.attr("beg"));
+		arh_end = s2ll(req.attr("end"));
+		arh_per = s2ll(req.attr("per"));
 	    }
 	}
 
@@ -6091,14 +6091,14 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	{
 	    XMLNode req("get");
 	    req.setAttr("path",addr()+"/%2fserv%2fval")->
-		setAttr("tm",TSYS::ll2str(tTime))->
+		setAttr("tm",ll2s(tTime))->
 		setAttr("tm_grnd","0");
 	    if(mod->cntrIfCmd(req,user,false)) return;
 
-	    int64_t lst_tm = (atoll(req.attr("tm").c_str())/wantPer)*wantPer;
+	    int64_t lst_tm = (s2ll(req.attr("tm"))/wantPer)*wantPer;
 	    if(lst_tm >= valEnd())
 	    {
-		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : atof(req.text().c_str());
+		double curVal = (req.text() == EVAL_STR) ? EVAL_REAL : s2r(req.text());
 		if((val_tp == TFld::Boolean && curVal == EVAL_BOOL) || (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		    curVal = EVAL_REAL;
 		if(valEnd() && (lst_tm-valEnd())/vmax(wantPer,trcPer) > 2) vals.push_back(SHg(lst_tm-trcPer,EVAL_REAL));
@@ -6119,16 +6119,16 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	{
 	    if(addr().compare(0,5,"data:") == 0) req.load(addr().substr(5));
 	    else if(addr().compare(0,5,"line:") == 0)
-		req.setAttr("vtp", TSYS::int2str(TFld::Real))->
-		    setAttr("tm", TSYS::ll2str(tTime))->
-		    setAttr("tm_grnd", TSYS::ll2str(tTimeGrnd))->
-		    setAttr("per", TSYS::ll2str(wantPer))->
+		req.setAttr("vtp", i2s(TFld::Real))->
+		    setAttr("tm", ll2s(tTime))->
+		    setAttr("tm_grnd", ll2s(tTimeGrnd))->
+		    setAttr("per", ll2s(wantPer))->
 		    setText("0 "+addr().substr(5));
 
-	    val_tp  = req.attr("vtp").size() ? atoi(req.attr("vtp").c_str()) : TFld::Real;
-	    arh_beg = atoll(req.attr("tm_grnd").c_str());
-	    arh_end = atoll(req.attr("tm").c_str());
-            arh_per = atoll(req.attr("per").c_str());
+	    val_tp  = req.attr("vtp").size() ? s2i(req.attr("vtp")) : TFld::Real;
+	    arh_beg = s2ll(req.attr("tm_grnd"));
+	    arh_end = s2ll(req.attr("tm"));
+            arh_per = s2ll(req.attr("per"));
         }
         catch(TError) { arh_per = arh_beg = arh_end = 0; return; }
 
@@ -6163,22 +6163,22 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
     if(!isDataDir)
     {
 	req.clear()->
-	    setAttr("arch",arch)->
-	    setAttr("path",addr()+"/%2fserv%2fval")->
-	    setAttr("tm",TSYS::ll2str(tTime))->
-	    setAttr("tm_grnd",TSYS::ll2str(tTimeGrnd))->
-	    setAttr("per",TSYS::ll2str(wantPer))->
-	    setAttr("mode","1")->
-	    setAttr("real_prec","6")->
-	    setAttr("round_perc","0");//TSYS::real2str(100/(float)owner().height));
+	    setAttr("arch", arch)->
+	    setAttr("path", addr()+"/%2fserv%2fval")->
+	    setAttr("tm", ll2s(tTime))->
+	    setAttr("tm_grnd", ll2s(tTimeGrnd))->
+	    setAttr("per", ll2s(wantPer))->
+	    setAttr("mode", "1")->
+	    setAttr("real_prec", "6")->
+	    setAttr("round_perc", "0");//r2s(100/(float)owner().height));
 
 	if(mod->cntrIfCmd(req,user,false)) return;
     }
 
     //> Get data buffer parameters
-    bbeg = atoll(req.attr("tm_grnd").c_str());
-    bend = atoll(req.attr("tm").c_str());
-    bper = atoll(req.attr("per").c_str());
+    bbeg = s2ll(req.attr("tm_grnd"));
+    bend = s2ll(req.attr("tm"));
+    bper = s2ll(req.attr("per"));
 
     if(bbeg <= 0 || bend <= 0 || bper <= 0 || bbeg > bend || req.text().empty()) return;
 
@@ -6189,8 +6189,8 @@ void VCADiagram::TrendObj::loadTrendsData( const string &user, bool full )
 	if((svl=TSYS::strLine(req.text(),0,&v_off)).size())
 	{
 	    var_off = 0;
-	    curPos = atoi(TSYS::strParse(svl,0," ",&var_off,true).c_str());
-	    curVal = atof((curValS=TSYS::strParse(svl,0," ",&var_off,true)).c_str());
+	    curPos = s2i(TSYS::strParse(svl,0," ",&var_off,true));
+	    curVal = s2r((curValS=TSYS::strParse(svl,0," ",&var_off,true)));
 	    if(curValS == EVAL_STR || (val_tp == TFld::Boolean && curVal == EVAL_BOOL) ||
 				      (val_tp == TFld::Integer && curVal == EVAL_INT) || isinf(curVal))
 		curVal = EVAL_REAL;
@@ -6284,7 +6284,7 @@ void VCADocument::setAttrs( XMLNode &node, const string &user )
     {
 	XMLNode *req_el = node.childGet(i_a);
 	if(req_el->name() != "el")	continue;
-	switch(atoi(req_el->attr("p").c_str()))
+	switch(s2i(req_el->attr("p")))
 	{
 	    case A_DocTmpl: case A_DocDoc:
 	    {

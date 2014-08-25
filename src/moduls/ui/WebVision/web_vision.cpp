@@ -50,7 +50,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -60,8 +60,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new WebVision::TWEB( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new WebVision::TWEB(source);
 	return NULL;
     }
 }
@@ -85,164 +84,164 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
 
     id_vcases	= grpAdd("ses_");
 
-    //> Reg export functions
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-        "Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
-    modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-        "Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+    //Reg export functions
+    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
+	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet));
+    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost));
 
     gdFTUseFontConfig(1);
 
-    //> Create named colors' container
-    colors["aliceblue"] = rgb(240, 248, 255);
-    colors["antiquewhite"] = rgb(250, 235, 215);
-    colors["aqua"] = rgb( 0, 255, 255);
-    colors["aquamarine"] = rgb(127, 255, 212);
-    colors["azure"] = rgb(240, 255, 255);
-    colors["beige"] = rgb(245, 245, 220);
-    colors["bisque"] = rgb(255, 228, 196);
-    colors["black"] = rgb( 0, 0, 0);
-    colors["blanchedalmond"] = rgb(255, 235, 205);
-    colors["blue"] = rgb( 0, 0, 255);
-    colors["blueviolet"] = rgb(138, 43, 226);
-    colors["brown"] = rgb(165, 42, 42);
-    colors["burlywood"] = rgb(222, 184, 135);
-    colors["cadetblue"] = rgb( 95, 158, 160);
-    colors["chartreuse"] = rgb(127, 255, 0);
-    colors["chocolate"] = rgb(210, 105, 30);
-    colors["coral"] = rgb(255, 127, 80);
-    colors["cornflowerblue"] = rgb(100, 149, 237);
-    colors["cornsilk"] = rgb(255, 248, 220);
-    colors["crimson"] = rgb(220, 20, 60);
-    colors["cyan"] = rgb( 0, 255, 255);
-    colors["darkblue"] = rgb( 0, 0, 139);
-    colors["darkcyan"] = rgb( 0, 139, 139);
-    colors["darkgoldenrod"] = rgb(184, 134, 11);
-    colors["darkgray"] = rgb(169, 169, 169);
-    colors["darkgreen"] = rgb( 0, 100, 0);
-    colors["darkgrey"] = rgb(169, 169, 169);
-    colors["darkkhaki"] = rgb(189, 183, 107);
-    colors["darkmagenta"] = rgb(139, 0, 139);
-    colors["darkolivegreen"] = rgb( 85, 107, 47);
-    colors["darkorange"] = rgb(255, 140, 0);
-    colors["darkorchid"] = rgb(153, 50, 204);
-    colors["darkred"] = rgb(139, 0, 0);
-    colors["darksalmon"] = rgb(233, 150, 122);
-    colors["darkseagreen"] = rgb(143, 188, 143);
-    colors["darkslateblue"] = rgb( 72, 61, 139);
-    colors["darkslategray"] = rgb( 47, 79, 79);
-    colors["darkslategrey"] = rgb( 47, 79, 79);
-    colors["darkturquoise"] = rgb( 0, 206, 209);
-    colors["darkviolet"] = rgb(148, 0, 211);
-    colors["deeppink"] = rgb(255, 20, 147);
-    colors["deepskyblue"] = rgb( 0, 191, 255);
-    colors["dimgray"] = rgb(105, 105, 105);
-    colors["dimgrey"] = rgb(105, 105, 105);
-    colors["dodgerblue"] = rgb( 30, 144, 255);
-    colors["firebrick"] = rgb(178, 34, 34);
-    colors["floralwhite"] = rgb(255, 250, 240);
-    colors["forestgreen"] = rgb( 34, 139, 34);
-    colors["fuchsia"] = rgb(255, 0, 255);
-    colors["gainsboro"] = rgb(220, 220, 220);
-    colors["ghostwhite"] = rgb(248, 248, 255);
-    colors["gold"] = rgb(255, 215, 0);
-    colors["goldenrod"] = rgb(218, 165, 32);
-    colors["gray"] = rgb(128, 128, 128);
-    colors["grey"] = rgb(128, 128, 128);
-    colors["green"] = rgb( 0, 128, 0);
-    colors["greenyellow"] = rgb(173, 255, 47);
-    colors["honeydew"] = rgb(240, 255, 240);
-    colors["hotpink"] = rgb(255, 105, 180);
-    colors["indianred"] = rgb(205, 92, 92);
-    colors["indigo"] = rgb( 75, 0, 130);
-    colors["ivory"] = rgb(255, 255, 240);
-    colors["khaki"] = rgb(240, 230, 140);
-    colors["lavender"] = rgb(230, 230, 250);
-    colors["lavenderblush"] = rgb(255, 240, 245);
-    colors["lawngreen"] = rgb(124, 252, 0);
-    colors["lemonchiffon"] = rgb(255, 250, 205);
-    colors["lightblue"] = rgb(173, 216, 230);
-    colors["lightcoral"] = rgb(240, 128, 128);
-    colors["lightcyan"] = rgb(224, 255, 255);
+    //Create named colors' container
+    colors["aliceblue"]		= rgb(240, 248, 255);
+    colors["antiquewhite"]	= rgb(250, 235, 215);
+    colors["aqua"]		= rgb(0, 255, 255);
+    colors["aquamarine"]	= rgb(127, 255, 212);
+    colors["azure"]		= rgb(240, 255, 255);
+    colors["beige"]		= rgb(245, 245, 220);
+    colors["bisque"]		= rgb(255, 228, 196);
+    colors["black"]		= rgb(0, 0, 0);
+    colors["blanchedalmond"]	= rgb(255, 235, 205);
+    colors["blue"]		= rgb(0, 0, 255);
+    colors["blueviolet"]	= rgb(138, 43, 226);
+    colors["brown"]		= rgb(165, 42, 42);
+    colors["burlywood"]		= rgb(222, 184, 135);
+    colors["cadetblue"]		= rgb(95, 158, 160);
+    colors["chartreuse"]	= rgb(127, 255, 0);
+    colors["chocolate"]		= rgb(210, 105, 30);
+    colors["coral"]		= rgb(255, 127, 80);
+    colors["cornflowerblue"]	= rgb(100, 149, 237);
+    colors["cornsilk"]		= rgb(255, 248, 220);
+    colors["crimson"]		= rgb(220, 20, 60);
+    colors["cyan"]		= rgb(0, 255, 255);
+    colors["darkblue"]		= rgb(0, 0, 139);
+    colors["darkcyan"]		= rgb(0, 139, 139);
+    colors["darkgoldenrod"]	= rgb(184, 134, 11);
+    colors["darkgray"]		= rgb(169, 169, 169);
+    colors["darkgreen"]		= rgb(0, 100, 0);
+    colors["darkgrey"]		= rgb(169, 169, 169);
+    colors["darkkhaki"]		= rgb(189, 183, 107);
+    colors["darkmagenta"]	= rgb(139, 0, 139);
+    colors["darkolivegreen"]	= rgb(85, 107, 47);
+    colors["darkorange"]	= rgb(255, 140, 0);
+    colors["darkorchid"]	= rgb(153, 50, 204);
+    colors["darkred"]		= rgb(139, 0, 0);
+    colors["darksalmon"]	= rgb(233, 150, 122);
+    colors["darkseagreen"]	= rgb(143, 188, 143);
+    colors["darkslateblue"]	= rgb(72, 61, 139);
+    colors["darkslategray"]	= rgb(47, 79, 79);
+    colors["darkslategrey"]	= rgb(47, 79, 79);
+    colors["darkturquoise"]	= rgb(0, 206, 209);
+    colors["darkviolet"]	= rgb(148, 0, 211);
+    colors["deeppink"]		= rgb(255, 20, 147);
+    colors["deepskyblue"]	= rgb(0, 191, 255);
+    colors["dimgray"]		= rgb(105, 105, 105);
+    colors["dimgrey"]		= rgb(105, 105, 105);
+    colors["dodgerblue"]	= rgb(30, 144, 255);
+    colors["firebrick"]		= rgb(178, 34, 34);
+    colors["floralwhite"]	= rgb(255, 250, 240);
+    colors["forestgreen"]	= rgb(34, 139, 34);
+    colors["fuchsia"]		= rgb(255, 0, 255);
+    colors["gainsboro"]		= rgb(220, 220, 220);
+    colors["ghostwhite"]	= rgb(248, 248, 255);
+    colors["gold"]		= rgb(255, 215, 0);
+    colors["goldenrod"]		= rgb(218, 165, 32);
+    colors["gray"]		= rgb(128, 128, 128);
+    colors["grey"]		= rgb(128, 128, 128);
+    colors["green"]		= rgb(0, 128, 0);
+    colors["greenyellow"]	= rgb(173, 255, 47);
+    colors["honeydew"]		= rgb(240, 255, 240);
+    colors["hotpink"]		= rgb(255, 105, 180);
+    colors["indianred"]		= rgb(205, 92, 92);
+    colors["indigo"]		= rgb(75, 0, 130);
+    colors["ivory"]		= rgb(255, 255, 240);
+    colors["khaki"]		= rgb(240, 230, 140);
+    colors["lavender"]		= rgb(230, 230, 250);
+    colors["lavenderblush"]	= rgb(255, 240, 245);
+    colors["lawngreen"]		= rgb(124, 252, 0);
+    colors["lemonchiffon"]	= rgb(255, 250, 205);
+    colors["lightblue"]		= rgb(173, 216, 230);
+    colors["lightcoral"]	= rgb(240, 128, 128);
+    colors["lightcyan"]		= rgb(224, 255, 255);
     colors["lightgoldenrodyellow"] = rgb(250, 250, 210);
-    colors["lightgray"] = rgb(211, 211, 211);
-    colors["lightgreen"] = rgb(144, 238, 144);
-    colors["lightgrey"] = rgb(211, 211, 211);
-    colors["lightpink"] = rgb(255, 182, 193);
-    colors["lightsalmon"] = rgb(255, 160, 122);
-    colors["lightseagreen"] = rgb( 32, 178, 170);
-    colors["lightskyblue"] = rgb(135, 206, 250);
-    colors["lightslategray"] = rgb(119, 136, 153);
-    colors["lightslategrey"] = rgb(119, 136, 153);
-    colors["lightsteelblue"] = rgb(176, 196, 222);
-    colors["lightyellow"] = rgb(255, 255, 224);
-    colors["lime"] = rgb( 0, 255, 0);
-    colors["limegreen"] = rgb( 50, 205, 50);
-    colors["linen"] = rgb(250, 240, 230);
-    colors["magenta"] = rgb(255, 0, 255);
-    colors["maroon"] = rgb(128, 0, 0);
-    colors["mediumaquamarine"] = rgb(102, 205, 170);
-    colors["mediumblue"] = rgb( 0, 0, 205);
-    colors["mediumorchid"] = rgb(186, 85, 211);
-    colors["mediumpurple"] = rgb(147, 112, 219);
-    colors["mediumseagreen"] = rgb( 60, 179, 113);
-    colors["mediumslateblue"] = rgb(123, 104, 238);
-    colors["mediumspringgreen"] = rgb( 0, 250, 154);
-    colors["mediumturquoise"] = rgb( 72, 209, 204);
-    colors["mediumvioletred"] = rgb(199, 21, 133);
-    colors["midnightblue"] = rgb( 25, 25, 112);
-    colors["mintcream"] = rgb(245, 255, 250);
-    colors["mistyrose"] = rgb(255, 228, 225);
-    colors["moccasin"] = rgb(255, 228, 181);
-    colors["navajowhite"] = rgb(255, 222, 173);
-    colors["navy"] = rgb( 0, 0, 128);
-    colors["oldlace"] = rgb(253, 245, 230);
-    colors["olive"] = rgb(128, 128, 0);
-    colors["olivedrab"] = rgb(107, 142, 35);
-    colors["orange"] = rgb(255, 165, 0);
-    colors["orangered"] = rgb(255, 69, 0);
-    colors["orchid"] = rgb(218, 112, 214);
-    colors["palegoldenrod"] = rgb(238, 232, 170);
-    colors["palegreen"] = rgb(152, 251, 152);
-    colors["paleturquoise"] = rgb(175, 238, 238);
-    colors["palevioletred"] = rgb(219, 112, 147);
-    colors["papayawhip"] = rgb(255, 239, 213);
-    colors["peachpuff"] = rgb(255, 218, 185);
-    colors["peru"] = rgb(205, 133, 63);
-    colors["pink"] = rgb(255, 192, 203);
-    colors["plum"] = rgb(221, 160, 221);
-    colors["powderblue"] = rgb(176, 224, 230);
-    colors["purple"] = rgb(128, 0, 128);
-    colors["red"] = rgb(255, 0, 0);
-    colors["rosybrown"] = rgb(188, 143, 143);
-    colors["royalblue"] = rgb( 65, 105, 225);
-    colors["saddlebrown"] = rgb(139, 69, 19);
-    colors["salmon"] = rgb(250, 128, 114);
-    colors["sandybrown"] = rgb(244, 164, 96);
-    colors["seagreen"] = rgb( 46, 139, 87);
-    colors["seashell"] = rgb(255, 245, 238);
-    colors["sienna"] = rgb(160, 82, 45);
-    colors["silver"] = rgb(192, 192, 192);
-    colors["skyblue"] = rgb(135, 206, 235);
-    colors["slateblue"] = rgb(106, 90, 205);
-    colors["slategray"] = rgb(112, 128, 144);
-    colors["slategrey"] = rgb(112, 128, 144);
-    colors["snow"] = rgb(255, 250, 250);
-    colors["springgreen"] = rgb( 0, 255, 127);
-    colors["steelblue"] = rgb( 70, 130, 180);
-    colors["tan"] = rgb(210, 180, 140);
-    colors["teal"] = rgb( 0, 128, 128);
-    colors["thistle"] = rgb(216, 191, 216);
-    colors["tomato"] = rgb(255, 99, 71);
-    colors["turquoise"] = rgb( 64, 224, 208);
-    colors["violet"] = rgb(238, 130, 238);
-    colors["wheat"] = rgb(245, 222, 179);
-    colors["white"] = rgb(255, 255, 255);
-    colors["whitesmoke"] = rgb(245, 245, 245);
-    colors["yellow"] = rgb(255, 255, 0);
-    colors["yellowgreen"] = rgb(154, 205, 50);
+    colors["lightgray"]		= rgb(211, 211, 211);
+    colors["lightgreen"]	= rgb(144, 238, 144);
+    colors["lightgrey"]		= rgb(211, 211, 211);
+    colors["lightpink"]		= rgb(255, 182, 193);
+    colors["lightsalmon"]	= rgb(255, 160, 122);
+    colors["lightseagreen"]	= rgb(32, 178, 170);
+    colors["lightskyblue"]	= rgb(135, 206, 250);
+    colors["lightslategray"]	= rgb(119, 136, 153);
+    colors["lightslategrey"]	= rgb(119, 136, 153);
+    colors["lightsteelblue"]	= rgb(176, 196, 222);
+    colors["lightyellow"]	= rgb(255, 255, 224);
+    colors["lime"]		= rgb(0, 255, 0);
+    colors["limegreen"]		= rgb(50, 205, 50);
+    colors["linen"]		= rgb(250, 240, 230);
+    colors["magenta"]		= rgb(255, 0, 255);
+    colors["maroon"]		= rgb(128, 0, 0);
+    colors["mediumaquamarine"]	= rgb(102, 205, 170);
+    colors["mediumblue"]	= rgb(0, 0, 205);
+    colors["mediumorchid"]	= rgb(186, 85, 211);
+    colors["mediumpurple"]	= rgb(147, 112, 219);
+    colors["mediumseagreen"]	= rgb(60, 179, 113);
+    colors["mediumslateblue"]	= rgb(123, 104, 238);
+    colors["mediumspringgreen"]	= rgb(0, 250, 154);
+    colors["mediumturquoise"]	= rgb(72, 209, 204);
+    colors["mediumvioletred"]	= rgb(199, 21, 133);
+    colors["midnightblue"]	= rgb(25, 25, 112);
+    colors["mintcream"]		= rgb(245, 255, 250);
+    colors["mistyrose"]		= rgb(255, 228, 225);
+    colors["moccasin"]		= rgb(255, 228, 181);
+    colors["navajowhite"]	= rgb(255, 222, 173);
+    colors["navy"]		= rgb(0, 0, 128);
+    colors["oldlace"]		= rgb(253, 245, 230);
+    colors["olive"]		= rgb(128, 128, 0);
+    colors["olivedrab"]		= rgb(107, 142, 35);
+    colors["orange"]		= rgb(255, 165, 0);
+    colors["orangered"]		= rgb(255, 69, 0);
+    colors["orchid"]		= rgb(218, 112, 214);
+    colors["palegoldenrod"]	= rgb(238, 232, 170);
+    colors["palegreen"]		= rgb(152, 251, 152);
+    colors["paleturquoise"]	= rgb(175, 238, 238);
+    colors["palevioletred"]	= rgb(219, 112, 147);
+    colors["papayawhip"]	= rgb(255, 239, 213);
+    colors["peachpuff"]		= rgb(255, 218, 185);
+    colors["peru"]		= rgb(205, 133, 63);
+    colors["pink"]		= rgb(255, 192, 203);
+    colors["plum"]		= rgb(221, 160, 221);
+    colors["powderblue"]	= rgb(176, 224, 230);
+    colors["purple"]		= rgb(128, 0, 128);
+    colors["red"]		= rgb(255, 0, 0);
+    colors["rosybrown"]		= rgb(188, 143, 143);
+    colors["royalblue"]		= rgb(65, 105, 225);
+    colors["saddlebrown"]	= rgb(139, 69, 19);
+    colors["salmon"]		= rgb(250, 128, 114);
+    colors["sandybrown"]	= rgb(244, 164, 96);
+    colors["seagreen"]		= rgb(46, 139, 87);
+    colors["seashell"]		= rgb(255, 245, 238);
+    colors["sienna"]		= rgb(160, 82, 45);
+    colors["silver"]		= rgb(192, 192, 192);
+    colors["skyblue"]		= rgb(135, 206, 235);
+    colors["slateblue"]		= rgb(106, 90, 205);
+    colors["slategray"]		= rgb(112, 128, 144);
+    colors["slategrey"]		= rgb(112, 128, 144);
+    colors["snow"]		= rgb(255, 250, 250);
+    colors["springgreen"]	= rgb(0, 255, 127);
+    colors["steelblue"]		= rgb(70, 130, 180);
+    colors["tan"]		= rgb(210, 180, 140);
+    colors["teal"]		= rgb(0, 128, 128);
+    colors["thistle"]		= rgb(216, 191, 216);
+    colors["tomato"]		= rgb(255, 99, 71);
+    colors["turquoise"]		= rgb(64, 224, 208);
+    colors["violet"]		= rgb(238, 130, 238);
+    colors["wheat"]		= rgb(245, 222, 179);
+    colors["white"]		= rgb(255, 255, 255);
+    colors["whitesmoke"]	= rgb(245, 245, 245);
+    colors["yellow"]		= rgb(255, 255, 0);
+    colors["yellowgreen"]	= rgb(154, 205, 50);
 
-    //> Default CSS init
+    //Default CSS init
     mCSStables =
 	"hr { width: 95%; }\n"
 	"body { background-color: #B0B0B0; margin: 0px; }\n"
@@ -267,7 +266,7 @@ TWEB::TWEB( string name ) : TUI(MOD_ID), mTSess(10), mSessLimit(5), mPNGCompLev(
 #endif
 }
 
-TWEB::~TWEB()
+TWEB::~TWEB( )
 {
 
 }
@@ -309,22 +308,22 @@ string TWEB::optDescr( )
 
 void TWEB::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    //> Load parameters from config-file
-    setSessTime(atoi(TBDS::genDBGet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime())).c_str()));
-    setSessLimit(atoi(TBDS::genDBGet(nodePath()+"SessLimit",TSYS::int2str(sessLimit())).c_str()));
-    setPNGCompLev(atoi(TBDS::genDBGet(nodePath()+"PNGCompLev",TSYS::int2str(PNGCompLev())).c_str()));
+    //Load parameters from config-file
+    setSessTime(s2i(TBDS::genDBGet(nodePath()+"SessTimeLife",i2s(sessTime()))));
+    setSessLimit(s2i(TBDS::genDBGet(nodePath()+"SessLimit",i2s(sessLimit()))));
+    setPNGCompLev(s2i(TBDS::genDBGet(nodePath()+"PNGCompLev",i2s(PNGCompLev()))));
 }
 
 void TWEB::save_( )
 {
-    TBDS::genDBSet(nodePath()+"SessTimeLife",TSYS::int2str(sessTime()));
-    TBDS::genDBSet(nodePath()+"SessLimit",TSYS::int2str(sessLimit()));
-    TBDS::genDBSet(nodePath()+"PNGCompLev",TSYS::int2str(PNGCompLev()));
+    TBDS::genDBSet(nodePath()+"SessTimeLife",i2s(sessTime()));
+    TBDS::genDBSet(nodePath()+"SessLimit",i2s(sessLimit()));
+    TBDS::genDBSet(nodePath()+"PNGCompLev",i2s(PNGCompLev()));
 }
 
 void TWEB::modStart( )	{ run_st = true; }
@@ -333,9 +332,8 @@ void TWEB::modStop( )	{ run_st = false; }
 
 void TWEB::perSYSCall( unsigned int cnt )
 {
-    try
-    {
-	//> Check for opened sessions timeout close
+    try {
+	//Check for opened sessions timeout close
 	time_t cur_tm = time(NULL);
 
 	vector<string> list;
@@ -352,7 +350,7 @@ string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const
     return "HTTP/1.0 "+rcode+"\x0D\x0A"
 	"Server: "+PACKAGE_STRING+"\x0D\x0A"
 	"Accept-Ranges: bytes\x0D\x0A"
-	"Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
+	"Content-Length: "+i2s(cln)+"\x0D\x0A"
 	"Connection: close\x0D\x0A"
 	"Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"+addattr+"\x0D\x0A";
 }
@@ -379,46 +377,38 @@ string TWEB::pgHead( const string &head_els, const string &title, const string &
     return shead;
 }
 
-string TWEB::pgTail( )
-{
-    return "</body>\n</html>";
-}
+string TWEB::pgTail( )	{ return "</body>\n</html>"; }
 
 void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,"");
     ses.page = pgHead();
 
-    try
-    {
+    try {
 	string zero_lev = TSYS::pathLev(ses.url,0);
-	//> Get about module page
-	if( zero_lev == "about" )       getAbout(ses);
-	//> Get module icon and global image
-	else if( zero_lev == "ico" || zero_lev.substr(0,4) == "img_" )
-	{
+	//Get about module page
+	if(zero_lev == "about")	getAbout(ses);
+	//Get module icon and global image
+	else if(zero_lev == "ico" || zero_lev.compare(0,4,"img_") == 0) {
 	    string itp;
-	    ses.page=TUIS::icoGet( zero_lev=="ico"?"UI."MOD_ID:zero_lev.substr(4), &itp );
+	    ses.page = TUIS::icoGet(zero_lev=="ico"?"UI."MOD_ID:zero_lev.substr(4), &itp);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
-	else
-	{
-	    //> Session select or new session for project creation
-	    if( zero_lev.empty() )
-	    {
+	else {
+	    //Session select or new session for project creation
+	    if(zero_lev.empty()) {
 		bool sesPrjOk = false;
 		ses.page = ses.page+
 		    "<h1 class='head'>"+PACKAGE_NAME+". "+_(MOD_NAME)+"</h1>\n<hr/><br/>\n"
 		    "<center><table class='work'>\n";
-		//>> Get present sessions list
+		// Get present sessions list
 		string self_prjSess, prjSesEls = "";
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
 		ResAlloc sesRes(nodeRes(),false);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-		{
+		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) &&
 			    (req.childGet(i_ch)->attr("user") != user ||
 			    (vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() != sender)))
@@ -431,8 +421,7 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    prjSesEls += "</td></tr>";
 		    self_prjSess += req.childGet(i_ch)->attr("proj")+";";
 		}
-		if(!prjSesEls.empty())
-		{
+		if(!prjSesEls.empty()) {
 		    ses.page = ses.page+
 			"<tr><th>"+_("Connect to opened session")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
@@ -441,19 +430,17 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 			"</table></td></tr>\n";
 		    sesPrjOk = true;
 		}
-		//>> Get present projects list
+		// Get present projects list
 		prjSesEls = "";
 		req.clear()->setAttr("path","/%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
-		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++)
-		{
+		for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
 		    if(!SYS->security().at().access(user,SEC_WR,"root","root",RWRWR_) && self_prjSess.find(req.childGet(i_ch)->attr("id")+";") != string::npos)
 			continue;
 		    prjSesEls += "<tr><td style='text-align: center;'><a href='/"MOD_ID"/prj_"+req.childGet(i_ch)->attr("id")+"/'>"+
 			req.childGet(i_ch)->text()+"</a></td></tr>";
 		}
-		if(!prjSesEls.empty())
-		{
+		if(!prjSesEls.empty()) {
 		    ses.page = ses.page +
 			"<tr><th>"+_("Create new session for present project")+"</th></tr>\n"
 			"<tr><td class='content'>\n"
@@ -464,13 +451,12 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		}
 		ses.page += "</table></center>";
 
-		if( !sesPrjOk )	messPost(ses.page,nodePath(),_("No one sessions and projects of VCA engine are present for user!"),TWEB::Warning);
+		if(!sesPrjOk) messPost(ses.page,nodePath(),_("No one sessions and projects of VCA engine are present for user!"),TWEB::Warning);
 	    }
-	    //> New session create
-	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "prj_" )
-	    {
+	    //New session create
+	    else if(zero_lev.compare(0,4,"prj_") == 0) {
 		string sName;
-		//>> Find for early created session for user and sender
+		// Find for early created session for user and sender
 		XMLNode req("get");
 		req.setAttr("path","/%2fses%2fses")->setAttr("chkUserPerm","1");
 		cntrIfCmd(req,ses.user);
@@ -479,20 +465,17 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    if(req.childGet(i_ch)->attr("user") == user && req.childGet(i_ch)->attr("proj") == zero_lev.substr(4) &&
 			    vcaSesPresent(req.childGet(i_ch)->text()) && vcaSesAt(req.childGet(i_ch)->text()).at().sender() == sender)
 		    { sName = req.childGet(i_ch)->text(); break; }
-		if(sName.empty())
-		{
+		if(sName.empty()) {
 		    vector<string> vcaLs;
 		    vcaSesList(vcaLs);
 		    if((int)vcaLs.size() >= mod->sessLimit())
 		        messPost(ses.page,nodePath(),_("Sorry, opened sessions number reach limit!"),TWEB::Warning);
-		    else
-		    {
+		    else {
 			sesRes.request(true);
 			req.setName("connect")->setAttr("path","/%2fserv%2fsess")->setAttr("prj",zero_lev.substr(4));
 			if(cntrIfCmd(req,ses.user))
 			    messPost(ses.page,req.attr("mcat").c_str(),req.text().c_str(),TWEB::Error);
-			else
-			{
+			else {
 			    sName = req.attr("sess");
 			    vcaSesAdd(sName,true);
 			    vcaSesAt(sName).at().senderSet(sender);
@@ -503,24 +486,20 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		    ses.page = pgHead("<META HTTP-EQUIV='Refresh' CONTENT='0; URL=/"MOD_ID"/ses_"+sName+"/'/>")+
 			"<center>Go to session '"+sName+"' for project: '"+zero_lev.substr(4)+"'</center>\n<br/>";
 	    }
-	    //> Main session page data prepare
-	    else if( zero_lev.size() > 4 && zero_lev.substr(0,4) == "ses_" )
-	    {
-		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//> Internal data into UTF-8
+	    //Main session page data prepare
+	    else if(zero_lev.compare(0,4,"ses_") == 0) {
+		ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
 		string sesnm = zero_lev.substr(4);
-		//>> Check for session present
-		if( !ses.prm.size() )
-		{
+		// Check for session present
+		if(!ses.prm.size()) {
 		    XMLNode req("get"); req.setAttr("path",ses.url+"/%2fobj%2fst%2fen");
-		    if(cntrIfCmd(req,ses.user) || !atoi(req.text().c_str()))	{ HttpGet( "", page, sender, vars, user ); return; }
+		    if(cntrIfCmd(req,ses.user) || !s2i(req.text()))	{ HttpGet("", page, sender, vars, user); return; }
 		}
-		//>> Call to session
+		// Call to session
 		ResAlloc sesRes(nodeRes(),false);
-		try{ vcaSesAt(sesnm).at().getReq(ses); }
-		catch(...)
-		{
-		    if( !vcaSesPresent(sesnm) )
-		    {
+		try { vcaSesAt(sesnm).at().getReq(ses); }
+		catch(...) {
+		    if(!vcaSesPresent(sesnm)) {
 			sesRes.request(true);
 			vcaSesAdd(sesnm,false);
 			vcaSesAt(sesnm).at().senderSet(sender);
@@ -531,17 +510,17 @@ void TWEB::HttpGet( const string &url, string &page, const string &sender, vecto
 		page = ses.page;
 		return;
 	    }
-            else mess_err(nodePath().c_str(),_("An inaccessible request is received: '%s'"),zero_lev.c_str());
+	    else mess_err(nodePath().c_str(),_("An inaccessible request is received: '%s'"),zero_lev.c_str());
 	}
-    }catch(TError err)
-    {
-	ses.page = "Page <"+ses.url+"> error: "+err.mess;
-	page = httpHead("404 Not Found",ses.page.size())+ses.page;
+    }
+    catch(TError err) {
+	ses.page = "Page <" + ses.url + "> error: " + err.mess;
+	page = httpHead("404 Not Found",ses.page.size()) + ses.page;
 	return;
     }
 
     ses.page += pgTail();
-    page = httpHead("200 OK",ses.page.size())+ses.page;
+    page = httpHead("200 OK", ses.page.size()) + ses.page;
 }
 
 void TWEB::getAbout( SSess &ses )
@@ -572,12 +551,10 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
 
-    try
-    {
-	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//> Internal data into UTF-8
-	//> To control interface request
-	if( (cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com" )
-	{
+    try {
+	ses.url = Mess->codeConvIn("UTF-8", ses.url);	//Internal data into UTF-8
+	//To control interface request
+	if((cntEl=ses.prm.find("com"))!=ses.prm.end() && cntEl->second == "com") {
 	    XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	    cntrIfCmd(req,ses.user,false);
 	    ses.page = req.save();
@@ -585,11 +562,10 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 	    return;
 	}
 
-	//> Post command to session
+	//Post command to session
 	string sesnm = TSYS::pathLev(ses.url,0);
-	if( sesnm.size() <= 4 || sesnm.substr(0,4) != "ses_" ) page = httpHead("404 Not Found");
-	else
-	{
+	if(sesnm.size() <= 4 || sesnm.compare(0,4,"ses_") != 0) page = httpHead("404 Not Found");
+	else {
 	    ResAlloc sesRes(nodeRes(),false);
 	    vcaSesAt(sesnm.substr(4)).at().postReq(ses);
 	    page = ses.page;
@@ -600,34 +576,32 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
 
 void TWEB::messPost( string &page, const string &cat, const string &mess, MessLev type )
 {
-    //> Put system message.
+    //Put system message.
     message(cat.c_str(), (type==Error) ? TMess::Error : (type==Warning) ? TMess::Warning : TMess::Info,"%s",mess.c_str());
 
-    //> Prepare HTML messages
-    page = page+"<table border='2' width='40%' align='center'><tbody>\n";
-    if(type == Warning )	page = page+"<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n";
-    else if(type == Error )	page = page+"<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n";
-    else page = page+"<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n";
-    page = page+"<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
-    page = page+"</tbody></table>\n";
+    //Prepare HTML messages
+    page += "<table border='2' width='40%' align='center'><tbody>\n";
+    if(type == Warning )	page += "<tr bgcolor='yellow'><td align='center'><b>Warning!</b></td></tr>\n";
+    else if(type == Error )	page += "<tr bgcolor='red'><td align='center'><b>Error!</b></td></tr>\n";
+    else page += "<tr bgcolor='#9999ff'><td align='center'><b>Message!</b></td></tr>\n";
+    page += "<tr bgcolor='#cccccc'> <td align='center'>"+TSYS::strEncode(mess,TSYS::Html)+"</td></tr>\n";
+    page += "</tbody></table>\n";
 }
 
 int TWEB::cntrIfCmd( XMLNode &node, const string &user, bool VCA )
 {
-    node.setAttr("user",user);
-    if( VCA )	node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
+    node.setAttr("user", user);
+    if(VCA)	node.setAttr("path","/UI/VCAEngine"+node.attr("path"));
     SYS->cntrCmd(&node);
-    return atoi(node.attr("rez").c_str());
+    return s2i(node.attr("rez"));
 }
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_))
-	{
+	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"),R_R_R_)) {
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/lf_tm", _("Life time of session (min)"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/sesLimit", _("Sessions limit"), RWRWR_, "root", SUI_ID, 1, "tp","dec");
 	    ctrMkNode("fld", opt, -1, "/prm/cfg/PNGCompLev", _("PNG compression level"), RWRWR_, "root", SUI_ID, 4,
@@ -639,22 +613,19 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/lf_tm")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(sessTime()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessTime(atoi(opt->text().c_str()));
+    if(a_path == "/prm/cfg/lf_tm") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessTime()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessTime(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/sesLimit")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(sessLimit()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(atoi(opt->text().c_str()));
+    else if(a_path == "/prm/cfg/sesLimit") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(sessLimit()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setSessLimit(s2i(opt->text()));
     }
-    else if(a_path == "/prm/cfg/PNGCompLev")
-    {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(TSYS::int2str(PNGCompLev()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPNGCompLev(atoi(opt->text().c_str()));
+    else if(a_path == "/prm/cfg/PNGCompLev") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(PNGCompLev()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPNGCompLev(s2i(opt->text()));
     }
     else TUI::cntrCmdProc(opt);
 }
@@ -673,52 +644,49 @@ void TWEB::imgConvert(SSess &ses)
     else if((sim=gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())))	itp = "gif";
     //if(sim) gdImageAlphaBlending(sim, 0);
 
-    //>> Check for resize icon
-    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=atoi(prmEl->second.c_str())) > 0 && gdImageSY(sim) > newImgH)
+    //Check for resize icon
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH)
     {
-        newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
-        gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
-        gdImageAlphaBlending(dim,0);
-        gdImageFilledRectangle(dim,0,0,newImgW-1,newImgH-1,gdImageColorResolveAlpha(dim,0,0,0,127));
-        gdImageCopyResampled(dim,sim,0,0,0,0,newImgW,newImgH,gdImageSX(sim),gdImageSY(sim));
-        gdImageDestroy(sim);
-        sim = dim;
+	newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
+	gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
+	gdImageAlphaBlending(dim,0);
+	gdImageFilledRectangle(dim,0,0,newImgW-1,newImgH-1,gdImageColorResolveAlpha(dim,0,0,0,127));
+	gdImageCopyResampled(dim,sim,0,0,0,0,newImgW,newImgH,gdImageSX(sim),gdImageSY(sim));
+	gdImageDestroy(sim);
+	sim = dim;
     }
 
-    //>> Check for disable icon make
+    // Check for disable icon make
     if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
     {
-        gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
-        gdImageAlphaBlending(dim,0);
-        bool isUnAct = (prmEl->second == "unact");
-        for(int i_y = 0; i_y < gdImageSY(sim); i_y++)
-            for(int i_x = 0; i_x < gdImageSX(sim); i_x++)
-            {
-                int c = gdImageGetPixel(sim,i_x,i_y);
-                int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
-                if(isUnAct) y = 255-(255-y)/2;
-                c = (int)gdImageColorResolveAlpha(dim,y,y,y,gdImageAlpha(sim,c));
-                gdImageSetPixel(dim,i_x,i_y,c);
-            }
-        gdImageDestroy(sim);
-        sim = dim;
+	gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
+	gdImageAlphaBlending(dim,0);
+	bool isUnAct = (prmEl->second == "unact");
+	for(int i_y = 0; i_y < gdImageSY(sim); i_y++)
+	    for(int i_x = 0; i_x < gdImageSX(sim); i_x++) {
+		int c = gdImageGetPixel(sim,i_x,i_y);
+		int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
+		if(isUnAct) y = 255-(255-y)/2;
+		c = (int)gdImageColorResolveAlpha(dim,y,y,y,gdImageAlpha(sim,c));
+		gdImageSetPixel(dim,i_x,i_y,c);
+	    }
+	gdImageDestroy(sim);
+	sim = dim;
     }
 
-    //>> Save result
-    if(sim)
-    {
-        int img_sz;
-        char *img_ptr = NULL;
-        gdImageSaveAlpha(sim, 1);
-        if(itp == "png")        img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, PNGCompLev());
-        else if(itp == "jpg")   img_ptr = (char *)gdImageJpegPtr(sim, &img_sz,-1);
-        else if(itp == "gif")   img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
-        if(img_ptr)
-        {
-            ses.page.assign(img_ptr,img_sz);
-            gdFree(img_ptr);
-        }
-        gdImageDestroy(sim);
+    // Save result
+    if(sim) {
+	int img_sz;
+	char *img_ptr = NULL;
+	gdImageSaveAlpha(sim, 1);
+	if(itp == "png")	img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, PNGCompLev());
+	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim, &img_sz,-1);
+	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
+	if(img_ptr) {
+	    ses.page.assign(img_ptr,img_sz);
+	    gdFree(img_ptr);
+	}
+	gdImageDestroy(sim);
     }
 }
 
@@ -727,27 +695,24 @@ int TWEB::colorParse( const string &tclr )
     string clr = tclr;
     int alpha;
     size_t found = clr.find("-");
-    if (found != string::npos)
-    {
+    if(found != string::npos) {
 	clr = tclr.substr(0,found);
-	alpha =  atoi(tclr.substr(found+1).c_str());
+	alpha =  s2i(tclr.substr(found+1));
     }
     else alpha = 255;
 
-    if( clr.size() >= 4 && clr[0] == '#' )
-    {
+    if(clr.size() >= 4 && clr[0] == '#') {
 	int el_sz = clr.size()/3;
 	return ((int)vmin(127,(alpha/2+0.5))<<24)+
 		(strtol(clr.substr(1,el_sz).c_str(),NULL,16)<<16)+
 		(strtol(clr.substr(1+el_sz,el_sz).c_str(),NULL,16)<<8)+
 		strtol(clr.substr(1+2*el_sz,el_sz).c_str(),NULL,16);
     }
-    else if( clr.size() )
-    {
+    else if(clr.size()) {
 	map<string,int>::iterator iclr = colors.find(clr);
-	if( iclr != colors.end() )
-	    return ((int)vmin(127,(alpha/2+0.5))<<24)+ iclr->second;
+	if(iclr != colors.end()) return ((int)vmin(127,(alpha/2+0.5))<<24)+ iclr->second;
     }
+
     return -1;
 }
 
@@ -761,14 +726,13 @@ string TWEB::trMessReplace( const string &tsrc )
     string trez; trez.reserve(tsrc.size());
 
     unsigned txtBeg = 0, i_s, i_r;
-    for( i_s = 0; i_s < tsrc.size(); i_s++ )
-	if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
+    for(i_s = 0; i_s < tsrc.size(); i_s++)
+	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#')
 	{
-	    for( i_r = i_s+3; i_r < tsrc.size(); i_r++ )
-	    if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
+	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
+	    if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n')
 		break;
-	    if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
-	    {
+	    if(i_r < tsrc.size() && tsrc[i_r] != '\n') {
 		trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
 		trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
 		i_s = i_r+2;
@@ -776,7 +740,7 @@ string TWEB::trMessReplace( const string &tsrc )
 		continue;
 	    }
 	}
-    if( txtBeg < i_s ) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+    if(txtBeg < i_s) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
 
     return trez;
 }
@@ -787,10 +751,9 @@ string TWEB::trMessReplace( const string &tsrc )
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
     url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
 {
-    //> URL parameters parse
+    //URL parameters parse
     size_t prmSep = iurl.find("?");
-    if(prmSep != string::npos)
-    {
+    if(prmSep != string::npos) {
 	url = iurl.substr(0,prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
@@ -799,7 +762,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
     }
 
-    //> Content parse
+    //Content parse
     string boundary;
     const char *c_bound = "boundary=";
     const char *c_term = "\x0D\x0A";
@@ -808,34 +771,31 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_name = "name=\"";
 
     for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-        if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
-        {
-            pos += strlen(c_bound);
-            boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
-        }
+	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
+	{
+	    pos += strlen(c_bound);
+	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+	}
     if(boundary.empty()) return;
 
-    for(size_t pos = 0, spos = 0, i_bnd = 0; true; )
-    {
-        pos = content.find(boundary,pos);
-        if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
-        pos += boundary.size()+strlen(c_term);
+    for(size_t pos = 0, spos = 0, i_bnd = 0; true; ) {
+	pos = content.find(boundary,pos);
+	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
+	pos += boundary.size()+strlen(c_term);
 
-        //>> Process properties and get name
-        string p_name;
-        while(pos < content.size())
-        {
-            string c_head = content.substr(pos, content.find(c_term,pos)-pos);
-            pos += c_head.size()+strlen(c_term);
-            if(c_head.empty()) break;
-            if((spos=c_head.find(":")) == string::npos) return;
-            if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos)
-            {
-                i_bnd += strlen(c_name);
-                p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-            }
-        }
-        if(pos >= content.size()) return;
-        if(!p_name.empty()) cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
+	// Process properties and get name
+	string p_name;
+	while(pos < content.size()) {
+	    string c_head = content.substr(pos, content.find(c_term,pos)-pos);
+	    pos += c_head.size()+strlen(c_term);
+	    if(c_head.empty()) break;
+	    if((spos=c_head.find(":")) == string::npos) return;
+	    if(c_head.compare(0,spos,c_fd) == 0 && (i_bnd=c_head.find(c_name,spos)) != string::npos) {
+		i_bnd += strlen(c_name);
+		p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
+	    }
+	}
+	if(pos >= content.size()) return;
+	if(!p_name.empty()) cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
     }
 }

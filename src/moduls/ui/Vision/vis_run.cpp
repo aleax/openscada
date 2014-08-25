@@ -55,9 +55,9 @@
 
 using namespace VISION;
 
-VisRun::VisRun( const string &iprj_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
+VisRun::VisRun( const string &iprjSes_it, const string &open_user, const string &user_pass, const string &VCAstat, bool icrSessForce, unsigned iScr ) :
     QMainWindow(QDesktopWidget().screen(iScr)), prPg(NULL), prDiag(NULL), prDoc(NULL), fileDlg(NULL), winClose(false), conErr(NULL),
-    crSessForce(icrSessForce), keepAspectRatio(false), prj_it(iprj_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
+    crSessForce(icrSessForce), keepAspectRatio(false), prjSes_it(iprjSes_it), master_pg(NULL), mPeriod(1000), mScreen(iScr), wPrcCnt(0), reqtm(1),
     expDiagCnt(1), expDocCnt(1), x_scale(1), y_scale(1), mAlrmSt(0xFFFFFF)
 {
     QImage ico_t;
@@ -166,12 +166,8 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     connect(actQtAbout, SIGNAL(triggered()), this, SLOT(aboutQt()));
     //  The project manual
     if(!ico_t.load(TUIS::icoGet("manual",NULL,true).c_str())) ico_t.load(":/images/manual.png");
-    string tPrjId = (iprj_it.size()>5) ? iprj_it.substr(5) : "";
-    QAction *actProjManual = new QAction(QPixmap::fromImage(ico_t),QString(_("Project '%1' manual")).arg(tPrjId.c_str()),this);
-    actProjManual->setProperty("doc", tPrjId.c_str());
+    QAction *actProjManual = new QAction(QPixmap::fromImage(ico_t),"",this);
     actProjManual->setShortcut(Qt::Key_F1);
-    actProjManual->setWhatsThis(QString(_("The button for getting the using project '%1' manual")).arg(tPrjId.c_str()));
-    actProjManual->setStatusTip(QString(_("Press to get the using project '%1' manual.")).arg(tPrjId.c_str()));
     connect(actProjManual, SIGNAL(triggered()), this, SLOT(enterManual()));
     //  Vision manual
     QAction *actManual = new QAction(QPixmap::fromImage(ico_t),QString(_("'%1' manual")).arg(mod->modId().c_str()),this);
@@ -316,7 +312,13 @@ VisRun::VisRun( const string &iprj_it, const string &open_user, const string &us
     resize(600, 400);
 
     //Init session
-    initSess(prj_it, crSessForce);
+    initSess(prjSes_it, crSessForce);
+
+    //For real project's name update
+    actProjManual->setText(QString(_("Project '%1' manual")).arg(srcProject().c_str()));
+    actProjManual->setProperty("doc", srcProject().c_str());
+    actProjManual->setWhatsThis(QString(_("The button for getting the using project '%1' manual")).arg(srcProject().c_str()));
+    actProjManual->setStatusTip(QString(_("Press to get the using project '%1' manual.")).arg(srcProject().c_str()));
 
     //mWStat->setText(host.st_nm.c_str());
     statusBar()->showMessage(_("Ready"), 2000);
@@ -1035,18 +1037,22 @@ void VisRun::alarmAct( QAction *alrm )
     if(master_pg) master_pg->attrSet("event",("ws_"+alrm->objectName()).toStdString());
 }
 
-void VisRun::initSess( const string &prj_it, bool crSessForce )
+void VisRun::initSess( const string &prjSes_it, bool crSessForce )
 {
+    bool isSess = false;
+    src_prj = work_sess = "";
+
     //Connect/create session
-    src_prj = TSYS::pathLev(prj_it,0);
-    if(src_prj.empty()) return;
-    src_prj = src_prj.substr(4);
-    work_sess = "";
+    if((src_prj=TSYS::pathLev(prjSes_it,0)).empty()) return;
+    // Check for ready session connection or project
+    if(src_prj.compare(0,4,"ses_") == 0) { work_sess = src_prj.substr(4); src_prj = ""; isSess = true; }
+    else if(src_prj.compare(0,4,"prj_") == 0) src_prj.erase(0,4);
+    else return;
 
     //Get opened sessions list for our page and put dialog for connection
     XMLNode req("list");
     req.setAttr("path","/%2fserv%2fsess")->setAttr("prj",src_prj);
-    if(!crSessForce && !cntrIfCmd(req) && req.childSize())
+    if(!isSess && !crSessForce && !cntrIfCmd(req) && req.childSize())
     {
 	// Prepare and execute a session selection dialog
 	QImage ico_t;
@@ -1076,65 +1082,62 @@ void VisRun::initSess( const string &prj_it, bool crSessForce )
 	return;
     }
 
-    work_sess = req.attr("sess");
+    if(work_sess.empty()) work_sess = req.attr("sess");
+    if(src_prj.empty()) src_prj = req.attr("prj");
 
-    //Set window title
-    // Get project's name
-    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fname");
-    if(!cntrIfCmd(req))	setWindowTitle(req.text().c_str());
-    else setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));
-
-    //Set project's icon to window
-    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fico");
+    //Prepare group for parameters request and apply
+    setWindowTitle(QString(_("Running project: %1")).arg(src_prj.c_str()));	//Default title
+    setWindowIcon(mod->icon());
+    req.clear()->setName("CntrReqs")->setAttr("path","");
+    req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fname");
+    req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fico");
+    req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
+    req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
+    req.childAdd("get")->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
+    req.childAdd("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
+    req.childAdd("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
     if(!cntrIfCmd(req)) {
+	// Title
+	XMLNode *pN = req.childGet(0);
+	setWindowTitle(pN->text().c_str());
+	// Icon
+	pN = req.childGet(1);
 	QImage img;
-	string simg = TSYS::strDecode(req.text(),TSYS::base64);
+	string simg = TSYS::strDecode(pN->text(),TSYS::base64);
 	if(img.loadFromData((const uchar*)simg.c_str(),simg.size()))
 	    setWindowIcon(QPixmap::fromImage(img));
-    }
-    else setWindowIcon(mod->icon());
-
-    //Get update period
-    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fper");
-    if(!cntrIfCmd(req)) mPeriod = s2i(req.text());
-
-    //Get current style
-    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstyle");
-    if(!cntrIfCmd(req)) {
-	setStyle(s2i(req.text()));
-	//Check for styles present
-	if(style() < 0) {
-	    req.clear()->setAttr("path","/ses_"+work_sess+"/%2fobj%2fcfg%2fstLst");
-	    if(!cntrIfCmd(req) && req.childSize() <= 1) mStlBar->setVisible(false);
+	// Period
+	pN = req.childGet(2);
+	mPeriod = s2i(pN->text());
+	// Style
+	pN = req.childGet(3);
+	setStyle(s2i(pN->text()));
+	pN = req.childGet(4);
+	if(style() < 0 && pN->childSize() <= 1) mStlBar->setVisible(false);
+	// Flags
+	pN = req.childGet(5);
+	int flgs = s2i(pN->text());
+	if(flgs&0x01)		setWindowState(Qt::WindowMaximized);
+	else if(flgs&0x02)	actFullScr->setChecked(true);
+	keepAspectRatio = flgs&0x04;
+	// Open pages list
+	pN = req.childGet(6);
+	for(unsigned i_ch = 0; i_ch < pN->childSize(); i_ch++) {
+	    pgList.push_back(pN->childGet(i_ch)->text());
+	    callPage(pN->childGet(i_ch)->text());
 	}
+	reqtm = strtoul(pN->attr("tm").c_str(),NULL,10);
     }
-
-    //Get project's flags
-    req.clear()->setName("get")->setAttr("path","/prj_"+src_prj+"/%2fobj%2fcfg%2fflgs");
-    if(!cntrIfCmd(req)) {
-	if(s2i(req.text())&0x01)	setWindowState(Qt::WindowMaximized);
-	else if(s2i(req.text())&0x02)	actFullScr->setChecked(true);
-	keepAspectRatio = s2i(req.text())&0x04;
-    }
-
-    //Get open pages list
-    req.clear()->setName("openlist")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg");
-    if(!cntrIfCmd(req))
-	for(unsigned i_ch = 0; i_ch < req.childSize(); i_ch++) {
-	    pgList.push_back(req.childGet(i_ch)->text());
-	    callPage(req.childGet(i_ch)->text());
-	}
-    reqtm = strtoul(req.attr("tm").c_str(),NULL,10);
 
     //Open direct-selected page
-    if(!TSYS::pathLev(prj_it,1).empty()) {
+    if(!TSYS::pathLev(prjSes_it,1).empty()) {
 	// Convert project path to session path
 	string prj_el;
 	string ses_it = "/ses_"+work_sess;
 	int i_el = 1;
-	while((prj_el=TSYS::pathLev(prj_it,i_el++)).size())
-	    if(prj_el.substr(0,3) != "pg_") break;
-	    else ses_it += "/"+prj_el;
+	while((prj_el=TSYS::pathLev(prjSes_it,i_el++)).size())
+	    if(prj_el.compare(0,3,"pg_") != 0) break;
+	    else ses_it += "/" + prj_el;
 
 	// Send open command
 	req.clear()->setName("open")->setAttr("path","/ses_"+work_sess+"/%2fserv%2fpg")->setAttr("pg",ses_it);
@@ -1404,9 +1407,9 @@ void VisRun::updatePage( )
     }
     // Restore closed session of used project.
     else if(rez == 2) {
-	mess_warning(mod->nodePath().c_str(),_("Session creation restore for '%s'."),prj_it.c_str());
+	mess_warning(mod->nodePath().c_str(),_("Session creation restore for '%s'."),prjSes_it.c_str());
 	updateTimer->stop();
-	initSess(prj_it, crSessForce);
+	initSess(prjSes_it, crSessForce);
 	return;
     }
 

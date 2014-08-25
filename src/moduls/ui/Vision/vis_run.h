@@ -52,7 +52,7 @@ class VisRun : public QMainWindow
     Q_OBJECT
     public:
 	//Public methods
-	VisRun( const string &prj_it, const string &open_user, const string &user_pass,
+	VisRun( const string &prjSes_it, const string &open_user, const string &user_pass,
 	    const string &VCAstat, bool crSessForce = false, unsigned screen = 0 );
 	~VisRun( );
 
@@ -74,7 +74,7 @@ class VisRun : public QMainWindow
 	void setReqTm( unsigned rt )	{ reqtm = rt; }
 	void setStyle( int istl );
 
-	void initSess( const string &prj_it, bool crSessForce = false );	//Init session for project's item path
+	void initSess( const string &prjSes_it, bool crSessForce = false );	//Init session for project's item path
 	void callPage( const string &ses_it, bool updWdg = false );		//Call session page
 	void fullUpdatePgs( );
 
@@ -176,7 +176,7 @@ class VisRun : public QMainWindow
 	QLabel		*conErr;		//Connection error label
 	bool		crSessForce;		//Force session creation flag
 	bool		keepAspectRatio;	//Keep aspect ratio on scale
-	string 		prj_it, work_sess, src_prj;//Work session and source project
+	string 		prjSes_it, work_sess, src_prj;//Work session and source project
 	RunPageView	*master_pg;		//Master page of runtime session
 	int		mPeriod;		//Clock's period
 	unsigned	mScreen,		//Work screen, possible virtual

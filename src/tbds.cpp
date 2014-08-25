@@ -401,7 +401,7 @@ bool TBDS::dataDel( const string &ibdn, const string &path, TConfig &cfg, bool u
     }
 
     //Delete from config
-    if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG)) {
+    if(path.size() && (forceCfg || ibdn.empty() || TSYS::strParse(bdn,0,".") == DB_CFG || !db_true)) {
 	ResAlloc res(SYS->nodeRes(),false);
 	XMLNode *nd = SYS->cfgNode(SYS->id()+"/"+path, true);
 	vector<string> cf_el;
@@ -518,7 +518,7 @@ void TBDS::load_( )
 	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file
-    mSYSStPref = (bool)atoi(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg).c_str());
+    mSYSStPref = (bool)s2i(TBDS::genDBGet(nodePath()+"SYSStPref",(mSYSStPref?"1":"0"),"root",TBDS::OnlyCfg));
 
     //DB open
     // Open, load and enable generic DB
@@ -604,7 +604,7 @@ void TTipBD::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/db/ful_db_del") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID,SEC_RD))	opt->setText(full_db_del?"1":"0");
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))	full_db_del = atoi(opt->text().c_str());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))	full_db_del = s2i(opt->text());
     }
     else if(a_path == "/br/db_" || a_path == "/db/odb") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {
@@ -806,7 +806,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     if(a_path == "/prm/st/st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD))	opt->setText(enableStat()?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	atoi(opt->text().c_str())?enable():disable();
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDB_ID,SEC_WR))	s2i(opt->text()) ? enable() : disable();
     }
     else if(a_path == "/prm/st/allow_tbls") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDB_ID,SEC_RD)) {
@@ -842,7 +842,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/sql/trans") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(userSQLTrans));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLTrans = atoi(opt->text().c_str());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLTrans = s2i(opt->text());
     }
     else if(a_path == "/sql/send" && enableStat( ) && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))
 	sqlReq(userSQLReq,&userSQLResTbl,userSQLTrans);
@@ -1000,7 +1000,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
     if(a_path == "/prm/cfg/nm" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD)) opt->setText(name());
     else if(a_path == "/prm/tblOff") {
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(tblOff));
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = atoi(opt->text().c_str());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	tblOff = s2i(opt->text());
     }
     else if(a_path == "/prm/tbl") {
 	TConfig req;

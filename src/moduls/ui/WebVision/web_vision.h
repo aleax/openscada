@@ -88,14 +88,14 @@ class TWEB: public TUI
 	void setPNGCompLev( int vl )			{ mPNGCompLev = vmax(-1,vmin(9,vl)); modif(); }
 	void setCSStables( const string &vl )		{ mCSStables = vl; modif(); }
 
-	//> VCA sessions
+	// VCA sessions
 	void vcaSesList( vector<string> &list )		{ chldList(id_vcases,list); }
 	bool vcaSesPresent( const string &name )	{ return chldPresent(id_vcases,name); }
 	void vcaSesAdd( const string &name, bool isCreate );
 	void vcaSesDel( const string &name )		{ chldDel(id_vcases,name); }
 	AutoHD<VCASess> vcaSesAt( const string &name )	{ return chldAt(id_vcases,name); }
 
-	//> Web process methods
+	// Web process methods
 	void HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 	void getAbout( SSess &ses );
 
@@ -131,7 +131,7 @@ class TWEB: public TUI
 
     private:
 	//Methods
-	//> Post message dialog
+	// Post message dialog
 	void messPost( string &page, const string &cat, const string &mess, MessLev type = Info );
 
 	//Attributes
