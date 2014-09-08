@@ -128,7 +128,7 @@ void TCntrNode::cntrCmd( XMLNode *opt, int lev, const string &ipath, int off )
 	    opt->setAttr("path",s_br);
 	    cntrCmdProc(opt);
 	    if(opt->attr("rez") != "0")
-		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),path.c_str(),s_br.c_str());
+		throw TError("ContrItfc",_("%s:%s:> Control element '%s' error!"),opt->name().c_str(),(nodePath()+path).c_str(),s_br.c_str());
 	}
     }
     catch(TError err) {

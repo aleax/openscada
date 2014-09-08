@@ -35,7 +35,7 @@
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 
 #define mess_lev( )			Mess->messLevel()
-//> Limited to mess_lev() messages
+//Limited to mess_lev() messages
 #define message(cat,lev,fmt,args...)	Mess->put(cat,lev,fmt,##args)
 #define mess_debug(cat,fmt,args...)	Mess->put(cat,TMess::Debug,fmt,##args)
 #define mess_info(cat,fmt,args...)	Mess->put(cat,TMess::Info,fmt,##args)
@@ -45,7 +45,7 @@
 #define mess_crit(cat,fmt,args...)	Mess->put(cat,TMess::Crit,fmt,##args)
 #define mess_alert(cat,fmt,args...)	Mess->put(cat,TMess::Alert,fmt,##args)
 #define mess_emerg(cat,fmt,args...)	Mess->put(cat,TMess::Emerg,fmt,##args)
-//> Unlimited to mess_lev() messages
+//Unlimited to mess_lev() messages
 #define message_(cat,lev,fmt,args...)	Mess->put_(cat,lev,fmt,##args)
 #define mess_debug_(cat,fmt,args...)	Mess->put_(cat,TMess::Debug,fmt,##args)
 #define mess_info_(cat,fmt,args...)	Mess->put_(cat,TMess::Info,fmt,##args)
@@ -97,15 +97,12 @@ class TMess
 	void load( );
 	void save( );
 
-	string codeConv( const string &fromCH, const string &toCH, const string &mess);
-	string codeConvIn( const string &fromCH, const string &mess)
-	{ return( codeConv( fromCH, IOCharSet, mess ) ); }
-	string codeConvOut( const string &toCH, const string &mess)
-	{ return( codeConv( IOCharSet, toCH , mess ) ); }
+	string codeConv( const string &fromCH, const string &toCH, const string &mess );
+	string codeConvIn( const string &fromCH, const string &mess )	{ return codeConv(fromCH, IOCharSet, mess); }
+	string codeConvOut( const string &toCH, const string &mess )	{ return codeConv(IOCharSet, toCH, mess); }
 
 	static const char *I18N( const char *mess, const char *d_name = NULL );
-	static string I18Ns( const string &mess, const char *d_name = NULL )
-	{ return I18N((char *)mess.c_str(), d_name); }
+	static string I18Ns( const string &mess, const char *d_name = NULL )	{ return I18N((char*)mess.c_str(), d_name); }
 
 	string lang( );
 	string lang2Code( )	{ return mLang2Code; }
@@ -126,7 +123,20 @@ class TMess
 	void put_( const char *categ, int8_t level, const char *fmt,  ... );
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
-	//> Often used, generic text messages
+	// Internal messages translations
+	bool translEn( )	{ return mTranslEn; }
+	string translLangs( )	{ return mTranslLangs; }
+	string translFltr( )	{ return mTranslFltr; }
+	void setTranslEn( bool vl, bool passive = false );
+	void setTranslLangs( const string &vl )	{ mTranslLangs = vl; }
+	void setTranslFltr( const string &vl )	{ mTranslFltr = vl; }
+
+	string translFld( const string &lng, const string &fld, bool isCfg = false );
+
+	//  Register translation. Src format: "{MDB}.{DB}.{TBL}:{TrFld}"
+	void translReg( const string &mess, const string &src, const string &prms = "" );
+
+	// Often used, generic text messages
 	static const char *labDB( );
 	static const char *labSecCRON( );
 	static const char *labSecCRONsel( );
@@ -142,13 +152,18 @@ class TMess
 	unsigned mLogDir	:4;	//Log direction
 	unsigned mConvCode	:1;	//Enable text code conversion
 	unsigned mIsUTF8	:1;
+	unsigned mTranslEn	:1;
+	unsigned mTranslSet	:1;
 
 	string	mLang2CodeBase, mLang2Code;
 
 	map<string, bool>	debugCats;
 	vector<string>		selectDebugCats;
 
-	Res	mRes;
+	string	mTranslLangs, mTranslFltr;
+	map<string, map<string,string> > builtMessIdx;
+
+	pthread_mutex_t	mRes;
 };
 
 extern TMess *Mess;

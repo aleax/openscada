@@ -351,6 +351,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	ctrMkNode("fld",opt,-1,"/prm/st/disp_n",_("Display number"),R_R_R_,"root",SUI_ID,1,"tp","dec");
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/stationVCA",_("VCA engine station"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/prm/cfg/vca_lst");
+	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	    if(VCAStation() == ".")
 		ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    else {
@@ -360,14 +361,13 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	    }
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/cachePgLife",_("Cached pages lifetime"),RWRWR_,"root",SUI_ID,2,"tp","real",
 		"help",_("The time in hours for close pages from cache by inactive.\nFor zero time pages will not closed."));
-	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,2,"tp","str",
+	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj",_("Run projects list"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/prm/cfg/r_lst",
 		"help",_("Automatic started projects separated by symbol ';'.\n"
 			 "For opening a project's window to need display (1) use the project name format: 'PrjName-1'.\n"
-			 "For connect to background or other openned session use \"ses_{SesID}\"."));
+			 "For connect to background or other opened session use \"ses_{SesID}\"."));
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/run_prj_st",_("Run projects status display"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/winPos_cntr_save",_("Windows position control and save"),RWRWR_,"root",SUI_ID,1,"tp","bool");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/exit_on_lst_run_prj_cls",_("Exit on last run project close"),RWRWR_,"root",SUI_ID,1,"tp","bool");
-	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	}
 	if(ctrMkNode("area",opt,2,"/alarm",_("Alarms"),R_R_R_,"root",SUI_ID))
 	    ctrMkNode("fld",opt,-1,"/alarm/plComm",_("Play command"),RWRWR_,"root",SUI_ID,4,"tp","str","dest","sel_ed","select","/alarm/plComLs","help",
@@ -398,6 +398,23 @@ void TVision::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/prm/cfg/run_prj") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(runPrjs());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setRunPrjs(opt->text());
+    }
+    else if(a_path == "/prm/cfg/r_lst" && ctrChkNode(opt)) {
+	string rPrjs = runPrjs();
+	// Sessions and projects list request
+	XMLNode req("CntrReqs");
+	req.childAdd("get")->setAttr("path","%2fses%2fses")->setAttr("chkUserPerm","1");
+	req.childAdd("get")->setAttr("path","%2fprm%2fcfg%2fprj")->setAttr("chkUserPerm","1");
+	cntrIfCmd(req, startUser(), userPass(), VCAStation());
+	XMLNode *reqN = req.childGet(0);
+	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
+	    if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_) ||
+		    reqN->childGet(i_ch)->attr("user") == startUser())
+		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+"ses_"+reqN->childGet(i_ch)->text());
+	reqN = req.childGet(1);
+	for(unsigned i_ch = 0; i_ch < reqN->childSize(); i_ch++)
+	    if(SYS->security().at().access(startUser(),SEC_WR,"root","root",RWRWR_))
+		opt->childAdd("el")->setText((rPrjs.size()?rPrjs+";":"")+reqN->childGet(i_ch)->attr("id"));
     }
     else if(a_path == "/prm/cfg/winPos_cntr_save") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(winPosCntrSave()));
@@ -435,8 +452,7 @@ void TVision::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(playCom());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPlayCom(opt->text());
     }
-    else if(a_path == "/alarm/plComLs" && ctrChkNode(opt))
-	opt->childAdd("el")->setText("play %f");
+    else if(a_path == "/alarm/plComLs" && ctrChkNode(opt)) opt->childAdd("el")->setText("play %f");
     else TUI::cntrCmdProc(opt);
 }
 

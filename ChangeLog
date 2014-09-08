@@ -1,3 +1,29 @@
+2014-09-06 Roman
+- SYS: Into main spec-file for default init used RH-init file.
+    debian/control expand for dependent from "sqlite3" and the depends made unified.
+    TVArchive,TTransportIn: Check for cfg-change real value for prevent some problems.
+    TElem: Expand for create TFld from example-pattern of present TFld but different ID. TElem::fldClear() for fields clean up is added.
+    Messages resource moved from ResAlloc to MtxAlloc.
+    !!!!: Request keys mode support, by WHERE of SQL, is added:
+	TCfg::reqKey(), TCfg::setReqKey(), TConfig::reqKeys() used for mark Request keys mode. TCfg::isKey() append for common key
+	    whether generic or request (by mark TConfig::reqKeys()).
+	Flags KeyUpdtBase and KeyUpdtSet to functions TCfg::setS() and TCfg::getS(), mark TCfg::keyUpdt() is added for key update mode set
+	    and particular values of the keys set (KeyUpdtBase - base update value; KeyUpdtSet - set update value), for set requests.
+    !!!!: Data messages' translations register, built messages index and manage API is added.
+	<cfg>,SQLite,FireBird,MySQL,PostgreSQL: Register and requests for messages from config ("cfg:...") and DB.* ("incl:...") is added.
+	    Generic translations manager is created.
+- !!!!:DB: Method TTable::fullDBName() is added. For key detect used isKey(). For table content set uses TCfg::KeyUpdt mode.
+    SQLite,DBF,FireBird,MySQL,PostgreSQL: Expand to Request keys, TConfig::reqKeys() and TCfg::reqKey(), mode.
+	Expand to TCfg::KeyUpdt mode using into fieldSet() and fieldFix()
+    MySQL,PostgreSQL,FireBird: Uses for zero length default TEXT type.
+    FIX:FireBird: dataSeek() fix for no SELECT fields set. Fix using default type for integer from INT64 to BIGINT.
+- DAQ.JavaLikeCalc: Prevent controller object reload into start (execution) mode.
+- DAQ.OPC_UA.lib: Fix strLine() declaration from static to extern.
+- UI.Vision: Allowed sessions and projects list for proper remote station, the user and password is added to field "Run projects list"
+    of common dialog by the module.
+- Special.SystemTests.DB: Expanded by test "Check for update fields, by request key".
+
+
 2014-08-25 Roman
 - FIX:DB: TBDS::dataDel() fix for remove records from config file after DB try, mostly for same DB records remove fix.
 - UI.VCAEngine: Automatic sessions creation update at the module enable is added.

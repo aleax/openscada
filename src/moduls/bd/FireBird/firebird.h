@@ -97,7 +97,7 @@ class MBD : public TBD
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	TTable *openTable( const string &name, bool create );
 
 	string getErr( ISC_STATUS_ARRAY status );

@@ -853,7 +853,7 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 								//by some artifications like ticks lost into Slider
 								//Possible for the global events generations will need the processing here
 								//or observe the artification into the global handler.
-	    case QEvent::Hide:
+	    case QEvent::Hide: {
 		ShpDt *shD = (ShpDt*)w->shpData;
 		switch(shD->elType)
 		{
@@ -865,6 +865,8 @@ bool ShapeFormEl::event( WdgView *w, QEvent *event )
 			break;
 		}
 		break;
+	    }
+	    default: break;
 	}
 
     return false;
@@ -1923,7 +1925,7 @@ bool ShapeDiagram::attrSet( WdgView *w, int uiPrmPos, const string &val)
 	    shD->valsForPix = vmin(10,vmax(0,s2i(val)));
 	    reld_tr_dt = 2;
 	    break;
-        case A_DiagramSclHorPer: shD->sclHorPer = vmax(0, s2r(val))*1e6; make_pct = true;	break;
+	case A_DiagramSclHorPer: shD->sclHorPer = vmax(0, s2r(val))*1e6; make_pct = true;	break;
 	default:
 	    //Individual trend's attributes process
 	    if(uiPrmPos >= A_DiagramTrs) {
@@ -2037,8 +2039,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 
     // Get main scale for non individual parameters
     int prmInGrp = 0, prmGrpLast = -1;
-    for(unsigned i_p = 0, mainPerc = false; i_p < shD->prms.size(); i_p++)
-    {
+    for(unsigned i_p = 0, mainPerc = false; i_p < shD->prms.size(); i_p++) {
 	TrendObj &cP = shD->prms[i_p];
 	if(!cP.fftN || !cP.color().isValid())	continue;
 
@@ -2051,8 +2052,7 @@ void ShapeDiagram::makeSpectrumPicture( WdgView *w )
 		cP.adjL = vmin(cP.adjL, curVl); cP.adjU = vmax(cP.adjU, curVl);
 	    }
 	    if(cP.adjU == cP.adjL)	{ cP.adjU += 1.0; cP.adjL -= 1.0; }
-	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001)
-	    {
+	    else if((cP.adjU-cP.adjL) / fabs(cP.adjL+(cP.adjU-cP.adjL)/2) < 0.001) {
 		double wnt_dp = 0.001*fabs(cP.adjL+(cP.adjU-cP.adjL)/2)-(cP.adjU-cP.adjL);
 		cP.adjL -= wnt_dp/2;
 		cP.adjU += wnt_dp/2;

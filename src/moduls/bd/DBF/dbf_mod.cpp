@@ -132,8 +132,7 @@ void MBD::allowList( vector<string> &list )
     dirent scan_dirent, *scan_rez = NULL;
     DIR *IdDir = opendir(addr().c_str());
     if(IdDir == NULL) return;
-    while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez)
-    {
+    while(readdir_r(IdDir,&scan_dirent,&scan_rez) == 0 && scan_rez) {
 	nfile = scan_rez->d_name;
 	if(nfile == ".." || nfile == "." ||
 	    nfile.rfind(".") == string::npos || nfile.substr(nfile.rfind(".")) != ".dbf") continue;
@@ -146,12 +145,10 @@ void MBD::allowList( vector<string> &list )
 
 void MBD::transCloseCheck( )
 {
-    if(enableStat())
-    {
+    if(enableStat()) {
 	vector<string> t_list;
 	list(t_list);
-	for(unsigned i_l = 0; i_l < t_list.size(); i_l++)
-	{
+	for(unsigned i_l = 0; i_l < t_list.size(); i_l++) {
 	    AutoHD<MTable> t = at(t_list[i_l]);
 	    if(t.at().mModify && (SYS->sysTm()-t.at().mModify) > 10) t.at().save();
 	}
@@ -197,8 +194,7 @@ MTable::MTable( const string &inm, MBD *iown, bool create ) : TTable(inm), mModi
     n_table = owner().addr()+'/'+tbl_nm;
 
     basa = new TBasaDBF();
-    if(basa->LoadFile((char *)n_table.c_str()) == -1 && !create)
-    {
+    if(basa->LoadFile((char *)n_table.c_str()) == -1 && !create) {
 	delete basa;
 	throw TError(nodePath().c_str(), _("Open table error!"));
     }
@@ -236,14 +232,13 @@ bool MTable::fieldSeek( int i_ln, TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //Seek and get data
-    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
-    {
+    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
 	// Find collumn
 	db_str_rec *fld_rec;
-	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
-	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
+	for(i_clm = 0; (fld_rec=basa->getField(i_clm)) != NULL; i_clm++)
+	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
 	if(fld_rec == NULL) continue;
 
 	// Get table volume
@@ -272,14 +267,13 @@ void MTable::fieldGet( TConfig &cfg )
     cfg.cfgList(cf_el);
 
     //Write data to cfg
-    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++)
-    {
+    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
 
 	// Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
-	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
+	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
 	if(fld_rec == NULL) continue;
 
 	// Get table volume
@@ -305,6 +299,8 @@ void MTable::fieldSet( TConfig &cfg )
     if(!(access(n_table.c_str(),F_OK|W_OK) == 0 || (access(n_table.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
 	throw TError(nodePath().c_str(), _("Read only access to file '%s'."), n_table.c_str());
 
+    bool isForceUpdt = cfg.reqKeys();
+
     //Check and fix structure of table
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
@@ -312,7 +308,7 @@ void MTable::fieldSet( TConfig &cfg )
 	// Find collumn
 	db_str_rec *fld_rec;
 	for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
+	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
 	if(fld_rec == NULL) {
 	    // Create new collumn
 	    db_str_rec n_rec;
@@ -320,10 +316,9 @@ void MTable::fieldSet( TConfig &cfg )
 	    fieldPrmSet(e_cfg, n_rec);
 	    if(basa->addField(i_cf,&n_rec) < 0) throw TError(nodePath().c_str(), _("Column error!"));
 	}
-	else {
+	else if(!isForceUpdt) {
 	    // Check collumn parameters
-	    switch(e_cfg.fld().type())
-	    {
+	    switch(e_cfg.fld().type()) {
 		case TFld::String:
 		    if(fld_rec->tip_fild == 'C' && e_cfg.fld().len() == fld_rec->len_fild)	continue;
 		    break;
@@ -348,28 +343,37 @@ void MTable::fieldSet( TConfig &cfg )
     }
     //Del no used collumn
     db_str_rec *fld_rec;
-    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++) {
+    for(i_clm = 0; !isForceUpdt && (fld_rec=basa->getField(i_clm)) != NULL; i_clm++) {
 	unsigned i_cf;
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
-	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
+	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
 	if(i_cf >= cf_el.size() && basa->DelField(i_clm) < 0) throw TError(nodePath().c_str(), _("Delete field error!"));
     }
+
+    //Write to all records
     //Get key line
-    i_ln = findKeyLine(cfg);
-    if(i_ln < 0) i_ln = basa->CreateItems(-1);
+    bool isEnd = false;
+    for(i_ln = 0; !isEnd; i_ln++) {
+	if((i_ln=findKeyLine(cfg,0,false,i_ln)) < 0) {
+	    if(isForceUpdt) return;
+	    i_ln = basa->CreateItems(-1);
+	}
 
-    //Write data to bd
-    for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
-	TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
+	//Write data to bd
+	for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
+	    TCfg &e_cfg = cfg.cfg(cf_el[i_cf]);
+	    if(!e_cfg.view()) continue;
 
-	// Find collumn
-	db_str_rec *fld_rec;
-	for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
-	    if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
-	if(fld_rec == NULL) continue;
+	    // Find collumn
+	    db_str_rec *fld_rec;
+	    for(i_clm = 0; (fld_rec=basa->getField(i_clm)) != NULL; i_clm++)
+		if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
+	    if(fld_rec == NULL) continue;
 
-	// Set table volume
-	if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	    // Set table volume
+	    if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	}
+	if(!isForceUpdt) isEnd = true;
     }
 
     mModify = SYS->sysTm();
@@ -393,7 +397,7 @@ void MTable::fieldDel( TConfig &cfg )
     }
 }
 
-int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
+int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey, int off )
 {
     int i_ln, i_clm, i_cnt = 0;
 
@@ -405,11 +409,11 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
 
     //Left only keys into list
     for(unsigned i_cf = 0; i_cf < cf_el.size(); )
-	if(cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::Key) i_cf++;
+	if(cfg.cfg(cf_el[i_cf]).isKey()) i_cf++;
 	else cf_el.erase(cf_el.begin()+i_cf);
 
     //Find want field
-    for(i_ln = 0; i_ln < basa->GetCountItems(); i_ln++) {
+    for(i_ln = off; i_ln < basa->GetCountItems(); i_ln++) {
 	int cnt_key = 0;
 	for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
 	    if(useKey && !cfg.cfg(cf_el[i_cf]).keyUse()) { cnt_key++; continue; }
@@ -417,18 +421,18 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey )
 	    //Check key
 	    // Find collumn
 	    db_str_rec *fld_rec;
-	    for(i_clm = 0;(fld_rec = basa->getField(i_clm)) != NULL;i_clm++)
-		if(cf_el[i_cf].substr(0,10) == fld_rec->name) break;
+	    for(i_clm = 0; (fld_rec = basa->getField(i_clm)) != NULL; i_clm++)
+		if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
 	    if(fld_rec == NULL) throw TError(nodePath().c_str(), _("Key column '%s' is not present!"), cf_el[i_cf].c_str());
 	    // Get table volume
 	    string val;
-	    if(basa->GetFieldIt(i_ln,i_clm,val ) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
+	    if(basa->GetFieldIt(i_ln,i_clm,val) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
 	    // Remove spaces from end
 	    int i;
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;
 	    if(i != (int)val.size()) val.resize(i);
 	    // Compare value
-	    if(val != getVal(cfg.cfg(cf_el[i_cf]))) {
+	    if(val != cfg.cfg(cf_el[i_cf]).getS(TCfg::KeyUpdtBase)/*getVal(cfg.cfg(cf_el[i_cf]))*/) {
 		cnt_key = 0;
 		break;
 	    }

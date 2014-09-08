@@ -57,6 +57,7 @@ class TTable : public TCntrNode
 	TCntrNode &operator=( TCntrNode &node );
 
 	string	name( )		{ return mName.c_str(); }
+	string	fullDBName( );
 	time_t	lstUse( )	{ return mLstUse; }
 
 	virtual void fieldStruct( TConfig &cfg )
@@ -110,8 +111,8 @@ class TBD : public TCntrNode, public TConfig
 	string	addr( )		{ return cfg("ADDR").getS(); }
 	string	codePage( )	{ return cfg("CODEPAGE").getS(); }
 
-	bool enableStat( )		{ return mEn; }
-	bool toEnable( )		{ return mToEn; }
+	bool enableStat( )	{ return mEn; }
+	bool toEnable( )	{ return mToEn; }
 
 	void setName( const string &inm )	{ cfg("NAME").setS(inm); }
 	void setDscr( const string &idscr )	{ cfg("DESCR").setS(idscr); }
@@ -122,7 +123,7 @@ class TBD : public TCntrNode, public TConfig
 	virtual void enable( );
 	virtual void disable( );
 
-	//> Opened DB tables
+	// Opened DB tables
 	virtual void allowList( vector<string> &list )
 	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"allowList"); }
 	void list( vector<string> &list )	{ chldList(mTbl,list); }
@@ -131,7 +132,7 @@ class TBD : public TCntrNode, public TConfig
 	void close( const string &table, bool del = false, long tm = -1 )	{ chldDel(mTbl,table,tm,del); }
 	AutoHD<TTable> at( const string &name )	{ return chldAt(mTbl,name); }
 
-	//> SQL request interface
+	// SQL request interface
 	virtual void sqlReq( const string &req, vector< vector<string> > *tbl = NULL, char intoTrans = EVAL_BOOL )
 	{ throw TError(nodePath().c_str(),_("Function '%s' no support!"),"sqlReq"); }
 
@@ -162,13 +163,13 @@ class TBD : public TCntrNode, public TConfig
 	const char *nodeName( )	{ return mId.getSd(); }
 
 	//Private attributes
-	//> Base options
+	// Base options
 	TCfg	&mId;	//ID
 	char	&mToEn;
 
 	bool	mEn;
 
-	//> Special options
+	// Special options
 	int	mTbl;
 
 	string	userSQLReq;
@@ -190,7 +191,7 @@ class TTipBD : public TModule
 
 	bool fullDeleteDB( )	{ return full_db_del; }
 
-	//> Opened DB
+	// Opened DB
 	void list( vector<string> &list )	{ chldList(m_db,list); }
 	bool openStat( const string &idb )	{ return chldPresent(m_db,idb); }
 	void open( const string &iid );
@@ -219,8 +220,7 @@ class TBDS : public TSubSYS, public TElem
 {
     public:
 	//Data
-	enum ReqGen
-	{
+	enum ReqGen {
 	    OnlyCfg	= 0x01,		//Only from cinfig request
 	    UseTranslate= 0x02		//Use translation for request
 	};
@@ -236,17 +236,17 @@ class TBDS : public TSubSYS, public TElem
 
 	void perSYSCall( unsigned int cnt );
 
-	//> Open/close table.
+	// Open/close table.
 	AutoHD<TTable> open( const string &bdn, bool create = false );
 	void close( const string &bdn, bool del = false );
 
-	//> Get Data from DB or config file. If <tbl> cleaned then load from config-file
+	// Get Data from DB or config file. If <tbl> cleaned then load from config-file
 	bool dataSeek( const string &bdn, const string &path, int lev, TConfig &cfg, bool forceCfg = false );
 	bool dataGet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
 	bool dataSet( const string &bdn, const string &path, TConfig &cfg, bool forceCfg = false, bool noEx = false );
 	bool dataDel( const string &bdn, const string &path, TConfig &cfg, bool useKeyAll = false, bool forceCfg = false, bool noEx = false );	//Next test for noEx=false
 
-	//> Generic DB table
+	// Generic DB table
 	static string genDBGet( const string &path, const string &oval = "", const string &user = "root", char rFlg = 0 );
 	static void genDBSet( const string &path, const string &val, const string &user = "root", char rFlg = 0 );
 

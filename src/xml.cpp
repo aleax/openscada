@@ -75,7 +75,7 @@ XMLNode* XMLNode::childAdd( const string &name )
 void XMLNode::childDel( int id )
 {
     if(id < 0) id = (int)childSize()+id;
-    if(id < 0 || id >= childSize()) throw TError("XMLNode",_("Child %d is not present."),id);
+    if(id < 0 || id >= (int)childSize()) throw TError("XMLNode",_("Child %d is not present."),id);
     delete mChildren[id];
     mChildren.erase(mChildren.begin()+id);
 }
@@ -102,7 +102,7 @@ int XMLNode::childIns( int id, XMLNode * n )
     if(!n) return -1;
     if(id < 0) id = (int)childSize()+id;
 
-    if(id < 0 || id > childSize()) id = childSize();
+    if(id < 0 || id > (int)childSize()) id = childSize();
     mChildren.insert(mChildren.begin()+id, n);
     n->mParent = this;
 

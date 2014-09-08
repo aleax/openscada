@@ -1491,7 +1491,7 @@ void SessWdg::calc( bool first, bool last )
 			    string nP = vl.at().nodePath(0,true);
 			    attr.at().setS((nP.size()&&nP[nP.size()-1]=='/')?nP.substr(0,nP.size()-1):"");// "/DAQ"+attr.at().cfgVal().substr(obj_tp.size()));
 			}
-			else if(vl.at().fld().type() == TFld::Object && detOff < attr.at().cfgVal().size())
+			else if(vl.at().fld().type() == TFld::Object && detOff < (int)attr.at().cfgVal().size())
 			    attr.at().set(vl.at().getO().at().propGet(attr.at().cfgVal().substr(detOff),0));
 			else attr.at().set(vl.at().get());
 
@@ -1647,7 +1647,7 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
 	    if(obj_tp == "prm:") {
 		int detOff = obj_tp.size();	//Links subdetail process
 		AutoHD<TVal> vl = SYS->daq().at().attrAt(TSYS::strParse(cfg.cfgVal(),0,"#",&detOff));
-		if(vl.at().fld().type() == TFld::Object && detOff < cfg.cfgVal().size())
+		if(vl.at().fld().type() == TFld::Object && detOff < (int)cfg.cfgVal().size())
 		{
 		    vl.at().getO().at().propSet(cfg.cfgVal().substr(detOff),0,cfg.get());
 		    vl.at().setO(vl.at().getO());	//For modify object sign

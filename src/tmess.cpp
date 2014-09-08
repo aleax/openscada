@@ -45,8 +45,15 @@ using namespace OSCADA;
 //*************************************************
 //* TMess                                         *
 //*************************************************
-TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE), mConvCode(true), mIsUTF8(true)
+TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
+    mConvCode(true), mIsUTF8(true), mTranslEn(false), mTranslSet(false)
 {
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
+
     setenv("LC_NUMERIC","C",1);
     openlog(PACKAGE,0,LOG_USER);
     setlocale(LC_ALL,"");
@@ -69,6 +76,8 @@ TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_A
 TMess::~TMess( )
 {
     closelog();
+
+    pthread_mutex_destroy(&mRes);
 }
 
 void TMess::setMessLevel( int level )
@@ -85,23 +94,18 @@ void TMess::setLogDirect( int dir )
 
 void TMess::put( const char *categ, int8_t level, const char *fmt,  ... )
 {
-    if(abs(vmin(Emerg, vmax(-Emerg,level))) < messLevel()) return;
+    if(abs(vmin(Emerg,vmax(-Emerg,level))) < messLevel()) return;
 
     //messLevel() = TMess::Debug process for selected category and categories list combining
     if(messLevel() == TMess::Debug && level == TMess::Debug) {
-	ResAlloc res(mRes, false);
+	MtxAlloc res(mRes, true);
 	// Check for present into debugCats and put new
 	if(debugCats.find(categ) == debugCats.end()) {
 	    string curCatLev, tCat;
-	    bool resWR = false;
 	    for(int off = 0; (tCat=TSYS::pathLev(categ,0,true,&off)).size(); ) {
 		curCatLev += "/"+tCat;
-		if(debugCats.find(curCatLev) == debugCats.end()) {
-		    if(!resWR) { res.request(true); resWR = true; }
-		    debugCats[curCatLev] = false;
-		}
+		if(debugCats.find(curCatLev) == debugCats.end()) debugCats[curCatLev] = false;
 	    }
-	    if(resWR) res.request(false);
 	}
 
 	// Check for match to selectDebugCats
@@ -135,7 +139,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 
     level = vmin(Emerg, vmax(-Emerg,level));
     int64_t ctm = TSYS::curTime();
-    string s_mess = TSYS::int2str(level) + "|" + categ + " | " + mess;
+    string s_mess = i2s(level) + "|" + categ + " | " + mess;
 
     if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
@@ -164,6 +168,33 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const stri
     if(mLogDir & DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
 }
 
+void TMess::setTranslEn( bool vl, bool passive )
+{
+    if(vl == mTranslEn || mTranslSet) return;
+    mTranslSet = true;
+    mTranslEn = vl;
+    if(!passive) {
+	if(vl) SYS->load(true);
+	else builtMessIdx.clear();
+    }
+    mTranslSet = false;
+
+    SYS->modif();
+}
+
+void TMess::translReg( const string &mess, const string &src, const string &prms )
+{
+    if(!translEn() || TSYS::strNoSpace(mess).empty()) return;
+
+    MtxAlloc res(Mess->mRes, true);
+    builtMessIdx[mess][src] = prms;
+}
+
+string TMess::translFld( const string &lng, const string &fld, bool isCfg )
+{
+    return isCfg ? fld+"_"+lng : lng+"#"+fld;
+}
+
 string TMess::lang( )
 {
     char *lng = NULL;
@@ -176,7 +207,7 @@ string TMess::selDebCats( )
 {
     string rez;
 
-    ResAlloc res(Mess->mRes, false);
+    MtxAlloc res(Mess->mRes, true);
     for(unsigned i_sdc = 0; i_sdc < selectDebugCats.size(); i_sdc++)
 	rez += selectDebugCats[i_sdc]+";";
 
@@ -185,7 +216,7 @@ string TMess::selDebCats( )
 
 void TMess::setSelDebCats( const string &vl )
 {
-    ResAlloc res(Mess->mRes, true);
+    MtxAlloc res(Mess->mRes, true);
     debugCats.clear();
     selectDebugCats.clear();
 
@@ -289,23 +320,25 @@ void TMess::load( )
 	    int i = atoi(optarg);
 	    if(i >= Debug && i <= Emerg) setMessLevel(i);
 	}
-	else if(argCom == "log") setLogDirect(atoi(argVl.c_str()));
+	else if(argCom == "log") setLogDirect(s2i(argVl));
 
     //Load params config-file
-    setMessLevel(atoi(TBDS::genDBGet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg).c_str()));
+    setMessLevel(s2i(TBDS::genDBGet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg)));
     setSelDebCats(TBDS::genDBGet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg));
-    setLogDirect(atoi(TBDS::genDBGet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg).c_str()));
+    setLogDirect(s2i(TBDS::genDBGet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg)));
     setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
+    setTranslEn(s2i(TBDS::genDBGet(SYS->nodePath()+"TranslEn",i2s(translEn()),"root",TBDS::OnlyCfg)), true);
 }
 
-void TMess::save()
+void TMess::save( )
 {
-    TBDS::genDBSet(SYS->nodePath()+"MessLev",TSYS::int2str(messLevel()),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"MessLev",i2s(messLevel()),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"SelDebCats",selDebCats(),"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"LogTarget",TSYS::int2str(logDirect()),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
     if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"TranslEn",i2s(translEn()),"root",TBDS::OnlyCfg);
 }
 
 const char *TMess::labDB( )

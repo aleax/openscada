@@ -831,7 +831,7 @@ void Node::setEnable( bool vl )
 		}
 		//  Specific mode
 		else {
-		    for(off = 0; off < ioId.size() && !isdigit(ioId[off]); off++) ;
+		    for(off = 0; off < (int)ioId.size() && !isdigit(ioId[off]); off++) ;
 		    atp = ioId.substr(0,off);
 		    ai  = ioId.substr(off);
 		    if(tolower(ioId[ioId.size()-1])=='w') mode = "w";

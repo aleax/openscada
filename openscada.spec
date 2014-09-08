@@ -5,7 +5,7 @@ Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
 Version: 0.9
-Release: r2052
+Release: r2150
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
 License: GPLv2
@@ -231,7 +231,11 @@ autoreconf -ivf
 %makeinstall
 rm -f %buildroot/%_libdir/openscada/*.la
 install -m 755 -d %buildroot/%_datadir/openscada/{DATA,icons,docs,LibsDB,AGLKS,Boiler}
+%if %_vendor == "alt"
 install -m 755 -pD data/oscada_ALT.init %buildroot/%_initdir/oscadad
+%else
+install -m 755 -pD data/oscada_RH.init %buildroot/%_initdir/oscadad
+%endif
 
 ln -s openscada_start %buildroot/%_bindir/openscada_AGLKS
 ln -s openscada_start %buildroot/%_bindir/openscada_Boiler

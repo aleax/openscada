@@ -314,8 +314,7 @@ string TSYS::strNoSpace( const string &val )
     int beg = -1, end = -1;
 
     for(unsigned i_s = 0; i_s < val.size(); i_s++)
-	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t')
-	{
+	if(val[i_s] != ' ' && val[i_s] != '\n' && val[i_s] != '\t') {
 	    if(beg < 0) beg = i_s;
 	    end = i_s;
 	}
@@ -346,7 +345,7 @@ string TSYS::strMess( unsigned len, const char *fmt, ... )
     int lenRez = vsnprintf(str, sizeof(str), fmt, argptr);
     va_end(argptr);
 
-    return (lenRez < len) ? string(str) : string(str)+"...";
+    return (lenRez < (int)len) ? string(str) : string(str)+"...";
 }
 
 string TSYS::strLabEnum( const string &base )
@@ -532,8 +531,8 @@ void TSYS::cfgPrmLoad( )
     setModDir(TBDS::genDBGet(nodePath()+"ModDir",modDir(),"root",TBDS::OnlyCfg), true);
     setIcoDir(TBDS::genDBGet(nodePath()+"IcoDir",icoDir(),"root",TBDS::OnlyCfg), true);
     setDocDir(TBDS::genDBGet(nodePath()+"DocDir",docDir(),"root",TBDS::OnlyCfg), true);
-    setSaveAtExit(atoi(TBDS::genDBGet(nodePath()+"SaveAtExit","0").c_str()));
-    setSavePeriod(atoi(TBDS::genDBGet(nodePath()+"SavePeriod","0").c_str()));
+    setSaveAtExit(s2i(TBDS::genDBGet(nodePath()+"SaveAtExit","0")));
+    setSavePeriod(s2i(TBDS::genDBGet(nodePath()+"SavePeriod","0")));
 }
 
 void TSYS::load_( )
@@ -1650,8 +1649,7 @@ double TSYS::taskUtilizTm( const string &path )
     map<string,STask>::iterator it = mTasks.find(path);
     if(it == mTasks.end()) return 0;
     int64_t tm_beg = 0, tm_end = 0, tm_per = 0;
-    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
-    {
+    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++) {
 	tm_beg = it->second.tm_beg;
 	tm_end = it->second.tm_end;
 	tm_per = it->second.tm_per;
@@ -1692,8 +1690,7 @@ void *TSYS::taskWrap( void *stas )
 	CPU_ZERO(&cpuset);
 	string sval;
 	bool cpuSetOK = false;
-	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true)
-	    CPU_SET(atoi(sval.c_str()),&cpuset);
+	for(int off = 0; (sval=TSYS::strParse(tsk->cpuSet,0,":",&off)).size(); cpuSetOK = true) CPU_SET(s2i(sval), &cpuset);
 	if(cpuSetOK) pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
     }
     else if(SYS->multCPU() && (tsk->flgs & STask::Detached)) tsk->cpuSet = "NA";
@@ -2303,8 +2300,24 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
 #endif
 	    }
-	if((mess_lev() == TMess::Debug || !cntrEmpty()) && ctrMkNode("area",opt,-1,"/debug",_("Debug")))
-	{
+	if(Mess->lang2CodeBase().size() && ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
+	    ctrMkNode("fld",opt,-1,"/tr/en",_("Enable"),RWRWR_,"root","root",2,"tp","bool",
+		"help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
+	    if(Mess->translEn()) {
+		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRWR_,"root","root",2,"tp","str",
+		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));
+		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRWR_,"root","root",1,"tp","str");
+		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRWR_,"root","root",1,"key","base")) {
+		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRWR_,"root","root",1,"tp","str");
+		    string lngEl;
+		    for(int off = 0; (lngEl=strParse(Mess->translLangs(),0,";",&off)).size(); )
+			if(lngEl.size() == 2 && lngEl != Mess->lang2CodeBase())
+			    ctrMkNode("list",opt,-1,("/tr/mess/"+lngEl).c_str(),lngEl.c_str(),RWRWR_,"root","root",1,"tp","str");
+		    ctrMkNode("list",opt,-1,"/tr/mess/src",_("Source"),R_R_R_,"root","root",1,"tp","str");
+		}
+	    }
+	}
+	if((mess_lev() == TMess::Debug || !cntrEmpty()) && ctrMkNode("area",opt,-1,"/debug",_("Debug"))) {
 	    if(!cntrEmpty() && ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root"))
 	    {
 		ctrMkNode("list",opt,-1,"/debug/cntr/id","ID",R_R_R_,"root","root",1,"tp","str");
@@ -2357,11 +2370,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/saveExit") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(saveAtExit()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSaveAtExit(s2i(opt->text()));
     }
     else if(a_path == "/gen/savePeriod") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(savePeriod()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setSavePeriod(s2i(opt->text()));
     }
     else if(a_path == "/gen/workdir") {
 	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(workDir());
@@ -2399,23 +2412,23 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/gen/mess/lev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->messLevel()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(atoi(opt->text().c_str()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(s2i(opt->text()));
     }
     else if(a_path == "/gen/mess/log_sysl") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x01)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x01:Mess->logDirect()&(~0x01));
     }
     else if(a_path == "/gen/mess/log_stdo") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x02)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x02:Mess->logDirect()&(~0x02));
     }
     else if(a_path == "/gen/mess/log_stde") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x04)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x04:Mess->logDirect()&(~0x04));
     }
     else if(a_path == "/gen/mess/log_arch") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x08)?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect( atoi(opt->text().c_str())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08) );
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08));
     }
     else if((a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD))
     {
@@ -2434,7 +2447,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_prior	= ctrMkNode("list",opt,-1,"/tasks/tasks/prior","",R_R___,"root","root");
 	    XMLNode *n_cpuSet	= (multCPU() ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL);
 
-	    ResAlloc res(taskRes,false);
+	    ResAlloc res(taskRes, false);
 	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++)
 	    {
 		if(n_path)	n_path->childAdd("el")->setText(it->first);
@@ -2477,8 +2490,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    cpu_set_t cpuset;
 	    CPU_ZERO(&cpuset);
 	    string sval;
-	    for(int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); )
-		CPU_SET(atoi(sval.c_str()),&cpuset);
+	    for(int off = 0; (sval=TSYS::strParse(it->second.cpuSet,0,":",&off)).size(); ) CPU_SET(s2i(sval), &cpuset);
 	    int rez = pthread_setaffinity_np(it->second.thr, sizeof(cpu_set_t), &cpuset);
 	    res.release();
 	    TBDS::genDBSet(nodePath()+"CpuSet:"+it->first,opt->text());
@@ -2486,6 +2498,102 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(rez && opt->text().size()) throw TError(nodePath().c_str(),_("CPU set for thread error."));
 	}
 #endif
+    }
+    else if(a_path == "/tr/en") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->translEn()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslEn(s2i(opt->text()));
+    }
+    else if(a_path == "/tr/langs") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->translLangs());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslLangs(opt->text());
+    }
+    else if(a_path == "/tr/fltr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->translFltr());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslFltr(opt->text());
+    }
+    else if(a_path == "/tr/mess") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
+	    string tStr;
+	    TConfig req;
+	    vector<XMLNode*> ns;
+
+	    // Columns list prepare
+	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/base","",RWRWR_,"root","root"));
+	    for(int off = 0; (tStr=strParse(Mess->translLangs(),0,";",&off)).size(); )
+		if(tStr.size() == 2 && tStr != Mess->lang2CodeBase())
+		    ns.push_back(ctrMkNode("list",opt,-1,("/tr/mess/"+tStr).c_str(),tStr.c_str(),RWRWR_,"root","root"));
+	    ns.push_back(ctrMkNode("list",opt,-1,"/tr/mess/src","",R_R_R_,"root","root"));
+
+	    // Values request from first source
+	    MtxAlloc res(Mess->mRes, true);
+	    for(map<string, map<string,string> >::iterator im = Mess->builtMessIdx.begin(); im != Mess->builtMessIdx.end(); ++im)
+	    {
+		//  Check for filter
+		if(Mess->translFltr().size()) {
+		    map<string,string>::iterator is;
+		    for(is = im->second.begin(); is != im->second.end() && (is->first+"#"+is->second).find(Mess->translFltr()) == string::npos; ++is) ;
+		    if(is == im->second.end()) continue;
+		}
+
+		string trFld = im->second.begin()->second, trSrc = im->second.begin()->first;
+		bool secVl = false;
+		//  Source is config file or included DB
+		if((secVl=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,5,"incl:") == 0) {
+		    if(ns.size() > 1) {
+			//  Need DB structure prepare
+			req.elem().fldClear();
+			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
+			for(unsigned i_n = 1; i_n < ns.size(); i_n++)
+			    req.elem().fldAdd(new TFld(Mess->translFld(ns[i_n]->attr("id"),trFld,secVl).c_str(),
+				ns[i_n]->attr("descr").c_str(),TFld::String,0));
+			req.cfg(trFld).setReqKey(true);
+			req.cfg(trFld).setS(im->first);
+
+			//  Get from config file or DB source
+			if(secVl) SYS->db().at().dataSeek("", trSrc.substr(4), 0, req);
+			else SYS->db().at().dataSeek(trSrc.substr(5),"",0,req);
+		    }
+
+		    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
+			if(i_n == 0) ns[i_n]->childAdd("el")->setText(im->first);
+			else if(i_n < (ns.size()-1)) ns[i_n]->childAdd("el")->setText(req.cfg(Mess->translFld(ns[i_n]->attr("id"),trFld,secVl)).getS());
+			else {
+			    tStr.clear();
+			    for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is)
+				tStr += (tStr.size()?"\n":"")+is->first + "#" + is->second;
+			    ns[i_n]->childAdd("el")->setText(tStr);
+			}
+		    }
+		}
+	    }
+	}
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
+	    string  baseMess = opt->attr("key_base"),
+		    lng = opt->attr("col");
+	    MtxAlloc res(Mess->mRes, true);
+	    map<string,string> mI = Mess->builtMessIdx[baseMess];
+	    for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
+		string setFld = is->second, trSrc = is->first;
+		TConfig req;
+		bool setRes = false, secVl = false;
+		//  Source is config file or included DB
+		if((secVl=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,5,"incl:") == 0) {		//Source is config file
+		    req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
+		    req.cfg(setFld).setReqKey(true);
+		    req.cfg(setFld).setS(baseMess, (lng=="base")?TCfg::KeyUpdtBase|TCfg::ForceUse:0);
+		    if(lng != "base") {
+			setFld = Mess->translFld(lng, setFld, secVl);
+			req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
+		    }
+		    req.cfg(setFld).setS(opt->text(), TCfg::ForceUse);
+		    setRes = secVl ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
+				   : SYS->db().at().dataSet(trSrc.substr(5), "", req, false, true);
+		}
+		//  Move the source to new base
+		if(setRes && lng == "base") Mess->builtMessIdx[opt->text()][is->first] = is->second;
+	    }
+	    if(lng == "base") Mess->builtMessIdx.erase(baseMess);
+	}
     }
     else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root"))
     {
@@ -2504,18 +2612,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_cat = ctrMkNode("list",opt,-1,"/debug/dbgCats/cat","",RWRWR_,"root","root");
 	    XMLNode *n_prc = ctrMkNode("list",opt,-1,"/debug/dbgCats/prc","",RWRWR_,"root","root");
 
-	    ResAlloc res(Mess->mRes, false);
+	    MtxAlloc res(Mess->mRes, true);
 	    for(map<string,bool>::iterator idc = Mess->debugCats.begin(); idc != Mess->debugCats.end(); idc++)
 	    {
-		if(n_cat)	n_cat->childAdd("el")->setText(idc->first);
-		if(n_prc)	n_prc->childAdd("el")->setText(r2s(idc->second));
+		if(n_cat) n_cat->childAdd("el")->setText(idc->first);
+		if(n_prc) n_prc->childAdd("el")->setText(r2s(idc->second));
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
-	    ResAlloc res(Mess->mRes, true);
+	    MtxAlloc res(Mess->mRes, true);
 	    //Check for set category
-	    if((Mess->debugCats[opt->attr("key_cat")]=atoi(opt->text().c_str())))
-	    {
+	    if((Mess->debugCats[opt->attr("key_cat")]=s2i(opt->text()))) {
 		for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); )
 		{
 		    if(*iDC != opt->attr("key_cat")) {

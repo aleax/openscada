@@ -369,11 +369,11 @@ void TVarObj::propSet( const string &ids, char sep, TVariant val )
     TVariant obj = this;
     string tid;
     int off = 0;
-    if(sep) while(obj.type() == TVariant::Object && (tid=TSYS::strSepParse(ids,0,sep,&off)).size() && off < ids.size())
+    if(sep) while(obj.type() == TVariant::Object && (tid=TSYS::strSepParse(ids,0,sep,&off)).size() && off < (int)ids.size())
 	obj = obj.getO().at().propGet(tid);
-    else while(obj.type() == TVariant::Object && (tid=TSYS::pathLev(ids,0,true,&off)).size() && off < ids.size())
+    else while(obj.type() == TVariant::Object && (tid=TSYS::pathLev(ids,0,true,&off)).size() && off < (int)ids.size())
 	obj = obj.getO().at().propGet(tid);
-    if(tid.size() && off >= ids.size())	obj.getO().at().propSet(tid, val);
+    if(tid.size() && off >= (int)ids.size())	obj.getO().at().propSet(tid, val);
 }
 
 string TVarObj::getStrXML( const string &oid )

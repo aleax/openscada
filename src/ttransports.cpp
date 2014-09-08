@@ -601,7 +601,7 @@ void TTransportIn::postDisable(int flag)
 
 bool TTransportIn::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "ADDR") stop();	//By the address change and reconnect need ordinary
+    if(co.name() == "ADDR" && co.getS() != pc.getS()) stop();	//By the address change and reconnect need ordinary
     modif();
 
     return true;

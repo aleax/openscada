@@ -115,15 +115,14 @@ class TVariant
 
     protected:
 	//Data
-	union
-	{
+	union {
 	    char	b;
 	    int64_t	i;
 	    double	r;
 	    char	*sPtr;
 	    char	sMini[8];
 	    AutoHD<TVarObj>	*o;
-	}val;
+	} val;
 
 	//Attributes
 	unsigned mSize		: 27;

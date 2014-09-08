@@ -919,6 +919,7 @@ void TVArchive::postDisable( int flag )
 
 bool TVArchive::cfgChange( TCfg &co, const TVariant &pc )
 {
+    if(co.getS() == pc.getS()) return true;
     if(co.name() == "VTYPE" || co.name() == "BSIZE" || co.name() == "BHGRD" || co.name() == "BHRES") setUpBuf();
     else if(co.name() == "SrcMode") {
 	if(startStat()) stop();
@@ -1499,8 +1500,9 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 		    lab_tm = (chLev>=2 || chLev==-1) ? TSYS::strMess("%d:%02d:%g",ttm.tm_hour,ttm.tm_min,(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 			     (chLev>=1) ? TSYS::strMess(_("%gs"),(float)ttm.tm_sec+(float)(i_h%1000000)/1e6) :
 					  TSYS::strMess(_("%gms"),(double)(i_h%1000000)/1000.);
-		int wdth, tpos, endPosTm = 0, endPosDt = 0;
+		int tpos;
 #if HAVE_GD_CORE
+		int wdth, endPosTm = 0, endPosDt = 0;
 		if(lab_dt.size()) {
 		    gdImageStringFT(NULL, &brect[0], 0, (char*)sclMarkFont.c_str(), mrkFontSize, 0, 0, 0, (char*)lab_dt.c_str());
 		    wdth = brect[2] - brect[6];
@@ -1637,10 +1639,7 @@ string TVArchive::makeTrendImg( int64_t ibeg, int64_t iend, const string &iarch,
 	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(aver_vl-v_min)/(v_max-v_min));
 	    if(!trPath) trPath = im.childAdd("path")->setAttr("stroke",clr_trnd)->setAttr("stroke-width","1")->setAttr("fill","none");
 	    if(prev_vl == EVAL_REAL) trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("M%d,%d",aver_pos,c_vpos));	//Set single point
-	    else {
-		int c_vpos_prv = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));
-		trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("L%d,%d",aver_pos,c_vpos));
-	    }
+	    else trPath->setAttr("d",trPath->attr("d")+TSYS::strMess("L%d,%d",aver_pos,c_vpos));
 	}
 	else if(prev_vl != EVAL_REAL) {
 	    int c_vpos = v_w_start + v_w_size - (int)((double)v_w_size*(prev_vl-v_min)/(v_max-v_min));

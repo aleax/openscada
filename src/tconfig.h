@@ -53,6 +53,8 @@ class TCfg : public TVariant
 	};
 	enum ReqFlg {
 	    ForceUse	= 0x01,		//Force use flag
+	    KeyUpdtBase	= 0x02,		//Key update base value request or set
+	    KeyUpdtSet	= 0x04		//Key update set value
 	};
 
 	//Methods
@@ -67,18 +69,24 @@ class TCfg : public TVariant
 	bool	view( )			{ return mView; }
 	bool	keyUse( )		{ return mKeyUse; }
 	bool	noTransl( )		{ return mNoTransl; }
+	bool	reqKey( )		{ return mReqKey; }
+	bool	isKey( );						//Whether real or request key test
+	bool	keyUpdt( )		{ return mKeyUpdt; }
 	void	setView( bool vw )	{ mView = vw; }
-	void	setKeyUse( bool vl )	{ if( fld().flg()&Key ) mKeyUse = vl; }
+	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
+	void	setReqKey( bool vl );
+	void	setKeyUpdt( bool vw )	{ mKeyUpdt = vw; }
 
 	TFld	&fld( )			{ return *mFld; }
 
-	//> Universal access
+	// Universal access
 	string	getSEL( );
 	string	getS( );
+	string	getS( char RqFlg );
 	operator bool( )		{ return getB(); }
 
-	//> Direct access. Use only for readonly config-fields by no resourced!
+	// Direct access. Use only for readonly config-fields by no resourced!
 	const char *getSd( );
 	double	&getRd( );
 	int64_t	&getId( );
@@ -101,11 +109,16 @@ class TCfg : public TVariant
 	TCfg	&operator=( int64_t vl )	{ setI(vl); return *this; }
 	TCfg	&operator=( bool vl )		{ setB(vl); return *this; }
 
+	TConfig	&owner( )	{ return mOwner; }
+
     private:
 	//Attributes
 	uint8_t	mView		: 1;
 	uint8_t	mKeyUse		: 1;
 	uint8_t	mNoTransl	: 1;
+	uint8_t	mReqKey		: 1;	//Request's key, mostly for WHERE sentence of SQL
+	uint8_t	mKeyUpdt	: 1;	//Key update mode,
+					//where TVariant type force to String and value separated by key set value and base value by 0 symbol
 
 	TFld	*mFld;
 	TConfig	&mOwner;
@@ -144,8 +157,9 @@ class TConfig: public TValElem
         void cntrCmdProc( XMLNode *fld, const string &elem,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
 
-	bool noTransl( )	{ return mNoTransl; }
-	void setNoTransl( bool vl )		{ mNoTransl = vl; }
+	bool noTransl( )		{ return mNoTransl; }
+	bool reqKeys( )			{ return mReqKeys; }
+	void setNoTransl( bool vl )	{ mNoTransl = vl; }
 
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -157,6 +171,8 @@ class TConfig: public TValElem
 	void addFld( TElem *el, unsigned id );
 	void delFld( TElem *el, unsigned id );
 
+	void reqKeysUpdate( );
+
 	//Attributes
 	pthread_mutex_t mRes;
 
@@ -164,8 +180,9 @@ class TConfig: public TValElem
 	//Attributes
 	TCfgMap		value;
 	TElem		*m_elem;
-	char		single		: 1;
-	char		mNoTransl	: 1;
+	uint8_t		single		: 1;
+	uint8_t		mNoTransl	: 1;
+	uint8_t		mReqKeys	: 1;
 };
 
 }

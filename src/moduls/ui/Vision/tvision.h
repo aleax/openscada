@@ -74,7 +74,7 @@ class TVision : public TUI
 	void setUserPass( const string &pass )	{ user_pass = pass; modif(); }
 	void setRunPrjs( const string &prj )	{ run_prjs = prj; modif(); }
 	void setRunPrjsSt( bool en )		{ mStatusEn = en; modif(); }
-	bool setWinPosCntrSave( bool en )	{ mWinPosCntrSave = en; modif(); }
+	void setWinPosCntrSave( bool en )	{ mWinPosCntrSave = en; modif(); }
 	void setExitLstRunPrjCls( bool en )	{ mExitLstRunPrjCls = en; modif(); }
 	void setVCAStation( const string &stat ){ vca_station = stat; modif(); }
 	void setRestoreTime( int vl )		{ mRestTime = vl; modif(); }

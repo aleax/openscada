@@ -279,7 +279,7 @@ extern string uint2str( unsigned val );
 extern string ll2str( int64_t val );
 extern string real2str( double val, int prec = 15, char tp = 'g' );
 extern string strParse( const string &path, int level, const string &sep, int *off = NULL, bool mergeSepSymb = false );
-static string strLine( const string &str, int level, int *off = NULL );
+extern string strLine( const string &str, int level, int *off = NULL );
 extern string strMess( const char *fmt, ... );
 
 //*************************************************

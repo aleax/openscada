@@ -25,7 +25,7 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mNoTransl(false)
+TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mNoTransl(false), mReqKeys(false)
 {
     pthread_mutex_init(&mRes, NULL);
 
@@ -88,6 +88,14 @@ void TConfig::delFld( TElem *el, unsigned id )
     if(p == value.end()) return;
     delete p->second;
     value.erase(p);
+}
+
+void TConfig::reqKeysUpdate( )
+{
+    vector<string> ls;
+    cfgList(ls);
+    mReqKeys = false;
+    for(unsigned i_c = 0; i_c < ls.size() && !mReqKeys; i_c++) mReqKeys = cfg(ls[i_c]).reqKey();
 }
 
 TCfg &TConfig::cfg( const string &n_val )
@@ -215,7 +223,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mKeyUpdt(false), mOwner(owner)
 {
     //Chek for self field for dinamic elements
     if(fld.flg()&TFld::SelfFld) {
@@ -224,12 +232,11 @@ TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl
     }
     else mFld = &fld;
 
-    switch(mFld->type())
-    {
-	case TFld::String:	setType(TVariant::String, true);  TVariant::setS(mFld->def());	break;
-	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(atoll(mFld->def().c_str()));	break;
-	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(atof(mFld->def().c_str()));	break;
-	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)atoi(mFld->def().c_str()));break;
+    switch(mFld->type()) {
+	case TFld::String:	setType(TVariant::String, true);  TVariant::setS(mFld->def());		break;
+	case TFld::Integer:	setType(TVariant::Integer, true); TVariant::setI(s2ll(mFld->def()));	break;
+	case TFld::Real:	setType(TVariant::Real, true);	  TVariant::setR(s2r(mFld->def()));	break;
+	case TFld::Boolean:	setType(TVariant::Boolean, true); TVariant::setB((bool)s2i(mFld->def()));break;
 	default: break;
     }
     if(fld.flg()&TCfg::Hide)	mView = false;
@@ -241,6 +248,44 @@ TCfg::~TCfg( )
 }
 
 const string &TCfg::name( )	{ return mFld->name(); }
+
+void TCfg::setReqKey( bool vl )
+{
+    mReqKey = mKeyUse = vl;
+    mOwner.reqKeysUpdate();
+}
+
+bool TCfg::isKey( )	{ return owner().reqKeys() ? reqKey() : fld().flg()&TCfg::Key; }
+
+string TCfg::getSEL( )
+{
+    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg",_("Element type is not selected!"));
+    switch(type())
+    {
+	case TVariant::String:	return mFld->selVl2Nm(getS());
+	case TVariant::Integer:	return mFld->selVl2Nm(getI());
+	case TVariant::Real:	return mFld->selVl2Nm(getR());
+	case TVariant::Boolean:	return mFld->selVl2Nm(getB());
+	default: break;
+    }
+    return "";
+}
+
+string TCfg::getS( )
+{
+    pthread_mutex_lock(&mOwner.mRes);
+    string rez = TVariant::getS();
+    pthread_mutex_unlock(&mOwner.mRes);
+    return keyUpdt() ? TSYS::strSepParse(rez,0,0) : rez;
+}
+
+string TCfg::getS( char RqFlg )
+{
+    pthread_mutex_lock(&mOwner.mRes);
+    string rez = TVariant::getS();
+    pthread_mutex_unlock(&mOwner.mRes);
+    return keyUpdt() ? TSYS::strSepParse(rez,((RqFlg&KeyUpdtBase)?1:0),0) : rez;
+}
 
 const char *TCfg::getSd( )
 {
@@ -266,35 +311,13 @@ char &TCfg::getBd( )
     return val.b;
 }
 
-string TCfg::getSEL( )
-{
-    if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg",_("Element type is not selected!"));
-    switch(type())
-    {
-	case TVariant::String:	return mFld->selVl2Nm(getS());
-	case TVariant::Integer:	return mFld->selVl2Nm(getI());
-	case TVariant::Real:	return mFld->selVl2Nm(getR());
-	case TVariant::Boolean:	return mFld->selVl2Nm(getB());
-	default: break;
-    }
-    return "";
-}
-
-string TCfg::getS( )
-{
-    pthread_mutex_lock(&mOwner.mRes);
-    string rez = TVariant::getS();
-    pthread_mutex_unlock(&mOwner.mRes);
-    return rez;
-}
-
 void TCfg::setS( const string &val )
 {
     switch(type())
     {
-	case TVariant::Integer:	setI(atoll(val.c_str()));	break;
-	case TVariant::Real:	setR(atof(val.c_str()));	break;
-	case TVariant::Boolean:	setB((bool)atoi(val.c_str()));	break;
+	case TVariant::Integer:	setI(s2ll(val));	break;
+	case TVariant::Real:	setR(s2r(val));		break;
+	case TVariant::Boolean:	setB((bool)s2i(val));	break;
 	case TVariant::String: {
 	    pthread_mutex_lock(&mOwner.mRes);
 	    string tVal = TVariant::getS();
@@ -392,7 +415,9 @@ void TCfg::setSEL( const string &val, char RqFlg )
 
 void TCfg::setS( const string &val, char RqFlg )
 {
-    setS(val);
+    if(isKey() && !keyUpdt() && (RqFlg&(KeyUpdtBase|KeyUpdtSet))) { mKeyUpdt = true; setType(TVariant::String); }
+    if(keyUpdt()) setS((RqFlg&KeyUpdtBase)?getS()+string(1,0)+val:val+string(1,0)+getS(KeyUpdtBase));
+    else setS(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 

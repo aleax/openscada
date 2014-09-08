@@ -60,8 +60,8 @@ class MTable : public TTable
 
     public:
 	//Public methods
-	MTable(const string &name, MBD *iown, bool create );
-	~MTable(  );
+	MTable( const string &name, MBD *iown, bool create );
+	~MTable( );
 
 	// Field's operations
 	bool fieldSeek( int row, TConfig &cfg );
@@ -73,9 +73,9 @@ class MTable : public TTable
 
     private:
 	//Private methods
-	void postDisable(int flag);
+	void postDisable( int flag );
 	void save( );
-	int  findKeyLine( TConfig &cfg, int cnt = 0, bool useKey = false );
+	int  findKeyLine( TConfig &cfg, int cnt = 0, bool useKey = false, int off = 0 );
 	void fieldPrmSet( TCfg &e_cfg, db_str_rec &n_rec );
 
 	string getVal( TCfg &cfg, db_str_rec *fld_rec = NULL );

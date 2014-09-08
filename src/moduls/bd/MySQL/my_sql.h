@@ -43,7 +43,7 @@ class MTable : public TTable
 {
     public:
 	//Public methods
-	MTable(string name, MBD *iown, bool create);
+	MTable( string name, MBD *iown, bool create );
 	~MTable( );
 
 	//> Field's functions

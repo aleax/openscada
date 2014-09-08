@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-15 16:56+0300\n"
+"POT-Creation-Date: 2014-09-06 09:49+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -716,6 +716,9 @@ msgstr "[Tabellenname]"
 msgid "Attribute '%s' is not present!"
 msgstr "Attribut '%s' ist nicht vorhanden!"
 
+msgid "Element type is not selected!"
+msgstr "Elemententyp ist nicht ausgewählt!"
+
 msgid "Element type is not string!"
 msgstr "Elemententyp ist nicht Text!"
 
@@ -727,9 +730,6 @@ msgstr "Elemententyp ist nicht Ganzzahl!"
 
 msgid "Element type is not Boolean!"
 msgstr "Elemententyp ist nicht Logisch!"
-
-msgid "Element type is not selected!"
-msgstr "Elemententyp ist nicht ausgewählt!"
 
 msgid "Started. "
 msgstr "Gestartet. "
@@ -1779,6 +1779,7 @@ msgstr "Zeitüberschreitung !!!"
 msgid "Wait event..."
 msgstr "Warte auf Ereignis..."
 
+#, c-format
 msgid "Task '%s' already present!"
 msgstr "Aufgabe '%s' ist schon geschafft!"
 
@@ -1946,6 +1947,24 @@ msgstr "Priorität"
 
 msgid "CPU set"
 msgstr "CPU Installation"
+
+msgid "Translations"
+msgstr "Übersetzungen"
+
+msgid ""
+"Enable common translation manage which cause full reloading for all built "
+"messages obtain."
+msgstr ""
+"Aktivieren gemeinsame Übersetzung verwalten, welche volle Nachladen führen für alle gebaut Nachrichten zu erhalten."
+
+msgid "Languages"
+msgstr "Sprachen"
+
+msgid "Processed languages list by two symbols code and separated symbol ';'."
+msgstr "Verarbeitet Sprachen Liste durch zwei Symbole Code und getrennt Symbol ';'."
+
+msgid "Source filter"
+msgstr "Quellfilter"
 
 msgid "Debug"
 msgstr "Debuggen"
@@ -2341,9 +2360,6 @@ msgstr "Nein ein Projekt einstellen!"
 
 msgid "Set the project name to:"
 msgstr "Stellen Sie den Namen des Projekts an:"
-
-#~ msgid "Source mode"
-#~ msgstr "Quellenmodus"
 
 #~ msgid "Start archive"
 #~ msgstr "Start des Archivs"

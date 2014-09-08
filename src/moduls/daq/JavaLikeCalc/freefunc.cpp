@@ -89,8 +89,8 @@ TCntrNode &Func::operator=( TCntrNode &node )
 
 Func &Func::operator=(Func &func)
 {
-    *(TConfig *)this = (TConfig&)func;
-    *(TFunction *)this = (TFunction&)func;
+    *(TConfig*)this = (TConfig&)func;
+    *(TFunction*)this = (TFunction&)func;
 
     //Set to DB
     cfg("ID").setS(mId);
@@ -134,11 +134,12 @@ void Func::load_( )
 
 void Func::loadIO( )
 {
+    if(startStat()) return;
     TConfig cfg(&mod->elFncIO());
 
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), true);
-    for(int fld_cnt=0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++)
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++)
     {
 	string sid = cfg.cfg("ID").getS();
 

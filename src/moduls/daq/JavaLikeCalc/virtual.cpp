@@ -435,15 +435,15 @@ void Contr::disable_( )
 
 void Contr::load_( )
 {
-    TController::load_( );
+    TController::load_();
 
-    loadFunc( );
+    loadFunc();
 }
 
 void Contr::loadFunc( bool onlyVl )
 {
     if(func() != NULL) {
-	if(!onlyVl) ((Func *)func())->load();
+	if(!onlyVl) ((Func*)func())->load();
 
 	//Creating special IO
 	if(func()->ioId("f_frq") < 0)	func()->ioIns(new IO("f_frq",_("Function calculate frequency (Hz)"),IO::Real,Func::SysAttr,"1000",false),0);

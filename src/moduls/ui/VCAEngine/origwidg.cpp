@@ -610,11 +610,11 @@ bool OrigFormEl::eventProc( const string &ev, Widget *src )
 	    int row = s2i(TSYS::strParse(ev,3,"_"));
 	    XMLNode items("tbl");
 	    items.load(src->attrAt("items").at().getS(), XMLNode::LD_Full);
-	    for(int i_chR = 0, i_r = 0; i_chR < items.childSize() && !setOK; i_chR++)
+	    for(int i_chR = 0, i_r = 0; i_chR < (int)items.childSize() && !setOK; i_chR++)
 	    {
 		XMLNode *chRN = items.childGet(i_chR);
 		if(chRN->name() != "r") continue;
-		for(int i_chC = 0, i_c = 0; i_chC < chRN->childSize() && !setOK; i_chC++) {
+		for(int i_chC = 0, i_c = 0; i_chC < (int)chRN->childSize() && !setOK; i_chC++) {
 		    XMLNode *chCN = chRN->childGet(i_chC);
 		    if(!(chCN->name() == "s" || chCN->name() == "r" || chCN->name() == "i" || chCN->name() == "b")) continue;
 		    if(i_c == col && i_r == row) { chCN->setText(src->attrAt("set").at().getS(),true); setOK = true; }
@@ -1270,8 +1270,6 @@ void OrigDocument::disable( Widget *base )	{ SYS->taskDestroy(base->nodePath('.'
 
 bool OrigDocument::attrChange( Attr &cfg, TVariant prev )
 {
-    int off = 0;
-
     //Document's number change process
     if(cfg.id() == "n" && cfg.getI() != prev.getI()) {
 	if(!cfg.getI()) {

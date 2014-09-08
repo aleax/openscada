@@ -696,6 +696,7 @@ void Engine::perSYSCall( unsigned int cnt )
 void Engine::cntrCmdProc( XMLNode *opt )
 {
     string a_path = opt->attr("path");
+
     //Service commands process
     if(a_path == "/serv/sess") {	//Session operation
 	if(ctrChkNode(opt,"list",RWRWRW,"root",SUI_ID,SEC_RD)) {	//List session for some project

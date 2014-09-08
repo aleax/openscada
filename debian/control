@@ -2,7 +2,11 @@ Source: openscada
 Section: graphics
 Priority: optional
 Maintainer: Roman Savochenko <rom_as@oscada.org>
-Build-Depends: debhelper (>= 5), dh-autoreconf, g++, autotools-dev, pkg-config, gettext, libgd2-xpm-dev | libgd2-noxpm-dev, libmysqlclient-dev, libsqlite3-dev, libsensors4-dev, portaudio19-dev, bison, libsnmp-dev, libfftw3-dev, libqt4-dev, libpcre3-dev, firebird2.5-dev, libpq-dev, libssl-dev, libphonon-dev, libqtwebkit-dev
+Build-Depends: debhelper (>= 5), dh-autoreconf, sqlite3, g++, autotools-dev, pkg-config, gettext, libgd2-xpm-dev | libgd2-noxpm-dev, libpcre3-dev,
+ libmysqlclient-dev, libsqlite3-dev, firebird2.5-dev, libpq-dev, 
+ libsensors4-dev, portaudio19-dev, bison, libsnmp-dev,
+ libssl-dev, 
+ libfftw3-dev, libqt4-dev, libphonon-dev, libqtwebkit-dev
 Standards-Version: 3.7.3
 Homepage: <http://oscada.org>
 

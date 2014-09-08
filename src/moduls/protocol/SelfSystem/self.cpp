@@ -105,7 +105,7 @@ int TProt::sesOpen( const string &user, const string &pass, const string &src )
     for(map<int, SAuth>::iterator aI = auths.begin(); aI != auths.end(); )
 	if(time(NULL) > (aI->second.tAuth+authTime()*60)) auths.erase(aI++);	//Long unused
 	else {
-	    if(aI->second.name == user && aI->second.src == src)	//More openned
+	    if(aI->second.name == user && aI->second.src == src)	//More opened
 	    {
 		if(aOldI == auths.end() || aI->second.tAuth < aOldI->second.tAuth) aOldI = aI;
 		++i_oCnt;
