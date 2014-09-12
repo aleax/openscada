@@ -139,9 +139,18 @@ void Func::loadIO( )
 
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), true);
+    cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++)
     {
 	string sid = cfg.cfg("ID").getS();
+
+	//Take before type
+	cfg.cfg("DEF").setNoTransl((cfg.cfg("TYPE").getI()!=IO::String));
+
+	//Load all: !!!! Rewrite further optimal !!!!
+	cfg.cfgViewAll(true);
+	SYS->db().at().dataGet(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
+	cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
 
 	//Position storing
 	int pos = cfg.cfg("POS").getI();

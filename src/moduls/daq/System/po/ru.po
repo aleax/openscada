@@ -1,14 +1,13 @@
 # OpenSCADA.DAQ.System translate to Russian.
-# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-23 20:12+0300\n"
+"POT-Creation-Date: 2014-09-12 11:13+0300\n"
 "PO-Revision-Date: OpenSCADA.DAQ.System 1.2.0\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <ru@li.org>\n"
@@ -37,7 +36,7 @@ msgstr "10:Устройство недоступно."
 msgid "Full CPU Load"
 msgstr "Общая нагрузка процессора"
 
-msgid "CPU Load :"
+msgid "CPU Load: "
 msgstr "Нагрузка процессора: "
 
 msgid "Read (B)"
@@ -124,8 +123,28 @@ msgstr "Статистика интерфейсов: "
 msgid "Data sensors"
 msgstr "Данные сенсоров"
 
-msgid "HD smart: "
-msgstr ""
+msgid "HDD SMART: "
+msgstr "SMART НЖМД: "
+
+msgid "UPS"
+msgstr "ИБП"
+
+#, c-format
+msgid "REQ -> '%s'"
+msgstr "ЗАПР. -> '%s'"
+
+#, c-format
+msgid "RESP -> '%s'"
+msgstr "ОТВ -> '%s'"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "UPS: "
+msgstr "ИБП: "
 
 msgid "Full seconds"
 msgstr "Секунды полные"
@@ -162,10 +181,10 @@ msgstr "Роман Савоченко"
 
 msgid ""
 "Allow operation system data acquisition. Support OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU and other."
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
 msgstr ""
 "Предоставляет сбор данных операционной системы. Поддерживаются источники "
-"данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU и другие."
+"данных ОС Linux: HDDTemp, Sensors, Uptime, Memory, CPU, UPS и другие."
 
 msgid "Auto create active DA"
 msgstr "Авт. создавать активные ист. данных"
@@ -188,6 +207,9 @@ msgstr "Стандартный"
 msgid "System part"
 msgstr "Часть системы"
 
+msgid "Additional parameters"
+msgstr "Дополнительные параметры"
+
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
@@ -209,6 +231,10 @@ msgstr "2:Контроллер остановлен"
 msgid "1:Parameter disabled"
 msgstr "1:Параметр отключен"
 
+#, c-format
+msgid "Write value to attribute '%s' error: %s"
+msgstr "Ошибка записи значения в атрибут '%s': %s"
+
 msgid "CPU"
 msgstr "Процессор"
 
@@ -226,6 +252,9 @@ msgstr "Статистика сети"
 
 msgid "Sensors"
 msgstr "Сенсоры"
+
+msgid "UPS (NUT)"
+msgstr "ИБП (NUT)"
 
 msgid "Up time"
 msgstr "Время работы"

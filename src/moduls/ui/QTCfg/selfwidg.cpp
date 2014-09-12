@@ -658,6 +658,13 @@ CfgTable::CfgTable( QWidget *parent ) : QTableWidget(parent)
 #endif
 }
 
+void CfgTable::resizeRowsToContentsLim( )
+{
+    QTableView::resizeRowsToContents();
+    for(int i_rw = 0; i_rw < rowCount(); i_rw++)
+	setRowHeight(i_rw, vmin(rowHeight(i_rw), size().height()/1.3));
+}
+
 bool CfgTable::event( QEvent *e )
 {
     if(e->type() == QEvent::MouseButtonPress)
@@ -972,26 +979,35 @@ bool UserStBar::userSel( )
 //*************************************************
 //* TableDelegate: Combobox table delegate.       *
 //*************************************************
-TableDelegate::TableDelegate(QObject *parent) : QItemDelegate(parent)
+TableDelegate::TableDelegate( QObject *parent ) : QItemDelegate(parent)
 {
 
 }
 
-void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+/*QSize TableDelegate::sizeHint( const QStyleOptionViewItem &option, const QModelIndex &index ) const
+{
+    QSize rez = QItemDelegate::sizeHint(option, index);
+    QWidget *w = dynamic_cast<QWidget*>(parent());
+    return w ? QSize(rez.width(),vmin(rez.height(),w->height()*0.9)) : rez;
+}*/
+
+void TableDelegate::paint( QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     drawFocus(painter,option,option.rect.adjusted(+1,+1,-1,-1));
 
     QVariant value = index.data(Qt::DisplayRole);
-    switch(value.type())
-    {
+    switch(value.type()) {
 	case QVariant::Bool:
 	    //painter->save();
-	    if(value.toBool())
-	    {
+	    if(value.toBool()) {
 		QImage img(":/images/ok.png");
 		painter->drawImage(option.rect.center().x()-img.width()/2,option.rect.center().y()-img.height()/2,img);
 	    }
 	    //painter->restore();
+	    break;
+	case QVariant::String:
+	    //!!!! Append correct eliding
+	    painter->drawText(option.rect, Qt::AlignLeft|Qt::AlignVCenter|Qt::TextWordWrap, value.toString());
 	    break;
 	default:
 	    drawDisplay(painter,option,option.rect,value.toString());
@@ -999,7 +1015,7 @@ void TableDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
 }
 
-QWidget *TableDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *TableDelegate::createEditor( QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index ) const
 {
     QWidget *w_del;
     if(!index.isValid()) return 0;

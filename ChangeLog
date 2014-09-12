@@ -1,3 +1,29 @@
+2014-09-12 Roman
+- !!!!:LibsDB.{OscadaLibs,vcaBase,vcaTest}.db,AGLKS.{St,Model,vca}.db,Boiler.{St,Model}.db:
+    Translations mostly updated and fixed by new Translations manager help.
+- SYS: Translations manager expands:
+	DB.*: Translated field name moved to the source address by view "{Addr}#{FLD}" for embrase different translations from single table.
+	translFltr() store moved direct to SYS table.
+	"Check unmatch" flag is added and GET request mostly rewrote for enable/disable the too high-loaded operation.
+	Prefix for DB-sources renamed from "incl:" to "db:".
+    !!!!:CntrIf,UI.{QTCfg,WebCfgD}: To table and further result flag "noReload" is added to "SET" request for control to reload big tables,
+	also used into "Table" object of DB.
+    XMLNode::childGet(): negative index support is added for count from end.
+    TConfig,DB.*: Global noTransl() flag is removed as deprecated.
+- FIX:DB.SQLite: WHERE value encode is fixed into dataSet().
+- DAQ.JavaLikeCalc,Protocol.ModBus:
+    IO loading changed to two stage for prevent register spare messages to translation. Need further for rewrite optimal!!!
+- DAQ.LogicLev: Set untranslated at load spare template's attributes.
+- UI.QTCfg: Spare symbols '/' into default open page path are removed.
+    !!!!:Table widget significant expanded by:
+	- Enable vertical scrolling by pixels.
+	- resizeRowsToContents expanded by rows height limit to 0.9 table height and call on header section mouse press, for refit.
+	- String represent for multiline texts into ItemsDelegate rewrited for prevet wrong Qt eliding to line and other.
+- FIX:UI.VCAEngine: More fields set to notranslated for prevent register spare messages to translation.
+    Widget's attributes by user created loading changed to two stage for prevent register spare messages to translation.
+	Need further for rewrite optimal!!!
+
+
 2014-09-06 Roman
 - SYS: Into main spec-file for default init used RH-init file.
     debian/control expand for dependent from "sqlite3" and the depends made unified.

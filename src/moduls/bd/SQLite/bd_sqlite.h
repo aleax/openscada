@@ -61,7 +61,7 @@ class MTable : public TTable
 	void postDisable( int flag );
 	void fieldFix( TConfig &cfg );
 
-	string	getVal( TCfg &cfg, bool toEnc = true );
+	string	getVal( TCfg &cfg, bool toEnc = true, uint8_t RqFlg = 0 );
 	void	setVal( TCfg &cfg, const string &vl );
 
 	//Private attributes

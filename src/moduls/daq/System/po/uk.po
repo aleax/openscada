@@ -1,14 +1,13 @@
 # OpenSCADA.DAQ.System translate to Ukrainian.
-# Copyright (C) 2005-2010 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.DAQ.System package module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2005-2010.
+# Roman Savochenko <rom_as@oscada.org>, 2005-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.System 1.7.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-23 20:12+0300\n"
+"POT-Creation-Date: 2014-09-12 11:13+0300\n"
 "PO-Revision-Date: 2007-10-29 11:52+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: LANGUAGE <uk@li.org>\n"
@@ -37,7 +36,7 @@ msgstr "10:Пристрій недоступний."
 msgid "Full CPU Load"
 msgstr "Повне навантаження CPU"
 
-msgid "CPU Load :"
+msgid "CPU Load: "
 msgstr "Навантаження CPU: "
 
 msgid "Read (B)"
@@ -124,8 +123,28 @@ msgstr "Статистика інтерфейсу: "
 msgid "Data sensors"
 msgstr "Дані сенсорів"
 
-msgid "HD smart: "
-msgstr ""
+msgid "HDD SMART: "
+msgstr "SMART НЖМД: "
+
+msgid "UPS"
+msgstr "ДБЖ"
+
+#, c-format
+msgid "REQ -> '%s'"
+msgstr "ЗАП. -> '%s'"
+
+#, c-format
+msgid "RESP -> '%s'"
+msgstr "ВІДП -> '%s'"
+
+msgid "User"
+msgstr "Користувач"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "UPS: "
+msgstr "ИБП: "
 
 msgid "Full seconds"
 msgstr "Секунди повні"
@@ -162,10 +181,10 @@ msgstr "Роман Савоченко"
 
 msgid ""
 "Allow operation system data acquisition. Support OS Linux data sources: "
-"HDDTemp, Sensors, Uptime, Memory, CPU and other."
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS and other."
 msgstr ""
 "Надає збір даних операційної системи. Підтримуються джерела даних ОС Linux: "
-"HDDTemp, Sensors, Uptime, Memory, CPU та інше."
+"HDDTemp, Sensors, Uptime, Memory, CPU, UPS та інше."
 
 msgid "Auto create active DA"
 msgstr "Авт. створювати акт. джерела даних"
@@ -188,6 +207,9 @@ msgstr "Стандартний"
 msgid "System part"
 msgstr "Частина системи"
 
+msgid "Additional parameters"
+msgstr "Додаткові параметри"
+
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
@@ -209,6 +231,10 @@ msgstr "2:Контролер зупинено!"
 msgid "1:Parameter disabled"
 msgstr "1:Параметр вимкнено"
 
+#, c-format
+msgid "Write value to attribute '%s' error: %s"
+msgstr "Помилка запису значення до атрибуту '%s': %s"
+
 msgid "CPU"
 msgstr "Процесор"
 
@@ -226,6 +252,9 @@ msgstr "Статистика мережі"
 
 msgid "Sensors"
 msgstr "Сенсори"
+
+msgid "UPS (NUT)"
+msgstr "ДБЖ (NUT)"
 
 msgid "Up time"
 msgstr "Час роботи"

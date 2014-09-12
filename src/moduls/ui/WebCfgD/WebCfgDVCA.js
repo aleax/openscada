@@ -836,20 +836,17 @@ function selectChildRecArea( node, aPath, cBlk )
 	t_s.addr_lab = lab; t_s.addr_val = val;
       }
       else { lab = t_s.addr_lab; val = t_s.addr_val; }
-      //>>> Set image
-      if( lab ) setNodeText(lab,t_s.getAttribute('dscr')+':');
-      if( val )
-      {
+      //  Set image
+      if(lab) setNodeText(lab,t_s.getAttribute('dscr')+':');
+      if(val) {
 	val.title = t_s.getAttribute('help');
 	val.src = '/'+MOD_ID+selPath+'/'+brPath+'?com=img&rnd='+Math.floor(Math.random()*1000);
       }
     }
-    else if( t_s.nodeName.toLowerCase() == 'table' )
-    {
+    else if(t_s.nodeName.toLowerCase() == 'table') {
       var brPath = (aPath+t_s.getAttribute('id')).replace(/%/g,'%25').replace(/\//g,'%2f');
       var lab = null; var table = null;
-      if( cBlk )
-      {
+      if(cBlk) {
 	var dBlk = document.createElement('div'); dBlk.className = 'elem';
 	lab = document.createElement('span'); lab.className = 'label';
 	dBlk.appendChild(lab);
@@ -857,26 +854,23 @@ function selectChildRecArea( node, aPath, cBlk )
 	table = document.createElement('table'); table.className = 'elem'; table.cellPadding = 2; table.cellSpacing = 0;
 	table.itPath = selPath+'/'+brPath;
 	table.onmouseover = function() { setStatus(this.itPath,10000); }
-	if( wr )
-	{
+	if(wr) {
 	  table.srcNode = t_s;
-	  table.comSet = function(row,col,val)
-	  {
+	  table.comSet = function(row,col,val) {
 	    var com = "<set col='"+this.srcNode.childNodes[col].getAttribute('id')+"' ";
-	    if( !this.srcNode.getAttribute('key') ) com += "row='"+row+"' ";
-	    else
-	    {
+	    if(!this.srcNode.getAttribute('key')) com += "row='"+row+"' ";
+	    else {
 	      var keys = this.srcNode.getAttribute('key').split(',');
-	      for( var i_off = 0; i_off < keys.length; i_off++ )
-		for( var i_el = 0; i_el < this.srcNode.childNodes.length; i_el++ )
-		  if( this.srcNode.childNodes[i_el].getAttribute('id') == keys[i_off] )
+	      for(var i_off = 0; i_off < keys.length; i_off++)
+		for(var i_el = 0; i_el < this.srcNode.childNodes.length; i_el++)
+		  if(this.srcNode.childNodes[i_el].getAttribute('id') == keys[i_off])
 		  { com += "key_"+keys[i_off]+"='"+nodeText(this.srcNode.childNodes[i_el].childNodes[row])+"' "; break; }
 	     }
 	     com += ">"+strEncode(val)+"</set>";
 
 	     var rez = servSet(this.itPath,'com=com',com,true);
-	     if( rez && parseInt(rez.getAttribute('rez')) != 0 ) alert(nodeText(rez));
-	     setTimeout('pageRefresh()',500);
+	     if(rez && parseInt(rez.getAttribute('rez')) != 0) alert(nodeText(rez));
+	     if(!parseInt(rez.getAttribute('noReload'))) setTimeout('pageRefresh()',500);
 	  }
 	}
 	dBlk.childNodes[1].appendChild(table);

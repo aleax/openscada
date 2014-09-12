@@ -2307,6 +2307,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRWR_,"root","root",2,"tp","str",
 		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));
 		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRWR_,"root","root",1,"tp","str");
+		ctrMkNode("fld",opt,-1,"/tr/chkUnMatch",_("Check unmatch"),RWRWR_,"root","root",1,"tp","bool");
 		if(ctrMkNode("table",opt,-1,"/tr/mess",_("Messages"),RWRWR_,"root","root",1,"key","base")) {
 		    ctrMkNode("list",opt,-1,"/tr/mess/base",Mess->lang2CodeBase().c_str(),RWRWR_,"root","root",1,"tp","str");
 		    string lngEl;
@@ -2318,13 +2319,11 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if((mess_lev() == TMess::Debug || !cntrEmpty()) && ctrMkNode("area",opt,-1,"/debug",_("Debug"))) {
-	    if(!cntrEmpty() && ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root"))
-	    {
+	    if(!cntrEmpty() && ctrMkNode("table",opt,-1,"/debug/cntr",_("Counters"),R_R_R_,"root","root")) {
 		ctrMkNode("list",opt,-1,"/debug/cntr/id","ID",R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/debug/cntr/vl",_("Value"),R_R_R_,"root","root",1,"tp","real");
 	    }
-	    if(ctrMkNode("table",opt,-1,"/debug/dbgCats",_("Debug categories"),RWRWR_,"root","root",1,"key","cat"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/debug/dbgCats",_("Debug categories"),RWRWR_,"root","root",1,"key","cat")) {
 		ctrMkNode("list",opt,-1,"/debug/dbgCats/cat",_("Category"),R_R_R_,"root","root",1,"tp","str");
 		ctrMkNode("list",opt,-1,"/debug/dbgCats/prc",_("Process"),RWRWR_,"root","root",1,"tp","bool");
 	    }
@@ -2448,8 +2447,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_cpuSet	= (multCPU() ? ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet","",RWRW__,"root","root") : NULL);
 
 	    ResAlloc res(taskRes, false);
-	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++)
-	    {
+	    for(map<string,STask>::iterator it = mTasks.begin(); it != mTasks.end(); it++) {
 		if(n_path)	n_path->childAdd("el")->setText(it->first);
 		if(n_thr)	n_thr->childAdd("el")->setText(u2s(it->second.thr));
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
@@ -2508,12 +2506,17 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslLangs(opt->text());
     }
     else if(a_path == "/tr/fltr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->translFltr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslFltr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrFltr",opt->text(),opt->attr("user"));
+    }
+    else if(a_path == "/tr/chkUnMatch") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	TBDS::genDBSet(nodePath()+"TrChkUnMatch",opt->text(),opt->attr("user"));
     }
     else if(a_path == "/tr/mess") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD)) {
-	    string tStr;
+	    bool chkUnMatch = s2i(TBDS::genDBGet(nodePath()+"TrChkUnMatch","0",opt->attr("user")));
+	    string tStr, trFltr = TBDS::genDBGet(nodePath()+"TrFltr","",opt->attr("user"));
 	    TConfig req;
 	    vector<XMLNode*> ns;
 
@@ -2529,17 +2532,31 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    for(map<string, map<string,string> >::iterator im = Mess->builtMessIdx.begin(); im != Mess->builtMessIdx.end(); ++im)
 	    {
 		//  Check for filter
-		if(Mess->translFltr().size()) {
+		if(trFltr.size()) {
 		    map<string,string>::iterator is;
-		    for(is = im->second.begin(); is != im->second.end() && (is->first+"#"+is->second).find(Mess->translFltr()) == string::npos; ++is) ;
+		    for(is = im->second.begin(); is != im->second.end() && (is->first+"#"+is->second).find(trFltr) == string::npos; ++is) ;
 		    if(is == im->second.end()) continue;
 		}
 
-		string trFld = im->second.begin()->second, trSrc = im->second.begin()->first;
-		bool secVl = false;
-		//  Source is config file or included DB
-		if((secVl=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,5,"incl:") == 0) {
-		    if(ns.size() > 1) {
+		//  Rows append
+		for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
+		    if(i_n == 0) ns[i_n]->childAdd("el")->setText(im->first);
+		    else if(i_n < (ns.size()-1)) ns[i_n]->childAdd("el")->setText("");	//Empty cell at start
+		    else {
+			tStr.clear();
+			for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is)
+			    tStr += (tStr.size()?"\n":"")+is->first;// + "#" + is->second;
+			ns[i_n]->childAdd("el")->setText(tStr);
+		    }
+		}
+		if(ns.size() <= 2) continue;	//No any translated languages set
+
+		//  Real translated data obtain and check
+		for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is) {
+		    string tMath, trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#");
+		    bool firstInst = (is == im->second.begin()), secVl = false, haveMatch = false;
+		    //  Source is config file or included DB
+		    if((secVl=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
 			//  Need DB structure prepare
 			req.elem().fldClear();
 			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
@@ -2550,34 +2567,48 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			req.cfg(trFld).setS(im->first);
 
 			//  Get from config file or DB source
-			if(secVl) SYS->db().at().dataSeek("", trSrc.substr(4), 0, req);
-			else SYS->db().at().dataSeek(trSrc.substr(5),"",0,req);
-		    }
-
-		    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
-			if(i_n == 0) ns[i_n]->childAdd("el")->setText(im->first);
-			else if(i_n < (ns.size()-1)) ns[i_n]->childAdd("el")->setText(req.cfg(Mess->translFld(ns[i_n]->attr("id"),trFld,secVl)).getS());
-			else {
-			    tStr.clear();
-			    for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is)
-				tStr += (tStr.size()?"\n":"")+is->first + "#" + is->second;
-			    ns[i_n]->childAdd("el")->setText(tStr);
+			bool seekRez = false;
+			for(int inst = 0; true; inst++) {
+			    if(secVl) seekRez = SYS->db().at().dataSeek("", trSrc.substr(4), inst, req);
+			    else seekRez = SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req);
+			    if(!seekRez) break;
+			    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
+				if(!(i_n && i_n < (ns.size()-1))) continue;
+				tMath = req.cfg(Mess->translFld(ns[i_n]->attr("id"),trFld,secVl)).getS();
+				XMLNode *recNd = ns[i_n]->childGet(-1);
+				if(firstInst) { recNd->setText(tMath); haveMatch = true; }
+				else {
+				    //printf("TEST 00: Check to match for %s\n",im->first.c_str());
+				    if(!s2i(recNd->attr("unmatch"))) {
+					if(tMath == recNd->text()) haveMatch = true;
+					else {
+					    if(recNd->text().empty()) recNd->setText(tMath);
+					    recNd->setText(_("<<<Unmatched sources!!!>>>\n")+recNd->text());
+					    recNd->setAttr("unmatch","1");
+					}
+				    }
+				}
+			    }
+			    if(!chkUnMatch || !haveMatch) break;
 			}
-		    }
+		    } else haveMatch = true;
+		    if(!chkUnMatch || !haveMatch) break;
 		}
 	    }
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
+	    bool needReload = false;
 	    string  baseMess = opt->attr("key_base"),
 		    lng = opt->attr("col");
 	    MtxAlloc res(Mess->mRes, true);
 	    map<string,string> mI = Mess->builtMessIdx[baseMess];
 	    for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
-		string setFld = is->second, trSrc = is->first;
+		string trSrc = TSYS::strParse(is->first,0,"#"), setFld = TSYS::strParse(is->first,1,"#");
+		//string setFld = is->second, trSrc = is->first;
 		TConfig req;
 		bool setRes = false, secVl = false;
 		//  Source is config file or included DB
-		if((secVl=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,5,"incl:") == 0) {		//Source is config file
+		if((secVl=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {		//Source is config file
 		    req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 		    req.cfg(setFld).setReqKey(true);
 		    req.cfg(setFld).setS(baseMess, (lng=="base")?TCfg::KeyUpdtBase|TCfg::ForceUse:0);
@@ -2587,12 +2618,16 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    }
 		    req.cfg(setFld).setS(opt->text(), TCfg::ForceUse);
 		    setRes = secVl ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
-				   : SYS->db().at().dataSet(trSrc.substr(5), "", req, false, true);
+				   : SYS->db().at().dataSet(trSrc.substr(3), "", req, false, true);
 		}
 		//  Move the source to new base
-		if(setRes && lng == "base") Mess->builtMessIdx[opt->text()][is->first] = is->second;
+		if(setRes && lng == "base") {
+		    needReload = Mess->builtMessIdx[opt->text()].size();
+		    Mess->builtMessIdx[opt->text()][is->first] = is->second;
+		}
 	    }
 	    if(lng == "base") Mess->builtMessIdx.erase(baseMess);
+	    if(!needReload) opt->setAttr("noReload","1");
 	}
     }
     else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root"))

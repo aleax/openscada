@@ -551,8 +551,8 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     TConfig c_el(&elWdgIO());
     c_el.cfg("IDW").setS(idw);
     c_el.cfg("IDC").setS(idc);
-    string tstr;
 
+    string tstr;
     for(int off = 0; !(tstr = TSYS::strSepParse(attrs,0,';',&off)).empty(); ) {
 	if(!w.attrPresent(tstr)) continue;
 	AutoHD<Attr> attr = w.attrAt(tstr);
@@ -563,11 +563,11 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 
 	c_el.cfg("ID").setS(tstr);
 	c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
 	c_el.cfg("CFG_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))/* &&
-		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))*/));	//!!!! Commented by no the flags present on first start
-										//on global attributes creation from the primitive.
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) )); /*&&
+		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))));*/
+
 	if(!SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el,false,true)) continue;
 
 	attr.at().setS(c_el.cfg("IO_VAL").getS(),true);
@@ -584,21 +584,34 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     c_el.setElem(&elWdgUIO());
     c_el.cfg("IDW").setS(idw,true);
     c_el.cfg("IDC").setS(idc,true);
-
+    c_el.cfgViewAll(false); c_el.cfg("IO_TYPE").setView(true); c_el.cfg("SELF_FLG").setView(true);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid = c_el.cfg("ID").getS();
-	unsigned flg = c_el.cfg("IO_TYPE").getI();
-
 	if(!TSYS::pathLev(sid,1).empty()) continue;
+	unsigned type = c_el.cfg("IO_TYPE").getI();
+	unsigned flg = type >> 4;
+	type = type&0x0f;
+	unsigned selfFlg = c_el.cfg("SELF_FLG").getI();
 
-	if(!w.attrPresent(sid))
-	    w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)(flg&0x0f),flg>>4));
+	//Take before type
+	c_el.cfg("IO_VAL").setNoTransl(!(type == TFld::String &&
+	    !(flg&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
+	c_el.cfg("CFG_VAL").setNoTransl(!(type == TFld::String &&
+		    !(flg&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    (selfFlg&(Attr::CfgConst|Attr::CfgLnkIn))));
+
+	//Load all: !!!! Rewrite further optimal !!!!
+	c_el.cfgViewAll(true);
+	SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el);
+	c_el.cfgViewAll(false); c_el.cfg("IO_TYPE").setView(true); c_el.cfg("SELF_FLG").setView(true);
+
+	if(!w.attrPresent(sid)) w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)type,flg));
 	AutoHD<Attr> attr = w.attrAt(sid);
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
 	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
 	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
 	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
-	attr.at().setFlgSelf((Attr::SelfAttrFlgs)c_el.cfg("SELF_FLG").getI());
+	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
@@ -610,7 +623,7 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
     string m_attrs = "";
     vector<string> als;
 
-    w.attrList( als );
+    w.attrList(als);
     TConfig c_el(&mod->elWdgIO()); c_el.cfg("IDW").setS(idw,true);
     c_el.cfg("IDC").setS(idc,true);
     TConfig c_elu(&mod->elWdgUIO()); c_elu.cfg("IDW").setS(idw,true);
@@ -625,14 +638,14 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	if(attr.at().flgSelf()&Attr::IsInher || !(attr.at().flgGlob()&Attr::IsUser))
 	{
 	    c_el.cfg("ID").setS( als[i_a] );
-	    c_el.cfg("IO_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))) );
+	    c_el.cfg("IO_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
-	    c_el.cfg("CFG_VAL").setNoTransl( !(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))) );
+	    c_el.cfg("CFG_VAL").setNoTransl(!(attr.at().type() == TFld::String &&
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))));
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el,false,true);
 	}

@@ -284,7 +284,7 @@ void TCntrNode::nodeCopy( const string &src, const string &dst, const string &us
 		s2i(branch->childGet(i_b)->attr("acs"))&SEC_WR)
 	    break;
     if(i_b >= branch->childSize())
-        throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
+	throw TError(SYS->nodePath().c_str(),_("Destination node doesn't have necessary branche."));
     bool idm = s2i(branch->childGet(i_b)->attr("idm"));
     string n_grp = branch->childGet(i_b)->attr("id");
     d_el = d_el.substr(n_grp.size());
@@ -519,8 +519,7 @@ int TCntrNode::isModify( int f )
 
     if(f&Self && mFlg&SelfModify) rflg |= Self;
     if(f&Child)
-	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++)
-	{
+	for(unsigned i_g = 0; chGrp && i_g < chGrp->size(); i_g++) {
 	    TMap::iterator p;
 	    for(p = (*chGrp)[i_g].elem.begin(); p != (*chGrp)[i_g].elem.end(); ++p)
 		if(p->second->isModify(Self|Child))	{ rflg |= Child; break; }

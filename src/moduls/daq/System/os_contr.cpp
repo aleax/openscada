@@ -107,7 +107,7 @@ TTpContr::~TTpContr( )
 
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
 }
 
@@ -115,7 +115,7 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Init DA sources
+    //Init DA sources
     daReg(new CPU());
     daReg(new Mem());
     daReg(new Sensors());
@@ -126,20 +126,19 @@ void TTpContr::postEnable( int flag )
     daReg(new NetStat());
     daReg(new UPS());
 
-    //> Controler's bd structure
+    //Controler's bd structure
     fldAdd(new TFld("AUTO_FILL",_("Auto create active DA"),TFld::Boolean,TFld::NoFlag,"1","0"));
     fldAdd(new TFld("PRM_BD",_("System parameters table"),TFld::String,TFld::NoFlag,"30","system"));
     fldAdd(new TFld("PERIOD",_("Request data period (ms)"),TFld::Integer,TFld::NoFlag,"5","0","0;10000"));	//!!!! Remove at further
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Request task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
 
-    //> Parameter type bd structure
-    //>> Make enumerated
+    //Parameter type bd structure
+    // Make enumerated
     string el_id,el_name,el_def;
     vector<string> list;
     daList(list);
-    for(unsigned i_ls = 0; i_ls < list.size(); i_ls++)
-    {
+    for(unsigned i_ls = 0; i_ls < list.size(); i_ls++) {
 	if(i_ls == 0)	el_def = list[i_ls];
 	el_id += list[i_ls]+";";
 	el_name = el_name+_(daGet(list[i_ls])->name().c_str())+";";
@@ -150,10 +149,7 @@ void TTpContr::postEnable( int flag )
     tpPrmAt(t_prm).fldAdd(new TFld("ADD_PRMS",_("Additional parameters"),TFld::String,TFld::FullText|TCfg::NoVal,"100000"));
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
 
 void TTpContr::daList( vector<string> &da )
 {
@@ -174,7 +170,7 @@ DA *TTpContr::daGet( const string &da )
 
 void TTpContr::perSYSCall( unsigned int cnt )
 {
-    //> Recheck auto-controllers to create parameters for new devices
+    //Recheck auto-controllers to create parameters for new devices
     vector<string> clist;
     list(clist);
     for(unsigned i_c = 0; i_c < clist.size(); i_c++)
@@ -199,8 +195,7 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
-    if(startStat() && !redntUse())
-    {
+    if(startStat() && !redntUse()) {
 	if(call_st)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
 	else rez += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -211,8 +206,7 @@ string TMdContr::getStatus( )
 
 void TMdContr::devUpdate( )
 {
-    if(enableStat() && cfg("AUTO_FILL").getB())
-    {
+    if(enableStat() && cfg("AUTO_FILL").getB()) {
 	vector<string> list;
 	mod->daList(list);
 	for(unsigned i_l = 0; i_l < list.size(); i_l++)
@@ -220,10 +214,7 @@ void TMdContr::devUpdate( )
     }
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name,&owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type )	{ return new TMdPrm(name,&owner().tpPrmAt(type)); }
 
 void TMdContr::load_( )
 {
@@ -231,8 +222,8 @@ void TMdContr::load_( )
 
     TController::load_();
 
-    //> Check for get old period method value
-    if(mPerOld) { cfg("SCHEDULE").setS(TSYS::real2str(mPerOld/1e3)); mPerOld = 0; }
+    //Check for get old period method value
+    if(mPerOld) { cfg("SCHEDULE").setS(r2s(mPerOld/1e3)); mPerOld = 0; }
 }
 
 void TMdContr::enable_( )
@@ -243,22 +234,22 @@ void TMdContr::enable_( )
 
 void TMdContr::start_( )
 {
-    //> Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
+    //Schedule process
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*s2r(cron())) : 0;
 
-    //> Start the request data task
+    //Start the request data task
     if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
 
-    //> Set Eval for parameters
+    //Set Eval for parameters
     ResAlloc res(en_res, true);
     for(unsigned i_prm = 0; i_prm < p_hd.size(); i_prm++)
-        p_hd[i_prm].at().setEval();
+	p_hd[i_prm].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -279,14 +270,11 @@ void *TMdContr::Task( void *icntr )
     cntr.endrun_req = false;
     cntr.prc_st = true;
 
-    while(!cntr.endrun_req)
-    {
-	if(!cntr.redntUse())
-	{
+    while(!cntr.endrun_req) {
+	if(!cntr.redntUse()) {
 	    cntr.call_st = true;
-	    //> Update controller's data
-	    try
-	    {
+	    //Update controller's data
+	    try {
 		int64_t t_cnt = TSYS::curTime();
 
 		cntr.en_res.resRequestR();
@@ -295,8 +283,7 @@ void *TMdContr::Task( void *icntr )
 		cntr.en_res.resRelease();
 
 		cntr.tm_calc = TSYS::curTime()-t_cnt;
-	    }
-	    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    } catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	    cntr.call_st = false;
 	}
 
@@ -311,8 +298,7 @@ void *TMdContr::Task( void *icntr )
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/PERIOD");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
@@ -384,8 +370,7 @@ void TMdPrm::save_( )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if(val.name() == "err")
-    {
+    if(val.name() == "err") {
 	if(!owner().startStat())val.setS(_("2:Controller stopped"), 0, true);
 	else if(!enableStat())	val.setS(_("1:Parameter disabled"), 0, true);
 	else if(daErr.size())	val.setS(daErr, 0, true);
@@ -398,8 +383,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
     if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
 
     //Send to active reserve station
-    if(owner().redntUse())
-    {
+    if(owner().redntUse()) {
 	if(vl == pvl) return;
 	XMLNode req("set");
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
@@ -409,8 +393,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 
     //Direct write
     try { if(mDA) mDA->vlSet(this, vo, vl, pvl); }
-    catch(TError err)
-    {
+    catch(TError err) {
 	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),vo.name().c_str(),err.mess.c_str());
 	vo.setS(pvl.getS(), 0, true);
     }
@@ -427,14 +410,12 @@ void TMdPrm::setEval( )
 
     vector<string> als;
     mDA->fldList(als);
-    if(als.size())
-    {
+    if(als.size()) {
 	for(unsigned i_a = 0; i_a < als.size(); i_a++)
 	    if(vlPresent(als[i_a]))
 		vlAt(als[i_a]).at().setS(EVAL_STR,0,true);
     }
-    else
-    {
+    else {
 	vlList(als);
 	for(unsigned i_a = 0; i_a < als.size(); i_a++)
 	    if(!(als[i_a] == "SHIFR" || als[i_a] == "OWNER" || als[i_a] == "NAME" || als[i_a] == "DESCR" || als[i_a] == "err"))
@@ -461,19 +442,16 @@ void TMdPrm::setType( const string &da_id )
 {
     if(mDA && da_id == mDA->id())	return;
 
-    //> Free previous type
-    if(mDA)
-    {
+    //Free previous type
+    if(mDA) {
 	mDA->deInit(this);
 	vlElemDet(mDA);
 	mDA = NULL;
     }
 
-    //> Create new type
-    try
-    {
-	if(da_id.size() && (mDA=mod->daGet(da_id)))
-	{
+    //Create new type
+    try {
+	if(da_id.size() && (mDA=mod->daGet(da_id))) {
 	    daErr = "";
 	    vlElemAtt(mDA);
 	    mDA->init(this);
@@ -486,8 +464,7 @@ string TMdPrm::addPrm( const string &prm, const string &def )
 {
     string rez;
     XMLNode prmNd;
-    try
-    {
+    try {
 	prmNd.load(cfg("ADD_PRMS").getS());
 	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
 	if(!sa.size())	return (rez=prmNd.attr(prm)).empty() ? def : rez;
@@ -510,8 +487,7 @@ void TMdPrm::setAddPrm( const string &prm, const string &val )
     if(!sa.size()) prmNd.setAttr(prm, val);
 
     //Internal node
-    else
-    {
+    else {
 	unsigned i_n;
 	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
@@ -526,7 +502,7 @@ void TMdPrm::setAddPrm( const string &prm, const string &val )
 
 bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 {
-    //> Change TYPE parameter
+    //Change TYPE parameter
     if(co.name() == "TYPE") { setType(co.getS()); return true; }
     if(mDA) mDA->cfgChange(co, pc);
     if(!autoC()) modif();
@@ -536,8 +512,7 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/ADD_PRMS");
 	if(mDA) mDA->cntrCmdProc(this, opt);

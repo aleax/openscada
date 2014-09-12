@@ -155,7 +155,7 @@ void Widget::postEnable( int flag )
 	attrAdd(new TFld("tipTool",_("Tip:tool"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_TOOL).c_str()));
 	attrAdd(new TFld("tipStatus",_("Tip:status"),TFld::String,Attr::Generic,"","","","",i2s(A_TIP_STATUS).c_str()));
 	attrAdd(new TFld("contextMenu",_("Context menu"),TFld::String,TFld::FullText|Attr::Generic,"","","","",i2s(A_CTX_MENU).c_str()));
-	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText,"200"));
+	attrAdd(new TFld("evProc",_("Events process"),TFld::String,TFld::FullText|TFld::NoStrTransl,"200"));
     }
 }
 
@@ -264,7 +264,7 @@ void Widget::setEnable( bool val )
 	BACrtHoldOvr = false;
 
 	//Load self values from DB
-	loadIO( );
+	loadIO();
     }
     if(!val) {
 	disable(this);

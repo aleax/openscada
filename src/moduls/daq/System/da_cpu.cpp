@@ -32,7 +32,7 @@ using namespace SystemCntr;
 //*************************************************
 CPU::CPU( )
 {
-    //> CPU value structure
+    //CPU value structure
     fldAdd(new TFld("load",_("Load (%)"),TFld::Real,TFld::NoWrite));
     fldAdd(new TFld("sys",_("System (%)"),TFld::Real,TFld::NoWrite));
     fldAdd(new TFld("user",_("User (%)"),TFld::Real,TFld::NoWrite));
@@ -49,25 +49,22 @@ void CPU::init( TMdPrm *prm )
     char buf[256];
     prm->daData = new tval;
 
-    //> Create config
+    //Create config
     TCfg &c_subt = prm->cfg("SUBT");
     c_subt.fld().setDescr("");
 
-    //> Init start value
+    //Init start value
     FILE *f = fopen("/proc/stat","r");
     string cpuLs, cpuLsNm;
     for(int n_cpu; f && fgets(buf,sizeof(buf),f) != NULL; )
-	if(sscanf(buf,"cpu%d",&n_cpu))
-	{
-	    if(!isdigit(buf[3]))
-	    {
+	if(sscanf(buf,"cpu%d",&n_cpu)) {
+	    if(!isdigit(buf[3])) {
 		cpuLs += "gen;";
 		cpuLsNm += string(_("General"))+";";
 	    }
-	    else
-	    {
-		cpuLs += TSYS::int2str(n_cpu)+";";
-		cpuLsNm += TSYS::int2str(n_cpu)+";";
+	    else {
+		cpuLs += i2s(n_cpu)+";";
+		cpuLsNm += i2s(n_cpu)+";";
 	    }
 	}
     c_subt.fld().setValues(cpuLs);
@@ -112,17 +109,15 @@ void CPU::getVal( TMdPrm *prm )
 	return;
     }*/
 
-    //> File /proc/stat scan
+    //File /proc/stat scan
     char buf[256];
     FILE *f = fopen("/proc/stat","r");
-    for(int n = 0; f && fgets(buf,sizeof(buf),f) != NULL; )
-    {
+    for(int n = 0; f && fgets(buf,sizeof(buf),f) != NULL; ) {
 	if(trg == "gen")
 	    n = sscanf(buf,"cpu %lu %lu %lu %lu %lu\n",&user,&nice,&sys,&idle,&iowait);
 	else if(isdigit(trg[0]))
 	    n = sscanf(buf,(string("cpu")+trg+" %lu %lu %lu %lu %lu\n").c_str(),&user,&nice,&sys,&idle,&iowait);
-	if(n)
-	{
+	if(n) {
 	    if(n == 5) idle += iowait;
 	    sum = (float)(user+nice+sys+idle-c_vls.user-c_vls.nice-c_vls.sys-c_vls.idle);
 	    prm->vlAt("load").at().setR(100*(float(user+sys-c_vls.user-c_vls.sys))/sum, 0, true);
@@ -139,10 +134,9 @@ void CPU::getVal( TMdPrm *prm )
     }
     if(f) fclose(f);
 
-    //> Device error
+    //Device error
     if(devOK) prm->daErr = "";
-    else if(!prm->daErr.getVal().size())
-    {
+    else if(!prm->daErr.getVal().size()) {
 	prm->setEval();
 	prm->daErr = _("10:Device is not available.");
     }
@@ -155,26 +149,23 @@ void CPU::makeActiveDA( TMdContr *aCntr )
     FILE *f = fopen("/proc/stat","r");
     if(f == NULL) return;
 
-    //> Check for allow CPU
+    //Check for allow CPU
     for(int n_cpu; fgets(buf,sizeof(buf),f) != NULL; )
-	if(sscanf(buf,"cpu%d",&n_cpu))
-	{
+	if(sscanf(buf,"cpu%d",&n_cpu)) {
 	    string pId = "CPULoad";
 	    string pNm = _("Full CPU Load");
 	    string pSTp = "gen";
-	    if(isdigit(buf[3]))
-	    {
-		pId = "CPU"+TSYS::int2str(n_cpu)+"Load";
-		pNm = _("CPU Load :")+TSYS::int2str(n_cpu);
-		pSTp = TSYS::int2str(n_cpu);
+	    if(isdigit(buf[3])) {
+		pId = "CPU"+i2s(n_cpu)+"Load";
+		pNm = _("CPU Load: ")+i2s(n_cpu);
+		pSTp = i2s(n_cpu);
 	    }
 
 	    vector<string> pLs;
 	    // Find propper parameter's object
 	    aCntr->list(pLs);
 	    unsigned i_p;
-	    for(i_p = 0; i_p < pLs.size(); i_p++)
-	    {
+	    for(i_p = 0; i_p < pLs.size(); i_p++) {
 		AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
 		if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == pSTp)	break;
 	    }

@@ -79,20 +79,17 @@ void HddSmart::dList( vector<string> &list, bool part )
     FILE *f = fopen("/proc/partitions","r");
     if(f == NULL) return;
 
-    while(fgets(buf,sizeof(buf),f) != NULL)
-    {
+    while(fgets(buf,sizeof(buf),f) != NULL) {
 	if(sscanf(buf,"%d %d %*d %10s",&major,&minor,name) != 3) continue;
 	if(!part && ((major != SCSI_MAJOR && minor != 0) || (major == SCSI_MAJOR && (minor%16)) || !strncmp(name,"md",2)))
 	    continue;
 
 	string cmd = TSYS::strMess(smartval_cmd,(string("/dev/")+name+((major==SCSI_MAJOR)?" -d ata":"")).c_str());
 	FILE *fp = popen(cmd.c_str(),"r");
-	if(fp)
-	{
+	if(fp) {
 	    int val;
 	    bool access_true = false;
-	    while(fgets(buf,sizeof(buf),fp) != NULL)
-	    {
+	    while(fgets(buf,sizeof(buf),fp) != NULL) {
 		if(sscanf(buf,"%*d %*s %*x %*d %*d %*d %*s %*s %*s %d\n",&val) != 1) continue;
 		access_true = true;
 		break;
@@ -114,13 +111,12 @@ void HddSmart::getVal( TMdPrm *prm )
 
     string dev = prm->cfg("SUBT").getS();
 
-    //> SMART attributes
+    //SMART attributes
     string cmd = TSYS::strMess(smartval_cmd,("/dev/"+dev+((dev.size()&&dev[0]=='s')?" -d ata":"")).c_str());
     FILE *fp = popen(cmd.c_str(),"r");
-    while(fp && fgets(buf,sizeof(buf),fp) != NULL)
-    {
+    while(fp && fgets(buf,sizeof(buf),fp) != NULL) {
 	if(sscanf(buf,"%d %30s %*x %*d %*d %*d %*s %*s %*s %lu\n",&id,name,&val) != 3) continue;
-	string s_id = TSYS::int2str(id);
+	string s_id = i2s(id);
 	if(!prm->vlPresent(s_id)) ((tval*)prm->daData)->els.fldAdd(new TFld(s_id.c_str(),name,TFld::Integer,TFld::NoWrite));
 	prm->vlAt(s_id).at().setI(val,0,true);
 	devOK = true;
@@ -128,10 +124,9 @@ void HddSmart::getVal( TMdPrm *prm )
     if(fp) fclose(fp);
 
     if(devOK) prm->daErr = "";
-    else if(!prm->daErr.getVal().size())
-    {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+    else if(!prm->daErr.getVal().size()) {
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -141,15 +136,13 @@ void HddSmart::makeActiveDA( TMdContr *aCntr )
 
     vector<string> list;
     dList(list);
-    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
-    {
+    for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
 	vector<string> pLs;
 	// Find propper parameter's object
 	aCntr->list(pLs);
 
 	unsigned i_p;
-	for(i_p = 0; i_p < pLs.size(); i_p++)
-	{
+	for(i_p = 0; i_p < pLs.size(); i_p++) {
 	    AutoHD<TMdPrm> p = aCntr->at(pLs[i_p]);
 	    if(p.at().cfg("TYPE").getS() == id() && p.at().cfg("SUBT").getS() == list[i_hd])	break;
 	}
@@ -159,7 +152,7 @@ void HddSmart::makeActiveDA( TMdContr *aCntr )
 	while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
 	aCntr->add(hddprm,0);
 	AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
-	dprm.at().setName(_("HD smart: ")+list[i_hd]);
+	dprm.at().setName(_("HDD SMART: ")+list[i_hd]);
 	dprm.at().autoC(true);
 	dprm.at().cfg("TYPE").setS(id());
 	dprm.at().cfg("SUBT").setS(list[i_hd]);

@@ -442,7 +442,7 @@ ConfApp::ConfApp( string open_user ) :
 
     // Display root page and init external pages
     initHosts();
-    try{ pageDisplay("/"+SYS->id()+"/"+mod->startPath()); }
+    try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError err) { pageDisplay("/"+SYS->id()); }
 }
 
@@ -842,7 +842,7 @@ void ConfApp::userSel( )
 {
     pg_info.setAttr("path","");
 
-    try{ pageDisplay("/"+SYS->id()+"/"+mod->startPath()); }
+    try{ pageDisplay("/"+SYS->id()+mod->startPath()); }
     catch(TError err) { pageDisplay("/"+SYS->id()); }
 
     initHosts();
@@ -1146,6 +1146,8 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl = new CfgTable(widget);
 		tbl->setItemDelegate(new TableDelegate);
 		tbl->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+		tbl->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+		//tbl->setTextElideMode(Qt::ElideNone);
 		tbl->setStatusTip((sel_path+"/"+br_path).c_str());
 		tbl->setObjectName(br_path.c_str());
 		QSizePolicy sp(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -1154,6 +1156,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 		tbl->setContextMenuPolicy(Qt::CustomContextMenu);
 		connect(tbl, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(tablePopup(const QPoint&)));
 		connect(tbl, SIGNAL(cellChanged(int,int)), this, SLOT(tableSet(int,int)));
+		connect(tbl->horizontalHeader(), SIGNAL(sectionClicked(int)/*sectionResized(int,int,int)*/), tbl, SLOT(resizeRowsToContentsLim()));
 		tbl->setMinimumHeight(150); //tbl->setMaximumHeight(500);
 
 		widget->layout()->addWidget(new QLabel((t_s.attr("dscr")+":").c_str(),widget));
@@ -1280,9 +1283,7 @@ void ConfApp::selectChildRecArea( const XMLNode &node, const string &a_path, QWi
 				tbl->setColumnWidth(i_c, busyColsWdth);
 		    }
 
-		    tbl->resizeRowsToContents();
-		    for(int i_rw = 0; i_rw < tbl->rowCount(); i_rw++)
-			tbl->setRowHeight(i_rw, vmin(tbl->rowHeight(i_rw), tbl->size().height()/1.3));
+		    tbl->resizeRowsToContentsLim();
 		}
 
 		tbl_init = false;
@@ -2787,6 +2788,7 @@ void ConfApp::imgPopup( const QPoint &pos )
 
 void ConfApp::tableSet( int row, int col )
 {
+    bool noReload = false;
     string value;
     if(tbl_init || row < 0 || col < 0) return;
 
@@ -2855,10 +2857,11 @@ void ConfApp::tableSet( int row, int col )
 	mess_info(mod->nodePath().c_str(),_("%s| Set '%s' cell ('%s':%s) to: %s."),
 	    w_user->user().toStdString().c_str(), el_path.c_str(), row_addr.c_str(), n_el1.attr("col").c_str(), value.c_str());
 	if(cntrIfCmd(n_el1))	throw TError(n_el1.attr("mcat").c_str(),n_el1.text().c_str());
+	noReload = s2i(n_el1.attr("noReload"));
     }
     catch(TError err) { mod->postMess(err.cat,err.mess,TUIMod::Error,this); }
 
-    pageRefresh(true);
+    if(!noReload) pageRefresh(true);
 }
 
 void ConfApp::listBoxGo( QListWidgetItem* item )

@@ -25,7 +25,7 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mNoTransl(false), mReqKeys(false)
+TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mReqKeys(false)
 {
     pthread_mutex_init(&mRes, NULL);
 
@@ -279,7 +279,7 @@ string TCfg::getS( )
     return keyUpdt() ? TSYS::strSepParse(rez,0,0) : rez;
 }
 
-string TCfg::getS( char RqFlg )
+string TCfg::getS( uint8_t RqFlg )
 {
     pthread_mutex_lock(&mOwner.mRes);
     string rez = TVariant::getS();
@@ -400,7 +400,7 @@ void TCfg::setB( char val )
     }
 }
 
-void TCfg::setSEL( const string &val, char RqFlg )
+void TCfg::setSEL( const string &val, uint8_t RqFlg )
 {
     if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selected!"));
     switch(type())
@@ -413,7 +413,7 @@ void TCfg::setSEL( const string &val, char RqFlg )
     }
 }
 
-void TCfg::setS( const string &val, char RqFlg )
+void TCfg::setS( const string &val, uint8_t RqFlg )
 {
     if(isKey() && !keyUpdt() && (RqFlg&(KeyUpdtBase|KeyUpdtSet))) { mKeyUpdt = true; setType(TVariant::String); }
     if(keyUpdt()) setS((RqFlg&KeyUpdtBase)?getS()+string(1,0)+val:val+string(1,0)+getS(KeyUpdtBase));
@@ -421,19 +421,19 @@ void TCfg::setS( const string &val, char RqFlg )
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
-void TCfg::setR( double val, char RqFlg )
+void TCfg::setR( double val, uint8_t RqFlg )
 {
     setR(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
-void TCfg::setI( int64_t val, char RqFlg )
+void TCfg::setI( int64_t val, uint8_t RqFlg )
 {
     setI(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 
-void TCfg::setB( char val, char RqFlg )
+void TCfg::setB( char val, uint8_t RqFlg )
 {
     setB(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }

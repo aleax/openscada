@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-06 09:49+0300\n"
+"POT-Creation-Date: 2014-09-12 12:25+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1955,16 +1955,21 @@ msgid ""
 "Enable common translation manage which cause full reloading for all built "
 "messages obtain."
 msgstr ""
-"Aktivieren gemeinsame Übersetzung verwalten, welche volle Nachladen führen für alle gebaut Nachrichten zu erhalten."
+"Aktivieren gemeinsame Übersetzung verwalten, welche volle Nachladen führen "
+"für alle gebaut Nachrichten zu erhalten."
 
 msgid "Languages"
 msgstr "Sprachen"
 
 msgid "Processed languages list by two symbols code and separated symbol ';'."
-msgstr "Verarbeitet Sprachen Liste durch zwei Symbole Code und getrennt Symbol ';'."
+msgstr ""
+"Verarbeitet Sprachen Liste durch zwei Symbole Code und getrennt Symbol ';'."
 
 msgid "Source filter"
 msgstr "Quellfilter"
+
+msgid "Check unmatch"
+msgstr "Prüfen unmatch"
 
 msgid "Debug"
 msgstr "Debuggen"
@@ -2004,6 +2009,9 @@ msgstr "Unzugängliche Prozesse sind installiert"
 
 msgid "CPU set for thread error."
 msgstr "Fehler bei der Installation von Prozessoren für den Strom."
+
+msgid "<<<Unmatched sources!!!>>>\n"
+msgstr "<<<Unerreichte Quelle>>>!!!\n"
 
 msgid "Redundant"
 msgstr "Überflüssig"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-06 09:49+0300\n"
+"POT-Creation-Date: 2014-09-12 12:25+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1941,16 +1941,21 @@ msgid ""
 "Enable common translation manage which cause full reloading for all built "
 "messages obtain."
 msgstr ""
-"Включение общего управления переводами, что приводит к полной перезагрузке для получения встроенных сообщений."
+"Включение общего управления переводами, что приводит к полной перезагрузке "
+"для получения встроенных сообщений."
 
 msgid "Languages"
 msgstr "Языки"
 
 msgid "Processed languages list by two symbols code and separated symbol ';'."
-msgstr "Список обрабатываемых языков в двухсимвольной кодировке и разделённые ';'."
+msgstr ""
+"Список обрабатываемых языков в двухсимвольной кодировке и разделённые ';'."
 
 msgid "Source filter"
 msgstr "Фильтр источника"
+
+msgid "Check unmatch"
+msgstr "Проверять несовпадения"
 
 msgid "Debug"
 msgstr "Отладка"
@@ -1990,6 +1995,9 @@ msgstr "Установлены недопустимые процессоры."
 
 msgid "CPU set for thread error."
 msgstr "Ошибка установки процессоров для потока."
+
+msgid "<<<Unmatched sources!!!>>>\n"
+msgstr "<<<Несовпадение источников!!!>>>\n"
 
 msgid "Redundant"
 msgstr "Резервирование"

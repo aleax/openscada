@@ -83,7 +83,7 @@ class TCfg : public TVariant
 	// Universal access
 	string	getSEL( );
 	string	getS( );
-	string	getS( char RqFlg );
+	string	getS( uint8_t RqFlg );
 	operator bool( )		{ return getB(); }
 
 	// Direct access. Use only for readonly config-fields by no resourced!
@@ -92,15 +92,15 @@ class TCfg : public TVariant
 	int64_t	&getId( );
 	char	&getBd( );
 
-	void	setSEL( const string &val, char RqFlg = 0 );
+	void	setSEL( const string &val, uint8_t RqFlg = 0 );
 	void	setS( const string &val );
-	void	setS( const string &val, char RqFlg );
+	void	setS( const string &val, uint8_t RqFlg );
 	void	setR( double val );
-	void	setR( double val, char RqFlg );
+	void	setR( double val, uint8_t RqFlg );
 	void	setI( int64_t val );
-	void	setI( int64_t val, char RqFlg );
+	void	setI( int64_t val, uint8_t RqFlg );
 	void	setB( char val );
-	void	setB( char val, char RqFlg );
+	void	setB( char val, uint8_t RqFlg );
 
 	TCfg	&operator=( const string &vl )	{ setS(vl); return *this; }
 	TCfg	&operator=( const char *vl )	{ setS(vl); return *this; }
@@ -157,9 +157,7 @@ class TConfig: public TValElem
         void cntrCmdProc( XMLNode *fld, const string &elem,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
 
-	bool noTransl( )		{ return mNoTransl; }
 	bool reqKeys( )			{ return mReqKeys; }
-	void setNoTransl( bool vl )	{ mNoTransl = vl; }
 
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user );
 
@@ -181,7 +179,6 @@ class TConfig: public TValElem
 	TCfgMap		value;
 	TElem		*m_elem;
 	uint8_t		single		: 1;
-	uint8_t		mNoTransl	: 1;
 	uint8_t		mReqKeys	: 1;
 };
 

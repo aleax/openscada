@@ -30,7 +30,7 @@ using namespace SystemCntr;
 //*************************************************
 Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 {
-    //> HDD value structure
+    //HDD value structure
     fldAdd(new TFld("disk",_("Name"),TFld::String,TFld::NoWrite));
     fldAdd(new TFld("ed",_("Measure unit"),TFld::String,TFld::NoWrite));
     fldAdd(new TFld("t",_("Temperature"),TFld::Integer,TFld::NoWrite,"0"));
@@ -38,8 +38,7 @@ Hddtemp::Hddtemp( ) : t_tr("Sockets"), n_tr("HDDTemp")
 
 Hddtemp::~Hddtemp( )
 {
-    try
-    {
+    try {
 	if(((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outPresent(n_tr))
 	    ((TTipTransport &)SYS->transport().at().modAt(t_tr).at()).outDel(n_tr);
     }catch(TError err) { }
@@ -49,7 +48,7 @@ void Hddtemp::init( TMdPrm *prm )
 {
     TCfg &c_subt = prm->cfg("SUBT");
 
-    //> Create Configuration
+    //Create Configuration
     c_subt.fld().setDescr(_("Disk"));
 
     vector<string> list;
@@ -65,42 +64,36 @@ void Hddtemp::init( TMdPrm *prm )
 
 void Hddtemp::dList( vector<string> &list )
 {
-    try
-    {
+    try {
 	string val = getHDDTemp(), c_el;
 	list.clear();
 	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt += 5)
 	    list.push_back(c_el);
-    }
-    catch( TError err ) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
+    } catch(TError err) { /*mess_err(err.cat.c_str(),"%s",err.mess.c_str());*/ }
 }
 
 void Hddtemp::getVal( TMdPrm *prm )
 {
     bool devOK = false;
-    try
-    {
+    try {
 	string	dev = prm->cfg("SUBT").getS(),
 		val = getHDDTemp(),
 		c_el, t_vl;
 	for(int p_cnt = 0; (c_el=TSYS::strSepParse(val,p_cnt+1,'|')).size(); p_cnt += 5)
-	    if(c_el == dev)
-	    {
+	    if(c_el == dev) {
 		prm->vlAt("disk").at().setS(parseName(TSYS::strSepParse(val,p_cnt+2,'|')), 0, true);
 		t_vl = TSYS::strSepParse(val,p_cnt+3, '|');
-		prm->vlAt("t").at().setI(((t_vl=="NA")?EVAL_INT:atoi(t_vl.c_str())), 0, true);
+		prm->vlAt("t").at().setI(((t_vl=="NA")?EVAL_INT:s2i(t_vl)), 0, true);
 		prm->vlAt("ed").at().setS(TSYS::strSepParse(val,p_cnt+4,'|'), 0, true);
 		devOK = true;
 		break;
 	    }
-    }
-    catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+    } catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 
     if(devOK) prm->daErr = "";
-    else if(!prm->daErr.getVal().size())
-    {
-        prm->setEval();
-        prm->daErr = _("10:Device is not available.");
+    else if(!prm->daErr.getVal().size()) {
+	prm->setEval();
+	prm->daErr = _("10:Device is not available.");
     }
 }
 
@@ -110,7 +103,7 @@ string Hddtemp::getHDDTemp( )
     char buf[20];
 
     ResAlloc res(m_res, true);
-    //> Check connect and start
+    //Check connect and start
     if(!SYS->transport().at().at(t_tr).at().outPresent(n_tr)) SYS->transport().at().at(t_tr).at().outAdd(n_tr);
     AutoHD<TTransportOut> tr = SYS->transport().at().at(t_tr).at().outAt(n_tr);
 
@@ -122,11 +115,11 @@ string Hddtemp::getHDDTemp( )
     if(tr.at().startStat()) tr.at().stop();
     tr.at().start();
 
-    //> Request
+    //Request
     int len;
-    do{
-        len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true);
-        val.append(buf,len);
+    do {
+	len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true);
+	val.append(buf,len);
     }while(len);
 
     tr.at().stop();
@@ -140,10 +133,8 @@ void Hddtemp::makeActiveDA( TMdContr *aCntr )
 
     vector<string> list;
     dList(list);
-    try
-    {
-	for(unsigned i_hd = 0; i_hd < list.size(); i_hd++)
-	{
+    try {
+	for(unsigned i_hd = 0; i_hd < list.size(); i_hd++) {
 	    vector<string> pLs;
 	    // Find propper parameter's object
 	    aCntr->list(pLs);
@@ -156,11 +147,11 @@ void Hddtemp::makeActiveDA( TMdContr *aCntr )
 	    }
 	    if(i_p < pLs.size()) continue;
 
-	    string hddprm = ap_nm+TSYS::int2str(i_hd);
+	    string hddprm = ap_nm+i2s(i_hd);
 	    while(aCntr->present(hddprm)) hddprm = TSYS::strLabEnum(hddprm);
 	    aCntr->add(hddprm,0);
 	    AutoHD<TMdPrm> dprm = aCntr->at(hddprm);
-	    dprm.at().setName(_("HD temperature: ")+TSYS::int2str(i_hd));
+	    dprm.at().setName(_("HD temperature: ")+i2s(i_hd));
 	    dprm.at().autoC(true);
 	    dprm.at().cfg("TYPE").setS(id());
 	    dprm.at().cfg("SUBT").setS(list[i_hd]);
@@ -176,8 +167,7 @@ string Hddtemp::parseName( const string &val )
     int beg = -1, end = -1;
 
     for(unsigned i_s = 0; i_s < val.size(); i_s++)
-	if(val[i_s] != ' ' &&  val[i_s] != '\t' && isalnum(val[i_s]))
-	{
+	if(val[i_s] != ' ' &&  val[i_s] != '\t' && isalnum(val[i_s])) {
 	    if(beg < 0) beg = i_s;
 	    end = i_s;
 	}

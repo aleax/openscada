@@ -492,6 +492,7 @@ void TMdPrm::loadIO( bool force )
 
 	for(int i_io = 0; i_io < tmpl->val.ioSize(); i_io++) {
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
+	    cfg.cfg("VALUE").setNoTransl(!(tmpl->val.func()->io(i_io)->type()==IO::String && !(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)));
 	    if(!SYS->db().at().dataGet(io_bd,owner().owner().nodePath()+type().DB(&owner())+"_io",cfg,false,true))
 		continue;
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
@@ -519,7 +520,7 @@ void TMdPrm::saveIO()
 
 	for(int i_io = 0; i_io < tmpl->val.func()->ioSize(); i_io++) {
 	    cfg.cfg("ID").setS(tmpl->val.func()->io(i_io)->id());
-	    cfg.cfg("VALUE").setNoTransl( !(tmpl->val.func()->io(i_io)->type()==IO::String && !(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)) );
+	    cfg.cfg("VALUE").setNoTransl(!(tmpl->val.func()->io(i_io)->type()==IO::String && !(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)));
 	    if(tmpl->val.func()->io(i_io)->flg()&TPrmTempl::CfgLink)
 		cfg.cfg("VALUE").setS(lnk(lnkId(i_io)).prm_attr);
 	    else cfg.cfg("VALUE").setS(tmpl->val.getS(i_io));

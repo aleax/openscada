@@ -719,9 +719,18 @@ void Node::load_( )
     vector<string> u_pos;
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
+    cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
     for(int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
+
+	//Take before type
+	cfg.cfg("VALUE").setNoTransl((cfg.cfg("TYPE").getI()!=IO::String));
+
+	//Load all: !!!! Rewrite further optimal !!!!
+	cfg.cfgViewAll(true);
+	SYS->db().at().dataGet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
+	cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
 
 	//Position storing
 	int pos = cfg.cfg("POS").getI();
@@ -769,6 +778,7 @@ void Node::save_( )
 	cfg.cfg("TYPE").setI(io(i_io)->type());
 	cfg.cfg("FLAGS").setI(io(i_io)->flg());
 	cfg.cfg("POS").setI(i_io);
+	cfg.cfg("VALUE").setNoTransl((io(i_io)->type()!=IO::String));
 	if(io(i_io)->flg()&Node::IsLink) cfg.cfg("VALUE").setS(io(i_io)->rez());
 	else if(data && data->val.func()) cfg.cfg("VALUE").setS(data->val.getS(i_io));
 	else cfg.cfg("VALUE").setS(io(i_io)->def());

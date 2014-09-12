@@ -126,10 +126,8 @@ class TMess
 	// Internal messages translations
 	bool translEn( )	{ return mTranslEn; }
 	string translLangs( )	{ return mTranslLangs; }
-	string translFltr( )	{ return mTranslFltr; }
 	void setTranslEn( bool vl, bool passive = false );
 	void setTranslLangs( const string &vl )	{ mTranslLangs = vl; }
-	void setTranslFltr( const string &vl )	{ mTranslFltr = vl; }
 
 	string translFld( const string &lng, const string &fld, bool isCfg = false );
 
@@ -160,7 +158,7 @@ class TMess
 	map<string, bool>	debugCats;
 	vector<string>		selectDebugCats;
 
-	string	mTranslLangs, mTranslFltr;
+	string	mTranslLangs;
 	map<string, map<string,string> > builtMessIdx;
 
 	pthread_mutex_t	mRes;

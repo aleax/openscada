@@ -73,7 +73,7 @@ using namespace QTCFG;
 //*************************************************
 //* TUIMod                                        *
 //*************************************************
-TUIMod::TUIMod( string name ) : TUI(MOD_ID), start_path(string("/")+SYS->id()), end_run(false)
+TUIMod::TUIMod( string name ) : TUI(MOD_ID), /*start_path(string("/")+SYS->id()),*/ end_run(false)
 {
     mod		= this;
 
@@ -124,7 +124,7 @@ void TUIMod::load_( )
     //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
-        if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
+	if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
     //Load parameters from config-file and DB
     setStartPath(TBDS::genDBGet(nodePath()+"StartPath",startPath()));
@@ -135,7 +135,7 @@ void TUIMod::save_( )
 {
     mess_debug(nodePath().c_str(),_("Save module."));
 
-    //> Save parameters to DB
+    //Save parameters to DB
     TBDS::genDBSet(nodePath()+"StartPath", startPath());
     TBDS::genDBSet(nodePath()+"StartUser", startUser());
 }
@@ -156,13 +156,11 @@ QMainWindow *TUIMod::openWindow( )
 {
     string user_open = startUser();
     if(!SYS->security().at().usrPresent(user_open))
-	while(true)
-	{
+	while(true) {
 	    DlgUser d_usr;
 	    int rez = d_usr.exec();
 	    if(rez == DlgUser::SelCancel) return NULL;
-	    if(rez == DlgUser::SelErr)
-	    {
+	    if(rez == DlgUser::SelErr) {
 		postMess(nodePath().c_str(),_("Auth is wrong!!!"));
 		continue;
 	    }
@@ -211,11 +209,9 @@ void TUIMod::unregWin( QMainWindow *win )
 void TUIMod::cntrCmdProc( XMLNode *opt )
 {
     //> Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
-	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
-	{
+	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options"))) {
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_path",_("Configurator start path"),RWRWR_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,-1,"/prm/cfg/start_user",_("Configurator start user"),RWRWR_,"root",SUI_ID,3,"tp","str","dest","select","select","/prm/cfg/u_lst");
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
@@ -225,19 +221,16 @@ void TUIMod::cntrCmdProc( XMLNode *opt )
 
     //> Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/start_path")
-    {
+    if(a_path == "/prm/cfg/start_path") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startPath());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartPath(opt->text());
     }
-    else if(a_path == "/prm/cfg/start_user" )
-    {
+    else if(a_path == "/prm/cfg/start_user" ) {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(startUser());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setStartUser(opt->text());
     }
     else if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
-    else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt))
-    {
+    else if(a_path == "/prm/cfg/u_lst" && ctrChkNode(opt)) {
 	vector<string> ls;
 	SYS->security().at().usrList(ls);
 	opt->childAdd("el")->setText("");
@@ -258,8 +251,7 @@ void TUIMod::postMess( const string &cat, const string &mess, TUIMod::MessLev ty
     msgBox.setWindowTitle(_(MOD_NAME));
     msgBox.setTextFormat(Qt::PlainText);
     msgBox.setText(mess.c_str());
-    switch(type)
-    {
+    switch(type) {
 	case TUIMod::Info:	msgBox.setIcon(QMessageBox::Information);	break;
 	case TUIMod::Warning:	msgBox.setIcon(QMessageBox::Warning);		break;
 	case TUIMod::Error:

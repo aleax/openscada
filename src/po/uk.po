@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-06 09:49+0300\n"
+"POT-Creation-Date: 2014-09-12 12:25+0300\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -1938,7 +1938,8 @@ msgid ""
 "Enable common translation manage which cause full reloading for all built "
 "messages obtain."
 msgstr ""
-"Включення загального керування перекладами, що призводить до повного перезавантаження для отримання вбудованих повідомлень."
+"Включення загального керування перекладами, що призводить до повного "
+"перезавантаження для отримання вбудованих повідомлень."
 
 msgid "Languages"
 msgstr "Мови"
@@ -1948,6 +1949,9 @@ msgstr "Перелік оброблюваних мов у двосимвольн
 
 msgid "Source filter"
 msgstr "Фільтр джерела"
+
+msgid "Check unmatch"
+msgstr "Перевіряти незбіги"
 
 msgid "Debug"
 msgstr "Наладка"
@@ -1987,6 +1991,9 @@ msgstr "Встановлено недопустимі процесори."
 
 msgid "CPU set for thread error."
 msgstr "Помилка встановлення CPU для потоку."
+
+msgid "<<<Unmatched sources!!!>>>\n"
+msgstr "<<<Незбіг джерел!!!>>>\n"
 
 msgid "Redundant"
 msgstr "Резервування"

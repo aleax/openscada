@@ -10,7 +10,7 @@ I:40000:var:Var
 CREATE TABLE 'Archive_mess_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"CATEG" TEXT DEFAULT '' ,"LEVEL" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"DBArchSize" DOUBLE DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
 INSERT INTO "Archive_mess_proc" VALUES('NetRequsts','FSArch','','Requests to server through transport Sockets.',1,'/sub_Transport/mod_Sockets*',1,'ARCHIVES/MESS/Net/',10000.0,'','Запити до сервера через транспорт Sockets.','','Запросы к серверу через транспорт Sockets.','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
 ');
-INSERT INTO "Archive_mess_proc" VALUES('test','FSArch','Test','',1,'*',0,'ARCHIVES/MESS/TEST/',10000.0,'Test','','Test','','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
+INSERT INTO "Archive_mess_proc" VALUES('test','FSArch','Test','',1,'*',0,'ARCHIVES/MESS/TEST/',10000.0,'Тест','','Тест','','<prms XML="0" MSize="1024" NFiles="30" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
 ');
 INSERT INTO "Archive_mess_proc" VALUES('StatErrors','FSArch','','Local errors'' archive',1,'/*',4,'ARCHIVES/MESS/stError/',10000.0,'','Архів локальних помилок','','Архив локальных ощибок','<prms XML="1" MSize="300" NFiles="10" TmSize="30" PackTm="10" CheckTm="60" PackInfoFiles="0" PrevDbl="0" />
 ');
@@ -127,7 +127,7 @@ INSERT INTO "Archive_val" VALUES('test_t1_1','','',1,0,'',4,1.0,100,1,0,'FSArch.
 CREATE TABLE 'Archive_val_proc' ("ID" TEXT DEFAULT '' ,"MODUL" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"V_PER" DOUBLE DEFAULT '' ,"A_PER" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODUL"));
 INSERT INTO "Archive_val_proc" VALUES('1m','FSArch','','Minute''s archive',1,'ARCHIVES/VAL/1m',60.0,60,'','Хвилинний архів','','Минутный архив','<prms TmSize="800" NFiles="100" MaxCapacity="0" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="0" />
 ');
-INSERT INTO "Archive_val_proc" VALUES('1s','FSArch','','Second''s archive',1,'ARCHIVES/VAL/1s',1.0,60,'','Секундний архів.','','Секундный архив.','<prms TmSize="800" NFiles="100" MaxCapacity="0" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
+INSERT INTO "Archive_val_proc" VALUES('1s','FSArch','','Second''s archive',1,'ARCHIVES/VAL/1s',1.0,60,'','Секундний архів','','Секундный архив','<prms TmSize="800" NFiles="100" MaxCapacity="0" Round="0.01" PackTm="10" CheckTm="60" PackInfoFiles="1" />
 ');
 INSERT INTO "Archive_val_proc" VALUES('1s','DBArch','','',0,'MySQL.arch',1.0,60,'','','','','<prms Size="25" />
 ');
@@ -565,10 +565,10 @@ INSERT INTO "CIFPrm_test_io" VALUES('test','in48','DB1.104');
 INSERT INTO "CIFPrm_test_io" VALUES('test','in49','DB1.106');
 INSERT INTO "CIFPrm_test_io" VALUES('test','in50','DB1.108');
 CREATE TABLE 'CfgExtHosts' ("OP_USER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TRANSP" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"USER" TEXT DEFAULT '' ,"PASS" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' , PRIMARY KEY ("OP_USER","ID"));
-INSERT INTO "CfgExtHosts" VALUES('roman','loop','Loop','Sockets','TCP:localhost:10005','root','openscada','Loop','Loop');
-INSERT INTO "CfgExtHosts" VALUES('*','loop','Loop','Sockets','TCP:localhost:10005','root','openscada','Loop','Loop');
-INSERT INTO "CfgExtHosts" VALUES('roman','loopSSL','Loop SSL','SSL','localhost:10045','root','openscada','Loop SSL','Loop SSL');
-INSERT INTO "CfgExtHosts" VALUES('*','loopSSL','Loop SSL','SSL','localhost:10045','root','openscada','Loop SSL','Loop SSL');
+INSERT INTO "CfgExtHosts" VALUES('roman','loop','Loop','Sockets','TCP:localhost:10005','root','openscada','Петля','Петля');
+INSERT INTO "CfgExtHosts" VALUES('*','loop','Loop','Sockets','TCP:localhost:10005','root','openscada','Петля','Петля');
+INSERT INTO "CfgExtHosts" VALUES('roman','loopSSL','Loop SSL','SSL','localhost:10045','root','openscada','Петля SSL','Петля SSL');
+INSERT INTO "CfgExtHosts" VALUES('*','loopSSL','Loop SSL','SSL','localhost:10045','root','openscada','Петля SSL','Петля SSL');
 CREATE TABLE 'DAQ_AMRDevs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"BUS_ADDR" TEXT DEFAULT '' ,"TM_REQ" INTEGER DEFAULT '' ,"TM_REST" INTEGER DEFAULT '' ,"REQ_TRY" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_AMRDevs" VALUES('test','','','','',1,0,0,'<high>','AMRDevsPrm_test','1',0,'',0,30,3);
 CREATE TABLE 'DAQ_BFN' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"SYNCPER" DOUBLE DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"HOUSE" TEXT DEFAULT '' ,"USER" TEXT DEFAULT '' ,"PASS" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
@@ -592,24 +592,24 @@ INSERT INTO "DAQ_SoundCard" VALUES('test','','',1,0,'SoundCard_test','NVidia nFo
 CREATE TABLE 'DAQ_System' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '' ,"START" INTEGER DEFAULT '' ,"AUTO_FILL" INTEGER DEFAULT '' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '' ,"PRIOR" INTEGER DEFAULT '' ,"REDNT" INTEGER DEFAULT '' ,"REDNT_RUN" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_System" VALUES('AutoDA','Active data','Active data of operation system.',1,1,1,'AutoDAprm',1000,0,0,'<high>','Активні дані','Активні дані операційної системи.','Активные данные','Активные данные операционной системы.');
 CREATE TABLE 'DB' ("ID" TEXT DEFAULT '' ,"TYPE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"CODEPAGE" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID","TYPE"));
-INSERT INTO "DB" VALUES('LibBD','MySQL','Functions libraries','Many functions libraries.','server.diya.org;roman;123456;oscadaUserLibs;;;utf8','UTF-8',0,'Бібліотеки функцій','Декілька бібліотек функцій.','Библиотеки функций','Содержит множество библиотек функций.');
-INSERT INTO "DB" VALUES('GenDB','SQLite','Generic DB','','./AGLKS/St.db','UTF-8',0,'Головна БД','','Generic DB','');
-INSERT INTO "DB" VALUES('LibDB','SQLite','Functions libraries','Many functions libraries.','LibsDB/OscadaLibs.db','UTF-8',1,'Бібліотеки функцій','Декілька бібліотек функцій.','Библиотеки функций','Содержит множество библиотек функций.');
-INSERT INTO "DB" VALUES('AnastModel','SQLite','AGLKS model','AGLKS model contents::
+INSERT INTO "DB" VALUES('LibBD','MySQL','Functions libraries','Many functions libraries.','server.diya.org;roman;123456;oscadaUserLibs;;;utf8','UTF-8',0,'Бібліотеки функцій','Декілька бібліотек функцій.','Библиотеки функций','Несколько библиотек функций.');
+INSERT INTO "DB" VALUES('GenDB','SQLite','Generic DB','','./AGLKS/St.db','UTF-8',0,'Основна БД','','Основная БД','');
+INSERT INTO "DB" VALUES('LibDB','SQLite','Functions libraries','Many functions libraries.','LibsDB/OscadaLibs.db','UTF-8',1,'Бібліотеки функцій','Декілька бібліотек функцій.','Библиотеки функций','Несколько библиотек функций.');
+INSERT INTO "DB" VALUES('AnastModel','SQLite','AGLKS model','AGLKS model contents:
 - Genericstation;
 - КМ101;
 - КМ102;
 - КМ201;
 - КМ202;
 - КМ301;
-- КМ302;','Model.db','UTF-8',1,'Модель АГЛКС','Модель АГЛКС містить:
+- КМ302;','Model.db','UTF-8',1,'Модель АГЛКС','Модель АГЛКС у складі:
 - Загальностанційка;
 - КМ101;
 - КМ102;
 - КМ201;
 - КМ202;
 - КМ301;
-- КМ302;','Модель АГЛКС','Модель Анастасиеской ГЛКС в составе:
+- КМ302;','Модель АГЛКС','Модель Анастасиевской ГЛКС в составе:
 - Общестанционные;
 - КМ101;
 - КМ102;
@@ -619,23 +619,23 @@ INSERT INTO "DB" VALUES('AnastModel','SQLite','AGLKS model','AGLKS model content
 - КМ302;');
 INSERT INTO "DB" VALUES('arch','FireBird','','','/var/tmp/arch.fbd;roman;123456','UTF-8',0,'','','','');
 INSERT INTO "DB" VALUES('testFB','FireBird','','','server.diya.org:/var/tmp/test.fbd;roman;123456','UTF-8',0,'','','','');
-INSERT INTO "DB" VALUES('GenDB','MySQL','Generic DB','','server.diya.org;roman;123456;oscadaDemoSt;;;utf8','UTF-8',0,'Головна БД','','Основная БД','');
+INSERT INTO "DB" VALUES('GenDB','MySQL','Generic DB','','server.diya.org;roman;123456;oscadaDemoSt;;;utf8','UTF-8',0,'Основна БД','','Основная БД','');
 INSERT INTO "DB" VALUES('arch','MySQL','','','server.diya.org;roman;123456;oscadaArch;;;;5,2,2','',0,'','','','');
-INSERT INTO "DB" VALUES('AnastModel','MySQL','AGLKS model','AGLKS model contents::
+INSERT INTO "DB" VALUES('AnastModel','MySQL','AGLKS model','AGLKS model contents:
 - Genericstation;
 - КМ101;
 - КМ102;
 - КМ201;
 - КМ202;
 - КМ301;
-- КМ302;','server.diya.org;roman;123456;oscadaAnastas;;;utf8','UTF-8',0,'Модель АГЛКС','Модель АГЛКС містить:
+- КМ302;','server.diya.org;roman;123456;oscadaAnastas;;;utf8','UTF-8',0,'Модель АГЛКС','Модель АГЛКС у складі:
 - Загальностанційка;
 - КМ101;
 - КМ102;
 - КМ201;
 - КМ202;
 - КМ301;
-- КМ302;','Модель АГЛКС','Модель Анастасиеской ГЛКС в составе:
+- КМ302;','Модель АГЛКС','Модель Анастасиевской ГЛКС в составе:
 - Общестанционные;
 - КМ101;
 - КМ102;
@@ -663,19 +663,19 @@ INSERT INTO "DB" VALUES('vcaBase','SQLite','VCA: Main libraries','Contents:
 - Библиотека "Базовые элементы"
 - Библиотека "Элементы мнемосхемы"
 - Библиотека "Документы"');
-INSERT INTO "DB" VALUES('exp','SQLite','Export DB','','../exp.db','UTF-8',0,'Експорта БД','','Export DB','');
+INSERT INTO "DB" VALUES('exp','SQLite','Export DB','','../exp.db','UTF-8',0,'Експорт БД','','Экспорт БД','');
 INSERT INTO "DB" VALUES('vcaTest','MySQL','VCA: Tests','Contain the library of tests frames.','server.diya.org;roman;123456;oscadaVcaTest;;;utf8','UTF-8',0,'СВК: Тести','Містить бібліотеку тестових кадрів.','СВУ: Тесты','Содержит библиотеку тестовых кадров.');
 INSERT INTO "DB" VALUES('test','MySQL','','','server.diya.org;roman;123456;test;;;utf8','',0,'','','','');
 INSERT INTO "DB" VALUES('vcaTest','SQLite','VCA: Tests','Contain the library of tests frames.','LibsDB/vcaTest.db','UTF-8',1,'СВК: Тести','Містить бібліотеку тестових кадрів.','СВУ: Тесты','Содержит библиотеку тестовых кадров.');
 INSERT INTO "DB" VALUES('vcaAGLKS','SQLite','VCA: AGLKS','Contain of the libraries and the project of visualisation area AGLKS.','vca.db','UTF-8',1,'СВК: АГЛКС','Містить бібліотеки та проект середовища візуалізвції АГЛКС.','СВУ: АГЛКС','Содержит библиотеки и проект среды визуализации АГЛКС.');
-INSERT INTO "DB" VALUES('vcaAGLKS','MySQL','VCA: AGLKS','The DB contain libraries and project for visualisation environment AGLKS.','server.diya.org;roman;123456;oscadaVcaAGLKS;;;utf8','UTF-8',0,'СВК: АГЛКС','Містить бібліотеки та проект середовища візуалізвції АГЛКС.','VCA: AGLKS','The DB contain libraries and project for visualisation environment AGLKS.');
+INSERT INTO "DB" VALUES('vcaAGLKS','MySQL','VCA: AGLKS','The DB contain libraries and project for visualisation environment AGLKS.','server.diya.org;roman;123456;oscadaVcaAGLKS;;;utf8','UTF-8',0,'СВК: АГЛКС','Містить бібліотеки та проект середовища візуалізації АГЛКС.','VCA: AGLKS','Содержит библиотеки и проект среды визуализации АГЛКС.');
 INSERT INTO "DB" VALUES('test','PostgreSQL','','','maksim.diya.org;;postgres;12345678;vcaTest','UTF-8',0,'','','','');
 INSERT INTO "DB" VALUES('QuickStart','MySQL','','','server.diya.org;roman;123456;oscadaQuickStart;;;utf8','UTF-8',0,'','','','');
 CREATE TABLE 'DCONPrm_test' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"MOD_ADDR" INTEGER DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"CRC_CTRL" INTEGER DEFAULT '' ,"HOST_SIGNAL" INTEGER DEFAULT '' ,"AI_METHOD" INTEGER DEFAULT '' ,"AI_RANGE" INTEGER DEFAULT '' ,"AO_METHOD" INTEGER DEFAULT '' ,"AO_RANGE" INTEGER DEFAULT '' ,"DI_METHOD" INTEGER DEFAULT '' ,"DO_METHOD" INTEGER DEFAULT '' ,"CI_METHOD" INTEGER DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "DCONPrm_test" VALUES('test','','','','',1,0,'','',1,0,8,0,0,0,0,0,0);
 CREATE TABLE 'LogLevPrm_experiment_io' ("PRM_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("PRM_ID","ID"));
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','in','BlockCalc.Anast1to2node.F3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','var','45.2508186009347','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','var','45.0907412526859','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','max','100','','');
@@ -688,9 +688,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','in','BlockCalc.Anast1to2node.F4.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','var','52.8916722339593','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','var','52.9858626218298','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','max','100','','');
@@ -703,10 +703,10 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','in','BlockCalc.Anast1to2node.T_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','var','20.4002015794259','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','ed','°C','°С','°С');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','var','20.4897261671763','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','max','50','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','aMin','0','','');
@@ -718,10 +718,10 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','in','BlockCalc.Anast1to2node.T_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','var','32.179458378928','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','ed','°C','°С','°С');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','var','32.1699146501379','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','max','100','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','aMin','0','','');
@@ -733,10 +733,10 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','in','BlockCalc.Anast1to2node.T_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','var','32.04571885145','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','ed','°C','°С','°С');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','var','32.0323879670771','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','max','100','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','aMin','0','','');
@@ -748,10 +748,10 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','in','BlockCalc.Anast1to2node.P_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','var','5.6411114663383','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','ed','at','кгс/см2','кгс/см2');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','var','5.64617018445335','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','ed','at','ата','ата');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','max','10','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','aMin','4','','');
@@ -763,9 +763,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','in','BlockCalc.Anast1to2node.P_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','var','24.2251988252887','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','var','24.2368067037723','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','max','50','','');
@@ -778,9 +778,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','in','BlockCalc.Anast1to2node.P_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','var','23.695176183434','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','var','23.7059705555857','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','max','50','','');
@@ -793,16 +793,16 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm_md','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm_mess','Клапан закрыт!','Клапан закрыт!','Клапан закрыт!');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm_mess','The crane closed!','Клапан закрито!','Клапан закрыт!');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','in','BlockCalc.Anast1to2node.КШ6.st_open','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','in','BlockCalc.Anast1to2node.P3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','var','22.8947440612092','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','var','22.8982873325313','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','max','100','','');
@@ -815,9 +815,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','in','BlockCalc.Anast1to2node.P4.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','var','23.695176183434','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','var','23.7059705555857','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','max','50','','');
@@ -830,9 +830,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','in','BlockCalc.Anast1to2node.Pi.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','var','8.97507910495963','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','var','8.85696123081945','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','max','20','','');
@@ -845,10 +845,10 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','in','BlockCalc.Anast1to2node.Ti.var','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','var','20','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','ed','grad.C','°С','°С');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','ed','°C','°C','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','min','-50','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','max','50','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','aMin','-20','','');
@@ -860,9 +860,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','in','BlockCalc.Anast1to2node.PT0503.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','var','5.79410822690184','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','var','5.79958295971756','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','ed','kgH/cm2','кгс/см2','кгс/см2');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','max','10','','');
@@ -875,7 +875,7 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','cmdOpen','BlockCalc.Anast1to2node.КШ7.com','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','cmdClose','BlockCalc.Anast1to2node.КШ7','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','cmdStop','BlockCalc.Anast1to2node.КШ7','','');
@@ -887,9 +887,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','tCmd','5','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','last_cmd','3','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','w_tm','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','in','BlockCalc.Anast1to2node.F_PP1.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.605243385313','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.787254485829','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','max','150','','');
@@ -902,9 +902,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','in','BlockCalc.Anast1to2node.F_PP3.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','var','98.652403641346','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','var','98.6437300766731','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','max','150','','');
@@ -917,9 +917,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','in','BlockCalc.Anast1to2node.F_PP5.var','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','var','52.8924807374067','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','var','52.9848185331752','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','ed','tone/h','т/год','т/ч');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','min','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','max','100','','');
@@ -932,17 +932,17 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','iMult','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_err','0','0','0');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_err','0','0','0');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','F','200.237139145721','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','Q','10653.3366971973','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','P','8.30569012011666','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','T','14.7051613222366','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','dP','6.06779209532489','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','DS','1.05816672507588','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','f_err','0','0','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','F','201.677826800932','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','Q','10657.1143176207','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','P','9.82093243292576','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','T','15.5216893747084','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','dP','6.11144929699794','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('gN1','DS','0.962761695619096','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','speed','0','','');
@@ -955,8 +955,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_F3/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','SHIFR','F3','F3','F3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','NAME','F3','F3','F3');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','SHIFR','F3','F3','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','NAME','F3','F3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','DESCR','The gas flow through a pipe to Glinsk','Витрати газу через трубу на Глінск','Расход газа через трубу на Глинск');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','HystBnd','0','','');
@@ -970,9 +970,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_F4/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','SHIFR','F4','F4','F4');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','NAME','F4','F4','F4');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','DESCR','Gas flow through the diaphragm PP5','Витрати газу через діафрагму PP5','Расход газа через диафрагму PP5');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','SHIFR','F4','F4','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','NAME','F4','F4','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F4','DESCR','Gas flow through the diaphragm PP5','Витрати газу через діафрагму PP5','Расход через диафрагму PP5');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','speed','0','','');
@@ -985,9 +985,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_F_PP1/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','SHIFR','F_PP1','F_PP1','F_PP1');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','NAME','F_PP1','F_PP1','F PP1');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','DESCR','Gas flow through the diaphragm PP1','Витрати газу через діафрагму PP1','Расход газа через диафрагму PP1');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','SHIFR','F_PP1','F_PP1','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','NAME','F_PP1','F_PP1','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','DESCR','Gas flow through the diaphragm PP1','Витрати газу через діафрагму PP1','Расход через диафрагму PP1');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','speed','0','','');
@@ -1000,8 +1000,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_F_PP3/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','SHIFR','F_PP3','F_PP3','F_PP3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','NAME','F_PP3','F PP3','F PP3');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','SHIFR','F_PP3','F_PP3','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','NAME','F_PP3','F_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP3','DESCR','Gas flow through the diaphragm PP3','Витрати газу через діафрагму PP3','Расход газа через диафрагму PP3');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','HystBnd','0','','');
@@ -1015,9 +1015,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_F_PP5/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','SHIFR','F_PP5','F_PP5','F_PP5');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','NAME','F_PP5','F_PP5','F PP5');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','DESCR','Gas flow through the diaphragm PP5','Витрати газу через діафрагму PP5',' ');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','SHIFR','F_PP5','F_PP5','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','NAME','F_PP5','F_PP5','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP5','DESCR','Gas flow through the diaphragm PP5','Витрати газу через діафрагму PP5','Расход через диафрагму PP5');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','speed','0','','');
@@ -1030,9 +1030,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_P3/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','SHIFR','P3','P3','P3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','NAME','P3','P3','P3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','DESCR','The gas pressure in the pipe to Glinsk','Тиск газу у трубі на Глінск','Давление газа в трубе на Глинск');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','SHIFR','P3','P3','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','NAME','P3','P3','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P3','DESCR','The gas pressure in the pipe to Glinsk','Тиск газу у трубі на Глінск','Давление в трубе на Глинск');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','speed','0','','');
@@ -1045,8 +1045,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_P4/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','SHIFR','P4','P4','P4');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','NAME','P4','P4','P4');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','SHIFR','P4','P4','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','NAME','P4','P4','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P4','DESCR','Pressure P4','Тиск газу на діафрагмі PP5','Давление газа на диафрагме PP5');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','HystBnd','0','','');
@@ -1060,9 +1060,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_PT0503/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','SHIFR','PT0503','PT0503','PT0503');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','NAME','PT0503','PT0503','PT0503');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','DESCR','The gas pressure in the separator С1','Тиск газу у сепараторі С1',' ');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','SHIFR','PT0503','PT0503','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','NAME','PT0503','PT0503','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','DESCR','The gas pressure in the separator С1','Тиск газу у сепараторі С1','Давление газа в сепараторе С1');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','speed','0','','');
@@ -1075,8 +1075,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_P_PP1/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','SHIFR','P_PP1','P_PP1','P_PP1');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','NAME','P_PP1','P_PP1','P PP1');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','SHIFR','P_PP1','P_PP1','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','NAME','P_PP1','P_PP1','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP1','DESCR','Gas pressure at the diaphragm PP1','Тиск газу на діафрагмі PP1','Давление газа на диафрагме PP1');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','HystBnd','0','','');
@@ -1090,8 +1090,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_P_PP3/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','SHIFR','P_PP3','P_PP3','P_PP3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','NAME','P_PP3','P_PP3','P PP3');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','SHIFR','P_PP3','P_PP3','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','NAME','P_PP3','P_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP3','DESCR','Gas pressure at the diaphragm PP3','Тиск газу на діафрагмі PP3','Давление газа на диафрагме PP3');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','HystBnd','0','','');
@@ -1105,9 +1105,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_P_PP5/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','SHIFR','P_PP5','P_PP5','P_PP5');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','NAME','P_PP5','P_PP5','P PP5');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','DESCR','Gas pressure at the diaphragm PP5','Тиск газу на діафрагмі PP5','Давление газа на диафрагме PP5 ');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','SHIFR','P_PP5','P_PP5','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','NAME','P_PP5','P_PP5','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('P_PP5','DESCR','Gas pressure at the diaphragm PP5','Тиск газу на діафрагмі PP5','Давление газа на диафрагме PP5');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','scSqr','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','HystBnd','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','speed','0','','');
@@ -1120,9 +1120,9 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_Pi/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','SHIFR','Pi','Pi','Pi');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','NAME','Pi','Pi','Pi');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','DESCR','The gas pressure at the input of the CS.','Тиск газу на вході КС.','Давление газа на входе КС.');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','SHIFR','Pi','Pi','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','NAME','Pi','Pi','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Pi','DESCR','The gas pressure at the input of the CS.','Тиск газу на вході у КС.','Давление газа на входе КС.');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','inProc','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','subMode','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F3','subVar','0','','');
@@ -1186,8 +1186,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_T_PP1/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','SHIFR','T_PP1','T_PP1','T_PP1');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','NAME','T_PP1','T_PP1','T PP1');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','SHIFR','T_PP1','T_PP1','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','NAME','T_PP1','T_PP1','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP1','DESCR','The gas temperature at the diaphragm PP1','Температура газу на діафрагмі PP1','Температура газа на диафрагме PP1');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','inProc','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','scSqr','0','','');
@@ -1204,8 +1204,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_T_PP5/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','SHIFR','T_PP5','T_PP5','T_PP5');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','NAME','T_PP5','T_PP5','T PP5');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','SHIFR','T_PP5','T_PP5','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','NAME','T_PP5','T_PP5','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP5','DESCR','The gas temperature at the diaphragm PP5','Температура газу на діафрагмі PP5','Температура газа на диафрагме PP5');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','inProc','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','scSqr','0','','');
@@ -1222,8 +1222,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_Ti/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','SHIFR','Ti','Ti','Ti');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','NAME','Ti','Ti','Ti');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','SHIFR','Ti','Ti','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','NAME','Ti','Ti','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('Ti','DESCR','The gas temperature at the input of the CS.','Температура газу на вході КС.','Температура газа на входе КС.');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','inProc','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','scSqr','0','','');
@@ -1240,8 +1240,8 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','plcExcess','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','plcImit','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','plcImitIn','','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_T_PP3/"/>','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','SHIFR','T_PP3','T_PP3','T_PP3');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','NAME','T_PP3','T_PP3','T PP3');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','SHIFR','T_PP3','T_PP3','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','NAME','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','DESCR','The gas temperature at the diaphragm PP3','Температура газу на діафрагмі PP3','Температура газа на диафрагме PP3');
 CREATE TABLE 'ModBus_node' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"ADDR" INTEGER DEFAULT '' ,"InTR" TEXT DEFAULT '' ,"PRT" TEXT DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DT_PER" DOUBLE DEFAULT '' ,"TO_TR" TEXT DEFAULT '' ,"TO_PRT" TEXT DEFAULT '' ,"TO_ADDR" INTEGER DEFAULT '' ,"DT_PROG" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#DT_PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#DT_PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ModBus_node" VALUES('test','Test',' ',1,1,'*','*',0,1.0,'Serial.exlar','RTU',10,'JavaLikeCalc.JavaScript
@@ -1264,17 +1264,7 @@ R100 = 65536*(AT101_1_Ti-273)/150;
 R101 = 65536*(AT101_1_To-273)/100;
 //AT101_1 processing
 R103 = 65536*(AT101_2_Ti-273)/150;
-R104 = 65536*(AT101_2_To-273)/100;','Тест',' ','JavaLikeCalc.JavaScript
-//Test
-R4+=1;
-C4 = !C4;
-
-//AT101_1 processing
-R100 = 65536*(AT101_1_Ti-273)/150;
-R101 = 65536*(AT101_1_To-273)/100;
-//AT101_1 processing
-R103 = 65536*(AT101_2_Ti-273)/150;
-R104 = 65536*(AT101_2_To-273)/100;');
+R104 = 65536*(AT101_2_To-273)/100;','Тест',' ','');
 INSERT INTO "ModBus_node" VALUES('gate','','',0,2,'Sockets.testModBus','*',1,1.0,'Serial.exlar','RTU',1,'','','','','','','');
 CREATE TABLE 'ModBus_node_io' ("NODE_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("NODE_ID","ID"));
 INSERT INTO "ModBus_node_io" VALUES('test','R0','Register 0',1,0,'1000',0,'Регістр 0','1000','Регистр 0','1000');
@@ -1282,22 +1272,22 @@ INSERT INTO "ModBus_node_io" VALUES('test','R3w','Register 3 (write)',1,0,'10',2
 INSERT INTO "ModBus_node_io" VALUES('test','R1','Register 1',1,16,'LogicLev.experiment.F3.var',1,'Регістр 1','LogicLev.experiment.F3.var','Регистр 1','LogicLev.experiment.F3.var');
 INSERT INTO "ModBus_node_io" VALUES('test','C3','Bit 3',3,0,'1',9,'Біт 3','1','Бит 3','1');
 INSERT INTO "ModBus_node_io" VALUES('test','C6','Bit 6',3,16,'BlockCalc.Anast1to2node.КШ1.st_open',11,'Біт 6','BlockCalc.Anast1to2node.КШ1.st_open','Бит 6','BlockCalc.Anast1to2node.КШ1.st_open');
-INSERT INTO "ModBus_node_io" VALUES('test','R4','Register 4',1,0,'75360',3,'Регістр 4','30678','Регистр 4','43186');
-INSERT INTO "ModBus_node_io" VALUES('test','C4','Bit 4',3,0,'0',10,'Біт 4','0','Бит 4','1');
+INSERT INTO "ModBus_node_io" VALUES('test','R4','Register 4',1,0,'75369',3,'Регістр 4','30695','Регистр 4','43186');
+INSERT INTO "ModBus_node_io" VALUES('test','C4','Bit 4',3,0,'1',10,'Біт 4','1','Бит 4','1');
 INSERT INTO "ModBus_node_io" VALUES('test','C8w','Bit 8',3,0,'0',12,'Біт 8','0','Бит 8','0');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_Ti','AT101_1.Ti',2,16,'BlockCalc.KM101.AT101_1.Ti',13,'AT101_1.Ti','BlockCalc.KM101.AT101_1.Ti','AT101_1.Ti','BlockCalc.KM101.AT101_1.Ti');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_To','AT101_1.To',2,16,'BlockCalc.KM101.AT101_1.To',14,'AT101_1.To','BlockCalc.KM101.AT101_1.To','AT101_1.To','BlockCalc.KM101.AT101_1.To');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_Ti','AT101_2.Ti',2,16,'BlockCalc.KM101.AT101_2.Ti',15,'AT101_2.Ti','BlockCalc.KM101.AT101_2.Ti','AT101_2.Ti','BlockCalc.KM101.AT101_2.Ti');
-INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_To','AT101_2.To',2,16,'BlockCalc.KM101.AT101_2.To',16,'AT101_2.To','BlockCalc.KM101.AT101_2.To','AT101_2.To','BlockCalc.KM101.AT101_2.To');
-INSERT INTO "ModBus_node_io" VALUES('test','R100','AT101_1.Ti code',1,0,'25332',17,'AT101_1.Ti code','25400','AT101_1.Ti code','25395');
-INSERT INTO "ModBus_node_io" VALUES('test','R101','AT101_1.To code',1,0,'16553',18,'AT101_1.To code','16567','AT101_1.To code','16572');
-INSERT INTO "ModBus_node_io" VALUES('test','R102w','AT101_1.Wc',1,16,'BlockCalc.KM101.AT101_1.Wc',19,'AT101_1.Wc','BlockCalc.KM101.AT101_1.Wc','AT101_1.Wc','BlockCalc.KM101.AT101_1.Wc');
-INSERT INTO "ModBus_node_io" VALUES('test','R103','AT101_2.Ti code',1,0,'54795',20,'AT101_2.Ti code','54886','AT101_2.Ti code','54884');
-INSERT INTO "ModBus_node_io" VALUES('test','R104','AT101_2.To code',1,0,'21680',21,'AT101_2.To code','21687','AT101_2.To code','21695');
-INSERT INTO "ModBus_node_io" VALUES('test','R105w','AT101_2.Wc',1,16,'BlockCalc.KM101.AT101_2.Wc',22,'AT101_2.Wc','BlockCalc.KM101.AT101_2.Wc','AT101_2.Wc','BlockCalc.KM101.AT101_2.Wc');
-INSERT INTO "ModBus_node_io" VALUES('test','C100w','КШ2.com',3,16,'BlockCalc.Anast1to2node.КШ2.com',23,'КШ2.com','BlockCalc.Anast1to2node.КШ2.com','КШ102.com','BlockCalc.KM101.КШ102.com');
-INSERT INTO "ModBus_node_io" VALUES('test','C101','КШ2.st_open',3,16,'BlockCalc.Anast1to2node.КШ2.st_open',24,'КШ2.st_open','BlockCalc.Anast1to2node.КШ2.st_open','КШ102.st_open','BlockCalc.KM101.КШ102.st_open');
-INSERT INTO "ModBus_node_io" VALUES('test','C102','КШ2.st_close',3,16,'BlockCalc.Anast1to2node.КШ2.st_close',25,'КШ2.st_close','BlockCalc.Anast1to2node.КШ2.st_close','КШ102.st_close','BlockCalc.KM101.КШ102.st_close');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_Ti','AT101_1.Ti',2,16,'BlockCalc.KM101.AT101_1.Ti',13,'AT101_1.Ti','BlockCalc.KM101.AT101_1.Ti','','BlockCalc.KM101.AT101_1.Ti');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_1_To','AT101_1.To',2,16,'BlockCalc.KM101.AT101_1.To',14,'AT101_1.To','BlockCalc.KM101.AT101_1.To','','BlockCalc.KM101.AT101_1.To');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_Ti','AT101_2.Ti',2,16,'BlockCalc.KM101.AT101_2.Ti',15,'AT101_2.Ti','BlockCalc.KM101.AT101_2.Ti','','BlockCalc.KM101.AT101_2.Ti');
+INSERT INTO "ModBus_node_io" VALUES('test','AT101_2_To','AT101_2.To',2,16,'BlockCalc.KM101.AT101_2.To',16,'AT101_2.To','BlockCalc.KM101.AT101_2.To','','BlockCalc.KM101.AT101_2.To');
+INSERT INTO "ModBus_node_io" VALUES('test','R100','AT101_1.Ti code',1,0,'25390',17,'AT101_1.Ti code','25392','','25395');
+INSERT INTO "ModBus_node_io" VALUES('test','R101','AT101_1.To code',1,0,'16568',18,'AT101_1.To code','16566','','16572');
+INSERT INTO "ModBus_node_io" VALUES('test','R102w','AT101_1.Wc',1,16,'BlockCalc.KM101.AT101_1.Wc',19,'AT101_1.Wc','BlockCalc.KM101.AT101_1.Wc','','BlockCalc.KM101.AT101_1.Wc');
+INSERT INTO "ModBus_node_io" VALUES('test','R103','AT101_2.Ti code',1,0,'54876',20,'AT101_2.Ti code','54878','','54884');
+INSERT INTO "ModBus_node_io" VALUES('test','R104','AT101_2.To code',1,0,'21687',21,'AT101_2.To code','21683','','21695');
+INSERT INTO "ModBus_node_io" VALUES('test','R105w','AT101_2.Wc',1,16,'BlockCalc.KM101.AT101_2.Wc',22,'AT101_2.Wc','BlockCalc.KM101.AT101_2.Wc','','BlockCalc.KM101.AT101_2.Wc');
+INSERT INTO "ModBus_node_io" VALUES('test','C100w','КШ2.com',3,16,'BlockCalc.Anast1to2node.КШ2.com',23,'КШ2.com','BlockCalc.Anast1to2node.КШ2.com','','BlockCalc.KM101.КШ102.com');
+INSERT INTO "ModBus_node_io" VALUES('test','C101','КШ2.st_open',3,16,'BlockCalc.Anast1to2node.КШ2.st_open',24,'КШ2.st_open','BlockCalc.Anast1to2node.КШ2.st_open','','BlockCalc.KM101.КШ102.st_open');
+INSERT INTO "ModBus_node_io" VALUES('test','C102','КШ2.st_close',3,16,'BlockCalc.Anast1to2node.КШ2.st_close',25,'КШ2.st_close','BlockCalc.Anast1to2node.КШ2.st_close','','BlockCalc.KM101.КШ102.st_close');
 INSERT INTO "ModBus_node_io" VALUES('test','R_i6w','Register 6,7',1,0,'-5',4,'Регістр 6,7','-4','Регистр 6,7','-5');
 INSERT INTO "ModBus_node_io" VALUES('test','R_f8w','Register 8,9',2,0,'3.14159265',5,'Регістр 8,9','3.14159265','Регистр 8,9','3.14159265');
 INSERT INTO "ModBus_node_io" VALUES('test','R_i8:10:w','Register 10,13',1,0,'123456789',6,'Регістр 10,13','21474836470','Регистр 10,13','123456789');
@@ -1365,7 +1355,7 @@ Basic256:3
 CREATE TABLE 'SNMPPrm_localhost' ("SHIFR" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"OID_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR"));
 INSERT INTO "SNMPPrm_localhost" VALUES('test','','','','',1,'system');
 CREATE TABLE 'SYS' ("user" TEXT DEFAULT '' ,"id" TEXT DEFAULT '' ,"val" TEXT DEFAULT '' ,"uk#val" TEXT DEFAULT '' ,"ru#val" TEXT DEFAULT '' , PRIMARY KEY ("user","id"));
-INSERT INTO "SYS" VALUES('root','/sub_UI/mod_QTCfg/StartPath','/','','');
+INSERT INTO "SYS" VALUES('root','/sub_UI/mod_QTCfg/StartPath','','','');
 INSERT INTO "SYS" VALUES('root','/sub_UI/mod_QTCfg/StartUser','roman','','');
 INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/StartUser','root','','');
 INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/RunPrjs','','','');
@@ -1502,7 +1492,7 @@ INSERT INTO "SYS" VALUES('root','/sub_UI/mod_VCAEngine/AutoSess','<Sess />','','
 INSERT INTO "SYS" VALUES('roman','/sub_Special/mod_FLibSYS/fnc_str2int/ntCalc','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Special/mod_FLibSYS/fnc_tmCron/ntCalc','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/messLev','1','','');
-INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/uiProps','<UI devWinState="AAAA/wAAAAD9AAAAAQAAAAAAAAEVAAACUPwCAAAAAvwAAAA3AAABIwAAAH0A////+gAAAAECAAAA&#010;AvsAAAAQAFAAcgBvAGoAVAByAGUAZQEAAAAA/////wAAAHIA////+wAAAA4AVwBkAGcAVAByAGUA&#010;ZQEAAAAA/////wAAAHIA/////AAAAWAAAAEnAAAAfQD////6AAAAAAIAAAAC+wAAABgASQBuAHMA&#010;cABBAHQAdAByAEQAbwBjAGsBAAAAAP////8AAAByAP////sAAAAWAEkAbgBzAHAATABuAGsARABv&#010;AGMAawEAAAAA/////wAAAHIA////AAAEOwAAAlAAAAAEAAAABAAAAAgAAAAI/AAAAAIAAAACAAAA&#010;CAAAABgAdgBpAHMASQB0AFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdwBkAGcA&#010;VABvAG8AbABWAGkAZQB3AAAAAZQAAAEjAAAAAAAAAAAAAAASAGUAbABGAGkAZwBUAG8AbwBsAAAA&#010;Apz/////AAAAAAAAAAAAAAAIAE0AYQBpAG4AAAAAAP////8AAAAAAAAAAAAAAAYAZABvAGMAAAAA&#010;AP////8AAAAAAAAAAAAAABIAbwByAGkAZwBpAG4AYQBsAHMBAAABlAAAA0wAAAAAAAAAAAAAAAoA&#010;QQBHAEwASwBTAAAAAAD/////AAAAAAAAAAAAAAAIAHQAZQBzAHQAAAAAAP////8AAAAAAAAAAAAA&#010;AAMAAAABAAAACgBtAG4ARQBsAHMBAAAAAP////8AAAAAAAAAAA==" visItToolBar_icSz="16" originals_icSz="16" wdgToolView_icSz="16" mnEls_icSz="16" elFigTool_icSz="16" />
+INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/uiProps','<UI devWinState="AAAA/wAAAAD9AAAAAQAAAAAAAAEfAAACUPwCAAAAAvwAAAA3AAABIwAAAH0A////+gAAAAACAAAA&#010;AvsAAAAQAFAAcgBvAGoAVAByAGUAZQEAAAAA/////wAAAHIA////+wAAAA4AVwBkAGcAVAByAGUA&#010;ZQEAAAAA/////wAAAHIA/////AAAAWAAAAEnAAAAfQD////6AAAAAAIAAAAC+wAAABgASQBuAHMA&#010;cABBAHQAdAByAEQAbwBjAGsBAAAAAP////8AAAByAP////sAAAAWAEkAbgBzAHAATABuAGsARABv&#010;AGMAawEAAAAA/////wAAAHIA////AAAEMQAAAlAAAAAEAAAABAAAAAgAAAAI/AAAAAIAAAACAAAA&#010;CAAAABgAdgBpAHMASQB0AFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdwBkAGcA&#010;VABvAG8AbABWAGkAZQB3AAAAAZQAAAEjAAAAAAAAAAAAAAASAGUAbABGAGkAZwBUAG8AbwBsAAAA&#010;Apz/////AAAAAAAAAAAAAAAIAE0AYQBpAG4AAAAAAP////8AAAAAAAAAAAAAAAYAZABvAGMAAAAA&#010;AP////8AAAAAAAAAAAAAABIAbwByAGkAZwBpAG4AYQBsAHMBAAABlAAAA0wAAAAAAAAAAAAAAAoA&#010;QQBHAEwASwBTAAAAAAD/////AAAAAAAAAAAAAAAIAHQAZQBzAHQAAAAAAP////8AAAAAAAAAAAAA&#010;AAMAAAABAAAACgBtAG4ARQBsAHMBAAAAAP////8AAAAAAAAAAA==" visItToolBar_icSz="16" originals_icSz="16" wdgToolView_icSz="16" mnEls_icSz="16" elFigTool_icSz="16" />
 ','','');
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_QTCfg/StartPath','/DemoStation','','');
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_QTCfg/StartUser','root','','');
@@ -1521,18 +1511,19 @@ INSERT INTO "SYS" VALUES('roman','/sub_Archive/mod_FSArch/mess_StatErrors/messSi
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/mod_FSArch/mess_NetRequsts/messSize','600','','');
 INSERT INTO "SYS" VALUES('roman','/sub_DAQ/mod_OPC_UA/cntr_test/prm_test/selND','free (2:"DAQ.System.AutoDA.MemInfo.free")','','');
 INSERT INTO "SYS" VALUES('roman','/sub_DAQ/mod_DAQGate/selCPRM','ModBus.testTCP.test','','');
+INSERT INTO "SYS" VALUES('roman','/TrChkUnMatch','0','','');
 CREATE TABLE 'Security_grp' ("NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"USERS" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("NAME"));
 INSERT INTO "Security_grp" VALUES('users','Users group','user;root;roman;test1;','Група користувачів','Группа пользователей');
-INSERT INTO "Security_grp" VALUES('BD','Data bases','roman;','Бази даних','Базы данных');
+INSERT INTO "Security_grp" VALUES('BD','Data base','roman;','Бази даних','Базы данных');
 INSERT INTO "Security_grp" VALUES('Archive','Archives','root;test;','Архіви','Архивы');
 INSERT INTO "Security_grp" VALUES('Security','Security','root;test;','Безпека','Безопасность');
-INSERT INTO "Security_grp" VALUES('UI','Users'' interfaces','root;','Інтерфейси користувача','Интерфейсы пользователя');
-INSERT INTO "Security_grp" VALUES('root','Administartors'' group','root;roman;','Група адміністраторів.','Группа администраторов.');
+INSERT INTO "Security_grp" VALUES('UI','User''s interfaces','root;','Інтерфейси користувача','Интерфейсы пользователя');
+INSERT INTO "Security_grp" VALUES('root','Administartor''s group','root;roman;','Група адміністраторів.','Группа администраторов.');
 INSERT INTO "Security_grp" VALUES('Protocol','Transport''s protocols','root;','Транспортні протоколи','Транспортные протоколы');
 INSERT INTO "Security_grp" VALUES('Special','Special','root;test;','Спеціальні','Специальные');
 INSERT INTO "Security_grp" VALUES('DAQ','Data acquisition','root;','Збір даних','Сбор данных');
 INSERT INTO "Security_grp" VALUES('ModSched','Modules control','root;','Керування модулями','Управление модулями');
-INSERT INTO "Security_grp" VALUES('Transport','Transport','root;','Транспорти','Транспорты');
+INSERT INTO "Security_grp" VALUES('Transport','Transport','root;','Транспорт','Транспорт');
 CREATE TABLE 'Security_user' ("NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"PASS" TEXT DEFAULT '' ,"PICTURE" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"LONGDESCR" TEXT DEFAULT '' ,"uk#LONGDESCR" TEXT DEFAULT '' , PRIMARY KEY ("NAME"));
 INSERT INTO "Security_user" VALUES('roman','Roman Savochenko','roBH1UjQVoAL.','/9j/4AAQSkZJRgABAQEBLAEsAAD/4Q/4RXhpZgAATU0AKgAAAAgABwESAAMAAAABAAEAAAEaAAUA
 AAABAAAAYgEbAAUAAAABAAAAagEoAAMAAAABAAIAAAExAAIAAAAUAAAAcgEyAAIAAAAUAAAAhodp
@@ -1735,7 +1726,7 @@ jfbArxpMjyafdxyO0ihIGHOc4LbEjPTYmiioP8RIm/B9FL34IzgR/qauliq/3rfekbRoenvnP6Ci
 ipyPEaejSPJql4zsSYmMSeyrscAfMk0UUV4iL8n/2Q==','Роман Савоченко','Роман Савоченко','','');
 INSERT INTO "Security_user" VALUES('root','Administrator (superuser)!!!','roZEK8sP/t6Qg','','Адміністратор (суперкористувач)!!!','Администратор (суперпользователь)!!!','','');
 INSERT INTO "Security_user" VALUES('user','Simple user','us6EKZMmfBVwI','','Звичайний користувач','Простой пользователь','','');
-INSERT INTO "Security_user" VALUES('test','Тестовий користувач','teMGKvBPcptKo','','Тестовий користувач','','','');
+INSERT INTO "Security_user" VALUES('test','Test user','teMGKvBPcptKo','','Тестовий користувач','Тестовый пользователь','','');
 CREATE TABLE 'Siemens_CIFdevs' ("ID" INTEGER DEFAULT '' ,"ADDR" INTEGER DEFAULT '' ,"SPEED" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "Siemens_CIFdevs" VALUES(0,10,6);
 INSERT INTO "Siemens_CIFdevs" VALUES(1,0,0);
@@ -1746,11 +1737,11 @@ INSERT INTO "SoundCard_test" VALUES('test','','',1,0,'','','','');
 INSERT INTO "SoundCard_test" VALUES('test1','','',1,1,'','','','');
 CREATE TABLE 'Transport_in' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"PROT" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"BufLen" INTEGER DEFAULT '' ,"TMS" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCRIPT" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCRIPT" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
 INSERT INTO "Transport_in" VALUES('Self','Sockets','','','TCP::10005:1','SelfSystem',1,5,'1.88:320','Власний','','','','');
-INSERT INTO "Transport_in" VALUES('WEB_1','Sockets','WEB 1','Main transport for WEB interface.','TCP::10002:0','HTTP',1,5,'1.88:320','WEB 1','Головний транспорт для WEB інтерфейсу.','WEB 1','Главный транспотр для WEB интерфейса.','<prms MaxQueue="10" MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" />
+INSERT INTO "Transport_in" VALUES('WEB_1','Sockets','WEB 1','Main transport for WEB interface.','TCP::10002:0','HTTP',1,5,'1.88:320','','Головний транспорт для WEB інтерфейсу.','','Главный транспотр для WEB интерфейса.','<prms MaxQueue="10" MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" />
 ');
-INSERT INTO "Transport_in" VALUES('WEB_2','Sockets','WEB 2','Reserve transport for WEB interface.','TCP::10004:0','HTTP',1,5,'1.88:320','WEB 2','Резервний транспорт для WEB інтерфейсу.','WEB 2','Резервный транспотр для WEB интерфейса.','<prms MaxQueue="10" MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" />
+INSERT INTO "Transport_in" VALUES('WEB_2','Sockets','WEB 2','Reserve transport for WEB interface.','TCP::10004:0','HTTP',1,5,'1.88:320','','Резервний транспорт для WEB інтерфейсу.','','Резервный транспотр для WEB интерфейса.','<prms MaxQueue="10" MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" />
 ');
-INSERT INTO "Transport_in" VALUES('WEB_2','SSL','WEB 2','Reserve security transport for WEB interface.','*:10044','HTTP',1,5,'1.88:320','WEB 2','Резервний безпечний транспорт для WEB інтерфейсу.','','Резервный безопасный транспотр для WEB интерфейса.','<prms MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" PKeyPass="123456">
+INSERT INTO "Transport_in" VALUES('WEB_2','SSL','WEB 2','Reserve security transport for WEB interface.','*:10044','HTTP',1,5,'1.88:320','','Резервний безпечний транспорт для WEB інтерфейсу.','','Резервный безопасный транспотр для WEB интерфейса.','<prms MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" PKeyPass="123456">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEETCCAvmgAwIBAgIJAIgqZ1h4oyoBMA0GCSqGSIb3DQEBBQUAMIGeMQswCQYD
@@ -1809,7 +1800,7 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 </CertKey>
 </prms>
 ');
-INSERT INTO "Transport_in" VALUES('WEB_1','SSL','WEB 1','Main security transport for WEB interface.','*:10042','HTTP',1,5,'1.88:320','WEB 1','Головний безпечний транспорт для WEB інтерфейсу.','','Главный безопасный транспотр для WEB интерфейса.','<prms MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" PKeyPass="123456">
+INSERT INTO "Transport_in" VALUES('WEB_1','SSL','WEB 1','Main security transport for WEB interface.','*:10042','HTTP',1,5,'1.88:320','','Головний безпечний транспорт для WEB інтерфейсу.','','Главный безопасный транспотр для WEB интерфейса.','<prms MaxClients="100" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0" PKeyPass="123456">
 <CertKey>
 -----BEGIN CERTIFICATE-----
 MIIEETCCAvmgAwIBAgIJAIgqZ1h4oyoBMA0GCSqGSIb3DQEBBQUAMIGeMQswCQYD
@@ -1927,16 +1918,16 @@ fdfa9weotHT55KrlRp06LxgUqckwoHoGjKDwR8bCk7s0QobgxuFufjEqUZg44VXw
 </CertKey>
 </prms>
 ');
-INSERT INTO "Transport_in" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS1:115200:8N1','ModBus',0,5,'0.95:48','Test ModBus',' ','Тест ModBus','','<prms TMS="0.95:48"/>
+INSERT INTO "Transport_in" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS1:115200:8N1','ModBus',0,5,'0.95:48','Тест ModBus',' ','Тест ModBus','','<prms TMS="0.95:48"/>
 ');
 INSERT INTO "Transport_in" VALUES('testModBus','Sockets','Test ModBus',' ','TCP::10502:1','ModBus',1,5,'0.57:320','Тест ModBus',' ','Тест ModBus','','<prms MaxQueue="10" MaxClients="10" BufLen="5" KeepAliveCnt="100" KeepAliveTm="5" TaskPrior="0"/>
 ');
 INSERT INTO "Transport_in" VALUES('testOPC','Sockets','','','TCP::4841','OPC_UA',1,5,'','','','','','<prms MaxQueue="10" MaxClients="10" BufLen="5" KeepAliveReqs="0" KeepAliveTm="60" TaskPrior="0" />
 ');
-INSERT INTO "Transport_in" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyUSB0:115200:8N1::1','UserProtocol.test',0,0,'','Test Modem',' ','','','<prms TMS="0.95:48" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
+INSERT INTO "Transport_in" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyUSB0:115200:8N1::1','UserProtocol.test',0,0,'','Тест модему',' ','Тест модема','','<prms TMS="0.95:48" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmRingReq="RING" MdmRingAnswer="ATA" MdmRingAnswerResp="CONNECT" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
 CREATE TABLE 'Transport_out' ("ID" TEXT DEFAULT '' ,"MODULE" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCRIPT" TEXT DEFAULT '' ,"ADDR" TEXT DEFAULT '' ,"START" INTEGER DEFAULT '' ,"SSLCertKey" TEXT DEFAULT '' ,"SSLKeyPass" TEXT DEFAULT '' ,"TMS" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCRIPT" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCRIPT" TEXT DEFAULT '' ,"A_PRMS" TEXT DEFAULT '' , PRIMARY KEY ("ID","MODULE"));
-INSERT INTO "Transport_out" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS0:115200:8N1',0,'','','50:4','Test ModBus',' ','Тест ModBus','','<prms TMS="97:0.95"/>
+INSERT INTO "Transport_out" VALUES('testModBus','Serial','Test ModBus',' ','/dev/ttyS0:115200:8N1',0,'','','50:4','Тест ModBus',' ','Тест ModBus','','<prms TMS="97:0.95"/>
 ');
 INSERT INTO "Transport_out" VALUES('testModBus','Sockets','Test ModBus',' ','TCP:localhost:10502',1,'','','1000','Тест ModBus',' ','Тест ModBus','','<prms tms="6:1"/>
 ');
@@ -1948,13 +1939,13 @@ INSERT INTO "Transport_out" VALUES('UIQtCfgloop','Sockets','','','TCP:localhost:
 ');
 INSERT INTO "Transport_out" VALUES('DAQRedundantloop','Sockets','','','TCP:localhost:10005',0,'','','1000','','','','','');
 INSERT INTO "Transport_out" VALUES('DAQGatetestloop','Sockets','','','TCP:localhost:10005',0,'','','1000','','','','','');
-INSERT INTO "Transport_out" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyACM0:38400:8N1::0679859815',0,'','','','Test Modem',' ','','','<prms TMS="5000:1000" MdmTm="30" MdmLifeTime="30" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmDialStr="ATDT" MdmCnctResp="CONNECT" MdmBusyResp="BUSY" MdmNoCarResp="NO CARRIER" MdmNoDialToneResp="NO DIALTONE" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
+INSERT INTO "Transport_out" VALUES('testModem','Serial','Test Modem',' ','/dev/ttyACM0:38400:8N1::0679859815',0,'','','','Тест модему',' ','Тест модема','','<prms TMS="5000:1000" MdmTm="30" MdmLifeTime="30" MdmPreInit="0.5" MdmPostInit="1" MdmInitStr1="ATZ" MdmInitStr2="" MdmInitResp="OK" MdmDialStr="ATDT" MdmCnctResp="CONNECT" MdmBusyResp="BUSY" MdmNoCarResp="NO CARRIER" MdmNoDialToneResp="NO DIALTONE" MdmHangUp="+++ATH" MdmHangUpResp="OK"/>
 ');
 INSERT INTO "Transport_out" VALUES('HDDTemp','Sockets','Parameter Hddtemp','','TCP:127.0.0.1:7634',0,'','','','Параметр Hddtemp','','Параметр Hddtemp','','<prms tms="5:0.01" />
 ');
-INSERT INTO "Transport_out" VALUES('OPCUAtest','Sockets','','OPC UA автоматично створений транспорт для контроллеру ''test''.','TCP:127.0.0.1:4841',0,'','','','','OPC UA автоматично створений транспорт для контроллеру ''test''.','','OPC UA автоматично створений транспорт для контроллеру ''test''.','<prms tms="5:0.1" />
+INSERT INTO "Transport_out" VALUES('OPCUAtest','Sockets','','OPC UA automatic created transport for controller ''test''.','TCP:127.0.0.1:4841',0,'','','','','OPC UA автоматично створений транспорт для контроллеру ''test''.','','OPC UA автоматически созданный транспорт для контроллера ''test''.','<prms tms="5:0.1" />
 ');
-INSERT INTO "Transport_out" VALUES('sys_UPS','Sockets','UPS','','TCP:localhost:3493',0,'','','','UPS','','','','<prms tms="3:0.1" />
+INSERT INTO "Transport_out" VALUES('sys_UPS','Sockets','UPS','','TCP:localhost:3493',0,'','','','ДБЖ','','ИБП','','<prms tms="3:0.1" />
 ');
 CREATE TABLE 'UserProtocol_uPrt' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"InPROG" TEXT DEFAULT '' ,"uk#InPROG" TEXT DEFAULT '' ,"OutTR" TEXT DEFAULT '' ,"OutPROG" TEXT DEFAULT '' ,"uk#OutPROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#InPROG" TEXT DEFAULT '' ,"ru#OutPROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "UserProtocol_uPrt" VALUES('test','','','','',1,'JavaLikeCalc.JavaScript
@@ -2101,7 +2092,7 @@ if(resp[0] != ">") { io.setAttr("err","12:"+resp[0]+":Ошибка DCON."); retu
 //Возврат результата
 io.setAttr("err","");
 io.setText(resp.slice(1,resp.length-3));');
-INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','Elemer TM5102 and TM5103','',1,'','','*','JavaLikeCalc.JavaScript
+INSERT INTO "UserProtocol_uPrt" VALUES('TM510x','Elemer TM510x','','Elemer TM5102 and TM5103.','Elemer TM5102 та TM5103.',1,'','','*','JavaLikeCalc.JavaScript
 //Request form:
 //<mess addr="1">{req}</mess> - message tag
 //  addr - remote station address (1...254)
@@ -2144,7 +2135,7 @@ for(i = 1; i < min(KSpos+1,resp.length); i++)
 		KS = (KS&0x01) ? (KS >> 1)^0xA001 : (KS >> 1);
 }
 if(KS != resp.slice(KSpos+1).toInt(10)) { io.setAttr("err","6:KS error."); return; }
-io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','','','','','');
+io.setText(resp.slice(resp.indexOf(";")+1,KSpos));','','','Elemer TM5102 и TM5103.','','');
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('originals','Original widgets','','wlb_originals','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD8ABZ7LUMWAAAACXBI
 WXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH1wIaCRwZC0asvgAAH5xJREFUeNrVm3mQXVd54H/n3P2+
@@ -2406,7 +2397,6 @@ INSERT INTO "wlb_originals_io" VALUES('Diagram','type','0',0,'','','','','','','
 INSERT INTO "wlb_originals_io" VALUES('Diagram','parNum','1',0,'','','','','','','','','');
 INSERT INTO "wlb_originals_io" VALUES('Document','time','0',0,'','','','','','','','','');
 INSERT INTO "wlb_originals_io" VALUES('Document','n','0',0,'','','','','','','','','');
-CREATE TABLE 'FSArch_Pack' ("FILE" TEXT DEFAULT '' ,"BEGIN" TEXT DEFAULT '' ,"END" TEXT DEFAULT '' ,"PRM1" TEXT DEFAULT '' ,"PRM2" TEXT DEFAULT '' ,"PRM3" TEXT DEFAULT '' , PRIMARY KEY ("FILE"));
 CREATE TABLE 'OPC_UA_Prm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"ND_LS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "OPC_UA_Prm_test" VALUES('test','','','','','','','',1,'2:"DAQ.System.AutoDA.CPULoad.load"
 2:"DAQ.System.AutoDA.MemInfo.use"
@@ -2435,24 +2425,24 @@ R_f:8:rw:f8:Float [8,9]
 R_d:14:rw:d14:Double [14-17]
 R_d:18:rw:d18:Double [18-21]','','');
 CREATE TABLE 'LogLevPrm_experiment' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO "LogLevPrm_experiment" VALUES('F3','','F3','F3','F3','The gas flow through a pipe to Glinsk','Расход газа через трубу на Глинск','Витрати газу через трубу на Глінск',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('F4','','F4','F4','F4','Gas flow through the diaphragm PP5','Расход газа через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('T_PP1','','T_PP1','T PP1','T_PP1','The gas temperature at the diaphragm PP1','Температура газа на диафрагме PP1','Температура газу на діафрагмі PP1',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('T_PP3','','T_PP3','T PP3','T_PP3','The gas temperature at the diaphragm PP3','Температура газа на диафрагме PP3','Температура газу на діафрагмі PP3',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('T_PP5','','T_PP5','T PP5','T_PP5','The gas temperature at the diaphragm PP5','Температура газа на диафрагме PP5','Температура газу на діафрагмі PP5',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('P_PP1','','P_PP1','P PP1','P_PP1','Gas pressure at the diaphragm PP1','Давление газа на диафрагме PP1','Тиск газу на діафрагмі PP1',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('P_PP3','','P_PP3','P PP3','P_PP3','Gas pressure at the diaphragm PP3','Давление газа на диафрагме PP3','Тиск газу на діафрагмі PP3',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('P_PP5','','P_PP5','P PP5','P_PP5','Gas pressure at the diaphragm PP5','Давление газа на диафрагме PP5 ','Тиск газу на діафрагмі PP5',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('F3','','F3','','F3','The gas flow through a pipe to Glinsk','Расход газа через трубу на Глинск','Витрати газу через трубу на Глінск',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('F4','','F4','','F4','Gas flow through the diaphragm PP5','Расход через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('T_PP1','','T_PP1','','T_PP1','The gas temperature at the diaphragm PP1','Температура газа на диафрагме PP1','Температура газу на діафрагмі PP1',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('T_PP3','','T_PP3','','T_PP3','The gas temperature at the diaphragm PP3','Температура газа на диафрагме PP3','Температура газу на діафрагмі PP3',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('T_PP5','','T_PP5','','T_PP5','The gas temperature at the diaphragm PP5','Температура газа на диафрагме PP5','Температура газу на діафрагмі PP5',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('P_PP1','','P_PP1','','P_PP1','Gas pressure at the diaphragm PP1','Давление газа на диафрагме PP1','Тиск газу на діафрагмі PP1',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('P_PP3','','P_PP3','','P_PP3','Gas pressure at the diaphragm PP3','Давление газа на диафрагме PP3','Тиск газу на діафрагмі PP3',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('P_PP5','','P_PP5','','P_PP5','Gas pressure at the diaphragm PP5','Давление газа на диафрагме PP5','Тиск газу на діафрагмі PP5',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('КШ6close','','Close KSH6','Закрытие КШ6','Закриття КШ6','Alarm for closing the valve KSH6','Сигнализация по закрытию крана КШ6','Сигналізація по закриттю крана КШ6',1,'base.digAlarm');
-INSERT INTO "LogLevPrm_experiment" VALUES('P3','','P3','P3','P3','The gas pressure in the pipe to Glinsk','Давление газа в трубе на Глинск','Тиск газу у трубі на Глінск',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('P4','','P4','P4','P4','Pressure P4','Давление газа на диафрагме PP5','Тиск газу на діафрагмі PP5',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('Pi','','Pi','Pi','Pi','The gas pressure at the input of the CS.','Давление газа на входе КС.','Тиск газу на вході КС.',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('Ti','','Ti','Ti','Ti','The gas temperature at the input of the CS.','Температура газа на входе КС.','Температура газу на вході КС.',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('PT0503','','PT0503','PT0503','PT0503','The gas pressure in the separator С1',' ','Тиск газу у сепараторі С1',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('КШ7','','KSH7','Кран КШ7','КШ7','The control block of the ball valve KSH7','Блок управления шарового крана КШ7','Блок керування шарового крану КШ7',1,'base.digitBlock');
-INSERT INTO "LogLevPrm_experiment" VALUES('F_PP1','','F_PP1','F PP1','F_PP1','Gas flow through the diaphragm PP1','Расход газа через диафрагму PP1','Витрати газу через діафрагму PP1',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('F_PP3','','F_PP3','F PP3','F PP3','Gas flow through the diaphragm PP3','Расход газа через диафрагму PP3','Витрати газу через діафрагму PP3',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('F_PP5','','F_PP5','F PP5','F_PP5','Gas flow through the diaphragm PP5',' ','Витрати газу через діафрагму PP5',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('P3','','P3','','P3','The gas pressure in the pipe to Glinsk','Давление в трубе на Глинск','Тиск газу у трубі на Глінск',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('P4','','P4','','P4','Pressure P4','Давление газа на диафрагме PP5','Тиск газу на діафрагмі PP5',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('Pi','','Pi','','Pi','The gas pressure at the input of the CS.','Давление газа на входе КС.','Тиск газу на вході у КС.',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('Ti','','Ti','','Ti','The gas temperature at the input of the CS.','Температура газа на входе КС.','Температура газу на вході КС.',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('PT0503','','PT0503','','PT0503','The gas pressure in the separator С1','Давление газа в сепараторе С1','Тиск газу у сепараторі С1',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('КШ7','','KSH7','КШ7','КШ7','The control block of the ball valve KSH7','Блок управления шарового крана КШ7','Блок керування кульовим краном КШ7',1,'base.digitBlock');
+INSERT INTO "LogLevPrm_experiment" VALUES('F_PP1','','F_PP1','','F_PP1','Gas flow through the diaphragm PP1','Расход через диафрагму PP1','Витрати газу через діафрагму PP1',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('F_PP3','','F_PP3','','F_PP3','Gas flow through the diaphragm PP3','Расход газа через диафрагму PP3','Витрати газу через діафрагму PP3',1,'base.anUnif');
+INSERT INTO "LogLevPrm_experiment" VALUES('F_PP5','','F_PP5','','F_PP5','Gas flow through the diaphragm PP5','Расход через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('gN1','','Account node 1','Узел учёта 1','Вузол обліку 1',' ',' ',' ',1,'base.gasPoint');
 CREATE TABLE 'DAQ_OPC_UA' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"SYNCPER" DOUBLE DEFAULT '60' ,"EndPoint" TEXT DEFAULT 'opc.tcp://localhost' ,"SecPolicy" TEXT DEFAULT 'None' ,"SecMessMode" INTEGER DEFAULT '1' ,"Cert" TEXT DEFAULT '' ,"PvKey" TEXT DEFAULT '' ,"AuthUser" TEXT DEFAULT '' ,"AuthPass" TEXT DEFAULT '' ,"AttrsLimit" INTEGER DEFAULT '100' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_OPC_UA" VALUES('test','','','','','','',1,1,3,0,'<high>','OPC_UA_Prm_test','1',0,60.0,'opc.tcp://127.0.0.1:4841/OSCADA_OPC/None','None',1,'-----BEGIN CERTIFICATE-----
@@ -2538,10 +2528,10 @@ CREATE TABLE 'DAQ_ModBus' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAM
 INSERT INTO "DAQ_ModBus" VALUES('testRTU','','','','','','',1,0,3,0,'<high>','ModBusPrm_testRTU','','1',0,'RTU','Serial.testModBus',1,1,0,0,0,30,1,200);
 INSERT INTO "DAQ_ModBus" VALUES('testTCP','','','','','','',1,1,3,0,'<high>','ModBusPrm_testTCP','','1',0,'TCP','Sockets.testModBus',1,1,0,0,0,30,3,200);
 CREATE TABLE 'DAQ_DAQGate' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"TM_REST" INTEGER DEFAULT '30' ,"TM_REST_DT" DOUBLE DEFAULT '1' ,"GATH_MESS_LEV" INTEGER DEFAULT '1' ,"SYNCPER" DOUBLE DEFAULT '0' ,"STATIONS" TEXT DEFAULT '' ,"CNTRPRM" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "DAQ_DAQGate" VALUES('test','Test','Тест','Test',' ',' ',' ',1,1,3,0,'<high>','DAQGatePrm_test',0,'1',0,30,1.0,1,60.0,'loop','System.AutoDA
+INSERT INTO "DAQ_DAQGate" VALUES('test','Test','Тест','Тест',' ',' ',' ',1,1,3,0,'<high>','DAQGatePrm_test',0,'1',0,30,1.0,1,60.0,'loop','System.AutoDA
 ModBus.testTCP.test');
 CREATE TABLE 'DAQGatePrm_test' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM_ADDR" TEXT DEFAULT '' ,"ATTRS" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
-INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load :0','Нагрузка процессора: 0','Навантаження CPU: 0','','','',1,'System/AutoDA/prm_CPU0Load','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load: 0','Нагрузка процессора: 0','Навантаження CPU: 0','','','',1,'System/AutoDA/prm_CPU0Load','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2552,7 +2542,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('CPU0Load','','CPU Load :0','Нагрузк
 <a id="idle" nm="Idle (%)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load :1','Нагрузка процессора: 1','Навантаження CPU: 1','','','',1,'System/AutoDA/prm_CPU1Load','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load: 1','Нагрузка процессора: 1','Навантаження CPU: 1','','','',1,'System/AutoDA/prm_CPU1Load','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2563,7 +2553,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('CPU1Load','','CPU Load :1','Нагрузк
 <a id="idle" nm="Idle (%)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('CPULoad','','Full CPU Load','Общая нагрузка процессора','Повне навантаження CPU','','','',1,'System/AutoDA/prm_CPULoad','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('CPULoad','','Full CPU Load','Общая нагрузка процессора','Повне навантаження процесору','','','',1,'System/AutoDA/prm_CPULoad','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2642,7 +2632,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('SensorsData','','Data sensors','Данны
 <a id="k8temp_temp4" nm="k8temp temp4" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HD statistic: sda','Статистика НЖМД: sda','Статистика НЖМД: sda','','','',1,'System/AutoDA/prm_Statistic_sda','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HDD statistic: sda','Статистика НЖМД: sda','Статистика НЖМД: sda','','','',1,'System/AutoDA/prm_Statistic_sda','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2653,7 +2643,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda','','HD statistic: sda','С�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HD statistic: sda1','Статистика НЖМД: sda1','Статистика НЖМД: sda1','','','',1,'System/AutoDA/prm_Statistic_sda1','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HDD statistic: sda1','Статистика НЖМД: sda1','Статистика НЖМД: sda1','','','',1,'System/AutoDA/prm_Statistic_sda1','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2664,7 +2654,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda1','','HD statistic: sda1','�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HDD statistic: sda2','Статистика НЖМД: sda2','Статистика НЖМД: sda2','','','',1,'System/AutoDA/prm_Statistic_sda2','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2675,7 +2665,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda2','','HD statistic: sda2','�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda5','','HD statistic: sda5','Статистика НЖМД: sda5','Статистика НЖМД: sda5','','','',1,'System/AutoDA/prm_Statistic_sda5','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda5','','HDD statistic: sda5','Статистика НЖМД: sda5','Статистика НЖМД: sda5','','','',1,'System/AutoDA/prm_Statistic_sda5','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2686,7 +2676,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda5','','HD statistic: sda5','�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda6','','HD statistic: sda6','Статистика НЖМД: sda6','Статистика НЖМД: sda6','','','',1,'System/AutoDA/prm_Statistic_sda6','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda6','','HDD statistic: sda6','Статистика НЖМД: sda6','Статистика НЖМД: sda6','','','',1,'System/AutoDA/prm_Statistic_sda6','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2697,7 +2687,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda6','','HD statistic: sda6','�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda7','','HD statistic: sda7','Статистика НЖМД: sda7','Статистика НЖМД: sda7','','','',1,'System/AutoDA/prm_Statistic_sda7','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda7','','HDD statistic: sda7','Статистика НЖМД: sda7','Статистика НЖМД: sda7','','','',1,'System/AutoDA/prm_Statistic_sda7','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2708,7 +2698,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda7','','HD statistic: sda7','�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda8','','HD statistic: sda8','Статистика НЖМД: sda8','Статистика НЖМД: sda8','','','',1,'System/AutoDA/prm_Statistic_sda8','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda8','','HDD statistic: sda8','Статистика НЖМД: sda8','Статистика НЖМД: sda8','','','',1,'System/AutoDA/prm_Statistic_sda8','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
@@ -2719,7 +2709,7 @@ INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda8','','HD statistic: sda8','�
 <a id="wrSp" nm="Write speed (B/s)" tp="4" flg="772" />
 </Attrs>
 ');
-INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda9','','HD statistic: sda9','Статистика НЖМД: sda9','Статистика НЖМД: sda9','','','',1,'System/AutoDA/prm_Statistic_sda9','<Attrs>
+INSERT INTO "DAQGatePrm_test" VALUES('Statistic_sda9','','HDD statistic: sda9','Статистика НЖМД: sda9','Статистика НЖМД: sda9','','','',1,'System/AutoDA/prm_Statistic_sda9','<Attrs>
 <a id="SHIFR" nm="ID" tp="5" flg="772" />
 <a id="OWNER" nm="Owner" tp="5" flg="772" />
 <a id="NAME" nm="Name" tp="5" flg="768" />
