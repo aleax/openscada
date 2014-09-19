@@ -199,7 +199,7 @@ string TMess::translGet( const string &base, const string &src )
 		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
 		    req.cfg("base").setS(base);
 		}
-		if(SYS->db().at().dataGet(*iA+"."+translUApiTbl(),"/"mess_TrUApiTbl,req,false,true)) {
+		if(SYS->db().at().dataGet(*iA+"."mess_TrUApiTbl,"/"mess_TrUApiTbl,req,false,true)) {
 		    rez = req.cfg(tStrVl).getS();
 		    break;
 		}
