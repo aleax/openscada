@@ -33,6 +33,7 @@
 
 #define _(mess) Mess->I18N(mess)
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
+#define mess_TrUApiTbl	"Trs"
 
 #define mess_lev( )			Mess->messLevel()
 //Limited to mess_lev() messages
@@ -126,12 +127,15 @@ class TMess
 	// Internal messages translations
 	bool translEn( )	{ return mTranslEn; }
 	string translLangs( )	{ return mTranslLangs; }
+	string translFld( const string &lng, const string &fld, bool isCfg = false );
 	void setTranslEn( bool vl, bool passive = false );
 	void setTranslLangs( const string &vl )	{ mTranslLangs = vl; }
 
-	string translFld( const string &lng, const string &fld, bool isCfg = false );
-
-	//  Register translation. Src format: "{MDB}.{DB}.{TBL}:{TrFld}"
+	string translGet( const string &base, const string &src = "" );
+	//  Register translations. Source format:
+	//    for DB: "db:{MDB}.{DB}.{TBL}#{TrFld}"
+	//    for <cfg>: "cfg:{ObjPath}/{TBL}#{TrFld}"
+	//    for UserAPI table: "uapi:{DB}"
 	void translReg( const string &mess, const string &src, const string &prms = "" );
 
 	// Often used, generic text messages
@@ -141,6 +145,16 @@ class TMess
 	static const char *labTaskPrior( );
 
     private:
+	//Data
+	class CacheEl
+	{
+	    public:
+		CacheEl( const string &ival, time_t itm = 0 ) : tm(itm), val(ival)	{ }
+		CacheEl( ) : tm(0)	{ }
+		time_t	tm;
+		string	val;
+	};
+
 	//Methods
 	void putArg( const char *categ, int8_t level, const char *fmt, va_list ap );
 
@@ -159,7 +173,8 @@ class TMess
 	vector<string>		selectDebugCats;
 
 	string	mTranslLangs;
-	map<string, map<string,string> > builtMessIdx;
+	map<string, map<string,string> > trMessIdx;
+	map<string, CacheEl>	trMessCache;
 
 	pthread_mutex_t	mRes;
 };

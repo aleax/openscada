@@ -124,7 +124,7 @@ class TestDB : public TFunction
 		bd_cfg.cfg("reqKey").setS("reqNew0",TCfg::ForceUse);
 		bd_cfg.cfg("reqVal").setS("Request new 0 value",TCfg::ForceUse);
 		tbl.at().fieldSet(bd_cfg);
-		mod->mess(id(),_("Updated %d records, by request key, for time %f sec."),experem,1e-6*(TSYS::curTime()-ctime));
+		mod->mess(id(),_("Updated %d records, by request key, for time %f sec."),experem/2,1e-6*(TSYS::curTime()-ctime));
 		bd_cfg.cfg("reqKey").setReqKey(false);
 		bd_cfg.cfg("reqKey").setKeyUpdt(false);
 		bd_cfg.cfgViewAll(true);

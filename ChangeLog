@@ -1,7 +1,20 @@
+2014-09-19 Roman
+- SYS: MMS module build is added to RPM packages spec-file openscada_mod.spec.
+- !!!!:LibsDB.{OscadaLibs,vcaBase}.db: DAQ templates base.{anUnif,anUnifSt} and widget Main.ElCadr adapted as example-test
+    to the included procedire's transaltion by new User API function tr() and the dynamic translation.
+- SYS: Translations next expands:
+    !!!!:DAQ.JavaLikeCalc: Built-in user API function tr() is added for call to translation of base constant string.
+    TFunction,DAQ.{TPrmTmpl,JavaLikeCalc,ModBus},Protocol.UserProtocol,UI.VCAEngine: expanded by storage property for DB place by table "Trs" obtain.
+    Translation API exanded function TMess::translGet() for translated to base message obtain, for now only for User API procedure's messages by tr().
+- DB: Object TBD expanded function fullDBName().
+    DB.*: Expanded by new DB's structure flag incomplTblStruct() for prevent remove collumns and only new append.
+    FIX:SQLite: DEFAULT twice wrapping to quotes '', on rereading the from table structure is fixed.
+
+
 2014-09-12 Roman
 - !!!!:LibsDB.{OscadaLibs,vcaBase,vcaTest}.db,AGLKS.{St,Model,vca}.db,Boiler.{St,Model}.db:
     Translations mostly updated and fixed by new Translations manager help.
-- SYS: Translations manager expands:
+- SYS: Translations expands:
 	DB.*: Translated field name moved to the source address by view "{Addr}#{FLD}" for embrase different translations from single table.
 	translFltr() store moved direct to SYS table.
 	"Check unmatch" flag is added and GET request mostly rewrote for enable/disable the too high-loaded operation.

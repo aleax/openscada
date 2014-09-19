@@ -96,7 +96,7 @@ class TFunction : public TCntrNode
 {
     public:
 	//Methods
-	TFunction( const string &id, const char *grp = "root" );
+	TFunction( const string &id, const char *grp = "root", const string &stor = "" );
 	virtual ~TFunction( );
 
 	TFunction &operator=( TFunction &func );
@@ -104,14 +104,16 @@ class TFunction : public TCntrNode
 	string	id( )			{ return mId.c_str(); };
 	virtual string name( )		{ return ""; }
 	virtual string descr( )		{ return ""; }
+	virtual string stor( )		{ return mStor; }
 	bool startStat( )		{ return run_st; }
 	int use( )			{ return used.size(); }
 	Res &fRes( )			{ return f_res; }
 
 	void setId( const string &vl );
-	virtual void setStart( bool val ) { run_st = val; }
+	void setStor( const string &istor )	{ mStor = istor; }
+	virtual void setStart( bool val )	{ run_st = val; }
 
-	//> IO
+	// IO
 	void ioList( vector<string> &list );
 	int ioId( const string &id );
 	int ioSize( );
@@ -139,10 +141,11 @@ class TFunction : public TCntrNode
 	void preDisable( int flag );
 
 	//Attributes
-	string		mId;
+	string		mId,
+			mStor;			//Link to storage
 	bool		run_st, be_start;
 	TValFunc	*mTVal;
-	vector<TValFunc*>	used;
+	vector<TValFunc*> used;
 	const char	*grp;
 
     private:
@@ -163,11 +166,12 @@ class TValFunc
 
 	string user( )				{ return mUser; }
 	const string &vfName( )			{ return mName; }
+
 	bool blk( )				{ return mBlk; }
 	bool mdfChk( )				{ return mMdfChk; }
-
 	void setUser( const string &iuser )	{ mUser = iuser; }
 	void setVfName( const string &inm )	{ mName = inm; }
+
 	void setMdfChk( bool set );
 
 	void ioList( vector<string> &list );

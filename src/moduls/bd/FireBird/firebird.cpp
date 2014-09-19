@@ -441,8 +441,8 @@ MTable::MTable( string inm, MBD *iown, bool create ) : TTable(inm)
     if(create) {
 	string req = "EXECUTE BLOCK AS BEGIN "
 	    "if (not exists(select 1 from rdb$relations where rdb$relation_name = '" + mod->sqlReqCode(name()) + "')) then "
-	    "execute statement 'create table \"" + mod->sqlReqCode(name(),'"') + "\" ( name VARCHAR(20) NOT NULL, "
-	    "CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\" PRIMARY KEY(name) )'; END";
+	    "execute statement 'create table \"" + mod->sqlReqCode(name(),'"') + "\" (\"<<empty>>\" VARCHAR(20) NOT NULL, "
+	    "CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\" PRIMARY KEY(\"<<empty>>\") )'; END";
 	owner().sqlReq(req);
     }
 
@@ -452,6 +452,8 @@ MTable::MTable( string inm, MBD *iown, bool create ) : TTable(inm)
 }
 
 MTable::~MTable( )	{ }
+
+bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>>"; }
 
 void MTable::postDisable( int flag )
 {
@@ -771,15 +773,15 @@ void MTable::fieldFix( TConfig &cfg )
     vector<string> cf_el;
     cfg.cfgList(cf_el);
 
-    bool reqMode = cfg.reqKeys(),	//Request mode: only for append no present fields
+    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
 	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Prepare request for fix structure
     string req = "ALTER TABLE \"" + mod->sqlReqCode(name(),'"') + "\" ";
-    if(!reqMode) req += "DROP CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\", ";
+    if(!appMode) req += "DROP CONSTRAINT \"pk_" + mod->sqlReqCode(name(),'"') + "\", ";
 
     //DROP fields
-    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size() && !reqMode; i_fld++) {
+    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size() && !appMode; i_fld++) {
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][0] ||
 		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 &&
@@ -816,7 +818,7 @@ void MTable::fieldFix( TConfig &cfg )
     for(unsigned i_cf = 0, i_fld; i_cf < cf_el.size(); i_cf++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 	// Check primary key
-	if(u_cfg.fld().flg()&TCfg::Key && !reqMode) {
+	if(u_cfg.fld().flg()&TCfg::Key && !appMode) {
 	    pr_keys += (next_key?",\"":"\"") + mod->sqlReqCode(u_cfg.name(),'"') + "\"";
 	    next_key = true;
 	}

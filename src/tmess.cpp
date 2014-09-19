@@ -29,6 +29,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <algorithm>
+
 #include "tsys.h"
 #include "resalloc.h"
 #include "tmess.h"
@@ -168,15 +170,74 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const stri
     if(mLogDir & DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
 }
 
+string TMess::translGet( const string &base, const string &src )
+{
+    string rez;
+
+    MtxAlloc res(Mess->mRes, true);
+    //Request from cache at first
+    map<string,CacheEl>::iterator itr = trMessCache.find(base);
+    if(itr != trMessCache.end()) { itr->second.tm = SYS->sysTm(); rez = itr->second.val; }
+    else {
+	//Request to data source direct
+	if(src.compare(0,5,"uapi:") == 0) { // Check/Get/Place from user API translations table
+	    string srcAddrs = src.substr(5), tStrVl;
+	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
+
+	    TConfig req;
+	    req.setIncmplTblStrct(true);
+	    int8_t isCfg = -1;
+
+	    vector<string> addrs;
+	    for(int off = 0; (tStrVl=TSYS::strParse(srcAddrs,0,";",&off)).size(); ) addrs.push_back(tStrVl);
+	    for(vector<string>::reverse_iterator iA = addrs.rbegin(); iA != addrs.rend(); ++iA) {
+		tStrVl = translFld(lang2Code(), "base", (isCfg==1));
+		if(isCfg != (*iA==DB_CFG)) {
+		    isCfg = (*iA==DB_CFG) ? 1 : 0;
+		    req.elem().fldClear();
+		    req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
+		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
+		    req.cfg("base").setS(base);
+		}
+		if(SYS->db().at().dataGet(*iA+"."+translUApiTbl(),"/"mess_TrUApiTbl,req,false,true)) {
+		    rez = req.cfg(tStrVl).getS();
+		    break;
+		}
+		// Create new record into the translation table of the data source
+		else if((iA+1) == addrs.rend() && lang2CodeBase().size()) {
+		    if(lang2CodeBase() == lang2Code())	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
+		    SYS->db().at().dataSet(*iA+"."mess_TrUApiTbl, "/"mess_TrUApiTbl, req, false, true);
+		}
+	    }
+	    trMessCache[base] = CacheEl(rez, SYS->sysTm());
+	}
+
+	//Cache data and limit update
+	if(trMessCache.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+	    vector< pair<time_t,string> > sortQueue;
+	    for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
+		sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
+	    sort(sortQueue.begin(), sortQueue.end());
+	    for(unsigned i_del = 0; i_del < (STD_CACHE_LIM/10); ++i_del) trMessCache.erase(sortQueue[i_del].second);
+	}
+    }
+
+    return rez.empty() ? base : rez;
+}
+
 void TMess::setTranslEn( bool vl, bool passive )
 {
     if(vl == mTranslEn || mTranslSet) return;
     mTranslSet = true;
     mTranslEn = vl;
     if(!passive) {
-	if(vl) SYS->load(true);
-	else builtMessIdx.clear();
+	if(vl) {
+	    SYS->load(true);		//Built messages load
+	    translReg("", "uapi:");	//User API messages load
+	}
+	else trMessIdx.clear();
     }
+
     mTranslSet = false;
 
     SYS->modif();
@@ -184,10 +245,33 @@ void TMess::setTranslEn( bool vl, bool passive )
 
 void TMess::translReg( const string &mess, const string &src, const string &prms )
 {
-    if(!translEn() || TSYS::strNoSpace(mess).empty()) return;
+    if(!translEn()) return;
 
-    MtxAlloc res(Mess->mRes, true);
-    builtMessIdx[mess][src] = prms;
+    if(src.compare(0,5,"uapi:") == 0) {
+	vector<string> ls;
+	if(src.size() > 5) ls.push_back(src.substr(5));
+	else {
+	    SYS->db().at().dbList(ls);
+	    ls.push_back("<cfg>");
+	}
+
+	TConfig req;
+	req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
+
+	MtxAlloc res(Mess->mRes, true);
+	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
+	    if(ls[i_l] == DB_CFG)
+		for(int io_cnt = 0; SYS->db().at().dataSeek("","/"mess_TrUApiTbl,io_cnt++,req); )
+		    trMessIdx[req.cfg("base").getS()]["cfg:/"mess_TrUApiTbl] = prms;
+	    else
+		for(int io_cnt = 0; SYS->db().at().dataSeek(ls[i_l]+"."mess_TrUApiTbl,"",io_cnt++,req); )
+		    trMessIdx[req.cfg("base").getS()]["db:"+ls[i_l]+"."mess_TrUApiTbl"#base"] = prms;
+    }
+    else {
+	if(TSYS::strNoSpace(mess).empty()) return;
+	MtxAlloc res(Mess->mRes, true);
+	trMessIdx[mess][src] = prms;
+    }
 }
 
 string TMess::translFld( const string &lng, const string &fld, bool isCfg )

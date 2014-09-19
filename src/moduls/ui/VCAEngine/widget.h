@@ -167,6 +167,7 @@ class Widget : public TCntrNode
 	virtual string calcId( );				//Compile function identifier
 	virtual string calcLang( )	{ return ""; }		//Calc procedure language
 	virtual string calcProg( )	{ return ""; }		//Calc procedure
+	virtual string calcProgStors( const string &attr = "" )	{ return ""; }	//Storages get
 	virtual int    calcPer( )	{ return -1; }		//Calc widget period. 0 value talk for calc on session period.
 	virtual bool   isContainer( );				//Is container (Is define of the terminator)
 	virtual bool   isLink( )	{ return m_lnk; }	//Widget as link
@@ -221,7 +222,7 @@ class Widget : public TCntrNode
 	virtual AutoHD<Widget> wdgAt( const string &wdg, int lev = -1, int off = 0 );
 
 	// Data access
-	virtual void resourceList( vector<string> &ls )				{ }
+	virtual void resourceList( vector<string> &ls )	{ }
 	virtual string resourceGet( const string &id, string *mime = NULL )	{ return ""; }
 
 	// Context helps

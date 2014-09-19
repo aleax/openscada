@@ -98,6 +98,7 @@ class Node : public TFunction, public TConfig
 	string id( )		{ return mId; }
 	string name( );
 	string descr( )		{ return mDscr; }
+	string stor( )		{ return DB(); }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
 	int addr( );

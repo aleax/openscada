@@ -16448,109 +16448,6 @@ INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','close','Parameter:command - "Cl
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Zadvizhka','close','Parameter:command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр:команда - "Закрити"','','','Параметр:команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Zadvizhka','close','Parameter:command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр:команда - "Закрити"','','','Параметр:команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','stop','Parameter:command - "Stop"',131072,'0||',14,'Parameter|stop','','','Параметр:команда - "Стоп"','','','Параметр:команда - "Стоп"','','','','');
-CREATE TABLE 'prj_tmplSO_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc0','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:10:33<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc1','<body><i>Программа: </i>Библ1/Прог1<br/>
-<i>Запущено: </i>2013-07-29 18:37:31<br/>
-<i>Статус: </i>Успешное завершение<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Комментарии</th><th>Время</th></tr>
-<tr class=''pass''><td>0</td><td>Таймер</td><td>Ожидание 12с истекло</td><td>0:00:00</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','aCur','4');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc2','<body><i>Программа: </i>Тест<br/>
-<i>Запущено: </i>2013-09-10 15:42:27<br/>
-<i>Статус: </i>Прерван<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Комментарии</th><th>Время</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Программа прервана</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td>Время (с) = 15; </td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Время (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc3','<body><i>Program: </i>Библ1/Прог1<br/>
-<i>Started: </i>2013-11-15 10:42:55<br/>
-<i>Status: </i>Terminated<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>#</th><th>Command</th><th>Comments</th><th>Time</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc4','<body><i>Program: </i><br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>#</th><th>Command</th><th>Comments</th><th>Time</th></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc5','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:09:49<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc6','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:09:53<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc7','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:09:55<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc8','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:09:58<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc9','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:10:04<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc10','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:08:14<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc11','<body><i>Програма: </i>Тест<br/>
-<i>Запущено: </i>2013-06-26 20:08:56<br/>
-<i>Стан: </i>Перервано<br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>№</th><th>Команда</th><th>Коментарі</th><th>Час</th></tr>
-<tr class=''err''><td>0</td><td>Таймер</td><td>Програму перервано</td><td>0:00:00</td></tr>
-<tr><td>1</td><td>Фоновый таймер</td><td></td><td>---</td></tr>
-<tr><td>2</td><td>Таймер</td><td>Час (с) = 20; </td><td>---</td></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so','0geomX','0');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so','0geomY','0');
 CREATE TABLE 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main" VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -16584,514 +16481,184 @@ cntr++;
 if(!prmColor.isEVal()) { bordColor = prmColor; bordWidth = 2; }
 else { bordColor = "black"; bordWidth = 1; } 
 
-//> Disable all mutable widgets
+//Disable all mutable widgets
 info_ed_en = info_var_en = info_sp_en = info_out_en = spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = lev_out_en = lev_var_en = lev_sp_en = mode_en = modMan_en = modAuto_en =
-    modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
-    com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
+	modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
+	com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
 
 info_name_text = prmShifr.isEVal() ? "" : prmShifr;
 
-//>Impulse processing
-if(!prmAnalog.isEVal() && prmAnalog == false)
-{
-  lev_out_en = info_out_en = false; 
-  moveUp_en = moveDwn_en = true; 
-  moveUp_fillColor = (!prmImpQupTm.isEVal() && prmImpQupTm) ? "cyan" : "black-0"; 
-  moveDwn_fillColor = (!prmImpQdwnTm.isEVal() && prmImpQdwnTm) ? "cyan" : "black-0"; 
+//Impulse processing
+if(!prmAnalog.isEVal() && prmAnalog == false) {
+	lev_out_en = info_out_en = false; 
+	moveUp_en = moveDwn_en = true; 
+	moveUp_fillColor = (!prmImpQupTm.isEVal() && prmImpQupTm) ? "cyan" : "black-0"; 
+	moveDwn_fillColor = (!prmImpQdwnTm.isEVal() && prmImpQdwnTm) ? "cyan" : "black-0"; 
 }
 
-//> Check for analog
-if(!prmVar.isEVal() || !prmVarIn.isEVal())
-{
-  info_ed_en = info_var_en = lev_var_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = true;
-  info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
-  pVar = prmVar.isEVal() ? prmVarIn : prmVar;
-  if(prmVarIn.isEVal()) info_var_bordWidth = 0;
-  if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
-  lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
+//Check for analog
+if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
+	info_ed_en = info_var_en = lev_var_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = true;
+	info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
+	pVar = prmVar.isEVal() ? prmVarIn : prmVar;
+	if(prmVarIn.isEVal()) info_var_bordWidth = 0;
+	if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
+	lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
 	if(prmPrec.isEVal())	info_var_arg0cfg = "10;f;2";
 	else if(prmPrec >= 0)	info_var_arg0cfg = "10;f;"+prmPrec;
 	else	info_var_arg0cfg = "10;g;"+abs(prmPrec);
 
-  info_var_color = lev_var_c3 = "#3EFF3E";
-  //> Warning borders process
-  if(!prmWMin.isEVal() && !prmWMax.isEVal() && prmWMax > prmWMin)
-  {
-    lev_var_c2 = "yellow";
-    lev_var_p6y = lev_var_p7y = 140*(1-(prmWMax-min)/(max-min));
-    lev_var_p8y = lev_var_p9y = 140*(1-(prmWMin-min)/(max-min));
-    if(pVar >= prmWMax || pVar <= prmWMin) info_var_color = lev_var_c3 = "yellow";
-  }
-  else lev_var_c2 = "black-0";
-  //> Alarm borders process
-  if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin)
-  {
-    lev_var_c1 = "red";
-    lev_var_p2y = lev_var_p3y = 140*(1-(prmAMax-min)/(max-min));
-    lev_var_p4y = lev_var_p5y = 140*(1-(prmAMin-min)/(max-min));
-    if( pVar >= prmAMax || pVar <= prmAMin ) info_var_color = lev_var_c3 = "red";
-  }
-  else lev_var_c1 = "black-0";
-  //> EVAL
-  if(pVar > max || pVar < min) info_var_color = lev_var_c3 = "lightgray";
-
-  //>>Check an process PID regulator
-  if(!prmVar.isEVal() && !prmSp.isEVal())
-  {
-    lev_out_en = info_out_en = !prmOut.isEVal() && (prmAnalog.isEVal() || prmAnalog == true);
-    info_sp_en = lev_sp_en = mode_en = modMan_en = modAuto_en = pnl_pid_en = true;
-
-    modCasc_en = !prmCasc.isEVal();
-    spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
-    lev_out_p1y = 140*(1-prmOut/100);
-    lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
-    if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
-		if(prmPrec.isEVal())	info_sp_arg0cfg = "10;f;2";
-		else if(prmPrec >= 0)	info_sp_arg0cfg = "10;f;"+prmPrec;
-		else info_sp_arg0cfg = "10;g;"+abs(prmPrec);
-
-    if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
-    appToVl = 0;
-
-    //Event process
-    while(true)
-    {
-      ev_wrk = strParse(event,0,"\n",off);
-      if(ev_wrk == "") break;
-      prevMode = prmAuto ? ((prmCasc==true)?"Cascad":"Automat") : "Manual";      
-      if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) 
-      {  
-        prmAuto = false; if(prmCasc==true) prmCasc = false;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Mode: "+prmDescr+" : "+prevMode+" : Manual");
-      }
-      else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) 
-      {  
-        prmAuto = true; if(prmCasc==true) prmCasc = false;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Mode : "+prmDescr+" : "+prevMode+" : Automat");
-      }
-      else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) 
-      {  
-        prmAuto = prmCasc = true;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Mode : "+prmDescr+" : "+prevMode+" : Cascad");
-      }
-      else if(ev_wrk == "key_mousePresLeft:/info_sp")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Setpoint : "+prmDescr+" : "+real2str(prmSp,abs(prmPrec))+" : "+real2str(info_sp_arg0val,abs(prmPrec)) );
-        prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
-      }
-      else if(ev_wrk == "key_mousePresLeft:/info_out")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Output : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1) );
-        prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
-      }
-      else if(ev_wrk == "ws_BtPress:/spToVar")
-      {
-        info_sp_arg0val = info_var_arg0val;
-        info_sp_backColor = "darkslategray";
-        info_sp_clearCnt = 25;
-      }
-      else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-      else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-      else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-      else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-      else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-      else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-      else if(ev_wrk == "ws_BtPress:/pnl_pid")
-      {
-        sessNm = strParsePath(path,0);
-        pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
-        if( vcaNodePresent(pidPg) ) vcaAttrSet(pidPg+"/a_pgOpen",1);
-        else ev_rez+= "usr_PidCntrCall\n"; 
-      } 
-      else ev_rez+=ev_wrk+"\n";
-    }
-    event = ev_rez;
-
-		if(appToVl && (prmAuto || prmOut.isEVal()))
-		{
-			if(prmPrec.isEVal())	newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else
-			{
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_sp_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
-			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
-		}
-    else if(appToVl && !prmAuto)
-    {
-       if(prmAnalog==false)
-       {
-         prmManIn = 50+2.5*appToVl;
-         if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Output: "+prmDescr+" :: Close ( < )");
-         else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Output: "+prmDescr+" :: Open ( > )");
-         else if(appToVl == -10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Output: "+prmDescr+" :: Close ( << )");
-         else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Output: "+prmDescr+" :: Open ( >> )");
-       }
-       else
-       {
-         newVl = max(0,min(100,info_out_arg0val+appToVl));
-         info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
-      }
-    }
-
-    if(prmAuto && prmCasc) { mode_text = "Cascad"; info_sp_bordWidth = info_out_bordWidth = 0; }
-    else if(prmAuto)
-    {
-      mode_text = "Automat";
-      info_sp_bordWidth = 1; info_out_bordWidth = 0;
-    }
-    else
-    {
-      mode_text = "Manual";
-      info_out_bordWidth = 1; info_sp_bordWidth = prmOut.isEVal() ? 1 : 0;
-    }
-  }
-  //>> Manual variable input
-  else if(!prmVarIn.isEVal())
-  {
-    up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = true;
-    info_var_bordWidth = 1;
-    appToVl = 0;
-
-    //Event process
-    while(true)
-    {
-      ev_wrk = strParse(event,0,"\n",off);
-      if(ev_wrk == "") break;
-      else if(ev_wrk == "key_mousePresLeft:/info_var")
-      {
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Variable : "+prmDescr+" : "+real2str(prmVarIn,abs(prmPrec))+" : "+real2str(info_var_arg0val,abs(prmPrec)));
-        prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
-      }
-      else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-      else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-      else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-      else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-      else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-      else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-      else ev_rez += ev_wrk + "\n";
-    }
-    event = ev_rez;
-
-		if(appToVl)
-		{
-			if(prmPrec.isEVal()) newVl = ((info_var_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else
-			{
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_var_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
-			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_var_arg0val = newVl; info_var_backColor = "darkslategray"; info_var_clearCnt = 25;
-		}
+	info_var_color = lev_var_c3 = "#3EFF3E";
+	//Warning borders process
+	if(!prmWMin.isEVal() && !prmWMax.isEVal() && prmWMax > prmWMin) {
+		lev_var_c2 = "yellow";
+		lev_var_p6y = lev_var_p7y = 140*(1-(prmWMax-min)/(max-min));
+		lev_var_p8y = lev_var_p9y = 140*(1-(prmWMin-min)/(max-min));
+		if(pVar >= prmWMax || pVar <= prmWMin) info_var_color = lev_var_c3 = "yellow";
 	}
-}
-else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmCloseSt.isEVal())
-{
-  Ramka_en = true;
-  com_open_en = com_close_en = (!prmCom.isEVal() || !prmClose.isEVal());
-  st_open_en = st_close_en = (!prmOpenSt.isEVal() || !prmCloseSt.isEVal());
-  com_stop_en = !prmStop.isEVal();
+	else lev_var_c2 = "black-0";
+	//Alarm borders process
+	if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) {
+		lev_var_c1 = "red";
+		lev_var_p2y = lev_var_p3y = 140*(1-(prmAMax-min)/(max-min));
+		lev_var_p4y = lev_var_p5y = 140*(1-(prmAMin-min)/(max-min));
+		if( pVar >= prmAMax || pVar <= prmAMin ) info_var_color = lev_var_c3 = "red";
+	}
+	else lev_var_c1 = "black-0";
 
-  if(com_open_en)
-  {
-    com_open_name = !digComs.isEVal() ? strParse(strParse(digComs,0,";"),0,"-") : "OPEN";
-    com_open_color = (strParse(strParse(digComs,0,";"),1,"-") != "") ? strParse(strParse(digComs,0,";"),1,"-") : "green";
-    com_open_tipTool = !digComs.isEVal() ? "Command "+strParse(strParse(digComs,0,";"),0,"-") : "Command OPEN";
-    com_open_tipStatus = !digComs.isEVal() ? "Press for "+strParse(strParse(digComs,0,";"),0,"-") : "Press for OPEN";
-    com_open_en = com_open_name.length;
-  }
-  if(com_close_en)
-  {
-    com_close_name  = !digComs.isEVal() ? strParse(strParse(digComs,1,";"),0,"-") : "CLOSE";
-    com_close_color = (strParse(strParse(digComs,1,";"),1,"-") != "") ? strParse(strParse(digComs,1,";"),1,"-") : "red";
-    com_close_tipTool = !digComs.isEVal() ? "Command "+strParse(strParse(digComs,1,";"),0,"-") : "Command CLOSE";
-    com_close_tipStatus = !digComs.isEVal() ? "Press for "+strParse(strParse(digComs,1,";"),0,"-") : "Press for CLOSE";
-    com_close_en = com_close_name.length;
-  }
-  if(com_stop_en)
-  { 
-    com_stop_name = com_close_tipTool = !digComs.isEVal() ? strParse(strParse(digComs,2,";"),0,"-") : "STOP";
-    com_stop_color = (strParse(strParse(digComs,2,";"),1,"-") != "") ? strParse(strParse(digComs,2,";"),1,"-") : "yellow";
-    com_close_tipTool = !digComs.isEVal() ? "Command "+strParse(strParse(digComs,2,";"),0,"-") : "Command STOP";
-    com_close_tipStatus = !digComs.isEVal() ? "Press for "+strParse(strParse(digComs,2,";"),0,"-") : "Press for STOP";
-    com_stop_en = com_stop_name.length;
-  }
-  if(st_open_en)
-  { 
-    st_open_text = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : "OPEN";
-    st_open_color = (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green";
-    st_open_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : "OPEN";
-    st_open_tipStatus = !digStts.isEVal() ? "State "+strParse(strParse(digStts,0,";"),0,"-") : "State OPEN";
-  }
-  if(st_close_en)
-  { 
-    st_close_text = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : "CLOSE";
-    st_close_color = (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red";
-    st_close_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : "CLOSE";
-    st_close_tipStatus = !digStts.isEVal() ? "State "+strParse(strParse(digStts,1,";"),0,"-") : "State CLOSE";
-  }
+	//EVAL
+	if(pVar > max || pVar < min) info_var_color = lev_var_c3 = "lightgray";
 
-  //Event process
-  while(true)
-  {
-    ev_wrk = strParse(event,0,"\n",off);
-    if(ev_wrk == "") break;
-    else if(ev_wrk == "ws_BtPress:/com_open")
-    {
-      if(!prmCom.isEVal()) prmCom = true; prmClose = false;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Command : "+prmDescr+" : : "+com_open_name);
-    }
-    else if(ev_wrk == "ws_BtPress:/com_close")
-    {
-      if(!prmClose.isEVal()) prmClose = true; prmCom = false;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Command : "+prmDescr+" : : "+com_close_name);
-    }
-    else if(ev_wrk == "ws_BtPress:/com_stop")
-    {
-      prmStop = true;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Command : "+prmDescr+" : : "+com_stop_name);
-    }
-    else ev_rez+=ev_wrk+"\n";
-  }
-  event=ev_rez;
+	// Check an process PID regulator
+	if(!prmVar.isEVal() && !prmSp.isEVal()) {
+		lev_out_en = info_out_en = !prmOut.isEVal() && (prmAnalog.isEVal() || prmAnalog == true);
+		info_sp_en = lev_sp_en = mode_en = modMan_en = modAuto_en = pnl_pid_en = true;
 
-  if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? ( prmOpenSt ?
-  	( (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green" ) :    
-  	"gray" ) : ( prmCloseSt ? "gray" : ( (strParse(strParse(digStts,0,";"),1,"-") != "") ?
-  	strParse(strParse(digStts,0,";"),1,"-") : "green" ) );
-
-  if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? ( prmCloseSt ?
-  	( (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red" ) :
-  	"gray") : ( prmOpenSt ? "gray" : ( (strParse(strParse(digStts,1,";"),1,"-") != "") ?
-  	strParse(strParse(digStts,1,";"),1,"-") : "red" ) );
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-ev_wrk = ev_rez = "";
-off = 0;
-if(f_start) cntr = prevCntr = holdCntr = 0;
-cntr++;
-
-if(!prmColor.isEVal()) { bordColor = prmColor; bordWidth = 2; }
-else { bordColor = "black"; bordWidth = 1; } 
-
-//> Disable all mutable widgets
-info_ed_en = info_var_en = info_sp_en = info_out_en = spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = lev_out_en = lev_var_en = lev_sp_en = mode_en = modMan_en = modAuto_en =
-    modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
-    com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
-
-info_name_text = prmShifr.isEVal() ? "" : prmShifr;
-
-//>Impulse processing
-if(!prmAnalog.isEVal() && prmAnalog == false)
-{
-  lev_out_en = info_out_en = false; 
-  moveUp_en = moveDwn_en = true; 
-  moveUp_fillColor = (!prmImpQupTm.isEVal() && prmImpQupTm) ? "cyan" : "black-0"; 
-  moveDwn_fillColor = (!prmImpQdwnTm.isEVal() && prmImpQdwnTm) ? "cyan" : "black-0"; 
-}
-
-//> Check for analog
-if(!prmVar.isEVal() || !prmVarIn.isEVal())
-{
-  info_ed_en = info_var_en = lev_var_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = true;
-  info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
-  pVar = prmVar.isEVal() ? prmVarIn : prmVar;
-  if(prmVarIn.isEVal()) info_var_bordWidth = 0;
-  if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
-  lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
-	if(prmPrec.isEVal())	info_var_arg0cfg = "10;f;2";
-	else if(prmPrec >= 0)	info_var_arg0cfg = "10;f;"+prmPrec;
-	else	info_var_arg0cfg = "10;g;"+abs(prmPrec);
-
-  info_var_color = lev_var_c3 = "#3EFF3E";
-  //> Warning borders process
-  if(!prmWMin.isEVal() && !prmWMax.isEVal() && prmWMax > prmWMin)
-  {
-    lev_var_c2 = "yellow";
-    lev_var_p6y = lev_var_p7y = 140*(1-(prmWMax-min)/(max-min));
-    lev_var_p8y = lev_var_p9y = 140*(1-(prmWMin-min)/(max-min));
-    if( pVar >= prmWMax || pVar <= prmWMin ) info_var_color = lev_var_c3 = "yellow";
-  }
-  else lev_var_c2 = "black-0";
-  //> Alarm borders process
-  if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin)
-  {
-    lev_var_c1 = "red";
-    lev_var_p2y = lev_var_p3y = 140*(1-(prmAMax-min)/(max-min));
-    lev_var_p4y = lev_var_p5y = 140*(1-(prmAMin-min)/(max-min));
-    if( pVar >= prmAMax || pVar <= prmAMin ) info_var_color = lev_var_c3 = "red";
-  }
-  else lev_var_c1 = "black-0";
-  //> EVAL
-  if(pVar > max || pVar < min) info_var_color = lev_var_c3 = "lightgray";
-
-  //>>Check an process PID regulator
-	if(!prmVar.isEVal() && !prmSp.isEVal())
-  {
-    lev_out_en = info_out_en = !prmOut.isEVal() && (prmAnalog.isEVal() || prmAnalog == true);
-    info_sp_en = lev_sp_en = mode_en = modMan_en = modAuto_en = pnl_pid_en = true;
-
-    modCasc_en = !prmCasc.isEVal(); 
-    spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
-    lev_out_p1y = 140*(1-prmOut/100);
-    lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
-    if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
+		modCasc_en = !prmCasc.isEVal();
+		spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
+		lev_out_p1y = 140*(1-prmOut/100);
+		lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
+		if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
 		if(prmPrec.isEVal())	info_sp_arg0cfg = "10;f;2";
 		else if(prmPrec >= 0)	info_sp_arg0cfg = "10;f;"+prmPrec;
 		else info_sp_arg0cfg = "10;g;"+abs(prmPrec);
 
-    if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
-    appToVl = 0;
+		if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
+		appToVl = 0;
 
-    //Event process
-    while(true)
-    {
-      ev_wrk = strParse(event,0,"\n",off);
-      if(ev_wrk == "") break;
-      prevMode = prmAuto ? ((prmCasc==true)?"Каскад":"Автомат") : "Ручной";
-      if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) 
-      {  
-        prmAuto = false; if(prmCasc==true) prmCasc = false;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Режим: "+prmDescr+" : "+prevMode+" : Ручной");
-      }
-      else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) 
-      {  
-        prmAuto = true; if(prmCasc==true) prmCasc = false;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Режим : "+prmDescr+" : "+prevMode+" : Автомат");
-      }
-      else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) 
-      {  
-        prmAuto = prmCasc = true;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Режим : "+prmDescr+" : "+prevMode+" : Каскад");
-      }
-      else if(ev_wrk == "key_mousePresLeft:/info_sp")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Задание : "+prmDescr+" : "+real2str(prmSp,prmPrec)+" : "+real2str(info_sp_arg0val,prmPrec) );
-        prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
-      }
-      else if(ev_wrk == "key_mousePresLeft:/info_out")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Выход : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1) );
-        prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
-      }
-		 else if(ev_wrk == "ws_BtPress:/spToVar")
-		 {
-			 info_sp_arg0val = info_var_arg0val;
-			 info_sp_backColor = "darkslategray";
-			 info_sp_clearCnt = 25;
-		 }
-      else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-      else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-		 else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-      else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-      else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-		 else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-      else if(ev_wrk == "ws_BtPress:/pnl_pid")
-      {
-        sessNm = strParsePath(path,0);
-        pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
-        if( vcaNodePresent(pidPg) ) vcaAttrSet(pidPg+"/a_pgOpen",1);
-        else ev_rez+= "usr_PidCntrCall\n"; 
-      } 
-      else ev_rez+=ev_wrk+"\n";
-    }
-    event = ev_rez;
-
-		if(appToVl && (prmAuto || prmOut.isEVal()))
-		{
-			if(prmPrec.isEVal()) newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else
-			{
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_sp_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
+		//Event process
+		while(true) {
+			ev_wrk = strParse(event,0,"\n",off);
+			if(ev_wrk == "") break;
+			prevMode = prmAuto ? ((prmCasc==true)?tr("Cascade"):tr("Automate")) : tr("Manual");      
+			if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) {  
+				prmAuto = false; if(prmCasc==true) prmCasc = false;
+				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Manual"));
 			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
-    }
-    else if(appToVl && !prmAuto)
-    {
-       if(prmAnalog==false)
-       {
-         prmManIn = 50+2.5*appToVl;
-         if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Выход: "+prmDescr+" :: Закрыть ( < )");
-         else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Выход: "+prmDescr+" :: Открыть ( > )");
-         else if(appToVl == -10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Выход: "+prmDescr+" :: Закрыть ( << )");
-         else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Выход: "+prmDescr+" :: Открыть ( >> )");
-       }
-       else
-       {
-         newVl = max(0,min(100,info_out_arg0val+appToVl));
-         info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
-      }
-    }
-
-    if(prmAuto && prmCasc) { mode_text = "Каскад"; info_sp_bordWidth = info_out_bordWidth = 0; }
-    else if(prmAuto)
-    {
-      mode_text = "Автомат";
-      info_sp_bordWidth = 1; info_out_bordWidth = 0;
-    }
-    else
-    {
-      mode_text = "Ручной";
-      info_out_bordWidth = 1; info_sp_bordWidth = prmOut.isEVal() ? 1 : 0;
-    }
-  }
-  //>> Manual variable input
-  else if(!prmVarIn.isEVal())
-  {
-    up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = true;
-    info_var_bordWidth = 1;
-    appToVl = 0;
-
-    //Event process
-    while(true)
-    {
-      ev_wrk = strParse(event,0,"\n",off);
-      if(ev_wrk == "") break;
-      else if(ev_wrk == "key_mousePresLeft:/info_var")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Переменная : "+prmDescr+" : "+real2str(prmVarIn,prmPrec)+" : "+real2str(info_var_arg0val,prmPrec) );
-        prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
-      }
-      else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-      else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-      else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-      else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-      else if(ev_wrk == "ws_BtPress:/downm") 	appToVl = -10;
-      else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-      else ev_rez+=ev_wrk+"\n";
-    }
+			else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) {  
+				prmAuto = true; if(prmCasc==true) prmCasc = false;
+				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Automate"));
+			}
+			else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) {  
+        	prmAuto = prmCasc = true;
+        	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Mode")+" : "+prmDescr+" : "+prevMode+" : "+tr("Cascade"));
+			}
+			else if(ev_wrk == "key_mousePresLeft:/info_sp") {
+				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Setpoint")+" : "+prmDescr+" : "+real2str(prmSp,abs(prmPrec))+" : "+real2str(info_sp_arg0val,abs(prmPrec)));
+				prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
+			}
+			else if(ev_wrk == "key_mousePresLeft:/info_out") {
+				messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Output")+" : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1));
+				prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
+			}
+			else if(ev_wrk == "ws_BtPress:/spToVar") {
+				info_sp_arg0val = info_var_arg0val;
+				info_sp_backColor = "darkslategray";
+				info_sp_clearCnt = 25;
+			}
+			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
+			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
+			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
+			else if(ev_wrk == "ws_BtPress:/down")			appToVl = -1;
+			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
+			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
+			else if(ev_wrk == "ws_BtPress:/pnl_pid") {
+				sessNm = strParsePath(path,0);
+				pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
+				if(vcaNodePresent(pidPg)) vcaAttrSet(pidPg+"/a_pgOpen",1);
+				else ev_rez+= "usr_PidCntrCall\n"; 
+			} 
+			else ev_rez+=ev_wrk+"\n";
+		}
 		event = ev_rez;
 
-		if(appToVl)
-		{
+		if(appToVl && (prmAuto || prmOut.isEVal())) {
+			if(prmPrec.isEVal())	newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
+			else {
+				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
+				prevCntr = cntr;
+				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
+				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
+				newVl = info_sp_arg0val + sign(appToVl) *										//direction
+														pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
+														pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
+														pow(10,-prmPrec);										//precision base
+			}
+			newVl = max(min,min(max,newVl));
+			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
+			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
+		}
+   	else if(appToVl && !prmAuto) {
+			if(prmAnalog==false) {
+				prmManIn = 50+2.5*appToVl;
+				if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( < )");
+				else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( > )");
+				else if(appToVl == -10)messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Close")+" ( << )");
+				else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''."+tr("Output")+": "+prmDescr+" :: "+tr("Open")+" ( >> )");
+			}
+			else {
+				newVl = max(0,min(100,info_out_arg0val+appToVl));
+				info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
+			}
+		}
+
+		if(prmAuto && prmCasc) { mode_text = tr("Cascade"); info_sp_bordWidth = info_out_bordWidth = 0; }
+		else if(prmAuto) {
+			mode_text = tr("Automate");
+			info_sp_bordWidth = 1; info_out_bordWidth = 0;
+		}
+		else {
+			mode_text = tr("Manual");
+			info_out_bordWidth = 1; info_sp_bordWidth = prmOut.isEVal() ? 1 : 0;
+		}
+	}
+	// Manual variable input
+	else if(!prmVarIn.isEVal()) {
+		up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = true;
+		info_var_bordWidth = 1;
+		appToVl = 0;
+
+		//Event process
+		while(true) {
+			ev_wrk = strParse(event,0,"\n",off);
+			if(ev_wrk == "") break;
+			else if(ev_wrk == "key_mousePresLeft:/info_var") {
+				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+real2str(prmVarIn,abs(prmPrec))+" : "+real2str(info_var_arg0val,abs(prmPrec)));
+				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
+			}
+			else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
+			else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
+			else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
+			else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
+			else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
+			else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
+			else ev_rez += ev_wrk + "\n";
+		}
+		event = ev_rez;
+
+		if(appToVl) {
 			if(prmPrec.isEVal()) newVl = ((info_var_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else
-			{
+			else {
 				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
 				prevCntr = cntr;
 				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
@@ -17107,392 +16674,74 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal())
 		}
 	}
 }
-else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmCloseSt.isEVal())
-{
-  Ramka_en = true;
-  com_open_en = com_close_en = (!prmCom.isEVal() || !prmClose.isEVal());
-  st_open_en = st_close_en = (!prmOpenSt.isEVal() || !prmCloseSt.isEVal());
-  com_stop_en = !prmStop.isEVal();
+else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmCloseSt.isEVal()) {
+	Ramka_en = true;
+	com_open_en = com_close_en = (!prmCom.isEVal() || !prmClose.isEVal());
+	st_open_en = st_close_en = (!prmOpenSt.isEVal() || !prmCloseSt.isEVal());
+	com_stop_en = !prmStop.isEVal();
 
-  if(com_open_en)
-  {
-    com_open_name = !digComs.isEVal() ? strParse(strParse(digComs,0,";"),0,"-") : "ОТКР";
-    com_open_color = (strParse(strParse(digComs,0,";"),1,"-") != "") ? strParse(strParse(digComs,0,";"),1,"-") : "green";
-    com_open_tipTool = !digComs.isEVal() ? "Команда "+strParse(strParse(digComs,0,";"),0,"-") : "Команда ОТКР";
-    com_open_tipStatus = !digComs.isEVal() ? "Нажать для "+strParse(strParse(digComs,0,";"),0,"-") : "Нажать для ОТКР";
-    com_open_en = com_open_name.length;
+	if(com_open_en) {
+		com_open_name = !digComs.isEVal() ? strParse(strParse(digComs,0,";"),0,"-") : tr("OPEN");
+		com_open_color = (strParse(strParse(digComs,0,";"),1,"-") != "") ? strParse(strParse(digComs,0,";"),1,"-") : "green";
+		com_open_tipTool = !digComs.isEVal() ? tr("Command")+" "+strParse(strParse(digComs,0,";"),0,"-") : tr("Command")+" "+tr("OPEN");
+		com_open_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+strParse(strParse(digComs,0,";"),0,"-") : tr("Press for")+" "+tr("OPEN");
+		com_open_en = com_open_name.length;
+	}
+	if(com_close_en) {
+		com_close_name = !digComs.isEVal() ? strParse(strParse(digComs,1,";"),0,"-") : tr("CLOSE");
+		com_close_color = (strParse(strParse(digComs,1,";"),1,"-") != "") ? strParse(strParse(digComs,1,";"),1,"-") : "red";
+		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+strParse(strParse(digComs,1,";"),0,"-") : tr("Command")+" "+tr("CLOSE");
+		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+strParse(strParse(digComs,1,";"),0,"-") : tr("Press for")+" "+tr("CLOSE");
+		com_close_en = com_close_name.length;
   }
-  if(com_close_en)
-  {
-    com_close_name  = !digComs.isEVal() ? strParse(strParse(digComs,1,";"),0,"-") : "ЗАКР";
-    com_close_color = (strParse(strParse(digComs,1,";"),1,"-") != "") ? strParse(strParse(digComs,1,";"),1,"-") : "red";
-    com_close_tipTool = !digComs.isEVal() ? "Команда "+strParse(strParse(digComs,1,";"),0,"-") : "Команда ЗАКР";
-    com_close_tipStatus = !digComs.isEVal() ? "Нажать для "+strParse(strParse(digComs,1,";"),0,"-") : "Нажать для ЗАКР";
-    com_close_en = com_close_name.length;
+  if(com_stop_en) { 
+		com_stop_name = com_close_tipTool = !digComs.isEVal() ? strParse(strParse(digComs,2,";"),0,"-") : tr("STOP");
+		com_stop_color = (strParse(strParse(digComs,2,";"),1,"-") != "") ? strParse(strParse(digComs,2,";"),1,"-") : "yellow";
+		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+strParse(strParse(digComs,2,";"),0,"-") : tr("Command")+" "+tr("STOP");
+		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+strParse(strParse(digComs,2,";"),0,"-") : tr("Press for")+" "+tr("STOP");
+		com_stop_en = com_stop_name.length;
   }
-  if(com_stop_en)
-  { 
-    com_stop_name = com_close_tipTool = !digComs.isEVal() ? strParse(strParse(digComs,2,";"),0,"-") : "СТОП";
-    com_stop_color = (strParse(strParse(digComs,2,";"),1,"-") != "") ? strParse(strParse(digComs,2,";"),1,"-") : "yellow";
-    com_close_tipTool = !digComs.isEVal() ? "Команда "+strParse(strParse(digComs,2,";"),0,"-") : "Команда СТОП";
-    com_close_tipStatus = !digComs.isEVal() ? "Нажать для "+strParse(strParse(digComs,2,";"),0,"-") : "Нажать для СТОП";
-    com_stop_en = com_stop_name.length;
+  if(st_open_en) {
+		st_open_text = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : tr("OPEN");
+		st_open_color = (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green";
+		st_open_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : tr("OPEN");
+		st_open_tipStatus = !digStts.isEVal() ? tr("State")+" "+strParse(strParse(digStts,0,";"),0,"-") : tr("State")+" "+tr("OPEN");
   }
-  if(st_open_en)
-  { 
-    st_open_text = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : "ОТКР";
-    st_open_color = (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green";
-    st_open_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : "ОТКР";
-    st_open_tipStatus = !digStts.isEVal() ? "Состояние "+strParse(strParse(digStts,0,";"),0,"-") : "Состояние ОТКР";
-  }
-  if(st_close_en)
-  { 
-    st_close_text = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : "ЗАКР";
-    st_close_color = (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red";
-    st_close_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : "ЗАКР";
-    st_close_tipStatus = !digStts.isEVal() ? "Состояние "+strParse(strParse(digStts,1,";"),0,"-") : "Состояние ЗАКР";
-  }
+	if(st_close_en) {
+		st_close_text = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : tr("CLOSE");
+		st_close_color = (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red";
+		st_close_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : tr("CLOSE");
+		st_close_tipStatus = !digStts.isEVal() ? tr("State")+" "+strParse(strParse(digStts,1,";"),0,"-") : tr("State")+" "+tr("CLOSE");
+	}
 
-  //Event process
-  while(true)
-  {
-    ev_wrk = strParse(event,0,"\n",off);
-    if(ev_wrk == "") break;
-    else if(ev_wrk == "ws_BtPress:/com_open")
-    {
-      if(!prmCom.isEVal()) prmCom = true; prmClose = false;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Команда : "+prmDescr+" : : "+com_open_name);
-    }
-    else if(ev_wrk == "ws_BtPress:/com_close")
-    {
-      if(!prmClose.isEVal()) prmClose = true; prmCom = false;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Команда : "+prmDescr+" : : "+com_close_name);
-    }
-    else if(ev_wrk == "ws_BtPress:/com_stop")
-    {
-      prmStop = true;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Команда : "+prmDescr+" : : "+com_stop_name);
-    }
-    else ev_rez+=ev_wrk+"\n";
-  }
-  event=ev_rez;
+	//Event process
+	while(true) {
+		ev_wrk = strParse(event,0,"\n",off);
+		if(ev_wrk == "") break;
+		else if(ev_wrk == "ws_BtPress:/com_open") {
+			if(!prmCom.isEVal()) prmCom = true; prmClose = false;
+			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
+		}
+		else if(ev_wrk == "ws_BtPress:/com_close") {
+			if(!prmClose.isEVal()) prmClose = true; prmCom = false;
+			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_close_name);
+		}
+		else if(ev_wrk == "ws_BtPress:/com_stop") {
+			prmStop = true;
+			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_stop_name);
+		}
+		else ev_rez+=ev_wrk+"\n";
+	}
+	event=ev_rez;
 
-  if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? ( prmOpenSt ?
-  	( (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green" ) :    
-  	"gray" ) : ( prmCloseSt ? "gray" : ( (strParse(strParse(digStts,0,";"),1,"-") != "") ?
-  	strParse(strParse(digStts,0,";"),1,"-") : "green" ) );
+	if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? (prmOpenSt ?
+		((strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green") : "gray") :
+			(prmCloseSt ? "gray" : ((strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green"));
 
-  if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? ( prmCloseSt ?
-  	( (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red" ) :
-  	"gray") : ( prmOpenSt ? "gray" : ( (strParse(strParse(digStts,1,";"),1,"-") != "") ?
-  	strParse(strParse(digStts,1,";"),1,"-") : "red" ) );
-}','JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-ev_wrk = ev_rez = "";
-off = 0;
-if(f_start) cntr = prevCntr = holdCntr = 0;
-cntr++;
-
-if(!prmColor.isEVal()) { bordColor = prmColor; bordWidth = 2; }
-else { bordColor = "black"; bordWidth = 1; } 
-
-//> Disable all mutable widgets
-info_ed_en = info_var_en = info_sp_en = info_out_en = spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = lev_out_en = lev_var_en = lev_sp_en = mode_en = modMan_en = modAuto_en =
-    modCasc_en = pnl_pid_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = 
-    com_open_en = com_stop_en = com_close_en = st_open_en = st_close_en = Ramka_en = moveUp_en = moveDwn_en = false;
-
-info_name_text = prmShifr.isEVal() ? "" : prmShifr;
-
-//>Impulse processing
-if(!prmAnalog.isEVal() && prmAnalog == false)
-{
-  lev_out_en = info_out_en = false; 
-  moveUp_en = moveDwn_en = true; 
-  moveUp_fillColor = (!prmImpQupTm.isEVal() && prmImpQupTm) ? "cyan" : "black-0"; 
-  moveDwn_fillColor = (!prmImpQdwnTm.isEVal() && prmImpQdwnTm) ? "cyan" : "black-0"; 
-}
-
-//> Check for analog
-if(!prmVar.isEVal() || !prmVarIn.isEVal())
-{
-  info_ed_en = info_var_en = lev_var_en = greed_text_en = greed_text1_en = greed_text2_en = greed_text3_en = greed_text4_en = greed_text5_en = true;
-  info_ed_text = prmDemention.isEVal() ? "" : prmDemention;
-  pVar = prmVar.isEVal() ? prmVarIn : prmVar;
-  if(prmVarIn.isEVal()) info_var_bordWidth = 0;
-  if(info_var_clearCnt <= 0) { info_var_arg0val = pVar; info_var_backColor = ""; } else info_var_clearCnt--; 
-  lev_var_p1y = max(0,min(140,140*(1-(pVar-min)/(max-min))));
-	if(prmPrec.isEVal())	info_var_arg0cfg = "10;f;2";
-	else if(prmPrec >= 0)	info_var_arg0cfg = "10;f;"+prmPrec;
-	else	info_var_arg0cfg = "10;g;"+abs(prmPrec);
-
-  info_var_color = lev_var_c3 = "#3EFF3E";
-  //> Warning borders process
-  if(!prmWMin.isEVal() && !prmWMax.isEVal() && prmWMax > prmWMin)
-  {
-    lev_var_c2 = "yellow";
-    lev_var_p6y = lev_var_p7y = 140*(1-(prmWMax-min)/(max-min));
-    lev_var_p8y = lev_var_p9y = 140*(1-(prmWMin-min)/(max-min));
-    if( pVar >= prmWMax || pVar <= prmWMin ) info_var_color = lev_var_c3 = "yellow";
-  }
-  else lev_var_c2 = "black-0";
-  //> Alarm borders process
-  if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin)
-  {
-    lev_var_c1 = "red";
-    lev_var_p2y = lev_var_p3y = 140*(1-(prmAMax-min)/(max-min));
-    lev_var_p4y = lev_var_p5y = 140*(1-(prmAMin-min)/(max-min));
-    if( pVar >= prmAMax || pVar <= prmAMin ) info_var_color = lev_var_c3 = "red";
-  }
-  else lev_var_c1 = "black-0";
-  //> EVAL
-  if(pVar > max || pVar < min) info_var_color = lev_var_c3 = "lightgray";
-
-  //>>Check an process PID regulator
-	if(!prmVar.isEVal() && !prmSp.isEVal())
-  {
-    lev_out_en = info_out_en = !prmOut.isEVal() && (prmAnalog.isEVal() || prmAnalog == true);
-    info_sp_en = lev_sp_en = mode_en = modMan_en = modAuto_en = pnl_pid_en = true;
-
-    modCasc_en = !prmCasc.isEVal(); 
-    spToVar_en = up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = (prmCasc != true);
-    lev_out_p1y = 140*(1-prmOut/100);
-    lev_sp_p1y = max(0,min(140,140*(1-(prmSp-min)/(max-min))));
-    if(info_sp_clearCnt <= 0) { info_sp_arg0val = prmSp; info_sp_backColor = ""; } else info_sp_clearCnt--; 
-		if(prmPrec.isEVal())	info_sp_arg0cfg = "10;f;2";
-		else if(prmPrec >= 0)	info_sp_arg0cfg = "10;f;"+prmPrec;
-		else info_sp_arg0cfg = "10;g;"+abs(prmPrec);
-
-    if(info_out_clearCnt <= 0) { info_out_arg0val = prmOut; info_out_backColor = ""; } else info_out_clearCnt--;
-    appToVl = 0;
-
-    //Event process
-    while(true)
-    {
-      ev_wrk = strParse(event,0,"\n",off);
-      if(ev_wrk == "") break;
-      prevMode = prmAuto ? ((prmCasc==true)?"Каскад":"Автомат") : "Ручний";
-      if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) 
-      {  
-        prmAuto = false; if(prmCasc==true) prmCasc = false;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Режим: "+prmDescr+" : "+prevMode+" : Ручний");
-      }
-      else if(ev_wrk == "ws_BtPress:/modAuto" && (!prmAuto || prmCasc)) 
-      {  
-        prmAuto = true; if(prmCasc==true) prmCasc = false;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Режим : "+prmDescr+" : "+prevMode+" : Автомат");
-      }
-      else if(ev_wrk == "ws_BtPress:/modCasc" && !prmCasc) 
-      {  
-        prmAuto = prmCasc = true;
-        messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Режим : "+prmDescr+" : "+prevMode+" : Каскад");
-      }
-      else if(ev_wrk == "key_mousePresLeft:/info_sp")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Завдання : "+prmDescr+" : "+real2str(prmSp,prmPrec)+" : "+real2str(info_sp_arg0val,prmPrec) );
-        prmSp = info_sp_arg0val; info_sp_backColor = ""; info_sp_clearCnt = 0;
-      }
-      else if(ev_wrk == "key_mousePresLeft:/info_out")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Вихід : "+prmDescr+" : "+real2str(prmManIn,1)+" : "+real2str(info_out_arg0val,1) );
-        prmManIn = info_out_arg0val; info_out_backColor = ""; info_out_clearCnt = 0;
-      }
-		 else if(ev_wrk == "ws_BtPress:/spToVar")
-		 {
-			 info_sp_arg0val = info_var_arg0val;
-			 info_sp_backColor = "darkslategray";
-			 info_sp_clearCnt = 25;
-		 }
-      else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-      else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-      else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-      else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-      else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-      else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-      else if(ev_wrk == "ws_BtPress:/pnl_pid")
-      {
-        sessNm = strParsePath(path,0);
-        pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
-        if( vcaNodePresent(pidPg) ) vcaAttrSet(pidPg+"/a_pgOpen",1);
-        else ev_rez+= "usr_PidCntrCall\n"; 
-      } 
-      else ev_rez+=ev_wrk+"\n";
-    }
-    event = ev_rez;
-
-		if(appToVl && (prmAuto || prmOut.isEVal()))
-		{
-			if(prmPrec.isEVal()) newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else
-			{
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_sp_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
-			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin ) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_sp_arg0val = newVl; info_sp_backColor = "darkslategray"; info_sp_clearCnt = 25;
-    }
-    else if(appToVl && !prmAuto)
-    {
-       if(prmAnalog==false)
-       {
-         prmManIn = 50+2.5*appToVl;
-         if(appToVl == -1)			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Вихід: "+prmDescr+" :: Закрити ( < )");
-         else if(appToVl == 1)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Вихід: "+prmDescr+" :: Відкрити ( > )");
-         else if(appToVl == -10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Вихід: "+prmDescr+" :: Закрити ( << )");
-         else if(appToVl == 10)	messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''.Вихід: "+prmDescr+" :: Відкрити ( >> )");
-       }
-       else
-       {
-         newVl = max(0,min(100,info_out_arg0val+appToVl));
-         info_out_arg0val = newVl; info_out_backColor = "darkslategray"; info_out_clearCnt = 25;
-      }
-    }
-
-    if(prmAuto && prmCasc) { mode_text = "Каскад"; info_sp_bordWidth = info_out_bordWidth = 0; }
-    else if(prmAuto)
-    {
-      mode_text = "Автомат";
-      info_sp_bordWidth = 1; info_out_bordWidth = 0;
-    }
-    else
-    {
-      mode_text = "Ручний";
-      info_out_bordWidth = 1; info_sp_bordWidth = prmOut.isEVal() ? 1 : 0;
-    }
-  }
-  //>> Manual variable input
-  else if(!prmVarIn.isEVal())
-  {
-    up_en = upm_en = upMax_en = down_en = downm_en = downMin_en = true;
-    info_var_bordWidth = 1;
-    appToVl = 0;
-
-    //Event process
-    while(true)
-    {
-      ev_wrk = strParse(event,0,"\n",off);
-      if(ev_wrk == "") break;
-      else if(ev_wrk == "key_mousePresLeft:/info_var")
-      {
-        messPut( "OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Змінна : "+prmDescr+" : "+real2str(prmVarIn,prmPrec)+" : "+real2str(info_var_arg0val,prmPrec) );
-        prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
-      }
-      else if(ev_wrk == "ws_BtPress:/up")			appToVl = 1;
-      else if(ev_wrk == "ws_BtPress:/upm")			appToVl = 10;
-		 else if(ev_wrk == "ws_BtPress:/upMax")		appToVl = 1e300;
-      else if(ev_wrk == "ws_BtPress:/down")		appToVl = -1;
-      else if(ev_wrk == "ws_BtPress:/downm")		appToVl = -10;
-		 else if(ev_wrk == "ws_BtPress:/downMin")	appToVl = -1e300;
-      else ev_rez+=ev_wrk+"\n";
-    }
-    event = ev_rez;
-
-		if(appToVl)
-		{
-			if(prmPrec.isEVal()) newVl = ((info_var_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
-			else
-			{
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
-				prevCntr = cntr;
-				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
-				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
-				newVl = info_var_arg0val +	sign(appToVl) *										//direction
-															pow(abs(appToVl),floor(decMult/2)) *		//half for two buttons level
-															pow(10,min(levUp,ceil(decMult/2)-1)) *	//levelUp on hold any 3 seconds
-															pow(10,-prmPrec);										//precision base
-			}
-			newVl = max(min,min(max,newVl));
-			if(!prmAMin.isEVal() && !prmAMax.isEVal() && prmAMax > prmAMin) newVl = max(prmAMin,min(prmAMax,newVl));
-			info_var_arg0val = newVl; info_var_backColor = "darkslategray"; info_var_clearCnt = 25;
-    }
-  }
-}
-else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmCloseSt.isEVal())
-{
-  Ramka_en = true;
-  com_open_en = com_close_en = (!prmCom.isEVal() || !prmClose.isEVal());
-  st_open_en = st_close_en = (!prmOpenSt.isEVal() || !prmCloseSt.isEVal());
-  com_stop_en = !prmStop.isEVal();
-
-  if(com_open_en)
-  {
-    com_open_name = !digComs.isEVal() ? strParse(strParse(digComs,0,";"),0,"-") : "ОТКР";
-    com_open_color = (strParse(strParse(digComs,0,";"),1,"-") != "") ? strParse(strParse(digComs,0,";"),1,"-") : "green";
-    com_open_tipTool = !digComs.isEVal() ? "Команда "+strParse(strParse(digComs,0,";"),0,"-") : "Команда ОТКР";
-    com_open_tipStatus = !digComs.isEVal() ? "Натиснути для "+strParse(strParse(digComs,0,";"),0,"-") : "Натиснути для ОТКР";
-    com_open_en = com_open_name.length;
-  }
-  if(com_close_en)
-  {
-    com_close_name  = !digComs.isEVal() ? strParse(strParse(digComs,1,";"),0,"-") : "ЗАКР";
-    com_close_color = (strParse(strParse(digComs,1,";"),1,"-") != "") ? strParse(strParse(digComs,1,";"),1,"-") : "red";
-    com_close_tipTool = !digComs.isEVal() ? "Команда "+strParse(strParse(digComs,1,";"),0,"-") : "Команда ЗАКР";
-    com_close_tipStatus = !digComs.isEVal() ? "Натиснути для "+strParse(strParse(digComs,1,";"),0,"-") : "Натиснути для ЗАКР";
-    com_close_en = com_close_name.length;
-  }
-  if(com_stop_en)
-  { 
-    com_stop_name = com_close_tipTool = !digComs.isEVal() ? strParse(strParse(digComs,2,";"),0,"-") : "СТОП";
-    com_stop_color = (strParse(strParse(digComs,2,";"),1,"-") != "") ? strParse(strParse(digComs,2,";"),1,"-") : "yellow";
-    com_close_tipTool = !digComs.isEVal() ? "Команда "+strParse(strParse(digComs,2,";"),0,"-") : "Команда СТОП";
-    com_close_tipStatus = !digComs.isEVal() ? "Натиснути для "+strParse(strParse(digComs,2,";"),0,"-") : "Натиснути для СТОП";
-    com_stop_en = com_stop_name.length;
-  }
-  if(st_open_en)
-  { 
-    st_open_text = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : "ОТКР";
-    st_open_color = (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green";
-    st_open_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : "ОТКР";
-    st_open_tipStatus = !digStts.isEVal() ? "Стан "+strParse(strParse(digStts,0,";"),0,"-") : "Стан ОТКР";
-  }
-  if(st_close_en)
-  { 
-    st_close_text = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : "ЗАКР";
-    st_close_color = (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red";
-    st_close_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : "ЗАКР";
-    st_close_tipStatus = !digStts.isEVal() ? "Стан "+strParse(strParse(digStts,1,";"),0,"-") : "Стан ЗАКР";
-  }
-
-  //Event process
-  while(true)
-  {
-    ev_wrk = strParse(event,0,"\n",off);
-    if(ev_wrk == "") break;
-    else if(ev_wrk == "ws_BtPress:/com_open")
-    {
-      if(!prmCom.isEVal()) prmCom = true; prmClose = false;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Команда : "+prmDescr+" : : "+com_open_name);
-    }
-    else if(ev_wrk == "ws_BtPress:/com_close")
-    {
-      if(!prmClose.isEVal()) prmClose = true; prmCom = false;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Команда : "+prmDescr+" : : "+com_close_name);
-    }
-    else if(ev_wrk == "ws_BtPress:/com_stop")
-    {
-      prmStop = true;
-      messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. Команда : "+prmDescr+" : : "+com_stop_name);
-    }
-    else ev_rez+=ev_wrk+"\n";
-  }
-  event=ev_rez;
-
-  if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? ( prmOpenSt ?
-  	( (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green" ) :    
-  	"gray" ) : ( prmCloseSt ? "gray" : ( (strParse(strParse(digStts,0,";"),1,"-") != "") ?
-  	strParse(strParse(digStts,0,";"),1,"-") : "green" ) );
-
-  if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? ( prmCloseSt ?
-  	( (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red" ) :
-  	"gray") : ( prmOpenSt ? "gray" : ( (strParse(strParse(digStts,1,";"),1,"-") != "") ?
-  	strParse(strParse(digStts,1,";"),1,"-") : "red" ) );
-}',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1384703442);
+	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
+		((strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red") : "gray") :
+			(prmOpenSt ? "gray" : ((strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red"));
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1410966447);
 INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -24274,7 +23523,20 @@ INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','2','','..','','
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','3','','..','','','',-1,0,'name;pgOpen;grpName;','');
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/so/1/ggraph','4','','..','','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_archBrowser" VALUES('/archBrowser/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt','','','',-1,0,'geomZ;pName;',1404219070);
-CREATE TABLE 'prj_archBrowser_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so','0geomX','0');
-INSERT INTO "prj_archBrowser_ses" VALUES('/pg_so','0geomY','0');
+CREATE TABLE 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
+INSERT INTO "Trs" VALUES('Cascade','Каскад','Каскад');
+INSERT INTO "Trs" VALUES('Automate','Автомат','Автомат');
+INSERT INTO "Trs" VALUES('Manual','Ручний','Ручной');
+INSERT INTO "Trs" VALUES('Mode','Режим','Режим');
+INSERT INTO "Trs" VALUES('Setpoint','Завдання','Задание');
+INSERT INTO "Trs" VALUES('Output','Вихід','Выход');
+INSERT INTO "Trs" VALUES('Close','Закрити','Закрыть');
+INSERT INTO "Trs" VALUES('Open','Відкрити','Открыть');
+INSERT INTO "Trs" VALUES('Variable','Змінна','Переменная');
+INSERT INTO "Trs" VALUES('OPEN','ОТКР','ОТКР');
+INSERT INTO "Trs" VALUES('Command','Команда','Команда');
+INSERT INTO "Trs" VALUES('Press for','Натиснути для','Нажать для');
+INSERT INTO "Trs" VALUES('CLOSE','ЗАКР','ЗАКР');
+INSERT INTO "Trs" VALUES('STOP','СТОП','СТОП');
+INSERT INTO "Trs" VALUES('State','Стан','Состояние');
 COMMIT;

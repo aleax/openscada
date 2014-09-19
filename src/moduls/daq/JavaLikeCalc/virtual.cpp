@@ -170,6 +170,7 @@ void TipContr::postEnable( int flag )
     mBFunc.push_back(BFunc("ceil",Reg::FCeil,1));
     mBFunc.push_back(BFunc("floor",Reg::FFloor,1));
     mBFunc.push_back(BFunc("typeof",Reg::FTypeOf,1));
+    mBFunc.push_back(BFunc("tr",Reg::FTr,1));
 }
 
 TController *TipContr::ContrAttach( const string &name, const string &daq_db )	{ return new Contr(name,daq_db,this); }

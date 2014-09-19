@@ -296,7 +296,7 @@ MTable::MTable( string inm, MBD *iown, bool create ) : TTable(inm)
 	req ="PRAGMA table_info('"+mod->sqlReqCode(name())+"');";
 	owner().sqlReq(req, &tblStrct);
     }
-    catch(...) { if( !create ) throw; }
+    catch(...) { if(!create) throw; }
 }
 
 MTable::~MTable( )
@@ -594,7 +594,7 @@ void MTable::fieldDel( TConfig &cfg )
 void MTable::fieldFix( TConfig &cfg )
 {
     bool toUpdate = false,
-	 reqMode = cfg.reqKeys(),	//Request mode: only for append no present fields
+	 appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !tblStrct.empty()),	//Only for append no present fields
 	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
 
     //Get config fields list
@@ -607,12 +607,12 @@ void MTable::fieldFix( TConfig &cfg )
     bool next = false, next_key = false;
 
     //Curent context copy list
-    if(reqMode) {
+    if(appMode) {
 	if(tblStrct.empty()) return;
 	for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	    all_flds += (all_flds.size()?",\"":"\"") + mod->sqlReqCode(tblStrct[i_fld][1],'"') + "\"";
 	    crtReq += (next?",\"":"\"") + mod->sqlReqCode(tblStrct[i_fld][1],'"') + "\" "+
-		tblStrct[i_fld][2]+" DEFAULT '" + mod->sqlReqCode(tblStrct[i_fld][4]) + "' ";
+		tblStrct[i_fld][2]+" DEFAULT " + tblStrct[i_fld][4] + " ";
 	    next = true;
 	    if(tblStrct[i_fld][5] == "1") {
 		pr_keys += (next_key?",\"":"\"") + mod->sqlReqCode(tblStrct[i_fld][1],'"') + "\"";
@@ -627,7 +627,7 @@ void MTable::fieldFix( TConfig &cfg )
 	// Check for update needs
 	for(i_fld = 1; i_fld < tblStrct.size(); i_fld++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][1]) {
-		if(reqMode) break;
+		if(appMode) break;
 		switch(cf.fld().type()) {
 		    case TFld::String:	if(tblStrct[i_fld][2] != "TEXT")	toUpdate = true;	break;
 		    case TFld::Integer: case TFld::Boolean:
@@ -649,7 +649,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
 
 	// Append
-	if(i_fld >= tblStrct.size() || !reqMode) {
+	if(i_fld >= tblStrct.size() || !appMode) {
 	    crtReq += (next?",\"":"\"") + mod->sqlReqCode(cf_el[i_cf],'"') + "\" " + tpCfg;
 	    next = true;
 	    if(i_fld >= tblStrct.size()) toUpdate = true;
@@ -670,13 +670,13 @@ void MTable::fieldFix( TConfig &cfg )
 	    }
 	}
 	// Primary key
-	else if(cf.fld().flg()&TCfg::Key && !reqMode) {
+	else if(cf.fld().flg()&TCfg::Key && !appMode) {
 	    pr_keys += (next_key?",\"":"\"") + mod->sqlReqCode(cf_el[i_cf],'"') + "\"";
 	    next_key = true;
 	}
     }
     //Check deleted fields
-    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size() && !toUpdate && !reqMode; i_fld++) {
+    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size() && !toUpdate && !appMode; i_fld++) {
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][1] ||
 		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][1].size() > 3 &&

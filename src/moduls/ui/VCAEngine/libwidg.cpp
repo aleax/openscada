@@ -542,6 +542,14 @@ string LWidget::calcProg( )
     return iprg.substr(lng_end);
 }
 
+string LWidget::calcProgStors( const string &attr )
+{
+    string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
+    if((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size()) && rez.find(ownerLib().DB()) == string::npos)
+	rez = ownerLib().DB() + ";" + rez;
+    return rez;
+}
+
 int LWidget::calcPer( )
 {
     if(m_proc_per < 0 && !parent().freeStat())	return parent().at().calcPer();
@@ -874,6 +882,8 @@ string CWidget::calcLang( )	{ return parent().freeStat() ? "" : parent().at().ca
 
 string CWidget::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
+string CWidget::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+
 int CWidget::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 void CWidget::load_( )
@@ -951,7 +961,7 @@ string CWidget::resourceGet( const string &id, string *mime )
 {
     string mimeType, mimeData;
 
-    if((mimeData=ownerLWdg().resourceGet( id, &mimeType )).empty() && !parent().freeStat())
+    if((mimeData=ownerLWdg().resourceGet(id,&mimeType)).empty() && !parent().freeStat())
 	mimeData = parent().at().resourceGet(id, &mimeType);
     if(mime) *mime = mimeType;
 

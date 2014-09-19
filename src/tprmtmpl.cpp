@@ -85,6 +85,8 @@ string TPrmTempl::descr( )		{ return cfg("DESCR").getS(); }
 
 void TPrmTempl::setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
 
+string TPrmTempl::stor( )		{ return owner().DB(); }
+
 int TPrmTempl::maxCalcTm( )		{ return cfg("MAXCALCTM").getI(); }
 
 void TPrmTempl::setMaxCalcTm( int vl )	{ cfg("MAXCALCTM").setI(vl); }
@@ -477,7 +479,7 @@ void TPrmTmplLib::postDisable(int flag)
 {
     if(flag) {
 	//Delete libraries record
-	SYS->db().at().dataDel(work_lib_db.getVal()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
+	SYS->db().at().dataDel(DB()+"."+owner().tmplLibTable(),owner().nodePath()+"tmplib",*this,true);
 
 	//Delete temlate librarie's DBs
 	SYS->db().at().open(fullDB());

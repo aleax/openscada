@@ -25,7 +25,7 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mReqKeys(false)
+TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mIncmplTblStrct(false), mReqKeys(false)
 {
     pthread_mutex_init(&mRes, NULL);
 

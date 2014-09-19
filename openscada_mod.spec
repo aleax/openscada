@@ -5,7 +5,7 @@ Summary(uk_UA.UTF8): Відкрита SCADA система.
 Summary(de_DE.UTF8): Open SCADA-System.
 Name: openscada
 Version: 0.9
-Release: r2150
+Release: r2151
 Source: openscada-%version.tar.lzma
 Source1: openscada-res-%version.tar.lzma
 License: GPLv2
@@ -75,6 +75,7 @@ Das offene SCADA System. Typische Installation.
 %endif
 %def_enable Comedi
 %def_enable AMRDevs
+%def_disable MMS
 
 #=====  Archive modules =====
 %def_enable FSArch
@@ -759,6 +760,21 @@ Das Paket %{name}-DAQ.AMRDevs - ermöglicht den Zugang zu den Zählerwerken der 
 Es werden die Anlagen unterstützt: Kontar (http://www.mzta.ru).
 %endif
 
+%if_enabled MMS
+%package DAQ.MMS
+Summary: MMS(IEC-9506).
+Group: Graphics
+Requires: %name-core = %version-%release
+%description DAQ.MMS
+The %{name}-DAQ.MMS package - allow MMS(IEC-9506) client implementation.
+%description DAQ.MMS -l ru_RU.UTF8
+Пакет %{name}-DAQ.MMS - предоставляет реализацию клиента MMS(IEC-9506).
+%description DAQ.MMS -l uk_UA.UTF8
+Пакет %{name}-DAQ.MMS - надає реалізацію клієнта MMS(IEC-9506).
+%description DAQ.MMS -l de_DE.UTF8
+Das Paket %{name}-DAQ.MMS - ermöglicht MMS(IEC-9506) Client-Implementierung.
+%endif
+
 
 #=====  Archive modules =====
 %if_enabled FSArch
@@ -1134,7 +1150,7 @@ Das Paket %{name}-Special.FLibSYS - bibliothek mit System-API für spezifische P
     %{subst_enable System} %{subst_enable BlockCalc} %{subst_enable JavaLikeCalc} %{subst_enable DiamondBoards} \
     %{subst_enable LogicLev} %{subst_enable SNMP} %{subst_enable Siemens} %{subst_enable ModBus} %{subst_enable DCON} \
     %{subst_enable DAQGate} %{subst_enable SoundCard} %{subst_enable ICP_DAS} %{subst_enable OPC_UA} %{subst_enable BFN} %{subst_enable Comedi} \
-    %{subst_enable AMRDevs} \
+    %{subst_enable AMRDevs} %{subst_enable MMS} \
     %{subst_enable FSArch} %{subst_enable DBArch} \
     %{subst_enable Sockets} %{subst_enable SSL} %{subst_enable Serial} \
     %{subst_enable HTTP} %{subst_enable SelfSystem} %{subst_enable UserProtocol} \
@@ -1377,6 +1393,12 @@ ln -s `relative %_defaultdocdir/%name-docUK-%version %_datadir/openscada/docs/uk
 %files DAQ.AMRDevs
 %_libdir/openscada/daq_AMRDevs.so
 %_datadir/locale/*/LC_MESSAGES/oscd_AMRDevs.mo
+%endif
+
+%if_enabled MMS
+%files DAQ.MMS
+%_libdir/openscada/daq_MMS.so
+%_datadir/locale/*/LC_MESSAGES/oscd_MMS.mo
 %endif
 
 #=====  Archive modules =====

@@ -381,7 +381,7 @@ string TWEB::pgTail( )	{ return "</body>\n</html>"; }
 
 void TWEB::HttpGet( const string &url, string &page, const string &sender, vector<string> &vars, const string &user )
 {
-    SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,"");
+    SSess ses(TSYS::strDecode(url,TSYS::HttpURL), sender, user, vars, "");
     ses.page = pgHead();
 
     try {

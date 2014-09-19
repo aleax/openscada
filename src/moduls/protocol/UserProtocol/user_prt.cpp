@@ -393,6 +393,7 @@ void UserPrt::setEnable( bool vl )
 	//Prepare and compile input transport function
 	if(!inProg().empty()) {
 	    TFunction funcIO("uprt_"+id()+"_in");
+	    funcIO.setStor(DB());
 	    funcIO.ioIns(new IO("rez",_("Result"),IO::Boolean,IO::Return), 0);
 	    funcIO.ioIns(new IO("request",_("Request"),IO::String,IO::Default), 1);
 	    funcIO.ioIns(new IO("answer",_("Answer"),IO::String,IO::Output), 2);

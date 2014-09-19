@@ -299,7 +299,8 @@ void MTable::fieldSet( TConfig &cfg )
     if(!(access(n_table.c_str(),F_OK|W_OK) == 0 || (access(n_table.c_str(),F_OK) != 0 && access(owner().addr().c_str(),W_OK) == 0)))
 	throw TError(nodePath().c_str(), _("Read only access to file '%s'."), n_table.c_str());
 
-    bool isForceUpdt = cfg.reqKeys();
+    bool forceUpdt = cfg.reqKeys(),
+	appMode = forceUpdt || (cfg.incomplTblStruct() && !basa->isEmpty());	//Only for append no present fields
 
     //Check and fix structure of table
     for(unsigned i_cf = 0; i_cf < cf_el.size(); i_cf++) {
@@ -316,7 +317,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    fieldPrmSet(e_cfg, n_rec);
 	    if(basa->addField(i_cf,&n_rec) < 0) throw TError(nodePath().c_str(), _("Column error!"));
 	}
-	else if(!isForceUpdt) {
+	else if(!appMode) {
 	    // Check collumn parameters
 	    switch(e_cfg.fld().type()) {
 		case TFld::String:
@@ -343,7 +344,7 @@ void MTable::fieldSet( TConfig &cfg )
     }
     //Del no used collumn
     db_str_rec *fld_rec;
-    for(i_clm = 0; !isForceUpdt && (fld_rec=basa->getField(i_clm)) != NULL; i_clm++) {
+    for(i_clm = 0; !appMode && (fld_rec=basa->getField(i_clm)) != NULL; i_clm++) {
 	unsigned i_cf;
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf].compare(0,10,fld_rec->name) == 0) break;
@@ -355,7 +356,7 @@ void MTable::fieldSet( TConfig &cfg )
     bool isEnd = false;
     for(i_ln = 0; !isEnd; i_ln++) {
 	if((i_ln=findKeyLine(cfg,0,false,i_ln)) < 0) {
-	    if(isForceUpdt) return;
+	    if(forceUpdt) return;
 	    i_ln = basa->CreateItems(-1);
 	}
 
@@ -373,7 +374,7 @@ void MTable::fieldSet( TConfig &cfg )
 	    // Set table volume
 	    if(basa->ModifiFieldIt(i_ln,i_clm,getVal(e_cfg,fld_rec).c_str()) < 0) throw TError(nodePath().c_str(), _("Cell error!"));
 	}
-	if(!isForceUpdt) isEnd = true;
+	if(!forceUpdt) isEnd = true;
     }
 
     mModify = SYS->sysTm();

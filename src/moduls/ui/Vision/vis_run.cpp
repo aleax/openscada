@@ -1349,19 +1349,26 @@ string VisRun::cacheResGet( const string &res )
 {
     map<string,CacheEl>::iterator ires = mCacheRes.find(res);
     if(ires == mCacheRes.end()) return "";
-    ires->second.tm = time(NULL);
+    ires->second.tm = SYS->sysTm();
     return ires->second.val;
 }
 
 void VisRun::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > 1024*1024) return;
-    mCacheRes[res] = CacheEl(time(NULL),val);
-    if(mCacheRes.size() > 100) {
+    if(val.size() > USER_FILE_LIMIT) return;
+    mCacheRes[res] = CacheEl(SYS->sysTm(), val);
+    if(mCacheRes.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+    vector< pair<time_t,string> > sortQueue;
+    for(map<string,CacheEl>::iterator itr = mCacheRes.begin(); itr != mCacheRes.end(); ++itr)
+	sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
+    sort(sortQueue.begin(), sortQueue.end());
+    for(unsigned i_del = 0; i_del < (STD_CACHE_LIM/10); ++i_del) mCacheRes.erase(sortQueue[i_del].second);
+
+    /*if(mCacheRes.size() > STD_CACHE_LIM) {	//!!!!: Need rewrite for performance rise
 	map<string,CacheEl>::iterator ilast = mCacheRes.begin();
 	for(map<string,CacheEl>::iterator ires = mCacheRes.begin(); ires != mCacheRes.end(); ++ires)
 	    if(ires->second.tm < ilast->second.tm) ilast = ires;
-	mCacheRes.erase(ilast);
+	mCacheRes.erase(ilast);*/
     }
 }
 

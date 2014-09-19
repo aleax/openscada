@@ -147,6 +147,7 @@ class Reg
 	    FCeil,	//[CRRrr]: Function ceil.
 	    FFloor,	//[CRRrr]: Function floor.
 	    FTypeOf,	//[CRRrr]: Function for get type of value.
+	    FTr,	//[CRRrr]: Function for get translation of base message.
 	    CProc,	//[CFnRR____]: Procedure (RR - don't used).
 	    CFunc,	//[CFnRR____]: Function.
 	    CFuncObj	//[CRRnRR____]: Object's function
@@ -264,6 +265,7 @@ class Func : public TConfig, public TFunction
 
 	string name( );
 	string descr( )			{ return cfg("DESCR").getS(); }
+	string stor( );
 	int maxCalcTm( )		{ return mMaxCalcTm; }
 	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }

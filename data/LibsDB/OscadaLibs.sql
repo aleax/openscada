@@ -4723,19 +4723,19 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	tErr = "1:No data or connection with source"; levErr = -5;
+	tErr = tr("1:No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:The signal exceed to upper hardware border"; levErr = -5;
+	tErr = tr("1:The signal exceed to upper hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:The signal exceed to bottom hardware border"; levErr = -5;
+	tErr = tr("2:The signal exceed to bottom hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
@@ -4755,14 +4755,14 @@ if(!tErr) {
 
 	bndVarHyst = (max-min)*HystBnd/100;
 	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr="3:Upper alarm border error"; levErr = -4; }
+	{ tErr = tr("3:Upper alarm border error"); levErr = -4; }
 	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr="4:Nether alarm border error"; levErr = -4; }
+	{ tErr = tr("4:Lower alarm border error"); levErr = -4; }
 	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr="5:Upper warning border error"; levErr = -2; }
+	{ tErr = tr("5:Upper warning border error"); levErr = -2; }
 	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr="6:Nether warning border error"; levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr="7:Too big parameter''s motion speed"; levErr = -2; }
+	{ tErr = tr("6:Lower warning border error"); levErr = -2; }
+	else if(speed && varDt > speed)	{ tErr = tr("7:Too big parameter''s motion speed"); levErr = -2; }
 }
 
 //Alarms forming
@@ -4771,175 +4771,9 @@ else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-  if(!plcImitIn.isEVal()) in = plcImitIn;
-  else {
-    plcDif = abs(pMax-pMin);
-    in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:Немає даних або зв''язку із джерелом"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:Сигнал перевищив верхню апаратну границю"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:Сигнал перевищив нижню апаратну границю"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(!tErr) {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:Помилка верхньої аварійної границі"; levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:Помилка нижньої аварійної границі"; levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:Помилка верхньої поперджув. границі"; levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:Помилка нижньої поперджув. границі"; levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr = "7:Дуже велика швидкість зміни параметру"; levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-	if(!plcImitIn.isEVal()) in = plcImitIn;
-	else {
-		plcDif = abs(pMax-pMin);
-		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:Нет данных или связи с источником"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:Выход сигнала за верхнюю аппаратную границу"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:Выход сигнала за нижнюю аппаратную границу"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(!tErr) {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:Нарушение верхней аварийной границы"; levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:Нарушение нижней аварийной границы"; levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:Нарушение верхней предупредительной границы"; levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:Нарушение нижней предупредительной границы"; levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr = "7:Очень большая скорость изменения параметра"; levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-	f_err = tErr;
-}',1402043014);
+}','','',1410945360);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,'JavaLikeCalc.JavaScript
 set=false;
 if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
@@ -5164,19 +4998,19 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	tErr = "1:No data or connection with source"; levErr = -5;
+	tErr = tr("1:No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:The signal exceed to upper hardware border"; levErr = -5;
+	tErr = tr("1:The signal exceed to upper hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:The signal exceed to bottom hardware border"; levErr = -5;
+	tErr = tr("2:The signal exceed to bottom hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
@@ -5200,14 +5034,14 @@ else {
 
 	bndVarHyst = (max-min)*HystBnd/100;
 	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:Upper alarm border error"; levErr = -4; HH = true; EVAL = H = LL = L = false; }
+	{ tErr = tr("3:Upper alarm border error"); levErr = -4; HH = true; EVAL = H = LL = L = false; }
 	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:Nether alarm border error"; levErr = -4; LL = true; EVAL = HH = H = L = false; }
+	{ tErr = tr("4:Lower alarm border error"); levErr = -4; LL = true; EVAL = HH = H = L = false; }
 	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:Upper warning border error"; levErr = -2; H = true; EVAL = HH = LL = L = false; }
+	{ tErr = tr("5:Upper warning border error"); levErr = -2; H = true; EVAL = HH = LL = L = false; }
 	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:Nether warning border error"; levErr = -2; L = true; EVAL = HH = H = LL = false; }
-	else if(speed && varDt > speed)	{ tErr = "7:Too big parameter''s motion speed"; levErr = -2; }
+	{ tErr = tr("6:Lower warning border error"); levErr = -2; L = true; EVAL = HH = H = LL = false; }
+	else if(speed && varDt > speed)	{ tErr = tr("7:Too big parameter''s motion speed"); levErr = -2; }
 	else EVAL = HH = H = LL = L = false;
 }
 
@@ -5217,185 +5051,9 @@ else {
 	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
 	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-	if(!plcImitIn.isEVal()) in = plcImitIn;
-	else {
-		plcDif = abs(pMax-pMin);
-		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:Немає даних або зв''язку із джерелом"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:Сигнал перевищив верхню апаратну границю"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:Сигнал перевищив нижню апаратну границю"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(tErr) {
-  EVAL = true;
-  HH = H = LL = L = false;
-}
-else {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:Помилка верхньої аварійної границі"; levErr = -4; HH = true; EVAL = H = LL = L = false; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-{ tErr = "4:Помилка нижньої аварійної границі"; levErr = -4; LL = true; EVAL = HH = H = L = false; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-{ tErr = "5:Помилка верхньої поперджув. границі"; levErr = -2; H = true; EVAL = HH = LL = L = false; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-{ tErr = "6:Помилка нижньої поперджув. границі"; levErr = -2; L = true; EVAL = HH = H = LL = false; }
-	else if(speed && varDt > speed)	{ tErr = "7:Дуже велика швидкість зміни параметру"; levErr = -2; }
-	else EVAL = HH = H = LL = L = false;
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-	if(!plcImitIn.isEVal()) in = plcImitIn;
-	else {
-		plcDif = abs(pMax-pMin);
-		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:Нет данных или связи с источником"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:Выход сигнала за верхнюю аппаратную границу"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:Выход сигнала за нижнюю аппаратную границу"; levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(tErr) {
-  EVAL = true;
-  HH = H = LL = L = false;
-}
-else {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:Нарушение верхней аварийной границы"; levErr = -4; HH = true; EVAL = H = LL = L = false; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:Нарушение нижней аварийной границы"; levErr = -4; LL = true; EVAL = HH = H = L = false; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:Нарушение верхней предупредительной границы"; levErr = -2; H = true; EVAL = HH = LL = L = false; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:Нарушение нижней предупредительной границы"; levErr = -2; L = true; EVAL = HH = H = LL = false; }
-	else if(speed && varDt > speed)	{ tErr = "7:Очень большая скорость изменения параметра"; levErr = -2; }
-	else EVAL = HH = H = LL = L = false;
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-	f_err = tErr;
-}',1402043046);
+}','','',1402043046);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
@@ -6959,4 +6617,14 @@ if(HTTPreq == "GET")
 }
 
 return "404 Not Found";',1377264714,'Сайт из XHTML шаблона.','XHTML-шаблон');
+CREATE TABLE 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
+INSERT INTO "Trs" VALUES('1:No data or connection with source','1:Немає даних або зв''язку із джерелом','1:Нет данных или связи с источником');
+INSERT INTO "Trs" VALUES('1:The signal exceed to upper hardware border','1:Сигнал перевищив верхню апаратну границю','1:Выход сигнала за верхнюю аппаратную границу');
+INSERT INTO "Trs" VALUES('2:The signal exceed to bottom hardware border','2:Сигнал перевищив нижню апаратну границю','2:Выход сигнала за нижнюю аппаратную границу');
+INSERT INTO "Trs" VALUES('3:Upper alarm border error','3:Помилка верхньої аварійної границі','3:Нарушение верхней аварийной границы');
+INSERT INTO "Trs" VALUES('4:Lower alarm border error','4:Помилка нижньої аварійної границі','4:Нарушение нижней аварийной границы');
+INSERT INTO "Trs" VALUES('5:Upper warning border error','5:Помилка верхньої поперджув. границі','5:Нарушение верхней предупредительной границы');
+INSERT INTO "Trs" VALUES('6:Lower warning border error','6:Помилка нижньої поперджув. границі','6:Нарушение нижней предупредительной границы');
+INSERT INTO "Trs" VALUES('7:Too big parameter''s motion speed','7:Дуже велика швидкість зміни параметру','7:Очень большая скорость изменения параметра');
+INSERT INTO "Trs" VALUES('NORMA','НОРМА','НОРМА');
 COMMIT;

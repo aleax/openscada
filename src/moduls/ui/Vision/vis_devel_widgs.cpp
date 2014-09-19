@@ -2607,7 +2607,7 @@ string DevelWdgView::cacheResGet( const string &res )
 
 void DevelWdgView::cacheResSet( const string &res, const string &val )
 {
-    if(val.size() > 1024*1024) return;
+    if(val.size() > USER_FILE_LIMIT) return;
     mCacheRes[res] = val;
 }
 

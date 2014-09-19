@@ -1153,6 +1153,7 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     if(val && !TSYS::strNoSpace(calcProg()).empty()) {
 	// Prepare function io structure
 	TFunction fio(parent().at().calcId());
+	fio.setStor(calcProgStors());
 	//  Add generic io
 	fio.ioIns(new IO("f_frq","Function calculate frequency (Hz)",IO::Real,IO::Default,"1000",false), 0);
 	fio.ioIns(new IO("f_start","Function start flag",IO::Boolean,IO::Default,"0",false), 1);
@@ -1236,13 +1237,15 @@ void SessWdg::setProcess( bool val, bool lastFirstCalc )
     if(diff && val && lastFirstCalc) calc(true, false);
 }
 
-string SessWdg::ico( )		{ return (!parent().freeStat()) ? parent().at().ico() : ""; }
+string SessWdg::ico( )		{ return parent().freeStat() ? "" : parent().at().ico(); }
 
-string SessWdg::calcLang( )	{ return (!parent().freeStat()) ? parent().at().calcLang() : ""; }
+string SessWdg::calcLang( )	{ return parent().freeStat() ? "" : parent().at().calcLang(); }
 
-string SessWdg::calcProg( )	{ return (!parent().freeStat()) ? parent().at().calcProg() : ""; }
+string SessWdg::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
-int SessWdg::calcPer( )		{ return (!parent().freeStat()) ? parent().at().calcPer() : 0; }
+string SessWdg::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+
+int SessWdg::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 string SessWdg::resourceGet( const string &id, string *mime )
 {

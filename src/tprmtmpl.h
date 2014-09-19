@@ -43,8 +43,7 @@ class TPrmTempl: public TFunction, public TConfig
     public:
 	//Data
 	// Addition flags for IO
-	enum IOTmplFlgs
-	{
+	enum IOTmplFlgs {
 	    AttrRead	= 0x010,	//Attribute only for read
 	    AttrFull	= 0x020,	//Attribute for full access
 	    CfgPublConst= 0x040,	//Configure as public constant
@@ -61,6 +60,7 @@ class TPrmTempl: public TFunction, public TConfig
 	string	id( )		{ return mId; }
 	string	name( );
 	string	descr( );
+	string	stor( );
 	int	maxCalcTm( );
 	string	progLang( );
 	string	prog( );
@@ -156,7 +156,8 @@ class TPrmTmplLib : public TCntrNode, public TConfig
 	bool	run_st;
 	int	m_ptmpl;
 	TCfg	&mId;
-	ResString work_lib_db;
+	//ResString 
+	string work_lib_db;
 };
 
 }

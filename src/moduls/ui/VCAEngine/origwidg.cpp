@@ -1484,6 +1484,7 @@ string OrigDocument::makeDoc( const string &tmpl, Widget *wdg )
     string wProgO;				//Object of work program
     time_t lstTime = 0;				//Last time
     TFunction funcIO(TSYS::path2sepstr(wdg->path(),'_'));
+    funcIO.setStor(wdg->calcProgStors("doc"));
     TValFunc funcV(wdg->id()+"_doc",NULL,false);
     vector<string> als;
 

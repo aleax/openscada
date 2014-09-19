@@ -56,6 +56,11 @@ TBasaDBF::~TBasaDBF( )
     free(db_head_ptr);
 }
 
+bool TBasaDBF::isEmpty( )
+{
+    return !db_head_ptr || ((db_head_ptr->len_head-sizeof(db_head)-2)/sizeof(db_str_rec)) == 0;
+}
+
 int TBasaDBF::LoadFile( char *Name )
 {
     int hd;

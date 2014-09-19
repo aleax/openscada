@@ -842,22 +842,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 
 	    var toInit = !this.place.childNodes.length;
-            var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
-            if(toInit || this.attrsMdf["src"])
-            {
-        	medObj.src = this.attrs['src'].length ? '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src'] : '';
+	    var medObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
+	    if(toInit || this.attrsMdf["src"]) {
+		medObj.src = this.attrs['src'].length ? '/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['src'] : '';
 		medObj.hidden = !this.attrs['src'].length;
 	    }
-	    if(toInit || this.attrsMdf["fit"])
-	    {
-		if(this.attrs['fit'] == 1)
-		{
+	    if(toInit || this.attrsMdf["fit"]) {
+		if(this.attrs['fit'] == 1) {
 		    medObj.width = geomW; medObj.height = geomH;
 		    if(this.attrs['src'].length) medObj.src += "&size="+geomH;
 		    medObj.onload = null;
 		}
-		else medObj.onload = function()
-		{
+		else medObj.onload = function() {
 		    var cWdth = this.width; var cHeight = this.height;
 		    this.width = cWdth * this.wdgLnk.xScale(true);
 		    this.height = cHeight * this.wdgLnk.yScale(true);

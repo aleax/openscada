@@ -107,12 +107,12 @@ class TFld
 	void setReserve( const string &ires )	{ m_res = ires; }
 
 	// Selected
-	const vector<string>	&selValS();
-	const vector<int>	&selValI();
-	const vector<double>	&selValR();
-	const vector<bool>	&selValB();
+	const vector<string>	&selValS( );
+	const vector<int>	&selValI( );
+	const vector<double>	&selValR( );
+	const vector<bool>	&selValB( );
 	// selectable element's name
-	const vector<string> &selNm();
+	const vector<string> &selNm( );
 
 	string selVl2Nm( const string &val );
 	string selVl2Nm( int64_t val );

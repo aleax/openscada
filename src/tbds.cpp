@@ -214,7 +214,7 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool forceCfg, bool noEx )
 {
     bool db_true = false;
-    string  bdn = realDBName(ibdn);
+    string bdn = realDBName(ibdn);
     TError dbErr;
 
     //Load from DB
@@ -677,6 +677,8 @@ void TBD::postDisable( int flag )
 
 TTipBD &TBD::owner( )	{ return *(TTipBD*)nodePrev(); }
 
+string TBD::fullDBName( )	{ return owner().modId()+"."+id(); }
+
 string TBD::name( )
 {
     string rez = cfg("NAME").getS();
@@ -688,6 +690,8 @@ void TBD::enable( )
     if(enableStat()) return;
 
     mEn = true;
+
+    Mess->translReg("", "uapi:"+fullDBName());
 }
 
 void TBD::disable( )
@@ -886,7 +890,7 @@ TCntrNode &TTable::operator=( TCntrNode &node )
     return *this;
 }
 
-string TTable::fullDBName( )	{ return owner().owner().modId()+"."+owner().id()+"."+name(); }
+string TTable::fullDBName( )	{ return owner().fullDBName()+"."+name(); }
 
 TBD &TTable::owner( )	{ return *(TBD*)nodePrev(); }
 

@@ -86,10 +86,8 @@ if test ! -e $CfgFile -a -f $StartOrigCfgFile; then cp $StartOrigCfgFile $CfgFil
 if test -d $StartWorkDir/LibsDB -a ! -d $WorkDir/LibsDB; then cp -R $StartWorkDir/LibsDB $WorkDir; fi
 if test ! -d $WorkDir/$ProjName/LibsDB -a ! -L $WorkDir/$ProjName/LibsDB; then ln -s ../LibsDB $WorkDir/$ProjName/LibsDB; fi
 ## Check for typical archives directory creation need
-if test ! -d $WorkDir/$ProjName/ARCHIVES; then
-    mkdir -pm 700 $WorkDir/$ProjName/ARCHIVES/MESS;
-    mkdir -pm 700 $WorkDir/$ProjName/ARCHIVES/VAL;
-fi
+if test ! -d $WorkDir/$ProjName/ARCHIVES/MESS; then mkdir -pm 700 $WorkDir/$ProjName/ARCHIVES/MESS; fi
+if test ! -d $WorkDir/$ProjName/ARCHIVES/VAL; then mkdir -pm 700 $WorkDir/$ProjName/ARCHIVES/VAL; fi
 
 cd $WorkDir/$ProjName
 

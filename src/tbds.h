@@ -106,6 +106,7 @@ class TBD : public TCntrNode, public TConfig
 	TCntrNode &operator=( TCntrNode &node );
 
 	string	id( )		{ return mId; }
+	string	fullDBName( );
 	string	name( );
 	string	dscr( )		{ return cfg("DESCR").getS(); }
 	string	addr( )		{ return cfg("ADDR").getS(); }

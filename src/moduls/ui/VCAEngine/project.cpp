@@ -937,6 +937,14 @@ string Page::calcProg( )
     return iprg.substr(lng_end);
 }
 
+string Page::calcProgStors( const string &attr )
+{
+    string rez = parent().freeStat() ? "" : parent().at().calcProgStors(attr);
+    if((attr.size() && attrAt(attr).at().modif()) || (!attr.size() && proc().size()) && rez.find(ownerProj()->DB()) == string::npos)
+	rez = ownerProj()->DB() + ";" + rez;
+    return rez;
+}
+
 int Page::calcPer( )	{ return (mProcPer < 0 && !parent().freeStat()) ? parent().at().calcPer() : mProcPer; }
 
 void Page::setCalcLang( const string &ilng )
@@ -1560,6 +1568,8 @@ string PageWdg::calcLang( )	{ return parent().freeStat() ? "" : parent().at().ca
 
 string PageWdg::calcProg( )	{ return parent().freeStat() ? "" : parent().at().calcProg(); }
 
+string PageWdg::calcProgStors( const string &attr ){ return parent().freeStat() ? "" : parent().at().calcProgStors(attr); }
+
 int PageWdg::calcPer( )		{ return parent().freeStat() ? 0 : parent().at().calcPer(); }
 
 void PageWdg::load_( )
@@ -1637,7 +1647,7 @@ void PageWdg::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr( attr );
-    if( !mdf )  modifClr( );
+    if(!mdf) modifClr( );
 }
 
 void PageWdg::resourceList( vector<string> &ls )

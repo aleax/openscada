@@ -505,10 +505,10 @@ retry:
 	}
 
 	//Find buildin function
-	if(c == '(' && mod->bFuncGet( smb_nm.c_str() ) != NULL) {
-	    yylval.id = mod->bFuncGet(smb_nm.c_str())->code;
-	    switch(mod->bFuncGet(smb_nm.c_str())->prm)
-	    {
+	BFunc *bf = NULL;
+	if(c == '(' && (bf=mod->bFuncGet(smb_nm.c_str()))) {
+	    yylval.id = bf->code;
+	    switch(bf->prm) {
 		case 0: return B_FUNC;
 		case 1: return B_FUNC1;
 		case 2: return B_FUNC2;
@@ -520,11 +520,8 @@ retry:
 
 	//Find external or object's functions
 	if(c == '(') {
-	    //>> External functions
-	    if(p_fnc->funcGet(smb_nm) >= 0) {
-		yylval.id = p_fnc->funcGet(smb_nm);
-		return FUNC;
-	    }
+	    // External functions
+	    if((yylval.id=p_fnc->funcGet(smb_nm)) >= 0) return FUNC;
 
 	    // Check for object's functions and system object's function
 	    //string sel = TSYS::strSepParse(smb_nm,0,'.');
@@ -539,7 +536,7 @@ retry:
 	    return ERR;
 	}
 
-	//Check allow registers
+	//Check allowed registers
 	if(p_fnc->regGet(smb_nm) >= 0) {
 	    yylval.reg = p_fnc->regAt(p_fnc->regGet(smb_nm));
 	    return VAR;

@@ -142,7 +142,7 @@ class VisRun : public QMainWindow
 	{
 	    public:
 		CacheEl( time_t itm, const string &ival ) : tm(itm), val(ival)	{ }
-		CacheEl( )	{ }
+		CacheEl( ) : tm(0)	{ }
 		time_t	tm;
 		string	val;
 	};

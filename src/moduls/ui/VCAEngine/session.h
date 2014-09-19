@@ -186,6 +186,7 @@ class SessWdg : public Widget, public TValFunc
 	string	ico( );
 	string	calcLang( );
 	string	calcProg( );
+	string	calcProgStors( const string &attr = "" );
 	int	calcPer( );
 	bool	process( )	{ return mProc; }		//Process stat
 

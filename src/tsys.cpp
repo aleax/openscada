@@ -622,6 +622,9 @@ int TSYS::start( )
 
     cfgFileScan(true);
 
+    //Register user API translations into config
+    Mess->translReg("", "uapi:"DB_CFG);
+
     mess_info(nodePath().c_str(),_("Final starting!"));
 
     unsigned int i_cnt = 1;
@@ -2529,7 +2532,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 
 	    // Values request from first source
 	    MtxAlloc res(Mess->mRes, true);
-	    for(map<string, map<string,string> >::iterator im = Mess->builtMessIdx.begin(); im != Mess->builtMessIdx.end(); ++im)
+	    for(map<string, map<string,string> >::iterator im = Mess->trMessIdx.begin(); im != Mess->trMessIdx.end(); ++im)
 	    {
 		//  Check for filter
 		if(trFltr.size()) {
@@ -2554,14 +2557,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		//  Real translated data obtain and check
 		for(map<string,string>::iterator is = im->second.begin(); is != im->second.end(); ++is) {
 		    string tMath, trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#");
-		    bool firstInst = (is == im->second.begin()), secVl = false, haveMatch = false;
+		    bool firstInst = (is == im->second.begin()), isCfg = false, haveMatch = false;
 		    //  Source is config file or included DB
-		    if((secVl=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
+		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
 			//  Need DB structure prepare
 			req.elem().fldClear();
 			req.elem().fldAdd(new TFld(trFld.c_str(),trFld.c_str(),TFld::String,0));
 			for(unsigned i_n = 1; i_n < ns.size(); i_n++)
-			    req.elem().fldAdd(new TFld(Mess->translFld(ns[i_n]->attr("id"),trFld,secVl).c_str(),
+			    req.elem().fldAdd(new TFld(Mess->translFld(ns[i_n]->attr("id"),trFld,isCfg).c_str(),
 				ns[i_n]->attr("descr").c_str(),TFld::String,0));
 			req.cfg(trFld).setReqKey(true);
 			req.cfg(trFld).setS(im->first);
@@ -2569,12 +2572,12 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 			//  Get from config file or DB source
 			bool seekRez = false;
 			for(int inst = 0; true; inst++) {
-			    if(secVl) seekRez = SYS->db().at().dataSeek("", trSrc.substr(4), inst, req);
-			    else seekRez = SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req);
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req);
 			    if(!seekRez) break;
 			    for(unsigned i_n = 0; i_n < ns.size(); i_n++) {
 				if(!(i_n && i_n < (ns.size()-1))) continue;
-				tMath = req.cfg(Mess->translFld(ns[i_n]->attr("id"),trFld,secVl)).getS();
+				tMath = req.cfg(Mess->translFld(ns[i_n]->attr("id"),trFld,isCfg)).getS();
 				XMLNode *recNd = ns[i_n]->childGet(-1);
 				if(firstInst) { recNd->setText(tMath); haveMatch = true; }
 				else {
@@ -2601,33 +2604,33 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    string  baseMess = opt->attr("key_base"),
 		    lng = opt->attr("col");
 	    MtxAlloc res(Mess->mRes, true);
-	    map<string,string> mI = Mess->builtMessIdx[baseMess];
+	    map<string,string> mI = Mess->trMessIdx[baseMess];
 	    for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
 		string trSrc = TSYS::strParse(is->first,0,"#"), setFld = TSYS::strParse(is->first,1,"#");
 		//string setFld = is->second, trSrc = is->first;
 		TConfig req;
-		bool setRes = false, secVl = false;
+		bool setRes = false, isCfg = false;
 		//  Source is config file or included DB
-		if((secVl=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {		//Source is config file
+		if((isCfg=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {		//Source is config file
 		    req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 		    req.cfg(setFld).setReqKey(true);
 		    req.cfg(setFld).setS(baseMess, (lng=="base")?TCfg::KeyUpdtBase|TCfg::ForceUse:0);
 		    if(lng != "base") {
-			setFld = Mess->translFld(lng, setFld, secVl);
+			setFld = Mess->translFld(lng, setFld, isCfg);
 			req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
 		    }
 		    req.cfg(setFld).setS(opt->text(), TCfg::ForceUse);
-		    setRes = secVl ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
+		    setRes = isCfg ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
 				   : SYS->db().at().dataSet(trSrc.substr(3), "", req, false, true);
 		}
 		//  Move the source to new base
 		if(setRes && lng == "base") {
-		    needReload = Mess->builtMessIdx[opt->text()].size();
-		    Mess->builtMessIdx[opt->text()][is->first] = is->second;
+		    needReload = Mess->trMessIdx[opt->text()].size();
+		    Mess->trMessIdx[opt->text()][is->first] = is->second;
 		}
 	    }
-	    if(lng == "base") Mess->builtMessIdx.erase(baseMess);
-	    if(!needReload) opt->setAttr("noReload","1");
+	    if(lng == "base") Mess->trMessIdx.erase(baseMess);
+	    if(!needReload) { opt->setAttr("noReload","1"); Mess->trMessCache.clear(); }
 	}
     }
     else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root"))

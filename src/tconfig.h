@@ -157,6 +157,8 @@ class TConfig: public TValElem
         void cntrCmdProc( XMLNode *fld, const string &elem,
 		const string &user = "root", const string &grp = "root", int perm = 0664 );
 
+	bool incomplTblStruct( )	{ return mIncmplTblStrct; }
+	void setIncmplTblStrct( bool vl ) { mIncmplTblStrct = vl; }
 	bool reqKeys( )			{ return mReqKeys; }
 
 	TVariant objFunc( const string &id, vector<TVariant> &prms, const string &user );
@@ -179,6 +181,7 @@ class TConfig: public TValElem
 	TCfgMap		value;
 	TElem		*m_elem;
 	uint8_t		single		: 1;
+	uint8_t		mIncmplTblStrct	: 1;
 	uint8_t		mReqKeys	: 1;
 };
 

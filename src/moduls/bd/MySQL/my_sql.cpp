@@ -214,8 +214,7 @@ void MBD::sqlReq( const string &ireq, vector< vector<string> > *tbl, char intoTr
 
     int irez, eNRez;
     rep:
-    if((irez=mysql_real_query(&connect,req.c_str(),req.size())))
-    {
+    if((irez=mysql_real_query(&connect,req.c_str(),req.size()))) {
 	eNRez = mysql_errno(&connect);
 	if(irez == CR_SERVER_GONE_ERROR || irez == CR_SERVER_LOST ||
 	    eNRez == CR_SERVER_GONE_ERROR || eNRez == CR_CONN_HOST_ERROR || eNRez == CR_SERVER_LOST || eNRez == CR_CONNECTION_ERROR)
@@ -335,7 +334,7 @@ MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
 
     if(create) {
 	req = "CREATE TABLE IF NOT EXISTS `"+TSYS::strEncode(owner().bd,TSYS::SQL)+"`.`"+
-	    TSYS::strEncode(name,TSYS::SQL)+"` (`name` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
+	    TSYS::strEncode(name,TSYS::SQL)+"` (`<<empty>>` char(20) NOT NULL DEFAULT '' PRIMARY KEY)";
 	owner().sqlReq(req);
     }
     //Get table structure description
@@ -347,6 +346,8 @@ MTable::MTable( string name, MBD *iown, bool create ) : TTable(name)
 }
 
 MTable::~MTable( )	{ }
+
+bool MTable::isEmpty( )	{ return tblStrct.empty() || tblStrct[1][0] == "<<empty>>"; }
 
 void MTable::postDisable( int flag )
 {
@@ -660,8 +661,7 @@ void MTable::fieldFix( TConfig &cfg )
 
     if(tblStrct.empty()) throw TError(nodePath().c_str(), _("Table is empty!"));
 
-    //string lang2Code = cfg.noTransl( ) ? "" : Mess->lang2Code();
-    bool reqMode = cfg.reqKeys(),	//Request mode: only for append no present fields
+    bool appMode = cfg.reqKeys() || (cfg.incomplTblStruct() && !isEmpty()),	//Only for append no present fields
 	 isVarTextTransl = (!Mess->lang2CodeBase().empty() && Mess->lang2Code() != Mess->lang2CodeBase());
     //Get config fields list
     vector<string> cf_el;
@@ -669,7 +669,7 @@ void MTable::fieldFix( TConfig &cfg )
 
     //Prepare request for fix structure
     string req = "ALTER TABLE `" + TSYS::strEncode(owner().bd,TSYS::SQL) + "`.`" + TSYS::strEncode(name(),TSYS::SQL) + "` ";
-    if(!reqMode) req += "DROP PRIMARY KEY, ";
+    if(!appMode) req += "DROP PRIMARY KEY, ";
 
     string pr_keys;
     int keyCnt = 0;
@@ -677,7 +677,7 @@ void MTable::fieldFix( TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(cf_el[i_cf]);
 
 	// Check primary key
-	if(u_cfg.fld().flg()&TCfg::Key && !reqMode) {
+	if(u_cfg.fld().flg()&TCfg::Key && !appMode) {
 	    pr_keys += (next_key?",`":"`") + TSYS::strEncode(u_cfg.name(),TSYS::SQL) + "`";
 	    next_key = true;
 	    keyCnt++;
@@ -688,7 +688,7 @@ void MTable::fieldFix( TConfig &cfg )
 
 	// Change field
 	string f_tp;
-	if(i_fld < tblStrct.size() && !reqMode) {
+	if(i_fld < tblStrct.size() && !appMode) {
 	    switch(u_cfg.fld().type()) {
 		case TFld::String:
 		    if(u_cfg.fld().len() < 256 || u_cfg.fld().flg()&TCfg::Key)
@@ -725,7 +725,7 @@ void MTable::fieldFix( TConfig &cfg )
 	    bool col_cur = false;
 	    for(unsigned i_c = i_fld; i_c < tblStrct.size(); i_c++)
 		if(tblStrct[i_c][0].size() > 3 && tblStrct[i_c][0].substr(2) == ("#"+cf_el[i_cf])) {
-		    if(tblStrct[i_c][1] != f_tp && !reqMode) {
+		    if(tblStrct[i_c][1] != f_tp && !appMode) {
 			req += (next?",CHANGE `":"CHANGE `") + TSYS::strEncode(tblStrct[i_c][0],TSYS::SQL) + "` `"
 							     + TSYS::strEncode(tblStrct[i_c][0],TSYS::SQL) + "` ";
 			next = true;
@@ -741,7 +741,7 @@ void MTable::fieldFix( TConfig &cfg )
 	}
     }
     //DROP fields
-    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size() && !reqMode; i_fld++) {
+    for(unsigned i_fld = 1, i_cf; i_fld < tblStrct.size() && !appMode; i_fld++) {
 	for(i_cf = 0; i_cf < cf_el.size(); i_cf++)
 	    if(cf_el[i_cf] == tblStrct[i_fld][0] ||
 		    (cfg.cfg(cf_el[i_cf]).fld().flg()&TCfg::TransltText && tblStrct[i_fld][0].size() > 3 &&

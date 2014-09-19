@@ -121,6 +121,7 @@ class LWidget : public Widget, public TConfig
 	string	calcId( );
 	string	calcLang( );
 	string	calcProg( );
+	string	calcProgStors( const string &attr = "" );
 	int	calcPer( );
 	string	parentNm( )	{ return cfg("PARENT").getS(); }
 	string	proc( )		{ return cfg("PROC").getS(); }
@@ -189,6 +190,7 @@ class CWidget : public Widget, public TConfig
 	string	calcId( );
 	string	calcLang( );
 	string	calcProg( );
+	string	calcProgStors( const string &attr = "" );
 	int	calcPer( );
 	string	parentNm( )	{ return cfg("PARENT").getS(); }
 

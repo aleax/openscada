@@ -176,8 +176,7 @@ TFld::~TFld( )
 {
     if(m_sel)	delete m_sel;
     if(m_val.s != NULL)
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::String:	delete m_val.s;	break;
 	    case TFld::Integer:	delete m_val.i;	break;
 	    case TFld::Real:	delete m_val.r;	break;
@@ -188,8 +187,7 @@ TFld::~TFld( )
 
 TFld::Type TFld::type( IO::Type tp )
 {
-    switch(tp)
-    {
+    switch(tp) {
 	case IO::String:  return String;
 	case IO::Integer: return Integer;
 	case IO::Real:    return Real;
@@ -202,8 +200,7 @@ TFld::Type TFld::type( IO::Type tp )
 
 IO::Type TFld::typeIO( )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case Boolean:	return IO::Boolean;
 	case Integer:	return IO::Integer;
 	case Real:	return IO::Real;
@@ -227,8 +224,7 @@ string TFld::values( )
     if(m_val.s == NULL) return "";
 
     string rez;
-    switch(type())
-    {
+    switch(type()) {
 	case TFld::String:
 	    for(unsigned i_el = 0; i_el < m_val.s->size(); i_el++)
 		rez = rez + (*m_val.s)[i_el] + ";";
@@ -271,8 +267,7 @@ void TFld::setValues( const string &vls )
 	int i_lvl = 0, i_off = 0;
 	while(TSYS::strSepParse(vls,0,';',&i_off).size()) i_lvl++;
 
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::String:
 		if(!m_val.s)	m_val.s = new vector<string>;
 		m_val.s->resize(i_lvl,"");
@@ -294,8 +289,7 @@ void TFld::setValues( const string &vls )
 	//Get elements
 	for(int i = 0, i_off=0; i < i_lvl; i++) {
 	    string s_el = TSYS::strSepParse(vls,0,';',&i_off);
-	    switch(type())
-	    {
+	    switch(type()) {
 		case TFld::String:  (*m_val.s)[i] = s_el;		break;
 		case TFld::Integer: (*m_val.i)[i] = strtol(s_el.c_str(),NULL,(flg()&HexDec)?16:((flg()&OctDec)?8:10));	break;
 		case TFld::Real:    (*m_val.r)[i] = s2r(s_el);	break;
@@ -305,8 +299,7 @@ void TFld::setValues( const string &vls )
 	}
     }
     else
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::Integer:
 		if(!m_val.i)	m_val.i = new vector<int>;
 		m_val.i->resize(2,0);
@@ -373,8 +366,7 @@ TFld &TFld::operator=( TFld &fld )
     //Free old
     if(m_sel)	delete m_sel;
     if(m_val.s != NULL)
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::String:	delete m_val.s;	break;
 	    case TFld::Integer:	delete m_val.i;	break;
 	    case TFld::Real:	delete m_val.r;	break;
@@ -394,8 +386,7 @@ TFld &TFld::operator=( TFld &fld )
     if(flg()&TFld::Selected) {
 	m_sel  = new vector<string>;
 	*m_sel = fld.selNm();
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::String:	m_val.s = new vector<string>;	*(m_val.s) = fld.selValS();	break;
 	    case TFld::Integer:	m_val.i = new vector<int>;	*(m_val.i) = fld.selValI();	break;
 	    case TFld::Real:	m_val.r = new vector<double>;	*(m_val.r) = fld.selValR();	break;
@@ -404,8 +395,7 @@ TFld &TFld::operator=( TFld &fld )
 	}
     }
     else
-	switch(type())
-	{
+	switch(type()) {
 	    case TFld::Integer:	m_val.i = new vector<int>;	*(m_val.i) = fld.selValI();	break;
 	    case TFld::Real:	m_val.r = new vector<double>;	*(m_val.r) = fld.selValR();	break;
 	    default: break;
@@ -517,8 +507,7 @@ XMLNode *TFld::cntrCmdMake( XMLNode *opt, const string &path, int pos, const str
 	if(flg()&TFld::Selected)
 	    n_e->setAttr("tp","str")->setAttr("len","")->setAttr("dest",(flg()&TFld::SelEdit)?"sel_ed":"select")->
 		setAttr("sel_id",values())->setAttr("sel_list",selNames());
-	else switch(type())
-	{
+	else switch(type()) {
 	    case TFld::String:
 		n_e->setAttr("tp","str");
 		if(flg()&FullText)	n_e->setAttr("cols","100")->setAttr("rows","4");
