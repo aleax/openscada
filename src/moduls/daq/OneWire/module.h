@@ -93,7 +93,7 @@ class TMdContr: public TController
 	string getStatus( );
 
 	int64_t	period( )	{ return mPer; }
-	string  cron( )         { return mSched; }
+	string	cron( )		{ return mSched; }
 	int	prior( )	{ return mPrior; }
 	int	bus( )		{ return mBus; }
 
@@ -112,7 +112,7 @@ class TMdContr: public TController
     private:
 	//Methods
 	TParamContr *ParamAttach( const string &name, int type );
-	void cntrCmdProc( XMLNode *opt );       //Control interface command process
+	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 	static void *Task( void *icntr );
 
 	//Attributes

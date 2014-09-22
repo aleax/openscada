@@ -65,8 +65,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
-	    return new ModOneWire::TTpContr(source);
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new ModOneWire::TTpContr(source);
 	return NULL;
     }
 }
@@ -98,32 +97,29 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Controler's bd structure
+    //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
     fldAdd(new TFld("BUS",_("1Wire bus"),TFld::Integer,TFld::NoFlag,"2","-1","-1;99"));
     fldAdd(new TFld("Simult",_("Simultaneous temperature request"),TFld::Real,TCfg::NoVal,"3.2","0"));
 
-    //> Parameter type bd structure
+    //Parameter type bd structure
     int t_prm = tpParmAdd("std", "PRM_BD", _("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("DEV",_("Device"),TFld::String,TCfg::NoVal,"16",""));
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db ) { return new TMdContr(name, daq_db, this); }
 
 void TTpContr::load_( )
 {
-    //> Load parameters from config-file
+    //Load parameters from config-file
     setOWFSPrms(TBDS::genDBGet(nodePath()+"OWFSPrms",OWFSPrms()));
 }
 
 void TTpContr::save_( )
 {
-    //> Save parameters to config-file
+    //Save parameters to config-file
     TBDS::genDBSet(nodePath()+"OWFSPrms",OWFSPrms());
 }
 
@@ -134,8 +130,7 @@ void TTpContr::setOWFSPrms( const string &vl )
 
     ResAlloc res(OWFSRes, true);
     if(OW_initOK) { OW_finish(); OW_initOK = false; }
-    if(vl.size())
-    {
+    if(vl.size()) {
 	optind = opterr = 0;	//Global optget variables clear
 	OW_initOK = (OW_init(vl.c_str())==0);
     }
@@ -149,10 +144,9 @@ string TTpContr::OWFSGet( const string &path )
     string rez;
     char *buf;
     size_t s;
-    if(OW_get(path.c_str(),&buf,&s) >= 0)
-    {
+    if(OW_get(path.c_str(),&buf,&s) >= 0) {
 	rez = buf;
-        free(buf);
+	free(buf);
     }
 
     return rez;
@@ -169,24 +163,21 @@ int TTpContr::OWFSPut( const string &path, const string &val )
 
 void TTpContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
-        TTipDAQ::cntrCmdProc(opt);
-        if(ctrMkNode("area",opt,0,"/prm","OWFS"))
-        {
-            ctrMkNode("fld",opt,-1,"/prm/OW_initOK",_("OWFS OK"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
-            ctrMkNode("fld",opt,-1,"/prm/OWFSPrms",_("OWFS parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
-        }
-        return;
+    //Get page info
+    if(opt->name() == "info") {
+	TTipDAQ::cntrCmdProc(opt);
+	if(ctrMkNode("area",opt,0,"/prm","OWFS")) {
+	    ctrMkNode("fld",opt,-1,"/prm/OW_initOK",_("OWFS OK"),R_R_R_,"root",SDAQ_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/prm/OWFSPrms",_("OWFS parameters"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
+	}
+	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/OW_initOK" && ctrChkNode(opt,"get")) opt->setText(OW_initOK?"1":"0");
-    else if(a_path == "/prm/OWFSPrms")
-    {
-        if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(OWFSPrms());
-        if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOWFSPrms(opt->text());
+    else if(a_path == "/prm/OWFSPrms") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(OWFSPrms());
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setOWFSPrms(opt->text());
     }
     else TTipDAQ::cntrCmdProc(opt);
 }
@@ -209,45 +200,41 @@ TMdContr::~TMdContr( )
 string TMdContr::getStatus( )
 {
     string rez = TController::getStatus();
-    if(startStat() && !redntUse())
-    {
+    if(startStat() && !redntUse()) {
 	if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
 	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s."),tm2s(tmGath).c_str());
     }
+
     return rez;
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::enable_( )
 {
-    if(OWFSBusLs().find(TSYS::int2str(bus())+";") == string::npos)
+    if(OWFSBusLs().find(i2s(bus())+";") == string::npos)
 	throw TError(nodePath().c_str(),_("Bus error or is not selected."));
 }
 
 void TMdContr::start_( )
 {
-    //> Schedule process
-    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+    //Schedule process
+    mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
-    //> Start the gathering data task
+    //Start the gathering data task
     SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true),NULL,10,true);
 
-    //> Set EVal
+    //Set EVal
     ResAlloc res(en_res, false);
-    for(unsigned i_p = 0; i_p < p_hd.size(); i_p++)
-        p_hd[i_p].at().setEval();
+    for(unsigned i_p = 0; i_p < p_hd.size(); i_p++) p_hd[i_p].at().setEval();
 }
 
 void TMdContr::prmEn( const string &id, bool val )
@@ -268,7 +255,7 @@ string TMdContr::OWFSBusLs( )
     string rez, curVl, fsLs = mod->OWFSGet("/");
     for(int off = 0; (curVl=TSYS::strParse(fsLs,0,",",&off)).size(); )
 	if(curVl.compare(0,4,"bus.") == 0)
-	    rez += TSYS::int2str(atoi(curVl.c_str()+4))+";";
+	    rez += i2s(atoi(curVl.c_str()+4))+";";
 
     return rez;
 }
@@ -279,24 +266,21 @@ void *TMdContr::Task( void *icntr )
 
     cntr.prcSt = true;
 
-    while(!TSYS::taskEndRun())
-    {
+    while(!TSYS::taskEndRun()) {
 	int64_t t_cnt = TSYS::curTime();
 
-	//> Write simultaneous/temperature for all temperature chips prepare
-	if(cntr.mSimult.getR() > 0.1)
-	{
-	    mod->OWFSPut("/bus."+TSYS::int2str(cntr.bus())+"/simultaneous/temperature","1");
+	//Write simultaneous/temperature for all temperature chips prepare
+	if(cntr.mSimult.getR() > 0.1) {
+	    mod->OWFSPut("/bus."+i2s(cntr.bus())+"/simultaneous/temperature","1");
 	    TSYS::sysSleep(cntr.mSimult.getR());
 	}
 
-	//> Update controller's data
+	//Update controller's data
 	cntr.en_res.resRequestR( );
 	cntr.callSt = true;
 	for(unsigned i_p = 0; i_p < cntr.p_hd.size() && !cntr.redntUse() && !TSYS::taskEndRun(); i_p++)
 	    try { cntr.p_hd[i_p].at().getVals(); }
-	    catch(TError err)
-	    { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
+	    catch(TError err) { mess_err(err.cat.c_str(), "%s", err.mess.c_str()); }
 	cntr.callSt = false;
 	cntr.en_res.resRelease();
 	cntr.tmGath = TSYS::curTime()-t_cnt;
@@ -312,21 +296,21 @@ void *TMdContr::Task( void *icntr )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
-        TController::cntrCmdProc(opt);
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-            "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
-        ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",mBus.fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-            "dest","select","select","/cntr/cfg/BUSLst","help",_("1Wire bus number according OWFS order configuration."));
-        return;
+    //Get page info
+    if(opt->name() == "info") {
+	TController::cntrCmdProc(opt);
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",mSched.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "dest","sel_ed","sel_list",TMess::labSecCRONsel(),"help",TMess::labSecCRON());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/PRIOR",mPrior.fld().descr(),startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,1,"help",TMess::labTaskPrior());
+	ctrMkNode("fld",opt,-1,"/cntr/cfg/BUS",mBus.fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "dest","select","sel_list",OWFSBusLs().c_str(),"help",_("1Wire bus number according OWFS order configuration."));
+	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/BUSLst" && ctrChkNode(opt,"get")) opt->setText(OWFSBusLs());
-    else TController::cntrCmdProc(opt);
+    /*if(a_path == "/cntr/cfg/BUSLst" && ctrChkNode(opt,"get")) opt->setText(OWFSBusLs());
+    else */
+    TController::cntrCmdProc(opt);
 }
 
 //*************************************************
@@ -346,7 +330,7 @@ TMdPrm::~TMdPrm( )
 void TMdPrm::postEnable( int flag )
 {
     TParamContr::postEnable(flag);
-    if(!vlElemPresent(&p_el))   vlElemAtt(&p_el);
+    if(!vlElemPresent(&p_el))	vlElemAtt(&p_el);
 }
 
 TMdContr &TMdPrm::owner( )	{ return (TMdContr&)TParamContr::owner(); }
@@ -358,10 +342,9 @@ void TMdPrm::enable( )
 
     vector<string> als;
 
-    //> Get device's files list
-    string rez, curVl, fsLs = mod->OWFSGet("/bus."+TSYS::int2str(owner().bus())+"/"+dev());
-    for(int off = 0; (curVl=TSYS::strParse(fsLs,0,",",&off)).size(); )
-    {
+    //Get device's files list
+    string rez, curVl, fsLs = mod->OWFSGet("/bus."+i2s(owner().bus())+"/"+dev());
+    for(int off = 0; (curVl=TSYS::strParse(fsLs,0,",",&off)).size(); ) {
 	if(curVl == "address")		p_el.fldAdd(new TFld(curVl.c_str(),_("Address"),TFld::String,TFld::NoWrite));
 	else if(curVl == "type")	p_el.fldAdd(new TFld(curVl.c_str(),_("Type"),TFld::String,TFld::NoWrite));
 	else if(curVl == "power")	p_el.fldAdd(new TFld(curVl.c_str(),_("Power"),TFld::Boolean,TFld::NoWrite));
@@ -370,16 +353,15 @@ void TMdPrm::enable( )
 	als.push_back(curVl);
     }
 
-    //> Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
-    {
-        unsigned i_l;
-        for(i_l = 0; i_l < als.size(); i_l++)
-            if(p_el.fldAt(i_p).name() == als[i_l])
-                break;
-        if(i_l >= als.size())
-            try{ p_el.fldDel(i_p); i_p--; }
-            catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
+    //Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++) {
+	unsigned i_l;
+	for(i_l = 0; i_l < als.size(); i_l++)
+	    if(p_el.fldAt(i_p).name() == als[i_l])
+		break;
+	if(i_l >= als.size())
+	    try{ p_el.fldDel(i_p); i_p--; }
+	    catch(TError err){ mess_warning(err.cat.c_str(),err.mess.c_str()); }
     }
 
     owner().prmEn(id(), true);
@@ -387,7 +369,7 @@ void TMdPrm::enable( )
 
 void TMdPrm::disable( )
 {
-    if(!enableStat())  return;
+    if(!enableStat())	return;
 
     owner().prmEn(id(), false);
 
@@ -409,7 +391,7 @@ void TMdPrm::save_( )
 string TMdPrm::OWFSDevLs( )
 {
     if(owner().bus() < 0 || enableStat()) return "";
-    string rez, curVl, fsLs = mod->OWFSGet("/bus."+TSYS::int2str(owner().bus())+"/");
+    string rez, curVl, fsLs = mod->OWFSGet("/bus."+i2s(owner().bus())+"/");
     for(int off = 0; (curVl=TSYS::strParse(fsLs,0,",",&off)).size(); )
 	if(isdigit(curVl[0]))
 	    rez += curVl.substr(0,curVl.size()-1)+";";
@@ -423,13 +405,12 @@ void TMdPrm::getVals( )
     vlList(als);
     string tvl;
 
-    for(unsigned i_a = 0; i_a < als.size(); i_a++)
-    {
-        AutoHD<TVal> val = vlAt(als[i_a]);
-        if((val.at().get().isEVal() && (als[i_a] == "address" || als[i_a] == "type" || als[i_a] == "power")) ||
+    for(unsigned i_a = 0; i_a < als.size(); i_a++) {
+	AutoHD<TVal> val = vlAt(als[i_a]);
+	if((val.at().get().isEVal() && (als[i_a] == "address" || als[i_a] == "type" || als[i_a] == "power")) ||
 	    als[i_a] == "temperature")
 	{
-	    tvl = mod->OWFSGet("/bus."+TSYS::int2str(owner().bus())+"/"+dev()+"/"+als[i_a]);
+	    tvl = mod->OWFSGet("/bus."+i2s(owner().bus())+"/"+dev()+"/"+als[i_a]);
 	    val.at().setS(tvl.size()?tvl:EVAL_STR, 0, true);
 	}
     }
@@ -440,27 +421,27 @@ void TMdPrm::setEval( )
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
-        vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
+	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 }
 
 void TMdPrm::cntrCmdProc( XMLNode *opt )
 {
-    //> Service commands process
+    //Service commands process
     string a_path = opt->attr("path");
-    if(a_path.substr(0,6) == "/serv/")	{ TParamContr::cntrCmdProc(opt); return; }
+    if(a_path.compare(0,6,"/serv/") == 0)	{ TParamContr::cntrCmdProc(opt); return; }
 
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
-	ctrMkNode("fld",opt,-1,"/prm/cfg/DEV",mDev.fld().descr(),enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
-            "dest","select","select","/prm/cfg/DEVLst","help",_("Device code on controller's bus according to 1Wire IC."));
+	ctrMkNode("fld",opt,-1,"/prm/cfg/DEV",EVAL_STR,enableStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
+	    "dest","select","sel_list",OWFSDevLs().c_str(),"help",_("Device code on controller's bus according to 1Wire IC."));
 	return;
     }
 
-    //> Process command to page
-    if(a_path == "/prm/cfg/DEVLst" && ctrChkNode(opt,"get")) opt->setText(OWFSDevLs());
-    else TParamContr::cntrCmdProc(opt);
+    //Process command to page
+    /*if(a_path == "/prm/cfg/DEVLst" && ctrChkNode(opt,"get")) opt->setText(OWFSDevLs());
+    else */
+    TParamContr::cntrCmdProc(opt);
 }
 
 void TMdPrm::vlArchMake( TVal &val )

@@ -1,4 +1,5 @@
 2014-09-22 Roman
+- FIX:DAQ.OneWire: Busses and devices list prepare fix.
 - UI:WebCfgD: Expanded for loading files WebCfgDVCA.html and WebCfgDVCA.js from work directory try.
     Images cache expanded clean up like to UI.Vision and translations.
     JavaScript code mostly clean up and Table expanded for simplify control and exit from cells edit mode.
