@@ -1,3 +1,11 @@
+2014-09-22 Roman
+- UI:WebCfgD: Expanded for loading files WebCfgDVCA.html and WebCfgDVCA.js from work directory try.
+    Images cache expanded clean up like to UI.Vision and translations.
+    JavaScript code mostly clean up and Table expanded for simplify control and exit from cells edit mode.
+    Source code mostly clean up.
+- UI:WebVision: Source code some clean up.
+
+
 2014-09-19 Roman
 - SYS: MMS module build is added to RPM packages spec-file openscada_mod.spec.
 - !!!!:LibsDB.{OscadaLibs,vcaBase}.db: DAQ templates base.{anUnif,anUnifSt} and widget Main.ElCadr adapted as example-test

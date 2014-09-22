@@ -18,6 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <fcntl.h>
 #include <time.h>
 #include <string.h>
 #include <string>
@@ -52,7 +53,7 @@ extern "C"
     TModule::SAt module( int n_mod )
 #endif
     {
-	if( n_mod==0 )	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
+	if(n_mod == 0)	return TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE);
 	return TModule::SAt("");
     }
 
@@ -62,8 +63,7 @@ extern "C"
     TModule *attach( const TModule::SAt &AtMod, const string &source )
 #endif
     {
-	if( AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE) )
-	    return new WebCfgD::TWEB( source );
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new WebCfgD::TWEB(source);
 	return NULL;
     }
 }
@@ -88,18 +88,17 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
     mLicense	= LICENSE;
     mSource	= name;
 
-    //> Reg export functions
-    modFuncReg( new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Get comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpGet) );
-    modFuncReg( new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
-	"Process Set comand from http protocol's!",(void(TModule::*)( )) &TWEB::HttpPost) );
+    //Reg export functions
+    modFuncReg(new ExpFunc("void HttpGet(const string&,string&,const string&,vector<string>&,const string&);",
+	"Process Get comand from http protocol's!",(void(TModule::*)()) &TWEB::HttpGet));
+    modFuncReg(new ExpFunc("void HttpPost(const string&,string&,const string&,vector<string>&,const string&);",
+	"Process Set comand from http protocol's!",(void(TModule::*)()) &TWEB::HttpPost));
 
     gdFTUseFontConfig(1);
 
-    //> Massages not for compile but for indexing by gettext
+    //Massages not for compile but for indexing by gettext
 #if 0
-    char mess[][100] =
-    {
+    char mess[][100] = {
 	_("OpenSCADA. Dynamic WEB configurator"), _("About"),
 	_("Load"), _("Save"), _("Up"), _("Previous"), _("Next"), _("Add item"),_("Delete item"),
 	_("Copy item"), _("Cut item"), _("Paste item"),
@@ -123,15 +122,15 @@ TWEB::TWEB( string name ) : TUI(MOD_ID)
 #endif
 }
 
-TWEB::~TWEB()
+TWEB::~TWEB( )
 {
 
 }
 
 string TWEB::modInfo( const string &name )
 {
-    if( name == "SubType" )	return SUB_TYPE;
-    else if( name == "Auth" )	return "1";
+    if(name == "SubType")	return SUB_TYPE;
+    else if(name == "Auth")	return "1";
     else return TModule::modInfo(name);
 }
 
@@ -144,17 +143,17 @@ void TWEB::modInfo( vector<string> &list )
 
 void TWEB::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
-    //> Load parameters from config-file
+    //Load parameters from config-file
 }
 
-void TWEB::modStart()
+void TWEB::modStart( )
 {
     run_st = true;
 }
 
-void TWEB::modStop()
+void TWEB::modStop( )
 {
     run_st = false;
 }
@@ -162,9 +161,9 @@ void TWEB::modStop()
 string TWEB::httpHead( const string &rcode, int cln, const string &cnt_tp, const string &addattr, const string &charset )
 {
     return  "HTTP/1.0 "+rcode+"\x0D\x0A"
-	    "Server: "+PACKAGE_STRING+"\x0D\x0A"
+	    "Server: "PACKAGE_STRING"\x0D\x0A"
 	    "Accept-Ranges: bytes\x0D\x0A"
-	    "Content-Length: "+TSYS::int2str(cln)+"\x0D\x0A"
+	    "Content-Length: "+i2s(cln)+"\x0D\x0A"
 	    "Content-Type: "+cnt_tp+"; charset="+charset+"\x0D\x0A"
 	    "Cache-Control: no-cache\x0D\x0A"+addattr+"\x0D\x0A";
 }
@@ -198,10 +197,7 @@ string TWEB::pgHead( string head_els )
 	"<body>\n";
 }
 
-string TWEB::pgTail( )
-{
-    return "</body>\n</html>";
-}
+string TWEB::pgTail( )	{ return "</body>\n</html>"; }
 
 void TWEB::imgConvert(SSess &ses)
 {
@@ -217,8 +213,8 @@ void TWEB::imgConvert(SSess &ses)
     else if((sim=gdImageCreateFromGifPtr(ses.page.size(),(char*)ses.page.data())))	itp = "gif";
     //if(sim) gdImageAlphaBlending(sim, 0);
 
-    //>> Check for resize icon
-    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=atoi(prmEl->second.c_str())) > 0 && gdImageSY(sim) > newImgH)
+    //Check for resize icon
+    if(sim && (prmEl=ses.prm.find("size")) != ses.prm.end() && (newImgH=s2i(prmEl->second)) > 0 && gdImageSY(sim) > newImgH)
     {
 	newImgW = gdImageSX(sim)*newImgH/gdImageSY(sim);
 	gdImagePtr dim = gdImageCreateTrueColor(newImgW,newImgH);
@@ -228,15 +224,14 @@ void TWEB::imgConvert(SSess &ses)
 	gdImageDestroy(sim);
 	sim = dim;
     }
-    //>> Check for disable icon make
+    //Check for disable icon make
     if(sim && (prmEl = ses.prm.find("filtr")) != ses.prm.end() && (prmEl->second == "gray" || prmEl->second == "unact"))
     {
         gdImagePtr dim = gdImageCreateTrueColor(gdImageSX(sim),gdImageSY(sim));
 	gdImageAlphaBlending(dim,0);
 	bool isUnAct = (prmEl->second == "unact");
 	for(int i_y = 0; i_y < gdImageSY(sim); i_y++)
-	    for(int i_x = 0; i_x < gdImageSX(sim); i_x++)
-	    {
+	    for(int i_x = 0; i_x < gdImageSX(sim); i_x++) {
 		int c = gdImageGetPixel(sim,i_x,i_y);
 		int y = (int)(0.3*gdImageRed(sim,c)+0.59*gdImageGreen(sim,c)+0.11*gdImageBlue(sim,c));
 		if(isUnAct) y = 255-(255-y)/2;
@@ -246,17 +241,15 @@ void TWEB::imgConvert(SSess &ses)
 	gdImageDestroy(sim);
 	sim = dim;
     }
-    //>> Save result
-    if(sim)
-    {
+    //Save result
+    if(sim) {
 	int img_sz;
 	char *img_ptr = NULL;
 	gdImageSaveAlpha(sim, 1);
 	if(itp == "png")	img_ptr = (char *)gdImagePngPtrEx(sim, &img_sz, 1);
 	else if(itp == "jpg")	img_ptr = (char *)gdImageJpegPtr(sim, &img_sz, -1);
 	else if(itp == "gif")	img_ptr = (char *)gdImageGifPtr(sim, &img_sz);
-	if(img_ptr)
-	{
+	if(img_ptr) {
 	    ses.page.assign(img_ptr,img_sz);
 	    gdFree(img_ptr);
 	}
@@ -270,85 +263,89 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
     SSess ses(TSYS::strDecode(urli,TSYS::HttpURL),sender,user,vars,"");
     ses.page = pgHead();
 
-    try
-    {
+    try {
 	string zero_lev = TSYS::pathLev(ses.url,0);
 
-	//> Get about module page
-	if( zero_lev == "about" )	getAbout(ses);
-	//> Get module icon and global image
-	else if( zero_lev == "ico" || zero_lev.substr(0,4) == "img_" )
-	{
+	//Get about module page
+	if(zero_lev == "about")	getAbout(ses);
+	//Get module icon and global image
+	else if(zero_lev == "ico" || zero_lev.substr(0,4) == "img_") {
 	    string itp;
 	    ses.page = TUIS::icoGet(((zero_lev == "ico")?"UI."MOD_ID:zero_lev.substr(4)), &itp);
 	    imgConvert(ses);
 	    page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 	    return;
 	}
-	else
-	{
+	else {
 	    prmEl = ses.prm.find("com");
+	    int hd;
 	    string wp_com = (prmEl!=ses.prm.end()) ? prmEl->second : "";
+	    ses.page = "";
 
-	    if( wp_com.empty() && zero_lev == "script.js" )
-	    {
-		ses.page = trMessReplace(WebCfgDVCA_js);
+	    if(wp_com.empty() && zero_lev == "script.js") {
+		if((hd=open("WebCfgDVCA.js",O_RDONLY)) >= 0) {
+		    char buf[STR_BUF_LEN];
+		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
+		    close(hd);
+		    ses.page = trMessReplace(ses.page);
+		}
+		else ses.page = trMessReplace(WebCfgDVCA_js);
 		page = httpHead("200 OK",ses.page.size(),"text/javascript")+ses.page;
 		return;
 	    }
-	    //> Main work page create.
-	    else if( wp_com.empty() )
-	    {
-		ses.page = trMessReplace(WebCfgDVCA_html);
-		//>> User replace
+	    //Main work page create.
+	    else if(wp_com.empty()) {
+		if((hd=open("WebCfgDVCA.html",O_RDONLY)) >= 0) {
+		    char buf[STR_BUF_LEN];
+		    for(int len = 0; (len=read(hd,buf,sizeof(buf))) > 0; ) ses.page.append(buf, len);
+		    close(hd);
+		    ses.page = trMessReplace(ses.page);
+		}
+		else ses.page = trMessReplace(WebCfgDVCA_html);
+		// User replace
 		size_t varPos = ses.page.find("##USER##");
 		if(varPos != string::npos)
 		    ses.page.replace(varPos,8,TSYS::strMess("<span style=\"color: %s;\">%s</span>",((user=="root")?"red":"green"),user.c_str()));
-		//>> Charset replace
+		// Charset replace
 		if((varPos=ses.page.find("##CHARSET##")) != string::npos) ses.page.replace(varPos,11,Mess->charset());
 
 		page = httpHead("200 OK",ses.page.size(),"text/html")+ses.page;
 		return;
 	    }
-	    //> Get node icon
-	    else if( wp_com == "ico" )
-	    {
+	    //Get node icon
+	    else if(wp_com == "ico") {
 		string itp = "png";
 		XMLNode req("get"); req.setAttr("path",ses.url+"/%2fico");
-		if( !mod->cntrIfCmd(req,ses.user) )
+		if(!mod->cntrIfCmd(req,ses.user))
 		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
 		else ses.page = TUIS::icoGet("disconnect",&itp);
 		imgConvert(ses);
 		page = httpHead("200 OK",ses.page.size(),string("image/")+itp)+ses.page;
 		return;
 	    }
-	    //> Get node childs
-	    else if( wp_com == "chlds" )
-	    {
+	    //Get node childs
+	    else if(wp_com == "chlds") {
 		XMLNode req("chlds");
 		prmEl = ses.prm.find("grp");
 		string gbr = (prmEl!=ses.prm.end()) ? prmEl->second : "";
-		//>> Get information about allow stations
-		if( zero_lev.empty() )
-		{
+		// Get information about allow stations
+		if(zero_lev.empty()) {
 		    vector<string> stls;
 		    SYS->transport().at().extHostList(ses.user,stls);
 		    stls.insert(stls.begin(),SYS->id());
-		    for(unsigned i_st = 0; i_st < stls.size(); i_st++)
-		    {
+		    for(unsigned i_st = 0; i_st < stls.size(); i_st++) {
 			XMLNode *chN;
-			if( stls[i_st] == SYS->id() )
+			if(stls[i_st] == SYS->id())
 			    chN = req.childAdd("el")->setAttr("id",SYS->id())->setText(SYS->name());
-			else
-			{
+			else {
 			    TTransportS::ExtHost host = SYS->transport().at().extHostGet(ses.user,stls[i_st]);
 			    chN = req.childAdd("el")->setAttr("id",host.id)->setText(host.name);
 			}
-			//>>>> Check icon
+			//  Check icon
 			XMLNode reqIco("get"); reqIco.setAttr("path","/"+stls[i_st]+"/%2fico");
-			if( mod->cntrIfCmd(reqIco,ses.user) ) chN->setAttr("icoSize","1000");
-			else chN->setAttr("icoSize",TSYS::int2str(reqIco.text().size()));
-			//>>>> Process groups
+			if(mod->cntrIfCmd(reqIco,ses.user)) chN->setAttr("icoSize","1000");
+			else chN->setAttr("icoSize",i2s(reqIco.text().size()));
+			//  Process groups
 			XMLNode brReq("info"); brReq.setAttr("path","/"+SYS->id()+"/%2fbr");
 			mod->cntrIfCmd(brReq,ses.user);
 			for(unsigned i_br = 0; brReq.childSize() && i_br < brReq.childGet(0)->childSize(); i_br++)
@@ -359,8 +356,7 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 			}
 		    }
 		}
-		else
-		{
+		else {
 		    req.setAttr("path",ses.url+"/%2fobj")->setAttr("grp",gbr)->setAttr("icoCheck","1");
 		    mod->cntrIfCmd(req,ses.user);
 		}
@@ -368,36 +364,32 @@ void TWEB::HttpGet( const string &urli, string &page, const string &sender, vect
 		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
 		return;
 	    }
-	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify")
-	    {
+	    else if(wp_com == "info" || wp_com == "get" || wp_com == "modify") {
 		XMLNode req(wp_com); req.setAttr("path",ses.url);
 		mod->cntrIfCmd(req,ses.user);
 		ses.page = req.save();
 		page = mod->httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
 		return;
 	    }
-	    else if( wp_com == "img" )
-	    {
+	    else if(wp_com == "img") {
 		string itp = "png";
 		XMLNode req("get"); req.setAttr("path",ses.url);
-		if( mod->cntrIfCmd(req,ses.user) || atoi(req.attr("rez").c_str()) || req.text().empty() )
+		if(mod->cntrIfCmd(req,ses.user) || s2i(req.attr("rez")) || req.text().empty())
 		    ses.page = TUIS::icoGet("stop",&itp);
-		else
-		{
+		else {
 		    ses.page = TSYS::strDecode(req.text(),TSYS::base64);
 		    if(req.attr("tp").size()) itp = req.attr("tp");
 		}
 		page = mod->httpHead("200 OK",ses.page.size(),"image/"+itp)+ses.page;
 		return;
 	    }
-	    else
-	    {
+	    else {
 		mess_warning(nodePath().c_str(),_("Unknown command: %s."),wp_com.c_str());
 		ses.page = ses.page+"<center>Call page/widget '"+ses.url+"' command: '"+wp_com+"'</center>\n<br/>";
 	    }
 	}
-    }catch( TError err )
-    {
+    }
+    catch(TError err) {
 	ses.page = "Page <"+ses.url+"> error: "+err.mess;
 	page = httpHead("404 Not Found",ses.page.size())+ses.page;
 	return;
@@ -438,28 +430,25 @@ void TWEB::HttpPost( const string &url, string &page, const string &sender, vect
     map<string,string>::iterator cntEl;
     SSess ses(TSYS::strDecode(url,TSYS::HttpURL),sender,user,vars,page);
 
-    //> Commands process
+    //Commands process
     cntEl = ses.prm.find("com");
     string wp_com = (cntEl!=ses.prm.end()) ? cntEl->second : "";
-    //> Attributes set
-    if( wp_com == "com" )
-    {
+    //Attributes set
+    if(wp_com == "com") {
 	XMLNode req(""); req.load(ses.content); req.setAttr("path",ses.url);
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save(XMLNode::XMLHeader);
 	page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
     }
-    //> Full request to control interface
-    else if( wp_com == "req" )
-    {
+    //Full request to control interface
+    else if(wp_com == "req") {
 	XMLNode req(""); req.load(ses.content);
 	mod->cntrIfCmd(req,ses.user);
 	ses.page = req.save(XMLNode::XMLHeader);
 	page = httpHead("200 OK",ses.page.size(),"text/xml","","UTF-8")+ses.page;
     }
-    else if( wp_com == "img" )
-    {
-	if( (cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty() )
+    else if(wp_com == "img") {
+	if((cntEl=ses.cnt.find("name")) != ses.cnt.end() && !ses.files[cntEl->second].empty())
 	{
 	    XMLNode req("set"); req.setAttr("path",ses.url)->setText(TSYS::strEncode(ses.files[cntEl->second],TSYS::base64));
 	    mod->cntrIfCmd(req,ses.user);
@@ -474,13 +463,13 @@ string TWEB::trMessReplace( const string &tsrc )
 
     unsigned txtBeg = 0, i_s, i_r;
     for(i_s = 0; i_s < tsrc.size(); i_s++)
-	if( tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3)<tsrc.size() && tsrc[i_s+3] != '#' )
+	if(tsrc[i_s] == '#' && tsrc.substr(i_s,3) == "###" && (i_s+3) < tsrc.size() && tsrc[i_s+3] != '#')
 	{
 	    for(i_r = i_s+3; i_r < tsrc.size(); i_r++)
-		if( (tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) || tsrc[i_r] == '\n' )
+		if((tsrc[i_r] == '#' && tsrc.substr(i_r,3) == "###" && ((i_r+3)>=tsrc.size() || tsrc[i_r+3] != '#')) ||
+			tsrc[i_r] == '\n')
 		    break;
-	    if( i_r < tsrc.size() && tsrc[i_r] != '\n' )
-	    {
+	    if(i_r < tsrc.size() && tsrc[i_r] != '\n') {
 		trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
 		trez.append(_(tsrc.substr(i_s+3,i_r-i_s-3).c_str()));
 		i_s = i_r+2;
@@ -488,7 +477,7 @@ string TWEB::trMessReplace( const string &tsrc )
 		continue;
 	    }
 	}
-    if( txtBeg < i_s ) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
+    if(txtBeg < i_s) trez.append(tsrc.substr(txtBeg,i_s-txtBeg));
 
     return trez;
 }
@@ -498,17 +487,16 @@ int TWEB::cntrIfCmd( XMLNode &node, const string &user )
     try { return SYS->transport().at().cntrIfCmd(node,"UIWebCfg",user); }
     catch(TError err) { node.setAttr("mcat",err.cat)->setAttr("rez","10")->setText(err.mess); }
 
-    return atoi(node.attr("rez").c_str());
+    return s2i(node.attr("rez"));
 }
 
 string TWEB::getCookie( string name, vector<string> &vars )
 {
-    for( unsigned i_var = 0; i_var < vars.size(); i_var++)
-	if( vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie" )
-	{
+    for(unsigned i_var = 0; i_var < vars.size(); i_var++)
+	if(vars[i_var].substr(0, vars[i_var].find(":",0)) == "Cookie") {
 	    size_t i_beg = vars[i_var].find(name+"=",0);
-	    if( i_beg == string::npos ) return "";
-	    i_beg += name.size()+1;
+	    if(i_beg == string::npos) return "";
+	    i_beg += name.size() + 1;
 	    return vars[i_var].substr(i_beg,vars[i_var].find(";",i_beg)-i_beg);
 	}
     return "";
@@ -523,16 +511,15 @@ string TWEB::cntGet( SSess &ses, const string &nm )
 
 void TWEB::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TUI::cntrCmdProc(opt);
 	if(ctrMkNode("area",opt,1,"/prm/cfg",_("Module options")))
 	    ctrMkNode("comm",opt,-1,"/prm/cfg/host_lnk",_("Go to remote stations list configuration"),RWRW__,"root",SUI_ID,1,"tp","lnk");
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/host_lnk" && ctrChkNode(opt,"get",RWRW__,"root",SUI_ID,SEC_RD)) opt->setText("/Transport");
     else TUI::cntrCmdProc(opt);
@@ -544,10 +531,9 @@ void TWEB::cntrCmdProc( XMLNode *opt )
 SSess::SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent ) :
     url(iurl), sender(isender), user(iuser), content(icontent), vars(ivars)
 {
-    //> URL parameters parse
+    //URL parameters parse
     size_t prmSep = iurl.find("?");
-    if(prmSep != string::npos)
-    {
+    if(prmSep != string::npos) {
 	url = iurl.substr(0,prmSep);
 	string prms = iurl.substr(prmSep+1);
 	string sprm;
@@ -556,7 +542,7 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
 	    else prm[sprm.substr(0,prmSep)] = sprm.substr(prmSep+1);
     }
 
-    //> Content parse
+    //Content parse
     string boundary;
     const char *c_bound = "boundary=";
     const char *c_term = "\x0D\x0A";
@@ -566,47 +552,41 @@ SSess::SSess( const string &iurl, const string &isender, const string &iuser, ve
     const char *c_file = "filename=\"";
 
     for(size_t i_vr = 0, pos = 0; i_vr < vars.size() && boundary.empty(); i_vr++)
-        if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 && (pos=vars[i_vr].find(c_bound,0)) != string::npos)
-        {
-            pos += strlen(c_bound);
-            boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
-        }
+	if(vars[i_vr].compare(0,vars[i_vr].find(":",0),"Content-Type") == 0 &&
+	    (pos=vars[i_vr].find(c_bound,0)) != string::npos)
+	{
+	    pos += strlen(c_bound);
+	    boundary = vars[i_vr].substr(pos,vars[i_vr].size()-pos);
+	}
     if(boundary.empty()) return;
 
-    for(size_t pos = 0, spos = 0, i_bnd = 0; true; )
-    {
-        pos = content.find(boundary,pos);
-        if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
-        pos += boundary.size()+strlen(c_term);
+    for(size_t pos = 0, spos = 0, i_bnd = 0; true; ) {
+	pos = content.find(boundary,pos);
+	if(pos == string::npos || content.compare(pos+boundary.size(),2,c_end) == 0) break;
+	pos += boundary.size()+strlen(c_term);
 
-        //>> Process properties and get name
-        string p_name, f_name;
-        while(pos < content.size())
-        {
-            string c_head = content.substr(pos, content.find(c_term,pos)-pos);
-            pos += c_head.size()+strlen(c_term);
-            if(c_head.empty()) break;
-            if((spos=c_head.find(":")) == string::npos) return;
-            if(c_head.compare(0,spos,c_fd) == 0)
-            {
-        	if((i_bnd=c_head.find(c_name,spos)) != string::npos)
-        	{
-            	    i_bnd += strlen(c_name);
-            	    p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-        	}
-        	if((i_bnd=c_head.find(c_file,spos)) != string::npos)
-        	{
-        	    i_bnd += strlen(c_file);
-        	    f_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
-        	}
+	// Process properties and get name
+	string p_name, f_name;
+	while(pos < content.size()) {
+	    string c_head = content.substr(pos, content.find(c_term,pos)-pos);
+	    pos += c_head.size()+strlen(c_term);
+	    if(c_head.empty()) break;
+	    if((spos=c_head.find(":")) == string::npos) return;
+	    if(c_head.compare(0,spos,c_fd) == 0) {
+		if((i_bnd=c_head.find(c_name,spos)) != string::npos) {
+		    i_bnd += strlen(c_name);
+		    p_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
+		}
+		if((i_bnd=c_head.find(c_file,spos)) != string::npos) {
+		    i_bnd += strlen(c_file);
+		    f_name = c_head.substr(i_bnd,c_head.find("\"",i_bnd)-i_bnd);
+		}
 	    }
-        }
-        if(pos >= content.size()) return;
-        if(!p_name.empty())
-        {
+	}
+	if(pos >= content.size()) return;
+	if(!p_name.empty()) {
 	    cnt[p_name] = content.substr(pos,content.find(string(c_term)+c_end+boundary,pos)-pos);
-	    if(!f_name.empty())
-	    {
+	    if(!f_name.empty()) {
 		files[f_name] = cnt[p_name];
 		cnt[p_name] = f_name;
 	    }

@@ -51,7 +51,8 @@ class SSess
 {
     public:
 	//Methods
-	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars, const string &icontent );
+	SSess( const string &iurl, const string &isender, const string &iuser, vector<string> &ivars,
+	    const string &icontent );
 
 	//Attributes
 	string url;		//request URL

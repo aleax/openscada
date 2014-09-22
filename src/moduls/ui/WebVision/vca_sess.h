@@ -126,7 +126,8 @@ class InundationItem
 {
     public:
 	InundationItem( )	{ }
-	InundationItem( vector<int> inumber_point, int color, int i_index_color, string P_imgFill ) : number_point(inumber_point), P_color(color), index_color(i_index_color), imgFill(P_imgFill)
+	InundationItem( vector<int> inumber_point, int color, int i_index_color, string P_imgFill ) :
+	    number_point(inumber_point), P_color(color), index_color(i_index_color), imgFill(P_imgFill)
 	{ }
 
 	vector<int>	number_point;
@@ -152,7 +153,7 @@ class VCAElFigure : public VCAObj
 	double angle( const Point p1, const Point p2, const Point p3, const Point p4 );
 	static double length( const Point pt1, const Point pt2 );
 	Point arc( double t, double a, double b );
-	Point unrotate(const Point pnt, double alpha, double a, double b);
+	Point unrotate( const Point pnt, double alpha, double a, double b );
 	Point rotate( const Point pnt, double alpha );
 	Point bezier( double t, Point p1, Point p2, Point p3, Point p4 );
 	double bezierDeltaT( Point p1, Point p2, Point p3, Point p4 );
@@ -205,7 +206,7 @@ class VCAText : public VCAObj
 {
     private:
 	//Data
-	//> Argument object's class
+	// Argument object's class
 	class ArgObj
 	{
 	    public:
@@ -243,21 +244,21 @@ class VCAText : public VCAObj
 	double	orient;
 	bool	active;		//Active diagram
 
-	double	width, height;  //Widget geometry
-	int     scaleHeight,    //Vertical scale
-		scaleWidth;     //Horizontal scale
-	int     textFontSize,   //The font's size of the text
-		textColor;      //The color of the text
-	short   alignHor :4;    //Horizontal align
-	short   alignVer :3;    //Vertical align
-	bool    wordWrap,       //Word wrap flag
-		underline,      //Underline text flag
-		strikeout,      //Strikeout text flag
-		bold;	   	//Bold text flag ( for calculating the underline and strikeout width )
-	string  text,	   	//The result text
-		text_tmpl,      //The text without the arguments
-		textFont;       //The text's font
-	vector<ArgObj>	args;   //The argument's vector
+	double	width, height;	 //Widget geometry
+	int     scaleHeight,	//Vertical scale
+		scaleWidth;	//Horizontal scale
+	int     textFontSize,	//The font's size of the text
+		textColor;	//The color of the text
+	short   alignHor :4;	//Horizontal align
+	short   alignVer :3;	//Vertical align
+	bool    wordWrap,	//Word wrap flag
+		underline,	//Underline text flag
+		strikeout,	//Strikeout text flag
+		bold;		//Bold text flag ( for calculating the underline and strikeout width )
+	string  text,		//The result text
+		text_tmpl,	//The text without the arguments
+		textFont;	//The text's font
+	vector<ArgObj>	args;	//The argument's vector
 
 	Res	mRes;
 };
@@ -305,7 +306,7 @@ class VCADiagram : public VCAObj
 
     private:
 	//Data
-	//> Trend object's class
+	// Trend object's class
 	class TrendObj
 	{
 	    friend class VCADiagram;
@@ -355,7 +356,7 @@ class VCADiagram : public VCAObj
 		bool	isIndiv;		//Individual scale
 		char	wScale;
 #if HAVE_FFTW3_H
-		//> FFT
+		// FFT
 		int	fftN;			//Spectrum samples number
 		fftw_complex	*fftOut;	//Spectrum out buffer, size = fftN/2+1
 #endif
@@ -367,11 +368,11 @@ class VCADiagram : public VCAObj
 		int		mColor;		//Values line color
 		char		mWidth;		//Line width
 		char		mScale;		//Separted scale
-		//> Archive
+		// Archive
 		int64_t		arh_per;	//Archive period
 		int64_t		arh_beg;	//Archive begin time
 		int64_t		arh_end;	//Archive end time
-		//> Values
+		// Values
 		int		val_tp;		//Values type
 		deque<SHg>	vals;		//Values buffer
 
@@ -420,7 +421,7 @@ class VCASess : public TCntrNode
 	void getReq( SSess &ses );
 	void postReq( SSess &ses );
 
-	//> Objects
+	// Objects
 	void objCheck( const string &rootId, const string &wPath );
 	void objList( vector<string> &list )		{ chldList(id_objs,list); }
 	bool objPresent( const string &name )		{ return chldPresent(id_objs,name); }

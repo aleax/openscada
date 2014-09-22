@@ -87,17 +87,17 @@ class TWEB: public TUI
 
 	void HttpPost( const string &url, string &page, const string &sender, vector<string> &vars, const string &user );
 
-	//> Get form content for name
+	// Get form content for name
 	string cntGet( SSess &ses, const string &nm );
 
-	//> Controll system requests
+	// Controll system requests
 	int cntrIfCmd( XMLNode &node, const string &user );
 
 	string modInfo( const string &name );
 	void   modInfo( vector<string> &list );
 	string trMessReplace( const string &tsrc );
 
-	void imgConvert(SSess &ses);
+	void imgConvert( SSess &ses );
 
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 };
