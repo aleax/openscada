@@ -1,3 +1,7 @@
+2014-09-23 Roman
+- FIX:UI:Vision: #include <algorithm> is added for STL sort() build into some environments, detected at CentOS 6.5.
+
+
 2014-09-22 Roman
 - FIX:DAQ.OneWire: Busses and devices list prepare fix.
 - UI:WebCfgD: Expanded for loading files WebCfgDVCA.html and WebCfgDVCA.js from work directory try.

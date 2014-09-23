@@ -22,6 +22,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <algorithm>
+
 #include <linux/input.h>
 
 #include <QApplication>
