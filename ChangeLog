@@ -1,3 +1,8 @@
+2014-09-28 Roman
+- SYS: Main start script "openscada_start" expanded for message about already start.
+- DAQ.SoundCard: Expand for X86_64 specific with short framesPerBuffer call to CallBack function.
+
+
 2014-09-23 Roman
 - FIX:UI:Vision: #include <algorithm> is added for STL sort() build into some environments, detected at CentOS 6.5.
 

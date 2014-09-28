@@ -98,6 +98,10 @@ pLock=".openscada.lock"
 # Check for already started programm present
 if [ -f $pLock ] && ps -Ao pid,command | grep "$(cat ${pLock})[ ]*${pCmd}" > /dev/null; then
     echo "OpenSCADA station \"$ProjName\" already started!";
+    if test $TERM_REZ = 0 -a -n "$(which dialog)"; then dialog --msgbox "\"$ProjName\" $(gettext "already started.")" 10 30;
+    elif test -n "$(which kdialog)"; then kdialog --title "$(gettext "OpenSCADA start")" --msgbox "\"$ProjName\" $(gettext "already started.")";
+    elif test -n "$(which zenity)"; then zenity --title "$(gettext "OpenSCADA start")" --info --text="\"$ProjName\" $(gettext "already started.")";
+    elif test -n "$(which Xdialog)"; then Xdialog --title "$(gettext "OpenSCADA start")" --msgbox "\"$ProjName\" $(gettext "already started.")" 10 30; fi
     exit 1;
 fi
 

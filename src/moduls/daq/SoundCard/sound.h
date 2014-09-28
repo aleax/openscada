@@ -130,6 +130,7 @@ class TMdContr: public TController
 	int	sRt;
 	float	acqSize;
 	double	inAdcTimePrev, inAdcTimeAdj, lostFrmsCntr;
+	unsigned long framesPerBufferMax;
 
 	Res	nRes;
 };
