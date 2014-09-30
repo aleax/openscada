@@ -56,7 +56,7 @@ VisDevelop::VisDevelop( const string &open_user, const string &user_pass, const 
     setDockOptions(dockOptions() | QMainWindow::VerticalTabs);
     mod->regWin(this);
 
-    setWindowTitle(TSYS::strMess(_("OpenSCADA Vision developing: %s"), SYS->name().c_str()).c_str());
+    setWindowTitle(TSYS::strMess(_("OpenSCADA Vision developing: %s"),trU(SYS->name(),open_user).c_str()).c_str());
     setWindowIcon(mod->icon());
 
     //Init workspace

@@ -185,8 +185,7 @@ XMLNode *TSYS::cfgNode( const string &path, bool create )
 	if(!ok) {
 	    if(!create)	return NULL;
 	    ndNm = "prm";
-	    switch(nLev)
-	    {
+	    switch(nLev) {
 		case 0: ndNm = "station";	break;
 		case 1: if(s_el.compare(0,4,"sub_") == 0) ndNm = "node";	break;
 		case 2: if(s_el.compare(0,4,"mod_") == 0) ndNm = "node";	break;
@@ -211,8 +210,7 @@ void TSYS::modifCfg( bool chkPossibleWR )
 string TSYS::int2str( int val, TSYS::IntView view )
 {
     char buf[NSTR_BUF_LEN];
-    switch(view)
-    {
+    switch(view) {
 	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", (unsigned)val);	break;
 	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", (unsigned)val);	break;
 	default: snprintf(buf, sizeof(buf), "%d", val);				break;
@@ -223,8 +221,7 @@ string TSYS::int2str( int val, TSYS::IntView view )
 string TSYS::uint2str( unsigned val, IntView view )
 {
     char buf[NSTR_BUF_LEN];
-    switch(view)
-    {
+    switch(view) {
 	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%o", val);	break;
 	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%x", val);	break;
 	default: snprintf(buf, sizeof(buf), "%u", val);		break;
@@ -235,8 +232,7 @@ string TSYS::uint2str( unsigned val, IntView view )
 string TSYS::ll2str( int64_t val, IntView view )
 {
     char buf[NSTR_BUF_LEN];
-    switch(view)
-    {
+    switch(view) {
 	case TSYS::Oct:	snprintf(buf, sizeof(buf), "%llo", (long long unsigned int)val);	break;
 	case TSYS::Hex:	snprintf(buf, sizeof(buf), "%llx", (long long unsigned int)val);	break;
 	default: snprintf(buf, sizeof(buf), "%lld", (long long int)val);			break;
@@ -248,8 +244,7 @@ string TSYS::real2str( double val, int prec, char tp )
 {
     char buf[NSTR_BUF_LEN];
     prec = vmax(0, prec);
-    switch(tp)
-    {
+    switch(tp) {
 	case 'g': snprintf(buf, sizeof(buf), "%.*g", prec, val);	break;
 	case 'e': snprintf(buf, sizeof(buf), "%.*e", prec, val);	break;
 	default: snprintf(buf, sizeof(buf), "%.*f", prec, val);		break;
@@ -683,8 +678,7 @@ bool TSYS::chkSelDB( const string& wDB,  bool isStrong )
 
 void TSYS::sighandler( int signal )
 {
-    switch(signal)
-    {
+    switch(signal) {
 	case SIGINT:
 	    SYS->mStopSignal = signal;
 	    break;
@@ -696,8 +690,7 @@ void TSYS::sighandler( int signal )
 	    mess_warning(SYS->nodePath().c_str(),_("Floating point exception is caught!"));
 	    exit(1);
 	    break;
-	case SIGCHLD:
-	{
+	case SIGCHLD: {
 	    int status;
 	    pid_t pid = wait(&status);
 	    if(!WIFEXITED(status) && pid > 0)
@@ -731,8 +724,7 @@ void TSYS::clkCalc( )
 	char buf[255];
 	FILE *fp = NULL;
 	//Try read file cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq for current CPU frequency get
-	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r")))
-	{
+	if(!mSysclc && (fp=fopen("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq", "r"))) {
 	    size_t rez = fread(buf, 1, sizeof(buf)-1, fp); buf[rez] = 0;
 	    mSysclc = uint64_t(atof(buf)*1e3);
 	    fclose(fp);
@@ -922,13 +914,11 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
     int i_sz;
     string sout;
 
-    switch(tp)
-    {
+    switch(tp) {
 	case TSYS::PathEl:
 	    sout = in;
 	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch(sout[i_sz])
-		{
+		switch(sout[i_sz]) {
 		    case '/': sout.replace(i_sz,1,"%2f"); i_sz += 2; break;
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
 		}
@@ -937,8 +927,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    char buf[4];
 	    sout = in;
 	    for(i_sz = 0; i_sz < (int)sout.size(); i_sz++)
-		switch(sout[i_sz])
-		{
+		switch(sout[i_sz]) {
 		    case '%': sout.replace(i_sz,1,"%25"); i_sz += 2; break;
 		    case ' ': sout.replace(i_sz,1,"%20"); i_sz += 2; break;
 		    case '\t': sout.replace(i_sz,1,"%09"); i_sz += 2; break;
@@ -955,8 +944,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::Html:
 	    sout.reserve(in.size()+10);
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+		switch(in[i_sz]) {
 		    case '>':	sout += "&gt;";		break;
 		    case '<':	sout += "&lt;";		break;
 		    case '"':	sout += "&quot;";	break;
@@ -968,8 +956,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::JavaSc:
 	    sout.reserve(in.size()+10);
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+		switch(in[i_sz]) {
 		    case '\n':	sout += "\\n";	break;
 		    default:	sout += in[i_sz];
 		}
@@ -977,8 +964,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::SQL:
 	    sout.reserve(in.size()+10);
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+		switch(in[i_sz]) {
 		    case '\'':	sout += "\\'";	break;
 		    case '\"':	sout += "\\\"";	break;
 		    case '`':	sout += "\\`";	break;
@@ -1033,8 +1019,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	case TSYS::oscdID:
 	    sout.reserve(in.size());
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+		switch(in[i_sz]) {
 		    case ' ': case '/': case '\\': case '&': case '(':
 		    case ')': case '[': case ']': case '!': case '~':
 		    case '`': case '@': case '%': case '^': case '-':
@@ -1061,8 +1046,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 	    sout.reserve(in.size());
 	    for(i_sz = 0; i_sz < (int)in.size(); i_sz++)
 		if(in[i_sz] == '\\' && i_sz < ((int)in.size()-1)) {
-		    switch(in[i_sz+1])
-		    {
+		    switch(in[i_sz+1]) {
 			case 'a':	sout += '\a';	break;
 			case 'b':	sout += '\b';	break;
 			case 'f':	sout += '\f';	break;
@@ -1092,8 +1076,7 @@ string TSYS::strEncode( const string &in, TSYS::Code tp, const string &opt1 )
 
 unsigned char TSYS::getBase64Code( unsigned char asymb )
 {
-    switch(asymb)
-    {
+    switch(asymb) {
 	case 'A'...'Z':	return asymb-(unsigned char)'A';
 	case 'a'...'z':	return 26+asymb-(unsigned char)'a';
 	case '0'...'9':	return 52+asymb-(unsigned char)'0';
@@ -1108,13 +1091,11 @@ string TSYS::strDecode( const string &in, TSYS::Code tp, const string &opt1 )
     unsigned i_sz;
     string sout;
 
-    switch(tp)
-    {
+    switch(tp) {
 	case TSYS::PathEl: case TSYS::HttpURL: case TSYS::Custom:
 	    sout.reserve(in.size());
 	    for(i_sz = 0; i_sz < in.size(); i_sz++)
-		switch(in[i_sz])
-		{
+		switch(in[i_sz]) {
 		    case '%':
 			if(i_sz+2 < in.size()) {
 			    sout += (char)strtol(in.substr(i_sz+1,2).c_str(),NULL,16);
@@ -1280,11 +1261,9 @@ float TSYS::floatLE( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
     ieee754_float ieee754_be;
-    union ieee754_le
-    {
+    union ieee754_le {
 	float f;
-	struct
-	{
+	struct {
 	    unsigned int mantissa:23;
 	    unsigned int exponent:8;
 	    unsigned int negative:1;
@@ -1306,11 +1285,9 @@ float TSYS::floatLErev( float in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN
     ieee754_float ieee754_be;
-    union ieee754_le
-    {
+    union ieee754_le {
 	float f;
-	struct
-	{
+	struct {
 	    unsigned int mantissa:23;
 	    unsigned int exponent:8;
 	    unsigned int negative:1;
@@ -1332,11 +1309,9 @@ double TSYS::doubleLE( double in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN || __FLOAT_WORD_ORDER == __BIG_ENDIAN
     ieee754_double ieee754_be;
-    union ieee754_le
-    {
+    union ieee754_le {
 	double d;
-	struct
-	{
+	struct {
 	    unsigned int mantissa1:32;
 	    unsigned int mantissa0:20;
 	    unsigned int exponent:11;
@@ -1360,11 +1335,9 @@ double TSYS::doubleLErev( double in )
 {
 #if __BYTE_ORDER == __BIG_ENDIAN || __FLOAT_WORD_ORDER == __BIG_ENDIAN
     ieee754_double ieee754_be;
-    union ieee754_le
-    {
+    union ieee754_le {
 	double d;
-	struct
-	{
+	struct {
 	    unsigned int mantissa1:32;
 	    unsigned int mantissa0:20;
 	    unsigned int exponent:11;
@@ -1388,11 +1361,9 @@ float TSYS::floatBE( float in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     ieee754_float ieee754_le;
-    union ieee754_be
-    {
+    union ieee754_be {
 	float f;
-	struct
-	{
+	struct {
 	    unsigned int negative:1;
 	    unsigned int exponent:8;
 	    unsigned int mantissa:23;
@@ -1414,11 +1385,9 @@ float TSYS::floatBErev( float in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     ieee754_float ieee754_le;
-    union ieee754_be
-    {
+    union ieee754_be {
 	float f;
-	struct
-	{
+	struct {
 	    unsigned int negative:1;
 	    unsigned int exponent:8;
 	    unsigned int mantissa:23;
@@ -1440,11 +1409,9 @@ double TSYS::doubleBE( double in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     ieee754_double ieee754_le;
-    union ieee754_be
-    {
+    union ieee754_be {
 	double d;
-	struct
-	{
+	struct {
 	    unsigned int negative:1;
 	    unsigned int exponent:11;
 	    unsigned int mantissa0:20;
@@ -1468,11 +1435,9 @@ double TSYS::doubleBErev( double in )
 {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     ieee754_double ieee754_le;
-    union ieee754_be
-    {
+    union ieee754_be {
 	double d;
-	struct
-	{
+	struct {
 	    unsigned int negative:1;
 	    unsigned int exponent:11;
 	    unsigned int mantissa0:20;
@@ -1528,11 +1493,9 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     map<string,STask>::iterator ti;
 
     ResAlloc res(taskRes, true);
-    for(time_t c_tm = time(NULL); (ti=mTasks.find(path)) != mTasks.end(); )
-    {
+    for(time_t c_tm = time(NULL); (ti=mTasks.find(path)) != mTasks.end(); ) {
 	//Remove created and finished but not destroyed task
-	if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached))
-	{
+	if(ti->second.flgs&STask::FinishTask && !(ti->second.flgs&STask::Detached)) {
 	    pthread_join(ti->second.thr, NULL);
 	    mTasks.erase(ti);
 	    continue;
@@ -1619,8 +1582,7 @@ void TSYS::taskDestroy( const string &path, bool *endrunCntr, int wtm, bool noSi
     t_tm = s_tm = time(NULL);
     bool first = true;
     res.request(true);
-    while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask))
-    {
+    while((it=mTasks.find(path)) != mTasks.end() && !(it->second.flgs&STask::FinishTask)) {
 	if(first) pthread_kill(it->second.thr, SIGUSR1);	//> User's termination signal, check for it by function taskEndRun()
 	if(!noSignal) pthread_kill(it->second.thr, SIGALRM);	//> Sleep, select and other system calls termination
 	res.release();
@@ -1821,8 +1783,7 @@ reload:
     //Minutes check
     cronEl = TSYS::strSepParse(vl,0,' ');
     vm = 200;
-    for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
-    {
+    for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); ) {
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=59; }
@@ -1842,8 +1803,7 @@ reload:
     //Hours check
     cronEl = TSYS::strSepParse(vl,1,' ');
     vm = 200;
-    for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
-    {
+    for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); ) {
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=23; }
@@ -1867,8 +1827,7 @@ reload:
     string cronElw = TSYS::strSepParse(vl,4,' ');
     vm = 200;
     if(cronEl != "*")
-	for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
-	{
+	for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); ) {
 	    vbeg = vend = -1; vstep = 0;
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=31; }
@@ -1881,10 +1840,9 @@ reload:
 		else vm = vmin(vm, ttm.tm_mday);
 	    }
 	    if(vm == ttm.tm_mday) break;
-        }
+	}
     if(cronEl == "*" || (cronElw != "*" && !cronElw.empty()))
-	for(int eoff = 0; (tEl=TSYS::strSepParse(cronElw,0,',',&eoff)).size(); )
-	{
+	for(int eoff = 0; (tEl=TSYS::strSepParse(cronElw,0,',',&eoff)).size(); ) {
 	    vbeg = vend = -1; vstep = 0;
 	    sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	    if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=0; vend=6; }
@@ -1907,8 +1865,7 @@ reload:
     //Month check
     cronEl = TSYS::strSepParse(vl,3,' ');
     vm = 200;
-    for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); )
-    {
+    for(int eoff = 0; (tEl=TSYS::strSepParse(cronEl,0,',',&eoff)).size(); ) {
 	vbeg = vend = -1; vstep = 0;
 	sscanf(tEl.c_str(),"%d-%d/%d",&vbeg,&vend,&vstep);
 	if(vbeg < 0) { sscanf(tEl.c_str(),"*/%d",&vstep); vbeg=1; vend=12; }
@@ -2189,8 +2146,7 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
     nd->childAdd("el")->setText("/");
     if(TSYS::pathLev(fsBaseIn,0) != ".") nd->childAdd("el")->setText(".");
     string fsBase, tEl;
-    for(int off = 0; (tEl=TSYS::pathLev(fsBaseIn,0,false,&off)).size(); pathLev++)
-    {
+    for(int off = 0; (tEl=TSYS::pathLev(fsBaseIn,0,false,&off)).size(); pathLev++) {
 	fsBase += ((pathLev || fromRoot)?"/":"")+tEl;
 	nd->childAdd("el")->setText(fsBase);
     }
@@ -2237,11 +2193,12 @@ void TSYS::ctrListFS( XMLNode *nd, const string &fsBaseIn, const string &fileExt
 void TSYS::cntrCmdProc( XMLNode *opt )
 {
     char buf[STR_BUF_LEN];
+    string u = opt->attr("user");
 
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,name().c_str());
+	snprintf(buf,sizeof(buf),_("%s station: \"%s\""),PACKAGE_NAME,trU(name(),u).c_str());
 	ctrMkNode("oscada_cntr",opt,-1,"/",buf,R_R_R_)->setAttr("doc","AboutOpenSCADA|ProgrammManual");
 	if(ctrMkNode("branches",opt,-1,"/br","",R_R_R_))
 	    ctrMkNode("grp",opt,-1,"/br/sub_",_("Subsystem"),R_R_R_,"root","root",1,"idm","1");
@@ -2271,9 +2228,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/gen/savePeriod",_("Save system period"),RWRWR_,"root","root",2,"tp","dec",
 		"help",_("Use no zero period (seconds) for periodic saving of changed systems parts to DB."));
 	    ctrMkNode("fld",opt,-1,"/gen/lang",_("Language"),RWRWR_,"root","root",1,"tp","str");
-	    ctrMkNode("fld",opt,-1,"/gen/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
-		"tp","str","len","2","dest","sel_ed","select","/gen/baseLangLs",
-		"help",_("Multilingual for variable texts support enabling by base language selection."));
 	    if(ctrMkNode("area",opt,-1,"/gen/mess",_("Messages"),R_R_R_)) {
 		ctrMkNode("fld",opt,-1,"/gen/mess/lev",_("Least level"),RWRWR_,"root","root",6,"tp","dec","len","1","dest","select",
 		    "sel_id","0;1;2;3;4;5;6;7",
@@ -2304,9 +2258,15 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 #endif
 	    }
 	if(Mess->lang2CodeBase().size() && ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
-	    ctrMkNode("fld",opt,-1,"/tr/en",_("Enable"),RWRWR_,"root","root",2,"tp","bool",
-		"help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
-	    if(Mess->translEn()) {
+	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
+		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
+		"help",_("Multilingual for variable texts support enabling by base language selection."));
+	    ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current dynamic translation state."));
+	    ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Plan for dynamic translation at next start."));
+	    if(!Mess->translDyn())
+		ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable manager"),RWRWR_,"root","root",2,"tp","bool",
+		    "help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
+	    if(Mess->translEnMan()) {
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRWR_,"root","root",2,"tp","str",
 		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));
 		ctrMkNode("fld",opt,-1,"/tr/fltr",_("Source filter"),RWRWR_,"root","root",1,"tp","str");
@@ -2352,8 +2312,8 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/ver" && ctrChkNode(opt))	opt->setText(VERSION);
     else if(a_path == "/gen/id" && ctrChkNode(opt))	opt->setText(id());
     else if(a_path == "/gen/stat") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(trU(name(),u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	setName(trSetU(name(),u,opt->text()));
     }
     else if(a_path == "/gen/frq" && ctrChkNode(opt))	opt->setText(r2s((float)sysClk()/1000000.,6));
     else if(a_path == "/gen/clk_res" && ctrChkNode(opt)) {
@@ -2402,16 +2362,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang(opt->text());
     }
-    else if(a_path == "/gen/baseLang") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang2CodeBase(opt->text());
-    }
-    else if(a_path == "/gen/baseLangLs" && ctrChkNode(opt)) {
-	opt->childAdd("el")->setText(Mess->lang2Code());
-	if(!Mess->lang2CodeBase().empty() && Mess->lang2CodeBase() != Mess->lang2Code())
-	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
-	opt->childAdd("el")->setText("");
-    }
     else if(a_path == "/gen/mess/lev") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->messLevel()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setMessLevel(s2i(opt->text()));
@@ -2432,11 +2382,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText((Mess->logDirect()&0x08)?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLogDirect(s2i(opt->text())?Mess->logDirect()|0x08:Mess->logDirect()&(~0x08));
     }
-    else if((a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD))
-    {
+    else if((a_path == "/br/sub_" || a_path == "/subs/br") && ctrChkNode(opt,"get",R_R_R_,"root","root",SEC_RD)) {
 	vector<string> lst;
 	list(lst);
-	for(unsigned i_a=0; i_a < lst.size(); i_a++)
+	for(unsigned i_a = 0; i_a < lst.size(); i_a++)
 	    opt->childAdd("el")->setAttr("id",lst[i_a])->setText(at(lst[i_a]).at().subName());
     }
     else if(a_path == "/tasks/tasks") {
@@ -2479,8 +2428,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 #if __GLIBC_PREREQ(2,4)
-	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet")
-	{
+	if(multCPU() && ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR) && opt->attr("col") == "cpuSet") {
 	    ResAlloc res(taskRes,true);
 	    map<string,STask>::iterator it = mTasks.find(opt->attr("key_path"));
 	    if(it == mTasks.end()) throw TError(nodePath().c_str(),_("No present task '%s'."));
@@ -2500,9 +2448,24 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 #endif
     }
-    else if(a_path == "/tr/en") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->translEn()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslEn(s2i(opt->text()));
+    else if(a_path == "/tr/baseLang") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->lang2CodeBase());
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setLang2CodeBase(opt->text());
+    }
+    else if(a_path == "/tr/baseLangLs" && ctrChkNode(opt)) {
+	opt->childAdd("el")->setText(Mess->lang2Code());
+	if(!Mess->lang2CodeBase().empty() && Mess->lang2CodeBase() != Mess->lang2Code())
+	    opt->childAdd("el")->setText(Mess->lang2CodeBase());
+	opt->childAdd("el")->setText("");
+    }
+    else if(a_path == "/tr/dyn" && ctrChkNode(opt))	opt->setText(i2s(Mess->translDyn()));
+    else if(a_path == "/tr/dynPlan") {
+	if(ctrChkNode(opt,"get",RWRW__,"root","root",SEC_RD))	opt->setText(i2s(Mess->translDyn(true)));
+	if(ctrChkNode(opt,"set",RWRW__,"root","root",SEC_WR))	Mess->setTranslDyn(s2i(opt->text()));
+    }
+    else if(a_path == "/tr/enMan") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(i2s(Mess->translEnMan()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR))	Mess->setTranslEnMan(s2i(opt->text()));
     }
     else if(a_path == "/tr/langs") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root","root",SEC_RD))	opt->setText(Mess->translLangs());
@@ -2601,46 +2564,16 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	}
 	if(ctrChkNode(opt,"set",RWRWR_,"root","root",SEC_WR)) {
 	    bool needReload = false;
-	    string  baseMess = opt->attr("key_base"),
-		    lng = opt->attr("col");
-	    MtxAlloc res(Mess->mRes, true);
-	    map<string,string> mI = Mess->trMessIdx[baseMess];
-	    for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
-		string trSrc = TSYS::strParse(is->first,0,"#"), setFld = TSYS::strParse(is->first,1,"#");
-		//string setFld = is->second, trSrc = is->first;
-		TConfig req;
-		bool setRes = false, isCfg = false;
-		//  Source is config file or included DB
-		if((isCfg=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {		//Source is config file
-		    req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
-		    req.cfg(setFld).setReqKey(true);
-		    req.cfg(setFld).setS(baseMess, (lng=="base")?TCfg::KeyUpdtBase|TCfg::ForceUse:0);
-		    if(lng != "base") {
-			setFld = Mess->translFld(lng, setFld, isCfg);
-			req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
-		    }
-		    req.cfg(setFld).setS(opt->text(), TCfg::ForceUse);
-		    setRes = isCfg ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
-				   : SYS->db().at().dataSet(trSrc.substr(3), "", req, false, true);
-		}
-		//  Move the source to new base
-		if(setRes && lng == "base") {
-		    needReload = Mess->trMessIdx[opt->text()].size();
-		    Mess->trMessIdx[opt->text()][is->first] = is->second;
-		}
-	    }
-	    if(lng == "base") Mess->trMessIdx.erase(baseMess);
-	    if(!needReload) { opt->setAttr("noReload","1"); Mess->trMessCache.clear(); }
+	    Mess->translSet(opt->attr("key_base"), ((opt->attr("col")=="base")?Mess->lang2CodeBase():opt->attr("col")), opt->text(), &needReload);
+	    if(!needReload) opt->setAttr("noReload","1");
 	}
     }
-    else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root"))
-    {
+    else if(!cntrEmpty() && a_path == "/debug/cntr" && ctrChkNode(opt,"get",R_R_R_,"root","root")) {
 	XMLNode *n_id	= ctrMkNode("list",opt,-1,"/debug/cntr/id","",R_R_R_,"root","root");
 	XMLNode *n_vl	= ctrMkNode("list",opt,-1,"/debug/cntr/vl","",R_R_R_,"root","root");
 
 	ResAlloc res(nodeRes(), false);
-	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++)
-	{
+	for(map<string,double>::iterator icnt = mCntrs.begin(); icnt != mCntrs.end(); icnt++) {
 	    if(n_id)	n_id->childAdd("el")->setText(icnt->first);
 	    if(n_vl)	n_vl->childAdd("el")->setText(r2s(icnt->second));
 	}
@@ -2651,8 +2584,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_prc = ctrMkNode("list",opt,-1,"/debug/dbgCats/prc","",RWRWR_,"root","root");
 
 	    MtxAlloc res(Mess->mRes, true);
-	    for(map<string,bool>::iterator idc = Mess->debugCats.begin(); idc != Mess->debugCats.end(); idc++)
-	    {
+	    for(map<string,bool>::iterator idc = Mess->debugCats.begin(); idc != Mess->debugCats.end(); idc++) {
 		if(n_cat) n_cat->childAdd("el")->setText(idc->first);
 		if(n_prc) n_prc->childAdd("el")->setText(r2s(idc->second));
 	    }
@@ -2661,8 +2593,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    MtxAlloc res(Mess->mRes, true);
 	    //Check for set category
 	    if((Mess->debugCats[opt->attr("key_cat")]=s2i(opt->text()))) {
-		for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); )
-		{
+		for(vector<string>::iterator iDC = Mess->selectDebugCats.begin(); iDC != Mess->selectDebugCats.end(); ) {
 		    if(*iDC != opt->attr("key_cat")) {
 			if(iDC->compare(0,opt->attr("key_cat").size(),opt->attr("key_cat")) == 0) {
 			    Mess->debugCats[*iDC] = false;

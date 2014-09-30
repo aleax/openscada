@@ -1800,13 +1800,13 @@ TVariant SessWdg::objFuncCall( const string &iid, vector<TVariant> &prms, const 
 
 bool SessWdg::cntrCmdServ( XMLNode *opt )
 {
-    string a_path = opt->attr("path");
+    string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/serv/attr") {	//Attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
 	    unsigned tm = strtoul(opt->attr("tm").c_str(), 0, 10);
 	    if(!tm) {
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
-		    setText(i2s(ownerSess()->sec.at().access(opt->attr("user"),SEC_RD|SEC_WR,owner(),grp(),permit())));
+		    setText(i2s(ownerSess()->sec.at().access(u,SEC_RD|SEC_WR,owner(),grp(),permit())));
 		if(dynamic_cast<SessPage*>(this)) opt->childAdd("el")->setAttr("id", "name")->setAttr("p", "-4")->setText(name());
 	    }
 	    if(!tm || modifChk(tm,mMdfClc)) {
@@ -1818,13 +1818,12 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		    if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && s2i(attr.at().fld().reserve()))
 			opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 					     setAttr("p", attr.at().fld().reserve())->
-					     setText(attr.at().getS());
+					     setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
 		}
 	    }
 	}
-	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR))	//Set values
-	{
-	    if(ownerSess()->user() != opt->attr("user")) ownerSess()->setUser(opt->attr("user"));
+	else if(ctrChkNode(opt,"set",permit(),owner().c_str(),grp().c_str(),SEC_WR)) {	//Set values
+	    if(ownerSess()->user() != u) ownerSess()->setUser(u);
 	    for(unsigned i_ch = 0; i_ch < opt->childSize(); i_ch++) {
 		XMLNode *aN = opt->childGet(i_ch);
 		string aid = aN->attr("id");
@@ -1833,11 +1832,10 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    }
 	}
     }
-    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD))//Get attributes all updated elements' of the branch
-    {
+    else if(a_path == "/serv/attrBr" && ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get attributes all updated elements' of the branch
 	unsigned tm = strtoul(opt->attr("tm").c_str(), NULL, 10);
 	bool     fullTree = s2i(opt->attr("FullTree"));
-	int perm = ownerSess()->sec.at().access(opt->attr("user"),(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
+	int perm = ownerSess()->sec.at().access(u,(tm?SEC_RD:SEC_RD|SEC_WR),owner(),grp(),permit());
 
 	//Self attributes put
 	if(!tm || modifChk(tm,mMdfClc)) {
@@ -1853,7 +1851,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 		if(!(attr.at().flgGlob()&Attr::IsUser) && modifChk(tm,attr.at().modif()) && s2i(attr.at().fld().reserve()))
 		    opt->childAdd("el")->setAttr("id", als[i_l].c_str())->
 				     setAttr("p", attr.at().fld().reserve())->
-				     setText(attr.at().getS());
+				     setText(attr.at().isTransl()?trU(attr.at().getS(),u):attr.at().getS());
 	    }
 	}
 
@@ -1865,8 +1863,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++) {
 		AutoHD<SessWdg> iwdg = wdgAt(lst[i_f]);
 		XMLNode *wn = new XMLNode("get");
-		wn->setAttr("path", a_path)->setAttr("user", opt->attr("user"))->
-		    setAttr("tm", opt->attr("tm"))->setAttr("FullTree", opt->attr("FullTree"));
+		wn->setAttr("path", a_path)->setAttr("user", u)->setAttr("tm", opt->attr("tm"))->setAttr("FullTree", opt->attr("FullTree"));
 		iwdg.at().cntrCmdServ(wn);
 		if(wn->childSize() || fullTree) {
 		    wn->setName("w")->attrDel("path")->attrDel("user")->
@@ -1928,7 +1925,7 @@ bool SessWdg::cntrCmdAttributes( XMLNode *opt, Widget *src )
     if(a_path.compare(0,6,"/attr/") == 0) {
 	AutoHD<Attr> attr = attrAt(TSYS::pathLev(a_path,1));
 	if(ctrChkNode(opt,"get",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_RD))
-	    opt->setText(attr.at().getS());
+	    opt->setText(attr.at().isTransl()?trU(attr.at().getS(),opt->attr("user")):attr.at().getS());
 	else if(ctrChkNode(opt,"set",((attr.at().fld().flg()&TFld::NoWrite)?(permit()&~0222):permit())|R_R_R_,owner().c_str(),grp().c_str(),SEC_WR))
 	{
 	    if(attr.at().id() == "event")	eventAdd(opt->text()+"\n");

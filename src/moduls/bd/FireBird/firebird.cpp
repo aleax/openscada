@@ -552,7 +552,7 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	sid = tblStrct[i_fld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(!u_cfg && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
+	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
 	    trPresent = true;
@@ -605,7 +605,7 @@ void MTable::fieldGet( TConfig &cfg )
     for(unsigned i_fld = 1; i_fld < tblStrct.size(); i_fld++) {
 	sid = tblStrct[i_fld][0];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(!u_cfg && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
+	if(!u_cfg && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) {
 	    u_cfg = cfg.at(sid.substr(3), true);
 	    if(u_cfg && !(u_cfg->fld().flg()&TCfg::TransltText)) continue;
 	    trPresent = true;
@@ -664,7 +664,7 @@ void MTable::fieldSet( TConfig &cfg )
 	if(trPresent && (!isVarTextTransl || trDblDef)) break;
 	sid = tblStrct[i_fld][0];
 	if(sid.size() > 3) {
-	    if(!trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
+	    if(!trPresent && !Mess->translDyn() && sid.compare(0,3,Mess->lang2Code()+"#") == 0) trPresent = true;
 	    if(Mess->lang2Code() == Mess->lang2CodeBase() && !trDblDef && sid.compare(0,3,Mess->lang2CodeBase()+"#") == 0)
 		trDblDef = true;
 	}

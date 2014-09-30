@@ -118,8 +118,7 @@ AutoHD<TCntrNode> WidgetLib::chldAt( int8_t igr, const string &name, const strin
     AutoHD<TCntrNode> nd = TCntrNode::chldAt(igr, name, user);
     if(igr == m_wdg && !nd.freeStat()) {
 	AutoHD<LWidget> lwdg = nd;
-	if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed)
-	{
+	if(!lwdg.freeStat() && !lwdg.at().enable() && !passAutoEn && lwdg.at().enableByNeed) {
 	    lwdg.at().enableByNeed = false;
 	    try {
 		lwdg.at().load(true);
@@ -161,8 +160,7 @@ void WidgetLib::load_( )
     map<string, bool>   itReg;
     TConfig c_el(&mod->elWdg());
     c_el.cfgViewAll(false);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(fullDB(),mod->nodePath()+tbl(),fld_cnt++,c_el); ) {
 	string f_id = c_el.cfg("ID").getS();
 	if(!present(f_id)) { add(f_id,"",""); at(f_id).at().setEnableByNeed(); }
 	itReg[f_id] = true;
@@ -249,8 +247,7 @@ bool WidgetLib::mimeDataGet( const string &iid, string &mimeType, string *mimeDa
 	TConfig c_el(&mod->elWdgData());
 	if(!mimeData) c_el.cfg("DATA").setView(false);
 	c_el.cfg("ID").setS( dbid );
-	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el,false,true))
-	{
+	if(SYS->db().at().dataGet(wdb+"."+wtbl,mod->nodePath()+wtbl,c_el,false,true)) {
 	    mimeType = c_el.cfg("MIME").getS();
 	    if(mimeData) *mimeData = c_el.cfg("DATA").getS();
 	    return true;
@@ -344,8 +341,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/wdg",_("Widgets")))
 	    ctrMkNode("list",opt,-1,"/wdg/wdg",_("Widgets"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","wdg_","idSz","30");
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
@@ -354,7 +350,7 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path");
+    string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(atoi(opt->text().c_str()));
@@ -376,19 +372,19 @@ void WidgetLib::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID)) opt->setText(id());
     else if(a_path == "/obj/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trU(name(),u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetU(name(),u,opt->text()));
     }
     else if(a_path == "/obj/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trU(descr(),u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetU(descr(),u,opt->text()));
     }
     else if(a_path == "/br/wdg_" || a_path == "/wdg/wdg") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD)) {
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trU(at(lst[i_f]).at().name(),u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -595,8 +591,7 @@ void LWidget::setEnable( bool val )
 	    for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 		try {
 		    AutoHD<Widget> iw = wdgAt(lst[i_l]);
-		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0)
-		    {
+		    if(iw.at().parentNm().compare(0,mParentNmPrev.size()+1,mParentNmPrev+"/") == 0) {
 			iw.at().setParentNm(parentNm()+iw.at().parentNm().substr(mParentNmPrev.size()));
 			iw.at().setEnable(true);
 		    }
@@ -656,8 +651,7 @@ void LWidget::loadIO( )
     string db  = ownerLib().DB();
     string tbl = ownerLib().tbl()+"_incl";
     c_el.cfg("IDW").setS(id(),true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid  = c_el.cfg("ID").getS();
 	if(c_el.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -725,8 +719,7 @@ void LWidget::wdgAdd( const string &wid, const string &name, const string &path,
 	TConfig c_el( &mod->elInclWdg() );
 	c_el.cfg("IDW").setS(id());
 	c_el.cfg("ID").setS(wid);
-	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>")
-	{
+	if(SYS->db().at().dataGet(db+"."+tbl,mod->nodePath()+tbl,c_el,false,true) && c_el.cfg("PARENT").getS() == "<deleted>") {
 	    if(!parent().at().wdgPresent(wid))	SYS->db().at().dataDel(db+"."+tbl, mod->nodePath()+tbl, c_el, true, false, true);
 	    else throw TError(nodePath().c_str(),_("You try to create widget with name '%s' of the widget that was the early inherited and deleted from base container!"),wid.c_str());
 	}
@@ -772,7 +765,7 @@ void LWidget::inheritAttr( const string &attr )
 {
     bool mdf = isModify();
     Widget::inheritAttr( attr );
-    if( !mdf )	modifClr( );
+    if(!mdf)	modifClr( );
 }
 
 void LWidget::cntrCmdProc( XMLNode *opt )
@@ -783,7 +776,7 @@ void LWidget::cntrCmdProc( XMLNode *opt )
     if(opt->name() == "info") {
 	cntrCmdGeneric(opt);
 	ctrMkNode("fld",opt,-1,"/wdg/st/timestamp",_("Date of modification"),R_R_R_,"root",SUI_ID,1,"tp","time");
-	cntrCmdAttributes(opt );
+	cntrCmdAttributes(opt);
 	cntrCmdLinks(opt);
 	cntrCmdProcess(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Library widget: ")+id());

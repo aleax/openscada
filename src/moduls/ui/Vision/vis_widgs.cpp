@@ -119,7 +119,7 @@ InputDlg::InputDlg( QWidget *parent, const QIcon &icon, const QString &mess, con
     connect(but_box, SIGNAL(rejected()), this, SLOT(reject()));
     dlg_lay->addWidget( but_box );
 
-    resize(400,120+(40*with_nm)+(40*with_id));
+    resize(400, 120+(40*with_nm)+(40*with_id));
 }
 
 QString InputDlg::id( )		{ return mId ? mId->text() : ""; }
@@ -307,7 +307,7 @@ FontDlg::FontDlg( QWidget *parent, const QString &ifnt )
     setFont(ifnt);
 }
 
-QString	FontDlg::font( )
+QString FontDlg::font( )
 {
     return QString("%1 %2 %3 %4 %5 %6").arg(fntSel->currentFont().family().replace(QRegExp(" "),"_")).
 					arg(spBox->value()).
@@ -432,8 +432,7 @@ bool LineEdit::isEdited( )	{ return mIsEdited; }
 void LineEdit::setReadOnly( bool val )
 {
     if(!ed_fld)	return;
-    switch(type())
-    {
+    switch(type()) {
 	case Text:	((QLineEdit*)ed_fld)->setReadOnly(val);		break;
 	case Integer: case Real: case Time: case Date: case DateTime:
 	    ((QAbstractSpinBox*)ed_fld)->setReadOnly(val);		break;
@@ -450,8 +449,7 @@ void LineEdit::setType( LType tp )
     if(tp >= 0 && ed_fld) delete ed_fld;
 
     //Create new widget
-    switch(tp)
-    {
+    switch(tp) {
 	case Text:
 	    ed_fld = new QLineEdit(this);
 	    connect((QLineEdit*)ed_fld, SIGNAL(textEdited(const QString&)), SLOT(changed()));
@@ -665,7 +663,7 @@ bool LineEdit::event( QEvent * e )
 //*************************************************
 //* SyntxHighl: Syntax highlighter                *
 //*************************************************
-SyntxHighl::SyntxHighl(QTextDocument *parent) : QSyntaxHighlighter(parent)
+SyntxHighl::SyntxHighl( QTextDocument *parent ) : QSyntaxHighlighter(parent)
 {
 
 }
@@ -1048,8 +1046,7 @@ bool WdgView::attrSet( const string &attr, const string &val, int uiPrmPos )
     }
     bool up = false, upChlds = false;
 
-    switch(uiPrmPos)
-    {
+    switch(uiPrmPos) {
 	case A_COM_LOAD: up = true;	break;
 	case 0:	return false;
 	case A_ROOT:
@@ -1134,7 +1131,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 
     //Load from data model
     if(isLoad) {
-        bool reqBrCr = false;
+	bool reqBrCr = false;
 	if(!aBr) {
 	    aBr = new XMLNode("get");
 	    aBr->setAttr("path",id()+"/%2fserv%2fattrBr");
@@ -1209,7 +1206,7 @@ void WdgView::load( const string& item, bool isLoad, bool isInit, XMLNode *aBr )
 		wdg->load((item==id())?"":item,false,true);
 	}
 	update();
-        //repaint();
+	//repaint();
 
 	if(mess_lev() == TMess::Debug)
 	    mess_debug(mod->nodePath().c_str(), _("Init '%s' time %f ms."), id().c_str(), 1e-3*(TSYS::curTime()-d_cnt));

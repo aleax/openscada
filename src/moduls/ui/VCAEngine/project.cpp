@@ -482,8 +482,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("list",opt,-1,"/page/page",_("Pages"),RWRWR_,"root",SUI_ID,5,"tp","br","idm","1","s_com","add,del","br_pref","pg_","idSz","30");
 	}
 	if(ctrMkNode("area",opt,-1,"/mime",_("Mime data")))
-	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/mime/mime",_("Mime data"),RWRWR_,"root",SUI_ID,2,"s_com","add,del","key","id")) {
 		ctrMkNode("list",opt,-1,"/mime/mime/id",_("Id"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/tp",_("Mime type"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/mime/mime/dt",_("Data"),RWRWR_,"root",SUI_ID,2,"tp","str","dest","data");
@@ -492,8 +491,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    ctrMkNode("fld",opt,-1,"/style/style",_("Style"),RWRWR_,"root",SUI_ID,3,"tp","dec","dest","select","select","/style/stLst");
 	    if(stlCurent() >= 0 && stlCurent() < stlSize()) {
 		ctrMkNode("fld",opt,-1,"/style/name",_("Name"),RWRWR_,"root",SUI_ID,1,"tp","str");
-		if(ctrMkNode("table",opt,-1,"/style/props",_("Properties"),RWRWR_,"root",SUI_ID,2,"s_com","del","key","id"))
-		{
+		if(ctrMkNode("table",opt,-1,"/style/props",_("Properties"),RWRWR_,"root",SUI_ID,2,"s_com","del","key","id")) {
 		    ctrMkNode("list",opt,-1,"/style/props/id",_("Id"),R_R_R_,"root",SUI_ID,1,"tp","str");
 		    ctrMkNode("list",opt,-1,"/style/props/vl",_("Value"),RWRWR_,"root",SUI_ID,1,"tp","str");
 		}
@@ -515,7 +513,7 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path");
+    string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/obj/st/en") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(enable()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setEnable(s2i(opt->text()));
@@ -557,15 +555,14 @@ void Project::cntrCmdProc( XMLNode *opt )
     }
     else if(a_path == "/obj/cfg/id" && ctrChkNode(opt,"get",R_R_R_,"root",SUI_ID))	opt->setText(id());
     else if(a_path == "/obj/cfg/name") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(name());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trU(name(),u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setName(trSetU(name(),u,opt->text()));
     }
     else if(a_path == "/obj/cfg/descr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(descr());
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(opt->text());
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(trU(descr(),u));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setDescr(trSetU(descr(),u,opt->text()));
     }
-    else if(a_path == "/obj/cfg/per")
-    {
+    else if(a_path == "/obj/cfg/per") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SUI_ID,SEC_RD))	opt->setText(i2s(period()));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SUI_ID,SEC_WR))	setPeriod(s2i(opt->text()));
     }
@@ -584,7 +581,7 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    vector<string> lst;
 	    list(lst);
 	    for(unsigned i_f = 0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(at(lst[i_f]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trU(at(lst[i_f]).at().name(),u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    string vid = TSYS::strEncode(opt->attr("id"),TSYS::oscdID);
@@ -1058,8 +1055,7 @@ void Page::loadIO( )
     string db  = ownerProj()->DB();
     string tbl = ownerProj()->tbl()+"_incl";
     c_el.cfg("IDW").setS(path(),true);
-    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); )
-    {
+    for(int fld_cnt = 0; SYS->db().at().dataSeek(db+"."+tbl,mod->nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid  = c_el.cfg("ID").getS();
 	if(c_el.cfg("PARENT").getS() == "<deleted>") {
 	    if(wdgPresent(sid))	wdgDel(sid);
@@ -1272,8 +1268,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     if(opt->name() == "info") {
 	Widget::cntrCmdGeneric(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Project page: ")+path(),RWRWR_,"root",SUI_ID);
-	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration")))
-	{
+	if(ctrMkNode("area",opt,-1,"/wdg",_("Widget")) && ctrMkNode("area",opt,-1,"/wdg/cfg",_("Configuration"))) {
 	    if(prjFlags()&Page::Empty || (ownerPage() && ownerPage()->prjFlags()&(Page::Template) && !(ownerPage()->prjFlags()&Page::Container)))
 		ctrMkNode("fld",opt,-1,"/wdg/st/parent",_("Parent"),R_R_R_,"root",SUI_ID,1,"tp","str");
 	    ctrMkNode("fld",opt,10,"/wdg/st/pgTp",_("Page type"),RWRWR_,"root",SUI_ID,4,"tp","str","idm","1","dest","select","select","/wdg/st/pgTpLst");
@@ -1291,7 +1286,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
     }
 
     //Process command to page
-    string a_path = opt->attr("path");
+    string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/wdg/w_lst" && ctrChkNode(opt) && ownerPage() && ownerPage()->prjFlags()&Page::Template)
 	opt->childIns(0,"el")->setText("..");
     else if(a_path == "/wdg/st/pgTp") {
@@ -1312,7 +1307,7 @@ bool Page::cntrCmdGeneric( XMLNode *opt )
 	    vector<string> lst;
 	    pageList(lst);
 	    for(unsigned i_f=0; i_f < lst.size(); i_f++)
-		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(pageAt(lst[i_f]).at().name());
+		opt->childAdd("el")->setAttr("id",lst[i_f])->setText(trU(pageAt(lst[i_f]).at().name(),u));
 	}
 	if(ctrChkNode(opt,"add",RWRWR_,"root",SUI_ID,SEC_WR)) {
 	    pageAdd(opt->attr("id").c_str(),opt->text().c_str());
@@ -1590,8 +1585,7 @@ void PageWdg::load_( )
     for(unsigned i_a = 0; i_a < als.size(); i_a++) {
 	if(!attrPresent(als[i_a])) continue;
 	AutoHD<Attr> attr = attrAt(als[i_a]);
-	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos)
-	{
+	if(attr.at().modif() && tAttrs.find(als[i_a]+";") == string::npos) {
 	    attr.at().setModif(0);
 	    inheritAttr(als[i_a]);
 	}

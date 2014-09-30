@@ -915,7 +915,7 @@ string Node::getStatus( )
 	    case MD_DATA:
 		rez += TSYS::strMess(_("Spent time: %s. Requests %.4g. Read registers %.4g, coils %.4g, register inputs %.4g, coil inputs %.4g.\n"
 					"Writed registers %.4g, coils %.4g."),
-		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->rRegI, data->wReg, data->wCoil);
+		    tm2s(tmProc).c_str(), cntReq, data->rReg, data->rCoil, data->rRegI, data->rCoilI, data->wReg, data->wCoil);
 		break;
 	    case MD_GT_ND: case MD_GT_NET:
 		rez += TSYS::strMess(_("Requests %.4g."), cntReq);

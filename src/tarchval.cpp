@@ -1757,16 +1757,14 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    period = vmax(period,buf.period());
 	    int mode = s2i(opt->attr("mode"));
 	    if(mode < 0 || mode > 2) throw TError(nodePath().c_str(),_("No support data mode '%d'"),mode);
-	    switch(buf.valType())
-	    {
+	    switch(buf.valType()) {
 		case TFld::Boolean: {
 		    char tval_pr = EVAL_BOOL, tval_pr1 = EVAL_BOOL;
 		    while(ibeg <= iend) {
 			char tval = buf.getB(&ibeg, true);
 			vpos_cur = (ibeg-buf.begin())/period;
 			if(vpos_cur > vpos_end)
-			    bool1: switch(mode)
-			    {
+			    bool1: switch(mode) {
 				case 0: text += ((tval_pr==EVAL_BOOL) ? EVAL_STR : i2s(tval_pr)) + "\n"; break;
 				case 1:
 				    if(!vpos_end || tval_pr != tval_pr1)
@@ -1797,8 +1795,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 				tval = ((int64_t)tval_pr*s_k+(int64_t)tval*n_k)/(s_k+n_k);
 			    }
 			}
-			else int1: switch(mode)
-			{
+			else int1: switch(mode) {
 			    case 0: text += ((tval_pr==EVAL_INT) ? EVAL_STR : ll2s(tval_pr)) + "\n"; break;
 			    case 1:
 				if(!(vpos_end && (tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
@@ -1834,8 +1831,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 				tval = (tval_pr*s_k+tval*n_k)/(s_k+n_k);
 			    }
 			}
-			else real1: switch(mode)
-			{
+			else real1: switch(mode) {
 			    case 0: text += ((tval_pr==EVAL_REAL) ? EVAL_STR : r2s(tval_pr,real_prec)) + "\n";	break;
 			    case 1:
 				if(!(vpos_end && (tval_pr==tval_pr1 || (((tval_pr1 > 0 && tval_pr > 0) || (tval_pr1 < 0 && tval_pr < 0)) &&
@@ -1861,8 +1857,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 			string tval = buf.getS(&ibeg, true);
 			vpos_cur = (ibeg-buf.begin())/period;
 			if(vpos_cur > vpos_end)
-			    str1: switch(mode)
-			    {
+			    str1: switch(mode) {
 				case 0: text += TSYS::strEncode(tval_pr,TSYS::Custom,"\n")+"\n"; break;
 				case 1:
 				    if(!vpos_end || tval_pr != tval_pr1)
@@ -1918,8 +1913,7 @@ void TVArchive::cntrCmdProc( XMLNode *opt )
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/arch",_("Archivators"),R_R_R_,"root",SARH_ID)) {
-	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archivators"),RWRWR_,"root",SARH_ID,1,"key","arch"))
-	    {
+	    if(ctrMkNode("table",opt,-1,"/arch/arch",_("Archivators"),RWRWR_,"root",SARH_ID,1,"key","arch")) {
 		ctrMkNode("list",opt,-1,"/arch/arch/arch",_("Archivator"),R_R_R_,"root",SARH_ID,1,"tp","str");
 		ctrMkNode("list",opt,-1,"/arch/arch/start",_("Start"),R_R_R_,"root",SARH_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/arch/arch/proc",_("Process"),RWRWR_,"root",SARH_ID,1,"tp","bool");

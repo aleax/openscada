@@ -510,8 +510,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 
 	string val = (value.type()==QVariant::Bool) ? (value.toBool()?"1":"0") : value.toString().toStdString();
 	XMLNode req("set"), reqPrev("get");
-	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); )
-	{
+	for(int off = 0; (swdg=TSYS::strSepParse(nwdg,0,';',&off)).size(); ) {
 	    req.setAttr("path",swdg+"/%2fattr%2f"+nattr)->setText(val);
 	    DevelWdgView *dw = mainWin()->work_space->findChild<DevelWdgView*>(swdg.c_str());
 	    if(dw) {
@@ -525,7 +524,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		}
 	    }
 
-	    if(!mainWin()->cntrIfCmd(req) && req.text() == val) {
+	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by dynamic translation mode specifuc
 		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
@@ -534,10 +533,17 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		    if(it->dataEdit1().toStringList()[i_it] == value) { value = it->dataEdit().toStringList()[i_it]; break; }
 
 		//Local update
-		it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
+		//it->setData((it->data().type()==QVariant::Bool) ? value.toBool() : value);
+		switch(it->data().type()) {
+		    case QVariant::Bool:	it->setData((bool)s2i(req.text()));	break;
+		    case QVariant::Int:		it->setData(s2i(req.text()));		break;
+		    case QVariant::Double:	it->setData(s2r(req.text()));		break;
+		    default:			it->setData(req.text().c_str());	break;
+		}
+
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
-		emit dataChanged(index,index);
+		emit dataChanged(index, index);
 		if(it->flag()&(Item::Active|Item::SelEd)) setWdg(cur_wdg);
 	    }
 	}

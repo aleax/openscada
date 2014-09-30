@@ -119,13 +119,13 @@ string TModule::modInfo( const string &name )
     string info;
 
     if(name == l_info[0])	info = mId;
-    else if(name == l_info[1]) info = mName;
-    else if(name == l_info[2]) info = mType;
-    else if(name == l_info[3]) info = mSource;
-    else if(name == l_info[4]) info = mVers;
-    else if(name == l_info[5]) info = mAuthor;
-    else if(name == l_info[6]) info = mDescr;
-    else if(name == l_info[7]) info = mLicense;
+    else if(name == l_info[1])	info = mName;
+    else if(name == l_info[2])	info = mType;
+    else if(name == l_info[3])	info = mSource;
+    else if(name == l_info[4])	info = mVers;
+    else if(name == l_info[5])	info = mAuthor;
+    else if(name == l_info[6])	info = mDescr;
+    else if(name == l_info[7])	info = mLicense;
 
     return info;
 }
@@ -149,7 +149,7 @@ void TModule::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/ico" && ctrChkNode(opt)) {
 	string itp;

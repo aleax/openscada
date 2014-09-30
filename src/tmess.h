@@ -32,6 +32,10 @@
 #include "resalloc.h"
 
 #define _(mess) Mess->I18N(mess)
+#define trL(base,lng) Mess->translGet(base, lng)
+#define trU(base,usr) Mess->translGetU(base, usr)
+#define trSetL(base,lng,mess) Mess->translSet(base, lng, mess)
+#define trSetU(base,usr,mess) Mess->translSetU(base, usr, mess)
 #define FTM(rec) ((int64_t)rec.time*1000000 + rec.utime)
 #define mess_TrUApiTbl	"Trs"
 
@@ -77,8 +81,7 @@ class TMess
 	enum Type { Debug, Info, Notice, Warning, Error, Crit, Alert, Emerg };
 	enum Direct { DIR_SYSLOG = 0x1, DIR_STDOUT = 0x2, DIR_STDERR = 0x4, DIR_ARCHIVE = 0x8 };
 
-	class SRec
-	{
+	class SRec {
 	    public:
 		SRec( ) : time(0), categ(""), level(TMess::Debug), mess("") { }
 		SRec( time_t itm, int iutime, const string &icat, int8_t ilev, const string &imess ) :
@@ -107,7 +110,6 @@ class TMess
 
 	string lang( );
 	string lang2Code( )	{ return mLang2Code; }
-	string lang2CodeBase( )	{ return mLang2CodeBase; }
 	string &charset( )	{ return IOCharSet; }
 	int logDirect( )	{ return mLogDir; }
 	int messLevel( )	{ return mMessLevel; }
@@ -115,7 +117,6 @@ class TMess
 	bool isUTF8( )		{ return mIsUTF8; }
 
 	void setLang( const string &lang, bool init = false );
-	void setLang2CodeBase( const string &vl );
 	void setLogDirect( int dir );
 	void setMessLevel( int level );
 	void setSelDebCats( const string &vl );
@@ -125,13 +126,22 @@ class TMess
 	void get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const string &category = "", int8_t level = Debug );
 
 	// Internal messages translations
-	bool translEn( )	{ return mTranslEn; }
-	string translLangs( )	{ return mTranslLangs; }
+	string lang2CodeBase( )			{ return mLang2CodeBase; }
+	bool translDyn( bool plan = false )	{ return plan ? mTranslDynPlan : mTranslDyn; }
+	bool translEnMan( )			{ return mTranslEnMan; }
+	string translLangs( )			{ return mTranslLangs; }
 	string translFld( const string &lng, const string &fld, bool isCfg = false );
-	void setTranslEn( bool vl, bool passive = false );
+	void setLang2CodeBase( const string &vl );
+	void setTranslDyn( bool val, bool plan = true );
+	void setTranslEnMan( bool vl, bool passive = false );
 	void setTranslLangs( const string &vl )	{ mTranslLangs = vl; }
 
-	string translGet( const string &base, const string &src = "" );
+	//  Translation request for <base>, <lang> | <user> and <src> (direct source mostly for "uapi:").
+	string translGet( const string &base, const string &lang, const string &src = "" );
+	string translGetU( const string &base, const string &user, const string &src = "" );
+	//  Translation set for <base>, <lang> | <user> and <mess>. Return base or the changed.
+	string translSet( const string &base, const string &lang, const string &mess, bool *needReload = NULL );
+	string translSetU( const string &base, const string &user, const string &mess, bool *needReload = NULL );
 	//  Register translations. Source format:
 	//    for DB: "db:{MDB}.{DB}.{TBL}#{TrFld}"
 	//    for <cfg>: "cfg:{ObjPath}/{TBL}#{TrFld}"
@@ -146,8 +156,7 @@ class TMess
 
     private:
 	//Data
-	class CacheEl
-	{
+	class CacheEl {
 	    public:
 		CacheEl( const string &ival, time_t itm = 0 ) : tm(itm), val(ival)	{ }
 		CacheEl( ) : tm(0)	{ }
@@ -164,7 +173,9 @@ class TMess
 	unsigned mLogDir	:4;	//Log direction
 	unsigned mConvCode	:1;	//Enable text code conversion
 	unsigned mIsUTF8	:1;
-	unsigned mTranslEn	:1;
+	unsigned mTranslDyn	:1;
+	unsigned mTranslDynPlan	:1;
+	unsigned mTranslEnMan	:1;
 	unsigned mTranslSet	:1;
 
 	string	mLang2CodeBase, mLang2Code;

@@ -47,19 +47,19 @@ class TSubSYS : public TCntrNode
 
 	string objName( );
 
-	string	subId( )	{ return m_id.c_str(); }
+	string	subId( )	{ return mId.c_str(); }
 	string	subName( );
 	bool subStartStat( )	{ return mStart; }
 
-	bool subModule( )	{ return m_mod_sys; }	//Module subsystem
+	bool subModule( )	{ return mModSys; }	//Module subsystem
 
 	virtual int subVer( )	{ return 0; }		//Type/grp module version
 
-	//> Start procedures
+	// Start procedures
 	virtual void subStart( );
 	virtual void subStop( );
 
-	//> Modules
+	// Modules
 	void modList( vector<string> &list );
 	bool modPresent( const string &name );
 	void modAdd( TModule *modul );
@@ -79,16 +79,16 @@ class TSubSYS : public TCntrNode
 
     private:
 	//Private methods
-	const char *nodeName( )	{ return m_id.c_str(); }
+	const char *nodeName( )	{ return mId.c_str(); }
 
 	//Private attributes
-	bool	m_mod_sys;
-	int	m_mod;
+	bool	mModSys;
+	int	mMod;
 
-	string	m_id;		//Id
-	string	m_name;		//Name
+	string	mId;		//Id
+	string	mName;		//Name
 };
 
 }
 
-#endif // TGRPMODULE_H
+#endif	// TGRPMODULE_H

@@ -82,7 +82,7 @@ ConfApp::ConfApp( string open_user ) :
     QImage ico_t;
     mod->regWin(this);
 
-    setWindowTitle(TSYS::strMess(_("OpenSCADA QTCfg: %s"),SYS->name().c_str()).c_str());
+    setWindowTitle(TSYS::strMess(_("OpenSCADA QTCfg: %s"),trU(SYS->name(),open_user).c_str()).c_str());
     setWindowIcon(mod->icon());
 
     //Init centrall widget
@@ -1520,9 +1520,9 @@ void ConfApp::basicFields( XMLNode &t_s, const string &a_path, QWidget *widget, 
 		    val_r = new QLabel(widget);
 		    val_r->setTextInteractionFlags(Qt::TextSelectableByMouse);
 		    val_r->setStatusTip((sel_path+"/"+br_path).c_str());
-		    QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
-		    sp.setHorizontalStretch(1);
-		    val_r->setSizePolicy(sp);
+		    //QSizePolicy sp(QSizePolicy::Ignored/*Expanding*/, QSizePolicy::Preferred);
+		    //sp.setHorizontalStretch(1);
+		    //val_r->setSizePolicy(sp);
 		}
 		// View edit
 		else {
@@ -2255,8 +2255,7 @@ string ConfApp::getPrintVal( const string &vl )
 {
     bool isBool = false;
     for(unsigned iCh = 0; !isBool && iCh < vl.size(); ++iCh)
-	switch(vl[iCh])
-	{
+	switch(vl[iCh]) {
 	    case 0: isBool = true; break;
 	}
 
@@ -2290,13 +2289,13 @@ void ConfApp::initHosts( )
 		{ nit = CtrTree->topLevelItem(i_top); break; }
 	if(!nit) nit = new QTreeWidgetItem(CtrTree);
 	if(stls[i_st] == SYS->id()) {
-	    nit->setText(0,SYS->name().c_str());
+	    nit->setText(0,trU(SYS->name(),w_user->user().toStdString()).c_str());
 	    nit->setText(1,_("Local station"));
 	    nit->setText(2,("/"+SYS->id()).c_str());
 	}
 	else {
 	    TTransportS::ExtHost host = SYS->transport().at().extHostGet(w_user->user().toStdString(),stls[i_st]);
-	    nit->setText(0,host.name.c_str());
+	    nit->setText(0,trU(host.name,w_user->user().toStdString()).c_str());
 	    nit->setText(1,_("Remote station"));
 	    nit->setText(2,("/"+host.id).c_str());
 	}

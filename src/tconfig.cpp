@@ -25,7 +25,7 @@ using namespace OSCADA;
 //*************************************************
 //* TConfig                                       *
 //*************************************************
-TConfig::TConfig( TElem *Elements ) : m_elem(NULL), mIncmplTblStrct(false), mReqKeys(false)
+TConfig::TConfig( TElem *Elements ) : mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
 {
     pthread_mutex_init(&mRes, NULL);
 
@@ -41,8 +41,8 @@ TConfig::~TConfig( )
 	value.erase(p);
     }
 
-    m_elem->valDet(this);
-    if(single) delete m_elem;
+    mElem->valDet(this);
+    if(single) delete mElem;
 
     pthread_mutex_lock(&mRes);
     pthread_mutex_destroy(&mRes);
@@ -59,8 +59,7 @@ TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
 	if(!config.cfgPresent(list_el[i_el]) || passCpLs.find(list_el[i_el]+";") != string::npos) continue;
 	TCfg &s_cfg = config.cfg(list_el[i_el]);
 	TCfg &d_cfg = cfg(list_el[i_el]);
-	switch(d_cfg.fld().type())
-	{
+	switch(d_cfg.fld().type()) {
 	    case TFld::String:	d_cfg.setS(s_cfg.getS());break;
 	    case TFld::Real:	d_cfg.setR(s_cfg.getR());break;
 	    case TFld::Integer:	d_cfg.setI(s_cfg.getI());break;
@@ -74,17 +73,17 @@ TConfig &TConfig::exclCopy( TConfig &config, const string &passCpLs )
 
 void TConfig::detElem( TElem *el )
 {
-    if(el == m_elem)	setElem(NULL);
+    if(el == mElem)	setElem(NULL);
 }
 
 void TConfig::addFld( TElem *el, unsigned id )
 {
-    value.insert(std::pair<string,TCfg*>(m_elem->fldAt(id).name(),new TCfg(m_elem->fldAt(id),*this)));
+    value.insert(std::pair<string,TCfg*>(mElem->fldAt(id).name(),new TCfg(mElem->fldAt(id),*this)));
 }
 
 void TConfig::delFld( TElem *el, unsigned id )
 {
-    TCfgMap::iterator p = value.find(m_elem->fldAt(id).name());
+    TCfgMap::iterator p = value.find(mElem->fldAt(id).name());
     if(p == value.end()) return;
     delete p->second;
     value.erase(p);
@@ -117,16 +116,10 @@ TCfg *TConfig::at( const string &n_val, bool noExpt )
 void TConfig::cfgList( vector<string> &list )
 {
     list.clear();
-    if(m_elem)	m_elem->fldList(list);
+    if(mElem)	mElem->fldList(list);
 }
 
-bool TConfig::cfgPresent( const string &n_val )
-{
-    TCfgMap::iterator p = value.find(n_val);
-    if(p == value.end()) return false;
-
-    return true;
-}
+bool TConfig::cfgPresent( const string &n_val )	{ return (value.find(n_val) != value.end()); }
 
 void TConfig::cfgViewAll( bool val )
 {
@@ -143,35 +136,33 @@ void TConfig::cfgKeyUseAll( bool val )
 
 void TConfig::setElem( TElem *Elements, bool first )
 {
-    if(m_elem == Elements && !first) return;
+    if(mElem == Elements && !first) return;
 
     //Clear previos setting
-    if(m_elem) {
+    if(mElem) {
 	TCfgMap::iterator p;
 	while((p=value.begin()) != value.end()) {
 	    delete p->second;
 	    value.erase(p);
 	}
-	m_elem->valDet(this);
-	if(single) delete m_elem;
+	mElem->valDet(this);
+	if(single) delete mElem;
     }
 
     //Set new setting
     if(!Elements) {
-	m_elem = new TElem("single");
+	mElem = new TElem("single");
 	single = true;
     }
     else {
-	m_elem = Elements;
+	mElem = Elements;
 	single = false;
     }
 
-    m_elem->valAtt(this);
-    for(unsigned i=0; i < m_elem->fldSize(); i++)
-	value.insert(std::pair<string,TCfg*>(m_elem->fldAt(i).name(),new TCfg(m_elem->fldAt(i),*this)));
+    mElem->valAtt(this);
+    for(unsigned i = 0; i < mElem->fldSize(); i++)
+	value.insert(std::pair<string,TCfg*>(mElem->fldAt(i).name(),new TCfg(mElem->fldAt(i),*this)));
 }
-
-TElem &TConfig::elem( )	{ return *m_elem; }
 
 void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const string &user, const string &grp, int perm )
 {
@@ -184,18 +175,23 @@ void TConfig::cntrCmdMake( XMLNode *opt, const string &path, int pos, const stri
 
 void TConfig::cntrCmdProc( XMLNode *opt, const string &elem, const string &user, const string &grp, int perm )
 {
-    if(elem.compare(0,4,"sel_") == 0 && TCntrNode::ctrChkNode(opt))
-    {
+    if(elem.compare(0,4,"sel_") == 0 && TCntrNode::ctrChkNode(opt)) {
 	TFld &n_e_fld = cfg(elem.substr(4)).fld();
 	for(unsigned i_a = 0; i_a < n_e_fld.selNm().size(); i_a++)
 	    opt->childAdd("el")->setText(n_e_fld.selNm()[i_a]);
 	return;
     }
     TCfg &cel = cfg(elem);
-    if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD))
-	opt->setText(cel.getS());
-    if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR))
-	cel.setS(opt->text());
+    if(TCntrNode::ctrChkNode(opt,"get",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_RD)) {
+	if(Mess->translDyn() && cel.fld().type() == TFld::String && !(cel.fld().flg()&TFld::NoStrTransl))
+	    opt->setText(trU(cel.getS(),opt->attr("user")));
+	else opt->setText(cel.getS());
+    }
+    if(TCntrNode::ctrChkNode(opt,"set",(cel.fld().flg()&TFld::NoWrite)?(perm&~0222):perm,user.c_str(),grp.c_str(),SEC_WR)) {
+	if(Mess->translDyn() && cel.fld().type() == TFld::String && !(cel.fld().flg()&TFld::NoStrTransl))
+	    cel.setS(trSetU(cel.getS(),opt->attr("user"),opt->text()));
+	else cel.setS(opt->text());
+    }
 }
 
 TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const string &user )
@@ -260,8 +256,7 @@ bool TCfg::isKey( )	{ return owner().reqKeys() ? reqKey() : fld().flg()&TCfg::Ke
 string TCfg::getSEL( )
 {
     if(!(mFld->flg()&TFld::Selected))	throw TError("Cfg",_("Element type is not selected!"));
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::String:	return mFld->selVl2Nm(getS());
 	case TVariant::Integer:	return mFld->selVl2Nm(getI());
 	case TVariant::Real:	return mFld->selVl2Nm(getR());
@@ -313,8 +308,7 @@ char &TCfg::getBd( )
 
 void TCfg::setS( const string &val )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::Integer:	setI(s2ll(val));	break;
 	case TVariant::Real:	setR(s2r(val));		break;
 	case TVariant::Boolean:	setB((bool)s2i(val));	break;
@@ -344,8 +338,7 @@ void TCfg::setS( const string &val )
 
 void TCfg::setR( double val )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::String:	setS(r2s(val));	break;
 	case TVariant::Integer:	setI((int)val);	break;
 	case TVariant::Boolean:	setB((bool)val);break;
@@ -364,8 +357,7 @@ void TCfg::setR( double val )
 
 void TCfg::setI( int64_t val )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::String:	setS(i2s(val));	break;
 	case TVariant::Real:	setR(val);	break;
 	case TVariant::Boolean:	setB((bool)val);break;
@@ -384,15 +376,14 @@ void TCfg::setI( int64_t val )
 
 void TCfg::setB( char val )
 {
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::String:	setS(i2s(val));	break;
 	case TVariant::Integer:	setI(val);	break;
 	case TVariant::Real:	setR(val);	break;
 	case TVariant::Boolean: {
 	    bool tVal = TVariant::getB();
 	    TVariant::setB(val);
-	    try{ if(!mOwner.cfgChange(*this,tVal)) TVariant::setB(tVal); }
+	    try { if(!mOwner.cfgChange(*this,tVal)) TVariant::setB(tVal); }
 	    catch(TError err) { TVariant::setB(tVal); throw; }
 	    break;
 	}
@@ -403,8 +394,7 @@ void TCfg::setB( char val )
 void TCfg::setSEL( const string &val, uint8_t RqFlg )
 {
     if(!(mFld->flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selected!"));
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::String:	setS(mFld->selNm2VlS(val), RqFlg);	break;
 	case TVariant::Integer:	setI(mFld->selNm2VlI(val), RqFlg);	break;
 	case TVariant::Real:	setR(mFld->selNm2VlR(val), RqFlg);	break;
@@ -442,8 +432,7 @@ void TCfg::setB( char val, uint8_t RqFlg )
 bool TCfg::operator==( TCfg &cfg )
 {
     if(fld().type() == cfg.fld().type())
-	switch(fld().type())
-	{
+	switch(fld().type()) {
 	    case TFld::String:	return (getS() == cfg.getS());
 	    case TFld::Integer:	return (getI() == cfg.getI());
 	    case TFld::Real:	return (getR() == cfg.getR());
@@ -455,8 +444,7 @@ bool TCfg::operator==( TCfg &cfg )
 
 TCfg &TCfg::operator=(TCfg & cfg)
 {
-    switch(type())
-    {
+    switch(type()) {
 	case TVariant::String:	setS(cfg.getS());	break;
 	case TVariant::Integer:	setI(cfg.getI());	break;
 	case TVariant::Real:	setR(cfg.getR());	break;

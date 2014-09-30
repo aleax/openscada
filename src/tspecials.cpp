@@ -40,23 +40,23 @@ string TSpecialS::optDescr( )
 
 void TSpecialS::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
     string argCom, argVl;
     for(int argPos = 0; (argCom=SYS->getCmdOpt(argPos,&argVl)).size(); )
         if(argCom == "h" || argCom == "help")	fprintf(stdout,"%s",optDescr().c_str());
 
-    //> Load parameters from config-file
+    //Load parameters from config-file
 }
 
 void TSpecialS::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TSubSYS::cntrCmdProc(opt);
 	return;
     }
-    //> Process command to page
+
+    //Process command to page
     string a_path = opt->attr("path");
     TSubSYS::cntrCmdProc(opt);
 }
@@ -71,21 +71,19 @@ TSpecial::TSpecial( const string &id ) : TModule(id), run_st(false)
 
 void TSpecial::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TModule::cntrCmdProc(opt);
 	ctrMkNode("area",opt,0,"/prm",_("Special"));
 	ctrMkNode("area",opt,-1,"/prm/st",_("State"));
 	ctrMkNode("fld",opt,-1,"/prm/st/st",_("Running"),RWRWR_,"root",SSPC_ID,1,"tp","bool");
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/st/st")
-    {
+    if(a_path == "/prm/st/st") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SSPC_ID,SEC_RD))	opt->setText(run_st?"1":"0");
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SSPC_ID,SEC_WR))	atoi(opt->text().c_str())?modStart():modStop();
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SSPC_ID,SEC_WR))	s2i(opt->text()) ? modStart() : modStop();
     }
     else TModule::cntrCmdProc(opt);
 }

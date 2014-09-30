@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 12:25+0300\n"
+"POT-Creation-Date: 2014-09-28 21:09+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1433,6 +1433,9 @@ msgstr "Полное имя"
 msgid "Password"
 msgstr "Пароль"
 
+msgid "Language"
+msgstr "Язык"
+
 msgid "User picture"
 msgstr "Изображение пользователя"
 
@@ -1486,11 +1489,11 @@ msgstr "Группы пользователей"
 msgid "User "
 msgstr "Пользователь "
 
-msgid "User DB"
-msgstr "БД пользователя"
-
 msgid "Include"
 msgstr "Включен"
+
+msgid "User DB"
+msgstr "БД пользователя"
 
 msgid "Group "
 msgstr "Группа "
@@ -1875,18 +1878,6 @@ msgstr ""
 "Использовать ненулевой период (секунды) для периодического сохранения "
 "изменённых частей системы в БД."
 
-msgid "Language"
-msgstr "Язык"
-
-msgid "Text variable's base language"
-msgstr "Базовый язык текстовых переменных"
-
-msgid ""
-"Multilingual for variable texts support enabling by base language selection."
-msgstr ""
-"Включает многоязыковую поддержку для текстовых переменных путём выбора "
-"базового языка."
-
 msgid "Least level"
 msgstr "Наименьший уровень"
 
@@ -1936,6 +1927,27 @@ msgstr "Уст. CPU"
 
 msgid "Translations"
 msgstr "Переводы"
+
+msgid "Text variable's base language"
+msgstr "Базовый язык текстовых переменных"
+
+msgid ""
+"Multilingual for variable texts support enabling by base language selection."
+msgstr ""
+"Включает многоязыковую поддержку для текстовых переменных путём выбора "
+"базового языка."
+
+msgid "Dynamic translation"
+msgstr "Динамический перевод"
+
+msgid "Current dynamic translation state."
+msgstr "Текущее состояние динамического перевода."
+
+msgid "Plan for dynamic translation at next start."
+msgstr "План для динамического перевода при следующем запуске."
+
+msgid "Enable manager"
+msgstr "Включение менеджера"
 
 msgid ""
 "Enable common translation manage which cause full reloading for all built "
@@ -2353,6 +2365,9 @@ msgstr "Ни одного проекта не выбрано!"
 
 msgid "Set the project name to:"
 msgstr "Имя проекта установлено в:"
+
+msgid "already started."
+msgstr "уже запущен."
 
 #~ msgid "Start archive"
 #~ msgstr "Начало архива"

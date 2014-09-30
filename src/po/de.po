@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-12 12:25+0300\n"
+"POT-Creation-Date: 2014-09-28 21:09+0300\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -1449,6 +1449,9 @@ msgstr "Voller Name"
 msgid "Password"
 msgstr "Kennwort"
 
+msgid "Language"
+msgstr "Sprache"
+
 msgid "User picture"
 msgstr "Bild des Benutzers"
 
@@ -1502,11 +1505,11 @@ msgstr "Gruppen"
 msgid "User "
 msgstr "Benutzer: "
 
-msgid "User DB"
-msgstr "Datenbank des Benutzers"
-
 msgid "Include"
 msgstr "Eingeschlossen"
+
+msgid "User DB"
+msgstr "Datenbank des Benutzers"
 
 msgid "Group "
 msgstr "Gruppe "
@@ -1889,18 +1892,6 @@ msgstr ""
 "Keine Nullperiode (Sekunden) für periodische Speicherung der geänderten "
 "Systemteile in die Datenbank verwenden."
 
-msgid "Language"
-msgstr "Sprache"
-
-msgid "Text variable's base language"
-msgstr "Basissprache für die Variablentexte"
-
-msgid ""
-"Multilingual for variable texts support enabling by base language selection."
-msgstr ""
-"Schließt die multisprachliche Unterstützung für die Textvariable durch die "
-"Wahl der Grundsprache."
-
 msgid "Least level"
 msgstr "Niedrigste Nachrichtenstufe"
 
@@ -1950,6 +1941,27 @@ msgstr "CPU Installation"
 
 msgid "Translations"
 msgstr "Übersetzungen"
+
+msgid "Text variable's base language"
+msgstr "Basissprache für die Variablentexte"
+
+msgid ""
+"Multilingual for variable texts support enabling by base language selection."
+msgstr ""
+"Schließt die multisprachliche Unterstützung für die Textvariable durch die "
+"Wahl der Grundsprache."
+
+msgid "Dynamic translation"
+msgstr "Dynamische Übersetzung"
+
+msgid "Current dynamic translation state."
+msgstr "Aktuellen dynamischen Übersetzung Zustand."
+
+msgid "Plan for dynamic translation at next start."
+msgstr "Planen Sie für die dynamische Übersetzung beim nächsten Start."
+
+msgid "Enable manager"
+msgstr "Manager aktivieren"
 
 msgid ""
 "Enable common translation manage which cause full reloading for all built "
@@ -2368,6 +2380,9 @@ msgstr "Nein ein Projekt einstellen!"
 
 msgid "Set the project name to:"
 msgstr "Stellen Sie den Namen des Projekts an:"
+
+msgid "already started."
+msgstr "begonnen."
 
 #~ msgid "Start archive"
 #~ msgstr "Start des Archivs"

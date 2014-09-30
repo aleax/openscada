@@ -74,7 +74,7 @@ class Attr
 	};
 
 	//Methods
-	//> Main
+	// Main
 	Attr( TFld *fld, bool inher );
 	~Attr( );
 
@@ -86,6 +86,7 @@ class Attr
 	unsigned modif( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
+	bool isTransl( bool cfg = false );
 
 	void setFlgSelf( SelfAttrFlgs flg );
 	void setModif( unsigned set )	{ mModif = set; }

@@ -48,7 +48,7 @@ using namespace OSCADA;
 //* TMess                                         *
 //*************************************************
 TMess::TMess( ) : IOCharSet("UTF-8"), mMessLevel(Info), mLogDir(DIR_STDOUT|DIR_ARCHIVE),
-    mConvCode(true), mIsUTF8(true), mTranslEn(false), mTranslSet(false)
+    mConvCode(true), mIsUTF8(true), mTranslDyn(false), mTranslDynPlan(false), mTranslEnMan(false), mTranslSet(false)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -145,8 +145,7 @@ void TMess::putArg( const char *categ, int8_t level, const char *fmt, va_list ap
 
     if(mLogDir & DIR_SYSLOG) {
 	int level_sys;
-	switch(abs(level))
-	{
+	switch(abs(level)) {
 	    case Debug:		level_sys = LOG_DEBUG;	break;
 	    case Info:		level_sys = LOG_INFO;	break;
 	    case Notice:	level_sys = LOG_NOTICE;	break;
@@ -170,66 +169,31 @@ void TMess::get( time_t b_tm, time_t e_tm, vector<TMess::SRec> &recs, const stri
     if(mLogDir & DIR_ARCHIVE)	SYS->archive().at().messGet(b_tm, e_tm, recs, category, level);
 }
 
-string TMess::translGet( const string &base, const string &src )
+string TMess::translFld( const string &lng, const string &fld, bool isCfg )	{ return isCfg ? fld+"_"+lng : lng+"#"+fld; }
+
+void TMess::setLang2CodeBase( const string &vl )
 {
-    string rez;
+    mLang2CodeBase = vl;
+    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C")
+	mLang2CodeBase = "en";
+    else mLang2CodeBase = mLang2CodeBase.substr(0,2);
 
-    MtxAlloc res(Mess->mRes, true);
-    //Request from cache at first
-    map<string,CacheEl>::iterator itr = trMessCache.find(base);
-    if(itr != trMessCache.end()) { itr->second.tm = SYS->sysTm(); rez = itr->second.val; }
-    else {
-	//Request to data source direct
-	if(src.compare(0,5,"uapi:") == 0) { // Check/Get/Place from user API translations table
-	    string srcAddrs = src.substr(5), tStrVl;
-	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
-
-	    TConfig req;
-	    req.setIncmplTblStrct(true);
-	    int8_t isCfg = -1;
-
-	    vector<string> addrs;
-	    for(int off = 0; (tStrVl=TSYS::strParse(srcAddrs,0,";",&off)).size(); ) addrs.push_back(tStrVl);
-	    for(vector<string>::reverse_iterator iA = addrs.rbegin(); iA != addrs.rend(); ++iA) {
-		tStrVl = translFld(lang2Code(), "base", (isCfg==1));
-		if(isCfg != (*iA==DB_CFG)) {
-		    isCfg = (*iA==DB_CFG) ? 1 : 0;
-		    req.elem().fldClear();
-		    req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
-		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
-		    req.cfg("base").setS(base);
-		}
-		if(SYS->db().at().dataGet(*iA+"."mess_TrUApiTbl,"/"mess_TrUApiTbl,req,false,true)) {
-		    rez = req.cfg(tStrVl).getS();
-		    break;
-		}
-		// Create new record into the translation table of the data source
-		else if((iA+1) == addrs.rend() && lang2CodeBase().size()) {
-		    if(lang2CodeBase() == lang2Code())	req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
-		    SYS->db().at().dataSet(*iA+"."mess_TrUApiTbl, "/"mess_TrUApiTbl, req, false, true);
-		}
-	    }
-	    trMessCache[base] = CacheEl(rez, SYS->sysTm());
-	}
-
-	//Cache data and limit update
-	if(trMessCache.size() > (STD_CACHE_LIM+STD_CACHE_LIM/10)) {
-	    vector< pair<time_t,string> > sortQueue;
-	    for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
-		sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
-	    sort(sortQueue.begin(), sortQueue.end());
-	    for(unsigned i_del = 0; i_del < (STD_CACHE_LIM/10); ++i_del) trMessCache.erase(sortQueue[i_del].second);
-	}
-    }
-
-    return rez.empty() ? base : rez;
+    SYS->modif();
 }
 
-void TMess::setTranslEn( bool vl, bool passive )
+void TMess::setTranslDyn( bool val, bool plan )
 {
-    if(vl == mTranslEn || mTranslSet) return;
+    if(plan) mTranslDynPlan = val;
+    else mTranslDyn = mTranslDynPlan = val;
+
+    SYS->modif();
+}
+
+void TMess::setTranslEnMan( bool vl, bool passive )
+{
+    if(vl == mTranslEnMan || mTranslSet) return;
     mTranslSet = true;
-    mTranslEn = vl;
+    mTranslEnMan = vl;
     if(!passive) {
 	if(vl) {
 	    SYS->load(true);		//Built messages load
@@ -243,9 +207,152 @@ void TMess::setTranslEn( bool vl, bool passive )
     SYS->modif();
 }
 
+string TMess::translGet( const string &base, const string &lang, const string &src )
+{
+    string rez, tStr, cKey = base, trLang = lang2Code();
+    if(translDyn()) {
+	if(lang.size() >= 2) trLang = lang.substr(0,2);
+	if(trLang == lang2CodeBase()) return base;
+	cKey = trLang+"#"+cKey;
+    } else if(src.compare(0,5,"uapi:") != 0) return base;
+
+    MtxAlloc res(mRes, true);
+    //Request from cache at first
+    map<string,CacheEl>::iterator itr = trMessCache.find(cKey);
+    if(itr != trMessCache.end()) { itr->second.tm = SYS->sysTm(); rez = itr->second.val; }
+    else {
+	//if(base == "Roman Savochenko") printf("TEST 00: trLang='%s'; cKey='%s'\n", trLang.c_str(), cKey.c_str());
+	//Request to data source direct
+	if(src.compare(0,5,"uapi:") == 0) {	// Check/Get/Place from user API translations table
+	    string srcAddrs = src.substr(5), tStrVl;
+	    if(srcAddrs.empty()) srcAddrs = SYS->workDB();
+
+	    TConfig req;
+	    req.setIncmplTblStrct(true);
+	    int8_t isCfg = -1;
+
+	    vector<string> addrs;
+	    for(int off = 0; (tStrVl=TSYS::strParse(srcAddrs,0,";",&off)).size(); ) addrs.push_back(tStrVl);
+	    for(vector<string>::reverse_iterator iA = addrs.rbegin(); iA != addrs.rend(); ++iA) {
+		tStrVl = translFld(trLang, "base", (isCfg==1));
+		if(isCfg != (*iA==DB_CFG)) {
+		    isCfg = (*iA==DB_CFG) ? 1 : 0;
+		    req.elem().fldClear();
+		    req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
+		    req.elem().fldAdd(new TFld(tStrVl.c_str(),"Tr",TFld::String,0));
+		    req.cfg("base").setS(base);
+		}
+		if(SYS->db().at().dataGet(*iA+"."mess_TrUApiTbl,"/"mess_TrUApiTbl,req,false,true)) {
+		    rez = req.cfg(tStrVl).getS();
+		    break;
+		}
+		// Create new record into the translation table of the data source
+		else if((iA+1) == addrs.rend() && lang2CodeBase().size()) {
+		    if(lang2CodeBase() == trLang) req.elem().fldDel(req.elem().fldId(tStrVl.c_str()));
+		    SYS->db().at().dataSet(*iA+"."mess_TrUApiTbl, "/"mess_TrUApiTbl, req, false, true);
+		}
+	    }
+	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
+	}
+	//Check included sources from index
+	else {
+	    map<string, map<string,string> >::iterator im = trMessIdx.find(base);
+	    if(im != trMessIdx.end()) {
+		TConfig req;
+		for(map<string,string>::iterator is = im->second.begin(); rez.empty() && is != im->second.end(); ++is) {
+		    string trSrc = TSYS::strParse(is->first,0,"#"), trFld = TSYS::strParse(is->first,1,"#"), reqFld;
+		    bool isCfg = false;
+		    //  Source is config file or included DB
+		    if((isCfg=trSrc.compare(0,4,"cfg:")==0) || trSrc.compare(0,3,"db:") == 0) {
+			reqFld = translFld(trLang, trFld, isCfg);
+			//  Need DB structure prepare
+			req.elem().fldClear();
+			req.elem().fldAdd(new TFld(trFld.c_str(),"",TFld::String,0));
+			req.elem().fldAdd(new TFld(reqFld.c_str(),"",TFld::String,0));
+			req.cfg(trFld).setReqKey(true);
+			req.cfg(trFld).setS(im->first);
+
+			//  Get from config file or DB source
+			bool seekRez = false;
+			for(int inst = 0; rez.empty(); inst++) {
+			    seekRez = isCfg ? SYS->db().at().dataSeek("", trSrc.substr(4), inst, req)
+					    : SYS->db().at().dataSeek(trSrc.substr(3), "", inst, req);
+			    if(!seekRez) break;
+			    rez = req.cfg(reqFld).getS();
+			}
+		    }
+		}
+	    }
+	    trMessCache[cKey] = CacheEl(rez, SYS->sysTm());
+	}
+
+	//Cache data and limit update
+	if(trMessCache.size() > 10*(STD_CACHE_LIM+STD_CACHE_LIM/10)) {
+	    vector< pair<time_t,string> > sortQueue;
+	    for(map<string,CacheEl>::iterator itr = trMessCache.begin(); itr != trMessCache.end(); ++itr)
+		sortQueue.push_back(pair<time_t,string>(itr->second.tm,itr->first));
+	    sort(sortQueue.begin(), sortQueue.end());
+	    for(unsigned i_del = 0; i_del < 10*(STD_CACHE_LIM/10); ++i_del) trMessCache.erase(sortQueue[i_del].second);
+	}
+    }
+
+    return rez.empty() ? base : rez;
+}
+
+string TMess::translGetU( const string &base, const string &user, const string &src )
+{
+    if(!translDyn() && src.empty()) return base;
+    return translGet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), src);
+}
+
+string TMess::translSet( const string &base, const string &lang, const string &mess, bool *needReload )
+{
+    if(!translDyn() && !needReload) return mess;
+
+    string trLang = lang2Code();
+    if(lang.size() >= 2) trLang = lang.substr(0,2);
+    bool chBase = (trLang == lang2CodeBase());
+
+    MtxAlloc res(mRes, true);
+    map<string,string> mI = trMessIdx[base];
+    for(map<string,string>::iterator is = mI.begin(); is != mI.end(); ++is) {
+	string trSrc = TSYS::strParse(is->first,0,"#"), setFld = TSYS::strParse(is->first,1,"#");
+	TConfig req;
+	bool setRes = false, isCfg = false;
+	//  Source is config file or included DB
+	if((isCfg=trSrc.compare(0,4,"cfg:") == 0) || trSrc.compare(0,3,"db:") == 0) {	//Source is config file
+	    req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
+	    req.cfg(setFld).setReqKey(true);
+	    req.cfg(setFld).setS(base, chBase?TCfg::KeyUpdtBase|TCfg::ForceUse:0);
+	    if(!chBase) {
+		setFld = translFld(trLang, setFld, isCfg);
+		req.elem().fldAdd(new TFld(setFld.c_str(),setFld.c_str(),TFld::String,0));
+	    }
+	    req.cfg(setFld).setS(mess, TCfg::ForceUse);
+	    setRes = isCfg ? SYS->db().at().dataSet("", trSrc.substr(4), req, true, true)
+			   : SYS->db().at().dataSet(trSrc.substr(3), "", req, false, true);
+	}
+	//  Move the source to new base
+	if(setRes && chBase) {
+	    if(needReload) *needReload = trMessIdx[mess].size();
+	    trMessIdx[mess][is->first] = is->second;
+	}
+    }
+    if(chBase) trMessIdx.erase(base);
+    trMessCache.clear();
+
+    return chBase ? mess : base;
+}
+
+string TMess::translSetU( const string &base, const string &user, const string &mess, bool *needReload )
+{
+    if(!translDyn() && !needReload) return mess;
+    return translSet(base, (SYS->security().at().usrPresent(user)?SYS->security().at().usrAt(user).at().lang():lang2Code()), mess, needReload);
+}
+
 void TMess::translReg( const string &mess, const string &src, const string &prms )
 {
-    if(!translEn()) return;
+    if(!translEnMan()) return;
 
     if(src.compare(0,5,"uapi:") == 0) {
 	vector<string> ls;
@@ -258,7 +365,7 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
 	TConfig req;
 	req.elem().fldAdd(new TFld("base","Base",TFld::String,TCfg::Key,"1000"));
 
-	MtxAlloc res(Mess->mRes, true);
+	MtxAlloc res(mRes, true);
 	for(unsigned i_l = 0; i_l < ls.size(); i_l++)
 	    if(ls[i_l] == DB_CFG)
 		for(int io_cnt = 0; SYS->db().at().dataSeek("","/"mess_TrUApiTbl,io_cnt++,req); )
@@ -269,14 +376,9 @@ void TMess::translReg( const string &mess, const string &src, const string &prms
     }
     else {
 	if(TSYS::strNoSpace(mess).empty()) return;
-	MtxAlloc res(Mess->mRes, true);
+	MtxAlloc res(mRes, true);
 	trMessIdx[mess][src] = prms;
     }
-}
-
-string TMess::translFld( const string &lng, const string &fld, bool isCfg )
-{
-    return isCfg ? fld+"_"+lng : lng+"#"+fld;
 }
 
 string TMess::lang( )
@@ -291,7 +393,7 @@ string TMess::selDebCats( )
 {
     string rez;
 
-    MtxAlloc res(Mess->mRes, true);
+    MtxAlloc res(mRes, true);
     for(unsigned i_sdc = 0; i_sdc < selectDebugCats.size(); i_sdc++)
 	rez += selectDebugCats[i_sdc]+";";
 
@@ -300,7 +402,7 @@ string TMess::selDebCats( )
 
 void TMess::setSelDebCats( const string &vl )
 {
-    MtxAlloc res(Mess->mRes, true);
+    MtxAlloc res(mRes, true);
     debugCats.clear();
     selectDebugCats.clear();
 
@@ -384,16 +486,6 @@ const char *TMess::I18N( const char *mess, const char *d_name )
 #endif
 }
 
-void TMess::setLang2CodeBase( const string &vl )
-{
-    mLang2CodeBase = vl;
-    if((!mLang2CodeBase.empty() && mLang2CodeBase.size() < 2) || mLang2CodeBase == "POSIX" || mLang2CodeBase == "C")
-	mLang2CodeBase = "en";
-    else mLang2CodeBase = mLang2CodeBase.substr(0,2);
-
-    SYS->modif();
-}
-
 void TMess::load( )
 {
     //Load params from command line
@@ -412,7 +504,8 @@ void TMess::load( )
     setLogDirect(s2i(TBDS::genDBGet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg)));
     setLang(TBDS::genDBGet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg), true);
     mLang2CodeBase = TBDS::genDBGet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
-    setTranslEn(s2i(TBDS::genDBGet(SYS->nodePath()+"TranslEn",i2s(translEn()),"root",TBDS::OnlyCfg)), true);
+    setTranslDyn(s2i(TBDS::genDBGet(SYS->nodePath()+"TranslDyn",i2s(translDyn()),"root",TBDS::OnlyCfg)), false);
+    setTranslEnMan(translDyn() || s2i(TBDS::genDBGet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg)), true);
 }
 
 void TMess::save( )
@@ -422,7 +515,8 @@ void TMess::save( )
     TBDS::genDBSet(SYS->nodePath()+"LogTarget",i2s(logDirect()),"root",TBDS::OnlyCfg);
     if(SYS->sysModifFlgs&TSYS::MDF_LANG) TBDS::genDBSet(SYS->nodePath()+"Lang",lang(),"root",TBDS::OnlyCfg);
     TBDS::genDBSet(SYS->nodePath()+"Lang2CodeBase",mLang2CodeBase,"root",TBDS::OnlyCfg);
-    TBDS::genDBSet(SYS->nodePath()+"TranslEn",i2s(translEn()),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"TranslDyn",i2s(translDyn(true)),"root",TBDS::OnlyCfg);
+    TBDS::genDBSet(SYS->nodePath()+"TranslEnMan",i2s(translEnMan()),"root",TBDS::OnlyCfg);
 }
 
 const char *TMess::labDB( )

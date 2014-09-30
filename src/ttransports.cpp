@@ -456,7 +456,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	return;
     }
     //Process command to page
-    string a_path = opt->attr("path");
+    string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/sub/transps" && ctrChkNode(opt)) {
 	vector<string>  list;
 	modList(list);
@@ -464,7 +464,7 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    opt->childAdd("el")->setAttr("id",list[i_a])->setText(modAt(list[i_a]).at().modName());
     }
     else if(a_path == "/sub/ehost") {
-	bool sysHostAcs = SYS->security().at().access(opt->attr("user"),SEC_WR,"root",STR_ID,RWRWR_);
+	bool sysHostAcs = SYS->security().at().access(u,SEC_WR,"root",STR_ID,RWRWR_);
 	if(ctrChkNode(opt,"get",RWRWRW,"root",STR_ID,SEC_RD)) {
 	    XMLNode *n_id	= ctrMkNode("list",opt,-1,"/sub/ehost/id","",RWRWRW,"root",STR_ID);
 	    XMLNode *n_nm	= ctrMkNode("list",opt,-1,"/sub/ehost/name","",RWRWRW,"root",STR_ID);
@@ -475,11 +475,11 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 	    XMLNode *n_mode	= sysHostAcs ? ctrMkNode("list",opt,-1,"/sub/ehost/mode","",RWRW__,"root",STR_ID) : NULL;
 
 	    vector<string> list;
-	    extHostList(opt->attr("user"), list, n_mode);
+	    extHostList(u, list, n_mode);
 	    for(unsigned i_h = 0; i_h < list.size(); i_h++) {
-		ExtHost host = extHostGet(opt->attr("user"), list[i_h], n_mode);
+		ExtHost host = extHostGet(u, list[i_h], n_mode);
 		if(n_id)	n_id->childAdd("el")->setText(host.id);
-		if(n_nm)	n_nm->childAdd("el")->setText(host.name);
+		if(n_nm)	n_nm->childAdd("el")->setText(trU(host.name,u));
 		if(n_tr)	n_tr->childAdd("el")->setText(host.transp);
 		if(n_addr)	n_addr->childAdd("el")->setText(host.addr);
 		if(n_user)	n_user->childAdd("el")->setText(host.user);
@@ -487,17 +487,16 @@ void TTransportS::cntrCmdProc( XMLNode *opt )
 		if(n_mode)	n_mode->childAdd("el")->setText(i2s(host.mode));
 	    }
 	}
-	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))
-	    extHostSet(ExtHost(opt->attr("user"),"newHost",_("New external host"),"","",opt->attr("user")));
-	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR))	extHostDel(opt->attr("user"), opt->attr("key_id"), sysHostAcs);
+	if(ctrChkNode(opt,"add",RWRWRW,"root",STR_ID,SEC_WR))	extHostSet(ExtHost(u,"newHost",_("New external host"),"","",u));
+	if(ctrChkNode(opt,"del",RWRWRW,"root",STR_ID,SEC_WR))	extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	if(ctrChkNode(opt,"set",RWRWRW,"root",STR_ID,SEC_WR)) {
 	    string col   = opt->attr("col");
-	    ExtHost host = extHostGet(opt->attr("user"), opt->attr("key_id"), sysHostAcs);
+	    ExtHost host = extHostGet(u, opt->attr("key_id"), sysHostAcs);
 	    if(col == "id") {
 		host.id = opt->text();
-		extHostDel(opt->attr("user"), opt->attr("key_id"), sysHostAcs);
+		extHostDel(u, opt->attr("key_id"), sysHostAcs);
 	    }
-	    else if(col == "name")  host.name = opt->text();
+	    else if(col == "name")  host.name = trSetU(host.name,u,opt->text());
 	    else if(col == "transp")host.transp = opt->text();
 	    else if(col == "addr")  host.addr = opt->text();
 	    else if(col == "user")  host.user = opt->text();
@@ -867,16 +866,14 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     // string messIO(string mess, real timeOut = 0) - sending the message <mess> through the transport with the waiting timeout <timeOut>
     //  mess - message text for send
     //  timeOut - connection timeout, in seconds
-    if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object)
-    {
+    if(iid == "messIO" && prms.size() >= 1 && prms[0].type() != TVariant::Object) {
 	string rez;
 	char buf[STR_BUF_LEN];
 	try {
 	    if(!startStat()) start();
 	    int resp_len = messIO(prms[0].getS().data(), prms[0].getS().size(), buf, sizeof(buf), (prms.size()>=2) ? (int)(1e3*prms[1].getR()) : 0);
 	    rez.assign(buf,resp_len);
-	}
-	catch(TError) { return ""; }
+	} catch(TError) { return ""; }
 
 	return rez;
     }
@@ -884,15 +881,14 @@ TVariant TTransportOut::objFuncCall( const string &iid, vector<TVariant> &prms, 
     //      session through the transport by means of protocol.
     //  req - request into XML-tree
     //  prt - protocol name
-    else if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat())
-    {
+    else if(iid == "messIO" && prms.size() >= 2 && !AutoHD<XMLNodeObj>(prms[0].getO()).freeStat()) {
 	try {
 	    XMLNode req;
 	    if(!startStat()) start();
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().toXMLNode(req);
 	    messProtIO(req,prms[1].getS());
 	    AutoHD<XMLNodeObj>(prms[0].getO()).at().fromXMLNode(req);
-	}catch(TError err) { return err.mess; }
+	} catch(TError err) { return err.mess; }
 	return 0;
     }
 
@@ -962,8 +958,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",STR_ID,SEC_RD))	opt->setText(TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user")));
 	if(ctrChkNode(opt,"set",RWRW__,"root",STR_ID,SEC_WR)) {
 	    int mode = s2i(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
-	    switch(mode)
-	    {
+	    switch(mode) {
 		case 0:
 		    TBDS::genDBSet(owner().nodePath()+"ReqReq",
 			TSYS::strDecode(TSYS::strEncode(opt->text(),TSYS::Bin),TSYS::Bin," "), opt->attr("user"));
@@ -983,8 +978,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	int mode = s2i(TBDS::genDBGet(owner().nodePath()+"ReqMode","0",opt->attr("user")));
 	string req = TBDS::genDBGet(owner().nodePath()+"ReqReq","",opt->attr("user"));
 
-	switch(mode)
-	{
+	switch(mode) {
 	    case 0:	req = TSYS::strEncode(req,TSYS::Bin);	break;
 	    case 1:	//TEXT(LF)
 		for(size_t i_p = 0; (i_p=req.find("\n",i_p)) != string::npos; i_p++)
@@ -1012,8 +1006,7 @@ void TTransportOut::cntrCmdProc( XMLNode *opt )
 	    answ.assign(buf,resp_len);
 
 	    bool ToTmOut = (bool)s2i(TBDS::genDBGet(owner().nodePath()+"ToTmOut","0",opt->attr("user")));
-	    while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM)
-	    {
+	    while(ToTmOut && resp_len > 0 && ((TSYS::curTime()-stm)/1000000) < STD_INTERF_TM) {
 		try{ resp_len = messIO(NULL,0,buf,sizeof(buf),0,true); } catch(TError err) { break; }
 		answ.append(buf,resp_len);
 	    }

@@ -1062,8 +1062,8 @@ Reg *Func::cdBldFnc( int f_cod, Reg *prm1, Reg *prm2 )
     if(p1_pos >= 0) { addr = p1_pos; prg.append((char*)&addr, sizeof(uint16_t)); }
     if(p2_pos >= 0) { addr = p2_pos; prg.append((char*)&addr, sizeof(uint16_t)); }
 
-    //!!!! Register constant's translations for FTr
-    if(f_cod == Reg::FTr && prm1 && prm1->type() == Reg::String) Mess->translGet(*prm1->val().s, "uapi:"+stor());
+    //Register constant's translations for FTr at compile stage
+    if(f_cod == Reg::FTr && prm1 && prm1->type() == Reg::String) Mess->translGet(*prm1->val().s, "", "uapi:"+stor());
 
     return rez;
 }
@@ -2441,7 +2441,7 @@ void Func::exec( TValFunc *val, const uint8_t *cprg, ExecData &dt )
 #ifdef OSC_DEBUG
 		if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), "CODE: Function %d=tr(%d).", ptr->rez, ptr->a);
 #endif
-		reg[ptr->rez] = Mess->translGet(getValS(val,reg[ptr->a]), "uapi:"+val->func()->stor());
+		reg[ptr->rez] = Mess->translGetU(getValS(val,reg[ptr->a]),val->user(),"uapi:"+val->func()->stor());
 		cprg += sizeof(SCode); continue;
 	    }
 	    case Reg::CProc:

@@ -771,10 +771,12 @@ AutoHD<TCntrNode> TBD::chldAt( int8_t igr, const string &name, const string &use
 
 void TBD::cntrCmdProc( XMLNode *opt )
 {
+    string u = opt->attr("user");
+
     //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
-	ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+name(),RWRWR_,"root",SDB_ID);
+	ctrMkNode("oscada_cntr",opt,-1,"/",_("Data base: ")+trU(name(),u),RWRWR_,"root",SDB_ID);
 	ctrMkNode("branches",opt,-1,"/br","",R_R_R_);
 	ctrMkNode("grp",opt,-1,"/br/tbl_",_("Opened table"),RWRW__,"root",SDB_ID,1,"idSz","255");
 	if(ctrMkNode("area",opt,0,"/prm",_("Data base"))) {
@@ -849,7 +851,7 @@ void TBD::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRW__,"root",SDB_ID))	opt->setText(i2s(userSQLTrans));
 	if(ctrChkNode(opt,"set",RWRW__,"root",SDB_ID))	userSQLTrans = s2i(opt->text());
     }
-    else if(a_path == "/sql/send" && enableStat( ) && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))
+    else if(a_path == "/sql/send" && enableStat() && ctrChkNode(opt,"set",RWRW__,"root",SDB_ID,SEC_WR))
 	sqlReq(userSQLReq,&userSQLResTbl,userSQLTrans);
     else if(a_path == "/sql/tbl" && ctrChkNode(opt,"get",R_R___,"root",SDB_ID,SEC_RD))
 	for(unsigned i_r = 0; i_r < userSQLResTbl.size(); i_r++)

@@ -149,7 +149,7 @@ class TConfig: public TValElem
 	void cfgViewAll( bool val = true );	// Show/Hide all no key elements
 	void cfgKeyUseAll( bool val );
 
-	TElem &elem( );
+	TElem &elem( )			{ return *mElem; }
 	void setElem( TElem *Elements, bool first = false );
 
 	void cntrCmdMake( XMLNode *fld, const string &path, int pos,
@@ -179,7 +179,7 @@ class TConfig: public TValElem
     private:
 	//Attributes
 	TCfgMap		value;
-	TElem		*m_elem;
+	TElem		*mElem;
 	uint8_t		single		: 1;
 	uint8_t		mIncmplTblStrct	: 1;
 	uint8_t		mReqKeys	: 1;

@@ -118,8 +118,7 @@ class Session : public TCntrNode
 
     private:
 	//Data
-	class Alarm
-	{
+	class Alarm {
 	    public:
 		//Methods
 		Alarm(const string &ipath, uint8_t ilev, uint8_t itp, const string &icat, const string &imess,
@@ -129,14 +128,14 @@ class Session : public TCntrNode
 		Alarm( ) : lev(0), tp(0), qtp(0)	{ }
 
 		//Attributes
-		uint8_t	    lev,	//Level
-			    tp,		//Type
-			    qtp;	//Quittance type
-		string	    path,	//Widget path
-			    cat,	//Category
-			    mess,	//Message
-			    tpArg;	//Type argument
-		unsigned    clc;	//Clock
+		uint8_t	lev,	//Level
+			tp,		//Type
+			qtp;	//Quittance type
+		string	path,	//Widget path
+			cat,	//Category
+			mess,	//Message
+			tpArg;	//Type argument
+		unsigned clc;	//Clock
 	};
 
 	//Methods

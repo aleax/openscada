@@ -1,3 +1,17 @@
+2014-09-30 Roman
+- !!!!:SYS,DB.*: Dynamic translation main implement is added:
+    TMess: Functions translDyn() and setTranslDyn() into plan mode for next start is added.
+	Function translGet() expanded for dynamic mode and translGetU() is added for take the language from user.
+	Functions translSet() and translSetU() is added for dynamic translations set.
+	Short templates to new dynamic translations functions is added: trL(), trU(), trSetL(), trSetU().
+    Security: Language property by function lang() and DB field "LANG" is added to users. Functions lName() and descr() is renamed to
+	descr() and longDescr() accordingly to the DB fields for users and the groups.
+    Property "Text variable's base language" moved from tab "Generic" to specific for that tab "Translations".
+    UI.Vision: Apply attributes rewote by dynamic translation specific.
+- FIX:Protocol.ModBus: Inconsistent diagnostic format of node to real counters fix.
+- FIX:UI.QTCfg: Size policy for Boolean value into RO mode fix.
+
+
 2014-09-28 Roman
 - SYS: Main start script "openscada_start" expanded for message about already start.
 - DAQ.SoundCard: Expand for X86_64 specific with short framesPerBuffer call to CallBack function.
