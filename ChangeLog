@@ -1,3 +1,9 @@
+2014-10-01 Roman
+- SYS: To task status maximum call lag and consume is added for RT properties problems detect better.
+- DAQ.LogicLev: enRes moved from Res to mutex.
+- UI.VCAEngine: Attr::isTransl() separated to static varaint and used also into generic attributes loading and saving function.
+
+
 2014-09-30 Roman
 - !!!!:SYS,DB.*: Dynamic translation main implement is added:
     TMess: Functions translDyn() and setTranslDyn() into plan mode for next start is added.

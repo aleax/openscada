@@ -295,10 +295,10 @@ class TSYS : public TCntrNode
 
 		//Methods
 		STask( ) : thr(0), policy(0), prior(0), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
-		    cycleLost(0)	{ }
+		    cycleLost(0), lagMax(0), consMax(0)	{ }
 		STask( pthread_t ithr, char ipolicy, char iprior ) :
 		    thr(ithr), policy(ipolicy), prior(iprior), tid(0), flgs(0), tm_beg(0), tm_end(0), tm_per(0), tm_pnt(0),
-		    cycleLost(0)	{ }
+		    cycleLost(0), lagMax(0), consMax(0)	{ }
 
 		//Attributes
 		string		path;
@@ -310,6 +310,7 @@ class TSYS : public TCntrNode
 		void		*taskArg;
 		unsigned	flgs;
 		int64_t		tm_beg, tm_end, tm_per, tm_pnt, cycleLost;
+		int		lagMax, consMax;
 	};
 
 	//Private methods

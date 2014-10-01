@@ -52,7 +52,7 @@ msgid ""
 "For DBF address DB is the directory which contains files of tables (*.dbf).\n"
 "For example: /opt/dbf ."
 msgstr ""
-"Для DBF адреса БД це директорія, яка містить файли таблиць (*.dbf).\n"
+"Для DBF адреса БД це тека, яка містить файли таблиць (*.dbf).\n"
 "Наприклад: /opt/dbf ."
 
 #: dbf_mod.cpp:204

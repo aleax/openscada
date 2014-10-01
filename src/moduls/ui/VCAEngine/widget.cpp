@@ -1954,12 +1954,14 @@ string Attr::cfgVal( )
     return tvl;
 }
 
-bool Attr::isTransl( bool cfg )
+/*bool Attr::isTransl( TFld::Type tp, int flgGlb, int flgSelf )
 {
-    return (type() == TFld::String &&
-	!(flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-	(!cfg || flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn)));
+    return (tp == TFld::String &&
+	!(flgGlb&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+	(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
 }
+
+bool Attr::isTransl( bool cfg )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }*/
 
 void Attr::setCfgTempl( const string &vl )
 {

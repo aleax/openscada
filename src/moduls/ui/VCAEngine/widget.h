@@ -86,7 +86,12 @@ class Attr
 	unsigned modif( )	{ return mModif; }
 	string cfgTempl( );
 	string cfgVal( );
-	bool isTransl( bool cfg = false );
+	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
+	    return (tp == TFld::String &&
+		!(flgGlb&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
+	}
+	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }
 
 	void setFlgSelf( SelfAttrFlgs flg );
 	void setModif( unsigned set )	{ mModif = set; }

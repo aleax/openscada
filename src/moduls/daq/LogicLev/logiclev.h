@@ -78,8 +78,7 @@ class TMdPrm : public TParamContr
 
     private:
 	//Data
-	class SLnk
-	{
+	class SLnk {
 	    public:
 		SLnk( int iid, const string &iprm_attr = "" ) : io_id(iid), prm_attr(iprm_attr) { }
 		int	io_id;
@@ -87,20 +86,18 @@ class TMdPrm : public TParamContr
 		AutoHD<TVal> aprm;
 	};
 
-	struct STmpl
-	{
+	struct STmpl {
 	    TValFunc	val;
 	    vector<SLnk> lnk;
 	};
 
-	union
-	{
+	union {
 	    AutoHD<TValue> *prm_refl;		//Direct reflection
 	    STmpl *tmpl;			//Template
 	};
 
 	//Methods
-	//> Template link operations
+	// Template link operations
 	int lnkSize( );
 	int lnkId( int id );
 	int lnkId( const string &id );
@@ -153,7 +150,7 @@ class TMdContr: public TController
 	static void *Task( void *icntr );
 
 	//Attributes
-	Res	en_res;				//Resource for enable params
+	pthread_mutex_t	enRes;			//Resource for enable params
 	int64_t	&mPerOld,			// ms
 		&mPrior;			// Process task priority
 

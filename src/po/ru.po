@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-28 21:09+0300\n"
+"POT-Creation-Date: 2014-10-01 16:45+0300\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -1984,15 +1984,15 @@ msgstr "Просмотр сообщений"
 msgid "Finished. "
 msgstr "Закончен. "
 
-#, c-format
-msgid "Last: %s. Consume: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."
+msgid ""
+"Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."
 msgstr ""
-"Посл.: %s. Использ. %3.1f%% (%s из %s). Отстав.: %s. Потеря циклов: %g."
+"Посл.: %s. Использ. %3.1f[%3.1f]%% (%s из %s). Отстав.: %s[%s]. Потеря циклов: %g."
 
 msgid "Standard"
 msgstr "Стандарт"
 
-msgid "Round-robin"
+msgid "RT Round-robin"
 msgstr ""
 
 msgid "Style \"batch\""

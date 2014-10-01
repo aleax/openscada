@@ -1531,7 +1531,7 @@ void TSYS::taskCreate( const string &path, int priority, void *(*start_routine)(
     if(priority > 0)	policy = SCHED_RR;
     pthread_attr_setschedpolicy(pthr_attr, policy);
     prior.sched_priority = vmax(sched_get_priority_min(policy),vmin(sched_get_priority_max(policy),priority));
-    pthread_attr_setschedparam(pthr_attr,&prior);
+    pthread_attr_setschedparam(pthr_attr, &prior);
 
     try {
 	pthread_attr_getdetachstate(pthr_attr,&detachStat);
@@ -1645,7 +1645,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    //tsk->prior = param.sched_priority;
+    //tsk->prior = param.sched_priority;	//!!!! Commented by nice
 
 #if __GLIBC_PREREQ(2,4)
     //Load and init CPU set
@@ -1753,6 +1753,8 @@ void TSYS::taskSleep( int64_t per, time_t cron, int64_t *lag )
 	    stsk->tm_end = cur_tm;
 	    stsk->tm_per = wake_tm;
 	    stsk->tm_pnt = pnt_tm;
+	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
+	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
 	}
     }
     else {
@@ -1763,6 +1765,8 @@ void TSYS::taskSleep( int64_t per, time_t cron, int64_t *lag )
 	    stsk->tm_end = 1000000000ll*end_tm;
 	    stsk->tm_per = 1000000000ll*time(NULL);
 	    stsk->tm_pnt = 1000000000ll*cron;
+	    stsk->lagMax = vmax(stsk->lagMax, stsk->tm_per - stsk->tm_pnt);
+	    if(stsk->tm_beg) stsk->consMax = vmax(stsk->consMax, stsk->tm_end - stsk->tm_beg);
 	}
     }
 }
@@ -2319,7 +2323,7 @@ void TSYS::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/gen/clk_res" && ctrChkNode(opt)) {
 	struct timespec tmval;
 	clock_getres(CLOCK_REALTIME,&tmval);
-	opt->setText(TSYS::time2str(1e-3*tmval.tv_nsec));
+	opt->setText(tm2s(1e-3*tmval.tv_nsec));
     }
     else if(a_path == "/gen/in_charset" && ctrChkNode(opt))	opt->setText(Mess->charset());
     else if(a_path == "/gen/config") {
@@ -2404,20 +2408,24 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		if(n_thr)	n_thr->childAdd("el")->setText(u2s(it->second.thr));
 		if(n_tid)	n_tid->childAdd("el")->setText(i2s(it->second.tid));
 		if(n_stat) {
-		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0;
+		    int64_t	tm_beg = 0, tm_end = 0, tm_per = 0, tm_pnt = 0, lagMax = 0, consMax = 0;
 		    for(int i_tr = 0; tm_beg == tm_per && i_tr < 2; i_tr++)
-		    { tm_beg = it->second.tm_beg; tm_end = it->second.tm_end; tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt; }
+		    {
+			tm_beg = it->second.tm_beg; tm_end = it->second.tm_end;
+			tm_per = it->second.tm_per; tm_pnt = it->second.tm_pnt;
+			lagMax = it->second.lagMax; consMax = it->second.consMax;
+		    }
 		    XMLNode *cn = n_stat->childAdd("el");
 		    if(it->second.flgs&STask::FinishTask) cn->setText(_("Finished. "));
 		    if(tm_beg && tm_beg < tm_per)
-			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f%% (%s from %s). Lag: %s. Cycles lost: %g."),
-			    time2str((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
-			    time2str(1e-3*(tm_end-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_beg)).c_str(), time2str(1e-3*(tm_per-tm_pnt)).c_str(),
-			    (double)it->second.cycleLost));
+			cn->setText(cn->text()+TSYS::strMess(_("Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."),
+			    tm2s((time_t)(1e-9*tm_per),"%d-%m-%Y %H:%M:%S").c_str(), 100*(double)(tm_end-tm_beg)/(double)(tm_per-tm_beg),
+			    100*(double)consMax/(double)(tm_per-tm_beg), tm2s(1e-3*(tm_end-tm_beg)).c_str(), tm2s(1e-3*(tm_per-tm_beg)).c_str(),
+			    tm2s(1e-3*(tm_per-tm_pnt)).c_str(), tm2s(1e-3*lagMax).c_str(), (double)it->second.cycleLost));
 		}
 		if(n_plc) {
 		    string plcVl = _("Standard");
-		    if(it->second.policy == SCHED_RR) plcVl = _("Round-robin");
+		    if(it->second.policy == SCHED_RR) plcVl = _("RT Round-robin");
 #if __GLIBC_PREREQ(2,4)
 		    if(it->second.policy == SCHED_BATCH) plcVl = _("Style \"batch\"");
 #endif

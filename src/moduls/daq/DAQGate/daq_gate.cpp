@@ -301,8 +301,7 @@ void TMdContr::enable_( )
 	if(mStatWork[i_st].second.cntr >= 0) prmChkToDel = false;
     if(prmChkToDel && enableStat()) {
 	MtxAlloc res(enRes, true);
-	for(unsigned i_prm = 0, i_gPrm = 0; i_prm < pHd.size(); )
-	{
+	for(unsigned i_prm = 0, i_gPrm = 0; i_prm < pHd.size(); ) {
 	    for(i_gPrm = 0; i_gPrm < gPrmLs.size() && gPrmLs[i_gPrm] != pHd[i_prm].at().ownerPath(true); ) i_gPrm++;
 	    if(i_gPrm >= gPrmLs.size()) {
 		string pId = pHd[i_prm].at().id();
