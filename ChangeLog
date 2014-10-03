@@ -1,3 +1,7 @@
+2014-10-03 Roman
+- SYS: Remove conditional display for tab "Translations" of main configuration page.
+
+
 2014-10-01 Roman
 - SYS: To task status maximum call lag and consume is added for RT properties problems detect better.
 - DAQ.LogicLev: enRes moved from Res to mutex.

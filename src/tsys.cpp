@@ -2261,12 +2261,14 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 		    ctrMkNode("list",opt,-1,"/tasks/tasks/cpuSet",_("CPU set"),RWRW__,"root","root",1,"tp","str");
 #endif
 	    }
-	if(Mess->lang2CodeBase().size() && ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
+	if(ctrMkNode("area",opt,-1,"/tr",_("Translations"))) {
 	    ctrMkNode("fld",opt,-1,"/tr/baseLang",_("Text variable's base language"),RWRWR_,"root","root",5,
 		"tp","str","len","2","dest","sel_ed","select","/tr/baseLangLs",
 		"help",_("Multilingual for variable texts support enabling by base language selection."));
-	    ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current dynamic translation state."));
-	    ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Plan for dynamic translation at next start."));
+	    if(Mess->lang2CodeBase().size()) {
+		ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current dynamic translation state."));
+		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Plan for dynamic translation at next start."));
+	    }
 	    if(!Mess->translDyn())
 		ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable manager"),RWRWR_,"root","root",2,"tp","bool",
 		    "help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
