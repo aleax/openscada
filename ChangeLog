@@ -1,3 +1,8 @@
+2014-10-04 Roman
+- LibsDB.{OscadaLibs,vcaBase}.db: Prescription units moved to single script with translation by tr().
+- FIX:UI.QTCfg: Internal XML value update fix at the table set into no reload mode, mostly for keys.
+
+
 2014-10-03 Roman
 - SYS: Remove conditional display for tab "Translations" of main configuration page.
 

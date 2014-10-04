@@ -17,19 +17,19 @@ INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','arg1','20','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','tmp1','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_frq','5','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_start','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','1','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_stop','0','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','f_err','0','','0');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','run','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','pause','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','error','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','abort','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','rez','1','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','15','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','0','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','arg1','10','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','tmp1','9.4','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_frq','5','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_start','0','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','1','','');
-INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_err','0','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_stop','0','','');
+INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','f_err','0','','0');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','start','0','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('backTimer','stop','1','','');
 INSERT INTO "LogLevPrm_prescription_io" VALUES('timer','start','0','','');
@@ -70,7 +70,7 @@ License: GPL','flb_doc','Звітна документація','Бібліот�
 Автор: Роман Савоченко
 Лицензия: GPL',1);
 INSERT INTO "UserFuncLibs" VALUES('regEl','Regulation elements','Regulation elements library','flb_regEl','Елементи регулювання','Бібліотека елементів регулювання','Элементы регулирования','Библиотека элементов регулирования',0);
-INSERT INTO "UserFuncLibs" VALUES('Controller','Controllers','Programms of controllers based on JavaLikeCalc.','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.','Контроллеры','Программы контроллеров основанных на JavaLikeCalc.',1);
+INSERT INTO "UserFuncLibs" VALUES('Controller','Controllers','Programms of controllers based on JavaLikeCalc.','lib_Controllers','Контролери','Програми контролерів базованих на JavaLikeCalc.','Контроллеры','Программы контроллеров основанных на JavaLikeCalc.',0);
 INSERT INTO "UserFuncLibs" VALUES('web','XHTML-template','Pages processing functions library for XHTML-template user''s Web-interface','flb_web','XHTML-шаблон','Бібліотека функцій обробки сторінок XHTML-шаблонів користувацткого Web-інтерфейсу.','XHTML-шаблон','Библиотека функций обработки страниц XHTML-шаблонов пользовательского Web-интерфейса.',0);
 CREATE TABLE 'flb_doc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "flb_doc" VALUES('getVal','Getting value from archive','Query the value for a specified time from the assigned archive and issuing the result with the specified number of decimal points.',10,'using Special.FLibSYS;
@@ -1287,19 +1287,19 @@ INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg>
 ');
 INSERT INTO "prescr_val" VALUES('comsCntr','LogicLev.prescription');
 INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
-<TVarObj p=''Таймер''>
-<str p=''arg1''>Час (сек.)</str>
-<str p=''descr''>Типовий таймер. Утримує виконання до завершення часу.</str>
-<str p=''prmID''>timer</str>
-</TVarObj>
-<TVarObj p=''Фоновий таймер''>
-<str p=''arg1''>Час (сек.)</str>
-<str p=''descr''>Фоновий таймер. Оновлюється паралельно з поточною командою.</str>
+<TVarObj p=''Background timer''>
+<str p=''arg1''>Time (s)</str>
+<str p=''descr''>Background timer. Updating parallel with current command.</str>
 <str p=''prmID''>backTimer</str>
+</TVarObj>
+<TVarObj p=''Timer''>
+<str p=''arg1''>Time (s)</str>
+<str p=''descr''>Typical timer. Hold run up to time elapse.</str>
+<str p=''prmID''>timer</str>
 </TVarObj>
 </TVarObj>
 ');
-INSERT INTO "prescr_val" VALUES('clcCnt','10148878');
+INSERT INTO "prescr_val" VALUES('clcCnt','10163296');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -2422,88 +2422,41 @@ CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Рецепты','Рецепти','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,'JavaLikeCalc.JavaScript
-//> Reset to default
+//Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//> Run
-if(run && !pause)
-{
+//Run
+if(run && !pause) {
 	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
 	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:Waiting "+arg1.toPrecision(3)+"s expired"; run = false; }
-	else rez = "0:Waiting "+tmp1.toPrecision(3)+"с";
-}','JavaLikeCalc.JavaScript
-//> Reset to default
-if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//> Run
-if(run && !pause)
-{
-	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
-	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:Очікування "+arg1.toPrecision(3)+"с вичерпано"; run = false; }
-	else rez = "0:Очікування "+tmp1.toPrecision(3)+"с";
-}','JavaLikeCalc.JavaScript
-//> Reset to default
-if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//> Run
-if(run && !pause)
-{
-	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
-	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:Ожидание "+arg1.toPrecision(3)+"с истекло"; run = false; }
-	else rez = "0:Ожидание "+tmp1.toPrecision(3)+"с";
-}',1372172781);
+	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
+	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
+}','','',1412327507);
 INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлюється паралельно з поточною командою.','Фоновый таймер. Обновляется параллельно с текущей командой.',10,'JavaLikeCalc.JavaScript
-//> Reset to default
+//Reset to default
 if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//> Run
-if(run && !pause)
-{
+//Run
+if(run && !pause) {
 	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
 	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:Ожидание "+arg1.toPrecision(3)+"с истекло"; run = false; }
+	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
 	//if(tmp1 <= 10)	rez = "-1:Waiting "+arg1.toPrecision(3)+"s expired";
-	else rez = "10:Background waiting "+tmp1.toPrecision(3)+"s";
-}','JavaLikeCalc.JavaScript
-//> Reset to default
-if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//> Run
-if(run && !pause)
-{
-	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
-	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:Ожидание "+arg1.toPrecision(3)+"с истекло"; run = false; }
-	//if(tmp1 <= 10)	rez = "-1:Очікування "+arg1.toPrecision(3)+"с вичерпано";
-	else rez = "10:Фонове очікування "+tmp1.toPrecision(3)+"с";
-}','JavaLikeCalc.JavaScript
-//> Reset to default
-if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//> Run
-if(run && !pause)
-{
-	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
-	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:Ожидание "+arg1.toPrecision(3)+"с истекло"; run = false; }
-	//if(tmp1 <= 10)	rez = "-1:Ожидание "+arg1.toPrecision(3)+"с истекло";
-	else rez = "10:Фоновое ожидание "+tmp1.toPrecision(3)+"с";
-}',1372172772);
+	else rez = "10:"+tr("Background waiting %1s").replace("%1",tmp1.toPrecision(3));
+}','','',1412327656);
 CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',10,'clcCnt++;
 
 if(f_start)	work = SYS.XMLNode("prg");
 
-//> Check to commands controller present
+//Check to commands controller present
 comCntrO = false;
 if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
 
-//> Commands list update
-if(f_start || !(clcCnt%(60*f_frq)))
-{
-	if(!comCntrO)
-	{
+//Commands list update
+if(f_start || !(clcCnt%(60*f_frq))) {
+	if(!comCntrO) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
 		comLs = new Object();
-		for(i_t = 1; i_t < rez.length; i_t++)
-		{
+		for(i_t = 1; i_t < rez.length; i_t++) {
 			comNm = rez[i_t]["name"];
 			comLs[comNm] = new Object();
 			comLs[comNm]["descr"] = rez[i_t]["descr"];
@@ -2512,12 +2465,10 @@ if(f_start || !(clcCnt%(60*f_frq)))
 				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
 		}
 	}
-	else
-	{
+	else {
 		var nL = comCntrO.nodeList("prm_");
 		comLs = new Object();
-		for(i_n = 0; i_n < nL.length; i_n++)
-		{
+		for(i_n = 0; i_n < nL.length; i_n++) {
 			comO = comCntrO[nL[i_n]];
 			comNm = comO.cfg("NAME");
 			comLs[comNm] = new Object();
@@ -2530,18 +2481,15 @@ if(f_start || !(clcCnt%(60*f_frq)))
 	}
 }
 
-//> Programm selection change
-if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1))
-{
+//Programm selection change
+if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
 	work = SYS.XMLNode("prg");
 	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-	if(rez.length > 1)
-	{
-		//> Parse programm and insert procedure text and argument''s labels to here
+	if(rez.length > 1) {
+		//Parse program and insert procedure text and argument''s labels
 		work.load(rez[1][0]);
 		work.setAttr("name",prog);
-		for(i_c = 0; i_c < work.childSize(); i_c++)
-		{
+		for(i_c = 0; i_c < work.childSize(); i_c++) {
 			comId = work.childGet(i_c).attr("id");
 			if(comLs[comId].isEVal())	continue;
 			work.childGet(i_c).setAttr("proc",comLs[comId].proc);
@@ -2552,18 +2500,15 @@ if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1))
 	else prog = "";
 }
 
-//> Start process
-if(curMode <= 0 && mode == 1 && prog.length)
-{
+//Start process
+if(curMode <= 0 && mode == 1 && prog.length) {
 	startTm = SYS.time();
 	curCom = 0;
 	curMode = mode;	
 
-	if(comCntrO)
-	{
+	if(comCntrO) {
 		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-		{
+		for(i_c = 0; i_c < cL.length; i_c++) {
 			var cLi = comCntrO[cL[i_c]];
 			cLi.run.set(false);
 			cLi.stop.set(false);
@@ -2573,53 +2518,44 @@ if(curMode <= 0 && mode == 1 && prog.length)
 		}
 	}
 }
-//> Pause and other process
-else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1))
-{
+//Pause and other process
+else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1)) {
 	curMode = mode;
-	if((curMode == 1 || curMode == 2) && comCntrO)
-	{
+	if((curMode == 1 || curMode == 2) && comCntrO) {
 		var cL = comCntrO.nodeList("prm_");
 		for(i_c = 0; i_c < cL.length; i_c++)
 			comCntrO[cL[i_c]].pause.set(curMode==2);
 	}
 }
 
-//> Call program
-if(curMode == 1 || curMode == 2)
-{
+//Call program
+if(curMode == 1 || curMode == 2) {
 	prog = work.attr("name");
 
-	//> Internal commands call
-	if(!comCntrO)
-	{
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize())
-		{
-			work.childGet(curCom).setAttr("rez","-10:Step missed");
+	//Internal commands call
+	if(!comCntrO) {
+		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
+			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
 			curCom++;
 		}
-		if(curCom >= 0 && curCom < work.childSize())
-		{
+		if(curCom >= 0 && curCom < work.childSize()) {
 			comEl = work.childGet(curCom);
-			//> Stop process
-			if(mode == 0)
-			{
-				comEl.setAttr("rez","-10:Program terminated");
-				//>> Call stop command
-				if(!comLs["Stop"].isEVal())
-				{
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-10:"+tr("Program terminated"));
+				// Call stop command
+				if(!comLs["Stop"].isEVal()) {
 					off = 0;
 					prLang = comLs["Stop"].proc.parse(0,"\n",off);
 					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
 				}
-				SYS.messInfo("uprg"+prog,"Terminated by user session of program \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
-			//> Pass empty command		
+			//Pass empty command		
 			else if(!comEl.attr("proc").length) curCom++;
-			//> Execute command
-			else if(curMode == 1)
-			{
+			//Execute command
+			else if(curMode == 1) {
 				args = new Object();
 				args.rez = "";
 				args.f_start = !comEl.attr("tm").length;
@@ -2631,16 +2567,14 @@ if(curMode == 1 || curMode == 2)
 				prLang = comEl.attr("proc").parse(0,"\n",off);
 				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
 				if(rez && args.rez.toInt() > 0) curCom++;
-				else if(!rez || args.rez.toInt() < 0)
-				{
-					//>> Call error command
-					if(!comLs["Error"].isEVal())
-					{
+				else if(!rez || args.rez.toInt() < 0) {
+					// Call error command
+					if(!comLs["Error"].isEVal()) {
 						off = 0;
 						prLang = comLs["Error"].proc.parse(0,"\n",off);
 						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
 					}
-					SYS.messInfo("uprg"+prog,"Terminated by error session of program \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 					curMode = mode = -1;
 				}
 				comEl.setAttr("rez",args.rez);
@@ -2650,25 +2584,22 @@ if(curMode == 1 || curMode == 2)
 			}
 		}
 
-		//> End call
-		if(curCom < 0 || curCom >= work.childSize())
-		{
-			//>> Call stop command
-			if(!comLs["Stop"].isEVal())
-			{
+		//End call
+		if(curCom < 0 || curCom >= work.childSize()) {
+			// Call stop command
+			if(!comLs["Stop"].isEVal()) {
 				off = 0;
 				prLang = comLs["Stop"].proc.parse(0,"\n",off);
 				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
 			}
 
 			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,"Successful session of program \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 
-			//> Place to program last execution time
+			//Place to program last execution time
 			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1)
-			{
-				//> Parse programm and insert procedure text and argument''s labels to here
+			if(rez.length > 1) {
+				//Parse programm and insert procedure text and argument''s labels to here
 				comTree = SYS.XMLNode("prg");
 				comTree.load(rez[1][0]);
 				comTree.setAttr("wtm",SYS.time()-startTm);
@@ -2676,57 +2607,48 @@ if(curMode == 1 || curMode == 2)
 			}
 		}
 	}
-	//> External commands call
-	else
-	{
-		//>> Get current command parameter-object		
+	//External commands call
+	else {
+		// Get current command parameter-object		
 		curComPrm = EVAL_BOOL;
-		if(curCom >= 0 && curCom < work.childSize())
-		{
+		if(curCom >= 0 && curCom < work.childSize()) {
 			if(!(comId=comLs[work.childGet(curCom).attr("id")]).isEVal())	curComPrm = comCntrO["prm_"+comId.prmID];
-			if(curComPrm.isEVal())
-			{
+			if(curComPrm.isEVal()) {
 				curMode = mode = -1;
-				work.childGet(curCom).setAttr("rez","-11:Comand missed: "+work.childGet(curCom).attr("id"));
+				work.childGet(curCom).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
 				return;
 			}
 		}
 
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize())
-		{
-			work.childGet(curCom).setAttr("rez","-10:Step missed");
+		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
+			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
 			curComPrm.run.set(false);
 			curCom++;
 			mode = curMode;
 			return;
 		}
-		if(curCom >= 0 && curCom < work.childSize())
-		{
+		if(curCom >= 0 && curCom < work.childSize()) {
 			comEl = work.childGet(curCom);
-			//> Stop process
-			if(mode == 0)
-			{
-				comEl.setAttr("rez","-12:Program terminated");
-				//>> Stop all typical and set "abort" flag
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-12:"+tr("Program terminated"));
+				// Stop all typical and set "abort" flag
 				var cL = comCntrO.nodeList("prm_");
-				for(i_c = 0; i_c < cL.length; i_c++)
-				{
+				for(i_c = 0; i_c < cL.length; i_c++) {
 					var cLi = comCntrO[cL[i_c]];
 					cLi.run.set(false);
 					cLi.start.set(false);
 					cLi.abort.set(true);
 				}
 
-				SYS.messInfo("uprg"+prog,"Terminated by user session of program \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
-			//> Commands process
-			else
-			{
-				//>> Start command
-				if(!comEl.attr("tm").length)
-				{
-					curComPrm.run.set(0);	//> Stop for possible background call
+			//Commands process
+			else {
+				// Start command
+				if(!comEl.attr("tm").length) {
+					curComPrm.run.set(0);	//Stop for possible background call
 					comEl.setAttr("tm",SYS.time());
 					for(i_a = 1; i_a <= 5; i_a++)
 						if(!(comA=curComPrm["arg"+i_a]).isEVal())
@@ -2735,29 +2657,26 @@ if(curMode == 1 || curMode == 2)
 					curComPrm.run.set(true);
 				}
 
-				//> Update steps status, up to current comand
+				//Update steps status, up to current comand
 				comTo = min(curCom+1,work.childSize());
-				for(i_c = 0; i_c < comTo; i_c++)
-				{
+				for(i_c = 0; i_c < comTo; i_c++) {
 					comElI = work.childGet(i_c);
 					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
 					if(i_c < curCom && !(curComPI.run.get() && 
 						comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))	continue;
 					rez = curComPI.rez.get();
 					if(i_c == curCom && rez.toInt() > 0) curCom++;
-					if(rez.toInt() < 0)
-					{
-						//>> Stop all typical and call "error" command
+					if(rez.toInt() < 0) {
+						// Stop all typical and call "error" command
 						var cL = comCntrO.nodeList("prm_");
-						for(i_c = 0; i_c < cL.length; i_c++)
-						{
+						for(i_c = 0; i_c < cL.length; i_c++) {
 							var cLi = comCntrO[cL[i_c]];
 							cLi.run.set(false);
 							cLi.start.set(false);
 							cLi.error.set(true);
 						}
 
-						SYS.messInfo("uprg"+prog,"Terminated by error session of program \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+						SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 						curMode = mode = -1;
 					}
 					comElI.setAttr("rez",rez);
@@ -2768,13 +2687,11 @@ if(curMode == 1 || curMode == 2)
 			}
 		}
 		
-		//> End call
-		if(curCom < 0 || curCom >= work.childSize())
-		{
-			//>> Stop all typical and call "stop" command
+		//End call
+		if(curCom < 0 || curCom >= work.childSize()) {
+			// Stop all typical and call "stop" command
 			var cL = comCntrO.nodeList("prm_");
-			for(i_c = 0; i_c < cL.length; i_c++)
-			{
+			for(i_c = 0; i_c < cL.length; i_c++) {
 				var cLi = comCntrO[cL[i_c]];
 				cLi.run.set(false);
 				cLi.start.set(false);
@@ -2782,13 +2699,12 @@ if(curMode == 1 || curMode == 2)
 			}
 
 			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,"Successful session of program \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 
-			//> Place to program last execution time
+			//Place to program last execution time
 			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1)
-			{
-				//> Parse programm and insert procedure text and argument''s labels to here
+			if(rez.length > 1) {
+				//Parse programm and insert procedure text and argument''s labels to here
 				comTree = SYS.XMLNode("prg");
 				comTree.load(rez[1][0]);
 				comTree.setAttr("wtm",SYS.time()-startTm);
@@ -2797,626 +2713,7 @@ if(curMode == 1 || curMode == 2)
 		}
 	}
 }
-mode = curMode;','clcCnt++;
-
-if(f_start)	work = SYS.XMLNode("prg");
-
-//> Check to commands controller present
-comCntrO = false;
-if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
-
-//> Commands list update
-if(f_start || !(clcCnt%(60*f_frq)))
-{
-	if(!comCntrO)
-	{
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
-		comLs = new Object();
-		for(i_t = 1; i_t < rez.length; i_t++)
-		{
-			comNm = rez[i_t]["name"];
-			comLs[comNm] = new Object();
-			comLs[comNm]["descr"] = rez[i_t]["descr"];
-			comLs[comNm]["proc"] = rez[i_t]["proc"];
-			for(i_a = 1; i_a <= 5; i_a++)
-				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
-		}
-	}
-	else
-	{
-		var nL = comCntrO.nodeList("prm_");
-		comLs = new Object();
-		for(i_n = 0; i_n < nL.length; i_n++)
-		{
-			comO = comCntrO[nL[i_n]];
-			comNm = comO.cfg("NAME");
-			comLs[comNm] = new Object();
-			comLs[comNm]["prmID"] = nL[i_n].slice(4);
-			comLs[comNm]["descr"] = comO.cfg("DESCR");
-			for(i_a = 1; i_a <= 5; i_a++)
-				if(!(comA=comO["arg"+i_a]).isEVal())
-					comLs[comNm]["arg"+i_a] = comA.descr();
-		}
-	}
-}
-
-//> Programm selection change
-if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1))
-{
-	work = SYS.XMLNode("prg");
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-	if(rez.length > 1)
-	{
-		//> Parse programm and insert procedure text and argument''s labels to here
-		work.load(rez[1][0]);
-		work.setAttr("name",prog);
-		for(i_c = 0; i_c < work.childSize(); i_c++)
-		{
-			comId = work.childGet(i_c).attr("id");
-			if(comLs[comId].isEVal())	continue;
-			work.childGet(i_c).setAttr("proc",comLs[comId].proc);
-			for(i_a = 1; i_a <= 5; i_a++)
-				work.childGet(i_c).setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
-		}
-	}
-	else prog = "";
-}
-
-//> Start process
-if(curMode <= 0 && mode == 1 && prog.length)
-{
-	startTm = SYS.time();
-	curCom = 0;
-	curMode = mode;	
-
-	if(comCntrO)
-	{
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-		{
-			var cLi = comCntrO[cL[i_c]];
-			cLi.run.set(false);
-			cLi.stop.set(false);
-			cLi.error.set(false);
-			cLi.abort.set(false);
-			cLi.start.set(true);
-		}
-	}
-}
-//> Pause and other process
-else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1))
-{
-	curMode = mode;
-	if((curMode == 1 || curMode == 2) && comCntrO)
-	{
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-			comCntrO[cL[i_c]].pause.set(curMode==2);
-	}
-}
-
-//> Call program
-if(curMode == 1 || curMode == 2)
-{
-	prog = work.attr("name");
-
-	//> Internal commands call
-	if(!comCntrO)
-	{
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize())
-		{
-			work.childGet(curCom).setAttr("rez","-10:Шаг пропущен");
-			curCom++;
-		}
-		if(curCom >= 0 && curCom < work.childSize())
-		{
-			comEl = work.childGet(curCom);
-			//> Stop process
-			if(mode == 0)
-			{
-				comEl.setAttr("rez","-10:Программа прервана");
-				//>> Call stop command
-				if(!comLs["Stop"].isEVal())
-				{
-					off = 0;
-					prLang = comLs["Stop"].proc.parse(0,"\n",off);
-					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-				}
-				SYS.messInfo("uprg"+prog,"Прерванный пользователем сеанс программы \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//> Pass empty command		
-			else if(!comEl.attr("proc").length) curCom++;
-			//> Execute command
-			else if(curMode == 1)
-			{
-				args = new Object();
-				args.rez = "";
-				args.f_start = !comEl.attr("tm").length;
-				if(args.f_start) comEl.setAttr("tm",SYS.time());
-				args.f_frq = f_frq;
-				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
-				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
-				off = 0;
-				prLang = comEl.attr("proc").parse(0,"\n",off);
-				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
-				if(rez && args.rez.toInt() > 0) curCom++;
-				else if(!rez || args.rez.toInt() < 0)
-				{
-					//>> Call error command
-					if(!comLs["Error"].isEVal())
-					{
-						off = 0;
-						prLang = comLs["Error"].proc.parse(0,"\n",off);
-						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
-					}
-					SYS.messInfo("uprg"+prog,"Прерванный ошибкой сеанс программы \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-					curMode = mode = -1;
-				}
-				comEl.setAttr("rez",args.rez);
-				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
-				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
-				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
-			}
-		}
-
-		//> End call
-		if(curCom < 0 || curCom >= work.childSize())
-		{
-			//>> Call stop command
-			if(!comLs["Stop"].isEVal())
-			{
-				off = 0;
-				prLang = comLs["Stop"].proc.parse(0,"\n",off);
-				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,"Успешный сеанс программы \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//> Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1)
-			{
-				//> Parse programm and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-	//> External commands call
-	else
-	{
-		//>> Get current command parameter-object		
-		curComPrm = EVAL_BOOL;
-		if(curCom >= 0 && curCom < work.childSize())
-		{
-			if(!(comId=comLs[work.childGet(curCom).attr("id")]).isEVal())	curComPrm = comCntrO["prm_"+comId.prmID];
-			if(curComPrm.isEVal())
-			{
-				curMode = mode = -1;
-				work.childGet(curCom).setAttr("rez","-11:Отсутствует команда: "+work.childGet(curCom).attr("id"));
-				return;
-			}
-		}
-
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize())
-		{
-			work.childGet(curCom).setAttr("rez","-10:Шаг пропущен");
-			curComPrm.run.set(false);
-			curCom++;
-			mode = curMode;
-			return;
-		}
-		if(curCom >= 0 && curCom < work.childSize())
-		{
-			comEl = work.childGet(curCom);
-			//> Stop process
-			if(mode == 0)
-			{
-				comEl.setAttr("rez","-12:Программа прервана");
-				//>> Stop all typical and set "abort" flag
-				var cL = comCntrO.nodeList("prm_");
-				for(i_c = 0; i_c < cL.length; i_c++)
-				{
-					var cLi = comCntrO[cL[i_c]];
-					cLi.run.set(false);
-					cLi.start.set(false);
-					cLi.abort.set(true);
-				}
-
-				SYS.messInfo("uprg"+prog,"Прерванный пользователем сеанс программы \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//> Commands process
-			else
-			{
-				//>> Start command
-				if(!comEl.attr("tm").length)
-				{
-					curComPrm.run.set(0);	//> Stop for possible background call
-					comEl.setAttr("tm",SYS.time());
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPrm["arg"+i_a]).isEVal())
-							comA.set(comEl.attr("arg"+i_a));
-					curComPrm.rez.set(0);
-					curComPrm.run.set(true);
-				}
-
-				//> Update steps status, up to current comand
-				comTo = min(curCom+1,work.childSize());
-				for(i_c = 0; i_c < comTo; i_c++)
-				{
-					comElI = work.childGet(i_c);
-					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
-					if(i_c < curCom && !(curComPI.run.get() && 
-						comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))	continue;
-					rez = curComPI.rez.get();
-					if(i_c == curCom && rez.toInt() > 0) curCom++;
-					if(rez.toInt() < 0)
-					{
-						//>> Stop all typical and call "error" command
-						var cL = comCntrO.nodeList("prm_");
-						for(i_c = 0; i_c < cL.length; i_c++)
-						{
-							var cLi = comCntrO[cL[i_c]];
-							cLi.run.set(false);
-							cLi.start.set(false);
-							cLi.error.set(true);
-						}
-
-						SYS.messInfo("uprg"+prog,"Прерванный ошибкой сеанс программы \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-						curMode = mode = -1;
-					}
-					comElI.setAttr("rez",rez);
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPI["arg"+i_a]).isEVal())
-							comElI.setAttr("arg"+i_a, comA.get());
-				}
-			}
-		}
-		
-		//> End call
-		if(curCom < 0 || curCom >= work.childSize())
-		{
-			//>> Stop all typical and call "stop" command
-			var cL = comCntrO.nodeList("prm_");
-			for(i_c = 0; i_c < cL.length; i_c++)
-			{
-				var cLi = comCntrO[cL[i_c]];
-				cLi.run.set(false);
-				cLi.start.set(false);
-				cLi.stop.set(true);
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,"Успешный сеанс программы \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//> Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1)
-			{
-				//> Parse programm and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-}
-mode = curMode;','clcCnt++;
-
-if(f_start)	work = SYS.XMLNode("prg");
-
-//> Check to commands controller present
-comCntrO = false;
-if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
-
-//> Commands list update
-if(f_start || !(clcCnt%(60*f_frq)))
-{
-	if(!comCntrO)
-	{
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
-		comLs = new Object();
-		for(i_t = 1; i_t < rez.length; i_t++)
-		{
-			comNm = rez[i_t]["name"];
-			comLs[comNm] = new Object();
-			comLs[comNm]["descr"] = rez[i_t]["descr"];
-			comLs[comNm]["proc"] = rez[i_t]["proc"];
-			for(i_a = 1; i_a <= 5; i_a++)
-				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
-		}
-	}
-	else
-	{
-		var nL = comCntrO.nodeList("prm_");
-		comLs = new Object();
-		for(i_n = 0; i_n < nL.length; i_n++)
-		{
-			comO = comCntrO[nL[i_n]];
-			comNm = comO.cfg("NAME");
-			comLs[comNm] = new Object();
-			comLs[comNm]["prmID"] = nL[i_n].slice(4);
-			comLs[comNm]["descr"] = comO.cfg("DESCR");
-			for(i_a = 1; i_a <= 5; i_a++)
-				if(!(comA=comO["arg"+i_a]).isEVal())
-					comLs[comNm]["arg"+i_a] = comA.descr();
-		}
-	}
-}
-
-//> Programm selection change
-if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1))
-{
-	work = SYS.XMLNode("prg");
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-	if(rez.length > 1)
-	{
-		//> Parse programm and insert procedure text and argument''s labels to here
-		work.load(rez[1][0]);
-		work.setAttr("name",prog);
-		for(i_c = 0; i_c < work.childSize(); i_c++)
-		{
-			comId = work.childGet(i_c).attr("id");
-			if(comLs[comId].isEVal())	continue;
-			work.childGet(i_c).setAttr("proc",comLs[comId].proc);
-			for(i_a = 1; i_a <= 5; i_a++)
-				work.childGet(i_c).setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
-		}
-	}
-	else prog = "";
-}
-
-//> Start process
-if(curMode <= 0 && mode == 1 && prog.length)
-{
-	startTm = SYS.time();
-	curCom = 0;
-	curMode = mode;	
-
-	if(comCntrO)
-	{
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-		{
-			var cLi = comCntrO[cL[i_c]];
-			cLi.run.set(false);
-			cLi.stop.set(false);
-			cLi.error.set(false);
-			cLi.abort.set(false);
-			cLi.start.set(true);
-		}
-	}
-}
-//> Pause and other process
-else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1))
-{
-	curMode = mode;
-	if((curMode == 1 || curMode == 2) && comCntrO)
-	{
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-			comCntrO[cL[i_c]].pause.set(curMode==2);
-	}
-}
-
-//> Call program
-if(curMode == 1 || curMode == 2)
-{
-	prog = work.attr("name");
-
-	//> Internal commands call
-	if(!comCntrO)
-	{
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize())
-		{
-			work.childGet(curCom).setAttr("rez","-10:Крок пропущено");
-			curCom++;
-		}
-		if(curCom >= 0 && curCom < work.childSize())
-		{
-			comEl = work.childGet(curCom);
-			//> Stop process
-			if(mode == 0)
-			{
-				comEl.setAttr("rez","-10:Програму перервано");
-				//>> Call stop command
-				if(!comLs["Stop"].isEVal())
-				{
-					off = 0;
-					prLang = comLs["Stop"].proc.parse(0,"\n",off);
-					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-				}
-				SYS.messInfo("uprg"+prog,"Перерваний користувачем сеанс програми \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//> Pass empty command		
-			else if(!comEl.attr("proc").length) curCom++;
-			//> Execute command
-			else if(curMode == 1)
-			{
-				args = new Object();
-				args.rez = "";
-				args.f_start = !comEl.attr("tm").length;
-				if(args.f_start) comEl.setAttr("tm",SYS.time());
-				args.f_frq = f_frq;
-				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
-				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
-				off = 0;
-				prLang = comEl.attr("proc").parse(0,"\n",off);
-				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
-				if(rez && args.rez.toInt() > 0) curCom++;
-				else if(!rez || args.rez.toInt() < 0)
-				{
-					//>> Call error command
-					if(!comLs["Error"].isEVal())
-					{
-						off = 0;
-						prLang = comLs["Error"].proc.parse(0,"\n",off);
-						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
-					}
-					SYS.messInfo("uprg"+prog,"Перерваний помилкою сеанс програми \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-					curMode = mode = -1;
-				}
-				comEl.setAttr("rez",args.rez);
-				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
-				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
-				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
-			}
-		}
-
-		//> End call
-		if(curCom < 0 || curCom >= work.childSize())
-		{
-			//>> Call stop command
-			if(!comLs["Stop"].isEVal())
-			{
-				off = 0;
-				prLang = comLs["Stop"].proc.parse(0,"\n",off);
-				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,"Вдалий сеанс програми \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//> Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1)
-			{
-				//> Parse programm and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-	//> External commands call
-	else
-	{
-		//>> Get current command parameter-object		
-		curComPrm = EVAL_BOOL;
-		if(curCom >= 0 && curCom < work.childSize())
-		{
-			if(!(comId=comLs[work.childGet(curCom).attr("id")]).isEVal())	curComPrm = comCntrO["prm_"+comId.prmID];
-			if(curComPrm.isEVal())
-			{
-				curMode = mode = -1;
-				work.childGet(curCom).setAttr("rez","-11:Відсутня команда: "+work.childGet(curCom).attr("id"));
-				return;
-			}
-		}
-
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize())
-		{
-			work.childGet(curCom).setAttr("rez","-10:Крок пропущено");
-			curComPrm.run.set(false);
-			curCom++;
-			mode = curMode;
-			return;
-		}
-		if(curCom >= 0 && curCom < work.childSize())
-		{
-			comEl = work.childGet(curCom);
-			//> Stop process
-			if(mode == 0)
-			{
-				comEl.setAttr("rez","-12:Програму перервано");
-				//>> Stop all typical and set "abort" flag
-				var cL = comCntrO.nodeList("prm_");
-				for(i_c = 0; i_c < cL.length; i_c++)
-				{
-					var cLi = comCntrO[cL[i_c]];
-					cLi.run.set(false);
-					cLi.start.set(false);
-					cLi.abort.set(true);
-				}
-
-				SYS.messInfo("uprg"+prog,"Перерваний користувачем сеанс програми \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//> Commands process
-			else
-			{
-				//>> Start command
-				if(!comEl.attr("tm").length)
-				{
-					curComPrm.run.set(0);	//> Stop for possible background call
-					comEl.setAttr("tm",SYS.time());
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPrm["arg"+i_a]).isEVal())
-							comA.set(comEl.attr("arg"+i_a));
-					curComPrm.rez.set(0);
-					curComPrm.run.set(true);
-				}
-
-				//> Update steps status, up to current comand
-				comTo = min(curCom+1,work.childSize());
-				for(i_c = 0; i_c < comTo; i_c++)
-				{
-					comElI = work.childGet(i_c);
-					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
-					if(i_c < curCom && !(curComPI.run.get() && 
-						comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))	continue;
-					rez = curComPI.rez.get();
-					if(i_c == curCom && rez.toInt() > 0) curCom++;
-					if(rez.toInt() < 0)
-					{
-						//>> Stop all typical and call "error" command
-						var cL = comCntrO.nodeList("prm_");
-						for(i_c = 0; i_c < cL.length; i_c++)
-						{
-							var cLi = comCntrO[cL[i_c]];
-							cLi.run.set(false);
-							cLi.start.set(false);
-							cLi.error.set(true);
-						}
-
-						SYS.messInfo("uprg"+prog,"Перерваний помилкою сеанс програми \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-						curMode = mode = -1;
-					}
-					comElI.setAttr("rez",rez);
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPI["arg"+i_a]).isEVal())
-							comElI.setAttr("arg"+i_a, comA.get());
-				}
-			}
-		}
-		
-		//> End call
-		if(curCom < 0 || curCom >= work.childSize())
-		{
-			//>> Stop all typical and call "stop" command
-			var cL = comCntrO.nodeList("prm_");
-			for(i_c = 0; i_c < cL.length; i_c++)
-			{
-				var cLi = comCntrO[cL[i_c]];
-				cLi.run.set(false);
-				cLi.start.set(false);
-				cLi.stop.set(true);
-			}
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,"Вдалий сеанс програми \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//> Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1)
-			{
-				//> Parse programm and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-}
-mode = curMode;',1372172656);
+mode = curMode;','','',1412326668);
 INSERT INTO "lib_Controllers" VALUES('test','test','','','','','',10,'using Special.FLibSYS;
 
 out+=10;
@@ -4773,7 +4070,90 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','','',1410945360);
+}','JavaLikeCalc.JavaScript
+if(f_start) {
+	f_err = "0";
+	prevVar = EVAL_REAL;
+	//Prepare data for preprocessing
+	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcArgs = new Object();
+	inPrcArgs.this = this;
+}
+pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
+if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
+
+if(plcImit) {	//Data imitation
+  if(!plcImitIn.isEVal()) in = plcImitIn;
+  else {
+    plcDif = abs(pMax-pMin);
+    in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+  }
+}
+
+//Call specific preprocessing procedure
+if(inProc.length)	{
+	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
+	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
+	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
+	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
+	in = inPrcArgs.in;
+}
+
+levErr = 0;
+tErr = "0";
+//Input data check and postprocess
+if(in.isEVal()) {
+	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+if(!tErr) {
+	vCalibr = iMult*(in+iAdd);
+	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
+	if(var.isEVal())	var = vCalibr;
+	varDt = vCalibr - var;
+	var += varDt/max(1,Tf*f_frq);
+	prevVar = var;
+
+	bndVarHyst = (max-min)*HystBnd/100;
+	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
+	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
+	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
+	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
+	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+}
+
+//Alarms forming
+if(alSup)	f_err = "0";
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	else if(f_err.toInt() && !tErr.toInt())
+		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	f_err = tErr;
+}','',1412343817);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,'JavaLikeCalc.JavaScript
 set=false;
 if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
@@ -5053,7 +4433,95 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','','',1402043046);
+}','JavaLikeCalc.JavaScript
+if(f_start) {
+	f_err = "0";
+	prevVar = EVAL_REAL;
+	//Prepare data for preprocessing
+	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcArgs = new Object();
+	inPrcArgs.this = this;
+}
+pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
+if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
+
+if(plcImit) {	//Data imitation
+	if(!plcImitIn.isEVal()) in = plcImitIn;
+	else {
+		plcDif = abs(pMax-pMin);
+		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+//Call specific preprocessing procedure
+if(inProc.length)	{
+	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
+	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
+	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
+	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
+	in = inPrcArgs.in;
+}
+
+levErr = 0;
+tErr = "0";
+//Input data check and postprocess
+if(in.isEVal()) {
+	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+if(tErr) {
+  EVAL = true;
+  HH = H = LL = L = false;
+}
+else {
+	vCalibr = iMult*(in+iAdd);
+	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
+	if(var.isEVal())	var = vCalibr;
+	varDt = vCalibr - var;
+	var += varDt/max(1,Tf*f_frq);
+	prevVar = var;
+
+	bndVarHyst = (max-min)*HystBnd/100;
+	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH = true; EVAL = H = LL = L = false; }
+	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL = true; EVAL = HH = H = L = false; }
+	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H = true; EVAL = HH = LL = L = false; }
+	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L = true; EVAL = HH = H = LL = false; }
+	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+	else EVAL = HH = H = LL = L = false;
+}
+
+//Alarms forming
+if(alSup)	f_err = "0";
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	else if(f_err.toInt() && !tErr.toInt())
+		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	f_err = tErr;
+}','',1412343987);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
@@ -5282,7 +4750,7 @@ CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEF
 INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовой таймер. Удерживает выполнение до завершения времени.','Типовий таймер. Утримує виконання до завершення часу.',1,'PrescrTempl.timer');
 INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Фоновый таймер','Фоновий таймер','Background timer. Updating parallel with current command.','Фоновый таймер. Обновляется параллельно с текущей командой.','Фоновий таймер. Оновлюється паралельно з поточною командою.',1,'PrescrTempl.backTimer');
 CREATE TABLE 'DAQ_LogicLev' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT '' ,"PRM_BD_REFL" TEXT DEFAULT '' ,"PERIOD" INTEGER DEFAULT '0' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' , PRIMARY KEY ("ID"));
-INSERT INTO "DAQ_LogicLev" VALUES('prescription','Prescription commands','Команды рецепта','Команди рецепту','','','',1,0,3,0,'<high>','LogLevPrm_prescription','LogLevPrmRefl_prescription',0,'0.2',0);
+INSERT INTO "DAQ_LogicLev" VALUES('prescription','Prescription commands','Команды рецепта','Команди рецепту','','','',1,1,3,0,'<high>','LogLevPrm_prescription','LogLevPrmRefl_prescription',0,'0.2',0);
 CREATE TABLE 'flb_web_io' ("F_ID" TEXT DEFAULT '''''''''''''' ,"ID" TEXT DEFAULT '''''''''''''' ,"NAME" TEXT DEFAULT '''''''''''''' ,"TYPE" INTEGER DEFAULT '''''''''''''' ,"MODE" INTEGER DEFAULT '''''''''''''' ,"DEF" TEXT DEFAULT '''''''''''''' ,"HIDE" INTEGER DEFAULT '''''''''''''' ,"POS" INTEGER DEFAULT '''''''''''''' ,"ru#NAME" TEXT DEFAULT '''''' ,"uk#NAME" TEXT DEFAULT '' , PRIMARY KEY ("F_ID","ID"));
 INSERT INTO "flb_web_io" VALUES('alarms','rules','Rules',0,1,'\n',0,0,'Правила','Правила');
 INSERT INTO "flb_web_io" VALUES('devMon','rez','Result',0,2,'',0,0,'Результат','Результат');
@@ -6618,13 +6086,22 @@ if(HTTPreq == "GET")
 
 return "404 Not Found";',1377264714,'Сайт из XHTML шаблона.','XHTML-шаблон');
 CREATE TABLE 'Trs' ("base" TEXT DEFAULT '' ,"uk#base" TEXT DEFAULT '' ,"ru#base" TEXT DEFAULT '' , PRIMARY KEY ("base"));
-INSERT INTO "Trs" VALUES('1:No data or connection with source','1:Немає даних або зв''язку із джерелом','1:Нет данных или связи с источником');
-INSERT INTO "Trs" VALUES('1:The signal exceed to upper hardware border','1:Сигнал перевищив верхню апаратну границю','1:Выход сигнала за верхнюю аппаратную границу');
-INSERT INTO "Trs" VALUES('2:The signal exceed to bottom hardware border','2:Сигнал перевищив нижню апаратну границю','2:Выход сигнала за нижнюю аппаратную границу');
-INSERT INTO "Trs" VALUES('3:Upper alarm border error','3:Помилка верхньої аварійної границі','3:Нарушение верхней аварийной границы');
-INSERT INTO "Trs" VALUES('4:Lower alarm border error','4:Помилка нижньої аварійної границі','4:Нарушение нижней аварийной границы');
-INSERT INTO "Trs" VALUES('5:Upper warning border error','5:Помилка верхньої поперджув. границі','5:Нарушение верхней предупредительной границы');
-INSERT INTO "Trs" VALUES('6:Lower warning border error','6:Помилка нижньої поперджув. границі','6:Нарушение нижней предупредительной границы');
-INSERT INTO "Trs" VALUES('7:Too big parameter''s motion speed','7:Дуже велика швидкість зміни параметру','7:Очень большая скорость изменения параметра');
+INSERT INTO "Trs" VALUES('No data or connection with source','Немає даних або зв''язку із джерелом','Нет данных или связи с источником');
+INSERT INTO "Trs" VALUES('The signal exceed to upper hardware border','Сигнал перевищив верхню апаратну границю','Выход сигнала за верхнюю аппаратную границу');
+INSERT INTO "Trs" VALUES('The signal exceed to bottom hardware border','Сигнал перевищив нижню апаратну границю','Выход сигнала за нижнюю аппаратную границу');
+INSERT INTO "Trs" VALUES('Upper alarm border error','Помилка верхньої аварійної границі','Нарушение верхней аварийной границы');
+INSERT INTO "Trs" VALUES('Lower alarm border error','Помилка нижньої аварійної границі','Нарушение нижней аварийной границы');
+INSERT INTO "Trs" VALUES('Upper warning border error','Помилка верхньої поперджув. границі','Нарушение верхней предупредительной границы');
+INSERT INTO "Trs" VALUES('Lower warning border error','Помилка нижньої поперджув. границі','Нарушение нижней предупредительной границы');
+INSERT INTO "Trs" VALUES('Too big parameter''s motion speed','Дуже велика швидкість зміни параметру','Очень большая скорость изменения параметра');
 INSERT INTO "Trs" VALUES('NORMA','НОРМА','НОРМА');
+INSERT INTO "Trs" VALUES('Step missed','Крок пропущено','Шаг пропущен');
+INSERT INTO "Trs" VALUES('Program terminated','Програму перервано','Программа прервана');
+INSERT INTO "Trs" VALUES('Terminated by user session of the program','Перерваний користувачем сеанс програми','Прерванный пользователем сеанс программы');
+INSERT INTO "Trs" VALUES('Terminated by error session of the program','Перерваний помилкою сеанс програми','Прерванный ошибкой сеанс программы');
+INSERT INTO "Trs" VALUES('Successful session of the program','Вдалий сеанс програми','Успешный сеанс программы');
+INSERT INTO "Trs" VALUES('Command miss: ','Відсутня команда: ','Отсутствует команда: ');
+INSERT INTO "Trs" VALUES('Waiting %1s expired','Очікування %1с вичерпано','Ожидание %1c исчерпано');
+INSERT INTO "Trs" VALUES('Waiting %1s','Очікування %1с','Ожидание %1c');
+INSERT INTO "Trs" VALUES('Background waiting %1s','Фонове очікування %1с','Фоновое ожидание %1c');
 COMMIT;
