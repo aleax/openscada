@@ -661,7 +661,7 @@ void TVal::setS( const string &value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setS( value ); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite)	throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
 	    //Set current value and time
 	    nodeRes().resRequestW();
 	    string pvl = *val.s;
@@ -691,7 +691,7 @@ void TVal::setI( int64_t value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setI(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValI()[1] > fld().selValI()[0] && value != EVAL_INT)
 		value = vmin(fld().selValI()[1],vmax(fld().selValI()[0],value));
@@ -720,7 +720,7 @@ void TVal::setR( double value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setR(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
 	    //Set current value and time
 	    if(!(fld().flg()&TFld::Selected) && fld().selValR()[1] > fld().selValR()[0] && value != EVAL_REAL)
 		value = vmin(fld().selValR()[1],vmax(fld().selValR()[0],value));
@@ -749,7 +749,7 @@ void TVal::setB( char value, int64_t tm, bool sys )
 	    //Set value to config
 	    if(mCfg)	{ src.cfg->setB(value); return; }
 	    //Check to write
-	    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val", _("Write access is denied!"));
+	    if(!sys && fld().flg()&TFld::NoWrite) return; //throw TError("Val", _("Write access is denied!"));
 	    //Set current value and time
 	    char pvl = val.b; val.b = value;
 	    mTime = tm;
@@ -770,7 +770,7 @@ void TVal::setO( AutoHD<TVarObj> value, int64_t tm, bool sys )
     if(mCfg || fld().type() != TFld::Object) return;
     //Set value to config. Set object to config did not support
     //Check to write
-    if(!sys && fld().flg()&TFld::NoWrite) throw TError("Val",_("Write access is denied!"));
+    if(!sys && fld().flg()&TFld::NoWrite) return;	//throw TError("Val",_("Write access is denied!"));
     //Set current value and time
     nodeRes().resRequestW();
     AutoHD<TVarObj> pvl = *val.o;

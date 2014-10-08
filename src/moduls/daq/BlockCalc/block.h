@@ -42,15 +42,15 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 {
     public:
 	//Data
-	//> Link types:
-	// DIS   - Disable IO
-	// FREE  - Free link or constant
-	// I_LOC - Input interblocks local link
-	// I_GLB - Input interblocks global link
-	// I_PRM - input parameter link
-	// O_LOC - Input interblocks local link
-	// O_GLB - Input interblocks global link
-	// O_PRM - output parameter link
+	// Link types:
+	//  DIS   - Disable IO
+	//  FREE  - Free link or constant
+	//  I_LOC - Input interblocks local link
+	//  I_GLB - Input interblocks global link
+	//  I_PRM - input parameter link
+	//  O_LOC - Input interblocks local link
+	//  O_GLB - Input interblocks global link
+	//  O_PRM - output parameter link
 	enum LnkT { FREE, I_LOC, I_GLB, I_PRM, O_PRM, O_LOC, O_GLB };
 	//> Link comands
 	enum LnkCmd { INIT, DEINIT, SET };
@@ -61,7 +61,7 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
 	TCntrNode &operator=( TCntrNode &node );
 
-	//> Block's parameters
+	// Block's parameters
 	string id( )		{ return m_id; }
 	string name( );
 	string descr( ) 	{ return cfg("DESCR").getS(); }
@@ -84,12 +84,12 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	void setWFunc( const string &vl )	{ cfg("FUNC").setS(vl); }
 	void setOutLnkWrChs( bool val )		{ mOutLnkWrChs = val; modif(); }
 
-	//> Link IO
+	// Link IO
 	LnkT link( unsigned id );
 	bool linkActive( unsigned id );	
 	void setLink( unsigned id, LnkCmd cmd, LnkT lnk = FREE, const string &vlnk = "" );
 
-	//> Calc block
+	// Calc block
 	void calc( bool first, bool last, double frq );
 
 	Contr &owner( );
@@ -111,9 +111,8 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 
     private:
 	//Data
-	//> Define input interblock link structure
-	class SLIBlk
-	{
+	// Define input interblock link structure
+	class SLIBlk {
 	    public:
 		SLIBlk( ) : w_id(-1) { }
 
@@ -122,12 +121,10 @@ class Block : public TCntrNode, public TValFunc, public TConfig
 	};
 
 	//> Define link structures
-	struct SLnk
-	{
+	struct SLnk {
 	    LnkT tp;			//Link type
 	    string lnk;			//Link
-	    union
-	    {
+	    union {
 		SLIBlk		*iblk;	//Input interblock link structure
 		AutoHD<TVal>	*aprm;	//Parameter atribute link structure
 	    };

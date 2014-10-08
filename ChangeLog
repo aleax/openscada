@@ -1,4 +1,9 @@
 2014-10-04 Roman
+- SYS: Disable exeptions for value set into NoWrite mode, simple return at that. Mostly for fix problems into DAQ.BlockCalc.
+- DAQ.BlockCalc,Protocol.OPC_UA: Some code clean up.
+
+
+2014-10-04 Roman
 - LibsDB.{OscadaLibs,vcaBase}.db: Prescription units moved to single script with translation by tr().
 - FIX:UI.QTCfg: Internal XML value update fix at the table set into no reload mode, mostly for keys.
 

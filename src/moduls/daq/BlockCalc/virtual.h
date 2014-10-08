@@ -97,7 +97,7 @@ class Contr: public TController
 	string cron( )				{ return cfg("SCHEDULE").getS(); }
 	int iterate( )				{ return mIter; }
 
-	//> Scheme's functions
+	// Scheme's functions
 	void blkList( vector<string> &ls )	{ chldList(mBl,ls); }
 	bool blkPresent( const string &id )	{ return chldPresent(mBl,id); }
 	void blkAdd( const string &id );
@@ -117,7 +117,7 @@ class Contr: public TController
 	void stop_( );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
-	//> Process stat
+	// Process stat
 	void blkProc( const string & id, bool val );
 
 	void postDisable(int flag);
@@ -157,8 +157,7 @@ class TipContr: public TTipDAQ
 	TElem &blockE( )	{ return blk_el; }
 	TElem &blockIOE( )	{ return blkio_el; }
 
-	AutoHD<Contr> at( const string &name, const string &who = "" )
-	{ return TTipDAQ::at(name,who); }
+	AutoHD<Contr> at( const string &name, const string &who = "" )	{ return TTipDAQ::at(name,who); }
 	void copy( const string &src, const string &dst );
 
     protected:

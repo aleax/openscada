@@ -47,7 +47,7 @@ INSERT INTO "PrescrProgs" VALUES('Библ1/Прог3','<prg><com arg1="10" arg2
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог4','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог5','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог6','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Фоновий таймер" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
+INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" /></com></com></com></prg>');
 INSERT INTO "PrescrProgs" VALUES('abcd','');
 INSERT INTO "PrescrProgs" VALUES('Abcdef','');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог123','');
@@ -899,6 +899,7 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','tr
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','view','/wlb_Main/wdg_cntrPaspExt/wdg_view','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','value;','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','comInAdd','/wlb_Main/wdg_prescrEdit/wdg_comInAdd','','');
 CREATE TABLE 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1830,6 +1831,7 @@ INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el8','/wlb_Main/wdg_ElViewGraph
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el9','/wlb_Main/wdg_ElViewGraph','geomX;geomY;geomXsc;geomZ;color;','');
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;','');
+INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -4805,7 +4807,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','arg5',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Add',32,'','','comAdd','Додати','','Добавить','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','227.437',32,'','','comAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','511',32,'','','comAdd','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','119',32,'','','comAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','71.548',32,'','','comAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','23',32,'','','comAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','17',32,'','','comAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Add command',32,'','','comAdd','Додати команду','','Добавить команду','','','');
@@ -4835,7 +4837,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordStyle','6',32,'','','comBox',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Delete',32,'','','comDel','Видалити','','Удалить','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','227.437',32,'','','comDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','562',32,'','','comDel','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','119',32,'','','comDel','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','144',32,'','','comDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','23',32,'','','comDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','20',32,'','','comDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Delete command into selected position',32,'','','comDel','Видалити команду у обраній позиції','','Удалить команду в выбранной позиции','','','');
@@ -4843,9 +4845,9 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',40,'','','comDel','',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','3',32,'','','comDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comDel','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','comDwn','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','347',32,'','','comDwn','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','372',32,'','','comDwn','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','550',32,'','','comDwn','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','79',32,'','','comDwn','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','54',32,'','','comDwn','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','35',32,'','','comDwn','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','22',32,'','','comDwn','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Down command to selected position',32,'','','comDwn','Опустити команду у обраній позиції','','Опустить выбранную команду ниже','','','');
@@ -4856,7 +4858,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comDwn'
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Insert',32,'','','comIns','Вставити','','Вставить','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','227.437',32,'','','comIns','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','536',32,'','','comIns','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','119',32,'','','comIns','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','144',32,'','','comIns','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','23',32,'','','comIns','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','19',32,'','','comIns','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Insert command to selected position',32,'','','comIns','Вставити команду у обрану позицію','','Вставить команду в выбранную позицию','','','');
@@ -4864,9 +4866,9 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',40,'','','comIns','',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','3',32,'','','comIns','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comIns','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','comUp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','347',32,'','','comUp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','372',32,'','','comUp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','511',32,'','','comUp','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','79',32,'','','comUp','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','54',32,'','','comUp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','35',32,'','','comUp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','21',32,'','','comUp','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Up command into selected position',32,'','','comUp','Підняти команду у обраній позиції','','Поднять выбранную команду выше','','','');
@@ -4981,7 +4983,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','8',32,'','','lib','','',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','value','',8,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','items','',8,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','lib','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Library',32,'','','prog','Бібліотека','','Библиотека','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Commands',32,'','','prog','Бібліотека','','Библиотека','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','227',32,'','','prog','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','62',32,'','','prog','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','200',32,'','','prog','','','','','','');
@@ -4989,7 +4991,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','444',32,'','','prog','','
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','18',32,'','','prog','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','List and sequence of commands',32,'','','prog','Перелік та послідовність команд','','Список и последовательность команд','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',32,'','','prog','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','5',32,'','','prog','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','8',32,'','','prog','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','value','',8,'','','prog','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','items','',8,'','','prog','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','prog','','','','','','');
@@ -5992,6 +5994,16 @@ INSERT INTO "wlb_Main_io" VALUES('ResultGraph','en','0',32,'','','e6','','','','
 INSERT INTO "wlb_Main_io" VALUES('ResultGraph','en','0',32,'','','e7','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraph','en','0',32,'','','e8','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ResultGraph','en','0',32,'','','e9','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Add >',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','299.889',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','511',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','71.548',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','23',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','39',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Add command',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',40,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','3',32,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comInAdd','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -19476,7 +19488,7 @@ var comOp = "";
 
 //Events for commands process
 for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
-	//SYS.messInfo("Prescription edit control","Event: "+ev_cur);
+	SYS.messInfo(this.nodePath(),"Event: "+ev_cur);
 	if(ev_cur == "ws_BtPress:/progAdd") {
 		if(!progNm_value.length) progNm_value = tr("New program");
 		SYS.BD.nodeAt(dbDB,".").SQLReq("INSERT INTO "+dbProgs+" (name) VALUES (''"+progNm_value+"'');");
@@ -19506,28 +19518,34 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_TreeChange:/lib")	{ progSelPrg = progSelCom = true; prog_value = ""; }
 	else if(ev_cur == "ws_BtPress:/comAdd")	comOp = "add";
 	else if(ev_cur == "ws_BtPress:/comIns")	comOp = "ins";
+	else if(ev_cur == "ws_BtPress:/comInAdd")	comOp = "inAdd";
 	else if(ev_cur == "ws_BtPress:/comDel") comOp = "del";
 	else if(ev_cur == "ws_BtPress:/comUp")	comOp = "up";
 	else if(ev_cur == "ws_BtPress:/comDwn") comOp = "dwn";
-	else if(ev_cur == "ws_ListChange:/prog"){ progSelCom = true; save_active = false; }
+	else if(ev_cur == "ws_TreeChange:/prog"){ progSelCom = true; save_active = false; }
 	else if(ev_cur == "ws_CombChange:/type"){ progSelTp = true; save_active = true; }
 	else if(ev_cur == "ws_BtPress:/save" && prog_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
-			comTree = SYS.XMLNode("prg");
-			comTree.load(rez[1][0]);
-			i_c = prog_value.toInt();
-			if(i_c < comTree.childSize()) {
-				comTree.childGet(i_c).setAttr("id",type_value);
+			comTree = selNd = SYS.XMLNode("prg"); comTree.load(rez[1][0]);
+			parentPath = "";
+			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
+				if(offPV < prog_value.length) parentPath += "/"+vIt;
+				selNd = selNd.childGet((i_c=vIt.toInt()));
+			}
+			if(selNd) {
+				selNd.setAttr("id",type_value);
+				selNd.setAttr("descr",descr_value);
 				for(i_a = 1; i_a <= 5; i_a++) {
 					argObj = this["arg"+i_a];
 					argVal = argObj.attr("value");
 					if(!argObj.attr("min").isEVal()) argVal = max(argVal,argObj.attr("min"));
 					if(!argObj.attr("max").isEVal()) argVal = min(argVal,argObj.attr("max"));
-					comTree.childGet(i_c).setAttr("arg"+i_a, argVal);
+					selNd.setAttr("arg"+i_a, argVal);
 				}
 				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
-				prog_value = i_c.toString()+":"+type_value;
+				prog_value = parentPath+"/"+i_c+":"+type_value;
+				SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
 				progSelPrg = true;
 			}
 		}
@@ -19536,26 +19554,9 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 	else if(ev_cur == "ws_BtPress:/progExport" && lib_value.length) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
-			//SYS.messInfo("Prescription","TEST 00");
 			expTree = SYS.XMLNode("OpenSCADA_Prescr");
 			expTree.childAdd("prg").setAttr("id",lib_value).load(rez[1][0]);
 			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
-
-			/*comTree = SYS.XMLNode("prg");
-			comTree.load(rez[1][0]);
-			comTree.setAttr("id",lib_value);
-			//> Load present file
-			expTree = SYS.XMLNode("OpenSCADA_Prescr");
-			expTree.load(fileExpImp,true);
-			//> Remove already present record
-			for(i_p = 0; i_p < expTree.childSize(); i_p++)
-				if(expTree.childGet(i_p).attr("id") == lib_value)
-				{
-					expTree.childDel(i_p);
-					break;
-				}
-			expTree.childAdd(comTree);
-			expTree.save(0x05,fileExpImp);*/
 		}
 	} 
 	//else if(ev_cur == "ws_BtPress:/progImport")
@@ -19564,11 +19565,8 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		expTree = SYS.XMLNode("OpenSCADA_Prescr");
 		expTree.load(progImport_value.slice(pCtx+1));
 		progImport_value = progImport_value.slice(0,pCtx);
-		//> Load present file
-		/*expTree = SYS.XMLNode("OpenSCADA_Prescr");
-		expTree.load(fileExpImp,true);
-		//> Save all recors to DB
-		SYS.messDebug("Prescription edit control","Items: "+expTree.childSize());*/
+		// Save all recors to DB
+		//SYS.messDebug("Prescription edit control","Items: "+expTree.childSize());
 		for(i_p = 0; i_p < expTree.childSize(); i_p++) {
 			treeNd = expTree.childGet(i_p);
 			if(treeNd.name() != "prg") continue;
@@ -19579,7 +19577,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		progLbUpdt = progSelPrg = progSelCom = true;
 	}
-	else if((rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if(ev_cur == "ws_TxtAccept:/descr" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
 	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
 		argObj = this["arg"+rez[1]];
 		argVal = argObj.attr("value");
@@ -19606,22 +19604,45 @@ progCopy_active = progRename_active = progDel_active = progExport_active = comAd
 if(comOp.length && lib_value.length) {
 	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 	if(rez.length > 1) {
-		comTree = SYS.XMLNode("prg");
+		comTree = selNd = SYS.XMLNode("prg");
 		comTree.load(rez[1][0]);
-
-		if(comOp == "add") comTree.childAdd("com").setAttr("id",tr("New command"));
+		parentPath = "";
+		if(prog_value.length) {
+			for(offPV = 0; (vIt=prog_value.parsePath(0,offPV)).length; ) {
+				if(offPV < prog_value.length) parentPath += "/"+vIt;
+				selNd = selNd.childGet((i_c=vIt.toInt()));
+			}
+			selNd = selNd.parent();
+		}
+		if(comOp == "add") {
+			selNd.childAdd("com").setAttr("id",tr("New command"));
+			prog_value = parentPath+"/"+(selNd.childSize()-1)+":"+tr("New command");
+		}
 		else {
-			// Get selected command position
-			i_c = prog_value.toInt();
-			if(i_c < comTree.childSize()) {
-				if(comOp == "ins")	comTree.childIns(i_c,"com").setAttr("id",tr("New command"));
-				else if(comOp == "del") { comTree.childDel(i_c); prog_value = ""; }
-				else if((comOp == "up" && i_c) || (comOp == "dwn" && i_c < (comTree.childSize()-1))) {
-					storeNd = comTree.childGet(i_c);
-					comTree.childDel(i_c);
+			// Get selected command node and position
+			if(i_c < selNd.childSize()) {
+				if(comOp == "inAdd") {
+					selNd.childGet(i_c).childAdd("com").setAttr("id",tr("New command"));
+					prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id")+"/"+(selNd.childGet(i_c).childSize()-1)+":"+tr("New command");
+				}
+				else if(comOp == "ins") {
+					selNd.childIns(i_c,"com").setAttr("id",tr("New command"));
+					prog_value = parentPath+"/"+i_c+":"+tr("New command");
+				}
+				else if(comOp == "del") {
+					selNd.childDel(i_c);
+					if(!selNd.childSize())	prog_value = parentPath;
+					else {
+						if(i_c >= selNd.childSize()) i_c = selNd.childSize()-1;
+						prog_value = parentPath+"/"+i_c+":"+selNd.childGet(i_c).attr("id");
+					}
+				}
+				else if((comOp == "up" && i_c) || (comOp == "dwn" && i_c < (selNd.childSize()-1))) {
+					storeNd = selNd.childGet(i_c);
+					selNd.childDel(i_c);
 					if(comOp == "up") i_c--; else i_c++;
-					comTree.childIns(i_c,storeNd);
-					prog_value = i_c.toString()+":"+prog_value.parse(1,":");
+					selNd.childIns(i_c,storeNd);
+					prog_value = parentPath+"/"+i_c+":"+storeNd.attr("id");
 				}
 			}
 		}
@@ -19640,13 +19661,31 @@ if(f_start || progSelPrg) {
 		if(rez.length > 1) {
 			comTree = SYS.XMLNode("prg");
 			comTree.load(rez[1][0]);
-			for(i_c = 0; i_c < comTree.childSize(); i_c++)
-				prog_items += (i_c?"\n":"")+i_c+":"+comTree.childGet(i_c).attr("id");
+			curNd = comTree; curPos = 0; curPath = ""; comLevs = new Array();
+			for( ; true; curPos++) {
+				if(curPos >= curNd.childSize()) {
+					if(!comLevs.length) break;
+					stObj = comLevs.pop();
+					curNd = curNd.parent();
+					curPos = stObj.curPos; curPath = stObj.curPath;
+					continue;
+				}
+				prog_items += (prog_items.length?"\n":"")+(wPath=curPath+"/"+curPos+":"+curNd.childGet(curPos).attr("id"));
+				if(curNd.childGet(curPos).childSize()) {
+					curNd = curNd.childGet(curPos);
+					comLevs.push((stObj=new Object()));
+					stObj.curPos = curPos; stObj.curPath = curPath;
+					curPos = -1; curPath = wPath;
+					continue;
+				}
+			}
+			//for(i_c = 0; i_c < comTree.childSize(); i_c++)
+			//	prog_items += (i_c?"\n":"")+i_c+":"+comTree.childGet(i_c).attr("id");
 		}
 	}
 	labProg_arg0val = progNm_value = lib_value;
 }
-comIns_active = comDel_active = comUp_active = comDwn_active = prog_value.length;
+comIns_active = comInAdd_active = comDel_active = comUp_active = comDwn_active = prog_value.length;
 
 //Get command properties
 if(f_start || progSelCom || progSelTp) {
@@ -19665,11 +19704,19 @@ if(f_start || progSelCom || progSelTp) {
 	}
 
 	if(prog_value.length) {
-		if(!progSelTp) type_value = prog_value.parse(1,":");
+		selNd = false;
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
+		if(rez.length > 1) {
+			selNd = SYS.XMLNode("prg"); selNd.load(rez[1][0]);
+			for(off = 0; (vIt=prog_value.parsePath(0,off)).length; ) selNd = selNd.childGet(vIt.toInt());
+		}
+		if(!progSelTp && selNd) {
+			type_value = selNd.attr("id");
+			descr_value = selNd.attr("descr");
+		}
 		// Load command argument''s names
 		if(!prExtComLs.isEVal() && !prExtComLs[type_value].isEVal()) {
-			descr_value = prExtComLs[type_value]["descr"];
-			if(descr_value.isEVal())	descr_value = "";
+			if((progSelTp || !descr_value.length) && (descr_value=prExtComLs[type_value]["descr"]).isEVal()) descr_value = "";
 			for(i_a = 1; i_a <= 5; i_a++) {
 				argLab = prExtComLs[type_value]["arg"+i_a];
 				if(argLab.isEVal() || !argLab.length)	continue;
@@ -19683,21 +19730,12 @@ if(f_start || progSelCom || progSelTp) {
 			}
 		}
 
-		if(!progSelTp) {
-			// Load arguments'' values
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
-			if(rez.length > 1) {
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				i_c = prog_value.toInt();
-				if(i_c < comTree.childSize())
-					for(i_a = 1; i_a <= 5; i_a++)
-						this["arg"+i_a].attrSet("value",comTree.childGet(i_c).attr("arg"+i_a));
-			}
-		}
+		// Load arguments'' values
+		if(!progSelTp && selNd)
+			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
 	}
 }
-type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1412342001);
+type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1412616911);
 INSERT INTO "wlb_Main" VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
 0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
@@ -20700,11 +20738,11 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 }
 else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1408110037);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1398168970);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1412509434);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','
 ','
 ','
-',-1,5,'name;dscr;geomX;',1398168970);
+',-1,5,'name;dscr;geomX;',1412509434);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/ggraph','1','','..','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','doc','','root','
@@ -20715,7 +20753,7 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/doc','1','','/wlb_doc/wdg_docAlarm
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','mn','','root','
 ','
 ','
-',-1,5,'name;dscr;',1398168970);
+',-1,5,'name;dscr;',1412509434);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1398168970);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gcadr','','/wlb_Main/wdg_grpCadr','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gcadr','1','','..','','','',-1,0,'name;grpName;','');
@@ -20745,7 +20783,7 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','terminator','','/wlb_Main/wdg
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPasp','','','',-1,0,'pName;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','accept','','/wlb_Main/wdg_accept','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','10','','/wlb_Main/wdg_prescrRun','','','',-1,0,'pgNoOpenProc;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1375114385);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','11','','/wlb_Main/wdg_prescrEdit','','','',-1,0,'prExtComLs;',1379005177);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','11','','/wlb_Main/wdg_prescrEdit','','','',-1,0,'prExtComLs;',1412509434);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_treeSelect','','','',-1,0,'',1382881863);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt','','','',-1,0,'geomZ;pName;',1404219070);
@@ -22448,4 +22486,11 @@ INSERT INTO "Trs" VALUES('Comments','Коментарі','Комментарии
 INSERT INTO "Trs" VALUES('Time','Час','Время');
 INSERT INTO "Trs" VALUES('Select a program please','Оберіть будь ласка програму','Выберите пожалуйста программу');
 INSERT INTO "Trs" VALUES('Select a program','Оберіть програму','Выберите программу');
+CREATE TABLE 'prj_tmplSO_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
+INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc0','<body><i>Program: </i><br/>
+<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
+<tr><th>#</th><th>Command</th><th>Comments</th><th>Time</th></tr>
+</table></body>');
+INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so','0geomX','324');
+INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so','0geomY','0');
 COMMIT;
