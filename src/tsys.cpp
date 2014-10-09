@@ -2268,10 +2268,10 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 	    if(Mess->lang2CodeBase().size()) {
 		ctrMkNode("fld",opt,-1,"/tr/dyn",_("Dynamic translation"),R_R_R_,"root","root",2,"tp","bool","help",_("Current dynamic translation state."));
 		ctrMkNode("fld",opt,-1,"/tr/dynPlan","",RWRW__,"root","root",2,"tp","bool","help",_("Plan for dynamic translation at next start."));
+		if(!Mess->translDyn())
+		    ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable manager"),RWRWR_,"root","root",2,"tp","bool",
+			"help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
 	    }
-	    if(!Mess->translDyn())
-		ctrMkNode("fld",opt,-1,"/tr/enMan",_("Enable manager"),RWRWR_,"root","root",2,"tp","bool",
-		    "help",_("Enable common translation manage which cause full reloading for all built messages obtain."));
 	    if(Mess->translEnMan()) {
 		ctrMkNode("fld",opt,-1,"/tr/langs",_("Languages"),RWRWR_,"root","root",2,"tp","str",
 		    "help",_("Processed languages list by two symbols code and separated symbol ';'."));

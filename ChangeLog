@@ -1,4 +1,11 @@
-2014-10-04 Roman
+2014-10-09 Roman
+- LibsDB.{OscadaLibs,vcaBase}.db: Prescription editor expand for tree commands implement.
+    DAQ templates base.{anUnif,anUnifSt} fix for translation.
+- FIX:SYS: "Enable manager" property hide for no translation mode.
+- FIX:UI.WebUser: Crash at new HTTP variable processing into respond prevented.
+
+
+2014-10-08 Roman
 - SYS: Disable exeptions for value set into NoWrite mode, simple return at that. Mostly for fix problems into DAQ.BlockCalc.
 - DAQ.BlockCalc,Protocol.OPC_UA: Some code clean up.
 

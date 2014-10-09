@@ -4020,19 +4020,19 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	tErr = tr("1:No data or connection with source"); levErr = -5;
+	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = tr("1:The signal exceed to upper hardware border"); levErr = -5;
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = tr("2:The signal exceed to bottom hardware border"); levErr = -5;
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
@@ -4052,14 +4052,14 @@ if(!tErr) {
 
 	bndVarHyst = (max-min)*HystBnd/100;
 	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr = tr("3:Upper alarm border error"); levErr = -4; }
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
 	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr = tr("4:Lower alarm border error"); levErr = -4; }
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
 	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr = tr("5:Upper warning border error"); levErr = -2; }
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
 	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr = tr("6:Lower warning border error"); levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr = tr("7:Too big parameter''s motion speed"); levErr = -2; }
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
+	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
 }
 
 //Alarms forming
@@ -4153,7 +4153,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','',1412343817);
+}','',1412878770);
 INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,'JavaLikeCalc.JavaScript
 set=false;
 if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
@@ -4378,19 +4378,19 @@ levErr = 0;
 tErr = "0";
 //Input data check and postprocess
 if(in.isEVal()) {
-	tErr = tr("1:No data or connection with source"); levErr = -5;
+	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = tr("1:The signal exceed to upper hardware border"); levErr = -5;
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
 else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = tr("2:The signal exceed to bottom hardware border"); levErr = -5;
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
 	var = EVAL_REAL;
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
@@ -4414,14 +4414,14 @@ else {
 
 	bndVarHyst = (max-min)*HystBnd/100;
 	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = tr("3:Upper alarm border error"); levErr = -4; HH = true; EVAL = H = LL = L = false; }
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH = true; EVAL = H = LL = L = false; }
 	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr = tr("4:Lower alarm border error"); levErr = -4; LL = true; EVAL = HH = H = L = false; }
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL = true; EVAL = HH = H = L = false; }
 	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-	{ tErr = tr("5:Upper warning border error"); levErr = -2; H = true; EVAL = HH = LL = L = false; }
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H = true; EVAL = HH = LL = L = false; }
 	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr = tr("6:Lower warning border error"); levErr = -2; L = true; EVAL = HH = H = LL = false; }
-	else if(speed && varDt > speed)	{ tErr = tr("7:Too big parameter''s motion speed"); levErr = -2; }
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L = true; EVAL = HH = H = LL = false; }
+	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
 	else EVAL = HH = H = LL = L = false;
 }
 
@@ -4521,7 +4521,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','',1412343987);
+}','',1412878882);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 
