@@ -58,8 +58,7 @@ extern "C"
 
     TModule *attach( const TModule::SAt &AtMod, const string &source )
     {
-	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE))
-	    return new ICP_DAS_DAQ::TTpContr(source);
+	if(AtMod == TModule::SAt(MOD_ID,MOD_TYPE,VER_TYPE)) return new ICP_DAS_DAQ::TTpContr(source);
 	return NULL;
     }
 }
@@ -85,8 +84,7 @@ TTpContr::TTpContr( string name ) : TTipDAQ(MOD_ID)
 TTpContr::~TTpContr( )
 {
     nodeDelAll();
-    for(unsigned i_da = 0; i_da < m_da.size(); i_da++)
-	delete m_da[i_da];
+    for(unsigned i_da = 0; i_da < m_da.size(); i_da++) delete m_da[i_da];
     m_da.clear();
 }
 
@@ -94,12 +92,12 @@ void TTpContr::postEnable( int flag )
 {
     TTipDAQ::postEnable(flag);
 
-    //> Init DA sources
+    //Init DA sources
     daReg(new da_LP_8x());
     daReg(new da_87x());
     daReg(new da_ISA());
 
-    //> Controler's bd structure
+    //Controler's bd structure
     fldAdd(new TFld("PRM_BD",_("Parameteres table"),TFld::String,TFld::NoFlag,"30",""));
     fldAdd(new TFld("SCHEDULE",_("Acquisition schedule"),TFld::String,TFld::NoFlag,"100","1"));
     fldAdd(new TFld("PRIOR",_("Gather task priority"),TFld::Integer,TFld::NoFlag,"2","0","-1;99"));
@@ -112,7 +110,7 @@ void TTpContr::postEnable( int flag )
     fldAdd(new TFld("LP_PRMS",_("LinPAC parameters"),TFld::String,TFld::FullText,"1000"));
     fldAdd(new TFld("REQ_TRY",_("Serial request tries"),TFld::Integer,TFld::NoFlag,"1","1","1;10"));
 
-    //> Parameter type bd structure
+    //Parameter type bd structure
     int t_prm = tpParmAdd("std","PRM_BD",_("Standard"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_TP",_("Module type"),TFld::String,TFld::HexDec|TCfg::NoVal,"20","-"));
     tpPrmAt(t_prm).fldAdd(new TFld("MOD_ADDR",_("Module address"),TFld::Integer,TCfg::NoVal,"3","0","0;255"));
@@ -122,7 +120,7 @@ void TTpContr::postEnable( int flag )
 
 void TTpContr::load_( )
 {
-    //> Load parameters from command line
+    //Load parameters from command line
 
 }
 
@@ -131,10 +129,7 @@ void TTpContr::save_( )
 
 }
 
-TController *TTpContr::ContrAttach( const string &name, const string &daq_db )
-{
-    return new TMdContr(name, daq_db, this);
-}
+TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{ return new TMdContr(name, daq_db, this); }
 
 void TTpContr::daReg( DA *da )
 {
@@ -151,8 +146,7 @@ void TTpContr::daTpList( TMdPrm *prm, vector<string> &tpl, vector<string> *ntpl 
 
 DA *TTpContr::daGet( TMdPrm *prm )
 {
-    for(unsigned i_da = 0; prm->modTp.getS().size() && i_da < m_da.size(); i_da++)
-    {
+    for(unsigned i_da = 0; prm->modTp.getS().size() && i_da < m_da.size(); i_da++) {
 	vector<string> tpl;
 	m_da[i_da]->tpList(prm,tpl);
 	for(unsigned i_t = 0; i_t < tpl.size(); i_t++)
@@ -185,8 +179,7 @@ string TMdContr::getStatus( )
 {
     string val = TController::getStatus();
 
-    if(startStat() && !redntUse())
-    {
+    if(startStat() && !redntUse()) {
 	if(call_st)	val += TSYS::strMess(_("Call now. "));
 	if(period())	val += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
 	else val += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
@@ -204,19 +197,15 @@ void TMdContr::start_( )
 {
     if(prcSt)	return;
 
-    if(mBus == 0)
-    {
+    if(mBus == 0) {
 	ResAlloc res(pBusRes, true);
 	if(Open_SlotAll() > 0) throw TError(nodePath().c_str(), _("Open All LP-slots error."));
 	if(Open_Slot(9) > 0) { Close_SlotAll(); throw TError(nodePath().c_str(), _("Open LP-slot 9 error.")); }
     }
 
-    try
-    {
-	if(mBus >= 0)
-	{
-	    if(trOscd() == TrIcpDasNm)
-	    {
+    try {
+	if(mBus >= 0) {
+	    if(trOscd() == TrIcpDasNm) {
 		if(Open_Com((mBus?mBus:1), mBus?mBaud:115200, Data8Bit, NonParity, OneStopBit) > 0)
 		    throw TError(nodePath().c_str(), _("Open COM%d port error."), (mBus?mBus:1));
 	    }
@@ -225,14 +214,13 @@ void TMdContr::start_( )
 
 	numReq = numErr = numErrResp = 0;
 
-	//> Schedule process
-	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*atof(cron().c_str()))) : 0;
+	//Schedule process
+	mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,(int64_t)(1e9*s2r(cron()))) : 0;
 
-	//> Start the gathering data task
+	//Start the gathering data task
 	SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this, 10);
     }
-    catch(TError err)
-    {
+    catch(TError err) {
 	if(mBus == 0)	{ Close_Slot(9); Close_SlotAll(); }
 	throw;
     }
@@ -240,12 +228,11 @@ void TMdContr::start_( )
 
 void TMdContr::stop_( )
 {
-    //> Stop the request and calc data task
+    //Stop the request and calc data task
     SYS->taskDestroy(nodePath('.',true), &endRunReq);
 
     //tr.free();
-    if(mBus >= 0)
-    {
+    if(mBus >= 0) {
 	if(trOscd() == TrIcpDasNm) Close_Com(mBus?mBus:1);
 	else tr.free();
     }
@@ -306,14 +293,11 @@ void *TMdContr::Task( void *icntr )
     cntr.endRunReq = false;
 
     //Init watchdog and get previous state
-    if(cntr.mBus == 0) wTm = atof(cntr.prmLP("wTm").c_str());
+    if(cntr.mBus == 0) wTm = s2r(cntr.prmLP("wTm"));
 
-    try
-    {
-	while(!cntr.endRunReq)
-	{
-	    if(!cntr.redntUse())
-	    {
+    try {
+	while(!cntr.endRunReq) {
+	    if(!cntr.redntUse()) {
 		cntr.call_st = true;
 		int64_t t_cnt = TSYS::curTime();
 
@@ -328,8 +312,7 @@ void *TMdContr::Task( void *icntr )
 	    }
 
 	    //Watchdog timer process
-	    if(cntr.mBus == 0 && cntr.period() && wTm > 0)
-	    {
+	    if(cntr.mBus == 0 && cntr.period() && wTm > 0) {
 		ResAlloc res(cntr.reqRes, true);
 		int wTmSet = 1e3*vmax(1.5e-9*cntr.period(), wTm);
 		EnableWDT(wTmSet);
@@ -364,31 +347,26 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
     if(mBus == 0 && mSlot != mCurSlot)	{ pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
 
     //Request by OpenSCADA output transport
-    if(bus() >= 0 && trOscd() != TrIcpDasNm)
-    {
+    if(bus() >= 0 && trOscd() != TrIcpDasNm) {
 	string rez;
-	try
-	{
+	try {
 	    if(!tr.at().startStat()) tr.at().start();
 	    if(CRC) req += DCONCRC(req);
 	    req += "\r";
 	    char buf[1000];
 
 	    ResAlloc resN(tr.at().nodeRes(), true);
-	    for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++)
-	    {
+	    for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++) {
 		int resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf), 0, true);
 		rez.assign(buf, resp_len);
 		// Wait tail
-		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r'))
-		{
+		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
 		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
 		    rez.append(buf, resp_len);
 		}
 		if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
 		rez = rez.substr(0,rez.size()-1);
-		if(CRC)
-		{
+		if(CRC) {
 		    if(strtol(rez.substr(rez.size()-2).c_str(),NULL,16) != strtol(DCONCRC(rez.substr(0,rez.size()-2)).c_str(),NULL,16))
 		    { err = _("21:Invalid module CRC."); continue; }
 		    rez = rez.substr(0,rez.size()-2);
@@ -413,8 +391,7 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
     char szReceive[255]; szReceive[0] = 0;
 
     for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++)
-	if(!(rez=Send_Receive_Cmd(mBus?mBus:1,(char*)req.c_str(),szReceive,1,CRC,&wT)))
-	{
+	if(!(rez=Send_Receive_Cmd(mBus?mBus:1,(char*)req.c_str(),szReceive,1,CRC,&wT))) {
 	    if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("RESP -> '%s'"), szReceive);
 	    return szReceive;
 	}
@@ -428,9 +405,8 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
 void TMdContr::cntrCmdProc( XMLNode *opt )
 {
-    //> Get page info
-    if(opt->name() == "info")
-    {
+    //Get page info
+    if(opt->name() == "info") {
 	TController::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/cntr/cfg/LP_PRMS");
 	ctrMkNode("fld",opt,-1,"/cntr/cfg/SCHEDULE",EVAL_STR,startStat()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,
@@ -442,21 +418,20 @@ void TMdContr::cntrCmdProc( XMLNode *opt )
 	if(mBus <= 0 || trOscd() != TrIcpDasNm) ctrRemoveNode(opt,"/cntr/cfg/BAUD");
 	if(mBus < 0) ctrRemoveNode(opt,"/cntr/cfg/REQ_TRY");
 	if(mBus == 0 && ctrMkNode("area",opt,-1,"/LPcfg","LinPAC"))
-	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,1,"tp","real");
+	    ctrMkNode("fld",opt,-1,"/LPcfg/wTm",_("Watchdog timeout (s)"),RWRWR_,"root",SDAQ_ID,2,
+		"tp","real","help",_("Set to zero for the watchdog disable."));
 	return;
     }
-    //> Process command to page
+    //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt))
-    {
+    if(a_path == "/cntr/cfg/trLst" && ctrChkNode(opt)) {
 	vector<string> sls;
 	opt->childAdd("el")->setText(TrIcpDasNm);
 	SYS->transport().at().outTrList(sls);
 	for(unsigned i_s = 0; i_s < sls.size(); i_s++)
 	    opt->childAdd("el")->setText(sls[i_s]);
     }
-    else if(mBus == 0 && a_path == "/LPcfg/wTm")
-    {
+    else if(mBus == 0 && a_path == "/LPcfg/wTm") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(prmLP("wTm"));
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setPrmLP("wTm",opt->text());
     }
@@ -496,15 +471,14 @@ void TMdPrm::enable( )
 
     TParamContr::enable();
 
-    wTm = vmin(25.5,vmax(0,atof(modPrm("wTm").c_str())));
+    wTm = vmin(25.5,vmax(0,s2r(modPrm("wTm"))));
     acq_err = "";
 
     vector<string> als;
     da->enable(this, als);
 
-    //> Check for delete DAQ parameter's attributes
-    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++)
-    {
+    //Check for delete DAQ parameter's attributes
+    for(int i_p = 0; i_p < (int)p_el.fldSize(); i_p++) {
 	unsigned i_l;
 	for(i_l = 0; i_l < als.size(); i_l++)
 	    if(p_el.fldAt(i_p).name() == als[i_l])
@@ -525,13 +499,13 @@ void TMdPrm::disable()
 
     TParamContr::disable();
 
-    //> Set EVAL to parameter attributes
+    //Set EVAL to parameter attributes
     vector<string> ls;
     elem().fldList(ls);
     for(unsigned i_el = 0; i_el < ls.size(); i_el++)
 	vlAt(ls[i_el]).at().setS(EVAL_STR, 0, true);
 
-    //> Stop fast task
+    //Stop fast task
     if(prcSt) SYS->taskDestroy(nodePath('.',true), &endRunReq);
 
     if(da) da->disable(this);
@@ -546,12 +520,11 @@ string TMdPrm::modPrm( const string &prm, const string &def )
 {
     string rez;
     XMLNode prmNd;
-    try
-    {
+    try {
 	prmNd.load(cfg("MOD_PRMS").getS());
 	string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
 	if(!sa.size())	return (rez=prmNd.attr(prm)).empty()?def:rez;
-	//> Internal node
+	//Internal node
 	for(unsigned i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
 		return (rez=prmNd.childGet(i_n)->attr(sa)).empty()?def:rez;
@@ -568,9 +541,8 @@ void TMdPrm::setModPrm( const string &prm, const string &val )
     if(modPrm(prm) != val) modif();
     string sobj = TSYS::strParse(prm,0,":"), sa = TSYS::strParse(prm,1,":");
     if(!sa.size()) prmNd.setAttr(prm,val);
-    //> Internal node
-    else
-    {
+    //Internal node
+    else {
 	unsigned i_n;
 	for(i_n = 0; i_n < prmNd.childSize(); i_n++)
 	    if(prmNd.childGet(i_n)->name() == sobj)
@@ -595,10 +567,8 @@ bool TMdPrm::cfgChange( TCfg &co, const TVariant &pc )
 
 void TMdPrm::vlGet( TVal &val )
 {
-    if(!enableStat() || !owner().startStat())
-    {
-	if(val.name() == "err")
-	{
+    if(!enableStat() || !owner().startStat()) {
+	if(val.name() == "err") {
 	    if(!enableStat())			val.setS(_("1:Parameter is disabled."),0,true);
 	    else if(!owner().startStat())	val.setS(_("2:Acquisition is stopped."),0,true);
 	}
@@ -608,8 +578,7 @@ void TMdPrm::vlGet( TVal &val )
 
     if(owner().redntUse()) return;
 
-    if(val.name() == "err")
-    {
+    if(val.name() == "err") {
 	if(acq_err.getVal().empty())	val.setS("0",0,true);
 	else				val.setS(acq_err.getVal(),0,true);
     }
@@ -619,19 +588,17 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 {
     if(!enableStat() || !owner().startStat())	{ vo.setI(EVAL_INT, 0, true); return; }
 
-    //> Send to active reserve station
-    if(owner().redntUse())
-    {
+    //Send to active reserve station
+    if(owner().redntUse()) {
 	if(vl == pvl) return;
 	XMLNode req("set");
 	req.setAttr("path",nodePath(0,true)+"/%2fserv%2fattr")->childAdd("el")->setAttr("id",vo.name())->setText(vl.getS());
 	SYS->daq().at().rdStRequest(owner().workId(),req);
 	return;
     }
-    //> Direct write
+    //Direct write
     try { if(da) da->vlSet(this, vo, vl, pvl); }
-    catch(TError err)
-    {
+    catch(TError err) {
 	mess_err(nodePath().c_str(),_("Write value to attribute '%s' error: %s"),vo.name().c_str(),err.mess.c_str());
 	vo.setS(pvl.getS(), 0, true);
     }
@@ -653,8 +620,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
     string rez;
 
     //Get page info
-    if(opt->name() == "info")
-    {
+    if(opt->name() == "info") {
 	TParamContr::cntrCmdProc(opt);
 	ctrRemoveNode(opt,"/prm/cfg/MOD_PRMS");
 	ctrMkNode("fld",opt,-1,"/prm/cfg/MOD_TP",EVAL_STR,(enableStat()?R_R_R_:RWRWR_),"root",SDAQ_ID,2,
@@ -669,8 +635,7 @@ void TMdPrm::cntrCmdProc( XMLNode *opt )
 
     //Process command to page
     string a_path = opt->attr("path");
-    if(a_path == "/prm/cfg/modLst" && ctrChkNode(opt))
-    {
+    if(a_path == "/prm/cfg/modLst" && ctrChkNode(opt)) {
 	vector<string> tid, tnm;
 	mod->daTpList(this, tid, &tnm);
 	opt->childAdd("el")->setAttr("id","-")->setText(_("<No select>"));

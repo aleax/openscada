@@ -1,5 +1,17 @@
+2014-10-16 Roman
+- SYS.icons: DAQ.{BlockCalc,LogicLev} icons updated.
+- LibsDB.OscadaLibs: Prescription controller mostly updated and fixed for multilevel.
+- !!!!:LibsDB.vcaBase.db: Prescription run frames adapted for multilevel.
+    Prescription edit frame expanded by editable name and description for a step.
+- FIX:DAQ.BlockCalc: Blocks table copy into BLOCK_SH prevent at the controller object copy.
+    Attribute's items comment by symbol '#' is added to the items list.
+- DAQ.{DCON,ICP_DAS}: Some source code clean up.
+- DAQ.ICP_DAS: Context help for watchdog field of LP8x81 is added.
+- FIX:UI.WebCfgD: Table item processing fix, mostly into tab "Diagnostic" of DAQ controller.
+
+
 2014-10-09 Roman
-- LibsDB.{OscadaLibs,vcaBase}.db: Prescription editor expand for tree commands implement.
+- !!!!:LibsDB.{OscadaLibs,vcaBase}.db: Prescription editor expand for tree commands implement.
     DAQ templates base.{anUnif,anUnifSt} fix for translation.
 - FIX:SYS: "Enable manager" property hide for no translation mode.
 - FIX:UI.WebUser: Crash at new HTTP variable processing into respond prevented.

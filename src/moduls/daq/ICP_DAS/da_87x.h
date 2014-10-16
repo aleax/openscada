@@ -33,8 +33,7 @@ class da_87x: public DA
 {
     public:
 	//Data
-	class DevFeature
-	{
+	class DevFeature {
 	    public:
 		DevFeature( unsigned iAI, unsigned iAO = 0, unsigned iDI = 0, unsigned iDO = 0, unsigned iCNTR = 0 ) :
 		    AI(iAI), AO(iAO), DI(iDI), DO(iDO), CNTR(iCNTR)	{ }
@@ -49,8 +48,7 @@ class da_87x: public DA
 		string	aiTypes;
 	};
 
-	class tval
-	{
+	class tval {
 	    public:
 		tval( ) : doVal(0)	{ }
 

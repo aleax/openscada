@@ -47,10 +47,10 @@ INSERT INTO "PrescrProgs" VALUES('Библ1/Прог3','<prg><com arg1="10" arg2
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог4','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог5','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог6','<prg><com arg1="12" arg2="0" arg3="0" arg4="0" arg5="0" id="Таймер" /></prg>');
-INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" /></com></com></com></prg>');
-INSERT INTO "PrescrProgs" VALUES('abcd','');
+INSERT INTO "PrescrProgs" VALUES('abcd','<prg wtm="52"><com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" name="Таймер ур.1"><com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" name="Таймер ур.2" /></com><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" /></prg>');
 INSERT INTO "PrescrProgs" VALUES('Abcdef','');
 INSERT INTO "PrescrProgs" VALUES('Библ1/Прог123','');
+INSERT INTO "PrescrProgs" VALUES('Тест12','<prg id="Тест12" wtm="31"><com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer"><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Timer" /><com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" id="Background timer" /><com id="New command"><com arg1="123" arg2="0" arg3="0" arg4="0" arg5="0" descr="123456" id="Timer" name="Test timer" /></com></com></com></prg>');
 CREATE TABLE 'VCALibs' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"DB_TBL" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "VCALibs" VALUES('Main','Main elements','User interface''s main elements library.','wlb_Main','','Основні елементи','Бібліотека основних елементів інтерфейсу користувача.','Основные элементы','Библиотека основных элементов пользовательского интерфейса.');
 INSERT INTO "VCALibs" VALUES('mnEls','Mnemo elements','User interface''s main elements library.','wlb_mnEls','','Елементи мнемосхеми','Бібліотека основних елементів інтерфейсу користувача.','Элементы мнемосхемы','Библиотека основных элементов пользовательского интерфейса.');
@@ -878,7 +878,7 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_ggraph','arh','/
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_ggraph/pg_1','arh','/prj_tmplSO/pg_so/pg_1/pg_ggraph/wdg_arh','',0);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_2/pg_ggraph','arh','/wlb_Main/wdg_grpGraph/wdg_arh','',0);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_2/pg_ggraph/pg_1','arh','/prj_tmplSO/pg_so/pg_2/pg_ggraph/wdg_arh','',0);
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',0);
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_1','prescrRunSimple','/wlb_test/wdg_mn_gen/wdg_prescrRunSimple','prExtMode;prExtProg;prExtStartTm;prExtWork;prExtCurCom;',0);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_doc/pg_1','doc','/wlb_doc/wdg_docAlarmsRep/wdg_doc','',0);
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','descr','/wlb_Main/wdg_prescrEdit/wdg_descr','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','labDescr','/wlb_Main/wdg_prescrEdit/wdg_labDescr','','');
@@ -900,6 +900,8 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','vi
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','viewLabSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewLabSet','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','viewSet','/wlb_Main/wdg_cntrPaspExt/wdg_viewSet','value;','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','comInAdd','/wlb_Main/wdg_prescrEdit/wdg_comInAdd','','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','labName','/wlb_Main/wdg_prescrEdit/wdg_labName','','');
+INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','name','/wlb_Main/wdg_prescrEdit/wdg_name','','');
 CREATE TABLE 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1471,13 +1473,13 @@ INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','value',
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','value','Новая программа',8,'','','progNm','','','','Новая программа','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','dbDB','MySQL.vcaBase',41,'DB','MySQL.vcaBase','','','','','MySQL.vcaBase','DB','MySQL.vcaBase');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','dbDB','MySQL.vcaBase',41,'DB','MySQL.vcaBase','','','','','MySQL.vcaBase','DB','MySQL.vcaBase');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtCurCom','0',42,'Controller|curCom','prm:/JavaLikeCalc/prescr/cntr/curCom','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtMode','0',46,'Controller|mode','prm:/JavaLikeCalc/prescr/cntr/mode','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtProg','',46,'Controller|prog','prm:/JavaLikeCalc/prescr/cntr/prog','','','','','','','');
-INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtStartTm','0',42,'Controller|startTm','prm:/JavaLikeCalc/prescr/cntr/startTm','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtCurCom','0',42,'Controller|curCom','prm:/JavaLikeCalc/prescr/cntr//curCom','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtMode','0',46,'Controller|mode','prm:/JavaLikeCalc/prescr/cntr//mode','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtProg','',46,'Controller|prog','prm:/JavaLikeCalc/prescr/cntr//prog','','','','','','','');
+INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtStartTm','0',42,'Controller|startTm','prm:/JavaLikeCalc/prescr/cntr//startTm','','','','','','','');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_10','prExtWork','<TVarObj>
 </TVarObj>
-',42,'Controller|work','prm:/JavaLikeCalc/prescr/cntr/work','','','','','','','prm:/JavaLikeCalc/prescr/cntr/work');
+',42,'Controller|work','prm:/JavaLikeCalc/prescr/cntr//work','','','','','','','prm:/JavaLikeCalc/prescr/cntr/work');
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so/pg_1/pg_ggraph/pg_1','allowSelLst','/System/AutoDA/CPULoad/a_load:CPU Load:0:100:%
 /LogicLev/experiment/F3
 <varhs>',40,'','','','','','','','','');
@@ -1832,6 +1834,8 @@ INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','el9','/wlb_Main/wdg_ElViewGraph
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','name','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;color;alignment;text;numbArg;arg0tp;arg0val;','');
 INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diagram','perm;name;active;geomX;geomY;geomW;geomH;geomZ;trcPer;tSek;tSize;sclColor;sclHor;sclVer;sclMarkFont;parNum;prm0color;prm0val;curSek;curUSek;prm1color;prm1val;prm2color;prm2val;prm3color;prm3val;prm4color;prm4val;prm5color;prm5val;prm6color;prm6val;prm7color;prm7val;prm8color;prm8val;prm9color;prm9val;','');
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','labName','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
+INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','name','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;confirm;font;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -4752,7 +4756,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordStyle','3',32,'','','','','',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','arg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','arg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','610',32,'','','arg1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','244',32,'','','arg1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','269',32,'','','arg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','258',32,'','','arg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','arg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','24',32,'','','arg1','','','','','','');
@@ -4763,7 +4767,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','arg1',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','arg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','arg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','610',32,'','','arg2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','269',32,'','','arg2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','294',32,'','','arg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','258',32,'','','arg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','arg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','25',32,'','','arg2','','','','','','');
@@ -4774,7 +4778,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','arg2',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','arg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','arg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','610',32,'','','arg3','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','294',32,'','','arg3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','319',32,'','','arg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','258',32,'','','arg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','arg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','26',32,'','','arg3','','','','','','');
@@ -4785,7 +4789,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','arg3',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','arg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','arg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','610',32,'','','arg4','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','319',32,'','','arg4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','344',32,'','','arg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','258',32,'','','arg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','arg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','27',32,'','','arg4','','','','','','');
@@ -4796,7 +4800,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','arg4',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','arg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','arg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','610',32,'','','arg5','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','344',32,'','','arg5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','369',32,'','','arg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','258',32,'','','arg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','arg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','28',32,'','','arg5','','','','','','');
@@ -4816,10 +4820,10 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','3',32,'','','comAdd','',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','comArgsBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','438',32,'','','comArgsBox','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','226.5',32,'','','comArgsBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','251.5',32,'','','comArgsBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','436',32,'','','comArgsBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','142.846',32,'','','comArgsBox','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','2',32,'','','comArgsBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','4',32,'','','comArgsBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','backColor','',32,'','','comArgsBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordWidth','2',32,'','','comArgsBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordColor','#5A5A5A',32,'','','comArgsBox','','','','','','');
@@ -4828,8 +4832,8 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','comBox','','',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','431',32,'','','comBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','72',32,'','','comBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','450',32,'','','comBox','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','336',32,'','','comBox','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','1',32,'','','comBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','361',32,'','','comBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','3',32,'','','comBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','backColor','',32,'','','comBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordWidth','2',32,'','','comBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordColor','#5A5A5A',32,'','','comBox','','','','','','');
@@ -4879,7 +4883,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comUp',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labArg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','labArg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','444.077',32,'','','labArg1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','244',32,'','','labArg1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','269',32,'','','labArg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','161',32,'','','labArg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labArg1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','31',32,'','','labArg1','','','','','','');
@@ -4890,7 +4894,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Argument 1:',40,'','','lab
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labArg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','labArg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','444.077',32,'','','labArg2','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','269',32,'','','labArg2','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','294',32,'','','labArg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','161',32,'','','labArg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labArg2','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','35',32,'','','labArg2','','','','','','');
@@ -4901,7 +4905,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Argument 2:',40,'','','lab
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labArg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','labArg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','444.077',32,'','','labArg3','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','294',32,'','','labArg3','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','319',32,'','','labArg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','161',32,'','','labArg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labArg3','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','36',32,'','','labArg3','','','','','','');
@@ -4912,7 +4916,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Argument 3:',40,'','','lab
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labArg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','labArg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','444.077',32,'','','labArg4','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','319',32,'','','labArg4','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','344',32,'','','labArg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','161',32,'','','labArg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labArg4','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','38',32,'','','labArg4','','','','','','');
@@ -4923,7 +4927,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Argument 4:',40,'','','lab
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labArg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','en','1',40,'','','labArg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','444.077',32,'','','labArg5','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','344',32,'','','labArg5','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','369',32,'','','labArg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','161',32,'','','labArg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labArg5','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','37',32,'','','labArg5','','','','','','');
@@ -4933,10 +4937,10 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','alignment','8',32,'','','labArg5'
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Argument 5:',40,'','','labArg5','Аргумент 5:','','Аргумент 5:','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','445',32,'','','labArgs','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','219',32,'','','labArgs','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','244',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','100',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labArgs','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','3',32,'','','labArgs','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','5',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','backColor','#5A5A5A',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 17',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','alignment','8',32,'','','labArgs','','','','','','');
@@ -4964,13 +4968,13 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Program: %1',32,'','','lab
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','439.077',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','85',32,'','','labType','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','51.25',32,'','','labType','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','66',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','34',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','backColor','',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 17',32,'','','labType','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','alignment','8',32,'','','labType','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Name:',32,'','','labType','Ім''я:','','Имя:','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Type:',32,'','','labType','Ім''я:','','Имя:','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Programms',32,'','','lib','Програми','','Программы','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','12',32,'','','lib','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','52',32,'','','lib','','','','','','');
@@ -5010,7 +5014,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','221',32,'','','progBox','
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','52',32,'','','progBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','668',32,'','','progBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','539',32,'','','progBox','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','4',32,'','','progBox','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','2',32,'','','progBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','backColor','',32,'','','progBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordWidth','2',32,'','','progBox','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','bordColor','#5A5A5A',32,'','','progBox','','','','','','');
@@ -5056,9 +5060,9 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','value','New program',8,'','','pro
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','confirm','0',32,'','','progNm','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 14',32,'','','progNm','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','Save',32,'','','save','Зберегти','','Сохранить','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','619',32,'','','save','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','376',32,'','','save','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','254',32,'','','save','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','610',32,'','','save','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','401',32,'','','save','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','258',32,'','','save','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','25',32,'','','save','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','29',32,'','','save','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',40,'','','save','','','','','','');
@@ -5525,7 +5529,7 @@ INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipTool','Start for play Demo',32,'
 INSERT INTO "wlb_Main_io" VALUES('RootPgSo','tipStatus','Start for play Demo by scenario',32,'','','play','Запустити для програвання Демо за сценарієм','','Запустить для проигрывания Демо по сценарию','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','descr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','532',32,'','','descr','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','110',32,'','','descr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','140',32,'','','descr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','340',32,'','','descr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','105',32,'','','descr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','32',32,'','','descr','','','','','','');
@@ -5533,7 +5537,7 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','descr',
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomMargin','2',32,'','','labArgs','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labDescr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','439.077',32,'','','labDescr','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','110',32,'','','labDescr','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','140',32,'','','labDescr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','92.25',32,'','','labDescr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labDescr','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','33',32,'','','labDescr','','','','','','');
@@ -6004,6 +6008,26 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','tipTool','Add command',32,'','','
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',40,'','','comInAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','3',32,'','','comInAdd','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',0,'','','comInAdd','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','439.077',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','110',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','66',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','38',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 17',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','alignment','8',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','text','Name:',32,'','','labName','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','name','',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomX','507',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomY','110',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomW','365',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomH','19',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','geomZ','39',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','active','1',40,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','0',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','value','',8,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('prescrEdit','confirm','0',32,'','','name','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -8401,7 +8425,7 @@ INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','prExtComLs','Available commands 
 </TVarObj>
 ||',10,'Controller|comLs','','','Перелік доступних команд рецепту','','','Список доступных команд рецепта','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prEndRun','Program: running end',131077,'||',8,'','','','Програма: кінець виконання','','','Программа: конец запуска','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtCurCom','Controller:current command',131073,'0||',10,'Controller|curCom','','','Контролер:поточна команда','','','Контроллер:текущая команда','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtCurCom','Controller:current command',131077,'0||',10,'Controller|curCom','','','Контролер:поточна команда','','','Контроллер:текущая команда','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtMode','Controller:mode',131073,'0||',14,'Controller|mode','','','Контролер:режим','','','Контроллер:режим','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtProg','Controller:program',131077,'||',14,'Controller|prog','','','Контролер:програма','','','Контроллер:программа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRunSimple','prExtStartTm','Controller:start time',131073,'0||',10,'Controller|startTm','','','Контролер:час запуску','','','Контроллер:запуск','','','','');
@@ -8464,7 +8488,7 @@ INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','max','Maximum',131076,'0||',8,''
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','min','Minimum',131076,'0||',8,'','','arg4','Мінімум','','','Минимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','max','Maximum',131076,'0||',8,'','','arg5','Максимум','','','Максимум','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrEdit','min','Minimum',131076,'0||',8,'','','arg5','Мінімум','','','Минимум','','','','');
-INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prExtCurCom','Controller:current command',131073,'0||',10,'Controller|curCom','','','Контроллер:поточна команда','','','Контроллер:текущая команда','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prExtCurCom','Controller:current command',131077,'0||',10,'Controller|curCom','','','Контроллер:поточна команда','','','Контроллер:текущая команда','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prExtMode','Controller:mode',131073,'0||',14,'Controller|mode','','','Контроллер:режим','','','Контроллер:режим','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prExtProg','Controller:program',131077,'||',14,'Controller|prog','','','Контроллер:програма','','','Контроллер:программа','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('prescrRun','prExtStartTm','Controller:start',131073,'0||',10,'Controller|startTm','','','Контроллер:запуск','','','Контроллер:запуск','','','','');
@@ -19535,6 +19559,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 			}
 			if(selNd) {
 				selNd.setAttr("id",type_value);
+				selNd.setAttr("name",name_value);
 				selNd.setAttr("descr",descr_value);
 				for(i_a = 1; i_a <= 5; i_a++) {
 					argObj = this["arg"+i_a];
@@ -19544,7 +19569,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 					selNd.setAttr("arg"+i_a, argVal);
 				}
 				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+lib_value+"'';");
-				prog_value = parentPath+"/"+i_c+":"+type_value;
+				prog_value = parentPath+"/"+i_c+":"+(name_value.length?name_value:type_value);
 				SYS.messInfo(this.nodePath(),"prog_value: "+prog_value);
 				progSelPrg = true;
 			}
@@ -19555,7 +19580,8 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+lib_value+"'';");
 		if(rez.length > 1) {
 			expTree = SYS.XMLNode("OpenSCADA_Prescr");
-			expTree.childAdd("prg").setAttr("id",lib_value).load(rez[1][0]);
+			expTree.childAdd("prg").load(rez[1][0]);
+			expTree.childGet(0).setAttr("id",lib_value);
 			progExport_value = tr("Prescription-Program")+" (*.prscr)|"+tr("Prescription file")+"|"+lib_value.replace("/","_")+".prscr\n"+expTree.save(0x05);
 		}
 	} 
@@ -19566,7 +19592,6 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		expTree.load(progImport_value.slice(pCtx+1));
 		progImport_value = progImport_value.slice(0,pCtx);
 		// Save all recors to DB
-		//SYS.messDebug("Prescription edit control","Items: "+expTree.childSize());
 		for(i_p = 0; i_p < expTree.childSize(); i_p++) {
 			treeNd = expTree.childGet(i_p);
 			if(treeNd.name() != "prg") continue;
@@ -19577,7 +19602,7 @@ for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length; ) {
 		}
 		progLbUpdt = progSelPrg = progSelCom = true;
 	}
-	else if(ev_cur == "ws_TxtAccept:/descr" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
+	else if(ev_cur == "ws_LnAccept:/name" || ev_cur == "ws_TxtAccept:/descr" || (rez=ev_cur.match("ws_LnAccept:\\/arg(\\d)")).length)	save_active = true;
 	else if((rez=ev_cur.match("ws_FocusOut:\\/arg(\\d)")).length) {
 		argObj = this["arg"+rez[1]];
 		argVal = argObj.attr("value");
@@ -19670,7 +19695,7 @@ if(f_start || progSelPrg) {
 					curPos = stObj.curPos; curPath = stObj.curPath;
 					continue;
 				}
-				prog_items += (prog_items.length?"\n":"")+(wPath=curPath+"/"+curPos+":"+curNd.childGet(curPos).attr("id"));
+				prog_items += (prog_items.length?"\n":"")+(wPath=curPath+"/"+curPos+":"+curNd.childGet(curPos).attr(curNd.childGet(curPos).attr("name").length?"name":"id"));
 				if(curNd.childGet(curPos).childSize()) {
 					curNd = curNd.childGet(curPos);
 					comLevs.push((stObj=new Object()));
@@ -19679,8 +19704,6 @@ if(f_start || progSelPrg) {
 					continue;
 				}
 			}
-			//for(i_c = 0; i_c < comTree.childSize(); i_c++)
-			//	prog_items += (i_c?"\n":"")+i_c+":"+comTree.childGet(i_c).attr("id");
 		}
 	}
 	labProg_arg0val = progNm_value = lib_value;
@@ -19689,7 +19712,7 @@ comIns_active = comInAdd_active = comDel_active = comUp_active = comDwn_active =
 
 //Get command properties
 if(f_start || progSelCom || progSelTp) {
-	if(!progSelTp) type_value = descr_value = "";
+	if(!progSelTp) name_value = type_value = descr_value = "";
 	for(i_a = 1; i_a <= 5; i_a++) {
 		this["labArg"+i_a].attrSet("en",false).attrSet("text","");
 		this["arg"+i_a].attrSet("en",false).attrSet("value","");
@@ -19711,6 +19734,7 @@ if(f_start || progSelCom || progSelTp) {
 			for(off = 0; (vIt=prog_value.parsePath(0,off)).length; ) selNd = selNd.childGet(vIt.toInt());
 		}
 		if(!progSelTp && selNd) {
+			name_value = selNd.attr("name");
 			type_value = selNd.attr("id");
 			descr_value = selNd.attr("descr");
 		}
@@ -19735,7 +19759,7 @@ if(f_start || progSelCom || progSelTp) {
 			for(i_a = 1; selNd && i_a <= 5; i_a++) this["arg"+i_a].attrSet("value",selNd.attr("arg"+i_a));
 	}
 }
-type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1412616911);
+type_active = prog_value.length;','','',100,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;bordStyle;',1413479593);
 INSERT INTO "wlb_Main" VALUES('prescrRun','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA0SAAANOgHo3ZneAAAC60lEQVRYhe2ZTU8TQRyH//Oy2+22Ai0hGiqRSvTiAb0YI1y5eODolYQP
 0LvfhJPh6BW+gIkxUeNZ8QU1bYFYCsW+zs67h01ILRSLWueyz2Ezmfll5vdcZg+DSqVSOp2GIRzW
@@ -19808,17 +19832,31 @@ if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode 
 	pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
 					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th>";
 	pTxt += "</tr>\n";
-	for(i_c = 0; i_c < prExtWork.childSize(); i_c++) {
-		comEl = prExtWork.childGet(i_c);
+
+	for(comElN = prExtWork, comPos = 0, comLev = 0, comCur = true, comAftCur = false, comN = "", comPath = ""; true; comPos++) {
+		if(comPos >= comElN.childSize()) {
+			if((comElN=comElN.parent())) {
+				comLev--;
+				comPos = comElN.attr("seekPos").toInt();
+				comCur = comElN.attr("comCur").toInt();
+				comN = comElN.attr("comN");
+				comPath = comElN.attr("comPath");
+				continue;
+			}
+			break;
+		}
+		comEl = comElN.childGet(comPos);
+		comN_ = (comN.length?comN+":":"") + comPos;
+		comPath_ = (comPath.length?comPath+": ":"") + (comEl.attr("name").length?comEl.attr("name"):comEl.attr("id"));
+		isCurCmd = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos && !prExtCurCom.parse(comLev+1,":").length;
+		if(isCurCmd) comAftCur = true;
 		rezVl = comEl.attr("rez");
 		toMark = true;
-		if(i_c < prExtCurCom && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))
-			pTxt += "<tr class=''"+((rezVl.toInt()==-10)?"skip":((rezVl.toInt()<0)?"err":"pass"))+"''>";
-		else if(i_c == prExtCurCom && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))
-			pTxt += "<tr class=''"+(prEndRun?"err":"run")+"''>";
+		if(isCurCmd && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))				pTxt += "<tr class=''"+(prEndRun?"err":"run")+"''>";
+		else if(!comAftCur && (prExtMode > 0 || (prExtMode < 0 && prog_aCur < 0)))	pTxt += "<tr class=''"+((rezVl.toInt()==-10)?"skip":((rezVl.toInt()<0)?"err":"pass"))+"''>";
 		else { pTxt += "<tr>"; toMark = false; }
-		pTxt += "<td>"+i_c+"</td>";
-		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comEl.attr("id"))+"</td><td>";
+		pTxt += "<td>"+comN_+"</td>";
+		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath_)+"</td><td>";
 		if(toMark && rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
 		else {
 			//Arguments values
@@ -19836,6 +19874,13 @@ if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode 
 		}
 		else pTxt += "<td>---</td>";
 		pTxt += "</tr>\n";
+
+		if(comEl.childSize()) {
+			comElN.setAttr("seekPos",comPos).setAttr("comCur",comCur).setAttr("comN",comN).setAttr("comPath",comPath);
+			comElN = comEl;
+			comCur = comCur && (tmpComLv=prExtCurCom.parse(comLev,":")).length && tmpComLv.toInt() == comPos;
+			comPos = -1; comLev++; comN = comN_; comPath = comPath_;
+		}
 	}
 	pTxt += "</table></body>";
 }
@@ -19874,7 +19919,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_value;
-else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1412342725);
+else lib_value = prExtProg;','','',200,'name;dscr;geomW;geomH;evProc;pgGrp;backColor;bordWidth;bordColor;',1413479593);
 INSERT INTO "wlb_Main" VALUES('prescrRunSimple','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAAE0ElEQVRoge2Vy28TVxSHz525nvG8HNtjO2+TEBJqAoEoJBREqSLooqrK
 gj1do6Z/BH9EkYBVoMuyYAeqIkpbYlKkQNqkOAlJbEwcO37FnhnP2PPsghRBFsVQpCmSv9Xo3qtz
@@ -19930,7 +19975,7 @@ else if(prExtMode == 2){ btStart_img = "start"; btStart_value = true; btStop_act
 pTxt = "";
 if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode <= 0))) {
 	pTxt = "<body>";
-	off = 0;
+	//off = 0;
 	labProg_arg0val = prExtWork.attr("name");
 
 	if(prExtMode < 0 && !prEndRun)	prEndRun = true;
@@ -19942,18 +19987,24 @@ if((prExtMode == 1 || prExtMode == 3 || ((prCnt%max(1,f_frq)) == 0 && prExtMode 
 		wtm = max(0,prExtWork.attr("wtm").toInt()-(SYS.time()-prExtStartTm));
 		pTxt += "\n<br/><i>"+tr("Remain:")+" </i>"+(wtm/3600).toString(10)+":"+((wtm/60)%60).toString(10,2)+":"+(wtm%60).toString(10,2);
 	}
-	if(prExtMode > 0 && prExtCurCom < prExtWork.childSize()) {
+	if(prExtMode > 0 && prExtCurCom.parse(0,":").toInt() < prExtWork.childSize()) {
 		pTxt += "<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>\n"
 					"<tr><th>"+tr("#")+"</th><th>"+tr("Command")+"</th><th>"+tr("Comments")+"</th><th>"+tr("Time")+"</th></tr>\n";
-		i_c = (prExtMode == 0) ? 0 : prExtCurCom;
-		//for(i_c = 0; i_c < comTree.childSize(); i_c++){
-		comEl = prExtWork.childGet(i_c);
+		comN = 0;
+		if(prExtMode == 0)	comEl = prExtWork.childGet(0);
+		else {
+			comEl = prExtWork;
+			for(off = 0; comEl && (tVl=prExtCurCom.parse(0,":",off)).length; )	comEl = comEl.childGet(tVl.toInt());
+			if(!comEl) comEl = prExtWork.childGet(0); else comN = prExtCurCom;
+		}
+		for(comPath = "", comElI = comEl; comElI; comElI = comElI.parent())
+			if(comElI.name() == "com")
+				comPath = comElI.attr(comElI.attr("name").length?"name":"id")+(comPath.length?": ":"")+comPath;
 		rezVl = comEl.attr("rez");
-		//if(prExtMode != 0 && i_c < prExtCurCom) pTxt += "<tr class=''pass''>";	else
-		if(prExtMode != 0 /*&& i_c == prExtCurCom*/) pTxt += "<tr class=''"+((prExtMode==-1)?"err":"run")+"''>";
+		if(prExtMode != 0) pTxt += "<tr class=''"+((prExtMode==-1)?"err":"run")+"''>";
 		else pTxt += "<tr>";
-		pTxt += "<td>"+i_c+"</td>";
-		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comEl.attr("id"))+"</td><td>";
+		pTxt += "<td>"+comN+"</td>";
+		pTxt += "<td>"+Special.FLibSYS.strEnc2HTML(comPath)+"</td><td>";
 		if(rezVl.parse(1,":").length) pTxt += Special.FLibSYS.strEnc2HTML(rezVl.parse(1,":"));
 		else {
 			//Arguments values
@@ -20001,7 +20052,7 @@ event = ev_rez;
 //Programm select process
 if(!prExtProg.length || lib_items.search("^"+prExtProg.replace(new RegExp("(\\[|\\]|\\(|\\)|\\.|\\+|\\*|\\?|\\^|\\$|\\<|\\>|\\{|\\}|\\\\)","g"),"\\$1")+"$","m") < 0)
 	prExtProg = lib_name;
-else lib_name = lib_selValue = prExtProg;','','',500,'name;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1412343423);
+else lib_name = lib_selValue = prExtProg;','','',500,'name;geomW;geomH;evProc;backColor;bordWidth;bordColor;bordStyle;',1413479593);
 INSERT INTO "wlb_Main" VALUES('accept','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAeCAIAAAATj48OAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADx0lEQVRYhe2X3W/bVBjGX9vHTh27+XCSJWlamvSLds0qsY1O2kDbQIML
 LiYViRX1DgkEUoS44KITEn8LAuUGcVcxCQbthgasWwordEALydZpLW3WNHbjJE7OsQ8XiQrctI0L
@@ -20738,11 +20789,11 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 }
 else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1408110037);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1412509434);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1413400277);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','
 ','
 ','
-',-1,5,'name;dscr;geomX;',1412509434);
+',-1,5,'name;dscr;geomX;',1413400277);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/ggraph','1','','..','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','doc','','root','
@@ -20753,8 +20804,8 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/doc','1','','/wlb_doc/wdg_docAlarm
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','mn','','root','
 ','
 ','
-',-1,5,'name;dscr;',1412509434);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1398168970);
+',-1,5,'name;dscr;',1413400277);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1413400277);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gcadr','','/wlb_Main/wdg_grpCadr','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gcadr','1','','..','','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gview','','/wlb_Main/wdg_ViewCadr','','','',-1,2,'evProc;pgGrp;','');
@@ -20782,8 +20833,8 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','grph_panel','','/wlb_Main/wdg
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','terminator','','/wlb_Main/wdg_terminator','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPasp','','/wlb_Main/wdg_cntrPasp','','','',-1,0,'pName;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','accept','','/wlb_Main/wdg_accept','','','',-1,0,'','');
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','10','','/wlb_Main/wdg_prescrRun','','','',-1,0,'pgNoOpenProc;prExtCurCom;prExtMode;prExtProg;prExtStartTm;prExtWork;',1375114385);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','11','','/wlb_Main/wdg_prescrEdit','','','',-1,0,'prExtComLs;',1412509434);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','10','','/wlb_Main/wdg_prescrRun','','','',-1,0,'pgNoOpenProc;prExtMode;prExtProg;prExtStartTm;prExtWork;prExtCurCom;',1413393636);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','11','','/wlb_Main/wdg_prescrEdit','','','',-1,0,'prExtComLs;',1413011073);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','graphSelPrm','','/wlb_Main/wdg_graphSelPrm','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','treeSelect','','/wlb_Main/wdg_treeSelect','','','',-1,0,'',1382881863);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/control','cntrPaspExt','','/wlb_Main/wdg_cntrPaspExt','','','',-1,0,'geomZ;pName;',1404219070);
@@ -22486,11 +22537,4 @@ INSERT INTO "Trs" VALUES('Comments','Коментарі','Комментарии
 INSERT INTO "Trs" VALUES('Time','Час','Время');
 INSERT INTO "Trs" VALUES('Select a program please','Оберіть будь ласка програму','Выберите пожалуйста программу');
 INSERT INTO "Trs" VALUES('Select a program','Оберіть програму','Выберите программу');
-CREATE TABLE 'prj_tmplSO_ses' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID"));
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so/pg_1/pg_mn/pg_10/wdg_prog','doc0','<body><i>Program: </i><br/>
-<table border=''1'' cellpadding=''2'' cellspacing=''0'' width=''100%''>
-<tr><th>#</th><th>Command</th><th>Comments</th><th>Time</th></tr>
-</table></body>');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so','0geomX','324');
-INSERT INTO "prj_tmplSO_ses" VALUES('/pg_so','0geomY','0');
 COMMIT;

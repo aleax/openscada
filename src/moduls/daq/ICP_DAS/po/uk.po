@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.ICP_DAS 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-30 17:32+0300\n"
+"POT-Creation-Date: 2014-10-16 20:50+0300\n"
 "PO-Revision-Date: 2009-10-22 13:05+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -15,7 +15,6 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: da_87x.cpp:43
 msgid ""
 "4mA to 20mA;-10V to 10V;-5V to 5V;-1V to 1V;-500mV to 500mV;-150mV to "
 "150mV;-20mA to 20mA;0mA to 20mA;"
@@ -23,7 +22,6 @@ msgstr ""
 "4мА до 20мА;-10В до 10В;-5В до 5В;-1В до 1В;-500мВ до 500мВ;-150мВ до "
 "150мВ;-20мВ to 20мВ;0мА до 20мА;"
 
-#: da_87x.cpp:48
 msgid ""
 "-15mV to +15mV;-50mV to +50mV;-100mV to +100mV;-500mV to +500mV;-1V to "
 "+1V;-2.5V to +2.5V;-20mA to +20mA (with 125 ohms resistor);-10V to +10V;-5V "
@@ -37,220 +35,169 @@ msgstr ""
 "резистором 125 ом);J Тип;K Тип;T Тип;E Тип;R Тип;S Тип;B Тип;N Тип;C Тип;L "
 "Тип;M Тип;L Тип (DIN43710C Тип)"
 
-#: da_87x.cpp:112
 msgid "Cold-Junction Compensation(CJC) temperature"
 msgstr "Температура компенсації холодних спаїв"
 
-#: da_87x.cpp:117 da_LP_8x.cpp:108 da_LP_8x.cpp:391
 #, c-format
 msgid "Input %d"
 msgstr "Вхід %d"
 
-#: da_87x.cpp:129
 #, c-format
 msgid "Out %d"
 msgstr "Вихід %d"
 
-#: da_87x.cpp:143 da_ISA.cpp:172 da_ISA.cpp:189 da_LP_8x.cpp:137
 #, c-format
 msgid "Digital input %d.%d"
 msgstr "Дискретний вхід %d.%d"
 
-#: da_87x.cpp:150 da_ISA.cpp:165 da_ISA.cpp:196 da_LP_8x.cpp:145
 #, c-format
 msgid "Digital out %d.%d"
 msgstr "Дискретний вихід %d.%d"
 
-#: da_87x.cpp:158
 #, c-format
 msgid "Counter %d"
 msgstr "Лічильник %d"
 
-#: da_87x.cpp:253 da_87x.cpp:300 da_87x.cpp:338
 msgid "10:Request to module error."
 msgstr "10:Помилка запиту до модуля."
 
-#: da_87x.cpp:338
 msgid "11:Respond from module error."
 msgstr "11:Помилка у відповіді модуля."
 
-#: da_87x.cpp:373
 msgid "CRC control"
 msgstr "Контроль CRC"
 
-#: da_87x.cpp:377
 msgid "AI number"
 msgstr "Кількість AI"
 
-#: da_87x.cpp:383
 msgid "AO number, #AAN(Data)"
 msgstr "Кількість AO, #AAN(Data)"
 
-#: da_87x.cpp:387
 msgid "DI number (ports x8)"
 msgstr "Кількість DI (порти x8)"
 
-#: da_87x.cpp:394
 msgid "DO number (ports x8)"
 msgstr "Кількість DO (порти x8)"
 
-#: da_87x.cpp:400
 msgid "Counters number, #AAN"
 msgstr "Кількість лічильників, #AAN"
 
-#: da_87x.cpp:404 da_87x.cpp:413 da_87x.cpp:426 da_87x.cpp:436 da_ISA.cpp:511
-#: da_LP_8x.cpp:385 da_LP_8x.cpp:397
 msgid "Configuration"
 msgstr "Конфігурація"
 
-#: da_87x.cpp:407
 #, c-format
 msgid "Input %d type"
 msgstr "Тип входу %d"
 
-#: da_87x.cpp:410
 msgid "Error;"
 msgstr "Помилка;"
 
-#: da_87x.cpp:415 da_87x.cpp:438
 msgid "Host watchdog timeout (s)"
 msgstr "Час хостового сторожового таймеру (с)"
 
-#: da_87x.cpp:416 da_87x.cpp:439
 msgid "Module"
 msgstr "Модуль"
 
-#: da_87x.cpp:418 da_87x.cpp:441
 msgid "Host watchdog status"
 msgstr "Стан хостового сторожового таймеру"
 
-#: da_87x.cpp:419 da_87x.cpp:442
 msgid "Power on values"
 msgstr "Значення при включені"
 
-#: da_87x.cpp:420 da_87x.cpp:443
 msgid "Set power on values from current"
 msgstr "Встановити значення при включені у поточні"
 
-#: da_87x.cpp:421 da_87x.cpp:444
 msgid "Safe values"
 msgstr "Безпечні значення"
 
-#: da_87x.cpp:422 da_87x.cpp:445
 msgid "Set safe values from current"
 msgstr "Встановити безпечні значення у поточні"
 
-#: da_87x.cpp:431 da_ISA.cpp:540 da_LP_8x.cpp:402
 #, c-format
 msgid "DI %d reverse"
 msgstr "DI %d, реверс"
 
-#: da_87x.cpp:432 da_ISA.cpp:541 da_LP_8x.cpp:403
 #, c-format
 msgid "DO %d reverse"
 msgstr "DO %d, реверс"
 
-#: da_87x.cpp:492 da_87x.cpp:564
 msgid "Set. "
 msgstr "Встановлений. "
 
-#: da_87x.cpp:492 da_87x.cpp:564
 msgid "Clear. "
 msgstr "Чистий. "
 
-#: da_87x.cpp:498 da_87x.cpp:570
 msgid "Enabled, "
 msgstr "Включений, "
 
-#: da_87x.cpp:498 da_87x.cpp:570
 msgid "Disabled, "
 msgstr "Виключений, "
 
-#: da_87x.cpp:499 da_87x.cpp:571
 msgid " s."
 msgstr " с."
 
-#: da_87x.cpp:511 da_87x.cpp:526 da_87x.cpp:580 da_87x.cpp:596
 msgid "Error"
 msgstr "Помилка"
 
-#: da_ISA.cpp:118
 #, c-format
 msgid "Analog input %d"
 msgstr "Аналоговий вхід %d"
 
-#: da_ISA.cpp:132
 #, c-format
 msgid "Analog output %d"
 msgstr "Аналоговий вихід %d"
 
-#: da_ISA.cpp:516
 msgid "Analog input settle timeout (us)"
 msgstr "Час встановлення аналогового входу (мкс)"
 
-#: da_ISA.cpp:519
 #, c-format
 msgid "AI %d gain"
 msgstr "AI %d підсилення"
 
-#: da_ISA.cpp:526
 #, c-format
 msgid "Channel %d out"
 msgstr "Канал %d вихід"
 
-#: da_ISA.cpp:530
 #, c-format
 msgid "IO %d reverse"
 msgstr "IO %d, реверс"
 
-#: da_LP_8x.cpp:96
 msgid "Serial number"
 msgstr "Серійний номер"
 
-#: da_LP_8x.cpp:97
 msgid "SDK version"
 msgstr "Версія SDK"
 
-#: da_LP_8x.cpp:98
 msgid "DIP switch"
 msgstr "DIP перемикач"
 
-#: da_LP_8x.cpp:99
 msgid "Rotary switch"
 msgstr "Поворотний перемикач"
 
-#: da_LP_8x.cpp:112
 #, c-format
 msgid "H/A %d"
 msgstr ""
 
-#: da_LP_8x.cpp:114
 #, c-format
 msgid "L/A %d"
 msgstr ""
 
-#: da_LP_8x.cpp:122
 #, c-format
 msgid "Output %d"
 msgstr "Вихід %d"
 
-#: da_LP_8x.cpp:387
 msgid "Process parameters"
 msgstr "Обробка параметрів"
 
-#: da_LP_8x.cpp:388
 msgid "Fast data get period (s)"
 msgstr "Період швидкого збору даних (с)"
 
-#: da_LP_8x.cpp:388
 msgid "Use 0 for disable"
 msgstr "Використати 0 для вимкнення"
 
-#: da_LP_8x.cpp:389
 msgid "Mode"
 msgstr "Режим"
 
-#: da_LP_8x.cpp:394
 msgid ""
 "-10V to +10V;-5V to +5V;-2.5V to +2.5V;-1.25V to +1.25V;-20mA to +20mA (with "
 "125 ohms resistor)"
@@ -258,15 +205,12 @@ msgstr ""
 "-10В до +10В;-5В до +5В;-2.5В до +2.5В;-1.25В до +1.25В;-20мА до +20мА (з "
 "резистором 125 ом)"
 
-#: ICP_module.cpp:40
 msgid "ICP DAS hardware"
 msgstr "Обладнання ICP DAS"
 
-#: ICP_module.cpp:44
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: ICP_module.cpp:45
 msgid ""
 "Allow implementation for 'ICP DAS' hardware support. Include main I-87xxx "
 "DCON modules, I-8xxx fast modules and boards on ISA bus."
@@ -274,23 +218,18 @@ msgstr ""
 "Надає реалізацію підтримки обладнання 'ICP DAS'. Включає підтримку основних "
 "I-87xxx DCON модулів, I-8xxx швидких модулів та плат на шині ISA."
 
-#: ICP_module.cpp:104
 msgid "Parameteres table"
 msgstr "Таблиця параметрів"
 
-#: ICP_module.cpp:105
 msgid "Acquisition schedule"
 msgstr "Планування опитування"
 
-#: ICP_module.cpp:106
 msgid "Gather task priority"
 msgstr "Пріоритет задачі збору даних"
 
-#: ICP_module.cpp:107
 msgid "Bus"
 msgstr "Шина"
 
-#: ICP_module.cpp:108
 msgid ""
 "ISA;COM 1 (Master LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;"
 "COM 9;COM 10"
@@ -298,139 +237,111 @@ msgstr ""
 "ISA;COM 1 (Мастер LP-8xxx);COM 1;COM 2;COM 3;COM 4;COM 5;COM 6;COM 7;COM 8;"
 "COM 9;COM 10"
 
-#: ICP_module.cpp:109
 msgid "Transport"
 msgstr "Транспорт"
 
-#: ICP_module.cpp:110
 msgid "Baudrate"
 msgstr "Швидкість"
 
-#: ICP_module.cpp:113
 msgid "LinPAC parameters"
 msgstr "Параметри LinPAC"
 
-#: ICP_module.cpp:114
 msgid "Serial request tries"
 msgstr "Спроб послід. запитів"
 
-#: ICP_module.cpp:117
 msgid "Standard"
 msgstr "Стандарт"
 
-#: ICP_module.cpp:118
 msgid "Module type"
 msgstr "Тип модуля"
 
-#: ICP_module.cpp:119
 msgid "Module address"
 msgstr "Адреса модуля"
 
-#: ICP_module.cpp:120
 msgid "Module slot"
 msgstr "Слот модуля"
 
-#: ICP_module.cpp:121
 msgid "Module addition parameters"
 msgstr "Додаткові параметри модуля"
 
-#: ICP_module.cpp:191
 msgid "Call now. "
 msgstr "Виклик зараз. "
 
-#: ICP_module.cpp:192
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Виклик за періодом: %s. "
 
-#: ICP_module.cpp:193
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Наступний виклик за cron '%s'. "
 
-#: ICP_module.cpp:194
 #, c-format
 msgid "Spent time: %s. Serial requests %g, errors %g. "
 msgstr "Витрачено часу: %s. Послід. запитів %g, помилок %g. "
 
-#: ICP_module.cpp:211
 msgid "Open All LP-slots error."
 msgstr "Помилка відкриття всіх LP-слотів."
 
-#: ICP_module.cpp:212
 msgid "Open LP-slot 9 error."
 msgstr "Помилка відкриття LP-слоту 9."
 
-#: ICP_module.cpp:222
 #, c-format
 msgid "Open COM%d port error."
 msgstr "Помилка відкриття COM%d порту."
 
-#: ICP_module.cpp:337
+#, c-format
 msgid "Set watchdog to %d ms."
 msgstr "Встановлення watchdog у %d мс."
 
-#: ICP_module.cpp:362
 #, c-format
 msgid "REQ -> '%s'"
 msgstr "Запит -> '%s'"
 
-#: ICP_module.cpp:389
 msgid "13:Error respond: Not full."
 msgstr "13:Помилка відповіді: Не повна."
 
-#: ICP_module.cpp:394
 msgid "21:Invalid module CRC."
 msgstr "21:Помилка контрольної суми."
 
-#: ICP_module.cpp:398 ICP_module.cpp:419
 #, c-format
 msgid "RESP -> '%s'"
 msgstr "Відпов. -> '%s'"
 
-#: ICP_module.cpp:404 ICP_module.cpp:424
 #, c-format
 msgid "ERR -> '%s': %s"
 msgstr "Помилка -> '%s': %s"
 
-#: ICP_module.cpp:422
 #, c-format
 msgid "13:Send_Receive_Cmd() error: %d."
 msgstr "13:Send_Receive_Cmd() помилка: %d."
 
-#: ICP_module.cpp:446
 msgid "Watchdog timeout (s)"
 msgstr "Час сторожового таймеру (с)"
 
-#: ICP_module.cpp:496
+msgid "Set to zero for the watchdog disable."
+msgstr "Встановити у нуль для вимкнення сторожового таймеру."
+
 msgid "No a device selected."
 msgstr "Жодного пристрою не обрано."
 
-#: ICP_module.cpp:603
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр вимкнено."
 
-#: ICP_module.cpp:604
 msgid "2:Acquisition is stopped."
 msgstr "2:Збір зупинено."
 
-#: ICP_module.cpp:636
 #, c-format
 msgid "Write value to attribute '%s' error: %s"
 msgstr "Помилка запису значення до атрибуту '%s': %s"
 
-#: ICP_module.cpp:677
 msgid "<No select>"
 msgstr "<Не обрано>"
 
-#: da_87x.h:67
 msgid "I-8700, I-7000 serial bus"
 msgstr "I-8700, I-7000 послідовна шина"
 
-#: da_ISA.h:45
 msgid "ISA DAQ boards"
 msgstr "ISA DAQ плати"
 
-#: da_LP_8x.h:41
 msgid "LP-8000, I-8000 parallel bus"
 msgstr "LP-8000, I-8000 паралельна шина"

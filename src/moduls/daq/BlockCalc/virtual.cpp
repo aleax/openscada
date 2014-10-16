@@ -171,6 +171,7 @@ Contr::~Contr( )
 
 TCntrNode &Contr::operator=( TCntrNode &node )
 {
+    string storBlkShTbl = cfg("BLOCK_SH");
     Contr *src_n = dynamic_cast<Contr*>(&node);
     if(src_n) {
 	//Blocks copy
@@ -188,6 +189,9 @@ TCntrNode &Contr::operator=( TCntrNode &node )
     }
 
     TController::operator=(node);
+
+    //Blocks DB table propose instead copy
+    cfg("BLOCK_SH") = storBlkShTbl;
 
     return *this;
 }
@@ -283,10 +287,10 @@ void Contr::disable_( )
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
 	if(blkAt(lst[i_l]).at().enable())
 	    try{ blkAt(lst[i_l]).at().setEnable(false); }
-		catch(TError err) {
-		    mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
-		    mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
-		}
+	    catch(TError err) {
+		mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
+		mess_warning(nodePath().c_str(),_("Enable block '%s' error."),lst[i_l].c_str());
+	    }
 }
 
 void Contr::start_( )
@@ -335,7 +339,7 @@ void Contr::stop_( )
     if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
     run_st = false;
 
-    //> Make deprocess all blocks
+    //Make deprocess all blocks
     vector<string> lst;
     blkList(lst);
     for(unsigned i_l = 0; i_l < lst.size(); i_l++)
@@ -515,20 +519,20 @@ Prm::Prm( string name, TTipParam *tp_prm ) :
 
 }
 
-Prm::~Prm()
+Prm::~Prm( )
 {
     nodeDelAll();
 }
 
 void Prm::postEnable( int flag )
 {
-    TParamContr::postEnable( flag );
+    TParamContr::postEnable(flag);
     if(!vlElemPresent(&v_el))	vlElemAtt(&v_el);
 }
 
 Contr &Prm::owner( )	{ return (Contr&)TParamContr::owner( ); }
 
-void Prm::enable()
+void Prm::enable( )
 {
     if(enableStat())	return;
     string ioLs = cfg("IO").getS();
@@ -554,6 +558,7 @@ void Prm::enable()
     int io, if_off, id_off;
     string mio, ioaddr, ioblk, ioid, aid, anm;
     for(int io_off = 0; (mio=TSYS::strParse(ioLs,0,"\n",&io_off)).size(); ) {
+	if(mio[0] == '#') continue;
 	if_off = id_off = 0;
 	ioaddr = TSYS::strParse(mio,0,":",&if_off);
 	ioblk  = TSYS::strParse(ioaddr,0,".",&id_off);
@@ -619,7 +624,7 @@ void Prm::enable()
     TParamContr::enable();
 }
 
-void Prm::disable()
+void Prm::disable( )
 {
     if(!enableStat())  return;
 
@@ -704,6 +709,7 @@ void Prm::cntrCmdProc( XMLNode *opt )
     //Process command to page
     string a_path = opt->attr("path");
     if(a_path == "/prm/cfg/IO" && ctrChkNode(opt,"SnthHgl",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
+	opt->childAdd("rule")->setAttr("expr","^#[^\n]*")->setAttr("color","gray")->setAttr("font_italic","1");
 	opt->childAdd("rule")->setAttr("expr","^\\*[sirb]\\.[^\\:]*")->setAttr("color","darkorange");
 	opt->childAdd("rule")->setAttr("expr","^.*\\.[^\\:]*")->setAttr("color","darkblue");
 	opt->childAdd("rule")->setAttr("expr","\\:")->setAttr("color","blue");

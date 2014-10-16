@@ -538,7 +538,7 @@ INSERT INTO "lib_Controllers_io" VALUES('prescr','mode','Mode: Finish(-2); Error
 INSERT INTO "lib_Controllers_io" VALUES('prescr','curMode','Current mode',1,0,'',0,9,'Текущий режим','','Поточний режим','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','prog','Name of selected programm',0,1,'',0,10,'Имя выбранной программы','','Ім''я обраної програми','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','startTm','Start time (seconds)',1,0,'',0,11,'Время запуска (секунды)','','Час запуску (секунди)','');
-INSERT INTO "lib_Controllers_io" VALUES('prescr','curCom','Current command-step',1,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','');
+INSERT INTO "lib_Controllers_io" VALUES('prescr','curCom','Current command-step',0,0,'',0,12,'Текущая комманда-шаг','','Поточна команда-крок','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','work','Work programm',4,0,'',0,13,'Рабочая программа','','Робоча програма','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','comsCntr','Commands controller',0,0,'',0,7,'Контроллер команд','','Контролер команд','');
 INSERT INTO "lib_Controllers_io" VALUES('prescr','comLs','Commands list',4,0,'',0,14,'Список команд','','Перелік команд','');
@@ -1279,10 +1279,18 @@ INSERT INTO "prescr_val" VALUES('dbComs','PrescrComs');
 INSERT INTO "prescr_val" VALUES('dbProgs','PrescrProgs');
 INSERT INTO "prescr_val" VALUES('mode','-2');
 INSERT INTO "prescr_val" VALUES('curMode','-2');
-INSERT INTO "prescr_val" VALUES('prog','');
-INSERT INTO "prescr_val" VALUES('startTm','1372173007');
+INSERT INTO "prescr_val" VALUES('prog','abcd');
+INSERT INTO "prescr_val" VALUES('startTm','1413479709');
 INSERT INTO "prescr_val" VALUES('curCom','3');
-INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg>
+INSERT INTO "prescr_val" VALUES('work','<XMLNodeObj:prg comCur="1" comN="" comPath="" name="abcd" seekPos="1" wtm="52">
+<XMLNodeObj:com arg1="5" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;" rez="1:Waiting 5s expired" tm="1413479709">
+</XMLNodeObj:com>
+<XMLNodeObj:com arg1="10" arg2="0" arg3="0" arg4="0" arg5="0" descr="Таймер уровень 1" id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.1" proc="&lt;EVAL&gt;" rez="1:Waiting 10s expired" tm="1413479715">
+<XMLNodeObj:com arg1="15" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" name="Таймер ур.2" proc="&lt;EVAL&gt;" rez="1:Waiting 15s expired" tm="1413479725">
+</XMLNodeObj:com>
+</XMLNodeObj:com>
+<XMLNodeObj:com arg1="20" arg2="0" arg3="0" arg4="0" arg5="0" descr="Typical timer. Hold run up to time elapse." id="Timer" labArg1="Time (s)" labArg2="&lt;EVAL&gt;" labArg3="&lt;EVAL&gt;" labArg4="&lt;EVAL&gt;" labArg5="&lt;EVAL&gt;" proc="&lt;EVAL&gt;" rez="1:Waiting 20s expired" tm="1413479741">
+</XMLNodeObj:com>
 </XMLNodeObj:prg>
 ');
 INSERT INTO "prescr_val" VALUES('comsCntr','LogicLev.prescription');
@@ -1299,7 +1307,7 @@ INSERT INTO "prescr_val" VALUES('comLs','<TVarObj>
 </TVarObj>
 </TVarObj>
 ');
-INSERT INTO "prescr_val" VALUES('clcCnt','10163296');
+INSERT INTO "prescr_val" VALUES('clcCnt','10281614');
 CREATE TABLE 'techApp' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '' ,"FORMULA" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "techApp" VALUES('lag','Lag','Lag model. You can use this for sensors'' variables lag imitation.',10,'out-=(out-in)/(t_lg*f_frq);','Затримка','Модель затримки. Може використовуватися для імітації запізнення значень давачів.','Запаздывание','Модель задержки. Может использоваться для имитации запаздывания
 значений датчиков.
@@ -2489,12 +2497,17 @@ if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
 		//Parse program and insert procedure text and argument''s labels
 		work.load(rez[1][0]);
 		work.setAttr("name",prog);
-		for(i_c = 0; i_c < work.childSize(); i_c++) {
-			comId = work.childGet(i_c).attr("id");
+		for(comElN = work, comPos = 0; true; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) { comPos = comElN.attr("seekPos").toInt(); continue; }
+				break;
+			}
+			comElI = comElN.childGet(comPos);
+			comId = comElI.attr("id");
 			if(comLs[comId].isEVal())	continue;
-			work.childGet(i_c).setAttr("proc",comLs[comId].proc);
-			for(i_a = 1; i_a <= 5; i_a++)
-				work.childGet(i_c).setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
+			comElI.setAttr("proc",comLs[comId].proc);
+			for(i_a = 1; i_a <= 5; i_a++) comElI.setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
+			if(comElI.childSize()) { comElN.setAttr("seekPos",comPos); comElN = comElI; comPos = -1; }
 		}
 	}
 	else prog = "";
@@ -2531,6 +2544,16 @@ else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode ==
 //Call program
 if(curMode == 1 || curMode == 2) {
 	prog = work.attr("name");
+
+	//Curent node at levels obtain
+	curComNd = work;
+	for(curComLev = 0, curComPos = 0, off = 0; curComNd && (tVl=curCom.parse(0,":",off)).length; curComLev++, curComPos = tVl.toInt())
+		curComNd = curComNd.childGet(tVl.toInt());
+	if(!curComNd) {
+		SYS.messInfo("uprg"+prog,tr("No current node present")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+		curMode = mode = -3;
+	}
+	curComNd = curComNd.parent();
 
 	//Internal commands call
 	if(!comCntrO) {
@@ -2610,25 +2633,24 @@ if(curMode == 1 || curMode == 2) {
 	//External commands call
 	else {
 		// Get current command parameter-object		
+		toNext = false;
 		curComPrm = EVAL_BOOL;
-		if(curCom >= 0 && curCom < work.childSize()) {
-			if(!(comId=comLs[work.childGet(curCom).attr("id")]).isEVal())	curComPrm = comCntrO["prm_"+comId.prmID];
+		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
 			if(curComPrm.isEVal()) {
 				curMode = mode = -1;
-				work.childGet(curCom).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
+				curComNd.childGet(curComPos).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
 				return;
 			}
 		}
-
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
-			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
+		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
+			curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
 			curComPrm.run.set(false);
-			curCom++;
 			mode = curMode;
-			return;
+			toNext = true;
 		}
-		if(curCom >= 0 && curCom < work.childSize()) {
-			comEl = work.childGet(curCom);
+		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			comEl = curComNd.childGet(curComPos);
 			//Stop process
 			if(mode == 0) {
 				comEl.setAttr("rez","-12:"+tr("Program terminated"));
@@ -2640,7 +2662,6 @@ if(curMode == 1 || curMode == 2) {
 					cLi.start.set(false);
 					cLi.abort.set(true);
 				}
-
 				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
 				curMode = mode = -3;
 			}
@@ -2648,7 +2669,7 @@ if(curMode == 1 || curMode == 2) {
 			else {
 				// Start command
 				if(!comEl.attr("tm").length) {
-					curComPrm.run.set(0);	//Stop for possible background call
+					curComPrm.run.set(false);	//Stop for possible background call
 					comEl.setAttr("tm",SYS.time());
 					for(i_a = 1; i_a <= 5; i_a++)
 						if(!(comA=curComPrm["arg"+i_a]).isEVal())
@@ -2656,39 +2677,64 @@ if(curMode == 1 || curMode == 2) {
 					curComPrm.rez.set(0);
 					curComPrm.run.set(true);
 				}
-
 				//Update steps status, up to current comand
-				comTo = min(curCom+1,work.childSize());
-				for(i_c = 0; i_c < comTo; i_c++) {
-					comElI = work.childGet(i_c);
-					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
-					if(i_c < curCom && !(curComPI.run.get() && 
-						comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))	continue;
-					rez = curComPI.rez.get();
-					if(i_c == curCom && rez.toInt() > 0) curCom++;
-					if(rez.toInt() < 0) {
-						// Stop all typical and call "error" command
-						var cL = comCntrO.nodeList("prm_");
-						for(i_c = 0; i_c < cL.length; i_c++) {
-							var cLi = comCntrO[cL[i_c]];
-							cLi.run.set(false);
-							cLi.start.set(false);
-							cLi.error.set(true);
+				for(comElN = work, comPos = 0, comLev = 0, comCur = true; true; comPos++) {
+					if(comPos >= comElN.childSize()) {
+						if((comElN=comElN.parent())) {
+							comLev--;
+							comPos = comElN.attr("seekPos").toInt();
+							comCur = comElN.attr("comCur").toInt();
+							continue;
 						}
-
-						SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-						curMode = mode = -1;
+						break;
 					}
-					comElI.setAttr("rez",rez);
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPI["arg"+i_a]).isEVal())
-							comElI.setAttr("arg"+i_a, comA.get());
+					comElI = comElN.childGet(comPos);
+					isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
+					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
+					if(isCurCmd || (curComPI.run.get() && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))
+					{
+						rez = curComPI.rez.get();
+						if(isCurCmd && rez.toInt() > 0) toNext = true;
+						if(rez.toInt() < 0) {
+							// Stop all typical and call "error" command
+							var cL = comCntrO.nodeList("prm_");
+							for(i_c = 0; i_c < cL.length; i_c++) {
+								var cLi = comCntrO[cL[i_c]];
+								cLi.run.set(false);
+								cLi.start.set(false);
+								cLi.error.set(true);
+							}
+							SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+							curMode = mode = -1;
+						}
+						comElI.setAttr("rez",rez);
+						for(i_a = 1; i_a <= 5; i_a++)
+							if(!(comA=curComPI["arg"+i_a]).isEVal())
+								comElI.setAttr("arg"+i_a, comA.get());
+					}
+					if(isCurCmd) break;
+					if(comElI.childSize()) {
+						comElN.setAttr("seekPos",comPos);
+						comElN.setAttr("comCur",comCur);
+						comElN = comElI;
+						comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
+						comPos = -1; comLev++;
+					}
 				}
 			}
 		}
+
+		// Go to next step
+		if(toNext) {
+			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
+			else if((++curComPos) >= curComNd.childSize())
+			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
+			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
+			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
+		}
 		
 		//End call
-		if(curCom < 0 || curCom >= work.childSize()) {
+		if(curComLev <= 0) {
 			// Stop all typical and call "stop" command
 			var cL = comCntrO.nodeList("prm_");
 			for(i_c = 0; i_c < cL.length; i_c++) {
@@ -2704,7 +2750,7 @@ if(curMode == 1 || curMode == 2) {
 			//Place to program last execution time
 			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
 			if(rez.length > 1) {
-				//Parse programm and insert procedure text and argument''s labels to here
+				//Parse program and insert procedure text and argument''s labels to here
 				comTree = SYS.XMLNode("prg");
 				comTree.load(rez[1][0]);
 				comTree.setAttr("wtm",SYS.time()-startTm);
@@ -2713,7 +2759,7 @@ if(curMode == 1 || curMode == 2) {
 		}
 	}
 }
-mode = curMode;','','',1412326668);
+mode = curMode;','','',1413479420);
 INSERT INTO "lib_Controllers" VALUES('test','test','','','','','',10,'using Special.FLibSYS;
 
 out+=10;
@@ -6104,4 +6150,5 @@ INSERT INTO "Trs" VALUES('Command miss: ','Відсутня команда: ','�
 INSERT INTO "Trs" VALUES('Waiting %1s expired','Очікування %1с вичерпано','Ожидание %1c исчерпано');
 INSERT INTO "Trs" VALUES('Waiting %1s','Очікування %1с','Ожидание %1c');
 INSERT INTO "Trs" VALUES('Background waiting %1s','Фонове очікування %1с','Фоновое ожидание %1c');
+INSERT INTO "Trs" VALUES('No current node present','','');
 COMMIT;

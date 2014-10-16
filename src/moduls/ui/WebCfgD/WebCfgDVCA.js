@@ -866,7 +866,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		dBlk.childNodes[1].appendChild(table);
 		cBlk.appendChild(dBlk);
 
-		table.setElements = function()	// (1)
+		table.setElements = function()
 		{
 		    for(var i_col = 0; i_col < this.srcNode.childNodes.length; i_col++) {
 			var prcCol = this.srcNode.childNodes[i_col];
@@ -1209,6 +1209,7 @@ function selectChildRecArea( node, aPath, cBlk )
 		    }
 		    if(table.childNodes[i_rw].childNodes.length) setNodeText(table.childNodes[i_rw].childNodes[0],i_rw?i_rw:'#');
 		}
+		table.srcNode = t_s;
 		table.setElements();
 		table.parentNode.style.height = Math.min(300,Math.max(100,table.clientHeight))+'px';
 	    }

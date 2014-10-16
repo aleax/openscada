@@ -593,8 +593,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 			string c_path = "", c_el;
 
 			opt->childAdd("el")->setText(c_path);
-			for(int c_off = 0; (c_el=TSYS::strSepParse(lnk,0,'.',&c_off)).size(); ++c_lv)
-			{
+			for(int c_off = 0; (c_el=TSYS::strSepParse(lnk,0,'.',&c_off)).size(); ++c_lv) {
 			    c_path += c_lv ? "."+c_el : c_el;
 			    opt->childAdd("el")->setText(c_path);
 			}
@@ -604,11 +603,9 @@ void Block::cntrCmdProc( XMLNode *opt )
 			string prm1 = TSYS::strSepParse(lnk, 1, '.');
 			string prm2 = TSYS::strSepParse(lnk, 2, '.');
 
-			switch(m_lnk[id].tp)
-			{
+			switch(m_lnk[id].tp) {
 			    case I_LOC: case O_LOC:
-				switch(c_lv)
-				{
+				switch(c_lv) {
 				    case 0: owner().blkList(list); break;
 				    case 1:
 					if(owner().blkPresent(prm0) && owner().blkAt(prm0).at().func())
@@ -617,8 +614,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 				}
 				break;
 			    case I_GLB: case O_GLB:
-				switch(c_lv)
-				{
+				switch(c_lv) {
 				    case 0: owner().owner().list(list); break;
 				    case 1:
 					if(owner().owner().present(prm0))
