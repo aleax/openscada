@@ -3309,8 +3309,8 @@ tErr = "";
 
 //Connect to source
 if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
-if(!srcPrm) { tErr = "No connection to source object"; alLev = 3; }
-else if(srcPrm.err.get() != 0)	 { tErr = "Source error: "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
 else {
 	//Attributes list get and "items" update
 	nLst = srcPrm.nodeList("a_");
@@ -3335,53 +3335,53 @@ else {
 
 	//Alarms process and mark
 	varS = "ups_status";
-	if(tP=srcPrm[varS]) {
-		if(tP.get() == "OB")	{ items[varS].alarm = 1; tErr += "Status \"On battery\"; "; }
-		else if(tP.get() == "LB")	{ items[varS].alarm = 2; tErr += "Status \"Low battery\"; "; }
-		else if(tP.get() == "SD")	{ items[varS].alarm = 2; tErr += "Status \"Shutdown load\"; "; }
-		else if(tP.get().indexOf("ALARM") != -1)	{ items[varS].alarm = 2; tErr += "Status \"ALARM\"; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get() == "OB")	{ items[varS].alarm = 1; tErr += tr("Status")+" \""+tr("On battery")+"\"; "; }
+		else if(tP.get() == "LB")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Low battery")+"\"; "; }
+		else if(tP.get() == "SD")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Shutdown load")+"\"; "; }
+		else if(tP.get().indexOf("ALARM") != -1)	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("ALARM")+"\"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_packs";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += "None good battery present; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None good battery present")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_charge";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toReal() < 20) { items[varS].alarm = 1; tErr += "Battery charge low; "; }
-		else if(tP.get().toReal() < 5) { items[varS].alarm = 2; tErr += "Battery charge critical; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() < 20) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
+		else if(tP.get().toReal() < 5) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "battery_packs_bad";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toInt())	{ items[varS].alarm = 1; tErr += "Bad "+tP.get().toInt()+" batteries present"; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toInt())	{ items[varS].alarm = 1; tErr += tr("Bad %1 batteries present").replace("%1",tP.get().toInt()); }
 		else items[varS].alarm = 0;
 	}
 	varS = "input_voltage";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toReal() < 210) { items[varS].alarm = 1; tErr += "Input voltage low; "; }
-		else if(tP.get().toReal() > 250) { items[varS].alarm = 1; tErr += "Input voltage high; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() > 10 && tP.get().toReal() < 210) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
+		else if(tP.get().toReal() > 250) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "input_frequency";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toReal() < 40) { items[varS].alarm = 2; tErr += "Input frequency too low; "; }
-		else if(tP.get().toReal() > 60) { items[varS].alarm = 2; tErr += "Input frequency too high; "; }
-		else if(tP.get().toReal() < 45) { items[varS].alarm = 1; tErr += "Input frequency low; "; }
-		else if(tP.get().toReal() > 55) { items[varS].alarm = 1; tErr += "Input frequency high; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() < 40) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
+		else if(tP.get().toReal() > 60) { items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
+		else if(tP.get().toReal() < 45) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
+		else if(tP.get().toReal() > 55) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "ups_load";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toReal() > 100)			{ items[varS].alarm = 2; tErr += "UPS overloaded; "; }
-		else if(tP.get().toReal() > 80)	{ items[varS].alarm = 1; tErr += "UPS load high; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() > 100)			{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
+		else if(tP.get().toReal() > 80)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 	varS = "ups_temperature";
-	if(tP=srcPrm[varS]) {
-		if(tP.get().toReal() > 70) { items[varS].alarm = 2; tErr += "UPS overheated; "; }
-		else if(tP.get().toReal() > 50) { items[varS].alarm = 1; tErr += "Temperature high; "; }
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() > 70) { items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
+		else if(tP.get().toReal() > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
 		else items[varS].alarm = 0;
 	}
 
@@ -3405,8 +3405,8 @@ tErr = tErr.length ? ""+alLev+":"+tErr : "0";
 if(tErr.toInt() && tErr.toInt() != f_err.toInt())
 	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
 else if(f_err.toInt() && !tErr.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','','',1403717899);
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1413790827);
 INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,'JavaLikeCalc.JavaScript
 using Special.FLibSYS;
 
@@ -6150,5 +6150,26 @@ INSERT INTO "Trs" VALUES('Command miss: ','Відсутня команда: ','�
 INSERT INTO "Trs" VALUES('Waiting %1s expired','Очікування %1с вичерпано','Ожидание %1c исчерпано');
 INSERT INTO "Trs" VALUES('Waiting %1s','Очікування %1с','Ожидание %1c');
 INSERT INTO "Trs" VALUES('Background waiting %1s','Фонове очікування %1с','Фоновое ожидание %1c');
-INSERT INTO "Trs" VALUES('No current node present','','');
+INSERT INTO "Trs" VALUES('No current node present','Поточний вузол відсутній','Текущий узел отсутствует');
+INSERT INTO "Trs" VALUES('No connection to source object','Немає з''єднання із об''єктом джерела','Нет подключения с объектом источника');
+INSERT INTO "Trs" VALUES('Source error','Помилка джерела','Ошибка источника');
+INSERT INTO "Trs" VALUES('Status','Статус','Статус');
+INSERT INTO "Trs" VALUES('On battery','Від батареї','От батареи');
+INSERT INTO "Trs" VALUES('Low battery','Батарею розряджено','Батарея разряжена');
+INSERT INTO "Trs" VALUES('Shutdown load','Скид навантаження','Сброс нагрузки');
+INSERT INTO "Trs" VALUES('ALARM','АВАРІЯ','АВАРИЯ');
+INSERT INTO "Trs" VALUES('None good battery present','Відсутні хорощі батареї','Отсутствуют хорошие батареи');
+INSERT INTO "Trs" VALUES('Battery charge low','Низький заряд батареї','Низкий заряд батареи');
+INSERT INTO "Trs" VALUES('Battery charge critical','Критичний заряд батареї','Критический заряд батареи');
+INSERT INTO "Trs" VALUES('Bad %1 batteries present','Зіпсованих батарей %1','Испорченных батарей %1');
+INSERT INTO "Trs" VALUES('Input voltage low','Низька вхідна напруга','Низкое входное напряжение');
+INSERT INTO "Trs" VALUES('Input voltage high','Висока вхідна напруга','Высокое входное напряжение');
+INSERT INTO "Trs" VALUES('Input frequency too low','Дуже низька вхідна частота','Очень низкая входная частота');
+INSERT INTO "Trs" VALUES('Input frequency too high','Дуже висока вхідна частота','Очень высокая входная частота');
+INSERT INTO "Trs" VALUES('Input frequency low','Низька вхідна частота','Низкая входная частота');
+INSERT INTO "Trs" VALUES('Input frequency high','Висока вхідна частота','Высокая входная частота');
+INSERT INTO "Trs" VALUES('UPS overloaded','ДБЖ перевантажено','ИБП перегружено');
+INSERT INTO "Trs" VALUES('UPS load high','Високе навантаження ДБЖ','Высокая нагрузка ИБП');
+INSERT INTO "Trs" VALUES('UPS overheated','ДБЖ перегрітий','ИБП перегретый');
+INSERT INTO "Trs" VALUES('Temperature high','Висока температура','Высокая температура');
 COMMIT;

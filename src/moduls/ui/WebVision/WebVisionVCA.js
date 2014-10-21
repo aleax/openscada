@@ -32,8 +32,7 @@ function strEncode( vl, tp )
     var encRez = '';
     if(!tp || tp == "html")
 	for(var i_enc = 0; i_enc < vl.length; i_enc++)
-	    switch(vl.charAt(i_enc))
-	    {
+	    switch(vl.charAt(i_enc)) {
 		case '&': encRez += '&amp;'; break;
 		case '>': encRez += '&gt;'; break;
 		case '<': encRez += '&lt;'; break;
@@ -54,8 +53,7 @@ function pathLev( path, level, scan )
     var t_dir;
     while(an_dir < path.length && path.charAt(an_dir) == '/') an_dir++;
     if(an_dir >= path.length) return '';
-    while(true)
-    {
+    while(true) {
 	t_dir = path.indexOf('/',an_dir);
 	if(t_dir < 0)		{ pathLev.off = path.length; return (t_lev==level)?path.substr(an_dir):''; }
 	if(t_lev == level)	{ pathLev.off = t_dir; return path.substr(an_dir,t_dir-an_dir); }
@@ -64,6 +62,7 @@ function pathLev( path, level, scan )
 	while(an_dir<path.length && path.charAt(an_dir)=='/') an_dir++;
     }
 }
+
 /***************************************************
  * noSpace - Get no space string                   *
  ***************************************************/
@@ -74,6 +73,7 @@ function noSpace( str )
 	if(str[i] != ' ') { if(posSt<0) posSt = i; posEnd = i; }
     return (posSt>=0) ? str.substr(posSt,posEnd-posSt+1) : '';
 }
+
 /***************************************************
  * nodeText - Get DOM node text                    *
  ***************************************************/
@@ -84,6 +84,7 @@ function nodeText( node )
 	if(node.childNodes[i].nodeType == 3) rez += node.childNodes[i].data;
     return rez;
 }
+
 /***************************************************
  * setNodeText - Set DOM node text                 *
  ***************************************************/
@@ -95,6 +96,7 @@ function setNodeText( node, val )
 	{ node.childNodes[i].data = val; return; }
     node.appendChild(node.ownerDocument.createTextNode(val));
 }
+
 /*****************************************************
  * nodeTextByTagId - Get DOM node by tag name and id *
  *****************************************************/
@@ -105,14 +107,14 @@ function nodeTextByTagId( node, tag, avl )
 	    return nodeText(node.childNodes[i]);
     return '';
 }
+
 /***************************************************
  * posGetX - Get absolute position                 *
  **************************************************/
 function posGetX(obj,noWScrl)
 {
     var posX = 0;
-    for( ; obj && obj.nodeName != 'BODY'; obj = obj.parentNode)
-    {
+    for( ; obj && obj.nodeName != 'BODY'; obj = obj.parentNode) {
 	posX += (obj.style.left?parseInt(obj.style.left):0)+
 	    (obj.parentNode.style.borderLeftWidth?parseInt(obj.parentNode.style.borderLeftWidth):0)+
 	    (obj.parentNode.style.marginLeft?parseInt(obj.parentNode.style.marginLeft):0);
@@ -120,14 +122,14 @@ function posGetX(obj,noWScrl)
     }
     return posX+(!noWScrl?-window.pageXOffset:0);
 }
+
 /***************************************************
  * posGetY - Get absolute position                 *
  **************************************************/
 function posGetY(obj,noWScrl)
 {
     var posY = 0;
-    for( ; obj && obj.nodeName != 'BODY'; obj = obj.parentNode)
-    {
+    for( ; obj && obj.nodeName != 'BODY'; obj = obj.parentNode) {
 	posY += (obj.style.top?parseInt(obj.style.top):0)+
 	    (obj.parentNode.style.borderTopWidth?parseInt(obj.parentNode.style.borderTopWidth):0)+
 	    (obj.parentNode.style.marginTop?parseInt(obj.parentNode.style.marginTop):0);
@@ -135,6 +137,7 @@ function posGetY(obj,noWScrl)
     }
     return posY+(!noWScrl?-window.pageYOffset:0);
 }
+
 /***************************************************
  * getXmlHttp - Check and return XMLHttpRequest for*
  *  various browsers.                              *
@@ -142,13 +145,13 @@ function posGetY(obj,noWScrl)
 function getXmlHttp( )
 {
     if(window.XMLHttpRequest) return new XMLHttpRequest();
-    else if(window.ActiveXObject)
-    {
+    else if(window.ActiveXObject) {
 	try { return new ActiveXObject('Msxml2.XMLHTTP'); }
 	catch(e) { return new ActiveXObject('Microsoft.XMLHTTP'); }
     }
     return null;
 }
+
 /***************************************************
  * realRound - Real numbers round                  *
  ***************************************************/
@@ -158,6 +161,7 @@ function realRound( val, dig, toInt )
     if(toInt) return Math.floor(rrRez+0.5);
     return rrRez;
 }
+
 /***************************************************
  * evMouseGet - Get mouse key code from event      *
  ***************************************************/
@@ -168,6 +172,7 @@ function evMouseGet( e )
     else if(e.which == 3)	return 'Right';
     return '';
 }
+
 /***************************************************
  * evKeyGet - Get key code from event              *
  ***************************************************/
@@ -175,8 +180,7 @@ function evKeyGet( e )
 {
     if((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 65 && e.keyCode <= 90))
 	return String.fromCharCode(e.keyCode);
-    switch(e.keyCode)
-    {
+    switch(e.keyCode) {
 	case 27: return 'Esc';
 	case 8:  return 'BackSpace';
 	case 13: return 'Enter';
@@ -206,8 +210,7 @@ function evKeyGet( e )
 	case 59: return 'Semicolon';
 	case 61: return 'Equal';
     }
-    if(isNN) switch(e.keyCode)
-    {
+    if(isNN) switch(e.keyCode) {
 	case 46: return 'Delete';
 	case 44: return 'Print';
 	case 192: return 'Apostrophe';
@@ -222,8 +225,7 @@ function evKeyGet( e )
 	case 221: return 'BracketRight';
 	case 222: return 'QuoteLeft';
     }
-    else switch(e.keyCode)
-    {
+    else switch(e.keyCode) {
 	case 127: return 'Delete';
 	case 96: return 'Apostrophe';
 	case 42: return 'Asterisk';
@@ -239,6 +241,7 @@ function evKeyGet( e )
     }
     return '#'+e.keyCode.toString(16);
 }
+
 /***************************************************
  * servGet - XML get request to server             *
  ***************************************************/
@@ -246,11 +249,9 @@ function servGet( adr, prm, callBack )
 {
     var req = getXmlHttp();
     req.open('GET', encodeURI('/'+MOD_ID+adr+'?'+prm), callBack ? true : false);
-    if(callBack)
-    {
+    if(callBack) {
 	req.callBack = callBack;
-	req.onreadystatechange = function( )
-	{
+	req.onreadystatechange = function( ) {
 	    if(this.readyState != 4) return;
 	    if(this.status == 200 && this.responseXML.childNodes.length)
 		this.callBack(this.responseXML.childNodes[0]);
@@ -259,8 +260,7 @@ function servGet( adr, prm, callBack )
 	req.send(null);
 	return null;
     }
-    try
-    {
+    try {
 	req.send(null);
 	if(req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
@@ -268,6 +268,7 @@ function servGet( adr, prm, callBack )
 
     return null;
 }
+
 /***************************************************
  * servSet - XML set request to server             *
  ***************************************************/
@@ -275,8 +276,7 @@ function servSet( adr, prm, body, waitRez )
 {
     var req = getXmlHttp();
     req.open('POST', encodeURI('/'+MOD_ID+adr+'?'+prm), !waitRez);
-    try
-    {
+    try {
 	req.send(body);
 	if(waitRez && req.status == 200 && req.responseXML.childNodes.length)
 	    return req.responseXML.childNodes[0];
@@ -285,6 +285,7 @@ function servSet( adr, prm, body, waitRez )
 
     return null;
 }
+
 /***************************************************
  * getWAttr - request page/widget attribute        *
  ***************************************************/
@@ -295,6 +296,7 @@ function getWAttr( wId, attr )
 
     return nodeText(rNode);
 }
+
 /***************************************************
  * setWAttrs - set page/widget attributes          *
  ***************************************************/
@@ -306,6 +308,7 @@ function setWAttrs( wId, attrs, val )
     body += '</set>';
     servSet(wId, 'com=attrs', body);
 }
+
 /***************************************************
  * getFont( fStr, fSc, opt ) - Parse font          *
  *  opt - options: 1-punkts; 2-return size         *
@@ -313,8 +316,7 @@ function setWAttrs( wId, attrs, val )
 function getFont( fStr, fSc, opt )
 {
     var rez = '';
-    if(fStr)
-    {
+    if(fStr) {
 	var allFnt = fStr.split(' ');
 	if(opt == 2) return (parseInt(allFnt[1])*(fSc?fSc:1)).toFixed(0);
 	if(allFnt.length >= 1) rez += 'font-family: ' + allFnt[0].replace(/_/g,' ') + '; ';
@@ -325,6 +327,7 @@ function getFont( fStr, fSc, opt )
 
     return rez;
 }
+
 /***************************************************
  * getColor - Parse color                          *
  ***************************************************/
@@ -334,36 +337,33 @@ function getColor( cStr, getOpacity )
     if(getOpacity) return (fPos >= 0) ? Math.max(0,Math.min(255,parseFloat(cStr.slice(fPos+1))/255)) : 1;
     return (fPos >= 0) ? cStr.slice(0,fPos) : cStr;
 }
+
 /*****************************************************
  * chkPattern - Check for allow expression to pattern *
  *****************************************************/
 function chkPattern( val, patt )
 {
-    //> Check by regular expression
+    //Check by regular expression
     if(patt.length > 2 && patt.charAt(0) == '/' && patt.charAt(patt.length-1) == '/')
 	return (new RegExp(patt.slice(1,patt.length-1),'')).test(val);
 
-    //> Check by simple pattern
+    //Check by simple pattern
     var mult_s = false;
     var v_cnt = 0, p_cnt = 0;
     var v_bck = -1, p_bck = -1;
 
-    while(true)
-    {
+    while(true) {
 	if(p_cnt >= patt.length)	return true;
 	if(patt.charAt(p_cnt) == '?')	{ v_cnt++; p_cnt++; mult_s = false; continue; }
 	if(patt.charAt(p_cnt) == '*')	{ p_cnt++; mult_s = true; v_bck = -1; continue; }
 	if(patt.charAt(p_cnt) == '\\')	p_cnt++;
 	if(v_cnt >= val.length)	break;
-	if(patt.charAt(p_cnt) == val.charAt(v_cnt))
-	{
+	if(patt.charAt(p_cnt) == val.charAt(v_cnt)) {
 	    if(mult_s && v_bck < 0)	{ v_bck = v_cnt+1; p_bck = p_cnt; }
 	    v_cnt++; p_cnt++;
 	}
-	else
-	{
-	    if(mult_s)
-	    {
+	else {
+	    if(mult_s) {
 		if(v_bck >= 0) { v_cnt = v_bck; p_cnt = p_bck; v_bck = -1; }
 		else v_cnt++;
 	    }
@@ -392,25 +392,21 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 {
     if(!pgId) return true;
 
-    //> Check and update present page
-    if(this == masterPage)
-    {
+    //Check and update present page
+    if(this == masterPage) {
 	var opPg = this.findOpenPage(pgId);
-	if(opPg)
-	{
+	if(opPg) {
 	    if(!(prcCnt%5)) opPg.makeEl(servGet(pgId,'com=attrsBr&FullTree=1&tm='+tmCnt),false,false,true);
 	    else if(updWdg) opPg.makeEl(servGet(pgId,'com=attrsBr&tm='+tmCnt));
 	    return true;
 	}
     }
 
-    //> Create or replace main page
+    //Create or replace main page
     if(!pgGrp) pgGrp = getWAttr(pgId,'pgGrp');
     if(!pgOpenSrc) pgOpenSrc = getWAttr(pgId,'pgOpenSrc');
-    if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp']))
-    {
-	if(this.addr.length)
-	{
+    if(this == masterPage && (!this.addr.length || pgGrp == 'main' || pgGrp == this.attrs['pgGrp'])) {
+	if(this.addr.length) {
 	    servSet(this.addr,'com=pgClose','');
 	    this.pwClean();
 	    document.body.removeChild(this.window);
@@ -423,17 +419,15 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	centerTag.appendChild(this.place);
 	document.body.appendChild(centerTag);
 	this.window = centerTag;
-	//> Set project's icon and RunTime page title
+	//Set project's icon and RunTime page title
 	document.getElementsByTagName('link')[0].setAttribute('href',location.pathname+'?com=ico');
 	return true;
     }
 
-    //> Find for include page creation
+    //Find for include page creation
     for(var i in this.wdgs)
-	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible)
-	{
-	    if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc'])
-	    {
+	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
+	    if(pgGrp == this.wdgs[i].attrs['pgGrp'] && pgId != this.wdgs[i].attrs['pgOpenSrc']) {
 		this.wdgs[i].attrs['pgOpenSrc'] = pgId;
 		this.wdgs[i].makeEl(null,true);
 		setWAttrs(this.wdgs[i].addr,'pgOpenSrc',pgId);
@@ -441,12 +435,11 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    }
 	    if(this.wdgs[i].inclOpen && this.wdgs[i].pages[this.wdgs[i].inclOpen].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
 	}
-    //> Put checking to child pages
+    //Put checking to child pages
     for(var i in this.pages)
 	if(this.pages[i].callPage(pgId,updWdg,pgGrp,pgOpenSrc)) return true;
-    //> Check for open child page or for unknown and empty source pages open as master page child windows
-    if((!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage)
-    {
+    //Check for open child page or for unknown and empty source pages open as master page child windows
+    if((!pgGrp.length && pgOpenSrc == this.addr) || this == masterPage) {
 	var iPg = new pwDescr(pgId,true,this);
 	var attrBrVal = servGet(pgId,'com=attrsBr');
 
@@ -459,9 +452,8 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomW') winWidth = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
 	    else if(attrBrVal.childNodes[i_ch].getAttribute('id') == 'geomH') winHeight = parseInt(nodeText(attrBrVal.childNodes[i_ch]));
 
-	//> New external <div> window create
-	if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH']))
-	{
+	//New external <div> window create
+	if(winWidth < parseInt(masterPage.attrs['geomW']) && winHeight < parseInt(masterPage.attrs['geomH'])) {
 	    iPg.window = document.createElement('table');
 	    iPg.window.setAttribute('cellpadding','2');
 	    iPg.window.setAttribute('cellspacing','0');
@@ -473,24 +465,20 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    iPg.window.appendChild(wRow);
 	    wRow.setAttribute('style','cursor: move;');
 	    wRow.win = iPg.window;
-    	    wRow.onmousedown = function(e)
-    	    {
+	    wRow.onmousedown = function(e) {
 		if(!e) e = window.event;
 		this.clX = e.clientX; this.clY = e.clientY;
 		return false;
 	    }
-	    wRow.onmouseup = function(e)
-	    {
+	    wRow.onmouseup = function(e) {
 		if(!e) e = window.event;
 		this.clX = this.clY = null;
 		return false;
 	    }
 	    wRow.onmouseout = wRow.onmouseup;
-	    wRow.onmousemove = function(e)
-	    {
+	    wRow.onmousemove = function(e) {
 		if(!e) e = window.event;
-		if(this.clX != null)
-		{
+		if(this.clX != null) {
 		    this.win.style.left = (parseInt(this.win.style.left)+e.clientX-this.clX)+"px";
 		    this.win.style.top  = (parseInt(this.win.style.top)+e.clientY-this.clY)+"px";
 		    this.clX = e.clientX; this.clY = e.clientY;
@@ -505,8 +493,7 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    wRow.appendChild(closeWin);
 	    closeWin.appendChild(document.createTextNode('X'));
 	    closeWin.setAttribute('style','color: red; cursor: pointer;');
-	    closeWin.onclick = function()
-	    {
+	    closeWin.onclick = function( ) {
 		servSet(this.iPg.addr,'com=pgClose','');
 		document.getElementById('mainCntr').removeChild(this.iPg.window);
 		this.iPg.pwClean();
@@ -523,15 +510,14 @@ function callPage( pgId, updWdg, pgGrp, pgOpenSrc )
 	    wCntCell.appendChild(iPg.place);
 	    document.getElementById('mainCntr').appendChild(iPg.window);
 	}
-	//> New external window create
-	else
-	{
+	//New external window create
+	else {
 	    iPg.window = window.open('about:blank',pgId,'width='+(winWidth+20)+',height='+(winHeight+60)+
 		',directories=no,menubar=no,toolbar=no,scrollbars=yes,dependent=yes,location=no,locationbar=no,status=no,statusbar=no,alwaysRaised=yes');
 	    if(!iPg.window) return true;
-	    iPg.window.document.open( );
+	    iPg.window.document.open();
 	    iPg.window.document.write("<html><body style='background-color: #E6E6E6;'><center><div id='main'/></center></body></html>\n");
-	    iPg.window.document.close( );
+	    iPg.window.document.close();
 	    iPg.window.document.title = winName;
 	    var mainDiv = iPg.window.document.getElementById('main');
 	    iPg.place = mainDiv;
@@ -551,20 +537,17 @@ function findOpenPage( pgId )
 {
     var opPg;
     if(pgId == this.addr) return this;
-    //> Check from included widgets
+    //Check from included widgets
     for(var i in this.wdgs)
-	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible)
-	{
+	if(this.wdgs[i].attrs['root'] == 'Box' && this.wdgs[i].isVisible) {
 	    if(pgId == this.wdgs[i].attrs['pgOpenSrc']) return this.wdgs[i].pages[pgId];
-	    if(this.wdgs[i].inclOpen)
-	    {
+	    if(this.wdgs[i].inclOpen) {
 		opPg = this.wdgs[i].pages[this.wdgs[i].inclOpen].findOpenPage(pgId);
 		if(opPg) return opPg;
 	    }
 	}
-    //> Put checking to child pages
-    for(var i in this.pages)
-    {
+    //Put checking to child pages
+    for(var i in this.pages) {
 	opPg = this.pages[i].findOpenPage(pgId);
 	if(opPg) return opPg;
     }
@@ -576,13 +559,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 {
     var margBrdUpd = false; var newAttr = false;
     this.place.wdgLnk = this;
-    if(!inclPg && pgBr)
-    {
-	//> Clear modify flag for all
+    if(!inclPg && pgBr) {
+	//Clear modify flag for all
 	for(var j in this.attrsMdf) this.attrsMdf[j] = false;
-	//> Updated attributes
-	for(var j = 0; j < pgBr.childNodes.length; j++)
-	{
+	//Updated attributes
+	for(var j = 0; j < pgBr.childNodes.length; j++) {
 	    if(pgBr.childNodes[j].nodeName != 'el') continue;
 	    var i = pgBr.childNodes[j].getAttribute('id');
 	    if((i == 'bordWidth' || i == 'geomMargin') && (!this.attrs[i] || this.attrs[i] != nodeText(pgBr.childNodes[j]))) margBrdUpd = true;
@@ -593,8 +574,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
     }
 
-    if(newAttr || inclPg || !pgBr)
-    {
+    if(newAttr || inclPg || !pgBr) {
 	var elWr = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
 	var elMargin = parseInt(this.attrs['geomMargin']);
 	var elBorder = 0;
@@ -607,12 +587,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	var geomY = parseFloat(this.attrs['geomY']);
 	if(this.pg) { geomX = geomY = 0; elStyle += 'overflow: hidden; '; }
 	else { geomX *= this.parent.xScale(true); geomY *= this.parent.yScale(true); }
-	if(this.parent && !(this.pg && this.parent.pg))
-	{
+	if(this.parent && !(this.pg && this.parent.pg)) {
 	    geomX -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	    geomY -= parseInt(this.parent.attrs['geomMargin'])+parseInt(this.parent.attrs['bordWidth']);
 	}
-	elStyle+='position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
+	elStyle += 'position: '+((this==masterPage || this.window)?'relative':'absolute')+'; left: '+realRound(geomX)+'px; top: '+realRound(geomY)+'px; ';
 
 	var xSc = this.xScale(true);
 	var ySc = this.yScale(true);
@@ -622,12 +601,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	this.mousedown = new Array;
 	this.mouseup = new Array;
 
-	if(this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr)
-	{
+	if(this.pg && this.parent && this.parent.inclOpen && this.parent.inclOpen == this.addr) {
 	    var geomWpar = parseFloat(this.parent.attrs['geomW'])*this.parent.xScale(true);
 	    var geomHpar = parseFloat(this.parent.attrs['geomH'])*this.parent.yScale(true);
-	    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'scroll' : 'visible';
-	    //elStyle += 'overflow: auto; ';
+	    this.parent.place.style.overflow = (geomW > geomWpar || geomH > geomHpar) ? 'scroll' : 'hidden';
 	    geomW = Math.max(geomW, geomWpar);
 	    geomH = Math.max(geomH, geomHpar);
 	}
@@ -636,10 +613,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	geomW -= 2*(elMargin+elBorder);
 	geomH -= 2*(elMargin+elBorder);
 
-	//> Set included window geometry to widget size
+	//Set included window geometry to widget size
 	//if( this == masterPage ) resizeTo(geomW,geomH);
-	if(this.pg && this.window && this.windowExt)
-	{
+	if(this.pg && this.window && this.windowExt) {
 	    if(this.window.innerHeight)
 		this.window.resizeTo(geomW+(this.window.outerWidth-this.window.innerWidth)+20,
 				     geomH+(this.window.outerHeight-this.window.innerHeight)+20);
@@ -648,29 +624,24 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	if(this.attrs['focus'] && parseInt(this.attrs['focus'])) setFocus(this.addr,true);
 
-	if(!(parseInt(this.attrs['perm'])&SEC_RD))
-	{
-	    if(this.pg)
-	    {
+	if(!(parseInt(this.attrs['perm'])&SEC_RD)) {
+	    if(this.pg) {
 		elStyle += 'background-color: #B0B0B0; border: 1px solid black; color: red; overflow: auto; ';
 		this.place.innerHTML = "<div class='vertalign' style='width: "+(geomW-2)+"px; height: "+(geomH-2)+"px;'>Page: '"+this.addr+"'.<br/>View access is no permitted.</div>";
 	    }
 	}
-	else if(this.attrs['root'] == 'ElFigure')
-	{
+	else if(this.attrs['root'] == 'ElFigure') {
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    var toInit = !this.place.childNodes.length;
 	    var figObj = toInit ? this.place.ownerDocument.createElement('img') : this.place.childNodes[0];
 	    figObj.width = geomW; figObj.height = geomH;
-	    //>> Src update always therefore for any changes is shape update
+	    // Src update always therefore for any changes is shape update
 	    figObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3);
-	    if(elWr != this.place.elWr)
-	    {
-		figObj.onclick = !elWr ? '' : function(e)
-		{
+	    if(elWr != this.place.elWr) {
+		figObj.onclick = !elWr ? '' : function(e) {
 		    if(!e) e = window.event;
 		    servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3)+
@@ -678,9 +649,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 						    '&y='+(e.offsetY?e.offsetY:(e.clientY-posGetY(this)))+
 						    '&key='+evMouseGet(e),'');
 		    return false;
-    		}
-    		figObj.ondblclick = !elWr ? '' : function(e)
-    		{
+		}
+		figObj.ondblclick = !elWr ? '' : function(e) {
 		    if(!e) e = window.event;
 		    servSet(this.wdgLnk.addr,'com=obj&sub=point&geomX='+geomX.toFixed(3)+'&geomY='+geomY.toFixed(3)+
 						    '&xSc='+xSc.toFixed(3)+'&ySc='+ySc.toFixed(3)+
@@ -690,17 +660,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 	    }
 
-	    if(toInit)
-	    {
+	    if(toInit) {
 		figObj.border = 0;
 		figObj.wdgLnk = this;
 		this.place.appendChild(figObj);
-		//> Disable drag mostly for FireFox
+		//Disable drag mostly for FireFox
 		figObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 	    }
 	}
-	else if(this.attrs['root'] == 'Box')
-	{
+	else if(this.attrs['root'] == 'Box') {
 	    if(this == masterPage && this.attrs['tipStatus'].length) setStatus(this.attrs['tipStatus'],10000);
 	    backStyle = '';
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
@@ -710,8 +678,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    elStyle += backStyle;
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
-	    switch(parseInt(this.attrs['bordStyle']))
-	    {
+	    switch(parseInt(this.attrs['bordStyle'])) {
 		case 1: elStyle += 'border-style: dotted; '; break;
 		case 2: elStyle += 'border-style: dashed; '; break;
 		case 3: elStyle += 'border-style: solid; ';  break;
@@ -724,8 +691,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(!this.pg && ((this.inclOpen && this.attrs['pgOpenSrc'] != this.inclOpen) ||
 		    (!this.inclOpen && this.attrs['pgOpenSrc'].length)))
 	    {
-		if(this.inclOpen)
-		{
+		if(this.inclOpen) {
 		    servSet(this.inclOpen,'com=pgClose','');
 		    pgCache[this.inclOpen] = this.pages[this.inclOpen];
 		    pgCache[this.inclOpen].reqTm = tmCnt;
@@ -734,11 +700,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    delete this.pages[this.inclOpen];
 		    this.inclOpen = null;
 		}
-		if(this.attrs['pgOpenSrc'].length)
-		{
+		if(this.attrs['pgOpenSrc'].length) {
 		    this.inclOpen = this.attrs['pgOpenSrc'];
-		    if(pgCache[this.inclOpen])
-		    {
+		    if(pgCache[this.inclOpen]) {
 			this.pages[this.inclOpen] = pgCache[this.inclOpen];
 			this.place.appendChild(this.pages[this.inclOpen].place);
 			pgBr = servGet(this.inclOpen,'com=attrsBr&tm='+pgCache[this.inclOpen].reqTm);
@@ -746,44 +710,35 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.pages[this.inclOpen].makeEl(pgBr);
 			delete pgCache[this.inclOpen];
 		    }
-		    else
-		    {
+		    else {
 			var iPg = new pwDescr(this.inclOpen,true,this);
 			iPg.place = this.place.ownerDocument.createElement('div');
 			iPg.makeEl(servGet(this.inclOpen,'com=attrsBr'),false,true);
 			this.pages[this.inclOpen] = iPg;
 			this.place.appendChild(iPg.place);
 		    }
-		    //Oppress scroll for include page size equal to the continer
-		    if(this.place.width = this.pages[this.inclOpen].place.width) this.pages[this.inclOpen].place.width--;
-		    if(this.place.height = this.pages[this.inclOpen].place.height) this.pages[this.inclOpen].place.height--;
 		}
-		elStyle += "overflow: scroll; ";
 	    }
 	    this.place.wdgLnk = this;
 	    this.place.onclick = (!elWr) ? null : function() { setFocus(this.wdgLnk.addr); return false; };
 	}
-	else if(this.attrs['root'] == 'Text')
-	{
+	else if(this.attrs['root'] == 'Text') {
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg'])	elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; overflow: hidden; ';
 	    if(this.attrs['bordColor'])	elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    if(elMargin) { elStyle += 'padding: '+elMargin+'px; '; elMargin = 0; }
-	    if(parseInt(this.attrs['orient']) == 0)
-	    {
+	    if(parseInt(this.attrs['orient']) == 0) {
 		var txtAlign = parseInt(this.attrs['alignment']);
 		var spanStyle = 'display: table-cell; width: '+geomW+'px; height: '+geomH+'px; ';
-		switch(txtAlign&0x3)
-		{
+		switch(txtAlign&0x3) {
 		    case 0: spanStyle += 'text-align: left; ';		break;
 		    case 1: spanStyle += 'text-align: right; ';		break;
 		    case 2: spanStyle += 'text-align: center; ';	break;
 		    case 3: spanStyle += 'text-align: justify; ';	break;
 		}
-		switch(txtAlign>>2)
-		{
+		switch(txtAlign>>2) {
 		    case 0: spanStyle += 'vertical-align: top; ';	break;
 		    case 1: spanStyle += 'vertical-align: bottom; ';	break;
 		    case 2: spanStyle += 'vertical-align: middle; ';	break;
@@ -791,12 +746,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		spanStyle += getFont(this.attrs['font'],Math.min(xSc,ySc));
 		spanStyle += 'color: ' + (this.attrs['color']?getColor(this.attrs['color']):'black') + '; ';
 		var txtVal = this.attrs['text'];
-		for(var i = 0; i < parseInt(this.attrs['numbArg']); i++)
-		{
+		for(var i = 0; i < parseInt(this.attrs['numbArg']); i++) {
 		    var argVal;
 		    var argCfg = new Array();
-		    switch(parseInt(this.attrs['arg'+i+'tp']))
-		    {
+		    switch(parseInt(this.attrs['arg'+i+'tp'])) {
 			case 0: case 2:
 			    argCfg[0] = this.attrs['arg'+i+'cfg'];
 			    argVal = this.attrs['arg'+i+'val'];
@@ -830,8 +783,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(elWr) this.place.onclick = function() { setFocus(this.wdgLnk.addr); return false; };
 	    else this.place.onclick = '';
 	}
-	else if(this.attrs['root'] == 'Media')
-	{
+	else if(this.attrs['root'] == 'Media') {
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
@@ -859,15 +811,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    this.height = cHeight * this.wdgLnk.yScale(true);
 		}
 	    }
-	    if(elWr && (toInit || this.attrsMdf["areas"]))
-	    {
+	    if(elWr && (toInit || this.attrsMdf["areas"])) {
 		var mapObj = toInit ? this.place.ownerDocument.createElement('map') : this.place.childNodes[1];
 		while(mapObj.childNodes.length) mapObj.removeChild(mapObj.childNodes[0]);
-		for(var i = 0; i < parseInt(this.attrs['areas']); i++)
-		{
+		for(var i = 0; i < parseInt(this.attrs['areas']); i++) {
 		    var arObj = this.place.ownerDocument.createElement('area');
-		    switch(parseInt(this.attrs['area'+i+'shp']))
-		    {
+		    switch(parseInt(this.attrs['area'+i+'shp'])) {
 			case 0: arObj.shape = 'rect';	break;
 			case 1: arObj.shape = 'poly';	break;
 			case 2: arObj.shape = 'circle';	break;
@@ -881,32 +830,27 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    mapObj.appendChild(arObj);
 		}
 	    }
-	    if(toInit)
-	    {
+	    if(toInit) {
 		medObj.wdgLnk = this;
-		//> Disable drag mostly for FireFox
+		//Disable drag mostly for FireFox
 		medObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 		medObj.border = 0;
 		this.place.appendChild(medObj);
-		if(elWr)
-		{
+		if(elWr) {
 		    this.place.appendChild(mapObj);
 		    mapObj.name = this.addr;
 		    medObj.setAttribute('usemap','#'+this.addr);
 		}
 	    }
 	}
-	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify)
-	{
+	else if(this.attrs['root'] == 'FormEl' && !this.place.isModify) {
 	    var elTp = parseInt(this.attrs['elType']);
 	    if(this.attrsMdf['elType'] || this.place.elWr != elWr)
 		while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 
-	    if(this.attrsMdf['font'])
-	    {
+	    if(this.attrsMdf['font']) {
 		this.place.fontCfg = '';
-		if(this.attrs['font'])
-		{
+		if(this.attrs['font']) {
 		    var allFnt = this.attrs['font'].split(' ');
 		    if(allFnt.length >= 3 && parseInt(allFnt[2])) this.place.fontCfg += 'bold ';
 		    if(allFnt.length >= 4 && parseInt(allFnt[3])) this.place.fontCfg += 'italic ';
@@ -915,14 +859,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		}
 	    }
 	    var fntSz = Math.min(geomH,(getFont(this.attrs['font'],Math.min(xSc,ySc),2)*1.4).toFixed(0));
-	    switch(elTp)
-	    {
+	    switch(elTp) {
 		case 0:	//Line edit
 		    var toInit = !this.place.childNodes.length;
 		    var formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
 		    if(toInit || this.attrsMdf['geomZ']) formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
-		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font'])
-		    {
+		    if(toInit || this.attrsMdf['geomH'] || this.attrsMdf['geomW'] || this.attrsMdf['font']) {
 			var geomWint = geomW-4;
 			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((geomH-fntSz)/2)+'px; width: '+geomWint+'px; '+
 						'height: '+(fntSz-2)+'px; border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px;';
@@ -934,34 +876,28 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.wdgLnk = this;
 		    formObj.disabled = !elWr;
 		    this.place.appendChild(formObj);
-		    if(elWr)
-		    {
-			switch(this.place.view)
-			{
+		    if(elWr) {
+			switch(this.place.view) {
 			    case 1:		//Combo
 				var combImg = this.place.ownerDocument.createElement('img');
 				combImg.src = '/'+MOD_ID+'/img_combar';
 				combImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
 				this.place.appendChild(combImg);
 				formObj.style.width = (geomWint-16)+'px';
-				combImg.onclick = function()
-				{
+				combImg.onclick = function( ) {
 				    var formObj = this.parentNode.childNodes[0];
 				    var combList = this.ownerDocument.getElementById('#combo');
-				    if(!combList)
-				    {
+				    if(!combList) {
 					combList = this.ownerDocument.createElement('div');
 					combList.id = '#combo';
 					combList.appendChild(this.ownerDocument.createElement('select'));
 					combList.childNodes[0].size = '100';
-					combList.childNodes[0].onchange = function()
-					{
+					combList.childNodes[0].onchange = function( ) {
 					    this.formObj.value = this.options[this.selectedIndex].value;
 					    this.formObj.setModify(true);
 					    this.parentNode.style.visibility = 'hidden';
 					}
-					combList.childNodes[0].onblur = function()
-					{
+					combList.childNodes[0].onblur = function( ) {
 					    this.parentNode.style.visibility = 'hidden';
 					    this.parentNode.style.top = "-100px";
 					}
@@ -970,15 +906,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				    while(combList.childNodes[0].childNodes.length)
 					combList.childNodes[0].removeChild(combList.childNodes[0].childNodes[0]);
 				    var elLst = formObj.parentNode.cfg.split('\n');
-				    for(var i = 0; i < elLst.length; i++)
-				    {
+				    for(var i = 0; i < elLst.length; i++) {
 					var optEl = this.ownerDocument.createElement('option');
 					optEl.appendChild(this.ownerDocument.createTextNode(elLst[i]));
 					if(formObj.valGet() == elLst[i]) optEl.defaultSelected = optEl.selected = true;
 					combList.childNodes[0].appendChild(optEl);
 				    }
-				    if(combList.childNodes[0].childNodes.length)
-				    {
+				    if(combList.childNodes[0].childNodes.length) {
 					combList.style.cssText = 'position: absolute; visibility : visible; left: '+posGetX(formObj,true)+'px; '+
 							         'top: '+(posGetY(formObj,true)+formObj.offsetHeight)+'px; width: '+formObj.offsetWidth+'px; '+
 							         'height: '+Math.min(elLst.length*15,70)+'px; border: 0; ';
@@ -997,8 +931,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				spinImg.style.cssText = 'position: absolute; left: '+(geomW-16)+'px; top: '+((geomH-fntSz)/2)+'px; width: 16px; height: '+fntSz+'px; cursor: pointer; ';
 				spinImg.border = '0';
 				formObj.style.width = (geomWint-16)+'px';
-				spinImg.onclick = function(e)
-				{
+				spinImg.onclick = function(e) {
 				    if(!e) e = window.event;
 				    var formObj = this.parentNode.childNodes[0];
 				    var argCfg = this.parentNode.cfg.split(':');
@@ -1011,8 +944,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				this.place.appendChild(spinImg);
 				break;
 			}
-			formObj.onkeyup = function(e)
-			{
+			formObj.onkeyup = function(e) {
 			    if(!e) e = window.event;
 			    if(this.modify() && e.keyCode == 13) this.chApply();
 			    if(this.modify() && e.keyCode == 27) this.chEscape();
@@ -1020,22 +952,19 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			formObj.modify = function( )
 			{ return (this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1].style.visibility == 'visible'); }
-			formObj.setModify = function(on)
-			{
+			formObj.setModify = function(on) {
 			    if(on && this.clearTm) this.clearTm = 5;
 			    if(this.modify() == on) return;
 			    var posOkImg = (this.parentNode.view>=1&&this.parentNode.view<=3)?2:1;
 			    var okImg = this.parentNode.childNodes[posOkImg];
-			    if(on)
-			    {
+			    if(on) {
 				this.style.width = (parseInt(this.style.width)-16)+'px';
 				if(posOkImg == 2)
 				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)-16)+'px';
 				okImg.style.visibility = 'visible';
 				this.wdgLnk.perUpdtEn(true); this.clearTm = 5;
 			    }
-			    else
-			    {
+			    else {
 				this.style.width = (parseInt(this.style.width)+16)+'px';
 				if(posOkImg == 2)
 				    this.parentNode.childNodes[1].style.left = (parseInt(this.parentNode.childNodes[1].style.left)+16)+'px';
@@ -1045,10 +974,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    this.parentNode.isModify = on;
 			}
 		    }
-		    formObj.valSet = function(val)
-		    {
-			switch(this.parentNode.view)
-			{
+		    formObj.valSet = function(val) {
+			switch(this.parentNode.view) {
 			    case 0: case 1: this.value = val; break;
 			    case 2:
 				var argCfg = this.parentNode.cfg.split(':');
@@ -1093,10 +1020,8 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			this.saveVal = this.value;
 			this.srcVal = val;
 		    }
-		    formObj.valGet = function( )
-		    {
-			switch(this.parentNode.view)
-			{
+		    formObj.valGet = function( ) {
+			switch(this.parentNode.view) {
 			    case 0: case 1: return this.value;
 			    case 2:
 				var rez = this.value;
@@ -1117,8 +1042,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 4:
 				var cfg = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'hh:mm';
 				var rez = this.value;
-				if(cfg.indexOf('ap') >= 0 || cfg.indexOf('AP') >= 0)
-				{
+				if(cfg.indexOf('ap') >= 0 || cfg.indexOf('AP') >= 0) {
 				    cfg = cfg.replace('ap','');
 				    cfg = cfg.replace('AP','');
 				    rez = rez.replace('am','');
@@ -1130,14 +1054,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				var min  = Math.floor(this.srcVal/60)%60;
 				var sec  = this.srcVal%60;
 				var i = 0; var lstS = ''; var lenS = 0;
-				while(true)
-				{
-				    if(i >= cfg.length || cfg.charAt(i) == 'h' || cfg.charAt(i) == 'm' || cfg.charAt(i) == 's')
-				    {
+				while(true) {
+				    if(i >= cfg.length || cfg.charAt(i) == 'h' || cfg.charAt(i) == 'm' || cfg.charAt(i) == 's') {
 					var space = lenS ? noSpace(cfg.substr(i-lenS,lenS)) : '';
 					if(lenS && !space.length) space = ' ';
-					if((space.length && lstS != '') || i >= cfg.length)
-					{
+					if((space.length && lstS != '') || i >= cfg.length) {
 					    if(space.length && rez.indexOf(space) == -1) return 0;
 					    var val = parseInt(space.length?rez.substr(0,rez.indexOf(space)):rez,10);
 					    rez = rez.substr(rez.indexOf(space));
@@ -1146,8 +1067,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    else if(lstS == 's')sec = val;
 					    if(i >= cfg.length) break;
 					}
-					if(space.length)
-					{
+					if(space.length) {
 					    if(rez.indexOf(space) == -1) return 0;
 					    rez = rez.substr(rez.indexOf(space)+space.length);
 					}
@@ -1164,14 +1084,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				var rez  = this.value;
 				var dt = new Date(this.srcVal*1000);
 				var i = 0; var lstS = ''; var lenS = 0;
-				while(true)
-				{
-				    if(i >= cfg.length || cfg.charAt(i) == 'd' || cfg.charAt(i) == 'M' || cfg.charAt(i) == 'y')
-				    {
+				while(true) {
+				    if(i >= cfg.length || cfg.charAt(i) == 'd' || cfg.charAt(i) == 'M' || cfg.charAt(i) == 'y') {
 					var space = lenS ? noSpace(cfg.substr(i-lenS,lenS)) : '';
 					if(lenS && !space.length) space = ' ';
-					if((space.length && lstS != '') || i >= cfg.length)
-					{
+					if((space.length && lstS != '') || i >= cfg.length) {
 					    if(space.length && rez.indexOf(space) == -1) return 0;
 					    var val = parseInt(space.length?rez.substr(0,rez.indexOf(space)):rez,10);
 					    rez = rez.substr(rez.indexOf(space));
@@ -1180,8 +1097,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    else if(lstS == 'y')dt.setFullYear((val<100)?2000+val:val);
 					    if(i >= cfg.length) break;
 					}
-					if(space.length)
-					{
+					if(space.length) {
 					    if(rez.indexOf(space) == -1) return 0;
 					    rez = rez.substr(rez.indexOf(space)+space.length);
 					}
@@ -1196,8 +1112,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			    case 6:
 				var cfg = (this.parentNode.cfg.length) ? this.parentNode.cfg : 'dd.MM.yy hh:mm';
 				var rez  = this.value;
-				if(cfg.indexOf('ap') >= 0 || cfg.indexOf('AP') >= 0)
-				{
+				if(cfg.indexOf('ap') >= 0 || cfg.indexOf('AP') >= 0) {
 				    cfg = cfg.replace('ap','');
 				    cfg = cfg.replace('AP','');
 				    rez = rez.replace('am','');
@@ -1207,15 +1122,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				}
 				var dt = new Date(this.srcVal*1000);
 				var i = 0; var lstS = ''; var lenS = 0;
-				while(true)
-				{
+				while(true) {
 				    if(i >= cfg.length || cfg.charAt(i) == 'd' || cfg.charAt(i) == 'M' || cfg.charAt(i) == 'y' ||
 					cfg.charAt(i) == 'h' || cfg.charAt(i) == 'm' || cfg.charAt(i) == 's')
 				    {
 					var space = lenS ? noSpace(cfg.substr(i-lenS,lenS)) : '';
 					if(lenS && !space.length) space = ' ';
-					if((space.length && lstS != '') || i >= cfg.length)
-					{
+					if((space.length && lstS != '') || i >= cfg.length) {
 					    if(space.length && rez.indexOf(space) == -1) return 0;
 					    var val = parseInt(space.length?rez.substr(0,rez.indexOf(space)):rez,10);
 					    rez = rez.substr(rez.indexOf(space));
@@ -1227,8 +1140,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 					    else if(lstS == 's')dt.setSeconds(val);
 					    if(i >= cfg.length) break;
 					}
-					if(space.length)
-					{
+					if(space.length) {
 					    if(rez.indexOf(space) == -1) return 0;
 					    rez = rez.substr(rez.indexOf(space)+space.length);
 					}
@@ -1242,8 +1154,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			return '';
 		    }
-		    formObj.chApply = function( )
-		    {
+		    formObj.chApply = function( ) {
 			var val = this.valGet();
 			this.valSet(val);
 			var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1];
@@ -1251,8 +1162,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			var attrs = new Object(); attrs.value = val; attrs.event = 'ws_LnAccept';
 			setWAttrs(this.wdgLnk.addr,attrs);
 		    }
-		    formObj.chEscape = function( )
-		    {
+		    formObj.chEscape = function( ) {
 			this.value = this.saveVal;
 			var okImg = this.parentNode.childNodes[(this.parentNode.view>=1&&this.parentNode.view<=3)?2:1];
 			this.setModify(false);
@@ -1277,16 +1187,13 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.appendChild(this.place.ownerDocument.createTextNode(this.attrs['value']));
 		    formObj.onkeyup = function( ) { if(this.saveVal != this.value) this.setModify(true); };
 		    formObj.modify = function( ) { return (this.parentNode.childNodes[1].style.visibility == 'visible'); }
-		    formObj.setModify = function(on)
-		    {
+		    formObj.setModify = function(on) {
 			if(this.modify() == on) return;
-			if(on)
-			{
+			if(on) {
 			    this.style.height = (parseInt(this.style.height)-16)+'px';
 			    this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes[2].style.visibility = 'visible';
 			}
-			else
-			{
+			else {
 			    this.style.height = (parseInt(this.style.height)+16)+'px';
 			    this.parentNode.childNodes[1].style.visibility = this.parentNode.childNodes[2].style.visibility = 'hidden';
 			}
@@ -1295,8 +1202,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    okImg.src = '/'+MOD_ID+'/img_button_ok';
 		    okImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-35)+'px; '+
 					  'top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
-		    okImg.onclick = function()
-		    {
+		    okImg.onclick = function( ) {
 			var attrs = new Object();
 			attrs.value = this.parentNode.childNodes[0].value; attrs.event = 'ws_TxtAccept';
 			setWAttrs(this.parentNode.childNodes[0].wdgLnk.addr,attrs);
@@ -1306,8 +1212,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    var cancelImg = this.place.ownerDocument.createElement('img');
 		    cancelImg.src = '/'+MOD_ID+'/img_button_cancel';
 		    cancelImg.style.cssText = 'visibility: hidden; position: absolute; left: '+(geomW-16)+'px; top: '+(geomH-16)+'px; width: 16px; height: 16px; cursor: pointer;';
-		    cancelImg.onclick = function()
-		    {
+		    cancelImg.onclick = function( ) {
 			this.parentNode.childNodes[0].value = this.parentNode.childNodes[0].saveVal;
 			this.parentNode.childNodes[0].setModify(false);
 			return false;
@@ -1329,8 +1234,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.type = 'checkbox';
 		    formObj.disabled = !elWr;
 		    formObj.wdgLnk = this;
-		    formObj.onclick = function( )
-		    {
+		    formObj.onclick = function( ) {
 			//console.log(this.addr+": TEST 00: ChkChange="+this.checked);
 			var attrs = new Object();
 			attrs.value = this.checked ? '1' : '0';	attrs.event = 'ws_ChkChange';
@@ -1350,10 +1254,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			while(this.place.childNodes.length) this.place.removeChild(this.place.childNodes[0]);
 		    this.place.custBut = custBut;
 		    var toInit = !this.place.childNodes.length;
-		    if(custBut)
-		    {
+		    if(custBut) {
 			formObj =  toInit ? this.place.ownerDocument.createElement('div') : this.place.childNodes[0];
-			//>> Container widget style
+			// Container widget style
 			elStyle += 'border-style: '+((this.place.checkable && parseInt(this.attrs['value']))?'inset; ':'outset; ')+
 						    (elWr?'cursor: pointer; ':'')+'border-width: 2px; ';
 			if(this.attrs['colorText'])
@@ -1364,11 +1267,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			if(toInit || this.attrsMdf['font']) formObj.style.font = this.place.fontCfg;
 			var imgObj = formObj.childNodes.length ? formObj.childNodes[0] : this.place.ownerDocument.createElement('img');
 			var spanObj = formObj.childNodes.length ? formObj.childNodes[1] : this.place.ownerDocument.createElement('span');
-			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name'])
-			{
+			if(toInit || this.attrsMdf['img'] || this.attrsMdf['name']) {
 			    imgObj.hidden = !this.attrs['img'].length;
-			    if(!imgObj.hidden)
-			    {
+			    if(!imgObj.hidden) {
 				imgObj.src = "/"+MOD_ID+this.addr+"?com=res&val="+this.attrs['img']+"&size="+Math.min(geomW-6,geomH-6)+(!elWr?"&filtr=unact":"");
 				imgObj.width = Math.min(geomW-6,geomH-6);
 				imgObj.height = Math.min(geomW-6,geomH-6);
@@ -1376,8 +1277,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 				imgObj.style.marginRight = this.attrs['name'].length ? "2px" : "0px";
 			    }
 			}
-			if(toInit || this.attrsMdf['name'])
-			{
+			if(toInit || this.attrsMdf['name']) {
 			    spanObj.disabled = !this.attrs['name'].length;
 			    //while(spanObj.childNodes.length) spanObj.removeChild(spanObj.childNodes[0]);
 			    txtVal1 = '';
@@ -1388,15 +1288,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			geomW -= 4; geomH -= 4;
 
-			if(elWr)
-			{
-			    this.mouseup[this.mouseup.length] = function(e,el)
-			    {
+			if(elWr) {
+			    this.mouseup[this.mouseup.length] = function(e,el) {
 				if(el.checkable) return;
 				el.style.borderStyle = 'outset'; setWAttrs(el.wdgLnk.addr,'event','ws_BtRelease');
 			    };
-			    this.mousedown[this.mousedown.length] = function(e,el)
-			    {
+			    this.mousedown[this.mousedown.length] = function(e,el) {
 				if(el.checkable) return;
 				el.style.borderStyle = "inset"; setWAttrs(el.wdgLnk.addr,'event','ws_BtPress');
 			    };
@@ -1404,18 +1301,15 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 			if(!toInit) break;
 			formObj.className = 'vertalign';
-			//> Disable drag mostly for FireFox
+			//Disable drag mostly for FireFox
 			imgObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
-			if(elWr)
-			{
-			    this.place.onmouseout = function()
-			    {
+			if(elWr) {
+			    this.place.onmouseout = function( ) {
 				if(this.checkable || this.style.borderStyle == 'outset') return false;
 				this.style.borderStyle = 'outset'; setWAttrs(this.wdgLnk.addr,'event','ws_BtRelease');
 				return false;
 			    };
-			    this.place.onclick = function()
-			    {
+			    this.place.onclick = function( ) {
 				if(!this.checkable) return false;
 				var attrs = new Object();
 				if(this.style.borderLeftStyle == 'outset')
@@ -1432,8 +1326,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.width = geomW+'px'; formObj.style.height = geomH+'px';
 			this.place.appendChild(formObj);
 		    }
-		    else
-		    {
+		    else {
 			formObj = toInit ? this.place.ownerDocument.createElement('input') : this.place.childNodes[0];
 			if(toInit || this.attrsMdf['geomZ'])	formObj.tabIndex = parseInt(this.attrs['geomZ'])+1;
 			if(toInit || this.attrsMdf['font'])	formObj.style.font = this.place.fontCfg;
@@ -1460,21 +1353,18 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			formObj.style.cssText = 'position: absolute; left: 0px; top: '+((elTp==4)?(geomH-fntSz)/2:0)+'px; '+
 					    'height: '+((elTp==4)?fntSz:(geomH-4))+'px; width: '+geomW+'px; '+
 					    'border: 1px solid black; font: '+this.place.fontCfg+'; padding: 1px; ';
-		    if(this.attrsMdf['items'] || this.attrsMdf['value'])
-		    {
+		    if(this.attrsMdf['items'] || this.attrsMdf['value']) {
 			while(formObj.childNodes.length) formObj.removeChild(formObj.childNodes[0]);
 			var selVal = this.attrs['value'];
 			var elLst = this.attrs['items'].split('\n');
 			var selOk = false;
-			for(var i = 0; i < elLst.length; i++)
-			{
+			for(var i = 0; i < elLst.length; i++) {
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.appendChild(this.place.ownerDocument.createTextNode(elLst[i]));
 			    if(selVal == elLst[i]) selOk = optEl.defaultSelected=optEl.selected = true;
 			    formObj.appendChild(optEl);
 			}
-			if(!selOk && elTp == 4)
-			{
+			if(!selOk && elTp == 4) {
 			    var optEl = this.place.ownerDocument.createElement('option');
 			    optEl.textContent = selVal;
 			    optEl.selected = optEl.defaultSelected = true;
@@ -1486,17 +1376,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    formObj.wdgLnk = this;
 		    //f(elTp == 5) formObj.setAttribute('size',100);
 		    if(elTp == 4)
-			formObj.onchange = function( )
-			{
+			formObj.onchange = function( ) {
 			    var attrs = new Object();
 			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_CombChange';
 			    setWAttrs(this.wdgLnk.addr,attrs);
 			}
-		    else
-		    {
+		    else {
 			formObj.size = 100;
-			formObj.onchange = function( )
-			{
+			formObj.onchange = function( ) {
 			    var attrs = new Object();
 			    attrs.value = this.options[this.selectedIndex].value; attrs.event = 'ws_ListChange';
 			    setWAttrs(this.wdgLnk.addr,attrs);
@@ -1506,16 +1393,14 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    break;
 	    }
 	}
-	else if(this.attrs['root'] == 'Diagram')
-	{
+	else if(this.attrs['root'] == 'Diagram') {
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    if(this.attrs['backImg']) elStyle += 'background-image: url(\'/'+MOD_ID+this.addr+'?com=res&val='+this.attrs['backImg']+'\'); ';
 	    elStyle += 'border-style: solid; border-width: '+this.attrs['bordWidth']+'px; ';
 	    if(this.attrs['bordColor']) elStyle += 'border-color: '+getColor(this.attrs['bordColor'])+'; ';
 	    var anchObj = this.place.childNodes[0];
-	    if(!anchObj)
-	    {
+	    if(!anchObj) {
 		anchObj = this.place.ownerDocument.createElement('a');
 		anchObj.wdgLnk = this;
 		var dgrObj = this.place.ownerDocument.createElement('img');
@@ -1528,8 +1413,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    anchObj.onfocus = function( ) { if(this.isActive) setFocus(this.wdgLnk.addr); }
 	    anchObj.onkeydown = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_pres'+evKeyGet(e?e:window.event)); }
 	    anchObj.onkeyup = function(e) { if(this.isActive) setWAttrs(this.wdgLnk.addr,'event','key_rels'+evKeyGet(e?e:window.even)); }
-	    anchObj.onclick = function(e)
-	    {
+	    anchObj.onclick = function(e) {
 		if(!this.isActive) return false;
 		if(!e) e = window.event;
 		servSet(this.wdgLnk.addr,'com=obj&sub=point&x='+(e.offsetX?e.offsetX:(e.clientX-posGetX(this)))+
@@ -1542,12 +1426,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    dgrObj.isLoad = false;
 	    dgrObj.onload = function( )	{ this.isLoad = true; }
 	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+xSc.toFixed(2)+'&ySc='+ySc.toFixed(2);
-	    //> Disable drag mostly for FireFox
+	    //Disable drag mostly for FireFox
 	    dgrObj.onmousedown = function(e) { e = e?e:window.event; if(e.preventDefault) e.preventDefault(); }
 	    this.perUpdtEn(this.isEnabled() && parseInt(this.attrs['trcPer']));
 	}
-	else if(this.attrs['root'] == 'Protocol')
-	{
+	else if(this.attrs['root'] == 'Protocol') {
 	    if(this.attrs['backColor'] && getColor(this.attrs['backColor'],true))
 		elStyle += 'background-color: '+getColor(this.attrs['backColor'])+'; ';
 	    else elStyle += 'background-color: white; ';
@@ -1557,30 +1440,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 	    this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc));
 
-	    if(!this.place.firstChild)
-	    {
+	    if(!this.place.firstChild) {
 		this.place.appendChild(document.createElement('table'));
 		this.place.firstChild.setAttribute('width','100%');
 		this.place.firstChild.wdgLnk = this;
 		this.place.firstChild.isActive = elWr;
-		this.place.firstChild.onclick = function(e)
-		{
+		this.place.firstChild.onclick = function(e) {
 		    if(this.isActive) setFocus(this.wdgLnk.addr);
 		    return false;
 		}
 		this.place.firstChild.className='prot';
-		this.loadData = function( )
-		{
+		this.loadData = function( ) {
 		    if(!this.tmPrev) this.tmPrev = 0;
 		    if(!this.tmGrndPrev) this.tmGrndPrev = 0;
 
 		    var tblB = this.place.firstChild;
 
-		    //> Get archive parameters
+		    //Get archive parameters
 		    var tTime = parseInt(this.attrs['time']);
 		    var tTimeCurent = false;
-		    if(!tTime)
-		    {
+		    if(!tTime) {
 			tTimeCurent = true;
 			tTime = (new Date()).getTime()/1000;
 		    }
@@ -1603,8 +1482,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			tblB.appendChild(rowEl);
 			var colCfg = '';
 			var clm = this.curCols.split(';');
-			for(var c_off = 0; c_off < clm.length; c_off++)
-			{
+			for(var c_off = 0; c_off < clm.length; c_off++) {
 			    if(!parseInt(this.attrs['headVis'])) colCfg += "<th/>";
 			    else colCfg += "<th ind='"+clm[c_off]+"' "+
 						"style='"+this.wFont+"'>"+((clm[c_off]=='pos') ? '#' :
@@ -1619,14 +1497,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    }
 
 		    if(parseInt(this.curLev) < 0) this.messList = new Array();
-		    else
-		    {
-			if(!this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd || tTimeCurent)
-			{
+		    else {
+			if(!this.arhBeg || !this.arhEnd || !tTime || tTime > this.arhEnd || tTimeCurent) {
 			    var rez = servSet('/Archive/%2fserv%2fmess','com=com',"<info arch='"+this.curArch+"'/>",true);
 			    if(!rez || parseInt(rez.getAttribute('rez')) != 0)	this.arhBeg = this.arhEnd = 0;
-			    else
-			    {
+			    else {
 				this.arhBeg = parseInt(rez.getAttribute('beg'));
 				this.arhEnd = parseInt(rez.getAttribute('end'));
 				if(!tTime) { tTime = this.arhEnd; tTimeGrnd += tTime; }
@@ -1634,27 +1509,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			}
 			if(!this.arhBeg || !this.arhEnd) return;
 
-			//> Correct request to archive border
+			//Correct request to archive border
 			tTime = tTimeCurent ? this.arhEnd : Math.min(tTime,this.arhEnd);
 			tTimeGrnd = Math.max(tTimeGrnd, this.arhBeg);
 		    }
 
-		    //> Clear data at time error
+		    //Clear data at time error
 		    var valEnd = 0; var valBeg = 0;
 		    while(this.messList.length && (valEnd=this.messList[0][0]) > tTime) this.messList.shift();
 		    while(this.messList.length && (valBeg=this.messList[this.messList.length-1][0]) < tTimeGrnd) this.messList.pop();
 
 		    if(!this.messList.length) valEnd = valBeg = 0;
 
-		    if(tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg))
-		    {
+		    if(tTime < tTimeGrnd || (tTime < valEnd && tTimeGrnd > valBeg)) {
 			this.messList = new Array();
 			while(tblB.childNodes.length > 1) tblB.removeChild(tblB.lastChild);
 			valEnd = valBeg = 0;
 			return;
 		    }
 
-		    //> Correct request to present data
+		    //Correct request to present data
 		    var toUp = false, isDtChang = false;
 		    if(srcTime > this.tmPrev) { if(valEnd) tTimeGrnd = valEnd; toUp = true; }
 		    else if((srcTime-parseInt(this.attrs['tSize'])) < this.tmGrndPrev) { if(valBeg) tTime = valBeg-1; }
@@ -1667,54 +1541,49 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    if(!rez || parseInt(rez.getAttribute('rez')) != 0) return;
 
 		    if(toUp)
-			for(var i_req = 0; i_req < rez.childNodes.length; i_req++)
-			{
+			for(var i_req = 0; i_req < rez.childNodes.length; i_req++) {
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
 						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
 
-			    //>> Check for dublicates
+			    // Check for dublicates
 			    var isDbl = false;
-			    for(var i_p = 0; !isDbl && i_p < this.messList.length; i_p++)
-			    {
+			    for(var i_p = 0; !isDbl && i_p < this.messList.length; i_p++) {
 				if(mess[0] > this.messList[0][0] && i_p) break;
 				if(this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] &&
 				    this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4]) isDbl = true;
 			    }
 			    if(isDbl) continue;
 
-			    //>> Insert new row
+			    // Insert new row
 			    this.messList.unshift(mess);
 			    isDtChang = true;
 			}
 		    else
-			for(var i_req = rez.childNodes.length-1; i_req >= 0; i_req--)
-			{
+			for(var i_req = rez.childNodes.length-1; i_req >= 0; i_req--) {
 			    var rcd = rez.childNodes[i_req];
 			    var mess = new Array(parseInt(rcd.getAttribute('time')), parseInt(rcd.getAttribute('utime')),
 						    Math.abs(parseInt(rcd.getAttribute('lev'))), rcd.getAttribute('cat'), nodeText(rcd));
 
-			    //>> Check for dublicates
+			    // Check for dublicates
 			    var isDbl = false;
-			    for(var i_p = this.messList.length-1; !isDbl && i_p >= 0; i_p--)
-			    {
+			    for(var i_p = this.messList.length-1; !isDbl && i_p >= 0; i_p--) {
 				if(mess[0] < this.messList[this.messList.length-1][0] && i_p < (this.messList.length-1)) break;
 				if(this.messList[i_p][1] == mess[1] && this.messList[i_p][2] == mess[2] &&
 				    this.messList[i_p][3] == mess[3] && this.messList[i_p][4] == mess[4]) isDbl = true;
 			    }
 			    if(isDbl) continue;
 
-			    //>> Insert new row
+			    // Insert new row
 			    this.messList.push(mess);
 			    isDtChang = true;
 			}
 
 		    if((tblB.childNodes.length-1) == this.messList.length && !isDtChang) return;
 
-		    //> Sort data
+		    //Sort data
 		    var sortIts = new Array();
-		    switch(parseInt(this.attrs['viewOrd'])&0x3)
-		    {
+		    switch(parseInt(this.attrs['viewOrd'])&0x3) {
 			case 0:
 			    for(var i_m = 0; i_m < this.messList.length; i_m++)
 				sortIts.push(this.messList[i_m][0]+' '+this.messList[i_m][1]+':'+i_m);
@@ -1736,18 +1605,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		    sortIts.sort();
 		    if(parseInt(this.attrs['viewOrd'])&0x4) sortIts.reverse();
 
-		    //> Write to table
-		    for(var i_m = 0; i_m < sortIts.length; i_m++)
-		    {
+		    //Write to table
+		    for(var i_m = 0; i_m < sortIts.length; i_m++) {
 			var rowEl = (i_m>=(tblB.childNodes.length-1)) ? document.createElement('tr') : tblB.childNodes[i_m+1];
 			var elPos = parseInt(sortIts[i_m].slice(sortIts[i_m].lastIndexOf(':')+1));
 
 			var rowFnt = this.wFont;
 			var rowColor = '';
 
-			//>> Check properties
-			for(var i_it = 0, lst_lev = -1; i_it < parseInt(this.attrs['itProp']); i_it++)
-			{
+			// Check properties
+			for(var i_it = 0, lst_lev = -1; i_it < parseInt(this.attrs['itProp']); i_it++) {
 			    var prpLev = parseInt(this.attrs['it'+i_it+'lev']);
 			    if(this.messList[elPos][2] >= prpLev && prpLev > lst_lev &&
 				    chkPattern(this.messList[elPos][3],this.attrs['it'+i_it+'tmpl']))
@@ -1762,12 +1629,10 @@ function makeEl( pgBr, inclPg, full, FullTree )
 			//if( rowColor.length ) fclr = ((0.3*clr.red()+0.59*clr.green()+0.11*clr.blue()) > 128) ? Qt::black : Qt::white;
 			rowEl.style.cssText = rowFnt+rowColor;
 
-			for(var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++)
-			{
+			for(var i_cel = 0; i_cel < tblB.childNodes[0].childNodes.length; i_cel++) {
 			    var celEl = (i_cel>=rowEl.childNodes.length) ? document.createElement('td') : rowEl.childNodes[i_cel];
 			    if(this.col_pos == i_cel) { setNodeText(celEl,i_m); celEl.style.cssText += ' text-align: center; '; }
-			    else if(this.col_tm == i_cel)
-			    {
+			    else if(this.col_tm == i_cel) {
 				var dt = new Date(this.messList[elPos][0]*1000);
 				setNodeText(celEl,dt.getDate()+'.'+(dt.getMonth()+1)+'.'+dt.getFullYear()+' '+dt.getHours()+':'+
 				    ((dt.getMinutes()<10)?('0'+dt.getMinutes()):dt.getMinutes())+':'+((dt.getSeconds()<10)?('0'+dt.getSeconds()):dt.getSeconds()));
@@ -1787,8 +1652,7 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    if(this.isEnabled() && parseInt(this.attrs['trcPer'])) this.perUpdtEn(true);
 	    else { this.perUpdtEn(false); this.loadData(); }
 	}
-	else if(this.attrs['root'] == 'Document')
-	{
+	else if(this.attrs['root'] == 'Document') {
 	    elStyle += 'background-color: white; ';
 
 	    if(this.attrsMdf["style"] || this.attrsMdf["font"] ||
@@ -1797,13 +1661,11 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		this.wFont = getFont(this.attrs['font'],Math.min(xSc,ySc),1);
 
 		var ifrmObj = this.place.childNodes[0];
-		try
-		{
+		try {
 		    if(ifrmObj && (!ifrmObj.contentDocument || document.URL != ifrmObj.contentDocument.URL))
 		    { this.place.removeChild(ifrmObj); ifrmObj = null; }
 		}catch(e) { this.place.removeChild(ifrmObj); ifrmObj = null; }
-		if(!ifrmObj)
-		{
+		if(!ifrmObj) {
 		    ifrmObj = this.place.ownerDocument.createElement('iframe');
 		    this.place.appendChild(ifrmObj);
 		}
@@ -1813,19 +1675,24 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	    }
 	}
 	elStyle += 'width: '+geomW+'px; height: '+geomH+'px; z-index: '+this.attrs['geomZ']+'; margin: '+elMargin+'px; ';
+	//Scroll for the included containers correct
+	if(this.inclOpen) {
+	    var geomWpar = parseFloat(this.attrs['geomW'])*this.xScale(true);
+	    var geomHpar = parseFloat(this.attrs['geomH'])*this.yScale(true);
+	    var geomWch = parseFloat(this.pages[this.inclOpen].attrs['geomW'])*this.pages[this.inclOpen].xScale(true);
+	    var geomHch = parseFloat(this.pages[this.inclOpen].attrs['geomH'])*this.pages[this.inclOpen].yScale(true);
+	    elStyle += "overflow: "+((geomWch > geomWpar || geomHch > geomHpar) ? 'scroll' : 'hidden')+"; ";
+	}
 	if(elStyle != this.place.style.cssText)	this.place.style.cssText = elStyle;
 
-	//> Generic mouse events process
-	if(elWr)
-	{
+	//Generic mouse events process
+	if(elWr) {
 	    //console.log(this.addr+": TEST 03: mDownCnt="+this.mDownCnt);
-	    this.mousedown[this.mousedown.length] = function(e,el)
-	    {
+	    this.mousedown[this.mousedown.length] = function(e,el) {
 		if(!e) e = window.event;
 		setWAttrs(el.wdgLnk.addr,'event','key_mousePres'+evMouseGet(e));
 	    }
-	    this.mouseup[this.mouseup.length] = function(e,el)
-	    {
+	    this.mouseup[this.mouseup.length] = function(e,el) {
 		if(!e) e = window.event;
 		setWAttrs(el.wdgLnk.addr,'event','key_mouseRels'+evMouseGet(e));
 	    }
@@ -1833,11 +1700,9 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else this.place.ondblclick = '';
 
-	//> Context menu setup
-	if(elWr && this.attrs['contextMenu'].length)
-	{
-	    var ctxEv = function(e,el)
-	    {
+	//Context menu setup
+	if(elWr && this.attrs['contextMenu'].length) {
+	    var ctxEv = function(e,el) {
 		var cel = el ? el : this;
 		if(!e) e = window.event;
 		if((isKonq || isOpera) && evMouseGet(e) != 'Right') return true;
@@ -1847,14 +1712,12 @@ function makeEl( pgBr, inclPg, full, FullTree )
 		for(var i_ce = 0; i_ce < cntxEls.length; i_ce++)
 		    optEl += "<option sign='"+cntxEls[i_ce].split(':')[1]+"'>"+cntxEls[i_ce].split(':')[0]+"</option>";
 		popUpMenu.childNodes[0].innerHTML = optEl;
-		if(popUpMenu.childNodes[0].childNodes.length)
-		{
+		if(popUpMenu.childNodes[0].childNodes.length) {
 		    popUpMenu.childNodes[0].wdgLnk = cel.wdgLnk;
 		    popUpMenu.childNodes[0].size = Math.max(3,popUpMenu.childNodes[0].childNodes.length);
 		    popUpMenu.style.cssText = 'visibility: visible; left: '+(e.clientX+window.pageXOffset)+'px; top: '+(e.clientY+window.pageYOffset)+'px;';
 		    popUpMenu.childNodes[0].selectedIndex = -1;
-		    popUpMenu.childNodes[0].onclick = function()
-		    {
+		    popUpMenu.childNodes[0].onclick = function( ) {
 			this.parentNode.style.cssText = 'visibility: hidden; left: -200px; top: -200px;';
 			if(this.selectedIndex < 0) return false;
 			setWAttrs(this.wdgLnk.addr,'event','usr_'+this.options[this.selectedIndex].getAttribute('sign'));
@@ -1868,18 +1731,16 @@ function makeEl( pgBr, inclPg, full, FullTree )
 	}
 	else this.place.oncontextmenu = null;
 
-	//> Common mouse events process
+	//Common mouse events process
 	if(this.mousedown.length)
-	    this.place.onmousedown = function(e)
-	    {
+	    this.place.onmousedown = function(e) {
 		for(var i_on = 0; i_on < this.wdgLnk.mousedown.length; i_on++)
 		this.wdgLnk.mousedown[i_on](e,this);
 		return true;
 	    }
 	else delete this.mousedown;
 	if(this.mouseup.length)
-	    this.place.onmouseup = function(e)
-	    {
+	    this.place.onmouseup = function(e) {
 		for(var i_on = 0; i_on < this.wdgLnk.mouseup.length; i_on++)
 		    this.wdgLnk.mouseup[i_on](e,this);
 		return true;
@@ -1892,30 +1753,26 @@ function makeEl( pgBr, inclPg, full, FullTree )
     this.place.setAttribute('title',this.attrs['tipTool']);
     this.place.onmouseover = function() { if( this.wdgLnk.attrs['tipStatus'] ) setStatus(this.wdgLnk.attrs['tipStatus'],10000); };
 
-    //> Delete child widgets check
+    //Delete child widgets check
     if(FullTree && pgBr)
-	for(var i in this.wdgs)
-	{
+	for(var i in this.wdgs) {
 	    var j;
 	    for(j = 0; j < pgBr.childNodes.length; j++)
 		if(pgBr.childNodes[j].nodeName == 'w' && pgBr.childNodes[j].getAttribute('id') == i)
 		    break;
-	    if(j >= pgBr.childNodes.length)
-	    {
+	    if(j >= pgBr.childNodes.length) {
 		this.wdgs[i].place.parentNode.removeChild(this.wdgs[i].place);
 		delete this.wdgs[i];
 	    }
 	}
 
-    //> Child widgets process
+    //Child widgets process
     if(pgBr && !inclPg && parseInt(this.attrs['perm'])&SEC_RD)
-	for(var j = 0; j < pgBr.childNodes.length; j++)
-	{
+	for(var j = 0; j < pgBr.childNodes.length; j++) {
 	    if(pgBr.childNodes[j].nodeName != 'w') continue;
 	    var chEl = pgBr.childNodes[j].getAttribute('id');
 	    if(this.wdgs[chEl]) this.wdgs[chEl].makeEl(pgBr.childNodes[j], false, full, FullTree);
-	    else
-	    {
+	    else {
 		var wdgO = new pwDescr(this.addr+'/wdg_'+chEl,false,this);
 		wdgO.place = this.place.ownerDocument.createElement('div');
 		this.place.appendChild(wdgO.place);
@@ -1928,25 +1785,23 @@ function makeEl( pgBr, inclPg, full, FullTree )
 
 function pwClean( )
 {
-    //> Periodic update disable
+    //Periodic update disable
     this.perUpdtEn(false);
-    //> Pages recursively clean
+    //Pages recursively clean
     for(var i in this.pages) this.pages[i].pwClean();
     this.pages = new Object();
-    //> Widgets recursively clean
+    //Widgets recursively clean
     for(var i in this.wdgs) this.wdgs[i].pwClean();
     this.wdgs = new Object();
 }
 
 function perUpdtEn( en )
 {
-    if(this.attrs['root'] == 'Diagram' || this.attrs['root'] == 'Protocol')
-    {
+    if(this.attrs['root'] == 'Diagram' || this.attrs['root'] == 'Protocol') {
 	if(en && this.isEnabled() && !perUpdtWdgs[this.addr] && parseInt(this.attrs['trcPer']))	perUpdtWdgs[this.addr] = this;
 	if(!en && perUpdtWdgs[this.addr]) delete perUpdtWdgs[this.addr];
     }
-    else if(this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl')
-    {
+    else if(this.attrs['root'] == 'Document' || this.attrs['root'] == 'FormEl') {
 	if(en) perUpdtWdgs[this.addr] = this;
 	else delete perUpdtWdgs[this.addr];
     }
@@ -1958,25 +1813,21 @@ function perUpdt( )
     if(this.attrs['root'] == 'FormEl' && this.place.childNodes.length && this.place.childNodes[0].clearTm &&
 	    (this.place.childNodes[0].clearTm-=prcTm) <= 0)
 	this.place.childNodes[0].chEscape();
-    else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0)
-    {
+    else if(this.attrs['root'] == 'Diagram' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);
 	var dgrObj = this.place.childNodes[0].childNodes[0];
 	if(!dgrObj.stLoadTm) dgrObj.stLoadTm = (new Date()).getTime();
-	if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000))
-	{
+	if(dgrObj && (dgrObj.isLoad || ((new Date()).getTime()-dgrObj.stLoadTm) > this.updCntr*3000)) {
 	    dgrObj.isLoad = false;
 	    dgrObj.src = '/'+MOD_ID+this.addr+'?com=obj&tm='+tmCnt+'&xSc='+this.xScale(true).toFixed(2)+'&ySc='+this.yScale(true).toFixed(2);
 	    dgrObj.stLoadTm = (new Date()).getTime();
 	}
     }
-    else if(this.attrs['root'] == 'Protocol' && (this.updCntr-=prcTm) <= 0)
-    {
+    else if(this.attrs['root'] == 'Protocol' && (this.updCntr-=prcTm) <= 0) {
 	this.updCntr = parseInt(this.attrs['trcPer']);
 	this.loadData();
     }
-    else if(this.attrs['root'] == 'Document')
-    {
+    else if(this.attrs['root'] == 'Document') {
 	var frDoc = this.place.childNodes[0].contentDocument || this.place.childNodes[0].contentWindow || this.place.childNodes[0].document;
 	frDoc.open();
 	frDoc.write("<html><head>\n"+
@@ -1998,8 +1849,7 @@ function perUpdt( )
 	frDoc.close();
 	frDoc.body.wdgLnk = this;
 	frDoc.body.isActive = (parseInt(this.attrs['active']) && parseInt(this.attrs['perm'])&SEC_WR);
-	frDoc.body.onclick = function(e)
-	{
+	frDoc.body.onclick = function(e) {
 	    if(this.isActive) setFocus(this.wdgLnk.addr);
 	    return true;
 	}
@@ -2063,36 +1913,31 @@ function pwDescr( pgAddr, pg, parent )
  ***************************************************/
 function makeUI( callBackRez )
 {
-    if(!callBackRez)
-    {
+    if(!callBackRez) {
 	prcCnt++;
 	stTmMain = new Date();
     }
 
-    //> Get open pages list
-    //>> Synchronous
+    //Get open pages list
+    // Synchronous
     var pgNode = servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt);
-    //>> Asynchronous
+    // Asynchronous
     //var pgNode = null;
     //if(callBackRez) pgNode = (callBackRez == -1) ? null : callBackRez;
     //else { servGet('/'+sessId,'com=pgOpenList&tm='+tmCnt,makeUI); return; }
-    if(pgNode)
-    {
+    if(pgNode) {
 	modelPer = parseInt(pgNode.getAttribute("per"));
-	//>> Check for delete pages
-	for(var i_p = 0; i_p < pgList.length; i_p++)
-	{
+	// Check for delete pages
+	for(var i_p = 0; i_p < pgList.length; i_p++) {
 	    var opPg; var i_ch;
 	    for(i_ch = 0; i_ch < pgNode.childNodes.length; i_ch++)
 		if(pgNode.childNodes[i_ch].nodeName == 'pg' && nodeText(pgNode.childNodes[i_ch]) == pgList[i_p])
 		    break;
 	    if(i_ch < pgNode.childNodes.length || !(opPg=masterPage.findOpenPage(pgList[i_p]))) continue;
-	    if(opPg.window)
-	    {
+	    if(opPg.window) {
 		if(opPg.windowExt) opPg.window.close();
 		else if(opPg != masterPage) document.getElementById('mainCntr').removeChild(opPg.window);
-		else
-		{
+		else {
 		    document.body.removeChild(opPg.window);
 		    masterPage = new pwDescr('',true)
 		}
@@ -2101,31 +1946,29 @@ function makeUI( callBackRez )
 	    else if(opPg.parent && opPg.parent.inclOpen && opPg.parent.inclOpen == pgList[i_p])
 	    { opPg.parent.attrs['pgOpenSrc'] = ''; opPg.parent.makeEl(null,true); }
 	}
-	//>> Process opened pages
+	// Process opened pages
 	pgList = new Array();
 	for(var i = 0; i < pgNode.childNodes.length; i++)
-	    if(pgNode.childNodes[i].nodeName == 'pg')
-	    {
+	    if(pgNode.childNodes[i].nodeName == 'pg') {
 	        var prPath = nodeText(pgNode.childNodes[i]);
-		//>>> Check for closed window
+		//  Check for closed window
 		var opPg = masterPage.findOpenPage(prPath);
-		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed)
-		{
+		if(opPg && opPg.window && opPg.windowExt && opPg.window.closed) {
 		    servSet(prPath,'com=pgClose','');
 		    opPg.pwClean();
 		    delete opPg.parent.pages[prPath];
 		    continue;
 		}
-		//>>> Call page
+		//  Call page
 		pgList.push(prPath);
 		masterPage.callPage(prPath,parseInt(pgNode.childNodes[i].getAttribute('updWdg')));
 	    }
 	tmCnt = parseInt(pgNode.getAttribute('tm'));
     }
-    //> Update some widgets
+    //Update some widgets
     for(var i in perUpdtWdgs) perUpdtWdgs[i].perUpdt();
 
-    //> Elapsed time get and adjust for plane update period depends from network speed
+    //Elapsed time get and adjust for plane update period depends from network speed
     var elTm = 1e-3*((new Date()).getTime()-stTmMain.getTime());
     if(!planePer) planePer = 1e-3*modelPer;
     planePer += (Math.max(1e-3*modelPer,elTm*3)-planePer)/100;
@@ -2137,7 +1980,7 @@ function makeUI( callBackRez )
     //prcTm = Math.max(modelPer*1e-3,Math.min(60,3e-3*((new Date()).getTime() - stTmMain.getTime())));
     //setTimeout(makeUI,prcTm*1e3);
 
-    //> Execution performance test
+    //Execution performance test
     /*var startChkTm = (new Date()).getTime();
     for(var i_cnt = 0; i_cnt < 1000000; i_cnt++)
 	var trez = Math.sin(Math.PI);
@@ -2162,8 +2005,7 @@ function setStatus( mess, tm )
 function getPopup( )
 {
     var popUpMenu = document.getElementById('popupmenu');
-    if(!popUpMenu)
-    {
+    if(!popUpMenu) {
 	popUpMenu = document.createElement('div'); popUpMenu.id = 'popupmenu';
 	popUpMenu.appendChild(document.createElement('select'));
 	document.body.appendChild(popUpMenu);

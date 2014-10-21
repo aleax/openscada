@@ -8531,6 +8531,7 @@ INSERT INTO "wlb_Main_uio" VALUES('objProps','objName','Object:name',131077,'||'
 INSERT INTO "wlb_Main_uio" VALUES('cntrPaspExt','prevTab','Previous tab',131077,'view||',8,'','','','Попередня вкладинка','','','Предыдущая вкладка','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','allowSelLst','Allow for select parameters',131205,'||',8,'','','','Параметри дозволені для обрання','','','Параметры разрешённые для выбора','','','','');
 INSERT INTO "wlb_Main_uio" VALUES('grpGraph10','grpName','Group name',131077,'||',9,'','','','Ім''я групи','','','Имя группы','','','','');
+INSERT INTO "wlb_Main_uio" VALUES('TextLab','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'||',9,'','','','','','','','','','','');
 CREATE TABLE 'wlb_doc' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '' ,"ATTRS" TEXT DEFAULT '' ,"DBV" INTEGER DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_doc" VALUES('docGasNodeDayA','','/wlb_doc/wdg_doc','JavaLikeCalc.JavaScript
 using Special.FLibSYS;
@@ -17971,161 +17972,46 @@ OBGt7ou7AUCxthdCIWJtemQuKitQTE6O3vL0+ZsO9Q4iTSlJGxNjozPxtLz09YMKoj14xt5gSMyO
 h3+YrABEp8buuE1+d3P/YIumVtZTket3Z8sq7BSAuJm6EQ6X1uOyBgBQkXI3w2EsrorVdlLl8atf
 JOc8Tc46rIipxd+i6Zzyl4tDXY3NXguvZ6OZaoW8mfj20ifRdq/NqC8L2bnZyNrDm/tpX6dJp9N5
 7ty5/zvJf5TT6fwdtJ1wW1UXxCwAAAAASUVORK5CYII=','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-name_text = pName.isEVal()?"No data":pName;
-val_arg0val = pVal;
-val_font = "Arial 24 1 0 0 0"; 
-if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
-if(pVal.isEVal())
-{
-	val_color = name_color = "grey";
-	val_font = "Arial 24 0 1 0 1";
-	alarm = "";
-	pErrCode = 0;
-	return;
-}
-
-//Alarms create
-if(!pErr.isEVal() && pErrCode != pErr)
-{
-	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - reject.|7" : "100|"+pName+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" above alarm border.|7";
-	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" bellow alarm border.|7";
-	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" above warning border."+"|7";
-	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" bellow warning border."+"|7";
-	else if(alarmSt&0x100) alarm = "1|"+pName+"||1";
-}
-if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-
-//Alarm color change
-alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100)
-{
-	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1) wColor = "lime";
-	else if(alarmLev < 30)	wColor = "yellow";
-	else if(alarmLev < 75)	wColor = "red";
-	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor;
-	else 
-	{ 
-		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? "red" : wColor; }
-		else name_color = val_color = wColor;
-	}
-}
-else  name_color = val_color = "lime";
-
-//Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pName)
-{
-  bordColor = (bordColor == "white") ? "grey" : "white";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }
-
-//Check the regulator mode
-if(pModeC == true) mode_text = "C";
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M");','JavaLikeCalc.JavaScript
-name_text = pName.isEVal()?"Нет данных":pName;
-val_arg0val = pVal;
-val_font = "Arial 24 1 0 0 0"; 
-if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
-if(pVal.isEVal())
-{
-	val_color = name_color = "grey";
-	val_font = "Arial 24 0 1 0 1";
-	alarm = "";
-	pErrCode = 0;
-	return;
-}
-
-//Alarms create
-if(!pErr.isEVal() && pErrCode != pErr)
-{
-	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - отказ.|7" : "100|"+pName+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" выше допустимой границы.|7";
-	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" ниже допустимой границы.|7";
-	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" выше нормы."+"|7";
-	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" ниже нормы."+"|7";
-	else if(alarmSt&0x100) alarm = "1|"+pName+"||1";
-}
-if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-
-//Alarm color change
-alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100)
-{
-	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1) wColor = "lime";
-	else if(alarmLev < 30)	wColor = "yellow";
-	else if(alarmLev < 75)	wColor = "red";
-	else { wColor = "grey"; blinkPr = false; }
-
-	if(blinkPr) name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor;
-	else 
-	{
-		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? "red" : wColor; }
-		else name_color = val_color = wColor;
-	}
-}
-else  name_color = val_color = "lime";
-
-//Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pName)
-{
-  bordColor = (bordColor == "white") ? "grey" : "white";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }
-
-//Check the regulator mode
-if(pModeC == true) mode_text = "К";
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "А" : "Р");','JavaLikeCalc.JavaScript
-name_text = pName.isEVal()?"Немає даних":pName;
+name_text = pName.isEVal() ? tr("No data") : pName;
 val_arg0val = pVal;
 val_font = "Arial 24 1 0 0 0";
 if(!pPrec.isEVal()) val_arg0cfg = ((pPrec>=0)?";f;":";g;")+abs(pPrec);
-if(pVal.isEVal())
-{
+if(pVal.isEVal()) {
 	val_color = name_color = "grey";
 	val_font = "Arial 24 0 1 0 1";
 	alarm = "";
 	pErrCode = 0;
+	bordColor = "grey", bordWidth = 1;
 	return;
 }
 
-//Alarms create
-if(!pErr.isEVal() && pErrCode != pErr)
-{
+//Notification create
+if(!pErr.isEVal() && pErrCode != pErr) {
 	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - reject.|7" : "100|"+pName+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" above alarm border.|7";
-	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" bellow alarm border.|7";
-	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" above warning border."+"|7";
-	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" bellow warning border."+"|7";
-	else if(alarmSt&0x100) alarm = "1|"+pName+"||1";
+	if(pErrCode == 1 || pErrCode == 2)	alarm = (redEVAL == true) ? "100|"+pName+"|"+spName+" - "+tr("reject")+".|7" : "100|"+pName+"||1";
+	else if(pErrCode == 3)	alarm = "50|"+pName+"|"+spName+" "+tr("above alarm border")+".|7";
+	else if(pErrCode == 4)	alarm = "50|"+pName+"|"+spName+" "+tr("bellow alarm border")+".|7";
+	else if(pErrCode == 5)	alarm = "10|"+pName+"|"+spName+" "+tr("above warning border")+".|7";
+	else if(pErrCode == 6)	alarm = "10|"+pName+"|"+spName+" "+tr("bellow warning border")+".|7";
+	else if(alarmSt&0x100)	alarm = "1|"+pName+"||1";
 }
 if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 
-//Alarm color change
+//Notification color change
 alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100)
-{
+if(alarmLev && alarmSt&0x100) {
 	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1) wColor = "lime";
+	if(!pErrCode || alarmLev <= 1)	wColor = "lime";
 	else if(alarmLev < 30)	wColor = "yellow";
 	else if(alarmLev < 75)	wColor = "red";
 	else { wColor = "grey"; blinkPr = false; }
-
 	if(blinkPr) name_color = val_color = (alarmSt&0x10000 && name_color == wColor) ? "grey" : wColor;
-	else 
-	{ 
+	else { 
 		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; name_color = (redEVAL==true) ? "red" : wColor; }
 		else name_color = val_color = wColor;
 	}
 }
-else  name_color = val_color = "lime";
+else name_color = val_color = "lime";
 
 //Blink focused or linked with ElCadr
 if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pName)
@@ -18136,8 +18022,8 @@ if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss
 else { bordColor = "grey"; bordWidth = 1; }
 
 //Check the regulator mode
-if(pModeC == true) mode_text = "К";
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "Р");',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1410443654);
+if(pModeC == true) mode_text = tr("C");
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1413915803);
 INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -18270,40 +18156,37 @@ name_geomW = pNameSz;
 val_arg0val = pVal;
 val_font = "Arial 24 1 0 0 0"; 
 if(!prec.isEVal()) val_arg0cfg = ((prec>=0)?";f;":";g;")+abs(prec);
-if(pVal.isEVal())
-{
+if(pVal.isEVal()) {
 	val_color = "grey";
 	val_font = "Arial 24 0 1 0 1";
 	alarm = "";
 	pErrCode = 0;
+	bordColor = "grey", bordWidth = 1;
 	return;
 }
 
-//Alarms create
-if(!pErr.isEVal() && pErrCode != pErr)
-{
+//Notification create
+if(!pErr.isEVal() && pErrCode != pErr) {
 	pErrCode = pErr;
 	if(pErrCode == 1 || pErrCode == 2)	alarm = "100|"+pNAME+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" above alarm border.|7";
-	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" bellow alarm border.|7";
-	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" above warning border."+"|7";
-	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" bellow warning border."+"|7";
+	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" "+tr("above alarm border")+".|7";
+	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" "+tr("bellow alarm border")+".|7";
+	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" "+tr("above warning border")+".|7";
+	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" "+tr("bellow warning border")+".|7";
 	else if(alarmSt&0x100) alarm = "1|"+pNAME+"||1";
 }
 if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 
-//Alarm color change
+//Notification color change
 alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100)
-{
+if(alarmLev && alarmSt&0x100) {
 	blinkPr = true;
 	if(!pErrCode || alarmLev <= 1) wColor = "lime";
 	else if(alarmLev < 30)	wColor = "yellow";
 	else if(alarmLev < 75)	wColor = "red";
 	else { wColor = "grey"; blinkPr = false; }
 	if(blinkPr) val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor;
-	else 
-	{ 
+	else { 
 		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; }
 		else val_color = wColor;
 	}
@@ -18316,114 +18199,7 @@ if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss
   bordColor = (bordColor == "white") ? "grey" : "white";
   bordWidth = 2;
 }
-else { bordColor = "grey"; bordWidth = 1; }','JavaLikeCalc.JavaScript
-name_en = pName.length;
-name_text = pName;
-name_geomW = pNameSz;
-val_arg0val = pVal;
-val_font = "Arial 24 1 0 0 0"; 
-if(!prec.isEVal()) val_arg0cfg = ((prec>=0)?";f;":";g;")+abs(prec);
-if(pVal.isEVal())
-{
-	val_color = "grey";
-	val_font = "Arial 24 0 1 0 1";
-	alarm = "";
-	pErrCode = 0;
-	return;
-}
-
-//Alarms create
-if(!pErr.isEVal() && pErrCode != pErr)
-{
-	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = "100|"+pNAME+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" выше допустимой границы.|7";
-	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" ниже допустимой границы.|7";
-	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" выше нормы."+"|7";
-	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" ниже нормы."+"|7";
-	else if(alarmSt&0x100) alarm = "1|"+pNAME+"||1";
-}
-if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-
-//Alarm color change
-alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100)
-{
-	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1) wColor = "lime";
-	else if(alarmLev < 30)	wColor = "yellow";
-	else if(alarmLev < 75)	wColor = "red";
-	else { wColor = "grey"; blinkPr = false; }
-
-	if(blinkPr) val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor;
-	else 
-{
-		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; }
-		else val_color = wColor;
-}
-}
-else val_color = "lime";
-
-//Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pNAME)
-{
-  bordColor = (bordColor == "white") ? "grey" : "white";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }','JavaLikeCalc.JavaScript
-name_en = pName.length;
-name_text = pName;
-name_geomW = pNameSz;
-val_arg0val = pVal;
-val_font = "Arial 24 1 0 0 0"; 
-if(!prec.isEVal()) val_arg0cfg = ((prec>=0)?";f;":";g;")+abs(prec);
-if(pVal.isEVal())
-{
-	val_color = "grey";
-	val_font = "Arial 24 0 1 0 1";
-	alarm = "";
-	pErrCode = 0;
-	return;
-}
-
-//Alarms create
-if(!pErr.isEVal() && pErrCode != pErr)
-{
-	pErrCode = pErr;
-	if(pErrCode == 1 || pErrCode == 2)	alarm = "100|"+pNAME+"||1";
-	else if(pErrCode == 3)	alarm = "50|"+pNAME+"|"+spName+" above alarm border.|7";
-	else if(pErrCode == 4)	alarm = "50|"+pNAME+"|"+spName+" bellow alarm border.|7";
-	else if(pErrCode == 5)	alarm = "10|"+pNAME+"|"+spName+" above warning border."+"|7";
-	else if(pErrCode == 6)	alarm = "10|"+pNAME+"|"+spName+" bellow warning border."+"|7";
-	else if(alarmSt&0x100) alarm = "1|"+pNAME+"||1";
-}
-if(!pErrCode && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
-
-//Alarm color change
-alarmLev = alarmSt&0xFF;
-if(alarmLev && alarmSt&0x100)
-{
-	blinkPr = true;
-	if(!pErrCode || alarmLev <= 1) wColor = "lime";
-	else if(alarmLev < 30)	wColor = "yellow";
-	else if(alarmLev < 75)	wColor = "red";
-	else { wColor = "grey"; blinkPr = false; }
-	if(blinkPr) val_color = (alarmSt&0x10000 && val_color == wColor) ? "grey" : wColor;
-	else 
-	{ 
-		if(pErrCode == 1 || pErrCode == 2)	{ val_color = wColor; val_font = "Arial 24 0 1 0 1"; }
-		else val_color = wColor;
-	}
-}
-else val_color = "lime";
-
-//Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pNAME)
-{
-  bordColor = (bordColor == "white") ? "grey" : "white";
-  bordWidth = 2;
-}
-else { bordColor = "grey"; bordWidth = 1; }',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1399468672);
+else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1413911550);
 INSERT INTO "wlb_Main" VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
@@ -19354,7 +19130,7 @@ QmCC','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
 if(f_start) { en = !name.isEVal(); loadFromSess = false; }
 
 if(en && name.isEVal()) {
-	name = "<No selected>";
+	name = tr("<No selected>");
 	//Load stored session''s assignments
 	if(!loadFromSess) {
 		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
@@ -19385,8 +19161,8 @@ else { bordWidth =  1; bordColor = "black"; }
 //Check the regulator mode
 if(!enMode.isEVal() && enMode) { 
   mode_en = true; 
-  if(!pModeC.isEVal() && pModeC) mode_text = "C";
-  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M"); 
+  if(!pModeC.isEVal() && pModeC) mode_text = tr("C");
+  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M")); 
 }
 else mode_en = false;
 
@@ -19407,78 +19183,14 @@ if(bordStyle == 1) color = "-";
 trClr_lineClr = color;
 
 tipTool = "";
-if(!name.isEVal())	tipTool += "Name: "+name+"\n";
-if(!min.isEVal() && !max.isEVal() && max > min) tipTool += "Scale: "+min+" ... "+max+"\n";
-if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += "Alarm border: "+aMin+" ... "+aMax+"\n";
-if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += "Warning border: "+wMin+" ... "+wMax+"\n";
+if(!name.isEVal())	tipTool += tr("Name")+": "+name+"\n";
+if(!min.isEVal() && !max.isEVal() && max > min) tipTool += tr("Scale")+": "+min+" ... "+max+"\n";
+if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += tr("Alarm border")+": "+aMin+" ... "+aMax+"\n";
+if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning border")+": "+wMin+" ... "+wMax+"\n";
 if(!dscr.isEVal()) {
-	tipTool += "Description: "+dscr+"\n";
+	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','JavaLikeCalc.JavaScript
-if(f_start) { en = !name.isEVal(); loadFromSess = false; }
-
-if(en && name.isEVal()) {
-	name = "<Не выбран>";
-	//Load stored session''s assignments
-	if(!loadFromSess) {
-		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
-			if((wA=this.attr(lnA,true)).length) this.linkSet(lnA, wA);
-		//if((cVal=this.attr("color",true)).length) this.color = cVal;
-		loadFromSess = true;
-}
-}
-lb_sfr_text = name;
-if(varEl.isEVal()) lb_val_arg0val = "-";
-else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
-else lb_val_arg0val = (prec.isEVal() || prec == 0) ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
-lb_val_color = lb_sfr_color = lb_ed_color = "limegreen";
-if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
-else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "red";
-else if(!wMax.isEVal() && !wMin.isEVal() && wMax > wMin && (varEl >= wMax || varEl <= wMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "yellow";
-
-lb_ed_text = ed.isEVal() ? "" : ed;
-
-//Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == name)
-{
-  bordColor = (bordColor == "white") ? "black" : "white";
-  bordWidth =  2;
-}
-else { bordWidth =  1; bordColor = "black"; }
-
-//Check the regulator mode
-if(!enMode.isEVal() && enMode) { 
-  mode_en = true; 
-  if(!pModeC.isEVal() && pModeC) mode_text = "C";
-  else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? "A" : "M"); 
-}
-else mode_en = false;
-
-//Events process
-evRez = "";
-for(off = 0; (evCur=event.parse(0,"\n",off)).length; ) {
-	//messPut("Trend en",0,"Event: "+evCur);
-	if(evCur == "key_mouseDblClick" || evCur == "usr_hideshow") bordStyle = (bordStyle==1) ? 3 : 1;
-	//Store session''s assignments
-	else if(evCur == "usr_set")
-		for(off = 0; (lnA="addr;name;dscr;min;max;ed;prec;aMax;aMin;wMax;wMin;pModeA;pModeC;color".parse(0,";",off)).length; )
-			this.attrSet(lnA, this.link(lnA),true);
-	else evRez += evCur+"\n";
-}
-event = evRez;
-
-if(bordStyle == 1) color = "-";
-trClr_lineClr = color;
-
-tipTool = "";
-if(!name.isEVal())	tipTool += "Имя: "+name+"\n";
-if(!min.isEVal() && !max.isEVal() && max > min) tipTool += "Шкала: "+min+" ... "+max+"\n";
-if(!aMin.isEVal() && !aMax.isEVal() && aMax > aMin) tipTool += "Аварийная граница: "+aMin+" ... "+aMax+"\n";
-if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += "Предупр. граница: "+wMin+" ... "+wMax+"\n";
-if(!dscr.isEVal()) {
-	tipTool += "Описание: "+dscr+"\n";
-	tipStatus = dscr;
-}','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1405591024);
+}','','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1413789462);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -20209,228 +19921,87 @@ OQfaPSSDv3//MjAwMA20MygFox4YaDDqgYEGox4YaDDkPcBCke6/Hx9cv/fszcdfCCFWHgFhKRmu
 KJVmkTB4ff7snYcvviIEeeU0TUTUKPLACE9CTFziCipabII/EEJs/CISwny8qvr6IihKBcX4hDlV
 1NgExJHSG4ewlDgXZWFImQdYhDXM7TSwySgFqmERlVKiyDpsYMgnoVEPDDQY9cBAAxYGBoYfP36w
 sFBWHA0E+PHjB2FFgx8AAE0jPQCZy9M+AAAAAElFTkSuQmCC','/wlb_originals/wdg_Text','JavaLikeCalc.JavaScript
-//> Prepare context menu
-if(f_start && !digComs.isEVal() && digComs.length)
-{
+if(f_start)	isErr = false, alBlnk = false;
+//Prepare context menu
+if(f_start && !digComs.isEVal() && digComs.length) {
 	contextMenu = "";
 	if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-")+":open\n";
 	if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-")+":close\n";
 	if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-")+":stop\n";
 }
 
-//> Display label from st_text
-if(!st_text.isEVal() && st_text.length)
-{
+//Display label from st_text
+stCur = -1;
+if(!st_text.isEVal() && st_text.length) {
 	text = st_text.parse(0,":");
 	blink = st_text.parse(2,":").toInt();
 	backClr = st_text.parse(1,":").parse(0,"-");
-	if(blink)
-	{
+	if(blink) {
 		backClrBl = st_text.parse(1,":").parse(1,"-");
 		if(!backClrBl.length)	backClrBl = "gray";
 		backColor = (backColor!=backClr) ? backClr : backClrBl;
 	}
 	else	backColor = backClr;
 }
-//> Display typical for st_open
-else if(st_open == true || st_close == false)
-{
-	backColor = ((stVal=digStts.parse(0,";").parse(1,"-")).length) ? stVal : "green";
-	text = ((stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : "Enable";
+//Display typical for st_open
+else if(st_open == true || st_close == false) {
+	backColor = (stVal=digStts.parse(0,";").parse(1,"-")).length ? stVal : "green";
+	text = (!digStts.isEVal() && (stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : tr("Enable");
+	stCur = 1;
 }
-else if(st_open == false || st_close == true)
-{
-	backColor = ((stVal=digStts.parse(1,";").parse(1,"-")).length) ? stVal : "blue";
-	text = ((stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : "Disable";
+else if(st_open == false || st_close == true) {
+	backColor = (stVal=digStts.parse(1,";").parse(1,"-")).length ? stVal : "blue";
+	text = (!digStts.isEVal() && (stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : tr("Disable");
+	stCur = 0;
 }
 else { backColor = "grey"; text = "---"; return; }
 
-//> Blink linked with ElCadr
-if(focus/*!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME*/)
+//Blink linked with ElCadr
+if(this.attr("focus") ||
+	(!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME))
 {
   bordColor = (bordColor != "white") ? "white" : "black";
   bordWidth = 2;
 }
 else { bordWidth = 1; bordColor = "black"; }
 
-//> Events process
+//Notification create
+if(ntf.length && (ntf.toInt() == stCur) != isErr) {
+	if((isErr=(ntf.toInt()==stCur)))	alarm = "50|"+NAME+"|"+ntf.parse(2,":")+".|"+ntf.parse(1,":");
+	else if(alarmSt&0x100)	alarm = "1|"+NAME+"||1";
+}
+if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
+if(alarmSt&0x100) {
+	if(!(alarmSt&0x10000) || alBlnk)	backColor = "red";
+	alBlnk = !alBlnk;
+}
+
+//Events process
 ev_rez = "";
-for(off = 0; true; )
-{
+for(off = 0; true; ) {
   	sval = event.parse(0,"\n",off);
 	//messPut("Kran",1,"Event: "+sval);
 	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
+	else if(sval == "usr_open") {
 		if(!com.isEVal())	com = true;
 		else close = false;
-		if((comVal=digComs.parse(0,";")).length) comVal = "ENABLE";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Command : "+DESCR+" : : "+comVal);
+		if((comVal=digComs.parse(0,";")).length) comVal = tr("ENABLE");
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
-	else if(sval == "usr_close")
-	{
+	else if(sval == "usr_close") {
 		if(!close.isEVal())	close = true;
 		else com = false;
-		if((comVal=digComs.parse(1,";")).length) comVal = "DISABLE";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Command : "+DESCR+" : : "+comVal);
+		if((comVal=digComs.parse(1,";")).length) comVal = tr("DISABLE");
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
-	else if(sval == "usr_stop")
-	{
+	else if(sval == "usr_stop") {
 		if(!stop.isEVal())	stop = true;
-		if((comVal=digComs.parse(2,";")).length) comVal = "STOP";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Command : "+DESCR+" : : "+comVal);
+		if((comVal=digComs.parse(2,";")).length) comVal = tr("STOP");
+		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. "+tr("Command")+" : "+DESCR+" : : "+comVal);
 	}
-	else ev_rez+=sval+"\n";
+	else ev_rez += sval+"\n";
 }
-event = ev_rez;','JavaLikeCalc.JavaScript
-//> Prepare context menu
-if(f_start && !digComs.isEVal() && digComs.length)
-{
-	contextMenu = "";
-	if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-")+":open\n";
-	if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-")+":close\n";
-	if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-")+":stop\n";
-}
-
-//> Display label from st_text
-if(!st_text.isEVal() && st_text.length)
-{
-	text = st_text.parse(0,":");
-	blink = st_text.parse(2,":").toInt();
-	backClr = st_text.parse(1,":").parse(0,"-");
-	if(blink)
-	{
-		backClrBl = st_text.parse(1,":").parse(1,"-");
-		if(!backClrBl.length)	backClrBl = "gray";
-		backColor = (backColor!=backClr) ? backClr : backClrBl;
-	}
-	else	backColor = backClr;
-}
-//> Display typical for st_open
-else if(st_open == true || st_close == false)
-{
-	backColor = ((stVal=digStts.parse(0,";").parse(1,"-")).length) ? stVal : "green";
-	text = ((stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : "Вкл";
-}
-else if(st_open == false || st_close == true)
-{
-	backColor = ((stVal=digStts.parse(1,";").parse(1,"-")).length) ? stVal : "blue";
-	text = ((stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : "Выкл";
-}
-else { backColor = "grey"; text = "---"; return; }
-
-//> Blink linked with ElCadr
-if(focus/*!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME*/)
-{
-  bordColor = (bordColor != "white") ? "white" : "black";
-  bordWidth = 2;
-}
-else { bordWidth = 1; bordColor = "black"; }
-
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-  	sval = event.parse(0,"\n",off);
-	//messPut("Kran",1,"Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		if(!com.isEVal())	com = true;
-		else close = false;
-		if((comVal=digComs.parse(0,";")).length) comVal = "ВКЛ";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Команда : "+DESCR+" : : "+comVal);
-	}
-	else if(sval == "usr_close")
-	{
-		if(!close.isEVal())	close = true;
-		else com = false;
-		if((comVal=digComs.parse(1,";")).length) comVal = "ВЫКЛ";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Команда : "+DESCR+" : : "+comVal);
-	}
-	else if(sval == "usr_stop")
-	{
-		if(!stop.isEVal())	stop = true;
-		if((comVal=digComs.parse(2,";")).length) comVal = "СТОП";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Команда : "+DESCR+" : : "+comVal);
-	}
-	else ev_rez+=sval+"\n";
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-//> Prepare context menu
-if(f_start && !digComs.isEVal() && digComs.length)
-{
-	contextMenu = "";
-	if((comVal=digComs.parse(0,";")).length)	contextMenu += comVal.parse(0,"-")+":open\n";
-	if((comVal=digComs.parse(1,";")).length)	contextMenu += comVal.parse(0,"-")+":close\n";
-	if((comVal=digComs.parse(2,";")).length)	contextMenu += comVal.parse(0,"-")+":stop\n";
-}
-
-//> Display label from st_text
-if(!st_text.isEVal() && st_text.length)
-{
-	text = st_text.parse(0,":");
-	blink = st_text.parse(2,":").toInt();
-	backClr = st_text.parse(1,":").parse(0,"-");
-	if(blink)
-	{
-		backClrBl = st_text.parse(1,":").parse(1,"-");
-		if(!backClrBl.length)	backClrBl = "gray";
-		backColor = (backColor!=backClr) ? backClr : backClrBl;
-	}
-	else	backColor = backClr;
-}
-//> Display typical for st_open
-else if(st_open == true || st_close == false)
-{
-	backColor = ((stVal=digStts.parse(0,";").parse(1,"-")).length) ? stVal : "green";
-	text = ((stVal=digStts.parse(0,";").parse(0,"-")).length) ? stVal : "Вкл.";
-}
-else if(st_open == false || st_close == true)
-{
-	backColor = ((stVal=digStts.parse(1,";").parse(1,"-")).length) ? stVal : "blue";
-	text = ((stVal=digStts.parse(1,";").parse(0,"-")).length) ? stVal : "Викл.";
-}
-else { backColor = "grey"; text = "---"; return; }
-
-//> Blink linked with ElCadr
-if(focus/*!NAME.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == NAME*/)
-{
-  bordColor = (bordColor != "white") ? "white" : "black";
-  bordWidth = 2;
-}
-else { bordWidth = 1; bordColor = "black"; }
-
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-  	sval = event.parse(0,"\n",off);
-	//messPut("Kran",1,"Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		if(!com.isEVal())	com = true;
-		else close = false;
-		if((comVal=digComs.parse(0,";")).length) comVal = "ВКЛ";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Команда : "+DESCR+" : : "+comVal);
-	}
-	else if(sval == "usr_close")
-	{
-		if(!close.isEVal())	close = true;
-		else com = false;
-		if((comVal=digComs.parse(1,";")).length) comVal = "ВИКЛ";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Команда : "+DESCR+" : : "+comVal);
-	}
-	else if(sval == "usr_stop")
-	{
-		if(!stop.isEVal())	stop = true;
-		if((comVal=digComs.parse(2,";")).length) comVal = "СТОП";
-		SYS.messNote("OP:"+this.ownerSess().user(),"''"+NAME+"''. Команда : "+DESCR+" : : "+comVal);
-	}
-	else ev_rez+=sval+"\n";
-}
-event = ev_rez;',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1399368578);
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1413916667);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -21755,132 +21326,41 @@ T8l7+mBFWIECjv2yeKvSOGMMlmVBUZT7tm3fvHfvXseMB473bPByNpv91/DwiK5pzTWC4NFYq9K4
 PGEuLi4+KJfLvwHw304reayHo729vYMA/jw9PX1T1/WsYRhN+3oB+XBEkLGzs4Pd3d2FtbW1byuV
 yj10KOaDOKnj8fFsNnudEPJdMpls/HCLU1/OOcrlMra2tn7knH9dLBZ/QMg83w4n+f8AGb8DcK3F
 8y8Qcm0fIUKECBEiRIgQIUKECBEiRGiL/wHlH6BTZhaA5gAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure','JavaLikeCalc.JavaScript
-//============== Compressor ===========
-if(f_start)
-{
+if(f_start) {
 	c1Sv = c1;
 	contextMenu = "";
 	if(!com.isEVal() || !close.isEVal())
-		contextMenu =	(digComs.isEVal()?"Start":digComs.parse(0,";").parse(0,"-"))+":open\n"+
-								(digComs.isEVal()?"Stop":digComs.parse(1,";").parse(0,"-"))+":close\n";
+		contextMenu =	(digComs.isEVal()?tr("Start"):digComs.parse(0,";").parse(0,"-"))+":open\n"+
+								(digComs.isEVal()?tr("Stop"):digComs.parse(1,";").parse(0,"-"))+":close\n";
 }
-c1 = (focus && c1 == c1Sv) ? "#00ddff" : c1Sv;
+if(this.attr("focus") ||
+	(!shifr.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
+		c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
+else c1 = c1Sv;
 fillColor = "gray";
-if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false))
-{
+if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false)) {
 	fillColor = "green";
 	if(!digStts.isEVal())	fillColor = digStts.parse(0,";").parse(1,"-");
 }
-if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false))
-{
+if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false)) {
 	fillColor = "red";
 	if(!digStts.isEVal())	fillColor = digStts.parse(1,";").parse(1,"-");
 }
 
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-	sval = event.parse(0,"\n",off);
+//Events process
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	//SYS.messInfo("Kran","Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
+	if(sval == "usr_open") {
 		com = true; close = false;
-		SYS.messNote("OP:user","''"+shifr+"''. Command : : : "+(digComs.isEVal()?"START":digComs.parse(0,";").parse(0,"-")));
+		SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("START"):digComs.parse(0,";").parse(0,"-")));
 	}
-	else if(sval == "usr_close")
-	{
+	else if(sval == "usr_close") {
 		com = false; close = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Command : : : "+(digComs.isEVal()?"STOP":digComs.parse(1,";").parse(0,"-")));
+		SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("STOP"):digComs.parse(1,";").parse(0,"-")));
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','JavaLikeCalc.JavaScript
-//============== Compressor ===========
-if(f_start)
-{
-	c1Sv = c1;
-	contextMenu = "";
-	if(!com.isEVal() || !close.isEVal())
-		contextMenu =	(digComs.isEVal()?"Старт":digComs.parse(0,";").parse(0,"-"))+":open\n"+
-								(digComs.isEVal()?"Стоп":digComs.parse(1,";").parse(0,"-"))+":close\n";
-}
-c1 = (focus && c1 == c1Sv) ? "#00ddff" : c1Sv;
-fillColor = "gray";
-if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false))
-{
-	fillColor = "green";
-	if(!digStts.isEVal())	fillColor = digStts.parse(0,";").parse(1,"-");
-}
-if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false))
-{
-	fillColor = "red";
-	if(!digStts.isEVal())	fillColor = digStts.parse(1,";").parse(1,"-");
-}
-
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-	sval = event.parse(0,"\n",off);
-	//SYS.messInfo("Kran","Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		com = true; close = false;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"СТАРТ":digComs.parse(0,";").parse(0,"-")));
-	}
-	else if(sval == "usr_close")
-	{
-		com = false; close = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"СТОП":digComs.parse(1,";").parse(0,"-")));
-	}
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-//============== Compressor ===========
-if(f_start)
-{
-	c1Sv = c1;
-	contextMenu = "";
-	if(!com.isEVal() || !close.isEVal())
-		contextMenu =	(digComs.isEVal()?"Старт":digComs.parse(0,";").parse(0,"-"))+":open\n"+
-								(digComs.isEVal()?"Стоп":digComs.parse(1,";").parse(0,"-"))+":close\n";
-}
-c1 = (focus && c1 == c1Sv) ? "#00ddff" : c1Sv;
-fillColor = "gray";
-if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false))
-{
-	fillColor = "green";
-	if(!digStts.isEVal())	fillColor = digStts.parse(0,";").parse(1,"-");
-}
-if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false))
-{
-	fillColor = "red";
-	if(!digStts.isEVal())	fillColor = digStts.parse(1,";").parse(1,"-");
-}
-
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-	sval = event.parse(0,"\n",off);
-	//SYS.messInfo("Kran","Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		com = true; close = false;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"СТАРТ":digComs.parse(0,";").parse(0,"-")));
-	}
-	else if(sval == "usr_close")
-	{
-		com = false; close = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"СТОП":digComs.parse(1,";").parse(0,"-")));
-	}
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;',1000,'name;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1399317462);
+event = ev_rez;','','',1000,'name;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1413794111);
 INSERT INTO "wlb_mnEls" VALUES('cooler2','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAB9ZJREFUeJztWntQVNcZ/7EPFgSU50oRsqxKQUREalGsVKlJg5CUgmJi
 dWw7jszUcaa2Q20lM21o2ulMZ5qmFnUsPsc4lIiSqIk4IgQStMlGHstL2GV5rMDy2Df7Fr/+kYYU
@@ -22537,4 +22017,26 @@ INSERT INTO "Trs" VALUES('Comments','Коментарі','Комментарии
 INSERT INTO "Trs" VALUES('Time','Час','Время');
 INSERT INTO "Trs" VALUES('Select a program please','Оберіть будь ласка програму','Выберите пожалуйста программу');
 INSERT INTO "Trs" VALUES('Select a program','Оберіть програму','Выберите программу');
+INSERT INTO "Trs" VALUES('<No selected>','<Не обрано>','<Не выбран>');
+INSERT INTO "Trs" VALUES('C','К','К');
+INSERT INTO "Trs" VALUES('A','А','А');
+INSERT INTO "Trs" VALUES('M','Р','Р');
+INSERT INTO "Trs" VALUES('Name','Ім''я','Имя');
+INSERT INTO "Trs" VALUES('Scale','Шкала','Шкала');
+INSERT INTO "Trs" VALUES('Alarm border','Аварійна границя','Аварийная граница');
+INSERT INTO "Trs" VALUES('Warning border','Попередж. границя','Предупр. граница');
+INSERT INTO "Trs" VALUES('Description','Опис','Описание');
+INSERT INTO "Trs" VALUES('Enable','Вкл.','Вкл.');
+INSERT INTO "Trs" VALUES('Disable','Викл.','Выкл.');
+INSERT INTO "Trs" VALUES('ENABLE','ВКЛ','ВКЛ');
+INSERT INTO "Trs" VALUES('DISABLE','ВИКЛ','ВЫКЛ');
+INSERT INTO "Trs" VALUES('Start','Старт','Старт');
+INSERT INTO "Trs" VALUES('Stop','Стоп','Стоп');
+INSERT INTO "Trs" VALUES('START','СТАРТ','СТАРТ');
+INSERT INTO "Trs" VALUES('No data','Немає даних','Нет данных');
+INSERT INTO "Trs" VALUES('reject','відмова','отказ');
+INSERT INTO "Trs" VALUES('above alarm border','вище дозволеної границі','выше допустимой границы');
+INSERT INTO "Trs" VALUES('bellow alarm border','нижче дозволеної границі','ниже допустимой границы');
+INSERT INTO "Trs" VALUES('above warning border','вище норми','выше нормы');
+INSERT INTO "Trs" VALUES('bellow warning border','нижче норми','ниже нормы');
 COMMIT;

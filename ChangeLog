@@ -1,3 +1,11 @@
+2014-10-21 Roman
+- LibsDB.OscadaLibs: DevLib.UPS translated adapted for miss fields and translated.
+- LibsDB.vcaBase.db: Main.TextLab moved to dynamic translation and expanded by alarms notify.
+    Main.{anShow,ElViewGraph}, mnEls.Compressor some fixed and expanded for translation.
+- UI.WebVision: Scroll for the included containers correct for different variants.
+    Some code clean up.
+
+
 2014-10-16 Roman
 - SYS.icons: DAQ.{BlockCalc,LogicLev} icons updated.
 - LibsDB.OscadaLibs: Prescription controller mostly updated and fixed for multilevel.
