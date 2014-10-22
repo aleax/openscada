@@ -876,18 +876,6 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_start','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_frq','1','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_stop','0','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('PT0503','f_err','0','0','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','cmdOpen','BlockCalc.Anast1to2node.КШ7.com','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','cmdClose','BlockCalc.Anast1to2node.КШ7','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','cmdStop','BlockCalc.Anast1to2node.КШ7','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','stOpen','BlockCalc.Anast1to2node.КШ7.st_open','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','stClose','BlockCalc.Anast1to2node.КШ7.st_close','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_frq','1','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_start','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_stop','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','tCmd','5','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','last_cmd','3','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','w_tm','0','','');
-INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ7','f_err','0','0','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','in','BlockCalc.Anast1to2node.F_PP1.var','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','var','101.787254485829','','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('F_PP1','ed','tone/h','т/год','т/ч');
@@ -1243,6 +1231,11 @@ INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','this','<TCntrNodeObj path=
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','SHIFR','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','NAME','T_PP3','T_PP3','');
 INSERT INTO "LogLevPrm_experiment_io" VALUES('T_PP3','DESCR','The gas temperature at the diaphragm PP3','Температура газу на діафрагмі PP3','Температура газа на диафрагме PP3');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','alrm','0:4:The crane KSH6 closed!','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','SHIFR','КШ6close','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','NAME','Close KSH6','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','DESCR','Alarm for closing the valve KSH6','','');
+INSERT INTO "LogLevPrm_experiment_io" VALUES('КШ6close','this','<TCntrNodeObj path="/sub_DAQ/mod_LogicLev/cntr_experiment/prm_КШ6close/"/>','','');
 CREATE TABLE 'ModBus_node' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '' ,"ADDR" INTEGER DEFAULT '' ,"InTR" TEXT DEFAULT '' ,"PRT" TEXT DEFAULT '' ,"MODE" INTEGER DEFAULT '' ,"DT_PER" DOUBLE DEFAULT '' ,"TO_TR" TEXT DEFAULT '' ,"TO_PRT" TEXT DEFAULT '' ,"TO_ADDR" INTEGER DEFAULT '' ,"DT_PROG" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"uk#DT_PROG" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"ru#DT_PROG" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "ModBus_node" VALUES('test','Test',' ',1,1,'*','*',0,1.0,'Serial.exlar','RTU',10,'JavaLikeCalc.JavaScript
 //Test
@@ -1362,7 +1355,7 @@ INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/RunPrjs','','','');
 INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/VCAstation','.','','');
 INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/PlayCom','play -q %f','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Transport/mod_Sockets/ReqMode','0','','');
-INSERT INTO "SYS" VALUES('roman','/sub_DAQ/mod_LogicLev/onlAttr','0','','');
+INSERT INTO "SYS" VALUES('roman','/sub_DAQ/mod_LogicLev/onlAttr','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/messArch','','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/vShowTrnd','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/vaSize','600','','');
@@ -1492,7 +1485,7 @@ INSERT INTO "SYS" VALUES('root','/sub_UI/mod_VCAEngine/AutoSess','<Sess />','','
 INSERT INTO "SYS" VALUES('roman','/sub_Special/mod_FLibSYS/fnc_str2int/ntCalc','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Special/mod_FLibSYS/fnc_tmCron/ntCalc','1','','');
 INSERT INTO "SYS" VALUES('roman','/sub_Archive/messLev','1','','');
-INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/uiProps','<UI devWinState="AAAA/wAAAAD9AAAAAQAAAAAAAAEfAAACUPwCAAAAAvwAAAA3AAABIwAAAH0A////+gAAAAACAAAA&#010;AvsAAAAQAFAAcgBvAGoAVAByAGUAZQEAAAAA/////wAAAHIA////+wAAAA4AVwBkAGcAVAByAGUA&#010;ZQEAAAAA/////wAAAHIA/////AAAAWAAAAEnAAAAfQD////6AAAAAAIAAAAC+wAAABgASQBuAHMA&#010;cABBAHQAdAByAEQAbwBjAGsBAAAAAP////8AAAByAP////sAAAAWAEkAbgBzAHAATABuAGsARABv&#010;AGMAawEAAAAA/////wAAAHIA////AAAEMQAAAlAAAAAEAAAABAAAAAgAAAAI/AAAAAIAAAACAAAA&#010;CAAAABgAdgBpAHMASQB0AFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdwBkAGcA&#010;VABvAG8AbABWAGkAZQB3AAAAAZQAAAEjAAAAAAAAAAAAAAASAGUAbABGAGkAZwBUAG8AbwBsAAAA&#010;Apz/////AAAAAAAAAAAAAAAIAE0AYQBpAG4AAAAAAP////8AAAAAAAAAAAAAAAYAZABvAGMAAAAA&#010;AP////8AAAAAAAAAAAAAABIAbwByAGkAZwBpAG4AYQBsAHMBAAABlAAAA0wAAAAAAAAAAAAAAAoA&#010;QQBHAEwASwBTAAAAAAD/////AAAAAAAAAAAAAAAIAHQAZQBzAHQAAAAAAP////8AAAAAAAAAAAAA&#010;AAMAAAABAAAACgBtAG4ARQBsAHMBAAAAAP////8AAAAAAAAAAA==" visItToolBar_icSz="16" originals_icSz="16" wdgToolView_icSz="16" mnEls_icSz="16" elFigTool_icSz="16" />
+INSERT INTO "SYS" VALUES('root','/sub_UI/mod_Vision/uiProps','<UI devWinState="AAAA/wAAAAD9AAAAAQAAAAAAAAEkAAACUPwCAAAAAvwAAAA3AAABIwAAAH0A////+gAAAAACAAAA&#010;AvsAAAAQAFAAcgBvAGoAVAByAGUAZQEAAAAA/////wAAAHIA////+wAAAA4AVwBkAGcAVAByAGUA&#010;ZQEAAAAA/////wAAAHIA/////AAAAWAAAAEnAAAAfQD////6AAAAAAIAAAAC+wAAABgASQBuAHMA&#010;cABBAHQAdAByAEQAbwBjAGsBAAAAAP////8AAAByAP////sAAAAWAEkAbgBzAHAATABuAGsARABv&#010;AGMAawEAAAAA/////wAAAHIA////AAAELAAAAlAAAAAEAAAABAAAAAgAAAAI/AAAAAIAAAACAAAA&#010;CAAAABgAdgBpAHMASQB0AFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAABYAdwBkAGcA&#010;VABvAG8AbABWAGkAZQB3AAAAAZQAAAEjAAAAAAAAAAAAAAASAGUAbABGAGkAZwBUAG8AbwBsAAAA&#010;Apz/////AAAAAAAAAAAAAAAIAE0AYQBpAG4AAAAAAP////8AAAAAAAAAAAAAAAYAZABvAGMAAAAA&#010;AP////8AAAAAAAAAAAAAABIAbwByAGkAZwBpAG4AYQBsAHMBAAABlAAAA0wAAAAAAAAAAAAAAAoA&#010;QQBHAEwASwBTAAAAAAD/////AAAAAAAAAAAAAAAIAHQAZQBzAHQAAAAAAP////8AAAAAAAAAAAAA&#010;AAMAAAABAAAACgBtAG4ARQBsAHMBAAAAAP////8AAAAAAAAAAA==" visItToolBar_icSz="16" originals_icSz="16" wdgToolView_icSz="16" mnEls_icSz="16" elFigTool_icSz="16" />
 ','','');
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_QTCfg/StartPath','/DemoStation','','');
 INSERT INTO "SYS" VALUES('root','/DemoStation/sub_UI/mod_QTCfg/StartUser','root','','');
@@ -2439,7 +2432,6 @@ INSERT INTO "LogLevPrm_experiment" VALUES('P4','','P4','','P4','Pressure P4','Д
 INSERT INTO "LogLevPrm_experiment" VALUES('Pi','','Pi','','Pi','The gas pressure at the input of the CS.','Давление газа на входе КС.','Тиск газу на вході у КС.',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('Ti','','Ti','','Ti','The gas temperature at the input of the CS.','Температура газа на входе КС.','Температура газу на вході КС.',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('PT0503','','PT0503','','PT0503','The gas pressure in the separator С1','Давление газа в сепараторе С1','Тиск газу у сепараторі С1',1,'base.anUnif');
-INSERT INTO "LogLevPrm_experiment" VALUES('КШ7','','KSH7','КШ7','КШ7','The control block of the ball valve KSH7','Блок управления шарового крана КШ7','Блок керування кульовим краном КШ7',1,'base.digitBlock');
 INSERT INTO "LogLevPrm_experiment" VALUES('F_PP1','','F_PP1','','F_PP1','Gas flow through the diaphragm PP1','Расход через диафрагму PP1','Витрати газу через діафрагму PP1',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('F_PP3','','F_PP3','','F_PP3','Gas flow through the diaphragm PP3','Расход газа через диафрагму PP3','Витрати газу через діафрагму PP3',1,'base.anUnif');
 INSERT INTO "LogLevPrm_experiment" VALUES('F_PP5','','F_PP5','','F_PP5','Gas flow through the diaphragm PP5','Расход через диафрагму PP5','Витрати газу через діафрагму PP5',1,'base.anUnif');

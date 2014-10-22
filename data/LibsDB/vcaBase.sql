@@ -3601,23 +3601,23 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','40',32,'','','lev_var','','',
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','140',32,'','','lev_var','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomZ','13',32,'','','lev_var','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','fillColor','brown',32,'','','lev_var','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('ElCadr','elLst','line:1:(10|140):10:c3:::
-line:(15|0):(15|140):::::
+INSERT INTO "wlb_Main_io" VALUES('ElCadr','elLst','line:(15|0):(15|140):::::
 line:(15|0):(20|0):::::
 line:(15|28):(20|28):::::
 line:(15|56):(20|56):::::
 line:(15|84):(20|84):::::
 line:(15|112):(20|112):::::
 line:(15|139):(20|139):::::
-line:2:3::c1:::
-line:4:5::c1:::
-line:6:7::c2:::
-line:8:9::c2:::
 line:(15|70):(20|70):::::
 line:(15|98):(20|98):::::
 line:(15|126):(20|126):::::
 line:(15|42):(20|42):::::
-line:(15|14):(20|14):::::',32,'','','lev_var','','','','','','');
+line:(15|14):(20|14):::::
+line:1:(10|140):10:c3:::
+line:2:3::c1:::
+line:4:5::c1:::
+line:6:7::c2:::
+line:8:9::c2:::',32,'','','lev_var','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','name','Prescription:run (simple)',32,'','','','Рецепт:виконання (простий)','','Рецепт:исполнение (простой)','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomW','250',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomH','170',32,'','','','','','','','','');
@@ -16778,7 +16778,7 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
 		((strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red") : "gray") :
 			(prmOpenSt ? "gray" : ((strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red"));
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1410966447);
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1413999475);
 INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8
@@ -18161,7 +18161,7 @@ if(pVal.isEVal()) {
 	val_font = "Arial 24 0 1 0 1";
 	alarm = "";
 	pErrCode = 0;
-	bordColor = "grey", bordWidth = 1;
+	bordColor = "gray", bordWidth = 1;
 	return;
 }
 
@@ -19972,7 +19972,8 @@ if(ntf.length && (ntf.toInt() == stCur) != isErr) {
 }
 if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 if(alarmSt&0x100) {
-	if(!(alarmSt&0x10000) || alBlnk)	backColor = "red";
+	if(!(alarmSt&0x10000) || alBlnk)	backColor = isErr ? "red" : backColor;
+	else backColor = "gray";
 	alBlnk = !alBlnk;
 }
 
@@ -20001,7 +20002,7 @@ for(off = 0; true; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1413916667);
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1413998465);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -20360,11 +20361,11 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 }
 else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1408110037);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1413400277);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1413998465);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','
 ','
 ','
-',-1,5,'name;dscr;geomX;',1413400277);
+',-1,5,'name;dscr;geomX;',1413998465);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/ggraph','1','','..','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','doc','','root','
@@ -20375,8 +20376,8 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/doc','1','','/wlb_doc/wdg_docAlarm
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','mn','','root','
 ','
 ','
-',-1,5,'name;dscr;',1413400277);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1413400277);
+',-1,5,'name;dscr;',1413998465);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1413998465);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gcadr','','/wlb_Main/wdg_grpCadr','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gcadr','1','','..','','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gview','','/wlb_Main/wdg_ViewCadr','','','',-1,2,'evProc;pgGrp;','');
@@ -21020,156 +21021,49 @@ P6yvr/+H67pfnCutvxCu656r1+sP1uv1h7PZ7Luvu+66B7LZrKSqiUkpPfOVWCCAA8d2MBxaaLV2
 u41G47ec83e5rrs6VzZ/G9rtdvuzhJA/djqd95eKpRfqyaSmaQn4s34XcF0X/X4f9Vrd7nQ6393c
 3PxvAD/F/1E0m83/aTab3261WqdLpdLdpmnemkgkrnxDuVL5Rbla/mEqlXoJ/vF+Ijdzudy/ViqV
 7wJ45ZUWvWaOBi0KGQDHFm3EAf5e8CeIyH5z7O/CwwAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure','JavaLikeCalc.JavaScript
-//============== Krane ================
-if(f_start)
-{
+if(f_start) {
 	c1Sv = c1;
 	contextMenu = "";
-	if(!com.isEVal() || !close.isEVal())
-	{
-		contextMenu =	(digComs.isEVal()?"Open":digComs.parse(0,";").parse(0,"-"))+":open\n"+
-								(digComs.isEVal()?"Close":digComs.parse(1,";").parse(0,"-"))+":close\n";
+	if(!com.isEVal() || !close.isEVal()) {
+		contextMenu =	(digComs.isEVal()?tr("Open"):digComs.parse(0,";").parse(0,"-"))+":open\n"+
+								(digComs.isEVal()?tr("Close"):digComs.parse(1,";").parse(0,"-"))+":close\n";
 		if(!stop.isEVal())	contextMenu += (digComs.isEVal()?"Stop":digComs.parse(2,";").parse(0,"-"))+":stop\n";
 	}
 }
-c1 = (focus && c1 == c1Sv) ? "#00ddff" : c1Sv;
+
+if(this.attr("focus") ||
+		(!shifr.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
+	c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
+else c1 = c1Sv;
+
 fillColor = "gray";
-if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false))
-{
+if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false)) {
 	fillColor = "green";
 	if(!digStts.isEVal())	fillColor = digStts.parse(0,";").parse(1,"-");
 }
-if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false))
-{
+if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false)) {
 	fillColor = "red";
 	if(!digStts.isEVal())	fillColor = digStts.parse(1,";").parse(1,"-");
 }
 
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-	sval = event.parse(0,"\n",off);
+//Events process
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	//SYS.messInfo("Kran","Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		com = true; close = false;
-		SYS.messNote("OP:user","''"+shifr+"''. Command : : : "+(digComs.isEVal()?"OPEN":digComs.parse(0,";").parse(0,"-")));
+	if(sval == "usr_open") {
+		com = true, close = false;
+		SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("OPEN"):digComs.parse(0,";").parse(0,"-")));
 	}
-	else if(sval == "usr_close")
-	{
-		com = false; close = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Command : : : "+(digComs.isEVal()?"CLOSE":digComs.parse(1,";").parse(0,"-")));
+	else if(sval == "usr_close") {
+		com = false, close = true;
+		SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("CLOSE"):digComs.parse(1,";").parse(0,"-")));
 	}
-	else if(sval == "usr_stop")
-	{
+	else if(sval == "usr_stop") {
 		stop = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Command : : : "+(digComs.isEVal()?"STOP":digComs.parse(2,";").parse(0,"-")));
+		SYS.messNote("OP:user","''"+shifr+"''. "+tr("Command")+" : : : "+(digComs.isEVal()?tr("STOP"):digComs.parse(2,";").parse(0,"-")));
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','JavaLikeCalc.JavaScript
-//============== Krane ================
-if(f_start)
-{
-	c1Sv = c1;
-	contextMenu = "";
-	if(!com.isEVal() || !close.isEVal())
-	{
-		contextMenu =	(digComs.isEVal()?"Відкрити":digComs.parse(0,";").parse(0,"-"))+":open\n"+
-								(digComs.isEVal()?"Закрити":digComs.parse(1,";").parse(0,"-"))+":close\n";
-		if(!stop.isEVal())	contextMenu += (digComs.isEVal()?"Стоп":digComs.parse(2,";").parse(0,"-"))+":stop\n";
-	}
-}
-c1 = (focus && c1 == c1Sv) ? "#00ddff" : c1Sv;
-fillColor = "gray";
-if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false))
-{
-	fillColor = "green";
-	if(!digStts.isEVal())	fillColor = digStts.parse(0,";").parse(1,"-");
-}
-if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false))
-{
-	fillColor = "red";
-	if(!digStts.isEVal())	fillColor = digStts.parse(1,";").parse(1,"-");
-}
-
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-	sval = event.parse(0,"\n",off);
-	//SYS.messInfo("Kran","Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		com = true; close = false;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"ВІДКР":digComs.parse(0,";").parse(0,"-")));
-	}
-	else if(sval == "usr_close")
-	{
-		com = false; close = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"ЗАКР":digComs.parse(1,";").parse(0,"-")));
-	}
-	else if(sval == "usr_stop")
-	{
-		stop = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"СТОП":digComs.parse(2,";").parse(0,"-")));
-	}
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;','JavaLikeCalc.JavaScript
-//============== Krane ================
-if(f_start)
-{
-	c1Sv = c1;
-	contextMenu = "";
-	if(!com.isEVal() || !close.isEVal())
-	{
-		contextMenu =	(digComs.isEVal()?"Открыть":digComs.parse(0,";").parse(0,"-"))+":open\n"+
-								(digComs.isEVal()?"Закрыть":digComs.parse(1,";").parse(0,"-"))+":close\n";
-		if(!stop.isEVal())	contextMenu += (digComs.isEVal()?"Стоп":digComs.parse(2,";").parse(0,"-"))+":stop\n";
-	}
-}
-c1 = (focus && c1 == c1Sv) ? "#00ddff" : c1Sv;
-fillColor = "gray";
-if((st_open == true && st_close != true) || (st_open.isEVal() && st_close == false))
-{
-	fillColor = "green";
-	if(!digStts.isEVal())	fillColor = digStts.parse(0,";").parse(1,"-");
-}
-if((st_close == true && st_open != true) || (st_close.isEVal() && st_open == false))
-{
-	fillColor = "red";
-	if(!digStts.isEVal())	fillColor = digStts.parse(1,";").parse(1,"-");
-}
-
-//> Events process
-ev_rez = "";
-for(off = 0; true; )
-{
-	sval = event.parse(0,"\n",off);
-	//SYS.messInfo("Kran","Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open")
-	{
-		com = true; close = false;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"ОТКР":digComs.parse(0,";").parse(0,"-")));
-	}
-	else if(sval == "usr_close")
-	{
-		com = false; close = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"ЗАКР":digComs.parse(1,";").parse(0,"-")));
-	}
-	else if(sval == "usr_stop")
-{
-		stop = true;
-		SYS.messNote("OP:user","''"+shifr+"''. Команда : : : "+(digComs.isEVal()?"СТОП":digComs.parse(2,";").parse(0,"-")));
-}
-	else ev_rez += sval+"\n";
-}
-event = ev_rez;',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1399317462);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1414000438);
 INSERT INTO "wlb_mnEls" VALUES('El_Pipe_simple_vert_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAS9JREFUeJztm0FOwlAYBoe+iqRAPAI7DiE38QJ4JvZyB+9VmhALuigG
 0Z1dTIzfJH/en/eSZjL7ThjJasX7ZgNNM8y8gfli2JfL633TwGJxu89mUFXQ93A4QNfdnod22NvL

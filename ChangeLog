@@ -1,5 +1,13 @@
+2014-10-22 Roman
+- LibsDB.OscadaLibs.db: Template base.digAlarm expanded for fullfeatured alarms generation from digital signal.
+- LibsDB.vcaBase.db: Main.ElCadr: scale and histogram reordered for alarms borders visible ensure.
+    Main.TextLab: alarms notify expanded to blink to "gray" back and postblink after alarm gone.
+    mnEls.El_Kran_Sh: moved to dynamic translation and blink by appropriate control's panel open.
+- AGLKS.St.db: Wrong LogLev.experiment.КШ7 removed.
+
+
 2014-10-21 Roman
-- LibsDB.OscadaLibs: DevLib.UPS translated adapted for miss fields and translated.
+- LibsDB.OscadaLibs.db: DevLib.UPS translated adapted for miss fields and translated.
 - LibsDB.vcaBase.db: Main.TextLab moved to dynamic translation and expanded by alarms notify.
     Main.{anShow,ElViewGraph}, mnEls.Compressor some fixed and expanded for translation.
 - UI.WebVision: Scroll for the included containers correct for different variants.

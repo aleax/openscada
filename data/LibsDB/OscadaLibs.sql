@@ -2193,9 +2193,7 @@ INSERT INTO "tmplib_S7_io" VALUES('test','in2','Input2',1,160,'DB Test|8',6,'В�
 INSERT INTO "tmplib_S7_io" VALUES('test','in1','Input1',1,160,'DB Test|6',5,'Вхід1','DB Тест|6','Вход1','DB Тест|6');
 INSERT INTO "tmplib_S7_io" VALUES('test','in','Input',1,160,'DB Test|4',4,'Вхід','DB Тест|4','Вход','DB Тест|4');
 CREATE TABLE 'tmplib_base_io' ("TMPL_ID" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"TYPE" INTEGER DEFAULT '' ,"FLAGS" INTEGER DEFAULT '' ,"VALUE" TEXT DEFAULT '' ,"POS" INTEGER DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#VALUE" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#VALUE" TEXT DEFAULT '' , PRIMARY KEY ("TMPL_ID","ID"));
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm_md','Signal mode',3,64,' ',0,'Режим сигналу',' ','Режим сигнала','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm_mess','Error message',0,64,' ',1,'Повідомлення помилки',' ','Сообщение ошибки','');
-INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,' ',2,'Вхід',' ','Вход','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','in','Input',3,144,'Input|in',1,'Вхід',' ','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','in','Input',2,128,'Parameter|var',0,'Вхід','','Вход','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','var','Variable',2,32,'0',1,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('simleBoard','ed','Dimension',0,32,' ',2,'Од. виміру',' ','Ед. измерения','');
@@ -2426,6 +2424,11 @@ INSERT INTO "tmplib_base_io" VALUES('SNMP','this','The object',4,0,'',3,'Об''�
 INSERT INTO "tmplib_base_io" VALUES('SNMP','SHIFR','Code',0,0,'',4,'Шифр','','Шифр','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','NAME','Name',0,0,'',5,'Ім''я','','Имя','');
 INSERT INTO "tmplib_base_io" VALUES('SNMP','DESCR','Description',0,0,'',6,'Опис','','Описание','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','alrm','Alarm "{st}:{lev}:{mess}"',0,64,' ',0,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','SHIFR','Code',0,0,'',2,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','NAME','Name',0,0,'',3,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',4,'','','','');
+INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',5,'','','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Рецепты','Рецепти','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
 CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
@@ -3764,9 +3767,19 @@ if(t_err.length) {
 else f_err = errAttrs.length ? "11:Quality errors: "+errAttrs : "0";','','',1404847065);
 CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.','Сигналізація за дискретним параметром.','Сигнализация по дискретному параметру.',10,'JavaLikeCalc.JavaScript
-f_err=(in==alrm_md)?"1:"+alrm_mess:"0";','JavaLikeCalc.JavaScript
-f_err=(in==alrm_md)?"1:"+alrm_mess:"0";','JavaLikeCalc.JavaScript
-f_err=(in==alrm_md)?"1:"+alrm_mess:"0";','');
+if(f_start)	f_err = "0", prevVar = EVAL_REAL;
+
+//State set
+tErr = "0", levErr = 0;
+if(in.isEVal())	tErr = "1:"+tr("No data or connection with source"), levErr = -5;
+else if(in == alrm.toInt())	tErr = "3:"+alrm.parse(2,":"), levErr = -alrm.parse(1,":").toInt();
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1413964768);
 INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders','Сигн. аналог. за границями','Сигн. аналог. по границам','The template of simple parameter included boders and dimension variable.','Шаблон простого параметру з перевіркою границь та одиницею виміру.','Шаблон простого параметра с проверкой границ и единицей измерения.',10,'JavaLikeCalc.JavaScript
 var=iMult*(in+iAdd);
 if(var>max)			f_err="1:Upper work border violation";
