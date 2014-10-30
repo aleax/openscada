@@ -642,22 +642,26 @@ void Project::cntrCmdProc( XMLNode *opt )
 	    // Request data
 	    if(idcol == "id") {
 		string mimeType, mimeData;
-		//  Copy mime data to new record
+		// Copy mime data to new record
 		if(mimeDataGet("res:"+idmime, mimeType, &mimeData)) {
 		    mimeDataSet(opt->text(), mimeType, mimeData);
-		    mimeDataDel(idmime );
+		    mimeDataDel(idmime);
 		}
 	    }
 	    else if(idcol == "tp") {
 		string mimeType;
-		//  Copy mime data to new record
+		// Copy mime data to new record
 		if(mimeDataGet("res:"+idmime, mimeType))
 		    mimeDataSet(idmime, opt->text()+";"+TSYS::strSepParse(mimeType,1,';'), "");
 	    }
 	    else if(idcol == "dt") {
 		string mimeType;
-		if(mimeDataGet("res:"+idmime, mimeType))
-		    mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024.,6),opt->text());
+		if(!mimeDataGet("res:"+idmime, mimeType)) {
+		    size_t extP = idmime.rfind(".");
+		    if(extP == string::npos || extP == 0 || extP == (idmime.size()-1)) mimeType = "media/unknown";
+		    else { mimeType = "media/"+idmime.substr(extP+1); idmime = idmime.substr(0,extP); }
+		}
+		mimeDataSet(idmime, TSYS::strSepParse(mimeType,0,';')+";"+r2s((float)opt->text().size()/1024,6),opt->text());
 	    }
 	}
     }

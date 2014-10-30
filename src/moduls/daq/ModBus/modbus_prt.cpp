@@ -327,8 +327,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
 		rez.assign(buf, resp_len);
 		//Wait tail
-		while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A"))
-		{
+		while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
 		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
 		    rez.append(buf, resp_len);
 		}
@@ -349,8 +348,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	if(err.empty()) {
 	    if(pdu.size() < 2) err = _("13:Error respond");
 	    if(pdu[0]&0x80)
-		switch(pdu[1])
-		{
+		switch(pdu[1]) {
 		    case 0x1: err = TSYS::strMess(_("1:%02X:Function is not supported."),(unsigned char)(pdu[0]&(~0x80)));	break;
 		    case 0x2: err = _("2:Requested address not allow or request area too long.");	break;
 		    case 0x3: err = _("3:Illegal data value into request.");		break;
@@ -362,7 +360,7 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 		    default: err = TSYS::strMess(_("12:%02X:Unknown error."),(unsigned char)(pdu[1]));	break;
 		}
 	}
-    }catch(TError er) { err = _("14:Device error: ") + er.mess; }
+    } catch(TError er) { err = _("14:Device error: ") + er.mess; }
 
     io.setText(err.empty()?pdu:"");
     if(!err.empty()) io.setAttr("err",err);
@@ -673,8 +671,7 @@ bool Node::cfgChange( TCfg &co, const TVariant &pc )
 	cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
 
 	//Show selected
-	switch(co.getI())
-	{
+	switch(co.getI()) {
 	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
 	    case 1:	cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
 	    case 2:	cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;

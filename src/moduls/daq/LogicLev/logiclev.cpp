@@ -130,7 +130,7 @@ TController *TTpContr::ContrAttach( const string &name, const string &daq_db )	{
 //*************************************************
 TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::TController(name_c,daq_db,cfgelem),
     mPerOld(cfg("PERIOD").getId()), mPrior(cfg("PRIOR").getId()),
-    prc_st(false), call_st(false), endrun_req(false), mPer(1e9)
+    prcSt(false), callSt(false), endrunReq(false), mPer(1e9)
 {
     pthread_mutexattr_t attrM;
     pthread_mutexattr_init(&attrM);
@@ -142,9 +142,9 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem) : ::T
     cfg("PRM_BD_REFL").setS("LogLevPrmRefl_"+name_c);
 }
 
-TMdContr::~TMdContr()
+TMdContr::~TMdContr( )
 {
-    if(run_st) stop();
+    if(startStat()) stop();
 
     pthread_mutex_destroy(&enRes);
 }
@@ -167,7 +167,7 @@ string TMdContr::getStatus( )
 {
     string rez = TController::getStatus( );
     if(startStat() && !redntUse()) {
-	if(call_st)	rez += TSYS::strMess(_("Call now. "));
+	if(callSt)	rez += TSYS::strMess(_("Call now. "));
 	if(period())	rez += TSYS::strMess(_("Call by period: %s. "),tm2s(1e-3*period()).c_str());
 	else rez += TSYS::strMess(_("Call next by cron '%s'. "),tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
 	rez += TSYS::strMess(_("Spent time: %s. "),tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str());
@@ -193,13 +193,13 @@ void TMdContr::start_( )
     mPer = TSYS::strSepParse(cron(),1,' ').empty() ? vmax(0,1e9*atof(cron().c_str())) : 0;
 
     //Start the request data task
-    if(!prc_st) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
+    if(!prcSt) SYS->taskCreate(nodePath('.',true), mPrior, TMdContr::Task, this);
 }
 
 void TMdContr::stop_( )
 {
     //Stop the request and calc data task
-    if(prc_st) SYS->taskDestroy(nodePath('.',true), &endrun_req);
+    if(prcSt) SYS->taskDestroy(nodePath('.',true), &endrunReq);
 }
 
 void TMdContr::prmEn( TMdPrm *p, bool val )
@@ -207,19 +207,19 @@ void TMdContr::prmEn( TMdPrm *p, bool val )
     MtxAlloc res(enRes, true);
 
     unsigned i_prm;
-    for(i_prm = 0; i_prm < p_hd.size(); i_prm++)
-	if(&p_hd[i_prm].at() == p) break;
+    for(i_prm = 0; i_prm < pHd.size(); i_prm++)
+	if(&pHd[i_prm].at() == p) break;
 
-    if(val && i_prm >= p_hd.size())	p_hd.push_back(p);
-    if(!val && i_prm < p_hd.size())	p_hd.erase(p_hd.begin()+i_prm);
+    if(val && i_prm >= pHd.size())	pHd.push_back(p);
+    if(!val && i_prm < pHd.size())	pHd.erase(pHd.begin()+i_prm);
 }
 
 void *TMdContr::Task( void *icntr )
 {
-    TMdContr &cntr = *(TMdContr *)icntr;
+    TMdContr &cntr = *(TMdContr*)icntr;
 
-    cntr.endrun_req = false;
-    cntr.prc_st = true;
+    cntr.endrunReq = false;
+    cntr.prcSt = true;
 
     bool is_start = true;
     bool is_stop  = false;
@@ -230,8 +230,8 @@ void *TMdContr::Task( void *icntr )
 	if(!cntr.redntUse()) {
 	    if(!cntr.period())	t_cnt = TSYS::curTime();
 	    pthread_mutex_lock(&cntr.enRes);
-	    for(unsigned i_p = 0; i_p < cntr.p_hd.size(); i_p++)
-		try { cntr.p_hd[i_p].at().calc(is_start, is_stop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
+	    for(unsigned i_p = 0; i_p < cntr.pHd.size(); i_p++)
+		try { cntr.pHd[i_p].at().calc(is_start, is_stop, cntr.period()?(1e9/cntr.period()):(-1e-6*(t_cnt-t_prev))); }
 		catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 	    pthread_mutex_unlock(&cntr.enRes);
 	    t_prev = t_cnt;
@@ -239,11 +239,11 @@ void *TMdContr::Task( void *icntr )
 
 	if(is_stop) break;
 	TSYS::taskSleep((int64_t)cntr.period(), (cntr.period()?0:TSYS::cron(cntr.cron())));
-	if(cntr.endrun_req) is_stop = true;
-	if(!cntr.redntUse()) is_start = false;
+	if(cntr.endrunReq)	is_stop = true;
+	if(!cntr.redntUse())	is_start = false;
     }
 
-    cntr.prc_st = false;
+    cntr.prcSt = false;
 
     return NULL;
 }

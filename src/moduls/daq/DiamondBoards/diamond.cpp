@@ -206,28 +206,24 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) :
 
 TMdContr::~TMdContr()
 {
-    if(run_st) stop();
+    if(startStat()) stop();
 }
 
 string TMdContr::getStatus( )
 {
     string val = TController::getStatus( );
 
-    if(startStat() && !redntUse())
-    {
-        if(callSt)	val += TSYS::strMess(_("Call now. "));
-        if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
-        else val += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
-        val += TSYS::strMess(_("Spent time: %s. "), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str());
+    if(startStat() && !redntUse()) {
+	if(callSt)	val += TSYS::strMess(_("Call now. "));
+	if(period())	val += TSYS::strMess(_("Call by period: %s. "), tm2s(1e-3*period()).c_str());
+	else val += TSYS::strMess(_("Call next by cron '%s'. "), tm2s(TSYS::cron(cron()),"%d-%m-%Y %R").c_str());
+	val += TSYS::strMess(_("Spent time: %s. "), tm2s(SYS->taskUtilizTm(nodePath('.',true))).c_str());
     }
 
     return val;
 }
 
-TParamContr *TMdContr::ParamAttach( const string &name, int type )
-{
-    return new TMdPrm(name, &owner().tpPrmAt(type));
-}
+TParamContr *TMdContr::ParamAttach( const string &name, int type ) { return new TMdPrm(name, &owner().tpPrmAt(type)); }
 
 void TMdContr::start_( )
 {

@@ -75,8 +75,8 @@ class TController : public TCntrNode, public TConfig
 
 	bool toEnable( )	{ return mAEn; }
 	bool toStart( )		{ return mAStart; }
-	bool enableStat( )	{ return en_st; }
-	bool startStat( )	{ return run_st; }
+	bool enableStat( )	{ return enSt; }
+	bool startStat( )	{ return runSt; }
 	int  messLev( )		{ return mMessLev; }
 
 	void start( );
@@ -107,8 +107,7 @@ class TController : public TCntrNode, public TConfig
 
     protected:
 	//Protected attributes
-	bool	en_st;
-	bool	run_st;
+	bool	enSt, runSt;
 
 	//Methods
 	// User methods

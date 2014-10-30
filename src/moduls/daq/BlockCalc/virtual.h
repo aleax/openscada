@@ -127,19 +127,19 @@ class Contr: public TController
 	static void *Task( void *contr );
 
 	//Private attributes
-	bool	prc_st,		//Calc status
-		call_st,	//Calc now stat
-		endrun_req,	//Endrun calc request
-		sync_st;	//Sync DB status
+	bool	prcSt,		//Calc status
+		callSt,		//Calc now stat
+		endrunReq;	//Endrun calc request
 	int64_t	&mPerOld,	//Clock period (ms)
 		&mPrior,	//Process data task priority
 		&mIter;		//Iteration into clock
 
 	int	mBl;
-	vector< AutoHD<Block> >	clc_blks;	// Calc blocks HD
+	vector< AutoHD<Block> > calcBlks;	// Calc blocks HD
 	double	mPer;
 
-	Res	hd_res, calcRes;		// Resource for process block
+	pthread_mutex_t calcRes;	// Resource for process block
+	Res	hdRes;
 };
 
 //************************************************

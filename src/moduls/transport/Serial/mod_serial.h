@@ -42,13 +42,13 @@ class TTrIn: public TTransportIn
 	TTrIn( string name, const string &idb, TElem *el );
 	~TTrIn( );
 
-	string getStatus( );
+	string	getStatus( );
 
-	string timings( )			{ return mTimings; }
+	string	timings( )			{ return mTimings; }
 
 	void setTimings( const string &vl );
 
-	//> Modem functions
+	// Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
 	int	taskPrior( )			{ return mTaskPrior; }
 	float	mdmPreInit( )			{ return mMdmPreInit; }
@@ -96,7 +96,7 @@ class TTrIn: public TTransportIn
 	uint64_t trIn, trOut;			// Traffic in and out counter
 	float	tmMax;
 
-	//> Modem properties
+	// Modem properties
 	int	mTaskPrior;			// Requests processing task prioritet
 	int	mMdmTm;
 	float	mMdmPreInit, mMdmPostInit;
@@ -104,7 +104,7 @@ class TTrIn: public TTransportIn
 	string	mMdmRingReq, mMdmRingAnswer, mMdmRingAnswerResp;
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
-	unsigned mRTSfc         :1;
+	unsigned mRTSfc		:1;
 };
 
 //************************************************
@@ -122,7 +122,7 @@ class TTrOut: public TTransportOut
 
 	void setTimings( const string &vl );
 
-	//> Modem functions
+	// Modem functions
 	int	mdmTm( )			{ return mMdmTm; }
 	int	mdmLifeTime( )			{ return mMdmLifeTime; }
 	float	mdmPreInit( )			{ return mMdmPreInit; }
@@ -135,7 +135,7 @@ class TTrOut: public TTransportOut
 	string	mdmBusyResp( )			{ return mMdmBusyResp; }
 	string	mdmNoCarResp( )			{ return mMdmNoCarResp; }
 	string	mdmNoDialToneResp( )		{ return mMdmNoDialToneResp; }
-	string  mdmExit( )			{ return mMdmExit; }
+	string	mdmExit( )			{ return mMdmExit; }
 	string	mdmHangUp( )			{ return mMdmHangUp; }
 	string	mdmHangUpResp( )		{ return mMdmHangUpResp; }
 
@@ -179,9 +179,9 @@ class TTrOut: public TTransportOut
 	int	fd;
 	int64_t	mLstReqTm, mKeepAliveLstTm;
 
-	uint64_t trIn, trOut;			// Traffic in and out counter and maximum respond timeout
+	uint64_t trIn, trOut;			//Traffic in and out counter and maximum respond timeout
 
-	//> Modem properties
+	// Modem properties
 	int	mMdmTm, mMdmLifeTime;
 	float	mMdmPreInit, mMdmPostInit;
 	string	mMdmInitStr1, mMdmInitStr2, mMdmInitResp;
@@ -189,7 +189,7 @@ class TTrOut: public TTransportOut
 	string	mMdmExit, mMdmHangUp, mMdmHangUpResp;
 	unsigned mMdmMode	:1;
 	unsigned mMdmDataMode	:1;
-	unsigned mRTSfc		:1;	//Flow control by RTS signal for pure RS-485
+	unsigned mRTSfc		:1;		//Flow control by RTS signal for pure RS-485
 };
 
 //************************************************

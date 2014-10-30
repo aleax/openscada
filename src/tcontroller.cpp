@@ -29,7 +29,7 @@ using namespace OSCADA;
 //* TController					  *
 //*************************************************
 TController::TController( const string &id_c, const string &daq_db, TElem *cfgelem ) :
-    TConfig(cfgelem), en_st(false), run_st(false),
+    TConfig(cfgelem), enSt(false), runSt(false),
     mId(cfg("ID")), mMessLev(cfg("MESS_LEV")), mAEn(cfg("ENABLE").getBd()), mAStart(cfg("START").getBd()),
     mDB(daq_db), mRedntUse(false)
 {
@@ -146,15 +146,15 @@ void TController::load_( )
 
     mess_info(nodePath().c_str(),_("Load controller's configurations!"));
 
-    bool en_st_prev = en_st, run_st_prev = run_st;
+    bool enSt_prev = enSt, runSt_prev = runSt;
 
     cfgViewAll(true);
     SYS->db().at().dataGet(fullDB(),owner().nodePath()+"DAQ",*this);
 
     LoadParmCfg();
 
-    if(!en_st && en_st_prev) enable();
-    if(!run_st && run_st_prev) start();
+    if(!enSt && enSt_prev)	enable();
+    if(!runSt && runSt_prev)	start();
 }
 
 void TController::save_( )
@@ -168,8 +168,8 @@ void TController::save_( )
 void TController::start( )
 {
     //Enable if no enabled
-    if(run_st)	return;
-    if(!en_st)	enable();
+    if(runSt)	return;
+    if(!enSt)	enable();
 
     mess_info(nodePath().c_str(),_("Start controller!"));
 
@@ -179,24 +179,24 @@ void TController::start( )
     //Start for children
     start_();
 
-    run_st = true;
+    runSt = true;
 }
 
 void TController::stop( )
 {
-    if(!run_st)	return;
+    if(!runSt)	return;
 
     mess_info(nodePath().c_str(),_("Stop controller!"));
 
     //Stop for children
     stop_();
 
-    run_st = false;
+    runSt = false;
 }
 
 void TController::enable( )
 {
-    if(!en_st) {
+    if(!enSt) {
 	mess_info(nodePath().c_str(),_("Enable controller!"));
 
 	//Enable for children
@@ -219,17 +219,17 @@ void TController::enable( )
 	    }
 
     //Set enable stat flag
-    en_st = true;
+    enSt = true;
 
     if(enErr) throw TError(nodePath().c_str(),_("Some parameters enable error."));
 }
 
 void TController::disable( )
 {
-    if(!en_st) return;
+    if(!enSt) return;
 
     //Stop if runed
-    if(run_st) stop();
+    if(runSt) stop();
 
     mess_info(nodePath().c_str(),_("Disable controller!"));
 
@@ -248,7 +248,7 @@ void TController::disable( )
     disable_();
 
     //Clear enable flag
-    en_st = false;
+    enSt = false;
 }
 
 void TController::LoadParmCfg( )
@@ -452,8 +452,8 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrMkNode("area",opt,-1,"/cntr",_("Controller"))) {
 	    if(ctrMkNode("area",opt,-1,"/cntr/st",_("State"))) {
 		ctrMkNode("fld",opt,-1,"/cntr/st/status",_("Status"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
-		ctrMkNode("fld",opt,-1,"/cntr/st/en_st",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
-		ctrMkNode("fld",opt,-1,"/cntr/st/run_st",_("Run"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/enSt",_("Enable"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
+		ctrMkNode("fld",opt,-1,"/cntr/st/runSt",_("Run"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("fld",opt,-1,"/cntr/st/db",_("Controller DB"),RWRWR_,"root",SDAQ_ID,4,
 		    "tp","str","dest","select","select","/db/list","help",TMess::labDB());
 	    }
@@ -536,12 +536,12 @@ void TController::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(DB());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDB(opt->text());
     }
-    else if(a_path == "/cntr/st/en_st") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(en_st?"1":"0");
+    else if(a_path == "/cntr/st/enSt") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(enSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? enable() : disable();
     }
-    else if(a_path == "/cntr/st/run_st") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(run_st?"1":"0");
+    else if(a_path == "/cntr/st/runSt") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(runSt?"1":"0");
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	s2i(opt->text()) ? start() : stop();
     }
     else if(a_path.substr(0,9) == "/cntr/cfg") {

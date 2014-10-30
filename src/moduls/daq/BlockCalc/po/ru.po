@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.DAQ.BlockCalc 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-10 15:58+0300\n"
+"POT-Creation-Date: 2014-10-30 18:44+0200\n"
 "PO-Revision-Date: 2007-10-28 08:44+0200\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -15,84 +15,65 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: block.cpp:177
 #, c-format
 msgid "Block link '%s' save error."
 msgstr "Ошибка сохранения блочной связи '%s'."
 
-#: block.cpp:189
 #, c-format
 msgid "Node '%s' is not function."
 msgstr "Узел '%s' не функция."
 
-#: block.cpp:241 block.cpp:249 block.cpp:265
 #, c-format
 msgid "Link %d error!"
 msgstr "Ошибка в связке %d!"
 
-#: block.cpp:390
 #, c-format
 msgid "Error reading block's '%s' links."
 msgstr "Ошибка чтения связей блока '%s'."
 
-#: block.cpp:439
 #, c-format
 msgid "Error writing block's '%s' links."
 msgstr "Ошибка записи связей блока '%s'."
 
-#: block.cpp:453
 msgid "Block disabled or error."
 msgstr "Блок отключен или ошибка."
 
-#: block.cpp:473
 msgid "Block: "
 msgstr "Блок: "
 
-#: block.cpp:474 virtual.cpp:476
 msgid "Block"
 msgstr "Блок"
 
-#: block.cpp:476
 msgid "State"
 msgstr "Состояние"
 
-#: block.cpp:478
 msgid "Enable"
 msgstr "Включен"
 
-#: block.cpp:480
 msgid "Process"
 msgstr "Обрабатывается"
 
-#: block.cpp:482
 msgid "Configuration"
 msgstr "Конфигурация"
 
-#: block.cpp:484
 msgid "Id"
 msgstr ""
 
-#: block.cpp:485 virtual.cpp:127
 msgid "Name"
 msgstr "Имя"
 
-#: block.cpp:486 virtual.cpp:128
 msgid "Description"
 msgstr "Описание"
 
-#: block.cpp:487 virtual.cpp:130
 msgid "To enable"
 msgstr "Включать"
 
-#: block.cpp:488 virtual.cpp:131
 msgid "To process"
 msgstr "Обрабатывать"
 
-#: block.cpp:489 virtual.cpp:132
 msgid "Prior block"
 msgstr "Предшествующий блок"
 
-#: block.cpp:490
 msgid ""
 "Priority block(s) calculate before this block. Blocks list is separated by "
 "symbol ';'."
@@ -100,207 +81,172 @@ msgstr ""
 "Приоритетный блок(и) вычисляемый перед данным. Список блоков разделяется "
 "символом ';'."
 
-#: block.cpp:491 virtual.cpp:129
 msgid "Function"
 msgstr "Функция"
 
-#: block.cpp:492
 msgid "Go to function"
 msgstr "Перейти к функции"
 
-#: block.cpp:497 block.cpp:501 block.cpp:527
 msgid "IO"
 msgstr ""
 
-#: block.cpp:499 block.cpp:525
 msgid "Show"
 msgstr "Показать"
 
-#: block.cpp:500 block.cpp:526
 msgid "Hidden"
 msgstr "Скрытые"
 
-#: block.cpp:523
 msgid "Links"
 msgstr "Связи"
 
-#: block.cpp:732 block.cpp:739
 msgid "Free"
 msgstr "Свободна"
 
-#: block.cpp:733
 msgid "Local"
 msgstr "Локальная"
 
-#: block.cpp:734
 msgid "Global"
 msgstr "Глобальная"
 
-#: block.cpp:735
 msgid "Parameter"
 msgstr "Параметр"
 
-#: block.cpp:740
 msgid "Local out"
 msgstr "Локальный выход"
 
-#: block.cpp:741
 msgid "Global out"
 msgstr "Глобальный выход"
 
-#: block.cpp:742
 msgid "Parameter out"
 msgstr "Параметр выход"
 
-#: block.cpp:743
 msgid "Local in"
 msgstr "Локальный вход"
 
-#: block.cpp:744
 msgid "Global in"
 msgstr "Глобальный вход"
 
-#: block.cpp:745
 msgid "Parameter in"
 msgstr "Параметр вход"
 
-#: virtual.cpp:43
 msgid "Block based calculator"
 msgstr "Блочный вычислитель"
 
-#: virtual.cpp:47
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: virtual.cpp:48
 msgid "Allow block based calculator."
 msgstr "Предоставляет блочный вычислитель."
 
-#: virtual.cpp:113
 msgid "Parameters table"
 msgstr "Таблица параметров"
 
-#: virtual.cpp:114
 msgid "Block's table"
 msgstr "Таблица блоков"
 
-#: virtual.cpp:115
 msgid "Calculate period (ms)"
 msgstr "Периодичность обсчёта (мс)"
 
-#: virtual.cpp:116
 msgid "Calculate schedule"
 msgstr "Планирование вычислений"
 
-#: virtual.cpp:117
 msgid "Calculate task priority"
 msgstr "Приоритет задачи вычисления"
 
-#: virtual.cpp:118
 msgid "Iteration number into calculate period"
 msgstr "Число итераций в одном периоде обсчёта"
 
-#: virtual.cpp:119
-msgid "Write to output links only at changes"
-msgstr "Записывать по выходным связям только при изменениях"
-
-#: virtual.cpp:122
 msgid "Standard"
 msgstr "Стандартный"
 
-#: virtual.cpp:123
 msgid "Blocks' IOs"
 msgstr "Параметры блока"
 
-#: virtual.cpp:126
 msgid "ID"
 msgstr ""
 
-#: virtual.cpp:135
+msgid "Write to output links only at changes"
+msgstr "Записывать по выходным связям только при изменениях"
+
 msgid "Block's ID"
 msgstr "Id блока"
 
-#: virtual.cpp:136
 msgid "IO ID"
 msgstr ""
 
-#: virtual.cpp:137
 msgid "Link's type"
 msgstr "Тип связи"
 
-#: virtual.cpp:138
 msgid "Link"
 msgstr "Связь"
 
-#: virtual.cpp:139
 msgid "Link's value"
 msgstr "Значение связи"
 
-#: virtual.cpp:208
 msgid "Call now. "
 msgstr "Вызов сейчас. "
 
-#: virtual.cpp:209
 #, c-format
 msgid "Call by period: %s. "
 msgstr "Вызовы с периодом: %s. "
 
-#: virtual.cpp:210
 #, c-format
 msgid "Call next by cron '%s'. "
 msgstr "Следующий вызов по cron '%s'. "
 
-#: virtual.cpp:211
 #, c-format
 msgid "Spent time: %s. "
 msgstr "Затрачено времени: %s. "
 
-#: virtual.cpp:289 virtual.cpp:304
 #, c-format
 msgid "Enable block '%s' error."
 msgstr "Ошибка включения блока '%s'."
 
-#: virtual.cpp:322
+msgid "Start stage 1: set all blocks to process."
+msgstr ""
+
 #, c-format
 msgid "Process block '%s' error."
 msgstr "Ошибка обработки блока '%s'."
 
-#: virtual.cpp:392
+msgid "Start stage 2: sort blocks for need sequence."
+msgstr ""
+
+#, c-format
+msgid "Reshuffle blocks '%s'(%d) <-> '%s'(%d)."
+msgstr ""
+
+#, c-format
+msgid "Start stage 3: task create: prcSt=%d."
+msgstr ""
+
 #, c-format
 msgid "Block '%s' calc error."
 msgstr "Ошибка '%s' вычисления блока."
 
-#: virtual.cpp:395
 #, c-format
 msgid "Block '%s' is stopped."
 msgstr "Блок '%s' остановлен."
 
-#: virtual.cpp:481
 msgid "Blocks scheme"
 msgstr "Схема блоков"
 
-#: virtual.cpp:483
 msgid "Number"
 msgstr "Количество"
 
-#: virtual.cpp:484
 msgid "Blocks"
 msgstr "Блоки"
 
-#: virtual.cpp:542
 #, c-format
 msgid "All: %u; Enabled: %u; Process: %u"
 msgstr "Всего: %u; Включено: %u; Обрабатывается: %u"
 
-#: virtual.cpp:705
 msgid "1:Parameter is disabled."
 msgstr "1:Параметр отключен."
 
-#: virtual.cpp:706
 msgid "2:Controller is stopped."
 msgstr "2:Контроллер остановлен."
 
-#: virtual.cpp:741
 msgid ""
 "Attributes configuration list. List must be written by lines in format: "
 "[<blk>.<blk_io>:<aid>:<anm>]\n"

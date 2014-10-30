@@ -1519,7 +1519,7 @@ ws_FocusIn:/el7:open:/pg_control/pg_ElCadr
 ws_FocusIn:/el8:open:/pg_control/pg_ElCadr','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph','curSek','1247474043',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','name','Generic',40,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','grpName','Generic',41,'','Generic','','Загальні','','Загальні','Общие','','Общие');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/T_PP1/wMin','el2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/LogicLev/experiment/F_PP1/var','el8','','','','','','');
@@ -2238,7 +2238,7 @@ ws_FocusIn:/el7:open:/pg_control/pg_ElCadr
 ws_FocusIn:/el8:open:/pg_control/pg_ElCadr','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','name','KM102',32,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','grpName','KM102',41,'','KM102','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','addr','<EVAL>',42,'Parameter|var','prm:/BlockCalc/KM102/TE1314_1/var','el7','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','ed','<EVAL>',34,'Parameter|ed','prm:/BlockCalc/KM102/TE1314_1/ed','el7','','','','','','');
@@ -2519,7 +2519,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','min','
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','curSek','1285253917',40,'','','trnd1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/T_PP1','el2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','min','<EVAL>',42,'Parameter|min','prm:/LogicLev/experiment/T_PP1/min','el2','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Graphics 2',32,'','','','Графіки 2','','','Графики 2','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','name','Temperatures',40,'','','','Графіки 2','','','Графики 2','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmAuto','0',38,'Parameter|auto','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmCasc','0',38,'Parameter|casc','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_gcadr/pg_1','prmClose','<EVAL>',38,'Parameter|close','prm:/LogicLev/experiment/F_PP1','el8','','','','','','');
@@ -2540,7 +2540,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeA
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/BlockCalc/KM101/ST8612','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','name','KM101',32,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pErr','<EVAL>',34,'Parameter|err','prm:/BlockCalc/KM101/TE1314_2/err','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pName','',34,'Parameter|NAME','prm:/BlockCalc/KM101/TE1314_2/NAME','TAT101_2','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_mn/pg_KM101','pVal','0',34,'Parameter|var','prm:/BlockCalc/KM101/TE1314_2/var','TAT101_2','','','','','','');
@@ -2810,7 +2810,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/Pi','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/LogicLev/experiment/Pi/aMax','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','aMin','<EVAL>',34,'Parameter|aMin','prm:/LogicLev/experiment/Pi/aMin','el1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/Pi','el1','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','prec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/Pi/prec','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMax','<EVAL>',34,'Parameter|wMax','prm:/LogicLev/experiment/Pi/wMax','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','wMin','<EVAL>',34,'Parameter|wMin','prm:/LogicLev/experiment/Pi/wMin','el1','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/BlockCalc/Anast1to2node_cntr/PC_КРД1/auto','el2','','','','','','');
@@ -2977,7 +2977,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','digStt
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','<EVAL>',34,'Parameter|err','prm:/LogicLev/experiment/Pi/err','Pi','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/Pi','Pi','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/Pi','Pi','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pPrec','<EVAL>',34,'Parameter|prec','val:1','Pi','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pPrec','<EVAL>',34,'Parameter|prec','prm:/LogicLev/experiment/Pi/prec','Pi','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pErr','<EVAL>',34,'Parameter|err','prm:/LogicLev/experiment/Ti/err','Ti','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeA','<EVAL>',34,'Parameter|auto','prm:/LogicLev/experiment/Ti','Ti','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_mn/pg_1','pModeC','<EVAL>',34,'Parameter|casc','prm:/LogicLev/experiment/Ti','Ti','','','','','','');
@@ -3014,7 +3014,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_mn/pg_KM101','prec',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4','name','KM201',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','KM201',32,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','grpName','KM201',41,'','KM201','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM201/F101/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
@@ -3306,7 +3306,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_mn/pg_KM101','text',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5','name','KM202',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','KM202',32,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','grpName','KM202',41,'','KM202','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/КМ202/F103/NAME','el2','Елемент групи графіків','','','Элемент группы графиков','','');
@@ -3409,7 +3409,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','wMin',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6','name','KM301',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','KM301',32,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','grpName','KM301',41,'','KM301','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM301/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM301/ST8612','el1','','','','','','');
@@ -3604,7 +3604,7 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_mn/pg_KM101','text',
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7','name','KM302',0,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph','pgGrp','so',32,'','','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph','curSek','1205241018',40,'','','trnd1','','','','','','');
-INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics 1',32,'','','','Графіки 1','','','Графики 1','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','KM302',32,'','','','Графіки 1','','','Графики 1','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','grpName','KM302',41,'','KM302','','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','name','Graphics group element',34,'Parameter|NAME','prm:/BlockCalc/KM302/ST8612/NAME','el1','Елемент групи графіків','','','Элемент группы графиков','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','aMax','<EVAL>',34,'Parameter|aMax','prm:/BlockCalc/KM302/ST8612','el1','','','','','','');
@@ -4020,6 +4020,14 @@ INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value'
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','0',0,'','','sel_trends','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','1',0,'','','sel_view','','','','','','');
 INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_control/pg_cntrPaspExt','value','',8,'','','viewSet','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_1','dscr','Pages group: "Generic"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_1/pg_ggraph/pg_2','dscr','Pages group: "Temperatures"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_2/pg_ggraph/pg_1','dscr','Pages group: "KM101"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_3/pg_ggraph/pg_1','dscr','Pages group: "KM102"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_4/pg_ggraph/pg_1','dscr','Pages group: "KM201"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_5/pg_ggraph/pg_1','dscr','Pages group: "KM202"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_6/pg_ggraph/pg_1','dscr','Pages group: "KM301"',32,'','','','','','','','','');
+INSERT INTO "prj_AGLKS_io" VALUES('/prj_AGLKS/pg_so/pg_7/pg_ggraph/pg_1','dscr','Pages group: "KM302"',32,'','','','','','','','','');
 CREATE TABLE 'prj_AGLKS_stl' ("ID" TEXT DEFAULT '' ,"V_0" TEXT DEFAULT '' ,"V_1" TEXT DEFAULT '' ,"V_2" TEXT DEFAULT '' ,"V_3" TEXT DEFAULT '' ,"V_4" TEXT DEFAULT '' ,"V_5" TEXT DEFAULT '' ,"V_6" TEXT DEFAULT '' ,"V_7" TEXT DEFAULT '' ,"V_8" TEXT DEFAULT '' ,"V_9" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "prj_AGLKS_stl" VALUES('<Styles>','Default;root;UI;0444','Ivory','','','','','','','','');
 INSERT INTO "prj_AGLKS_stl" VALUES('backColor','gray','ivory','','','','','','','','');
@@ -6489,255 +6497,14 @@ INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomXsc','0.2',32,'','','El_angleTR
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomYsc','0.2',32,'','','El_angleTR_gr9','','','','','','');
 INSERT INTO "wlb_AGLKS_io" VALUES('KCH_MN1','geomZ','47',32,'','','El_angleTR_gr9','','','','','','');
 CREATE TABLE 'wlb_AGLKS_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "wlb_AGLKS_mime" VALUES('newMime','image/new;18.0742','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
-96Phhaznb80AAAAASUVORK5CYII=');
 CREATE TABLE 'wlb_AGLKS_uio' ("IDW" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"IO_TYPE" INTEGER DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","IDC","ID"));
 INSERT INTO "wlb_AGLKS_uio" VALUES('comprEn','','pVar','Variable',131073,'<EVAL>|0;0|',10,'Parameter|var','','Переменная','','','','Змінна','','','');
 CREATE TABLE 'prj_AGLKS' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;demoPlayProc;',1413998465);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root','','','',-1,5,'name;dscr;geomX;',1413998465);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400849872);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..','','','',-1,0,'name;grpName;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..','','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;demoPlayProc;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','1','','root','','','',-1,5,'name;dscr;geomX;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/ggraph','2','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','doc','','root','
 ','
 ','
@@ -6747,17 +6514,17 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','2','','/wlb_doc/wdg_docUsersSe
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','3','','/wlb_doc/wdg_docGasNodeDayA','','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','4','','/wlb_doc/wdg_docGasNodeMonthA','','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/doc','5','','/wlb_doc/wdg_docGasNodeDayOrder','','','',-1,0,'geomYsc;pgNoOpenProc;',1400852515);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root','','','',-1,5,'name;dscr;',1413998465);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1413966286);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen','','','',-1,0,'pgNoOpenProc;pgGrp;',1413998465);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','mn','','root','','','',-1,5,'name;dscr;',1414521219);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','1','','/wlb_AGLKS/wdg_KCH_MN1','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1414518565);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/mn','10','','/wlb_test/wdg_mn_gen','','','',-1,0,'pgNoOpenProc;pgGrp;',1414521219);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gcadr','','/wlb_Main/wdg_grpCadr','','','',-1,2,'geomYsc;evProc;pgGrp;',1400851728);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gcadr','1','','..','','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','rg','','root','','','',-1,5,'name;',1400851728);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg','rg','','/wlb_Main/wdg_ResultGraph','','','',-1,2,'name;geomYsc;pgGrp;grpName;',1400851728);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1','gview','','/wlb_Main/wdg_ViewCadr','','','',-1,2,'dscr;geomYsc;evProc;pgGrp;',1400851728);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/1/gview','1','','..','','','',-1,0,'name;dscr;','');
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root','','','',-1,5,'name;dscr;',1400849872);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400849872);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','2','','root','','','',-1,5,'name;dscr;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2','mn','','root','','','',-1,5,'name;dscr;',1397927358);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'pgGrp;',1397927358);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS','control','','root','','','',-1,5,'name;',1405531810);
@@ -6770,22 +6537,22 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/rg/rg','1','','..','','','',-1,0,'name
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','3','','root','
 ','
 ','
-',-1,5,'name;dscr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/ggraph','1','','..','','','',-1,0,'name;grpName;','');
+',-1,5,'name;dscr;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3','mn','','root','
 ','
 ','
 ',-1,5,'name;dscr;',1397926992);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/3/mn','KM101','','/wlb_AGLKS/wdg_KM101','','','',-1,0,'name;pgGrp;',1397926992);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..','','','',-1,0,'name;grpName;','');
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/2/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/control','cntrPasp','','/wlb_Main/wdg_cntrPasp','','','',-1,0,'pName;','');
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','4','','root','
 ','
 ','
-',-1,5,'name;dscr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/ggraph','1','','..','','','',-1,0,'name;grpName;','');
+',-1,5,'name;dscr;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/4','mn','','root','
 ','
 ','
@@ -6795,9 +6562,9 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/mn','KM101','','/wlb_AGLKS/wdg_KM101
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','5','','root','
 ','
 ','
-',-1,5,'name;dscr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/ggraph','1','','..','','','',-1,0,'name;grpName;','');
+',-1,5,'name;dscr;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','mn','','root','
 ','
 ','
@@ -6805,9 +6572,9 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/5','mn','','root','
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','6','','root','
 ','
 ','
-',-1,5,'name;dscr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/ggraph','1','','..','','','',-1,0,'name;grpName;','');
+',-1,5,'name;dscr;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6','mn','','root','
 ','
 ','
@@ -6816,9 +6583,9 @@ INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/6/mn','KM101','','/wlb_AGLKS/wdg_KM101
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so','7','','root','
 ','
 ','
-',-1,5,'name;dscr;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1400851728);
-INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/ggraph','1','','..','','','',-1,0,'name;grpName;','');
+',-1,5,'name;dscr;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'geomYsc;pgGrp;',1414589842);
+INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7/ggraph','1','','..','','','',-1,0,'name;dscr;grpName;',1414589842);
 INSERT INTO "prj_AGLKS" VALUES('/AGLKS/so/7','mn','','root','
 ','
 ','

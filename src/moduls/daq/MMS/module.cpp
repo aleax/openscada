@@ -159,7 +159,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, ::TElem *cfgelem ) : TC
 
 TMdContr::~TMdContr( )
 {
-    if(run_st) stop();
+    if(startStat()) stop();
 
     pthread_mutex_destroy(&enRes);
     pthread_mutex_destroy(&cntrRes);

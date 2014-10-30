@@ -1,3 +1,19 @@
+2014-10-30 Roman
+- LibsDB.OscadaLibs.db: base.{anUnif,manInUnif}: "HystBnd" for default set to 1% into the template.
+    FIX:base.digitBlock: fixed for simultaneously commands clean.
+- LibsDB.vcaBase.db:
+    Graphics group:
+	Title moved to attribute "name", for particular export name set.
+	Adapted to procedure dynamic translation.
+	Zero precision processing changed to equal for Main.anShow.
+    Main.{anShow,anShow1},mnEls.{El_Kran_Sh,Compressor}: Select by focus and prevent the focus for empty name is added.
+    mnEls.El_Alarm: processing procedure created for full signal and alarms forming.
+- FIX:UI.VCAEngine: Mime download expanded and fixed for projects.
+- DAQ.BlockCalc: "calcRes" moved to mutex.
+    Diagnostics messages added for no start to process in some cases the reason detect.
+    Sort blocks procedure mostly rewrited for fix.
+
+
 2014-10-22 Roman
 - LibsDB.OscadaLibs.db: Template base.digAlarm expanded for fullfeatured alarms generation from digital signal.
 - LibsDB.vcaBase.db: Main.ElCadr: scale and histogram reordered for alarms borders visible ensure.

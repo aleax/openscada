@@ -300,8 +300,7 @@ void TTrIn::connect( )
 	string speed = TSYS::strNoSpace(TSYS::strSepParse(addr(),1,':').c_str());
 	if(!speed.empty()) {
 	    speed_t tspd = B9600;
-	    switch(s2i(speed))
-	    {
+	    switch(s2i(speed)) {
 		case 300:	tspd = B300;	break;
 		case 600:	tspd = B600;	break;
 		case 1200:	tspd = B1200;	break;
@@ -330,8 +329,7 @@ void TTrIn::connect( )
 	    int len =  format[0]-'0';
 	    if(len < 5 || len > 8) throw TError(nodePath().c_str(),_("Char length '%d' error."),len);
 	    tio.c_cflag &= ~CSIZE;
-	    switch(len)
-	    {
+	    switch(len) {
 		case 5:	tio.c_cflag |= CS5;	break;
 		case 6:	tio.c_cflag |= CS6;	break;
 		case 7:	tio.c_cflag |= CS7;	break;
@@ -339,8 +337,7 @@ void TTrIn::connect( )
 	    }
 	    //  Set parity
 	    char parity = tolower(format[1]);
-	    switch(parity)
-	    {
+	    switch(parity) {
 		case 'e': tio.c_cflag |= PARENB; tio.c_cflag &= ~PARODD;break;
 		case 'o': tio.c_cflag |= PARENB; tio.c_cflag |= PARODD;	break;
 		case 'n': tio.c_cflag &= ~PARENB;			break;
@@ -1029,8 +1026,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
     wReqTm = time ? time : wReqTm;
     double wCharTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
     double wKeepAliveTm = s2r(TSYS::strSepParse(timings(),0,':',&off));
-    if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000)
-    {
+    if(wKeepAliveTm && (TSYS::curTime()-mKeepAliveLstTm) > wKeepAliveTm*1000000) {
 	stop();
 	start();
 	mKeepAliveLstTm = TSYS::curTime();
@@ -1083,7 +1079,7 @@ int TTrOut::messIO( const char *obuf, int len_ob, char *ibuf, int len_ib, int ti
 	}
     }
 
-    //> Read reply
+    //Read reply
     if(ibuf != NULL && len_ib > 0) {
 	if(obuf && len_ob > 0) { tv.tv_sec  = wReqTm/1000; tv.tv_usec = 1000*(wReqTm%1000); }
 	else { tv.tv_sec = (int)(1.5e-3*wCharTm); tv.tv_usec = (int)(1.5e3*wCharTm)%1000000; }

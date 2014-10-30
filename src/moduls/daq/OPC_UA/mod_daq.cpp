@@ -97,7 +97,7 @@ TMdContr::TMdContr( string name_c, const string &daq_db, TElem *cfgelem ) : TCon
 
 TMdContr::~TMdContr( )
 {
-    if(run_st) stop();
+    if(startStat()) stop();
 }
 
 string TMdContr::epParse( string *uri )
@@ -156,13 +156,12 @@ void TMdContr::enable_( )
 {
     string trName = "Sockets.out_OPCUA"+id();
     tr = SYS->transport().at().nodeAt(trName, 0, '.', 0, true);
-    if(tr.freeStat())
-    {
-        SYS->transport().at().at(TSYS::strParse(trName,0,".")).at().outAdd(TSYS::strParse(trName,1,".").substr(4));
-        tr = SYS->transport().at().nodeAt(trName, 0, '.');
-        tr.at().setDscr(TSYS::strMess(_("OPC UA automatic created transport for '%s' controller."),id().c_str()));
+    if(tr.freeStat()) {
+	SYS->transport().at().at(TSYS::strParse(trName,0,".")).at().outAdd(TSYS::strParse(trName,1,".").substr(4));
+	tr = SYS->transport().at().nodeAt(trName, 0, '.');
+	tr.at().setDscr(TSYS::strMess(_("OPC UA automatic created transport for '%s' controller."),id().c_str()));
     }
-    en_st = true;
+    enSt = true;
     setEndPoint(endPoint());
 }
 

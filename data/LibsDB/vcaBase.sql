@@ -1868,7 +1868,7 @@ INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','30',32,'','','moveUp','','','
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','45',32,'','','st_open','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomH','30',32,'','','st_open','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomY','98',32,'','','st_open','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','name','Graphics group',32,'','','','Група графіків','','Группа графиков','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','name','Graphics group',41,'','','','Група графіків','','Группа графиков','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','dscr','Pages template: "Graphics group"',32,'','','','Шаблон сторінок: "Група графіків"','','Шаблон страниц: "Группа графиков"','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomW','900',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','geomH','600',32,'','','','','','','','','');
@@ -3669,7 +3669,7 @@ INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordL','0',32,'','','trnd1','',
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0bordU','0',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0color','mediumorchid',32,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm0val','<EVAL>',32,'','','trnd1','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1405434652',8,'','','trnd1','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph','curSek','1414589389',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','curUSek','0',8,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1addr','',0,'','','trnd1','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph','prm1bordL','0',0,'','','trnd1','','','','','','');
@@ -5664,7 +5664,7 @@ INSERT INTO "wlb_Main_io" VALUES('TextLab','contextMenu','',40,'','','','','',''
 INSERT INTO "wlb_Main_io" VALUES('TextLab','active','1',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','evProc','ws_FocusIn::open:/pg_control/pg_ElCadr
 key_mouseDblClick::open:/pg_control/pg_cntrPasp',32,'','','','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('TextLab','backColor','grey',40,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('TextLab','backColor','gray',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','bordWidth','1',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','bordColor','#000000',40,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('TextLab','font','Arial 20 1',32,'','','','','','','','','');
@@ -5851,7 +5851,7 @@ INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','en','0',32,'','','trendsList',''
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','active','1',32,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','font','Arial 9',0,'','','trendsList','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('cntrPaspExt','value','',8,'','','trendsList','','','','','','');
-INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',32,'','','','Група графіків 10','','Группа графиков 10','','','');
+INSERT INTO "wlb_Main_io" VALUES('grpGraph10','name','Graphics group 10',41,'','','','Група графіків 10','','Группа графиков 10','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','dscr','Pages template: "Graphics group 10"',32,'','','','Шаблон сторінок: "Група графіків 10"','','Шаблон страниц: "Группа графиков 10"','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomW','1160',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('grpGraph10','geomH','600',32,'','','','','','','','','');
@@ -10819,11 +10819,11 @@ fill:(0|25):(0|75):(65|75):(65|95):(95|50):(65|5):(65|25):c1:
 ',32,'','','','','','','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('El_Strela','c1','yellow',0,'','','','','','','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','name','Alarming',32,'','','','Сигналізація','','Сигнализация','','','');
-INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','geomW','50',32,'','','','','','','','','');
-INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','geomH','38',32,'','','','','','','','','');
-INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','fillColor','green',32,'','','','','','','','','');
-INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','elLst','arc:(10|17):(10|17):(25|19):(27|4):(10|17):::::
-fill:(10|17):(10|17)::
+INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','geomW','40',32,'','','','','','','','','');
+INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','geomH','40',32,'','','','','','','','','');
+INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','fillColor','lime',40,'','','','','','','','','');
+INSERT INTO "wlb_mnEls_io" VALUES('El_Alarm','elLst','arc:(5|17):(5|17):(20|19):(22|4):(5|17):::::
+fill:(5|17):(5|17)::
 ',32,'','','','','','','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('El_Armatura','name','Valve',32,'','','','Засувка','','Задвижка','','','');
 INSERT INTO "wlb_mnEls_io" VALUES('El_Armatura','geomW','100',32,'','','','','','','','','');
@@ -16485,6 +16485,11 @@ INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','close','Parameter:command - "Cl
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Zadvizhka','close','Parameter:command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр:команда - "Закрити"','','','Параметр:команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('Zadvizhka','close','Parameter:command - "Close"',131072,'0||',14,'Parameter|close','','','Параметр:команда - "Закрити"','','','Параметр:команда - "Закрыть"','','','','');
 INSERT INTO "wlb_mnEls_uio" VALUES('El_Kran_Sh','stop','Parameter:command - "Stop"',131072,'0||',14,'Parameter|stop','','','Параметр:команда - "Стоп"','','','Параметр:команда - "Стоп"','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','NAME','Name',131077,'||',10,'Parameter|NAME','','','','','','','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','st_open','Parameter:status-open',131072,'0||',10,'Parameter|st_open','','','','','','','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','st_close','Parameter:status-close',131072,'0||',10,'Parameter|st_close','','','','','','','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','ntf','Notification "{st}:{modes}:{Speech text}"',131077,'||',9,'','','','','','','','','','','');
+INSERT INTO "wlb_mnEls_uio" VALUES('El_Alarm','digStts','Statuses',131077,'||',10,'Parameter|digStts','','','','','','','','','','');
 CREATE TABLE 'wlb_Main' ("ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main" VALUES('ElCadr','iVBORw0KGgoAAAANSUhEUgAAABcAAABACAIAAAB+w3u4AAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 z0lEQVRYhdWX32/TVhTHv7Zv7NhO08RpcBLaauqPTcC0PYAQQkKTGJrGwx54QPsD2Z/AH8CkFiak
@@ -16802,16 +16807,14 @@ ATzP830/iqKSFULUh6cNuFWwW3tZQg/ZhRCMMSaEuLq6qosadomXy2XVBKCBl5j4/g9NYCPjG3Cr
 YLf2u9N4XZBlWVEURAgRBEF6E0+fPkXECo7H48FgUEEhhOd5Fcyy7ODgQClVMWEYlv+Al7G3t1ff
 3Pf90WhUQWPM4eFhlmUV8+jRI8dx6rt1u90Kep43Ho/TNGWMPX78uN1uD4dDfPny18+fT6E50W63
 R6MRAPR6vW63y968+ePVq99+9lP9x3Bd9x9FY7XqUFOtUwAAAABJRU5ErkJggg==','/wlb_originals/wdg_Box','JavaLikeCalc.JavaScript
-if(f_start)
-{
-	//> Parameter selection enable
+if(f_start) {
+	//Parameter selection enable
 	if(allowSelLst.length)
-		for(i_el = 0; i_el < 8; i_el++)
-		{
+		for(i_el = 0; i_el < 8; i_el++) {
 			cEl = this["el"+(i_el+1)];
 			cEl.attrSet("en",1);
 			if(cEl.attr("contextMenu").search(":select$") < 0)
-				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+"Select:select\n");
+				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
 		}
 }
 
@@ -16820,44 +16823,36 @@ if(!trnd1_tSek) trnd1_tSek = curTm;
 selSingle = 0;
 selAll = false;
 
-//> Events process
-ev_cur = ev_rez = "";
-off = 0;
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	if(ev_cur == "key_presComma:/trnd1")		trnd1_tSek -= trnd1_tSize/2;
+//Events process
+for(ev_rez = "", off = 0; (ev_cur=event.parse(0,"\n",off)).length;  ) {
+	if(ev_cur == "key_presComma:/trnd1")			trnd1_tSek -= trnd1_tSize/2;
 	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
 	else if(ev_cur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
 	else if(ev_cur.search("usr_single:/el") == 0)	selSingle = ev_cur.slice(14).toInt();
-	else if(ev_cur.search("usr_all:/el") == 0)		selAll = true;
+	else if(ev_cur.search("usr_all:/el") == 0)	selAll = true;
 	else ev_rez += (ev_cur+"\n");
 	//SYS.messDebug("Trend","Event: "+ev_cur);
 }
 event = ev_rez;
 
-//> Trend time control
+//Trend time control
 //if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
 if(trnd1_tSek < curTm) trnd1_trcPer = 0;
 else { trnd1_trcPer = 1; trnd1_tSek = 0; }
 
-//> Generic
-name_arg0val = grpName;
+//Generic
+name_arg0val = name;
 
-//> Trends
-arh_beg = 1e30;
-arh_end = 0;
-for(i_el = 0; i_el < 8; i_el++)
-{
+//Trends
+arh_beg = 1e30, arh_end = 0;
+for(i_el = 0; i_el < 8; i_el++) {
 	cEl = this["el"+(i_el+1)];
 	if(selAll)	cEl.attrSet("bordStyle",3);
 	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
 	cTr = this["trnd1"];
 	cTrPrm = "prm"+i_el;
 	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
-	else
-	{
+	else {
 		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
 		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
 		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
@@ -16867,107 +16862,22 @@ for(i_el = 0; i_el < 8; i_el++)
 		//Enable/disable of the mode''s indication in the regulators ???
 		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
 		//Archive depth calculate
-		if(cEl.attr("bordStyle") == 3)
-		{
+		if(cEl.attr("bordStyle") == 3) {
 			arh_tmp = cTr.attr(cTrPrm+"prop");
 			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
 			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
 		}
 	}
 }
-//> Set archive scroll
-if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2))
-{
+//Set archive scroll
+if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
 	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
-	arh_tipTool = "Archive space: ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
+	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','JavaLikeCalc.JavaScript
-if(f_start)
-{
-	//> Parameter selection enable
-	if(allowSelLst.length)
-		for(i_el = 0; i_el < 8; i_el++)
-		{
-			cEl = this["el"+(i_el+1)];
-			cEl.attrSet("en",1);
-			if(cEl.attr("contextMenu").search(":select$") < 0)
-				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+"Выбор:select\n");
-		}
-}
-
-curTm = SYS.time();
-if(!trnd1_tSek) trnd1_tSek = curTm;
-selSingle = 0;
-selAll = false;
-
-//> Events process
-ev_cur = ev_rez = "";
-off = 0;
-while(true)
-{
-	ev_cur = event.parse(0,"\n",off);
-	if(ev_cur == "") break;
-	if(ev_cur == "key_presComma:/trnd1")		trnd1_tSek -= trnd1_tSize/2;
-	else if(ev_cur == "key_presPeriod:/trnd1")	trnd1_tSek += trnd1_tSize/2;
-	else if(ev_cur == "ws_SliderChange:/arh")	trnd1_tSek = arh_value*trnd1_tSize;
-	else if(ev_cur.search("usr_single:/el") == 0)	selSingle = ev_cur.slice(14).toInt();
-	else if(ev_cur.search("usr_all:/el") == 0)		selAll = true;
-	else ev_rez += (ev_cur+"\n");
-	//SYS.messDebug("Trend","Event: "+ev_cur);
-}
-event = ev_rez;
-
-//> Trend time control
-//if( trnd1_curSek > trnd1_tSek || trnd1_curSek < (trnd1_tSek-trnd1_tSize) ) trnd1_curSek = trnd1_tSek;
-if(trnd1_tSek < curTm) trnd1_trcPer = 0;
-else { trnd1_trcPer = 1; trnd1_tSek = 0; }
-
-//> Generic
-name_arg0val = grpName;
-
-//> Trends
-arh_beg = 1e30;
-arh_end = 0;
-for(i_el = 0; i_el < 8; i_el++)
-{
-	cEl = this["el"+(i_el+1)];
-	if(selAll)	cEl.attrSet("bordStyle",3);
-	if(selSingle) cEl.attrSet("bordStyle",((i_el+1)==selSingle)?3:1);
-	cTr = this["trnd1"];
-	cTrPrm = "prm"+i_el;
-	if(!cEl.attr("en")) cTr.attrSet(cTrPrm+"addr","");
-	else
-	{
-		cTr.attrSet(cTrPrm+"addr",cEl.attr("addr"));
-		cTr.attrSet(cTrPrm+"bordL",cEl.attr("min"));
-		cTr.attrSet(cTrPrm+"bordU",cEl.attr("max"));
-		cTr.attrSet(cTrPrm+"color",cEl.attr("color"));
-		cTr.attrSet(cTrPrm+"width",cEl.attr("bordWidth"));
-		cEl.attrSet("varEl",cTr.attr(cTrPrm+"val"));
-		//Enable/disable of the mode''s indication in the regulators ???
-		cEl.attrSet("enMode",((curTm-trnd1_curSek) <= 2));
-		//Archive depth calculate
-		if(cEl.attr("bordStyle") == 3)
-		{
-			arh_tmp = cTr.attr(cTrPrm+"prop");
-			if((arh_vl=arh_tmp.parse(0,":").toReal())) arh_beg = min(arh_beg,arh_vl);
-			if((arh_vl=arh_tmp.parse(1,":").toReal())) arh_end = min(curTm,max(arh_end,arh_vl));
-		}
-	}
-}
-//> Set archive scroll
-if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2))
-{
-	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
-	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
-	arh_tipTool = "Область архива: ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
-	arh_active = true;
-	if(selSingle) trnd1_tSek = arh_end;
-}
-else { arh_active = false; arh_tipTool = ""; }','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1405435575);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1414590083);
 INSERT INTO "wlb_Main" VALUES('graphSelPrm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAaCAYAAAAHfFpPAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAABJJJREFUWIXlmU1vG0UYx38znp19qeOXxE2cNJQmqdQGekPAl4Ar6g31
 I/ReiQtSv0K/AeoNcaWoElSIcuGARICivqRuyTp27NjOxt7ZneWQNjQ0idzYSVvxkyyvVuv//veZ
@@ -18014,7 +17924,8 @@ if(alarmLev && alarmSt&0x100) {
 else name_color = val_color = "lime";
 
 //Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pName)
+if(this.attr("focus") ||
+	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
 {
   bordColor = (bordColor == "white") ? "grey" : "white";
   bordWidth = 2;
@@ -18023,7 +17934,7 @@ else { bordColor = "grey"; bordWidth = 1; }
 
 //Check the regulator mode
 if(pModeC == true) mode_text = tr("C");
-else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1413915803);
+else mode_text = pModeA.isEVal() ? "" : ((pModeA) ? tr("A") : tr("M"));','','',500,'path;name;active;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;',1414518565);
 INSERT INTO "wlb_Main" VALUES('ViewCadr','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 CElEQVRYhe2YW2/bRhCFz9kLL5JpuE3ctA996T9t/mpRpC7SWrRFmuLuzPSBshTZsgPUIewAOk9a
 7szHHVLS2R1+/P2jc24cN8OwUdOUkpktF8uu74qiAABgvV7nnPH2tFgswjDckTSzpjkjMKbUNE3f
@@ -18194,12 +18105,13 @@ if(alarmLev && alarmSt&0x100) {
 else val_color = "lime";
 
 //Blink focused or linked with ElCadr
-if(this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/ss/pg_control/pg_ElCadr",true).attr("prmShifr") == pNAME)
+if(this.attr("focus") ||
+	(!pName.isEVal() && pName.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == pName))
 {
   bordColor = (bordColor == "white") ? "grey" : "white";
   bordWidth = 2;
 }
-else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1413911550);
+else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1414518565);
 INSERT INTO "wlb_Main" VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
@@ -19142,7 +19054,7 @@ if(en && name.isEVal()) {
 lb_sfr_text = name;
 if(varEl.isEVal()) lb_val_arg0val = "-";
 else if(!digStts.isEVal() && digStts.length) lb_val_arg0val = (varEl^digRevers) ? digStts.parse(0,";").parse(0,"-") : digStts.parse(1,";").parse(0,"-");
-else lb_val_arg0val = (prec.isEVal() || prec == 0) ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
+else lb_val_arg0val = prec.isEVal() ? varEl.toPrecision(9) : ((prec < 0) ? varEl.toPrecision(abs(prec)) : varEl.toFixed(prec));
 lb_val_color = lb_sfr_color = lb_ed_color = "limegreen";
 if(varEl.isEVal() || (!min.isEVal() && max > min && varEl < min) || (!max.isEVal() && max > min && varEl > max)) lb_val_color = lb_sfr_color = lb_ed_color =  "grey";
 else if(!aMax.isEVal() && !aMin.isEVal() && aMax > aMin && (varEl >= aMax || varEl <= aMin)) lb_val_color = lb_sfr_color = lb_ed_color =  "red";
@@ -19190,7 +19102,7 @@ if(!wMin.isEVal() && !wMax.isEVal() && wMax > wMin) tipTool += tr("Warning borde
 if(!dscr.isEVal()) {
 	tipTool += tr("Description")+": "+dscr+"\n";
 	tipStatus = dscr;
-}','','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1413789462);
+}','','',500,'path;name;dscr;en;active;geomW;geomH;tipTool;tipStatus;contextMenu;evProc;backColor;bordWidth;bordColor;bordStyle;',1414523031);
 INSERT INTO "wlb_Main" VALUES('prescrEdit','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAF
 gUlEQVRYhe1ZTW8TRxh+52N37fVXDLGd1FEUEomQEqGmUpB66YkjvfYf9HfAkUt/Ab+BUwuX0N4L
 QUV1cdzg2ASEnQTbWcf27uzXTA/TLmaduhslrlUpz2G1fuaZ1/PMzM6+M4vu378Pn6Ldbuu6rmka
@@ -19973,17 +19885,14 @@ if(ntf.length && (ntf.toInt() == stCur) != isErr) {
 if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
 if(alarmSt&0x100) {
 	if(!(alarmSt&0x10000) || alBlnk)	backColor = isErr ? "red" : backColor;
-	else backColor = "gray";
+	else backColor = (backColor=="gray")?"#383838":"gray";
 	alBlnk = !alBlnk;
 }
 
 //Events process
-ev_rez = "";
-for(off = 0; true; ) {
-  	sval = event.parse(0,"\n",off);
-	//messPut("Kran",1,"Event: "+sval);
-	if(!sval.length) break;
-	else if(sval == "usr_open") {
+for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
+	//SYS.messInfo("Kran","Event: "+sval);
+	if(sval == "usr_open") {
 		if(!com.isEVal())	com = true;
 		else close = false;
 		if((comVal=digComs.parse(0,";")).length) comVal = tr("ENABLE");
@@ -20002,7 +19911,7 @@ for(off = 0; true; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1413998465);
+event = ev_rez;','','',500,'name;active;geomW;geomH;contextMenu;evProc;backColor;bordWidth;bordColor;font;alignment;text;',1414589841);
 INSERT INTO "wlb_Main" VALUES('cntrPaspExt','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAAA3NCSVQICAjb4U/gAAAACXBIWXMA
 AA7EAAAOxAGVKw4bAAADaUlEQVRoge2aTW8bRRjH/zM7u469u15vHLu1U1cRThB9FQUkyq2ocOon
 QHwALnwCznDiwKkfoRI3LnAAKioqWqlBFEqFTGQRShJHpI7j+CXZ2Ls7D4dNE0tIrVMjppHmd9rZ
@@ -20294,7 +20203,7 @@ if(f_start) {
 			cEl = this["el"+(i_el+1)];
 			cEl.attrSet("en",1);
 			if(cEl.attr("contextMenu").search(":select$") < 0)
-				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+"Select:select\n");
+				cEl.attrSet("contextMenu",cEl.attr("contextMenu")+tr("Select")+":select\n");
 		}
 }
 
@@ -20322,11 +20231,10 @@ if(trnd1_tSek < curTm) trnd1_trcPer = 0;
 else { trnd1_trcPer = 1; trnd1_tSek = 0; }
 
 //Generic
-name_arg0val = grpName;
+name_arg0val = name;
 
 //Trends
-arh_beg = 1e30;
-arh_end = 0;
+arh_beg = 1e30, arh_end = 0;
 for(i_el = 0; i_el < 10; i_el++) {
 	cEl = this["el"+(i_el+1)];
 	if(selAll)	cEl.attrSet("bordStyle",3);
@@ -20355,17 +20263,17 @@ for(i_el = 0; i_el < 10; i_el++) {
 if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	arh_cfg = "0:"+floor(arh_beg/trnd1_tSize+1)+":"+floor(arh_end/trnd1_tSize+1)+":1:5";
 	arh_value = (trnd1_tSek?trnd1_tSek:curTm)/trnd1_tSize;
-	arh_tipTool = "Archive space: ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
+	arh_tipTool = tr("Archive space")+": ["+SYS.strftime(arh_beg)+" ... "+SYS.strftime(arh_end)+"]";
 	arh_active = true;
 	if(selSingle) trnd1_tSek = arh_end;
 }
-else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1408110037);
+else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1414590083);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1413998465);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1414521219);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','
 ','
 ','
-',-1,5,'name;dscr;geomX;',1413998465);
+',-1,5,'name;dscr;geomX;',1414521219);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','ggraph','','/wlb_Main/wdg_grpGraph','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/ggraph','1','','..','','','',-1,0,'','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','doc','','root','
@@ -20376,8 +20284,8 @@ INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/doc','1','','/wlb_doc/wdg_docAlarm
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','mn','','root','
 ','
 ','
-',-1,5,'name;dscr;',1413998465);
-INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1413998465);
+',-1,5,'name;dscr;',1414521219);
+INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/mn','1','','/wlb_test/wdg_mn_gen','','','',-1,0,'name;pgOpen;pgNoOpenProc;pgGrp;',1414521219);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gcadr','','/wlb_Main/wdg_grpCadr','','','',-1,2,'pgGrp;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1/gcadr','1','','..','','','',-1,0,'name;grpName;','');
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so/1','gview','','/wlb_Main/wdg_ViewCadr','','','',-1,2,'evProc;pgGrp;','');
@@ -20889,30 +20797,53 @@ hHtOSPkWaGqCzEc/Z1lWZljVVxqAxwMD/eXk5+fr/SjaarIWkHG+SVkHNDbew/PPfRlxHmUBHGnO
 Y+OzwQ9ABJNyAEZG4IOqLGo+qpOSTzkAPT2zuXfhVpIWLZLyzVcKQHc3HGvfxc5db0ub8CgDwOcD
 uz2RZza8LjWvMgDq6xPJXdFAxiMPS53uKgPA5XqMdcXFxpzrB9OPP3SLQIcbYoopcv0D6b+nFDyD
 BvUAAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure','','','',-1,'name;geomW;geomH;fillColor;elLst;c1;','');
-INSERT INTO "wlb_mnEls" VALUES('El_Alarm','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAwCAYAAAChS3wfAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
-AAAOxAAADsQBlSsOGwAABNtJREFUaIHtmm1MU1cYx399QVpBq2TEOXGJMosGwSFiXFScjE2dCRiX
-8BIWY+Y0cclItn0g0S2ZH+Zctg8zUWe2+LKkfpiJUfmwTXCAonNQiUgUxQ2cMCSUWikW+kJ7zz5c
-NItR13tvSzX2l5wP9+Y+//Ocf5/70nMOxIkT53lGN14d+X1+MezxhH29yWRiYnJS1PMzRruD+1y/
-do3S8jJCoVBY13+2/dMoZyQTNYcHXXfF5zt20O/oB8AluagZrUEgworPNeZiNVgfHH/y0ccsWpwX
-8XyjUgF/3fhT7Nm7B5vNhnOKE14ALMASQB+eRkt7Cy1dLeADrkLSxCTOnW0Uy/KXR9SEiIq1XW4T
-bvcgv1+6QNU3VfLJFcArGkSHgGrADxuKN7C55H0MegNZWVlMskzWnH9EDAgGRkUwGGTN2repb6gH
-K1AeCeWHaATq5Go423CG7OxsEhInaBpDmAX5ZDq7Oil4owC73Q6LgFWRUH0EOcBa8Hq9VLxbQXV1
-tWZJzQacaWgQ27Ztp9luxzPfAwuBFM15PZpkwArSKonrtzv4dvduDh88FN5T9TFofgh2XO/g2M/H
-YD6QC6RqVfwfJo/1MwKNVxqZc26OJjlNFfB3103R4/oHZgFrif7g72MEVgJZ4Aq6aL9yVQR8flWV
-oOkBsmXzFnHg0gFCa0KyleP2XTmGBPpWPdnd2Zypb8AydYriDFRVwD33kKioqBAnTp4gJIXAwPgP
-HkAPEhI3Ojp4a/Uqmi78obgKVBkgSRKtra04Uh2QqUYhgsyAkYVemi42Meh2Kw7X9hZIH2uxZBqw
-ALkKVaDYgHvuIdHZ1UnAHIBEdZ1GHAMwFXodvQz0OxTdBopfg3a7nfXl6xlad092/2lgKrARKr+q
-xNnnVBSq2IDRYFC+1xLUREcJPWAGj9eDz+dVHPpcEzcg1gnEmrgBsU4g1sQNiHUCsSZuQKwTiDWK
-DZifmckP+74n7doMuBmNlFTgBk5C1cYqiouKFYUqNmDGzDRdyTslWBxT4K7S6CjhB65CweICFuS8
-qmhmQtst4BprscQD9AGSunDVBhiNRnTndXBOrUKEuAEcByNG9Drl01KqDDCbzRyxHaGoqEhNeMRJ
-n51O3W915OXlKY5V9Yd2gilRB1BfVycmnZyErcEGy9SqaeAyLE1eSuXOD1mcl4dponl8JkXvs7Kg
-QJc/bzm0ILchLWoKCAHtcp8ZpgxKy8p0agYPEfgOSElJwTrdiv6UXr4fw98DoQ4/cBuohTQpjZlp
-aZrkNE9mB3x+0dbWxoqVrzPsHZYXLJZrVX0CXYANkGDf3r1sem8TiWaT6nForoAJpkSdNSODml9P
-kZuTCxeBGq2qj6EV+AXMiWZ+PHSYdcXrNA0eIryccfSno6Knp5v2vnYOnD8on8wGXtIgOgw0AQEo
-nFfImszVJCQkUFpSyrTpLz4d+wMe5mKzXXzx5U5qa2vxzPPAy4AZeQ0h3B57kT+yPEA95C/J54Ot
-WykrL396d4j8F6djQJSWlXKruxsAv8VPz2s9YfeY2p6K5ZblwfH+7/ZT+GZhLBbg1DHqDwiX845w
-OgaE0zEgTp+uFYZkg8BEWG3X17sexDodA8I34tW0D+BxjJujrjsu0dzcjBDhjWPu3AxmzZ797Pzi
-ceI8m/wLdm2cKGAgan0AAAAASUVORK5CYII=','/wlb_originals/wdg_ElFigure','','','',-1,'name;geomW;geomH;fillColor;elLst;','');
+INSERT INTO "wlb_mnEls" VALUES('El_Alarm','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+AAAOxAAADsQBlSsOGwAABGVJREFUeJzt20tsVHUUx/EP5VFK25lQJTUUSwVCMSlocNGEqBAlGmIT
+q4su0LhCY2QBC4ys6s6FCxM1krglBDFRIASNC0IocWETwyuIUwwlNFSghLY8+qClXBd3LMbQ18yd
+Xiv3exYzk5k5/989//O/8597ziUhISEh4dFl1jSN8yLeyOF7ndiLP6OV84A5hXKMxVgEVmhQavuU
+PYxoc12Ha9owgg7cilJkITNgB94CWyyyVdWUPVw0oFmHswZwG804FqHGSDNgHl7BcvCmBk96Fqwn
++2xqLFLiHbU6cc+AX72t1TPZd1twKm/VETEP1VIOSwukBXYJIrVegc1Z32mBMjtRhqJ8hM+O5PDZ
+JOVjH1nrXeUasQ4VEXknVFqNjWhEoNIZS5FBb65u810CKaxVr9Fyr3kZ9Xl6HIu5//J9w2o3lDmn
+wyVHcLZAI49LHY7bql+vwFDEaT+e9Qv87J41buGTXA8gnyXQaJX3fKBeg7TaPL1NlbkoUeQJxRYq
+c9JSXENXoYdOoc4qezQJZKZx1seyPQJr3LLUdtTI88Q4ERtwXLMumWwqxm1dwuWwSTs+E/46TIqp
+JO08bFKvSaNXNUh7TpiKcVOKRYqMWCilTLsSQ+7gapTDpHHA6wI9sc/52HZAuE9g22QOqqBrZSYw
+2SWwTKmXrLfRC5ZYJ1wQ/0VuogcLdOp0C924m6/b96X0+saQOwL3Y0/0sW1IuG3eqh/HhXuVMZns
+TrDYLGnzhSec/zJzhWerOUpQboIsn+gcMB8rrVBlddbxTKEKdUpUqhVem8iJldhni8vOZFNrpthl
+gf361ckIr008lImWQAlqlWYzYCZRhaeUmK02++qhPPI/g0kA4hYQN0kA4hYQN0kA4hYQN0kA4hYQ
+N0kA4hYQN498ACa6IjSCa9KKnPO0SlROg6ooOIC9Ov3ha90O4VI+7rZJCy84zhTbJsBJRqvJDyVZ
+ApP8XLF5Bj2mwpAKNQrbW5IPF/AtTmnxu+/RKmyuyJukLvB/ZCoBGEarPq1+MuxCoSTlSKiOc64I
+/EBhFC5QarOU3shbYPK1v1toUg4Le0kmVbqZakV/2LA+d11UrFyHGjXCgnmctOBLA36zW7s9OI2h
+Qg+7Q52M/fpdjmnW+4X9Cc26hFWgDYU+6H+yWKUmdTI+jSkAGYEmgVX2CEtgU87FfJpabuvTo8uw
+csW61agQbWfYeLTgkOuOOijjO2EG5F0EzZUHxdMe4T5hMOLZvi9wJ+u7x6SLnxMRVVtTtzlOu67a
+j5Y4KNw21UbkHfrxBb7CQZy3W6fPhX2COc98VBvadn2uOqIaV8Ayq41k22aXk1Np7SZOZB8HDTvq
+hCNZ/2EYjuWpO3IWCOc+rdyu0bbWnTmm/RmB57M+UnqV2jzqP6IWjaj/0vSPPrttH9rACettz+F+
+gT6drtrrpk5hmv8izIfImK4bJjbjwxy+1yZskT8frZwHTFcAHjdOiXocBoQ3SQxGKychISEhISEB
+fwFOqpSSuh+D/wAAAABJRU5ErkJggg==','/wlb_originals/wdg_ElFigure','JavaLikeCalc.JavaScript
+if(f_start)	isErr = false, alBlnk = false;
+
+//Display typical for st_open
+stCur = -1;
+if(st_open == true || st_close == false) {
+	fillColor = (stVal=digStts.parse(0,";").parse(1,"-")).length ? stVal : "green";
+	stCur = 1;
+}
+else if(st_open == false || st_close == true) {
+	fillColor = (stVal=digStts.parse(1,";").parse(1,"-")).length ? stVal : "blue";
+	stCur = 0;
+}
+else { fillColor = "grey"; return; }
+
+//Notification create
+if(ntf.length && (ntf.toInt() == stCur) != isErr) {
+	if((isErr=(ntf.toInt()==stCur)))	alarm = "50|"+NAME+"|"+ntf.parse(2,":")+".|"+ntf.parse(1,":");
+	else if(alarmSt&0x100)	alarm = "1|"+NAME+"||1";
+}
+if(!isErr && alarmSt&0x100 && !(alarmSt&0x10000)) alarm = "";
+if(alarmSt&0x100) {
+	if(!(alarmSt&0x10000) || alBlnk)	fillColor = isErr ? "red" : fillColor;
+	else fillColor = "gray";
+	alBlnk = !alBlnk;
+}','','',1000,'name;geomW;geomH;fillColor;elLst;',1414600281);
 INSERT INTO "wlb_mnEls" VALUES('El_Armatura','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAC3BJREFUeJztWXmMVdUd/u4959zlLTMDs7IN4DDQAoMyDAoRCkYIiwxF
 jRibYsLSJdIgrctfojU1NdGkLgW1YEpBY0SII4vRxoKM0hhETNgEii0UGIEqzrx5y93Ovad/3GXe
@@ -21032,7 +20963,7 @@ if(f_start) {
 }
 
 if(this.attr("focus") ||
-		(!shifr.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
+		(!shifr.isEVal() && shifr.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
 	c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
 else c1 = c1Sv;
 
@@ -21063,7 +20994,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1414000438);
+event = ev_rez;','','',1000,'name;dscr;active;geomW;geomH;contextMenu;evProc;lineWdth;lineClr;fillColor;elLst;c1;',1414518565);
 INSERT INTO "wlb_mnEls" VALUES('El_Pipe_simple_vert_gr','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAAS9JREFUeJztm0FOwlAYBoe+iqRAPAI7DiE38QJ4JvZyB+9VmhALuigG
 0Z1dTIzfJH/en/eSZjL7ThjJasX7ZgNNM8y8gfli2JfL633TwGJxu89mUFXQ93A4QNfdnod22NvL
@@ -21228,7 +21159,7 @@ if(f_start) {
 								(digComs.isEVal()?tr("Stop"):digComs.parse(1,";").parse(0,"-"))+":close\n";
 }
 if(this.attr("focus") ||
-	(!shifr.isEVal() && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
+	(!shifr.isEVal() && shifr.length && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("pgOpen") && this.wdgAt("/s/pg_control/pg_ElCadr",true).attr("prmShifr") == shifr))
 		c1 = (c1 == c1Sv) ? "#00ddff" : c1Sv;
 else c1 = c1Sv;
 fillColor = "gray";
@@ -21254,7 +21185,7 @@ for(ev_rez = "", off = 0; (sval=event.parse(0,"\n",off)).length; ) {
 	}
 	else ev_rez += sval+"\n";
 }
-event = ev_rez;','','',1000,'name;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1413794111);
+event = ev_rez;','','',1000,'name;active;geomW;geomH;contextMenu;evProc;fillColor;elLst;c1;',1414518565);
 INSERT INTO "wlb_mnEls" VALUES('cooler2','iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
 AAAOxAAADsQBlSsOGwAAB9ZJREFUeJztWntQVNcZ/7EPFgSU50oRsqxKQUREalGsVKlJg5CUgmJi
 dWw7jszUcaa2Q20lM21o2ulMZ5qmFnUsPsc4lIiSqIk4IgQStMlGHstL2GV5rMDy2Df7Fr/+kYYU
@@ -21933,4 +21864,6 @@ INSERT INTO "Trs" VALUES('above alarm border','вище дозволеної г�
 INSERT INTO "Trs" VALUES('bellow alarm border','нижче дозволеної границі','ниже допустимой границы');
 INSERT INTO "Trs" VALUES('above warning border','вище норми','выше нормы');
 INSERT INTO "Trs" VALUES('bellow warning border','нижче норми','ниже нормы');
+INSERT INTO "Trs" VALUES('Select','Вибір','Выбор');
+INSERT INTO "Trs" VALUES('Archive space','Область архіву','Область архива');
 COMMIT;
