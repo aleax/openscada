@@ -521,7 +521,7 @@ void Block::cntrCmdProc( XMLNode *opt )
 	owner().blkList(list);
 	opt->childAdd("el")->setText("");
 	for(unsigned i_b = 0; i_b < list.size(); i_b++)
-	    if(list[i_b] != id()) opt->childAdd("el")->setText(list[i_b]);
+	    if(list[i_b] != id()) opt->childAdd("el")->setText((prior().size()?prior()+";":"")+list[i_b]);
     }
     else if(a_path == "/blck/cfg/func") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {

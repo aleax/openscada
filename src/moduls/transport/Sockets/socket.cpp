@@ -288,8 +288,7 @@ int TSocketIn::writeTo( const string &sender, const string &data )
 
     ResAlloc resN(nodeRes(), true);	//Prevent simultaneous writing
 
-    switch(type)
-    {
+    switch(type) {
 	case SOCK_TCP: case SOCK_UNIX: {
 	    int sId = atoi(TSYS::strLine(sender,1).c_str());
 	    if(sId < 0) return -1;

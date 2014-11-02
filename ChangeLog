@@ -1,3 +1,9 @@
+2014-11-02 Roman
+- LibsDB.vcaBase.db: Main.objProps: default size decreased to 1.5 and moved to dynamic translation.
+    Main.cntrPaspExt: Moved to dynamic translation.
+- DAQ.BlockCalc: Priority block additive selection is added.
+
+
 2014-10-30 Roman
 - LibsDB.OscadaLibs.db: base.{anUnif,manInUnif}: "HystBnd" for default set to 1% into the template.
     FIX:base.digitBlock: fixed for simultaneously commands clean.
