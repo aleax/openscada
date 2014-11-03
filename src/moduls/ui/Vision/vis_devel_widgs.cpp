@@ -395,16 +395,14 @@ QVariant ModInspAttr::data( const QModelIndex &index, int role ) const
 	Item *it = static_cast<Item*>(index.internalPointer());
 
 	if(index.column() == 0)
-	    switch(role)
-	    {
+	    switch(role) {
 		case Qt::DisplayRole:	val = it->name().c_str();	break;
 		case Qt::ForegroundRole:
 		    if(it->modify())	val = QBrush(Qt::blue);
 		    break;
 	    }
 	if(index.column() == 1)
-	    switch(role)
-	    {
+	    switch(role) {
 		case Qt::DisplayRole:
 		    val = it->data();
 		    if(val.type() == QVariant::Int && it->flag()&ModInspAttr::Item::DateTime)
@@ -524,7 +522,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		}
 	    }
 
-	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by dynamic translation mode specifuc
+	    if(!mainWin()->cntrIfCmd(req) /*&& req.text() == val*/) {	//!!!! Commented by dynamic translation mode specific
 		//Send change request to opened to edit widget
 		if(dw)	dw->chRecord(chCtx);
 
@@ -544,7 +542,7 @@ bool ModInspAttr::setData( const QModelIndex &index, const QVariant &ivl, int ro
 		it->setModify(true);
 		emit modified(swdg+"/a_"+nattr);
 		emit dataChanged(index, index);
-		if(it->flag()&(Item::Active|Item::SelEd)) setWdg(cur_wdg);
+		if(it->flag()&(Item::Active|Item::Select|Item::SelEd)) setWdg(cur_wdg);
 	    }
 	}
     }catch(...){ return false; }

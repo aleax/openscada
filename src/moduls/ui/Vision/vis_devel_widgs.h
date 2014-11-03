@@ -104,13 +104,13 @@ class ModInspAttr: public QAbstractTableModel
 
 		void clean( );
 
-		Item *child(int row) const;
+		Item *child( int row ) const;
 		int  childGet( const string &id ) const;
-		int  childCount() const;
+		int  childCount( ) const;
 		int  childInsert( const string &id, int row, Type tp );
 		void childDel( int row );
 
-		Item *parent()		{ return parentItem; }
+		Item *parent( )		{ return parentItem; }
 
 	    private:
 		string	idItem, nameItem, wdgsItem, helpItem, snthHglItem;

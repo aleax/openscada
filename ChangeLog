@@ -1,3 +1,7 @@
+2014-11-03 Roman
+- FIX:UI.Vision: Item::Select mode attribute processing fix for permition like attributes.
+
+
 2014-11-02 Roman
 - LibsDB.vcaBase.db: Main.objProps: default size decreased to 1.5 and moved to dynamic translation.
     Main.cntrPaspExt: Moved to dynamic translation.

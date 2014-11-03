@@ -406,7 +406,7 @@ void TCfg::setSEL( const string &val, uint8_t RqFlg )
 void TCfg::setS( const string &val, uint8_t RqFlg )
 {
     if(isKey() && !keyUpdt() && (RqFlg&(KeyUpdtBase|KeyUpdtSet))) { mKeyUpdt = true; setType(TVariant::String); }
-    if(keyUpdt()) setS((RqFlg&KeyUpdtBase)?getS()+string(1,0)+val:val+string(1,0)+getS(KeyUpdtBase));
+    if(keyUpdt()) setS((RqFlg&KeyUpdtBase)?(getS()+string(1,0)+val):(val+string(1,0)+getS(KeyUpdtBase)));
     else setS(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
