@@ -343,8 +343,10 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 
     if(messLev() == TMess::Debug) mess_debug_(nodePath().c_str(), _("REQ -> '%s'"), req.c_str());
 
+    ResAlloc res(reqRes, true);
+
     //Request by ICP DAS serial API
-    if(mBus == 0 && mSlot != mCurSlot)	{ pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
+    if(mBus == 0 && mSlot != mCurSlot) { pBusRes.resRequestW(); ChangeToSlot(mSlot); mCurSlot = mSlot; pBusRes.resRelease(); }
 
     //Request by OpenSCADA output transport
     if(bus() >= 0 && trOscd() != TrIcpDasNm) {
@@ -385,8 +387,6 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
     }
 
     //Request by ICP DAS serial API
-    ResAlloc res(reqRes, true);
-
     WORD wT, rez;
     char szReceive[255]; szReceive[0] = 0;
 
