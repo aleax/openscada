@@ -168,7 +168,7 @@ class TSYS : public TCntrNode
 	static bool taskEndRun( );	// Check for the task endrun by signal SIGUSR1
 
 	// Sleep task for period grid <per> on ns or to cron time.
-	static int sysSleep( float tm );			//> System sleep in seconds up to nanoseconds (1e-9)
+	static int sysSleep( float tm );			//System sleep in seconds up to nanoseconds (1e-9)
 	static void taskSleep( int64_t per, time_t cron = 0, int64_t *lag = NULL );
 	static time_t cron( const string &vl, time_t base = 0 );
 

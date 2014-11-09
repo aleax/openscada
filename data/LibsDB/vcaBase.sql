@@ -902,7 +902,6 @@ INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_control/pg_cntrPaspExt','vi
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','comInAdd','/wlb_Main/wdg_prescrEdit/wdg_comInAdd','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','labName','/wlb_Main/wdg_prescrEdit/wdg_labName','','');
 INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_11','name','/wlb_Main/wdg_prescrEdit/wdg_name','','');
-INSERT INTO "prj_tmplSO_incl" VALUES('/prj_tmplSO/pg_so/pg_1/pg_mn/pg_1','objProps1','/wlb_test/wdg_mn_gen/wdg_objProps1','','');
 CREATE TABLE 'prj_tmplSO_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "prj_tmplSO_io" VALUES('/prj_tmplSO/pg_so','evProc','ws_BtPress:/prev:prev:/pg_so/*/*/$
 ws_BtPress:/next:next:/pg_so/*/*/$
@@ -1837,6 +1836,8 @@ INSERT INTO "wlb_Main_incl" VALUES('grpGraph10','trnd1','/wlb_originals/wdg_Diag
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','comInAdd','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;tipTool;elType;font;','');
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','labName','/wlb_originals/wdg_Text','name;geomX;geomY;geomW;geomH;geomZ;font;alignment;text;','');
 INSERT INTO "wlb_Main_incl" VALUES('prescrEdit','name','/wlb_originals/wdg_FormEl','name;active;geomX;geomY;geomW;geomH;geomZ;elType;value;confirm;font;','');
+INSERT INTO "wlb_Main_incl" VALUES('anShow1s','name','/wlb_Main/wdg_anShow1/wdg_name','','');
+INSERT INTO "wlb_Main_incl" VALUES('anShow1s','val','/wlb_Main/wdg_anShow1/wdg_val','geomW;','');
 CREATE TABLE 'wlb_Main_io' ("IDW" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"IO_VAL" TEXT DEFAULT '' ,"SELF_FLG" INTEGER DEFAULT '' ,"CFG_TMPL" TEXT DEFAULT '' ,"CFG_VAL" TEXT DEFAULT '' ,"IDC" TEXT DEFAULT '' ,"uk#IO_VAL" TEXT DEFAULT '' ,"uk#CFG_TMPL" TEXT DEFAULT '' ,"ru#IO_VAL" TEXT DEFAULT '' ,"ru#CFG_TMPL" TEXT DEFAULT '' ,"ru#CFG_VAL" TEXT DEFAULT '' ,"uk#CFG_VAL" TEXT DEFAULT '' , PRIMARY KEY ("IDW","ID","IDC"));
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','name','Element cadr',32,'','','','Елемент кадр','','Элемент кадр','','','');
 INSERT INTO "wlb_Main_io" VALUES('ElCadr','geomW','110',32,'','','','','','','','','');
@@ -6029,6 +6030,9 @@ INSERT INTO "wlb_Main_io" VALUES('prescrEdit','elType','0',32,'','','name','',''
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','value','',8,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','font','Arial 15',32,'','','name','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrEdit','confirm','0',32,'','','name','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow1s','name','Analog show 1 (short)',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow1s','geomW','65',32,'','','','','','','','','');
+INSERT INTO "wlb_Main_io" VALUES('anShow1s','geomW','65',32,'','','val','','','','','','');
 CREATE TABLE 'wlb_Main_mime' ("ID" TEXT DEFAULT '' ,"MIME" TEXT DEFAULT '' ,"DATA" TEXT DEFAULT '' , PRIMARY KEY ("ID"));
 INSERT INTO "wlb_Main_mime" VALUES('cadr','image/png;8.83301','iVBORw0KGgoAAAANSUhEUgAAAGQAAABaCAYAAABOkvOJAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
 /wD/oL2nkwAAAAlwSFlzAAAMdQAADHUBLXiUdQAAAAd0SU1FB9kCGxAwD1fi7KsAAAAZdEVYdENv
@@ -18112,7 +18116,7 @@ if(this.attr("focus") ||
   bordColor = (bordColor == "white") ? "grey" : "white";
   bordWidth = 2;
 }
-else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1414518565);
+else { bordColor = "grey"; bordWidth = 1; }','','',500,'name;active;geomH;evProc;backColor;bordWidth;bordColor;',1415294952);
 INSERT INTO "wlb_Main" VALUES('cntrRegul','iVBORw0KGgoAAAANSUhEUgAAAEAAAAArCAIAAABHOBkQAAAACXBIWXMAAA06AAANOgEDIh6FAAAE
 DklEQVRoge2ZTU8bRxjHn9mZ2fF4d/2CDREJcUFVLRRLHHyAK+LGAT4INz5Cc04lLqmUxgfU9oCE
 OPEFoK2VVEhcoKQcqFog3lC7NsZv+zrTgwtBKAmDkmhVyb/TzjP7n/3/V8/MWjJ69uy7VqsF0eE6
@@ -20237,6 +20241,39 @@ if(arh_end && ((arh_end-arh_beg)/trnd1_tSize > 2)) {
 	if(selSingle) trnd1_tSek = arh_end;
 }
 else { arh_active = false; arh_tipTool = ""; }','','',500,'name;dscr;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1414590083);
+INSERT INTO "wlb_Main" VALUES('anShow1s','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','/wlb_Main/wdg_anShow1','','','',-1,'name;geomW;',1415294944);
 CREATE TABLE 'prj_tmplSO' ("OWNER" TEXT DEFAULT '' ,"ID" TEXT DEFAULT '' ,"ICO" TEXT DEFAULT '' ,"PARENT" TEXT DEFAULT '' ,"PROC" TEXT DEFAULT '' ,"uk#PROC" TEXT DEFAULT '' ,"ru#PROC" TEXT DEFAULT '' ,"PROC_PER" INTEGER DEFAULT '-1' ,"FLGS" INTEGER DEFAULT '0' ,"ATTRS" TEXT DEFAULT '*' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("OWNER","ID"));
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO','so','','/wlb_Main/wdg_RootPgSo','','','',-1,1,'pgOpen;',1414948968);
 INSERT INTO "prj_tmplSO" VALUES('/tmplSO/so','1','','root','

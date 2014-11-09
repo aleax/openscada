@@ -270,12 +270,10 @@ void Session::uiComm( const string &com, const string &prm, SessWdg *src )
 	// Go to destination page
 	string cur_pt_el;
 	AutoHD<SessPage> cpg;
-	for(unsigned i_el = 0; (cur_pt_el=TSYS::pathLev(prm,i_el++)).size(); )
-	{
+	for(unsigned i_el = 0; (cur_pt_el=TSYS::pathLev(prm,i_el++)).size(); ) {
 	    string op_pg;
 	    if(cur_pt_el.compare(0,3,"pg_") == 0) op_pg = cur_pt_el.substr(3);
-	    else if(cur_pt_el == "*" || (cur_pt_el == "$" && ( com == "next" || com == "prev")))
-	    {
+	    else if(cur_pt_el == "*" || (cur_pt_el == "$" && ( com == "next" || com == "prev"))) {
 		vector<string> pls;
 		if(cpg.freeStat()) list(pls); else cpg.at().pageList(pls);
 		if(pls.empty())	return;
@@ -507,8 +505,7 @@ void Session::cntrCmdProc( XMLNode *opt )
     string a_path = opt->attr("path");
     //Service commands process
     if(a_path == "/serv/pg") {	//Pages operations
-	if(ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEC_RD))	//Open pages list
-	{
+	if(ctrChkNode(opt,"openlist",permit(),owner().c_str(),grp().c_str(),SEC_RD)) {	//Open pages list
 	    unsigned tm = strtoul(opt->attr("tm").c_str(),NULL,10);
 	    unsigned ntm = calcClk();
 	    vector<string> lst = openList();
@@ -538,8 +535,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	return;
     }
     else if(a_path == "/serv/alarm") {	//Alarm operations
-	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD))
-	{
+	if(ctrChkNode(opt,"get",permit(),owner().c_str(),grp().c_str(),SEC_RD)) {
 	    // Get alarm status
 	    int aSt = alarmStat();
 	    opt->setAttr("alarmSt", i2s(aSt));
@@ -566,7 +562,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 			opt->setText(((AutoHD<SessWdg>)mod->nodeAt(mAlrm[i_q].path)).at().resourceGet(mAlrm[i_q].tpArg));
 		    else opt->setText(mod->callSynth(mAlrm[i_q].mess));
 		    mAlrmSndPlay = i_q;
-		}else mAlrmSndPlay = -1;
+		} else mAlrmSndPlay = -1;
 	    } else if(!((aSt>>16) & Engine::Sound)) mAlrmSndPlay = -1;
 	}
 	else if(ctrChkNode(opt,"quittance",permit(),owner().c_str(),grp().c_str(),SEC_WR))
@@ -574,7 +570,7 @@ void Session::cntrCmdProc( XMLNode *opt )
 	return;
     }
 
-    //> Get page info
+    //Get page info
     if(opt->name() == "info") {
 	TCntrNode::cntrCmdProc(opt);
 	ctrMkNode("oscada_cntr",opt,-1,"/",_("Session: ")+id(),permit(),owner().c_str(),grp().c_str());
@@ -1472,8 +1468,7 @@ void SessWdg::calc( bool first, bool last )
 	int pgOpenPrc = -1;
 
 	//Load events to process
-	if(!((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last)
-	{
+	if(!((ownerSess()->calcClk())%(vmax(calcPer()/ownerSess()->period(),1))) || first || last) {
 	    string wevent = eventGet(true);
 	    //Process input links and constants
 	    AutoHD<Attr> attr;
@@ -1482,8 +1477,7 @@ void SessWdg::calc( bool first, bool last )
 	    for(unsigned i_a = 0; i_a < mAttrLnkLs.size(); i_a++) {
 		attr = attrAt(mAttrLnkLs[i_a]);
 		if(attr.at().flgSelf()&Attr::CfgConst && !attr.at().cfgVal().empty())	attr.at().setS(attr.at().cfgVal());
-		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty())
-		{
+		else if(attr.at().flgSelf()&Attr::CfgLnkIn && !attr.at().cfgVal().empty()) {
 		    obj_tp = TSYS::strSepParse(attr.at().cfgVal(),0,':')+":";
 		    if(obj_tp == "val:")	attr.at().setS(attr.at().cfgVal().substr(obj_tp.size()));
 		    else if(obj_tp == "prm:") {
@@ -1563,8 +1557,7 @@ void SessWdg::calc( bool first, bool last )
 		int t_off;
 		bool isPg = dynamic_cast<SessPage*>(this);
 		string sevup, sev, sev_ev, sev_path, sprc_lst, sprc, sprc_ev, sprc_path;
-		for(int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); )
-		{
+		for(int el_off = 0; (sev=TSYS::strSepParse(wevent,0,'\n',&el_off)).size(); ) {
 		    // Check for process events
 		    t_off = 0;
 		    sev_ev   = TSYS::strSepParse(sev, 0, ':', &t_off);
@@ -1574,13 +1567,11 @@ void SessWdg::calc( bool first, bool last )
 
 		    sprc_lst = attrAt("evProc").at().getS();
 		    bool evProc = false;
-		    for(int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); )
-		    {
+		    for(int elp_off = 0; (sprc=TSYS::strSepParse(sprc_lst,0,'\n',&elp_off)).size(); ) {
 			t_off = 0;
 			sprc_ev   = TSYS::strSepParse(sprc, 0, ':', &t_off);
 			sprc_path = TSYS::strSepParse(sprc, 0, ':', &t_off);
-			if(sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path))
-			{
+			if(sprc_ev == sev_ev && (sprc_path == "*" || sprc_path == sev_path)) {
 			    sprc_path = TSYS::strSepParse(sprc, 0, ':', &t_off);
 			    SessWdg *sev = this;
 			    if(!sev_path.empty()) sev = (TSYS::pathLev(sev_path,0).compare(0,4,"ses_") == 0) ?

@@ -64,7 +64,7 @@ class MTable : public TTable
 	void getStructDB( vector< vector<string> > &tblStrct );
 
 	string getVal( TCfg &cfg );
-	void   setVal( TCfg &cfg, const string &vl );
+	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	//Private attributes
 	vector< vector<string> > tblStrct;

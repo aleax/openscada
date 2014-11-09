@@ -46,15 +46,16 @@ class TCfg : public TVariant
     public:
 	//Data
 	enum AttrFlg {
-	    TransltText = 0x100,	//String value type: Use translation variable texts mechanism
+	    TransltText	= 0x100,	//String value type: Use translation variable texts mechanism
 	    NoVal	= 0x200,	//No value mirrored
 	    Key		= 0x400,	//Primary key
 	    Hide	= 0x800		//Attribute hide
 	};
 	enum ReqFlg {
 	    ForceUse	= 0x01,		//Force use flag
-	    KeyUpdtBase	= 0x02,		//Key update base value request or set
-	    KeyUpdtSet	= 0x04		//Key update set value
+	    DblValOne	= 0x02,		//One/first (and default) value: set value for key
+	    DblValTwo	= 0x04,		//Two/second value: base value for the key request or set
+	    Transl	= 0x80		//Get translated value from DblValTwo or original from DblValOne and the register
 	};
 
 	//Methods
@@ -71,12 +72,12 @@ class TCfg : public TVariant
 	bool	noTransl( )		{ return mNoTransl; }
 	bool	reqKey( )		{ return mReqKey; }
 	bool	isKey( );						//Whether real or request key test
-	bool	keyUpdt( )		{ return mKeyUpdt; }
+	bool	dblVal( )		{ return mDblVal; }
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl );
-	void	setKeyUpdt( bool vw )	{ mKeyUpdt = vw; }
+	void	setDblVal( bool vw )	{ mDblVal = vw; }
 
 	TFld	&fld( )			{ return *mFld; }
 
@@ -117,8 +118,9 @@ class TCfg : public TVariant
 	uint8_t	mKeyUse		: 1;
 	uint8_t	mNoTransl	: 1;
 	uint8_t	mReqKey		: 1;	//Request's key, mostly for WHERE sentence of SQL
-	uint8_t	mKeyUpdt	: 1;	//Key update mode,
-					//where TVariant type force to String and value separated by key set value and base value by 0 symbol
+	uint8_t	mDblVal		: 1;	//Double value mode: For key and translation processing,
+					//where TVariant type force to String and value separated by one value (set for key)
+					//and two value (base for key) by 0 symbol
 
 	TFld	*mFld;
 	TConfig	&mOwner;

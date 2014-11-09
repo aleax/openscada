@@ -518,7 +518,7 @@ void TMdPrm::save_( )
     if(enableStat()) saveIO();
 }
 
-void TMdPrm::saveIO()
+void TMdPrm::saveIO( )
 {
     //Save IO and init links
     if(isStd() && tmpl->val.func()) {
@@ -605,7 +605,7 @@ void TMdPrm::vlSet( TVal &vo, const TVariant &vl, const TVariant &pvl )
 	else if(isStd() && tmpl->val.func()) {
 	    int id_lnk = lnkId(vo.name());
 	    if(id_lnk >= 0 && lnk(id_lnk).aprm.freeStat()) id_lnk = -1;
-	    ResAlloc cres(calcRes,true);
+	    ResAlloc cres(calcRes, true);
 	    if(id_lnk < 0) tmpl->val.set(tmpl->val.ioId(vo.name()), vl);
 	    else lnk(id_lnk).aprm.at().set(vl);
 	}
@@ -623,7 +623,7 @@ void TMdPrm::vlArchMake( TVal &val )
     val.arch().at().setHighResTm(true);
 }
 
-int TMdPrm::lnkSize()
+int TMdPrm::lnkSize( )
 {
     if(!isStd() || !tmpl->val.func()) throw TError(nodePath().c_str(),_("Parameter is disabled or is not based on the template."));
     return tmpl->lnk.size();

@@ -316,7 +316,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 		if(el->name() != "fld")	continue;
 		//  Check keywords
 		for(i_el = 0; i_el < cf_el.size(); i_el++)
-		    if(cfg.cfg(cf_el[i_el]).isKey() && cfg.cfg(cf_el[i_el]).getS(TCfg::KeyUpdtBase) != el->attr(cf_el[i_el])) break;
+		    if(cfg.cfg(cf_el[i_el]).isKey() && cfg.cfg(cf_el[i_el]).getS(TCfg::DblValTwo) != el->attr(cf_el[i_el])) break;
 		if(i_el == cf_el.size()) { wel = el; break; }
 	    }
 
@@ -1048,7 +1048,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++)
 		if(req.elem().fldAt(i_f).flg()&TCfg::Key) {
 		    eid = req.elem().fldAt(i_f).name();
-		    req.cfg(eid).setS(opt->attr("key_"+eid), TCfg::ForceUse|TCfg::KeyUpdtBase);
+		    req.cfg(eid).setS(opt->attr("key_"+eid), TCfg::ForceUse|TCfg::DblValTwo);
 		}
 	    // Same set
 	    req.cfgViewAll(false);

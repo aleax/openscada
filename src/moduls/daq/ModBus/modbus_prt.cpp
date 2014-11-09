@@ -298,14 +298,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap += crc;
 
 	    //Send request
-	    for(int i_tr = 0; i_tr < reqTry; i_tr++) {
-		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
-		rez.assign(buf, resp_len);
-		//Wait tail
-		while(resp_len) {
-		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-		    rez.append(buf, resp_len);
-		}
+	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
+		try {
+		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		    rez.assign(buf, resp_len);
+		    //Wait tail
+		    while(resp_len) {
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+			rez.append(buf, resp_len);
+		    }
+		} catch(TError er) { err = _("14:Device error: ") + er.mess; continue; } //By possible the send request breakdown and no response
 
 		if(rez.size() < 2) { err = _("13:Error respond: Too short."); continue; }
 		if(CRC16(rez.substr(0,rez.size()-2)) != (uint16_t)((rez[rez.size()-2]<<8)+(uint8_t)rez[rez.size()-1]))
@@ -323,14 +325,16 @@ void TProt::outMess( XMLNode &io, TTransportOut &tro )
 	    mbap = ":"+DataToASCII(mbap)+"\x0D\x0A";
 
 	    //Send request
-	    for(int i_tr = 0; i_tr < reqTry; i_tr++) {
-		int resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
-		rez.assign(buf, resp_len);
-		//Wait tail
-		while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
-		    try{ resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
-		    rez.append(buf, resp_len);
-		}
+	    for(int i_tr = 0, resp_len = 0; i_tr < reqTry; i_tr++) {
+		try {
+		    resp_len = tro.messIO(mbap.data(), mbap.size(), buf, sizeof(buf), reqTm, true);
+		    rez.assign(buf, resp_len);
+		    //Wait tail
+		    while(resp_len && (rez.size() < 3 || rez.substr(rez.size()-2,2) != "\x0D\x0A")) {
+			try { resp_len = tro.messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError err){ break; }
+			rez.append(buf, resp_len);
+		    }
+		} catch(TError er) { err = _("14:Device error: ") + er.mess; continue; } //By possible the send request breakdown and no response
 
 		if(rez.size() < 3 || rez[0] != ':' || rez.substr(rez.size()-2,2) != "\x0D\x0A")
 		{ err = _("13:Error respond: Error format."); continue; }

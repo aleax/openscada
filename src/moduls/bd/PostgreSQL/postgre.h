@@ -65,7 +65,7 @@ class MTable : public TTable
 	void getStructDB( string name, vector< vector<string> > &tblStrct );
 
 	string getVal( TCfg &cfg );
-	void   setVal( TCfg &cfg, const string &vl );
+	void   setVal( TCfg &cfg, const string &vl, bool tr = false );
 
 	string UTCtoSQL( time_t val );
 	time_t SQLtoUTC( const string &val );

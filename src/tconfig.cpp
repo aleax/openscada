@@ -219,7 +219,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mKeyUpdt(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mDblVal(false), mOwner(owner)
 {
     //Chek for self field for dinamic elements
     if(fld.flg()&TFld::SelfFld) {
@@ -271,7 +271,7 @@ string TCfg::getS( )
     pthread_mutex_lock(&mOwner.mRes);
     string rez = TVariant::getS();
     pthread_mutex_unlock(&mOwner.mRes);
-    return keyUpdt() ? TSYS::strSepParse(rez,0,0) : rez;
+    return dblVal() ? TSYS::strSepParse(rez,0,0) : rez;
 }
 
 string TCfg::getS( uint8_t RqFlg )
@@ -279,7 +279,16 @@ string TCfg::getS( uint8_t RqFlg )
     pthread_mutex_lock(&mOwner.mRes);
     string rez = TVariant::getS();
     pthread_mutex_unlock(&mOwner.mRes);
-    return keyUpdt() ? TSYS::strSepParse(rez,((RqFlg&KeyUpdtBase)?1:0),0) : rez;
+    if(dblVal()) {
+	if(RqFlg&Transl){
+	    string rezT = TSYS::strSepParse(rez, 1, 0);
+	    rez = TSYS::strSepParse(rez, 0, 0);
+	    return rezT.size() ? rezT : rez;
+	}
+	return TSYS::strSepParse(rez,((RqFlg&DblValTwo)?1:0),0);
+    }
+    return rez;
+    //return dblVal() ? TSYS::strSepParse(rez,((RqFlg&DblValTwo)?1:0),0) : rez;
 }
 
 const char *TCfg::getSd( )
@@ -405,8 +414,8 @@ void TCfg::setSEL( const string &val, uint8_t RqFlg )
 
 void TCfg::setS( const string &val, uint8_t RqFlg )
 {
-    if(isKey() && !keyUpdt() && (RqFlg&(KeyUpdtBase|KeyUpdtSet))) { mKeyUpdt = true; setType(TVariant::String); }
-    if(keyUpdt()) setS((RqFlg&KeyUpdtBase)?(getS()+string(1,0)+val):(val+string(1,0)+getS(KeyUpdtBase)));
+    if(/*isKey() &&*/ !dblVal() && (RqFlg&(DblValTwo|DblValOne))) { mDblVal = true; setType(TVariant::String); }
+    if(dblVal()) setS((RqFlg&DblValTwo)?(getS()+string(1,0)+val):(val+string(1,0)+getS(DblValTwo)));
     else setS(val);
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }

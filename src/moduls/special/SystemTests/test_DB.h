@@ -120,13 +120,13 @@ class TestDB : public TFunction
 		ctime = TSYS::curTime();
 		bd_cfg.cfgViewAll(false);
 		bd_cfg.cfg("reqKey").setReqKey(true);
-		bd_cfg.cfg("reqKey").setS("req0",TCfg::ForceUse|TCfg::KeyUpdtBase);
+		bd_cfg.cfg("reqKey").setS("req0",TCfg::ForceUse|TCfg::DblValTwo);
 		bd_cfg.cfg("reqKey").setS("reqNew0",TCfg::ForceUse);
 		bd_cfg.cfg("reqVal").setS("Request new 0 value",TCfg::ForceUse);
 		tbl.at().fieldSet(bd_cfg);
 		mod->mess(id(),_("Updated %d records, by request key, for time %f sec."),experem/2,1e-6*(TSYS::curTime()-ctime));
 		bd_cfg.cfg("reqKey").setReqKey(false);
-		bd_cfg.cfg("reqKey").setKeyUpdt(false);
+		bd_cfg.cfg("reqKey").setDblVal(false);
 		bd_cfg.cfgViewAll(true);
 
 		//Check for get fields

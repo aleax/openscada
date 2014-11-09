@@ -433,7 +433,7 @@ int MTable::findKeyLine( TConfig &cfg, int cnt, bool useKey, int off )
 	    for(i = val.size(); i > 0 && val[i-1] == ' '; i--) ;
 	    if(i != (int)val.size()) val.resize(i);
 	    // Compare value
-	    if(val != cfg.cfg(cf_el[i_cf]).getS(TCfg::KeyUpdtBase)/*getVal(cfg.cfg(cf_el[i_cf]))*/) {
+	    if(val != cfg.cfg(cf_el[i_cf]).getS(TCfg::DblValTwo)/*getVal(cfg.cfg(cf_el[i_cf]))*/) {
 		cnt_key = 0;
 		break;
 	    }

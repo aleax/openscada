@@ -3856,7 +3856,7 @@ uint32_t Server::EP::reqData( int reqTp, XML_N &req )
 	    //if(debug()) debugMess(strMess("Browse '%s'",req.save().c_str()));
 
 	    //typeDefinition reference process
-	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH))       //!!!! Check for other call
+	    if(lstNd.empty() && rtId.numbVal() == OpcUa_References && (bd == BD_FORWARD || bd == BD_BOTH))	//!!!! Check for other call
 	    {
 		map<string, XML_N*>::iterator ndTpDef = ndMap.find(ndX->second->attr("typeDefinition"));
 		if(ndTpDef != ndMap.end())
@@ -4210,7 +4210,7 @@ XML_N* XML_N::clear()
 //*************************************************
 OPCError::OPCError( const char *fmt, ... )
 {
-    char str[1024];		  //!!!!
+    char str[1024];		//!!!!
     va_list argptr;
 
     va_start(argptr,fmt);
@@ -4223,7 +4223,7 @@ OPCError::OPCError( const char *fmt, ... )
 
 OPCError::OPCError( int icod, const char *fmt, ... )
 {
-    char str[1024];		  //!!!!
+    char str[1024];		//!!!!
     va_list argptr;
 
     va_start(argptr,fmt);

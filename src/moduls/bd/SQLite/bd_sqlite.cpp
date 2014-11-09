@@ -386,18 +386,13 @@ bool MTable::fieldSeek( int row, TConfig &cfg )
 
     owner().sqlReq(req, &tbl/*, false*/);	// For seek to deletion into save context do not set to "false"
     if(tbl.size() < 2) return false;
-    //Processing of query
+    //Processing of the query
     for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) {
-	    setVal(*u_cfg, tbl[1][i_fld]);
-	    if(u_cfg->fld().flg()&TCfg::TransltText && !u_cfg->noTransl()) Mess->translReg(u_cfg->getS(), "db:"+fullDBName()+"#"+sid);
-	}
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size()) {
-	    u_cfg = cfg.at(sid.substr(3),true);
-	    if(u_cfg) setVal(*u_cfg,tbl[1][i_fld]);
-	}
+	if(u_cfg) setVal(*u_cfg, tbl[1][i_fld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, tbl[1][i_fld], true);
     }
 
     return true;
@@ -447,14 +442,9 @@ void MTable::fieldGet( TConfig &cfg )
     for(unsigned i_fld = 0; i_fld < tbl[0].size(); i_fld++) {
 	sid = tbl[0][i_fld];
 	TCfg *u_cfg = cfg.at(sid, true);
-	if(u_cfg) {
-	    setVal(*u_cfg, tbl[1][i_fld]);
-	    if(u_cfg->fld().flg()&TCfg::TransltText && !u_cfg->noTransl()) Mess->translReg(u_cfg->getS(), "db:"+fullDBName()+"#"+sid);
-	}
-	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size()) {
-	    u_cfg = cfg.at(sid.substr(3), true);
-	    if(u_cfg && u_cfg->fld().flg()&TCfg::TransltText && !u_cfg->noTransl()) setVal(*u_cfg, tbl[1][i_fld]);
-	}
+	if(u_cfg) setVal(*u_cfg, tbl[1][i_fld]);
+	else if(trPresent && sid.compare(0,3,Mess->lang2Code()+"#") == 0 && tbl[1][i_fld].size() && (u_cfg=cfg.at(sid.substr(3),true)))
+	    setVal(*u_cfg, tbl[1][i_fld], true);
     }
 }
 
@@ -491,14 +481,14 @@ void MTable::fieldSet( TConfig &cfg )
     string req_where = "WHERE ";
     // Add key list to queue
     bool next = false, noKeyFld = false,
-	 isForceUpdt = cfg.reqKeys();			//Force update by ReqKeys or reqKey() or keyUpdt() present
+	 isForceUpdt = cfg.reqKeys();			//Force update by ReqKeys or reqKey() present
     for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
-	req_where += (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"=" + getVal(u_cfg,true,TCfg::KeyUpdtBase);
+	req_where += (next?" AND \"":"\"") + mod->sqlReqCode(cf_el[i_el],'"') + "\"=" + getVal(u_cfg,true,TCfg::DblValTwo);
 	next = true;
 
-	if(!isForceUpdt && u_cfg.keyUpdt()) isForceUpdt = true;
+	if(!isForceUpdt && u_cfg.dblVal()) isForceUpdt = true;
 
 	// Check for no key fields
 	if(noKeyFld) continue;
@@ -543,7 +533,7 @@ void MTable::fieldSet( TConfig &cfg )
 	next = false;
 	for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	    if((u_cfg.isKey() && !u_cfg.keyUpdt()) || !u_cfg.view()) continue;
+	    if((u_cfg.isKey() && !u_cfg.dblVal()) || !u_cfg.view()) continue;
 
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
@@ -731,4 +721,11 @@ string MTable::getVal( TCfg &cfg, bool toEnc, uint8_t RqFlg )
     return "";
 }
 
-void MTable::setVal( TCfg &cfg, const string &val )	{ cfg.setS(val); }
+void MTable::setVal( TCfg &cf, const string &val, bool tr )
+{
+    if(!cf.dblVal()) {
+	cf.setS(val);
+	if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
+    }
+    else cf.setS(val, (tr?TCfg::DblValTwo:TCfg::DblValOne));
+}

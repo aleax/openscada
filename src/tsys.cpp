@@ -1644,7 +1644,7 @@ void *TSYS::taskWrap( void *stas )
     struct sched_param param;
     pthread_getschedparam(pthread_self(), &policy, &param);
     tsk->policy = policy;
-    //tsk->prior = param.sched_priority;	//!!!! Commented by nice
+    //tsk->prior = param.sched_priority;	//!!!! Commented for nice
 
 #if __GLIBC_PREREQ(2,4)
     //Load and init CPU set

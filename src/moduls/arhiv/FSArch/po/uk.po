@@ -1,14 +1,13 @@
 # OpenSCADA.Archive.FSArch translate to Ukrainian.
-# Copyright (C) 2003-2011 Roman Savochenko
 # This file is distributed under the same license as the OpenSCADA.Archive.FSArch module.
 #
-# Roman Savochenko <rom_as@oscada.org>, 2003-2011.
+# Roman Savochenko <rom_as@oscada.org>, 2003-2014.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Archive.FSArch 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 18:08+0200\n"
+"POT-Creation-Date: 2014-11-09 21:56+0200\n"
 "PO-Revision-Date: 2007-10-21 22:21+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -141,7 +140,8 @@ msgid ""
 "packaged in gzip archiver.\n"
 "Set to zero for disable packing by gzip."
 msgstr ""
-"Встановлює проміжок часу за вичерпанням якого, та у випадку відсутності звернень,\n"
+"Встановлює проміжок часу за вичерпанням якого, та у випадку відсутності "
+"звернень,\n"
 "файли архівів будуть пакуватися gzip архіватором.\n"
 "Встановити в нуль для виключення упакування gzip."
 
@@ -209,9 +209,8 @@ msgstr ""
 msgid "Can not create file: '%s'!"
 msgstr "Не можу створити файл: '%s'!"
 
-#, c-format
-msgid "Write to file error: %s"
-msgstr "Помилка запису до файлу: %s"
+msgid "Write to file '%s' error"
+msgstr "Помилка запису до файлу '%s'"
 
 #, c-format
 msgid "File '%s' header error!"
@@ -232,11 +231,17 @@ msgstr "Вставлення повідомлення до архівного ф
 msgid "Archive file '%s' isn't attached!"
 msgstr "Файл архіву '%s' не під'єднано!"
 
+msgid "File access to '%s' error."
+msgstr "Помилка доступу до файлу '%s'."
+
 msgid "Getting messages from an error Archive file!"
 msgstr "Отримання повідомлень з файлу архіву з помилкою!"
 
 msgid "Archive file isn't attached!"
 msgstr "Файл архіву не під'єднано!"
+
+msgid "Write to '%s' error!"
+msgstr "Помилка запису до файлу '%s'!"
 
 #, c-format
 msgid "Unpack '%s' for information get."
@@ -342,12 +347,22 @@ msgid "Archive file error!"
 msgstr "Помилка у файлі архіву!"
 
 #, c-format
+msgid "Warning! Allocated buffer size %d for indexes lesser for used %d."
+msgstr "Попередження! Виділений розмір %d буферу індексу менше використаного %d."
+
+#, c-format
 msgid ""
 "Write data block to archive file '%s' error. Will structure break. mSize=%d, "
 "foff_end=%d, vSize=%d"
 msgstr ""
 "Помилка запису блока до файлу архіву '%s'. Структуру буде зламано. mSize=%d, "
 "foff_end=%d, vSize=%d"
+
+msgid "Read file '%s' for offset %d error!"
+msgstr "Помилка читання файлу '%s' для зсуву %d!"
+
+msgid "Write to file '%s' error!"
+msgstr "Помилка запису до файлу '%s'!"
 
 #, c-format
 msgid "Error archive file structure: '%s'. Margin = %d byte. Will try fix it!"

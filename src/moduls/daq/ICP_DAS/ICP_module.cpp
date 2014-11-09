@@ -358,14 +358,16 @@ string TMdContr::serReq( string req, char mSlot, bool CRC )
 	    char buf[1000];
 
 	    ResAlloc resN(tr.at().nodeRes(), true);
-	    for(int i_tr = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++) {
-		int resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf), 0, true);
-		rez.assign(buf, resp_len);
-		// Wait tail
-		while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
-		    try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
-		    rez.append(buf, resp_len);
-		}
+	    for(int i_tr = 0, resp_len = 0; i_tr < vmax(1,vmin(10,connTry)); i_tr++) {
+		try {
+		    resp_len = tr.at().messIO(req.data(), req.size(), buf, sizeof(buf), 0, true);
+		    rez.assign(buf, resp_len);
+		    // Wait tail
+		    while(resp_len && (rez.size() < 2 || rez[rez.size()-1] != '\r')) {
+			try{ resp_len = tr.at().messIO(NULL, 0, buf, sizeof(buf), 0, true); } catch(TError er){ break; }
+			rez.append(buf, resp_len);
+		    }
+		} catch(TError er) { err = "10:" + er.mess; continue; } //By possible the send request breakdown and no response
 		if(rez.size() < 2 || rez[rez.size()-1] != '\r') { err = _("13:Error respond: Not full."); continue; }
 		rez = rez.substr(0,rez.size()-1);
 		if(CRC) {

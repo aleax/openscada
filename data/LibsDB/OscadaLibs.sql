@@ -4420,10 +4420,7 @@ else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
 	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
 	else if(subMode == 2) var = subVar;
 }
-if(tErr) {
-  EVAL = true;
-  HH = H = LL = L = false;
-}
+if(tErr)	EVAL = true, HH = H = LL = L = false;
 else {
 	vCalibr = iMult*(in+iAdd);
 	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
@@ -4438,16 +4435,17 @@ else {
 	prevVar = var;
 
 	bndVarHyst = (max-min)*HystBnd/100;
+	EVAL = HH_ = H_ = LL_ = L_ = false;
+	if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+	if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L_ = true; }
+	if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H_ = true; }
+	if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL_ = true; }
 	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH = true; EVAL = H = LL = L = false; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL = true; EVAL = HH = H = L = false; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H = true; EVAL = HH = LL = L = false; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L = true; EVAL = HH = H = LL = false; }
-	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
-	else EVAL = HH = H = LL = L = false;
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH_ = true; }
+	HH = HH_; H = H_; LL = LL_; L = L_;
 }
 
 //Alarms forming
@@ -4546,7 +4544,7 @@ else {
 	else if(f_err.toInt() && !tErr.toInt())
 		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
 	f_err = tErr;
-}','',1412878882);
+}','',1415296612);
 INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,'JavaLikeCalc.JavaScript
 if(f_start) f_err = "0";
 

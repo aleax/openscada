@@ -72,8 +72,7 @@ class VFileArch
 
 	//Attributes
 	static string afl_id;
-	struct FHead
-	{
+	struct FHead {
 	    char		f_tp[20];	//Archive system name ("OpenSCADA Val Arch.")
 	    char		archive[20];	//Value archive name
 	    int64_t		beg;		//Time archive begin
@@ -103,30 +102,29 @@ class VFileArch
 
 	void repairFile( int hd );
 
-	//> Base parameters
-	string	mName;		// Name Archive file
-	int	mSize;		// Archive size
-	TFld::Type mTp;		// Value typ
-	int64_t	mBeg;		// Begin of archive file
-	int64_t	mEnd;		// End of archive file
-	int64_t	mPer;		// Values period
+	// Base parameters
+	string	mName;		//Name Archive file
+	int	mSize;		//Archive size
+	TFld::Type mTp;		//Value typ
+	int64_t	mBeg;		//Begin of archive file
+	int64_t	mEnd;		//End of archive file
+	int64_t	mPer;		//Values period
 
-	//> State parameters
-	bool	mErr;		// Archive err
-	bool	mPack;		// Archive packed
-	Res	mRes;		// resource to access
-	time_t	mAcces;		// Last access time
+	// State parameters
+	bool	mErr;		//Archive err
+	bool	mPack;		//Archive packed
+	Res	mRes;		//Resource to access
+	time_t	mAcces;		//Last access time
 
-	//> File access atributes
-	bool	fixVl;		// Fix size values
-	int	vSize;		// Fix value size or address size (bytes)
-	string	eVal;		// Eval data type value
-	int	mpos;		// Maximum value position into file
-	char	tbt;		// Temporary byte
+	// File access atributes
+	bool	fixVl;		//Fix size values
+	int	vSize;		//Fix value size or address size (bytes)
+	string	eVal;		//Eval data type value
+	int	mpos;		//Maximum value position into file
+	char	tbt;		//Temporary byte
 
-	//> Cache parameters
-	struct CacheEl
-	{
+	// Cache parameters
+	struct CacheEl {
 	    int pos;
 	    int off;
 	    int vsz;
@@ -134,7 +132,7 @@ class VFileArch
 	vector<CacheEl> cache;
 	CacheEl cach_pr_rd, cach_pr_wr;
 
-	//> Specific parameters
+	// Specific parameters
 	ModVArchEl *mOwner;
 };
 
@@ -170,7 +168,8 @@ class ModVArchEl: public TVArchEl
 
     private:
 	//Attributes
-	Res	mRes;		// resource to access;
+	bool	mChecked;	//The present archive files checked, for prevent doubles create at the new data place
+	Res	mRes;		//Resource to access;
 	deque<VFileArch *>	arh_f;
 	int64_t	realEnd;
 };
@@ -230,15 +229,15 @@ class ModVArch: public TVArchivator
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	//Attributes
-	double	time_size;			// number hours into one file
-	unsigned mNumbFiles;			// number of Archive files
-	double	mMaxCapacity;			// maximum archives capacity in megabytes
-	double	round_proc;			// numeric values rounding procent (0-50)
-	int	mChkTm;				// period of check the archive files directory;
-	int	mPackTm;			// pack the archive files timeout
-	bool	mPackInfoFiles;			// use info files for packed archives
+	double	time_size;			//Number hours into one file
+	unsigned mNumbFiles;			//Number of Archive files
+	double	mMaxCapacity;			//Maximum archives capacity in megabytes
+	double	round_proc;			//Numeric values rounding procent (0-50)
+	int	mChkTm;				//Period of check the archive files directory;
+	int	mPackTm;			//Pack the archive files timeout
+	bool	mPackInfoFiles;			//Use info files for packed archives
 
-	time_t	mLstCheck;			// Last check directory time
+	time_t	mLstCheck;			//Last check directory time
     };
 }
 

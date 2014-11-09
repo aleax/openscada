@@ -1,3 +1,22 @@
+2014-11-09 Roman
+- LibsDB.OscadaLibs.db: base.anUnifSt: expanded for independent L and LL, H and HH borders set.
+- LibsDB.vcaBase.db: Analog show 1 short variant Main.anShow1s is added.
+- ModelAGLKS.vca.db: Present graphics group fixed for "name" process set.
+- TConfig: KeyUpdtBase renamed to DblValTwo and KeyUpdtSet to DblValOne and keyUpdt() to dblVal().
+    TCfg::Transl as flag is added for translated message request from dblVal() by getS().
+- !!:FIX:Archive.FSArch: Check for the archive's files checking before new created is added, for prevent doubles.
+    Point to the data area for last value index prevented for the type String.
+    Messages and its translation some updated.
+- DB.{FireBird,MySQL,PostgreSQL,}: setVal() function expanded for translations.
+- DAQ.{DCON,ICP_DAS,ModBus}: Tries apply for connections set by possible the send request breakdown and no response.
+- DAQ.JAvaLikeCalc: Experimental, one stage requested, used for load field "DEF" of the functions, by setDblVal(true).
+- FIX:Special.FLibSYS: IO object fix for empty stream process into unsigned operation "pos <= (str.size()-tpD.szBt)".
+
+
+2014-11-03 Roman
+- !!!!:FIX:DAQ.ICP_DAS: Resource to slot and the next request moved to generic for collisions exclude.
+
+
 2014-11-03 Roman
 - FIX:UI.Vision: Item::Select mode attribute processing fix for permition like attributes.
 
