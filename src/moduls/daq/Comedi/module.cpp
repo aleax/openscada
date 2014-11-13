@@ -429,8 +429,6 @@ void TMdPrm::getVals( const string &atr )
 	    comedi_range *rng = comedi_get_range(devH, i_sd, i_chnl, i_rng);
 	    int maxVal = comedi_get_maxdata(devH, i_sd, i_chnl);
 	    double dVal = vmax(rng->min,vmin(rng->max,rng->min+((double)data/(double)maxVal)*(rng->max-rng->min)));
-
-	    //if(i_chnl == 0) printf("TEST 01 %d = '%d'\n",i_chnl,data);
 	    val.at().setR((rez == -1 || isnan(dVal)) ? EVAL_REAL : dVal, 0, true);
 	}
 	else if(als[i_a].compare(0,2,"di") == 0 || als[i_a].compare(0,2,"do") == 0)

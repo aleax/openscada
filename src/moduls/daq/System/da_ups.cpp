@@ -117,7 +117,7 @@ void UPS::getVal( TMdPrm *prm )
 		else if(lstSec) {
 		    if(sscanf(c_el.c_str(),"VAR %*s %50s \"%255[^\"]s\"",var,vVal) != 2) continue;
 		    string vid = var;
-		    string aid = TSYS::strEncode(vid,TSYS::oscdID);
+		    string aid = TSYS::strEncode(vid, TSYS::oscdID);
 		    string aVal = vVal;
 		    if(!prm->vlPresent(aid)) {
 			// Description request

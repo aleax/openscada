@@ -1,3 +1,8 @@
+2014-11-13 Roman
+- LibsDB.vcaBase.db: Main.ElCadr mostly fixed for tooltips to the commands.
+- !!:FIX:Archive,Archive.FSArch: Final fixed for prevent doubles and wrong archives connection for later appended data sources.
+
+
 2014-11-09 Roman
 - LibsDB.OscadaLibs.db: base.anUnifSt: expanded for independent L and LL, H and HH borders set.
 - LibsDB.vcaBase.db: Analog show 1 short variant Main.anShow1s is added.

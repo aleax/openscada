@@ -234,7 +234,7 @@ void ModVArch::checkArchivator( bool now )
 	    TFld::Type	ArhTp;
 	    string NameArhFile = addr()+"/"+scan_rez->d_name;
 
-	    stat(NameArhFile.c_str(),&file_stat);
+	    stat(NameArhFile.c_str(), &file_stat);
 	    if((file_stat.st_mode&S_IFMT) != S_IFREG || access(NameArhFile.c_str(),F_OK|R_OK) != 0) continue;
 
 	    // Check for info files
@@ -273,7 +273,7 @@ void ModVArch::checkArchivator( bool now )
     if(isTm)	mLstCheck = time(NULL);
 }
 
-void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm)
+void ModVArch::expArch( const string &arch_nm, time_t beg, time_t end, const string &file_tp, const string &file_nm )
 {
     int64_t buf_sz = 100000;
     int64_t buf_per = (int64_t)(valPeriod()*1e6);
@@ -396,7 +396,7 @@ void ModVArch::expArch(const string &arch_nm, time_t beg, time_t end, const stri
 TVArchEl *ModVArch::getArchEl( TVArchive &arch )
 {
     ModVArchEl *v_el = new ModVArchEl(arch, *this);
-    if(!owner().owner().SubStarting) v_el->checkArchivator(true);
+    if(!owner().owner().subStarting) v_el->checkArchivator(true);
 
     return v_el;
 }

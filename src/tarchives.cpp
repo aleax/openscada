@@ -275,31 +275,35 @@ void TArchiveS::subStart( )
 {
     mess_info(nodePath().c_str(),_("Start/update subsystem."));
 
-    SubStarting = true;
+    subStarting = true;
+    toUpdate = false;	//Moved to start for prevent possible changes the toUpdate at processing
 
     vector<string> t_lst, o_lst;
 
+    bool stArchM = false, stArchV = false;
     modList(t_lst);
+    //Start no started early archivators and check for already started
     for(unsigned i_t = 0; i_t < t_lst.size(); i_t++) {
 	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
-
-	//Message archivators start
+	//Messages
 	mod.at().messList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++) {
 	    AutoHD<TMArchivator> mess = mod.at().messAt(o_lst[i_o]);
-	    if(mess.at().toStart())
-		try{ mess.at().start(); }
+	    if(mess.at().startStat()) stArchM = true;
+	    else if(mess.at().toStart())
+		try { mess.at().start(); }
 		catch(TError err) {
 		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),o_lst[i_o].c_str());
 		}
 	}
-	//Value archivators start
+	//Values
 	mod.at().valList(o_lst);
 	for(unsigned i_o = 0; i_o < o_lst.size(); i_o++) {
 	    AutoHD<TVArchivator> val = mod.at().valAt(o_lst[i_o]);
-	    if(val.at().toStart())
-		try{ val.at().start(); }
+	    if(val.at().startStat()) stArchV = true;
+	    else if(val.at().toStart())
+		try { val.at().start(); }
 		catch(TError err) {
 		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
 		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
@@ -307,16 +311,43 @@ void TArchiveS::subStart( )
 	}
     }
 
-    //Value archives start
+    //Value archives start.
     valList(o_lst);
     for(unsigned i_o = 0; i_o < o_lst.size(); i_o++) {
 	AutoHD<TVArchive> aval = valAt(o_lst[i_o]);
 	if(aval.at().toStart())
-	    try{ aval.at().start(); }
+	    try { aval.at().start(); }
 	    catch(TError err) {
 		mess_err(err.cat.c_str(),"%s",err.mess.c_str());
 		mess_err(nodePath().c_str(),_("Value archive '%s' start error."),o_lst[i_o].c_str());
 	    }
+    }
+
+    //Start already started for update
+    for(unsigned i_t = 0; i_t < t_lst.size() && (stArchM || stArchV); i_t++) {
+	AutoHD<TTipArchivator> mod = modAt(t_lst[i_t]);
+	//Messages
+	mod.at().messList(o_lst);
+	for(unsigned i_o = 0; stArchM && i_o < o_lst.size(); i_o++) {
+	    AutoHD<TMArchivator> mess = mod.at().messAt(o_lst[i_o]);
+	    if(mess.at().startStat())
+		try { mess.at().start(); }
+		catch(TError err) {
+		    mess_err(err.cat.c_str(),"%s",err.mess.c_str());
+		    mess_err(nodePath().c_str(),_("Message archivator '%s' start error."),o_lst[i_o].c_str());
+		}
+	}
+	//Values
+	mod.at().valList(o_lst);
+	for(unsigned i_o = 0; stArchV && i_o < o_lst.size(); i_o++) {
+	    AutoHD<TVArchivator> val = mod.at().valAt(o_lst[i_o]);
+	    if(val.at().startStat())
+		try { val.at().start(); }
+		catch(TError err) {
+		    mess_err(err.cat.c_str(), "%s", err.mess.c_str());
+		    mess_err(nodePath().c_str(), _("Value archivator '%s' start error."), val.at().workId().c_str());
+		}
+	}
     }
 
     //Start messages values acquisition task
@@ -325,7 +356,7 @@ void TArchiveS::subStart( )
 
     TSubSYS::subStart( );
 
-    SubStarting = toUpdate = false;
+    subStarting = false;
 }
 
 void TArchiveS::subStop( )
@@ -383,7 +414,7 @@ void TArchiveS::subStop( )
 
 void TArchiveS::perSYSCall( unsigned int cnt )
 {
-    if(subStartStat() && toUpdate && !SubStarting) subStart();
+    if(subStartStat() && toUpdate && !subStarting) subStart();
 
     TSubSYS::perSYSCall(cnt);
 }

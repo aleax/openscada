@@ -444,10 +444,7 @@ void *TMdContr::Task( void *icntr )
 		res.lock();
 		for(unsigned i_a = 0; i_a < als.size(); i_a++) {
 		    AutoHD<TVal> pVal = cntr.pHD[i_p].at().vlAt(als[i_a]);
-		    nId = TSYS::strLine(pVal.at().fld().reserve(),0);
-		    if(nId.empty()) continue;
-		    //printf("TEST 01: '%s' = %s\n", nId.c_str(), cntr.mVars[nId].getS().c_str());
-		    pVal.at().set(cntr.mVars[nId].val, 0, true);
+		    if(!(nId=TSYS::strLine(pVal.at().fld().reserve(),0)).empty()) pVal.at().set(cntr.mVars[nId].val, 0, true);
 		}
 		res.unlock();
 	    }

@@ -2553,7 +2553,6 @@ void TSYS::cntrCmdProc( XMLNode *opt )
 				XMLNode *recNd = ns[i_n]->childGet(-1);
 				if(firstInst) { recNd->setText(tMath); haveMatch = true; }
 				else {
-				    //printf("TEST 00: Check to match for %s\n",im->first.c_str());
 				    if(!s2i(recNd->attr("unmatch"))) {
 					if(tMath == recNd->text()) haveMatch = true;
 					else {

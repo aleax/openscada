@@ -64,8 +64,7 @@ TValBuf::TValBuf( TFld::Type vtp, int isz, int64_t ipr, bool ihgrd, bool ihres )
 
 TValBuf::~TValBuf( )
 {
-    switch(mValTp)
-    {
+    switch(mValTp) {
 	case TFld::Boolean:	delete buf.bl;	break;
 	case TFld::Int16:	delete buf.i16;	break;
 	case TFld::Int32:	delete buf.i32;	break;
@@ -81,8 +80,7 @@ TValBuf &TValBuf::operator=( TValBuf &src )
 {
     makeBuf(src.mValTp, src.mSize, src.mPer, src.mHrdGrd, src.mHgResTm);
 
-    switch(mValTp)
-    {
+    switch(mValTp) {
 	case TFld::Boolean:
 	    buf.bl->cur = src.buf.bl->cur;
 	    if(mHrdGrd)		*(buf.bl->buf.grid) = *(src.buf.bl->buf.grid);
@@ -134,8 +132,7 @@ TValBuf &TValBuf::operator=( TValBuf &src )
 
 void TValBuf::clear( )
 {
-    switch(mValTp)
-    {
+    switch(mValTp) {
 	case TFld::Boolean:	buf.bl->clear();	break;
 	case TFld::Int16:	buf.i16->clear();	break;
 	case TFld::Int32:	buf.i32->clear();	break;
@@ -149,8 +146,7 @@ void TValBuf::clear( )
 
 int TValBuf::realSize( )
 {
-    switch(mValTp)
-    {
+    switch(mValTp) {
 	case TFld::Boolean:	return buf.bl->realSize();
 	case TFld::Int16:	return buf.i16->realSize();
 	case TFld::Int32:	return buf.i32->realSize();
@@ -187,8 +183,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 
     //Destroy buffer
     if(v_tp != mValTp && buf.bl) {
-	switch(mValTp)
-	{
+	switch(mValTp) {
 	    case TFld::Boolean:	delete buf.bl;	break;
 	    case TFld::Int16:	delete buf.i16;	break;
 	    case TFld::Int32:	delete buf.i32;	break;
@@ -203,8 +198,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 
     if(!buf.bl) {
 	//Make new buffer
-	switch(v_tp)
-	{
+	switch(v_tp) {
 	    case TFld::Boolean:	buf.bl = new TBuf<char>(EVAL_BOOL, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
 	    case TFld::Int16:	buf.i16 = new TBuf<int16_t>(EVAL_INT16, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
 	    case TFld::Int32:	buf.i32 = new TBuf<int32_t>(EVAL_INT32, mSize, mPer, mHrdGrd, mHgResTm, mEnd, mBeg, mEvalCnt);	break;
@@ -217,8 +211,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 	mValTp = v_tp;
     }
     if(isz != mSize || ipr != mPer || hd_grd != mHrdGrd || hg_res != mHgResTm)
-	switch(mValTp)
-	{
+	switch(mValTp) {
 	    case TFld::Boolean:	buf.bl->makeBuf(isz, ipr, hd_grd, hg_res);	break;
 	    case TFld::Int16:	buf.i16->makeBuf(isz, ipr, hd_grd, hg_res);	break;
 	    case TFld::Int32:	buf.i32->makeBuf(isz, ipr, hd_grd, hg_res);	break;
@@ -232,8 +225,7 @@ void TValBuf::makeBuf( TFld::Type v_tp, int isz, int64_t ipr, bool hd_grd, bool 
 
 TVariant TValBuf::get( int64_t *itm, bool up_ord )
 {
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Boolean:	return getB(itm, up_ord);
 	case TFld::Integer:	return getI(itm, up_ord);
 	case TFld::Real:	return getR(itm, up_ord);
@@ -246,8 +238,7 @@ TVariant TValBuf::get( int64_t *itm, bool up_ord )
 
 string TValBuf::getS( int64_t *itm, bool up_ord )
 {
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Boolean: { char vl = getB(itm, up_ord); return (vl==EVAL_BOOL) ? EVAL_STR : i2s((bool)vl); }
 	case TFld::Integer: { int64_t vl = getI(itm, up_ord); return (vl==EVAL_INT) ? EVAL_STR : i2s(vl); }
 	case TFld::Real:    { double vl = getR(itm, up_ord); return (vl==EVAL_REAL) ? EVAL_STR : r2s(vl); }
@@ -259,8 +250,7 @@ string TValBuf::getS( int64_t *itm, bool up_ord )
 
 double TValBuf::getR( int64_t *itm, bool up_ord )
 {
-    switch(valType(true))
-    {
+    switch(valType(true)) {
 	case TFld::Boolean: { char vl = getB(itm, up_ord); return (vl==EVAL_BOOL) ? EVAL_REAL : (bool)vl; }
 	case TFld::Int16: case TFld::Int32: case TFld::Int64:
 			    { int64_t vl = getI(itm, up_ord); return (vl==EVAL_INT) ? EVAL_REAL : (double)vl; }
@@ -274,8 +264,7 @@ double TValBuf::getR( int64_t *itm, bool up_ord )
 
 int64_t TValBuf::getI( int64_t *itm, bool up_ord )
 {
-    switch(valType(true))
-    {
+    switch(valType(true)) {
 	case TFld::Boolean: { char vl = getB(itm, up_ord); return (vl==EVAL_BOOL) ? EVAL_INT : (bool)vl; }
 	case TFld::String:  { string vl = getS(itm, up_ord); return (vl==EVAL_STR) ? EVAL_INT : s2ll(vl); }
 	case TFld::Float: case TFld::Double:
@@ -290,8 +279,7 @@ int64_t TValBuf::getI( int64_t *itm, bool up_ord )
 
 char TValBuf::getB( int64_t *itm, bool up_ord )
 {
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Integer: { int64_t vl = getI(itm, up_ord); return (vl==EVAL_INT) ? EVAL_BOOL : (bool)vl; }
 	case TFld::String:  { string vl = getS(itm, up_ord); return (vl==EVAL_STR) ? EVAL_BOOL : (bool)s2i(vl); }
 	case TFld::Real:    { double vl = getR(itm, up_ord); return (vl==EVAL_REAL) ? EVAL_BOOL : (bool)vl; }
@@ -303,8 +291,7 @@ char TValBuf::getB( int64_t *itm, bool up_ord )
 
 void TValBuf::setS( const string &value, int64_t tm )
 {
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Boolean: setB((value==EVAL_STR)?EVAL_BOOL:(bool)s2i(value), tm);	break;
 	case TFld::Integer: setI((value==EVAL_STR)?EVAL_INT:s2ll(value), tm);		break;
 	case TFld::Real:    setR((value==EVAL_STR)?EVAL_REAL:s2r(value), tm);		break;
@@ -315,8 +302,7 @@ void TValBuf::setS( const string &value, int64_t tm )
 
 void TValBuf::setR( double value, int64_t tm )
 {
-    switch(valType(true))
-    {
+    switch(valType(true)) {
 	case TFld::Boolean: setB((value==EVAL_REAL)?EVAL_BOOL:(bool)value, tm);		break;
 	case TFld::Int16: case TFld::Int32: case TFld::Int64:
 			    setI((value==EVAL_REAL)?EVAL_INT:(int64_t)value, tm);	break;
@@ -329,8 +315,7 @@ void TValBuf::setR( double value, int64_t tm )
 
 void TValBuf::setI( int64_t value, int64_t tm )
 {
-    switch(valType(true))
-    {
+    switch(valType(true)) {
 	case TFld::Boolean: setB((value==EVAL_INT)?EVAL_BOOL:(bool)value, tm);	break;
 	case TFld::String:  setS((value==EVAL_INT)?EVAL_STR:ll2s(value), tm);	break;
 	case TFld::Float: case TFld::Double:
@@ -344,8 +329,7 @@ void TValBuf::setI( int64_t value, int64_t tm )
 
 void TValBuf::setB( char value, int64_t tm )
 {
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Integer: setI((value==EVAL_BOOL)?EVAL_INT:(bool)value, tm);		break;
 	case TFld::String:  setS((value==EVAL_BOOL)?EVAL_STR:i2s((bool)value), tm);	break;
 	case TFld::Real:    setR((value==EVAL_BOOL)?EVAL_REAL:(bool)value, tm);		break;
@@ -356,8 +340,7 @@ void TValBuf::setB( char value, int64_t tm )
 
 void TValBuf::set( const TVariant &value, int64_t tm )
 {
-    switch(value.type())
-    {
+    switch(value.type()) {
 	case TVariant::Boolean:	setB(value.getB(), tm);	break;
 	case TVariant::Integer:	setI(value.getI(), tm);	break;
 	case TVariant::Real:	setR(value.getR(), tm);	break;
@@ -377,8 +360,7 @@ void TValBuf::getVals( TValBuf &buf, int64_t ibeg, int64_t iend )
 	t_step = buf.period();
 	ibeg = (ibeg/t_step)*t_step;
     }
-    switch(valType())
-    {
+    switch(valType()) {
 	case TFld::Boolean: {
 	    char vl;
 	    for( ; ibeg <= iend; ibeg += t_step) { vl = getB(&ibeg, true); buf.setB(vl, ibeg); }
@@ -502,8 +484,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 	    int c_end = c_cur;
 
 	    // Half divider
-	    for(int d_win = buf.tm_high->size()/2; d_win > HalfDivMinWin; d_win /= 2)
-	    {
+	    for(int d_win = buf.tm_high->size()/2; d_win > HalfDivMinWin; d_win /= 2) {
 		int c_cnext = c_end-d_win;
 		if(c_cnext < 0) c_cnext += buf.tm_high->size();
 		if(tm/per < (*buf.tm_high)[c_cnext].tm/per) c_end = c_cnext;
@@ -531,8 +512,7 @@ template <class TpVal> TpVal TValBuf::TBuf<TpVal>::get( int64_t *itm, bool up_or
 	    int c_end = c_cur;
 
 	    // Half divider
-	    for(int d_win = buf.tm_low->size()/2; d_win > HalfDivMinWin; d_win /= 2)
-	    {
+	    for(int d_win = buf.tm_low->size()/2; d_win > HalfDivMinWin; d_win /= 2) {
 		int c_cnext = c_end-d_win;
 		if(c_cnext < 0) c_cnext += buf.tm_low->size();
 		if(tm/per < (int64_t)(*buf.tm_low)[c_cnext].tm*1000000/per) c_end=c_cnext;
@@ -1056,7 +1036,7 @@ void TVArchive::start( )
     string arch, archs = cfg("ArchS").getS();
     for(int i_off = 0; (arch = TSYS::strSepParse(archs,0,';',&i_off)).size(); )
 	if(!archivatorPresent(arch))
-	    try{ archivatorAttach(arch); }
+	    try { archivatorAttach(arch); }
 	    catch(TError err)	{ mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
 }
 
@@ -2170,9 +2150,11 @@ string TVArchivator::workId( )	{ return owner().modId()+"."+id(); }
 void TVArchivator::start( )
 {
     //Start archivator thread
-    if(archPeriod() && !runSt) SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this, 2, NULL, &runSt);
+    if(!runSt) {
+	if(archPeriod()) SYS->taskCreate(nodePath('.',true), 0, TVArchivator::Task, this, 2, NULL, &runSt);
+	owner().owner().setToUpdate();
+    }
 
-    owner().owner().setToUpdate();
     runSt = true;
 }
 

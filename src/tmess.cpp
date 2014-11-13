@@ -221,7 +221,6 @@ string TMess::translGet( const string &base, const string &lang, const string &s
     map<string,CacheEl>::iterator itr = trMessCache.find(cKey);
     if(itr != trMessCache.end()) { itr->second.tm = SYS->sysTm(); rez = itr->second.val; }
     else {
-	//if(base == "Roman Savochenko") printf("TEST 00: trLang='%s'; cKey='%s'\n", trLang.c_str(), cKey.c_str());
 	//Request to data source direct
 	if(src.compare(0,5,"uapi:") == 0) {	// Check/Get/Place from user API translations table
 	    string srcAddrs = src.substr(5), tStrVl;

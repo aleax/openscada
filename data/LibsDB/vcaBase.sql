@@ -16594,9 +16594,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		appToVl = 0;
 
 		//Event process
-		while(true) {
-			ev_wrk = strParse(event,0,"\n",off);
-			if(ev_wrk == "") break;
+		while((ev_wrk=event.parse(0,"\n",off)).length) {
 			prevMode = prmAuto ? ((prmCasc==true)?tr("Cascade"):tr("Automate")) : tr("Manual");      
 			if(ev_wrk == "ws_BtPress:/modMan" && prmAuto) {  
 				prmAuto = false; if(prmCasc==true) prmCasc = false;
@@ -16686,10 +16684,8 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		appToVl = 0;
 
 		//Event process
-		while(true) {
-			ev_wrk = strParse(event,0,"\n",off);
-			if(ev_wrk == "") break;
-			else if(ev_wrk == "key_mousePresLeft:/info_var") {
+		while((ev_wrk=event.parse(0,"\n",off)).length) {
+			if(ev_wrk == "key_mousePresLeft:/info_var") {
 				messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Variable")+" : "+prmDescr+" : "+real2str(prmVarIn,abs(prmPrec))+" : "+real2str(info_var_arg0val,abs(prmPrec)));
 				prmVarIn = info_var_arg0val; info_var_backColor = ""; info_var_clearCnt = 0;
 			}
@@ -16728,44 +16724,42 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	com_stop_en = !prmStop.isEVal();
 
 	if(com_open_en) {
-		com_open_name = !digComs.isEVal() ? strParse(strParse(digComs,0,";"),0,"-") : tr("OPEN");
-		com_open_color = (strParse(strParse(digComs,0,";"),1,"-") != "") ? strParse(strParse(digComs,0,";"),1,"-") : "green";
-		com_open_tipTool = !digComs.isEVal() ? tr("Command")+" "+strParse(strParse(digComs,0,";"),0,"-") : tr("Command")+" "+tr("OPEN");
-		com_open_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+strParse(strParse(digComs,0,";"),0,"-") : tr("Press for")+" "+tr("OPEN");
+		com_open_name = !digComs.isEVal() ? digComs.parse(0,";").parse(0,"-") : tr("OPEN");
+		com_open_color = (digComs.parse(0,";").parse(1,"-") != "") ? digComs.parse(0,";").parse(1,"-") : "green";
+		com_open_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(0,";").parse(0,"-") : tr("Command")+" "+tr("OPEN");
+		com_open_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(0,";").parse(0,"-") : tr("Press for")+" "+tr("OPEN");
 		com_open_en = com_open_name.length;
 	}
 	if(com_close_en) {
-		com_close_name = !digComs.isEVal() ? strParse(strParse(digComs,1,";"),0,"-") : tr("CLOSE");
-		com_close_color = (strParse(strParse(digComs,1,";"),1,"-") != "") ? strParse(strParse(digComs,1,";"),1,"-") : "red";
-		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+strParse(strParse(digComs,1,";"),0,"-") : tr("Command")+" "+tr("CLOSE");
-		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+strParse(strParse(digComs,1,";"),0,"-") : tr("Press for")+" "+tr("CLOSE");
+		com_close_name = !digComs.isEVal() ? digComs.parse(1,";").parse(0,"-") : tr("CLOSE");
+		com_close_color = (digComs.parse(1,";").parse(1,"-") != "") ? digComs.parse(1,";").parse(1,"-") : "red";
+		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(1,";").parse(0,"-") : tr("Command")+" "+tr("CLOSE");
+		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(1,";").parse(0,"-") : tr("Press for")+" "+tr("CLOSE");
 		com_close_en = com_close_name.length;
   }
   if(com_stop_en) { 
-		com_stop_name = com_close_tipTool = !digComs.isEVal() ? strParse(strParse(digComs,2,";"),0,"-") : tr("STOP");
-		com_stop_color = (strParse(strParse(digComs,2,";"),1,"-") != "") ? strParse(strParse(digComs,2,";"),1,"-") : "yellow";
-		com_close_tipTool = !digComs.isEVal() ? tr("Command")+" "+strParse(strParse(digComs,2,";"),0,"-") : tr("Command")+" "+tr("STOP");
-		com_close_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+strParse(strParse(digComs,2,";"),0,"-") : tr("Press for")+" "+tr("STOP");
+		com_stop_name = !digComs.isEVal() ? digComs.parse(2,";").parse(0,"-") : tr("STOP");
+		com_stop_color = (digComs.parse(2,";").parse(1,"-") != "") ? digComs.parse(2,";").parse(1,"-") : "yellow";
+		com_stop_tipTool = !digComs.isEVal() ? tr("Command")+" "+digComs.parse(2,";").parse(0,"-") : tr("Command")+" "+tr("STOP");
+		com_stop_tipStatus = !digComs.isEVal() ? tr("Press for")+" "+digComs.parse(2,";").parse(0,"-") : tr("Press for")+" "+tr("STOP");
 		com_stop_en = com_stop_name.length;
   }
   if(st_open_en) {
-		st_open_text = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : tr("OPEN");
-		st_open_color = (strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green";
-		st_open_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,0,";"),0,"-") : tr("OPEN");
-		st_open_tipStatus = !digStts.isEVal() ? tr("State")+" "+strParse(strParse(digStts,0,";"),0,"-") : tr("State")+" "+tr("OPEN");
+		st_open_text = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
+		st_open_color = (digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green";
+		st_open_tipTool = !digStts.isEVal() ? digStts.parse(0,";").parse(0,"-") : tr("OPEN");
+		st_open_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(0,";").parse(0,"-") : tr("State")+" "+tr("OPEN");
   }
 	if(st_close_en) {
-		st_close_text = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : tr("CLOSE");
-		st_close_color = (strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red";
-		st_close_tipTool = !digStts.isEVal() ? strParse(strParse(digStts,1,";"),0,"-") : tr("CLOSE");
-		st_close_tipStatus = !digStts.isEVal() ? tr("State")+" "+strParse(strParse(digStts,1,";"),0,"-") : tr("State")+" "+tr("CLOSE");
+		st_close_text = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
+		st_close_color = (digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red";
+		st_close_tipTool = !digStts.isEVal() ? digStts.parse(1,";").parse(0,"-") : tr("CLOSE");
+		st_close_tipStatus = !digStts.isEVal() ? tr("State")+" "+digStts.parse(1,";").parse(0,"-") : tr("State")+" "+tr("CLOSE");
 	}
 
 	//Event process
-	while(true) {
-		ev_wrk = strParse(event,0,"\n",off);
-		if(ev_wrk == "") break;
-		else if(ev_wrk == "ws_BtPress:/com_open") {
+	while((ev_wrk=event.parse(0,"\n",off)).length) {
+		if(ev_wrk == "ws_BtPress:/com_open") {
 			if(!prmCom.isEVal()) prmCom = true; prmClose = false;
 			messPut("OP:"+vcaSesUser(path),2,"''"+prmShifr+"''. "+tr("Command")+" : "+prmDescr+" : : "+com_open_name);
 		}
@@ -16782,13 +16776,13 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	event=ev_rez;
 
 	if(st_open_en) st_open_color = !prmOpenSt.isEVal() ? (prmOpenSt ?
-		((strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green") : "gray") :
-			(prmCloseSt ? "gray" : ((strParse(strParse(digStts,0,";"),1,"-") != "") ? strParse(strParse(digStts,0,";"),1,"-") : "green"));
+		((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green") : "gray") :
+			(prmCloseSt ? "gray" : ((digStts.parse(0,";").parse(1,"-") != "") ? digStts.parse(0,";").parse(1,"-") : "green"));
 
 	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
-		((strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red") : "gray") :
-			(prmOpenSt ? "gray" : ((strParse(strParse(digStts,1,";"),1,"-") != "") ? strParse(strParse(digStts,1,";"),1,"-") : "red"));
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1413999475);
+		((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red") : "gray") :
+			(prmOpenSt ? "gray" : ((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red"));
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1415726680);
 INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8

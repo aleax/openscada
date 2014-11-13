@@ -189,14 +189,12 @@ uint32_t Core::iN( const string &rb, int &off, uint8_t vSz )
 
 int Core::ASN_i( const string &rb, int &off, int offLim )
 {
-    //printf("TEST 10: off=%d\n",off);
     if((off+2) > (int)rb.size())	throw Error("Buffer size is lesser to requested tag.");
     if((uint8_t)rb[off] == 0x9f || (uint8_t)rb[off] == 0xbf) off++;	//Pass big tag
     off++;	//Pass tag
     if(off > (int)rb.size())	throw Error("Buffer size is lesser to requested tag.");
     int sz = (uint8_t)rb[off++];
-    if(sz&0x80)
-    {
+    if(sz&0x80) {
 	union { uint32_t v; char c[4]; } dt;
 	dt.v = 0;
 	int szB = sz & (~0x80);
@@ -282,7 +280,6 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 	int offC1 = off, szC1 = ASN_i(buf, off, offC+sz);
 	while(i_it >= (int)io.childSize()) io.childAdd("itC");
 	XML_N *chN = io.childGet(i_it);
-	//printf("TEST 30: AccsIt %x(%x)h: %d\n", off, offC1, i_it);
 	switch((vTp=ASN_iTAG(buf,offC1)&~(0x20)))
 	{
 	    case VT_Error:
@@ -305,7 +302,6 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 		break;
 	    case VT_Array: case VT_Struct:
 		chN->setAttr("tp",int2s(vTp));
-		//printf("TEST 32: EnterStruct %xh: %d(%xh): %s\n", off, i_it, vTp, chN->text().c_str());
 		ASN_iAccessResult(buf, off, szC1, *chN);
 		break;
 	    case VT_Bool: chN->setAttr("tp",int2s(vTp))->setText(int2s(ASN_iN(buf,off,szC1)));	break;
@@ -333,7 +329,6 @@ void Core::ASN_iAccessResult( const string &buf, int &off, int sz, XML_N &io )
 	    case VT_Float: chN->setAttr("tp",int2s(vTp))->setText(r2s(ASN_iR(buf,off,szC1)));	break;
 	    default: off += szC1;
 	}
-	//printf("TEST 31: AccsIt %xh: %d(%xh): %s\n", offC1, i_it, vTp, chN->text().c_str());
     }
 }
 

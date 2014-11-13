@@ -409,8 +409,6 @@ void *TMdContr::Task( void *icntr )
 	    pdu += (char)(cntr.MRWrFrm.size()/2);	//Registers quantity LSB
 	    pdu += (char)cntr.MRWrFrm.size();		//Byte Count
 	    pdu += cntr.MRWrFrm;
-
-	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 	    cntr.modBusReq(pdu, false, true);
 	}
 
@@ -848,27 +846,24 @@ void MRCParam::enable( TParamContr *ip )
 	pdu += (char)((bSz/2)>>8);	//Registers quantity MSB
 	pdu += (char)(bSz/2);		//Registers quantity LSB
 
-	//printf("TEST 10: Request parameters: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ".c_str());
-
 	rezReq = p->owner().modBusReq(pdu, (modSlot<0));
-	//printf("TEST 10: Respond for request parameters: '%s' (%d)\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str(),sizeof(Inquired_t));
 	if(rezReq.size() || pdu.size() < (3+sizeof(Inquired_t)))
 	    throw TError(p->nodePath().c_str(),_("Parameters request error: %s."),rezReq.c_str());
 	pdu.erase(0,3);
-	//> Swap registers
+	//Swap registers
 	for(int i_p = 0; i_p < (int)pdu.size()-1; i_p += 2)
 	{ char t_sw = pdu[i_p]; pdu[i_p] = pdu[i_p+1]; pdu[i_p+1] = t_sw; }
 	Inquired_t *resp = (Inquired_t*)pdu.data();
-	//> Compare with configured module type
+	//Compare with configured module type
 	if(resp->proc.ID.hard != ePrm->dev.HardID)
 	    throw TError(p->nodePath().c_str(),_("Configure device %d but set %d."),ePrm->dev.HardID,resp->proc.ID.hard);
 
-	//> Save serial number for next process
+	//Save serial number for next process
 	ePrm->SoftID = resp->proc.ID.soft;
 	ePrm->SN = resp->SerialNum;
 
-    }catch(TError err)
-    {
+    }
+    catch(TError err) {
 	if(p->extPrms)	{ delete (tval*)p->extPrms; p->extPrms = NULL; }
 	throw;
     }
@@ -899,11 +894,8 @@ void MRCParam::sendTune( TParamContr *ip )
     pdu += (char)tune.size();		//Byte Count
     pdu += tune;
 
-    //printf("TEST 10: Send tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
-
     rezReq = p->owner().modBusReq(pdu, (modSlot<0));
     if(rezReq.size()) throw TError(p->nodePath().c_str(),_("Send tune request error: %s."),rezReq.c_str());
-    //printf("TEST 10: Respond for tune: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 }
 
 void MRCParam::disable( TParamContr *ip )
@@ -923,9 +915,8 @@ void MRCParam::getVals( TParamContr *ip )
     if(p->vlPresent("id")) p->vlAt("id").at().setI(ePrm->dev.HardID, 0, true);
     if(p->vlPresent("sn")) p->vlAt("sn").at().setI(ePrm->SN, 0, true);
 
-    if(modSlot < 0)	//> MC process
-    {
-	//> Read inputs
+    if(modSlot < 0) {	//MC process
+	// Read inputs
 	pduReq = (char)ePrm->SN;	//SN[0]
 	pduReq += (char)0x03;		//Function, read multiple registers
 	pduReq += (char)(ePrm->SN>>16);	//SN[2]
@@ -933,16 +924,13 @@ void MRCParam::getVals( TParamContr *ip )
 	pduReq += (char)0x00;		//Registers quantity MSB
 	pduReq += (char)0x20;		//Registers quantity LSB, MC structure size 32 registers
 
-	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
-	if(rezReq.size() || pduReq.size() < 35)
-	{
+	if(rezReq.size() || pduReq.size() < 35) {
 	    pduReq.resize(35);
 	    if(rezReq.empty())	rezReq = _("20:PDU short.");
 	}
 	//else if(pduReq[0]&0x80)	rezReq = _("21:Error respond.");
 
-	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	pduReq.erase(0,3);
 	//> Swap registers
 	for(int i_p = 0; i_p < (int)pduReq.size()-1; i_p += 2)
@@ -1021,7 +1009,6 @@ void MRCParam::getVals( TParamContr *ip )
 	    pdu += (char)(data.size()/2);	//Registers quantity LSB
 	    pdu += (char)data.size();	//Byte Count
 	    pdu += data;
-	    //printf("TEST 10: Send data: '%s'\n",TSYS::strDecode(pdu,TSYS::Bin," ").c_str());
 	    rezReq = p->owner().modBusReq(pdu, (modSlot<0), true);
 	}
 
@@ -1043,11 +1030,8 @@ void MRCParam::getVals( TParamContr *ip )
 	pduReq += (char)(ePrm->SN>>8);		//SN[1]
 	pduReq += (char)((reStrSize/2)>>8);	//Registers quantity MSB
 	pduReq += (char)(reStrSize/2);		//Registers quantity LSB, MC structure size 32 registers
-	//printf("TEST 11: Send data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
 	rezReq = p->owner().modBusReq(pduReq, (modSlot<0));
-	//printf("TEST 11a: Respond data: '%s'\n",TSYS::strDecode(pduReq,TSYS::Bin," ").c_str());
-	if(rezReq.size() || (int)pduReq.size() < (3+reStrSize))
-	{
+	if(rezReq.size() || (int)pduReq.size() < (3+reStrSize)) {
 	    pduReq.resize(3+reStrSize);
 	    if(rezReq.empty()) rezReq = _("20:PDU short.");
 	}
@@ -1246,7 +1230,6 @@ bool MRCParam::cntrCmdProc( TParamContr *ip, XMLNode *opt )
 		if(cfgStream.size() >= 8)
 		    for(int i_air = 0; i_air < 4; i_air++)
 			p->setModPrm("tune"+TSYS::int2str(i_t+i_air),TSYS::int2str((cfgStream[i_air*2]<<8)|cfgStream[i_air*2+1]));
-		//printf("TEST 00: '%s', %d = %d\n",buf,nWr,cfgStream.size());
 	    }
 	    else if(i_tb < 0) p->setModPrm(tits, opt->text());
 	    else
@@ -1346,8 +1329,6 @@ bool DevMRCFeature::load( const string &iniFile )
     }
 
     fclose(fp);
-
-    //printf("TEST 00: Name: '%s'; Descr: '%s'; sects: %d; vars: %d\n",name.c_str(),descr.c_str(),sects.size(),vars.size());
 
     return true;
 }
