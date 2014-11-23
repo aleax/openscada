@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-01 16:45+0300\n"
+"POT-Creation-Date: 2014-11-22 11:09+0200\n"
 "PO-Revision-Date: 2011-07-24 22:47+0400\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: German <de@li.org>\n"
@@ -826,8 +826,11 @@ msgstr "Datenerfassung"
 msgid "Maximum calculate time (sec)"
 msgstr "Maximale Zeit der Berechnung (sek)"
 
-msgid "Template program"
-msgstr "Vorlagenprogramm"
+msgid "Program translation allow"
+msgstr "Programm Übersetzung ermöglichen"
+
+msgid "Program"
+msgstr "Programm"
 
 msgid "Date of modification"
 msgstr "Änderungsdatum"
@@ -1384,9 +1387,6 @@ msgstr "Konstante;Konstante frei verfügbar;Verbindung"
 
 msgid "Program language"
 msgstr "Programmsprache"
-
-msgid "Program"
-msgstr "Programm"
 
 msgid "New IO"
 msgstr "Neu IO"
@@ -1998,18 +1998,16 @@ msgstr "Ansicht der Nachrichten"
 msgid "Finished. "
 msgstr "Finished. "
 
-#, fuzzy, c-format
 msgid ""
 "Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."
 msgstr ""
-"Letzter: %s. Konsumieren: %3.1f%% (%s von %s). Lag: %s. Verlust Zyklen: %g."
+"Letzter: %s. Konsumieren: %3.1f[%3.1f]%% (%s von %s). Lag: %s[%s]. Verlust Zyklen: %g."
 
 msgid "Standard"
 msgstr "Standard"
 
-#, fuzzy
 msgid "RT Round-robin"
-msgstr "Round-robin"
+msgstr "RT Round-robin"
 
 msgid "Style \"batch\""
 msgstr "Stil \"batch\""
@@ -2053,7 +2051,7 @@ msgid ""
 msgstr "Modul unterstützt Kompilierung der Programmiersprache nicht."
 
 msgid "Owner"
-msgstr ""
+msgstr "Eigentümer"
 
 msgid "Transport type"
 msgstr "Übertragungstypen"
@@ -2114,7 +2112,7 @@ msgid "External hosts poll"
 msgstr "Liste der entfernten Systeme"
 
 msgid "User;System;User and System"
-msgstr ""
+msgstr "Benutzer;System;Benutzer und System"
 
 msgid "New external host"
 msgstr "Neuer externe Host"
@@ -2236,9 +2234,6 @@ msgstr "Archivierung"
 
 msgid "Not select type!"
 msgstr "Typ ist nicht ausgewählt!"
-
-msgid "Write access is denied!"
-msgstr "Schreibzugriff verboten!"
 
 #, c-format
 msgid "Write value to archive error: %s"
@@ -2385,36 +2380,3 @@ msgstr "Stellen Sie den Namen des Projekts an:"
 
 msgid "already started."
 msgstr "begonnen."
-
-#~ msgid "Start archive"
-#~ msgstr "Start des Archivs"
-
-#~ msgid "Options help"
-#~ msgstr "Optionen Hilfe"
-
-#~ msgid "Help"
-#~ msgstr "Hilfe"
-
-#~ msgid "Buffer full. Messages lost!"
-#~ msgstr "Der Speicher ist voll, Datenverlust!"
-
-#~ msgid "Messages buffer filling is too fast!"
-#~ msgstr "Nachrichtenspeicher wird zu schnell gefüllt!"
-
-#~ msgid "Loading node error."
-#~ msgstr "Fehler beim Laden des Knotens."
-
-#~ msgid "Saving node error."
-#~ msgstr "Fehler beim Speichern des Knotens."
-
-#~ msgid "System's external hosts"
-#~ msgstr "Entfernte Systeme"
-
-#~ msgid "Array is empty."
-#~ msgstr "Massiv ist leer."
-
-#~ msgid "No parameter present '%s'."
-#~ msgstr "Es gibt keine Option '%s'."
-
-#~ msgid "Negative id is not allow for array."
-#~ msgstr "Negativer Index ist verboten für das Massiv-"

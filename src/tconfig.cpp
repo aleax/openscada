@@ -27,7 +27,11 @@ using namespace OSCADA;
 //*************************************************
 TConfig::TConfig( TElem *Elements ) : mElem(NULL), mIncmplTblStrct(false), mReqKeys(false)
 {
-    pthread_mutex_init(&mRes, NULL);
+    pthread_mutexattr_t attrM;
+    pthread_mutexattr_init(&attrM);
+    pthread_mutexattr_settype(&attrM, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&mRes, &attrM);
+    pthread_mutexattr_destroy(&attrM);
 
     setElem(Elements, true);
 }
@@ -219,7 +223,7 @@ TVariant TConfig::objFunc( const string &iid, vector<TVariant> &prms, const stri
 //*************************************************
 //* TCfg                                          *
 //*************************************************
-TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mDblVal(false), mOwner(owner)
+TCfg::TCfg( TFld &fld, TConfig &owner ) : mView(true), mKeyUse(false), mNoTransl(false), mReqKey(false), mExtVal(false), mOwner(owner)
 {
     //Chek for self field for dinamic elements
     if(fld.flg()&TFld::SelfFld) {
@@ -245,13 +249,13 @@ TCfg::~TCfg( )
 
 const string &TCfg::name( )	{ return mFld->name(); }
 
+bool TCfg::isKey( )	{ return owner().reqKeys() ? reqKey() : fld().flg()&TCfg::Key; }
+
 void TCfg::setReqKey( bool vl )
 {
     mReqKey = mKeyUse = vl;
     mOwner.reqKeysUpdate();
 }
-
-bool TCfg::isKey( )	{ return owner().reqKeys() ? reqKey() : fld().flg()&TCfg::Key; }
 
 string TCfg::getSEL( )
 {
@@ -271,24 +275,28 @@ string TCfg::getS( )
     pthread_mutex_lock(&mOwner.mRes);
     string rez = TVariant::getS();
     pthread_mutex_unlock(&mOwner.mRes);
-    return dblVal() ? TSYS::strSepParse(rez,0,0) : rez;
+    if(!extVal()) return rez;
+    else {
+	if(fld().flg()&TransltText && !noTransl()) {
+	    string rezT = TSYS::strSepParse(rez, 1, 0), rezSrc = TSYS::strSepParse(rez, 2, 0);
+	    rez = TSYS::strSepParse(rez, 0, 0);
+	    if(rez.size() && rezSrc.size()) Mess->translReg(rez, rezSrc);	//!!!! May be too busy
+	    return rezT.size() ? rezT : rez;
+	}
+	else return TSYS::strSepParse(rez, 0, 0);
+    }
 }
 
 string TCfg::getS( uint8_t RqFlg )
 {
-    pthread_mutex_lock(&mOwner.mRes);
-    string rez = TVariant::getS();
-    pthread_mutex_unlock(&mOwner.mRes);
-    if(dblVal()) {
-	if(RqFlg&Transl){
-	    string rezT = TSYS::strSepParse(rez, 1, 0);
-	    rez = TSYS::strSepParse(rez, 0, 0);
-	    return rezT.size() ? rezT : rez;
-	}
-	return TSYS::strSepParse(rez,((RqFlg&DblValTwo)?1:0),0);
+    if(extVal() && RqFlg&(ExtValOne|ExtValTwo|ExtValThree)) {
+	pthread_mutex_lock(&mOwner.mRes);
+	string rez = TVariant::getS();
+	pthread_mutex_unlock(&mOwner.mRes);
+
+	return TSYS::strSepParse(rez, ((RqFlg&ExtValTwo)?1:((RqFlg&ExtValThree)?2:0)), 0);
     }
-    return rez;
-    //return dblVal() ? TSYS::strSepParse(rez,((RqFlg&DblValTwo)?1:0),0) : rez;
+    return getS();
 }
 
 const char *TCfg::getSd( )
@@ -324,7 +332,11 @@ void TCfg::setS( const string &val )
 	case TVariant::String: {
 	    pthread_mutex_lock(&mOwner.mRes);
 	    string tVal = TVariant::getS();
-	    TVariant::setS(val);
+	    if(extVal() && (fld().flg()&TransltText) && !noTransl() && val.find(char(0)) == string::npos) {
+		if(Mess->lang2Code()==Mess->lang2CodeBase()) TVariant::setS(val+string(2,0)+getS(ExtValThree));
+		else TVariant::setS(getS(ExtValOne)+string(1,0)+val+string(1,0)+getS(ExtValThree));
+	    }
+	    else TVariant::setS(val);
 	    pthread_mutex_unlock(&mOwner.mRes);
 	    try {
 		if(!mOwner.cfgChange(*this,tVal)) {
@@ -414,9 +426,11 @@ void TCfg::setSEL( const string &val, uint8_t RqFlg )
 
 void TCfg::setS( const string &val, uint8_t RqFlg )
 {
-    if(/*isKey() &&*/ !dblVal() && (RqFlg&(DblValTwo|DblValOne))) { mDblVal = true; setType(TVariant::String); }
-    if(dblVal()) setS((RqFlg&DblValTwo)?(getS()+string(1,0)+val):(val+string(1,0)+getS(DblValTwo)));
-    else setS(val);
+    if(!extVal() && (RqFlg&(ExtValTwo|ExtValOne|ExtValThree))) { mExtVal = true; setType(TVariant::String); }
+    if(!extVal()) setS(val);
+    else setS(((RqFlg&ExtValOne)?val:getS(ExtValOne))+string(1,0)+
+		((RqFlg&ExtValTwo)?val:getS(ExtValTwo))+string(1,0)+
+		((RqFlg&ExtValThree)?val:getS(ExtValThree)));
     if(RqFlg&TCfg::ForceUse)	{ setView(true); setKeyUse(true); }
 }
 

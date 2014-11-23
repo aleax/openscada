@@ -53,9 +53,9 @@ class TCfg : public TVariant
 	};
 	enum ReqFlg {
 	    ForceUse	= 0x01,		//Force use flag
-	    DblValOne	= 0x02,		//One/first (and default) value: set value for key
-	    DblValTwo	= 0x04,		//Two/second value: base value for the key request or set
-	    Transl	= 0x80		//Get translated value from DblValTwo or original from DblValOne and the register
+	    ExtValOne	= 0x02,		//One/first (and default) value: set value for key
+	    ExtValTwo	= 0x04,		//Two/second value: base value for the key request or set
+	    ExtValThree	= 0x08		//Three value: source address for translations
 	};
 
 	//Methods
@@ -72,12 +72,12 @@ class TCfg : public TVariant
 	bool	noTransl( )		{ return mNoTransl; }
 	bool	reqKey( )		{ return mReqKey; }
 	bool	isKey( );						//Whether real or request key test
-	bool	dblVal( )		{ return mDblVal; }
+	bool	extVal( )		{ return mExtVal; }
 	void	setView( bool vw )	{ mView = vw; }
 	void	setKeyUse( bool vl )	{ if(fld().flg()&Key) mKeyUse = vl; }
 	void	setNoTransl( bool vl )	{ mNoTransl = vl; }
 	void	setReqKey( bool vl );
-	void	setDblVal( bool vw )	{ mDblVal = vw; }
+	void	setExtVal( bool vw )	{ mExtVal = vw; }
 
 	TFld	&fld( )			{ return *mFld; }
 
@@ -118,7 +118,7 @@ class TCfg : public TVariant
 	uint8_t	mKeyUse		: 1;
 	uint8_t	mNoTransl	: 1;
 	uint8_t	mReqKey		: 1;	//Request's key, mostly for WHERE sentence of SQL
-	uint8_t	mDblVal		: 1;	//Double value mode: For key and translation processing,
+	uint8_t	mExtVal		: 1;	//Double value mode: For key and translation processing,
 					//where TVariant type force to String and value separated by one value (set for key)
 					//and two value (base for key) by 0 symbol
 

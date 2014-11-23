@@ -267,6 +267,7 @@ class Func : public TConfig, public TFunction
 	string descr( )			{ return cfg("DESCR").getS(); }
 	string stor( );
 	int maxCalcTm( )		{ return mMaxCalcTm; }
+	bool progTr( )			{ return cfg("PR_TR"); }
 	string prog( )			{ return cfg("FORMULA").getS(); }
 	const string &usings( )		{ return mUsings; }
 	int64_t	timeStamp( )		{ return mTimeStamp; }
@@ -275,6 +276,7 @@ class Func : public TConfig, public TFunction
 	void setName( const string &nm );
 	void setDescr( const string &dscr );
 	void setMaxCalcTm( int vl );
+	void setProgTr( bool vl )	{ cfg("PR_TR") = vl; }
 	void setProg( const string &prg );
 	void setStart( bool val );
 	void setUsings( const string &val )	{ mUsings = val; }
@@ -364,7 +366,7 @@ class Func : public TConfig, public TFunction
 	//Methods
 	void postEnable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );	//Control interface command process
 
 	void load_( );

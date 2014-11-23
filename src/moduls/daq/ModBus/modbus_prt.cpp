@@ -62,6 +62,7 @@ TProt::TProt( string name ) : TProtocol(PRT_ID), mPrtLen(0)
 	TSYS::strMess("%d;%d;%d",Node::MD_DATA,Node::MD_GT_ND,Node::MD_GT_NET).c_str(),_("Data;Gateway node;Gateway net")));
     // For "Data" mode
     mNodeEl.fldAdd(new TFld("DT_PER",_("Calculate data period (s)"),TFld::Real,0,"5.3","1","0.001;99"));
+    mNodeEl.fldAdd(new TFld("DT_PR_TR",_("Program translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     mNodeEl.fldAdd(new TFld("DT_PROG",_("Program"),TFld::String,TCfg::TransltText,"1000000"));
     // For "Gateway" mode
     mNodeEl.fldAdd(new TFld("TO_TR",_("To transport"),TFld::String,0,OBJ_ID_SZ));
@@ -98,13 +99,13 @@ void TProt::load_( )
 	map<string, bool> itReg;
 
 	//  Search into DB
-	SYS->db().at().dbList(db_ls,true);
+	SYS->db().at().dbList(db_ls, true);
 	db_ls.push_back(DB_CFG);
 	for(unsigned i_db = 0; i_db < db_ls.size(); i_db++)
 	    for(int fld_cnt = 0; SYS->db().at().dataSeek(db_ls[i_db]+"."+modId()+"_node",nodePath()+modId()+"_node",fld_cnt++,g_cfg); )
 	    {
 		string id = g_cfg.cfg("ID").getS();
-		if(!nPresent(id)) nAdd(id,(db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
+		if(!nPresent(id)) nAdd(id, (db_ls[i_db]==SYS->workDB())?"*.*":db_ls[i_db]);
 		itReg[id] = true;
 	    }
 
@@ -579,6 +580,7 @@ Node::Node( const string &iid, const string &idb, TElem *el ) :
     mId = iid;
 
     cfg("MODE").setI(0);
+    cfg("DT_PROG").setExtVal(true);
 }
 
 Node::~Node( )
@@ -668,17 +670,18 @@ void Node::setProg( const string &iprg )
 
 bool Node::cfgChange( TCfg &co, const TVariant &pc )
 {
-    if(co.name() == "MODE") {
+    if(co.name() == "DT_PR_TR") cfg("DT_PROG").setNoTransl(!progTr());
+    else if(co.name() == "MODE") {
 	setEnable(false);
 	//Hide all specific
-	cfg("ADDR").setView(false); cfg("DT_PER").setView(false); cfg("DT_PROG").setView(false);
+	cfg("ADDR").setView(false); cfg("DT_PER").setView(false); cfg("DT_PR_TR").setView(false); cfg("DT_PROG").setView(false);
 	cfg("TO_TR").setView(false); cfg("TO_PRT").setView(false); cfg("TO_ADDR").setView(false);
 
 	//Show selected
 	switch(co.getI()) {
-	    case 0:	cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PROG").setView(true);	break;
-	    case 1:	cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
-	    case 2:	cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;
+	    case 0: cfg("ADDR").setView(true); cfg("DT_PER").setView(true); cfg("DT_PR_TR").setView(true); cfg("DT_PROG").setView(true);	break;
+	    case 1: cfg("ADDR").setView(true); cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true); cfg("TO_ADDR").setView(true);	break;
+	    case 2: cfg("TO_TR").setView(true); cfg("TO_PRT").setView(true);	break;
 	}
     }
 
@@ -720,18 +723,10 @@ void Node::load_( )
     vector<string> u_pos;
     TConfig cfg(&owner().nodeIOEl());
     cfg.cfg("NODE_ID").setS(id(),true);
-    cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
+    cfg.cfg("VALUE").setExtVal(true);
     for(int io_cnt = 0; SYS->db().at().dataSeek(fullDB()+"_io",owner().nodePath()+tbl()+"_io",io_cnt++,cfg); )
     {
 	string sid = cfg.cfg("ID").getS();
-
-	//Take before type
-	cfg.cfg("VALUE").setNoTransl((cfg.cfg("TYPE").getI()!=IO::String));
-
-	//Load all: !!!! Rewrite further optimal !!!!
-	cfg.cfgViewAll(true);
-	SYS->db().at().dataGet(fullDB()+"_io", owner().nodePath()+tbl()+"_io", cfg);
-	cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
 
 	//Position storing
 	int pos = cfg.cfg("POS").getI();
@@ -747,6 +742,7 @@ void Node::load_( )
 	    io(iid)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	    io(iid)->setFlg(cfg.cfg("FLAGS").getI());
 	}
+	cfg.cfg("VALUE").setNoTransl(io(iid)->type()!=IO::String);
 	if(io(iid)->flg()&Node::IsLink) io(iid)->setRez(cfg.cfg("VALUE").getS());
 	else io(iid)->setDef(cfg.cfg("VALUE").getS());
     }
@@ -1319,8 +1315,10 @@ void Node::cntrCmdProc( XMLNode *opt )
 		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_itr");
 		xt = ctrId(opt->childGet(0),"/nd/cfg/TO_TR",true);
 		if(xt) xt->setAttr("dest","sel_ed")->setAttr("select","/nd/cfg/ls_otr");
-		xt = ctrId(opt->childGet(0),"/nd/cfg/DT_PROG",true);
-		if(xt) xt->parent()->childDel(xt);
+		ctrRemoveNode(opt, "/nd/cfg/DT_PROG");
+		ctrRemoveNode(opt, "/nd/cfg/DT_PR_TR");
+		/*xt = ctrId(opt->childGet(0),"/nd/cfg/DT_PROG",true);
+		if(xt) xt->parent()->childDel(xt);*/
 	    }
 	}
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/dt",_("Data"))) {
@@ -1352,7 +1350,8 @@ void Node::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/dt/io/vl",_("Value"),RWRWR_,"root",SPRT_ID,1,"tp","str");
 	    }
 	    ctrMkNode("fld",opt,-1,"/dt/progLang",_("Program language"),RWRWR_,"root",SPRT_ID,3,"tp","str","dest","sel_ed","select","/dt/plang_ls");
-	    ctrMkNode("fld",opt,-1,"/dt/prog",_("Program"),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    ctrMkNode("fld",opt,-1,"/dt/progTr",cfg("DT_PR_TR").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/dt/prog",cfg("DT_PROG").fld().descr().c_str(),RWRWR_,"root",SPRT_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	if(mode() == MD_DATA && ctrMkNode("area",opt,-1,"/lnk",_("Links")))
 	    for(int i_io = 0; i_io < ioSize(); i_io++)
@@ -1448,6 +1447,10 @@ void Node::cntrCmdProc( XMLNode *opt )
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(progLang());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgLang(opt->text());
     }
+    else if(a_path == "/dt/progTr") {
+	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(i2s(progTr()));
+	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProgTr(s2i(opt->text()));
+    }
     else if(a_path == "/dt/prog") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SPRT_ID,SEC_RD))	opt->setText(prog());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SPRT_ID,SEC_WR))	setProg(opt->text());
@@ -1462,15 +1465,13 @@ void Node::cntrCmdProc( XMLNode *opt )
 	int c_lv = 0;
 	string c_path = "", c_el;
 	opt->childAdd("el")->setText(c_path);
-	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++)
-	{
+	for(int c_off = 0; (c_el=TSYS::strSepParse(tplng,0,'.',&c_off)).size(); c_lv++) {
 	    c_path += c_lv ? "."+c_el : c_el;
 	    opt->childAdd("el")->setText(c_path);
 	}
 	if(c_lv) c_path+=".";
 	vector<string>  ls;
-	switch(c_lv)
-	{
+	switch(c_lv) {
 	    case 0:
 		SYS->daq().at().modList(ls);
 		for(unsigned i_l = 0; i_l < ls.size(); )

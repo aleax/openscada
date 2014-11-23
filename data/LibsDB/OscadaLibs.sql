@@ -2213,12 +2213,12 @@ INSERT INTO "tmplib_base_io" VALUES('digitBlock','stClose','State "Closed"',3,14
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','tCmd','Hold command time (s)',1,32,'5',5,'Час утримання команди (с)','','Время удерж. команды (с)','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','last_cmd','Last command',1,1,'0',6,'Остання команда','','Последняя команда','');
 INSERT INTO "tmplib_base_io" VALUES('digitBlock','w_tm','Process command counter',2,1,'0',7,'Лічильник опрацювання команди','','Счётчик отраб. команды','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',9,'Щильність (кг/м3)','','Плотность (кг/м3)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',8,'Перепад (кГс/м2)','','Перепад (кГс/м2)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','T','Temperature (°C)',2,16,'0',7,'Температура (°С)','','Температура (°С)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,16,'0',6,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','Q','Volume (1000 x m3)',2,16,'0',5,'Об''єм (тис.м3)','','Объём (тыс.м3)','');
-INSERT INTO "tmplib_base_io" VALUES('gasPoint','F','Flow (1000 x m3/h)',2,16,'0',4,'Витрати (тис.м3)','','Расход (тыс.м3)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','DS','Density (kg/m3)',2,16,'0',5,'Щильність (кг/м3)','','Плотность (кг/м3)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','dP','Differential pressure (kgH/m2)',2,16,'0',4,'Перепад (кГс/м2)','','Перепад (кГс/м2)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','T','Temperature (°C)',2,16,'0',3,'Температура (°С)','','Температура (°С)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','P','Pressure (kgH/sm2)',2,16,'0',2,'Тиск (кГс/см2)','','Давление (кГс/см2)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','Q','Volume (1000 x m3)',2,16,'0',1,'Об''єм (тис.м3)','','Объём (тыс.м3)','');
+INSERT INTO "tmplib_base_io" VALUES('gasPoint','F','Flow (1000 x m3/h)',2,16,'0',0,'Витрати (тис.м3)','','Расход (тыс.м3)','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','inout','Input/Output',2,129,'Parameter|var',0,'Вхід/Вихід','','Вход/Выход','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','var','Variable',2,16,'0',1,'Змінна','','Переменная','');
 INSERT INTO "tmplib_base_io" VALUES('manInUnif','ed','Dimension',0,32,' ',3,'Од. виміру',' ','Ед. измерения',' ');
@@ -2431,2344 +2431,6 @@ INSERT INTO "tmplib_base_io" VALUES('digAlarm','DESCR','Description',0,0,'',4,''
 INSERT INTO "tmplib_base_io" VALUES('digAlarm','this','The object',4,0,'',5,'','','','');
 CREATE TABLE 'DAQ_JavaLikeCalc' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ENABLE" INTEGER DEFAULT '0' ,"START" INTEGER DEFAULT '0' ,"MESS_LEV" INTEGER DEFAULT '3' ,"REDNT" INTEGER DEFAULT '0' ,"REDNT_RUN" TEXT DEFAULT '<high>' ,"PRM_BD" TEXT DEFAULT 'system' ,"FUNC" TEXT DEFAULT '' ,"SCHEDULE" TEXT DEFAULT '1' ,"PRIOR" INTEGER DEFAULT '0' ,"ITER" INTEGER DEFAULT '1' , PRIMARY KEY ("ID"));
 INSERT INTO "DAQ_JavaLikeCalc" VALUES('prescr','Prescriptions','Рецепты','Рецепти','','','',1,1,3,0,'<high>','JavaLikePrm_prescr','Controller.prescr','0.2',0,1);
-CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,'JavaLikeCalc.JavaScript
-//Reset to default
-if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//Run
-if(run && !pause) {
-	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
-	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
-	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
-}','','',1412327507);
-INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлюється паралельно з поточною командою.','Фоновый таймер. Обновляется параллельно с текущей командой.',10,'JavaLikeCalc.JavaScript
-//Reset to default
-if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
-//Run
-if(run && !pause) {
-	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
-	tmp1 = max(0, tmp1 - 1/f_frq);
-	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
-	//if(tmp1 <= 10)	rez = "-1:Waiting "+arg1.toPrecision(3)+"s expired";
-	else rez = "10:"+tr("Background waiting %1s").replace("%1",tmp1.toPrecision(3));
-}','','',1412327656);
-CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','','','','',10,'clcCnt++;
-
-if(f_start)	work = SYS.XMLNode("prg");
-
-//Check to commands controller present
-comCntrO = false;
-if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
-
-//Commands list update
-if(f_start || !(clcCnt%(60*f_frq))) {
-	if(!comCntrO) {
-		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
-		comLs = new Object();
-		for(i_t = 1; i_t < rez.length; i_t++) {
-			comNm = rez[i_t]["name"];
-			comLs[comNm] = new Object();
-			comLs[comNm]["descr"] = rez[i_t]["descr"];
-			comLs[comNm]["proc"] = rez[i_t]["proc"];
-			for(i_a = 1; i_a <= 5; i_a++)
-				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
-		}
-	}
-	else {
-		var nL = comCntrO.nodeList("prm_");
-		comLs = new Object();
-		for(i_n = 0; i_n < nL.length; i_n++) {
-			comO = comCntrO[nL[i_n]];
-			comNm = comO.cfg("NAME");
-			comLs[comNm] = new Object();
-			comLs[comNm]["prmID"] = nL[i_n].slice(4);
-			comLs[comNm]["descr"] = comO.cfg("DESCR");
-			for(i_a = 1; i_a <= 5; i_a++)
-				if(!(comA=comO["arg"+i_a]).isEVal())
-					comLs[comNm]["arg"+i_a] = comA.descr();
-		}
-	}
-}
-
-//Programm selection change
-if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
-	work = SYS.XMLNode("prg");
-	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-	if(rez.length > 1) {
-		//Parse program and insert procedure text and argument''s labels
-		work.load(rez[1][0]);
-		work.setAttr("name",prog);
-		for(comElN = work, comPos = 0; true; comPos++) {
-			if(comPos >= comElN.childSize()) {
-				if((comElN=comElN.parent())) { comPos = comElN.attr("seekPos").toInt(); continue; }
-				break;
-			}
-			comElI = comElN.childGet(comPos);
-			comId = comElI.attr("id");
-			if(comLs[comId].isEVal())	continue;
-			comElI.setAttr("proc",comLs[comId].proc);
-			for(i_a = 1; i_a <= 5; i_a++) comElI.setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
-			if(comElI.childSize()) { comElN.setAttr("seekPos",comPos); comElN = comElI; comPos = -1; }
-		}
-	}
-	else prog = "";
-}
-
-//Start process
-if(curMode <= 0 && mode == 1 && prog.length) {
-	startTm = SYS.time();
-	curCom = 0;
-	curMode = mode;	
-
-	if(comCntrO) {
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++) {
-			var cLi = comCntrO[cL[i_c]];
-			cLi.run.set(false);
-			cLi.stop.set(false);
-			cLi.error.set(false);
-			cLi.abort.set(false);
-			cLi.start.set(true);
-		}
-	}
-}
-//Pause and other process
-else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1)) {
-	curMode = mode;
-	if((curMode == 1 || curMode == 2) && comCntrO) {
-		var cL = comCntrO.nodeList("prm_");
-		for(i_c = 0; i_c < cL.length; i_c++)
-			comCntrO[cL[i_c]].pause.set(curMode==2);
-	}
-}
-
-//Call program
-if(curMode == 1 || curMode == 2) {
-	prog = work.attr("name");
-
-	//Curent node at levels obtain
-	curComNd = work;
-	for(curComLev = 0, curComPos = 0, off = 0; curComNd && (tVl=curCom.parse(0,":",off)).length; curComLev++, curComPos = tVl.toInt())
-		curComNd = curComNd.childGet(tVl.toInt());
-	if(!curComNd) {
-		SYS.messInfo("uprg"+prog,tr("No current node present")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-		curMode = mode = -3;
-	}
-	curComNd = curComNd.parent();
-
-	//Internal commands call
-	if(!comCntrO) {
-		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
-			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
-			curCom++;
-		}
-		if(curCom >= 0 && curCom < work.childSize()) {
-			comEl = work.childGet(curCom);
-			//Stop process
-			if(mode == 0) {
-				comEl.setAttr("rez","-10:"+tr("Program terminated"));
-				// Call stop command
-				if(!comLs["Stop"].isEVal()) {
-					off = 0;
-					prLang = comLs["Stop"].proc.parse(0,"\n",off);
-					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//Pass empty command		
-			else if(!comEl.attr("proc").length) curCom++;
-			//Execute command
-			else if(curMode == 1) {
-				args = new Object();
-				args.rez = "";
-				args.f_start = !comEl.attr("tm").length;
-				if(args.f_start) comEl.setAttr("tm",SYS.time());
-				args.f_frq = f_frq;
-				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
-				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
-				off = 0;
-				prLang = comEl.attr("proc").parse(0,"\n",off);
-				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
-				if(rez && args.rez.toInt() > 0) curCom++;
-				else if(!rez || args.rez.toInt() < 0) {
-					// Call error command
-					if(!comLs["Error"].isEVal()) {
-						off = 0;
-						prLang = comLs["Error"].proc.parse(0,"\n",off);
-						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
-					}
-					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-					curMode = mode = -1;
-				}
-				comEl.setAttr("rez",args.rez);
-				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
-				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
-				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
-			}
-		}
-
-		//End call
-		if(curCom < 0 || curCom >= work.childSize()) {
-			// Call stop command
-			if(!comLs["Stop"].isEVal()) {
-				off = 0;
-				prLang = comLs["Stop"].proc.parse(0,"\n",off);
-				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1) {
-				//Parse programm and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-	//External commands call
-	else {
-		// Get current command parameter-object		
-		toNext = false;
-		curComPrm = EVAL_BOOL;
-		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
-			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
-			if(curComPrm.isEVal()) {
-				curMode = mode = -1;
-				curComNd.childGet(curComPos).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
-				return;
-			}
-		}
-		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
-			curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
-			curComPrm.run.set(false);
-			mode = curMode;
-			toNext = true;
-		}
-		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
-			comEl = curComNd.childGet(curComPos);
-			//Stop process
-			if(mode == 0) {
-				comEl.setAttr("rez","-12:"+tr("Program terminated"));
-				// Stop all typical and set "abort" flag
-				var cL = comCntrO.nodeList("prm_");
-				for(i_c = 0; i_c < cL.length; i_c++) {
-					var cLi = comCntrO[cL[i_c]];
-					cLi.run.set(false);
-					cLi.start.set(false);
-					cLi.abort.set(true);
-				}
-				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-				curMode = mode = -3;
-			}
-			//Commands process
-			else {
-				// Start command
-				if(!comEl.attr("tm").length) {
-					curComPrm.run.set(false);	//Stop for possible background call
-					comEl.setAttr("tm",SYS.time());
-					for(i_a = 1; i_a <= 5; i_a++)
-						if(!(comA=curComPrm["arg"+i_a]).isEVal())
-							comA.set(comEl.attr("arg"+i_a));
-					curComPrm.rez.set(0);
-					curComPrm.run.set(true);
-				}
-				//Update steps status, up to current comand
-				for(comElN = work, comPos = 0, comLev = 0, comCur = true; true; comPos++) {
-					if(comPos >= comElN.childSize()) {
-						if((comElN=comElN.parent())) {
-							comLev--;
-							comPos = comElN.attr("seekPos").toInt();
-							comCur = comElN.attr("comCur").toInt();
-							continue;
-						}
-						break;
-					}
-					comElI = comElN.childGet(comPos);
-					isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
-					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
-					if(isCurCmd || (curComPI.run.get() && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))
-					{
-						rez = curComPI.rez.get();
-						if(isCurCmd && rez.toInt() > 0) toNext = true;
-						if(rez.toInt() < 0) {
-							// Stop all typical and call "error" command
-							var cL = comCntrO.nodeList("prm_");
-							for(i_c = 0; i_c < cL.length; i_c++) {
-								var cLi = comCntrO[cL[i_c]];
-								cLi.run.set(false);
-								cLi.start.set(false);
-								cLi.error.set(true);
-							}
-							SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-							curMode = mode = -1;
-						}
-						comElI.setAttr("rez",rez);
-						for(i_a = 1; i_a <= 5; i_a++)
-							if(!(comA=curComPI["arg"+i_a]).isEVal())
-								comElI.setAttr("arg"+i_a, comA.get());
-					}
-					if(isCurCmd) break;
-					if(comElI.childSize()) {
-						comElN.setAttr("seekPos",comPos);
-						comElN.setAttr("comCur",comCur);
-						comElN = comElI;
-						comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
-						comPos = -1; comLev++;
-					}
-				}
-			}
-		}
-
-		// Go to next step
-		if(toNext) {
-			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
-			else if((++curComPos) >= curComNd.childSize())
-			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
-			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
-			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
-		}
-		
-		//End call
-		if(curComLev <= 0) {
-			// Stop all typical and call "stop" command
-			var cL = comCntrO.nodeList("prm_");
-			for(i_c = 0; i_c < cL.length; i_c++) {
-				var cLi = comCntrO[cL[i_c]];
-				cLi.run.set(false);
-				cLi.start.set(false);
-				cLi.stop.set(true);
-			}
-
-			curMode = mode = -2;
-			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
-
-			//Place to program last execution time
-			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
-			if(rez.length > 1) {
-				//Parse program and insert procedure text and argument''s labels to here
-				comTree = SYS.XMLNode("prg");
-				comTree.load(rez[1][0]);
-				comTree.setAttr("wtm",SYS.time()-startTm);
-				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
-			}
-		}
-	}
-}
-mode = curMode;','','',1413479420);
-INSERT INTO "lib_Controllers" VALUES('test','test','','','','','',10,'using Special.FLibSYS;
-
-out+=10;
-if(out>100) out=0;
-
-test = (10).toString(16,2,true);
-test = (-10.34).toFixed(4,8);
-
-//Request prepare
-//req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
-//Send request
-//SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
-//if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
-
-//test = "Text \n value[\041abc\x21].";
-
-//test = arguments[4];
-//arguments[4] = 10;
-
-//test="Java123Script".search(new RegExp("script","i"));
-//text = "Javascript3\"sdf\"3javaScript __ javascript";
-//test = text.replace(4,3,"67");
-//test = text.replace("3","55");
-//test = text.replace(new RegExp("javascript","ig"),"JavaScript");//
-//test = text.replace(new RegExp("\"([^\"]*)\"","g"),"``$1''''");
-//text = "1 плюс 2 плюс 3";
-//test = text.match("\\d+","g");
-//text = "Посетите мою домашнюю страницу http://www.isp.com/~david";
-//test = text.match("(\\w+):\\/\\/([\\w.]+)\\/(\\S*)");
-//test = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));
-//test = "hello <b>world</b>".split(new RegExp("(<[^>]*>)"));
-//var p = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
-//test = p.test("abc12/30/1969def");
-
-/*CRC = new Array(0,1,2,3,4,5);vSz = 3
-hi=CRC[out%6];
-test = hi;*/
-
-//test = SYS.Transport.Sockets.out_testModBus.messIO("123456");
-
-/*obj = new Object();
-obj["test1"]=1;l
-obj["test2"]=1;
-for( var i in obj ) SYS.messDebug("test","Prop: "+i);
-SYS.messDebug("test","Props test");*/
-
-//vl = SYS.strFromCharCode(100,200,50,60);
-//test = vl.charCodeAt(1);
-
-//test = SYS.system("ps -Ao pid,comm");
-
-//ModBus.Unidrive.pos.pos=out;
-//ModBus.testRTU.test.pos=out;
-//test = rand(offset*0.4);
-//val="Test";
-//if( val=="Test1" || val=="Test2" ) test="TestN"; else test="Test";
-
-//test1=new Array(1,"a",2,"b",3,"c",4);
-//test1[7]=new Array(5,6,7);
-//test=test1[7][1];
-
-//test1="ab;cde;fgh;jk;lm";
-//test = test1.split(";").join();
-
-//req = xmlNode("get").setAttr("path","/%2fgen%2fid");
-//test = xmlCntrReq(req);
-//test = req.text();
-
-/*test1 = vArh("DAQ.System.AutoDA.CPULoad.load");
-test2 = test1.FFT(0,60);
-test = "";
-for( i = 0; i < test2.length; i++ ) test += ""+test2[i]+";";*/
-
-//messPut("cron",0,"Time: "+tmFStr(tmTime()));
-
-/*req = SYS.XMLNode();
-test = req.load("test1.xml",true);*/
-//for( i = 0; i < req.childSize(); i++ )
-//  test += req.childGet(i).attr("id")+"; ";
-/*sutm = 0; stm = SYS.time(sutm);
-req.save(0,"test2.xml");
-eutm = 0; etm = SYS.time(eutm);
-test = 1e6*(etm-stm)+(eutm-sutm);*/
-
-//test = strDec4Bin(Transport.Sockets.out_testModBus.messIO(strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05")));
-
-/*req = SYS.XMLNode("GET");
-req.setAttr("URI","/");
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
-test = req.text();*/
-
-/*req = SYS.XMLNode("POST");
-req.setAttr("URI","/WebUser/FlowTec.txt");
-cntNode = req.childAdd("cnt").setAttr("name","pole0").setAttr("filename","Object2-k001-100309-17.txt");
-cntNode.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
-cntText = "Object2-k001\r\n";
-cntText += "\r\n";
-cntText += "v002\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
-cntText += "v005\r\n";
-cntText += " n1\r\n";
-cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
-cntText += "\r\n";
-cntNode.setText(cntText);
-SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");*/
-
-//test = SYS.UI.VCAEngine["ses_AGLKS"].alrmSndPlay();
-//test = "1;2;5;7;9";
-//test = "1;2;5;7;9".type();
-
-//SYS.messDebug("test",strEnc2Bin("68 74 74 70 3a 2f 2f 77 77 77 2e 77 33 2e 6f 72 67 2f 32 30 30 30 2f 30 39 2f 78 6d 6c 64 73 69 67 23 72 73 61 2d 73 68 61 31"));
-
-//test = SYS.DAQ.ModBus.testTCP.test.a_8_1_1_ПС_ОПД_стенд_температура__ОПД_.get();
-
-/*req = SYS.XMLNode("get").setAttr("path","/%2fgen%2fid");
-rez = SYS.cntrReq(req,"loop");
-test = req.text();*/
-
-/*DBTbl=SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
-for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
-{
-  var rec = "";
-  for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
-    rec += DBTbl[i_rw][i_fld]+"\t";
-  SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
-}*/','','','');
-INSERT INTO "lib_Controllers" VALUES('test1','test1','','','','','',10,'//clc=0;
-//First getting previous time
-//if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
-
-//Get curent time
-//c_tm = Special.FLibSYS.tmTime()-2;
-
-//Open value archive
-//a_id = Special.FLibSYS.avalOpen("Archive.va_test");
-//if(a_id==-1) break;
-
-//Calc average archive
-//for(i_tm=p_tm;i_tm<c_tm;i_tm++)
-//{ 
-//  val = Special.FLibSYS.avalGetR(a_id,i_tm,0,"");
-//  rez = (rez*(i_tm-p_tm)+val)/(i_tm-p_tm+1);
-//  clc++;
-//}
-
-//Close value archive
-//Special.FLibSYS.avalClose(a_id);
-//p_tm=c_tm;','','','');
-CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_DevLib" VALUES('SCU750','','','','Typical EDWARDS TURBOMOLECULAR PUMPS data request by SCU750 Cotrol Unit protocol.','Опитування даних типових EDWARDS TURBOMOLECULAR PUMPS за допомогою протоколу блоків керування SCU750.','Опрос данных типовых EDWARDS TURBOMOLECULAR PUMPS с помощью протокола блоков управления SCU750.',10,'JavaLikeCalc.JavaScript
-if(f_start)
-{
-	version = "";
-	operModes = new Object();
-	operModes[1] = "Levitation";
-	operModes[2] = "No Levitation";
-	operModes[3] = "Acceleration";
-	operModes[4] = "Normal";
-	operModes[5] = "Deceleration (Brake)";
-	operModes[6] = "Autotest";
-	operModes[7] = "Tuning";
-	operModes[8] = "Tuning Complete";
-}
-
-tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-req = SYS.XMLNode("mess").setAttr("ProtIt","SCU750").setAttr("addr",addr);
-
-//======= Commands =========
-//> START, STOP and RESET process
-if(comReset == true) req.setText(" E04");
-else if(comStop == true) req.setText(" E02");
-else if(comStart == true) req.setText(" E01");
-else req.setText("");
-if(req.text().length) { tr.messIO(req,"UserProtocol"); comReset=comStop=comStart=false; }
-
-//> Speed setpoint set
-if(spSpeed != spSpeedPrev)
-{
-	req.setText(" h"+spSpeed.toString(16,4));
-	tr.messIO(req,"UserProtocol");
-	spSpeedPrev = spSpeed;
-}
-
-//======= Data getting (by self bigger period) ========
-if((cnt++)%max(1,perGet*f_frq))	return;
-t_err = "";
-
-//Read version, single
-if(!version.length || version.isEVal())
-{
-	req.setText("?V");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); version = EVAL_STR; }
-	else
-	{
-		if(req.text().length != 42) version = EVAL_STR;
-		else
-		{
-			CUSv = "";
-			lstNoSp = 0;
-			for(i_s = 2; i_s < 32; i_s+=2)
-			{
-				cod = req.text().slice(i_s,i_s+2).toInt(16);
-				CUSv += SYS.strFromCharCode(cod);
-				if(cod != 0x20) lstNoSp = i_s/2;
-			}
-			version = "Contr. Unit Soft V.="+CUSv.slice(0,lstNoSp)+"; "
-					    "Motor Drive Soft V.="+req.text().charAt(35)+"."+req.text().charAt(36)+"; "
-					    "DSP Soft V.="+req.text().charAt(39)+"."+req.text().charAt(40);
-		}
-	}
-}
-
-//Read rotational speed.
-if(t_err.length) tTMS = tMotor = rotSpeed = EVAL_INT;
-else
-{
-	req.setText("?[");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); tTMS = tMotor = rotSpeed = EVAL_INT; }
-	else
-	{
-		tTMS = req.text().slice(32,36).toInt(16);
-		tMotor = req.text().slice(36,40).toInt(16);
-		rotSpeed = req.text().slice(50,54).toInt(16);
-	}
-}
-
-//Pump operation mode and errors read
-if(t_err.length) { operMode = EVAL_INT; errors = EVAL_STR; }
-else
-{
-	req.setText("?M");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); operMode = EVAL_INT; errors = EVAL_STR; }
-	else
-	{
-		oMode = req.text().slice(2,4).toInt(16);
-		operMode = oMode.toString()+":"+(operModes[oMode].isEVal()?"Unknown":operModes[oMode]);
-		//SYS.messDebug("CNTR","pumpOperMode: "+pumpOperMode);
-		
-		errCnt = req.text().slice(4,6).toInt(16);
-		errors = "";
-		for(i_e = 0; i_e < errCnt; i_e++)
-			errors += req.text().slice(6+i_e*2,8+i_e*2)+"; ";
-	}
-}
-
-//Events read
-if(t_err.length)	events = EVAL_STR;
-else
-{
-	req.setText("?g");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); events = EVAL_STR; }
-	else
-	{
-		errCnt = req.text().slice(2,4).toInt(16);
-		events = "";
-		for(i_e = 0; i_e < errCnt; i_e++)
-			events += req.text().slice(4+i_e*2,6+i_e*2)+"; ";
-	}
-}
-
-//Counters
-if(t_err.length) { snCntrUnit = snPump = EVAL_STR; cntPumpHour = cntCntrUnitHour = cntStart = EVAL_REAL; }
-else
-{
-	req.setText("?c");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); snCntrUnit = snPump = EVAL_STR; cntPumpHour = cntCntrUnitHour = cntStart = EVAL_REAL; }
-	else
-	{
-		snCntrUnit = req.text().slice(2,12);
-		snPump = req.text().slice(12,22);
-		cntPumpHour = req.text().slice(22,30).toInt(16);
-		cntCntrUnitHour = req.text().slice(30,38).toInt(16);
-		cntStart = req.text().slice(38,46).toInt(16);
-	}
-}
-
-//Read setpoints
-if(t_err.length)	spSpeed = spSpeedPrev = spTMSt = EVAL_INT;
-else
-{
-	req.setText("?d");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); spSpeed = spSpeedPrev = spTMSt = EVAL_INT; }
-	else
-	{
-		spSpeed = spSpeedPrev = req.text().slice(2,6).toInt(16);
-		spTMSt = req.text().slice(6,10).toInt(16);
-	}
-}
-
-f_err = t_err;','','','');
-INSERT INTO "tmplib_DevLib" VALUES('TMH','TMP-xx03','','','Power supply for turbomolecular pumps, model EI-R04M.','Джерело живлення для турбомолекулярного насосу, модель EI-R04M.','Источник питания для турбомолекулярного насоса, модель EI-R04M.',10,'JavaLikeCalc.JavaScript
-tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-req = SYS.XMLNode("mess").setAttr("ProtIt","TMH").setAttr("addr",addr);
-
-if(f_start)
-{
-	modelID = "";
-	operModes = new Object();
-	//Modes
-	operModes["NS"] = "1:Levitation";
-	operModes["NA"] = "3:Acceleration";
-	operModes["NN"] = "4:Normal";
-	operModes["NB"] = "5:Deceleration";
-	operModes["FS"] = "6:Stop operation failure";
-	operModes["FF"] = "7:Idling failure";
-	operModes["FR"] = "8:Regeneration breaking failure";
-	operModes["FB"] = "9:Deceleration failure";
-	//Conrols
-	operModes["LL"] = "Local";
-	operModes["LR"] = "Remote";
-	operModes["LC"] = "RS-232C";
-	operModes["LD"] = "RS-485";
-
-	//Set to //> Interactive
-	req.setText("LN");
-	tr.messIO(req,"UserProtocol");
-}
-
-//======= Commands =========
-//> START, STOP and RESET process
-if(comReset == true) req.setText("RR");
-else if(comStop == true) req.setText("RP");
-else if(comStart == true) req.setText("RT");
-else req.setText("");
-if(req.text().length)	{ tr.messIO(req,"UserProtocol"); comReset=comStop=comStart=false; }
-
-//> Interactive, Autonomous
-if(comInteract == true) req.setText("LN");
-else if(comAutonom == true) req.setText("LF");
-else req.setText("");
-if(req.text().length)	{ tr.messIO(req,"UserProtocol"); comInteract=comAutonom=false; }
-
-//======= Data getting (by self bigger period) ========
-if((cnt++)%max(1,perGet*f_frq))	return;
-t_err = "0";
-
-//> Oper mode
-req.setText("CS");
-tr.messIO(req,"UserProtocol");
-if(req.attr("err").length) { t_err = req.attr("err"); operMode = EVAL_STR; }
-else operMode = /*req.text().slice(2)+":"+*/operModes[req.text().slice(0,2)];
-
-//> Oper control
-if(t_err.toInt())	operCntr = EVAL_STR;
-else
-{
-	req.setText("LS");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); operCntr = EVAL_STR; }
-	else operCntr = operModes[req.text().slice(0,2)];
-}
-
-//> Alarms list obtain
-if(t_err.toInt())	errors = EVAL_STR;
-else
-{
-	errors = "";
-	for(i = 0; true; i++)
-	{
-		req.setText("CF"+i.toString(10,2));
-		tr.messIO(req,"UserProtocol");
-		if(req.attr("err").length) { t_err = req.attr("err"); errors = EVAL_STR; break; }
-		//SYS.messDebug("TMH","Result: "+req.text());
-		if(req.text().slice(0,2) != "CA")	break;
-		errors += req.text().slice(2)+";";
-		continue;
-	}
-}
-
-//> Get parameters
-//>> Model ID
-if(t_err.toInt())	modelID = EVAL_STR;
-else if(!modelID.length || modelID == EVAL_STR)
-{
-	req.setText("PR01");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); modelID = EVAL_STR;}
-	else if(req.text().slice(0,2) != "PA") modelID = EVAL_STR;
-	else modelID = "TMP-"+req.text().slice(4);
-}
-
-//>> Rotation speed
-if(t_err.toInt())	rotSpeed = EVAL_INT;
-else
-{
-	req.setText("PR03");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); rotSpeed = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") rotSpeed = EVAL_INT;
-	else rotSpeed = req.text().slice(4).toInt()*10;
-}
-
-//>> Current
-if(t_err.toInt())	I = EVAL_REAL;
-else
-{
-	req.setText("PR04");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); I = EVAL_REAL;}
-	else if(req.text().slice(0,2) != "PA") I = EVAL_REAL;
-	else I = req.text().slice(4).toInt()/10;
-}
-
-//>> Axle 1 disbalance
-if(t_err.toInt())	axle1disb = EVAL_INT;
-else
-{
-	req.setText("PR21");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); axle1disb = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") axle1disb = EVAL_INT;
-	else axle1disb = req.text().slice(4).toInt();
-}
-
-//>> Axle 2 disbalance
-if(t_err.toInt())	axle2disb = EVAL_INT;
-else
-{
-	req.setText("PR22");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); axle2disb = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") axle2disb = EVAL_INT;
-	else axle2disb = req.text().slice(4).toInt();
-}
-
-//>> MP X1
-if(t_err.toInt())	MP_X1 = EVAL_INT;
-else
-{
-	req.setText("PR26");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); MP_X1 = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") MP_X1 = EVAL_INT;
-	else MP_X1 = req.text().slice(4).toInt();
-}
-
-//>> MP Y1
-if(t_err.toInt())	MP_Y1 = EVAL_INT;
-else
-{
-	req.setText("PR27");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); MP_Y1 = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") MP_Y1 = EVAL_INT;
-	else MP_Y1 = req.text().slice(4).toInt();
-}
-
-//>> MP X2
-if(t_err.toInt())	MP_X2 = EVAL_INT;
-else
-{
-	req.setText("PR28");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); MP_X2 = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") MP_X2 = EVAL_INT;
-	else MP_X2 = req.text().slice(4).toInt();
-}
-
-//>> MP Y2
-if(t_err.toInt())	MP_Y2 = EVAL_INT;
-else
-{
-	req.setText("PR29");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); MP_Y2 = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") MP_Y2 = EVAL_INT;
-	else MP_Y2 = req.text().slice(4).toInt();
-}
-
-//>> MP Z
-if(t_err.toInt())	MP_Z = EVAL_INT;
-else
-{
-	req.setText("PR30");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length) { t_err = req.attr("err"); MP_Z = EVAL_INT;}
-	else if(req.text().slice(0,2) != "PA") MP_Z = EVAL_INT;
-	else MP_Z = req.text().slice(4).toInt();
-}
-
-f_err = t_err;','','','');
-INSERT INTO "tmplib_DevLib" VALUES('TM510x','Elemer TM510x','','','Elemer TM5102 and TM5103.','Elemer TM5102 та TM5103.','Elemer TM5102 и TM5103.',10,'JavaLikeCalc.JavaScript
-if(f_start)
-{
-	devTp = EVAL_INT;
-}
-
-tr = SYS.Transport.Serial.nodeAt("out_"+transport);
-req = SYS.XMLNode("mess").setAttr("ProtIt","TM510x").setAttr("addr",addr);
-
-t_err = "";
-
-//> Device type get
-if(devTp.isEVal() || !devTp)
-{
-	req.setText("0");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length)	t_err = req.attr("err");
-	else devTp = req.text().toInt();
-}
-
-//> Inputs read
-errors = "";
-if(t_err.length) in1 = in2 = in3 = in4 = in5 = in6 = in7 = in8 = EVAL_REAL;
-else
-{
-	req.setText("6;0;8");
-	tr.messIO(req,"UserProtocol");
-	if(req.attr("err").length)
-	{ t_err = req.attr("err"); in1 = in2 = in3 = in4 = in5 = in6 = in7 = in8 = EVAL_REAL; }
-	else
-	{
-		off = 0;
-		tvl = "";
-		in1 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in2 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in3 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in4 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in5 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in6 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in7 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-		in8 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
-		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
-	}
-}
-
-f_err = t_err;','','','');
-INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','','','',10,'JavaLikeCalc.JavaScript
-if(f_start)	{ srcPrm = false; items = new Object(); }
-
-alLev = 0;
-tErr = "";
-
-//Connect to source
-if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
-if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
-else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
-else {
-	//Attributes list get and "items" update
-	nLst = srcPrm.nodeList("a_");
-	for(i_n = 0; i_n < nLst.length; i_n++) {
-		aId = nLst[i_n].slice(2);
-		aNd = srcPrm[nLst[i_n]];
-		if(items[aId].isEVal()) {
-			items[aId] = itW = new Object();
-			itW.descr = aNd.descr();
-
-			// Writeable check
-			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
-			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
-				itW.wr = "";
-				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
-					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
-			}
-			itW.alarm = 0;
-		}
-		items[aId].val = aNd.get();
-	}
-
-	//Alarms process and mark
-	varS = "ups_status";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get() == "OB")	{ items[varS].alarm = 1; tErr += tr("Status")+" \""+tr("On battery")+"\"; "; }
-		else if(tP.get() == "LB")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Low battery")+"\"; "; }
-		else if(tP.get() == "SD")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Shutdown load")+"\"; "; }
-		else if(tP.get().indexOf("ALARM") != -1)	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("ALARM")+"\"; "; }
-		else items[varS].alarm = 0;
-	}
-	varS = "battery_packs";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None good battery present")+"; "; }
-		else items[varS].alarm = 0;
-	}
-	varS = "battery_charge";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toReal() < 20) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
-		else if(tP.get().toReal() < 5) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
-		else items[varS].alarm = 0;
-	}
-	varS = "battery_packs_bad";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toInt())	{ items[varS].alarm = 1; tErr += tr("Bad %1 batteries present").replace("%1",tP.get().toInt()); }
-		else items[varS].alarm = 0;
-	}
-	varS = "input_voltage";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toReal() > 10 && tP.get().toReal() < 210) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
-		else if(tP.get().toReal() > 250) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
-		else items[varS].alarm = 0;
-	}
-	varS = "input_frequency";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toReal() < 40) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
-		else if(tP.get().toReal() > 60) { items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
-		else if(tP.get().toReal() < 45) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
-		else if(tP.get().toReal() > 55) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
-		else items[varS].alarm = 0;
-	}
-	varS = "ups_load";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toReal() > 100)			{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
-		else if(tP.get().toReal() > 80)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
-		else items[varS].alarm = 0;
-	}
-	varS = "ups_temperature";
-	if(!(tP=srcPrm[varS]).isEVal()) {
-		if(tP.get().toReal() > 70) { items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
-		else if(tP.get().toReal() > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
-		else items[varS].alarm = 0;
-	}
-
-	//Set variables process
-	for(var aIt in items) {
-		it = items[aIt];
-		if(!it.set.isEVal()) {
-			aNd = srcPrm["a_"+it.id];
-			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
-			aNd.set(it.set);
-			it.set = EVAL_REAL;
-		}
-		alLev = max(alLev, it.alarm);
-	}
-}
-
-//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
-tErr = tErr.length ? ""+alLev+":"+tErr : "0";
-
-//Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1413790827);
-INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,'JavaLikeCalc.JavaScript
-using Special.FLibSYS;
-
-if(f_start) {
-	//Variables list prepare
-	varsLs = new Object();
-	//Тв1
-	varsLs["t1_1"] = 0; varsLs["t2_1"] = 1; varsLs["t3_1"] = 2;		//t
-	varsLs["V1_1"] = 3; varsLs["V2_1"] = 4;	varsLs["V3_1"] = 5;		//V
-	varsLs["M1_1"] = 6;	varsLs["M2_1"] = 7;	varsLs["M3_1"] = 8;		//M
-	varsLs["P1_1"] = 9;	varsLs["P2_1"] = 10;	//P
-	varsLs["Mg_1"] = 11;	//Mg
-	varsLs["Qo_1"] = 12;	//Qo
-	varsLs["Qg_1"] = 13;	//Qg
-	varsLs["dt_1"] = 14;	//dt
-	varsLs["BNR_1"] = 17; varsLs["BOC_1"] = 18;//BNR and BOC
-	varsLs["G1_1"] = 19; varsLs["G2_1"] = 20;	//G
-	//Тв2
-	varsLs["t1_2"] = 22; varsLs["t2_2"] = 23; varsLs["t3_2"] = 24;	//t
-	varsLs["V1_2"] = 25; varsLs["V2_2"] = 26; varsLs["V3_2"] = 27;	//V
-	varsLs["M1_2"] = 28; varsLs["M2_2"] = 29; varsLs["M3_2"] = 30;	//M
-	varsLs["P1_2"] = 31; varsLs["P2_2"] = 32;	//P
-	varsLs["Mg_2"] = 33;	//Mg
-	varsLs["Qo_2"] = 34;	//Qo
-	varsLs["Qg_2"] = 35;	//Qg
-	varsLs["dt_2"] = 36;	//dt
-	varsLs["BNR_2"] = 39; varsLs["BOC_2"] = 40;//BNR and BOC
-	varsLs["G1_2"] = 41; varsLs["G2_2"] = 42;	//G
-
-	//Buffers create
-	bfH = vArhBuf(4/*Real*/, 10, 3600*1000000, true, false);
-	bfD = vArhBuf(4/*Real*/, 10, 24*3600*1000000, true, false);
-	bfM = vArhBuf(4/*Real*/, 10, 24*3600*1000000, true, false);
-}
-
-t_err = "";
-//Imitation for values
-if(imit > 0.1) {
-	//SYS.messDebug("/VKT7/TMPL","imit="+t1_1+"; dt="+(imit*(rand(t1_1)-t1_1/2)/100));
-	for(var cA in varsLs)
-		if(cA.slice(0,2) == "dt") arguments[cA] = arguments["t1_"+cA.slice(3)]-arguments["t2_"+cA.slice(3)];
-		else arguments[cA] += imit*(rand(arguments[cA])-arguments[cA]/2)/100;
-	f_err = "0";
-	return;
-}
-
-if(f_stop) {
-	f_err = "";
-	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
-	return;
-}
-
-//Set transport and RTS
-if(f_start){ tr = SYS.nodeAt(trAddr,"."); tr.TS(true); valsPrec = false; valsSz = false; }
-if(!tr)	t_err = "1:Transport ''"+trAddr+"'' error.";
-
-req = SYS.XMLNode("mess").setAttr("ProtIt","VKT7").setAttr("addr",0);
-
-//Session start
-if(!t_err.length) {
-	SYS.messDebug("/VKT7/TMPL","Start session.");
-	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3F,0xFF,0x00,0x00,0xCC,0x80,0x00,0x00,0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//Request for service information
-if(!t_err.length && (f_start || firmVer.isEVal())) {
-	SYS.messDebug("/VKT7/TMPL","Reques for service info.");
-	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3f,0xf9,0x00,0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length) {
-		rez = req.text();
-		firmVer = (rez.charCodeAt(2)>>4)+(rez.charCodeAt(2)&0x0F)/10;
-		abonId = rez.slice(7,7+8);
-		netNum = rez.charCodeAt(15);
-		repDay = rez.charCodeAt(16);
-		modelImpl = rez.charCodeAt(17);
-	}
-}
-
-//Request for counter time and hour archive begin
-if(!t_err.length && (f_start || !lastHTm || !lastDTm || !lastResTm)) {
-	SYS.messDebug("/VKT7/TMPL","Reques for counter time and hour archive begin.");
-	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3f,0xf6,0x00,0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length) {
-		rez = req.text();
-		lastHTm = max(lastHTm, SYS.mktime(0,0,rez.charCodeAt(5),rez.charCodeAt(2),rez.charCodeAt(3)-1,2000+rez.charCodeAt(4)));
-		diffTm = floor((SYS.time()-SYS.mktime(0,0,rez.charCodeAt(9),rez.charCodeAt(6),rez.charCodeAt(7)-1,2000+rez.charCodeAt(8)))/3600);
-		leftHTm = (SYS.time()-lastHTm)/3600 - diffTm;
-	}
-	lastDTm = max(lastDTm, SYS.time()-maxDayDepth*24*3600);
-	leftDTm = (SYS.time()-lastDTm)/(24*3600);
-	lastResTm = max(lastResTm, SYS.time()-maxDayDepth*24*3600);
-	leftResTm = (SYS.time()-lastResTm)/(31*24*3600);
-}
-
-//Request for dimensions and precisions
-if(!t_err.length && (f_start || !valsPrec))
-{
-	SYS.messDebug("/VKT7/TMPL","Reques for dimensions and precisions.");
-	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0x72,
-		0x2C, 0x00, 0x00, 0x40, 0x07, 0x00,	//tTypeM
-		0x2D, 0x00, 0x00, 0x40, 0x07, 0x00,	//GTypeM
-		0x2E, 0x00, 0x00, 0x40, 0x07, 0x00,	//VTypeM
-		0x2F, 0x00, 0x00, 0x40, 0x07, 0x00,	//MTypeM
-		0x30, 0x00, 0x00, 0x40, 0x07, 0x00,	//PTypeM
-		0x35, 0x00, 0x00, 0x40, 0x07, 0x00,	//QoTypeM
-		0x37, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeHIM
-		0x38, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeM
-		0x39, 0x00, 0x00, 0x40, 0x01, 0x00,	//tTypeFractDiNum
-		0x3B, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum1
-		0x3C, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum1
-		0x3D, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum1
-		0x3E, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum1
-		0x42, 0x00, 0x00, 0x40, 0x01, 0x00,	//QoTypeFractDigNum1
-		0x45, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum2
-		0x46, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum2
-		0x47, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum2
-		0x48, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum2
-		0x4C, 0x00, 0x00, 0x40, 0x01, 0x00));	//QoTypeFractDigNum2
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length) {
-		req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3F,0xFE,0x00,0x00));
-		tr.messIO(req,"UserProtocol");
-		t_err = req.attr("err");
-		if(!t_err.length) {
-			rez = req.text();	off = 2;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			tTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			GTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			VTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			MTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			PTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QoTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QntTypeHIM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
-			QntTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
-			valsPrec = new Object();
-			valsPrec["tTypeFractDiNum"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["VTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["MTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["PTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["dtTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["QoTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["VTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["MTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["PTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["dtTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-			valsPrec["QoTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
-		}
-	}
-}
-
-//Request for values present list and size.
-if(!t_err.length && (f_start || !valsSz || !valsSz.length))
-{
-	SYS.messDebug("/VKT7/TMPL","Request for values present list and size.");
-	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3f,0xfc,0x00,0x00));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-	if(!t_err.length) {
-		rez = req.text();
-		valsSz = new Array();
-		for(off = 2; off < rez.length; off += 6)
-			valsSz[rez.charCodeAt(off)] = rez.charCodeAt(off+4);
-	}
-}
-
-//Readed items list write
-if(!t_err.length) {
-	SYS.messDebug("/VKT7/TMPL","Readed items list write.");
-	data = "";
-	for(var cA in varsLs) {
-		itId = varsLs[cA];
-		if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
-	}
-
-	if(!data.length) {
-		for(var cA in varsLs) arguments[cA] = EVAL_REAL;
-		f_err = "10:Data list for request empty.";
-		return;
-	}
-	req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xff,0x00,0x00,data.length)+data);
-	//SYS.messDebug("/VKT7/TMPL","SetDataList: "+Special.FLibSYS.strDec4Bin(req.text()));
-	tr.messIO(req,"UserProtocol");
-	t_err = req.attr("err");
-}
-
-//Read 0-current value(4), 1-hour archive(0) and 2-result month archive(3)
-errAttrs = "";
-for(i_dt = 0; !t_err.length && i_dt < 4; i_dt++) {
-	tpReq = 4;																						//current
-	if(i_dt == 1)			{ tpReq = 0; if(!arhH.length) continue; }		//hour archive
-	else if(i_dt == 2)	{ tpReq = 1; if(!arhD.length) continue; }		//day archive
-	else if(i_dt == 3)	{ tpReq = 3; if(!arhRes.length) continue; }	//result archive
-
-	//Request for curent values (4).
-	if(tpReq == 4 && !t_err.length) {
-		SYS.messDebug("/VKT7/TMPL","Request for curent values.");
-		req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,0x04,0x00));
-		tr.messIO(req,"UserProtocol");
-		t_err = req.attr("err");
-	}
-
-	//Request for archive values hour
-	if(tpReq == 0) {
-		if(!t_err.length) {
-			if((SYS.time()-lastHTm-diffTm*3600)/3600 < 2) continue;	//No more ready hours present
-			SYS.messDebug("/VKT7/TMPL","Request for hour archive values.");
-			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
-			tr.messIO(req,"UserProtocol");
-			t_err = req.attr("err");
-		}
-
-		// Set for hour archive value data
-		if(!t_err.length) {
-			SYS.messDebug("/VKT7/TMPL","Request for set archive data.");
-			stHour = stDay = stMonth = stYear = 0;
-			SYS.localtime(lastHTm, 0, 0, stHour, stDay, stMonth, stYear);
-			stHour++;
-			rdTime = SYS.mktime(0, 0, stHour, stDay, stMonth, stYear);
-
-			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,stDay,stMonth+1,stYear-2000,stHour));
-			tr.messIO(req,"UserProtocol");
-			t_err = req.attr("err");
-			if(t_err.parse(1,":").toInt() == 3) { lastHTm = rdTime; leftHTm = (SYS.time()-lastHTm)/3600 - diffTm; t_err = ""; continue; }
-		}
-	}
-
-	//Request for archive values day
-	if(tpReq == 1) {
-		if(!t_err.length) {
-			if((SYS.time()-lastDTm-diffTm*3600)/(24*3600) < 1) continue;	//No more ready days present
-			SYS.messDebug("/VKT7/TMPL","Request for day archive values.");
-			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
-			tr.messIO(req,"UserProtocol");
-			t_err = req.attr("err");
-		}
-
-		// Set for day archive value data
-		if(!t_err.length) {
-			SYS.messDebug("/VKT7/TMPL","Request for set archive data.");
-			stDay = stMonth = stYear = 0;
-			SYS.gmtime(lastDTm, 0, 0, 0, stDay, stMonth, stYear);
-			stDay++;
-			rdDTime = SYS.timegm(0, 0, 0, stDay, stMonth, stYear);
-
-			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,stDay,stMonth+1,stYear-2000,stHour));
-			tr.messIO(req,"UserProtocol");
-			t_err = req.attr("err");
-			if(t_err.parse(1,":").toInt() == 3) { lastDTm = rdDTime; leftDTm = (SYS.time()-lastDTm)/(24*3600) - diffTm; t_err = ""; continue; }
-		}
-	}
-
-	//Request for results month archive
-	if(tpReq == 3) {
-		if(!t_err.length) {
-			if((SYS.time()-lastResTm-diffTm*3600)/(24*3600) < 31) continue;	//No more ready month present
-			SYS.messDebug("/VKT7/TMPL","Request for results month archive values.");
-			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
-			tr.messIO(req,"UserProtocol");
-			t_err = req.attr("err");
-		}
-		// Set for month results archive value data
-		if(!t_err.length) {
-			SYS.messDebug("/VKT7/TMPL","Request for set archive data.");
-			stMonth = stYear = 0;
-			SYS.gmtime(lastResTm, 0, 0, 0, 0, stMonth, stYear);
-			stMonth++;
-			rdResTime = SYS.timegm(0, 0, 0, repDay, stMonth, stYear);
-
-			req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,repDay,stMonth+1,stYear-2000,0));
-			tr.messIO(req,"UserProtocol");
-			t_err = req.attr("err");
-			if(t_err.parse(1,":").toInt() == 3) { lastResTm = rdResTime; leftResTm = (SYS.time()-lastResTm)/(31*24*3600); t_err = ""; continue; }
-		}
-	}
-
-	//Request for data read
-	if(!t_err.length) {
-		SYS.messDebug("/VKT7/TMPL","Request for data read.");
-		req.setAttr("err","2:No connection").setText(SYS.strFromCharCode(0x03,0x3F,0xFE,0x00,0x00));
-		tr.messIO(req,"UserProtocol");
-		t_err = req.attr("err");
-		if(!t_err.length) {
-			rez = req.text(); off = 2; vSz = 0;
-			for(var cA in varsLs) {
-				itId = varsLs[cA]; vSz = valsSz[itId];
-				if(vSz.isEVal()) {
-					if(tpReq == 4) arguments[cA] = EVAL_REAL;
-					continue;
-				}
-				//SYS.messDebug("/VKT7/TMPL","off: "+off+"; itId: "+itId+"; vSz: "+vSz);
-				if(rez.charCodeAt(off+vSz) == 0xC0) {
-					for(pVal = 0, i_b = 0; i_b < vSz; i_b++) pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
-					//Float type values
-					if(cA[0] == "G") pVal = floatMergeWord(pVal&0xFFFF, (pVal>>16)&0xFFFF);
-					//Integer type values, negative process
-					else if(pVal&(0x80<<(8*(vSz-1))))	pVal -= (1<<(8*vSz));
-					// Type specific
-					if(cA[0] == "t")						tmpVl = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
-					else if(cA[0] == "V")				tmpVl = pVal/pow(10,valsPrec["VTypeFractDigNum"+cA[3]]);
-					else if(cA[0] == "M")				tmpVl = pVal/pow(10,valsPrec["MTypeFractDigNum"+cA[3]]);
-					else if(cA[0] == "P")				tmpVl = pVal/pow(10,valsPrec["PTypeFractDigNum"+cA[3]]);
-					else if(cA[0] == "Q")				tmpVl = pVal/pow(10,valsPrec["QoTypeFractDigNum"+cA[3]]);
-					else if(cA.slice(0,2) == "dt")tmpVl = pVal/pow(10,valsPrec["dtTypeFractDigNum"+cA[3]]);
-					else tmpVl = pVal;
-
-					// Write current or archive
-					if(tpReq == 4) {
-						arguments[cA] = tmpVl;
-						SYS.messDebug("/VKT7/TMPL","Set current "+cA+": "+tmpVl);
-					}
-					else if(!(aObj=vArh(this.nodePath(".")+"."+cA)).isNull()) {
-						if(tpReq == 0) {
-							bfH.set(tmpVl, rdTime, 0); aObj.copy(bfH, rdTime, 0, rdTime, 0, arhH);
-							SYS.messDebug("/VKT7/TMPL","Write to hour archive for time: "+rdTime+"; "+cA+": "+tmpVl);
-						}
-						if(tpReq == 1) {
-							bfD.set(tmpVl, rdDTime, 0); aObj.copy(bfD, rdDTime, 0, rdDTime, 0, arhD);
-							SYS.messDebug("/VKT7/TMPL","Write to day archive for time: "+rdDTime+"; "+cA+": "+tmpVl);
-						}
-						else if(tpReq == 3) {
-							bfM.set(tmpVl, rdResTime, 0); aObj.copy(bfM, rdResTime, 0, rdResTime, 0, arhRes);
-							SYS.messDebug("/VKT7/TMPL","Write to result month archive for time: "+rdResTime+"; "+cA+": "+tmpVl);
-						}
-					}
-				}
-				else if(tpReq == 4) { arguments[cA] = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
-				off += vSz+2;
-			}
-			if(tpReq == 0) { lastHTm = rdTime; leftHTm = (SYS.time()-lastHTm)/3600 - diffTm; }
-			else if(tpReq == 1) { lastDTm = rdDTime; leftDTm = (SYS.time()-lastDTm)/(24*3600) - diffTm; }
-			else if(tpReq == 3) { lastResTm = rdResTime; leftResTm = (SYS.time()-lastResTm)/(31*24*3600); }
-		}
-	}
-}
-
-if(t_err.length) {
-	SYS.messDebug("/VKT7/TMPL","Error response: "+t_err);
-	f_err = t_err;
-	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
-}
-else f_err = errAttrs.length ? "11:Quality errors: "+errAttrs : "0";','','',1404847065);
-CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
-INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.','Сигналізація за дискретним параметром.','Сигнализация по дискретному параметру.',10,'JavaLikeCalc.JavaScript
-if(f_start)	f_err = "0", prevVar = EVAL_REAL;
-
-//State set
-tErr = "0", levErr = 0;
-if(in.isEVal())	tErr = "1:"+tr("No data or connection with source"), levErr = -5;
-else if(in == alrm.toInt())	tErr = "3:"+alrm.parse(2,":"), levErr = -alrm.parse(1,":").toInt();
-
-//Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-f_err = tErr;','','',1413964768);
-INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders','Сигн. аналог. за границями','Сигн. аналог. по границам','The template of simple parameter included boders and dimension variable.','Шаблон простого параметру з перевіркою границь та одиницею виміру.','Шаблон простого параметра с проверкой границ и единицей измерения.',10,'JavaLikeCalc.JavaScript
-var=iMult*(in+iAdd);
-if(var>max)			f_err="1:Upper work border violation";
-else if(var<min)			f_err="2:Bottom work border violation";
-else if(aMax>aMin && var>aMax)		f_err="3:Upper alarm border violation";
-else if(aMax>aMin && var<aMin)		f_err="4:Bottom alarm border violation";
-else if(wMax>wMin && var>wMax)	f_err="5:Upper warning border violation";
-else if(wMax>wMin && var<wMin)	f_err="6:Bottom warning border violation";
-else f_err="0";','JavaLikeCalc.JavaScript
-var=iMult*(in+iAdd);
-if(var>max)			f_err="1:Порушення верхньої робочої границі";
-else if(var<min)			f_err="2:Порушення нижньої робочої границі";
-else if(aMax>aMin && var>aMax)		f_err="3:Порушення верхньої аварійної границі";
-else if(aMax>aMin && var<aMin)		f_err="4:Порушення нижньої аварійної границі";
-else if(wMax>wMin && var>wMax)	f_err="5:Порушення верхньої попереджувальної границі";
-else if(wMax>wMin && var<wMin)	f_err="6:Порушення нижньої попереджувальної границі";
-else f_err="0";','JavaLikeCalc.JavaScript
-var=iMult*(in+iAdd);
-if(var>max)		f_err="1:Нарушение верхней рабочей границы";
-else if(var<min)	f_err="2:Нарушение нижней рабочей границы";
-else if(aMax>aMin && var>aMax)	f_err="3:Нарушение верхней аварийной границы";
-else if(aMax>aMin && var<aMin)	f_err="4:Нарушение нижней аварийной границы";
-else if(wMax>wMin && var>wMax)	f_err="5:Нарушение верхней предупредительной границы";
-else if(wMax>wMin && var<wMin)	f_err="6:Нарушение нижней предупредительной границы";
-else f_err="0";','');
-INSERT INTO "tmplib_base" VALUES('digitBlock','Diskret parameters block','Блок дискр. параметрів','Блок дискр. параметров','The block for union of Diskret parameters for one device control.','Блок для збору дискретних параметрів, керуючих одним апаратом.','Блок для сборки дискретных параметров управляющих одним аппаратом.',10,'JavaLikeCalc.JavaScript
-set = false;
-if(cmdOpen && !(last_cmd&0x1))	{ last_cmd = last_cmd|0x1; set = true; }
-if(cmdClose && !(last_cmd&0x2))	{ last_cmd = last_cmd|0x2; set = true; }
-if(cmdStop && !(last_cmd&0x4))	{ last_cmd = last_cmd|0x4; set = true; }
-if(set && tCmd > 0) w_tm = tCmd;
-if(w_tm > 0) w_tm -= 1/f_frq;
-else {
-	w_tm = 0;
-	if(tCmd > 0) {
-		if(last_cmd&0x1) { cmdOpen = false; last_cmd = last_cmd&(~0x1); }
-		if(last_cmd&0x2) { cmdClose = false; last_cmd = last_cmd&(~0x2); }
-		if(last_cmd&0x4) { cmdStop = false; last_cmd = last_cmd&(~0x4); }
-	}
-}','','',1414519215);
-INSERT INTO "tmplib_base" VALUES('gasPoint','Flow control point','Витрато-вимірювальний вузол','Расходомерный узел',' ',' ','',10,'JavaLikeCalc.JavaScript
-F=200+(rand(5)-2.5);
-Q+=F/3600;
-P=9+(rand(2)-1);
-T=15+(rand(2)-1);
-dP=F/33;
-DS=1+(rand(0.2)-0.1);
-','','','');
-INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (Unif)','Ручний ввід (Уніф)','Ручной ввод (Униф)','Unified template for manual input signals.','Уніфікований шаблон для ручного вводу значень сигналів.','Унифицированный шаблон ручного ввода сигнала.',10,'JavaLikeCalc.JavaScript
-if(f_start)	f_err = "0";
-
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-//Manual input set process
-if(!varIn.isEVal() && (varIn != var || inout.isEVal()))
-{
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (varIn-min)/(max-min);
-	if(scSqr)	vCalibr = pow(vCalibr,2);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min(pMax,pMin)+vCalibr*abs(pMax-pMin);
-	inout = vCalibr/iMult - iAdd;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(inout > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:The signal exceed to upper hardware border"; levErr = -5;
-	var = max + plcExcess*(max-min)/100;
-}
-else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:The signal exceed to bottom hardware border"; levErr = -5;
-	var = min - plcExcess*(max-min)/100;
-}
-if(!tErr) {
-	vCalibr = iMult*(inout+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	varIn = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr="3:Upper alarm border error"; levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr="4:Nether alarm border error"; levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr="5:Upper warning border error"; levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr="6:Nether warning border error"; levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr="7:Too big parameter''s motion speed"; levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start)	f_err = "0";
-
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-//Manual input set process
-if(!varIn.isEVal() && (varIn != var || inout.isEVal()))
-{
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (varIn-min)/(max-min);
-	if(scSqr)	vCalibr = pow(vCalibr,2);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min(pMax,pMin)+vCalibr*abs(pMax-pMin);
-	inout = vCalibr/iMult - iAdd;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(inout > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:Сигнал перевищив верхню апаратну границю"; levErr = -5;
-	var = max + plcExcess*(max-min)/100;
-}
-else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:Сигнал перевищив нижню апаратну границю"; levErr = -5;
-	var = min - plcExcess*(max-min)/100;
-}
-if(!tErr) {
-	vCalibr = iMult*(inout+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	varIn = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr="3:Помилка верхньої аварійної границі"; levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr="4:Помилка нижньої аварійної границі"; levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr="5:Помилка верхньої поперджув. границі"; levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr="6:Помилка нижньої поперджув. границі"; levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr="7:Дуже велика швидкість зміни параметру"; levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start)	f_err = "0";
-
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-//Manual input set process
-if(!varIn.isEVal() && (varIn != var || inout.isEVal()))
-{
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	vCalibr = (varIn-min)/(max-min);
-	if(scSqr)	vCalibr = pow(vCalibr,2);
-	if(pMax < pMin) vCalibr = 1-vCalibr;
-	vCalibr = min(pMax,pMin)+vCalibr*abs(pMax-pMin);
-	inout = vCalibr/iMult - iAdd;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(inout > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:Выход сигнала за верхнюю аппаратную границу"; levErr = -5;
-	var = max + plcExcess*(max-min)/100;
-}
-else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:Выход сигнала за нижнюю аппаратную границу"; levErr = -5;
-	var = min - plcExcess*(max-min)/100;
-}
-if(!tErr) {
-	vCalibr = iMult*(inout+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	varIn = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr="3:Нарушение верхней аварийной границы"; levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr="4:Нарушение нижней аварийной границы"; levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr="5:Нарушение верхней предупредительной границы"; levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr="6:Нарушение нижней предупредительной границы"; levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr="7:Очень большая скорость изменения параметра"; levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-	f_err = tErr;
-}',1414688109);
-INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,'JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-  if(!plcImitIn.isEVal()) in = plcImitIn;
-  else {
-    plcDif = abs(pMax-pMin);
-    in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-  }
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(!tErr) {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-  if(!plcImitIn.isEVal()) in = plcImitIn;
-  else {
-    plcDif = abs(pMax-pMin);
-    in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-  }
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(!tErr) {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
-	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-	f_err = tErr;
-}','',1414688065);
-INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,'JavaLikeCalc.JavaScript
-set=false;
-if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
-if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
-if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
-if( set && tCmd > 0 ) w_tm = tCmd;
-if( w_tm > 0 ) w_tm -= 1./f_frq;
-else
-{
-  w_tm=0;
-  if( tCmd > 0 )
-  {
-    if( last_cmd==1 ) com = false;
-    if( last_cmd==2 ) close = false;
-    if( last_cmd==3 ) stop = false;
-    last_cmd = 0;
-  }
-}','JavaLikeCalc.JavaScript
-set=false;
-if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
-if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
-if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
-if( set && tCmd > 0 ) w_tm = tCmd;
-if( w_tm > 0 ) w_tm -= 1./f_frq;
-else
-{
-  w_tm=0;
-  if( tCmd > 0 )
-  {
-    if( last_cmd==1 ) com = false;
-    if( last_cmd==2 ) close = false;
-    if( last_cmd==3 ) stop = false;
-    last_cmd = 0;
-  }
-}','JavaLikeCalc.JavaScript
-set=false;
-if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
-if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
-if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
-if( set && tCmd > 0 ) w_tm = tCmd;
-if( w_tm > 0 ) w_tm -= 1./f_frq;
-else
-{
-  w_tm=0;
-  if( tCmd > 0 )
-  {
-    if( last_cmd==1 ) com = false;
-    if( last_cmd==2 ) close = false;
-    if( last_cmd==3 ) stop = false;
-    last_cmd = 0;
-  }
-}','');
-INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигн. (Униф, состояния)','The unified template for process analog signals with properties impulse PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.',10,'JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "1:The signal exceed to upper hardware border"; var = max+plcExcess*(max-min)/100;}
-else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "2:The signal exceed to bottom hardware border"; var = min-plcExcess*(max-min)/100;}
-if( tErr ) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
-	{ tErr="3:Upper alarm border error"; HH=true; EVAL=H=LL=L=false; }
-	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
-	{ tErr="4:Bottom alarm border error"; LL=true; EVAL=HH=H=L=false; }
-	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
-	{ tErr="5:Upper warning border error"; H=true; EVAL=HH=LL=L=false; }
-	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
-	{ tErr="6:Bottom warning border error"; L=true; EVAL=HH=H=LL=false; }
-	else if( speed && varDt > speed ) { tErr="7:Too big parameter''s motion speed";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "1:Сигнал перевищив верхню апаратну границю"; var = max+plcExcess*(max-min)/100;}
-else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "2:Сигнал перевищив нижню апаратну границю"; var = min-plcExcess*(max-min)/100;}
-if( tErr ) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
-	{ tErr="3:Помилка верхньої границі аварії"; HH=true; EVAL=H=LL=L=false; }
-	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
-	{ tErr="4:Помилка нижньої границі аварії"; LL=true; EVAL=HH=H=L=false; }
-	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
-	{ tErr="5:Помилка верхньої границі попередження"; H=true; EVAL=HH=LL=L=false; }
-	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
-	{ tErr="6:Помилка нижньої границі попередження"; L=true; EVAL=HH=H=LL=false; }
-	else if( speed && varDt > speed ) { tErr="7:Дуже велика швидкість зміни параметру";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
-{ tErr = "1:Выход сигнала за верхнюю аппаратную границу"; var = max+plcExcess*(max-min)/100;}
-else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
-{ tErr = "2:Выход сигнала за нижнюю аппаратную границу"; var = min-plcExcess*(max-min)/100;}
-if(tErr)
-{
-	//var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-	EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if(aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))))
-	{ tErr="3:Нарушение верхней аварийной границы"; HH=true; EVAL=H=LL=L=false; }
-	else if(aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))))
-	{ tErr="4:Нарушение нижней аварийной границы"; LL=true; EVAL=HH=H=L=false; }
-	else if(wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))))
-	{ tErr="5:Нарушение верхней предупредительной границы"; H=true; EVAL=HH=LL=L=false; }
-	else if(wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))))
-	{ tErr="6:Нарушение нижней предупредительной границы"; L=true; EVAL=HH=H=LL=false; }
-	else if(speed && varDt > speed) { tErr="7:Очень большая скорость изменения параметра";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-f_err = tErr;','');
-INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,'JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-	if(!plcImitIn.isEVal()) in = plcImitIn;
-	else {
-		plcDif = abs(pMax-pMin);
-		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(tErr)	EVAL = true, HH = H = LL = L = false;
-else {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	EVAL = HH_ = H_ = LL_ = L_ = false;
-	if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
-	if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L_ = true; }
-	if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H_ = true; }
-	if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL_ = true; }
-	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH_ = true; }
-	HH = HH_; H = H_; LL = LL_; L = L_;
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-	f_err = tErr;
-}','JavaLikeCalc.JavaScript
-if(f_start) {
-	f_err = "0";
-	prevVar = EVAL_REAL;
-	//Prepare data for preprocessing
-	inPrcLng = "JavaLikeCalc.JavaScript";
-	inPrcArgs = new Object();
-	inPrcArgs.this = this;
-}
-pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
-if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
-
-if(plcImit) {	//Data imitation
-	if(!plcImitIn.isEVal()) in = plcImitIn;
-	else {
-		plcDif = abs(pMax-pMin);
-		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-//Call specific preprocessing procedure
-if(inProc.length)	{
-	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
-	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
-	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
-	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
-	in = inPrcArgs.in;
-}
-
-levErr = 0;
-tErr = "0";
-//Input data check and postprocess
-if(in.isEVal()) {
-	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
-	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
-	var = EVAL_REAL;
-	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
-	else if(subMode == 2) var = subVar;
-}
-if(tErr) {
-  EVAL = true;
-  HH = H = LL = L = false;
-}
-else {
-	vCalibr = iMult*(in+iAdd);
-	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
-	if(!passIn || scSqr) {
-		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
-		if(pMax < pMin) vCalibr = 1-vCalibr;
-		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
-	}
-	if(var.isEVal())	var = vCalibr;
-	varDt = vCalibr - var;
-	var += varDt/max(1,Tf*f_frq);
-	prevVar = var;
-
-	bndVarHyst = (max-min)*HystBnd/100;
-	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
-	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH = true; EVAL = H = LL = L = false; }
-	else if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
-	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL = true; EVAL = HH = H = L = false; }
-	else if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
-	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H = true; EVAL = HH = LL = L = false; }
-	else if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
-	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L = true; EVAL = HH = H = LL = false; }
-	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
-	else EVAL = HH = H = LL = L = false;
-}
-
-//Alarms forming
-if(alSup)	f_err = "0";
-else {
-	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
-	else if(f_err.toInt() && !tErr.toInt())
-		this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
-	f_err = tErr;
-}','',1415296612);
-INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,'JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "1:The signal exceed to upper hardware border"; var = max+plcExcess*(max-min)/100;}
-else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "2:The signal exceed to bottom hardware border"; var = min-plcExcess*(max-min)/100;}
-if( tErr ) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
-	{ tErr="3:Upper alarm border error"; HH=true; EVAL=H=LL=L=false; }
-	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
-	{ tErr="4:Nether alarm border error"; LL=true; EVAL=HH=H=L=false; }
-	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
-	{ tErr="5:Upper warning border error"; H=true; EVAL=HH=LL=L=false; }
-	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
-	{ tErr="6:Nether warning border error"; L=true; EVAL=HH=H=LL=false; }
-	else if( speed && varDt > speed ) { tErr="7:Too big parameter''s motion speed";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "1:Сигнал перевищив верхню апаратну границю"; var = max+plcExcess*(max-min)/100;}
-else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
-{ tErr = "2:Сигнал перевищив нижню апаратну границю"; var = min-plcExcess*(max-min)/100;}
-if( tErr ) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
-	{ tErr="3:Помилка верхньої границі аварії"; HH=true; EVAL=H=LL=L=false; }
-	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
-	{ tErr="4:Помилка нижньої границі аварії"; LL=true; EVAL=HH=H=L=false; }
-	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
-	{ tErr="5:Помилка верхньої границі попередження"; H=true; EVAL=HH=LL=L=false; }
-	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
-	{ tErr="6:Помилка нижньої границі попередження"; L=true; EVAL=HH=H=LL=false; }
-	else if( speed && varDt > speed ) { tErr="7:Дуже велика швидкість зміни параметру";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','JavaLikeCalc.JavaScript
-if(f_start) f_err = "0";
-
-if(plcImit)
-{
-	if(plcImitIn != EVAL_REAL) in = plcImitIn;
-	else
-	{
-		plcDif = plcMax-plcMin;
-		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
-	}
-}
-
-tErr = "0";
-if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
-{ tErr = "1:Выход сигнала за верхнюю аппаратную границу"; var = max+plcExcess*(max-min)/100;}
-else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
-{ tErr = "2:Выход сигнала за нижнюю аппаратную границу"; var = min-plcExcess*(max-min)/100;}
-if(tErr) 
-{
-  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
-  EVAL = true;
-}
-else
-{
-	vCalibr = iMult*(in+iAdd);
-
-	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
-	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
-	var += varDt/max(1,Tf/1000*f_frq);
-
-	bndVarHyst = (aMax-aMin)*HystBnd/100;
-	if(aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))))
-	{ tErr="3:Нарушение верхней аварийной границы"; HH=true; EVAL=H=LL=L=false; }
-	else if(aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))))
-	{ tErr="4:Нарушение нижней аварийной границы"; LL=true; EVAL=HH=H=L=false; }
-	else if(wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))))
-	{ tErr="5:Нарушение верхней предупредительной границы"; H=true; EVAL=HH=LL=L=false; }
-	else if(wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))))
-	{ tErr="6:Нарушение нижней предупредительной границы"; L=true; EVAL=HH=H=LL=false; }
-	else if(speed && varDt > speed) { tErr="7:Очень большая скорость изменения параметра";   EVAL=true; HH=H=LL=L=false; }
-	else EVAL=HH=H=LL=L=false;
-}
-
-if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
-else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
-f_err = tErr;','');
-INSERT INTO "tmplib_base" VALUES('SNMP','','','','','','',10,'JavaLikeCalc.JavaScript
-if(f_start)	{ srcPrm = false; items = new Object(); }
-
-alLev = 0;
-tErr = "";
-
-//Connect to source
-if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
-if(!srcPrm) { tErr = "No connection to source object"; alLev = 3; }
-else if(srcPrm.err.get() != 0)	 { tErr = "Source error: "+srcPrm.err.get().parse(1,":"); alLev = 3; }
-else {
-	//Attributes list get and "items" update
-	nLst = srcPrm.nodeList("a_");
-	lstTable = "";
-	for(i_n = 0; i_n < nLst.length; i_n++) {
-		aNd = srcPrm[nLst[i_n]];
-		aId = nLst[i_n].slice(2);
-		aIdPrc = aNd.descr();
-		if(!aIdPrc.parse(1,"::").length) continue;
-		if(aIdPrc.slice(-13) == "TotalNumber.0")	{ lstTable = aIdPrc.slice(0,-13); continue; }
-
-		//Manual tables check
-		if(!lstTable.length || lstTable != aIdPrc.slice(0,lstTable.length))
-			for(off = 0; (iMnT=manTables.parse(0,";",off)).length; )
-				if(iMnT == aIdPrc.slice(0,iMnT.length)) { lstTable = iMnT; break; }
-		
-		if(lstTable.length && lstTable == aIdPrc.slice(0,lstTable.length))
-			aIdPrc = lstTable.parse(1,"::")+(prt1=aIdPrc.slice(lstTable.length)).parse(1,".")+prt1.parse(0,".");
-		else aIdPrc = aIdPrc.parse(1,"::").parse(0,".");
-
-		if(items[aIdPrc].isEVal()) {
-			items[aIdPrc] = itW = new Object();
-			itW.descr = aIdPrc;//aNd.descr();
-			itW.id = aId;
-
-			// Writeable check
-			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
-			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
-				itW.wr = "";
-				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
-					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
-			}
-			itW.alarm = 0;
-		}
-		cVl = aNd.get();
-		// Selectable value specifying
-		if(aNd.flg()&0x01)
-			for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
-				if(cVl == selId && cVl != aNd.selNames().parse(pos,";")) {		
-					cVl = aNd.selNames().parse(pos,";")+"("+cVl+")";
-					break;
-				}
-		items[aIdPrc].val = cVl;
-	}
-
-	//Alarms process and mark
-	/*varS = "battery_packs";
-	if(tP=srcPrm[varS])
-	{
-		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += "None good battery present; "; }
-		else items[varS].alarm = 0;
-	}*/
-
-	//Set variables process
-	for(var aIt in items) {
-		it = items[aIt];
-		if(!it.set.isEVal()) {
-			aNd = srcPrm["a_"+it.id];
-			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
-			aNd.set(it.set);
-			it.set = EVAL_REAL;
-		}
-		alLev = max(alLev, it.alarm);
-	}
-}
-
-//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
-tErr = tErr.length ? ""+alLev+":"+tErr : "0";
-
-//Alarms forming
-if(tErr.toInt() && tErr.toInt() != f_err.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
-else if(f_err.toInt() && !tErr.toInt())
-	this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
-f_err = tErr;','','',1403717921);
 CREATE TABLE 'LogLevPrm_prescription' ("SHIFR" TEXT DEFAULT '' ,"OWNER" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"EN" INTEGER DEFAULT '0' ,"PRM" TEXT DEFAULT '' , PRIMARY KEY ("SHIFR","OWNER"));
 INSERT INTO "LogLevPrm_prescription" VALUES('timer','','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовой таймер. Удерживает выполнение до завершения времени.','Типовий таймер. Утримує виконання до завершення часу.',1,'PrescrTempl.timer');
 INSERT INTO "LogLevPrm_prescription" VALUES('backTimer','','Background timer','Фоновый таймер','Фоновий таймер','Background timer. Updating parallel with current command.','Фоновый таймер. Обновляется параллельно с текущей командой.','Фоновий таймер. Оновлюється паралельно з поточною командою.',1,'PrescrTempl.backTimer');
@@ -6149,4 +3811,2048 @@ INSERT INTO "Trs" VALUES('UPS overloaded','ДБЖ перевантажено','�
 INSERT INTO "Trs" VALUES('UPS load high','Високе навантаження ДБЖ','Высокая нагрузка ИБП');
 INSERT INTO "Trs" VALUES('UPS overheated','ДБЖ перегрітий','ИБП перегретый');
 INSERT INTO "Trs" VALUES('Temperature high','Висока температура','Высокая температура');
+INSERT INTO "Trs" VALUES('Levitation','Левітація','Левитация');
+INSERT INTO "Trs" VALUES('No Levitation','Не левітація','Не левитация');
+INSERT INTO "Trs" VALUES('Acceleration','Розгін','Разгон');
+INSERT INTO "Trs" VALUES('Normal','Нормальний','Нормальный');
+INSERT INTO "Trs" VALUES('Deceleration (Brake)','Гальмування','Торможение');
+INSERT INTO "Trs" VALUES('Autotest','Автотест','Автотест');
+INSERT INTO "Trs" VALUES('Tuning','Підлаштування','Подстройка');
+INSERT INTO "Trs" VALUES('Tuning Complete','Підлаштування завершене','Подстройка завершена');
+INSERT INTO "Trs" VALUES('Local','Локально','Локально');
+INSERT INTO "Trs" VALUES('Remote','Віддалено','Удалённо');
+INSERT INTO "Trs" VALUES('Start session.','Запуск сеансу.','Запуск сеанса.');
+INSERT INTO "Trs" VALUES('Request for values present list and size.','Запит наявних значень та розмірів','Запрос доступных значений и размеров');
+INSERT INTO "Trs" VALUES('Readed items list write.','Запис переліку элементів для читання.','Запись списка элементов для чтения.');
+INSERT INTO "Trs" VALUES('Request for curent values.','','');
+INSERT INTO "Trs" VALUES('Request for hour archive values.','','');
+INSERT INTO "Trs" VALUES('Request for set archive data.','','');
+INSERT INTO "Trs" VALUES('Request for day archive values.','','');
+INSERT INTO "Trs" VALUES('Request for results month archive values.','','');
+INSERT INTO "Trs" VALUES('Request for data read.','','');
+INSERT INTO "Trs" VALUES('Set current','','');
+INSERT INTO "Trs" VALUES('Write to hour archive for time','','');
+INSERT INTO "Trs" VALUES('Write to day archive for time','','');
+INSERT INTO "Trs" VALUES('Write to result month archive for time','','');
+INSERT INTO "Trs" VALUES('Error response','Помилка відповіді','Ошибка ответа');
+INSERT INTO "Trs" VALUES('Quality errors','Помилки якості','Ошибки качетсва');
+INSERT INTO "Trs" VALUES('Transport ''%1'' error.','','');
+INSERT INTO "Trs" VALUES('No connection','Нема підключення','Нет подключения');
+INSERT INTO "Trs" VALUES('Data list for request empty.','','');
+INSERT INTO "Trs" VALUES('Unknown','Невідомий','Неизвестный');
+INSERT INTO "Trs" VALUES('Deceleration','Гальмування','Торможение');
+INSERT INTO "Trs" VALUES('Stop operation failure','Невдача операції зупинки','Неудача операции останова');
+INSERT INTO "Trs" VALUES('Idling failure','Невдача простою','Неудача простоя');
+INSERT INTO "Trs" VALUES('Regeneration breaking failure','','');
+INSERT INTO "Trs" VALUES('Deceleration failure','Помилка гальмування','Ошибка торможения');
+INSERT INTO "Trs" VALUES('Request for service info.','','');
+INSERT INTO "Trs" VALUES('Request for counter time and hour archive begin.','','');
+INSERT INTO "Trs" VALUES('Request for dimensions and precisions.','','');
+CREATE TABLE 'tmplib_DevLib' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "tmplib_DevLib" VALUES('SCU750','','','','Typical EDWARDS TURBOMOLECULAR PUMPS data request by SCU750 Cotrol Unit protocol.','Опитування даних типових EDWARDS TURBOMOLECULAR PUMPS за допомогою протоколу блоків керування SCU750.','Опрос данных типовых EDWARDS TURBOMOLECULAR PUMPS с помощью протокола блоков управления SCU750.',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	version = "";
+	operModes = new Object();
+	operModes[1] = tr("Levitation");
+	operModes[2] = tr("No Levitation");
+	operModes[3] = tr("Acceleration");
+	operModes[4] = tr("Normal");
+	operModes[5] = tr("Deceleration (Brake)");
+	operModes[6] = tr("Autotest");
+	operModes[7] = tr("Tuning");
+	operModes[8] = tr("Tuning Complete");
+}
+
+tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+req = SYS.XMLNode("mess").setAttr("ProtIt","SCU750").setAttr("addr",addr);
+
+//======= Commands =========
+//START, STOP and RESET process
+if(comReset == true) req.setText(" E04");
+else if(comStop == true) req.setText(" E02");
+else if(comStart == true) req.setText(" E01");
+else req.setText("");
+if(req.text().length) { tr.messIO(req,"UserProtocol"); comReset=comStop=comStart=false; }
+
+//Speed setpoint set
+if(spSpeed != spSpeedPrev) {
+	req.setText(" h"+spSpeed.toString(16,4));
+	tr.messIO(req,"UserProtocol");
+	spSpeedPrev = spSpeed;
+}
+
+//======= Data getting (by self bigger period) ========
+if((cnt++)%max(1,perGet*f_frq))	return;
+t_err = "";
+
+//Read version, single
+if(!version.length || version.isEVal()) {
+	req.setText("?V");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); version = EVAL_STR; }
+	else {
+		if(req.text().length != 42) version = EVAL_STR;
+		else {
+			CUSv = "";
+			lstNoSp = 0;
+			for(i_s = 2; i_s < 32; i_s+=2) {
+				cod = req.text().slice(i_s,i_s+2).toInt(16);
+				CUSv += SYS.strFromCharCode(cod);
+				if(cod != 0x20) lstNoSp = i_s/2;
+			}
+			version = "Contr. Unit Soft V.="+CUSv.slice(0,lstNoSp)+"; "
+					    "Motor Drive Soft V.="+req.text().charAt(35)+"."+req.text().charAt(36)+"; "
+					    "DSP Soft V.="+req.text().charAt(39)+"."+req.text().charAt(40);
+		}
+	}
+}
+
+//Read rotational speed.
+if(t_err.length) tTMS = tMotor = rotSpeed = EVAL_INT;
+else {
+	req.setText("?[");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); tTMS = tMotor = rotSpeed = EVAL_INT; }
+	else {
+		tTMS = req.text().slice(32,36).toInt(16);
+		tMotor = req.text().slice(36,40).toInt(16);
+		rotSpeed = req.text().slice(50,54).toInt(16);
+	}
+}
+
+//Pump operation mode and errors read
+if(t_err.length) { operMode = EVAL_INT; errors = EVAL_STR; }
+else {
+	req.setText("?M");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); operMode = EVAL_INT; errors = EVAL_STR; }
+	else {
+		oMode = req.text().slice(2,4).toInt(16);
+		operMode = oMode.toString()+":"+(operModes[oMode].isEVal()?tr("Unknown"):operModes[oMode]);
+		//SYS.messDebug("CNTR","pumpOperMode: "+pumpOperMode);
+		
+		errCnt = req.text().slice(4,6).toInt(16);
+		errors = "";
+		for(i_e = 0; i_e < errCnt; i_e++)
+			errors += req.text().slice(6+i_e*2,8+i_e*2)+"; ";
+	}
+}
+
+//Events read
+if(t_err.length)	events = EVAL_STR;
+else {
+	req.setText("?g");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); events = EVAL_STR; }
+	else {
+		errCnt = req.text().slice(2,4).toInt(16);
+		events = "";
+		for(i_e = 0; i_e < errCnt; i_e++)
+			events += req.text().slice(4+i_e*2,6+i_e*2)+"; ";
+	}
+}
+
+//Counters
+if(t_err.length) { snCntrUnit = snPump = EVAL_STR; cntPumpHour = cntCntrUnitHour = cntStart = EVAL_REAL; }
+else {
+	req.setText("?c");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); snCntrUnit = snPump = EVAL_STR; cntPumpHour = cntCntrUnitHour = cntStart = EVAL_REAL; }
+	else {
+		snCntrUnit = req.text().slice(2,12);
+		snPump = req.text().slice(12,22);
+		cntPumpHour = req.text().slice(22,30).toInt(16);
+		cntCntrUnitHour = req.text().slice(30,38).toInt(16);
+		cntStart = req.text().slice(38,46).toInt(16);
+	}
+}
+
+//Read setpoints
+if(t_err.length)	spSpeed = spSpeedPrev = spTMSt = EVAL_INT;
+else {
+	req.setText("?d");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); spSpeed = spSpeedPrev = spTMSt = EVAL_INT; }
+	else {
+		spSpeed = spSpeedPrev = req.text().slice(2,6).toInt(16);
+		spTMSt = req.text().slice(6,10).toInt(16);
+	}
+}
+
+f_err = t_err;','','',1416655551);
+INSERT INTO "tmplib_DevLib" VALUES('TMH','TMP-xx03','TMP-xx03','','Power supply for turbomolecular pumps, model EI-R04M.','Джерело живлення для турбомолекулярного насосу, модель EI-R04M.','Источник питания для турбомолекулярного насоса, модель EI-R04M.',10,0,'JavaLikeCalc.JavaScript
+tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+req = SYS.XMLNode("mess").setAttr("ProtIt","TMH").setAttr("addr",addr);
+
+if(f_start) {
+	modelID = "";
+	operModes = new Object();
+	//Modes
+	operModes["NS"] = "1:"+tr("Levitation");
+	operModes["NA"] = "3:"+tr("Acceleration");
+	operModes["NN"] = "4:"+tr("Normal");
+	operModes["NB"] = "5:"+tr("Deceleration");
+	operModes["FS"] = "6:"+tr("Stop operation failure");
+	operModes["FF"] = "7:"+tr("Idling failure");
+	operModes["FR"] = "8:"+tr("Regeneration breaking failure");
+	operModes["FB"] = "9:"+tr("Deceleration failure");
+	//Conrols
+	operModes["LL"] = tr("Local");
+	operModes["LR"] = tr("Remote");
+	operModes["LC"] = "RS-232C";
+	operModes["LD"] = "RS-485";
+
+	//Set to Interactive
+	req.setText("LN");
+	tr.messIO(req,"UserProtocol");
+}
+
+//======= Commands =========
+//START, STOP and RESET process
+if(comReset == true)			req.setText("RR");
+else if(comStop == true)		req.setText("RP");
+else if(comStart == true)	req.setText("RT");
+else req.setText("");
+if(req.text().length)	{ tr.messIO(req,"UserProtocol"); comReset = comStop = comStart = false; }
+
+//Interactive, Autonomous
+if(comInteract == true)		req.setText("LN");
+else if(comAutonom == true)	req.setText("LF");
+else req.setText("");
+if(req.text().length)	{ tr.messIO(req,"UserProtocol"); comInteract = comAutonom = false; }
+
+//======= Data getting (by self bigger period) ========
+if((cnt++)%max(1,perGet*f_frq))	return;
+t_err = "0";
+
+//Oper mode
+req.setText("CS");
+tr.messIO(req,"UserProtocol");
+if(req.attr("err").length) { t_err = req.attr("err"); operMode = EVAL_STR; }
+else operMode = /*req.text().slice(2)+":"+*/operModes[req.text().slice(0,2)];
+
+//Oper control
+if(t_err.toInt())	operCntr = EVAL_STR;
+else {
+	req.setText("LS");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); operCntr = EVAL_STR; }
+	else operCntr = operModes[req.text().slice(0,2)];
+}
+
+//Alarms list obtain
+if(t_err.toInt())	errors = EVAL_STR;
+else {
+	errors = "";
+	for(i = 0; true; i++) {
+		req.setText("CF"+i.toString(10,2));
+		tr.messIO(req,"UserProtocol");
+		if(req.attr("err").length) { t_err = req.attr("err"); errors = EVAL_STR; break; }
+		//SYS.messDebug("TMH","Result: "+req.text());
+		if(req.text().slice(0,2) != "CA")	break;
+		errors += req.text().slice(2)+";";
+		continue;
+	}
+}
+
+//Get parameters
+// Model ID
+if(t_err.toInt())	modelID = EVAL_STR;
+else if(!modelID.length || modelID == EVAL_STR) {
+	req.setText("PR01");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); modelID = EVAL_STR;}
+	else if(req.text().slice(0,2) != "PA") modelID = EVAL_STR;
+	else modelID = "TMP-"+req.text().slice(4);
+}
+
+// Rotation speed
+if(t_err.toInt())	rotSpeed = EVAL_INT;
+else {
+	req.setText("PR03");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); rotSpeed = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") rotSpeed = EVAL_INT;
+	else rotSpeed = req.text().slice(4).toInt()*10;
+}
+
+// Current
+if(t_err.toInt())	I = EVAL_REAL;
+else {
+	req.setText("PR04");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); I = EVAL_REAL;}
+	else if(req.text().slice(0,2) != "PA") I = EVAL_REAL;
+	else I = req.text().slice(4).toInt()/10;
+}
+
+// Axle 1 disbalance
+if(t_err.toInt())	axle1disb = EVAL_INT;
+else {
+	req.setText("PR21");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); axle1disb = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") axle1disb = EVAL_INT;
+	else axle1disb = req.text().slice(4).toInt();
+}
+
+// Axle 2 disbalance
+if(t_err.toInt())	axle2disb = EVAL_INT;
+else {
+	req.setText("PR22");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); axle2disb = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") axle2disb = EVAL_INT;
+	else axle2disb = req.text().slice(4).toInt();
+}
+
+// MP X1
+if(t_err.toInt())	MP_X1 = EVAL_INT;
+else {
+	req.setText("PR26");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); MP_X1 = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") MP_X1 = EVAL_INT;
+	else MP_X1 = req.text().slice(4).toInt();
+}
+
+// MP Y1
+if(t_err.toInt())	MP_Y1 = EVAL_INT;
+else {
+	req.setText("PR27");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); MP_Y1 = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") MP_Y1 = EVAL_INT;
+	else MP_Y1 = req.text().slice(4).toInt();
+}
+
+// MP X2
+if(t_err.toInt())	MP_X2 = EVAL_INT;
+else {
+	req.setText("PR28");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); MP_X2 = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") MP_X2 = EVAL_INT;
+	else MP_X2 = req.text().slice(4).toInt();
+}
+
+// MP Y2
+if(t_err.toInt())	MP_Y2 = EVAL_INT;
+else {
+	req.setText("PR29");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); MP_Y2 = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") MP_Y2 = EVAL_INT;
+	else MP_Y2 = req.text().slice(4).toInt();
+}
+
+// MP Z
+if(t_err.toInt())	MP_Z = EVAL_INT;
+else {
+	req.setText("PR30");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length) { t_err = req.attr("err"); MP_Z = EVAL_INT;}
+	else if(req.text().slice(0,2) != "PA") MP_Z = EVAL_INT;
+	else MP_Z = req.text().slice(4).toInt();
+}
+
+f_err = t_err;','','',1416655709);
+INSERT INTO "tmplib_DevLib" VALUES('TM510x','Elemer TM510x','','','Elemer TM5102 and TM5103.','Elemer TM5102 та TM5103.','Elemer TM5102 и TM5103.',10,0,'JavaLikeCalc.JavaScript
+if(f_start) devTp = EVAL_INT;
+
+tr = SYS.Transport.Serial.nodeAt("out_"+transport);
+req = SYS.XMLNode("mess").setAttr("ProtIt","TM510x").setAttr("addr",addr);
+
+t_err = "";
+
+//Device type get
+if(devTp.isEVal() || !devTp) {
+	req.setText("0");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length)	t_err = req.attr("err");
+	else devTp = req.text().toInt();
+}
+
+//Inputs read
+errors = "";
+if(t_err.length) in1 = in2 = in3 = in4 = in5 = in6 = in7 = in8 = EVAL_REAL;
+else {
+	req.setText("6;0;8");
+	tr.messIO(req,"UserProtocol");
+	if(req.attr("err").length)
+	{ t_err = req.attr("err"); in1 = in2 = in3 = in4 = in5 = in6 = in7 = in8 = EVAL_REAL; }
+	else {
+		off = 0;
+		tvl = "";
+		in1 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in2 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in3 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in4 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in5 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in6 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in7 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+		in8 = ((tvl=req.text().parse(0, ";", off))[0] == "$") ? EVAL_INT : tvl.toReal();
+		errors += ((tvl[0] == "$") ? tvl.slice(1) : "0")+";";
+	}
+}
+
+f_err = t_err;','','',1416652969);
+INSERT INTO "tmplib_DevLib" VALUES('UPS','','','','','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aId = nLst[i_n].slice(2);
+		aNd = srcPrm[nLst[i_n]];
+		if(items[aId].isEVal()) {
+			items[aId] = itW = new Object();
+			itW.descr = aNd.descr();
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		items[aId].val = aNd.get();
+	}
+
+	//Alarms process and mark
+	varS = "ups_status";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get() == "OB")	{ items[varS].alarm = 1; tErr += tr("Status")+" \""+tr("On battery")+"\"; "; }
+		else if(tP.get() == "LB")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Low battery")+"\"; "; }
+		else if(tP.get() == "SD")	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("Shutdown load")+"\"; "; }
+		else if(tP.get().indexOf("ALARM") != -1)	{ items[varS].alarm = 2; tErr += tr("Status")+" \""+tr("ALARM")+"\"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_packs";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += tr("None good battery present")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_charge";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() < 20) { items[varS].alarm = 1; tErr += tr("Battery charge low")+"; "; }
+		else if(tP.get().toReal() < 5) { items[varS].alarm = 2; tErr += tr("Battery charge critical")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "battery_packs_bad";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toInt())	{ items[varS].alarm = 1; tErr += tr("Bad %1 batteries present").replace("%1",tP.get().toInt()); }
+		else items[varS].alarm = 0;
+	}
+	varS = "input_voltage";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() > 10 && tP.get().toReal() < 210) { items[varS].alarm = 1; tErr += tr("Input voltage low")+"; "; }
+		else if(tP.get().toReal() > 250) { items[varS].alarm = 1; tErr += tr("Input voltage high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "input_frequency";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() < 40) { items[varS].alarm = 2; tErr += tr("Input frequency too low")+"; "; }
+		else if(tP.get().toReal() > 60) { items[varS].alarm = 2; tErr += tr("Input frequency too high")+"; "; }
+		else if(tP.get().toReal() < 45) { items[varS].alarm = 1; tErr += tr("Input frequency low")+"; "; }
+		else if(tP.get().toReal() > 55) { items[varS].alarm = 1; tErr += tr("Input frequency high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "ups_load";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() > 100)			{ items[varS].alarm = 2; tErr += tr("UPS overloaded")+"; "; }
+		else if(tP.get().toReal() > 80)	{ items[varS].alarm = 1; tErr += tr("UPS load high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+	varS = "ups_temperature";
+	if(!(tP=srcPrm[varS]).isEVal()) {
+		if(tP.get().toReal() > 70) { items[varS].alarm = 2; tErr += tr("UPS overheated")+"; "; }
+		else if(tP.get().toReal() > 50) { items[varS].alarm = 1; tErr += tr("Temperature high")+"; "; }
+		else items[varS].alarm = 0;
+	}
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1416765527);
+INSERT INTO "tmplib_DevLib" VALUES('VKT7','VKT-7','VKT-7','','Firm "Teplocom" (http://www.teplocom.spb.ru) computer "VKT-7", St.Peterburg.','Фірма "Teplocom" (http://www.teplocom.spb.ru) комп''ютер "VKT-7", St.Peterburg.','Фирма "Teplocom" (http://www.teplocom.spb.ru) компьютер "VKT-7", St.Peterburg.',60,0,'JavaLikeCalc.JavaScript
+using Special.FLibSYS;
+
+if(f_start) {
+	//Variables list prepare
+	varsLs = new Object();
+	//Тв1
+	varsLs["t1_1"] = 0; varsLs["t2_1"] = 1; varsLs["t3_1"] = 2;		//t
+	varsLs["V1_1"] = 3; varsLs["V2_1"] = 4;	varsLs["V3_1"] = 5;		//V
+	varsLs["M1_1"] = 6;	varsLs["M2_1"] = 7;	varsLs["M3_1"] = 8;		//M
+	varsLs["P1_1"] = 9;	varsLs["P2_1"] = 10;	//P
+	varsLs["Mg_1"] = 11;	//Mg
+	varsLs["Qo_1"] = 12;	//Qo
+	varsLs["Qg_1"] = 13;	//Qg
+	varsLs["dt_1"] = 14;	//dt
+	varsLs["BNR_1"] = 17; varsLs["BOC_1"] = 18;//BNR and BOC
+	varsLs["G1_1"] = 19; varsLs["G2_1"] = 20;	//G
+	//Тв2
+	varsLs["t1_2"] = 22; varsLs["t2_2"] = 23; varsLs["t3_2"] = 24;	//t
+	varsLs["V1_2"] = 25; varsLs["V2_2"] = 26; varsLs["V3_2"] = 27;	//V
+	varsLs["M1_2"] = 28; varsLs["M2_2"] = 29; varsLs["M3_2"] = 30;	//M
+	varsLs["P1_2"] = 31; varsLs["P2_2"] = 32;	//P
+	varsLs["Mg_2"] = 33;	//Mg
+	varsLs["Qo_2"] = 34;	//Qo
+	varsLs["Qg_2"] = 35;	//Qg
+	varsLs["dt_2"] = 36;	//dt
+	varsLs["BNR_2"] = 39; varsLs["BOC_2"] = 40;//BNR and BOC
+	varsLs["G1_2"] = 41; varsLs["G2_2"] = 42;	//G
+
+	//Buffers create
+	bfH = vArhBuf(4/*Real*/, 10, 3600*1000000, true, false);
+	bfD = vArhBuf(4/*Real*/, 10, 24*3600*1000000, true, false);
+	bfM = vArhBuf(4/*Real*/, 10, 24*3600*1000000, true, false);
+}
+
+t_err = "";
+//Imitation for values
+if(imit > 0.1) {
+	//SYS.messDebug("/VKT7/TMPL","imit="+t1_1+"; dt="+(imit*(rand(t1_1)-t1_1/2)/100));
+	for(var cA in varsLs)
+		if(cA.slice(0,2) == "dt") arguments[cA] = arguments["t1_"+cA.slice(3)]-arguments["t2_"+cA.slice(3)];
+		else arguments[cA] += imit*(rand(arguments[cA])-arguments[cA]/2)/100;
+	f_err = "0";
+	return;
+}
+
+if(f_stop) {
+	f_err = "";
+	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
+	return;
+}
+
+//Set transport and RTS
+if(f_start){ tr = SYS.nodeAt(trAddr,"."); tr.TS(true); valsPrec = false; valsSz = false; }
+if(!tr)	t_err = "1:"+tr("Transport ''%1'' error.").replace("%1",trAddr);
+
+req = SYS.XMLNode("mess").setAttr("ProtIt","VKT7").setAttr("addr",0);
+
+//Session start
+if(!t_err.length) {
+	SYS.messDebug("/VKT7/TMPL",tr("Start session."));
+	req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3F,0xFF,0x00,0x00,0xCC,0x80,0x00,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+}
+
+//Request for service information
+if(!t_err.length && (f_start || firmVer.isEVal())) {
+	SYS.messDebug("/VKT7/TMPL",tr("Request for service info."));
+	req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x03,0x3f,0xf9,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		rez = req.text();
+		firmVer = (rez.charCodeAt(2)>>4)+(rez.charCodeAt(2)&0x0F)/10;
+		abonId = rez.slice(7,7+8);
+		netNum = rez.charCodeAt(15);
+		repDay = rez.charCodeAt(16);
+		modelImpl = rez.charCodeAt(17);
+	}
+}
+
+//Request for counter time and hour archive begin
+if(!t_err.length && (f_start || !lastHTm || !lastDTm || !lastResTm)) {
+	SYS.messDebug("/VKT7/TMPL",tr("Request for counter time and hour archive begin."));
+	req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x03,0x3f,0xf6,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		rez = req.text();
+		lastHTm = max(lastHTm, SYS.mktime(0,0,rez.charCodeAt(5),rez.charCodeAt(2),rez.charCodeAt(3)-1,2000+rez.charCodeAt(4)));
+		diffTm = floor((SYS.time()-SYS.mktime(0,0,rez.charCodeAt(9),rez.charCodeAt(6),rez.charCodeAt(7)-1,2000+rez.charCodeAt(8)))/3600);
+		leftHTm = (SYS.time()-lastHTm)/3600 - diffTm;
+	}
+	lastDTm = max(lastDTm, SYS.time()-maxDayDepth*24*3600);
+	leftDTm = (SYS.time()-lastDTm)/(24*3600);
+	lastResTm = max(lastResTm, SYS.time()-maxDayDepth*24*3600);
+	leftResTm = (SYS.time()-lastResTm)/(31*24*3600);
+}
+
+//Request for dimensions and precisions
+if(!t_err.length && (f_start || !valsPrec)) {
+	SYS.messDebug("/VKT7/TMPL",tr("Request for dimensions and precisions."));
+	req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10, 0x3F, 0xFF, 0x00, 0x00, 0x72,
+		0x2C, 0x00, 0x00, 0x40, 0x07, 0x00,	//tTypeM
+		0x2D, 0x00, 0x00, 0x40, 0x07, 0x00,	//GTypeM
+		0x2E, 0x00, 0x00, 0x40, 0x07, 0x00,	//VTypeM
+		0x2F, 0x00, 0x00, 0x40, 0x07, 0x00,	//MTypeM
+		0x30, 0x00, 0x00, 0x40, 0x07, 0x00,	//PTypeM
+		0x35, 0x00, 0x00, 0x40, 0x07, 0x00,	//QoTypeM
+		0x37, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeHIM
+		0x38, 0x00, 0x00, 0x40, 0x07, 0x00,	//QntTypeM
+		0x39, 0x00, 0x00, 0x40, 0x01, 0x00,	//tTypeFractDiNum
+		0x3B, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum1
+		0x3C, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum1
+		0x3D, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum1
+		0x3E, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum1
+		0x42, 0x00, 0x00, 0x40, 0x01, 0x00,	//QoTypeFractDigNum1
+		0x45, 0x00, 0x00, 0x40, 0x01, 0x00,	//VTypeFractDigNum2
+		0x46, 0x00, 0x00, 0x40, 0x01, 0x00,	//MTypeFractDigNum2
+		0x47, 0x00, 0x00, 0x40, 0x01, 0x00,	//PTypeFractDigNum2
+		0x48, 0x00, 0x00, 0x40, 0x01, 0x00,	//dtTypeFractDigNum2
+		0x4C, 0x00, 0x00, 0x40, 0x01, 0x00));	//QoTypeFractDigNum2
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x03,0x3F,0xFE,0x00,0x00));
+		tr.messIO(req,"UserProtocol");
+		t_err = req.attr("err");
+		if(!t_err.length) {
+			rez = req.text();	off = 2;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			tTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			GTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			VTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			MTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			PTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			QoTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			QntTypeHIM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			vLen = (rez.charCodeAt(off+1)<<8)|rez.charCodeAt(off);
+			QntTypeM = SYS.strCodeConv(rez.slice(off+2,off+2+vLen),"CP866","");	off += vLen+4;
+			valsPrec = new Object();
+			valsPrec["tTypeFractDiNum"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["VTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["MTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["PTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["dtTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["QoTypeFractDigNum1"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["VTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["MTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["PTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["dtTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+			valsPrec["QoTypeFractDigNum2"] = rez.charCodeAt(off);	off += 3;
+		}
+	}
+}
+
+//Request for values present list and size.
+if(!t_err.length && (f_start || !valsSz || !valsSz.length)) {
+	SYS.messDebug("/VKT7/TMPL",tr("Request for values present list and size."));
+	req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x03,0x3f,0xfc,0x00,0x00));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+	if(!t_err.length) {
+		rez = req.text();
+		valsSz = new Array();
+		for(off = 2; off < rez.length; off += 6)
+			valsSz[rez.charCodeAt(off)] = rez.charCodeAt(off+4);
+	}
+}
+
+//Readed items list write
+if(!t_err.length) {
+	SYS.messDebug("/VKT7/TMPL",tr("Readed items list write."));
+	data = "";
+	for(var cA in varsLs) {
+		itId = varsLs[cA];
+		if(!valsSz[itId].isEVal())	data += SYS.strFromCharCode(itId, 0x00, 0x00, 0x40, valsSz[itId], 0x00);
+	}
+
+	if(!data.length) {
+		for(var cA in varsLs) arguments[cA] = EVAL_REAL;
+		f_err = "10:"+tr("Data list for request empty.");
+		return;
+	}
+	req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xff,0x00,0x00,data.length)+data);
+	//SYS.messDebug("/VKT7/TMPL","SetDataList: "+Special.FLibSYS.strDec4Bin(req.text()));
+	tr.messIO(req,"UserProtocol");
+	t_err = req.attr("err");
+}
+
+//Read 0-current value(4), 1-hour archive(0) and 2-result month archive(3)
+errAttrs = "";
+for(i_dt = 0; !t_err.length && i_dt < 4; i_dt++) {
+	tpReq = 4;																						//current
+	if(i_dt == 1)			{ tpReq = 0; if(!arhH.length) continue; }		//hour archive
+	else if(i_dt == 2)	{ tpReq = 1; if(!arhD.length) continue; }		//day archive
+	else if(i_dt == 3)	{ tpReq = 3; if(!arhRes.length) continue; }	//result archive
+
+	//Request for curent values (4).
+	if(tpReq == 4 && !t_err.length) {
+		SYS.messDebug("/VKT7/TMPL",tr("Request for curent values."));
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,0x04,0x00));
+		tr.messIO(req,"UserProtocol");
+		t_err = req.attr("err");
+	}
+
+	//Request for archive values hour
+	if(tpReq == 0) {
+		if(!t_err.length) {
+			if((SYS.time()-lastHTm-diffTm*3600)/3600 < 2) continue;	//No more ready hours present
+			SYS.messDebug("/VKT7/TMPL",tr("Request for hour archive values."));
+			req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+		}
+
+		// Set for hour archive value data
+		if(!t_err.length) {
+			SYS.messDebug("/VKT7/TMPL",tr("Request for set archive data."));
+			stHour = stDay = stMonth = stYear = 0;
+			SYS.localtime(lastHTm, 0, 0, stHour, stDay, stMonth, stYear);
+			stHour++;
+			rdTime = SYS.mktime(0, 0, stHour, stDay, stMonth, stYear);
+
+			req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,stDay,stMonth+1,stYear-2000,stHour));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+			if(t_err.parse(1,":").toInt() == 3) { lastHTm = rdTime; leftHTm = (SYS.time()-lastHTm)/3600 - diffTm; t_err = ""; continue; }
+		}
+	}
+
+	//Request for archive values day
+	if(tpReq == 1) {
+		if(!t_err.length) {
+			if((SYS.time()-lastDTm-diffTm*3600)/(24*3600) < 1) continue;	//No more ready days present
+			SYS.messDebug("/VKT7/TMPL",tr("Request for day archive values."));
+			req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+		}
+
+		// Set for day archive value data
+		if(!t_err.length) {
+			SYS.messDebug("/VKT7/TMPL",tr("Request for set archive data."));
+			stDay = stMonth = stYear = 0;
+			SYS.gmtime(lastDTm, 0, 0, 0, stDay, stMonth, stYear);
+			stDay++;
+			rdDTime = SYS.timegm(0, 0, 0, stDay, stMonth, stYear);
+
+			req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,stDay,stMonth+1,stYear-2000,stHour));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+			if(t_err.parse(1,":").toInt() == 3) { lastDTm = rdDTime; leftDTm = (SYS.time()-lastDTm)/(24*3600) - diffTm; t_err = ""; continue; }
+		}
+	}
+
+	//Request for results month archive
+	if(tpReq == 3) {
+		if(!t_err.length) {
+			if((SYS.time()-lastResTm-diffTm*3600)/(24*3600) < 31) continue;	//No more ready month present
+			SYS.messDebug("/VKT7/TMPL",tr("Request for results month archive values."));
+			req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfd,0x00,0x00,0x02,tpReq,0x00));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+		}
+		// Set for month results archive value data
+		if(!t_err.length) {
+			SYS.messDebug("/VKT7/TMPL",tr("Request for set archive data."));
+			stMonth = stYear = 0;
+			SYS.gmtime(lastResTm, 0, 0, 0, 0, stMonth, stYear);
+			stMonth++;
+			rdResTime = SYS.timegm(0, 0, 0, repDay, stMonth, stYear);
+
+			req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x10,0x3f,0xfb,0x00,0x00,0x04,repDay,stMonth+1,stYear-2000,0));
+			tr.messIO(req,"UserProtocol");
+			t_err = req.attr("err");
+			if(t_err.parse(1,":").toInt() == 3) { lastResTm = rdResTime; leftResTm = (SYS.time()-lastResTm)/(31*24*3600); t_err = ""; continue; }
+		}
+	}
+
+	//Request for data read
+	if(!t_err.length) {
+		SYS.messDebug("/VKT7/TMPL",tr("Request for data read."));
+		req.setAttr("err","2:"+tr("No connection")).setText(SYS.strFromCharCode(0x03,0x3F,0xFE,0x00,0x00));
+		tr.messIO(req,"UserProtocol");
+		t_err = req.attr("err");
+		if(!t_err.length) {
+			rez = req.text(); off = 2; vSz = 0;
+			for(var cA in varsLs) {
+				itId = varsLs[cA]; vSz = valsSz[itId];
+				if(vSz.isEVal()) {
+					if(tpReq == 4) arguments[cA] = EVAL_REAL;
+					continue;
+				}
+				//SYS.messDebug("/VKT7/TMPL","off: "+off+"; itId: "+itId+"; vSz: "+vSz);
+				if(rez.charCodeAt(off+vSz) == 0xC0) {
+					for(pVal = 0, i_b = 0; i_b < vSz; i_b++) pVal = pVal | rez.charCodeAt(off+i_b)<<(i_b*8);
+					//Float type values
+					if(cA[0] == "G") pVal = floatMergeWord(pVal&0xFFFF, (pVal>>16)&0xFFFF);
+					//Integer type values, negative process
+					else if(pVal&(0x80<<(8*(vSz-1))))	pVal -= (1<<(8*vSz));
+					// Type specific
+					if(cA[0] == "t")						tmpVl = pVal/pow(10,valsPrec["tTypeFractDiNum"]);
+					else if(cA[0] == "V")				tmpVl = pVal/pow(10,valsPrec["VTypeFractDigNum"+cA[3]]);
+					else if(cA[0] == "M")				tmpVl = pVal/pow(10,valsPrec["MTypeFractDigNum"+cA[3]]);
+					else if(cA[0] == "P")				tmpVl = pVal/pow(10,valsPrec["PTypeFractDigNum"+cA[3]]);
+					else if(cA[0] == "Q")				tmpVl = pVal/pow(10,valsPrec["QoTypeFractDigNum"+cA[3]]);
+					else if(cA.slice(0,2) == "dt")tmpVl = pVal/pow(10,valsPrec["dtTypeFractDigNum"+cA[3]]);
+					else tmpVl = pVal;
+
+					// Write current or archive
+					if(tpReq == 4) {
+						arguments[cA] = tmpVl;
+						SYS.messDebug("/VKT7/TMPL",tr("Set current")+" "+cA+": "+tmpVl);
+					}
+					else if(!(aObj=vArh(this.nodePath(".")+"."+cA)).isNull()) {
+						if(tpReq == 0) {
+							bfH.set(tmpVl, rdTime, 0); aObj.copy(bfH, rdTime, 0, rdTime, 0, arhH);
+							SYS.messDebug("/VKT7/TMPL",tr("Write to hour archive for time")+": "+rdTime+"; "+cA+": "+tmpVl);
+						}
+						if(tpReq == 1) {
+							bfD.set(tmpVl, rdDTime, 0); aObj.copy(bfD, rdDTime, 0, rdDTime, 0, arhD);
+							SYS.messDebug("/VKT7/TMPL",tr("Write to day archive for time")+": "+rdDTime+"; "+cA+": "+tmpVl);
+						}
+						else if(tpReq == 3) {
+							bfM.set(tmpVl, rdResTime, 0); aObj.copy(bfM, rdResTime, 0, rdResTime, 0, arhRes);
+							SYS.messDebug("/VKT7/TMPL",tr("Write to result month archive for time")+": "+rdResTime+"; "+cA+": "+tmpVl);
+						}
+					}
+				}
+				else if(tpReq == 4) { arguments[cA] = EVAL_REAL; errAttrs += ""+itId+"="+rez.charCodeAt(off+vSz).toString(16)+"; "; }
+				off += vSz+2;
+			}
+			if(tpReq == 0) { lastHTm = rdTime; leftHTm = (SYS.time()-lastHTm)/3600 - diffTm; }
+			else if(tpReq == 1) { lastDTm = rdDTime; leftDTm = (SYS.time()-lastDTm)/(24*3600) - diffTm; }
+			else if(tpReq == 3) { lastResTm = rdResTime; leftResTm = (SYS.time()-lastResTm)/(31*24*3600); }
+		}
+	}
+}
+
+if(t_err.length) {
+	SYS.messDebug("/VKT7/TMPL",tr("Error response")+": "+t_err);
+	f_err = t_err;
+	for(var cA in varsLs) arguments[cA] = EVAL_REAL;
+}
+else f_err = errAttrs.length ? "11:"+tr("Quality errors")+": "+errAttrs : "0";','','',1416766326);
+CREATE TABLE 'tmplib_PrescrTempl' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "tmplib_PrescrTempl" VALUES('timer','Timer','Таймер','Таймер','Typical timer. Hold run up to time elapse.','Типовий таймер. Утримує виконання до завершення часу.','Типовой таймер. Удерживает выполнение до завершения времени.',10,0,'JavaLikeCalc.JavaScript
+//Reset to default
+if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
+//Run
+if(run && !pause) {
+	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
+	tmp1 = max(0, tmp1 - 1/f_frq);
+	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
+	else rez = "0:"+tr("Waiting %1s").replace("%1",tmp1.toPrecision(3));
+}','','',1416656093);
+INSERT INTO "tmplib_PrescrTempl" VALUES('backTimer','Background timer','Фоновий таймер','Фоновый таймер','Background timer. Updating parallel with current command.','Фоновий таймер. Оновлюється паралельно з поточною командою.','Фоновый таймер. Обновляется параллельно с текущей командой.',10,0,'JavaLikeCalc.JavaScript
+//Reset to default
+if(f_start || (!run && tmp1)) { run = pause = error = abort = false; tmp1 = 0; rez = 1; }
+//Run
+if(run && !pause) {
+	if(tmp1 == 0) tmp1 = arg1+1/f_frq;
+	tmp1 = max(0, tmp1 - 1/f_frq);
+	if(tmp1 <= 0) { rez = "1:"+tr("Waiting %1s expired").replace("%1",arg1.toPrecision(3)); run = false; }
+	//if(tmp1 <= 10)	rez = "-1:Waiting "+arg1.toPrecision(3)+"s expired";
+	else rez = "10:"+tr("Background waiting %1s").replace("%1",tmp1.toPrecision(3));
+}','','',1416656088);
+CREATE TABLE 'tmplib_base' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"PROGRAM" TEXT DEFAULT '' ,"uk#PROGRAM" TEXT DEFAULT '' ,"ru#PROGRAM" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "tmplib_base" VALUES('digAlarm','Alarm digital','Сигн. дискретна','Сигн. дискретная','Alarm from a digital parameter.','Сигналізація за дискретним параметром.','Сигнализация по дискретному параметру.',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	f_err = "0", prevVar = EVAL_REAL;
+
+//State set
+tErr = "0", levErr = 0;
+if(in.isEVal())	tErr = "1:"+tr("No data or connection with source"), levErr = -5;
+else if(in == alrm.toInt())	tErr = "3:"+alrm.parse(2,":"), levErr = -alrm.parse(1,":").toInt();
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1416765738);
+INSERT INTO "tmplib_base" VALUES('simleBoard','Analog alarm by borders','Сигн. аналог. за границями','Сигн. аналог. по границам','The template of simple parameter included boders and dimension variable.','Шаблон простого параметру з перевіркою границь та одиницею виміру.','Шаблон простого параметра с проверкой границ и единицей измерения.',10,1,'JavaLikeCalc.JavaScript
+var=iMult*(in+iAdd);
+if(var>max)			f_err="1:Upper work border violation";
+else if(var<min)			f_err="2:Bottom work border violation";
+else if(aMax>aMin && var>aMax)		f_err="3:Upper alarm border violation";
+else if(aMax>aMin && var<aMin)		f_err="4:Bottom alarm border violation";
+else if(wMax>wMin && var>wMax)	f_err="5:Upper warning border violation";
+else if(wMax>wMin && var<wMin)	f_err="6:Bottom warning border violation";
+else f_err="0";','JavaLikeCalc.JavaScript
+var=iMult*(in+iAdd);
+if(var>max)			f_err="1:Порушення верхньої робочої границі";
+else if(var<min)			f_err="2:Порушення нижньої робочої границі";
+else if(aMax>aMin && var>aMax)		f_err="3:Порушення верхньої аварійної границі";
+else if(aMax>aMin && var<aMin)		f_err="4:Порушення нижньої аварійної границі";
+else if(wMax>wMin && var>wMax)	f_err="5:Порушення верхньої попереджувальної границі";
+else if(wMax>wMin && var<wMin)	f_err="6:Порушення нижньої попереджувальної границі";
+else f_err="0";','JavaLikeCalc.JavaScript
+var=iMult*(in+iAdd);
+if(var>max)		f_err="1:Нарушение верхней рабочей границы";
+else if(var<min)	f_err="2:Нарушение нижней рабочей границы";
+else if(aMax>aMin && var>aMax)	f_err="3:Нарушение верхней аварийной границы";
+else if(aMax>aMin && var<aMin)	f_err="4:Нарушение нижней аварийной границы";
+else if(wMax>wMin && var>wMax)	f_err="5:Нарушение верхней предупредительной границы";
+else if(wMax>wMin && var<wMin)	f_err="6:Нарушение нижней предупредительной границы";
+else f_err="0";','');
+INSERT INTO "tmplib_base" VALUES('digitBlock','Diskret parameters block','Блок дискр. параметрів','Блок дискр. параметров','The block for union of Diskret parameters for one device control.','Блок для збору дискретних параметрів, керуючих одним апаратом.','Блок для сборки дискретных параметров управляющих одним аппаратом.',10,0,'JavaLikeCalc.JavaScript
+set = false;
+if(cmdOpen && !(last_cmd&0x1))	{ last_cmd = last_cmd|0x1; set = true; }
+if(cmdClose && !(last_cmd&0x2))	{ last_cmd = last_cmd|0x2; set = true; }
+if(cmdStop && !(last_cmd&0x4))	{ last_cmd = last_cmd|0x4; set = true; }
+if(set && tCmd > 0) w_tm = tCmd;
+if(w_tm > 0) w_tm -= 1/f_frq;
+else {
+	w_tm = 0;
+	if(tCmd > 0) {
+		if(last_cmd&0x1) { cmdOpen = false; last_cmd = last_cmd&(~0x1); }
+		if(last_cmd&0x2) { cmdClose = false; last_cmd = last_cmd&(~0x2); }
+		if(last_cmd&0x4) { cmdStop = false; last_cmd = last_cmd&(~0x4); }
+	}
+}','','',1416656400);
+INSERT INTO "tmplib_base" VALUES('gasPoint','Flow control point','Витрато-вимірювальний вузол','Расходомерный узел',' ',' ','',10,0,'JavaLikeCalc.JavaScript
+F=200+(rand(5)-2.5);
+Q+=F/3600;
+P=9+(rand(2)-1);
+T=15+(rand(2)-1);
+dP=F/33;
+DS=1+(rand(0.2)-0.1);
+','','',1416656424);
+INSERT INTO "tmplib_base" VALUES('manInUnif','Manual input (Unif)','Ручний ввід (Уніф)','Ручной ввод (Униф)','Unified template for manual input signals.','Уніфікований шаблон для ручного вводу значень сигналів.','Унифицированный шаблон ручного ввода сигнала.',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	f_err = "0";
+
+pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
+if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
+
+//Manual input set process
+if(!varIn.isEVal() && (varIn != var || inout.isEVal()))
+{
+	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
+	vCalibr = (varIn-min)/(max-min);
+	if(scSqr)	vCalibr = pow(vCalibr,2);
+	if(pMax < pMin) vCalibr = 1-vCalibr;
+	vCalibr = min(pMax,pMin)+vCalibr*abs(pMax-pMin);
+	inout = vCalibr/iMult - iAdd;
+}
+
+levErr = 0;
+tErr = "0";
+//Input data check and postprocess
+if(inout > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
+	var = max + plcExcess*(max-min)/100;
+}
+else if(inout < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
+	var = min - plcExcess*(max-min)/100;
+}
+if(!tErr) {
+	vCalibr = iMult*(inout+iAdd);
+	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
+	if(var.isEVal())	var = vCalibr;
+	varDt = vCalibr - var;
+	var += varDt/max(1,Tf*f_frq);
+	varIn = var;
+
+	bndVarHyst = (max-min)*HystBnd/100;
+	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
+	{ tErr="3:"+tr("Upper alarm border error"); levErr = -4; }
+	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
+	{ tErr="4:"+tr("Lower alarm border error"); levErr = -4; }
+	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
+	{ tErr="5:"+tr("Upper warning border error"); levErr = -2; }
+	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
+	{ tErr="6:"+tr("Lower warning border error"); levErr = -2; }
+	else if(speed && varDt > speed)	{ tErr="7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+}
+
+//Alarms forming
+if(alSup)	f_err = "0";
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	else if(f_err.toInt() && !tErr.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	f_err = tErr;
+}','','',1416765781);
+INSERT INTO "tmplib_base" VALUES('anUnif','Analog sign. (Unif)','Аналог. сигнал (Уніф)','Аналог. сигн. (Униф)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	f_err = "0";
+	prevVar = EVAL_REAL;
+	//Prepare data for preprocessing
+	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcArgs = new Object();
+	inPrcArgs.this = this;
+}
+pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
+if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
+
+if(plcImit) {	//Data imitation
+  if(!plcImitIn.isEVal()) in = plcImitIn;
+  else {
+    plcDif = abs(pMax-pMin);
+    in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+  }
+}
+
+//Call specific preprocessing procedure
+if(inProc.length)	{
+	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
+	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
+	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
+	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
+	in = inPrcArgs.in;
+}
+
+levErr = 0;
+tErr = "0";
+//Input data check and postprocess
+if(in.isEVal()) {
+	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+if(!tErr) {
+	vCalibr = iMult*(in+iAdd);
+	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
+	if(var.isEVal())	var = vCalibr;
+	varDt = vCalibr - var;
+	var += varDt/max(1,Tf*f_frq);
+	prevVar = var;
+
+	bndVarHyst = (max-min)*HystBnd/100;
+	if(aMax < max && aMax > aMin && (var >= aMax || (f_err.toInt() == 3 && var >= (aMax-bndVarHyst))))
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; }
+	else if(aMin > min && aMax > aMin && (var <= aMin || (f_err.toInt() == 4 && var <= (aMin+bndVarHyst))))
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; }
+	else if(wMax < max && wMax > wMin && (var >= wMax || (f_err.toInt() == 5 && var >= (wMax-bndVarHyst))))
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; }
+	else if(wMin > min && wMax > wMin && (var <= wMin || (f_err.toInt() == 6 && var <= (wMin+bndVarHyst))))
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; }
+	else if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+}
+
+//Alarms forming
+if(alSup)	f_err = "0";
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	else if(f_err.toInt() && !tErr.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	f_err = tErr;
+}','','',1416765630);
+INSERT INTO "tmplib_base" VALUES('digitBlockUnif','Diskret block (Unif)','Блок дискретних (Уніф)','Блок дискр. (Униф)','The block for union of Diskret parameters for one device control.','Блок поєднання дискретних сигналів контролю одним пристроєм.','Блок для дискретных параметров управляющих одним аппаратом.',10,1,'JavaLikeCalc.JavaScript
+set=false;
+if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
+if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
+if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
+if( set && tCmd > 0 ) w_tm = tCmd;
+if( w_tm > 0 ) w_tm -= 1./f_frq;
+else
+{
+  w_tm=0;
+  if( tCmd > 0 )
+  {
+    if( last_cmd==1 ) com = false;
+    if( last_cmd==2 ) close = false;
+    if( last_cmd==3 ) stop = false;
+    last_cmd = 0;
+  }
+}','JavaLikeCalc.JavaScript
+set=false;
+if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
+if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
+if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
+if( set && tCmd > 0 ) w_tm = tCmd;
+if( w_tm > 0 ) w_tm -= 1./f_frq;
+else
+{
+  w_tm=0;
+  if( tCmd > 0 )
+  {
+    if( last_cmd==1 ) com = false;
+    if( last_cmd==2 ) close = false;
+    if( last_cmd==3 ) stop = false;
+    last_cmd = 0;
+  }
+}','JavaLikeCalc.JavaScript
+set=false;
+if( com != EVAL_BOOL && com && last_cmd!=1 ) { last_cmd=1; set=true; }
+if( close != EVAL_BOOL && close && last_cmd!=2 ) { last_cmd=2; set=true; }
+if( stop != EVAL_BOOL && stop && last_cmd!=3 ) { last_cmd=3; set=true; }
+if( set && tCmd > 0 ) w_tm = tCmd;
+if( w_tm > 0 ) w_tm -= 1./f_frq;
+else
+{
+  w_tm=0;
+  if( tCmd > 0 )
+  {
+    if( last_cmd==1 ) com = false;
+    if( last_cmd==2 ) close = false;
+    if( last_cmd==3 ) stop = false;
+    last_cmd = 0;
+  }
+}','');
+INSERT INTO "tmplib_base" VALUES('pidUnifImp','Impulse PID sign. (Unif, stats)','Імпульсний ПІД сигнал (Уніф, стани)','ПИД импульсный сигн. (Униф, состояния)','The unified template for process analog signals with properties impulse PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями імпульсного ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами импульсного ПИД.',10,1,'JavaLikeCalc.JavaScript
+if(f_start) f_err = "0";
+
+if(plcImit)
+{
+	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	else
+	{
+		plcDif = plcMax-plcMin;
+		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+tErr = "0";
+if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "1:The signal exceed to upper hardware border"; var = max+plcExcess*(max-min)/100;}
+else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "2:The signal exceed to bottom hardware border"; var = min-plcExcess*(max-min)/100;}
+if( tErr ) 
+{
+  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
+  EVAL = true;
+}
+else
+{
+	vCalibr = iMult*(in+iAdd);
+
+	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
+	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	var += varDt/max(1,Tf/1000*f_frq);
+
+	bndVarHyst = (aMax-aMin)*HystBnd/100;
+	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
+	{ tErr="3:Upper alarm border error"; HH=true; EVAL=H=LL=L=false; }
+	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
+	{ tErr="4:Bottom alarm border error"; LL=true; EVAL=HH=H=L=false; }
+	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
+	{ tErr="5:Upper warning border error"; H=true; EVAL=HH=LL=L=false; }
+	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
+	{ tErr="6:Bottom warning border error"; L=true; EVAL=HH=H=LL=false; }
+	else if( speed && varDt > speed ) { tErr="7:Too big parameter''s motion speed";   EVAL=true; HH=H=LL=L=false; }
+	else EVAL=HH=H=LL=L=false;
+}
+
+if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+f_err = tErr;','JavaLikeCalc.JavaScript
+if(f_start) f_err = "0";
+
+if(plcImit)
+{
+	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	else
+	{
+		plcDif = plcMax-plcMin;
+		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+tErr = "0";
+if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "1:Сигнал перевищив верхню апаратну границю"; var = max+plcExcess*(max-min)/100;}
+else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "2:Сигнал перевищив нижню апаратну границю"; var = min-plcExcess*(max-min)/100;}
+if( tErr ) 
+{
+  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
+  EVAL = true;
+}
+else
+{
+	vCalibr = iMult*(in+iAdd);
+
+	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
+	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	var += varDt/max(1,Tf/1000*f_frq);
+
+	bndVarHyst = (aMax-aMin)*HystBnd/100;
+	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
+	{ tErr="3:Помилка верхньої границі аварії"; HH=true; EVAL=H=LL=L=false; }
+	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
+	{ tErr="4:Помилка нижньої границі аварії"; LL=true; EVAL=HH=H=L=false; }
+	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
+	{ tErr="5:Помилка верхньої границі попередження"; H=true; EVAL=HH=LL=L=false; }
+	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
+	{ tErr="6:Помилка нижньої границі попередження"; L=true; EVAL=HH=H=LL=false; }
+	else if( speed && varDt > speed ) { tErr="7:Дуже велика швидкість зміни параметру";   EVAL=true; HH=H=LL=L=false; }
+	else EVAL=HH=H=LL=L=false;
+}
+
+if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+f_err = tErr;','JavaLikeCalc.JavaScript
+if(f_start) f_err = "0";
+
+if(plcImit)
+{
+	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	else
+	{
+		plcDif = plcMax-plcMin;
+		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+tErr = "0";
+if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
+{ tErr = "1:Выход сигнала за верхнюю аппаратную границу"; var = max+plcExcess*(max-min)/100;}
+else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
+{ tErr = "2:Выход сигнала за нижнюю аппаратную границу"; var = min-plcExcess*(max-min)/100;}
+if(tErr)
+{
+	//var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
+	EVAL = true;
+}
+else
+{
+	vCalibr = iMult*(in+iAdd);
+
+	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
+	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	var += varDt/max(1,Tf/1000*f_frq);
+
+	bndVarHyst = (aMax-aMin)*HystBnd/100;
+	if(aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))))
+	{ tErr="3:Нарушение верхней аварийной границы"; HH=true; EVAL=H=LL=L=false; }
+	else if(aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))))
+	{ tErr="4:Нарушение нижней аварийной границы"; LL=true; EVAL=HH=H=L=false; }
+	else if(wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))))
+	{ tErr="5:Нарушение верхней предупредительной границы"; H=true; EVAL=HH=LL=L=false; }
+	else if(wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))))
+	{ tErr="6:Нарушение нижней предупредительной границы"; L=true; EVAL=HH=H=LL=false; }
+	else if(speed && varDt > speed) { tErr="7:Очень большая скорость изменения параметра";   EVAL=true; HH=H=LL=L=false; }
+	else EVAL=HH=H=LL=L=false;
+}
+
+if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
+f_err = tErr;',1416765846);
+INSERT INTO "tmplib_base" VALUES('anUnifSt','Analog sign. (Unif, stats)','Аналог. сигнал (Уніф, стани)','Аналог. сигн. (Униф, состояния)','Unified template for analog input signals processing.','Уніфікований шаблон для обробки аналогових вхідних сигналів.','Унифицированный шаблон обработки аналогового входного сигнала.',10,0,'JavaLikeCalc.JavaScript
+if(f_start) {
+	f_err = "0";
+	prevVar = EVAL_REAL;
+	//Prepare data for preprocessing
+	inPrcLng = "JavaLikeCalc.JavaScript";
+	inPrcArgs = new Object();
+	inPrcArgs.this = this;
+}
+pMax = plcMax; pMin = plcMin;	//Copy for local modifies using
+if(passIn=(pMax==pMin)) { pMax = max/iMult - iAdd; pMin = min/iMult - iAdd; }
+
+if(plcImit) {	//Data imitation
+	if(!plcImitIn.isEVal()) in = plcImitIn;
+	else {
+		plcDif = abs(pMax-pMin);
+		in = pMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+//Call specific preprocessing procedure
+if(inProc.length)	{
+	inPrcArgs.in = in; inPrcArgs.min = min; inPrcArgs.max = max;
+	inPrcArgs.plcMin = pMin; inPrcArgs.plcMax = pMax;
+	inPrcArgs.plcImit = plcImit; inPrcArgs.plcImitIn = plcImitIn;
+	SYS.DAQ.funcCall(inPrcLng, inPrcArgs, inProc);
+	in = inPrcArgs.in;
+}
+
+levErr = 0;
+tErr = "0";
+//Input data check and postprocess
+if(in.isEVal()) {
+	tErr = "1:"+tr("No data or connection with source"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in > (max(pMax,pMin)+plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "1:"+tr("The signal exceed to upper hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? max+plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+else if(in < (min(pMax,pMin)-plcExcess*abs(pMax-pMin)/100)) {
+	tErr = "2:"+tr("The signal exceed to bottom hardware border"); levErr = -5;
+	var = EVAL_REAL;
+	if(subMode == 1) var = prevVar.isEVal() ? min-plcExcess*(max-min)/100 : prevVar;
+	else if(subMode == 2) var = subVar;
+}
+if(tErr)	EVAL = true, HH = H = LL = L = false;
+else {
+	vCalibr = iMult*(in+iAdd);
+	if(passIn) { pMin = iMult*(pMin+iAdd); pMax = iMult*(pMax+iAdd); }
+	if(!passIn || scSqr) {
+		vCalibr = (vCalibr-min(pMax,pMin))/abs(pMax-pMin);
+		if(pMax < pMin) vCalibr = 1-vCalibr;
+		vCalibr = min + (max-min)*(scSqr?pow(vCalibr,0.5):vCalibr);
+	}
+	if(var.isEVal())	var = vCalibr;
+	varDt = vCalibr - var;
+	var += varDt/max(1,Tf*f_frq);
+	prevVar = var;
+
+	bndVarHyst = (max-min)*HystBnd/100;
+	EVAL = HH_ = H_ = LL_ = L_ = false;
+	if(speed && varDt > speed)	{ tErr = "7:"+tr("Too big parameter''s motion speed"); levErr = -2; }
+	if(wMin > min && wMax > wMin && (var <= wMin || (L && var <= (wMin+bndVarHyst))))
+	{ tErr = "6:"+tr("Lower warning border error"); levErr = -2; L_ = true; }
+	if(wMax < max && wMax > wMin && (var >= wMax || (H && var >= (wMax-bndVarHyst))))
+	{ tErr = "5:"+tr("Upper warning border error"); levErr = -2; H_ = true; }
+	if(aMin > min && aMax > aMin && (var <= aMin || (LL && var <= (aMin+bndVarHyst))))
+	{ tErr = "4:"+tr("Lower alarm border error"); levErr = -4; LL_ = true; }
+	if(aMax < max && aMax > aMin && (var >= aMax || (HH && var >= (aMax-bndVarHyst))))
+	{ tErr = "3:"+tr("Upper alarm border error"); levErr = -4; HH_ = true; }
+	HH = HH_; H = H_; LL = LL_; L = L_;
+}
+
+//Alarms forming
+if(alSup)	f_err = "0";
+else {
+	if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), levErr, SHIFR);
+	else if(f_err.toInt() && !tErr.toInt())
+		this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+	f_err = tErr;
+}','','',1416765681);
+INSERT INTO "tmplib_base" VALUES('pidUnif','PID sign. (Unif, stats)','ПІД сигнал (Уніф, стани)','ПИД сигн. (Униф, состояния)','The unified template for process analog signals with properties PID.','Уніфікований шаблон для обробки аналогового сигналу з властивостями ПІД.','Унифицированный шаблон обработки аналогового сигнала со свойствами ПИД.',10,1,'JavaLikeCalc.JavaScript
+if(f_start) f_err = "0";
+
+if(plcImit)
+{
+	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	else
+	{
+		plcDif = plcMax-plcMin;
+		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+tErr = "0";
+if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "1:The signal exceed to upper hardware border"; var = max+plcExcess*(max-min)/100;}
+else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "2:The signal exceed to bottom hardware border"; var = min-plcExcess*(max-min)/100;}
+if( tErr ) 
+{
+  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
+  EVAL = true;
+}
+else
+{
+	vCalibr = iMult*(in+iAdd);
+
+	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
+	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	var += varDt/max(1,Tf/1000*f_frq);
+
+	bndVarHyst = (aMax-aMin)*HystBnd/100;
+	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
+	{ tErr="3:Upper alarm border error"; HH=true; EVAL=H=LL=L=false; }
+	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
+	{ tErr="4:Nether alarm border error"; LL=true; EVAL=HH=H=L=false; }
+	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
+	{ tErr="5:Upper warning border error"; H=true; EVAL=HH=LL=L=false; }
+	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
+	{ tErr="6:Nether warning border error"; L=true; EVAL=HH=H=LL=false; }
+	else if( speed && varDt > speed ) { tErr="7:Too big parameter''s motion speed";   EVAL=true; HH=H=LL=L=false; }
+	else EVAL=HH=H=LL=L=false;
+}
+
+if(!f_err.toInt() && tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+f_err = tErr;','JavaLikeCalc.JavaScript
+if(f_start) f_err = "0";
+
+if(plcImit)
+{
+	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	else
+	{
+		plcDif = plcMax-plcMin;
+		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+tErr = "0";
+if( in > (plcMax+plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "1:Сигнал перевищив верхню апаратну границю"; var = max+plcExcess*(max-min)/100;}
+else if( in < (plcMin-plcExcess*(plcMax-plcMin)/100) )
+{ tErr = "2:Сигнал перевищив нижню апаратну границю"; var = min-plcExcess*(max-min)/100;}
+if( tErr ) 
+{
+  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
+  EVAL = true;
+}
+else
+{
+	vCalibr = iMult*(in+iAdd);
+
+	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
+	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	var += varDt/max(1,Tf/1000*f_frq);
+
+	bndVarHyst = (aMax-aMin)*HystBnd/100;
+	if( aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))) )
+	{ tErr="3:Помилка верхньої границі аварії"; HH=true; EVAL=H=LL=L=false; }
+	else if( aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))) )
+	{ tErr="4:Помилка нижньої границі аварії"; LL=true; EVAL=HH=H=L=false; }
+	else if( wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))) )
+	{ tErr="5:Помилка верхньої границі попередження"; H=true; EVAL=HH=LL=L=false; }
+	else if( wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))) )
+	{ tErr="6:Помилка нижньої границі попередження"; L=true; EVAL=HH=H=LL=false; }
+	else if( speed && varDt > speed ) { tErr="7:Дуже велика швидкість зміни параметру";   EVAL=true; HH=H=LL=L=false; }
+	else EVAL=HH=H=LL=L=false;
+}
+
+if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": NORMA", 1, SHIFR);
+f_err = tErr;','JavaLikeCalc.JavaScript
+if(f_start) f_err = "0";
+
+if(plcImit)
+{
+	if(plcImitIn != EVAL_REAL) in = plcImitIn;
+	else
+	{
+		plcDif = plcMax-plcMin;
+		in = plcMin + plcDif/2 + rand(plcDif/10)-plcDif/20;
+	}
+}
+
+tErr = "0";
+if(in > (plcMax+plcExcess*(plcMax-plcMin)/100))
+{ tErr = "1:Выход сигнала за верхнюю аппаратную границу"; var = max+plcExcess*(max-min)/100;}
+else if(in < (plcMin-plcExcess*(plcMax-plcMin)/100))
+{ tErr = "2:Выход сигнала за нижнюю аппаратную границу"; var = min-plcExcess*(max-min)/100;}
+if(tErr) 
+{
+  //var = dmsk ? max+plcExcess*(max-min)/100 : min-plcExcess*(max-min)/100;
+  EVAL = true;
+}
+else
+{
+	vCalibr = iMult*(in+iAdd);
+
+	vCalibr = (vCalibr-plcMin)/(plcMax-plcMin);
+	varDt = min+(max-min)*(scSqr?pow(vCalibr,0.5):vCalibr)-var;
+	var += varDt/max(1,Tf/1000*f_frq);
+
+	bndVarHyst = (aMax-aMin)*HystBnd/100;
+	if(aMax>aMin && (var>=aMax || (HH && var>=(aMax-bndVarHyst))))
+	{ tErr="3:Нарушение верхней аварийной границы"; HH=true; EVAL=H=LL=L=false; }
+	else if(aMax>aMin && (var<=aMin || (LL && var<=(aMin+bndVarHyst))))
+	{ tErr="4:Нарушение нижней аварийной границы"; LL=true; EVAL=HH=H=L=false; }
+	else if(wMax>wMin && (var>=wMax || (H && var>=(wMax-bndVarHyst))))
+	{ tErr="5:Нарушение верхней предупредительной границы"; H=true; EVAL=HH=LL=L=false; }
+	else if(wMax>wMin && (var<=wMin || (L && var<=(wMin+bndVarHyst))))
+	{ tErr="6:Нарушение нижней предупредительной границы"; L=true; EVAL=HH=H=LL=false; }
+	else if(speed && varDt > speed) { tErr="7:Очень большая скорость изменения параметра";   EVAL=true; HH=H=LL=L=false; }
+	else EVAL=HH=H=LL=L=false;
+}
+
+if(!f_err.toInt() && tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -4, SHIFR);
+else if(f_err.toInt() && !tErr.toInt()) this.nodePrev().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": НОРМА", 1, SHIFR);
+f_err = tErr;',1416765808);
+INSERT INTO "tmplib_base" VALUES('SNMP','','','','','','',10,0,'JavaLikeCalc.JavaScript
+if(f_start)	{ srcPrm = false; items = new Object(); }
+
+alLev = 0;
+tErr = "";
+
+//Connect to source
+if(typeof(srcPrm) != "TCntrNode:TValue:TParamContr") srcPrm = SYS.DAQ.nodeAt(srcAddr,".");
+if(!srcPrm) { tErr = tr("No connection to source object"); alLev = 3; }
+else if(srcPrm.err.get() != 0)	 { tErr = tr("Source error")+": "+srcPrm.err.get().parse(1,":"); alLev = 3; }
+else {
+	//Attributes list get and "items" update
+	nLst = srcPrm.nodeList("a_");
+	lstTable = "";
+	for(i_n = 0; i_n < nLst.length; i_n++) {
+		aNd = srcPrm[nLst[i_n]];
+		aId = nLst[i_n].slice(2);
+		aIdPrc = aNd.descr();
+		if(!aIdPrc.parse(1,"::").length) continue;
+		if(aIdPrc.slice(-13) == "TotalNumber.0")	{ lstTable = aIdPrc.slice(0,-13); continue; }
+
+		//Manual tables check
+		if(!lstTable.length || lstTable != aIdPrc.slice(0,lstTable.length))
+			for(off = 0; (iMnT=manTables.parse(0,";",off)).length; )
+				if(iMnT == aIdPrc.slice(0,iMnT.length)) { lstTable = iMnT; break; }
+		
+		if(lstTable.length && lstTable == aIdPrc.slice(0,lstTable.length))
+			aIdPrc = lstTable.parse(1,"::")+(prt1=aIdPrc.slice(lstTable.length)).parse(1,".")+prt1.parse(0,".");
+		else aIdPrc = aIdPrc.parse(1,"::").parse(0,".");
+
+		if(items[aIdPrc].isEVal()) {
+			items[aIdPrc] = itW = new Object();
+			itW.descr = aIdPrc;//aNd.descr();
+			itW.id = aId;
+
+			// Writeable check
+			//SYS.messInfo("UPS test", aId+": aNd.flg()="+aNd.flg());
+			if((itW.wr=!(aNd.flg()&0x04)) && aNd.flg()&0x01) {
+				itW.wr = "";
+				for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+					itW.wr += ((selId==(selNm=aNd.selNames().parse(pos,";")))?selId:(selNm+" ("+selId+")"))+";";
+			}
+			itW.alarm = 0;
+		}
+		cVl = aNd.get();
+		// Selectable value specifying
+		if(aNd.flg()&0x01)
+			for(off = 0, pos = 0; (selId=aNd.values().parse(0,";",off)).length; pos++)
+				if(cVl == selId && cVl != aNd.selNames().parse(pos,";")) {		
+					cVl = aNd.selNames().parse(pos,";")+"("+cVl+")";
+					break;
+				}
+		items[aIdPrc].val = cVl;
+	}
+
+	//Alarms process and mark
+	/*varS = "battery_packs";
+	if(tP=srcPrm[varS])
+	{
+		if(tP.get().toInt() == 0)	{ items[varS].alarm = 2; tErr += "None good battery present; "; }
+		else items[varS].alarm = 0;
+	}*/
+
+	//Set variables process
+	for(var aIt in items) {
+		it = items[aIt];
+		if(!it.set.isEVal()) {
+			aNd = srcPrm["a_"+it.id];
+			if(aNd.flg()&0x01 && (selV=it.set.match(".+\\((.+)\\)$")).length) it.set = selV[1];
+			aNd.set(it.set);
+			it.set = EVAL_REAL;
+		}
+		alLev = max(alLev, it.alarm);
+	}
+}
+
+//SYS.messInfo("UPS test", "tErr="+tErr+"; alLev="+alLev);
+tErr = tErr.length ? ""+alLev+":"+tErr : "0";
+
+//Alarms forming
+if(tErr.toInt() && tErr.toInt() != f_err.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tErr.parse(1,":"), -(2+alLev), SHIFR);
+else if(f_err.toInt() && !tErr.toInt())
+	this.cntr().alarmSet((NAME.length?NAME:SHIFR)+": "+DESCR+": "+tr("NORMA"), 1, SHIFR);
+f_err = tErr;','','',1416765601);
+CREATE TABLE 'lib_Controllers' ("ID" TEXT DEFAULT '' ,"NAME" TEXT DEFAULT '' ,"ru#NAME" TEXT DEFAULT '' ,"uk#NAME" TEXT DEFAULT '' ,"DESCR" TEXT DEFAULT '' ,"ru#DESCR" TEXT DEFAULT '' ,"uk#DESCR" TEXT DEFAULT '' ,"MAXCALCTM" INTEGER DEFAULT '10' ,"PR_TR" INTEGER DEFAULT '1' ,"FORMULA" TEXT DEFAULT '' ,"ru#FORMULA" TEXT DEFAULT '' ,"uk#FORMULA" TEXT DEFAULT '' ,"TIMESTAMP" INTEGER DEFAULT '' , PRIMARY KEY ("ID"));
+INSERT INTO "lib_Controllers" VALUES('prescr','prescr','','prescr','','','',10,0,'clcCnt++;
+
+if(f_start)	work = SYS.XMLNode("prg");
+
+//Check to commands controller present
+comCntrO = false;
+if(comsCntr.length)	comCntrO = SYS.DAQ.nodeAt(comsCntr,".");
+
+//Commands list update
+if(f_start || !(clcCnt%(60*f_frq))) {
+	if(!comCntrO) {
+		rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT * FROM "+dbComs+";");
+		comLs = new Object();
+		for(i_t = 1; i_t < rez.length; i_t++) {
+			comNm = rez[i_t]["name"];
+			comLs[comNm] = new Object();
+			comLs[comNm]["descr"] = rez[i_t]["descr"];
+			comLs[comNm]["proc"] = rez[i_t]["proc"];
+			for(i_a = 1; i_a <= 5; i_a++)
+				comLs[comNm]["arg"+i_a] = rez[i_t]["arg"+i_a];
+		}
+	}
+	else {
+		var nL = comCntrO.nodeList("prm_");
+		comLs = new Object();
+		for(i_n = 0; i_n < nL.length; i_n++) {
+			comO = comCntrO[nL[i_n]];
+			comNm = comO.cfg("NAME");
+			comLs[comNm] = new Object();
+			comLs[comNm]["prmID"] = nL[i_n].slice(4);
+			comLs[comNm]["descr"] = comO.cfg("DESCR");
+			for(i_a = 1; i_a <= 5; i_a++)
+				if(!(comA=comO["arg"+i_a]).isEVal())
+					comLs[comNm]["arg"+i_a] = comA.descr();
+		}
+	}
+}
+
+//Programm selection change
+if(curMode <= 0 && prog.length && (prog != work.attr("name") || mode == 1)) {
+	work = SYS.XMLNode("prg");
+	rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+	if(rez.length > 1) {
+		//Parse program and insert procedure text and argument''s labels
+		work.load(rez[1][0]);
+		work.setAttr("name",prog);
+		for(comElN = work, comPos = 0; true; comPos++) {
+			if(comPos >= comElN.childSize()) {
+				if((comElN=comElN.parent())) { comPos = comElN.attr("seekPos").toInt(); continue; }
+				break;
+			}
+			comElI = comElN.childGet(comPos);
+			comId = comElI.attr("id");
+			if(comLs[comId].isEVal())	continue;
+			comElI.setAttr("proc",comLs[comId].proc);
+			for(i_a = 1; i_a <= 5; i_a++) comElI.setAttr("labArg"+i_a,comLs[comId]["arg"+i_a]);
+			if(comElI.childSize()) { comElN.setAttr("seekPos",comPos); comElN = comElI; comPos = -1; }
+		}
+	}
+	else prog = "";
+}
+
+//Start process
+if(curMode <= 0 && mode == 1 && prog.length) {
+	startTm = SYS.time();
+	curCom = 0;
+	curMode = mode;	
+
+	if(comCntrO) {
+		var cL = comCntrO.nodeList("prm_");
+		for(i_c = 0; i_c < cL.length; i_c++) {
+			var cLi = comCntrO[cL[i_c]];
+			cLi.run.set(false);
+			cLi.stop.set(false);
+			cLi.error.set(false);
+			cLi.abort.set(false);
+			cLi.start.set(true);
+		}
+	}
+}
+//Pause and other process
+else if((mode == 0 && curMode < 0) || (curMode == 1 && mode == 2) || (curMode == 2 && mode == 1)) {
+	curMode = mode;
+	if((curMode == 1 || curMode == 2) && comCntrO) {
+		var cL = comCntrO.nodeList("prm_");
+		for(i_c = 0; i_c < cL.length; i_c++)
+			comCntrO[cL[i_c]].pause.set(curMode==2);
+	}
+}
+
+//Call program
+if(curMode == 1 || curMode == 2) {
+	prog = work.attr("name");
+
+	//Curent node at levels obtain
+	curComNd = work;
+	for(curComLev = 0, curComPos = 0, off = 0; curComNd && (tVl=curCom.parse(0,":",off)).length; curComLev++, curComPos = tVl.toInt())
+		curComNd = curComNd.childGet(tVl.toInt());
+	if(!curComNd) {
+		SYS.messInfo("uprg"+prog,tr("No current node present")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+		curMode = mode = -3;
+	}
+	curComNd = curComNd.parent();
+
+	//Internal commands call
+	if(!comCntrO) {
+		if(mode == 3 && curCom >= 0 && curCom < work.childSize()) {
+			work.childGet(curCom).setAttr("rez","-10:"+tr("Step missed"));
+			curCom++;
+		}
+		if(curCom >= 0 && curCom < work.childSize()) {
+			comEl = work.childGet(curCom);
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-10:"+tr("Program terminated"));
+				// Call stop command
+				if(!comLs["Stop"].isEVal()) {
+					off = 0;
+					prLang = comLs["Stop"].proc.parse(0,"\n",off);
+					SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
+				}
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				curMode = mode = -3;
+			}
+			//Pass empty command		
+			else if(!comEl.attr("proc").length) curCom++;
+			//Execute command
+			else if(curMode == 1) {
+				args = new Object();
+				args.rez = "";
+				args.f_start = !comEl.attr("tm").length;
+				if(args.f_start) comEl.setAttr("tm",SYS.time());
+				args.f_frq = f_frq;
+				for(i_a = 1; i_a <= 5; i_a++) args["arg"+i_a] = comEl.attr("arg"+i_a);
+				for(i_a = 1; i_a <= 10; i_a++) args["tmp"+i_a] = comEl.attr("tmp"+i_a);
+				off = 0;
+				prLang = comEl.attr("proc").parse(0,"\n",off);
+				rez = SYS.DAQ.funcCall(prLang,args,comEl.attr("proc").slice(off));
+				if(rez && args.rez.toInt() > 0) curCom++;
+				else if(!rez || args.rez.toInt() < 0) {
+					// Call error command
+					if(!comLs["Error"].isEVal()) {
+						off = 0;
+						prLang = comLs["Error"].proc.parse(0,"\n",off);
+						SYS.DAQ.funcCall(prLang,new Object(),comLs["Error"].proc.slice(off));
+					}
+					SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+					curMode = mode = -1;
+				}
+				comEl.setAttr("rez",args.rez);
+				for(i_a = 1; i_a <= 5; i_a++) comEl.setAttr("arg"+i_a, args["arg"+i_a]);
+				for(i_a = 1; i_a <= 10; i_a++) comEl.setAttr("tmp"+i_a, args["tmp"+i_a]);
+				//SYS.messDebug("TEST Calc","TEST Calc rezult: "+args.y);
+			}
+		}
+
+		//End call
+		if(curCom < 0 || curCom >= work.childSize()) {
+			// Call stop command
+			if(!comLs["Stop"].isEVal()) {
+				off = 0;
+				prLang = comLs["Stop"].proc.parse(0,"\n",off);
+				SYS.DAQ.funcCall(prLang,new Object(),comLs["Stop"].proc.slice(off));
+			}
+
+			curMode = mode = -2;
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+
+			//Place to program last execution time
+			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			if(rez.length > 1) {
+				//Parse programm and insert procedure text and argument''s labels to here
+				comTree = SYS.XMLNode("prg");
+				comTree.load(rez[1][0]);
+				comTree.setAttr("wtm",SYS.time()-startTm);
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+			}
+		}
+	}
+	//External commands call
+	else {
+		// Get current command parameter-object		
+		toNext = false;
+		curComPrm = EVAL_BOOL;
+		if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			if(!(comId=comLs[curComNd.childGet(curComPos).attr("id")]).isEVal()) curComPrm = comCntrO["prm_"+comId.prmID];
+			if(curComPrm.isEVal()) {
+				curMode = mode = -1;
+				curComNd.childGet(curComPos).setAttr("rez","-11:"+tr("Command miss: ")+work.childGet(curCom).attr("id"));
+				return;
+			}
+		}
+		if(mode == 3 && curComPos >= 0 && curComPos < curComNd.childSize()) {
+			curComNd.childGet(curComPos).setAttr("rez","-10:"+tr("Step missed"));
+			curComPrm.run.set(false);
+			mode = curMode;
+			toNext = true;
+		}
+		else if(curComPos >= 0 && curComPos < curComNd.childSize()) {
+			comEl = curComNd.childGet(curComPos);
+			//Stop process
+			if(mode == 0) {
+				comEl.setAttr("rez","-12:"+tr("Program terminated"));
+				// Stop all typical and set "abort" flag
+				var cL = comCntrO.nodeList("prm_");
+				for(i_c = 0; i_c < cL.length; i_c++) {
+					var cLi = comCntrO[cL[i_c]];
+					cLi.run.set(false);
+					cLi.start.set(false);
+					cLi.abort.set(true);
+				}
+				SYS.messInfo("uprg"+prog,tr("Terminated by user session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+				curMode = mode = -3;
+			}
+			//Commands process
+			else {
+				// Start command
+				if(!comEl.attr("tm").length) {
+					curComPrm.run.set(false);	//Stop for possible background call
+					comEl.setAttr("tm",SYS.time());
+					for(i_a = 1; i_a <= 5; i_a++)
+						if(!(comA=curComPrm["arg"+i_a]).isEVal())
+							comA.set(comEl.attr("arg"+i_a));
+					curComPrm.rez.set(0);
+					curComPrm.run.set(true);
+				}
+				//Update steps status, up to current comand
+				for(comElN = work, comPos = 0, comLev = 0, comCur = true; true; comPos++) {
+					if(comPos >= comElN.childSize()) {
+						if((comElN=comElN.parent())) {
+							comLev--;
+							comPos = comElN.attr("seekPos").toInt();
+							comCur = comElN.attr("comCur").toInt();
+							continue;
+						}
+						break;
+					}
+					comElI = comElN.childGet(comPos);
+					isCurCmd = comCur && comLev == (curComLev-1) && curCom.parse(comLev,":").toInt() == comPos;
+					curComPI = comCntrO["prm_"+comLs[comElI.attr("id")].prmID];
+					if(isCurCmd || (curComPI.run.get() && comElI.attr("rez").toInt() != 1 && comElI.attr("rez").toInt() > -10))
+					{
+						rez = curComPI.rez.get();
+						if(isCurCmd && rez.toInt() > 0) toNext = true;
+						if(rez.toInt() < 0) {
+							// Stop all typical and call "error" command
+							var cL = comCntrO.nodeList("prm_");
+							for(i_c = 0; i_c < cL.length; i_c++) {
+								var cLi = comCntrO[cL[i_c]];
+								cLi.run.set(false);
+								cLi.start.set(false);
+								cLi.error.set(true);
+							}
+							SYS.messInfo("uprg"+prog,tr("Terminated by error session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+							curMode = mode = -1;
+						}
+						comElI.setAttr("rez",rez);
+						for(i_a = 1; i_a <= 5; i_a++)
+							if(!(comA=curComPI["arg"+i_a]).isEVal())
+								comElI.setAttr("arg"+i_a, comA.get());
+					}
+					if(isCurCmd) break;
+					if(comElI.childSize()) {
+						comElN.setAttr("seekPos",comPos);
+						comElN.setAttr("comCur",comCur);
+						comElN = comElI;
+						comCur = comCur && comLev < curComLev && curCom.parse(comLev,":").toInt() == comPos;
+						comPos = -1; comLev++;
+					}
+				}
+			}
+		}
+
+		// Go to next step
+		if(toNext) {
+			if(curComNd.childGet(curComPos).childSize())	{ curComLev++; curComPos = 0; }
+			else if((++curComPos) >= curComNd.childSize())
+			{ curComLev--; curComPos = curComLev ? curCom.parse(curComLev-1,":").toInt()+1 : curComNd.childSize(); }
+			for(i_c = 0, curComN = ""; i_c < (curComLev-1); i_c++) curComN += curCom.parse(i_c,":");
+			curCom = curComN.length ? curComN+":"+curComPos : curComPos;
+		}
+		
+		//End call
+		if(curComLev <= 0) {
+			// Stop all typical and call "stop" command
+			var cL = comCntrO.nodeList("prm_");
+			for(i_c = 0; i_c < cL.length; i_c++) {
+				var cLi = comCntrO[cL[i_c]];
+				cLi.run.set(false);
+				cLi.start.set(false);
+				cLi.stop.set(true);
+			}
+
+			curMode = mode = -2;
+			SYS.messInfo("uprg"+prog,tr("Successful session of the program")+" \""+prog+"\" : "+SYS.strftime(startTm)+" : "+SYS.strftime(SYS.time()));
+
+			//Place to program last execution time
+			rez = SYS.BD.nodeAt(dbDB,".").SQLReq("SELECT prgTxt FROM "+dbProgs+" WHERE name=''"+prog+"'';");
+			if(rez.length > 1) {
+				//Parse program and insert procedure text and argument''s labels to here
+				comTree = SYS.XMLNode("prg");
+				comTree.load(rez[1][0]);
+				comTree.setAttr("wtm",SYS.time()-startTm);
+				SYS.BD.nodeAt(dbDB,".").SQLReq("UPDATE "+dbProgs+" SET prgTxt=''"+comTree.save().replace("''","''''")+"'' WHERE name=''"+prog+"'';");
+			}
+		}
+	}
+}
+mode = curMode;','','',1416656600);
+INSERT INTO "lib_Controllers" VALUES('test','test','','test','','','',10,0,'using Special.FLibSYS;
+
+out+=10;
+if(out>100) out=0;
+
+test = (10).toString(16,2,true);
+test = (-10.34).toFixed(4,8);
+
+//Request prepare
+//req = SYS.XMLNode("#").setAttr("ProtIt","DCON").setAttr("addr",10);
+//Send request
+//SYS.Transport["Serial"]["out_TestDCON"].messIO(req,"UserProtocol");
+//if(!req.attr("err").length) SYS.messDebug("TEST REQ","RES: "+req.text());
+
+//test = "Text \n value[\041abc\x21].";
+
+//test = arguments[4];
+//arguments[4] = 10;
+
+//test="Java123Script".search(new RegExp("script","i"));
+//text = "Javascript3\"sdf\"3javaScript __ javascript";
+//test = text.replace(4,3,"67");
+//test = text.replace("3","55");
+//test = text.replace(new RegExp("javascript","ig"),"JavaScript");//
+//test = text.replace(new RegExp("\"([^\"]*)\"","g"),"``$1''''");
+//text = "1 плюс 2 плюс 3";
+//test = text.match("\\d+","g");
+//text = "Посетите мою домашнюю страницу http://www.isp.com/~david";
+//test = text.match("(\\w+):\\/\\/([\\w.]+)\\/(\\S*)");
+//test = "1,2, 3 , 4 ,5".split(new RegExp("\\s*,\\s*"));
+//test = "hello <b>world</b>".split(new RegExp("(<[^>]*>)"));
+//var p = new RegExp("(\\d\\d)[-/](\\d\\d)[-/](\\d\\d(?:\\d\\d)?)","");
+//test = p.test("abc12/30/1969def");
+
+/*CRC = new Array(0,1,2,3,4,5);vSz = 3
+hi=CRC[out%6];
+test = hi;*/
+
+//test = SYS.Transport.Sockets.out_testModBus.messIO("123456");
+
+/*obj = new Object();
+obj["test1"]=1;l
+obj["test2"]=1;
+for( var i in obj ) SYS.messDebug("test","Prop: "+i);
+SYS.messDebug("test","Props test");*/
+
+//vl = SYS.strFromCharCode(100,200,50,60);
+//test = vl.charCodeAt(1);
+
+//test = SYS.system("ps -Ao pid,comm");
+
+//ModBus.Unidrive.pos.pos=out;
+//ModBus.testRTU.test.pos=out;
+//test = rand(offset*0.4);
+//val="Test";
+//if( val=="Test1" || val=="Test2" ) test="TestN"; else test="Test";
+
+//test1=new Array(1,"a",2,"b",3,"c",4);
+//test1[7]=new Array(5,6,7);
+//test=test1[7][1];
+
+//test1="ab;cde;fgh;jk;lm";
+//test = test1.split(";").join();
+
+//req = xmlNode("get").setAttr("path","/%2fgen%2fid");
+//test = xmlCntrReq(req);
+//test = req.text();
+
+/*test1 = vArh("DAQ.System.AutoDA.CPULoad.load");
+test2 = test1.FFT(0,60);
+test = "";
+for( i = 0; i < test2.length; i++ ) test += ""+test2[i]+";";*/
+
+//messPut("cron",0,"Time: "+tmFStr(tmTime()));
+
+/*req = SYS.XMLNode();
+test = req.load("test1.xml",true);*/
+//for( i = 0; i < req.childSize(); i++ )
+//  test += req.childGet(i).attr("id")+"; ";
+/*sutm = 0; stm = SYS.time(sutm);
+req.save(0,"test2.xml");
+eutm = 0; etm = SYS.time(eutm);
+test = 1e6*(etm-stm)+(eutm-sutm);*/
+
+//test = strDec4Bin(Transport.Sockets.out_testModBus.messIO(strEnc2Bin("15 01 00 00 00 06 01 03 00 00 00 05")));
+
+/*req = SYS.XMLNode("GET");
+req.setAttr("URI","/");
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");
+test = req.text();*/
+
+/*req = SYS.XMLNode("POST");
+req.setAttr("URI","/WebUser/FlowTec.txt");
+cntNode = req.childAdd("cnt").setAttr("name","pole0").setAttr("filename","Object2-k001-100309-17.txt");
+cntNode.childAdd("prm").setAttr("id","Content-Type").setText("text/plain");
+cntText = "Object2-k001\r\n";
+cntText += "\r\n";
+cntText += "v002\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj    7155.25    216.0  32.000  17.5\r\n";
+cntText += "v005\r\n";
+cntText += " n1\r\n";
+cntText += "  09.03.10 16   Polnyj     188.81    350.0   4.000  40.0\r\n";
+cntText += "\r\n";
+cntNode.setText(cntText);
+SYS.Transport.Sockets.out_testHTTP.messIO(req,"HTTP");*/
+
+//test = SYS.UI.VCAEngine["ses_AGLKS"].alrmSndPlay();
+//test = "1;2;5;7;9";
+//test = "1;2;5;7;9".type();
+
+//SYS.messDebug("test",strEnc2Bin("68 74 74 70 3a 2f 2f 77 77 77 2e 77 33 2e 6f 72 67 2f 32 30 30 30 2f 30 39 2f 78 6d 6c 64 73 69 67 23 72 73 61 2d 73 68 61 31"));
+
+//test = SYS.DAQ.ModBus.testTCP.test.a_8_1_1_ПС_ОПД_стенд_температура__ОПД_.get();
+
+/*req = SYS.XMLNode("get").setAttr("path","/%2fgen%2fid");
+rez = SYS.cntrReq(req,"loop");
+test = req.text();*/
+
+/*DBTbl=SYS.BD.MySQL.GenDB.SQLReq("SELECT * from DB;");
+for( var i_rw = 0; i_rw < DBTbl.length; i_rw++ )
+{
+  var rec = "";
+  for( var i_fld = 0; i_fld < DBTbl[i_rw].length; i_fld++ )
+    rec += DBTbl[i_rw][i_fld]+"\t";
+  SYS.messDebug("TEST DB","Row "+i_rw+": "+rec);
+}*/','','',1416656627);
+INSERT INTO "lib_Controllers" VALUES('test1','test1','','test1','','','',10,0,'//clc=0;
+//First getting previous time
+//if(!p_tm){ p_tm = Special.FLibSYS.tmTime(); break; }
+
+//Get curent time
+//c_tm = Special.FLibSYS.tmTime()-2;
+
+//Open value archive
+//a_id = Special.FLibSYS.avalOpen("Archive.va_test");
+//if(a_id==-1) break;
+
+//Calc average archive
+//for(i_tm=p_tm;i_tm<c_tm;i_tm++)
+//{ 
+//  val = Special.FLibSYS.avalGetR(a_id,i_tm,0,"");
+//  rez = (rez*(i_tm-p_tm)+val)/(i_tm-p_tm+1);
+//  clc++;
+//}
+
+//Close value archive
+//Special.FLibSYS.avalClose(a_id);
+//p_tm=c_tm;','','',1416656632);
 COMMIT;

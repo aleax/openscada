@@ -125,6 +125,7 @@ void Engine::postEnable( int flag )
     wdg_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     wdg_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     wdg_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    //wdg_el.fldAdd(new TFld("PROC_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     wdg_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
     wdg_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     wdg_el.fldAdd(new TFld("ATTRS",_("Changed attributes"),TFld::String,TFld::NoFlag,"10000","*"));
@@ -174,6 +175,7 @@ void Engine::postEnable( int flag )
     page_el.fldAdd(new TFld("ID",_("ID"),TFld::String,TCfg::Key,"30"));
     page_el.fldAdd(new TFld("ICO",_("Icon"),TFld::String,TFld::NoFlag,"10000"));
     page_el.fldAdd(new TFld("PARENT",_("Parent widget"),TFld::String,TFld::NoFlag,"200"));
+    //page_el.fldAdd(new TFld("PROC_TR",_("Procedure translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     page_el.fldAdd(new TFld("PROC",_("Procedure text and language"),TFld::String,TCfg::TransltText,"1000000"));
     page_el.fldAdd(new TFld("PROC_PER",_("Procedure calculate period"),TFld::Integer,TFld::NoFlag,"5","-1"));
     page_el.fldAdd(new TFld("FLGS",_("Flags"),TFld::Integer,TFld::NoFlag,"1","0"));
@@ -532,7 +534,7 @@ string Engine::callSynth( const string &itxt )
     //Read result from result file
     if(!rezFromPipe) {
 	FILE *fp = fopen( synthRez, "r" );
-	if( !fp ) return "";
+	if(!fp) return "";
 	while((comPos=fread(buf,1,sizeof(buf),fp)))
 	    rez.append(buf,comPos);
 	fclose(fp);
@@ -585,7 +587,8 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
     c_el.setElem(&elWdgUIO());
     c_el.cfg("IDW").setS(idw,true);
     c_el.cfg("IDC").setS(idc,true);
-    c_el.cfgViewAll(false); c_el.cfg("IO_TYPE").setView(true); c_el.cfg("SELF_FLG").setView(true);
+    c_el.cfg("IO_VAL").setExtVal(true);
+    c_el.cfg("CFG_VAL").setExtVal(true);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(wdb,nodePath()+tbl,fld_cnt++,c_el); ) {
 	string sid = c_el.cfg("ID").getS();
 	if(!TSYS::pathLev(sid,1).empty()) continue;
@@ -594,28 +597,17 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	type = type&0x0f;
 	unsigned selfFlg = c_el.cfg("SELF_FLG").getI();
 
-	//Take before type
-	c_el.cfg("IO_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg));
-	    /*(type == TFld::String &&
-	    !(flg&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));*/
-	c_el.cfg("CFG_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg,selfFlg));
-		/*(type == TFld::String &&
-		!(flg&(TFld::NoStrTransl|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-		(selfFlg&(Attr::CfgConst|Attr::CfgLnkIn))));*/
-
-	//Load all: !!!! Rewrite further optimal !!!!
-	c_el.cfgViewAll(true);
-	SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el);
-	c_el.cfgViewAll(false); c_el.cfg("IO_TYPE").setView(true); c_el.cfg("SELF_FLG").setView(true);
-
 	if(!w.attrPresent(sid)) w.attrAdd(new TFld(sid.c_str(),c_el.cfg("NAME").getS().c_str(),(TFld::Type)type,flg));
 	AutoHD<Attr> attr = w.attrAt(sid);
 	if(!(!(attr.at().flgSelf()&Attr::IsInher) && attr.at().flgGlob()&Attr::IsUser)) continue;
-	attr.at().setS(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),0,'|'));
-	attr.at().fld().setValues(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),1,'|'));
-	attr.at().fld().setSelNames(TSYS::strSepParse(c_el.cfg("IO_VAL").getS(),2,'|'));
+	c_el.cfg("IO_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg));
+	string IO_VAL = c_el.cfg("IO_VAL").getS();
+	attr.at().setS(TSYS::strSepParse(IO_VAL,0,'|'));
+	attr.at().fld().setValues(TSYS::strSepParse(IO_VAL,1,'|'));
+	attr.at().fld().setSelNames(TSYS::strSepParse(IO_VAL,2,'|'));
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)selfFlg);
 	attr.at().setCfgTempl(c_el.cfg("CFG_TMPL").getS());
+	c_el.cfg("CFG_VAL").setNoTransl(!Attr::isTransl(TFld::Type(type),flg,selfFlg));
 	attr.at().setCfgVal(c_el.cfg("CFG_VAL").getS());
     }
 }

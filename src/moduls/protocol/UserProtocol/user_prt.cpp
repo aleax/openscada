@@ -88,6 +88,7 @@ TProt::TProt( string name ) : TProtocol(MOD_ID)
     mUPrtEl.fldAdd(new TFld("NAME",_("Name"),TFld::String,TCfg::TransltText,OBJ_NM_SZ));
     mUPrtEl.fldAdd(new TFld("DESCR",_("Description"),TFld::String,TFld::FullText|TCfg::TransltText,"300"));
     mUPrtEl.fldAdd(new TFld("EN",_("To enable"),TFld::Boolean,0,"1","0"));
+    mUPrtEl.fldAdd(new TFld("PR_TR",_("Program translation allow"),TFld::Boolean,TFld::NoFlag,"1","1"));
     mUPrtEl.fldAdd(new TFld("InPROG",_("Input program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
     mUPrtEl.fldAdd(new TFld("OutPROG",_("Output program"),TFld::String,TFld::FullText|TCfg::TransltText,"1000000"));
 }
@@ -279,6 +280,8 @@ UserPrt::UserPrt( const string &iid, const string &idb, TElem *el ) :
     TConfig(el), cntInReq(0), cntOutReq(0), mId(cfg("ID")), mAEn(cfg("EN").getBd()), mEn(false), mDB(idb)
 {
     mId = iid;
+    cfg("InPROG").setExtVal(true);
+    cfg("OutPROG").setExtVal(true);
 }
 
 UserPrt::~UserPrt( )
@@ -381,7 +384,15 @@ void UserPrt::save_( )
     SYS->db().at().dataSet(fullDB(),owner().nodePath()+tbl(),*this);
 }
 
-bool UserPrt::cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+bool UserPrt::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PR_TR") {
+	cfg("InPROG").setNoTransl(!progTr());
+	cfg("OutPROG").setNoTransl(!progTr());
+    }
+    modif();
+    return true;
+}
 
 void UserPrt::setEnable( bool vl )
 {
@@ -490,8 +501,7 @@ void UserPrt::cntrCmdProc( XMLNode *opt )
 	}
 	if(c_lv) c_path += ".";
 	vector<string>  ls;
-	switch(c_lv)
-	{
+	switch(c_lv) {
 	    case 0:
 		SYS->daq().at().modList(ls);
 		for(unsigned i_l = 0; i_l < ls.size(); )

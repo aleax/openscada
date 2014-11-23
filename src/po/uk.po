@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-01 16:45+0300\n"
+"POT-Creation-Date: 2014-11-22 11:09+0200\n"
 "PO-Revision-Date: 2004-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -814,8 +814,11 @@ msgstr "Збір даних"
 msgid "Maximum calculate time (sec)"
 msgstr "Максимальний час обрахунку (сек)"
 
-msgid "Template program"
-msgstr "Програма шаблону"
+msgid "Program translation allow"
+msgstr "Перекладати програму"
+
+msgid "Program"
+msgstr "Програма"
 
 msgid "Date of modification"
 msgstr "Дата модифікації"
@@ -1366,9 +1369,6 @@ msgstr "Константа;Публічна константа;Зв'язок"
 
 msgid "Program language"
 msgstr "Мова програми"
-
-msgid "Program"
-msgstr "Програма"
 
 msgid "New IO"
 msgstr "Нове IO"
@@ -1980,10 +1980,12 @@ msgstr "Перегляд повідомлень"
 msgid "Finished. "
 msgstr "Закінчено. "
 
+#, c-format
 msgid ""
 "Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."
 msgstr ""
-"Останній: %s. Використ.: %3.1f[%3.1f]%% (%s із %s). Відстав.: %s[%s]. Втрата циклів: %g."
+"Останній: %s. Використ.: %3.1f[%3.1f]%% (%s із %s). Відстав.: %s[%s]. Втрата "
+"циклів: %g."
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -2216,9 +2218,6 @@ msgstr "Архівація"
 msgid "Not select type!"
 msgstr "Не вибірковий тип!"
 
-msgid "Write access is denied!"
-msgstr "Немає доступу на запис!"
-
 #, c-format
 msgid "Write value to archive error: %s"
 msgstr "Помилка запису значення до архіву: %s"
@@ -2364,36 +2363,3 @@ msgstr "Встановлено назву проекту у:"
 
 msgid "already started."
 msgstr "вже запущено."
-
-#~ msgid "Start archive"
-#~ msgstr "Запустити архів"
-
-#~ msgid "Options help"
-#~ msgstr "Допомога по опціям"
-
-#~ msgid "Help"
-#~ msgstr "Допомога"
-
-#~ msgid "Buffer full. Messages lost!"
-#~ msgstr "Буфер повний. Повідомлення втрачені!"
-
-#~ msgid "Messages buffer filling is too fast!"
-#~ msgstr "Буфер повідомлень заповнюється дуже швидко!"
-
-#~ msgid "Loading node error."
-#~ msgstr "Помилка завантаження вузла."
-
-#~ msgid "Saving node error."
-#~ msgstr "Помилка збереження вузла."
-
-#~ msgid "System's external hosts"
-#~ msgstr "Системні зовнішні хости"
-
-#~ msgid "Array is empty."
-#~ msgstr "Масив порожній."
-
-#~ msgid "No parameter present '%s'."
-#~ msgstr "Відсутній параметр '%s'."
-
-#~ msgid "Negative id is not allow for array."
-#~ msgstr "Негативний індекс не дозволений для масиву."

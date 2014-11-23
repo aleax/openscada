@@ -42,6 +42,7 @@ Func::Func( const string &iid, const string &name ) :
 {
     cfg("ID").setS(id());
     cfg("NAME").setS(name.empty() ? id() : name);
+    cfg("FORMULA").setExtVal(true);
     mMaxCalcTm = mod->safeTm();
 }
 
@@ -61,6 +62,13 @@ void Func::postDisable( int flag )
     if(flag && !owner().DB().empty())
 	try{ del(); }
 	catch(TError err) { mess_err(err.cat.c_str(),"%s",err.mess.c_str()); }
+}
+
+bool Func::cfgChange( TCfg &co, const TVariant &pc )
+{
+    if(co.name() == "PR_TR") cfg("FORMULA").setNoTransl(!progTr());
+    modif();
+    return true;
 }
 
 Lib &Func::owner( )	{ return *((Lib*)nodePrev()); }
@@ -128,7 +136,6 @@ void Func::load_( )
 {
     if(owner().DB().empty() || (!SYS->chkSelDB(owner().DB())))	throw TError();
 
-    cfg("FORMULA").setNoTransl(!owner().progTr());
     SYS->db().at().dataGet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
     loadIO();
@@ -141,20 +148,10 @@ void Func::loadIO( )
 
     vector<string> u_pos;
     cfg.cfg("F_ID").setS(id(), true);
-    cfg.cfg("DEF").setDblVal(true);
-    //!!!! Where the translated messages register, for particular source????
-    //cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);
+    cfg.cfg("DEF").setExtVal(true);
     for(int fld_cnt = 0; SYS->db().at().dataSeek(owner().fullDB()+"_io",mod->nodePath()+owner().tbl()+"_io",fld_cnt,cfg); fld_cnt++)
     {
 	string sid = cfg.cfg("ID").getS();
-
-	/*//Take before type
-	cfg.cfg("DEF").setNoTransl((cfg.cfg("TYPE").getI()!=IO::String));
-
-	//Load all: !!!! Rewrite further optimal !!!!
-	cfg.cfgViewAll(true);
-	SYS->db().at().dataGet(owner().fullDB()+"_io", mod->nodePath()+owner().tbl()+"_io", cfg);
-	cfg.cfgViewAll(false); cfg.cfg("TYPE").setView(true);*/
 
 	//Position storing
 	int pos = cfg.cfg("POS").getI();
@@ -169,7 +166,8 @@ void Func::loadIO( )
 	io(id)->setName(cfg.cfg("NAME").getS());
 	io(id)->setType((IO::Type)cfg.cfg("TYPE").getI());
 	io(id)->setFlg(cfg.cfg("MODE").getI());
-	io(id)->setDef(cfg.cfg("DEF").getS((io(id)->type()==IO::String)?TCfg::Transl:0));
+	cfg.cfg("DEF").setNoTransl(io(id)->type()!=IO::String);
+	io(id)->setDef(cfg.cfg("DEF").getS());
 	io(id)->setHide(cfg.cfg("HIDE").getB());
     }
     //Remove holes
@@ -188,7 +186,6 @@ void Func::save_( )
 {
     if(owner().DB().empty()) return;
 
-    cfg("FORMULA").setNoTransl(!owner().progTr());
     mTimeStamp = SYS->sysTm();
     SYS->db().at().dataSet(owner().fullDB(), mod->nodePath()+owner().tbl(), *this);
 
@@ -2582,7 +2579,9 @@ void Func::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("list",opt,-1,"/io/io/4",_("Hide"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 		ctrMkNode("list",opt,-1,"/io/io/5",_("Default"),RWRWR_,"root",SDAQ_ID,1,"tp","str");
 	    }
-	    ctrMkNode("fld",opt,-1,"/io/prog",_("Program"),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
+	    if(!owner().DB().empty())
+		ctrMkNode("fld",opt,-1,"/io/prog_tr",cfg("PR_TR").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,1,"tp","bool");
+	    ctrMkNode("fld",opt,-1,"/io/prog",cfg("FORMULA").fld().descr().c_str(),RWRW__,"root",SDAQ_ID,3,"tp","str","rows","10","SnthHgl","1");
 	}
 	return;
     }
@@ -2636,10 +2635,14 @@ void Func::cntrCmdProc( XMLNode *opt )
 	    if(!owner().DB().empty()) modif();
 	}
     }
+    else if(a_path == "/io/prog_tr") {
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(progTr()));
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	setProgTr(s2i(opt->text()));
+    }
     else if(a_path == "/io/prog") {
-	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))		opt->setText(prog());
-	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))		{ setProg(opt->text()); progCompile(); }
-	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD))	mod->compileFuncSynthHighl("JavaScript",*opt);
+	if(ctrChkNode(opt,"get",RWRW__,"root",SDAQ_ID,SEC_RD))	opt->setText(prog());
+	if(ctrChkNode(opt,"set",RWRW__,"root",SDAQ_ID,SEC_WR))	{ setProg(opt->text()); progCompile(); }
+	if(ctrChkNode(opt,"SnthHgl",RWRW__,"root",SDAQ_ID,SEC_RD)) mod->compileFuncSynthHighl("JavaScript",*opt);
     }
     else TFunction::cntrCmdProc(opt);
 }

@@ -179,19 +179,25 @@ bool TBDS::dataSeek( const string &ibdn, const string &path, int lev, TConfig &c
 		        cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el])) break;
 		if(i_el == cf_el.size() && lev <= c_lev++) {
 		    for(i_el = 0; i_el < cf_el.size(); i_el++) {
-			TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+			TCfg &cf = cfg.cfg(cf_el[i_el]);
 			vl = el->attr(cf_el[i_el]);
 			// Check for field's tag, for store big values
 			if(vl.empty() && (fnd=el->childGet(cf_el[i_el],0,true))) vl = fnd->text(true);
 			// Check for translation
-			if(u_cfg.fld().flg()&TCfg::TransltText && (Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()))
-			{
-			    vl_tr = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
-			    // Check for field's tag, for store big values
-			    if(vl_tr.empty() && (fnd=el->childGet(cf_el[i_el]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
-			    if(!vl_tr.empty()) vl = vl_tr;
-			}
-			u_cfg.setS(vl);
+			if(cf.fld().flg()&TCfg::TransltText) {
+			    vl_tr = "";
+			    if(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
+				vl_tr = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
+				// Check for field's tag, for store big values
+				if(vl_tr.empty() && (fnd=el->childGet(cf_el[i_el]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
+			    }
+			    if(!cf.extVal()) { cf.setS(vl_tr.size()?vl_tr:vl); Mess->translReg(vl, "cfg:"+path+"#"+cf_el[i_el]); }
+			    else {
+				cf.setS(vl, TCfg::ExtValOne);
+				cf.setS(vl_tr, TCfg::ExtValTwo);
+				cf.setS("cfg:"+path+"#"+cf_el[i_el], TCfg::ExtValThree);
+			    }
+			} else cf.setS(vl);
 		    }
 		    return true;
 		}
@@ -250,21 +256,25 @@ bool TBDS::dataGet( const string &ibdn, const string &path, TConfig &cfg, bool f
 		if(cfg.cfg(cf_el[i_el]).isKey() && cfg.cfg(cf_el[i_el]).getS() != el->attr(cf_el[i_el])) break;
 	    if(i_el == cf_el.size()) {
 		for(i_el = 0; i_el < cf_el.size(); i_el++) {
-		    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
+		    TCfg &cf = cfg.cfg(cf_el[i_el]);
 		    vl = el->attr(cf_el[i_el]);
 		    //  Check for field's tag, for store big values
 		    if(vl.empty() && (fnd=el->childGet(cf_el[i_el],0,true))) vl = fnd->text(true);
 		    //  Check for translation
-		    if(u_cfg.fld().flg()&TCfg::TransltText) {
-			Mess->translReg(vl, "cfg:"+path+"#"+cf_el[i_el]);
+		    if(cf.fld().flg()&TCfg::TransltText) {
+			vl_tr = "";
 			if(Mess->lang2CodeBase().empty() || Mess->lang2Code() != Mess->lang2CodeBase()) {
 			    vl_tr = el->attr(cf_el[i_el]+"_"+Mess->lang2Code());
 			    //  Check for field's tag, for store big values
 			    if(vl_tr.empty() && (fnd=el->childGet(cf_el[i_el]+"_"+Mess->lang2Code(),0,true))) vl_tr = fnd->text(true);
-			    if(!vl_tr.empty()) vl = vl_tr;
 			}
-		    }
-		    u_cfg.setS(vl);
+			if(!cf.extVal()) { cf.setS(vl_tr.size()?vl_tr:vl); Mess->translReg(vl, "cfg:"+path+"#"+cf_el[i_el]); }
+			else {
+			    cf.setS(vl, TCfg::ExtValOne);
+			    cf.setS(vl_tr, TCfg::ExtValTwo);
+			    cf.setS("cfg:"+path+"#"+cf_el[i_el], TCfg::ExtValThree);
+			}
+		    } else cf.setS(vl);
 		}
 		return true;
 	    }
@@ -287,7 +297,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	AutoHD<TTable> tbl = open(bdn,true);
 	if(!tbl.freeStat()) {
 	    bool db_true = true;
-	    try{ tbl.at().fieldSet(cfg); }
+	    try { tbl.at().fieldSet(cfg); }
 	    catch(TError err) {
 		//mess_warning(err.cat.c_str(),"%s",err.mess.c_str());
 		db_true = false;
@@ -316,7 +326,7 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 		if(el->name() != "fld")	continue;
 		//  Check keywords
 		for(i_el = 0; i_el < cf_el.size(); i_el++)
-		    if(cfg.cfg(cf_el[i_el]).isKey() && cfg.cfg(cf_el[i_el]).getS(TCfg::DblValTwo) != el->attr(cf_el[i_el])) break;
+		    if(cfg.cfg(cf_el[i_el]).isKey() && cfg.cfg(cf_el[i_el]).getS(TCfg::ExtValTwo) != el->attr(cf_el[i_el])) break;
 		if(i_el == cf_el.size()) { wel = el; break; }
 	    }
 
@@ -324,29 +334,29 @@ bool TBDS::dataSet( const string &ibdn, const string &path, TConfig &cfg, bool f
 	    if(!wel) wel = nd->childAdd("fld");
 	    for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 		vnm = cf_el[i_el];
-		TCfg &u_cfg = cfg.cfg(vnm);
-		bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && !u_cfg.noTransl() &&
+		TCfg &cf = cfg.cfg(vnm);
+		bool isTransl = (cf.fld().flg()&TCfg::TransltText && !cf.noTransl() &&
 				Mess->lang2CodeBase().size() && Mess->lang2Code() != Mess->lang2CodeBase());
 		if(isCreate || !isTransl) {
-		    if(u_cfg.getS().size() < 100) {
-			wel->setAttr(vnm, u_cfg.getS());
+		    if(cf.getS().size() < 100) {
+			wel->setAttr(vnm, cf.getS());
 			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 		    }
 		    else {
 			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			fnd->setText(u_cfg.getS(),true);
+			fnd->setText(cf.getS(),true);
 			wel->setAttr(vnm,"");
 		    }
 		}
 		if(isTransl) {
 		    vnm = cf_el[i_el]+"_"+Mess->lang2Code();
-		    if(u_cfg.getS().size() < 100) {
-			wel->setAttr(vnm, u_cfg.getS());
+		    if(cf.getS().size() < 100) {
+			wel->setAttr(vnm, cf.getS());
 			if((fnd=wel->childGet(vnm,0,true))) wel->childDel(fnd);
 		    }
 		    else {
 			if(!(fnd=wel->childGet(vnm,0,true))) fnd = wel->childAdd(vnm);
-			fnd->setText(u_cfg.getS(),true);
+			fnd->setText(cf.getS(),true);
 			wel->setAttr(vnm,"");
 		    }
 		}
@@ -1048,7 +1058,7 @@ void TTable::cntrCmdProc( XMLNode *opt )
 	    for(unsigned i_f = 0; i_f < req.elem().fldSize(); i_f++)
 		if(req.elem().fldAt(i_f).flg()&TCfg::Key) {
 		    eid = req.elem().fldAt(i_f).name();
-		    req.cfg(eid).setS(opt->attr("key_"+eid), TCfg::ForceUse|TCfg::DblValTwo);
+		    req.cfg(eid).setS(opt->attr("key_"+eid), TCfg::ForceUse|TCfg::ExtValTwo);
 		}
 	    // Same set
 	    req.cfgViewAll(false);

@@ -108,6 +108,7 @@ class Node : public TFunction, public TConfig
 
 	double period( )	{ return mPer; }
 	string progLang( );
+	bool progTr( )		{ return cfg("DT_PR_TR"); }
 	string prog( );
 
 	string getStatus( );
@@ -121,6 +122,7 @@ class Node : public TFunction, public TConfig
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
 	void setProgLang( const string &ilng );
+	void setProgTr( bool vl )		{ cfg("DT_PR_TR") = vl; }
 	void setProg( const string &iprg );
 
 	void setDB( const string &vl )		{ mDB = vl; modifG(); }
@@ -136,8 +138,7 @@ class Node : public TFunction, public TConfig
 
     private:
 	//Data
-	class SIO
-	{
+	class SIO {
 	    public:
 		SIO( ) : id(-1), pos(-1), sTp(0)	{ }
 		SIO( int iid, char isTp = 0, int ipos = 0 ) : id(iid), pos(ipos), sTp(isTp)	{ }
@@ -145,8 +146,7 @@ class Node : public TFunction, public TConfig
 		int id, pos;
 		char sTp;
 	};
-	class SData
-	{
+	class SData {
 	    public:
 		SData( ) : rReg(0), wReg(0), rCoil(0), wCoil(0), rCoilI(0), rRegI(0)	{ }
 

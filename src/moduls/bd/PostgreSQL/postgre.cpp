@@ -639,10 +639,10 @@ void MTable::fieldSet( TConfig &cfg )
 	TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
 	if(!u_cfg.isKey()) continue;
 	req_where += (next?"AND \"":"\"") + TSYS::strEncode(cf_el[i_el],TSYS::SQL) + "\"='" +
-					    TSYS::strEncode(u_cfg.getS(TCfg::DblValTwo)/*getVal(u_cfg)*/,TSYS::SQL) + "' ";
+					    TSYS::strEncode(u_cfg.getS(TCfg::ExtValTwo)/*getVal(u_cfg)*/,TSYS::SQL) + "' ";
 	next = true;
 
-	if(!isForceUpdt && u_cfg.dblVal()) isForceUpdt = true;
+	if(!isForceUpdt && u_cfg.extVal()) isForceUpdt = true;
 
 	// Check for no key fields
 	if(noKeyFld) continue;
@@ -689,7 +689,7 @@ void MTable::fieldSet( TConfig &cfg )
 	next = false;
 	for(unsigned i_el = 0; i_el < cf_el.size(); i_el++) {
 	    TCfg &u_cfg = cfg.cfg(cf_el[i_el]);
-	    if((u_cfg.isKey() && !u_cfg.dblVal()) || !u_cfg.view()) continue;
+	    if((u_cfg.isKey() && !u_cfg.extVal()) || !u_cfg.view()) continue;
 	    bool isTransl = (u_cfg.fld().flg()&TCfg::TransltText && trPresent && !u_cfg.noTransl());
 	    sid = isTransl ? (Mess->lang2Code()+"#"+cf_el[i_el]) : cf_el[i_el];
 	    sval = getVal(u_cfg);
@@ -868,11 +868,14 @@ void MTable::setVal( TCfg &cf, const string &val, bool tr )
 	    else cf.setS(val);
 	    break;
 	case TFld::String:
-	    if(!cf.dblVal()) {
+	    if(!cf.extVal()) {
 		cf.setS(val);
 		if(!tr && cf.fld().flg()&TCfg::TransltText && !cf.noTransl()) Mess->translReg(val, "db:"+fullDBName()+"#"+cf.name());
 	    }
-	    else cf.setS(val, (tr?TCfg::DblValTwo:TCfg::DblValOne));
+	    else {
+		cf.setS(val, (tr?TCfg::ExtValTwo:TCfg::ExtValOne));
+		if(!tr) cf.setS("db:"+fullDBName()+"#"+cf.name(), TCfg::ExtValThree);
+	    }
 	    break;
 	default: cf.setS(val); break;
     }

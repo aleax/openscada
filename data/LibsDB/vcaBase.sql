@@ -3616,10 +3616,10 @@ line:(15|126):(20|126):::::
 line:(15|42):(20|42):::::
 line:(15|14):(20|14):::::
 line:1:(10|140):10:c3:::
-line:2:3::c1:::
-line:4:5::c1:::
 line:6:7::c2:::
-line:8:9::c2:::',32,'','','lev_var','','','','','','');
+line:8:9::c2:::
+line:2:3::c1:::
+line:4:5::c1:::',32,'','','lev_var','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','name','Prescription:run (simple)',32,'','','','Рецепт:виконання (простий)','','Рецепт:исполнение (простой)','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomW','250',32,'','','','','','','','','');
 INSERT INTO "wlb_Main_io" VALUES('prescrRunSimple','geomH','170',32,'','','','','','','','','');
@@ -16631,16 +16631,16 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 				sessNm = strParsePath(path,0);
 				pidPg = "/"+sessNm + "/pg_so/"+vcaAttrGet("/"+sessNm+"/pg_so/wdg_pgCont/a_pgOpenSrc").parsePath(2)+"/pg_greg/pg_"+prmId;
 				if(vcaNodePresent(pidPg)) vcaAttrSet(pidPg+"/a_pgOpen",1);
-				else ev_rez+= "usr_PidCntrCall\n"; 
+				else ev_rez += "usr_PidCntrCall\n"; 
 			} 
-			else ev_rez+=ev_wrk+"\n";
+			else ev_rez += ev_wrk+"\n";
 		}
 		event = ev_rez;
 
 		if(appToVl && (prmAuto || prmOut.isEVal())) {
 			if(prmPrec.isEVal())	newVl = ((info_sp_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
 			else {
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
+				if((cntr-prevCntr)/f_frq > 0.2)	{ holdCntr = cntr; levUp = 0; }
 				prevCntr = cntr;
 				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
 				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
@@ -16702,7 +16702,7 @@ if(!prmVar.isEVal() || !prmVarIn.isEVal()) {
 		if(appToVl) {
 			if(prmPrec.isEVal()) newVl = ((info_var_arg0val-min)/(max-min)+appToVl/100)*(max-min)+min;
 			else {
-				if((cntr-prevCntr)/f_frq > 0.5)	{ holdCntr = cntr; levUp = 0; }
+				if((cntr-prevCntr)/f_frq > 0.2)	{ holdCntr = cntr; levUp = 0; }
 				prevCntr = cntr;
 				if((cntr-holdCntr)/f_frq > 3)	{ holdCntr = cntr; levUp++; }
 				decMult = max(2,floor(lg((max-min)/pow(10,-prmPrec))));
@@ -16782,7 +16782,7 @@ else if(!prmCom.isEVal() || !prmClose.isEVal() || !prmOpenSt.isEVal() || !prmClo
 	if(st_close_en) st_close_color = !prmCloseSt.isEVal() ? (prmCloseSt ?
 		((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red") : "gray") :
 			(prmOpenSt ? "gray" : ((digStts.parse(1,";").parse(1,"-") != "") ? digStts.parse(1,";").parse(1,"-") : "red"));
-}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1415726680);
+}','','',100,'path;name;dscr;active;geomW;geomH;evProc;backColor;bordWidth;bordColor;',1416768084);
 INSERT INTO "wlb_Main" VALUES('grpGraph','iVBORw0KGgoAAAANSUhEUgAAAEAAAAAqCAIAAACMZMq1AAAACXBIWXMAAAx1AAAMdQEteJR1AAAE
 xklEQVRYhdVYTW/bRhCd2S8uRVESJbOCZCSAgThBTknR3Jrmnj+R/5Kf2EvgwEacOkod24q+SIHk
 krvbA22akW0ILQSknNO+p/cWXM2sZih8//69ylSSJo7jGGPiOG6327ooALHlulEcE0IAQCmVJAn8

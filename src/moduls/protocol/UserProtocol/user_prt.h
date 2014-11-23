@@ -75,6 +75,7 @@ class UserPrt : public TCntrNode, public TConfig
 	string descr( )		{ return cfg("DESCR").getS(); }
 	bool toEnable( )	{ return mAEn; }
 	bool enableStat( )	{ return mEn; }
+	bool progTr( )		{ return cfg("PR_TR"); }
 	string inProgLang( );
 	string inProg( );
 	string outProgLang( );
@@ -92,6 +93,7 @@ class UserPrt : public TCntrNode, public TConfig
 	void setDescr( const string &idsc )	{ cfg("DESCR").setS(idsc); }
 	void setToEnable( bool vl )		{ mAEn = vl; modif(); }
 	void setEnable( bool vl );
+	void setProgTr( bool vl )		{ cfg("PR_TR") = vl; }
 	void setInProgLang( const string &ilng );
 	void setInProg( const string &iprg );
 	void setOutProgLang( const string &ilng );

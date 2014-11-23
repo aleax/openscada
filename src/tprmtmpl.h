@@ -63,6 +63,7 @@ class TPrmTempl: public TFunction, public TConfig
 	string	stor( );
 	int	maxCalcTm( );
 	string	progLang( );
+	bool	progTr( )	{ return cfg("PR_TR"); }
 	string	prog( );
 	int64_t	timeStamp( )	{ return mTimeStamp; }
 
@@ -70,6 +71,7 @@ class TPrmTempl: public TFunction, public TConfig
 	void setDescr( const string &idsc );
 	void setMaxCalcTm( int vl );
 	void setProgLang( const string &ilng );
+	void setProgTr( bool vl )	{ cfg("PR_TR") = vl; }
 	void setProg( const string &iprg );
 	void setStart( bool val );
 
@@ -84,7 +86,7 @@ class TPrmTempl: public TFunction, public TConfig
 
 	void postEnable( int flag );
 	void postDisable( int flag );
-	bool cfgChange( TCfg &co, const TVariant &pc )	{ modif(); return true; }
+	bool cfgChange( TCfg &co, const TVariant &pc );
 	void cntrCmdProc( XMLNode *opt );       //Control interface command process
 
 	TVariant objFuncCall( const string &id, vector<TVariant> &prms, const string &user );

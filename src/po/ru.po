@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA 0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-01 16:45+0300\n"
+"POT-Creation-Date: 2014-11-22 11:09+0200\n"
 "PO-Revision-Date: 2007-10-05 19:25+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <ru@li.org>\n"
@@ -815,8 +815,11 @@ msgstr "Сбор данных"
 msgid "Maximum calculate time (sec)"
 msgstr "Максимальное время вычисления (сек)"
 
-msgid "Template program"
-msgstr "Программа шаблона"
+msgid "Program translation allow"
+msgstr "Переводить программу"
+
+msgid "Program"
+msgstr "Программа"
 
 msgid "Date of modification"
 msgstr "Дата модификации"
@@ -1369,9 +1372,6 @@ msgstr "Константа;Публичная константа;Связь"
 
 msgid "Program language"
 msgstr "Язык программы"
-
-msgid "Program"
-msgstr "Программа"
 
 msgid "New IO"
 msgstr "Новое IO"
@@ -1984,10 +1984,12 @@ msgstr "Просмотр сообщений"
 msgid "Finished. "
 msgstr "Закончен. "
 
+#, c-format
 msgid ""
 "Last: %s. Consume: %3.1f[%3.1f]%% (%s from %s). Lag: %s[%s]. Cycles lost: %g."
 msgstr ""
-"Посл.: %s. Использ. %3.1f[%3.1f]%% (%s из %s). Отстав.: %s[%s]. Потеря циклов: %g."
+"Посл.: %s. Использ. %3.1f[%3.1f]%% (%s из %s). Отстав.: %s[%s]. Потеря "
+"циклов: %g."
 
 msgid "Standard"
 msgstr "Стандарт"
@@ -2220,9 +2222,6 @@ msgstr "Архивация"
 msgid "Not select type!"
 msgstr "Не выборочный тип!"
 
-msgid "Write access is denied!"
-msgstr "Нет доступа на запись!"
-
 #, c-format
 msgid "Write value to archive error: %s"
 msgstr "Ошибка записи значения в архив: %s"
@@ -2368,36 +2367,3 @@ msgstr "Имя проекта установлено в:"
 
 msgid "already started."
 msgstr "уже запущен."
-
-#~ msgid "Start archive"
-#~ msgstr "Начало архива"
-
-#~ msgid "Options help"
-#~ msgstr "Помощь по опциям"
-
-#~ msgid "Help"
-#~ msgstr "Помощь"
-
-#~ msgid "Buffer full. Messages lost!"
-#~ msgstr "Буфер полон. Потеря сообщений!"
-
-#~ msgid "Messages buffer filling is too fast!"
-#~ msgstr "Буфер сообщений заполняется слишком быстро!"
-
-#~ msgid "Loading node error."
-#~ msgstr "Ошибка загрузки узла."
-
-#~ msgid "Saving node error."
-#~ msgstr "Ошибка сохранения узла."
-
-#~ msgid "System's external hosts"
-#~ msgstr "Системные внешние хосты"
-
-#~ msgid "Array is empty."
-#~ msgstr "Массив пуст."
-
-#~ msgid "No parameter present '%s'."
-#~ msgstr "Отсутствует параметр '%s'."
-
-#~ msgid "Negative id is not allow for array."
-#~ msgstr "Отрицательные индексы не допустимы для массива."

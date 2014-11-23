@@ -1,3 +1,11 @@
+2014-11-23 Roman
+- LibsDB.OscadaLibs.db: Translation field is added to procedures and the library accept.
+- LibsDB.vcaBase.db: Main.ElCadr: Border's order set to alarm upper. Restore time for repeat decrease to 0.2.
+- !!:TConfig,DAQ.{Templates,JavaLikeCalc},Protocol.{ModBus,UserProtocol}:
+    DblVal renamed to ExtVal. Transparent mode for translation access by getS() and ExtVal mode is added.
+    ExtVal mode mostly used for procedures text translate control, mostly for the disable into dynamic translation mode.
+
+
 2014-11-13 Roman
 - LibsDB.vcaBase.db: Main.ElCadr mostly fixed for tooltips to the commands.
 - !!:FIX:Archive,Archive.FSArch: Final fixed for prevent doubles and wrong archives connection for later appended data sources.

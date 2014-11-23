@@ -125,8 +125,7 @@ class TCntrNode
     //* Resource section *
     public:
 	//Data
-	enum Flag
-	{
+	enum Flag {
 	    // Modes
 	    MkDisable	= 0x00,		//Node make disable
 	    Disable	= 0x01,		//Node disabled
@@ -137,8 +136,7 @@ class TCntrNode
 	    SelfModifyS	= 0x08,		//Self modify store
 	    SelfSaveForceOnChild = 0x10	//Save force on childs modify flag set
 	};
-	enum EnFlag
-	{
+	enum EnFlag {
 	    NodeConnect	= 0x01,		//Connect node to control tree
 	    NodeRestore	= 0x02,		//Restore node enabling after broken disabling.
 	    NodeShiftDel= 0x04
@@ -189,8 +187,7 @@ class TCntrNode
 
     protected:
 	//Data
-	struct GrpEl
-	{
+	struct GrpEl {
 	    string	id;
 	    bool	ordered;
 	    TMap	elem;
@@ -224,8 +221,7 @@ class TCntrNode
 
     private:
 	//Data
-	struct
-	{
+	struct {
 	    TCntrNode	*node;
 	    int8_t	grp;
 	} prev;

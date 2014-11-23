@@ -509,8 +509,7 @@ void Widget::attrList( vector<string> &list )
     pthread_mutex_lock(&mtxAttr());
     list.clear();
     list.reserve(mAttrs.size());
-    for(map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p)
-    {
+    for(map<string, Attr* >::iterator p = mAttrs.begin(); p != mAttrs.end(); ++p) {
 	while(p->second->mOi >= list.size())	list.push_back("");
 	list[p->second->mOi] = p->first;
     }

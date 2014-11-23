@@ -32,7 +32,7 @@ using namespace JavaLikeCalc;
 //* Lib: Functions library                        *
 //*************************************************
 Lib::Lib( const string &id, const string &name, const string &lib_db ) :
-    TConfig(&mod->elLib()), work_lib_db(lib_db), mId(cfg("ID")), mProgTr(cfg("PROG_TR").getBd())
+    TConfig(&mod->elLib()), work_lib_db(lib_db), mId(cfg("ID"))
 {
     mId = id;
     cfg("NAME").setS(name);
@@ -105,7 +105,7 @@ void Lib::load_( )
 {
     if(DB().empty() || (!SYS->chkSelDB(DB())))	throw TError();
 
-    SYS->db().at().dataGet(DB()+"."+mod->libTable(),mod->nodePath()+"lib/",*this);
+    SYS->db().at().dataGet(DB()+"."+mod->libTable(), mod->nodePath()+"lib/", *this);
 
     //Load functions
     map<string, bool>   itReg;
@@ -180,8 +180,6 @@ void Lib::cntrCmdProc( XMLNode *opt )
 		ctrMkNode("fld",opt,-1,"/lib/cfg/id",_("Id"),R_R_R_,"root",SDAQ_ID,1,"tp","str");
 		ctrMkNode("fld",opt,-1,"/lib/cfg/name",_("Name"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,2,"tp","str","len",OBJ_NM_SZ);
 		ctrMkNode("fld",opt,-1,"/lib/cfg/descr",_("Description"),DB().empty()?R_R_R_:RWRWR_,"root",SDAQ_ID,3,"tp","str","cols","100","rows","5");
-		if(!DB().empty())
-		    ctrMkNode("fld",opt,-1,"/lib/cfg/progTr",_("Program's text translation"),RWRWR_,"root",SDAQ_ID,1,"tp","bool");
 	    }
 	}
 	if(ctrMkNode("area",opt,-1,"/func",_("Functions")))
@@ -215,10 +213,6 @@ void Lib::cntrCmdProc( XMLNode *opt )
     else if(a_path == "/lib/cfg/descr") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(descr());
 	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setDescr(opt->text());
-    }
-    else if(a_path == "/lib/cfg/progTr") {
-	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD))	opt->setText(i2s(progTr()));
-	if(ctrChkNode(opt,"set",RWRWR_,"root",SDAQ_ID,SEC_WR))	setProgTr(s2i(opt->text()));
     }
     else if(a_path == "/br/fnc_" || a_path == "/func/func") {
 	if(ctrChkNode(opt,"get",RWRWR_,"root",SDAQ_ID,SEC_RD)) {
