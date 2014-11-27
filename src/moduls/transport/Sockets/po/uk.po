@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenSCADA.Transport.Sockets 1.5.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-01 20:38+0200\n"
+"POT-Creation-Date: 2014-11-27 13:56+0200\n"
 "PO-Revision-Date: 2007-10-19 18:04+0300\n"
 "Last-Translator: Roman Savochenko <rom_as@oscada.org>\n"
 "Language-Team: <uk@li.org>\n"
@@ -16,15 +16,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: socket.cpp:45
 msgid "Sockets"
 msgstr "Сокети"
 
-#: socket.cpp:49
 msgid "Roman Savochenko"
 msgstr "Роман Савоченко"
 
-#: socket.cpp:50
 msgid ""
 "Allow sockets based transport. Support inet and unix sockets. Inet socket "
 "use TCP and UDP protocols."
@@ -32,11 +29,9 @@ msgstr ""
 "Надає транспорт базований на сокетах. Підтримуються інтернет та UNIX сокети. "
 "Інтернет сокет використовує TCP та UDP протоколи."
 
-#: socket.cpp:108 socket.cpp:109
 msgid "Addition parameters"
 msgstr "Додаткові параметри"
 
-#: socket.cpp:148
 #, c-format
 msgid ""
 "Connections %d, opened %d. Traffic in %s, out %s. Closed connections by "
@@ -45,98 +40,94 @@ msgstr ""
 "Підключень %d, відкрито %d. Трафік вхідний %s, вихідний %s. Закрито "
 "підключень за лімітом %d."
 
-#: socket.cpp:200 socket.cpp:208 socket.cpp:214
 #, c-format
 msgid "Error create '%s' socket!"
 msgstr "Помилка створення %s сокету!"
 
-#: socket.cpp:217
 #, c-format
 msgid "Socket type '%s' error!"
 msgstr "Помилка у типу '%s' сокету!"
 
-#: socket.cpp:232 socket.cpp:775
 #, c-format
 msgid "Socket name '%s' error!"
 msgstr "Помилка у імені '%s' сокету!"
 
-#: socket.cpp:249
 #, c-format
 msgid "TCP socket doesn't bind to '%s'!"
 msgstr "TCP сокет не під'єднався до '%s'!"
 
-#: socket.cpp:265
 #, c-format
 msgid "UDP socket doesn't bind to '%s'!"
 msgstr "UDP сокет не під'єднався до '%s'!"
 
-#: socket.cpp:282
 #, c-format
 msgid "UNIX socket doesn't bind to '%s'!"
 msgstr "UNIX сокет не під'єднався до '%s'!"
 
-#: socket.cpp:318
+#, c-format
+msgid "RAWCAN socket doesn't bind to '%s'!"
+msgstr "RAWCAN сокет не під'єднався до '%s'!"
+
+#, c-format
+msgid "RAWCAN socket binded '%s'!"
+msgstr "RAWCAN сокет під'єднався до '%s'!"
+
 #, c-format
 msgid "Socket write message '%d'."
 msgstr "Сокет записав повідомлення '%d'."
 
-#: socket.cpp:324 socket.cpp:514
 msgid "Write: reply for zero bytes."
 msgstr "Запис: відповідь ноль байт."
 
-#: socket.cpp:334 socket.cpp:524
 #, c-format
 msgid "Write: error '%s (%d)'!"
 msgstr "Запис: помилка '%s (%d)'!"
 
-#: socket.cpp:374
 #, c-format
 msgid "Close input transport by error: %s"
 msgstr "Закриття вхідного транспорту за помилкою: %s!"
 
-#: socket.cpp:402 socket.cpp:427
 msgid "Error creation of the thread!"
 msgstr "Помилка створення потоку!"
 
-#: socket.cpp:441
 #, c-format
 msgid "Socket received datagram '%d' from '%s'!"
 msgstr "Сокет отримав датаграму '%d' з '%s'!"
 
-#: socket.cpp:447
 #, c-format
 msgid "Socket replied datagram '%d' to '%s'!"
 msgstr "Сокет відповів датаграмою '%d' до '%s'!"
 
-#: socket.cpp:463
+#, c-format
+msgid ""
+"Socket received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X"
+"%02X!"
+msgstr ""
+"Сокет отримав CAN повідомлення id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X"
+"%02X%02X!"
+
 msgid " client task is stopping...."
 msgstr " клієнтську задачу зупинено...."
 
-#: socket.cpp:477
 #, c-format
 msgid "Socket has been connected by '%s'!"
 msgstr "До сокета приєднався '%s'!"
 
-#: socket.cpp:502
 #, c-format
 msgid "Socket received message '%d' from '%s'."
 msgstr "Сокет отримав повідомлення '%d' від '%s'."
 
-#: socket.cpp:509
 #, c-format
 msgid "Socket replied message '%d' to '%s'."
 msgstr "Сокет відповів повідомленням '%d' до '%s'."
 
-#: socket.cpp:551
 #, c-format
 msgid "Socket has been disconnected by '%s'!"
 msgstr "Від сокету від'єднався '%s'!"
 
-#: socket.cpp:588
 msgid "Error request to protocol."
 msgstr "Помилка запиту до протоколу."
 
-#: socket.cpp:624
 msgid ""
 "Socket's input transport has address format:\n"
 "  TCP:{addr}:{port}:{mode} - TCP socket:\n"
@@ -148,6 +139,10 @@ msgid ""
 "    addr - address for socket to be opened, empty address opens socket for "
 "all interfaces;\n"
 "    port - network port (/etc/services).\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+"    if - interface name;\n"
+"    mask - CAN frame id mask;\n"
+"    id - CAN id.\n"
 "  UNIX:{name}:{mode} - UNIX socket:\n"
 "    name - UNIX-socket's file name;\n"
 "    mode - work mode (0 - break connection; 1 - keep alive)."
@@ -162,35 +157,32 @@ msgstr ""
 "    addr - адреса відкриття сокету, порожня адреса відкриває сокет на всіх "
 "інтерфейсах;\n"
 "    port - мережевий порт (/etc/services);\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN сокет:\n"
+"    if - ім'я інтерфейсу;\n"
+"    mask - маска CAN;\n"
+"    id - ідентифікатор CAN.\n"
 "  UNIX:{name}:{mode} - UNIX сокет:\n"
 "    name - Ім'я файлу UNIX-сокета;\n"
 "    mode - режим роботи (0 - розривати з'єднання; 1 - зберігати з'єднання)."
 
-#: socket.cpp:636
 msgid "Queue length"
 msgstr "Довжина черги"
 
-#: socket.cpp:637 socket.cpp:639
 msgid "Used for TCP and UNIX sockets."
 msgstr "Використовується для TCP та UNIX сокетів."
 
-#: socket.cpp:638
 msgid "Clients maximum"
 msgstr "Максимум клієнтів"
 
-#: socket.cpp:640
 msgid "Input buffer (kbyte)"
 msgstr "Вхідний буфер (кбайт)"
 
-#: socket.cpp:641
 msgid "Priority"
 msgstr "Пріоритет"
 
-#: socket.cpp:643
 msgid "Keep alive requests"
 msgstr "Keep alive запитів"
 
-#: socket.cpp:644
 msgid ""
 "Close the connection after specified requests.\n"
 "Zero value for disable (not close ever)."
@@ -198,11 +190,9 @@ msgstr ""
 "Закриття підключення після визначеної кількості запитів.\n"
 "Нульове значення для відключення (не закривається ніколи)."
 
-#: socket.cpp:645
 msgid "Keep alive timeout (s)"
 msgstr "Keep alive час очікування (с)"
 
-#: socket.cpp:646
 msgid ""
 "Close the connection after no requests at specified timeout.\n"
 "Zero value for disable (not close ever)."
@@ -210,63 +200,54 @@ msgstr ""
 "Закриття підключення після відсутності запитів протягом визначеного часу.\n"
 "Нульове значення для відключення (не закривається ніколи)."
 
-#: socket.cpp:720
 #, c-format
 msgid "Traffic in %s, out %s."
 msgstr "Трафік вхідний %s, вихідний %s."
 
-#: socket.cpp:762
 #, c-format
 msgid "Type socket '%s' error!"
 msgstr "Помилка у типу '%s' сокету!"
 
-#: socket.cpp:789
+#, c-format
+msgid "Error force socket %d using: %s!"
+msgstr "Помилка примусового використання сокету %d: %s!"
+
 #, c-format
 msgid "Error creation TCP socket: %s!"
 msgstr "Помилка створення TCP сокету: %s!"
 
-#: socket.cpp:796
 #, c-format
 msgid "Error creation UDP socket: %s!"
 msgstr "Помилка створення UDP сокету: %s!"
 
-#: socket.cpp:816
 #, c-format
 msgid "Connect to Internet socket error: %s!"
 msgstr "Помилка підключення до Internet сокету: %s!"
 
-#: socket.cpp:829
 #, c-format
 msgid "Error creation UNIX socket: %s!"
 msgstr "Помилка створення UNIX сокету: %s!"
 
-#: socket.cpp:834
 #, c-format
 msgid "Connect to UNIX error: %s!"
 msgstr "Помилка підключення до UNIX сокету: %s!"
 
-#: socket.cpp:864
 msgid "Unknown error"
 msgstr "Невідома помилка"
 
-#: socket.cpp:877
 msgid "Transport is not started!"
 msgstr "Транспорт не запущено!"
 
-#: socket.cpp:880
 #, c-format
 msgid "Request error: %s"
 msgstr "Помилка запиту: %s"
 
-#: socket.cpp:927
 msgid "Timeouted!"
 msgstr "Перевищено час очікування!"
 
-#: socket.cpp:928
 msgid "Socket error!"
 msgstr "Помилка сокету!"
 
-#: socket.cpp:958
 msgid ""
 "Socket's output transport has address format:\n"
 "  TCP:{addr}:{port} - TCP socket:\n"
@@ -275,6 +256,10 @@ msgid ""
 "  UDP:{addr}:{port} - UDP socket:\n"
 "    addr - address for remote socket to be opened;\n"
 "    port - network port (/etc/services).\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+"    if - interface name;\n"
+"    mask - CAN frame id mask;\n"
+"    id - CAN id.\n"
 "  UNIX:{name} - UNIX socket:\n"
 "    name - UNIX-socket's file name."
 msgstr ""
@@ -285,14 +270,16 @@ msgstr ""
 "  UDP:{addr}:{port} - UDP сокет:\n"
 "    addr - адреса для відкриття віддаленого сокету;\n"
 "    port - мережевий порт (/etc/services);\n"
+"  RAWCAN:{if}:{mask}:{id} - CAN сокет:\n"
+"    if - ім'я інтерфейсу;\n"
+"    mask - маска CAN;\n"
+"    id - ідентифікатор CAN.\n"
 "  UNIX:{name} - UNIX сокет:\n"
 "    name - Ім'я файлу UNIX-сокету."
 
-#: socket.cpp:967
 msgid "Timings"
 msgstr "Інтервали часу"
 
-#: socket.cpp:968
 msgid ""
 "Connection timings in format: \"conn:next[:rep]\". Where:\n"
 "    conn - maximum time for connection respond wait, in seconds;\n"

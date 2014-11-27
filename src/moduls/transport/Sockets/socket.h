@@ -32,11 +32,13 @@
 #define S_NM_TCP	"TCP"
 #define S_NM_UDP	"UDP"
 #define S_NM_UNIX	"UNIX"
+#define S_NM_RAWCAN	"RAWCAN"
 
 #define SOCK_FORCE	-1
 #define SOCK_TCP	0
 #define SOCK_UDP	1
 #define SOCK_UNIX	2
+#define SOCK_RAWCAN	3
 
 using namespace OSCADA;
 
@@ -195,12 +197,12 @@ class TSocketOut: public TTransportOut
 
 	int		sock_fd;
 
-	int		type;			// socket's types
+	int		type;			//Socket's types
 	struct sockaddr_in	name_in;
 	struct sockaddr_un	name_un;
 
 	// Status atributes
-	uint64_t	trIn, trOut;			// Traffic in and out counter
+	uint64_t	trIn, trOut;		//Traffic in and out counter
 	Res		wres;
 	int64_t		mLstReqTm;
 };

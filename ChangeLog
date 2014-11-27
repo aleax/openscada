@@ -1,3 +1,7 @@
+2014-11-27 fido_max
+- !:Transport.Sockets: RAWCAN SocketCAN support added.
+
+
 2014-11-23 Roman
 - LibsDB.OscadaLibs.db: Translation field is added to procedures and the library accept.
 - LibsDB.vcaBase.db: Main.ElCadr: Border's order set to alarm upper. Restore time for repeat decrease to 0.2.

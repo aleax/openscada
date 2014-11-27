@@ -20,15 +20,29 @@
 
 #include <sys/types.h>
 #include <sys/un.h>
+#include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/wait.h>
 #include <sys/select.h>
 #include <arpa/inet.h>
+#include <net/if.h>
+
+#include <linux/can.h>
+#include <linux/can/raw.h>
+
+#ifndef PF_CAN
+#define PF_CAN 29
+#endif
+
+#ifndef AF_CAN
+#define AF_CAN PF_CAN
+#endif
 
 #include <fcntl.h>
 #include <unistd.h>
+#include <getopt.h>
 #include <string>
 #include <errno.h>
 
@@ -196,6 +210,11 @@ void TSocketIn::start( )
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
 	type = SOCK_UNIX;
     }
+    else if(s_type == S_NM_RAWCAN) {
+	if((sock_fd = socket(PF_CAN,SOCK_RAW,CAN_RAW)) == -1)
+	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
+	type = SOCK_RAWCAN;
+    }
     else throw TError(nodePath().c_str(), _("Socket type '%s' error!"), s_type.c_str());
 
     if(type == SOCK_TCP || type == SOCK_UDP) {
@@ -256,6 +275,25 @@ void TSocketIn::start( )
 	    throw TError(nodePath().c_str(),_("UNIX socket doesn't bind to '%s'!"),addr().c_str());
 	}
 	listen(sock_fd, maxQueue());
+    }
+    else if(type == SOCK_RAWCAN) {
+	path	= TSYS::strSepParse(addr(), 1, ':');
+	struct can_filter rfilter;
+	rfilter.can_id = strtoul(TSYS::strSepParse(addr(),2,':').c_str(), NULL, 0);
+	rfilter.can_mask = strtoul(TSYS::strSepParse(addr(),3,':').c_str(), NULL, 0);
+	setsockopt(sock_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+	if(!path.size()) path = "can0";
+	struct ifreq ifr;
+	strcpy(ifr.ifr_name, path.c_str());
+	ioctl(sock_fd, SIOCGIFINDEX, &ifr);
+	struct sockaddr_can name_can;
+	name_can.can_family = AF_CAN;
+	name_can.can_ifindex = ifr.ifr_ifindex;
+	if(bind(sock_fd, (struct sockaddr*) &name_can, sizeof(name_can)) == -1) {
+	    close(sock_fd);
+	    throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr().c_str());
+	}
+	else if(mess_lev() == TMess::Debug) mess_debug(nodePath().c_str(), _("RAWCAN socket binded '%s'!"), addr().c_str());
     }
 
     SYS->taskCreate(nodePath('.',true), taskPrior(), Task, this);
@@ -415,7 +453,26 @@ void *TSocketIn::Task( void *sock_in )
 		mess_debug(sock->nodePath().c_str(), _("Socket replied datagram '%d' to '%s'!"), answ.size(), inet_ntoa(name_cl.sin_addr));
 
 	    r_len = sendto(sock->sock_fd, answ.c_str(), answ.size(), 0, (sockaddr *)&name_cl, name_cl_len);
-	    sock->trOut += vmax(0,r_len);
+	    sock->trOut += vmax(0, r_len);
+	}
+	else if(sock->type == SOCK_RAWCAN) {
+	    struct can_frame frame;
+	    string req, answ;
+	    int r_len = recv(sock->sock_fd, &frame, sizeof(frame), 0);
+	    if(r_len <= 0) continue;
+	    sock->trIn += r_len;
+	    req.assign((char*)frame.data, frame.can_dlc);
+
+	    if(mess_lev() == TMess::Debug)
+		mess_debug(sock->nodePath().c_str(), _("Socket received CAN frame id:%08X; dlc:%d; data:%02X%02X%02X%02X%02X%02X%02X%02X!"),
+		    frame.can_id, frame.can_dlc, frame.data[0], frame.data[1], frame.data[2], frame.data[3], frame.data[4],
+		    frame.data[5], frame.data[6], frame.data[7]);
+
+	    sock->messPut(sock->sock_fd, req, answ, TSYS::uint2str(frame.can_id), prot_in);
+	    if(!prot_in.freeStat()) continue;
+
+	    r_len = send(sock->sock_fd, answ.c_str(), answ.size(), 0);
+	    sock->trOut += vmax(0, r_len);
 	}
     }
     pthread_attr_destroy(&pthr_attr);
@@ -587,6 +644,10 @@ void TSocketIn::cntrCmdProc( XMLNode *opt )
 	    "  UDP:{addr}:{port} - UDP socket:\n"
 	    "    addr - address for socket to be opened, empty address opens socket for all interfaces;\n"
 	    "    port - network port (/etc/services).\n"
+	    "  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+	    "    if - interface name;\n"
+	    "    mask - CAN frame id mask;\n"
+	    "    id - CAN id.\n"
 	    "  UNIX:{name}:{mode} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name;\n"
 	    "    mode - work mode (0 - break connection; 1 - keep alive)."));
@@ -708,13 +769,13 @@ void TSocketOut::start( int itmCon )
     else if(s_type == S_NM_TCP)	type = SOCK_TCP;
     else if(s_type == S_NM_UDP)	type = SOCK_UDP;
     else if(s_type == S_NM_UNIX)type = SOCK_UNIX;
+    else if(s_type == S_NM_RAWCAN) type = SOCK_RAWCAN;
     else throw TError(nodePath().c_str(),_("Type socket '%s' error!"),s_type.c_str());
 
     if(type == SOCK_FORCE) {
 	sock_fd = atoi(TSYS::strSepParse(addr(),1,':').c_str());
 	int rez;
-	if((rez=fcntl(sock_fd,F_GETFL,0)) < 0 || fcntl(sock_fd,F_SETFL,rez|O_NONBLOCK) < 0)
-	{
+	if((rez=fcntl(sock_fd,F_GETFL,0)) < 0 || fcntl(sock_fd,F_SETFL,rez|O_NONBLOCK) < 0) {
 	    close(sock_fd);
 	    throw TError(nodePath().c_str(), _("Error force socket %d using: %s!"), sock_fd, strerror(errno));
 	}
@@ -778,14 +839,35 @@ void TSocketOut::start( int itmCon )
 	//Create socket
 	if((sock_fd=socket(PF_UNIX,SOCK_STREAM,0)) == -1)
 	    throw TError(nodePath().c_str(), _("Error creation UNIX socket: %s!"), strerror(errno));
-	if(connect(sock_fd,(sockaddr*)&name_un,sizeof(name_un)) == -1)
-	{
+	if(connect(sock_fd,(sockaddr*)&name_un,sizeof(name_un)) == -1) {
 	    close(sock_fd);
 	    sock_fd = -1;
 	    throw TError(nodePath().c_str(), _("Connect to UNIX error: %s!"), strerror(errno));
 	}
 	fcntl(sock_fd, F_SETFL, fcntl(sock_fd,F_GETFL,0)|O_NONBLOCK);
     }
+    else if(type == SOCK_RAWCAN) {
+	if((sock_fd = socket( PF_CAN, SOCK_RAW, CAN_RAW)) == -1)
+	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
+	    int flags = fcntl(sock_fd, F_GETFL, 0);
+	    fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK);;
+	    string path = TSYS::strSepParse(addr(), 1, ':');
+	    struct can_filter rfilter;
+	    rfilter.can_id = strtoul(TSYS::strSepParse(addr(),2,':').c_str(), NULL, 0);
+	    rfilter.can_mask = strtoul(TSYS::strSepParse(addr(),3,':').c_str(), NULL, 0);
+	    setsockopt(sock_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+	    if(!path.size()) path = "can0";
+	    struct ifreq ifr;
+	    strcpy(ifr.ifr_name, path.c_str());
+	    ioctl(sock_fd, SIOCGIFINDEX, &ifr); 
+	    struct sockaddr_can name_can;
+	    name_can.can_family = AF_CAN;
+	    name_can.can_ifindex = ifr.ifr_ifindex;
+	    if(bind(sock_fd,(struct sockaddr*)&name_can,sizeof(name_can)) == -1) {
+		close(sock_fd);
+		throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr().c_str());
+	    }
+	}
 
     mLstReqTm = TSYS::curTime();
 
@@ -910,6 +992,10 @@ void TSocketOut::cntrCmdProc( XMLNode *opt )
 	    "  UDP:{addr}:{port} - UDP socket:\n"
 	    "    addr - address for remote socket to be opened;\n"
 	    "    port - network port (/etc/services).\n"
+	    "  RAWCAN:{if}:{mask}:{id} - CAN socket:\n"
+	    "    if - interface name;\n"
+	    "    mask - CAN frame id mask;\n"
+	    "    id - CAN id.\n"
 	    "  UNIX:{name} - UNIX socket:\n"
 	    "    name - UNIX-socket's file name."));
 	ctrMkNode("fld",opt,-1,"/prm/cfg/TMS",_("Timings"),RWRWR_,"root",STR_ID,2,"tp","str","help",
