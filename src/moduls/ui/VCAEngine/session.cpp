@@ -1633,16 +1633,14 @@ bool SessWdg::attrChange( Attr &cfg, TVariant prev )
     }
 
     //External link process
-    if(!inLnkGet && !prev.isNull() && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty())
-    {
+    if(!inLnkGet && !prev.isNull() && cfg.flgSelf()&Attr::CfgLnkOut && !cfg.cfgVal().empty()) {
 	if(cfg.flgSelf()&Attr::SessAttrInh) cfg.setFlgSelf((Attr::SelfAttrFlgs)(cfg.flgSelf()&(~Attr::SessAttrInh)));
 	string obj_tp = TSYS::strSepParse(cfg.cfgVal(),0,':') + ":";
 	try {
 	    if(obj_tp == "prm:") {
 		int detOff = obj_tp.size();	//Links subdetail process
 		AutoHD<TVal> vl = SYS->daq().at().attrAt(TSYS::strParse(cfg.cfgVal(),0,"#",&detOff));
-		if(vl.at().fld().type() == TFld::Object && detOff < (int)cfg.cfgVal().size())
-		{
+		if(vl.at().fld().type() == TFld::Object && detOff < (int)cfg.cfgVal().size()) {
 		    vl.at().getO().at().propSet(cfg.cfgVal().substr(detOff),0,cfg.get());
 		    vl.at().setO(vl.at().getO());	//For modify object sign
 		}

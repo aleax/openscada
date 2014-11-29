@@ -847,27 +847,27 @@ void TSocketOut::start( int itmCon )
 	fcntl(sock_fd, F_SETFL, fcntl(sock_fd,F_GETFL,0)|O_NONBLOCK);
     }
     else if(type == SOCK_RAWCAN) {
-	if((sock_fd = socket( PF_CAN, SOCK_RAW, CAN_RAW)) == -1)
+	if((sock_fd = socket(PF_CAN, SOCK_RAW, CAN_RAW)) == -1)
 	    throw TError(nodePath().c_str(), _("Error create '%s' socket!"), s_type.c_str());
-	    int flags = fcntl(sock_fd, F_GETFL, 0);
-	    fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK);;
-	    string path = TSYS::strSepParse(addr(), 1, ':');
-	    struct can_filter rfilter;
-	    rfilter.can_id = strtoul(TSYS::strSepParse(addr(),2,':').c_str(), NULL, 0);
-	    rfilter.can_mask = strtoul(TSYS::strSepParse(addr(),3,':').c_str(), NULL, 0);
-	    setsockopt(sock_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
-	    if(!path.size()) path = "can0";
-	    struct ifreq ifr;
-	    strcpy(ifr.ifr_name, path.c_str());
-	    ioctl(sock_fd, SIOCGIFINDEX, &ifr); 
-	    struct sockaddr_can name_can;
-	    name_can.can_family = AF_CAN;
-	    name_can.can_ifindex = ifr.ifr_ifindex;
-	    if(bind(sock_fd,(struct sockaddr*)&name_can,sizeof(name_can)) == -1) {
-		close(sock_fd);
-		throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr().c_str());
-	    }
+	int flags = fcntl(sock_fd, F_GETFL, 0);
+	fcntl(sock_fd, F_SETFL, flags | O_NONBLOCK);;
+	string path = TSYS::strSepParse(addr(), 1, ':');
+	struct can_filter rfilter;
+	rfilter.can_id = strtoul(TSYS::strSepParse(addr(),2,':').c_str(), NULL, 0);
+	rfilter.can_mask = strtoul(TSYS::strSepParse(addr(),3,':').c_str(), NULL, 0);
+	setsockopt(sock_fd, SOL_CAN_RAW, CAN_RAW_FILTER, &rfilter, sizeof(rfilter));
+	if(!path.size()) path = "can0";
+	struct ifreq ifr;
+	strcpy(ifr.ifr_name, path.c_str());
+	ioctl(sock_fd, SIOCGIFINDEX, &ifr); 
+	struct sockaddr_can name_can;
+	name_can.can_family = AF_CAN;
+	name_can.can_ifindex = ifr.ifr_ifindex;
+	if(bind(sock_fd,(struct sockaddr*)&name_can,sizeof(name_can)) == -1) {
+	    close(sock_fd);
+	    throw TError(nodePath().c_str(), _("RAWCAN socket doesn't bind to '%s'!"), addr().c_str());
 	}
+    }
 
     mLstReqTm = TSYS::curTime();
 

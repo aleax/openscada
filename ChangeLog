@@ -1,3 +1,8 @@
+2014-11-29 Roman
+- !:DAQ.LogicLev: Link to object's property by path "{ModType}.{Cntr}.{Prm}.{Attr}#{ObjPath}" is added.
+- Transport.Sockets: Source code for SOCK_RAWCAN some clean up.
+
+
 2014-11-27 fido_max
 - !:Transport.Sockets: RAWCAN SocketCAN support added.
 
@@ -1601,8 +1606,8 @@
 - FIX:UI.{Vision,WebVision}: Remove upper limit for primitive's "Diagram" parameters number.
 
 
-2013-02-20 Roman
-- !!:DAQ.DCON: Significant changes from Almaz Karimov:
+2013-02-20 Almaz
+- !!:DAQ.DCON: Significant changes:
     - analog inputs reading of one methods is added;
     - the method 1AO (#AA) (blocks NL-1AO, I-7021, ADAM-4021) working is fixed;
     - the method 4AO (#AACN) is added for working with block ADAM-4024;
@@ -3054,8 +3059,8 @@
 - DAQ.Siemens, DAQ.DiamondBoards: Full controller's and parameter's object load mechanism update.
 
 
-2011-10-05 Roman
-- SYS: Debian init script is updated by "almaz".
+2011-10-05 Almaz
+- SYS: Debian init script is updated.
 
 
 2011-10-04 Roman
