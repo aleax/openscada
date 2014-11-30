@@ -58,7 +58,8 @@ class Attr
 	    IsUser	= 0x02000,	//User created element
 	    Mutable	= 0x08000,	//Mutable attribute, present depend from "Active" attribute value
 	    Generic	= 0x10000,	//Generic atributes' flag. This atributes loaded independent from enabled state
-	    DirRead	= 0x20000	//Direct read attribute, through widget
+	    OnlyRead	= 0x20000,	//Only read attribute, through widget, no the attribute storing location
+	    PreRead	= 0x40000	//Preprocessed read
 	};
 
 	// Link types
@@ -88,7 +89,7 @@ class Attr
 	string cfgVal( );
 	static bool isTransl( TFld::Type tp, int flgGlb, int flgSelf = -1 ) {
 	    return (tp == TFld::String &&
-		!(flgGlb&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		!(flgGlb&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
 	}
 	bool isTransl( bool cfg = false )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }

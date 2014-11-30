@@ -743,8 +743,7 @@ void SessPage::setEnable( bool val, bool force )
 	mToEn = true;
 	// Check for full enable need
 	bool pgOpen = (!(parent().at().prjFlags()&Page::Empty) && parent().at().attrAt("pgOpen").at().getB());
-	if((pgOpen || force || parent().at().attrAt("pgNoOpenProc").at().getB()) && !enable())
-	{
+	if((pgOpen || force || parent().at().attrAt("pgNoOpenProc").at().getB()) && !enable()) {
 	    SessWdg::setEnable(true);
 	    if(pgOpen) ownerSess()->openReg(path());
 	}
@@ -999,6 +998,25 @@ AutoHD<Attr> SessPage::attrAt(const string &attr, int lev)
 {
     if(lev < 0 && !enable() && !mToEn) setEnable(true, true);
     return Widget::attrAt(attr,lev);
+}
+
+TVariant SessPage::vlGet( Attr &a )
+{
+    if(a.owner() == this) {
+	if(a.id() == "owner") {
+	    short perm = attrAt("perm").at().getI(true);
+	    if(!(perm&01000)) return a.getS(true);
+	    SessPage *oP = ownerPage();
+	    return oP ? oP->attrAt("owner").at().getS() : ownerSess()->owner()+":"+ownerSess()->grp();
+	}
+	else if(a.id() == "perm") {
+	    short perm = a.getI(true);
+	    if(!(perm&01000)) return perm;
+	    SessPage *oP = ownerPage();
+	    return (oP?oP->attrAt("perm").at().getI():ownerSess()->permit())|01000;
+	}
+    }
+    return Widget::vlGet(a);
 }
 
 TVariant SessPage::stlReq( Attr &a, const TVariant &vl, bool wr )
@@ -1792,7 +1810,7 @@ bool SessWdg::cntrCmdServ( XMLNode *opt )
     string a_path = opt->attr("path"), u = opt->attr("user");
     if(a_path == "/serv/attr") {	//Attribute's value operations
 	if(ctrChkNode(opt,"get",R_R_R_,"root","UI",SEC_RD)) {	//Get values
-	    unsigned tm = strtoul(opt->attr("tm").c_str(), 0, 10);
+	    unsigned tm = s2ll(opt->attr("tm"));
 	    if(!tm) {
 		opt->childAdd("el")->setAttr("id","perm")->setAttr("p","-3")->
 		    setText(i2s(ownerSess()->sec.at().access(u,SEC_RD|SEC_WR,owner(),grp(),permit())));

@@ -222,6 +222,7 @@ class Page : public Widget, public TConfig
 	void wClear( );
 
 	unsigned int modifVal( Attr &cfg )	{ modif(); return 0; }
+	TVariant vlGet( Attr &a );
 	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
 	bool cntrCmdGeneric( XMLNode *opt );

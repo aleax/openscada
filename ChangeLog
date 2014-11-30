@@ -1,3 +1,7 @@
+2014-11-30 Roman
+- !:UI.VCAEngine: Inheritance support is added for owner and permition of the widgets.
+
+
 2014-11-29 Roman
 - !:DAQ.LogicLev: Link to object's property by path "{ModType}.{Cntr}.{Prm}.{Attr}#{ObjPath}" is added.
 - Transport.Sockets: Source code for SOCK_RAWCAN some clean up.

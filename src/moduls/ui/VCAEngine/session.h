@@ -129,7 +129,7 @@ class Session : public TCntrNode
 
 		//Attributes
 		uint8_t	lev,	//Level
-			tp,		//Type
+			tp,	//Type
 			qtp;	//Quittance type
 		string	path,	//Widget path
 			cat,	//Category
@@ -268,8 +268,8 @@ class SessPage : public SessWdg
 	SessPage( const string &id, const string &page, Session *sess );
 	~SessPage( );
 
-	string path( );
-	string type( )		{ return "SessPage"; }
+	string	path( );
+	string	type( )		{ return "SessPage"; }
 
 	void setEnable( bool val, bool force = false );
 	void setProcess( bool val, bool lastFirstCalc = true );
@@ -299,6 +299,7 @@ class SessPage : public SessWdg
 	bool cntrCmdGeneric( XMLNode *opt );
 
 	bool attrChange( Attr &cfg, TVariant prev );
+	TVariant vlGet( Attr &a );
 	TVariant stlReq( Attr &a, const TVariant &vl, bool wr );
 
     private:

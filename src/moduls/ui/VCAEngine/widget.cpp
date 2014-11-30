@@ -102,9 +102,8 @@ TCntrNode &Widget::operator=( TCntrNode &node )
 	}
 	attr  = attrAt(els[i_a]);
 	attr.at().setFlgSelf(pattr.at().flgSelf());
-	if(!(attr.at().flgGlob()&Attr::DirRead))
-	    switch(attr.at().type())
-	    {
+	if(!(attr.at().flgGlob()&Attr::OnlyRead))
+	    switch(attr.at().type()) {
 		case TFld::Boolean:	attr.at().setB(pattr.at().getB());	break;
 		case TFld::Integer:	attr.at().setI(pattr.at().getI());	break;
 		case TFld::Real:	attr.at().setR(pattr.at().getR());	break;
@@ -132,14 +131,17 @@ void Widget::postEnable( int flag )
     if(flag&TCntrNode::NodeRestore) setEnable(true);
     if(flag&TCntrNode::NodeConnect && !BACrtHoldOvr) {
 	//Add main attributes
-	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
-	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
-	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic));
-	attrAdd(new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic,"","root:UI"));
-	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic,"","0664",
-	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666",
-	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW")));
-	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::DirRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
+	attrAdd(new TFld("id",_("Id"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
+	attrAdd(new TFld("path",_("Path"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
+	attrAdd(new TFld("parent",_("Parent"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic));
+	attrAdd(new TFld("owner",_("Owner"),TFld::String,TFld::NoStrTransl|Attr::Generic|Attr::PreRead,"","root:UI"));
+	attrAdd(new TFld("perm",_("Access"),TFld::Integer,TFld::OctDec|TFld::Selected|Attr::Generic|Attr::PreRead,"","01000",
+	    "0;0400;0440;0444;0600;0640;0644;0660;0664;0666;"
+	    "01000;01400;01440;01444;01600;01640;01644;01660;01664;01666",
+	    _("No access;R_____;R_R___;R_R_R_;RW____;RWR___;RWR_R_;RWRW__;RWRWR_;RWRWRW;"
+	      "Inheritance;Inherit.(R_____);Inherit.(R_R___);Inherit.(R_R_R_);Inherit.(RW____);"
+	      "Inherit.(RWR___);Inherit.(RWR_R_);Inherit.(RWRW__);Inherit.(RWRWR_);Inherit.(RWRWRW)")));
+	attrAdd(new TFld("root",_("Root"),TFld::String,TFld::NoWrite|Attr::OnlyRead|Attr::Generic,"","","","",i2s(A_ROOT).c_str()));
 	attrAdd(new TFld("name",_("Name"),TFld::String,Attr::Generic));
 	attrAdd(new TFld("dscr",_("Description"),TFld::String,TFld::FullText|Attr::Generic));
 	attrAdd(new TFld("en",_("Enable"),TFld::Boolean,Attr::Generic,"","1","","",i2s(A_EN).c_str()));
@@ -375,9 +377,8 @@ void Widget::inheritAttr( const string &iattr )
 	if(!(attr.at().flgSelf()&Attr::IsInher)) attr.at().setFld(&pattr.at().fld(),true);
 	if(attr.at().modif() && !(attr.at().flgSelf()&Attr::SessAttrInh)) continue;
 	attr.at().setFlgSelf((Attr::SelfAttrFlgs)pattr.at().flgSelf());
-	if(!(attr.at().flgGlob()&Attr::DirRead))
-	    switch(attr.at().type())
-	    {
+	if(!(attr.at().flgGlob()&Attr::OnlyRead))
+	    switch(attr.at().type()) {
 		case TFld::Boolean:	attr.at().setB(pattr.at().getB(), attr.at().flgGlob()&Attr::Active);	break;
 		case TFld::Integer:	attr.at().setI(pattr.at().getI(), attr.at().flgGlob()&Attr::Active);	break;
 		case TFld::Real:	attr.at().setR(pattr.at().getR(), attr.at().flgGlob()&Attr::Active);	break;
@@ -726,6 +727,18 @@ TVariant Widget::vlGet( Attr &a )
 	else if(a.id() == "path")	return TVariant(path());
 	else if(a.id() == "root")	return TVariant(rootId());
 	else if(a.id() == "parent")	return TVariant(parentNm());
+	else if(a.id() == "owner") {
+	    short perm = attrAt("perm").at().getI(true);
+	    if(!(perm&01000)) return a.getS(true);
+	    Widget *ownW = dynamic_cast<Widget*>(nodePrev());
+	    return ownW ? ownW->attrAt("owner").at().getS() : "root:UI";
+	}
+	else if(a.id() == "perm") {
+	    short perm = a.getI(true);
+	    if(!(perm&01000)) return perm;
+	    Widget *ownW = dynamic_cast<Widget*>(nodePrev());
+	    return (ownW?ownW->attrAt("perm").at().getI():RWRWR_)|01000;
+	}
     }
 
     if(!parent().freeStat())		return parent().at().vlGet(a);
@@ -1631,7 +1644,7 @@ void Attr::setFld( TFld *fld, bool inher )
 	switch(fld->type()) {
 	    case TFld::String:
 		mVal.s = NULL;
-		if(fld->flg()&Attr::DirRead) break;
+		if(fld->flg()&Attr::OnlyRead) break;
 		mVal.s = new string();
 		*mVal.s = fld->def();
 		break;
@@ -1642,7 +1655,7 @@ void Attr::setFld( TFld *fld, bool inher )
 	    case TFld::Boolean:	mVal.b = s2i(fld->def());	break;
 	    case TFld::Object:
 		mVal.o = NULL;
-		if(fld->flg()&Attr::DirRead) break;
+		if(fld->flg()&Attr::OnlyRead) break;
 		mVal.o = new AutoHD<TVarObj>(new TVarObj);
 		break;
 	    default: break;
@@ -1696,7 +1709,7 @@ TVariant Attr::get( bool sys )
 
 string Attr::getS( bool sys )
 {
-    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getS();
+    if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getS();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getS(true),false).getS();
     switch(fld().type()) {
 	case TFld::Integer:	{ int64_t tvl = getI(sys); return (tvl != EVAL_INT) ? ll2s(tvl) : EVAL_STR; }
@@ -1717,7 +1730,7 @@ string Attr::getS( bool sys )
 
 int64_t Attr::getI( bool sys )
 {
-    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getI();
+    if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getI();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getI(true),false).getI();
     switch(fld().type()) {
 	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? s2ll(tvl) : EVAL_INT; }
@@ -1732,7 +1745,7 @@ int64_t Attr::getI( bool sys )
 
 double Attr::getR( bool sys )
 {
-    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getR();
+    if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getR();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getR(true),false).getR();
     switch(fld().type()) {
 	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? s2r(tvl) : EVAL_REAL; }
@@ -1747,7 +1760,7 @@ double Attr::getR( bool sys )
 
 char Attr::getB( bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return owner()->vlGet(*this).getB();
+    if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getB();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getB(true),false).getB();
     switch(fld().type()) {
 	case TFld::String:	{ string tvl = getS(sys); return (tvl != EVAL_STR) ? (bool)s2i(tvl) : EVAL_BOOL; }
@@ -1762,7 +1775,7 @@ char Attr::getB( bool sys )
 
 AutoHD<TVarObj> Attr::getO( bool sys )
 {
-    if(flgGlob()&Attr::DirRead)	return owner()->vlGet(*this).getO();
+    if(flgGlob()&Attr::OnlyRead || (flgGlob()&Attr::PreRead && !sys)) return owner()->vlGet(*this).getO();
     if(flgSelf()&Attr::FromStyle && !sys) return owner()->stlReq(*this,getO(true),false).getO();
     if(fld().type() != TFld::Object) return new TEValObj;
     pthread_mutex_lock(&owner()->mtxAttr());
@@ -1774,7 +1787,7 @@ AutoHD<TVarObj> Attr::getO( bool sys )
 
 void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return;
+    if(flgGlob()&Attr::OnlyRead) return;
     if(!(fld().flg()&TFld::Selected)) throw TError("Cfg",_("Element type is not selected!"));
     switch(fld().type()) {
 	case TFld::String:	setS(fld().selNm2VlS(val), strongPrev, sys);	break;
@@ -1787,7 +1800,7 @@ void Attr::setSEL( const string &val, bool strongPrev, bool sys )
 
 void Attr::set( const TVariant &val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return;
+    if(flgGlob()&Attr::OnlyRead) return;
     switch(fld().type()) {
 	case TFld::Integer:	setI(val.getI(), strongPrev, sys);	break;
 	case TFld::Real:	setR(val.getR(), strongPrev, sys);	break;
@@ -1800,7 +1813,7 @@ void Attr::set( const TVariant &val, bool strongPrev, bool sys )
 
 void Attr::setS( const string &val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return;
+    if(flgGlob()&Attr::OnlyRead) return;
     switch(fld().type()) {
 	case TFld::Integer:	setI((val!=EVAL_STR) ? s2ll(val) : EVAL_INT, strongPrev, sys);	break;
 	case TFld::Real:	setR((val!=EVAL_STR) ? s2r(val) : EVAL_REAL, strongPrev, sys);	break;
@@ -1832,7 +1845,7 @@ void Attr::setS( const string &val, bool strongPrev, bool sys )
 
 void Attr::setI( int64_t val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return;
+    if(flgGlob()&Attr::OnlyRead) return;
     switch(fld().type()) {
 	case TFld::String:	setS((val!=EVAL_INT) ? ll2s(val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Real:	setR((val!=EVAL_INT) ? val : EVAL_REAL, strongPrev, sys);		break;
@@ -1858,7 +1871,7 @@ void Attr::setI( int64_t val, bool strongPrev, bool sys )
 
 void Attr::setR( double val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return;
+    if(flgGlob()&Attr::OnlyRead) return;
     switch(fld().type()) {
 	case TFld::String:	setS((val!=EVAL_REAL) ? r2s(val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Integer:	setI((val!=EVAL_REAL) ? (int64_t)val : EVAL_INT, strongPrev, sys);	break;
@@ -1884,7 +1897,7 @@ void Attr::setR( double val, bool strongPrev, bool sys )
 
 void Attr::setB( char val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead) return;
+    if(flgGlob()&Attr::OnlyRead) return;
     switch(fld().type()) {
 	case TFld::String:	setS((val!=EVAL_BOOL) ? i2s((bool)val) : EVAL_STR, strongPrev, sys);	break;
 	case TFld::Integer:	setI((val!=EVAL_BOOL) ? (bool)val : EVAL_INT, strongPrev, sys);		break;
@@ -1908,7 +1921,7 @@ void Attr::setB( char val, bool strongPrev, bool sys )
 
 void Attr::setO( AutoHD<TVarObj> val, bool strongPrev, bool sys )
 {
-    if(flgGlob()&Attr::DirRead)	return;
+    if(flgGlob()&Attr::OnlyRead)	return;
     switch(fld().type()) {
 	case TFld::String:	setS(val.at().getStrXML(), strongPrev, sys);break;
 	case TFld::Integer: case TFld::Real: case TFld::Boolean:
@@ -1952,15 +1965,6 @@ string Attr::cfgVal( )
     pthread_mutex_unlock(&owner()->mtxAttr());
     return tvl;
 }
-
-/*bool Attr::isTransl( TFld::Type tp, int flgGlb, int flgSelf )
-{
-    return (tp == TFld::String &&
-	!(flgGlb&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
-	(flgSelf == -1 || flgSelf&(Attr::CfgConst|Attr::CfgLnkIn)));
-}
-
-bool Attr::isTransl( bool cfg )	{ return Attr::isTransl(type(), flgGlob(), (cfg?flgSelf():-1)); }*/
 
 void Attr::setCfgTempl( const string &vl )
 {

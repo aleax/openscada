@@ -565,10 +565,10 @@ void Engine::attrsLoad( Widget &w, const string &fullDB, const string &idw, cons
 	c_el.cfg("ID").setS(tstr);
 	c_el.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 		/*(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));*/
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));*/
 	c_el.cfg("CFG_VAL").setNoTransl(!attr.at().isTransl());
 		/*(attr.at().type() == TFld::String &&
-		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)))); /*&&
+		!(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)))); /*&&
 		(attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))));*/
 
 	if(!SYS->db().at().dataGet(wdb,nodePath()+tbl,c_el,false,true)) continue;
@@ -635,13 +635,13 @@ string Engine::attrsSave( Widget &w, const string &fullDB, const string &idw, co
 	    c_el.cfg("ID").setS( als[i_a] );
 	    c_el.cfg("IO_VAL").setNoTransl(!attr.at().isTransl());
 		    /*(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));*/
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address))));*/
 	    c_el.cfg("IO_VAL").setS(attr.at().getS());
 	    c_el.cfg("SELF_FLG").setI(attr.at().flgSelf());
 	    c_el.cfg("CFG_TMPL").setS(attr.at().cfgTempl());
 	    c_el.cfg("CFG_VAL").setNoTransl(!attr.at().isTransl(true));
 		    /*(attr.at().type() == TFld::String &&
-		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::DirRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
+		    !(attr.at().flgGlob()&(TFld::NoStrTransl|Attr::OnlyRead|Attr::Image|Attr::DateTime|Attr::Color|Attr::Font|Attr::Address)) &&
 		    (attr.at().flgSelf()&(Attr::CfgConst|Attr::CfgLnkIn))));*/
 	    c_el.cfg("CFG_VAL").setS(attr.at().cfgVal());
 	    SYS->db().at().dataSet(fullDB+"_io",nodePath()+tbl+"_io",c_el,false,true);
